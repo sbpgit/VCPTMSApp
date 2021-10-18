@@ -1,7 +1,7 @@
 namespace my.timeseries;
 
 entity odTimeSeries {
-  key objDepn : String;
+  key objectDependency : String;
   key objDdepnCnt : Integer;
   key calDate : Date;
   att1   : Double;
