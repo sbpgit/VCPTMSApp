@@ -1,9 +1,9 @@
 namespace my.timeseries;
 
 entity odTimeSeries {
-  key group_id : String;
-  id     : Integer;
-  cal_date : Date;
+  key objDepn : String;
+  key objDdepnCnt : Integer;
+  key calDate : Date;
   att1   : Double;
   att2   : Double;
   att3   : Double;
