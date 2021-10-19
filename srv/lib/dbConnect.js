@@ -12,16 +12,23 @@ let con;
 class DbConnect {
   constructor() {
     con = hana.createConnection();
+    con.connect(connParams);
   }
 
   async dbQuery(sql) {
     return new Promise((resolve) => {
-      con.connect(connParams);
+    //  con.connect(connParams);
 
       let results = con.prepare(sql).exec();
       con.prepare(sql).drop();
       resolve(results);
     });
+  }
+  async dbQueryClause(sql,filterCond){
+      let results,err;
+      var filter = filterCond.split(',');
+     // let stmt = con.prepare(sql);
+      results = con.execute(sql,filter);
   }
 }
 
