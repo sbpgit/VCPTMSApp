@@ -26,20 +26,23 @@ module.exports = async function() {
 }
 function calculateTimeseries(iSalesHistory, iObjDep){
     let i,j,count = 0, flag;
-    let aSOCharCount=[];
+    let aSOCharCount = [];
         for(i = 0; i< iObjDep.length; i++){
             for(j = 0; j< iSalesHistory.length; j++){
-                if(iObjDep[i].characteristicName == iSalesHistory[j].characteristicName
-                    && iObjDep[i].characteristicValue == iSalesHistory[j].characteristicValue)
-                 {
-                    flag = 'X';
-                    count++;
-                 }   
-        }
-        if (flag  === 'X'){
-            aSOCharCount[i].characteristicName = iObjDep[i].characteristicName;
-            aSOCharCount[i].characteristicValue = iObjDep[i].characteristicValue;            
-            aSOCharCount[i].count = count;
+                if(iObjDep[i].characteristicName == iSalesHistory[j].characteristicName){
+                    if(iObjDep[i].condition == 'EQ'){
+                        if(iObjDep[i].characteristicValue == iSalesHistory[j].characteristicValue)
+                        {
+                            flag = 'X';
+                            count++;
+                        }  
+                    }  
+                }              
+            }        
+            if (flag  === 'X'){
+            aSOCharCount.push({ "characteristicName": iObjDep[i].characteristicName,
+                                "characteristicValue":iObjDep[i].characteristicValue,
+                                "count": count});
             flag = '';
             count = 0;
         }
