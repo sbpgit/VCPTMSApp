@@ -55,6 +55,10 @@ module.exports = async function () {
    let iSalesCharTemp = [];
    let iSalesConsolidate = [];
    let sSalesConsolidate = {};
+
+/**
+ * Loop thorugh Sales History
+ *  */   
    iSalesHistory.forEach(sSalesHistory => {
 
         sSalesConsolidate.salesDocument     = sSalesHistory.salesDocument;
@@ -62,6 +66,9 @@ module.exports = async function () {
         sSalesConsolidate.productId         = sSalesHistory.productId;
         sSalesConsolidate.calDate           = genFunctions.getNextSunday(sSalesHistory.documentCreatedOn);
 
+
+/**
+ * Get Sales Characteristic  */  
        iSalesCharTemp = [];
        iSalesChar.forEach(sSalesChar => {
            if (sSalesChar.salesDocument == sSalesHistory.salesDocument 
@@ -70,9 +77,14 @@ module.exports = async function () {
 
        })
 
+/**
+ * Loop through Products
+ *  */       
        iProdBOM.forEach(sProdBOM => {
            if (sSalesHistory.productId == sProdBOM.productId){
 
+/**
+ * Product Dependency for the Product */            
              iObjDep.forEach(sObjDep => {
                  if(sProdBOM.objectDependency == sObjDep.objectDependency){
 
@@ -82,6 +94,8 @@ module.exports = async function () {
                     sSalesConsolidate.success            = ' ';
                     sSalesConsolidate.attributeIndex     = sObjDep.attributeIndex;
 
+/**
+ * Verify if Sales Characterstics satisfy the Object Dependency */                    
                      iSalesCharTemp.forEach(sSalesChar => {
                          if(sSalesChar.characteristicName = sObjDep.characteristicName){
                              if ((sObjDep.condition == 'EQ' 
@@ -102,10 +116,9 @@ module.exports = async function () {
              })
            }
        })
-
-
-
    });
+
+
 
    iSalesConsolidate.sort(genFunctions.dynamicSortMultiple("salesDocument", 
                                                            "salesDocumentItem", 
@@ -124,8 +137,9 @@ module.exports = async function () {
        sTimeseries.objCounter       != sSalesConsolidate.objCounter
      ) {
        if(lSalesDocument != '' && lSalesDocumentItem != ''){
-         // Check if Object Dependency is success      
-          if (checkObjDepSuccess(sTimeseries, iObjDep) != 'X') sTimeseries.success = 'X';
+          
+        if (checkObjDepSuccess(sTimeseries, iObjDep) != 'X') sTimeseries.success = 'X';
+
           iTimeseries.push(JSON.parse(JSON.stringify(sTimeseries)));
           sTimeseries = {};
        }
@@ -280,10 +294,11 @@ module.exports = async function () {
 function checkObjDepSuccess(sTimeseries, iObjDep) {
   let lFailure = "";
   let lCheckCharCounter = "";
+    
   iObjDep.forEach((sObjDep) => {
     if (
       sTimeseries.objectDependency == sObjDep.objectDependency &&
-      sTimeseries.objCounter == sObjDep.objCounter
+      sTimeseries.objCounter       == sObjDep.objCounter
     ) {
       lCheckCharCounter = "";
       switch (sObjDep.attributeIndex) {
@@ -352,8 +367,8 @@ function checkCharCounter(iObjDep, sTimeseries, imObjDepen, imObjCounter, imChar
     iObjDep.forEach((sObjDepTemp) => {
         if (
           sObjDepTemp.objectDependency == imObjDepen &&
-          sObjDepTemp.objCounter == imObjCounter &&
-          sObjDepTemp.charCounter == imCharCounter
+          sObjDepTemp.objCounter       == imObjCounter &&
+          sObjDepTemp.charCounter      == imCharCounter
         ) {
           switch (sObjDepTemp.attributeIndex) {
             case 1:
