@@ -2,7 +2,6 @@
 
 class GenFunctions {
   constructor() {
-      console.log("This:" + this);
   }
 
   getNextSunday(imDate) {

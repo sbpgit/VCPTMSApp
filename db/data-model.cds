@@ -4,6 +4,7 @@ entity odTimeSeries {
   key objectDependency : String;
   key objDdepnCnt : Integer;
   key calDate : Date;
+  success: Double;
   att1   : Double;
   att2   : Double;
   att3   : Double;

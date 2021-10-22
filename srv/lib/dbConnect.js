@@ -14,21 +14,29 @@ class DbConnect {
     con = hana.createConnection();
     con.connect(connParams);
   }
-
+/**
+ * 
+ * @param {String} sql 
+ */
   async dbQuery(sql) {
-    return new Promise((resolve) => {
-    //  con.connect(connParams);
 
+    return new Promise((resolve) => {
       let results = con.prepare(sql).exec();
       con.prepare(sql).drop();
       resolve(results);
     });
+
   }
+
+ /**
+  * 
+  * @param {String} sql 
+  * @param {String} filterCond 
+  */ 
   async dbQueryClause(sql,filterCond){
+
       let results,err;
-      var filter = filterCond.split(',');
-     // let stmt = con.prepare(sql);
-      results = con.execute(sql,filter);
+      var filter = filterCond.split(',');b 
   }
 }
 
