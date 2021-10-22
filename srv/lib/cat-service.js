@@ -57,7 +57,6 @@ module.exports = async function () {
    let sSalesConsolidate = {};
    iSalesHistory.forEach(sSalesHistory => {
 
-
         sSalesConsolidate.salesDocument     = sSalesHistory.salesDocument;
         sSalesConsolidate.salesDocumentItem = sSalesHistory.salesDocumentItem;
         sSalesConsolidate.productId         = sSalesHistory.productId;
