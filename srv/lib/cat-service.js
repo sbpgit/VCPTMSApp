@@ -268,7 +268,7 @@ module.exports = async function () {
         await dbConnect.dbQuery(
             `INSERT INTO "TIMESERIES" VALUES( '`+
                         sTimeseries.calDate + `','` +
-                        sTimeseries.objectDependency + `','0','` +
+                        sTimeseries.objectDependency + `','` +
                         sTimeseries.success + `','` +
                         sTimeseries.attr1 + `','` +
                         sTimeseries.attr2 + `','` +
