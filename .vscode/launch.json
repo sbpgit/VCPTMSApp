@@ -14,7 +14,7 @@
       ]
     },
     {
-      "name": "Run config_products-3",
+      "name": "Run config_products-5",
       "request": "launch",
       "type": "node",
       "cwd": "${workspaceFolder}",
@@ -33,7 +33,7 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "envFile": "${workspaceFolder}/.env3",
+      "envFile": "${workspaceFolder}/.env5",
       "env": {
         "NODE_ENV": "development",
         "run.config": "{\"handlerId\":\"cap_run_config_handler_id\",\"runnableId\":\"{\\\"projectPath\\\":\\\"/home/user/projects/config_products\\\",\\\"profileName\\\":\\\"development\\\"}\"}"

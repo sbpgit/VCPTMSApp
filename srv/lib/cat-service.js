@@ -21,8 +21,6 @@ module.exports = async function () {
                                               WHERE A."salesDocument"     = B."salesDocument"
                                                 AND A."salesDocumentItem" = B."salesDocumentItem" )`);
 
-
-
   // Get unique records for product and location
   let iSalesHProd = await dbConnect.dbQuery(
                           `SELECT DISTINCT "productId", 
@@ -137,8 +135,8 @@ module.exports = async function () {
        sTimeseries.objCounter       != sSalesConsolidate.objCounter
      ) {
        if(lSalesDocument != '' && lSalesDocumentItem != ''){
-          
-        if (checkObjDepSuccess(sTimeseries, iObjDep) != 'X') sTimeseries.success = 'X';
+        if (checkObjDepSuccess(sTimeseries, iObjDep) != 'X') 
+            sTimeseries.success = 'X';
 
           iTimeseries.push(JSON.parse(JSON.stringify(sTimeseries)));
           sTimeseries = {};
@@ -292,8 +290,8 @@ module.exports = async function () {
  * Check if Object Dependency is success or not
  */
 function checkObjDepSuccess(sTimeseries, iObjDep) {
-  let lFailure = "";
-  let lCheckCharCounter = "";
+    let lFailure = '';
+    let lCheckCharCounter = "";
     
   iObjDep.forEach((sObjDep) => {
     if (
@@ -349,10 +347,11 @@ function checkObjDepSuccess(sTimeseries, iObjDep) {
             sObjDep.charCounter
           ) != "X"
         )
-          lFailure = "X";
+        lFailure = "X";
       }
     }
   });
+  return lFailure
 }
 /**
  * 
