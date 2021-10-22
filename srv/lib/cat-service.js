@@ -9,7 +9,8 @@ module.exports = async function () {
 
   const iSalesHistory = await dbConnect.dbQuery(
                               `SELECT * 
-                                 FROM SALESH`);
+                                 FROM SALESH 
+                                WHERE "salesDocument" = '20378'`);
 
   // Get Sales hist with respect to Date Range
   const iSalesChar = await dbConnect.dbQuery(
@@ -86,9 +87,9 @@ module.exports = async function () {
                          if(sSalesChar.characteristicName = sObjDep.characteristicName){
 
                              if ((sObjDep.condition == 'EQ' 
-                              && sSalesChar.characteristicValue == sProdBOM.characteristicValue) 
+                              && sSalesChar.characteristicValue == sObjDep.characteristicValue) 
                               || (sObjDep.condition == 'NE' 
-                              && sSalesChar.characteristicValue != sProdBOM.characteristicValue)){
+                              && sSalesChar.characteristicValue != sObjDep.characteristicValue)){
 
                                 sSalesConsolidate.success            = 'X';
 
