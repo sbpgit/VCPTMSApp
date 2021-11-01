@@ -13,8 +13,10 @@
         "express": "^4",
         "hdb": "^0.18.3"
     },
+    "engines": {
+        "node": "^12 || ^14"
+    },
     "devDependencies": {
-        "@sap/hdi-deploy": "^4.2.0",
         "sqlite3": "^5.0.2"
     },
     "scripts": {

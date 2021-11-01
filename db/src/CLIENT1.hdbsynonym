@@ -1,0 +1,74 @@
+{
+  "CONFIG_PRODUCTS.db::PRODUCT": {
+    "target": {
+        "object": "PRODUCT",
+        "schema": "DB_CONFIG_PROD_CLIENT1"
+    }
+  },
+  "CONFIG_PRODUCTS.db::CUSTGROUP": {
+    "target": {
+        "object": "CUSTOMERGROUP",
+        "schema": "DB_CONFIG_PROD_CLIENT1"
+    }
+  },
+  "CONFIG_PRODUCTS.db::OBJDEPHDR": {
+    "target": {
+        "object": "OBJDEP_HEADER",
+        "schema": "DB_CONFIG_PROD_CLIENT1"
+    }
+  },
+  "CONFIG_PRODUCTS.db::LOCATION": {
+    "target": {
+        "object": "LOCATION",
+        "schema": "DB_CONFIG_PROD_CLIENT1"
+    }
+  },
+  "CONFIG_PRODUCTS.db::PRODUCTCONFIG": {
+    "target": {
+        "object": "PRODUCT_CONFIG",
+        "schema": "DB_CONFIG_PROD_CLIENT1"
+    }
+  },
+  "CONFIG_PRODUCTS.db::LOCPRODUCTS": {
+    "target": {
+        "object": "LOCATION_PRODUCT",
+        "schema": "DB_CONFIG_PROD_CLIENT1"
+    }
+  },
+  "CONFIG_PRODUCTS.db::BOMHEADER": {
+    "target": {
+        "object": "BOMHEADER",
+        "schema": "DB_CONFIG_PROD_CLIENT1"
+    }
+  },
+  "CONFIG_PRODUCTS.db::BOMOBJDEP": {
+    "target": {
+        "object": "BOM_OBJDEPENDENCY",
+        "schema": "DB_CONFIG_PROD_CLIENT1"
+    }
+  },
+  "CONFIG_PRODUCTS.db::SALESH": {
+    "target": {
+        "object": "SALESH",
+        "schema": "DB_CONFIG_PROD_CLIENT1"
+    }
+  },
+  "CONFIG_PRODUCTS.db::SALESHCFG": {
+    "target": {
+        "object": "SALESH_CONFIG",
+        "schema": "DB_CONFIG_PROD_CLIENT1"
+    }
+  },
+  "CONFIG_PRODUCTS.db::TS_OBJDEPHDR": {
+    "target": {
+        "object": "TS_OBJDEPHDR",
+        "schema": "DB_CONFIG_PROD_CLIENT1"
+    }
+  },
+  "CONFIG_PRODUCTS.db::TS_OBJDEPCHHDR": {
+    "target": {
+        "object": "TS_OBJDEP_CHARHDR",
+        "schema": "DB_CONFIG_PROD_CLIENT1"
+    }
+  }
+}

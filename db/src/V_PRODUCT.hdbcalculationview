@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="V_PRODUCT" applyPrivilegeType="NONE" dataCategory="CUBE" schemaVersion="3.0" outputViewType="Aggregation" cacheInvalidationPeriod="NONE" enforceSqlExecution="true">
+<descriptions defaultDescription="V_PRODUCT"/>
+<localVariables/>
+<variableMappings/>
+<dataSources>
+  <DataSource id="CONFIG_PRODUCTS.db::PRODUCT">
+    <resourceUri>CONFIG_PRODUCTS.db::PRODUCT</resourceUri>
+  </DataSource>
+</dataSources>
+<calculationViews>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
+    <viewAttributes>
+      <viewAttribute id="PRODUCTID"/>
+      <viewAttribute id="PRODUCTDESC"/>
+      <viewAttribute id="PRODUCTFAMILY"/>
+      <viewAttribute id="PRODUCTGROUP"/>
+      <viewAttribute id="PRODUCTMODEL"/>
+      <viewAttribute id="PRODMDLRANGE"/>
+      <viewAttribute id="PRODUCTSERIES"/>
+      <viewAttribute id="RESERVEFIELD1"/>
+      <viewAttribute id="RESERVEFIELD2"/>
+      <viewAttribute id="RESERVEFIELD3"/>
+      <viewAttribute id="RESERVEFIELD4"/>
+      <viewAttribute id="RESERVEFIELD5"/>
+      <viewAttribute id="CHANGEDDATE"/>
+      <viewAttribute id="CHANGEDTIME"/>
+      <viewAttribute id="CHANGEDBY"/>
+      <viewAttribute id="CREATEDDATE"/>
+      <viewAttribute id="CREATEDTIME"/>
+      <viewAttribute id="CREATEDBY"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="CONFIG_PRODUCTS.db::PRODUCT">
+      <mapping xsi:type="Calculation:AttributeMapping" target="PRODUCTID" source="productId"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PRODUCTDESC" source="productDesc"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PRODUCTFAMILY" source="productFamily"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PRODUCTGROUP" source="productGroup"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PRODUCTMODEL" source="productModel"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PRODMDLRANGE" source="productModelRange"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PRODUCTSERIES" source="productSeries"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="RESERVEFIELD1" source="reserveField1"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="RESERVEFIELD2" source="reserveField2"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="RESERVEFIELD3" source="reserveField3"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="RESERVEFIELD4" source="reserveField4"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="RESERVEFIELD5" source="reserveField5"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CHANGEDDATE" source="changedDate"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CHANGEDTIME" source="changedTime"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CHANGEDBY" source="changedBy"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDDATE" source="createdDate"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDTIME" source="createdTime"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDBY" source="createdBy"/>
+    </input>
+  </calculationView>
+  <calculationView xsi:type="Calculation:RankView" id="Rank_1">
+    <viewAttributes>
+      <viewAttribute id="PRODUCTID"/>
+      <viewAttribute id="PRODUCTDESC"/>
+      <viewAttribute id="PRODUCTFAMILY"/>
+      <viewAttribute id="PRODUCTGROUP"/>
+      <viewAttribute id="PRODUCTMODEL"/>
+      <viewAttribute id="PRODMDLRANGE"/>
+      <viewAttribute id="PRODUCTSERIES"/>
+      <viewAttribute id="RESERVEFIELD1"/>
+      <viewAttribute id="RESERVEFIELD2"/>
+      <viewAttribute id="RESERVEFIELD3"/>
+      <viewAttribute id="RESERVEFIELD4"/>
+      <viewAttribute id="RESERVEFIELD5"/>
+      <viewAttribute id="CHANGEDDATE"/>
+      <viewAttribute id="CHANGEDTIME" aggregationType="min"/>
+      <viewAttribute id="CHANGEDBY"/>
+      <viewAttribute id="CREATEDDATE"/>
+      <viewAttribute id="CREATEDTIME" aggregationType="min"/>
+      <viewAttribute id="CREATEDBY"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="Projection_1"/>
+    <rankingFilter type="RANK" offset="0" offsetReference="FRONT" dynamicPartitionAttributes="false">
+      <rankThreshold>
+        <value>20</value>
+      </rankThreshold>
+      <rankViewAttributeName>RANK</rankViewAttributeName>
+    </rankingFilter>
+  </calculationView>
+</calculationViews>
+
+<logicalModel id="Rank_1">
+  <attributes>
+    <attribute id="PRODUCTID" order="1" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="productId"/>
+      <keyMapping columnObjectName="Rank_1" columnName="PRODUCTID"/>
+    </attribute>
+    <attribute id="PRODUCTDESC" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="productDesc"/>
+      <keyMapping columnObjectName="Rank_1" columnName="PRODUCTDESC"/>
+    </attribute>
+    <attribute id="PRODUCTFAMILY" order="3" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="productFamily"/>
+      <keyMapping columnObjectName="Rank_1" columnName="PRODUCTFAMILY"/>
+    </attribute>
+    <attribute id="PRODUCTGROUP" order="4" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="productGroup"/>
+      <keyMapping columnObjectName="Rank_1" columnName="PRODUCTGROUP"/>
+    </attribute>
+    <attribute id="PRODUCTMODEL" order="5" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="productModel"/>
+      <keyMapping columnObjectName="Rank_1" columnName="PRODUCTMODEL"/>
+    </attribute>
+    <attribute id="PRODMDLRANGE" order="6" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="productModelRange"/>
+      <keyMapping columnObjectName="Rank_1" columnName="PRODMDLRANGE"/>
+    </attribute>
+    <attribute id="PRODUCTSERIES" order="7" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="productSeries"/>
+      <keyMapping columnObjectName="Rank_1" columnName="PRODUCTSERIES"/>
+    </attribute>
+    <attribute id="RESERVEFIELD1" order="8" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="reserveField1"/>
+      <keyMapping columnObjectName="Rank_1" columnName="RESERVEFIELD1"/>
+    </attribute>
+    <attribute id="RESERVEFIELD2" order="9" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="reserveField2"/>
+      <keyMapping columnObjectName="Rank_1" columnName="RESERVEFIELD2"/>
+    </attribute>
+    <attribute id="RESERVEFIELD3" order="10" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="reserveField3"/>
+      <keyMapping columnObjectName="Rank_1" columnName="RESERVEFIELD3"/>
+    </attribute>
+    <attribute id="RESERVEFIELD4" order="11" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="reserveField4"/>
+      <keyMapping columnObjectName="Rank_1" columnName="RESERVEFIELD4"/>
+    </attribute>
+    <attribute id="RESERVEFIELD5" order="12" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="reserveField5"/>
+      <keyMapping columnObjectName="Rank_1" columnName="RESERVEFIELD5"/>
+    </attribute>
+    <attribute id="CHANGEDDATE" order="13" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="changedDate"/>
+      <keyMapping columnObjectName="Rank_1" columnName="CHANGEDDATE"/>
+    </attribute>
+    <attribute id="CHANGEDBY" order="15" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="changedBy"/>
+      <keyMapping columnObjectName="Rank_1" columnName="CHANGEDBY"/>
+    </attribute>
+    <attribute id="CREATEDDATE" order="16" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="createdDate"/>
+      <keyMapping columnObjectName="Rank_1" columnName="CREATEDDATE"/>
+    </attribute>
+    <attribute id="CREATEDBY" order="18" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="createdBy"/>
+      <keyMapping columnObjectName="Rank_1" columnName="CREATEDBY"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures>
+    <measure id="CHANGEDTIME" order="14" aggregationType="min" measureType="simple">
+      <descriptions defaultDescription="changedTime"/>
+      <measureMapping columnObjectName="Rank_1" columnName="CHANGEDTIME"/>
+    </measure>
+    <measure id="CREATEDTIME" order="17" aggregationType="min" measureType="simple">
+      <descriptions defaultDescription="createdTime"/>
+      <measureMapping columnObjectName="Rank_1" columnName="CREATEDTIME"/>
+    </measure>
+    <measure id="RANK" order="19" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="RANK"/>
+      <measureMapping columnObjectName="Rank_1" columnName="RANK"/>
+    </measure>
+  </baseMeasures>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+  <localDimensions/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="92" y="112"/>
+    
+      <rectangleSize width="160"/>
+    </shape>
+    
+  
+    <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="92" y="322"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+  
+    <shape expanded="true" modelObjectName="Rank_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="92" y="217"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+  </shapes>
+</layout>
+</Calculation:scenario>

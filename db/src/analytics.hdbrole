@@ -1,0 +1,13 @@
+{
+    "role": {
+    "name": "config_products.db.src::analytics",
+    "schema_privileges":[
+        {
+            "privileges":[
+                "SELECT",
+                "EXECUTE"
+            ]
+        }
+    ]    
+    }
+}

@@ -16,13 +16,12 @@ modules:
     buildpack: nodejs_buildpack
 - name: config_products-db-deployer
   type: hdb
-  path: gen/db
+  path: db
   requires:
   - name: config_products-db
     properties:
       TARGET_CONTAINER: ~{hdi-service-name}
   - name: cross-container-service-1
-  - name: cross-container-service-3
   parameters:
     buildpack: nodejs_buildpack
 resources:
@@ -37,10 +36,6 @@ resources:
   type: org.cloudfoundry.existing-service
   parameters:
     service-name: CC_ACCESS
-- name: cross-container-service-3
-  type: org.cloudfoundry.existing-service
-  parameters:
-    service-name: CCL1_ACCESS
 parameters:
   enable-parallel-deployments: true
 build-parameters:

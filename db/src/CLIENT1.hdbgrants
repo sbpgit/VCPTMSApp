@@ -1,0 +1,10 @@
+{
+  "CCL1_ACCESS": {
+    "object_owner" : {
+      "roles" : ["CL1ROLE" ]
+    },
+    "application_user" : {
+      "roles" : ["CL1ROLE" ]
+    }
+  }
+}

@@ -61,7 +61,8 @@ module.exports = async function () {
 
         sSalesConsolidate.salesDocument     = sSalesHistory.salesDocument;
         sSalesConsolidate.salesDocumentItem = sSalesHistory.salesDocumentItem;
-        sSalesConsolidate.productId         = sSalesHistory.productId;
+        sSalesConsolidate.productId         = sSalesHistory.productId;        
+        sSalesConsolidate.locationId        = sSalesHistory.locationId;  //
         sSalesConsolidate.calDate           = genFunctions.getNextSunday(sSalesHistory.documentCreatedOn);
 
 
@@ -141,12 +142,14 @@ module.exports = async function () {
           iTimeseries.push(JSON.parse(JSON.stringify(sTimeseries)));
           sTimeseries = {};
        }
-     }
+     }       
+
        lSalesDocument               = sSalesConsolidate.salesDocument;
        lSalesDocumentItem           = sSalesConsolidate.salesDocumentItem;
        sTimeseries.calDate          = sSalesConsolidate.calDate;
        sTimeseries.objectDependency = sSalesConsolidate.objectDependency;
        sTimeseries.objCounter       = sSalesConsolidate.objCounter;
+
        if (sSalesConsolidate.success == "X") {
          switch (sSalesConsolidate.attributeIndex) {
            case 1:
@@ -192,7 +195,8 @@ module.exports = async function () {
 
    iTimeseries.push(JSON.parse(JSON.stringify(sTimeseries)));
 
-   iTimeseries.sort(genFunctions.dynamicSortMultiple(   "calDate", 
+   iTimeseries.sort(genFunctions.dynamicSortMultiple(   
+                                                        "calDate", 
                                                         "objectDependency", 
                                                         "objCounter")) ;
 
@@ -202,7 +206,7 @@ module.exports = async function () {
     let lCalDate = "";
     iTimeseries.forEach((sTimeseries) => {
       if (
-        sTimeseriesOut.calDate != sTimeseries.calDate ||
+        sTimeseriesOut.calDate          != sTimeseries.calDate         ||
         sTimeseriesOut.objectDependency != sTimeseries.objectDependency
       ) {
         if (sTimeseriesOut.calDate) {
@@ -226,7 +230,7 @@ module.exports = async function () {
         sTimeseriesOut.attr12 = 0;
       }
 
-      sTimeseriesOut.calDate = sTimeseries.calDate;
+      sTimeseriesOut.calDate          = sTimeseries.calDate;
       sTimeseriesOut.objectDependency = sTimeseries.objectDependency;
 
       if (sTimeseries.success == "X")
@@ -262,8 +266,7 @@ module.exports = async function () {
     removeExistingData(sTimeseriesOut.calDate);
 
     iTimeseriesOut.forEach(async function (sTimeseries) {
-
-        await dbConnect.dbQuery(
+         await dbConnect.dbQuery(
             `INSERT INTO "TIMESERIES" VALUES( '`+
                         sTimeseries.calDate + `','` +
                         sTimeseries.objectDependency + `','` +
