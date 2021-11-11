@@ -24,12 +24,13 @@ module.exports = async function () {
   );
 
   // Get unique records for product and location
-  let iSalesHProd = await dbConnect.dbQuery(
+  let iSalesHProd = await dbConnect.dbQuery(  
     `SELECT DISTINCT "productId", 
                                            "locationID" 
                                       FROM V_SALESH_CONFIG`
   );
 
+  
   // Get BOM
   let iProdBOM = await dbConnect.dbQuery(
     `SELECT *
