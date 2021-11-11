@@ -242,7 +242,7 @@ context my.timeseries {
     };
 
     entity TS_OBJDEPHDR {
-        key CAL_DATE    : Date      @title : Date;
+        key CAL_DATE    : Date      @title : 'Date';
         key LOCATION_ID : String(4) @title : 'Location ID';
         key PRODUCT_ID  : String(40)@title : 'Product ID';
         key OBJ_TYPE    : String(2) @title : 'Object Type';
@@ -252,7 +252,7 @@ context my.timeseries {
     };
 
     entity TS_OBJDEP_CHARHDR {
-        key CAL_DATE    : Date      @title : Date;
+        key CAL_DATE    : Date      @title : 'Date';
         key LOCATION_ID : String(4) @title : 'Location ID';
         key PRODUCT_ID  : String(40)@title : 'Product ID';
         key OBJ_TYPE    : String(2) @title : 'Object Type';
