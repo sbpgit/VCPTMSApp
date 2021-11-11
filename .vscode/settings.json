@@ -12,6 +12,5 @@
     "eslint.nodePath": "/extbin/npm/globals/lib/node_modules/@sap/cds-dk/node_modules",
     "eslint.options": {
         "configFile": "/extbin/npm/globals/lib/node_modules/@sap/cds-dk/lib/lint/.eslintrc.js"
-    },
-    "actions": []
+    }
 }

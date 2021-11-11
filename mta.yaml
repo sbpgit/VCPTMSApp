@@ -25,6 +25,36 @@ modules:
   - name: cross-container-service-3
   parameters:
     buildpack: nodejs_buildpack
+- name: config_products-destination-content
+  type: com.sap.application.content
+  requires:
+  - name: config_products-destination-service
+    parameters:
+      content-target: true
+  - name: config_products_html_repo_host
+    parameters:
+      service-key:
+        name: config_products_html_repo_host-key
+  - name: uaa_config_products
+    parameters:
+      service-key:
+        name: uaa_config_products-key
+  parameters:
+    content:
+      instance:
+        destinations:
+        - Name: configprod_approuter_config_products_html_repo_host
+          ServiceInstanceName: config_products-html5-app-host-service
+          ServiceKeyName: config_products_html_repo_host-key
+          sap.cloud.service: configprod_approuter
+        - Authentication: OAuth2UserTokenExchange
+          Name: configprod_approuter_uaa_config_products
+          ServiceInstanceName: config_products-xsuaa-service
+          ServiceKeyName: uaa_config_products-key
+          sap.cloud.service: configprod_approuter
+        existing_destinations_policy: ignore
+  build-parameters:
+    no-source: true
 resources:
 - name: config_products-db
   type: com.sap.xs.hdi-container
@@ -41,6 +71,28 @@ resources:
   type: org.cloudfoundry.existing-service
   parameters:
     service-name: CCL1_ACCESS
+- name: config_products-destination-service
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      HTML5Runtime_enabled: true
+      version: 1.0.0
+    service: destination
+    service-name: config_products-destination-service
+    service-plan: lite
+- name: config_products_html_repo_host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-name: config_products-html5-app-host-service
+    service-plan: app-host
+- name: uaa_config_products
+  type: org.cloudfoundry.managed-service
+  parameters:
+    path: ./xs-security.json
+    service: xsuaa
+    service-name: config_products-xsuaa-service
+    service-plan: application
 parameters:
   enable-parallel-deployments: true
 build-parameters:

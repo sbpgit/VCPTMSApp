@@ -1,0 +1,8 @@
+{
+  "com.sap::CUSTOMERGROUP": {
+    "target": {
+      "object": "CUSTOMERGROUP",
+      "schema": "DB_CONFIG_PROD_CLIENT1"
+    }
+  }
+}

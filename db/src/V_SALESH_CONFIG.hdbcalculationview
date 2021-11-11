@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="V_SALESH_CONFIG" applyPrivilegeType="NONE" dataCategory="CUBE" schemaVersion="3.0" outputViewType="Aggregation" cacheInvalidationPeriod="NONE" enforceSqlExecution="true">
+<descriptions defaultDescription="V_SALESH_CONFIG"/>
+<localVariables/>
+<variableMappings/>
+<dataSources>
+  <DataSource id="CONFIG_PRODUCTS.db::SALESHCFG">
+    <resourceUri>CONFIG_PRODUCTS.db::SALESHCFG</resourceUri>
+  </DataSource>
+</dataSources>
+<calculationViews>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
+    <viewAttributes>
+      <viewAttribute id="SALES_DOC"/>
+      <viewAttribute id="SALESDOC_ITEM"/>
+      <viewAttribute id="CHAR_NAME"/>
+      <viewAttribute id="CHAR_VALUE"/>
+      <viewAttribute id="PRODUCT_ID"/>
+      <viewAttribute id="PROD_AVAILDATE"/>
+      <viewAttribute id="CHANGED_DATE"/>
+      <viewAttribute id="CHANGED_TIME"/>
+      <viewAttribute id="CHANGED_BY"/>
+      <viewAttribute id="CREATED_DATE"/>
+      <viewAttribute id="CREATED_TIME"/>
+      <viewAttribute id="CREATED_BY"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="CONFIG_PRODUCTS.db::SALESHCFG"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:RankView" id="Rank_1">
+    <viewAttributes>
+      <viewAttribute id="SALES_DOC"/>
+      <viewAttribute id="SALESDOC_ITEM"/>
+      <viewAttribute id="CHAR_NAME"/>
+      <viewAttribute id="CHAR_VALUE"/>
+      <viewAttribute id="PRODUCT_ID"/>
+      <viewAttribute id="PROD_AVAILDATE"/>
+      <viewAttribute id="CHANGED_DATE"/>
+      <viewAttribute id="CHANGED_TIME" aggregationType="min"/>
+      <viewAttribute id="CHANGED_BY"/>
+      <viewAttribute id="CREATED_DATE"/>
+      <viewAttribute id="CREATED_TIME" aggregationType="min"/>
+      <viewAttribute id="CREATED_BY"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="Projection_1"/>
+    <rankingFilter type="RANK" offset="0" offsetReference="FRONT" dynamicPartitionAttributes="false">
+      <order byViewAttributeName="SALES_DOC" direction="ASC"/>
+      <rankThreshold>
+        <value>50</value>
+      </rankThreshold>
+      <rankViewAttributeName>RANK</rankViewAttributeName>
+    </rankingFilter>
+  </calculationView>
+</calculationViews>
+
+<logicalModel id="Rank_1">
+  <attributes>
+    <attribute id="SALES_DOC" order="1" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="SALES_DOC"/>
+      <keyMapping columnObjectName="Rank_1" columnName="SALES_DOC"/>
+    </attribute>
+    <attribute id="SALESDOC_ITEM" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="SALESDOC_ITEM"/>
+      <keyMapping columnObjectName="Rank_1" columnName="SALESDOC_ITEM"/>
+    </attribute>
+    <attribute id="CHAR_NAME" order="3" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CHAR_NAME"/>
+      <keyMapping columnObjectName="Rank_1" columnName="CHAR_NAME"/>
+    </attribute>
+    <attribute id="CHAR_VALUE" order="4" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CHAR_VALUE"/>
+      <keyMapping columnObjectName="Rank_1" columnName="CHAR_VALUE"/>
+    </attribute>
+    <attribute id="PRODUCT_ID" order="5" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="PRODUCT_ID"/>
+      <keyMapping columnObjectName="Rank_1" columnName="PRODUCT_ID"/>
+    </attribute>
+    <attribute id="PROD_AVAILDATE" order="6" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="PROD_AVAILDATE"/>
+      <keyMapping columnObjectName="Rank_1" columnName="PROD_AVAILDATE"/>
+    </attribute>
+    <attribute id="CHANGED_DATE" order="7" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CHANGED_DATE"/>
+      <keyMapping columnObjectName="Rank_1" columnName="CHANGED_DATE"/>
+    </attribute>
+    <attribute id="CHANGED_BY" order="9" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CHANGED_BY"/>
+      <keyMapping columnObjectName="Rank_1" columnName="CHANGED_BY"/>
+    </attribute>
+    <attribute id="CREATED_DATE" order="10" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CREATED_DATE"/>
+      <keyMapping columnObjectName="Rank_1" columnName="CREATED_DATE"/>
+    </attribute>
+    <attribute id="CREATED_BY" order="12" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CREATED_BY"/>
+      <keyMapping columnObjectName="Rank_1" columnName="CREATED_BY"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures>
+    <measure id="CHANGED_TIME" order="8" aggregationType="min" measureType="simple">
+      <descriptions defaultDescription="CHANGED_TIME"/>
+      <measureMapping columnObjectName="Rank_1" columnName="CHANGED_TIME"/>
+    </measure>
+    <measure id="CREATED_TIME" order="11" aggregationType="min" measureType="simple">
+      <descriptions defaultDescription="CREATED_TIME"/>
+      <measureMapping columnObjectName="Rank_1" columnName="CREATED_TIME"/>
+    </measure>
+    <measure id="RANK" order="13" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="RANK"/>
+      <measureMapping columnObjectName="Rank_1" columnName="RANK"/>
+    </measure>
+  </baseMeasures>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+  <localDimensions/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="92" y="112"/>
+    
+      <rectangleSize width="160"/>
+    </shape>
+    
+  
+    <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="92" y="322"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Rank_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="92" y="217"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+  </shapes>
+</layout>
+</Calculation:scenario>

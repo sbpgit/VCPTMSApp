@@ -70,5 +70,29 @@
         "object": "TS_OBJDEP_CHARHDR",
         "schema": "DB_CONFIG_PROD_CLIENT1"
     }
+  },
+  "CONFIG_PRODUCTS.db::TS_PIRCH": {
+    "target": {
+        "object": "PIR_CH",
+        "schema": "DB_CONFIG_PROD_CLIENT1"
+    }
+  },
+  "CONFIG_PRODUCTS.db::SALESSMY": {
+    "target": {
+        "object": "SALESH_SUMMARY",
+        "schema": "DB_CONFIG_PROD_CLIENT1"
+    }
+  },
+  "CONFIG_PRODUCTS.db::SALESCFGSMY": {
+    "target": {
+        "object": "SALESH_CFG_SMRY",
+        "schema": "DB_CONFIG_PROD_CLIENT1"
+    }
+  },
+  "CONFIG_PRODUCTS.db::PRODATTR": {
+    "target": {
+        "object": "PROD_ATTRIBUTES",
+        "schema": "DB_CONFIG_PROD_CLIENT1"
+    }
   }
 }

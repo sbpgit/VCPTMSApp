@@ -1,0 +1,10 @@
+{
+   "xsappname":"config_products",
+   "appUrls": {
+      "getDependencies" : "https://sbp-btp-sbpconsulting-dev-config-products-srv.cfapps.us10.hana.ondemand.com/callback/v1.0/dependencies",
+      "onSubscription" : "https://sbp-btp-sbpconsulting-dev-config-products-srv.cfapps.us10.hana.ondemand.com/callback/v1.0/tenants/1bb5f500-e56c-40ed-ba66-ab47c13ffe30"
+   },
+   "displayName" : "Configurable Products",
+   "description" : "Configurable Products",
+   "category" : "ICS Provider"
+}
