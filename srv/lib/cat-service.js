@@ -7,420 +7,272 @@ const genFunctions = new GenFunctions();
 module.exports = async function () {
   console.log("Started timeseries Service");
 
-  const iSalesHistory = await dbConnect.dbQuery(
-                              `SELECT * 
-                                 FROM SALESH`);
+  const iLocation = await dbConnect.dbQuery(
+    `SELECT *
+       FROM "LOCATION"`
+  );
 
-  // Get Sales hist with respect to Date Range
-  const iSalesChar = await dbConnect.dbQuery(
-                            `SELECT * 
-                               FROM SALESH_CONFIG AS A
-                              WHERE EXISTS ( SELECT "salesDocument",
-                                                    "salesDocumentItem"
-                                               FROM SALESH as B
-                                              WHERE A."salesDocument"     = B."salesDocument"
-                                                AND A."salesDocumentItem" = B."salesDocumentItem" )`);
+  /** Loop through Location */
+  iLocation.forEach(async function (sLocation) {
+    await clearExistingData(sLocation.LOCATION_ID);
 
-  // Get unique records for product and location
-  let iSalesHProd = await dbConnect.dbQuery(
-                          `SELECT DISTINCT "productId", 
-                                           "locationID" 
-                                      FROM V_SALESH_CONFIG`);
+    /** Get Sales History */
+    const iSalesHead = await dbConnect.dbQuery(
+      `SELECT *
+         FROM SALESH
+        WHERE LOCATION_ID = '` + sLocation.LOCATION_ID + `'`
+    );
 
-  // Get BOM
-  let iProdBOM = await dbConnect.dbQuery(
-                       `SELECT *
-                          FROM V_BOMOBJ_DEP AS A 
-                         WHERE EXISTS ( SELECT DISTINCT "locationID", 
-                                                        "productId" 
-                                                   FROM V_SALESH_CONFIG AS B 
-                                                  WHERE A."locationId" = B."locationID" 
-                                                    AND A."productId"  = B."productId" )`);
-  
-  // Get obj dependency
-  let iObjDep = await dbConnect.dbQuery(
-                      `SELECT * 
-                         FROM OBJDEP_HEADER 
-                        WHERE "objectDependency" IN ( SELECT DISTINCT "objectDependency" 
-                                                        FROM V_BOMOBJ_DEP AS A 
-                                                       WHERE EXISTS ( SELECT DISTINCT "locationID", 
-                                                                                      "productId" 
-                                                                                 FROM V_SALESH_CONFIG AS B 
-                                                                                WHERE A."locationId" = B."locationID" 
-                                                                                  AND A."productId"  = B."productId" ) )`
- );
+    /** Process through Sales Histor */
+    for (const sSalesHead of iSalesHead) {
+      lCalDate = genFunctions.getNextSunday(sSalesHead.DOC_CREATEDDATE);
 
-   let iSalesCharTemp = [];
-   let iSalesConsolidate = [];
-   let sSalesConsolidate = {};
+      /** Get Sales Characteristics and Product Object Dependency */
+      const iSales = await getSalesData(sSalesHead);
 
-/**
- * Loop thorugh Sales History
- *  */   
-   iSalesHistory.forEach(sSalesHistory => {
-
-        sSalesConsolidate.salesDocument     = sSalesHistory.salesDocument;
-        sSalesConsolidate.salesDocumentItem = sSalesHistory.salesDocumentItem;
-        sSalesConsolidate.productId         = sSalesHistory.productId;        
-        sSalesConsolidate.locationId        = sSalesHistory.locationId;  //
-        sSalesConsolidate.calDate           = genFunctions.getNextSunday(sSalesHistory.documentCreatedOn);
-
-
-/**
- * Get Sales Characteristic  */  
-       iSalesCharTemp = [];
-       iSalesChar.forEach(sSalesChar => {
-           if (sSalesChar.salesDocument == sSalesHistory.salesDocument 
-            && sSalesChar.salesDocumentItem == sSalesHistory.salesDocumentItem ) 
-                iSalesCharTemp.push(sSalesChar);
-
-       })
-
-/**
- * Loop through Products
- *  */       
-       iProdBOM.forEach(sProdBOM => {
-           if (sSalesHistory.productId == sProdBOM.productId){
-
-/**
- * Product Dependency for the Product */            
-             iObjDep.forEach(sObjDep => {
-                 if(sProdBOM.objectDependency == sObjDep.objectDependency){
-
-                    sSalesConsolidate.objectDependency   = sObjDep.objectDependency;
-                    sSalesConsolidate.objCounter         = sObjDep.objCounter;
-                    sSalesConsolidate.characteristicName = sObjDep.characteristicName;
-                    sSalesConsolidate.success            = ' ';
-                    sSalesConsolidate.attributeIndex     = sObjDep.attributeIndex;
-
-/**
- * Verify if Sales Characterstics satisfy the Object Dependency */                    
-                     iSalesCharTemp.forEach(sSalesChar => {
-                         if(sSalesChar.characteristicName = sObjDep.characteristicName){
-                             if ((sObjDep.condition == 'EQ' 
-                              && sSalesChar.characteristicValue == sObjDep.characteristicValue) 
-                              || (sObjDep.condition == 'NE' 
-                              && sSalesChar.characteristicValue != sObjDep.characteristicValue)){
-
-                                sSalesConsolidate.success            = 'X';
-
-                              }
-
-                         }
-                     })
-                     iSalesConsolidate.push(JSON.parse(JSON.stringify(sSalesConsolidate)));
-                     
-
-                 }
-             })
-           }
-       })
-   });
-
-
-
-   iSalesConsolidate.sort(genFunctions.dynamicSortMultiple("salesDocument", 
-                                                           "salesDocumentItem", 
-                                                           "objectDependency", 
-                                                           "objCounter",
-                                                           "attributeIndex")) ;
-   let lSalesDocument = '';
-   let lSalesDocumentItem = '';
-   let iTimeseries = [];
-   let sTimeseries = {};
-   iSalesConsolidate.forEach((sSalesConsolidate) => {
-     if (
-       lSalesDocument               != sSalesConsolidate.salesDocument      ||
-       lSalesDocumentItem           != sSalesConsolidate.salesDocumentItem  ||
-       sTimeseries.objectDependency != sSalesConsolidate.objectDependency   ||
-       sTimeseries.objCounter       != sSalesConsolidate.objCounter
-     ) {
-       if(lSalesDocument != '' && lSalesDocumentItem != ''){
-        if (checkObjDepSuccess(sTimeseries, iObjDep) != 'X') 
-            sTimeseries.success = 'X';
-
-          iTimeseries.push(JSON.parse(JSON.stringify(sTimeseries)));
-          sTimeseries = {};
-       }
-     }       
-
-       lSalesDocument               = sSalesConsolidate.salesDocument;
-       lSalesDocumentItem           = sSalesConsolidate.salesDocumentItem;
-       sTimeseries.calDate          = sSalesConsolidate.calDate;
-       sTimeseries.objectDependency = sSalesConsolidate.objectDependency;
-       sTimeseries.objCounter       = sSalesConsolidate.objCounter;
-
-       if (sSalesConsolidate.success == "X") {
-         switch (sSalesConsolidate.attributeIndex) {
-           case 1:
-             sTimeseries.attr1 = "X";
-             break;
-           case 2:
-             sTimeseries.attr2 = "X";
-             break;
-           case 3:
-             sTimeseries.attr3 = "X";
-             break;
-           case 4:
-             sTimeseries.attr4 = "X";
-             break;
-           case 5:
-             sTimeseries.attr5 = "X";
-             break;
-           case 6:
-             sTimeseries.attr6 = "X";
-             break;
-           case 7:
-             sTimeseries.attr7 = "X";
-             break;
-           case 8:
-             sTimeseries.attr8 = "X";
-             break;
-           case 9:
-             sTimeseries.attr9 = "X";
-             break;
-           case 10:
-             sTimeseries.attr10 = "X";
-             break;
-           case 11:
-             sTimeseries.attr11 = "X";
-             break;
-           case 12:
-             sTimeseries.attr12 = "X";
-             break;
-         
-       }
-     }
-   });
-
-   iTimeseries.push(JSON.parse(JSON.stringify(sTimeseries)));
-
-   iTimeseries.sort(genFunctions.dynamicSortMultiple(   
-                                                        "calDate", 
-                                                        "objectDependency", 
-                                                        "objCounter")) ;
-
-
-    let iTimeseriesOut = [];
-    let sTimeseriesOut = {};
-    let lCalDate = "";
-    iTimeseries.forEach((sTimeseries) => {
-      if (
-        sTimeseriesOut.calDate          != sTimeseries.calDate         ||
-        sTimeseriesOut.objectDependency != sTimeseries.objectDependency
-      ) {
-        if (sTimeseriesOut.calDate) {
-          iTimeseriesOut.push(JSON.parse(JSON.stringify(sTimeseriesOut)));
-          removeExistingData(sTimeseriesOut.calDate);
-        }
-        sTimeseriesOut = {};
-
-        sTimeseriesOut.success = 0;
-        sTimeseriesOut.attr1 = 0;
-        sTimeseriesOut.attr2 = 0;
-        sTimeseriesOut.attr3 = 0;
-        sTimeseriesOut.attr4 = 0;
-        sTimeseriesOut.attr5 = 0;
-        sTimeseriesOut.attr6 = 0;
-        sTimeseriesOut.attr7 = 0;
-        sTimeseriesOut.attr8 = 0;
-        sTimeseriesOut.attr9 = 0;
-        sTimeseriesOut.attr10 = 0;
-        sTimeseriesOut.attr11 = 0;
-        sTimeseriesOut.attr12 = 0;
-      }
-
-      sTimeseriesOut.calDate          = sTimeseries.calDate;
-      sTimeseriesOut.objectDependency = sTimeseries.objectDependency;
-
-      if (sTimeseries.success == "X")
-        sTimeseriesOut.success = sTimeseriesOut.success + 1;
-      if (sTimeseries.attr1 == "X")
-        sTimeseriesOut.attr1 = sTimeseriesOut.attr1 + 1;
-      if (sTimeseries.attr2 == "X")
-        sTimeseriesOut.attr2 = sTimeseriesOut.attr2 + 1;
-      if (sTimeseries.attr3 == "X")
-        sTimeseriesOut.attr3 = sTimeseriesOut.attr3 + 1;
-      if (sTimeseries.attr4 == "X")
-        sTimeseriesOut.attr4 = sTimeseriesOut.attr4 + 1;
-      if (sTimeseries.attr5 == "X")
-        sTimeseriesOut.attr5 = sTimeseriesOut.attr5 + 1;
-      if (sTimeseries.attr6 == "X")
-        sTimeseriesOut.attr6 = sTimeseriesOut.attr6 + 1;
-      if (sTimeseries.attr7 == "X")
-        sTimeseriesOut.attr7 = sTimeseriesOut.attr7 + 1;
-      if (sTimeseries.attr8 == "X")
-        sTimeseriesOut.attr8 = sTimeseriesOut.attr8 + 1;
-      if (sTimeseries.attr9 == "X")
-        sTimeseriesOut.attr9 = sTimeseriesOut.attr9 + 1;
-      if (sTimeseries.attr10 == "X")
-        sTimeseriesOut.attr10 = sTimeseriesOut.attr10 + 1;
-      if (sTimeseries.attr11 == "X")
-        sTimeseriesOut.attr11 = sTimeseriesOut.attr11 + 1;
-      if (sTimeseries.attr12 == "X")
-        sTimeseriesOut.attr12 = sTimeseriesOut.attr12 + 1;
-    });
-    
-    iTimeseriesOut.push(JSON.parse(JSON.stringify(sTimeseriesOut)));
-
-    removeExistingData(sTimeseriesOut.calDate);
-
-    iTimeseriesOut.forEach(async function (sTimeseries) {
-         await dbConnect.dbQuery(
-            `INSERT INTO "TIMESERIES" VALUES( '`+
-                        sTimeseries.calDate + `','` +
-                        sTimeseries.objectDependency + `','` +
-                        sTimeseries.success + `','` +
-                        sTimeseries.attr1 + `','` +
-                        sTimeseries.attr2 + `','` +
-                        sTimeseries.attr3 + `','` +
-                        sTimeseries.attr4 + `','` +
-                        sTimeseries.attr5 + `','` +
-                        sTimeseries.attr6 + `','` +
-                        sTimeseries.attr7 + `','` +
-                        sTimeseries.attr8 + `','` +
-                        sTimeseries.attr9 + `','` +
-                        sTimeseries.attr10 + `','` +
-                        sTimeseries.attr11 + `','` +
-                        sTimeseries.attr12  + `')`
-        );
-        
-    })
-
-
-};
-/**
- * Check if Object Dependency is success or not
- */
-function checkObjDepSuccess(sTimeseries, iObjDep) {
-    let lFailure = '';
-    let lCheckCharCounter = "";
-    
-  iObjDep.forEach((sObjDep) => {
-    if (
-      sTimeseries.objectDependency == sObjDep.objectDependency &&
-      sTimeseries.objCounter       == sObjDep.objCounter
-    ) {
-      lCheckCharCounter = "";
-      switch (sObjDep.attributeIndex) {
-        case 1:
-          if (sTimeseries.attr1 != "X") lCheckCharCounter = "X";
-          break;
-        case 2:
-          if (sTimeseries.attr2 != "X") lCheckCharCounter = "X";
-          break;
-        case 3:
-          if (sTimeseries.attr3 != "X") lCheckCharCounter = "X";
-          break;
-        case 4:
-          if (sTimeseries.attr4 != "X") lCheckCharCounter = "X";
-          break;
-        case 5:
-          if (sTimeseries.attr5 != "X") lCheckCharCounter = "X";
-          break;
-        case 6:
-          if (sTimeseries.attr6 != "X") lCheckCharCounter = "X";
-          break;
-        case 7:
-          if (sTimeseries.attr7 != "X") lCheckCharCounter = "X";
-          break;
-        case 8:
-          if (sTimeseries.attr8 != "X") lCheckCharCounter = "X";
-          break;
-        case 9:
-          if (sTimeseries.attr9 != "X") lCheckCharCounter = "X";
-          break;
-        case 10:
-          if (sTimeseries.attr10 != "X") lCheckCharCounter = "X";
-          break;
-        case 11:
-          if (sTimeseries.attr11 != "X") lCheckCharCounter = "X";
-          break;
-        case 12:
-          if (sTimeseries.attr12 != "X") lCheckCharCounter = "X";
-          break;
-      }
-      if (lCheckCharCounter === "X") {
-        if (
-          checkCharCounter(
-            iObjDep,
-            sTimeseries,
-            sObjDep.objectDependency,
-            sObjDep.objCounter,
-            sObjDep.charCounter
-          ) != "X"
+      iSales.objDep.sort(
+        genFunctions.dynamicSortMultiple(
+          "OBJ_DEP",
+          "OBJ_COUNTER",
+          "CHAR_NAME",
+          "CHAR_COUNTER",
+          "CHAR_VALUE"
         )
-        lFailure = "X";
-      }
-    }
-  });
-  return lFailure
-}
-/**
- * 
- * @param {*} iObjDep 
- * @param {*} sTimeseries 
- * @param {*} imObjDepen 
- * @param {*} imObjCounter 
- * @param {*} imCharCounter 
- */
-function checkCharCounter(iObjDep, sTimeseries, imObjDepen, imObjCounter, imCharCounter){
-    let lSuccess = '';
-    iObjDep.forEach((sObjDepTemp) => {
-        if (
-          sObjDepTemp.objectDependency == imObjDepen &&
-          sObjDepTemp.objCounter       == imObjCounter &&
-          sObjDepTemp.charCounter      == imCharCounter
-        ) {
-          switch (sObjDepTemp.attributeIndex) {
-            case 1:
-              if (sTimeseries.attr1 == "X") lSuccess = "X";
-              break;
-            case 2:
-              if (sTimeseries.attr2 == "X") lSuccess = "X";
-              break;
-            case 3:
-              if (sTimeseries.attr3 == "X") lSuccess = "X";
-              break;
-            case 4:
-              if (sTimeseries.attr4 == "X") lSuccess = "X";
-              break;
-            case 5:
-              if (sTimeseries.attr5 == "X") lSuccess = "X";
-              break;
-            case 6:
-              if (sTimeseries.attr6 == "X") lSuccess = "X";
-              break;
-            case 7:
-              if (sTimeseries.attr7 == "X") lSuccess = "X";
-              break;
-            case 8:
-              if (sTimeseries.attr8 == "X") lSuccess = "X";
-              break;
-            case 9:
-              if (sTimeseries.attr9 == "X") lSuccess = "X";
-              break;
-            case 10:
-              if (sTimeseries.attr10 == "X") lSuccess = "X";
-              break;
-            case 11:
-              if (sTimeseries.attr11 == "X") lSuccess = "X";
-              break;
-            case 12:
-              if (sTimeseries.attr12 == "X") lSuccess = "X";
-              break;
-          }
-        }
-    });
-return lSuccess;
-}
+      );
+
+      /** Update Object Dependency Characteristic timeseries Table */
+      for (const sSalesChar of iSales.salesChar) {
+        await processObjDepChar(iSales, sSalesHead, sSalesChar);
+      }                                // for (const sSalesChar of iSales.salesChar)
+
+      /** Update Object Dependency timeseries Table */
+      await processObjDepHead(iSales, sSalesHead);
+    }                                  // for (const sSalesHead of iSalesHead)
+  });                                  // iLocation.forEach
+};                                     // function ()
 
 /**
- * 
- * @param {*} lDate 
+ * Clear existing records with respect to Location
  */
-async function removeExistingData(lDate){
-    
-        await dbConnect.dbQuery(`DELETE FROM "TIMESERIES" WHERE "calDate" = '` + lDate + `'`);
+async function clearExistingData(lLocation) {
+  await dbConnect.dbQuery(
+    `DELETE FROM "TS_OBJDEPHDR" WHERE "LOCATION_ID" = '` + lLocation + `'`
+  );
+  await dbConnect.dbQuery(
+    `DELETE FROM "TS_OBJDEP_CHARHDR" WHERE "LOCATION_ID" = '` + lLocation + `'`
+  );
+}                                      // function clearExistingData(lLocation)
+
+/**
+ * Get Sales Head
+ * @param {Sales Head} sSalesHead 
+ */
+async function getSalesData(sSalesHead) {
+
+    /** Get Sales Characteristics */
+  const iSalesChar = await dbConnect.dbQuery(
+    `SELECT * 
+       FROM SALESH_CONFIG
+      WHERE SALES_DOC     = '` + sSalesHead.SALES_DOC + `' 
+        AND SALESDOC_ITEM = '` + sSalesHead.SALESDOC_ITEM + `'`
+  );
+    /** Get Object Dependency Header from Product */
+  const iObjDep = await dbConnect.dbQuery(
+    `SELECT A.* 
+       FROM OBJDEP_HEADER     AS A
+       JOIN BOM_OBJDEPENDENCY AS B
+         ON A.OBJ_DEP = B.OBJ_DEP
+      WHERE B.LOCATION_ID = '` + sSalesHead.LOCATION_ID + `' 
+        AND B.PRODUCT_ID  = '` + sSalesHead.PRODUCT_ID + `'`
+  );
+
+  let iSales = [];
+  iSales.salesChar = iSalesChar;
+  iSales.objDep = iObjDep;
+  return iSales;
+}                                      // function getSalesData(sSalesHead)
+
+/** 
+ * Generate timeseries data for Object Dependency Characteristics */
+async function processObjDepChar(iSales, sSalesHead, sSalesChar) {
+  for (const sObjDep of iSales.objDep) {
+
+
+       /** Check if Characteristic is already present */
+      const liSuccess = await dbConnect.dbQuery(
+          `SELECT SUCCESS + 1 as SUCCESS
+              FROM "TS_OBJDEP_CHARHDR"
+          WHERE CAL_DATE    = '` + lCalDate + `'
+              AND LOCATION_ID = '` + sSalesHead.LOCATION_ID + `'
+              AND PRODUCT_ID  = '` + sSalesHead.PRODUCT_ID + `'
+              AND OBJ_TYPE    = 'OD'
+              AND OBJ_DEP     = '` + sObjDep.OBJ_DEP + `'
+              AND OBJ_COUNTER = '` + sObjDep.OBJ_COUNTER + `'
+              AND ROW_ID      = '` + sObjDep.ROW_ID + `'`
+      );
+
+       /** If there is no record, insert record with zero success */
+      if (!liSuccess[0]) {
+        await dbConnect.dbQuery(
+          `UPSERT "TS_OBJDEP_CHARHDR" VALUES('` + lCalDate + `','` +
+                                                  sSalesHead.LOCATION_ID + `','` +
+                                                  sSalesHead.PRODUCT_ID + `','OD','` +
+                                                  sObjDep.OBJ_DEP +  `','` +
+                                                  sObjDep.OBJ_COUNTER +  `','` +
+                                                  sObjDep.ROW_ID +  `', 0) WITH PRIMARY KEY`
+        );
+      }                                // if (!liSuccess[0])
+
+
+
+    if (sObjDep.CHAR_NAME === sSalesChar.CHAR_NAME) {
+
+      if (
+        (sObjDep.OD_CONDITION === "EQ" &&
+          sObjDep.CHAR_VALUE === sSalesChar.CHAR_VALUE) ||
+        (sObjDep.OD_CONDITION === "NE" &&
+          sObjDep.CHAR_VALUE !== sSalesChar.CHAR_VALUE)
+      ) {
+
+        
+       /** Check if Characteristic is already present */
+      const liSuccess = await dbConnect.dbQuery(
+          `SELECT SUCCESS + 1 as SUCCESS
+              FROM "TS_OBJDEP_CHARHDR"
+          WHERE CAL_DATE    = '` + lCalDate + `'
+              AND LOCATION_ID = '` + sSalesHead.LOCATION_ID + `'
+              AND PRODUCT_ID  = '` + sSalesHead.PRODUCT_ID + `'
+              AND OBJ_TYPE    = 'OD'
+              AND OBJ_DEP     = '` + sObjDep.OBJ_DEP + `'
+              AND OBJ_COUNTER = '` + sObjDep.OBJ_COUNTER + `'
+              AND ROW_ID      = '` + sObjDep.ROW_ID + `'`
+      );
+
+      let lSuccessCount = 0;
+       /** If there is no record, insert record with zero success */
+      if (!liSuccess[0]) {
+          lSuccessCount = 1
+      } else {
+          lSuccessCount = liSuccess[0].SUCCESS;
+      }                                // if (!liSuccess[0])
+
+/** If the Characteristic is success, update the counter */          
+        await dbConnect.dbQuery(
+          `UPSERT "TS_OBJDEP_CHARHDR" VALUES('` + lCalDate + `','` +
+                                                  sSalesHead.LOCATION_ID + `','` +
+                                                  sSalesHead.PRODUCT_ID + `','OD','` +
+                                                  sObjDep.OBJ_DEP +  `','` +
+                                                  sObjDep.OBJ_COUNTER +  `','` +
+                                                  sObjDep.ROW_ID +  `',` +
+                                                  lSuccessCount + `) WITH PRIMARY KEY`
+        );
+      }                                // if ((sObjDep.OD_CONDITION === "EQ" &&...
+    }                                  // if (sObjDep.CHAR_NAME === sSalesChar.CHAR_NAME)
+  }                                    // for (const sObjDep of iSales.objDep)
+}                                      // function processObjDepChar(iSales, sSalesHead, sSalesChar)
+
+/**
+ * Generate Timeseries data for Object Dependency
+ * @param {Salesh Info} iSales 
+ * @param {Sales Head} sSalesHead 
+ */
+async function processObjDepHead(iSales, sSalesHead){
+      let lObjDep = "";
+      let lObjCounter = 0;
+      let iObjDepHead = [];
+      let iObjDepCount = [];
+      
+/** Get Unique Object Dependencies and Object Dependency Counters */      
+      for (const sObjDep of iSales.objDep) {
+        if (lObjDep !== sObjDep.OBJ_DEP || lObjCounter != sObjDep.OBJ_COUNTER) {
+          iObjDepCount.push(JSON.parse(JSON.stringify(sObjDep)));
+        }                              // if (lObjDep !== sObjDep.OBJ_DEP || lObjCounter != sObjDep.OBJ_COUNTER)
+
+        lObjDep = sObjDep.OBJ_DEP;
+        lObjCounter = sObjDep.OBJ_COUNTER;
+      }                                // for (const sObjDep of iSales.objDep)
+
+        /** Process through Object Dependency Counter */
+        for (const sObjDepCount of iObjDepCount) {
+            let lFail = "";
+            let lSuccess = "";
+
+            lObjCounter = sObjDepCount.OBJ_COUNTER;
+            let lCharCounter = 0;
+
+            /** Process through Object Dependency Counter Characteristics*/
+            for (const sObjDep of iSales.objDep) {
+              if (
+                sObjDep.OBJ_DEP === sObjDepCount.OBJ_DEP &&
+                sObjDep.OBJ_COUNTER === sObjDepCount.OBJ_COUNTER
+              ) {
+                  /** IF Failed, check if there is a same characteristic counter  */
+                if (lFail == "X") {
+                  if (lCharCounter !== sObjDep.CHAR_COUNTER) {
+                    break;
+                  } else {
+                    lFail = "";
+                  }
+                }
+                /** If Success, no need to check same characteristic counter */
+                if (lSuccess === "X") {
+                  if (lCharCounter === sObjDep.CHAR_COUNTER) {
+                    continue;
+                  } else {
+                    lSuccess = "";
+                  }
+                }
+                lCharCounter = sObjDep.CHAR_COUNTER;
+                /** Check if the characteristic value is maintained for Sales Order */
+                for (const sSalesChar of iSales.salesChar) {
+                  if (sSalesChar.CHAR_NAME === sObjDep.CHAR_NAME) {
+                    if (
+                      (sObjDep.OD_CONDITION === "EQ" &&
+                        sObjDep.CHAR_VALUE == sSalesChar.CHAR_VALUE) ||
+                      (sObjDep.OD_CONDITION === "NE" &&
+                        sObjDep.CHAR_VALUE !== sSalesChar.CHAR_VALUE)
+                    ) {
+                      lSuccess = "X";
+                      break;
+                    } else {
+                      lFail = "X";
+                      break;
+                    }                  // if ((sObjDep.OD_CONDITION === "EQ" &&...
+                  }                    // if (sSalesChar.CHAR_NAME === sObjDep.CHAR_NAME)...
+                }                      // for (const sSalesChar of iSales.salesChar)
+              }                        // if (sObjDep.OBJ_DEP === sObjDepCount.OBJ_DEP &&...
+            }                          // for (const sObjDep of iSales.objDep)
+
+        /** Update Object Dependency Head timeseries  */
+        if (lFail === "") {
+          const liSuccess = await dbConnect.dbQuery(
+            `SELECT SUCCESS + 1 as SUCCESS
+               FROM "TS_OBJDEPHDR"
+              WHERE CAL_DATE    = '` + lCalDate + `'
+                AND LOCATION_ID = '` + sSalesHead.LOCATION_ID + `'
+                AND PRODUCT_ID  = '` + sSalesHead.PRODUCT_ID + `'
+                AND OBJ_TYPE    = 'OD'
+                AND OBJ_DEP     = '` + sObjDepCount.OBJ_DEP + `'
+                AND OBJ_COUNTER = '` + sObjDepCount.OBJ_COUNTER + `'`
+          );
+
+            if (!liSuccess[0]) {
+                lSuccessCount = 1
+            } else {
+                lSuccessCount = liSuccess[0].SUCCESS;
+            }                                // if (!liSuccess[0])
+
+          await dbConnect.dbQuery(
+            `UPSERT "TS_OBJDEPHDR" VALUES('` + lCalDate + `','` 
+                                             + sSalesHead.LOCATION_ID + `','` 
+                                             + sSalesHead.PRODUCT_ID + `','OD','` 
+                                             + sObjDepCount.OBJ_DEP + `','` 
+                                             + sObjDepCount.OBJ_COUNTER + `',` 
+                                             + lSuccessCount + `) WITH PRIMARY KEY`
+          );
+        }                              // if (lFail === "") {
+      }                                // for (const sObjDepCount of iObjDepCount)            
+
+
 
 }
