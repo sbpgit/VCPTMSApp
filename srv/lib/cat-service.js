@@ -11,7 +11,7 @@ module.exports = async function () {
     `SELECT *
        FROM "LOCATION"`
   );
-
+ 
   /** Loop through Location */
   iLocation.forEach(async function (sLocation) {
     await clearExistingData(sLocation.LOCATION_ID);
