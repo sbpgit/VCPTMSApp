@@ -1,4 +1,4 @@
-//namespace my.timeseries;
+//namespace config.products;
 //namespace app.schema;
 using {
     managed,
@@ -6,7 +6,7 @@ using {
     sap.common
 } from '@sap/cds/common';
 
-context my.timeseries {
+context config.products {
     //namespace app.schema;
     entity LOCATION : managed {
         key LOCATION_ID    : String(4)     @title : 'Location ';
@@ -155,7 +155,7 @@ context my.timeseries {
             ORD_QTY          : Decimal(13, 3)@title : 'Order Quantity';
             MAT_AVAILDATE    : Date          @title : 'Material Availability Date';
             NET_VALUE        : Decimal(15, 2)@title : 'Net Value';
-            CUSTOMER_GRP     : String(2)     @title : 'Customer Group';
+            CUSTOMER_GROUP   : String(2)     @title : 'Customer Group';
             LOCATION_ID      : String(4)     @title : 'Location ID';
             CHANGED_DATE     : Date          @title : 'Changed Date';
             CHANGED_BY       : String(12)    @title : 'Changed By';
@@ -206,7 +206,7 @@ context my.timeseries {
         key WEEK_DATE      : Date          @title : 'Week Date';
         key PRODUCT_ID     : String(40)    @title : 'Product ID';
         key LOCATION_ID    : String(4)     @title : 'Location ID';
-        key CUSTOMER_GRP   : String(2)     @title : 'Customer Group';
+        key CUSTOMER_GROUP : String(2)     @title : 'Customer Group';
             DEMAND_PROD    : String(10)    @title : 'Demand';
             SALEHIST_PROD  : Decimal(13, 3)@title : 'Confirmed Quantity';
             RESERVE_FIELD1 : String(20)    @title : 'Reserve Field1';
@@ -260,9 +260,40 @@ context my.timeseries {
         key OBJ_COUNTER : Integer   @title : 'Object Counter';
         key ROW_ID      : Integer   @title : ' Attribute Index';
             SUCCESS     : Integer   @title : 'Count';
-    }
-}
+    };
 
+    // Classes
+    entity CLASS : managed {
+        key INTRNO_CLASS : String(18)@title : 'Internal class number';
+            CLASS_NAME   : String(20)@title : 'Class Name';
+            CLASS_TYPE   : String(3) @title : 'Class Type';
+            CLASS_DESC   : String(50)@title : 'Class Description';
+            AUTHGROUP    : String(4) @title : 'Authorization Group';
+    };
+
+    //Characteristitcs
+    entity CHARACTERISTICS : managed {
+        key INTRNO_CLASS : String(18)@title : 'Internal class number';
+        key INTRNO_CHAR  : String(10)@title : 'Internal Char. number';
+            CHAR_NAME    : String(30)@title : 'Charateristic Name';
+            CHAR_DESC    : String(30)@title : 'Charateristic Desc.';
+            CHAR_GROUP   : String(10)@title : 'Charateristic Group';
+            CHAR_TYPE    : String(4) @title : 'Charateristic Type';
+            ENTRY_REQ    : String(1) @title : 'Entry request';
+            CHAR_CATGRY  : String(40)@title : 'Charateristic Category';
+    };
+
+    // Characteristic Values
+    entity CHAR_VALUES : managed {
+        key INTRNO_CHAR    : String(10)@title : 'Internal Char. number';
+        key INTRNO_CHARVAL : String(10)@title : 'Internal Char. number';
+            CHAR_VALUE     : String(70)@title : 'Charateristic Value';
+            CHARVAL_DESC   : String(30)@title : 'Charateristic Value Desc.';
+            CATCH_ALL      : String(1) @title : 'Catch all';
+    };
+
+}
+/*
 @cds.persistence.exists
 @cds.persistence.calcview
 entity![V_TIMESERIES]{
@@ -519,3 +550,4 @@ entity![V_ODCHARHDR]{
     key![ROW_ID]      : Integer   @title : 'Attribute Index';
     key![SUCCESS]     : Integer   @title : 'Success Count';
 }
+*/

@@ -1,5 +1,5 @@
-using my.timeseries as od from '../db/data-model';
-using V_TIMESERIES from '../db/data-model';
+using config.products as od from '../db/data-model';
+/*using V_TIMESERIES from '../db/data-model';
 using V_PRODUCT from '../db/data-model';
 using V_LOCATION from '../db/data-model';
 using V_CUSTOMERGROUP from '../db/data-model';
@@ -12,7 +12,7 @@ using V_BOMOD from '../db/data-model';
 using V_PIRCH from '../db/data-model';
 using V_PRODATTR from '../db/data-model';
 using V_ODHDR from '../db/data-model';
-using V_ODCHARHDR from '../db/data-model';
+using V_ODCHARHDR from '../db/data-model';*/
 
 service CatalogService @(impl : './lib/cat-service.js') {
     //@readonly entity odTimeSeries as projection on my.odTimeSeries;
