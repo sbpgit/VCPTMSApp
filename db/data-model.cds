@@ -6,7 +6,7 @@ using {
     sap.common
 } from '@sap/cds/common';
 
-context config.products {
+context cp {
     //namespace app.schema;
     entity LOCATION : managed {
         key LOCATION_ID    : String(4)     @title : 'Location ';
@@ -261,6 +261,26 @@ context config.products {
         key ROW_ID      : Integer   @title : ' Attribute Index';
             SUCCESS     : Integer   @title : 'Count';
     };
+    entity TS_OBJDEPHDR_F {
+        key CAL_DATE    : Date      @title : 'Date';
+        key LOCATION_ID : String(4) @title : 'Location ID';
+        key PRODUCT_ID  : String(40)@title : 'Product ID';
+        key OBJ_TYPE    : String(2) @title : 'Object Type';
+        key OBJ_DEP     : String(15)@title : 'Object Dependency';
+        key OBJ_COUNTER : Integer   @title : 'Object Counter';
+            SUCCESS     : Integer   @title : 'Count';
+    };
+
+    entity TS_OBJDEP_CHARHDR_F {
+        key CAL_DATE    : Date      @title : 'Date';
+        key LOCATION_ID : String(4) @title : 'Location ID';
+        key PRODUCT_ID  : String(40)@title : 'Product ID';
+        key OBJ_TYPE    : String(2) @title : 'Object Type';
+        key OBJ_DEP     : String(15)@title : 'Object Dependency';
+        key OBJ_COUNTER : Integer   @title : 'Object Counter';
+        key ROW_ID      : Integer   @title : ' Attribute Index';
+            SUCCESS     : Integer   @title : 'Count';
+    };
 
     // Classes
     entity CLASS : managed {
@@ -292,6 +312,26 @@ context config.products {
             CATCH_ALL      : String(1) @title : 'Catch all';
     };
 
+}
+/*
+@cds.persistence.exists 
+Entity ![V_CLASSCHAR] {
+key     ![INTRNO_CLASS]: String(18)  @title: 'INTRNO_CLASS: INTRNO_CLASS' ; 
+key     ![CLASS_NAME]: String(20)  @title: 'CLASS_NAME: CLASS_NAME' ; 
+key     ![CLASS_TYPE]: String(3)  @title: 'CLASS_TYPE: CLASS_TYPE' ; 
+key     ![CLASS_DESC]: String(50)  @title: 'CLASS_DESC: CLASS_DESC' ; 
+key     ![AUTHGROUP]: String(4)  @title: 'AUTHGROUP: AUTHGROUP' ; 
+key     ![INTRNO_CHAR]: String(10)  @title: 'INTRNO_CHAR: INTRNO_CHAR' ; 
+key     ![CHAR_NAME]: String(30)  @title: 'CHAR_NAME: CHAR_NAME' ; 
+key     ![CHAR_DESC]: String(30)  @title: 'CHAR_DESC: CHAR_DESC' ; 
+key     ![CHAR_GROUP]: String(10)  @title: 'CHAR_GROUP: CHAR_GROUP' ; 
+key     ![CHAR_TYPE]: String(4)  @title: 'CHAR_TYPE: CHAR_TYPE' ; 
+key     ![ENTRY_REQ]: String(1)  @title: 'ENTRY_REQ: ENTRY_REQ' ; 
+key     ![CHAR_CATGRY]: String(40)  @title: 'CHAR_CATGRY: CHAR_CATGRY' ; 
+key     ![CREATEDBY]: String(255)  @title: 'CREATEDBY: CREATEDBY' ; 
+key     ![MODIFIEDBY]: String(255)  @title: 'MODIFIEDBY: MODIFIEDBY' ; 
+key     ![CREATEDAT]: Timestamp  @title: 'CREATEDAT: CREATEDAT' ; 
+key     ![MODIFIEDAT]: Timestamp  @title: 'MODIFIEDAT: MODIFIEDAT' ; 
 }
 /*
 @cds.persistence.exists

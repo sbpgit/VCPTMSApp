@@ -1,4 +1,4 @@
-using config.products as od from '../db/data-model';
+using cp as od from '../db/data-model';
 /*using V_TIMESERIES from '../db/data-model';
 using V_PRODUCT from '../db/data-model';
 using V_LOCATION from '../db/data-model';

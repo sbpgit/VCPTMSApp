@@ -1,4 +1,4 @@
-using config.products as service from '../db/data-model';
+using cp as service from '../db/data-model';
 //using V_TIMESERIES as tssrv from '../db/data-model';
 //using V_PRODUCT as prd from '../db/data-model';
 
@@ -135,22 +135,15 @@ annotate service.PRODUCT with @(
             TypeName       : 'Product',
             TypeNamePlural : 'Products',
         },
-        HeaderFacets                   : [{
+        HeaderFacets            : [{
             $Type             : 'UI.ReferenceFacet',
-            Target            : '@UI.FieldGroup#AdministrativeData',
+            Target            : '@UI.FieldGroup#Description',
             ![@UI.Importance] : #Medium
         }],
-
-        FieldGroup #AdministrativeData : {Data : [
-            {
-                $Type : 'UI.DataField',
-                Value : RESERVE_FIELD1
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : RESERVE_FIELD2
-            }
-        ]},
+        FieldGroup #Description : {Data : [{
+            $Type : 'UI.DataField',
+            Value : PROD_DESC
+        }]},
         FieldGroup #Details            : {Data : [
             {
                 $Type : 'UI.DataField',
@@ -171,6 +164,26 @@ annotate service.PRODUCT with @(
             {
                 $Type : 'UI.DataField',
                 Value : PROD_MDLRANGE
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : RESERVE_FIELD1
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : RESERVE_FIELD2
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : RESERVE_FIELD3
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : RESERVE_FIELD4
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : RESERVE_FIELD5
             }
         ]}
     },

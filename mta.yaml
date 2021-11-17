@@ -16,7 +16,7 @@ modules:
     buildpack: nodejs_buildpack
 - name: config_products-db-deployer
   type: hdb
-  path: db
+  path: gen/db
   requires:
   - name: config_products-db
     properties:
