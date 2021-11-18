@@ -1,4 +1,5 @@
 using cp as service from '../db/data-model';
+using V_CLASSCHAR as srv from '../db/data-model';
 //using V_TIMESERIES as tssrv from '../db/data-model';
 //using V_PRODUCT as prd from '../db/data-model';
 
@@ -133,7 +134,7 @@ annotate service.PRODUCT with @(
             Title          : {Value : PRODUCT_ID},
             Description    : {Value : PROD_DESC},
             TypeName       : 'Product',
-            TypeNamePlural : 'Products',
+            TypeNamePlural : 'Products'
         },
         HeaderFacets            : [{
             $Type             : 'UI.ReferenceFacet',
@@ -145,6 +146,10 @@ annotate service.PRODUCT with @(
             Value : PROD_DESC
         }]},
         FieldGroup #Details            : {Data : [
+            {
+                $Type : 'UI.DataField',
+                Value : PROD_DESC
+            },
             {
                 $Type : 'UI.DataField',
                 Value : PROD_FAMILY
@@ -615,6 +620,18 @@ annotate service.SALESH with @(
             {
                 $Type : 'UI.DataField',
                 Value : NET_VALUE
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : DOC_CREATEDDATE
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : SCHEDULELINE_NUM
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : CONFIRMED_QTY
             }
         ]}
     },
@@ -778,6 +795,14 @@ annotate service.SALESH_CFG_SMRY with @(
             {
                 $Type : 'UI.DataField',
                 Value : SALEHIST_PROD
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : CHAR_NAME
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : CHAR_VALUE
             }
         ]}
     },
@@ -875,6 +900,10 @@ annotate service.PIR_CH with @(
             {
                 $Type : 'UI.DataField',
                 Value : CH_QTY
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : PLANT
             }
         ]},
 
@@ -1049,6 +1078,190 @@ annotate service.BOMHEADER with @(
         Facets : [{
             $Type  : 'UI.ReferenceFacet',
             Label  : 'Product BOM',
+            Target : '@UI.FieldGroup#Details'
+        }]
+    }]
+);
+
+//TS_OBJHEADER
+annotate service.TS_OBJDEPHDR with @(
+    UI        : {
+        SelectionFields     : [
+            CAL_DATE,
+            LOCATION_ID,
+            PRODUCT_ID
+        ],
+        LineItem            : [
+            {
+                $Type : 'UI.DataField', //Label : 'Product Family',
+                Value : CAL_DATE
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Family',
+                Value : LOCATION_ID
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product ID',
+                Value : PRODUCT_ID
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Description',
+                Value : OBJ_TYPE
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product ID',
+                Value : OBJ_DEP
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Description',
+                Value : OBJ_COUNTER
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : SUCCESS
+            }
+        ],
+        HeaderInfo          : {
+            Title          : {Value : CAL_DATE},
+            Description    : {Value : PRODUCT_ID},
+            TypeName       : 'Timeseries',
+            TypeNamePlural : 'Timeseries',
+        },
+        FieldGroup #Details : {Data : [
+            {
+                $Type : 'UI.DataField', //Label : 'Product Family',
+                Value : CAL_DATE
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Family',
+                Value : LOCATION_ID
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product ID',
+                Value : PRODUCT_ID
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Description',
+                Value : OBJ_TYPE
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product ID',
+                Value : OBJ_DEP
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Description',
+                Value : OBJ_COUNTER
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : SUCCESS
+            }
+        ]}
+    },
+    // Page Facets
+    UI.Facets : [{
+        $Type  : 'UI.CollectionFacet',
+        ID     : 'Timeser',
+        Label  : 'Timeseries',
+        Facets : [{
+            $Type  : 'UI.ReferenceFacet',
+            Label  : 'Timeseries',
+            Target : '@UI.FieldGroup#Details'
+        }]
+    }]
+);
+
+//TS_OBJDEP_CHARHDR
+annotate service.TS_OBJDEP_CHARHDR with @(
+    UI        : {
+        SelectionFields     : [
+            CAL_DATE,
+            LOCATION_ID,
+            PRODUCT_ID
+        ],
+        LineItem            : [
+            {
+                $Type : 'UI.DataField', //Label : 'Product Family',
+                Value : CAL_DATE
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Family',
+                Value : LOCATION_ID
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product ID',
+                Value : PRODUCT_ID
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Description',
+                Value : OBJ_TYPE
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product ID',
+                Value : OBJ_DEP
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Description',
+                Value : OBJ_COUNTER
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : ROW_ID
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : SUCCESS
+            }
+        ],
+        HeaderInfo          : {
+            Title          : {Value : CAL_DATE},
+            Description    : {Value : PRODUCT_ID},
+            TypeName       : 'Timeseries',
+            TypeNamePlural : 'Timeseries',
+        },
+        FieldGroup #Details : {Data : [
+            {
+                $Type : 'UI.DataField', //Label : 'Product Family',
+                Value : CAL_DATE
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Family',
+                Value : LOCATION_ID
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product ID',
+                Value : PRODUCT_ID
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Description',
+                Value : OBJ_TYPE
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product ID',
+                Value : OBJ_DEP
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Description',
+                Value : OBJ_COUNTER
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : ROW_ID
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : SUCCESS
+            }
+        ]}
+    },
+    // Page Facets
+    UI.Facets : [{
+        $Type  : 'UI.CollectionFacet',
+        ID     : 'Timeser',
+        Label  : 'Timeseries',
+        Facets : [{
+            $Type  : 'UI.ReferenceFacet',
+            Label  : 'Timeseries',
             Target : '@UI.FieldGroup#Details'
         }]
     }]

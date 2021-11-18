@@ -313,25 +313,25 @@ context cp {
     };
 
 }
-/*
+
 @cds.persistence.exists 
 Entity ![V_CLASSCHAR] {
-key     ![INTRNO_CLASS]: String(18)  @title: 'INTRNO_CLASS: INTRNO_CLASS' ; 
-key     ![CLASS_NAME]: String(20)  @title: 'CLASS_NAME: CLASS_NAME' ; 
-key     ![CLASS_TYPE]: String(3)  @title: 'CLASS_TYPE: CLASS_TYPE' ; 
-key     ![CLASS_DESC]: String(50)  @title: 'CLASS_DESC: CLASS_DESC' ; 
-key     ![AUTHGROUP]: String(4)  @title: 'AUTHGROUP: AUTHGROUP' ; 
-key     ![INTRNO_CHAR]: String(10)  @title: 'INTRNO_CHAR: INTRNO_CHAR' ; 
-key     ![CHAR_NAME]: String(30)  @title: 'CHAR_NAME: CHAR_NAME' ; 
-key     ![CHAR_DESC]: String(30)  @title: 'CHAR_DESC: CHAR_DESC' ; 
-key     ![CHAR_GROUP]: String(10)  @title: 'CHAR_GROUP: CHAR_GROUP' ; 
-key     ![CHAR_TYPE]: String(4)  @title: 'CHAR_TYPE: CHAR_TYPE' ; 
-key     ![ENTRY_REQ]: String(1)  @title: 'ENTRY_REQ: ENTRY_REQ' ; 
-key     ![CHAR_CATGRY]: String(40)  @title: 'CHAR_CATGRY: CHAR_CATGRY' ; 
-key     ![CREATEDBY]: String(255)  @title: 'CREATEDBY: CREATEDBY' ; 
-key     ![MODIFIEDBY]: String(255)  @title: 'MODIFIEDBY: MODIFIEDBY' ; 
-key     ![CREATEDAT]: Timestamp  @title: 'CREATEDAT: CREATEDAT' ; 
-key     ![MODIFIEDAT]: Timestamp  @title: 'MODIFIEDAT: MODIFIEDAT' ; 
+key     ![CREATEDBY]: String(255)  @title: 'Created BY' ; 
+key     ![MODIFIEDBY]: String(255)  @title: 'Modified By' ; 
+key     ![INTRNO_CLASS]: String(18)  @title: 'Internal class Number' ; 
+key     ![CLASS_NAME]: String(20)  @title: 'Class Name' ; 
+key     ![CLASS_TYPE]: String(3)  @title: 'Class Type' ; 
+key     ![CLASS_DESC]: String(50)  @title: 'Class Description' ; 
+key     ![AUTHGROUP]: String(4)  @title: 'Authorization group' ; 
+key     ![INTRNO_CHAR]: String(10)  @title: 'Internal characteristic Number' ; 
+key     ![CHAR_NAME]: String(30)  @title: 'Characteristic Name' ; 
+key     ![CHAR_DESC]: String(30)  @title: 'Characteristic Desc' ; 
+key     ![CHAR_GROUP]: String(10)  @title: 'Characteristic Group' ; 
+key     ![CHAR_TYPE]: String(4)  @title: 'Characteristic Type' ; 
+key     ![ENTRY_REQ]: String(1)  @title: 'Entry Request' ; 
+key     ![CHAR_CATGRY]: String(40)  @title: 'Characteristic Category' ; 
+key     ![CREATEDAT]: Timestamp  @title: 'Created At' ; 
+key     ![MODIFIEDAT]: Timestamp  @title: 'Modified At' ; 
 }
 /*
 @cds.persistence.exists

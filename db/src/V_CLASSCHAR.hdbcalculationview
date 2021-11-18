@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="V_CLASSCHAR" applyPrivilegeType="NONE" dataCategory="CUBE" schemaVersion="3.0" outputViewType="Aggregation" cacheInvalidationPeriod="NONE" enforceSqlExecution="true">
+<descriptions defaultDescription="V_CLASSCHAR"/>
+<localVariables/>
+<variableMappings/>
+<dataSources>
+  <DataSource id="CP_CLASS">
+    <resourceUri>CP_CLASS</resourceUri>
+  </DataSource>
+  <DataSource id="CP_CHARACTERISTICS">
+    <resourceUri>CP_CHARACTERISTICS</resourceUri>
+  </DataSource>
+</dataSources>
+<calculationViews>
+  <calculationView xsi:type="Calculation:JoinView" id="Join_1" cardinality="CN_N" joinType="inner">
+    <viewAttributes>
+      <viewAttribute id="CREATEDAT" aggregationType="min"/>
+      <viewAttribute id="CREATEDBY"/>
+      <viewAttribute id="MODIFIEDAT" aggregationType="min"/>
+      <viewAttribute id="MODIFIEDBY"/>
+      <viewAttribute id="INTRNO_CLASS"/>
+      <viewAttribute id="CLASS_NAME"/>
+      <viewAttribute id="CLASS_TYPE"/>
+      <viewAttribute id="CLASS_DESC"/>
+      <viewAttribute id="AUTHGROUP"/>
+      <viewAttribute id="INTRNO_CHAR"/>
+      <viewAttribute id="CHAR_NAME"/>
+      <viewAttribute id="CHAR_DESC"/>
+      <viewAttribute id="CHAR_GROUP"/>
+      <viewAttribute id="CHAR_TYPE"/>
+      <viewAttribute id="ENTRY_REQ"/>
+      <viewAttribute id="CHAR_CATGRY"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="Projection_1">
+      <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDAT" source="CREATEDAT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDBY" source="CREATEDBY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="MODIFIEDAT" source="MODIFIEDAT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="MODIFIEDBY" source="MODIFIEDBY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="INTRNO_CLASS" source="INTRNO_CLASS"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CLASS_NAME" source="CLASS_NAME"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CLASS_TYPE" source="CLASS_TYPE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CLASS_DESC" source="CLASS_DESC"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="AUTHGROUP" source="AUTHGROUP"/>
+    </input>
+    <input node="Projection_2">
+      <mapping xsi:type="Calculation:AttributeMapping" target="INTRNO_CHAR" source="INTRNO_CHAR"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CHAR_NAME" source="CHAR_NAME"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CHAR_DESC" source="CHAR_DESC"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CHAR_GROUP" source="CHAR_GROUP"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CHAR_TYPE" source="CHAR_TYPE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="ENTRY_REQ" source="ENTRY_REQ"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CHAR_CATGRY" source="CHAR_CATGRY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="INTRNO_CLASS" source="INTRNO_CLASS"/>
+    </input>
+    <joinAttribute name="INTRNO_CLASS"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
+    <viewAttributes>
+      <viewAttribute id="CREATEDAT"/>
+      <viewAttribute id="CREATEDBY"/>
+      <viewAttribute id="MODIFIEDAT"/>
+      <viewAttribute id="MODIFIEDBY"/>
+      <viewAttribute id="INTRNO_CLASS"/>
+      <viewAttribute id="CLASS_NAME"/>
+      <viewAttribute id="CLASS_TYPE"/>
+      <viewAttribute id="CLASS_DESC"/>
+      <viewAttribute id="AUTHGROUP"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="CP_CLASS"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_2">
+    <viewAttributes>
+      <viewAttribute id="INTRNO_CLASS"/>
+      <viewAttribute id="INTRNO_CHAR"/>
+      <viewAttribute id="CHAR_NAME"/>
+      <viewAttribute id="CHAR_DESC"/>
+      <viewAttribute id="CHAR_GROUP"/>
+      <viewAttribute id="CHAR_TYPE"/>
+      <viewAttribute id="ENTRY_REQ"/>
+      <viewAttribute id="CHAR_CATGRY"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="CP_CHARACTERISTICS"/>
+  </calculationView>
+</calculationViews>
+
+<logicalModel id="Join_1">
+  <attributes>
+    <attribute id="CREATEDBY" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CREATEDBY"/>
+      <keyMapping columnObjectName="Join_1" columnName="CREATEDBY"/>
+    </attribute>
+    <attribute id="MODIFIEDBY" order="4" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="MODIFIEDBY"/>
+      <keyMapping columnObjectName="Join_1" columnName="MODIFIEDBY"/>
+    </attribute>
+    <attribute id="INTRNO_CLASS" order="5" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="INTRNO_CLASS"/>
+      <keyMapping columnObjectName="Join_1" columnName="INTRNO_CLASS"/>
+    </attribute>
+    <attribute id="CLASS_NAME" order="6" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CLASS_NAME"/>
+      <keyMapping columnObjectName="Join_1" columnName="CLASS_NAME"/>
+    </attribute>
+    <attribute id="CLASS_TYPE" order="7" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CLASS_TYPE"/>
+      <keyMapping columnObjectName="Join_1" columnName="CLASS_TYPE"/>
+    </attribute>
+    <attribute id="CLASS_DESC" order="8" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CLASS_DESC"/>
+      <keyMapping columnObjectName="Join_1" columnName="CLASS_DESC"/>
+    </attribute>
+    <attribute id="AUTHGROUP" order="9" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="AUTHGROUP"/>
+      <keyMapping columnObjectName="Join_1" columnName="AUTHGROUP"/>
+    </attribute>
+    <attribute id="INTRNO_CHAR" order="10" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="INTRNO_CHAR"/>
+      <keyMapping columnObjectName="Join_1" columnName="INTRNO_CHAR"/>
+    </attribute>
+    <attribute id="CHAR_NAME" order="11" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CHAR_NAME"/>
+      <keyMapping columnObjectName="Join_1" columnName="CHAR_NAME"/>
+    </attribute>
+    <attribute id="CHAR_DESC" order="12" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CHAR_DESC"/>
+      <keyMapping columnObjectName="Join_1" columnName="CHAR_DESC"/>
+    </attribute>
+    <attribute id="CHAR_GROUP" order="13" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CHAR_GROUP"/>
+      <keyMapping columnObjectName="Join_1" columnName="CHAR_GROUP"/>
+    </attribute>
+    <attribute id="CHAR_TYPE" order="14" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CHAR_TYPE"/>
+      <keyMapping columnObjectName="Join_1" columnName="CHAR_TYPE"/>
+    </attribute>
+    <attribute id="ENTRY_REQ" order="15" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="ENTRY_REQ"/>
+      <keyMapping columnObjectName="Join_1" columnName="ENTRY_REQ"/>
+    </attribute>
+    <attribute id="CHAR_CATGRY" order="16" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CHAR_CATGRY"/>
+      <keyMapping columnObjectName="Join_1" columnName="CHAR_CATGRY"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures>
+    <measure id="CREATEDAT" order="1" aggregationType="min" measureType="simple">
+      <descriptions defaultDescription="CREATEDAT"/>
+      <measureMapping columnObjectName="Join_1" columnName="CREATEDAT"/>
+    </measure>
+    <measure id="MODIFIEDAT" order="3" aggregationType="min" measureType="simple">
+      <descriptions defaultDescription="MODIFIEDAT"/>
+      <measureMapping columnObjectName="Join_1" columnName="MODIFIEDAT"/>
+    </measure>
+  </baseMeasures>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+  <localDimensions/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="40" y="85"/>
+    </shape>
+    
+  
+    <shape expanded="true" modelObjectName="Join_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="116" y="203"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape modelObjectName="Projection_1" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="20" y="30"/>
+      <rectangleSize width="170.35302734375"/>
+    </shape>
+    <shape modelObjectName="Projection_2" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="320" y="30"/>
+      <rectangleSize width="170.35302734375"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="5" y="347"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Projection_2" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="307" y="347"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+  </shapes>
+</layout>
+</Calculation:scenario>
