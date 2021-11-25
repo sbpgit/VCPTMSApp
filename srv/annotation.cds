@@ -1,5 +1,5 @@
 using cp as service from '../db/data-model';
-using V_CLASSCHAR as srv from '../db/data-model';
+//using V_CLASSCHAR as srv from '../db/data-model';
 //using V_TIMESERIES as tssrv from '../db/data-model';
 //using V_PRODUCT as prd from '../db/data-model';
 
@@ -262,6 +262,26 @@ annotate service.LOCATION with @(
             {
                 $Type : 'UI.DataField',
                 Value : LONGITUTE
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : RESERVE_FIELD1
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : RESERVE_FIELD2
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : RESERVE_FIELD3
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : RESERVE_FIELD4
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : RESERVE_FIELD5
             }
         ]}
     },
@@ -317,9 +337,30 @@ annotate service.CUSTOMERGROUP with @(
             },
         ]},
         FieldGroup #Details     : {Data : [{
-            $Type : 'UI.DataField',
-            Value : CUSTOMER_DESC
-        }]}
+                $Type : 'UI.DataField',
+                Value : CUSTOMER_DESC
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : RESERVE_FIELD1
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : RESERVE_FIELD2
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : RESERVE_FIELD3
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : RESERVE_FIELD4
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : RESERVE_FIELD5
+            }
+        ]}
     },
     // Page Facets
     UI.Facets : [{
@@ -410,7 +451,7 @@ annotate service.PROD_ATTRIBUTES with @(
 );
 
 // Product Configuration
-annotate service.PROD_CONFIG with @(
+/*annotate service.PROD_CONFIG with @(
     UI        : {
         SelectionFields     : [
             PRODUCT_ID,
@@ -472,7 +513,7 @@ annotate service.PROD_CONFIG with @(
             Value : PRODDESC
         }
         ]},*/
-        FieldGroup #Details : {Data : [
+    /*    FieldGroup #Details : {Data : [
             {
                 $Type : 'UI.DataField',
                 Value : CLASS
@@ -514,7 +555,7 @@ annotate service.PROD_CONFIG with @(
             Target : '@UI.FieldGroup#Details'
         }]
     }]
-);
+);*/
 
 // Product Configuration
 annotate service.SALESH with @(
@@ -649,7 +690,7 @@ annotate service.SALESH with @(
 );
 
 // SALES History configuration
-annotate service.SALESH_CONFIG with @(
+/*annotate service.SALESH_CONFIG with @(
     UI        : {
         SelectionFields     : [
             SALES_DOC,
@@ -818,7 +859,7 @@ annotate service.SALESH_CFG_SMRY with @(
         }]
     }]
 );
-
+*/
 //PIR
 annotate service.PIR_CH with @(
     UI        : {
@@ -1266,3 +1307,106 @@ annotate service.TS_OBJDEP_CHARHDR with @(
         }]
     }]
 );
+//TS_OBJDEP_CHARHDR
+/*annotate V_CLASSCHAR with @(
+    UI        : {
+        SelectionFields     : [
+            CLASS_NAME,
+            CLASS_DESC,
+            CHAR_NAME
+        ],
+        LineItem            : [
+            {
+                $Type : 'UI.DataField', //Label : 'Product Family',
+                Value : CLASS_NAME
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Family',
+                Value : CLASS_TYPE
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product ID',
+                Value : CLASS_DESC
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Description',
+                Value : CHAR_NAME
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product ID',
+                Value : CHAR_GROUP
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Description',
+                Value : CHAR_CATGRY
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : ENTRY_REQ
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : AUTHGROUP
+            }
+        ],
+        HeaderInfo          : {
+            Title          : {Value : CLASS_NAME},
+            Description    : {Value : CHAR_NAME},
+            TypeName       : 'Class Characteristic',
+            TypeNamePlural : 'Class Characteristic',
+        },
+        FieldGroup #Details : {Data : [
+            {
+                $Type : 'UI.DataField', //Label : 'Product Family',
+                Value : CLASS_NAME
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Family',
+                Value : CLASS_TYPE
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product ID',
+                Value : CLASS_DESC
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Description',
+                Value : CHAR_NAME
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Description',
+                Value : CHAR_DESC
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Description',
+                Value : CHAR_TYPE
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product ID',
+                Value : CHAR_GROUP
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Description',
+                Value : CHAR_CATGRY
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : ENTRY_REQ
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : AUTHGROUP
+            }
+        ]}
+    },
+    // Page Facets
+    UI.Facets : [{
+        $Type  : 'UI.CollectionFacet',
+        ID     : 'classchar',
+        Label  : 'Class Characteristic',
+        Facets : [{
+            $Type  : 'UI.ReferenceFacet',
+            Label  : 'Class Characteristic',
+            Target : '@UI.FieldGroup#Details'
+        }]
+    }]
+);*/

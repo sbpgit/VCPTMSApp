@@ -1,5 +1,5 @@
 using cp as od from '../db/data-model';
-using V_CLASSCHAR from '../db/data-model';
+//using V_CLASSCHAR from '../db/data-model';
 /*using V_TIMESERIES from '../db/data-model';
 using V_PRODUCT from '../db/data-model';
 using V_LOCATION from '../db/data-model';
@@ -57,7 +57,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
     @readonly
     entity getODCharHdr  as projection on od.TS_OBJDEP_CHARHDR;
 
-    @readonly
+  /*  @readonly
     entity getclasschar as projection on V_CLASSCHAR;
 
 // Services on Schema tables
