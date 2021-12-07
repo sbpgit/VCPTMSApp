@@ -1,0 +1,12 @@
+<mvc:View
+    controllerName="cfgapp.pvsroot.cfgprdpvsroot.controller.Detail"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:f="sap.f"
+    displayBlock="true"
+    xmlns="sap.m" >
+	<Page title="{oGModel>/JobNum}" showNavButton="true" navButtonPress="onNavBack">
+		<content>
+			<f:FlexibleColumnLayout id="fcl"></f:FlexibleColumnLayout>
+		</content>
+		</Page>
+</mvc:View>

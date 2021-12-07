@@ -1,0 +1,20 @@
+
+<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="cfgapp.pvsroot.cfgprdpvsroot.controller.ItemDetail" class="ItemDetail">
+	<Page title="{i18n>detailTitle}" busy="{ItemDetail>/busy}" showNavButton="{device>/support/touch}"
+		navButtonPress="onDetailNavBack" navButtonTooltip="{i18n>back2Master}" showFooter="true">
+		<content>
+<Table id="idListDetail">
+<columns>
+
+								<Column hAlign="Center" vAlign="Middle">
+									<Text text="{i18n>structureNode}"/>
+								</Column>
+								<Column hAlign="Center" vAlign="Middle">
+									<Text text="{i18n>strucDesc}"/>
+								</Column>
+</columns>
+</Table>
+        
+		</content>
+	</Page>
+</mvc:View>

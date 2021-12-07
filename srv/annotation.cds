@@ -1,5 +1,5 @@
 using cp as service from '../db/data-model';
-//using V_CLASSCHAR as srv from '../db/data-model';
+using V_CLASSCHAR as srv from '../db/data-model';
 //using V_TIMESERIES as tssrv from '../db/data-model';
 //using V_PRODUCT as prd from '../db/data-model';
 
@@ -451,11 +451,11 @@ annotate service.PROD_ATTRIBUTES with @(
 );
 
 // Product Configuration
-/*annotate service.PROD_CONFIG with @(
+annotate service.PROD_CONFIG with @(
     UI        : {
         SelectionFields     : [
             PRODUCT_ID,
-            CHAR_NAME,
+           // CHAR_NAME,
             CHAR_ATTR
         ],
         LineItem            : [
@@ -469,15 +469,15 @@ annotate service.PROD_ATTRIBUTES with @(
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Family',
-                Value : CHAR_NAME
+                Value : CHAR_NUM
             },
-            {
+         /*   {
                 $Type : 'UI.DataField', //Label : 'Product Series',
                 Value : CHAR_VALUE
-            },
+            },*/
             {
                 $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : CHARVAL_DESC
+                Value : CHARVAL_NUM
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Series',
@@ -507,28 +507,28 @@ annotate service.PROD_ATTRIBUTES with @(
               ![@UI.Importance] : #Medium
           }
           ], */
-        /*FieldGroup #Description        : {Data : [
+      /*  FieldGroup #Description        : {Data : [
         {
             $Type : 'UI.DataField',
             Value : PRODDESC
         }
         ]},*/
-    /*    FieldGroup #Details : {Data : [
+        FieldGroup #Details : {Data : [
             {
                 $Type : 'UI.DataField',
                 Value : CLASS
             },
             {
                 $Type : 'UI.DataField',
-                Value : CHAR_NAME
+                Value : CHAR_NUM
             },
-            {
+          /*  {
                 $Type : 'UI.DataField',
                 Value : CHAR_VALUE
-            },
+            },*/
             {
                 $Type : 'UI.DataField',
-                Value : CHARVAL_DESC
+                Value : CHARVAL_NUM
             },
             {
                 $Type : 'UI.DataField',
@@ -555,7 +555,7 @@ annotate service.PROD_ATTRIBUTES with @(
             Target : '@UI.FieldGroup#Details'
         }]
     }]
-);*/
+);
 
 // Product Configuration
 annotate service.SALESH with @(
@@ -690,12 +690,11 @@ annotate service.SALESH with @(
 );
 
 // SALES History configuration
-/*annotate service.SALESH_CONFIG with @(
+annotate service.SALESH_CONFIG with @(
     UI        : {
         SelectionFields     : [
             SALES_DOC,
-            PRODUCT_ID,
-            CHAR_NAME
+            PRODUCT_ID
         ],
         LineItem            : [
             {
@@ -712,11 +711,11 @@ annotate service.SALESH with @(
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : CHAR_NAME
+                Value : CHAR_NUM
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : CHAR_VALUE
+                Value : CHARVAL_NUM
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Series',
@@ -737,11 +736,11 @@ annotate service.SALESH with @(
             },
             {
                 $Type : 'UI.DataField',
-                Value : CHAR_NAME
+                Value : CHAR_NUM
             },
             {
                 $Type : 'UI.DataField',
-                Value : CHAR_VALUE
+                Value : CHARVAL_NUM
             },
             {
                 $Type : 'UI.DataField',
@@ -766,7 +765,7 @@ annotate service.SALESH_CFG_SMRY with @(
     UI        : {
         SelectionFields         : [
             WEEK_DATE,
-            CHAR_NAME
+            CHAR_NUM
         ],
         LineItem                : [
             {
@@ -775,15 +774,15 @@ annotate service.SALESH_CFG_SMRY with @(
             },
             {
                 $Type : 'UI.DataField', //Label : 'Description',
-                Value : CHAR_NAME
+                Value : CHAR_NUM
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Family',
-                Value : CHAR_VALUE
+                Value : CHARVAL_NUM
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : CLASS
+                Value : CLASS_NUM
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Series',
@@ -801,7 +800,7 @@ annotate service.SALESH_CFG_SMRY with @(
         ],
         HeaderInfo              : {
             Title          : {Value : WEEK_DATE},
-            Description    : {Value : CLASS},
+            Description    : {Value : LOCATION_ID},
             TypeName       : 'Class',
             TypeNamePlural : 'Classes',
         },
@@ -813,11 +812,11 @@ annotate service.SALESH_CFG_SMRY with @(
         FieldGroup #Description : {Data : [
             {
                 $Type : 'UI.DataField',
-                Value : CHAR_NAME
+                Value : CHAR_NUM
             },
             {
                 $Type : 'UI.DataField',
-                Value : CHAR_VALUE
+                Value : CHARVAL_NUM
             }
         ]},
         FieldGroup #Details     : {Data : [
@@ -839,11 +838,11 @@ annotate service.SALESH_CFG_SMRY with @(
             },
             {
                 $Type : 'UI.DataField',
-                Value : CHAR_NAME
+                Value : CHAR_NUM
             },
             {
                 $Type : 'UI.DataField',
-                Value : CHAR_VALUE
+                Value : CHARVAL_NUM
             }
         ]}
     },
@@ -859,7 +858,7 @@ annotate service.SALESH_CFG_SMRY with @(
         }]
     }]
 );
-*/
+
 //PIR
 annotate service.PIR_CH with @(
     UI        : {
@@ -1308,7 +1307,7 @@ annotate service.TS_OBJDEP_CHARHDR with @(
     }]
 );
 //TS_OBJDEP_CHARHDR
-/*annotate V_CLASSCHAR with @(
+annotate V_CLASSCHAR with @(
     UI        : {
         SelectionFields     : [
             CLASS_NAME,
@@ -1340,10 +1339,10 @@ annotate service.TS_OBJDEP_CHARHDR with @(
                 $Type : 'UI.DataField', //Label : 'Description',
                 Value : CHAR_CATGRY
             },
-            {
+           /* {
                 $Type : 'UI.DataField', //Label : 'Product Series',
                 Value : ENTRY_REQ
-            },
+            },*/
             {
                 $Type : 'UI.DataField', //Label : 'Product Series',
                 Value : AUTHGROUP
@@ -1390,10 +1389,6 @@ annotate service.TS_OBJDEP_CHARHDR with @(
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : ENTRY_REQ
-            },
-            {
-                $Type : 'UI.DataField', //Label : 'Product Series',
                 Value : AUTHGROUP
             }
         ]}
@@ -1409,4 +1404,4 @@ annotate service.TS_OBJDEP_CHARHDR with @(
             Target : '@UI.FieldGroup#Details'
         }]
     }]
-);*/
+);

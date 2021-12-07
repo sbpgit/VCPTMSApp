@@ -250,6 +250,7 @@ context cp {
         key OBJ_DEP     : String(30)@title : 'Object Dependency';
         key OBJ_COUNTER : Integer   @title : 'Object Counter';
             SUCCESS     : Integer   @title : 'Count';
+            SUCCESS_RATE: Double    @title : 'Sucess Rate';
     };
 
     entity TS_OBJDEP_CHARHDR {
@@ -261,6 +262,7 @@ context cp {
         key OBJ_COUNTER : Integer   @title : 'Object Counter';
         key ROW_ID      : Integer   @title : ' Attribute Index';
             SUCCESS     : Integer   @title : 'Count';
+            SUCCESS_RATE: Double    @title : 'Sucess Rate';
     };
 
     entity TS_OBJDEPHDR_F {
@@ -289,32 +291,32 @@ context cp {
 
     // Classes
     entity CLASS : managed {
-        key CLASS_NUM  : String(18)@title : 'Internal class number';
-            CLASS_NAME : String(20)@title : 'Class Name';
-            CLASS_TYPE : String(3) @title : 'Class Type';
+        key CLASS_NUM  : String(18) @title : 'Internal class number';
+            CLASS_NAME : String(20) @title : 'Class Name';
+            CLASS_TYPE : String(3)  @title : 'Class Type';
             CLASS_DESC : String(150)@title : 'Class Description';
-            AUTHGROUP  : String(4) @title : 'Authorization Group';
+            AUTHGROUP  : String(4)  @title : 'Authorization Group';
     };
 
     //Characteristitcs
     entity CHARACTERISTICS : managed {
-        key CLASS_NUM   : String(18)@title : 'Internal class number';
-        key CHAR_NUM    : String(10)@title : 'Internal Char. number';
-            CHAR_NAME   : String(30)@title : 'Charateristic Name';
+        key CLASS_NUM   : String(18) @title : 'Internal class number';
+        key CHAR_NUM    : String(10) @title : 'Internal Char. number';
+            CHAR_NAME   : String(30) @title : 'Charateristic Name';
             CHAR_DESC   : String(150)@title : 'Charateristic Desc.';
-            CHAR_GROUP  : String(10)@title : 'Charateristic Group';
-            CHAR_TYPE   : String(4) @title : 'Charateristic Type';
-            ENTRY_REQ   : String(1) @title : 'Entry request';
-            CHAR_CATGRY : String(40)@title : 'Charateristic Category';
+            CHAR_GROUP  : String(10) @title : 'Charateristic Group';
+            CHAR_TYPE   : String(4)  @title : 'Charateristic Type';
+            ENTRY_REQ   : String(1)  @title : 'Entry request';
+            CHAR_CATGRY : String(40) @title : 'Charateristic Category';
     };
 
     // Characteristic Values
     entity CHAR_VALUES : managed {
-        key CHAR_NUM     : String(10)@title : 'Internal Char. number';
-        key CHARVAL_NUM  : String(10)@title : 'Internal Char. number';
-            CHAR_VALUE   : String(70)@title : 'Charateristic Value';
+        key CHAR_NUM     : String(10) @title : 'Internal Char. number';
+        key CHARVAL_NUM  : String(10) @title : 'Internal Char. number';
+            CHAR_VALUE   : String(70) @title : 'Charateristic Value';
             CHARVAL_DESC : String(150)@title : 'Charateristic Value Desc.';
-            CATCH_ALL    : String(1) @title : 'Catch all';
+            CATCH_ALL    : String(1)  @title : 'Catch all';
     };
 
     //entity for Access nodes
@@ -338,26 +340,30 @@ context cp {
         key COMPONENT   : String(40)@title : 'Component';
             STRUC_NODE  : String(50)@title : 'Structure Node'
     }
+
+    entity TS_ORDERRATE: managed{
+        key WEEK_DATE : Date @title : 'Date';
+        ORDER_COUNT : Integer@title : 'Order Count';
+    }
 }
 
 @cds.persistence.exists
 entity![V_CLASSCHAR]{
-    key![CREATEDBY]    : String(255)@title : 'Created BY';
-    key![MODIFIEDBY]   : String(255)@title : 'Modified By';
-    key![INTRNO_CLASS] : String(18) @title : 'Internal class Number';
+    key![CLASS_NUM]    : String(18) @title : 'Internal class Number';
     key![CLASS_NAME]   : String(20) @title : 'Class Name';
     key![CLASS_TYPE]   : String(3)  @title : 'Class Type';
     key![CLASS_DESC]   : String(50) @title : 'Class Description';
     key![AUTHGROUP]    : String(4)  @title : 'Authorization group';
-    key![INTRNO_CHAR]  : String(10) @title : 'Internal characteristic Number';
+    key![CHAR_NUM]     : String(10) @title : 'Internal characteristic Number';
     key![CHAR_NAME]    : String(30) @title : 'Characteristic Name';
     key![CHAR_DESC]    : String(30) @title : 'Characteristic Desc';
     key![CHAR_GROUP]   : String(10) @title : 'Characteristic Group';
     key![CHAR_TYPE]    : String(4)  @title : 'Characteristic Type';
-    key![ENTRY_REQ]    : String(1)  @title : 'Entry Request';
     key![CHAR_CATGRY]  : String(40) @title : 'Characteristic Category';
-    key![CREATEDAT]    : Timestamp  @title : 'Created At';
-    key![MODIFIEDAT]   : Timestamp  @title : 'Modified At';
+    key![CHARVAL_NUM]  : String(10) @title : 'Internal No. characteristic Value';
+    key![CHAR_VALUE]   : String(70) @title : 'characteristic Value';
+    key![CHARVAL_DESC] : String(150)@title : 'characteristic Value Desc';
+    key![RANK]         : Double     @title : 'Rank';
 }
 /*
 @cds.persistence.exists

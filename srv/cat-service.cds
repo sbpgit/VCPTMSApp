@@ -1,5 +1,5 @@
 using cp as od from '../db/data-model';
-//using V_CLASSCHAR from '../db/data-model';
+using V_CLASSCHAR from '../db/data-model';
 /*using V_TIMESERIES from '../db/data-model';
 using V_PRODUCT from '../db/data-model';
 using V_LOCATION from '../db/data-model';
@@ -53,12 +53,40 @@ service CatalogService @(impl : './lib/cat-service.js') {
 
     @readonly
     entity getODHdr      as projection on od.TS_OBJDEPHDR;
-
+    
+    /*type rangedate{
+        DATE_LOW  :Date;
+        DATE_HIGH   : Date;
+    };
+    action get_timesereies ( tsrange : rangedate );*/
+    
     @readonly
-    entity getODCharHdr  as projection on od.TS_OBJDEP_CHARHDR;
-
-  /*  @readonly
+    entity getODCharHdr  as projection on od.TS_OBJDEP_CHARHDR
+    
+    @readonly
     entity getclasschar as projection on V_CLASSCHAR;
+
+   // @odata.draft.enabled
+   // entity ACCESS_NODES as projection on od.ACCESS_NODES;
+    
+    @odata.draft.enabled
+    entity getAccessNodes as projection on od.ACCESS_NODES;
+    type rangedate{
+        LOCATION_ID : String(4) ;
+        DATE_LOW  :Date;
+        DATE_HIGH   : Date;
+    };
+    type nodeDetails{
+        PNODES: String(50);
+        CNODE: String(50);
+        NODE_DESC: String(200);
+    };
+    function fGetNodeDet ( NODE_TYPE : String(2), CHILD_NODE: String(50), PARENT_NODE: String(50)) returns array of getAccessNodes;//ACCESS_NODES;
+    action generate_timeseries( LOCATION_ID : String(4) ,
+                                DATE_LOW    :Date,
+                                DATE_HIGH   : Date );
+
+}
 
 // Services on Schema tables
 /* @readonly
@@ -103,4 +131,4 @@ service CatalogService @(impl : './lib/cat-service.js') {
 /* @readonly
   entity Timeseries
       as projection on V_TIMESERIES;*/
-}
+

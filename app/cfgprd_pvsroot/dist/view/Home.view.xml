@@ -1,0 +1,23 @@
+<mvc:View
+    controllerName="cfgapp.pvsroot.cfgprdpvsroot.controller.Home"
+    xmlns:mvc="sap.ui.core.mvc"
+    displayBlock="true"
+    xmlns="sap.m"
+>
+	<Page
+    title= "{i18n>accNode}">
+        
+		<content>
+			<VBox class="sapUiTinyMarginBeginEnd">
+				<Input liveChange="onSearch" placeholder="Access Node" width="100%"/>
+			</VBox>
+			<List id="idList"  items="{path: '/results', sorter: {path: 'CHILD_NODE'}}" growingScrollToLoad="true" growing="true"
+				mode="SingleSelectMaster" selectionChange=" handleItemSelction" rememberSelections="false" updateFinished="onUpdateFinished">
+				<items>
+					<StandardListItem title="{CHILD_NODE}" description="{NODE_DESC}" info="{NODE_DESC}"
+						 type="Active"/>
+				</items>
+			</List>
+		</content>
+		</Page>
+</mvc:View>

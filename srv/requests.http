@@ -1,0 +1,4 @@
+### Get Products
+Send Request
+GET http://localhost:4004/sap/opu/odata/sap/catalog/$metadata HTTP/1.1
+

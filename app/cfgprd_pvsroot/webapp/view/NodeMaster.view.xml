@@ -1,0 +1,21 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="cfgapp.pvsroot.cfgprdpvsroot.controller.ItemMaster" class="ItemMaster">
+	<Page>
+		<customHeader>
+			<Toolbar>
+				<Title id="listTitle" text="{i18n>listTitle}" class="sapUiSmallMarginBegin"></Title>
+			</Toolbar>
+		</customHeader>
+		<content>
+			<VBox class="sapUiTinyMarginBeginEnd">
+				<Input type="Number" id="searchBar" liveChange="onSearch" placeholder="{i18n>Nodeval}" width="100%"/>
+			</VBox>
+			<List id="viewNodeList" items="{path: '/results', sorter: {path: 'CHILD_NODE'}}" growingScrollToLoad="true" growing="true"
+				mode="SingleSelectMaster" selectionChange="handlePress" rememberSelections="false">
+				<items>
+					<StandardListItem title="{CHILD_NODE}" description="{NODE_DESC}" info="{NODE_DESC}"
+						 type="Active"/>
+				</items>
+			</List>
+		</content>
+	</Page>
+</mvc:View>

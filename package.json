@@ -6,8 +6,8 @@
     "license": "UNLICENSED",
     "private": true,
     "dependencies": {
-        "@sap/cds": "^5.5.4",
-        "@sap/cds-odata-v2-adapter-proxy": "^1.7.13",
+        "@sap/cds": "^5.6.4",
+        "@sap/cds-odata-v2-adapter-proxy": "^1.8.2",
         "@sap/hana-client": "^2.10.15",
         "@sap/hdi-deploy": "^4.2.0",
         "debug": "^4.3.2",
@@ -17,11 +17,10 @@
     "engines": {
         "node": "^12 || ^14"
     },
-    "devDependencies": {
-        "sqlite3": "^5.0.2"
-    },
     "scripts": {
-        "start": "cds run"
+        "start": "cds run",
+        "watch-cfgprd_pvsroot": "cds watch --open cfgprd_pvsroot/webapp/index.html#fe-lrop-v4",
+        "undeploy": "cf undeploy config_products --delete-services --delete-service-keys"
     },
     "eslintConfig": {
         "extends": "eslint:recommended",
@@ -57,5 +56,11 @@
         "hana": {
             "deploy-format": "hdbtable"
         }
+    },
+    "sapux": [
+        "app/cfgprd_pvsroot"
+    ],
+    "devDependencies": {
+        "@sap/ux-specification": "^1.90.15"
     }
 }
