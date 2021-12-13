@@ -6,7 +6,7 @@ using {
     sap.common
 } from '@sap/cds/common';
 
-context cp {
+context cp  {
     //namespace app.schema;
 
     entity LOCATION : managed {

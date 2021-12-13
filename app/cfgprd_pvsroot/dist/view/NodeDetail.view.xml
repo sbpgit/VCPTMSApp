@@ -1,20 +1,44 @@
-
-<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="cfgapp.pvsroot.cfgprdpvsroot.controller.ItemDetail" class="ItemDetail">
-	<Page title="{i18n>detailTitle}" busy="{ItemDetail>/busy}" showNavButton="{device>/support/touch}"
-		navButtonPress="onDetailNavBack" navButtonTooltip="{i18n>back2Master}" showFooter="true">
-		<content>
-<Table id="idListDetail">
-<columns>
-
-								<Column hAlign="Center" vAlign="Middle">
-									<Text text="{i18n>structureNode}"/>
-								</Column>
-								<Column hAlign="Center" vAlign="Middle">
-									<Text text="{i18n>strucDesc}"/>
-								</Column>
-</columns>
-</Table>
+<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="cfgapp.pvsroot.cfgprdpvsroot.controller.NodeDetail">
+	<Page  showNavButton="{device>/support/touch}"
+		navButtonPress="onDetailNavBack" navButtonTooltip="{i18n>back2Master}" showFooter="true" >        
         
-		</content>
+        <customHeader>
+			<OverflowToolbar>
+					<Button icon="sap-icon://nav-back" press="onDetailNavBack"/>
+                    <ToolbarSpacer/>
+                    <Title text="Structure Node" />   
+                    <ToolbarSpacer/>
+					<Title text="" width="20%" />
+			</OverflowToolbar>
+        </customHeader>
+		<content>
+            <Table id="idListDetail"
+            items="{path: '/results', sorter: {path: 'CHILD_NODE'}}" >
+				<headerToolbar>
+                <OverflowToolbar>
+						<Title text="" level="H2" />
+                        <ToolbarSpacer />
+						<Button  icon="sap-icon://add" press="onCreate" />
+                        <SearchField width="20%" liveChange="onSearch" placeholder="Node/Description"/>				
+                </OverflowToolbar>
+				</headerToolbar>
+                <columns>
+                    <Column hAlign="Center" vAlign="Middle">
+                        <Text text="Structure Node"/>
+                    </Column>
+                    <Column hAlign="Center" vAlign="Middle">
+                        <Text text="Description"/>
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem >
+                        <cells>
+                            <Text text="{CHILD_NODE}"></Text>
+                            <Text text="{NODE_DESC}"></Text>
+                        </cells>
+                    </ColumnListItem >
+                </items>   
+            </Table> 
+        </content>
 	</Page>
 </mvc:View>

@@ -12,14 +12,16 @@ sap.ui.define([
 		return BaseController.extend("cfgapp.pvsroot.cfgprdpvsroot.controller.Detail", {
 			onInit: function () {
                 this.bus = sap.ui.getCore().getEventBus();
-                this.bus.subscribe("flexible", "addBeginPage", this.addBeginPage, this);
-                this.bus.subscribe("flexible", "addDetailPage", this.addDetailPage, this);
+                this.bus.subscribe("cfgapp.pvsroot.cfgprdpvsroot", "addBeginPage", this.addBeginPage, this);
+                this.bus.subscribe("cfgapp.pvsroot.cfgprdpvsroot", "addDetailPage", this.addDetailPage, this);
                 this.bus.subscribe("nav", "toBeginPage", this.toBeginPage, this);
                 this.bus.subscribe("nav", "toDetailPage", this.toDetailPage, this);
                 this.bus.subscribe("nav", "backToBegin", this.backToBegin, this);
+                this.bus.subscribe("nav", "expandBegin", this.expandBegin, this);
     
                 this.oFlexibleColumnLayout = this.byId("fcl");
-                this.getRouter().getRoute("Details").attachPatternMatched(this._onPatternMatched, this);
+                this.getRouter().getRoute("Detail").attachPatternMatched(this._onPatternMatched, this);
+                this.oFlexibleColumnLayout.setLayout(sap.f.LayoutType.TwoColumnsMidExpanded);
             },
     
             /**
@@ -27,8 +29,8 @@ sap.ui.define([
              * @memberOf com.enerpipe.shopfloor.sf_ep_shop_status.view.Details
              */
             onExit: function () {
-                this.bus.unsubscribe("flexible", "addBeginPage", this.addBeginPage, this);
-                this.bus.unsubscribe("flexible", "addDetailPage", this.addDetailPage, this);
+                this.bus.unsubscribe("cfgapp.pvsroot.cfgprdpvsroot", "addBeginPage", this.addBeginPage, this);
+                this.bus.unsubscribe("cfgapp.pvsroot.cfgprdpvsroot", "addDetailPage", this.addDetailPage, this);
                 this.bus.unsubscribe("nav", "toBeginPage", this.toBeginPage, this);
                 this.bus.unsubscribe("nav", "toDetailPage", this.toDetailPage, this);
                 this.bus.unsubscribe("nav", "backToBegin", this.backToBegin, this);
@@ -58,18 +60,18 @@ sap.ui.define([
              * @param {string} sEvent - Event name
              * @param {object} oView - View to be displayed
              */
-            addDetailPage: function (sChannel, sEvent, oView) {
-                var aPages = this.oFlexibleColumnLayout.getMidColumnPages();
-                var flag = false;
+            addDetailPage: function (sChannel, sEvent, oView) {                
+                var aPages = this.oFlexibleColumnLayout.getMidColumnPages(),
+                bFound = false;
                 for (var i = 0; i < aPages.length; i++) {
                     if (aPages[i].getProperty("viewName") === oView.getViewName()) {
-                        flag = true;
+                        bFound = true;
                         break;
                     } else {
-                        flag = false;
+                        bFound = false;
                     }
                 }
-                if (!flag) {
+                if (!bFound) {
                     this.oFlexibleColumnLayout.addMidColumnPage(oView);
                 }
             },
@@ -100,9 +102,23 @@ sap.ui.define([
                 for (var i = 0; i < aPages.length; i++) {
                     if (aPages[i].getProperty("viewName") === oView.viewName) {
                         this.oFlexibleColumnLayout.toMidColumnPage(this.oFlexibleColumnLayout.getMidColumnPages()[i]);
+                        break;
                     }
                 }
                 this.oFlexibleColumnLayout.setLayout(sap.f.LayoutType.TwoColumnsMidExpanded);
+                /* Adding ItemDetail page */
+			if (aPages.length < 1) {
+				this.getOwnerComponent().runAsOwner(function () {
+					this.detailView = sap.ui.view({
+						viewName: "cfgapp.pvsroot.cfgprdpvsroot.view.NodeDetail",
+						type: "XML"
+					});
+					this.oFlexibleColumnLayout.addMidColumnPage(this.detailView);
+				}.bind(this));
+			} else {
+				this.oFlexibleColumnLayout.addMidColumnPage(aPages[0]);
+				aPages[0].onAfterRendering();
+			}
             },
     
             /** 
@@ -126,7 +142,7 @@ sap.ui.define([
                     if (aPages.length < 1) {
                         this.getOwnerComponent().runAsOwner(function () {
                             this.masterView = sap.ui.view({
-                                viewName: "cfgapp.pvsroot.cfgprdpvsroot.controller.NodeMaster",
+                                viewName: "cfgapp.pvsroot.cfgprdpvsroot.view.NodeMaster",
                                 type: "XML"
                             });
                             this.oFlexibleColumnLayout.addBeginColumnPage(this.masterView);
@@ -135,6 +151,14 @@ sap.ui.define([
                         this.oFlexibleColumnLayout.toBeginColumnPage(aPages[0]);
                         aPages[0].onAfterRendering();
                     }
+                }
+            },
+            expandBegin: function () {
+                this.bus.publish("nav", "backToBegin");
+            /* Handling Ment button when we are in Item Master page  */
+                if (!Device.system.desktop) {
+                    this.byId("leftMenu").setVisible(false);
+                    this.getModel("appView").setProperty("/expanded", true);
                 }
             }
 		});
