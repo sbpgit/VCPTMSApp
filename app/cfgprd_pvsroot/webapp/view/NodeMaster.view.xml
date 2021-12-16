@@ -1,16 +1,25 @@
-<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="cfgapp.pvsroot.cfgprdpvsroot.controller.ItemMaster" class="ItemMaster">
+<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="cfgapp.pvsroot.cfgprdpvsroot.controller.NodeMaster" class="ItemMaster">
 	<Page>
-		<customHeader>
-			<Toolbar>
-				<Title id="listTitle" text="{i18n>listTitle}" class="sapUiSmallMarginBegin"></Title>
-			</Toolbar>
-		</customHeader>
+        <customHeader>
+			<OverflowToolbar>
+					<Title text="" width="20%" />
+                    <ToolbarSpacer/>
+                    <Title text="View Node" />   
+                    <ToolbarSpacer/>
+					<Title text="" width="20%" />
+			</OverflowToolbar>
+        </customHeader>
 		<content>
-			<VBox class="sapUiTinyMarginBeginEnd">
-				<Input type="Number" id="searchBar" liveChange="onSearch" placeholder="{i18n>Nodeval}" width="100%"/>
-			</VBox>
 			<List id="viewNodeList" items="{path: '/results', sorter: {path: 'CHILD_NODE'}}" growingScrollToLoad="true" growing="true"
 				mode="SingleSelectMaster" selectionChange="handlePress" rememberSelections="false">
+                <headerToolbar>
+                <OverflowToolbar>
+						<Title text="" level="H2" />
+                        <ToolbarSpacer />
+						<Button  icon="sap-icon://add" press="onCreate" />
+                        <SearchField width="40%" liveChange="onSearch" placeholder="Node /Description"/>				
+                </OverflowToolbar>
+				</headerToolbar>
 				<items>
 					<StandardListItem title="{CHILD_NODE}" description="{NODE_DESC}" info="{NODE_DESC}"
 						 type="Active"/>

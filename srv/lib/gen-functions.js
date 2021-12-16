@@ -1,19 +1,19 @@
 //Class for Generic Functions
 
 class GenFunctions {
-  constructor() {
-  }
+    constructor() {
+    }
 
-  getNextSunday(imDate) {
-    const lDate = new Date(imDate);
-    let lDay = lDate.getDay();
-    if (lDay !== 0 ) lDay = 7-lDay;
-    const lNextSun = new Date(lDate.getFullYear(), lDate.getMonth(), lDate.getDate()+lDay);
-    
-    return lNextSun.toISOString().split('T')[0];
-  }
+    static getNextSunday(imDate) {
+        const lDate = new Date(imDate);
+        let lDay = lDate.getDay();
+        if (lDay !== 0) lDay = 7 - lDay;
+        const lNextSun = new Date(lDate.getFullYear(), lDate.getMonth(), lDate.getDate() + lDay);
 
-    dynamicSortMultiple() {
+        return lNextSun.toISOString().split('T')[0];
+    }
+
+    static dynamicSortMultiple() {
         /*
         * save the arguments object as it will be overwritten
         * note that arguments object is an array-like object
@@ -26,21 +26,21 @@ class GenFunctions {
             /* try getting a different result from 0 (equal)
             * as long as we have extra properties to compare
             */
-            while(result === 0 && i < numberOfProperties) {
-               result = that.dynamicSort(props[i])(obj1, obj2);
+            while (result === 0 && i < numberOfProperties) {
+                result = that.dynamicSort(props[i])(obj1, obj2);
                 i++;
             }
             return result;
         }
     };
-    
-    dynamicSort(property) {
+
+    static dynamicSort(property) {
         var sortOrder = 1;
-        if(property[0] === "-") {
+        if (property[0] === "-") {
             sortOrder = -1;
             property = property.substr(1);
         }
-        return function (a,b) {
+        return function (a, b) {
             /* next line works with strings and numbers, 
             * and you may want to customize it to your needs
             */
@@ -48,6 +48,22 @@ class GenFunctions {
             return result * sortOrder;
         }
     }
+
+    static parse(input) {
+        return JSON.parse(JSON.stringify(input));
+    }
+
+    static addOne(i, lMax) {
+        if((i + 1) === lMax) return i;
+        
+        return i + 1;
+        
+    }
+
+    static subOne(i) {
+        if (i === 0) return i;
+        return i - 1;
+    }    
 }
 
 module.exports = GenFunctions;

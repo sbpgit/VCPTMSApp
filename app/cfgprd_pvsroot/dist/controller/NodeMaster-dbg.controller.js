@@ -73,26 +73,29 @@ sap.ui.define([
 		handlePress: function (oEvent) {
 			that.setCurrentSelectedItem();
 			var oBinding = oEvent.getParameter("listItem").getBindingContext();
-			oGModel.setProperty("/CHILD_NODE", oBinding.getProperty("CHILD_NODE"));
-			oGModel.setProperty("/PARENT_NODE", oBinding.getProperty("PARENT_NODE"));
+			oGModel.setProperty("/PARENT_NODE", oBinding.getProperty("CHILD_NODE"));
 			oGModel.setProperty("/NODE_DESC", oBinding.getProperty("NODE_DESC"));
 			this.getOwnerComponent().runAsOwner(function () {
 				if (!that.oDetailView) {
 					try {
 						that.oDetailView = sap.ui.view({
-							viewName: "cfgapp.pvsroot.cfgprdpvsroot.controller.NodeDetail",
+							viewName: "cfgapp.pvsroot.cfgprdpvsroot.view.NodeDetail",
 							type: "XML"
 						});
 						that.bus.publish("flexible", "addDetailPage", that.oDetailView);
 						that.bus.publish("nav", "toDetailPage", {viewName: that.oDetailView.getViewName()});
 					} catch (e) {
-						MessageToast.show(that.i18n.getText("getItemDetailErr"));
+						//MessageToast.show(that.i18n.getText("getItemDetailErr"));
+                       // that.bus.publish("flexible", "addDetailPage", that.oDetailView);
+					//	that.bus.publish("nav", "toDetailPage", {viewName: that.oDetailView.getViewName()});
+                        
+					//that.bus.publish("nav", "toDetailPage", {viewName: that.oDetailView.getViewName()});
+                    
+					    that.oDetailView.onAfterRendering();
 					}
 				} else {
 					that.bus.publish("nav", "toDetailPage", {viewName: that.oDetailView.getViewName()});
-					// changed on 20/01/2020 by santosh to refresh data for item change
-					that.getData();
-					//change end
+					
 					that.oDetailView.onAfterRendering();
 				}
 			});
@@ -117,7 +120,7 @@ sap.ui.define([
 			this.oList = this.byId("viewNodeList");
 			this.oList.setModel(that.oListModel);
 			this.oList.removeSelections();
-			this.byId("searchBar").setValue();
+			//this.byId("searchBar").setValue();
 			if (this.oList.getBinding("items")) {
 				this.oList.getBinding("items").filter([]);
 			}
@@ -164,6 +167,30 @@ sap.ui.define([
                     MessageToast.show(that.i18n.getText("getListErr"));
                 }
             });
-		}
+		},
+        
+        onCreate: function(){
+            if (!that._oCreateNode) {
+				that._oCreateNode = sap.ui.xmlfragment("cfgapp.pvsroot.cfgprdpvsroot.view.CreateNode", that);
+				that.getView().addDependent(that._oCreateNode);
+			}
+            sap.ui.getCore().byId("idCrDg").setTitle("Create View Node");
+            var sText = "Access Node : " + sParNode;
+            sap.ui.getCore().byId("idText").setText(sText);
+            sap.ui.getCore().byId("idText").setVisible(true);
+           that._oCreateNode.open();
+        },
+        onSave: function(){
+			that._oCreateNode.close();
+            sap.ui.getCore().byId("idText").setVisible(false);
+            sap.ui.getCore().byId("idCrDg").setTitle("");
+			that._oCreateNode.destroy(true);
+        },
+        onCancel: function(){
+			that._oCreateNode.close();
+            sap.ui.getCore().byId("idText").setVisible(false);
+            sap.ui.getCore().byId("idCrDg").setTitle("");
+			that._oCreateNode.destroy(true);
+        }
 	});
 });

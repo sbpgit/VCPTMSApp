@@ -6,7 +6,7 @@ using {
     sap.common
 } from '@sap/cds/common';
 
-context cp {
+context cp  {
     //namespace app.schema;
 
     entity LOCATION : managed {
@@ -271,6 +271,7 @@ context cp {
         key PRODUCT_ID       : String(40)@title : 'Product ID';
         key OBJ_TYPE         : String(2) @title : 'Object Type';
         key OBJ_DEP          : String(30)@title : 'Object Dependency';
+        key OBJ_COUNTER      : Integer   @title : 'Object Counter';
             PREDICTED        : Double    @title : 'Predicted';
             PREDICTED_TIME   : Timestamp @title : 'Predicted Time';
             PREDICTED_STATUS : String(8) @title : 'Predicted Status';

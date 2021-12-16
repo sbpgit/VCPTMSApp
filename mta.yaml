@@ -21,8 +21,8 @@ modules:
   - name: config_products-db
     properties:
       TARGET_CONTAINER: ~{hdi-service-name}
-  - name: cross-container-service-1
-  - name: cross-container-service-3
+  # - name: cross-container-service-1
+  # - name: cross-container-service-3
   parameters:
     buildpack: nodejs_buildpack
 - name: config_products-destination-content
@@ -87,14 +87,14 @@ resources:
     service-plan: hdi-shared
   properties:
     hdi-service-name: ${service-name}
-- name: cross-container-service-1
-  type: org.cloudfoundry.existing-service
-  parameters:
-    service-name: CC_ACCESS
-- name: cross-container-service-3
-  type: org.cloudfoundry.existing-service
-  parameters:
-    service-name: CCL1_ACCESS
+# - name: cross-container-service-1
+#   type: org.cloudfoundry.existing-service
+#   parameters:
+#     service-name: CC_ACCESS
+# - name: cross-container-service-3
+#   type: org.cloudfoundry.existing-service
+#   parameters:
+#     service-name: CCL1_ACCESS
 - name: config_products-destination-service
   type: org.cloudfoundry.managed-service
   parameters:

@@ -1,11 +1,24 @@
-const GenTimeseries = require("./cat-servicets");
+//const GenTimeseries = require("./cat-servicets");
 const DbConnect = require("./dbConnect");
-module.exports = srv=>{
-    srv.on("generate_timeseries", req =>{
+const GenFunctions = require("./gen-functions");
+const cds = require("@sap/cds");
+const { createLogger, format, transports } = require("winston");
+const { combine, timestamp, label, prettyPrint } = format;
+
+const GenTimeseries = require("./gen-timeseries");
+const genTimeseries = new GenTimeseries;
+
+const genFunctions = new GenFunctions();
+
+module.exports = async function () {
+    await genTimeseries.GenTimeseries();
+}
+/*module.exports = srv=>{
+    srv.on("generate_timeseries", async req =>{
+        
+    await genTimeseries.GenTimeseries();
         console.log("test");
-      //  const ObjgenTimeseries = new GenTimeseries();
-        //await ObjgenTimeseries.genTimeseries();
-        //return "Success";
+     
     })
     srv.on("fGetNodeDet", async req =>{
         let { getAccessNodes } = srv.entities;
@@ -15,4 +28,4 @@ module.exports = srv=>{
         ) 
         return results;     
     })
-};
+};*/

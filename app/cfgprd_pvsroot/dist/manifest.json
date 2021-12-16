@@ -116,6 +116,13 @@
                     "target": [
                         "Home"
                     ]
+                },
+                {
+                    "name": "Detail",
+                    "pattern": "Detail",
+                    "target": [
+                        "Detail"
+                    ]
                 }
             ],
             "targets": {
@@ -129,6 +136,16 @@
                     "viewType": "XML",
                     "viewName": "Detail",
                     "viewLevel": 2
+                },
+                "NodeMaster": {
+                    "viewType": "XML",
+                    "viewName": "NodeMaster",
+                    "viewLevel": 3
+                },
+                "NodeDetail": {
+                    "viewType": "XML",
+                    "viewName": "NodeDetail",
+                    "viewLevel": 4
                 }
             }
         }

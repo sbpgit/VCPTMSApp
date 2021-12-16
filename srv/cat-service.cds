@@ -71,7 +71,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
     
     @odata.draft.enabled
     entity getAccessNodes as projection on od.ACCESS_NODES;
-    type rangedate{
+    /*type rangedate{
         LOCATION_ID : String(4) ;
         DATE_LOW  :Date;
         DATE_HIGH   : Date;
@@ -80,11 +80,15 @@ service CatalogService @(impl : './lib/cat-service.js') {
         PNODES: String(50);
         CNODE: String(50);
         NODE_DESC: String(200);
-    };
-    function fGetNodeDet ( NODE_TYPE : String(2), CHILD_NODE: String(50), PARENT_NODE: String(50)) returns array of getAccessNodes;//ACCESS_NODES;
-    action generate_timeseries( LOCATION_ID : String(4) ,
+    };*/
+    
+    function fGetNodeDet ( NODE_TYPE : String(2), CHILD_NODE: String(50), PARENT_NODE: String(50)) returns array of getAccessNodes;
+   //// actions {
+        function generate_timeseries( LOCATION_ID : String(4) ) returns String 
+    //};
+   /* action generate_timeseries( LOCATION_ID : String(4) ,
                                 DATE_LOW    :Date,
-                                DATE_HIGH   : Date );
+                                DATE_HIGH   : Date );*/
 
 }
 

@@ -1,8 +1,0 @@
-{
-  "CONFIG_PRODUCTS.db::TIMESERIES": {
-    "target": {
-        "object": "TIMESERIES",
-        "schema": "DB_CONFIG_PROD_SBPDEV"
-    }
-  }
-}
