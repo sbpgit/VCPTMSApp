@@ -1,0 +1,11 @@
+COLUMN TABLE "CP_VC_HISTORY_TS"(
+	"PeriodOfYear" INTEGER,
+	"Location" NVARCHAR(5) NOT NULL,
+	"Product" NVARCHAR(40) NOT NULL,
+	"Type" NVARCHAR(2) NOT NULL,
+	"GroupID" NVARCHAR(20) NOT NULL,
+	"Row" INTEGER,
+	"Attribute" NVARCHAR(10) NOT NULL,
+	"CharCount" DOUBLE,
+	"Target" DOUBLE
+);
