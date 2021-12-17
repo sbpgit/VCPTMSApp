@@ -10,10 +10,10 @@ const genTimeseries = new GenTimeseries;
 
 const genFunctions = new GenFunctions();
 
-module.exports = async function () {
-    await genTimeseries.GenTimeseries();
-}
-/*module.exports = srv=>{
+/*module.exports = async function () {
+  //  await genTimeseries.GenTimeseries();
+}*/
+module.exports = srv=>{
     srv.on("generate_timeseries", async req =>{
         
     await genTimeseries.GenTimeseries();
@@ -28,4 +28,4 @@ module.exports = async function () {
         ) 
         return results;     
     })
-};*/
+};

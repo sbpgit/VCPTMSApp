@@ -1,14 +1,13 @@
 {
   "xsappname": "config_products",
-  "tenant-mode": "dedicated",
+  "tenant-mode": "shared",
   "description": "Security profile of called application",
   "scopes": [
     {
       "name": "uaa.user",
       "description": "UAA"
     },
-    {  
-         "name":"$CONFIG_PRODUCTS.Callback",
+    { "name":"$CONFIG_PRODUCTS.mtcallback", "description": "Subscribe to applications",
          "grant-as-authority-to-apps":[  
             "$CONFIG_PRODUCTS(application,sap-provisioning,tenant-onboarding)"
          ]

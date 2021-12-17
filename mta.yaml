@@ -21,8 +21,6 @@ modules:
   - name: config_products-db
     properties:
       TARGET_CONTAINER: ~{hdi-service-name}
-  # - name: cross-container-service-1
-  # - name: cross-container-service-3
   parameters:
     buildpack: nodejs_buildpack
 - name: config_products-destination-content
@@ -87,14 +85,6 @@ resources:
     service-plan: hdi-shared
   properties:
     hdi-service-name: ${service-name}
-# - name: cross-container-service-1
-#   type: org.cloudfoundry.existing-service
-#   parameters:
-#     service-name: CC_ACCESS
-# - name: cross-container-service-3
-#   type: org.cloudfoundry.existing-service
-#   parameters:
-#     service-name: CCL1_ACCESS
 - name: config_products-destination-service
   type: org.cloudfoundry.managed-service
   parameters:
@@ -126,6 +116,28 @@ resources:
     service: xsuaa
     service-name: config_products-xsuaa-service
     service-plan: application
+# - name: config_products_saas
+#   type: org.cloudfoundry.managed-service
+#   requires:
+#     - name: uaa_config_products
+#     # - name: mtx-api
+#     #   properties:
+#     #     prop: ~{mtx-url}
+#     #     parameters:
+#     #       param: ~{mtx-url}
+#   parameters:
+#     service: saas-registry
+#     service-plan: application
+#     config:
+#         xsappname: config_products
+#         appName: config_products
+#         displayName: Configurable Prodcuts
+#         description: A simple CAP project.
+#         appUrls:
+#              onSubscription: ~{mtx-api/mtx-url}/mtx/v1/provisioning/tenant/1bb5f500-e56c-40ed-ba66-ab47c13ffe30
+#              onSubscriptionAsync: false
+#              onUnSubscriptionAsync: false
+#              callbackTimeoutMillis: 300000
 parameters:
   deploy_mode: html5-repo
   enable-parallel-deployments: true

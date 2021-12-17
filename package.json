@@ -7,12 +7,15 @@
     "private": true,
     "dependencies": {
         "@sap/cds": "^5.6.4",
+        "@sap/cds-mtx": "^2.5.1",
         "@sap/cds-odata-v2-adapter-proxy": "^1.8.2",
         "@sap/hana-client": "^2.10.15",
         "@sap/hdi-deploy": "^4.2.0",
+        "@sap/xssec": "^3.2.11",
         "debug": "^4.3.2",
         "express": "^4",
-        "hdb": "^0.18.3"
+        "hdb": "^0.18.3",
+        "passport": "^0.5.0"
     },
     "engines": {
         "node": "^12 || ^14"
@@ -56,6 +59,10 @@
         "hana": {
             "deploy-format": "hdbtable"
         }
+    },
+    "multitenancy": true,
+    "uaa": {
+        "kind": "xsuaa"
     },
     "sapux": [
         "app/cfgprd_pvsroot"

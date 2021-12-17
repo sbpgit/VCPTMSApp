@@ -6,7 +6,7 @@ using {
     sap.common
 } from '@sap/cds/common';
 
-context cp  {
+context cp {
     //namespace app.schema;
 
     entity LOCATION : managed {
@@ -20,6 +20,7 @@ context cp  {
             RESERVE_FIELD3 : String(20)    @title : 'Reserve Field3';
             RESERVE_FIELD4 : String(20)    @title : 'Reserve Field4';
             RESERVE_FIELD5 : String(20)    @title : 'Reserve Field5';
+            AUTH_GROUP     : String(4)     @title : 'Authorization Group';
     };
 
     // Customer group
@@ -31,6 +32,7 @@ context cp  {
             RESERVE_FIELD3 : String(20)@title : 'Reserve Field3';
             RESERVE_FIELD4 : String(20)@title : 'Reserve Field4';
             RESERVE_FIELD5 : String(20)@title : 'Reserve Field5';
+            AUTH_GROUP     : String(4) @title : 'Authorization Group';
     };
 
     // Product
@@ -47,6 +49,7 @@ context cp  {
             RESERVE_FIELD3 : String(20)@title : 'Reserve Field3';
             RESERVE_FIELD4 : String(20)@title : 'Reserve Field4';
             RESERVE_FIELD5 : String(20)@title : 'Reserve Field5';
+            AUTH_GROUP     : String(4) @title : 'Authorization Group';
     };
 
     // Product and LOcation table
@@ -243,26 +246,26 @@ context cp  {
     };
 
     entity TS_OBJDEPHDR {
-        key CAL_DATE    : Date      @title : 'Date';
-        key LOCATION_ID : String(4) @title : 'Location ID';
-        key PRODUCT_ID  : String(40)@title : 'Product ID';
-        key OBJ_TYPE    : String(2) @title : 'Object Type';
-        key OBJ_DEP     : String(30)@title : 'Object Dependency';
-        key OBJ_COUNTER : Integer   @title : 'Object Counter';
-            SUCCESS     : Integer   @title : 'Count';
-            SUCCESS_RATE: Double    @title : 'Sucess Rate';
+        key CAL_DATE     : Date      @title : 'Date';
+        key LOCATION_ID  : String(4) @title : 'Location ID';
+        key PRODUCT_ID   : String(40)@title : 'Product ID';
+        key OBJ_TYPE     : String(2) @title : 'Object Type';
+        key OBJ_DEP      : String(30)@title : 'Object Dependency';
+        key OBJ_COUNTER  : Integer   @title : 'Object Counter';
+            SUCCESS      : Integer   @title : 'Count';
+            SUCCESS_RATE : Double    @title : 'Sucess Rate';
     };
 
     entity TS_OBJDEP_CHARHDR {
-        key CAL_DATE    : Date      @title : 'Date';
-        key LOCATION_ID : String(4) @title : 'Location ID';
-        key PRODUCT_ID  : String(40)@title : 'Product ID';
-        key OBJ_TYPE    : String(2) @title : 'Object Type';
-        key OBJ_DEP     : String(30)@title : 'Object Dependency';
-        key OBJ_COUNTER : Integer   @title : 'Object Counter';
-        key ROW_ID      : Integer   @title : ' Attribute Index';
-            SUCCESS     : Integer   @title : 'Count';
-            SUCCESS_RATE: Double    @title : 'Sucess Rate';
+        key CAL_DATE     : Date      @title : 'Date';
+        key LOCATION_ID  : String(4) @title : 'Location ID';
+        key PRODUCT_ID   : String(40)@title : 'Product ID';
+        key OBJ_TYPE     : String(2) @title : 'Object Type';
+        key OBJ_DEP      : String(30)@title : 'Object Dependency';
+        key OBJ_COUNTER  : Integer   @title : 'Object Counter';
+        key ROW_ID       : Integer   @title : ' Attribute Index';
+            SUCCESS      : Integer   @title : 'Count';
+            SUCCESS_RATE : Double    @title : 'Sucess Rate';
     };
 
     entity TS_OBJDEPHDR_F {
@@ -342,10 +345,47 @@ context cp  {
             STRUC_NODE  : String(50)@title : 'Structure Node'
     }
 
-    entity TS_ORDERRATE: managed{
-        key WEEK_DATE : Date @title : 'Date';
-        ORDER_COUNT : Integer@title : 'Order Count';
+    entity TS_ORDERRATE : managed {
+        key WEEK_DATE   : Date     @title : 'Date';
+        key LOCATION_ID : String(4)@title : 'Location ID';
+            ORDER_COUNT : Integer  @title : 'Order Count';
     }
+
+    entity AUTH_OBJ : managed {
+        key AUTH_OBJ    : String(100)@title : 'Authorization Object';
+            DESCRIPTION : String(250)@title : 'Description';
+    }
+
+    entity AUTH_OBJ_PARA : managed {
+        key AUTH_OBJ    : String(100)@title : 'Authorization Object';
+        key PARAMETER   : String(100)@title : 'Parameter';
+            DESCRIPTION : String(250)@title : 'Description';
+    }
+
+    entity AUTH_ROLE: managed  {
+        key ROLE_ID     : String(100)@title : 'Role ID';
+            DESCRIPTION : String(250)@title : 'Description';
+    }
+
+    entity AUTH_ROLE_OBJ: managed  {
+        key ROLE_ID       : String(100)@title : 'Role ID';
+        key AUTH_OBJ      : String(100)@title : 'Authorization Object';
+        key PARAMETER     : String(100)@title : 'Parameter';
+            PARAMETER_VAL : String(250)@title : 'Parameter';
+    }
+
+    entity AUTH_EMP_ROLE : managed {
+        key USER    : String(100)@title : 'User';
+        key ROLE_ID : String(100)@title : 'Role ID';
+    }
+}
+
+@cds.persistence.exists
+entity![V_CHARVAL]{
+    key![CHAR_NUM]    : String(10)@title : 'Characteristic Internal No.';
+    key![CHAR_NAME]   : String(30)@title : 'Characteristic Name';
+    key![CHAR_VALUE]  : String(70)@title : 'Characteristic Val Internal No.';
+    key![CHARVAL_NUM] : String(10)@title : 'CHARVAL_NUM';
 }
 
 @cds.persistence.exists
