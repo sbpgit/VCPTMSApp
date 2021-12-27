@@ -3,99 +3,6 @@ using V_CLASSCHAR as srv from '../db/data-model';
 //using V_TIMESERIES as tssrv from '../db/data-model';
 //using V_PRODUCT as prd from '../db/data-model';
 
-// Product annotations
-annotate service.odTimeSeries with @(UI : {
-    SelectionFields                : [
-        objectDependency,
-        calDate
-    ],
-    LineItem                       : [
-        {
-            $Type : 'UI.DataField', //Label : 'Product ID',
-            Value : objectDependency
-        },
-        {
-            $Type : 'UI.DataField', //Label : 'Description',
-            Value : calDate
-        },
-        {
-            $Type : 'UI.DataField', //Label : 'Product Family',
-            Value : success
-        }
-    ],
-    HeaderInfo                     : {
-        Title          : {Value : objectDependency},
-        Description    : {Value : calDate},
-        TypeName       : 'Object Dependency',
-        TypeNamePlural : 'Object Dependencies',
-    },
-    HeaderFacets                   : [{
-        $Type             : 'UI.ReferenceFacet',
-        Target            : '@UI.FieldGroup#AdministrativeData',
-        ![@UI.Importance] : #Medium
-    }],
-
-    FieldGroup #AdministrativeData : {Data : [
-
-        {
-            $Type : 'UI.DataField',
-            Value : success,
-        //![@UI.Importance] : #Medium
-        },
-        {
-            $Type : 'UI.DataField',
-            Value : att1
-        },
-        {
-            $Type : 'UI.DataField', //Label : 'Product Series',
-            Value : att2
-        },
-        {
-            $Type : 'UI.DataField', //Label : 'Product Series',
-            Value : att3
-        },
-        {
-            $Type : 'UI.DataField', //Label : 'Product Series',
-            Value : att4
-        },
-        {
-            $Type : 'UI.DataField', //Label : 'Product Series',
-            Value : att5
-        },
-        {
-            $Type : 'UI.DataField', //Label : 'Product Series',
-            Value : att6
-        },
-        {
-            $Type : 'UI.DataField', //Label : 'Product Series',
-            Value : att7
-        },
-        {
-            $Type : 'UI.DataField', //Label : 'Product Series',
-            Value : att8
-        },
-        {
-            $Type : 'UI.DataField', //Label : 'Product Series',
-            Value : att9
-        },
-        {
-            $Type : 'UI.DataField', //Label : 'Product Series',
-            Value : att10
-        },
-        {
-            $Type : 'UI.DataField', //Label : 'Product Series',
-            Value : att11
-        },
-        {
-            $Type : 'UI.DataField', //Label : 'Product Series',
-            Value : att12
-        }
-    ]}
-});
-/**
- * ***
- */
-
 
 // Product annotations
 annotate service.PRODUCT with @(
@@ -1404,4 +1311,136 @@ annotate V_CLASSCHAR with @(
             Target : '@UI.FieldGroup#Details'
         }]
     }]
+);
+/*******************************************/
+// IBP Future demand Plan
+/*******************************************/
+annotate service.IBP_FUTUREDEMAND with @(
+    UI        : {
+        SelectionFields                : [
+            LOCATION_ID,
+            PRODUCT_ID
+        ],
+        LineItem                       : [
+            
+            {
+                $Type : 'UI.DataField', //Label : 'Description',
+                Value : LOCATION_ID
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product ID',
+                Value : PRODUCT_ID
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Family',
+                Value : VER_BLINE
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : SCENARIO
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : WEEK_BUCKET
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : QUANTITY
+            }
+        ]
+    }
+);
+/*******************************************/
+// IBP Future Character Plan
+/*******************************************/
+annotate service.IBP_FCHARPLAN with @(
+    UI        : {
+        SelectionFields                : [
+            LOCATION_ID,
+            PRODUCT_ID,
+            CHAR_NAME
+        ],
+        LineItem                       : [
+            
+            {
+                $Type : 'UI.DataField', //Label : 'Description',
+                Value : LOCATION_ID
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product ID',
+                Value : PRODUCT_ID
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Family',
+                Value : CLASS_NAME
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : CHAR_NAME
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : CHAR_VALUE
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Family',
+                Value : VER_BLINE
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : SCENARIO
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : WEEK_BUCKET
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : OPT_PERCENT
+            },
+            {
+                $Type : 'UI.DataField',
+                Value :OPT_QTY
+            }
+        ]
+    }
+);
+/*******************************************/
+// IBP Future Character Plan
+/*******************************************/
+annotate service.IBP_RESULTPLAN with @(
+    UI        : {
+        SelectionFields                : [
+            LOCATION_ID,
+            PRODUCT_ID,
+            OBJ_DEP
+        ],
+        LineItem                       : [
+            
+            {
+                $Type : 'UI.DataField', //Label : 'Description',
+                Value : LOCATION_ID
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product ID',
+                Value : PRODUCT_ID
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Family',
+                Value : OBJ_DEP
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Family',
+                Value : VER_BLINE
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : SCENARIO
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : WEEK_BUCKET
+            }
+        ]
+    }
 );

@@ -226,25 +226,6 @@ context cp {
             CREATED_TIME   : Time          @title : 'Created TIme';
     };
 
-
-    entity odTimeSeries {
-        key objectDependency : String    @title : 'Object Dependency';
-        key calDate          : Date      @title : 'Date';
-            success          : String(10)@title : 'Object Dep. Count';
-            att1             : String(10)@title : 'Attribute 1';
-            att2             : String(10)@title : 'Attribute 2';
-            att3             : String(10)@title : 'Attribute 3';
-            att4             : String(10)@title : 'Attribute 4';
-            att5             : String(10)@title : 'Attribute 5';
-            att6             : String(10)@title : 'Attribute 6';
-            att7             : String(10)@title : 'Attribute 7';
-            att8             : String(10)@title : 'Attribute 8';
-            att9             : String(10)@title : 'Attribute 9';
-            att10            : String(10)@title : 'Attribute 10';
-            att11            : String(10)@title : 'Attribute 11';
-            att12            : String(10)@title : 'Attribute 12';
-    };
-
     entity TS_OBJDEPHDR {
         key CAL_DATE     : Date      @title : 'Date';
         key LOCATION_ID  : String(4) @title : 'Location ID';
@@ -348,6 +329,7 @@ context cp {
     entity TS_ORDERRATE : managed {
         key WEEK_DATE   : Date     @title : 'Date';
         key LOCATION_ID : String(4)@title : 'Location ID';
+        key PRODUCT_ID  : String(40)@title : 'Product ID';
             ORDER_COUNT : Integer  @title : 'Order Count';
     }
 
@@ -362,12 +344,12 @@ context cp {
             DESCRIPTION : String(250)@title : 'Description';
     }
 
-    entity AUTH_ROLE: managed  {
+    entity AUTH_ROLE : managed {
         key ROLE_ID     : String(100)@title : 'Role ID';
             DESCRIPTION : String(250)@title : 'Description';
     }
 
-    entity AUTH_ROLE_OBJ: managed  {
+    entity AUTH_ROLE_OBJ : managed {
         key ROLE_ID       : String(100)@title : 'Role ID';
         key AUTH_OBJ      : String(100)@title : 'Authorization Object';
         key PARAMETER     : String(100)@title : 'Parameter';
@@ -377,6 +359,70 @@ context cp {
     entity AUTH_EMP_ROLE : managed {
         key USER    : String(100)@title : 'User';
         key ROLE_ID : String(100)@title : 'Role ID';
+    }
+
+    // IBP structures
+    entity IBP_FUTUREDEMAND {
+        key LOCATION_ID : String(4)     @title : 'Location ID';
+        key PRODUCT_ID  : String(40)    @title : 'Product ID';
+        key VERSION     : String(10)    @title : 'Version';
+        key SCENARIO    : String(32)    @title : 'Scenario';
+        key WEEK_BUCKET : Timestamp     @title : 'Weekly Bucket';
+            QUANTITY    : Decimal(13, 3)@title : 'Demand Quantity';
+    }
+
+    entity IBP_FCHARPLAN {
+        key LOCATION_ID : String(4)     @title : 'Location ID';
+        key PRODUCT_ID  : String(40)    @title : 'Product ID';
+        key CLASS_NAME  : String(20)    @title : 'Class Name';
+        key CHAR_NAME   : String(30)    @title : 'Charateristic Name';
+        key CHAR_VALUE  : String(70)    @title : 'Charateristic Value';
+        key VERSION     : String(10)    @title : 'Version';
+        key SCENARIO    : String(32)    @title : 'Scenario';
+        key WEEK_BUCKET : Timestamp     @title : 'Weekly Bucket';
+            OPT_PERCENT : Decimal(5, 2) @title : 'Option Percnetage';
+            OPT_QTY     : Decimal(13, 3)@title : 'Option Quantity';
+    }
+
+    entity IBP_RESULTPLAN {
+        key LOCATION_ID      : String(4) @title : 'Location ID';
+        key PRODUCT_ID       : String(40)@title : 'Product ID';
+        key OBJ_DEP          : String(30)@title : 'Object Dependency';
+        key VERSION          : String(10)@title : 'Version';
+        key SCENARIO         : String(32)@title : 'Scenario';
+        key WEEK_BUCKET      : Timestamp @title : 'Weekly Bucket';
+            PREDICTED        : Double    @title : 'Predicted';
+            PREDICTED_TIME   : Timestamp @title : 'Predicted Time';
+            PREDICTED_STATUS : String(8) @title : 'Predicted Status';
+    }
+
+    entity PAL_METHD_PARA:  managed {
+        key METHOD    : String(50) @title : 'Method Name';
+        key PARA_NAME : String(100)@title : 'Parameter Name';
+    }
+
+    entity PAL_PROFILEMETH {
+        key PROFILE      : String(50) @title : 'Profile';
+            METHOD       : String(50) @title : 'Method Name';
+            PRF_DESC     : String(200)@title : 'Profile Description';
+            CREATED_DATE : Date       @title : 'Date';
+    }
+
+    entity PAL_PROFILEMETH_PARA : managed {
+        key PROFILE   : String(50) @title : 'Profile';
+        key METHOD    : String(50) @title : 'Method Name';
+        key PARA_NAME : String(100)@title : 'Parameter Name';
+            //  key PARA_VALUE : String(200)@title : 'Parameter Value';
+            INTVAL    : Integer;
+            DOUBLEVAL : Double;
+            STRVAL    : String(20);
+            PARA_DESC : String(1000);
+            PARA_DEP  : String(1000);
+    }
+
+    entity PAL_PROFILEOD : managed {
+        key PROFILE : String(50)@title : 'Profile';
+        key OBJ_DEP : String(30)@title : 'Object Dependency';
     }
 }
 

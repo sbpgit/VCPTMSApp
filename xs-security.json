@@ -1,6 +1,6 @@
 {
   "xsappname": "config_products",
-  "tenant-mode": "shared",
+  "tenant-mode": "dedicated",
   "description": "Security profile of called application",
   "scopes": [
     {

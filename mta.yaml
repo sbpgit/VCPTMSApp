@@ -67,9 +67,51 @@ modules:
       - cfgapppvsrootcfgprdpvsroot.zip
       name: cfgapppvsrootcfgprdpvsroot
       target-path: resources/
+    - artifacts:
+      - cpibpfdemcpibpfdem.zip
+      name: cpibpfdemcpibpfdem
+      target-path: resources/
+    - artifacts:
+      - cpibpfplancpibpfplan.zip
+      name: cpibpfplancpibpfplan
+      target-path: resources/
+    - artifacts:
+      - cpibpfrescpibpfres.zip
+      name: cpibpfrescpibpfres
+      target-path: resources/
 - name: cfgapppvsrootcfgprdpvsroot
   type: html5
   path: app/cfgprd_pvsroot
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpibpfdemcpibpfdem
+  type: html5
+  path: app/cp_ibpfdem
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpibpfplancpibpfplan
+  type: html5
+  path: app/cp_ibpfplan
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpibpfrescpibpfres
+  type: html5
+  path: app/cp_ibpfres
   build-parameters:
     build-result: dist
     builder: custom
@@ -116,28 +158,6 @@ resources:
     service: xsuaa
     service-name: config_products-xsuaa-service
     service-plan: application
-# - name: config_products_saas
-#   type: org.cloudfoundry.managed-service
-#   requires:
-#     - name: uaa_config_products
-#     # - name: mtx-api
-#     #   properties:
-#     #     prop: ~{mtx-url}
-#     #     parameters:
-#     #       param: ~{mtx-url}
-#   parameters:
-#     service: saas-registry
-#     service-plan: application
-#     config:
-#         xsappname: config_products
-#         appName: config_products
-#         displayName: Configurable Prodcuts
-#         description: A simple CAP project.
-#         appUrls:
-#              onSubscription: ~{mtx-api/mtx-url}/mtx/v1/provisioning/tenant/1bb5f500-e56c-40ed-ba66-ab47c13ffe30
-#              onSubscriptionAsync: false
-#              onUnSubscriptionAsync: false
-#              callbackTimeoutMillis: 300000
 parameters:
   deploy_mode: html5-repo
   enable-parallel-deployments: true
