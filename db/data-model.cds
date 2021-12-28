@@ -329,7 +329,7 @@ context cp {
     entity TS_ORDERRATE : managed {
         key WEEK_DATE   : Date     @title : 'Date';
         key LOCATION_ID : String(4)@title : 'Location ID';
-        key PRODUCT_ID  : String(40)@title : 'Product ID';
+        //key PRODUCT_ID  : String(40)@title : 'Product ID';
             ORDER_COUNT : Integer  @title : 'Order Count';
     }
 
@@ -374,9 +374,12 @@ context cp {
     entity IBP_FCHARPLAN {
         key LOCATION_ID : String(4)     @title : 'Location ID';
         key PRODUCT_ID  : String(40)    @title : 'Product ID';
-        key CLASS_NAME  : String(20)    @title : 'Class Name';
-        key CHAR_NAME   : String(30)    @title : 'Charateristic Name';
-        key CHAR_VALUE  : String(70)    @title : 'Charateristic Value';
+        key CLASS_NUM  : String(20)    @title : 'Class Name';
+        key CHAR_NUM   : String(30)    @title : 'Charateristic Name';
+        key CHARVAL_NUM  : String(70)    @title : 'Charateristic Value';
+       // key CLASS_NAME  : String(20)    @title : 'Class Name';
+       // key CHAR_NAME   : String(30)    @title : 'Charateristic Name';
+       // key CHAR_VALUE  : String(70)    @title : 'Charateristic Value';
         key VERSION     : String(10)    @title : 'Version';
         key SCENARIO    : String(32)    @title : 'Scenario';
         key WEEK_BUCKET : Timestamp     @title : 'Weekly Bucket';

@@ -91,7 +91,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
                                 DATE_HIGH   : Date );*/
 
 }
-/*service CatalogServiceFn@(impl : './lib/cat-service.js') {
+service CatalogSrvBtp @(impl : './lib/cat-service.js') {
     type bomOD{
         LOCATION_ID : String(4);
         PRODUCT_ID  : String(40);
@@ -109,9 +109,19 @@ service CatalogService @(impl : './lib/cat-service.js') {
         OD_CONDITION : String(2);
         ROW_ID       : Integer;
     }
-    function getBOMOD () 
+    //function getBOMOD () returns String;
    /* action generate_timeseries( LOCATION_ID : String(4) ,
                                 DATE_LOW    :Date,
                                 DATE_HIGH   : Date );*/
 
-//}*/
+}
+service CatalogSrvML @(impl : './lib/cat-serviceml.js') {
+    type pf_exec{
+        LOCATION_ID : String(4);
+        PRODUCT_ID  : String(40);
+        OBJ_DEP     : String(30);
+    }   
+     function profile_exec(LOCATION_ID : String(4),
+                            PRODUCT_ID  : String(40),
+                            OBJ_DEP     : String(30)) returns String;
+}

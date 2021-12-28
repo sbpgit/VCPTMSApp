@@ -20,7 +20,7 @@ module.exports = srv=>{
         console.log("test");
      
     })
-    srv.on("fGetNodeDet", async req =>{
+    srv.on("profile_exec", async req =>{
         let { getAccessNodes } = srv.entities;
         const db = srv.transaction(req); 
         const results = await cds.transaction(req).run(

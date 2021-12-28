@@ -79,6 +79,10 @@ modules:
       - cpibpfrescpibpfres.zip
       name: cpibpfrescpibpfres
       target-path: resources/
+    - artifacts:
+      - cpexecpredcpexecprediction.zip
+      name: cpexecpredcpexecprediction
+      target-path: resources/
 - name: cfgapppvsrootcfgprdpvsroot
   type: html5
   path: app/cfgprd_pvsroot
@@ -112,6 +116,16 @@ modules:
 - name: cpibpfrescpibpfres
   type: html5
   path: app/cp_ibpfres
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpexecpredcpexecprediction
+  type: html5
+  path: app/cp_execprediction
   build-parameters:
     build-result: dist
     builder: custom
