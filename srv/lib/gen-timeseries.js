@@ -111,6 +111,7 @@ class GenTimeseries {
       );
       lsSalesInfo.LOCATION_ID = GenFunctions.parse(liSalesHead[i].LOCATION_ID);
       lsSalesInfo.PRODUCT_ID = GenFunctions.parse(liSalesHead[i].PRODUCT_ID);
+      lsSalesInfo.ORD_QTY = GenFunctions.parse(liSalesHead[i].ORD_QTY);      
       lsSalesInfo.calDate = GenFunctions.parse(
         GenFunctions.getNextSunday(liSalesHead[i].DOC_CREATEDDATE)
       );
@@ -294,8 +295,12 @@ class GenTimeseries {
 
     let liObjDepHead = [];
     let lordCount = 0;
+    let lOrdQty = 0;
 
     for (let lsSalesInfo of imiSalesInfo) {
+
+        lOrdQty = lOrdQty + lsSalesInfo.ORD_QTY;
+
       lordCount++;
       this.logger.info(
         "Calculation Date: " +
@@ -373,7 +378,7 @@ class GenTimeseries {
           this.sObjDepHead.OBJ_COUNTER = liObjDep[i].OBJ_COUNTER;
 
           if (lFail === "") {
-            this.sObjDepHead.SUCCESS = 1;
+            this.sObjDepHead.SUCCESS = lsSalesInfo.ORD_QTY;
           } else {
             this.sObjDepHead.SUCCESS = 0;
           } // if (lFail === "")
@@ -410,7 +415,7 @@ class GenTimeseries {
       if (i === liObjDepHead.length) {
         lsObjDepHead.SUCCESS = lSuccess;
         lsObjDepHead.SUCCESS_RATE =
-          (lsObjDepHead.SUCCESS / imiSalesInfo.length) * 100;
+          (lsObjDepHead.SUCCESS / lOrdQty) * 100;
         liOdHeadTemp.push(GenFunctions.parse(lsObjDepHead));
         lSuccess = 0;
         break;
@@ -425,7 +430,7 @@ class GenTimeseries {
       ) {
         lsObjDepHead.SUCCESS = lSuccess;
         lsObjDepHead.SUCCESS_RATE =
-          (lsObjDepHead.SUCCESS / imiSalesInfo.length) * 100;
+          (lsObjDepHead.SUCCESS / lOrdQty) * 100;
         liOdHeadTemp.push(GenFunctions.parse(lsObjDepHead));
         lSuccess = 0;
       }
