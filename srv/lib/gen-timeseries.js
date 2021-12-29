@@ -15,7 +15,7 @@ class GenTimeseries {
       transports: [
         new transports.Console(),
         new transports.File({
-          filename: "cat-service-log.log",
+          filename: "log-ts-generation.log",
         }),
       ],
     });
@@ -117,7 +117,8 @@ class GenTimeseries {
       );
 
       /** Get Sales Characteristics */
-      const liSalesChar = await cds.run(
+/*      
+      lsSalesInfo.salesChar = await cds.run(
         SELECT.from("CP_SALESH_CONFIG").where({
           xpr: [
             { ref: ["SALES_DOC"] },
@@ -131,7 +132,18 @@ class GenTimeseries {
         })
       );
 
-      lsSalesInfo.salesChar = GenFunctions.parse(liSalesChar);
+      
+        lsSalesInfo.salesChar = [];
+        liSalesConfig.forEach(lsSalesConfig=> {
+            if(lsSalesConfig.SALES_DOC === liSalesHead[i].SALES_DOC &&
+               lsSalesConfig.SALESDOC_ITEM === liSalesHead[i].SALESDOC_ITEM  ){
+                    lsSalesInfo.salesChar.push(GenFunctions.parse(lsSalesConfig));
+               }
+        });
+
+*/
+
+//      lsSalesInfo.salesChar = GenFunctions.parse(liSalesChar);
       this.iSalesInfo.push(GenFunctions.parse(lsSalesInfo));
 
       // Get Object dependency for every change in Product
@@ -226,11 +238,14 @@ class GenTimeseries {
           })
         );
 
-        cds.run(
+        /*
+        await cds.run(
           INSERT.into("CP_TS_ORDERRATE")
             .columns("LOCATION_ID", "WEEK_DATE", "ORDER_COUNT")
             .values(imLocation, this.iSalesInfo[i].calDate, liDateSalesInfo.length)
         );
+        */
+        
 
         await cds.run(
           DELETE.from("CP_TS_OBJDEPHDR").where({
@@ -260,8 +275,8 @@ class GenTimeseries {
           })
         );
 
-        this.processObjDepHead(liDateSalesInfo);
-        this.processObjDepChar(liDateSalesInfo);
+        await this.processObjDepHead(liDateSalesInfo);
+        await this.processObjDepChar(liDateSalesInfo);
 
         liDateSalesInfo = [];
       }
@@ -288,7 +303,7 @@ class GenTimeseries {
    * Process Object Dependency Header
    * @param {Sales Info} imiSalesInfo
    */
-  processObjDepHead(imiSalesInfo) {
+  async processObjDepHead(imiSalesInfo) {
     let lFail = "";
     let lObjFail = "";
     let lSuccess = "";
@@ -299,7 +314,7 @@ class GenTimeseries {
 
     for (let lsSalesInfo of imiSalesInfo) {
 
-        lOrdQty = lOrdQty + lsSalesInfo.ORD_QTY;
+        lOrdQty = lOrdQty + Math.pow(lsSalesInfo.ORD_QTY,0);
 
       lordCount++;
       this.logger.info(
@@ -311,6 +326,21 @@ class GenTimeseries {
           imiSalesInfo.length +
           " | Head"
       );
+
+      const liSalesChar = await cds.run(
+        SELECT.from("CP_SALESH_CONFIG").where({
+          xpr: [
+            { ref: ["SALES_DOC"] },
+            "=",
+            { val: imiSalesInfo.SALES_DOC },
+            "AND",
+            { ref: ["SALESDOC_ITEM"] },
+            "=",
+            { val: imiSalesInfo.SALESDOC_ITEM },
+          ],
+        })
+      );
+
 
       let liObjDep = this.getObjDep(
         lsSalesInfo.LOCATION_ID,
@@ -345,7 +375,7 @@ class GenTimeseries {
             }
           }
 
-          for (const sSalesChar of lsSalesInfo.salesChar) {
+          for (const sSalesChar of liSalesChar) {
             if (sSalesChar.CHAR_NUM === liObjDep[i].CHAR_NUM) {
               if (
                 (liObjDep[i].OD_CONDITION === "EQ" &&
@@ -378,7 +408,7 @@ class GenTimeseries {
           this.sObjDepHead.OBJ_COUNTER = liObjDep[i].OBJ_COUNTER;
 
           if (lFail === "") {
-            this.sObjDepHead.SUCCESS = lsSalesInfo.ORD_QTY;
+            this.sObjDepHead.SUCCESS = Math.pow(lsSalesInfo.ORD_QTY,0);
           } else {
             this.sObjDepHead.SUCCESS = 0;
           } // if (lFail === "")
@@ -450,12 +480,11 @@ class GenTimeseries {
    * Process Object Dependency Characteristics
    * @param {Sales Info} imiSalesInfo
    */
-  processObjDepChar(imiSalesInfo) {
+  async processObjDepChar(imiSalesInfo) {
     let liObjDepChar = [];
     let liObjDep = [];
     let i = 0;
-
-    console.log(imiSalesInfo);
+    let lOrdQty = 0;
 
     imiSalesInfo.sort(
       GenFunctions.dynamicSortMultiple("LOCATION_ID", "PRODUCT_ID")
@@ -472,7 +501,10 @@ class GenTimeseries {
           " | Char"
       );
 
+      lOrdQty = lOrdQty + Math.pow(lsSalesInfo.ORD_QTY,0);
+
       if (
+//Compare Location and Product          
         i === 0 ||
         imiSalesInfo[GenFunctions.subOne(i, imiSalesInfo)].LOCATION_ID !==
           lsSalesInfo.LOCATION_ID ||
@@ -512,8 +544,22 @@ class GenTimeseries {
 
       liObjDep.sort(GenFunctions.dynamicSortMultiple("CHAR_NUM"));
 
+      const liSalesChar = await cds.run(
+        SELECT.from("CP_SALESH_CONFIG").where({
+          xpr: [
+            { ref: ["SALES_DOC"] },
+            "=",
+            { val: imiSalesInfo.SALES_DOC },
+            "AND",
+            { ref: ["SALESDOC_ITEM"] },
+            "=",
+            { val: imiSalesInfo.SALESDOC_ITEM },
+          ],
+        })
+      );
+
       let lFound = "";
-      for (const lsSalesChar of lsSalesInfo.salesChar) {
+      for (const lsSalesChar of liSalesChar ) {
         lFound = "";
         for (let i = 0; i < liObjDep.length; i++) {
           if (liObjDep[i].CHAR_NUM === lsSalesChar.CHAR_NUM) {
@@ -534,9 +580,9 @@ class GenTimeseries {
                   liObjDepChar[j].OBJ_COUNTER === liObjDep[i].OBJ_COUNTER &&
                   liObjDepChar[j].ROW_ID === liObjDep[i].ROW_ID
                 ) {
-                  liObjDepChar[j].SUCCESS++;
+                  liObjDepChar[j].SUCCESS = liObjDepChar[j].SUCCESS + Math.pow(lsSalesInfo.ORD_QTY,0);
                   liObjDepChar[j].SUCCESS_RATE =
-                    (liObjDepChar[j].SUCCESS / imiSalesInfo.length) * 100;
+                    (liObjDepChar[j].SUCCESS / lOrdQty) * 100;
                 }
               }
             }
