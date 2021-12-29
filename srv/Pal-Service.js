@@ -5567,8 +5567,8 @@ async function _generateRegModels (req) {
     console.log('Response completed Time  :', createtAt);
 
     var res = req._.req.res;
-    res.statusCode = 201;
-    res.send({values});
+   // res.statusCode = 201;
+   // res.send({values});
 
     if (hasCharCount2 == true)
     {

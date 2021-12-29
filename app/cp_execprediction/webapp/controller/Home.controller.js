@@ -82,10 +82,10 @@ sap.ui.define([
                             MessageToast.show("error");
                     }
                 });
-                this.getModel("BModel").read("/getODHdr",{
+                this.getModel("BModel").read("/getProfiles",{
                     success:function(oData){
-                        that.odModel.setData(oData)
-                        that.oODList.setModel(that.odModel);
+                        that.ppfModel.setData(oData)
+                        that.oPPFList.setModel(that.ppfModel);
 
                     },
                     error:function(oData,error){
@@ -94,8 +94,8 @@ sap.ui.define([
                 });
             },
             onRun: function(){
-                var oModel = this.getModel("PModel"),
-                oEntry = [];
+                this.oModel = this.getModel("PModel");
+                var oEntry = [];
                 var vVcRulesList= {  
                     vcRulesList: []
                 };
@@ -110,30 +110,23 @@ sap.ui.define([
                     "Product"  : "KM_M219VBVS_BVS",
                     "GroupID"  :  "M219VV00105NN_1"
                 });*/
-                oModel.create("/generateRegModels", vVcRulesList,{      
+                this.oModel.create("/generateRegModels", vVcRulesList,{      
                     	success: function (oData) {
-                    		MessageToast.show("success");
+                    		//MessageToast.show("success");
+                            that.oModel.create("/generatePredictions", vVcRulesList,{      
+                                success: function (oData) {
+                                    MessageToast.show("success");
+                                },
+                                error: function (oError) {
+                                    MessageToast.show("error");
+                                }
+                            });
                     	},
                     	error: function (oError) {
                     		MessageToast.show("error");
                     	}
                     });
-                // var oFilters = new Filter({
-                //     filters: [
-                //         new Filter("Location", sap.ui.model.FilterOperator.Contains, "FR10"),
-                //         new Filter("Product", sap.ui.model.FilterOperator.Contains, "KM_M219VBVS_BVS"),
-                //         new Filter("GroupID", sap.ui.model.FilterOperator.Contains, "M219VV00105NN_1")
-                //     ],
-                //     and: false
-                // });
-                // vVcRulesList.push(oFilters);
-                // var oFilters1 = new Filter({
-                //     filters: [
-                //         new Filter("vcRulesList", sap.ui.model.FilterOperator.Contains,vVcRulesList )
-                //     ],
-                //     and: false
-                // });
-                // oEntry.push(oFilters1);
+               
                 // oModel.read("/generateRegModels",{
                 //     filters: oEntry,
                 //     success: function (oData) {
@@ -167,16 +160,14 @@ sap.ui.define([
                     if (this.oODList.getBinding("items")) {
                         this.oODList.getBinding("items").filter([
                             new Filter("LOCATION_ID", FilterOperator.Contains, that.oLocList.getSelectedItem().getTitle()),                            
-                            new Filter("PRODUCT_ID", FilterOperator.Contains, that.oProdList.getSelectedItem().getTitle())
+                            new Filter("PRODUCT_ID", FilterOperator.Contains, "KM_M219VBVS_BVS")
                         ]);
                     }
                     this._valueHelpDialogOD.open();
                  }
-                //  else if (sId.includes("emp")) {
-                //     this._dialogEmployee.open();
-                // } else {
-                //     this._dialogFCCCIO.open();
-                // }
+                  else {
+                    this._valueHelpDialogPPF.open();
+                }
             },
             handleClose: function(oEvent){
                 var sId = oEvent.getParameter("id");
@@ -197,7 +188,10 @@ sap.ui.define([
 				}
 			}
             else {
-                //DO NOTHING
+                that._oCore.byId(this._valueHelpDialogPPF.getId() + "-searchField").setValue("");
+				if (that.oPPFList.getBinding("items")) {
+					that.oPPFList.getBinding("items").filter([]);
+				}
             }
             },
             handleSearch: function (oEvent) {
@@ -206,7 +200,7 @@ sap.ui.define([
                     oFilters = [];
                 // Check if search filter is to be applied
                 query = query ? query.trim() : "";
-                // Admin
+                // Location
                 if (sId.includes("loc")) {
                     if (query !== "") {
                         oFilters.push(new Filter({
@@ -223,7 +217,7 @@ sap.ui.define([
                     if (query !== "") {
                         oFilters.push(new Filter({
                             filters: [
-                                new Filter("PRODUCT_ID", FilterOperator.Contains, that.oAdminList.getSelectedItem().getTitle()),
+                                new Filter("PRODUCT_ID", FilterOperator.Contains, query),
                                 new Filter("PROD_DESC", FilterOperator.Contains, query)
                             ],
                             and: false
@@ -246,7 +240,17 @@ sap.ui.define([
                     that.oODList.getBinding("items").filter(oFilters);
                 // Save dialog
                 }  else {
-                    //DO NOTHING
+                    if (query !== "") {
+                        oFilters.push(new Filter({
+                            filters: [
+                                new Filter("PROFILE", FilterOperator.Contains, query),
+                                new Filter("METHOD", FilterOperator.Contains, query),
+                                new Filter("PRF_DESC", FilterOperator.Contains, query)
+                            ],
+                            and: false
+                        }));
+                    } 
+                    that.oPPFList.getBinding("items").filter(oFilters);
                 }
             },
             handleSelection: function (oEvent) {
@@ -263,6 +267,7 @@ sap.ui.define([
                     that.oProdList.getBinding("items").filter([]);                    
                     aSelectedItems = oEvent.getParameter("selectedItems");
                     if (aSelectedItems && aSelectedItems.length > 0) {
+                        that.oProd.removeAllTokens();
                         aSelectedItems.forEach(function (oItem) {
                             that.oProd.addToken(new sap.m.Token({
                                 key:oItem.getTitle(),
@@ -276,6 +281,7 @@ sap.ui.define([
                     that.oODList.getBinding("items").filter([]);                    
                     aSelectedItems = oEvent.getParameter("selectedItems");
                     if (aSelectedItems && aSelectedItems.length > 0) {
+                        that.oObjDep.removeAllTokens();
                         aSelectedItems.forEach(function (oItem) {
                             that.oObjDep.addToken(new sap.m.Token({
                                 key:oItem.getTitle(),
@@ -284,9 +290,19 @@ sap.ui.define([
                         });
                     }
                 } else {
-                    //Do nothing
+                    that.oPPFList.getBinding("items").filter([]);                    
+                    aSelectedItems = oEvent.getParameter("selectedItems");
+                    if (aSelectedItems && aSelectedItems.length > 0) {
+                        aSelectedItems.forEach(function (oItem) {
+                            that.oPredProfile.addToken(new sap.m.Token({
+                                key:oItem.getTitle(),
+                                text: oItem.getTitle()
+                            }));
+                        });
+                    }
                 }
                 that.handleClose(oEvent);
             },
+
 		});
 	});

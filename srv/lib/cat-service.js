@@ -10,10 +10,10 @@ const genTimeseries = new GenTimeseries;
 
 const genFunctions = new GenFunctions();
 
- module.exports = async function () {
+/* module.exports = async function () {
      await genTimeseries.GenTimeseries();
- }
- /*
+ }*/
+ 
 module.exports = srv=>{
     srv.on("generate_timeseries", async req =>{
         
@@ -21,14 +21,14 @@ module.exports = srv=>{
         console.log("test");
      
     })
-    srv.on("profile_exec", async req =>{
+    /*srv.on("profile_exec", async req =>{
         let { getAccessNodes } = srv.entities;
         const db = srv.transaction(req); 
         const results = await cds.transaction(req).run(
             SELECT .from(getAccessNodes) .where({PARENT_NODE: req.data.PARENT_NODE, NODE_TYPE: req.data.NODE_TYPE})
         ) 
         return results;     
-    })
+    })*/
     //srv.on("")
 };
-*/
+

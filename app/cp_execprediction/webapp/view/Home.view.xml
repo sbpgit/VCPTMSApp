@@ -71,9 +71,9 @@
                             <Label text="{i18n>predpf}" />
                         </f:label>
                         <f:fields>
-                            <Input id="pmInput" placeholder="{i18n>predpf}"/>
-                            <!-- <MultiInput id="pmInput" placeholder="{i18n>predpf}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"
-                                tokenUpdate="handleTokenUpdate"/> -->
+                            <!-- <Input id="pmInput" placeholder="{i18n>predpf}"/> -->
+                            <MultiInput id="pmInput" placeholder="{i18n>predpf}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"
+                                tokenUpdate="handleTokenUpdate"/>
                         </f:fields>
                     </f:FormElement>
                 </f:formElements>
