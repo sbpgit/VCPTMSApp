@@ -422,23 +422,23 @@ entity PalGenPredictions
     };
 }
 
-entity PalModelProfiles
-{
-    key Location: String(5);
-	key Product: String(40);
-	key GroupID: String(20);
-	key ModelType : String(10);
-	key ProfileID : Integer;
-};
+// entity PalModelProfiles
+// {
+//     key Location: String(5);
+// 	key Product: String(40);
+// 	key GroupID: String(20);
+// 	key ModelType : String(10);
+// 	key ProfileID : Integer;
+// };
 
-entity PalModelParameters
-{
-     key ModelType: String(10);
-	 key ProfileID: Integer;
-	 key paramName: String(30);
-	 intVal: Integer;
-	 doubleVal: Double;
-	 strVal: String(20);
-	 paramDescription: String(1000);
-};
+// entity PalModelParameters
+// {
+//      key ModelType: String(10);
+// 	 key ProfileID: Integer;
+// 	 key paramName: String(30);
+// 	 intVal: Integer;
+// 	 doubleVal: Double;
+// 	 strVal: String(20);
+// 	 paramDescription: String(1000);
+// };
 

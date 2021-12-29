@@ -329,7 +329,7 @@ context cp {
     entity TS_ORDERRATE : managed {
         key WEEK_DATE   : Date     @title : 'Date';
         key LOCATION_ID : String(4)@title : 'Location ID';
-        //key PRODUCT_ID  : String(40)@title : 'Product ID';
+            //key PRODUCT_ID  : String(40)@title : 'Product ID';
             ORDER_COUNT : Integer  @title : 'Order Count';
     }
 
@@ -374,12 +374,12 @@ context cp {
     entity IBP_FCHARPLAN {
         key LOCATION_ID : String(4)     @title : 'Location ID';
         key PRODUCT_ID  : String(40)    @title : 'Product ID';
-        key CLASS_NUM  : String(20)    @title : 'Class Name';
-        key CHAR_NUM   : String(30)    @title : 'Charateristic Name';
-        key CHARVAL_NUM  : String(70)    @title : 'Charateristic Value';
-       // key CLASS_NAME  : String(20)    @title : 'Class Name';
-       // key CHAR_NAME   : String(30)    @title : 'Charateristic Name';
-       // key CHAR_VALUE  : String(70)    @title : 'Charateristic Value';
+        key CLASS_NUM   : String(20)    @title : 'Class Name';
+        key CHAR_NUM    : String(30)    @title : 'Charateristic Name';
+        key CHARVAL_NUM : String(70)    @title : 'Charateristic Value';
+            // key CLASS_NAME  : String(20)    @title : 'Class Name';
+            // key CHAR_NAME   : String(30)    @title : 'Charateristic Name';
+            // key CHAR_VALUE  : String(70)    @title : 'Charateristic Value';
         key VERSION     : String(10)    @title : 'Version';
         key SCENARIO    : String(32)    @title : 'Scenario';
         key WEEK_BUCKET : Timestamp     @title : 'Weekly Bucket';
@@ -399,9 +399,23 @@ context cp {
             PREDICTED_STATUS : String(8) @title : 'Predicted Status';
     }
 
-    entity PAL_METHD_PARA:  managed {
-        key METHOD    : String(50) @title : 'Method Name';
-        key PARA_NAME : String(100)@title : 'Parameter Name';
+    // entity PAL_METHD_PARA : managed {
+    //     key METHOD    : String(50) @title : 'Method Name';
+    //     key PARA_NAME : String(100)@title : 'Parameter Name';
+    //         paratype defvalue
+    // }
+
+    entity PAL_PARAMETERS
+    {
+        key METHOD      : String(20)  @title : 'Method Name';
+        key PARA_NAME   : String(30)  @title : 'Parameter Name';
+            DATATYPE    : String(30)  @title : 'Data Type';
+            DEFAULTVAL  : String(100) @title : 'Default Value';
+            INTVAL      : Integer     @title : 'Integer';
+            DOUBLEVAL   : Double      @title : 'Double';
+            STRVAL      : String(50)  @title : 'String';
+            DESCRIPTION : String(1000)@title : ' Description';
+            DEPENDENCY  : String(1000)@title : ' Dependency';
     }
 
     entity PAL_PROFILEMETH {
@@ -415,7 +429,6 @@ context cp {
         key PROFILE   : String(50) @title : 'Profile';
         key METHOD    : String(50) @title : 'Method Name';
         key PARA_NAME : String(100)@title : 'Parameter Name';
-            //  key PARA_VALUE : String(200)@title : 'Parameter Value';
             INTVAL    : Integer;
             DOUBLEVAL : Double;
             STRVAL    : String(20);
@@ -423,10 +436,22 @@ context cp {
             PARA_DEP  : String(1000);
     }
 
+
     entity PAL_PROFILEOD : managed {
         key PROFILE : String(50)@title : 'Profile';
         key OBJ_DEP : String(30)@title : 'Object Dependency';
     }
+   
+
+    entity PAL_MODEL_PARAMETERS {
+        key ModelType        : String(10);
+        key ProfileID        : Integer;
+        key paramName        : String(30);
+            intVal           : Integer;
+            doubleVal        : Double;
+            strVal           : String(20);
+            paramDescription : String(1000);
+    };
 }
 
 @cds.persistence.exists

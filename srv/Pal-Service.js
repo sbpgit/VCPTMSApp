@@ -523,8 +523,8 @@ async function _generatePredictions(req) {
     console.log('Response completed Time  :', createtAt);
 
     var res = req._.req.res;
-    res.statusCode = 201;
-    res.send({values});
+  //  res.statusCode = 201;
+    //res.send({values});
 
     for (let i = 0; i < vcRulesList.length; i++)
     {

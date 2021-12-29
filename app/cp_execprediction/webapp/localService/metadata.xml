@@ -1,0 +1,514 @@
+<edmx:Edmx xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:sap="http://www.sap.com/Protocols/SAPData" Version="1.0">
+<edmx:Reference xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx" Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Validation.V1.xml">
+<edmx:Include Alias="Validation" Namespace="Org.OData.Validation.V1"/>
+</edmx:Reference>
+<edmx:DataServices m:DataServiceVersion="2.0">
+<Schema xmlns="http://schemas.microsoft.com/ado/2008/09/edm" Namespace="PalService">
+<EntityContainer Name="EntityContainer" m:IsDefaultEntityContainer="true">
+<EntitySet Name="hgbtRegressionsV1" EntityType="PalService.hgbtRegressionsV1"/>
+<EntitySet Name="hgbtByGroup" EntityType="PalService.hgbtByGroup"/>
+<EntitySet Name="hgbtPredictionsV1" EntityType="PalService.hgbtPredictionsV1"/>
+<EntitySet Name="mlrRegressions" EntityType="PalService.mlrRegressions"/>
+<EntitySet Name="mlrByGroup" EntityType="PalService.mlrByGroup"/>
+<EntitySet Name="mlrPredictions" EntityType="PalService.mlrPredictions"/>
+<EntitySet Name="varmaModels" EntityType="PalService.varmaModels"/>
+<EntitySet Name="varmaByGroup" EntityType="PalService.varmaByGroup"/>
+<EntitySet Name="varmaPredictions" EntityType="PalService.varmaPredictions"/>
+<EntitySet Name="generateRegModels" EntityType="PalService.generateRegModels"/>
+<EntitySet Name="generatePredictions" EntityType="PalService.generatePredictions"/>
+<FunctionImport Name="genTimeSeriesData" m:HttpMethod="POST"/>
+</EntityContainer>
+<EntityType Name="hgbtRegressionsV1">
+<Key>
+<PropertyRef Name="hgbtID"/>
+</Key>
+<Property Name="hgbtID" Type="Edm.String" MaxLength="50" Nullable="false"/>
+<Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+<Property Name="regressionParameters" Type="Collection(PalService.hgbtRegressionsV1_regressionParameters)" Nullable="false"/>
+<Property Name="hgbtType" Type="Edm.Int32"/>
+<Property Name="regressionData" Type="Collection(PalService.hgbtRegressionsV1_regressionData)" Nullable="false"/>
+<Property Name="modelsOp" Type="Collection(PalService.hgbtRegressionsV1_modelsOp)" Nullable="false"/>
+<Property Name="importanceOp" Type="Collection(PalService.hgbtRegressionsV1_importanceOp)" Nullable="false"/>
+<Property Name="statisticsOp" Type="Collection(PalService.hgbtRegressionsV1_statisticsOp)" Nullable="false"/>
+<Property Name="paramSelectionOp" Type="Collection(PalService.hgbtRegressionsV1_paramSelectionOp)" Nullable="false"/>
+</EntityType>
+<EntityType Name="hgbtByGroup">
+<Property Name="hgbtGroupID" Type="Edm.String" MaxLength="50"/>
+<Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+<Property Name="groupId" Type="Edm.String" MaxLength="20"/>
+<Property Name="regressionParameters" Type="Collection(PalService.hgbtByGroup_regressionParameters)" Nullable="false"/>
+<Property Name="hgbtType" Type="Edm.Int32"/>
+<Property Name="importanceOp" Type="Collection(PalService.hgbtByGroup_importanceOp)" Nullable="false"/>
+<Property Name="statisticsOp" Type="Collection(PalService.hgbtByGroup_statisticsOp)" Nullable="false"/>
+<Property Name="paramSelectionOp" Type="Collection(PalService.hgbtByGroup_paramSelectionOp)" Nullable="false"/>
+</EntityType>
+<EntityType Name="hgbtPredictionsV1">
+<Key>
+<PropertyRef Name="hgbtID"/>
+</Key>
+<Property Name="hgbtID" Type="Edm.String" MaxLength="50" Nullable="false"/>
+<Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+<Property Name="groupId" Type="Edm.String" MaxLength="20"/>
+<Property Name="predictionParameters" Type="Collection(PalService.hgbtPredictionsV1_predictionParameters)" Nullable="false"/>
+<Property Name="hgbtType" Type="Edm.Int32"/>
+<Property Name="predictionData" Type="Collection(PalService.hgbtPredictionsV1_predictionData)" Nullable="false"/>
+<Property Name="predictedResults" Type="Collection(PalService.hgbtPredictionsV1_predictedResults)" Nullable="false"/>
+</EntityType>
+<EntityType Name="mlrRegressions">
+<Key>
+<PropertyRef Name="mlrID"/>
+</Key>
+<Property Name="mlrID" Type="Edm.String" MaxLength="50" Nullable="false"/>
+<Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+<Property Name="regressionParameters" Type="Collection(PalService.mlrRegressions_regressionParameters)" Nullable="false"/>
+<Property Name="mlrType" Type="Edm.Int32"/>
+<Property Name="regressionData" Type="Collection(PalService.mlrRegressions_regressionData)" Nullable="false"/>
+<Property Name="coefficientOp" Type="Collection(PalService.mlrRegressions_coefficientOp)" Nullable="false"/>
+<Property Name="pmmlOp" Type="Collection(PalService.mlrRegressions_pmmlOp)" Nullable="false"/>
+<Property Name="fittedOp" Type="Collection(PalService.mlrRegressions_fittedOp)" Nullable="false"/>
+<Property Name="statisticsOp" Type="Collection(PalService.mlrRegressions_statisticsOp)" Nullable="false"/>
+<Property Name="optimalParamOp" Type="Collection(PalService.mlrRegressions_optimalParamOp)" Nullable="false"/>
+</EntityType>
+<EntityType Name="mlrByGroup">
+<Property Name="mlrGroupID" Type="Edm.String" MaxLength="50"/>
+<Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+<Property Name="groupId" Type="Edm.String" MaxLength="20"/>
+<Property Name="regressionParameters" Type="Collection(PalService.mlrByGroup_regressionParameters)" Nullable="false"/>
+<Property Name="mlrType" Type="Edm.Int32"/>
+<Property Name="coefficientOp" Type="Collection(PalService.mlrByGroup_coefficientOp)" Nullable="false"/>
+<Property Name="fittedOp" Type="Collection(PalService.mlrByGroup_fittedOp)" Nullable="false"/>
+<Property Name="statisticsOp" Type="Collection(PalService.mlrByGroup_statisticsOp)" Nullable="false"/>
+<Property Name="optimalParamOp" Type="Collection(PalService.mlrByGroup_optimalParamOp)" Nullable="false"/>
+</EntityType>
+<EntityType Name="mlrPredictions">
+<Key>
+<PropertyRef Name="mlrpID"/>
+</Key>
+<Property Name="mlrpID" Type="Edm.String" MaxLength="50" Nullable="false"/>
+<Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+<Property Name="groupId" Type="Edm.String" MaxLength="20"/>
+<Property Name="predictionParameters" Type="Collection(PalService.mlrPredictions_predictionParameters)" Nullable="false"/>
+<Property Name="mlrpType" Type="Edm.Int32"/>
+<Property Name="predictionData" Type="Collection(PalService.mlrPredictions_predictionData)" Nullable="false"/>
+<Property Name="fittedResults" Type="Collection(PalService.mlrPredictions_fittedResults)" Nullable="false"/>
+</EntityType>
+<EntityType Name="varmaModels">
+<Key>
+<PropertyRef Name="varmaID"/>
+</Key>
+<Property Name="varmaID" Type="Edm.String" MaxLength="50" Nullable="false"/>
+<Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+<Property Name="controlParameters" Type="Collection(PalService.varmaModels_controlParameters)" Nullable="false"/>
+<Property Name="varmaType" Type="Edm.Int32"/>
+<Property Name="varmaData" Type="Collection(PalService.varmaModels_varmaData)" Nullable="false"/>
+<Property Name="modelsOp" Type="Collection(PalService.varmaModels_modelsOp)" Nullable="false"/>
+<Property Name="fittedOp" Type="Collection(PalService.varmaModels_fittedOp)" Nullable="false"/>
+<Property Name="irfOp" Type="Collection(PalService.varmaModels_irfOp)" Nullable="false"/>
+</EntityType>
+<EntityType Name="varmaByGroup">
+<Property Name="varmaGroupID" Type="Edm.String" MaxLength="50"/>
+<Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+<Property Name="groupId" Type="Edm.String" MaxLength="20"/>
+<Property Name="controlParameters" Type="Collection(PalService.varmaByGroup_controlParameters)" Nullable="false"/>
+<Property Name="varmaType" Type="Edm.Int32"/>
+<Property Name="varmaData" Type="Collection(PalService.varmaByGroup_varmaData)" Nullable="false"/>
+<Property Name="fittedOp" Type="Collection(PalService.varmaByGroup_fittedOp)" Nullable="false"/>
+<Property Name="irfOp" Type="Collection(PalService.varmaByGroup_irfOp)" Nullable="false"/>
+</EntityType>
+<EntityType Name="varmaPredictions">
+<Key>
+<PropertyRef Name="varmaID"/>
+</Key>
+<Property Name="varmaID" Type="Edm.String" MaxLength="50" Nullable="false"/>
+<Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+<Property Name="groupId" Type="Edm.String" MaxLength="20"/>
+<Property Name="predictionParameters" Type="Collection(PalService.varmaPredictions_predictionParameters)" Nullable="false"/>
+<Property Name="varmaType" Type="Edm.Int32"/>
+<Property Name="predictionData" Type="Collection(PalService.varmaPredictions_predictionData)" Nullable="false"/>
+<Property Name="predictedResults" Type="Collection(PalService.varmaPredictions_predictedResults)" Nullable="false"/>
+</EntityType>
+<EntityType Name="generateRegModels">
+<Key>
+<PropertyRef Name="regressionsID"/>
+</Key>
+<Property Name="regressionsID" Type="Edm.String" MaxLength="50" Nullable="false"/>
+<Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+<Property Name="modelType" Type="Edm.String" MaxLength="10"/>
+<Property Name="vcRulesList" Type="Collection(PalService.generateRegModels_vcRulesList)" Nullable="false"/>
+</EntityType>
+<EntityType Name="generatePredictions">
+<Key>
+<PropertyRef Name="predictionsID"/>
+</Key>
+<Property Name="predictionsID" Type="Edm.String" MaxLength="50" Nullable="false"/>
+<Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+<Property Name="modelType" Type="Edm.String" MaxLength="10"/>
+<Property Name="vcRulesList" Type="Collection(PalService.generatePredictions_vcRulesList)" Nullable="false"/>
+</EntityType>
+<ComplexType Name="result">
+<Property Name="resultStatus" Type="Edm.String"/>
+<Property Name="success" Type="Edm.Boolean"/>
+</ComplexType>
+<ComplexType Name="hgbtRegressionsV1_regressionParameters">
+<Property Name="groupId" Type="Edm.String" MaxLength="20"/>
+<Property Name="paramName" Type="Edm.String" MaxLength="100"/>
+<Property Name="intVal" Type="Edm.Int32"/>
+<Property Name="doubleVal" Type="Edm.Double"/>
+<Property Name="strVal" Type="Edm.String" MaxLength="100"/>
+</ComplexType>
+<ComplexType Name="hgbtRegressionsV1_regressionData">
+<Property Name="groupId" Type="Edm.String" MaxLength="20"/>
+<Property Name="ID" Type="Edm.Int32"/>
+<Property Name="att1" Type="Edm.Double"/>
+<Property Name="att2" Type="Edm.Double"/>
+<Property Name="att3" Type="Edm.Double"/>
+<Property Name="att4" Type="Edm.Double"/>
+<Property Name="att5" Type="Edm.Double"/>
+<Property Name="att6" Type="Edm.Double"/>
+<Property Name="att7" Type="Edm.Double"/>
+<Property Name="att8" Type="Edm.Double"/>
+<Property Name="att9" Type="Edm.Double"/>
+<Property Name="att10" Type="Edm.Double"/>
+<Property Name="att11" Type="Edm.Double"/>
+<Property Name="att12" Type="Edm.Double"/>
+<Property Name="target" Type="Edm.Double"/>
+</ComplexType>
+<ComplexType Name="hgbtRegressionsV1_modelsOp">
+<Property Name="groupId" Type="Edm.String" MaxLength="20"/>
+<Property Name="rowIndex" Type="Edm.Int32"/>
+<Property Name="treeIndex" Type="Edm.Int32"/>
+<Property Name="modelContent" Type="Edm.String"/>
+</ComplexType>
+<ComplexType Name="hgbtRegressionsV1_importanceOp">
+<Property Name="groupId" Type="Edm.String" MaxLength="20"/>
+<Property Name="variableName" Type="Edm.String" MaxLength="256"/>
+<Property Name="importance" Type="Edm.Double"/>
+</ComplexType>
+<ComplexType Name="hgbtRegressionsV1_statisticsOp">
+<Property Name="groupId" Type="Edm.String" MaxLength="20"/>
+<Property Name="statName" Type="Edm.String" MaxLength="1000"/>
+<Property Name="statValue" Type="Edm.String" MaxLength="1000"/>
+</ComplexType>
+<ComplexType Name="hgbtRegressionsV1_paramSelectionOp">
+<Property Name="groupId" Type="Edm.String" MaxLength="20"/>
+<Property Name="paramName" Type="Edm.String" MaxLength="256"/>
+<Property Name="intVal" Type="Edm.Int32"/>
+<Property Name="doubleVal" Type="Edm.Double"/>
+<Property Name="strVal" Type="Edm.String" MaxLength="1000"/>
+</ComplexType>
+<ComplexType Name="hgbtByGroup_regressionParameters">
+<Property Name="paramName" Type="Edm.String" MaxLength="100"/>
+<Property Name="intVal" Type="Edm.Int32"/>
+<Property Name="doubleVal" Type="Edm.Double"/>
+<Property Name="strVal" Type="Edm.String" MaxLength="100"/>
+</ComplexType>
+<ComplexType Name="hgbtByGroup_importanceOp">
+<Property Name="variableName" Type="Edm.String" MaxLength="256"/>
+<Property Name="importance" Type="Edm.Double"/>
+</ComplexType>
+<ComplexType Name="hgbtByGroup_statisticsOp">
+<Property Name="statName" Type="Edm.String" MaxLength="1000"/>
+<Property Name="statValue" Type="Edm.String" MaxLength="1000"/>
+</ComplexType>
+<ComplexType Name="hgbtByGroup_paramSelectionOp">
+<Property Name="paramName" Type="Edm.String" MaxLength="256"/>
+<Property Name="intVal" Type="Edm.Int32"/>
+<Property Name="doubleVal" Type="Edm.Double"/>
+<Property Name="strVal" Type="Edm.String" MaxLength="1000"/>
+</ComplexType>
+<ComplexType Name="hgbtPredictionsV1_predictionParameters">
+<Property Name="groupId" Type="Edm.String" MaxLength="20"/>
+<Property Name="paramName" Type="Edm.String" MaxLength="100"/>
+<Property Name="intVal" Type="Edm.Int32"/>
+<Property Name="doubleVal" Type="Edm.Double"/>
+<Property Name="strVal" Type="Edm.String" MaxLength="100"/>
+</ComplexType>
+<ComplexType Name="hgbtPredictionsV1_predictionData">
+<Property Name="groupId" Type="Edm.String" MaxLength="20"/>
+<Property Name="ID" Type="Edm.Int32"/>
+<Property Name="att1" Type="Edm.Double"/>
+<Property Name="att2" Type="Edm.Double"/>
+<Property Name="att3" Type="Edm.Double"/>
+<Property Name="att4" Type="Edm.Double"/>
+<Property Name="att5" Type="Edm.Double"/>
+<Property Name="att6" Type="Edm.Double"/>
+<Property Name="att7" Type="Edm.Double"/>
+<Property Name="att8" Type="Edm.Double"/>
+<Property Name="att9" Type="Edm.Double"/>
+<Property Name="att10" Type="Edm.Double"/>
+<Property Name="att11" Type="Edm.Double"/>
+<Property Name="att12" Type="Edm.Double"/>
+</ComplexType>
+<ComplexType Name="hgbtPredictionsV1_predictedResults">
+<Property Name="groupId" Type="Edm.String" MaxLength="20"/>
+<Property Name="id" Type="Edm.Int32"/>
+<Property Name="score" Type="Edm.String" MaxLength="100"/>
+<Property Name="confidence" Type="Edm.Double"/>
+</ComplexType>
+<ComplexType Name="mlrRegressions_regressionParameters">
+<Property Name="groupId" Type="Edm.String" MaxLength="20"/>
+<Property Name="paramName" Type="Edm.String" MaxLength="256"/>
+<Property Name="intVal" Type="Edm.Int32"/>
+<Property Name="doubleVal" Type="Edm.Double"/>
+<Property Name="strVal" Type="Edm.String" MaxLength="1000"/>
+</ComplexType>
+<ComplexType Name="mlrRegressions_regressionData">
+<Property Name="groupId" Type="Edm.String" MaxLength="20"/>
+<Property Name="ID" Type="Edm.Int32"/>
+<Property Name="target" Type="Edm.Double"/>
+<Property Name="att1" Type="Edm.Double"/>
+<Property Name="att2" Type="Edm.Double"/>
+<Property Name="att3" Type="Edm.Double"/>
+<Property Name="att4" Type="Edm.Double"/>
+<Property Name="att5" Type="Edm.Double"/>
+<Property Name="att6" Type="Edm.Double"/>
+<Property Name="att7" Type="Edm.Double"/>
+<Property Name="att8" Type="Edm.Double"/>
+<Property Name="att9" Type="Edm.Double"/>
+<Property Name="att10" Type="Edm.Double"/>
+<Property Name="att11" Type="Edm.Double"/>
+<Property Name="att12" Type="Edm.Double"/>
+</ComplexType>
+<ComplexType Name="mlrRegressions_coefficientOp">
+<Property Name="groupId" Type="Edm.String" MaxLength="20"/>
+<Property Name="variableName" Type="Edm.String" MaxLength="1000"/>
+<Property Name="coefficientValue" Type="Edm.Double"/>
+<Property Name="tValue" Type="Edm.Double"/>
+<Property Name="pValue" Type="Edm.Double"/>
+</ComplexType>
+<ComplexType Name="mlrRegressions_pmmlOp">
+<Property Name="groupId" Type="Edm.String" MaxLength="20"/>
+<Property Name="rowIndex" Type="Edm.Int32"/>
+<Property Name="modelContent" Type="Edm.String"/>
+</ComplexType>
+<ComplexType Name="mlrRegressions_fittedOp">
+<Property Name="groupId" Type="Edm.String" MaxLength="20"/>
+<Property Name="ID" Type="Edm.Int32"/>
+<Property Name="value" Type="Edm.Double"/>
+</ComplexType>
+<ComplexType Name="mlrRegressions_statisticsOp">
+<Property Name="groupId" Type="Edm.String" MaxLength="20"/>
+<Property Name="statName" Type="Edm.String" MaxLength="256"/>
+<Property Name="statValue" Type="Edm.String" MaxLength="1000"/>
+</ComplexType>
+<ComplexType Name="mlrRegressions_optimalParamOp">
+<Property Name="groupId" Type="Edm.String" MaxLength="20"/>
+<Property Name="paramName" Type="Edm.String" MaxLength="256"/>
+<Property Name="intVal" Type="Edm.Int32"/>
+<Property Name="doubleVal" Type="Edm.Double"/>
+<Property Name="strVal" Type="Edm.String" MaxLength="1000"/>
+</ComplexType>
+<ComplexType Name="mlrByGroup_regressionParameters">
+<Property Name="paramName" Type="Edm.String" MaxLength="256"/>
+<Property Name="intVal" Type="Edm.Int32"/>
+<Property Name="doubleVal" Type="Edm.Double"/>
+<Property Name="strVal" Type="Edm.String" MaxLength="1000"/>
+</ComplexType>
+<ComplexType Name="mlrByGroup_coefficientOp">
+<Property Name="variableName" Type="Edm.String" MaxLength="1000"/>
+<Property Name="coefficientValue" Type="Edm.Double"/>
+<Property Name="tValue" Type="Edm.Double"/>
+<Property Name="pValue" Type="Edm.Double"/>
+</ComplexType>
+<ComplexType Name="mlrByGroup_fittedOp">
+<Property Name="ID" Type="Edm.Int32"/>
+<Property Name="value" Type="Edm.Double"/>
+</ComplexType>
+<ComplexType Name="mlrByGroup_statisticsOp">
+<Property Name="statName" Type="Edm.String" MaxLength="256"/>
+<Property Name="statValue" Type="Edm.String" MaxLength="1000"/>
+</ComplexType>
+<ComplexType Name="mlrByGroup_optimalParamOp">
+<Property Name="paramName" Type="Edm.String" MaxLength="256"/>
+<Property Name="intVal" Type="Edm.Int32"/>
+<Property Name="doubleVal" Type="Edm.Double"/>
+<Property Name="strVal" Type="Edm.String" MaxLength="1000"/>
+</ComplexType>
+<ComplexType Name="mlrPredictions_predictionParameters">
+<Property Name="groupId" Type="Edm.String" MaxLength="20"/>
+<Property Name="paramName" Type="Edm.String" MaxLength="256"/>
+<Property Name="intVal" Type="Edm.Int32"/>
+<Property Name="doubleVal" Type="Edm.Double"/>
+<Property Name="strVal" Type="Edm.String" MaxLength="1000"/>
+</ComplexType>
+<ComplexType Name="mlrPredictions_predictionData">
+<Property Name="groupId" Type="Edm.String" MaxLength="20"/>
+<Property Name="ID" Type="Edm.Int32"/>
+<Property Name="att1" Type="Edm.Double"/>
+<Property Name="att2" Type="Edm.Double"/>
+<Property Name="att3" Type="Edm.Double"/>
+<Property Name="att4" Type="Edm.Double"/>
+<Property Name="att5" Type="Edm.Double"/>
+<Property Name="att6" Type="Edm.Double"/>
+<Property Name="att7" Type="Edm.Double"/>
+<Property Name="att8" Type="Edm.Double"/>
+<Property Name="att9" Type="Edm.Double"/>
+<Property Name="att10" Type="Edm.Double"/>
+<Property Name="att11" Type="Edm.Double"/>
+<Property Name="att12" Type="Edm.Double"/>
+</ComplexType>
+<ComplexType Name="mlrPredictions_fittedResults">
+<Property Name="groupId" Type="Edm.String" MaxLength="20"/>
+<Property Name="ID" Type="Edm.Int32"/>
+<Property Name="value" Type="Edm.Double"/>
+</ComplexType>
+<ComplexType Name="varmaModels_controlParameters">
+<Property Name="groupId" Type="Edm.String" MaxLength="20"/>
+<Property Name="paramName" Type="Edm.String" MaxLength="100"/>
+<Property Name="intVal" Type="Edm.Int32"/>
+<Property Name="doubleVal" Type="Edm.Double"/>
+<Property Name="strVal" Type="Edm.String" MaxLength="100"/>
+</ComplexType>
+<ComplexType Name="varmaModels_varmaData">
+<Property Name="groupId" Type="Edm.String" MaxLength="20"/>
+<Property Name="ID" Type="Edm.Int32"/>
+<Property Name="att1" Type="Edm.Double"/>
+<Property Name="att2" Type="Edm.Double"/>
+<Property Name="att3" Type="Edm.Double"/>
+<Property Name="att4" Type="Edm.Double"/>
+<Property Name="att5" Type="Edm.Double"/>
+<Property Name="att6" Type="Edm.Double"/>
+<Property Name="att7" Type="Edm.Double"/>
+<Property Name="att8" Type="Edm.Double"/>
+<Property Name="att9" Type="Edm.Double"/>
+<Property Name="att10" Type="Edm.Double"/>
+<Property Name="att11" Type="Edm.Double"/>
+<Property Name="att12" Type="Edm.Double"/>
+<Property Name="target" Type="Edm.Double"/>
+</ComplexType>
+<ComplexType Name="varmaModels_modelsOp">
+<Property Name="groupId" Type="Edm.String" MaxLength="20"/>
+<Property Name="contentIndex" Type="Edm.Int32"/>
+<Property Name="contentValue" Type="Edm.String"/>
+</ComplexType>
+<ComplexType Name="varmaModels_fittedOp">
+<Property Name="groupId" Type="Edm.String" MaxLength="20"/>
+<Property Name="nameCol" Type="Edm.String"/>
+<Property Name="idx" Type="Edm.Int32"/>
+<Property Name="fitting" Type="Edm.Double"/>
+<Property Name="residual" Type="Edm.Double"/>
+</ComplexType>
+<ComplexType Name="varmaModels_irfOp">
+<Property Name="groupId" Type="Edm.String" MaxLength="20"/>
+<Property Name="col1" Type="Edm.String"/>
+<Property Name="col2" Type="Edm.String"/>
+<Property Name="idx" Type="Edm.Int32"/>
+<Property Name="response" Type="Edm.Double"/>
+</ComplexType>
+<ComplexType Name="varmaByGroup_controlParameters">
+<Property Name="paramName" Type="Edm.String" MaxLength="100"/>
+<Property Name="intVal" Type="Edm.Int32"/>
+<Property Name="doubleVal" Type="Edm.Double"/>
+<Property Name="strVal" Type="Edm.String" MaxLength="100"/>
+</ComplexType>
+<ComplexType Name="varmaByGroup_varmaData">
+<Property Name="ID" Type="Edm.Int32"/>
+<Property Name="att1" Type="Edm.Double"/>
+<Property Name="att2" Type="Edm.Double"/>
+<Property Name="att3" Type="Edm.Double"/>
+<Property Name="att4" Type="Edm.Double"/>
+<Property Name="att5" Type="Edm.Double"/>
+<Property Name="att6" Type="Edm.Double"/>
+<Property Name="att7" Type="Edm.Double"/>
+<Property Name="att8" Type="Edm.Double"/>
+<Property Name="att9" Type="Edm.Double"/>
+<Property Name="att10" Type="Edm.Double"/>
+<Property Name="att11" Type="Edm.Double"/>
+<Property Name="att12" Type="Edm.Double"/>
+<Property Name="target" Type="Edm.Double"/>
+</ComplexType>
+<ComplexType Name="varmaByGroup_fittedOp">
+<Property Name="nameCol" Type="Edm.String"/>
+<Property Name="idx" Type="Edm.Int32"/>
+<Property Name="fitting" Type="Edm.Double"/>
+<Property Name="residual" Type="Edm.Double"/>
+</ComplexType>
+<ComplexType Name="varmaByGroup_irfOp">
+<Property Name="col1" Type="Edm.String"/>
+<Property Name="col2" Type="Edm.String"/>
+<Property Name="idx" Type="Edm.Int32"/>
+<Property Name="response" Type="Edm.Double"/>
+</ComplexType>
+<ComplexType Name="varmaPredictions_predictionParameters">
+<Property Name="groupId" Type="Edm.String" MaxLength="20"/>
+<Property Name="paramName" Type="Edm.String" MaxLength="100"/>
+<Property Name="intVal" Type="Edm.Int32"/>
+<Property Name="doubleVal" Type="Edm.Double"/>
+<Property Name="strVal" Type="Edm.String" MaxLength="100"/>
+</ComplexType>
+<ComplexType Name="varmaPredictions_predictionData">
+<Property Name="groupId" Type="Edm.String" MaxLength="20"/>
+<Property Name="ID" Type="Edm.Int32"/>
+<Property Name="att1" Type="Edm.Double"/>
+<Property Name="att2" Type="Edm.Double"/>
+<Property Name="att3" Type="Edm.Double"/>
+<Property Name="att4" Type="Edm.Double"/>
+<Property Name="att5" Type="Edm.Double"/>
+<Property Name="att6" Type="Edm.Double"/>
+<Property Name="att7" Type="Edm.Double"/>
+<Property Name="att8" Type="Edm.Double"/>
+<Property Name="att9" Type="Edm.Double"/>
+<Property Name="att10" Type="Edm.Double"/>
+<Property Name="att11" Type="Edm.Double"/>
+<Property Name="att12" Type="Edm.Double"/>
+</ComplexType>
+<ComplexType Name="varmaPredictions_predictedResults">
+<Property Name="groupId" Type="Edm.String" MaxLength="20"/>
+<Property Name="columnName" Type="Edm.String" MaxLength="50"/>
+<Property Name="idx" Type="Edm.Int32"/>
+<Property Name="forecast" Type="Edm.Double"/>
+<Property Name="se" Type="Edm.Double"/>
+<Property Name="lo95" Type="Edm.Double"/>
+<Property Name="hi95" Type="Edm.Double"/>
+</ComplexType>
+<ComplexType Name="generateRegModels_vcRulesList">
+<Property Name="Location" Type="Edm.String" MaxLength="20"/>
+<Property Name="Product" Type="Edm.String" MaxLength="15"/>
+<Property Name="GroupID" Type="Edm.String" MaxLength="20"/>
+<Property Name="dimensions" Type="Edm.Int32"/>
+</ComplexType>
+<ComplexType Name="generatePredictions_vcRulesList">
+<Property Name="Location" Type="Edm.String" MaxLength="20"/>
+<Property Name="Product" Type="Edm.String" MaxLength="15"/>
+<Property Name="GroupID" Type="Edm.String" MaxLength="20"/>
+<Property Name="dimensions" Type="Edm.Int32"/>
+</ComplexType>
+<Annotations xmlns="http://docs.oasis-open.org/odata/ns/edm" Target="PalService.hgbtRegressionsV1/hgbtType">
+<Annotation Term="Validation.Minimum" Int="2"/>
+<Annotation Term="Validation.Maximum" Int="12"/>
+</Annotations>
+<Annotations xmlns="http://docs.oasis-open.org/odata/ns/edm" Target="PalService.hgbtByGroup/hgbtType">
+<Annotation Term="Validation.Minimum" Int="2"/>
+<Annotation Term="Validation.Maximum" Int="12"/>
+</Annotations>
+<Annotations xmlns="http://docs.oasis-open.org/odata/ns/edm" Target="PalService.hgbtPredictionsV1/hgbtType">
+<Annotation Term="Validation.Minimum" Int="2"/>
+<Annotation Term="Validation.Maximum" Int="12"/>
+</Annotations>
+<Annotations xmlns="http://docs.oasis-open.org/odata/ns/edm" Target="PalService.mlrRegressions/mlrType">
+<Annotation Term="Validation.Minimum" Int="2"/>
+<Annotation Term="Validation.Maximum" Int="12"/>
+</Annotations>
+<Annotations xmlns="http://docs.oasis-open.org/odata/ns/edm" Target="PalService.mlrByGroup/mlrType">
+<Annotation Term="Validation.Minimum" Int="2"/>
+<Annotation Term="Validation.Maximum" Int="12"/>
+</Annotations>
+<Annotations xmlns="http://docs.oasis-open.org/odata/ns/edm" Target="PalService.mlrPredictions/mlrpType">
+<Annotation Term="Validation.Minimum" Int="2"/>
+<Annotation Term="Validation.Maximum" Int="12"/>
+</Annotations>
+<Annotations xmlns="http://docs.oasis-open.org/odata/ns/edm" Target="PalService.varmaModels/varmaType">
+<Annotation Term="Validation.Minimum" Int="2"/>
+<Annotation Term="Validation.Maximum" Int="12"/>
+</Annotations>
+<Annotations xmlns="http://docs.oasis-open.org/odata/ns/edm" Target="PalService.varmaByGroup/varmaType">
+<Annotation Term="Validation.Minimum" Int="2"/>
+<Annotation Term="Validation.Maximum" Int="12"/>
+</Annotations>
+<Annotations xmlns="http://docs.oasis-open.org/odata/ns/edm" Target="PalService.varmaPredictions/varmaType">
+<Annotation Term="Validation.Minimum" Int="2"/>
+<Annotation Term="Validation.Maximum" Int="12"/>
+</Annotations>
+</Schema>
+</edmx:DataServices>
+</edmx:Edmx>

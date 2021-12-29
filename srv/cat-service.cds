@@ -70,7 +70,8 @@ service CatalogService @(impl : './lib/cat-service.js') {
     @readonly 
     entity getIBPFres as projection on od.IBP_RESULTPLAN;
 
-
+    @readonly
+    entity getProfiles  as projection on od.PAL_PROFILEMETH;
     /*type rangedate{
         LOCATION_ID : String(4) ;
         DATE_LOW  :Date;
