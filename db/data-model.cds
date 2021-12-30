@@ -405,18 +405,17 @@ context cp {
     //         paratype defvalue
     // }
 
-    entity PAL_PARAMETERS
-    {
-        key METHOD      : String(20)  @title : 'Method Name';
-        key PARA_NAME   : String(30)  @title : 'Parameter Name';
-            DATATYPE    : String(30)  @title : 'Data Type';
-            DEFAULTVAL  : String(100) @title : 'Default Value';
-            INTVAL      : Integer     @title : 'Integer';
-            DOUBLEVAL   : Double      @title : 'Double';
-            STRVAL      : String(50)  @title : 'String';
-            DESCRIPTION : String(1000)@title : ' Description';
-            DEPENDENCY  : String(1000)@title : ' Dependency';
-    }
+    // entity PAL_PARAMETERS {
+    //     key METHOD      : String(20)  @title : 'Method Name';
+    //     key PARA_NAME   : String(30)  @title : 'Parameter Name';
+    //         DATATYPE    : String(30)  @title : 'Data Type';
+    //         DEFAULTVAL  : String(100) @title : 'Default Value';
+    //         INTVAL      : Integer     @title : 'Integer';
+    //         DOUBLEVAL   : Double      @title : 'Double';
+    //         STRVAL      : String(50)  @title : 'String';
+    //         DESCRIPTION : String(1000)@title : ' Description';
+    //         DEPENDENCY  : String(1000)@title : ' Dependency';
+    // }
 
     entity PAL_PROFILEMETH {
         key PROFILE      : String(50) @title : 'Profile';
@@ -438,19 +437,23 @@ context cp {
 
 
     entity PAL_PROFILEOD : managed {
-        key PROFILE : String(50)@title : 'Profile';
-        key OBJ_DEP : String(30)@title : 'Object Dependency';
+        key LOCATION_ID : String(4) @title : 'Location ID';
+        key PRODUCT_ID  : String(40)@title : 'Product ID';
+        key COMPONENT   : String(40)@title : 'Component';
+        key PROFILE     : String(50)@title : 'Profile';
+        key OBJ_DEP     : String(30)@title : 'Object Dependency';
+            STRUC_NODE  : String(50)@title : 'Structure Node';
     }
-   
+
 
     entity PAL_MODEL_PARAMETERS {
-        key ModelType        : String(10);
-        key ProfileID        : Integer;
-        key paramName        : String(30);
-            intVal           : Integer;
-            doubleVal        : Double;
-            strVal           : String(20);
-            paramDescription : String(1000);
+        key MODEL_TYPE : String(10)  @title : 'Model Type';
+        key PROFILE_ID : Integer     @title : 'Profile ID';
+        key PARA_NAME  : String(100) @title : 'Parameter Name';
+            INTVAL     : Integer;
+            DOUBLEVAL  : Double;
+            STRVAL     : String(20);
+            PARA_DESC  : String(1000)@title : 'Parameter Description';
     };
 }
 

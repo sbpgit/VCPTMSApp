@@ -422,23 +422,35 @@ entity PalGenPredictions
     };
 }
 
-// entity PalModelProfiles
-// {
-//     key Location: String(5);
-// 	key Product: String(40);
-// 	key GroupID: String(20);
-// 	key ModelType : String(10);
-// 	key ProfileID : Integer;
-// };
+entity PalModelProfiles
+{
+    key Location: String(5);
+	key Product: String(40);
+	key GroupID: String(20);
+	key ModelType : String(10);
+	key ProfileID : Integer;
+};
 
-// entity PalModelParameters
-// {
-//      key ModelType: String(10);
-// 	 key ProfileID: Integer;
-// 	 key paramName: String(30);
-// 	 intVal: Integer;
-// 	 doubleVal: Double;
-// 	 strVal: String(20);
-// 	 paramDescription: String(1000);
-// };
+entity PalModelParameters
+{
+     key ModelType: String(10);
+	 key ProfileID: Integer;
+	 key paramName: String(30);
+	 intVal: Integer;
+	 doubleVal: Double;
+	 strVal: String(20);
+	 paramDescription: String(1000);
+};
 
+entity PAL_PARAMETERS
+{
+    key METHOD : String(20) @title : 'Method Name';
+	key PARA_NAME : String(30) @title : 'Parameter Name';
+	DATATYPE : String(30) @title : 'Data Type';
+	DEFAULTVAL : String(100) @title : 'Default Value';
+	INTVAL : Integer @title : 'Integer';
+	DOUBLEVAL : Double @title : 'Double';
+	STRVAL : String(50) @title : 'String';
+	DESCRIPTION : String(1000) @title : ' Description';
+	DEPENDENCY : String(1000) @title : ' Dependency';
+}

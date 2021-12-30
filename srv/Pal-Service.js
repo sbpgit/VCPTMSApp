@@ -5567,8 +5567,22 @@ async function _generateRegModels (req) {
     console.log('Response completed Time  :', createtAt);
 
     var res = req._.req.res;
-   // res.statusCode = 201;
-   // res.send({values});
+    res.statusCode = 201;
+//    res.end();
+    res.send({values});
+    
+//    console.log("Response Headers ", res.getHeaders());
+//    res.removeHeader("x-powered-by");
+//    res.removeHeader("x-correlation-id");
+//    res.removeHeader("odata-version");
+//    res.removeHeader("content-type");
+//    res.removeHeader("content-length");
+
+//    console.log("Response Headers ", res.getHeaders());
+
+
+//    req.reply();
+
 
     if (hasCharCount2 == true)
     {
@@ -6274,6 +6288,7 @@ async function _postRegressionRequest(url,paramsObj,numChars,dataObj,modelType,v
 //                console.log('cqnQuery ', cqnQuery);
 
              cds.run(cqnQuery);
+             console.log("_postRegressionRequest response headers", response.getHeaders());
 
             }
             else if (modelType == 'MLR')
