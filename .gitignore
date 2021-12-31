@@ -27,3 +27,34 @@ mta_archives/
 # IDEs
 # .vscode
 # .idea
+resources/cpibpfrescpibpfres.zip
+resources/cpibpfplancpibpfplan.zip
+resources/cpibpfdemcpibpfdem.zip
+resources/cpexecpredcpexecprediction.zip
+resources/cfgapppvsrootcfgprdpvsroot.zip
+app/cp_ibpfres/dist/sap-ui-cachebuster-info.json
+app/cp_ibpfres/dist/resources/sap-ui-version.json
+app/cp_ibpfres/dist/manifest-bundle.zip
+app/cp_ibpfres/dist/cpibpfrescpibpfres.zip
+app/cp_ibpfplan/dist/sap-ui-cachebuster-info.json
+app/cp_ibpfplan/dist/resources/sap-ui-version.json
+app/cp_ibpfplan/dist/manifest-bundle.zip
+app/cp_ibpfplan/dist/cpibpfplancpibpfplan.zip
+app/cp_ibpfdem/dist/sap-ui-cachebuster-info.json
+app/cp_ibpfdem/dist/resources/sap-ui-version.json
+app/cp_ibpfdem/dist/manifest-bundle.zip
+app/cp_ibpfdem/dist/cpibpfdemcpibpfdem.zip
+app/cp_execprediction/dist/view/Home.view.xml
+app/cp_execprediction/dist/sap-ui-cachebuster-info.json
+app/cp_execprediction/dist/resources/sap-ui-version.json
+app/cp_execprediction/dist/manifest-bundle.zip
+app/cp_execprediction/dist/cpexecpredcpexecprediction.zip
+app/cp_execprediction/dist/Component-preload.js
+app/cfgprd_pvsroot/dist/sap-ui-cachebuster-info.json
+app/cfgprd_pvsroot/dist/resources/sap-ui-version.json
+app/cfgprd_pvsroot/dist/manifest-bundle.zip
+app/cfgprd_pvsroot/dist/cfgapppvsrootcfgprdpvsroot.zip
+app/cfgprd_pvsroot/dist/manifest-bundle.zip
+app/cfgprd_pvsroot/dist/cfgapppvsrootcfgprdpvsroot.zip
+app/cfgprd_pvsroot/dist/cfgapppvsrootcfgprdpvsroot.zip
+app/cfgprd_pvsroot/dist/manifest-bundle.zip
