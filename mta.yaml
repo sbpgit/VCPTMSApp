@@ -83,6 +83,10 @@ modules:
       - cpexecpredcpexecprediction.zip
       name: cpexecpredcpexecprediction
       target-path: resources/
+    - artifacts:
+      - cprunprofilescpexeprofiles.zip
+      name: cprunprofilescpexeprofiles
+      target-path: resources/
 - name: cfgapppvsrootcfgprdpvsroot
   type: html5
   path: app/cfgprd_pvsroot
@@ -126,6 +130,16 @@ modules:
 - name: cpexecpredcpexecprediction
   type: html5
   path: app/cp_execprediction
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cprunprofilescpexeprofiles
+  type: html5
+  path: app/cp_exeprofiles
   build-parameters:
     build-result: dist
     builder: custom

@@ -9,7 +9,15 @@
     xmlns:u="sap.ui.unified"
 >
 <Page title="Build and Run Predictions">
-
+<customHeader>
+			<OverflowToolbar>
+				<Text text="" width="30%"/>
+				<ToolbarSpacer/>
+				<Title text="Build and Run Predictions"/>
+				<ToolbarSpacer/>
+				<Text text="" width="40%"/>
+			</OverflowToolbar>
+		</customHeader>
 <content> 
 	<Panel id="filterPanel"  expandable="true" expanded="true">
         <headerToolbar>
