@@ -14,7 +14,6 @@
     "await-sleep": "^0.0.1",
     "debug": "^4.3.2",
     "express": "^4",
-    "hdb": "^0.19.1",
     "https": "^1.0.0",
     "passport": "^0.5.0",
     "request": "^2.88.2",
@@ -75,9 +74,9 @@
         "pool": {
           "acquireTimeoutMillis": 10000,
           "evictionRunIntervalMillis": 60000,
-          "min": 0,
-          "max": 100,
-          "numTestsPerEvictionRun": 34,
+          "min": 20,
+          "max": 200,
+          "numTestsPerEvictionRun": 60,
           "softIdleTimeoutMillis": 30000,
           "idleTimeoutMillis": 30000,
           "testOnBorrow": true
