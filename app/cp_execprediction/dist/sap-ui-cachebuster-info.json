@@ -1,5 +1,33 @@
 {
+<<<<<<< HEAD
   "view/ProdDialog.fragment.xml": 1640869540886,
+=======
+<<<<<<< HEAD
+  "view/LocDialog.fragment.xml": 1640719038967,
+  "controller/BaseController.js": 1640691740971,
+  "model/models.js": 1640617227102,
+  "controller/Home.controller.js": 1640933961044,
+  "manifest.json": 1640937952220,
+  "controller/App.controller.js": 1640693546623,
+  "Component.js": 1640617227098,
+  "manifest-bundle.zip": 1640937952233,
+  "Component-preload.js": 1640937952689,
+  "model/models-dbg.js": 1640617227102,
+  "controller/Home-dbg.controller.js": 1640933961044,
+  "controller/BaseController-dbg.js": 1640691740971,
+  "controller/App-dbg.controller.js": 1640693546623,
+  "Component-dbg.js": 1640617227098,
+  "view/ProdDialog.fragment.xml": 1640719341237,
+  "view/PredProfileDialog.fragment.xml": 1640805005403,
+  "view/ObjDepDialog.fragment.xml": 1640770953795,
+  "i18n/i18n.properties": 1640873583212,
+  "view/Home.view.xml": 1640867030880,
+  "view/App.view.xml": 1640693156239,
+  "css/style.css": 1640617227098,
+  "index.html": 1640866736931
+=======
+  "model/models-dbg.js": 1640869540886,
+>>>>>>> 8faefcfb3ce4543f6a8b67a3e3c4984c3506d1a9
   "Component.js": 1640869540882,
   "model/models.js": 1640869540886,
   "controller/Home.controller.js": 1640869540882,
@@ -21,4 +49,5 @@
   "view/App.view.xml": 1640869540886,
   "css/style.css": 1640869540882,
   "index.html": 1640869540882
+>>>>>>> c8670bf0ad573998fedba086daa290ab55e384b7
 }

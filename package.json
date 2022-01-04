@@ -42,49 +42,49 @@
       "mocha": true
     },
     "globals": {
-      "SELECT": true,
-      "INSERT": true,
-      "UPDATE": true,
-      "DELETE": true,
-      "CREATE": true,
-      "DROP": true,
-      "CDL": true,
-      "CQL": true,
-      "CXL": true,
-      "cds": true
+        "SELECT": true,
+        "INSERT": true,
+        "UPDATE": true,
+        "DELETE": true,
+        "CREATE": true,
+        "DROP": true,
+        "CDL": true,
+        "CQL": true,
+        "CXL": true,
+        "cds": true
     },
     "rules": {
-      "no-console": "off",
-      "require-atomic-updates": "off"
+        "no-console": "off",
+        "require-atomic-updates": "off"
     }
-  },
-  "cds": {
+  }, 
+ "cds": {
     "requires": {
-      "auth": {
-        "kind": "basic-auth",
-        "users": {
-          "SBPTECHTEAM": {
-            "password": "Sbpcorp@22"
-          },
-          "*": false
+        "auth": {
+            "kind": "basic-auth",
+            "users": {
+                "SBPTECHTEAM": {
+                    "password": "Sbpcorp@22"
+                },
+                "*": false
+            }
+        },
+        "db": {
+            "kind": "hana",
+            "pool": {
+                "acquireTimeoutMillis": 10000,
+                "evictionRunIntervalMillis": 60000,
+                "min": 20,
+                "max": 200,
+                "numTestsPerEvictionRun": 60,
+                "softIdleTimeoutMillis": 30000,
+                "idleTimeoutMillis": 30000,
+                "testOnBorrow": true
+            }
         }
-      },
-      "db": {
-        "kind": "hana",
-        "pool": {
-          "acquireTimeoutMillis": 10000,
-          "evictionRunIntervalMillis": 60000,
-          "min": 20,
-          "max": 200,
-          "numTestsPerEvictionRun": 60,
-          "softIdleTimeoutMillis": 30000,
-          "idleTimeoutMillis": 30000,
-          "testOnBorrow": true
-        }
-      }
     },
     "hana": {
-      "deploy-format": "hdbtable"
+        "deploy-format": "hdbtable"
     }
   },
   "multitenancy": true,
