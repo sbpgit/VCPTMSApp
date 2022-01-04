@@ -401,6 +401,8 @@ entity PalGenRegressionModels
     vcRulesList : array of {
 //        periodType : String(10); // day, week
 //        tableName : String(50); // Input Table Name for Data Extraction
+        profile : String(50);
+        override : Boolean;
         Location:String(20); 
         Product:String(15); 
         GroupID :String(20);
@@ -427,14 +429,14 @@ entity PalModelProfiles
     key Location: String(5);
 	key Product: String(40);
 	key GroupID: String(20);
-	key ModelType : String(10);
-	key ProfileID : Integer;
+	key ModelType : String(50);
+	key ProfileID : String(50); //Integer;
 };
 
 entity PalModelParameters
 {
      key ModelType: String(10);
-	 key ProfileID: Integer;
+	 key ProfileID: String(50); //Integer;
 	 key paramName: String(30);
 	 intVal: Integer;
 	 doubleVal: Double;
