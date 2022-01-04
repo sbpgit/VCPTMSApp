@@ -32,7 +32,8 @@
         "watch-cp_ibpfdem": "cds watch --open cp_ibpfdem/webapp/index.html#fe-lrop-v4",
         "watch-cp_ibpfplan": "cds watch --open cp_ibpfplan/webapp/index.html#fe-lrop-v4",
         "watch-cp_ibpfres": "cds watch --open cp_ibpfres/webapp/index.html#fe-lrop-v4",
-        "watch-cp_execprediction": "cds watch --open cp_execprediction/webapp/index.html#fe-lrop-v4"
+        "watch-cp_execprediction": "cds watch --open cp_execprediction/webapp/index.html#fe-lrop-v4",
+        "watch-cp_exeregressionmdls": "cds watch --open cp_exeregressionmdls/webapp/index.html#fe-lrop-v4"
     },
     "eslintConfig": {
         "extends": "eslint:recommended",
@@ -98,7 +99,8 @@
         "app/cp_ibpfdem",
         "app/cp_ibpfplan",
         "app/cp_ibpfres",
-        "app/cp_execprediction"
+        "app/cp_execprediction",
+        "app/cp_exeregressionmdls"
     ],
     "devDependencies": {
         "@sap/ux-specification": "^1.96.0"

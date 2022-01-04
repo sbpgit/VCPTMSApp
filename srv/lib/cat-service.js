@@ -15,11 +15,15 @@ const genFunctions = new GenFunctions();
  }*/
  
 module.exports = srv=>{
-    srv.on("generate_timeseries", async req =>{
-        
-    await genTimeseries.GenTimeseries();
-        console.log("test");
-     
+    srv.on("generate_timeseries", async req =>{        
+        await genTimeseries.GenTimeseries();
+        console.log("test");     
+    })
+    srv.on("get_objdep", async req =>{
+        let { getMODHeader } = srv.entities;
+        const db = srv.transaction(req); 
+        const results = await cds.transaction(req).run(SELECT.distinct.from(getMODHeader) .columns('LOCATION_ID','PRODUCT_ID', 'OBJ_DEP', 'OBJ_COUNTER' ))
+        return results; 
     })
     /*srv.on("profile_exec", async req =>{
         let { getAccessNodes } = srv.entities;

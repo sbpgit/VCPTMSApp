@@ -1,11 +1,7 @@
 {
 	"name": "cfgapp.pvsroot.cfgprdpvsroot",
 	"version": "0.0.1",
-<<<<<<< HEAD
-	"buildTimestamp": "202112310805",
-=======
-	"buildTimestamp": "202112302045",
->>>>>>> c8670bf0ad573998fedba086daa290ab55e384b7
+	"buildTimestamp": "202201040819",
 	"scmRevision": "",
 	"libraries": []
 }
