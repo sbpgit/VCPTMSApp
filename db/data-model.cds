@@ -483,6 +483,19 @@ entity![V_CLASSCHAR]{
     key![CHARVAL_DESC] : String(150)@title : 'characteristic Value Desc';
     key![RANK]         : Double     @title : 'Rank';
 }
+
+@cds.persistence.exists 
+entity ![V_OBDHDR] {
+key     ![LOCATION_ID]: String(4)  @title: 'Location' ; 
+key     ![PRODUCT_ID]: String(40)  @title: 'Product' ; 
+key     ![OBJ_DEP]: String(30)  @title: 'Object Dependency' ; 
+key     ![CHAR_NUM]: String(10)  @title: 'Char Num' ; 
+key     ![CHARVAL_NUM]: String(10)  @title: 'Charval Num' ; 
+key     ![OD_CONDITION]: String(2)  @title: 'OD_CONDITION' ; 
+key     ![OBJ_COUNTER]: Integer  @title: 'OBJ_COUNTER' ; 
+key     ![CHAR_COUNTER]: Integer  @title: 'CHAR_COUNTER' ; 
+key     ![ROW_ID]: Integer  @title: 'ROW_ID' ; 
+}
 /*
 @cds.persistence.exists
 @cds.persistence.calcview

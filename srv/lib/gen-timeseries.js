@@ -56,21 +56,101 @@ class GenTimeseries {
     /** Get Location */
     const iLocation = await cds.run(SELECT.from("CP_LOCATION"));
 
-    /** Loop through Location */
-    for (let i = 0; i < iLocation.length; i++) {
-      this.logger.info(
-        "Location: " +
-          iLocation[i].LOCATION_ID +
-          " | Status: " +
-          GenFunctions.addOne(i, iLocation.length) +
-          " of " +
-          iLocation.length
+    /** Get Sales History */
+    const liSalesHead = await cds.run(
+        SELECT.from("CP_SALESH")
+          .orderBy("LOCATION_ID", "PRODUCT_ID", "MAT_AVAILDATE")
       );
 
-      await this.getSalesInfo(iLocation[i].LOCATION_ID);
 
-      await this.processOrders(iLocation[i].LOCATION_ID);
-    }
+      let liSalesInfo = [];
+      let lsSalesInfo = {};      
+      for (let i = 0; i < liSalesHead.length; i++) {
+
+        lsSalesInfo.LOCATION_ID   = GenFunctions.parse(liSalesHead[i].LOCATION_ID);
+        lsSalesInfo.PRODUCT_ID    = GenFunctions.parse(liSalesHead[i].PRODUCT_ID);
+        lsSalesInfo.CAL_DATE      = GenFunctions.getNextSunday(liSalesHead[i].MAT_AVAILDATE);
+        if(!lsSalesInfo.ORD_QTY) lsSalesInfo.ORD_QTY = 0;
+        lsSalesInfo.ORD_QTY       = lsSalesInfo.ORD_QTY + GenFunctions.parse(liSalesHead[i].ORD_QTY);
+        if(liSalesHead[i].LOCATION_ID !== liSalesHead[GenFunctions.addOne(i, liSalesHead.length)].LOCATION_ID ||
+           liSalesHead[i].PRODUCT_ID  !== liSalesHead[GenFunctions.addOne(i, liSalesHead.length)].PRODUCT_ID ||
+           liSalesHead[GenFunctions.addOne(i, liSalesHead.length)].MAT_AVAILDATE > lsSalesInfo.CAL_DATE ||
+           i                          === GenFunctions.addOne(i, liSalesHead.length)){
+            liSalesInfo.push(GenFunctions.parse(lsSalesInfo));
+            lsSalesInfo = {};
+           }
+      }
+
+
+      for (let i = 0; i < liSalesInfo.length; i++) {
+          let lCalDate = new Date(liSalesInfo[i].CAL_DATE);
+          lCalDate.setDate(lCalDate.getDate()-7);
+
+        let liSalesChar = await cds.run(
+            `SELECT *
+            FROM V_ORDCHAR
+            WHERE MAT_AVAILDATE > '` + lCalDate.toISOString().slice(0, 10) + `'
+              AND MAT_AVAILDATE <= '` + liSalesInfo[i].CAL_DATE + `'
+              ORDER BY LOCATION_ID, PRODUCT_ID, OBJ_DEP, OBJ_COUNTER, ROW_ID, CHAR_NUM`
+            );
+
+        console.log(liSalesInfo[i].CAL_DATE );
+            
+        let lSuccess = '';
+        for (let i = 0; i < liSalesChar.length; i++) {
+            if ((liSalesChar[i].OD_CONDITION === "EQ" &&
+                 liSalesChar[i].CHARVAL_NUM === liSalesChar[i].OD_CHARVAL_NUM) ||
+                (liSalesChar[i].OD_CONDITION === "NE" &&
+                liSalesChar[i].CHARVAL_NUM !== liSalesChar[i].OD_CHARVAL_NUM)) {
+                    lSuccess = 'X';
+            }
+            if(liSalesChar[i].LOCATION_ID !== liSalesChar[GenFunctions.addOne(i,liSalesChar.length)].LOCATION_ID ||
+                liSalesChar[i].PRODUCT_ID !== liSalesChar[GenFunctions.addOne(i,liSalesChar.length)].PRODUCT_ID ||
+                liSalesChar[i].OBJ_DEP !== liSalesChar[GenFunctions.addOne(i,liSalesChar.length)].OBJ_DEP ||
+                liSalesChar[i].OBJ_COUNTER !== liSalesChar[GenFunctions.addOne(i,liSalesChar.length)].OBJ_COUNTER ||
+                liSalesChar[i].ROW_ID !== liSalesChar[GenFunctions.addOne(i,liSalesChar.length)].ROW_ID){
+                    this.sObjDepChar = [];
+                    if(lSuccess === 'X'){
+                        this.sObjDepChar.CAL_DATE = liSalesChar[i].CAL_DATE;
+                        this.sObjDepChar.LOCATION_ID = liSalesChar[i].LOCATION_ID;
+                        this.sObjDepChar.PRODUCT_ID = liSalesChar[i].PRODUCT_ID;
+                        this.sObjDepChar.OBJ_TYPE = "OD";
+                        this.sObjDepChar.OBJ_DEP = liSalesChar[i].OBJ_DEP;
+                        this.sObjDepChar.OBJ_COUNTER = liSalesChar[i].OBJ_COUNTER;
+                        this.sObjDepChar.ROW_ID = liSalesChar[i].ROW_ID;
+                        if(!this.sObjDepChar.SUCCESS) this.sObjDepChar.SUCCESS = 0;
+                        this.sObjDepChar.SUCCESS = this.sObjDepChar.SUCCESS + Math.pow(liSalesInfo[i].ORD_QTY,0);
+                        this.sObjDepChar.SUCCESS_RATE =
+                        (this.sObjDepChar.SUCCESS / this.sObjDepChar.SUCCESS) * 100;   
+                        cds.run(INSERT.into("CP_TS_OBJDEP_CHARHDR").entries(this.sObjDepChar));               
+                        lSuccess = '';
+                    }
+                }
+            
+            }
+            
+        }
+      
+
+    
+
+      
+
+    // /** Loop through Location */
+    // for (let i = 0; i < iLocation.length; i++) {
+    //   this.logger.info(
+    //     "Location: " +
+    //       iLocation[i].LOCATION_ID +
+    //       " | Status: " +
+    //       GenFunctions.addOne(i, iLocation.length) +
+    //       " of " +
+    //       iLocation.length
+    //   );
+
+    //   await this.getSalesInfo(iLocation[i].LOCATION_ID);
+
+    //   await this.processOrders(iLocation[i].LOCATION_ID);
+    // }
   }
 
   /**
@@ -238,13 +318,13 @@ class GenTimeseries {
           })
         );
 
-        /*
+
         await cds.run(
           INSERT.into("CP_TS_ORDERRATE")
             .columns("LOCATION_ID", "WEEK_DATE", "ORDER_COUNT")
             .values(imLocation, this.iSalesInfo[i].calDate, liDateSalesInfo.length)
         );
-        */
+
         
 
         await cds.run(

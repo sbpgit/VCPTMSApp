@@ -31,15 +31,16 @@
     "watch-cp_ibpfdem": "cds watch --open cp_ibpfdem/webapp/index.html#fe-lrop-v4",
     "watch-cp_ibpfplan": "cds watch --open cp_ibpfplan/webapp/index.html#fe-lrop-v4",
     "watch-cp_ibpfres": "cds watch --open cp_ibpfres/webapp/index.html#fe-lrop-v4",
-    "watch-cp_execprediction": "cds watch --open cp_execprediction/webapp/index.html#fe-lrop-v4"
+    "watch-cp_execprediction": "cds watch --open cp_execprediction/webapp/index.html#fe-lrop-v4",
+    "watch-cp_exeregressionmdls": "cds watch --open cp_exeregressionmdls/webapp/index.html#fe-lrop-v4"
   },
   "eslintConfig": {
     "extends": "eslint:recommended",
     "env": {
-      "es2020": true,
-      "node": true,
-      "jest": true,
-      "mocha": true
+        "es2020": true,
+        "node": true,
+        "jest": true,
+        "mocha": true
     },
     "globals": {
       "SELECT": true,
@@ -83,23 +84,21 @@
         }
       }
     },
-    "hana": {
-      "deploy-format": "hdbtable"
+    "multitenancy": true,
+    "uaa": {
+        "kind": "xsuaa"
+    },
+    "sapux": [
+        "app/cfgprd_pvsroot",
+        "app/project1",
+        "app/cp_ibpfdem",
+        "app/cp_ibpfplan",
+        "app/cp_ibpfres",
+        "app/cp_execprediction",
+        "app/cp_exeregressionmdls"
+    ],
+    "devDependencies": {
+        "@sap/ux-specification": "^1.96.0"
     }
-  },
-  "multitenancy": true,
-  "uaa": {
-    "kind": "xsuaa"
-  },
-  "sapux": [
-    "app/cfgprd_pvsroot",
-    "app/project1",
-    "app/cp_ibpfdem",
-    "app/cp_ibpfplan",
-    "app/cp_ibpfres",
-    "app/cp_execprediction"
-  ],
-  "devDependencies": {
-    "@sap/ux-specification": "^1.96.0"
-  }
+}
 }
