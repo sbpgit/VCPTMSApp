@@ -13,11 +13,19 @@
         "ach": "ach",
         "dataSources": {
             "mainService": {
-                "uri": "pal/",
+                "uri": "v2/pal/",
                 "type": "OData",
                 "settings": {
                     "odataVersion": "2.0",
                     "localUri": "localService/metadata.xml"
+                }
+            },
+            "CatalogService": {
+                "uri": "v2/catalog/",
+                "type": "OData",
+                "settings": {
+                    "odataVersion": "2.0",
+                    "localUri": "localService/CatalogService/metadata.xml"
                 }
             }
         },
@@ -56,10 +64,10 @@
     "sap.ui5": {
         "flexEnabled": false,
         "rootView": {
-            "viewName": "cp.execpred.cpexecprediction.view.Home",
+            "viewName": "cp.execpred.cpexecprediction.view.App",
             "type": "XML",
             "async": true,
-            "id": "Home"
+            "id": "App"
         },
         "dependencies": {
             "minUI5Version": "1.97.1",
@@ -81,8 +89,24 @@
                     "bundleName": "cp.execpred.cpexecprediction.i18n.i18n"
                 }
             },
-            "": {
+            "PModel": {
                 "dataSource": "mainService",
+                "preload": true,
+                "settings": {
+                    "useBatch": true,
+                    "defaultBindingMode": "TwoWay"
+                }
+            },
+            "BModel": {
+                "dataSource": "CatalogService",
+                "preload": true,
+                "settings": {
+                    "useBatch": true,
+                    "defaultBindingMode": "TwoWay"
+                }
+            },
+            "GModel": {
+                "type": "sap.ui.model.json.JSONModel",
                 "preload": true
             }
         },
@@ -105,19 +129,17 @@
             },
             "routes": [
                 {
-                    "name": "RouteHome",
-                    "pattern": "RouteHome",
+                    "name": "Home",
+                    "pattern": "",
                     "target": [
-                        "TargetHome"
+                        "Home"
                     ]
                 }
             ],
             "targets": {
-                "TargetHome": {
+                "Home": {
                     "viewType": "XML",
-                    "transition": "slide",
-                    "clearControlAggregation": false,
-                    "viewId": "Home",
+                    "viewLevel": 1,
                     "viewName": "Home"
                 }
             }

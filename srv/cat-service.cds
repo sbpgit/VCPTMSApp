@@ -70,7 +70,10 @@ service CatalogService @(impl : './lib/cat-service.js') {
     @readonly 
     entity getIBPFres as projection on od.IBP_RESULTPLAN;
 
-
+    
+    entity getProfiles  as projection on od.PAL_PROFILEMETH;
+    entity getProfileParameters as projection on od.PAL_PROFILEMETH_PARA;
+    
     /*type rangedate{
         LOCATION_ID : String(4) ;
         DATE_LOW  :Date;
@@ -91,7 +94,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
                                 DATE_HIGH   : Date );*/
 
 }
-service CatalogSrvBtp @(impl : './lib/cat-service.js') {
+/*service CatalogSrvBtp @(impl : './lib/cat-service.js') {
     type bomOD{
         LOCATION_ID : String(4);
         PRODUCT_ID  : String(40);
@@ -114,7 +117,7 @@ service CatalogSrvBtp @(impl : './lib/cat-service.js') {
                                 DATE_LOW    :Date,
                                 DATE_HIGH   : Date );*/
 
-}
+/*}
 service CatalogSrvML @(impl : './lib/cat-serviceml.js') {
     type pf_exec{
         LOCATION_ID : String(4);
@@ -124,4 +127,4 @@ service CatalogSrvML @(impl : './lib/cat-serviceml.js') {
      function profile_exec(LOCATION_ID : String(4),
                             PRODUCT_ID  : String(40),
                             OBJ_DEP     : String(30)) returns String;
-}
+}*/

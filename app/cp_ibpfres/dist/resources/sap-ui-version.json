@@ -1,7 +1,15 @@
 {
 	"name": "cp.ibpfres.cpibpfres",
 	"version": "0.0.1",
-	"buildTimestamp": "202112280836",
+<<<<<<< HEAD
+	"buildTimestamp": "202201040022",
+=======
+<<<<<<< HEAD
+	"buildTimestamp": "202112310805",
+=======
+	"buildTimestamp": "202112302045",
+>>>>>>> c8670bf0ad573998fedba086daa290ab55e384b7
+>>>>>>> 8faefcfb3ce4543f6a8b67a3e3c4984c3506d1a9
 	"scmRevision": "",
 	"libraries": []
 }

@@ -1,7 +1,7 @@
 
 const cds = require("@sap/cds");
 
-module.exports = srv=>{
+/*module.exports = srv=>{
     srv.on("profile_exec", async req =>{
         let { getAccessNodes } = srv.entities;
         const db = srv.transaction(req); 
@@ -10,4 +10,4 @@ module.exports = srv=>{
         ) 
         return results;     
     })
-}
+}*/

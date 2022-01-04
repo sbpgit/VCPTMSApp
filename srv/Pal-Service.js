@@ -432,6 +432,7 @@ async function _postPredictionRequest(url,paramsObj,numChars,dataObj,modelType,v
     });
 }
 
+
 async function _generatePredictions(req) {
  const vcRulesListReq = req.data.vcRulesList;
    const sleep = require('await-sleep');
@@ -5313,30 +5314,51 @@ function _getRuleListTypeForGenModels(vcRulesList, modelType, numChars)
         if (vcRulesList[i].dimensions == numChars )
         {
 
-            sqlStr = 'SELECT * FROM "CP_PALMODELPROFILES"' +
-                         ' WHERE "PRODUCT" = ' + "'" + vcRulesList[i].Product + "'" + 
-                         ' AND "LOCATION" = ' + "'" + vcRulesList[i].Location + "'" + 
-                         ' AND "GROUPID" = ' + "'" + vcRulesList[i].GroupID + "'" + 
-                         ' AND "MODELTYPE" = ' + "'" + modelType +"'"; 
-            console.log('sqlStr: ', sqlStr);            
-            stmt=conn.prepare(sqlStr);
-            results=stmt.exec();
-            stmt.drop();
-           // console.log('_getRuleListTypeForGenModels results: ', results);            
-
-            //let modelType = results[i].ModelType;
-            //let profileID = results[i].ProfileID;
-          //  console.log('_getRuleListTypeForGenModels results ',results, 'results Length = ', results.length);
-            if (results.length > 0)
+            if (vcRulesList[i].override == false)
             {
-                ruleListObj.push({"Location":vcRulesList[i].Location, 
-                                "Product":vcRulesList[i].Product, 
-                                "GroupID":vcRulesList[i].GroupID, 
-                                "modelType":results[0].MODELTYPE, 
-                                "profileID":results[0].PROFILEID, 
-                               // "modelType":results[0].ModelType, 
-                               // "profileID":results[0].ProfileID, 
-                                "dimensions" : numChars});
+                sqlStr = 'SELECT * FROM "CP_PALMODELPROFILES"' +
+                            ' WHERE "PRODUCT" = ' + "'" + vcRulesList[i].Product + "'" + 
+                            ' AND "LOCATION" = ' + "'" + vcRulesList[i].Location + "'" + 
+                            ' AND "GROUPID" = ' + "'" + vcRulesList[i].GroupID + "'" + 
+                            ' AND "MODELTYPE" = ' + "'" + modelType +"'"; 
+                console.log('sqlStr: ', sqlStr);            
+                stmt=conn.prepare(sqlStr);
+                results=stmt.exec();
+                stmt.drop();
+            // console.log('_getRuleListTypeForGenModels results: ', results);            
+
+                //let modelType = results[i].ModelType;
+                //let profileID = results[i].ProfileID;
+            //  console.log('_getRuleListTypeForGenModels results ',results, 'results Length = ', results.length);
+                if (results.length > 0)
+                {
+                    ruleListObj.push({"Location":vcRulesList[i].Location, 
+                                    "Product":vcRulesList[i].Product, 
+                                    "GroupID":vcRulesList[i].GroupID, 
+                                    "modelType":results[0].MODELTYPE, 
+                                    "profileID":results[0].PROFILEID, 
+                                    "override":vcRulesList[i].override,
+                                    "dimensions" : numChars});
+                }
+            }
+            else
+            {
+                sqlStr = 'SELECT * FROM "CP_PAL_PROFILEMETH_PARA"' +
+                ' WHERE "PROFILE" = ' + "'" + vcRulesList[i].profile + "'";
+                console.log('sqlStr: ', sqlStr);            
+                stmt=conn.prepare(sqlStr);
+                results=stmt.exec();
+                stmt.drop();
+                if (results.length > 0)
+                {
+                    ruleListObj.push({"Location":vcRulesList[i].Location, 
+                                    "Product":vcRulesList[i].Product, 
+                                    "GroupID":vcRulesList[i].GroupID, 
+                                    "modelType":results[0].METHOD, 
+                                    "profileID":results[0].PROFILE, 
+                                    "override":vcRulesList[i].override,
+                                    "dimensions" : numChars});
+                }
             }
         }
     }
@@ -5361,43 +5383,65 @@ function _getParamsObjForGenModels(vcRulesList, modelType, numChars)
     var paramsObj = [];
     for (var i = 0; i < vcRulesList.length; i++)
     {
-        /*
-        let sqlStr = 'SELECT * FROM ' + conn_params.uid + '."SBP_CBP_ProfileParameters"' +
-                        'WHERE "Product" = ' + vcRulesList[i].Product + 
-                        ' AND "Location" = ' + vcRulesList[i].Location +
-                        ' AND "GroupID" = ' + vcRulesList[i].GroupID +
-                        ' AND "ModelType" =' + modelType; 
-        */
-        sqlStr = 'SELECT "PROFILEID" FROM "CP_PALMODELPROFILES"' +
-                        ' WHERE "PRODUCT" = ' + "'" + vcRulesList[i].Product + "'" + 
-                        ' AND "LOCATION" = ' + "'" + vcRulesList[i].Location + "'" + 
-                        ' AND "GROUPID" = ' + "'" + vcRulesList[i].GroupID + "'" + 
-                        ' AND "MODELTYPE" = ' + "'" + modelType +"'"; 
-        console.log(' _getParamsObjForGenModels sqlStr: ', sqlStr);            
-        stmt=conn.prepare(sqlStr);
-        results=stmt.exec();
-        stmt.drop();
 
-        //console.log("_getParamsObjForGenModels MODELPROFILES ", results);
+        if (vcRulesList[i].override == false)
+        {
+            sqlStr = 'SELECT "PROFILEID" FROM "CP_PALMODELPROFILES"' +
+                            ' WHERE "PRODUCT" = ' + "'" + vcRulesList[i].Product + "'" + 
+                            ' AND "LOCATION" = ' + "'" + vcRulesList[i].Location + "'" + 
+                            ' AND "GROUPID" = ' + "'" + vcRulesList[i].GroupID + "'" + 
+                            ' AND "MODELTYPE" = ' + "'" + modelType +"'"; 
+            console.log(' _getParamsObjForGenModels sqlStr: ', sqlStr);            
+            stmt=conn.prepare(sqlStr);
+            results=stmt.exec();
+            stmt.drop();
 
-        sqlStr = 'SELECT * FROM "CP_PALMODELPARAMETERS"' +
-                    ' WHERE "MODELTYPE" = ' + "'" + modelType + "'" + 
-                    ' AND "PROFILEID" = ' + "'" + results[0].PROFILEID + "'"; 
-       // console.log('sqlStr: ', sqlStr);            
-        stmt=conn.prepare(sqlStr);
-        results=stmt.exec();
-        stmt.drop();
+            //console.log("_getParamsObjForGenModels MODELPROFILES ", results);
+
+            sqlStr = 'SELECT * FROM "CP_PALMODELPARAMETERS"' +
+                        ' WHERE "MODELTYPE" = ' + "'" + modelType + "'" + 
+                        ' AND "PROFILEID" = ' + "'" + results[0].PROFILEID + "'"; 
+        // console.log('sqlStr: ', sqlStr);            
+            stmt=conn.prepare(sqlStr);
+            results=stmt.exec();
+            stmt.drop();
+        }
+        else
+        {
+            sqlStr = 'SELECT * FROM "CP_PAL_PROFILEMETH_PARA"' +
+                        ' WHERE "METHOD" = ' + "'" + modelType + "'" + 
+                        ' AND "PROFILE" = ' + "'" + vcRulesList[i].profileID + "'"; 
+        // console.log('sqlStr: ', sqlStr);            
+            stmt=conn.prepare(sqlStr);
+            results=stmt.exec();
+            stmt.drop();
+        }
         //console.log('i = ',i, 'modelType :', modelType );
         if (vcRulesList[i].dimensions == numChars)
         {
-            for (let index=0; index<results.length; index++) 
+            if (vcRulesList[i].override == false)
             {
-                paramsObj.push({"groupId":vcRulesList[i].GroupID, 
-                                "paramName":results[index].PARAMNAME, 
-                                "intVal":results[index].INTVAL,
-                                "doubleVal": results[index].DOUBLEVAL, 
-                                "strVal" : results[index].STRVAL});
+                for (let index=0; index<results.length; index++) 
+                {
+                    paramsObj.push({"groupId":vcRulesList[i].GroupID, 
+                                    "paramName":results[index].PARAMNAME, 
+                                    "intVal":results[index].INTVAL,
+                                    "doubleVal": results[index].DOUBLEVAL, 
+                                    "strVal" : results[index].STRVAL});
 
+                }
+            }
+            else
+            {
+                for (let index=0; index<results.length; index++) 
+                {
+                    paramsObj.push({"groupId":vcRulesList[i].GroupID, 
+                                    "paramName":results[index].PARA_NAME, 
+                                    "intVal":results[index].INTVAL,
+                                    "doubleVal": results[index].DOUBLEVAL, 
+                                    "strVal" : results[index].STRVAL});
+
+                }
             }
             if (modelType == 'VARMA')
             {
@@ -5454,6 +5498,7 @@ function _getParamsObjForGenModels(vcRulesList, modelType, numChars)
 
 }
 
+
 async function _generateRegModels (req) {
 
    const vcRulesListReq = req.data.vcRulesList;
@@ -5502,7 +5547,9 @@ async function _generateRegModels (req) {
             let Location = results[index].Location;
             let Product = results[index].Product;
             let GroupID = results[index].GroupID;
-            vcRulesList.push({Location,Product,GroupID});
+            let profile = vcRulesListReq[0].profile;
+            let override = vcRulesListReq[0].override;
+            vcRulesList.push({profile,override,Location,Product,GroupID});
 
         }
         //vcRulesList = JSON.stringify(vcRulesList);
@@ -5568,7 +5615,22 @@ async function _generateRegModels (req) {
 
     var res = req._.req.res;
     res.statusCode = 201;
+//    res.end();
+//    req.res.contentType('application/json');
     res.send({values});
+    
+//    console.log("Response Headers ", res.getHeaders());
+//    res.removeHeader("x-powered-by");
+//    res.removeHeader("x-correlation-id");
+//    res.removeHeader("odata-version");
+//    res.removeHeader("content-type");
+//    res.removeHeader("content-length");
+
+//    console.log("Response Headers ", res.getHeaders());
+
+
+//    req.reply();
+
 
     if (hasCharCount2 == true)
     {
@@ -6274,7 +6336,6 @@ async function _postRegressionRequest(url,paramsObj,numChars,dataObj,modelType,v
 //                console.log('cqnQuery ', cqnQuery);
 
              cds.run(cqnQuery);
-
             }
             else if (modelType == 'MLR')
             {

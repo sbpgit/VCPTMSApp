@@ -2,3 +2,20 @@
 Send Request
 GET http://localhost:4004/sap/opu/odata/sap/catalog/$metadata HTTP/1.1
 
+
+### POST Regressions
+POST https://sbp-btp-sbpconsulting-dev-config-products-srv.cfapps.us10.hana.ondemand.com/pal/generateRegModels
+Content-Type: application/json
+
+{
+    "vcRulesList": [
+      {
+        "Location": "FR10",
+        "Product": "KM_M219VBVS_BVS",
+        "GroupID": "M219VV00105NN_1"
+      }
+    ]
+}
+
+
+
