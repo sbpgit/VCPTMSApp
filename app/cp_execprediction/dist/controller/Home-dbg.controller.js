@@ -446,10 +446,15 @@ sap.ui.define(
               oEntry.vcRulesList.push(vRuleslist);
               // var uri = "ConfigProd_DB/v2/pal/generatePredictions";
               var uri = "/v2/pal/generatePredictions";
+            //   var vUser = "SBPTECHTEAM",
+            //   vPwd = "Sbpcorp@22";
               $.ajax({
                 url: uri,
-                type: "post",
+                type: "POST",
                 contentType: "application/json",
+                // beforeSend: function (xhr) {
+                //     xhr.setRequestHeader('Authorization', 'Basic ' + btoa(vUser + ":" + vPwd));
+                // },
                 data: JSON.stringify({
                   vcRulesList: oEntry.vcRulesList,
                 }),

@@ -14,10 +14,7 @@ modules:
     properties:
       srv-url: ${default-url}
   parameters:
-    buildpack: nodejs_buildpack  
-    # host: ${appname}
-  # build-parameters:
-  #   ignore: ["env", "./node_modules"]
+    buildpack: nodejs_buildpack
 - name: config_products-db-deployer
   type: hdb
   path: gen/db
@@ -26,9 +23,11 @@ modules:
     properties:
       TARGET_CONTAINER: ~{hdi-service-name}
   parameters:
-    buildpack: nodejs_buildpack  
+    buildpack: nodejs_buildpack
   build-parameters:
-    ignore: ["env", "./node_modules"]
+    ignore:
+    - env
+    - ./node_modules
 - name: config_products-destination-content
   type: com.sap.application.content
   requires:
@@ -170,19 +169,12 @@ resources:
         instance:
           destinations:
           - Authentication: NoAuthentication
+            HTML5.DynamicDestination: true
+            HTML5.ForwardAuthToken: true
             Name: ui5
             ProxyType: Internet
-            HTML5.ForwardAuthToken: true
-            HTML5.DynamicDestination: true
             Type: HTTP
             URL: https://ui5.sap.com
-          # - Name: ConfigProd_DB 
-            # Authentication: NoAuthentication
-            # ProxyType: Internet
-            # HTML5.ForwardAuthToken: true
-            # HTML5.DynamicDestination: true
-            # Type: HTTP
-            # URL: https://${appname}.${default-domain}
           existing_destinations_policy: update
       version: 1.0.0
     service: destination
