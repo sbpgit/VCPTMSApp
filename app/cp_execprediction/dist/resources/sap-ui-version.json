@@ -1,27 +1,7 @@
 {
 	"name": "cp.execpred.cpexecprediction",
 	"version": "0.0.1",
-<<<<<<< HEAD
-	"buildTimestamp": "202201050738",
-=======
-<<<<<<< HEAD
-	"buildTimestamp": "202201041109",
-=======
-<<<<<<< HEAD
-	"buildTimestamp": "202201040820",
-=======
-<<<<<<< HEAD
-	"buildTimestamp": "202201040022",
-=======
-<<<<<<< HEAD
-	"buildTimestamp": "202112310805",
-=======
-	"buildTimestamp": "202112302045",
->>>>>>> c8670bf0ad573998fedba086daa290ab55e384b7
->>>>>>> 8faefcfb3ce4543f6a8b67a3e3c4984c3506d1a9
->>>>>>> b00df4e31b74bfc1056c2e6badba8cc67feb3c4a
->>>>>>> 52d503508e5598fc48cc5513407a1cafb0ffbed6
->>>>>>> 773428669764a27780a03f9193597aceac24f99f
+	"buildTimestamp": "202201050827",
 	"scmRevision": "",
 	"libraries": []
 }
