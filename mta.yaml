@@ -8,6 +8,7 @@ modules:
   path: gen/srv
   requires:
   - name: config_products-db
+  - name: uaa_config_products
   provides:
   - name: srv-api
     properties:
@@ -23,6 +24,10 @@ modules:
       TARGET_CONTAINER: ~{hdi-service-name}
   parameters:
     buildpack: nodejs_buildpack
+  build-parameters:
+    ignore:
+    - env
+    - ./node_modules
 - name: config_products-destination-content
   type: com.sap.application.content
   requires:
@@ -84,8 +89,8 @@ modules:
       name: cpexecpredcpexecprediction
       target-path: resources/
     - artifacts:
-      - cprunprofilescpexeprofiles.zip
-      name: cprunprofilescpexeprofiles
+      - cpexeregcpexeregressionmdls.zip
+      name: cpexeregcpexeregressionmdls
       target-path: resources/
 - name: cfgapppvsrootcfgprdpvsroot
   type: html5
@@ -137,9 +142,9 @@ modules:
     - npm install
     - npm run build:cf
     supported-platforms: []
-- name: cprunprofilescpexeprofiles
+- name: cpexeregcpexeregressionmdls
   type: html5
-  path: app/cp_exeprofiles
+  path: app/cp_exeregressionmdls
   build-parameters:
     build-result: dist
     builder: custom
@@ -164,6 +169,8 @@ resources:
         instance:
           destinations:
           - Authentication: NoAuthentication
+            HTML5.DynamicDestination: true
+            HTML5.ForwardAuthToken: true
             Name: ui5
             ProxyType: Internet
             Type: HTTP

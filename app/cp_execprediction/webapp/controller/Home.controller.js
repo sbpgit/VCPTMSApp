@@ -30,6 +30,7 @@ sap.ui.define(
           this.prodModel = new JSONModel();
           this.odModel = new JSONModel();
           this.ppfModel = new JSONModel();
+          this.otabModel = new JSONModel();
           this._oCore = sap.ui.getCore();
           if (!this._valueHelpDialogLoc) {
             this._valueHelpDialogLoc = sap.ui.xmlfragment(
@@ -65,6 +66,8 @@ sap.ui.define(
         },
         _onPatternMatched: function () {
           that = this;
+          this.oPanel = this.byId("idPanel");
+          this.oTable = this.byId("pmdlList");
           this.i18n = this.getResourceBundle();
           this.oGModel = this.getModel("GModel");
           this.oLoc = this.byId("locInput");
@@ -102,12 +105,14 @@ sap.ui.define(
               MessageToast.show("error");
             },
           });
-          this.getModel("BModel").read("/getODHdr", {
+          this.getModel("BModel").callFunction("/get_objdep", {
+            method: "GET",
+            urlParameters: {},
             success: function (oData) {
               that.odModel.setData(oData);
               that.oODList.setModel(that.odModel);
             },
-            error: function (oData, error) {
+            error: function (oRes) {
               MessageToast.show("error");
             },
           });
@@ -133,23 +138,42 @@ sap.ui.define(
             GroupID: "M219VV00105NN_1",
           };
           vVcRulesList.vcRulesList.push(vruleslist);
-
-          this.oModel.create("/generateRegModels", vVcRulesList, {
+          /******************          */
+          var uri = "/v2/pal/generatePredictions";
+          $.ajax({
+            url: uri,
+            type: "post",
+            contentType: "application/json",
+            data: JSON.stringify({
+              vcRulesList: vVcRulesList.vcRulesList,
+            }),
+            dataType: "json",
+            async: false,
+            timeout: 0,
+            error: function (data) {
+              sap.m.MessageToast.show(JSON.stringify(data));
+            },
+            success: function (data) {
+              sap.m.MessageToast.show("Generated Regression Models");
+            },
+          });
+          /************************** */
+          /*this.oModel.create("/generateRegModels", vVcRulesList, {
             success: function (oData) {
-              //MessageToast.show("success");              
+              MessageToast.show("Generated regression model");              
             },
             error: function (oError) {
               MessageToast.show("error");
             },
-          });
-        //   this.oModel.create("/generatePredictions", vVcRulesList, {
-        //     success: function (oData) {
-        //       MessageToast.show("success");
-        //     },
-        //     error: function (oError) {
-        //       MessageToast.show("error");
-        //     },
-        //   });
+          });*/
+          //   this.oModel.create("/generatePredictions", vVcRulesList, {
+          //     success: function (oData) {
+          //       MessageToast.show("success");
+          //     },
+          //     error: function (oError) {
+          //       MessageToast.show("error");
+          //     },
+          //   });
           // oModel.read("/generateRegModels",{
           //     filters: oEntry,
           //     success: function (oData) {
@@ -397,66 +421,100 @@ sap.ui.define(
           }
         },
         onRun2: function () {
-            this.oModel = this.getModel("PModel");
-            var oEntry = {
-              vcRulesList: [],
-            },
-            aItems, vruleslist, i;
+          this.oModel = this.getModel("PModel");
+          var aItems,
+            i,
+            regData = [],
+            vFlag;
+          aItems = this.oODList.getSelectedItems();
 
-            aItems = this.oODList.getSelectedItems();
-            if(this.oObjDep.getTOken() && this.oPredProfile.getTokens()){
-            for ( i = 0; i < aItems.length; i++){
-            vruleslist = {
-              Location: aItems[i].getInfo(),
-              Product: aItems[i].getDescription(),
-              GroupID: aItems[i].getTitle()
-            };
-            oEntry.vcRulesList.push(vruleslist);
-  
-            this.oModel.create("/generateRegModels", oEntry, {
-              success: function (oData) {
-                //MessageToast.show("success");
-                that.oModel.create("/generatePredictions", vVcRulesList, {
-                  success: function (oData) {
-                    MessageToast.show("success");
-                  },
-                  error: function (oError) {
-                    MessageToast.show("error");
-                  },
-                });
-              },
-              error: function (oError) {
-                MessageToast.show("error");
-              },
-            });
+          that.byId("pmdlList").setModel(this.otabModel);
+          if (
+            this.oObjDep.getTokens().length > 0 &&
+            this.oPredProfile.getTokens().length > 0
+          ) {
+            for (i = 0; i < aItems.length; i++) {
+              var oEntry = {
+                  vcRulesList: [],
+                },
+                vRuleslist;
+              vRuleslist = {
+                Location: aItems[i].getInfo(),
+                Product: aItems[i].getDescription(),
+                GroupID: aItems[i].getTitle(),
+              };
+              oEntry.vcRulesList.push(vRuleslist);
+              // var uri = "ConfigProd_DB/v2/pal/generatePredictions";
+              var uri = "/v2/pal/generatePredictions";
+            //   var vUser = "SBPTECHTEAM",
+            //   vPwd = "Sbpcorp@22";
+              $.ajax({
+                url: uri,
+                type: "POST",
+                contentType: "application/json",
+                // beforeSend: function (xhr) {
+                //     xhr.setRequestHeader('Authorization', 'Basic ' + btoa(vUser + ":" + vPwd));
+                // },
+                data: JSON.stringify({
+                  vcRulesList: oEntry.vcRulesList,
+                }),
+                dataType: "json",
+                async: false,
+                timeout: 0,
+                error: function (data) {
+                  sap.m.MessageToast.show(that.i18n.getText("genPredErr"));
+                },
+                success: function (data) {
+                  sap.m.MessageToast.show(that.i18n.getText("genPredSuccess"));
+                  regData.push(data.d.values[0].vcRulesList[0]);
+
+                  that.otabModel.setData({
+                    results: regData,
+                  });
+                  that.oPanel.setProperty("visible", true);
+                  vFlag = 'X';
+                },
+              });
+            }
+            if(vFlag === 'X'){
+            that.resetInputs();
+            }
+          } else {
+            MessageToast.show(that.i18n.getText("errInput"));
+          }
+          // oModel.read("/generateRegModels",{
+          //     filters: oEntry,
+          //     success: function (oData) {
+          //         MessageToast.show("success");
+          // 	},
+          // 	error: function (oError) {
+          // 		MessageToast.show("error");
+          // 	}
+          // }
+          // );
+          //oModel.setUseBatch(true);
+          // oModel.createEntry("/generateRegModels", {
+          //     properties: oEntry
+          // });
+          // oModel.submitChanges({
+          // 	success: function (oData) {
+          // 		// MessageToast.show(that.i18n.getText("saveSessTabsSuc"));
+          // 	},
+          // 	error: function (oError) {
+          // 		MessageToast.show("error");
+          // 	}
+          // });
+        },
+        resetInputs: function(){
+            this.oLoc.setValue("");
+            this.oObjDep.destroyTokens();
+            this.oLocList.removeSelections();
+            this.oODList.removeSelections();
+            this.oPredProfile.destroyTokens();
+            this.oPPFList.removeSelections();
+            this.oProd.destroyTokens();
+            this.oProdList.removeSelections();
         }
-    }
-    else{
-        MessageToast.show("noInput");
-    }
-            // oModel.read("/generateRegModels",{
-            //     filters: oEntry,
-            //     success: function (oData) {
-            //         MessageToast.show("success");
-            // 	},
-            // 	error: function (oError) {
-            // 		MessageToast.show("error");
-            // 	}
-            // }
-            // );
-            //oModel.setUseBatch(true);
-            // oModel.createEntry("/generateRegModels", {
-            //     properties: oEntry
-            // });
-            // oModel.submitChanges({
-            // 	success: function (oData) {
-            // 		// MessageToast.show(that.i18n.getText("saveSessTabsSuc"));
-            // 	},
-            // 	error: function (oError) {
-            // 		MessageToast.show("error");
-            // 	}
-            // });
-          },
       }
     );
   }

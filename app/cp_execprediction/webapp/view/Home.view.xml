@@ -8,12 +8,12 @@
     xmlns:f="sap.ui.layout.form"
     xmlns:u="sap.ui.unified"
 >
-<Page title="Build and Run Predictions">
+<Page title="Run Predictions">
 <customHeader>
 			<OverflowToolbar>
 				<Text text="" width="30%"/>
 				<ToolbarSpacer/>
-				<Title text="Build and Run Predictions"/>
+				<Title text="Run Predictions"/>
 				<ToolbarSpacer/>
 				<Text text="" width="40%"/>
 			</OverflowToolbar>
@@ -116,7 +116,7 @@
 
                     <f:FormElement>
                         <f:fields>                              
-				        <Button type="Emphasized" text="{i18n>Run}" press="onRun" width="50%"/>
+				        <Button type="Emphasized" text="{i18n>Run}" press="onRun2" width="50%"/>
                         </f:fields>
                     </f:FormElement>
                 </f:formElements> 
@@ -127,27 +127,44 @@
         </f:Form>
         
     </Panel>
-    <Panel visible="false">
-    <Table id="pmdlList" headerText="{i18n>predmodel}" mode="MultiSelect" selectionChange="handlepredSelect">
+    <Panel id="idPanel" visible="false">
+    <Table id="pmdlList" headerText="{i18n>predmodel}"  items="{/results}"  selectionChange="handlepredSelect">
      <headerToolbar>
 			<OverflowToolbar>
 				<Title text="{i18n>predmodel}"/>
                 <ToolbarSpacer/>
-                
-				<Button type="Ghost" icon="sap-icon://add-activity-2" tooltip="{i18n>addEntry}" press="onSingleEntry"/>
+                <!-- 
+				<Button type="Ghost" icon="sap-icon://add-activity-2" tooltip="{i18n>addEntry}" press="onSingleEntry"/> -->
 			</OverflowToolbar>
 		</headerToolbar>
         <columns>
-            <Column>
-                <Text text="{i18n>timestamp}"/>
-            </Column>
             <Column>
                 <Text text="{i18n>loc}"/>
             </Column>
             <Column>
                 <Text text="{i18n>prod}"/>
             </Column>
+            <Column>
+                <Text text="{i18n>objdep}"/>
+            </Column>
+            <Column>
+                <Text text="{i18n>dim}"/>
+            </Column>
         </columns>
+        <items>
+            <ColumnListItem vAlign="Middle">
+                <cells>
+                    <Text text="{Location}"/>                    
+                    <Text text="{Product}"/>                    
+                    <Text text="{GroupID}"/>
+                    <ObjectStatus
+                    class="sapUiSmallMarginBottom"
+                    text="{dimensions}"
+                    icon="sap-icon://sys-enter-2"
+                    state="Success" />
+                </cells>
+            </ColumnListItem>
+        </items>
     </Table>
     </Panel>
 </content>
