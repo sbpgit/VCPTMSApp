@@ -1,7 +1,6 @@
 using cp as od from '../db/data-model';
 using V_CLASSCHAR from '../db/data-model';
 using V_CHARVAL from '../db/data-model';
-using V_OBDHDR from '../db/data-model';
 
 service CatalogService @(impl : './lib/cat-service.js') {
     // Service on HDI entities
@@ -75,8 +74,6 @@ service CatalogService @(impl : './lib/cat-service.js') {
     entity getProfiles  as projection on od.PAL_PROFILEMETH;
     entity getProfileParameters as projection on od.PAL_PROFILEMETH_PARA;
     
-    
-    entity getMODHeader as projection on V_OBDHDR;
     /*type rangedate{
         LOCATION_ID : String(4) ;
         DATE_LOW  :Date;
@@ -90,18 +87,14 @@ service CatalogService @(impl : './lib/cat-service.js') {
     
     function fGetNodeDet ( NODE_TYPE : String(2), CHILD_NODE: String(50), PARENT_NODE: String(50)) returns array of getAccessNodes;
    //// actions {
-    function generate_timeseries( LOCATION_ID : String(4) ) returns String;
-    
-    type objectDep{
-        LOCATION_ID : String(4);    
-        PRODUCT_ID  : String(40);  
-        OBJ_DEP     : String(30);
-        OBJ_COUNTER  : Integer
-    }
-    function get_objdep() returns array of objectDep;
+    function generate_timeseries( LOCATION_ID : String(4) ) returns String
+    //};
+   /* action generate_timeseries( LOCATION_ID : String(4) ,
+                                DATE_LOW    :Date,
+                                DATE_HIGH   : Date );*/
 
 }
-/*service CatalogSrvBtp @(impl : './lib/cat-service.js') {
+service CatalogSrvBtp @(impl : './lib/cat-service.js') {
     type bomOD{
         LOCATION_ID : String(4);
         PRODUCT_ID  : String(40);
@@ -120,11 +113,11 @@ service CatalogService @(impl : './lib/cat-service.js') {
         ROW_ID       : Integer;
     }
     //function getBOMOD () returns String;
-   /* action generate_timeseries( LOCATION_ID : String(4) ,
-                                DATE_LOW    :Date,
-                                DATE_HIGH   : Date );*/
+   action generate_timeseries( LOCATION_ID : String(4) ,
+                                DATE_LOW   : Date,
+                                DATE_HIGH  : Date );
 
-/*}
+}
 service CatalogSrvML @(impl : './lib/cat-serviceml.js') {
     type pf_exec{
         LOCATION_ID : String(4);
@@ -134,4 +127,4 @@ service CatalogSrvML @(impl : './lib/cat-serviceml.js') {
      function profile_exec(LOCATION_ID : String(4),
                             PRODUCT_ID  : String(40),
                             OBJ_DEP     : String(30)) returns String;
-}*/
+}
