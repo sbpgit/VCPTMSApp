@@ -37,10 +37,10 @@
   "eslintConfig": {
     "extends": "eslint:recommended",
     "env": {
-        "es2020": true,
-        "node": true,
-        "jest": true,
-        "mocha": true
+      "es2020": true,
+      "node": true,
+      "jest": true,
+      "mocha": true
     },
     "globals": {
       "SELECT": true,
@@ -86,19 +86,19 @@
     },
     "multitenancy": true,
     "uaa": {
-        "kind": "xsuaa"
+      "kind": "xsuaa"
     },
     "sapux": [
-        "app/cfgprd_pvsroot",
-        "app/project1",
-        "app/cp_ibpfdem",
-        "app/cp_ibpfplan",
-        "app/cp_ibpfres",
-        "app/cp_execprediction",
-        "app/cp_exeregressionmdls"
+      "app/cfgprd_pvsroot",
+      "app/project1",
+      "app/cp_ibpfdem",
+      "app/cp_ibpfplan",
+      "app/cp_ibpfres",
+      "app/cp_execprediction",
+      "app/cp_exeregressionmdls"
     ],
     "devDependencies": {
-        "@sap/ux-specification": "^1.96.0"
+      "@sap/ux-specification": "^1.96.0"
     }
-}
+  }
 }

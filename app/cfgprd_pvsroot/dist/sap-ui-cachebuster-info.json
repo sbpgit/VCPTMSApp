@@ -1,69 +1,30 @@
 {
-<<<<<<< HEAD
-  "controller/Home-dbg.controller.js": 1640869540878,
-=======
-<<<<<<< HEAD
-  "view/Detail.view.xml": 1640953104327,
-  "Component.js": 1640953104323,
-  "model/models.js": 1640953104327,
-  "controller/NodeMaster.controller.js": 1640953104327,
-  "controller/NodeDetail.controller.js": 1640953104327,
-  "controller/Home.controller.js": 1640953104327,
-  "controller/Detail.controller.js": 1640953104323,
-  "controller/BaseController.js": 1640953104323,
-  "controller/App.controller.js": 1640953104323,
-  "manifest.json": 1641284368511,
-  "manifest-bundle.zip": 1641284368524,
-  "Component-preload.js": 1641284368983,
-  "controller/App-dbg.controller.js": 1640953104323,
-  "controller/NodeMaster-dbg.controller.js": 1640953104327,
-  "controller/NodeDetail-dbg.controller.js": 1640953104327,
-  "controller/Home-dbg.controller.js": 1640953104327,
-  "controller/Detail-dbg.controller.js": 1640953104323,
-  "controller/BaseController-dbg.js": 1640953104323,
-  "model/models-dbg.js": 1640953104327,
-  "Component-dbg.js": 1640953104323,
-  "view/NodeMaster.view.xml": 1640953104327,
-  "view/NodeDetail.view.xml": 1640953104327,
-  "view/Home.view.xml": 1640953104327,
-  "i18n/i18n.properties": 1640953104327,
-  "view/CreateNode.fragment.xml": 1640953104327,
-  "view/App.view.xml": 1640953104327,
-  "css/style.css": 1640953104327,
-  "index.html": 1640953104327
-=======
-<<<<<<< HEAD
->>>>>>> 52d503508e5598fc48cc5513407a1cafb0ffbed6
-  "controller/App.controller.js": 1640869540878,
-  "model/models.js": 1640869540878,
+  "view/Home.view.xml": 1640869540882,
   "controller/NodeMaster.controller.js": 1640869540878,
+  "model/models.js": 1640869540878,
+  "manifest.json": 1641370027494,
   "controller/NodeDetail.controller.js": 1640869540878,
   "controller/Home.controller.js": 1640869540878,
   "controller/Detail.controller.js": 1640869540878,
   "controller/BaseController.js": 1640869540878,
-  "manifest.json": 1641294550518,
+  "controller/App.controller.js": 1640869540878,
   "Component.js": 1640869540878,
-  "manifest-bundle.zip": 1641294550536,
-  "Component-preload.js": 1641294551061,
-  "controller/BaseController-dbg.js": 1640869540878,
-  "controller/NodeMaster-dbg.controller.js": 1640869540878,
+  "manifest-bundle.zip": 1641370027512,
+  "Component-preload.js": 1641370028008,
   "controller/NodeDetail-dbg.controller.js": 1640869540878,
-  "i18n/i18n.properties": 1640869540878,
-  "controller/Detail-dbg.controller.js": 1640869540878,
+  "controller/NodeMaster-dbg.controller.js": 1640869540878,
   "model/models-dbg.js": 1640869540878,
+  "controller/Home-dbg.controller.js": 1640869540878,
+  "controller/Detail-dbg.controller.js": 1640869540878,
+  "controller/BaseController-dbg.js": 1640869540878,
   "controller/App-dbg.controller.js": 1640869540878,
   "Component-dbg.js": 1640869540878,
   "view/NodeMaster.view.xml": 1640869540882,
   "view/NodeDetail.view.xml": 1640869540882,
-  "view/Home.view.xml": 1640869540882,
+  "i18n/i18n.properties": 1640869540878,
   "view/Detail.view.xml": 1640869540882,
   "view/CreateNode.fragment.xml": 1640869540882,
   "view/App.view.xml": 1640869540882,
   "css/style.css": 1640869540878,
   "index.html": 1640869540878
-<<<<<<< HEAD
-=======
->>>>>>> c8670bf0ad573998fedba086daa290ab55e384b7
->>>>>>> b00df4e31b74bfc1056c2e6badba8cc67feb3c4a
->>>>>>> 52d503508e5598fc48cc5513407a1cafb0ffbed6
 }

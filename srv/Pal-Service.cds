@@ -22,6 +22,7 @@ service PalService @(requires: 'authenticated-user'){
     entity generateRegModels as projection on pal.PalGenRegressionModels;
     entity generatePredictions as projection on pal.PalGenPredictions;
 
+    entity palProfiles as projection on pal.PalModelProfiles;
 
     //entity hgbtPred as projection on pal.PalHgbtPred;
 
