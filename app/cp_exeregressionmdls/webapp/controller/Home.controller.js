@@ -139,7 +139,7 @@ sap.ui.define(
             this.oObjDep.getTokens().length > 0 &&
             this.oPredProfile.getTokens().length > 0
           ) {
-            var vToken = this.getToken();
+            // var vToken = this.getToken();
             for (i = 0; i < aItems.length; i++) {
               var oEntry = {
                   vcRulesList: [],
@@ -159,9 +159,9 @@ sap.ui.define(
                 data: JSON.stringify({
                   vcRulesList: oEntry.vcRulesList,
                 }),
-                headers: {
-                    "X-CSRF-Token": vToken
-                },
+                // headers: {
+                //     "X-CSRF-Token": vToken
+                // },
                 dataType: "json",
                 async: false,
                 timeout: 0,

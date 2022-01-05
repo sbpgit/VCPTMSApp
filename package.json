@@ -11,11 +11,13 @@
     "@sap/cds-odata-v2-adapter-proxy": "^1.8.2",
     "@sap/hana-client": "^2.10.15",
     "@sap/hdi-deploy": "^4.2.0",
+    "@sap/xsenv": "^3.1.1",
+    "@sap/xssec": "^2.2.5",
     "await-sleep": "^0.0.1",
     "debug": "^4.3.2",
     "express": "^4",
     "https": "^1.0.0",
-    "passport": "^0.5.0",
+    "passport": "^0.5.2",
     "request": "^2.88.2",
     "sync": "^0.2.5",
     "uuid": "^8.3.2"
@@ -37,68 +39,71 @@
   "eslintConfig": {
     "extends": "eslint:recommended",
     "env": {
-        "es2020": true,
-        "node": true,
-        "jest": true,
-        "mocha": true
+      "es2020": true,
+      "node": true,
+      "jest": true,
+      "mocha": true
     },
     "globals": {
-        "SELECT": true,
-        "INSERT": true,
-        "UPDATE": true,
-        "DELETE": true,
-        "CREATE": true,
-        "DROP": true,
-        "CDL": true,
-        "CQL": true,
-        "CXL": true,
-        "cds": true
+      "SELECT": true,
+      "INSERT": true,
+      "UPDATE": true,
+      "DELETE": true,
+      "CREATE": true,
+      "DROP": true,
+      "CDL": true,
+      "CQL": true,
+      "CXL": true,
+      "cds": true
     },
     "rules": {
-        "no-console": "off",
-        "require-atomic-updates": "off"
+      "no-console": "off",
+      "require-atomic-updates": "off"
     }
-},
-"cds": {
+  },
+  "cds": {
     "requires": {
-        "auth": {
-            "kind": "basic-auth",
-            "users": {
-                "SBPTECHTEAM": {
-                    "password": "Sbpcorp@22"
-                },
-                "*": false
-            }
-        },
-        "db": {
-            "kind": "hana",
-            "pool": {
-                "acquireTimeoutMillis": 10000,
-                "evictionRunIntervalMillis": 60000,
-                "min": 0,
-                "max": 100,
-                "numTestsPerEvictionRun": 34,
-                "softIdleTimeoutMillis": 30000,
-                "idleTimeoutMillis": 30000,
-                "testOnBorrow": true
-            }
+      "auth": {
+        "kind": "basic-auth",
+        "users": {
+          "SBPTECHTEAM": {
+            "password": "Sbpcorp@22"
+          },
+          "*": false
         }
+      },
+      "db": {
+        "kind": "hana",
+        "pool": {
+          "acquireTimeoutMillis": 10000,
+          "evictionRunIntervalMillis": 60000,
+          "min": 0,
+          "max": 100,
+          "numTestsPerEvictionRun": 34,
+          "softIdleTimeoutMillis": 30000,
+          "idleTimeoutMillis": 30000,
+          "testOnBorrow": true
+        }
+      }
     },
-    "multitenancy": true,
-    "uaa": {
-        "kind": "xsuaa"
-    },
-    "sapux": [
-        "app/cfgprd_pvsroot",
-        "app/project1",
-        "app/cp_ibpfdem",
-        "app/cp_ibpfplan",
-        "app/cp_ibpfres",
-        "app/cp_execprediction",
-        "app/cp_exeregressionmdls"
-    ],
-    "devDependencies": {
-        "@sap/ux-specification": "^1.96.0"
+    "hana": {
+      "deploy-format": "hdbtable"
     }
-}
+  },
+  "multitenancy": true,
+  "uaa": {
+    "kind": "xsuaa"
+  },
+  "sapux": [
+    "app/cfgprd_pvsroot",
+    "app/project1",
+    "app/cp_ibpfdem",
+    "app/cp_ibpfplan",
+    "app/cp_ibpfres",
+    "app/cp_execprediction",
+    "app/cp_exeregressionmdls"
+  ],
+  "devDependencies": {
+    "@sap/ux-specification": "^1.96.0"
+  }
 }
