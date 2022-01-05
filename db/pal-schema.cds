@@ -424,14 +424,14 @@ entity PalGenPredictions
     };
 }
 
-entity PalModelProfiles
-{
+ entity PalModelProfiles
+ {
     key Location: String(5);
-	key Product: String(40);
-	key GroupID: String(20);
-	key ModelType : String(50);
-	key ProfileID : String(50); //Integer;
-};
+ 	key Product: String(40);
+ 	key GroupID: String(20);
+ 	ModelType : String(50);
+ 	ProfileID : String(50); //Integer;
+ };
 
 entity PalModelParameters
 {
