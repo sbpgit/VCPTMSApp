@@ -1,6 +1,16 @@
 {
+<<<<<<< HEAD
   "view/App.view.xml": 1640953104335,
   "controller/Home.controller.js": 1641305978998,
+=======
+<<<<<<< HEAD
+  "Component-preload.js": 1641294590921,
+  "manifest.json": 1641294590401,
+=======
+<<<<<<< HEAD
+  "controller/Home-dbg.controller.js": 1641236473712,
+  "controller/Home.controller.js": 1641236473712,
+>>>>>>> 773428669764a27780a03f9193597aceac24f99f
   "model/models.js": 1640953104331,
   "manifest.json": 1641368320500,
   "controller/BaseController.js": 1640953104331,
@@ -21,4 +31,64 @@
   "i18n/i18n.properties": 1641236451476,
   "css/style.css": 1640953104331,
   "index.html": 1640953104331
+<<<<<<< HEAD
+=======
+=======
+<<<<<<< HEAD
+  "view/ProdDialog.fragment.xml": 1640869540886,
+=======
+<<<<<<< HEAD
+  "view/LocDialog.fragment.xml": 1640719038967,
+  "controller/BaseController.js": 1640691740971,
+  "model/models.js": 1640617227102,
+  "controller/Home.controller.js": 1640933961044,
+  "manifest.json": 1640937952220,
+  "controller/App.controller.js": 1640693546623,
+  "Component.js": 1640617227098,
+  "manifest-bundle.zip": 1640937952233,
+  "Component-preload.js": 1640937952689,
+  "model/models-dbg.js": 1640617227102,
+  "controller/Home-dbg.controller.js": 1640933961044,
+  "controller/BaseController-dbg.js": 1640691740971,
+  "controller/App-dbg.controller.js": 1640693546623,
+  "Component-dbg.js": 1640617227098,
+  "view/ProdDialog.fragment.xml": 1640719341237,
+  "view/PredProfileDialog.fragment.xml": 1640805005403,
+  "view/ObjDepDialog.fragment.xml": 1640770953795,
+  "i18n/i18n.properties": 1640873583212,
+  "view/Home.view.xml": 1640867030880,
+  "view/App.view.xml": 1640693156239,
+  "css/style.css": 1640617227098,
+  "index.html": 1640866736931
+=======
+  "model/models-dbg.js": 1640869540886,
+>>>>>>> 8faefcfb3ce4543f6a8b67a3e3c4984c3506d1a9
+  "Component.js": 1640869540882,
+>>>>>>> 52d503508e5598fc48cc5513407a1cafb0ffbed6
+  "model/models.js": 1640869540886,
+  "controller/Home.controller.js": 1640869540882,
+  "controller/BaseController.js": 1640869540882,
+  "controller/App.controller.js": 1640869540882,
+  "Component.js": 1640869540882,
+  "manifest-bundle.zip": 1641294590417,
+  "i18n/i18n.properties": 1641256746191,
+  "controller/App-dbg.controller.js": 1640869540882,
+  "controller/Home-dbg.controller.js": 1640869540882,
+  "controller/BaseController-dbg.js": 1640869540882,
+  "model/models-dbg.js": 1640869540886,
+  "Component-dbg.js": 1640869540882,
+  "view/ProdDialog.fragment.xml": 1640869540886,
+  "view/PredProfileDialog.fragment.xml": 1640869540886,
+  "view/ObjDepDialog.fragment.xml": 1640869540886,
+  "view/LocDialog.fragment.xml": 1640869540886,
+  "view/Home.view.xml": 1640869540886,
+  "view/App.view.xml": 1640869540886,
+  "css/style.css": 1640869540882,
+  "index.html": 1640869540882
+<<<<<<< HEAD
+=======
+>>>>>>> c8670bf0ad573998fedba086daa290ab55e384b7
+>>>>>>> b00df4e31b74bfc1056c2e6badba8cc67feb3c4a
+>>>>>>> 52d503508e5598fc48cc5513407a1cafb0ffbed6
+>>>>>>> 773428669764a27780a03f9193597aceac24f99f
 }

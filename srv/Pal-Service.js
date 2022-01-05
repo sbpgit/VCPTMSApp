@@ -5369,7 +5369,7 @@ function _getRuleListTypeForGenModels(vcRulesList, modelType, numChars)
 
 }
 
-function _getParamsObjForGenModels(vcRulesList, modelType, numChars)
+function _getParamsObjForGenModels_bkup(vcRulesList, modelType, numChars)
 {
     var conn = hana.createConnection();
     
@@ -5498,6 +5498,121 @@ function _getParamsObjForGenModels(vcRulesList, modelType, numChars)
 
 }
 
+function _getParamsObjForGenModels(vcRulesList, modelType, numChars)
+{
+    var conn = hana.createConnection();
+    
+    conn.connect(conn_params_container);
+    var sqlStr = 'SET SCHEMA ' + containerSchema;  
+    // console.log('sqlStr: ', sqlStr);            
+    var stmt=conn.prepare(sqlStr);
+    var results=stmt.exec();
+    stmt.drop();
+
+    var paramsObj = [];
+    for (var i = 0; i < vcRulesList.length; i++)
+    {
+
+        if (vcRulesList[i].override == false)
+        {
+            sqlStr = 'SELECT "PROFILEID" FROM "CP_PALMODELPROFILES"' +
+                            ' WHERE "PRODUCT" = ' + "'" + vcRulesList[i].Product + "'" + 
+                            ' AND "LOCATION" = ' + "'" + vcRulesList[i].Location + "'" + 
+                            ' AND "GROUPID" = ' + "'" + vcRulesList[i].GroupID + "'" + 
+                            ' AND "MODELTYPE" = ' + "'" + modelType +"'"; 
+            console.log(' _getParamsObjForGenModels sqlStr: ', sqlStr);            
+            stmt=conn.prepare(sqlStr);
+            results=stmt.exec();
+            stmt.drop();
+
+            //console.log("_getParamsObjForGenModels MODELPROFILES ", results);
+
+            sqlStr = 'SELECT * FROM "CP_PAL_PROFILEMETH_PARA"' +
+                        ' WHERE "METHOD" = ' + "'" + modelType + "'" + 
+                        ' AND "PROFILE" = ' + "'" + results[0].PROFILEID + "'"; 
+        // console.log('sqlStr: ', sqlStr);            
+            stmt=conn.prepare(sqlStr);
+            results=stmt.exec();
+            stmt.drop();
+        }
+        else
+        {
+            sqlStr = 'SELECT * FROM "CP_PAL_PROFILEMETH_PARA"' +
+                        ' WHERE "METHOD" = ' + "'" + modelType + "'" + 
+                        ' AND "PROFILE" = ' + "'" + vcRulesList[i].profileID + "'"; 
+        // console.log('sqlStr: ', sqlStr);            
+            stmt=conn.prepare(sqlStr);
+            results=stmt.exec();
+            stmt.drop();
+        }
+        //console.log('i = ',i, 'modelType :', modelType );
+        if (vcRulesList[i].dimensions == numChars)
+        {
+           
+            for (let index=0; index<results.length; index++) 
+            {
+                paramsObj.push({"groupId":vcRulesList[i].GroupID, 
+                                "paramName":results[index].PARA_NAME, 
+                                "intVal":results[index].INTVAL,
+                                "doubleVal": results[index].DOUBLEVAL, 
+                                "strVal" : results[index].STRVAL});
+
+            }
+
+            if (modelType == 'VARMA')
+            {
+                paramsObj.push({"groupId":vcRulesList[i].GroupID,"paramName":"EXOGENOUS_VARIABLE","intVal":null,"doubleVal": null,"strVal":"ATT1"});
+                paramsObj.push({"groupId":vcRulesList[i].GroupID,"paramName":"EXOGENOUS_VARIABLE","intVal":null,"doubleVal": null,"strVal":"ATT2"});
+                if (numChars > 2 )
+                {
+                    paramsObj.push({"groupId":vcRulesList[i].GroupID,"paramName":"EXOGENOUS_VARIABLE","intVal":null,"doubleVal": null,"strVal":"ATT3"});
+                }
+                if (numChars > 3 )
+                {
+                    paramsObj.push({"groupId":vcRulesList[i].GroupID,"paramName":"EXOGENOUS_VARIABLE","intVal":null,"doubleVal": null,"strVal":"ATT4"});
+                }
+                if (numChars > 4 )
+                {
+                    paramsObj.push({"groupId":vcRulesList[i].GroupID,"paramName":"EXOGENOUS_VARIABLE","intVal":null,"doubleVal": null,"strVal":"ATT5"});
+                }
+                if (numChars > 5 )
+                {
+                    paramsObj.push({"groupId":vcRulesList[i].GroupID,"paramName":"EXOGENOUS_VARIABLE","intVal":null,"doubleVal": null,"strVal":"ATT6"});
+                }
+                if (numChars > 6 )
+                {
+                    paramsObj.push({"groupId":vcRulesList[i].GroupID,"paramName":"EXOGENOUS_VARIABLE","intVal":null,"doubleVal": null,"strVal":"ATT7"});
+                }
+                if (numChars > 7 )
+                {
+                    paramsObj.push({"groupId":vcRulesList[i].GroupID,"paramName":"EXOGENOUS_VARIABLE","intVal":null,"doubleVal": null,"strVal":"ATT8"});
+                }
+                if (numChars > 8 )
+                {
+                    paramsObj.push({"groupId":vcRulesList[i].GroupID,"paramName":"EXOGENOUS_VARIABLE","intVal":null,"doubleVal": null,"strVal":"ATT9"});
+                }
+                if (numChars > 9 )
+                {
+                    paramsObj.push({"groupId":vcRulesList[i].GroupID,"paramName":"EXOGENOUS_VARIABLE","intVal":null,"doubleVal": null,"strVal":"ATT10"});
+                }
+                if (numChars > 10 )
+                {
+                    paramsObj.push({"groupId":vcRulesList[i].GroupID,"paramName":"EXOGENOUS_VARIABLE","intVal":null,"doubleVal": null,"strVal":"ATT11"});
+                }
+                if (numChars > 11 )
+                {
+                    paramsObj.push({"groupId":vcRulesList[i].GroupID,"paramName":"EXOGENOUS_VARIABLE","intVal":null,"doubleVal": null,"strVal":"ATT12"});
+                }
+            }
+        }
+    }
+  //  console.log('_getParamsObjForGenModels paramsObj',paramsObj);
+    //console.log('_getParamsObjForGenModels paramsObj[0]',paramsObj[0]);
+    conn.disconnect();
+
+    return paramsObj;
+
+}
 
 async function _generateRegModels (req) {
 
