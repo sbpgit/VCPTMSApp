@@ -23,7 +23,7 @@ using { cp as pal } from '../db/pal-schema';
     entity generatePredictions as projection on pal.PalGenPredictions;
 
     @odata.draft.enabled
-    entity palProfiles as projection on pal.PalModelProfiles;
+    entity modelProfiles as projection on pal.PalModelProfiles;
 
     //entity hgbtPred as projection on pal.PalHgbtPred;
 
