@@ -446,15 +446,15 @@ context cp {
     }
 
 
-    entity PAL_MODEL_PARAMETERS {
-        key MODEL_TYPE : String(10)  @title : 'Model Type';
-        key PROFILE_ID : Integer     @title : 'Profile ID';
-        key PARA_NAME  : String(100) @title : 'Parameter Name';
-            INTVAL     : Integer;
-            DOUBLEVAL  : Double;
-            STRVAL     : String(20);
-            PARA_DESC  : String(1000)@title : 'Parameter Description';
-    };
+    // entity PAL_MODEL_PARAMETERS {
+    //     key MODEL_TYPE : String(10)  @title : 'Model Type';
+    //     key PROFILE_ID : Integer     @title : 'Profile ID';
+    //     key PARA_NAME  : String(100) @title : 'Parameter Name';
+    //         INTVAL     : Integer;
+    //         DOUBLEVAL  : Double;
+    //         STRVAL     : String(20);
+    //         PARA_DESC  : String(1000)@title : 'Parameter Description';
+    // };
 }
 
 @cds.persistence.exists
