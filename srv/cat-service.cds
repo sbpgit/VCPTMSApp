@@ -87,17 +87,17 @@ service CatalogService @(impl : './lib/cat-service.js') {
         CNODE: String(50);
         NODE_DESC: String(200);
     };*/
-    
-    function fGetNodeDet ( NODE_TYPE : String(2), CHILD_NODE: String(50), PARENT_NODE: String(50)) returns array of getAccessNodes;
-   //// actions {
-    function generate_timeseries( LOCATION_ID : String(4) ) returns String;
-    
+     
     type objectDep{
         LOCATION_ID : String(4);    
         PRODUCT_ID  : String(40);  
         OBJ_DEP     : String(30);
         OBJ_COUNTER  : Integer
     }
+    function fGetNodeDet ( NODE_TYPE : String(2), CHILD_NODE: String(50), PARENT_NODE: String(50)) returns array of getAccessNodes;
+   //// actions {
+    function generate_timeseries( LOCATION_ID : String(4) ) returns String;
+   
     function get_objdep() returns array of objectDep;
 
 }
