@@ -1,11 +1,7 @@
 {
 	"name": "cp.exereg.cpexeregressionmdls",
 	"version": "0.0.1",
-<<<<<<< HEAD
-	"buildTimestamp": "202201050845",
-=======
-	"buildTimestamp": "202201050738",
->>>>>>> 698cbb260c5e918025ac0264f830c370ac8f2b00
+	"buildTimestamp": "202201060223",
 	"scmRevision": "",
 	"libraries": []
 }
