@@ -417,6 +417,8 @@ entity PalGenPredictions
     createdAt  : Timestamp ;  
     modelType : String(10);
     vcRulesList : array of {
+        profile : String(50);
+        override : Boolean;
         Location:String(20); 
         Product:String(15); 
         GroupID :String(20);
