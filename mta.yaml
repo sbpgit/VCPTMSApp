@@ -92,6 +92,10 @@ modules:
       - cpexeregcpexeregressionmdls.zip
       name: cpexeregcpexeregressionmdls
       target-path: resources/
+    - artifacts:
+      - cpmdlprofilecpmodelprofiles.zip
+      name: cpmdlprofilecpmodelprofiles
+      target-path: resources/
 - name: cfgapppvsrootcfgprdpvsroot
   type: html5
   path: app/cfgprd_pvsroot
@@ -152,6 +156,16 @@ modules:
     - npm install
     - npm run build:cf
     supported-platforms: []
+- name: cpmdlprofilecpmodelprofiles
+  type: html5
+  path: app/cp_modelprofiles
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
 resources:
 - name: config_products-db
   type: com.sap.xs.hdi-container
@@ -169,8 +183,6 @@ resources:
         instance:
           destinations:
           - Authentication: NoAuthentication
-            HTML5.DynamicDestination: true
-            HTML5.ForwardAuthToken: true
             Name: ui5
             ProxyType: Internet
             Type: HTTP
