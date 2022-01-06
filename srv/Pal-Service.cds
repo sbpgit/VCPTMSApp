@@ -23,8 +23,8 @@ using { cp as pal } from '../db/pal-schema';
     entity generateRegModels as projection on pal.PalGenRegressionModels;
     entity generatePredictions as projection on pal.PalGenPredictions;
 
-    @odata.draft.enabled
-    entity modelProfiles as projection on pal.PalModelProfiles;
+    // @odata.draft.enabled
+    // entity modelProfiles as projection on pal.PalModelProfiles;
 
     //entity hgbtPred as projection on pal.PalHgbtPred;
 

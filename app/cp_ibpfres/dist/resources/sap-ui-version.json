@@ -2,6 +2,9 @@
 	"name": "cp.ibpfres.cpibpfres",
 	"version": "0.0.1",
 <<<<<<< HEAD
+	"buildTimestamp": "202201060223",
+=======
+<<<<<<< HEAD
 	"buildTimestamp": "202201050827",
 =======
 <<<<<<< HEAD
@@ -30,6 +33,7 @@
 >>>>>>> 773428669764a27780a03f9193597aceac24f99f
 >>>>>>> 698cbb260c5e918025ac0264f830c370ac8f2b00
 >>>>>>> 7400a7a983716dadb9165b3f3b6dbe2af26477bb
+>>>>>>> a5dc27d34a53e57e47b92d8c3d808526b82eaff8
 	"scmRevision": "",
 	"libraries": []
 }
