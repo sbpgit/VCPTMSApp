@@ -367,7 +367,7 @@ context cp {
         key PRODUCT_ID  : String(40)    @title : 'Product ID';
         key VERSION     : String(10)    @title : 'Version';
         key SCENARIO    : String(32)    @title : 'Scenario';
-        key WEEK_BUCKET : Timestamp     @title : 'Weekly Bucket';
+        key WEEK_Date   : Date          @title : 'Weekly Date';
             QUANTITY    : Decimal(13, 3)@title : 'Demand Quantity';
     }
 
@@ -382,7 +382,7 @@ context cp {
             // key CHAR_VALUE  : String(70)    @title : 'Charateristic Value';
         key VERSION     : String(10)    @title : 'Version';
         key SCENARIO    : String(32)    @title : 'Scenario';
-        key WEEK_BUCKET : Timestamp     @title : 'Weekly Bucket';
+        key WEEK_Date   : Date          @title : 'Weekly Date';
             OPT_PERCENT : Decimal(5, 2) @title : 'Option Percnetage';
             OPT_QTY     : Decimal(13, 3)@title : 'Option Quantity';
     }
@@ -393,7 +393,7 @@ context cp {
         key OBJ_DEP          : String(30)@title : 'Object Dependency';
         key VERSION          : String(10)@title : 'Version';
         key SCENARIO         : String(32)@title : 'Scenario';
-        key WEEK_BUCKET      : Timestamp @title : 'Weekly Bucket';
+        key WEEK_Date        : Date          @title : 'Weekly Date';
             PREDICTED        : Double    @title : 'Predicted';
             PREDICTED_TIME   : Timestamp @title : 'Predicted Time';
             PREDICTED_STATUS : String(8) @title : 'Predicted Status';

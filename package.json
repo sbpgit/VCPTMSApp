@@ -1,111 +1,111 @@
 {
-    "name": "config_products",
-    "version": "1.0.0",
-    "description": "A simple CAP project.",
-    "repository": "<Add your repository here>",
-    "license": "UNLICENSED",
-    "private": true,
-    "dependencies": {
-        "@sap/cds": "^5.6.4",
-        "@sap/cds-mtx": "^2.5.1",
-        "@sap/cds-odata-v2-adapter-proxy": "^1.8.2",
-        "@sap/hana-client": "^2.10.15",
-        "@sap/hdi-deploy": "^4.2.0",
-        "@sap/xsenv": "^3.1.1",
-        "@sap/xssec": "^2.2.5",
-        "await-sleep": "^0.0.1",
-        "debug": "^4.3.2",
-        "express": "^4",
-        "https": "^1.0.0",
-        "passport": "^0.5.2",
-        "request": "^2.88.2",
-        "sync": "^0.2.5",
-        "uuid": "^8.3.2"
+  "name": "config_products",
+  "version": "1.0.0",
+  "description": "A simple CAP project.",
+  "repository": "<Add your repository here>",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "@sap/audit-logging": "^5.3.0",
+    "@sap/cds": "^5.6.4",
+    "@sap/cds-mtx": "^2.5.1",
+    "@sap/cds-odata-v2-adapter-proxy": "^1.8.2",
+    "@sap/hana-client": "^2.10.15",
+    "@sap/hdi-deploy": "^4.2.0",
+    "@sap/xsenv": "^3.1.1",
+    "@sap/xssec": "^2.2.5",
+    "await-sleep": "^0.0.1",
+    "debug": "^4.3.2",
+    "express": "^4",
+    "https": "^1.0.0",
+    "passport": "^0.5.2",
+    "request": "^2.88.2",
+    "sync": "^0.2.5",
+    "uuid": "^8.3.2"
+  },
+  "engines": {
+    "node": "^12 || ^14"
+  },
+  "scripts": {
+    "start": "NODE_ENV=production cds run",
+    "watch-cfgprd_pvsroot": "cds watch --open cfgprd_pvsroot/webapp/index.html#fe-lrop-v4",
+    "undeploy": "cf undeploy config_products --delete-services --delete-service-keys",
+    "watch-project1": "cds watch --open project1/webapp/index.html#fe-lrop-v4",
+    "watch-cp_ibpfdem": "cds watch --open cp_ibpfdem/webapp/index.html#fe-lrop-v4",
+    "watch-cp_ibpfplan": "cds watch --open cp_ibpfplan/webapp/index.html#fe-lrop-v4",
+    "watch-cp_ibpfres": "cds watch --open cp_ibpfres/webapp/index.html#fe-lrop-v4",
+    "watch-cp_execprediction": "cds watch --open cp_execprediction/webapp/index.html#fe-lrop-v4",
+    "watch-cp_exeregressionmdls": "cds watch --open cp_exeregressionmdls/webapp/index.html#fe-lrop-v4",
+    "watch-cp_modelprofiles": "cds watch --open cp_modelprofiles/webapp/index.html#fe-lrop-v4"
+  },
+  "eslintConfig": {
+    "extends": "eslint:recommended",
+    "env": {
+      "es2020": true,
+      "node": true,
+      "jest": true,
+      "mocha": true
     },
-    "engines": {
-        "node": "^12 || ^14"
+    "globals": {
+      "SELECT": true,
+      "INSERT": true,
+      "UPDATE": true,
+      "DELETE": true,
+      "CREATE": true,
+      "DROP": true,
+      "CDL": true,
+      "CQL": true,
+      "CXL": true,
+      "cds": true
     },
-    "scripts": {
-        "start": "cds run",
-        "watch-cfgprd_pvsroot": "cds watch --open cfgprd_pvsroot/webapp/index.html#fe-lrop-v4",
-        "undeploy": "cf undeploy config_products --delete-services --delete-service-keys",
-        "watch-project1": "cds watch --open project1/webapp/index.html#fe-lrop-v4",
-        "watch-cp_ibpfdem": "cds watch --open cp_ibpfdem/webapp/index.html#fe-lrop-v4",
-        "watch-cp_ibpfplan": "cds watch --open cp_ibpfplan/webapp/index.html#fe-lrop-v4",
-        "watch-cp_ibpfres": "cds watch --open cp_ibpfres/webapp/index.html#fe-lrop-v4",
-        "watch-cp_execprediction": "cds watch --open cp_execprediction/webapp/index.html#fe-lrop-v4",
-        "watch-cp_exeregressionmdls": "cds watch --open cp_exeregressionmdls/webapp/index.html#fe-lrop-v4",
-        "watch-cp_modelprofiles": "cds watch --open cp_modelprofiles/webapp/index.html#fe-lrop-v4"
-    },
-    "eslintConfig": {
-        "extends": "eslint:recommended",
-        "env": {
-            "es2020": true,
-            "node": true,
-            "jest": true,
-            "mocha": true
-        },
-        "globals": {
-            "SELECT": true,
-            "INSERT": true,
-            "UPDATE": true,
-            "DELETE": true,
-            "CREATE": true,
-            "DROP": true,
-            "CDL": true,
-            "CQL": true,
-            "CXL": true,
-            "cds": true
-        },
-        "rules": {
-            "no-console": "off",
-            "require-atomic-updates": "off"
-        }
-    },
-    "cds": {
-        "requires": {
-            "auth": {
-                "kind": "basic-auth",
-                "users": {
-                    "SBPTECHTEAM": {
-                        "password": "Sbpcorp@22"
-                    },
-                    "*": false
-                }
-            },
-            "db": {
-                "kind": "hana",
-                "pool": {
-                    "acquireTimeoutMillis": 10000,
-                    "evictionRunIntervalMillis": 60000,
-                    "min": 20,
-                    "max": 200,
-                    "numTestsPerEvictionRun": 60,
-                    "softIdleTimeoutMillis": 30000,
-                    "idleTimeoutMillis": 30000,
-                    "testOnBorrow": true
-                }
-            }
-        },
-        "hana": {
-            "deploy-format": "hdbtable"
-        }
-    },
-    "multitenancy": true,
-    "uaa": {
-        "kind": "xsuaa"
-    },
-    "sapux": [
-        "app/cfgprd_pvsroot",
-        "app/project1",
-        "app/cp_ibpfdem",
-        "app/cp_ibpfplan",
-        "app/cp_ibpfres",
-        "app/cp_execprediction",
-        "app/cp_exeregressionmdls",
-        "app/cp_modelprofiles"
-    ],
-    "devDependencies": {
-        "@sap/ux-specification": "^1.96.0"
+    "rules": {
+      "no-console": "off",
+      "require-atomic-updates": "off"
     }
+  },
+  "cds": {
+    "requires": {
+      "auth": {
+        "kind": "basic-auth",
+        "users": {
+          "SBPTECHTEAM": {
+            "password": "Sbpcorp@22"
+          },
+          "*": false
+        }
+      },
+      "db": {
+        "kind": "hana",
+        "pool": {
+          "acquireTimeoutMillis": 10000,
+          "evictionRunIntervalMillis": 60000,
+          "min": 20,
+          "max": 200,
+          "numTestsPerEvictionRun": 60,
+          "softIdleTimeoutMillis": 30000,
+          "idleTimeoutMillis": 30000,
+          "testOnBorrow": true
+        }
+      },
+      "uaa": {
+        "kind": "xsuaa"
+      }
+    },
+    "hana": {
+      "deploy-format": "hdbtable"
+    }
+  },
+  "sapux": [
+    "app/cfgprd_pvsroot",
+    "app/project1",
+    "app/cp_ibpfdem",
+    "app/cp_ibpfplan",
+    "app/cp_ibpfres",
+    "app/cp_execprediction",
+    "app/cp_exeregressionmdls",
+    "app/cp_modelprofiles"
+  ],
+  "devDependencies": {
+    "@sap/ux-specification": "^1.96.0"
+  }
 }
