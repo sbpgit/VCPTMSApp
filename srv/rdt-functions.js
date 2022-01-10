@@ -1,4 +1,4 @@
-git add const cds = require('@sap/cds')
+const cds = require('@sap/cds')
 const { v1: uuidv1} = require('uuid')
 const hana = require('@sap/hana-client');
 
