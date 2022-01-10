@@ -123,6 +123,111 @@ entity PalHgbtPredictionsV1 {
   };
 }
 
+entity PalRdtRegressions {
+    key rdtID : String(50);
+    createdAt  : Timestamp ;  
+    regressionParameters : array of {
+        groupId:String(20); 
+        paramName:String(100); 
+        intVal:Integer;
+        doubleVal : Double;
+        strVal  : String(100);
+    }; 
+
+    rdtType : Integer  @assert.range: [ 2, 12 ];
+    regressionData : array of  { 
+        groupId:String(20); 
+        ID : Integer;
+        att1: Double; 
+        att2: Double; 
+        att3: Double;
+        att4 : Double;
+        att5 : Double;
+        att6 : Double;
+        att7: Double;
+        att8 : Double;
+        att9 : Double;
+        att10 : Double;
+        att11 : Double;
+        att12 : Double;
+        target  : Double; 
+    } ; 
+    modelsOp : array of {
+        groupId : String(20); 
+        rowIndex  : Integer; 
+        treeIndex  : Integer; 
+        modelContent : LargeString;
+    };
+    importanceOp : array of {
+        groupId : String(20);
+        variableName : String(256);
+        importance : Double;
+    };
+    outOfBagOp : array of {
+        groupId : String(20);
+        treeIndex  : Integer; 
+        error  : Double; 
+    }
+}
+
+entity PalRdtByGroup {
+    rdtGroupID : String(50);
+    createdAt  : Timestamp ;
+    groupId : String(20);
+    regressionParameters : array of {
+        paramName:String(100); 
+        intVal:Integer;
+        doubleVal : Double;
+        strVal  : String(100);
+    }; 
+    rdtType : Integer  @assert.range: [ 2, 12 ];    
+    importanceOp : array of {
+        variableName : String(256);
+        importance : Double;
+    };
+    outOfBagOp : array of {
+        treeIndex  : Integer; 
+        error  : Double; 
+    }    
+}
+
+entity PalRdtPredictions { 
+    key rdtID : String(50);
+    createdAt  : Timestamp ; //@cds.on.insert : $now;
+    groupId : String(20);
+    predictionParameters: array of {
+        groupId:String(20); 
+        paramName:String(100); 
+        intVal:Integer;
+        doubleVal : Double;
+        strVal  : String(100);
+    }; 
+    rdtType : Integer  @assert.range: [ 2, 12 ];
+    predictionData : array of  { 
+        groupId:String(20); 
+        //id   : Integer; 
+        ID   : Integer; 
+        att1 : Double; 
+        att2 : Double; 
+        att3 : Double;
+        att4 : Double;
+        att5 : Double;
+        att6 : Double;
+        att7 : Double;
+        att8 : Double;
+        att9 : Double;
+        att10 : Double;
+        att11 : Double;
+        att12 : Double;
+    } ; 
+    predictedResults : array of {
+    groupId : String(20);
+    id    : Integer;
+    score : String(100);
+    confidence : Double;
+  };
+}
+
 entity PalMlrRegressions {
     //key mlrID : UUID;
     key mlrID : String(50);
@@ -399,8 +504,6 @@ entity PalGenRegressionModels
     //modelType : Integer;//  @assert.range: [ 1, 2 ]; // 1 - MLR, 2 - HGBT
     modelType : String(10);
     vcRulesList : array of {
-//        periodType : String(10); // day, week
-//        tableName : String(50); // Input Table Name for Data Extraction
         profile : String(50);
         override : Boolean;
         Location:String(20); 
@@ -426,25 +529,6 @@ entity PalGenPredictions
     };
 }
 
-//  entity PalModelProfiles
-//  {
-//     key Location: String(5);
-//  	key Product: String(40);
-//  	key GroupID: String(20);
-//  	ModelType : String(50);
-//  	ProfileID : String(50); //Integer;
-//  };
-
-// entity PalModelParameters
-// {
-//      key ModelType: String(10);
-// 	 key ProfileID: String(50); //Integer;
-// 	 key paramName: String(30);
-// 	 intVal: Integer;
-// 	 doubleVal: Double;
-// 	 strVal: String(20);
-// 	 paramDescription: String(1000);
-// };
 
 entity PAL_PARAMETERS
 {
