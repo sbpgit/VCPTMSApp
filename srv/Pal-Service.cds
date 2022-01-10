@@ -8,7 +8,9 @@ using { cp as pal } from '../db/pal-schema';
     entity hgbtByGroup as projection on pal.PalHgbtByGroup;
     entity hgbtPredictionsV1 as projection on pal.PalHgbtPredictionsV1;
 
-
+    entity rdtRegressions as projection on pal.PalRdtRegressions;
+    entity rdtByGroup as projection on pal.PalRdtByGroup;
+    entity rdtPredictions as projection on pal.PalRdtPredictions;
     
 
     entity mlrRegressions as projection on pal.PalMlrRegressions;

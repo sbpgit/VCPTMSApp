@@ -21,6 +21,22 @@ const conn_params_container = {
     ssltruststore: cds.env.requires.hana.credentials.certificate
 };
 
+// Begin of RDT Functions
+
+const rdtMethods = require('./rdt-functions.js');
+//const _runRdtRegressions = rdtMethods._runRdtRegressions;
+//const _runRdtPredictions = rdtMethods._runRdtPredictions;
+const _updateRdtGroupParams = rdtMethods._updateRdtGroupParams;
+const _updateRdtGroupData = rdtMethods._updateRdtGroupData;
+const _runRegressionRdtGroup = rdtMethods._runRegressionRdtGroup;
+
+const  _updateRdtPredictionParams = rdtMethods._updateRdtPredictionParams;
+const _updateRdtPredictionData = rdtMethods._updateRdtPredictionData;
+//const _runPredictionRdtGroup = rdtMethods._runPredictionRdtGroup;
+//const _runRdtPrediction = rdtMethods._runRdtPrediction;
+
+// End of RDT functions
+
 module.exports = srv => {
   
    srv.on ('CREATE', 'mlrRegressions',    _runMlrRegressions)
@@ -29,6 +45,9 @@ module.exports = srv => {
 
    srv.on ('CREATE', 'hgbtRegressionsV1',    _runHgbtRegressionsV1)
    srv.on ('CREATE', 'hgbtPredictionsV1',    _runHgbtPredictionsV1)
+
+   srv.on ('CREATE', 'rdtRegressions',    _runRdtRegressions)
+   srv.on ('CREATE', 'rdtPredictions',    _runRdtPredictions)
 
    srv.on ('CREATE', 'varmaModels',    _genVarmaModels)
    srv.on ('CREATE', 'varmaPredictions', _runVarmaPredictions)
@@ -59,6 +78,675 @@ module.exports = srv => {
     */
  }
 
+ function _runRdtRegressions(req) {
+    _updateRdtGroupParams (req);   
+    _updateRdtGroupData(req);
+    _runRegressionRdtGroup(req); 
+ }
+
+ function _runRdtPredictions (req) {
+
+    var groupId = req.data.groupId;
+ 
+    var conn = hana.createConnection();
+ 
+    conn.connect(conn_params);
+ 
+    var sqlStr = 'SET SCHEMA ' + classicalSchema;  
+    // console.log('sqlStr: ', sqlStr);            
+    var stmt=conn.prepare(sqlStr);
+    var results=stmt.exec();
+    stmt.drop();
+ 
+    sqlStr = 'SELECT COUNT(DISTINCT "GROUP_ID") AS "ModelExists" FROM "PAL_RDT_MODEL_GRP_TAB" WHERE "GROUP_ID" = ' + "'" + groupId + "'";
+    stmt=conn.prepare(sqlStr);
+    results = stmt.exec();
+    stmt.drop();
+    console.log('_runRdtPredictions - sqlStr : ', sqlStr);            
+ 
+    var modelExists = results[0].ModelExists;
+    console.log('_runRdtPredictions - modelExists: ', modelExists);            
+ 
+    if (modelExists == 0)
+    {
+       let predResults = [];
+       var responseMessage = " Model Does not Exist For groupId : " + groupId;
+       predResults.push(responseMessage);
+       console.log('_runMlrPredictions : Model Does not Exist For groupId', groupId); 
+       let res = req._.req.res;
+       res.statusCode = 400;
+       res.send({"value":predResults});
+       conn.disconnect(); 
+       return;          
+    }
+    conn.disconnect(); 
+    
+    
+    _updateRdtPredictionParams (req);
+     
+    _updateRdtPredictionData(req);
+ 
+    _runPredictionRdtGroup(req); 
+   
+ }
+ 
+ function _runPredictionRdtGroup(req) {
+
+
+    var conn = hana.createConnection();
+ 
+    conn.connect(conn_params);
+    var sqlStr = 'SET SCHEMA ' + classicalSchema;  
+    // console.log('sqlStr: ', sqlStr);            
+    var stmt=conn.prepare(sqlStr);
+    var results=stmt.exec();
+    stmt.drop();
+
+    var rdtType = req.data.rdtType;
+
+    console.log('_runPredictionRdtGroup rdtType : ', rdtType);
+
+
+
+    if (rdtType == 2)
+        sqlStr = "SELECT DISTINCT GROUP_ID from  PAL_RDT_PRED_DATA_GRP_TAB_2T";
+    else if (rdtType == 3)
+        sqlStr = "SELECT DISTINCT GROUP_ID from  PAL_RDT_PRED_DATA_GRP_TAB_3T";
+    else if (rdtType == 4)
+        sqlStr = "SELECT DISTINCT GROUP_ID from  PAL_RDT_PRED_DATA_GRP_TAB_4T";
+    else if (rdtType == 5)
+        sqlStr = "SELECT DISTINCT GROUP_ID from  PAL_RDT_PRED_DATA_GRP_TAB_5T";
+    else if (rdtType == 6)
+        sqlStr = "SELECT DISTINCT GROUP_ID from  PAL_RDT_PRED_DATA_GRP_TAB_6T";
+    else if (rdtType == 7)
+        sqlStr = "SELECT DISTINCT GROUP_ID from  PAL_RDT_PRED_DATA_GRP_TAB_7T";
+    else if (rdtType == 8)
+        sqlStr = "SELECT DISTINCT GROUP_ID from  PAL_RDT_PRED_DATA_GRP_TAB_8T";
+    else if (rdtType == 9)
+        sqlStr = "SELECT DISTINCT GROUP_ID from  PAL_RDT_PRED_DATA_GRP_TAB_9T";
+    else if (rdtType == 10)
+        sqlStr = "SELECT DISTINCT GROUP_ID from  PAL_RDT_PRED_DATA_GRP_TAB_10T";
+    else if (rdtType == 11)
+        sqlStr = "SELECT DISTINCT GROUP_ID from  PAL_RDT_PRED_DATA_GRP_TAB_11T";
+    else if (rdtType == 12)
+        sqlStr = "SELECT DISTINCT GROUP_ID from  PAL_RDT_PRED_DATA_GRP_TAB_12T";
+    else
+    {
+        var res = req._.req.res;
+        res.send({"Invalid RdtType":rdtType});
+        return;
+    }
+
+    stmt=conn.prepare(sqlStr);
+    results=stmt.exec();
+    stmt.drop();
+    console.log(results);
+
+    var distinctGroups = results.length;
+    console.log('distinctGroups Count: ', distinctGroups);
+    
+    var predResults = [];			
+    for (var index=0; index<distinctGroups; index++)
+    {     
+        //var groupId = ruleIds[index];
+        var groupId = results[index].GROUP_ID;
+
+        console.log('PredictionRdt Group: ', groupId);
+        //predictionResults = predictionResults + _runRdtPrediction(groupId);
+        let predictionObj = _runRdtPrediction(rdtType, groupId);
+        //value.push({predictionObj});
+        predResults.push(predictionObj);
+
+        if (index == (distinctGroups -1))
+        {
+            //console.log('Prediction Results', predResults);
+            let res = req._.req.res;
+            res.send({"value":predResults});
+            conn.disconnect();
+        }
+    }
+}
+
+ function _runRdtPrediction(rdtType, group) {
+
+    console.log('_runRdtPrediction - group', group);
+
+    var conn = hana.createConnection();
+ 
+
+
+    conn.connect(conn_params);
+    var sqlStr = 'SET SCHEMA ' + classicalSchema;  
+    // console.log('sqlStr: ', sqlStr);            
+    var stmt=conn.prepare(sqlStr);
+    var result=stmt.exec();
+    stmt.drop();
+
+    var groupId = group;
+    
+    sqlStr = "create local temporary column table #PAL_RDT_MODEL_TAB_"+ groupId + " " + 
+                    "(\"ROW_INDEX\" INTEGER,\"TREE_INDEX\" INTEGER,\"MODEL_CONTENT\" NCLOB)"; // MEMORY THRESHOLD 1000)";
+
+
+    stmt=conn.prepare(sqlStr);
+    result=stmt.exec();
+    stmt.drop();
+    //console.log(result);
+
+
+    sqlStr = 'INSERT INTO ' + '#PAL_RDT_MODEL_TAB_'+ groupId + ' SELECT "ROW_INDEX", "TREE_INDEX", "MODEL_CONTENT" FROM PAL_RDT_MODEL_GRP_TAB WHERE PAL_RDT_MODEL_GRP_TAB.GROUP_ID =' + "'" + groupId + "'";
+
+    stmt=conn.prepare(sqlStr);
+    stmt.exec();
+    stmt.drop();
+    var predDataObj = [];	
+
+    if (rdtType == 2)
+    {
+ 
+        sqlStr = "create local temporary column table #PAL_RDT_PREDICTDATA_TAB_" + groupId + " " + 
+                        "(\"ID\" integer,\"ATT1\" double,\"ATT2\" double)";
+        stmt=conn.prepare(sqlStr);
+        result=stmt.exec();
+        stmt.drop();
+        sqlStr = 'INSERT INTO ' + '#PAL_RDT_PREDICTDATA_TAB_' + groupId + ' SELECT "ID", "ATT1", "ATT2" FROM PAL_RDT_PRED_DATA_GRP_TAB_2T WHERE PAL_RDT_PRED_DATA_GRP_TAB_2T.GROUP_ID =' + "'" + groupId + "'";
+        stmt=conn.prepare(sqlStr);
+        result=stmt.exec();
+        stmt.drop();
+
+        sqlStr = 'SELECT "ID", "ATT1", "ATT2" FROM PAL_RDT_PRED_DATA_GRP_TAB_2T WHERE PAL_RDT_PRED_DATA_GRP_TAB_2T.GROUP_ID =' + "'" + groupId + "'";
+        stmt=conn.prepare(sqlStr);
+        result=stmt.exec();
+        stmt.drop();
+        var predData = result;
+        //console.log('predData :', predData);
+
+        for (var i=0; i<predData.length; i++) 
+        {
+            //let groupId =  groupId;
+            let id =  predData[i].ID;
+            let att1 =  predData[i].ATT1;
+            let att2 =  predData[i].ATT2;
+            predDataObj.push({groupId,id,att1,att2});
+        }
+    
+    }
+    else if(rdtType == 3)
+    {
+        sqlStr = "create local temporary column table #PAL_RDT_PREDICTDATA_TAB_" + groupId + " " + 
+                        "(\"ID\" integer,\"ATT1\" double,\"ATT2\" double,\"ATT3\" double)";
+        stmt=conn.prepare(sqlStr);
+        result=stmt.exec();
+        stmt.drop();
+        sqlStr = 'INSERT INTO ' + '#PAL_RDT_PREDICTDATA_TAB_' + groupId + ' SELECT "ID", "ATT1", "ATT2", "ATT3" FROM PAL_RDT_PRED_DATA_GRP_TAB_3T WHERE PAL_RDT_PRED_DATA_GRP_TAB_3T.GROUP_ID =' + "'" + groupId + "'";
+        stmt=conn.prepare(sqlStr);
+        result=stmt.exec();
+        stmt.drop();
+
+        sqlStr = 'SELECT "ID", "ATT1", "ATT2", "ATT3" FROM PAL_RDT_PRED_DATA_GRP_TAB_3T WHERE PAL_RDT_PRED_DATA_GRP_TAB_3T.GROUP_ID =' + "'" + groupId + "'";
+        stmt=conn.prepare(sqlStr);
+        let predData =stmt.exec();
+        stmt.drop();
+        //var predData = result;
+        //console.log('predData :', predData);
+
+        for (let i=0; i<predData.length; i++) 
+        {
+            //let groupId =  groupId;
+            let id =  predData[i].ID;
+            let att1 =  predData[i].ATT1;
+            let att2 =  predData[i].ATT2;
+            let att3 =  predData[i].ATT3;
+            predDataObj.push({groupId,id,att1,att2,att3});
+        }
+    }
+    else if(rdtType == 4)
+    {
+        sqlStr = "create local temporary column table #PAL_RDT_PREDICTDATA_TAB_" + groupId + " " + 
+                        "(\"ID\" integer,\"ATT1\" double,\"ATT2\" double,\"ATT3\" double,\"ATT4\" double)";
+        stmt=conn.prepare(sqlStr);
+        result=stmt.exec();
+        stmt.drop();
+        sqlStr = 'INSERT INTO ' + '#PAL_RDT_PREDICTDATA_TAB_' + groupId + ' SELECT "ID", "ATT1", "ATT2", "ATT3" , "ATT4" FROM PAL_RDT_PRED_DATA_GRP_TAB_4T WHERE PAL_RDT_PRED_DATA_GRP_TAB_4T.GROUP_ID =' + "'" + groupId + "'";
+        stmt=conn.prepare(sqlStr);
+        result=stmt.exec();
+        stmt.drop();
+
+        sqlStr = 'SELECT "ID", "ATT1", "ATT2", "ATT3", "ATT4" FROM PAL_RDT_PRED_DATA_GRP_TAB_4T WHERE PAL_RDT_PRED_DATA_GRP_TAB_4T.GROUP_ID =' + "'" + groupId + "'";
+        stmt=conn.prepare(sqlStr);
+        result=stmt.exec();
+        stmt.drop();
+        let predData = result;
+        //console.log('predData :', predData);
+
+        for (let i=0; i<predData.length; i++) 
+        {
+            //let groupId =  groupId;
+            let id =  predData[i].ID;
+            let att1 =  predData[i].ATT1;
+            let att2 =  predData[i].ATT2;
+            let att3 =  predData[i].ATT3;
+            let att4 =  predData[i].ATT4;
+            predDataObj.push({groupId,id,att1,att2,att3,att4});
+        }
+    }
+    else if(rdtType == 5)
+    {
+         sqlStr = "create local temporary column table #PAL_RDT_PREDICTDATA_TAB_" + groupId + " " + 
+                        "(\"ID\" integer,\"ATT1\" double,\"ATT2\" double,\"ATT3\" double,\"ATT4\" double,\"ATT5\" double)";
+        stmt=conn.prepare(sqlStr);
+        result=stmt.exec();
+        stmt.drop();
+        sqlStr = 'INSERT INTO ' + '#PAL_RDT_PREDICTDATA_TAB_' + groupId + ' SELECT "ID", "ATT1", "ATT2", "ATT3" , "ATT4", "ATT5" FROM PAL_RDT_PRED_DATA_GRP_TAB_5T WHERE PAL_RDT_PRED_DATA_GRP_TAB_5T.GROUP_ID =' + "'" + groupId + "'";
+        stmt=conn.prepare(sqlStr);
+        result=stmt.exec();
+        stmt.drop();
+
+        sqlStr = 'SELECT "ID", "ATT1", "ATT2", "ATT3", "ATT4" , "ATT5" FROM PAL_RDT_PRED_DATA_GRP_TAB_5T WHERE PAL_RDT_PRED_DATA_GRP_TAB_5T.GROUP_ID =' + "'" + groupId + "'";
+        stmt=conn.prepare(sqlStr);
+        result=stmt.exec();
+        stmt.drop();
+        let predData = result;
+        //console.log('predData :', predData);
+
+        for (let i=0; i<predData.length; i++) 
+        {
+            //let groupId =  groupId;
+            let id =  predData[i].ID;
+            let att1 =  predData[i].ATT1;
+            let att2 =  predData[i].ATT2;
+            let att3 =  predData[i].ATT3;
+            let att4 =  predData[i].ATT4;
+            let att5 =  predData[i].ATT5;
+
+            predDataObj.push({groupId,id,att1,att2,att3,att4,att5});
+        }
+    }
+    else if(rdtType == 6)
+    {
+        sqlStr = "create local temporary column table #PAL_RDT_PREDICTDATA_TAB_" + groupId + " " + 
+                        "(\"ID\" integer,\"ATT1\" double,\"ATT2\" double,\"ATT3\" double,\"ATT4\" double,\"ATT5\" double ,\"ATT6\" double)";
+        stmt=conn.prepare(sqlStr);
+        result=stmt.exec();
+        stmt.drop();
+        sqlStr = 'INSERT INTO ' + '#PAL_RDT_PREDICTDATA_TAB_' + groupId + ' SELECT "ID", "ATT1", "ATT2", "ATT3" , "ATT4", "ATT5", "ATT6" FROM PAL_RDT_PRED_DATA_GRP_TAB_6T WHERE PAL_RDT_PRED_DATA_GRP_TAB_6T.GROUP_ID =' + "'" + groupId + "'";
+        stmt=conn.prepare(sqlStr);
+        result=stmt.exec();
+        stmt.drop();
+
+        sqlStr = 'SELECT "ID", "ATT1", "ATT2", "ATT3", "ATT4", "ATT4" , "ATT5" , "ATT6" FROM PAL_RDT_PRED_DATA_GRP_TAB_6T WHERE PAL_RDT_PRED_DATA_GRP_TAB_6T.GROUP_ID =' + "'" + groupId + "'";
+        stmt=conn.prepare(sqlStr);
+        result=stmt.exec();
+        stmt.drop();
+        let predData = result;
+        //console.log('predData :', predData);
+
+        for (let i=0; i<predData.length; i++) 
+        {
+            //let groupId =  groupId;
+            let id =  predData[i].ID;
+            let att1 =  predData[i].ATT1;
+            let att2 =  predData[i].ATT2;
+            let att3 =  predData[i].ATT3;
+            let att4 =  predData[i].ATT4;
+            let att5 =  predData[i].ATT5;
+            let att6 =  predData[i].ATT6;
+
+
+            predDataObj.push({groupId,id,att1,att2,att3,att4,att5,att6});
+        }
+    }
+    else if(rdtType == 7)
+    {
+        sqlStr = "create local temporary column table #PAL_RDT_PREDICTDATA_TAB_" + groupId + " " + 
+                        "(\"ID\" integer,\"ATT1\" double,\"ATT2\" double,\"ATT3\" double,\"ATT4\" double,\"ATT5\" double ,\"ATT6\" double,\"ATT7\" double)";
+        stmt=conn.prepare(sqlStr);
+        result=stmt.exec();
+        stmt.drop();
+        sqlStr = 'INSERT INTO ' + '#PAL_RDT_PREDICTDATA_TAB_' + groupId + ' SELECT "ID", "ATT1", "ATT2", "ATT3" , "ATT4", "ATT5", "ATT6" , "ATT7"FROM PAL_RDT_PRED_DATA_GRP_TAB_7T WHERE PAL_RDT_PRED_DATA_GRP_TAB_7T.GROUP_ID =' + "'" + groupId + "'";
+        stmt=conn.prepare(sqlStr);
+        result=stmt.exec();
+        stmt.drop();
+
+        sqlStr = 'SELECT "ID", "ATT1", "ATT2", "ATT3", "ATT4", "ATT4" , "ATT5" , "ATT6", "ATT7" FROM PAL_RDT_PRED_DATA_GRP_TAB_7T WHERE PAL_RDT_PRED_DATA_GRP_TAB_7T.GROUP_ID =' + "'" + groupId + "'";
+        stmt=conn.prepare(sqlStr);
+        result=stmt.exec();
+        stmt.drop();
+        let predData = result;
+        //console.log('predData :', predData);
+
+        for (let i=0; i<predData.length; i++) 
+        {
+            //let groupId =  groupId;
+            let id =  predData[i].ID;
+            let att1 =  predData[i].ATT1;
+            let att2 =  predData[i].ATT2;
+            let att3 =  predData[i].ATT3;
+            let att4 =  predData[i].ATT4;
+            let att5 =  predData[i].ATT5;
+            let att6 =  predData[i].ATT6;
+            let att7 =  predData[i].ATT7;
+
+
+            predDataObj.push({groupId,id,att1,att2,att3,att4,att5,att6,att7});
+        }
+    }
+    else if(rdtType == 8)
+    {
+        sqlStr = "create local temporary column table #PAL_RDT_PREDICTDATA_TAB_" + groupId + " " + 
+                        "(\"ID\" integer,\"ATT1\" double,\"ATT2\" double,\"ATT3\" double,\"ATT4\" double,\"ATT5\" double ,\"ATT6\" double,\"ATT7\" double,\"ATT8\" double)";
+        stmt=conn.prepare(sqlStr);
+        result=stmt.exec();
+        stmt.drop();
+        sqlStr = 'INSERT INTO ' + '#PAL_RDT_PREDICTDATA_TAB_' + groupId + ' SELECT "ID", "ATT1", "ATT2", "ATT3" , "ATT4", "ATT5", "ATT6" , "ATT7" , "ATT8" FROM PAL_RDT_PRED_DATA_GRP_TAB_8T WHERE PAL_RDT_PRED_DATA_GRP_TAB_8T.GROUP_ID =' + "'" + groupId + "'";
+        stmt=conn.prepare(sqlStr);
+        result=stmt.exec();
+        stmt.drop();
+
+        sqlStr = 'SELECT "ID", "ATT1", "ATT2", "ATT3", "ATT4", "ATT4" , "ATT5" , "ATT6", "ATT7" , "ATT8" FROM PAL_RDT_PRED_DATA_GRP_TAB_8T WHERE PAL_RDT_PRED_DATA_GRP_TAB_8T.GROUP_ID =' + "'" + groupId + "'";
+        stmt=conn.prepare(sqlStr);
+        result=stmt.exec();
+        stmt.drop();
+        let predData = result;
+        //console.log('predData :', predData);
+
+        for (let i=0; i<predData.length; i++) 
+        {
+            //let groupId =  groupId;
+            let id =  predData[i].ID;
+            let att1 =  predData[i].ATT1;
+            let att2 =  predData[i].ATT2;
+            let att3 =  predData[i].ATT3;
+            let att4 =  predData[i].ATT4;
+            let att5 =  predData[i].ATT5;
+            let att6 =  predData[i].ATT6;
+            let att7 =  predData[i].ATT7;
+            let att8 =  predData[i].ATT8;
+
+
+            predDataObj.push({groupId,id,att1,att2,att3,att4,att5,att6,att7,att8});
+        }
+    }
+    else if(rdtType == 9)
+    {
+        sqlStr = "create local temporary column table #PAL_RDT_PREDICTDATA_TAB_" + groupId + " " + 
+                        "(\"ID\" integer,\"ATT1\" double,\"ATT2\" double,\"ATT3\" double,\"ATT4\" double,\"ATT5\" double ,\"ATT6\" double,\"ATT7\" double,\"ATT8\" double,\"ATT9\" double)";
+        stmt=conn.prepare(sqlStr);
+        result=stmt.exec();
+        stmt.drop();
+        sqlStr = 'INSERT INTO ' + '#PAL_RDT_PREDICTDATA_TAB_' + groupId + ' SELECT "ID", "ATT1", "ATT2", "ATT3" , "ATT4", "ATT5", "ATT6" , "ATT7" , "ATT8" , "ATT9" FROM PAL_RDT_PRED_DATA_GRP_TAB_9T WHERE PAL_RDT_PRED_DATA_GRP_TAB_9T.GROUP_ID =' + "'" + groupId + "'";
+        stmt=conn.prepare(sqlStr);
+        result=stmt.exec();
+        stmt.drop();
+
+        sqlStr = 'SELECT "ID", "ATT1", "ATT2", "ATT3", "ATT4", "ATT4" , "ATT5" , "ATT6", "ATT7" , "ATT8" , "ATT9" FROM PAL_RDT_PRED_DATA_GRP_TAB_9T WHERE PAL_RDT_PRED_DATA_GRP_TAB_9T.GROUP_ID =' + "'" + groupId + "'";
+        stmt=conn.prepare(sqlStr);
+        result=stmt.exec();
+        stmt.drop();
+        let predData = result;
+        //console.log('predData :', predData);
+
+        for (let i=0; i<predData.length; i++) 
+        {
+            //let groupId =  groupId;
+            let id =  predData[i].ID;
+            let att1 =  predData[i].ATT1;
+            let att2 =  predData[i].ATT2;
+            let att3 =  predData[i].ATT3;
+            let att4 =  predData[i].ATT4;
+            let att5 =  predData[i].ATT5;
+            let att6 =  predData[i].ATT6;
+            let att7 =  predData[i].ATT7;
+            let att8 =  predData[i].ATT8;
+            let att9 =  predData[i].ATT9;
+
+
+            predDataObj.push({groupId,id,att1,att2,att3,att4,att5,att6,att7,att8,att9});
+        }
+    }
+    else if(rdtType == 10)
+    {
+        sqlStr = "create local temporary column table #PAL_RDT_PREDICTDATA_TAB_" + groupId + " " + 
+                        "(\"ID\" integer,\"ATT1\" double,\"ATT2\" double,\"ATT3\" double,\"ATT4\" double,\"ATT5\" double ,\"ATT6\" double,\"ATT7\" double,\"ATT8\" double,\"ATT9\" double,\"ATT10\" double)";
+        stmt=conn.prepare(sqlStr);
+        result=stmt.exec();
+        stmt.drop();
+        sqlStr = 'INSERT INTO ' + '#PAL_RDT_PREDICTDATA_TAB_' + groupId + ' SELECT "ID", "ATT1", "ATT2", "ATT3" , "ATT4", "ATT5", "ATT6" , "ATT7" , "ATT8" , "ATT9" , "ATT10" FROM PAL_RDT_PRED_DATA_GRP_TAB_10T WHERE PAL_RDT_PRED_DATA_GRP_TAB_10T.GROUP_ID =' + "'" + groupId + "'";
+        stmt=conn.prepare(sqlStr);
+        result=stmt.exec();
+        stmt.drop();
+
+        sqlStr = 'SELECT "ID", "ATT1", "ATT2", "ATT3", "ATT4", "ATT4" , "ATT5" , "ATT6", "ATT7" , "ATT8" , "ATT9", "ATT10" FROM PAL_RDT_PRED_DATA_GRP_TAB_10T WHERE PAL_RDT_PRED_DATA_GRP_TAB_10T.GROUP_ID =' + "'" + groupId + "'";
+        stmt=conn.prepare(sqlStr);
+        result=stmt.exec();
+        stmt.drop();
+        let predData = result;
+        //console.log('predData :', predData);
+
+        for (let i=0; i<predData.length; i++) 
+        {
+            //let groupId =  groupId;
+            let id =  predData[i].ID;
+            let att1 =  predData[i].ATT1;
+            let att2 =  predData[i].ATT2;
+            let att3 =  predData[i].ATT3;
+            let att4 =  predData[i].ATT4;
+            let att5 =  predData[i].ATT5;
+            let att6 =  predData[i].ATT6;
+            let att7 =  predData[i].ATT7;
+            let att8 =  predData[i].ATT8;
+            let att9 =  predData[i].ATT9;
+            let att10 =  predData[i].ATT10;
+
+
+            predDataObj.push({groupId,id,att1,att2,att3,att4,att5,att6,att7,att8,att9,att10});
+        }
+    }
+    else if(rdtType == 11)
+    {
+        sqlStr = "create local temporary column table #PAL_RDT_PREDICTDATA_TAB_" + groupId + " " + 
+                        "(\"ID\" integer,\"ATT1\" double,\"ATT2\" double,\"ATT3\" double,\"ATT4\" double,\"ATT5\" double ,\"ATT6\" double,\"ATT7\" double,\"ATT8\" double,\"ATT9\" double,\"ATT10\" double,\"ATT11\" double)";
+        stmt=conn.prepare(sqlStr);
+        result=stmt.exec();
+        stmt.drop();
+        sqlStr = 'INSERT INTO ' + '#PAL_RDT_PREDICTDATA_TAB_' + groupId + ' SELECT "ID", "ATT1", "ATT2", "ATT3" , "ATT4", "ATT5", "ATT6" , "ATT7" , "ATT8" , "ATT9" , "ATT10", "ATT11" FROM PAL_RDT_PRED_DATA_GRP_TAB_11T WHERE PAL_RDT_PRED_DATA_GRP_TAB_11T.GROUP_ID =' + "'" + groupId + "'";
+        stmt=conn.prepare(sqlStr);
+        result=stmt.exec();
+        stmt.drop();
+
+        sqlStr = 'SELECT "ID", "ATT1", "ATT2", "ATT3", "ATT4", "ATT4" , "ATT5" , "ATT6", "ATT7" , "ATT8" , "ATT9", "ATT10", "ATT11" FROM PAL_RDT_PRED_DATA_GRP_TAB_11T WHERE PAL_RDT_PRED_DATA_GRP_TAB_11T.GROUP_ID =' + "'" + groupId + "'";
+        stmt=conn.prepare(sqlStr);
+        result=stmt.exec();
+        stmt.drop();
+        let predData = result;
+        //console.log('predData :', predData);
+
+        for (let i=0; i<predData.length; i++) 
+        {
+            //let groupId =  groupId;
+            let id =  predData[i].ID;
+            let att1 =  predData[i].ATT1;
+            let att2 =  predData[i].ATT2;
+            let att3 =  predData[i].ATT3;
+            let att4 =  predData[i].ATT4;
+            let att5 =  predData[i].ATT5;
+            let att6 =  predData[i].ATT6;
+            let att7 =  predData[i].ATT7;
+            let att8 =  predData[i].ATT8;
+            let att9 =  predData[i].ATT9;
+            let att10 =  predData[i].ATT10;
+            let att11 =  predData[i].ATT11;
+
+
+            predDataObj.push({groupId,id,att1,att2,att3,att4,att5,att6,att7,att8,att9,att10,att11});
+        }
+    }
+    else if(rdtType == 12)
+    {
+        sqlStr = "create local temporary column table #PAL_RDT_PREDICTDATA_TAB_" + groupId + " " + 
+                        "(\"ID\" integer,\"ATT1\" double,\"ATT2\" double,\"ATT3\" double,\"ATT4\" double,\"ATT5\" double ,\"ATT6\" double,\"ATT7\" double,\"ATT8\" double,\"ATT9\" double,\"ATT10\" double,\"ATT11\" double,\"ATT12\" double)";
+        stmt=conn.prepare(sqlStr);
+        result=stmt.exec();
+        stmt.drop();
+        sqlStr = 'INSERT INTO ' + '#PAL_RDT_PREDICTDATA_TAB_' + groupId + ' SELECT "ID", "ATT1", "ATT2", "ATT3" , "ATT4", "ATT5", "ATT6" , "ATT7" , "ATT8" , "ATT9" , "ATT10", "ATT11", "ATT12" FROM PAL_RDT_PRED_DATA_GRP_TAB_12T WHERE PAL_RDT_PRED_DATA_GRP_TAB_12T.GROUP_ID =' + "'" + groupId + "'";
+        stmt=conn.prepare(sqlStr);
+        result=stmt.exec();
+        stmt.drop();
+
+        sqlStr = 'SELECT "ID", "ATT1", "ATT2", "ATT3", "ATT4", "ATT4" , "ATT5" , "ATT6", "ATT7" , "ATT8" , "ATT9", "ATT10", "ATT11", "ATT12" FROM PAL_RDT_PRED_DATA_GRP_TAB_12T WHERE PAL_RDT_PRED_DATA_GRP_TAB_12T.GROUP_ID =' + "'" + groupId + "'";
+        stmt=conn.prepare(sqlStr);
+        result=stmt.exec();
+        stmt.drop();
+        let predData = result;
+        //console.log('predData :', predData);
+
+        for (let i=0; i<predData.length; i++) 
+        {
+            //let groupId =  groupId;
+            let id =  predData[i].ID;
+            let att1 =  predData[i].ATT1;
+            let att2 =  predData[i].ATT2;
+            let att3 =  predData[i].ATT3;
+            let att4 =  predData[i].ATT4;
+            let att5 =  predData[i].ATT5;
+            let att6 =  predData[i].ATT6;
+            let att7 =  predData[i].ATT7;
+            let att8 =  predData[i].ATT8;
+            let att9 =  predData[i].ATT9;
+            let att10 =  predData[i].ATT10;
+            let att11 =  predData[i].ATT11;
+            let att12 =  predData[i].ATT12;
+
+            predDataObj.push({groupId,id,att1,att2,att3,att4,att5,att6,att7,att8,att9,att10,att11,att12});
+        }
+    }
+    else
+    {
+        console.log('_runRdtPrediction Invalid rdtType ', rdtType);
+        return;
+    }
+    
+    //console.log(result);
+
+    sqlStr = "create local temporary column table #PAL_RDT_PARAMETER_TAB_" + groupId + " " +
+                        "(\"PARAM_NAME\" varchar(100),\"INT_VALUE\" integer,\"double_VALUE\" double,\"STRING_VALUE\" varchar(100))";
+    stmt=conn.prepare(sqlStr);
+    result=stmt.exec();
+    stmt.drop();
+    //console.log(result);
+
+
+    sqlStr = 'INSERT INTO ' + '#PAL_RDT_PARAMETER_TAB_' + groupId + ' SELECT "PARAM_NAME", "INT_VALUE", "DOUBLE_VALUE", "STRING_VALUE" FROM PAL_RDT_PREDICT_PARAMETER_GRP_TAB WHERE PAL_RDT_PREDICT_PARAMETER_GRP_TAB.GROUP_ID =' + "'" +  groupId + "'";
+
+    stmt=conn.prepare(sqlStr);
+    result=stmt.exec();
+    stmt.drop();
+
+
+    sqlStr = ' SELECT "PARAM_NAME", "INT_VALUE", "DOUBLE_VALUE", "STRING_VALUE" FROM PAL_RDT_PREDICT_PARAMETER_GRP_TAB WHERE PAL_RDT_PREDICT_PARAMETER_GRP_TAB.GROUP_ID =' + "'" +  groupId + "'";
+    stmt=conn.prepare(sqlStr);
+    result=stmt.exec();
+    stmt.drop();
+    var predParams = result;
+    //console.log('predParams :', predParams);
+
+    var predParamsObj = [];	
+    for (let i=0; i<predParams.length; i++) 
+    {
+        //let groupId =  groupId;
+        let paramName =  predParams[i].PARAM_NAME;
+        let intVal =  predParams[i].INT_VALUE;
+        let doubleVal =  predParams[i].DOUBLE_VALUE;
+        let strVal =  predParams[i].STRING_VALUE;
+
+        predParamsObj.push({groupId,paramName,intVal,doubleVal,strVal});
+    }
+
+
+    sqlStr = "call _SYS_AFL.PAL_RANDOM_DECISION_TREES_PREDICT (" + "#PAL_RDT_PREDICTDATA_TAB_" + groupId + "," + "#PAL_RDT_MODEL_TAB_" + groupId + "," + "#PAL_RDT_PARAMETER_TAB_" + groupId + "," + "?)";
+    console.log('_runRdtPrediction rdtType ', rdtType);
+
+    console.log('_runRdtPrediction sqlStr ', sqlStr);
+
+    stmt=conn.prepare(sqlStr);
+    let predictionResults=stmt.exec();
+    stmt.drop();
+    //console.log('Prediction Results ', predictionResults);
+
+    // --------------- BEGIN --------------------
+
+    
+    var resultsObj = [];	
+    for (let i=0; i<predictionResults.length; i++) 
+    {
+        let id = predictionResults[i].ID;
+        let score =  predictionResults[i].SCORE;
+        let confidence = predictionResults[i].CONFIDENCE;
+    
+        resultsObj.push({groupId,id,score,confidence});
+    }	
+
+    var createtAtObj = new Date();
+    //let idObj = groupId;
+    let idObj = uuidv1();
+    
+    var cqnQuery = {INSERT:{ into: { ref: ['CP_PALRDTPREDICTIONS'] }, entries: [
+         {rdtID: idObj, createdAt : createtAtObj.toISOString(), groupId : groupId, predictionParameters:predParamsObj, rdtType : rdtType, predictionData : predDataObj, predictedResults : resultsObj}
+         ]}}
+
+    cds.run(cqnQuery);
+
+    conn.disconnect();
+
+    conn = hana.createConnection();
+ 
+    conn.connect(conn_params_container);
+
+    sqlStr = 'SET SCHEMA ' + containerSchema; 
+    // console.log('sqlStr: ', sqlStr);            
+    stmt=conn.prepare(sqlStr);
+    result=stmt.exec();
+    stmt.drop();
+
+    sqlStr = 'SELECT DISTINCT ' + '"' + vcConfigTimePeriod + '"' + ' from  V_FUTURE_DEP_TS WHERE  "GroupID" = ' + "'" + groupId + "'" + ' ORDER BY ' + '"' + vcConfigTimePeriod + '"' + ' ASC';
+    console.log("V_FUTURE_DEP_TS Distinct Periods sqlStr", sqlStr)
+    stmt=conn.prepare(sqlStr);
+    var distPeriods=stmt.exec();
+    stmt.drop();
+    console.log("Time Periods for Group :", groupId, " Results: ", distPeriods);
+    var predictedTime = new Date().toISOString();
+    var trimmedPeriod = vcConfigTimePeriod.replace(/^(["]*)/g, '');
+    console.log('trimmedPeriod : ', trimmedPeriod, 'vcConfigTimePeriod :', vcConfigTimePeriod);
+
+    for (var index=0; index<distPeriods.length; index++)
+    {     
+        let predictedVal = resultsObj[index].score;
+        predictedVal =  (+predictedVal).toFixed(2);
+        let periodId = distPeriods[index][trimmedPeriod];
+        sqlStr = 'UPDATE V_FUTURE_DEP_TS SET "Predicted" = ' + "'" + predictedVal + "'" + "," +
+                 '"PredictedTime" = ' + "'" + predictedTime + "'" + "," +
+                 '"PredictedStatus" = ' + "'" + 'SUCCESS' + "'"+ 
+                 ' WHERE "GroupID" = ' + "'" + groupId + "'" + ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
+        console.log("V_FUTURE_DEP_TS Predicted Value sql update sqlStr", sqlStr)
+
+        stmt=conn.prepare(sqlStr);
+        stmt.exec();
+        stmt.drop();
+    }
+    conn.disconnect();
+
+ 
+    let returnObj = [];	
+    let createdAt = createtAtObj;
+    let rdtID = idObj; 
+    let predictionParameters = predParamsObj;
+    let predictionData = predDataObj;
+    let predictedResults = resultsObj;
+    returnObj.push({rdtID, createdAt,predictionParameters,rdtType,predictionData,predictedResults});
+
+    return returnObj[0];
+}
+
 function _genTimeSeriesData(req)
 {
     console.log('_genTimeSeriesData: ', req.data);   
@@ -70,7 +758,8 @@ function _getParamsObjForPredictions(vcRulesList, index, modelType, numChars)
    // {
         //console.log('i = ',i, 'modelType :', modelType );
         if ( (vcRulesList[index].dimensions == numChars) &&
-             (modelType == 'HGBT'))
+             ((modelType == 'HGBT') ||
+               (modelType == 'RDT')) )
         {
             paramsObj.push({"groupId":vcRulesList[index].GroupID, "paramName":"THREAD_RATIO", "intVal":null,"doubleVal": 0.5, "strVal" : null});
             paramsObj.push({"groupId":vcRulesList[index].GroupID,"paramName":"VERBOSE", "intVal":0,"doubleVal": null, "strVal" : null});
@@ -284,6 +973,24 @@ async function _postPredictionRequest(url,paramsObj,numChars,dataObj,modelType,v
 
         };
     }
+    else if (modelType == 'RDT')
+    {
+        options = {
+            'method': 'POST',
+            'url': url,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Authorization' : auth
+        },
+        body: JSON.stringify({
+            "groupId" : vcRuleListObj[0].GroupID,
+            "predictionParameters": paramsObj,
+            "rdtType": numChars,
+            "predictionData": dataObj
+        })
+
+        };
+    }
     else if (modelType == 'MLR')
     {
         options = {
@@ -344,6 +1051,22 @@ async function _postPredictionRequest(url,paramsObj,numChars,dataObj,modelType,v
                 //console.log('hgbt predictionsID ', responseData.value[0].hgbtID);
                 let cqnQuery = {INSERT:{ into: { ref: ['CP_PALGENPREDICTIONS'] }, entries: [
                     {   predictionsID: responseData.value[0].hgbtID, 
+                        createdAt : responseData.value[0].createdAt, 
+                        modelType : modelType,
+                        vcRulesList : vcRuleListObj
+                    }
+                ]}}
+//                console.log('cqnQuery ', cqnQuery);
+
+                cds.run(cqnQuery);
+
+            }
+            else if (modelType == 'RDT')
+            {
+
+                //console.log('rdt predictionsID ', responseData.value[0].rdtID);
+                let cqnQuery = {INSERT:{ into: { ref: ['CP_PALGENPREDICTIONS'] }, entries: [
+                    {   predictionsID: responseData.value[0].rdtID, 
                         createdAt : responseData.value[0].createdAt, 
                         modelType : modelType,
                         vcRulesList : vcRuleListObj
@@ -587,6 +1310,8 @@ async function _generatePredictions(req) {
         console.log('_generatePredictions: protocol', req.headers['x-forwarded-proto'], 'hostName :', req.headers.host);
         if ( modelType == 'HGBT')
             url =  baseUrl + '/pal/hgbtPredictionsV1';
+        else if (modelType == 'RDT')
+            url = baseUrl + '/pal/rdtPredictions';
         else if (modelType == 'MLR')
             url = baseUrl + '/pal/mlrPredictions';
         else if (modelType == 'VARMA')
@@ -5285,66 +6010,6 @@ function _runVarmaPrediction(varmaType, group) {
     return returnObj[0];
 }
 
-/*
-function _getRuleListTypeForGenModels(vcRulesList, modelType, numChars)
-{
-
-    var ruleListObj = [];
-    for (var i = 0; i < vcRulesList.length; i++)
-    {
-        if (vcRulesList[i].dimensions == numChars )
-        {
-     
-            ruleListObj.push({"Location":vcRulesList[i].Location, 
-                                "Product":vcRulesList[i].Product, 
-                                "GroupID":vcRulesList[i].GroupID, 
-                                "dimensions" : numChars});
-        }
-    }
-    //console.log('_getRuleListTypeForGenModels ruleListObj ',ruleListObj);
-    //console.log('_getRuleListTypeForGenModels  ruleListObj[0]',ruleListObj[0]);
-    return ruleListObj;
-
-}
-
-function _getParamsObjForGenModels(vcRulesList, modelType, numChars)
-{
-    var paramsObj = [];
-    for (var i = 0; i < vcRulesList.length; i++)
-    {
-        //console.log('i = ',i, 'modelType :', modelType );
-        if ( (vcRulesList[i].dimensions == numChars) &&
-             (modelType == 'HGBT'))
-        {
-            paramsObj.push({"groupId":vcRulesList[i].GroupID, "paramName":"SPLIT_METHOD", "intVal":null,"doubleVal": null, "strVal" : "exact"});
-            paramsObj.push({"groupId":vcRulesList[i].GroupID,"paramName":"MAX_DEPTH", "intVal":6,"doubleVal": null, "strVal" : null});
-            paramsObj.push({"groupId":vcRulesList[i].GroupID,"paramName":"RESAMPLING_METHOD", "intVal":null,"doubleVal": null, "strVal" : "cv"});
-            paramsObj.push({"groupId":vcRulesList[i].GroupID,"paramName":"FOLD_NUM", "intVal":5,"doubleVal": null, "strVal" : null});
-            paramsObj.push({"groupId":vcRulesList[i].GroupID,"paramName":"PARAM_SEARCH_STRATEGY", "intVal":null,"doubleVal": null, "strVal" : "grid"});
-            paramsObj.push({"groupId":vcRulesList[i].GroupID,"paramName":"EVALUATION_METRIC", "intVal":null,"doubleVal": null, "strVal" : "RMSE"});
-            paramsObj.push({"groupId":vcRulesList[i].GroupID,"paramName":"REF_METRIC", "intVal":null,"doubleVal": null, "strVal" : "MAE"});
-            paramsObj.push({"groupId":vcRulesList[i].GroupID,"paramName":"SEED", "intVal":1,"doubleVal": null, "strVal" : null});
-            paramsObj.push({"groupId":vcRulesList[i].GroupID,"paramName":"ETA_RANGE", "intVal":null,"doubleVal": null, "strVal" : "[0.1, 0.2, 1.0]"});
-            paramsObj.push({"groupId":vcRulesList[i].GroupID,"paramName":"GAMMA_RANGE", "intVal":null,"doubleVal": null, "strVal" : "[0.0, 0.2, 1.0]"});
-            paramsObj.push({"groupId":vcRulesList[i].GroupID,"paramName":"ITER_NUM_RANGE", "intVal":null,"doubleVal": null, "strVal" : "[10, 10, 20]"});
-        }
-        else if ( (vcRulesList[i].dimensions == numChars) && 
-                  (modelType == 'MLR'))
-        {
-            paramsObj.push({"groupId":vcRulesList[i].GroupID,"paramName":"PMML_EXPORT","intVal":2,"doubleVal": null,"strVal":null});
-            paramsObj.push({"groupId":vcRulesList[i].GroupID,"paramName":"ALG","intVal":6,"doubleVal": null,"strVal":null});
-            paramsObj.push({"groupId":vcRulesList[i].GroupID,"paramName":"ENET_LAMBDA","intVal":null,"doubleVal":0.003194,"strVal":null});
-            paramsObj.push({"groupId":vcRulesList[i].GroupID,"paramName":"ENET_ALPHA","intVal":null,"doubleVal":0.95,"strVal":null});
-            paramsObj.push({"groupId":vcRulesList[i].GroupID,"paramName":"HAS_ID","intVal":1,"doubleVal":null,"strVal":null});
-        }
-    }
-    //console.log('_getParamsObjForGenModels paramsObj',paramsObj);
-    //console.log('_getParamsObjForGenModels paramsObj[0]',paramsObj[0]);
-
-    return paramsObj;
-
-}
-*/
 function _getRuleListTypeForGenModels(vcRulesList, modelType, numChars)
 {
     var conn = hana.createConnection();
@@ -5735,6 +6400,19 @@ async function _generateRegModels (req) {
             _postRegressionRequest(url,paramsObj,2,dataObj,modelType,ruleList);
         }
 
+        modelType = 'RDT';
+
+        ruleList = _getRuleListTypeForGenModels(vcRulesList, modelType, 2);
+        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+        {
+            //let paramsObj =  _getParamsObjForGenModels(vcRulesList, modelType, 2);
+            let paramsObj =  _getParamsObjForGenModels(ruleList, modelType, 2);
+
+            let dataObj = _getDataObjForGenModels(ruleList, modelType, 2);
+            url =  baseUrl + '/pal/rdtRegressions';
+            _postRegressionRequest(url,paramsObj,2,dataObj,modelType,ruleList);
+        }
+
         modelType = 'VARMA';
 
         ruleList = _getRuleListTypeForGenModels(vcRulesList, modelType, 2);
@@ -5776,6 +6454,19 @@ async function _generateRegModels (req) {
             _postRegressionRequest(url,paramsObj,3,dataObj,modelType,ruleList);
         }
 
+        modelType = 'RDT';
+        
+        ruleList = _getRuleListTypeForGenModels(vcRulesList, modelType, 3);
+        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+        {
+            //let paramsObj =  _getParamsObjForGenModels(vcRulesList, modelType, 3);
+            let paramsObj =  _getParamsObjForGenModels(ruleList, modelType, 3);
+
+            let dataObj = _getDataObjForGenModels(ruleList, modelType, 3);
+            url =  baseUrl + '/pal/rdtRegressions';
+            _postRegressionRequest(url,paramsObj,3,dataObj,modelType,ruleList);
+        }
+
         modelType = 'VARMA';
         
         ruleList = _getRuleListTypeForGenModels(vcRulesList, modelType, 3);
@@ -5813,6 +6504,17 @@ async function _generateRegModels (req) {
             url =  baseUrl + '/pal/hgbtRegressionsV1';
             _postRegressionRequest(url,paramsObj,4,dataObj,modelType,ruleList);
         }
+        modelType = 'RDT';
+        ruleList = _getRuleListTypeForGenModels(vcRulesList, modelType, 4);
+        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+        {
+            //let paramsObj =  _getParamsObjForGenModels(vcRulesList, modelType, 4);
+            let paramsObj =  _getParamsObjForGenModels(ruleList, modelType, 4);
+
+            let dataObj = _getDataObjForGenModels(ruleList, modelType, 4);
+            url =  baseUrl + '/pal/rdtRegressions';
+            _postRegressionRequest(url,paramsObj,4,dataObj,modelType,ruleList);
+        }
         modelType = 'VARMA';
         ruleList = _getRuleListTypeForGenModels(vcRulesList, modelType, 4);
         if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
@@ -5847,6 +6549,17 @@ async function _generateRegModels (req) {
 
             let dataObj = _getDataObjForGenModels(ruleList, modelType, 5);
             url =  baseUrl + '/pal/hgbtRegressionsV1';
+            _postRegressionRequest(url,paramsObj,5,dataObj,modelType,ruleList);
+        }
+        modelType = 'RDT';
+        ruleList = _getRuleListTypeForGenModels(vcRulesList, modelType, 5);
+        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+        {
+           // let paramsObj =  _getParamsObjForGenModels(vcRulesList, modelType, 5);
+            let paramsObj =  _getParamsObjForGenModels(ruleList, modelType, 5);
+
+            let dataObj = _getDataObjForGenModels(ruleList, modelType, 5);
+            url =  baseUrl + '/pal/rdtRegressions';
             _postRegressionRequest(url,paramsObj,5,dataObj,modelType,ruleList);
         }
         modelType = 'VARMA';
@@ -5887,6 +6600,18 @@ async function _generateRegModels (req) {
             _postRegressionRequest(url,paramsObj,6,dataObj,modelType,ruleList);
 
         }
+        modelType = 'RDT';
+        ruleList = _getRuleListTypeForGenModels(vcRulesList, modelType, 6);
+        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+        {
+         //   let paramsObj =  _getParamsObjForGenModels(vcRulesList, modelType, 6);
+            let paramsObj =  _getParamsObjForGenModels(ruleList, modelType, 6);
+
+            let dataObj = _getDataObjForGenModels(ruleList, modelType, 6);
+            url =  baseUrl + '/pal/rdtRegressions';
+            _postRegressionRequest(url,paramsObj,6,dataObj,modelType,ruleList);
+
+        }
         modelType = 'VARMA';
         ruleList = _getRuleListTypeForGenModels(vcRulesList, modelType, 6);
         if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
@@ -5924,6 +6649,17 @@ async function _generateRegModels (req) {
             url =  baseUrl + '/pal/hgbtRegressionsV1';
             _postRegressionRequest(url,paramsObj,7,dataObj,modelType,ruleList);
         }
+        modelType = 'RDT';
+        ruleList = _getRuleListTypeForGenModels(vcRulesList, modelType, 7);
+        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+        {
+         //   let paramsObj =  _getParamsObjForGenModels(vcRulesList, modelType, 7);
+            let paramsObj =  _getParamsObjForGenModels(ruleList, modelType, 7);
+
+            let dataObj = _getDataObjForGenModels(ruleList, modelType, 7);
+            url =  baseUrl + '/pal/rdtRegressions';
+            _postRegressionRequest(url,paramsObj,7,dataObj,modelType,ruleList);
+        }
         modelType = 'VARMA';
         ruleList = _getRuleListTypeForGenModels(vcRulesList, modelType, 7);
         if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
@@ -5958,6 +6694,17 @@ async function _generateRegModels (req) {
 
             let dataObj = _getDataObjForGenModels(ruleList, modelType, 8);
             url =  baseUrl + '/pal/hgbtRegressionsV1';
+            _postRegressionRequest(url,paramsObj,8,dataObj,modelType,ruleList);
+        }
+        modelType = 'RDT';
+        ruleList = _getRuleListTypeForGenModels(vcRulesList, modelType, 8);
+        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+        {
+        //    let paramsObj =  _getParamsObjForGenModels(vcRulesList, modelType, 8);
+            let paramsObj =  _getParamsObjForGenModels(ruleList, modelType, 8);
+
+            let dataObj = _getDataObjForGenModels(ruleList, modelType, 8);
+            url =  baseUrl + '/pal/rdtRegressions';
             _postRegressionRequest(url,paramsObj,8,dataObj,modelType,ruleList);
         }
         modelType = 'VARMA';
@@ -5997,6 +6744,17 @@ async function _generateRegModels (req) {
             url =  baseUrl + '/pal/hgbtRegressionsV1';
             _postRegressionRequest(url,paramsObj,9,dataObj,modelType,ruleList);
         }
+        modelType = 'RDT';
+        ruleList = _getRuleListTypeForGenModels(vcRulesList, modelType, 9);
+        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+        {
+            //let paramsObj =  _getParamsObjForGenModels(vcRulesList, modelType, 9);
+            let paramsObj =  _getParamsObjForGenModels(ruleList, modelType, 9);
+
+            let dataObj = _getDataObjForGenModels(ruleList, modelType, 9);
+            url =  baseUrl + '/pal/rdtRegressions';
+            _postRegressionRequest(url,paramsObj,9,dataObj,modelType,ruleList);
+        }
         modelType = 'VARMA';
         ruleList = _getRuleListTypeForGenModels(vcRulesList, modelType, 9);
         if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
@@ -6031,6 +6789,17 @@ async function _generateRegModels (req) {
 
             let dataObj = _getDataObjForGenModels(ruleList, modelType, 10);
             url =  baseUrl + '/pal/hgbtRegressionsV1';
+            _postRegressionRequest(url,paramsObj,10,dataObj,modelType,ruleList);
+        }
+        modelType = 'RDT';
+        ruleList = _getRuleListTypeForGenModels(vcRulesList, modelType, 10);
+        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+        {
+         //   let paramsObj =  _getParamsObjForGenModels(vcRulesList, modelType, 10);
+            let paramsObj =  _getParamsObjForGenModels(ruleList, modelType, 10);
+
+            let dataObj = _getDataObjForGenModels(ruleList, modelType, 10);
+            url =  baseUrl + '/pal/rdtRegressions';
             _postRegressionRequest(url,paramsObj,10,dataObj,modelType,ruleList);
         }
         modelType = 'VARMA';
@@ -6069,6 +6838,17 @@ async function _generateRegModels (req) {
             url =  baseUrl + '/pal/hgbtRegressionsV1';
             _postRegressionRequest(url,paramsObj,11,dataObj,modelType,ruleList);
         }
+        modelType = 'RDT';
+        ruleList = _getRuleListTypeForGenModels(vcRulesList, modelType, 11);
+        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+        {
+         //   let paramsObj =  _getParamsObjForGenModels(vcRulesList, modelType, 11);
+            let paramsObj =  _getParamsObjForGenModels(ruleList, modelType, 11);
+
+            let dataObj = _getDataObjForGenModels(ruleList, modelType, 11);
+            url =  baseUrl + '/pal/rdtRegressions';
+            _postRegressionRequest(url,paramsObj,11,dataObj,modelType,ruleList);
+        }
         modelType = 'VARMA';
         ruleList = _getRuleListTypeForGenModels(vcRulesList, modelType, 11);
         if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
@@ -6103,6 +6883,17 @@ async function _generateRegModels (req) {
 
             let dataObj = _getDataObjForGenModels(ruleList, modelType, 12);
             url =  baseUrl + '/pal/hgbtRegressionsV1';
+            _postRegressionRequest(url,paramsObj,12,dataObj,modelType,ruleList);
+        }
+        modelType = 'RDT';
+        ruleList = _getRuleListTypeForGenModels(vcRulesList, modelType, 12);
+        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+        {
+         //   let paramsObj =  _getParamsObjForGenModels(vcRulesList, modelType, 12);
+            let paramsObj =  _getParamsObjForGenModels(ruleList, modelType, 12);
+
+            let dataObj = _getDataObjForGenModels(ruleList, modelType, 12);
+            url =  baseUrl + '/pal/rdtRegressions';
             _postRegressionRequest(url,paramsObj,12,dataObj,modelType,ruleList);
         }
         modelType = 'VARMA';
@@ -6164,7 +6955,6 @@ function _getDataObjForGenModels(vcRulesList, modelType, numChars) {
     stmt.drop();
     var dataObj = [];	
 
-    //for (var i in vcRulesList)
     for (var i = 0; i < vcRulesList.length; i++)
     {
         
@@ -6343,6 +7133,24 @@ async function _postRegressionRequest(url,paramsObj,numChars,dataObj,modelType,v
 
         };
     }
+    else if(modelType == 'RDT')
+    {
+
+        options = {
+            'method': 'POST',
+            'url': url,
+            'headers': {
+                'Authorization' : auth,
+                'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            "regressionParameters": paramsObj,
+            "rdtType": numChars,
+            "regressionData": dataObj
+        })
+
+        };
+    }
     else if (modelType == 'MLR')
     {
         options = {
@@ -6394,10 +7202,7 @@ async function _postRegressionRequest(url,paramsObj,numChars,dataObj,modelType,v
             //var cqnQuery;
             if (modelType == 'HGBT')
             {
-              //  console.log('hgbt responseData ', responseData);
-
                 console.log('hgbt regressionsID ', responseData.value[0].hgbtID);
-             //   let cqnQuery = {INSERT:{ into: { ref: ['PalGenRegressionModels'] }, entries: [
                 let cqnQuery = {INSERT:{ into: { ref: ['CP_PALGENREGRESSIONMODELS'] }, entries: [
 
                     {   regressionsID: responseData.value[0].hgbtID, 
@@ -6410,6 +7215,22 @@ async function _postRegressionRequest(url,paramsObj,numChars,dataObj,modelType,v
 
              cds.run(cqnQuery);
             }
+            else if (modelType == 'RDT')
+            {
+  
+                  console.log('rdt regressionsID ', responseData.value[0].rdtID);
+                  let cqnQuery = {INSERT:{ into: { ref: ['CP_PALGENREGRESSIONMODELS'] }, entries: [
+  
+                      {   regressionsID: responseData.value[0].rdtID, 
+                          createdAt : responseData.value[0].createdAt, 
+                          modelType : modelType,
+                          vcRulesList : vcRuleListObj
+                      }
+                  ]}}
+  //                console.log('cqnQuery ', cqnQuery);
+  
+               cds.run(cqnQuery);
+              }
             else if (modelType == 'MLR')
             {
               //  console.log('mlr regressionsID ', responseData.value[0].mlrID);
