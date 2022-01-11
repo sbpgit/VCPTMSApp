@@ -24,17 +24,6 @@ const conn_params_container = {
 // Begin of RDT Functions
 
 const rdtMethods = require('./rdt-functions.js');
-//const _runRdtRegressions = rdtMethods._runRdtRegressions;
-//const _runRdtPredictions = rdtMethods._runRdtPredictions;
-
-//const _updateRdtGroupParams = rdtMethods._updateRdtGroupParams;
-//const _updateRdtGroupData = rdtMethods._updateRdtGroupData;
-//const _runRegressionRdtGroup = rdtMethods._runRegressionRdtGroup;
-
-//const  _updateRdtPredictionParams = rdtMethods._updateRdtPredictionParams;
-//const _updateRdtPredictionData = rdtMethods._updateRdtPredictionData;
-//const _runPredictionRdtGroup = rdtMethods._runPredictionRdtGroup;
-//const _runRdtPrediction = rdtMethods._runRdtPrediction;
 
 // End of RDT functions
 
@@ -47,10 +36,7 @@ module.exports = srv => {
    srv.on ('CREATE', 'hgbtRegressionsV1',    _runHgbtRegressionsV1)
    srv.on ('CREATE', 'hgbtPredictionsV1',    _runHgbtPredictionsV1)
 
-   //srv.on ('CREATE', 'rdtRegressions',    _runRdtRegressions)
    srv.on ('CREATE', 'rdtRegressions',    rdtMethods._runRdtRegressions)
-
-   //srv.on ('CREATE', 'rdtPredictions',    _runRdtPredictions)
    srv.on ('CREATE', 'rdtPredictions',    rdtMethods._runRdtPredictions)
 
 
@@ -83,59 +69,6 @@ module.exports = srv => {
     */
  }
 
-//  function _runRdtRegressions(req) {
-//     _updateRdtGroupParams (req);   
-//     _updateRdtGroupData(req);
-//     _runRegressionRdtGroup(req); 
-//  }
-
-//  function _runRdtPredictions (req) {
-
-//     var groupId = req.data.groupId;
- 
-//     var conn = hana.createConnection();
- 
-//     conn.connect(conn_params);
- 
-//     var sqlStr = 'SET SCHEMA ' + classicalSchema;  
-//     // console.log('sqlStr: ', sqlStr);            
-//     var stmt=conn.prepare(sqlStr);
-//     var results=stmt.exec();
-//     stmt.drop();
- 
-//     sqlStr = 'SELECT COUNT(DISTINCT "GROUP_ID") AS "ModelExists" FROM "PAL_RDT_MODEL_GRP_TAB" WHERE "GROUP_ID" = ' + "'" + groupId + "'";
-//     stmt=conn.prepare(sqlStr);
-//     results = stmt.exec();
-//     stmt.drop();
-//     console.log('_runRdtPredictions - sqlStr : ', sqlStr);            
- 
-//     var modelExists = results[0].ModelExists;
-//     console.log('_runRdtPredictions - modelExists: ', modelExists);            
- 
-//     if (modelExists == 0)
-//     {
-//        let predResults = [];
-//        var responseMessage = " Model Does not Exist For groupId : " + groupId;
-//        predResults.push(responseMessage);
-//        console.log('_runMlrPredictions : Model Does not Exist For groupId', groupId); 
-//        let res = req._.req.res;
-//        res.statusCode = 400;
-//        res.send({"value":predResults});
-//        conn.disconnect(); 
-//        return;          
-//     }
-//     conn.disconnect(); 
-    
-    
-//     _updateRdtPredictionParams (req);
-     
-//     _updateRdtPredictionData(req);
- 
-//     _runPredictionRdtGroup(req); 
-   
-//  }
- 
- 
 
 function _genTimeSeriesData(req)
 {
