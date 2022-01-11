@@ -418,14 +418,15 @@ context cp {
     //         DEPENDENCY  : String(1000)@title : ' Dependency';
     // }
 
-    entity PAL_PROFILEMETH {
+    entity PAL_PROFILEMETH: {
         key PROFILE      : String(50) @title : 'Profile';
             METHOD       : String(50) @title : 'Method Name';
             PRF_DESC     : String(200)@title : 'Profile Description';
             CREATED_DATE : Date       @title : 'Date';
+            CREATED_BY   : String(12)@title : 'Created By'
     }
 
-    entity PAL_PROFILEMETH_PARA : managed {
+    entity PAL_PROFILEMETH_PARA : {
         key PROFILE   : String(50) @title : 'Profile';
         key METHOD    : String(50) @title : 'Method Name';
         key PARA_NAME : String(100)@title : 'Parameter Name';
@@ -434,6 +435,8 @@ context cp {
             STRVAL    : String(20);
             PARA_DESC : String(1000);
             PARA_DEP  : String(1000);
+            CREATED_DATE : Date       @title : 'Date';
+            CREATED_BY   : String(12)@title : 'Created By'
     }
 
 

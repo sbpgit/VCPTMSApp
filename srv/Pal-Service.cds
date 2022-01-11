@@ -30,9 +30,8 @@ using { cp as pal } from '../db/pal-schema';
 
     //entity hgbtPred as projection on pal.PalHgbtPred;
 
-
+    entity get_palparameters as projection on pal.PAL_PARAMETERS;
     //entity correlation as projection on pal.Palinputs;
-
     type result {
         resultStatus : String;
         success : Boolean;
