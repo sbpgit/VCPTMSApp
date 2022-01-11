@@ -86,6 +86,7 @@ context cp {
     entity OBJDEP_HEADER {
         key OBJ_DEP      : String(30)@title : 'Object Dependency';
         key OBJ_COUNTER  : Integer   @title : 'Object Dependency Counter';
+        key CLASS_NUM    : String(18)@title : 'Internal class number';
         key CHAR_NUM     : String(10)@title : 'Internal Char. number';
         key CHAR_COUNTER : Integer   @title : 'Characteristic counter';
         key CHARVAL_NUM  : String(10)@title : 'Internal Char. number';

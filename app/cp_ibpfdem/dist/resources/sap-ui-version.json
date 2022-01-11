@@ -1,7 +1,11 @@
 {
 	"name": "cp.ibpfdem.cpibpfdem",
 	"version": "0.0.1",
+<<<<<<< HEAD
 	"buildTimestamp": "202201110923",
+=======
+	"buildTimestamp": "202201101329",
+>>>>>>> 472fe8e3d8d7f855853dcce8a7b651de2a558ac5
 	"scmRevision": "",
 	"libraries": []
 }
