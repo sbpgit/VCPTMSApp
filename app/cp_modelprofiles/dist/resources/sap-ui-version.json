@@ -1,11 +1,7 @@
 {
 	"name": "cp.mdlprofile.cpmodelprofiles",
 	"version": "0.0.1",
-<<<<<<< HEAD
-	"buildTimestamp": "202201110924",
-=======
-	"buildTimestamp": "202201101330",
->>>>>>> 472fe8e3d8d7f855853dcce8a7b651de2a558ac5
+	"buildTimestamp": "202201111353",
 	"scmRevision": "",
 	"libraries": []
 }
