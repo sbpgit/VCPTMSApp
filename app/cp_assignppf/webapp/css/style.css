@@ -1,0 +1,19 @@
+/* Enter your custom styles here */
+
+.sapMIBar.sapMTB .sapMBarChild {
+    margin-left: 40.25rem;
+}
+/* .sapUiSizeCompact .sapMSlt {
+    height: 1.625rem;
+    margin-top: 0.1875rem;
+    margin-bottom: 0.1875rem;
+    margin-left: 8rem;
+} */
+.sapUiFormResGrid>div {
+    padding: 0.5rem 0.5rem;
+    box-sizing: border-box;
+}
+
+span#__dialog0-title-inner {
+    font-weight: bold;
+}
