@@ -63,7 +63,7 @@ sap.ui.define(
         var selMethod = oEvent.getSource().getParent().getCells()[1].getText();
 
         var Title = "Parameters " + " " + " - " + selProfie + " " + " - " + selMethod;
-
+ 
         if (!that._onParameter) {
           that._onParameter = sap.ui.xmlfragment(
             "cp.appf.cpassignppf.view.Parameter",
@@ -122,6 +122,7 @@ sap.ui.define(
           sap.ui.getCore().byId("idCretBy").setValue("");
           sap.ui.getCore().byId("idAuth").setValue("");
           sap.ui.getCore().byId("idAlgo").setSelectedKey("N");
+          sap.ui.getCore().byId("idTab").destroyItems();
           that._onAddppf.open();
         } else if (selId === "Copy") {
           var selRow = this.byId("profList").getSelectedItems();
@@ -141,6 +142,8 @@ sap.ui.define(
             } else {
               sap.ui.getCore().byId("idAlgo").setSelectedKey("N");
             }
+            that.onAlgorChange();
+            that._onAddppf.setTitle("Copy");
             that._onAddppf.open();
           } else {
             MessageToast.show("Please Select one row to change");
@@ -162,6 +165,12 @@ sap.ui.define(
             filters: [oFilters],
 
           success: function (oData) {
+
+            oData.results.forEach(function (row) {
+                row.FLAG = row.DATATYPE;
+
+            }, that);
+
             that.oAlgoListModel.setData({
               results: oData.results,
             });
@@ -173,9 +182,299 @@ sap.ui.define(
         });
       },
 
-      onSubmit: function (oEvent) {
-        var table = sap.ui.getCore().byId("idTab");
+    //   onLive:function(oEvent){
+    //     var Query = oEvent.getParameter("newValue"),
+    //         selId = oEvent.getParameter("id").split("-")[2];
+    //         var SelType = sap.ui.getCore().byId("idTab").getItems()[selId].getCells()[1].getSelectedKey(),
+    //             count = 0;
+    //         var letters = /^[A-Za-z0-9]+$/; 
+            
+    //         var digit = /^[0-9]+$/;    
+    //         var specials=/^[^*!#%^=+?|\":<>[\]{}!`\\()';@&$]+$/;
+
+    //         if(specials.test(Query)  || Query === ""){
+
+            
+    //         if(Query % 1 === 0 && parseInt(Query).toString() === Query.toString() ){
+    //             sap.ui.getCore().byId("idTab").getItems()[selId].getCells()[5].setText("INTEGER");
+    //             sap.ui.getCore().byId("idTab").getItems()[selId].getCells()[3].setValueState("None");
+    //             count = 0;
+    //         } else if(letters.test(Query) && specials.test(Query) ){
+    //             sap.ui.getCore().byId("idTab").getItems()[selId].getCells()[5].setText("NVARCHAR");
+    //             sap.ui.getCore().byId("idTab").getItems()[selId].getCells()[3].setValueState("None");
+    //             count = 0;
+    //         } else if(Query === "") {
+    //             sap.ui.getCore().byId("idTab").getItems()[selId].getCells()[5].setText(SelType);
+    //             sap.ui.getCore().byId("idTab").getItems()[selId].getCells()[3].setValueState("None");
+    //             count = 0;
+    //         } else if(Query.includes(".") && Query.split(".")[1] !== ""){
+    //             // var alphabets = /^[A-Za-z]+$/;
+    //             if(digit.test(Query.split(".")[0]) && digit.test(Query.split(".")[1])){
+    //                 sap.ui.getCore().byId("idTab").getItems()[selId].getCells()[5].setText("DOUBLE");
+    //                 sap.ui.getCore().byId("idTab").getItems()[selId].getCells()[3].setValueState("None");
+    //                 count = 0;
+    //             } else {
+    //                 sap.ui.getCore().byId("idTab").getItems()[selId].getCells()[5].setText("NVARCHAR");
+    //                 sap.ui.getCore().byId("idTab").getItems()[selId].getCells()[3].setValueState("None");
+    //                 count = 0;                
+    //             }
+    //         } else {
+    //             sap.ui.getCore().byId("idTab").getItems()[selId].getCells()[3].setValueState("Error");
+    //             count = 1;
+    //         }
+
+
+    //     } else {
+    //         sap.ui.getCore().byId("idTab").getItems()[selId].getCells()[3].setValueState("Error");
+    //         count = 1;
+    //     }
+
+    //     if(Query.includes("-")){
+    //         sap.ui.getCore().byId("idTab").getItems()[selId].getCells()[3].setValueState("Error");
+    //         count = 1;
+    //     }
+
+    //         if(count === 0){
+    //             sap.ui.getCore().byId("idSave").setEnabled(true);
+    //         } else {
+    //             sap.ui.getCore().byId("idSave").setEnabled(false);
+    //         }
+
+    //   },
+
+    //   onTypeChange:function(oEvent){
+    //     that.typeChange = oEvent.getParameter("id").split("-")[2];
+    //         that.onLive();
+    //   },
+
+      onLive:function(oEvent){
+        sap.ui.getCore().byId("idSave").setEnabled(true);
+          if(oEvent){
+            var Query = oEvent.getParameter("newValue"),
+            selId = oEvent.getParameter("id").split("-")[2];
+          } else {
+            var selId = that.typeChange;
+                Query = sap.ui.getCore().byId("idTab").getItems()[selId].getCells()[3].getValue();
+            }
+            var SelType = sap.ui.getCore().byId("idTab").getItems()[selId].getCells()[1].getSelectedKey(),
+                count = 0;
+                var specials=/^[^*|\":<>[\]{}!`\\()';@&$]+$/;
+                if(SelType === "DOUBLE"){
+                    sap.ui.getCore().byId("idTab").getItems()[selId].getCells()[3].setType("Number");
+                }
+
+            if(SelType === "INTEGER"){
+                if(Query % 1 === 0 && parseInt(Query).toString() === Query.toString() || Query === ""){
+                    sap.ui.getCore().byId("idTab").getItems()[selId].getCells()[3].setValueState("None");
+                    count = 0;
+                } else {
+                    sap.ui.getCore().byId("idTab").getItems()[selId].getCells()[3].setValueState("Error");
+                    count = count + 1;
+                }
+            } else if(SelType === "NVARCHAR"){
+                var letters = /^[A-Za-z0-9]+$/;
+        if(letters.test(Query) && specials.test(Query) || Query === ""){
+        
+                sap.ui.getCore().byId("idTab").getItems()[selId].getCells()[3].setValueState("None");
+                count = 0;
+            } else {
+                sap.ui.getCore().byId("idTab").getItems()[selId].getCells()[3].setValueState("Error");
+                count = count + 1;
+            }
+
+            } else if(SelType === "DOUBLE"){
+                    if(!/^\d+$/.test(Query) &&  Query !== ""){
+                        if(Query.split(".")[1] !== "" && Query !== "."){
+                            sap.ui.getCore().byId("idTab").getItems()[selId].getCells()[3].setValueState("None");
+                            count = 0;
+                        } else {
+                            sap.ui.getCore().byId("idTab").getItems()[selId].getCells()[3].setValueState("Error");
+                            count = count + 1;
+                        }                        
+                        } else {
+                            if(Query === ""){
+                                sap.ui.getCore().byId("idTab").getItems()[selId].getCells()[3].setValueState("None");
+                                count = 0;
+                            } else{
+                            sap.ui.getCore().byId("idTab").getItems()[selId].getCells()[3].setValueState("Error");
+                            count = count + 1;
+                            }
+                        }                
+            }
+            if(count === 0){
+                sap.ui.getCore().byId("idSave").setEnabled(true);
+            } else {
+                sap.ui.getCore().byId("idSave").setEnabled(false);
+            }
       },
+
+      onSubmit: function (oEvent) {
+        sap.ui.core.BusyIndicator.show();
+        var oEntry={};
+
+        oEntry.PROFILE = sap.ui.getCore().byId("idPn").getValue();
+        oEntry.PRF_DESC = sap.ui.getCore().byId("idPdesc").getValue();
+        oEntry.CREATED_BY = sap.ui.getCore().byId("idCretBy").getValue();
+        // oEntry.AUTHORIZATION = sap.ui.getCore().byId("auth").getValue();
+        oEntry.METHOD = sap.ui.getCore().byId("idAlgo")._getSelectedItemText();
+        oEntry.CREATED_DATE = "2022-01-13";
+
+        if(oEntry.PROFILE !== "" && oEntry.PRF_DESC !== "" && oEntry.METHOD !== "" ){
+            
+        
+        this.getModel("BModel").create("/getProfiles", oEntry, {
+            success: function (oData) {
+                sap.ui.core.BusyIndicator.hide();
+                MessageToast.show("created");
+            sap.ui.core.BusyIndicator.hide();
+            that.tablesendbatch();
+            },
+            error: function (oData) {
+                MessageToast.show("update failed");
+                sap.ui.core.BusyIndicator.hide();
+            }
+        });
+    } else {
+        MessageToast.show("Please fill all required fields");
+                sap.ui.core.BusyIndicator.hide();
+    }
+
+      },
+
+    //   tablesendbatch(oEvent){
+    //     var table = sap.ui.getCore().byId("idTab").getItems();
+    //     // var oTabEntry={},
+    //     // PROFILE, METHOD, CREATED_BY, PARA_NAME, INTVAL, DOUBLEVAL, STRVAL;
+    //     that.getModel("BModel").setUseBatch(true);
+	// 			that.batchReq = true;
+        
+
+    //     for (var i = 0; i < table.length; i++) {
+    //         var PROFILE, METHOD, CREATED_BY, PARA_NAME, INTVAL ="", DOUBLEVAL ="", STRVAL ="";
+    //         PROFILE = sap.ui.getCore().byId("idPn").getValue();
+    //         METHOD = sap.ui.getCore().byId("idAlgo")._getSelectedItemText();
+    //         CREATED_BY = sap.ui.getCore().byId("idCretBy").getValue();
+    //         PARA_NAME = table[i].getCells()[0].getText();
+            
+    //         if(sap.ui.getCore().byId("idDatatype").getValue() === ""){
+    //             if(table[i].getCells()[1].getSelectedKey() === "INTEGER"){
+    //                 INTVAL = table[i].getCells()[2].getText();
+    //             } else if(table[i].getCells()[1].getSelectedKey() === "DOUBLE"){
+    //                 DOUBLEVAL = table[i].getCells()[2].getText();
+    //             } else if(table[i].getCells()[1].getSelectedKey() === "NVARCHAR"){
+    //                 STRVAL = table[i].getCells()[2].getText();
+    //             }
+
+    //         } else {
+    //             if(table[i].getCells()[5].getSelectedKey() === "INTEGER"){
+    //                 INTVAL = table[i].getCells()[3].getValue();
+    //             } else if(table[i].getCells()[1].getSelectedKey() === "DOUBLE"){
+    //                 DOUBLEVAL = table[i].getCells()[3].getValue();
+    //             } else if(table[i].getCells()[1].getSelectedKey() === "NVARCHAR"){
+    //                 STRVAL = table[i].getCells()[3].getValue();
+    //             }
+    //         }
+
+            
+    //         // that.getModel("BModel").createEntry("/getProfileParameters", {
+    //         //         properties: {
+    //         //             Value: sImage,
+    //         //             Field1: sField1,
+    //         //             Filename: sFname,
+    //         //             Project: oGModel.getProperty("/projectNo"),
+    //         //             EnerfabRef: enerRef
+    //         //         }
+    //         //     });
+            
+    //     }
+
+    //     // if (that.batchReq) {
+    //     //     that.batchReq = false;
+    //     //     oModel.submitChanges({
+    //     //         success: function (oData, oResponse) {
+    //     //             sap.ui.core.BusyIndicator.hide();
+    //     //             MessageToast.show(oData.__batchResponses[0].__changeResponses[0].data.Message);               
+    //     //         },
+    //     //         error: function (oResponse) {
+    //     //             sap.ui.core.BusyIndicator.hide();
+    //     //             MessageToast.show("Failed to create entries");
+
+    //     //         }
+    //     //     });
+    //     // }
+    //   }
+
+      tablesendbatch(oEvent){
+        var table = sap.ui.getCore().byId("idTab").getItems();
+        // var oTabEntry={},
+        // PROFILE, METHOD, CREATED_BY, PARA_NAME, INTVAL, DOUBLEVAL, STRVAL;
+        that.getModel("BModel").setUseBatch(true);
+				that.batchReq = true;
+        
+
+        for (var i = 0; i < table.length; i++) {
+            var PROFILE, METHOD, CREATED_BY, PARA_NAME, INTVAL , DOUBLEVAL, STRVAL ;
+            PROFILE = sap.ui.getCore().byId("idPn").getValue();
+            METHOD = sap.ui.getCore().byId("idAlgo")._getSelectedItemText();
+            CREATED_BY = sap.ui.getCore().byId("idCretBy").getValue();
+            PARA_NAME = table[i].getCells()[0].getText();
+            
+            if(table[i].getCells()[1].getSelectedKey() === "INTEGER"){
+                if(table[i].getCells()[3].getValue() === ""){
+                    INTVAL = table[i].getCells()[2].getText();
+                } else {
+                    INTVAL = table[i].getCells()[3].getValue();
+                }
+
+            } else if(table[i].getCells()[1].getSelectedKey() === "DOUBLE"){
+                if(table[i].getCells()[3].getValue() === ""){
+                    DOUBLEVAL = table[i].getCells()[2].getText();
+                } else {
+                    DOUBLEVAL = table[i].getCells()[3].getValue();
+                }
+
+            } else if(table[i].getCells()[1].getSelectedKey() === "DOUBLE"){
+                if(table[i].getCells()[3].getValue() === ""){
+                    STRVAL = table[i].getCells()[2].getText();
+                } else {
+                    STRVAL = table[i].getCells()[3].getValue();
+                }
+
+            }
+            that.getModel("BModel").createEntry("/getProfileParameters", {
+                    properties: {
+                        PROFILE: PROFILE,
+                        METHOD: METHOD,
+                        CREATED_BY: CREATED_BY,
+                        PARA_NAME: PARA_NAME,
+                        INTVAL: INTVAL,
+                        DOUBLEVAL: DOUBLEVAL,
+                        STRVAL : STRVAL
+                    }
+                });
+            
+        }
+
+        if (that.batchReq) {
+            that.batchReq = false;
+            that.getModel("BModel").submitChanges({
+                success: function (oData, oResponse) {
+                    sap.ui.core.BusyIndicator.hide();
+                    MessageToast.show("success to create entries");               
+                },
+                error: function (oResponse) {
+                    sap.ui.core.BusyIndicator.hide();
+                    MessageToast.show("Failed to create entries");
+
+                }
+            });
+        }
+      }
+
+
+
+
+
     });
   }
 );

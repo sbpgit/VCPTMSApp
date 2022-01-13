@@ -28,41 +28,45 @@
         </VBox>
         <Table id="idTab"  items="{path: '/results'}"  >
 				<columns>
-					<Column hAlign="Left" vAlign="Middle">
+					<Column hAlign="Left" vAlign="Middle" width="180px">
 						<Text text="{i18n>param}" />
 					</Column>
-					<Column hAlign="Left" vAlign="Middle">
+					<Column hAlign="Left" vAlign="Middle" >
 						<Text text="{i18n>type}"/>
 					</Column>
                     <Column hAlign="Left" vAlign="Middle">
 						<Text text="{i18n>deValue}"/>
-					</Column>
-                    <Column hAlign="Left" vAlign="Middle">
-						<Text text="{i18n>notes}"/>
-					</Column>
+					</Column>                    
                     <Column hAlign="Left" vAlign="Middle">
 						<Text text="{i18n>uservalue}"/>
+					</Column>
+                    <Column hAlign="Left" vAlign="Middle" width="70px">
+						<Text text="{i18n>notes}"/>
+					</Column>
+                    <Column hAlign="Left" vAlign="Middle" >
+						<Text text=""/>
 					</Column>
 				</columns>
 				<items>
 					<ColumnListItem>
 						<!-- <cells> -->
-							<Text text="{PROFILE}"/>
-                            <Select id="idTypes" change="onTypeChange" selectedKey="I" >
-                                <core:ListItem key="I" text="Interger"/>
-                                <core:ListItem key="D" text="Double"/>
-                                <core:ListItem key="S" text="String"/>
+							<Text text="{PARA_NAME}"/>
+                            <Select id="idTypes" change="onTypeChange" selectedKey="{DATATYPE}" >
+                                <core:ListItem key="INTEGER" text="Interger"/>
+                                <core:ListItem key="DOUBLE" text="Double"/>
+                                <core:ListItem key="NVARCHAR" text="String"/>
                             </Select>
-                            <Text text="{METHOD}"/>
+                            <Text text="{DEFAULTVAL}"/>                            
+                            <Input id="idDatatype" value="" liveChange="onLive" valueState="None"/>
                             <Button id="idNotes" icon="sap-icon://display" tooltip="Notes" 
                                     press="onNotes" iconDensityAware="false" type="Transparent"/>
-                            <Input value="{METHOD}"/>
+                            <Text text="{FLAG}"/>
 						<!-- </cells> -->
 					</ColumnListItem>
 				</items>
 			</Table>
 		<buttons>
-			<Button type='Ghost' text="{i18n>save}" press="onSubmit"></Button>
+			<Button id="idSave" type='Ghost' text="{i18n>save}" press="onSubmit"></Button>
 			<Button type='Reject' text="{i18n>close}" press="onAddClose"></Button>
 		</buttons>
 	</Dialog>
