@@ -492,7 +492,9 @@ entity![V_CLASSCHAR]{
 entity ![V_OBDHDR] {
 key     ![LOCATION_ID]: String(4)  @title: 'Location' ; 
 key     ![PRODUCT_ID]: String(40)  @title: 'Product' ; 
+key     ![COMPONENT]: String(40)  @title: 'COMPONENT' ; 
 key     ![OBJ_DEP]: String(30)  @title: 'Object Dependency' ; 
+key     ![OBJDEP_DESC]: String(30)  @title: 'OBJDEP_DESC' ;
 key     ![CLASS_NUM]: String(18)  @title: 'Internal Class Number' ; 
 key     ![CHAR_NUM]: String(10)  @title: 'Char Num' ; 
 key     ![CHARVAL_NUM]: String(10)  @title: 'Charval Num' ; 
@@ -509,6 +511,7 @@ key     ![LOCATION_ID]: String(4)  @title: 'Location' ;
 key     ![PRODUCT_ID]: String(40)  @title: 'Product' ; 
 key     ![COMPONENT]: String(40)  @title: 'Component' ; 
 key     ![OBJ_DEP]: String(30)  @title: 'Object Dependency' ; 
+key     ![OBJ_COUNTER]: Integer  @title: 'OBJ_COUNTER' ; 
 key     ![OBJDEP_DESC]: String(30)  @title: 'Object Dependency Description' ; 
 key     ![PROFILE]: String(50)  @title: 'Profile' ; 
 }

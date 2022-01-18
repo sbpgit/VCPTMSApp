@@ -30,6 +30,7 @@ sap.ui.define(
           this.prodModel = new JSONModel();
           this.odModel = new JSONModel();
           this.ppfModel = new JSONModel();
+          this.oODPModel = new JSONModel();
           this.otabModel = new JSONModel();
           this._oCore = sap.ui.getCore();
           if (!this._valueHelpDialogLoc) {
@@ -67,6 +68,7 @@ sap.ui.define(
         _onPatternMatched: function () {
           that = this;
           this.oPanel = this.byId("idPanel");
+          this.oODTable = this.byId("odlList");
           this.oTable = this.byId("pmdlList");
           this.i18n = this.getResourceBundle();
           this.oGModel = this.getModel("GModel");
@@ -105,17 +107,26 @@ sap.ui.define(
               MessageToast.show("error");
             },
           });
-          this.getModel("BModel").callFunction("/get_objdep", {
-            method: "GET",
-            urlParameters: {},
+          this.getModel("BModel").read("/getObjDepProfiles", {
             success: function (oData) {
-              that.odModel.setData(oData);
-              that.oODList.setModel(that.odModel);
+                that.odModel.setData(oData);
+                that.oODList.setModel(that.odModel);
             },
-            error: function (oRes) {
+            error: function (oData, error) {
               MessageToast.show("error");
             },
           });
+        //   this.getModel("BModel").callFunction("/get_objdep", {
+        //     method: "GET",
+        //     urlParameters: {},
+        //     success: function (oData) {
+        //       that.odModel.setData(oData);
+        //       that.oODList.setModel(that.odModel);
+        //     },
+        //     error: function (oRes) {
+        //       MessageToast.show("error");
+        //     },
+        //   });
           this.getModel("BModel").read("/getProfiles", {
             success: function (oData) {
               that.ppfModel.setData(oData);
@@ -126,84 +137,13 @@ sap.ui.define(
             },
           });
         },
-        onRun: function () {
-          this.oModel = this.getModel("PModel");
-          var oEntry = [];
-          var vVcRulesList = {
-            vcRulesList: [],
-          };
-          var vruleslist = {
-            Location: "FR10",
-            Product: "KM_M219VBVS_BVS",
-            GroupID: "M219VV00105NN_1",
-          };
-          vVcRulesList.vcRulesList.push(vruleslist);
-          /******************          */
-          var uri = "/v2/pal/generatePredictions";
-          $.ajax({
-            url: uri,
-            type: "post",
-            contentType: "application/json",
-            data: JSON.stringify({
-              vcRulesList: vVcRulesList.vcRulesList,
-            }),
-            dataType: "json",
-            async: false,
-            timeout: 0,
-            error: function (data) {
-              sap.m.MessageToast.show(JSON.stringify(data));
-            },
-            success: function (data) {
-              sap.m.MessageToast.show("Generated Regression Models");
-            },
-          });
-          /************************** */
-          /*this.oModel.create("/generateRegModels", vVcRulesList, {
-            success: function (oData) {
-              MessageToast.show("Generated regression model");              
-            },
-            error: function (oError) {
-              MessageToast.show("error");
-            },
-          });*/
-          //   this.oModel.create("/generatePredictions", vVcRulesList, {
-          //     success: function (oData) {
-          //       MessageToast.show("success");
-          //     },
-          //     error: function (oError) {
-          //       MessageToast.show("error");
-          //     },
-          //   });
-          // oModel.read("/generateRegModels",{
-          //     filters: oEntry,
-          //     success: function (oData) {
-          //         MessageToast.show("success");
-          // 	},
-          // 	error: function (oError) {
-          // 		MessageToast.show("error");
-          // 	}
-          // }
-          // );
-          //oModel.setUseBatch(true);
-          // oModel.createEntry("/generateRegModels", {
-          //     properties: oEntry
-          // });
-          // oModel.submitChanges({
-          // 	success: function (oData) {
-          // 		// MessageToast.show(that.i18n.getText("saveSessTabsSuc"));
-          // 	},
-          // 	error: function (oError) {
-          // 		MessageToast.show("error");
-          // 	}
-          // });
-        },
         handleValueHelp: function (oEvent) {
           var sId = oEvent.getParameter("id");
           if (sId.includes("loc")) {
             this._valueHelpDialogLoc.open();
           } else if (sId.includes("prod")) {
             this._valueHelpDialogProd.open();
-          } else if (sId.includes("od")) {
+          } else if (sId.includes("od") || sId.includes("__button1")) {
             if (that.oLoc.getValue() && that.oProd.getTokens()) {
               if (this.oODList.getBinding("items")) {
                 this.oODList
@@ -245,7 +185,7 @@ sap.ui.define(
             if (that.oProdList.getBinding("items")) {
               that.oProdList.getBinding("items").filter([]);
             }
-          } else if (sId.includes("od")) {
+          } else if (sId.includes("od") || sId.includes("__button1")) {
             that._oCore
               .byId(this._valueHelpDialogOD.getId() + "-searchField")
               .setValue("");
@@ -297,7 +237,7 @@ sap.ui.define(
             }
             that.oProdList.getBinding("items").filter(oFilters);
             // Object Dependency
-          } else if (sId.includes("od")) {
+          } else if (sId.includes("od") ) {
             if (query !== "") {
               oFilters.push(
                 new Filter({
@@ -332,7 +272,8 @@ sap.ui.define(
         handleSelection: function (oEvent) {
           var sId = oEvent.getParameter("id"),
             oItem = oEvent.getParameter("selectedItems"),
-            aSelectedItems;
+            aSelectedItems,
+            aODdata = [];
           //Location list
           if (sId.includes("Loc")) {
             aSelectedItems = oEvent.getParameter("selectedItems");
@@ -357,16 +298,21 @@ sap.ui.define(
             // Object ependency
           } else if (sId.includes("od")) {
             that.oODList.getBinding("items").filter([]);
+            that.oODTable.setModel(that.oODPModel);
             aSelectedItems = oEvent.getParameter("selectedItems");
             if (aSelectedItems && aSelectedItems.length > 0) {
               that.oObjDep.removeAllTokens();
               aSelectedItems.forEach(function (oItem) {
+                aODdata.push({GroupID : oItem.getTitle()});
                 that.oObjDep.addToken(
                   new sap.m.Token({
                     key: oItem.getTitle(),
                     text: oItem.getTitle(),
                   })
                 );
+              });
+              this.oODPModel.setData({
+                results: aODdata,
               });
             }
           } else {
@@ -409,6 +355,7 @@ sap.ui.define(
             for (i = 0; i < aItems.length; i++) {
               if (aItems[i].getTitle() === sRemovedTokenTitle) {
                 aItems[i].setSelected(false);
+                that.oODList.removeitem(aItem[i]);
               }
             }
           } else if (sId.includes("pmInput")) {
@@ -431,8 +378,8 @@ sap.ui.define(
           that.byId("pmdlList").setModel(this.otabModel);
           if (
             this.oObjDep.getTokens().length > 0 &&
-            this.oPredProfile.getTokens().length > 0
-          ) {
+            this.oPredProfile.getTokens().length > 0 )
+           {
             for (i = 0; i < aItems.length; i++) {
               var oEntry = {
                   vcRulesList: [],
@@ -444,17 +391,11 @@ sap.ui.define(
                 GroupID: aItems[i].getTitle(),
               };
               oEntry.vcRulesList.push(vRuleslist);
-              // var uri = "ConfigProd_DB/v2/pal/generatePredictions";
               var uri = "/v2/pal/generatePredictions";
-            //   var vUser = "SBPTECHTEAM",
-            //   vPwd = "Sbpcorp@22";
               $.ajax({
                 url: uri,
                 type: "POST",
                 contentType: "application/json",
-                // beforeSend: function (xhr) {
-                //     xhr.setRequestHeader('Authorization', 'Basic ' + btoa(vUser + ":" + vPwd));
-                // },
                 data: JSON.stringify({
                   vcRulesList: oEntry.vcRulesList,
                 }),
@@ -482,28 +423,6 @@ sap.ui.define(
           } else {
             MessageToast.show(that.i18n.getText("errInput"));
           }
-          // oModel.read("/generateRegModels",{
-          //     filters: oEntry,
-          //     success: function (oData) {
-          //         MessageToast.show("success");
-          // 	},
-          // 	error: function (oError) {
-          // 		MessageToast.show("error");
-          // 	}
-          // }
-          // );
-          //oModel.setUseBatch(true);
-          // oModel.createEntry("/generateRegModels", {
-          //     properties: oEntry
-          // });
-          // oModel.submitChanges({
-          // 	success: function (oData) {
-          // 		// MessageToast.show(that.i18n.getText("saveSessTabsSuc"));
-          // 	},
-          // 	error: function (oError) {
-          // 		MessageToast.show("error");
-          // 	}
-          // });
         },
         resetInputs: function(){
             this.oLoc.setValue("");
@@ -514,7 +433,79 @@ sap.ui.define(
             this.oPPFList.removeSelections();
             this.oProd.destroyTokens();
             this.oProdList.removeSelections();
-        }
+        },
+        
+        onRun: function () {
+            this.oModel = this.getModel("PModel");
+            var oEntry = [];
+            var vVcRulesList = {
+              vcRulesList: [],
+            };
+            var vruleslist = {
+              Location: "FR10",
+              Product: "KM_M219VBVS_BVS",
+              GroupID: "M219VV00105NN_1",
+            };
+            vVcRulesList.vcRulesList.push(vruleslist);
+            /******************          */
+            var uri = "/v2/pal/generatePredictions";
+            $.ajax({
+              url: uri,
+              type: "post",
+              contentType: "application/json",
+              data: JSON.stringify({
+                vcRulesList: vVcRulesList.vcRulesList,
+              }),
+              dataType: "json",
+              async: false,
+              timeout: 0,
+              error: function (data) {
+                sap.m.MessageToast.show(JSON.stringify(data));
+              },
+              success: function (data) {
+                sap.m.MessageToast.show("Generated Regression Models");
+              },
+            });
+            /************************** */
+            /*this.oModel.create("/generateRegModels", vVcRulesList, {
+              success: function (oData) {
+                MessageToast.show("Generated regression model");              
+              },
+              error: function (oError) {
+                MessageToast.show("error");
+              },
+            });*/
+            //   this.oModel.create("/generatePredictions", vVcRulesList, {
+            //     success: function (oData) {
+            //       MessageToast.show("success");
+            //     },
+            //     error: function (oError) {
+            //       MessageToast.show("error");
+            //     },
+            //   });
+            // oModel.read("/generateRegModels",{
+            //     filters: oEntry,
+            //     success: function (oData) {
+            //         MessageToast.show("success");
+            // 	},
+            // 	error: function (oError) {
+            // 		MessageToast.show("error");
+            // 	}
+            // }
+            // );
+            //oModel.setUseBatch(true);
+            // oModel.createEntry("/generateRegModels", {
+            //     properties: oEntry
+            // });
+            // oModel.submitChanges({
+            // 	success: function (oData) {
+            // 		// MessageToast.show(that.i18n.getText("saveSessTabsSuc"));
+            // 	},
+            // 	error: function (oError) {
+            // 		MessageToast.show("error");
+            // 	}
+            // });
+          },
       }
     );
   }
