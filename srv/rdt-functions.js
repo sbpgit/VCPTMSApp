@@ -1,5 +1,6 @@
 const cds = require('@sap/cds')
 const { v1: uuidv1} = require('uuid')
+    
 const hana = require('@sap/hana-client');
 const rtdFuncs = require('./rdt-functions.js');
 
@@ -557,7 +558,10 @@ exports._runRegressionRdtGroup = function(req) {
 
 exports._runRdtPredictions = function(req) {
 
-   var groupId = req.data.groupId;
+  // var groupId = req.data.groupId;
+
+   var groupId = req.data.groupId + '#' + req.data.Location + '#' + req.data.Product;
+   //var outputGroupId = req.data.groupId;
 
    var conn = hana.createConnection();
 
@@ -922,6 +926,11 @@ exports._runRdtPrediction = function(rdtType, group) {
     stmt.drop();
 
     var groupId = group;
+
+    let grpStr=groupId.split('#');
+    let GroupId = grpStr[0];
+    let location = grpStr[1];
+    let product = grpStr[2];
     
     sqlStr = "create local temporary column table #PAL_RDT_MODEL_TAB_"+ groupId + " " + 
                     "(\"ROW_INDEX\" INTEGER,\"TREE_INDEX\" INTEGER,\"MODEL_CONTENT\" NCLOB)"; // MEMORY THRESHOLD 1000)";
@@ -966,7 +975,7 @@ exports._runRdtPrediction = function(rdtType, group) {
             let id =  predData[i].ID;
             let att1 =  predData[i].ATT1;
             let att2 =  predData[i].ATT2;
-            predDataObj.push({groupId,id,att1,att2});
+            predDataObj.push({GroupId,id,att1,att2});
         }
     
     }
@@ -996,7 +1005,7 @@ exports._runRdtPrediction = function(rdtType, group) {
             let att1 =  predData[i].ATT1;
             let att2 =  predData[i].ATT2;
             let att3 =  predData[i].ATT3;
-            predDataObj.push({groupId,id,att1,att2,att3});
+            predDataObj.push({GroupId,id,att1,att2,att3});
         }
     }
     else if(rdtType == 4)
@@ -1026,7 +1035,7 @@ exports._runRdtPrediction = function(rdtType, group) {
             let att2 =  predData[i].ATT2;
             let att3 =  predData[i].ATT3;
             let att4 =  predData[i].ATT4;
-            predDataObj.push({groupId,id,att1,att2,att3,att4});
+            predDataObj.push({GroupId,id,att1,att2,att3,att4});
         }
     }
     else if(rdtType == 5)
@@ -1058,7 +1067,7 @@ exports._runRdtPrediction = function(rdtType, group) {
             let att4 =  predData[i].ATT4;
             let att5 =  predData[i].ATT5;
 
-            predDataObj.push({groupId,id,att1,att2,att3,att4,att5});
+            predDataObj.push({GroupId,id,att1,att2,att3,att4,att5});
         }
     }
     else if(rdtType == 6)
@@ -1092,7 +1101,7 @@ exports._runRdtPrediction = function(rdtType, group) {
             let att6 =  predData[i].ATT6;
 
 
-            predDataObj.push({groupId,id,att1,att2,att3,att4,att5,att6});
+            predDataObj.push({GroupId,id,att1,att2,att3,att4,att5,att6});
         }
     }
     else if(rdtType == 7)
@@ -1127,7 +1136,7 @@ exports._runRdtPrediction = function(rdtType, group) {
             let att7 =  predData[i].ATT7;
 
 
-            predDataObj.push({groupId,id,att1,att2,att3,att4,att5,att6,att7});
+            predDataObj.push({GroupId,id,att1,att2,att3,att4,att5,att6,att7});
         }
     }
     else if(rdtType == 8)
@@ -1163,7 +1172,7 @@ exports._runRdtPrediction = function(rdtType, group) {
             let att8 =  predData[i].ATT8;
 
 
-            predDataObj.push({groupId,id,att1,att2,att3,att4,att5,att6,att7,att8});
+            predDataObj.push({GroupId,id,att1,att2,att3,att4,att5,att6,att7,att8});
         }
     }
     else if(rdtType == 9)
@@ -1200,7 +1209,7 @@ exports._runRdtPrediction = function(rdtType, group) {
             let att9 =  predData[i].ATT9;
 
 
-            predDataObj.push({groupId,id,att1,att2,att3,att4,att5,att6,att7,att8,att9});
+            predDataObj.push({GroupId,id,att1,att2,att3,att4,att5,att6,att7,att8,att9});
         }
     }
     else if(rdtType == 10)
@@ -1238,7 +1247,7 @@ exports._runRdtPrediction = function(rdtType, group) {
             let att10 =  predData[i].ATT10;
 
 
-            predDataObj.push({groupId,id,att1,att2,att3,att4,att5,att6,att7,att8,att9,att10});
+            predDataObj.push({GroupId,id,att1,att2,att3,att4,att5,att6,att7,att8,att9,att10});
         }
     }
     else if(rdtType == 11)
@@ -1277,7 +1286,7 @@ exports._runRdtPrediction = function(rdtType, group) {
             let att11 =  predData[i].ATT11;
 
 
-            predDataObj.push({groupId,id,att1,att2,att3,att4,att5,att6,att7,att8,att9,att10,att11});
+            predDataObj.push({GroupId,id,att1,att2,att3,att4,att5,att6,att7,att8,att9,att10,att11});
         }
     }
     else if(rdtType == 12)
@@ -1316,7 +1325,7 @@ exports._runRdtPrediction = function(rdtType, group) {
             let att11 =  predData[i].ATT11;
             let att12 =  predData[i].ATT12;
 
-            predDataObj.push({groupId,id,att1,att2,att3,att4,att5,att6,att7,att8,att9,att10,att11,att12});
+            predDataObj.push({GroupId,id,att1,att2,att3,att4,att5,att6,att7,att8,att9,att10,att11,att12});
         }
     }
     else
@@ -1358,7 +1367,7 @@ exports._runRdtPrediction = function(rdtType, group) {
         let doubleVal =  predParams[i].DOUBLE_VALUE;
         let strVal =  predParams[i].STRING_VALUE;
 
-        predParamsObj.push({groupId,paramName,intVal,doubleVal,strVal});
+        predParamsObj.push({GroupId,paramName,intVal,doubleVal,strVal});
     }
 
 
@@ -1382,15 +1391,18 @@ exports._runRdtPrediction = function(rdtType, group) {
         let score =  predictionResults[i].SCORE;
         let confidence = predictionResults[i].CONFIDENCE;
     
-        resultsObj.push({groupId,id,score,confidence});
+        resultsObj.push({GroupId,id,score,confidence});
     }	
 
     var createtAtObj = new Date();
     //let idObj = groupId;
     let idObj = uuidv1();
-    
+    // let grpStr=groupId.split('#');
+    // let outputGroupId = grpStr[0];
+    // let location = grpStr[1];
+    // let product = grpStr[2];
     var cqnQuery = {INSERT:{ into: { ref: ['CP_PALRDTPREDICTIONS'] }, entries: [
-         {rdtID: idObj, createdAt : createtAtObj.toISOString(), groupId : groupId, predictionParameters:predParamsObj, rdtType : rdtType, predictionData : predDataObj, predictedResults : resultsObj}
+         {rdtID: idObj, createdAt : createtAtObj.toISOString(), Location : location, Product : product, groupId : GroupId, predictionParameters:predParamsObj, rdtType : rdtType, predictionData : predDataObj, predictedResults : resultsObj}
          ]}}
 
     cds.run(cqnQuery);

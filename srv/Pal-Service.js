@@ -85,6 +85,10 @@ function _genTimeSeriesData(req)
 function _getParamsObjForPredictions(vcRulesList, index, modelType, numChars)
 {
     var paramsObj = [];
+    //let palGroupId = vcRulesList[index].GroupID;
+
+    let palGroupId = vcRulesList[index].GroupID + '#' + vcRulesList[index].Location + '#' + vcRulesList[index].Product;
+
    // for (var i = 0; i < vcRulesList.length; i++)
    // {
         //console.log('i = ',i, 'modelType :', modelType );
@@ -92,18 +96,18 @@ function _getParamsObjForPredictions(vcRulesList, index, modelType, numChars)
              ((modelType == 'HGBT') ||
                (modelType == 'RDT')) )
         {
-            paramsObj.push({"groupId":vcRulesList[index].GroupID, "paramName":"THREAD_RATIO", "intVal":null,"doubleVal": 0.5, "strVal" : null});
-            paramsObj.push({"groupId":vcRulesList[index].GroupID,"paramName":"VERBOSE", "intVal":0,"doubleVal": null, "strVal" : null});
+            paramsObj.push({"groupId":palGroupId, "paramName":"THREAD_RATIO", "intVal":null,"doubleVal": 0.5, "strVal" : null});
+            paramsObj.push({"groupId":palGroupId,"paramName":"VERBOSE", "intVal":0,"doubleVal": null, "strVal" : null});
         }
         else if ( (vcRulesList[index].dimensions == numChars) && 
                   (modelType == 'MLR'))
         {
-            paramsObj.push({"groupId":vcRulesList[index].GroupID, "paramName":"THREAD_RATIO", "intVal":null,"doubleVal": 0.1, "strVal" : null});
+            paramsObj.push({"groupId":palGroupId, "paramName":"THREAD_RATIO", "intVal":null,"doubleVal": 0.1, "strVal" : null});
         }
         else if ( (vcRulesList[index].dimensions == numChars) && 
                   (modelType == 'VARMA'))
         {
-            paramsObj.push({"groupId":vcRulesList[index].GroupID, "paramName":"FORECAST_LENGTH", "intVal":1,"doubleVal": null, "strVal" : null});
+            paramsObj.push({"groupId":palGroupId, "paramName":"FORECAST_LENGTH", "intVal":1,"doubleVal": null, "strVal" : null});
         }
    // }
 
@@ -212,23 +216,25 @@ function _getDataObjForPredictions(vcRulesList, idx, modelType, numChars) {
 
             if (charIdx % numChars == 0)
             {
+                let palGroupId = vcRulesList[idx].GroupID + '#' + vcRulesList[idx].Location + '#' + vcRulesList[idx].Product;
+
                 if (numChars == 2)
                 {
-                    dataObj.push({"groupId":vcRulesList[idx].GroupID, "ID": distinctPeriodIdx,"att1":att1, "att2":att2});
+                    dataObj.push({"groupId":palGroupId, "ID": distinctPeriodIdx,"att1":att1, "att2":att2});
                 }
                 else if (numChars == 3)
                 {
-                    dataObj.push({"groupId":vcRulesList[idx].GroupID, "ID": distinctPeriodIdx,"att1":att1, "att2":att2,"att3":att3});
+                    dataObj.push({"groupId":palGroupId, "ID": distinctPeriodIdx,"att1":att1, "att2":att2,"att3":att3});
 
                 }
                 else if (numChars == 4)
                 {
-                    dataObj.push({"groupId":vcRulesList[idx].GroupID, "ID": distinctPeriodIdx,"att1":att1, "att2":att2,"att3":att3,"att4":att4});
+                    dataObj.push({"groupId":palGroupId, "ID": distinctPeriodIdx,"att1":att1, "att2":att2,"att3":att3,"att4":att4});
 
                     }
                 else if (numChars == 5)
                 {
-                    dataObj.push({"groupId":vcRulesList[idx].GroupID, "ID": distinctPeriodIdx,"att1":att1, "att2":att2,"att3":att3,"att4":att4,"att5":att5});
+                    dataObj.push({"groupId":palGroupId, "ID": distinctPeriodIdx,"att1":att1, "att2":att2,"att3":att3,"att4":att4,"att5":att5});
 
                 }
                 else if (numChars == 6)
@@ -238,28 +244,28 @@ function _getDataObjForPredictions(vcRulesList, idx, modelType, numChars) {
                 else if (numChars == 7)
                 {
 
-                    dataObj.push({"groupId":vcRulesList[idx].GroupID, "ID": distinctPeriodIdx,"att1":att1, "att2":att2,"att3":att3,"att4":att4,"att5":att5,"att6":att6,"att7":att7});
+                    dataObj.push({"groupId":palGroupId, "ID": distinctPeriodIdx,"att1":att1, "att2":att2,"att3":att3,"att4":att4,"att5":att5,"att6":att6,"att7":att7});
                 } 
                 else if (numChars == 8)
                 {
 
-                    dataObj.push({"groupId":vcRulesList[idx].GroupID, "ID": distinctPeriodIdx,"att1":att1, "att2":att2,"att3":att3,"att4":att4,"att5":att5,"att6":att6,"att7":att7,"att8":att8});
+                    dataObj.push({"groupId":palGroupId, "ID": distinctPeriodIdx,"att1":att1, "att2":att2,"att3":att3,"att4":att4,"att5":att5,"att6":att6,"att7":att7,"att8":att8});
                 }      
                 else if (numChars == 9)
                 {
-                    dataObj.push({"groupId":vcRulesList[idx].GroupID, "ID": distinctPeriodIdx,"att1":att1, "att2":att2,"att3":att3,"att4":att4,"att5":att5,"att6":att6,"att7":att7,"att8":att8,"att9":att9});
+                    dataObj.push({"groupId":palGroupId, "ID": distinctPeriodIdx,"att1":att1, "att2":att2,"att3":att3,"att4":att4,"att5":att5,"att6":att6,"att7":att7,"att8":att8,"att9":att9});
                 }     
                 else if (numChars == 10)
                 {
-                    dataObj.push({"groupId":vcRulesList[idx].GroupID, "ID": distinctPeriodIdx,"att1":att1, "att2":att2,"att3":att3,"att4":att4,"att5":att5,"att6":att6,"att7":att7,"att8":att8,"att9":att9,"att10":att10});
+                    dataObj.push({"groupId":palGroupId, "ID": distinctPeriodIdx,"att1":att1, "att2":att2,"att3":att3,"att4":att4,"att5":att5,"att6":att6,"att7":att7,"att8":att8,"att9":att9,"att10":att10});
                 } 
                 else if (numChars == 11)
                 {
-                    dataObj.push({"groupId":vcRulesList[idx].GroupID, "ID": distinctPeriodIdx,"att1":att1, "att2":att2,"att3":att3,"att4":att4,"att5":att5,"att6":att6,"att7":att7,"att8":att8,"att9":att9,"att10":att10,"att11":att11});
+                    dataObj.push({"groupId":palGroupId, "ID": distinctPeriodIdx,"att1":att1, "att2":att2,"att3":att3,"att4":att4,"att5":att5,"att6":att6,"att7":att7,"att8":att8,"att9":att9,"att10":att10,"att11":att11});
                 }
                 else if (numChars == 12)
                 {
-                    dataObj.push({"groupId":vcRulesList[idx].GroupID, "ID": distinctPeriodIdx,"att1":att1, "att2":att2,"att3":att3,"att4":att4,"att5":att5,"att6":att6,"att7":att7,"att8":att8,"att9":att9,"att10":att10,"att11":att11,"att12":att12});
+                    dataObj.push({"groupId":palGroupId, "ID": distinctPeriodIdx,"att1":att1, "att2":att2,"att3":att3,"att4":att4,"att5":att5,"att6":att6,"att7":att7,"att8":att8,"att9":att9,"att10":att10,"att11":att11,"att12":att12});
                 }                  
                 else
                 {
@@ -286,6 +292,8 @@ async function _postPredictionRequest(url,paramsObj,numChars,dataObj,modelType,v
     let password = "Sbpcorp@22";
     var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
     console.log("_postPredictionRequest - AUTH", auth);
+    console.log("_postPredictionRequest - vcRuleListObj ", vcRuleListObj);
+
     if (modelType == 'HGBT')
     {
         options = {
@@ -296,6 +304,8 @@ async function _postPredictionRequest(url,paramsObj,numChars,dataObj,modelType,v
                 'Authorization' : auth
         },
         body: JSON.stringify({
+            "Product": vcRuleListObj[0].Product,
+            "Location": vcRuleListObj[0].Location,
             "groupId" : vcRuleListObj[0].GroupID,
             "predictionParameters": paramsObj,
             "hgbtType": numChars,
@@ -314,6 +324,8 @@ async function _postPredictionRequest(url,paramsObj,numChars,dataObj,modelType,v
                 'Authorization' : auth
         },
         body: JSON.stringify({
+            "Product": vcRuleListObj[0].Product,
+            "Location": vcRuleListObj[0].Location,
             "groupId" : vcRuleListObj[0].GroupID,
             "predictionParameters": paramsObj,
             "rdtType": numChars,
@@ -332,6 +344,8 @@ async function _postPredictionRequest(url,paramsObj,numChars,dataObj,modelType,v
                 'Authorization' : auth
         },
         body: JSON.stringify({
+            "Product": vcRuleListObj[0].Product,
+            "Location": vcRuleListObj[0].Location,
             "groupId" : vcRuleListObj[0].GroupID,
             "predictionParameters": paramsObj,
             "mlrpType": numChars,
@@ -350,6 +364,8 @@ async function _postPredictionRequest(url,paramsObj,numChars,dataObj,modelType,v
                 'Authorization' : auth
         },
         body: JSON.stringify({
+            "Product": vcRuleListObj[0].Product,
+            "Location": vcRuleListObj[0].Location,
             "groupId" : vcRuleListObj[0].GroupID,
             "predictionParameters": paramsObj,
             "varmaType": numChars,
@@ -455,7 +471,7 @@ async function _postPredictionRequest(url,paramsObj,numChars,dataObj,modelType,v
             stmt.exec();
             stmt.drop();
             sqlStr = 'SELECT DISTINCT ' + '"' + vcConfigTimePeriod + '"' + ' from  "V_FUTURE_DEP_TS" WHERE  "GroupID" = ' + "'" + vcRuleListObj[0].GroupID + "'" + ' ORDER BY ' + '"' + vcConfigTimePeriod + '"' + ' ASC';
-//            console.log("V_FUTURE_DEP_TS Distinct Periods sqlStr", sqlStr)
+            console.log("V_FUTURE_DEP_TS Distinct Periods sqlStr", sqlStr);
             stmt=conn.prepare(sqlStr);
             var distPeriods=stmt.exec();
             stmt.drop();
@@ -912,10 +928,12 @@ function _getParamsObjForGenModels(vcRulesList, modelType, numChars)
         //console.log('i = ',i, 'modelType :', modelType );
         if (vcRulesList[i].dimensions == numChars)
         {
-           
+            let palGroupId = vcRulesList[i].GroupID + '#' + vcRulesList[i].Location + '#' + vcRulesList[i].Product;
+
             for (let index=0; index<results.length; index++) 
             {
-                paramsObj.push({"groupId":vcRulesList[i].GroupID, 
+               // paramsObj.push({"groupId":vcRulesList[i].GroupID, 
+                paramsObj.push({"groupId":palGroupId, 
                                 "paramName":results[index].PARA_NAME, 
                                 "intVal":results[index].INTVAL,
                                 "doubleVal": results[index].DOUBLEVAL, 
@@ -927,47 +945,47 @@ function _getParamsObjForGenModels(vcRulesList, modelType, numChars)
             if ( (method == 'VARMA') && 
                  (results.length > 0))
             {
-                paramsObj.push({"groupId":vcRulesList[i].GroupID,"paramName":"EXOGENOUS_VARIABLE","intVal":null,"doubleVal": null,"strVal":"ATT1"});
-                paramsObj.push({"groupId":vcRulesList[i].GroupID,"paramName":"EXOGENOUS_VARIABLE","intVal":null,"doubleVal": null,"strVal":"ATT2"});
+                paramsObj.push({"groupId":palGroupId,"paramName":"EXOGENOUS_VARIABLE","intVal":null,"doubleVal": null,"strVal":"ATT1"});
+                paramsObj.push({"groupId":palGroupId,"paramName":"EXOGENOUS_VARIABLE","intVal":null,"doubleVal": null,"strVal":"ATT2"});
                 if (numChars > 2 )
                 {
-                    paramsObj.push({"groupId":vcRulesList[i].GroupID,"paramName":"EXOGENOUS_VARIABLE","intVal":null,"doubleVal": null,"strVal":"ATT3"});
+                    paramsObj.push({"groupId":palGroupId,"paramName":"EXOGENOUS_VARIABLE","intVal":null,"doubleVal": null,"strVal":"ATT3"});
                 }
                 if (numChars > 3 )
                 {
-                    paramsObj.push({"groupId":vcRulesList[i].GroupID,"paramName":"EXOGENOUS_VARIABLE","intVal":null,"doubleVal": null,"strVal":"ATT4"});
+                    paramsObj.push({"groupId":palGroupId,"paramName":"EXOGENOUS_VARIABLE","intVal":null,"doubleVal": null,"strVal":"ATT4"});
                 }
                 if (numChars > 4 )
                 {
-                    paramsObj.push({"groupId":vcRulesList[i].GroupID,"paramName":"EXOGENOUS_VARIABLE","intVal":null,"doubleVal": null,"strVal":"ATT5"});
+                    paramsObj.push({"groupId":palGroupId,"paramName":"EXOGENOUS_VARIABLE","intVal":null,"doubleVal": null,"strVal":"ATT5"});
                 }
                 if (numChars > 5 )
                 {
-                    paramsObj.push({"groupId":vcRulesList[i].GroupID,"paramName":"EXOGENOUS_VARIABLE","intVal":null,"doubleVal": null,"strVal":"ATT6"});
+                    paramsObj.push({"groupId":palGroupId,"paramName":"EXOGENOUS_VARIABLE","intVal":null,"doubleVal": null,"strVal":"ATT6"});
                 }
                 if (numChars > 6 )
                 {
-                    paramsObj.push({"groupId":vcRulesList[i].GroupID,"paramName":"EXOGENOUS_VARIABLE","intVal":null,"doubleVal": null,"strVal":"ATT7"});
+                    paramsObj.push({"groupId":palGroupId,"paramName":"EXOGENOUS_VARIABLE","intVal":null,"doubleVal": null,"strVal":"ATT7"});
                 }
                 if (numChars > 7 )
                 {
-                    paramsObj.push({"groupId":vcRulesList[i].GroupID,"paramName":"EXOGENOUS_VARIABLE","intVal":null,"doubleVal": null,"strVal":"ATT8"});
+                    paramsObj.push({"groupId":palGroupId,"paramName":"EXOGENOUS_VARIABLE","intVal":null,"doubleVal": null,"strVal":"ATT8"});
                 }
                 if (numChars > 8 )
                 {
-                    paramsObj.push({"groupId":vcRulesList[i].GroupID,"paramName":"EXOGENOUS_VARIABLE","intVal":null,"doubleVal": null,"strVal":"ATT9"});
+                    paramsObj.push({"groupId":palGroupId,"paramName":"EXOGENOUS_VARIABLE","intVal":null,"doubleVal": null,"strVal":"ATT9"});
                 }
                 if (numChars > 9 )
                 {
-                    paramsObj.push({"groupId":vcRulesList[i].GroupID,"paramName":"EXOGENOUS_VARIABLE","intVal":null,"doubleVal": null,"strVal":"ATT10"});
+                    paramsObj.push({"groupId":palGroupIdD,"paramName":"EXOGENOUS_VARIABLE","intVal":null,"doubleVal": null,"strVal":"ATT10"});
                 }
                 if (numChars > 10 )
                 {
-                    paramsObj.push({"groupId":vcRulesList[i].GroupID,"paramName":"EXOGENOUS_VARIABLE","intVal":null,"doubleVal": null,"strVal":"ATT11"});
+                    paramsObj.push({"groupId":palGroupId,"paramName":"EXOGENOUS_VARIABLE","intVal":null,"doubleVal": null,"strVal":"ATT11"});
                 }
                 if (numChars > 11 )
                 {
-                    paramsObj.push({"groupId":vcRulesList[i].GroupID,"paramName":"EXOGENOUS_VARIABLE","intVal":null,"doubleVal": null,"strVal":"ATT12"});
+                    paramsObj.push({"groupId":palGroupId,"paramName":"EXOGENOUS_VARIABLE","intVal":null,"doubleVal": null,"strVal":"ATT12"});
                 }
             }
         }
@@ -1774,12 +1792,13 @@ function _getDataObjForGenModels(vcRulesList, modelType, numChars) {
                 att12 = results[index].CharCount;
             }
             charIdx  = charIdx + 1;
+            let palGroupId = vcRulesList[i].GroupID + '#' + vcRulesList[i].Location + '#' + vcRulesList[i].Product;
 
             if (charIdx % numChars == 0)
             {
                 if (numChars == 2)
                 {
-                    dataObj.push({"groupId":vcRulesList[i].GroupID, "ID": distinctPeriodIdx,"att1":att1, "att2":att2,"target": target});
+                    dataObj.push({"groupId":palGroupId, "ID": distinctPeriodIdx,"att1":att1, "att2":att2,"target": target});
 /*
                     if (modelType == 'MLR') //MLR
                         dataObj.push({"groupId":vcRulesList[i].GroupID, "ID": distinctPeriodIdx,"att1":att1, "att2":att2,"target": target});
@@ -1789,48 +1808,48 @@ function _getDataObjForGenModels(vcRulesList, modelType, numChars) {
                     }
                 else if (numChars == 3)
                 {
-                    dataObj.push({"groupId":vcRulesList[i].GroupID, "ID": distinctPeriodIdx,"att1":att1, "att2":att2,"att3":att3,"target": target});
+                    dataObj.push({"groupId":palGroupId, "ID": distinctPeriodIdx,"att1":att1, "att2":att2,"att3":att3,"target": target});
 
                 }
                 else if (numChars == 4)
                 {
-                    dataObj.push({"groupId":vcRulesList[i].GroupID, "ID": distinctPeriodIdx,"att1":att1, "att2":att2,"att3":att3,"att4":att4,"target": target});
+                    dataObj.push({"groupId":palGroupId, "ID": distinctPeriodIdx,"att1":att1, "att2":att2,"att3":att3,"att4":att4,"target": target});
 
                     }
                 else if (numChars == 5)
                 {
-                    dataObj.push({"groupId":vcRulesList[i].GroupID, "ID": distinctPeriodIdx,"att1":att1, "att2":att2,"att3":att3,"att4":att4,"att5":att5,"target": target});
+                    dataObj.push({"groupId":palGroupId, "ID": distinctPeriodIdx,"att1":att1, "att2":att2,"att3":att3,"att4":att4,"att5":att5,"target": target});
 
                 }
                 else if (numChars == 6)
                 {
-                    dataObj.push({"groupId":vcRulesList[i].GroupID, "ID": distinctPeriodIdx,"att1":att1, "att2":att2,"att3":att3,"att4":att4,"att5":att5,"att6":att6,"target": target});
+                    dataObj.push({"groupId":palGroupId, "ID": distinctPeriodIdx,"att1":att1, "att2":att2,"att3":att3,"att4":att4,"att5":att5,"att6":att6,"target": target});
                 }    
                 else if (numChars == 7)
                 {
 
-                    dataObj.push({"groupId":vcRulesList[i].GroupID, "ID": distinctPeriodIdx,"att1":att1, "att2":att2,"att3":att3,"att4":att4,"att5":att5,"att6":att6,"att7":att7,"target": target});
+                    dataObj.push({"groupId":palGroupId, "ID": distinctPeriodIdx,"att1":att1, "att2":att2,"att3":att3,"att4":att4,"att5":att5,"att6":att6,"att7":att7,"target": target});
                 } 
                 else if (numChars == 8)
                 {
 
-                    dataObj.push({"groupId":vcRulesList[i].GroupID, "ID": distinctPeriodIdx,"att1":att1, "att2":att2,"att3":att3,"att4":att4,"att5":att5,"att6":att6,"att7":att7,"att8":att8,"target": target});
+                    dataObj.push({"groupId":palGroupId, "ID": distinctPeriodIdx,"att1":att1, "att2":att2,"att3":att3,"att4":att4,"att5":att5,"att6":att6,"att7":att7,"att8":att8,"target": target});
                 }      
                 else if (numChars == 9)
                 {
-                    dataObj.push({"groupId":vcRulesList[i].GroupID, "ID": distinctPeriodIdx,"att1":att1, "att2":att2,"att3":att3,"att4":att4,"att5":att5,"att6":att6,"att7":att7,"att8":att8,"att9":att9,"target": target});
+                    dataObj.push({"groupId":palGroupId, "ID": distinctPeriodIdx,"att1":att1, "att2":att2,"att3":att3,"att4":att4,"att5":att5,"att6":att6,"att7":att7,"att8":att8,"att9":att9,"target": target});
                 }     
                 else if (numChars == 10)
                 {
-                    dataObj.push({"groupId":vcRulesList[i].GroupID, "ID": distinctPeriodIdx,"att1":att1, "att2":att2,"att3":att3,"att4":att4,"att5":att5,"att6":att6,"att7":att7,"att8":att8,"att9":att9,"att10":att10,"target": target});
+                    dataObj.push({"groupId":palGroupId, "ID": distinctPeriodIdx,"att1":att1, "att2":att2,"att3":att3,"att4":att4,"att5":att5,"att6":att6,"att7":att7,"att8":att8,"att9":att9,"att10":att10,"target": target});
                 }
                 else if (numChars == 11)
                 {
-                    dataObj.push({"groupId":vcRulesList[i].GroupID, "ID": distinctPeriodIdx,"att1":att1, "att2":att2,"att3":att3,"att4":att4,"att5":att5,"att6":att6,"att7":att7,"att8":att8,"att9":att9,"att10":att10,"att11":att11,"target": target});
+                    dataObj.push({"groupId":palGroupId, "ID": distinctPeriodIdx,"att1":att1, "att2":att2,"att3":att3,"att4":att4,"att5":att5,"att6":att6,"att7":att7,"att8":att8,"att9":att9,"att10":att10,"att11":att11,"target": target});
                 }
                 else if (numChars == 12)
                 {
-                    dataObj.push({"groupId":vcRulesList[i].GroupID, "ID": distinctPeriodIdx,"att1":att1, "att2":att2,"att3":att3,"att4":att4,"att5":att5,"att6":att6,"att7":att7,"att8":att8,"att9":att9,"att10":att10,"att11":att11,"att12":att12,"target": target});
+                    dataObj.push({"groupId":palGroupId, "ID": distinctPeriodIdx,"att1":att1, "att2":att2,"att3":att3,"att4":att4,"att5":att5,"att6":att6,"att7":att7,"att8":att8,"att9":att9,"att10":att10,"att11":att11,"att12":att12,"target": target});
                 }                 
                 else
                 {
@@ -1858,6 +1877,8 @@ async function _postRegressionRequest(url,paramsObj,numChars,dataObj,modelType,v
     let password = "Sbpcorp@22";
     var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
     console.log("_postRegressionRequest - AUTH", auth);
+    console.log("vcRuleListObj ", vcRuleListObj);
+
     if (modelType == 'HGBT')
     {
 
@@ -1869,6 +1890,9 @@ async function _postRegressionRequest(url,paramsObj,numChars,dataObj,modelType,v
                 'Content-Type': 'application/json'
         },
         body: JSON.stringify({
+            "product": vcRuleListObj.Product,
+            "location": vcRuleListObj.Location,
+            "groupId": vcRuleListObj.GroupID,
             "regressionParameters": paramsObj,
             "hgbtType": numChars,
             "regressionData": dataObj
@@ -1887,6 +1911,9 @@ async function _postRegressionRequest(url,paramsObj,numChars,dataObj,modelType,v
                 'Content-Type': 'application/json'
         },
         body: JSON.stringify({
+            "product": vcRuleListObj.Product,
+            "location": vcRuleListObj.Location,
+            "groupId": vcRuleListObj.GroupID,
             "regressionParameters": paramsObj,
             "rdtType": numChars,
             "regressionData": dataObj
@@ -1904,6 +1931,9 @@ async function _postRegressionRequest(url,paramsObj,numChars,dataObj,modelType,v
                 'Content-Type': 'application/json'
         },
         body: JSON.stringify({
+            "product": vcRuleListObj.Product,
+            "location": vcRuleListObj.Location,
+            "groupId": vcRuleListObj.GroupID,
             "regressionParameters": paramsObj,
             "mlrType": numChars,
             "regressionData": dataObj
@@ -1921,6 +1951,9 @@ async function _postRegressionRequest(url,paramsObj,numChars,dataObj,modelType,v
                 'Content-Type': 'application/json'
         },
         body: JSON.stringify({
+            "product": vcRuleListObj.Product,
+            "location": vcRuleListObj.Location,
+            "groupId": vcRuleListObj.GroupID,
             "controlParameters": paramsObj,
             "varmaType": numChars,
             "varmaData": dataObj
