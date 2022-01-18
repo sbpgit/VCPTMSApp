@@ -17,3 +17,9 @@
 span#__dialog0-title-inner {
     font-weight: bold;
 }
+
+.sapUiRespGridMedia-Std-Tablet.sapUiFormResGridMain>div:not(.sapUiRespGridSpanM12):not(.sapUiFormResGridLastContM), .sapUiRespGridMedia-Std-Desktop.sapUiFormResGridMain>div:not(.sapUiRespGridSpanL12):not(.sapUiFormResGridLastContL), .sapUiRespGridMedia-Std-LargeDesktop.sapUiFormResGridMain>div:not(.sapUiRespGridSpanXL12):not(.sapUiFormResGridLastContXL) {
+    
+    box-sizing: border-box;
+    margin-left: 15rem;
+}

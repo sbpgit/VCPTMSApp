@@ -84,6 +84,13 @@
           "bundleName": "cp.appf.cpassignppf.i18n.i18n"
         }
       },
+      "oGModel": {
+        "type": "sap.ui.model.json.JSONModel",
+        "settings": {
+            "defaultBindingMode": "TwoWay"
+        },
+        "preload": true
+    },
       "BModel": {
         "dataSource": "mainService",
         "preload": true,
@@ -126,15 +133,28 @@
           "name": "Home",
           "pattern": "",
           "target": ["Home"]
+        },
+        {
+            "name": "Detail",
+            "pattern": "Detail",
+            "target": [
+                "Detail"
+            ]
         }
       ],
       "targets": {
         "Home": {
           "viewType": "XML",
           "transition": "slide",
-          "clearControlAggregation": false,
+          "clearControlAggregation": true,
           "viewId": "Home",
           "viewName": "Home"
+        },
+        "Detail": {
+            "viewType": "XML",
+            "transition": "slide",
+            "clearControlAggregation": true,
+            "viewName": "Detail"
         }
       }
     

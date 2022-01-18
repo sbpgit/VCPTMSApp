@@ -31,6 +31,7 @@ sap.ui.define(
         that.oListModel = new JSONModel();
         that.oParamModel = new JSONModel();
         that.oAlgoListModel = new JSONModel();
+        
       },
       onAfterRendering: function () {
         that = this;
@@ -57,6 +58,23 @@ sap.ui.define(
           },
         });
       },
+
+      onSearch: function(oEvent){
+        var query = oEvent.getParameter("value") || oEvent.getParameter("newValue"),
+        oFilters = [];
+ 
+        if (query !== "") {
+            oFilters.push(new Filter({
+                filters: [
+                    new Filter("PROFILE", FilterOperator.Contains, query),
+                    new Filter("PRF_DESC", FilterOperator.Contains, query)
+                ],
+                and: false
+            }));
+        }
+        that.oList.getBinding("items").filter(oFilters);
+
+    },
 
       onParameters: function (oEvent) {
         var selProfie = oEvent.getSource().getParent().getCells()[0].getTitle();
@@ -97,6 +115,32 @@ sap.ui.define(
         that._onParameter.close();
         //   that._onParameter.destroy(true);
         //   that._onParameter = "";
+      },
+
+
+      onCreate:function(oEvent){
+        that.oGModel =  that.getModel("oGModel");
+
+        var sId = oEvent.getSource().getTooltip();
+        that.oGModel.setProperty("/sId" , sId);
+        if(sId === "Copy"){
+        var selRow = this.byId("profList").getSelectedItems();
+
+        if (selRow.length) {
+          var selAlgo = selRow[0].getBindingContext().getProperty();
+          that.oGModel.setProperty("/sProfile" , selAlgo.PROFILE);
+          that.oGModel.setProperty("/sProf_desc" , selAlgo.PRF_DESC);
+          that.oGModel.setProperty("/sMethod" , selAlgo.METHOD);
+          var oRouter = sap.ui.core.UIComponent.getRouterFor(that);
+        oRouter.navTo("Detail", {}, true);
+        } else {
+            MessageToast.show("Please select one row");
+        }
+    } else {
+          
+        var oRouter = sap.ui.core.UIComponent.getRouterFor(that);
+        oRouter.navTo("Detail", {}, true);
+    }
       },
 
       onPpfAdd: function (oEvent) {
