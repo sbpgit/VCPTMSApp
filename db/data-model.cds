@@ -493,6 +493,7 @@ entity ![V_OBDHDR] {
 key     ![LOCATION_ID]: String(4)  @title: 'Location' ; 
 key     ![PRODUCT_ID]: String(40)  @title: 'Product' ; 
 key     ![OBJ_DEP]: String(30)  @title: 'Object Dependency' ; 
+key     ![CLASS_NUM]: String(18)  @title: 'Internal Class Number' ; 
 key     ![CHAR_NUM]: String(10)  @title: 'Char Num' ; 
 key     ![CHARVAL_NUM]: String(10)  @title: 'Charval Num' ; 
 key     ![OD_CONDITION]: String(2)  @title: 'OD_CONDITION' ; 

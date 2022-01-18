@@ -67,6 +67,7 @@ sap.ui.define(
         _onPatternMatched: function () {
           that = this;
           this.oPanel = this.byId("idPanel");
+          this.oODTable = this.byId("odlList");
           this.oTable = this.byId("pmdlList");
           this.i18n = this.getResourceBundle();
           this.oGModel = this.getModel("GModel");
@@ -431,8 +432,8 @@ sap.ui.define(
           that.byId("pmdlList").setModel(this.otabModel);
           if (
             this.oObjDep.getTokens().length > 0 &&
-            this.oPredProfile.getTokens().length > 0
-          ) {
+            this.oPredProfile.getTokens().length > 0 )
+           {
             for (i = 0; i < aItems.length; i++) {
               var oEntry = {
                   vcRulesList: [],
@@ -444,17 +445,11 @@ sap.ui.define(
                 GroupID: aItems[i].getTitle(),
               };
               oEntry.vcRulesList.push(vRuleslist);
-              // var uri = "ConfigProd_DB/v2/pal/generatePredictions";
               var uri = "/v2/pal/generatePredictions";
-            //   var vUser = "SBPTECHTEAM",
-            //   vPwd = "Sbpcorp@22";
               $.ajax({
                 url: uri,
                 type: "POST",
                 contentType: "application/json",
-                // beforeSend: function (xhr) {
-                //     xhr.setRequestHeader('Authorization', 'Basic ' + btoa(vUser + ":" + vPwd));
-                // },
                 data: JSON.stringify({
                   vcRulesList: oEntry.vcRulesList,
                 }),

@@ -320,20 +320,42 @@ sap.ui.define(
         oEntry.CREATED_DATE = "2022-01-13";
 
         if(oEntry.PROFILE !== "" && oEntry.PRF_DESC !== "" && oEntry.METHOD !== "" ){
-            
+            var uri = "/v2/catalog/getProfiles";
+            $.ajax({
+              url: uri,
+              type: "post",
+              contentType: "application/json",
+              data: JSON.stringify({
+                PROFILE: oEntry.PROFILE,
+                METHOD: oEntry.METHOD,
+                PRF_DESC: oEntry.PRF_DESC,
+                // CREATED_DATE:"2022-01-11",
+                CREATED_BY: oEntry.CREATED_BY,
+              }),
+              dataType: "json",
+              async: false,
+              timeout: 0,
+              error: function (data) {
+                sap.m.MessageToast.show(JSON.stringify(data));
+              },
+              success: function (data) {
+                        sap.ui.core.BusyIndicator.hide();
+                sap.m.MessageToast.show("Created Prediction Model");
+              },
+            }); 
         
-        this.getModel("BModel").create("/getProfiles", oEntry, {
-            success: function (oData) {
-                sap.ui.core.BusyIndicator.hide();
-                MessageToast.show("created");
-            sap.ui.core.BusyIndicator.hide();
-            that.tablesendbatch();
-            },
-            error: function (oData) {
-                MessageToast.show("update failed");
-                sap.ui.core.BusyIndicator.hide();
-            }
-        });
+        // this.getModel("BModel").create("/getProfiles", oEntry, {
+        //     success: function (oData) {
+        //         sap.ui.core.BusyIndicator.hide();
+        //         MessageToast.show("created");
+        //     sap.ui.core.BusyIndicator.hide();
+        //     that.tablesendbatch();
+        //     },
+        //     error: function (oData) {
+        //         MessageToast.show("update failed");
+        //         sap.ui.core.BusyIndicator.hide();
+        //     }
+        // });
     } else {
         MessageToast.show("Please fill all required fields");
                 sap.ui.core.BusyIndicator.hide();

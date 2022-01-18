@@ -127,6 +127,37 @@
         </f:Form>
         
     </Panel>
+    <Panel id="idPanelod" visible="false">
+    <Table id="odlList" headerText="{i18n>defmodel}"  items="{/results}"  selectionChange="handlepredSelect">
+     <headerToolbar>
+			<OverflowToolbar>
+				<Title text="{i18n>defmodel}"/>
+                <ToolbarSpacer/>                
+				<Button type="Ghost" icon="sap-icon://add-activity-2" tooltip="{i18n>addEntry}" press="onSingleEntry"/>
+			</OverflowToolbar>
+		</headerToolbar>
+        <columns>
+            <Column>
+                <Text text="{i18n>objdep}"/>
+            </Column>
+            <Column>
+                <Text text="{i18n>predpf}"/>
+            </Column>
+            <Column>
+                <Text text="{i18n>ovride}"/>
+            </Column>
+        </columns>
+        <items>
+            <ColumnListItem vAlign="Middle">
+                <cells>                  
+                    <Text text="{GroupID}"/>
+                    <Input placeholder="{i18n>objdep}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                    <CheckBox />
+                </cells>
+            </ColumnListItem>
+        </items>
+    </Table>
+    </Panel>
     <Panel id="idPanel" visible="false">
     <Table id="pmdlList" headerText="{i18n>predmodel}"  items="{/results}"  selectionChange="handlepredSelect">
      <headerToolbar>

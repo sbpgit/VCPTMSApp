@@ -86,7 +86,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
         OBJ_DEP     : String(30);
         OBJ_COUNTER : Integer
     }
-    function createProf() returns String;
+    //function createProf() returns String;
     function fGetNodeDet(NODE_TYPE : String(2), CHILD_NODE : String(50), PARENT_NODE : String(50)) returns array of getAccessNodes;
     function generate_timeseries() returns String;
     function get_objdep() returns array of objectDep;

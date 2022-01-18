@@ -55,35 +55,7 @@ module.exports = (srv) => {
       );
     return results;
   })
-  srv.on("createProf",async (req) => {
-    let liProfiles = [];
-    let lsprofiles = {};
-    let createResults = [];
-    let res;
-    var responseMessage;
-    var datetime = new Date();
-    var curDate = datetime.toISOString().slice(0,10);
-  
-    lsprofiles.PROFILE = "Test";
-    lsprofiles.METHOD = "MLR";
-    lsprofiles.PRF_DESC = "Test";
-    lsprofiles.CREATED_DATE = "2022-01-11" ;
-    lsprofiles.CREATED_BY = "TTHAKUR";
-    liProfiles.push(lsprofiles);
-    lsprofiles = {}
-  
-    try {
-      await cds.run(
-          INSERT.into("CP_PAL_PROFILEMETH").entries(liProfiles)
-      );
-      responseMessage = " Creation successfully " ;
-      createResults.push(responseMessage);
-    } catch (e) {    
-      responseMessage = " Creation failed" ;
-    }  
-    res = req._.req.res;
-    res.send({"value":createResults});
-  })
+ 
   srv.on("CREATE", "getProfiles", _createProfiles);
 
   srv.on("CREATE", "getProfileParameters", _createProfileParameters);
@@ -113,18 +85,20 @@ async function _createProfiles(req) {
   lsprofiles.CREATED_BY = req.data.CREATED_BY;
   liProfiles.push(lsprofiles);
   lsprofiles = {}
+  res = req._.req.res;
 
   try {
     await cds.run(
         INSERT.into("CP_PAL_PROFILEMETH").entries(liProfiles)
     );
     responseMessage = " Creation successfully " ;
+    //res.statusCode = 201;
     createResults.push(responseMessage);
   } catch (e) {    
     responseMessage = " Creation failed" ;
+    // res.statusCode = 201;
     createResults.push(responseMessage);
   }  
-  res = req._.req.res;
   res.send({"value":createResults});
 }
 
