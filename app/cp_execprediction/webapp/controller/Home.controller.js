@@ -68,8 +68,8 @@ sap.ui.define(
         _onPatternMatched: function () {
           that = this;
           this.oPanel = this.byId("idPanel");
-          this.oPanelod = this.byId("idPanelod");
-          this.oODTable = this.byId("odlList");
+        //   this.oPanelod = this.byId("idPanelod");
+        //   this.oODTable = this.byId("odlList");
           this.oTable = this.byId("pmdlList");
           this.i18n = this.getResourceBundle();
           this.oGModel = this.getModel("GModel");
@@ -108,26 +108,26 @@ sap.ui.define(
               MessageToast.show("error");
             },
           });
-          this.getModel("BModel").read("/getObjDepProfiles", {
-            success: function (oData) {
-                that.odModel.setData(oData);
-                that.oODList.setModel(that.odModel);
-            },
-            error: function (oData, error) {
-              MessageToast.show("error");
-            },
-          });
-        //   this.getModel("BModel").callFunction("/get_objdep", {
-        //     method: "GET",
-        //     urlParameters: {},
+        //   this.getModel("BModel").read("/getObjDepProfiles", {
         //     success: function (oData) {
-        //       that.odModel.setData(oData);
-        //       that.oODList.setModel(that.odModel);
+        //         that.odModel.setData(oData);
+        //         that.oODList.setModel(that.odModel);
         //     },
-        //     error: function (oRes) {
+        //     error: function (oData, error) {
         //       MessageToast.show("error");
         //     },
         //   });
+          this.getModel("BModel").callFunction("/get_objdep", {
+            method: "GET",
+            urlParameters: {},
+            success: function (oData) {
+              that.odModel.setData(oData);
+              that.oODList.setModel(that.odModel);
+            },
+            error: function (oRes) {
+              MessageToast.show("error");
+            },
+          });
           this.getModel("BModel").read("/getProfiles", {
             success: function (oData) {
               that.ppfModel.setData(oData);
@@ -304,7 +304,9 @@ sap.ui.define(
             if (aSelectedItems && aSelectedItems.length > 0) {
               that.oObjDep.removeAllTokens();
               aSelectedItems.forEach(function (oItem) {
-                aODdata.push({GroupID : oItem.getTitle()});
+                // aODdata.push({GroupID : oItem.getTitle(),
+                //               PROFILE : oItem.getInfo()
+                //                 });
                 that.oObjDep.addToken(
                   new sap.m.Token({
                     key: oItem.getTitle(),
@@ -312,11 +314,11 @@ sap.ui.define(
                   })
                 );
               });
-              this.oODPModel.setData({
-                results: aODdata,
-              });
-              that.oPanelod.setProperty("visible", true);
-              that.oPanelod.setProperty("expandable", true);
+            //   this.oODPModel.setData({
+            //     results: aODdata,
+            //   });
+            //   that.oPanelod.setProperty("visible", true);
+            //   that.oPanelod.setProperty("expandable", true);
             }
           } else {
             that.oPPFList.getBinding("items").filter([]);
@@ -358,7 +360,7 @@ sap.ui.define(
             for (i = 0; i < aItems.length; i++) {
               if (aItems[i].getTitle() === sRemovedTokenTitle) {
                 aItems[i].setSelected(false);
-                that.oODList.removeitem(aItem[i]);
+                // that.oODList.removeitem(aItem[i]);
               }
             }
           } else if (sId.includes("pmInput")) {
