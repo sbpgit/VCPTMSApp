@@ -152,14 +152,14 @@ sap.ui.define(
           });
         },
   
-        handleSelection: function () {
+        onAssign: function () {
           that.oGModel = that.getModel("oGModel");
-          var selTabItem = that.byId("idTab").getSelectedItems()[0].getBindingContext().getProperty();
+          var selTabItem = that.byId("idTab").getSelectedItems();
+          if(selTabItem.length){
+
+          
           if (!that._onProfiles) {
-            that._onProfiles = sap.ui.xmlfragment(
-              "cp.odp.cpodprofiles.view.Profiles",
-              that
-            );
+            that._onProfiles = sap.ui.xmlfragment("cp.odp.cpodprofiles.view.Profiles",that);
             that.getView().addDependent(that._onProfiles);
           }
   
@@ -179,6 +179,9 @@ sap.ui.define(
               MessageToast.show("Failed to get profiles");
             },
           });
+        } else {
+            MessageToast.show("Please select atleast one item to assign profile");
+        }
         },
   
         handleClose: function () {
@@ -368,20 +371,35 @@ sap.ui.define(
 
 
         onProfileSel: function (oEvent) {
-            var sItem = that.oGModel.getProperty("/selItem");
-            var sProfile = oEvent.getSource().getSelectedItems()[0].getBindingContext().getProperty();
-            var objDep = test = sItem.OBJ_DEP + "_" + sItem.OBJ_COUNTER;
+            var sItem = that.oGModel.getProperty("/selItem"),
+                aData = [],
+                sProfile = sap.ui.getCore().byId("idListTab").getSelectedItems()[0].getTitle();
+            // var objDep = sItem.OBJ_DEP + "_" + sItem.OBJ_COUNTER;
+            var selected ;
+            for (var i = 0; i < sItem.length; i++) {
+                selected = sItem[i].getBindingContext().getProperty();
+                aData.push({
+                    "LOCATION_ID-": selected.LOCATION_ID,
+                    "PRODUCT_ID": selected.PRODUCT_ID,
+                    "COMPONENT": selected.COMPONENT,
+                    "OBJ_DEP": selected.OBJ_DEP + "_" + selected.OBJ_COUNTER,
+                    "PROFILE": sProfile
+            });
+
+
+            }
+
             var uri = "/v2/catalog/getProfileOD";
             $.ajax({
               url: uri,
               type: "post",
               contentType: "application/json",
               data: JSON.stringify({
-                  LOCATION_ID: sItem.LOCATION_ID,
-                  PRODUCT_ID : sItem.PRODUCT_ID,
-                  COMPONENT: sItem.COMPONENT,
-                  OBJ_DEP:objDep,
-                  PROFILE:sProfile.PROFILE
+                //   LOCATION_ID: sItem.LOCATION_ID,
+                //   PRODUCT_ID : sItem.PRODUCT_ID,
+                //   COMPONENT: sItem.COMPONENT,
+                //   OBJ_DEP:objDep,
+                //   PROFILE:sProfile.PROFILE
               }),
               dataType: "json",
               async: false,
