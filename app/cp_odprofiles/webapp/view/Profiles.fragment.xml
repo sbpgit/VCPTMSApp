@@ -1,0 +1,18 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+	<Dialog id="idList" title="Profiles" contentWidth="350px">
+		<content>
+			<SearchField width="100%"  liveChange="handleSearch"/>
+			<List id="idListTab" items="{/results}" mode="SingleSelectMaster" rememberSelections="false" 
+            selectionChange="onProfileSel">
+				<ObjectListItem title="{PROFILE}"  type="Active">
+					<attributes>
+						<ObjectAttribute text="{PRF_DESC}"/>
+					</attributes>
+				</ObjectListItem>
+			</List>
+		</content>
+		<endButton>
+			<Button text="Cancel" press="handleClose" type="Emphasized"/>
+		</endButton>
+	</Dialog>
+</core:FragmentDefinition>
