@@ -54,11 +54,13 @@ module.exports = (srv) => {
           .columns("LOCATION_ID", "PRODUCT_ID", "OBJ_DEP", "OBJ_COUNTER")
       );
     return results;
-  })
- 
+  });
+
   srv.on("CREATE", "getProfiles", _createProfiles);
 
   srv.on("CREATE", "getProfileParameters", _createProfileParameters);
+
+  srv.on("CREATE", "getProfileOD", _createProfileOD);
   /*srv.on("profile_exec", async req =>{
         let { getAccessNodes } = srv.entities;
         const db = srv.transaction(req); 
@@ -76,30 +78,28 @@ async function _createProfiles(req) {
   let res;
   var responseMessage;
   var datetime = new Date();
-  var curDate = datetime.toISOString().slice(0,10);
+  var curDate = datetime.toISOString().slice(0, 10);
 
   lsprofiles.PROFILE = req.data.PROFILE;
   lsprofiles.METHOD = req.data.METHOD;
   lsprofiles.PRF_DESC = req.data.PRF_DESC;
-  lsprofiles.CREATED_DATE = curDate ;
+  lsprofiles.CREATED_DATE = curDate;
   lsprofiles.CREATED_BY = req.data.CREATED_BY;
   liProfiles.push(lsprofiles);
-  lsprofiles = {}
+  lsprofiles = {};
   res = req._.req.res;
 
   try {
-    await cds.run(
-        INSERT.into("CP_PAL_PROFILEMETH").entries(liProfiles)
-    );
-    responseMessage = " Creation successfully " ;
+    await cds.run(INSERT.into("CP_PAL_PROFILEMETH").entries(liProfiles));
+    responseMessage = " Creation successfully ";
     //res.statusCode = 201;
     createResults.push(responseMessage);
-  } catch (e) {    
-    responseMessage = " Creation failed" ;
+  } catch (e) {
+    responseMessage = " Creation failed";
     // res.statusCode = 201;
     createResults.push(responseMessage);
-  }  
-  res.send({"value":createResults});
+  }
+  res.send({ value: createResults });
 }
 
 async function _createProfileParameters(req) {
@@ -109,32 +109,82 @@ async function _createProfileParameters(req) {
   let res;
   var responseMessage;
   var datetime = new Date();
-  var curDate = datetime.toISOString().slice(0,10);
+  var curDate = datetime.toISOString().slice(0, 10);
 
   for (let i = 0; i < req.data.length; i++) {
-    lsprofilesPara.PROFILE      = req.data[i].PROFILE;
-    lsprofilesPara.METHOD       = req.data[i].METHOD;
-    lsprofilesPara.PARA_NAME    = req.data[i].PARA_NAME;
-    lsprofilesPara.INTVAL       = req.data[i].INTVAL;
-    lsprofilesPara.DOUBLEVAL    = req.data[i].DOUBLEVAL;
-    lsprofilesPara.STRVAL       = req.data[i].STRVAL;
-    lsprofilesPara.PARA_DESC    = req.data[i].PARA_DESC;
-    lsprofilesPara.PARA_DEP     = req.data[i].PARA_DEP;
+    lsprofilesPara.PROFILE = req.data[i].PROFILE;
+    lsprofilesPara.METHOD = req.data[i].METHOD;
+    lsprofilesPara.PARA_NAME = req.data[i].PARA_NAME;
+    lsprofilesPara.INTVAL = req.data[i].INTVAL;
+    lsprofilesPara.DOUBLEVAL = req.data[i].DOUBLEVAL;
+    lsprofilesPara.STRVAL = req.data[i].STRVAL;
+    lsprofilesPara.PARA_DESC = req.data[i].PARA_DESC;
+    lsprofilesPara.PARA_DEP = req.data[i].PARA_DEP;
     lsprofilesPara.CREATED_DATE = curDate;
-    lsprofilesPara.CREATED_BY   = req.data[i].CREATED_BY;
-    liProfilesPara.push(lsprofilesPara);
-    lsprofilesPara = {};
+    lsprofilesPara.CREATED_BY = req.data[i].CREATED_BY;
+    const liProfPara_t = await cds.run(
+      SELECT.from("CP_PAL_PROFILEMETH_PARA").where({ PROFILE: 111 })`SELECT *
+           FROM "CP_PAL_PROFILEMETH_PARA"
+          WHERE "PROFILE" = '` +
+        lsprofilesPara.PROFILE +
+        `'
+            AND "METHOD" = '` +
+        lsprofilesPara.METHOD +
+        `'
+            AND "PARA_NAME" = '` +
+        lsprofilesPara.PARA_NAME +
+        `'`
+    );
+    if (liProfPara_t.length !== 0) {
+      liProfilesPara.push(lsprofilesPara);
+      lsprofilesPara = {};
+    }
   }
   try {
-    await cds.run(
+    if (liProfilesPara.length > 0) {
+      await cds.run(
         INSERT.into("CP_PAL_PROFILEMETH_PARA").entries(liProfilesPara)
-    );
-    responseMessage = " Creation successfully " ;
+      );
+      responseMessage = " Creation successfully ";
+      createResults.push(responseMessage);
+    }
+  } catch (e) {
+    responseMessage = " Creation failed";
     createResults.push(responseMessage);
-  } catch (e) {    
-    responseMessage = " Creation failed" ;
-    createResults.push(responseMessage);
-  }  
+  }
   res = req._.req.res;
-  res.send({"value":createResults});
+  res.send({ value: createResults });
+}
+
+async function _createProfileOD(req) {
+  let liProfilesOD = [];
+  let lsprofilesOD = {};
+  let createResults = [];
+  let res;
+  var responseMessage;
+  var datetime = new Date();
+  var curDate = datetime.toISOString().slice(0, 10);
+
+  lsprofilesOD.LOCATION_ID = req.data.LOCATION_ID;
+  lsprofilesOD.PRODUCT_ID = req.data.PRODUCT_ID;
+  lsprofilesOD.COMPONENT = req.data.COMPONENT;
+  lsprofilesOD.OBJ_DEP = req.data.OBJ_DEP;
+  lsprofilesOD.PROFILE = req.data.PROFILE;
+  liProfilesOD.push(lsprofilesID);
+  lsprofilesOD = {};
+  res = req._.req.res;
+
+  try {
+    if (liProfilesOD.length > 0) {
+      await cds.run(INSERT.into("CP_PAL_PROFILEOD").entries(liProfilesOD));
+      responseMessage = " Creation successfully ";
+      //res.statusCode = 201;
+      createResults.push(responseMessage);
+    }
+  } catch (e) {
+    responseMessage = " Creation failed";
+    // res.statusCode = 201;
+    createResults.push(responseMessage);
+  }
+  res.send({ value: createResults });
 }

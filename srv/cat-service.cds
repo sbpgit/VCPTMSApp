@@ -79,7 +79,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
     entity getProfiles          as projection on od.PAL_PROFILEMETH;
     entity getProfileParameters as projection on od.PAL_PROFILEMETH_PARA;
     entity getMODHeader         as projection on V_OBDHDR;
-    
+    entity getProfileOD         as projection on od.PAL_PROFILEOD;
     type objectDep {
         LOCATION_ID : String(4);
         PRODUCT_ID  : String(40);
