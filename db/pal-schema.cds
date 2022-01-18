@@ -6,8 +6,10 @@ using { managed } from '@sap/cds/common';
 entity PalHgbtRegressionsV1 {
     key hgbtID : String(50);
     createdAt  : Timestamp ;  
+    Location : String(4);
+    Product : String(40);
     regressionParameters : array of {
-        groupId:String(20); 
+        groupId:String(100); 
         paramName:String(100); 
         intVal:Integer;
         doubleVal : Double;
@@ -16,7 +18,7 @@ entity PalHgbtRegressionsV1 {
 
     hgbtType : Integer  @assert.range: [ 2, 12 ];
     regressionData : array of  { 
-        groupId:String(20); 
+        groupId:String(100); 
         ID : Integer;
         att1: Double; 
         att2: Double; 
@@ -33,23 +35,23 @@ entity PalHgbtRegressionsV1 {
         target  : Double; 
     } ; 
     modelsOp : array of {
-        groupId : String(20); 
+        groupId : String(100); 
         rowIndex  : Integer; 
         treeIndex  : Integer; 
         modelContent : LargeString;
     };
     importanceOp : array of {
-        groupId : String(20);
+        groupId : String(100);
         variableName : String(256);
         importance : Double;
     };
     statisticsOp : array of {
-        groupId : String(20);
+        groupId : String(100);
         statName : String(1000);
         statValue : String(1000);
     };
     paramSelectionOp : array of {
-        groupId : String(20);
+        groupId : String(100);
         paramName : String(256);
         intVal : Integer;
         doubleVal : Double;
@@ -61,7 +63,9 @@ entity PalHgbtRegressionsV1 {
 entity PalHgbtByGroup {
     hgbtGroupID : String(50);
     createdAt  : Timestamp ;
-    groupId : String(20);
+    Location : String(4);
+    Product : String(40);
+    groupId : String(100);
     regressionParameters : array of {
         paramName:String(100); 
         intVal:Integer;
@@ -89,9 +93,11 @@ entity PalHgbtByGroup {
 entity PalHgbtPredictionsV1 { 
     key hgbtID : String(50);
     createdAt  : Timestamp ; //@cds.on.insert : $now;
-    groupId : String(20);
+    Location : String(4);
+    Product : String(40);
+    groupId : String(100);
     predictionParameters: array of {
-        groupId:String(20); 
+        groupId:String(100); 
         paramName:String(100); 
         intVal:Integer;
         doubleVal : Double;
@@ -99,7 +105,7 @@ entity PalHgbtPredictionsV1 {
     }; 
     hgbtType : Integer  @assert.range: [ 2, 12 ];
     predictionData : array of  { 
-        groupId:String(20); 
+        groupId:String(100); 
         //id   : Integer; 
         ID   : Integer; 
         att1 : Double; 
@@ -116,7 +122,7 @@ entity PalHgbtPredictionsV1 {
         att12 : Double;
     } ; 
     predictedResults : array of {
-    groupId : String(20);
+    groupId : String(100);
     id    : Integer;
     score : String(100);
     confidence : Double;
@@ -125,9 +131,11 @@ entity PalHgbtPredictionsV1 {
 
 entity PalRdtRegressions {
     key rdtID : String(50);
-    createdAt  : Timestamp ;  
+    createdAt  : Timestamp ;
+    Location : String(4);
+    Product : String(40);  
     regressionParameters : array of {
-        groupId:String(20); 
+        groupId:String(100); 
         paramName:String(100); 
         intVal:Integer;
         doubleVal : Double;
@@ -136,7 +144,7 @@ entity PalRdtRegressions {
 
     rdtType : Integer  @assert.range: [ 2, 12 ];
     regressionData : array of  { 
-        groupId:String(20); 
+        groupId:String(100); 
         ID : Integer;
         att1: Double; 
         att2: Double; 
@@ -153,18 +161,18 @@ entity PalRdtRegressions {
         target  : Double; 
     } ; 
     modelsOp : array of {
-        groupId : String(20); 
+        groupId : String(100); 
         rowIndex  : Integer; 
         treeIndex  : Integer; 
         modelContent : LargeString;
     };
     importanceOp : array of {
-        groupId : String(20);
+        groupId : String(100);
         variableName : String(256);
         importance : Double;
     };
     outOfBagOp : array of {
-        groupId : String(20);
+        groupId : String(100);
         treeIndex  : Integer; 
         error  : Double; 
     }
@@ -173,7 +181,9 @@ entity PalRdtRegressions {
 entity PalRdtByGroup {
     rdtGroupID : String(50);
     createdAt  : Timestamp ;
-    groupId : String(20);
+    Location : String(4);
+    Product : String(40);
+    groupId : String(100);
     regressionParameters : array of {
         paramName:String(100); 
         intVal:Integer;
@@ -194,9 +204,11 @@ entity PalRdtByGroup {
 entity PalRdtPredictions { 
     key rdtID : String(50);
     createdAt  : Timestamp ; //@cds.on.insert : $now;
+    Location : String(4);
+    Product : String(40);
     groupId : String(20);
     predictionParameters: array of {
-        groupId:String(20); 
+        groupId:String(100); 
         paramName:String(100); 
         intVal:Integer;
         doubleVal : Double;
@@ -204,7 +216,7 @@ entity PalRdtPredictions {
     }; 
     rdtType : Integer  @assert.range: [ 2, 12 ];
     predictionData : array of  { 
-        groupId:String(20); 
+        groupId:String(100); 
         //id   : Integer; 
         ID   : Integer; 
         att1 : Double; 
@@ -221,7 +233,7 @@ entity PalRdtPredictions {
         att12 : Double;
     } ; 
     predictedResults : array of {
-    groupId : String(20);
+    groupId : String(100);
     id    : Integer;
     score : String(100);
     confidence : Double;
@@ -232,8 +244,10 @@ entity PalMlrRegressions {
     //key mlrID : UUID;
     key mlrID : String(50);
     createdAt  : Timestamp ;
+    Location : String(4);
+    Product : String(40);
     regressionParameters : array of {
-        groupId:String(20); 
+        groupId:String(100); 
         paramName:String(256); 
         intVal:Integer;
         doubleVal : Double;
@@ -242,7 +256,7 @@ entity PalMlrRegressions {
     mlrType : Integer  @assert.range: [ 2, 12 ];
     regressionData : array of
     {
-        groupId : String(20);
+        groupId : String(100);
         ID : Integer;
         target : Double; 
         att1 : Double;
@@ -259,29 +273,29 @@ entity PalMlrRegressions {
         att12 : Double;
     }; 
     coefficientOp : array of {
-        groupId : String(20);
+        groupId : String(100);
 	    variableName : String(1000); 	
 	    coefficientValue : Double;
 	    tValue : Double;
 	    pValue : Double;
     };
     pmmlOp : array of {
-        groupId : String(20);
+        groupId : String(100);
         rowIndex : Integer;
         modelContent : LargeString;
     };
     fittedOp : array of {
-        groupId : String(20);
+        groupId : String(100);
         ID : Integer;
         value : Double;
     };
     statisticsOp : array of {
-        groupId : String(20);
+        groupId : String(100);
         statName : String(256);
         statValue : String(1000);
     };
     optimalParamOp : array of {
-        groupId : String(20);
+        groupId : String(100);
         paramName : String(256);
         intVal : Integer;
         doubleVal : Double;
@@ -293,7 +307,9 @@ entity PalMlrRegressions {
 entity PalMlrByGroup {
     mlrGroupID : String(50);
     createdAt  : Timestamp ;
-    groupId : String(20);
+    Location : String(4);
+    Product : String(40);
+    groupId : String(100);
     regressionParameters : array of {
         paramName:String(256); 
         intVal:Integer;
@@ -327,9 +343,11 @@ entity PalMlrPredictions {
     //key mlrpID : UUID;
     key mlrpID : String(50);
     createdAt  : Timestamp ; //@cds.on.insert : $now;
+    Location : String(4);
+    Product : String(40);
     groupId : String(20);
     predictionParameters: array of {
-        groupId:String(20); 
+        groupId:String(100); 
         paramName:String(256); 
         intVal:Integer;
         doubleVal : Double;
@@ -338,7 +356,7 @@ entity PalMlrPredictions {
 
     mlrpType : Integer  @assert.range: [ 2, 12 ];
     predictionData : array of { 
-        groupId : String(20);
+        groupId : String(100);
         ID : Integer;
         att1 : Double;
         att2 : Double;
@@ -354,7 +372,7 @@ entity PalMlrPredictions {
         att12 : Double; 
     };
     fittedResults : array of {
-        groupId : String(20);
+        groupId : String(100);
         ID : Integer;
         value : Double;
     }
@@ -363,8 +381,10 @@ entity PalMlrPredictions {
 entity PalVarmaModels {
     key varmaID : String(50);
     createdAt  : Timestamp ;
+    Location : String(4);
+    Product : String(40);
     controlParameters : array of {
-        groupId:String(20); 
+        groupId:String(100); 
         paramName:String(100); 
         intVal:Integer;
         doubleVal : Double;
@@ -373,7 +393,7 @@ entity PalVarmaModels {
     varmaType : Integer  @assert.range: [ 2, 12 ];
     varmaData : array of
     {
-        groupId : String(20);
+        groupId : String(100);
         //timestamp : Integer;
         ID : Integer;
         att1 : Double;
@@ -391,19 +411,19 @@ entity PalVarmaModels {
         target : Double; 
     }; 
     modelsOp : array of {
-        groupId : String(20);
+        groupId : String(100);
 	    contentIndex : Integer; 	
 	    contentValue : LargeString;
     };
     fittedOp : array of {
-        groupId : String(20);
+        groupId : String(100);
         nameCol : LargeString;
         idx : Integer;
         fitting : Double;
         residual : Double;
     };
     irfOp : array of {
-        groupId : String(20);
+        groupId : String(100);
         col1 : LargeString;
         col2 : LargeString;
         idx  : Integer;
@@ -415,7 +435,9 @@ entity PalVarmaModels {
 entity PalVarmaByGroup {
     varmaGroupID : String(50);
     createdAt  : Timestamp ;
-    groupId:String(20); 
+    Location : String(4);
+    Product : String(40);
+    groupId:String(100); 
     controlParameters : array of {
         paramName:String(100); 
         intVal:Integer;
@@ -458,9 +480,11 @@ entity PalVarmaByGroup {
 entity PalVarmaPredictions { 
     key varmaID : String(50);
     createdAt  : Timestamp ;
+    Location : String(4);
+    Product : String(40);
     groupId : String(20);
     predictionParameters : array of {
-        groupId:String(20); 
+        groupId:String(100); 
         paramName:String(100); 
         intVal:Integer;
         doubleVal : Double;
@@ -469,7 +493,7 @@ entity PalVarmaPredictions {
     varmaType : Integer  @assert.range: [ 2, 12 ];
     predictionData : array of
     {
-        groupId : String(20);
+        groupId : String(100);
         //timestampIdx : Integer;
         ID : Integer;
         att1 : Double;
@@ -486,7 +510,7 @@ entity PalVarmaPredictions {
         att12 : Double;
     }; 
     predictedResults : array of {
-    groupId : String(20);
+    groupId : String(100);
     columnName    : String(50);
     idx :Integer;
     forecast : Double;
@@ -506,8 +530,8 @@ entity PalGenRegressionModels
     vcRulesList : array of {
         profile : String(50);
         override : Boolean;
-        Location:String(20); 
-        Product:String(15); 
+        Location:String(4); 
+        Product:String(40); 
         GroupID :String(20);
         //modelType : Integer;//  @assert.range: [ 1, 2 ]; // 1 - MLR, 2 - HGBT
         dimensions : Integer;
@@ -522,8 +546,8 @@ entity PalGenPredictions
     vcRulesList : array of {
         profile : String(50);
         override : Boolean;
-        Location:String(20); 
-        Product:String(15); 
+        Location:String(4); 
+        Product:String(40); 
         GroupID :String(20);
         dimensions : Integer;
     };
