@@ -424,9 +424,11 @@ sap.ui.define(
                     CREATED_BY: CREATED_BY,
                     PARA_NAME: PARA_NAME,
                     PARA_DESC: PARA_DESC,
+                    PARA_DEP : PARA_DESC,
                     INTVAL: INTVAL,
                     DOUBLEVAL: DOUBLEVAL,
                     STRVAL : STRVAL,
+                    CREATED_DATE:"2022-01-14"
             }),
               dataType: "json",
               async: false,
@@ -440,7 +442,7 @@ sap.ui.define(
                         if(that.count === that.comp){
                             sap.ui.core.BusyIndicator.hide();
                             sap.m.MessageToast.show("Created profile parameters");
-                            break;
+                            
                         } else {
                             that.comp = that.comp + 1;
                         }
