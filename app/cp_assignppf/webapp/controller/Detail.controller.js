@@ -488,6 +488,7 @@ sap.ui.define(
           //               STRVAL : STRVAL
           //           }
           //       });
+
         }
 
         var uri = "/v2/catalog/genProfileParam";

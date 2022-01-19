@@ -96,6 +96,14 @@ modules:
       - cpmdlprofilecpmodelprofiles.zip
       name: cpmdlprofilecpmodelprofiles
       target-path: resources/
+    - artifacts:
+      - cpappfcpassignppf.zip
+      name: cpappfcpassignppf
+      target-path: resources/
+    - artifacts:
+      - cpodpcpodprofiles.zip
+      name: cpodpcpodprofiles
+      target-path: resources/
 - name: cfgapppvsrootcfgprdpvsroot
   type: html5
   path: app/cfgprd_pvsroot
@@ -159,6 +167,26 @@ modules:
 - name: cpmdlprofilecpmodelprofiles
   type: html5
   path: app/cp_modelprofiles
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappfcpassignppf
+  type: html5
+  path: app/cp_assignppf
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpodpcpodprofiles
+  type: html5
+  path: app/cp_odprofiles
   build-parameters:
     build-result: dist
     builder: custom
