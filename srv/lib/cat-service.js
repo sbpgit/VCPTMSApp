@@ -223,7 +223,14 @@ async function _createProfileOD(req) {
 
   try {
     if (liProfilesOD.length > 0) {
-      await cds.run(INSERT.into("CP_PAL_PROFILEOD").entries(liProfilesOD));
+      await cds.run(UPSERT.into("CP_PAL_PROFILEOD").entries(liProfilesOD));
+    //   await cds.run(
+    //   `UPDATE CP_PAL_PROFILEOD "PROFILE"='`+ + `'
+    //   WHERE "LOCATION_ID" = '` +  + `'
+    //   "PRODUCT" = '` +  + `'
+    //   "COMPONENT" = '` + + `' 
+    //   "OBJ_DEP" = '` + + `'`
+    //   );
       responseMessage = " Creation successfully ";
       //res.statusCode = 201;
       createResults.push(responseMessage);
