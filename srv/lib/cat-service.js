@@ -110,36 +110,20 @@ async function _createProfileParameters(req) {
   var responseMessage;
   var datetime = new Date();
   var curDate = datetime.toISOString().slice(0, 10);
-
-  for (let i = 0; i < req.data.length; i++) {
-    lsprofilesPara.PROFILE = req.data[i].PROFILE;
-    lsprofilesPara.METHOD = req.data[i].METHOD;
-    lsprofilesPara.PARA_NAME = req.data[i].PARA_NAME;
-    lsprofilesPara.INTVAL = req.data[i].INTVAL;
-    lsprofilesPara.DOUBLEVAL = req.data[i].DOUBLEVAL;
-    lsprofilesPara.STRVAL = req.data[i].STRVAL;
-    lsprofilesPara.PARA_DESC = req.data[i].PARA_DESC;
-    lsprofilesPara.PARA_DEP = req.data[i].PARA_DEP;
+    lsprofilesPara.PROFILE = req.data.PROFILE;
+    lsprofilesPara.METHOD = req.data.METHOD;
+    lsprofilesPara.PARA_NAME = req.data.PARA_NAME;
+    lsprofilesPara.INTVAL = req.data.INTVAL;
+    lsprofilesPara.DOUBLEVAL = req.data.DOUBLEVAL;
+    lsprofilesPara.STRVAL = req.data.STRVAL;
+    lsprofilesPara.PARA_DESC = req.data.PARA_DESC;
+    lsprofilesPara.PARA_DEP = req.data.PARA_DEP;
     lsprofilesPara.CREATED_DATE = curDate;
-    lsprofilesPara.CREATED_BY = req.data[i].CREATED_BY;
-    const liProfPara_t = await cds.run(
-      SELECT.from("CP_PAL_PROFILEMETH_PARA").where({ PROFILE: 111 })`SELECT *
-           FROM "CP_PAL_PROFILEMETH_PARA"
-          WHERE "PROFILE" = '` +
-        lsprofilesPara.PROFILE +
-        `'
-            AND "METHOD" = '` +
-        lsprofilesPara.METHOD +
-        `'
-            AND "PARA_NAME" = '` +
-        lsprofilesPara.PARA_NAME +
-        `'`
-    );
-    if (liProfPara_t.length !== 0) {
+    lsprofilesPara.CREATED_BY = req.data.CREATED_BY;
       liProfilesPara.push(lsprofilesPara);
       lsprofilesPara = {};
-    }
-  }
+   
+  
   try {
     if (liProfilesPara.length > 0) {
       await cds.run(
@@ -154,6 +138,50 @@ async function _createProfileParameters(req) {
   }
   res = req._.req.res;
   res.send({ value: createResults });
+
+//   for (let i = 0; i < req.data.length; i++) {
+//     lsprofilesPara.PROFILE = req.data[i].PROFILE;
+//     lsprofilesPara.METHOD = req.data[i].METHOD;
+//     lsprofilesPara.PARA_NAME = req.data[i].PARA_NAME;
+//     lsprofilesPara.INTVAL = req.data[i].INTVAL;
+//     lsprofilesPara.DOUBLEVAL = req.data[i].DOUBLEVAL;
+//     lsprofilesPara.STRVAL = req.data[i].STRVAL;
+//     lsprofilesPara.PARA_DESC = req.data[i].PARA_DESC;
+//     lsprofilesPara.PARA_DEP = req.data[i].PARA_DEP;
+//     lsprofilesPara.CREATED_DATE = curDate;
+//     lsprofilesPara.CREATED_BY = req.data[i].CREATED_BY;
+//     const liProfPara_t = await cds.run(
+//       SELECT.from("CP_PAL_PROFILEMETH_PARA").where({ PROFILE: 111 })`SELECT *
+//            FROM "CP_PAL_PROFILEMETH_PARA"
+//           WHERE "PROFILE" = '` +
+//         lsprofilesPara.PROFILE +
+//         `'
+//             AND "METHOD" = '` +
+//         lsprofilesPara.METHOD +
+//         `'
+//             AND "PARA_NAME" = '` +
+//         lsprofilesPara.PARA_NAME +
+//         `'`
+//     );
+//     if (liProfPara_t.length !== 0) {
+//       liProfilesPara.push(lsprofilesPara);
+//       lsprofilesPara = {};
+//     }
+//   }
+//   try {
+//     if (liProfilesPara.length > 0) {
+//       await cds.run(
+//         INSERT.into("CP_PAL_PROFILEMETH_PARA").entries(liProfilesPara)
+//       );
+//       responseMessage = " Creation successfully ";
+//       createResults.push(responseMessage);
+//     }
+//   } catch (e) {
+//     responseMessage = " Creation failed";
+//     createResults.push(responseMessage);
+//   }
+//   res = req._.req.res;
+//   res.send({ value: createResults });
 }
 
 async function _createProfileOD(req) {

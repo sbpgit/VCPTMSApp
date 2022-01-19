@@ -430,11 +430,11 @@ context cp {
         key PROFILE   : String(50) @title : 'Profile';
         key METHOD    : String(50) @title : 'Method Name';
         key PARA_NAME : String(100)@title : 'Parameter Name';
-            INTVAL    : Integer;
-            DOUBLEVAL : Double;
-            STRVAL    : String(20);
-            PARA_DESC : String(1000);
-            PARA_DEP  : String(1000);
+            INTVAL    : Integer@title : 'Integer';
+            DOUBLEVAL : Double@title : 'Double';
+            STRVAL    : String(20)@title : 'String';
+            PARA_DESC : String(1000)@title : 'Parameter Description';
+            PARA_DEP  : String(1000)@title : 'Parameter Dependency';
             CREATED_DATE : Date       @title : 'Date';
             CREATED_BY   : String(12)@title : 'Created By'
     }
