@@ -60,7 +60,7 @@ module.exports = (srv) => {
 
   srv.on("CREATE", "genProfileParam", _createProfileParameters);
 
-  srv.on("CREATE", "getProfileOD", _createProfileOD);
+  srv.on("CREATE", "genProfileOD", _createProfileOD);
   /*srv.on("profile_exec", async req =>{
         let { getAccessNodes } = srv.entities;
         const db = srv.transaction(req); 
@@ -111,55 +111,26 @@ async function _createProfileParameters(req) {
   var datetime = new Date();
   var curDate = datetime.toISOString().slice(0, 10);
   const aProfilePara_req = req.data.PROFILEPARA;
-//   var aProfilePara = [];
 
-//     lsprofilesPara.PROFILE = req.data.PROFILE;
-//     lsprofilesPara.METHOD = req.data.METHOD;
-//     lsprofilesPara.PARA_NAME = req.data.PARA_NAME;
-//     lsprofilesPara.INTVAL = req.data.INTVAL;
-//     lsprofilesPara.DOUBLEVAL = req.data.DOUBLEVAL;
-//     lsprofilesPara.STRVAL = req.data.STRVAL;
-//     lsprofilesPara.PARA_DESC = req.data.PARA_DESC;
-//     lsprofilesPara.PARA_DEP = req.data.PARA_DEP;
-//     lsprofilesPara.CREATED_DATE = curDate;
-//     lsprofilesPara.CREATED_BY = req.data.CREATED_BY;
-//       liProfilesPara.push(lsprofilesPara);
-//       lsprofilesPara = {};
-   
-  
-//   try {
-//     if (liProfilesPara.length > 0) {
-//       await cds.run(
-//         INSERT.into("CP_PAL_PROFILEMETH_PARA").entries(liProfilesPara)
-//       );
-//       responseMessage = " Creation successfully ";
-//       createResults.push(responseMessage);
-//     }
-//   } catch (e) {
-//     responseMessage = " Creation failed";
-//     createResults.push(responseMessage);
-//   }
-//   res = req._.req.res;
-//   res.send({ value: createResults });
-  
   for (let i = 0; i < aProfilePara_req.length; i++) {
-    lsprofilesPara.PROFILE      = aProfilePara_req.PROFILE;
-    lsprofilesPara.METHOD       = aProfilePara_req.METHOD;
-    lsprofilesPara.PARA_NAME    =  aProfilePara_req.PARA_NAME;
-    lsprofilesPara.INTVAL       =  aProfilePara_req.INTVAL;
-    lsprofilesPara.DOUBLEVAL    =  aProfilePara_req.DOUBLEVAL;
-    lsprofilesPara.STRVAL       =  aProfilePara_req.STRVAL;
-    lsprofilesPara.PARA_DESC    =  aProfilePara_req.PARA_DESC;
-    lsprofilesPara.PARA_DEP     =  aProfilePara_req.PARA_DEP;
-    lsprofilesPara.CREATED_DATE = curDate;
-    lsprofilesPara.CREATED_BY   =  aProfilePara_req.CREATED_BY;
-      liProfilesPara.push(lsprofilesPara);
-      lsprofilesPara = {};
+    lsprofilesPara.PROFILE = aProfilePara_req[i].PROFILE;
+    if (lsprofilesPara.PROFILE !== undefined) {
+      lsprofilesPara.METHOD = aProfilePara_req[i].METHOD;
+      lsprofilesPara.PARA_NAME = aProfilePara_req[i].PARA_NAME;
+        lsprofilesPara.INTVAL = aProfilePara_req[i].INTVAL;
+         lsprofilesPara.DOUBLEVAL = aProfilePara_req[i].DOUBLEVAL;
+      lsprofilesPara.STRVAL = aProfilePara_req[i].STRVAL;
+      lsprofilesPara.PARA_DESC = aProfilePara_req[i].PARA_DESC;
+      lsprofilesPara.PARA_DEP = null;//aProfilePara_req[i].PARA_DEP;
+      lsprofilesPara.CREATED_DATE = curDate;
+      lsprofilesPara.CREATED_BY = aProfilePara_req[i].CREATED_BY;
+      liProfilesPara.push(GenFunctions.parse(lsprofilesPara));
     }
+    lsprofilesPara = {};
+  }
   try {
     if (liProfilesPara.length > 0) {
-      await cds.run(
-        INSERT.into("CP_PAL_PROFILEMETH_PARA").entries(liProfilesPara)
+      await cds.run(INSERT.into("CP_PAL_PROFILEMETH_PARA").entries(liProfilesPara)
       );
       responseMessage = " Creation successfully ";
       createResults.push(responseMessage);
@@ -181,13 +152,20 @@ async function _createProfileOD(req) {
   var datetime = new Date();
   var curDate = datetime.toISOString().slice(0, 10);
 
-  lsprofilesOD.LOCATION_ID = req.data.LOCATION_ID;
-  lsprofilesOD.PRODUCT_ID = req.data.PRODUCT_ID;
-  lsprofilesOD.COMPONENT = req.data.COMPONENT;
-  lsprofilesOD.OBJ_DEP = req.data.OBJ_DEP;
-  lsprofilesOD.PROFILE = req.data.PROFILE;
-  liProfilesOD.push(lsprofilesID);
-  lsprofilesOD = {};
+  const aProfileOD_req = req.data.PROFILEOD;
+
+  for (let i = 0; i < aProfileOD_req.length; i++) {
+    lsprofilesOD.PROFILE = aProfileOD_req[i].PROFILE;
+    if (lsprofilesOD.PROFILE !== undefined) {
+      lsprofilesOD.LOCATION_ID = aProfileOD_req[i].LOCATION_ID;
+      lsprofilesOD.PRODUCT_ID = aProfileOD_req[i].PRODUCT_ID;
+      lsprofilesOD.COMPONENT = aProfileOD_req[i].COMPONENT;
+      lsprofilesOD.OBJ_DEP = aProfileOD_req[i].OBJ_DEP;
+      lsprofilesOD.PROFILE = aProfileOD_req[i].PROFILE;
+      liProfilesOD.push(GenFunctions.parse(lsprofilesOD));
+    }
+    lsprofilesOD = {};
+  }
   res = req._.req.res;
 
   try {
