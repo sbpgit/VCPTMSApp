@@ -56,6 +56,59 @@ module.exports = (srv) => {
     return results;
   });
 
+  srv.on("getODProfiles", async (req) => {    
+  let liresults = [];
+  let lsresults = {};
+    let { getMODHeader, getProfileOD } = srv.entities;
+    const db = srv.transaction(req);
+    const aOdhdr = await cds
+      .transaction(req)
+      .run(
+        SELECT.distinct
+          .from(getMODHeader)
+          .columns("LOCATION_ID", "PRODUCT_ID", "COMPONENT", "OBJ_DEP", "OBJ_COUNTER", "OBJDEP_DESC")
+      );
+    const aOdProfile = await cds
+    .transaction(req)
+    .run(
+      SELECT.distinct
+        .from(getProfileOD)
+        .columns("LOCATION_ID", "PRODUCT_ID", "COMPONENT", "PROFILE", "OBJ_DEP", "STRUC_NODE")
+    );
+    
+    for (let i = 0; i < aOdhdr.length; i++){
+        var vOD = aOdhdr[i].OBJ_DEP + '_' + aOdhdr[i].OBJ_COUNTER;
+        lsresults.LOCATION_ID = aOdhdr[i].LOCATION_ID;
+        lsresults.PRODUCT_ID = aOdhdr[i].PRODUCT_ID;
+        lsresults.COMPONENT = aOdhdr[i].COMPONENT;
+        lsresults.OBJ_DEP = vOD;
+        lsresults.OBJDEP_DESC = aOdhdr[i].OBJDEP_DESC;
+        let liPrfOD = await cds.run(
+            `SELECT DISTINCT
+                        "LOCATION_ID",
+                        "PRODUCT_ID",
+                        "COMPONENT",
+                        "PROFILE",
+                        "OBJ_DEP",
+                        "STRUC_NODE"
+                    FROM "CP_PAL_PROFILEOD"
+                   WHERE "LOCATION_ID" = '` + lsresults.LOCATION_ID + `'
+                     AND "PRODUCT_ID" = '` + lsresults.PRODUCT_ID + `'
+                     AND "COMPONENT" = '` + lsresults.COMPONENT + `'
+                     AND "OBJ_DEP" = '` + vOD + `'`
+          );
+        //   for (let j = 0; j < liPrfOD.length; j++){
+        if(liPrfOD[0].PROFILE !== null){
+            lsresults.PROFILE =  liPrfOD[0].PROFILE;
+            lsresults.STRUC_NODE = liPrfOD[0].STRUC_NODE;
+        }
+        liresults.push(lsresults);
+        liPrfOD = [];
+        lsresults = {};
+    // }
+}
+    return liresults;
+  });
   srv.on("CREATE", "getProfiles", _createProfiles);
 
   srv.on("CREATE", "genProfileParam", _createProfileParameters);
