@@ -427,52 +427,52 @@ context cp {
     }
 
     entity PAL_PROFILEMETH_PARA {
-        key PROFILE   : String(50) @title : 'Profile';
-        key METHOD    : String(50) @title : 'Method Name';
-        key PARA_NAME : String(100)@title : 'Parameter Name';
-            INTVAL    : Integer@title : 'Integer';
-            DOUBLEVAL : Double@title : 'Double';
-            STRVAL    : String(20)@title : 'String';
-            PARA_DESC : String(1000)@title : 'Parameter Description';
-            PARA_DEP  : String(1000)@title : 'Parameter Dependency';
-            CREATED_DATE : Date       @title : 'Date';
-            CREATED_BY   : String(12)@title : 'Created By'
+        key PROFILE   : String(50);
+        key METHOD    : String(50);
+        key PARA_NAME : String(100);
+            INTVAL    : Integer;
+            DOUBLEVAL : Double;
+            STRVAL    : String(20);
+            PARA_DESC : String(1000);
+            PARA_DEP  : String(1000);
+            CREATED_DATE : Date;
+            CREATED_BY   : String(12);
     }
 
 
     entity PAL_PROFILEOD : managed {
-        key LOCATION_ID : String(4) @title : 'Location ID';
-        key PRODUCT_ID  : String(40)@title : 'Product ID';
-        key COMPONENT   : String(40)@title : 'Component';
-        key PROFILE     : String(50)@title : 'Profile';
-        key OBJ_DEP     : String(30)@title : 'Object Dependency';
-            STRUC_NODE  : String(50)@title : 'Structure Node';
+        key LOCATION_ID : String(4);
+        key PRODUCT_ID  : String(40);
+        key COMPONENT   : String(40);
+        key PROFILE     : String(50);
+        key OBJ_DEP     : String(30);
+            STRUC_NODE  : String(50);
     }
 
     entity IP_PROFILEOD {
-        key UNID: Integer;
+        key CREATED_DATE: Date;
         PROFILEOD: array of {
-            LOCATION_ID : String(4) @title : 'Location ID';
-            PRODUCT_ID  : String(40)@title : 'Product ID';
-            COMPONENT   : String(40)@title : 'Component';
-            PROFILE     : String(50)@title : 'Profile';
-            OBJ_DEP     : String(30)@title : 'Object Dependency';
-        }
+            LOCATION_ID : String(4) ;
+            PRODUCT_ID  : String(40);
+            COMPONENT   : String(40);
+            PROFILE     : String(50);
+            OBJ_DEP     : String(30);
+        };
     }
     entity IP_PROFILEMETH_PARA {
-        key UNID: Integer;
+        key CREATED_DATE: Date;
         PROFILEPARA: array of {
-            PROFILE   : String(50) @title : 'Profile';
-            METHOD    : String(50) @title : 'Method Name';
-            PARA_NAME : String(100)@title : 'Parameter Name';
-            INTVAL    : Integer@title : 'Integer';
-            DOUBLEVAL : Double@title : 'Double';
-            STRVAL    : String(20)@title : 'String';
-            PARA_DESC : String(1000)@title : 'Parameter Description';
-            PARA_DEP  : String(1000)@title : 'Parameter Dependency';
-            CREATED_DATE : Date       @title : 'Date';
-            CREATED_BY   : String(12)@title : 'Created By'
-        }
+            PROFILE   : String(50);
+            METHOD    : String(50);
+            PARA_NAME : String(100);
+            INTVAL    : Integer;
+            DOUBLEVAL : Double;
+            STRVAL    : String(20);
+            PARA_DESC : String(1000);
+            PARA_DEP  : String(1000);
+            CREATED_DATE : Date   ;
+            CREATED_BY   : String(12);
+        };
     }
     // entity PAL_MODEL_PARAMETERS {
     //     key MODEL_TYPE : String(10)  @title : 'Model Type';

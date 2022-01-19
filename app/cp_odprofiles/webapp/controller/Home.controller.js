@@ -372,34 +372,33 @@ sap.ui.define(
 
         onProfileSel: function (oEvent) {
             var sItem = that.oGModel.getProperty("/selItem"),
-                aData = [],
+                aData = {
+                    PROFILEOD:[]
+                },
+                jsonProfileOD,
                 sProfile = sap.ui.getCore().byId("idListTab").getSelectedItems()[0].getTitle();
             // var objDep = sItem.OBJ_DEP + "_" + sItem.OBJ_COUNTER;
             var selected ;
             for (var i = 0; i < sItem.length; i++) {
                 selected = sItem[i].getBindingContext().getProperty();
-                aData.push({
-                    "LOCATION_ID-": selected.LOCATION_ID,
-                    "PRODUCT_ID": selected.PRODUCT_ID,
-                    "COMPONENT": selected.COMPONENT,
-                    "OBJ_DEP": selected.OBJ_DEP + "_" + selected.OBJ_COUNTER,
-                    "PROFILE": sProfile
-            });
-
-
+                jsonProfileOD = {
+                    LOCATION_ID: selected.LOCATION_ID,
+                    PRODUCT_ID : selected.PRODUCT_ID,
+                    COMPONENT : selected.COMPONENT,
+                    OBJ_DEP: selected.OBJ_DEP + "_" + selected.OBJ_COUNTER,
+                    PROFILE: sProfile
+                };
+                aData.PROFILEOD.push(jsonProfileOD);
+                jsonProfileOD={};
             }
 
-            var uri = "/v2/catalog/getProfileOD";
+            var uri = "/v2/catalog/genProfileOD";
             $.ajax({
               url: uri,
               type: "post",
               contentType: "application/json",
               data: JSON.stringify({
-                //   LOCATION_ID: sItem.LOCATION_ID,
-                //   PRODUCT_ID : sItem.PRODUCT_ID,
-                //   COMPONENT: sItem.COMPONENT,
-                //   OBJ_DEP:objDep,
-                //   PROFILE:sProfile.PROFILE
+                  PROFILEOD:aData.PROFILEOD
               }),
               dataType: "json",
               async: false,
@@ -410,13 +409,10 @@ sap.ui.define(
               success: function (data) {
                 sap.ui.core.BusyIndicator.hide();
                 sap.m.MessageToast.show("Profile assigned successfully");
+                that.handleClose();
               },
             });
           }
-
-
-
-
       });
     }
   );
