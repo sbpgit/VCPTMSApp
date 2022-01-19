@@ -213,7 +213,7 @@ sap.ui.define(
                   that.otabModel.setData({
                     results: regData,
                   });
-                  that.byId("pmdlList").setModel(this.otabModel);
+                  that.byId("rmdlList").setModel(that.otabModel);
                   that.oPanel.setProperty("visible", true);
                   vFlag = 'X';
                 },
@@ -257,7 +257,7 @@ sap.ui.define(
                   that.otabModel.setData({
                     results: regData,
                   });
-                  that.byId("pmdlList").setModel(this.otabModel);
+                  that.byId("rmdlList").setModel(that.otabModel);
                   that.oPanel.setProperty("visible", true);
                   vFlag = 'X';
                 },

@@ -98,7 +98,7 @@
                         <Text text="{LOCATION_ID}"/>
                         <Text text="{PRODUCT_ID}"/>
                         <Text text="{COMPONENT}"/>
-                        <Text text="{OBJ_DEP}_{OBJ_COUNTER}"/>
+                        <Text text="{OBJ_DEP}"/>
                         <Text text="{OBJDEP_DESC}"/>
                         <Text text="{PROFILE}"/>
                         <!-- </cells> -->

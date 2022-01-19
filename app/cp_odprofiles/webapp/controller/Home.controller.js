@@ -148,95 +148,6 @@ sap.ui.define(
             MessageToast.show("error");
           },
         });
-        //   this.getModel("BModel").read("/getObjDepProfiles", {
-        //     success: function (oData) {
-        //         that.aLocation = [];
-        //         that.aProduct = [];
-        //         that.aComponent = [];
-        //         that.aObjDep = [];
-
-        //         that.SelLoc = [];
-        //         that.SelProd = [];
-        //         that.SelComp = [];
-        //         that.SelObjDep = [];
-
-        //         var aKeysLoc = [],
-        //             aKeysProd = [],
-        //             aKeysComp = [],
-        //             aKeysObjDep = [];
-        //         that.TableData = oData.results;
-
-        //       for (var i = 0; i < oData.results.length; i++) {
-
-        //         if (that.aLocation.indexOf(oData.results[i].LOCATION_ID) === -1) {
-        //             that.aLocation.push(oData.results[i].LOCATION_ID);
-        //             if (oData.results[i].LOCATION_ID !== "") {
-        //                 that.oLocData = {
-        //                     "LOCATION_ID": oData.results[i].LOCATION_ID
-        //                 };
-        //                 that.SelLoc.push(that.oLocData);
-        //                 aKeysLoc[i] = that.oLocData.LOCATION_ID;
-        //             }
-        //         }
-        //         if (that.aProduct.indexOf(oData.results[i].PRODUCT_ID) === -1) {
-        //             that.aProduct.push(oData.results[i].PRODUCT_ID);
-        //             if (oData.results[i].PRODUCT_ID !== "") {
-        //                 that.oProdData = {
-        //                     "PRODUCT_ID": oData.results[i].PRODUCT_ID
-        //                 };
-        //                 that.SelProd.push(that.oProdData);
-        //                 aKeysProd[i] = that.oProdData.PRODUCT_ID;
-        //             }
-        //         }
-        //         if (that.aComponent.indexOf(oData.results[i].COMPONENT) === -1) {
-        //             that.aComponent.push(oData.results[i].COMPONENT);
-        //             if (oData.results[i].COMPONENT !== "") {
-        //                 that.oCompData = {
-        //                     "COMPONENT": oData.results[i].COMPONENT
-        //                 };
-        //                 that.SelComp.push(that.oCompData);
-        //                 aKeysComp[i] = that.oCompData.COMPONENT;
-        //             }
-        //         }
-        //         if (that.aObjDep.indexOf(oData.results[i].OBJ_DEP) === -1) {
-        //             that.aObjDep.push(oData.results[i].OBJ_DEP);
-        //             if (oData.results[i].OBJ_DEP !== "") {
-        //                 that.oObjDepData = {
-        //                     "OBJ_DEP": oData.results[i].OBJ_DEP
-        //                 };
-        //                 that.SelObjDep.push(that.oObjDepData);
-        //                 aKeysObjDep[i] = that.oObjDepData.OBJ_DEP;
-        //             }
-        //         }
-        //       }
-
-        //       that.oListModel.setData({
-        //         results: oData.results,
-        //       });
-        //       that.oList.setModel(that.oListModel);
-
-        //       that.oLocModel.setData({ resultsLoc: that.SelLoc });
-        //       that.oProdModel.setData({ resultsProd: that.SelProd });
-        //       that.oCompModel.setData({ resultsComp: that.SelComp });
-        //       that.oObjDepModel.setData({ resultsObjDep: that.SelObjDep });
-
-        //       that.oMcLoc.setModel(that.oLocModel);
-        //       that.oMcProd.setModel(that.oProdModel);
-        //       that.oMcComp.setModel(that.oCompModel);
-        //       that.oMcObjDep.setModel(that.oObjDepModel);
-
-        //       that.oMcLoc.setSelectedKeys(that.aLocation);
-        //       that.oMcProd.setSelectedKeys(that.aProduct);
-        //       that.oMcComp.setSelectedKeys(that.aComponent);
-        //       that.oMcObjDep.setSelectedKeys(that.aObjDep);
-
-        //       sap.ui.core.BusyIndicator.hide();
-        //     },
-        //     error: function () {
-        //         sap.ui.core.BusyIndicator.hide();
-        //       MessageToast.show("Failed to get data");
-        //     },
-        //   });
       },
 
       onAssign: function () {
@@ -469,7 +380,7 @@ sap.ui.define(
             LOCATION_ID: selected.LOCATION_ID,
             PRODUCT_ID: selected.PRODUCT_ID,
             COMPONENT: selected.COMPONENT,
-            OBJ_DEP: selected.OBJ_DEP + "_" + selected.OBJ_COUNTER,
+            OBJ_DEP: selected.OBJ_DEP,
             PROFILE: sProfile,
           };
           aData.PROFILEOD.push(jsonProfileOD);
