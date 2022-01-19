@@ -433,11 +433,14 @@ exports._runRegressionRdtGroup = function(req) {
 
     var createtAtObj = new Date();
     var idObj = uuidv1();
-    
+    console.log("_runRegressionRdtGroup location ", req.data.Location, " product ", req.data.Product);
+
     let cqnQuery = {INSERT:{ into: { ref: ['CP_PALRDTREGRESSIONS'] }, entries: [
         //  {   ID: idObj, createdAt : createtAtObj, 
         {   rdtID: idObj, 
-            createdAt : createtAtObj.toISOString(), //2021-12-14T12:00:35.940Z', //new Date(), 
+            createdAt : createtAtObj.toISOString(), //2021-12-14T12:00:35.940Z', //new Date(),
+            Location : req.data.Location,
+            Product : req.data.Product,
             regressionParameters:req.data.regressionParameters, 
             rdtType : req.data.rdtType,
             regressionData : req.data.regressionData, 
@@ -514,11 +517,19 @@ exports._runRegressionRdtGroup = function(req) {
             }
         }
 
-       
+        let grpStr=inGroups[grpIndex].split('#');
+        let GroupId = grpStr[0];
+        let location = grpStr[1];
+        let product = grpStr[2];
+
+        console.log("_runRegressionRdtGroup  grpStr ", grpStr, "GroupId ",GroupId, " location ", location, " product ", product);
+
         var rowObj = {   rdtGroupID: idObj, 
             //createdAt : createtAtObj, 
             createdAt : createtAtObj.toISOString(),
-            groupId : inGroups[grpIndex],
+            Location : location,
+            Product : product,
+            groupId : GroupId,
             regressionParameters:paramsGroupObj, 
             rdtType : req.data.rdtType,
             importanceOp : impGroupObj,
