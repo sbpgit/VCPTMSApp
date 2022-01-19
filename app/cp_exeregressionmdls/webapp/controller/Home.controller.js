@@ -31,6 +31,8 @@ sap.ui.define(
           this.odModel = new JSONModel();
           this.ppfModel = new JSONModel();
           this.otabModel = new JSONModel();
+          this.prodModel.setSizeLimit(5000);
+          this.odModel.setSizeLimit(5000);
           this._oCore = sap.ui.getCore();
           if (!this._valueHelpDialogLoc) {
             this._valueHelpDialogLoc = sap.ui.xmlfragment(
@@ -98,6 +100,10 @@ sap.ui.define(
           });
           this.getModel("BModel").read("/getProducts", {
             success: function (oData) {
+                oData.results.unshift({
+                    PRODUCT_ID: "All",
+                    PROD_DESC: "All"
+                });
               that.prodModel.setData(oData);
               that.oProdList.setModel(that.prodModel);
             },
@@ -109,6 +115,11 @@ sap.ui.define(
             method: "GET",
             urlParameters: {},
             success: function (oData) {
+                oData.results.unshift({
+                    OBJ_DEP: "All",
+                    LOCATION_ID:"",
+                    PRODUCT_ID:"KM_M219VBVS_BVS"
+                });
               that.odModel.setData(oData);
               that.oODList.setModel(that.odModel);
             },
@@ -293,6 +304,9 @@ sap.ui.define(
           } else if (sId.includes("od")) {
             if (that.oLoc.getValue() && that.oProd.getTokens()) {
               if (this.oODList.getBinding("items")) {
+                if(this.oODList.getBinding("items").oList[0].LOCATION_ID !== that.oLocList.getSelectedItem().getTitle()){
+                    this.oODList.getBinding("items").oList[0].LOCATION_ID = that.oLocList.getSelectedItem().getTitle();
+                  }
                 this.oODList
                   .getBinding("items")
                   .filter([
@@ -425,6 +439,11 @@ sap.ui.define(
             aSelectedItems = oEvent.getParameter("selectedItems");
             that.oLoc.setValue(aSelectedItems[0].getTitle());
 
+            that.oProd.removeAllTokens();
+            that.oObjDep.removeAllTokens();
+            this._valueHelpDialogProd.getAggregation("_dialog").getContent()[1].removeSelections();
+            this._valueHelpDialogOD.getAggregation("_dialog").getContent()[1].removeSelections();
+
             // Prod list
           } else if (sId.includes("prod")) {
             that.oProdList.getBinding("items").filter([]);
@@ -439,6 +458,8 @@ sap.ui.define(
                   })
                 );
               });
+            } else {
+                that.oProd.removeAllTokens();
             }
             //that.addToken("Prod", that.oProdList.getSelectedItems(), that.generateSideGangList);
             // Object ependency
@@ -532,6 +553,39 @@ sap.ui.define(
           this.oProd.destroyTokens();
           this.oProdList.removeSelections();
         },
+
+        handleProdChange:function(oEvent){
+            var selected = oEvent.getParameter("listItem").getTitle();
+            var items = sap.ui.getCore().byId("prodSlctList").getItems();
+            var selItems = this._valueHelpDialogProd.getAggregation("_dialog").getContent()[1].getSelectedItems();
+              if(selected === "All" && oEvent.getParameter("selected")){
+
+                  this._valueHelpDialogProd.getAggregation("_dialog").getContent()[1].selectAll();
+              } else if(selected === "All" && !oEvent.getParameter("selected")){
+                  this._valueHelpDialogProd.getAggregation("_dialog").getContent()[1].removeSelections();
+              } else if(selected !== "All" || items.length !== selItems.length){
+                  sap.ui.getCore().byId("prodSlctList").getItems()[0].setSelected(false);
+              }
+
+
+        },
+
+        handleObjDepChange:function(oEvent){
+          var selected = oEvent.getParameter("listItem").getTitle();
+          var items = sap.ui.getCore().byId("odSlctList").getItems();
+          var selItems = this._valueHelpDialogOD.getAggregation("_dialog").getContent()[1].getSelectedItems();
+            if(selected === "All_" && oEvent.getParameter("selected") && items.length !== 1){
+                this._valueHelpDialogOD.getAggregation("_dialog").getContent()[1].selectAll();
+            } else if(selected === "All_" && !oEvent.getParameter("selected")){
+                this._valueHelpDialogOD.getAggregation("_dialog").getContent()[1].removeSelections();
+            } else if(selected !== "All_" || items.length !== selItems.length){
+                sap.ui.getCore().byId("odSlctList").getItems()[0].setSelected(false);
+            } else if(selected === "All_" && oEvent.getParameter("selected") && items.length === 1){
+              this._valueHelpDialogOD.getAggregation("_dialog").getContent()[1].removeSelections();
+          }
+
+
+      }
       }
     );
   }

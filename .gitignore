@@ -58,3 +58,14 @@ app/cfgprd_pvsroot/dist/manifest-bundle.zip
 app/cfgprd_pvsroot/dist/cfgapppvsrootcfgprdpvsroot.zip
 app/cfgprd_pvsroot/dist/cfgapppvsrootcfgprdpvsroot.zip
 app/cfgprd_pvsroot/dist/manifest-bundle.zip
+app/cp_exeregressionmdls/dist/cpexeregcpexeregressionmdls.zip
+app/cp_exeregressionmdls/dist/manifest-bundle.zip
+.gitignore
+resources/cpmdlprofilecpmodelprofiles.zip
+resources/cpexeregcpexeregressionmdls.zip
+app/cp_modelprofiles/dist/sap-ui-cachebuster-info.json
+app/cp_modelprofiles/dist/resources/sap-ui-version.json
+app/cp_modelprofiles/dist/manifest-bundle.zip
+app/cp_modelprofiles/dist/cpmdlprofilecpmodelprofiles.zip
+app/cp_exeregressionmdls/dist/sap-ui-cachebuster-info.json
+app/cp_exeregressionmdls/dist/resources/sap-ui-version.json

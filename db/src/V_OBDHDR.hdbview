@@ -1,7 +1,9 @@
 VIEW "V_OBDHDR"
 AS SELECT B.LOCATION_ID,
         B.PRODUCT_ID,
+        B.COMPONENT,
         A.OBJ_DEP,
+        B.OBJDEP_DESC,
         A.CLASS_NUM,
         A.CHAR_NUM,
         A.CHARVAL_NUM,

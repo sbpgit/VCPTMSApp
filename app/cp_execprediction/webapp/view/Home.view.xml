@@ -79,7 +79,6 @@
                             <Label text="{i18n>predpf}" />
                         </f:label>
                         <f:fields>
-                            <!-- <Input id="pmInput" placeholder="{i18n>predpf}"/> -->
                             <MultiInput id="pmInput" placeholder="{i18n>predpf}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"
                                 tokenUpdate="handleTokenUpdate"/>
                         </f:fields>
@@ -105,7 +104,7 @@
                             <Text/>
                         </f:fields>
                     </f:FormElement>
-                    <f:FormElement>
+<f:FormElement>
                         <f:label>
                             <Label text=""/>
                         </f:label>
@@ -113,7 +112,6 @@
                             <Text/>
                         </f:fields>
                     </f:FormElement>
-
                     <f:FormElement>
                         <f:fields>                              
 				        <Button type="Emphasized" text="{i18n>Run}" press="onRun2" width="50%"/>
@@ -127,21 +125,21 @@
         </f:Form>
         
     </Panel>
-    <Panel id="idPanelod" visible="false">
-    <Table id="odlList" headerText="{i18n>defmodel}"  items="{/results}"  selectionChange="handlepredSelect">
-     <headerToolbar>
+    <!-- <Panel id="idPanelod" visible="false" expandable="false">
+    <headerToolbar>
 			<OverflowToolbar>
 				<Title text="{i18n>defmodel}"/>
                 <ToolbarSpacer/>                
-				<Button type="Ghost" icon="sap-icon://add-activity-2" tooltip="{i18n>addEntry}" press="onSingleEntry"/>
+				<Button type="Ghost" icon="sap-icon://add" tooltip="{i18n>objdep}" press="handleValueHelp"/>
 			</OverflowToolbar>
 		</headerToolbar>
+    <Table id="odlList"   items="{/results}"  selectionChange="handlepredSelect">
         <columns>
             <Column>
                 <Text text="{i18n>objdep}"/>
             </Column>
             <Column>
-                <Text text="{i18n>predpf}"/>
+                <Text text="{i18n>asgnpredpf}"/>
             </Column>
             <Column>
                 <Text text="{i18n>ovride}"/>
@@ -151,13 +149,14 @@
             <ColumnListItem vAlign="Middle">
                 <cells>                  
                     <Text text="{GroupID}"/>
-                    <Input placeholder="{i18n>objdep}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                    <Text text="{PROFILE}"/>
+                    <Input placeholder="{i18n>predpf}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
                     <CheckBox />
                 </cells>
             </ColumnListItem>
         </items>
     </Table>
-    </Panel>
+    </Panel> -->
     <Panel id="idPanel" visible="false">
     <Table id="pmdlList" headerText="{i18n>predmodel}"  items="{/results}"  selectionChange="handlepredSelect">
      <headerToolbar>
@@ -199,5 +198,11 @@
     </Table>
     </Panel>
 </content>
+<!-- <footer>
+			<OverflowToolbar >
+				<ToolbarSpacer/>
+				<Button type="Emphasized" text="{i18n>Run}" press="onRun2" />
+			</OverflowToolbar>
+		</footer> -->
 </Page>
 </mvc:View>
