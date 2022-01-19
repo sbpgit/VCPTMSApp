@@ -56,9 +56,9 @@ module.exports = (srv) => {
     return results;
   });
 
-  srv.on("getODProfiles", async (req) => {    
-  let liresults = [];
-  let lsresults = {};
+  srv.on("getODProfiles", async (req) => {
+    let liresults = [];
+    let lsresults = {};
     let { getMODHeader, getProfileOD } = srv.entities;
     const db = srv.transaction(req);
     const aOdhdr = await cds
@@ -66,25 +66,39 @@ module.exports = (srv) => {
       .run(
         SELECT.distinct
           .from(getMODHeader)
-          .columns("LOCATION_ID", "PRODUCT_ID", "COMPONENT", "OBJ_DEP", "OBJ_COUNTER", "OBJDEP_DESC")
+          .columns(
+            "LOCATION_ID",
+            "PRODUCT_ID",
+            "COMPONENT",
+            "OBJ_DEP",
+            "OBJ_COUNTER",
+            "OBJDEP_DESC"
+          )
       );
     const aOdProfile = await cds
-    .transaction(req)
-    .run(
-      SELECT.distinct
-        .from(getProfileOD)
-        .columns("LOCATION_ID", "PRODUCT_ID", "COMPONENT", "PROFILE", "OBJ_DEP", "STRUC_NODE")
-    );
-    
-    for (let i = 0; i < aOdhdr.length; i++){
-        var vOD = aOdhdr[i].OBJ_DEP + '_' + aOdhdr[i].OBJ_COUNTER;
-        lsresults.LOCATION_ID = aOdhdr[i].LOCATION_ID;
-        lsresults.PRODUCT_ID = aOdhdr[i].PRODUCT_ID;
-        lsresults.COMPONENT = aOdhdr[i].COMPONENT;
-        lsresults.OBJ_DEP = vOD;
-        lsresults.OBJDEP_DESC = aOdhdr[i].OBJDEP_DESC;
-        let liPrfOD = await cds.run(
-            `SELECT DISTINCT
+      .transaction(req)
+      .run(
+        SELECT.distinct
+          .from(getProfileOD)
+          .columns(
+            "LOCATION_ID",
+            "PRODUCT_ID",
+            "COMPONENT",
+            "PROFILE",
+            "OBJ_DEP",
+            "STRUC_NODE"
+          )
+      );
+
+    for (let i = 0; i < aOdhdr.length; i++) {
+      var vOD = aOdhdr[i].OBJ_DEP + "_" + aOdhdr[i].OBJ_COUNTER;
+      lsresults.LOCATION_ID = aOdhdr[i].LOCATION_ID;
+      lsresults.PRODUCT_ID = aOdhdr[i].PRODUCT_ID;
+      lsresults.COMPONENT = aOdhdr[i].COMPONENT;
+      lsresults.OBJ_DEP = vOD;
+      lsresults.OBJDEP_DESC = aOdhdr[i].OBJDEP_DESC;
+      let liPrfOD = await cds.run(
+        `SELECT DISTINCT
                         "LOCATION_ID",
                         "PRODUCT_ID",
                         "COMPONENT",
@@ -92,21 +106,29 @@ module.exports = (srv) => {
                         "OBJ_DEP",
                         "STRUC_NODE"
                     FROM "CP_PAL_PROFILEOD"
-                   WHERE "LOCATION_ID" = '` + lsresults.LOCATION_ID + `'
-                     AND "PRODUCT_ID" = '` + lsresults.PRODUCT_ID + `'
-                     AND "COMPONENT" = '` + lsresults.COMPONENT + `'
-                     AND "OBJ_DEP" = '` + vOD + `'`
-          );
-        //   for (let j = 0; j < liPrfOD.length; j++){
-        if(liPrfOD[0].PROFILE !== null){
-            lsresults.PROFILE =  liPrfOD[0].PROFILE;
-            lsresults.STRUC_NODE = liPrfOD[0].STRUC_NODE;
-        }
-        liresults.push(lsresults);
-        liPrfOD = [];
-        lsresults = {};
-    // }
-}
+                   WHERE "LOCATION_ID" = '` +
+          lsresults.LOCATION_ID +
+          `'
+                     AND "PRODUCT_ID" = '` +
+          lsresults.PRODUCT_ID +
+          `'
+                     AND "COMPONENT" = '` +
+          lsresults.COMPONENT +
+          `'
+                     AND "OBJ_DEP" = '` +
+          vOD +
+          `'`
+      );
+      //   for (let j = 0; j < liPrfOD.length; j++){
+      if (liPrfOD[0].PROFILE !== null) {
+        lsresults.PROFILE = liPrfOD[0].PROFILE;
+        lsresults.STRUC_NODE = liPrfOD[0].STRUC_NODE;
+      }
+      liresults.push(lsresults);
+      liPrfOD = [];
+      lsresults = {};
+      // }
+    }
     return liresults;
   });
   srv.on("CREATE", "getProfiles", _createProfiles);
@@ -170,11 +192,11 @@ async function _createProfileParameters(req) {
     if (lsprofilesPara.PROFILE !== undefined) {
       lsprofilesPara.METHOD = aProfilePara_req[i].METHOD;
       lsprofilesPara.PARA_NAME = aProfilePara_req[i].PARA_NAME;
-        lsprofilesPara.INTVAL = aProfilePara_req[i].INTVAL;
-         lsprofilesPara.DOUBLEVAL = aProfilePara_req[i].DOUBLEVAL;
+      lsprofilesPara.INTVAL = aProfilePara_req[i].INTVAL;
+      lsprofilesPara.DOUBLEVAL = aProfilePara_req[i].DOUBLEVAL;
       lsprofilesPara.STRVAL = aProfilePara_req[i].STRVAL;
       lsprofilesPara.PARA_DESC = aProfilePara_req[i].PARA_DESC;
-      lsprofilesPara.PARA_DEP = null;//aProfilePara_req[i].PARA_DEP;
+      lsprofilesPara.PARA_DEP = null; //aProfilePara_req[i].PARA_DEP;
       lsprofilesPara.CREATED_DATE = curDate;
       lsprofilesPara.CREATED_BY = aProfilePara_req[i].CREATED_BY;
       liProfilesPara.push(GenFunctions.parse(lsprofilesPara));
@@ -183,7 +205,8 @@ async function _createProfileParameters(req) {
   }
   try {
     if (liProfilesPara.length > 0) {
-      await cds.run(INSERT.into("CP_PAL_PROFILEMETH_PARA").entries(liProfilesPara)
+      await cds.run(
+        INSERT.into("CP_PAL_PROFILEMETH_PARA").entries(liProfilesPara)
       );
       responseMessage = " Creation successfully ";
       createResults.push(responseMessage);
@@ -198,7 +221,9 @@ async function _createProfileParameters(req) {
 
 async function _createProfileOD(req) {
   let liProfilesOD = [];
+  let liProfilesDel = [];
   let lsprofilesOD = {};
+  let lsprofilesDel = {};
   let createResults = [];
   let res;
   var responseMessage;
@@ -216,29 +241,67 @@ async function _createProfileOD(req) {
       lsprofilesOD.OBJ_DEP = aProfileOD_req[i].OBJ_DEP;
       lsprofilesOD.PROFILE = aProfileOD_req[i].PROFILE;
       liProfilesOD.push(GenFunctions.parse(lsprofilesOD));
+      
+      lsprofilesDel.LOCATION_ID = aProfileOD_req[i].LOCATION_ID;
+      lsprofilesDel.PRODUCT_ID = aProfileOD_req[i].PRODUCT_ID;
+      lsprofilesDel.COMPONENT = aProfileOD_req[i].COMPONENT;
+      lsprofilesDel.OBJ_DEP = aProfileOD_req[i].OBJ_DEP;
+    //   lsprofilesDel.PROFILE = aProfileOD_req[i].PROFILE;
+      liProfilesDel.push(GenFunctions.parse(lsprofilesDel));
+      await cds.delete('CP_PAL_PROFILEOD',lsprofilesDel);
+    //   try {
+        // if (liProfilesOD.length > 0) {
+        //   //   await cds.run(UPSERT.into("CP_PAL_PROFILEOD").entries(liProfilesOD));
+        //   await cds.run(
+        //     `UPDATE CP_PAL_PROFILEOD "PROFILE" = '` +
+        //       lsprofilesOD.PROFILE +
+        //       `'
+        //   WHERE "LOCATION_ID" = '` +
+        //       lsprofilesOD.LOCATION_ID +
+        //       `'
+        //   "PRODUCT_ID" = '` +
+        //       lsprofilesOD.PRODUCT_ID +
+        //       `'
+        //   "COMPONENT" = '` +
+        //       lsprofilesOD.COMPONENT +
+        //       `' 
+        //   "OBJ_DEP" = '` +
+        //       lsprofilesOD.OBJ_DEP +
+        //       `'`
+        //   );
+        //   responseMessage = " Creation successfully ";
+        //   //res.statusCode = 201;
+        //   createResults.push(responseMessage);
+        // }
+    //   } catch (e) {
+    //     responseMessage = " Creation failed";
+    //     // res.statusCode = 201;
+    //     createResults.push(responseMessage);
+    //   }
     }
     lsprofilesOD = {};
   }
   res = req._.req.res;
 
-  try {
-    if (liProfilesOD.length > 0) {
-      await cds.run(UPSERT.into("CP_PAL_PROFILEOD").entries(liProfilesOD));
-    //   await cds.run(
-    //   `UPDATE CP_PAL_PROFILEOD "PROFILE"='`+ + `'
-    //   WHERE "LOCATION_ID" = '` +  + `'
-    //   "PRODUCT" = '` +  + `'
-    //   "COMPONENT" = '` + + `' 
-    //   "OBJ_DEP" = '` + + `'`
-    //   );
-      responseMessage = " Creation successfully ";
-      //res.statusCode = 201;
+    try {
+      if (liProfilesOD.length > 0) {
+        // await cds.run(DELETE.into("CP_PAL_PROFILEOD").matching(liProfilesDel));
+        await cds.run(INSERT.into("CP_PAL_PROFILEOD").entries(liProfilesOD));
+      //   await cds.run(
+      //   `UPDATE CP_PAL_PROFILEOD "PROFILE"='`+ + `'
+      //   WHERE "LOCATION_ID" = '` +  + `'
+      //   "PRODUCT" = '` +  + `'
+      //   "COMPONENT" = '` + + `'
+      //   "OBJ_DEP" = '` + + `'`
+      //   );
+        responseMessage = " Creation successfully ";
+        //res.statusCode = 201;
+        createResults.push(responseMessage);
+      }
+    } catch (e) {
+      responseMessage = " Creation failed";
+      // res.statusCode = 201;
       createResults.push(responseMessage);
     }
-  } catch (e) {
-    responseMessage = " Creation failed";
-    // res.statusCode = 201;
-    createResults.push(responseMessage);
-  }
   res.send({ value: createResults });
 }

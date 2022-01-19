@@ -17,22 +17,26 @@ service CatalogService @(impl : './lib/cat-service.js') {
     @readonly
     entity getCustgroup         as projection on od.CUSTOMERGROUP;
 
-    @odata.draft.enabled
+    //@odata.draft.enabled
+    @readonly
     entity getProdConfig        as projection on od.PROD_CONFIG;
 
     @readonly
     entity getSalesh            as projection on od.SALESH;
 
-    @odata.draft.enabled
+    //@odata.draft.enabled
+    @readonly
     entity getLocProd           as projection on od.LOCATION_PRODUCT;
 
     @readonly
     entity getSalesCfg          as projection on od.SALESH_CONFIG;
 
-    @odata.draft.enabled
+   // @odata.draft.enabled
+    @readonly
     entity getBomHeader         as projection on od.BOMHEADER;
 
-    @odata.draft.enabled
+    //@odata.draft.enabled
+    @readonly
     entity getBomOD             as projection on od.BOM_OBJDEPENDENCY;
 
     @readonly

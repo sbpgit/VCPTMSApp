@@ -164,6 +164,9 @@
                 <Text text="{i18n>objdep}"/>
             </Column>
             <Column>
+                <Text text="{i18n>profile}"/>
+            </Column>
+            <Column>
                 <Text text="{i18n>dim}"/>
             </Column>
         </columns>
@@ -173,7 +176,7 @@
                     <Text text="{Location}"/>                    
                     <Text text="{Product}"/>                    
                     <Text text="{GroupID}"/>                    
-                    <!-- <Text text="{dimenions}"/> -->
+                    <Text text="{profile}"/>
                     <ObjectStatus
                     class="sapUiSmallMarginBottom"
                     text="{dimensions}"

@@ -32,6 +32,8 @@ sap.ui.define(
           this.ppfModel = new JSONModel();
           this.oODPModel = new JSONModel();
           this.otabModel = new JSONModel();
+          this.prodModel.setSizeLimit(5000);
+          this.odModel.setSizeLimit(5000);
           this._oCore = sap.ui.getCore();
           if (!this._valueHelpDialogLoc) {
             this._valueHelpDialogLoc = sap.ui.xmlfragment(
@@ -68,7 +70,8 @@ sap.ui.define(
         _onPatternMatched: function () {
           that = this;
           this.oPanel = this.byId("idPanel");
-          this.oODTable = this.byId("odlList");
+        //   this.oPanelod = this.byId("idPanelod");
+        //   this.oODTable = this.byId("odlList");
           this.oTable = this.byId("pmdlList");
           this.i18n = this.getResourceBundle();
           this.oGModel = this.getModel("GModel");
@@ -100,6 +103,10 @@ sap.ui.define(
           });
           this.getModel("BModel").read("/getProducts", {
             success: function (oData) {
+                oData.results.unshift({
+                    PRODUCT_ID: "All",
+                    PROD_DESC: "All"
+                });
               that.prodModel.setData(oData);
               that.oProdList.setModel(that.prodModel);
             },
@@ -107,26 +114,31 @@ sap.ui.define(
               MessageToast.show("error");
             },
           });
-          this.getModel("BModel").read("/getObjDepProfiles", {
-            success: function (oData) {
-                that.odModel.setData(oData);
-                that.oODList.setModel(that.odModel);
-            },
-            error: function (oData, error) {
-              MessageToast.show("error");
-            },
-          });
-        //   this.getModel("BModel").callFunction("/get_objdep", {
-        //     method: "GET",
-        //     urlParameters: {},
+        //   this.getModel("BModel").read("/getObjDepProfiles", {
         //     success: function (oData) {
-        //       that.odModel.setData(oData);
-        //       that.oODList.setModel(that.odModel);
+        //         that.odModel.setData(oData);
+        //         that.oODList.setModel(that.odModel);
         //     },
-        //     error: function (oRes) {
+        //     error: function (oData, error) {
         //       MessageToast.show("error");
         //     },
         //   });
+          this.getModel("BModel").callFunction("/get_objdep", {
+            method: "GET",
+            urlParameters: {},
+            success: function (oData) {
+                oData.results.unshift({
+                    OBJ_DEP: "All",
+                    LOCATION_ID:"",
+                    PRODUCT_ID:""//"KM_M219VBVS_BVS"
+                });
+              that.odModel.setData(oData);
+              that.oODList.setModel(that.odModel);
+            },
+            error: function (oRes) {
+              MessageToast.show("error");
+            },
+          });
           this.getModel("BModel").read("/getProfiles", {
             success: function (oData) {
               that.ppfModel.setData(oData);
@@ -146,6 +158,10 @@ sap.ui.define(
           } else if (sId.includes("od") || sId.includes("__button1")) {
             if (that.oLoc.getValue() && that.oProd.getTokens()) {
               if (this.oODList.getBinding("items")) {
+                  if(this.oODList.getBinding("items").oList[0].LOCATION_ID !== that.oLocList.getSelectedItem().getTitle()){
+                    this.oODList.getBinding("items").oList[0].LOCATION_ID = that.oLocList.getSelectedItem().getTitle();
+                  }
+                
                 this.oODList
                   .getBinding("items")
                   .filter([
@@ -157,10 +173,16 @@ sap.ui.define(
                     new Filter(
                       "PRODUCT_ID",
                       FilterOperator.Contains,
-                      "KM_M219VBVS_BVS"
+                      
+                      this.oProdList.getSelectedItem().getTitle()//   "KM_M219VBVS_BVS""KM_M219VBVS_BVS"
                     ),
                   ]);
               }
+            //   var table = sap.ui.getCore().byId("odSlctList");
+            //   if(table.getItems().length === 1 && table.getItems()[0].getTitle() === "All_"){
+            //     table.removeItem(table.getItems()[0]);
+            //     }
+              
               this._valueHelpDialogOD.open();
             } else {
               MessageToast.show(that.i18n.getText("noLocProd"));
@@ -278,6 +300,11 @@ sap.ui.define(
           if (sId.includes("Loc")) {
             aSelectedItems = oEvent.getParameter("selectedItems");
             that.oLoc.setValue(aSelectedItems[0].getTitle());
+            that.oProd.removeAllTokens();
+            that.oObjDep.removeAllTokens();
+            this._valueHelpDialogProd.getAggregation("_dialog").getContent()[1].removeSelections();
+            this._valueHelpDialogOD.getAggregation("_dialog").getContent()[1].removeSelections();
+            
 
             // Prod list
           } else if (sId.includes("prod")) {
@@ -293,17 +320,28 @@ sap.ui.define(
                   })
                 );
               });
+            } else {
+                that.oProd.removeAllTokens();
             }
             //that.addToken("Prod", that.oProdList.getSelectedItems(), that.generateSideGangList);
             // Object ependency
           } else if (sId.includes("od")) {
             that.oODList.getBinding("items").filter([]);
-            that.oODTable.setModel(that.oODPModel);
+            // that.oODTable.setModel(that.oODPModel);
+
             aSelectedItems = oEvent.getParameter("selectedItems");
+            
             if (aSelectedItems && aSelectedItems.length > 0) {
+                if(aSelectedItems[0].getTitle() === "All_"){
+                    that.byId("idCheck").setSelected(true);
+                } else {
+                    that.byId("idCheck").setSelected(false);
+                }
               that.oObjDep.removeAllTokens();
               aSelectedItems.forEach(function (oItem) {
-                aODdata.push({GroupID : oItem.getTitle()});
+                // aODdata.push({GroupID : oItem.getTitle(),
+                //               PROFILE : oItem.getInfo()
+                //                 });
                 that.oObjDep.addToken(
                   new sap.m.Token({
                     key: oItem.getTitle(),
@@ -311,13 +349,21 @@ sap.ui.define(
                   })
                 );
               });
-              this.oODPModel.setData({
-                results: aODdata,
-              });
+            //   this.oODPModel.setData({
+            //     results: aODdata,
+            //   });
+            //   that.oPanelod.setProperty("visible", true);
+            //   that.oPanelod.setProperty("expandable", true);
+            }else {
+                that.oObjDep.removeAllTokens();
+              
+                    that.byId("idCheck").setSelected(false);
+         
             }
           } else {
             that.oPPFList.getBinding("items").filter([]);
             aSelectedItems = oEvent.getParameter("selectedItems");
+            that.oPredProfile.removeAllTokens();
             if (aSelectedItems && aSelectedItems.length > 0) {
               aSelectedItems.forEach(function (oItem) {
                 that.oPredProfile.addToken(
@@ -355,7 +401,7 @@ sap.ui.define(
             for (i = 0; i < aItems.length; i++) {
               if (aItems[i].getTitle() === sRemovedTokenTitle) {
                 aItems[i].setSelected(false);
-                that.oODList.removeitem(aItem[i]);
+                // that.oODList.removeitem(aItem[i]);
               }
             }
           } else if (sId.includes("pmInput")) {
@@ -367,30 +413,105 @@ sap.ui.define(
             }
           }
         },
-        onRun2: function () {
+
+
+        onRun2: function(){
+            var selected = that.byId("idCheck").getSelected();
+            var text = "Do you want to override assignments?";
+            if(selected === true){
+                sap.m.MessageBox.show(
+                    text, {
+    
+                        title: "Confirmation",
+                        actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
+                        onClose: function (oAction) {
+                            if (oAction === sap.m.MessageBox.Action.YES) {
+                                that.onRunSend();
+                            }
+    
+                        }
+                    }
+                );
+            } else {
+                that.onRunSend();
+            }
+        },
+        onRunSend: function () {
           this.oModel = this.getModel("PModel");
-          var aItems,
+          var aItems, prodItems, predProfile, selected,
             i,
             regData = [],
             vFlag;
+            var oEntry = {
+                vcRulesList: [],
+              },
+              vRuleslist;
           aItems = this.oODList.getSelectedItems();
+          prodItems = this.oProdList.getSelectedItems(),
+          predProfile= that.oPredProfile.getTokens()[0].getText(),
+          selected = that.byId("idCheck").getSelected();
 
-          that.byId("pmdlList").setModel(this.otabModel);
-          if (
-            this.oObjDep.getTokens().length > 0 &&
-            this.oPredProfile.getTokens().length > 0 )
-           {
-            for (i = 0; i < aItems.length; i++) {
-              var oEntry = {
-                  vcRulesList: [],
+          
+          if (this.oObjDep.getTokens().length > 0 && this.oPredProfile.getTokens().length > 0 ){
+
+            if(aItems[0].getTitle() === "All_" && prodItems[0].getTitle() === "All"){
+                var oEntry = {
+                    vcRulesList: [],
+                  },
+                  vRuleslist;
+                vRuleslist = {
+                  profile: predProfile,
+                  override: true,
+                  Location: aItems[1].getInfo(),
+                  Product: "All",
+                  GroupID: "All",
+                };
+                oEntry.vcRulesList.push(vRuleslist);
+
+            var uri = "/v2/pal/generatePredictions";
+              $.ajax({
+                url: uri,
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({
+                  vcRulesList: oEntry.vcRulesList,
+                }),
+                dataType: "json",
+                async: false,
+                timeout: 0,
+                error: function (data) {
+                  sap.m.MessageToast.show(that.i18n.getText("genPredErr"));
                 },
-                vRuleslist;
+                success: function (data) {
+                  sap.m.MessageToast.show(that.i18n.getText("genPredSuccess"));
+                  regData.push(data.d.values[0].vcRulesList);
+
+                  that.otabModel.setData({
+                    results: regData[0],
+                  });
+                  that.byId("pmdlList").setModel(that.otabModel);
+                  that.oPanel.setProperty("visible", true);
+                  vFlag = 'X';
+                },
+              });
+
+            } else {
+            for (i = 0; i < aItems.length; i++) {
+                if(aItems[i].getTitle() !== "All_"){
+
+                
+              
               vRuleslist = {
+                profile: predProfile,
+                override: selected,
                 Location: aItems[i].getInfo(),
                 Product: aItems[i].getDescription(),
                 GroupID: aItems[i].getTitle(),
               };
               oEntry.vcRulesList.push(vRuleslist);
+
+            }
+        }
               var uri = "/v2/pal/generatePredictions";
               $.ajax({
                 url: uri,
@@ -407,16 +528,18 @@ sap.ui.define(
                 },
                 success: function (data) {
                   sap.m.MessageToast.show(that.i18n.getText("genPredSuccess"));
-                  regData.push(data.d.values[0].vcRulesList[0]);
+                  regData.push(data.d.values[0].vcRulesList);
 
                   that.otabModel.setData({
-                    results: regData,
+                    results: regData[0],
                   });
+                  that.byId("pmdlList").setModel(that.otabModel);
                   that.oPanel.setProperty("visible", true);
                   vFlag = 'X';
                 },
               });
-            }
+        
+        }
             if(vFlag === 'X'){
             that.resetInputs();
             }
@@ -506,6 +629,39 @@ sap.ui.define(
             // 	}
             // });
           },
+
+          handleProdChange:function(oEvent){
+              var selected = oEvent.getParameter("listItem").getTitle();
+              var items = sap.ui.getCore().byId("prodSlctList").getItems();
+              var selItems = this._valueHelpDialogProd.getAggregation("_dialog").getContent()[1].getSelectedItems();
+                if(selected === "All" && oEvent.getParameter("selected")){
+
+                    this._valueHelpDialogProd.getAggregation("_dialog").getContent()[1].selectAll();
+                } else if(selected === "All" && !oEvent.getParameter("selected")){
+                    this._valueHelpDialogProd.getAggregation("_dialog").getContent()[1].removeSelections();
+                } else if(selected !== "All" || items.length !== selItems.length){
+                    sap.ui.getCore().byId("prodSlctList").getItems()[0].setSelected(false);
+                }
+
+
+          },
+
+          handleObjDepChange:function(oEvent){
+            var selected = oEvent.getParameter("listItem").getTitle();
+            var items = sap.ui.getCore().byId("odSlctList").getItems();
+            var selItems = this._valueHelpDialogOD.getAggregation("_dialog").getContent()[1].getSelectedItems();
+              if(selected === "All_" && oEvent.getParameter("selected") && items.length !== 1){
+                  this._valueHelpDialogOD.getAggregation("_dialog").getContent()[1].selectAll();
+              } else if(selected === "All_" && !oEvent.getParameter("selected")){
+                  this._valueHelpDialogOD.getAggregation("_dialog").getContent()[1].removeSelections();
+              } else if(selected !== "All_" || items.length !== selItems.length){
+                  sap.ui.getCore().byId("odSlctList").getItems()[0].setSelected(false);
+              } else if(selected === "All_" && oEvent.getParameter("selected") && items.length === 1){
+                this._valueHelpDialogOD.getAggregation("_dialog").getContent()[1].removeSelections();
+            }
+
+
+        }
       }
     );
   }

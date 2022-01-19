@@ -1,0 +1,117 @@
+<mvc:View controllerName="cp.odp.cpodprofiles.controller.Home"
+    xmlns:l="sap.ui.layout"
+    xmlns:core="sap.ui.core"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns="sap.m">
+
+    <Page id="page" title="{i18n>title}" titleAlignment="Center">
+        <Toolbar height="15%">
+            <f:Form editable="true">
+                <f:layout>
+                    <f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2" singleContainerFullSize="false"/>
+                </f:layout>
+                <f:formContainers>
+                    <f:FormContainer>
+                        <f:formElements>
+                            <f:FormElement>
+                                <f:label>
+                                    <Label text="Location"/>
+                                </f:label>
+                                <MultiComboBox id='idLoc' selectionChange="handLocChg"  width="250px" 
+                                items="{ path: '/resultsLoc' }">
+                                    <core:Item key="{LOCATION_ID}" text="{LOCATION_ID}" />
+                                </MultiComboBox>
+                            </f:FormElement>
+                            <f:FormElement>
+                                <f:label>
+                                    <Label text="Product"/>
+                                </f:label>
+                                <MultiComboBox id='idProd' selectionChange="handProdChg"  width="300px" 
+                                items="{ path: '/resultsProd' }">
+                                    <core:Item key="{PRODUCT_ID}" text="{PRODUCT_ID}" />
+                                </MultiComboBox>
+                            </f:FormElement>
+                        </f:formElements>
+                    </f:FormContainer>
+                    <f:FormContainer>
+                        <f:formElements>
+                            <f:FormElement>
+                                <f:label>
+                                    <Label text="Component"/>
+                                </f:label>
+                                <MultiComboBox id='idComp' selectionChange="handCompChg"  width="300px" 
+                                items="{ path: '/resultsComp' }">
+                                    <core:Item key="{COMPONENT}" text="{COMPONENT}" />
+                                </MultiComboBox>
+                            </f:FormElement>
+                            <f:FormElement>
+                                <f:label>
+                                    <Label text="Object Dep"/>
+                                </f:label>
+                                <MultiComboBox id='idObjDep' selectionChange="handObjDepChg"  width="300px" 
+                                items="{ path: '/resultsObjDep' }">
+                                    <core:Item key="{OBJ_DEP}" text="{OBJ_DEP}" />
+                                </MultiComboBox>
+                            </f:FormElement>
+                        </f:formElements>
+                    </f:FormContainer>
+                </f:formContainers>
+            </f:Form>
+            
+        </Toolbar>
+        <content>
+            <Table id="idTab" items="{path: '/results'}" mode="MultiSelect" sticky="ColumnHeaders" >
+                <headerToolbar>
+				<Toolbar>
+					<content>
+						<SearchField id="idSearch" placeholder="Location/ Product/ Component/ Object Dep"  
+                        liveChange="onTableSearch" width="600px"/>
+                        <ToolbarSpacer/>
+			        <Button id="idAssign" type='Ghost' text="Assign" press="onAssign"></Button>
+					</content>
+				</Toolbar>		
+				</headerToolbar>
+                <columns>
+                    <Column hAlign="Left" vAlign="Middle">
+                        <Text text="{i18n>locId}" />
+                    </Column>
+                    <Column hAlign="Left" vAlign="Middle">
+                        <Text text="{i18n>prdId}" />
+                    </Column>
+                    <Column hAlign="Left" vAlign="Middle">
+                        <Text text="{i18n>comp}"/>
+                    </Column>
+                    <Column hAlign="Left" vAlign="Middle">
+                        <Text text="{i18n>objdep}"/>
+                    </Column>
+                    <Column hAlign="Left" vAlign="Middle">
+                        <Text text="{i18n>objDesc}"/>
+                    </Column>
+                    <Column hAlign="Left" vAlign="Middle">
+                        <Text text="Profile"/>
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem>
+                        <!-- <cells> -->
+                        <Text text="{LOCATION_ID}"/>
+                        <Text text="{PRODUCT_ID}"/>
+                        <Text text="{COMPONENT}"/>
+                        <Text text="{OBJ_DEP}"/>
+                        <Text text="{OBJDEP_DESC}"/>
+                        <Text text="{PROFILE}"/>
+                        <!-- </cells> -->
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </content>
+        <!-- <footer>
+			<Toolbar id="idButton" >
+                <ToolbarSpacer/>
+			        <Button id="idAdd" type='Ghost' text="Assign Profile" press="onAdd"></Button>
+            </Toolbar>
+		</footer> -->
+    </Page>
+
+</mvc:View>

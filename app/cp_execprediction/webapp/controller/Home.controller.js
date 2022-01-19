@@ -130,7 +130,7 @@ sap.ui.define(
                 oData.results.unshift({
                     OBJ_DEP: "All",
                     LOCATION_ID:"",
-                    PRODUCT_ID:"KM_M219VBVS_BVS"
+                    PRODUCT_ID:""//"KM_M219VBVS_BVS"
                 });
               that.odModel.setData(oData);
               that.oODList.setModel(that.odModel);
@@ -173,7 +173,8 @@ sap.ui.define(
                     new Filter(
                       "PRODUCT_ID",
                       FilterOperator.Contains,
-                      "KM_M219VBVS_BVS"
+                      
+                      this.oProdList.getSelectedItem().getTitle()//   "KM_M219VBVS_BVS""KM_M219VBVS_BVS"
                     ),
                   ]);
               }
@@ -483,10 +484,10 @@ sap.ui.define(
                 },
                 success: function (data) {
                   sap.m.MessageToast.show(that.i18n.getText("genPredSuccess"));
-                  regData.push(data.d.values[0].vcRulesList[0]);
+                  regData.push(data.d.values[0].vcRulesList);
 
                   that.otabModel.setData({
-                    results: regData,
+                    results: regData[0],
                   });
                   that.byId("pmdlList").setModel(that.otabModel);
                   that.oPanel.setProperty("visible", true);
@@ -527,10 +528,10 @@ sap.ui.define(
                 },
                 success: function (data) {
                   sap.m.MessageToast.show(that.i18n.getText("genPredSuccess"));
-                  regData.push(data.d.values[0].vcRulesList[0]);
+                  regData.push(data.d.values[0].vcRulesList);
 
                   that.otabModel.setData({
-                    results: regData,
+                    results: regData[0],
                   });
                   that.byId("pmdlList").setModel(that.otabModel);
                   that.oPanel.setProperty("visible", true);
