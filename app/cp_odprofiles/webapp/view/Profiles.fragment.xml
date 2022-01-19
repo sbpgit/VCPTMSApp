@@ -1,9 +1,8 @@
 <core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
-	<Dialog id="idList" title="Profiles" contentWidth="350px">
+	<Dialog id="idList" title="Assign Profile" contentWidth="350px">
 		<content>
 			<SearchField width="100%"  liveChange="handleSearch"/>
-			<List id="idListTab" items="{/results}" mode="SingleSelectMaster" rememberSelections="false" 
-            selectionChange="onProfileSel">
+			<List id="idListTab" items="{/results}" mode="SingleSelectMaster" >
 				<ObjectListItem title="{PROFILE}"  type="Active">
 					<attributes>
 						<ObjectAttribute text="{PRF_DESC}"/>
@@ -11,6 +10,9 @@
 				</ObjectListItem>
 			</List>
 		</content>
+        <beginButton>
+            <Button text="Assign Profile" press="onProfileSel" type="Emphasized"/>
+        </beginButton>
 		<endButton>
 			<Button text="Cancel" press="handleClose" type="Emphasized"/>
 		</endButton>

@@ -1890,9 +1890,8 @@ async function _postRegressionRequest(url,paramsObj,numChars,dataObj,modelType,v
                 'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            "product": vcRuleListObj.Product,
-            "location": vcRuleListObj.Location,
-            "groupId": vcRuleListObj.GroupID,
+            "Product": vcRuleListObj[0].Product,
+            "Location": vcRuleListObj[0].Location,
             "regressionParameters": paramsObj,
             "hgbtType": numChars,
             "regressionData": dataObj
@@ -1911,9 +1910,8 @@ async function _postRegressionRequest(url,paramsObj,numChars,dataObj,modelType,v
                 'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            "product": vcRuleListObj.Product,
-            "location": vcRuleListObj.Location,
-            "groupId": vcRuleListObj.GroupID,
+            "Product": vcRuleListObj[0].Product,
+            "Location": vcRuleListObj[0].Location,
             "regressionParameters": paramsObj,
             "rdtType": numChars,
             "regressionData": dataObj
@@ -1931,9 +1929,8 @@ async function _postRegressionRequest(url,paramsObj,numChars,dataObj,modelType,v
                 'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            "product": vcRuleListObj.Product,
-            "location": vcRuleListObj.Location,
-            "groupId": vcRuleListObj.GroupID,
+            "Product": vcRuleListObj[0].Product,
+            "Location": vcRuleListObj[0].Location,
             "regressionParameters": paramsObj,
             "mlrType": numChars,
             "regressionData": dataObj
@@ -1951,9 +1948,8 @@ async function _postRegressionRequest(url,paramsObj,numChars,dataObj,modelType,v
                 'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            "product": vcRuleListObj.Product,
-            "location": vcRuleListObj.Location,
-            "groupId": vcRuleListObj.GroupID,
+            "Product": vcRuleListObj[0].Product,
+            "Location": vcRuleListObj[0].Location,
             "controlParameters": paramsObj,
             "varmaType": numChars,
             "varmaData": dataObj

@@ -434,6 +434,8 @@ exports._genVarmaModelsGroup = function(req) {
     
     let cqnQuery = {INSERT:{ into: { ref: ['CP_PALVARMAMODELS'] }, entries: [
         {   varmaID: idObj, createdAt : createtAtObj.toISOString(), 
+            Location : req.data.Location,
+            Product : req.data.Product,
             controlParameters:req.data.controlParameters, 
             varmaData : req.data.varmaData, 
             modelsOp : modelsObj,
@@ -520,7 +522,17 @@ exports._genVarmaModelsGroup = function(req) {
 
         cds.run(cqnQuery);
     */    
-        var rowObj = {   varmaGroupID: idObj, createdAt : createtAtObj.toISOString(), groupId : inGroups[grpIndex],
+        let grpStr=inGroups[grpIndex].split('#');
+        let GroupId = grpStr[0];
+        let location = grpStr[1];
+        let product = grpStr[2];
+
+        console.log("_runRegressionMLRGroup  grpStr ", grpStr, "GroupId ",GroupId, " location ", location, " product ", product);
+
+        var rowObj = {   varmaGroupID: idObj, createdAt : createtAtObj.toISOString(), 
+            Location : location,
+            Product : product,
+            groupId : GroupId,
             controlParameters:paramsGroupObj, 
             varmaType : req.data.varmaType,
             fittedOp : fittedGroupObj,
@@ -556,7 +568,8 @@ exports._genVarmaModelsGroup = function(req) {
 
 exports._runVarmaPredictions = function(req) {
 
-    var groupId = req.data.groupId;
+  //  var groupId = req.data.groupId;
+  var groupId = req.data.groupId + '#' + req.data.Location + '#' + req.data.Product;
 
    var conn = hana.createConnection();
 
@@ -922,6 +935,10 @@ exports._runVarmaPrediction = function(varmaType, group) {
     stmt.drop();
 
     var groupId = group;
+    let grpStr=groupId.split('#');
+    let GroupId = grpStr[0];
+    let location = grpStr[1];
+    let product = grpStr[2];
     
     sqlStr = "create local temporary column table #PAL_VARMA_MODEL_TAB_"+ groupId + " " + 
                     "(\"CONTENT_INDEX\" INTEGER,\"CONTENT_VALUE\" NVARCHAR(5000))";
@@ -965,7 +982,7 @@ exports._runVarmaPrediction = function(varmaType, group) {
             let timeStampIdx =  predData[i].TIMESTAMP;
             let att1 =  predData[i].ATT1;
             let att2 =  predData[i].ATT2;
-            predDataObj.push({groupId,timeStampIdx,att1,att2});
+            predDataObj.push({GroupId,timeStampIdx,att1,att2});
         }
     
     }
@@ -995,7 +1012,7 @@ exports._runVarmaPrediction = function(varmaType, group) {
             let att2 =  predData[i].ATT2;
             let att3 =  predData[i].ATT3;
 
-            predDataObj.push({groupId,timeStampIdx,att1,att2,att3});
+            predDataObj.push({GroupId,timeStampIdx,att1,att2,att3});
         }
     
     }
@@ -1026,7 +1043,7 @@ exports._runVarmaPrediction = function(varmaType, group) {
             let att3 =  predData[i].ATT3;
             let att4 =  predData[i].ATT4;
 
-            predDataObj.push({groupId,timeStampIdx,att1,att2,att3,att4});
+            predDataObj.push({GroupId,timeStampIdx,att1,att2,att3,att4});
         }
     }
     else if(varmaType == 5)
@@ -1057,7 +1074,7 @@ exports._runVarmaPrediction = function(varmaType, group) {
             let att4 =  predData[i].ATT4;
             let att5 =  predData[i].ATT5;
 
-            predDataObj.push({groupId,timeStampIdx,att1,att2,att3,att4,att5});
+            predDataObj.push({GroupId,timeStampIdx,att1,att2,att3,att4,att5});
         }
     }
     else if(varmaType == 6)
@@ -1089,7 +1106,7 @@ exports._runVarmaPrediction = function(varmaType, group) {
             let att5 =  predData[i].ATT5;
             let att6 =  predData[i].ATT6;
 
-            predDataObj.push({groupId,timeStampIdx,att1,att2,att3,att4,att5,att6});
+            predDataObj.push({GroupId,timeStampIdx,att1,att2,att3,att4,att5,att6});
         }
     }
     else if(varmaType == 7)
@@ -1122,7 +1139,7 @@ exports._runVarmaPrediction = function(varmaType, group) {
             let att6 =  predData[i].ATT6;
             let att7 =  predData[i].ATT7;
 
-            predDataObj.push({groupId,timeStampIdx,att1,att2,att3,att4,att5,att6,att7});
+            predDataObj.push({GroupId,timeStampIdx,att1,att2,att3,att4,att5,att6,att7});
         }
     }
     else if(varmaType == 8)
@@ -1156,7 +1173,7 @@ exports._runVarmaPrediction = function(varmaType, group) {
             let att7 =  predData[i].ATT7;
             let att8 =  predData[i].ATT8;
 
-            predDataObj.push({groupId,timeStampIdx,att1,att2,att3,att4,att5,att6,att7,att8});
+            predDataObj.push({GroupId,timeStampIdx,att1,att2,att3,att4,att5,att6,att7,att8});
         }
     }
     else if(varmaType == 9)
@@ -1191,7 +1208,7 @@ exports._runVarmaPrediction = function(varmaType, group) {
             let att8 =  predData[i].ATT8;
             let att9 =  predData[i].ATT9;
 
-            predDataObj.push({groupId,timeStampIdx,att1,att2,att3,att4,att5,att6,att7,att8,att9});
+            predDataObj.push({GroupId,timeStampIdx,att1,att2,att3,att4,att5,att6,att7,att8,att9});
         }
     }
     else if(varmaType == 10)
@@ -1227,7 +1244,7 @@ exports._runVarmaPrediction = function(varmaType, group) {
             let att9 =  predData[i].ATT9;
             let att10 =  predData[i].ATT10;
 
-            predDataObj.push({groupId,timeStampIdx,att1,att2,att3,att4,att5,att6,att7,att8,att9,att10});
+            predDataObj.push({GroupId,timeStampIdx,att1,att2,att3,att4,att5,att6,att7,att8,att9,att10});
         }
     }
     else if(varmaType == 11)
@@ -1264,7 +1281,7 @@ exports._runVarmaPrediction = function(varmaType, group) {
             let att10 =  predData[i].ATT10;
             let att11 =  predData[i].ATT11;
 
-            predDataObj.push({groupId,timeStampIdx,att1,att2,att3,att4,att5,att6,att7,att8,att9,att10,att11});
+            predDataObj.push({GroupId,timeStampIdx,att1,att2,att3,att4,att5,att6,att7,att8,att9,att10,att11});
         }
     }
     else if(varmaType == 12)
@@ -1302,7 +1319,7 @@ exports._runVarmaPrediction = function(varmaType, group) {
             let att11 =  predData[i].ATT11;
             let att12 =  predData[i].ATT12;
 
-            predDataObj.push({groupId,timeStampIdx,att1,att2,att3,att4,att5,att6,att7,att8,att9,att10,att11,att12});
+            predDataObj.push({GroupId,timeStampIdx,att1,att2,att3,att4,att5,att6,att7,att8,att9,att10,att11,att12});
         }
     }
     else
@@ -1345,7 +1362,7 @@ exports._runVarmaPrediction = function(varmaType, group) {
         let doubleVal =  predParams[i].DOUBLE_VALUE;
         let strVal =  predParams[i].STRING_VALUE;
 
-        predParamsObj.push({groupId,paramName,intVal,doubleVal,strVal});
+        predParamsObj.push({GroupId,paramName,intVal,doubleVal,strVal});
     }
 
 
@@ -1369,7 +1386,7 @@ exports._runVarmaPrediction = function(varmaType, group) {
         let lo95 = predictionResults[i].LO95;
         let hi95 = predictionResults[i].HI95;
 
-        resultsObj.push({groupId,colName,idx,forecast,se,lo95,hi95});
+        resultsObj.push({GroupId,colName,idx,forecast,se,lo95,hi95});
     }	
 
     var createtAtObj = new Date();
@@ -1377,7 +1394,7 @@ exports._runVarmaPrediction = function(varmaType, group) {
     let idObj = uuidv1();
     
     var cqnQuery = {INSERT:{ into: { ref: ['CP_PALVARMAPREDICTIONS'] }, entries: [
-         {varmaID: idObj, createdAt : createtAtObj.toISOString(), groupId : groupId, predictionParameters:predParamsObj, varmaType : varmaType, predictionData : predDataObj, predictedResults : resultsObj}
+         {varmaID: idObj, createdAt : createtAtObj.toISOString(), Location : location, Product : product, groupId : GroupId, predictionParameters:predParamsObj, varmaType : varmaType, predictionData : predDataObj, predictedResults : resultsObj}
          ]}}
 
     cds.run(cqnQuery);

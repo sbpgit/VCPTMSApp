@@ -58,15 +58,17 @@
                     </f:FormContainer>
                 </f:formContainers>
             </f:Form>
+            
         </Toolbar>
         <content>
-            <Table id="idTab" items="{path: '/results'}" mode="SingleSelectMaster" rememberSelections="false"
-            sticky="ColumnHeaders" selectionChange="handleSelection">
+            <Table id="idTab" items="{path: '/results'}" mode="MultiSelect" sticky="ColumnHeaders" >
                 <headerToolbar>
 				<Toolbar>
 					<content>
 						<SearchField id="idSearch" placeholder="Location/ Product/ Component/ Object Dep"  
-                        liveChange="onTableSearch"/>
+                        liveChange="onTableSearch" width="600px"/>
+                        <ToolbarSpacer/>
+			        <Button id="idAssign" type='Ghost' text="Assign" press="onAssign"></Button>
 					</content>
 				</Toolbar>		
 				</headerToolbar>
