@@ -82,6 +82,9 @@ service CatalogService @(impl : './lib/cat-service.js') {
     entity getMODHeader         as projection on V_OBDHDR;
     entity getProfileOD         as projection on od.PAL_PROFILEOD;
     entity getObjDepProfiles    as projection on V_ODPROFILES;
+    // Generate batch req 
+    entity genProfileParam      as projection on od.IP_PROFILEMETH_PARA;
+    entity genProfileOD         as projection on od.IP_PROFILEOD;
 
     type objectDep {
         LOCATION_ID : String(4);

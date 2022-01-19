@@ -430,11 +430,11 @@ context cp {
         key PROFILE   : String(50) @title : 'Profile';
         key METHOD    : String(50) @title : 'Method Name';
         key PARA_NAME : String(100)@title : 'Parameter Name';
-            INTVAL    : Integer;
-            DOUBLEVAL : Double;
-            STRVAL    : String(20);
-            PARA_DESC : String(1000);
-            PARA_DEP  : String(1000);
+            INTVAL    : Integer@title : 'Integer';
+            DOUBLEVAL : Double@title : 'Double';
+            STRVAL    : String(20)@title : 'String';
+            PARA_DESC : String(1000)@title : 'Parameter Description';
+            PARA_DEP  : String(1000)@title : 'Parameter Dependency';
             CREATED_DATE : Date       @title : 'Date';
             CREATED_BY   : String(12)@title : 'Created By'
     }
@@ -449,7 +449,31 @@ context cp {
             STRUC_NODE  : String(50)@title : 'Structure Node';
     }
 
-
+    entity IP_PROFILEOD {
+        key UNID: Integer;
+        PROFILEOD: array of {
+            LOCATION_ID : String(4) @title : 'Location ID';
+            PRODUCT_ID  : String(40)@title : 'Product ID';
+            COMPONENT   : String(40)@title : 'Component';
+            PROFILE     : String(50)@title : 'Profile';
+            OBJ_DEP     : String(30)@title : 'Object Dependency';
+        }
+    }
+    entity IP_PROFILEMETH_PARA {
+        key UNID: Integer;
+        PROFILEPARA: array of {
+            PROFILE   : String(50) @title : 'Profile';
+            METHOD    : String(50) @title : 'Method Name';
+            PARA_NAME : String(100)@title : 'Parameter Name';
+            INTVAL    : Integer@title : 'Integer';
+            DOUBLEVAL : Double@title : 'Double';
+            STRVAL    : String(20)@title : 'String';
+            PARA_DESC : String(1000)@title : 'Parameter Description';
+            PARA_DEP  : String(1000)@title : 'Parameter Dependency';
+            CREATED_DATE : Date       @title : 'Date';
+            CREATED_BY   : String(12)@title : 'Created By'
+        }
+    }
     // entity PAL_MODEL_PARAMETERS {
     //     key MODEL_TYPE : String(10)  @title : 'Model Type';
     //     key PROFILE_ID : Integer     @title : 'Profile ID';

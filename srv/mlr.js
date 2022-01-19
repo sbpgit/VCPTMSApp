@@ -481,7 +481,9 @@ exports._runRegressionMlrGroup = function(req) {
    
     var cqnQuery = {INSERT:{ into: { ref: ['CP_PALMLRREGRESSIONS'] }, entries: [
         //  {   ID: idObj, createdAt : createtAtObj, 
-        {   mlrID: idObj, createdAt : createtAtObj.toISOString(), 
+        {   mlrID: idObj, createdAt : createtAtObj.toISOString(),
+            Location : req.data.Location,
+            Product : req.data.Product, 
             regressionParameters:req.data.regressionParameters, 
             mlrType : req.data.mlrType,
             regressionData : req.data.regressionData, 
@@ -612,10 +614,19 @@ exports._runRegressionMlrGroup = function(req) {
         ]}}
 
         cds.run(cqnQuery);
-*/        
+*/   
+        let grpStr=inGroups[grpIndex].split('#');
+        let GroupId = grpStr[0];
+        let location = grpStr[1];
+        let product = grpStr[2];
+
+        console.log("_runRegressionMLRGroup  grpStr ", grpStr, "GroupId ",GroupId, " location ", location, " product ", product);
+
         var rowObj = {   mlrGroupID: idObj, 
             createdAt : createtAtObj.toISOString(), 
-            groupId : inGroups[grpIndex],
+            Location : location,
+            Product : product,
+            groupId : GroupId,
             regressionParameters:paramsGroupObj, 
             mlrType : req.data.mlrType,
             coefficientOp : coeffsGroupObj,
@@ -660,7 +671,8 @@ exports._runMlrPredictions = function(req) {
 
    //const predictionParameters = req.data.predictionParameters;
    //console.log('predictionParameters: ', predictionParameters); 
-   var groupId = req.data.groupId;
+   //var groupId = req.data.groupId;
+   var groupId = req.data.groupId + '#' + req.data.Location + '#' + req.data.Product;
 
    var conn = hana.createConnection();
 
@@ -1019,6 +1031,11 @@ exports._runMlrPrediction = function (mlrpType, group) {
     stmt.drop();
 
     var groupId = group;
+    let grpStr=groupId.split('#');
+    let GroupId = grpStr[0];
+    let location = grpStr[1];
+    let product = grpStr[2];
+
     sqlStr = 'create local temporary column table ' + '"#PAL_FMLR_COEFICIENT_TBL_' + groupId + '" ' + 
                     "(\"Coefficient\" varchar(50),\"CoefficientValue\" DOUBLE)"; 
 
@@ -1054,7 +1071,7 @@ exports._runMlrPrediction = function (mlrpType, group) {
             let id =  predData[i].ID;
             let att1 =  predData[i].V1;
             let att2 =  predData[i].V2;
-            predDataObj.push({groupId,id,att1,att2});
+            predDataObj.push({GroupId,id,att1,att2});
         }
 
         sqlStr = 'INSERT INTO ' + '"#PAL_FMLR_COEFICIENT_TBL_' + groupId  + '"' + ' SELECT "VARIABLE_NAME", "COEFFICIENT_VALUE" FROM "PAL_MLR_COEFFICIENT_GRP_TAB" WHERE GROUP_ID = ' 
@@ -1090,7 +1107,7 @@ exports._runMlrPrediction = function (mlrpType, group) {
             let att1 =  predData[i].V1;
             let att2 =  predData[i].V2;
             let att3 =  predData[i].V3;
-            predDataObj.push({groupId,id,att1,att2,att3});
+            predDataObj.push({GroupId,id,att1,att2,att3});
         }
 
         sqlStr = 'INSERT INTO ' + '"#PAL_FMLR_COEFICIENT_TBL_' + groupId  + '"' + ' SELECT "VARIABLE_NAME", "COEFFICIENT_VALUE" FROM "PAL_MLR_COEFFICIENT_GRP_TAB" WHERE GROUP_ID = ' 
@@ -1126,7 +1143,7 @@ exports._runMlrPrediction = function (mlrpType, group) {
             let att2 =  predData[i].V2;
             let att3 =  predData[i].V3;
             let att4 =  predData[i].V4;
-            predDataObj.push({groupId,id,att1,att2,att3,att4});
+            predDataObj.push({GroupId,id,att1,att2,att3,att4});
         }
 
         sqlStr = 'INSERT INTO ' + '"#PAL_FMLR_COEFICIENT_TBL_' + groupId  + '"' + ' SELECT "VARIABLE_NAME", "COEFFICIENT_VALUE" FROM "PAL_MLR_COEFFICIENT_GRP_TAB" WHERE GROUP_ID = ' 
@@ -1166,7 +1183,7 @@ exports._runMlrPrediction = function (mlrpType, group) {
             let att3 =  predData[i].V3;
             let att4 =  predData[i].V4;
             let att5 =  predData[i].V5;
-            predDataObj.push({groupId,id,att1,att2,att3,att4,att5});
+            predDataObj.push({GroupId,id,att1,att2,att3,att4,att5});
         }
 
         sqlStr = 'INSERT INTO ' + '"#PAL_FMLR_COEFICIENT_TBL_' + groupId  + '"' + ' SELECT "VARIABLE_NAME", "COEFFICIENT_VALUE" FROM "PAL_MLR_COEFFICIENT_GRP_TAB" WHERE GROUP_ID = ' 
@@ -1208,7 +1225,7 @@ exports._runMlrPrediction = function (mlrpType, group) {
             let att5 =  predData[i].V5;
             let att6 =  predData[i].V6;
 
-            predDataObj.push({groupId,id,att1,att2,att3,att4,att5,att6});
+            predDataObj.push({GroupId,id,att1,att2,att3,att4,att5,att6});
         }
 
         sqlStr = 'INSERT INTO ' + '"#PAL_FMLR_COEFICIENT_TBL_' + groupId  + '"' + ' SELECT "VARIABLE_NAME", "COEFFICIENT_VALUE" FROM PAL_MLR_COEFFICIENT_GRP_TAB WHERE GROUP_ID = ' 
@@ -1251,7 +1268,7 @@ exports._runMlrPrediction = function (mlrpType, group) {
             let att6 =  predData[i].V6;
             let att7 =  predData[i].V7;
 
-            predDataObj.push({groupId,id,att1,att2,att3,att4,att5,att6,att7});
+            predDataObj.push({GroupId,id,att1,att2,att3,att4,att5,att6,att7});
         }
 
         sqlStr = 'INSERT INTO ' + '"#PAL_FMLR_COEFICIENT_TBL_' + groupId  + '"' +' SELECT "VARIABLE_NAME", "COEFFICIENT_VALUE" FROM "PAL_MLR_COEFFICIENT_GRP_TAB" WHERE GROUP_ID = ' 
@@ -1295,7 +1312,7 @@ exports._runMlrPrediction = function (mlrpType, group) {
             let att7 =  predData[i].V7;
             let att8 =  predData[i].V8;
 
-            predDataObj.push({groupId,id,att1,att2,att3,att4,att5,att6,att7,att8});
+            predDataObj.push({GroupId,id,att1,att2,att3,att4,att5,att6,att7,att8});
         }
 
         sqlStr = 'INSERT INTO ' + '"#PAL_FMLR_COEFICIENT_TBL_' + groupId  + '"' + ' SELECT "VARIABLE_NAME", "COEFFICIENT_VALUE" FROM PAL_MLR_COEFFICIENT_GRP_TAB WHERE GROUP_ID = ' 
@@ -1338,7 +1355,7 @@ exports._runMlrPrediction = function (mlrpType, group) {
             let att8 =  predData[i].V8;
             let att9 =  predData[i].V9;
 
-            predDataObj.push({groupId,id,att1,att2,att3,att4,att5,att6,att7,att8,att9});
+            predDataObj.push({GroupId,id,att1,att2,att3,att4,att5,att6,att7,att8,att9});
         }
 
         sqlStr = 'INSERT INTO ' + '"#PAL_FMLR_COEFICIENT_TBL_' + groupId  + '"' + ' SELECT "VARIABLE_NAME", "COEFFICIENT_VALUE" FROM PAL_MLR_COEFFICIENT_GRP_TAB WHERE GROUP_ID = ' 
@@ -1382,7 +1399,7 @@ exports._runMlrPrediction = function (mlrpType, group) {
             let att9 =  predData[i].V9;
             let att10 =  predData[i].V10;
 
-            predDataObj.push({groupId,id,att1,att2,att3,att4,att5,att6,att7,att8,att9,att10});
+            predDataObj.push({GroupId,id,att1,att2,att3,att4,att5,att6,att7,att8,att9,att10});
         }
 
         sqlStr = 'INSERT INTO ' + '"#PAL_FMLR_COEFICIENT_TBL_' + groupId  + '"' + ' SELECT "VARIABLE_NAME", "COEFFICIENT_VALUE" FROM PAL_MLR_COEFFICIENT_GRP_TAB WHERE GROUP_ID = ' 
@@ -1427,7 +1444,7 @@ exports._runMlrPrediction = function (mlrpType, group) {
             let att10 =  predData[i].V10;
             let att11 =  predData[i].V11;
 
-            predDataObj.push({groupId,id,att1,att2,att3,att4,att5,att6,att7,att8,att9,att10,att11});
+            predDataObj.push({GroupId,id,att1,att2,att3,att4,att5,att6,att7,att8,att9,att10,att11});
         }
 
         sqlStr = 'INSERT INTO ' + '"#PAL_FMLR_COEFICIENT_TBL_' + groupId  + '"' + ' SELECT "VARIABLE_NAME", "COEFFICIENT_VALUE" FROM PAL_MLR_COEFFICIENT_GRP_TAB WHERE GROUP_ID = ' 
@@ -1473,7 +1490,7 @@ exports._runMlrPrediction = function (mlrpType, group) {
             let att11 =  predData[i].V11;
             let att12 =  predData[i].V12;
 
-            predDataObj.push({groupId,id,att1,att2,att3,att4,att5,att6,att7,att8,att9,att10,att11,att12});
+            predDataObj.push({GroupId,id,att1,att2,att3,att4,att5,att6,att7,att8,att9,att10,att11,att12});
         }
 
         sqlStr = 'INSERT INTO ' + '"#PAL_FMLR_COEFICIENT_TBL_' + groupId  + '"' + ' SELECT "VARIABLE_NAME", "COEFFICIENT_VALUE" FROM PAL_MLR_COEFFICIENT_GRP_TAB WHERE GROUP_ID = ' 
@@ -1521,7 +1538,7 @@ exports._runMlrPrediction = function (mlrpType, group) {
         let doubleVal =  predParams[i].DOUBLE_VALUE;
         let strVal =  predParams[i].STRING_VALUE;
 
-        predParamsObj.push({groupId,paramName,intVal,doubleVal,strVal});
+        predParamsObj.push({GroupId,paramName,intVal,doubleVal,strVal});
     }
 
 
@@ -1540,7 +1557,7 @@ exports._runMlrPrediction = function (mlrpType, group) {
         let id = predictionResults[i].ID;
         let value =  predictionResults[i].VALUE;
     
-        fittedObj.push({groupId,id,value});
+        fittedObj.push({GroupId,id,value});
 
     }	
  
@@ -1551,7 +1568,7 @@ exports._runMlrPrediction = function (mlrpType, group) {
     let idObj = uuidv1();
     
     var cqnQuery = {INSERT:{ into: { ref: ['CP_PALMLRPREDICTIONS'] }, entries: [
-         {mlrpID: idObj, createdAt : createtAtObj.toISOString(), groupId : groupId, predictionParameters:predParamsObj, mlrpType : mlrpType, predictionData : predDataObj, fittedResults : fittedObj}
+         {mlrpID: idObj, createdAt : createtAtObj.toISOString(), Location : location, Product : product, groupId : GroupId, predictionParameters:predParamsObj, mlrpType : mlrpType, predictionData : predDataObj, fittedResults : fittedObj}
          ]}}
 
     cds.run(cqnQuery);

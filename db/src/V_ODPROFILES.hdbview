@@ -2,9 +2,9 @@ VIEW "V_ODPROFILES"
 AS SELECT distinct A.LOCATION_ID,
         A.PRODUCT_ID,
         A.COMPONENT,
-        CONCAT(A.OBJ_DEP, CONCAT('_',A.OBJ_COUNTER))  AS "OBJ_DEP",
-        -- A.OBJ_DEP,
-        -- A.OBJ_COUNTER,
+        -- CONCAT(A.OBJ_DEP, CONCAT('_',A.OBJ_COUNTER))  AS "OBJ_DEP",
+        A.OBJ_DEP,
+        A.OBJ_COUNTER,
         A.OBJDEP_DESC,
         B.PROFILE
 --  FROM CP_BOM_OBJDEPENDENCY  AS A

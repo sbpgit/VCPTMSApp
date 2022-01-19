@@ -461,20 +461,16 @@ exports._runRegressionHgbtGroupV1 = function(req) {
 
     var createtAtObj = new Date();
     var idObj = uuidv1();
-    //let uuidObj = uuidv1();
 
-   // let timeStamp = createtAtObj;
-   // let tsObj = [];	
+    console.log("_runRegressionHgbtGroupV1 location ", req.data.Location, " product ", req.data.Product);
 
-   // tsObj.push({timeStamp});
-   // console.log("tsObj ", tsObj);
-   // var myDate = new Date(1559736267189);
-   // alert(myDate.getFullYear() + '-' +('0' + (myDate.getMonth()+1)).slice(-2)+ '-' +  ('0' + myDate.getDate()).slice(-2) + ' '+myDate.getHours()+ ':'+('0' + (myDate.getMinutes())).slice(-2)+ ':'+myDate.getSeconds());
-    
+
     let cqnQuery = {INSERT:{ into: { ref: ['CP_PALHGBTREGRESSIONSV1'] }, entries: [
         //  {   ID: idObj, createdAt : createtAtObj, 
         {   hgbtID: idObj, 
             createdAt : createtAtObj.toISOString(), //2021-12-14T12:00:35.940Z', //new Date(), 
+            Location : req.data.Location,
+            Product : req.data.Product,
             regressionParameters:req.data.regressionParameters, 
             hgbtType : req.data.hgbtType,
             regressionData : req.data.regressionData, 
@@ -490,45 +486,6 @@ exports._runRegressionHgbtGroupV1 = function(req) {
     cds.run(cqnQuery);
     console.log("CP_PALHGBTREGRESSIONSV1 cqnQuery Completed " , new Date());
 
-
-  //  console.log("CP_PALHGBTREGRESSIONSV1 cQnQuery " , cqnQuery);
-/*
-    const sleep = require('await-sleep');
-    console.log('_runRegressionHgbtGroupV1 Sleep Start Time',new Date());
-    await sleep(200);
-    console.log('_runRegressionHgbtGroupV1 Sleep Completed Time',new Date());
-*/
-
-/*
-
-    var conn_container = hana.createConnection();
-    conn_container.connect(conn_params_container);
-    var sqlStr = 'SET SCHEMA ' + containerSchema;  
-    // console.log('sqlStr: ', sqlStr);            
-    var stmt=conn_container.prepare(sqlStr);
-    stmt.exec();
-    stmt.drop();
-   
-    sqlStr = "INSERT INTO CP_PALHGBTREGRESSIONSV1(HGBTID, CREATEDAT, REGRESSIONPARAMETERS, HGBTTYPE, REGRESSIONDATA, MODELSOP,IMPORTANCEOP,STATISTICSOP,PARAMSELECTIONOP)" +
-             "VALUES(" + idObj + "," + createtAtObj + "," + req.data.regressionParameters + "," +
-              req.data.hgbtType + "," + req.data.regressionData + "," +
-             modelsObj + "," + impObj + "," + statisticsObj + "," + paramSelectionObj +")";
-    
-    console.log('CP_PALHGBTREGRESSIONSV1 sqlStr: ', sqlStr);            
-
-    sqlStr = "INSERT INTO CP_PALHGBTREGRESSIONSV1(HGBTID, CREATEDAT, REGRESSIONPARAMETERS, " + 
-               "HGBTTYPE, REGRESSIONDATA, MODELSOP,IMPORTANCEOP,STATISTICSOP,PARAMSELECTIONOP)" +
-               "VALUES(?,?,?,?,?,?,?,?,?)";
-    console.log('CP_PALHGBTREGRESSIONSV1 sqlStr: ', sqlStr);            
-
-    stmt = conn_container.prepare(sqlStr);
-    result = stmt.exec([idObj,createtAtObj,req.data.regressionParameters,
-                        req.data.hgbtType,req.data.regressionData,modelsObj,
-                        impObj,statisticsObj,paramSelectionObj]);
-    stmt.drop();
-    console.log("Number of rows added: " + result);
-    conn_container.disconnect();
-*/
 
 /////
     let regressionParameters = req.data.regressionParameters;
@@ -614,10 +571,19 @@ exports._runRegressionHgbtGroupV1 = function(req) {
 
         cds.run(cqnQuery);
 */        
+        let grpStr=inGroups[grpIndex].split('#');
+        let GroupId = grpStr[0];
+        let location = grpStr[1];
+        let product = grpStr[2];
+
+        console.log("_runRegressionHgbtGroupV1  grpStr ", grpStr, "GroupId ",GroupId, " location ", location, " product ", product);
+
         var rowObj = {   hgbtGroupID: idObj, 
             //createdAt : createtAtObj, 
             createdAt : createtAtObj.toISOString(),
-            groupId : inGroups[grpIndex],
+            Location : location,
+            Product : product,
+            groupId : GroupId,
             regressionParameters:paramsGroupObj, 
             hgbtType : req.data.hgbtType,
             importanceOp : impGroupObj,
@@ -686,7 +652,8 @@ exports._runRegressionHgbtGroupV1 = function(req) {
 
 
 exports._runHgbtPredictionsV1 = function(req) {
-   var groupId = req.data.groupId;
+   //var groupId = req.data.groupId;
+   var groupId = req.data.groupId + '#' + req.data.Location + '#' + req.data.Product;
 
    var conn = hana.createConnection();
 
@@ -730,7 +697,7 @@ exports._runHgbtPredictionsV1 = function(req) {
   
 }
 
-function _updateHgbtPredictionParamsV1(req) {
+exports._updateHgbtPredictionParamsV1 = function(req) {
 
     const hgbtPredictParams = req.data.predictionParameters;
     //console.log('mlrPredictParams: ', mlrPredictParams);         
@@ -777,7 +744,7 @@ function _updateHgbtPredictionParamsV1(req) {
     conn.disconnect();
 }
 
-function _updateHgbtPredictionDataV1(req) {
+exports._updateHgbtPredictionDataV1 = function(req) {
 
     const hgbtPredictData = req.data.predictionData;
     var hgbtType = req.data.hgbtType;
@@ -955,7 +922,7 @@ function _updateHgbtPredictionDataV1(req) {
     console.log(' _updateHgbtPredictionDataV1 Completed ');
 }
 
-function _runPredictionHgbtGroupV1(req) {
+exports._runPredictionHgbtGroupV1 = function(req) {
 
     var conn = hana.createConnection();
  
@@ -1048,6 +1015,11 @@ exports._runHgbtPredictionV1 = function(hgbtType, group) {
 
     var groupId = group;
     
+    let grpStr=groupId.split('#');
+    let GroupId = grpStr[0];
+    let location = grpStr[1];
+    let product = grpStr[2];
+
     sqlStr = "create local temporary column table #PAL_HGBT_MODEL_TAB_"+ groupId + " " + 
                     "(\"ROW_INDEX\" INTEGER,\"TREE_INDEX\" INTEGER,\"MODEL_CONTENT\" NCLOB)"; // MEMORY THRESHOLD 1000)";
 
@@ -1091,7 +1063,7 @@ exports._runHgbtPredictionV1 = function(hgbtType, group) {
             let id =  predData[i].ID;
             let att1 =  predData[i].ATT1;
             let att2 =  predData[i].ATT2;
-            predDataObj.push({groupId,id,att1,att2});
+            predDataObj.push({GroupId,id,att1,att2});
         }
     
     }
@@ -1121,7 +1093,7 @@ exports._runHgbtPredictionV1 = function(hgbtType, group) {
             let att1 =  predData[i].ATT1;
             let att2 =  predData[i].ATT2;
             let att3 =  predData[i].ATT3;
-            predDataObj.push({groupId,id,att1,att2,att3});
+            predDataObj.push({GroupId,id,att1,att2,att3});
         }
     }
     else if(hgbtType == 4)
@@ -1151,7 +1123,7 @@ exports._runHgbtPredictionV1 = function(hgbtType, group) {
             let att2 =  predData[i].ATT2;
             let att3 =  predData[i].ATT3;
             let att4 =  predData[i].ATT4;
-            predDataObj.push({groupId,id,att1,att2,att3,att4});
+            predDataObj.push({GroupId,id,att1,att2,att3,att4});
         }
     }
     else if(hgbtType == 5)
@@ -1183,7 +1155,7 @@ exports._runHgbtPredictionV1 = function(hgbtType, group) {
             let att4 =  predData[i].ATT4;
             let att5 =  predData[i].ATT5;
 
-            predDataObj.push({groupId,id,att1,att2,att3,att4,att5});
+            predDataObj.push({GroupId,id,att1,att2,att3,att4,att5});
         }
     }
     else if(hgbtType == 6)
@@ -1217,7 +1189,7 @@ exports._runHgbtPredictionV1 = function(hgbtType, group) {
             let att6 =  predData[i].ATT6;
 
 
-            predDataObj.push({groupId,id,att1,att2,att3,att4,att5,att6});
+            predDataObj.push({GroupId,id,att1,att2,att3,att4,att5,att6});
         }
     }
     else if(hgbtType == 7)
@@ -1252,7 +1224,7 @@ exports._runHgbtPredictionV1 = function(hgbtType, group) {
             let att7 =  predData[i].ATT7;
 
 
-            predDataObj.push({groupId,id,att1,att2,att3,att4,att5,att6,att7});
+            predDataObj.push({GroupId,id,att1,att2,att3,att4,att5,att6,att7});
         }
     }
     else if(hgbtType == 8)
@@ -1288,7 +1260,7 @@ exports._runHgbtPredictionV1 = function(hgbtType, group) {
             let att8 =  predData[i].ATT8;
 
 
-            predDataObj.push({groupId,id,att1,att2,att3,att4,att5,att6,att7,att8});
+            predDataObj.push({GroupId,id,att1,att2,att3,att4,att5,att6,att7,att8});
         }
     }
     else if(hgbtType == 9)
@@ -1325,7 +1297,7 @@ exports._runHgbtPredictionV1 = function(hgbtType, group) {
             let att9 =  predData[i].ATT9;
 
 
-            predDataObj.push({groupId,id,att1,att2,att3,att4,att5,att6,att7,att8,att9});
+            predDataObj.push({GroupId,id,att1,att2,att3,att4,att5,att6,att7,att8,att9});
         }
     }
     else if(hgbtType == 10)
@@ -1363,7 +1335,7 @@ exports._runHgbtPredictionV1 = function(hgbtType, group) {
             let att10 =  predData[i].ATT10;
 
 
-            predDataObj.push({groupId,id,att1,att2,att3,att4,att5,att6,att7,att8,att9,att10});
+            predDataObj.push({GroupId,id,att1,att2,att3,att4,att5,att6,att7,att8,att9,att10});
         }
     }
     else if(hgbtType == 11)
@@ -1402,7 +1374,7 @@ exports._runHgbtPredictionV1 = function(hgbtType, group) {
             let att11 =  predData[i].ATT11;
 
 
-            predDataObj.push({groupId,id,att1,att2,att3,att4,att5,att6,att7,att8,att9,att10,att11});
+            predDataObj.push({GroupId,id,att1,att2,att3,att4,att5,att6,att7,att8,att9,att10,att11});
         }
     }
     else if(hgbtType == 12)
@@ -1441,7 +1413,7 @@ exports._runHgbtPredictionV1 = function(hgbtType, group) {
             let att11 =  predData[i].ATT11;
             let att12 =  predData[i].ATT12;
 
-            predDataObj.push({groupId,id,att1,att2,att3,att4,att5,att6,att7,att8,att9,att10,att11,att12});
+            predDataObj.push({GroupId,id,att1,att2,att3,att4,att5,att6,att7,att8,att9,att10,att11,att12});
         }
     }
     else
@@ -1483,7 +1455,7 @@ exports._runHgbtPredictionV1 = function(hgbtType, group) {
         let doubleVal =  predParams[i].DOUBLE_VALUE;
         let strVal =  predParams[i].STRING_VALUE;
 
-        predParamsObj.push({groupId,paramName,intVal,doubleVal,strVal});
+        predParamsObj.push({GroupId,paramName,intVal,doubleVal,strVal});
     }
 
 
@@ -1507,7 +1479,7 @@ exports._runHgbtPredictionV1 = function(hgbtType, group) {
         let score =  predictionResults[i].SCORE;
         let confidence = predictionResults[i].CONFIDENCE;
     
-        resultsObj.push({groupId,id,score,confidence});
+        resultsObj.push({GroupId,id,score,confidence});
     }	
 
     var createtAtObj = new Date();
@@ -1515,7 +1487,7 @@ exports._runHgbtPredictionV1 = function(hgbtType, group) {
     let idObj = uuidv1();
     
     var cqnQuery = {INSERT:{ into: { ref: ['CP_PALHGBTPREDICTIONSV1'] }, entries: [
-         {hgbtID: idObj, createdAt : createtAtObj.toISOString(), groupId : groupId, predictionParameters:predParamsObj, hgbtType : hgbtType, predictionData : predDataObj, predictedResults : resultsObj}
+         {hgbtID: idObj, createdAt : createtAtObj.toISOString(), Location : location, Product : product, groupId : GroupId, predictionParameters:predParamsObj, hgbtType : hgbtType, predictionData : predDataObj, predictedResults : resultsObj}
          ]}}
 
     cds.run(cqnQuery);
