@@ -2,7 +2,7 @@ using cp as od from '../db/data-model';
 using V_CLASSCHAR from '../db/data-model';
 using V_CHARVAL from '../db/data-model';
 using V_OBDHDR  from '../db/data-model';
-using V_ODPROFILES from '../db/data-model';
+// using V_ODPROFILES from '../db/data-model';
 service CatalogService @(impl : './lib/cat-service.js') {
     // Service on HDI entities
     //@odata.draft.enabled
@@ -17,22 +17,26 @@ service CatalogService @(impl : './lib/cat-service.js') {
     @readonly
     entity getCustgroup         as projection on od.CUSTOMERGROUP;
 
-    @odata.draft.enabled
+    //@odata.draft.enabled
+    @readonly
     entity getProdConfig        as projection on od.PROD_CONFIG;
 
     @readonly
     entity getSalesh            as projection on od.SALESH;
 
-    @odata.draft.enabled
+    //@odata.draft.enabled
+    @readonly
     entity getLocProd           as projection on od.LOCATION_PRODUCT;
 
     @readonly
     entity getSalesCfg          as projection on od.SALESH_CONFIG;
 
-    @odata.draft.enabled
+   // @odata.draft.enabled
+    @readonly
     entity getBomHeader         as projection on od.BOMHEADER;
 
-    @odata.draft.enabled
+    //@odata.draft.enabled
+    @readonly
     entity getBomOD             as projection on od.BOM_OBJDEPENDENCY;
 
     @readonly
@@ -81,7 +85,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
     entity getProfileParameters as projection on od.PAL_PROFILEMETH_PARA;
     entity getMODHeader         as projection on V_OBDHDR;
     entity getProfileOD         as projection on od.PAL_PROFILEOD;
-    entity getObjDepProfiles    as projection on V_ODPROFILES;
+    // entity getObjDepProfiles    as projection on V_ODPROFILES;
     // Generate batch req 
     entity genProfileParam      as projection on od.IP_PROFILEMETH_PARA;
     entity genProfileOD         as projection on od.IP_PROFILEOD;
@@ -92,10 +96,21 @@ service CatalogService @(impl : './lib/cat-service.js') {
         OBJ_DEP     : String(30);
         OBJ_COUNTER : Integer
     }
+
+    type odprofiles {
+        LOCATION_ID : String(4);
+        PRODUCT_ID  : String(40);
+        COMPONENT   : String(40);
+        PROFILE     : String(50);
+        OBJ_DEP     : String(30);
+        OBJDEP_DESC  : String(30);
+        STRUC_NODE  : String(50);
+    }
     //function createProf() returns String;
     function fGetNodeDet(NODE_TYPE : String(2), CHILD_NODE : String(50), PARENT_NODE : String(50)) returns array of getAccessNodes;
     function generate_timeseries() returns String;
     function get_objdep() returns array of objectDep;
+    function getODProfiles() returns array of odprofiles;
     action gen_timeseries() returns String;
 
 }

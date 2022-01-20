@@ -1,0 +1,1 @@
+sap.ui.define(["sap/ui/core/mvc/Controller"],function(n){"use strict";return n.extend("cp.appf.cpassignppf.controller.App",{onInit:function(){}})});

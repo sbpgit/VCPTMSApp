@@ -84,6 +84,14 @@
                                 tokenUpdate="handleTokenUpdate"/>
                         </f:fields>
                     </f:FormElement>
+                    <f:FormElement>
+                        <f:label>
+                            <Label text="Override Assignment" />
+                        </f:label>
+                        <f:fields>
+                            <CheckBox id="idCheck" select="onCheck"/>
+                        </f:fields>
+                    </f:FormElement>
                 </f:formElements>
             </f:FormContainer>
             <f:FormContainer>
@@ -97,6 +105,14 @@
                         </f:fields>
                     </f:FormElement>
                     
+                    <f:FormElement>
+                        <f:label>
+                            <Label text=""/>
+                        </f:label>
+                        <f:fields>
+                            <Text/>
+                        </f:fields>
+                    </f:FormElement>
                     <f:FormElement>
                         <f:label>
                             <Label text=""/>
@@ -148,6 +164,9 @@
                 <Text text="{i18n>objdep}"/>
             </Column>
             <Column>
+                <Text text="{i18n>profile}"/>
+            </Column>
+            <Column>
                 <Text text="{i18n>dim}"/>
             </Column>
         </columns>
@@ -157,7 +176,7 @@
                     <Text text="{Location}"/>                    
                     <Text text="{Product}"/>                    
                     <Text text="{GroupID}"/>                    
-                    <!-- <Text text="{dimenions}"/> -->
+                    <Text text="{profile}"/>
                     <ObjectStatus
                     class="sapUiSmallMarginBottom"
                     text="{dimensions}"

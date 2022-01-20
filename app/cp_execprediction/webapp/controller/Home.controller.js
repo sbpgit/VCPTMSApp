@@ -129,8 +129,8 @@ sap.ui.define(
             success: function (oData) {
                 oData.results.unshift({
                     OBJ_DEP: "All",
-                    LOCATION_ID:"",
-                    PRODUCT_ID:"KM_M219VBVS_BVS"
+                    LOCATION_ID:"All",
+                    PRODUCT_ID:"All"//"KM_M219VBVS_BVS"
                 });
               that.odModel.setData(oData);
               that.oODList.setModel(that.odModel);
@@ -160,7 +160,21 @@ sap.ui.define(
               if (this.oODList.getBinding("items")) {
                   if(this.oODList.getBinding("items").oList[0].LOCATION_ID !== that.oLocList.getSelectedItem().getTitle()){
                     this.oODList.getBinding("items").oList[0].LOCATION_ID = that.oLocList.getSelectedItem().getTitle();
+                    this.oODList.getBinding("items").oList[0].PRODUCT_ID = that.oProdList.getSelectedItem().getTitle();
                   }
+
+                  if(this.oProdList.getSelectedItem().getTitle() === "All"){
+
+                    this.oODList
+                    .getBinding("items")
+                    .filter([
+                      new Filter(
+                        "LOCATION_ID",
+                        FilterOperator.Contains,
+                        that.oLocList.getSelectedItem().getTitle()
+                      )
+                    ]);
+                  } else {
                 
                 this.oODList
                   .getBinding("items")
@@ -173,9 +187,19 @@ sap.ui.define(
                     new Filter(
                       "PRODUCT_ID",
                       FilterOperator.Contains,
-                      "KM_M219VBVS_BVS"
+                      
+                      this.oProdList.getSelectedItem().getTitle()//   "KM_M219VBVS_BVS""KM_M219VBVS_BVS"
                     ),
+                    new Filter(
+                        "LOCATION_ID",
+                        FilterOperator.EQ, "All"
+                      ),
+                      new Filter(
+                        "PRODUCT_ID",
+                        FilterOperator.EQ,"All"
+                      ),
                   ]);
+                }
               }
             //   var table = sap.ui.getCore().byId("odSlctList");
             //   if(table.getItems().length === 1 && table.getItems()[0].getTitle() === "All_"){
@@ -308,6 +332,8 @@ sap.ui.define(
             // Prod list
           } else if (sId.includes("prod")) {
             that.oProdList.getBinding("items").filter([]);
+            that.oObjDep.removeAllTokens();
+            this._valueHelpDialogOD.getAggregation("_dialog").getContent()[1].removeSelections();
             aSelectedItems = oEvent.getParameter("selectedItems");
             if (aSelectedItems && aSelectedItems.length > 0) {
               that.oProd.removeAllTokens();
@@ -327,8 +353,15 @@ sap.ui.define(
           } else if (sId.includes("od")) {
             that.oODList.getBinding("items").filter([]);
             // that.oODTable.setModel(that.oODPModel);
+
             aSelectedItems = oEvent.getParameter("selectedItems");
+            
             if (aSelectedItems && aSelectedItems.length > 0) {
+                if(aSelectedItems[0].getTitle() === "All_"){
+                    that.byId("idCheck").setSelected(true);
+                } else {
+                    that.byId("idCheck").setSelected(false);
+                }
               that.oObjDep.removeAllTokens();
               aSelectedItems.forEach(function (oItem) {
                 // aODdata.push({GroupID : oItem.getTitle(),
@@ -346,10 +379,16 @@ sap.ui.define(
             //   });
             //   that.oPanelod.setProperty("visible", true);
             //   that.oPanelod.setProperty("expandable", true);
+            }else {
+                that.oObjDep.removeAllTokens();
+              
+                    that.byId("idCheck").setSelected(false);
+         
             }
           } else {
             that.oPPFList.getBinding("items").filter([]);
             aSelectedItems = oEvent.getParameter("selectedItems");
+            that.oPredProfile.removeAllTokens();
             if (aSelectedItems && aSelectedItems.length > 0) {
               aSelectedItems.forEach(function (oItem) {
                 that.oPredProfile.addToken(
@@ -399,31 +438,62 @@ sap.ui.define(
             }
           }
         },
-        onRun2: function () {
+
+
+        onRun2: function(){
+            var selected = that.byId("idCheck").getSelected();
+            var text = "Do you want to override assignments?";
+            if(selected === true){
+                sap.m.MessageBox.show(
+                    text, {
+    
+                        title: "Confirmation",
+                        actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
+                        onClose: function (oAction) {
+                            if (oAction === sap.m.MessageBox.Action.YES) {
+                                that.onRunSend();
+                            }
+    
+                        }
+                    }
+                );
+            } else {
+                that.onRunSend();
+            }
+        },
+        onRunSend: function () {
           this.oModel = this.getModel("PModel");
-          var aItems,
+          var aItems, prodItems, predProfile, selected,
             i,
             regData = [],
             vFlag;
+            var oEntry = {
+                vcRulesList: [],
+              },
+              vRuleslist;
           aItems = this.oODList.getSelectedItems();
+          prodItems = this.oProdList.getSelectedItems(),
+          predProfile= that.oPredProfile.getTokens()[0].getText(),
+          selected = that.byId("idCheck").getSelected();
 
-          that.byId("pmdlList").setModel(this.otabModel);
-          if (
-            this.oObjDep.getTokens().length > 0 &&
-            this.oPredProfile.getTokens().length > 0 )
-           {
-            for (i = 0; i < aItems.length; i++) {
-              var oEntry = {
-                  vcRulesList: [],
-                },
-                vRuleslist;
-              vRuleslist = {
-                Location: aItems[i].getInfo(),
-                Product: aItems[i].getDescription(),
-                GroupID: aItems[i].getTitle(),
-              };
-              oEntry.vcRulesList.push(vRuleslist);
-              var uri = "/v2/pal/generatePredictions";
+          
+          if (this.oObjDep.getTokens().length > 0 && this.oPredProfile.getTokens().length > 0 ){
+
+            if(aItems[0].getTitle() === "All_" && prodItems[0].getTitle() === "All"){
+                var oEntry = {
+                    vcRulesList: [],
+                  },
+                  vRuleslist;
+                vRuleslist = {
+                  profile: predProfile,
+                  override: true,
+                  Location: aItems[1].getInfo(),
+                  Product: "All",
+                  GroupID: "All",
+                };
+                oEntry.vcRulesList.push(vRuleslist);
+
+            var uri = "/v2/pal/generatePredictions";
               $.ajax({
                 url: uri,
                 type: "POST",
@@ -439,16 +509,63 @@ sap.ui.define(
                 },
                 success: function (data) {
                   sap.m.MessageToast.show(that.i18n.getText("genPredSuccess"));
-                  regData.push(data.d.values[0].vcRulesList[0]);
+                  regData.push(data.d.values[0].vcRulesList);
 
                   that.otabModel.setData({
-                    results: regData,
+                    results: regData[0],
                   });
+                  that.byId("pmdlList").setModel(that.otabModel);
                   that.oPanel.setProperty("visible", true);
                   vFlag = 'X';
                 },
               });
+
+            } else {
+            for (i = 0; i < aItems.length; i++) {
+                if(aItems[i].getTitle() !== "All_"){
+
+                
+              
+              vRuleslist = {
+                profile: predProfile,
+                override: selected,
+                Location: aItems[i].getInfo(),
+                Product: aItems[i].getDescription(),
+                GroupID: aItems[i].getTitle(),
+              };
+              oEntry.vcRulesList.push(vRuleslist);
+
             }
+        }
+              var uri = "/v2/pal/generatePredictions";
+             
+              $.ajax({
+                url: uri,
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({
+                  vcRulesList: oEntry.vcRulesList,
+                }),
+                dataType: "json",
+                async: false,
+                timeout: 0,
+                error: function (data) {
+                  sap.m.MessageToast.show(that.i18n.getText("genPredErr"));
+                },
+                success: function (data) {
+                  sap.m.MessageToast.show(that.i18n.getText("genPredSuccess"));
+                  regData.push(data.d.values[0].vcRulesList);
+
+                  that.otabModel.setData({
+                    results: regData[0],
+                  });
+                  that.byId("pmdlList").setModel(that.otabModel);
+                  that.oPanel.setProperty("visible", true);
+                  vFlag = 'X';
+                },
+              });
+        
+        }
             if(vFlag === 'X'){
             that.resetInputs();
             }
