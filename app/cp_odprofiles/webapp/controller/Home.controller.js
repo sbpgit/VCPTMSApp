@@ -389,23 +389,38 @@ sap.ui.define(
 
         var uri = "/v2/catalog/genProfileOD";
         $.ajax({
-          url: uri,
-          type: "post",
-          contentType: "application/json",
-          data: JSON.stringify({
-            PROFILEOD: aData.PROFILEOD,
-          }),
-          dataType: "json",
-          async: false,
-          timeout: 0,
-          error: function (data) {
-            sap.m.MessageToast.show(JSON.stringify(data));
+          url: "/v2/catalog/getODProfiles()",
+          type: "GET",
+          headers: {
+            "X-CSRF-Token": "fetch",
           },
-          success: function (data) {
-            sap.ui.core.BusyIndicator.hide();
-            sap.m.MessageToast.show("Profile assigned successfully");
-            that.handleClose();
-            that.onAfterRendering();
+          success: function (data, status, xhr) {
+            $.ajax({
+              url: uri,
+              type: "POST",
+              contentType: "application/json",
+              headers: {
+                "X-CSRF-Token": xhr.getResponseHeader("X-CSRF-Token"),
+              },
+              data: JSON.stringify({
+                PROFILEOD: aData.PROFILEOD,
+              }),
+              dataType: "json",
+              async: false,
+              timeout: 0,
+              error: function (data) {
+                sap.m.MessageToast.show(JSON.stringify(data));
+              },
+              success: function (data) {
+                sap.ui.core.BusyIndicator.hide();
+                sap.m.MessageToast.show("Profile assigned successfully");
+                that.handleClose();
+                that.onAfterRendering();
+              },
+            });
+          },
+          error: function (err) {
+            //debugger;
           },
         });
       },
