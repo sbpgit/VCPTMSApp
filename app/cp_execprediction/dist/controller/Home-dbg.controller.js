@@ -160,6 +160,7 @@ sap.ui.define(
               if (this.oODList.getBinding("items")) {
                   if(this.oODList.getBinding("items").oList[0].LOCATION_ID !== that.oLocList.getSelectedItem().getTitle()){
                     this.oODList.getBinding("items").oList[0].LOCATION_ID = that.oLocList.getSelectedItem().getTitle();
+                    this.oODList.getBinding("items").oList[0].PRODUCT_ID = that.oProdList.getSelectedItem().getTitle();
                   }
                 
                 this.oODList
@@ -513,6 +514,7 @@ sap.ui.define(
             }
         }
               var uri = "/v2/pal/generatePredictions";
+             
               $.ajax({
                 url: uri,
                 type: "POST",
