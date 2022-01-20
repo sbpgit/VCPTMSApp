@@ -117,8 +117,8 @@ sap.ui.define(
             success: function (oData) {
                 oData.results.unshift({
                     OBJ_DEP: "All",
-                    LOCATION_ID:"",
-                    PRODUCT_ID:""//"KM_M219VBVS_BVS"
+                    LOCATION_ID:"All",
+                    PRODUCT_ID:"All"//"KM_M219VBVS_BVS"
                 });
               that.odModel.setData(oData);
               that.oODList.setModel(that.odModel);
@@ -441,6 +441,18 @@ sap.ui.define(
                 if(this.oODList.getBinding("items").oList[0].LOCATION_ID !== that.oLocList.getSelectedItem().getTitle()){
                     this.oODList.getBinding("items").oList[0].LOCATION_ID = that.oLocList.getSelectedItem().getTitle();
                   }
+                  if(this.oProdList.getSelectedItem().getTitle() === "All"){
+
+                    this.oODList
+                    .getBinding("items")
+                    .filter([
+                      new Filter(
+                        "LOCATION_ID",
+                        FilterOperator.Contains,
+                        that.oLocList.getSelectedItem().getTitle()
+                      )
+                    ]);
+                  } else {
                 this.oODList
                   .getBinding("items")
                   .filter([
@@ -454,7 +466,16 @@ sap.ui.define(
                       FilterOperator.Contains,
                       this.oProdList.getSelectedItem().getTitle()//   "KM_M219VBVS_BVS"
                     ),
+                    new Filter(
+                        "LOCATION_ID",
+                        FilterOperator.EQ, "All"
+                      ),
+                      new Filter(
+                        "PRODUCT_ID",
+                        FilterOperator.EQ,"All"
+                      ),
                   ]);
+                }
               }
               this._valueHelpDialogOD.open();
             } else {
@@ -581,6 +602,8 @@ sap.ui.define(
             // Prod list
           } else if (sId.includes("prod")) {
             that.oProdList.getBinding("items").filter([]);
+            that.oObjDep.removeAllTokens();
+            this._valueHelpDialogOD.getAggregation("_dialog").getContent()[1].removeSelections();
             aSelectedItems = oEvent.getParameter("selectedItems");
             if (aSelectedItems && aSelectedItems.length > 0) {
               that.oProd.removeAllTokens();
