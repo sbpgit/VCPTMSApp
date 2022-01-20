@@ -104,6 +104,10 @@ modules:
       - cpodpcpodprofiles.zip
       name: cpodpcpodprofiles
       target-path: resources/
+    - artifacts:
+      - cpappfcpassignprofiles.zip
+      name: cpappfcpassignprofiles
+      target-path: resources/
 - name: cfgapppvsrootcfgprdpvsroot
   type: html5
   path: app/cfgprd_pvsroot
@@ -187,6 +191,16 @@ modules:
 - name: cpodpcpodprofiles
   type: html5
   path: app/cp_odprofiles
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappfcpassignprofiles
+  type: html5
+  path: app/cp_assignprofiles
   build-parameters:
     build-result: dist
     builder: custom

@@ -105,7 +105,8 @@
         "app/cp_exeregressionmdls",
         "app/cp_modelprofiles",
         "app/cp_assignppf",
-        "app/cp_odprofiles"
+        "app/cp_odprofiles",
+        "app/cp_assignprofiles"
     ],
     "devDependencies": {
         "@sap/ux-specification": "^1.96.0"

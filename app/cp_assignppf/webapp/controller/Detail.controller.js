@@ -67,6 +67,11 @@ sap.ui.define(
           that.byId("idCretBy").setValue("");
           that.byId("idAuth").setValue("");
           that.byId("idAlgo").setSelectedKey("N");
+          var data = [];
+            that.oAlgoListModel.setData({
+                results: data,
+              });
+              that.byId("idTab").setModel(that.oAlgoListModel);
         }
       },
 
