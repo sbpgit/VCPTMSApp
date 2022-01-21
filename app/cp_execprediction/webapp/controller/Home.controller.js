@@ -158,10 +158,10 @@ sap.ui.define(
           } else if (sId.includes("od") || sId.includes("__button1")) {
             if (that.oLoc.getValue() && that.oProd.getTokens()) {
               if (this.oODList.getBinding("items")) {
-                  if(this.oODList.getBinding("items").oList[0].LOCATION_ID !== that.oLocList.getSelectedItem().getTitle()){
-                    this.oODList.getBinding("items").oList[0].LOCATION_ID = that.oLocList.getSelectedItem().getTitle();
-                    this.oODList.getBinding("items").oList[0].PRODUCT_ID = that.oProdList.getSelectedItem().getTitle();
-                  }
+                //   if(this.oODList.getBinding("items").oList[0].LOCATION_ID !== that.oLocList.getSelectedItem().getTitle()){
+                //     this.oODList.getBinding("items").oList[0].LOCATION_ID = that.oLocList.getSelectedItem().getTitle();
+                //     this.oODList.getBinding("items").oList[0].PRODUCT_ID = that.oProdList.getSelectedItem().getTitle();
+                //   }
 
                   if(this.oProdList.getSelectedItem().getTitle() === "All"){
 
@@ -172,33 +172,53 @@ sap.ui.define(
                         "LOCATION_ID",
                         FilterOperator.Contains,
                         that.oLocList.getSelectedItem().getTitle()
+                      ),
+                      new Filter(
+                        "LOCATION_ID",
+                        FilterOperator.EQ, "All"
                       )
                     ]);
                   } else {
+
+                    var aFilter =[];
+                    var sItems = that.oProdList.getSelectedItems();
+
+                    for(var i=0; i<sItems.length; i++){
+                        
+                    aFilter.push(new Filter("PRODUCT_ID", sap.ui.model.FilterOperator.EQ, sItems[i].getTitle()));
+
+                    }
+
+                aFilter.push(new Filter("LOCATION_ID", sap.ui.model.FilterOperator.Contains, that.oLocList.getSelectedItem().getTitle()));
+                aFilter.push(new Filter("LOCATION_ID", sap.ui.model.FilterOperator.EQ, "All"));
+                aFilter.push(new Filter("PRODUCT_ID", sap.ui.model.FilterOperator.EQ, "All"));
+
+                this.oODList.getBinding("items").filter(aFilter);
+
                 
-                this.oODList
-                  .getBinding("items")
-                  .filter([
-                    new Filter(
-                      "LOCATION_ID",
-                      FilterOperator.Contains,
-                      that.oLocList.getSelectedItem().getTitle()
-                    ),
-                    new Filter(
-                      "PRODUCT_ID",
-                      FilterOperator.Contains,
+                // this.oODList
+                //   .getBinding("items")
+                //   .filter([
+                //     new Filter(
+                //       "LOCATION_ID",
+                //       FilterOperator.Contains,
+                //       that.oLocList.getSelectedItem().getTitle()
+                //     ),
+                //     new Filter(
+                //       "PRODUCT_ID",
+                //       FilterOperator.Contains,
                       
-                      this.oProdList.getSelectedItem().getTitle()//   "KM_M219VBVS_BVS""KM_M219VBVS_BVS"
-                    ),
-                    new Filter(
-                        "LOCATION_ID",
-                        FilterOperator.EQ, "All"
-                      ),
-                      new Filter(
-                        "PRODUCT_ID",
-                        FilterOperator.EQ,"All"
-                      ),
-                  ]);
+                //       this.oProdList.getSelectedItem().getTitle()//   "KM_M219VBVS_BVS""KM_M219VBVS_BVS"
+                //     ),
+                //     new Filter(
+                //         "LOCATION_ID",
+                //         FilterOperator.EQ, "All"
+                //       ),
+                //       new Filter(
+                //         "PRODUCT_ID",
+                //         FilterOperator.EQ,"All"
+                //       ),
+                //   ]);
                 }
               }
             //   var table = sap.ui.getCore().byId("odSlctList");
