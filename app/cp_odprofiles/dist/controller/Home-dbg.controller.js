@@ -388,20 +388,20 @@ sap.ui.define(
         }
 
         var uri = "/v2/catalog/genProfileOD";
-        $.ajax({
-          url: "/v2/catalog/getProfiles",
-          type: "GET",
-          headers: {
-            "X-CSRF-Token": "fetch",
-          },
-          success: function (data, status, xhr) {
+        // $.ajax({
+        //   url: "/v2/catalog/getCSRFToken()",
+        //   type: "GET",
+        //   headers: {
+        //     "X-CSRF-Token": "fetch",
+        //   },
+        //   success: function (data, status, xhr) {
             $.ajax({
               url: uri,
-              type: "post",
+              type: "POST",
               contentType: "application/json",
-              headers: {
-                "X-CSRF-Token": xhr.getResponseHeader("X-CSRF-Token"),
-              },
+            //   headers: {
+            //     "X-CSRF-Token": xhr.getResponseHeader("X-CSRF-Token"),
+            //   },
               data: JSON.stringify({
                 PROFILEOD: aData.PROFILEOD,
               }),
@@ -418,11 +418,11 @@ sap.ui.define(
                 that.onAfterRendering();
               },
             });
-          },
-          error: function (err) {
-            //debugger;
-          },
-        });
+        //   },
+        //   error: function (err) {
+        //     //debugger;
+        //   },
+        // });
       },
     });
   }
