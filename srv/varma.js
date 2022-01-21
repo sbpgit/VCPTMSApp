@@ -60,7 +60,9 @@ exports._updateVarmaGroupParams = function(req) {
         {
             if( varmaControlParams[i].groupId != varmaControlParams[i-1].groupId)
             {
-                inGroups.push(varmaControlParams[i].GROUP_ID);
+               // inGroups.push(varmaControlParams[i].GROUP_ID);
+               inGroups.push(varmaControlParams[i].groupId);
+
             }
         }
     }

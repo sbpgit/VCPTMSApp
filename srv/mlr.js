@@ -45,7 +45,7 @@ exports._runMlrRegressions = function(req) {
 exports._updateMlrGroupParams = function(req) {
     const mlrGroupParams = req.data.regressionParameters;
 
-    //console.log('_updateMlrGroupParams: ', mlrGroupParams);         
+    console.log('_updateMlrGroupParams: ', mlrGroupParams);         
 
 
     var conn = hana.createConnection();
@@ -68,7 +68,12 @@ exports._updateMlrGroupParams = function(req) {
         {
             if( mlrGroupParams[i].groupId != mlrGroupParams[i-1].groupId)
             {
-                inGroups.push(mlrGroupParams[i].GROUP_ID);
+                //inGroups.push(mlrGroupParams[i].GROUP_ID);
+                inGroups.push(mlrGroupParams[i].groupId);
+
+                //console.log('i :', i, 'groupId: ', mlrGroupParams[i].groupId, 'GROUP_ID: ', mlrGroupParams[i].GROUP_ID, );            
+
+
             }
         }
     }

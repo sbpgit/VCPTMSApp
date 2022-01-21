@@ -63,7 +63,8 @@ exports._updateHgbtGroupParamsV1 = function(req) {
         {
             if( hgbtGroupParams[i].groupId != hgbtGroupParams[i-1].groupId)
             {
-                inGroups.push(hgbtGroupParams[i].GROUP_ID);
+               // inGroups.push(hgbtGroupParams[i].GROUP_ID);
+                inGroups.push(hgbtGroupParams[i].groupId);
             }
         }
     }

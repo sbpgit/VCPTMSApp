@@ -58,7 +58,8 @@ exports._updateRdtGroupParams = function(req) {
         {
             if( rdtGroupParams[i].groupId != rdtGroupParams[i-1].groupId)
             {
-                inGroups.push(rdtGroupParams[i].GROUP_ID);
+               // inGroups.push(rdtGroupParams[i].GROUP_ID);
+                inGroups.push(rdtGroupParams[i].groupId);
             }
         }
     }
