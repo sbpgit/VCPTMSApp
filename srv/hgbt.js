@@ -4,6 +4,16 @@ const hana = require('@sap/hana-client');
 const hgbtFuncs = require('./hgbt.js');
 
 
+// const conn_params = {
+//     serverNode  : cds.env.requires.db.credentials.host + ":" + cds.env.requires.db.credentials.port,
+//     uid         : "SBPTECHTEAM", //process.env.uidClassicalSchema, //cf environment variable
+//     pwd         : "Sbpcorp@22", //process.env.uidClassicalSchemaPassword,//cf environment variable
+//     encrypt: 'TRUE',
+//     ssltruststore: cds.env.requires.hana.credentials.certificate
+// };
+// const vcConfigTimePeriod = "PeriodOfYear"; //process.env.TimePeriod; //cf environment variable
+// const classicalSchema = "DB_CONFIG_PROD_CLIENT1"; //process.env.classicalSchema; //cf environment variable
+
 const conn_params = {
     serverNode  : cds.env.requires.db.credentials.host + ":" + cds.env.requires.db.credentials.port,
     uid         : process.env.uidClassicalSchema, //cf environment variable"SBPTECHTEAM",//
@@ -63,7 +73,8 @@ exports._updateHgbtGroupParamsV1 = function(req) {
         {
             if( hgbtGroupParams[i].groupId != hgbtGroupParams[i-1].groupId)
             {
-                inGroups.push(hgbtGroupParams[i].GROUP_ID);
+               // inGroups.push(hgbtGroupParams[i].GROUP_ID);
+                inGroups.push(hgbtGroupParams[i].groupId);
             }
         }
     }
