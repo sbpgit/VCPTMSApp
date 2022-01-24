@@ -33,6 +33,11 @@ sap.ui.define(
         that.oAlgoListModel = new JSONModel();
       },
       onBack: function () {
+          var data = [];
+        that.oAlgoListModel.setData({
+            results: data, 
+          });
+          that.alogoList.setModel(that.oAlgoListModel);
         var oRouter = sap.ui.core.UIComponent.getRouterFor(that);
         oRouter.navTo("Home", {}, true);
       },
@@ -49,11 +54,12 @@ sap.ui.define(
             this.byId("idPage").setTitle("Edit Profile");
           } else {
             that.byId("idPn").setValue("");
+            that.byId("idPn").setEditable(true);
             this.byId("idPage").setTitle("Create Profile");
           }
 
           that.byId("idPdesc").setValue(that.oGModel.getProperty("/sProf_desc"));
-          that.byId("idCretBy").setValue(that.oGModel.getProperty("/sCreatedBy"));
+        //   that.byId("idCretBy").setValue(that.oGModel.getProperty("/sCreatedBy"));
           that.byId("idAuth").setValue("");
 
           var methodText = that.oGModel.getProperty("/sMethod");
@@ -72,9 +78,10 @@ sap.ui.define(
         } else {
           that.byId("idPn").setValue("");
           that.byId("idPdesc").setValue("");
-          that.byId("idCretBy").setValue("");
+        //   that.byId("idCretBy").setValue("");
           that.byId("idAuth").setValue("");
           that.byId("idAlgo").setSelectedKey("N");
+          that.byId("idPn").setEditable(true);
           var data = [];
           that.oAlgoListModel.setData({
             results: data,
@@ -169,7 +176,7 @@ sap.ui.define(
             count = count + 1;
           }
         } else if (SelType === "NVARCHAR") {
-          var letters = /^[A-Za-z0-9]+$/;
+          var letters = /^[A-Za-z0-9 ]+$/;
           if ((letters.test(Query) && specials.test(Query)) || Query === "") {
             that.byId("idTab").getItems()[selId].getCells()[4].setValueState("None");
             count = 0;
@@ -205,14 +212,18 @@ sap.ui.define(
 
       onSubmit: function (oEvent) {
         sap.ui.core.BusyIndicator.show();
+        var selOperation = that.oGModel.getProperty("/sId");
+        var operationFlag = "";
+        if(selOperation === "Edit"){
+            operationFlag = "E"
+        }
         var oEntry = {};
 
         oEntry.PROFILE = that.byId("idPn").getValue();
         oEntry.PRF_DESC = that.byId("idPdesc").getValue();
-        oEntry.CREATED_BY = that.byId("idCretBy").getValue();
+        oEntry.CREATED_BY = operationFlag;
         // oEntry.AUTHORIZATION = that.byId("auth").getValue();
         oEntry.METHOD = that.byId("idAlgo")._getSelectedItemText();
-        oEntry.CREATED_DATE = "2022-01-13";
 
         if (oEntry.PROFILE !== "" && oEntry.PRF_DESC !== "" && oEntry.METHOD !== "" ) {
           var uri = "/v2/catalog/getProfiles";
@@ -223,8 +234,7 @@ sap.ui.define(
             data: JSON.stringify({
               PROFILE: oEntry.PROFILE,
               METHOD: oEntry.METHOD,
-              PRF_DESC: oEntry.PRF_DESC,
-              CREATED_BY: oEntry.CREATED_BY,
+              PRF_DESC: oEntry.PRF_DESC
             }),
             dataType: "json",
             async: false,
@@ -281,7 +291,7 @@ sap.ui.define(
             STRVAL = "";
           PROFILE = that.byId("idPn").getValue();
           METHOD = that.byId("idAlgo")._getSelectedItemText();
-          CREATED_BY = that.byId("idCretBy").getValue();
+        //   CREATED_BY = that.byId("idCretBy").getValue();
           PARA_NAME = table[i].getCells()[0].getText();
           PARA_DESC = table[i].getCells()[1].getText();
 

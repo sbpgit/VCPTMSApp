@@ -14,8 +14,8 @@
 					<Input id="idPn" value="" width="300px"/>
 					<Label text="{i18n>profDesc}"/>
 					<Input id="idPdesc" value="" width="300px"/>
-					<Label text="{i18n>createdBy}"/>
-					<Input id="idCretBy" value="" width="300px"/>
+					<!-- <Label text="{i18n>createdBy}"/>
+					<Input id="idCretBy" value="" width="300px"/> -->
                     <Label text="{i18n>auth}"/>
 					<Input id="idAuth" value="" width="300px"/>
                     <Label text="{i18n>algo}"/>

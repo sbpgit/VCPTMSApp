@@ -12,7 +12,7 @@
                 <Button id="idAdd" text="Create" icon="sap-icon://add" press="onCreate" tooltip = "Create"/>
                 <Button id="idCopy" text="Copy" icon="sap-icon://copy" press="onCreate" tooltip = "Copy"/>
 				<Button id="idEdit" text="Edit" icon="sap-icon://edit" press="onCreate" tooltip = "Edit"/>
-				<Button id="idDelete" text="Delete" icon="sap-icon://delete" press="onCreate" tooltip = "Delete"/>
+				<Button id="idDelete" text="Delete" icon="sap-icon://delete" press="onDelete" tooltip = "Delete"/>
 			</Toolbar>
 		</customHeader>
 		<content>
