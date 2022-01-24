@@ -1,0 +1,53 @@
+<mvc:View
+    controllerName="cp.appf.cpassignprofiles.controller.Home"
+    xmlns:mvc="sap.ui.core.mvc"
+    displayBlock="true"
+    xmlns="sap.m"
+>
+    <Page >
+		<customHeader>
+			<Toolbar >
+				<Title id="profTitle" text="{i18n>profTitle}"  ></Title>
+				<ToolbarSpacer/>
+				<!-- <Button id="idAdd" icon="sap-icon://add" press="onPpfAdd" tooltip = "Add"/> -->
+                <Button id="idAdd" text="Create" icon="sap-icon://add" press="onCreate" tooltip = "Add"/>
+				<!-- <Button id="idChan" icon="sap-icon://edit" press="onPpfAdd" tooltip = "Change"/> -->
+                <Button id="idCopy" text="Copy" icon="sap-icon://copy" press="onCreate" tooltip = "Copy"/>
+			</Toolbar>
+		</customHeader>
+		<content>
+			<SearchField id="headSearch"  liveChange="onSearch" placeholder="Profile or Description"/>
+                <Table id="profList"  items="{path: '/results'}" mode="SingleSelectLeft" >
+				<columns>
+					<Column hAlign="Left" vAlign="Middle">
+						<Text text="{i18n>prof}" />
+					</Column>
+					<Column hAlign="Left" vAlign="Middle">
+						<Text text="{i18n>method}"/>
+					</Column>
+                    <Column hAlign="Left" vAlign="Middle">
+						<Text text="{i18n>profDesc}"/>
+					</Column>
+                    <Column hAlign="Left" vAlign="Middle">
+						<Text text="{i18n>auth}"/>
+					</Column>
+                    <Column hAlign="Left" vAlign="Middle">
+						<Text text=""/>
+					</Column>
+				</columns>
+				<items>
+					<ColumnListItem>
+						<cells>
+							<ObjectIdentifier title="{PROFILE}" />
+                            <Text text="{METHOD}"/>
+                            <Text text="{PRF_DESC}"/>
+                            <Text text="{AUTHORIZATION}"/>
+                            <Button id="idDisplay" icon="sap-icon://display" tooltip="Display" 
+                                    press="onParameters" iconDensityAware="false" type="Transparent"/>
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+		</content>
+	</Page>
+</mvc:View>

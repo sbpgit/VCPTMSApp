@@ -1333,7 +1333,7 @@ annotate service.IBP_FUTUREDEMAND with @(
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Family',
-                Value : VER_BLINE
+                Value : VERSION
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Series',
@@ -1341,7 +1341,7 @@ annotate service.IBP_FUTUREDEMAND with @(
             },
             {
                 $Type : 'UI.DataField',
-                Value : WEEK_BUCKET
+                Value : WEEK_DATE
             },
             {
                 $Type : 'UI.DataField',
@@ -1357,8 +1357,7 @@ annotate service.IBP_FCHARPLAN with @(
     UI        : {
         SelectionFields                : [
             LOCATION_ID,
-            PRODUCT_ID,
-            CHAR_NAME
+            PRODUCT_ID
         ],
         LineItem                       : [
             
@@ -1372,19 +1371,19 @@ annotate service.IBP_FCHARPLAN with @(
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Family',
-                Value : CLASS_NAME
+                Value : CLASS_NUM
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : CHAR_NAME
+                Value : CHAR_NUM
             },
             {
                 $Type : 'UI.DataField',
-                Value : CHAR_VALUE
+                Value : CHARVAL_NUM
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Family',
-                Value : VER_BLINE
+                Value : VERSION
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Series',
@@ -1392,7 +1391,7 @@ annotate service.IBP_FCHARPLAN with @(
             },
             {
                 $Type : 'UI.DataField',
-                Value : WEEK_BUCKET
+                Value : WEEK_DATE
             },
             {
                 $Type : 'UI.DataField',
@@ -1431,7 +1430,7 @@ annotate service.IBP_RESULTPLAN with @(
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Family',
-                Value : VER_BLINE
+                Value : VERSION
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Series',
@@ -1439,8 +1438,90 @@ annotate service.IBP_RESULTPLAN with @(
             },
             {
                 $Type : 'UI.DataField',
-                Value : WEEK_BUCKET
+                Value : WEEK_Date
             }
         ]
     }
+);
+
+annotate service.LOCATION_PRODUCT with @(
+    UI        : {
+        SelectionFields         : [
+            LOCATION_ID,
+            PRODUCT_ID
+        ],
+        LineItem                : [
+            {
+                $Type : 'UI.DataField',
+                //Label : 'Location ID',
+                Value : LOCATION_ID
+            },
+            {
+                $Type : 'UI.DataField',
+                //Label : 'Description',
+                Value : PRODUCT_ID
+            },
+            {
+                $Type : 'UI.DataField',
+                //Label : 'Location Type',
+                Value : LOTSIZE_KEY
+            },
+            {
+                $Type : 'UI.DataField',
+                //Label : 'Location Type',
+                Value : LOT_SIZE
+            },
+            {
+                $Type : 'UI.DataField',
+                //Label : 'Location Type',
+                Value : PROCUREMENT_TYPE
+            },
+            {
+                $Type : 'UI.DataField',
+                //Label : 'Location Type',
+                Value : PLANNING_STRATEGY
+            }
+        ],
+        HeaderInfo              : {
+            Title          : {Value : LOCATION_ID},
+            Description    : {Value : PRODUCT_ID},
+            TypeName       : 'Location-Product',
+            TypeNamePlural : 'Location-Product',
+        },
+        HeaderFacets            : [{
+            $Type             : 'UI.ReferenceFacet',
+            Target            : '@UI.FieldGroup#Description',
+            ![@UI.Importance] : #Medium
+        }],
+        FieldGroup #Description : {Data : [{
+            $Type : 'UI.DataField',
+            Value : LOTSIZE_KEY
+        }]},
+        FieldGroup #Details     : {Data : [
+            {
+                $Type : 'UI.DataField',
+                Value : LOT_SIZE
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : PROCUREMENT_TYPE
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : PLANNING_STRATEGY
+            }
+        ]}
+    },
+
+    // Page Facets
+    UI.Facets : [{
+        $Type  : 'UI.CollectionFacet',
+        ID     : 'Location Products',
+        Label  : 'Location Products',
+        Facets : [{
+            $Type  : 'UI.ReferenceFacet',
+            Label  : 'Location Products',
+            Target : '@UI.FieldGroup#Details'
+        }]
+    }]
 );
