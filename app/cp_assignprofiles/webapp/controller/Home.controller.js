@@ -124,21 +124,25 @@ sap.ui.define(
         that.oGModel = that.getModel("oGModel");
 
         var sId = oEvent.getSource().getTooltip();
+        
         that.oGModel.setProperty("/sId", sId);
-        if (sId === "Copy") {
+        if (sId === "Copy" || sId === "Edit") {
           var selRow = this.byId("profList").getSelectedItems();
 
           if (selRow.length) {
+            var SelUsername = this.byId("profList").getSelectedItem().getBindingContext().getProperty().CREATED_BY;
             var selAlgo = selRow[0].getBindingContext().getProperty();
             that.oGModel.setProperty("/sProfile", selAlgo.PROFILE);
             that.oGModel.setProperty("/sProf_desc", selAlgo.PRF_DESC);
             that.oGModel.setProperty("/sMethod", selAlgo.METHOD);
+            that.oGModel.setProperty("/sCreatedBy", SelUsername);
+            
             var oRouter = sap.ui.core.UIComponent.getRouterFor(that);
             oRouter.navTo("Detail", {}, true);
           } else {
             MessageToast.show("Please select one row");
           }
-        } else {
+        } else if (sId === "Create"){
           var oRouter = sap.ui.core.UIComponent.getRouterFor(that);
           oRouter.navTo("Detail", {}, true);
         }
