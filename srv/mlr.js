@@ -3,6 +3,16 @@ const { v1: uuidv1} = require('uuid')
 const hana = require('@sap/hana-client');
 const mlrFuncs = require('./mlr.js');
 
+// const conn_params = {
+//     serverNode  : cds.env.requires.db.credentials.host + ":" + cds.env.requires.db.credentials.port,
+//     uid         : "SBPTECHTEAM", //process.env.uidClassicalSchema, //cf environment variable
+//     pwd         : "Sbpcorp@22", //process.env.uidClassicalSchemaPassword,//cf environment variable
+//     encrypt: 'TRUE',
+//     ssltruststore: cds.env.requires.hana.credepwdntials.certificate
+// };
+// const vcConfigTimePeriod = "PeriodOfYear"; //process.env.TimePeriod; //cf environment variable
+// const classicalSchema = "DB_CONFIG_PROD_CLIENT1"; //process.env.classicalSchema; //cf environment variable
+
 
 const conn_params = {
     serverNode  : cds.env.requires.db.credentials.host + ":" + cds.env.requires.db.credentials.port,
@@ -773,6 +783,7 @@ exports._updateMlrPredictionParams = function(req) {
 }
 
 exports._updateMlrPredictionData = function(req) {
+    //console.log('_updateMlrGroupData req: ', req.data);         
 
     const mlrPredictData = req.data.predictionData;
     //console.log('_updateMlrGroupData: ', mlrGroupData);         
@@ -833,7 +844,7 @@ exports._updateMlrPredictionData = function(req) {
     {
         groupId = mlrPredictData[i].groupId ;
         ID = mlrPredictData[i].ID;
-        //console.log('_updateMlrGroupData ', ID);
+        //console.log('_updateMlrGroupData groupId', groupId);
 
         V1 = mlrPredictData[i].att1;
         V2 =  mlrPredictData[i].att2;
@@ -1598,10 +1609,10 @@ exports._runMlrPrediction = function (mlrpType, group) {
     stmt=conn.prepare(sqlStr);
     var distPeriods=stmt.exec();
     stmt.drop();
-    console.log("Time Periods for Group :", groupId, " Results: ", distPeriods);
+    //console.log("Time Periods for Group :", groupId, " Results: ", distPeriods);
     var predictedTime = new Date().toISOString();
     var trimmedPeriod = vcConfigTimePeriod.replace(/^(["]*)/g, '');
-    console.log('trimmedPeriod : ', trimmedPeriod, 'vcConfigTimePeriod :', vcConfigTimePeriod);
+    //console.log('trimmedPeriod : ', trimmedPeriod, 'vcConfigTimePeriod :', vcConfigTimePeriod);
 
     for (let index=0; index<distPeriods.length; index++)
     {     
@@ -1621,7 +1632,7 @@ exports._runMlrPrediction = function (mlrpType, group) {
                  //' WHERE "GroupID" = ' + "'" + "OBJ_DEP".concat("-","OBJ_COUNTER") + "'" + ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
 
           //       ' WHERE "GroupID" = ' + "'" + groupId + "'" + ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
-        console.log("V_FUTURE_DEP_TS Predicted Value sql update sqlStr", sqlStr)
+        //console.log("V_FUTURE_DEP_TS Predicted Value sql update sqlStr", sqlStr)
 
         stmt=conn.prepare(sqlStr);
         stmt.exec();
