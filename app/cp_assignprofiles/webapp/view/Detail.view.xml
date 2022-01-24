@@ -61,7 +61,7 @@
 							<Text text="{PARA_NAME}"/>
                             <Text text="{DESCRIPTION}"/>
                             <Select id="idTypes" change="onTypeChange" selectedKey="{DATATYPE}" editable="false">
-                                <core:ListItem key="INTEGER" text="Interger"/>
+                                <core:ListItem key="INTEGER" text="Integer"/>
                                 <core:ListItem key="DOUBLE" text="Double"/>
                                 <core:ListItem key="NVARCHAR" text="String"/>
                             </Select>

@@ -56,7 +56,8 @@ context cp {
     entity LOCATION_PRODUCT {
         key LOCATION_ID       : String(4) @title : 'Location ';
         key PRODUCT_ID        : String(40)@title : 'Product';
-            LOTSIZE           : String(2) @title : 'Lot Size';
+            LOTSIZE_KEY       : String(2) @title : 'Lot Size Key';
+            LOT_SIZE          : Integer @title : 'Lot Size';
             PROCUREMENT_TYPE  : String(1) @title : 'Procurement Type';
             PLANNING_STRATEGY : String(2) @title : 'Planning Strategy';
     };
@@ -368,7 +369,7 @@ context cp {
         key PRODUCT_ID  : String(40)    @title : 'Product ID';
         key VERSION     : String(10)    @title : 'Version';
         key SCENARIO    : String(32)    @title : 'Scenario';
-        key WEEK_Date   : Date          @title : 'Weekly Date';
+        key WEEK_DATE   : Date          @title : 'Weekly Date';
             QUANTITY    : Decimal(13, 3)@title : 'Demand Quantity';
     }
 
@@ -383,7 +384,7 @@ context cp {
             // key CHAR_VALUE  : String(70)    @title : 'Charateristic Value';
         key VERSION     : String(10)    @title : 'Version';
         key SCENARIO    : String(32)    @title : 'Scenario';
-        key WEEK_Date   : Date          @title : 'Weekly Date';
+        key WEEK_DATE   : Date          @title : 'Weekly Date';
             OPT_PERCENT : Decimal(5, 2) @title : 'Option Percnetage';
             OPT_QTY     : Decimal(13, 3)@title : 'Option Quantity';
     }
@@ -451,6 +452,7 @@ context cp {
 
     entity IP_PROFILEOD {
         key CREATED_DATE: Date;
+        FLAG        : String(1);
         PROFILEOD: array of {
             LOCATION_ID : String(4) ;
             PRODUCT_ID  : String(40);
@@ -461,6 +463,7 @@ context cp {
     }
     entity IP_PROFILEMETH_PARA {
         key CREATED_DATE: Date;
+        FLAG        : String(1);
         PROFILEPARA: array of {
             PROFILE   : String(50);
             METHOD    : String(50);

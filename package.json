@@ -36,7 +36,8 @@
         "watch-cp_ibpfres": "cds watch --open cp_ibpfres/webapp/index.html#fe-lrop-v4",
         "watch-cp_execprediction": "cds watch --open cp_execprediction/webapp/index.html#fe-lrop-v4",
         "watch-cp_exeregressionmdls": "cds watch --open cp_exeregressionmdls/webapp/index.html#fe-lrop-v4",
-        "watch-cp_modelprofiles": "cds watch --open cp_modelprofiles/webapp/index.html#fe-lrop-v4"
+        "watch-cp_modelprofiles": "cds watch --open cp_modelprofiles/webapp/index.html#fe-lrop-v4",
+        "watch-cp_locprod": "cds watch --open cp_locprod/webapp/index.html#fe-lrop-v4"
     },
     "eslintConfig": {
         "extends": "eslint:recommended",
@@ -106,9 +107,10 @@
         "app/cp_modelprofiles",
         "app/cp_assignppf",
         "app/cp_odprofiles",
-        "app/cp_assignprofiles"
+        "app/cp_assignprofiles",
+        "app/cp_locprod"
     ],
     "devDependencies": {
-        "@sap/ux-specification": "^1.96.0"
+        "@sap/ux-specification": "^1.96.2"
     }
 }

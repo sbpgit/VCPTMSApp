@@ -386,30 +386,48 @@ sap.ui.define(
           aData.PROFILEOD.push(jsonProfileOD);
           jsonProfileOD = {};
         }
-
+///////
+var token = {			
+    "csrfToken" : ""
+    };
+    
+    var oToken = new sap.ui.model.json.JSONModel(token);
+    sap.ui.getCore().setModel(oToken,'oToken');
+    var tokenModel=sap.ui.getCore().getModel("oToken").getData();
+    
+///////
         var uri = "/v2/catalog/genProfileOD";
         $.ajax({
-          url: "/v2/catalog/getODProfiles()",
+          url: "/v2/catalog/getLocation",
           type: "GET",
           headers: {
+            ContentType: 'application/json',
+            Accept: 'application/json',
+            cache: true,
             "X-CSRF-Token": "fetch",
           },
           success: function (data, status, xhr) {
+              
+		tokenModel["csrfToken"] = xhr.getResponseHeader('X-Csrf-Token');
+        token = tokenModel["csrfToken"];
             $.ajax({
               url: uri,
               type: "POST",
               contentType: "application/json",
               headers: {
-                "X-CSRF-Token": xhr.getResponseHeader("X-CSRF-Token"),
+                "X-CSRF-Token":token// xhr.getResponseHeader("X-CSRF-Token"),
               },
               data: JSON.stringify({
+                FLAG    : "I",
                 PROFILEOD: aData.PROFILEOD,
               }),
               dataType: "json",
               async: false,
               timeout: 0,
               error: function (data) {
-                sap.m.MessageToast.show(JSON.stringify(data));
+                sap.m.MessageToast.show("Error in assigning Profiles");
+                sap.ui.core.BusyIndicator.hide();
+                that.handleClose();
               },
               success: function (data) {
                 sap.ui.core.BusyIndicator.hide();
@@ -420,7 +438,7 @@ sap.ui.define(
             });
           },
           error: function (err) {
-            //debugger;
+            sap.m.MessageToast.show("Error in assigning Profiles");
           },
         });
       },

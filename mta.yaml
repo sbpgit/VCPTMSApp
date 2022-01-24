@@ -97,16 +97,16 @@ modules:
       name: cpmdlprofilecpmodelprofiles
       target-path: resources/
     - artifacts:
-      - cpappfcpassignppf.zip
-      name: cpappfcpassignppf
-      target-path: resources/
-    - artifacts:
       - cpodpcpodprofiles.zip
       name: cpodpcpodprofiles
       target-path: resources/
     - artifacts:
       - cpappfcpassignprofiles.zip
       name: cpappfcpassignprofiles
+      target-path: resources/
+    - artifacts:
+      - cplpcplocprod.zip
+      name: cplpcplocprod
       target-path: resources/
 - name: cfgapppvsrootcfgprdpvsroot
   type: html5
@@ -178,16 +178,6 @@ modules:
     - npm install
     - npm run build:cf
     supported-platforms: []
-- name: cpappfcpassignppf
-  type: html5
-  path: app/cp_assignppf
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    supported-platforms: []
 - name: cpodpcpodprofiles
   type: html5
   path: app/cp_odprofiles
@@ -201,6 +191,16 @@ modules:
 - name: cpappfcpassignprofiles
   type: html5
   path: app/cp_assignprofiles
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cplpcplocprod
+  type: html5
+  path: app/cp_locprod
   build-parameters:
     build-result: dist
     builder: custom

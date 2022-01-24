@@ -2,15 +2,25 @@ const cds = require('@sap/cds')
 const { v1: uuidv1} = require('uuid')
 const hana = require('@sap/hana-client');
 
+// const conn_params = {
+//     serverNode  : cds.env.requires.db.credentials.host + ":" + cds.env.requires.db.credentials.port,
+//     uid         : "SBPTECHTEAM", //process.env.uidClassicalSchema, //cf environment variable
+//     pwd         : "Sbpcorp@22", //process.env.uidClassicalSchemaPassword,//cf environment variable
+//     encrypt: 'TRUE',
+//     ssltruststore: cds.env.requires.hana.credentials.certificate
+// };
+// const vcConfigTimePeriod = "PeriodOfYear"; //process.env.TimePeriod; //cf environment variable
+// const classicalSchema = "DB_CONFIG_PROD_CLIENT1"; //process.env.classicalSchema; //cf environment variable
+
 const conn_params = {
     serverNode  : cds.env.requires.db.credentials.host + ":" + cds.env.requires.db.credentials.port,
-    uid         : process.env.uidClassicalSchema, //cf environment variable
-    pwd         : process.env.uidClassicalSchemaPassword,//cf environment variable
+    uid         : process.env.uidClassicalSchema, //cf environment variable"SBPTECHTEAM",//
+    pwd         : process.env.uidClassicalSchemaPassword,//cf environment variable"Sbpcorp@22",//
     encrypt: 'TRUE',
     ssltruststore: cds.env.requires.hana.credentials.certificate
 };
-const vcConfigTimePeriod = process.env.TimePeriod; //cf environment variable
-const classicalSchema = process.env.classicalSchema; //cf environment variable
+const vcConfigTimePeriod = process.env.TimePeriod; //cf environment variable"PeriodOfYear";//
+const classicalSchema = process.env.classicalSchema; //cf environment variable"DB_CONFIG_PROD_CLIENT1";//
 
 const containerSchema = cds.env.requires.db.credentials.schema;
 const conn_params_container = {
@@ -96,13 +106,13 @@ function _getParamsObjForPredictions(vcRulesList, index, modelType, numChars)
              ((modelType == 'HGBT') ||
                (modelType == 'RDT')) )
         {
-            paramsObj.push({"groupId":palGroupId, "paramName":"THREAD_RATIO", "intVal":null,"doubleVal": 0.5, "strVal" : null});
+            paramsObj.push({"groupId":palGroupId, "paramName":"THREAD_RATIO", "intVal":null,"doubleVal": 1, "strVal" : null});
             paramsObj.push({"groupId":palGroupId,"paramName":"VERBOSE", "intVal":0,"doubleVal": null, "strVal" : null});
         }
         else if ( (vcRulesList[index].dimensions == numChars) && 
                   (modelType == 'MLR'))
         {
-            paramsObj.push({"groupId":palGroupId, "paramName":"THREAD_RATIO", "intVal":null,"doubleVal": 0.1, "strVal" : null});
+            paramsObj.push({"groupId":palGroupId, "paramName":"THREAD_RATIO", "intVal":null,"doubleVal": 1, "strVal" : null});
         }
         else if ( (vcRulesList[index].dimensions == numChars) && 
                   (modelType == 'VARMA'))
@@ -239,7 +249,7 @@ function _getDataObjForPredictions(vcRulesList, idx, modelType, numChars) {
                 }
                 else if (numChars == 6)
                 {
-                    dataObj.push({"groupId":vcRulesList[idx].GroupID, "ID": distinctPeriodIdx,"att1":att1, "att2":att2,"att3":att3,"att4":att4,"att5":att5,"att6":att6});
+                    dataObj.push({"groupId":palGroupId, "ID": distinctPeriodIdx,"att1":att1, "att2":att2,"att3":att3,"att4":att4,"att5":att5,"att6":att6});
                 }    
                 else if (numChars == 7)
                 {
@@ -291,8 +301,8 @@ async function _postPredictionRequest(url,paramsObj,numChars,dataObj,modelType,v
     let username = "SBPTECHTEAM";
     let password = "Sbpcorp@22";
     var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
-    console.log("_postPredictionRequest - AUTH", auth);
-    console.log("_postPredictionRequest - vcRuleListObj ", vcRuleListObj);
+    //console.log("_postPredictionRequest - AUTH", auth);
+    //console.log("_postPredictionRequest - vcRuleListObj ", vcRuleListObj);
 
     if (modelType == 'HGBT')
     {
@@ -470,12 +480,16 @@ async function _postPredictionRequest(url,paramsObj,numChars,dataObj,modelType,v
             var stmt=conn.prepare(sqlStr);
             stmt.exec();
             stmt.drop();
-            sqlStr = 'SELECT DISTINCT ' + '"' + vcConfigTimePeriod + '"' + ' from  "V_FUTURE_DEP_TS" WHERE  "GroupID" = ' + "'" + vcRuleListObj[0].GroupID + "'" + ' ORDER BY ' + '"' + vcConfigTimePeriod + '"' + ' ASC';
+            let groupId = vcRuleListObj[0].GroupID + '#' + vcRuleListObj[0].Location + '#' + vcRuleListObj[0].Product;
+
+            sqlStr = 'SELECT DISTINCT ' + '"' + vcConfigTimePeriod + '"' + ' from  "V_FUTURE_DEP_TS" ' +
+                     'WHERE  "GroupID" = ' + "'" + groupId + "'" + 
+                     ' ORDER BY ' + '"' + vcConfigTimePeriod + '"' + ' ASC';
             console.log("V_FUTURE_DEP_TS Distinct Periods sqlStr", sqlStr);
             stmt=conn.prepare(sqlStr);
             var distPeriods=stmt.exec();
             stmt.drop();
-            console.log("Time Periods for Group :", vcRuleListObj[0].GroupID, " Results: ", distPeriods);
+            //console.log("Time Periods for Group :", vcRuleListObj[0].GroupID, " Results: ", distPeriods);
             var predictedTime = new Date().toISOString();
             var trimmedPeriod = vcConfigTimePeriod.replace(/^(["]*)/g, '');
 //            console.log('trimmedPeriod : ', trimmedPeriod, 'vcConfigTimePeriod :', vcConfigTimePeriod);
@@ -630,10 +644,12 @@ async function _generatePredictions(req) {
                 results = [];
                 sqlStr = 'SELECT * FROM "CP_PAL_PROFILEMETH_PARA"' +
                     ' WHERE "PROFILE" = ' + "'" + profileID + "'";
-                console.log('sqlStr: ', sqlStr);            
+                //console.log('sqlStr: ', sqlStr);            
                 stmt=conn.prepare(sqlStr);
                 results=stmt.exec();
                 stmt.drop();
+                //console.log("results = ", results)
+
                 if(results.length > 0)
                     //vcRulesList[i].modelType = results[0].ModelType;
                     //vcRulesList[i].modelType = results[0].MODELTYPE;
@@ -650,10 +666,11 @@ async function _generatePredictions(req) {
         {
             sqlStr = 'SELECT * FROM "CP_PAL_PROFILEMETH_PARA"' +
                         ' WHERE "PROFILE" = ' + "'" + vcRulesList[i].profile + "'";
-            console.log('sqlStr: ', sqlStr);            
+            //console.log('sqlStr: ', sqlStr);            
             stmt=conn.prepare(sqlStr);
             results=stmt.exec();
             stmt.drop();
+            //console.log("results = ", results)
             if (results.length > 0)
             {
                 vcRulesList[i].modelType = results[0].METHOD;
@@ -690,7 +707,7 @@ async function _generatePredictions(req) {
         let url;
 
         var baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
-
+        //var baseUrl = 'http' + '://' + req.headers.host;
         console.log('_generatePredictions: protocol', req.headers['x-forwarded-proto'], 'hostName :', req.headers.host);
         if ( modelType == 'HGBT')
             url =  baseUrl + '/pal/hgbtPredictionsV1';
@@ -793,9 +810,9 @@ async function _generatePredictions(req) {
         }
         // Wait for 1 second before posting Next Prediction Request
         // It allows CDS (cqn Query) to commit PalMlrPredictions / PalHgbtPredictions / PalVarmaPredictions
-        console.log('_generatePredictions Sleeping for ', 1000, ' Milli Seconds');
+        console.log('_generatePredictions Sleeping for ', 500, ' Milli Seconds');
         console.log('_generatePredictions Sleep Start Time',new Date(), 'charcount ', 'index ',i, 'dimensions', vcRulesList[i].dimensions);
-        await sleep(1000);
+        await sleep(500);
         console.log('_generatePredictions Sleep Completed Time',new Date(), 'charcount ', vcRulesList[i].dimensions);
     }
 
@@ -823,74 +840,97 @@ function _getRuleListTypeForGenModels(vcRulesList, modelType, numChars)
     {
         if (vcRulesList[i].dimensions == numChars )
         {
-
-            if (vcRulesList[i].override == false)
+            results = [];
+            if (modelType == 'MLR')
             {
-                // sqlStr = 'SELECT * FROM "CP_PALMODELPROFILES"' +
-                //             ' WHERE "PRODUCT" = ' + "'" + vcRulesList[i].Product + "'" + 
-                //             ' AND "LOCATION" = ' + "'" + vcRulesList[i].Location + "'" + 
-                //             ' AND "GROUPID" = ' + "'" + vcRulesList[i].GroupID + "'" + 
-                //             ' AND "MODELTYPE" = ' + "'" + modelType +"'"; 
-                sqlStr = 'SELECT * FROM "CP_PAL_PROFILEOD"' +
-                            ' WHERE "PRODUCT_ID" = ' + "'" + vcRulesList[i].Product + "'" + 
-                            ' AND "LOCATION_ID" = ' + "'" + vcRulesList[i].Location + "'" + 
-                            ' AND "OBJ_DEP" = ' + "'" + vcRulesList[i].GroupID + "'" ;
-                          //  ' AND "MODELTYPE" = ' + "'" + modelType +"'"; 
-                console.log('sqlStr: ', sqlStr);            
+                // Check for MLR For Constant value of Attribute across the Time Series
+                sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", "Attribute" ' +
+                        'FROM "CP_VC_HISTORY_TS" WHERE "Product" = ' + "'" + vcRulesList[i].Product + "'" +
+                        ' AND "Location" = ' + "'" + vcRulesList[i].Location + "'" + 
+                        ' AND "GroupID" = ' + "'" + vcRulesList[i].GroupID + "'" +
+                        ' GROUP BY "Location", "Product", "GroupID", "Attribute"' +
+                        ' HAVING COUNT(DISTINCT "Location", "Product", "GroupID", "Row", "Attribute", "CharCount") = 1';
+                console.log('_getRuleListTypeForGenModels sqlStr ', sqlStr);
+
                 stmt=conn.prepare(sqlStr);
                 results=stmt.exec();
                 stmt.drop();
+                console.log('_getRuleListTypeForGenModels modelType = ', modelType, 'results = ',results, 'results Length = ', results.length);
+            }
 
-                let profileID = 0;
-                if (results.length > 0)
+            if ( ((results.length == 0) && (modelType == 'MLR')) ||
+                 (modelType != 'MLR') )
+            {
+                if (vcRulesList[i].override == false)
                 {
-                    profileID = results[0].PROFILE;
-                    results = [];
-                    sqlStr = 'SELECT * FROM "CP_PAL_PROFILEMETH_PARA"' +
-                        ' WHERE "PROFILE" = ' + "'" + profileID + "'";
+                    // sqlStr = 'SELECT * FROM "CP_PALMODELPROFILES"' +
+                    //             ' WHERE "PRODUCT" = ' + "'" + vcRulesList[i].Product + "'" + 
+                    //             ' AND "LOCATION" = ' + "'" + vcRulesList[i].Location + "'" + 
+                    //             ' AND "GROUPID" = ' + "'" + vcRulesList[i].GroupID + "'" + 
+                    //             ' AND "MODELTYPE" = ' + "'" + modelType +"'"; 
+                    sqlStr = 'SELECT * FROM "CP_PAL_PROFILEOD"' +
+                                ' WHERE "PRODUCT_ID" = ' + "'" + vcRulesList[i].Product + "'" + 
+                                ' AND "LOCATION_ID" = ' + "'" + vcRulesList[i].Location + "'" + 
+                                ' AND "OBJ_DEP" = ' + "'" + vcRulesList[i].GroupID + "'" ;
+                            //  ' AND "MODELTYPE" = ' + "'" + modelType +"'"; 
                     console.log('sqlStr: ', sqlStr);            
                     stmt=conn.prepare(sqlStr);
                     results=stmt.exec();
                     stmt.drop();
-                // console.log('_getRuleListTypeForGenModels results: ', results);            
 
-                    //let modelType = results[i].ModelType;
-                    //let profileID = results[i].ProfileID;
-                //  console.log('_getRuleListTypeForGenModels results ',results, 'results Length = ', results.length);
+                    let profileID = 0;
+                    if (results.length > 0)
+                    {
+                        profileID = results[0].PROFILE;
+                        results = [];
+                        sqlStr = 'SELECT * FROM "CP_PAL_PROFILEMETH_PARA"' +
+                            ' WHERE "PROFILE" = ' + "'" + profileID + "'" +
+                            ' AND "METHOD" = ' + "'" + modelType + "'";
+                        console.log('sqlStr: ', sqlStr);            
+                        stmt=conn.prepare(sqlStr);
+                        results=stmt.exec();
+                        stmt.drop();
+                    // console.log('_getRuleListTypeForGenModels results: ', results);            
+
+                        //let modelType = results[i].ModelType;
+                        //let profileID = results[i].ProfileID;
+                    //  console.log('_getRuleListTypeForGenModels results ',results, 'results Length = ', results.length);
+                        if (results.length > 0)
+                        {
+                            ruleListObj.push({"Location":vcRulesList[i].Location, 
+                                            "Product":vcRulesList[i].Product, 
+                                            "GroupID":vcRulesList[i].GroupID, 
+                                            "modelType":results[0].METHOD, 
+                                            "profileID":profileID, 
+                                            "override":vcRulesList[i].override,
+                                            "dimensions" : numChars});
+                        }
+                    }
+                }
+                else
+                {
+                    sqlStr = 'SELECT * FROM "CP_PAL_PROFILEMETH_PARA"' +
+                            ' WHERE "PROFILE" = ' + "'" + vcRulesList[i].profile + "'" +
+                            ' AND "METHOD" = ' + "'" + modelType + "'";
+                    console.log('sqlStr: ', sqlStr);            
+                    stmt=conn.prepare(sqlStr);
+                    results=stmt.exec();
+                    stmt.drop();
                     if (results.length > 0)
                     {
                         ruleListObj.push({"Location":vcRulesList[i].Location, 
                                         "Product":vcRulesList[i].Product, 
                                         "GroupID":vcRulesList[i].GroupID, 
                                         "modelType":results[0].METHOD, 
-                                        "profileID":profileID, 
+                                        "profileID":results[0].PROFILE, 
                                         "override":vcRulesList[i].override,
                                         "dimensions" : numChars});
                     }
                 }
             }
-            else
-            {
-                sqlStr = 'SELECT * FROM "CP_PAL_PROFILEMETH_PARA"' +
-                        ' WHERE "PROFILE" = ' + "'" + vcRulesList[i].profile + "'";
-                console.log('sqlStr: ', sqlStr);            
-                stmt=conn.prepare(sqlStr);
-                results=stmt.exec();
-                stmt.drop();
-                if (results.length > 0)
-                {
-                    ruleListObj.push({"Location":vcRulesList[i].Location, 
-                                    "Product":vcRulesList[i].Product, 
-                                    "GroupID":vcRulesList[i].GroupID, 
-                                    "modelType":results[0].METHOD, 
-                                    "profileID":results[0].PROFILE, 
-                                    "override":vcRulesList[i].override,
-                                    "dimensions" : numChars});
-                }
-            }
         }
     }
-  //  console.log('_getRuleListTypeForGenModels ruleListObj ',ruleListObj);
+    //console.log('_getRuleListTypeForGenModels ruleListObj ',ruleListObj);
     //console.log('_getRuleListTypeForGenModels  ruleListObj[0]',ruleListObj[0]);
     conn.disconnect();
     return ruleListObj;
@@ -1039,12 +1079,19 @@ async function _generateRegModels (req) {
 
    const vcRulesListReq = req.data.vcRulesList;
 
-   //  console.log('_generateRegModels: ', vcRulesListReq); 
+//    console.log('_generateRegModels: ', vcRulesListReq); 
+//    let resp = req._.req.res;
+//    resp.statusCode = 201;
+
+//    resp.send({vcRulesListReq});
+//     return;
+
     var url;
     //const modelType = req.data.modelType;
 
     // https://nodejs.org/api/url.html
     var baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+    //var baseUrl = 'http' + '://' + req.headers.host;
 
     console.log('_generateRegModels: protocol', req.headers['x-forwarded-proto'], 'hostName :', req.headers.host);
 
@@ -1085,24 +1132,24 @@ async function _generateRegModels (req) {
        if ( (vcRulesListReq[0].Location != "ALL") &&
             (vcRulesListReq[0].Product == "ALL") )
        {
-           sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "V_PREDICTION_TS"' + 
+           sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "CP_VC_HISTORY_TS"' + 
                     'WHERE "Location" =' + "'" +   vcRulesListReq[0].Location + "'" +
-                    ' GROUP BY "Location", "Product", "GroupID"';
+                    ' GROUP BY "Location", "Product", "GroupID" HAVING COUNT(DISTINCT "' + vcConfigTimePeriod + '") > 20';
        }
        else if ( (vcRulesListReq[0].Product != "ALL") &&
                  (vcRulesListReq[0].Location == "ALL") )
        {
-           sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "V_PREDICTION_TS"' + 
+           sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "CP_VC_HISTORY_TS"' + 
                     'WHERE "Product" =' + "'" +   vcRulesListReq[0].Product + "'" +
-                    ' GROUP BY "Location", "Product", "GroupID"';
+                    ' GROUP BY "Location", "Product", "GroupID" HAVING COUNT(DISTINCT "' + vcConfigTimePeriod + '") > 20';
        }
        else if ( (vcRulesListReq[0].Product != "ALL") &&
                  (vcRulesListReq[0].Location != "ALL") )
        {
-           sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "V_PREDICTION_TS"' + 
+           sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "CP_VC_HISTORY_TS"' + 
                'WHERE "Product" =' + "'" +   vcRulesListReq[0].Product + "'" +
                ' AND "Location" =' + "'" +   vcRulesListReq[0].Location + "'" +
-               ' GROUP BY "Location", "Product", "GroupID"';
+               ' GROUP BY "Location", "Product", "GroupID" HAVING COUNT(DISTINCT "' + vcConfigTimePeriod + '") > 20';
        }
        else
        {
@@ -1131,7 +1178,30 @@ async function _generateRegModels (req) {
     }
     else
     {
-        vcRulesList =  vcRulesListReq;
+        for (var i = 0; i < vcRulesListReq.length; i++)
+        {
+            sqlStr = 'SELECT  "Location", "Product", "GroupID" FROM "CP_VC_HISTORY_TS" WHERE "Product" =' +
+                        "'" +  vcRulesListReq[i].Product + "'" +  
+                        ' AND "GroupID" =' + "'" +   vcRulesListReq[i].GroupID + "'" +
+                        ' AND "Location" =' + "'" +   vcRulesListReq[i].Location + "'" +
+                        ' GROUP BY "Location", "Product", "GroupID"' +
+                        ' HAVING COUNT(DISTINCT "' + vcConfigTimePeriod + '") > 20';// + 'ORDER BY "WeekOfYear"';   
+            console.log('sqlStr: ', sqlStr);            
+            stmt=conn.prepare(sqlStr);
+            results=stmt.exec();
+            stmt.drop();
+            if (results.length > 0)
+            {    
+                let Location = results[0].Location;
+                let Product = results[0].Product;
+                let GroupID = results[0].GroupID;
+                let profile = vcRulesListReq[i].profile;
+                let override = vcRulesListReq[i].override;
+                vcRulesList.push({profile,override,Location,Product,GroupID});
+
+            }
+        //vcRulesList =  vcRulesListReq;
+        }
     }
 
     var hasCharCount2, hasCharCount3, hasCharCount4, hasCharCount5, hasCharCount6, hasCharCount7, hasCharCount8, hasCharCount9, hasCharCount10, hasCharCount11, hasCharCount12  = false;
@@ -1188,6 +1258,7 @@ async function _generateRegModels (req) {
 
     var res = req._.req.res;
     res.statusCode = 201;
+
 //    res.end();
 //    req.res.contentType('application/json');
     res.send({values});
@@ -1761,11 +1832,11 @@ async function _generateRegModels (req) {
     res.send({values});
 */
    
-    const sleep = require('await-sleep');
-    console.log('_generateRegModels Sleeping for ', 1000*vcRulesList.length, ' Milli Seconds');
-    console.log('_generateRegModels Sleep Start Time',new Date());
-    await sleep(1000*vcRulesList.length);
-    console.log('_generateRegModels Sleep Completed Time',new Date());
+    // const sleep = require('await-sleep');
+    // console.log('_generateRegModels Sleeping for ', 1000*vcRulesList.length, ' Milli Seconds');
+    // console.log('_generateRegModels Sleep Start Time',new Date());
+    // await sleep(1000*vcRulesList.length);
+    // console.log('_generateRegModels Sleep Completed Time',new Date());
 
 }
 

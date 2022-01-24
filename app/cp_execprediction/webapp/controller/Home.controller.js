@@ -315,7 +315,19 @@ sap.ui.define(
             that.oObjDep.removeAllTokens();
             this._valueHelpDialogProd.getAggregation("_dialog").getContent()[1].removeSelections();
             this._valueHelpDialogOD.getAggregation("_dialog").getContent()[1].removeSelections();
-            
+            this.getModel("BModel").read("/getLocProd?$filter=contains(LOCATION_ID,aSelectedItems[0].getTitle())", {
+                success: function (oData) {
+                    oData.results.unshift({
+                        PRODUCT_ID: "All"//,
+                        //PROD_DESC: "All"
+                    });
+                  that.prodModel.setData(oData);
+                  that.oProdList.setModel(that.prodModel);
+                },
+                error: function (oData, error) {
+                  MessageToast.show("error");
+                },
+              });
 
             // Prod list
           } else if (sId.includes("prod")) {
