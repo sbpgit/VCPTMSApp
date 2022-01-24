@@ -111,6 +111,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
     function generate_timeseries() returns String;
     function get_objdep() returns array of objectDep;
     function getODProfiles() returns array of odprofiles;
+    function getCSRFToken() returns String;
     action gen_timeseries() returns String;
 
 }

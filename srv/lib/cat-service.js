@@ -15,6 +15,14 @@ const genFunctions = new GenFunctions();
  }*/
 
 module.exports = (srv) => {
+  srv.on("getCSRFToken", async (req) => {
+    return "Token";
+  });
+  srv.on("CREATE", "getProfiles", _createProfiles);
+
+  srv.on("CREATE", "genProfileParam", _createProfileParameters);
+
+  srv.on("CREATE", "genProfileOD", _createProfileOD);
   srv.on("generate_timeseries", async (req) => {
     const obgenTimeseries = new GenTimeseries();
     await obgenTimeseries.genTimeseries();
@@ -120,9 +128,13 @@ module.exports = (srv) => {
           `'`
       );
       //   for (let j = 0; j < liPrfOD.length; j++){
-      if (liPrfOD[0].PROFILE !== null) {
+      if (liPrfOD[0] !== undefined) {
         lsresults.PROFILE = liPrfOD[0].PROFILE;
         lsresults.STRUC_NODE = liPrfOD[0].STRUC_NODE;
+      }
+      else{
+        lsresults.PROFILE = "";
+        lsresults.STRUC_NODE = "";
       }
       liresults.push(lsresults);
       liPrfOD = [];
@@ -131,11 +143,6 @@ module.exports = (srv) => {
     }
     return liresults;
   });
-  srv.on("CREATE", "getProfiles", _createProfiles);
-
-  srv.on("CREATE", "genProfileParam", _createProfileParameters);
-
-  srv.on("CREATE", "genProfileOD", _createProfileOD);
   /*srv.on("profile_exec", async req =>{
         let { getAccessNodes } = srv.entities;
         const db = srv.transaction(req); 
@@ -146,6 +153,7 @@ module.exports = (srv) => {
     })*/
   //srv.on("")
 };
+// Create or delete Profiles
 async function _createProfiles(req) {
   let liProfiles = [];
   let lsprofiles = {};
@@ -154,29 +162,47 @@ async function _createProfiles(req) {
   var responseMessage;
   var datetime = new Date();
   var curDate = datetime.toISOString().slice(0, 10);
-
-  lsprofiles.PROFILE = req.data.PROFILE;
-  lsprofiles.METHOD = req.data.METHOD;
-  lsprofiles.PRF_DESC = req.data.PRF_DESC;
-  lsprofiles.CREATED_DATE = curDate;
-  lsprofiles.CREATED_BY = req.data.CREATED_BY;
-  liProfiles.push(lsprofiles);
-  lsprofiles = {};
   res = req._.req.res;
-
-  try {
-    await cds.run(INSERT.into("CP_PAL_PROFILEMETH").entries(liProfiles));
-    responseMessage = " Creation successfully ";
-    //res.statusCode = 201;
-    createResults.push(responseMessage);
-  } catch (e) {
-    responseMessage = " Creation failed";
-    // res.statusCode = 201;
-    createResults.push(responseMessage);
+  // Delete or Insert
+  if (req.data.PRF_DESC === "D") {
+    lsprofiles.PROFILE = req.data.PROFILE;
+    try {
+      await cds.delete("CP_PAL_PROFILEMETH", lsprofiles.PROFILE);
+      responseMessage = " Deletion successfull";
+      createResults.push(responseMessage);
+    } catch (e) {
+      responseMessage = " Deletion failed";
+      createResults.push(responseMessage);
+    }
+  }
+  // Insert
+  else {
+    lsprofiles.PROFILE = req.data.PROFILE;
+    lsprofiles.METHOD = req.data.METHOD;
+    lsprofiles.PRF_DESC = req.data.PRF_DESC;
+    lsprofiles.CREATED_DATE = curDate;
+    if(lsprofiles.CREATED_BY === 'E'){
+    try {
+        await cds.delete("CP_PAL_PROFILEMETH", lsprofiles);
+    } catch (e) {
+        //DONOTHING
+    }
+    }
+    lsprofiles.CREATED_BY = req.user_id;
+    liProfiles.push(lsprofiles);
+    lsprofiles = {};
+    try {
+      await cds.run(INSERT.into("CP_PAL_PROFILEMETH").entries(liProfiles));
+      responseMessage = " Created successfully ";
+      createResults.push(responseMessage);
+    } catch (e) {
+      responseMessage = " Creation failed";
+      createResults.push(responseMessage);
+    }
   }
   res.send({ value: createResults });
 }
-
+// Create or delete Profile parameters
 async function _createProfileParameters(req) {
   let liProfilesPara = [];
   let lsprofilesPara = {};
@@ -186,39 +212,58 @@ async function _createProfileParameters(req) {
   var datetime = new Date();
   var curDate = datetime.toISOString().slice(0, 10);
   const aProfilePara_req = req.data.PROFILEPARA;
-
-  for (let i = 0; i < aProfilePara_req.length; i++) {
-    lsprofilesPara.PROFILE = aProfilePara_req[i].PROFILE;
-    if (lsprofilesPara.PROFILE !== undefined) {
-      lsprofilesPara.METHOD = aProfilePara_req[i].METHOD;
-      lsprofilesPara.PARA_NAME = aProfilePara_req[i].PARA_NAME;
-      lsprofilesPara.INTVAL = aProfilePara_req[i].INTVAL;
-      lsprofilesPara.DOUBLEVAL = aProfilePara_req[i].DOUBLEVAL;
-      lsprofilesPara.STRVAL = aProfilePara_req[i].STRVAL;
-      lsprofilesPara.PARA_DESC = aProfilePara_req[i].PARA_DESC;
-      lsprofilesPara.PARA_DEP = null; //aProfilePara_req[i].PARA_DEP;
-      lsprofilesPara.CREATED_DATE = curDate;
-      lsprofilesPara.CREATED_BY = aProfilePara_req[i].CREATED_BY;
-      liProfilesPara.push(GenFunctions.parse(lsprofilesPara));
+  if (req.data.FLAG === "I" || req.data.FLAG === "E") {
+    for (let i = 0; i < aProfilePara_req.length; i++) {
+      lsprofilesPara.PROFILE = aProfilePara_req[i].PROFILE;
+      if (lsprofilesPara.PROFILE !== undefined) {
+        lsprofilesPara.METHOD = aProfilePara_req[i].METHOD;
+        lsprofilesPara.PARA_NAME = aProfilePara_req[i].PARA_NAME;
+        lsprofilesPara.INTVAL = aProfilePara_req[i].INTVAL;
+        lsprofilesPara.DOUBLEVAL = aProfilePara_req[i].DOUBLEVAL;
+        lsprofilesPara.STRVAL = aProfilePara_req[i].STRVAL;
+        lsprofilesPara.PARA_DESC = aProfilePara_req[i].PARA_DESC;
+        lsprofilesPara.PARA_DEP = null; //aProfilePara_req[i].PARA_DEP;
+        lsprofilesPara.CREATED_DATE = curDate;
+        lsprofilesPara.CREATED_BY = aProfilePara_req[i].CREATED_BY;
+        if (req.data.FLAG === "E") {
+          await cds.delete("CP_PAL_PROFILEMETH_PARA", lsprofilesPara);
+        }
+        liProfilesPara.push(GenFunctions.parse(lsprofilesPara));
+      }
+      lsprofilesPara = {};
     }
-    lsprofilesPara = {};
-  }
-  try {
-    if (liProfilesPara.length > 0) {
-      await cds.run(
-        INSERT.into("CP_PAL_PROFILEMETH_PARA").entries(liProfilesPara)
-      );
-      responseMessage = " Creation successfully ";
+    try {
+      if (liProfilesPara.length > 0) {
+        await cds.run(
+          INSERT.into("CP_PAL_PROFILEMETH_PARA").entries(liProfilesPara)
+        );
+        responseMessage = " Created successfully ";
+        createResults.push(responseMessage);
+      }
+    } catch (e) {
+      responseMessage = " Creation failed";
       createResults.push(responseMessage);
     }
-  } catch (e) {
-    responseMessage = " Creation failed";
-    createResults.push(responseMessage);
+  } else if (req.data.FLAG === "D") {
+    for (let i = 0; i < aProfilePara_req.length; i++) {
+      lsprofilesPara.PROFILE = aProfilePara_req[i].PROFILE;
+      break;
+    }
+    try {
+      if (lsprofilesPara.PROFILE !== undefined) {
+        await cds.delete("CP_PAL_PROFILEMETH_PARA", lsprofilesPara.PROFILE);
+        responseMessage = " Deletion successfully ";
+        createResults.push(responseMessage);
+      }
+    } catch (e) {
+      responseMessage = " Deletion failed";
+      createResults.push(responseMessage);
+    }
   }
   res = req._.req.res;
   res.send({ value: createResults });
 }
-
+// Assign Object dependency to Profiles
 async function _createProfileOD(req) {
   let liProfilesOD = [];
   let liProfilesDel = [];
@@ -231,7 +276,7 @@ async function _createProfileOD(req) {
   var curDate = datetime.toISOString().slice(0, 10);
 
   const aProfileOD_req = req.data.PROFILEOD;
-
+  res = req._.req.res;
   for (let i = 0; i < aProfileOD_req.length; i++) {
     lsprofilesOD.PROFILE = aProfileOD_req[i].PROFILE;
     if (lsprofilesOD.PROFILE !== undefined) {
@@ -241,67 +286,36 @@ async function _createProfileOD(req) {
       lsprofilesOD.OBJ_DEP = aProfileOD_req[i].OBJ_DEP;
       lsprofilesOD.PROFILE = aProfileOD_req[i].PROFILE;
       liProfilesOD.push(GenFunctions.parse(lsprofilesOD));
-      
+      // Delete before insert to override
       lsprofilesDel.LOCATION_ID = aProfileOD_req[i].LOCATION_ID;
       lsprofilesDel.PRODUCT_ID = aProfileOD_req[i].PRODUCT_ID;
       lsprofilesDel.COMPONENT = aProfileOD_req[i].COMPONENT;
       lsprofilesDel.OBJ_DEP = aProfileOD_req[i].OBJ_DEP;
-    //   lsprofilesDel.PROFILE = aProfileOD_req[i].PROFILE;
+
       liProfilesDel.push(GenFunctions.parse(lsprofilesDel));
-      await cds.delete('CP_PAL_PROFILEOD',lsprofilesDel);
-    //   try {
-        // if (liProfilesOD.length > 0) {
-        //   //   await cds.run(UPSERT.into("CP_PAL_PROFILEOD").entries(liProfilesOD));
-        //   await cds.run(
-        //     `UPDATE CP_PAL_PROFILEOD "PROFILE" = '` +
-        //       lsprofilesOD.PROFILE +
-        //       `'
-        //   WHERE "LOCATION_ID" = '` +
-        //       lsprofilesOD.LOCATION_ID +
-        //       `'
-        //   "PRODUCT_ID" = '` +
-        //       lsprofilesOD.PRODUCT_ID +
-        //       `'
-        //   "COMPONENT" = '` +
-        //       lsprofilesOD.COMPONENT +
-        //       `' 
-        //   "OBJ_DEP" = '` +
-        //       lsprofilesOD.OBJ_DEP +
-        //       `'`
-        //   );
-        //   responseMessage = " Creation successfully ";
-        //   //res.statusCode = 201;
-        //   createResults.push(responseMessage);
-        // }
-    //   } catch (e) {
-    //     responseMessage = " Creation failed";
-    //     // res.statusCode = 201;
-    //     createResults.push(responseMessage);
-    //   }
+      try {
+          await cds.delete("CP_PAL_PROFILEOD", lsprofilesDel);
+          responseMessage = " Deletion successfull ";
+      } catch (e) {
+        responseMessage = " Deletion failed";
+      }
     }
     lsprofilesOD = {};
   }
-  res = req._.req.res;
 
+  if (req.data.FLAG === "I") {
     try {
       if (liProfilesOD.length > 0) {
-        // await cds.run(DELETE.into("CP_PAL_PROFILEOD").matching(liProfilesDel));
         await cds.run(INSERT.into("CP_PAL_PROFILEOD").entries(liProfilesOD));
-      //   await cds.run(
-      //   `UPDATE CP_PAL_PROFILEOD "PROFILE"='`+ + `'
-      //   WHERE "LOCATION_ID" = '` +  + `'
-      //   "PRODUCT" = '` +  + `'
-      //   "COMPONENT" = '` + + `'
-      //   "OBJ_DEP" = '` + + `'`
-      //   );
-        responseMessage = " Creation successfully ";
-        //res.statusCode = 201;
+        responseMessage = " Created successfully ";
         createResults.push(responseMessage);
       }
     } catch (e) {
       responseMessage = " Creation failed";
-      // res.statusCode = 201;
       createResults.push(responseMessage);
     }
+  } else {
+    createResults.push(responseMessage);
+  }
   res.send({ value: createResults });
 }

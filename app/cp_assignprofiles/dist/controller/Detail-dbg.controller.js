@@ -219,7 +219,7 @@ sap.ui.define(
             var uri = "/v2/catalog/getProfiles";
             $.ajax({
               url: uri,
-              type: "post",
+              type: "POST",
               contentType: "application/json",
               data: JSON.stringify({
                 PROFILE: oEntry.PROFILE,

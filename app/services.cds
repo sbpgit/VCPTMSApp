@@ -10,3 +10,4 @@ using from './cp_modelprofiles/annotations';
 // using from './cp_assignppf/annotations';
 using from './cp_odprofiles/annotations';
 using from './cp_assignprofiles/annotations';
+using from './cp_locprod/annotations';
