@@ -255,7 +255,7 @@ class GenTimeseries {
           ) {
             lSuccess = "X";
             lSuccessQty = liSalesChar[k].ORD_QTY;
-            lSCharIndex = k;
+            lSCharIndex = k + 1;
             break;
           }
           if(lReached = 'X' && (

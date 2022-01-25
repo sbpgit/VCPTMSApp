@@ -181,6 +181,7 @@ async function _createProfiles(req) {
     lsprofiles.METHOD = req.data.METHOD;
     lsprofiles.PRF_DESC = req.data.PRF_DESC;
     lsprofiles.CREATED_DATE = curDate;
+    lsprofiles.CREATED_BY = req.data.CREATED_BY;
     if(lsprofiles.CREATED_BY === 'E'){
     try {
         await cds.delete("CP_PAL_PROFILEMETH", lsprofiles);
