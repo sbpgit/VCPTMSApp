@@ -114,7 +114,16 @@ context cp {
             CHANGED_TIME : Time      @title : 'Changed Time';
             CREATED_TIME : Time      @title : 'Created Time';
     };
-
+    entity PRODUCT_CLASS {
+        key PRODUCT_ID     : String(40)@title : 'Product Id';
+        key CLASS_NUM      : String(18)@title : 'Class Num';
+            CHANGED_DATE   : Date      @title : 'Changed Date';
+            CHANGED_BY     : String(12)@title : 'Changed By';
+            CREATED_DATE   : Date      @title : 'Created Date';
+            CREATED_BY     : String(12)@title : 'Created By';
+            CHANGED_TIME   : Time      @title : 'Changed Time';
+            CREATED_TIME   : Time      @title : 'Created Time';
+    };
 
     entity PROD_CONFIG {
         key PRODUCT_ID     : String(40)@title : 'Product Id';
@@ -177,7 +186,7 @@ context cp {
         key CHAR_NUM       : String(10)@title : 'Internal number Char.';
             CHARVAL_NUM    : String(10)@title : 'Internal number Char. Value ';
             PRODUCT_ID     : String(40)@title : 'Product Id';
-            PROD_AVAILDATE : Date      @title : 'Prod Availability Date';
+           // PROD_AVAILDATE : Date      @title : 'Prod Availability Date';
             CHANGED_DATE   : Date      @title : 'Changed Date';
             CHANGED_BY     : String(12)@title : 'Changed By';
             CREATED_DATE   : Date      @title : 'Created Date';
@@ -531,7 +540,22 @@ key     ![CHAR_COUNTER]: Integer  @title: 'CHAR_COUNTER' ;
 key     ![ROW_ID]: Integer  @title: 'ROW_ID' ; 
 }
 
+@cds.persistence.exists 
+Entity ![V_CLASSCHARVAL] {
+key     ![CLASS_NUM]: String(18)  @title: 'CLASS_NUM' ; 
+key     ![CLASS_NAME]: String(20)  @title: 'CLASS_NAME' ; 
+key     ![CHAR_NUM]: String(10)  @title: 'CHAR_NUM' ; 
+key     ![CHAR_NAME]: String(30)  @title: 'CHAR_NAME' ; 
+key     ![CHAR_VALUE]: String(70)  @title: 'CHAR_VALUE' ; 
+key     ![CHARVAL_NUM]: String(10)  @title: 'CHARVAL_NUM' ; 
+}
 
+@cds.persistence.exists 
+Entity ![V_PRODCLSCHAR] {
+key     ![PRODUCT_ID]: String(40)  @title: 'PRODUCT_ID' ; 
+key     ![CLASS_NUM]: String(18)  @title: 'CLASS_NUM' ; 
+key     ![CLASS_NAME]: String(20)  @title: 'CLASS_NAME' ; 
+}
 // @cds.persistence.exists 
 // Entity ![V_ODPROFILES] {
 // key     ![LOCATION_ID]: String(4)  @title: 'Location' ; 

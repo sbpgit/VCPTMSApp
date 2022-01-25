@@ -167,7 +167,7 @@ async function _createProfiles(req) {
   if (req.data.PRF_DESC === "D") {
     lsprofiles.PROFILE = req.data.PROFILE;
     try {
-      await cds.delete("CP_PAL_PROFILEMETH", lsprofiles.PROFILE);
+      await cds.delete("CP_PAL_PROFILEMETH", lsprofiles);
       responseMessage = " Deletion successfull";
       createResults.push(responseMessage);
     } catch (e) {
@@ -251,7 +251,7 @@ async function _createProfileParameters(req) {
     }
     try {
       if (lsprofilesPara.PROFILE !== undefined) {
-        await cds.delete("CP_PAL_PROFILEMETH_PARA", lsprofilesPara.PROFILE);
+        await cds.delete("CP_PAL_PROFILEMETH_PARA", lsprofilesPara);
         responseMessage = " Deletion successfully ";
         createResults.push(responseMessage);
       }
