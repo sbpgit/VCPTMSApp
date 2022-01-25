@@ -555,6 +555,12 @@ Entity ![V_PRODCLSCHAR] {
 key     ![PRODUCT_ID]: String(40)  @title: 'PRODUCT_ID' ; 
 key     ![CLASS_NUM]: String(18)  @title: 'CLASS_NUM' ; 
 key     ![CLASS_NAME]: String(20)  @title: 'CLASS_NAME' ; 
+key     ![PROD_DESC]: String(40)  @title: 'PROD_DESC' ; 
+key     ![PROD_FAMILY]: String(30)  @title: 'PROD_FAMILY' ; 
+key     ![PROD_GROUP]: String(30)  @title: 'PROD_GROUP' ; 
+key     ![PROD_MODEL]: String(30)  @title: 'PROD_MODEL' ; 
+key     ![PROD_MDLRANGE]: String(30)  @title: 'PROD_MDLRANGE' ; 
+key     ![PROD_SERIES]: String(30)  @title: 'PROD_SERIES' ; 
 }
 // @cds.persistence.exists 
 // Entity ![V_ODPROFILES] {
