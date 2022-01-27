@@ -562,16 +562,35 @@ key     ![PROD_MODEL]: String(30)  @title: 'PROD_MODEL' ;
 key     ![PROD_MDLRANGE]: String(30)  @title: 'PROD_MDLRANGE' ; 
 key     ![PROD_SERIES]: String(30)  @title: 'PROD_SERIES' ; 
 }
-// @cds.persistence.exists 
-// Entity ![V_ODPROFILES] {
-// key     ![LOCATION_ID]: String(4)  @title: 'Location' ; 
-// key     ![PRODUCT_ID]: String(40)  @title: 'Product' ; 
-// key     ![COMPONENT]: String(40)  @title: 'Component' ; 
-// key     ![OBJ_DEP]: String(30)  @title: 'Object Dependency' ; 
-// key     ![OBJ_COUNTER]: Integer  @title: 'OBJ_COUNTER' ; 
-// key     ![OBJDEP_DESC]: String(30)  @title: 'Object Dependency Description' ; 
-// key     ![PROFILE]: String(50)  @title: 'Profile' ; 
-// }
+
+@cds.persistence.exists 
+Entity ![V_BOMODCOND] {
+key     ![LOCATION_ID]: String(4)  @title: 'LOCATION_ID' ; 
+key     ![PRODUCT_ID]: String(40)  @title: 'PRODUCT_ID' ; 
+key     ![ITEM_NUM]: String(5)  @title: 'ITEM_NUM' ; 
+key     ![COMPONENT]: String(40)  @title: 'COMPONENT' ; 
+key     ![OBJ_DEP]: String(42)  @title: 'OBJ_DEP' ; 
+key     ![OBJDEP_DESC]: String(30)  @title: 'OBJDEP_DESC' ; 
+key     ![CLASS_NUM]: String(18)  @title: 'CLASS_NUM' ; 
+key     ![CLASS_NAME]: String(20)  @title: 'CLASS_NAME' ; 
+key     ![CHAR_NUM]: String(10)  @title: 'CHAR_NUM' ; 
+key     ![CHAR_NAME]: String(30)  @title: 'CHAR_NAME' ; 
+key     ![CHARVAL_NUM]: String(10)  @title: 'CHARVAL_NUM' ; 
+key     ![CHAR_VALUE]: String(70)  @title: 'CHAR_VALUE' ; 
+key     ![OD_CONDITION]: String(2)  @title: 'OD_CONDITION' ; 
+key     ![CHAR_COUNTER]: Integer  @title: 'CHAR_COUNTER' ; 
+key     ![ROW_ID]: Integer  @title: 'ROW_ID' ; 
+}
+
+@cds.persistence.exists 
+Entity ![V_ODPROFILES] {
+key     ![LOCATION_ID]: String(4)  @title: 'LOCATION_ID' ; 
+key     ![PRODUCT_ID]: String(40)  @title: 'PRODUCT_ID' ; 
+key     ![COMPONENT]: String(40)  @title: 'COMPONENT' ; 
+key     ![OBJ_DEP]: String(42)  @title: 'OBJ_DEP' ; 
+key     ![OBJDEP_DESC]: String(30)  @title: 'OBJDEP_DESC' ; 
+key     ![PROFILE]: String(50)  @title: 'PROFILE' ; 
+}
 /*
 @cds.persistence.exists
 @cds.persistence.calcview

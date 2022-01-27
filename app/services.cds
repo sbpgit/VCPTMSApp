@@ -11,3 +11,4 @@ using from './cp_modelprofiles/annotations';
 using from './cp_odprofiles/annotations';
 using from './cp_assignprofiles/annotations';
 using from './cp_locprod/annotations';
+using from './cp_prodconfig/annotations';
