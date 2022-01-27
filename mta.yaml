@@ -112,6 +112,10 @@ modules:
       - cpappfcpsaleshcfg.zip
       name: cpappfcpsaleshcfg
       target-path: resources/
+    - artifacts:
+      - cpappfcpprodconfig.zip
+      name: cpappfcpprodconfig
+      target-path: resources/
 - name: cfgapppvsrootcfgprdpvsroot
   type: html5
   path: app/cfgprd_pvsroot
@@ -215,6 +219,16 @@ modules:
 - name: cpappfcpsaleshcfg
   type: html5
   path: app/cp_saleshcfg
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappfcpprodconfig
+  type: html5
+  path: app/cp_prodconfig
   build-parameters:
     build-result: dist
     builder: custom

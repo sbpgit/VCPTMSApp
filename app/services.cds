@@ -11,4 +11,8 @@ using from './cp_modelprofiles/annotations';
 using from './cp_odprofiles/annotations';
 using from './cp_assignprofiles/annotations';
 using from './cp_locprod/annotations';
+<<<<<<< HEAD
 using from './cp_saleshcfg/annotations';
+=======
+using from './cp_prodconfig/annotations';
+>>>>>>> 3695e979841f0874dcae13867b9685c01fdeb020

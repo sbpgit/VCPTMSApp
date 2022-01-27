@@ -1,0 +1,32 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="cp.appf.cpprodconfig.controller.ItemDetail"
+	xmlns:html="http://www.w3.org/1999/xhtml" class="ItemMaster">
+	<Page id="idClassChar" showFooter="true" enableScrolling="false" showHeader="false">
+		
+		<content>
+        <Toolbar height="12%">
+				<VBox>
+					<HBox>
+						<Text text="Class# : " class="boldText"></Text>
+						<Text text=" {oGModel>/classNo}"></Text>
+					</HBox>
+					<HBox>
+						<Text text="Prod Desc : " class="boldText"></Text>
+						<Text text=" {oGModel>/prodDesc}" class="sapUiLargeMarginEnd"></Text>
+						<ToolbarSpacer/>
+						<Text text="Prod Family : " class="boldText"></Text>
+						<Text text=" {oGModel>/prodFam}" ></Text>
+					</HBox>
+					<HBox>
+							<ToolbarSpacer/>
+						<Text text="Prod Group : " class="boldText"></Text>
+						<Text text=" {oGModel>/prodGroup}" class="sapUiLargeMarginEnd1"></Text>
+						<ToolbarSpacer/>
+						<Text text="Prod Model : " class="boldText"></Text>
+						<Text text="{oGModel>/prodModel}"></Text>
+					</HBox>
+				</VBox>
+			</Toolbar>
+			
+		</content>
+	</Page>
+</mvc:View>
