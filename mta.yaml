@@ -28,6 +28,17 @@ modules:
     ignore:
     - env
     - ./node_modules
+# - name: configprod_approuter
+#   type: approuter.nodejs
+#   path: app
+#   requires:
+#   - name: uaa_config_products
+#   - name: srv-api
+#     group: destinations
+#     properties:
+#       forwardAuthToken: true
+#       name: srv-api
+#       url: ~{srv-url}  
 - name: config_products-destination-content
   type: com.sap.application.content
   requires:

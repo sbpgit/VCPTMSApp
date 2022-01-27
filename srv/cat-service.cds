@@ -4,7 +4,8 @@ using V_CHARVAL from '../db/data-model';
 using V_OBDHDR  from '../db/data-model';
 using V_CLASSCHARVAL from '../db/data-model';
 using V_PRODCLSCHAR from '../db/data-model';
-// using V_ODPROFILES from '../db/data-model';
+using V_ODPROFILES from '../db/data-model';
+using V_BOMODCOND from '../db/data-model';
 service CatalogService @(impl : './lib/cat-service.js') {
     // Service on HDI entities
     //@odata.draft.enabled
@@ -87,14 +88,15 @@ service CatalogService @(impl : './lib/cat-service.js') {
     entity getProfileParameters as projection on od.PAL_PROFILEMETH_PARA;
     entity getMODHeader         as projection on V_OBDHDR;
     entity getProfileOD         as projection on od.PAL_PROFILEOD;
-    // entity getObjDepProfiles    as projection on V_ODPROFILES;
+    entity getODProfiles        as projection on V_ODPROFILES;
     // Generate batch req 
     entity genProfileParam      as projection on od.IP_PROFILEMETH_PARA;
     entity genProfileOD         as projection on od.IP_PROFILEOD;
 
     entity getProdClass         as projection on V_PRODCLSCHAR;
     entity getClassChar         as projection on V_CLASSCHARVAL;
-
+// Service to get BOM and OD condition
+    entity getBomOdCond         as projection on V_BOMODCOND;
     type objectDep {
         LOCATION_ID : String(4);
         PRODUCT_ID  : String(40);
@@ -115,7 +117,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
     function fGetNodeDet(NODE_TYPE : String(2), CHILD_NODE : String(50), PARENT_NODE : String(50)) returns array of getAccessNodes;
     function generate_timeseries() returns String;
     function get_objdep() returns array of objectDep;
-    function getODProfiles() returns array of odprofiles;
+    //function getODProfiles() returns array of odprofiles;
     function getCSRFToken() returns String;
     action gen_timeseries() returns String;
 
