@@ -6,6 +6,7 @@ using V_CLASSCHARVAL from '../db/data-model';
 using V_PRODCLSCHAR from '../db/data-model';
 using V_ODPROFILES from '../db/data-model';
 using V_BOMODCOND from '../db/data-model';
+using V_SALESHCFG_CHARVAL from '../db/data-model';
 service CatalogService @(impl : './lib/cat-service.js') {
     // Service on HDI entities
     //@odata.draft.enabled
@@ -21,8 +22,8 @@ service CatalogService @(impl : './lib/cat-service.js') {
     entity getCustgroup         as projection on od.CUSTOMERGROUP;
 
     //@odata.draft.enabled
-    @readonly
-    entity getProdConfig        as projection on od.PROD_CONFIG;
+    // @readonly
+    // entity getProdConfig        as projection on od.PROD_CONFIG;
 
     @readonly
     entity getSalesh            as projection on od.SALESH;
@@ -82,7 +83,8 @@ service CatalogService @(impl : './lib/cat-service.js') {
 
     @readonly
     entity getIBPFres           as projection on od.IBP_RESULTPLAN;
-
+//
+    entity getSaleshCfg        as projection on V_SALESHCFG_CHARVAL;
 
     entity getProfiles          as projection on od.PAL_PROFILEMETH;
     entity getProfileParameters as projection on od.PAL_PROFILEMETH_PARA;

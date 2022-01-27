@@ -101,7 +101,7 @@ sap.ui.define(
               MessageToast.show("error");
             },
           });
-          this.getModel("BModel").read("/getProducts", {
+          this.getModel("BModel").read("/getProdClass ", {
             success: function (oData) {
                 oData.results.unshift({
                     PRODUCT_ID: "All",
@@ -114,32 +114,33 @@ sap.ui.define(
               MessageToast.show("error");
             },
           });
-        //   this.getModel("BModel").read("/getObjDepProfiles", {
-        //     success: function (oData) {
-        //         that.odModel.setData(oData);
-        //         that.oODList.setModel(that.odModel);
-        //     },
-        //     error: function (oData, error) {
-        //       MessageToast.show("error");
-        //     },
-        //   });
-          this.getModel("BModel").callFunction("/get_objdep", {
-            method: "GET",
-            urlParameters: {},
+          this.getModel("BModel").read("/getBomOdCond", {
             success: function (oData) {
-                that.objDep = oData.results;
-                // oData.results.unshift({
-                //     OBJ_DEP: "All",
-                //     LOCATION_ID:"All",
-                //     PRODUCT_ID:"All"//"KM_M219VBVS_BVS"
-                // });
-              that.odModel.setData(oData);
-              that.oODList.setModel(that.odModel);
+                        that.objDep = oData.results;
+                that.odModel.setData(oData);
+                that.oODList.setModel(that.odModel);
             },
-            error: function (oRes) {
+            error: function (oData, error) {
               MessageToast.show("error");
             },
           });
+        //   this.getModel("BModel").callFunction("/getBomOdCond", {
+        //     method: "GET",
+        //     urlParameters: {},
+        //     success: function (oData) {
+        //         that.objDep = oData.results;
+        //         // oData.results.unshift({
+        //         //     OBJ_DEP: "All",
+        //         //     LOCATION_ID:"All",
+        //         //     PRODUCT_ID:"All"//"KM_M219VBVS_BVS"
+        //         // });
+        //       that.odModel.setData(oData);
+        //       that.oODList.setModel(that.odModel);
+        //     },
+        //     error: function (oRes) {
+        //       MessageToast.show("error");
+        //     },
+        //   });
           this.getModel("BModel").read("/getProfiles", {
             success: function (oData) {
               that.ppfModel.setData(oData);
@@ -315,11 +316,11 @@ sap.ui.define(
             that.oObjDep.removeAllTokens();
             this._valueHelpDialogProd.getAggregation("_dialog").getContent()[1].removeSelections();
             this._valueHelpDialogOD.getAggregation("_dialog").getContent()[1].removeSelections();
-            this.getModel("BModel").read("/getLocProd?$filter=contains(LOCATION_ID,aSelectedItems[0].getTitle())", {
+            this.getModel("BModel").read("/getProdClass?$filter=contains(LOCATION_ID,aSelectedItems[0].getTitle())", {
                 success: function (oData) {
                     oData.results.unshift({
-                        PRODUCT_ID: "All"//,
-                        //PROD_DESC: "All"
+                        PRODUCT_ID: "All",
+                        PROD_DESC: "All"
                     });
                   that.prodModel.setData(oData);
                   that.oProdList.setModel(that.prodModel);

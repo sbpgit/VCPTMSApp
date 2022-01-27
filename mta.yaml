@@ -28,17 +28,6 @@ modules:
     ignore:
     - env
     - ./node_modules
-# - name: configprod_approuter
-#   type: approuter.nodejs
-#   path: app
-#   requires:
-#   - name: uaa_config_products
-#   - name: srv-api
-#     group: destinations
-#     properties:
-#       forwardAuthToken: true
-#       name: srv-api
-#       url: ~{srv-url}  
 - name: config_products-destination-content
   type: com.sap.application.content
   requires:
@@ -118,6 +107,10 @@ modules:
     - artifacts:
       - cplpcplocprod.zip
       name: cplpcplocprod
+      target-path: resources/
+    - artifacts:
+      - cpappfcpsaleshcfg.zip
+      name: cpappfcpsaleshcfg
       target-path: resources/
 - name: cfgapppvsrootcfgprdpvsroot
   type: html5
@@ -212,6 +205,16 @@ modules:
 - name: cplpcplocprod
   type: html5
   path: app/cp_locprod
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappfcpsaleshcfg
+  type: html5
+  path: app/cp_saleshcfg
   build-parameters:
     build-result: dist
     builder: custom

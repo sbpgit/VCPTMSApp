@@ -125,28 +125,28 @@ context cp {
             CREATED_TIME   : Time      @title : 'Created Time';
     };
 
-    entity PROD_CONFIG {
-        key PRODUCT_ID     : String(40)@title : 'Product Id';
-        key LOCATION_ID    : String(4) @title : 'Location ID';
-        key CLASS          : String(18)@title : 'Class';
-        key CHAR_NUM       : String(10)@title : 'Internal number Char.';
-        key CHARVAL_NUM    : String(10)@title : 'Internal number Char. Value ';
-            CHARVAL_DESC   : String(70)@title : 'Character Value Desc';
-            CHAR_ATTR      : String(30)@title : 'Characteristic Attribute';
-            CHAR_DESC      : String(50)@title : 'Characteristic Description';
-            CUSTOMER_GROUP : String(2) @title : 'Customer Group';
-            RESERVE_FIELD1 : String(20)@title : 'Reserve Field1';
-            RESERVE_FIELD2 : String(20)@title : 'Reserve Field2';
-            RESERVE_FIELD3 : String(20)@title : 'Reserve Field3';
-            RESERVE_FIELD4 : String(20)@title : 'Reserve Field4';
-            RESERVE_FIELD5 : String(20)@title : 'Reserve Field5';
-            CHANGED_DATE   : Date      @title : 'Changed Date';
-            CHANGED_BY     : String(12)@title : 'Changed By';
-            CREATED_DATE   : Date      @title : 'Created Date';
-            CREATED_BY     : String(12)@title : 'Created By';
-            CHANGED_TIME   : Time      @title : 'Changed Time';
-            CREATED_TIME   : Time      @title : 'Created Time';
-    };
+    // entity PROD_CONFIG {
+    //     key PRODUCT_ID     : String(40)@title : 'Product Id';
+    //     key LOCATION_ID    : String(4) @title : 'Location ID';
+    //     key CLASS          : String(18)@title : 'Class';
+    //     key CHAR_NUM       : String(10)@title : 'Internal number Char.';
+    //     key CHARVAL_NUM    : String(10)@title : 'Internal number Char. Value ';
+    //         CHARVAL_DESC   : String(70)@title : 'Character Value Desc';
+    //         CHAR_ATTR      : String(30)@title : 'Characteristic Attribute';
+    //         CHAR_DESC      : String(50)@title : 'Characteristic Description';
+    //         CUSTOMER_GROUP : String(2) @title : 'Customer Group';
+    //         RESERVE_FIELD1 : String(20)@title : 'Reserve Field1';
+    //         RESERVE_FIELD2 : String(20)@title : 'Reserve Field2';
+    //         RESERVE_FIELD3 : String(20)@title : 'Reserve Field3';
+    //         RESERVE_FIELD4 : String(20)@title : 'Reserve Field4';
+    //         RESERVE_FIELD5 : String(20)@title : 'Reserve Field5';
+    //         CHANGED_DATE   : Date      @title : 'Changed Date';
+    //         CHANGED_BY     : String(12)@title : 'Changed By';
+    //         CREATED_DATE   : Date      @title : 'Created Date';
+    //         CREATED_BY     : String(12)@title : 'Created By';
+    //         CHANGED_TIME   : Time      @title : 'Changed Time';
+    //         CREATED_TIME   : Time      @title : 'Created Time';
+    // };
 
     entity PROD_ATTRIBUTES {
         key LOCATION_ID   : String(4) @title : 'Location ID';
@@ -553,6 +553,7 @@ key     ![CHARVAL_NUM]: String(10)  @title: 'CHARVAL_NUM' ;
 @cds.persistence.exists 
 Entity ![V_PRODCLSCHAR] {
 key     ![PRODUCT_ID]: String(40)  @title: 'PRODUCT_ID' ; 
+key     ![LOCATION_ID]: String(4)  @title: 'LOCATION_ID' ; 
 key     ![CLASS_NUM]: String(18)  @title: 'CLASS_NUM' ; 
 key     ![CLASS_NAME]: String(20)  @title: 'CLASS_NAME' ; 
 key     ![PROD_DESC]: String(40)  @title: 'PROD_DESC' ; 
@@ -563,6 +564,7 @@ key     ![PROD_MDLRANGE]: String(30)  @title: 'PROD_MDLRANGE' ;
 key     ![PROD_SERIES]: String(30)  @title: 'PROD_SERIES' ; 
 }
 
+
 @cds.persistence.exists 
 Entity ![V_BOMODCOND] {
 key     ![LOCATION_ID]: String(4)  @title: 'LOCATION_ID' ; 
@@ -571,6 +573,9 @@ key     ![ITEM_NUM]: String(5)  @title: 'ITEM_NUM' ;
 key     ![COMPONENT]: String(40)  @title: 'COMPONENT' ; 
 key     ![OBJ_DEP]: String(42)  @title: 'OBJ_DEP' ; 
 key     ![OBJDEP_DESC]: String(30)  @title: 'OBJDEP_DESC' ; 
+key     ![COMP_QTY]: Decimal(13, 3)  @title: 'COMP_QTY' ; 
+key     ![VALID_FROM]: Date  @title: 'VALID_FROM' ; 
+key     ![VALID_TO]: Date  @title: 'VALID_TO' ; 
 key     ![CLASS_NUM]: String(18)  @title: 'CLASS_NUM' ; 
 key     ![CLASS_NAME]: String(20)  @title: 'CLASS_NAME' ; 
 key     ![CHAR_NUM]: String(10)  @title: 'CHAR_NUM' ; 
@@ -590,6 +595,31 @@ key     ![COMPONENT]: String(40)  @title: 'COMPONENT' ;
 key     ![OBJ_DEP]: String(42)  @title: 'OBJ_DEP' ; 
 key     ![OBJDEP_DESC]: String(30)  @title: 'OBJDEP_DESC' ; 
 key     ![PROFILE]: String(50)  @title: 'PROFILE' ; 
+}
+
+@cds.persistence.exists 
+Entity ![V_SALESHCFG_CHARVAL] {
+key     ![SALES_DOC]: String(10)  @title: 'Sales Document' ; 
+key     ![SALESDOC_ITEM]: String(6)  @title: 'Sales Doc. Item' ; 
+key     ![DOC_CREATEDDATE]: Date  @title: 'Doc. Created Date' ; 
+key     ![SCHEDULELINE_NUM]: String(4)  @title: 'Schedule Line No.' ; 
+key     ![PRODUCT_ID]: String(40)  @title: 'Product ID' ; 
+key     ![REASON_REJ]: String(2)  @title: 'Reason for Rej.' ; 
+key     ![UOM]: String(3)  @title: 'UOM' ; 
+key     ![CONFIRMED_QTY]: Decimal(13, 3)  @title: 'Confirmed Qty' ; 
+key     ![ORD_QTY]: Decimal(13, 3)  @title: 'Ordered Qty' ; 
+key     ![MAT_AVAILDATE]: Date  @title: 'Material Avail. Date' ; 
+key     ![NET_VALUE]: Decimal(15, 2)  @title: 'Net Value' ; 
+key     ![CUSTOMER_GROUP]: String(2)  @title: 'Customer Group' ; 
+key     ![LOCATION_ID]: String(4)  @title: 'Location ID' ; 
+key     ![CHAR_NAME]: String(30)  @title: 'Characteristic' ; 
+key     ![CHAR_VALUE]: String(70)  @title: 'Characteristic Value' ; 
+key     ![CHANGED_DATE]: Date  @title: 'Changed Date' ; 
+key     ![CHANGED_BY]: String(12)  @title: 'Changed By' ; 
+key     ![CREATED_DATE]: Date  @title: 'Created Date' ; 
+key     ![CREATED_BY]: String(12)  @title: 'Created By' ; 
+key     ![CHANGED_TIME]: Time  @title: 'Changed Time' ; 
+key     ![CREATED_TIME]: Time  @title: 'Created Time' ; 
 }
 /*
 @cds.persistence.exists
