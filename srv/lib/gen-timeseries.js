@@ -19,7 +19,7 @@ class GenTimeseries {
         }),
       ],
     });
-
+    
   }
 
   /**
@@ -86,7 +86,7 @@ class GenTimeseries {
       lsSalesInfo.CAL_DATE    = GenFunctions.getNextSunday(liSalesHead[i].MAT_AVAILDATE);
       
       if (!lsSalesInfo.ORD_QTY) lsSalesInfo.ORD_QTY = 0;
-      lsSalesInfo.ORD_QTY = lsSalesInfo.ORD_QTY + parseInt(liSalesHead[i].ORD_QTY);
+      lsSalesInfo.ORD_QTY = parseInt(lsSalesInfo.ORD_QTY) + parseInt(liSalesHead[i].ORD_QTY);
       if ( liSalesHead[i].LOCATION_ID !== liSalesHead[GenFunctions.addOne(i, liSalesHead.length)].LOCATION_ID ||
            liSalesHead[i].PRODUCT_ID  !== liSalesHead[GenFunctions.addOne(i, liSalesHead.length)].PRODUCT_ID ||
            liSalesHead[GenFunctions.addOne(i, liSalesHead.length)].MAT_AVAILDATE > lsSalesInfo.CAL_DATE ||
@@ -120,7 +120,7 @@ class GenTimeseries {
             FROM V_ORDCHAR
             WHERE MAT_AVAILDATE > '` + lCalDate.toISOString().slice(0, 10) + `'
               AND MAT_AVAILDATE <= '` + liSalesInfo[lSalesIndex].CAL_DATE + `'
-              AND SUCCESS = 'S'
+              AND SUCCESS = 'S'   
               ORDER BY LOCATION_ID, PRODUCT_ID, OBJ_DEP, OBJ_COUNTER, ROW_ID`
       );
 
@@ -149,7 +149,7 @@ class GenTimeseries {
         sObjDepChar.OBJ_DEP = liProdOD[lProdIndex].OBJ_DEP;
         sObjDepChar.OBJ_COUNTER = liProdOD[lProdIndex].OBJ_COUNTER;
         sObjDepChar.ROW_ID = liProdOD[lProdIndex].ROW_ID;
-        sObjDepChar.SUCCESS = 0;
+        sObjDepChar.SUCCESS      = 0;
         sObjDepChar.SUCCESS_RATE = 0;
         liObjDepChar.push(GenFunctions.parse(sObjDepChar));
       }
@@ -166,20 +166,17 @@ class GenTimeseries {
       let lSuccessQty = 0;
       for (let i = 0; i < liSalesChar.length; i++) {
         if (liSalesChar[i].SUCCESS === "S") {
-          lSuccessQty = lSuccessQty + liSalesChar[i].ORD_QTY;
+          lSuccessQty = parseInt(lSuccessQty) + parseInt(liSalesChar[i].ORD_QTY);
         }
         if (
           liSalesChar[i].LOCATION_ID !==
-            liSalesChar[GenFunctions.addOne(i, liSalesChar.length)]
-              .LOCATION_ID ||
+            liSalesChar[GenFunctions.addOne(i, liSalesChar.length)].LOCATION_ID ||
           liSalesChar[i].PRODUCT_ID !==
-            liSalesChar[GenFunctions.addOne(i, liSalesChar.length)]
-              .PRODUCT_ID ||
+            liSalesChar[GenFunctions.addOne(i, liSalesChar.length)].PRODUCT_ID ||
           liSalesChar[i].OBJ_DEP !==
             liSalesChar[GenFunctions.addOne(i, liSalesChar.length)].OBJ_DEP ||
           liSalesChar[i].OBJ_COUNTER !==
-            liSalesChar[GenFunctions.addOne(i, liSalesChar.length)]
-              .OBJ_COUNTER ||
+            liSalesChar[GenFunctions.addOne(i, liSalesChar.length)].OBJ_COUNTER ||
           liSalesChar[i].ROW_ID !==
             liSalesChar[GenFunctions.addOne(i, liSalesChar.length)].ROW_ID
         ) {
@@ -244,27 +241,27 @@ class GenTimeseries {
                 liSalesChar[k].OBJ_DEP      === liProdOD[lProdIndex].OBJ_DEP &&
                 liSalesChar[k].OBJ_COUNTER  === liProdOD[lProdIndex].OBJ_COUNTER ) {
                     lReached = 'X'
-                }
-          if (
-            liSalesChar[k].LOCATION_ID  === liProdOD[lProdIndex].LOCATION_ID &&
-            liSalesChar[k].PRODUCT_ID   === liProdOD[lProdIndex].PRODUCT_ID &&
-            liSalesChar[k].OBJ_DEP      === liProdOD[lProdIndex].OBJ_DEP &&
-            liSalesChar[k].OBJ_COUNTER  === liProdOD[lProdIndex].OBJ_COUNTER &&
-            liSalesChar[k].CHAR_COUNTER === liProdOD[lProdIndex].CHAR_COUNTER &&
-            liSalesChar[k].SUCCESS      === "S"
-          ) {
-            lSuccess = "X";
-            lSuccessQty = liSalesChar[k].ORD_QTY;
-            lSCharIndex = k + 1;
-            break;
-          }
-          if(lReached = 'X' && (
-            liSalesChar[k].LOCATION_ID  !== liProdOD[lProdIndex].LOCATION_ID ||
-            liSalesChar[k].PRODUCT_ID   !== liProdOD[lProdIndex].PRODUCT_ID ||
-            liSalesChar[k].OBJ_DEP      !== liProdOD[lProdIndex].OBJ_DEP ||
-            liSalesChar[k].OBJ_COUNTER  !== liProdOD[lProdIndex].OBJ_COUNTER )){
-                lReached = '';
+            }
+            if (
+                liSalesChar[k].LOCATION_ID  === liProdOD[lProdIndex].LOCATION_ID &&
+                liSalesChar[k].PRODUCT_ID   === liProdOD[lProdIndex].PRODUCT_ID &&
+                liSalesChar[k].OBJ_DEP      === liProdOD[lProdIndex].OBJ_DEP &&
+                liSalesChar[k].OBJ_COUNTER  === liProdOD[lProdIndex].OBJ_COUNTER &&
+                liSalesChar[k].CHAR_COUNTER === liProdOD[lProdIndex].CHAR_COUNTER &&
+                liSalesChar[k].SUCCESS      === "S"
+            ) {
+                lSuccess = "X";
+                lSuccessQty = parseInt(lSuccessQty) + parseInt(liSalesChar[k].ORD_QTY);
+                lSCharIndex = k + 1;
                 break;
+            }
+            if(lReached = 'X' && (
+                liSalesChar[k].LOCATION_ID  !== liProdOD[lProdIndex].LOCATION_ID ||
+                liSalesChar[k].PRODUCT_ID   !== liProdOD[lProdIndex].PRODUCT_ID ||
+                liSalesChar[k].OBJ_DEP      !== liProdOD[lProdIndex].OBJ_DEP ||
+                liSalesChar[k].OBJ_COUNTER  !== liProdOD[lProdIndex].OBJ_COUNTER )){
+                    lReached = '';
+                    break;
             }
         }
         if (lSuccess === "") lFail = "X";
@@ -275,8 +272,7 @@ class GenTimeseries {
           liProdOD[lProdIndex].OBJ_DEP     !== liProdOD[GenFunctions.addOne(lProdIndex, liProdOD.length)].OBJ_DEP ||
           liProdOD[lProdIndex].OBJ_COUNTER !== liProdOD[GenFunctions.addOne(lProdIndex, liProdOD.length)].OBJ_COUNTER ||
           lProdIndex === GenFunctions.addOne(lProdIndex, liProdOD.length)
-        ) {
-            
+        ) { 
               sObjDepHdr.CAL_DATE = liSalesInfo[lSalesIndex].CAL_DATE;
               sObjDepHdr.LOCATION_ID = liProdOD[lProdIndex].LOCATION_ID;
               sObjDepHdr.PRODUCT_ID = liProdOD[lProdIndex].PRODUCT_ID;

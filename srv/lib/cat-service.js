@@ -64,7 +64,7 @@ module.exports = (srv) => {
     return results;
   });
 
-  srv.on("getODProfiles", async (req) => {
+ /* srv.on("getODProfiles", async (req) => {
     let liresults = [];
     let lsresults = {};
     let { getMODHeader, getProfileOD } = srv.entities;
