@@ -2,6 +2,8 @@ using cp as od from '../db/data-model';
 using V_CLASSCHAR from '../db/data-model';
 using V_CHARVAL from '../db/data-model';
 using V_OBDHDR  from '../db/data-model';
+using V_CLASSCHARVAL from '../db/data-model';
+using V_PRODCLSCHAR from '../db/data-model';
 // using V_ODPROFILES from '../db/data-model';
 service CatalogService @(impl : './lib/cat-service.js') {
     // Service on HDI entities
@@ -89,6 +91,9 @@ service CatalogService @(impl : './lib/cat-service.js') {
     // Generate batch req 
     entity genProfileParam      as projection on od.IP_PROFILEMETH_PARA;
     entity genProfileOD         as projection on od.IP_PROFILEOD;
+
+    entity getProdClass         as projection on V_PRODCLSCHAR;
+    entity getClassChar         as projection on V_CLASSCHARVAL;
 
     type objectDep {
         LOCATION_ID : String(4);

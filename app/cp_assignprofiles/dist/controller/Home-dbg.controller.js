@@ -37,6 +37,7 @@ sap.ui.define(
         // oGModel = this.getModel("oGModel");
         // this.i18n = this.getResourceBundle();
         that.oList = this.byId("profList");
+        this.byId("headSearch").setValue("");
         that.oList.removeSelections();
         if (that.oList.getBinding("items")) {
           that.oList.getBinding("items").filter([]);
@@ -124,21 +125,25 @@ sap.ui.define(
         that.oGModel = that.getModel("oGModel");
 
         var sId = oEvent.getSource().getTooltip();
+        
         that.oGModel.setProperty("/sId", sId);
-        if (sId === "Copy") {
+        if (sId === "Copy" || sId === "Edit") {
           var selRow = this.byId("profList").getSelectedItems();
 
           if (selRow.length) {
+            var SelUsername = this.byId("profList").getSelectedItem().getBindingContext().getProperty().CREATED_BY;
             var selAlgo = selRow[0].getBindingContext().getProperty();
             that.oGModel.setProperty("/sProfile", selAlgo.PROFILE);
             that.oGModel.setProperty("/sProf_desc", selAlgo.PRF_DESC);
             that.oGModel.setProperty("/sMethod", selAlgo.METHOD);
+            that.oGModel.setProperty("/sCreatedBy", SelUsername);
+            
             var oRouter = sap.ui.core.UIComponent.getRouterFor(that);
             oRouter.navTo("Detail", {}, true);
           } else {
             MessageToast.show("Please select one row");
           }
-        } else {
+        } else if (sId === "Create"){
           var oRouter = sap.ui.core.UIComponent.getRouterFor(that);
           oRouter.navTo("Detail", {}, true);
         }
@@ -148,30 +153,115 @@ sap.ui.define(
         //   that._onAddppf.destroy(true);
         //   that._onAddppf = "";
       },
-      onAlgorChange: function (oEvent) {
-        var selAlgo = sap.ui.getCore().byId("idAlgo")._getSelectedItemText();
-        that.alogoList = sap.ui.getCore().byId("idTab");
 
-        var oFilters = new Filter("METHOD", FilterOperator.EQ, selAlgo);
+      onDelete:function(oEvent){
 
-        this.getModel("PModel").read("/get_palparameters", {
-          filters: [oFilters],
+        var selRow = this.byId("profList").getSelectedItems()[0].getBindingContext().getProperty();
 
-          success: function (oData) {
-            oData.results.forEach(function (row) {
-              row.FLAG = row.DATATYPE;
-            }, that);
+        sap.ui.core.BusyIndicator.show();
+        var oEntry = {};
 
-            that.oAlgoListModel.setData({
-              results: oData.results,
-            });
-            that.alogoList.setModel(that.oAlgoListModel);
+        oEntry.PROFILE = selRow.PROFILE;
+        oEntry.METHOD = selRow.METHOD;
+        oEntry.PRF_DESC = "D";
+
+          var uri = "/v2/catalog/getProfiles";
+          $.ajax({
+            url: uri,
+            type: "post",
+            contentType: "application/json",
+            data: JSON.stringify({
+              PROFILE: oEntry.PROFILE,
+              METHOD: oEntry.METHOD,
+              PRF_DESC: oEntry.PRF_DESC
+            }),
+            dataType: "json",
+            async: false,
+            timeout: 0,
+            error: function (data) {
+              sap.m.MessageToast.show(JSON.stringify(data));
+            },
+            success: function (data) {
+              sap.ui.core.BusyIndicator.hide();
+              sap.m.MessageToast.show("Profile deleted");
+              that.tablesendbatch();
+            },
+          });
+
+      },
+
+      tablesendbatch:function(){
+          var aData = {
+            PROFILEPARA: [],
           },
-          error: function () {
-            MessageToast.show("Failed to get data");
+          jsonProfilePara;
+
+          var selRow = this.byId("profList").getSelectedItems()[0].getBindingContext().getProperty();
+
+          jsonProfilePara = {
+              PROFILE: selRow.PROFILE,
+              METHOD: selRow.METHOD,
+              PARA_NAME: "",
+              PARA_DESC: "",
+              INTVAL: null,
+              DOUBLEVAL: null,
+              STRVAL: null,
+            };
+          
+          aData.PROFILEPARA.push(jsonProfilePara);
+
+
+        var uri = "/v2/catalog/genProfileParam";
+        $.ajax({
+          url: uri,
+          type: "post",
+          contentType: "application/json",
+          data: JSON.stringify({
+              FLAG : "D",
+            PROFILEPARA: aData.PROFILEPARA,
+          }),
+          dataType: "json",
+          async: false,
+          timeout: 0,
+          error: function (data) {
+            sap.ui.core.BusyIndicator.hide();
+            sap.m.MessageToast.show(JSON.stringify(data));
+          },
+          success: function (data) {
+            sap.ui.core.BusyIndicator.hide();
+            sap.m.MessageToast.show("Profile parameters deleted");
+            that.onAfterRendering();
           },
         });
-      }
+
+          
+        }
+      
+
+    //   onAlgorChange: function (oEvent) {
+    //     var selAlgo = sap.ui.getCore().byId("idAlgo")._getSelectedItemText();
+    //     that.alogoList = sap.ui.getCore().byId("idTab");
+
+    //     var oFilters = new Filter("METHOD", FilterOperator.EQ, selAlgo);
+
+    //     this.getModel("PModel").read("/get_palparameters", {
+    //       filters: [oFilters],
+
+    //       success: function (oData) {
+    //         oData.results.forEach(function (row) {
+    //           row.FLAG = row.DATATYPE;
+    //         }, that);
+
+    //         that.oAlgoListModel.setData({
+    //           results: oData.results,
+    //         });
+    //         that.alogoList.setModel(that.oAlgoListModel);
+    //       },
+    //       error: function () {
+    //         MessageToast.show("Failed to get data");
+    //       },
+    //     });
+    //   }
 
       
     });

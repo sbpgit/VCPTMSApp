@@ -115,11 +115,12 @@ sap.ui.define(
             method: "GET",
             urlParameters: {},
             success: function (oData) {
-                oData.results.unshift({
-                    OBJ_DEP: "All",
-                    LOCATION_ID:"All",
-                    PRODUCT_ID:"All"//"KM_M219VBVS_BVS"
-                });
+                that.objDep = oData.results;
+                // oData.results.unshift({
+                //     OBJ_DEP: "All",
+                //     LOCATION_ID:"All",
+                //     PRODUCT_ID:"All"//"KM_M219VBVS_BVS"
+                // });
               that.odModel.setData(oData);
               that.oODList.setModel(that.odModel);
             },
@@ -438,44 +439,38 @@ sap.ui.define(
           } else if (sId.includes("od")) {
             if (that.oLoc.getValue() && that.oProd.getTokens()) {
               if (this.oODList.getBinding("items")) {
-                if(this.oODList.getBinding("items").oList[0].LOCATION_ID !== that.oLocList.getSelectedItem().getTitle()){
-                    this.oODList.getBinding("items").oList[0].LOCATION_ID = that.oLocList.getSelectedItem().getTitle();
-                  }
+                var sItems = that.oProdList.getSelectedItems();
+                that.objDepData = [];
+
                   if(this.oProdList.getSelectedItem().getTitle() === "All"){
 
-                    this.oODList
-                    .getBinding("items")
-                    .filter([
-                      new Filter(
-                        "LOCATION_ID",
-                        FilterOperator.Contains,
-                        that.oLocList.getSelectedItem().getTitle()
-                      )
-                    ]);
-                  } else {
-                this.oODList
-                  .getBinding("items")
-                  .filter([
-                    new Filter(
-                      "LOCATION_ID",
-                      FilterOperator.Contains,
-                      that.oLocList.getSelectedItem().getTitle()
-                    ),
-                    new Filter(
-                      "PRODUCT_ID",
-                      FilterOperator.Contains,
-                      this.oProdList.getSelectedItem().getTitle()//   "KM_M219VBVS_BVS"
-                    ),
-                    new Filter(
-                        "LOCATION_ID",
-                        FilterOperator.EQ, "All"
-                      ),
-                      new Filter(
-                        "PRODUCT_ID",
-                        FilterOperator.EQ,"All"
-                      ),
-                  ]);
-                }
+                        for(var j=0; j<that.objDep.length; j++){
+                            if(that.objDep[j].LOCATION_ID === that.oLocList.getSelectedItem().getTitle()){
+                                that.objDepData.push(that.objDep[j]);
+                            }
+
+                        }                
+                    } else {
+                        for(var i=0; i<sItems.length; i++){
+                            for(var j=0; j<that.objDep.length; j++){
+                                if(that.objDep[j].LOCATION_ID === that.oLocList.getSelectedItem().getTitle() && 
+                                that.objDep[j].PRODUCT_ID === sItems[i].getTitle()){
+                                    that.objDepData.push(that.objDep[j]);
+                                }
+                            }
+                        }
+                    }   
+
+
+                    if(that.objDepData.length > 1){
+                        that.objDepData.unshift({
+                            OBJ_DEP: "All",
+                            LOCATION_ID:"All",
+                            PRODUCT_ID:"All"
+                        });
+                    }
+                that.odModel.setData({ results: that.objDepData });
+                that.oODList.setModel(that.odModel);
               }
               this._valueHelpDialogOD.open();
             } else {
@@ -738,14 +733,14 @@ sap.ui.define(
             var selected = oEvent.getParameter("listItem").getTitle();
             var items = sap.ui.getCore().byId("prodSlctList").getItems();
             var selItems = this._valueHelpDialogProd.getAggregation("_dialog").getContent()[1].getSelectedItems();
-              if(selected === "All" && oEvent.getParameter("selected")){
-
+              if(selected === "All" && oEvent.getParameter("selected") && items.length !== 1){
                   this._valueHelpDialogProd.getAggregation("_dialog").getContent()[1].selectAll();
               } else if(selected === "All" && !oEvent.getParameter("selected")){
                   this._valueHelpDialogProd.getAggregation("_dialog").getContent()[1].removeSelections();
-              } else if(selected !== "All" || items.length !== selItems.length){
+              } else if(selected === "All" && items.length === 1){
                   sap.ui.getCore().byId("prodSlctList").getItems()[0].setSelected(false);
               }
+            
 
 
         },
@@ -758,11 +753,9 @@ sap.ui.define(
                 this._valueHelpDialogOD.getAggregation("_dialog").getContent()[1].selectAll();
             } else if(selected === "All_" && !oEvent.getParameter("selected")){
                 this._valueHelpDialogOD.getAggregation("_dialog").getContent()[1].removeSelections();
-            } else if(selected !== "All_" || items.length !== selItems.length){
+            } else if(selected === "All" && items.length === 1 ){ 
                 sap.ui.getCore().byId("odSlctList").getItems()[0].setSelected(false);
-            } else if(selected === "All_" && oEvent.getParameter("selected") && items.length === 1){
-              this._valueHelpDialogOD.getAggregation("_dialog").getContent()[1].removeSelections();
-          }
+            }
 
 
       }

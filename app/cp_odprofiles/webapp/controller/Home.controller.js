@@ -406,10 +406,9 @@ var token = {
             cache: true,
             "X-CSRF-Token": "fetch",
           },
-          success: function (data, status, xhr) {
-              
-		tokenModel["csrfToken"] = xhr.getResponseHeader('X-Csrf-Token');
-        token = tokenModel["csrfToken"];
+          success: function (data, status, xhr) {              
+            tokenModel["csrfToken"] = xhr.getResponseHeader('X-Csrf-Token');
+            token = tokenModel["csrfToken"];
             $.ajax({
               url: uri,
               type: "POST",
