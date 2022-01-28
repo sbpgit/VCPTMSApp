@@ -15,6 +15,10 @@ modules:
       srv-url: ${default-url}
   parameters:
     buildpack: nodejs_buildpack
+  build-parameters:
+    ignore:
+    - env
+    - ./node_modules
 - name: config_products-db-deployer
   type: hdb
   path: gen/db
@@ -28,17 +32,6 @@ modules:
     ignore:
     - env
     - ./node_modules
-# - name: configprod_approuter
-#   type: approuter.nodejs
-#   path: app
-#   requires:
-#   - name: uaa_config_products
-#   - name: srv-api
-#     group: destinations
-#     properties:
-#       forwardAuthToken: true
-#       name: srv-api
-#       url: ~{srv-url}  
 - name: config_products-destination-content
   type: com.sap.application.content
   requires:
@@ -103,10 +96,10 @@ modules:
       - cpexeregcpexeregressionmdls.zip
       name: cpexeregcpexeregressionmdls
       target-path: resources/
-    - artifacts:
-      - cpmdlprofilecpmodelprofiles.zip
-      name: cpmdlprofilecpmodelprofiles
-      target-path: resources/
+    # - artifacts:
+    #   - cpmdlprofilecpmodelprofiles.zip
+    #   name: cpmdlprofilecpmodelprofiles
+    #   target-path: resources/
     - artifacts:
       - cpodpcpodprofiles.zip
       name: cpodpcpodprofiles
@@ -120,8 +113,16 @@ modules:
       name: cplpcplocprod
       target-path: resources/
     - artifacts:
+      - cpappfcpsaleshcfg.zip
+      name: cpappfcpsaleshcfg
+      target-path: resources/
+    - artifacts:
       - cpappfcpprodconfig.zip
       name: cpappfcpprodconfig
+      target-path: resources/
+    - artifacts:
+      - cpappfcpbomod.zip
+      name: cpappfcpbomod
       target-path: resources/
 - name: cfgapppvsrootcfgprdpvsroot
   type: html5
@@ -183,16 +184,16 @@ modules:
     - npm install
     - npm run build:cf
     supported-platforms: []
-- name: cpmdlprofilecpmodelprofiles
-  type: html5
-  path: app/cp_modelprofiles
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    supported-platforms: []
+# - name: cpmdlprofilecpmodelprofiles
+#   type: html5
+#   path: app/cp_modelprofiles
+#   build-parameters:
+#     build-result: dist
+#     builder: custom
+#     commands:
+#     - npm install
+#     - npm run build:cf
+#     supported-platforms: []
 - name: cpodpcpodprofiles
   type: html5
   path: app/cp_odprofiles
@@ -223,9 +224,29 @@ modules:
     - npm install
     - npm run build:cf
     supported-platforms: []
+- name: cpappfcpsaleshcfg
+  type: html5
+  path: app/cp_saleshcfg
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
 - name: cpappfcpprodconfig
   type: html5
   path: app/cp_prodconfig
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappfcpbomod
+  type: html5
+  path: app/cp_bomod
   build-parameters:
     build-result: dist
     builder: custom

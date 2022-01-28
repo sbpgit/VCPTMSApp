@@ -1,0 +1,83 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="cp.appf.cpbomod.controller.ItemDetail"
+	xmlns:html="http://www.w3.org/1999/xhtml" class="ItemMaster">
+	<Page id="idProd" showFooter="true" enableScrolling="false" showHeader="false">	
+		<content>
+            <Table id="BomcharList" items="{path: '/results'}" >
+				<columns>
+					<Column hAlign="Center">
+						<Text text="Class Name" />
+					</Column>
+					<Column hAlign="Center">
+						<Text text="Class #"/>
+					</Column>
+                    <Column hAlign="Center">
+						<Text text="Char Name" />
+					</Column>
+					<Column hAlign="Center">
+						<Text text="Char #"/>
+					</Column>
+                    <Column hAlign="Center">
+						<Text text="Char Value" />
+					</Column>
+					<Column hAlign="Center">
+						<Text text="Char Value #"/>
+					</Column>
+				</columns>
+				<items>
+					<ColumnListItem>
+						<cells>
+							<Text title="{CLASS_NAME}" />
+							<Text title="{CLASS_NUM}" />
+                            <Text title="{CHAR_NAME}" />
+							<Text title="{CHAR_NUM}" />
+                            <Text title="{CHAR_VALUE}" />
+							<Text title="{CHARVAL_NUM}" />
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+			
+		</content>
+	</Page>
+
+    <Page id="idChar" showFooter="true" enableScrolling="false" showHeader="false">
+		
+		<content>
+            <Table id="charList" items="{path: '/results'}" >
+				<columns>
+					<Column hAlign="Center">
+						<Text text="Class Name" />
+					</Column>
+					<Column hAlign="Center">
+						<Text text="Class #"/>
+					</Column>
+                    <Column hAlign="Center">
+						<Text text="Char Name" />
+					</Column>
+					<Column hAlign="Center">
+						<Text text="Char #"/>
+					</Column>
+                    <Column hAlign="Center">
+						<Text text="Char Value" />
+					</Column>
+					<Column hAlign="Center">
+						<Text text="Char Value #"/>
+					</Column>
+				</columns>
+				<items>
+					<ColumnListItem>
+						<cells>
+							<Text title="{CLASS_NAME}" />
+							<Text title="{CLASS_NUM}" />
+                            <Text title="{CHAR_NAME}" />
+							<Text title="{CHAR_NUM}" />
+                            <Text title="{CHAR_VALUE}" />
+							<Text title="{CHARVAL_NUM}" />
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+			
+		</content>
+	</Page>
+</mvc:View>
