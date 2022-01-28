@@ -1,24 +1,23 @@
 ## Application Details
 |               |
 | ------------- |
-|**Generation Date and Time**<br>Wed Jan 05 2022 11:13:31 GMT+0000 (Coordinated Universal Time)|
+|**Generation Date and Time**<br>Fri Jan 28 2022 04:44:00 GMT+0000 (Coordinated Universal Time)|
 |**App Generator**<br>@sap/generator-fiori|
-|**App Generator Version**<br>1.3.6|
-|**Generation Platform**<br>CLI|
-|**Floorplan Used**<br>List Report Object Page V4|
+|**App Generator Version**<br>1.4.6|
+|**Generation Platform**<br>SAP Business Application Studio|
+|**Floorplan Used**<br>simple|
 |**Service Type**<br>Local Cap|
-|**Service URL**<br>/pal/
-|**Module Name**<br>cp_modelprofiles|
-|**Application Title**<br>Model Profiles|
-|**Namespace**<br>cp.mdlprofile|
+|**Service URL**<br>http://localhost:4004/catalog/
+|**Module Name**<br>cp_bomod|
+|**Application Title**<br>BOM Object Dependency|
+|**Namespace**<br>cp.appf|
 |**UI5 Theme**<br>sap_fiori_3|
 |**UI5 Version**<br>Latest|
 |**Enable Code Assist Libraries**<br>False|
 |**Add Eslint configuration**<br>False|
 |**Enable Telemetry**<br>True|
-|**Main Entity**<br>modelProfiles|
 
-## cp_modelprofiles
+## cp_bomod
 
 A Fiori application.
 
@@ -26,7 +25,7 @@ A Fiori application.
 
 -   This app has been generated using the SAP Fiori tools - App Generator, as part of the SAP Fiori tools suite.  In order to launch the generated app, simply start your CAP project and navigate to the following location in your browser:
 
-http://localhost:4004/cp_modelprofiles/webapp/index.html
+http://localhost:4004/cp_bomod/webapp/index.html
 
 #### Pre-requisites:
 

@@ -1,5 +1,5 @@
 sap.ui.define([
-	"cp/appf/cpprodconfig/controller/BaseController",
+	"cp/appf/cpbomod/controller/BaseController",
 	"sap/m/MessageToast",
 	"sap/ui/model/json/JSONModel",
 	"sap/ui/model/Filter",
@@ -10,7 +10,7 @@ sap.ui.define([
 	"use strict";
 	var that, oGModel;
 
-	return BaseController.extend("cp.appf.cpprodconfig.controller.ItemMaster", {
+	return BaseController.extend("cp.appf.cpbomod.controller.ItemMaster", {
 
 		onInit: function () {
 			that = this;
@@ -30,14 +30,14 @@ sap.ui.define([
 			that = this;
 			oGModel = this.getModel("oGModel");
 
-            this.getModel("BModel").read("/getProdClass", {
+            this.getModel("BModel").read("/getBomOD", {
                 
                 success: function (oData) {
                  
                   that.oModel.setData({
                     results: oData.results,
                   });
-                  that.byId("prodList").setModel(that.oModel);
+                  that.byId("bomList").setModel(that.oModel);
                 },
                 error: function () {
                   MessageToast.show("Failed to get data");
@@ -74,7 +74,7 @@ sap.ui.define([
                     if (!that.oDetailView) {
                         try {
                             that.oDetailView = sap.ui.view({
-                                viewName: "cp.appf.cpprodconfig.view.ItemDetail",
+                                viewName: "cp.appf.cpbomod.view.ItemDetail",
                                 type: "XML"
                             });
                             that.bus.publish("flexible", "addDetailPage", that.oDetailView);
@@ -95,7 +95,7 @@ sap.ui.define([
     
                     }
                 });
-            },
+            }
 
 	});
 

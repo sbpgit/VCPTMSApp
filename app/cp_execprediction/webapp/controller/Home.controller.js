@@ -101,19 +101,19 @@ sap.ui.define(
               MessageToast.show("error");
             },
           });
-          this.getModel("BModel").read("/getProdClass ", {
-            success: function (oData) {
-                oData.results.unshift({
-                    PRODUCT_ID: "All",
-                    PROD_DESC: "All"
-                });
-              that.prodModel.setData(oData);
-              that.oProdList.setModel(that.prodModel);
-            },
-            error: function (oData, error) {
-              MessageToast.show("error");
-            },
-          });
+        //   this.getModel("BModel").read("/getProdClass ", {
+        //     success: function (oData) {
+        //         oData.results.unshift({
+        //             PRODUCT_ID: "All",
+        //             PROD_DESC: "All"
+        //         });
+        //       that.prodModel.setData(oData);
+        //       that.oProdList.setModel(that.prodModel);
+        //     },
+        //     error: function (oData, error) {
+        //       MessageToast.show("error");
+        //     },
+        //   });
           this.getModel("BModel").read("/getBomOdCond", {
             success: function (oData) {
                         that.objDep = oData.results;
@@ -124,7 +124,7 @@ sap.ui.define(
               MessageToast.show("error");
             },
           });
-        //   this.getModel("BModel").callFunction("/getBomOdCond", {
+        //   this.getModel("BModel").callFunction("/get_objdep", {
         //     method: "GET",
         //     urlParameters: {},
         //     success: function (oData) {
@@ -328,7 +328,7 @@ sap.ui.define(
             that.oObjDep.removeAllTokens();
             this._valueHelpDialogProd.getAggregation("_dialog").getContent()[1].removeSelections();
             this._valueHelpDialogOD.getAggregation("_dialog").getContent()[1].removeSelections();
-            this.getModel("BModel").read("/getProdClass?$filter=contains(LOCATION_ID,aSelectedItems[0].getTitle())", {
+            this.getModel("BModel").read("/getProdClass?$filter=contains(LOCATION_ID,'FR10')", {
                 success: function (oData) {
                     oData.results.unshift({
                         PRODUCT_ID: "All",

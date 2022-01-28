@@ -1,5 +1,5 @@
 sap.ui.define([
-	"cp/appf/cpprodconfig/controller/BaseController",
+	"cp/appf/cpbomod/controller/BaseController",
 	"sap/m/MessageToast",
 	"sap/m/MessageBox",
 	"sap/ui/model/json/JSONModel",
@@ -10,7 +10,7 @@ sap.ui.define([
 ], function (BaseController, MessageToast, MessageBox, JSONModel, Filter, FilterOperator, Device,  Fragment) {
 	"use strict";
 	var that, oGModel;
-	return BaseController.extend("cp.appf.cpprodconfig.controller.ItemDetail", {
+	return BaseController.extend("cp.appf.cpbomod.controller.ItemDetail", {
 		onInit: function () {
 			that = this;
 			// this.DetailHome = DetailHome;
@@ -24,9 +24,10 @@ sap.ui.define([
             
              var className = oGModel.getProperty("/className");
 
-             this.getModel("BModel").read("/getClassChar", {
+             this.getModel("BModel").read("/getBomOdCond", {
                 filters: [
-                    new Filter("CLASS_NAME", FilterOperator.EQ, "")
+                    new Filter("LOCATION_ID", FilterOperator.EQ, ""),
+                    new Filter("PRODUCT_ID", FilterOperator.EQ, "")
                   ],
                 
                 success: function (oData) {
