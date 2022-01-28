@@ -15,33 +15,62 @@ sap.ui.define([
 			that = this;
 			// this.DetailHome = DetailHome;
 			this.bus = sap.ui.getCore().getEventBus();
-			that.oCharModel = new JSONModel();
+			that.oBomModel = new JSONModel();
+            that.oCharModel = new JSONModel();
+            this.oBomModel.setSizeLimit(1000);
+            this.oCharModel.setSizeLimit(1000);
 			oGModel = that.getOwnerComponent().getModel("oGModel");
 		},
 
 		onAfterRendering: function () {
             oGModel = that.getOwnerComponent().getModel("oGModel");
-            
-             var className = oGModel.getProperty("/className");
+            sap.ui.core.BusyIndicator.show();
+             var prdId = oGModel.getProperty("/prdId");
+             var locId = oGModel.getProperty("/locId");
 
              this.getModel("BModel").read("/getBomOdCond", {
                 filters: [
-                    new Filter("LOCATION_ID", FilterOperator.EQ, ""),
-                    new Filter("PRODUCT_ID", FilterOperator.EQ, "")
+                    new Filter("LOCATION_ID", FilterOperator.EQ, locId),
+                    new Filter("PRODUCT_ID", FilterOperator.EQ, prdId)
                   ],
                 
                 success: function (oData) {
                  
-                  that.oCharModel.setData({
+                  that.oBomModel.setData({
                     results: oData.results,
                   });
-                  that.byId("charList").setModel(that.oCharModel);
+                  that.byId("idBom").setModel(that.oBomModel);
+                  sap.ui.core.BusyIndicator.hide();
                 },
                 error: function () {
                   MessageToast.show("Failed to get data");
                 },
               });
 
+
+        },
+
+        onItemPress:function(){
+            sap.ui.core.BusyIndicator.show();
+            var selItem = this.byId("idBom").getSelectedItem().getCells()[2].getText();
+
+            this.getModel("BModel").read("/getODcharval", {
+                filters: [
+                    new Filter("OBJ_DEP", FilterOperator.EQ, selItem)
+                  ],
+                
+                success: function (oData) {
+                 
+                  that.oCharModel.setData({
+                    charResults: oData.results,
+                  });
+                  that.byId("idChartab").setModel(that.oCharModel);
+                  sap.ui.core.BusyIndicator.hide();
+                },
+                error: function () {
+                  MessageToast.show("Failed to get data");
+                },
+              });
 
         }
 

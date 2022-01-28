@@ -1,41 +1,52 @@
-<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="cp.appf.cpbomod.controller.ItemDetail"
-	xmlns:html="http://www.w3.org/1999/xhtml" class="ItemMaster">
+<mvc:View xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:l="sap.ui.layout"
+    xmlns:core="sap.ui.core" controllerName="cp.appf.cpbomod.controller.ItemDetail"
+    xmlns:html="http://www.w3.org/1999/xhtml">
+    <!-- <page>
+    <content>
+    <l:Splitter id="homeScrSplitter" orientation="Vertical">
 	<Page id="idProd" showFooter="true" enableScrolling="false" showHeader="false">	
 		<content>
-            <Table id="BomcharList" items="{path: '/results'}" >
+            <Table id="BomcharList" items="{path: '/results'}">
 				<columns>
 					<Column hAlign="Center">
-						<Text text="Class Name" />
+						<Text text="Item #" />
 					</Column>
 					<Column hAlign="Center">
-						<Text text="Class #"/>
+						<Text text="Component"/>
 					</Column>
                     <Column hAlign="Center">
-						<Text text="Char Name" />
+						<Text text="Obj Dependency" />
 					</Column>
 					<Column hAlign="Center">
-						<Text text="Char #"/>
+						<Text text="Obj Dep description"/>
 					</Column>
                     <Column hAlign="Center">
-						<Text text="Char Value" />
+						<Text text="Comp Quantity" />
 					</Column>
 					<Column hAlign="Center">
-						<Text text="Char Value #"/>
+						<Text text="Valid From"/>
+					</Column>
+                    <Column hAlign="Center">
+						<Text text="Valid To"/>
 					</Column>
 				</columns>
 				<items>
 					<ColumnListItem>
 						<cells>
-							<Text title="{CLASS_NAME}" />
-							<Text title="{CLASS_NUM}" />
-                            <Text title="{CHAR_NAME}" />
-							<Text title="{CHAR_NUM}" />
-                            <Text title="{CHAR_VALUE}" />
-							<Text title="{CHARVAL_NUM}" />
+							<Text title="{ITEM_NUM}" />
+							<Text title="{COMPONENT}" />
+                            <Text title="{OBJ_DEP}" />
+							<Text title="{OBJDEP_DESC}" />
+                            <Text title="{COMP_QTY}" />
+							<Text title="{VALID_FROM}" />
+                            <Text title="{VALID_TO}" />
 						</cells>
 					</ColumnListItem>
 				</items>
 			</Table>
+            
 			
 		</content>
 	</Page>
@@ -43,7 +54,7 @@
     <Page id="idChar" showFooter="true" enableScrolling="false" showHeader="false">
 		
 		<content>
-            <Table id="charList" items="{path: '/results'}" >
+            <Table id="charList" items="{path: '/results'}">
 				<columns>
 					<Column hAlign="Center">
 						<Text text="Class Name" />
@@ -54,15 +65,7 @@
                     <Column hAlign="Center">
 						<Text text="Char Name" />
 					</Column>
-					<Column hAlign="Center">
-						<Text text="Char #"/>
-					</Column>
-                    <Column hAlign="Center">
-						<Text text="Char Value" />
-					</Column>
-					<Column hAlign="Center">
-						<Text text="Char Value #"/>
-					</Column>
+					
 				</columns>
 				<items>
 					<ColumnListItem>
@@ -70,9 +73,6 @@
 							<Text title="{CLASS_NAME}" />
 							<Text title="{CLASS_NUM}" />
                             <Text title="{CHAR_NAME}" />
-							<Text title="{CHAR_NUM}" />
-                            <Text title="{CHAR_VALUE}" />
-							<Text title="{CHARVAL_NUM}" />
 						</cells>
 					</ColumnListItem>
 				</items>
@@ -80,4 +80,104 @@
 			
 		</content>
 	</Page>
+    </l:Splitter>
+    </content>
+    </page>
+</mvc:View> -->
+
+
+
+    <Page id="page" showHeader="false">
+        <content>
+            <l:Splitter id="ScrSplitter" orientation="Vertical">
+                <Page id="idProd" showFooter="true" enableScrolling="false" showHeader="false">                    
+                        <layoutData >
+                            <l:SplitterLayoutData resizable="false" size="50%"/>
+                        </layoutData>
+                        <content>
+                        <Table id="idBom" items="{path: '/results'}" itemPress="onItemPress" 
+                        mode="SingleSelectMaster" selectionChange="onItemPress" sticky="ColumnHeaders">
+                            <columns>
+                                <Column hAlign="Left" width="80px">
+                                    <Text text="{i18n>itemno}" />
+                                </Column>
+                                <Column hAlign="Left">
+                                    <Text text="{i18n>comp}"/>
+                                </Column>
+                                <Column hAlign="Left">
+                                    <Text text="{i18n>objdep}" />
+                                </Column>
+                                <Column hAlign="Left">
+                                    <Text text="{i18n>objdepdes}"/>
+                                </Column>
+                                <Column hAlign="Left">
+                                    <Text text="{i18n>compqty}" />
+                                </Column>
+                                <Column hAlign="Left" width="100px">
+                                    <Text text="{i18n>validfm}"/>
+                                </Column>
+                                <Column hAlign="Left" width="100px">
+                                    <Text text="{i18n>validto}"/>
+                                </Column>
+                            </columns>
+                            <items>
+                                <ColumnListItem>
+                                    <cells>
+                                        <Text text="{ITEM_NUM}" />
+                                        <Text text="{COMPONENT}" />
+                                        <Text text="{OBJ_DEP}" />
+                                        <Text text="{OBJDEP_DESC}" />
+                                        <Text text="{COMP_QTY}" />
+                                        <Text text="{path: 'VALID_FROM', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'MM/dd/yyyy' }}"/>
+                                        <Text text="{path: 'VALID_TO', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'MM/dd/yyyy' }}"/>
+                                    </cells>
+                                </ColumnListItem>
+                            </items>
+                        </Table>
+                    </content>
+                </Page>
+
+                <Page showHeader="false">
+                    <layoutData >
+                        <l:SplitterLayoutData resizable="false" size="50%"/>
+                    </layoutData>
+                    <Table id="idChartab" items="{ path: '/charResults'}">
+                        <columns>
+                            <Column hAlign="Begin">
+                                <Text text="{i18n>clsname}"/>
+                            </Column>
+                            <Column hAlign="Center">
+                                <Text text="{i18n>charname}"/>
+                            </Column>
+                            <Column hAlign="Center">
+                                <Text text="{i18n>charVal}"/>
+                            </Column>
+                            <Column hAlign="Center">
+                                <Text text="{i18n>CharCoun}"/>
+                            </Column>
+                            <Column hAlign="Center" >
+                                <Text text="{i18n>odcond}"/>
+                            </Column>
+                            <Column hAlign="Center" >
+                                <Text text="{i18n>rowid}" />
+                            </Column>
+
+                        </columns>
+                        <items>
+                            <ColumnListItem>
+                                <cells>
+                                    <Text text="{CLASS_NAME}" />
+                                    <Text text="{CHAR_NAME}" />
+                                    <Text text="{CHAR_VALUE}" />                                    
+                                    <Text text="{CHAR_COUNTER}" />
+                                    <Text text="{OD_CONDITION}" />
+                                    <Text text="{ROW_ID}" />
+                                </cells>
+                            </ColumnListItem>
+                        </items>
+                    </Table>
+                </Page>
+            </l:Splitter>
+        </content>
+    </Page>
 </mvc:View>
