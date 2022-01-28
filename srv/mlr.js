@@ -8,7 +8,7 @@ const mlrFuncs = require('./mlr.js');
 //     uid         : "SBPTECHTEAM", //process.env.uidClassicalSchema, //cf environment variable
 //     pwd         : "Sbpcorp@22", //process.env.uidClassicalSchemaPassword,//cf environment variable
 //     encrypt: 'TRUE',
-//     ssltruststore: cds.env.requires.hana.credepwdntials.certificate
+//     ssltruststore: cds.env.requires.hana.credentials.certificate
 // };
 // const vcConfigTimePeriod = "PeriodOfYear"; //process.env.TimePeriod; //cf environment variable
 // const classicalSchema = "DB_CONFIG_PROD_CLIENT1"; //process.env.classicalSchema; //cf environment variable
@@ -1621,17 +1621,39 @@ exports._runMlrPrediction = function (mlrpType, group) {
         let periodId = distPeriods[index][trimmedPeriod];
        // console.log('Inside for loop index: ', index, 'trimmedPeriod : ', trimmedPeriod, 'periodId :', periodId);
 
-        sqlStr = 'UPDATE "V_FUTURE_DEP_TS" SET "Predicted" = ' + "'" + predictedVal + "'" + "," +
-                 '"PredictedTime" = ' + "'" + predictedTime + "'" + "," +
-                 '"PredictedStatus" = ' + "'" + 'SUCCESS' + "'"+ 
-                 ' WHERE "GroupID" = ' + "'" + groupId + "'" + 
-                 ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
+        // sqlStr = 'UPDATE "V_FUTURE_DEP_TS" SET "Predicted" = ' + "'" + predictedVal + "'" + "," +
+        //          '"PredictedTime" = ' + "'" + predictedTime + "'" + "," +
+        //          '"PredictedStatus" = ' + "'" + 'SUCCESS' + "'"+ 
+        //          ' WHERE "GroupID" = ' + "'" + groupId + "'" + 
+        //          ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
 
-                //' WHERE "OBJ_DEP" = distPeriods[index][OBJ_DEP] AND "OBJ_COUNTER" = distPeriods[index][OBJ_COUNTER]' + 
+         //console.log("V_FUTURE_DEP_TS Predicted Value sql update sqlStr", sqlStr)
+        sqlStr = 'SELECT "CAL_DATE", "Location", "Product", "Type", "OBJ_DEP", "OBJ_COUNTER" ' +
+        'FROM "V_FUTURE_DEP_TS" WHERE "GroupID" = ' + "'" + groupId + "'" + 
+        ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
+        console.log("V_FUTURE_DEP_TS MLR SELECT sqlStr ", sqlStr);
 
-                 //' WHERE "GroupID" = ' + "'" + "OBJ_DEP".concat("-","OBJ_COUNTER") + "'" + ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
+        stmt=conn.prepare(sqlStr);
+        result=stmt.exec();
+        stmt.drop();
+        console.log("V_FUTURE_DEP_TS MLR SELECT sqlStr result ", result);
 
-          //       ' WHERE "GroupID" = ' + "'" + groupId + "'" + ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
+        sqlStr = 'UPSERT "CP_TS_PREDICTIONS" VALUES (' + "'" + result[0].CAL_DATE + "'" + "," +
+                    "'" + result[0].Location + "'" + "," +
+                    "'" + result[0].Product + "'" + "," +
+                    "'" + result[0].Type + "'" + "," +
+                    "'" + result[0].OBJ_DEP + "'" + "," +
+                    "'" + result[0].OBJ_COUNTER + "'" + "," +
+                    "'" + 'MLR' + "'" + "," +
+                    "'" + predictedVal + "'" + "," +
+                    "'" + predictedTime + "'" + "," +
+                    "'" + 'SUCCESS' + "'" + ')' + ' WITH PRIMARY KEY';
+            
+            //' WHERE "GroupID" = ' + "'" + groupId + "'" + 
+            //' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
+        console.log("V_PREDICTIONS Predicted Value MLR sql update sqlStr", sqlStr);
+
+
         //console.log("V_FUTURE_DEP_TS Predicted Value sql update sqlStr", sqlStr)
 
         stmt=conn.prepare(sqlStr);

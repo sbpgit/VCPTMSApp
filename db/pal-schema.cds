@@ -566,3 +566,16 @@ entity PAL_PARAMETERS
 	DESCRIPTION : String(1000) @title : ' Description';
 	DEPENDENCY : String(1000) @title : ' Dependency';
 }
+
+entity TS_PREDICTIONS{
+    key CAL_DATE         : Date      @title : 'Date';
+    key LOCATION_ID      : String(4) @title : 'Location ID';
+    key PRODUCT_ID       : String(40)@title : 'Product ID';
+    key OBJ_TYPE         : String(2) @title : 'Object Type';
+    key OBJ_DEP          : String(30)@title : 'Object Dependency';
+    key OBJ_COUNTER      : Integer   @title : 'Object Counter';
+    key MODEL_TYPE : String(10) @title : 'PAL Model Type';
+    PREDICTED        : Double    @title : 'Predicted';
+    PREDICTED_TIME   : Timestamp @title : 'Predicted Time';
+    PREDICTED_STATUS : String(8) @title : 'Predicted Status';
+};
