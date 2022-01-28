@@ -1,1 +1,0 @@
-using PalService as service from '../../srv/Pal-Service';

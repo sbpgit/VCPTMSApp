@@ -96,10 +96,10 @@ modules:
       - cpexeregcpexeregressionmdls.zip
       name: cpexeregcpexeregressionmdls
       target-path: resources/
-    - artifacts:
-      - cpmdlprofilecpmodelprofiles.zip
-      name: cpmdlprofilecpmodelprofiles
-      target-path: resources/
+    # - artifacts:
+    #   - cpmdlprofilecpmodelprofiles.zip
+    #   name: cpmdlprofilecpmodelprofiles
+    #   target-path: resources/
     - artifacts:
       - cpodpcpodprofiles.zip
       name: cpodpcpodprofiles
@@ -180,16 +180,16 @@ modules:
     - npm install
     - npm run build:cf
     supported-platforms: []
-- name: cpmdlprofilecpmodelprofiles
-  type: html5
-  path: app/cp_modelprofiles
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    supported-platforms: []
+# - name: cpmdlprofilecpmodelprofiles
+#   type: html5
+#   path: app/cp_modelprofiles
+#   build-parameters:
+#     build-result: dist
+#     builder: custom
+#     commands:
+#     - npm install
+#     - npm run build:cf
+#     supported-platforms: []
 - name: cpodpcpodprofiles
   type: html5
   path: app/cp_odprofiles
