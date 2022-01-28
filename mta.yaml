@@ -120,6 +120,10 @@ modules:
       - cpappfcpprodconfig.zip
       name: cpappfcpprodconfig
       target-path: resources/
+    - artifacts:
+      - cpappfcpbomod.zip
+      name: cpappfcpbomod
+      target-path: resources/
 - name: cfgapppvsrootcfgprdpvsroot
   type: html5
   path: app/cfgprd_pvsroot
@@ -233,6 +237,16 @@ modules:
 - name: cpappfcpprodconfig
   type: html5
   path: app/cp_prodconfig
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappfcpbomod
+  type: html5
+  path: app/cp_bomod
   build-parameters:
     build-result: dist
     builder: custom

@@ -5,27 +5,68 @@
 		<content>
         <Toolbar height="12%">
 				<VBox>
-					<HBox>
+					<!-- <HBox>
 						<Text text="Class# : " class="boldText"></Text>
 						<Text text=" {oGModel>/classNo}"></Text>
+					</HBox> -->
+					<HBox>
+                        <Text text="Product Family : " class="boldText"></Text>
+						<Text text=" {oGModel>/prodFam}" class="sapUiLargeMarginEnd"></Text>						
+						<ToolbarSpacer/>
+                        <Text text="Product Desc : " class="boldText"></Text>
+						<Text text=" {oGModel>/prodDesc}" ></Text>
+						
 					</HBox>
 					<HBox>
-						<Text text="Prod Desc : " class="boldText"></Text>
-						<Text text=" {oGModel>/prodDesc}" class="sapUiLargeMarginEnd"></Text>
+						<Text text="Product Group : " class="boldText"></Text>
+						<Text text=" {oGModel>/prodGroup}" class="sapUiLargeMarginEnd1" ></Text>
 						<ToolbarSpacer/>
-						<Text text="Prod Family : " class="boldText"></Text>
-						<Text text=" {oGModel>/prodFam}" ></Text>
+						<Text text="Product Series : " class="boldText"></Text>
+						<Text text="{oGModel>/prodSeries}"></Text>
 					</HBox>
-					<HBox>
-							<ToolbarSpacer/>
-						<Text text="Prod Group : " class="boldText"></Text>
-						<Text text=" {oGModel>/prodGroup}" class="sapUiLargeMarginEnd1"></Text>
+                    <HBox>
+						<Text text="Product Mid Range : " class="boldText"></Text>
+						<Text text=" {oGModel>/prodMidRng}" class="sapUiLargeMarginEnd2"></Text>
 						<ToolbarSpacer/>
-						<Text text="Prod Model : " class="boldText"></Text>
-						<Text text="{oGModel>/prodModel}"></Text>
+                        <Text text="Product Model Range : " class="boldText"></Text>
+						<Text text="{oGModel>/prodModel}"></Text>						
 					</HBox>
 				</VBox>
 			</Toolbar>
+            <Table id="charList" items="{path: '/results'}" >
+				<columns>
+					<Column hAlign="Center">
+						<Text text="Class Name" />
+					</Column>
+					<Column hAlign="Center">
+						<Text text="Class #"/>
+					</Column>
+                    <Column hAlign="Center">
+						<Text text="Char Name" />
+					</Column>
+					<Column hAlign="Center">
+						<Text text="Char #"/>
+					</Column>
+                    <Column hAlign="Center">
+						<Text text="Char Value" />
+					</Column>
+					<Column hAlign="Center">
+						<Text text="Char Value #"/>
+					</Column>
+				</columns>
+				<items>
+					<ColumnListItem>
+						<cells>
+							<Text title="{CLASS_NAME}" />
+							<Text title="{CLASS_NUM}" />
+                            <Text title="{CHAR_NAME}" />
+							<Text title="{CHAR_NUM}" />
+                            <Text title="{CHAR_VALUE}" />
+							<Text title="{CHARVAL_NUM}" />
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
 			
 		</content>
 	</Page>

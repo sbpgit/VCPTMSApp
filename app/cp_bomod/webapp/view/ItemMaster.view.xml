@@ -1,10 +1,12 @@
 <mvc:View xmlns:mvc="sap.ui.core.mvc"
-    xmlns="sap.m" controllerName="cp.appf.cpprodconfig.controller.ItemMaster"
+    xmlns="sap.m" controllerName="cp.appf.cpbomod.controller.ItemMaster"
     xmlns:html="http://www.w3.org/1999/xhtml" class="ItemMaster">
     <Page showHeader="false">
         <content>
             <SearchField id="headSearch" liveChange="onSearch" placeholder=""/>
-            <Table id="prodList" items="{path: '/results', sorter: {path: 'PRODUCT_ID'}}" growingScrollToLoad="true" rememberSelections="false" itemPress="onhandlePress" mode="SingleSelectMaster" selectionChange="onhandlePress">
+            <Table id="bomList" items="{path: '/results', sorter: {path: 'PRODUCT_ID'}}" growingScrollToLoad="true" 
+                    rememberSelections="false" itemPress="onhandlePress" mode="SingleSelectMaster" 
+                    selectionChange="onhandlePress">
                 <columns>
                     <Column hAlign="Center">
                         <Text text="Product" />
