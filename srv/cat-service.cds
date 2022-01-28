@@ -7,6 +7,7 @@ using V_PRODCLSCHAR from '../db/data-model';
 using V_ODPROFILES from '../db/data-model';
 using V_BOMODCOND from '../db/data-model';
 using V_SALESHCFG_CHARVAL from '../db/data-model';
+using V_ODCHARVAL from '../db/data-model';
 service CatalogService @(impl : './lib/cat-service.js') {
     // Service on HDI entities
     //@odata.draft.enabled
@@ -99,6 +100,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
     entity getClassChar         as projection on V_CLASSCHARVAL;
 // Service to get BOM and OD condition
     entity getBomOdCond         as projection on V_BOMODCOND;
+    entity getODcharval         as projection on V_ODCHARVAL;
     type objectDep {
         LOCATION_ID : String(4);
         PRODUCT_ID  : String(40);
