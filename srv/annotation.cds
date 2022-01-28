@@ -1,5 +1,6 @@
 using cp as service from '../db/data-model';
 using V_CLASSCHAR as srv from '../db/data-model';
+using V_SALESHCFG_CHARVAL from '../db/data-model';
 //using V_TIMESERIES as tssrv from '../db/data-model';
 //using V_PRODUCT as prd from '../db/data-model';
 
@@ -358,111 +359,7 @@ annotate service.PROD_ATTRIBUTES with @(
 );
 
 // Product Configuration
-annotate service.PROD_CONFIG with @(
-    UI        : {
-        SelectionFields     : [
-            PRODUCT_ID,
-           // CHAR_NAME,
-            CHAR_ATTR
-        ],
-        LineItem            : [
-            {
-                $Type : 'UI.DataField', //Label : 'Product ID',
-                Value : PRODUCT_ID
-            },
-            {
-                $Type : 'UI.DataField', //Label : 'Description',
-                Value : CLASS
-            },
-            {
-                $Type : 'UI.DataField', //Label : 'Product Family',
-                Value : CHAR_NUM
-            },
-         /*   {
-                $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : CHAR_VALUE
-            },*/
-            {
-                $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : CHARVAL_NUM
-            },
-            {
-                $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : CHAR_ATTR
-            },
-            {
-                $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : CHAR_DESC
-            }
 
-        ],
-        HeaderInfo          : {
-            Title          : {Value : PRODUCT_ID},
-            Description    : {Value : LOCATION_ID},
-            TypeName       : 'Product',
-            TypeNamePlural : 'Products',
-        },
-        /*  HeaderFacets                   : [
-         {
-              $Type             : 'UI.ReferenceFacet',
-              Target            : '@UI.FieldGroup#Description',
-              ![@UI.Importance] : #Medium
-          },
-          {
-              $Type             : 'UI.ReferenceFacet',
-              Target            : '@UI.FieldGroup#AdministrativeData',
-              ![@UI.Importance] : #Medium
-          }
-          ], */
-      /*  FieldGroup #Description        : {Data : [
-        {
-            $Type : 'UI.DataField',
-            Value : PRODDESC
-        }
-        ]},*/
-        FieldGroup #Details : {Data : [
-            {
-                $Type : 'UI.DataField',
-                Value : CLASS
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : CHAR_NUM
-            },
-          /*  {
-                $Type : 'UI.DataField',
-                Value : CHAR_VALUE
-            },*/
-            {
-                $Type : 'UI.DataField',
-                Value : CHARVAL_NUM
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : CHAR_ATTR
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : CHAR_DESC
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : CUSTOMER_GROUP
-            }
-        ]}
-    },
-    // Page Facets
-    UI.Facets : [{
-        $Type  : 'UI.CollectionFacet',
-        ID     : 'ProdCfg',
-        Label  : 'Product Configurations',
-        Facets : [{
-            $Type  : 'UI.ReferenceFacet',
-            Label  : 'Product Configurations',
-            Target : '@UI.FieldGroup#Details'
-        }]
-    }]
-);
 
 // Product Configuration
 annotate service.SALESH with @(
@@ -623,10 +520,6 @@ annotate service.SALESH_CONFIG with @(
             {
                 $Type : 'UI.DataField', //Label : 'Product Series',
                 Value : CHARVAL_NUM
-            },
-            {
-                $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : PROD_AVAILDATE
             }
 
         ],
@@ -648,10 +541,6 @@ annotate service.SALESH_CONFIG with @(
             {
                 $Type : 'UI.DataField',
                 Value : CHARVAL_NUM
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : PROD_AVAILDATE
             }
         ]}
     },
@@ -1521,6 +1410,133 @@ annotate service.LOCATION_PRODUCT with @(
         Facets : [{
             $Type  : 'UI.ReferenceFacet',
             Label  : 'Location Products',
+            Target : '@UI.FieldGroup#Details'
+        }]
+    }]
+);
+// Product Configuration
+annotate V_SALESHCFG_CHARVAL with @(
+    UI        : {
+        SelectionFields         : [
+            SALES_DOC,
+            DOC_CREATEDDATE,
+            PRODUCT_ID
+        ],
+        LineItem                : [
+            {
+                $Type : 'UI.DataField', //Label : 'Product ID',
+                Value : SALES_DOC
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Description',
+                Value : SALESDOC_ITEM
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Family',
+                Value : DOC_CREATEDDATE
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : SCHEDULELINE_NUM
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : PRODUCT_ID
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : CUSTOMER_GROUP
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : LOCATION_ID
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : ORD_QTY
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : NET_VALUE
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : MAT_AVAILDATE
+            }
+
+        ],
+        HeaderInfo              : {
+            Title          : {Value : SALES_DOC},
+            Description    : {Value : SALESDOC_ITEM},
+            TypeName       : 'Sales History',
+            TypeNamePlural : 'Sales History',
+        },
+        HeaderFacets            : [{
+            $Type             : 'UI.ReferenceFacet',
+            Target            : '@UI.FieldGroup#Description',
+            ![@UI.Importance] : #Medium
+        }],
+        FieldGroup #Description : {Data : [
+            {
+                $Type : 'UI.DataField',
+                Value : DOC_CREATEDDATE
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : PRODUCT_ID
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : LOCATION_ID
+            }
+        ]},
+        FieldGroup #Details     : {Data : [
+            {
+                $Type : 'UI.DataField',
+                Value : SCHEDULELINE_NUM
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : REASON_REJ
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : 'CONFIRMED_QTY - UOM'
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : 'ORD_QTY - UOM'
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : MAT_AVAILDATE
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : CUSTOMER_GROUP
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : NET_VALUE
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : CHAR_NAME
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : CHAR_VALUE
+            }
+        ]}
+    },
+    // Page Facets
+    UI.Facets : [{
+        $Type  : 'UI.CollectionFacet',
+        ID     : 'saleshis',
+        Label  : 'Sales History Configuration',
+        Facets : [{
+            $Type  : 'UI.ReferenceFacet',
+            Label  : 'Sales History Configuration',
             Target : '@UI.FieldGroup#Details'
         }]
     }]

@@ -1,7 +1,7 @@
 {
     "_version": "1.32.0",
     "sap.app": {
-        "id": "cp.mdlprofile.cpmodelprofiles",
+        "id": "cp.appf.cpsaleshcfg",
         "type": "application",
         "i18n": "i18n/i18n.properties",
         "applicationVersion": {
@@ -11,7 +11,7 @@
         "description": "{{appDescription}}",
         "dataSources": {
             "mainService": {
-                "uri": "/pal/",
+                "uri": "/catalog/",
                 "type": "OData",
                 "settings": {
                     "odataVersion": "4.0"
@@ -26,12 +26,12 @@
         },
         "crossNavigation": {
             "inbounds": {
-                "cp-mdlprofile-cpmodelprofiles-inbound": {
+                "cp-appf-cpsaleshcfg-inbound": {
                     "signature": {
                         "parameters": {},
                         "additionalParameters": "allowed"
                     },
-                    "semanticObject": "modelprofiles",
+                    "semanticObject": "saleshconfig",
                     "action": "Display",
                     "title": "{{flpTitle}}",
                     "subTitle": "{{flpSubtitle}}",
@@ -62,7 +62,7 @@
             "css": []
         },
         "dependencies": {
-            "minUI5Version": "1.97.1",
+            "minUI5Version": "1.98.0",
             "libs": {
                 "sap.ui.core": {},
                 "sap.fe.templates": {}
@@ -92,42 +92,42 @@
             "routes": [
                 {
                     "pattern": ":?query:",
-                    "name": "modelProfilesList",
-                    "target": "modelProfilesList"
+                    "name": "getSaleshCfgList",
+                    "target": "getSaleshCfgList"
                 },
                 {
-                    "pattern": "modelProfiles({key}):?query:",
-                    "name": "modelProfilesObjectPage",
-                    "target": "modelProfilesObjectPage"
+                    "pattern": "getSaleshCfg({key}):?query:",
+                    "name": "getSaleshCfgObjectPage",
+                    "target": "getSaleshCfgObjectPage"
                 }
             ],
             "targets": {
-                "modelProfilesList": {
+                "getSaleshCfgList": {
                     "type": "Component",
-                    "id": "modelProfilesList",
+                    "id": "getSaleshCfgList",
                     "name": "sap.fe.templates.ListReport",
                     "options": {
                         "settings": {
-                            "entitySet": "modelProfiles",
+                            "entitySet": "getSaleshCfg",
                             "variantManagement": "Page",
                             "navigation": {
-                                "modelProfiles": {
+                                "getSaleshCfg": {
                                     "detail": {
-                                        "route": "modelProfilesObjectPage"
+                                        "route": "getSaleshCfgObjectPage"
                                     }
                                 }
                             }
                         }
                     }
                 },
-                "modelProfilesObjectPage": {
+                "getSaleshCfgObjectPage": {
                     "type": "Component",
-                    "id": "modelProfilesObjectPage",
+                    "id": "getSaleshCfgObjectPage",
                     "name": "sap.fe.templates.ObjectPage",
                     "options": {
                         "settings": {
                             "editableHeaderContent": false,
-                            "entitySet": "modelProfiles"
+                            "entitySet": "getSaleshCfg"
                         }
                     }
                 }

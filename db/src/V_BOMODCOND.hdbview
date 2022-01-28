@@ -1,22 +1,27 @@
 VIEW "V_BOMODCOND"
-AS SELECT B.LOCATION_ID,
+AS SELECT distinct B.LOCATION_ID,
         B.PRODUCT_ID,
         B.ITEM_NUM,
         B.COMPONENT,
-        -- A.OBJ_DEP,
-        CONCAT(A.OBJ_DEP, CONCAT('_',A.OBJ_COUNTER))  AS "OBJ_DEP",
+        -- A.OBJ_DEP as OD,
+        -- A.OBJ_COUNTER AS COUNTEROD,
+        A.OBJ_DEP_CN  AS "OBJ_DEP",
         B.OBJDEP_DESC,
-        A.CLASS_NUM,
-        C.CLASS_NAME,
-        A.CHAR_NUM,
-        C.CHAR_NAME,
-        A.CHARVAL_NUM,
-        C.CHAR_VALUE,
-        A.OD_CONDITION,
-        A.CHAR_COUNTER,
-        A.ROW_ID
- FROM CP_OBJDEP_HEADER  AS A
- INNER JOIN CP_BOM_OBJDEPENDENCY AS B ON ( A.OBJ_DEP = B.OBJ_DEP )
- LEFT OUTER JOIN V_CLASSCHARVAL AS C ON ( A.CLASS_NUM = C.CLASS_NUM
-                                AND  A.CHAR_NUM  = C.CHAR_NUM
-                                AND  A.CHARVAL_NUM = C.CHARVAL_NUM);
+        B.COMP_QTY,
+        B.VALID_FROM,
+        B.VALID_TO
+        -- A.CLASS_NUM,
+        -- C.CLASS_NAME,
+        -- A.CHAR_NUM,
+        -- C.CHAR_NAME,
+        -- A.CHARVAL_NUM,
+        -- C.CHAR_VALUE,
+        -- A.OD_CONDITION,
+        -- A.CHAR_COUNTER,
+        -- A.ROW_ID
+ FROM V_OBJDEP  AS A
+ INNER JOIN CP_BOM_OBJDEPENDENCY AS B ON ( 
+     A.OBJ_DEP = B.OBJ_DEP )
+--  LEFT OUTER JOIN V_CLASSCHARVAL AS C ON ( A.CLASS_NUM = C.CLASS_NUM
+--                                 AND  A.CHAR_NUM  = C.CHAR_NUM
+--                                 AND  A.CHARVAL_NUM = C.CHARVAL_NUM);

@@ -15,6 +15,10 @@ modules:
       srv-url: ${default-url}
   parameters:
     buildpack: nodejs_buildpack
+  build-parameters:
+    ignore:
+    - env
+    - ./node_modules
 - name: config_products-db-deployer
   type: hdb
   path: gen/db
@@ -92,10 +96,10 @@ modules:
       - cpexeregcpexeregressionmdls.zip
       name: cpexeregcpexeregressionmdls
       target-path: resources/
-    - artifacts:
-      - cpmdlprofilecpmodelprofiles.zip
-      name: cpmdlprofilecpmodelprofiles
-      target-path: resources/
+    # - artifacts:
+    #   - cpmdlprofilecpmodelprofiles.zip
+    #   name: cpmdlprofilecpmodelprofiles
+    #   target-path: resources/
     - artifacts:
       - cpodpcpodprofiles.zip
       name: cpodpcpodprofiles
@@ -107,6 +111,10 @@ modules:
     - artifacts:
       - cplpcplocprod.zip
       name: cplpcplocprod
+      target-path: resources/
+    - artifacts:
+      - cpappfcpsaleshcfg.zip
+      name: cpappfcpsaleshcfg
       target-path: resources/
     - artifacts:
       - cpappfcpprodconfig.zip
@@ -176,16 +184,16 @@ modules:
     - npm install
     - npm run build:cf
     supported-platforms: []
-- name: cpmdlprofilecpmodelprofiles
-  type: html5
-  path: app/cp_modelprofiles
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    supported-platforms: []
+# - name: cpmdlprofilecpmodelprofiles
+#   type: html5
+#   path: app/cp_modelprofiles
+#   build-parameters:
+#     build-result: dist
+#     builder: custom
+#     commands:
+#     - npm install
+#     - npm run build:cf
+#     supported-platforms: []
 - name: cpodpcpodprofiles
   type: html5
   path: app/cp_odprofiles
@@ -209,6 +217,16 @@ modules:
 - name: cplpcplocprod
   type: html5
   path: app/cp_locprod
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappfcpsaleshcfg
+  type: html5
+  path: app/cp_saleshcfg
   build-parameters:
     build-result: dist
     builder: custom
