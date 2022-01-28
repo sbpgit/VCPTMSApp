@@ -29,6 +29,7 @@ sap.ui.define([
 		onAfterRendering: function () {
 			that = this;
 			oGModel = this.getModel("oGModel");
+            sap.ui.core.BusyIndicator.show();
 
             this.getModel("BModel").read("/getBomOD", {
                 
@@ -38,6 +39,7 @@ sap.ui.define([
                     results: oData.results,
                   });
                   that.byId("bomList").setModel(that.oModel);
+                  sap.ui.core.BusyIndicator.hide();
                 },
                 error: function () {
                   MessageToast.show("Failed to get data");
@@ -53,14 +55,7 @@ sap.ui.define([
                     var oSelItem = oEvent.getSource().getSelectedItem().getBindingContext().getObject();
                    
                     oGModel.setProperty("/prdId", oSelItem.PRODUCT_ID);
-                    oGModel.setProperty("/className", oSelItem.CLASS_NAME);
-                    oGModel.setProperty("/classNo", oSelItem.CLASS_NUM);
-                    oGModel.setProperty("/prodDesc", oSelItem.PROD_DESC);
-                    oGModel.setProperty("/prodFam", oSelItem.PROD_FAMILY);
-                    oGModel.setProperty("/prodGroup", oSelItem. PROD_GROUP);
-                    oGModel.setProperty("/prodModel", oSelItem.PROD_MODEL);
-                    oGModel.setProperty("/prodMidRng", oSelItem.PROD_MDLRANGE);
-                    oGModel.setProperty("/prodSeries", oSelItem.PROD_SERIES);
+                    oGModel.setProperty("/locId", oSelItem.LOCATION_ID);
     
     
                 } else {
@@ -95,7 +90,25 @@ sap.ui.define([
     
                     }
                 });
-            }
+            },
+            onSearch: function (oEvent) {
+                var query =
+                    oEvent.getParameter("value") || oEvent.getParameter("newValue"),
+                  oFilters = [];
+        
+                if (query !== "") {
+                  oFilters.push(
+                    new Filter({
+                      filters: [
+                        new Filter("PRODUCT_ID", FilterOperator.Contains, query),
+                        new Filter("LOCATION_ID", FilterOperator.Contains, query)
+                      ],
+                      and: false,
+                    })
+                  );
+                }
+                that.byId("bomList").getBinding("items").filter(oFilters);
+              }
 
 	});
 

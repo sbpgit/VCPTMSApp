@@ -498,11 +498,37 @@ async function _postPredictionRequest(url,paramsObj,numChars,dataObj,modelType,v
             {     
 
                 let periodId = distPeriods[index][trimmedPeriod];
-                sqlStr = 'UPDATE V_FUTURE_DEP_TS SET "Predicted" = ' + "'" + -1 + "'" + "," +
-                        '"PredictedTime" = ' + "'" + predictedTime + "'" + "," +
-                        '"PredictedStatus" = ' + "'" + 'FAIL' + "'"+ 
-                        ' WHERE "GroupID" = ' + "'" + vcRuleListObj[0].GroupID + "'" + ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
-//                console.log("V_FUTURE_DEP_TS Predicted Value sql update sqlStr", sqlStr)
+//                 sqlStr = 'UPDATE V_FUTURE_DEP_TS SET "Predicted" = ' + "'" + -1 + "'" + "," +
+//                         '"PredictedTime" = ' + "'" + predictedTime + "'" + "," +
+//                         '"PredictedStatus" = ' + "'" + 'FAIL' + "'"+ 
+//                         ' WHERE "GroupID" = ' + "'" + vcRuleListObj[0].GroupID + "'" + ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
+// //                console.log("V_FUTURE_DEP_TS Predicted Value sql update sqlStr", sqlStr)
+
+                sqlStr = 'SELECT "CAL_DATE", "Location", "Product", "Type", "OBJ_DEP", "OBJ_COUNTER" ' +
+                'FROM "V_FUTURE_DEP_TS" WHERE "GroupID" = ' + "'" + groupId + "'" + 
+                ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
+                console.log("V_FUTURE_DEP_TS P SELECT sqlStr ", sqlStr);
+
+                stmt=conn.prepare(sqlStr);
+                result=stmt.exec();
+                stmt.drop();
+                console.log("V_FUTURE_DEP_TS P SELECT sqlStr result ", result);
+
+                sqlStr = 'UPSERT "CP_TS_PREDICTIONS" VALUES (' + "'" + result[0].CAL_DATE + "'" + "," +
+                            "'" + result[0].Location + "'" + "," +
+                            "'" + result[0].Product + "'" + "," +
+                            "'" + result[0].Type + "'" + "," +
+                            "'" + result[0].OBJ_DEP + "'" + "," +
+                            "'" + result[0].OBJ_COUNTER + "'" + "," +
+                            "'" + modelType + "'" + "," +
+                            "'" + -1 + "'" + "," +
+                            "'" + predictedTime + "'" + "," +
+                            "'" + 'FAIL' + "'" + ')' + ' WITH PRIMARY KEY';
+                    
+                    //' WHERE "GroupID" = ' + "'" + groupId + "'" + 
+                    //' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
+                console.log("V_PREDICTIONS Predicted Value sql update sqlStr", sqlStr);
+
 
                 stmt=conn.prepare(sqlStr);
                 stmt.exec();

@@ -12,7 +12,7 @@
 					<HBox>
                         <Text text="Product Family : " class="boldText"></Text>
 						<Text text=" {oGModel>/prodFam}" class="sapUiLargeMarginEnd"></Text>						
-						<ToolbarSpacer/>
+						<!-- <ToolbarSpacer/> -->
                         <Text text="Product Desc : " class="boldText"></Text>
 						<Text text=" {oGModel>/prodDesc}" ></Text>
 						
@@ -20,14 +20,14 @@
 					<HBox>
 						<Text text="Product Group : " class="boldText"></Text>
 						<Text text=" {oGModel>/prodGroup}" class="sapUiLargeMarginEnd1" ></Text>
-						<ToolbarSpacer/>
+						<!-- <ToolbarSpacer/> -->
 						<Text text="Product Series : " class="boldText"></Text>
 						<Text text="{oGModel>/prodSeries}"></Text>
 					</HBox>
                     <HBox>
 						<Text text="Product Mid Range : " class="boldText"></Text>
 						<Text text=" {oGModel>/prodMidRng}" class="sapUiLargeMarginEnd2"></Text>
-						<ToolbarSpacer/>
+						<!-- <ToolbarSpacer/> -->
                         <Text text="Product Model Range : " class="boldText"></Text>
 						<Text text="{oGModel>/prodModel}"></Text>						
 					</HBox>
