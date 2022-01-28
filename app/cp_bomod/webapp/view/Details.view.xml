@@ -1,4 +1,4 @@
-<mvc:View controllerName="cp.appf.cpprodconfig.controller.Details" xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:f="sap.f">
+<mvc:View controllerName="cp.appf.cpbomod.controller.Details" xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:f="sap.f">
 	<Page id="pageId">
 		<customHeader>
 			<Bar>

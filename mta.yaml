@@ -28,17 +28,6 @@ modules:
     ignore:
     - env
     - ./node_modules
-# - name: configprod_approuter
-#   type: approuter.nodejs
-#   path: app
-#   requires:
-#   - name: uaa_config_products
-#   - name: srv-api
-#     group: destinations
-#     properties:
-#       forwardAuthToken: true
-#       name: srv-api
-#       url: ~{srv-url}  
 - name: config_products-destination-content
   type: com.sap.application.content
   requires:
@@ -122,6 +111,10 @@ modules:
     - artifacts:
       - cpappfcpprodconfig.zip
       name: cpappfcpprodconfig
+      target-path: resources/
+    - artifacts:
+      - cpappfcpbomod.zip
+      name: cpappfcpbomod
       target-path: resources/
 - name: cfgapppvsrootcfgprdpvsroot
   type: html5
@@ -226,6 +219,16 @@ modules:
 - name: cpappfcpprodconfig
   type: html5
   path: app/cp_prodconfig
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappfcpbomod
+  type: html5
+  path: app/cp_bomod
   build-parameters:
     build-result: dist
     builder: custom
