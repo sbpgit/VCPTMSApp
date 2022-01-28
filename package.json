@@ -79,10 +79,10 @@
             "db": {
                 "kind": "hana",
                 "pool": {
-                    "acquireTimeoutMillis": 10000,
-                    "evictionRunIntervalMillis": 60000,
-                    "min": 20,
-                    "max": 200,
+                    "acquireTimeoutMillis": 120000,
+                    "evictionRunIntervalMillis": 120000,
+                    "min": 50,
+                    "max": 500,
                     "numTestsPerEvictionRun": 60,
                     "softIdleTimeoutMillis": 30000,
                     "idleTimeoutMillis": 30000,

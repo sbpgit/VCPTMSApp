@@ -621,6 +621,19 @@ key     ![CREATED_BY]: String(12)  @title: 'Created By' ;
 key     ![CHANGED_TIME]: Time  @title: 'Changed Time' ; 
 key     ![CREATED_TIME]: Time  @title: 'Created Time' ; 
 }
+@cds.persistence.exists 
+Entity ![V_ODCHARVAL] {
+key     ![OBJ_DEP]: String(42)  @title: 'OBJ_DEP' ; 
+key     ![CLASS_NUM]: String(18)  @title: 'CLASS_NUM' ; 
+key     ![CLASS_NAME]: String(20)  @title: 'CLASS_NAME' ; 
+key     ![CHAR_NUM]: String(10)  @title: 'CHAR_NUM' ; 
+key     ![CHAR_NAME]: String(30)  @title: 'CHAR_NAME' ; 
+key     ![CHARVAL_NUM]: String(10)  @title: 'CHARVAL_NUM' ; 
+key     ![CHAR_VALUE]: String(70)  @title: 'CHAR_VALUE' ; 
+key     ![OD_CONDITION]: String(2)  @title: 'OD_CONDITION' ; 
+key     ![CHAR_COUNTER]: Integer  @title: 'CHAR_COUNTER' ; 
+key     ![ROW_ID]: Integer  @title: 'ROW_ID' ; 
+}
 /*
 @cds.persistence.exists
 @cds.persistence.calcview

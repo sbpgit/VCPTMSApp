@@ -1516,7 +1516,7 @@ exports._runHgbtPredictionV1 = function(hgbtType, group) {
     stmt.drop();
 
     sqlStr = 'SELECT DISTINCT ' + '"' + vcConfigTimePeriod + '"' + ' from  V_FUTURE_DEP_TS WHERE  "GroupID" = ' + "'" + groupId + "'" + ' ORDER BY ' + '"' + vcConfigTimePeriod + '"' + ' ASC';
-    console.log("V_FUTURE_DEP_TS Distinct Periods sqlStr", sqlStr)
+    console.log("V_FUTURE_DEP_TS HGBT Distinct Periods sqlStr", sqlStr)
     stmt=conn.prepare(sqlStr);
     var distPeriods=stmt.exec();
     stmt.drop();
@@ -1530,11 +1530,36 @@ exports._runHgbtPredictionV1 = function(hgbtType, group) {
         let predictedVal = resultsObj[index].score;
         predictedVal =  (+predictedVal).toFixed(2);
         let periodId = distPeriods[index][trimmedPeriod];
-        sqlStr = 'UPDATE V_FUTURE_DEP_TS SET "Predicted" = ' + "'" + predictedVal + "'" + "," +
-                 '"PredictedTime" = ' + "'" + predictedTime + "'" + "," +
-                 '"PredictedStatus" = ' + "'" + 'SUCCESS' + "'"+ 
-                 ' WHERE "GroupID" = ' + "'" + groupId + "'" + ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
-        console.log("V_FUTURE_DEP_TS Predicted Value sql update sqlStr", sqlStr)
+        // sqlStr = 'UPDATE V_FUTURE_DEP_TS SET "Predicted" = ' + "'" + predictedVal + "'" + "," +
+        //          '"PredictedTime" = ' + "'" + predictedTime + "'" + "," +
+        //          '"PredictedStatus" = ' + "'" + 'SUCCESS' + "'"+ 
+        //          ' WHERE "GroupID" = ' + "'" + groupId + "'" + ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
+        // console.log("V_FUTURE_DEP_TS Predicted Value sql update sqlStr", sqlStr)
+
+        sqlStr = 'SELECT "CAL_DATE", "Location", "Product", "Type", "OBJ_DEP", "OBJ_COUNTER" ' +
+        'FROM "V_FUTURE_DEP_TS" WHERE "GroupID" = ' + "'" + groupId + "'" + 
+        ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
+        console.log("V_FUTURE_DEP_TS HGBT SELECT sqlStr ", sqlStr);
+
+        stmt=conn.prepare(sqlStr);
+        result=stmt.exec();
+        stmt.drop();
+        console.log("V_FUTURE_DEP_TS HGBT SELECT sqlStr result ", result);
+
+        sqlStr = 'UPSERT "CP_TS_PREDICTIONS" VALUES (' + "'" + result[0].CAL_DATE + "'" + "," +
+                    "'" + result[0].Location + "'" + "," +
+                    "'" + result[0].Product + "'" + "," +
+                    "'" + result[0].Type + "'" + "," +
+                    "'" + result[0].OBJ_DEP + "'" + "," +
+                    "'" + result[0].OBJ_COUNTER + "'" + "," +
+                    "'" + 'HGBT' + "'" + "," +
+                    "'" + predictedVal + "'" + "," +
+                    "'" + predictedTime + "'" + "," +
+                    "'" + 'SUCCESS' + "'" + ')' + ' WITH PRIMARY KEY';
+            
+            //' WHERE "GroupID" = ' + "'" + groupId + "'" + 
+            //' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
+        console.log("V_PREDICTIONS Predicted Value HGBT sql update sqlStr", sqlStr);
 
         stmt=conn.prepare(sqlStr);
         stmt.exec();
