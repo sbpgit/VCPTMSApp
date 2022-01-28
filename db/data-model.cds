@@ -576,15 +576,15 @@ key     ![OBJDEP_DESC]: String(30)  @title: 'OBJDEP_DESC' ;
 key     ![COMP_QTY]: Decimal(13, 3)  @title: 'COMP_QTY' ; 
 key     ![VALID_FROM]: Date  @title: 'VALID_FROM' ; 
 key     ![VALID_TO]: Date  @title: 'VALID_TO' ; 
-key     ![CLASS_NUM]: String(18)  @title: 'CLASS_NUM' ; 
-key     ![CLASS_NAME]: String(20)  @title: 'CLASS_NAME' ; 
-key     ![CHAR_NUM]: String(10)  @title: 'CHAR_NUM' ; 
-key     ![CHAR_NAME]: String(30)  @title: 'CHAR_NAME' ; 
-key     ![CHARVAL_NUM]: String(10)  @title: 'CHARVAL_NUM' ; 
-key     ![CHAR_VALUE]: String(70)  @title: 'CHAR_VALUE' ; 
-key     ![OD_CONDITION]: String(2)  @title: 'OD_CONDITION' ; 
-key     ![CHAR_COUNTER]: Integer  @title: 'CHAR_COUNTER' ; 
-key     ![ROW_ID]: Integer  @title: 'ROW_ID' ; 
+// key     ![CLASS_NUM]: String(18)  @title: 'CLASS_NUM' ; 
+// key     ![CLASS_NAME]: String(20)  @title: 'CLASS_NAME' ; 
+// key     ![CHAR_NUM]: String(10)  @title: 'CHAR_NUM' ; 
+// key     ![CHAR_NAME]: String(30)  @title: 'CHAR_NAME' ; 
+// key     ![CHARVAL_NUM]: String(10)  @title: 'CHARVAL_NUM' ; 
+// key     ![CHAR_VALUE]: String(70)  @title: 'CHAR_VALUE' ; 
+// key     ![OD_CONDITION]: String(2)  @title: 'OD_CONDITION' ; 
+// key     ![CHAR_COUNTER]: Integer  @title: 'CHAR_COUNTER' ; 
+// key     ![ROW_ID]: Integer  @title: 'ROW_ID' ; 
 }
 
 @cds.persistence.exists 

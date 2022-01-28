@@ -15,6 +15,10 @@ modules:
       srv-url: ${default-url}
   parameters:
     buildpack: nodejs_buildpack
+  build-parameters:
+    ignore:
+    - env
+    - ./node_modules
 - name: config_products-db-deployer
   type: hdb
   path: gen/db
