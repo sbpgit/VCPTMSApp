@@ -1,83 +1,105 @@
-<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="cp.appf.cpbomod.controller.ItemDetail"
-	xmlns:html="http://www.w3.org/1999/xhtml" class="ItemMaster">
-	<Page id="idProd" showFooter="true" enableScrolling="false" showHeader="false">	
+<mvc:View xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:l="sap.ui.layout"
+    xmlns:core="sap.ui.core" controllerName="cp.appf.cpbomod.controller.ItemDetail"
+    xmlns:html="http://www.w3.org/1999/xhtml">
+    <Page id="page" showHeader="false">
+        <content>
+        <Panel id="idBomPanel" expandable="true" headerText="BOM Components" width="auto" class="sapUiResponsiveMargin">
 		<content>
-            <Table id="BomcharList" items="{path: '/results'}" >
-				<columns>
-					<Column hAlign="Center">
-						<Text text="Class Name" />
-					</Column>
-					<Column hAlign="Center">
-						<Text text="Class #"/>
-					</Column>
-                    <Column hAlign="Center">
-						<Text text="Char Name" />
-					</Column>
-					<Column hAlign="Center">
-						<Text text="Char #"/>
-					</Column>
-                    <Column hAlign="Center">
-						<Text text="Char Value" />
-					</Column>
-					<Column hAlign="Center">
-						<Text text="Char Value #"/>
-					</Column>
-				</columns>
-				<items>
-					<ColumnListItem>
-						<cells>
-							<Text title="{CLASS_NAME}" />
-							<Text title="{CLASS_NUM}" />
-                            <Text title="{CHAR_NAME}" />
-							<Text title="{CHAR_NUM}" />
-                            <Text title="{CHAR_VALUE}" />
-							<Text title="{CHARVAL_NUM}" />
-						</cells>
-					</ColumnListItem>
-				</items>
-			</Table>
-			
-		</content>
-	</Page>
+            <Toolbar height="8%">
+                <ToolbarSpacer/>
+				<Text text="{oGModel>/prdId}" class="boldText"></Text>
+                <ToolbarSpacer/>
+			</Toolbar>
+        <SearchField id="bomSearch" liveChange="onbomSearch" placeholder="Item # / Object Dependency"/>
+        <Table id="idBom" items="{path: '/results', sorter : { path : 'ITEM_NUM'} }" itemPress="onItemPress" 
+            rememberSelections="false" mode="SingleSelectMaster" selectionChange="onItemPress" sticky="ColumnHeaders">
+                            <columns>
+                                <Column hAlign="Left" width="80px">
+                                    <Text text="{i18n>itemno}" />
+                                </Column>
+                                <Column hAlign="Left">
+                                    <Text text="{i18n>comp}"/>
+                                </Column>
+                                <Column hAlign="Left">
+                                    <Text text="{i18n>objdep}" />
+                                </Column>
+                                <Column hAlign="Left">
+                                    <Text text="{i18n>objdepdes}"/>
+                                </Column>
+                                <Column hAlign="Center">
+                                    <Text text="{i18n>compqty}" width="120px"/>
+                                </Column>
+                                <Column hAlign="Left" width="100px">
+                                    <Text text="{i18n>validfm}"/>
+                                </Column>
+                                <Column hAlign="Left" width="100px">
+                                    <Text text="{i18n>validto}"/>
+                                </Column>
+                            </columns>
+                            <items>
+                                <ColumnListItem>
+                                    <cells>
+                                        <Text text="{ITEM_NUM}" />
+                                        <Text text="{COMPONENT}" />
+                                        <Text text="{OBJ_DEP}" />
+                                        <Text text="{OBJDEP_DESC}" />
+                                        <Text text="{COMP_QTY}" />
+                                        <Text text="{path: 'VALID_FROM', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'MM/dd/yyyy' }}"/>
+                                        <Text text="{path: 'VALID_TO', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'MM/dd/yyyy' }}"/>
+                                    </cells>
+                                </ColumnListItem>
+                            </items>
+                        </Table>
+        </content>
+	</Panel>
+    <Panel id="idCharPanel" expandable="true" headerText="Object Dependency Characteristics" width="auto" class="sapUiResponsiveMargin">
+		<content>
+        <Toolbar height="8%">
+                <ToolbarSpacer/>
+				<Text text="{oGModel>/objdep}" class="boldText"></Text>
+                <ToolbarSpacer/>
+			</Toolbar>
+        <SearchField id="charSearch" liveChange="oncharSearch" placeholder="Class Name / Char Name"/>
+        <Table id="idChartab" items="{ path: '/charResults'}" sticky="ColumnHeaders">
+                        <columns>
+                            <Column hAlign="Begin">
+                                <Text text="{i18n>clsname}"/>
+                            </Column>
+                            <Column hAlign="Center">
+                                <Text text="{i18n>charname}"/>
+                            </Column>
+                            <Column hAlign="Center">
+                                <Text text="{i18n>charVal}"/>
+                            </Column>
+                            <Column hAlign="Center">
+                                <Text text="{i18n>CharCoun}"/>
+                            </Column>
+                            <Column hAlign="Center" >
+                                <Text text="{i18n>odcond}"/>
+                            </Column>
+                            <Column hAlign="Center" >
+                                <Text text="{i18n>rowid}" />
+                            </Column>
 
-    <Page id="idChar" showFooter="true" enableScrolling="false" showHeader="false">
-		
-		<content>
-            <Table id="charList" items="{path: '/results'}" >
-				<columns>
-					<Column hAlign="Center">
-						<Text text="Class Name" />
-					</Column>
-					<Column hAlign="Center">
-						<Text text="Class #"/>
-					</Column>
-                    <Column hAlign="Center">
-						<Text text="Char Name" />
-					</Column>
-					<Column hAlign="Center">
-						<Text text="Char #"/>
-					</Column>
-                    <Column hAlign="Center">
-						<Text text="Char Value" />
-					</Column>
-					<Column hAlign="Center">
-						<Text text="Char Value #"/>
-					</Column>
-				</columns>
-				<items>
-					<ColumnListItem>
-						<cells>
-							<Text title="{CLASS_NAME}" />
-							<Text title="{CLASS_NUM}" />
-                            <Text title="{CHAR_NAME}" />
-							<Text title="{CHAR_NUM}" />
-                            <Text title="{CHAR_VALUE}" />
-							<Text title="{CHARVAL_NUM}" />
-						</cells>
-					</ColumnListItem>
-				</items>
-			</Table>
-			
-		</content>
-	</Page>
+                        </columns>
+                        <items>
+                            <ColumnListItem>
+                                <cells>
+                                    <Text text="{CLASS_NAME}" />
+                                    <Text text="{CHAR_NAME}" />
+                                    <Text text="{CHAR_VALUE}" />                                    
+                                    <Text text="{CHAR_COUNTER}" />
+                                    <Text text="{OD_CONDITION}" />
+                                    <Text text="{ROW_ID}" />
+                                </cells>
+                            </ColumnListItem>
+                        </items>
+                    </Table>
+        </content>
+	</Panel>
+             
+       </content>
+    </Page>
 </mvc:View>
