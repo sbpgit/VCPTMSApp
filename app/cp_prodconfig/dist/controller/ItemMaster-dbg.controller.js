@@ -52,6 +52,8 @@ sap.ui.define([
                 if (oEvent) {
                     var oSelItem = oEvent.getSource().getSelectedItem().getBindingContext().getObject();
                    
+                    oGModel.setProperty("/prdId", oSelItem.PRODUCT_ID);
+                    oGModel.setProperty("/className", oSelItem.CLASS_NAME);
                     oGModel.setProperty("/classNo", oSelItem.CLASS_NUM);
                     oGModel.setProperty("/prodDesc", oSelItem.PROD_DESC);
                     oGModel.setProperty("/prodFam", oSelItem.PROD_FAMILY);
@@ -79,7 +81,7 @@ sap.ui.define([
                             that.bus.publish("nav", "toDetailPage", {
                                 viewName: that.oDetailView.getViewName()
                             });
-                            that.oDetailView.onAfterRendering();
+                            // that.oDetailView.onAfterRendering();
     
                         } catch (e) {
                                 that.oDetailView.onAfterRendering();
@@ -89,7 +91,7 @@ sap.ui.define([
                             viewName: that.oDetailView.getViewName()
                         });
     
-                        that.oDetailView.onAfterRendering();
+                        // that.oDetailView.onAfterRendering();
     
                     }
                 });

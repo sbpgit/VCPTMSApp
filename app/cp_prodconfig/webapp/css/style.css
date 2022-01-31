@@ -16,3 +16,8 @@
 .sapUiLargeMarginEnd2 {
     margin-right: 10.5rem !important;
 }
+
+.sapMBar .sapMBarRight.sapMBarContainer>*:first-child:last-child, .sapMBar .sapMBarLeft.sapMBarContainer>*:first-child:last-child, .sapMBar .sapMBarMiddle .sapMBarContainer>*:first-child:last-child {
+
+    font-weight: bold;
+}
