@@ -35,11 +35,29 @@ sap.ui.define([
                   ],
                 
                 success: function (oData) {
+
+                    if(oData.results.length === 0){
+                        var data = [];
+                        that.oBomModel.setData({
+                          results: data
+                        });
+                        that.oCharModel.setData({
+                          charResults: data
+                        });
+                        that.byId("idChartab").setModel(that.oCharModel);
+                        that.onbomSearch();
+                    } else {
                  
-                  that.oBomModel.setData({
-                    results: oData.results,
-                  });
-                  that.byId("idBom").setModel(that.oBomModel);
+                        that.oBomModel.setData({
+                            results: oData.results,
+                        });
+                        that.byId("idBom").setModel(that.oBomModel);
+                        that.byId("idBom").removeSelections(true);
+                        that.byId("idBomPanel").setExpanded(true);
+                        that.byId("idCharPanel").setExpanded(false);
+                        that.onbomSearch();
+                        }                
+                        that.byId("bomSearch").setValue("");  
                   sap.ui.core.BusyIndicator.hide();
                 },
                 error: function () {
@@ -54,6 +72,8 @@ sap.ui.define([
             sap.ui.core.BusyIndicator.show();
             var selItem = this.byId("idBom").getSelectedItem().getCells()[2].getText();
 
+            oGModel.setProperty("/objdep", selItem);
+
             this.getModel("BModel").read("/getODcharval", {
                 filters: [
                     new Filter("OBJ_DEP", FilterOperator.EQ, selItem)
@@ -65,12 +85,61 @@ sap.ui.define([
                     charResults: oData.results,
                   });
                   that.byId("idChartab").setModel(that.oCharModel);
+                  that.byId("idBomPanel").setExpanded(false);
+                  that.byId("idCharPanel").setExpanded(true);
+                  that.byId("charSearch").setValue("");  
+                  that.oncharSearch();
                   sap.ui.core.BusyIndicator.hide();
                 },
                 error: function () {
                   MessageToast.show("Failed to get data");
                 },
               });
+
+        },
+
+        onbomSearch:function(oEvent){
+            
+            var query = "",
+          oFilters = [];
+          if(oEvent){
+            var query = oEvent.getParameter("value") || oEvent.getParameter("newValue")
+        }
+
+        if (query !== "") {
+          oFilters.push(
+            new Filter({
+              filters: [
+                new Filter("ITEM_NUM", FilterOperator.Contains, query),
+                new Filter("OBJ_DEP", FilterOperator.Contains, query)
+              ],
+              and: false,
+            })
+          );
+        }
+        that.byId("idBom").getBinding("items").filter(oFilters);
+
+        },
+
+        oncharSearch: function(oEvent){
+            var query = "",
+          oFilters = [];
+          if(oEvent){
+            var query = oEvent.getParameter("value") || oEvent.getParameter("newValue")
+            }
+
+        if (query !== "") {
+          oFilters.push(
+            new Filter({
+              filters: [
+                new Filter("CLASS_NAME", FilterOperator.Contains, query),
+                new Filter("CHAR_NAME", FilterOperator.Contains, query)
+              ],
+              and: false,
+            })
+          );
+        }
+        that.byId("idChartab").getBinding("items").filter(oFilters);
 
         }
 

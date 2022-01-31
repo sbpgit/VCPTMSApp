@@ -31,7 +31,7 @@ sap.ui.define([
 			oGModel = this.getModel("oGModel");
             sap.ui.core.BusyIndicator.show();
 
-            this.getModel("BModel").read("/getBomOD", {
+            this.getModel("BModel").read("/getProdClass", {
                 
                 success: function (oData) {
                  
@@ -39,6 +39,10 @@ sap.ui.define([
                     results: oData.results,
                   });
                   that.byId("bomList").setModel(that.oModel);
+                  oGModel.setProperty("/prdId", oData.results[0].PRODUCT_ID);
+                    oGModel.setProperty("/locId", oData.results[0].LOCATION_ID);
+                    that.byId("bomList").setSelectedItem(that.byId("bomList").getItems()[0], true);
+                    that.onhandlePress();
                   sap.ui.core.BusyIndicator.hide();
                 },
                 error: function () {
@@ -58,12 +62,7 @@ sap.ui.define([
                     oGModel.setProperty("/locId", oSelItem.LOCATION_ID);
     
     
-                } else {
-                    // var num = oGModel.getProperty("/projectNo");
-                    // oGModel.setProperty("/projectNo", num);
-                    // var desc = oGModel.getProperty("/ProjDesc");
-                    // oGModel.setProperty("/ProjDesc", desc);
-                }
+                } 
             // Calling Item Detail page	
                 that.getOwnerComponent().runAsOwner(function () {
                     if (!that.oDetailView) {

@@ -7,10 +7,10 @@
             <Table id="prodList" items="{path: '/results', sorter: {path: 'PRODUCT_ID'}}" growingScrollToLoad="true" rememberSelections="false" itemPress="onhandlePress" mode="SingleSelectMaster" selectionChange="onhandlePress">
                 <columns>
                     <Column hAlign="Center">
-                        <Text text="Product" />
+                        <Text text="{i18n>prd}" />
                     </Column>
                     <Column hAlign="Left">
-                        <Text text="Class Name"/>
+                        <Text text="{i18n>classname}"/>
                     </Column>
                 </columns>
                 <items>
