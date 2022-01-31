@@ -604,7 +604,7 @@ key     ![SALESDOC_ITEM]: String(6)  @title: 'Sales Doc. Item' ;
 key     ![DOC_CREATEDDATE]: Date  @title: 'Doc. Created Date' ; 
 key     ![SCHEDULELINE_NUM]: String(4)  @title: 'Schedule Line No.' ; 
 key     ![PRODUCT_ID]: String(40)  @title: 'Product ID' ; 
-key     ![REASON_REJ]: String(2)  @title: 'Reason for Rej.' ; 
+// key     ![REASON_REJ]: String(2)  @title: 'Reason for Rej.' ; 
 key     ![UOM]: String(3)  @title: 'UOM' ; 
 key     ![CONFIRMED_QTY]: Decimal(13, 3)  @title: 'Confirmed Qty' ; 
 key     ![ORD_QTY]: Decimal(13, 3)  @title: 'Ordered Qty' ; 

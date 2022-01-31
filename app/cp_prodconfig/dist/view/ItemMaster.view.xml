@@ -1,34 +1,27 @@
-<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="cp.appf.cpprodconfig.controller.ItemMaster"
-	xmlns:html="http://www.w3.org/1999/xhtml" class="ItemMaster">
-	<Page >
-		<!-- <customHeader>
-			<Toolbar height="50%">
-				<Title id="projTitle" text="{i18n>projTitle}" class="ClassHead"></Title>
-				<ToolbarSpacer/>
-				<Button icon="sap-icon://add" press="onProjectPress"/>
-			</Toolbar>
-		</customHeader> -->
-		<content>
-			<SearchField id="headSearch"  liveChange="onSearch" placeholder=""/>
-			<Table id="prodList" items="{path: '/results', sorter: {path: 'PRODUCT_ID'}}" growingScrollToLoad="true" rememberSelections="false"
-				itemPress="onhandlePress" mode="SingleSelectMaster" selectionChange="onhandlePress">
-				<columns>
-					<Column hAlign="Center">
-						<Text text="Product" />
-					</Column>
-					<Column hAlign="Center">
-						<Text text="Class Name"/>
-					</Column>
-				</columns>
-				<items>
-					<ColumnListItem>
-						<cells>
-							<ObjectIdentifier title="{PRODUCT_ID}" />
-							<ObjectIdentifier title="{CLASS_NAME}" />
-						</cells>
-					</ColumnListItem>
-				</items>
-			</Table>
-		</content>
-	</Page>
+<mvc:View xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m" controllerName="cp.appf.cpprodconfig.controller.ItemMaster"
+    xmlns:html="http://www.w3.org/1999/xhtml" class="ItemMaster">
+    <Page showHeader="false">
+        <content>
+            <SearchField id="headSearch" liveChange="onSearch" placeholder=""/>
+            <Table id="prodList" items="{path: '/results', sorter: {path: 'PRODUCT_ID'}}" growingScrollToLoad="true" rememberSelections="false" itemPress="onhandlePress" mode="SingleSelectMaster" selectionChange="onhandlePress">
+                <columns>
+                    <Column hAlign="Center">
+                        <Text text="Product" />
+                    </Column>
+                    <Column hAlign="Left">
+                        <Text text="Class Name"/>
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem>
+                        <cells>
+                            <ObjectIdentifier title="{PRODUCT_ID}" />
+                            <ObjectIdentifier title="{CLASS_NAME}" />
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </content>
+    </Page>
 </mvc:View>
