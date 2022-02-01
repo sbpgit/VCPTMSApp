@@ -16,7 +16,7 @@ entity PalHgbtRegressionsV1 {
         strVal  : String(100);
     }; 
 
-    hgbtType : Integer  @assert.range: [ 2, 12 ];
+    hgbtType : Integer  @assert.range: [ 1, 12 ];
     regressionData : array of  { 
         groupId:String(100); 
         ID : Integer;
@@ -72,7 +72,7 @@ entity PalHgbtByGroup {
         doubleVal : Double;
         strVal  : String(100);
     }; 
-    hgbtType : Integer  @assert.range: [ 2, 12 ];    
+    hgbtType : Integer  @assert.range: [ 1, 12 ];    
     importanceOp : array of {
         variableName : String(256);
         importance : Double;
@@ -103,7 +103,7 @@ entity PalHgbtPredictionsV1 {
         doubleVal : Double;
         strVal  : String(100);
     }; 
-    hgbtType : Integer  @assert.range: [ 2, 12 ];
+    hgbtType : Integer  @assert.range: [ 1, 12 ];
     predictionData : array of  { 
         groupId:String(100); 
         //id   : Integer; 
@@ -142,7 +142,7 @@ entity PalRdtRegressions {
         strVal  : String(100);
     }; 
 
-    rdtType : Integer  @assert.range: [ 2, 12 ];
+    rdtType : Integer  @assert.range: [ 1, 12 ];
     regressionData : array of  { 
         groupId:String(100); 
         ID : Integer;
@@ -190,7 +190,7 @@ entity PalRdtByGroup {
         doubleVal : Double;
         strVal  : String(100);
     }; 
-    rdtType : Integer  @assert.range: [ 2, 12 ];    
+    rdtType : Integer  @assert.range: [ 1, 12 ];    
     importanceOp : array of {
         variableName : String(256);
         importance : Double;
@@ -214,7 +214,7 @@ entity PalRdtPredictions {
         doubleVal : Double;
         strVal  : String(100);
     }; 
-    rdtType : Integer  @assert.range: [ 2, 12 ];
+    rdtType : Integer  @assert.range: [ 1, 12 ];
     predictionData : array of  { 
         groupId:String(100); 
         //id   : Integer; 
@@ -253,7 +253,7 @@ entity PalMlrRegressions {
         doubleVal : Double;
         strVal  : String(1000);
     };
-    mlrType : Integer  @assert.range: [ 2, 12 ];
+    mlrType : Integer  @assert.range: [ 1, 12 ];
     regressionData : array of
     {
         groupId : String(100);
@@ -316,7 +316,7 @@ entity PalMlrByGroup {
         doubleVal : Double;
         strVal  : String(1000);
     };
-    mlrType : Integer  @assert.range: [ 2, 12 ];
+    mlrType : Integer  @assert.range: [ 1, 12 ];
     coefficientOp : array of {
 	    variableName : String(1000); 	
 	    coefficientValue : Double;
@@ -354,7 +354,7 @@ entity PalMlrPredictions {
         strVal  : String(1000);
     };
 
-    mlrpType : Integer  @assert.range: [ 2, 12 ];
+    mlrpType : Integer  @assert.range: [ 1, 12 ];
     predictionData : array of { 
         groupId : String(100);
         ID : Integer;
@@ -390,7 +390,7 @@ entity PalVarmaModels {
         doubleVal : Double;
         strVal  : String(100);
     };
-    varmaType : Integer  @assert.range: [ 2, 12 ];
+    varmaType : Integer  @assert.range: [ 1, 12 ];
     varmaData : array of
     {
         groupId : String(100);
@@ -444,7 +444,7 @@ entity PalVarmaByGroup {
         doubleVal : Double;
         strVal  : String(100);
     };
-    varmaType : Integer  @assert.range: [ 2, 12 ];
+    varmaType : Integer  @assert.range: [ 1, 12 ];
     varmaData : array of
     {
         //timestamp : Integer;
@@ -490,7 +490,7 @@ entity PalVarmaPredictions {
         doubleVal : Double;
         strVal  : String(100);
     };
-    varmaType : Integer  @assert.range: [ 2, 12 ];
+    varmaType : Integer  @assert.range: [ 1, 12 ];
     predictionData : array of
     {
         groupId : String(100);

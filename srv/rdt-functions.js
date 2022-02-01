@@ -118,7 +118,9 @@ exports._updateRdtGroupData = function(req) {
     stmt.exec();
     stmt.drop();
 
-    if (rdtType == 2)
+    if (rdtType == 1)
+        sqlStr = "DELETE FROM PAL_RDT_DATA_GRP_TAB_1T";
+    else if (rdtType == 2)
         sqlStr = "DELETE FROM PAL_RDT_DATA_GRP_TAB_2T";
     else if (rdtType == 3)
         sqlStr = "DELETE FROM PAL_RDT_DATA_GRP_TAB_3T";
@@ -166,7 +168,8 @@ exports._updateRdtGroupData = function(req) {
         //console.log('_updaterdtGroupData ', ID);
 
         att1 = rdtGroupData[i].att1;
-        att2 =  rdtGroupData[i].att2;
+        if (rdtType > 1)
+            att2 =  rdtGroupData[i].att2;
         if (rdtType > 2)
             att3 = rdtGroupData[i].att3;
         if (rdtType > 3)
@@ -189,7 +192,9 @@ exports._updateRdtGroupData = function(req) {
             att12 = rdtGroupData[i].att12;
 
         var rowObj = [];
-        if (rdtType == 2)
+        if (rdtType == 1)
+            rowObj.push(groupId,att1,target);
+        else if (rdtType == 2)
             rowObj.push(groupId,att1,att2,target);
         else if (rdtType == 3)
             rowObj.push(groupId,att1,att2,att3,target);
@@ -215,7 +220,12 @@ exports._updateRdtGroupData = function(req) {
         tableObj.push(rowObj);
     }
     //console.log(' tableObj ', tableObj);
-    if (rdtType == 2)
+    if (rdtType == 1)
+    {
+        sqlStr = "INSERT INTO PAL_RDT_DATA_GRP_TAB_1T(GROUP_ID,ATT1,TARGET) VALUES(?, ?, ?)";
+        stmt = conn.prepare(sqlStr);   
+    }
+    else if (rdtType == 2)
     {
         sqlStr = "INSERT INTO PAL_RDT_DATA_GRP_TAB_2T(GROUP_ID,ATT1,ATT2,TARGET) VALUES(?, ?, ?, ?)";
         stmt = conn.prepare(sqlStr);   
@@ -284,7 +294,9 @@ exports._runRegressionRdtGroup = function(req) {
     console.log('Executing RDT Regression at GROUP');
     var rdtType = req.data.rdtType;
     var rdtDataTable;
-    if (rdtType == 2)
+    if (rdtType == 1)
+        rdtDataTable = "PAL_RDT_DATA_GRP_TAB_1T";
+    else if (rdtType == 2)
         rdtDataTable = "PAL_RDT_DATA_GRP_TAB_2T";
     else if (rdtType == 3)
         rdtDataTable = "PAL_RDT_DATA_GRP_TAB_3T";
@@ -338,7 +350,9 @@ exports._runRegressionRdtGroup = function(req) {
     stmt.exec();
     stmt.drop();
 
-    if (rdtType == 2)
+    if (rdtType == 1)
+        sqlStr = 'call RDT_MAIN_1T(' + rdtDataTable + ', ?,?,?,?)';
+    else if (rdtType == 2)
         sqlStr = 'call RDT_MAIN_2T(' + rdtDataTable + ', ?,?,?,?)';
     else if (rdtType == 3)
         sqlStr = 'call RDT_MAIN_3T(' + rdtDataTable + ', ?,?,?,?)';
@@ -684,7 +698,9 @@ exports._updateRdtPredictionData = function(req) {
     stmt.exec();
     stmt.drop();
 
-    if (rdtType == 2)
+    if (rdtType == 1)
+        sqlStr = "DELETE FROM PAL_RDT_PRED_DATA_GRP_TAB_1T";
+    else if (rdtType == 2)
         sqlStr = "DELETE FROM PAL_RDT_PRED_DATA_GRP_TAB_2T";
     else if (rdtType == 3)
         sqlStr = "DELETE FROM PAL_RDT_PRED_DATA_GRP_TAB_3T";
@@ -730,7 +746,8 @@ exports._updateRdtPredictionData = function(req) {
         //console.log('_updateMlrGroupData ', ID);
         ID = rdtPredictData[i].ID;
         att1 = rdtPredictData[i].att1;
-        att2 =  rdtPredictData[i].att2;
+        if (rdtType > 1)
+            att2 =  rdtPredictData[i].att2;
         if (rdtType > 2)
             att3 = rdtPredictData[i].att3;
         if (rdtType > 3)
@@ -752,7 +769,9 @@ exports._updateRdtPredictionData = function(req) {
         if (rdtType > 11)
             att12 = rdtPredictData[i].att12;
         var rowObj = [];
-        if (rdtType == 2)
+        if (rdtType == 1)
+            rowObj.push(groupId,ID,att1);
+        else if (rdtType == 2)
             rowObj.push(groupId,ID,att1,att2);
         else if (rdtType == 3)
             rowObj.push(groupId,ID,att1,att2,att3);
@@ -777,7 +796,12 @@ exports._updateRdtPredictionData = function(req) {
         tableObj.push(rowObj);
     }
     //console.log(' tableObj ', tableObj);
-    if (rdtType == 2)
+    if (rdtType == 1)
+    {
+        sqlStr = "INSERT INTO PAL_RDT_PRED_DATA_GRP_TAB_1T(GROUP_ID,ID,ATT1) VALUES(?, ?, ?)";
+        stmt = conn.prepare(sqlStr);   
+    }
+    else if (rdtType == 2)
     {
         sqlStr = "INSERT INTO PAL_RDT_PRED_DATA_GRP_TAB_2T(GROUP_ID,ID,ATT1,ATT2) VALUES(?, ?, ?, ?)";
         stmt = conn.prepare(sqlStr);   
@@ -861,8 +885,9 @@ exports._runPredictionRdtGroup = function(req) {
     console.log('_runPredictionRdtGroup rdtType : ', rdtType);
 
 
-
-    if (rdtType == 2)
+    if (rdtType == 1)
+        sqlStr = "SELECT DISTINCT GROUP_ID from  PAL_RDT_PRED_DATA_GRP_TAB_1T";
+    else if (rdtType == 2)
         sqlStr = "SELECT DISTINCT GROUP_ID from  PAL_RDT_PRED_DATA_GRP_TAB_2T";
     else if (rdtType == 3)
         sqlStr = "SELECT DISTINCT GROUP_ID from  PAL_RDT_PRED_DATA_GRP_TAB_3T";
@@ -961,7 +986,36 @@ exports._runRdtPrediction = function(rdtType, group) {
     stmt.drop();
     var predDataObj = [];	
 
-    if (rdtType == 2)
+    if (rdtType == 1)
+    {
+ 
+        sqlStr = "create local temporary column table #PAL_RDT_PREDICTDATA_TAB_" + groupId + " " + 
+                        "(\"ID\" integer,\"ATT1\" double)";
+        stmt=conn.prepare(sqlStr);
+        result=stmt.exec();
+        stmt.drop();
+        sqlStr = 'INSERT INTO ' + '#PAL_RDT_PREDICTDATA_TAB_' + groupId + ' SELECT "ID", "ATT1" FROM PAL_RDT_PRED_DATA_GRP_TAB_1T WHERE PAL_RDT_PRED_DATA_GRP_TAB_1T.GROUP_ID =' + "'" + groupId + "'";
+        stmt=conn.prepare(sqlStr);
+        result=stmt.exec();
+        stmt.drop();
+
+        sqlStr = 'SELECT "ID", "ATT1" FROM PAL_RDT_PRED_DATA_GRP_TAB_1T WHERE PAL_RDT_PRED_DATA_GRP_TAB_1T.GROUP_ID =' + "'" + groupId + "'";
+        stmt=conn.prepare(sqlStr);
+        result=stmt.exec();
+        stmt.drop();
+        var predData = result;
+        //console.log('predData :', predData);
+
+        for (var i=0; i<predData.length; i++) 
+        {
+            //let groupId =  groupId;
+            let id =  predData[i].ID;
+            let att1 =  predData[i].ATT1;
+            predDataObj.push({GroupId,id,att1});
+        }
+    
+    }
+    else if (rdtType == 2)
     {
  
         sqlStr = "create local temporary column table #PAL_RDT_PREDICTDATA_TAB_" + groupId + " " + 
