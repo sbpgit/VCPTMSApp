@@ -15,14 +15,31 @@ sap.ui.define([
 			that = this;
 			// this.DetailHome = DetailHome;
 			this.bus = sap.ui.getCore().getEventBus();
-			that.oModel = new JSONModel();
-			that.oWOModel = new JSONModel();
-			that.oExtsModel = new JSONModel();
+			that.oCharModel = new JSONModel();
 			oGModel = that.getOwnerComponent().getModel("oGModel");
 		},
 
 		onAfterRendering: function () {
+            oGModel = that.getOwnerComponent().getModel("oGModel");
+            
+             var className = oGModel.getProperty("/className");
 
+             this.getModel("BModel").read("/getClassChar", {
+                filters: [
+                    new Filter("CLASS_NAME", FilterOperator.EQ, "")
+                  ],
+                
+                success: function (oData) {
+                 
+                  that.oCharModel.setData({
+                    results: oData.results,
+                  });
+                  that.byId("charList").setModel(that.oCharModel);
+                },
+                error: function () {
+                  MessageToast.show("Failed to get data");
+                },
+              });
 
 
         }

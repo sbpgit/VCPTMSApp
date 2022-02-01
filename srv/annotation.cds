@@ -1495,17 +1495,17 @@ annotate V_SALESHCFG_CHARVAL with @(
                 $Type : 'UI.DataField',
                 Value : SCHEDULELINE_NUM
             },
+            // {
+            //     $Type : 'UI.DataField',
+            //     Value : REASON_REJ
+            // },
             {
                 $Type : 'UI.DataField',
-                Value : REASON_REJ
+                Value : CONFIRMED_QTY
             },
             {
                 $Type : 'UI.DataField',
-                Value : 'CONFIRMED_QTY - UOM'
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : 'ORD_QTY - UOM'
+                Value : ORD_QTY
             },
             {
                 $Type : 'UI.DataField',

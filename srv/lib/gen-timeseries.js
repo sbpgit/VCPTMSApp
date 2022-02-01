@@ -240,7 +240,8 @@ class GenTimeseries {
                                             "PRODUCT_ID",
                                             "OBJ_DEP",
                                             "OBJ_COUNTER",
-                                            "CHAR_COUNTER"`
+                                            "CHAR_COUNTER",
+                                            "SUCCESS"`
                         );
 
         let liObjDepHdr = [];
@@ -259,8 +260,7 @@ class GenTimeseries {
                 liSalesChar[k].OBJ_DEP      === liSalesChar[GenFunctions.addOne(k, liSalesChar.length)].OBJ_DEP &&
                 liSalesChar[k].OBJ_COUNTER  === liSalesChar[GenFunctions.addOne(k, liSalesChar.length)].OBJ_COUNTER &&
                 liSalesChar[k].CHAR_COUNTER === liSalesChar[GenFunctions.addOne(k, liSalesChar.length)].CHAR_COUNTER &&
-                liSalesChar[GenFunctions.addOne(k, liSalesChar.length)].SUCCESS      === "S" &&
-                k === GenFunctions.addOne(k, liSalesChar.length) ) {
+                liSalesChar[GenFunctions.addOne(k, liSalesChar.length)].SUCCESS      === "S" ) {
 
                 }else{
                     lFail = "X";
