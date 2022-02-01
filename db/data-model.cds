@@ -311,7 +311,7 @@ context cp {
     // Characteristic Values
     entity CHAR_VALUES : managed {
         key CHAR_NUM     : String(10) @title : 'Internal Char. number';
-        key CHARVAL_NUM  : String(10) @title : 'Internal Char. number';
+        key CHARVAL_NUM  : String(15) @title : 'Internal Char. number';
             CHAR_VALUE   : String(70) @title : 'Charateristic Value';
             CHARVAL_DESC : String(150)@title : 'Charateristic Value Desc.';
             CATCH_ALL    : String(1)  @title : 'Catch all';
