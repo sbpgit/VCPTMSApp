@@ -147,7 +147,9 @@ exports._updateMlrGroupData  = function(req) {
     stmt.exec();
     stmt.drop();
 
-    if (mlrType == 2)
+    if (mlrType == 1)
+        sqlStr = 'DELETE FROM "PAL_MLR_DATA_GRP_TAB_1T"';
+    else if (mlrType == 2)
         sqlStr = 'DELETE FROM "PAL_MLR_DATA_GRP_TAB_2T"';
     else if (mlrType == 3)
         sqlStr = 'DELETE FROM "PAL_MLR_DATA_GRP_TAB_3T"';
@@ -193,7 +195,8 @@ exports._updateMlrGroupData  = function(req) {
         //console.log('_updateMlrGroupData ', ID);
 
         V1 = mlrGroupData[i].att1;
-        V2 =  mlrGroupData[i].att2;
+        if (mlrType > 1)
+            V2 =  mlrGroupData[i].att2;
         if (mlrType > 2)
             V3 = mlrGroupData[i].att3;
         if (mlrType > 3)
@@ -217,7 +220,9 @@ exports._updateMlrGroupData  = function(req) {
         let Y = mlrGroupData[i].target;
 
         var rowObj = [];
-        if (mlrType == 2)
+        if (mlrType == 1)
+            rowObj.push(groupId,ID,Y,V1);
+        else if (mlrType == 2)
             rowObj.push(groupId,ID,Y,V1,V2);
         else if (mlrType == 3)
             rowObj.push(groupId,ID,Y,V1,V2,V3);
@@ -242,7 +247,12 @@ exports._updateMlrGroupData  = function(req) {
         tableObj.push(rowObj);
     }
     //console.log(' tableObj ', tableObj);
-    if (mlrType == 2)
+    if (mlrType == 1)
+    {
+        sqlStr = 'INSERT INTO "PAL_MLR_DATA_GRP_TAB_1T"' + '(GROUP_ID,ID,Y,V1) VALUES(?, ?, ?, ?)';
+        stmt = conn.prepare(sqlStr);   
+    }
+    else if (mlrType == 2)
     {
         sqlStr = 'INSERT INTO "PAL_MLR_DATA_GRP_TAB_2T"' + '(GROUP_ID,ID,Y,V1,V2) VALUES(?, ?, ?, ?, ?)';
         stmt = conn.prepare(sqlStr);   
@@ -314,7 +324,9 @@ exports._runRegressionMlrGroup = function(req) {
     //console.log('Executing Multi Linear Regression at GROUP');
     var mlrType = req.data.mlrType;
     var mlrDataTable;
-    if (mlrType == 2)
+    if (mlrType == 1)
+        mlrDataTable = "PAL_MLR_DATA_GRP_TAB_1T";
+    else if (mlrType == 2)
         mlrDataTable = "PAL_MLR_DATA_GRP_TAB_2T";
     else if (mlrType == 3)
         mlrDataTable = "PAL_MLR_DATA_GRP_TAB_3T";
@@ -376,7 +388,9 @@ exports._runRegressionMlrGroup = function(req) {
     stmt.exec();
     stmt.drop();
 
-    if (mlrType == 2)
+    if (mlrType == 1)
+        sqlStr = 'call "MLR_MAIN_1T"(' + mlrDataTable + ', ?,?,?,?,?)';
+    else if (mlrType == 2)
         sqlStr = 'call "MLR_MAIN_2T"(' + mlrDataTable + ', ?,?,?,?,?)';
     else if (mlrType == 3)
         sqlStr = 'call "MLR_MAIN_3T"(' + mlrDataTable + ', ?,?,?,?,?)';
@@ -801,7 +815,9 @@ exports._updateMlrPredictionData = function(req) {
     stmt.exec();
     stmt.drop();
 
-    if (mlrpType == 2)
+    if (mlrpType == 1)
+        sqlStr = 'DELETE FROM "PAL_MLR_PRED_DATA_GRP_TAB_1T"';
+    else if (mlrpType == 2)
         sqlStr = 'DELETE FROM "PAL_MLR_PRED_DATA_GRP_TAB_2T"';
     else if (mlrpType == 3)
         sqlStr = 'DELETE FROM "PAL_MLR_PRED_DATA_GRP_TAB_3T"';
@@ -847,7 +863,8 @@ exports._updateMlrPredictionData = function(req) {
         //console.log('_updateMlrGroupData groupId', groupId);
 
         V1 = mlrPredictData[i].att1;
-        V2 =  mlrPredictData[i].att2;
+        if (mlrpType > 1)
+            V2 =  mlrPredictData[i].att2;
         if (mlrpType > 2)
             V3 = mlrPredictData[i].att3;
         if (mlrpType > 3)
@@ -869,7 +886,9 @@ exports._updateMlrPredictionData = function(req) {
         if (mlrpType > 11)
             V12 = mlrPredictData[i].att12;
         var rowObj = [];
-        if (mlrpType == 2)
+        if (mlrpType == 1)
+            rowObj.push(groupId,ID,V1);
+        else if (mlrpType == 2)
             rowObj.push(groupId,ID,V1,V2);
         else if (mlrpType == 3)
             rowObj.push(groupId,ID,V1,V2,V3);
@@ -894,7 +913,12 @@ exports._updateMlrPredictionData = function(req) {
         tableObj.push(rowObj);
     }
     //console.log(' tableObj ', tableObj);
-    if (mlrpType == 2)
+    if (mlrpType == 1)
+    {
+        sqlStr = "INSERT INTO PAL_MLR_PRED_DATA_GRP_TAB_1T(GROUP_ID,ID,V1) VALUES(?, ?, ?, ?)";
+        stmt = conn.prepare(sqlStr);   
+    }
+    else if (mlrpType == 2)
     {
         sqlStr = "INSERT INTO PAL_MLR_PRED_DATA_GRP_TAB_2T(GROUP_ID,ID,V1,V2) VALUES(?, ?, ?, ?)";
         stmt = conn.prepare(sqlStr);   
@@ -971,8 +995,9 @@ exports._runPredictionMlrGroup = function(req) {
 
     var mlrpType = req.data.mlrpType;
 
-
-    if (mlrpType == 2)
+    if (mlrpType == 1)
+        sqlStr = 'SELECT DISTINCT GROUP_ID from  "PAL_MLR_PRED_DATA_GRP_TAB_1T"';
+    else if (mlrpType == 2)
         sqlStr = 'SELECT DISTINCT GROUP_ID from  "PAL_MLR_PRED_DATA_GRP_TAB_2T"';
     else if (mlrpType == 3)
         sqlStr = 'SELECT DISTINCT GROUP_ID from  "PAL_MLR_PRED_DATA_GRP_TAB_3T"';
@@ -1061,8 +1086,41 @@ exports._runMlrPrediction = function (mlrpType, group) {
     //console.log(result);
 
     var predDataObj = [];	
+    if (mlrpType == 1)
+    {
+        sqlStr = 'create local temporary column table ' + '"#PAL_FMLR_PREDICTDATA_TAB_' + groupId + '" ' +  
+                        "(\"ID\" integer,\"V1\" double)";
+        stmt=conn.prepare(sqlStr);
+        result=stmt.exec();
+        stmt.drop();
+        sqlStr = 'INSERT INTO ' + '"#PAL_FMLR_PREDICTDATA_TAB_' + groupId + '"' + ' SELECT "ID", "V1" FROM "PAL_MLR_PRED_DATA_GRP_TAB_1T" WHERE "PAL_MLR_PRED_DATA_GRP_TAB_1T".GROUP_ID =' + "'" + groupId + "'";
+        stmt=conn.prepare(sqlStr);
+        result=stmt.exec();
+        stmt.drop();
 
-    if (mlrpType == 2)
+        sqlStr = 'SELECT "ID", "V1" FROM "PAL_MLR_PRED_DATA_GRP_TAB_1T" WHERE "PAL_MLR_PRED_DATA_GRP_TAB_1T".GROUP_ID =' + "'" + groupId + "'";
+        stmt=conn.prepare(sqlStr);
+        result=stmt.exec();
+        stmt.drop();
+        var predData = result;
+        //console.log('predData :', predData);
+
+        for (var i=0; i<predData.length; i++) 
+        {
+            //let groupId =  groupId;
+            let id =  predData[i].ID;
+            let att1 =  predData[i].V1;
+            predDataObj.push({GroupId,id,att1});
+        }
+
+        sqlStr = 'INSERT INTO ' + '"#PAL_FMLR_COEFICIENT_TBL_' + groupId  + '"' + ' SELECT "VARIABLE_NAME", "COEFFICIENT_VALUE" FROM "PAL_MLR_COEFFICIENT_GRP_TAB" WHERE GROUP_ID = ' 
+                   + "'" + groupId + "'" + ' AND VARIABLE_NAME IN (' + "'__PAL_INTERCEPT__','V1'" + ')';
+        stmt=conn.prepare(sqlStr);
+        result=stmt.exec();
+        stmt.drop();
+    
+    }
+    else if (mlrpType == 2)
     {
         sqlStr = 'create local temporary column table ' + '"#PAL_FMLR_PREDICTDATA_TAB_' + groupId + '" ' +  
                         "(\"ID\" integer,\"V1\" double,\"V2\" double)";

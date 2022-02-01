@@ -240,7 +240,8 @@ class GenTimeseries {
                                             "PRODUCT_ID",
                                             "OBJ_DEP",
                                             "OBJ_COUNTER",
-                                            "CHAR_COUNTER"`
+                                            "CHAR_COUNTER",
+                                            "SUCCESS"`
                         );
 
         let liObjDepHdr = [];

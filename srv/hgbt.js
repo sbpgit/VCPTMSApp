@@ -132,7 +132,9 @@ exports._updateHgbtGroupDataV1 = function(req) {
     stmt.exec();
     stmt.drop();
 
-    if (hgbtType == 2)
+    if (hgbtType == 1)
+        sqlStr = "DELETE FROM PAL_HGBT_DATA_GRP_TAB_1T";
+    else if (hgbtType == 2)
         sqlStr = "DELETE FROM PAL_HGBT_DATA_GRP_TAB_2T";
     else if (hgbtType == 3)
         sqlStr = "DELETE FROM PAL_HGBT_DATA_GRP_TAB_3T";
@@ -180,7 +182,8 @@ exports._updateHgbtGroupDataV1 = function(req) {
         //console.log('_updatehgbtGroupData ', ID);
 
         att1 = hgbtGroupData[i].att1;
-        att2 =  hgbtGroupData[i].att2;
+        if (hgbtType > 1)
+            att2 =  hgbtGroupData[i].att2;
         if (hgbtType > 2)
             att3 = hgbtGroupData[i].att3;
         if (hgbtType > 3)
@@ -203,7 +206,9 @@ exports._updateHgbtGroupDataV1 = function(req) {
             att12 = hgbtGroupData[i].att12;
 
         var rowObj = [];
-        if (hgbtType == 2)
+        if (hgbtType == 1)
+            rowObj.push(groupId,att1,target);
+        else if (hgbtType == 2)
             rowObj.push(groupId,att1,att2,target);
         else if (hgbtType == 3)
             rowObj.push(groupId,att1,att2,att3,target);
@@ -229,7 +234,12 @@ exports._updateHgbtGroupDataV1 = function(req) {
         tableObj.push(rowObj);
     }
     //console.log(' tableObj ', tableObj);
-    if (hgbtType == 2)
+    if (hgbtType == 1)
+    {
+        sqlStr = "INSERT INTO PAL_HGBT_DATA_GRP_TAB_1T(GROUP_ID,ATT1,TARGET) VALUES(?, ?, ?)";
+        stmt = conn.prepare(sqlStr);   
+    }
+    else if (hgbtType == 2)
     {
         sqlStr = "INSERT INTO PAL_HGBT_DATA_GRP_TAB_2T(GROUP_ID,ATT1,ATT2,TARGET) VALUES(?, ?, ?, ?)";
         stmt = conn.prepare(sqlStr);   
@@ -297,7 +307,9 @@ exports._runRegressionHgbtGroupV1 = function(req) {
     console.log('Executing HGBT Regression at GROUP');
     var hgbtType = req.data.hgbtType;
     var hgbtDataTable;
-    if (hgbtType == 2)
+    if (hgbtType == 1)
+        hgbtDataTable = "PAL_HGBT_DATA_GRP_TAB_1T";
+    else if (hgbtType == 2)
         hgbtDataTable = "PAL_HGBT_DATA_GRP_TAB_2T";
     else if (hgbtType == 3)
         hgbtDataTable = "PAL_HGBT_DATA_GRP_TAB_3T";
@@ -356,7 +368,9 @@ exports._runRegressionHgbtGroupV1 = function(req) {
     stmt.exec();
     stmt.drop();
 
-    if (hgbtType == 2)
+    if (hgbtType == 1)
+        sqlStr = 'call HGBT_MAIN_1T(' + hgbtDataTable + ', ?,?,?,?,?)';
+    else if (hgbtType == 2)
         sqlStr = 'call HGBT_MAIN_2T(' + hgbtDataTable + ', ?,?,?,?,?)';
     else if (hgbtType == 3)
         sqlStr = 'call HGBT_MAIN_3T(' + hgbtDataTable + ', ?,?,?,?,?)';
@@ -773,7 +787,9 @@ exports._updateHgbtPredictionDataV1 = function(req) {
     stmt.exec();
     stmt.drop();
 
-    if (hgbtType == 2)
+    if (hgbtType == 1)
+        sqlStr = "DELETE FROM PAL_HGBT_PRED_DATA_GRP_TAB_1T";
+    else if (hgbtType == 2)
         sqlStr = "DELETE FROM PAL_HGBT_PRED_DATA_GRP_TAB_2T";
     else if (hgbtType == 3)
         sqlStr = "DELETE FROM PAL_HGBT_PRED_DATA_GRP_TAB_3T";
@@ -819,7 +835,8 @@ exports._updateHgbtPredictionDataV1 = function(req) {
         //console.log('_updateMlrGroupData ', ID);
         ID = hgbtPredictData[i].ID;
         att1 = hgbtPredictData[i].att1;
-        att2 =  hgbtPredictData[i].att2;
+        if (hgbtType > 1)
+            att2 =  hgbtPredictData[i].att2;
         if (hgbtType > 2)
             att3 = hgbtPredictData[i].att3;
         if (hgbtType > 3)
@@ -841,7 +858,9 @@ exports._updateHgbtPredictionDataV1 = function(req) {
         if (hgbtType > 11)
             att12 = hgbtPredictData[i].att12;
         var rowObj = [];
-        if (hgbtType == 2)
+        if (hgbtType == 1)
+            rowObj.push(groupId,ID,att1);
+        else if (hgbtType == 2)
             rowObj.push(groupId,ID,att1,att2);
         else if (hgbtType == 3)
             rowObj.push(groupId,ID,att1,att2,att3);
@@ -866,7 +885,12 @@ exports._updateHgbtPredictionDataV1 = function(req) {
         tableObj.push(rowObj);
     }
     //console.log(' tableObj ', tableObj);
-    if (hgbtType == 2)
+    if (hgbtType == 1)
+    {
+        sqlStr = "INSERT INTO PAL_HGBT_PRED_DATA_GRP_TAB_1T(GROUP_ID,ID,ATT1) VALUES(?, ?, ?)";
+        stmt = conn.prepare(sqlStr);   
+    }
+    else if (hgbtType == 2)
     {
         sqlStr = "INSERT INTO PAL_HGBT_PRED_DATA_GRP_TAB_2T(GROUP_ID,ID,ATT1,ATT2) VALUES(?, ?, ?, ?)";
         stmt = conn.prepare(sqlStr);   
@@ -949,8 +973,9 @@ exports._runPredictionHgbtGroupV1 = function(req) {
     console.log('_runPredictionHgbtGroupV1 hgbtType : ', hgbtType);
 
 
-
-    if (hgbtType == 2)
+    if (hgbtType == 1)
+        sqlStr = "SELECT DISTINCT GROUP_ID from  PAL_HGBT_PRED_DATA_GRP_TAB_1T";
+    else if (hgbtType == 2)
         sqlStr = "SELECT DISTINCT GROUP_ID from  PAL_HGBT_PRED_DATA_GRP_TAB_2T";
     else if (hgbtType == 3)
         sqlStr = "SELECT DISTINCT GROUP_ID from  PAL_HGBT_PRED_DATA_GRP_TAB_3T";
@@ -1048,7 +1073,36 @@ exports._runHgbtPredictionV1 = function(hgbtType, group) {
     stmt.drop();
     var predDataObj = [];	
 
-    if (hgbtType == 2)
+    if (hgbtType == 1)
+    {
+ 
+        sqlStr = "create local temporary column table #PAL_HGBT_PREDICTDATA_TAB_" + groupId + " " + 
+                        "(\"ID\" integer,\"ATT1\" double)";
+        stmt=conn.prepare(sqlStr);
+        result=stmt.exec();
+        stmt.drop();
+        sqlStr = 'INSERT INTO ' + '#PAL_HGBT_PREDICTDATA_TAB_' + groupId + ' SELECT "ID", "ATT1" FROM PAL_HGBT_PRED_DATA_GRP_TAB_1T WHERE PAL_HGBT_PRED_DATA_GRP_TAB_1T.GROUP_ID =' + "'" + groupId + "'";
+        stmt=conn.prepare(sqlStr);
+        result=stmt.exec();
+        stmt.drop();
+
+        sqlStr = 'SELECT "ID", "ATT1" FROM PAL_HGBT_PRED_DATA_GRP_TAB_1T WHERE PAL_HGBT_PRED_DATA_GRP_TAB_1T.GROUP_ID =' + "'" + groupId + "'";
+        stmt=conn.prepare(sqlStr);
+        result=stmt.exec();
+        stmt.drop();
+        var predData = result;
+        //console.log('predData :', predData);
+
+        for (var i=0; i<predData.length; i++) 
+        {
+            //let groupId =  groupId;
+            let id =  predData[i].ID;
+            let att1 =  predData[i].ATT1;
+            predDataObj.push({GroupId,id,att1});
+        }
+    
+    }
+    else if (hgbtType == 2)
     {
  
         sqlStr = "create local temporary column table #PAL_HGBT_PREDICTDATA_TAB_" + groupId + " " + 
