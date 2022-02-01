@@ -282,6 +282,8 @@ context cp {
         key OBJ_DEP     : String(30)@title : 'Object Dependency';
         key OBJ_COUNTER : Integer   @title : 'Object Counter';
         key ROW_ID      : Integer   @title : ' Attribute Index';
+        key VERSION     : String(10)    @title : 'Version';
+        key SCENARIO    : String(32)    @title : 'Scenario';
             SUCCESS     : Integer   @title : 'Count';
     };
 
