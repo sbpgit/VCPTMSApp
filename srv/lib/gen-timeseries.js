@@ -335,6 +335,86 @@ class GenTimeseries {
     var lProcessTime = Math.floor((Math.abs(lStartTime - new Date())/1000)/60);
     this.logger.info("Processing time : " + lProcessTime + " Minutes", 'background: #222; color: #bada55');
   }
+
+  async genTimeseriesF(){
+    /** Get Future Plan */
+    const liFutureCharPlan = await cds.run(
+        `SELECT DISTINCT LOCATION_ID, 
+                        PRODUCT_ID, 
+                        WEEK_DATE
+            FROM "CP_IBP_FCHARPLAN"
+            ORDER BY LOCATION_ID, 
+                    PRODUCT_ID, 
+                    WEEK_DATE`
+    );
+
+    let lsObjdepF = {};
+    let liObjdepF = [];
+    let liObdhdr = [];
+
+    for (let lFutInd = 0; lFutInd < liFutureCharPlan.length; lFutInd++) {
+        if(lFutInd === 0 ||
+            liFutureCharPlan[lFutInd].LOCATION_ID !== liFutureCharPlan[GenFunctions.subOne(lFutInd,liFutureCharPlan.lenght)].LOCATION_ID ||
+            liFutureCharPlan[lFutInd].PRODUCT_ID !== liFutureCharPlan[GenFunctions.subOne(lFutInd,liFutureCharPlan.lenght)].PRODUCT_ID ){
+             
+                liObdhdr = await cds.run(
+                    `SELECT *
+                        FROM "V_OBDHDR"
+                       WHERE LOCATION_ID = '`+ liFutureCharPlan[lFutInd].LOCATION_ID +`'
+                         AND PRODUCT_ID = '`+ liFutureCharPlan[lFutInd].PRODUCT_ID +`'`
+                );                    
+
+        }
+
+        /** Get Future Plan */
+        const liFutureCharPlanDate = await cds.run(
+            `SELECT *
+               FROM "CP_IBP_FCHARPLAN"
+               WHERE LOCATION_ID = '`+ liFutureCharPlan[lFutInd].LOCATION_ID +`'
+               AND PRODUCT_ID = '`+ liFutureCharPlan[lFutInd].PRODUCT_ID +`'
+               AND WEEK_DATE = '`+ liFutureCharPlan[lFutInd].WEEK_DATE +`'`
+        );  
+        
+        liObjdepF = [];
+        for (let lObjInd = 0; lObjInd < liObdhdr.length; lObjInd++) {
+            lsObjdepF = {};
+            lsObjdepF.CAL_DATE    = liFutureCharPlan[lFutInd].WEEK_DATE;
+            lsObjdepF.LOCATION_ID = liFutureCharPlan[lFutInd].LOCATION_ID;
+            lsObjdepF.PRODUCT_ID  = liFutureCharPlan[lFutInd].PRODUCT_ID;
+            lsObjdepF.OBJ_TYPE    = 'OD';
+            lsObjdepF.OBJ_DEP     = liObdhdr[lObjInd].OBJ_DEP;
+            lsObjdepF.OBJ_COUNTER = liObdhdr[lObjInd].OBJ_COUNTER;
+            lsObjdepF.ROW_ID      = liObdhdr[lObjInd].ROW_ID;
+            lsObjdepF.SUCCESS     = 0;
+            for (let lFutIndex = 0; lFutIndex < liFutureCharPlanDate.length; lFutIndex++) {
+                if(liFutureCharPlanDate[lFutIndex].LOCATION_ID === liObdhdr[lObjInd].LOCATION_ID &&
+                   liFutureCharPlanDate[lFutIndex].PRODUCT_ID  === liObdhdr[lObjInd].PRODUCT_ID &&
+                   liFutureCharPlanDate[lFutIndex].CLASS_NUM   === liObdhdr[lObjInd].CLASS_NUM &&
+                   liFutureCharPlanDate[lFutIndex].CHAR_NUM    === liObdhdr[lObjInd].CHAR_NUM){
+                        if(liObdhdr[lObjInd].OD_CONDITION === 'EQ' &&
+                           liObdhdr[lObjInd].CHARVAL_NUM  === liFutureCharPlanDate[lFutIndex].CHARVAL_NUM){
+                            lsObjdepF.SUCCESS = liFutureCharPlanDate[lFutIndex].OPT_QTY;
+                        }
+                        if(liObdhdr[lObjInd].OD_CONDITION === 'NE' &&
+                           liObdhdr[lObjInd].CHARVAL_NUM  !== liFutureCharPlanDate[lFutIndex].CHARVAL_NUM){
+                            lsObjdepF.SUCCESS = liFutureCharPlanDate[lFutIndex].OPT_QTY;
+                        }                            
+                    }
+            }
+
+            liObjdepF.push(GenFunctions.parse(lsObjdepF));
+        }
+
+        try {
+            await cds.run(INSERT.into("CP_TS_OBJDEP_CHARHDR_F").entries(liObjdepF));
+          } catch (e) {
+            this.logger.error(e.message + "/" + e.query);
+          }
+    }
+    
+    this.logger.info("Completed timeseries Service");
+
+}  
 }
 
 
