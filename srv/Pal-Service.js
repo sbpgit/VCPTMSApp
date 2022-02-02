@@ -508,7 +508,7 @@ async function _postPredictionRequest(url,paramsObj,numChars,dataObj,modelType,v
 //                         ' WHERE "GroupID" = ' + "'" + vcRuleListObj[0].GroupID + "'" + ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
 // //                console.log("V_FUTURE_DEP_TS Predicted Value sql update sqlStr", sqlStr)
 
-                sqlStr = 'SELECT "CAL_DATE", "Location", "Product", "Type", "OBJ_DEP", "OBJ_COUNTER" ' +
+                sqlStr = 'SELECT "CAL_DATE", "Location", "Product", "Type", "OBJ_DEP", "OBJ_COUNTER", "VERSION", "SCENARIO" ' +
                 'FROM "V_FUTURE_DEP_TS" WHERE "GroupID" = ' + "'" + groupId + "'" + 
                 ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
                 console.log("V_FUTURE_DEP_TS P SELECT sqlStr ", sqlStr);
@@ -525,6 +525,8 @@ async function _postPredictionRequest(url,paramsObj,numChars,dataObj,modelType,v
                             "'" + result[0].OBJ_DEP + "'" + "," +
                             "'" + result[0].OBJ_COUNTER + "'" + "," +
                             "'" + modelType + "'" + "," +
+                            "'" + result[0].VERSION + "'" + "," +
+                            "'" + result[0].SCENARIO + "'" + "," +
                             "'" + -1 + "'" + "," +
                             "'" + predictedTime + "'" + "," +
                             "'" + 'FAIL' + "'" + ')' + ' WITH PRIMARY KEY';

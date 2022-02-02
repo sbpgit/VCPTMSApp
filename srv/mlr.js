@@ -1686,7 +1686,7 @@ exports._runMlrPrediction = function (mlrpType, group) {
         //          ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
 
          //console.log("V_FUTURE_DEP_TS Predicted Value sql update sqlStr", sqlStr)
-        sqlStr = 'SELECT "CAL_DATE", "Location", "Product", "Type", "OBJ_DEP", "OBJ_COUNTER" ' +
+        sqlStr = 'SELECT "CAL_DATE", "Location", "Product", "Type", "OBJ_DEP", "OBJ_COUNTER", "VERSION", "SCENARIO" ' +
         'FROM "V_FUTURE_DEP_TS" WHERE "GroupID" = ' + "'" + groupId + "'" + 
         ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
         console.log("V_FUTURE_DEP_TS MLR SELECT sqlStr ", sqlStr);
@@ -1703,6 +1703,8 @@ exports._runMlrPrediction = function (mlrpType, group) {
                     "'" + result[0].OBJ_DEP + "'" + "," +
                     "'" + result[0].OBJ_COUNTER + "'" + "," +
                     "'" + 'MLR' + "'" + "," +
+                    "'" + result[0].VERSION + "'" + "," +
+                    "'" + result[0].SCENARIO + "'" + "," +
                     "'" + predictedVal + "'" + "," +
                     "'" + predictedTime + "'" + "," +
                     "'" + 'SUCCESS' + "'" + ')' + ' WITH PRIMARY KEY';

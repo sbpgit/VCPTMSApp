@@ -574,8 +574,10 @@ entity TS_PREDICTIONS{
     key OBJ_TYPE         : String(2) @title : 'Object Type';
     key OBJ_DEP          : String(30)@title : 'Object Dependency';
     key OBJ_COUNTER      : Integer   @title : 'Object Counter';
-    key MODEL_TYPE : String(10) @title : 'PAL Model Type';
-    PREDICTED        : Double    @title : 'Predicted';
-    PREDICTED_TIME   : Timestamp @title : 'Predicted Time';
-    PREDICTED_STATUS : String(8) @title : 'Predicted Status';
+    key MODEL_TYPE       : String(10) @title : 'PAL Model Type';
+    key VERSION          : String(10)    @title : 'Version';
+    key SCENARIO         : String(32)    @title : 'Scenario';
+    PREDICTED            : Double    @title : 'Predicted';
+    PREDICTED_TIME       : Timestamp @title : 'Predicted Time';
+    PREDICTED_STATUS     : String(8) @title : 'Predicted Status';
 };

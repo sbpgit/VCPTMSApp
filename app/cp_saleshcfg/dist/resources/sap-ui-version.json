@@ -1,7 +1,15 @@
 {
 	"name": "cp.appf.cpsaleshcfg",
 	"version": "0.0.1",
+<<<<<<< HEAD
 	"buildTimestamp": "202202021138",
+=======
+<<<<<<< HEAD
+	"buildTimestamp": "202202021258",
+=======
+	"buildTimestamp": "202202011302",
+>>>>>>> 9bfcb84cff07c4f9f4200311e9e026d94187d287
+>>>>>>> d9a9cfd7e8b2b8641aa565baf652c69216ef02f3
 	"scmRevision": "",
 	"libraries": []
 }
