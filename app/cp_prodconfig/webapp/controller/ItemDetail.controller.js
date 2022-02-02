@@ -33,7 +33,7 @@ sap.ui.define([
                 success: function (oData) {
                  
                   that.oCharModel.setData({
-                    results: oData.results,
+                    classresults: oData.results,
                   });
                 //   that.byId("charList").setModel(that.oCharModel);
                 },

@@ -57,36 +57,36 @@
                     </f:Form>
                 <!-- </VBox> -->
             <!-- </Toolbar> -->
-            <Table id="charList" items="{path: '/results'}">
+            <Table id="charList" items="{path: '/classresults'}">
                 <columns>
-                    <Column hAlign="Center">
+                    <Column hAlign="Left">
                         <Text text="{i18n>classname}" />
                     </Column>
-                    <Column hAlign="Center">
+                    <Column hAlign="Left">
                         <Text text="{i18n>classno}"/>
                     </Column>
-                    <Column hAlign="Center">
+                    <Column hAlign="Left">
                         <Text text="{i18n>charname}" />
                     </Column>
-                    <Column hAlign="Center">
+                    <Column hAlign="Left">
                         <Text text="{i18n>charno}"/>
                     </Column>
-                    <Column hAlign="Center">
+                    <Column hAlign="Left">
                         <Text text="{i18n>charval}" />
                     </Column>
-                    <Column hAlign="Center">
+                    <Column hAlign="Left">
                         <Text text="{i18n>charvalno}"/>
                     </Column>
                 </columns>
                 <items>
                     <ColumnListItem>
                         <cells>
-                            <Text title="{CLASS_NAME}" />
-                            <Text title="{CLASS_NUM}" />
-                            <Text title="{CHAR_NAME}" />
-                            <Text title="{CHAR_NUM}" />
-                            <Text title="{CHAR_VALUE}" />
-                            <Text title="{CHARVAL_NUM}" />
+                            <Text text="{CLASS_NAME}" />
+                            <Text text="{CLASS_NUM}" />
+                            <Text text="{CHAR_NAME}" />
+                            <Text text="{CHAR_NUM}" />
+                            <Text text="{CHAR_VALUE}" />
+                            <Text text="{CHARVAL_NUM}" />
                         </cells>
                     </ColumnListItem>
                 </items>

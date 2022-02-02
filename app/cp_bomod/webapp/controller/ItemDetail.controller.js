@@ -37,15 +37,18 @@ sap.ui.define([
                 success: function (oData) {
 
                     if(oData.results.length === 0){
-                        var data = [];
-                        that.oBomModel.setData({
-                          results: data
-                        });
-                        that.oCharModel.setData({
-                          charResults: data
-                        });
-                        that.byId("idChartab").setModel(that.oCharModel);
-                        that.onbomSearch();
+                        //that.byId("idBom").removeSelections(true);
+                        that.byId("idBomPanel").setExpanded(true);
+                        that.byId("idCharPanel").setExpanded(false);
+                        // var data = [];
+                        // that.oBomModel.setData({
+                        //   results: data
+                        // });
+                        // that.oCharModel.setData({
+                        //   charResults: data
+                        // });
+                        // that.byId("idChartab").setModel(that.oCharModel);
+                        // that.onbomSearch();
                     } else {
                  
                         that.oBomModel.setData({

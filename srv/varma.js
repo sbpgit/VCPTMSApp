@@ -3,6 +3,16 @@ const { v1: uuidv1} = require('uuid')
 const hana = require('@sap/hana-client');
 const varmaFuncs = require('./varma.js');
 
+// const conn_params = {
+//     serverNode  : cds.env.requires.db.credentials.host + ":" + cds.env.requires.db.credentials.port,
+//     uid         : "SBPTECHTEAM", //process.env.uidClassicalSchema, //cf environment variable
+//     pwd         : "Sbpcorp@22", //process.env.uidClassicalSchemaPassword,//cf environment variable
+//     encrypt: 'TRUE',
+//     ssltruststore: cds.env.requires.hana.credentials.certificate
+// };
+// const vcConfigTimePeriod = "PeriodOfYear"; //process.env.TimePeriod; //cf environment variable
+// const classicalSchema = "DB_CONFIG_PROD_CLIENT1"; //process.env.classicalSchema; //cf environment variable
+
 
 const conn_params = {
     serverNode  : cds.env.requires.db.credentials.host + ":" + cds.env.requires.db.credentials.port,
@@ -118,7 +128,9 @@ exports._updateVarmaGroupData = function(req) {
     stmt.exec();
     stmt.drop();
 
-    if (varmaType == 2)
+    if (varmaType == 1)
+        sqlStr = "DELETE FROM PAL_VARMA_DATA_GRP_TAB_1T";
+    else if (varmaType == 2)
         sqlStr = "DELETE FROM PAL_VARMA_DATA_GRP_TAB_2T";
     else if (varmaType == 3)
         sqlStr = "DELETE FROM PAL_VARMA_DATA_GRP_TAB_3T";
@@ -167,7 +179,8 @@ exports._updateVarmaGroupData = function(req) {
         //console.log('_updateVarmaGroupData ', ID);
 
         att1 = varmaGroupData[i].att1;
-        att2 =  varmaGroupData[i].att2;
+        if (varmaType > 1)
+            att2 =  varmaGroupData[i].att2;
         if (varmaType > 2)
             att3 = varmaGroupData[i].att3;
         if (varmaType > 3)
@@ -190,7 +203,9 @@ exports._updateVarmaGroupData = function(req) {
             att12 = varmaGroupData[i].att12;
 
         var rowObj = [];
-        if (varmaType == 2)
+        if (varmaType == 1)
+            rowObj.push(groupId,timestamp,att1,target);
+        else if (varmaType == 2)
             rowObj.push(groupId,timestamp,att1,att2,target);
         else if (varmaType == 3)
             rowObj.push(groupId,timestamp,att1,att2,att3,target);
@@ -215,7 +230,12 @@ exports._updateVarmaGroupData = function(req) {
         tableObj.push(rowObj);
     }
     console.log(' _updateVarmaGroupData - tableObj ', tableObj);
-    if (varmaType == 2)
+    if (varmaType == 1)
+    {
+        sqlStr = "INSERT INTO PAL_VARMA_DATA_GRP_TAB_1T(GROUP_ID,TIMESTAMP,ATT1,TARGET) VALUES(?, ?, ?, ?)";
+        stmt = conn.prepare(sqlStr);   
+    }
+    else if (varmaType == 2)
     {
         sqlStr = "INSERT INTO PAL_VARMA_DATA_GRP_TAB_2T(GROUP_ID,TIMESTAMP,ATT1,ATT2,TARGET) VALUES(?, ?, ?, ?,?)";
         stmt = conn.prepare(sqlStr);   
@@ -282,7 +302,9 @@ exports._genVarmaModelsGroup = function(req) {
     console.log('Executing VARMA Models at GROUP');
     var varmaType = req.data.varmaType;
     var varmaDataTable;
-    if (varmaType == 2)
+    if (varmaType == 1)
+        varmaDataTable = "PAL_VARMA_DATA_GRP_TAB_1T";
+    else if (varmaType == 2)
         varmaDataTable = "PAL_VARMA_DATA_GRP_TAB_2T";
     else if (varmaType == 3)
         varmaDataTable = "PAL_VARMA_DATA_GRP_TAB_3T";
@@ -330,8 +352,9 @@ exports._genVarmaModelsGroup = function(req) {
     stmt.exec();
     stmt.drop();
 
-
-    if (varmaType == 2)
+    if (varmaType == 1)
+        sqlStr = 'call VARMA_MAIN_1T(' + varmaDataTable + ', ?,?,?)';
+    else if (varmaType == 2)
         sqlStr = 'call VARMA_MAIN_2T(' + varmaDataTable + ', ?,?,?)';
     else if (varmaType == 3)
         sqlStr = 'call VARMA_MAIN_3T(' + varmaDataTable + ', ?,?,?)';
@@ -685,8 +708,10 @@ exports._updateVarmaPredictionData = function(req) {
     var stmt=conn.prepare(sqlStr);
     stmt.exec();
     stmt.drop();
-    
-    if (varmaType == 2)
+
+    if (varmaType == 1)
+        sqlStr = "DELETE FROM PAL_VARMA_PRED_DATA_GRP_TAB_1T";
+    else if (varmaType == 2)
         sqlStr = "DELETE FROM PAL_VARMA_PRED_DATA_GRP_TAB_2T";
     else if (varmaType == 3)
         sqlStr = "DELETE FROM PAL_VARMA_PRED_DATA_GRP_TAB_3T";
@@ -734,7 +759,8 @@ exports._updateVarmaPredictionData = function(req) {
         //console.log('_updateMlrGroupData ', ID);
 
         att1 = predictionData[i].att1;
-        att2 =  predictionData[i].att2;
+        if (varmaType > 1)
+            att2 =  predictionData[i].att2;
         if (varmaType > 2)
             att3 = predictionData[i].att3;
         if (varmaType > 3)
@@ -757,7 +783,9 @@ exports._updateVarmaPredictionData = function(req) {
             att12 = predictionData[i].att12;
 
         var rowObj = [];
-        if (varmaType == 2)
+        if (varmaType == 1)
+            rowObj.push(groupId,timestampIdx,att1);
+        else if (varmaType == 2)
             rowObj.push(groupId,timestampIdx,att1,att2);
         else if (varmaType == 3)
             rowObj.push(groupId,timestampIdx,att1,att2,att3);
@@ -782,7 +810,12 @@ exports._updateVarmaPredictionData = function(req) {
         tableObj.push(rowObj);
     }
     //console.log(' tableObj ', tableObj);
-    if (varmaType == 2)
+    if (varmaType == 1)
+    {
+        sqlStr = "INSERT INTO PAL_VARMA_PRED_DATA_GRP_TAB_1T(GROUP_ID,TIMESTAMP,ATT1) VALUES(?, ?, ?)";
+        stmt = conn.prepare(sqlStr);   
+    }
+    else if (varmaType == 2)
     {
         sqlStr = "INSERT INTO PAL_VARMA_PRED_DATA_GRP_TAB_2T(GROUP_ID,TIMESTAMP,ATT1,ATT2) VALUES(?, ?, ?, ?)";
         stmt = conn.prepare(sqlStr);   
@@ -861,7 +894,9 @@ exports._runPredictionVarmaGroup = function(req) {
     var results=stmt.exec();
     stmt.drop();
 
-    if (varmaType == 2)
+    if (varmaType == 1)
+        sqlStr = "SELECT DISTINCT GROUP_ID from  PAL_VARMA_PRED_DATA_GRP_TAB_1T";
+    else if (varmaType == 2)
         sqlStr = "SELECT DISTINCT GROUP_ID from  PAL_VARMA_PRED_DATA_GRP_TAB_2T";
     else if (varmaType == 3)
         sqlStr = "SELECT DISTINCT GROUP_ID from  PAL_VARMA_PRED_DATA_GRP_TAB_3T";
@@ -959,7 +994,35 @@ exports._runVarmaPrediction = function(varmaType, group) {
     stmt.drop();
     var predDataObj = [];	
 
-    if (varmaType == 2)
+    if (varmaType == 1)
+    {
+ 
+        sqlStr = "create local temporary column table #PAL_VARMA_PREDICTDATA_TAB_" + groupId + " " + 
+                        "(\"TIMESTAMP\" integer,\"ATT1\" double)";
+        stmt=conn.prepare(sqlStr);
+        result=stmt.exec();
+        stmt.drop();
+        sqlStr = 'INSERT INTO ' + '#PAL_VARMA_PREDICTDATA_TAB_' + groupId + ' SELECT "TIMESTAMP", "ATT1" FROM PAL_VARMA_PRED_DATA_GRP_TAB_1T WHERE PAL_VARMA_PRED_DATA_GRP_TAB_1T.GROUP_ID =' + "'" + groupId + "'";
+        stmt=conn.prepare(sqlStr);
+        result=stmt.exec();
+        stmt.drop();
+
+        sqlStr = 'SELECT "TIMESTAMP", "ATT1" FROM PAL_VARMA_PRED_DATA_GRP_TAB_1T WHERE PAL_VARMA_PRED_DATA_GRP_TAB_1T.GROUP_ID =' + "'" + groupId + "'";
+        stmt=conn.prepare(sqlStr);
+        let predData=stmt.exec();
+        stmt.drop();
+        //console.log('predData :', predData);
+
+        for (let i=0; i<predData.length; i++) 
+        {
+            //let groupId =  groupId;
+            let timeStampIdx =  predData[i].TIMESTAMP;
+            let att1 =  predData[i].ATT1;
+            predDataObj.push({GroupId,timeStampIdx,att1});
+        }
+    
+    }
+    else if (varmaType == 2)
     {
  
         sqlStr = "create local temporary column table #PAL_VARMA_PREDICTDATA_TAB_" + groupId + " " + 

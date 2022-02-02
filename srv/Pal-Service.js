@@ -228,7 +228,11 @@ function _getDataObjForPredictions(vcRulesList, idx, modelType, numChars) {
             {
                 let palGroupId = vcRulesList[idx].GroupID + '#' + vcRulesList[idx].Location + '#' + vcRulesList[idx].Product;
 
-                if (numChars == 2)
+                if (numChars == 1)
+                {
+                    dataObj.push({"groupId":palGroupId, "ID": distinctPeriodIdx,"att1":att1});
+                }
+                else if (numChars == 2)
                 {
                     dataObj.push({"groupId":palGroupId, "ID": distinctPeriodIdx,"att1":att1, "att2":att2});
                 }
@@ -241,7 +245,7 @@ function _getDataObjForPredictions(vcRulesList, idx, modelType, numChars) {
                 {
                     dataObj.push({"groupId":palGroupId, "ID": distinctPeriodIdx,"att1":att1, "att2":att2,"att3":att3,"att4":att4});
 
-                    }
+                }
                 else if (numChars == 5)
                 {
                     dataObj.push({"groupId":palGroupId, "ID": distinctPeriodIdx,"att1":att1, "att2":att2,"att3":att3,"att4":att4,"att5":att5});
@@ -746,7 +750,15 @@ async function _generatePredictions(req) {
 
         console.log('_generatePredictions: url', url);
 
-        if (vcRulesList[i].dimensions == 2)
+        if (vcRulesList[i].dimensions == 1)
+        {
+         //   hasCharCount2 = true; 
+            let ruleList = _getRuleListTypeForPredictions(vcRulesList, i, 1);
+            let paramsObj =  _getParamsObjForPredictions(vcRulesList, i, modelType, 1);
+            let dataObj = _getDataObjForPredictions(vcRulesList, i, modelType, 1);
+            _postPredictionRequest(url,paramsObj,1,dataObj,modelType,ruleList);
+        }
+        else if (vcRulesList[i].dimensions == 2)
         {
          //   hasCharCount2 = true; 
             let ruleList = _getRuleListTypeForPredictions(vcRulesList, i, 2);
@@ -1049,7 +1061,10 @@ function _getParamsObjForGenModels(vcRulesList, modelType, numChars)
                  (results.length > 0))
             {
                 paramsObj.push({"groupId":palGroupId,"paramName":"EXOGENOUS_VARIABLE","intVal":null,"doubleVal": null,"strVal":"ATT1"});
-                paramsObj.push({"groupId":palGroupId,"paramName":"EXOGENOUS_VARIABLE","intVal":null,"doubleVal": null,"strVal":"ATT2"});
+                if (numChars > 1 )
+                {
+                    paramsObj.push({"groupId":palGroupId,"paramName":"EXOGENOUS_VARIABLE","intVal":null,"doubleVal": null,"strVal":"ATT2"});
+                }
                 if (numChars > 2 )
                 {
                     paramsObj.push({"groupId":palGroupId,"paramName":"EXOGENOUS_VARIABLE","intVal":null,"doubleVal": null,"strVal":"ATT3"});
@@ -1105,7 +1120,7 @@ async function _generateRegModels (req) {
 
    const vcRulesListReq = req.data.vcRulesList;
 
-//    console.log('_generateRegModels: ', vcRulesListReq); 
+//   console.log('_generateRegModels vcRulesListReq: ', vcRulesListReq); 
 //    let resp = req._.req.res;
 //    resp.statusCode = 201;
 
@@ -1230,7 +1245,7 @@ async function _generateRegModels (req) {
         }
     }
 
-    var hasCharCount2, hasCharCount3, hasCharCount4, hasCharCount5, hasCharCount6, hasCharCount7, hasCharCount8, hasCharCount9, hasCharCount10, hasCharCount11, hasCharCount12  = false;
+    var hasCharCount1, hasCharCount2, hasCharCount3, hasCharCount4, hasCharCount5, hasCharCount6, hasCharCount7, hasCharCount8, hasCharCount9, hasCharCount10, hasCharCount11, hasCharCount12  = false;
     for (var i = 0; i < vcRulesList.length; i++)
     {
         
@@ -1244,6 +1259,8 @@ async function _generateRegModels (req) {
         results=stmt.exec();
         stmt.drop();
         vcRulesList[i].dimensions = results[0].NUMCHARS;
+        if (vcRulesList[i].dimensions == 1)
+            hasCharCount1 = true; 
         if (vcRulesList[i].dimensions == 2)
            hasCharCount2 = true; 
         if (vcRulesList[i].dimensions == 3)
@@ -1301,6 +1318,59 @@ async function _generateRegModels (req) {
 
 //    req.reply();
 
+if (hasCharCount1 == true)
+{
+    
+    let modelType = 'MLR';
+
+    let ruleList = _getRuleListTypeForGenModels(vcRulesList, modelType, 1);
+    if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+    {
+        let paramsObj =  _getParamsObjForGenModels(ruleList, modelType, 1);
+
+        let dataObj = _getDataObjForGenModels(ruleList, modelType, 1);
+        url = baseUrl + '/pal/mlrRegressions';
+        _postRegressionRequest(url,paramsObj,1,dataObj,modelType,ruleList);
+    }
+    
+//    
+    modelType = 'HGBT';
+
+    ruleList = _getRuleListTypeForGenModels(vcRulesList, modelType, 1);
+    if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+    {
+        let paramsObj =  _getParamsObjForGenModels(ruleList, modelType, 1);
+
+        let dataObj = _getDataObjForGenModels(ruleList, modelType, 1);
+        url =  baseUrl + '/pal/hgbtRegressionsV1';
+        _postRegressionRequest(url,paramsObj,1,dataObj,modelType,ruleList);
+    }
+
+    modelType = 'RDT';
+
+    ruleList = _getRuleListTypeForGenModels(vcRulesList, modelType, 1);
+    if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+    {
+        let paramsObj =  _getParamsObjForGenModels(ruleList, modelType, 1);
+
+        let dataObj = _getDataObjForGenModels(ruleList, modelType, 1);
+        url =  baseUrl + '/pal/rdtRegressions';
+        _postRegressionRequest(url,paramsObj,1,dataObj,modelType,ruleList);
+    }
+
+    modelType = 'VARMA';
+
+    ruleList = _getRuleListTypeForGenModels(vcRulesList, modelType, 1);
+    if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+    {
+        let paramsObj =  _getParamsObjForGenModels(ruleList, modelType, 1);
+
+        let dataObj = _getDataObjForGenModels(ruleList, modelType, 1);
+        url =  baseUrl + '/pal/varmaModels';
+        _postRegressionRequest(url,paramsObj,1,dataObj,modelType,ruleList);
+    }
+
+}
 
     if (hasCharCount2 == true)
     {
@@ -1967,7 +2037,11 @@ function _getDataObjForGenModels(vcRulesList, modelType, numChars) {
 
             if (charIdx % numChars == 0)
             {
-                if (numChars == 2)
+                if (numChars == 1)
+                {
+                    dataObj.push({"groupId":palGroupId, "ID": distinctPeriodIdx,"att1":att1,"target": target});
+                }
+                else if (numChars == 2)
                 {
                     dataObj.push({"groupId":palGroupId, "ID": distinctPeriodIdx,"att1":att1, "att2":att2,"target": target});
 /*
@@ -1976,7 +2050,7 @@ function _getDataObjForGenModels(vcRulesList, modelType, numChars) {
                     else if (modelType == 'HGBT') // HGBT
                         dataObj.push({"groupId":vcRulesList[i].GroupID, "att1":att1, "att2":att2,"target": target});                   
 */
-                    }
+                }
                 else if (numChars == 3)
                 {
                     dataObj.push({"groupId":palGroupId, "ID": distinctPeriodIdx,"att1":att1, "att2":att2,"att3":att3,"target": target});
