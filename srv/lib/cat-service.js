@@ -23,6 +23,99 @@ module.exports = (srv) => {
   srv.on("CREATE", "genProfileParam", _createProfileParameters);
 
   srv.on("CREATE", "genProfileOD", _createProfileOD);
+
+  srv.on("genODHistory", async (req) => {
+    let { getODCharH } = srv.entities;
+    let liresults = [];
+    let lsresults = {};
+    let i, j, vObjdep, vObjcnt, vCaldate;
+    const db = srv.transaction(req);
+    const aodcharhdr = await cds.run(
+      `SELECT
+    "CAL_DATE",
+    "OBJ_DEP",
+    "OBJ_COUNTER",
+    "SUCCESS",
+    "ROW_ID",
+    "CHAR_SUCCESS"
+    FROM "V_TSODCHAR_H"
+    WHERE "OBJ_DEP" = '` +
+        req.data.OBJ_DEP +
+        `'
+    AND "OBJ_COUNTER" = '` +
+        req.data.OBJ_COUNTER +
+        `'
+    ORDER BY CAL_DATE DESC, ROW_ID ASC`
+    );
+    let vflag = '';
+    vCaldate = '';
+    for (i = 0; i < aodcharhdr.length; i++) {    
+      if (
+          vCaldate != aodcharhdr[i].CAL_DATE &&
+          vCaldate !== ''
+        // vObjdep !== aodcharhdr[i].OBJ_DEP &&
+        // vObjcnt !== aodcharhdr[i].OBJ_COUNTER
+      ) {
+        vCaldate = aodcharhdr[i].CAL_DATE;
+        liresults.push(lsresults);
+        // vObjdep = aodcharhdr[i].OBJ_DEP;
+        // vObjcnt = aodcharhdr[i].OBJ_COUNTER;
+        lsresults = {};
+        lsresults.CAL_DATE = aodcharhdr[i].CAL_DATE;
+        lsresults.OBJ_DEP = aodcharhdr[i].OBJ_DEP;
+        lsresults.OBJ_COUNTER = aodcharhdr[i].OBJ_COUNTER;
+        lsresults.SUCCESS = aodcharhdr[i].SUCCESS;
+        lsresults.ROW_ID1 = aodcharhdr[i].CHAR_SUCCESS;
+      } else {
+        vCaldate = aodcharhdr[i].CAL_DATE;
+        lsresults.CAL_DATE = aodcharhdr[i].CAL_DATE;
+        lsresults.OBJ_DEP = aodcharhdr[i].OBJ_DEP;
+        lsresults.OBJ_COUNTER = aodcharhdr[i].OBJ_COUNTER;
+        lsresults.SUCCESS = aodcharhdr[i].SUCCESS;
+        let x = aodcharhdr[i].ROW_ID;
+        if(x === 1){
+            lsresults.ROW_ID1 = aodcharhdr[i].CHAR_SUCCESS;
+         }
+         if(x === 2){
+            lsresults.ROW_ID2 = aodcharhdr[i].CHAR_SUCCESS;
+         }
+         if(x === 3){
+            lsresults.ROW_ID3 = aodcharhdr[i].CHAR_SUCCESS;
+          }
+          if(x === 4){
+            lsresults.ROW_ID4 = aodcharhdr[i].CHAR_SUCCESS;
+          }
+          if(x === 5){
+            lsresults.ROW_ID5 = aodcharhdr[i].CHAR_SUCCESS;
+          }
+          if(x === 6){
+            lsresults.ROW_ID6 = aodcharhdr[i].CHAR_SUCCESS;
+          }
+          if(x === 7){
+            lsresults.ROW_ID7 = aodcharhdr[i].CHAR_SUCCESS;
+          }
+          if(x === 8){
+            lsresults.ROW_ID8 = aodcharhdr[i].CHAR_SUCCESS;
+          }
+          if(x === 9){
+            lsresults.ROW_ID9 = aodcharhdr[i].CHAR_SUCCESS;
+          }
+          if(x === 10){
+            lsresults.ROW_ID10 = aodcharhdr[i].CHAR_SUCCESS;
+          }
+          if(x === 11){
+            lsresults.ROW_ID11 = aodcharhdr[i].CHAR_SUCCESS;
+          }
+          if(x === 12){
+            lsresults.ROW_ID12 = aodcharhdr[i].CHAR_SUCCESS;
+          }
+        
+      }
+    }
+    
+    // liresults.push(lsresults);
+    return liresults;
+  });
   srv.on("generate_timeseries", async (req) => {
     const obgenTimeseries = new GenTimeseries();
     await obgenTimeseries.genTimeseries();
@@ -63,95 +156,6 @@ module.exports = (srv) => {
       );
     return results;
   });
-
- /* srv.on("getODProfiles", async (req) => {
-    let liresults = [];
-    let lsresults = {};
-    let { getMODHeader, getProfileOD } = srv.entities;
-    const db = srv.transaction(req);
-    const aOdhdr = await cds
-      .transaction(req)
-      .run(
-        SELECT.distinct
-          .from(getMODHeader)
-          .columns(
-            "LOCATION_ID",
-            "PRODUCT_ID",
-            "COMPONENT",
-            "OBJ_DEP",
-            "OBJ_COUNTER",
-            "OBJDEP_DESC"
-          )
-      );
-    const aOdProfile = await cds
-      .transaction(req)
-      .run(
-        SELECT.distinct
-          .from(getProfileOD)
-          .columns(
-            "LOCATION_ID",
-            "PRODUCT_ID",
-            "COMPONENT",
-            "PROFILE",
-            "OBJ_DEP",
-            "STRUC_NODE"
-          )
-      );
-
-    for (let i = 0; i < aOdhdr.length; i++) {
-      var vOD = aOdhdr[i].OBJ_DEP + "_" + aOdhdr[i].OBJ_COUNTER;
-      lsresults.LOCATION_ID = aOdhdr[i].LOCATION_ID;
-      lsresults.PRODUCT_ID = aOdhdr[i].PRODUCT_ID;
-      lsresults.COMPONENT = aOdhdr[i].COMPONENT;
-      lsresults.OBJ_DEP = vOD;
-      lsresults.OBJDEP_DESC = aOdhdr[i].OBJDEP_DESC;
-      let liPrfOD = await cds.run(
-        `SELECT DISTINCT
-                        "LOCATION_ID",
-                        "PRODUCT_ID",
-                        "COMPONENT",
-                        "PROFILE",
-                        "OBJ_DEP",
-                        "STRUC_NODE"
-                    FROM "CP_PAL_PROFILEOD"
-                   WHERE "LOCATION_ID" = '` +
-          lsresults.LOCATION_ID +
-          `'
-                     AND "PRODUCT_ID" = '` +
-          lsresults.PRODUCT_ID +
-          `'
-                     AND "COMPONENT" = '` +
-          lsresults.COMPONENT +
-          `'
-                     AND "OBJ_DEP" = '` +
-          vOD +
-          `'`
-      );
-      //   for (let j = 0; j < liPrfOD.length; j++){
-      if (liPrfOD[0] !== undefined) {
-        lsresults.PROFILE = liPrfOD[0].PROFILE;
-        lsresults.STRUC_NODE = liPrfOD[0].STRUC_NODE;
-      }
-      else{
-        lsresults.PROFILE = "";
-        lsresults.STRUC_NODE = "";
-      }
-      liresults.push(lsresults);
-      liPrfOD = [];
-      lsresults = {};
-      // }
-    }
-    return liresults;
-  });
-  /*srv.on("profile_exec", async req =>{
-        let { getAccessNodes } = srv.entities;
-        const db = srv.transaction(req); 
-        const results = await cds.transaction(req).run(
-            SELECT .from(getAccessNodes) .where({PARENT_NODE: req.data.PARENT_NODE, NODE_TYPE: req.data.NODE_TYPE})
-        ) 
-        return results;     
-    })*/
-  //srv.on("")
 };
 // Create or delete Profiles
 async function _createProfiles(req) {
@@ -182,12 +186,12 @@ async function _createProfiles(req) {
     lsprofiles.PRF_DESC = req.data.PRF_DESC;
     lsprofiles.CREATED_DATE = curDate;
     lsprofiles.CREATED_BY = req.data.CREATED_BY;
-    if(lsprofiles.CREATED_BY === 'E'){
-    try {
+    if (lsprofiles.CREATED_BY === "E") {
+      try {
         await cds.delete("CP_PAL_PROFILEMETH", lsprofiles);
-    } catch (e) {
+      } catch (e) {
         //DONOTHING
-    }
+      }
     }
     lsprofiles.CREATED_BY = req.user_id;
     liProfiles.push(lsprofiles);
@@ -295,8 +299,8 @@ async function _createProfileOD(req) {
 
       liProfilesDel.push(GenFunctions.parse(lsprofilesDel));
       try {
-          await cds.delete("CP_PAL_PROFILEOD", lsprofilesDel);
-          responseMessage = " Deletion successfull ";
+        await cds.delete("CP_PAL_PROFILEOD", lsprofilesDel);
+        responseMessage = " Deletion successfull ";
       } catch (e) {
         responseMessage = " Deletion failed";
       }
@@ -320,3 +324,92 @@ async function _createProfileOD(req) {
   }
   res.send({ value: createResults });
 }
+
+/* srv.on("getODProfiles", async (req) => {
+    let liresults = [];
+    let lsresults = {};
+    let { getMODHeader, getProfileOD } = srv.entities;
+    const db = srv.transaction(req);
+    const aOdhdr = await cds
+      .transaction(req)
+      .run(
+        SELECT.distinct
+          .from(getMODHeader)
+          .columns(
+            "LOCATION_ID",
+            "PRODUCT_ID",
+            "COMPONENT",
+            "OBJ_DEP",
+            "OBJ_COUNTER",
+            "OBJDEP_DESC"
+          )
+      );
+    const aOdProfile = await cds
+      .transaction(req)
+      .run(
+        SELECT.distinct
+          .from(getProfileOD)
+          .columns(
+            "LOCATION_ID",
+            "PRODUCT_ID",
+            "COMPONENT",
+            "PROFILE",
+            "OBJ_DEP",
+            "STRUC_NODE"
+          )
+      );
+
+    for (let i = 0; i < aOdhdr.length; i++) {
+      var vOD = aOdhdr[i].OBJ_DEP + "_" + aOdhdr[i].OBJ_COUNTER;
+      lsresults.LOCATION_ID = aOdhdr[i].LOCATION_ID;
+      lsresults.PRODUCT_ID = aOdhdr[i].PRODUCT_ID;
+      lsresults.COMPONENT = aOdhdr[i].COMPONENT;
+      lsresults.OBJ_DEP = vOD;
+      lsresults.OBJDEP_DESC = aOdhdr[i].OBJDEP_DESC;
+      let liPrfOD = await cds.run(
+        `SELECT DISTINCT
+                        "LOCATION_ID",
+                        "PRODUCT_ID",
+                        "COMPONENT",
+                        "PROFILE",
+                        "OBJ_DEP",
+                        "STRUC_NODE"
+                    FROM "CP_PAL_PROFILEOD"
+                   WHERE "LOCATION_ID" = '` +
+          lsresults.LOCATION_ID +
+          `'
+                     AND "PRODUCT_ID" = '` +
+          lsresults.PRODUCT_ID +
+          `'
+                     AND "COMPONENT" = '` +
+          lsresults.COMPONENT +
+          `'
+                     AND "OBJ_DEP" = '` +
+          vOD +
+          `'`
+      );
+      //   for (let j = 0; j < liPrfOD.length; j++){
+      if (liPrfOD[0] !== undefined) {
+        lsresults.PROFILE = liPrfOD[0].PROFILE;
+        lsresults.STRUC_NODE = liPrfOD[0].STRUC_NODE;
+      }
+      else{
+        lsresults.PROFILE = "";
+        lsresults.STRUC_NODE = "";
+      }
+      liresults.push(lsresults);
+      liPrfOD = [];
+      lsresults = {};
+      // }
+    }
+    return liresults;
+  });
+  /*srv.on("profile_exec", async req =>{
+        let { getAccessNodes } = srv.entities;
+        const db = srv.transaction(req); 
+        const results = await cds.transaction(req).run(
+            SELECT .from(getAccessNodes) .where({PARENT_NODE: req.data.PARENT_NODE, NODE_TYPE: req.data.NODE_TYPE})
+        ) 
+        return results;     
+    })*/
+//srv.on("")

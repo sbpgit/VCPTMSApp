@@ -643,6 +643,16 @@ key     ![PRODUCT_ID]: String(40)  @title: 'PRODUCT_ID' ;
 key     ![LOCATION_ID]: String(4)  @title: 'LOCATION_ID' ; 
 }
 
+@cds.persistence.exists 
+Entity ![V_TSODCHAR_H] {
+key     ![CAL_DATE]: Date  @title: 'CAL_DATE' ; 
+key     ![OBJ_DEP]: String(30)  @title: 'OBJ_DEP' ; 
+key     ![OBJ_COUNTER]: Integer  @title: 'OBJ_COUNTER' ; 
+key     ![SUCCESS]: Integer  @title: 'SUCCESS' ; 
+key     ![ROW_ID]: Integer  @title: 'ROW_ID' ; 
+key     ![CHAR_SUCCESS]: Integer  @title: 'CHAR_SUCCESS' ; 
+}
+
 /*
 @cds.persistence.exists
 @cds.persistence.calcview
