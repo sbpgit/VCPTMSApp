@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "i18n/i18n.properties": 1643343456653,
   "utils/locate-reuse-libs.js": 1643343456653,
   "manifest.json": 1643806667820,
@@ -8,4 +9,15 @@
   "utils/locate-reuse-libs-dbg.js": 1643343456653,
   "Component-dbg.js": 1643343456653,
   "index.html": 1643343456653
+=======
+  "utils/locate-reuse-libs.js": 1643015903340,
+  "manifest.json": 1643720558875,
+  "i18n/i18n.properties": 1643015966176,
+  "Component.js": 1643015903332,
+  "manifest-bundle.zip": 1643720558896,
+  "Component-preload.js": 1643720559297,
+  "utils/locate-reuse-libs-dbg.js": 1643015903340,
+  "Component-dbg.js": 1643015903332,
+  "index.html": 1643015903336
+>>>>>>> 9bfcb84cff07c4f9f4200311e9e026d94187d287
 }

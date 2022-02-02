@@ -651,7 +651,7 @@ sap.ui.define(
               };
               vVcRulesList.vcRulesList.push(vruleslist);
               /******************          */
-              var uri = "/v2/pal/generatePredictions";
+              var uri = "v2/pal/generatePredictions";
               $.ajax({
                 url: uri,
                 type: "post",

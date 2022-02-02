@@ -31,7 +31,7 @@ sap.ui.define([
 			oGModel = this.getModel("oGModel");
             sap.ui.core.BusyIndicator.show();
 
-            this.getModel("BModel").read("/getProdClass", {
+            this.getModel("BModel").read("/getLocProdDet ", {
                 
                 success: function (oData) {
                  

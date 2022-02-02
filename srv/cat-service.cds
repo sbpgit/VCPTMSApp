@@ -8,6 +8,7 @@ using V_ODPROFILES from '../db/data-model';
 using V_BOMODCOND from '../db/data-model';
 using V_SALESHCFG_CHARVAL from '../db/data-model';
 using V_ODCHARVAL from '../db/data-model';
+using V_LOCPROD from '../db/data-model';
 service CatalogService @(impl : './lib/cat-service.js') {
     // Service on HDI entities
     //@odata.draft.enabled
@@ -30,9 +31,8 @@ service CatalogService @(impl : './lib/cat-service.js') {
     entity getSalesh            as projection on od.SALESH;
 
     //@odata.draft.enabled
-    @readonly
-    entity getLocProd           as projection on od.LOCATION_PRODUCT;
-
+    entity getLocProd           as projection on  od.LOCATION_PRODUCT;
+    entity getLocProdDet        as projection on V_LOCPROD;
     @readonly
     entity getSalesCfg          as projection on od.SALESH_CONFIG;
 

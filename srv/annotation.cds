@@ -1532,7 +1532,7 @@ annotate V_SALESHCFG_CHARVAL with @(
     // Page Facets
     UI.Facets : [{
         $Type  : 'UI.CollectionFacet',
-        ID     : 'saleshis',
+        ID     : 'saleshisC',
         Label  : 'Sales History Configuration',
         Facets : [{
             $Type  : 'UI.ReferenceFacet',

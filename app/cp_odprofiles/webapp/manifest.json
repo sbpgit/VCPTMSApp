@@ -11,7 +11,7 @@
         "description": "{{appDescription}}",
         "dataSources": {
             "mainService": {
-                "uri": "/v2/catalog/",
+                "uri": "v2/catalog/",
                 "type": "OData",
                 "settings": {
                   "localUri": "localService/CatalogService/metadata.xml",
@@ -19,7 +19,7 @@
                 }
               },
               "Pal": {
-                "uri": "/v2/pal/",
+                "uri": "v2/pal/",
                 "type": "OData",
                 "settings": {
                   "odataVersion": "2.0",

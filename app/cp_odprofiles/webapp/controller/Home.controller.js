@@ -59,9 +59,10 @@ sap.ui.define(
       },
       getData: function () {
         sap.ui.core.BusyIndicator.show();
-        this.getModel("BModel").callFunction("/getODProfiles", {
-          method: "GET",
-          urlParameters: {},
+        // this.getModel("BModel").callFunction("/getODProfiles", {
+        //   method: "GET",
+        //   urlParameters: {},
+        this.getModel("BModel").read("/getODProfiles", {
           success: function (oData) {
             that.aLocation = [];
             that.aProduct = [];
@@ -396,9 +397,9 @@ var token = {
     var tokenModel=sap.ui.getCore().getModel("oToken").getData();
     
 ///////
-        var uri = "/v2/catalog/genProfileOD";
+        var uri = "v2/catalog/genProfileOD";
         $.ajax({
-          url: "/v2/catalog/getLocation",
+          url: "v2/catalog/getLocation",
           type: "GET",
           headers: {
             ContentType: 'application/json',

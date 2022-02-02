@@ -24,6 +24,7 @@ sap.ui.define([
             
              var className = oGModel.getProperty("/className");
 
+             this.byId("charList").setModel(this.oCharModel);
              this.getModel("BModel").read("/getClassChar", {
                 filters: [
                     new Filter("CLASS_NAME", FilterOperator.EQ, className)
@@ -34,7 +35,7 @@ sap.ui.define([
                   that.oCharModel.setData({
                     classresults: oData.results,
                   });
-                  that.byId("charList").setModel(that.oCharModel);
+                //   that.byId("charList").setModel(that.oCharModel);
                 },
                 error: function () {
                   MessageToast.show("Failed to get data");
