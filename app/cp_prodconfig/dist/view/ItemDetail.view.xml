@@ -1,73 +1,97 @@
-<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="cp.appf.cpprodconfig.controller.ItemDetail"
-	xmlns:html="http://www.w3.org/1999/xhtml" class="ItemMaster">
-	<Page id="idClassChar" showFooter="true" enableScrolling="false" showHeader="false">
-		
-		<content>
-        <Toolbar height="12%">
-				<VBox>
-					<!-- <HBox>
-						<Text text="Class# : " class="boldText"></Text>
-						<Text text=" {oGModel>/classNo}"></Text>
-					</HBox> -->
-					<HBox>
-                        <Text text="Product Family : " class="boldText"></Text>
-						<Text text=" {oGModel>/prodFam}" class="sapUiLargeMarginEnd"></Text>						
-						<ToolbarSpacer/>
-                        <Text text="Product Desc : " class="boldText"></Text>
-						<Text text=" {oGModel>/prodDesc}" ></Text>
-						
-					</HBox>
-					<HBox>
-						<Text text="Product Group : " class="boldText"></Text>
-						<Text text=" {oGModel>/prodGroup}" class="sapUiLargeMarginEnd1" ></Text>
-						<ToolbarSpacer/>
-						<Text text="Product Series : " class="boldText"></Text>
-						<Text text="{oGModel>/prodSeries}"></Text>
-					</HBox>
-                    <HBox>
-						<Text text="Product Mid Range : " class="boldText"></Text>
-						<Text text=" {oGModel>/prodMidRng}" class="sapUiLargeMarginEnd2"></Text>
-						<ToolbarSpacer/>
-                        <Text text="Product Model Range : " class="boldText"></Text>
-						<Text text="{oGModel>/prodModel}"></Text>						
-					</HBox>
-				</VBox>
-			</Toolbar>
-            <Table id="charList" items="{path: '/results'}" >
-				<columns>
-					<Column hAlign="Center">
-						<Text text="Class Name" />
-					</Column>
-					<Column hAlign="Center">
-						<Text text="Class #"/>
-					</Column>
-                    <Column hAlign="Center">
-						<Text text="Char Name" />
-					</Column>
-					<Column hAlign="Center">
-						<Text text="Char #"/>
-					</Column>
-                    <Column hAlign="Center">
-						<Text text="Char Value" />
-					</Column>
-					<Column hAlign="Center">
-						<Text text="Char Value #"/>
-					</Column>
-				</columns>
-				<items>
-					<ColumnListItem>
-						<cells>
-							<Text title="{CLASS_NAME}" />
-							<Text title="{CLASS_NUM}" />
-                            <Text title="{CHAR_NAME}" />
-							<Text title="{CHAR_NUM}" />
-                            <Text title="{CHAR_VALUE}" />
-							<Text title="{CHARVAL_NUM}" />
-						</cells>
-					</ColumnListItem>
-				</items>
-			</Table>
-			
-		</content>
-	</Page>
+<mvc:View xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:f="sap.ui.layout.form" controllerName="cp.appf.cpprodconfig.controller.ItemDetail"
+    xmlns:html="http://www.w3.org/1999/xhtml" class="ItemMaster">
+    <Page id="idClassChar" title="Product Details" titleAlignment="Center" >
+
+        <content>
+            <!-- <Toolbar height="12%"> -->
+                <!-- <VBox > -->
+                    <f:Form id="idFormChg" editable="true">
+                        <f:layout>
+                            <f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" 
+                            adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" 
+                            columnsXL="4" columnsL="2" columnsM="2" singleContainerFullSize="false"
+                            breakpointXL= "1400" breakpointL= "800" breakpointM="600" />
+                        </f:layout>
+                        <f:formContainers>
+                            <f:FormContainer>
+                                <f:formElements>
+                                    <f:FormElement label="{i18n>prdfamily}" class="boldText">
+                                        <f:fields>
+                                            <Text text="{oGModel>/prodFam}" />
+                                        </f:fields>
+                                    </f:FormElement>
+                                    <f:FormElement label="{i18n>prdseries}" class="boldText">
+                                        <f:fields>
+                                            <Text text="{oGModel>/prodSeries}" />
+                                        </f:fields>
+                                    </f:FormElement>
+                                    <f:FormElement label="{i18n>prdgroup}" class="boldText">
+                                        <f:fields>
+                                            <Text text="{oGModel>/prodGroup}" />
+                                        </f:fields>
+                                    </f:FormElement>
+                                </f:formElements>
+                            </f:FormContainer>
+                            <f:FormContainer>
+                                <f:formElements>
+                                    <f:FormElement label="{i18n>proddesc}" class="boldText">
+                                        <f:fields>
+                                            <Text text="{oGModel>/prodDesc}" />
+                                        </f:fields>
+                                    </f:FormElement>
+                                    <f:FormElement label="{i18n>prdmodelrange}" class="boldText">
+                                        <f:fields>
+                                            <Text text="{oGModel>/prodModel}" />
+                                        </f:fields>
+                                    </f:FormElement>
+                                    <f:FormElement label="{i18n>prdmidrange}" class="boldText">
+                                        <f:fields>
+                                            <Text text="{oGModel>/prodMidRng}" />
+                                        </f:fields>
+                                    </f:FormElement>
+                                </f:formElements>
+                            </f:FormContainer>
+                        </f:formContainers>
+                    </f:Form>
+                <!-- </VBox> -->
+            <!-- </Toolbar> -->
+            <Table id="charList" items="{path: '/classresults'}">
+                <columns>
+                    <Column hAlign="Left">
+                        <Text text="{i18n>classname}" />
+                    </Column>
+                    <Column hAlign="Left">
+                        <Text text="{i18n>classno}"/>
+                    </Column>
+                    <Column hAlign="Left">
+                        <Text text="{i18n>charname}" />
+                    </Column>
+                    <Column hAlign="Left">
+                        <Text text="{i18n>charno}"/>
+                    </Column>
+                    <Column hAlign="Left">
+                        <Text text="{i18n>charval}" />
+                    </Column>
+                    <Column hAlign="Left">
+                        <Text text="{i18n>charvalno}"/>
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem>
+                        <cells>
+                            <Text text="{CLASS_NAME}" />
+                            <Text text="{CLASS_NUM}" />
+                            <Text text="{CHAR_NAME}" />
+                            <Text text="{CHAR_NUM}" />
+                            <Text text="{CHAR_VALUE}" />
+                            <Text text="{CHARVAL_NUM}" />
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+
+        </content>
+    </Page>
 </mvc:View>

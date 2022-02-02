@@ -26,13 +26,13 @@ sap.ui.define([
 
              this.getModel("BModel").read("/getClassChar", {
                 filters: [
-                    new Filter("CLASS_NAME", FilterOperator.EQ, "")
+                    new Filter("CLASS_NAME", FilterOperator.EQ, className)
                   ],
                 
                 success: function (oData) {
                  
                   that.oCharModel.setData({
-                    results: oData.results,
+                    classresults: oData.results,
                   });
                   that.byId("charList").setModel(that.oCharModel);
                 },

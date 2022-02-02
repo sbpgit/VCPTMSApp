@@ -2,25 +2,25 @@ const cds = require('@sap/cds')
 const { v1: uuidv1} = require('uuid')
 const hana = require('@sap/hana-client');
 
-const conn_params = {
-    serverNode  : cds.env.requires.db.credentials.host + ":" + cds.env.requires.db.credentials.port,
-    uid         : "SBPTECHTEAM", //process.env.uidClassicalSchema, //cf environment variable
-    pwd         : "Sbpcorp@22", //process.env.uidClassicalSchemaPassword,//cf environment variable
-    encrypt: 'TRUE',
-    ssltruststore: cds.env.requires.hana.credentials.certificate
-};
-const vcConfigTimePeriod = "PeriodOfYear"; //process.env.TimePeriod; //cf environment variable
-const classicalSchema = "DB_CONFIG_PROD_CLIENT1"; //process.env.classicalSchema; //cf environment variable
-
 // const conn_params = {
 //     serverNode  : cds.env.requires.db.credentials.host + ":" + cds.env.requires.db.credentials.port,
-//     uid         : process.env.uidClassicalSchema, //cf environment variable "SBPTECHTEAM",//
-//     pwd         : process.env.uidClassicalSchemaPassword,//cf environment variable"Sbpcorp@22",//
+//     uid         : "SBPTECHTEAM", //process.env.uidClassicalSchema, //cf environment variable
+//     pwd         : "Sbpcorp@22", //process.env.uidClassicalSchemaPassword,//cf environment variable
 //     encrypt: 'TRUE',
 //     ssltruststore: cds.env.requires.hana.credentials.certificate
 // };
-// const vcConfigTimePeriod = process.env.TimePeriod; //cf environment variable"PeriodOfYear";//
-// const classicalSchema = process.env.classicalSchema; //cf environment variable"DB_CONFIG_PROD_CLIENT1";//"DB_CONFIG_PROD_CLIENT1";//
+// const vcConfigTimePeriod = "PeriodOfYear"; //process.env.TimePeriod; //cf environment variable
+// const classicalSchema = "DB_CONFIG_PROD_CLIENT1"; //process.env.classicalSchema; //cf environment variable
+
+const conn_params = {
+    serverNode  : cds.env.requires.db.credentials.host + ":" + cds.env.requires.db.credentials.port,
+    uid         : process.env.uidClassicalSchema, //cf environment variable "SBPTECHTEAM",//
+    pwd         : process.env.uidClassicalSchemaPassword,//cf environment variable"Sbpcorp@22",//
+    encrypt: 'TRUE',
+    ssltruststore: cds.env.requires.hana.credentials.certificate
+};
+const vcConfigTimePeriod = process.env.TimePeriod; //cf environment variable"PeriodOfYear";//
+const classicalSchema = process.env.classicalSchema; //cf environment variable"DB_CONFIG_PROD_CLIENT1";//"DB_CONFIG_PROD_CLIENT1";//
 
 const containerSchema = cds.env.requires.db.credentials.schema;
 const conn_params_container = {
@@ -524,9 +524,9 @@ async function _postPredictionRequest(url,paramsObj,numChars,dataObj,modelType,v
                             "'" + result[0].Type + "'" + "," +
                             "'" + result[0].OBJ_DEP + "'" + "," +
                             "'" + result[0].OBJ_COUNTER + "'" + "," +
+                            "'" + modelType + "'" + "," +
                             "'" + result[0].VERSION + "'" + "," +
                             "'" + result[0].SCENARIO + "'" + "," +
-                            "'" + modelType + "'" + "," +
                             "'" + -1 + "'" + "," +
                             "'" + predictedTime + "'" + "," +
                             "'" + 'FAIL' + "'" + ')' + ' WITH PRIMARY KEY';
@@ -738,8 +738,8 @@ async function _generatePredictions(req) {
         { continue;}
         let url;
 
-        //var baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
-        var baseUrl = 'http' + '://' + req.headers.host;
+        var baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+        //var baseUrl = 'http' + '://' + req.headers.host;
         console.log('_generatePredictions: protocol', req.headers['x-forwarded-proto'], 'hostName :', req.headers.host);
         if ( modelType == 'HGBT')
             url =  baseUrl + '/pal/hgbtPredictionsV1';
@@ -1133,8 +1133,8 @@ async function _generateRegModels (req) {
     //const modelType = req.data.modelType;
 
     // https://nodejs.org/api/url.html
-    // var baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
-    var baseUrl = 'http' + '://' + req.headers.host;
+    var baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+    //var baseUrl = 'http' + '://' + req.headers.host;
 
     console.log('_generateRegModels: protocol', req.headers['x-forwarded-proto'], 'hostName :', req.headers.host);
 
