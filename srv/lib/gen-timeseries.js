@@ -19,7 +19,6 @@ class GenTimeseries {
         }),
       ],
     });
-//    this.genTimeseries();
   }
 
   /**
@@ -337,14 +336,22 @@ class GenTimeseries {
   }
 
   async genTimeseriesF(){
+
+    const lStartTime = new Date();
+    this.logger.info("Started timeseries Service");
+
     /** Get Future Plan */
     const liFutureCharPlan = await cds.run(
         `SELECT DISTINCT LOCATION_ID, 
                         PRODUCT_ID, 
+                        VERSION,
+                        SCENARIO,
                         WEEK_DATE
             FROM "CP_IBP_FCHARPLAN"
             ORDER BY LOCATION_ID, 
                     PRODUCT_ID, 
+                    VERSION,
+                    SCENARIO,
                     WEEK_DATE`
     );
 
@@ -353,10 +360,23 @@ class GenTimeseries {
     let liObdhdr = [];
 
     for (let lFutInd = 0; lFutInd < liFutureCharPlan.length; lFutInd++) {
+        this.logger.info(
+            "Date: " +
+            liFutureCharPlan[lFutInd].WEEK_DATE
+          );
         if(lFutInd === 0 ||
             liFutureCharPlan[lFutInd].LOCATION_ID !== liFutureCharPlan[GenFunctions.subOne(lFutInd,liFutureCharPlan.lenght)].LOCATION_ID ||
             liFutureCharPlan[lFutInd].PRODUCT_ID !== liFutureCharPlan[GenFunctions.subOne(lFutInd,liFutureCharPlan.lenght)].PRODUCT_ID ){
-             
+                await cds.run(
+                    DELETE.from("CP_TS_OBJDEP_CHARHDR_F").where({
+                        xpr: [
+                        { ref: ["LOCATION_ID"] }, "=", { val: liFutureCharPlan[lFutInd].LOCATION_ID }, 'AND',
+                        { ref: ["PRODUCT_ID"] }, "=", { val: liFutureCharPlan[lFutInd].PRODUCT_ID }
+                        ],
+                    })
+                );
+               
+                             
                 liObdhdr = await cds.run(
                     `SELECT *
                         FROM "V_OBDHDR"
@@ -381,6 +401,8 @@ class GenTimeseries {
             lsObjdepF.CAL_DATE    = liFutureCharPlan[lFutInd].WEEK_DATE;
             lsObjdepF.LOCATION_ID = liFutureCharPlan[lFutInd].LOCATION_ID;
             lsObjdepF.PRODUCT_ID  = liFutureCharPlan[lFutInd].PRODUCT_ID;
+            lsObjdepF.VERSION     = liFutureCharPlan[lFutInd].VERSION;
+            lsObjdepF.SCENARIO    = liFutureCharPlan[lFutInd].SCENARIO;
             lsObjdepF.OBJ_TYPE    = 'OD';
             lsObjdepF.OBJ_DEP     = liObdhdr[lObjInd].OBJ_DEP;
             lsObjdepF.OBJ_COUNTER = liObdhdr[lObjInd].OBJ_COUNTER;
@@ -405,15 +427,43 @@ class GenTimeseries {
             liObjdepF.push(GenFunctions.parse(lsObjdepF));
         }
 
-        try {
-            await cds.run(INSERT.into("CP_TS_OBJDEP_CHARHDR_F").entries(liObjdepF));
-          } catch (e) {
-            this.logger.error(e.message + "/" + e.query);
-          }
+        liObjdepF.sort(GenFunctions.dynamicSortMultiple("OBJ_DEP","OBJ_COUNTER","ROW_ID"));
+
+        let lSuccessQty = 0;
+        let liObjdepFTemp = [];
+        for (let index = 0; index < liObjdepF.length; index++) {
+            if(liObjdepF[index].OBJ_DEP !== liObjdepF[GenFunctions.addOne(index,liObjdepF.length)].OBJ_DEP ||
+                liObjdepF[index].OBJ_COUNTER !== liObjdepF[GenFunctions.addOne(index,liObjdepF.length)].OBJ_COUNTER ||
+                liObjdepF[index].ROW_ID !== liObjdepF[GenFunctions.addOne(index,liObjdepF.length)].ROW_ID ||
+                index === GenFunctions.addOne(index,liObjdepF.length) ){
+                    let lsObjdepFTemp = GenFunctions.parse(liObjdepF[index]);
+                    lsObjdepFTemp.SUCCESS = lSuccessQty;
+                    liObjdepFTemp.push(GenFunctions.parse(lsObjdepFTemp));
+                lSuccessQty = 0
+            }
+            if (lSuccessQty < liObjdepF[index].SUCCESS) {lSuccessQty = liObjdepF[index].SUCCESS;}
+            
+        }
+
+        if(liObjdepFTemp.length > 0 ){
+            try {
+                
+                for (let index = 0; index < liObjdepFTemp.length; index++) {
+                    cds.run(INSERT.into("CP_TS_OBJDEP_CHARHDR_F").entries(liObjdepFTemp[index]));
+                }
+               
+                //await cds.run(INSERT.into("CP_TS_OBJDEP_CHARHDR_F").entries(liObjdepFTemp));
+            } catch (e) {
+                this.logger.error(e.message + "/" + e.query);
+            }
+        }
     }
     
     this.logger.info("Completed timeseries Service");
 
+    var lProcessTime = Math.floor((Math.abs(lStartTime - new Date())/1000)/60);
+    this.logger.info("Processing time : " + lProcessTime + " Minutes", 'background: #222; color: #bada55');
+ 
 }  
 }
 
