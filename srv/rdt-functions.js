@@ -889,6 +889,8 @@ exports._runPredictionRdtGroup = function(req) {
     stmt.drop();
 
     var rdtType = req.data.rdtType;
+    var version = req.data.Version;
+    var scenario = req.data.Scenario;
 
     console.log('_runPredictionRdtGroup rdtType : ', rdtType);
 
@@ -940,7 +942,7 @@ exports._runPredictionRdtGroup = function(req) {
 
         console.log('PredictionRdt Group: ', groupId);
         //predictionResults = predictionResults + _runRdtPrediction(groupId);
-        let predictionObj = rtdFuncs._runRdtPrediction(rdtType, groupId);
+        let predictionObj = rtdFuncs._runRdtPrediction(rdtType, groupId, version, scenario);
         //value.push({predictionObj});
         predResults.push(predictionObj);
 
@@ -954,12 +956,12 @@ exports._runPredictionRdtGroup = function(req) {
     }
 }
 
-// function _runRdtPrediction(rdtType, group) {
+// function _runRdtPrediction(rdtType, group, version, scenario) {
 exports._runRdtPrediction = function(rdtType, group) {
 
 //    var groupId = req.data.groupId;
 
-    console.log('_runRdtPrediction - group', group);
+    console.log('_runRdtPrediction - group', group, 'Version ', version, 'Scenario ', scenario);
 
     var conn = hana.createConnection();
  
@@ -1476,7 +1478,10 @@ exports._runRdtPrediction = function(rdtType, group) {
     // let location = grpStr[1];
     // let product = grpStr[2];
     var cqnQuery = {INSERT:{ into: { ref: ['CP_PALRDTPREDICTIONS'] }, entries: [
-         {rdtID: idObj, createdAt : createtAtObj.toISOString(), Location : location, Product : product, groupId : GroupId, predictionParameters:predParamsObj, rdtType : rdtType, predictionData : predDataObj, predictedResults : resultsObj}
+         {rdtID: idObj, createdAt : createtAtObj.toISOString(), Location : location, 
+          Product : product, groupId : GroupId, Version : version, Scenario : scenario,
+          predictionParameters:predParamsObj, rdtType : rdtType, 
+          predictionData : predDataObj, predictedResults : resultsObj}
          ]}}
 
     cds.run(cqnQuery);
@@ -1493,7 +1498,11 @@ exports._runRdtPrediction = function(rdtType, group) {
     result=stmt.exec();
     stmt.drop();
 
-    sqlStr = 'SELECT DISTINCT ' + '"' + vcConfigTimePeriod + '"' + ' from  V_FUTURE_DEP_TS WHERE  "GroupID" = ' + "'" + groupId + "'" + ' ORDER BY ' + '"' + vcConfigTimePeriod + '"' + ' ASC';
+    sqlStr = 'SELECT DISTINCT ' + '"' + vcConfigTimePeriod + '"' + 
+                ' from  V_FUTURE_DEP_TS WHERE  "GroupID" = ' + "'" + groupId + "'" +
+                ' AND "VERSION" = ' + "'" + version + "'" +
+                ' AND "SCENARIO" = ' + "'" + scenario + "'" +   
+                ' ORDER BY ' + '"' + vcConfigTimePeriod + '"' + ' ASC';
     console.log("V_FUTURE_DEP_TS Distinct Periods sqlStr", sqlStr)
     stmt=conn.prepare(sqlStr);
     var distPeriods=stmt.exec();
@@ -1515,8 +1524,10 @@ exports._runRdtPrediction = function(rdtType, group) {
         // console.log("V_FUTURE_DEP_TS Predicted Value sql update sqlStr", sqlStr)
 
         sqlStr = 'SELECT "CAL_DATE", "Location", "Product", "Type", "OBJ_DEP", "OBJ_COUNTER", "VERSION", "SCENARIO" ' +
-        'FROM "V_FUTURE_DEP_TS" WHERE "GroupID" = ' + "'" + groupId + "'" + 
-        ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
+                'FROM "V_FUTURE_DEP_TS" WHERE "GroupID" = ' + "'" + groupId + "'" +
+                ' AND "VERSION" = ' + "'" + version + "'" +
+                ' AND "SCENARIO" = ' + "'" + scenario + "'" +   
+                ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
         console.log("V_FUTURE_DEP_TS P SELECT sqlStr ", sqlStr);
 
         stmt=conn.prepare(sqlStr);
