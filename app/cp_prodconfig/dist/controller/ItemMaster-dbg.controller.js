@@ -97,6 +97,25 @@ sap.ui.define([
                 });
             },
 
+            onSearch: function (oEvent) {
+                var query =
+                    oEvent.getParameter("value") || oEvent.getParameter("newValue"),
+                  oFilters = [];
+        
+                if (query !== "") {
+                  oFilters.push(
+                    new Filter({
+                      filters: [
+                        new Filter("PRODUCT_ID", FilterOperator.Contains, query),
+                        new Filter("CLASS_NAME", FilterOperator.Contains, query)
+                      ],
+                      and: false,
+                    })
+                  );
+                }
+                that.byId("prodList").getBinding("items").filter(oFilters);
+              }
+
 	});
 
 });

@@ -311,7 +311,7 @@ context cp {
     // Characteristic Values
     entity CHAR_VALUES : managed {
         key CHAR_NUM     : String(10) @title : 'Internal Char. number';
-        key CHARVAL_NUM  : String(10) @title : 'Internal Char. number';
+        key CHARVAL_NUM  : String(15) @title : 'Internal Char. number';
             CHAR_VALUE   : String(70) @title : 'Charateristic Value';
             CHARVAL_DESC : String(150)@title : 'Charateristic Value Desc.';
             CATCH_ALL    : String(1)  @title : 'Catch all';
@@ -616,12 +616,12 @@ key     ![CUSTOMER_GROUP]: String(2)  @title: 'Customer Group' ;
 key     ![LOCATION_ID]: String(4)  @title: 'Location ID' ; 
 key     ![CHAR_NAME]: String(30)  @title: 'Characteristic' ; 
 key     ![CHAR_VALUE]: String(70)  @title: 'Characteristic Value' ; 
-key     ![CHANGED_DATE]: Date  @title: 'Changed Date' ; 
-key     ![CHANGED_BY]: String(12)  @title: 'Changed By' ; 
-key     ![CREATED_DATE]: Date  @title: 'Created Date' ; 
-key     ![CREATED_BY]: String(12)  @title: 'Created By' ; 
-key     ![CHANGED_TIME]: Time  @title: 'Changed Time' ; 
-key     ![CREATED_TIME]: Time  @title: 'Created Time' ; 
+// key     ![CHANGED_DATE]: Date  @title: 'Changed Date' ; 
+// key     ![CHANGED_BY]: String(12)  @title: 'Changed By' ; 
+// key     ![CREATED_DATE]: Date  @title: 'Created Date' ; 
+// key     ![CREATED_BY]: String(12)  @title: 'Created By' ; 
+// key     ![CHANGED_TIME]: Time  @title: 'Changed Time' ; 
+// key     ![CREATED_TIME]: Time  @title: 'Created Time' ; 
 }
 @cds.persistence.exists 
 Entity ![V_ODCHARVAL] {
@@ -636,6 +636,23 @@ key     ![OD_CONDITION]: String(2)  @title: 'OD_CONDITION' ;
 key     ![CHAR_COUNTER]: Integer  @title: 'CHAR_COUNTER' ; 
 key     ![ROW_ID]: Integer  @title: 'ROW_ID' ; 
 }
+
+@cds.persistence.exists 
+Entity ![V_LOCPROD] {
+key     ![PRODUCT_ID]: String(40)  @title: 'PRODUCT_ID' ; 
+key     ![LOCATION_ID]: String(4)  @title: 'LOCATION_ID' ; 
+}
+
+@cds.persistence.exists 
+Entity ![V_TSODCHAR_H] {
+key     ![CAL_DATE]: Date  @title: 'CAL_DATE' ; 
+key     ![OBJ_DEP]: String(30)  @title: 'OBJ_DEP' ; 
+key     ![OBJ_COUNTER]: Integer  @title: 'OBJ_COUNTER' ; 
+key     ![SUCCESS]: Integer  @title: 'SUCCESS' ; 
+key     ![ROW_ID]: Integer  @title: 'ROW_ID' ; 
+key     ![CHAR_SUCCESS]: Integer  @title: 'CHAR_SUCCESS' ; 
+}
+
 /*
 @cds.persistence.exists
 @cds.persistence.calcview
