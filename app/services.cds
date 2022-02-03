@@ -14,3 +14,5 @@ using from './cp_locprod/annotations';
 using from './cp_saleshcfg/annotations';
 using from './cp_prodconfig/annotations';
 using from './cp_bomod/annotations';
+
+using from './cp_objdepdetails/annotations';
