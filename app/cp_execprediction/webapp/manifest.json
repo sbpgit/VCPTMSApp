@@ -13,7 +13,7 @@
         "ach": "ach",
         "dataSources": {
             "mainService": {
-                "uri": "/v2/pal/",
+                "uri": "v2/pal/",
                 "type": "OData",
                 "settings": {
                     "odataVersion": "2.0",
@@ -21,7 +21,7 @@
                 }
             },
             "CatalogService": {
-                "uri": "/v2/catalog/",
+                "uri": "v2/catalog/",
                 "type": "OData",
                 "settings": {
                     "odataVersion": "2.0",

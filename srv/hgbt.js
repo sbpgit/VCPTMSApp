@@ -969,6 +969,8 @@ exports._runPredictionHgbtGroupV1 = function(req) {
     stmt.drop();
 
     var hgbtType = req.data.hgbtType;
+    var version = req.data.Version;
+    var scenario = req.data.Scenario;
 
     console.log('_runPredictionHgbtGroupV1 hgbtType : ', hgbtType);
 
@@ -1020,7 +1022,7 @@ exports._runPredictionHgbtGroupV1 = function(req) {
 
         console.log('PredictionHgbt Group: ', groupId);
         //predictionResults = predictionResults + _runHgbtPrediction(groupId);
-        let predictionObj = hgbtFuncs._runHgbtPredictionV1(hgbtType, groupId);
+        let predictionObj = hgbtFuncs._runHgbtPredictionV1(hgbtType, groupId, version, scenario);
         //value.push({predictionObj});
         predResults.push(predictionObj);
 
@@ -1034,9 +1036,9 @@ exports._runPredictionHgbtGroupV1 = function(req) {
     }
 }
 
-exports._runHgbtPredictionV1 = function(hgbtType, group) {
+exports._runHgbtPredictionV1 = function(hgbtType, group, version, scenario) {
 
-    console.log('_runHgbtPredictionV1 - group', group);
+    console.log('_runHgbtPredictionV1 - group', group, 'Version ', version, 'Scenario ', scenario);
 
     var conn = hana.createConnection();
  
@@ -1552,7 +1554,10 @@ exports._runHgbtPredictionV1 = function(hgbtType, group) {
     let idObj = uuidv1();
     
     var cqnQuery = {INSERT:{ into: { ref: ['CP_PALHGBTPREDICTIONSV1'] }, entries: [
-         {hgbtID: idObj, createdAt : createtAtObj.toISOString(), Location : location, Product : product, groupId : GroupId, predictionParameters:predParamsObj, hgbtType : hgbtType, predictionData : predDataObj, predictedResults : resultsObj}
+         {hgbtID: idObj, createdAt : createtAtObj.toISOString(), Location : location, 
+          Product : product, groupId : GroupId, Version : version, Scenario : scenario, 
+          predictionParameters:predParamsObj, hgbtType : hgbtType, 
+          predictionData : predDataObj, predictedResults : resultsObj}
          ]}}
 
     cds.run(cqnQuery);
@@ -1569,7 +1574,11 @@ exports._runHgbtPredictionV1 = function(hgbtType, group) {
     result=stmt.exec();
     stmt.drop();
 
-    sqlStr = 'SELECT DISTINCT ' + '"' + vcConfigTimePeriod + '"' + ' from  V_FUTURE_DEP_TS WHERE  "GroupID" = ' + "'" + groupId + "'" + ' ORDER BY ' + '"' + vcConfigTimePeriod + '"' + ' ASC';
+    sqlStr = 'SELECT DISTINCT ' + '"' + vcConfigTimePeriod + '"' + 
+            ' from  V_FUTURE_DEP_TS WHERE  "GroupID" = ' + "'" + groupId + "'" + 
+            ' AND "VERSION" = ' + "'" + version + "'" +
+            ' AND "SCENARIO" = ' + "'" + scenario + "'" +
+            ' ORDER BY ' + '"' + vcConfigTimePeriod + '"' + ' ASC';
     console.log("V_FUTURE_DEP_TS HGBT Distinct Periods sqlStr", sqlStr)
     stmt=conn.prepare(sqlStr);
     var distPeriods=stmt.exec();
@@ -1590,9 +1599,11 @@ exports._runHgbtPredictionV1 = function(hgbtType, group) {
         //          ' WHERE "GroupID" = ' + "'" + groupId + "'" + ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
         // console.log("V_FUTURE_DEP_TS Predicted Value sql update sqlStr", sqlStr)
 
-        sqlStr = 'SELECT "CAL_DATE", "Location", "Product", "Type", "OBJ_DEP", "OBJ_COUNTER" ' +
-        'FROM "V_FUTURE_DEP_TS" WHERE "GroupID" = ' + "'" + groupId + "'" + 
-        ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
+        sqlStr = 'SELECT "CAL_DATE", "Location", "Product", "Type", "OBJ_DEP", "OBJ_COUNTER", "VERSION", "SCENARIO" ' +
+                    'FROM "V_FUTURE_DEP_TS" WHERE "GroupID" = ' + "'" + groupId + "'" + 
+                    ' AND "VERSION" = ' + "'" + version + "'" +
+                    ' AND "SCENARIO" = ' + "'" + scenario + "'" +
+                    ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
         console.log("V_FUTURE_DEP_TS HGBT SELECT sqlStr ", sqlStr);
 
         stmt=conn.prepare(sqlStr);
@@ -1607,6 +1618,8 @@ exports._runHgbtPredictionV1 = function(hgbtType, group) {
                     "'" + result[0].OBJ_DEP + "'" + "," +
                     "'" + result[0].OBJ_COUNTER + "'" + "," +
                     "'" + 'HGBT' + "'" + "," +
+                    "'" + result[0].VERSION + "'" + "," +
+                    "'" + result[0].SCENARIO + "'" + "," + 
                     "'" + predictedVal + "'" + "," +
                     "'" + predictedTime + "'" + "," +
                     "'" + 'SUCCESS' + "'" + ')' + ' WITH PRIMARY KEY';

@@ -30,6 +30,7 @@
     "src/gen/cp.PalGenPredictions.hdbtable",
     "src/gen/cp.PalModelParameters.hdbtable",
     "src/gen/cp.PAL_PARAMETERS.hdbtable",
+    "src/gen/cp.TS_PREDICTIONS.hdbtable",
     "src/gen/sbp.pal.PalHgbtRegressionsV1.hdbtable",
     "src/gen/sbp.pal.PalHgbtByGroup.hdbtable",
     "src/gen/sbp.pal.PalHgbtPredictionsV1.hdbtable",
