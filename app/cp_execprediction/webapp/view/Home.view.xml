@@ -194,6 +194,18 @@
                 <Text text="{i18n>objdep}"/>
             </Column>
             <Column>
+                <Text text="{i18n>profile}"/>
+            </Column>
+            <Column>
+                <Text text="{i18n>override}"/>
+            </Column>
+            <Column>
+                <Text text="{i18n>ver}"/>
+            </Column>
+            <Column>
+                <Text text="{i18n>scenario}"/>
+            </Column>
+            <Column>
                 <Text text="{i18n>dim}"/>
             </Column>
         </columns>
@@ -202,7 +214,11 @@
                 <cells>
                     <Text text="{Location}"/>                    
                     <Text text="{Product}"/>                    
-                    <Text text="{GroupID}"/>
+                    <Text text="{GroupID}"/>                   
+                    <Text text="{profile}"/>                   
+                    <Text text="{override}"/>                   
+                    <Text text="{Version}"/>                   
+                    <Text text="{Scenario}"/>
                     <ObjectStatus
                     class="sapUiSmallMarginBottom"
                     text="{dimensions}"
