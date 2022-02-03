@@ -994,6 +994,8 @@ exports._runPredictionMlrGroup = function(req) {
     stmt.drop();
 
     var mlrpType = req.data.mlrpType;
+    var version = req.data.Version;
+    var scenario = req.data.Scenario;
 
     if (mlrpType == 1)
         sqlStr = 'SELECT DISTINCT GROUP_ID from  "PAL_MLR_PRED_DATA_GRP_TAB_1T"';
@@ -1042,7 +1044,7 @@ exports._runPredictionMlrGroup = function(req) {
 
         console.log('PredictionMlr Group: ', groupId);
         //predictionResults = predictionResults + _runHgbtPrediction(groupId);
-        let predictionObj = mlrFuncs._runMlrPrediction(mlrpType, groupId);
+        let predictionObj = mlrFuncs._runMlrPrediction(mlrpType, groupId, version, scenario);
         //value.push({predictionObj});
         predResults.push(predictionObj);
 
@@ -1057,9 +1059,9 @@ exports._runPredictionMlrGroup = function(req) {
 }
 
 
-exports._runMlrPrediction = function (mlrpType, group) {
+exports._runMlrPrediction = function (mlrpType, group, version, scenario) {
 
-    console.log('_runMlrPrediction - group', group);
+    console.log('_runMlrPrediction - group', group, 'Version ', version, 'Scenario ', scenario);
 
     var conn = hana.createConnection();
  
@@ -1642,7 +1644,10 @@ exports._runMlrPrediction = function (mlrpType, group) {
     let idObj = uuidv1();
     
     var cqnQuery = {INSERT:{ into: { ref: ['CP_PALMLRPREDICTIONS'] }, entries: [
-         {mlrpID: idObj, createdAt : createtAtObj.toISOString(), Location : location, Product : product, groupId : GroupId, predictionParameters:predParamsObj, mlrpType : mlrpType, predictionData : predDataObj, fittedResults : fittedObj}
+         {mlrpID: idObj, createdAt : createtAtObj.toISOString(), Location : location, 
+          Product : product, groupId : GroupId, Version : version, Scenario : scenario,
+          predictionParameters:predParamsObj, mlrpType : mlrpType, 
+          predictionData : predDataObj, fittedResults : fittedObj}
          ]}}
 
     cds.run(cqnQuery);
@@ -1661,6 +1666,8 @@ exports._runMlrPrediction = function (mlrpType, group) {
 
     sqlStr = 'SELECT DISTINCT "OBJ_DEP", "OBJ_COUNTER", ' + '"' + vcConfigTimePeriod + '"' + 
              ' from  "V_FUTURE_DEP_TS" WHERE  "GroupID" = ' + "'" + groupId + "'" + 
+             ' AND "VERSION" = ' + "'" + version + "'" +
+             ' AND "SCENARIO" = ' + "'" + scenario + "'" +
              ' ORDER BY ' + '"' + vcConfigTimePeriod + '"' + ' ASC';
 
     console.log("V_FUTURE_DEP_TS Distinct Periods sqlStr", sqlStr)
@@ -1687,8 +1694,10 @@ exports._runMlrPrediction = function (mlrpType, group) {
 
          //console.log("V_FUTURE_DEP_TS Predicted Value sql update sqlStr", sqlStr)
         sqlStr = 'SELECT "CAL_DATE", "Location", "Product", "Type", "OBJ_DEP", "OBJ_COUNTER", "VERSION", "SCENARIO" ' +
-        'FROM "V_FUTURE_DEP_TS" WHERE "GroupID" = ' + "'" + groupId + "'" + 
-        ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
+                'FROM "V_FUTURE_DEP_TS" WHERE "GroupID" = ' + "'" + groupId + "'" + 
+                ' AND "VERSION" = ' + "'" + version + "'" +
+                ' AND "SCENARIO" = ' + "'" + scenario + "'" +
+                ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
         console.log("V_FUTURE_DEP_TS MLR SELECT sqlStr ", sqlStr);
 
         stmt=conn.prepare(sqlStr);

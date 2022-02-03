@@ -132,7 +132,7 @@ function _getRuleListTypeForPredictions(vcRulesList, idx, numChars)
     //{
         if (vcRulesList[idx].dimensions == numChars )
         {
-            ruleListObj.push({"Location":vcRulesList[idx].Location, "Product":vcRulesList[idx].Product, "GroupID":vcRulesList[idx].GroupID, "dimensions" : numChars});
+            ruleListObj.push({"Location":vcRulesList[idx].Location, "Product":vcRulesList[idx].Product, "GroupID":vcRulesList[idx].GroupID, "Version":vcRulesList[idx].Version,"Scenario":vcRulesList[idx].Scenario,"dimensions" : numChars});
         }
     //}
     return ruleListObj;
@@ -321,6 +321,8 @@ async function _postPredictionRequest(url,paramsObj,numChars,dataObj,modelType,v
             "Product": vcRuleListObj[0].Product,
             "Location": vcRuleListObj[0].Location,
             "groupId" : vcRuleListObj[0].GroupID,
+            "Version" : vcRuleListObj[0].Version,
+            "Scenario" : vcRuleListObj[0].Scenario,
             "predictionParameters": paramsObj,
             "hgbtType": numChars,
             "predictionData": dataObj
@@ -341,6 +343,8 @@ async function _postPredictionRequest(url,paramsObj,numChars,dataObj,modelType,v
             "Product": vcRuleListObj[0].Product,
             "Location": vcRuleListObj[0].Location,
             "groupId" : vcRuleListObj[0].GroupID,
+            "Version" : vcRuleListObj[0].Version,
+            "Scenario" : vcRuleListObj[0].Scenario,
             "predictionParameters": paramsObj,
             "rdtType": numChars,
             "predictionData": dataObj
@@ -361,6 +365,8 @@ async function _postPredictionRequest(url,paramsObj,numChars,dataObj,modelType,v
             "Product": vcRuleListObj[0].Product,
             "Location": vcRuleListObj[0].Location,
             "groupId" : vcRuleListObj[0].GroupID,
+            "Version" : vcRuleListObj[0].Version,
+            "Scenario" : vcRuleListObj[0].Scenario,
             "predictionParameters": paramsObj,
             "mlrpType": numChars,
             "predictionData": dataObj
@@ -381,6 +387,8 @@ async function _postPredictionRequest(url,paramsObj,numChars,dataObj,modelType,v
             "Product": vcRuleListObj[0].Product,
             "Location": vcRuleListObj[0].Location,
             "groupId" : vcRuleListObj[0].GroupID,
+            "Version" : vcRuleListObj[0].Version,
+            "Scenario" : vcRuleListObj[0].Scenario,
             "predictionParameters": paramsObj,
             "varmaType": numChars,
             "predictionData": dataObj
@@ -488,6 +496,8 @@ async function _postPredictionRequest(url,paramsObj,numChars,dataObj,modelType,v
 
             sqlStr = 'SELECT DISTINCT ' + '"' + vcConfigTimePeriod + '"' + ' from  "V_FUTURE_DEP_TS" ' +
                      'WHERE  "GroupID" = ' + "'" + groupId + "'" + 
+                     ' AND "VERSION" = ' + "'" + vcRuleListObj[0].Version + "'" +
+                     ' AND "SCENARIO" = ' + "'" + vcRuleListObj[0].Scenario + "'" +
                      ' ORDER BY ' + '"' + vcConfigTimePeriod + '"' + ' ASC';
             console.log("V_FUTURE_DEP_TS Distinct Periods sqlStr", sqlStr);
             stmt=conn.prepare(sqlStr);
@@ -510,6 +520,8 @@ async function _postPredictionRequest(url,paramsObj,numChars,dataObj,modelType,v
 
                 sqlStr = 'SELECT "CAL_DATE", "Location", "Product", "Type", "OBJ_DEP", "OBJ_COUNTER", "VERSION", "SCENARIO" ' +
                 'FROM "V_FUTURE_DEP_TS" WHERE "GroupID" = ' + "'" + groupId + "'" + 
+                ' AND "VERSION" = ' + "'" + vcRuleListObj[0].Version + "'" +
+                ' AND "SCENARIO" = ' + "'" + vcRuleListObj[0].Scenario + "'" +
                 ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
                 console.log("V_FUTURE_DEP_TS P SELECT sqlStr ", sqlStr);
 
@@ -553,7 +565,7 @@ async function _generatePredictions(req) {
  const vcRulesListReq = req.data.vcRulesList;
    const sleep = require('await-sleep');
 
-//    console.log('_generatePredictions VC Rules List: ', vcRulesListReq); 
+   console.log('_generatePredictions VC Rules List: ', vcRulesListReq); 
 
 
     var conn = hana.createConnection();
@@ -589,29 +601,29 @@ async function _generatePredictions(req) {
         if ( (vcRulesListReq[0].Location != "ALL") &&
              (vcRulesListReq[0].Product == "ALL") )
         {
-            sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "V_PREDICTION_TS"' + 
+            sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", "VERSION", "SCENARIO", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "V_PREDICTION_TS"' + 
                      'WHERE "Location" =' + "'" +   vcRulesListReq[0].Location + "'" +
-                     ' GROUP BY "Location", "Product", "GroupID"';
+                     ' GROUP BY "Location", "Product", "GroupID", "VERSION", "SCENARIO"';
         }
         else if ( (vcRulesListReq[0].Product != "ALL") &&
                   (vcRulesListReq[0].Location == "ALL") )
         {
-            sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "V_PREDICTION_TS"' + 
+            sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", "VERSION", "SCENARIO", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "V_PREDICTION_TS"' + 
                      'WHERE "Product" =' + "'" +   vcRulesListReq[0].Product + "'" +
-                     ' GROUP BY "Location", "Product", "GroupID"';
+                     ' GROUP BY "Location", "Product", "GroupID", "VERSION", "SCENARIO"';
         }
         else if ( (vcRulesListReq[0].Product != "ALL") &&
                   (vcRulesListReq[0].Location != "ALL") )
         {
-            sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "V_PREDICTION_TS"' + 
+            sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", "VERSION", "SCENARIO", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "V_PREDICTION_TS"' + 
                 'WHERE "Product" =' + "'" +   vcRulesListReq[0].Product + "'" +
                 ' AND "Location" =' + "'" +   vcRulesListReq[0].Location + "'" +
-                ' GROUP BY "Location", "Product", "GroupID"';
+                ' GROUP BY "Location", "Product", "GroupID", "VERSION", "SCENARIO"';
         }
         else
         {
-            sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "V_PREDICTION_TS"' + 
-                    ' GROUP BY "Location", "Product", "GroupID"';  
+            sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", "VERSION", "SCENARIO", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "V_PREDICTION_TS"' + 
+                    ' GROUP BY "Location", "Product", "GroupID", "VERSION", "SCENARIO"';  
         }
         console.log('sqlStr: ', sqlStr);            
         stmt = conn.prepare(sqlStr);
@@ -623,16 +635,47 @@ async function _generatePredictions(req) {
             let Location = results[index].Location;
             let Product = results[index].Product;
             let GroupID = results[index].GroupID;
+            let Version = results[index].VERSION;
+            let Scenario = results[index].SCENARIO;
             let profile = vcRulesListReq[0].profile;
             let override = vcRulesListReq[0].override;
-            vcRulesList.push({profile,override,Location,Product,GroupID});
+            vcRulesList.push({profile,override,Version, Scenario, Location,Product,GroupID});
         }
 //        console.log('_generatePredictions All Rules List: ', vcRulesList); 
 
     }
     else
     {
-        vcRulesList =  vcRulesListReq;
+        // vcRulesList =  vcRulesListReq;
+        for (let index=0; index<vcRulesListReq.length; index++) 
+        {
+            sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", "VERSION", "SCENARIO", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "V_PREDICTION_TS"' + 
+                     ' WHERE "Location" = ' + "'" +   vcRulesListReq[index].Location + "'" +
+                     ' AND "GroupID" =' + "'" +   vcRulesListReq[index].GroupID + "'" +
+                     ' AND "Product" =' + "'" +   vcRulesListReq[index].Product + "'" + 
+                     ' GROUP BY "Location", "Product", "GroupID", "VERSION", "SCENARIO"';
+            console.log('sqlStr: ', sqlStr);            
+            stmt = conn.prepare(sqlStr);
+            results=stmt.exec();
+            stmt.drop();
+            for (let rIndex=0; rIndex<results.length; rIndex++) 
+            {
+
+                let Location = results[rIndex].Location;
+                let Product = results[rIndex].Product;
+                let GroupID = results[rIndex].GroupID;
+                let Version = results[rIndex].VERSION;
+                let Scenario = results[rIndex].SCENARIO;
+                let profile = vcRulesListReq[index].profile;
+                let override = vcRulesListReq[index].override;
+                vcRulesList.push({profile,override,Version, Scenario, Location,Product,GroupID});
+
+
+                // vcRulesList[index].Version = results[0].VERSION;
+                // vcRulesList[index].Scenario = results[0].SCENARIO;
+            }
+        }
+
     }
 
    // var sqlStr;
@@ -645,7 +688,9 @@ async function _generatePredictions(req) {
         sqlStr = 'SELECT  COUNT(DISTINCT "Row") AS numChars FROM "V_PREDICTION_TS" WHERE "Product" =' +
                     "'" +  vcRulesList[i].Product + "'" +  
                     ' AND "GroupID" =' + "'" +   vcRulesList[i].GroupID + "'" +
-                    ' AND "Location" =' + "'" +   vcRulesList[i].Location + "'";   
+                    ' AND "Location" =' + "'" +   vcRulesList[i].Location + "'" +
+                    ' AND "VERSION" =' + "'" +   vcRulesList[i].Version + "'" +
+                    ' AND "SCENARIO" =' + "'" +   vcRulesList[i].Scenario + "'";   
 //        console.log('sqlStr: ', sqlStr);            
         stmt=conn.prepare(sqlStr);
         results=stmt.exec();

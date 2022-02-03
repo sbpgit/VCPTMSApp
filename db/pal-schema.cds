@@ -96,6 +96,8 @@ entity PalHgbtPredictionsV1 {
     Location : String(4);
     Product : String(40);
     groupId : String(100);
+    Version : String(10);
+    Scenario : String(32);
     predictionParameters: array of {
         groupId:String(100); 
         paramName:String(100); 
@@ -207,6 +209,8 @@ entity PalRdtPredictions {
     Location : String(4);
     Product : String(40);
     groupId : String(20);
+    Version : String(10);
+    Scenario : String(32);
     predictionParameters: array of {
         groupId:String(100); 
         paramName:String(100); 
@@ -346,6 +350,8 @@ entity PalMlrPredictions {
     Location : String(4);
     Product : String(40);
     groupId : String(20);
+    Version : String(10);
+    Scenario : String(32);
     predictionParameters: array of {
         groupId:String(100); 
         paramName:String(256); 
@@ -483,6 +489,8 @@ entity PalVarmaPredictions {
     Location : String(4);
     Product : String(40);
     groupId : String(20);
+    Version : String(10);
+    Scenario : String(32);
     predictionParameters : array of {
         groupId:String(100); 
         paramName:String(100); 
