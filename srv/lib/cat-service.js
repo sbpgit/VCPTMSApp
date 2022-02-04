@@ -64,14 +64,14 @@ module.exports = (srv) => {
         lsresults.CAL_DATE = aodcharhdr[i].CAL_DATE;
         lsresults.OBJ_DEP = aodcharhdr[i].OBJ_DEP;
         lsresults.OBJ_COUNTER = aodcharhdr[i].OBJ_COUNTER;
-        lsresults.SUCCESS = aodcharhdr[i].SUCCESS;
+        lsresults.ODCOUNT = aodcharhdr[i].SUCCESS;
         lsresults.ROW_ID1 = aodcharhdr[i].CHAR_SUCCESS;
       } else {
         vCaldate = aodcharhdr[i].CAL_DATE;
         lsresults.CAL_DATE = aodcharhdr[i].CAL_DATE;
         lsresults.OBJ_DEP = aodcharhdr[i].OBJ_DEP;
         lsresults.OBJ_COUNTER = aodcharhdr[i].OBJ_COUNTER;
-        lsresults.SUCCESS = aodcharhdr[i].SUCCESS;
+        lsresults.ODCOUNT = aodcharhdr[i].SUCCESS;
         let x = aodcharhdr[i].ROW_ID;
         if(x === 1){
             lsresults.ROW_ID1 = aodcharhdr[i].CHAR_SUCCESS;

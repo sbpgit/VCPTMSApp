@@ -159,6 +159,8 @@ function _getDataObjForPredictions(vcRulesList, idx, modelType, numChars) {
                     "'" +  vcRulesList[idx].Product + "'" +  
                     ' AND "GroupID" =' + "'" +   vcRulesList[idx].GroupID + "'" +
                     ' AND "Location" =' + "'" +   vcRulesList[idx].Location + "'" + 
+                    ' AND "VERSION" =' + "'" +   vcRulesList[idx].Version + "'" +
+                    ' AND "SCENARIO" =' + "'" +   vcRulesList[idx].Scenario + "'" +
                     ' GROUP BY "Attribute", "' + vcConfigTimePeriod + '"' +
                     ' ORDER BY "' + vcConfigTimePeriod + '", "Attribute"';
 
@@ -646,20 +648,34 @@ async function _generatePredictions(req) {
     }
     else
     {
-        vcRulesList =  vcRulesListReq;
-        for (let index=0; index<vcRulesList.length; index++) 
+        // vcRulesList =  vcRulesListReq;
+        for (let index=0; index<vcRulesListReq.length; index++) 
         {
             sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", "VERSION", "SCENARIO", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "V_PREDICTION_TS"' + 
-                     ' WHERE "Location" = ' + "'" +   vcRulesList[index].Location + "'" +
-                     ' AND "GroupID" =' + "'" +   vcRulesList[index].GroupID + "'" +
-                     ' AND "Product" =' + "'" +   vcRulesList[index].Product + "'" + 
+                     ' WHERE "Location" = ' + "'" +   vcRulesListReq[index].Location + "'" +
+                     ' AND "GroupID" =' + "'" +   vcRulesListReq[index].GroupID + "'" +
+                     ' AND "Product" =' + "'" +   vcRulesListReq[index].Product + "'" + 
                      ' GROUP BY "Location", "Product", "GroupID", "VERSION", "SCENARIO"';
             console.log('sqlStr: ', sqlStr);            
             stmt = conn.prepare(sqlStr);
             results=stmt.exec();
             stmt.drop();
-            vcRulesList[index].Version = results[0].VERSION;
-            vcRulesList[index].Scenario = results[0].SCENARIO;
+            for (let rIndex=0; rIndex<results.length; rIndex++) 
+            {
+
+                let Location = results[rIndex].Location;
+                let Product = results[rIndex].Product;
+                let GroupID = results[rIndex].GroupID;
+                let Version = results[rIndex].VERSION;
+                let Scenario = results[rIndex].SCENARIO;
+                let profile = vcRulesListReq[index].profile;
+                let override = vcRulesListReq[index].override;
+                vcRulesList.push({profile,override,Version, Scenario, Location,Product,GroupID});
+
+
+                // vcRulesList[index].Version = results[0].VERSION;
+                // vcRulesList[index].Scenario = results[0].SCENARIO;
+            }
         }
 
     }
@@ -770,7 +786,7 @@ async function _generatePredictions(req) {
         let url;
 
         var baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
-        //var baseUrl = 'http' + '://' + req.headers.host;
+        // var baseUrl = 'http' + '://' + req.headers.host;
         console.log('_generatePredictions: protocol', req.headers['x-forwarded-proto'], 'hostName :', req.headers.host);
         if ( modelType == 'HGBT')
             url =  baseUrl + '/pal/hgbtPredictionsV1';
