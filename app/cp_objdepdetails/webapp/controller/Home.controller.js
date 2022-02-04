@@ -122,12 +122,12 @@ sap.ui.define([
                     });
                   oTable.addColumn(oColumn);
 
-            //       var oColumn = new sap.m.Column("colcounter" , {
-            //         header: new sap.m.Text({
-            //         text: "Counter"
-            //         })
-            //     });
-            //   oTable.addColumn(oColumn);
+                  var oColumn = new sap.m.Column("colcounter" , {
+                    header: new sap.m.Text({
+                    text: "ODCOUNT"
+                    })
+                });
+              oTable.addColumn(oColumn);
 
                     for (var i = 1; i < columnNo; i++) {
                         var oColumn = new sap.m.Column("col" + i, {
@@ -148,10 +148,10 @@ sap.ui.define([
                        });
                     oCell.push(cell1);
 
-                    // var cell1 = new sap.m.Text({
-                    //     text: "{Counter}"
-                    // });
-                    // oCell.push(cell1);
+                    var cell1 = new sap.m.Text({
+                        text: "{ODCOUNT}"
+                    });
+                    oCell.push(cell1);
 
                     for (var i = 1; i < columnNo; i++) {
                         var test = "{ROW_ID";
