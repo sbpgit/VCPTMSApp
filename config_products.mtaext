@@ -1,0 +1,12 @@
+_schema-version: '3.1'
+ID: config_products-small
+extends: config_products
+
+modules:
+ - name: config_products-srv
+   build-parameters:
+     ignore: ["node_modules/"]
+
+ - name: config_products
+   build-parameters:
+     ignore: ["cp_assignprofiles/node_modules/","cp_bomod/node_modules"]

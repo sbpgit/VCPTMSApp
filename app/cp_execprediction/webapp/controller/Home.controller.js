@@ -591,49 +591,49 @@ sap.ui.define(
   
               }
           }
-          this.oModel.create("/generatePredictions", JSON.stringify(oEntry.vcRulesList), {
-                success: function (oData) {
-                sap.m.MessageToast.show(that.i18n.getText("genPredSuccess"));
-                regData.push(data.d.values[0].vcRulesList);
+        //   this.oModel.create("/generatePredictions", JSON.stringify(oEntry.vcRulesList), {
+        //         success: function (oData) {
+        //         sap.m.MessageToast.show(that.i18n.getText("genPredSuccess"));
+        //         regData.push(data.d.values[0].vcRulesList);
 
-                that.otabModel.setData({
-                  results: regData[0],
-                });
-                that.byId("pmdlList").setModel(that.otabModel);
-                that.oPanel.setProperty("visible", true);
-                vFlag = 'X';            
-                },
-                error: function (oError) {
-                  sap.m.MessageToast.show("error");
-                }
-            });
-                // var uri = "/v2/pal/generatePredictions";
+        //         that.otabModel.setData({
+        //           results: regData[0],
+        //         });
+        //         that.byId("pmdlList").setModel(that.otabModel);
+        //         that.oPanel.setProperty("visible", true);
+        //         vFlag = 'X';            
+        //         },
+        //         error: function (oError) {
+        //           sap.m.MessageToast.show("error");
+        //         }
+        //     });
+                var uri = "/v2/pal/generatePredictions";
                
-                // $.ajax({
-                //   url: uri,
-                //   type: "POST",
-                //   contentType: "application/json",
-                //   data: JSON.stringify({
-                //     vcRulesList: oEntry.vcRulesList,
-                //   }),
-                //   dataType: "json",
-                //   async: false,
-                //   timeout: 0,
-                //   error: function (data) {
-                //     sap.m.MessageToast.show(that.i18n.getText("genPredErr"));
-                //   },
-                //   success: function (data) {
-                //     sap.m.MessageToast.show(that.i18n.getText("genPredSuccess"));
-                //     regData.push(data.d.values[0].vcRulesList);
+                $.ajax({
+                  url: uri,
+                  type: "POST",
+                  contentType: "application/json",
+                  data: JSON.stringify({
+                    vcRulesList: oEntry.vcRulesList,
+                  }),
+                  dataType: "json",
+                  async: false,
+                  timeout: 0,
+                  error: function (data) {
+                    sap.m.MessageToast.show(that.i18n.getText("genPredErr"));
+                  },
+                  success: function (data) {
+                    sap.m.MessageToast.show(that.i18n.getText("genPredSuccess"));
+                    regData.push(data.d.values[0].vcRulesList);
   
-                //     that.otabModel.setData({
-                //       results: regData[0],
-                //     });
-                //     that.byId("pmdlList").setModel(that.otabModel);
-                //     that.oPanel.setProperty("visible", true);
-                //     vFlag = 'X';
-                //   },
-                // });
+                    that.otabModel.setData({
+                      results: regData[0],
+                    });
+                    that.byId("pmdlList").setModel(that.otabModel);
+                    that.oPanel.setProperty("visible", true);
+                    vFlag = 'X';
+                  },
+                });
           
           }
               if(vFlag === 'X'){
