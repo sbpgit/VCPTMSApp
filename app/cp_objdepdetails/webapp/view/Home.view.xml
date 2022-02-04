@@ -36,7 +36,10 @@
                     </layoutData>
                     <Panel id="idhisPanel" expandable="true" headerText="Object Dependency History Details" width="auto" class="sapUiResponsiveMargin">
                         <content>
+                        <Table id="idMyTable" itemPress="onObjDepPress" 
+            rememberSelections="false" mode="SingleSelectMaster" selectionChange="onObjDepPress" sticky="ColumnHeaders">
 
+                        </Table>
 
                         </content>
                     </Panel>
