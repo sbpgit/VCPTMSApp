@@ -36,15 +36,24 @@
                     </layoutData>
                     <Panel id="idhisPanel" expandable="true" headerText="Object Dependency History Details" width="auto" class="sapUiResponsiveMargin">
                         <content>
-                        <Table id="idMyTable" itemPress="onObjDepPress" 
-            rememberSelections="false" mode="SingleSelectMaster" selectionChange="onObjDepPress" sticky="ColumnHeaders">
+                        <Table id="idMyTable" >
+                        <infoToolbar>
+                            <OverflowToolbar>
+                            	<ToolbarSpacer />
+                                <Button id="idDisplay" icon="sap-icon://display" tooltip="Display" 
+                                    press="onParameters"  />
+                            </OverflowToolbar>
+                        </infoToolbar>
 
                         </Table>
 
                         </content>
                     </Panel>
-                    <Panel id="idPredPanel" expandable="true" headerText="Object Dependency Prediction" width="auto" class="sapUiResponsiveMargin">
+                    <Panel id="idFutPanel" expandable="true" headerText="Object Dependency Prediction" width="auto" class="sapUiResponsiveMargin">
                         <content>
+                        <Table id="idFutTable" >
+
+                        </Table>
 
                         </content>
                     </Panel>
