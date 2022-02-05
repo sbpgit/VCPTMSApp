@@ -29,6 +29,13 @@ sap.ui.define(
           that.oHdrModel = new JSONModel();
           that.oModel.setSizeLimit(2000);
           oGModel = that.getOwnerComponent().getModel("oGModel");
+          if (!that._onObjDepChar) {
+            that._onObjDepChar = sap.ui.xmlfragment(
+              "cp.appf.cpobjdepdetails.view.ObjDepChar",
+              that
+            );
+            that.getView().addDependent(that._onObjDepChar);
+          }
         },
         // Refreshing Master Data
         refreshMaster: function () {
@@ -55,15 +62,14 @@ sap.ui.define(
 
         onhandlePress: function (oEvent) {
           oGModel = that.getOwnerComponent().getModel("oGModel");
-          var selected = oEvent
-              .getSource()
-              .getSelectedItem()
-              .getTitle()
-              .split("_"),
-            selectedObjDep = selected[0],
-            selectedCounter = selected[1];
+          var selected = oEvent.getSource().getSelectedItem().getTitle(),
+              selectedItem = selected.split("_"),
+            selectedObjDep = selectedItem[0],
+            selectedCounter = selectedItem[1];
           oGModel.setProperty("/objDep", selectedObjDep);
+          oGModel.setProperty("/objCounter", selectedCounter);
           var oTable = that.getView().byId("idMyTable");
+          that.oCharModel = new JSONModel();
           oTable.destroyColumns();
 
           var aaColList = new sap.m.ColumnListItem("aaColList", {
@@ -78,6 +84,24 @@ sap.ui.define(
             oTable.setModel(dataModel);
             oTable.bindItems("/results", aaColList);
           }
+
+          this.getModel("BModel").read("/getODcharval", {
+            filters: [
+                new Filter("OBJ_DEP", FilterOperator.EQ, selected)
+              ],
+            
+            success: function (oData) {
+             
+              that.oCharModel.setData({
+                charResults: oData.results,
+              });
+              sap.ui.getCore().byId("idChartab").setModel(that.oCharModel);
+
+            },
+            error: function () {
+              MessageToast.show("Failed to get data");
+            },
+          });
 
           // sap.ui.core.BusyIndicator.show();
 
@@ -135,7 +159,7 @@ sap.ui.define(
 
               var oColumn = new sap.m.Column("colcounter", {
                 header: new sap.m.Text({
-                  text: "ODCOUNT",
+                  text: "ODCount",
                 }),
               });
               oTable.addColumn(oColumn);
@@ -262,22 +286,36 @@ sap.ui.define(
               var oTable = that.getView().byId("idFutTable");
               columnNo = parseInt(columnNo) + 1;
 
-              var oColumn = new sap.m.Column("colweek", {
+              var oColumn = new sap.m.Column("futcolweek", {
                 header: new sap.m.Text({
                   text: "WeeK",
                 }),
               });
               oTable.addColumn(oColumn);
 
-              var oColumn = new sap.m.Column("colcounter", {
+              var oColumn = new sap.m.Column("futcolcounter", {
                 header: new sap.m.Text({
-                  text: "ODCOUNT",
+                  text: "ODCount",
+                }),
+              });
+              oTable.addColumn(oColumn);
+
+              var oColumn = new sap.m.Column("futVersion", {
+                header: new sap.m.Text({
+                  text: "Version",
+                }),
+              });
+              oTable.addColumn(oColumn);
+
+              var oColumn = new sap.m.Column("futScenario", {
+                header: new sap.m.Text({
+                  text: "Scenario ",
                 }),
               });
               oTable.addColumn(oColumn);
 
               for (var i = 1; i < columnNo; i++) {
-                var oColumn = new sap.m.Column("col" + i, {
+                var oColumn = new sap.m.Column("futcol" + i, {
                   hAlign: "Center",
                   header: new sap.m.Text({
                     text: "ROW_ID" + i,
@@ -299,6 +337,16 @@ sap.ui.define(
               });
               oCell.push(cell1);
 
+              var cell1 = new sap.m.Text({
+                text: "{VERSION}",
+              });
+              oCell.push(cell1);
+
+              var cell1 = new sap.m.Text({
+                text: "{SCENARIO}",
+              });
+              oCell.push(cell1);
+
               for (var i = 1; i < columnNo; i++) {
                 var test = "{ROW_ID";
                 var test1 = "}";
@@ -307,7 +355,7 @@ sap.ui.define(
                 oCell.push(cell1);
               }
 
-              var futColList = new sap.m.ColumnListItem("futColList", {
+              var afutColList = new sap.m.ColumnListItem("afutColList", {
                 cells: oCell,
               });
 
@@ -317,7 +365,7 @@ sap.ui.define(
                 futdataModel.setSizeLimit(1000);
                 futdataModel.setData({ futresults: oData.results });
                 oTable.setModel(futdataModel);
-                oTable.bindItems("/futresults", futColList);
+                oTable.bindItems("/futresults", afutColList);
               }
               that.byId("idFutPanel").setExpanded(true);
               sap.ui.core.BusyIndicator.hide();
@@ -344,6 +392,47 @@ sap.ui.define(
             );
           }
           that.byId("objDepList").getBinding("items").filter(oFilters);
+        },
+
+        onParameters:function(){
+
+            // if (!that._onObjDepChar) {
+            //     that._onObjDepChar = sap.ui.xmlfragment(
+            //       "cp.appf.cpobjdepdetails.view.ObjDepChar",
+            //       that
+            //     );
+            //     that.getView().addDependent(that._onObjDepChar);
+            //   }
+
+              that._onObjDepChar.open();
+
+        },
+
+        handleClose:function(){
+            that._onObjDepChar.close();
+
+        },
+
+        oncharSearch: function(oEvent){
+            var query = "",
+          oFilters = [];
+          if(oEvent){
+            var query = oEvent.getParameter("value") || oEvent.getParameter("newValue")
+            }
+
+        if (query !== "") {
+          oFilters.push(
+            new Filter({
+              filters: [
+                new Filter("CLASS_NAME", FilterOperator.Contains, query),
+                new Filter("CHAR_NAME", FilterOperator.Contains, query)
+              ],
+              and: false,
+            })
+          );
+        }
+        sap.ui.getCore().byId("idChartab").getBinding("items").filter(oFilters);
+
         }
 
 
