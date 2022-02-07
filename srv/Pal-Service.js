@@ -159,6 +159,8 @@ function _getDataObjForPredictions(vcRulesList, idx, modelType, numChars) {
                     "'" +  vcRulesList[idx].Product + "'" +  
                     ' AND "GroupID" =' + "'" +   vcRulesList[idx].GroupID + "'" +
                     ' AND "Location" =' + "'" +   vcRulesList[idx].Location + "'" + 
+                    ' AND "VERSION" =' + "'" +   vcRulesList[idx].Version + "'" +
+                    ' AND "SCENARIO" =' + "'" +   vcRulesList[idx].Scenario + "'" +
                     ' GROUP BY "Attribute", "' + vcConfigTimePeriod + '"' +
                     ' ORDER BY "' + vcConfigTimePeriod + '", "Attribute"';
 
@@ -784,7 +786,7 @@ async function _generatePredictions(req) {
         let url;
 
         var baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
-        //var baseUrl = 'http' + '://' + req.headers.host;
+        // var baseUrl = 'http' + '://' + req.headers.host;
         console.log('_generatePredictions: protocol', req.headers['x-forwarded-proto'], 'hostName :', req.headers.host);
         if ( modelType == 'HGBT')
             url =  baseUrl + '/pal/hgbtPredictionsV1';
