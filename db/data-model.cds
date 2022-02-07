@@ -653,6 +653,17 @@ key     ![ROW_ID]: Integer  @title: 'ROW_ID' ;
 key     ![CHAR_SUCCESS]: Integer  @title: 'CHAR_SUCCESS' ; 
 }
 
+@cds.persistence.exists 
+Entity ![V_TSODCHAR_F] {
+key     ![CAL_DATE]: Date  @title: 'CAL_DATE' ; 
+key     ![OBJ_DEP]: String(30)  @title: 'OBJ_DEP' ; 
+key     ![OBJ_COUNTER]: Integer  @title: 'OBJ_COUNTER' ; 
+key     ![VERSION]: String(10)  @title: 'VERSION' ; 
+key     ![SCENARIO]: String(32)  @title: 'SCENARIO' ; 
+key     ![PREDICTED]: Double  @title: 'PREDICTED' ; 
+key     ![ROW_ID]: Integer  @title: 'ROW_ID' ; 
+key     ![CHAR_SUCCESS]: Integer  @title: 'CHAR_SUCCESS' ; 
+}
 /*
 @cds.persistence.exists
 @cds.persistence.calcview
