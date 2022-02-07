@@ -121,10 +121,6 @@ modules:
       name: cpappfcpbomod
       target-path: resources/
     - artifacts:
-      - cpappfcpobjdetails.zip
-      name: cpappfcpobjdetails
-      target-path: resources/
-    - artifacts:
       - cpappfcpobjdepdetails.zip
       name: cpappfcpobjdepdetails
       target-path: resources/
@@ -241,16 +237,6 @@ modules:
 - name: cpappfcpbomod
   type: html5
   path: app/cp_bomod
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    supported-platforms: []
-- name: cpappfcpobjdetails
-  type: html5
-  path: app/cp_objdetails
   build-parameters:
     build-result: dist
     builder: custom

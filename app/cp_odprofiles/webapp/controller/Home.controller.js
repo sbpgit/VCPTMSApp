@@ -63,6 +63,7 @@ sap.ui.define(
         //   method: "GET",
         //   urlParameters: {},
         this.getModel("BModel").read("/getODProfiles", {
+          filters: [new Filter("LOCATION_ID", FilterOperator.EQ, "MX32")],
           success: function (oData) {
             that.aLocation = [];
             that.aProduct = [];

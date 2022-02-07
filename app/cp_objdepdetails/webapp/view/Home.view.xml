@@ -11,7 +11,8 @@
                         <l:SplitterLayoutData resizable="false" size="25%"/>
                     </layoutData>
                     <content>
-                        <SearchField id="headSearch" liveChange="onSearch" placeholder="Object Dependency"/>
+                        <!-- <SearchField id="headSearch" liveChange="onSearch" placeholder="Object Dependency"/> -->
+                        <SearchField id="headSearch" search="onSearch" placeholder="Object Dependency"/>
                         <List id="objDepList" headerText="Object Dependency" items="{ path : '/results', sorter : { path : 'OBJ_DEP'}}" mode="SingleSelectMaster" noDataText="No Data" selectionChange="onhandlePress">
                             <items>
                                 <StandardListItem title="{OBJ_DEP}" description="{OBJDEP_DESC}" />
@@ -36,12 +37,24 @@
                     </layoutData>
                     <Panel id="idhisPanel" expandable="true" headerText="Object Dependency History Details" width="auto" class="sapUiResponsiveMargin">
                         <content>
+                        <Table id="idMyTable" >
+                        <infoToolbar>
+                            <OverflowToolbar>
+                            	<ToolbarSpacer />
+                                <Button id="idDisplay" icon="sap-icon://display" tooltip="Display" 
+                                    press="onParameters"  />
+                            </OverflowToolbar>
+                        </infoToolbar>
 
+                        </Table>
 
                         </content>
                     </Panel>
-                    <Panel id="idPredPanel" expandable="true" headerText="Object Dependency Prediction" width="auto" class="sapUiResponsiveMargin">
+                    <Panel id="idFutPanel" expandable="true" headerText="Object Dependency Prediction" width="auto" class="sapUiResponsiveMargin">
                         <content>
+                        <Table id="idFutTable" >
+
+                        </Table>
 
                         </content>
                     </Panel>

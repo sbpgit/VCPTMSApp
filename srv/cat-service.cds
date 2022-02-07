@@ -11,6 +11,7 @@ using V_SALESHCFG_CHARVAL from '../db/data-model';
 using V_ODCHARVAL from '../db/data-model';
 using V_LOCPROD from '../db/data-model';
 using V_TSODCHAR_H from '../db/data-model';
+using V_TSODCHAR_F from '../db/data-model';
 service CatalogService @(impl : './lib/cat-service.js') {
     // Service on HDI entities
     //@odata.draft.enabled
@@ -108,6 +109,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
     entity getBomOdCond         as projection on V_BOMODCOND;
     entity getODcharval         as projection on V_ODCHARVAL;
     entity getODCharH          as projection on V_TSODCHAR_H;
+    entity getODCharF          as projection on V_TSODCHAR_F;
 
 
     //function createProf() returns String;
@@ -116,7 +118,8 @@ service CatalogService @(impl : './lib/cat-service.js') {
     function get_objdep() returns array of ds.objectDep; //objectDep;
     //function getODProfiles() returns array of odprofiles;
     function getCSRFToken() returns String;
-    function genODHistory(OBJ_DEP:String(30),OBJ_COUNTER:String(10)) returns array of ds.odhisfuture;
+    function genODHistory(OBJ_DEP:String(30),OBJ_COUNTER:String(10)) returns array of ds.odhistory;
+    function genODFuture(OBJ_DEP:String(30),OBJ_COUNTER:String(10)) returns array of ds.odfuture;
     action gen_timeseries() returns String;
 
 }
