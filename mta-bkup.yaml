@@ -1,0 +1,318 @@
+_schema-version: "3.1"
+ID: config_products
+description: A simple CAP project.
+version: 1.0.0
+modules:
+- name: config_products-srv
+  type: nodejs
+  path: gen/srv
+  requires:
+  - name: config_products-db
+  - name: uaa_config_products
+  provides:
+  - name: srv-api
+    properties:
+      srv-url: ${default-url}
+  parameters:
+    buildpack: nodejs_buildpack
+  build-parameters:
+    ignore:
+    - env
+    - ./node_modules
+- name: config_products-db-deployer
+  type: hdb
+  path: gen/db
+  requires:
+  - name: config_products-db
+    properties:
+      TARGET_CONTAINER: ~{hdi-service-name}
+  parameters:
+    buildpack: nodejs_buildpack
+  build-parameters:
+    ignore:
+    - env
+    - ./node_modules
+- name: config_products-destination-content
+  type: com.sap.application.content
+  requires:
+  - name: config_products-destination-service
+    parameters:
+      content-target: true
+  - name: config_products_html_repo_host
+    parameters:
+      service-key:
+        name: config_products_html_repo_host-key
+  - name: uaa_config_products
+    parameters:
+      service-key:
+        name: uaa_config_products-key
+  parameters:
+    content:
+      instance:
+        destinations:
+        - Name: configprod_approuter_config_products_html_repo_host
+          ServiceInstanceName: config_products-html5-app-host-service
+          ServiceKeyName: config_products_html_repo_host-key
+          sap.cloud.service: configprod_approuter
+        - Authentication: OAuth2UserTokenExchange
+          Name: configprod_approuter_uaa_config_products
+          ServiceInstanceName: config_products-xsuaa-service
+          ServiceKeyName: uaa_config_products-key
+          sap.cloud.service: configprod_approuter
+        existing_destinations_policy: ignore
+  build-parameters:
+    no-source: true
+- name: config_products-app-content
+  type: com.sap.application.content
+  path: .
+  requires:
+  - name: config_products_html_repo_host
+    parameters:
+      content-target: true
+  build-parameters:
+    build-result: resources
+    requires:
+    - artifacts:
+      - cfgapppvsrootcfgprdpvsroot.zip
+      name: cfgapppvsrootcfgprdpvsroot
+      target-path: resources/
+    - artifacts:
+      - cpibpfdemcpibpfdem.zip
+      name: cpibpfdemcpibpfdem
+      target-path: resources/
+    - artifacts:
+      - cpibpfplancpibpfplan.zip
+      name: cpibpfplancpibpfplan
+      target-path: resources/
+    - artifacts:
+      - cpibpfrescpibpfres.zip
+      name: cpibpfrescpibpfres
+      target-path: resources/
+    - artifacts:
+      - cpexecpredcpexecprediction.zip
+      name: cpexecpredcpexecprediction
+      target-path: resources/
+    - artifacts:
+      - cpexeregcpexeregressionmdls.zip
+      name: cpexeregcpexeregressionmdls
+      target-path: resources/
+    - artifacts:
+      - cpodpcpodprofiles.zip
+      name: cpodpcpodprofiles
+      target-path: resources/
+    - artifacts:
+      - cpappfcpassignprofiles.zip
+      name: cpappfcpassignprofiles
+      target-path: resources/
+    - artifacts:
+      - cplpcplocprod.zip
+      name: cplpcplocprod
+      target-path: resources/
+    - artifacts:
+      - cpappfcpsaleshcfg.zip
+      name: cpappfcpsaleshcfg
+      target-path: resources/
+    - artifacts:
+      - cpappfcpprodconfig.zip
+      name: cpappfcpprodconfig
+      target-path: resources/
+    - artifacts:
+      - cpappfcpbomod.zip
+      name: cpappfcpbomod
+      target-path: resources/
+    - artifacts:
+      - cpappfcpobjdepdetails.zip
+      name: cpappfcpobjdepdetails
+      target-path: resources/
+    - artifacts:
+      - cpappfcpobjdepdetails.zip
+      name: cpappfcpobjdepdetails
+      target-path: resources/
+- name: cfgapppvsrootcfgprdpvsroot
+  type: html5
+  path: app/cfgprd_pvsroot
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpibpfdemcpibpfdem
+  type: html5
+  path: app/cp_ibpfdem
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpibpfplancpibpfplan
+  type: html5
+  path: app/cp_ibpfplan
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpibpfrescpibpfres
+  type: html5
+  path: app/cp_ibpfres
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpexecpredcpexecprediction
+  type: html5
+  path: app/cp_execprediction
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpexeregcpexeregressionmdls
+  type: html5
+  path: app/cp_exeregressionmdls
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpodpcpodprofiles
+  type: html5
+  path: app/cp_odprofiles
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappfcpassignprofiles
+  type: html5
+  path: app/cp_assignprofiles
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cplpcplocprod
+  type: html5
+  path: app/cp_locprod
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappfcpsaleshcfg
+  type: html5
+  path: app/cp_saleshcfg
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappfcpprodconfig
+  type: html5
+  path: app/cp_prodconfig
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappfcpbomod
+  type: html5
+  path: app/cp_bomod
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappfcpobjdepdetails
+  type: html5
+  path: app/cp_objdepdetails
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+# - name: cpappfcpobjdepdetails
+#   type: html5
+#   path: app/cp_objdepdetails
+#   build-parameters:
+#     build-result: dist
+#     builder: custom
+#     commands:
+#     - npm install
+#     - npm run build:cf
+#     supported-platforms: []
+resources:
+- name: config_products-db
+  type: com.sap.xs.hdi-container
+  parameters:
+    service: hana
+    service-plan: hdi-shared
+  properties:
+    hdi-service-name: ${service-name}
+- name: config_products-destination-service
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      HTML5Runtime_enabled: true
+      init_data:
+        instance:
+          destinations:
+          - Authentication: NoAuthentication
+            Name: ui5
+            ProxyType: Internet
+            Type: HTTP
+            URL: https://ui5.sap.com
+          existing_destinations_policy: update
+      version: 1.0.0
+    service: destination
+    service-name: config_products-destination-service
+    service-plan: lite
+- name: config_products_html_repo_host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-name: config_products-html5-app-host-service
+    service-plan: app-host
+- name: uaa_config_products
+  type: org.cloudfoundry.managed-service
+  parameters:
+    path: ./xs-security.json
+    service: xsuaa
+    service-name: config_products-xsuaa-service
+    service-plan: application
+parameters:
+  deploy_mode: html5-repo
+  enable-parallel-deployments: true
+build-parameters:
+  before-all:
+  - builder: custom
+    commands:
+    - npm install --production
+    - npx -p @sap/cds-dk cds build --production

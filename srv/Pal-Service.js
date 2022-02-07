@@ -553,6 +553,43 @@ async function _postPredictionRequest(url,paramsObj,numChars,dataObj,modelType,v
                 stmt=conn.prepare(sqlStr);
                 stmt.exec();
                 stmt.drop();
+
+
+                sqlStr = 'SELECT CP_PAL_PROFILEOD.PROFILE, METHOD FROM CP_PAL_PROFILEOD ' +
+                        'INNER JOIN CP_PAL_PROFILEMETH ON '+
+                        '"CP_PAL_PROFILEOD"."PROFILE" = "CP_PAL_PROFILEMETH"."PROFILE"' +
+                        ' AND CP_PAL_PROFILEMETH.METHOD = ' + "'" + modelType + "'" +
+                        ' AND LOCATION_ID = ' + "'" + result[0].Location + "'" +
+                        ' AND PRODUCT_ID = ' + "'" + result[0].Product + "'" +
+                        ' AND OBJ_DEP = ' + "'" + result[0].OBJ_DEP + '_' + result[0].OBJ_COUNTER + "'";
+                console.log("V_PREDICTIONS IBP Result Plan Predicted Value HGBT sql sqlStr", sqlStr);
+                stmt=conn.prepare(sqlStr);
+                results = stmt.exec();
+                stmt.drop();
+
+                if (results.length > 0)
+                {
+                    sqlStr = 'UPSERT "CP_IBP_RESULTPLAN_TS" VALUES (' + "'" + result[0].CAL_DATE + "'" + "," +
+                            "'" + result[0].Location + "'" + "," +
+                            "'" + result[0].Product + "'" + "," +
+                            "'" + result[0].Type + "'" + "," +
+                            "'" + result[0].OBJ_DEP + "'" + "," +
+                            "'" + result[0].OBJ_COUNTER + "'" + "," +
+                            "'" + result[0].VERSION + "'" + "," +
+                            "'" + result[0].SCENARIO + "'" + "," +
+                            "'" + -1 + "'" + "," +
+                            "'" + predictedTime + "'" + "," +
+                            "'" + 'FAIL' + "'" + ')' + ' WITH PRIMARY KEY';
+                    
+
+                    console.log("CP_IBP_RESULTPLAN_TS Predicted Value HGBT sql update sqlStr", sqlStr);
+
+                    stmt=conn.prepare(sqlStr);
+                    stmt.exec();
+                    stmt.drop();
+                }
+
+
             }
             conn.disconnect();
             // Retry posting the request if model exists and fails
