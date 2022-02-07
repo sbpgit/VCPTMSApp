@@ -1,0 +1,65 @@
+<mvc:View controllerName="cp.appf.cpobjdepdetails.controller.Home"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns="sap.m"
+    xmlns:l="sap.ui.layout"
+    xmlns:core="sap.ui.core">
+    <Page id="idPage" title="{i18n>PageTitle}">
+        <content>
+            <l:Splitter id="homeScrSplitter">
+                <Page id="idUC" showHeader="false">
+                    <layoutData >
+                        <l:SplitterLayoutData resizable="false" size="25%"/>
+                    </layoutData>
+                    <content>
+                        <!-- <SearchField id="headSearch" liveChange="onSearch" placeholder="Object Dependency"/> -->
+                        <SearchField id="headSearch" search="onSearch" placeholder="Object Dependency"/>
+                        <List id="objDepList" headerText="Object Dependency" items="{ path : '/results', sorter : { path : 'OBJ_DEP'}}" mode="SingleSelectMaster" noDataText="No Data" selectionChange="onhandlePress">
+                            <items>
+                                <StandardListItem title="{OBJ_DEP}" description="{OBJDEP_DESC}" />
+
+                            </items>
+                        </List>
+                    </content>
+                </Page>
+                <Page >
+                    <customHeader>
+                        <Bar>
+                            <contentMiddle>
+                                <HBox>
+                                    <Text text="Object Dependency : " class="boldText"></Text>
+                                    <Text text=" {oGModel>/objDep}"></Text>
+                                </HBox>
+                            </contentMiddle>
+                        </Bar>
+                    </customHeader>
+                    <layoutData >
+                        <l:SplitterLayoutData resizable="false" size="75%"/>
+                    </layoutData>
+                    <Panel id="idhisPanel" expandable="true" headerText="Object Dependency History Details" width="auto" class="sapUiResponsiveMargin">
+                        <content>
+                        <Table id="idMyTable" >
+                        <infoToolbar>
+                            <OverflowToolbar>
+                            	<ToolbarSpacer />
+                                <Button id="idDisplay" icon="sap-icon://display" tooltip="Display" 
+                                    press="onParameters"  />
+                            </OverflowToolbar>
+                        </infoToolbar>
+
+                        </Table>
+
+                        </content>
+                    </Panel>
+                    <Panel id="idFutPanel" expandable="true" headerText="Object Dependency Prediction" width="auto" class="sapUiResponsiveMargin">
+                        <content>
+                        <Table id="idFutTable" >
+
+                        </Table>
+
+                        </content>
+                    </Panel>
+                </Page>
+            </l:Splitter>
+        </content>
+    </Page>
+</mvc:View>
