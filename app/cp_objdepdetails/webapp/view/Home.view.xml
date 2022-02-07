@@ -11,7 +11,8 @@
                         <l:SplitterLayoutData resizable="false" size="25%"/>
                     </layoutData>
                     <content>
-                        <SearchField id="headSearch" liveChange="onSearch" placeholder="Object Dependency"/>
+                        <!-- <SearchField id="headSearch" liveChange="onSearch" placeholder="Object Dependency"/> -->
+                        <SearchField id="headSearch" search="onSearch" placeholder="Object Dependency"/>
                         <List id="objDepList" headerText="Object Dependency" items="{ path : '/results', sorter : { path : 'OBJ_DEP'}}" mode="SingleSelectMaster" noDataText="No Data" selectionChange="onhandlePress">
                             <items>
                                 <StandardListItem title="{OBJ_DEP}" description="{OBJDEP_DESC}" />
