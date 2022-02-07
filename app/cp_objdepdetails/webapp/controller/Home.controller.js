@@ -112,6 +112,8 @@ sap.ui.define(
               OBJ_COUNTER: selectedCounter,
             },
             success: function (oData) {
+                if(oData.results.length !== 0){
+                
               oData.results.forEach(function (row) {
                 row.CAL_DATE = new Date(
                   row.CAL_DATE.replace(/[^0-9]+/g, "") * 1
@@ -209,14 +211,16 @@ sap.ui.define(
               }
 
               that.byId("idhisPanel").setExpanded(true);
+            }
               that.getODFuture();
 
               sap.ui.core.BusyIndicator.hide();
             },
             error: function () {
               MessageToast.show("Failed to get data");
-            },
+            }
           });
+        
         },
 
         getODFuture: function () {
@@ -248,6 +252,7 @@ sap.ui.define(
               OBJ_COUNTER: selectedCounter,
             },
             success: function (oData) {
+                if(oData.results.length !== 0){
               oData.results.forEach(function (row) {
                 row.CAL_DATE = new Date(
                   row.CAL_DATE.replace(/[^0-9]+/g, "") * 1
@@ -368,6 +373,7 @@ sap.ui.define(
                 oTable.bindItems("/futresults", afutColList);
               }
               that.byId("idFutPanel").setExpanded(true);
+            }
               sap.ui.core.BusyIndicator.hide();
             },
             error: function () {
