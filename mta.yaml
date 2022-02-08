@@ -128,6 +128,10 @@ modules:
       - cpappfcpobjdepdetails.zip
       name: cpappfcpobjdepdetails
       target-path: resources/
+    - artifacts:
+      - cpappfcpsaleshconfig.zip
+      name: cpappfcpsaleshconfig
+      target-path: resources/
 - name: cfgapppvsrootcfgprdpvsroot
   type: html5
   path: app/cfgprd_pvsroot
@@ -261,6 +265,16 @@ modules:
 - name: cpappfcpobjdepdetails
   type: html5
   path: app/cp_objdepdetails
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappfcpsaleshconfig
+  type: html5
+  path: app/cp_saleshconfig
   build-parameters:
     build-result: dist
     builder: custom
