@@ -37,7 +37,7 @@ sap.ui.define(
         that.oAlgoListModel.setData({
             results: data, 
           });
-          that.alogoList.setModel(that.oAlgoListModel);
+          that.byId("idTab").setModel(that.oAlgoListModel);
         var oRouter = sap.ui.core.UIComponent.getRouterFor(that);
         oRouter.navTo("Home", {}, true);
       },
