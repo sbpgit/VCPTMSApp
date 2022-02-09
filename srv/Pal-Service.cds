@@ -27,6 +27,7 @@ using { cp as pal } from '../db/pal-schema';
 
     entity getPredictions as projection on pal.TS_PREDICTIONS;
     entity getIbpResultPlan as projection on pal.IBP_RESULTPLAN_TS;
+    entity getODImpactVals as projection on pal.TS_OBJDEP_CHAR_IMPACT_F;
 
     // @odata.draft.enabled
     // entity modelProfiles as projection on pal.PalModelProfiles;
