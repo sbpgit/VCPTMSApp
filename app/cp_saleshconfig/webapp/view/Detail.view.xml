@@ -8,6 +8,17 @@
 
     <Page id="page" title="{i18n>title}" titleAlignment="Center" showNavButton="true" navButtonPress="onBack">
         <Toolbar height="8%">
+        <VBox>
+        <HBox>
+            <HBox>
+						<Text text="Sales Order : " class="boldText"></Text>
+						<Text text=" {oGModel>/sSalOrd}"></Text>
+					</HBox>
+                    <HBox>
+						<Text text="Sales Order Item: " class="boldText"></Text>
+						<Text text=" {oGModel>/sSalOrdItem}"></Text>
+					</HBox>
+        </HBox>
             <HBox>
 					<HBox>
 						<Text text="{i18n>prodid} : " class="boldText"></Text>
@@ -22,6 +33,7 @@
 						<Text text=" {oGModel>/date}"></Text>
 					</HBox>
 				</HBox>
+        </VBox>
             
         </Toolbar>
             

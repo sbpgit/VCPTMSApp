@@ -140,6 +140,8 @@ sap.ui.define(
             that.oGModel = that.getModel("oGModel");
             var sTableItem = oEvent.getSource().getSelectedItem().getBindingContext().getObject();
             that.oGModel.setProperty("/selItem", sTableItem);
+            that.oGModel.setProperty("/sSalOrd", sTableItem.SALES_DOC);
+            that.oGModel.setProperty("/sSalOrdItem", sTableItem.SALESDOC_ITEM);
             that.oGModel.setProperty("/sPrdid", sTableItem.PRODUCT_ID);
             that.oGModel.setProperty("/sLocid", sTableItem.LOCATION_ID);
             that.oGModel.setProperty("/date", oEvent.getSource().getSelectedItem().getCells()[2].getText());
@@ -212,6 +214,27 @@ sap.ui.define(
 				}
 			}
 			that.byId("idTab").getBinding("items").filter(oFilters);
+        },
+
+        onTableSearch:function(oEvent){
+            var query =
+            oEvent.getParameter("value") || oEvent.getParameter("newValue"),
+          oFilters = [];
+
+        if (query !== "") {
+          oFilters.push(
+            new Filter({
+              filters: [
+                new Filter("SALES_DOC", FilterOperator.Contains, query),
+                new Filter("PRODUCT_ID", FilterOperator.Contains, query),
+                new Filter("LOCATION_ID", FilterOperator.Contains, query)
+              ],
+              and: false,
+            })
+          );
+        }
+        that.oList.getBinding("idTab").filter(oFilters);
+
         }
 
 

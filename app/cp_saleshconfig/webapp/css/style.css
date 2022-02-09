@@ -8,3 +8,8 @@ div#__hbox1 {
 boldText{
     font-weight: bold;
 }
+
+div#__hbox4 {
+    margin-left: 100px;
+    margin-right: 100px;
+}
