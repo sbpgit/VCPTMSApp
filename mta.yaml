@@ -124,6 +124,14 @@ modules:
       - cpappfcpobjdepdetails.zip
       name: cpappfcpobjdepdetails
       target-path: resources/
+    - artifacts:
+      - cpappcpodrestriction.zip
+      name: cpappcpodrestriction
+      target-path: resources/
+    - artifacts:
+      - cpappcpibpresultplan.zip
+      name: cpappcpibpresultplan
+      target-path: resources/
 - name: cfgapppvsrootcfgprdpvsroot
   type: html5
   path: app/cfgprd_pvsroot
@@ -247,6 +255,26 @@ modules:
 - name: cpappfcpobjdepdetails
   type: html5
   path: app/cp_objdepdetails
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappcpodrestriction
+  type: html5
+  path: app/cpodrestriction
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappcpibpresultplan
+  type: html5
+  path: app/cpibpresultplan
   build-parameters:
     build-result: dist
     builder: custom

@@ -91,6 +91,8 @@ service CatalogService @(impl : './lib/cat-service.js') {
     @readonly
     entity getIBPFres           as projection on od.IBP_RESULTPLAN;
 
+    entity getODHdrRstr         as projection on od.ODRESTRICT;
+
     //
     @readonly
     entity getSaleshCfg         as projection on V_SALESHCFG_CHARVAL;

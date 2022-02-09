@@ -1,4 +1,5 @@
 using cp as service from '../db/data-model';
+using cp as pal from '../db/pal-schema';
 using V_CLASSCHAR as srv from '../db/data-model';
 using V_SALESHCFG_CHARVAL from '../db/data-model';
 //using V_TIMESERIES as tssrv from '../db/data-model';
@@ -1541,3 +1542,98 @@ annotate V_SALESHCFG_CHARVAL with @(
         }]
     }]
 );
+/*****************************/
+// Restrictions OD
+/*****************************/
+// annotate service.OBJDEP_HEADER_RESTRICT with @(
+//     UI        : {
+//         SelectionFields     : [
+//             OBJ_DEP
+//         ],
+//         LineItem            : [
+//             {
+//                 $Type : 'UI.DataField', //Label : 'Product Family',
+//                 Value : CAL_DATE
+//             },
+//             {
+//                 $Type : 'UI.DataField', //Label : 'Product Family',
+//                 Value : LOCATION_ID
+//             },
+//             {
+//                 $Type : 'UI.DataField', //Label : 'Product ID',
+//                 Value : PRODUCT_ID
+//             },
+//             {
+//                 $Type : 'UI.DataField', //Label : 'Description',
+//                 Value : OBJ_TYPE
+//             },
+//             {
+//                 $Type : 'UI.DataField', //Label : 'Product ID',
+//                 Value : OBJ_DEP
+//             },
+//             {
+//                 $Type : 'UI.DataField', //Label : 'Description',
+//                 Value : OBJ_COUNTER
+//             },
+//             {
+//                 $Type : 'UI.DataField', //Label : 'Product Series',
+//                 Value : ROW_ID
+//             },
+//             {
+//                 $Type : 'UI.DataField', //Label : 'Product Series',
+//                 Value : SUCCESS
+//             }
+//         ],
+//         HeaderInfo          : {
+//             Title          : {Value : CAL_DATE},
+//             Description    : {Value : PRODUCT_ID},
+//             TypeName       : 'Timeseries',
+//             TypeNamePlural : 'Timeseries',
+//         },
+//         FieldGroup #Details : {Data : [
+//             {
+//                 $Type : 'UI.DataField', //Label : 'Product Family',
+//                 Value : CAL_DATE
+//             },
+//             {
+//                 $Type : 'UI.DataField', //Label : 'Product Family',
+//                 Value : LOCATION_ID
+//             },
+//             {
+//                 $Type : 'UI.DataField', //Label : 'Product ID',
+//                 Value : PRODUCT_ID
+//             },
+//             {
+//                 $Type : 'UI.DataField', //Label : 'Description',
+//                 Value : OBJ_TYPE
+//             },
+//             {
+//                 $Type : 'UI.DataField', //Label : 'Product ID',
+//                 Value : OBJ_DEP
+//             },
+//             {
+//                 $Type : 'UI.DataField', //Label : 'Description',
+//                 Value : OBJ_COUNTER
+//             },
+//             {
+//                 $Type : 'UI.DataField', //Label : 'Product Series',
+//                 Value : ROW_ID
+//             },
+//             {
+//                 $Type : 'UI.DataField', //Label : 'Product Series',
+//                 Value : SUCCESS
+//             }
+//         ]}
+//     },
+//     // Page Facets
+//     UI.Facets : [{
+//         $Type  : 'UI.CollectionFacet',
+//         ID     : 'Timeser',
+//         Label  : 'Timeseries',
+//         Facets : [{
+//             $Type  : 'UI.ReferenceFacet',
+//             Label  : 'Timeseries',
+//             Target : '@UI.FieldGroup#Details'
+//         }]
+//     }]
+// );
