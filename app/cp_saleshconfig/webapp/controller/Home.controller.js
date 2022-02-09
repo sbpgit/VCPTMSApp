@@ -35,9 +35,9 @@ sap.ui.define(
           that.osalDocModel = new JSONModel();
   
           this.oListModel.setSizeLimit(5000);
-        //   that.oLocModel.setSizeLimit(1000);
-        //   that.oProdModel.setSizeLimit(1000);
-        //   that.osalDocModel.setSizeLimit(500);
+          that.oLocModel.setSizeLimit(1000);
+          that.oProdModel.setSizeLimit(1000);
+          that.osalDocModel.setSizeLimit(1500);
         },
         onAfterRendering: function () {
           that = this;
@@ -91,6 +91,10 @@ sap.ui.define(
                     aKeysProd[i] = that.oProdData.PRODUCT_ID;
                   }
                 }
+                    if(that.aSalDoc.length === 0){
+                        that.aSalDoc.push("All");
+                    }
+
                 if (that.aSalDoc.indexOf(oData.results[i].SALES_DOC) === -1) {
                   that.aSalDoc.push(oData.results[i].SALES_DOC);
                   if (oData.results[i].SALES_DOC !== "") {
@@ -107,7 +111,12 @@ sap.ui.define(
                 results: oData.results,
               });
               that.oList.setModel(that.oListModel);
-  
+
+              that.SelSalDoc.unshift({
+                SALES_DOC: "All",
+                  });
+
+                    
               that.oLocModel.setData({ resultsLoc: that.SelLoc });
               that.oProdModel.setData({ resultsProd: that.SelProd });
               that.osalDocModel.setData({ resultsSalesDoc: that.SelSalDoc });
@@ -141,10 +150,40 @@ sap.ui.define(
             oRouter.navTo("Detail", {}, true);
         },
 
-        handleSelection:function(){
+        handleSelection:function(oEvent){
 			that.selLoc = that.byId("idLoc").getSelectedKeys();
             that.selPrd = that.byId("idProd").getSelectedKeys();
-			that.selSalDoc = that.byId("idSalesDoc").getSelectedKeys();
+			// that.selSalDoc = that.byId("idSalesDoc").getSelectedKeys();
+
+// var unselected =that.byId("idSalesDoc")._getUnselectedItems();
+
+                // for(var i=0; i<unselected.length; i++){
+                //     if(unselected[i].getText() === "All"){
+                //         var selected = "All";
+                //     }
+                // }
+
+
+                if(oEvent.getParameters().id.includes("idSalesDoc") === true){
+            var selected = oEvent.getParameters("listItem").changedItem.getText();
+              var items = this.byId("idTab").getItems();
+              var selItems = that.byId("idSalesDoc").getItems();
+                if(selected === "All" && oEvent.getParameter("selected")){
+                    that.byId("idSalesDoc").setSelectedItems(that.byId("idSalesDoc").getItems());
+                } else if(selected === "All" && !oEvent.getParameter("selected")){
+                    that.byId("idSalesDoc").removeAllSelectedItems();
+                } else if(selected !== "All" && !oEvent.getParameter("selected") && items.length - 1 === selItems.length){
+                    that.byId("idSalesDoc").removeSelectedItem(that.byId("idSalesDoc").getItems()[0]);
+              }  else if(selected !== "All" && oEvent.getParameter("selected") && items.length - 1 === selItems.length){
+                that.byId("idSalesDoc").setSelectedItems(that.byId("idSalesDoc").getItems()[0]);
+              } else if(selected === "All" && items.length === 1 ){ 
+                that.byId("idSalesDoc").removeSelectedItem(that.byId("idSalesDoc").getItems()[0]);
+              }
+            }
+
+              that.selSalDoc = that.byId("idSalesDoc").getSelectedKeys();
+
+
 
             var oFilters = [];
 
