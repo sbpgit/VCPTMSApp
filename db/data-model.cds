@@ -488,6 +488,16 @@ context cp {
             CREATED_BY   : String(12);
         };
     }
+    entity ODRESTRICT {
+        key OBJ_DEP      : String(30)@title : 'Object Dependency';
+        key OBJ_COUNTER  : Integer   @title : 'Object Dependency Counter';
+        key CLASS_NUM    : String(18)@title : 'Internal class number';
+        key CHAR_NUM     : String(10)@title : 'Internal Char. number';
+        key CHAR_COUNTER : Integer   @title : 'Characteristic counter';
+        key CHARVAL_NUM  : String(10)@title : 'Internal Char. number';
+            OD_CONDITION : String(2) @title : 'Object Dependency condition ';
+            ROW_ID       : Integer   @title : 'Attribute Index ';
+    };
     // entity PAL_MODEL_PARAMETERS {
     //     key MODEL_TYPE : String(10)  @title : 'Model Type';
     //     key PROFILE_ID : Integer     @title : 'Profile ID';
