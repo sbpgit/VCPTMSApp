@@ -125,17 +125,14 @@ modules:
       name: cpappfcpobjdepdetails
       target-path: resources/
     - artifacts:
-<<<<<<< HEAD
       - cpappcpodrestriction.zip
       name: cpappcpodrestriction
       target-path: resources/
     - artifacts:
       - cpappcpibpresultplan.zip
       name: cpappcpibpresultplan
-=======
       - cpappfcpsaleshconfig.zip
       name: cpappfcpsaleshconfig
->>>>>>> 3f83d2fb869b9d3b1118344fff62ce9b4aa5f9df
       target-path: resources/
 - name: cfgapppvsrootcfgprdpvsroot
   type: html5
@@ -267,7 +264,6 @@ modules:
     - npm install
     - npm run build:cf
     supported-platforms: []
-<<<<<<< HEAD
 - name: cpappcpodrestriction
   type: html5
   path: app/cpodrestriction
@@ -281,11 +277,9 @@ modules:
 - name: cpappcpibpresultplan
   type: html5
   path: app/cpibpresultplan
-=======
 - name: cpappfcpsaleshconfig
   type: html5
   path: app/cp_saleshconfig
->>>>>>> 3f83d2fb869b9d3b1118344fff62ce9b4aa5f9df
   build-parameters:
     build-result: dist
     builder: custom
