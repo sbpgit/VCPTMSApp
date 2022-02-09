@@ -1545,95 +1545,155 @@ annotate V_SALESHCFG_CHARVAL with @(
 /*****************************/
 // Restrictions OD
 /*****************************/
-// annotate service.OBJDEP_HEADER_RESTRICT with @(
-//     UI        : {
-//         SelectionFields     : [
-//             OBJ_DEP
-//         ],
-//         LineItem            : [
-//             {
-//                 $Type : 'UI.DataField', //Label : 'Product Family',
-//                 Value : CAL_DATE
-//             },
-//             {
-//                 $Type : 'UI.DataField', //Label : 'Product Family',
-//                 Value : LOCATION_ID
-//             },
-//             {
-//                 $Type : 'UI.DataField', //Label : 'Product ID',
-//                 Value : PRODUCT_ID
-//             },
-//             {
-//                 $Type : 'UI.DataField', //Label : 'Description',
-//                 Value : OBJ_TYPE
-//             },
-//             {
-//                 $Type : 'UI.DataField', //Label : 'Product ID',
-//                 Value : OBJ_DEP
-//             },
-//             {
-//                 $Type : 'UI.DataField', //Label : 'Description',
-//                 Value : OBJ_COUNTER
-//             },
-//             {
-//                 $Type : 'UI.DataField', //Label : 'Product Series',
-//                 Value : ROW_ID
-//             },
-//             {
-//                 $Type : 'UI.DataField', //Label : 'Product Series',
-//                 Value : SUCCESS
-//             }
-//         ],
-//         HeaderInfo          : {
-//             Title          : {Value : CAL_DATE},
-//             Description    : {Value : PRODUCT_ID},
-//             TypeName       : 'Timeseries',
-//             TypeNamePlural : 'Timeseries',
-//         },
-//         FieldGroup #Details : {Data : [
-//             {
-//                 $Type : 'UI.DataField', //Label : 'Product Family',
-//                 Value : CAL_DATE
-//             },
-//             {
-//                 $Type : 'UI.DataField', //Label : 'Product Family',
-//                 Value : LOCATION_ID
-//             },
-//             {
-//                 $Type : 'UI.DataField', //Label : 'Product ID',
-//                 Value : PRODUCT_ID
-//             },
-//             {
-//                 $Type : 'UI.DataField', //Label : 'Description',
-//                 Value : OBJ_TYPE
-//             },
-//             {
-//                 $Type : 'UI.DataField', //Label : 'Product ID',
-//                 Value : OBJ_DEP
-//             },
-//             {
-//                 $Type : 'UI.DataField', //Label : 'Description',
-//                 Value : OBJ_COUNTER
-//             },
-//             {
-//                 $Type : 'UI.DataField', //Label : 'Product Series',
-//                 Value : ROW_ID
-//             },
-//             {
-//                 $Type : 'UI.DataField', //Label : 'Product Series',
-//                 Value : SUCCESS
-//             }
-//         ]}
-//     },
-//     // Page Facets
-//     UI.Facets : [{
-//         $Type  : 'UI.CollectionFacet',
-//         ID     : 'Timeser',
-//         Label  : 'Timeseries',
-//         Facets : [{
-//             $Type  : 'UI.ReferenceFacet',
-//             Label  : 'Timeseries',
-//             Target : '@UI.FieldGroup#Details'
-//         }]
-//     }]
-// );
+annotate service.V_ODRESTRICT with @(
+    UI        : {
+        SelectionFields     : [
+            OBJ_DEP
+        ],
+        LineItem            : [
+            {
+                $Type : 'UI.DataField', //Label : 'Product ID',
+                Value : OBJ_DEP
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Description',
+                Value : OBJ_COUNTER
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : CLASS_NAME
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : CHAR_NAME
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : CHAR_VALUE
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : CHAR_COUNTER
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : OD_CONDITION
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : ROW_ID
+            }            
+        ]
+        // ,
+        // HeaderInfo          : {
+        //     Title          : {Value : CAL_DATE},
+        //     Description    : {Value : PRODUCT_ID},
+        //     TypeName       : 'Timeseries',
+        //     TypeNamePlural : 'Timeseries',
+        // },
+        // FieldGroup #Details : {Data : [
+        //     {
+        //         $Type : 'UI.DataField', //Label : 'Product Family',
+        //         Value : CAL_DATE
+        //     },
+        //     {
+        //         $Type : 'UI.DataField', //Label : 'Product Family',
+        //         Value : LOCATION_ID
+        //     },
+        //     {
+        //         $Type : 'UI.DataField', //Label : 'Product ID',
+        //         Value : PRODUCT_ID
+        //     },
+        //     {
+        //         $Type : 'UI.DataField', //Label : 'Description',
+        //         Value : OBJ_TYPE
+        //     },
+        //     {
+        //         $Type : 'UI.DataField', //Label : 'Product ID',
+        //         Value : OBJ_DEP
+        //     },
+        //     {
+        //         $Type : 'UI.DataField', //Label : 'Description',
+        //         Value : OBJ_COUNTER
+        //     },
+        //     {
+        //         $Type : 'UI.DataField', //Label : 'Product Series',
+        //         Value : ROW_ID
+        //     },
+        //     {
+        //         $Type : 'UI.DataField', //Label : 'Product Series',
+        //         Value : SUCCESS
+        //     }
+        // ]}
+    }
+    // ,
+    // Page Facets
+    // UI.Facets : [{
+    //     $Type  : 'UI.CollectionFacet',
+    //     ID     : 'Timeser',
+    //     Label  : 'Timeseries',
+    //     Facets : [{
+    //         $Type  : 'UI.ReferenceFacet',
+    //         Label  : 'Timeseries',
+    //         Target : '@UI.FieldGroup#Details'
+    //     }]
+    // }]
+);
+/*******************************************/
+// IBP Future Character Plan
+/*******************************************/
+annotate pal.IBP_RESULTPLAN_TS with @(
+    UI        : {
+        SelectionFields                : [
+            LOCATION_ID,
+            PRODUCT_ID,
+            OBJ_DEP
+        ],
+        LineItem                       : [
+            {
+                $Type : 'UI.DataField',
+                Value : CAL_DATE
+            },            
+            {
+                $Type : 'UI.DataField', //Label : 'Description',
+                Value : LOCATION_ID
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product ID',
+                Value : PRODUCT_ID
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Family',
+                Value : OBJ_TYPE
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Family',
+                Value : OBJ_DEP
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Family',
+                Value : OBJ_COUNTER
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Family',
+                Value : VERSION
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : SCENARIO
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Family',
+                Value : PREDICTED 
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Family',
+                Value : PREDICTED_TIME
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Family',
+                Value : PREDICTED_STATUS
+            }
+        ]
+    }
+);

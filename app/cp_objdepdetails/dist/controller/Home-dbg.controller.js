@@ -45,6 +45,7 @@ sap.ui.define(
           that = this;
           oGModel = this.getModel("oGModel");
           sap.ui.core.BusyIndicator.show();
+        //   var oUrlParams = "$skip=" + "0" + "&$top=" + "1000";
 
           this.getModel("BModel").read("/getBomOdCond", {
             success: function (oData) {

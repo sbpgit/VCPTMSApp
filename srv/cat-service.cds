@@ -12,6 +12,7 @@ using V_ODCHARVAL from '../db/data-model';
 using V_LOCPROD from '../db/data-model';
 using V_TSODCHAR_H from '../db/data-model';
 using V_TSODCHAR_F from '../db/data-model';
+using V_ODRESTRICT FROM '../db/data-model';
 service CatalogService @(impl : './lib/cat-service.js') {
     // Service on HDI entities
     //@odata.draft.enabled
@@ -64,8 +65,8 @@ service CatalogService @(impl : './lib/cat-service.js') {
 
     entity getCharval           as projection on V_CHARVAL;
 
-    @odata.draft.enabled
-    entity getAccessNodes       as projection on od.ACCESS_NODES;
+    // @odata.draft.enabled
+    entity getNodes       as projection on od.ACCESS_NODES;
 
     @odata.draft.enabled
     entity getAuthObj           as projection on od.AUTH_OBJ;
@@ -91,7 +92,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
     @readonly
     entity getIBPFres           as projection on od.IBP_RESULTPLAN;
 
-    entity getODHdrRstr         as projection on od.ODRESTRICT;
+    entity getODHdrRstr         as projection on V_ODRESTRICT;
 
     //
     @readonly
@@ -115,7 +116,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
 
 
     //function createProf() returns String;
-    function fGetNodeDet(NODE_TYPE : String(2), CHILD_NODE : String(50), PARENT_NODE : String(50)) returns array of getAccessNodes;
+    // function fGetNodeDet(NODE_TYPE : String(2), CHILD_NODE : String(50), PARENT_NODE : String(50)) returns array of getAccessNodes;
     function generate_timeseries() returns String;
     function get_objdep() returns array of ds.objectDep; //objectDep;
     //function getODProfiles() returns array of odprofiles;
