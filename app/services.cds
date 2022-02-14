@@ -19,3 +19,5 @@ using from './cp_objdepdetails/annotations';
 using from './cpodrestriction/annotations';
 using from './cpibpresultplan/annotations';
 using from './cp_saleshconfig/annotations';
+
+using from './cp_nodesdetails/annotations';
