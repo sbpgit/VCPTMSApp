@@ -15,14 +15,16 @@
 						<Text text=" {oGModel>/sSalOrd}"></Text>
 					</HBox>
                     <HBox>
-						<Text text="Sales Order Item: " class="boldText"></Text>
-						<Text text=" {oGModel>/sSalOrdItem}"></Text>
-					</HBox>
-        </HBox>
-            <HBox>
-					<HBox>
 						<Text text="{i18n>prodid} : " class="boldText"></Text>
 						<Text text=" {oGModel>/sPrdid}"></Text>
+					</HBox>
+                    
+        </HBox>
+            <HBox>
+					
+                    <HBox>
+						<Text text="Sales Order Item: " class="boldText"></Text>
+						<Text text=" {oGModel>/sSalOrdItem}"></Text>
 					</HBox>
                     <HBox>
 						<Text text="{i18n>locid} : " class="boldText"></Text>

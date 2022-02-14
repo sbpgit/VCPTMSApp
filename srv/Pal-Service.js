@@ -965,26 +965,26 @@ function _getRuleListTypeForGenModels(vcRulesList, modelType, numChars)
         if (vcRulesList[i].dimensions == numChars )
         {
             results = [];
-            if (modelType == 'MLR')
-            {
-                // Check for MLR For Constant value of Attribute across the Time Series
-                sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", "Attribute" ' +
-                        'FROM "CP_VC_HISTORY_TS" WHERE "Product" = ' + "'" + vcRulesList[i].Product + "'" +
-                        ' AND "Location" = ' + "'" + vcRulesList[i].Location + "'" + 
-                        ' AND "GroupID" = ' + "'" + vcRulesList[i].GroupID + "'" +
-                        ' GROUP BY "Location", "Product", "GroupID", "Attribute"' +
-                        ' HAVING COUNT(DISTINCT "Location", "Product", "GroupID", "Row", "Attribute", "CharCount") = 1';
-                console.log('_getRuleListTypeForGenModels sqlStr ', sqlStr);
+            // if (modelType == 'MLR')
+            // {
+            //     // Check for MLR For Constant value of Attribute across the Time Series
+            //     sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", "Attribute" ' +
+            //             'FROM "CP_VC_HISTORY_TS" WHERE "Product" = ' + "'" + vcRulesList[i].Product + "'" +
+            //             ' AND "Location" = ' + "'" + vcRulesList[i].Location + "'" + 
+            //             ' AND "GroupID" = ' + "'" + vcRulesList[i].GroupID + "'" +
+            //             ' GROUP BY "Location", "Product", "GroupID", "Attribute"' +
+            //             ' HAVING COUNT(DISTINCT "Location", "Product", "GroupID", "Row", "Attribute", "CharCount") = 1';
+            //     console.log('_getRuleListTypeForGenModels sqlStr ', sqlStr);
 
-                stmt=conn.prepare(sqlStr);
-                results=stmt.exec();
-                stmt.drop();
-                console.log('_getRuleListTypeForGenModels modelType = ', modelType, 'results = ',results, 'results Length = ', results.length);
-            }
+            //     stmt=conn.prepare(sqlStr);
+            //     results=stmt.exec();
+            //     stmt.drop();
+            //     console.log('_getRuleListTypeForGenModels modelType = ', modelType, 'results = ',results, 'results Length = ', results.length);
+            // }
 
-            if ( ((results.length == 0) && (modelType == 'MLR')) ||
-                 (modelType != 'MLR') )
-            {
+            // if ( ((results.length == 0) && (modelType == 'MLR')) ||
+            //      (modelType != 'MLR') )
+            // {
                 if (vcRulesList[i].override == false)
                 {
                     // sqlStr = 'SELECT * FROM "CP_PALMODELPROFILES"' +
@@ -1051,7 +1051,7 @@ function _getRuleListTypeForGenModels(vcRulesList, modelType, numChars)
                                         "dimensions" : numChars});
                     }
                 }
-            }
+            //}
         }
     }
     //console.log('_getRuleListTypeForGenModels ruleListObj ',ruleListObj);
@@ -2045,18 +2045,17 @@ function _getDataObjForGenModels(vcRulesList, modelType, numChars) {
 
     for (var i = 0; i < vcRulesList.length; i++)
     {
-        
-       sqlStr = 'SELECT DISTINCT "Attribute", "' + vcConfigTimePeriod + 
+
+        sqlStr = 'SELECT DISTINCT "Attribute", "' + vcConfigTimePeriod + 
                 '", SUM("CharCount") AS "CharCount", SUM("Target") AS "Target" FROM "CP_VC_HISTORY_TS" WHERE "Product" =' +
 
-                    "'" +  vcRulesList[i].Product + "'" +  
-                    ' AND "GroupID" =' + "'" +   vcRulesList[i].GroupID + "'" +
-                    ' AND "Location" =' + "'" +   vcRulesList[i].Location + "'" + 
-                    ' GROUP BY "Attribute", "' + vcConfigTimePeriod + '"' +
-                    ' ORDER BY "' + vcConfigTimePeriod + '", "Attribute"';
+                "'" +  vcRulesList[i].Product + "'" +  
+                ' AND "GroupID" =' + "'" +   vcRulesList[i].GroupID + "'" +
+                ' AND "Location" =' + "'" +   vcRulesList[i].Location + "'" + 
+                ' GROUP BY "Attribute", "' + vcConfigTimePeriod + '"' +
+                ' ORDER BY "' + vcConfigTimePeriod + '", "Attribute"';
 
-
-//        console.log('sqlStr :',sqlStr)
+        //console.log('_getDataObjForGenModels sqlStr :',sqlStr, 'i = ', i);
         stmt=conn.prepare(sqlStr);
         results=stmt.exec();
         stmt.drop();
@@ -2072,51 +2071,75 @@ function _getDataObjForGenModels(vcRulesList, modelType, numChars) {
            if ( charIdx % numChars == 0)
             {
                 att1 = results[index].CharCount;
+                if (index == 0)
+                    att1 = att1 + 0.00001;
                 target = results[index].Target;
             }
             else if (charIdx % numChars == 1)
             {
                 att2 = results[index].CharCount;
+                if (index == 0)
+                    att2 = att2 + 0.00001;
             }
             else if (charIdx % numChars == 2)
             {
                 att3 = results[index].CharCount;
+                if (index == 0)
+                    att3 = att3 + 0.00001;
             }
             else if (charIdx % numChars == 3)
             {
                 att4 = results[index].CharCount;
+                if (index == 0)
+                    att4 = att4 + 0.00001;
             }
             else if (charIdx % numChars == 4)
             {
                 att5 = results[index].CharCount;
+                if (index == 0)
+                    att5 = att5 + 0.00001;
             }
             else if (charIdx % numChars == 5)
             {
                 att6 = results[index].CharCount;
+                if (index == 0)
+                    att6 = att6 + 0.00001;
             }
             else if (charIdx % numChars == 6)
             {
                 att7 = results[index].CharCount;
+                if (index == 0)
+                    att7 = att7 + 0.00001;
             }
             else if (charIdx % numChars == 7)
             {
                 att8 = results[index].CharCount;
+                if (index == 0)
+                    att8 = att8 + 0.00001;
             }
             else if (charIdx % numChars == 8)
             {
                 att9 = results[index].CharCount;
+                if (index == 0)
+                    att9 = att9 + 0.00001;
             }
             else if (charIdx % numChars == 9)
             {
                 att10 = results[index].CharCount;
+                if (index == 0)
+                    att10 = att10 + 0.00001;
             }
             else if (charIdx % numChars == 10)
             {
                 att11 = results[index].CharCount;
+                if (index == 0)
+                    att11 = att11 + 0.00001;
             }
             else if (charIdx % numChars == 11)
             {
                 att12 = results[index].CharCount;
+                if (index == 0)
+                    att12 = att12 + 0.00001;
             }
             charIdx  = charIdx + 1;
             let palGroupId = vcRulesList[i].GroupID + '#' + vcRulesList[i].Location + '#' + vcRulesList[i].Product;
