@@ -957,7 +957,7 @@ exports._runPredictionRdtGroup = function(req) {
 }
 
 // function _runRdtPrediction(rdtType, group, version, scenario) {
-exports._runRdtPrediction = function(rdtType, group) {
+exports._runRdtPrediction = function(rdtType, group, version, scenario) {
 
 //    var groupId = req.data.groupId;
 
@@ -1523,7 +1523,7 @@ exports._runRdtPrediction = function(rdtType, group) {
         //          ' WHERE "GroupID" = ' + "'" + groupId + "'" + ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
         // console.log("V_FUTURE_DEP_TS Predicted Value sql update sqlStr", sqlStr)
 
-        sqlStr = 'SELECT "CAL_DATE", "Location", "Product", "Type", "OBJ_DEP", "OBJ_COUNTER", "VERSION", "SCENARIO" ' +
+        sqlStr = 'SELECT DISTINCT "CAL_DATE", "Location", "Product", "Type", "OBJ_DEP", "OBJ_COUNTER", "VERSION", "SCENARIO" ' +
                 'FROM "V_FUTURE_DEP_TS" WHERE "GroupID" = ' + "'" + groupId + "'" +
                 ' AND "VERSION" = ' + "'" + version + "'" +
                 ' AND "SCENARIO" = ' + "'" + scenario + "'" +   
@@ -1596,7 +1596,159 @@ exports._runRdtPrediction = function(rdtType, group) {
     }
     conn.disconnect();
 
+    var conn = hana.createConnection();
+    conn.connect(conn_params);
+    var sqlStr = 'SET SCHEMA ' + classicalSchema;  
+    // console.log('sqlStr: ', sqlStr);            
+    var stmt=conn.prepare(sqlStr);
+    result=stmt.exec();
+    stmt.drop();
  
+    // Extract Importance
+    sqlStr = 'SELECT "GROUP_ID", "VARIABLE_NAME", "IMPORTANCE" FROM PAL_RDT_IMP_GRP_TAB' +
+                 ' WHERE "GROUP_ID" = ' + "'" + groupId + "'";
+    //console.log('sqlStr: ', sqlStr);            
+
+    var stmt=conn.prepare(sqlStr);
+    result=stmt.exec();
+    stmt.drop();
+    //console.log('sqlStr PAL_RDT_IMP_GRP_TAB Result: ', result);            
+
+    conn.disconnect();
+
+ 
+    var w1, w2, w3, w4, w5, w6, w7, w8, w9, w10, w11, w12 = 0;
+
+    for (let index=0; index<result.length; index++)
+    {
+        //console.log('sqlStr PAL_HGBT_IMP_GRP_TAB index: ', index, 'VAR NAME = ', result[index].VARIABLE_NAME);            
+   
+        if (result[index].VARIABLE_NAME == 'ATT1')
+            w1 = result[index].IMPORTANCE;
+        else if (result[index].VARIABLE_NAME == 'ATT2')
+            w2 = result[index].IMPORTANCE;
+        else if (result[index].VARIABLE_NAME == 'ATT3')
+            w3 = result[index].IMPORTANCE;
+        else if (result[index].VARIABLE_NAME == 'ATT4')
+            w4 = result[index].IMPORTANCE;
+        else if (result[index].VARIABLE_NAME == 'ATT5')
+            w5 = result[index].IMPORTANCE;
+        else if (result[index].VARIABLE_NAME == 'ATT6')
+            w6 = result[index].IMPORTANCE;
+        else if (result[index].VARIABLE_NAME == 'ATT7')
+            w7 = result[index].IMPORTANCE;
+        else if (result[index].VARIABLE_NAME == 'ATT8')
+            w8 = result[index].IMPORTANCE;
+        else if (result[index].VARIABLE_NAME == 'ATT9')
+            w9 = result[index].IMPORTANCE;
+        else if (result[index].VARIABLE_NAME == 'ATT10')
+            w10 = result[index].IMPORTANCE;
+        else if (result[index].VARIABLE_NAME == 'ATT11')
+            w11 = result[index].IMPORTANCE;
+        else if (result[index].VARIABLE_NAME == 'ATT12')
+            w12 = result[index].IMPORTANCE;
+    }
+
+
+    var conn = hana.createConnection();
+ 
+    conn.connect(conn_params_container);
+
+    sqlStr = 'SET SCHEMA ' + containerSchema; 
+    // console.log('sqlStr: ', sqlStr);            
+    stmt=conn.prepare(sqlStr);
+    result=stmt.exec();
+    stmt.drop();
+
+   // console.log("resultsObj = ", resultsObj);
+    for (let pIndex=0; pIndex<distPeriods.length; pIndex++)
+    {     
+        let predictedVal = resultsObj[pIndex].score;
+        predictedVal = ( +predictedVal).toFixed(2);
+        let periodId = distPeriods[pIndex][trimmedPeriod];
+        //console.log('trimmedPeriod : ', trimmedPeriod, 'vcConfigTimePeriod :', vcConfigTimePeriod);
+
+        sqlStr = 'SELECT DISTINCT "CAL_DATE", "Location", "Product", ' +
+                 '"Type", "OBJ_DEP", "OBJ_COUNTER", "ROW_ID", "CharCount", "VERSION", "SCENARIO" ' +
+                'FROM "V_FUTURE_DEP_TS" WHERE "GroupID" = ' + "'" + groupId + "'" + 
+                ' AND "VERSION" = ' + "'" + version + "'" +
+                ' AND "SCENARIO" = ' + "'" + scenario + "'" +
+                ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
+        //console.log("V_FUTURE_DEP_TS MLR SELECT sqlStr ", sqlStr);
+
+        result = [];
+
+
+        stmt=conn.prepare(sqlStr);
+        result=stmt.exec();
+        stmt.drop();
+        //console.log("V_FUTURE_DEP_TS MLR SELECT sqlStr result ", result, "length = ", result.length);
+
+    
+
+        for (let rIndex = 0; rIndex < result.length; rIndex++)
+        {
+            let impact_val = impact_percent = 0;
+            if (result[rIndex].ROW_ID == 1)
+                impact_val = w1*predictedVal;//result[rIndex].CharCount;
+            else if (result[rIndex].ROW_ID == 2)
+                impact_val = w2*predictedVal;//result[rIndex].CharCount;   
+            else if (result[rIndex].ROW_ID == 3)
+                impact_val = w3*predictedVal;//result[rIndex].CharCount;  
+            else if (result[rIndex].ROW_ID == 4)
+                impact_val = w4*predictedVal;//result[rIndex].CharCount;
+            else if (result[rIndex].ROW_ID == 5)
+                impact_val = w5*predictedVal;//result[rIndex].CharCount;  
+            else if (result[rIndex].ROW_ID == 6)
+                impact_val = w6*predictedVal;//result[rIndex].CharCount;   
+            else if (result[rIndex].ROW_ID == 7)
+                impact_val = w7*predictedVal;//result[rIndex].CharCount;  
+            else if (result[rIndex].ROW_ID == 8)
+                impact_val = w8*predictedVal;//result[rIndex].CharCount;
+            else if (result[rIndex].ROW_ID == 9)
+                impact_val = w9*predictedVal;//result[rIndex].CharCount;
+            else if (result[rIndex].ROW_ID == 10)
+                impact_val = w10*predictedVal;//result[rIndex].CharCount;   
+            else if (result[rIndex].ROW_ID == 11)
+                impact_val = w11*predictedVal;//result[rIndex].CharCount;  
+            else if (result[rIndex].ROW_ID == 12)
+                impact_val = w12*predictedVal;//result[rIndex].CharCount;
+
+            if (predictedVal <= 0)
+               impact_percent = 0;
+            else
+               impact_percent = 100.0*impact_val/(predictedVal);
+
+            //console.log("rIndex = ",rIndex,"impact_percent = ", impact_percent,"predictedVal = ", predictedVal, "intercept =",intercept);
+            let predicted = predictedVal;
+            sqlStr = 'UPSERT "CP_TS_OBJDEP_CHAR_IMPACT_F" VALUES (' + "'" + result[rIndex].CAL_DATE + "'" + "," +
+                "'" + result[rIndex].Location + "'" + "," +
+                "'" + result[rIndex].Product + "'" + "," +
+                "'" + result[rIndex].Type + "'" + "," +
+                "'" + result[rIndex].OBJ_DEP + "'" + "," +
+                "'" + result[rIndex].OBJ_COUNTER + "'" + "," +
+                "'" + result[rIndex].ROW_ID + "'" + "," +
+                "'" + 'RDT' + "'" + "," +
+                "'" + result[rIndex].VERSION + "'" + "," +
+                "'" + result[rIndex].SCENARIO + "'" + "," +
+                "'" + result[rIndex].CharCount + "'" + "," +
+                "'" + impact_val + "'" + "," +
+                "'" + impact_percent + "'" + "," +
+                "'" + predicted + "'" + "," +
+                "'" + predictedTime + "'" + ')' + ' WITH PRIMARY KEY';
+            
+            //console.log("CP_TS_OBJDEP_CHAR_IMPACT_F MLR UPSERT sqlStr ", sqlStr); 
+  
+            stmt=conn.prepare(sqlStr);
+            stmt.exec();
+            stmt.drop(); 
+  
+        }
+  
+
+    }
+    conn.disconnect();
+
     let returnObj = [];	
     let createdAt = createtAtObj;
     let rdtID = idObj; 

@@ -915,7 +915,7 @@ exports._updateMlrPredictionData = function(req) {
     //console.log(' tableObj ', tableObj);
     if (mlrpType == 1)
     {
-        sqlStr = "INSERT INTO PAL_MLR_PRED_DATA_GRP_TAB_1T(GROUP_ID,ID,V1) VALUES(?, ?, ?, ?)";
+        sqlStr = "INSERT INTO PAL_MLR_PRED_DATA_GRP_TAB_1T(GROUP_ID,ID,V1) VALUES(?, ?, ?)";
         stmt = conn.prepare(sqlStr);   
     }
     else if (mlrpType == 2)
@@ -1693,17 +1693,17 @@ exports._runMlrPrediction = function (mlrpType, group, version, scenario) {
         //          ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
 
          //console.log("V_FUTURE_DEP_TS Predicted Value sql update sqlStr", sqlStr)
-        sqlStr = 'SELECT "CAL_DATE", "Location", "Product", "Type", "OBJ_DEP", "OBJ_COUNTER", "VERSION", "SCENARIO" ' +
+        sqlStr = 'SELECT DISTINCT "CAL_DATE", "Location", "Product", "Type", "OBJ_DEP", "OBJ_COUNTER", "VERSION", "SCENARIO" ' +
                 'FROM "V_FUTURE_DEP_TS" WHERE "GroupID" = ' + "'" + groupId + "'" + 
                 ' AND "VERSION" = ' + "'" + version + "'" +
                 ' AND "SCENARIO" = ' + "'" + scenario + "'" +
                 ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
-        console.log("V_FUTURE_DEP_TS MLR SELECT sqlStr ", sqlStr);
+        //console.log("V_FUTURE_DEP_TS MLR SELECT sqlStr ", sqlStr);
 
         stmt=conn.prepare(sqlStr);
         result=stmt.exec();
         stmt.drop();
-        console.log("V_FUTURE_DEP_TS MLR SELECT sqlStr result ", result);
+        //console.log("V_FUTURE_DEP_TS MLR SELECT sqlStr result ", result);
 
         sqlStr = 'UPSERT "CP_TS_PREDICTIONS" VALUES (' + "'" + result[0].CAL_DATE + "'" + "," +
                     "'" + result[0].Location + "'" + "," +
@@ -1720,7 +1720,7 @@ exports._runMlrPrediction = function (mlrpType, group, version, scenario) {
             
             //' WHERE "GroupID" = ' + "'" + groupId + "'" + 
             //' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
-        console.log("V_PREDICTIONS Predicted Value MLR sql update sqlStr", sqlStr);
+        //console.log("V_PREDICTIONS Predicted Value MLR sql update sqlStr", sqlStr);
 
 
         //console.log("V_FUTURE_DEP_TS Predicted Value sql update sqlStr", sqlStr)
@@ -1737,7 +1737,7 @@ exports._runMlrPrediction = function (mlrpType, group, version, scenario) {
                 ' AND LOCATION_ID = ' + "'" + result[0].Location + "'" +
                 ' AND PRODUCT_ID = ' + "'" + result[0].Product + "'" +
                 ' AND OBJ_DEP = ' + "'" + result[0].OBJ_DEP + '_' + result[0].OBJ_COUNTER + "'";
-        console.log("V_PREDICTIONS IBP Result Plan Predicted Value HGBT sql sqlStr", sqlStr);
+        //console.log("V_PREDICTIONS IBP Result Plan Predicted Value MLR sql sqlStr", sqlStr);
         stmt=conn.prepare(sqlStr);
         results = stmt.exec();
         stmt.drop();
@@ -1757,7 +1757,7 @@ exports._runMlrPrediction = function (mlrpType, group, version, scenario) {
                     "'" + 'SUCCESS' + "'" + ')' + ' WITH PRIMARY KEY';
             
  
-            console.log("CP_IBP_RESULTPLAN_TS Predicted Value HGBT sql update sqlStr", sqlStr);
+            //console.log("CP_IBP_RESULTPLAN_TS Predicted Value MLR sql update sqlStr", sqlStr);
 
             stmt=conn.prepare(sqlStr);
             stmt.exec();
@@ -1768,8 +1768,163 @@ exports._runMlrPrediction = function (mlrpType, group, version, scenario) {
 
     conn.disconnect();
 
+    var conn = hana.createConnection();
+    conn.connect(conn_params);
+    var sqlStr = 'SET SCHEMA ' + classicalSchema;  
+    // console.log('sqlStr: ', sqlStr);            
+    var stmt=conn.prepare(sqlStr);
+    result=stmt.exec();
+    stmt.drop();
+ 
+    // Extract Intercepts and Coefficients
+    sqlStr = 'SELECT "GROUP_ID", "VARIABLE_NAME", "COEFFICIENT_VALUE" FROM PAL_MLR_COEFFICIENT_GRP_TAB' +
+                 ' WHERE "GROUP_ID" = ' + "'" + groupId + "'";
+    //console.log('sqlStr: ', sqlStr);            
+
+    var stmt=conn.prepare(sqlStr);
+    result=stmt.exec();
+    stmt.drop();
+    //console.log('sqlStr PAL_MLR_COEFFICIENT_GRP_TAB Result: ', result);            
+
+    conn.disconnect();
 
  
+    var intercept, c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12 = 0;
+
+    for (let index=0; index<result.length; index++)
+    {
+        //console.log('sqlStr PAL_MLR_COEFFICIENT_GRP_TAB index: ', index, 'VAR NAME = ', result[index].VARIABLE_NAME);            
+   
+        if (result[index].VARIABLE_NAME == '__PAL_INTERCEPT__')
+            intercept = result[index].COEFFICIENT_VALUE;
+        else if (result[index].VARIABLE_NAME == 'V1')
+            c1 = result[index].COEFFICIENT_VALUE;
+        else if (result[index].VARIABLE_NAME == 'V2')
+            c2 = result[index].COEFFICIENT_VALUE;
+        else if (result[index].VARIABLE_NAME == 'V3')
+            c3 = result[index].COEFFICIENT_VALUE;
+        else if (result[index].VARIABLE_NAME == 'V4')
+            c4 = result[index].COEFFICIENT_VALUE;
+        else if (result[index].VARIABLE_NAME == 'V5')
+            c5 = result[index].COEFFICIENT_VALUE;
+        else if (result[index].VARIABLE_NAME == 'V6')
+            c6 = result[index].COEFFICIENT_VALUE;
+        else if (result[index].VARIABLE_NAME == 'V7')
+            c7 = result[index].COEFFICIENT_VALUE;
+        else if (result[index].VARIABLE_NAME == 'V8')
+            c8 = result[index].COEFFICIENT_VALUE;
+        else if (result[index].VARIABLE_NAME == 'V9')
+            c9 = result[index].COEFFICIENT_VALUE;
+        else if (result[index].VARIABLE_NAME == 'V10')
+            c10 = result[index].COEFFICIENT_VALUE;
+        else if (result[index].VARIABLE_NAME == 'V11')
+            c11 = result[index].COEFFICIENT_VALUE;
+        else if (result[index].VARIABLE_NAME == 'V12')
+            c12 = result[index].COEFFICIENT_VALUE;
+    }
+
+    //console.log("INTERCEPT = ". intercept);
+
+//    conn.disconnect();
+
+    var conn = hana.createConnection();
+ 
+    conn.connect(conn_params_container);
+
+    sqlStr = 'SET SCHEMA ' + containerSchema; 
+    // console.log('sqlStr: ', sqlStr);            
+    stmt=conn.prepare(sqlStr);
+    result=stmt.exec();
+    stmt.drop();
+
+    for (let pIndex=0; pIndex<distPeriods.length; pIndex++)
+    {     
+        let predictedVal = fittedObj[pIndex].value;
+        predictedVal = ( +predictedVal).toFixed(2);
+        let periodId = distPeriods[pIndex][trimmedPeriod];
+        //console.log('trimmedPeriod : ', trimmedPeriod, 'vcConfigTimePeriod :', vcConfigTimePeriod);
+
+        sqlStr = 'SELECT DISTINCT "CAL_DATE", "Location", "Product", ' +
+                 '"Type", "OBJ_DEP", "OBJ_COUNTER", "ROW_ID", "CharCount", "VERSION", "SCENARIO" ' +
+                'FROM "V_FUTURE_DEP_TS" WHERE "GroupID" = ' + "'" + groupId + "'" + 
+                ' AND "VERSION" = ' + "'" + version + "'" +
+                ' AND "SCENARIO" = ' + "'" + scenario + "'" +
+                ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
+        //console.log("V_FUTURE_DEP_TS MLR SELECT sqlStr ", sqlStr);
+
+        result = [];
+
+
+        stmt=conn.prepare(sqlStr);
+        result=stmt.exec();
+        stmt.drop();
+        //console.log("V_FUTURE_DEP_TS MLR SELECT sqlStr result ", result, "length = ", result.length);
+
+    
+
+        for (let rIndex = 0; rIndex < result.length; rIndex++)
+        {
+            let impact_val = impact_percent = 0;
+            if (result[rIndex].ROW_ID == 1)
+                impact_val = c1*result[rIndex].CharCount;
+            else if (result[rIndex].ROW_ID == 2)
+                impact_val = c2*result[rIndex].CharCount;   
+            else if (result[rIndex].ROW_ID == 3)
+                impact_val = c3*result[rIndex].CharCount;  
+            else if (result[rIndex].ROW_ID == 4)
+                impact_val = c4*result[rIndex].CharCount;
+            else if (result[rIndex].ROW_ID == 5)
+                impact_val = c5*result[rIndex].CharCount;  
+            else if (result[rIndex].ROW_ID == 6)
+                impact_val = c6*result[rIndex].CharCount;   
+            else if (result[rIndex].ROW_ID == 7)
+                impact_val = c7*result[rIndex].CharCount;  
+            else if (result[rIndex].ROW_ID == 8)
+                impact_val = c8*result[rIndex].CharCount;
+            else if (result[rIndex].ROW_ID == 9)
+                impact_val = c9*result[rIndex].CharCount;
+            else if (result[rIndex].ROW_ID == 10)
+                impact_val = c10*result[rIndex].CharCount;   
+            else if (result[rIndex].ROW_ID == 11)
+                impact_val = c11*result[rIndex].CharCount;  
+            else if (result[rIndex].ROW_ID == 12)
+                impact_val = c12*result[rIndex].CharCount;
+
+            if (predictedVal <= 0)
+               impact_percent = 0;
+            else
+               impact_percent = 100.0*impact_val/(predictedVal - intercept);
+
+            //console.log("rIndex = ",rIndex,"impact_percent = ", impact_percent,"predictedVal = ", predictedVal, "intercept =",intercept);
+            let predicted = predictedVal;
+            sqlStr = 'UPSERT "CP_TS_OBJDEP_CHAR_IMPACT_F" VALUES (' + "'" + result[rIndex].CAL_DATE + "'" + "," +
+                "'" + result[rIndex].Location + "'" + "," +
+                "'" + result[rIndex].Product + "'" + "," +
+                "'" + result[rIndex].Type + "'" + "," +
+                "'" + result[rIndex].OBJ_DEP + "'" + "," +
+                "'" + result[rIndex].OBJ_COUNTER + "'" + "," +
+                "'" + result[rIndex].ROW_ID + "'" + "," +
+                "'" + 'MLR' + "'" + "," +
+                "'" + result[rIndex].VERSION + "'" + "," +
+                "'" + result[rIndex].SCENARIO + "'" + "," +
+                "'" + result[rIndex].CharCount + "'" + "," +
+                "'" + impact_val + "'" + "," +
+                "'" + impact_percent + "'" + "," +
+                "'" + predicted + "'" + "," +
+                "'" + predictedTime + "'" + ')' + ' WITH PRIMARY KEY';
+            
+            //console.log("CP_TS_OBJDEP_CHAR_IMPACT_F MLR UPSERT sqlStr ", sqlStr); 
+  
+            stmt=conn.prepare(sqlStr);
+            stmt.exec();
+            stmt.drop(); 
+  
+        }
+  
+
+    }
+    conn.disconnect();
+
     let returnObj = [];	
     let createdAt = createtAtObj;
     let mlrpID = idObj; 
