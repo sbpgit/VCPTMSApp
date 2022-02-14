@@ -24,7 +24,72 @@ module.exports = (srv) => {
 
   srv.on("CREATE", "genProfileOD", _createProfileOD);
 
-  srv.on()
+  srv.on("genpvs", async (req) => {
+      let { getNodes } = srv.entities;
+        let liresults = [];
+        let lsresults = {};
+        let createResults = [];
+        let res;
+        var responseMessage;
+        // var datetime = new Date();
+        // var curDate = datetime.toISOString().slice(0, 10);
+        res = req._.req.res;
+    //     if(req.data.flag === 'G'){
+    //         const li_results = await cds
+    //   .transaction(req)
+    //   .run(
+    //     SELECT.distinct
+    //       .from(getNodes));
+    //      responseMessage = " Get successfull ";
+    //   createResults.push(responseMessage); 
+
+    //     }
+    //     else 
+        if(req.data.flag === 'C' ||
+        req.data.flag === 'E'){
+            lsresults.CHILD_NODE = req.data.CHILD_NODE;
+        lsresults.PARENT_NODEE = req.data.PARENT_NODE;
+        lsresults.NODE_TYPE = req.data.NODE_TYPE;
+        lsresults.NODE_DESC = req.data.NODE_DESC;
+        lsresults.AUTH_GROUP = req.data.AUTH_GROUP;
+        if (req.data.flag === 'E') {
+      try {
+        await cds.delete("CP_ACCESS_NODES", lsresults);
+      } catch (e) {
+        //DONOTHING
+      }
+    }
+        liresults.push(lsresults);
+        try {
+      await cds.run(INSERT.into("CP_ACCESS_NODES").entries(liresults));
+      responseMessage = " Created successfully ";
+      createResults.push(responseMessage);
+    } catch (e) {
+      responseMessage = " Creation failed";
+      createResults.push(responseMessage);
+    }
+    lsresults = {};
+  }
+  else if(req.data.flag === 'D'){
+      
+            lsresults.CHILD_NODE = req.data.CHILD_NODE;
+        lsresults.PARENT_NODEE = req.data.PARENT_NODE;
+        liresults.push(lsresults);
+        try {
+            await cds.delete("CP_ACCESS_NODES", lsresults);
+      responseMessage = " Deletion successfully ";
+      createResults.push(responseMessage);
+    } catch (e) {
+      responseMessage = " Deletion failed";
+      createResults.push(responseMessage);
+    }
+    lsresults = {};
+
+  }
+  res.send({ value: createResults });
+
+
+  })
 
   srv.on("genODHistory", async (req) => {
     let { getODCharH } = srv.entities;
