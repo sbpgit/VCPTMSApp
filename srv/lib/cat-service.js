@@ -24,6 +24,8 @@ module.exports = (srv) => {
 
   srv.on("CREATE", "genProfileOD", _createProfileOD);
 
+  srv.on()
+
   srv.on("genODHistory", async (req) => {
     let { getODCharH } = srv.entities;
     let liresults = [];
