@@ -6,7 +6,7 @@ const { createLogger, format, transports } = require("winston");
 const { combine, timestamp, label, prettyPrint } = format;
 
 const GenTimeseries = require("./gen-timeseries");
-//const genTimeseries = new GenTimeseries;
+const genTimeseries = new GenTimeseries;
 
 const genFunctions = new GenFunctions();
 
