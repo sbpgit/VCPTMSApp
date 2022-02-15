@@ -136,6 +136,20 @@ modules:
       - cpappcpprodaccnode.zip
       name: cpappcpprodaccnode
       target-path: resources/
+    - artifacts:
+      - cpappfcpnodesdetails.zip
+      name: cpappfcpnodesdetails
+      target-path: resources/
+- name: cfgapppvsrootcfgprdpvsroot
+  type: html5
+  path: app/cfgprd_pvsroot
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
 - name: cpibpfdemcpibpfdem
   type: html5
   path: app/cp_ibpfdem
@@ -289,6 +303,16 @@ modules:
 - name: cpappcpprodaccnode
   type: html5
   path: app/cpprodaccnode
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappfcpnodesdetails
+  type: html5
+  path: app/cp_nodesdetails
   build-parameters:
     build-result: dist
     builder: custom

@@ -22,3 +22,4 @@ using from './cp_saleshconfig/annotations';
 
 using from './cpodrestrict/annotations';
 using from './cpprodaccnode/annotations';
+using from './cp_nodesdetails/annotations';
