@@ -463,7 +463,7 @@ class GenTimeseries {
                     liObjdepFTemp[index].SUCCESS_RATE = 0;
                     for (let lDemI = 0; lDemI < liFutureDemandPlanDate.length; lDemI++) {
                         if(liFutureDemandPlanDate[lDemI].QUANTITY > 0){
-                            liObjdepFTemp[index].SUCCESS_RATE = (liObjdepFTemp[index].SUCCESS / liFutureDemandPlanDate[lDemI].QUANTITY) * 100;
+                            liObjdepFTemp[index].SUCCESS_RATE = ( liObjdepFTemp[index].SUCCESS / liFutureDemandPlanDate[lDemI].QUANTITY ) * 100;
                         }
                     }
 
