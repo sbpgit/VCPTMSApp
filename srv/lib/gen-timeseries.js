@@ -445,10 +445,26 @@ class GenTimeseries {
             
         }
 
+        /** Get Future Plan */
+        const liFutureDemandPlanDate = await cds.run(
+            `SELECT *
+               FROM "CP_IBP_FUTUREDEMAND"
+               WHERE LOCATION_ID = '`+ liFutureCharPlan[lFutInd].LOCATION_ID +`'
+               AND PRODUCT_ID = '`+ liFutureCharPlan[lFutInd].PRODUCT_ID +`'
+               AND WEEK_DATE = '`+ liFutureCharPlan[lFutInd].WEEK_DATE +`'`
+        );  
+
         if(liObjdepFTemp.length > 0 ){
             try {
                 
                 for (let index = 0; index < liObjdepFTemp.length; index++) {
+                    liObjdepFTemp[index].SUCCESS_RATE = 0;
+                    for (let lDemI = 0; lDemI < liFutureDemandPlanDate.length; lDemI++) {
+                        if(liFutureDemandPlanDate[lDemI].QUANTITY > 0){
+                            liObjdepFTemp[index].SUCCESS_RATE = liObjdepFTemp[index].SUCCESS / liFutureDemandPlanDate[lDemI].QUANTITY;
+                        }
+                    }
+
                     cds.run(INSERT.into("CP_TS_OBJDEP_CHARHDR_F").entries(liObjdepFTemp[index]));
                 }
                
