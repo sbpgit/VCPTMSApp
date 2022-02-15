@@ -168,7 +168,7 @@ sap.ui.define(
           // Deleting the selected access node
           var selected = oEvent.getSource().getParent().getCells()[0].getTitle();
           // Getting the conformation popup before deleting
-          var text = "Please Confirm to Remove access node" + " - " + selected;
+          var text = "Please confirm to remove access node" + " - " + selected;
           sap.m.MessageBox.show(text, {
             title: "Confirmation",
             actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
@@ -187,10 +187,13 @@ sap.ui.define(
                   },
                   success: function (oData) {
                     sap.ui.core.BusyIndicator.hide();
+                    MessageToast.show("Deletion Successfull");
+                            that.onAfterRendering();
                   },
                   error: function () {
-                    MessageToast.show("Failed to get data");
                     sap.ui.core.BusyIndicator.hide();
+                    MessageToast.show("Failed to delete node");
+                            that.onAfterRendering();
                   },
                 });
               }
@@ -202,7 +205,6 @@ sap.ui.define(
           var accesNode = sap.ui.getCore().byId("idAccesNode").getValue();
           var desc = sap.ui.getCore().byId("idDesc").getValue();
           var flag = oGModel.getProperty("/Flag");
-
           this.getModel("BModel").callFunction("/genpvs", {
             method: "GET",
             urlParameters: {
@@ -213,10 +215,20 @@ sap.ui.define(
               FLAG: flag
             },
             success: function (oData) {
-              sap.ui.core.BusyIndicator.hide();
+            //   sap.ui.core.BusyIndicator.hide();
+              MessageToast.show("Creation Successfull");
+                      that.onAccNodeClose();
+                      that.onAfterRendering();
             },
             error: function (oData) {
-              MessageToast.show("Failed to get data");
+                if(oData.statusCode === 200){
+                    MessageToast.show("Creation Successfull");
+                }
+                else{
+                MessageToast.show("Failed to create node");
+                }
+                        that.onAccNodeClose();
+                        that.onAfterRendering();
             },
           });
 

@@ -122,7 +122,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
 
 
     //function createProf() returns String;
-    function genpvs(NODE_TYPE : String(2), CHILD_NODE : String(50), PARENT_NODE : String(50), NODE_DESC:String(200),FLAG: String(1)) returns String;
+    function genpvs(NODE_TYPE : String(2), CHILD_NODE : String(50), PARENT_NODE : String(50), NODE_DESC:String(200),FLAG: String(1)) returns array of getNodes;
     // function fGetNodeDet(NODE_TYPE : String(2), CHILD_NODE : String(50), PARENT_NODE : String(50)) returns array of getAccessNodes;
     function generate_timeseries() returns String;
     function get_objdep() returns array of ds.objectDep; //objectDep;
