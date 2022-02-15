@@ -127,7 +127,8 @@ annotate service.LOCATION with @(
             {
                 $Type : 'UI.DataField',
                 //Label : 'Location ID',
-                Value : LOCATION_ID
+                Value : LOCATION_ID,
+                ![@UI.Importance] : #High
             },
             {
                 $Type : 'UI.DataField',

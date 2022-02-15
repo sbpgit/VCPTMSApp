@@ -48,7 +48,7 @@ module.exports = (srv) => {
         if(req.data.flag === 'C' ||
         req.data.flag === 'E'){
             lsresults.CHILD_NODE = req.data.CHILD_NODE;
-        lsresults.PARENT_NODEE = req.data.PARENT_NODE;
+        lsresults.PARENT_NODE = req.data.PARENT_NODE;
         lsresults.NODE_TYPE = req.data.NODE_TYPE;
         lsresults.NODE_DESC = req.data.NODE_DESC;
         lsresults.AUTH_GROUP = req.data.AUTH_GROUP;
