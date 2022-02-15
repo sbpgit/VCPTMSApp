@@ -11,14 +11,21 @@
         "description": "{{appDescription}}",
         "dataSources": {
             "mainService": {
-                "uri": "/catalog/",
+                "uri": "/v2/catalog/",
                 "type": "OData",
                 "settings": {
-                    "annotations": [],
-                    "localUri": "localService/metadata.xml",
-                    "odataVersion": "4.0"
+                  "localUri": "localService/CatalogService/metadata.xml",
+                  "odataVersion": "2.0"
                 }
-            }
+              },
+              "Pal": {
+                "uri": "/v2/pal/",
+                "type": "OData",
+                "settings": {
+                  "odataVersion": "2.0",
+                  "localUri": "localService/metadata.xml"
+                }
+              }
         },
         "crossNavigation": {
             "inbounds": {
@@ -54,6 +61,12 @@
     },
     "sap.ui5": {
         "flexEnabled": true,
+        "rootView": {
+            "viewName": "cpappf.cpnodesdetails.view.App",
+            "type": "XML",
+            "async": true,
+            "id": "App"
+        },
         "dependencies": {
             "minUI5Version": "1.98.0",
             "libs": {
@@ -71,17 +84,32 @@
                     "bundleName": "cpappf.cpnodesdetails.i18n.i18n"
                 }
             },
-            "": {
+            "oGModel": {
+                "type": "sap.ui.model.json.JSONModel",
+                "settings": {
+                    "defaultBindingMode": "TwoWay"
+                },
+                "preload": true
+            },
+            "BModel": {
                 "dataSource": "mainService",
                 "preload": true,
                 "settings": {
-                    "synchronizationMode": "None",
-                    "operationMode": "Server",
-                    "autoExpandSelect": true,
-                    "earlyRequests": true,
-                    "groupId": "$direct"
+                  "synchronizationMode": "None",
+                  "operationMode": "Server",
+                  "autoExpandSelect": true,
+                  "earlyRequests": true,
+                  "groupId": "$direct"
                 }
-            }
+              },
+              "PModel": {
+                "dataSource": "Pal",
+                "preload": true,
+                "settings": {
+                  "useBatch": true,
+                  "defaultBindingMode": "TwoWay"
+                }
+              }
         },
         "resources": {
             "css": [
@@ -102,28 +130,30 @@
             },
             "routes": [
                 {
-                    "name": "RouteDetails",
-                    "pattern": "RouteDetails",
-                    "target": [
-                        "TargetDetails"
-                    ]
-                }
+					"pattern": "",
+					"name": "Details",
+					"target": [
+						"Details"
+					]
+				}
             ],
             "targets": {
-                "TargetDetails": {
-                    "viewType": "XML",
-                    "transition": "slide",
-                    "clearControlAggregation": false,
-                    "viewId": "Details",
-                    "viewName": "Details"
-                }
+                "Details": {
+					"viewType": "XML",
+					"viewName": "Details",
+					"viewLevel": 1
+				},
+				"ItemMaster": {
+					"viewType": "XML",
+					"viewName": "ItemMaster",
+					"viewLevel": 2
+				},
+				"ItemDetail": {
+					"viewType": "XML",
+					"viewName": "ItemDetail",
+					"viewLevel": 3
+				}
             }
-        },
-        "rootView": {
-            "viewName": "cpappf.cpnodesdetails.view.Details",
-            "type": "XML",
-            "async": true,
-            "id": "Details"
         }
     },
     "sap.cloud": {
