@@ -1309,27 +1309,33 @@ annotate service.IBP_RESULTPLAN with @(
             
             {
                 $Type : 'UI.DataField', //Label : 'Description',
-                Value : LOCATION_ID
+                Value : LOCATION_ID,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product ID',
-                Value : PRODUCT_ID
+                Value : PRODUCT_ID,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Family',
-                Value : OBJ_DEP
+                Value : OBJ_DEP,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Family',
-                Value : VERSION
+                Value : VERSION,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : SCENARIO
+                Value : SCENARIO,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField',
-                Value : WEEK_Date
+                Value : WEEK_Date,
+                ![@UI.Importance]   : #High
             }
         ]
     }
@@ -1674,11 +1680,13 @@ annotate pal.IBP_RESULTPLAN_TS with @(
             },            
             {
                 $Type : 'UI.DataField', //Label : 'Description',
-                Value : LOCATION_ID
+                Value : LOCATION_ID,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product ID',
-                Value : PRODUCT_ID
+                Value : PRODUCT_ID,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Family',
