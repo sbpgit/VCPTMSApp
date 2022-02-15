@@ -40,7 +40,9 @@
         "watch-cp_locprod": "cds watch --open cp_locprod/webapp/index.html#fe-lrop-v4",
         "watch-cp_saleshcfg": "cds watch --open cp_saleshcfg/webapp/index.html#fe-lrop-v4",
         "watch-cpodrestriction": "cds watch --open cpodrestriction/webapp/index.html#fe-lrop-v4",
-        "watch-cpibpresultplan": "cds watch --open cpibpresultplan/webapp/index.html#fe-lrop-v4"
+        "watch-cpibpresultplan": "cds watch --open cpibpresultplan/webapp/index.html#fe-lrop-v4",
+        "watch-cpodrestrict": "cds watch --open cpodrestrict/webapp/index.html#fe-lrop-v4",
+        "watch-cpprodaccnode": "cds watch --open cpprodaccnode/webapp/index.html#fe-lrop-v4"
     },
     "eslintConfig": {
         "extends": "eslint:recommended",
@@ -114,7 +116,9 @@
         "app/cp_locprod",
         "app/cp_saleshcfg",
         "app/cpodrestriction",
-        "app/cpibpresultplan"
+        "app/cpibpresultplan",
+        "app/cpodrestrict",
+        "app/cpprodaccnode"
     ],
     "devDependencies": {
         "@sap/ux-specification": "^1.96.3"

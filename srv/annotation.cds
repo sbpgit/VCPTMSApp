@@ -1426,11 +1426,13 @@ annotate V_SALESHCFG_CHARVAL with @(
         LineItem                : [
             {
                 $Type : 'UI.DataField', //Label : 'Product ID',
-                Value : SALES_DOC
+                Value : SALES_DOC,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField', //Label : 'Description',
-                Value : SALESDOC_ITEM
+                Value : SALESDOC_ITEM,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Family',
@@ -1545,10 +1547,12 @@ annotate V_SALESHCFG_CHARVAL with @(
 /*****************************/
 // Restrictions OD
 /*****************************/
-annotate service.V_ODRESTRICT with @(
+annotate V_ODRESTRICT with @(
     UI        : {
         SelectionFields     : [
-            OBJ_DEP
+            OBJ_DEP,
+            CLASS_NAME,
+            CHAR_NAME
         ],
         LineItem            : [
             {
@@ -1584,57 +1588,69 @@ annotate service.V_ODRESTRICT with @(
                 Value : ROW_ID
             }            
         ]
-        // ,
-        // HeaderInfo          : {
-        //     Title          : {Value : CAL_DATE},
-        //     Description    : {Value : PRODUCT_ID},
-        //     TypeName       : 'Timeseries',
-        //     TypeNamePlural : 'Timeseries',
-        // },
-        // FieldGroup #Details : {Data : [
-        //     {
-        //         $Type : 'UI.DataField', //Label : 'Product Family',
-        //         Value : CAL_DATE
-        //     },
-        //     {
-        //         $Type : 'UI.DataField', //Label : 'Product Family',
-        //         Value : LOCATION_ID
-        //     },
-        //     {
-        //         $Type : 'UI.DataField', //Label : 'Product ID',
-        //         Value : PRODUCT_ID
-        //     },
-        //     {
-        //         $Type : 'UI.DataField', //Label : 'Description',
-        //         Value : OBJ_TYPE
-        //     },
-        //     {
-        //         $Type : 'UI.DataField', //Label : 'Product ID',
-        //         Value : OBJ_DEP
-        //     },
-        //     {
-        //         $Type : 'UI.DataField', //Label : 'Description',
-        //         Value : OBJ_COUNTER
-        //     },
-        //     {
-        //         $Type : 'UI.DataField', //Label : 'Product Series',
-        //         Value : ROW_ID
-        //     },
-        //     {
-        //         $Type : 'UI.DataField', //Label : 'Product Series',
-        //         Value : SUCCESS
-        //     }
-        // ]}
-    }
+        ,
+        HeaderInfo          : {
+            Title          : {Value : OBJ_DEP},
+            Description    : {Value : OBJ_COUNTER},
+            TypeName       : 'Restrictions',
+            TypeNamePlural : 'Restrictions',
+        },
+        FieldGroup #Details : {Data : [
+            {
+                $Type : 'UI.DataField', //Label : 'Product ID',
+                Value : OBJ_DEP
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Description',
+                Value : OBJ_COUNTER
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : CLASS_NUM
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : CLASS_NAME
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : CHAR_NUM
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : CHAR_NAME
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : CHARVAL_NUM
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : CHAR_VALUE
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : CHAR_COUNTER
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : OD_CONDITION
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : ROW_ID
+            } 
+        ]}
+    }//,
     // ,
     // Page Facets
     // UI.Facets : [{
     //     $Type  : 'UI.CollectionFacet',
-    //     ID     : 'Timeser',
-    //     Label  : 'Timeseries',
+    //     ID     : 'restriction',
+    //     Label  : 'Restriction',
     //     Facets : [{
     //         $Type  : 'UI.ReferenceFacet',
-    //         Label  : 'Timeseries',
+    //         Label  : 'Restriction',
     //         Target : '@UI.FieldGroup#Details'
     //     }]
     // }]
@@ -1652,7 +1668,8 @@ annotate pal.IBP_RESULTPLAN_TS with @(
         LineItem                       : [
             {
                 $Type : 'UI.DataField',
-                Value : CAL_DATE
+                Value : CAL_DATE,
+                ![@UI.Importance]   : #High
             },            
             {
                 $Type : 'UI.DataField', //Label : 'Description',

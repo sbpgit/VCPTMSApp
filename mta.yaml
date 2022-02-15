@@ -73,10 +73,6 @@ modules:
     build-result: resources
     requires:
     - artifacts:
-      - cfgapppvsrootcfgprdpvsroot.zip
-      name: cfgapppvsrootcfgprdpvsroot
-      target-path: resources/
-    - artifacts:
       - cpibpfdemcpibpfdem.zip
       name: cpibpfdemcpibpfdem
       target-path: resources/
@@ -125,10 +121,6 @@ modules:
       name: cpappfcpobjdepdetails
       target-path: resources/
     - artifacts:
-      - cpappcpodrestriction.zip
-      name: cpappcpodrestriction
-      target-path: resources/
-    - artifacts:
       - cpappcpibpresultplan.zip
       name: cpappcpibpresultplan
       target-path: resources/
@@ -136,16 +128,14 @@ modules:
       - cpappfcpsaleshconfig.zip
       name: cpappfcpsaleshconfig
       target-path: resources/
-- name: cfgapppvsrootcfgprdpvsroot
-  type: html5
-  path: app/cfgprd_pvsroot
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    supported-platforms: []
+    - artifacts:
+      - cpapprestrictcpodrestrict.zip
+      name: cpapprestrictcpodrestrict
+      target-path: resources/
+    - artifacts:
+      - cpappcpprodaccnode.zip
+      name: cpappcpprodaccnode
+      target-path: resources/
 - name: cpibpfdemcpibpfdem
   type: html5
   path: app/cp_ibpfdem
@@ -266,16 +256,6 @@ modules:
     - npm install
     - npm run build:cf
     supported-platforms: []
-- name: cpappcpodrestriction
-  type: html5
-  path: app/cpodrestriction
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    supported-platforms: []
 - name: cpappcpibpresultplan
   type: html5
   path: app/cpibpresultplan
@@ -289,6 +269,26 @@ modules:
 - name: cpappfcpsaleshconfig
   type: html5
   path: app/cp_saleshconfig
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpapprestrictcpodrestrict
+  type: html5
+  path: app/cpodrestrict
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappcpprodaccnode
+  type: html5
+  path: app/cpprodaccnode
   build-parameters:
     build-result: dist
     builder: custom

@@ -285,6 +285,7 @@ context cp {
         key VERSION     : String(10)    @title : 'Version';
         key SCENARIO    : String(32)    @title : 'Scenario';
             SUCCESS     : Integer   @title : 'Count';
+            SUCCESS_RATE : Double    @title : 'Sucess Rate';
     };
 
     // Classes
@@ -677,17 +678,17 @@ key     ![CHAR_SUCCESS]: Integer  @title: 'CHAR_SUCCESS' ;
 
 @cds.persistence.exists 
 Entity ![V_ODRESTRICT] {
-key     ![OBJ_DEP]: String(30)  @title: 'OBJ_DEP' ; 
-key     ![OBJ_COUNTER]: Integer  @title: 'OBJ_COUNTER' ; 
-key     ![CLASS_NUM]: String(18)  @title: 'CLASS_NUM' ; 
-key     ![CLASS_NAME]: String(20)  @title: 'CLASS_NAME' ; 
-key     ![CHAR_NUM]: String(10)  @title: 'CHAR_NUM' ; 
-key     ![CHAR_NAME]: String(30)  @title: 'CHAR_NAME' ; 
-key     ![CHARVAL_NUM]: String(10)  @title: 'CHARVAL_NUM' ; 
-key     ![CHAR_VALUE]: String(70)  @title: 'CHAR_VALUE' ; 
-key     ![OD_CONDITION]: String(2)  @title: 'OD_CONDITION' ; 
-key     ![CHAR_COUNTER]: Integer  @title: 'CHAR_COUNTER' ; 
-key     ![ROW_ID]: Integer  @title: 'ROW_ID' ; 
+key     ![OBJ_DEP]: String(30)  @title: 'Object Dependency' ; 
+key     ![OBJ_COUNTER]: Integer  @title: 'Object Counter' ; 
+key     ![CLASS_NUM]: String(18)  @title: 'Internal No. Class ' ; 
+key     ![CLASS_NAME]: String(20)  @title: 'Class Name' ; 
+key     ![CHAR_NUM]: String(10)  @title: 'Internal No. Characteristic' ; 
+key     ![CHAR_NAME]: String(30)  @title: 'Characteristic Name' ; 
+key     ![CHARVAL_NUM]: String(10)  @title: 'Internal No. Characteristic value' ; 
+key     ![CHAR_VALUE]: String(70)  @title: 'Characteristic Value' ; 
+key     ![OD_CONDITION]: String(2)  @title: 'Object Dep. Condition' ; 
+key     ![CHAR_COUNTER]: Integer  @title: 'Characteristic Counter' ; 
+key     ![ROW_ID]: Integer  @title: 'Row ID' ; 
 }
 /*
 @cds.persistence.exists

@@ -1,1 +1,0 @@
-sap.ui.define(["cfgapp/pvsroot/cfgprdpvsroot/controller/BaseController","sap/ui/model/json/JSONModel"],function(o,p){"use strict";return o.extend("cfgapp.pvsroot.cfgprdpvsroot.controller.App",{onInit:function(){this.getView().addStyleClass(!sap.ui.Device.support.touch?"sapUiSizeCompact":"sapUiSizeCozy")}})});
