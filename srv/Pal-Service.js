@@ -154,6 +154,8 @@ function _getDataObjForPredictions(vcRulesList, idx, modelType, numChars) {
    // for (var i = 0; i < vcRulesList.length; i++)
    // {
 
+    if(modelType == 'HGBT')
+    {
        sqlStr = 'SELECT DISTINCT "Attribute", "' + vcConfigTimePeriod + 
                 '", SUM("CharCount") AS "CharCount" FROM "V_PREDICTION_TS" WHERE "Product" =' +
                     "'" +  vcRulesList[idx].Product + "'" +  
@@ -164,6 +166,19 @@ function _getDataObjForPredictions(vcRulesList, idx, modelType, numChars) {
                     ' GROUP BY "Attribute", "' + vcConfigTimePeriod + '"' +
                     ' ORDER BY "' + vcConfigTimePeriod + '", "Attribute"';
 
+    }
+    else
+    {
+        sqlStr = 'SELECT DISTINCT "Attribute", "' + vcConfigTimePeriod + 
+                '", SUM("CharCountPercent") AS "CharCount" FROM "V_PREDICTION_TS" WHERE "Product" =' +
+                    "'" +  vcRulesList[idx].Product + "'" +  
+                    ' AND "GroupID" =' + "'" +   vcRulesList[idx].GroupID + "'" +
+                    ' AND "Location" =' + "'" +   vcRulesList[idx].Location + "'" + 
+                    ' AND "VERSION" =' + "'" +   vcRulesList[idx].Version + "'" +
+                    ' AND "SCENARIO" =' + "'" +   vcRulesList[idx].Scenario + "'" +
+                    ' GROUP BY "Attribute", "' + vcConfigTimePeriod + '"' +
+                    ' ORDER BY "' + vcConfigTimePeriod + '", "Attribute"';
+    }
 //        console.log('sqlStr :',sqlStr)
         stmt=conn.prepare(sqlStr);
         results=stmt.exec();
@@ -2046,14 +2061,28 @@ function _getDataObjForGenModels(vcRulesList, modelType, numChars) {
     for (var i = 0; i < vcRulesList.length; i++)
     {
 
-        sqlStr = 'SELECT DISTINCT "Attribute", "' + vcConfigTimePeriod + 
-                '", SUM("CharCount") AS "CharCount", SUM("Target") AS "Target" FROM "CP_VC_HISTORY_TS" WHERE "Product" =' +
+        if (modelType == 'HGBT')
+        {
+            sqlStr = 'SELECT DISTINCT "Attribute", "' + vcConfigTimePeriod + 
+                    '", SUM("CharCountPercent") AS "CharCount", SUM("TargetPercent") AS "Target" FROM "CP_VC_HISTORY_TS" WHERE "Product" =' +
 
-                "'" +  vcRulesList[i].Product + "'" +  
-                ' AND "GroupID" =' + "'" +   vcRulesList[i].GroupID + "'" +
-                ' AND "Location" =' + "'" +   vcRulesList[i].Location + "'" + 
-                ' GROUP BY "Attribute", "' + vcConfigTimePeriod + '"' +
-                ' ORDER BY "' + vcConfigTimePeriod + '", "Attribute"';
+                    "'" +  vcRulesList[i].Product + "'" +  
+                    ' AND "GroupID" =' + "'" +   vcRulesList[i].GroupID + "'" +
+                    ' AND "Location" =' + "'" +   vcRulesList[i].Location + "'" + 
+                    ' GROUP BY "Attribute", "' + vcConfigTimePeriod + '"' +
+                    ' ORDER BY "' + vcConfigTimePeriod + '", "Attribute"';
+        }
+        else
+        {
+            sqlStr = 'SELECT DISTINCT "Attribute", "' + vcConfigTimePeriod + 
+                    '", SUM("CharCount") AS "CharCount", SUM("Target") AS "Target" FROM "CP_VC_HISTORY_TS" WHERE "Product" =' +
+
+                    "'" +  vcRulesList[i].Product + "'" +  
+                    ' AND "GroupID" =' + "'" +   vcRulesList[i].GroupID + "'" +
+                    ' AND "Location" =' + "'" +   vcRulesList[i].Location + "'" + 
+                    ' GROUP BY "Attribute", "' + vcConfigTimePeriod + '"' +
+                    ' ORDER BY "' + vcConfigTimePeriod + '", "Attribute"';
+        }
 
         //console.log('_getDataObjForGenModels sqlStr :',sqlStr, 'i = ', i);
         stmt=conn.prepare(sqlStr);

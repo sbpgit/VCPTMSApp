@@ -91,12 +91,18 @@ service CatalogService @(impl : './lib/cat-service.js') {
 
     @readonly
     entity getIBPFres           as projection on od.IBP_RESULTPLAN;
-
+     @readonly
     entity getODHdrRstr         as projection on V_ODRESTRICT;
 
     //
     @readonly
     entity getSaleshCfg         as projection on V_SALESHCFG_CHARVAL;
+
+    @odata.draft.enabled
+    entity cProdAccessNode      as projection on od.PROD_ACCNODE;
+
+    @odata.draft.enabled
+    entity cCompStrcNode        as projection on od.PVS_BOM;
 
     entity getProfiles          as projection on od.PAL_PROFILEMETH;
     entity getProfileParameters as projection on od.PAL_PROFILEMETH_PARA;
@@ -116,7 +122,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
 
 
     //function createProf() returns String;
-    function genpvs(flag: String(1)) returns String;
+    function genpvs(NODE_TYPE : String(2), CHILD_NODE : String(50), PARENT_NODE : String(50), NODE_DESC:String(200),FLAG: String(1)) returns String;
     // function fGetNodeDet(NODE_TYPE : String(2), CHILD_NODE : String(50), PARENT_NODE : String(50)) returns array of getAccessNodes;
     function generate_timeseries() returns String;
     function get_objdep() returns array of ds.objectDep; //objectDep;
@@ -124,6 +130,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
     function getCSRFToken() returns String;
     function genODHistory(OBJ_DEP:String(30),OBJ_COUNTER:String(10)) returns array of ds.odhistory;
     function genODFuture(OBJ_DEP:String(30),OBJ_COUNTER:String(10)) returns array of ds.odfuture;
+    // function genProdAccess(ACCNODE: String())
     action gen_timeseries() returns String;
 
 }

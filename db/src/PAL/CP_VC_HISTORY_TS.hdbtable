@@ -7,5 +7,7 @@ COLUMN TABLE "CP_VC_HISTORY_TS"(
 	"Row" INTEGER,
 	"Attribute" NVARCHAR(10) NOT NULL,
 	"CharCount" DOUBLE,
-	"Target" DOUBLE
+    "CharCountPercent" DOUBLE,
+	"Target" DOUBLE,
+    "TargetPercent" DOUBLE
 );
