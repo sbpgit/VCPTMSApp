@@ -218,6 +218,7 @@ sap.ui.define(
               urlParameters: {
                 CHILD_NODE: accesNode,
                 PARENT_NODE: "",
+                ACCESS_NODES:accesNode,
                 NODE_TYPE: "AN",
                 NODE_DESC: desc,
                 FLAG: flag

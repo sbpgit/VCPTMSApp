@@ -660,6 +660,7 @@ key     ![ROW_ID]: Integer  @title: 'ROW_ID' ;
 Entity ![V_LOCPROD] {
 key     ![PRODUCT_ID]: String(40)  @title: 'PRODUCT_ID' ; 
 key     ![LOCATION_ID]: String(4)  @title: 'LOCATION_ID' ; 
+key     ![PROD_DESC]: String(40)  @title: 'PROD_DESC' ;
 }
 
 @cds.persistence.exists 
