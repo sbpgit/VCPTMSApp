@@ -59,7 +59,7 @@ module.exports = (srv) => {
         // createResults.push(responseMessage);
       } catch (e) {
         //DONOTHING
-        // responseMessage = " Creation failed";
+         responseMessage = " Creation failed";
         // createResults.push(responseMessage);
       }
       lsresults = {};
