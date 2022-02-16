@@ -226,7 +226,7 @@ sap.ui.define(
             if (sId.includes("Loc")) {
               aSelectedItems = oEvent.getParameter("selectedItems");
               that.oLoc.setValue(aSelectedItems[0].getTitle());
-              this.getModel("BModel").read("/getProdClass", {
+              this.getModel("BModel").read("/getLocProdDet", {
                   filters: [
                       new Filter("LOCATION_ID", FilterOperator.EQ, aSelectedItems[0].getTitle())
                     ],
@@ -301,6 +301,7 @@ sap.ui.define(
               new Filter({
                 filters: [
                   new Filter("PRODUCT_ID", FilterOperator.Contains, query),
+                  new Filter("LOCATION_ID", FilterOperator.Contains, query),
                 ],
                 and: false,
               })
@@ -359,25 +360,28 @@ sap.ui.define(
               if (oAction === sap.m.MessageBox.Action.YES) {
                 sap.ui.core.BusyIndicator.show();
 
-                that.getModel("BModel").callFunction("/genpvs", {
-                  method: "GET",
-                  urlParameters: {
-                    CHILD_NODE: selected,
-                    PARENT_NODE: "",
-                    NODE_TYPE: "AN",
-                    NODE_DESC: "",
-                    FLAG: "D",
-                  },
-                  success: function (oData) {
+                var uri = "/v2/catalog/genProdAccessNode";
+                $.ajax({
+                    url: uri,
+                    type: "post",
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        LOCATION_ID: Loc,
+                        PRODUCT_ID: prod,
+                        ACCESS_NODE: "D"
+                    }),
+                    dataType: "json",
+                    async: false,
+                    timeout: 0,
+                    
+                    success: function (data) {
                     sap.ui.core.BusyIndicator.hide();
-                    MessageToast.show("Deletion Successfull");
-                            that.onAfterRendering();
-                  },
-                  error: function () {
-                    sap.ui.core.BusyIndicator.hide();
-                    MessageToast.show("Failed to delete node");
-                            that.onAfterRendering();
-                  },
+                    sap.m.MessageToast.show("Access Node deleted successfully");
+                    that.onAfterRendering();
+                    },
+                    error: function (data) {
+                        sap.m.MessageToast.show(JSON.stringify(data));
+                    },
                 });
               }
             },
@@ -388,31 +392,31 @@ sap.ui.define(
           var Loc = sap.ui.getCore().byId("idloc").getValue();
           var prod = sap.ui.getCore().byId("idprod").getValue();
           var AccessNode = sap.ui.getCore().byId("idaccn").getValue();;
-          this.getModel("BModel").callFunction("/genpvs", {
-            method: "GET",
-            urlParameters: {
-              CHILD_NODE: accesNode,
-              PARENT_NODE: "",
-              NODE_TYPE: "AN",
-              NODE_DESC: desc,
-              FLAG: flag
+          
+
+          var uri = "/v2/catalog/genProdAccessNode";
+          $.ajax({
+            url: uri,
+            type: "post",
+            contentType: "application/json",
+            data: JSON.stringify({
+                LOCATION_ID: Loc,
+                PRODUCT_ID: prod,
+                ACCESS_NODE: AccessNode
+            }),
+            dataType: "json",
+            async: false,
+            timeout: 0,
+            
+            success: function (data) {
+              sap.ui.core.BusyIndicator.hide();
+              sap.m.MessageToast.show("Access Node created successfully");
+              that.onAccNodeClose();
+              that.onAfterRendering();
             },
-            success: function (oData) {
-            //   sap.ui.core.BusyIndicator.hide();
-              MessageToast.show("Creation Successfull");
-                      that.onAccNodeClose();
-                      that.onAfterRendering();
-            },
-            error: function (oData) {
-                if(oData.statusCode === 200){
-                    MessageToast.show("Creation Successfull");
-                }
-                else{
-                MessageToast.show("Failed to create node");
-                }
-                        that.onAccNodeClose();
-                        that.onAfterRendering();
-            },
+            error: function (data) {
+                sap.m.MessageToast.show(JSON.stringify(data));
+              },
           });
 
 

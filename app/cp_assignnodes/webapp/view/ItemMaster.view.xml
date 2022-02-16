@@ -4,16 +4,16 @@
     <Page >
     <customHeader>
 			<Toolbar height="50%">
-				<SearchField id="headSearch" liveChange="onSearch" placeholder="Access Node"/>
+				<SearchField id="headSearch" liveChange="onSearch" placeholder="Product/ Location"/>
 				<ToolbarSpacer/>
 				<Button icon="sap-icon://add" press="onAccNode" tooltip="Add Access Node"/>
-                <Button icon="sap-icon://edit" press="onAccNode" tooltip="Edit Access Node"/>
+                <Button icon="sap-icon://delete" press="onAccNodeDel" tooltip="Delete Access Node"/>
 			</Toolbar>
 		</customHeader>
         <content>
             <List
 		id="accessList"
-		mode="Delete"
+		mode="SingleSelectMaster"
 		delete="onAccNodeDel"
         itemPress="onhandlePress"
         selectionChange="onhandlePress"

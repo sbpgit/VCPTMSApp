@@ -16,31 +16,30 @@ sap.ui.define([
 			// this.DetailHome = DetailHome;
 			this.bus = sap.ui.getCore().getEventBus();
 			that.oStruModel = new JSONModel();
+            that.oStruModel.setSizeLimit(1000);
 			oGModel = that.getOwnerComponent().getModel("oGModel");
 		},
 
 		onAfterRendering: function () {
             oGModel = that.getOwnerComponent().getModel("oGModel");
 
-            var selItem = oGModel.getProperty("/SelectedAccessNode");
-            var stuData = oGModel.getProperty("/struNodeData");
-            var ViewData= oGModel.getProperty("/ViewNodeData");
-            that.struNodeData = [];
-            that.viewNodeData = [];
-
-            this.byId("struTitle").setText("Structure Node Details for -" + " " + selItem);
-
-                for(var i=0; i< stuData.length; i++){
-                    if(stuData[i].PARENT_NODE === selItem){
-                        that.struNodeData.push(stuData[i]);
-                    }
-                }
-
-
-            that.oStruModel.setData({
-                Struresults: that.struNodeData,
+            var selLoc = oGModel.getProperty("/SelectedLoc");
+            var stuProd = oGModel.getProperty("/SelectedProd");
+            this.getModel("BModel").read("/getPVSBOM", {
+                filters: [
+                    new Filter("PRODUCT_ID", FilterOperator.EQ, stuProd),
+                    new Filter("LOCATION_ID", FilterOperator.EQ, selLoc),
+                  ],
+                success: function (oData) {
+                  that.oStruModel.setData({
+                    results: oData.results,
+                  });
+                  that.byId("sturList").setModel(that.oStruModel);
+                },
+                error: function (oData) {
+                  MessageToast.show("Failed to get data");
+                },
               });
-              that.byId("sturList").setModel(that.oStruModel);
             
 
         },

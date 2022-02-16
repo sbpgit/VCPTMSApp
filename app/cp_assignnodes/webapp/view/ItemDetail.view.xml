@@ -5,22 +5,26 @@
     <Page id="idClassChar" >
     <customHeader>
 			<Toolbar height="50%">
-				<Title id="struTitle" text="" class="ClassHead"></Title>
+				<Title id="struTitle" text="BOM-Structure Nodes" class="ClassHead"></Title>
 				<ToolbarSpacer/>
                 <Button text="Assign" press="onAssign" tooltip="Assign to View Node"/>
-				<Button icon="sap-icon://add" press="onStruNode" tooltip="Add Structure Node"/>
-                <Button icon="sap-icon://edit" press="onStruNode" tooltip="Edit Structure Node"/>
 			</Toolbar>
 		</customHeader>
 
         <content>
-            <Table id="sturList" items="{path: '/Struresults'}" mode="SingleSelectMaster">
+            <Table id="sturList" items="{path: '/results'}" mode="SingleSelectMaster">
                 <columns>
                     <Column hAlign="Center">
-                        <Text text="{i18n>StruNode}" />
+                        <Text text="Item #" />
                     </Column>
                     <Column hAlign="Center">
-                        <Text text="{i18n>nodeDesc}"/>
+                        <Text text="Component"/>
+                    </Column>
+                    <Column hAlign="Center">
+                        <Text text="Component Qty" />
+                    </Column>
+                    <Column hAlign="Center">
+                        <Text text="Structure Node" />
                     </Column>
                     <Column hAlign="Right">
                         <Text text="" />
@@ -29,9 +33,11 @@
                 <items>
                     <ColumnListItem>
                         <cells>
-                            <Text text="{CHILD_NODE}" />
-                            <Text text="{NODE_DESC}" />
-                            <Button id="idStru" icon="sap-icon://decline" tooltip="Delete" press="onStruNodeDel" 
+                            <Text text="{ITEM_NUM}" />
+                            <Text text="{COMPONENT}" />
+                            <Text text="{COMP_QTY}" />
+                            <Text text="{STRUC_NODE}" />
+                            <Button icon="sap-icon://decline" tooltip="Delete" press="onStructureNodeDel" 
                                     iconDensityAware="false" type="Transparent"/>
                         </cells>
                     </ColumnListItem>
