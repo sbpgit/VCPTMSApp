@@ -25,3 +25,4 @@ using from './cpprodaccnode/annotations';
 using from './cp_nodesdetails/annotations';
 
 using from './cpcompsnode/annotations';
+using from './cplocation/annotations';
