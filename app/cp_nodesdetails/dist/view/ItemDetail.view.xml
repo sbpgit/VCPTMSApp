@@ -1,0 +1,43 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:f="sap.ui.layout.form" controllerName="cpappf.cpnodesdetails.controller.ItemDetail"
+    xmlns:html="http://www.w3.org/1999/xhtml" class="ItemMaster">
+    <Page id="idClassChar" >
+    <customHeader>
+			<Toolbar height="50%">
+				<Title id="struTitle" text="" class="ClassHead"></Title>
+				<ToolbarSpacer/>
+                <Button text="Assign" press="onAssign" tooltip="Assign to View Node"/>
+				<Button icon="sap-icon://add" press="onStruNode" tooltip="Add Structure Node"/>
+                <Button icon="sap-icon://edit" press="onStruNode" tooltip="Edit Structure Node"/>
+			</Toolbar>
+		</customHeader>
+
+        <content>
+            <Table id="sturList" items="{path: '/Struresults'}" mode="SingleSelectMaster">
+                <columns>
+                    <Column hAlign="Center">
+                        <Text text="{i18n>StruNode}" />
+                    </Column>
+                    <Column hAlign="Center">
+                        <Text text="{i18n>nodeDesc}"/>
+                    </Column>
+                    <Column hAlign="Right">
+                        <Text text="" />
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem>
+                        <cells>
+                            <Text text="{CHILD_NODE}" />
+                            <Text text="{NODE_DESC}" />
+                            <Button id="idStru" icon="sap-icon://decline" tooltip="Delete" press="onStruNodeDel" 
+                                    iconDensityAware="false" type="Transparent"/>
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+
+        </content>
+    </Page>
+</mvc:View>
