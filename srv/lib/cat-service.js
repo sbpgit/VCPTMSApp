@@ -6,13 +6,13 @@ const { createLogger, format, transports } = require("winston");
 const { combine, timestamp, label, prettyPrint } = format;
 
 const GenTimeseries = require("./gen-timeseries");
-const genTimeseries = new GenTimeseries;
+// const genTimeseries = new GenTimeseries;
 
-const genFunctions = new GenFunctions();
+// const genFunctions = new GenFunctions();
 
-/* module.exports = async function () {
-     await genTimeseries.GenTimeseries();
- }*/
+//  module.exports = async function () {
+//      await genTimeseries.GenTimeseries();
+//  }
 
 module.exports = (srv) => {
   srv.on("getCSRFToken", async (req) => {
@@ -24,72 +24,62 @@ module.exports = (srv) => {
 
   srv.on("CREATE", "genProfileOD", _createProfileOD);
 
-  srv.on("genpvs", async (req) => {
-      let { getNodes } = srv.entities;
-        let liresults = [];
-        let lsresults = {};
-        let createResults = [];
-        let res;
-        var responseMessage;
-        // var datetime = new Date();
-        // var curDate = datetime.toISOString().slice(0, 10);
-        res = req._.req.res;
-    //     if(req.data.flag === 'G'){
-    //         const li_results = await cds
-    //   .transaction(req)
-    //   .run(
-    //     SELECT.distinct
-    //       .from(getNodes));
-    //      responseMessage = " Get successfull ";
-    //   createResults.push(responseMessage); 
+  srv.on("CREATE", "getNodes", _createNodes);
 
-    //     }
-    //     else 
-        if(req.data.flag === 'C' ||
-        req.data.flag === 'E'){
-            lsresults.CHILD_NODE = req.data.CHILD_NODE;
-        lsresults.PARENT_NODE = req.data.PARENT_NODE;
-        lsresults.NODE_TYPE = req.data.NODE_TYPE;
-        lsresults.NODE_DESC = req.data.NODE_DESC;
-        lsresults.AUTH_GROUP = req.data.AUTH_GROUP;
-        if (req.data.flag === 'E') {
+  srv.on("genpvs", async (req) => {
+    let { getNodes } = srv.entities;
+    let liresults = [];
+    let lsresults = {};
+    let createResults = [];
+    let res;
+    var responseMessage;
+    res = req._.req.res;
+    if (req.data.FLAG === "C" || req.data.FLAG === "E") {
+      lsresults.CHILD_NODE = req.data.CHILD_NODE;
+      lsresults.PARENT_NODE = req.data.PARENT_NODE;
+      if (req.data.FLAG === "E") {
+        try {
+          await cds.delete("CP_ACCESS_NODES", lsresults);
+        } catch (e) {
+          //DONOTHING
+        }
+      }
+      lsresults.NODE_TYPE  = req.data.NODE_TYPE;
+      lsresults.NODE_DESC  = req.data.NODE_DESC;
+      lsresults.AUTH_GROUP = '';
+      liresults.push(lsresults);
       try {
-        await cds.delete("CP_ACCESS_NODES", lsresults);
+        await cds.run(INSERT.into("CP_ACCESS_NODES").entries(liresults));
+        // responseMessage = " Created successfully ";
+        // createResults.push(responseMessage);
       } catch (e) {
         //DONOTHING
+        // responseMessage = " Creation failed";
+        // createResults.push(responseMessage);
       }
-    }
-        liresults.push(lsresults);
-        try {
-      await cds.run(INSERT.into("CP_ACCESS_NODES").entries(liresults));
-      responseMessage = " Created successfully ";
-      createResults.push(responseMessage);
-    } catch (e) {
-      responseMessage = " Creation failed";
-      createResults.push(responseMessage);
-    }
-    lsresults = {};
-  }
-  else if(req.data.flag === 'D'){
-      
-            lsresults.CHILD_NODE = req.data.CHILD_NODE;
-        lsresults.PARENT_NODEE = req.data.PARENT_NODE;
-        liresults.push(lsresults);
-        try {
-            await cds.delete("CP_ACCESS_NODES", lsresults);
-      responseMessage = " Deletion successfully ";
-      createResults.push(responseMessage);
-    } catch (e) {
-      responseMessage = " Deletion failed";
-      createResults.push(responseMessage);
-    }
-    lsresults = {};
+      lsresults = {};
+    } else if (req.data.FLAG === "D") {
+      lsresults.CHILD_NODE = req.data.CHILD_NODE;
+      lsresults.PARENT_NODE = req.data.PARENT_NODE;
+      try {
+        await cds.delete("CP_ACCESS_NODES", lsresults);
+        // responseMessage = " Deletion successfully ";
+        // createResults.push(responseMessage);
+      } catch (e) {
 
-  }
-  res.send({ value: createResults });
-
-
-  })
+        // responseMessage = " Deletion failed";
+        // createResults.push(responseMessage);
+      }
+      lsresults = {};
+    }
+    liresults = await cds
+    .transaction(req)
+    .run(
+      SELECT.from(getNodes)
+    );
+    return liresults;
+    // res.send({ value: createResults });
+  });
 
   srv.on("genODHistory", async (req) => {
     let { getODCharH } = srv.entities;
@@ -114,12 +104,12 @@ module.exports = (srv) => {
         `'
     ORDER BY CAL_DATE DESC, ROW_ID ASC`
     );
-    let vflag = '';
-    vCaldate = '';
-    for (i = 0; i < aodcharhdr.length; i++) {    
+    let vflag = "";
+    vCaldate = "";
+    for (i = 0; i < aodcharhdr.length; i++) {
       if (
-          vCaldate != aodcharhdr[i].CAL_DATE &&
-          vCaldate !== ''
+        vCaldate != aodcharhdr[i].CAL_DATE &&
+        vCaldate !== ""
         // vObjdep !== aodcharhdr[i].OBJ_DEP &&
         // vObjcnt !== aodcharhdr[i].OBJ_COUNTER
       ) {
@@ -140,46 +130,45 @@ module.exports = (srv) => {
         lsresults.OBJ_COUNTER = aodcharhdr[i].OBJ_COUNTER;
         lsresults.ODCOUNT = aodcharhdr[i].SUCCESS;
         let x = aodcharhdr[i].ROW_ID;
-        if(x === 1){
-            lsresults.ROW_ID1 = aodcharhdr[i].CHAR_SUCCESS;
-         }
-         if(x === 2){
-            lsresults.ROW_ID2 = aodcharhdr[i].CHAR_SUCCESS;
-         }
-         if(x === 3){
-            lsresults.ROW_ID3 = aodcharhdr[i].CHAR_SUCCESS;
-          }
-          if(x === 4){
-            lsresults.ROW_ID4 = aodcharhdr[i].CHAR_SUCCESS;
-          }
-          if(x === 5){
-            lsresults.ROW_ID5 = aodcharhdr[i].CHAR_SUCCESS;
-          }
-          if(x === 6){
-            lsresults.ROW_ID6 = aodcharhdr[i].CHAR_SUCCESS;
-          }
-          if(x === 7){
-            lsresults.ROW_ID7 = aodcharhdr[i].CHAR_SUCCESS;
-          }
-          if(x === 8){
-            lsresults.ROW_ID8 = aodcharhdr[i].CHAR_SUCCESS;
-          }
-          if(x === 9){
-            lsresults.ROW_ID9 = aodcharhdr[i].CHAR_SUCCESS;
-          }
-          if(x === 10){
-            lsresults.ROW_ID10 = aodcharhdr[i].CHAR_SUCCESS;
-          }
-          if(x === 11){
-            lsresults.ROW_ID11 = aodcharhdr[i].CHAR_SUCCESS;
-          }
-          if(x === 12){
-            lsresults.ROW_ID12 = aodcharhdr[i].CHAR_SUCCESS;
-          }
-        
+        if (x === 1) {
+          lsresults.ROW_ID1 = aodcharhdr[i].CHAR_SUCCESS;
+        }
+        if (x === 2) {
+          lsresults.ROW_ID2 = aodcharhdr[i].CHAR_SUCCESS;
+        }
+        if (x === 3) {
+          lsresults.ROW_ID3 = aodcharhdr[i].CHAR_SUCCESS;
+        }
+        if (x === 4) {
+          lsresults.ROW_ID4 = aodcharhdr[i].CHAR_SUCCESS;
+        }
+        if (x === 5) {
+          lsresults.ROW_ID5 = aodcharhdr[i].CHAR_SUCCESS;
+        }
+        if (x === 6) {
+          lsresults.ROW_ID6 = aodcharhdr[i].CHAR_SUCCESS;
+        }
+        if (x === 7) {
+          lsresults.ROW_ID7 = aodcharhdr[i].CHAR_SUCCESS;
+        }
+        if (x === 8) {
+          lsresults.ROW_ID8 = aodcharhdr[i].CHAR_SUCCESS;
+        }
+        if (x === 9) {
+          lsresults.ROW_ID9 = aodcharhdr[i].CHAR_SUCCESS;
+        }
+        if (x === 10) {
+          lsresults.ROW_ID10 = aodcharhdr[i].CHAR_SUCCESS;
+        }
+        if (x === 11) {
+          lsresults.ROW_ID11 = aodcharhdr[i].CHAR_SUCCESS;
+        }
+        if (x === 12) {
+          lsresults.ROW_ID12 = aodcharhdr[i].CHAR_SUCCESS;
+        }
       }
     }
-    
+
     // liresults.push(lsresults);
     return liresults;
   });
@@ -209,12 +198,12 @@ module.exports = (srv) => {
         `'
     ORDER BY CAL_DATE DESC, ROW_ID ASC`
     );
-    let vflag = '';
-    vCaldate = '';
-    for (i = 0; i < aodcharhdr.length; i++) {    
+    let vflag = "";
+    vCaldate = "";
+    for (i = 0; i < aodcharhdr.length; i++) {
       if (
-          vCaldate != aodcharhdr[i].CAL_DATE &&
-          vCaldate !== ''
+        vCaldate != aodcharhdr[i].CAL_DATE &&
+        vCaldate !== ""
         // vObjdep !== aodcharhdr[i].OBJ_DEP &&
         // vObjcnt !== aodcharhdr[i].OBJ_COUNTER
       ) {
@@ -239,46 +228,45 @@ module.exports = (srv) => {
         lsresults.VERSION = aodcharhdr[i].VERSION;
         lsresults.SCENARIO = aodcharhdr[i].SCENARIO;
         let x = aodcharhdr[i].ROW_ID;
-        if(x === 1){
-            lsresults.ROW_ID1 = aodcharhdr[i].CHAR_SUCCESS;
-         }
-         if(x === 2){
-            lsresults.ROW_ID2 = aodcharhdr[i].CHAR_SUCCESS;
-         }
-         if(x === 3){
-            lsresults.ROW_ID3 = aodcharhdr[i].CHAR_SUCCESS;
-          }
-          if(x === 4){
-            lsresults.ROW_ID4 = aodcharhdr[i].CHAR_SUCCESS;
-          }
-          if(x === 5){
-            lsresults.ROW_ID5 = aodcharhdr[i].CHAR_SUCCESS;
-          }
-          if(x === 6){
-            lsresults.ROW_ID6 = aodcharhdr[i].CHAR_SUCCESS;
-          }
-          if(x === 7){
-            lsresults.ROW_ID7 = aodcharhdr[i].CHAR_SUCCESS;
-          }
-          if(x === 8){
-            lsresults.ROW_ID8 = aodcharhdr[i].CHAR_SUCCESS;
-          }
-          if(x === 9){
-            lsresults.ROW_ID9 = aodcharhdr[i].CHAR_SUCCESS;
-          }
-          if(x === 10){
-            lsresults.ROW_ID10 = aodcharhdr[i].CHAR_SUCCESS;
-          }
-          if(x === 11){
-            lsresults.ROW_ID11 = aodcharhdr[i].CHAR_SUCCESS;
-          }
-          if(x === 12){
-            lsresults.ROW_ID12 = aodcharhdr[i].CHAR_SUCCESS;
-          }
-        
+        if (x === 1) {
+          lsresults.ROW_ID1 = aodcharhdr[i].CHAR_SUCCESS;
+        }
+        if (x === 2) {
+          lsresults.ROW_ID2 = aodcharhdr[i].CHAR_SUCCESS;
+        }
+        if (x === 3) {
+          lsresults.ROW_ID3 = aodcharhdr[i].CHAR_SUCCESS;
+        }
+        if (x === 4) {
+          lsresults.ROW_ID4 = aodcharhdr[i].CHAR_SUCCESS;
+        }
+        if (x === 5) {
+          lsresults.ROW_ID5 = aodcharhdr[i].CHAR_SUCCESS;
+        }
+        if (x === 6) {
+          lsresults.ROW_ID6 = aodcharhdr[i].CHAR_SUCCESS;
+        }
+        if (x === 7) {
+          lsresults.ROW_ID7 = aodcharhdr[i].CHAR_SUCCESS;
+        }
+        if (x === 8) {
+          lsresults.ROW_ID8 = aodcharhdr[i].CHAR_SUCCESS;
+        }
+        if (x === 9) {
+          lsresults.ROW_ID9 = aodcharhdr[i].CHAR_SUCCESS;
+        }
+        if (x === 10) {
+          lsresults.ROW_ID10 = aodcharhdr[i].CHAR_SUCCESS;
+        }
+        if (x === 11) {
+          lsresults.ROW_ID11 = aodcharhdr[i].CHAR_SUCCESS;
+        }
+        if (x === 12) {
+          lsresults.ROW_ID12 = aodcharhdr[i].CHAR_SUCCESS;
+        }
       }
     }
-    
+
     // liresults.push(lsresults);
     return liresults;
   });
@@ -324,6 +312,68 @@ module.exports = (srv) => {
     return results;
   });
 };
+
+async function _createNodes(req) {
+  let liresults = [];
+  let lsresults = {};
+  let createResults = [];
+  let res;
+  var responseMessage;
+  res = req._.req.res;
+
+  if (req.data.NODE_TYPE === "E") {
+    try {
+      await cds.run(
+        `UPDATE
+              FROM "CP_ACCESS_NODES"
+              SET "NODE_DESC" ='` +
+          req.data.NODE_DESC +
+          `'
+              WHERE "CHILD_NODE" = '` +
+          req.data.CHILD_NODE +
+          `'
+              AND "PARENT_NODE" = '` +
+          req.data.PARENT_NODE +
+          `'`
+      );
+      responseMessage = " Update successfully ";
+      createResults.push(responseMessage);
+    } catch (e) {
+      responseMessage = " Update failed";
+      createResults.push(responseMessage);
+    }
+  } else if (req.data.NODE_TYPE === "D") {
+    lsresults.CHILD_NODE = req.data.CHILD_NODE;
+    lsresults.PARENT_NODEE = req.data.PARENT_NODE;
+    liresults.push(lsresults);
+    try {
+      await cds.delete("CP_ACCESS_NODES", lsresults);
+      responseMessage = " Deletion successfully ";
+      createResults.push(responseMessage);
+    } catch (e) {
+      responseMessage = " Deletion failed";
+      createResults.push(responseMessage);
+    }
+    lsresults = {};
+  } else {
+    lsresults.CHILD_NODE = req.data.CHILD_NODE;
+    lsresults.PARENT_NODE = req.data.PARENT_NODE;
+    lsresults.NODE_TYPE = req.data.NODE_TYPE;
+    lsresults.NODE_DESC = req.data.NODE_DESC;
+    lsresults.AUTH_GROUP = '';
+    liresults.push(lsresults);
+    try {
+      await cds.run(INSERT.into("CP_ACCESS_NODES").entries(liresults));
+      responseMessage = " Created successfully ";
+      createResults.push(responseMessage);
+    } catch (e) {
+      responseMessage = " Creation failed";
+      createResults.push(responseMessage);
+    }
+    lsresults = {};
+  }
+  res.send({ value: createResults });
+}
 // Create or delete Profiles
 async function _createProfiles(req) {
   let liProfiles = [];

@@ -133,80 +133,119 @@ annotate service.LOCATION with @(
             {
                 $Type : 'UI.DataField',
                 //Label : 'Description',
-                Value : LOCATION_DESC
+                Value : LOCATION_DESC,
+            ![@UI.Importance] : #High
             },
             {
                 $Type : 'UI.DataField',
                 //Label : 'Location Type',
-                Value : LOCATION_TYPE
+                Value : LOCATION_TYPE,
+            ![@UI.Importance] : #High
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : LATITUDE,
+            ![@UI.Importance] : #High
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : LONGITUTE,
+            ![@UI.Importance] : #High
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : RESERVE_FIELD1,
+            ![@UI.Importance] : #High
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : RESERVE_FIELD2,
+            ![@UI.Importance] : #High
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : RESERVE_FIELD3,
+            ![@UI.Importance] : #High
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : RESERVE_FIELD4,
+            ![@UI.Importance] : #High
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : RESERVE_FIELD5,
+            ![@UI.Importance] : #High
             }
-        ],
-        HeaderInfo              : {
-            Title          : {Value : LOCATION_ID},
-            Description    : {Value : LOCATION_DESC},
-            TypeName       : 'Location',
-            TypeNamePlural : 'Location',
-        },
-        HeaderFacets            : [{
-            $Type             : 'UI.ReferenceFacet',
-            Target            : '@UI.FieldGroup#Description',
-            ![@UI.Importance] : #Medium
-        }],
-        FieldGroup #Description : {Data : [{
-            $Type : 'UI.DataField',
-            Value : LOCATION_DESC
-        }]},
-        FieldGroup #Details     : {Data : [
-            {
-                $Type : 'UI.DataField',
-                Value : LOCATION_DESC
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : LOCATION_TYPE
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : LATITUDE
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : LONGITUTE
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : RESERVE_FIELD1
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : RESERVE_FIELD2
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : RESERVE_FIELD3
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : RESERVE_FIELD4
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : RESERVE_FIELD5
-            }
-        ]}
-    },
+        ]
+        // ,
+        // HeaderInfo              : {
+        //     Title          : {Value : LOCATION_ID},
+        //     Description    : {Value : LOCATION_DESC},
+        //     TypeName       : 'Location',
+        //     TypeNamePlural : 'Location',
+        // },
+        // HeaderFacets            : [{
+        //     $Type             : 'UI.ReferenceFacet',
+        //     Target            : '@UI.FieldGroup#Description',
+        //     ![@UI.Importance] : #Medium
+        // }],
+        // FieldGroup #Description : {Data : [{
+        //     $Type : 'UI.DataField',
+        //     Value : LOCATION_DESC
+        // }]},
+        // FieldGroup #Details     : {Data : [
+        //     {
+        //         $Type : 'UI.DataField',
+        //         Value : LOCATION_DESC
+        //     },
+        //     {
+        //         $Type : 'UI.DataField',
+        //         Value : LOCATION_TYPE
+        //     },
+        //     {
+        //         $Type : 'UI.DataField',
+        //         Value : LATITUDE
+        //     },
+        //     {
+        //         $Type : 'UI.DataField',
+        //         Value : LONGITUTE
+        //     },
+        //     {
+        //         $Type : 'UI.DataField',
+        //         Value : RESERVE_FIELD1
+        //     },
+        //     {
+        //         $Type : 'UI.DataField',
+        //         Value : RESERVE_FIELD2
+        //     },
+        //     {
+        //         $Type : 'UI.DataField',
+        //         Value : RESERVE_FIELD3
+        //     },
+        //     {
+        //         $Type : 'UI.DataField',
+        //         Value : RESERVE_FIELD4
+        //     },
+        //     {
+        //         $Type : 'UI.DataField',
+        //         Value : RESERVE_FIELD5
+        //     }
+        // ]}
+    }
+   // ,
 
-    // Page Facets
-    UI.Facets : [{
-        $Type  : 'UI.CollectionFacet',
-        ID     : 'LocDetails',
-        Label  : 'Location Details',
-        Facets : [{
-            $Type  : 'UI.ReferenceFacet',
-            Label  : 'Location Details',
-            Target : '@UI.FieldGroup#Details'
-        }]
-    }]
+    // // Page Facets
+    // UI.Facets : [{
+    //     $Type  : 'UI.CollectionFacet',
+    //     ID     : 'LocDetails',
+    //     Label  : 'Location Details',
+    //     Facets : [{
+    //         $Type  : 'UI.ReferenceFacet',
+    //         Label  : 'Location Details',
+    //         Target : '@UI.FieldGroup#Details'
+    //     }]
+    // }]
 );
 
 

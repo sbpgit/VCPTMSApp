@@ -144,6 +144,10 @@ modules:
       - cpappcpcompsnode.zip
       name: cpappcpcompsnode
       target-path: resources/
+    - artifacts:
+      - cpappcplocation.zip
+      name: cpappcplocation
+      target-path: resources/
 - name: cpibpfdemcpibpfdem
   type: html5
   path: app/cp_ibpfdem
@@ -317,6 +321,16 @@ modules:
 - name: cpappcpcompsnode
   type: html5
   path: app/cpcompsnode
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappcplocation
+  type: html5
+  path: app/cplocation
   build-parameters:
     build-result: dist
     builder: custom

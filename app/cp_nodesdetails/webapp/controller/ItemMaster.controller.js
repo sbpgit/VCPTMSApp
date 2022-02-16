@@ -165,102 +165,77 @@ sap.ui.define(
         },
 
         onAccNodeDel: function (oEvent) {
-          // Deleting the selected access node
-          var selected = oEvent.getSource().getParent().getCells()[0].getTitle();
-          // Getting the conformation popup before deleting
-          var text = "Please confirm to remove access node" + " - " + selected;
-          sap.m.MessageBox.show(text, {
-            title: "Confirmation",
-            actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
-            onClose: function (oAction) {
-              if (oAction === sap.m.MessageBox.Action.YES) {
-                sap.ui.core.BusyIndicator.show();
-
-                var uri = "/v2/catalog/getNodes";
-          $.ajax({
-            url: uri,
-            type: "post",
-            contentType: "application/json",
-            data: JSON.stringify({
-                CHILD_NODE: selected,
-                PARENT_NODE: "",
-                NODE_TYPE: "AN",
-                NODE_DESC: "",
-                createdBy: "D"
-            }),
-            dataType: "json",
-            async: false,
-            timeout: 0,
-            error: function (data) {
-                sap.ui.core.BusyIndicator.hide();
-              sap.m.MessageToast.show(JSON.stringify(data));
-            },
-            success: function (data) {
-              sap.ui.core.BusyIndicator.hide();
-              sap.m.MessageToast.show("Updated successfully");
-              that.onAccNodeClose();
-              that.onAfterRendering();
-            },
-          });
-
-                // that.getModel("BModel").callFunction("/genpvs", {
-                //   method: "GET",
-                //   urlParameters: {
-                //     CHILD_NODE: selected,
-                //     PARENT_NODE: "",
-                //     NODE_TYPE: "AN",
-                //     NODE_DESC: "",
-                //     FLAG: "D",
-                //   },
-                //   success: function (oData) {
-                //     sap.ui.core.BusyIndicator.hide();
-                //   },
-                //   error: function () {
-                //     MessageToast.show("Failed to get data");
-                //     sap.ui.core.BusyIndicator.hide();
-                //   },
-                // });
-              }
-            },
-          });
-        },
-
-        onAccessNodeSave: function () {
-          var accesNode = sap.ui.getCore().byId("idAccesNode").getValue();
-          var desc = sap.ui.getCore().byId("idDesc").getValue();
-          var flag = oGModel.getProperty("/Flag");
-
-          var uri = "/v2/catalog/getNodes";
-          $.ajax({
-            url: uri,
-            type: "post",
-            contentType: "application/json",
-            data: JSON.stringify({
+            // Deleting the selected access node
+            var selected = oEvent.getSource().getParent().getCells()[0].getTitle();
+            // Getting the conformation popup before deleting
+            var text = "Please confirm to remove access node" + " - " + selected;
+            sap.m.MessageBox.show(text, {
+              title: "Confirmation",
+              actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
+              onClose: function (oAction) {
+                if (oAction === sap.m.MessageBox.Action.YES) {
+                  sap.ui.core.BusyIndicator.show();
+  
+                  that.getModel("BModel").callFunction("/genpvs", {
+                    method: "GET",
+                    urlParameters: {
+                      CHILD_NODE: selected,
+                      PARENT_NODE: "",
+                      NODE_TYPE: "AN",
+                      NODE_DESC: "",
+                      FLAG: "D",
+                    },
+                    success: function (oData) {
+                      sap.ui.core.BusyIndicator.hide();
+                      MessageToast.show("Deletion Successfull");
+                              that.onAfterRendering();
+                    },
+                    error: function () {
+                      sap.ui.core.BusyIndicator.hide();
+                      MessageToast.show("Failed to delete node");
+                              that.onAfterRendering();
+                    },
+                  });
+                }
+              },
+            });
+          },
+  
+          onAccessNodeSave: function () {
+            var accesNode = sap.ui.getCore().byId("idAccesNode").getValue();
+            var desc = sap.ui.getCore().byId("idDesc").getValue();
+            var flag = oGModel.getProperty("/Flag");
+            this.getModel("BModel").callFunction("/genpvs", {
+              method: "GET",
+              urlParameters: {
                 CHILD_NODE: accesNode,
                 PARENT_NODE: "",
                 NODE_TYPE: "AN",
                 NODE_DESC: desc,
-                createdBy: flag
-            }),
-            dataType: "json",
-            async: false,
-            timeout: 0,
-            error: function (data) {
-                sap.ui.core.BusyIndicator.hide();
-              sap.m.MessageToast.show(JSON.stringify(data));
-            },
-            success: function (data) {
-              sap.ui.core.BusyIndicator.hide();
-              sap.m.MessageToast.show("Updated successfully");
-              that.onAccNodeClose();
-              that.onAfterRendering();
-            },
-          });
-
-
-
+                FLAG: flag
+              },
+              success: function (oData) {
+              //   sap.ui.core.BusyIndicator.hide();
+                MessageToast.show("Creation Successfull");
+                        that.onAccNodeClose();
+                        that.onAfterRendering();
+              },
+              error: function (oData) {
+                  if(oData.statusCode === 200){
+                      MessageToast.show("Creation Successfull");
+                  }
+                  else{
+                  MessageToast.show("Failed to create node");
+                  }
+                          that.onAccNodeClose();
+                          that.onAfterRendering();
+              },
+            });
+  
+  
+  
+          }
         }
-      }
-    );
-  }
-);
+      );
+    }
+  );
