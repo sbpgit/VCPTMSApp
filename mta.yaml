@@ -147,6 +147,10 @@ modules:
     - artifacts:
       - cpappcplocation.zip
       name: cpappcplocation
+      target-path: resources/    
+    - artifacts:
+      - cpappfcpassignnodes.zip
+      name: cpappfcpassignnodes.zip
       target-path: resources/
 - name: cpibpfdemcpibpfdem
   type: html5
@@ -331,6 +335,16 @@ modules:
 - name: cpappcplocation
   type: html5
   path: app/cplocation
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []    
+- name: cpappfcpassignnodes
+  type: html5
+  path: app/cp_assignnodes
   build-parameters:
     build-result: dist
     builder: custom

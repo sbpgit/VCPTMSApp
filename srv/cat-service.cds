@@ -45,7 +45,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
 
     // @odata.draft.enabled
     @readonly
-    entity getBomHeader         as projection on od.BOMHEADER;
+    entity gBomHeaderet         as projection on od.BOMHEADER;
 
     //@odata.draft.enabled
     @readonly
@@ -67,6 +67,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
 
     // @odata.draft.enabled
     entity getNodes       as projection on od.ACCESS_NODES;
+    entity getPVSNodes       as projection on od.PVS_NODES;
 
     @odata.draft.enabled
     entity getAuthObj           as projection on od.AUTH_OBJ;
@@ -98,11 +99,11 @@ service CatalogService @(impl : './lib/cat-service.js') {
     @readonly
     entity getSaleshCfg         as projection on V_SALESHCFG_CHARVAL;
 
-    @odata.draft.enabled
-    entity cProdAccessNode      as projection on od.PROD_ACCNODE;
+   // @odata.draft.enabled
+    entity genProdAccessNode      as projection on od.PROD_ACCNODE;
 
-    @odata.draft.enabled
-    entity cCompStrcNode        as projection on od.PVS_BOM;
+   // @odata.draft.enabled
+    entity genCompStrcNode        as projection on od.PVS_BOM;
 
     entity getProfiles          as projection on od.PAL_PROFILEMETH;
     entity getProfileParameters as projection on od.PAL_PROFILEMETH_PARA;

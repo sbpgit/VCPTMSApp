@@ -1,0 +1,53 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m" controllerName="cpappf.cpassignnodes.controller.ItemMaster"
+    xmlns:html="http://www.w3.org/1999/xhtml" class="ItemMaster">
+    <Page >
+    <customHeader>
+			<Toolbar height="50%">
+				<SearchField id="headSearch" liveChange="onSearch" placeholder="Access Node"/>
+				<ToolbarSpacer/>
+				<Button icon="sap-icon://add" press="onAccNode" tooltip="Add Access Node"/>
+                <Button icon="sap-icon://edit" press="onAccNode" tooltip="Edit Access Node"/>
+			</Toolbar>
+		</customHeader>
+        <content>
+            <List
+		id="accessList"
+		mode="Delete"
+		delete="onAccNodeDel"
+        itemPress="onhandlePress"
+        selectionChange="onhandlePress"
+		enableBusyIndicator="true"
+		headerText="Products"
+		growing="true"
+		items="{
+			path: '/results'
+		}" >
+		<StandardListItem
+			title="{PRODUCT_ID}"
+			description="{LOCATION_ID}"
+            info="{ACCESS_NODE}" />
+	    </List>
+            <!-- <Table id="accessList" items="{path: '/results'}" growingScrollToLoad="true" rememberSelections="false" 
+            itemPress="onhandlePress" mode="SingleSelectMaster" selectionChange="onhandlePress">
+                <columns>
+                    <Column hAlign="Center">
+                        <Text text="{i18n>AccNode}" />
+                    </Column>
+                    <Column hAlign="Right">
+                        <Text text=""/>
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem>
+                        <cells>
+                            <ObjectIdentifier title="{CHILD_NODE}" text="{NODE_DESC}"/>
+                            <Button id="buttonId" icon="sap-icon://decline" tooltip="Delete" press="onAccNodeDel" 
+                                    iconDensityAware="false" type="Transparent"/>
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table> -->
+        </content>
+    </Page>
+</mvc:View>

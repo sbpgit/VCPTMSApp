@@ -26,6 +26,10 @@ module.exports = (srv) => {
 
   srv.on("CREATE", "getNodes", _createNodes);
 
+  srv.on("CREATE", "genProdAccessNode", _createPrdAccessNode);
+
+  srv.on("CREATE", "genCompStrcNode", _createCompStrcNode);
+
   srv.on("genpvs", async (req) => {
     let { getNodes } = srv.entities;
     let liresults = [];
@@ -39,7 +43,7 @@ module.exports = (srv) => {
       lsresults.PARENT_NODE = req.data.PARENT_NODE;
       if (req.data.FLAG === "E") {
         try {
-          await cds.delete("CP_ACCESS_NODES", lsresults);
+          await cds.delete("CP_PVS_NODES", lsresults);
         } catch (e) {
           //DONOTHING
         }
@@ -49,7 +53,7 @@ module.exports = (srv) => {
       lsresults.AUTH_GROUP = '';
       liresults.push(lsresults);
       try {
-        await cds.run(INSERT.into("CP_ACCESS_NODES").entries(liresults));
+        await cds.run(INSERT.into("CP_PVS_NODES").entries(liresults));
         // responseMessage = " Created successfully ";
         // createResults.push(responseMessage);
       } catch (e) {
@@ -62,7 +66,7 @@ module.exports = (srv) => {
       lsresults.CHILD_NODE = req.data.CHILD_NODE;
       lsresults.PARENT_NODE = req.data.PARENT_NODE;
       try {
-        await cds.delete("CP_ACCESS_NODES", lsresults);
+        await cds.delete("CP_PVS_NODES", lsresults);
         // responseMessage = " Deletion successfully ";
         // createResults.push(responseMessage);
       } catch (e) {
@@ -313,6 +317,15 @@ module.exports = (srv) => {
   });
 };
 
+async function _createPrdAccessNode(req){
+    let liresults = [];
+    let lsresults = {};
+    let createResults = [];
+    let res;
+    var responseMessage;
+    res = req._.req.res;
+    lsresults = select.from   
+}
 async function _createNodes(req) {
   let liresults = [];
   let lsresults = {};

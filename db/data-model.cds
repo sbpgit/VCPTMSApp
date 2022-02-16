@@ -326,6 +326,14 @@ context cp {
             NODE_DESC   : String(200);//@tile  : 'Node Descriptions';
             AUTH_GROUP  : String(4);//  @title : 'Authorization Group';
     };
+    entity PVS_NODES : managed {
+        key CHILD_NODE  : String(50);// @title : 'Child Node';
+        key PARENT_NODE : String(50);// @title : 'Parent Node';
+            ACCESS_NODES: String(50);
+            NODE_TYPE   : String(2);//  @title : 'Node Type';
+            NODE_DESC   : String(200);//@tile  : 'Node Descriptions';
+            AUTH_GROUP  : String(4);//  @title : 'Authorization Group';
+    };
 
     entity PROD_ACCNODE : managed {
         key LOCATION_ID : String(4) @title : 'Location ID';

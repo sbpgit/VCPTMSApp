@@ -1688,18 +1688,18 @@ annotate V_ODRESTRICT with @(
             } 
         ]}
     }//,
-    // ,
-    // Page Facets
-    // UI.Facets : [{
-    //     $Type  : 'UI.CollectionFacet',
-    //     ID     : 'restriction',
-    //     Label  : 'Restriction',
-    //     Facets : [{
-    //         $Type  : 'UI.ReferenceFacet',
-    //         Label  : 'Restriction',
-    //         Target : '@UI.FieldGroup#Details'
-    //     }]
-    // }]
+    ,
+    //Page Facets
+    UI.Facets : [{
+        $Type  : 'UI.CollectionFacet',
+        ID     : 'restriction',
+        Label  : 'Restriction',
+        Facets : [{
+            $Type  : 'UI.ReferenceFacet',
+            Label  : 'Restriction',
+            Target : '@UI.FieldGroup#Details'
+        }]
+    }]
 );
 /*******************************************/
 // IBP Future Character Plan
@@ -1758,6 +1758,35 @@ annotate pal.IBP_RESULTPLAN_TS with @(
             {
                 $Type : 'UI.DataField', //Label : 'Product Family',
                 Value : PREDICTED_STATUS
+            }
+        ]
+    }
+);
+
+/*******************************************/
+// IBP Future Character Plan
+/*******************************************/
+annotate service.PROD_ACCNODE with @(
+    UI        : {
+        SelectionFields                : [
+            LOCATION_ID,
+            PRODUCT_ID,
+            ACCESS_NODE
+        ],
+        LineItem                       : [           
+            {
+                $Type : 'UI.DataField', //Label : 'Description',
+                Value : LOCATION_ID,
+                ![@UI.Importance]   : #High
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product ID',
+                Value : PRODUCT_ID,
+                ![@UI.Importance]   : #High
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Family',
+                Value : ACCESS_NODE
             }
         ]
     }
