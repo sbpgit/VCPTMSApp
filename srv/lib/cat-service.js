@@ -316,7 +316,14 @@ module.exports = (srv) => {
     return results;
   });
 };
-
+async function _createCompStrcNode(req){
+    let liresults = [];
+    let lsresults = {};
+    let createResults = [];
+    let res;
+    var responseMessage;
+    res = req._.req.res;
+}
 async function _createPrdAccessNode(req){
     let liresults = [];
     let lsresults = {};
@@ -324,7 +331,7 @@ async function _createPrdAccessNode(req){
     let res;
     var responseMessage;
     res = req._.req.res;
-    lsresults = select.from   
+    // lsresults = select.from   
 }
 async function _createNodes(req) {
   let liresults = [];
