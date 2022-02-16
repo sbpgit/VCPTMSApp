@@ -385,9 +385,9 @@ sap.ui.define(
         },
 
         onAccessNodeSave: function () {
-          var accesNode = sap.ui.getCore().byId("idAccesNode").getValue();
-          var desc = sap.ui.getCore().byId("idDesc").getValue();
-          var flag = oGModel.getProperty("/Flag");
+          var Loc = sap.ui.getCore().byId("idloc").getValue();
+          var prod = sap.ui.getCore().byId("idprod").getValue();
+          var AccessNode = sap.ui.getCore().byId("idaccn").getValue();;
           this.getModel("BModel").callFunction("/genpvs", {
             method: "GET",
             urlParameters: {

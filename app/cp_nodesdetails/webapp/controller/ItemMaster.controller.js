@@ -40,7 +40,7 @@ sap.ui.define(
           that = this;
           oGModel = this.getModel("oGModel");
 
-          this.getModel("BModel").read("/getNodes", {
+          this.getModel("BModel").read("/getPVSNodes", {
             success: function (oData) {
               that.AccessNodes = [];
               that.StructureNodes = [];
