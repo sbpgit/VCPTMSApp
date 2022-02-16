@@ -45,6 +45,7 @@ sap.ui.define(
               that.AccessNodes = [];
               that.StructureNodes = [];
               that.ViewNodes = [];
+              that.StruViewNodes = [];
 
               for (var i = 0; i < oData.results.length; i++) {
                 if (oData.results[i].NODE_TYPE === "AN") {
@@ -53,13 +54,25 @@ sap.ui.define(
                   that.StructureNodes.push(oData.results[i]);
                 } else if (oData.results[i].NODE_TYPE === "VN") {
                   that.ViewNodes.push(oData.results[i]);
-                }
+                } else if (oData.results[i].NODE_TYPE === "VS") {
+                    that.StruViewNodes.push(oData.results[i]);
+                  }
               }
+
+              oGModel.setProperty("/SelectedAccessNode", that.AccessNodes[0].CHILD_NODE);
+              oGModel.setProperty("/struNodeData", that.StructureNodes);
+              oGModel.setProperty("/ViewNodeData", that.ViewNodes);
+              oGModel.setProperty("/StruViewNodeData", that.StruViewNodes);
+
+              
 
               that.oModel.setData({
                 results: that.AccessNodes,
               });
               that.byId("accessList").setModel(that.oModel);
+
+              that.byId("accessList").getItems()[0].setSelected(true);
+              that.onhandlePress();
             },
             error: function () {
               MessageToast.show("Failed to get data");
@@ -76,12 +89,7 @@ sap.ui.define(
             oGModel.setProperty("/SelectedAccessNode", oSelItem.CHILD_NODE);
             oGModel.setProperty("/struNodeData", that.StructureNodes);
             oGModel.setProperty("/ViewNodeData", that.ViewNodes);
-          } else {
-            // var num = oGModel.getProperty("/projectNo");
-            // oGModel.setProperty("/projectNo", num);
-            // var desc = oGModel.getProperty("/ProjDesc");
-            // oGModel.setProperty("/ProjDesc", desc);
-          }
+          } 
           // Calling Item Detail page
           that.getOwnerComponent().runAsOwner(function () {
             if (!that.oDetailView) {

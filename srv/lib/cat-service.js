@@ -26,6 +26,10 @@ module.exports = (srv) => {
 
   srv.on("CREATE", "getNodes", _createNodes);
 
+  srv.on("CREATE", "genProdAccessNode", _createPrdAccessNode);
+
+  srv.on("CREATE", "genCompStrcNode", _createCompStrcNode);
+
   srv.on("genpvs", async (req) => {
     let { getNodes } = srv.entities;
     let liresults = [];
@@ -39,17 +43,18 @@ module.exports = (srv) => {
       lsresults.PARENT_NODE = req.data.PARENT_NODE;
       if (req.data.FLAG === "E") {
         try {
-          await cds.delete("CP_ACCESS_NODES", lsresults);
+          await cds.delete("CP_PVS_NODES", lsresults);
         } catch (e) {
           //DONOTHING
         }
       }
-      lsresults.NODE_TYPE  = req.data.NODE_TYPE;
-      lsresults.NODE_DESC  = req.data.NODE_DESC;
-      lsresults.AUTH_GROUP = '';
+      lsresults.ACCESS_NODES = req.data.ACCESS_NODES;
+      lsresults.NODE_TYPE = req.data.NODE_TYPE;
+      lsresults.NODE_DESC = req.data.NODE_DESC;
+      lsresults.AUTH_GROUP = "";
       liresults.push(lsresults);
       try {
-        await cds.run(INSERT.into("CP_ACCESS_NODES").entries(liresults));
+        await cds.run(INSERT.into("CP_PVS_NODES").entries(liresults));
         // responseMessage = " Created successfully ";
         // createResults.push(responseMessage);
       } catch (e) {
@@ -62,21 +67,16 @@ module.exports = (srv) => {
       lsresults.CHILD_NODE = req.data.CHILD_NODE;
       lsresults.PARENT_NODE = req.data.PARENT_NODE;
       try {
-        await cds.delete("CP_ACCESS_NODES", lsresults);
+        await cds.delete("CP_PVS_NODES", lsresults);
         // responseMessage = " Deletion successfully ";
         // createResults.push(responseMessage);
       } catch (e) {
-
         // responseMessage = " Deletion failed";
         // createResults.push(responseMessage);
       }
       lsresults = {};
     }
-    liresults = await cds
-    .transaction(req)
-    .run(
-      SELECT.from(getNodes)
-    );
+    liresults = await cds.transaction(req).run(SELECT.from(getNodes));
     return liresults;
     // res.send({ value: createResults });
   });
@@ -312,7 +312,81 @@ module.exports = (srv) => {
     return results;
   });
 };
-
+async function _createCompStrcNode(req) {
+    let liresults = [];
+    let lsresults = {};
+    let createResults = [];
+    let res;
+    var responseMessage;
+    res = req._.req.res;
+    if (req.data.STRUC_NODE === "D") {
+      lsresults.LOCATION_ID = req.data.LOCATION_ID;
+      lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
+      lsresults.COMPONENT = req.data.COMPONENT;
+      try {
+        await cds.delete("CP_PVS_BOM", lsresults);
+        responseMessage = " Deletion successfully ";
+        createResults.push(responseMessage);
+      } catch (e) {
+        responseMessage = " Deletion failed ";
+        createResults.push(responseMessage);
+        //DONOTHING
+      }
+    } else {
+      lsresults.LOCATION_ID = req.data.LOCATION_ID;
+      lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
+      lsresults.COMPONENT = req.data.COMPONENT;
+      lsresults.STRUC_NODE = req.data.STRUC_NODE;
+      liresults.push(lsresults);
+      lsresults = {};
+      try {
+        await cds.run(INSERT.into("CP_PVS_BOM").entries(liresults));
+        responseMessage = " Created successfully ";
+        createResults.push(responseMessage);
+      } catch (e) {
+        responseMessage = " Creation failed";
+        createResults.push(responseMessage);
+      }
+    }
+    res.send({ value: createResults });
+}
+async function _createPrdAccessNode(req) {
+  let liresults = [];
+  let lsresults = {};
+  let createResults = [];
+  let res;
+  var responseMessage;
+  res = req._.req.res;
+  if (req.data.ACCESS_NODE === "D") {
+    lsresults.LOCATION_ID = req.data.LOCATION_ID;
+    lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
+    try {
+      await cds.delete("CP_PROD_ACCNODE", lsresults);
+      responseMessage = " Deletion successfully ";
+      createResults.push(responseMessage);
+    } catch (e) {
+      responseMessage = " Deletion failed ";
+      createResults.push(responseMessage);
+      //DONOTHING
+    }
+  } else {
+    lsresults.LOCATION_ID = req.data.LOCATION_ID;
+    lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
+    lsresults.ACCESS_NODE = req.data.ACCESS_NODE;
+    liresults.push(lsresults);
+    lsresults = {};
+    try {
+      await cds.run(INSERT.into("CP_PROD_ACCNODE").entries(liresults));
+      responseMessage = " Created successfully ";
+      createResults.push(responseMessage);
+    } catch (e) {
+      responseMessage = " Creation failed";
+      createResults.push(responseMessage);
+    }
+  }
+  res.send({ value: createResults });
+  // lsresults = select.from
+}
 async function _createNodes(req) {
   let liresults = [];
   let lsresults = {};
@@ -360,7 +434,7 @@ async function _createNodes(req) {
     lsresults.PARENT_NODE = req.data.PARENT_NODE;
     lsresults.NODE_TYPE = req.data.NODE_TYPE;
     lsresults.NODE_DESC = req.data.NODE_DESC;
-    lsresults.AUTH_GROUP = '';
+    lsresults.AUTH_GROUP = "";
     liresults.push(lsresults);
     try {
       await cds.run(INSERT.into("CP_ACCESS_NODES").entries(liresults));

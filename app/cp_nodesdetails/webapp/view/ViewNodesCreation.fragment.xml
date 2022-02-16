@@ -1,6 +1,6 @@
 <core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns:l="sap.ui.layout"
 	xmlns:f="sap.ui.layout.form" xmlns:u="sap.ui.unified">
-	<Dialog  title="" contentWidth="450px" titleAlignment="Center">
+	<Dialog  title="View Node Creatin" contentWidth="450px" titleAlignment="Center">
 		<VBox class="sapUiSmallMargin">
 			<f:SimpleForm id="SimpleFormToolbar" editable="true" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="4" labelSpanM="4"
 				labelSpanS="4" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1"
@@ -8,18 +8,18 @@
 				<f:content>
                 <Label text="{i18n>AccNode}"/>
 					<Input id="idAccNode" value="{oGModel>/SelectedAccessNode}" editable="false" width="100%"/>
-					<Label text="{i18n>StruNode}"/>
-					<Input id="idStruNode" value="" width="100%"/>
+					<Label text="{i18n>viewNode}"/>
+					<Input id="idViewNode" value="" width="100%"/>
 					<Label text="{i18n>nodeDesc}"/>
-					<Input id="idStruDesc" value="" width="100%"/>
+					<Input id="idViewDesc" value="" width="100%"/>
 					
 				</f:content>
 			</f:SimpleForm>
 			
 		</VBox>
 		<buttons>
-			<Button  type='Ghost' text="{i18n>save}" press="onStruNodeSave"></Button>
-			<Button type='Reject' text="{i18n>close}" press="onStruNodeClose"></Button>
+			<Button type='Ghost' text="{i18n>save}" press="onViewNodeCreate"></Button>
+			<Button type='Reject' text="{i18n>close}" press="onViewClose"></Button>
 		</buttons>
 	</Dialog>
 </core:FragmentDefinition>
