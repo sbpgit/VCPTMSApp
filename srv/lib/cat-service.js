@@ -48,6 +48,7 @@ module.exports = (srv) => {
           //DONOTHING
         }
       }
+      lsresults.ACCESS_NODES = req.data.ACCESS_NODES;
       lsresults.NODE_TYPE  = req.data.NODE_TYPE;
       lsresults.NODE_DESC  = req.data.NODE_DESC;
       lsresults.AUTH_GROUP = '';
