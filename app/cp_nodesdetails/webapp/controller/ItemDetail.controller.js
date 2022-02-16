@@ -15,20 +15,24 @@ sap.ui.define([
 			that = this;
 			this.bus = sap.ui.getCore().getEventBus();
 			that.oStruModel = new JSONModel();
+            that.oViewlistModel = new JSONModel();
             that.oViewModel = new JSONModel();
 			oGModel = that.getOwnerComponent().getModel("oGModel");
 		},
 
 		onAfterRendering: function () {
             oGModel = that.getOwnerComponent().getModel("oGModel");
+            this.byId("sturList").removeSelections();
 
             var selItem = oGModel.getProperty("/SelectedAccessNode");
             var stuData = oGModel.getProperty("/struNodeData");
             var ViewData= oGModel.getProperty("/ViewNodeData");
+            var StruViewData= oGModel.getProperty("/StruViewNodeData");
             that.struNodeData = [];
             that.viewNodeData = [];
+            that.struviewNodeData = [];
 
-            this.byId("struTitle").setText("Structure Node Details for -" + " " + selItem);
+            this.byId("struTitle").setText("Structure Node - View Node");
 
                 for(var i=0; i< stuData.length; i++){
                     if(stuData[i].PARENT_NODE === selItem){
@@ -36,30 +40,164 @@ sap.ui.define([
                     }
                 }
 
+                for(var i=0; i< ViewData.length; i++){
+                    if(ViewData[i].PARENT_NODE === selItem){
+                        that.viewNodeData.push(ViewData[i]);
+                    }
+                }
+                
+                
+                for(var j=0; j< that.viewNodeData.length; j++){
+                    var count = 0;
+                for(var i=0; i< StruViewData.length; i++){
+                    if(StruViewData[i].PARENT_NODE === that.viewNodeData[j].CHILD_NODE &&
+                        that.viewNodeData[j].PARENT_NODE === selItem){
+                            that.struviewNodeData.push(StruViewData[i]);
+                            count = 1;
+                    }
+                }
+                if(count === 0){
+                      var data = {
+                        AUTH_GROUP: null,
+                        CHILD_NODE: "No Structure Node assigned",
+                        NODE_DESC: "",
+                        NODE_TYPE: "",
+                        PARENT_NODE: ViewData[j].CHILD_NODE,
+                        createdAt: null,
+                        createdBy: null,
+                        modifiedAt: null,
+                        modifiedBy: null,
+                      }
+                      
+                that.struviewNodeData.push(data);   
+                }
+            }
+
 
             that.oStruModel.setData({
                 Struresults: that.struNodeData,
               });
               that.byId("sturList").setModel(that.oStruModel);
 
+            //   that.oViewlistModel.setData({
+            //     ViewListresults: that.viewNodeData,
+            //   });
+            //   that.byId("ViewList").setModel(that.oViewlistModel);
 
+            // oGModel.setProperty("/reqTabData", aReqData);
+            that.aReqTabData();
+
+            var oReqData = oGModel.getProperty("/reqData");
+
+              that.oViewlistModel.setData({
+                ViewListresults:  oReqData.Requests,
+              });
+              that.byId("nodeTable").setModel(that.oViewlistModel);
 
         },
 
-        onAssign:function(){
+        aReqTabData:function(){
+            var viewData = that.viewNodeData,
+                svDate =   that.struviewNodeData ,             
+            oFinData = {
+                Requests: []
+            },
+            aFoundReq = [],
+            iIndex, oItem, oNewItem,
+            // Function to calculate the parent values
+            fnAddTime = function (oParent, oChild, sType) {
+                var oNewParent = JSON.parse(JSON.stringify(oParent)),
+                    oNewChild = JSON.parse(JSON.stringify(oChild)),
+                    oOldParent = JSON.parse(JSON.stringify(oParent));
+                // if (oChild.Status !== "S") {
+                //     oNewParent.QtyRequested = +oNewParent.QtyRequested + +oChild.QtyRequested;
+                // }
+                oNewChild._isParent = false;
+
+                // Push the parent data item as well as it is part of the breakdown also. Do this only once
+                if (oNewParent.children.length === 0) {
+                    oOldParent._isParent = false;
+                    oNewParent.children.push(oOldParent);
+                }
+                oNewParent.children.push(oNewChild);
+                return oNewParent;
+            };
+
+        // If there is data in the table
+        if (svDate.length) {
+            // for (var j = 0; j <viewData.length ; j++) {
+
+            for (var i = 0; i < svDate.length; i++) {
+                // Requests
+                iIndex = aFoundReq.indexOf(svDate[i].PARENT_NODE);
+                // If data not found previously
+                if (iIndex === -1) {
+                    aFoundReq.push(svDate[i].PARENT_NODE);
+                    svDate[i].children = [];
+                    svDate[i]._isParent = true;
+                    oFinData.Requests.push(svDate[i]);
+                    // Push as children
+                } else {
+                    oItem = oFinData.Requests[iIndex];
+                    oNewItem = fnAddTime(oItem, svDate[i], "Reqs");
+                    oFinData.Requests[iIndex] = oNewItem;
+                }
+            // }
+        }
+        }
+        oGModel.setProperty("/reqData", oFinData);
+
+        },
+
+
+        onTabChange:function(oEvent){
+            var seleTab = that.byId("detailNode").getSelectedKey();
+            if(seleTab === "struNode"){
+                that.byId("idAssign").setVisible(true);
+                that.byId("idAstru").setVisible(true);
+                that.byId("idEstru").setVisible(true);
+                that.byId("idView").setVisible(false);
+
+            } else if(seleTab === "viewNode"){
+                that.byId("idAssign").setVisible(false);
+                that.byId("idAstru").setVisible(false);
+                that.byId("idEstru").setVisible(false);
+                that.byId("idView").setVisible(true);
+            }
+
+        },
+        onAssign:function(oEvent){
             if (!that._oViewNode) {
 				that._oViewNode = sap.ui.xmlfragment("cpappf.cpnodesdetails.view.ViewNodes", that);
 				that.getView().addDependent(that._oViewNode);
 			}
-
+            if(this.byId("sturList").getSelectedItems().length){
             var ViewData= oGModel.getProperty("/ViewNodeData");
+            that.viewAssignData = [];
+            var selItem = oGModel.getProperty("/SelectedAccessNode");
+
+            oGModel.setProperty("/selstrNode", this.byId("sturList").getSelectedItem().getCells()[0].getText());
+            oGModel.setProperty("/selstrNodeDesc", this.byId("sturList").getSelectedItem().getCells()[1].getText());
+
+            for(var i=0; i< ViewData.length; i++){
+                if(ViewData[i].PARENT_NODE === selItem){
+                    that.viewAssignData.push(ViewData[i]);
+                }
+            }
 
             that.oViewModel.setData({
-                ViewNodesresults: ViewData,
+                ViewNodesresults: that.viewAssignData,
               });
               sap.ui.getCore().byId("ViewList").setModel(that.oViewModel);
 
+              if(that.viewAssignData.length !== 0){
               that._oViewNode.open();
+              } else {
+                MessageToast.show("There is no View Nodes for the selected Access Node");
+              }
+            } else {
+                MessageToast.show("Select structure node to assign");
+            }
         },
 
         onViewNodeClose:function(){
@@ -164,7 +302,12 @@ sap.ui.define([
                       FLAG: flag
                     },
                     success: function (oData) {
+                        if(flag === "C"){
+                            MessageToast.show("Successfully created the structure node");
+                        } else {
                         MessageToast.show("Successfully updated the structure node");
+                        }
+                        that.onStruNodeClose();
                         that.bus.publish("data", "refreshMaster");
                       sap.ui.core.BusyIndicator.hide();
                     },
@@ -173,6 +316,83 @@ sap.ui.define([
                       sap.ui.core.BusyIndicator.hide();
                     },
                   });
+        },
+
+        onAssignViewNode:function(oEvent){
+            var struNode = oGModel.getProperty("/selstrNode");
+            var struNodeDesc = oGModel.getProperty("/selstrNodeDesc");
+            var viewNode = sap.ui.getCore().byId("ViewList").getSelectedItem().getCells()[0].getTitle();
+            var viewNodeDesc = sap.ui.getCore().byId("ViewList").getSelectedItem().getCells()[0].getText();
+
+            var Desc = viewNodeDesc + " " + "-" + " " + struNodeDesc;
+
+            that.getModel("BModel").callFunction("/genpvs", {
+                method: "GET",
+                urlParameters: {
+                  CHILD_NODE: struNode,
+                  PARENT_NODE: viewNode,
+                  NODE_TYPE: "VS",
+                  NODE_DESC: Desc,
+                  FLAG: "C"
+                },
+                success: function (oData) {
+                    MessageToast.show("Successfully assigned structure node to view node");
+                    that.onViewNodeClose();
+                    that.bus.publish("data", "refreshMaster");
+                  sap.ui.core.BusyIndicator.hide();
+                },
+                error: function (oData) {
+                  MessageToast.show("Failed to updated the structure node");
+                  sap.ui.core.BusyIndicator.hide();
+                },
+              });
+
+        },
+
+        onViewNode:function(){
+            if (!that._oViewNodeCreate) {
+				that._oViewNodeCreate = sap.ui.xmlfragment("cpappf.cpnodesdetails.view.ViewNodesCreation", that);
+				that.getView().addDependent(that._oViewNodeCreate);
+			}
+
+            sap.ui.getCore().byId("idViewNode").setValue("");
+            sap.ui.getCore().byId("idViewDesc").setValue("");
+
+            that._oViewNodeCreate.open();
+
+        },
+
+        onViewClose:function(){
+            that._oViewNodeCreate.close();
+            that._oViewNodeCreate.destroy(true);
+            that._oViewNodeCreate="";
+
+        },
+
+        onViewNodeCreate:function(){
+            var accessNode = oGModel.getProperty("/SelectedAccessNode"),
+                ViewNode = sap.ui.getCore().byId("idViewNode").getValue(),
+            nodeDesc = sap.ui.getCore().byId("idViewDesc").getValue();
+            that.getModel("BModel").callFunction("/genpvs", {
+                method: "GET",
+                urlParameters: {
+                  CHILD_NODE: ViewNode,
+                  PARENT_NODE: accessNode,
+                  NODE_TYPE: "VN",
+                  NODE_DESC: nodeDesc,
+                  FLAG: "C"
+                },
+                success: function (oData) {
+                    MessageToast.show("Successfully created view node");
+                    that.onViewClose();
+                    that.bus.publish("data", "refreshMaster");
+                  sap.ui.core.BusyIndicator.hide();
+                },
+                error: function (oData) {
+                  MessageToast.show("Failed to updated the structure node");
+                  sap.ui.core.BusyIndicator.hide();
+                },
+              });
         }
 
 	});
