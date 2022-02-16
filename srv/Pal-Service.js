@@ -154,10 +154,11 @@ function _getDataObjForPredictions(vcRulesList, idx, modelType, numChars) {
    // for (var i = 0; i < vcRulesList.length; i++)
    // {
 
-    if(modelType == 'HGBT')
+    if( (modelType == 'HGBT') ||
+        (modelType == 'RDT') )
     {
        sqlStr = 'SELECT DISTINCT "Attribute", "' + vcConfigTimePeriod + 
-                '", SUM("CharCount") AS "CharCount" FROM "V_PREDICTION_TS" WHERE "Product" =' +
+                '", SUM("CharCountPercent") AS "CharCount" FROM "V_PREDICTION_TS" WHERE "Product" =' +
                     "'" +  vcRulesList[idx].Product + "'" +  
                     ' AND "GroupID" =' + "'" +   vcRulesList[idx].GroupID + "'" +
                     ' AND "Location" =' + "'" +   vcRulesList[idx].Location + "'" + 
@@ -170,7 +171,7 @@ function _getDataObjForPredictions(vcRulesList, idx, modelType, numChars) {
     else
     {
         sqlStr = 'SELECT DISTINCT "Attribute", "' + vcConfigTimePeriod + 
-                '", SUM("CharCountPercent") AS "CharCount" FROM "V_PREDICTION_TS" WHERE "Product" =' +
+                '", SUM("CharCount") AS "CharCount" FROM "V_PREDICTION_TS" WHERE "Product" =' +
                     "'" +  vcRulesList[idx].Product + "'" +  
                     ' AND "GroupID" =' + "'" +   vcRulesList[idx].GroupID + "'" +
                     ' AND "Location" =' + "'" +   vcRulesList[idx].Location + "'" + 
@@ -2061,7 +2062,8 @@ function _getDataObjForGenModels(vcRulesList, modelType, numChars) {
     for (var i = 0; i < vcRulesList.length; i++)
     {
 
-        if (modelType == 'HGBT')
+        if ( (modelType == 'HGBT') ||
+             (modelType == 'RDT') )
         {
             sqlStr = 'SELECT DISTINCT "Attribute", "' + vcConfigTimePeriod + 
                     '", SUM("CharCountPercent") AS "CharCount", SUM("TargetPercent") AS "Target" FROM "CP_VC_HISTORY_TS" WHERE "Product" =' +
@@ -2084,7 +2086,7 @@ function _getDataObjForGenModels(vcRulesList, modelType, numChars) {
                     ' ORDER BY "' + vcConfigTimePeriod + '", "Attribute"';
         }
 
-        //console.log('_getDataObjForGenModels sqlStr :',sqlStr, 'i = ', i);
+        console.log('_getDataObjForGenModels sqlStr :',sqlStr, 'i = ', i);
         stmt=conn.prepare(sqlStr);
         results=stmt.exec();
         stmt.drop();
