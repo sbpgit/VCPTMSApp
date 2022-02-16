@@ -72,9 +72,9 @@ sap.ui.define(
         onAfterRendering: function () {
           that = this;
           oGModel = this.getModel("oGModel");
-          this.oLoc = sap.ui.getCore().byId(sap.ui.getCore().byId("SimpleFormToolbar").getContent()[1].getId());
-          this.oProd = sap.ui.getCore().byId(sap.ui.getCore().byId("SimpleFormToolbar").getContent()[3].getId());
-          this.oAccn = sap.ui.getCore().byId(sap.ui.getCore().byId("SimpleFormToolbar").getContent()[5].getId());
+        //   this.oLoc = sap.ui.getCore().byId(sap.ui.getCore().byId("SimpleFormToolbar").getContent()[1].getId());
+        //   this.oProd = sap.ui.getCore().byId(sap.ui.getCore().byId("SimpleFormToolbar").getContent()[3].getId());
+        //   this.oAccn = sap.ui.getCore().byId(sap.ui.getCore().byId("SimpleFormToolbar").getContent()[5].getId());
           this.oProdList = this._oCore.byId(
             this._valueHelpDialogProd.getId() + "-list"
           );
@@ -158,7 +158,7 @@ sap.ui.define(
             } 
             else if (sId.includes("acc")) {
                 that._oCore
-                  .byId(this._oAccesNodeList + "-searchField")
+                  .byId(this._oAccesNodeList.getId() + "-searchField")
                   .setValue("");
                 if (that.oAccList.getBinding("items")) {
                   that.oAccList.getBinding("items").filter([]);
@@ -224,6 +224,7 @@ sap.ui.define(
               aODdata = [];
             //Location list
             if (sId.includes("Loc")) {
+                this.oLoc = sap.ui.getCore().byId(sap.ui.getCore().byId("SimpleFormToolbar").getContent()[1].getId());
               aSelectedItems = oEvent.getParameter("selectedItems");
               that.oLoc.setValue(aSelectedItems[0].getTitle());
               this.getModel("BModel").read("/getLocProdDet", {
@@ -241,9 +242,11 @@ sap.ui.define(
   
               // Prod list
             } else if (sId.includes("prod")) {
+                this.oProd = sap.ui.getCore().byId(sap.ui.getCore().byId("SimpleFormToolbar").getContent()[3].getId());
                 aSelectedItems = oEvent.getParameter("selectedItems");
                 that.oProd.setValue(aSelectedItems[0].getTitle());
             } else if (sId.includes("acc")) {
+                this.oAccn = sap.ui.getCore().byId(sap.ui.getCore().byId("SimpleFormToolbar").getContent()[5].getId());
                 aSelectedItems = oEvent.getParameter("selectedItems");
                 that.oAccn.setValue(aSelectedItems[0].getTitle());
             } 
@@ -254,11 +257,12 @@ sap.ui.define(
 
           if (oEvent) {
             var oSelProd = oEvent.getSource().getSelectedItem().getTitle(),
-            oSelLoc = oEvent.getSource().getSelectedItem().getDescription();
+            oSelLoc = oEvent.getSource().getSelectedItem().getDescription(),
+            oSelNode = oEvent.getSource().getSelectedItem().getInfo();
 
             oGModel.setProperty("/SelectedProd", oSelProd);
             oGModel.setProperty("/SelectedLoc", oSelLoc);
-            // oGModel.setProperty("/ViewNodeData", that.ViewNodes);
+            oGModel.setProperty("/SelectedNode", oSelNode);
           } else {
             // var num = oGModel.getProperty("/projectNo");
             // oGModel.setProperty("/projectNo", num);
@@ -350,9 +354,10 @@ sap.ui.define(
 
         onAccNodeDel: function (oEvent) {
           // Deleting the selected access node
-          var selected = oEvent.getSource().getParent().getCells()[0].getTitle();
+          var loc = oGModel.getProperty("/SelectedLoc"),
+                prod = oGModel.getProperty("/SelectedProd");
           // Getting the conformation popup before deleting
-          var text = "Please confirm to remove access node" + " - " + selected;
+          var text = "Please confirm to remove access node" + " - " + loc + " " + "-" + " "+ prod;
           sap.m.MessageBox.show(text, {
             title: "Confirmation",
             actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
@@ -366,7 +371,7 @@ sap.ui.define(
                     type: "post",
                     contentType: "application/json",
                     data: JSON.stringify({
-                        LOCATION_ID: Loc,
+                        LOCATION_ID: loc,
                         PRODUCT_ID: prod,
                         ACCESS_NODE: "D"
                     }),
@@ -410,7 +415,7 @@ sap.ui.define(
             
             success: function (data) {
               sap.ui.core.BusyIndicator.hide();
-              sap.m.MessageToast.show("Access Node created successfully");
+              sap.m.MessageToast.show(data.d.results[0].value);
               that.onAccNodeClose();
               that.onAfterRendering();
             },
@@ -418,10 +423,10 @@ sap.ui.define(
                 sap.m.MessageToast.show(JSON.stringify(data));
               },
           });
-
-
-
+          
         },
+
+
       }
     );
   }

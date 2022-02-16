@@ -7,11 +7,26 @@
 			<Toolbar height="50%">
 				<Title id="struTitle" text="BOM-Structure Nodes" class="ClassHead"></Title>
 				<ToolbarSpacer/>
-                <Button text="Assign" press="onAssign" tooltip="Assign to View Node"/>
+                <Button text="Assign" press="onAssign" tooltip="Assign Structure Node"/>
 			</Toolbar>
 		</customHeader>
 
         <content>
+        <Toolbar height="8%">
+				<VBox>
+					<HBox>
+						<Text text="{i18n>loc} : " class="boldText"></Text>
+						<Text text=" {oGModel>/SelectedLoc}"></Text>
+						<ToolbarSpacer/>
+                        
+					</HBox>
+                    <HBox>
+                    <Text text="{i18n>prod} : " class="boldText"></Text>
+						<Text text=" {oGModel>/SelectedProd}"></Text>
+                        </HBox>
+					
+				</VBox>
+			</Toolbar>
             <Table id="sturList" items="{path: '/results'}" mode="SingleSelectMaster">
                 <columns>
                     <Column hAlign="Center">
