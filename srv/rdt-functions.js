@@ -1523,7 +1523,7 @@ exports._runRdtPrediction = function(rdtType, group, version, scenario) {
         //          ' WHERE "GroupID" = ' + "'" + groupId + "'" + ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
         // console.log("V_FUTURE_DEP_TS Predicted Value sql update sqlStr", sqlStr)
 
-        sqlStr = 'SELECT DISTINCT "CAL_DATE", "Location", "Product", "Type", "OBJ_DEP", "OBJ_COUNTER", "VERSION", "SCENARIO" ' +
+        sqlStr = 'SELECT DISTINCT "CAL_DATE", "Location", "Product", "Type", "OBJ_DEP", "OBJ_COUNTER", "OrderQuantity", "VERSION", "SCENARIO" ' +
                 'FROM "V_FUTURE_DEP_TS" WHERE "GroupID" = ' + "'" + groupId + "'" +
                 ' AND "VERSION" = ' + "'" + version + "'" +
                 ' AND "SCENARIO" = ' + "'" + scenario + "'" +   
@@ -1544,7 +1544,7 @@ exports._runRdtPrediction = function(rdtType, group, version, scenario) {
                     "'" + 'RTD' + "'" + "," +
                     "'" + result[0].VERSION + "'" + "," +
                     "'" + result[0].SCENARIO + "'" + "," +
-                    "'" + predictedVal + "'" + "," +
+                    "'" + predictedVal * result[0].OrderQuantity + "'" + "," +
                     "'" + predictedTime + "'" + "," +
                     "'" + 'SUCCESS' + "'" + ')' + ' WITH PRIMARY KEY';
             
@@ -1581,7 +1581,7 @@ exports._runRdtPrediction = function(rdtType, group, version, scenario) {
                     "'" + result[0].OBJ_COUNTER + "'" + "," +
                     "'" + result[0].VERSION + "'" + "," +
                     "'" + result[0].SCENARIO + "'" + "," + 
-                    "'" + predictedVal + "'" + "," +
+                    "'" + predictedVal * result[0].OrderQuantity + "'" + "," +
                     "'" + predictedTime + "'" + "," +
                     "'" + 'SUCCESS' + "'" + ')' + ' WITH PRIMARY KEY';
             
