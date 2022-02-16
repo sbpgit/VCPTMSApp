@@ -1745,7 +1745,7 @@ exports._runHgbtPredictionV1 = function(hgbtType, group, version, scenario) {
         //console.log('trimmedPeriod : ', trimmedPeriod, 'vcConfigTimePeriod :', vcConfigTimePeriod);
 
         sqlStr = 'SELECT DISTINCT "CAL_DATE", "Location", "Product", ' +
-                 '"Type", "OBJ_DEP", "OBJ_COUNTER", "ROW_ID", "CharCount", "VERSION", "SCENARIO" ' +
+                 '"Type", "OBJ_DEP", "OBJ_COUNTER", "ROW_ID", "CharCount", "CharCountPercent", "VERSION", "SCENARIO" ' +
                 'FROM "V_FUTURE_DEP_TS" WHERE "GroupID" = ' + "'" + groupId + "'" + 
                 ' AND "VERSION" = ' + "'" + version + "'" +
                 ' AND "SCENARIO" = ' + "'" + scenario + "'" +
@@ -1761,39 +1761,136 @@ exports._runHgbtPredictionV1 = function(hgbtType, group, version, scenario) {
         //console.log("V_FUTURE_DEP_TS MLR SELECT sqlStr result ", result, "length = ", result.length);
 
     
-
+        var orderCount = 0;
         for (let rIndex = 0; rIndex < result.length; rIndex++)
         {
             let impact_val = impact_percent = 0;
+            
             if (result[rIndex].ROW_ID == 1)
-                impact_val = w1*predictedVal;//result[rIndex].CharCount;
+            {
+                //impact_val = w1*predictedVal;//result[rIndex].CharCount;
+                impact_percent = w1*predictedVal;//result[rIndex].CharCount;
+                if(result[rIndex].CharCount != 0)
+                {
+                    orderCount = result[rIndex].CharCount / result[rIndex].CharCountPercent;
+                    impact_val = impact_percent * orderCount;
+                }
+            }
             else if (result[rIndex].ROW_ID == 2)
-                impact_val = w2*predictedVal;//result[rIndex].CharCount;   
+            {
+                //impact_val = w2*predictedVal;//result[rIndex].CharCount;
+                impact_percent = w2*predictedVal;//result[rIndex].CharCount;
+                if(result[rIndex].CharCount != 0)
+                {
+                    orderCount = result[rIndex].CharCount / result[rIndex].CharCountPercent;
+                    impact_val = impact_percent * orderCount;
+                }
+            }            
             else if (result[rIndex].ROW_ID == 3)
-                impact_val = w3*predictedVal;//result[rIndex].CharCount;  
+            {
+                //impact_val = w3*predictedVal;//result[rIndex].CharCount;
+                impact_percent = w3*predictedVal;//result[rIndex].CharCount;
+                if(result[rIndex].CharCount != 0)
+                {
+                    orderCount = result[rIndex].CharCount / result[rIndex].CharCountPercent;
+                    impact_val = impact_percent * orderCount;
+                }
+            }            
             else if (result[rIndex].ROW_ID == 4)
-                impact_val = w4*predictedVal;//result[rIndex].CharCount;
+            {
+                //impact_val = w4*predictedVal;//result[rIndex].CharCount;
+                impact_percent = w4*predictedVal;//result[rIndex].CharCount;
+                if(result[rIndex].CharCount != 0)
+                {
+                    orderCount = result[rIndex].CharCount / result[rIndex].CharCountPercent;
+                    impact_val = impact_percent * orderCount;
+                }
+            }            
             else if (result[rIndex].ROW_ID == 5)
-                impact_val = w5*predictedVal;//result[rIndex].CharCount;  
+            {
+                //impact_val = w5*predictedVal;//result[rIndex].CharCount;
+                impact_percent = w5*predictedVal;//result[rIndex].CharCount;
+                if(result[rIndex].CharCount != 0)
+                {
+                    orderCount = result[rIndex].CharCount / result[rIndex].CharCountPercent;
+                    impact_val = impact_percent * orderCount;
+                }
+            }            
             else if (result[rIndex].ROW_ID == 6)
-                impact_val = w6*predictedVal;//result[rIndex].CharCount;   
+            {
+                //impact_val = w6*predictedVal;//result[rIndex].CharCount;
+                impact_percent = w6*predictedVal;//result[rIndex].CharCount;
+                if(result[rIndex].CharCount != 0)
+                {
+                    orderCount = result[rIndex].CharCount / result[rIndex].CharCountPercent;
+                    impact_val = impact_percent * orderCount;
+                }
+            }            
             else if (result[rIndex].ROW_ID == 7)
-                impact_val = w7*predictedVal;//result[rIndex].CharCount;  
+            {
+                //impact_val = w7*predictedVal;//result[rIndex].CharCount;
+                impact_percent = w7*predictedVal;//result[rIndex].CharCount;
+                if(result[rIndex].CharCount != 0)
+                {
+                    orderCount = result[rIndex].CharCount / result[rIndex].CharCountPercent;
+                    impact_val = impact_percent * orderCount;
+                }
+            }            
             else if (result[rIndex].ROW_ID == 8)
-                impact_val = w8*predictedVal;//result[rIndex].CharCount;
+            {
+                //impact_val = w8*predictedVal;//result[rIndex].CharCount;
+                impact_percent = w8*predictedVal;//result[rIndex].CharCount;
+                if(result[rIndex].CharCount != 0)
+                {
+                    orderCount = result[rIndex].CharCount / result[rIndex].CharCountPercent;
+                    impact_val = impact_percent * orderCount;
+                }
+            }            
             else if (result[rIndex].ROW_ID == 9)
-                impact_val = w9*predictedVal;//result[rIndex].CharCount;
+            {
+                //impact_val = w9*predictedVal;//result[rIndex].CharCount;
+                impact_percent = w9*predictedVal;//result[rIndex].CharCount;
+                if(result[rIndex].CharCount != 0)
+                {
+                    orderCount = result[rIndex].CharCount / result[rIndex].CharCountPercent;
+                    impact_val = impact_percent * orderCount;
+                }
+            }            
             else if (result[rIndex].ROW_ID == 10)
-                impact_val = w10*predictedVal;//result[rIndex].CharCount;   
+            {
+                //impact_val = w10*predictedVal;//result[rIndex].CharCount;
+                impact_percent = w10*predictedVal;//result[rIndex].CharCount;
+                if(result[rIndex].CharCount != 0)
+                {
+                    orderCount = result[rIndex].CharCount / result[rIndex].CharCountPercent;
+                    impact_val = impact_percent * orderCount;
+                }
+            }            
             else if (result[rIndex].ROW_ID == 11)
-                impact_val = w11*predictedVal;//result[rIndex].CharCount;  
+            {
+                //impact_val = w11*predictedVal;//result[rIndex].CharCount;
+                impact_percent = w11*predictedVal;//result[rIndex].CharCount;
+                if(result[rIndex].CharCount != 0)
+                {
+                    orderCount = result[rIndex].CharCount / result[rIndex].CharCountPercent;
+                    impact_val = impact_percent * orderCount;
+                }
+            }            
             else if (result[rIndex].ROW_ID == 12)
-                impact_val = w12*predictedVal;//result[rIndex].CharCount;
-
-            if (predictedVal <= 0)
-               impact_percent = 0;
-            else
-               impact_percent = 100.0*impact_val/(predictedVal);
+            {
+                //impact_val = w12*predictedVal;//result[rIndex].CharCount;
+                impact_percent = w12*predictedVal;//result[rIndex].CharCount;
+                if(result[rIndex].CharCount != 0)
+                {
+                    orderCount = result[rIndex].CharCount / result[rIndex].CharCountPercent;
+                    impact_val = impact_percent * orderCount;
+                }
+            }
+            // if (predictedVal <= 0)
+            //    impact_percent = 0;
+            // else
+            //     impact_percent = 100*impact_val/impact_percent;
+            //impact_percent = 100.0*impact_val/(predictedVal);
 
             //console.log("rIndex = ",rIndex,"impact_percent = ", impact_percent,"predictedVal = ", predictedVal, "intercept =",intercept);
             let predicted = predictedVal;
@@ -1809,8 +1906,8 @@ exports._runHgbtPredictionV1 = function(hgbtType, group, version, scenario) {
                 "'" + result[rIndex].SCENARIO + "'" + "," +
                 "'" + result[rIndex].CharCount + "'" + "," +
                 "'" + impact_val + "'" + "," +
-                "'" + impact_percent + "'" + "," +
-                "'" + predicted + "'" + "," +
+                "'" + 100*impact_val/(predicted*orderCount) + "'" + "," +
+                "'" + predicted*orderCount + "'" + "," +
                 "'" + predictedTime + "'" + ')' + ' WITH PRIMARY KEY';
             
             //console.log("CP_TS_OBJDEP_CHAR_IMPACT_F MLR UPSERT sqlStr ", sqlStr); 
