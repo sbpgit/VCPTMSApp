@@ -20,7 +20,7 @@ class GenTimeseries {
       ],
     });
 
-   // this.genTimeseriesF();
+    this.genTimeseriesF();
   }
 
   /**
@@ -393,10 +393,10 @@ class GenTimeseries {
             `SELECT *
                FROM "CP_IBP_FCHARPLAN"
                WHERE LOCATION_ID = '`+ liFutureCharPlan[lFutInd].LOCATION_ID +`'
-               AND PRODUCT_ID    = '`+ liFutureCharPlan[lFutInd].PRODUCT_ID +`'
-               AND WEEK_DATE     = '`+ liFutureCharPlan[lFutInd].WEEK_DATE +`'
-               AND VERSION       = '`+ liFutureCharPlan[lFutInd].VERSION +`'
-               AND SCENARIO      = '`+ liFutureCharPlan[lFutInd].SCENARIO + `'`
+               AND PRODUCT_ID = '`+ liFutureCharPlan[lFutInd].PRODUCT_ID +`'
+               AND VERSION = '`+ liFutureCharPlan[lFutInd].VERSION +`'
+               AND SCENARIO = '`+ liFutureCharPlan[lFutInd].SCENARIO +`'
+               AND WEEK_DATE = '`+ liFutureCharPlan[lFutInd].WEEK_DATE +`'`
         );  
         
         liObjdepF = [];
@@ -415,6 +415,8 @@ class GenTimeseries {
             for (let lFutIndex = 0; lFutIndex < liFutureCharPlanDate.length; lFutIndex++) {
                 if(liFutureCharPlanDate[lFutIndex].LOCATION_ID === liObdhdr[lObjInd].LOCATION_ID &&
                    liFutureCharPlanDate[lFutIndex].PRODUCT_ID  === liObdhdr[lObjInd].PRODUCT_ID &&
+                   liFutureCharPlanDate[lFutIndex].VERSION     === liFutureCharPlan[lFutInd].VERSION &&
+                   liFutureCharPlanDate[lFutIndex].SCENARIO    === liFutureCharPlan[lFutInd].SCENARIO &&
                    liFutureCharPlanDate[lFutIndex].CLASS_NUM   === liObdhdr[lObjInd].CLASS_NUM &&
                    liFutureCharPlanDate[lFutIndex].CHAR_NUM    === liObdhdr[lObjInd].CHAR_NUM){
                         if(liObdhdr[lObjInd].OD_CONDITION === 'EQ' &&
@@ -431,24 +433,6 @@ class GenTimeseries {
             liObjdepF.push(GenFunctions.parse(lsObjdepF));
         }
 
-        liObjdepF.sort(GenFunctions.dynamicSortMultiple("OBJ_DEP","OBJ_COUNTER","ROW_ID"));
-
-        let lSuccessQty = 0;
-        let liObjdepFTemp = [];
-        for (let index = 0; index < liObjdepF.length; index++) {
-            if(liObjdepF[index].OBJ_DEP !== liObjdepF[GenFunctions.addOne(index,liObjdepF.length)].OBJ_DEP ||
-                liObjdepF[index].OBJ_COUNTER !== liObjdepF[GenFunctions.addOne(index,liObjdepF.length)].OBJ_COUNTER ||
-                liObjdepF[index].ROW_ID !== liObjdepF[GenFunctions.addOne(index,liObjdepF.length)].ROW_ID ||
-                index === GenFunctions.addOne(index,liObjdepF.length) ){
-                    let lsObjdepFTemp = GenFunctions.parse(liObjdepF[index]);
-                    lsObjdepFTemp.SUCCESS = lSuccessQty;
-                    liObjdepFTemp.push(GenFunctions.parse(lsObjdepFTemp));
-                lSuccessQty = 0
-            }
-            if (lSuccessQty < liObjdepF[index].SUCCESS) {lSuccessQty = liObjdepF[index].SUCCESS;}
-            
-        }
-
         /** Get Future Plan */
         const liFutureDemandPlanDate = await cds.run(
             `SELECT *
@@ -460,21 +444,21 @@ class GenTimeseries {
                AND SCENARIO      = '`+ liFutureCharPlan[lFutInd].SCENARIO + `'`
         );  
 
-        if(liObjdepFTemp.length > 0 ){
+        if(liObjdepF.length > 0 ){
             try {
-                
-                for (let index = 0; index < liObjdepFTemp.length; index++) {
-                    liObjdepFTemp[index].SUCCESS_RATE = 0;
+                for (let index = 0; index < liObjdepF.length; index++) {
+
+                    liObjdepF[index].SUCCESS_RATE = 0;
                     for (let lDemI = 0; lDemI < liFutureDemandPlanDate.length; lDemI++) {
                         if(liFutureDemandPlanDate[lDemI].QUANTITY > 0){
-                            liObjdepFTemp[index].SUCCESS_RATE = ( liObjdepFTemp[index].SUCCESS / liFutureDemandPlanDate[lDemI].QUANTITY ) * 100;
+                            liObjdepF[index].SUCCESS_RATE = ( liObjdepF[index].SUCCESS / liFutureDemandPlanDate[lDemI].QUANTITY ) * 100;
                         }
-                    }
+                    }    
 
-                    cds.run(INSERT.into("CP_TS_OBJDEP_CHARHDR_F").entries(liObjdepFTemp[index]));
+                    await cds.run(INSERT.into("CP_TS_OBJDEP_CHARHDR_F").entries(liObjdepF[index]));  
                 }
-               
-                //await cds.run(INSERT.into("CP_TS_OBJDEP_CHARHDR_F").entries(liObjdepFTemp));
+
+                //await cds.run(INSERT.into("CP_TS_OBJDEP_CHARHDR_F").entries(liObjdepF));
             } catch (e) {
                 this.logger.error(e.message + "/" + e.query);
             }
