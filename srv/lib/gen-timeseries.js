@@ -20,7 +20,7 @@ class GenTimeseries {
       ],
     });
 
-    this.genTimeseriesF();
+   // this.genTimeseriesF();
   }
 
   /**
@@ -393,8 +393,10 @@ class GenTimeseries {
             `SELECT *
                FROM "CP_IBP_FCHARPLAN"
                WHERE LOCATION_ID = '`+ liFutureCharPlan[lFutInd].LOCATION_ID +`'
-               AND PRODUCT_ID = '`+ liFutureCharPlan[lFutInd].PRODUCT_ID +`'
-               AND WEEK_DATE = '`+ liFutureCharPlan[lFutInd].WEEK_DATE +`'`
+               AND PRODUCT_ID    = '`+ liFutureCharPlan[lFutInd].PRODUCT_ID +`'
+               AND WEEK_DATE     = '`+ liFutureCharPlan[lFutInd].WEEK_DATE +`'
+               AND VERSION       = '`+ liFutureCharPlan[lFutInd].VERSION +`'
+               AND SCENARIO      = '`+ liFutureCharPlan[lFutInd].SCENARIO + `'`
         );  
         
         liObjdepF = [];
@@ -453,7 +455,9 @@ class GenTimeseries {
                FROM "CP_IBP_FUTUREDEMAND"
                WHERE LOCATION_ID = '`+ liFutureCharPlan[lFutInd].LOCATION_ID +`'
                AND PRODUCT_ID = '`+ liFutureCharPlan[lFutInd].PRODUCT_ID +`'
-               AND WEEK_DATE = '`+ liFutureCharPlan[lFutInd].WEEK_DATE +`'`
+               AND WEEK_DATE = '`+ liFutureCharPlan[lFutInd].WEEK_DATE +`'
+               AND VERSION       = '`+ liFutureCharPlan[lFutInd].VERSION +`'
+               AND SCENARIO      = '`+ liFutureCharPlan[lFutInd].SCENARIO + `'`
         );  
 
         if(liObjdepFTemp.length > 0 ){
