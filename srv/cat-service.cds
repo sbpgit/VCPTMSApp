@@ -13,6 +13,7 @@ using V_LOCPROD from '../db/data-model';
 using V_TSODCHAR_H from '../db/data-model';
 using V_TSODCHAR_F from '../db/data-model';
 using V_ODRESTRICT FROM '../db/data-model';
+using V_BOMPVS from '../db/data-model';
 service CatalogService @(impl : './lib/cat-service.js') {
     // Service on HDI entities
     //@odata.draft.enabled
@@ -104,6 +105,8 @@ service CatalogService @(impl : './lib/cat-service.js') {
 
    // @odata.draft.enabled
     entity genCompStrcNode        as projection on od.PVS_BOM;
+
+    entity getPVSBOM            as projection on V_BOMPVS;
 
     entity getProfiles          as projection on od.PAL_PROFILEMETH;
     entity getProfileParameters as projection on od.PAL_PROFILEMETH_PARA;

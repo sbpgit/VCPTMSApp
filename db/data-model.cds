@@ -698,6 +698,18 @@ key     ![OD_CONDITION]: String(2)  @title: 'Object Dep. Condition' ;
 key     ![CHAR_COUNTER]: Integer  @title: 'Characteristic Counter' ; 
 key     ![ROW_ID]: Integer  @title: 'Row ID' ; 
 }
+
+@cds.persistence.exists 
+Entity ![V_BOMPVS] {
+key     ![LOCATION_ID]: String(4)  @title: 'LOCATION_ID' ; 
+key     ![PRODUCT_ID]: String(40)  @title: 'PRODUCT_ID' ; 
+key     ![ITEM_NUM]: String(5)  @title: 'ITEM_NUM' ; 
+key     ![COMPONENT]: String(40)  @title: 'COMPONENT' ; 
+key     ![COMP_QTY]: Decimal(13, 3)  @title: 'COMP_QTY' ; 
+key     ![VALID_FROM]: Date  @title: 'VALID_FROM' ; 
+key     ![VALID_TO]: Date  @title: 'VALID_TO' ; 
+key     ![STRUC_NODE]: String(50)  @title: 'STRUC_NODE' ; 
+}
 /*
 @cds.persistence.exists
 @cds.persistence.calcview
