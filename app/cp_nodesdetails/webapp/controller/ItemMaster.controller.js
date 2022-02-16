@@ -135,13 +135,13 @@ sap.ui.define(
             that.getView().addDependent(that._oAccesNode);
           }
           oGModel = this.getModel("oGModel");
-          oGModel.setProperty("/Flag", "")
+          oGModel.setProperty("/Flag", "");
 
           if (oEvent.getSource().getTooltip().includes("Add")) {
             that._oAccesNode.setTitle("Access Node Creation");
             sap.ui.getCore().byId("idAccesNode").setValue("");
             sap.ui.getCore().byId("idDesc").setValue("");
-            oGModel.setProperty("/Flag", "C")
+            oGModel.setProperty("/Flag", "C");
             that._oAccesNode.open();
           } else {
             if (this.byId("accessList").getSelectedItems().length) {
@@ -150,7 +150,7 @@ sap.ui.define(
               sap.ui.getCore().byId("idAccesNode").setValue(tableItem.getTitle());
               sap.ui.getCore().byId("idDesc").setValue(tableItem.getText());
               sap.ui.getCore().byId("idAccesNode").setEditable(false);
-              oGModel.setProperty("/Flag", "E")
+              oGModel.setProperty("/Flag", "E");
               that._oAccesNode.open();
             } else {
               MessageToast.show("Select access node to update");
@@ -168,7 +168,7 @@ sap.ui.define(
           // Deleting the selected access node
           var selected = oEvent.getSource().getParent().getCells()[0].getTitle();
           // Getting the conformation popup before deleting
-          var text = "Please Confirm to Remove access node" + " - " + selected;
+          var text = "Please confirm to remove access node" + " - " + selected;
           sap.m.MessageBox.show(text, {
             title: "Confirmation",
             actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
@@ -176,23 +176,50 @@ sap.ui.define(
               if (oAction === sap.m.MessageBox.Action.YES) {
                 sap.ui.core.BusyIndicator.show();
 
-                that.getModel("BModel").callFunction("/genpvs", {
-                  method: "GET",
-                  urlParameters: {
-                    CHILD_NODE: selected,
-                    PARENT_NODE: "",
-                    NODE_TYPE: "AN",
-                    NODE_DESC: "",
-                    FLAG: "D",
-                  },
-                  success: function (oData) {
-                    sap.ui.core.BusyIndicator.hide();
-                  },
-                  error: function () {
-                    MessageToast.show("Failed to get data");
-                    sap.ui.core.BusyIndicator.hide();
-                  },
-                });
+                var uri = "/v2/catalog/getNodes";
+          $.ajax({
+            url: uri,
+            type: "post",
+            contentType: "application/json",
+            data: JSON.stringify({
+                CHILD_NODE: selected,
+                PARENT_NODE: "",
+                NODE_TYPE: "AN",
+                NODE_DESC: "",
+                createdBy: "D"
+            }),
+            dataType: "json",
+            async: false,
+            timeout: 0,
+            error: function (data) {
+                sap.ui.core.BusyIndicator.hide();
+              sap.m.MessageToast.show(JSON.stringify(data));
+            },
+            success: function (data) {
+              sap.ui.core.BusyIndicator.hide();
+              sap.m.MessageToast.show("Updated successfully");
+              that.onAccNodeClose();
+              that.onAfterRendering();
+            },
+          });
+
+                // that.getModel("BModel").callFunction("/genpvs", {
+                //   method: "GET",
+                //   urlParameters: {
+                //     CHILD_NODE: selected,
+                //     PARENT_NODE: "",
+                //     NODE_TYPE: "AN",
+                //     NODE_DESC: "",
+                //     FLAG: "D",
+                //   },
+                //   success: function (oData) {
+                //     sap.ui.core.BusyIndicator.hide();
+                //   },
+                //   error: function () {
+                //     MessageToast.show("Failed to get data");
+                //     sap.ui.core.BusyIndicator.hide();
+                //   },
+                // });
               }
             },
           });
@@ -203,26 +230,36 @@ sap.ui.define(
           var desc = sap.ui.getCore().byId("idDesc").getValue();
           var flag = oGModel.getProperty("/Flag");
 
-          this.getModel("BModel").callFunction("/genpvs", {
-            method: "GET",
-            urlParameters: {
-              CHILD_NODE: accesNode,
-              PARENT_NODE: "",
-              NODE_TYPE: "AN",
-              NODE_DESC: desc,
-              FLAG: flag
+          var uri = "/v2/catalog/getNodes";
+          $.ajax({
+            url: uri,
+            type: "post",
+            contentType: "application/json",
+            data: JSON.stringify({
+                CHILD_NODE: accesNode,
+                PARENT_NODE: "",
+                NODE_TYPE: "AN",
+                NODE_DESC: desc,
+                createdBy: flag
+            }),
+            dataType: "json",
+            async: false,
+            timeout: 0,
+            error: function (data) {
+                sap.ui.core.BusyIndicator.hide();
+              sap.m.MessageToast.show(JSON.stringify(data));
             },
-            success: function (oData) {
+            success: function (data) {
               sap.ui.core.BusyIndicator.hide();
-            },
-            error: function (oData) {
-              MessageToast.show("Failed to get data");
+              sap.m.MessageToast.show("Updated successfully");
+              that.onAccNodeClose();
+              that.onAfterRendering();
             },
           });
 
 
 
-        },
+        }
       }
     );
   }
