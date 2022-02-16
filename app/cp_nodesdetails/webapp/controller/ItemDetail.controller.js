@@ -51,7 +51,7 @@ sap.ui.define([
                     var count = 0;
                 for(var i=0; i< StruViewData.length; i++){
                     if(StruViewData[i].PARENT_NODE === that.viewNodeData[j].CHILD_NODE &&
-                        that.viewNodeData[j].PARENT_NODE === selItem){
+                        StruViewData[i].ACCESS_NODES === selItem){
                             that.struviewNodeData.push(StruViewData[i]);
                             count = 1;
                     }
@@ -266,6 +266,7 @@ sap.ui.define([
                   urlParameters: {
                     CHILD_NODE: selectedStruNode,
                     PARENT_NODE: accessNode,
+                    ACCESS_NODES: accessNode,
                     NODE_TYPE: "SN",
                     NODE_DESC: "",
                     FLAG: "D",
@@ -297,6 +298,7 @@ sap.ui.define([
                     urlParameters: {
                       CHILD_NODE: StructureNode,
                       PARENT_NODE: AccessNode,
+                      ACCESS_NODES: AccessNode,
                       NODE_TYPE: "SN",
                       NODE_DESC: Desc,
                       FLAG: flag
@@ -322,7 +324,8 @@ sap.ui.define([
             var struNode = oGModel.getProperty("/selstrNode");
             var struNodeDesc = oGModel.getProperty("/selstrNodeDesc");
             var viewNode = sap.ui.getCore().byId("ViewList").getSelectedItem().getCells()[0].getTitle();
-            var viewNodeDesc = sap.ui.getCore().byId("ViewList").getSelectedItem().getCells()[0].getText();
+            var viewNodeDesc = sap.ui.getCore().byId("ViewList").getSelectedItem().getCells()[0].getText(),
+            accessNode = oGModel.getProperty("/SelectedAccessNode");
 
             var Desc = viewNodeDesc + " " + "-" + " " + struNodeDesc;
 
@@ -331,6 +334,7 @@ sap.ui.define([
                 urlParameters: {
                   CHILD_NODE: struNode,
                   PARENT_NODE: viewNode,
+                  ACCESS_NODES: accessNode,
                   NODE_TYPE: "VS",
                   NODE_DESC: Desc,
                   FLAG: "C"
@@ -378,6 +382,7 @@ sap.ui.define([
                 urlParameters: {
                   CHILD_NODE: ViewNode,
                   PARENT_NODE: accessNode,
+                  ACCESS_NODES: accessNode,
                   NODE_TYPE: "VN",
                   NODE_DESC: nodeDesc,
                   FLAG: "C"
