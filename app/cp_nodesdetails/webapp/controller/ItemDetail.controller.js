@@ -149,6 +149,26 @@ sap.ui.define([
 
         },
 
+        onDetailSearch:function(oEvent){
+            var query =
+              oEvent.getParameter("value") || oEvent.getParameter("newValue"),
+            oFilters = [];
+
+          if (query !== "") {
+            oFilters.push(
+              new Filter({
+                filters: [
+                  new Filter("CHILD_NODE", FilterOperator.Contains, query),
+                  new Filter("NODE_DESC", FilterOperator.Contains, query),
+                ],
+                and: false,
+              })
+            );
+          }
+          that.byId("sturList").getBinding("items").filter(oFilters);
+
+        },
+
 
         onTabChange:function(oEvent){
             var seleTab = that.byId("detailNode").getSelectedKey();

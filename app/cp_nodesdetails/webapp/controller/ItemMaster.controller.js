@@ -60,6 +60,7 @@ sap.ui.define(
               }
 
               oGModel.setProperty("/SelectedAccessNode", that.AccessNodes[0].CHILD_NODE);
+              oGModel.setProperty("/SelectedDesc", that.AccessNodes[0].NODE_DESC);
               oGModel.setProperty("/struNodeData", that.StructureNodes);
               oGModel.setProperty("/ViewNodeData", that.ViewNodes);
               oGModel.setProperty("/StruViewNodeData", that.StruViewNodes);
@@ -87,6 +88,7 @@ sap.ui.define(
             var oSelItem = oEvent.getSource().getSelectedItem().getBindingContext().getObject();
 
             oGModel.setProperty("/SelectedAccessNode", oSelItem.CHILD_NODE);
+            oGModel.setProperty("/SelectedDesc", oSelItem.NODE_DESC);
             oGModel.setProperty("/struNodeData", that.StructureNodes);
             oGModel.setProperty("/ViewNodeData", that.ViewNodes);
           } 

@@ -27,7 +27,9 @@
 					
 				</VBox>
 			</Toolbar>
+            <SearchField id="idDetailSearch" liveChange="onDetailSearch" placeholder="Compponent/ Structure Node"/>
             <Table id="sturList" items="{path: '/results'}" mode="SingleSelectMaster">
+            
                 <columns>
                     <Column hAlign="Center">
                         <Text text="Item #" />
