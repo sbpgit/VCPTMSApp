@@ -132,10 +132,6 @@ modules:
       - cpapprestrictcpodrestrict.zip
       name: cpapprestrictcpodrestrict
       target-path: resources/
-    # - artifacts:
-    #   - cpappcpprodaccnode.zip
-    #   name: cpappcpprodaccnode
-    #   target-path: resources/
     - artifacts:
       - cpappfcpnodesdetails.zip
       name: cpappfcpnodesdetails
@@ -147,6 +143,10 @@ modules:
     - artifacts:
       - cpappcpassignnode.zip
       name: cpappcpassignnode
+      target-path: resources/
+    - artifacts:
+      - cpappcpbompvs.zip
+      name: cpappcpbompvs
       target-path: resources/
 - name: cpibpfdemcpibpfdem
   type: html5
@@ -298,16 +298,6 @@ modules:
     - npm install
     - npm run build:cf
     supported-platforms: []
-# - name: cpappcpprodaccnode
-#   type: html5
-#   path: app/cpprodaccnode
-#   build-parameters:
-#     build-result: dist
-#     builder: custom
-#     commands:
-#     - npm install
-#     - npm run build:cf
-#     supported-platforms: []
 - name: cpappfcpnodesdetails
   type: html5
   path: app/cp_nodesdetails
@@ -331,6 +321,16 @@ modules:
 - name: cpappcpassignnode
   type: html5
   path: app/cpassignnode
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappcpbompvs
+  type: html5
+  path: app/cpbompvs
   build-parameters:
     build-result: dist
     builder: custom
