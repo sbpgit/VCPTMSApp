@@ -24,6 +24,7 @@
 					<core:ListItem key="M" text="{i18n>mlr}"/>
 					<core:ListItem key="H" text="{i18n>hgbt}"/>
 					<core:ListItem key="V" text="{i18n>varma}"/>
+					<core:ListItem key="R" text="{i18n>rdt}"/>
 			</Select>
 				</f:content>
 			</f:SimpleForm>

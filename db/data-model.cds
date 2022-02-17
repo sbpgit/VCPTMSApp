@@ -183,7 +183,7 @@ context cp {
     entity SALESH_CONFIG {
         key SALES_DOC      : String(10)@title : 'Sales Document';
         key SALESDOC_ITEM  : String(6) @title : 'Sales Document Item';
-        key CHAR_NUM       : String(10)@title : 'Internal number Char.';
+        key CHAR_NUM       : String(10)@title : 'Internal number Char.'; 
             CHARVAL_NUM    : String(10)@title : 'Internal number Char. Value ';
             PRODUCT_ID     : String(40)@title : 'Product Id';
            // PROD_AVAILDATE : Date      @title : 'Prod Availability Date';

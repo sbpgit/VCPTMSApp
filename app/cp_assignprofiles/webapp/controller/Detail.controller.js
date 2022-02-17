@@ -70,6 +70,8 @@ sap.ui.define(
             that.byId("idAlgo").setSelectedKey("H");
           } else if (methodText === "VARMA") {
             that.byId("idAlgo").setSelectedKey("V");
+          } else if (methodText === "RDT") {
+            that.byId("idAlgo").setSelectedKey("R");
           } else {
             that.byId("idAlgo").setSelectedKey("N");
           }
