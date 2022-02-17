@@ -1,0 +1,64 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:f="sap.ui.layout.form" controllerName="cpapp.cpassignnode.controller.ItemDetail"
+    xmlns:html="http://www.w3.org/1999/xhtml" class="ItemMaster">
+    <Page id="idClassChar" >
+    <customHeader>
+			<Toolbar height="50%">
+				<Title id="struTitle" text="BOM-Structure Nodes" class="ClassHead"></Title>
+				<ToolbarSpacer/>
+                <Button text="Assign" press="onAssign" tooltip="Assign Structure Node"/>
+			</Toolbar>
+		</customHeader>
+
+        <content>
+        <Toolbar height="8%">
+				<VBox>
+					<HBox>
+						<Text text="{i18n>loc} : " class="boldText"></Text>
+						<Text text=" {oGModel>/SelectedLoc}"></Text>
+						<ToolbarSpacer/>
+                        
+					</HBox>
+                    <HBox>
+                    <Text text="{i18n>prod} : " class="boldText"></Text>
+						<Text text=" {oGModel>/SelectedProd}"></Text>
+                        </HBox>
+					
+				</VBox>
+			</Toolbar>
+            <Table id="sturList" items="{path: '/results'}" mode="SingleSelectMaster">
+                <columns>
+                    <Column hAlign="Center">
+                        <Text text="Item #" />
+                    </Column>
+                    <Column hAlign="Center">
+                        <Text text="Component"/>
+                    </Column>
+                    <Column hAlign="Center">
+                        <Text text="Component Qty" />
+                    </Column>
+                    <Column hAlign="Center">
+                        <Text text="Structure Node" />
+                    </Column>
+                    <Column hAlign="Right">
+                        <Text text="" />
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem>
+                        <cells>
+                            <Text text="{ITEM_NUM}" />
+                            <Text text="{COMPONENT}" />
+                            <Text text="{COMP_QTY}" />
+                            <Text text="{STRUC_NODE}" />
+                            <Button icon="sap-icon://decline" tooltip="Delete" press="onStructureNodeDel" 
+                                    iconDensityAware="false" type="Transparent"/>
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+
+        </content>
+    </Page>
+</mvc:View>

@@ -1,6 +1,6 @@
 
 // using from './cfgprd_pvsroot/annotations';
-using from './cp_assignnodes/annotations';
+// using from './cp_assignnodes/annotations';
 using from './cp_ibpfdem/annotations';
 using from './cp_ibpfplan/annotations';
 
@@ -22,8 +22,9 @@ using from './cpibpresultplan/annotations';
 using from './cp_saleshconfig/annotations';
 
 using from './cpodrestrict/annotations';
-using from './cpprodaccnode/annotations';
+// using from './cpprodaccnode/annotations';
 using from './cp_nodesdetails/annotations';
 
-using from './cpcompsnode/annotations';
+// using from './cpcompsnode/annotations';
 using from './cplocation/annotations';
+using from './cpassignnode/annotations';

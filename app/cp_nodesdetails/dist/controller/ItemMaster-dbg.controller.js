@@ -40,11 +40,12 @@ sap.ui.define(
           that = this;
           oGModel = this.getModel("oGModel");
 
-          this.getModel("BModel").read("/getNodes", {
+          this.getModel("BModel").read("/getPVSNodes", {
             success: function (oData) {
               that.AccessNodes = [];
               that.StructureNodes = [];
               that.ViewNodes = [];
+              that.StruViewNodes = [];
 
               for (var i = 0; i < oData.results.length; i++) {
                 if (oData.results[i].NODE_TYPE === "AN") {
@@ -53,13 +54,25 @@ sap.ui.define(
                   that.StructureNodes.push(oData.results[i]);
                 } else if (oData.results[i].NODE_TYPE === "VN") {
                   that.ViewNodes.push(oData.results[i]);
-                }
+                } else if (oData.results[i].NODE_TYPE === "VS") {
+                    that.StruViewNodes.push(oData.results[i]);
+                  }
               }
+
+              oGModel.setProperty("/SelectedAccessNode", that.AccessNodes[0].CHILD_NODE);
+              oGModel.setProperty("/struNodeData", that.StructureNodes);
+              oGModel.setProperty("/ViewNodeData", that.ViewNodes);
+              oGModel.setProperty("/StruViewNodeData", that.StruViewNodes);
+
+              
 
               that.oModel.setData({
                 results: that.AccessNodes,
               });
               that.byId("accessList").setModel(that.oModel);
+
+              that.byId("accessList").getItems()[0].setSelected(true);
+              that.onhandlePress();
             },
             error: function () {
               MessageToast.show("Failed to get data");
@@ -71,21 +84,12 @@ sap.ui.define(
           oGModel = this.getModel("oGModel");
 
           if (oEvent) {
-            var oSelItem = oEvent
-              .getSource()
-              .getSelectedItem()
-              .getBindingContext()
-              .getObject();
+            var oSelItem = oEvent.getSource().getSelectedItem().getBindingContext().getObject();
 
             oGModel.setProperty("/SelectedAccessNode", oSelItem.CHILD_NODE);
             oGModel.setProperty("/struNodeData", that.StructureNodes);
             oGModel.setProperty("/ViewNodeData", that.ViewNodes);
-          } else {
-            // var num = oGModel.getProperty("/projectNo");
-            // oGModel.setProperty("/projectNo", num);
-            // var desc = oGModel.getProperty("/ProjDesc");
-            // oGModel.setProperty("/ProjDesc", desc);
-          }
+          } 
           // Calling Item Detail page
           that.getOwnerComponent().runAsOwner(function () {
             if (!that.oDetailView) {
@@ -138,24 +142,23 @@ sap.ui.define(
             );
             that.getView().addDependent(that._oAccesNode);
           }
+          oGModel = this.getModel("oGModel");
+          oGModel.setProperty("/Flag", "");
 
           if (oEvent.getSource().getTooltip().includes("Add")) {
             that._oAccesNode.setTitle("Access Node Creation");
             sap.ui.getCore().byId("idAccesNode").setValue("");
             sap.ui.getCore().byId("idDesc").setValue("");
+            oGModel.setProperty("/Flag", "C");
             that._oAccesNode.open();
           } else {
             if (this.byId("accessList").getSelectedItems().length) {
-              var tableItem = this.byId("accessList")
-                .getSelectedItem()
-                .getCells()[0];
+              var tableItem = this.byId("accessList").getSelectedItem().getCells()[0];
               that._oAccesNode.setTitle("Update Access Node");
-              sap.ui
-                .getCore()
-                .byId("idAccesNode")
-                .setValue(tableItem.getTitle());
+              sap.ui.getCore().byId("idAccesNode").setValue(tableItem.getTitle());
               sap.ui.getCore().byId("idDesc").setValue(tableItem.getText());
               sap.ui.getCore().byId("idAccesNode").setEditable(false);
+              oGModel.setProperty("/Flag", "E");
               that._oAccesNode.open();
             } else {
               MessageToast.show("Select access node to update");
@@ -170,52 +173,78 @@ sap.ui.define(
         },
 
         onAccNodeDel: function (oEvent) {
-          // Deleting the selected access node
-          var selected = this.byId("accessList")
-            .getSelectedItem()
-            .getCells()[0]
-            .getTitle();
-          // Getting the conformation popup before deleting
-          var text = "Please Confirm to Remove access node" + " - " + selected;
-          sap.m.MessageBox.show(text, {
-            title: "Confirmation",
-            actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
-            onClose: function (oAction) {
-              if (oAction === sap.m.MessageBox.Action.YES) {
-                oModel.setUseBatch(false);
-
-                var oEntry = {};
-                oEntry.Project = selected;
-                oEntry.Username = that.username;
-
-                sap.ui.core.BusyIndicator.show();
-
-                this.getModel("BModel").callFunction("/genpvs", {
-                  method: "GET",
-                  urlParameters: {
-                    CHILD_NODE: "",
-                    PARENT_NODE: "",
-                    NODE_TYPE: "AN",
-                    NODE_DESC: "",
-                    FLAG: "",
-                  },
-                  success: function (oData) {
-                    sap.ui.core.BusyIndicator.hide();
-                  },
-                  error: function () {
-                    MessageToast.show("Failed to get data");
-                  },
-                });
-              }
-            },
-          });
-        },
-
-        onAccessNodeSave: function () {
-          sap.ui.getCore().byId("idAccesNode");
-          sap.ui.getCore().byId("idDesc");
-        },
-      }
-    );
-  }
-);
+            // Deleting the selected access node
+            var selected = oEvent.getSource().getParent().getCells()[0].getTitle();
+            // Getting the conformation popup before deleting
+            var text = "Please confirm to remove access node" + " - " + selected;
+            sap.m.MessageBox.show(text, {
+              title: "Confirmation",
+              actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
+              onClose: function (oAction) {
+                if (oAction === sap.m.MessageBox.Action.YES) {
+                  sap.ui.core.BusyIndicator.show();
+  
+                  that.getModel("BModel").callFunction("/genpvs", {
+                    method: "GET",
+                    urlParameters: {
+                      CHILD_NODE: selected,
+                      PARENT_NODE: "",
+                      NODE_TYPE: "AN",
+                      NODE_DESC: "",
+                      FLAG: "D",
+                    },
+                    success: function (oData) {
+                      sap.ui.core.BusyIndicator.hide();
+                      MessageToast.show("Deletion Successfull");
+                              that.onAfterRendering();
+                    },
+                    error: function () {
+                      sap.ui.core.BusyIndicator.hide();
+                      MessageToast.show("Failed to delete node");
+                              that.onAfterRendering();
+                    },
+                  });
+                }
+              },
+            });
+          },
+  
+          onAccessNodeSave: function () {
+            var accesNode = sap.ui.getCore().byId("idAccesNode").getValue();
+            var desc = sap.ui.getCore().byId("idDesc").getValue();
+            var flag = oGModel.getProperty("/Flag");
+            this.getModel("BModel").callFunction("/genpvs", {
+              method: "GET",
+              urlParameters: {
+                CHILD_NODE: accesNode,
+                PARENT_NODE: "",
+                ACCESS_NODES: accesNode,
+                NODE_TYPE: "AN",
+                NODE_DESC: desc,
+                FLAG: flag
+              },
+              success: function (oData) {
+              //   sap.ui.core.BusyIndicator.hide();
+                MessageToast.show("Creation Successfull");
+                        that.onAccNodeClose();
+                        that.onAfterRendering();
+              },
+              error: function (oData) {
+                  if(oData.statusCode === 200){
+                      MessageToast.show("Creation Successfull");
+                  }
+                  else{
+                  MessageToast.show("Failed to create node");
+                  }
+                          that.onAccNodeClose();
+                          that.onAfterRendering();
+              },
+            });
+  
+  
+  
+          }
+        }
+      );
+    }
+  );

@@ -17,7 +17,7 @@ xmlns:l="sap.ui.layout"
 			
 		</VBox>
 		<buttons>
-			<Button id="saveButton" type='Ghost' text="{i18n>save}" press="onAccessNodeSave"></Button>
+			<Button type='Ghost' text="{i18n>save}" press="onAccessNodeSave"></Button>
 			<Button type='Reject' text="{i18n>close}" press="onAccNodeClose"></Button>
 		</buttons>
 	</Dialog>
