@@ -1,5 +1,5 @@
-context cp_ds{
-  type objectDep {
+context cp_ds {
+    type objectDep {
         LOCATION_ID : String(4);
         PRODUCT_ID  : String(40);
         OBJ_DEP     : String(30);
@@ -12,11 +12,12 @@ context cp_ds{
         COMPONENT   : String(40);
         PROFILE     : String(50);
         OBJ_DEP     : String(30);
-        OBJDEP_DESC  : String(30);
+        OBJDEP_DESC : String(30);
         STRUC_NODE  : String(50);
     }
-    type odhistory{    
-        CAL_DATE    : Date;    
+
+    type odhistory {
+        CAL_DATE    : Date;
         OBJ_DEP     : String(30);
         OBJ_COUNTER : Integer;
         ODCOUNT     : String(10);
@@ -29,12 +30,13 @@ context cp_ds{
         ROW_ID7     : String(10);
         ROW_ID8     : String(10);
         ROW_ID9     : String(10);
-        ROW_ID10     : String(10);
-        ROW_ID11     : String(10);
-        ROW_ID12     : String(10);
-    } 
-    type odfuture{    
-        CAL_DATE    : Date;    
+        ROW_ID10    : String(10);
+        ROW_ID11    : String(10);
+        ROW_ID12    : String(10);
+    }
+
+    type odfuture {
+        CAL_DATE    : Date;
         OBJ_DEP     : String(30);
         OBJ_COUNTER : Integer;
         VERSION     : String(10);
@@ -49,8 +51,174 @@ context cp_ds{
         ROW_ID7     : String(10);
         ROW_ID8     : String(10);
         ROW_ID9     : String(10);
-        ROW_ID10     : String(10);
-        ROW_ID11     : String(10);
-        ROW_ID12     : String(10);
-    } 
+        ROW_ID10    : String(10);
+        ROW_ID11    : String(10);
+        ROW_ID12    : String(10);
+    }
+
+    type compreq {
+        CAL_DATE    : Date;
+        LOCATION_ID : String(4);
+        PRODUCT_ID  : String(40);
+        COMPONENT   : String(40);
+        VERSION     : String(10);
+        SCENARIO    : String(32);
+        WEEK1       : Date;
+        WEEK2       : Date;
+        WEEK3       : Date;
+        WEEK4       : Date;
+        WEEK5       : Date;
+        WEEK6       : Date;
+        WEEK7       : Date;
+        WEEK8       : Date;
+        WEEK9       : Date;
+        WEEK10      : Date;
+        WEEK11      : Date;
+        WEEK12      : Date;
+        WEEK13      : Date;
+        WEEK14      : Date;
+        WEEK15      : Date;
+        WEEK16      : Date;
+        WEEK17      : Date;
+        WEEK18      : Date;
+        WEEK19      : Date;
+        WEEK20      : Date;
+        WEEK21      : Date;
+        WEEK22      : Date;
+        WEEK23      : Date;
+        WEEK24      : Date;
+        WEEK25      : Date;
+        WEEK26      : Date;
+        WEEK27      : Date;
+        WEEK28      : Date;
+        WEEK29      : Date;
+        WEEK30      : Date;
+        WEEK31      : Date;
+        WEEK32      : Date;
+        WEEK33      : Date;
+        WEEK34      : Date;
+        WEEK35      : Date;
+        WEEK36      : Date;
+        WEEK37      : Date;
+        WEEK38      : Date;
+        WEEK39      : Date;
+        WEEK40      : Date;
+        WEEK41      : Date;
+        WEEK42      : Date;
+        WEEK43      : Date;
+        WEEK44      : Date;
+        WEEK45      : Date;
+        WEEK46      : Date;
+        WEEK47      : Date;
+        WEEK48      : Date;
+        WEEK49      : Date;
+        WEEK50      : Date;
+        WEEK51      : Date;
+        WEEK52      : Date;
+        WEEK53      : Date;
+        WEEK54      : Date;
+        WEEK55      : Date;
+        WEEK56      : Date;
+        WEEK57      : Date;
+        WEEK58      : Date;
+        WEEK59      : Date;
+        WEEK60      : Date;
+        WEEK61      : Date;
+        WEEK62      : Date;
+        WEEK63      : Date;
+        WEEK64      : Date;
+        WEEK65      : Date;
+        WEEK66      : Date;
+        WEEK67      : Date;
+        WEEK68      : Date;
+        WEEK69      : Date;
+        WEEK70      : Date;
+        WEEK71      : Date;
+        WEEK72      : Date;
+        WEEK73      : Date;
+        WEEK74      : Date;
+        WEEK75      : Date;
+        WEEK76      : Date;
+        WEEK77      : Date;
+        WEEK78      : Date;
+        WEEK79      : Date;
+        WEEK80      : Date;
+        WEEK81      : Date;
+        WEEK82      : Date;
+        WEEK83      : Date;
+        WEEK84      : Date;
+        WEEK85      : Date;
+        WEEK86      : Date;
+        WEEK87      : Date;
+        WEEK88      : Date;
+        WEEK89      : Date;
+        WEEK90      : Date;
+        WEEK91      : Date;
+        WEEK92      : Date;
+        WEEK93      : Date;
+        WEEK94      : Date;
+        WEEK95      : Date;
+        WEEK96      : Date;
+        WEEK97      : Date;
+        WEEK98      : Date;
+        WEEK99      : Date;
+        WEEK100     : Date;
+        WEEK101     : Date;
+        WEEK102     : Date;
+        WEEK103     : Date;
+        WEEK104     : Date;
+        WEEK105     : Date;
+        WEEK106     : Date;
+        WEEK107     : Date;
+        WEEK108     : Date;
+        WEEK109     : Date;
+        WEEK110     : Date;
+        WEEK111     : Date;
+        WEEK112     : Date;
+        WEEK113     : Date;
+        WEEK114     : Date;
+        WEEK115     : Date;
+        WEEK116     : Date;
+        WEEK117     : Date;
+        WEEK118     : Date;
+        WEEK119     : Date;
+        WEEK120     : Date;
+        WEEK121     : Date;
+        WEEK122     : Date;
+        WEEK123     : Date;
+        WEEK124     : Date;
+        WEEK125     : Date;
+        WEEK126     : Date;
+        WEEK127     : Date;
+        WEEK128     : Date;
+        WEEK129     : Date;
+        WEEK130     : Date;
+        WEEK131     : Date;
+        WEEK132     : Date;
+        WEEK133     : Date;
+        WEEK134     : Date;
+        WEEK135     : Date;
+        WEEK136     : Date;
+        WEEK137     : Date;
+        WEEK138     : Date;
+        WEEK139     : Date;
+        WEEK140     : Date;
+        WEEK141     : Date;
+        WEEK142     : Date;
+        WEEK143     : Date;
+        WEEK144     : Date;
+        WEEK145     : Date;
+        WEEK146     : Date;
+        WEEK147     : Date;
+        WEEK148     : Date;
+        WEEK149     : Date;
+        WEEK150     : Date;
+        WEEK151     : Date;
+        WEEK152     : Date;
+        WEEK153     : Date;
+        WEEK154     : Date;
+        WEEK155     : Date;
+        WEEK156     : Date;
+
+    }
 }

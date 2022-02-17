@@ -13,11 +13,24 @@
                 <Button id="idView" icon="sap-icon://add" press="onViewNode" tooltip="Add View Node" visible="false"/>
             </Toolbar>
         </customHeader>
+        <Toolbar height="8%">
+				<VBox>
+					<HBox>
+						<Text text="Access Node : " class="boldText"></Text>
+						<Text text=" {oGModel>/SelectedAccessNode}"></Text>
+					</HBox>
+					<HBox>
+						<Text text="Description : " class="boldText"></Text>
+						<Text text=" {oGModel>/SelectedDesc}"></Text>
+					</HBox>
+				</VBox>
+			</Toolbar>
 
         <content>
             <IconTabBar id="detailNode" expanded="true" select="onTabChange" class="sapUiResponsiveContentPadding">
                 <items>
                     <IconTabFilter id="struNodeTab" text="Structure Node" key="struNode">
+                    <SearchField id="idDetailSearch" liveChange="onDetailSearch" placeholder="Structure Node/ Desc"/>
                         <Table id="sturList" items="{path: '/Struresults'}" mode="SingleSelectMaster">
                             <columns>
                                 <Column hAlign="Center">
@@ -42,7 +55,7 @@
                         </Table>
                     </IconTabFilter>
                     <IconTabFilter id="viewNodeTab" text="View Node" key="viewNode">
-
+                    <SearchField id="idDetailViewNode" liveChange="onViewNodeSearch" placeholder="View Node/ Structure Node"/>
                     <t:TreeTable id="nodeTable" enableSelectAll="false" ariaLabelledBy="title" selectionMode="None"
 					visibleRowCount="10"  
 					 rows="{
