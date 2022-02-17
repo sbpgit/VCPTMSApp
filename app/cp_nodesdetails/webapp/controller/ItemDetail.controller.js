@@ -73,6 +73,8 @@ sap.ui.define([
                 }
             }
 
+            oGModel.setProperty("/tableData", that.struviewNodeData);
+
 
             that.oStruModel.setData({
                 Struresults: that.struNodeData,
@@ -96,9 +98,10 @@ sap.ui.define([
 
         },
 
-        aReqTabData:function(){
+        aReqTabData:function(oData){
             var viewData = that.viewNodeData,
-                svDate =   that.struviewNodeData ,             
+                // svDate =   that.struviewNodeData ,
+                svDate = oData ? oData.results : oGModel.getProperty("/tableData"),             
             oFinData = {
                 Requests: []
             },
@@ -167,6 +170,35 @@ sap.ui.define([
           }
           that.byId("sturList").getBinding("items").filter(oFilters);
 
+        },
+
+        onViewNodeSearch(oEvent){
+            var sValue = oEvent.getParameter("value") || oEvent.getParameter("newValue"),
+				aData = oGModel.getProperty("/tableData"),
+				aResults = [];
+				
+			if (sValue && sValue.trim() !== "") {
+				sValue = sValue.trim().toLocaleUpperCase();
+				// for (var i = aData.length - 1; i >= 0; i--) {
+                for(var i=0; i<aData.length; i++){
+					if (aData[i].PARENT_NODE.includes(sValue) ||
+						aData[i].CHILD_NODE.includes(sValue)) {
+						aResults.push(aData[i]);
+					}
+				}
+			} else {
+				aResults = aData;
+			}
+			
+			that.aReqTabData({results: aResults});
+
+            var oReqData = oGModel.getProperty("/reqData");
+
+              that.oViewlistModel.setData({
+                ViewListresults:  oReqData.Requests,
+              });
+                   
+        
         },
 
 

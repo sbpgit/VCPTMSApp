@@ -55,7 +55,7 @@
                         </Table>
                     </IconTabFilter>
                     <IconTabFilter id="viewNodeTab" text="View Node" key="viewNode">
-
+                    <SearchField id="idDetailViewNode" liveChange="onViewNodeSearch" placeholder="View Node/ Structure Node"/>
                     <t:TreeTable id="nodeTable" enableSelectAll="false" ariaLabelledBy="title" selectionMode="None"
 					visibleRowCount="10"  
 					 rows="{
