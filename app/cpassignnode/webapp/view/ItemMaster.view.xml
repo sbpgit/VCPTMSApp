@@ -18,7 +18,7 @@
         itemPress="onhandlePress"
         selectionChange="onhandlePress"
 		enableBusyIndicator="true"
-		headerText="Products"
+		headerText="Products - Access Nodes"
 		growing="true"
 		items="{
 			path: '/results'

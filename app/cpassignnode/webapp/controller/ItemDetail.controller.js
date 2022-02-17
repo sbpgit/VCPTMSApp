@@ -50,6 +50,25 @@ sap.ui.define([
 
         },
 
+        onDetailSearch:function(oEvent){
+            var query = oEvent.getParameter("value") || oEvent.getParameter("newValue"),
+            oFilters = [];
+            // Check if search filter is to be applied
+            query = query ? query.trim() : "";
+              if (query !== "") {
+                oFilters.push(
+                  new Filter({
+                    filters: [
+                      new Filter("COMPONENT", FilterOperator.Contains, query),
+                      new Filter("STRUC_NODE", FilterOperator.Contains, query),
+                    ],
+                    and: false,
+                  })
+                );
+              }
+              that.byId("sturList").getBinding("items").filter(oFilters);
+        },
+
         onAssign:function(oEvent){
 
             if (!that._oStruNode) {
