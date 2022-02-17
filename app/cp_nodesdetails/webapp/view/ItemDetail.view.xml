@@ -18,6 +18,7 @@
             <IconTabBar id="detailNode" expanded="true" select="onTabChange" class="sapUiResponsiveContentPadding">
                 <items>
                     <IconTabFilter id="struNodeTab" text="Structure Node" key="struNode">
+                    <SearchField id="idDetailSearch" liveChange="onDetailSearch" placeholder="Structure Node/ Node Desc"/>
                         <Table id="sturList" items="{path: '/Struresults'}" mode="SingleSelectMaster">
                             <columns>
                                 <Column hAlign="Center">
