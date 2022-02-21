@@ -22,9 +22,8 @@ module.exports = (srv) => {
   srv.on("getCompreq", async (req) => {
     let liresult;
     const comreq = new ComponentReq();
-    //await obgenTimeseries.genTimeseries();
     comreq.genComponentReq(req.data,liresult);
-    return "Hello";
+    return liresult;
   });
 
   srv.on("CREATE", "getProfiles", _createProfiles);

@@ -57,7 +57,7 @@ context cp {
         key LOCATION_ID       : String(4) @title : 'Location ';
         key PRODUCT_ID        : String(40)@title : 'Product';
             LOTSIZE_KEY       : String(2) @title : 'Lot Size Key';
-            LOT_SIZE          : Integer @title : 'Lot Size';
+            LOT_SIZE          : Integer   @title : 'Lot Size';
             PROCUREMENT_TYPE  : String(1) @title : 'Procurement Type';
             PLANNING_STRATEGY : String(2) @title : 'Planning Strategy';
     };
@@ -114,15 +114,16 @@ context cp {
             CHANGED_TIME : Time      @title : 'Changed Time';
             CREATED_TIME : Time      @title : 'Created Time';
     };
+
     entity PRODUCT_CLASS {
-        key PRODUCT_ID     : String(40)@title : 'Product Id';
-        key CLASS_NUM      : String(18)@title : 'Class Num';
-            CHANGED_DATE   : Date      @title : 'Changed Date';
-            CHANGED_BY     : String(12)@title : 'Changed By';
-            CREATED_DATE   : Date      @title : 'Created Date';
-            CREATED_BY     : String(12)@title : 'Created By';
-            CHANGED_TIME   : Time      @title : 'Changed Time';
-            CREATED_TIME   : Time      @title : 'Created Time';
+        key PRODUCT_ID   : String(40)@title : 'Product Id';
+        key CLASS_NUM    : String(18)@title : 'Class Num';
+            CHANGED_DATE : Date      @title : 'Changed Date';
+            CHANGED_BY   : String(12)@title : 'Changed By';
+            CREATED_DATE : Date      @title : 'Created Date';
+            CREATED_BY   : String(12)@title : 'Created By';
+            CHANGED_TIME : Time      @title : 'Changed Time';
+            CREATED_TIME : Time      @title : 'Created Time';
     };
 
     // entity PROD_CONFIG {
@@ -181,18 +182,18 @@ context cp {
     };
 
     entity SALESH_CONFIG {
-        key SALES_DOC      : String(10)@title : 'Sales Document';
-        key SALESDOC_ITEM  : String(6) @title : 'Sales Document Item';
-        key CHAR_NUM       : String(10)@title : 'Internal number Char.'; 
-            CHARVAL_NUM    : String(10)@title : 'Internal number Char. Value ';
-            PRODUCT_ID     : String(40)@title : 'Product Id';
-           // PROD_AVAILDATE : Date      @title : 'Prod Availability Date';
-            CHANGED_DATE   : Date      @title : 'Changed Date';
-            CHANGED_BY     : String(12)@title : 'Changed By';
-            CREATED_DATE   : Date      @title : 'Created Date';
-            CREATED_BY     : String(12)@title : 'Created By';
-            CHANGED_TIME   : Time      @title : 'Changed Time';
-            CREATED_TIME   : Time      @title : 'Created Time';
+        key SALES_DOC     : String(10)@title : 'Sales Document';
+        key SALESDOC_ITEM : String(6) @title : 'Sales Document Item';
+        key CHAR_NUM      : String(10)@title : 'Internal number Char.';
+            CHARVAL_NUM   : String(10)@title : 'Internal number Char. Value ';
+            PRODUCT_ID    : String(40)@title : 'Product Id';
+            // PROD_AVAILDATE : Date      @title : 'Prod Availability Date';
+            CHANGED_DATE  : Date      @title : 'Changed Date';
+            CHANGED_BY    : String(12)@title : 'Changed By';
+            CREATED_DATE  : Date      @title : 'Created Date';
+            CREATED_BY    : String(12)@title : 'Created By';
+            CHANGED_TIME  : Time      @title : 'Changed Time';
+            CREATED_TIME  : Time      @title : 'Created Time';
     };
 
     entity SALESH_CFG_SMRY {
@@ -275,16 +276,16 @@ context cp {
     //  key OBJ_COUNTER : Integer   @title : 'Object Counter';
     //SUCCESS     : Integer   @title : 'Count';
     entity TS_OBJDEP_CHARHDR_F {
-        key CAL_DATE    : Date      @title : 'Date';
-        key LOCATION_ID : String(4) @title : 'Location ID';
-        key PRODUCT_ID  : String(40)@title : 'Product ID';
-        key OBJ_TYPE    : String(2) @title : 'Object Type';
-        key OBJ_DEP     : String(30)@title : 'Object Dependency';
-        key OBJ_COUNTER : Integer   @title : 'Object Counter';
-        key ROW_ID      : Integer   @title : ' Attribute Index';
-        key VERSION     : String(10)    @title : 'Version';
-        key SCENARIO    : String(32)    @title : 'Scenario';
-            SUCCESS     : Integer   @title : 'Count';
+        key CAL_DATE     : Date      @title : 'Date';
+        key LOCATION_ID  : String(4) @title : 'Location ID';
+        key PRODUCT_ID   : String(40)@title : 'Product ID';
+        key OBJ_TYPE     : String(2) @title : 'Object Type';
+        key OBJ_DEP      : String(30)@title : 'Object Dependency';
+        key OBJ_COUNTER  : Integer   @title : 'Object Counter';
+        key ROW_ID       : Integer   @title : ' Attribute Index';
+        key VERSION      : String(10)@title : 'Version';
+        key SCENARIO     : String(32)@title : 'Scenario';
+            SUCCESS      : Integer   @title : 'Count';
             SUCCESS_RATE : Double    @title : 'Sucess Rate';
     };
 
@@ -327,14 +328,14 @@ context cp {
     //         AUTH_GROUP  : String(4);//  @title : 'Authorization Group';
     // };
     entity PVS_NODES : managed {
-        key CHILD_NODE  : String(50);// @title : 'Child Node';
-        key PARENT_NODE : String(50);// @title : 'Parent Node';
-            ACCESS_NODES: String(50);
-            NODE_TYPE   : String(2);//  @title : 'Node Type';
-            NODE_DESC   : String(200);//@tile  : 'Node Descriptions';
-            AUTH_GROUP  : String(4);//  @title : 'Authorization Group';
-            UPPERLIMIT  : Integer;
-            LOWERLIMIT  : Integer;
+        key CHILD_NODE   : String(50); // @title : 'Child Node';
+        key PARENT_NODE  : String(50); // @title : 'Parent Node';
+            ACCESS_NODES : String(50);
+            NODE_TYPE    : String(2); //  @title : 'Node Type';
+            NODE_DESC    : String(200); //@tile  : 'Node Descriptions';
+            AUTH_GROUP   : String(4); //  @title : 'Authorization Group';
+            UPPERLIMIT   : Integer;
+            LOWERLIMIT   : Integer;
     };
 
     entity PROD_ACCNODE : managed {
@@ -418,7 +419,7 @@ context cp {
         key OBJ_DEP          : String(30)@title : 'Object Dependency';
         key VERSION          : String(10)@title : 'Version';
         key SCENARIO         : String(32)@title : 'Scenario';
-        key WEEK_Date        : Date          @title : 'Weekly Date';
+        key WEEK_Date        : Date      @title : 'Weekly Date';
             PREDICTED        : Double    @title : 'Predicted';
             PREDICTED_TIME   : Timestamp @title : 'Predicted Time';
             PREDICTED_STATUS : String(8) @title : 'Predicted Status';
@@ -442,23 +443,23 @@ context cp {
     //         DEPENDENCY  : String(1000)@title : ' Dependency';
     // }
 
-    entity PAL_PROFILEMETH{
+    entity PAL_PROFILEMETH {
         key PROFILE      : String(50) @title : 'Profile';
             METHOD       : String(50) @title : 'Method Name';
             PRF_DESC     : String(200)@title : 'Profile Description';
             CREATED_DATE : Date       @title : 'Date';
-            CREATED_BY   : String(12)@title : 'Created By'
+            CREATED_BY   : String(12) @title : 'Created By'
     }
 
     entity PAL_PROFILEMETH_PARA {
-        key PROFILE   : String(50);
-        key METHOD    : String(50);
-        key PARA_NAME : String(100);
-            INTVAL    : Integer;
-            DOUBLEVAL : Double;
-            STRVAL    : String(20);
-            PARA_DESC : String(1000);
-            PARA_DEP  : String(1000);
+        key PROFILE      : String(50);
+        key METHOD       : String(50);
+        key PARA_NAME    : String(100);
+            INTVAL       : Integer;
+            DOUBLEVAL    : Double;
+            STRVAL       : String(20);
+            PARA_DESC    : String(1000);
+            PARA_DEP     : String(1000);
             CREATED_DATE : Date;
             CREATED_BY   : String(12);
     }
@@ -474,32 +475,34 @@ context cp {
     }
 
     entity IP_PROFILEOD {
-        key CREATED_DATE: Date;
-        FLAG        : String(1);
-        PROFILEOD: array of {
-            LOCATION_ID : String(4) ;
-            PRODUCT_ID  : String(40);
-            COMPONENT   : String(40);
-            PROFILE     : String(50);
-            OBJ_DEP     : String(30);
-        };
+        key CREATED_DATE    : Date;
+            FLAG            : String(1);
+            PROFILEOD       : array of {
+                LOCATION_ID : String(4);
+                PRODUCT_ID  : String(40);
+                COMPONENT   : String(40);
+                PROFILE     : String(50);
+                OBJ_DEP     : String(30);
+            };
     }
+
     entity IP_PROFILEMETH_PARA {
-        key CREATED_DATE: Date;
-        FLAG        : String(1);
-        PROFILEPARA: array of {
-            PROFILE   : String(50);
-            METHOD    : String(50);
-            PARA_NAME : String(100);
-            INTVAL    : Integer;
-            DOUBLEVAL : Double;
-            STRVAL    : String(20);
-            PARA_DESC : String(1000);
-            PARA_DEP  : String(1000);
-            CREATED_DATE : Date   ;
-            CREATED_BY   : String(12);
-        };
+        key CREATED_DATE     : Date;
+            FLAG             : String(1);
+            PROFILEPARA      : array of {
+                PROFILE      : String(50);
+                METHOD       : String(50);
+                PARA_NAME    : String(100);
+                INTVAL       : Integer;
+                DOUBLEVAL    : Double;
+                STRVAL       : String(20);
+                PARA_DESC    : String(1000);
+                PARA_DEP     : String(1000);
+                CREATED_DATE : Date;
+                CREATED_BY   : String(12);
+            };
     }
+
     entity ODRESTRICT {
         key OBJ_DEP      : String(30)@title : 'Object Dependency';
         key OBJ_COUNTER  : Integer   @title : 'Object Dependency Counter';
@@ -510,15 +513,28 @@ context cp {
             OD_CONDITION : String(2) @title : 'Object Dependency condition ';
             ROW_ID       : Integer   @title : 'Attribute Index ';
     };
-    // entity PAL_MODEL_PARAMETERS {
-    //     key MODEL_TYPE : String(10)  @title : 'Model Type';
-    //     key PROFILE_ID : Integer     @title : 'Profile ID';
-    //     key PARA_NAME  : String(100) @title : 'Parameter Name';
-    //         INTVAL     : Integer;
-    //         DOUBLEVAL  : Double;
-    //         STRVAL     : String(20);
-    //         PARA_DESC  : String(1000)@title : 'Parameter Description';
-    // };
+
+    entity COMPQTYDETERMINE {
+        key LOCATION_ID  : String(4) @title : 'Location ID';
+        key PRODUCT_ID   : String(40)@title : 'Product ID';
+        key VERSION      : String(10)@title : 'Version';
+        key SCENARIO     : String(32)@title : 'Scenario';
+        key ITEM_NUM     : String(5) @title : 'Item Number ';
+        key COMPONENT    : String(40)@title : 'Component';
+        key CAL_DATE     : Date      @title : 'Weekly Date';
+            STRUC_NODE   : String(50)@title : 'Structure Node';
+            CAL_COMP_QTY : Integer   @title : 'Component Quantity before variation';
+            COMP_QTY     : Integer   @title : 'Component Quantity with variation';
+    }
+// entity PAL_MODEL_PARAMETERS {
+//     key MODEL_TYPE : String(10)  @title : 'Model Type';
+//     key PROFILE_ID : Integer     @title : 'Profile ID';
+//     key PARA_NAME  : String(100) @title : 'Parameter Name';
+//         INTVAL     : Integer;
+//         DOUBLEVAL  : Double;
+//         STRVAL     : String(20);
+//         PARA_DESC  : String(1000)@title : 'Parameter Description';
+// };
 }
 
 @cds.persistence.exists
@@ -548,171 +564,172 @@ entity![V_CLASSCHAR]{
     key![RANK]         : Double     @title : 'Rank';
 }
 
-@cds.persistence.exists 
-entity ![V_OBDHDR] {
-key     ![LOCATION_ID]: String(4)  @title: 'Location' ; 
-key     ![PRODUCT_ID]: String(40)  @title: 'Product' ; 
-key     ![COMPONENT]: String(40)  @title: 'COMPONENT' ; 
-key     ![OBJ_DEP]: String(30)  @title: 'Object Dependency' ; 
-key     ![OBJDEP_DESC]: String(30)  @title: 'OBJDEP_DESC' ;
-key     ![CLASS_NUM]: String(18)  @title: 'Internal Class Number' ; 
-key     ![CHAR_NUM]: String(10)  @title: 'Char Num' ; 
-key     ![CHARVAL_NUM]: String(10)  @title: 'Charval Num' ; 
-key     ![OD_CONDITION]: String(2)  @title: 'OD_CONDITION' ; 
-key     ![OBJ_COUNTER]: Integer  @title: 'OBJ_COUNTER' ; 
-key     ![CHAR_COUNTER]: Integer  @title: 'CHAR_COUNTER' ; 
-key     ![ROW_ID]: Integer  @title: 'ROW_ID' ; 
+@cds.persistence.exists
+entity![V_OBDHDR]{
+    key![LOCATION_ID]  : String(4) @title : 'Location';
+    key![PRODUCT_ID]   : String(40)@title : 'Product';
+    key![COMPONENT]    : String(40)@title : 'COMPONENT';
+    key![OBJ_DEP]      : String(30)@title : 'Object Dependency';
+    key![OBJDEP_DESC]  : String(30)@title : 'OBJDEP_DESC';
+    key![CLASS_NUM]    : String(18)@title : 'Internal Class Number';
+    key![CHAR_NUM]     : String(10)@title : 'Char Num';
+    key![CHARVAL_NUM]  : String(10)@title : 'Charval Num';
+    key![OD_CONDITION] : String(2) @title : 'OD_CONDITION';
+    key![OBJ_COUNTER]  : Integer   @title : 'OBJ_COUNTER';
+    key![CHAR_COUNTER] : Integer   @title : 'CHAR_COUNTER';
+    key![ROW_ID]       : Integer   @title : 'ROW_ID';
 }
 
-@cds.persistence.exists 
-Entity ![V_CLASSCHARVAL] {
-key     ![CLASS_NUM]: String(18)  @title: 'CLASS_NUM' ; 
-key     ![CLASS_NAME]: String(20)  @title: 'CLASS_NAME' ; 
-key     ![CHAR_NUM]: String(10)  @title: 'CHAR_NUM' ; 
-key     ![CHAR_NAME]: String(30)  @title: 'CHAR_NAME' ; 
-key     ![CHAR_VALUE]: String(70)  @title: 'CHAR_VALUE' ; 
-key     ![CHARVAL_NUM]: String(10)  @title: 'CHARVAL_NUM' ; 
+@cds.persistence.exists
+entity![V_CLASSCHARVAL]{
+    key![CLASS_NUM]   : String(18)@title : 'CLASS_NUM';
+    key![CLASS_NAME]  : String(20)@title : 'CLASS_NAME';
+    key![CHAR_NUM]    : String(10)@title : 'CHAR_NUM';
+    key![CHAR_NAME]   : String(30)@title : 'CHAR_NAME';
+    key![CHAR_VALUE]  : String(70)@title : 'CHAR_VALUE';
+    key![CHARVAL_NUM] : String(10)@title : 'CHARVAL_NUM';
 }
 
-@cds.persistence.exists 
-Entity ![V_PRODCLSCHAR] {
-key     ![PRODUCT_ID]: String(40)  @title: 'PRODUCT_ID' ; 
-key     ![LOCATION_ID]: String(4)  @title: 'LOCATION_ID' ; 
-key     ![CLASS_NUM]: String(18)  @title: 'CLASS_NUM' ; 
-key     ![CLASS_NAME]: String(20)  @title: 'CLASS_NAME' ; 
-key     ![PROD_DESC]: String(40)  @title: 'PROD_DESC' ; 
-key     ![PROD_FAMILY]: String(30)  @title: 'PROD_FAMILY' ; 
-key     ![PROD_GROUP]: String(30)  @title: 'PROD_GROUP' ; 
-key     ![PROD_MODEL]: String(30)  @title: 'PROD_MODEL' ; 
-key     ![PROD_MDLRANGE]: String(30)  @title: 'PROD_MDLRANGE' ; 
-key     ![PROD_SERIES]: String(30)  @title: 'PROD_SERIES' ; 
+@cds.persistence.exists
+entity![V_PRODCLSCHAR]{
+    key![PRODUCT_ID]    : String(40)@title : 'PRODUCT_ID';
+    key![LOCATION_ID]   : String(4) @title : 'LOCATION_ID';
+    key![CLASS_NUM]     : String(18)@title : 'CLASS_NUM';
+    key![CLASS_NAME]    : String(20)@title : 'CLASS_NAME';
+    key![PROD_DESC]     : String(40)@title : 'PROD_DESC';
+    key![PROD_FAMILY]   : String(30)@title : 'PROD_FAMILY';
+    key![PROD_GROUP]    : String(30)@title : 'PROD_GROUP';
+    key![PROD_MODEL]    : String(30)@title : 'PROD_MODEL';
+    key![PROD_MDLRANGE] : String(30)@title : 'PROD_MDLRANGE';
+    key![PROD_SERIES]   : String(30)@title : 'PROD_SERIES';
 }
 
 
-@cds.persistence.exists 
-Entity ![V_BOMODCOND] {
-key     ![LOCATION_ID]: String(4)  @title: 'LOCATION_ID' ; 
-key     ![PRODUCT_ID]: String(40)  @title: 'PRODUCT_ID' ; 
-key     ![ITEM_NUM]: String(5)  @title: 'ITEM_NUM' ; 
-key     ![COMPONENT]: String(40)  @title: 'COMPONENT' ; 
-key     ![OBJ_DEP]: String(42)  @title: 'OBJ_DEP' ; 
-key     ![OBJDEP_DESC]: String(30)  @title: 'OBJDEP_DESC' ; 
-key     ![COMP_QTY]: Decimal(13, 3)  @title: 'COMP_QTY' ; 
-key     ![VALID_FROM]: Date  @title: 'VALID_FROM' ; 
-key     ![VALID_TO]: Date  @title: 'VALID_TO' ; 
-// key     ![CLASS_NUM]: String(18)  @title: 'CLASS_NUM' ; 
-// key     ![CLASS_NAME]: String(20)  @title: 'CLASS_NAME' ; 
-// key     ![CHAR_NUM]: String(10)  @title: 'CHAR_NUM' ; 
-// key     ![CHAR_NAME]: String(30)  @title: 'CHAR_NAME' ; 
-// key     ![CHARVAL_NUM]: String(10)  @title: 'CHARVAL_NUM' ; 
-// key     ![CHAR_VALUE]: String(70)  @title: 'CHAR_VALUE' ; 
-// key     ![OD_CONDITION]: String(2)  @title: 'OD_CONDITION' ; 
-// key     ![CHAR_COUNTER]: Integer  @title: 'CHAR_COUNTER' ; 
-// key     ![ROW_ID]: Integer  @title: 'ROW_ID' ; 
+@cds.persistence.exists
+entity![V_BOMODCOND]{
+    key![LOCATION_ID] : String(4)     @title : 'LOCATION_ID';
+    key![PRODUCT_ID]  : String(40)    @title : 'PRODUCT_ID';
+    key![ITEM_NUM]    : String(5)     @title : 'ITEM_NUM';
+    key![COMPONENT]   : String(40)    @title : 'COMPONENT';
+    key![OBJ_DEP]     : String(42)    @title : 'OBJ_DEP';
+    key![OBJDEP_DESC] : String(30)    @title : 'OBJDEP_DESC';
+    key![COMP_QTY]    : Decimal(13, 3)@title : 'COMP_QTY';
+    key![VALID_FROM]  : Date          @title : 'VALID_FROM';
+    key![VALID_TO]    : Date          @title : 'VALID_TO';
+// key     ![CLASS_NUM]: String(18)  @title: 'CLASS_NUM' ;
+// key     ![CLASS_NAME]: String(20)  @title: 'CLASS_NAME' ;
+// key     ![CHAR_NUM]: String(10)  @title: 'CHAR_NUM' ;
+// key     ![CHAR_NAME]: String(30)  @title: 'CHAR_NAME' ;
+// key     ![CHARVAL_NUM]: String(10)  @title: 'CHARVAL_NUM' ;
+// key     ![CHAR_VALUE]: String(70)  @title: 'CHAR_VALUE' ;
+// key     ![OD_CONDITION]: String(2)  @title: 'OD_CONDITION' ;
+// key     ![CHAR_COUNTER]: Integer  @title: 'CHAR_COUNTER' ;
+// key     ![ROW_ID]: Integer  @title: 'ROW_ID' ;
 }
 
-@cds.persistence.exists 
-Entity ![V_ODPROFILES] {
-key     ![LOCATION_ID]: String(4)  @title: 'LOCATION_ID' ; 
-key     ![PRODUCT_ID]: String(40)  @title: 'PRODUCT_ID' ; 
-key     ![COMPONENT]: String(40)  @title: 'COMPONENT' ; 
-key     ![OBJ_DEP]: String(42)  @title: 'OBJ_DEP' ; 
-key     ![OBJDEP_DESC]: String(30)  @title: 'OBJDEP_DESC' ; 
-key     ![PROFILE]: String(50)  @title: 'PROFILE' ; 
+@cds.persistence.exists
+entity![V_ODPROFILES]{
+    key![LOCATION_ID] : String(4) @title : 'LOCATION_ID';
+    key![PRODUCT_ID]  : String(40)@title : 'PRODUCT_ID';
+    key![COMPONENT]   : String(40)@title : 'COMPONENT';
+    key![OBJ_DEP]     : String(42)@title : 'OBJ_DEP';
+    key![OBJDEP_DESC] : String(30)@title : 'OBJDEP_DESC';
+    key![PROFILE]     : String(50)@title : 'PROFILE';
 }
 
-@cds.persistence.exists 
-Entity ![V_SALESHCFG_CHARVAL] {
-key     ![SALES_DOC]: String(10)  @title: 'Sales Document' ; 
-key     ![SALESDOC_ITEM]: String(6)  @title: 'Sales Doc. Item' ; 
-key     ![DOC_CREATEDDATE]: Date  @title: 'Doc. Created Date' ; 
-key     ![SCHEDULELINE_NUM]: String(4)  @title: 'Schedule Line No.' ; 
-key     ![PRODUCT_ID]: String(40)  @title: 'Product ID' ; 
-// key     ![REASON_REJ]: String(2)  @title: 'Reason for Rej.' ; 
-key     ![UOM]: String(3)  @title: 'UOM' ; 
-key     ![CONFIRMED_QTY]: Decimal(13, 3)  @title: 'Confirmed Qty' ; 
-key     ![ORD_QTY]: Decimal(13, 3)  @title: 'Ordered Qty' ; 
-key     ![MAT_AVAILDATE]: Date  @title: 'Material Avail. Date' ; 
-key     ![NET_VALUE]: Decimal(15, 2)  @title: 'Net Value' ; 
-key     ![CUSTOMER_GROUP]: String(2)  @title: 'Customer Group' ; 
-key     ![LOCATION_ID]: String(4)  @title: 'Location ID' ; 
-key     ![CHAR_NAME]: String(30)  @title: 'Characteristic' ; 
-key     ![CHAR_VALUE]: String(70)  @title: 'Characteristic Value' ; 
-// key     ![CHANGED_DATE]: Date  @title: 'Changed Date' ; 
-// key     ![CHANGED_BY]: String(12)  @title: 'Changed By' ; 
-// key     ![CREATED_DATE]: Date  @title: 'Created Date' ; 
-// key     ![CREATED_BY]: String(12)  @title: 'Created By' ; 
-// key     ![CHANGED_TIME]: Time  @title: 'Changed Time' ; 
-// key     ![CREATED_TIME]: Time  @title: 'Created Time' ; 
-}
-@cds.persistence.exists 
-Entity ![V_ODCHARVAL] {
-key     ![OBJ_DEP]: String(42)  @title: 'OBJ_DEP' ; 
-key     ![CLASS_NUM]: String(18)  @title: 'CLASS_NUM' ; 
-key     ![CLASS_NAME]: String(20)  @title: 'CLASS_NAME' ; 
-key     ![CHAR_NUM]: String(10)  @title: 'CHAR_NUM' ; 
-key     ![CHAR_NAME]: String(30)  @title: 'CHAR_NAME' ; 
-key     ![CHARVAL_NUM]: String(10)  @title: 'CHARVAL_NUM' ; 
-key     ![CHAR_VALUE]: String(70)  @title: 'CHAR_VALUE' ; 
-key     ![OD_CONDITION]: String(2)  @title: 'OD_CONDITION' ; 
-key     ![CHAR_COUNTER]: Integer  @title: 'CHAR_COUNTER' ; 
-key     ![ROW_ID]: Integer  @title: 'ROW_ID' ; 
+@cds.persistence.exists
+entity![V_SALESHCFG_CHARVAL]{
+    key![SALES_DOC]        : String(10)    @title : 'Sales Document';
+    key![SALESDOC_ITEM]    : String(6)     @title : 'Sales Doc. Item';
+    key![DOC_CREATEDDATE]  : Date          @title : 'Doc. Created Date';
+    key![SCHEDULELINE_NUM] : String(4)     @title : 'Schedule Line No.';
+    key![PRODUCT_ID]       : String(40)    @title : 'Product ID';
+       // key     ![REASON_REJ]: String(2)  @title: 'Reason for Rej.' ;
+    key![UOM]              : String(3)     @title : 'UOM';
+    key![CONFIRMED_QTY]    : Decimal(13, 3)@title : 'Confirmed Qty';
+    key![ORD_QTY]          : Decimal(13, 3)@title : 'Ordered Qty';
+    key![MAT_AVAILDATE]    : Date          @title : 'Material Avail. Date';
+    key![NET_VALUE]        : Decimal(15, 2)@title : 'Net Value';
+    key![CUSTOMER_GROUP]   : String(2)     @title : 'Customer Group';
+    key![LOCATION_ID]      : String(4)     @title : 'Location ID';
+    key![CHAR_NAME]        : String(30)    @title : 'Characteristic';
+    key![CHAR_VALUE]       : String(70)    @title : 'Characteristic Value';
+// key     ![CHANGED_DATE]: Date  @title: 'Changed Date' ;
+// key     ![CHANGED_BY]: String(12)  @title: 'Changed By' ;
+// key     ![CREATED_DATE]: Date  @title: 'Created Date' ;
+// key     ![CREATED_BY]: String(12)  @title: 'Created By' ;
+// key     ![CHANGED_TIME]: Time  @title: 'Changed Time' ;
+// key     ![CREATED_TIME]: Time  @title: 'Created Time' ;
 }
 
-@cds.persistence.exists 
-Entity ![V_LOCPROD] {
-key     ![PRODUCT_ID]: String(40)  @title: 'PRODUCT_ID' ; 
-key     ![LOCATION_ID]: String(4)  @title: 'LOCATION_ID' ; 
-key     ![PROD_DESC]: String(40)  @title: 'PROD_DESC' ;
+@cds.persistence.exists
+entity![V_ODCHARVAL]{
+    key![OBJ_DEP]      : String(42)@title : 'OBJ_DEP';
+    key![CLASS_NUM]    : String(18)@title : 'CLASS_NUM';
+    key![CLASS_NAME]   : String(20)@title : 'CLASS_NAME';
+    key![CHAR_NUM]     : String(10)@title : 'CHAR_NUM';
+    key![CHAR_NAME]    : String(30)@title : 'CHAR_NAME';
+    key![CHARVAL_NUM]  : String(10)@title : 'CHARVAL_NUM';
+    key![CHAR_VALUE]   : String(70)@title : 'CHAR_VALUE';
+    key![OD_CONDITION] : String(2) @title : 'OD_CONDITION';
+    key![CHAR_COUNTER] : Integer   @title : 'CHAR_COUNTER';
+    key![ROW_ID]       : Integer   @title : 'ROW_ID';
 }
 
-@cds.persistence.exists 
-Entity ![V_TSODCHAR_H] {
-key     ![CAL_DATE]: Date  @title: 'CAL_DATE' ; 
-key     ![OBJ_DEP]: String(30)  @title: 'OBJ_DEP' ; 
-key     ![OBJ_COUNTER]: Integer  @title: 'OBJ_COUNTER' ; 
-key     ![SUCCESS]: Integer  @title: 'SUCCESS' ; 
-key     ![ROW_ID]: Integer  @title: 'ROW_ID' ; 
-key     ![CHAR_SUCCESS]: Integer  @title: 'CHAR_SUCCESS' ; 
+@cds.persistence.exists
+entity![V_LOCPROD]{
+    key![PRODUCT_ID]  : String(40)@title : 'PRODUCT_ID';
+    key![LOCATION_ID] : String(4) @title : 'LOCATION_ID';
+    key![PROD_DESC]   : String(40)@title : 'PROD_DESC';
 }
 
-@cds.persistence.exists 
-Entity ![V_TSODCHAR_F] {
-key     ![CAL_DATE]: Date  @title: 'CAL_DATE' ; 
-key     ![OBJ_DEP]: String(30)  @title: 'OBJ_DEP' ; 
-key     ![OBJ_COUNTER]: Integer  @title: 'OBJ_COUNTER' ; 
-key     ![VERSION]: String(10)  @title: 'VERSION' ; 
-key     ![SCENARIO]: String(32)  @title: 'SCENARIO' ; 
-key     ![PREDICTED]: Double  @title: 'PREDICTED' ; 
-key     ![ROW_ID]: Integer  @title: 'ROW_ID' ; 
-key     ![CHAR_SUCCESS]: Integer  @title: 'CHAR_SUCCESS' ; 
+@cds.persistence.exists
+entity![V_TSODCHAR_H]{
+    key![CAL_DATE]     : Date      @title : 'CAL_DATE';
+    key![OBJ_DEP]      : String(30)@title : 'OBJ_DEP';
+    key![OBJ_COUNTER]  : Integer   @title : 'OBJ_COUNTER';
+    key![SUCCESS]      : Integer   @title : 'SUCCESS';
+    key![ROW_ID]       : Integer   @title : 'ROW_ID';
+    key![CHAR_SUCCESS] : Integer   @title : 'CHAR_SUCCESS';
 }
 
-@cds.persistence.exists 
-Entity ![V_ODRESTRICT] {
-key     ![OBJ_DEP]: String(30)  @title: 'Object Dependency' ; 
-key     ![OBJ_COUNTER]: Integer  @title: 'Object Counter' ; 
-key     ![CLASS_NUM]: String(18)  @title: 'Internal No. Class ' ; 
-key     ![CLASS_NAME]: String(20)  @title: 'Class Name' ; 
-key     ![CHAR_NUM]: String(10)  @title: 'Internal No. Characteristic' ; 
-key     ![CHAR_NAME]: String(30)  @title: 'Characteristic Name' ; 
-key     ![CHARVAL_NUM]: String(10)  @title: 'Internal No. Characteristic value' ; 
-key     ![CHAR_VALUE]: String(70)  @title: 'Characteristic Value' ; 
-key     ![OD_CONDITION]: String(2)  @title: 'Object Dep. Condition' ; 
-key     ![CHAR_COUNTER]: Integer  @title: 'Characteristic Counter' ; 
-key     ![ROW_ID]: Integer  @title: 'Row ID' ; 
+@cds.persistence.exists
+entity![V_TSODCHAR_F]{
+    key![CAL_DATE]     : Date      @title : 'CAL_DATE';
+    key![OBJ_DEP]      : String(30)@title : 'OBJ_DEP';
+    key![OBJ_COUNTER]  : Integer   @title : 'OBJ_COUNTER';
+    key![VERSION]      : String(10)@title : 'VERSION';
+    key![SCENARIO]     : String(32)@title : 'SCENARIO';
+    key![PREDICTED]    : Double    @title : 'PREDICTED';
+    key![ROW_ID]       : Integer   @title : 'ROW_ID';
+    key![CHAR_SUCCESS] : Integer   @title : 'CHAR_SUCCESS';
 }
 
-@cds.persistence.exists 
-Entity ![V_BOMPVS] {
-key     ![LOCATION_ID]: String(4)  @title: 'LOCATION_ID' ; 
-key     ![PRODUCT_ID]: String(40)  @title: 'PRODUCT_ID' ; 
-key     ![ITEM_NUM]: String(5)  @title: 'ITEM_NUM' ; 
-key     ![COMPONENT]: String(40)  @title: 'COMPONENT' ; 
-key     ![COMP_QTY]: Decimal(13, 3)  @title: 'COMP_QTY' ; 
-key     ![VALID_FROM]: Date  @title: 'VALID_FROM' ; 
-key     ![VALID_TO]: Date  @title: 'VALID_TO' ; 
-key     ![STRUC_NODE]: String(50)  @title: 'STRUC_NODE' ; 
+@cds.persistence.exists
+entity![V_ODRESTRICT]{
+    key![OBJ_DEP]      : String(30)@title : 'Object Dependency';
+    key![OBJ_COUNTER]  : Integer   @title : 'Object Counter';
+    key![CLASS_NUM]    : String(18)@title : 'Internal No. Class ';
+    key![CLASS_NAME]   : String(20)@title : 'Class Name';
+    key![CHAR_NUM]     : String(10)@title : 'Internal No. Characteristic';
+    key![CHAR_NAME]    : String(30)@title : 'Characteristic Name';
+    key![CHARVAL_NUM]  : String(10)@title : 'Internal No. Characteristic value';
+    key![CHAR_VALUE]   : String(70)@title : 'Characteristic Value';
+    key![OD_CONDITION] : String(2) @title : 'Object Dep. Condition';
+    key![CHAR_COUNTER] : Integer   @title : 'Characteristic Counter';
+    key![ROW_ID]       : Integer   @title : 'Row ID';
+}
+
+@cds.persistence.exists
+entity![V_BOMPVS]{
+    key![LOCATION_ID] : String(4)     @title : 'LOCATION_ID';
+    key![PRODUCT_ID]  : String(40)    @title : 'PRODUCT_ID';
+    key![ITEM_NUM]    : String(5)     @title : 'ITEM_NUM';
+    key![COMPONENT]   : String(40)    @title : 'COMPONENT';
+    key![COMP_QTY]    : Decimal(13, 3)@title : 'COMP_QTY';
+    key![VALID_FROM]  : Date          @title : 'VALID_FROM';
+    key![VALID_TO]    : Date          @title : 'VALID_TO';
+    key![STRUC_NODE]  : String(50)    @title : 'STRUC_NODE';
 }
 /*
 @cds.persistence.exists
