@@ -125,7 +125,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
     entity getODCharF          as projection on V_TSODCHAR_F;
 
     //Component requirement qunatity determination
-    function getCompreq(LOCATION_ID:String(4), PRODUCT_ID:String(40), VERSION : String(10), SCENARIO    : String(32) ) returns String;
+    function getCompreqQty(LOCATION_ID:String(4), PRODUCT_ID:String(40), VERSION : String(10), SCENARIO    : String(32) ) returns String;
     // Create PVS node structure
     function genpvs(NODE_TYPE : String(2), CHILD_NODE : String(50), PARENT_NODE : String(50), ACCESS_NODES: String(50), NODE_DESC:String(200), UPPERLIMIT: Integer, LOWERLIMIT: Integer, FLAG: String(1)) returns array of getPVSNodes;
     // Generate Timeseries
@@ -139,7 +139,9 @@ service CatalogService @(impl : './lib/cat-service.js') {
     function genODHistory(OBJ_DEP:String(30),OBJ_COUNTER:String(10)) returns array of ds.odhistory;
     // Generate OD Future timeseries
     function genODFuture(OBJ_DEP:String(30),OBJ_COUNTER:String(10)) returns array of ds.odfuture;
+
+    function getCompReqFWeekly(LOCATION_ID:String(4), PRODUCT_ID:String(40), VERSION : String(10), SCENARIO    : String(32)) returns ds.compreq;
     // dummy testcase
-    action gen_timeseries() returns String;
+    // action gen_timeseries() returns String;
 
 }

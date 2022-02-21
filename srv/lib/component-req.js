@@ -38,7 +38,16 @@ class ComponentReq {
                 "STRUC_NODE" ASC`
     );
     const liBomoddemd = await cds.run(
-      `SELECT *
+      `SELECT A."ORD_QTY",
+      A."LOCATION_ID",
+      A."PRODUCT_ID",
+      A."ITEM_NUM",
+      A."COMPONENT",
+      A."COMP_QTY",
+      A."VERSION",
+      A."SCENARIO",
+      A."CAL_DATE",
+      B."STRUC_NODE"
         FROM "V_BOMIBPDEMD" AS A
         INNER JOIN CP_PVS_BOM AS B
         ON A.LOCATION_ID = B.LOCATION_ID
@@ -93,17 +102,37 @@ class ComponentReq {
           liCompQty.push(GenFunctions.parse(lsCompQty));
           await cds.run(
             DELETE.from("CP_COMPQTYDETERMINE").where({
-                xpr: [
-                { ref: ["LOCATION_ID"] }, "=", { val: liBomoddemd[j].LOCATION_ID }, 'AND',
-                { ref: ["PRODUCT_ID"] }, "=", { val: liBomoddemd[j].PRODUCT_ID }, 'AND',
-                { ref: ["VERSION"] }, "=", { val: liBomoddemd[j].VERSION }, 'AND',
-                { ref: ["SCENARIO"] }, "=", { val: liBomoddemd[j].SCENARIO }, 'AND',
-                { ref: ["ITEM_NUM"] }, "=", { val: liBomoddemd[j].ITEM_NUM }, 'AND',
-                { ref: ["COMPONENT"] }, "=", { val: liBomoddemd[j].COMPONENT },  'AND',
-                { ref: ["CAL_DATE"] }, "=", { val: liBomoddemd[j].CAL_DATE }
-                ],
+              xpr: [
+                { ref: ["LOCATION_ID"] },
+                "=",
+                { val: liBomoddemd[j].LOCATION_ID },
+                "AND",
+                { ref: ["PRODUCT_ID"] },
+                "=",
+                { val: liBomoddemd[j].PRODUCT_ID },
+                "AND",
+                { ref: ["VERSION"] },
+                "=",
+                { val: liBomoddemd[j].VERSION },
+                "AND",
+                { ref: ["SCENARIO"] },
+                "=",
+                { val: liBomoddemd[j].SCENARIO },
+                "AND",
+                { ref: ["ITEM_NUM"] },
+                "=",
+                { val: liBomoddemd[j].ITEM_NUM },
+                "AND",
+                { ref: ["COMPONENT"] },
+                "=",
+                { val: liBomoddemd[j].COMPONENT },
+                "AND",
+                { ref: ["CAL_DATE"] },
+                "=",
+                { val: liBomoddemd[j].CAL_DATE },
+              ],
             })
-        );
+          );
         }
       }
       // }
@@ -115,10 +144,10 @@ class ComponentReq {
       } catch (error) {
         iresult = "Failed to generate Component requirements";
       }
-    }
-    else{
-    iresult = "No data fetched";
+    } else {
+      iresult = "No data fetched";
     }
   }
+  async genCompReqWeekly(adata, iresult) {}
 }
 module.exports = ComponentReq;
