@@ -5,7 +5,7 @@
     <Page id="idClassChar">
         <customHeader>
             <Toolbar height="50%">
-                <Title id="struTitle" text=""></Title>
+                <Title id="struTitle" text="Structure Node - View Nod" class="boldText"></Title>
                 <ToolbarSpacer/>
                 <Button id="idAssign" text="Assign" press="onAssign" tooltip="Assign to View Node"/>
                 <Button id="idAstru" icon="sap-icon://add" press="onStruNode" tooltip="Add Structure Node"/>
@@ -88,6 +88,14 @@
 							<t:template>
 								<HBox justifyContent="Center" visible="{= ${children}.length === 0 ? true : !${_isParent}}">
 								<Text text="{NODE_DESC}"/>
+								</HBox>
+							</t:template>
+						</t:Column>
+                        <t:Column hAlign="Center">
+							<Label text=""/>
+							<t:template>
+								<HBox visible="{= ${children}.length === 0 ? true : !${_isParent}}">								
+								<Button press="onStruViewDelete" icon="sap-icon://delete" tooltip="Unassign Structure Node"  />
 								</HBox>
 							</t:template>
 						</t:Column>

@@ -10,3 +10,7 @@ div#__xmlview3--struTitle {
 .boldText {
     font-weight: bold !important;
 }
+
+header#__xmlview1--accessList-header {
+    font-weight: bold;
+}

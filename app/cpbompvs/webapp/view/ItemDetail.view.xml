@@ -5,7 +5,7 @@
     <Page id="idClassChar" >
     <customHeader>
 			<Toolbar height="50%">
-				<Title id="struTitle" text="BOM-Structure Nodes" class="ClassHead"></Title>
+				<Title id="struTitle" text="BOM-Structure Nodes" class="boldText"></Title>
 				<ToolbarSpacer/>
                 <Button text="Assign" press="onAssign" tooltip="Assign Structure Node"/>
 			</Toolbar>

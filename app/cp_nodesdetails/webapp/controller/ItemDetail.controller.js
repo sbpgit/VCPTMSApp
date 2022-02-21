@@ -32,7 +32,7 @@ sap.ui.define([
             that.viewNodeData = [];
             that.struviewNodeData = [];
 
-            this.byId("struTitle").setText("Structure Node - View Node");
+            // this.byId("struTitle").setText("Structure Node - View Node");
 
                 for(var i=0; i< stuData.length; i++){
                     if(stuData[i].PARENT_NODE === selItem){
@@ -156,7 +156,7 @@ sap.ui.define([
             var query =
               oEvent.getParameter("value") || oEvent.getParameter("newValue"),
             oFilters = [];
-
+            query = query ? query.trim() : "";
           if (query !== "") {
             oFilters.push(
               new Filter({
@@ -253,9 +253,33 @@ sap.ui.define([
         },
 
         onViewNodeClose:function(){
-            that._oViewNode.close();
-            that._oViewNode.destroy(true);
-            that._oViewNode="";
+            sap.ui.getCore().byId("ViewList")._searchField.setValue("");
+            if (that._oViewNode.getBinding("items")) {
+                that._oViewNode.getBinding("items").filter([]);
+              }
+
+        },
+
+        handleViewSearch:function(oEvent){
+            var query =
+                oEvent.getParameter("value") || oEvent.getParameter("newValue"),
+              sId = oEvent.getParameter("id"),
+              oFilters = [];
+            // Check if search filter is to be applied
+            query = query ? query.trim() : "";
+ 
+              if (query !== "") {
+                oFilters.push(
+                  new Filter({
+                    filters: [
+                      new Filter("CHILD_NODE", FilterOperator.Contains, query),
+                      new Filter("NODE_DESC", FilterOperator.Contains, query),
+                    ],
+                    and: false,
+                  })
+                );
+              }
+              that._oViewNode.getBinding("items").filter(oFilters);
 
         },
 
@@ -272,6 +296,8 @@ sap.ui.define([
                 that._oStruNode.setTitle("Structure Node Creation");
                 sap.ui.getCore().byId("idStruNode").setValue("");
                 sap.ui.getCore().byId("idStruDesc").setValue("");
+                sap.ui.getCore().byId("idLower").setValue("");
+                sap.ui.getCore().byId("idUpper").setValue("");
                 oGModel.setProperty("/sFlag", "C");
                 that._oStruNode.open();
 
@@ -343,7 +369,20 @@ sap.ui.define([
             var AccessNode = sap.ui.getCore().byId("idAccNode").getValue(),
                 StructureNode = sap.ui.getCore().byId("idStruNode").getValue(),
                 Desc = sap.ui.getCore().byId("idStruDesc").getValue(),
-                flag = oGModel.getProperty("/sFlag");
+                flag = oGModel.getProperty("/sFlag"),
+                lower, upper;
+
+                if(sap.ui.getCore().byId("idLower").getValue() === ""){
+                    lower =sap.ui.getCore().byId("idLower").getPlaceholder();
+                } else {
+                    lower = sap.ui.getCore().byId("idLower").getValue();
+                }
+
+                if(sap.ui.getCore().byId("idUpper").getValue() === ""){
+                    upper =sap.ui.getCore().byId("idUpper").getPlaceholder();
+                } else {
+                    upper = sap.ui.getCore().byId("idUpper").getValue();
+                }
 
                 that.getModel("BModel").callFunction("/genpvs", {
                     method: "GET",
@@ -375,8 +414,10 @@ sap.ui.define([
         onAssignViewNode:function(oEvent){
             var struNode = oGModel.getProperty("/selstrNode");
             var struNodeDesc = oGModel.getProperty("/selstrNodeDesc");
-            var viewNode = sap.ui.getCore().byId("ViewList").getSelectedItem().getCells()[0].getTitle();
-            var viewNodeDesc = sap.ui.getCore().byId("ViewList").getSelectedItem().getCells()[0].getText(),
+            // var viewNode = sap.ui.getCore().byId("ViewList").getSelectedItem().getCells()[0].getTitle();
+            // var viewNodeDesc = sap.ui.getCore().byId("ViewList").getSelectedItem().getCells()[0].getText(),
+            var viewNode = oEvent.getParameter("selectedItems")[0].getTitle();
+            var viewNodeDesc = oEvent.getParameter("selectedItems")[0].getDescription(),
             accessNode = oGModel.getProperty("/SelectedAccessNode");
 
             var Desc = viewNodeDesc + " " + "-" + " " + struNodeDesc;
@@ -392,7 +433,7 @@ sap.ui.define([
                   FLAG: "C"
                 },
                 success: function (oData) {
-                    MessageToast.show("Successfully assigned structure node to view node");
+                    MessageToast.show(data.d.results[0].value);
                     that.onViewNodeClose();
                     that.bus.publish("data", "refreshMaster");
                   sap.ui.core.BusyIndicator.hide();
@@ -402,6 +443,36 @@ sap.ui.define([
                   sap.ui.core.BusyIndicator.hide();
                 },
               });
+
+        },
+
+        onStruViewDelete:function(oEvent){
+            var oBinding = oEvent.getSource().getParent().getBindingContext(),
+                viewNode = oBinding.getObject().PARENT_NODE,
+                struNode = oBinding.getObject().CHILD_NODE,
+                accessNode = oBinding.getObject().ACCESS_NODES;
+
+                that.getModel("BModel").callFunction("/genpvs", {
+                    method: "GET",
+                    urlParameters: {
+                      CHILD_NODE: struNode,
+                      PARENT_NODE: viewNode,
+                      ACCESS_NODES: accessNode,
+                      NODE_TYPE: "VS",
+                      FLAG: "D"
+                    },
+                    success: function (oData) {
+                        MessageToast.show(data.d.results[0].value);
+                        that.onViewNodeClose();
+                        that.bus.publish("data", "refreshMaster");
+                      sap.ui.core.BusyIndicator.hide();
+                    },
+                    error: function (oData) {
+                      MessageToast.show("Failed to unassign structure node");
+                      sap.ui.core.BusyIndicator.hide();
+                    },
+                  });
+
 
         },
 
