@@ -223,7 +223,7 @@ sap.ui.define(
                 ACCESS_NODES: accesNode,
                 NODE_TYPE: "AN",
                 NODE_DESC: desc,
-                FLAG: flag
+                FLAG: flag,
               },
               success: function (oData) {
               //   sap.ui.core.BusyIndicator.hide();

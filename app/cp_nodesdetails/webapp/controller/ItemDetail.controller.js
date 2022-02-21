@@ -392,6 +392,8 @@ sap.ui.define([
                       ACCESS_NODES: AccessNode,
                       NODE_TYPE: "SN",
                       NODE_DESC: Desc,
+                      LOWERLIMIT:lower,
+                      UPPERLIMIT:upper,
                       FLAG: flag
                     },
                     success: function (oData) {

@@ -26,13 +26,20 @@ sap.ui.define([
             oGModel = that.getOwnerComponent().getModel("oGModel");
 
             that.byId("sturList").removeSelections();
+            var date = new Date().toLocaleDateString();
+
+            that.byId("fromDate").setValue("01/01/2000");
 
             var selLoc = oGModel.getProperty("/SelectedLoc");
             var selProd = oGModel.getProperty("/SelectedProd");
+            var fromDate = new Date(that.byId("fromDate").getValue()),
+                toDate = new Date(that.byId("toDate").getValue());
             this.getModel("BModel").read("/getPVSBOM", {
                 filters: [
                     new Filter("PRODUCT_ID", FilterOperator.EQ, selProd),
                     new Filter("LOCATION_ID", FilterOperator.EQ, selLoc),
+                    // new Filter("VALID_FROM", FilterOperator.EQ, fromDate),
+                    // new Filter("VALID_TO", FilterOperator.EQ, toDate),
                   ],
                 success: function (oData) {
                     sap.ui.core.BusyIndicator.hide();
