@@ -62,7 +62,7 @@ sap.ui.define([
                         CHILD_NODE: "No Structure Node assigned",
                         NODE_DESC: "",
                         NODE_TYPE: "",
-                        PARENT_NODE: ViewData[j].CHILD_NODE,
+                        PARENT_NODE: that.viewNodeData[j].CHILD_NODE,
                         createdAt: null,
                         createdBy: null,
                         modifiedAt: null,
