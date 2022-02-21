@@ -1,0 +1,7 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns:l="sap.ui.layout"
+	xmlns:f="sap.ui.layout.form" xmlns:u="sap.ui.unified">
+		<SelectDialog id="sturList" title="Structure Nodes" search="handleStruSearch" liveChange="handleStruSearch" rememberSelections="false"
+		confirm="handleStruSelection" cancel="handleClose" items="{/results}">
+		<StandardListItem title="{CHILD_NODE}" description="{NODE_DESC}" type="Active"/>
+	</SelectDialog>
+</core:FragmentDefinition>

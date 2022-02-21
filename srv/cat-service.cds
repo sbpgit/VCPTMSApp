@@ -67,7 +67,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
     entity getCharval           as projection on V_CHARVAL;
 
     // @odata.draft.enabled
-    entity getNodes       as projection on od.ACCESS_NODES;
+    //entity getNodes       as projection on od.ACCESS_NODES;
     entity getPVSNodes       as projection on od.PVS_NODES;
 
     @odata.draft.enabled
@@ -124,9 +124,11 @@ service CatalogService @(impl : './lib/cat-service.js') {
     entity getODCharH          as projection on V_TSODCHAR_H;
     entity getODCharF          as projection on V_TSODCHAR_F;
 
-
+    //function getCompreq() returns ds.compreq;
     //function createProf() returns String;
-    function genpvs(NODE_TYPE : String(2), CHILD_NODE : String(50), PARENT_NODE : String(50), ACCESS_NODES: String(50), NODE_DESC:String(200),FLAG: String(1)) returns array of getNodes;
+    function getCompreq(LOCATION_ID:String(4), PRODUCT_ID:String(40), VERSION : String(10), SCENARIO    : String(32) ) returns String;
+    
+    function genpvs(NODE_TYPE : String(2), CHILD_NODE : String(50), PARENT_NODE : String(50), ACCESS_NODES: String(50), NODE_DESC:String(200),FLAG: String(1)) returns array of getPVSNodes;
     // function fGetNodeDet(NODE_TYPE : String(2), CHILD_NODE : String(50), PARENT_NODE : String(50)) returns array of getAccessNodes;
     function generate_timeseries() returns String;
     function get_objdep() returns array of ds.objectDep; //objectDep;
