@@ -23,6 +23,7 @@ sap.ui.define([
 		onAfterRendering: function () {
             oGModel = that.getOwnerComponent().getModel("oGModel");
             this.byId("sturList").removeSelections();
+            that.byId("detailNode").setSelectedKey("struNode");
 
             var selItem = oGModel.getProperty("/SelectedAccessNode");
             var stuData = oGModel.getProperty("/struNodeData");
@@ -346,8 +347,10 @@ sap.ui.define([
                     PARENT_NODE: accessNode,
                     ACCESS_NODES: accessNode,
                     NODE_TYPE: "SN",
-                    NODE_DESC: "",
-                    FLAG: "D",
+                      NODE_DESC: "",
+                      LOWERLIMIT:0,
+                      UPPERLIMIT:0,
+                      FLAG: "D",
                   },
                   success: function (oData) {
                     MessageToast.show("Structure node deleted successfully");
@@ -463,7 +466,10 @@ sap.ui.define([
                       PARENT_NODE: viewNode,
                       ACCESS_NODES: accessNode,
                       NODE_TYPE: "VS",
-                      FLAG: "D"
+                      NODE_DESC: "",
+                      LOWERLIMIT:0,
+                      UPPERLIMIT:0,
+                      FLAG: "D",
                     },
                     success: function (oData) {
                         MessageToast.show(data.d.results[0].value);
