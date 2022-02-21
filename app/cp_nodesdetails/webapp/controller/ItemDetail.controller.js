@@ -432,6 +432,8 @@ sap.ui.define([
                   ACCESS_NODES: accessNode,
                   NODE_TYPE: "VS",
                   NODE_DESC: Desc,
+                  LOWERLIMIT:0,
+                  UPPERLIMIT:0,
                   FLAG: "C"
                 },
                 success: function (oData) {
@@ -510,6 +512,8 @@ sap.ui.define([
                   ACCESS_NODES: accessNode,
                   NODE_TYPE: "VN",
                   NODE_DESC: nodeDesc,
+                  LOWERLIMIT:0,
+                  UPPERLIMIT:0,
                   FLAG: "C"
                 },
                 success: function (oData) {
