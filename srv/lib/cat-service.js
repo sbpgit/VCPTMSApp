@@ -78,6 +78,8 @@ module.exports = (srv) => {
         lsresults.NODE_TYPE = req.data.NODE_TYPE;
         lsresults.NODE_DESC = req.data.NODE_DESC;
         lsresults.AUTH_GROUP = "";
+        lsresults.UPPERLIMIT = req.data.UPPERLIMIT;
+        lsresults.LOWERLIMIT = req.data.LOWERLIMIT;
         liresults.push(lsresults);
         try {
           await cds.run(INSERT.into("CP_PVS_NODES").entries(liresults));
@@ -351,6 +353,7 @@ async function _createCompStrcNode(req) {
   if (req.data.STRUC_NODE === "D") {
     lsresults.LOCATION_ID = req.data.LOCATION_ID;
     lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
+    lsresults.ITEM_NUM = req.data.ITEM_NUM;
     lsresults.COMPONENT = req.data.COMPONENT;
     try {
       await cds.delete("CP_PVS_BOM", lsresults);
@@ -364,6 +367,7 @@ async function _createCompStrcNode(req) {
   } else {
     lsresults.LOCATION_ID = req.data.LOCATION_ID;
     lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
+    lsresults.ITEM_NUM = req.data.ITEM_NUM;
     lsresults.COMPONENT = req.data.COMPONENT;
     lsresults.STRUC_NODE = req.data.STRUC_NODE;
     liresults.push(lsresults);
