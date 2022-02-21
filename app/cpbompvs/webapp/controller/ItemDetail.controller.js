@@ -28,6 +28,9 @@ sap.ui.define([
             sap.ui.core.BusyIndicator.show();
             oGModel = that.getOwnerComponent().getModel("oGModel");
 
+            that.byId("detailNode").setSelectedKey("assignNode");
+                that.byId("idDates").setVisible(true);
+
             that.byId("sturList").removeSelections();
 
             var selLoc = oGModel.getProperty("/SelectedLoc");
@@ -127,6 +130,45 @@ sap.ui.define([
         }
         
         oGModel.setProperty("/reqData", oFinData);
+
+        },
+
+         onStruNodeSearch:function(oEvent){
+            var sValue = oEvent.getParameter("value") || oEvent.getParameter("newValue"),
+				aData = oGModel.getProperty("/tableData"),
+				aResults = [];
+				
+			if (sValue && sValue.trim() !== "") {
+				sValue = sValue.trim().toLocaleUpperCase();
+				// for (var i = aData.length - 1; i >= 0; i--) {
+                for(var i=0; i<aData.length; i++){
+					if (aData[i].STRUC_NODE.includes(sValue) ||
+						aData[i].COMPONENT.includes(sValue)) {
+						aResults.push(aData[i]);
+					}
+				}
+			} else {
+				aResults = aData;
+			}
+			
+			that.aReqTabData({results: aResults});
+
+            var oReqData = oGModel.getProperty("/reqData");
+
+            that.oStruModelDetail.setData({
+                struDetailresults: oReqData.Requests,
+              });
+
+        },
+
+        onTabChange:function(oEvent){
+            var seleTab = that.byId("detailNode").getSelectedKey();
+            if(seleTab === "assignNode"){
+                that.byId("idDates").setVisible(true);
+
+            } else if(seleTab === "StruNodeDetail"){
+                that.byId("idDates").setVisible(false);
+            }
 
         },
 

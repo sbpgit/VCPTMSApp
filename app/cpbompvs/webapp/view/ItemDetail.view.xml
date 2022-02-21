@@ -33,7 +33,7 @@
                     
                     </HBox>
 
-                    <HBox>
+                    <HBox id="idDates">
                         <Text text="{i18n>validfrom} : " class="boldText"></Text>
 						<!-- <Input id="fromDate" placeholder="MM/DD/YYYY" value="" /> -->
                         <DatePicker id="fromDate" width="auto"  displayFormat="yyyy-MM-dd" change="handleDateChange"/>
@@ -53,7 +53,7 @@
             <content>
             <IconTabBar id="detailNode" expanded="true" select="onTabChange" class="sapUiResponsiveContentPadding">
                 <items>
-                    <IconTabFilter id="struNodeTab" text="Assign Nodes" key="struNode" icon="sap-icon://create-form">
+                    <IconTabFilter id="assignNodeTab" text="Assign Nodes" key="assignNode" icon="sap-icon://create-form">
                     <SearchField id="idDetailSearch" liveChange="onDetailSearch" placeholder="Compponent/ Structure Node"/>
                     <Table id="sturList" items="{path: '/results'}" mode="SingleSelectMaster">
                     
@@ -97,7 +97,7 @@
                     </Table>
 
              </IconTabFilter>
-                    <IconTabFilter id="viewNodeTab" text="Structure Node Details" key="viewNode" icon="sap-icon://org-chart">
+                    <IconTabFilter id="StruNodeDetailTab" text="Structure Node Details" key="StruNodeDetail" icon="sap-icon://org-chart">
                     <SearchField id="idStruNodeDetails" liveChange="onStruNodeSearch" placeholder="Structure Node/ Component"/>
                     <t:TreeTable id="StrunodeTable" enableSelectAll="false" ariaLabelledBy="title" selectionMode="None"
 					visibleRowCount="15"  
