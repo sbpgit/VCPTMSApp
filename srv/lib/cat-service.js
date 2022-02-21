@@ -41,24 +41,30 @@ module.exports = (srv) => {
   srv.on("genpvs", async (req) => {
     let { getPVSNodes } = srv.entities;
     let liresults = [];
-    let liresults_t = [];
     let lsresults = {};
+    let lireturn = [];
     let createResults = [];
     let res;
     let flagvs;
     var responseMessage;
     res = req._.req.res;
-    if (req.data.NODE_TYPE === "VS") {
-      liresults = await cds.run(
-        `SELECT *
-            FROM CP_PVS_NODES
+    if (req.data.NODE_TYPE === "VS" && req.data.FLAG !== "D" ) {
+        // liresults_t = await cds.run(SELECT.from("CP_PVS_NODES") .where ({CHILD_NODE: { in:req.data.CHILD_NODE}, and: { 
+        //    PARENT_NODE: { in:req.data.PARENT_NODE }}}))
+      const lires= await cds.run(
+        `SELECT "CHILD_NODE",
+        "PARENT_NODE",
+        "ACCESS_NODES",
+        "NODE_TYPE",
+        "NODE_DESC",
+        "AUTH_GROUP",
+        "UPPERLIMIT",
+        "LOWERLIMIT"
+            FROM "CP_PVS_NODES"
             WHERE "CHILD_NODE" = '` +
           req.data.CHILD_NODE +
-          `' AND "PARENT_NODE = '` +
-          req.data.PARENT_NODE +
-          `'`
-      );
-      if (liresults.length > 0) {
+          `' AND "NODE_TYPE" = 'VS'` );
+      if (lires.length > 0) {
         flagvs = "X";
       }
     }
@@ -103,11 +109,11 @@ module.exports = (srv) => {
         }
         lsresults = {};
       }
-      liresults = await cds.transaction(req).run(SELECT.from(getPVSNodes));
+      lireturn = await cds.transaction(req).run(SELECT.from(getPVSNodes));
     } else {
-      li_results = [];
+      //Do nothing
     }
-    return liresults;
+    return lireturn;
     // res.send({ value: createResults });
   });
   // Service for OD History

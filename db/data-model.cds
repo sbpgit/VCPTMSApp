@@ -83,10 +83,29 @@ context cp {
             VALID_FROM  : Date          @title : 'Valid From';
             VALID_TO    : Date          @title : 'Valid To';
     };
+ entity PRODRESTRICT : managed {
+        key LOCATION_ID : String(4)     @title : 'Location '; //Association to ZLOCATION;//
+        key PRODUCT_ID  : String(40)    @title : 'Product';
+        key RESTRICTION  : String(30)@title : 'Restriction';
+        key RTR_COUNTER  : Integer   @title : 'Restriction Counter';
+            RTR_QTY    : Decimal(13, 3)@title : 'Component Quantity';
+            VALID_FROM  : Date          @title : 'Valid From';
+            VALID_TO    : Date          @title : 'Valid To';
+    };
 
     entity OBJDEP_HEADER {
         key OBJ_DEP      : String(30)@title : 'Object Dependency';
         key OBJ_COUNTER  : Integer   @title : 'Object Dependency Counter';
+        key CLASS_NUM    : String(18)@title : 'Internal class number';
+        key CHAR_NUM     : String(10)@title : 'Internal Char. number';
+        key CHAR_COUNTER : Integer   @title : 'Characteristic counter';
+        key CHARVAL_NUM  : String(10)@title : 'Internal Char. number';
+            OD_CONDITION : String(2) @title : 'Object Dependency condition ';
+            ROW_ID       : Integer   @title : 'Attribute Index ';
+    };
+    entity RESTRICT_HEADER {
+        key RESTRICTION  : String(30)@title : 'Restriction';
+        key RTR_COUNTER  : Integer   @title : 'Restriction Counter';
         key CLASS_NUM    : String(18)@title : 'Internal class number';
         key CHAR_NUM     : String(10)@title : 'Internal Char. number';
         key CHAR_COUNTER : Integer   @title : 'Characteristic counter';
