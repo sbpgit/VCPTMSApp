@@ -39,7 +39,7 @@ module.exports = (srv) => {
   srv.on("CREATE", "genCompStrcNode", _createCompStrcNode);
   // Create PVS nodes
   srv.on("genpvs", async (req) => {
-    let { getNodes } = srv.entities;
+    let { getPVSNodes } = srv.entities;
     let liresults = [];
     let liresults_t = [];
     let lsresults = {};
