@@ -176,6 +176,7 @@ sap.ui.define(
 
         onAccNodeDel: function (oEvent) {
             // Deleting the selected access node
+            //var accesNode = sap.ui.getCore().byId("idAccesNode").getValue();
             var selected = oEvent.getSource().getParent().getCells()[0].getTitle();
             // Getting the conformation popup before deleting
             var text = "Please confirm to remove access node" + " - " + selected;
@@ -191,8 +192,11 @@ sap.ui.define(
                     urlParameters: {
                       CHILD_NODE: selected,
                       PARENT_NODE: "",
+                      ACCESS_NODES: 'AN',
                       NODE_TYPE: "AN",
                       NODE_DESC: "",
+                      LOWERLIMIT:0,
+                      UPPERLIMIT:0,
                       FLAG: "D",
                     },
                     success: function (oData) {

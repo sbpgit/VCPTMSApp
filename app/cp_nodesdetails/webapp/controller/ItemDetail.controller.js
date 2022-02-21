@@ -347,10 +347,17 @@ sap.ui.define([
                     ACCESS_NODES: accessNode,
                     NODE_TYPE: "SN",
                     NODE_DESC: "",
+                    LOWERLIMIT:0,
+                    UPPERLIMIT:0,
                     FLAG: "D",
                   },
                   success: function (oData) {
-                    MessageToast.show("Structure node deleted successfully");
+                    if (oData.results.length > 0) {
+                        MessageToast.show("Structure node deleted successfully");
+                    }
+                    else{
+                        MessageToast.show("Deletion failed");
+                    }
                     that.bus.publish("data", "refreshMaster");
                     sap.ui.core.BusyIndicator.hide();
                   },
@@ -437,9 +444,14 @@ sap.ui.define([
                   FLAG: "C"
                 },
                 success: function (oData) {
-                    MessageToast.show(data.d.results[0].value);
+                    if(oData.results.length > 0){
+                    MessageToast.show("View Node assigned successfully");
                     that.onViewNodeClose();
                     that.bus.publish("data", "refreshMaster");
+                    }
+                    else{                        
+                    MessageToast.show("View Node is already assigned");
+                    }
                   sap.ui.core.BusyIndicator.hide();
                 },
                 error: function (oData) {
@@ -463,10 +475,18 @@ sap.ui.define([
                       PARENT_NODE: viewNode,
                       ACCESS_NODES: accessNode,
                       NODE_TYPE: "VS",
+                      NODE_DESC: "",
+                      LOWERLIMIT:0,
+                      UPPERLIMIT:0,
                       FLAG: "D"
                     },
                     success: function (oData) {
-                        MessageToast.show(data.d.results[0].value);
+                        if (oData.results.length > 0) {
+                            MessageToast.show("Deleted successfully");
+                        }
+                        else{
+                            MessageToast.show("Deletion failed");
+                        }
                         that.onViewNodeClose();
                         that.bus.publish("data", "refreshMaster");
                       sap.ui.core.BusyIndicator.hide();
