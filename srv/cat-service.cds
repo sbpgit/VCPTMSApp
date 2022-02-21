@@ -124,19 +124,22 @@ service CatalogService @(impl : './lib/cat-service.js') {
     entity getODCharH          as projection on V_TSODCHAR_H;
     entity getODCharF          as projection on V_TSODCHAR_F;
 
-    //function getCompreq() returns ds.compreq;
-    //function createProf() returns String;
+    //Component requirement qunatity determination
     function getCompreq(LOCATION_ID:String(4), PRODUCT_ID:String(40), VERSION : String(10), SCENARIO    : String(32) ) returns String;
-    
-    function genpvs(NODE_TYPE : String(2), CHILD_NODE : String(50), PARENT_NODE : String(50), ACCESS_NODES: String(50), NODE_DESC:String(200),FLAG: String(1)) returns array of getPVSNodes;
-    // function fGetNodeDet(NODE_TYPE : String(2), CHILD_NODE : String(50), PARENT_NODE : String(50)) returns array of getAccessNodes;
+    // Create PVS node structure
+    function genpvs(NODE_TYPE : String(2), CHILD_NODE : String(50), PARENT_NODE : String(50), ACCESS_NODES: String(50), NODE_DESC:String(200), UPPERLIMIT: Integer, LOWERLIMIT: Integer, FLAG: String(1)) returns array of getPVSNodes;
+    // Generate Timeseries
     function generate_timeseries() returns String;
+    // Get Object dependency
     function get_objdep() returns array of ds.objectDep; //objectDep;
     //function getODProfiles() returns array of odprofiles;
+    // Generate CSRF Token
     function getCSRFToken() returns String;
+    // Generate OD history timeseries
     function genODHistory(OBJ_DEP:String(30),OBJ_COUNTER:String(10)) returns array of ds.odhistory;
+    // Generate OD Future timeseries
     function genODFuture(OBJ_DEP:String(30),OBJ_COUNTER:String(10)) returns array of ds.odfuture;
-    // function genProdAccess(ACCNODE: String())
+    // dummy testcase
     action gen_timeseries() returns String;
 
 }

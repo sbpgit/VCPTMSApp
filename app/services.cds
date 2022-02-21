@@ -27,5 +27,5 @@ using from './cp_nodesdetails/annotations';
 
 // using from './cpcompsnode/annotations';
 using from './cplocation/annotations';
-using from './cpassignnode/annotations';
+// using from './cpassignnode/annotations';
 using from './cpbompvs/annotations';

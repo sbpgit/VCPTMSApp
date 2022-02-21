@@ -140,10 +140,10 @@ modules:
       - cpappcplocation.zip
       name: cpappcplocation
       target-path: resources/
-    - artifacts:
-      - cpappcpassignnode.zip
-      name: cpappcpassignnode
-      target-path: resources/
+    # - artifacts:
+    #   - cpappcpassignnode.zip
+    #   name: cpappcpassignnode
+    #   target-path: resources/
     - artifacts:
       - cpappcpbompvs.zip
       name: cpappcpbompvs
@@ -318,16 +318,16 @@ modules:
     - npm install
     - npm run build:cf
     supported-platforms: []
-- name: cpappcpassignnode
-  type: html5
-  path: app/cpassignnode
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    supported-platforms: []
+# - name: cpappcpassignnode
+#   type: html5
+#   path: app/cpassignnode
+#   build-parameters:
+#     build-result: dist
+#     builder: custom
+#     commands:
+#     - npm install
+#     - npm run build:cf
+#     supported-platforms: []
 - name: cpappcpbompvs
   type: html5
   path: app/cpbompvs

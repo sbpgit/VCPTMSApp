@@ -22,9 +22,8 @@ module.exports = (srv) => {
   srv.on("getCompreq", async (req) => {
     let liresult;
     const comreq = new ComponentReq();
-    //await obgenTimeseries.genTimeseries();
     comreq.genComponentReq(req.data,liresult);
-    return "Hello";
+    return liresult;
   });
 
   srv.on("CREATE", "getProfiles", _createProfiles);
@@ -40,7 +39,7 @@ module.exports = (srv) => {
   srv.on("CREATE", "genCompStrcNode", _createCompStrcNode);
   // Create PVS nodes
   srv.on("genpvs", async (req) => {
-    let { getNodes } = srv.entities;
+    let { getPVSNodes } = srv.entities;
     let liresults = [];
     let liresults_t = [];
     let lsresults = {};
