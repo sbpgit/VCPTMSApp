@@ -15,10 +15,13 @@ sap.ui.define([
 			that = this;
 			// this.DetailHome = DetailHome;
 			this.bus = sap.ui.getCore().getEventBus();
-			that.oStruModel = new JSONModel();
+			that.oAssignModel = new JSONModel();
+            that.oStruModelDetail = new JSONModel();
             that.oAssinModel = new JSONModel();
-            that.oStruModel.setSizeLimit(1000);
+            that.oAssignModel.setSizeLimit(1000);
+            that.oStruModelDetail.setSizeLimit(1000);
 			oGModel = that.getOwnerComponent().getModel("oGModel");
+            oGModel.setProperty("/resetFlag", "");
 		},
 
 		onAfterRendering: function () {
@@ -26,34 +29,174 @@ sap.ui.define([
             oGModel = that.getOwnerComponent().getModel("oGModel");
 
             that.byId("sturList").removeSelections();
-            var date = new Date().toLocaleDateString();
-
-            that.byId("fromDate").setValue("01/01/2000");
 
             var selLoc = oGModel.getProperty("/SelectedLoc");
             var selProd = oGModel.getProperty("/SelectedProd");
-            var fromDate = new Date(that.byId("fromDate").getValue()),
-                toDate = new Date(that.byId("toDate").getValue());
             this.getModel("BModel").read("/getPVSBOM", {
                 filters: [
                     new Filter("PRODUCT_ID", FilterOperator.EQ, selProd),
                     new Filter("LOCATION_ID", FilterOperator.EQ, selLoc),
-                    // new Filter("VALID_FROM", FilterOperator.EQ, fromDate),
-                    // new Filter("VALID_TO", FilterOperator.EQ, toDate),
                   ],
                 success: function (oData) {
                     sap.ui.core.BusyIndicator.hide();
-                  that.oStruModel.setData({
+                  that.oAssignModel.setData({
                     results: oData.results,
                   });
-                  that.byId("sturList").setModel(that.oStruModel);
+                  that.byId("sturList").setModel(that.oAssignModel);
                 },
                 error: function (oData) {
                     sap.ui.core.BusyIndicator.hide();
                   MessageToast.show("Failed to get data");
                 },
               });
+
+              if(oGModel.getProperty("/resetFlag") === ""){
+
+                this.getModel("BModel").read("/genCompStrcNode", {
+                    filters: [
+                        new Filter("PRODUCT_ID", FilterOperator.EQ, selProd),
+                        new Filter("LOCATION_ID", FilterOperator.EQ, selLoc),
+                      ],
+                    success: function (oData) {
+                        oGModel.setProperty("/tableData", oData.results);
+                        that.aReqTabData();
+
+                var oReqData = oGModel.getProperty("/reqData");
+                        
+                      that.oStruModelDetail.setData({
+                        struDetailresults: oReqData.Requests,
+                      });
+                      that.byId("StrunodeTable").setModel(that.oStruModelDetail);
+
+                      sap.ui.core.BusyIndicator.hide();
+                    },
+                    error: function (oData) {
+                        sap.ui.core.BusyIndicator.hide();
+                      MessageToast.show("Failed to get data");
+                    },
+                  });
+
+              }
             
+
+        },
+
+        aReqTabData:function(oData){
+            var svData = oData ? oData.results : oGModel.getProperty("/tableData"),             
+            oFinData = {
+                Requests: []
+            },
+            aFoundReq = [],
+            iIndex, oItem, oNewItem,
+            // Function to calculate the parent values
+            fnAddTime = function (oParent, oChild, sType) {
+                var oNewParent = JSON.parse(JSON.stringify(oParent)),
+                    oNewChild = JSON.parse(JSON.stringify(oChild)),
+                    oOldParent = JSON.parse(JSON.stringify(oParent));
+                
+                oNewChild._isParent = false;
+
+                // Push the parent data item as well as it is part of the breakdown also. Do this only once
+                if (oNewParent.children.length === 0) {
+                    oOldParent._isParent = false;
+                    oNewParent.children.push(oOldParent);
+                }
+                oNewParent.children.push(oNewChild);
+                return oNewParent;
+            };
+
+        // If there is data in the table
+        
+
+            for (var i = 0; i < svData.length; i++) {
+                // Requests
+                iIndex = aFoundReq.indexOf(svData[i].STRUC_NODE);
+                // If data not found previously
+                if (iIndex === -1) {
+                    aFoundReq.push(svData[i].STRUC_NODE);
+                    svData[i].children = [];
+                    svData[i]._isParent = true;
+                    oFinData.Requests.push(svData[i]);
+                    // Push as children
+                } else {
+                    oItem = oFinData.Requests[iIndex];
+                    oNewItem = fnAddTime(oItem, svData[i], "Reqs");
+                    oFinData.Requests[iIndex] = oNewItem;
+                }
+            // }
+        }
+        
+        oGModel.setProperty("/reqData", oFinData);
+
+        },
+
+        onGetData:function(oEvent){
+            // sap.ui.core.BusyIndicator.show();
+            oGModel = that.getOwnerComponent().getModel("oGModel");
+
+            that.byId("sturList").removeSelections();
+
+            var selLoc = oGModel.getProperty("/SelectedLoc");
+            var selProd = oGModel.getProperty("/SelectedProd");
+            var fromDate = new Date(that.byId("fromDate").getDateValue()),
+                toDate = new Date(that.byId("toDate").getDateValue());
+                var fromMnth,fromDat,toMnth,toDat;
+                var mnthFrm = fromDate.getMonth() + 1,
+                    mnthto = toDate.getMonth() + 1
+
+                if(mnthFrm < 10 ){
+                    fromMnth = "0" + mnthFrm;
+                } else {
+                    fromMnth = mnthFrm;
+                }
+
+                if(fromDate.getDate() < 10 ){
+                    fromDat = "0" + fromDate.getDate();
+                } else {
+                    fromDat = fromDate.getDate();
+                } 
+
+                if(mnthto < 10 ){
+                    toMnth = "0" + mnthto;
+                } else {
+                    toMnth = mnthto;
+                }
+
+                if(toDate.getDate() < 10 ){
+                    toDat = "0" + toDate.getDate();
+                } else {
+                    toDat = toDate.getDate();
+                }
+
+                fromDate = fromDate.getFullYear() + "-" + fromMnth + "-"  + fromDat;
+                toDate = toDate.getFullYear() + "-" + toMnth + "-" + toDat;
+                this.getModel("BModel").read("/getPVSBOM", {
+                filters: [
+                    new Filter("PRODUCT_ID", FilterOperator.EQ, selProd),
+                    new Filter("LOCATION_ID", FilterOperator.EQ, selLoc),
+                    new Filter("VALID_FROM", FilterOperator.EQ, fromDate),
+                    new Filter("VALID_TO", FilterOperator.EQ, toDate),
+                  ],
+                success: function (oData) {
+                    sap.ui.core.BusyIndicator.hide();
+                  that.oAssignModel.setData({
+                    results: oData.results,
+                  });
+                  that.byId("sturList").setModel(that.oAssignModel);
+                },
+                error: function (oData) {
+                    sap.ui.core.BusyIndicator.hide();
+                  MessageToast.show("Failed to get data");
+                },
+              });
+
+        },
+
+        onResetDate:function(){
+            that.byId("fromDate").setValue("");
+                that.byId("toDate").setValue("");
+            oGModel.setProperty("/resetFlag", "X");
+            that.onAfterRendering();
 
         },
 
@@ -89,7 +232,9 @@ sap.ui.define([
 
             var selNode = oGModel.getProperty("/SelectedNode");
             var SelComponent = that.byId("sturList").getSelectedItem().getCells()[1].getText();
+            var SelItem = that.byId("sturList").getSelectedItem().getCells()[0].getText();
             oGModel.setProperty("/SelecteComponent", SelComponent);
+            oGModel.setProperty("/SelecteItem", SelItem);
 
             this.getModel("BModel").read("/getPVSNodes", {
                 filters: [
@@ -122,6 +267,7 @@ sap.ui.define([
             var loc = oGModel.getProperty("/SelectedLoc"),
                 prod = oGModel.getProperty("/SelectedProd"),
                 component = oGModel.getProperty("/SelecteComponent"),
+                item = oGModel.getProperty("/SelecteItem"),
                 struNode = oEvent.getParameter("selectedItems")[0].getTitle();
 
                 var uri = "/v2/catalog/genCompStrcNode";
@@ -133,6 +279,7 @@ sap.ui.define([
                         LOCATION_ID: loc,
                         PRODUCT_ID: prod,
                         COMPONENT: component,
+                        ITEM_NUM: item,
                         STRUC_NODE:struNode
                     }),
                     dataType: "json",
@@ -143,6 +290,7 @@ sap.ui.define([
                     sap.ui.core.BusyIndicator.hide();
                     sap.m.MessageToast.show("Structure Node assigned");
                     // that.onStruNodeClose();
+                    oGModel.setProperty("/resetFlag", "");
                     that.onAfterRendering();
                     },
                     error: function (data) {
