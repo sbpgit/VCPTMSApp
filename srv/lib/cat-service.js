@@ -19,13 +19,18 @@ module.exports = (srv) => {
     return "Token";
   });
   // Compoenent requirement
-  srv.on("getCompreq", async (req) => {
+  srv.on("getCompreqQty", async (req) => {
     let liresult;
     const comreq = new ComponentReq();
     comreq.genComponentReq(req.data,liresult);
     return liresult;
   });
-
+  srv.on("getCompReqFWeekly", async(req) => {
+    let liresult;
+    const comreq = new ComponentReq();
+    comreq.genCompReqWeekly(req.data,liresult);
+    return liresult;
+  });
   srv.on("CREATE", "getProfiles", _createProfiles);
 
   srv.on("CREATE", "genProfileParam", _createProfileParameters);
@@ -97,6 +102,23 @@ module.exports = (srv) => {
         }
         lsresults = {};
       } else if (req.data.FLAG === "D") {
+          if (req.data.NODE_TYPE === "SN"){
+            try {
+            await cds.run(`DELETE FROM "CP_PVS_NODES" WHERE "CHILD_NODE" = '`+ req.data.CHILD_NODE +`'`);
+            }
+            catch(e){
+                // Delete failed
+            }
+          }
+          else if(req.data.NODE_TYPE === "AN" ){            
+            try {
+                await cds.run(`DELETE FROM "CP_PVS_NODES" WHERE "ACCESS_NODES" = '`+ req.data.CHILD_NODE +`'`);
+                }
+                catch(e){
+                    // Delete failed
+                }
+          }
+          else{
         lsresults.CHILD_NODE = req.data.CHILD_NODE;
         lsresults.PARENT_NODE = req.data.PARENT_NODE;
         try {
@@ -107,6 +129,7 @@ module.exports = (srv) => {
           // responseMessage = " Deletion failed";
           // createResults.push(responseMessage);
         }
+    }
         lsresults = {};
       }
       lireturn = await cds.transaction(req).run(SELECT.from(getPVSNodes));
@@ -307,34 +330,7 @@ module.exports = (srv) => {
     return liresults;
   });
 
-  srv.on("generate_timeseries", async (req) => {
-    const obgenTimeseries = new GenTimeseries();
-    await obgenTimeseries.genTimeseries();
-    console.log("test");
-  });
-  srv.on("gen_timeseries", async (req) => {
-    const obgenTimeseries = new GenTimeseries();
-    var res = req._.req.res;
-    res
-      .status(202)
-      .send("Accepted async job, but long-running operation still running.");
-    const doLongRunningOperation = function (doFail) {
-      return new Promise((resolve, reject) => {
-        const letItFail = doFail;
-        setTimeout(() => {
-          if (letItFail === "true") {
-            reject({ message: "Backend operation failed with error code 123" });
-          } else {
-            resolve({
-              message: "Successfully finished long-running backend operation",
-            });
-          }
-        }, 3000); // wait... wait...
-      });
-    };
-    await obgenTimeseries.genTimeseries();
-    //console.log("test");
-  });
+ // Get object dependency
   srv.on("get_objdep", async (req) => {
     let { getMODHeader } = srv.entities;
     const db = srv.transaction(req);
@@ -347,7 +343,15 @@ module.exports = (srv) => {
       );
     return results;
   });
+  
+// Generate Timeseries
+srv.on("generate_timeseries", async (req) => {
+    const obgenTimeseries = new GenTimeseries();
+    await obgenTimeseries.genTimeseries();
+    console.log("test");
+  });
 };
+// Assign component to a Structure node
 async function _createCompStrcNode(req) {
   let liresults = [];
   let lsresults = {};
@@ -388,6 +392,7 @@ async function _createCompStrcNode(req) {
   }
   res.send({ value: createResults });
 }
+// Add Product to an Access node
 async function _createPrdAccessNode(req) {
   let liresults = [];
   let lsresults = {};
@@ -593,7 +598,29 @@ async function _createProfileOD(req) {
   }
   res.send({ value: createResults });
 }
-
+//   srv.on("gen_timeseries", async (req) => {
+//     const obgenTimeseries = new GenTimeseries();
+//     var res = req._.req.res;
+//     res
+//       .status(202)
+//       .send("Accepted async job, but long-running operation still running.");
+//     const doLongRunningOperation = function (doFail) {
+//       return new Promise((resolve, reject) => {
+//         const letItFail = doFail;
+//         setTimeout(() => {
+//           if (letItFail === "true") {
+//             reject({ message: "Backend operation failed with error code 123" });
+//           } else {
+//             resolve({
+//               message: "Successfully finished long-running backend operation",
+//             });
+//           }
+//         }, 3000); // wait... wait...
+//       });
+//     };
+//     await obgenTimeseries.genTimeseries();
+//     //console.log("test");
+//   });
 /* srv.on("getODProfiles", async (req) => {
     let liresults = [];
     let lsresults = {};
