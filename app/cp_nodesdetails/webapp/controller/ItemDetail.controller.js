@@ -68,6 +68,7 @@ sap.ui.define([
                         createdBy: null,
                         modifiedAt: null,
                         modifiedBy: null,
+                        Flag:"X",
                       }
                       
                 that.struviewNodeData.push(data);   
@@ -332,7 +333,7 @@ sap.ui.define([
           var selectedStruNode = oEvent.getSource().getParent().getCells()[0].getText(),
               accessNode = oGModel.getProperty("/SelectedAccessNode");
           // Getting the conformation popup before deleting
-          var text = "Please confirm to remove structure node" + " - " + selectedStruNode;
+          var text = "Do you want to delete all the assignments of this Node. " + " - " + selectedStruNode + "-" + "Please confirm";
           sap.m.MessageBox.show(text, {
             title: "Confirmation",
             actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
@@ -469,6 +470,15 @@ sap.ui.define([
                 struNode = oBinding.getObject().CHILD_NODE,
                 accessNode = oBinding.getObject().ACCESS_NODES;
 
+                // Getting the conformation popup before deleting
+          var text = "Do you want to delete all the assignments of this Node. " + " - " + struNode + "-" + "Please confirm";
+          sap.m.MessageBox.show(text, {
+            title: "Confirmation",
+            actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
+            onClose: function (oAction) {
+              if (oAction === sap.m.MessageBox.Action.YES) {
+                sap.ui.core.BusyIndicator.show();
+
                 that.getModel("BModel").callFunction("/genpvs", {
                     method: "GET",
                     urlParameters: {
@@ -488,7 +498,6 @@ sap.ui.define([
                         else{
                             MessageToast.show("Deletion failed");
                         }
-                        that.onViewNodeClose();
                         that.bus.publish("data", "refreshMaster");
                       sap.ui.core.BusyIndicator.hide();
                     },
@@ -497,6 +506,11 @@ sap.ui.define([
                       sap.ui.core.BusyIndicator.hide();
                     },
                   });
+              }
+            },
+          });
+
+                
 
 
         },
@@ -548,6 +562,55 @@ sap.ui.define([
                   sap.ui.core.BusyIndicator.hide();
                 },
               });
+        },
+
+        onViewNOdeDelete:function(oEvent){
+            var oBinding = oEvent.getSource().getParent().getBindingContext(),
+                viewNode = oBinding.getObject().PARENT_NODE,
+                accessNode = oGModel.getProperty("/SelectedAccessNode");
+
+                // Getting the conformation popup before deleting
+          var text = "Do you want to delete all the assignments of this Node. " + " - " + viewNode + "-" + "Please confirm";
+          sap.m.MessageBox.show(text, {
+            title: "Confirmation",
+            actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
+            onClose: function (oAction) {
+              if (oAction === sap.m.MessageBox.Action.YES) {
+                sap.ui.core.BusyIndicator.show();
+
+                that.getModel("BModel").callFunction("/genpvs", {
+                    method: "GET",
+                    urlParameters: {
+                      CHILD_NODE: viewNode,
+                      PARENT_NODE: accessNode,
+                      ACCESS_NODES: accessNode,
+                      NODE_TYPE: "VN",
+                      NODE_DESC: "",
+                      LOWERLIMIT:0,
+                      UPPERLIMIT:0,
+                      FLAG: "D"
+                    },
+                    success: function (oData) {
+                        if (oData.results.length > 0) {
+                            MessageToast.show("Deleted successfully");
+                        }
+                        else{
+                            MessageToast.show("Deletion failed");
+                        }
+                        that.bus.publish("data", "refreshMaster");
+                      sap.ui.core.BusyIndicator.hide();
+                    },
+                    error: function (oData) {
+                      MessageToast.show("Failed to unassign structure node");
+                      sap.ui.core.BusyIndicator.hide();
+                    },
+                  });
+              }
+            },
+          });
+
+                
+
         }
 
 	});

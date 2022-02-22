@@ -12,7 +12,7 @@
 		</customHeader>
 
         
-        <Toolbar height="8%">
+        <Toolbar height="12%">
 				<VBox>
 					<HBox>
                     <Text text="{i18n>AccNode} : " class="boldText"></Text>

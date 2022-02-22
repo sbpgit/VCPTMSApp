@@ -65,7 +65,7 @@
                     <IconTabFilter id="viewNodeTab" text="View Node" key="viewNode">
                     <SearchField id="idDetailViewNode" liveChange="onViewNodeSearch" placeholder="View Node/ Structure Node"/>
                     <t:TreeTable id="nodeTable" enableSelectAll="false" ariaLabelledBy="title" selectionMode="None"
-					visibleRowCount="10"  
+					visibleRowCount="15"  
 					 rows="{
 								path:'/ViewListresults',
 								parameters: {arrayNames:['children'], numberOfExpandedLevels: 1},
@@ -102,10 +102,16 @@
                         <t:Column hAlign="Center">
 							<Label text=""/>
 							<t:template>
-								<HBox visible="{= ${children}.length === 0 ? true : !${_isParent}}">								
+                            <VBox>
+                                <HBox>
+                                <Button press="onViewNOdeDelete" icon="sap-icon://decline" tooltip="Delete View Node" 
+                                        visible="{= ${Flag} === 'X' ? true : false}"  iconDensityAware="false" type="Transparent"/>	
+                                </HBox>
+								<HBox visible="{= ${children}.length === 0 ? true : !${_isParent}}">							
 								<Button press="onStruViewDelete" icon="sap-icon://delete" tooltip="Unassign Structure Node" 
-                                        visible="{= ${NODE_DESC} !== '' ? true : false}" />
+                                        visible="{= ${NODE_DESC} !== '' ? true : false}"  type="Emphasized"/>
 								</HBox>
+                                </VBox>
 							</t:template>
 						</t:Column>
 						

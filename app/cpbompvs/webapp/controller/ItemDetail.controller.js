@@ -30,6 +30,8 @@ sap.ui.define([
 
             that.byId("detailNode").setSelectedKey("assignNode");
                 that.byId("idDates").setVisible(true);
+                that.byId("fromDate").setValue("");
+                that.byId("toDate").setValue("");
 
             that.byId("sturList").removeSelections();
 
