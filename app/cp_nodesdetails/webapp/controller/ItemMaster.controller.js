@@ -192,7 +192,7 @@ sap.ui.define(
                     urlParameters: {
                       CHILD_NODE: selected,
                       PARENT_NODE: "",
-                      ACCESS_NODES: 'AN',
+                      ACCESS_NODES: "",
                       NODE_TYPE: "AN",
                       NODE_DESC: "",
                       LOWERLIMIT:0,
