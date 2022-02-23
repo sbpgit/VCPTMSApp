@@ -20,20 +20,24 @@ class GenTimeseries {
       ],
     });
 
-    this.genTimeseriesF();
+    //this.genTimeseriesF();
   }
 
   /**
    * Generate Timeseries
    */
-  async genTimeseries() {
+  async genTimeseries(adata) {
     const lStartTime = new Date();
     this.logger.info("Started timeseries Service");
 
     /** Get Sales History */
     const liSalesHead = await cds.run(
         `SELECT *
-            FROM CP_SALESH
+            FROM CP_SALESH 
+            WHERE "LOCATION_ID" = '`
+            + adata.LOCATION_ID + `'
+            AND "PRODUCT_ID" = '`
+            + adata.PRODUCT_ID + `'
             ORDER BY 
                 "LOCATION_ID" ASC, 
                 "PRODUCT_ID" ASC,

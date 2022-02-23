@@ -129,7 +129,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
     // Create PVS node structure
     function genpvs(NODE_TYPE : String(2), CHILD_NODE : String(50), PARENT_NODE : String(50), ACCESS_NODES: String(50), NODE_DESC:String(200), UPPERLIMIT: Integer, LOWERLIMIT: Integer, FLAG: String(1)) returns array of getPVSNodes;
     // Generate Timeseries
-    function generate_timeseries() returns String;
+    function generate_timeseries(LOCATION_ID:String(4), PRODUCT_ID:String(40)) returns String;
     // Get Object dependency
     function get_objdep() returns array of ds.objectDep; //objectDep;
     //function getODProfiles() returns array of odprofiles;

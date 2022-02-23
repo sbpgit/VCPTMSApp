@@ -347,7 +347,7 @@ module.exports = (srv) => {
 // Generate Timeseries
 srv.on("generate_timeseries", async (req) => {
     const obgenTimeseries = new GenTimeseries();
-    await obgenTimeseries.genTimeseries();
+    await obgenTimeseries.genTimeseries(req.data);
     console.log("test");
   });
 };
@@ -558,7 +558,8 @@ async function _createProfileOD(req) {
   res = req._.req.res;
   for (let i = 0; i < aProfileOD_req.length; i++) {
     lsprofilesOD.PROFILE = aProfileOD_req[i].PROFILE;
-    if (lsprofilesOD.PROFILE !== undefined) {
+    if (lsprofilesOD.PROFILE !== undefined ||
+        req.data.FLAG === "D") {
       lsprofilesOD.LOCATION_ID = aProfileOD_req[i].LOCATION_ID;
       lsprofilesOD.PRODUCT_ID = aProfileOD_req[i].PRODUCT_ID;
       lsprofilesOD.COMPONENT = aProfileOD_req[i].COMPONENT;

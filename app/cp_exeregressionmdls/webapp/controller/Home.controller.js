@@ -643,7 +643,8 @@ sap.ui.define(
               that.oObjDep.removeAllTokens();
               this._valueHelpDialogProd.getAggregation("_dialog").getContent()[1].removeSelections();
               this._valueHelpDialogOD.getAggregation("_dialog").getContent()[1].removeSelections();
-              this.getModel("BModel").read("/getProdClass", {
+              //this.getModel("BModel").read("/getProdClass", {
+                this.getModel("BModel").read("/getLocProdDet", {
                   filters: [
                       new Filter("LOCATION_ID", FilterOperator.EQ, aSelectedItems[0].getTitle())
                     ],
