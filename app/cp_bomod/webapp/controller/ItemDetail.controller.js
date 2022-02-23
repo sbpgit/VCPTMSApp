@@ -164,13 +164,6 @@ sap.ui.define([
 
              this.getModel("BModel").read("/getBomOdCond", {
                 filters: [oFilters],
-                // filters: [
-                //     new Filter("LOCATION_ID", FilterOperator.EQ, locId),
-                //     new Filter("PRODUCT_ID", FilterOperator.EQ, prdId),
-                //     new Filter("COMPONENT", FilterOperator.StartsWith, query),
-                //     new Filter("OBJ_DEP", FilterOperator.StartsWith, query),
-
-                //   ],
                 
                 success: function (oData) {
 
@@ -190,23 +183,6 @@ sap.ui.define([
                   MessageToast.show("Failed to get data");
                 },
               });
-
-
-
-        // if (query !== "") {
-        //   oFilters.push(
-        //     new Filter({
-        //       filters: [
-        //         new Filter("ITEM_NUM", FilterOperator.Contains, query),
-        //         new Filter("OBJ_DEP", FilterOperator.Contains, query)
-        //       ],
-        //       and: false,
-        //     })
-        //   );
-        // }
-        // that.byId("idBom").getBinding("items").filter(oFilters);
-
-
 
 
         },

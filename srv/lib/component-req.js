@@ -148,6 +148,75 @@ class ComponentReq {
       iresult = "No data fetched";
     }
   }
-  async genCompReqWeekly(adata, iresult) {}
+  async genCompReqWeekly(adata, iresult) {
+//     let DateFrom = '2022-03-04';
+//     let DateTo = '2023-01-03';
+//     let liCompWeekly = [];
+//     let lsCompWeekly = {};
+//       const liCompQty = await cds.run(`
+//       SELECT * FROM "CP_COMPQTYDETERMINE"
+//       WHERE "LOCATION_ID" = '` +
+//         adata.LOCATION_ID +
+//         `'
+//            AND "PRODUCT_ID" = '` +
+//         adata.PRODUCT_ID +
+//         `' AND "VERSION" = '` +
+//         adata.VERSION +
+//         `' AND "SCENARIO" = '` +
+//         adata.SCENARIO +
+//         `' AND ( "CAL_DATE" <= DateTo
+//             AND "CAL_DATE" >= DateFrom )
+//            ORDER BY 
+//                 "LOCATION_ID" ASC, 
+//                 "PRODUCT_ID" ASC,
+//                 "VERSION" ASC,
+//                 "SCENARIO" ASC,
+//                 "ITEM_NUM" ASC,
+//                 "COMPONENT" ASC,
+//                 "CAL_DATE" ASC,
+//                 "STRUC_NODE" ASC`);
+//     const liDates = await cds.run(`
+//     SELECT DISTINCT CAL_DATE FROM "CP_COMPQTYDETERMINE"
+//     WHERE ( "CAL_DATE" <= DateTo
+//             AND "CAL_DATE" >= DateFrom )
+//             ORDER BY 
+//                 "LOCATION_ID" ASC, 
+//                 "PRODUCT_ID" ASC,
+//                 "VERSION" ASC,
+//                 "SCENARIO" ASC,
+//                 "ITEM_NUM" ASC,
+//                 "COMPONENT" ASC,
+//                 "CAL_DATE" ASC,
+//                 "STRUC_NODE" ASC`);
+//      for (let i=1; i<= liDates.length; i++){
+         
+//         lsCompWeekly.LOCATION_ID = "LOC";
+//         lsCompWeekly.PRODUCT_ID = "PROD";
+//         lsCompWeekly.VERSION = "VER";
+//         lsCompWeekly.SCENARIO = "SCENR";
+//         lsCompWeekly.ITEM_NUM = "ITEM";
+//         lsCompWeekly.COMPONENT = "COMP";
+//         let columnname = "Week"+i;
+//         lsCompWeekly."columnname" = 
+//      }
+//      for( let i = 0 ; i < liCompQty.length ; i++){
+//         lsCompWeekly.LOCATION_ID = liCompQty[i].LOCATION_ID;
+//         lsCompWeekly.PRODUCT_ID = liCompQty[i].PRODUCT_ID;
+//         lsCompWeekly.VERSION = liCompQty[i].VERSION;
+//         lsCompWeekly.SCENARIO = liCompQty[i].SCENARIO;
+//         lsCompWeekly.ITEM_NUM = liCompQty[i].ITEM_NUM;
+//         lsCompWeekly.COMPONENT = liCompQty[i].COMPONENT;
+//         if (liCompQty[i].LOCATION_ID !== liCompQty[GenFunctions.addOne(i, liCompQty.length)].LOCATION_ID ||
+//             liCompQty[i].PRODUCT_ID  !== liCompQty[GenFunctions.addOne(i, liCompQty.length)].PRODUCT_ID ||
+//             liCompQty[i].VERSION  !== liCompQty[GenFunctions.addOne(i, liCompQty.length)].VERSION ||
+//             liCompQty[i].SCENARIO  !== liCompQty[GenFunctions.addOne(i, liCompQty.length)].SCENARIO ||  
+//         i === GenFunctions.addOne(i, liCompQty.length)
+//    ) {  
+        
+//         let columnname =  "Week"  
+//         lsCompWeekly.CAL_DATE = liCompQty[i].CAL_DATE;
+//    }
+//      }
+  }
 }
 module.exports = ComponentReq;
