@@ -15,6 +15,7 @@ sap.ui.define([
 		onInit: function () {
 			that = this;
 			that.oModel = new JSONModel();
+            this.oModel.setSizeLimit(1000);
 			this.bus = sap.ui.getCore().getEventBus();
 			this.bus.subscribe("data", "refreshMaster", this.refreshMaster, this);
 			this.bus.publish("nav", "toBeginPage", {

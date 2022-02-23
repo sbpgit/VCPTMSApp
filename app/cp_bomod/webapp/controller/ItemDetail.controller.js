@@ -16,6 +16,7 @@ sap.ui.define([
 			// this.DetailHome = DetailHome;
 			this.bus = sap.ui.getCore().getEventBus();
 			that.oBomModel = new JSONModel();
+            that.oBomOnPanelModel = new JSONModel();
             that.oCharModel = new JSONModel();
             this.oBomModel.setSizeLimit(1000);
             this.oCharModel.setSizeLimit(1000);
@@ -58,7 +59,7 @@ sap.ui.define([
                         that.byId("idBom").removeSelections(true);
                         that.byId("idBomPanel").setExpanded(true);
                         that.byId("idCharPanel").setExpanded(false);
-                        that.onbomSearch();
+                        // that.onbomSearch();
                         }                
                         that.byId("bomSearch").setValue("");  
                   sap.ui.core.BusyIndicator.hide();
@@ -92,12 +93,38 @@ sap.ui.define([
                   that.byId("idCharPanel").setExpanded(true);
                   that.byId("charSearch").setValue("");  
                   that.oncharSearch();
+                  that.BomOnPanelNext();
                   sap.ui.core.BusyIndicator.hide();
                 },
                 error: function () {
+                    sap.ui.core.BusyIndicator.hide();
                   MessageToast.show("Failed to get data");
                 },
               });
+
+        },
+
+        BomOnPanelNext:function(){
+
+            var selItem = this.byId("idBom").getSelectedItem().getCells();
+
+            var data = [{
+                ITEM_NUM: selItem[0].getText(),
+                COMPONENT: selItem[1].getText(),
+                OBJ_DEP: selItem[2].getText(),
+                OBJDEP_DESC: selItem[3].getText(),
+                COMP_QTY: selItem[4].getText(),
+                VALID_FROM: selItem[5].getText(),
+                VALID_TO: selItem[6].getText(),
+              }]
+
+
+              that.oBomOnPanelModel.setData({
+                BOMPanelresults: data,
+            });
+            that.byId("idBomOnNextPanel").setModel(that.oBomOnPanelModel);
+            sap.ui.core.BusyIndicator.hide();
+
 
         },
 
@@ -106,22 +133,57 @@ sap.ui.define([
             var query = "",
           oFilters = [];
           if(oEvent){
-            var query = oEvent.getParameter("value") || oEvent.getParameter("newValue")
+            // var query = oEvent.getParameter("value") || oEvent.getParameter("newValue")
+            var query = oEvent.getParameters().query;
+            }
+
+            query = query.toUpperCase();
+
+            sap.ui.core.BusyIndicator.show();
+             var prdId = oGModel.getProperty("/prdId");
+             var locId = oGModel.getProperty("/locId");
+
+             oFilters.push(new Filter({
+                filters: [
+                    new Filter("LOCATION_ID", FilterOperator.EQ, locId),
+                    new Filter("PRODUCT_ID", FilterOperator.EQ, prdId)
+                ],
+                and: true
+            }));
+
+            if(query !== ""){
+             oFilters.push(new Filter({
+                filters: [
+                    new Filter("COMPONENT", FilterOperator.StartsWith, query),
+                    new Filter("OBJ_DEP", FilterOperator.StartsWith, query)
+                ],
+                and: false
+            }));
         }
 
-        if (query !== "") {
-          oFilters.push(
-            new Filter({
-              filters: [
-                new Filter("ITEM_NUM", FilterOperator.Contains, query),
-                new Filter("COMPONENT", FilterOperator.Contains, query),
-                new Filter("OBJ_DEP", FilterOperator.Contains, query)
-              ],
-              and: false,
-            })
-          );
-        }
-        that.byId("idBom").getBinding("items").filter(oFilters);
+
+             this.getModel("BModel").read("/getBomOdCond", {
+                filters: [oFilters],
+                
+                success: function (oData) {
+
+                    
+                        that.oBomModel.setData({
+                            results: oData.results,
+                        });
+                        that.byId("idBom").setModel(that.oBomModel);
+                        that.byId("idBom").removeSelections(true);
+                        
+                        that.byId("idBomPanel").setExpanded(true);
+                        that.byId("idCharPanel").setExpanded(false);             
+                        // that.byId("bomSearch").setValue("");  
+                  sap.ui.core.BusyIndicator.hide();
+                },
+                error: function () {
+                  MessageToast.show("Failed to get data");
+                },
+              });
+
 
         },
 

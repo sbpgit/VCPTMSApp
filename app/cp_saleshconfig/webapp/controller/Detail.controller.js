@@ -49,10 +49,28 @@ sap.ui.define(
             new Filter("SALESDOC_ITEM", FilterOperator.EQ, Item.SALESDOC_ITEM),
           ],
           success: function (oData) {
+            var Data = [];
+                for(var i=0; i<oData.results.length; i++ ){
+                    if(oData.results[i].CHAR_NAME !== null || oData.results[i].CHAR_VALUE !== null ){
+                        Data.push(oData.results[i]);
+                    }
+                }
+
+
+
             that.oListModel.setData({
-              results: oData.results,
+              results: Data,
             });
             that.oList.setModel(that.oListModel);
+
+            that.oGModel.setProperty("/sSchedNo", oData.results[0].SCHEDULELINE_NUM);
+            that.oGModel.setProperty("/sRejReson", oData.results[0].REASON_REJ);
+            that.oGModel.setProperty("/sConQty", oData.results[0].CONFIRMED_QTY);
+            that.oGModel.setProperty("/sOrdQty", oData.results[0].ORD_QTY);
+            that.oGModel.setProperty("/sMatAvailData", oData.results[0].MAT_AVAILDATE);
+            that.oGModel.setProperty("/sCustGrp", oData.results[0].CUSTOMER_GROUP);
+            that.oGModel.setProperty("/sNetValue", oData.results[0].NET_VALUE);
+
             sap.ui.core.BusyIndicator.hide();
           },
           error: function (oRes) {
@@ -65,6 +83,28 @@ sap.ui.define(
         var oRouter = sap.ui.core.UIComponent.getRouterFor(that);
         oRouter.navTo("Home", {}, true);
       },
+
+      onTableSearch: function (oEvent) {
+        var query =
+            oEvent.getParameter("value") || oEvent.getParameter("newValue"),
+          oFilters = [];
+
+        if (query !== "") {
+          oFilters.push(
+            new Filter({
+              filters: [
+                new Filter("CHAR_NAME", FilterOperator.Contains, query),
+                new Filter("CHAR_VALUE", FilterOperator.Contains, query),
+              ],
+              and: false,
+            })
+          );
+        }
+        that.oList.getBinding("items").filter(oFilters);
+      },
+
+
+
     });
   }
 );
