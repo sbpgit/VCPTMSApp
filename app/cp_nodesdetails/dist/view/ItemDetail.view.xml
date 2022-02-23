@@ -5,7 +5,7 @@
     <Page id="idClassChar">
         <customHeader>
             <Toolbar height="50%">
-                <Title id="struTitle" text=""></Title>
+                <Title id="struTitle" text="Structure Node - View Nod" class="boldText"></Title>
                 <ToolbarSpacer/>
                 <Button id="idAssign" text="Assign" press="onAssign" tooltip="Assign to View Node"/>
                 <Button id="idAstru" icon="sap-icon://add" press="onStruNode" tooltip="Add Structure Node"/>
@@ -39,6 +39,12 @@
                                 <Column hAlign="Center">
                                     <Text text="{i18n>nodeDesc}"/>
                                 </Column>
+                                <Column hAlign="Center">
+                                    <Text text="{i18n>lower}"/>
+                                </Column>
+                                <Column hAlign="Center">
+                                    <Text text="{i18n>upper}"/>
+                                </Column>
                                 <Column hAlign="Right">
                                     <Text text="" />
                                 </Column>
@@ -48,6 +54,8 @@
                                     <cells>
                                         <Text text="{CHILD_NODE}" />
                                         <Text text="{NODE_DESC}" />
+                                        <Text text="{LOWERLIMIT}" />
+                                        <Text text="{UPPERLIMIT}" />
                                         <Button id="idStru" icon="sap-icon://decline" tooltip="Delete" press="onStruNodeDel" iconDensityAware="false" type="Transparent"/>
                                     </cells>
                                 </ColumnListItem>
@@ -57,7 +65,7 @@
                     <IconTabFilter id="viewNodeTab" text="View Node" key="viewNode">
                     <SearchField id="idDetailViewNode" liveChange="onViewNodeSearch" placeholder="View Node/ Structure Node"/>
                     <t:TreeTable id="nodeTable" enableSelectAll="false" ariaLabelledBy="title" selectionMode="None"
-					visibleRowCount="10"  
+					visibleRowCount="15"  
 					 rows="{
 								path:'/ViewListresults',
 								parameters: {arrayNames:['children'], numberOfExpandedLevels: 1},
@@ -89,6 +97,21 @@
 								<HBox justifyContent="Center" visible="{= ${children}.length === 0 ? true : !${_isParent}}">
 								<Text text="{NODE_DESC}"/>
 								</HBox>
+							</t:template>
+						</t:Column>
+                        <t:Column hAlign="Center">
+							<Label text=""/>
+							<t:template>
+                            <VBox>
+                                <HBox>
+                                <Button press="onViewNOdeDelete" icon="sap-icon://decline" tooltip="Delete View Node" 
+                                        visible="{= ${Flag} === 'X' ? true : false}"  iconDensityAware="false" type="Transparent"/>	
+                                </HBox>
+								<HBox visible="{= ${children}.length === 0 ? true : !${_isParent}}">							
+								<Button press="onStruViewDelete" icon="sap-icon://delete" tooltip="Unassign Structure Node" 
+                                        visible="{= ${NODE_DESC} !== '' ? true : false}"  type="Emphasized"/>
+								</HBox>
+                                </VBox>
 							</t:template>
 						</t:Column>
 						

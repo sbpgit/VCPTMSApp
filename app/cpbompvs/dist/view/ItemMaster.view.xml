@@ -12,17 +12,17 @@
 		</customHeader>
         <content>
             <List
-		id="accessList"
-		mode="SingleSelectMaster"
-		delete="onAccNodeDel"
-        itemPress="onhandlePress"
-        selectionChange="onhandlePress"
-		enableBusyIndicator="true"
-		headerText="Products - Access Nodes"
-		growing="true"
-		items="{
-			path: '/results'
-		}" >
+                id="accessList"
+                mode="SingleSelectMaster"
+                delete="onAccNodeDel"
+                itemPress="onhandlePress"
+                selectionChange="onhandlePress"
+                enableBusyIndicator="true"
+                headerText="Products - Access Nodes"
+                growing="true"
+                items="{
+                    path: '/results'
+                }" >
 		<StandardListItem
 			title="{PRODUCT_ID}"
 			description="{LOCATION_ID}"

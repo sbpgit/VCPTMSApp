@@ -1,6 +1,10 @@
 <core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns:l="sap.ui.layout"
 	xmlns:f="sap.ui.layout.form" xmlns:u="sap.ui.unified">
-	<Dialog  contentWidth="450px" showHeader="false" >
+    <SelectDialog id="ViewList" title= "View Nodes" titleAlignment="Center" search="handleViewSearch" liveChange="handleViewSearch" rememberSelections="false"
+		confirm="onAssignViewNode" cancel="onViewNodeClose" items="{/ViewNodesresults}" >
+		<StandardListItem title="{CHILD_NODE}" description="{NODE_DESC}" type="Active"/>
+	</SelectDialog>
+	<!-- <Dialog  contentWidth="450px" showHeader="false" >
 		<Table id="ViewList" items="{path: '/ViewNodesresults'}" rememberSelections="false" 
              mode="SingleSelectMaster">
                 <columns>
@@ -20,5 +24,5 @@
 			<Button type='Ghost' text="Assign" press="onAssignViewNode"></Button>
 			<Button type='Reject' text="{i18n>close}" press="onViewNodeClose"></Button>
 		</buttons>
-	</Dialog>
+	</Dialog> -->
 </core:FragmentDefinition>

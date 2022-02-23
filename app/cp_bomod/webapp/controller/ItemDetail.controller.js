@@ -114,6 +114,7 @@ sap.ui.define([
             new Filter({
               filters: [
                 new Filter("ITEM_NUM", FilterOperator.Contains, query),
+                new Filter("COMPONENT", FilterOperator.Contains, query),
                 new Filter("OBJ_DEP", FilterOperator.Contains, query)
               ],
               and: false,
@@ -136,7 +137,8 @@ sap.ui.define([
             new Filter({
               filters: [
                 new Filter("CLASS_NAME", FilterOperator.Contains, query),
-                new Filter("CHAR_NAME", FilterOperator.Contains, query)
+                new Filter("CHAR_NAME", FilterOperator.Contains, query),
+                new Filter("CHAR_VALUE", FilterOperator.Contains, query)
               ],
               and: false,
             })
