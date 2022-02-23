@@ -7,10 +7,13 @@
     xmlns="sap.m">
 
     <Page id="page" title="{i18n>title}" titleAlignment="Center">
-        <Toolbar height="12%">
+        <!-- <Toolbar height="12%"> -->
             <f:Form editable="true">
                 <f:layout>
-                    <f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2" singleContainerFullSize="false"/>
+                    <f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" 
+                            adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" 
+                            columnsXL="4" columnsL="2" columnsM="2" singleContainerFullSize="false"
+                            breakpointXL= "1400" breakpointL= "800" breakpointM="600" />
                 </f:layout>
                 <f:formContainers>
                     <f:FormContainer>
@@ -19,19 +22,14 @@
                                 <f:label>
                                     <Label text="Location"/>
                                 </f:label>
-                                <MultiComboBox id="idLoc"  selectionChange="handleSelection"  width="300px" 
-                                items="{ path: '/resultsLoc' }">
-                                    <core:Item key="{LOCATION_ID}" text="{LOCATION_ID}" />
-                                </MultiComboBox>
+                                <Input id="idloc" value="" width="225px" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
                             </f:FormElement>
                             <f:FormElement>
                                 <f:label>
-                                    <Label text="Sales Document"/>
+                                    <Label text="Doc Create Date"/>
                                 </f:label>
-                                <MultiComboBox id="idSalesDoc"  selectionChange="handleSelection"  width="300px" 
-                                items="{ path: '/resultsSalesDoc' }">
-                                    <core:Item key="{SALES_DOC}" text="{SALES_DOC}" />
-                                </MultiComboBox>
+                                <DatePicker id="idDate" width="225px"  displayFormat="yyyy-MM-dd" change="handleDateChange"/>
+                                
                             </f:FormElement>
                             
                         </f:formElements>
@@ -42,17 +40,17 @@
                                 <f:label>
                                     <Label text="Product"/>
                                 </f:label>
-                                <MultiComboBox id="idProd"  selectionChange="handleSelection"  width="300px" 
-                                items="{ path: '/resultsProd' }">
-                                    <core:Item key="{PRODUCT_ID}" text="{PRODUCT_ID}" />
-                                </MultiComboBox>
+                                <Input id="idprod" value="" width="225px"  showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>                               
+                            </f:FormElement>
+                            <f:FormElement>
+                                <Button text="Go" width="30%" press="onGetData" tooltip="Get data based on filters"/>
                             </f:FormElement>
                         </f:formElements>
                     </f:FormContainer>
                 </f:formContainers>
             </f:Form>
             
-        </Toolbar>
+        <!-- </Toolbar> -->
         <content>
             <Table id="idTab" items="{path: '/results'}" growingScrollToLoad="true" rememberSelections="false"
 				itemPress="onhandlePress" mode="SingleSelectMaster" selectionChange="onhandlePress" sticky="ColumnHeaders" >

@@ -181,7 +181,7 @@ sap.ui.define(
                       value1: aSelectedItem[i].getTitle()
                       });
                           oFilters.push(sFilter);
-              }
+                    }
                   }
   
   
