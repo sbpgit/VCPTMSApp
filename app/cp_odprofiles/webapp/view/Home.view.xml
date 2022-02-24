@@ -22,7 +22,7 @@
                                     <Label text="Location"/>
                                 </f:label>
                                 <f:fields>
-                                <Input id="idloc" value="" width="225px" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                                <Input id="idloc" value="" width="235px" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
                                 </f:fields>
                             </f:FormElement>
                             <f:FormElement>
