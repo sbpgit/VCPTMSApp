@@ -460,6 +460,7 @@ class GenTimeseries {
                     }    
 
                     await cds.run(INSERT.into("CP_TS_OBJDEP_CHARHDR_F").entries(liObjdepF[index]));  
+                    
                 }
 
                 //await cds.run(INSERT.into("CP_TS_OBJDEP_CHARHDR_F").entries(liObjdepF));
