@@ -107,7 +107,7 @@ sap.ui.define(
               MessageToast.show("error");
             },
           });
-          this.getModel("BModel").read("/getNodes", {
+          this.getModel("BModel").read("/getPVSNodes", {
             success: function (oData) {
               that.AccessNodes = [];
 

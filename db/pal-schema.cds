@@ -3,6 +3,7 @@ namespace cp;
 
 using { managed } from '@sap/cds/common';
 
+// groupId is part of Parameters, Data, Models and other to support Parallelization
 entity PalHgbtRegressionsV1 {
     key hgbtID : String(50);
     createdAt  : Timestamp ;  
@@ -66,6 +67,7 @@ entity PalHgbtByGroup {
     Location : String(4);
     Product : String(40);
     groupId : String(100);
+    profile : String(50);
     regressionParameters : array of {
         paramName:String(100); 
         intVal:Integer;
@@ -96,6 +98,7 @@ entity PalHgbtPredictionsV1 {
     Location : String(4);
     Product : String(40);
     groupId : String(100);
+    profile : String(50);
     Version : String(10);
     Scenario : String(32);
     predictionParameters: array of {
@@ -186,6 +189,7 @@ entity PalRdtByGroup {
     Location : String(4);
     Product : String(40);
     groupId : String(100);
+    profile : String(50);
     regressionParameters : array of {
         paramName:String(100); 
         intVal:Integer;
@@ -209,6 +213,7 @@ entity PalRdtPredictions {
     Location : String(4);
     Product : String(40);
     groupId : String(20);
+    profile : String(50);
     Version : String(10);
     Scenario : String(32);
     predictionParameters: array of {
@@ -314,6 +319,7 @@ entity PalMlrByGroup {
     Location : String(4);
     Product : String(40);
     groupId : String(100);
+    profile : String(50);
     regressionParameters : array of {
         paramName:String(256); 
         intVal:Integer;
@@ -351,6 +357,7 @@ entity PalMlrPredictions {
     Product : String(40);
     groupId : String(20);
     Version : String(10);
+    profile : String(50);
     Scenario : String(32);
     predictionParameters: array of {
         groupId:String(100); 
@@ -444,6 +451,7 @@ entity PalVarmaByGroup {
     Location : String(4);
     Product : String(40);
     groupId:String(100); 
+    profile : String(50);
     controlParameters : array of {
         paramName:String(100); 
         intVal:Integer;
@@ -489,6 +497,7 @@ entity PalVarmaPredictions {
     Location : String(4);
     Product : String(40);
     groupId : String(20);
+    profile : String(50);
     Version : String(10);
     Scenario : String(32);
     predictionParameters : array of {
@@ -583,6 +592,7 @@ entity TS_PREDICTIONS{
     key OBJ_DEP          : String(30)@title : 'Object Dependency';
     key OBJ_COUNTER      : Integer   @title : 'Object Counter';
     key MODEL_TYPE       : String(10) @title : 'PAL Model Type';
+    key MODEL_PROFILE    : String(50) @title : 'PAL Model Profile';
     key VERSION          : String(10)    @title : 'Version';
     key SCENARIO         : String(32)    @title : 'Scenario';
     PREDICTED            : Double    @title : 'Predicted';
@@ -597,6 +607,7 @@ entity IBP_RESULTPLAN_TS{
     key OBJ_TYPE         : String(2) @title : 'Object Type';
     key OBJ_DEP          : String(30)@title : 'Object Dependency';
     key OBJ_COUNTER      : Integer   @title : 'Object Counter';
+    key MODEL_PROFILE    : String(50) @title : 'PAL Model Profile';
     key VERSION          : String(10)    @title : 'Version';
     key SCENARIO         : String(32)    @title : 'Scenario';
     PREDICTED            : Double    @title : 'Predicted';
@@ -613,6 +624,7 @@ entity TS_OBJDEP_CHAR_IMPACT_F {
     key OBJ_COUNTER : Integer   @title : 'Object Counter';
     key ROW_ID      : Integer   @title : ' Attribute Index';
     key MODEL_TYPE       : String(10) @title : 'PAL Model Type';
+    key MODEL_PROFILE    : String(50) @title : 'PAL Model Profile';
     key VERSION     : String(10)    @title : 'Version';
     key SCENARIO    : String(32)    @title : 'Scenario';
     CHAR_COUNT      : Double   @title : 'Character Count';

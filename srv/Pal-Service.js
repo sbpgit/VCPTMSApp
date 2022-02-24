@@ -97,7 +97,7 @@ function _getParamsObjForPredictions(vcRulesList, index, modelType, numChars)
     var paramsObj = [];
     //let palGroupId = vcRulesList[index].GroupID;
 
-    let palGroupId = vcRulesList[index].GroupID + '#' + vcRulesList[index].Location + '#' + vcRulesList[index].Product;
+    let palGroupId = vcRulesList[index].profileID + '#' + vcRulesList[index].GroupID + '#' + vcRulesList[index].Location + '#' + vcRulesList[index].Product;
 
    // for (var i = 0; i < vcRulesList.length; i++)
    // {
@@ -117,7 +117,7 @@ function _getParamsObjForPredictions(vcRulesList, index, modelType, numChars)
         else if ( (vcRulesList[index].dimensions == numChars) && 
                   (modelType == 'VARMA'))
         {
-            paramsObj.push({"groupId":palGroupId, "paramName":"FORECAST_LENGTH", "intVal":1,"doubleVal": null, "strVal" : null});
+            //paramsObj.push({"groupId":palGroupId, "paramName":"FORECAST_LENGTH", "intVal":1,"doubleVal": null, "strVal" : null});
         }
    // }
 
@@ -132,7 +132,7 @@ function _getRuleListTypeForPredictions(vcRulesList, idx, numChars)
     //{
         if (vcRulesList[idx].dimensions == numChars )
         {
-            ruleListObj.push({"Location":vcRulesList[idx].Location, "Product":vcRulesList[idx].Product, "GroupID":vcRulesList[idx].GroupID, "Version":vcRulesList[idx].Version,"Scenario":vcRulesList[idx].Scenario,"dimensions" : numChars});
+            ruleListObj.push({"Location":vcRulesList[idx].Location, "Product":vcRulesList[idx].Product, "GroupID":vcRulesList[idx].GroupID, "Profile":vcRulesList[idx].profile,"Version":vcRulesList[idx].Version,"Scenario":vcRulesList[idx].Scenario,"dimensions" : numChars});
         }
     //}
     return ruleListObj;
@@ -244,7 +244,7 @@ function _getDataObjForPredictions(vcRulesList, idx, modelType, numChars) {
 
             if (charIdx % numChars == 0)
             {
-                let palGroupId = vcRulesList[idx].GroupID + '#' + vcRulesList[idx].Location + '#' + vcRulesList[idx].Product;
+                let palGroupId = vcRulesList[idx].profile + '#' + vcRulesList[idx].GroupID + '#' + vcRulesList[idx].Location + '#' + vcRulesList[idx].Product;
 
                 if (numChars == 1)
                 {
@@ -339,6 +339,7 @@ async function _postPredictionRequest(url,paramsObj,numChars,dataObj,modelType,v
             "Product": vcRuleListObj[0].Product,
             "Location": vcRuleListObj[0].Location,
             "groupId" : vcRuleListObj[0].GroupID,
+            "profile": vcRuleListObj[0].Profile,
             "Version" : vcRuleListObj[0].Version,
             "Scenario" : vcRuleListObj[0].Scenario,
             "predictionParameters": paramsObj,
@@ -361,6 +362,7 @@ async function _postPredictionRequest(url,paramsObj,numChars,dataObj,modelType,v
             "Product": vcRuleListObj[0].Product,
             "Location": vcRuleListObj[0].Location,
             "groupId" : vcRuleListObj[0].GroupID,
+            "profile": vcRuleListObj[0].Profile,
             "Version" : vcRuleListObj[0].Version,
             "Scenario" : vcRuleListObj[0].Scenario,
             "predictionParameters": paramsObj,
@@ -383,6 +385,7 @@ async function _postPredictionRequest(url,paramsObj,numChars,dataObj,modelType,v
             "Product": vcRuleListObj[0].Product,
             "Location": vcRuleListObj[0].Location,
             "groupId" : vcRuleListObj[0].GroupID,
+            "profile": vcRuleListObj[0].Profile,
             "Version" : vcRuleListObj[0].Version,
             "Scenario" : vcRuleListObj[0].Scenario,
             "predictionParameters": paramsObj,
@@ -405,6 +408,7 @@ async function _postPredictionRequest(url,paramsObj,numChars,dataObj,modelType,v
             "Product": vcRuleListObj[0].Product,
             "Location": vcRuleListObj[0].Location,
             "groupId" : vcRuleListObj[0].GroupID,
+            "profile": vcRuleListObj[0].Profile,
             "Version" : vcRuleListObj[0].Version,
             "Scenario" : vcRuleListObj[0].Scenario,
             "predictionParameters": paramsObj,
@@ -541,12 +545,12 @@ async function _postPredictionRequest(url,paramsObj,numChars,dataObj,modelType,v
                 ' AND "VERSION" = ' + "'" + vcRuleListObj[0].Version + "'" +
                 ' AND "SCENARIO" = ' + "'" + vcRuleListObj[0].Scenario + "'" +
                 ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
-                console.log("V_FUTURE_DEP_TS P SELECT sqlStr ", sqlStr);
+                //console.log("V_FUTURE_DEP_TS P SELECT sqlStr ", sqlStr);
 
                 stmt=conn.prepare(sqlStr);
                 result=stmt.exec();
                 stmt.drop();
-                console.log("V_FUTURE_DEP_TS P SELECT sqlStr result ", result);
+                //console.log("V_FUTURE_DEP_TS P SELECT sqlStr result ", result);
 
                 sqlStr = 'UPSERT "CP_TS_PREDICTIONS" VALUES (' + "'" + result[0].CAL_DATE + "'" + "," +
                             "'" + result[0].Location + "'" + "," +
@@ -555,6 +559,7 @@ async function _postPredictionRequest(url,paramsObj,numChars,dataObj,modelType,v
                             "'" + result[0].OBJ_DEP + "'" + "," +
                             "'" + result[0].OBJ_COUNTER + "'" + "," +
                             "'" + modelType + "'" + "," +
+                            "'" + vcRuleListObj[0].Profile + "'" + "," +
                             "'" + result[0].VERSION + "'" + "," +
                             "'" + result[0].SCENARIO + "'" + "," +
                             "'" + -1 + "'" + "," +
@@ -563,7 +568,7 @@ async function _postPredictionRequest(url,paramsObj,numChars,dataObj,modelType,v
                     
                     //' WHERE "GroupID" = ' + "'" + groupId + "'" + 
                     //' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
-                console.log("V_PREDICTIONS Predicted Value sql update sqlStr", sqlStr);
+                //console.log("V_PREDICTIONS Predicted Value sql update sqlStr", sqlStr);
 
 
                 stmt=conn.prepare(sqlStr);
@@ -578,7 +583,7 @@ async function _postPredictionRequest(url,paramsObj,numChars,dataObj,modelType,v
                         ' AND LOCATION_ID = ' + "'" + result[0].Location + "'" +
                         ' AND PRODUCT_ID = ' + "'" + result[0].Product + "'" +
                         ' AND OBJ_DEP = ' + "'" + result[0].OBJ_DEP + '_' + result[0].OBJ_COUNTER + "'";
-                console.log("V_PREDICTIONS IBP Result Plan Predicted Value HGBT sql sqlStr", sqlStr);
+                //console.log("V_PREDICTIONS IBP Result Plan Predicted Value HGBT sql sqlStr", sqlStr);
                 stmt=conn.prepare(sqlStr);
                 results = stmt.exec();
                 stmt.drop();
@@ -591,6 +596,7 @@ async function _postPredictionRequest(url,paramsObj,numChars,dataObj,modelType,v
                             "'" + result[0].Type + "'" + "," +
                             "'" + result[0].OBJ_DEP + "'" + "," +
                             "'" + result[0].OBJ_COUNTER + "'" + "," +
+                            "'" + vcRuleListObj[0].Profile + "'" + "," + 
                             "'" + result[0].VERSION + "'" + "," +
                             "'" + result[0].SCENARIO + "'" + "," +
                             "'" + -1 + "'" + "," +
@@ -598,7 +604,7 @@ async function _postPredictionRequest(url,paramsObj,numChars,dataObj,modelType,v
                             "'" + 'FAIL' + "'" + ')' + ' WITH PRIMARY KEY';
                     
 
-                    console.log("CP_IBP_RESULTPLAN_TS Predicted Value HGBT sql update sqlStr", sqlStr);
+                    //console.log("CP_IBP_RESULTPLAN_TS Predicted Value HGBT sql update sqlStr", sqlStr);
 
                     stmt=conn.prepare(sqlStr);
                     stmt.exec();
@@ -609,8 +615,8 @@ async function _postPredictionRequest(url,paramsObj,numChars,dataObj,modelType,v
             }
             conn.disconnect();
             // Retry posting the request if model exists and fails
-            if (response.statusCode != 400)
-                _postPredictionRequest(url,paramsObj,numChars,dataObj,modelType,vcRuleListObj);
+            // if (response.statusCode != 400)
+            //     _postPredictionRequest(url,paramsObj,numChars,dataObj,modelType,vcRuleListObj);
         }
     });
 }
@@ -746,7 +752,7 @@ async function _generatePredictions(req) {
                     ' AND "Location" =' + "'" +   vcRulesList[i].Location + "'" +
                     ' AND "VERSION" =' + "'" +   vcRulesList[i].Version + "'" +
                     ' AND "SCENARIO" =' + "'" +   vcRulesList[i].Scenario + "'";   
-//        console.log('sqlStr: ', sqlStr);            
+        console.log('sqlStr: ', sqlStr);            
         stmt=conn.prepare(sqlStr);
         results=stmt.exec();
         stmt.drop();
@@ -1145,7 +1151,7 @@ function _getParamsObjForGenModels(vcRulesList, modelType, numChars)
         //console.log('i = ',i, 'modelType :', modelType );
         if (vcRulesList[i].dimensions == numChars)
         {
-            let palGroupId = vcRulesList[i].GroupID + '#' + vcRulesList[i].Location + '#' + vcRulesList[i].Product;
+            let palGroupId =  vcRulesList[i].profileID + '#' + vcRulesList[i].GroupID + '#' + vcRulesList[i].Location + '#' + vcRulesList[i].Product;
 
             for (let index=0; index<results.length; index++) 
             {
@@ -2173,7 +2179,7 @@ function _getDataObjForGenModels(vcRulesList, modelType, numChars) {
                     att12 = att12 + 0.00001;
             }
             charIdx  = charIdx + 1;
-            let palGroupId = vcRulesList[i].GroupID + '#' + vcRulesList[i].Location + '#' + vcRulesList[i].Product;
+            let palGroupId =  vcRulesList[i].profileID + '#' + vcRulesList[i].GroupID + '#' + vcRulesList[i].Location + '#' + vcRulesList[i].Product;
 
             if (charIdx % numChars == 0)
             {

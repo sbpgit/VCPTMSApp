@@ -176,9 +176,10 @@ sap.ui.define(
 
         onAccNodeDel: function (oEvent) {
             // Deleting the selected access node
+            //var accesNode = sap.ui.getCore().byId("idAccesNode").getValue();
             var selected = oEvent.getSource().getParent().getCells()[0].getTitle();
             // Getting the conformation popup before deleting
-            var text = "Please confirm to remove access node" + " - " + selected;
+            var text = "Do you want to delete all the assignments of this Node. " + " - " + selected + "-" + "Please confirm";
             sap.m.MessageBox.show(text, {
               title: "Confirmation",
               actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
@@ -191,8 +192,11 @@ sap.ui.define(
                     urlParameters: {
                       CHILD_NODE: selected,
                       PARENT_NODE: "",
+                      ACCESS_NODES: "",
                       NODE_TYPE: "AN",
                       NODE_DESC: "",
+                      LOWERLIMIT:0,
+                      UPPERLIMIT:0,
                       FLAG: "D",
                     },
                     success: function (oData) {
@@ -223,7 +227,9 @@ sap.ui.define(
                 ACCESS_NODES: accesNode,
                 NODE_TYPE: "AN",
                 NODE_DESC: desc,
-                FLAG: flag
+                LOWERLIMIT:0,
+                UPPERLIMIT:0,
+                FLAG: flag,
               },
               success: function (oData) {
               //   sap.ui.core.BusyIndicator.hide();

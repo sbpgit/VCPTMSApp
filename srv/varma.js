@@ -335,22 +335,65 @@ exports._genVarmaModelsGroup = function(req) {
     var stmt=conn.prepare(sqlStr);
     stmt.exec();
     stmt.drop();
+/////////////////////////////////////////////////
+    const varmaControlParams = req.data.controlParameters;
+    let inGroups = [];
+    let modelGroup = varmaControlParams[0].groupId;
+    inGroups.push(modelGroup);
+    for (var i in varmaControlParams)
+    { 
+        if (i > 0)
+        {
+            if( varmaControlParams[i].groupId != varmaControlParams[i-1].groupId)
+            {
+               // inGroups.push(varmaControlParams[i].GROUP_ID);
+               inGroups.push(varmaControlParams[i].groupId);
 
-    //var groupId = group;
-    sqlStr = 'DELETE FROM PAL_VARMA_MODEL_GRP_TAB WHERE GROUP_ID IN (SELECT GROUP_ID FROM ' + varmaDataTable + ')';
-    stmt=conn.prepare(sqlStr);
-    stmt.exec();
-    stmt.drop();
+            }
+        }
+    }
+    for (let i = 0; i < inGroups.length; i++)
+    {
+        sqlStr = "DELETE FROM PAL_VARMA_CTRL_GRP_TAB WHERE GROUP_ID = " + "'" + inGroups[i] + "'";
+        console.log('_updateVarmaGroupParams sqlStr ', sqlStr);
+        stmt=conn.prepare(sqlStr);
+        //result=stmt.exec();
+        stmt.exec();
+        stmt.drop();
 
-    sqlStr =  'DELETE FROM PAL_VARMA_FIT_GRP_TAB WHERE GROUP_ID IN (SELECT GROUP_ID FROM ' + varmaDataTable + ')';
-    stmt=conn.prepare(sqlStr);
-    stmt.exec();
-    stmt.drop();
+        sqlStr = "DELETE FROM PAL_VARMA_MODEL_GRP_TAB WHERE GROUP_ID = " + "'" + inGroups[i] + "'";
+        stmt=conn.prepare(sqlStr);
+        stmt.exec();
+        stmt.drop();
 
-    sqlStr =  'DELETE FROM PAL_VARMA_IRF_GRP_TAB WHERE GROUP_ID IN (SELECT GROUP_ID FROM ' + varmaDataTable + ')';
-    stmt=conn.prepare(sqlStr);
-    stmt.exec();
-    stmt.drop();
+        sqlStr =  "DELETE FROM PAL_VARMA_FIT_GRP_TAB WHERE GROUP_ID = " + "'" + inGroups[i] + "'";
+        stmt=conn.prepare(sqlStr);
+        stmt.exec();
+        stmt.drop();
+
+        sqlStr =  "DELETE FROM PAL_VARMA_IRF_GRP_TAB WHERE GROUP_ID = " + "'" + inGroups[i] + "'";
+        stmt=conn.prepare(sqlStr);
+        stmt.exec();
+        stmt.drop();
+
+    }
+
+////////////////////////////////////////////////
+    // //var groupId = group;
+    // sqlStr = 'DELETE FROM PAL_VARMA_MODEL_GRP_TAB WHERE GROUP_ID IN (SELECT GROUP_ID FROM ' + varmaDataTable + ')';
+    // stmt=conn.prepare(sqlStr);
+    // stmt.exec();
+    // stmt.drop();
+
+    // sqlStr =  'DELETE FROM PAL_VARMA_FIT_GRP_TAB WHERE GROUP_ID IN (SELECT GROUP_ID FROM ' + varmaDataTable + ')';
+    // stmt=conn.prepare(sqlStr);
+    // stmt.exec();
+    // stmt.drop();
+
+    // sqlStr =  'DELETE FROM PAL_VARMA_IRF_GRP_TAB WHERE GROUP_ID IN (SELECT GROUP_ID FROM ' + varmaDataTable + ')';
+    // stmt=conn.prepare(sqlStr);
+    // stmt.exec();
+    // stmt.drop();
 
     if (varmaType == 1)
         sqlStr = 'call VARMA_MAIN_1T(' + varmaDataTable + ', ?,?,?)';
@@ -387,7 +430,7 @@ exports._genVarmaModelsGroup = function(req) {
             //console.log('Model Table Results: ', modelResults);
     
     var models = [];
-    var modelGroup = modelResults[0].GROUP_ID;
+    modelGroup = modelResults[0].GROUP_ID;
     models.push(modelGroup);
     for (var i in modelResults)
     { 
@@ -473,9 +516,9 @@ exports._genVarmaModelsGroup = function(req) {
     console.log('Varama Model Results', modelsObj);
 
 /////
-    let controlParameters = req.data.controlParameters;
-    let inGroups = [];
-    let inGroup = req.data.controlParameters[0].groupId;
+    controlParameters = req.data.controlParameters;
+    inGroups = [];
+    inGroup = req.data.controlParameters[0].groupId;
     inGroups.push(inGroup);
     for (let i in controlParameters)
     { 
@@ -548,16 +591,18 @@ exports._genVarmaModelsGroup = function(req) {
         cds.run(cqnQuery);
     */    
         let grpStr=inGroups[grpIndex].split('#');
-        let GroupId = grpStr[0];
-        let location = grpStr[1];
-        let product = grpStr[2];
+        let profileID = grpStr[0]; 
+        let GroupId = grpStr[1];
+        let location = grpStr[2];
+        let product = grpStr[3];
 
-        console.log("_runRegressionMLRGroup  grpStr ", grpStr, "GroupId ",GroupId, " location ", location, " product ", product);
+        console.log("_runRegressionMLRGroup  grpStr ", grpStr, "profileId ", profileID, "GroupId ",GroupId, " location ", location, " product ", product);
 
         var rowObj = {   varmaGroupID: idObj, createdAt : createtAtObj.toISOString(), 
             Location : location,
             Product : product,
             groupId : GroupId,
+            profile : profileID,
             controlParameters:paramsGroupObj, 
             varmaType : req.data.varmaType,
             fittedOp : fittedGroupObj,
@@ -594,7 +639,7 @@ exports._genVarmaModelsGroup = function(req) {
 exports._runVarmaPredictions = function(req) {
 
   //  var groupId = req.data.groupId;
-  var groupId = req.data.groupId + '#' + req.data.Location + '#' + req.data.Product;
+  var groupId = req.data.profile + '#' + req.data.groupId + '#' + req.data.Location + '#' + req.data.Product;
 
    var conn = hana.createConnection();
 
@@ -975,9 +1020,10 @@ exports._runVarmaPrediction = function(varmaType, group, version, scenario) {
 
     var groupId = group;
     let grpStr=groupId.split('#');
-    let GroupId = grpStr[0];
-    let location = grpStr[1];
-    let product = grpStr[2];
+    let profileId = grpStr[0];
+    let GroupId = grpStr[1];
+    let location = grpStr[2];
+    let product = grpStr[3];
     
     sqlStr = "create local temporary column table #PAL_VARMA_MODEL_TAB_"+ groupId + " " + 
                     "(\"CONTENT_INDEX\" INTEGER,\"CONTENT_VALUE\" NVARCHAR(5000))";
@@ -1481,9 +1527,12 @@ exports._runVarmaPrediction = function(varmaType, group, version, scenario) {
     result=stmt.exec();
     stmt.drop();
     
+    let tpGrpStr=groupId.split('#');
+    tpGroupId = tpGrpStr[1] + '#' + tpGrpStr[2] + '#' + tpGrpStr[3];
+
 
     sqlStr = 'SELECT DISTINCT ' + '"' + vcConfigTimePeriod + '"' + 
-            ' from  V_FUTURE_DEP_TS WHERE  "GroupID" = ' + "'" + groupId + "'" +
+            ' from  V_FUTURE_DEP_TS WHERE  "GroupID" = ' + "'" + tpGroupId + "'" +
             ' AND "VERSION" = ' + "'" + version + "'" +
             ' AND "SCENARIO" = ' + "'" + scenario + "'" +
             ' ORDER BY ' + '"' + vcConfigTimePeriod + '"' + ' ASC';
@@ -1494,9 +1543,11 @@ exports._runVarmaPrediction = function(varmaType, group, version, scenario) {
     console.log("Time Periods for Group :", groupId, " Results: ", distPeriods);
     var predictedTime = new Date().toISOString();
     var trimmedPeriod = vcConfigTimePeriod.replace(/^(["]*)/g, '');
-    console.log('trimmedPeriod : ', trimmedPeriod, 'vcConfigTimePeriod :', vcConfigTimePeriod);
+    //console.log('trimmedPeriod : ', trimmedPeriod, 'vcConfigTimePeriod :', vcConfigTimePeriod);
+    console.log('resultsObj.length : ', resultsObj.length, 'distPeriods.length :', distPeriods.length);
 
-    for (var index=0; index<distPeriods.length; index++)
+// Update for only length of Results Object
+    for (var index=0; index<resultsObj.length; index++)
     {     
         let predictedVal = resultsObj[index].forecast;
         predictedVal = ( +predictedVal).toFixed(2);
@@ -1508,7 +1559,7 @@ exports._runVarmaPrediction = function(varmaType, group, version, scenario) {
         // console.log("V_FUTURE_DEP_TS Predicted Value sql update sqlStr", sqlStr)
 
         sqlStr = 'SELECT DISTINCT "CAL_DATE", "Location", "Product", "Type", "OBJ_DEP", "OBJ_COUNTER", "VERSION", "SCENARIO" ' +
-                'FROM "V_FUTURE_DEP_TS" WHERE "GroupID" = ' + "'" + groupId + "'" + 
+                'FROM "V_FUTURE_DEP_TS" WHERE "GroupID" = ' + "'" + tpGroupId + "'" + 
                 ' AND "VERSION" = ' + "'" + version + "'" +
                 ' AND "SCENARIO" = ' + "'" + scenario + "'" +   
                 ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
@@ -1526,6 +1577,7 @@ exports._runVarmaPrediction = function(varmaType, group, version, scenario) {
                     "'" + result[0].OBJ_DEP + "'" + "," +
                     "'" + result[0].OBJ_COUNTER + "'" + "," +
                     "'" + 'VARMA' + "'" + "," +
+                    "'" + profileId  + "'" + "," +
                     "'" + result[0].VERSION + "'" + "," +
                     "'" + result[0].SCENARIO + "'" + "," +
                     "'" + predictedVal + "'" + "," +
@@ -1554,7 +1606,7 @@ exports._runVarmaPrediction = function(varmaType, group, version, scenario) {
         stmt.drop();
 
         if ( (results.length > 0) &&
-             (results[0].METHOD = 'VARMA'))
+            (results[0].METHOD = 'VARMA'))
         {
             sqlStr = 'UPSERT "CP_IBP_RESULTPLAN_TS" VALUES (' + "'" + result[0].CAL_DATE + "'" + "," +
                     "'" + result[0].Location + "'" + "," +
@@ -1562,13 +1614,14 @@ exports._runVarmaPrediction = function(varmaType, group, version, scenario) {
                     "'" + result[0].Type + "'" + "," +
                     "'" + result[0].OBJ_DEP + "'" + "," +
                     "'" + result[0].OBJ_COUNTER + "'" + "," +
+                    "'" + profileId  + "'" + "," +
                     "'" + result[0].VERSION + "'" + "," +
                     "'" + result[0].SCENARIO + "'" + "," + 
                     "'" + predictedVal + "'" + "," +
                     "'" + predictedTime + "'" + "," +
                     "'" + 'SUCCESS' + "'" + ')' + ' WITH PRIMARY KEY';
             
- 
+
             console.log("CP_IBP_RESULTPLAN_TS Predicted Value HGBT sql update sqlStr", sqlStr);
 
             stmt=conn.prepare(sqlStr);
@@ -1577,6 +1630,7 @@ exports._runVarmaPrediction = function(varmaType, group, version, scenario) {
         }
 
     }
+
 
 /*
     sqlStr = 'SELECT DISTINCT ' + '"' + vcConfigTimePeriod + '"' + ' from  V_FUTURE_DEP_TS WHERE  "GroupID" = ' + "'" + groupId + "'" + ' ORDER BY ' + '"' + vcConfigTimePeriod + '"' + ' ASC';

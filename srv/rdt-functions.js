@@ -4,24 +4,24 @@ const { v1: uuidv1} = require('uuid')
 const hana = require('@sap/hana-client');
 const rtdFuncs = require('./rdt-functions.js');
 
-// const conn_params = {
-//     serverNode  : cds.env.requires.db.credentials.host + ":" + cds.env.requires.db.credentials.port,
-//     uid         : "SBPTECHTEAM", //process.env.uidClassicalSchema, //cf environment variable
-//     pwd         : "Sbpcorp@22", //process.env.uidClassicalSchemaPassword,//cf environment variable
-//     encrypt: 'TRUE',
-//     ssltruststore: cds.env.requires.hana.credentials.certificate
-// };
-// const vcConfigTimePeriod = "PeriodOfYear"; //process.env.TimePeriod; //cf environment variable
-// const classicalSchema = "DB_CONFIG_PROD_CLIENT1"; //process.env.classicalSchema; //cf environment variable
 const conn_params = {
     serverNode  : cds.env.requires.db.credentials.host + ":" + cds.env.requires.db.credentials.port,
-    uid         : process.env.uidClassicalSchema, //cf environment variable"SBPTECHTEAM",//
-    pwd         : process.env.uidClassicalSchemaPassword,//cf environment variable"Sbpcorp@22",//
+    uid         : "SBPTECHTEAM", //process.env.uidClassicalSchema, //cf environment variable
+    pwd         : "Sbpcorp@22", //process.env.uidClassicalSchemaPassword,//cf environment variable
     encrypt: 'TRUE',
     ssltruststore: cds.env.requires.hana.credentials.certificate
 };
-const vcConfigTimePeriod = process.env.TimePeriod; //cf environment variable"PeriodOfYear";//
-const classicalSchema = process.env.classicalSchema; //cf environment variable"DB_CONFIG_PROD_CLIENT1";//
+const vcConfigTimePeriod = "PeriodOfYear"; //process.env.TimePeriod; //cf environment variable
+const classicalSchema = "DB_CONFIG_PROD_CLIENT1"; //process.env.classicalSchema; //cf environment variable
+// const conn_params = {
+//     serverNode  : cds.env.requires.db.credentials.host + ":" + cds.env.requires.db.credentials.port,
+//     uid         : process.env.uidClassicalSchema, //cf environment variable"SBPTECHTEAM",//
+//     pwd         : process.env.uidClassicalSchemaPassword,//cf environment variable"Sbpcorp@22",//
+//     encrypt: 'TRUE',
+//     ssltruststore: cds.env.requires.hana.credentials.certificate
+// };
+// const vcConfigTimePeriod = process.env.TimePeriod; //cf environment variable"PeriodOfYear";//
+// const classicalSchema = process.env.classicalSchema; //cf environment variable"DB_CONFIG_PROD_CLIENT1";//
 
 const containerSchema = cds.env.requires.db.credentials.schema;
 const conn_params_container = {
@@ -335,28 +335,69 @@ exports._runRegressionRdtGroup = function(req) {
     var stmt=conn.prepare(sqlStr);
     stmt.exec();
     stmt.drop();
+//////////////////////////////
+    const rdtGroupParams = req.data.regressionParameters;
+    let inGroups = [];
+    let modelGroup = rdtGroupParams[0].groupId;
+    inGroups.push(modelGroup);
+    for (var i in rdtGroupParams)
+    { 
+        if (i > 0)
+        {
+            if( rdtGroupParams[i].groupId != rdtGroupParams[i-1].groupId)
+            {
+               // inGroups.push(rdtGroupParams[i].GROUP_ID);
+                inGroups.push(rdtGroupParams[i].groupId);
+            }
+        }
+    }
+    for (let i = 0; i < inGroups.length; i++)
+    {
+        sqlStr = "DELETE FROM PAL_RDT_MODEL_GRP_TAB WHERE GROUP_ID = " + "'" + inGroups[i] + "'";
+        stmt=conn.prepare(sqlStr);
+        stmt.exec();
+        stmt.drop();
+    
+        sqlStr =  "DELETE FROM PAL_RDT_IMP_GRP_TAB WHERE GROUP_ID = " + "'" + inGroups[i] + "'";
+        stmt=conn.prepare(sqlStr);
+        stmt.exec();
+        stmt.drop();
+    
+        sqlStr =  "DELETE FROM PAL_RDT_OUT_OF_BAG_GRP_TAB WHERE GROUP_ID = " + "'" + inGroups[i] + "'";
+        //console.log('_runRegressionRdtGroup sqlStr', sqlStr);
+        stmt=conn.prepare(sqlStr);
+        stmt.exec();
+        stmt.drop();
+    
+        sqlStr =  "DELETE FROM PAL_RDT_CONFUSION_GRP_TAB WHERE GROUP_ID = " + "'" + inGroups[i] + "'";        
+        stmt=conn.prepare(sqlStr);
+        stmt.exec();
+        stmt.drop();
 
+    }
+
+////////////////////////////////
     //var groupId = group;
-    sqlStr = 'DELETE FROM PAL_RDT_MODEL_GRP_TAB WHERE GROUP_ID IN (SELECT GROUP_ID FROM ' + rdtDataTable + ')';
-    stmt=conn.prepare(sqlStr);
-    stmt.exec();
-    stmt.drop();
+    // sqlStr = 'DELETE FROM PAL_RDT_MODEL_GRP_TAB WHERE GROUP_ID IN (SELECT GROUP_ID FROM ' + rdtDataTable + ')';
+    // stmt=conn.prepare(sqlStr);
+    // stmt.exec();
+    // stmt.drop();
 
-    sqlStr =  'DELETE FROM PAL_RDT_IMP_GRP_TAB WHERE GROUP_ID IN (SELECT GROUP_ID FROM ' + rdtDataTable + ')';
-    stmt=conn.prepare(sqlStr);
-    stmt.exec();
-    stmt.drop();
+    // sqlStr =  'DELETE FROM PAL_RDT_IMP_GRP_TAB WHERE GROUP_ID IN (SELECT GROUP_ID FROM ' + rdtDataTable + ')';
+    // stmt=conn.prepare(sqlStr);
+    // stmt.exec();
+    // stmt.drop();
 
-    sqlStr =  'DELETE FROM PAL_RDT_OUT_OF_BAG_GRP_TAB WHERE GROUP_ID IN (SELECT GROUP_ID FROM ' + rdtDataTable + ')';
-    //console.log('_runRegressionRdtGroup sqlStr', sqlStr);
-    stmt=conn.prepare(sqlStr);
-    stmt.exec();
-    stmt.drop();
+    // sqlStr =  'DELETE FROM PAL_RDT_OUT_OF_BAG_GRP_TAB WHERE GROUP_ID IN (SELECT GROUP_ID FROM ' + rdtDataTable + ')';
+    // //console.log('_runRegressionRdtGroup sqlStr', sqlStr);
+    // stmt=conn.prepare(sqlStr);
+    // stmt.exec();
+    // stmt.drop();
 
-    sqlStr =  'DELETE FROM PAL_RDT_CONFUSION_GRP_TAB WHERE GROUP_ID IN (SELECT GROUP_ID FROM ' + rdtDataTable + ')';
-    stmt=conn.prepare(sqlStr);
-    stmt.exec();
-    stmt.drop();
+    // sqlStr =  'DELETE FROM PAL_RDT_CONFUSION_GRP_TAB WHERE GROUP_ID IN (SELECT GROUP_ID FROM ' + rdtDataTable + ')';
+    // stmt=conn.prepare(sqlStr);
+    // stmt.exec();
+    // stmt.drop();
 
     if (rdtType == 1)
         sqlStr = 'call RDT_MAIN_1T(' + rdtDataTable + ', ?,?,?,?)';
@@ -393,7 +434,7 @@ exports._runRegressionRdtGroup = function(req) {
 //    console.log('Model Table Results: ', modelResults);
     
     var models = [];
-    var modelGroup = modelResults[0].GROUP_ID;
+    modelGroup = modelResults[0].GROUP_ID;
     models.push(modelGroup);
     for (var i in modelResults)
     { 
@@ -480,10 +521,10 @@ exports._runRegressionRdtGroup = function(req) {
 
 
 /////
-    let regressionParameters = req.data.regressionParameters;
+    regressionParameters = req.data.regressionParameters;
 
-    let inGroups = [];
-    let inGroup = regressionParameters[0].groupId;
+    inGroups = [];
+    inGroup = regressionParameters[0].groupId;
     inGroups.push(inGroup);
     
     for (let i in regressionParameters)
@@ -541,11 +582,12 @@ exports._runRegressionRdtGroup = function(req) {
         }
 
         let grpStr=inGroups[grpIndex].split('#');
-        let GroupId = grpStr[0];
-        let location = grpStr[1];
-        let product = grpStr[2];
+        let profileID = grpStr[0]; 
+        let GroupId = grpStr[1];
+        let location = grpStr[2];
+        let product = grpStr[3];
 
-        console.log("_runRegressionRdtGroup  grpStr ", grpStr, "GroupId ",GroupId, " location ", location, " product ", product);
+        console.log("_runRegressionRdtGroup  grpStr ", grpStr, "profileID ",profileID, "GroupId ",GroupId, " location ", location, " product ", product);
 
         var rowObj = {   rdtGroupID: idObj, 
             //createdAt : createtAtObj, 
@@ -553,6 +595,7 @@ exports._runRegressionRdtGroup = function(req) {
             Location : location,
             Product : product,
             groupId : GroupId,
+            profile : profileID,
             regressionParameters:paramsGroupObj, 
             rdtType : req.data.rdtType,
             importanceOp : impGroupObj,
@@ -594,7 +637,7 @@ exports._runRdtPredictions = function(req) {
 
   // var groupId = req.data.groupId;
 
-   var groupId = req.data.groupId + '#' + req.data.Location + '#' + req.data.Product;
+   var groupId = req.data.profile + '#' + req.data.groupId + '#' + req.data.Location + '#' + req.data.Product;
    //var outputGroupId = req.data.groupId;
 
    var conn = hana.createConnection();
@@ -975,9 +1018,10 @@ exports._runRdtPrediction = function(rdtType, group, version, scenario) {
     var groupId = group;
 
     let grpStr=groupId.split('#');
-    let GroupId = grpStr[0];
-    let location = grpStr[1];
-    let product = grpStr[2];
+    let profileId = grpStr[0];
+    let GroupId = grpStr[1];
+    let location = grpStr[2];
+    let product = grpStr[3];
     
     sqlStr = "create local temporary column table #PAL_RDT_MODEL_TAB_"+ groupId + " " + 
                     "(\"ROW_INDEX\" INTEGER,\"TREE_INDEX\" INTEGER,\"MODEL_CONTENT\" NCLOB)"; // MEMORY THRESHOLD 1000)";
@@ -1498,8 +1542,11 @@ exports._runRdtPrediction = function(rdtType, group, version, scenario) {
     result=stmt.exec();
     stmt.drop();
 
+    let tpGrpStr=groupId.split('#');
+    tpGroupId = tpGrpStr[1] + '#' + tpGrpStr[2] + '#' + tpGrpStr[3];
+
     sqlStr = 'SELECT DISTINCT ' + '"' + vcConfigTimePeriod + '"' + 
-                ' from  V_FUTURE_DEP_TS WHERE  "GroupID" = ' + "'" + groupId + "'" +
+                ' from  V_FUTURE_DEP_TS WHERE  "GroupID" = ' + "'" + tpGroupId + "'" +
                 ' AND "VERSION" = ' + "'" + version + "'" +
                 ' AND "SCENARIO" = ' + "'" + scenario + "'" +   
                 ' ORDER BY ' + '"' + vcConfigTimePeriod + '"' + ' ASC';
@@ -1524,7 +1571,7 @@ exports._runRdtPrediction = function(rdtType, group, version, scenario) {
         // console.log("V_FUTURE_DEP_TS Predicted Value sql update sqlStr", sqlStr)
 
         sqlStr = 'SELECT DISTINCT "CAL_DATE", "Location", "Product", "Type", "OBJ_DEP", "OBJ_COUNTER", "OrderQuantity", "VERSION", "SCENARIO" ' +
-                'FROM "V_FUTURE_DEP_TS" WHERE "GroupID" = ' + "'" + groupId + "'" +
+                'FROM "V_FUTURE_DEP_TS" WHERE "GroupID" = ' + "'" + tpGroupId + "'" +
                 ' AND "VERSION" = ' + "'" + version + "'" +
                 ' AND "SCENARIO" = ' + "'" + scenario + "'" +   
                 ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
@@ -1542,6 +1589,7 @@ exports._runRdtPrediction = function(rdtType, group, version, scenario) {
                     "'" + result[0].OBJ_DEP + "'" + "," +
                     "'" + result[0].OBJ_COUNTER + "'" + "," +
                     "'" + 'RTD' + "'" + "," +
+                    "'" + profileId  + "'" + "," +
                     "'" + result[0].VERSION + "'" + "," +
                     "'" + result[0].SCENARIO + "'" + "," +
                     "'" + predictedVal * result[0].OrderQuantity + "'" + "," +
@@ -1579,6 +1627,7 @@ exports._runRdtPrediction = function(rdtType, group, version, scenario) {
                     "'" + result[0].Type + "'" + "," +
                     "'" + result[0].OBJ_DEP + "'" + "," +
                     "'" + result[0].OBJ_COUNTER + "'" + "," +
+                    "'" + profileId  + "'" + "," +
                     "'" + result[0].VERSION + "'" + "," +
                     "'" + result[0].SCENARIO + "'" + "," + 
                     "'" + predictedVal * result[0].OrderQuantity + "'" + "," +
@@ -1670,7 +1719,7 @@ exports._runRdtPrediction = function(rdtType, group, version, scenario) {
 
         sqlStr = 'SELECT DISTINCT "CAL_DATE", "Location", "Product", ' +
                  '"Type", "OBJ_DEP", "OBJ_COUNTER", "ROW_ID", "CharCount", "CharCountPercent", "VERSION", "SCENARIO" ' +
-                'FROM "V_FUTURE_DEP_TS" WHERE "GroupID" = ' + "'" + groupId + "'" + 
+                'FROM "V_FUTURE_DEP_TS" WHERE "GroupID" = ' + "'" + tpGroupId + "'" + 
                 ' AND "VERSION" = ' + "'" + version + "'" +
                 ' AND "SCENARIO" = ' + "'" + scenario + "'" +
                 ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
@@ -1817,6 +1866,15 @@ exports._runRdtPrediction = function(rdtType, group, version, scenario) {
 
             //console.log("rIndex = ",rIndex,"impact_percent = ", impact_percent,"predictedVal = ", predictedVal, "intercept =",intercept);
             let predicted = predictedVal;
+            let impactValPercent = 0;
+            if( predicted*orderCount > 0 )
+            {
+                impactValPercent = 100*impact_val/(predicted*orderCount);
+            }
+            else
+            {
+                impactValPercent = 0;
+            }
             sqlStr = 'UPSERT "CP_TS_OBJDEP_CHAR_IMPACT_F" VALUES (' + "'" + result[rIndex].CAL_DATE + "'" + "," +
                 "'" + result[rIndex].Location + "'" + "," +
                 "'" + result[rIndex].Product + "'" + "," +
@@ -1825,11 +1883,12 @@ exports._runRdtPrediction = function(rdtType, group, version, scenario) {
                 "'" + result[rIndex].OBJ_COUNTER + "'" + "," +
                 "'" + result[rIndex].ROW_ID + "'" + "," +
                 "'" + 'RDT' + "'" + "," +
+                "'" + profileId  + "'" + "," +
                 "'" + result[rIndex].VERSION + "'" + "," +
                 "'" + result[rIndex].SCENARIO + "'" + "," +
                 "'" + result[rIndex].CharCount + "'" + "," +
                 "'" + impact_val + "'" + "," +
-                "'" + 100*impact_val/(predicted*orderCount) + "'" + "," +
+                "'" + impactValPercent + "'" + "," +
                 "'" + predicted*orderCount + "'" + "," +
                 "'" + predictedTime + "'" + ')' + ' WITH PRIMARY KEY';            
             //console.log("CP_TS_OBJDEP_CHAR_IMPACT_F MLR UPSERT sqlStr ", sqlStr); 

@@ -16,7 +16,7 @@
             itemPress="onhandlePress" mode="SingleSelectMaster" selectionChange="onhandlePress">
                 <columns>
                     <Column hAlign="Center">
-                        <Text text="{i18n>AccNode}" />
+                        <Text text="{i18n>AccNode}" class="boldText" />
                     </Column>
                     <Column hAlign="Right">
                         <Text text=""/>

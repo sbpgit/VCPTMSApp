@@ -23,6 +23,7 @@ sap.ui.define([
 		onAfterRendering: function () {
             oGModel = that.getOwnerComponent().getModel("oGModel");
             this.byId("sturList").removeSelections();
+            that.byId("detailNode").setSelectedKey("struNode");
 
             var selItem = oGModel.getProperty("/SelectedAccessNode");
             var stuData = oGModel.getProperty("/struNodeData");
@@ -32,7 +33,7 @@ sap.ui.define([
             that.viewNodeData = [];
             that.struviewNodeData = [];
 
-            this.byId("struTitle").setText("Structure Node - View Node");
+            // this.byId("struTitle").setText("Structure Node - View Node");
 
                 for(var i=0; i< stuData.length; i++){
                     if(stuData[i].PARENT_NODE === selItem){
@@ -62,11 +63,12 @@ sap.ui.define([
                         CHILD_NODE: "No Structure Node assigned",
                         NODE_DESC: "",
                         NODE_TYPE: "",
-                        PARENT_NODE: ViewData[j].CHILD_NODE,
+                        PARENT_NODE: that.viewNodeData[j].CHILD_NODE,
                         createdAt: null,
                         createdBy: null,
                         modifiedAt: null,
                         modifiedBy: null,
+                        Flag:"X",
                       }
                       
                 that.struviewNodeData.push(data);   
@@ -156,7 +158,7 @@ sap.ui.define([
             var query =
               oEvent.getParameter("value") || oEvent.getParameter("newValue"),
             oFilters = [];
-
+            query = query ? query.trim() : "";
           if (query !== "") {
             oFilters.push(
               new Filter({
@@ -253,9 +255,33 @@ sap.ui.define([
         },
 
         onViewNodeClose:function(){
-            that._oViewNode.close();
-            that._oViewNode.destroy(true);
-            that._oViewNode="";
+            sap.ui.getCore().byId("ViewList")._searchField.setValue("");
+            if (that._oViewNode.getBinding("items")) {
+                that._oViewNode.getBinding("items").filter([]);
+              }
+
+        },
+
+        handleViewSearch:function(oEvent){
+            var query =
+                oEvent.getParameter("value") || oEvent.getParameter("newValue"),
+              sId = oEvent.getParameter("id"),
+              oFilters = [];
+            // Check if search filter is to be applied
+            query = query ? query.trim() : "";
+ 
+              if (query !== "") {
+                oFilters.push(
+                  new Filter({
+                    filters: [
+                      new Filter("CHILD_NODE", FilterOperator.Contains, query),
+                      new Filter("NODE_DESC", FilterOperator.Contains, query),
+                    ],
+                    and: false,
+                  })
+                );
+              }
+              that._oViewNode.getBinding("items").filter(oFilters);
 
         },
 
@@ -272,6 +298,8 @@ sap.ui.define([
                 that._oStruNode.setTitle("Structure Node Creation");
                 sap.ui.getCore().byId("idStruNode").setValue("");
                 sap.ui.getCore().byId("idStruDesc").setValue("");
+                sap.ui.getCore().byId("idLower").setValue("");
+                sap.ui.getCore().byId("idUpper").setValue("");
                 oGModel.setProperty("/sFlag", "C");
                 that._oStruNode.open();
 
@@ -305,7 +333,7 @@ sap.ui.define([
           var selectedStruNode = oEvent.getSource().getParent().getCells()[0].getText(),
               accessNode = oGModel.getProperty("/SelectedAccessNode");
           // Getting the conformation popup before deleting
-          var text = "Please confirm to remove structure node" + " - " + selectedStruNode;
+          var text = "Do you want to delete all the assignments of this Node. " + " - " + selectedStruNode + "-" + "Please confirm";
           sap.m.MessageBox.show(text, {
             title: "Confirmation",
             actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
@@ -321,10 +349,17 @@ sap.ui.define([
                     ACCESS_NODES: accessNode,
                     NODE_TYPE: "SN",
                     NODE_DESC: "",
+                    LOWERLIMIT:0,
+                    UPPERLIMIT:0,
                     FLAG: "D",
                   },
                   success: function (oData) {
-                    MessageToast.show("Structure node deleted successfully");
+                    if (oData.results.length > 0) {
+                        MessageToast.show("Structure node deleted successfully");
+                    }
+                    else{
+                        MessageToast.show("Deletion failed");
+                    }
                     that.bus.publish("data", "refreshMaster");
                     sap.ui.core.BusyIndicator.hide();
                   },
@@ -343,7 +378,20 @@ sap.ui.define([
             var AccessNode = sap.ui.getCore().byId("idAccNode").getValue(),
                 StructureNode = sap.ui.getCore().byId("idStruNode").getValue(),
                 Desc = sap.ui.getCore().byId("idStruDesc").getValue(),
-                flag = oGModel.getProperty("/sFlag");
+                flag = oGModel.getProperty("/sFlag"),
+                lower, upper;
+
+                if(sap.ui.getCore().byId("idLower").getValue() === ""){
+                    lower =sap.ui.getCore().byId("idLower").getPlaceholder();
+                } else {
+                    lower = sap.ui.getCore().byId("idLower").getValue();
+                }
+
+                if(sap.ui.getCore().byId("idUpper").getValue() === ""){
+                    upper =sap.ui.getCore().byId("idUpper").getPlaceholder();
+                } else {
+                    upper = sap.ui.getCore().byId("idUpper").getValue();
+                }
 
                 that.getModel("BModel").callFunction("/genpvs", {
                     method: "GET",
@@ -353,6 +401,8 @@ sap.ui.define([
                       ACCESS_NODES: AccessNode,
                       NODE_TYPE: "SN",
                       NODE_DESC: Desc,
+                      LOWERLIMIT:lower,
+                      UPPERLIMIT:upper,
                       FLAG: flag
                     },
                     success: function (oData) {
@@ -375,8 +425,10 @@ sap.ui.define([
         onAssignViewNode:function(oEvent){
             var struNode = oGModel.getProperty("/selstrNode");
             var struNodeDesc = oGModel.getProperty("/selstrNodeDesc");
-            var viewNode = sap.ui.getCore().byId("ViewList").getSelectedItem().getCells()[0].getTitle();
-            var viewNodeDesc = sap.ui.getCore().byId("ViewList").getSelectedItem().getCells()[0].getText(),
+            // var viewNode = sap.ui.getCore().byId("ViewList").getSelectedItem().getCells()[0].getTitle();
+            // var viewNodeDesc = sap.ui.getCore().byId("ViewList").getSelectedItem().getCells()[0].getText(),
+            var viewNode = oEvent.getParameter("selectedItems")[0].getTitle();
+            var viewNodeDesc = oEvent.getParameter("selectedItems")[0].getDescription(),
             accessNode = oGModel.getProperty("/SelectedAccessNode");
 
             var Desc = viewNodeDesc + " " + "-" + " " + struNodeDesc;
@@ -389,12 +441,19 @@ sap.ui.define([
                   ACCESS_NODES: accessNode,
                   NODE_TYPE: "VS",
                   NODE_DESC: Desc,
+                  LOWERLIMIT:0,
+                  UPPERLIMIT:0,
                   FLAG: "C"
                 },
                 success: function (oData) {
-                    MessageToast.show("Successfully assigned structure node to view node");
+                    if(oData.results.length > 0){
+                    MessageToast.show("View Node assigned successfully");
                     that.onViewNodeClose();
                     that.bus.publish("data", "refreshMaster");
+                    }
+                    else{                        
+                    MessageToast.show("View Node is already assigned");
+                    }
                   sap.ui.core.BusyIndicator.hide();
                 },
                 error: function (oData) {
@@ -402,6 +461,57 @@ sap.ui.define([
                   sap.ui.core.BusyIndicator.hide();
                 },
               });
+
+        },
+
+        onStruViewDelete:function(oEvent){
+            var oBinding = oEvent.getSource().getParent().getBindingContext(),
+                viewNode = oBinding.getObject().PARENT_NODE,
+                struNode = oBinding.getObject().CHILD_NODE,
+                accessNode = oBinding.getObject().ACCESS_NODES;
+
+                // Getting the conformation popup before deleting
+          var text = "Do you want to delete all the assignments of this Node. " + " - " + struNode + "-" + "Please confirm";
+          sap.m.MessageBox.show(text, {
+            title: "Confirmation",
+            actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
+            onClose: function (oAction) {
+              if (oAction === sap.m.MessageBox.Action.YES) {
+                sap.ui.core.BusyIndicator.show();
+
+                that.getModel("BModel").callFunction("/genpvs", {
+                    method: "GET",
+                    urlParameters: {
+                      CHILD_NODE: struNode,
+                      PARENT_NODE: viewNode,
+                      ACCESS_NODES: accessNode,
+                      NODE_TYPE: "VS",
+                      NODE_DESC: "",
+                      LOWERLIMIT:0,
+                      UPPERLIMIT:0,
+                      FLAG: "D"
+                    },
+                    success: function (oData) {
+                        if (oData.results.length > 0) {
+                            MessageToast.show("Deleted successfully");
+                        }
+                        else{
+                            MessageToast.show("Deletion failed");
+                        }
+                        that.bus.publish("data", "refreshMaster");
+                      sap.ui.core.BusyIndicator.hide();
+                    },
+                    error: function (oData) {
+                      MessageToast.show("Failed to unassign structure node");
+                      sap.ui.core.BusyIndicator.hide();
+                    },
+                  });
+              }
+            },
+          });
+
+                
+
 
         },
 
@@ -437,6 +547,8 @@ sap.ui.define([
                   ACCESS_NODES: accessNode,
                   NODE_TYPE: "VN",
                   NODE_DESC: nodeDesc,
+                  LOWERLIMIT:0,
+                  UPPERLIMIT:0,
                   FLAG: "C"
                 },
                 success: function (oData) {
@@ -450,6 +562,55 @@ sap.ui.define([
                   sap.ui.core.BusyIndicator.hide();
                 },
               });
+        },
+
+        onViewNOdeDelete:function(oEvent){
+            var oBinding = oEvent.getSource().getParent().getBindingContext(),
+                viewNode = oBinding.getObject().PARENT_NODE,
+                accessNode = oGModel.getProperty("/SelectedAccessNode");
+
+                // Getting the conformation popup before deleting
+          var text = "Do you want to delete all the assignments of this Node. " + " - " + viewNode + "-" + "Please confirm";
+          sap.m.MessageBox.show(text, {
+            title: "Confirmation",
+            actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
+            onClose: function (oAction) {
+              if (oAction === sap.m.MessageBox.Action.YES) {
+                sap.ui.core.BusyIndicator.show();
+
+                that.getModel("BModel").callFunction("/genpvs", {
+                    method: "GET",
+                    urlParameters: {
+                      CHILD_NODE: viewNode,
+                      PARENT_NODE: accessNode,
+                      ACCESS_NODES: accessNode,
+                      NODE_TYPE: "VN",
+                      NODE_DESC: "",
+                      LOWERLIMIT:0,
+                      UPPERLIMIT:0,
+                      FLAG: "D"
+                    },
+                    success: function (oData) {
+                        if (oData.results.length > 0) {
+                            MessageToast.show("Deleted successfully");
+                        }
+                        else{
+                            MessageToast.show("Deletion failed");
+                        }
+                        that.bus.publish("data", "refreshMaster");
+                      sap.ui.core.BusyIndicator.hide();
+                    },
+                    error: function (oData) {
+                      MessageToast.show("Failed to unassign structure node");
+                      sap.ui.core.BusyIndicator.hide();
+                    },
+                  });
+              }
+            },
+          });
+
+                
+
         }
 
 	});
