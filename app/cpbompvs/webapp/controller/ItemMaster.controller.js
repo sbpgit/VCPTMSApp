@@ -43,6 +43,23 @@ sap.ui.define(
               this
             );
             this.getView().addDependent(this._valueHelpDialogProd);
+          }this.locModel = new JSONModel();
+          this.prodModel = new JSONModel();
+          this.accModel = new JSONModel();
+          this._oCore = sap.ui.getCore();
+          if (!this._valueHelpDialogLoc) {
+            this._valueHelpDialogLoc = sap.ui.xmlfragment(
+              "cpapp.cpbompvs.view.LocDialog",
+              this
+            );
+            this.getView().addDependent(this._valueHelpDialogLoc);
+          }
+          if (!this._valueHelpDialogProd) {
+            this._valueHelpDialogProd = sap.ui.xmlfragment(
+              "cpapp.cpbompvs.view.ProdDialog",
+              this
+            );
+            this.getView().addDependent(this._valueHelpDialogProd);
           }
           if (!this._oAccesNode) {
             this._oAccesNode = sap.ui.xmlfragment(

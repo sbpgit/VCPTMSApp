@@ -1,5 +1,5 @@
 VIEW "V_PRODCLSCHAR"
-AS SELECT A.PRODUCT_ID,
+AS SELECT distinct A.PRODUCT_ID,
           D.LOCATION_ID,
           A.CLASS_NUM,
           B.CLASS_NAME,

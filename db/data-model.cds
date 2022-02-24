@@ -545,6 +545,13 @@ context cp {
             CAL_COMP_QTY : Integer   @title : 'Component Quantity before variation';
             COMP_QTY     : Integer   @title : 'Component Quantity with variation';
     }
+
+    entity LOCPRODCOMP_TEMP {
+        key LOCATION_ID  : String(4) @title : 'Location ID';
+        key PRODUCT_ID   : String(40)@title : 'Product ID';
+        key ITEM_NUM     : String(5) @title : 'Item Number ';
+        key COMPONENT    : String(40)@title : 'Component';
+    }
 // entity PAL_MODEL_PARAMETERS {
 //     key MODEL_TYPE : String(10)  @title : 'Model Type';
 //     key PROFILE_ID : Integer     @title : 'Profile ID';
