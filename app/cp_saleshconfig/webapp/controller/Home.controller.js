@@ -54,6 +54,7 @@ sap.ui.define(
       onAfterRendering: function () {
         that = this;
         that.oList = this.byId("idTab");
+        this.oProd = this.byId("prodInput");
 
         this.oProdList = this._oCore.byId(
           this._valueHelpDialogProd.getId() + "-list"
@@ -156,6 +157,8 @@ sap.ui.define(
           this.oLoc = that.byId("idloc");
           aSelectedItems = oEvent.getParameter("selectedItems");
           that.oLoc.setValue(aSelectedItems[0].getTitle());
+          that.oProd.removeAllTokens();
+          this._valueHelpDialogProd.getAggregation("_dialog").getContent()[1].removeSelections();
           this.getModel("BModel").read("/getLocProdDet", {
             filters: [
               new Filter(
@@ -175,9 +178,22 @@ sap.ui.define(
 
           // Prod list
         } else if (sId.includes("prod")) {
-          this.oProd = that.byId("idprod");
+          this.oProd = that.byId("prodInput");
           aSelectedItems = oEvent.getParameter("selectedItems");
-          that.oProd.setValue(aSelectedItems[0].getTitle());
+        //   that.oProd.setValue(aSelectedItems[0].getTitle());
+        if (aSelectedItems && aSelectedItems.length > 0) {
+            that.oProd.removeAllTokens();
+            aSelectedItems.forEach(function (oItem) {
+              that.oProd.addToken(
+                new sap.m.Token({
+                  key: oItem.getTitle(),
+                  text: oItem.getTitle(),
+                })
+              );
+            });
+          } else {
+              that.oProd.removeAllTokens();
+          }
         }
         that.handleClose(oEvent);
       },

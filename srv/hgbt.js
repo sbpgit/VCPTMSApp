@@ -304,7 +304,8 @@ exports._updateHgbtGroupDataV1 = function(req) {
 }
 
 exports._runRegressionHgbtGroupV1 = function(req) {
-    console.log('Executing HGBT Regression at GROUP');
+ //   console.log('Executing HGBT Regression at GROUP REQ', req.data);
+
     var hgbtType = req.data.hgbtType;
     var hgbtDataTable;
     if (hgbtType == 1)
@@ -340,33 +341,80 @@ exports._runRegressionHgbtGroupV1 = function(req) {
     var stmt=conn.prepare(sqlStr);
     stmt.exec();
     stmt.drop();
+////////////////////////////////////////////////////////////////////////////////////
+    const hgbtGroupParams = req.data.regressionParameters;
 
-    //var groupId = group;
-    sqlStr = 'DELETE FROM PAL_HGBT_MODEL_GRP_TAB WHERE GROUP_ID IN (SELECT GROUP_ID FROM ' + hgbtDataTable + ')';
-    stmt=conn.prepare(sqlStr);
-    stmt.exec();
-    stmt.drop();
+    let inGroups = [];
+    let inGroup = hgbtGroupParams[0].groupId;
+    inGroups.push(inGroup);
+    for (var i in hgbtGroupParams)
+    { 
+        if (i > 0)
+        {
+            if( hgbtGroupParams[i].groupId != hgbtGroupParams[i-1].groupId)
+            {
+               // inGroups.push(hgbtGroupParams[i].GROUP_ID);
+                inGroups.push(hgbtGroupParams[i].groupId);
+            }
+        }
+    }
+    for (let i = 0; i < inGroups.length; i++)
+    {
 
-    sqlStr =  'DELETE FROM PAL_HGBT_IMP_GRP_TAB WHERE GROUP_ID IN (SELECT GROUP_ID FROM ' + hgbtDataTable + ')';
-    stmt=conn.prepare(sqlStr);
-    stmt.exec();
-    stmt.drop();
+        sqlStr = "DELETE FROM PAL_HGBT_MODEL_GRP_TAB WHERE GROUP_ID = " + "'" + inGroups[i] + "'";
+        stmt=conn.prepare(sqlStr);
+        stmt.exec();
+        stmt.drop();
 
-    sqlStr =  'DELETE FROM PAL_HGBT_CONFUSION_GRP_TAB WHERE GROUP_ID IN (SELECT GROUP_ID FROM ' + hgbtDataTable + ')';
-    stmt=conn.prepare(sqlStr);
-    stmt.exec();
-    stmt.drop();
+        sqlStr =  "DELETE FROM PAL_HGBT_IMP_GRP_TAB WHERE GROUP_ID = " + "'" + inGroups[i] + "'";
+        stmt=conn.prepare(sqlStr);
+        stmt.exec();
+        stmt.drop();
 
-    sqlStr =  'DELETE FROM PAL_HGBT_STATS_GRP_TAB WHERE GROUP_ID IN (SELECT GROUP_ID FROM ' + hgbtDataTable + ')';
-    //console.log('_runRegressionHgbtGroup sqlStr', sqlStr);
-    stmt=conn.prepare(sqlStr);
-    stmt.exec();
-    stmt.drop();
+        sqlStr =  "DELETE FROM PAL_HGBT_CONFUSION_GRP_TAB WHERE GROUP_ID = " + "'" + inGroups[i] + "'";
+        stmt=conn.prepare(sqlStr);
+        stmt.exec();
+        stmt.drop();
 
-    sqlStr =  'DELETE FROM PAL_HGBT_PARAM_SELECTION_GRP_TAB WHERE GROUP_ID IN (SELECT GROUP_ID FROM ' + hgbtDataTable + ')';
-    stmt=conn.prepare(sqlStr);
-    stmt.exec();
-    stmt.drop();
+        sqlStr =  "DELETE FROM PAL_HGBT_STATS_GRP_TAB WHERE GROUP_ID = " + "'" + inGroups[i] + "'";
+        //console.log('_runRegressionHgbtGroup sqlStr', sqlStr);
+        stmt=conn.prepare(sqlStr);
+        stmt.exec();
+        stmt.drop();
+
+        sqlStr =  "DELETE FROM PAL_HGBT_PARAM_SELECTION_GRP_TAB WHERE GROUP_ID = " + "'" + inGroups[i] + "'";
+        stmt=conn.prepare(sqlStr);
+        stmt.exec();
+        stmt.drop();
+
+    }
+////////////////////////////////////////////////////////////////
+    // //var groupId = group;
+    // sqlStr = 'DELETE FROM PAL_HGBT_MODEL_GRP_TAB WHERE GROUP_ID IN (SELECT GROUP_ID FROM ' + hgbtDataTable + ')';
+    // stmt=conn.prepare(sqlStr);
+    // stmt.exec();
+    // stmt.drop();
+
+    // sqlStr =  'DELETE FROM PAL_HGBT_IMP_GRP_TAB WHERE GROUP_ID IN (SELECT GROUP_ID FROM ' + hgbtDataTable + ')';
+    // stmt=conn.prepare(sqlStr);
+    // stmt.exec();
+    // stmt.drop();
+
+    // sqlStr =  'DELETE FROM PAL_HGBT_CONFUSION_GRP_TAB WHERE GROUP_ID IN (SELECT GROUP_ID FROM ' + hgbtDataTable + ')';
+    // stmt=conn.prepare(sqlStr);
+    // stmt.exec();
+    // stmt.drop();
+
+    // sqlStr =  'DELETE FROM PAL_HGBT_STATS_GRP_TAB WHERE GROUP_ID IN (SELECT GROUP_ID FROM ' + hgbtDataTable + ')';
+    // //console.log('_runRegressionHgbtGroup sqlStr', sqlStr);
+    // stmt=conn.prepare(sqlStr);
+    // stmt.exec();
+    // stmt.drop();
+
+    // sqlStr =  'DELETE FROM PAL_HGBT_PARAM_SELECTION_GRP_TAB WHERE GROUP_ID IN (SELECT GROUP_ID FROM ' + hgbtDataTable + ')';
+    // stmt=conn.prepare(sqlStr);
+    // stmt.exec();
+    // stmt.drop();
 
     if (hgbtType == 1)
         sqlStr = 'call HGBT_MAIN_1T(' + hgbtDataTable + ', ?,?,?,?,?)';
@@ -513,10 +561,10 @@ exports._runRegressionHgbtGroupV1 = function(req) {
 
 
 /////
-    let regressionParameters = req.data.regressionParameters;
+    regressionParameters = req.data.regressionParameters;
 
-    let inGroups = [];
-    let inGroup = regressionParameters[0].groupId;
+    inGroups = [];
+    inGroup = regressionParameters[0].groupId;
     inGroups.push(inGroup);
     
     for (let i in regressionParameters)
@@ -597,11 +645,12 @@ exports._runRegressionHgbtGroupV1 = function(req) {
         cds.run(cqnQuery);
 */        
         let grpStr=inGroups[grpIndex].split('#');
-        let GroupId = grpStr[0];
-        let location = grpStr[1];
-        let product = grpStr[2];
+        let profileID = grpStr[0]; 
+        let GroupId = grpStr[1];
+        let location = grpStr[2];
+        let product = grpStr[3];
 
-        console.log("_runRegressionHgbtGroupV1  grpStr ", grpStr, "GroupId ",GroupId, " location ", location, " product ", product);
+        console.log("_runRegressionHgbtGroupV1  grpStr ", grpStr, "profileID ",profileID, "GroupId ",GroupId, " location ", location, " product ", product);
 
         var rowObj = {   hgbtGroupID: idObj, 
             //createdAt : createtAtObj, 
@@ -609,6 +658,7 @@ exports._runRegressionHgbtGroupV1 = function(req) {
             Location : location,
             Product : product,
             groupId : GroupId,
+            profile : profileID,
             regressionParameters:paramsGroupObj, 
             hgbtType : req.data.hgbtType,
             importanceOp : impGroupObj,
@@ -678,7 +728,7 @@ exports._runRegressionHgbtGroupV1 = function(req) {
 
 exports._runHgbtPredictionsV1 = function(req) {
    //var groupId = req.data.groupId;
-   var groupId = req.data.groupId + '#' + req.data.Location + '#' + req.data.Product;
+   var groupId = req.data.profile + '#' + req.data.groupId + '#' + req.data.Location + '#' + req.data.Product;
 
    var conn = hana.createConnection();
 
@@ -1054,9 +1104,10 @@ exports._runHgbtPredictionV1 = function(hgbtType, group, version, scenario) {
     var groupId = group;
     
     let grpStr=groupId.split('#');
-    let GroupId = grpStr[0];
-    let location = grpStr[1];
-    let product = grpStr[2];
+    let profileId = grpStr[0];
+    let GroupId = grpStr[1];
+    let location = grpStr[2];
+    let product = grpStr[3];
 
     sqlStr = "create local temporary column table #PAL_HGBT_MODEL_TAB_"+ groupId + " " + 
                     "(\"ROW_INDEX\" INTEGER,\"TREE_INDEX\" INTEGER,\"MODEL_CONTENT\" NCLOB)"; // MEMORY THRESHOLD 1000)";
@@ -1574,8 +1625,11 @@ exports._runHgbtPredictionV1 = function(hgbtType, group, version, scenario) {
     result=stmt.exec();
     stmt.drop();
 
+    let tpGrpStr=groupId.split('#');
+    tpGroupId = tpGrpStr[1] + '#' + tpGrpStr[2] + '#' + tpGrpStr[3];
+
     sqlStr = 'SELECT DISTINCT ' + '"' + vcConfigTimePeriod + '"' + 
-            ' from  V_FUTURE_DEP_TS WHERE  "GroupID" = ' + "'" + groupId + "'" + 
+            ' from  V_FUTURE_DEP_TS WHERE  "GroupID" = ' + "'" + tpGroupId + "'" + 
             ' AND "VERSION" = ' + "'" + version + "'" +
             ' AND "SCENARIO" = ' + "'" + scenario + "'" +
             ' ORDER BY ' + '"' + vcConfigTimePeriod + '"' + ' ASC';
@@ -1583,7 +1637,7 @@ exports._runHgbtPredictionV1 = function(hgbtType, group, version, scenario) {
     stmt=conn.prepare(sqlStr);
     var distPeriods=stmt.exec();
     stmt.drop();
-    console.log("Time Periods for Group :", groupId, " Results: ", distPeriods);
+    console.log("Time Periods for Group :", tpGroupId, " Results: ", distPeriods);
     var predictedTime = new Date().toISOString();
     var trimmedPeriod = vcConfigTimePeriod.replace(/^(["]*)/g, '');
     console.log('trimmedPeriod : ', trimmedPeriod, 'vcConfigTimePeriod :', vcConfigTimePeriod);
@@ -1600,7 +1654,7 @@ exports._runHgbtPredictionV1 = function(hgbtType, group, version, scenario) {
         // console.log("V_FUTURE_DEP_TS Predicted Value sql update sqlStr", sqlStr)
 
         sqlStr = 'SELECT DISTINCT "CAL_DATE", "Location", "Product", "Type", "OBJ_DEP", "OBJ_COUNTER", "OrderQuantity", "VERSION", "SCENARIO" ' +
-                    'FROM "V_FUTURE_DEP_TS" WHERE "GroupID" = ' + "'" + groupId + "'" + 
+                    'FROM "V_FUTURE_DEP_TS" WHERE "GroupID" = ' + "'" + tpGroupId + "'" + 
                     ' AND "VERSION" = ' + "'" + version + "'" +
                     ' AND "SCENARIO" = ' + "'" + scenario + "'" +
                     ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
@@ -1618,6 +1672,7 @@ exports._runHgbtPredictionV1 = function(hgbtType, group, version, scenario) {
                     "'" + result[0].OBJ_DEP + "'" + "," +
                     "'" + result[0].OBJ_COUNTER + "'" + "," +
                     "'" + 'HGBT' + "'" + "," +
+                    "'" + profileId  + "'" + "," +
                     "'" + result[0].VERSION + "'" + "," +
                     "'" + result[0].SCENARIO + "'" + "," + 
                     "'" + predictedVal * result[0].OrderQuantity + "'" + "," +
@@ -1654,6 +1709,7 @@ exports._runHgbtPredictionV1 = function(hgbtType, group, version, scenario) {
                     "'" + result[0].Type + "'" + "," +
                     "'" + result[0].OBJ_DEP + "'" + "," +
                     "'" + result[0].OBJ_COUNTER + "'" + "," +
+                    "'" + profileId  + "'" + "," +
                     "'" + result[0].VERSION + "'" + "," +
                     "'" + result[0].SCENARIO + "'" + "," + 
                     "'" + predictedVal * result[0].OrderQuantity + "'" + "," +
@@ -1746,7 +1802,7 @@ exports._runHgbtPredictionV1 = function(hgbtType, group, version, scenario) {
 
         sqlStr = 'SELECT DISTINCT "CAL_DATE", "Location", "Product", ' +
                  '"Type", "OBJ_DEP", "OBJ_COUNTER", "ROW_ID", "CharCount", "CharCountPercent", "VERSION", "SCENARIO" ' +
-                'FROM "V_FUTURE_DEP_TS" WHERE "GroupID" = ' + "'" + groupId + "'" + 
+                'FROM "V_FUTURE_DEP_TS" WHERE "GroupID" = ' + "'" + tpGroupId + "'" + 
                 ' AND "VERSION" = ' + "'" + version + "'" +
                 ' AND "SCENARIO" = ' + "'" + scenario + "'" +
                 ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
@@ -1894,6 +1950,15 @@ exports._runHgbtPredictionV1 = function(hgbtType, group, version, scenario) {
 
             //console.log("rIndex = ",rIndex,"impact_percent = ", impact_percent,"predictedVal = ", predictedVal, "intercept =",intercept);
             let predicted = predictedVal;
+            let impactValPercent = 0;
+            if( predicted*orderCount > 0 )
+            {
+                impactValPercent = 100*impact_val/(predicted*orderCount);
+            }
+            else
+            {
+                impactValPercent = 0;
+            }
             sqlStr = 'UPSERT "CP_TS_OBJDEP_CHAR_IMPACT_F" VALUES (' + "'" + result[rIndex].CAL_DATE + "'" + "," +
                 "'" + result[rIndex].Location + "'" + "," +
                 "'" + result[rIndex].Product + "'" + "," +
@@ -1902,11 +1967,12 @@ exports._runHgbtPredictionV1 = function(hgbtType, group, version, scenario) {
                 "'" + result[rIndex].OBJ_COUNTER + "'" + "," +
                 "'" + result[rIndex].ROW_ID + "'" + "," +
                 "'" + 'HGBT' + "'" + "," +
+                "'" + profileId  + "'" + "," +
                 "'" + result[rIndex].VERSION + "'" + "," +
                 "'" + result[rIndex].SCENARIO + "'" + "," +
                 "'" + result[rIndex].CharCount + "'" + "," +
                 "'" + impact_val + "'" + "," +
-                "'" + 100*impact_val/(predicted*orderCount) + "'" + "," +
+                "'" + impactValPercent + "'" + "," +
                 "'" + predicted*orderCount + "'" + "," +
                 "'" + predictedTime + "'" + ')' + ' WITH PRIMARY KEY';
             

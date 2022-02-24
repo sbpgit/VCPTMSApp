@@ -40,7 +40,12 @@
                                 <f:label>
                                     <Label text="Product"/>
                                 </f:label>
-                                <Input id="idprod" value="" width="225px"  showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>                               
+                                <!-- <Input id="idprod" value="" width="225px"  showValueHelp="true" valueHelpOnly="true" 
+                                valueHelpRequest="handleValueHelp"/> -->
+                                <f:fields>
+                            <MultiInput id="prodInput" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true"
+                                valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
+                        </f:fields>
                             </f:FormElement>
                             <f:FormElement>
                                 <Button text="Go" width="30%" press="onGetData" tooltip="Get data based on filters"/>

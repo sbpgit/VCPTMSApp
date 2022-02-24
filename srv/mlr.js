@@ -359,34 +359,89 @@ exports._runRegressionMlrGroup = function(req) {
     var stmt=conn.prepare(sqlStr);
     stmt.exec();
     stmt.drop();
+///////////////////////////////////
+    const mlrGroupParams = req.data.regressionParameters;
 
+    let inGroups = [];
+    let modelGroup = mlrGroupParams[0].groupId;
+    inGroups.push(modelGroup);
+    for (var i in mlrGroupParams)
+    { 
+        if (i > 0)
+        {
+            if( mlrGroupParams[i].groupId != mlrGroupParams[i-1].groupId)
+            {
+                //inGroups.push(mlrGroupParams[i].GROUP_ID);
+                inGroups.push(mlrGroupParams[i].groupId);
+
+                //console.log('i :', i, 'groupId: ', mlrGroupParams[i].groupId, 'GROUP_ID: ', mlrGroupParams[i].GROUP_ID, );            
+
+
+            }
+        }
+    }
+
+    for (let i = 0; i < inGroups.length; i++)
+    {
+        sqlStr = 'DELETE FROM "PAL_MLR_COEFFICIENT_GRP_TAB" ' + 'WHERE GROUP_ID = ' + "'" + inGroups[i] + "'" ;
+        //sqlStr ='DELETE FROM PAL_MLR_COEFFICIENT_GRP_TAB WHERE GROUP_ID IN (SELECT GROUP_ID FROM PAL_MLR_DATA_GRP_TAB_3T)';
+        stmt=conn.prepare(sqlStr);
+        stmt.exec();
+        stmt.drop();
+
+        sqlStr =  'DELETE FROM "PAL_MLR_PMML_GRP_TAB" ' + 'WHERE GROUP_ID = ' + "'" + inGroups[i] + "'" ;
+        stmt=conn.prepare(sqlStr);
+        stmt.exec();
+        stmt.drop();
+
+        sqlStr =  'DELETE FROM "PAL_MLR_FITTED_GRP_TAB" ' + 'WHERE GROUP_ID = ' + "'" + inGroups[i] + "'" ;
+        stmt=conn.prepare(sqlStr);
+        stmt.exec();
+        stmt.drop();
+
+        sqlStr =  'DELETE FROM "PAL_MLR_STATISTICS_GRP_TAB" ' + 'WHERE GROUP_ID = ' + "'" + inGroups[i] + "'" ;
+    //    console.log('_runRegressionMlrGroup sqlStr', sqlStr);
+        stmt=conn.prepare(sqlStr);
+        stmt.exec();
+        stmt.drop();
+
+        sqlStr =  'DELETE FROM "PAL_MLR_OPTIMAL_PARAM_GRP_TAB" ' + 'WHERE GROUP_ID = ' + "'" + inGroups[i] + "'" ;
+        stmt=conn.prepare(sqlStr);
+        stmt.exec();
+        stmt.drop();
+
+    }
+
+
+
+///////////////////////////////////
     //var groupId = group;
-    sqlStr = 'DELETE FROM "PAL_MLR_COEFFICIENT_GRP_TAB" WHERE GROUP_ID IN (SELECT GROUP_ID FROM ' + mlrDataTable + ')';
-    //sqlStr ='DELETE FROM PAL_MLR_COEFFICIENT_GRP_TAB WHERE GROUP_ID IN (SELECT GROUP_ID FROM PAL_MLR_DATA_GRP_TAB_3T)';
-    stmt=conn.prepare(sqlStr);
-    stmt.exec();
-    stmt.drop();
+//     sqlStr = 'DELETE FROM "PAL_MLR_COEFFICIENT_GRP_TAB" WHERE GROUP_ID IN (SELECT GROUP_ID FROM ' + mlrDataTable + ')';
+//     //sqlStr ='DELETE FROM PAL_MLR_COEFFICIENT_GRP_TAB WHERE GROUP_ID IN (SELECT GROUP_ID FROM PAL_MLR_DATA_GRP_TAB_3T)';
+//     stmt=conn.prepare(sqlStr);
+//     stmt.exec();
+//     stmt.drop();
 
-    sqlStr =  'DELETE FROM "PAL_MLR_PMML_GRP_TAB" WHERE GROUP_ID IN (SELECT GROUP_ID FROM ' + mlrDataTable + ')';
-    stmt=conn.prepare(sqlStr);
-    stmt.exec();
-    stmt.drop();
+//     sqlStr =  'DELETE FROM "PAL_MLR_PMML_GRP_TAB" WHERE GROUP_ID IN (SELECT GROUP_ID FROM ' + mlrDataTable + ')';
+//     stmt=conn.prepare(sqlStr);
+//     stmt.exec();
+//     stmt.drop();
 
-    sqlStr =  'DELETE FROM "PAL_MLR_FITTED_GRP_TAB" WHERE GROUP_ID IN (SELECT GROUP_ID FROM ' + mlrDataTable + ')';
-    stmt=conn.prepare(sqlStr);
-    stmt.exec();
-    stmt.drop();
+//     sqlStr =  'DELETE FROM "PAL_MLR_FITTED_GRP_TAB" WHERE GROUP_ID IN (SELECT GROUP_ID FROM ' + mlrDataTable + ')';
+//     stmt=conn.prepare(sqlStr);
+//     stmt.exec();
+//     stmt.drop();
 
-    sqlStr =  'DELETE FROM "PAL_MLR_STATISTICS_GRP_TAB" WHERE GROUP_ID IN (SELECT GROUP_ID FROM ' + mlrDataTable + ')';
-//    console.log('_runRegressionMlrGroup sqlStr', sqlStr);
-    stmt=conn.prepare(sqlStr);
-    stmt.exec();
-    stmt.drop();
+//     sqlStr =  'DELETE FROM "PAL_MLR_STATISTICS_GRP_TAB" WHERE GROUP_ID IN (SELECT GROUP_ID FROM ' + mlrDataTable + ')';
+// //    console.log('_runRegressionMlrGroup sqlStr', sqlStr);
+//     stmt=conn.prepare(sqlStr);
+//     stmt.exec();
+//     stmt.drop();
 
-    sqlStr =  'DELETE FROM "PAL_MLR_OPTIMAL_PARAM_GRP_TAB" WHERE GROUP_ID IN (SELECT GROUP_ID FROM ' + mlrDataTable + ')';
-    stmt=conn.prepare(sqlStr);
-    stmt.exec();
-    stmt.drop();
+//     sqlStr =  'DELETE FROM "PAL_MLR_OPTIMAL_PARAM_GRP_TAB" WHERE GROUP_ID IN (SELECT GROUP_ID FROM ' + mlrDataTable + ')';
+//     stmt=conn.prepare(sqlStr);
+//     stmt.exec();
+//     stmt.drop();
 
     if (mlrType == 1)
         sqlStr = 'call "MLR_MAIN_1T"(' + mlrDataTable + ', ?,?,?,?,?)';
@@ -535,7 +590,7 @@ exports._runRegressionMlrGroup = function(req) {
  
     let mlrID = idObj; //uuidObj;
  
-    let regressionParameters = req.data.regressionParameters;
+    regressionParameters = req.data.regressionParameters;
  
     mlrType = req.data.mlrType;
  
@@ -551,8 +606,8 @@ exports._runRegressionMlrGroup = function(req) {
     returnObj.push({mlrID, createdAt,regressionParameters,mlrType,regressionData,coefficientOp, pmmlOp,fittedOp,statisticsOp,optimalParamOp});
 
 /////
-    let inGroups = [];
-    let modelGroup = regressionParameters[0].groupId;
+    inGroups = [];
+    modelGroup = regressionParameters[0].groupId;
     inGroups.push(modelGroup);
     for (let i in regressionParameters)
     { 
@@ -645,17 +700,19 @@ exports._runRegressionMlrGroup = function(req) {
         cds.run(cqnQuery);
 */   
         let grpStr=inGroups[grpIndex].split('#');
-        let GroupId = grpStr[0];
-        let location = grpStr[1];
-        let product = grpStr[2];
+        let profileID = grpStr[0]; 
+        let GroupId = grpStr[1];
+        let location = grpStr[2];
+        let product = grpStr[3];
 
-        console.log("_runRegressionMLRGroup  grpStr ", grpStr, "GroupId ",GroupId, " location ", location, " product ", product);
+        console.log("_runRegressionMLRGroup  grpStr ", grpStr,  "profileID ",profileID, "GroupId ",GroupId, " location ", location, " product ", product);
 
         var rowObj = {   mlrGroupID: idObj, 
             createdAt : createtAtObj.toISOString(), 
             Location : location,
             Product : product,
             groupId : GroupId,
+            profile : profileID,
             regressionParameters:paramsGroupObj, 
             mlrType : req.data.mlrType,
             coefficientOp : coeffsGroupObj,
@@ -701,7 +758,7 @@ exports._runMlrPredictions = function(req) {
    //const predictionParameters = req.data.predictionParameters;
    //console.log('predictionParameters: ', predictionParameters); 
    //var groupId = req.data.groupId;
-   var groupId = req.data.groupId + '#' + req.data.Location + '#' + req.data.Product;
+   var groupId = req.data.profile + '#' + req.data.groupId + '#' + req.data.Location + '#' + req.data.Product;
 
    var conn = hana.createConnection();
 
@@ -1075,9 +1132,10 @@ exports._runMlrPrediction = function (mlrpType, group, version, scenario) {
 
     var groupId = group;
     let grpStr=groupId.split('#');
-    let GroupId = grpStr[0];
-    let location = grpStr[1];
-    let product = grpStr[2];
+    let profileId = grpStr[0];
+    let GroupId = grpStr[1];
+    let location = grpStr[2];
+    let product = grpStr[3];
 
     sqlStr = 'create local temporary column table ' + '"#PAL_FMLR_COEFICIENT_TBL_' + groupId + '" ' + 
                     "(\"Coefficient\" varchar(50),\"CoefficientValue\" DOUBLE)"; 
@@ -1664,8 +1722,11 @@ exports._runMlrPrediction = function (mlrpType, group, version, scenario) {
     result=stmt.exec();
     stmt.drop();
 
+    let tpGrpStr=groupId.split('#');
+    tpGroupId = tpGrpStr[1] + '#' + tpGrpStr[2] + '#' + tpGrpStr[3];
+
     sqlStr = 'SELECT DISTINCT "OBJ_DEP", "OBJ_COUNTER", ' + '"' + vcConfigTimePeriod + '"' + 
-             ' from  "V_FUTURE_DEP_TS" WHERE  "GroupID" = ' + "'" + groupId + "'" + 
+             ' from  "V_FUTURE_DEP_TS" WHERE  "GroupID" = ' + "'" + tpGroupId + "'" + 
              ' AND "VERSION" = ' + "'" + version + "'" +
              ' AND "SCENARIO" = ' + "'" + scenario + "'" +
              ' ORDER BY ' + '"' + vcConfigTimePeriod + '"' + ' ASC';
@@ -1674,7 +1735,7 @@ exports._runMlrPrediction = function (mlrpType, group, version, scenario) {
     stmt=conn.prepare(sqlStr);
     var distPeriods=stmt.exec();
     stmt.drop();
-    //console.log("Time Periods for Group :", groupId, " Results: ", distPeriods);
+    //console.log("Time Periods for Group :", tpGroupId, " Results: ", distPeriods);
     var predictedTime = new Date().toISOString();
     var trimmedPeriod = vcConfigTimePeriod.replace(/^(["]*)/g, '');
     //console.log('trimmedPeriod : ', trimmedPeriod, 'vcConfigTimePeriod :', vcConfigTimePeriod);
@@ -1694,7 +1755,7 @@ exports._runMlrPrediction = function (mlrpType, group, version, scenario) {
 
          //console.log("V_FUTURE_DEP_TS Predicted Value sql update sqlStr", sqlStr)
         sqlStr = 'SELECT DISTINCT "CAL_DATE", "Location", "Product", "Type", "OBJ_DEP", "OBJ_COUNTER", "VERSION", "SCENARIO" ' +
-                'FROM "V_FUTURE_DEP_TS" WHERE "GroupID" = ' + "'" + groupId + "'" + 
+                'FROM "V_FUTURE_DEP_TS" WHERE "GroupID" = ' + "'" + tpGroupId + "'" + 
                 ' AND "VERSION" = ' + "'" + version + "'" +
                 ' AND "SCENARIO" = ' + "'" + scenario + "'" +
                 ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
@@ -1712,6 +1773,7 @@ exports._runMlrPrediction = function (mlrpType, group, version, scenario) {
                     "'" + result[0].OBJ_DEP + "'" + "," +
                     "'" + result[0].OBJ_COUNTER + "'" + "," +
                     "'" + 'MLR' + "'" + "," +
+                    "'" + profileId  + "'" + "," +
                     "'" + result[0].VERSION + "'" + "," +
                     "'" + result[0].SCENARIO + "'" + "," +
                     "'" + predictedVal + "'" + "," +
@@ -1750,6 +1812,7 @@ exports._runMlrPrediction = function (mlrpType, group, version, scenario) {
                     "'" + result[0].Type + "'" + "," +
                     "'" + result[0].OBJ_DEP + "'" + "," +
                     "'" + result[0].OBJ_COUNTER + "'" + "," +
+                    "'" + profileId  + "'" + "," +
                     "'" + result[0].VERSION + "'" + "," +
                     "'" + result[0].SCENARIO + "'" + "," + 
                     "'" + predictedVal + "'" + "," +
@@ -1846,7 +1909,7 @@ exports._runMlrPrediction = function (mlrpType, group, version, scenario) {
 
         sqlStr = 'SELECT DISTINCT "CAL_DATE", "Location", "Product", ' +
                  '"Type", "OBJ_DEP", "OBJ_COUNTER", "ROW_ID", "CharCount", "VERSION", "SCENARIO" ' +
-                'FROM "V_FUTURE_DEP_TS" WHERE "GroupID" = ' + "'" + groupId + "'" + 
+                'FROM "V_FUTURE_DEP_TS" WHERE "GroupID" = ' + "'" + tpGroupId + "'" + 
                 ' AND "VERSION" = ' + "'" + version + "'" +
                 ' AND "SCENARIO" = ' + "'" + scenario + "'" +
                 ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
@@ -1905,6 +1968,7 @@ exports._runMlrPrediction = function (mlrpType, group, version, scenario) {
                 "'" + result[rIndex].OBJ_COUNTER + "'" + "," +
                 "'" + result[rIndex].ROW_ID + "'" + "," +
                 "'" + 'MLR' + "'" + "," +
+                "'" + profileId  + "'" + "," +
                 "'" + result[rIndex].VERSION + "'" + "," +
                 "'" + result[rIndex].SCENARIO + "'" + "," +
                 "'" + result[rIndex].CharCount + "'" + "," +
