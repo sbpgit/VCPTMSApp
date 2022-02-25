@@ -1,8 +1,23 @@
 const GenFunctions = require("./gen-functions");
 const cds = require("@sap/cds");
+const hana = require('@sap/hana-client');
 const { createLogger, format, transports } = require("winston");
 const { combine, timestamp, label, prettyPrint } = format;
-
+// const conn_params_container= {
+//     serverNode  : "b3117009-beb5-4b3f-a851-c379293f8579.hana.prod-us10.hanacloud.ondemand.com" + ":" + "443",
+//     uid         : "22E31DBAE729415AB87E36A13434327D_8AKT1T2RZWK448YCBFEX989YE_RT", //process.env.uidClassicalSchema, //cf environment variable
+//     pwd         : "Cm6.XYRMVE8WEI-QmSs6sSbdniWlVDC4m7z12pwdY2G5RxytgPfoyj1Jm3lMTmnWBfxJTiC9uCYsAc_-pp4LdhtwyX9VXCglz1jNe5PjuFeQGFbX345wPiRriL6UQzge", //process.env.uidClassicalSchemaPassword,//cf environment variable
+//     encrypt: 'TRUE',
+//     ssltruststore: cds.env.requires.hana.credentials.certificate
+// };
+const containerSchema = cds.env.requires.db.credentials.schema;
+const conn_params_container = {
+    serverNode  : cds.env.requires.db.credentials.host + ":" + cds.env.requires.db.credentials.port,
+    uid         : cds.env.requires.db.credentials.user, //cds userid environment variable
+    pwd         : cds.env.requires.db.credentials.password,//cds password environment variable
+    encrypt: 'TRUE',
+    ssltruststore: cds.env.requires.hana.credentials.certificate
+};
 class GenTimeseries {
   constructor() {
     /** Define Logger */
@@ -27,6 +42,20 @@ class GenTimeseries {
    * Generate Timeseries
    */
   async genTimeseries(adata) {
+    var conn = hana.createConnection(),
+    result, stmt;
+ 
+    conn.connect(conn_params_container);
+    var sqlStr = 'SET SCHEMA ' + containerSchema; 
+    // console.log('sqlStr: ', sqlStr);  
+    try {
+        stmt=conn.prepare(sqlStr);
+        result=stmt.exec();
+        stmt.drop();
+        
+    } catch (error) {
+        console.log(error);
+    }          
     const lStartTime = new Date();
     this.logger.info("Started timeseries Service");
 
@@ -105,14 +134,18 @@ class GenTimeseries {
     liOrdRate.sort(GenFunctions.dynamicSortMultiple("WEEK_DATE","LOCATION_ID"));
     let liOrdRateTemp = [];
     let lOrdCount = 0;
+    var tableObjR = [], rowObjR = [];
     for (let lOrdInd = 0; lOrdInd < liOrdRate.length; lOrdInd++) {
         lOrdCount = parseInt(lOrdCount) + parseInt(liOrdRate[lOrdInd].ORDER_COUNT);
         if( liOrdRate[lOrdInd].WEEK_DATE !== liOrdRate[GenFunctions.addOne(lOrdInd,liOrdRate.length)].WEEK_DATE ||
             liOrdRate[lOrdInd].LOCATION_ID !== liOrdRate[GenFunctions.addOne(lOrdInd,liOrdRate.length)].LOCATION_ID ||
             lOrdInd === GenFunctions.addOne(lOrdInd,liOrdRate.length)){
                 lsOrdRate = {};
+                rowObjR = [];
                 lsOrdRate = GenFunctions.parse(liOrdRate[lOrdInd]);
                 lsOrdRate.ORDER_COUNT = lOrdCount;
+                rowObjR.push(lsOrdRate.WEEK_DATE, lsOrdRate.LOCATION_ID, lsOrdRate.ORDER_COUNT);
+                tableObjR.push(rowObjR)
                 liOrdRateTemp.push(GenFunctions.parse(lsOrdRate));
                 lOrdCount = 0;
         }
@@ -122,6 +155,10 @@ class GenTimeseries {
         await cds.run(
           INSERT.into("CP_TS_ORDERRATE").entries(liOrdRateTemp)
         );
+        // var sqlStr = 'INSERT INTO "CP_TS_ORDERRATE"' + '(WEEK_DATE, LOCATION_ID, ORDER_COUNT) VALUES(?, ?, ?)';
+        // var stmt = conn.prepare(sqlStr);
+        // stmt.execBatch(tableObjR);
+        // stmt.drop();
       } catch (e) {
         this.logger.error(e.message + "/" + e.query);
       }  
@@ -158,6 +195,7 @@ class GenTimeseries {
       );
 
       let liObjDepChar = [];
+      var tableObj = [];
 
       // Fill the OD Characteristics with empty Success
       for (let lProdIndex = 0; lProdIndex < liProdOD.length; lProdIndex++) {
@@ -171,7 +209,11 @@ class GenTimeseries {
         sObjDepChar.ROW_ID       = liProdOD[lProdIndex].ROW_ID;
         sObjDepChar.SUCCESS      = 0;
         sObjDepChar.SUCCESS_RATE = 0;
+        var rowObj = [];
+        rowObj.push(sObjDepChar.CAL_DATE ,sObjDepChar.LOCATION_ID,sObjDepChar.PRODUCT_ID ,sObjDepChar.OBJ_TYPE, sObjDepChar.OBJ_DEP,sObjDepChar.OBJ_COUNTER, sObjDepChar.ROW_ID, sObjDepChar.SUCCESS, sObjDepChar.SUCCESS_RATE);
+        tableObj.push(rowObj);
         liObjDepChar.push(GenFunctions.parse(sObjDepChar));
+        //liObjDepChar.push(GenFunctions.parse(rowObj));
       }
 
       this.logger.info(
@@ -204,6 +246,9 @@ class GenTimeseries {
               liSalesChar[i].OBJ_COUNTER === liObjDepChar[k].OBJ_COUNTER &&
               liSalesChar[i].ROW_ID      === liObjDepChar[k].ROW_ID
             ) {
+                tableObj[k][7] = parseInt(lSuccessQty);
+                tableObj[k][8]  = (parseInt(lSuccessQty) / parseInt(liSalesInfo[lSalesIndex].ORD_QTY)) * 100;
+                tableObj[k][8].toFixed(2);
               liObjDepChar[k].SUCCESS      = parseInt(lSuccessQty);
               liObjDepChar[k].SUCCESS_RATE = (parseInt(lSuccessQty) / parseInt(liSalesInfo[lSalesIndex].ORD_QTY)) * 100;
               liObjDepChar[k].SUCCESS_RATE.toFixed(2);
@@ -216,9 +261,14 @@ class GenTimeseries {
 
       this.logger.info("Insert Char Length: " + liObjDepChar.length);
       try {
-        await cds.run(
-          INSERT.into("CP_TS_OBJDEP_CHARHDR").entries(liObjDepChar)
-        );
+        // await cds.run(
+        //   INSERT.into("CP_TS_OBJDEP_CHARHDR").entries(liObjDepChar)
+        // );
+       // tableObj.push(liObjDepChar);
+        var sqlStr = 'INSERT INTO "CP_TS_OBJDEP_CHARHDR"' + '(CAL_DATE, LOCATION_ID, PRODUCT_ID, OBJ_TYPE, OBJ_DEP, OBJ_COUNTER, ROW_ID, SUCCESS, SUCCESS_RATE) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        var stmt = conn.prepare(sqlStr);
+        await stmt.execBatch(tableObj);
+        stmt.drop();
       } catch (e) {
         this.logger.error(e.message + "/" + e.query);
       }
@@ -250,7 +300,8 @@ class GenTimeseries {
                         );
 
         let liObjDepHdr = [];
-        let sObjDepHdr = {};
+        let sObjDepHdr = {};        
+    var tableObjH = [], rowObjH = [];
         let lFail = '';
       for (let k = 0; k < liSalesChar.length; k++) {
 
@@ -300,8 +351,7 @@ class GenTimeseries {
     }
     liObjDepHdr.sort(GenFunctions.dynamicSortMultiple("CAL_DATE","LOCATION_ID","PRODUCT_ID","OBJ_TYPE","OBJ_DEP","OBJ_COUNTER"));
 
-    let liObjDepHdrTemp = [];
-
+    let liObjDepHdrTemp = [];    
     lSuccessQty = 0;
     for (let lIndObjHdr = 0; lIndObjHdr < liObjDepHdr.length; lIndObjHdr++) {
 
@@ -316,10 +366,13 @@ class GenTimeseries {
         lIndObjHdr === GenFunctions.addOne(lIndObjHdr,liObjDepHdr.length)
         ){
             sObjDepHdr = {};
+            rowObjH = [];
             sObjDepHdr = GenFunctions.parse(liObjDepHdr[lIndObjHdr]);
             sObjDepHdr.SUCCESS = parseInt(lSuccessQty);
             sObjDepHdr.SUCCESS_RATE = (parseInt(lSuccessQty) / parseInt(liSalesInfo[lSalesIndex].ORD_QTY)) * 100;
-            
+            rowObjH.push(sObjDepHdr.CAL_DATE ,sObjDepHdr.LOCATION_ID,sObjDepHdr.PRODUCT_ID ,sObjDepHdr.OBJ_TYPE, sObjDepHdr.OBJ_DEP,sObjDepHdr.OBJ_COUNTER, sObjDepHdr.SUCCESS, sObjDepHdr.SUCCESS_RATE);
+            tableObjH.push(rowObjH);
+        
             liObjDepHdrTemp.push(GenFunctions.parse(sObjDepHdr));
             lSuccessQty = 0;
         }      
@@ -327,7 +380,11 @@ class GenTimeseries {
 
     this.logger.info("Insert Head Length: " + liObjDepHdrTemp.length);
       try {
-        await cds.run(INSERT.into("CP_TS_OBJDEPHDR").entries(liObjDepHdrTemp));
+        // await cds.run(INSERT.into("CP_TS_OBJDEPHDR").entries(liObjDepHdrTemp));
+        var sqlStr = 'INSERT INTO "CP_TS_OBJDEPHDR"' + '(CAL_DATE, LOCATION_ID, PRODUCT_ID, OBJ_TYPE, OBJ_DEP, OBJ_COUNTER, SUCCESS, SUCCESS_RATE) VALUES(?, ?, ?, ?, ?, ?, ?, ?)';
+        var stmt = conn.prepare(sqlStr);
+        await stmt.execBatch(tableObjH);
+        stmt.drop();
       } catch (e) {
         this.logger.error(e.message + "/" + e.query);
       }

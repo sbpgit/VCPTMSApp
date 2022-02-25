@@ -22,7 +22,7 @@
                                     <Label text="Location"/>
                                 </f:label>
                                 <f:fields>
-                                <Input id="idloc" value="" width="225px" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                                <Input id="idloc" value="" width="225px" placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
                                 </f:fields>
                             </f:FormElement>
                             <f:FormElement>
@@ -97,6 +97,9 @@
                         <Text text="{i18n>objDesc}"/>
                     </Column>
                     <Column hAlign="Left" vAlign="Middle">
+                        <Text text="{i18n>strucnode}"/>
+                    </Column>
+                    <Column hAlign="Left" vAlign="Middle">
                         <Text text="Profile"/>
                     </Column>
                 </columns>
@@ -108,6 +111,7 @@
                         <Text text="{COMPONENT}"/>
                         <Text text="{OBJ_DEP}"/>
                         <Text text="{OBJDEP_DESC}"/>
+                        <Text text="{STRUC_NODE}"/>
                         <Text text="{PROFILE}"/>
                         <!-- </cells> -->
                     </ColumnListItem>

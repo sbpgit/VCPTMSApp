@@ -502,6 +502,7 @@ context cp {
                 COMPONENT   : String(40);
                 PROFILE     : String(50);
                 OBJ_DEP     : String(30);
+                STRUC_NODE  : String(50);
             };
     }
 

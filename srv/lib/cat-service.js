@@ -467,7 +467,7 @@ async function _createProfiles(req) {
         //DONOTHING
       }
     }
-    lsprofiles.CREATED_BY = req.user_id;
+    lsprofiles.CREATED_BY = " ";
     liProfiles.push(lsprofiles);
     lsprofiles = {};
     try {
@@ -565,6 +565,12 @@ async function _createProfileOD(req) {
       lsprofilesOD.COMPONENT = aProfileOD_req[i].COMPONENT;
       lsprofilesOD.OBJ_DEP = aProfileOD_req[i].OBJ_DEP;
       lsprofilesOD.PROFILE = aProfileOD_req[i].PROFILE;
+      if (lsprofilesOD.STRUC_NODE !== undefined){
+      lsprofilesOD.STRUC_NODE = aProfileOD_req[i].STRUC_NODE;
+      }
+      else{
+        lsprofilesOD.STRUC_NODE = "";
+      }
       liProfilesOD.push(GenFunctions.parse(lsprofilesOD));
       // Delete before insert to override
       lsprofilesDel.LOCATION_ID = aProfileOD_req[i].LOCATION_ID;

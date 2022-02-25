@@ -13,10 +13,22 @@
                     <content>
                         <!-- <SearchField id="headSearch" liveChange="onSearch" placeholder="Object Dependency"/> -->
                         <SearchField id="headSearch" search="onSearch" placeholder="Object Dependency"/>
-                        <List id="objDepList" growing="true"
-    growingThreshold="800" headerText="Object Dependency" items="{ path : '/results', sorter : { path : 'OBJ_DEP'}}" mode="SingleSelectMaster" noDataText="No Data" selectionChange="onhandlePress">
+                        <List id="objDepList" growing="true"  growingThreshold="800" headerText="Object Dependency" 
+                        items="{ path : '/results', sorter : { path : 'OBJ_DEP'}}" mode="SingleSelectMaster" 
+                        noDataText="No Data" selectionChange="onhandlePress">
                             <items>
-                                <StandardListItem title="{OBJ_DEP}" description="{OBJDEP_DESC}" />
+                                <!-- <StandardListItem title="{OBJ_DEP}" description="{OBJDEP_DESC}" /> -->
+                        <ObjectListItem  press="onhandlePress" title="{OBJ_DEP}" >
+						<firstStatus>
+							<ObjectStatus text="{LOCATION_ID}" />
+						</firstStatus>
+						<secondStatus>
+							<ObjectStatus text="{PRODUCT_ID}"/>
+						</secondStatus>
+						<attributes>
+							<ObjectAttribute text="{OBJDEP_DESC}"/>
+						</attributes>
+					</ObjectListItem>
 
                             </items>
                         </List>

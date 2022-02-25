@@ -203,7 +203,7 @@ sap.ui.define(
             if (that.oCompList.getBinding("items")) {
               that.oCompList.getBinding("items").filter([]);
             }
-          } else if (sId.includes("prod")) {
+          } else if (sId.includes("press")) {
             that._oCore
               .byId(this._valueHelpDialogObjDep.getId() + "-searchField")
               .setValue("");
@@ -465,8 +465,8 @@ sap.ui.define(
       },
 
       onGetData:function(){
-        if (that.byId("idloc").getValue() && that.byId("prodInput").getTokens().length !== 0
-        && that.byId("compInput").getTokens().length !== 0 && that.byId("objDepInput").getTokens().length !== 0) {
+        if (that.byId("idloc").getValue() && that.byId("prodInput").getTokens().length !== 0 ){
+      //  && that.byId("compInput").getTokens().length !== 0 && that.byId("objDepInput").getTokens().length !== 0) {
             var aSelectedItem = that.oProdList.getSelectedItems(); 
             var aSelectedComp = that.oCompList.getSelectedItems(); 
             var aSelectedObjDep = that.oObjDepList.getSelectedItems();              
@@ -600,6 +600,7 @@ sap.ui.define(
                 new Filter("PRODUCT_ID", FilterOperator.Contains, query),
                 new Filter("COMPONENT", FilterOperator.Contains, query),
                 new Filter("OBJ_DEP", FilterOperator.Contains, query),
+                new Filter("STRUC_NODE", FilterOperator.Contains, query),
                 new Filter("PROFILE", FilterOperator.Contains, query),
               ],
               and: false,
@@ -624,6 +625,7 @@ sap.ui.define(
             PRODUCT_ID: selected.PRODUCT_ID,
             COMPONENT: selected.COMPONENT,
             OBJ_DEP: selected.OBJ_DEP,
+            STRUC_NODE: selected.STRUC_NODE,
             PROFILE: sProfile,
           };
           aData.PROFILEOD.push(jsonProfileOD);
@@ -646,12 +648,12 @@ sap.ui.define(
               error: function (data) {
                 sap.m.MessageToast.show("Error in assigning Profiles");
                 sap.ui.core.BusyIndicator.hide();
-                that.handleClose();
+                that.handleClose(oEvent);
               },
               success: function (data) {
                 sap.ui.core.BusyIndicator.hide();
                 sap.m.MessageToast.show("Profile assigned successfully");
-                that.handleClose();
+                that.handleClose(oEvent);
                 that.onGetData();
               },
             });
