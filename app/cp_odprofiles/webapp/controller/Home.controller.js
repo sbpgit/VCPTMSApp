@@ -564,7 +564,7 @@ sap.ui.define(
                 results: oData.results,
               });
               that.oProfileList.setModel(that.oProfileModel);
-
+              that.oProfileList.removeSelections(true);
               that._onProfiles.open();
               that.oGModel.setProperty("/selItem", selTabItem);
             },
