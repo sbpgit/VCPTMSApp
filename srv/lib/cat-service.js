@@ -441,7 +441,7 @@ module.exports = (srv) => {
   });
   srv.on("generate_timeseriesF", async (req) => {
     const obgenTimeseries = new GenTimeseries();
-    await obgenTimeseries.genTimeseriesF();
+    await obgenTimeseries.genTimeseriesF(req.data);
     console.log("test");
   });
 };

@@ -398,7 +398,7 @@ class GenTimeseries {
     this.logger.info("Processing time : " + lProcessTime + " Minutes", 'background: #222; color: #bada55');
   }
 
-  async genTimeseriesF(){
+  async genTimeseriesF(adata){
 
     const lStartTime = new Date();
     this.logger.info("Started timeseries Service");
@@ -411,6 +411,10 @@ class GenTimeseries {
                         SCENARIO,
                         WEEK_DATE
             FROM "CP_IBP_FCHARPLAN"
+            WHERE "LOCATION_ID" = '`
+            + adata.LOCATION_ID + `'
+            AND "PRODUCT_ID" = '`
+            + adata.PRODUCT_ID + `'
             ORDER BY LOCATION_ID, 
                     PRODUCT_ID, 
                     VERSION,
