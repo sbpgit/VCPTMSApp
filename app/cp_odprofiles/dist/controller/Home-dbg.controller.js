@@ -58,22 +58,22 @@ sap.ui.define(
           this.getView().addDependent(this._valueHelpDialogProd);
         }
         if (!this._valueHelpDialogComp) {
-            this._valueHelpDialogComp = sap.ui.xmlfragment(
-              "cp.odp.cpodprofiles.view.ComponentDialog",
-              this
-            );
-            this.getView().addDependent(this._valueHelpDialogComp);
-          }
-          if (!this._valueHelpDialogObjDep) {
-            this._valueHelpDialogObjDep = sap.ui.xmlfragment(
-              "cp.odp.cpodprofiles.view.ObjDepDialog",
-              this
-            );
-            this.getView().addDependent(this._valueHelpDialogObjDep);
-          }
-          this.getRouter()
-              .getRoute("Home")
-              .attachPatternMatched(this._onPatternMatched.bind(this));
+          this._valueHelpDialogComp = sap.ui.xmlfragment(
+            "cp.odp.cpodprofiles.view.ComponentDialog",
+            this
+          );
+          this.getView().addDependent(this._valueHelpDialogComp);
+        }
+        if (!this._valueHelpDialogObjDep) {
+          this._valueHelpDialogObjDep = sap.ui.xmlfragment(
+            "cp.odp.cpodprofiles.view.ObjDepDialog",
+            this
+          );
+          this.getView().addDependent(this._valueHelpDialogObjDep);
+        }
+        this.getRouter()
+          .getRoute("Home")
+          .attachPatternMatched(this._onPatternMatched.bind(this));
       },
       _onPatternMatched: function () {
         that = this;
@@ -90,11 +90,11 @@ sap.ui.define(
           this._valueHelpDialogLoc.getId() + "-list"
         );
         this.oCompList = this._oCore.byId(
-            this._valueHelpDialogComp.getId() + "-list"
-          );
-          this.oObjDepList = this._oCore.byId(
-            this._valueHelpDialogObjDep.getId() + "-list"
-          );
+          this._valueHelpDialogComp.getId() + "-list"
+        );
+        this.oObjDepList = this._oCore.byId(
+          this._valueHelpDialogObjDep.getId() + "-list"
+        );
 
         that.oList.removeSelections();
         // Calling function
@@ -103,15 +103,15 @@ sap.ui.define(
       getData: function () {
         sap.ui.core.BusyIndicator.show();
         this.getModel("BModel").read("/getLocation", {
-            success: function (oData) {
-              that.locModel.setData(oData);
-              that.oLocList.setModel(that.locModel);
-              sap.ui.core.BusyIndicator.hide();
-            },
-            error: function (oData, error) {
-              MessageToast.show("error");
-            },
-          });
+          success: function (oData) {
+            that.locModel.setData(oData);
+            that.oLocList.setModel(that.locModel);
+            sap.ui.core.BusyIndicator.hide();
+          },
+          error: function (oData, error) {
+            MessageToast.show("error");
+          },
+        });
       },
 
       handleValueHelp: function (oEvent) {
@@ -119,64 +119,66 @@ sap.ui.define(
         if (sId.includes("loc")) {
           that._valueHelpDialogLoc.open();
         } else if (sId.includes("prod")) {
-            if (that.byId("idloc").getValue()){
-          that._valueHelpDialogProd.open();
-            } else {
-                MessageToast.show("Select Location");
-            }
+          if (that.byId("idloc").getValue()) {
+            that._valueHelpDialogProd.open();
+          } else {
+            MessageToast.show("Select Location");
+          }
         } else if (sId.includes("comp")) {
+          if (
+            that.byId("idloc").getValue() &&
+            that.byId("prodInput").getTokens().length !== 0
+          ) {
+            //         var aSelectedItem = that.oProdList.getSelectedItems();
 
-            if (that.byId("idloc").getValue() && that.byId("prodInput").getTokens().length !== 0) {
-        //         var aSelectedItem = that.oProdList.getSelectedItems();                
+            //         var oFilters = [];
+            //         var sFilter = new sap.ui.model.Filter({
+            //             path: "LOCATION_ID",
+            //             operator: sap.ui.model.FilterOperator.EQ,
+            //             value1: that.oLoc.getValue()
+            //         });
+            //         oFilters.push(sFilter);
 
-        //         var oFilters = [];
-        //         var sFilter = new sap.ui.model.Filter({
-        //             path: "LOCATION_ID",
-        //             operator: sap.ui.model.FilterOperator.EQ,
-        //             value1: that.oLoc.getValue()
-        //         });
-        //         oFilters.push(sFilter);
+            //         for(var i=0; i < aSelectedItem.length; i++){
 
-        //         for(var i=0; i < aSelectedItem.length; i++){
+            //             sFilter = new sap.ui.model.Filter({
+            //             path: "PRODUCT_ID",
+            //             operator: sap.ui.model.FilterOperator.EQ,
+            //             value1: aSelectedItem[i].getTitle()
+            //             });
+            //                 oFilters.push(sFilter);
 
-                                   
-        //             sFilter = new sap.ui.model.Filter({
-        //             path: "PRODUCT_ID",
-        //             operator: sap.ui.model.FilterOperator.EQ,
-        //             value1: aSelectedItem[i].getTitle()
-        //             });
-        //                 oFilters.push(sFilter);
-                  
-        //         }
+            //         }
 
+            //         this.getModel("BModel").read("/getBomOdCond", {
+            //             filters: oFilters,
+            //             success: function (oData) {
 
-        //         this.getModel("BModel").read("/getBomOdCond", {
-        //             filters: oFilters,
-        //             success: function (oData) {
-                                                
-        //                 that.CompModel.setData(oData);
-        //                 that.oCompList.setModel(that.CompModel);
+            //                 that.CompModel.setData(oData);
+            //                 that.oCompList.setModel(that.CompModel);
 
-        //                 that.ObjDepModel.setData(oData);
-        //                 that.oObjDepList.setModel(that.ObjDepModel);
-        //                 that._valueHelpDialogComp.open();
-              
-        //     },
-        //     error: function (oData, error) {
-        //       MessageToast.show("error");
-        //     },
-        //   });
-        that._valueHelpDialogComp.open();
-            } else {
-              MessageToast.show("No Product Location selected");
-            }
+            //                 that.ObjDepModel.setData(oData);
+            //                 that.oObjDepList.setModel(that.ObjDepModel);
+            //                 that._valueHelpDialogComp.open();
 
+            //     },
+            //     error: function (oData, error) {
+            //       MessageToast.show("error");
+            //     },
+            //   });
+            that._valueHelpDialogComp.open();
+          } else {
+            MessageToast.show("No Product Location selected");
+          }
         } else if (sId.includes("objDep")) {
-            if (that.byId("idloc").getValue() && that.byId("prodInput").getTokens().length !== 0) {
-          that._valueHelpDialogObjDep.open();
-            } else {
-                MessageToast.show("No Product Location selected");
-            }
+          if (
+            that.byId("idloc").getValue() &&
+            that.byId("prodInput").getTokens().length !== 0
+          ) {
+            that._valueHelpDialogObjDep.open();
+          } else {
+            MessageToast.show("No Product Location selected");
+          }
         }
       },
 
@@ -203,7 +205,7 @@ sap.ui.define(
             if (that.oCompList.getBinding("items")) {
               that.oCompList.getBinding("items").filter([]);
             }
-          } else if (sId.includes("prod")) {
+          } else if (sId.includes("press")) {
             that._oCore
               .byId(this._valueHelpDialogObjDep.getId() + "-searchField")
               .setValue("");
@@ -211,6 +213,14 @@ sap.ui.define(
               that.oObjDepList.getBinding("items").filter([]);
             }
           }
+        else if (sId.includes("prod")) {
+          that._oCore
+            .byId(this._valueHelpDialogObjDep.getId() + "-searchField")
+            .setValue("");
+          if (that.oObjDepList.getBinding("items")) {
+            that.oObjDepList.getBinding("items").filter([]);
+          }
+        }
       },
       handleSearch: function (oEvent) {
         var query =
@@ -248,32 +258,32 @@ sap.ui.define(
           }
           that.oProdList.getBinding("items").filter(oFilters);
         } else if (sId.includes("Comp")) {
-            if (query !== "") {
-              oFilters.push(
-                new Filter({
-                  filters: [
-                    new Filter("COMPONENT", FilterOperator.Contains, query),
-                    new Filter("ITEM_NUM", FilterOperator.Contains, query),
-                  ],
-                  and: false,
-                })
-              );
-            }
-            that.oCompList.getBinding("items").filter(oFilters);
-          } else if (sId.includes("ObjDep")) {
-            if (query !== "") {
-              oFilters.push(
-                new Filter({
-                  filters: [
-                    new Filter("OBJ_DEP", FilterOperator.Contains, query),
-                    new Filter("OBJDEP_DESC", FilterOperator.Contains, query),
-                  ],
-                  and: false,
-                })
-              );
-            }
-            that.oObjDepList.getBinding("items").filter(oFilters);
+          if (query !== "") {
+            oFilters.push(
+              new Filter({
+                filters: [
+                  new Filter("COMPONENT", FilterOperator.Contains, query),
+                  new Filter("ITEM_NUM", FilterOperator.Contains, query),
+                ],
+                and: false,
+              })
+            );
           }
+          that.oCompList.getBinding("items").filter(oFilters);
+        } else if (sId.includes("ObjDep")) {
+          if (query !== "") {
+            oFilters.push(
+              new Filter({
+                filters: [
+                  new Filter("OBJ_DEP", FilterOperator.Contains, query),
+                  new Filter("OBJDEP_DESC", FilterOperator.Contains, query),
+                ],
+                and: false,
+              })
+            );
+          }
+          that.oObjDepList.getBinding("items").filter(oFilters);
+        }
       },
 
       handleSelection: function (oEvent) {
@@ -289,9 +299,18 @@ sap.ui.define(
           that.oProd.removeAllTokens();
           that.oComp.removeAllTokens();
           that.oObjDep.removeAllTokens();
-          this._valueHelpDialogProd.getAggregation("_dialog").getContent()[1].removeSelections();
-          this._valueHelpDialogComp.getAggregation("_dialog").getContent()[1].removeSelections();
-          this._valueHelpDialogObjDep.getAggregation("_dialog").getContent()[1].removeSelections();
+          this._valueHelpDialogProd
+            .getAggregation("_dialog")
+            .getContent()[1]
+            .removeSelections();
+          this._valueHelpDialogComp
+            .getAggregation("_dialog")
+            .getContent()[1]
+            .removeSelections();
+          this._valueHelpDialogObjDep
+            .getAggregation("_dialog")
+            .getContent()[1]
+            .removeSelections();
           this.getModel("BModel").read("/getLocProdDet", {
             filters: [
               new Filter(
@@ -313,12 +332,18 @@ sap.ui.define(
         } else if (sId.includes("prod")) {
           this.oProd = that.byId("prodInput");
           aSelectedItems = oEvent.getParameter("selectedItems");
-        //   that.oProd.setValue(aSelectedItems[0].getTitle());
-        that.oComp.removeAllTokens();
+          //   that.oProd.setValue(aSelectedItems[0].getTitle());
+          that.oComp.removeAllTokens();
           that.oObjDep.removeAllTokens();
-          this._valueHelpDialogComp.getAggregation("_dialog").getContent()[1].removeSelections();
-          this._valueHelpDialogObjDep.getAggregation("_dialog").getContent()[1].removeSelections();
-        if (aSelectedItems && aSelectedItems.length > 0) {
+          this._valueHelpDialogComp
+            .getAggregation("_dialog")
+            .getContent()[1]
+            .removeSelections();
+          this._valueHelpDialogObjDep
+            .getAggregation("_dialog")
+            .getContent()[1]
+            .removeSelections();
+          if (aSelectedItems && aSelectedItems.length > 0) {
             that.oProd.removeAllTokens();
             aSelectedItems.forEach(function (oItem) {
               that.oProd.addToken(
@@ -328,206 +353,195 @@ sap.ui.define(
                 })
               );
             });
-            if (that.byId("idloc").getValue() && that.byId("prodInput").getTokens().length !== 0) {
-                var aSelectedItem = that.oProdList.getSelectedItems();                
+            if (
+              that.byId("idloc").getValue() &&
+              that.byId("prodInput").getTokens().length !== 0
+            ) {
+              var aSelectedItem = that.oProdList.getSelectedItems();
 
-                var oFilters = [];
-                var sFilter = new sap.ui.model.Filter({
-                    path: "LOCATION_ID",
-                    operator: sap.ui.model.FilterOperator.EQ,
-                    value1: that.oLoc.getValue()
+              var oFilters = [];
+              var sFilter = new sap.ui.model.Filter({
+                path: "LOCATION_ID",
+                operator: sap.ui.model.FilterOperator.EQ,
+                value1: that.oLoc.getValue(),
+              });
+              oFilters.push(sFilter);
+
+              for (var i = 0; i < aSelectedItem.length; i++) {
+                sFilter = new sap.ui.model.Filter({
+                  path: "PRODUCT_ID",
+                  operator: sap.ui.model.FilterOperator.EQ,
+                  value1: aSelectedItem[i].getTitle(),
                 });
                 oFilters.push(sFilter);
+              }
 
-                for(var i=0; i < aSelectedItem.length; i++){
+              this.getModel("BModel").read("/getBomOdCond", {
+                filters: oFilters,
+                success: function (oData) {
+                  that.odCondData = oData.results;
 
-                                   
-                    sFilter = new sap.ui.model.Filter({
-                    path: "PRODUCT_ID",
-                    operator: sap.ui.model.FilterOperator.EQ,
-                    value1: aSelectedItem[i].getTitle()
-                    });
-                        oFilters.push(sFilter);
-                  
-                }
+                  that.CompModel.setData(oData);
+                  that.oCompList.setModel(that.CompModel);
 
-
-                this.getModel("BModel").read("/getBomOdCond", {
-                    filters: oFilters,
-                    success: function (oData) {
-
-                        that.odCondData = oData.results;
-                                                
-                        that.CompModel.setData(oData);
-                        that.oCompList.setModel(that.CompModel);
-
-                        // that.ObjDepModel.setData(oData);
-                        // that.oObjDepList.setModel(that.ObjDepModel);
-              
-            },
-            error: function (oData, error) {
-              MessageToast.show("error");
-            },
-          });
+                  // that.ObjDepModel.setData(oData);
+                  // that.oObjDepList.setModel(that.ObjDepModel);
+                },
+                error: function (oData, error) {
+                  MessageToast.show("error");
+                },
+              });
             } else {
               MessageToast.show("No Product Location selected");
             }
           } else {
-              that.oProd.removeAllTokens();
+            that.oProd.removeAllTokens();
           }
         } else if (sId.includes("Comp")) {
-            this.oComp = that.byId("compInput");
-            aSelectedItems = oEvent.getParameter("selectedItems");
+          this.oComp = that.byId("compInput");
+          aSelectedItems = oEvent.getParameter("selectedItems");
           if (aSelectedItems && aSelectedItems.length > 0) {
-              that.oComp.removeAllTokens();
-              aSelectedItems.forEach(function (oItem) {
-                that.oComp.addToken(
-                  new sap.m.Token({
-                    key: oItem.getTitle(),
-                    text: oItem.getTitle(),
-                  })
-                );
+            that.oComp.removeAllTokens();
+            aSelectedItems.forEach(function (oItem) {
+              that.oComp.addToken(
+                new sap.m.Token({
+                  key: oItem.getTitle(),
+                  text: oItem.getTitle(),
+                })
+              );
+            });
+
+            if (
+              that.byId("idloc").getValue() &&
+              that.byId("prodInput").getTokens().length !== 0
+            ) {
+              var aSelectedItem = that.oProdList.getSelectedItems();
+              var aSelectedComp = that.oCompList.getSelectedItems();
+
+              var oFilters = [];
+              var sFilter = new sap.ui.model.Filter({
+                path: "LOCATION_ID",
+                operator: sap.ui.model.FilterOperator.EQ,
+                value1: that.oLoc.getValue(),
               });
+              oFilters.push(sFilter);
 
-              if (that.byId("idloc").getValue() && that.byId("prodInput").getTokens().length !== 0) {
-                var aSelectedItem = that.oProdList.getSelectedItems(); 
-                var aSelectedComp = that.oCompList.getSelectedItems();               
-
-                var oFilters = [];
-                var sFilter = new sap.ui.model.Filter({
-                    path: "LOCATION_ID",
-                    operator: sap.ui.model.FilterOperator.EQ,
-                    value1: that.oLoc.getValue()
+              for (var i = 0; i < aSelectedItem.length; i++) {
+                sFilter = new sap.ui.model.Filter({
+                  path: "PRODUCT_ID",
+                  operator: sap.ui.model.FilterOperator.EQ,
+                  value1: aSelectedItem[i].getTitle(),
                 });
                 oFilters.push(sFilter);
+              }
 
-                for(var i=0; i < aSelectedItem.length; i++){
+              for (var i = 0; i < aSelectedComp.length; i++) {
+                sFilter = new sap.ui.model.Filter({
+                  path: "COMPONENT",
+                  operator: sap.ui.model.FilterOperator.EQ,
+                  value1: aSelectedComp[i].getTitle(),
+                });
+                oFilters.push(sFilter);
+              }
 
-                                   
-                    sFilter = new sap.ui.model.Filter({
-                    path: "PRODUCT_ID",
-                    operator: sap.ui.model.FilterOperator.EQ,
-                    value1: aSelectedItem[i].getTitle()
-                    });
-                        oFilters.push(sFilter);
-                  
-                }
+              this.getModel("BModel").read("/getBomOdCond", {
+                filters: oFilters,
+                success: function (oData) {
+                  that.ObjDepModel.setData(oData);
+                  that.oObjDepList.setModel(that.ObjDepModel);
+                },
+                error: function (oData, error) {
+                  MessageToast.show("error");
+                },
+              });
+            } else {
+              MessageToast.show("No Product Location selected");
+            }
+          } else {
+            that.oComp.removeAllTokens();
+          }
+        } else if (sId.includes("ObjDep")) {
+          this.oObjDep = that.byId("objDepInput");
+          aSelectedItems = oEvent.getParameter("selectedItems");
+          if (aSelectedItems && aSelectedItems.length > 0) {
+            that.oObjDep.removeAllTokens();
+            aSelectedItems.forEach(function (oItem) {
+              that.oObjDep.addToken(
+                new sap.m.Token({
+                  key: oItem.getTitle(),
+                  text: oItem.getTitle(),
+                })
+              );
+            });
+          } else {
+            that.oObjDep.removeAllTokens();
+          }
+        }
+        that.handleClose(oEvent);
+      },
 
-                for(var i=0; i < aSelectedComp.length; i++){
+      onGetData: function () {
+        that.oList.removeSelections();
+        if (
+          that.byId("idloc").getValue() &&
+          that.byId("prodInput").getTokens().length !== 0 //&&
+          //that.byId("compInput").getTokens().length !== 0 &&
+        //  that.byId("objDepInput").getTokens().length !== 0
+        ) {
+          var aSelectedItem = that.oProdList.getSelectedItems();
+          var aSelectedComp = that.oCompList.getSelectedItems();
+          var aSelectedObjDep = that.oObjDepList.getSelectedItems();
 
-                                   
-                    sFilter = new sap.ui.model.Filter({
-                    path: "COMPONENT",
-                    operator: sap.ui.model.FilterOperator.EQ,
-                    value1: aSelectedComp[i].getTitle()
-                    });
-                        oFilters.push(sFilter);
-                  
-                }
+          var oFilters = [];
+          var sFilter = new sap.ui.model.Filter({
+            path: "LOCATION_ID",
+            operator: sap.ui.model.FilterOperator.EQ,
+            value1: that.oLoc.getValue(),
+          });
+          oFilters.push(sFilter);
 
+          for (var i = 0; i < aSelectedItem.length; i++) {
+            sFilter = new sap.ui.model.Filter({
+              path: "PRODUCT_ID",
+              operator: sap.ui.model.FilterOperator.EQ,
+              value1: aSelectedItem[i].getTitle(),
+            });
+            oFilters.push(sFilter);
+          }
 
-                this.getModel("BModel").read("/getBomOdCond", {
-                    filters: oFilters,
-                    success: function (oData) {
+          for (var i = 0; i < aSelectedComp.length; i++) {
+            sFilter = new sap.ui.model.Filter({
+              path: "COMPONENT",
+              operator: sap.ui.model.FilterOperator.EQ,
+              value1: aSelectedComp[i].getTitle(),
+            });
+            oFilters.push(sFilter);
+          }
 
-                        that.ObjDepModel.setData(oData);
-                        that.oObjDepList.setModel(that.ObjDepModel);
-              
+          for (var i = 0; i < aSelectedObjDep.length; i++) {
+            sFilter = new sap.ui.model.Filter({
+              path: "OBJ_DEP",
+              operator: sap.ui.model.FilterOperator.EQ,
+              value1: aSelectedObjDep[i].getTitle(),
+            });
+            oFilters.push(sFilter);
+          }
+
+          this.getModel("BModel").read("/getODProfiles", {
+            filters: oFilters,
+            success: function (oData) {
+              that.oListModel.setData({
+                results: oData.results,
+              });
+              that.oList.setModel(that.oListModel);
             },
             error: function (oData, error) {
               MessageToast.show("error");
             },
           });
-            } else {
-              MessageToast.show("No Product Location selected");
-            }
-            } else {
-                that.oComp.removeAllTokens();
-            }
-          } else if (sId.includes("ObjDep")) {
-            this.oObjDep = that.byId("objDepInput");
-            aSelectedItems = oEvent.getParameter("selectedItems");
-          if (aSelectedItems && aSelectedItems.length > 0) {
-              that.oObjDep.removeAllTokens();
-              aSelectedItems.forEach(function (oItem) {
-                that.oObjDep.addToken(
-                  new sap.m.Token({
-                    key: oItem.getTitle(),
-                    text: oItem.getTitle(),
-                  })
-                );
-              });
-            } else {
-                that.oObjDep.removeAllTokens();
-            }
-          }
-        that.handleClose(oEvent);
-      },
-
-      onGetData:function(){
-        if (that.byId("idloc").getValue() && that.byId("prodInput").getTokens().length !== 0
-        && that.byId("compInput").getTokens().length !== 0 && that.byId("objDepInput").getTokens().length !== 0) {
-            var aSelectedItem = that.oProdList.getSelectedItems(); 
-            var aSelectedComp = that.oCompList.getSelectedItems(); 
-            var aSelectedObjDep = that.oObjDepList.getSelectedItems();              
-
-            var oFilters = [];
-            var sFilter = new sap.ui.model.Filter({
-                path: "LOCATION_ID",
-                operator: sap.ui.model.FilterOperator.EQ,
-                value1: that.oLoc.getValue()
-            });
-            oFilters.push(sFilter);
-
-            for(var i=0; i < aSelectedItem.length; i++){
-
-                               
-                sFilter = new sap.ui.model.Filter({
-                path: "PRODUCT_ID",
-                operator: sap.ui.model.FilterOperator.EQ,
-                value1: aSelectedItem[i].getTitle()
-                });
-                    oFilters.push(sFilter);
-              
-            }
-
-            for(var i=0; i < aSelectedComp.length; i++){
-                sFilter = new sap.ui.model.Filter({
-                path: "COMPONENT",
-                operator: sap.ui.model.FilterOperator.EQ,
-                value1: aSelectedComp[i].getTitle()
-                });
-                    oFilters.push(sFilter);
-            }
-
-            for(var i=0; i < aSelectedObjDep.length; i++){
-                sFilter = new sap.ui.model.Filter({
-                path: "OBJ_DEP",
-                operator: sap.ui.model.FilterOperator.EQ,
-                value1: aSelectedObjDep[i].getTitle()
-                });
-                    oFilters.push(sFilter);
-            }
-
-
-            this.getModel("BModel").read("/getODProfiles", {
-                filters: oFilters,
-                success: function (oData) {
-
-                    that.oListModel.setData({
-                        results: oData.results,
-                      });
-                      that.oList.setModel(that.oListModel);
-          
-        },
-        error: function (oData, error) {
-          MessageToast.show("error");
-        },
-      });
         } else {
           MessageToast.show("Select all filter to get data");
         }
-
       },
 
       onAssign: function () {
@@ -600,6 +614,7 @@ sap.ui.define(
                 new Filter("PRODUCT_ID", FilterOperator.Contains, query),
                 new Filter("COMPONENT", FilterOperator.Contains, query),
                 new Filter("OBJ_DEP", FilterOperator.Contains, query),
+                new Filter("STRUC_NODE", FilterOperator.Contains, query),
                 new Filter("PROFILE", FilterOperator.Contains, query),
               ],
               and: false,
@@ -624,6 +639,7 @@ sap.ui.define(
             PRODUCT_ID: selected.PRODUCT_ID,
             COMPONENT: selected.COMPONENT,
             OBJ_DEP: selected.OBJ_DEP,
+            STRUC_NODE: selected.STRUC_NODE,
             PROFILE: sProfile,
           };
           aData.PROFILEOD.push(jsonProfileOD);
@@ -631,34 +647,33 @@ sap.ui.define(
         }
 
         var uri = "v2/catalog/genProfileOD";
-        
-            $.ajax({
-              url: uri,
-              type: "POST",
-              contentType: "application/json",
-              data: JSON.stringify({
-                FLAG    : "I",
-                PROFILEOD: aData.PROFILEOD,
-              }),
-              dataType: "json",
-              async: false,
-              timeout: 0,
-              error: function (data) {
-                sap.m.MessageToast.show("Error in assigning Profiles");
-                sap.ui.core.BusyIndicator.hide();
-                that.handleClose();
-              },
-              success: function (data) {
-                sap.ui.core.BusyIndicator.hide();
-                sap.m.MessageToast.show("Profile assigned successfully");
-                that.handleClose();
-                that.onGetData();
-              },
-            });
+
+        $.ajax({
+          url: uri,
+          type: "POST",
+          contentType: "application/json",
+          data: JSON.stringify({
+            FLAG: "I",
+            PROFILEOD: aData.PROFILEOD,
+          }),
+          dataType: "json",
+          async: false,
+          timeout: 0,
+          error: function (data) {
+            sap.m.MessageToast.show("Error in assigning Profiles");
+            sap.ui.core.BusyIndicator.hide();
+            that.handleProfileClose();
+          },
+          success: function (data) {
+            sap.ui.core.BusyIndicator.hide();
+            sap.m.MessageToast.show("Profile assigned successfully");
+            that.handleProfileClose();
+            that.onGetData();
+          },
+        });
       },
 
-      onUnAssign:function(){
-
+      onUnAssign: function () {
         var aData = {
             PROFILEOD: [],
           },
@@ -679,34 +694,29 @@ sap.ui.define(
         }
 
         var uri = "v2/catalog/genProfileOD";
-        
-            $.ajax({
-              url: uri,
-              type: "POST",
-              contentType: "application/json",
-              data: JSON.stringify({
-                FLAG    : "D",
-                PROFILEOD: aData.PROFILEOD,
-              }),
-              dataType: "json",
-              async: false,
-              timeout: 0,
-              error: function (data) {
-                sap.m.MessageToast.show("Error in unassigning Profiles");
-                sap.ui.core.BusyIndicator.hide();
-              },
-              success: function (data) {
-                sap.ui.core.BusyIndicator.hide();
-                sap.m.MessageToast.show("Profile unassigned successfully");
-                that.onGetData();
-              },
-            });
 
-
-
-      }
-
-
+        $.ajax({
+          url: uri,
+          type: "POST",
+          contentType: "application/json",
+          data: JSON.stringify({
+            FLAG: "D",
+            PROFILEOD: aData.PROFILEOD,
+          }),
+          dataType: "json",
+          async: false,
+          timeout: 0,
+          error: function (data) {
+            sap.m.MessageToast.show("Error in unassigning Profiles");
+            sap.ui.core.BusyIndicator.hide();
+          },
+          success: function (data) {
+            sap.ui.core.BusyIndicator.hide();
+            sap.m.MessageToast.show("Profile unassigned successfully");
+            that.onGetData();
+          },
+        });
+      },
     });
   }
 );

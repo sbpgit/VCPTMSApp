@@ -22,13 +22,13 @@ module.exports = (srv) => {
   srv.on("getCompreqQty", async (req) => {
     let liresult;
     const comreq = new ComponentReq();
-    comreq.genComponentReq(req.data,liresult);
+    comreq.genComponentReq(req.data, liresult);
     return liresult;
   });
-  srv.on("getCompReqFWeekly", async(req) => {
+  srv.on("getCompReqFWeekly", async (req) => {
     let liresult;
     const comreq = new ComponentReq();
-    comreq.genCompReqWeekly(req.data,liresult);
+    comreq.genCompReqWeekly(req.data, liresult);
     return liresult;
   });
   srv.on("CREATE", "getProfiles", _createProfiles);
@@ -42,6 +42,90 @@ module.exports = (srv) => {
   srv.on("CREATE", "genProdAccessNode", _createPrdAccessNode);
 
   srv.on("CREATE", "genCompStrcNode", _createCompStrcNode);
+  srv.on("genProdAN", async (req) => {
+    let { genProdAccessNode } = srv.entities;
+    let liresults = [];
+    let lireturn = [];
+    let lsresults = {};
+    let createResults = [];
+    let res;
+    var responseMessage;
+    res = req._.req.res;
+    if (req.data.ACCESS_NODE === "D") {
+      lsresults.LOCATION_ID = req.data.LOCATION_ID;
+      lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
+      try {
+        await cds.delete("CP_PROD_ACCNODE", lsresults);
+        responseMessage = " Deletion successfully ";
+        createResults.push(responseMessage);
+      } catch (e) {
+        responseMessage = " Deletion failed ";
+        createResults.push(responseMessage);
+        //DONOTHING
+      }
+    } else {
+      lsresults.LOCATION_ID = req.data.LOCATION_ID;
+      lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
+      lsresults.ACCESS_NODE = req.data.ACCESS_NODE;
+      liresults.push(lsresults);
+      lsresults = {};
+      try {
+        await cds.run(INSERT.into("CP_PROD_ACCNODE").entries(liresults));
+        responseMessage = " Created successfully ";
+        createResults.push(responseMessage);
+      } catch (e) {
+        responseMessage = " Creation failed";
+        createResults.push(responseMessage);
+      }
+    }
+    lireturn = await cds.transaction(req).run(SELECT.from(genProdAccessNode));
+    return lireturn;
+    //res.send({ value: createResults });
+  });
+
+  srv.on("genCompSN", async (req) => {
+    let { genCompStrcNode } = srv.entities;
+    let liresults = [];
+    let lireturn = [];
+    let lsresults = {};
+    let createResults = [];
+    let res;
+    var responseMessage;
+    res = req._.req.res;
+    if (req.data.STRUC_NODE === "D") {
+      lsresults.LOCATION_ID = req.data.LOCATION_ID;
+      lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
+      lsresults.ITEM_NUM = req.data.ITEM_NUM;
+      lsresults.COMPONENT = req.data.COMPONENT;
+      try {
+        await cds.delete("CP_PVS_BOM", lsresults);
+        responseMessage = " Deletion successfully ";
+        createResults.push(responseMessage);
+      } catch (e) {
+        responseMessage = " Deletion failed ";
+        createResults.push(responseMessage);
+        //DONOTHING
+      }
+    } else {
+      lsresults.LOCATION_ID = req.data.LOCATION_ID;
+      lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
+      lsresults.ITEM_NUM = req.data.ITEM_NUM;
+      lsresults.COMPONENT = req.data.COMPONENT;
+      lsresults.STRUC_NODE = req.data.STRUC_NODE;
+      liresults.push(lsresults);
+      lsresults = {};
+      try {
+        await cds.run(INSERT.into("CP_PVS_BOM").entries(liresults));
+        responseMessage = " Created successfully ";
+        createResults.push(responseMessage);
+      } catch (e) {
+        responseMessage = " Creation failed";
+        createResults.push(responseMessage);
+      }
+    }
+    lireturn = await cds.transaction(req).run(SELECT.from(genCompStrcNode));
+    return lireturn;
+  });
   // Create PVS nodes
   srv.on("genpvs", async (req) => {
     let { getPVSNodes } = srv.entities;
@@ -53,10 +137,10 @@ module.exports = (srv) => {
     let flagvs;
     var responseMessage;
     res = req._.req.res;
-    if (req.data.NODE_TYPE === "VS" && req.data.FLAG !== "D" ) {
-        // liresults_t = await cds.run(SELECT.from("CP_PVS_NODES") .where ({CHILD_NODE: { in:req.data.CHILD_NODE}, and: { 
-        //    PARENT_NODE: { in:req.data.PARENT_NODE }}}))
-      const lires= await cds.run(
+    if (req.data.NODE_TYPE === "VS" && req.data.FLAG !== "D") {
+      // liresults_t = await cds.run(SELECT.from("CP_PVS_NODES") .where ({CHILD_NODE: { in:req.data.CHILD_NODE}, and: {
+      //    PARENT_NODE: { in:req.data.PARENT_NODE }}}))
+      const lires = await cds.run(
         `SELECT "CHILD_NODE",
         "PARENT_NODE",
         "ACCESS_NODES",
@@ -68,7 +152,8 @@ module.exports = (srv) => {
             FROM "CP_PVS_NODES"
             WHERE "CHILD_NODE" = '` +
           req.data.CHILD_NODE +
-          `' AND "NODE_TYPE" = 'VS'` );
+          `' AND "NODE_TYPE" = 'VS'`
+      );
       if (lires.length > 0) {
         flagvs = "X";
       }
@@ -102,34 +187,38 @@ module.exports = (srv) => {
         }
         lsresults = {};
       } else if (req.data.FLAG === "D") {
-          if (req.data.NODE_TYPE === "SN"){
-            try {
-            await cds.run(`DELETE FROM "CP_PVS_NODES" WHERE "CHILD_NODE" = '`+ req.data.CHILD_NODE +`'`);
-            }
-            catch(e){
-                // Delete failed
-            }
+        if (req.data.NODE_TYPE === "SN") {
+          try {
+            await cds.run(
+              `DELETE FROM "CP_PVS_NODES" WHERE "CHILD_NODE" = '` +
+                req.data.CHILD_NODE +
+                `'`
+            );
+          } catch (e) {
+            // Delete failed
           }
-          else if(req.data.NODE_TYPE === "AN" ){            
-            try {
-                await cds.run(`DELETE FROM "CP_PVS_NODES" WHERE "ACCESS_NODES" = '`+ req.data.CHILD_NODE +`'`);
-                }
-                catch(e){
-                    // Delete failed
-                }
+        } else if (req.data.NODE_TYPE === "AN") {
+          try {
+            await cds.run(
+              `DELETE FROM "CP_PVS_NODES" WHERE "ACCESS_NODES" = '` +
+                req.data.CHILD_NODE +
+                `'`
+            );
+          } catch (e) {
+            // Delete failed
           }
-          else{
-        lsresults.CHILD_NODE = req.data.CHILD_NODE;
-        lsresults.PARENT_NODE = req.data.PARENT_NODE;
-        try {
-          await cds.delete("CP_PVS_NODES", lsresults);
-          // responseMessage = " Deletion successfully ";
-          // createResults.push(responseMessage);
-        } catch (e) {
-          // responseMessage = " Deletion failed";
-          // createResults.push(responseMessage);
+        } else {
+          lsresults.CHILD_NODE = req.data.CHILD_NODE;
+          lsresults.PARENT_NODE = req.data.PARENT_NODE;
+          try {
+            await cds.delete("CP_PVS_NODES", lsresults);
+            // responseMessage = " Deletion successfully ";
+            // createResults.push(responseMessage);
+          } catch (e) {
+            // responseMessage = " Deletion failed";
+            // createResults.push(responseMessage);
+          }
         }
-    }
         lsresults = {};
       }
       lireturn = await cds.transaction(req).run(SELECT.from(getPVSNodes));
@@ -330,7 +419,7 @@ module.exports = (srv) => {
     return liresults;
   });
 
- // Get object dependency
+  // Get object dependency
   srv.on("get_objdep", async (req) => {
     let { getMODHeader } = srv.entities;
     const db = srv.transaction(req);
@@ -343,11 +432,16 @@ module.exports = (srv) => {
       );
     return results;
   });
-  
-// Generate Timeseries
-srv.on("generate_timeseries", async (req) => {
+
+  // Generate Timeseries
+  srv.on("generate_timeseries", async (req) => {
     const obgenTimeseries = new GenTimeseries();
     await obgenTimeseries.genTimeseries(req.data);
+    console.log("test");
+  });
+  srv.on("generate_timeseriesF", async (req) => {
+    const obgenTimeseries = new GenTimeseries();
+    await obgenTimeseries.genTimeseriesF();
     console.log("test");
   });
 };
@@ -558,17 +652,15 @@ async function _createProfileOD(req) {
   res = req._.req.res;
   for (let i = 0; i < aProfileOD_req.length; i++) {
     lsprofilesOD.PROFILE = aProfileOD_req[i].PROFILE;
-    if (lsprofilesOD.PROFILE !== undefined ||
-        req.data.FLAG === "D") {
+    if (lsprofilesOD.PROFILE !== undefined || req.data.FLAG === "D") {
       lsprofilesOD.LOCATION_ID = aProfileOD_req[i].LOCATION_ID;
       lsprofilesOD.PRODUCT_ID = aProfileOD_req[i].PRODUCT_ID;
       lsprofilesOD.COMPONENT = aProfileOD_req[i].COMPONENT;
       lsprofilesOD.OBJ_DEP = aProfileOD_req[i].OBJ_DEP;
       lsprofilesOD.PROFILE = aProfileOD_req[i].PROFILE;
-      if (lsprofilesOD.STRUC_NODE !== undefined){
-      lsprofilesOD.STRUC_NODE = aProfileOD_req[i].STRUC_NODE;
-      }
-      else{
+      if (lsprofilesOD.STRUC_NODE !== undefined) {
+        lsprofilesOD.STRUC_NODE = aProfileOD_req[i].STRUC_NODE;
+      } else {
         lsprofilesOD.STRUC_NODE = "";
       }
       liProfilesOD.push(GenFunctions.parse(lsprofilesOD));

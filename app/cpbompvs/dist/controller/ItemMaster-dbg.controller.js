@@ -381,21 +381,13 @@ sap.ui.define(
             onClose: function (oAction) {
               if (oAction === sap.m.MessageBox.Action.YES) {
                 sap.ui.core.BusyIndicator.show();
-
-                var uri = "/v2/catalog/genProdAccessNode";
-                $.ajax({
-                    url: uri,
-                    type: "post",
-                    contentType: "application/json",
-                    data: JSON.stringify({
+                that.getModel("BModel").callFunction("/genProdAN", {
+                    method: "GET",
+                    urlParameters: {
                         LOCATION_ID: loc,
                         PRODUCT_ID: prod,
                         ACCESS_NODE: "D"
-                    }),
-                    dataType: "json",
-                    async: false,
-                    timeout: 0,
-                    
+                    },
                     success: function (data) {
                     sap.ui.core.BusyIndicator.hide();
                     sap.m.MessageToast.show("Access Node deleted successfully");
@@ -404,7 +396,30 @@ sap.ui.define(
                     error: function (data) {
                         sap.m.MessageToast.show(JSON.stringify(data));
                     },
-                });
+                  });
+                // var uri = "/v2/catalog/genProdAccessNode";
+                // $.ajax({
+                //     url: uri,
+                //     type: "post",
+                //     contentType: "application/json",
+                //     data: JSON.stringify({
+                //         LOCATION_ID: loc,
+                //         PRODUCT_ID: prod,
+                //         ACCESS_NODE: "D"
+                //     }),
+                //     dataType: "json",
+                //     async: false,
+                //     timeout: 0,
+                    
+                //     success: function (data) {
+                //     sap.ui.core.BusyIndicator.hide();
+                //     sap.m.MessageToast.show("Access Node deleted successfully");
+                //     that.onAfterRendering();
+                //     },
+                //     error: function (data) {
+                //         sap.m.MessageToast.show(JSON.stringify(data));
+                //     },
+                // });
               }
             },
           });
@@ -414,32 +429,48 @@ sap.ui.define(
           var Loc = sap.ui.getCore().byId("idloc").getValue();
           var prod = sap.ui.getCore().byId("idprod").getValue();
           var AccessNode = sap.ui.getCore().byId("idaccn").getValue();;
-          
-
-          var uri = "/v2/catalog/genProdAccessNode";
-          $.ajax({
-            url: uri,
-            type: "post",
-            contentType: "application/json",
-            data: JSON.stringify({
+          that.getModel("BModel").callFunction("/genProdAN", {
+            method: "GET",
+            urlParameters: {
                 LOCATION_ID: Loc,
                 PRODUCT_ID: prod,
                 ACCESS_NODE: AccessNode
-            }),
-            dataType: "json",
-            async: false,
-            timeout: 0,
-            
+            },
             success: function (data) {
-              sap.ui.core.BusyIndicator.hide();
-              sap.m.MessageToast.show(data.d.results[0].value);
-              that.onAccNodeClose();
-              that.onAfterRendering();
+                sap.ui.core.BusyIndicator.hide();
+                sap.m.MessageToast.show("Assigned Access Node successfully");
+                that.onAccNodeClose();
+                that.onAfterRendering();
             },
             error: function (data) {
                 sap.m.MessageToast.show(JSON.stringify(data));
               },
           });
+
+        //   var uri = "/v2/catalog/genProdAccessNode";
+        //   $.ajax({
+        //     url: uri,
+        //     type: "post",
+        //     contentType: "application/json",
+        //     data: JSON.stringify({
+        //         LOCATION_ID: Loc,
+        //         PRODUCT_ID: prod,
+        //         ACCESS_NODE: AccessNode
+        //     }),
+        //     dataType: "json",
+        //     async: false,
+        //     timeout: 0,
+            
+        //     success: function (data) {
+        //       sap.ui.core.BusyIndicator.hide();
+        //       sap.m.MessageToast.show(data.d.results[0].value);
+        //       that.onAccNodeClose();
+        //       that.onAfterRendering();
+        //     },
+        //     error: function (data) {
+        //         sap.m.MessageToast.show(JSON.stringify(data));
+        //       },
+        //   });
           
         },
 
