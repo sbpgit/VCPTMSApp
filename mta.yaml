@@ -145,10 +145,6 @@ modules:
       name: cpappcpbompvs
       target-path: resources/
     - artifacts:
-      - cpappcpgeneratetimesheet.zip
-      name: cpappcpgeneratetimesheet
-      target-path: resources/
-    - artifacts:
       - cpappfcpgeneratetimeseries.zip
       name: cpappfcpgeneratetimeseries
       target-path: resources/
@@ -325,16 +321,6 @@ modules:
 - name: cpappcpbompvs
   type: html5
   path: app/cpbompvs
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    supported-platforms: []
-- name: cpappcpgeneratetimesheet
-  type: html5
-  path: app/cp_generatetimesheet
   build-parameters:
     build-result: dist
     builder: custom

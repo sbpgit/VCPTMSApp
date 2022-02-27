@@ -162,6 +162,8 @@ sap.ui.define(
                   that.oLoc.setValue(aSelectedItems[0].getTitle());
                   that.oGModel.setProperty("/SelectedLoc", aSelectedItems[0].getTitle());
                   that.oProd.setValue("");
+                  that.byId("idTimeSeries").setEnabled(false);
+                    that.byId("idFTimeSeries").setEnabled(false);
                   that.oGModel.setProperty("/SelectedProd", "");
                   this.getModel("BModel").read("/getLocProdDet", {
                     filters: [
@@ -188,31 +190,30 @@ sap.ui.define(
                   that.oGModel.setProperty("/SelectedProd", aSelectedItems[0].getTitle());
 
                   if(that.oGModel.getProperty("/SelectedLoc") !== "" &&  that.oGModel.getProperty("/SelectedProd") !== ""){
-                  that.byId("idTimeSeries").setEnable(true);
-                  that.byId("idFTimeSeries").setEnable(true);
+                  that.byId("idTimeSeries").setEnabled(true);
+                  that.byId("idFTimeSeries").setEnabled(true);
                   } else {
-                    that.byId("idTimeSeries").setEnable(false);
-                    that.byId("idFTimeSeries").setEnable(false);
+                    that.byId("idTimeSeries").setEnabled(false);
+                    that.byId("idFTimeSeries").setEnabled(false);
                   }
                   } 
                 },
 
                 onTimeS:function(){
+                    var Selloc =that.oGModel.getProperty("/SelectedLoc"),
+                        Selprod = that.oGModel.getProperty("/SelectedProd"); 
 
-                    this.getModel("BModel").read("/getLocProdDet", {
-                        filters: [
-                          new Filter(
-                            "LOCATION_ID",
-                            FilterOperator.EQ,
-                            aSelectedItems[0].getTitle()
-                          ),
-                        ],
+                    this.getModel("BModel").callFunction("/generate_timeseries", {
+                        method: "GET",
+                        urlParameters: {
+                            LOCATION_ID: Selloc,
+                            PRODUCT_ID: Selprod,
+                        },
                         success: function (oData) {
-                          that.prodModel.setData(oData);
-                          that.oProdList.setModel(that.prodModel);
+                            MessageToast.show("TimeSeries Generated");
                         },
                         error: function (oData, error) {
-                          MessageToast.show("Failed to get product data");
+                          MessageToast.show("Failed to generate TimeSeries");
                         },
                       });
 
@@ -222,22 +223,22 @@ sap.ui.define(
 
                 onTimeF:function(){
 
-                    this.getModel("BModel").read("/getLocProdDet", {
-                        filters: [
-                          new Filter(
-                            "LOCATION_ID",
-                            FilterOperator.EQ,
-                            aSelectedItems[0].getTitle()
-                          ),
-                        ],
-                        success: function (oData) {
-                          that.prodModel.setData(oData);
-                          that.oProdList.setModel(that.prodModel);
-                        },
-                        error: function (oData, error) {
-                          MessageToast.show("Failed to get product data");
-                        },
-                      });
+                    var Selloc =that.oGModel.getProperty("/SelectedLoc"),
+                    Selprod = that.oGModel.getProperty("/SelectedProd"); 
+
+                this.getModel("BModel").callFunction("/generate_timeseriesF", {
+                    method: "GET",
+                    urlParameters: {
+                        LOCATION_ID: Selloc,
+                        PRODUCT_ID: Selprod,
+                    },
+                    success: function (oData) {
+                        MessageToast.show("TimeSeries Generated");
+                    },
+                    error: function (oData, error) {
+                      MessageToast.show("Failed to generate TimeSeries");
+                    },
+                  });
 
 
                 }

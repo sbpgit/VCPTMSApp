@@ -146,12 +146,6 @@
                     "viewName": "Home"
                 }
             }
-        },
-        "rootView": {
-            "viewName": "cpappf.cpgeneratetimeseries.view.Home",
-            "type": "XML",
-            "async": true,
-            "id": "Home"
         }
     },
     "sap.cloud": {

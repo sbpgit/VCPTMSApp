@@ -29,5 +29,4 @@ using from './cp_nodesdetails/annotations';
 using from './cplocation/annotations';
 // using from './cpassignnode/annotations';
 using from './cpbompvs/annotations';
-using from './cp_generatetimesheet/annotations';
 using from './cp_generatetimeseries/annotations';

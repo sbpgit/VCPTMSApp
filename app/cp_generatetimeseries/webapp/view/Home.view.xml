@@ -42,8 +42,8 @@
 
 
             <ToolbarSpacer/>
-            <Button id="idTimeSeries" text="Generate TimeSeries" press="onTimeS" tooltip="Generate Time Series" enable="false"/>
-            <Button id="idFTimeSeries" text="Generate Future TimeSeries" press="onTimeF" tooltip="Generate Future TimeSeries"  enable="false"/>
+            <Button id="idTimeSeries" text="Generate TimeSeries" press="onTimeS" tooltip="Generate Time Series" enabled="false"/>
+            <Button id="idFTimeSeries" text="Generate Future TimeSeries" press="onTimeF" tooltip="Generate Future TimeSeries"  enabled="false"/>
             
 
 
