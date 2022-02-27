@@ -28,9 +28,6 @@ sap.ui.define(
         this.rowData;
         this.locModel = new JSONModel();
         this.prodModel = new JSONModel();
-        // this.getRouter()
-        //   .getRoute("Home")
-        //   .attachPatternMatched(this._onPatternMatched.bind(this));
       },
       onAfterRendering: function () {
        // sap.ui.core.BusyIndicator.show();
@@ -47,19 +44,12 @@ sap.ui.define(
             success: function (data) {
                 that.rowData = data.results;
                 sap.ui.core.BusyIndicator.hide();
-                //sap.m.MessageToast.show("Structure Node assigned successfully");
-                // // that.onStruNodeClo
-                // that.onAfterRendering();
             },
             error: function (data) {
                 sap.m.MessageToast.show(JSON.stringify(data));
               },
           });
 
-        //that.byId("detailNode").setSelectedKey("assignNode");
-       // that.byId("idDates").setVisible(true);
-        //that.byId("fromDate").setValue("");
-       // that.byId("toDate").setValue("");
       },
       onResetDate: function () {
         that.byId("fromDate").setValue("");
@@ -92,41 +82,6 @@ sap.ui.define(
 		});
         
 		that.oTable.bindRows("/rows");
-        // var oColumnstatic = new sap.ui.table.Column({
-        //     label: new sap.m.Label({text: "Item Num."})
-        // });
-        // that.oTable.addColumn(oColumnstatic);
-        // oColumnstatic = new sap.ui.table.Column({
-        //     label: new sap.m.Label({text: "Component"})
-        // });
-        // var oColumnstatic = new sap.m.Column({
-        //     width: "20px",
-        //     header: new sap.m.Label({
-        //     text: "Item Num."
-        //     })
-        // });
-        // that.oTable.addColumn(oColumnstatic);
-        // oColumnstatic = new sap.m.Column({
-        //     width: "20px",
-        //     header: new sap.m.Label({
-        //     text: "Component"
-        //     })
-        // });
-        
-    //   that.oTable.addColumn(oColumnstatic);
-    //     for (var i = 0; i < liDates.length ; i++) {
-    //         var oColumn = new sap.ui.table.Column({
-    //             label: new sap.m.Label({text: liDates[i].CAL_DATE})
-               
-    //         });
-    //         // var oColumn = new sap.ui.table.Column({
-    //         //     width: "11rem",
-    //         //     label: new sap.m.Label({
-    //         //     text: liDates[i].CAL_DATE
-    //         //     })
-    //         // });
-    //       that.oTable.addColumn(oColumn);
-    //     }
       },
       generateDateseries: function (imFromDate, imToDate) {
         var lsDates = {},
@@ -169,10 +124,7 @@ sap.ui.define(
         const lNextWeekDay = new Date(lDate.getFullYear(), lDate.getMonth(), lDate.getDate() + imDays);
 
         return lNextWeekDay.toISOString().split('T')[0];
-      
-        // var result = new Date(date);
-        // result.setDate(result.getDate() + days);
-        // return result;
+   
       }, 
       removeDays: function(imDate, imDays) {
         const lDate = new Date(imDate);
