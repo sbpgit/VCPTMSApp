@@ -223,7 +223,9 @@ class ComponentReq {
                   "COMPONENT" ASC`
       );
     var vDateSeries = vDateFrom;
-    lsDates.CAL_DATE = GenFunctions.getNextSunday(vDateSeries);
+    lsDates.CAL_DATE = GenFunctions.removeDays(GenFunctions.getNextSunday(vDateSeries),1);
+    liDates.push(lsDates);
+    lsDates = {};
     while (vDateSeries <= vDateTo) {
       vDateSeries = GenFunctions.addDays(vDateSeries, 7);
       lsDates.CAL_DATE = GenFunctions.removeDays(
@@ -244,10 +246,10 @@ class ComponentReq {
       }
       lsCompWeekly.LOCATION_ID = liComp[j].LOCATION_ID;
       lsCompWeekly.PRODUCT_ID = liComp[j].PRODUCT_ID;
-      lsCompWeekly.VERSION = liComp[j].VERSION;
-      lsCompWeekly.SCENARIO = liComp[j].SCENARIO;
       lsCompWeekly.ITEM_NUM = liComp[j].ITEM_NUM;
       lsCompWeekly.COMPONENT = liComp[j].COMPONENT;
+      lsCompWeekly.VERSION = liComp[j].VERSION;
+      lsCompWeekly.SCENARIO = liComp[j].SCENARIO;
       for (let i = 0; i < liDates.length; i++) {
         vWeekIndex = vWeekIndex + 1;
         // In there is no change in componenet and CAL_DATE matches with the liDates series
@@ -265,6 +267,7 @@ class ComponentReq {
       lsCompWeekly = {};
     }
     iresult = liCompWeekly;
+    
   }
 }
 module.exports = ComponentReq;

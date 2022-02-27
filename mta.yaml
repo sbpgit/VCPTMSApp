@@ -145,6 +145,10 @@ modules:
       name: cpappcpbompvs
       target-path: resources/
     - artifacts:
+      - cpappcpcompreq.zip
+      name: cpappcpcompreq
+      target-path: resources/
+    - artifacts:
       - cpappfcpgeneratetimeseries.zip
       name: cpappfcpgeneratetimeseries
       target-path: resources/
@@ -321,6 +325,16 @@ modules:
 - name: cpappcpbompvs
   type: html5
   path: app/cpbompvs
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappcpcompreq
+  type: html5
+  path: app/cpcompreq
   build-parameters:
     build-result: dist
     builder: custom
