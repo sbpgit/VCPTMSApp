@@ -1,4 +1,4 @@
-sap.ui.define(
+zsap.ui.define(
   [
     "cp/appf/cpobjdepdetails/controller/BaseController",
     "sap/m/MessageToast",

@@ -1,0 +1,53 @@
+<mvc:View controllerName="cpappf.cpgeneratetimeseries.controller.Home"
+    xmlns:l="sap.ui.layout"
+    xmlns:core="sap.ui.core"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns="sap.m">
+
+    <Page id="page" title="{i18n>title}" titleAlignment="Center">
+        <content>
+            <f:Form editable="true">
+                <f:layout>
+                    <f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="4" columnsL="2" columnsM="2" singleContainerFullSize="false" breakpointXL= "1400" breakpointL= "800" breakpointM="600" />
+                </f:layout>
+                <f:formContainers>
+                    <f:FormContainer>
+                        <f:formElements>
+                            <f:FormElement>
+                                <f:label>
+                                    <Label text="Location"/>
+                                </f:label>
+                                <f:fields>
+                                    <Input id="idloc" value="" width="225px" placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                                </f:fields>
+                            </f:FormElement>
+                        </f:formElements>
+                    </f:FormContainer>
+                    <f:FormContainer>
+                        <f:formElements>
+                            <f:FormElement>
+                                <f:label>
+                                    <Label text="Product"/>
+                                </f:label>
+                                <f:fields>
+                                    <Input id="idProd" value="" width="225px" placeholder="Product" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+
+                                </f:fields>
+                            </f:FormElement>
+                        </f:formElements>
+                    </f:FormContainer>
+                </f:formContainers>
+            </f:Form>
+
+
+            <ToolbarSpacer/>
+            <Button id="idTimeSeries" text="Generate TimeSeries" press="onTimeS" tooltip="Generate Time Series" enable="false"/>
+            <Button id="idFTimeSeries" text="Generate Future TimeSeries" press="onTimeF" tooltip="Generate Future TimeSeries"  enable="false"/>
+            
+
+
+
+        </content>
+    </Page>
+</mvc:View>
