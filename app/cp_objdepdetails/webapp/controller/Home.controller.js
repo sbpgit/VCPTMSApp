@@ -1,4 +1,4 @@
-sap.ui.define(
+zsap.ui.define(
   [
     "cp/appf/cpobjdepdetails/controller/BaseController",
     "sap/m/MessageToast",
@@ -9,7 +9,7 @@ sap.ui.define(
     "sap/ui/Device",
   ],
   function (
-    BaseController,
+    BaseController,call
     MessageToast,
     JSONModel,
     Filter,

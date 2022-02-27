@@ -148,6 +148,10 @@ modules:
       - cpappcpcompreq.zip
       name: cpappcpcompreq
       target-path: resources/
+    - artifacts:
+      - cpappfcpgeneratetimeseries.zip
+      name: cpappfcpgeneratetimeseries
+      target-path: resources/
 - name: cpibpfdemcpibpfdem
   type: html5
   path: app/cp_ibpfdem
@@ -331,6 +335,16 @@ modules:
 - name: cpappcpcompreq
   type: html5
   path: app/cpcompreq
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappfcpgeneratetimeseries
+  type: html5
+  path: app/cp_generatetimeseries
   build-parameters:
     build-result: dist
     builder: custom
