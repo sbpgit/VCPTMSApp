@@ -233,10 +233,10 @@ sap.ui.define(
                         PRODUCT_ID: Selprod,
                     },
                     success: function (oData) {
-                        MessageToast.show("TimeSeries Generated");
+                        MessageToast.show("Future TimeSeries Generated");
                     },
                     error: function (oData, error) {
-                      MessageToast.show("Failed to generate TimeSeries");
+                      MessageToast.show("Failed to generate future TimeSeries");
                     },
                   });
 
