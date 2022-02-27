@@ -57,7 +57,7 @@ context cp_ds {
     }
 
     type compreq {
-        CAL_DATE    : Date;
+       // CAL_DATE    : Date;
         LOCATION_ID : String(4);
         PRODUCT_ID  : String(40);
         ITEM_NUM    : String(5);
