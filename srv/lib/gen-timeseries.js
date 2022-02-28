@@ -210,9 +210,11 @@ class GenTimeseries {
         sObjDepChar.SUCCESS      = 0;
         sObjDepChar.SUCCESS_RATE = 0;
         var rowObj = [];
-        rowObj.push(sObjDepChar.CAL_DATE ,sObjDepChar.LOCATION_ID,sObjDepChar.PRODUCT_ID ,sObjDepChar.OBJ_TYPE, sObjDepChar.OBJ_DEP,sObjDepChar.OBJ_COUNTER, sObjDepChar.ROW_ID, sObjDepChar.SUCCESS, sObjDepChar.SUCCESS_RATE);
-        tableObj.push(rowObj);
+        // rowObj.push(sObjDepChar.CAL_DATE ,sObjDepChar.LOCATION_ID,sObjDepChar.PRODUCT_ID ,sObjDepChar.OBJ_TYPE, sObjDepChar.OBJ_DEP,sObjDepChar.OBJ_COUNTER, sObjDepChar.ROW_ID, sObjDepChar.SUCCESS, sObjDepChar.SUCCESS_RATE);
+        // tableObj.push(rowObj);
         liObjDepChar.push(GenFunctions.parse(sObjDepChar));
+        rowObj.push(GenFunctions.parse(sObjDepChar));
+        tableObj.push(rowObj);
         //liObjDepChar.push(GenFunctions.parse(rowObj));
       }
 
@@ -370,10 +372,12 @@ class GenTimeseries {
             sObjDepHdr = GenFunctions.parse(liObjDepHdr[lIndObjHdr]);
             sObjDepHdr.SUCCESS = parseInt(lSuccessQty);
             sObjDepHdr.SUCCESS_RATE = (parseInt(lSuccessQty) / parseInt(liSalesInfo[lSalesIndex].ORD_QTY)) * 100;
-            rowObjH.push(sObjDepHdr.CAL_DATE ,sObjDepHdr.LOCATION_ID,sObjDepHdr.PRODUCT_ID ,sObjDepHdr.OBJ_TYPE, sObjDepHdr.OBJ_DEP,sObjDepHdr.OBJ_COUNTER, sObjDepHdr.SUCCESS, sObjDepHdr.SUCCESS_RATE);
-            tableObjH.push(rowObjH);
+            // rowObjH.push(sObjDepHdr.CAL_DATE ,sObjDepHdr.LOCATION_ID,sObjDepHdr.PRODUCT_ID ,sObjDepHdr.OBJ_TYPE, sObjDepHdr.OBJ_DEP,sObjDepHdr.OBJ_COUNTER, sObjDepHdr.SUCCESS, sObjDepHdr.SUCCESS_RATE);
+            // tableObjH.push(rowObjH);
         
             liObjDepHdrTemp.push(GenFunctions.parse(sObjDepHdr));
+            rowObjH.push(GenFunctions.parse(sObjDepHdr));
+            tableObjH.push(rowObjH);
             lSuccessQty = 0;
         }      
     }
