@@ -9,7 +9,7 @@
 |**Service Type**<br>Local Cap|
 |**Service URL**<br>http://localhost:4004/catalog/
 |**Module Name**<br>cp_generatetimeseries|
-|**Application Title**<br>Generate Time Series|
+|**Application Title**<br>Generate TimeSeries|
 |**Namespace**<br>cp_appf|
 |**UI5 Theme**<br>sap_fiori_3|
 |**UI5 Version**<br>1.98.0|

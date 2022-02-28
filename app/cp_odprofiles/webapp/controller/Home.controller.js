@@ -129,43 +129,6 @@ sap.ui.define(
             that.byId("idloc").getValue() &&
             that.byId("prodInput").getTokens().length !== 0
           ) {
-            //         var aSelectedItem = that.oProdList.getSelectedItems();
-
-            //         var oFilters = [];
-            //         var sFilter = new sap.ui.model.Filter({
-            //             path: "LOCATION_ID",
-            //             operator: sap.ui.model.FilterOperator.EQ,
-            //             value1: that.oLoc.getValue()
-            //         });
-            //         oFilters.push(sFilter);
-
-            //         for(var i=0; i < aSelectedItem.length; i++){
-
-            //             sFilter = new sap.ui.model.Filter({
-            //             path: "PRODUCT_ID",
-            //             operator: sap.ui.model.FilterOperator.EQ,
-            //             value1: aSelectedItem[i].getTitle()
-            //             });
-            //                 oFilters.push(sFilter);
-
-            //         }
-
-            //         this.getModel("BModel").read("/getBomOdCond", {
-            //             filters: oFilters,
-            //             success: function (oData) {
-
-            //                 that.CompModel.setData(oData);
-            //                 that.oCompList.setModel(that.CompModel);
-
-            //                 that.ObjDepModel.setData(oData);
-            //                 that.oObjDepList.setModel(that.ObjDepModel);
-            //                 that._valueHelpDialogComp.open();
-
-            //     },
-            //     error: function (oData, error) {
-            //       MessageToast.show("error");
-            //     },
-            //   });
             that._valueHelpDialogComp.open();
           } else {
             MessageToast.show("No Product Location selected");
