@@ -22,7 +22,15 @@
                                     <Label text="Location"/>
                                 </f:label>
                                 <f:fields>
-                                <Input id="idloc" value="RX01" width="225px" placeholder="Location" />
+                                <Input id="idloc" value="RX01" width="225px" placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                </f:fields>
+                            </f:FormElement>
+                            <f:FormElement>
+                                <f:label>
+                                    <Label text="Version"/>
+                                </f:label>
+                                <f:fields>
+                                <Input id="idver" value="" width="225px" placeholder="Version" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                                 </f:fields>
                             </f:FormElement>
                             <f:FormElement>
@@ -44,7 +52,15 @@
                                     <Label text="Product"/>
                                 </f:label>
                                 <f:fields>
-                                    <Input id="prodInput" placeholder="Product" value="8150RW"/>
+                                    <Input id="idprod" placeholder="Product" value="8150RW" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                                </f:fields>
+                            </f:FormElement>
+                            <f:FormElement>
+                                <f:label>
+                                    <Label text="Scenario"/>
+                                </f:label>
+                                <f:fields>
+                                <Input id="idscen" value="" width="225px" placeholder="Scenario" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                                 </f:fields>
                             </f:FormElement>
                             <f:FormElement>

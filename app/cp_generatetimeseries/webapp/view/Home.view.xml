@@ -42,7 +42,7 @@
 
 
             <ToolbarSpacer/>
-            <Button id="idTimeSeries" text="Generate TimeSeries" press="onTimeS" tooltip="Generate Time Series" enabled="false"/>
+            <Button id="idTimeSeries" text="Generate TimeSeries" press="onTimeS" tooltip="Generate TimeSeries" enabled="false"/>
             <Button id="idFTimeSeries" text="Generate Future TimeSeries" press="onTimeF" tooltip="Generate Future TimeSeries"  enabled="false"/>
             
 

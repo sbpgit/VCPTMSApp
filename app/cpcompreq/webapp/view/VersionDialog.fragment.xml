@@ -1,0 +1,7 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+	<SelectDialog id="VerSlctList" title="Version" rememberSelections="true" search="handleSearch" liveChange="handleSearch"
+		confirm="handleSelection" cancel="handleClose" multiSelect="true"  contentWidth="320px" items="{/results}" 
+        selectionChange="handleVerChange" growing="false">
+		<StandardListItem title="{COMPONENT}" description="{ITEM_NUM}" type="Active"/>
+	</SelectDialog>
+</core:FragmentDefinition>
