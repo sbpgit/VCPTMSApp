@@ -29,12 +29,12 @@ sap.ui.define(
           that.locModel = new JSONModel();
           that.prodModel = new JSONModel();
           that.verModel = new JSONModel();
-          that.scenDepModel = new JSONModel();
+          that.scenModel = new JSONModel();
   
           that.locModel.setSizeLimit(1000);
           that.prodModel.setSizeLimit(1000);
           that.verModel.setSizeLimit(1000);
-          that.scenDepModel.setSizeLimit(1000);
+          that.scenModel.setSizeLimit(1000);
   
           this._oCore = sap.ui.getCore();
           if (!this._valueHelpDialogLoc) {
@@ -336,8 +336,9 @@ sap.ui.define(
             that.oProd = that.byId("idprod");
             aSelectedItems = oEvent.getParameter("selectedItems");
             that.oLoc.setValue(aSelectedItems[0].getTitle());
+            that.oGModel.setProperty("/SelectedLoc", aSelectedItems[0].getTitle());
             that.oProd.setValue("");
-                    that.oGModel.setProperty("/SelectedProd", "");
+            that.oGModel.setProperty("/SelectedProd", "");
             
             this.getModel("BModel").read("/getLocProdDet", {
               filters: [
@@ -362,6 +363,23 @@ sap.ui.define(
               aSelectedItems = oEvent.getParameter("selectedItems");
               that.oProd.setValue(aSelectedItems[0].getTitle());
               that.oGModel.setProperty("/SelectedProd", aSelectedItems[0].getTitle());
+
+              this.getModel("BModel").read("/getIbpVerScn", {
+                filters: [
+                  new Filter("LOCATION_ID",FilterOperator.EQ, that.oGModel.getProperty("/SelectedLoc")),
+                  new Filter("PRODUCT_ID",FilterOperator.EQ, aSelectedItems[0].getTitle()),
+                ],
+                success: function (oData) {
+                  that.verModel.setData(oData);
+                  that.oVerList.setModel(that.verModel);
+
+                  that.scenModel.setData(oData);
+                  that.oScenList.setModel(that.scenModel);
+                },
+                error: function (oData, error) {
+                  MessageToast.show("error");
+                },
+              });
   
   
           } else if (sId.includes("ver")) {
