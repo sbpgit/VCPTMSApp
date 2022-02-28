@@ -7,7 +7,7 @@
     xmlns="sap.m">
 
     <Page id="page" title="{i18n>title}" titleAlignment="Center" showNavButton="true" navButtonPress="onBack">
-        <Toolbar height="8%">
+        <!-- <Toolbar height="8%">
         <VBox>
         <HBox>
             <HBox>
@@ -37,41 +37,60 @@
 				</HBox>
         </VBox>
             
-        </Toolbar>
+        </Toolbar> -->
+        <VBox class="sapUiSmallMargin">
+		<f:SimpleForm id="SimpleFormDisplayColumn_threeGroups234"
+			editable="false"
+			layout="ColumnLayout"
+			columnsM="2"
+			columnsL="2"
+			columnsXL="2"
+			>
+			<f:content>
+				<core:Title text="SO Header" />
+                <Label text="{i18n>prodid} " class="boldText"/>
+				<Text text="{oGModel>/sPrdid}" />
+                <Label text="{i18n>locid}" />
+				<Text text="{oGModel>/sLocid}" />
+                <Label text="Sales Order" class="boldText"/>
+				<Text text="{oGModel>/sSalOrd}" />
+                <Label text="Sales Order Item" class="boldText" />
+				<Text text="{oGModel>/sSalOrdItem}" />                                
+                <Label text="{i18n>docdate}" />
+				<Text text="{oGModel>/date}"/>
+                
+        
+				<core:Title text="SO Config Details" />
+				<Label text="{i18n>schLine}" />
+				<Text text="{oGModel>/sSchedNo}" />
+				<Label text="{i18n>reasonrej}" />
+				<Text text="{oGModel>/sRejReson}" />
+				<Label text="{i18n>conqty}" />
+				<Text text="{oGModel>/sConQty}" />
+                <Label text="{i18n>ordqty}" />
+				<Text text="{oGModel>/sOrdQty}" />
+				<Label text="{i18n>matavldate}" />
+				<Text text="{path: 'oGModel>/sMatAvailData', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'MM/dd/yyyy' }}" />
+                <Label text="{i18n>Custgrp}" />
+				<Text text="{oGModel>/sCustGrp}" />
+				<Label text="{i18n>netvalue}" />
+				<Text text="{oGModel>/sNetValue}" />
+			</f:content>
+		</f:SimpleForm>
+	</VBox>
             
         <content>
-            <Table id="idDetailTab" items="{path: '/results'}" growingScrollToLoad="true" rememberSelections="false"
-				itemPress="onhandlePress" mode="SingleSelectMaster" selectionChange="onhandlePress" sticky="ColumnHeaders" >
+            <Table id="idDetailTab" items="{path: '/results'}" growingScrollToLoad="true" sticky="ColumnHeaders" >
                 <headerToolbar>
 				<Toolbar>
 					<content>
-						<SearchField id="idDetailSearch" placeholder="Location/ Product/ Sales Doc"  
+						<SearchField id="idDetailSearch" placeholder="Char Name/ Char Value"  
                         liveChange="onTableSearch" width="600px"/>
 					</content>
 				</Toolbar>		
 				</headerToolbar>
                 <columns>
-                    <Column hAlign="Left" vAlign="Middle">
-                        <Text text="{i18n>schLine}" />
-                    </Column>
-                    <Column hAlign="Left" vAlign="Middle">
-                        <Text text="{i18n>reasonrej}" />
-                    </Column>
-                    <Column hAlign="Left" vAlign="Middle">
-                        <Text text="{i18n>conqty}"/>
-                    </Column>
-                    <Column hAlign="Left" vAlign="Middle">
-                        <Text text="{i18n>ordqty}"/>
-                    </Column>
-                    <Column hAlign="Left" vAlign="Middle">
-                        <Text text="{i18n>matavldate}"/>
-                    </Column>
-                    <Column hAlign="Left" vAlign="Middle">
-                        <Text text="{i18n>Custgrp}"/>
-                    </Column>
-                    <Column hAlign="Left" vAlign="Middle">
-                        <Text text="{i18n>netvalue}"/>
-                    </Column>
+                    
                     <Column hAlign="Left" vAlign="Middle">
                         <Text text="{i18n>charname}"/>
                     </Column>
@@ -82,13 +101,6 @@
                 <items>
                     <ColumnListItem>
                         <cells>
-                        <Text text="{SCHEDULELINE_NUM}"/>
-                        <Text text="{REASON_REJ}"/>
-                        <Text text="{CONFIRMED_QTY}"/>
-                        <Text text="{ORD_QTY}"/>
-                        <Text text="{path: 'MAT_AVAILDATE', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'MM/dd/yyyy' }}"/>
-                        <Text text="{CUSTOMER_GROUP}"/>
-                        <Text text="{NET_VALUE}"/>
                         <Text text="{CHAR_NAME}"/>
                         <Text text="{CHAR_VALUE}"/>
                         </cells>

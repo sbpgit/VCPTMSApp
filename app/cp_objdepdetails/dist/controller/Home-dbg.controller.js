@@ -478,6 +478,7 @@ sap.ui.define(
                 filters: [
                   new Filter("CLASS_NAME", FilterOperator.Contains, query),
                   new Filter("CHAR_NAME", FilterOperator.Contains, query),
+                  new Filter("CHAR_VALUE", FilterOperator.Contains, query),
                 ],
                 and: false,
               })

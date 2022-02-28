@@ -9,10 +9,10 @@
 		<content>
             <Toolbar height="8%">
                 <ToolbarSpacer/>
-				<Text text="{oGModel>/prdId}" class="boldText"></Text>
+				<Text text="Product : {oGModel>/prdId}  -  Location : {oGModel>/locId}" class="boldText"></Text>
                 <ToolbarSpacer/>
 			</Toolbar>
-        <SearchField id="bomSearch" liveChange="onbomSearch" placeholder="Item # / Object Dependency"/>
+        <SearchField id="bomSearch" search="onbomSearch" placeholder="Component / Object Dependency"/>
         <Table id="idBom" items="{path: '/results', sorter : { path : 'ITEM_NUM'} }" itemPress="onItemPress" 
             rememberSelections="false" mode="SingleSelectMaster" selectionChange="onItemPress" sticky="ColumnHeaders">
                             <columns>
@@ -56,12 +56,50 @@
 	</Panel>
     <Panel id="idCharPanel" expandable="true" headerText="Object Dependency Characteristics" width="auto" class="sapUiResponsiveMargin">
 		<content>
-        <Toolbar height="8%">
+        <Table id="idBomOnNextPanel" items="{path: '/BOMPanelresults'}" >
+                            <columns>
+                                <Column hAlign="Left" width="80px">
+                                    <Text text="{i18n>itemno}" />
+                                </Column>
+                                <Column hAlign="Left">
+                                    <Text text="{i18n>comp}"/>
+                                </Column>
+                                <Column hAlign="Left">
+                                    <Text text="{i18n>objdep}" />
+                                </Column>
+                                <Column hAlign="Left">
+                                    <Text text="{i18n>objdepdes}"/>
+                                </Column>
+                                <Column hAlign="Center">
+                                    <Text text="{i18n>compqty}" width="120px"/>
+                                </Column>
+                                <Column hAlign="Left" width="100px">
+                                    <Text text="{i18n>validfm}"/>
+                                </Column>
+                                <Column hAlign="Left" width="100px">
+                                    <Text text="{i18n>validto}"/>
+                                </Column>
+                            </columns>
+                            <items>
+                                <ColumnListItem>
+                                    <cells>
+                                        <Text text="{ITEM_NUM}" />
+                                        <Text text="{COMPONENT}" />
+                                        <Text text="{OBJ_DEP}" />
+                                        <Text text="{OBJDEP_DESC}" />
+                                        <Text text="{COMP_QTY}" />
+                                        <Text text="{VALID_FROM}"/>
+                                        <Text text="{VALID_TO}"/>
+                                    </cells>
+                                </ColumnListItem>
+                            </items>
+                        </Table>
+        <!-- <Toolbar height="8%">
                 <ToolbarSpacer/>
 				<Text text="{oGModel>/objdep}" class="boldText"></Text>
                 <ToolbarSpacer/>
-			</Toolbar>
-        <SearchField id="charSearch" liveChange="oncharSearch" placeholder="Class Name / Char Name"/>
+			</Toolbar> -->
+        <SearchField id="charSearch" liveChange="oncharSearch" placeholder="Class Name / Char Name/ Char Value"/>
         <Table id="idChartab" items="{ path: '/charResults'}" sticky="ColumnHeaders">
                         <columns>
                             <Column hAlign="Begin">
