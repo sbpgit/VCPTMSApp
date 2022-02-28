@@ -30,11 +30,15 @@ sap.ui.define(
           that.prodModel = new JSONModel();
           that.verModel = new JSONModel();
           that.scenModel = new JSONModel();
+          that.compModel = new JSONModel();
+          that.struModel = new JSONModel();
   
           that.locModel.setSizeLimit(1000);
           that.prodModel.setSizeLimit(1000);
           that.verModel.setSizeLimit(1000);
           that.scenModel.setSizeLimit(1000);
+          that.compModel.setSizeLimit(1000);
+          that.struModel.setSizeLimit(1000);
   
           this._oCore = sap.ui.getCore();
           if (!this._valueHelpDialogLoc) {
@@ -65,6 +69,20 @@ sap.ui.define(
             );
             this.getView().addDependent(this._valueHelpDialogScen);
           }
+          if (!this._valueHelpDialogComp) {
+            this._valueHelpDialogComp = sap.ui.xmlfragment(
+              "cpapp.cpcompreq.view.ComponentDialog",
+              this
+            );
+            this.getView().addDependent(this._valueHelpDialogComp);
+          }
+          if (!this._valueHelpDialogStru) {
+            this._valueHelpDialogStru = sap.ui.xmlfragment(
+              "cpapp.cpcompreq.view.StructureNodeDialog",
+              this
+            );
+            this.getView().addDependent(this._valueHelpDialogStru);
+          }
         },
         onAfterRendering: function () {
          // sap.ui.core.BusyIndicator.show();
@@ -74,6 +92,8 @@ sap.ui.define(
          this.oProd = this.byId("idprod");
          this.oVer = this.byId("idver");
          this.oScen = this.byId("idscen");
+         this.oComp = this.byId("idcomp");
+         this.oStru = this.byId("idstru");
   
          this.oProdList = this._oCore.byId(
            this._valueHelpDialogProd.getId() + "-list"
@@ -87,6 +107,12 @@ sap.ui.define(
          this.oScenList = this._oCore.byId(
            this._valueHelpDialogScen.getId() + "-list"
          );
+         this.oCompList = this._oCore.byId(
+            this._valueHelpDialogComp.getId() + "-list"
+          );
+          this.oStruList = this._oCore.byId(
+            this._valueHelpDialogStru.getId() + "-list"
+          );
   
   
          sap.ui.core.BusyIndicator.show();
@@ -137,7 +163,9 @@ sap.ui.define(
             var Loc = that.oGModel.getProperty("/SelectedLoc"),
                 Prod = that.oGModel.getProperty("/SelectedProd"),
                 ver= that.oGModel.getProperty("/SelectedVer"),
-                scen = that.oGModel.getProperty("/SelectedScen");
+                scen = that.oGModel.getProperty("/SelectedScen"),
+                comp = that.oGModel.getProperty("/SelectedComp")
+                stru = that.oGModel.getProperty("/SelectedStru")
 
             
           that.getModel("BModel").callFunction("/getCompReqFWeekly", {
@@ -246,19 +274,35 @@ sap.ui.define(
               MessageToast.show("Select Location");
             }
           } else if (sId.includes("ver")) {
-            
-              that._valueHelpDialogVer.open();
-            
+            if (that.byId("idloc").getValue() && that.byId("idprod").getValue()) {
+                that._valueHelpDialogVer.open();
+              } else {
+                MessageToast.show("Select Location and Product");
+              }            
           } else if (sId.includes("scen")) {
-            
-              that._valueHelpDialogScen.open();
-            
+            if (that.byId("idloc").getValue() && that.byId("idprod").getValue()) {
+                that._valueHelpDialogScen.open();
+              } else {
+                MessageToast.show("Select Location and Product");
+              } 
+          } else if (sId.includes("idcomp")) {
+            if (that.byId("idloc").getValue() && that.byId("idprod").getValue()) {
+                that._valueHelpDialogComp.open();
+              } else {
+                MessageToast.show("Select Location and Product");
+              } 
+          } else if (sId.includes("stru")) {
+            if (that.byId("idloc").getValue() && that.byId("idprod").getValue()) {
+                that._valueHelpDialogStru.open();
+              } else {
+                MessageToast.show("Select Location and Product");
+              } 
           }
         },
   
         handleClose: function (oEvent) {
           var sId = oEvent.getParameter("id");
-          if (sId.includes("loc")) {
+          if (sId.includes("Loc")) {
             that._oCore
               .byId(this._valueHelpDialogLoc.getId() + "-searchField")
               .setValue("");
@@ -272,7 +316,7 @@ sap.ui.define(
             if (that.oProdList.getBinding("items")) {
               that.oProdList.getBinding("items").filter([]);
             }
-          } else if (sId.includes("ver")) {
+          } else if (sId.includes("Ver")) {
               that._oCore
                 .byId(this._valueHelpDialogVer.getId() + "-searchField")
                 .setValue("");
@@ -286,7 +330,21 @@ sap.ui.define(
               if (that.oScenList.getBinding("items")) {
                 that.oScenList.getBinding("items").filter([]);
               }
-            }
+            } else if (sId.includes("Comp")) {
+                that._oCore
+                  .byId(this._valueHelpDialogComp.getId() + "-searchField")
+                  .setValue("");
+                if (that.oCompList.getBinding("items")) {
+                  that.oCompList.getBinding("items").filter([]);
+                }
+              } else if (sId.includes("Stru")) {
+                that._oCore
+                  .byId(this._valueHelpDialogStru.getId() + "-searchField")
+                  .setValue("");
+                if (that.oStruList.getBinding("items")) {
+                  that.oStruList.getBinding("items").filter([]);
+                }
+              }
           
         },
         handleSearch: function (oEvent) {
@@ -347,8 +405,33 @@ sap.ui.define(
                 })
               );
             }
-            that.oObjDepList.getBinding("items").filter(oFilters);
-          }
+            that.oScenList.getBinding("items").filter(oFilters);
+          } else if (sId.includes("Comp")) {
+            if (query !== "") {
+              oFilters.push(
+                new Filter({
+                  filters: [
+                    new Filter("COMPONENT", FilterOperator.Contains, query),
+                    new Filter("ITEM_NUM", FilterOperator.Contains, query),
+                  ],
+                  and: false,
+                })
+              );
+            }
+            that.oCompList.getBinding("items").filter(oFilters);
+          } else if (sId.includes("Stru")) {
+            if (query !== "") {
+              oFilters.push(
+                new Filter({
+                  filters: [
+                    new Filter("STRUC_NODE", FilterOperator.Contains, query),
+                  ],
+                  and: false,
+                })
+              );
+            }
+            that.oStruList.getBinding("items").filter(oFilters);
+          } 
         },
   
         handleSelection: function (oEvent) {
@@ -365,6 +448,10 @@ sap.ui.define(
             that.oLoc.setValue(aSelectedItems[0].getTitle());
             that.oGModel.setProperty("/SelectedLoc", aSelectedItems[0].getTitle());
             that.oProd.setValue("");
+            that.oVer.setValue("");
+            that.oScen.setValue("");
+            that.oComp.setValue("");
+            that.oStru.setValue("");
             that.oGModel.setProperty("/SelectedProd", "");
             
             this.getModel("BModel").read("/getLocProdDet", {
@@ -390,7 +477,11 @@ sap.ui.define(
               aSelectedItems = oEvent.getParameter("selectedItems");
               that.oProd.setValue(aSelectedItems[0].getTitle());
               that.oGModel.setProperty("/SelectedProd", aSelectedItems[0].getTitle());
-
+              that.oVer.setValue("");
+              that.oScen.setValue("");
+              that.oComp.setValue("");
+              that.oStru.setValue("");
+              
               this.getModel("BModel").read("/getIbpVerScn", {
                 filters: [
                   new Filter("LOCATION_ID",FilterOperator.EQ, that.oGModel.getProperty("/SelectedLoc")),
@@ -402,6 +493,20 @@ sap.ui.define(
 
                   that.scenModel.setData(oData);
                   that.oScenList.setModel(that.scenModel);
+                },
+                error: function (oData, error) {
+                  MessageToast.show("error");
+                },
+              });
+
+              this.getModel("BModel").read("/gBomHeaderet", {
+                filters: [
+                  new Filter("LOCATION_ID",FilterOperator.EQ, that.oGModel.getProperty("/SelectedLoc")),
+                  new Filter("PRODUCT_ID",FilterOperator.EQ, aSelectedItems[0].getTitle()),
+                ],
+                success: function (oData) {
+                  that.compModel.setData(oData);
+                  that.oCompList.setModel(that.compModel);
                 },
                 error: function (oData, error) {
                   MessageToast.show("error");
@@ -420,6 +525,38 @@ sap.ui.define(
             aSelectedItems = oEvent.getParameter("selectedItems");
               that.oScen.setValue(aSelectedItems[0].getTitle());
               that.oGModel.setProperty("/SelectedScen", aSelectedItems[0].getTitle());
+            
+          } else if (sId.includes("Comp")) {
+            this.oComp = that.byId("idcomp");
+            aSelectedItems = oEvent.getParameter("selectedItems");
+              that.oComp.setValue(aSelectedItems[0].getTitle());
+              that.oGModel.setProperty("/SelectedComp", aSelectedItems[0].getTitle());
+              that.oGModel.setProperty("/SelectedCompItem", aSelectedItems[0].getDescription());
+
+              
+            that.oStru.setValue("");
+
+              this.getModel("BModel").read("/genCompStrcNode", {
+                filters: [
+                  new Filter("LOCATION_ID",FilterOperator.EQ, that.oGModel.getProperty("/SelectedLoc")),
+                  new Filter("PRODUCT_ID",FilterOperator.EQ, that.oGModel.getProperty("/SelectedProd")),
+                  new Filter("COMPONENT",FilterOperator.EQ, that.oGModel.getProperty("/SelectedComp")),
+                  new Filter("ITEM_NUM",FilterOperator.EQ, that.oGModel.getProperty("/SelectedCompItem")),
+                ],
+                success: function (oData) {
+                  that.struModel.setData(oData);
+                  that.oStruList.setModel(that.struModel);
+                },
+                error: function (oData, error) {
+                  MessageToast.show("error");
+                },
+              });
+            
+          } else if (sId.includes("Stru")) {
+            this.oStru = that.byId("idstru");
+            aSelectedItems = oEvent.getParameter("selectedItems");
+              that.oStru.setValue(aSelectedItems[0].getTitle());
+              that.oGModel.setProperty("/SelectedStru", aSelectedItems[0].getTitle());
             
           }
           that.handleClose(oEvent);

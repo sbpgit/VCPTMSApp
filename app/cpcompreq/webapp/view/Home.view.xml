@@ -77,6 +77,26 @@
                                 <Button text="Reset" press="onResetDate" tooltip="Reset Valid To Date"/>
                             </f:FormElement>
                         </f:formElements>
+                        </f:FormContainer>
+                        <f:FormContainer>
+                        <f:formElements>
+                            <f:FormElement>
+                                <f:label>
+                                    <Label text="Component"/>
+                                </f:label>
+                                <f:fields>
+                                <Input id="idcomp" value="" width="225px" placeholder="Component" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                </f:fields>
+                            </f:FormElement>
+                            <f:FormElement>
+                                <f:label>
+                                    <Label text="Structure"/>
+                                </f:label>
+                                <f:fields>
+                                <Input id="idstru" value="" width="225px" placeholder="Structure" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                </f:fields>
+                            </f:FormElement>
+                        </f:formElements>
                     </f:FormContainer>
                 </f:formContainers>
             </f:Form>
