@@ -22,7 +22,7 @@
                                     <Label text="Location"/>
                                 </f:label>
                                 <f:fields>
-                                <Input id="idloc" value="RX01" width="225px" placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                <Input id="idloc" value="" width="225px" placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                                 </f:fields>
                             </f:FormElement>
                             <f:FormElement>
@@ -52,7 +52,7 @@
                                     <Label text="Product"/>
                                 </f:label>
                                 <f:fields>
-                                    <Input id="idprod" placeholder="Product" value="8150RW" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                                    <Input id="idprod" placeholder="Product" value="" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
                                 </f:fields>
                             </f:FormElement>
                             <f:FormElement>
