@@ -13,6 +13,7 @@ using V_LOCPROD from '../db/data-model';
 using V_TSODCHAR_H from '../db/data-model';
 using V_TSODCHAR_F from '../db/data-model';
 using V_ODRESTRICT FROM '../db/data-model';
+using V_IBPVERSCENARIO from '../db/data-model';
 using V_BOMPVS from '../db/data-model';
 service CatalogService @(impl : './lib/cat-service.js') {
     // Service on HDI entities
@@ -123,6 +124,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
     entity getODcharval         as projection on V_ODCHARVAL;
     entity getODCharH          as projection on V_TSODCHAR_H;
     entity getODCharF          as projection on V_TSODCHAR_F;
+    entity getIbpVerScn        as projection on V_IBPVERSCENARIO;
 
     //Component requirement qunatity determination
     function getCompreqQty(LOCATION_ID:String(4), PRODUCT_ID:String(40), VERSION : String(10), SCENARIO    : String(32) ) returns String;

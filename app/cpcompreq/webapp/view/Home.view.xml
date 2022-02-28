@@ -65,7 +65,7 @@
                             </f:FormElement>
                             <f:FormElement>
                                 <f:label>
-                                    <Label text="Object Dep"/>
+                                    <Label text="Valid To"/>
                                 </f:label>
                                 <f:fields>
                                     <DatePicker id="toDate" width="auto" value="2023-01-03" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="handleDateChange"/>
