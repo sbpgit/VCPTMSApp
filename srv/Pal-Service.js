@@ -2108,74 +2108,86 @@ function _getDataObjForGenModels(vcRulesList, modelType, numChars) {
            if ( charIdx % numChars == 0)
             {
                 att1 = results[index].CharCount;
-                if (index == 0)
+                if ( (index == 0) &&
+                     ( (modelType == 'MLR') || (modelType == 'VARMA')) )
                     att1 = att1 + 0.00001;
                 target = results[index].Target;
             }
             else if (charIdx % numChars == 1)
             {
                 att2 = results[index].CharCount;
-                if (index == 0)
+                if ( (index == 1) &&
+                     ( (modelType == 'MLR') || (modelType == 'VARMA')) )
                     att2 = att2 + 0.00001;
             }
             else if (charIdx % numChars == 2)
             {
                 att3 = results[index].CharCount;
-                if (index == 0)
+                if ( (index == 2) &&
+                     ( (modelType == 'MLR') || (modelType == 'VARMA')) )
                     att3 = att3 + 0.00001;
             }
             else if (charIdx % numChars == 3)
             {
                 att4 = results[index].CharCount;
-                if (index == 0)
+                if ( (index == 3) &&
+                     ( (modelType == 'MLR') || (modelType == 'VARMA')) )
                     att4 = att4 + 0.00001;
             }
             else if (charIdx % numChars == 4)
             {
                 att5 = results[index].CharCount;
-                if (index == 0)
+                if ( (index == 4) &&
+                     ( (modelType == 'MLR') || (modelType == 'VARMA')) )
                     att5 = att5 + 0.00001;
             }
             else if (charIdx % numChars == 5)
             {
                 att6 = results[index].CharCount;
-                if (index == 0)
+                if ( (index == 5) &&
+                     ( (modelType == 'MLR') || (modelType == 'VARMA')) )
                     att6 = att6 + 0.00001;
             }
             else if (charIdx % numChars == 6)
             {
                 att7 = results[index].CharCount;
-                if (index == 0)
+                if ( (index == 6) &&
+                     ( (modelType == 'MLR') || (modelType == 'VARMA')) )
                     att7 = att7 + 0.00001;
             }
             else if (charIdx % numChars == 7)
             {
                 att8 = results[index].CharCount;
-                if (index == 0)
+                if ( (index == 7) &&
+                     ( (modelType == 'MLR') || (modelType == 'VARMA')) )
                     att8 = att8 + 0.00001;
             }
             else if (charIdx % numChars == 8)
             {
                 att9 = results[index].CharCount;
-                if (index == 0)
+                if ( (index == 8) &&
+                     ( (modelType == 'MLR') || (modelType == 'VARMA')) )
                     att9 = att9 + 0.00001;
             }
             else if (charIdx % numChars == 9)
             {
                 att10 = results[index].CharCount;
-                if (index == 0)
+                if ( (index == 9) &&
+                     ( (modelType == 'MLR') || (modelType == 'VARMA')) )
                     att10 = att10 + 0.00001;
             }
             else if (charIdx % numChars == 10)
             {
                 att11 = results[index].CharCount;
-                if (index == 0)
+                if ( (index == 10) &&
+                     ( (modelType == 'MLR') || (modelType == 'VARMA')) )
                     att11 = att11 + 0.00001;
             }
             else if (charIdx % numChars == 11)
             {
                 att12 = results[index].CharCount;
-                if (index == 0)
+                if ( (index == 11) &&
+                     ( (modelType == 'MLR') || (modelType == 'VARMA')) )
                     att12 = att12 + 0.00001;
             }
             charIdx  = charIdx + 1;
