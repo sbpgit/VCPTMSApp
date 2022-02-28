@@ -199,13 +199,21 @@ sap.ui.define(
             that.oProdList.getBinding("items").filter([]);
           }
         } else if (sId.includes("comp")) {
-          that._oCore
-            .byId(this._valueHelpDialogComp.getId() + "-searchField")
-            .setValue("");
-          if (that.oCompList.getBinding("items")) {
-            that.oCompList.getBinding("items").filter([]);
+            that._oCore
+              .byId(this._valueHelpDialogComp.getId() + "-searchField")
+              .setValue("");
+            if (that.oCompList.getBinding("items")) {
+              that.oCompList.getBinding("items").filter([]);
+            }
+          } else if (sId.includes("press")) {
+            that._oCore
+              .byId(this._valueHelpDialogObjDep.getId() + "-searchField")
+              .setValue("");
+            if (that.oObjDepList.getBinding("items")) {
+              that.oObjDepList.getBinding("items").filter([]);
+            }
           }
-        } else if (sId.includes("prod")) {
+        else if (sId.includes("prod")) {
           that._oCore
             .byId(this._valueHelpDialogObjDep.getId() + "-searchField")
             .setValue("");
@@ -476,9 +484,9 @@ sap.ui.define(
         that.oList.removeSelections();
         if (
           that.byId("idloc").getValue() &&
-          that.byId("prodInput").getTokens().length !== 0 &&
-          that.byId("compInput").getTokens().length !== 0 &&
-          that.byId("objDepInput").getTokens().length !== 0
+          that.byId("prodInput").getTokens().length !== 0 //&&
+          //that.byId("compInput").getTokens().length !== 0 &&
+        //  that.byId("objDepInput").getTokens().length !== 0
         ) {
           var aSelectedItem = that.oProdList.getSelectedItems();
           var aSelectedComp = that.oCompList.getSelectedItems();
@@ -556,7 +564,7 @@ sap.ui.define(
                 results: oData.results,
               });
               that.oProfileList.setModel(that.oProfileModel);
-
+              that.oProfileList.removeSelections(true);
               that._onProfiles.open();
               that.oGModel.setProperty("/selItem", selTabItem);
             },
@@ -606,6 +614,7 @@ sap.ui.define(
                 new Filter("PRODUCT_ID", FilterOperator.Contains, query),
                 new Filter("COMPONENT", FilterOperator.Contains, query),
                 new Filter("OBJ_DEP", FilterOperator.Contains, query),
+                new Filter("STRUC_NODE", FilterOperator.Contains, query),
                 new Filter("PROFILE", FilterOperator.Contains, query),
               ],
               and: false,
@@ -630,6 +639,7 @@ sap.ui.define(
             PRODUCT_ID: selected.PRODUCT_ID,
             COMPONENT: selected.COMPONENT,
             OBJ_DEP: selected.OBJ_DEP,
+            STRUC_NODE: selected.STRUC_NODE,
             PROFILE: sProfile,
           };
           aData.PROFILEOD.push(jsonProfileOD);

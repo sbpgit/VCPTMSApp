@@ -140,13 +140,17 @@ modules:
       - cpappcplocation.zip
       name: cpappcplocation
       target-path: resources/
-    # - artifacts:
-    #   - cpappcpassignnode.zip
-    #   name: cpappcpassignnode
-    #   target-path: resources/
     - artifacts:
       - cpappcpbompvs.zip
       name: cpappcpbompvs
+      target-path: resources/
+    - artifacts:
+      - cpappcpcompreq.zip
+      name: cpappcpcompreq
+      target-path: resources/
+    - artifacts:
+      - cpappfcpgeneratetimeseries.zip
+      name: cpappfcpgeneratetimeseries
       target-path: resources/
 - name: cpibpfdemcpibpfdem
   type: html5
@@ -318,19 +322,29 @@ modules:
     - npm install
     - npm run build:cf
     supported-platforms: []
-# - name: cpappcpassignnode
-#   type: html5
-#   path: app/cpassignnode
-#   build-parameters:
-#     build-result: dist
-#     builder: custom
-#     commands:
-#     - npm install
-#     - npm run build:cf
-#     supported-platforms: []
 - name: cpappcpbompvs
   type: html5
   path: app/cpbompvs
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappcpcompreq
+  type: html5
+  path: app/cpcompreq
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappfcpgeneratetimeseries
+  type: html5
+  path: app/cp_generatetimeseries
   build-parameters:
     build-result: dist
     builder: custom

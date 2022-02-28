@@ -308,39 +308,59 @@ sap.ui.define([
        
 
         handleStruSelection:function(oEvent){
+            that = this;
             var loc = oGModel.getProperty("/SelectedLoc"),
                 prod = oGModel.getProperty("/SelectedProd"),
                 component = oGModel.getProperty("/SelecteComponent"),
                 item = oGModel.getProperty("/SelecteItem"),
                 struNode = oEvent.getParameter("selectedItems")[0].getTitle();
-
-                var uri = "/v2/catalog/genCompStrcNode";
-                $.ajax({
-                    url: uri,
-                    type: "post",
-                    contentType: "application/json",
-                    data: JSON.stringify({
+                that.getModel("BModel").callFunction("/genCompSN", {
+                    method: "GET",
+                    urlParameters: {
                         LOCATION_ID: loc,
                         PRODUCT_ID: prod,
                         COMPONENT: component,
                         ITEM_NUM: item,
                         STRUC_NODE:struNode
-                    }),
-                    dataType: "json",
-                    async: false,
-                    timeout: 0,
-                    
+                    },
                     success: function (data) {
-                    sap.ui.core.BusyIndicator.hide();
-                    sap.m.MessageToast.show("Structure Node assigned");
-                    // that.onStruNodeClose();
-                    oGModel.setProperty("/resetFlag", "");
-                    that.onAfterRendering();
+                        sap.ui.core.BusyIndicator.hide();
+                        sap.m.MessageToast.show("Structure Node assigned successfully");
+                        // that.onStruNodeClose();
+                        oGModel.setProperty("/resetFlag", "");
+                        that.onAfterRendering();
                     },
                     error: function (data) {
                         sap.m.MessageToast.show(JSON.stringify(data));
-                    },
-                });
+                      },
+                  });
+                // var uri = "/v2/catalog/genCompStrcNode";
+                // $.ajax({
+                //     url: uri,
+                //     type: "post",
+                //     contentType: "application/json",
+                //     data: JSON.stringify({
+                //         LOCATION_ID: loc,
+                //         PRODUCT_ID: prod,
+                //         COMPONENT: component,
+                //         ITEM_NUM: item,
+                //         STRUC_NODE:struNode
+                //     }),
+                //     dataType: "json",
+                //     async: false,
+                //     timeout: 0,
+                    
+                //     success: function (data) {
+                //     sap.ui.core.BusyIndicator.hide();
+                //     sap.m.MessageToast.show("Structure Node assigned");
+                //     // that.onStruNodeClose();
+                //     oGModel.setProperty("/resetFlag", "");
+                //     that.onAfterRendering();
+                //     },
+                //     error: function (data) {
+                //         sap.m.MessageToast.show(JSON.stringify(data));
+                //     },
+                // });
         },
 
         handleStruSearch:function(oEvent){
@@ -365,33 +385,52 @@ sap.ui.define([
         onStructureNodeDel:function(oEvent){
             var loc = oGModel.getProperty("/SelectedLoc"),
                 prod = oGModel.getProperty("/SelectedProd"),
+                selectedItem = oEvent.getSource().getParent().getCells()[0].getText(),
              selectedComp = oEvent.getSource().getParent().getCells()[1].getText();
-
-             var uri = "/v2/catalog/genCompStrcNode";
-                $.ajax({
-                    url: uri,
-                    type: "post",
-                    contentType: "application/json",
-                    data: JSON.stringify({
-                        LOCATION_ID: loc,
-                        PRODUCT_ID: prod,
-                        COMPONENT: selectedComp,
-                        STRUC_NODE:"D"
-                    }),
-                    dataType: "json",
-                    async: false,
-                    timeout: 0,
-                    
-                    success: function (data) {
+             that.getModel("BModel").callFunction("/genCompSN", {
+                method: "GET",
+                urlParameters: {
+                    LOCATION_ID: loc,
+                    PRODUCT_ID: prod,
+                    ITEM_NUM: selectedItem,
+                    COMPONENT: selectedComp,
+                    STRUC_NODE:"D"
+                },
+                success: function (data) {
                     sap.ui.core.BusyIndicator.hide();
                     sap.m.MessageToast.show("Structure Node deleted");
                     // that.onStruNodeClose();
                     that.onAfterRendering();
-                    },
-                    error: function (data) {
-                        sap.m.MessageToast.show(JSON.stringify(data));
-                    },
-                });
+                },
+                error: function (data) {
+                    sap.m.MessageToast.show(JSON.stringify(data));
+                  },
+              });
+            //  var uri = "/v2/catalog/genCompStrcNode";
+            //     $.ajax({
+            //         url: uri,
+            //         type: "post",
+            //         contentType: "application/json",
+            //         data: JSON.stringify({
+            //             LOCATION_ID: loc,
+            //             PRODUCT_ID: prod,
+            //             COMPONENT: selectedComp,
+            //             STRUC_NODE:"D"
+            //         }),
+            //         dataType: "json",
+            //         async: false,
+            //         timeout: 0,
+                    
+            //         success: function (data) {
+            //         sap.ui.core.BusyIndicator.hide();
+            //         sap.m.MessageToast.show("Structure Node deleted");
+            //         // that.onStruNodeClose();
+            //         that.onAfterRendering();
+            //         },
+            //         error: function (data) {
+            //             sap.m.MessageToast.show(JSON.stringify(data));
+            //         },
+            //     });
         }
 
 	});

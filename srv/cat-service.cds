@@ -130,6 +130,8 @@ service CatalogService @(impl : './lib/cat-service.js') {
     function genpvs(NODE_TYPE : String(2), CHILD_NODE : String(50), PARENT_NODE : String(50), ACCESS_NODES: String(50), NODE_DESC:String(200), UPPERLIMIT: Integer, LOWERLIMIT: Integer, FLAG: String(1)) returns array of getPVSNodes;
     // Generate Timeseries
     function generate_timeseries(LOCATION_ID:String(4), PRODUCT_ID:String(40)) returns String;
+    // Generate Timeseries
+    function generate_timeseriesF(LOCATION_ID:String(4), PRODUCT_ID:String(40)) returns String;
     // Get Object dependency
     function get_objdep() returns array of ds.objectDep; //objectDep;
     //function getODProfiles() returns array of odprofiles;
@@ -139,9 +141,10 @@ service CatalogService @(impl : './lib/cat-service.js') {
     function genODHistory(OBJ_DEP:String(30),OBJ_COUNTER:String(10)) returns array of ds.odhistory;
     // Generate OD Future timeseries
     function genODFuture(OBJ_DEP:String(30),OBJ_COUNTER:String(10)) returns array of ds.odfuture;
-
-    function getCompReqFWeekly(LOCATION_ID:String(4), PRODUCT_ID:String(40), VERSION : String(10), SCENARIO    : String(32)) returns ds.compreq;
-    // dummy testcase
-    // action gen_timeseries() returns String;
-
+    // Component weekly
+    function getCompReqFWeekly(LOCATION_ID:String(4), PRODUCT_ID:String(40), VERSION : String(10), SCENARIO : String(32)) returns array of ds.compreq;
+    //productaccess node
+    function genProdAN(LOCATION_ID:String(4), PRODUCT_ID:String(40), ACCESS_NODE:String(50)) returns array of genProdAccessNode;
+    //component structure node
+    function genCompSN(LOCATION_ID:String(4), PRODUCT_ID:String(40), ITEM_NUM:String(5),COMPONENT:String(40),STRUC_NODE  : String(50)) returns array of genCompStrcNode;
 }

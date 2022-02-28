@@ -149,74 +149,125 @@ class ComponentReq {
     }
   }
   async genCompReqWeekly(adata, iresult) {
-//     let DateFrom = '2022-03-04';
-//     let DateTo = '2023-01-03';
-//     let liCompWeekly = [];
-//     let lsCompWeekly = {};
-//       const liCompQty = await cds.run(`
-//       SELECT * FROM "CP_COMPQTYDETERMINE"
-//       WHERE "LOCATION_ID" = '` +
-//         adata.LOCATION_ID +
-//         `'
-//            AND "PRODUCT_ID" = '` +
-//         adata.PRODUCT_ID +
-//         `' AND "VERSION" = '` +
-//         adata.VERSION +
-//         `' AND "SCENARIO" = '` +
-//         adata.SCENARIO +
-//         `' AND ( "CAL_DATE" <= DateTo
-//             AND "CAL_DATE" >= DateFrom )
-//            ORDER BY 
-//                 "LOCATION_ID" ASC, 
-//                 "PRODUCT_ID" ASC,
-//                 "VERSION" ASC,
-//                 "SCENARIO" ASC,
-//                 "ITEM_NUM" ASC,
-//                 "COMPONENT" ASC,
-//                 "CAL_DATE" ASC,
-//                 "STRUC_NODE" ASC`);
-//     const liDates = await cds.run(`
-//     SELECT DISTINCT CAL_DATE FROM "CP_COMPQTYDETERMINE"
-//     WHERE ( "CAL_DATE" <= DateTo
-//             AND "CAL_DATE" >= DateFrom )
-//             ORDER BY 
-//                 "LOCATION_ID" ASC, 
-//                 "PRODUCT_ID" ASC,
-//                 "VERSION" ASC,
-//                 "SCENARIO" ASC,
-//                 "ITEM_NUM" ASC,
-//                 "COMPONENT" ASC,
-//                 "CAL_DATE" ASC,
-//                 "STRUC_NODE" ASC`);
-//      for (let i=1; i<= liDates.length; i++){
-         
-//         lsCompWeekly.LOCATION_ID = "LOC";
-//         lsCompWeekly.PRODUCT_ID = "PROD";
-//         lsCompWeekly.VERSION = "VER";
-//         lsCompWeekly.SCENARIO = "SCENR";
-//         lsCompWeekly.ITEM_NUM = "ITEM";
-//         lsCompWeekly.COMPONENT = "COMP";
-//         let columnname = "Week"+i;
-//         lsCompWeekly."columnname" = 
-//      }
-//      for( let i = 0 ; i < liCompQty.length ; i++){
-//         lsCompWeekly.LOCATION_ID = liCompQty[i].LOCATION_ID;
-//         lsCompWeekly.PRODUCT_ID = liCompQty[i].PRODUCT_ID;
-//         lsCompWeekly.VERSION = liCompQty[i].VERSION;
-//         lsCompWeekly.SCENARIO = liCompQty[i].SCENARIO;
-//         lsCompWeekly.ITEM_NUM = liCompQty[i].ITEM_NUM;
-//         lsCompWeekly.COMPONENT = liCompQty[i].COMPONENT;
-//         if (liCompQty[i].LOCATION_ID !== liCompQty[GenFunctions.addOne(i, liCompQty.length)].LOCATION_ID ||
-//             liCompQty[i].PRODUCT_ID  !== liCompQty[GenFunctions.addOne(i, liCompQty.length)].PRODUCT_ID ||
-//             liCompQty[i].VERSION  !== liCompQty[GenFunctions.addOne(i, liCompQty.length)].VERSION ||
-//             liCompQty[i].SCENARIO  !== liCompQty[GenFunctions.addOne(i, liCompQty.length)].SCENARIO ||  
-//         i === GenFunctions.addOne(i, liCompQty.length)
-//    ) {  
-        
-//         let columnname =  "Week"  
-//         lsCompWeekly.CAL_DATE = liCompQty[i].CAL_DATE;
-//    }
-//      }
+    let vDateFrom = "2022-03-04";
+    let vDateTo = "2023-01-03";
+    let liCompWeekly = [];
+    let lsCompWeekly = {};
+    let liDates = [],
+      vWeekIndex,
+      vCompIndex,
+      vDateIndex,
+      vComp,
+      lsDates = {};
+    let columnname = "Week";
+    lsCompWeekly[columnname + 1] = "hello";
+
+    const liCompQty = await cds.run(
+      `
+      SELECT * FROM "CP_COMPQTYDETERMINE"
+      WHERE "LOCATION_ID" = '` +
+        adata.LOCATION_ID +
+        `'
+           AND "PRODUCT_ID" = '` +
+        adata.PRODUCT_ID +
+        `' AND "VERSION" = '` +
+        adata.VERSION +
+        `' AND "SCENARIO" = '` +
+        adata.SCENARIO +
+        `' AND ( "CAL_DATE" <= '` +
+        vDateTo +
+        `'
+            AND "CAL_DATE" >= '` +
+        vDateFrom +
+        `')
+           ORDER BY 
+                "LOCATION_ID" ASC, 
+                "PRODUCT_ID" ASC,
+                "VERSION" ASC,
+                "SCENARIO" ASC,
+                "ITEM_NUM" ASC,
+                "COMPONENT" ASC,
+                "CAL_DATE" ASC`
+    );
+    
+    const liComp = await cds.run(
+        `
+        SELECT DISTINCT "LOCATION_ID",
+                        "PRODUCT_ID",
+                        "VERSION",
+                        "SCENARIO",
+                        "ITEM_NUM",
+                        "COMPONENT"
+        FROM "CP_COMPQTYDETERMINE"
+        WHERE "LOCATION_ID" = '` +
+          adata.LOCATION_ID +
+          `'
+             AND "PRODUCT_ID" = '` +
+          adata.PRODUCT_ID +
+          `' AND "VERSION" = '` +
+          adata.VERSION +
+          `' AND "SCENARIO" = '` +
+          adata.SCENARIO +
+          `' AND ( "CAL_DATE" <= '` +
+          vDateTo +
+          `'
+              AND "CAL_DATE" >= '` +
+          vDateFrom +
+          `')
+             ORDER BY 
+                  "LOCATION_ID" ASC, 
+                  "PRODUCT_ID" ASC,
+                  "VERSION" ASC,
+                  "SCENARIO" ASC,
+                  "ITEM_NUM" ASC,
+                  "COMPONENT" ASC`
+      );
+    var vDateSeries = vDateFrom;
+    lsDates.CAL_DATE = GenFunctions.removeDays(GenFunctions.getNextSunday(vDateSeries),1);
+    liDates.push(lsDates);
+    lsDates = {};
+    while (vDateSeries <= vDateTo) {
+      vDateSeries = GenFunctions.addDays(vDateSeries, 7);
+      lsDates.CAL_DATE = GenFunctions.removeDays(
+        GenFunctions.getNextSunday(vDateSeries),
+        1
+      );
+
+      liDates.push(lsDates);
+      lsDates = {};
+    }
+
+    for (let j = 0; j < liComp.length; j++) {
+      // Initially set vWeekIndex to j to geneate Week columns
+      // vCompIndex is to get Componnent quantity for all dates
+      if (j === 0) {
+        vWeekIndex = j;
+        vCompIndex = j;
+      }
+      lsCompWeekly.LOCATION_ID = liComp[j].LOCATION_ID;
+      lsCompWeekly.PRODUCT_ID = liComp[j].PRODUCT_ID;
+      lsCompWeekly.ITEM_NUM = liComp[j].ITEM_NUM;
+      lsCompWeekly.COMPONENT = liComp[j].COMPONENT;
+      lsCompWeekly.VERSION = liComp[j].VERSION;
+      lsCompWeekly.SCENARIO = liComp[j].SCENARIO;
+      for (let i = 0; i < liDates.length; i++) {
+        vWeekIndex = vWeekIndex + 1;
+        // In there is no change in componenet and CAL_DATE matches with the liDates series
+        if (
+          liCompQty[vCompIndex].COMPONENT === lsCompWeekly.COMPONENT &&
+          liCompQty[vCompIndex].CAL_DATE === liDates[i].CAL_DATE
+        ) {
+          lsCompWeekly[columnname + vWeekIndex] = liCompQty[j].COMP_QTY;
+          vCompIndex = vCompIndex + 1;
+        } else {
+          lsCompWeekly[columnname + vWeekIndex] = 0;
+        }
+      }
+      liCompWeekly.push(GenFunctions.parse(lsCompWeekly));
+      lsCompWeekly = {};
+    }
+    iresult = liCompWeekly;
+    
   }
 }
 module.exports = ComponentReq;

@@ -63,7 +63,27 @@ class GenFunctions {
     static subOne(i) {
         if (i === 0) return i;
         return i - 1;
-    }    
+    }   
+    static addDays(imDate, imDays) {
+        const lDate = new Date(imDate);
+        const lNextWeekDay = new Date(lDate.getFullYear(), lDate.getMonth(), lDate.getDate() + imDays);
+
+        return lNextWeekDay.toISOString().split('T')[0];
+      
+        // var result = new Date(date);
+        // result.setDate(result.getDate() + days);
+        // return result;
+      } 
+      static removeDays(imDate, imDays) {
+        const lDate = new Date(imDate);
+        const lNextWeekDay = new Date(lDate.getFullYear(), lDate.getMonth(), lDate.getDate() - imDays);
+
+        return lNextWeekDay.toISOString().split('T')[0];
+      
+        // var result = new Date(date);
+        // result.setDate(result.getDate() + days);
+        // return result;
+      } 
 }
 
 module.exports = GenFunctions;
