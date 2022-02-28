@@ -382,15 +382,31 @@ sap.ui.define(
               });
   
   
-          } else if (sId.includes("ver")) {
+          } else if (sId.includes("Ver")) {
               this.oVer = that.byId("idver");
+              aSelectedItems = oEvent.getParameter("selectedItems");
+              that.oVer.setValue(aSelectedItems[0].getTitle());
+              that.oGModel.setProperty("/SelectedVer", aSelectedItems[0].getTitle());
             
           } else if (sId.includes("scen")) {
             this.oScen = that.byId("idscen");
+            aSelectedItems = oEvent.getParameter("selectedItems");
+              that.oScen.setValue(aSelectedItems[0].getTitle());
+              that.oGModel.setProperty("/SelectedScen", aSelectedItems[0].getTitle());
             
           }
           that.handleClose(oEvent);
         },
+
+        
+
+
+
+
+
+
+
+
   
       });
     }

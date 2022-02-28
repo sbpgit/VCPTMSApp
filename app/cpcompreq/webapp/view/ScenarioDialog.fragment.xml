@@ -1,7 +1,7 @@
 <core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
-	<SelectDialog id="scenSlctList" title="Scenario" rememberSelections="true" search="handleSearch" liveChange="handleSearch"
-		confirm="handleSelection" cancel="handleClose" multiSelect="true"  contentWidth="320px" items="{/results}" 
+	<SelectDialog id="scenSlctList" title="Scenario" rememberSelections="false" search="handleSearch" liveChange="handleSearch"
+		confirm="handleSelection" cancel="handleClose"   contentWidth="320px" items="{/results}" 
         selectionChange="handleScenChange" growing="false">
-		<StandardListItem title="{OBJ_DEP}" description="{OBJDEP_DESC}" type="Active"/>
+		<StandardListItem title="{SCENARIO}" type="Active"/>
 	</SelectDialog>
 </core:FragmentDefinition>
