@@ -104,24 +104,24 @@ sap.ui.define(
   
   
   
-          that.oTable = that.byId("idCompReq")
-          oGModel = that.getView().getModel("oGModel");
-          that.getModel("BModel").callFunction("/getCompReqFWeekly", {
-              method: "GET",
-              urlParameters: {
-                  LOCATION_ID: "MX32",
-                  PRODUCT_ID: "57K0M",
-                  VERSION: "BSL_1.1",
-                  SCENARIO:"BSL_1.1_SCENARIO"
-              },
-              success: function (data) {
-                  that.rowData = data.results;
-                  sap.ui.core.BusyIndicator.hide();
-              },
-              error: function (data) {
-                  sap.m.MessageToast.show(JSON.stringify(data));
-                },
-            });
+        //   that.oTable = that.byId("idCompReq")
+        //   oGModel = that.getView().getModel("oGModel");
+        //   that.getModel("BModel").callFunction("/getCompReqFWeekly", {
+        //       method: "GET",
+        //       urlParameters: {
+        //           LOCATION_ID: "MX32",
+        //           PRODUCT_ID: "57K0M",
+        //           VERSION: "BSL_1.1",
+        //           SCENARIO:"BSL_1.1_SCENARIO"
+        //       },
+        //       success: function (data) {
+        //           that.rowData = data.results;
+        //           sap.ui.core.BusyIndicator.hide();
+        //       },
+        //       error: function (data) {
+        //           sap.m.MessageToast.show(JSON.stringify(data));
+        //         },
+        //     });
   
         },
         onResetDate: function () {
@@ -131,6 +131,27 @@ sap.ui.define(
           that.onAfterRendering();
         },
         onGetData: function (oEvent) {
+            that.oTable = that.byId("idCompReq")
+            that.oGModel = that.getModel("oGModel");
+
+            var Loc = that.oGModel.getProperty("/SelectedLoc"),
+                Prod = that.oGModel.getProperty("/SelectedProd"),
+                ver= that.oGModel.getProperty("/SelectedVer"),
+                scen = that.oGModel.getProperty("/SelectedScen");
+
+            
+          that.getModel("BModel").callFunction("/getCompReqFWeekly", {
+              method: "GET",
+              urlParameters: {
+                  LOCATION_ID: Loc,
+                  PRODUCT_ID: Prod,
+                  VERSION: ver,
+                  SCENARIO: scen
+              },
+              success: function (data) {
+                  that.rowData = data.results;
+                  sap.ui.core.BusyIndicator.hide();
+              
             var rowData;
           var fromDate = new Date(that.byId("fromDate").getDateValue()),
             toDate = new Date(that.byId("toDate").getDateValue());
@@ -155,6 +176,12 @@ sap.ui.define(
           });
           
           that.oTable.bindRows("/rows");
+
+        },
+        error: function (data) {
+            sap.m.MessageToast.show(JSON.stringify(data));
+          },
+      });
         },
         generateDateseries: function (imFromDate, imToDate) {
           var lsDates = {},
@@ -396,14 +423,7 @@ sap.ui.define(
             
           }
           that.handleClose(oEvent);
-        },
-
-        
-
-
-
-
-
+        }
 
 
 
