@@ -2,6 +2,10 @@
 
 
 button#container-cpappf\.cpgeneratetimeseries---Home--idTimeSeries {
-    margin-left: 251px;
+    margin-left: 300px;
     margin-right: 50px;
+}
+
+button#container-cpappf\.cpgeneratetimeseries---Home--buttonCompReq {
+    margin-left: 300px;
 }
