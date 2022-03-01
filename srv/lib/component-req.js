@@ -160,7 +160,7 @@ class ComponentReq {
       vComp,
       lsDates = {};
     let columnname = "Week";
-    lsCompWeekly[columnname + 1] = "hello";
+    // lsCompWeekly[columnname + 1] = "hello";
 
     const liCompQty = await cds.run(
       `

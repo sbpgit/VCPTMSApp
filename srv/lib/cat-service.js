@@ -26,10 +26,128 @@ module.exports = (srv) => {
     return liresult;
   });
   srv.on("getCompReqFWeekly", async (req) => {
-    let liresult;
-    const comreq = new ComponentReq();
-    comreq.genCompReqWeekly(req.data, liresult);
-    return liresult;
+    // let liresult;
+    // const comreq = new ComponentReq();
+    // comreq.genCompReqWeekly(req.data );//, liresult);
+    // return liresult;
+    let vDateFrom = "2022-03-04";
+    let vDateTo = "2023-01-03";
+    let liCompWeekly = [];
+    let lsCompWeekly = {};
+    let liDates = [],
+      vWeekIndex,
+      vCompIndex,
+      vDateIndex,
+      vComp,
+      lsDates = {};
+    let columnname = "Week";
+    // lsCompWeekly[columnname + 1] = "hello";
+
+    const liCompQty = await cds.run(
+      `
+      SELECT * FROM "CP_COMPQTYDETERMINE"
+      WHERE "LOCATION_ID" = '` +
+        req.data.LOCATION_ID +
+        `'
+           AND "PRODUCT_ID" = '` +
+        req.data.PRODUCT_ID +
+        `' AND "VERSION" = '` +
+        req.data.VERSION +
+        `' AND "SCENARIO" = '` +
+        req.data.SCENARIO +
+        `' AND ( "CAL_DATE" <= '` +
+        vDateTo +
+        `'
+            AND "CAL_DATE" >= '` +
+        vDateFrom +
+        `')
+           ORDER BY 
+                "LOCATION_ID" ASC, 
+                "PRODUCT_ID" ASC,
+                "VERSION" ASC,
+                "SCENARIO" ASC,
+                "ITEM_NUM" ASC,
+                "COMPONENT" ASC,
+                "CAL_DATE" ASC`
+    );
+    
+    const liComp = await cds.run(
+        `
+        SELECT DISTINCT "LOCATION_ID",
+                        "PRODUCT_ID",
+                        "VERSION",
+                        "SCENARIO",
+                        "ITEM_NUM",
+                        "COMPONENT"
+        FROM "CP_COMPQTYDETERMINE"
+        WHERE "LOCATION_ID" = '` +
+        req.data.LOCATION_ID +
+          `'
+             AND "PRODUCT_ID" = '` +
+          req.data.PRODUCT_ID +
+          `' AND "VERSION" = '` +
+          req.data.VERSION +
+          `' AND "SCENARIO" = '` +
+          req.data.SCENARIO +
+          `' AND ( "CAL_DATE" <= '` +
+          vDateTo +
+          `'
+              AND "CAL_DATE" >= '` +
+          vDateFrom +
+          `')
+             ORDER BY 
+                  "LOCATION_ID" ASC, 
+                  "PRODUCT_ID" ASC,
+                  "VERSION" ASC,
+                  "SCENARIO" ASC,
+                  "ITEM_NUM" ASC,
+                  "COMPONENT" ASC`
+      );
+    var vDateSeries = vDateFrom;
+    lsDates.CAL_DATE = GenFunctions.removeDays(GenFunctions.getNextSunday(vDateSeries),1);
+    liDates.push(lsDates);
+    lsDates = {};
+    while (vDateSeries <= vDateTo) {
+      vDateSeries = GenFunctions.addDays(vDateSeries, 7);
+      lsDates.CAL_DATE = GenFunctions.removeDays(
+        GenFunctions.getNextSunday(vDateSeries),
+        1
+      );
+
+      liDates.push(lsDates);
+      lsDates = {};
+    }
+
+    for (let j = 0; j < liComp.length; j++) {
+      // Initially set vWeekIndex to j to geneate Week columns
+      // vCompIndex is to get Componnent quantity for all dates
+      if (j === 0) {
+        vWeekIndex = j;
+        vCompIndex = j;
+      }
+      lsCompWeekly.LOCATION_ID = liComp[j].LOCATION_ID;
+      lsCompWeekly.PRODUCT_ID = liComp[j].PRODUCT_ID;
+      lsCompWeekly.ITEM_NUM = liComp[j].ITEM_NUM;
+      lsCompWeekly.COMPONENT = liComp[j].COMPONENT;
+      lsCompWeekly.VERSION = liComp[j].VERSION;
+      lsCompWeekly.SCENARIO = liComp[j].SCENARIO;
+      for (let i = 0; i < liDates.length; i++) {
+        vWeekIndex = vWeekIndex + 1;
+        // In there is no change in componenet and CAL_DATE matches with the liDates series
+        if (
+          liCompQty[vCompIndex].COMPONENT === lsCompWeekly.COMPONENT &&
+          liCompQty[vCompIndex].CAL_DATE === liDates[i].CAL_DATE
+        ) {
+          lsCompWeekly[columnname + vWeekIndex] = liCompQty[j].COMP_QTY;
+          vCompIndex = vCompIndex + 1;
+        } else {
+          lsCompWeekly[columnname + vWeekIndex] = 0;
+        }
+      }
+      liCompWeekly.push(GenFunctions.parse(lsCompWeekly));
+      lsCompWeekly = {};
+    }
+    return liCompWeekly;
   });
   srv.on("CREATE", "getProfiles", _createProfiles);
 
