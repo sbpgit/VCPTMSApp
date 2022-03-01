@@ -98,10 +98,10 @@
                             </f:FormElement>
                             <f:FormElement>
                                 <f:label>
-                                    <Label text="Structure"/>
+                                    <Label text="Structure Node"/>
                                 </f:label>
                                 <f:fields>
-                                <Input id="idstru" value="" width="225px" placeholder="Structure" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                <Input id="idstru" value="" width="225px" placeholder="Structure Node" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                                 </f:fields>
                             </f:FormElement>
                         </f:formElements>
