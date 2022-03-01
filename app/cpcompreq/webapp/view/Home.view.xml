@@ -30,7 +30,7 @@
                                     <Label text="Location"/>
                                 </f:label>
                                 <f:fields>
-                                <Input id="idloc" value="RX01" width="225px" placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                <Input id="idloc" value="" width="225px" placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                                 </f:fields>
                             </f:FormElement>
                             <f:FormElement>
@@ -60,7 +60,7 @@
                                     <Label text="Product"/>
                                 </f:label>
                                 <f:fields>
-                                    <Input id="idprod" placeholder="Product" value="8150RW" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                                    <Input id="idprod" placeholder="Product" value="" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
                                 </f:fields>
                             </f:FormElement>
                             <f:FormElement>
@@ -83,6 +83,26 @@
                             <f:FormElement>
                                 <Button text="Go" width="30%" press="onGetData" tooltip="Get data based on filters"/>
                                 <Button text="Reset" press="onResetDate" tooltip="Reset Valid To Date"/>
+                            </f:FormElement>
+                        </f:formElements>
+                        </f:FormContainer>
+                        <f:FormContainer>
+                        <f:formElements>
+                            <f:FormElement>
+                                <f:label>
+                                    <Label text="Component"/>
+                                </f:label>
+                                <f:fields>
+                                <Input id="idcomp" value="" width="225px" placeholder="Component" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                </f:fields>
+                            </f:FormElement>
+                            <f:FormElement>
+                                <f:label>
+                                    <Label text="Structure"/>
+                                </f:label>
+                                <f:fields>
+                                <Input id="idstru" value="" width="225px" placeholder="Structure" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                </f:fields>
                             </f:FormElement>
                         </f:formElements>
                     </f:FormContainer>
