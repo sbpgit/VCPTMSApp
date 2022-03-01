@@ -152,7 +152,9 @@ sap.ui.define(
         that.onAfterRendering();
       },
       onGetData: function (oEvent) {
-        var sRowData = {}, iRowData = [], weekIndex;
+        var sRowData = {},
+          iRowData = [],
+          weekIndex;
         that.oTable = that.byId("idCompReq");
         that.oGModel = that.getModel("oGModel");
 
@@ -160,65 +162,95 @@ sap.ui.define(
           Prod = that.oGModel.getProperty("/SelectedProd"),
           ver = that.oGModel.getProperty("/SelectedVer"),
           scen = that.oGModel.getProperty("/SelectedScen"),
-          comp = that.oGModel.getProperty("/SelectedComp");
-        stru = that.oGModel.getProperty("/SelectedStru");
+          comp = that.oGModel.getProperty("/SelectedComp"),
+          stru = that.oGModel.getProperty("/SelectedStru");
+        var vFromDate = this.byId("fromDate").getDateValue();
+        var vToDate = this.byId("toDate").getDateValue();
+        vFromDate = that.getDateFn(vFromDate);
+        vToDate = that.getDateFn(vToDate);
+        if (
+          Loc !== undefined &&
+          Prod !== undefined &&
+          ver !== undefined &&
+          scen !== undefined &&
+          comp !== undefined &&
+          stru !== undefined 
+        ) {
+          that.getModel("BModel").callFunction("/getCompReqFWeekly", {
+            method: "GET",
+            urlParameters: {
+              LOCATION_ID: Loc,
+              PRODUCT_ID: Prod,
+              VERSION: ver,
+              SCENARIO: scen,
+              COMPONENT:comp,
+              STRUCNODE:stru,
+              FROMDATE:vFromDate,
+              TODATE:vToDate
+            },
+            success: function (data) {
+              that.rowData = data.results;
+              sap.ui.core.BusyIndicator.hide();
 
-        that.getModel("BModel").callFunction("/getCompReqFWeekly", {
-          method: "GET",
-          urlParameters: {
-            LOCATION_ID: Loc,
-            PRODUCT_ID: Prod,
-            VERSION: ver,
-            SCENARIO: scen,
-          },
-          success: function (data) {
-            that.rowData = data.results;
-            sap.ui.core.BusyIndicator.hide();
+              var rowData;
+              var fromDate = new Date(that.byId("fromDate").getDateValue()),
+                toDate = new Date(that.byId("toDate").getDateValue());
+              fromDate = fromDate.toISOString().split("T")[0];
+              toDate = toDate.toISOString().split("T")[0];
+              var liDates = that.generateDateseries(fromDate, toDate);
 
-            var rowData;
-            var fromDate = new Date(that.byId("fromDate").getDateValue()),
-              toDate = new Date(that.byId("toDate").getDateValue());
-            fromDate = fromDate.toISOString().split("T")[0];
-            toDate = toDate.toISOString().split("T")[0];
-            var liDates = that.generateDateseries(fromDate, toDate);
-
-            for (var i = 0; i < that.rowData.length; i++) {
-              //   sRowData.Location = that.rowData[i].LOCATION_ID;
-              //   sRowData.Product = that.rowData[i].PRODUCT_ID;
-              sRowData.ItemNum = that.rowData[i].ITEM_NUM;
-              sRowData.Component = that.rowData[i].COMPONENT;
-              //   sRowData.Version = that.rowData[i].VERSION;
-              //   sRowData.Scenario = that.rowData[i].SCENARIO;
-              weekIndex = 1;
-              for (let index = 2; index < liDates.length; index++) {
-                sRowData[liDates[index].CAL_DATE] =
-                  that.rowData[i]["Week" + weekIndex];
-                weekIndex++;
+              for (var i = 0; i < that.rowData.length; i++) {
+                sRowData.ItemNum = that.rowData[i].ITEM_NUM;
+                sRowData.Component = that.rowData[i].COMPONENT;
+                sRowData.StructureNode = that.rowData[i].STRUC_NODE;
+                sRowData.Type = that.rowData[i].QTYTYPE;
+                weekIndex = 1;
+                for (let index = 4; index < liDates.length; index++) {
+                  sRowData[liDates[index].CAL_DATE] =
+                    that.rowData[i]["WEEK" + weekIndex];
+                  weekIndex++;
+                }
+                iRowData.push(sRowData);
+                sRowData = {};
               }
-              iRowData.push(sRowData);
-              sRowData = {};
-            }
-            var oModel = new sap.ui.model.json.JSONModel();
-            oModel.setData({
-              rows: iRowData,
-              columns: liDates,
-            });
-            that.oTable.setModel(oModel);
-            that.oTable.bindColumns("/columns", function (sId, oContext) {
-              var columnName = oContext.getObject().CAL_DATE;
-              return new sap.ui.table.Column({
-                width: "8rem",
-                label: columnName,
-                template: columnName,
+              var oModel = new sap.ui.model.json.JSONModel();
+              oModel.setData({
+                rows: iRowData,
+                columns: liDates,
               });
-            });
+              that.oTable.setModel(oModel);
+              that.oTable.bindColumns("/columns", function (sId, oContext) {
+                var columnName = oContext.getObject().CAL_DATE;
+            //     if(columnName === "Component" ||
+            //     columnName === "ItemNum" ||
+            //     columnName === "StructureNode" ||
+            //     columnName === "Type" ){
+            //     return new sap.ui.table.Column({
+            //       width: "8rem",
+            //       label: columnName,
+            //       template: columnName,
+            //     });
+            // }
+            // else{
+                return new sap.ui.table.Column({
+                    width: "8rem",
+                    label: columnName,
+                    template: columnName,
+                  });  
+            // }
+              });
 
-            that.oTable.bindRows("/rows");
-          },
-          error: function (data) {
-            sap.m.MessageToast.show(JSON.stringify(data));
-          },
-        });
+              that.oTable.bindRows("/rows");
+            },
+            error: function (data) {
+              sap.m.MessageToast.show("Error While fetching data");
+            },
+          });
+        } else {
+          sap.m.MessageToast.show(
+            "Please select a Location/Product/Version/Scenario"
+          );
+        }
       },
       generateDateseries: function (imFromDate, imToDate) {
         var lsDates = {},
@@ -229,6 +261,12 @@ sap.ui.define(
         liDates.push(lsDates);
         lsDates = {};
         lsDates.CAL_DATE = "ItemNum";
+        liDates.push(lsDates);
+        lsDates = {};
+        lsDates.CAL_DATE = "StructureNode";
+        liDates.push(lsDates);
+        lsDates = {};
+        lsDates.CAL_DATE = "Type";
         liDates.push(lsDates);
         lsDates = {};
         //   lsDates.CAL_DATE="Location";
@@ -637,6 +675,24 @@ sap.ui.define(
         }
         that.handleClose(oEvent);
       },
+      getDateFn: function(imDate){
+        var vMonth,vDate, exDate;
+        var vMnthFrm = imDate.getMonth() + 1;
+
+
+        if(vMnthFrm < 10 ){
+            vMonth = "0" + vMnthFrm;
+        } else {
+            vMonth = vMnthFrm;
+        }
+
+        if(imDate.getDate() < 10 ){
+            vDate = "0" + imDate.getDate();
+        } else {
+            vDate = imDate.getDate();
+        } 
+        return imDate = imDate.getFullYear() + "-" + vMonth + "-" + vDate; 
+       }
     });
   }
 );

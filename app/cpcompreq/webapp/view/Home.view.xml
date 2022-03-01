@@ -35,7 +35,7 @@
                             </f:FormElement>
                             <f:FormElement>
                                 <f:label>
-                                    <Label text="Version"/>
+                                    <Label text="IBP Version"/>
                                 </f:label>
                                 <f:fields>
                                 <Input id="idver" value="" width="225px" placeholder="Version" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
@@ -65,7 +65,7 @@
                             </f:FormElement>
                             <f:FormElement>
                                 <f:label>
-                                    <Label text="Scenario"/>
+                                    <Label text="IBP Scenario"/>
                                 </f:label>
                                 <f:fields>
                                 <Input id="idscen" value="" width="225px" placeholder="Scenario" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
@@ -126,8 +126,11 @@
 	</Toolbar> -->
     <content>
     <t:Table id="idCompReq" 
-    fixedColumnCount="2"
-				visibleRowCount="4">
+    fixedColumnCount="4"
+				selectionMode="Single"
+    alternateRowColors="true"
+    enableSelectAll="false"
+				visibleRowCount="3">
                 <t:columns>
 				</t:columns>
         </t:Table>
