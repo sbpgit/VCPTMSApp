@@ -100,10 +100,6 @@ sap.ui.define(
               MessageToast.show("error");
             },
           });
-  
-  
-  
-  
           that.oTable = that.byId("idCompReq")
           oGModel = that.getView().getModel("oGModel");
           that.getModel("BModel").callFunction("/getCompReqFWeekly", {
@@ -131,24 +127,40 @@ sap.ui.define(
           that.onAfterRendering();
         },
         onGetData: function (oEvent) {
-            var rowData;
+            var sRowData = {}, iRowData = [], weekIndex;
+
           var fromDate = new Date(that.byId("fromDate").getDateValue()),
             toDate = new Date(that.byId("toDate").getDateValue());
           fromDate = fromDate.toISOString().split('T')[0];
           toDate = toDate.toISOString().split('T')[0];
           var liDates = that.generateDateseries(fromDate, toDate);
-          
+
+          for(var i = 0; i< that.rowData.length; i++){
+            //   sRowData.Location = that.rowData[i].LOCATION_ID;
+            //   sRowData.Product = that.rowData[i].PRODUCT_ID; 
+              sRowData.ItemNum = that.rowData[i].ITEM_NUM; 
+              sRowData.Component = that.rowData[i].COMPONENT; 
+            //   sRowData.Version = that.rowData[i].VERSION; 
+            //   sRowData.Scenario = that.rowData[i].SCENARIO; 
+              weekIndex = 1;
+              for (let index = 6; index < liDates.length; index++) {
+                    sRowData[liDates[index].CAL_DATE] = that.rowData[i]["Week" + weekIndex];
+                    weekIndex++;  
+              }
+              iRowData.push(sRowData);
+              sRowData = {};
+          }
           var oModel = new sap.ui.model.json.JSONModel();
           oModel.setData({
-              rows: that.rowData,
+              rows: iRowData,
               columns: liDates
   
           });
           that.oTable.setModel(oModel);
           that.oTable.bindColumns("/columns", function(sId, oContext) {
-              var columnName = oContext.getObject().CAL_DATE;
+              var columnName = oContext.getObject().CAL_DATE; 
               return new sap.ui.table.Column({
-                  width:"11rem",
+                  width:"8rem",
                   label: columnName,
                   template: columnName,
               });
@@ -160,12 +172,26 @@ sap.ui.define(
           var lsDates = {},
             liDates = [];
           var vDateSeries = imFromDate;
-          lsDates.CAL_DATE="Item Num";
-          liDates.push(lsDates);
-          lsDates = {};
+          
+          
           lsDates.CAL_DATE="Component";
           liDates.push(lsDates);
           lsDates = {};
+          lsDates.CAL_DATE="ItemNum";
+          liDates.push(lsDates);
+          lsDates = {};
+        //   lsDates.CAL_DATE="Location";
+        //   liDates.push(lsDates);
+        //   lsDates = {};
+        //   lsDates.CAL_DATE="Product";
+        //   liDates.push(lsDates);
+        //   lsDates = {};
+        //   lsDates.CAL_DATE="Scenario";
+        //   liDates.push(lsDates);
+        //   lsDates = {};
+        //   lsDates.CAL_DATE="Version";
+        //   liDates.push(lsDates);
+        //   lsDates = {};
           //lsDates.CAL_DATE = that.removeDays(that.getNextSunday(vDateSeries), 1);
           lsDates.CAL_DATE = that.getNextSunday(vDateSeries);
           liDates.push(lsDates);
