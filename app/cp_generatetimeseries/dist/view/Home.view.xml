@@ -50,7 +50,7 @@
         </content>
         </Panel>
 
-        <Panel id="idComprwq" expandable="true" headerText="Components Requirments" width="auto" class="sapUiResponsiveMargin">
+        <Panel id="idComprwq" expandable="true" headerText="Components Requirements" width="auto" class="sapUiResponsiveMargin">
 		<content>
         <f:Form editable="true">
                 <f:layout>
@@ -103,7 +103,7 @@
                 </f:formContainers>
             </f:Form>
             <ToolbarSpacer/>
-            <Button id="buttonCompReq" text="Components Requirments" press="onCompReq" tooltip="Components Requirments" enabled="false"/>
+            <Button id="buttonCompReq" text="Components Requirements" press="onCompReq" tooltip="Components Requirments" enabled="false"/>
 
         </content>
 	</Panel>

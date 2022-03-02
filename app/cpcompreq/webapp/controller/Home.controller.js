@@ -289,11 +289,13 @@ sap.ui.define(
         //   lsDates = {};
         //lsDates.CAL_DATE = that.removeDays(that.getNextSunday(vDateSeries), 1);
         lsDates.CAL_DATE = that.getNextSunday(vDateSeries);
+        vDateSeries = lsDates.CAL_DATE;
         liDates.push(lsDates);
         lsDates = {};
         while (vDateSeries <= imToDate) {
           vDateSeries = that.addDays(vDateSeries, 7);
           lsDates.CAL_DATE = that.getNextSunday(vDateSeries);
+          vDateSeries = lsDates.CAL_DATE;
           liDates.push(lsDates);
           lsDates = {};
         }

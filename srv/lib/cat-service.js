@@ -279,18 +279,22 @@ module.exports = (srv) => {
                     "COMPONENT" ASC`
         );
       var vDateSeries = vDateFrom;
-      lsDates.CAL_DATE = GenFunctions.removeDays(GenFunctions.getNextSunday(vDateSeries),1);
+      lsDates.CAL_DATE = GenFunctions.getNextSunday(vDateSeries);
+      vDateSeries = lsDates.CAL_DATE; 
       liDates.push(lsDates);
       lsDates = {};
       while (vDateSeries <= vDateTo) {
         vDateSeries = GenFunctions.addDays(vDateSeries, 7);
-        lsDates.CAL_DATE = GenFunctions.removeDays(
-          GenFunctions.getNextSunday(vDateSeries),
-          1
-        );
+        
+        lsDates.CAL_DATE = GenFunctions.getNextSunday(vDateSeries);
+        vDateSeries = lsDates.CAL_DATE; 
   
         liDates.push(lsDates);
         lsDates = {};
+        // lsDates.CAL_DATE = GenFunctions.removeDays(
+        //   GenFunctions.getNextSunday(vDateSeries),
+        //   1
+        // );
       }
   
       for (let j = 0; j < liComp.length; j++) {
