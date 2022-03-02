@@ -116,12 +116,13 @@
             </f:Form>
     
     <content>
+    <SearchField id="headSearch"  liveChange="onSearchCompReq" placeholder="Component, Structure Node/ Type"/>
     <t:Table id="idCompReq" 
     fixedColumnCount="4"
 				selectionMode="Single"
     alternateRowColors="true"
     enableSelectAll="false"
-				visibleRowCount="20">
+				visibleRowCount="15">
                 <t:columns>
 				</t:columns>
         </t:Table>
