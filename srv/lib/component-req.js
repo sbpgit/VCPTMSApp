@@ -149,8 +149,8 @@ class ComponentReq {
     }
   }
   async genCompReqWeekly(adata, iresult) {
-    let vDateFrom = "2022-03-04";
-    let vDateTo = "2023-01-03";
+    let vDateFrom = adata.FROMDATE;//"2022-03-04";
+    let vDateTo = adata.TODATE;//"2023-01-03";
     let liCompWeekly = [];
     let lsCompWeekly = {};
     let liDates = [],
@@ -159,8 +159,10 @@ class ComponentReq {
       vDateIndex,
       vComp,
       lsDates = {};
-    let columnname = "Week";
-    // lsCompWeekly[columnname + 1] = "hello";
+    let columnname = "WEEK";
+    
+    vDateFrom = vDateFrom.toISOString().split('T')[0];
+    vDateTo = vDateTo.toISOString().split('T')[0];
 
     const liCompQty = await cds.run(
       `
@@ -174,6 +176,10 @@ class ComponentReq {
         adata.VERSION +
         `' AND "SCENARIO" = '` +
         adata.SCENARIO +
+        `' AND "COMPONENT" = '` +
+        adata.COMPONENT +
+        `'AND "STRUC_NODE" = '` +
+        adata.STRUCNODE +
         `' AND ( "CAL_DATE" <= '` +
         vDateTo +
         `'
@@ -187,11 +193,12 @@ class ComponentReq {
                 "SCENARIO" ASC,
                 "ITEM_NUM" ASC,
                 "COMPONENT" ASC,
-                "CAL_DATE" ASC`
+                "CAL_DATE" ASC,
+                "STRUC_NODE" ASC`
     );
-    
+
     const liComp = await cds.run(
-        `
+      `
         SELECT DISTINCT "LOCATION_ID",
                         "PRODUCT_ID",
                         "VERSION",
@@ -200,20 +207,20 @@ class ComponentReq {
                         "COMPONENT"
         FROM "CP_COMPQTYDETERMINE"
         WHERE "LOCATION_ID" = '` +
-          adata.LOCATION_ID +
-          `'
+        adata.LOCATION_ID +
+        `'
              AND "PRODUCT_ID" = '` +
-          adata.PRODUCT_ID +
-          `' AND "VERSION" = '` +
-          adata.VERSION +
-          `' AND "SCENARIO" = '` +
-          adata.SCENARIO +
-          `' AND ( "CAL_DATE" <= '` +
-          vDateTo +
-          `'
+        adata.PRODUCT_ID +
+        `' AND "VERSION" = '` +
+        adata.VERSION +
+        `' AND "SCENARIO" = '` +
+        adata.SCENARIO +
+        `' AND ( "CAL_DATE" <= '` +
+        vDateTo +
+        `'
               AND "CAL_DATE" >= '` +
-          vDateFrom +
-          `')
+        vDateFrom +
+        `')
              ORDER BY 
                   "LOCATION_ID" ASC, 
                   "PRODUCT_ID" ASC,
@@ -221,9 +228,12 @@ class ComponentReq {
                   "SCENARIO" ASC,
                   "ITEM_NUM" ASC,
                   "COMPONENT" ASC`
-      );
+    );
     var vDateSeries = vDateFrom;
-    lsDates.CAL_DATE = GenFunctions.removeDays(GenFunctions.getNextSunday(vDateSeries),1);
+    lsDates.CAL_DATE = GenFunctions.removeDays(
+      GenFunctions.getNextSunday(vDateSeries),
+      1
+    );
     liDates.push(lsDates);
     lsDates = {};
     while (vDateSeries <= vDateTo) {
@@ -240,16 +250,17 @@ class ComponentReq {
     for (let j = 0; j < liComp.length; j++) {
       // Initially set vWeekIndex to j to geneate Week columns
       // vCompIndex is to get Componnent quantity for all dates
-      if (j === 0) {
-        vWeekIndex = j;
-        vCompIndex = j;
-      }
+      // if (j === 0) {
+      vWeekIndex = 0; //j
+      vCompIndex = 0; //j
+      // }
       lsCompWeekly.LOCATION_ID = liComp[j].LOCATION_ID;
       lsCompWeekly.PRODUCT_ID = liComp[j].PRODUCT_ID;
       lsCompWeekly.ITEM_NUM = liComp[j].ITEM_NUM;
       lsCompWeekly.COMPONENT = liComp[j].COMPONENT;
       lsCompWeekly.VERSION = liComp[j].VERSION;
       lsCompWeekly.SCENARIO = liComp[j].SCENARIO;
+      lsCompWeekly.QTYTYPE = "Normalized";
       for (let i = 0; i < liDates.length; i++) {
         vWeekIndex = vWeekIndex + 1;
         // In there is no change in componenet and CAL_DATE matches with the liDates series
@@ -257,9 +268,33 @@ class ComponentReq {
           liCompQty[vCompIndex].COMPONENT === lsCompWeekly.COMPONENT &&
           liCompQty[vCompIndex].CAL_DATE === liDates[i].CAL_DATE
         ) {
-          lsCompWeekly[columnname + vWeekIndex] = liCompQty[j].COMP_QTY;
+          lsCompWeekly.STRUC_NODE = liCompQty[vCompIndex].STRUC_NODE;
+          lsCompWeekly[columnname + vWeekIndex] =
+            liCompQty[vCompIndex].COMP_QTY;
           vCompIndex = vCompIndex + 1;
         } else {
+          lsCompWeekly.STRUC_NODE = liCompQty[j].STRUC_NODE;
+          lsCompWeekly[columnname + vWeekIndex] = 0;
+        }
+      }
+      liCompWeekly.push(GenFunctions.parse(lsCompWeekly));
+
+      vWeekIndex = 0;
+      vCompIndex = 0;
+      lsCompWeekly.QTYTYPE = "Calculated";
+      for (let k = 0; k < liDates.length; k++) {
+        vWeekIndex = vWeekIndex + 1;
+        // In there is no change in componenet and CAL_DATE matches with the liDates series
+        if (
+          liCompQty[vCompIndex].COMPONENT === lsCompWeekly.COMPONENT &&
+          liCompQty[vCompIndex].CAL_DATE === liDates[i].CAL_DATE
+        ) {
+          lsCompWeekly.STRUC_NODE = liCompQty[vCompIndex].STRUC_NODE;
+          lsCompWeekly[columnname + vWeekIndex] =
+            liCompQty[vCompIndex].CAL_COMP_QTY;
+          vCompIndex = vCompIndex + 1;
+        } else {
+          lsCompWeekly.STRUC_NODE = liCompQty[vCompIndex].STRUC_NODE;
           lsCompWeekly[columnname + vWeekIndex] = 0;
         }
       }
@@ -267,7 +302,6 @@ class ComponentReq {
       lsCompWeekly = {};
     }
     iresult = liCompWeekly;
-    
   }
 }
 module.exports = ComponentReq;

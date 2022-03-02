@@ -144,7 +144,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
     // Generate OD Future timeseries
     function genODFuture(OBJ_DEP:String(30),OBJ_COUNTER:String(10)) returns array of ds.odfuture;
     // Component weekly
-    function getCompReqFWeekly(LOCATION_ID:String(4), PRODUCT_ID:String(40), VERSION : String(10), SCENARIO : String(32)) returns array of ds.compreq;
+    function getCompReqFWeekly(LOCATION_ID:String(4), PRODUCT_ID:String(40), VERSION : String(10), SCENARIO : String(32), COMPONENT:String(40), STRUCNODE  : String(50), FROMDATE: Date, TODATE: Date) returns array of ds.compreq;
     //productaccess node
     function genProdAN(LOCATION_ID:String(4), PRODUCT_ID:String(40), ACCESS_NODE:String(50)) returns array of genProdAccessNode;
     //component structure node
