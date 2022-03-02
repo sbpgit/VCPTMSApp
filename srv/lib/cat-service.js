@@ -21,8 +21,145 @@ module.exports = (srv) => {
   // Compoenent requirement
   srv.on("getCompreqQty", async (req) => {
     let liresult;
-    const comreq = new ComponentReq();
-    comreq.genComponentReq(req.data, liresult);
+    // const comreq = new ComponentReq();
+    // comreq.genComponentReq(req.data, liresult);
+    let liCompQty = [];
+    let lsCompQty = {};
+    let liprodpred = [];
+    let lsprodpred = {};
+    let lVariRatio = 1;
+    // const
+    const liStrucQty = await cds.run(
+      `SELECT *
+           FROM "V_PRODQTYSN"
+           WHERE "LOCATION_ID" = '` +
+        req.data.LOCATION_ID +
+        `'
+           AND "PRODUCT_ID" = '` +
+        req.data.PRODUCT_ID +
+        `' AND "VERSION" = '` +
+        req.data.VERSION +
+        `' AND "SCENARIO" = '` +
+        req.data.SCENARIO +
+        `'
+           ORDER BY 
+                "LOCATION_ID" ASC, 
+                "PRODUCT_ID" ASC,
+                "VERSION" ASC,
+                "SCENARIO" ASC,
+                "CAL_DATE" ASC,
+                "STRUC_NODE" ASC`
+    );
+    const liBomoddemd = await cds.run(
+      `SELECT A."ORD_QTY",
+      A."LOCATION_ID",
+      A."PRODUCT_ID",
+      A."ITEM_NUM",
+      A."COMPONENT",
+      A."COMP_QTY",
+      A."VERSION",
+      A."SCENARIO",
+      A."CAL_DATE",
+      B."STRUC_NODE"
+        FROM "V_BOMIBPDEMD" AS A
+        INNER JOIN CP_PVS_BOM AS B
+        ON A.LOCATION_ID = B.LOCATION_ID
+        AND A.PRODUCT_ID = B.PRODUCT_ID
+        AND A.ITEM_NUM = B.ITEM_NUM
+        AND A.COMPONENT = B.COMPONENT
+        WHERE A.LOCATION_ID = '` +
+        req.data.LOCATION_ID +
+        `' AND A."PRODUCT_ID" = '` +
+        req.data.PRODUCT_ID +
+        `'
+           ORDER BY
+           A."LOCATION_ID" ASC, 
+           A."PRODUCT_ID" ASC,
+           A."VERSION" ASC,
+           A."SCENARIO" ASC,
+           A."CAL_DATE" ASC,
+           B."STRUC_NODE" ASC`
+    );
+    for (let i = 0; i < liStrucQty.length; i++) {
+      lVariRatio = 1;
+      if (liStrucQty[i].STRUC_QTY < liStrucQty[i].LOWERLIMIT) {
+        lVariRatio = liStrucQty[i].LOWERLIMIT / liStrucQty[i].STRUC_QTY;
+      }
+      if (liStrucQty[i].STRUC_QTY > liStrucQty[i].UPPERLIMIT) {
+        lVariRatio = liStrucQty[i].UPPERLIMIT / liStrucQty[i].STRUC_QTY;
+      }
+      // if (lVariRatio !== 1) {
+      for (let j = 0; j < liBomoddemd.length; j++) {
+        if (
+          liStrucQty[i].LOCATION_ID === liBomoddemd[j].LOCATION_ID &&
+          liStrucQty[i].PRODUCT_ID === liBomoddemd[j].PRODUCT_ID &&
+          liStrucQty[i].VERSION === liBomoddemd[j].VERSION &&
+          liStrucQty[i].SCENARIO === liBomoddemd[j].SCENARIO &&
+          liStrucQty[i].CAL_DATE === liBomoddemd[j].CAL_DATE &&
+          liStrucQty[i].STRUC_NODE === liBomoddemd[j].STRUC_NODE
+        ) {
+          lsCompQty = {};
+          lsCompQty.LOCATION_ID = liBomoddemd[j].LOCATION_ID;
+          lsCompQty.PRODUCT_ID = liBomoddemd[j].PRODUCT_ID;
+          lsCompQty.VERSION = liBomoddemd[j].VERSION;
+          lsCompQty.SCENARIO = liBomoddemd[j].SCENARIO;
+          lsCompQty.ITEM_NUM = liBomoddemd[j].ITEM_NUM;
+          lsCompQty.COMPONENT = liBomoddemd[j].COMPONENT;
+          lsCompQty.CAL_DATE = liBomoddemd[j].CAL_DATE;
+          lsCompQty.STRUC_NODE = liBomoddemd[j].STRUC_NODE;
+          lsCompQty.CAL_COMP_QTY =
+            liBomoddemd[j].ORD_QTY * liBomoddemd[j].COMP_QTY;
+          lsCompQty.COMP_QTY = Math.ceil(
+            liBomoddemd[j].ORD_QTY * lVariRatio * liBomoddemd[j].COMP_QTY
+          );
+          liCompQty.push(GenFunctions.parse(lsCompQty));
+        //   await cds.run(
+        //     DELETE.from("CP_COMPQTYDETERMINE").where({
+        //       xpr: [
+        //         { ref: ["LOCATION_ID"] },
+        //         "=",
+        //         { val: liBomoddemd[j].LOCATION_ID },
+        //         "AND",
+        //         { ref: ["PRODUCT_ID"] },
+        //         "=",
+        //         { val: liBomoddemd[j].PRODUCT_ID },
+        //         "AND",
+        //         { ref: ["VERSION"] },
+        //         "=",
+        //         { val: liBomoddemd[j].VERSION },
+        //         "AND",
+        //         { ref: ["SCENARIO"] },
+        //         "=",
+        //         { val: liBomoddemd[j].SCENARIO },
+        //         "AND",
+        //         { ref: ["ITEM_NUM"] },
+        //         "=",
+        //         { val: liBomoddemd[j].ITEM_NUM },
+        //         "AND",
+        //         { ref: ["COMPONENT"] },
+        //         "=",
+        //         { val: liBomoddemd[j].COMPONENT },
+        //         "AND",
+        //         { ref: ["CAL_DATE"] },
+        //         "=",
+        //         { val: liBomoddemd[j].CAL_DATE },
+        //       ],
+        //     })
+        //   );
+        }
+      }
+      // }
+    }
+    if (liCompQty.length > 0) {
+      try {
+        await cds.run(INSERT.into("CP_COMPQTYDETERMINE").entries(liCompQty));
+        liresult = "Component requirements generated successfully";
+      } catch (error) {
+        liresult = "Failed to generate Component requirements";
+      }
+    } else {
+      liresult = "No data fetched";
+    }
     return liresult;
   });
   srv.on("getCompReqFWeekly", async (req) => {
@@ -41,44 +178,74 @@ module.exports = (srv) => {
       vComp,
       lsDates = {};
     let columnname = "WEEK";
-    
+   // const liCompQty;
    // vDateFrom = vDateFrom.toISOString().split('T')[0];
    // vDateTo = vDateTo.toISOString().split('T')[0];
     // lsCompWeekly[columnname + 1] = "hello";
-
-    const liCompQty = await cds.run(
-        `
-        SELECT * FROM "CP_COMPQTYDETERMINE"
-        WHERE "LOCATION_ID" = '` +
-          req.data.LOCATION_ID +
-          `'
-             AND "PRODUCT_ID" = '` +
-          req.data.PRODUCT_ID +
-          `' AND "VERSION" = '` +
-          req.data.VERSION +
-          `' AND "SCENARIO" = '` +
-          req.data.SCENARIO +
-          `' AND "COMPONENT" = '` +
-          req.data.COMPONENT + 
-          `'AND "STRUC_NODE" = '` +
-          req.data.STRUCNODE + 
-          `' AND ( "CAL_DATE" <= '` +
-          vDateTo +
-          `'
-              AND "CAL_DATE" >= '` +
-          vDateFrom +
-          `')
-             ORDER BY 
-                  "LOCATION_ID" ASC, 
-                  "PRODUCT_ID" ASC,
-                  "VERSION" ASC,
-                  "SCENARIO" ASC,
-                  "ITEM_NUM" ASC,
-                  "COMPONENT" ASC,
-                  "CAL_DATE" ASC,
-                  "STRUC_NODE" ASC`
-      );
-      
+//  if ( req.data.COMPONENT !== undefined && req.data.STRUCNODE !== undefined){
+//     const liCompQty = await cds.run(
+//         `
+//         SELECT * FROM "CP_COMPQTYDETERMINE"
+//         WHERE "LOCATION_ID" = '` +
+//           req.data.LOCATION_ID +
+//           `'
+//              AND "PRODUCT_ID" = '` +
+//           req.data.PRODUCT_ID +
+//           `' AND "VERSION" = '` +
+//           req.data.VERSION +
+//           `' AND "SCENARIO" = '` +
+//           req.data.SCENARIO +
+//           `' AND "COMPONENT" = '` +
+//           req.data.COMPONENT + 
+//           `'AND "STRUC_NODE" = '` +
+//           req.data.STRUCNODE + 
+//           `' AND ( "CAL_DATE" <= '` +
+//           vDateTo +
+//           `'
+//               AND "CAL_DATE" >= '` +
+//           vDateFrom +
+//           `')
+//              ORDER BY 
+//                   "LOCATION_ID" ASC, 
+//                   "PRODUCT_ID" ASC,
+//                   "VERSION" ASC,
+//                   "SCENARIO" ASC,
+//                   "ITEM_NUM" ASC,
+//                   "COMPONENT" ASC,
+//                   "CAL_DATE" ASC,
+//                   "STRUC_NODE" ASC`
+//       );
+//     }
+     // else{
+        const liCompQty = await cds.run(
+            `
+            SELECT * FROM "CP_COMPQTYDETERMINE"
+            WHERE "LOCATION_ID" = '` +
+              req.data.LOCATION_ID +
+              `'
+                 AND "PRODUCT_ID" = '` +
+              req.data.PRODUCT_ID +
+              `' AND "VERSION" = '` +
+              req.data.VERSION +
+              `' AND "SCENARIO" = '` +
+              req.data.SCENARIO +
+              `' AND ( "CAL_DATE" <= '` +
+              vDateTo +
+              `'
+                  AND "CAL_DATE" >= '` +
+              vDateFrom +
+              `')
+                 ORDER BY 
+                      "LOCATION_ID" ASC, 
+                      "PRODUCT_ID" ASC,
+                      "VERSION" ASC,
+                      "SCENARIO" ASC,
+                      "ITEM_NUM" ASC,
+                      "COMPONENT" ASC,
+                      "CAL_DATE" ASC,
+                      "STRUC_NODE" ASC`
+          );
+  //    }
       const liComp = await cds.run(
           `
           SELECT DISTINCT "LOCATION_ID",

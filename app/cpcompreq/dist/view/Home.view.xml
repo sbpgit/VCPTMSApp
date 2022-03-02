@@ -1,0 +1,140 @@
+<mvc:View
+    controllerName="cpapp.cpcompreq.controller.Home"
+    xmlns:mvc="sap.ui.core.mvc"
+    displayBlock="true" 
+    xmlns="sap.m"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:html="http://www.w3.org/1999/xhtml" 
+    xmlns:t="sap.ui.table">
+    <Page>
+    
+		<customHeader>
+			<Bar>
+				<contentMiddle>
+					<Title text="{i18n>pageTitle}" class="boldText"></Title>
+				</contentMiddle>
+			</Bar>
+		</customHeader>
+     <f:Form editable="true">
+                <f:layout>
+                    <f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" 
+                            adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" 
+                            columnsXL="4" columnsL="2" columnsM="2" singleContainerFullSize="false"
+                            breakpointXL= "1400" breakpointL= "800" breakpointM="600" />
+                </f:layout>
+                <f:formContainers>
+                    <f:FormContainer>
+                        <f:formElements>
+                            <f:FormElement>
+                                <f:label>
+                                    <Label text="Location"/>
+                                </f:label>
+                                <f:fields>
+                                <Input id="idloc" value="" width="225px" placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                </f:fields>
+                            </f:FormElement>
+                            <f:FormElement>
+                                <f:label>
+                                    <Label text="IBP Version"/>
+                                </f:label>
+                                <f:fields>
+                                <Input id="idver" value="" width="225px" placeholder="Version" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                </f:fields>
+                            </f:FormElement>
+                            <f:FormElement>
+                                <f:label>
+                                    <Label text="Valid From"/>
+                                </f:label>
+                                
+                                <f:fields>
+                                    <DatePicker id="fromDate" width="auto"  value="2022-03-04" displayFormat="yyyy-MM-dd" valueFormat="yyyy-MM-dd" change="handleDateChange"/>
+                                </f:fields>
+                            </f:FormElement>
+                            
+                        </f:formElements>
+                    </f:FormContainer>
+                    <f:FormContainer>
+                        <f:formElements>
+                            <f:FormElement>
+                                <f:label>
+                                    <Label text="Product"/>
+                                </f:label>
+                                <f:fields>
+                                    <Input id="idprod" placeholder="Product" value="" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                                </f:fields>
+                            </f:FormElement>
+                            <f:FormElement>
+                                <f:label>
+                                    <Label text="IBP Scenario"/>
+                                </f:label>
+                                <f:fields>
+                                <Input id="idscen" value="" width="225px" placeholder="Scenario" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                </f:fields>
+                            </f:FormElement>
+                            <f:FormElement>
+                                <f:label>
+                                    <Label text="Valid To"/>
+                                </f:label>
+                                <f:fields>
+                                    <DatePicker id="toDate" width="auto" value="2023-01-03" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="handleDateChange"/>
+
+                                </f:fields>
+                            </f:FormElement>
+                            <f:FormElement>
+                                <Button text="Go" width="30%" press="onGetData" tooltip="Get data based on filters"/>
+                                <Button text="Reset" press="onResetDate" tooltip="Reset Valid To Date"/>
+                            </f:FormElement>
+                        </f:formElements>
+                        </f:FormContainer>
+                        <f:FormContainer>
+                        <f:formElements>
+                            <f:FormElement>
+                                <f:label>
+                                    <Label text="Component"/>
+                                </f:label>
+                                <f:fields>
+                                <Input id="idcomp" value="" width="225px" placeholder="Component" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                </f:fields>
+                            </f:FormElement>
+                            <f:FormElement>
+                                <f:label>
+                                    <Label text="Structure Node"/>
+                                </f:label>
+                                <f:fields>
+                                <Input id="idstru" value="" width="225px" placeholder="Structure Node" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                </f:fields>
+                            </f:FormElement>
+                        </f:formElements>
+                    </f:FormContainer>
+                </f:formContainers>
+            </f:Form>
+    <!-- <Toolbar height="12%">
+        <VBox>
+            <HBox id="idDates">
+                <Text text="{i18n>validfrom} : " class="boldText"></Text>
+                
+                <DatePicker id="fromDate" width="auto"  value="2022-03-04" displayFormat="yyyy-MM-dd" valueFormat="yyyy-MM-dd" change="handleDateChange"/>
+
+                <Text text="{i18n>validto} : " class="boldText"></Text>
+                <DatePicker id="toDate" width="auto" value="2023-01-03" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="handleDateChange"/>
+
+                <Button text="Go" press="onGetData" tooltip="Get data based on dates"/>
+
+                <Button text="Reset" press="onResetDate" tooltip="Reset Valid To Date"/>
+            </HBox>
+        </VBox>
+	</Toolbar> -->
+    <content>
+    <t:Table id="idCompReq" 
+    fixedColumnCount="4"
+				selectionMode="Single"
+    alternateRowColors="true"
+    enableSelectAll="false"
+				visibleRowCount="3">
+                <t:columns>
+				</t:columns>
+        </t:Table>
+    </content>
+	</Page>
+
+</mvc:View>

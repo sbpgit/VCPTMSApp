@@ -100,39 +100,39 @@ class ComponentReq {
             liBomoddemd[j].ORD_QTY * lVariRatio * liBomoddemd[j].COMP_QTY
           );
           liCompQty.push(GenFunctions.parse(lsCompQty));
-          await cds.run(
-            DELETE.from("CP_COMPQTYDETERMINE").where({
-              xpr: [
-                { ref: ["LOCATION_ID"] },
-                "=",
-                { val: liBomoddemd[j].LOCATION_ID },
-                "AND",
-                { ref: ["PRODUCT_ID"] },
-                "=",
-                { val: liBomoddemd[j].PRODUCT_ID },
-                "AND",
-                { ref: ["VERSION"] },
-                "=",
-                { val: liBomoddemd[j].VERSION },
-                "AND",
-                { ref: ["SCENARIO"] },
-                "=",
-                { val: liBomoddemd[j].SCENARIO },
-                "AND",
-                { ref: ["ITEM_NUM"] },
-                "=",
-                { val: liBomoddemd[j].ITEM_NUM },
-                "AND",
-                { ref: ["COMPONENT"] },
-                "=",
-                { val: liBomoddemd[j].COMPONENT },
-                "AND",
-                { ref: ["CAL_DATE"] },
-                "=",
-                { val: liBomoddemd[j].CAL_DATE },
-              ],
-            })
-          );
+        //   await cds.run(
+        //     DELETE.from("CP_COMPQTYDETERMINE").where({
+        //       xpr: [
+        //         { ref: ["LOCATION_ID"] },
+        //         "=",
+        //         { val: liBomoddemd[j].LOCATION_ID },
+        //         "AND",
+        //         { ref: ["PRODUCT_ID"] },
+        //         "=",
+        //         { val: liBomoddemd[j].PRODUCT_ID },
+        //         "AND",
+        //         { ref: ["VERSION"] },
+        //         "=",
+        //         { val: liBomoddemd[j].VERSION },
+        //         "AND",
+        //         { ref: ["SCENARIO"] },
+        //         "=",
+        //         { val: liBomoddemd[j].SCENARIO },
+        //         "AND",
+        //         { ref: ["ITEM_NUM"] },
+        //         "=",
+        //         { val: liBomoddemd[j].ITEM_NUM },
+        //         "AND",
+        //         { ref: ["COMPONENT"] },
+        //         "=",
+        //         { val: liBomoddemd[j].COMPONENT },
+        //         "AND",
+        //         { ref: ["CAL_DATE"] },
+        //         "=",
+        //         { val: liBomoddemd[j].CAL_DATE },
+        //       ],
+        //     })
+        //   );
         }
       }
       // }
