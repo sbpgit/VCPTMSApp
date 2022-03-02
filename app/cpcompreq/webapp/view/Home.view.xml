@@ -6,7 +6,7 @@
     xmlns:f="sap.ui.layout.form"
     xmlns:html="http://www.w3.org/1999/xhtml" 
     xmlns:t="sap.ui.table">
-    <Page>
+    <Page text="{i18n>pageTitle}" class="boldText" titleAlignment="Center">
     
 		<customHeader>
 			<Bar>
@@ -80,10 +80,10 @@
 
                                 </f:fields>
                             </f:FormElement>
-                            <f:FormElement>
+                            <!-- <f:FormElement>
                                 <Button text="Go" width="30%" press="onGetData" tooltip="Get data based on filters"/>
                                 <Button text="Reset" press="onResetDate" tooltip="Reset Valid To Date"/>
-                            </f:FormElement>
+                            </f:FormElement> -->
                         </f:formElements>
                         </f:FormContainer>
                         <f:FormContainer>
@@ -103,6 +103,12 @@
                                 <f:fields>
                                 <Input id="idstru" value="" width="225px" placeholder="Structure Node" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                                 </f:fields>
+                            </f:FormElement>
+                            <f:FormElement>
+                            <HBox>
+                                <Button text="Go"  press="onGetData" tooltip="Get data based on filters"/>
+                                <Button text="Reset"  press="onResetDate" tooltip="Reset Valid To Date"/>
+                                </HBox>
                             </f:FormElement>
                         </f:formElements>
                     </f:FormContainer>

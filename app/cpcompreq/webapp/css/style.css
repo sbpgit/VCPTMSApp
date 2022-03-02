@@ -1,1 +1,11 @@
 /* Enter your custom styles here */
+
+button#__button0 {
+    margin-left: 120px;
+    margin-right: 20px;
+    min-width: 70px;
+}
+
+button#__button1 {
+    min-width: 70px;
+}
