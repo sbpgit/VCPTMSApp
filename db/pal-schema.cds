@@ -3,6 +3,14 @@ namespace cp;
 
 using { managed } from '@sap/cds/common';
 
+type ModelVersion : String enum {
+  Active; Simulation;
+}
+
+type ObjType : String enum {
+  OD; RT;
+}
+
 // groupId is part of Parameters, Data, Models and other to support Parallelization
 entity PalHgbtRegressionsV1 {
     key hgbtID : String(50);
@@ -18,6 +26,8 @@ entity PalHgbtRegressionsV1 {
     }; 
 
     hgbtType : Integer  @assert.range: [ 1, 12 ];
+    modelVersion : ModelVersion default 'Active' @assert.range: [ 'Active', 'Simulation' ]; // Active, Simulation
+
     regressionData : array of  { 
         groupId:String(100); 
         ID : Integer;
@@ -67,6 +77,8 @@ entity PalHgbtByGroup {
     Location : String(4);
     Product : String(40);
     groupId : String(100);
+    Type : ObjType default 'OD'; //OD - Object Dependency, Restriction
+    modelVersion : ModelVersion default 'Active' @assert.range: [ 'Active', 'Simulation' ]; // Active, Simulation
     profile : String(50);
     regressionParameters : array of {
         paramName:String(100); 
@@ -98,6 +110,8 @@ entity PalHgbtPredictionsV1 {
     Location : String(4);
     Product : String(40);
     groupId : String(100);
+    Type : ObjType default 'OD'; //OD - Object Dependency, Restriction
+    modelVersion : ModelVersion default 'Active' @assert.range: [ 'Active', 'Simulation' ]; // Active, Simulation
     profile : String(50);
     Version : String(10);
     Scenario : String(32);
@@ -148,6 +162,7 @@ entity PalRdtRegressions {
     }; 
 
     rdtType : Integer  @assert.range: [ 1, 12 ];
+    modelVersion : ModelVersion default 'Active' @assert.range: [ 'Active', 'Simulation' ]; // Active, Simulation
     regressionData : array of  { 
         groupId:String(100); 
         ID : Integer;
@@ -189,6 +204,8 @@ entity PalRdtByGroup {
     Location : String(4);
     Product : String(40);
     groupId : String(100);
+    Type : ObjType default 'OD'; //OD - Object Dependency, Restriction
+    modelVersion : ModelVersion default 'Active' @assert.range: [ 'Active', 'Simulation' ]; // Active, Simulation
     profile : String(50);
     regressionParameters : array of {
         paramName:String(100); 
@@ -213,6 +230,8 @@ entity PalRdtPredictions {
     Location : String(4);
     Product : String(40);
     groupId : String(20);
+    Type : ObjType default 'OD'; //OD - Object Dependency, Restriction
+    modelVersion : ModelVersion default 'Active' @assert.range: [ 'Active', 'Simulation' ]; // Active, Simulation
     profile : String(50);
     Version : String(10);
     Scenario : String(32);
@@ -263,6 +282,7 @@ entity PalMlrRegressions {
         strVal  : String(1000);
     };
     mlrType : Integer  @assert.range: [ 1, 12 ];
+    modelVersion : ModelVersion default 'Active' @assert.range: [ 'Active', 'Simulation' ]; // Active, Simulation
     regressionData : array of
     {
         groupId : String(100);
@@ -319,6 +339,8 @@ entity PalMlrByGroup {
     Location : String(4);
     Product : String(40);
     groupId : String(100);
+    Type : ObjType default 'OD'; //OD - Object Dependency, Restriction
+    modelVersion : ModelVersion default 'Active' @assert.range: [ 'Active', 'Simulation' ]; // Active, Simulation
     profile : String(50);
     regressionParameters : array of {
         paramName:String(256); 
@@ -356,6 +378,8 @@ entity PalMlrPredictions {
     Location : String(4);
     Product : String(40);
     groupId : String(20);
+    Type : ObjType default 'OD'; //OD - Object Dependency, Restriction
+    modelVersion : ModelVersion default 'Active' @assert.range: [ 'Active', 'Simulation' ]; // Active, Simulation
     Version : String(10);
     profile : String(50);
     Scenario : String(32);
@@ -404,6 +428,7 @@ entity PalVarmaModels {
         strVal  : String(100);
     };
     varmaType : Integer  @assert.range: [ 1, 12 ];
+    modelVersion : ModelVersion default 'Active' @assert.range: [ 'Active', 'Simulation' ]; // Active, Simulation
     varmaData : array of
     {
         groupId : String(100);
@@ -450,7 +475,9 @@ entity PalVarmaByGroup {
     createdAt  : Timestamp ;
     Location : String(4);
     Product : String(40);
-    groupId:String(100); 
+    groupId:String(100);
+    Type : ObjType default 'OD'; //OD - Object Dependency, Restriction
+    modelVersion : ModelVersion default 'Active' @assert.range: [ 'Active', 'Simulation' ]; // Active, Simulation 
     profile : String(50);
     controlParameters : array of {
         paramName:String(100); 
@@ -497,6 +524,8 @@ entity PalVarmaPredictions {
     Location : String(4);
     Product : String(40);
     groupId : String(20);
+    Type : ObjType default 'OD'; //OD - Object Dependency, Restriction
+    modelVersion : ModelVersion default 'Active' @assert.range: [ 'Active', 'Simulation' ]; // Active, Simulation
     profile : String(50);
     Version : String(10);
     Scenario : String(32);
@@ -537,6 +566,8 @@ entity PalVarmaPredictions {
   };
 }
 
+
+
 entity PalGenRegressionModels
 {
     key regressionsID : String(50);
@@ -544,15 +575,30 @@ entity PalGenRegressionModels
     createdAt  : Timestamp ;  
     //modelType : Integer;//  @assert.range: [ 1, 2 ]; // 1 - MLR, 2 - HGBT
     modelType : String(10);
-    vcRulesList : array of {
+    vcRulesList : array of {  
         profile : String(50);
         override : Boolean;
         Location:String(4); 
         Product:String(40); 
         GroupID :String(20);
+        Type : ObjType default 'OD'; //OD - Object Dependency, Restriction
+        modelVersion : ModelVersion default 'Active' @assert.range: [ 'Active', 'Simulation' ]; // Active, Simulation
         //modelType : Integer;//  @assert.range: [ 1, 2 ]; // 1 - MLR, 2 - HGBT
         dimensions : Integer;
     };
+}
+
+
+entity OD_MODEL_VERSIONS
+{
+    key LOCATION_ID      : String(4) @title : 'Location ID';
+    key PRODUCT_ID       : String(40)@title : 'Product ID';
+    key OBJ_DEP          : String(30)@title : 'Object Dependency';
+    key OBJ_COUNTER      : Integer   @title : 'Object Counter';
+    key OBJ_TYPE         : String(2) @title : 'Object Type';
+    MODEL_TYPE       : String(10) @title : 'PAL Model Type';
+    key MODEL_VERSION    : ModelVersion @title : 'Model Version - Active/Simulation'; 
+    MODEL_PROFILE    : String(50) @title : 'PAL Model Profile';
 }
 
 entity PalGenPredictions
@@ -563,9 +609,13 @@ entity PalGenPredictions
     vcRulesList : array of {
         profile : String(50);
         override : Boolean;
+        version : String(10) default 'BASELINE';  // IBP Version
+        scenario : String(32) default 'BSL_SCENARIO'; // IBP Scenario
         Location:String(4); 
         Product:String(40); 
         GroupID :String(20);
+        Type : ObjType default 'OD'; //OD - Object Dependency, Restriction
+        modelVersion : ModelVersion default 'Active' @assert.range: [ 'Active', 'Simulation' ]; // Active, Simulation
         dimensions : Integer;
     };
 }
@@ -592,6 +642,7 @@ entity TS_PREDICTIONS{
     key OBJ_DEP          : String(30)@title : 'Object Dependency';
     key OBJ_COUNTER      : Integer   @title : 'Object Counter';
     key MODEL_TYPE       : String(10) @title : 'PAL Model Type';
+    key MODEL_VERSION    : String(20) @title : 'OBJ Model Version'; 
     key MODEL_PROFILE    : String(50) @title : 'PAL Model Profile';
     key VERSION          : String(10)    @title : 'Version';
     key SCENARIO         : String(32)    @title : 'Scenario';
@@ -607,7 +658,8 @@ entity IBP_RESULTPLAN_TS{
     key OBJ_TYPE         : String(2) @title : 'Object Type';
     key OBJ_DEP          : String(30)@title : 'Object Dependency';
     key OBJ_COUNTER      : Integer   @title : 'Object Counter';
-    key MODEL_PROFILE    : String(50) @title : 'PAL Model Profile';
+    MODEL_VERSION        : String(20) @title : 'OBJ Model Version'; 
+    MODEL_PROFILE        : String(50) @title : 'PAL Model Profile';
     key VERSION          : String(10)    @title : 'Version';
     key SCENARIO         : String(32)    @title : 'Scenario';
     PREDICTED            : Double    @title : 'Predicted';
@@ -624,6 +676,7 @@ entity TS_OBJDEP_CHAR_IMPACT_F {
     key OBJ_COUNTER : Integer   @title : 'Object Counter';
     key ROW_ID      : Integer   @title : ' Attribute Index';
     key MODEL_TYPE       : String(10) @title : 'PAL Model Type';
+    key MODEL_VERSION    : String(20) @title : 'OBJ Model Version'; 
     key MODEL_PROFILE    : String(50) @title : 'PAL Model Profile';
     key VERSION     : String(10)    @title : 'Version';
     key SCENARIO    : String(32)    @title : 'Scenario';

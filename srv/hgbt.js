@@ -120,6 +120,7 @@ exports._updateHgbtGroupDataV1 = function(req) {
     const hgbtGroupData = req.data.regressionData;
 
     var hgbtType = req.data.hgbtType;
+    var modelVersion = req.data.modelVersion;
 
 
     var conn = hana.createConnection();
@@ -304,9 +305,13 @@ exports._updateHgbtGroupDataV1 = function(req) {
 }
 
 exports._runRegressionHgbtGroupV1 = function(req) {
- //   console.log('Executing HGBT Regression at GROUP REQ', req.data);
+    //console.log('Executing HGBT Regression at GROUP REQ', req.data);
 
     var hgbtType = req.data.hgbtType;
+    var hgbtModelVersion = req.data.modelVersion;
+
+    console.log('Executing HGBT Regression at GROUP REQ HGBT Model Version', hgbtModelVersion);
+
     var hgbtDataTable;
     if (hgbtType == 1)
         hgbtDataTable = "PAL_HGBT_DATA_GRP_TAB_1T";
@@ -341,6 +346,8 @@ exports._runRegressionHgbtGroupV1 = function(req) {
     var stmt=conn.prepare(sqlStr);
     stmt.exec();
     stmt.drop();
+
+
 ////////////////////////////////////////////////////////////////////////////////////
     const hgbtGroupParams = req.data.regressionParameters;
 
@@ -580,6 +587,15 @@ exports._runRegressionHgbtGroupV1 = function(req) {
 
     //let mlrGroupParams = req.data.regressionParameters;
     console.log("inGroups ", inGroups, "Number of Groups",inGroups.length);
+    var conn_container = hana.createConnection();
+ 
+    conn_container.connect(conn_params_container);
+
+    sqlStr = 'SET SCHEMA ' + containerSchema; 
+    // console.log('sqlStr: ', sqlStr);            
+    stmt=conn_container.prepare(sqlStr);
+    result=stmt.exec();
+    stmt.drop();
 
     var tableObj = [];
     for (let grpIndex = 0; grpIndex < inGroups.length; grpIndex++)
@@ -646,11 +662,12 @@ exports._runRegressionHgbtGroupV1 = function(req) {
 */        
         let grpStr=inGroups[grpIndex].split('#');
         let profileID = grpStr[0]; 
-        let GroupId = grpStr[1];
-        let location = grpStr[2];
-        let product = grpStr[3];
+        let type = grpStr[1];
+        let GroupId = grpStr[2];
+        let location = grpStr[3];
+        let product = grpStr[4];
 
-        console.log("_runRegressionHgbtGroupV1  grpStr ", grpStr, "profileID ",profileID, "GroupId ",GroupId, " location ", location, " product ", product);
+        console.log("_runRegressionHgbtGroupV1  grpStr ", grpStr, "profileID ",profileID, "type ", type, "GroupId ",GroupId, " location ", location, " product ", product);
 
         var rowObj = {   hgbtGroupID: idObj, 
             //createdAt : createtAtObj, 
@@ -658,6 +675,8 @@ exports._runRegressionHgbtGroupV1 = function(req) {
             Location : location,
             Product : product,
             groupId : GroupId,
+            Type : type,
+            modelVersion : hgbtModelVersion,
             profile : profileID,
             regressionParameters:paramsGroupObj, 
             hgbtType : req.data.hgbtType,
@@ -665,7 +684,29 @@ exports._runRegressionHgbtGroupV1 = function(req) {
             statisticsOp : statsGroupObj,
             paramSelectionOp : paramSelectionGroupObj};
         tableObj.push(rowObj);
+
+        let objStr=GroupId.split('_');
+        let obj_dep = objStr[0];
+        let obj_counter = objStr[1];
+
+        sqlStr = 'UPSERT "CP_OD_MODEL_VERSIONS" VALUES (' +
+                    "'" + location + "'" + "," +
+                    "'" + product + "'" + "," +
+                    "'" + obj_dep + "'" + "," +
+                    "'" + obj_counter + "'" + "," +
+                    "'" + type + "'" + "," +
+                    "'" + 'HGBT' + "'" + "," +
+                    "'" + hgbtModelVersion + "'" + "," +
+                    "'" + profileID  + "'" + ')' + ' WITH PRIMARY KEY';
+            
+        console.log("CP_OD_MODEL_VERSIONS HGBT sql update sqlStr", sqlStr);
+
+        stmt=conn_container.prepare(sqlStr);
+        stmt.exec();
+        stmt.drop();
     }
+
+    conn_container.disconnect();
 
 //    cqnQuery = {INSERT:{ into: { ref: ['PalHgbtByGroup'] }, entries:  tableObj }};
 
@@ -702,6 +743,12 @@ exports._runRegressionHgbtGroupV1 = function(req) {
     await sleep(1000);
     console.log('_runRegressionHgbtGroupV1 Sleep Completed Time',new Date());
 */
+
+
+
+
+
+
     let returnObj = [];	
     let createdAt = createtAtObj;
     let hgbtID = idObj; //uuidObj;
@@ -717,6 +764,8 @@ exports._runRegressionHgbtGroupV1 = function(req) {
     res.send({"value":returnObj});
 
     console.log('Completed HGBT Regression Models Generation for Groups Successfully');
+
+
 
     conn.disconnect(function(err) {
     if (err) throw err;
@@ -1021,6 +1070,7 @@ exports._runPredictionHgbtGroupV1 = function(req) {
     var hgbtType = req.data.hgbtType;
     var version = req.data.Version;
     var scenario = req.data.Scenario;
+    var modelVersion = req.data.modelVersion;
 
     console.log('_runPredictionHgbtGroupV1 hgbtType : ', hgbtType);
 
@@ -1072,7 +1122,7 @@ exports._runPredictionHgbtGroupV1 = function(req) {
 
         console.log('PredictionHgbt Group: ', groupId);
         //predictionResults = predictionResults + _runHgbtPrediction(groupId);
-        let predictionObj = hgbtFuncs._runHgbtPredictionV1(hgbtType, groupId, version, scenario);
+        let predictionObj = hgbtFuncs._runHgbtPredictionV1(hgbtType, groupId, version, scenario,modelVersion);
         //value.push({predictionObj});
         predResults.push(predictionObj);
 
@@ -1086,9 +1136,9 @@ exports._runPredictionHgbtGroupV1 = function(req) {
     }
 }
 
-exports._runHgbtPredictionV1 = function(hgbtType, group, version, scenario) {
+exports._runHgbtPredictionV1 = function(hgbtType, group, version, scenario, modelVersion) {
 
-    console.log('_runHgbtPredictionV1 - group', group, 'Version ', version, 'Scenario ', scenario);
+    console.log('_runHgbtPredictionV1 - group', group, 'Version ', version, 'Scenario ', scenario, 'Model Version', modelVersion);
 
     var conn = hana.createConnection();
  
@@ -1105,9 +1155,10 @@ exports._runHgbtPredictionV1 = function(hgbtType, group, version, scenario) {
     
     let grpStr=groupId.split('#');
     let profileId = grpStr[0];
-    let GroupId = grpStr[1];
-    let location = grpStr[2];
-    let product = grpStr[3];
+    let odType = grpStr[1];
+    let GroupId = grpStr[2];
+    let location = grpStr[3];
+    let product = grpStr[4];
 
     sqlStr = "create local temporary column table #PAL_HGBT_MODEL_TAB_"+ groupId + " " + 
                     "(\"ROW_INDEX\" INTEGER,\"TREE_INDEX\" INTEGER,\"MODEL_CONTENT\" NCLOB)"; // MEMORY THRESHOLD 1000)";
@@ -1603,10 +1654,11 @@ exports._runHgbtPredictionV1 = function(hgbtType, group, version, scenario) {
     var createtAtObj = new Date();
     //let idObj = groupId;
     let idObj = uuidv1();
-    
+
     var cqnQuery = {INSERT:{ into: { ref: ['CP_PALHGBTPREDICTIONSV1'] }, entries: [
          {hgbtID: idObj, createdAt : createtAtObj.toISOString(), Location : location, 
-          Product : product, groupId : GroupId, Version : version, Scenario : scenario, 
+          Product : product, groupId : GroupId, Type: odType, modelVersion: modelVersion, profile: profileId, 
+          Version : version, Scenario : scenario, 
           predictionParameters:predParamsObj, hgbtType : hgbtType, 
           predictionData : predDataObj, predictedResults : resultsObj}
          ]}}
@@ -1626,10 +1678,12 @@ exports._runHgbtPredictionV1 = function(hgbtType, group, version, scenario) {
     stmt.drop();
 
     let tpGrpStr=groupId.split('#');
-    tpGroupId = tpGrpStr[1] + '#' + tpGrpStr[2] + '#' + tpGrpStr[3];
+    tpGroupId = tpGrpStr[2] + '#' + tpGrpStr[3] + '#' + tpGrpStr[4];
+    console.log('tpGroupId: ', tpGroupId);            
 
     sqlStr = 'SELECT DISTINCT ' + '"' + vcConfigTimePeriod + '"' + 
             ' from  V_FUTURE_DEP_TS WHERE  "GroupID" = ' + "'" + tpGroupId + "'" + 
+            ' AND "Type" = ' + "'" + odType + "'" +
             ' AND "VERSION" = ' + "'" + version + "'" +
             ' AND "SCENARIO" = ' + "'" + scenario + "'" +
             ' ORDER BY ' + '"' + vcConfigTimePeriod + '"' + ' ASC';
@@ -1655,6 +1709,7 @@ exports._runHgbtPredictionV1 = function(hgbtType, group, version, scenario) {
 
         sqlStr = 'SELECT DISTINCT "CAL_DATE", "Location", "Product", "Type", "OBJ_DEP", "OBJ_COUNTER", "OrderQuantity", "VERSION", "SCENARIO" ' +
                     'FROM "V_FUTURE_DEP_TS" WHERE "GroupID" = ' + "'" + tpGroupId + "'" + 
+                    ' AND "Type" = ' + "'" + odType + "'" +
                     ' AND "VERSION" = ' + "'" + version + "'" +
                     ' AND "SCENARIO" = ' + "'" + scenario + "'" +
                     ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
@@ -1672,6 +1727,7 @@ exports._runHgbtPredictionV1 = function(hgbtType, group, version, scenario) {
                     "'" + result[0].OBJ_DEP + "'" + "," +
                     "'" + result[0].OBJ_COUNTER + "'" + "," +
                     "'" + 'HGBT' + "'" + "," +
+                    "'" + modelVersion  + "'" + "," +
                     "'" + profileId  + "'" + "," +
                     "'" + result[0].VERSION + "'" + "," +
                     "'" + result[0].SCENARIO + "'" + "," + 
@@ -1687,21 +1743,24 @@ exports._runHgbtPredictionV1 = function(hgbtType, group, version, scenario) {
         stmt.exec();
         stmt.drop();
 
-        let method = 'HGBT';
-        sqlStr = 'SELECT CP_PAL_PROFILEOD.PROFILE, METHOD FROM CP_PAL_PROFILEOD ' +
-                'INNER JOIN CP_PAL_PROFILEMETH ON '+
-                '"CP_PAL_PROFILEOD"."PROFILE" = "CP_PAL_PROFILEMETH"."PROFILE"' +
-                ' AND CP_PAL_PROFILEMETH.METHOD = ' + "'" + method + "'" +
-                ' AND LOCATION_ID = ' + "'" + result[0].Location + "'" +
-                ' AND PRODUCT_ID = ' + "'" + result[0].Product + "'" +
-                ' AND OBJ_DEP = ' + "'" + result[0].OBJ_DEP + '_' + result[0].OBJ_COUNTER + "'";
-        console.log("V_PREDICTIONS IBP Result Plan Predicted Value HGBT sql sqlStr", sqlStr);
-        stmt=conn.prepare(sqlStr);
-        results = stmt.exec();
-        stmt.drop();
+        // let method = 'HGBT';
+        // sqlStr = 'SELECT CP_PAL_PROFILEOD.PROFILE, METHOD FROM CP_PAL_PROFILEOD ' +
+        //         'INNER JOIN CP_PAL_PROFILEMETH ON '+
+        //         '"CP_PAL_PROFILEOD"."PROFILE" = "CP_PAL_PROFILEMETH"."PROFILE"' +
+        //         ' AND CP_PAL_PROFILEMETH.METHOD = ' + "'" + method + "'" +
+        //         ' AND LOCATION_ID = ' + "'" + result[0].Location + "'" +
+        //         ' AND PRODUCT_ID = ' + "'" + result[0].Product + "'" +
+        //         ' AND OBJ_DEP = ' + "'" + result[0].OBJ_DEP + '_' + result[0].OBJ_COUNTER + "'" +
+        //         ' AND OBJ_TYPE = ' + "'" + result[0].Type + "'";
+                
+        // console.log("V_PREDICTIONS IBP Result Plan Predicted Value HGBT sql sqlStr", sqlStr);
+        // stmt=conn.prepare(sqlStr);
+        // results = stmt.exec();
+        // stmt.drop();
 
-        if ( (results.length > 0) &&
-             (results[0].METHOD = 'HGBT'))
+        // if ( (results.length > 0) &&
+        //      (results[0].METHOD = 'HGBT') &&
+        if(modelVersion == 'Active')
         {
             sqlStr = 'UPSERT "CP_IBP_RESULTPLAN_TS" VALUES (' + "'" + result[0].CAL_DATE + "'" + "," +
                     "'" + result[0].Location + "'" + "," +
@@ -1709,6 +1768,7 @@ exports._runHgbtPredictionV1 = function(hgbtType, group, version, scenario) {
                     "'" + result[0].Type + "'" + "," +
                     "'" + result[0].OBJ_DEP + "'" + "," +
                     "'" + result[0].OBJ_COUNTER + "'" + "," +
+                    "'" + modelVersion  + "'" + "," +
                     "'" + profileId  + "'" + "," +
                     "'" + result[0].VERSION + "'" + "," +
                     "'" + result[0].SCENARIO + "'" + "," + 
@@ -1803,6 +1863,7 @@ exports._runHgbtPredictionV1 = function(hgbtType, group, version, scenario) {
         sqlStr = 'SELECT DISTINCT "CAL_DATE", "Location", "Product", ' +
                  '"Type", "OBJ_DEP", "OBJ_COUNTER", "ROW_ID", "CharCount", "CharCountPercent", "VERSION", "SCENARIO" ' +
                 'FROM "V_FUTURE_DEP_TS" WHERE "GroupID" = ' + "'" + tpGroupId + "'" + 
+                ' AND "Type" = ' + "'" + odType + "'" + 
                 ' AND "VERSION" = ' + "'" + version + "'" +
                 ' AND "SCENARIO" = ' + "'" + scenario + "'" +
                 ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
@@ -1967,6 +2028,7 @@ exports._runHgbtPredictionV1 = function(hgbtType, group, version, scenario) {
                 "'" + result[rIndex].OBJ_COUNTER + "'" + "," +
                 "'" + result[rIndex].ROW_ID + "'" + "," +
                 "'" + 'HGBT' + "'" + "," +
+                "'" + modelVersion  + "'" + "," +
                 "'" + profileId  + "'" + "," +
                 "'" + result[rIndex].VERSION + "'" + "," +
                 "'" + result[rIndex].SCENARIO + "'" + "," +

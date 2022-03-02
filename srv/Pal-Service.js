@@ -97,7 +97,7 @@ function _getParamsObjForPredictions(vcRulesList, index, modelType, numChars)
     var paramsObj = [];
     //let palGroupId = vcRulesList[index].GroupID;
 
-    let palGroupId = vcRulesList[index].profileID + '#' + vcRulesList[index].GroupID + '#' + vcRulesList[index].Location + '#' + vcRulesList[index].Product;
+    let palGroupId = vcRulesList[index].profileID + '#' + vcRulesList[index].Type + '#' + vcRulesList[index].GroupID + '#'  + vcRulesList[index].Location + '#' + vcRulesList[index].Product;
 
    // for (var i = 0; i < vcRulesList.length; i++)
    // {
@@ -132,7 +132,7 @@ function _getRuleListTypeForPredictions(vcRulesList, idx, numChars)
     //{
         if (vcRulesList[idx].dimensions == numChars )
         {
-            ruleListObj.push({"Location":vcRulesList[idx].Location, "Product":vcRulesList[idx].Product, "GroupID":vcRulesList[idx].GroupID, "Profile":vcRulesList[idx].profile,"Version":vcRulesList[idx].Version,"Scenario":vcRulesList[idx].Scenario,"dimensions" : numChars});
+            ruleListObj.push({"modelVersion":vcRulesList[idx].modelVersion,"Location":vcRulesList[idx].Location, "Product":vcRulesList[idx].Product, "GroupID":vcRulesList[idx].GroupID, "Type":vcRulesList[idx].Type,"Profile":vcRulesList[idx].profile,"Version":vcRulesList[idx].Version,"Scenario":vcRulesList[idx].Scenario,"dimensions" : numChars});
         }
     //}
     return ruleListObj;
@@ -161,6 +161,7 @@ function _getDataObjForPredictions(vcRulesList, idx, modelType, numChars) {
                 '", SUM("CharCountPercent") AS "CharCount" FROM "V_PREDICTION_TS" WHERE "Product" =' +
                     "'" +  vcRulesList[idx].Product + "'" +  
                     ' AND "GroupID" =' + "'" +   vcRulesList[idx].GroupID + "'" +
+                    ' AND "Type" =' + "'" +   vcRulesList[idx].Type + "'" +
                     ' AND "Location" =' + "'" +   vcRulesList[idx].Location + "'" + 
                     ' AND "VERSION" =' + "'" +   vcRulesList[idx].Version + "'" +
                     ' AND "SCENARIO" =' + "'" +   vcRulesList[idx].Scenario + "'" +
@@ -174,6 +175,7 @@ function _getDataObjForPredictions(vcRulesList, idx, modelType, numChars) {
                 '", SUM("CharCount") AS "CharCount" FROM "V_PREDICTION_TS" WHERE "Product" =' +
                     "'" +  vcRulesList[idx].Product + "'" +  
                     ' AND "GroupID" =' + "'" +   vcRulesList[idx].GroupID + "'" +
+                    ' AND "Type" =' + "'" +   vcRulesList[idx].Type + "'" +
                     ' AND "Location" =' + "'" +   vcRulesList[idx].Location + "'" + 
                     ' AND "VERSION" =' + "'" +   vcRulesList[idx].Version + "'" +
                     ' AND "SCENARIO" =' + "'" +   vcRulesList[idx].Scenario + "'" +
@@ -244,7 +246,7 @@ function _getDataObjForPredictions(vcRulesList, idx, modelType, numChars) {
 
             if (charIdx % numChars == 0)
             {
-                let palGroupId = vcRulesList[idx].profile + '#' + vcRulesList[idx].GroupID + '#' + vcRulesList[idx].Location + '#' + vcRulesList[idx].Product;
+                let palGroupId = vcRulesList[idx].profile + '#' + vcRulesList[idx].Type + '#' + vcRulesList[idx].GroupID + '#' + vcRulesList[idx].Location + '#' + vcRulesList[idx].Product;
 
                 if (numChars == 1)
                 {
@@ -335,10 +337,12 @@ async function _postPredictionRequest(url,paramsObj,numChars,dataObj,modelType,v
                 'Content-Type': 'application/json',
                 'Authorization' : auth
         },
+
         body: JSON.stringify({
             "Product": vcRuleListObj[0].Product,
             "Location": vcRuleListObj[0].Location,
             "groupId" : vcRuleListObj[0].GroupID,
+            "modelVersion":vcRuleListObj[0].modelVersion,
             "profile": vcRuleListObj[0].Profile,
             "Version" : vcRuleListObj[0].Version,
             "Scenario" : vcRuleListObj[0].Scenario,
@@ -362,6 +366,7 @@ async function _postPredictionRequest(url,paramsObj,numChars,dataObj,modelType,v
             "Product": vcRuleListObj[0].Product,
             "Location": vcRuleListObj[0].Location,
             "groupId" : vcRuleListObj[0].GroupID,
+            "modelVersion":vcRuleListObj[0].modelVersion,
             "profile": vcRuleListObj[0].Profile,
             "Version" : vcRuleListObj[0].Version,
             "Scenario" : vcRuleListObj[0].Scenario,
@@ -385,6 +390,7 @@ async function _postPredictionRequest(url,paramsObj,numChars,dataObj,modelType,v
             "Product": vcRuleListObj[0].Product,
             "Location": vcRuleListObj[0].Location,
             "groupId" : vcRuleListObj[0].GroupID,
+            "modelVersion":vcRuleListObj[0].modelVersion,
             "profile": vcRuleListObj[0].Profile,
             "Version" : vcRuleListObj[0].Version,
             "Scenario" : vcRuleListObj[0].Scenario,
@@ -408,6 +414,7 @@ async function _postPredictionRequest(url,paramsObj,numChars,dataObj,modelType,v
             "Product": vcRuleListObj[0].Product,
             "Location": vcRuleListObj[0].Location,
             "groupId" : vcRuleListObj[0].GroupID,
+            "modelVersion":vcRuleListObj[0].modelVersion,
             "profile": vcRuleListObj[0].Profile,
             "Version" : vcRuleListObj[0].Version,
             "Scenario" : vcRuleListObj[0].Scenario,
@@ -518,6 +525,7 @@ async function _postPredictionRequest(url,paramsObj,numChars,dataObj,modelType,v
 
             sqlStr = 'SELECT DISTINCT ' + '"' + vcConfigTimePeriod + '"' + ' from  "V_FUTURE_DEP_TS" ' +
                      'WHERE  "GroupID" = ' + "'" + groupId + "'" + 
+                     ' AND "Type" = ' + "'" + vcRuleListObj[0].Type + "'" +
                      ' AND "VERSION" = ' + "'" + vcRuleListObj[0].Version + "'" +
                      ' AND "SCENARIO" = ' + "'" + vcRuleListObj[0].Scenario + "'" +
                      ' ORDER BY ' + '"' + vcConfigTimePeriod + '"' + ' ASC';
@@ -542,6 +550,7 @@ async function _postPredictionRequest(url,paramsObj,numChars,dataObj,modelType,v
 
                 sqlStr = 'SELECT "CAL_DATE", "Location", "Product", "Type", "OBJ_DEP", "OBJ_COUNTER", "VERSION", "SCENARIO" ' +
                 'FROM "V_FUTURE_DEP_TS" WHERE "GroupID" = ' + "'" + groupId + "'" + 
+                ' AND "Type" = ' + "'" + vcRuleListObj[0].Type + "'" +
                 ' AND "VERSION" = ' + "'" + vcRuleListObj[0].Version + "'" +
                 ' AND "SCENARIO" = ' + "'" + vcRuleListObj[0].Scenario + "'" +
                 ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
@@ -582,7 +591,8 @@ async function _postPredictionRequest(url,paramsObj,numChars,dataObj,modelType,v
                         ' AND CP_PAL_PROFILEMETH.METHOD = ' + "'" + modelType + "'" +
                         ' AND LOCATION_ID = ' + "'" + result[0].Location + "'" +
                         ' AND PRODUCT_ID = ' + "'" + result[0].Product + "'" +
-                        ' AND OBJ_DEP = ' + "'" + result[0].OBJ_DEP + '_' + result[0].OBJ_COUNTER + "'";
+                        ' AND OBJ_DEP = ' + "'" + result[0].OBJ_DEP + '_' + result[0].OBJ_COUNTER + "'" +
+                        ' AND OBJ_TYPE = ' + "'" + result[0].Type + "'" ;
                 //console.log("V_PREDICTIONS IBP Result Plan Predicted Value HGBT sql sqlStr", sqlStr);
                 stmt=conn.prepare(sqlStr);
                 results = stmt.exec();
@@ -662,29 +672,42 @@ async function _generatePredictions(req) {
         if ( (vcRulesListReq[0].Location != "ALL") &&
              (vcRulesListReq[0].Product == "ALL") )
         {
-            sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", "VERSION", "SCENARIO", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "V_PREDICTION_TS"' + 
+            sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", "Type", "VERSION", "SCENARIO", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "V_PREDICTION_TS"' + 
                      'WHERE "Location" =' + "'" +   vcRulesListReq[0].Location + "'" +
-                     ' GROUP BY "Location", "Product", "GroupID", "VERSION", "SCENARIO"';
+                     ' AND "Type" =' + "'" +   vcRulesListReq[0].Type + "'" +
+                     ' AND "VERSION" =' + "'" +   vcRulesListReq[0].version + "'" +
+                     ' AND "SCENARIO" =' + "'" +   vcRulesListReq[0].scenario + "'" +
+                     ' GROUP BY "Location", "Product", "GroupID", "Type", "VERSION", "SCENARIO"';
         }
         else if ( (vcRulesListReq[0].Product != "ALL") &&
                   (vcRulesListReq[0].Location == "ALL") )
         {
-            sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", "VERSION", "SCENARIO", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "V_PREDICTION_TS"' + 
+            sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", "Type", "VERSION", "SCENARIO", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "V_PREDICTION_TS"' + 
                      'WHERE "Product" =' + "'" +   vcRulesListReq[0].Product + "'" +
-                     ' GROUP BY "Location", "Product", "GroupID", "VERSION", "SCENARIO"';
+                     ' AND "Type" =' + "'" +   vcRulesListReq[0].Type + "'" +
+                     ' AND "VERSION" =' + "'" +   vcRulesListReq[0].version + "'" +
+                     ' AND "SCENARIO" =' + "'" +   vcRulesListReq[0].scenario + "'" +
+                     ' GROUP BY "Location", "Product", "GroupID", "Type", "VERSION", "SCENARIO"';
         }
         else if ( (vcRulesListReq[0].Product != "ALL") &&
                   (vcRulesListReq[0].Location != "ALL") )
         {
-            sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", "VERSION", "SCENARIO", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "V_PREDICTION_TS"' + 
+            sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", "Type", "VERSION", "SCENARIO", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "V_PREDICTION_TS"' + 
                 'WHERE "Product" =' + "'" +   vcRulesListReq[0].Product + "'" +
                 ' AND "Location" =' + "'" +   vcRulesListReq[0].Location + "'" +
-                ' GROUP BY "Location", "Product", "GroupID", "VERSION", "SCENARIO"';
+                ' AND "Type" =' + "'" +   vcRulesListReq[0].Type + "'" +
+                ' AND "VERSION" =' + "'" +   vcRulesListReq[0].version + "'" +
+                ' AND "SCENARIO" =' + "'" +   vcRulesListReq[0].scenario + "'" +
+                ' GROUP BY "Location", "Product", "GroupID", "Type", "VERSION", "SCENARIO"';
         }
         else
         {
-            sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", "VERSION", "SCENARIO", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "V_PREDICTION_TS"' + 
+            sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", "Type", VERSION", "SCENARIO", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "V_PREDICTION_TS"' + 
                     ' GROUP BY "Location", "Product", "GroupID", "VERSION", "SCENARIO"';  
+                ' WHERE "Type" =' + "'" +   vcRulesListReq[0].Type + "'" +
+                ' AND "VERSION" =' + "'" +   vcRulesListReq[0].version + "'" +
+                ' AND "SCENARIO" =' + "'" +   vcRulesListReq[0].scenario + "'" +
+                    ' GROUP BY "Location", "Product", "GroupID", "Type", "VERSION", "SCENARIO"';  
         }
         console.log('sqlStr: ', sqlStr);            
         stmt = conn.prepare(sqlStr);
@@ -696,11 +719,31 @@ async function _generatePredictions(req) {
             let Location = results[index].Location;
             let Product = results[index].Product;
             let GroupID = results[index].GroupID;
-            let Version = results[index].VERSION;
-            let Scenario = results[index].SCENARIO;
-            let profile = vcRulesListReq[0].profile;
+            let Type = results[index].Type;
+
+            // Request Array Length is of only 1 - Hence always refer to '0' in vcRulesListReq
+            let modelVersion = vcRulesListReq[0].modelVersion;
+            let Version = vcRulesListReq[0].version; //results[index].VERSION;
+            let Scenario = vcRulesListReq[0].scenario; //results[index].SCENARIO;
+            //let profile = vcRulesListReq[0].profile;
             let override = vcRulesListReq[0].override;
-            vcRulesList.push({profile,override,Version, Scenario, Location,Product,GroupID});
+
+            sqlStr = 'SELECT "MODEL_PROFILE" FROM "CP_OD_MODEL_VERSIONS"' + 
+                     ' WHERE "LOCATION_ID" = ' + "'" +   Location + "'" +
+                     ' AND "PRODUCT_ID" =' + "'" +   Product + "'" +
+                     ' AND CONCAT("OBJ_DEP", CONCAT(' + "'" + '_' + "'" + ',"OBJ_COUNTER")) =' + "'" +   GroupID + "'" +
+                     ' AND "OBJ_TYPE" =' + "'" +   Type + "'" +
+                     ' AND "MODEL_VERSION" =' + "'" +   modelVersion + "'"; 
+            console.log('sqlStr: ', sqlStr);            
+            stmt = conn.prepare(sqlStr);
+            let mpResults=stmt.exec();
+            stmt.drop();
+
+            if (mpResults.length > 0)
+            {
+                let profile = mpResults[0].MODEL_PROFILE;
+                vcRulesList.push({profile,override,Version, Scenario, Location,Product,GroupID,Type,modelVersion});
+            }
         }
 //        console.log('_generatePredictions All Rules List: ', vcRulesList); 
 
@@ -710,27 +753,49 @@ async function _generatePredictions(req) {
         // vcRulesList =  vcRulesListReq;
         for (let index=0; index<vcRulesListReq.length; index++) 
         {
-            sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", "VERSION", "SCENARIO", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "V_PREDICTION_TS"' + 
+            sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", "Type", "VERSION", "SCENARIO", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "V_PREDICTION_TS"' + 
                      ' WHERE "Location" = ' + "'" +   vcRulesListReq[index].Location + "'" +
                      ' AND "GroupID" =' + "'" +   vcRulesListReq[index].GroupID + "'" +
+                     ' AND "Type" =' + "'" +   vcRulesListReq[index].Type + "'" +
                      ' AND "Product" =' + "'" +   vcRulesListReq[index].Product + "'" + 
-                     ' GROUP BY "Location", "Product", "GroupID", "VERSION", "SCENARIO"';
+                     ' GROUP BY "Location", "Product", "GroupID", "Type", "VERSION", "SCENARIO"';
             console.log('sqlStr: ', sqlStr);            
             stmt = conn.prepare(sqlStr);
             results=stmt.exec();
             stmt.drop();
             for (let rIndex=0; rIndex<results.length; rIndex++) 
             {
-
+                // rIndex is Results Index
                 let Location = results[rIndex].Location;
                 let Product = results[rIndex].Product;
                 let GroupID = results[rIndex].GroupID;
-                let Version = results[rIndex].VERSION;
-                let Scenario = results[rIndex].SCENARIO;
-                let profile = vcRulesListReq[index].profile;
-                let override = vcRulesListReq[index].override;
-                vcRulesList.push({profile,override,Version, Scenario, Location,Product,GroupID});
+                let Type = results[rIndex].Type;
 
+                // use index from Request as Request Array length > 1
+                let modelVersion = vcRulesListReq[index].modelVersion;
+                let Version = vcRulesListReq[index].version; //results[rIndex].VERSION;
+                let Scenario = vcRulesListReq[index].scenario; //results[rIndex].SCENARIO;
+                //let profile = vcRulesListReq[index].profile;
+                let override = vcRulesListReq[index].override;
+
+
+                sqlStr = 'SELECT "MODEL_PROFILE" FROM "CP_OD_MODEL_VERSIONS"' + 
+                     ' WHERE "LOCATION_ID" = ' + "'" +   Location + "'" +
+                     ' AND "PRODUCT_ID" =' + "'" +   Product + "'" +
+                     ' AND CONCAT("OBJ_DEP", CONCAT(' + "'" + '_' + "'" + ',"OBJ_COUNTER")) =' + "'" +   GroupID + "'" +
+                     ' AND "OBJ_TYPE" =' + "'" +   Type + "'" +
+                     ' AND "MODEL_VERSION" =' + "'" +   modelVersion + "'";
+                console.log('sqlStr: ', sqlStr);            
+                stmt = conn.prepare(sqlStr);
+                let mpResults=stmt.exec();
+                stmt.drop();
+
+                if (mpResults.length > 0)
+                {
+                    let profile = mpResults[0].MODEL_PROFILE;
+                    vcRulesList.push({profile,override,Version, Scenario, Location,Product,GroupID,Type,modelVersion});
+                    //vcRulesList.push({profile,override,Version, Scenario, Location,Product,GroupID,Type,modelVersion});
+                }
 
                 // vcRulesList[index].Version = results[0].VERSION;
                 // vcRulesList[index].Scenario = results[0].SCENARIO;
@@ -749,6 +814,7 @@ async function _generatePredictions(req) {
         sqlStr = 'SELECT  COUNT(DISTINCT "Row") AS numChars FROM "V_PREDICTION_TS" WHERE "Product" =' +
                     "'" +  vcRulesList[i].Product + "'" +  
                     ' AND "GroupID" =' + "'" +   vcRulesList[i].GroupID + "'" +
+                    ' AND "Type" =' + "'" +   vcRulesList[i].Type + "'" +
                     ' AND "Location" =' + "'" +   vcRulesList[i].Location + "'" +
                     ' AND "VERSION" =' + "'" +   vcRulesList[i].Version + "'" +
                     ' AND "SCENARIO" =' + "'" +   vcRulesList[i].Scenario + "'";   
@@ -768,7 +834,8 @@ async function _generatePredictions(req) {
             sqlStr = 'SELECT * FROM "CP_PAL_PROFILEOD"' +
                     ' WHERE "PRODUCT_ID" = ' + "'" + vcRulesList[i].Product + "'" + 
                     ' AND "LOCATION_ID" = ' + "'" + vcRulesList[i].Location + "'" + 
-                    ' AND "OBJ_DEP" = ' + "'" + vcRulesList[i].GroupID + "'" ;
+                    ' AND "OBJ_DEP" = ' + "'" + vcRulesList[i].GroupID + "'" +
+                    ' AND OBJ_TYPE = ' + "'" + vcRulesList[i].Type + "'" ;
                 //  ' AND "MODELTYPE" = ' + "'" + modelType +"'"; 
             console.log('sqlStr: ', sqlStr);            
             stmt=conn.prepare(sqlStr);
@@ -1017,7 +1084,8 @@ function _getRuleListTypeForGenModels(vcRulesList, modelType, numChars)
                     sqlStr = 'SELECT * FROM "CP_PAL_PROFILEOD"' +
                                 ' WHERE "PRODUCT_ID" = ' + "'" + vcRulesList[i].Product + "'" + 
                                 ' AND "LOCATION_ID" = ' + "'" + vcRulesList[i].Location + "'" + 
-                                ' AND "OBJ_DEP" = ' + "'" + vcRulesList[i].GroupID + "'" ;
+                                ' AND "OBJ_DEP" = ' + "'" + vcRulesList[i].GroupID + "'" +
+                                ' AND "OBJ_TYPE" = ' + "'" + vcRulesList[i].Type + "'" ;
                             //  ' AND "MODELTYPE" = ' + "'" + modelType +"'"; 
                     console.log('sqlStr: ', sqlStr);            
                     stmt=conn.prepare(sqlStr);
@@ -1046,6 +1114,8 @@ function _getRuleListTypeForGenModels(vcRulesList, modelType, numChars)
                             ruleListObj.push({"Location":vcRulesList[i].Location, 
                                             "Product":vcRulesList[i].Product, 
                                             "GroupID":vcRulesList[i].GroupID, 
+                                            "Type":vcRulesList[i].Type, 
+                                            "modelVersion":vcRulesList[i].modelVersion,
                                             "modelType":results[0].METHOD, 
                                             "profileID":profileID, 
                                             "override":vcRulesList[i].override,
@@ -1066,7 +1136,9 @@ function _getRuleListTypeForGenModels(vcRulesList, modelType, numChars)
                     {
                         ruleListObj.push({"Location":vcRulesList[i].Location, 
                                         "Product":vcRulesList[i].Product, 
-                                        "GroupID":vcRulesList[i].GroupID, 
+                                        "GroupID":vcRulesList[i].GroupID,
+                                        "Type":vcRulesList[i].Type, 
+                                        "modelVersion":vcRulesList[i].modelVersion, 
                                         "modelType":results[0].METHOD, 
                                         "profileID":results[0].PROFILE, 
                                         "override":vcRulesList[i].override,
@@ -1110,7 +1182,8 @@ function _getParamsObjForGenModels(vcRulesList, modelType, numChars)
             sqlStr = 'SELECT * FROM "CP_PAL_PROFILEOD"' +
                             ' WHERE "PRODUCT_ID" = ' + "'" + vcRulesList[i].Product + "'" + 
                             ' AND "LOCATION_ID" = ' + "'" + vcRulesList[i].Location + "'" + 
-                            ' AND "OBJ_DEP" = ' + "'" + vcRulesList[i].GroupID + "'" ;
+                            ' AND "OBJ_DEP" = ' + "'" + vcRulesList[i].GroupID + "'" +
+                            ' AND "OBJ_TYPE" = ' + "'" + vcRulesList[i].Type + "'" ;
             console.log(' _getParamsObjForGenModels sqlStr: ', sqlStr);            
             stmt=conn.prepare(sqlStr);
             results=stmt.exec();
@@ -1151,7 +1224,7 @@ function _getParamsObjForGenModels(vcRulesList, modelType, numChars)
         //console.log('i = ',i, 'modelType :', modelType );
         if (vcRulesList[i].dimensions == numChars)
         {
-            let palGroupId =  vcRulesList[i].profileID + '#' + vcRulesList[i].GroupID + '#' + vcRulesList[i].Location + '#' + vcRulesList[i].Product;
+            let palGroupId =  vcRulesList[i].profileID + '#' + vcRulesList[i].Type + '#' +vcRulesList[i].GroupID + '#' + vcRulesList[i].Location + '#' + vcRulesList[i].Product;
 
             for (let index=0; index<results.length; index++) 
             {
@@ -1281,30 +1354,34 @@ async function _generateRegModels (req) {
        if ( (vcRulesListReq[0].Location != "ALL") &&
             (vcRulesListReq[0].Product == "ALL") )
        {
-           sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "CP_VC_HISTORY_TS"' + 
+           sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", "Type", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "CP_VC_HISTORY_TS"' + 
                     'WHERE "Location" =' + "'" +   vcRulesListReq[0].Location + "'" +
-                    ' GROUP BY "Location", "Product", "GroupID" HAVING COUNT(DISTINCT "' + vcConfigTimePeriod + '") > 20';
+                    ' AND "Type" =' + "'" +   vcRulesListReq[0].Type + "'" +
+                    ' GROUP BY "Location", "Product", "GroupID", "Type" HAVING COUNT(DISTINCT "' + vcConfigTimePeriod + '") > 20';
        }
        else if ( (vcRulesListReq[0].Product != "ALL") &&
                  (vcRulesListReq[0].Location == "ALL") )
        {
-           sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "CP_VC_HISTORY_TS"' + 
+           sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", "Type", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "CP_VC_HISTORY_TS"' + 
                     'WHERE "Product" =' + "'" +   vcRulesListReq[0].Product + "'" +
-                    ' GROUP BY "Location", "Product", "GroupID" HAVING COUNT(DISTINCT "' + vcConfigTimePeriod + '") > 20';
+                    ' AND "Type" =' + "'" +   vcRulesListReq[0].Type + "'" +
+                    ' GROUP BY "Location", "Product", "GroupID", "Type" HAVING COUNT(DISTINCT "' + vcConfigTimePeriod + '") > 20';
        }
        else if ( (vcRulesListReq[0].Product != "ALL") &&
                  (vcRulesListReq[0].Location != "ALL") )
        {
-           sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "CP_VC_HISTORY_TS"' + 
+           sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", "Type", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "CP_VC_HISTORY_TS"' + 
                'WHERE "Product" =' + "'" +   vcRulesListReq[0].Product + "'" +
                ' AND "Location" =' + "'" +   vcRulesListReq[0].Location + "'" +
-               ' GROUP BY "Location", "Product", "GroupID" HAVING COUNT(DISTINCT "' + vcConfigTimePeriod + '") > 20';
+               ' AND "Type" =' + "'" +   vcRulesListReq[0].Type + "'" +
+               ' GROUP BY "Location", "Product", "GroupID", "Type" HAVING COUNT(DISTINCT "' + vcConfigTimePeriod + '") > 20';
        }
        else
        {
-            sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "CP_VC_HISTORY_TS"' + 
+            sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", "Type", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "CP_VC_HISTORY_TS"' + 
                    // vcRulesListReq[0].tableName + 
-                    ' GROUP BY "Location", "Product", "GroupID"  HAVING COUNT(DISTINCT "' + vcConfigTimePeriod + '") > 20';  
+                   'WHERE "Type" =' + "'" +   vcRulesListReq[0].Type + "'" +
+                    ' GROUP BY "Location", "Product", "GroupID", "Type"  HAVING COUNT(DISTINCT "' + vcConfigTimePeriod + '") > 20';  
        }
         console.log('sqlStr: ', sqlStr);            
         stmt=conn.prepare(sqlStr);
@@ -1316,9 +1393,11 @@ async function _generateRegModels (req) {
             let Location = results[index].Location;
             let Product = results[index].Product;
             let GroupID = results[index].GroupID;
+            let Type = results[index].Type;
+            let modelVersion = vcRulesListReq[0].modelVersion;
             let profile = vcRulesListReq[0].profile;
             let override = vcRulesListReq[0].override;
-            vcRulesList.push({profile,override,Location,Product,GroupID});
+            vcRulesList.push({profile,override,Location,Product,GroupID,Type,modelVersion});
 
         }
         //vcRulesList = JSON.stringify(vcRulesList);
@@ -1329,11 +1408,12 @@ async function _generateRegModels (req) {
     {
         for (var i = 0; i < vcRulesListReq.length; i++)
         {
-            sqlStr = 'SELECT  "Location", "Product", "GroupID" FROM "CP_VC_HISTORY_TS" WHERE "Product" =' +
+            sqlStr = 'SELECT  "Location", "Product", "GroupID", "Type" FROM "CP_VC_HISTORY_TS" WHERE "Product" =' +
                         "'" +  vcRulesListReq[i].Product + "'" +  
                         ' AND "GroupID" =' + "'" +   vcRulesListReq[i].GroupID + "'" +
                         ' AND "Location" =' + "'" +   vcRulesListReq[i].Location + "'" +
-                        ' GROUP BY "Location", "Product", "GroupID"' +
+                        ' AND "Type" =' + "'" +   vcRulesListReq[i].Type + "'" +
+                        ' GROUP BY "Location", "Product", "GroupID", "Type"' +
                         ' HAVING COUNT(DISTINCT "' + vcConfigTimePeriod + '") > 20';// + 'ORDER BY "WeekOfYear"';   
             console.log('sqlStr: ', sqlStr);            
             stmt=conn.prepare(sqlStr);
@@ -1344,9 +1424,11 @@ async function _generateRegModels (req) {
                 let Location = results[0].Location;
                 let Product = results[0].Product;
                 let GroupID = results[0].GroupID;
+                let Type = results[0].Type;
+                let modelVersion = vcRulesListReq[0].modelVersion;
                 let profile = vcRulesListReq[i].profile;
                 let override = vcRulesListReq[i].override;
-                vcRulesList.push({profile,override,Location,Product,GroupID});
+                vcRulesList.push({profile,override,Location,Product,GroupID,Type,modelVersion});
 
             }
         //vcRulesList =  vcRulesListReq;
@@ -1361,6 +1443,7 @@ async function _generateRegModels (req) {
         sqlStr = 'SELECT  COUNT(DISTINCT "Row") AS numChars FROM "CP_VC_HISTORY_TS" WHERE "Product" =' +
                     "'" +  vcRulesList[i].Product + "'" +  
                     ' AND "GroupID" =' + "'" +   vcRulesList[i].GroupID + "'" +
+                    ' AND "Type" =' + "'" +   vcRulesList[i].Type + "'" +
                     ' AND "Location" =' + "'" +   vcRulesList[i].Location + "'";// + 'ORDER BY "WeekOfYear"';   
         console.log('sqlStr: ', sqlStr);            
         stmt=conn.prepare(sqlStr);
@@ -2076,6 +2159,7 @@ function _getDataObjForGenModels(vcRulesList, modelType, numChars) {
 
                     "'" +  vcRulesList[i].Product + "'" +  
                     ' AND "GroupID" =' + "'" +   vcRulesList[i].GroupID + "'" +
+                    ' AND "Type" = ' + "'" + vcRulesList[i].Type + "'" +
                     ' AND "Location" =' + "'" +   vcRulesList[i].Location + "'" + 
                     ' GROUP BY "Attribute", "' + vcConfigTimePeriod + '"' +
                     ' ORDER BY "' + vcConfigTimePeriod + '", "Attribute"';
@@ -2087,6 +2171,7 @@ function _getDataObjForGenModels(vcRulesList, modelType, numChars) {
 
                     "'" +  vcRulesList[i].Product + "'" +  
                     ' AND "GroupID" =' + "'" +   vcRulesList[i].GroupID + "'" +
+                    ' AND "Type" = ' + "'" + vcRulesList[i].Type + "'" +
                     ' AND "Location" =' + "'" +   vcRulesList[i].Location + "'" + 
                     ' GROUP BY "Attribute", "' + vcConfigTimePeriod + '"' +
                     ' ORDER BY "' + vcConfigTimePeriod + '", "Attribute"';
@@ -2191,7 +2276,7 @@ function _getDataObjForGenModels(vcRulesList, modelType, numChars) {
                     att12 = att12 + 0.00001;
             }
             charIdx  = charIdx + 1;
-            let palGroupId =  vcRulesList[i].profileID + '#' + vcRulesList[i].GroupID + '#' + vcRulesList[i].Location + '#' + vcRulesList[i].Product;
+            let palGroupId =  vcRulesList[i].profileID + '#' +  vcRulesList[i].Type + '#' + vcRulesList[i].GroupID + '#' + vcRulesList[i].Location + '#' + vcRulesList[i].Product;
 
             if (charIdx % numChars == 0)
             {
@@ -2295,6 +2380,7 @@ async function _postRegressionRequest(url,paramsObj,numChars,dataObj,modelType,v
         body: JSON.stringify({
             "Product": vcRuleListObj[0].Product,
             "Location": vcRuleListObj[0].Location,
+            "modelVersion" : vcRuleListObj[0].modelVersion,
             "regressionParameters": paramsObj,
             "hgbtType": numChars,
             "regressionData": dataObj
@@ -2315,6 +2401,7 @@ async function _postRegressionRequest(url,paramsObj,numChars,dataObj,modelType,v
         body: JSON.stringify({
             "Product": vcRuleListObj[0].Product,
             "Location": vcRuleListObj[0].Location,
+            "modelVersion" : vcRuleListObj[0].modelVersion,
             "regressionParameters": paramsObj,
             "rdtType": numChars,
             "regressionData": dataObj
@@ -2334,6 +2421,7 @@ async function _postRegressionRequest(url,paramsObj,numChars,dataObj,modelType,v
         body: JSON.stringify({
             "Product": vcRuleListObj[0].Product,
             "Location": vcRuleListObj[0].Location,
+            "modelVersion" : vcRuleListObj[0].modelVersion,
             "regressionParameters": paramsObj,
             "mlrType": numChars,
             "regressionData": dataObj
@@ -2353,6 +2441,7 @@ async function _postRegressionRequest(url,paramsObj,numChars,dataObj,modelType,v
         body: JSON.stringify({
             "Product": vcRuleListObj[0].Product,
             "Location": vcRuleListObj[0].Location,
+            "modelVersion" : vcRuleListObj[0].modelVersion,
             "controlParameters": paramsObj,
             "varmaType": numChars,
             "varmaData": dataObj

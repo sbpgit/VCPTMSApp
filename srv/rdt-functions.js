@@ -4,24 +4,24 @@ const { v1: uuidv1} = require('uuid')
 const hana = require('@sap/hana-client');
 const rtdFuncs = require('./rdt-functions.js');
 
-const conn_params = {
-    serverNode  : cds.env.requires.db.credentials.host + ":" + cds.env.requires.db.credentials.port,
-    uid         : "SBPTECHTEAM", //process.env.uidClassicalSchema, //cf environment variable
-    pwd         : "Sbpcorp@22", //process.env.uidClassicalSchemaPassword,//cf environment variable
-    encrypt: 'TRUE',
-    ssltruststore: cds.env.requires.hana.credentials.certificate
-};
-const vcConfigTimePeriod = "PeriodOfYear"; //process.env.TimePeriod; //cf environment variable
-const classicalSchema = "DB_CONFIG_PROD_CLIENT1"; //process.env.classicalSchema; //cf environment variable
 // const conn_params = {
 //     serverNode  : cds.env.requires.db.credentials.host + ":" + cds.env.requires.db.credentials.port,
-//     uid         : process.env.uidClassicalSchema, //cf environment variable"SBPTECHTEAM",//
-//     pwd         : process.env.uidClassicalSchemaPassword,//cf environment variable"Sbpcorp@22",//
+//     uid         : "SBPTECHTEAM", //process.env.uidClassicalSchema, //cf environment variable
+//     pwd         : "Sbpcorp@22", //process.env.uidClassicalSchemaPassword,//cf environment variable
 //     encrypt: 'TRUE',
 //     ssltruststore: cds.env.requires.hana.credentials.certificate
 // };
-// const vcConfigTimePeriod = process.env.TimePeriod; //cf environment variable"PeriodOfYear";//
-// const classicalSchema = process.env.classicalSchema; //cf environment variable"DB_CONFIG_PROD_CLIENT1";//
+// const vcConfigTimePeriod = "PeriodOfYear"; //process.env.TimePeriod; //cf environment variable
+// const classicalSchema = "DB_CONFIG_PROD_CLIENT1"; //process.env.classicalSchema; //cf environment variable
+const conn_params = {
+    serverNode  : cds.env.requires.db.credentials.host + ":" + cds.env.requires.db.credentials.port,
+    uid         : process.env.uidClassicalSchema, //cf environment variable"SBPTECHTEAM",//
+    pwd         : process.env.uidClassicalSchemaPassword,//cf environment variable"Sbpcorp@22",//
+    encrypt: 'TRUE',
+    ssltruststore: cds.env.requires.hana.credentials.certificate
+};
+const vcConfigTimePeriod = process.env.TimePeriod; //cf environment variable"PeriodOfYear";//
+const classicalSchema = process.env.classicalSchema; //cf environment variable"DB_CONFIG_PROD_CLIENT1";//
 
 const containerSchema = cds.env.requires.db.credentials.schema;
 const conn_params_container = {
@@ -112,6 +112,8 @@ exports._updateRdtGroupParams = function(req) {
 exports._updateRdtGroupData = function(req) {
 
     const rdtGroupData = req.data.regressionData;
+    var modelVersion = req.data.modelVersion;
+
 
     var rdtType = req.data.rdtType;
 
@@ -301,6 +303,10 @@ exports._runRegressionRdtGroup = function(req) {
 
     console.log('Executing RDT Regression at GROUP');
     var rdtType = req.data.rdtType;
+    var rdtModelVersion = req.data.modelVersion;
+
+    console.log('Executing RDT Regression at GROUP REQ RDT Model Version', rdtModelVersion);
+
     var rdtDataTable;
     if (rdtType == 1)
         rdtDataTable = "PAL_RDT_DATA_GRP_TAB_1T";
@@ -541,6 +547,16 @@ exports._runRegressionRdtGroup = function(req) {
     //let mlrGroupParams = req.data.regressionParameters;
     console.log("inGroups ", inGroups, "Number of Groups",inGroups.length);
 
+    var conn_container = hana.createConnection();
+ 
+    conn_container.connect(conn_params_container);
+
+    sqlStr = 'SET SCHEMA ' + containerSchema; 
+    // console.log('sqlStr: ', sqlStr);            
+    stmt=conn_container.prepare(sqlStr);
+    result=stmt.exec();
+    stmt.drop();
+
     var tableObj = [];
     for (let grpIndex = 0; grpIndex < inGroups.length; grpIndex++)
     {
@@ -583,11 +599,12 @@ exports._runRegressionRdtGroup = function(req) {
 
         let grpStr=inGroups[grpIndex].split('#');
         let profileID = grpStr[0]; 
-        let GroupId = grpStr[1];
-        let location = grpStr[2];
-        let product = grpStr[3];
+        let type = grpStr[1];
+        let GroupId = grpStr[2];
+        let location = grpStr[3];
+        let product = grpStr[4];
 
-        console.log("_runRegressionRdtGroup  grpStr ", grpStr, "profileID ",profileID, "GroupId ",GroupId, " location ", location, " product ", product);
+        console.log("_runRegressionRdtGroup  grpStr ", grpStr, "profileID ",profileID, "type ", type, "GroupId ",GroupId, " location ", location, " product ", product);
 
         var rowObj = {   rdtGroupID: idObj, 
             //createdAt : createtAtObj, 
@@ -595,14 +612,38 @@ exports._runRegressionRdtGroup = function(req) {
             Location : location,
             Product : product,
             groupId : GroupId,
+            Type : type,
+            modelVersion : rdtModelVersion,
             profile : profileID,
             regressionParameters:paramsGroupObj, 
             rdtType : req.data.rdtType,
             importanceOp : impGroupObj,
             outOfBagOp : outOfBagGroupObj};
         tableObj.push(rowObj);
+
+        
+        let objStr=GroupId.split('_');
+        let obj_dep = objStr[0];
+        let obj_counter = objStr[1];
+
+        sqlStr = 'UPSERT "CP_OD_MODEL_VERSIONS" VALUES (' +
+                    "'" + location + "'" + "," +
+                    "'" + product + "'" + "," +
+                    "'" + obj_dep + "'" + "," +
+                    "'" + obj_counter + "'" + "," +
+                    "'" + type + "'" + "," +
+                    "'" + 'RDT' + "'" + "," +
+                    "'" + rdtModelVersion + "'" + "," +
+                    "'" + profileID  + "'" + ')' + ' WITH PRIMARY KEY';
+            
+        console.log("CP_OD_MODEL_VERSIONS RDT sql update sqlStr", sqlStr);
+
+        stmt=conn_container.prepare(sqlStr);
+        stmt.exec();
+        stmt.drop();
     }
 
+    conn_container.disconnect();
 
     cqnQuery = {INSERT:{ into: { ref: ['CP_PALRDTBYGROUP'] }, entries:  tableObj }};
 //    console.log("CP_PALRDTBYGROUP cQnQuery " , cqnQuery);
@@ -934,6 +975,7 @@ exports._runPredictionRdtGroup = function(req) {
     var rdtType = req.data.rdtType;
     var version = req.data.Version;
     var scenario = req.data.Scenario;
+    var modelVersion = req.data.modelVersion;
 
     console.log('_runPredictionRdtGroup rdtType : ', rdtType);
 
@@ -985,7 +1027,7 @@ exports._runPredictionRdtGroup = function(req) {
 
         console.log('PredictionRdt Group: ', groupId);
         //predictionResults = predictionResults + _runRdtPrediction(groupId);
-        let predictionObj = rtdFuncs._runRdtPrediction(rdtType, groupId, version, scenario);
+        let predictionObj = rtdFuncs._runRdtPrediction(rdtType, groupId, version, scenario,modelVersion);
         //value.push({predictionObj});
         predResults.push(predictionObj);
 
@@ -1000,11 +1042,11 @@ exports._runPredictionRdtGroup = function(req) {
 }
 
 // function _runRdtPrediction(rdtType, group, version, scenario) {
-exports._runRdtPrediction = function(rdtType, group, version, scenario) {
+exports._runRdtPrediction = function(rdtType, group, version, scenario,modelVersion) {
 
 //    var groupId = req.data.groupId;
 
-    console.log('_runRdtPrediction - group', group, 'Version ', version, 'Scenario ', scenario);
+    console.log('_runRdtPrediction - group', group, 'Version ', version, 'Scenario ', scenario,'Model Version', modelVersion);
 
     var conn = hana.createConnection();
  
@@ -1019,9 +1061,10 @@ exports._runRdtPrediction = function(rdtType, group, version, scenario) {
 
     let grpStr=groupId.split('#');
     let profileId = grpStr[0];
-    let GroupId = grpStr[1];
-    let location = grpStr[2];
-    let product = grpStr[3];
+    let odType = grpStr[1];
+    let GroupId = grpStr[2];
+    let location = grpStr[3];
+    let product = grpStr[4];
     
     sqlStr = "create local temporary column table #PAL_RDT_MODEL_TAB_"+ groupId + " " + 
                     "(\"ROW_INDEX\" INTEGER,\"TREE_INDEX\" INTEGER,\"MODEL_CONTENT\" NCLOB)"; // MEMORY THRESHOLD 1000)";
@@ -1523,7 +1566,8 @@ exports._runRdtPrediction = function(rdtType, group, version, scenario) {
     // let product = grpStr[2];
     var cqnQuery = {INSERT:{ into: { ref: ['CP_PALRDTPREDICTIONS'] }, entries: [
          {rdtID: idObj, createdAt : createtAtObj.toISOString(), Location : location, 
-          Product : product, groupId : GroupId, Version : version, Scenario : scenario,
+          Product : product, groupId : GroupId, Type: odType, modelVersion: modelVersion, profile: profileId,
+          Version : version, Scenario : scenario,
           predictionParameters:predParamsObj, rdtType : rdtType, 
           predictionData : predDataObj, predictedResults : resultsObj}
          ]}}
@@ -1543,10 +1587,12 @@ exports._runRdtPrediction = function(rdtType, group, version, scenario) {
     stmt.drop();
 
     let tpGrpStr=groupId.split('#');
-    tpGroupId = tpGrpStr[1] + '#' + tpGrpStr[2] + '#' + tpGrpStr[3];
+    tpGroupId = tpGrpStr[2] + '#' + tpGrpStr[3] + '#' + tpGrpStr[4];
+    console.log('tpGroupId: ', tpGroupId);
 
     sqlStr = 'SELECT DISTINCT ' + '"' + vcConfigTimePeriod + '"' + 
                 ' from  V_FUTURE_DEP_TS WHERE  "GroupID" = ' + "'" + tpGroupId + "'" +
+                ' AND "Type" = ' + "'" + odType + "'" +
                 ' AND "VERSION" = ' + "'" + version + "'" +
                 ' AND "SCENARIO" = ' + "'" + scenario + "'" +   
                 ' ORDER BY ' + '"' + vcConfigTimePeriod + '"' + ' ASC';
@@ -1572,6 +1618,7 @@ exports._runRdtPrediction = function(rdtType, group, version, scenario) {
 
         sqlStr = 'SELECT DISTINCT "CAL_DATE", "Location", "Product", "Type", "OBJ_DEP", "OBJ_COUNTER", "OrderQuantity", "VERSION", "SCENARIO" ' +
                 'FROM "V_FUTURE_DEP_TS" WHERE "GroupID" = ' + "'" + tpGroupId + "'" +
+                ' AND "Type" = ' + "'" + odType + "'" +
                 ' AND "VERSION" = ' + "'" + version + "'" +
                 ' AND "SCENARIO" = ' + "'" + scenario + "'" +   
                 ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
@@ -1589,6 +1636,7 @@ exports._runRdtPrediction = function(rdtType, group, version, scenario) {
                     "'" + result[0].OBJ_DEP + "'" + "," +
                     "'" + result[0].OBJ_COUNTER + "'" + "," +
                     "'" + 'RTD' + "'" + "," +
+                    "'" + modelVersion  + "'" + "," +
                     "'" + profileId  + "'" + "," +
                     "'" + result[0].VERSION + "'" + "," +
                     "'" + result[0].SCENARIO + "'" + "," +
@@ -1604,22 +1652,25 @@ exports._runRdtPrediction = function(rdtType, group, version, scenario) {
         stmt.exec();
         stmt.drop();
 
-        let method = 'RDT';
-        sqlStr = 'SELECT CP_PAL_PROFILEOD.PROFILE, METHOD FROM CP_PAL_PROFILEOD ' +
-                'INNER JOIN CP_PAL_PROFILEMETH ON '+
-                '"CP_PAL_PROFILEOD"."PROFILE" = "CP_PAL_PROFILEMETH"."PROFILE"' +
-                ' AND CP_PAL_PROFILEMETH.METHOD = ' + "'" + method + "'" +
-                ' AND LOCATION_ID = ' + "'" + result[0].Location + "'" +
-                ' AND PRODUCT_ID = ' + "'" + result[0].Product + "'" +
-                ' AND OBJ_DEP = ' + "'" + result[0].OBJ_DEP + '_' + result[0].OBJ_COUNTER + "'";
-        console.log("V_PREDICTIONS IBP Result Plan Predicted Value HGBT sql sqlStr", sqlStr);
-        stmt=conn.prepare(sqlStr);
-        results = stmt.exec();
-        stmt.drop();
+        // let method = 'RDT';
+        // sqlStr = 'SELECT CP_PAL_PROFILEOD.PROFILE, METHOD FROM CP_PAL_PROFILEOD ' +
+        //         'INNER JOIN CP_PAL_PROFILEMETH ON '+
+        //         '"CP_PAL_PROFILEOD"."PROFILE" = "CP_PAL_PROFILEMETH"."PROFILE"' +
+        //         ' AND CP_PAL_PROFILEMETH.METHOD = ' + "'" + method + "'" +
+        //         ' AND LOCATION_ID = ' + "'" + result[0].Location + "'" +
+        //         ' AND PRODUCT_ID = ' + "'" + result[0].Product + "'" +
+        //         ' AND OBJ_DEP = ' + "'" + result[0].OBJ_DEP + '_' + result[0].OBJ_COUNTER + "'" +
+        //         ' AND OBJ_TYPE = ' + "'" + result[0].Type + "'";
+
+        // console.log("V_PREDICTIONS IBP Result Plan Predicted Value RDT sql sqlStr", sqlStr);
+        // stmt=conn.prepare(sqlStr);
+        // results = stmt.exec();
+        // stmt.drop();
 
 
-        if ( (results.length > 0) &&
-             (results[0].METHOD = 'RDT'))
+        // if ( (results.length > 0) &&
+        //      (results[0].METHOD = 'RDT') &&
+        if (modelVersion == 'Active')
         {
             sqlStr = 'UPSERT "CP_IBP_RESULTPLAN_TS" VALUES (' + "'" + result[0].CAL_DATE + "'" + "," +
                     "'" + result[0].Location + "'" + "," +
@@ -1627,6 +1678,7 @@ exports._runRdtPrediction = function(rdtType, group, version, scenario) {
                     "'" + result[0].Type + "'" + "," +
                     "'" + result[0].OBJ_DEP + "'" + "," +
                     "'" + result[0].OBJ_COUNTER + "'" + "," +
+                    "'" + modelVersion  + "'" + "," +
                     "'" + profileId  + "'" + "," +
                     "'" + result[0].VERSION + "'" + "," +
                     "'" + result[0].SCENARIO + "'" + "," + 
@@ -1635,7 +1687,7 @@ exports._runRdtPrediction = function(rdtType, group, version, scenario) {
                     "'" + 'SUCCESS' + "'" + ')' + ' WITH PRIMARY KEY';
             
  
-            console.log("CP_IBP_RESULTPLAN_TS Predicted Value HGBT sql update sqlStr", sqlStr);
+            console.log("CP_IBP_RESULTPLAN_TS Predicted Value RDT sql update sqlStr", sqlStr);
 
             stmt=conn.prepare(sqlStr);
             stmt.exec();
@@ -1719,7 +1771,8 @@ exports._runRdtPrediction = function(rdtType, group, version, scenario) {
 
         sqlStr = 'SELECT DISTINCT "CAL_DATE", "Location", "Product", ' +
                  '"Type", "OBJ_DEP", "OBJ_COUNTER", "ROW_ID", "CharCount", "CharCountPercent", "VERSION", "SCENARIO" ' +
-                'FROM "V_FUTURE_DEP_TS" WHERE "GroupID" = ' + "'" + tpGroupId + "'" + 
+                'FROM "V_FUTURE_DEP_TS" WHERE "GroupID" = ' + "'" + tpGroupId + "'" +
+                ' AND "Type" = ' + "'" + odType + "'" + 
                 ' AND "VERSION" = ' + "'" + version + "'" +
                 ' AND "SCENARIO" = ' + "'" + scenario + "'" +
                 ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
@@ -1883,6 +1936,7 @@ exports._runRdtPrediction = function(rdtType, group, version, scenario) {
                 "'" + result[rIndex].OBJ_COUNTER + "'" + "," +
                 "'" + result[rIndex].ROW_ID + "'" + "," +
                 "'" + 'RDT' + "'" + "," +
+                "'" + modelVersion  + "'" + "," +
                 "'" + profileId  + "'" + "," +
                 "'" + result[rIndex].VERSION + "'" + "," +
                 "'" + result[rIndex].SCENARIO + "'" + "," +

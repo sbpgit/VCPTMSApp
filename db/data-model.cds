@@ -490,6 +490,7 @@ context cp {
         key COMPONENT   : String(40);
         key PROFILE     : String(50);
         key OBJ_DEP     : String(30);
+        key OBJ_TYPE     : String(2) default 'OD' @title : 'Object Type';
             STRUC_NODE  : String(50);
     }
 
