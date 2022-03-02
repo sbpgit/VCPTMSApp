@@ -258,6 +258,70 @@ sap.ui.define(
           );
         }
       },
+
+
+      onSearchCompReq:function(oEvent){
+        var sRowData = {},
+        iRowData = [],
+        weekIndex;
+      that.oTable = that.byId("idCompReq");
+      that.oGModel = that.getModel("oGModel");
+
+        var query =
+            oEvent.getParameter("value") || oEvent.getParameter("newValue");
+            that.Data = that.rowData;
+            that.searchData = [];
+
+            for(var i=0; i<that.Data.length; i++){
+                if(that.Data[i].COMPONENT.includes(query) || 
+                   that.Data[i].STRUC_NODE.includes(query) || 
+                   that.Data[i].QTYTYPE.includes(query) ){
+                    that.searchData.push(that.Data[i]);
+                }
+            }
+
+            var rowData;
+              var fromDate = new Date(that.byId("fromDate").getDateValue()),
+                toDate = new Date(that.byId("toDate").getDateValue());
+              fromDate = fromDate.toISOString().split("T")[0];
+              toDate = toDate.toISOString().split("T")[0];
+              var liDates = that.generateDateseries(fromDate, toDate);
+
+              for (var i = 0; i < that.searchData.length; i++) {
+                sRowData.ItemNum = that.searchData[i].ITEM_NUM;
+                sRowData.Component = that.searchData[i].COMPONENT;
+                sRowData.StructureNode = that.searchData[i].STRUC_NODE;
+                sRowData.Type = that.searchData[i].QTYTYPE;
+                weekIndex = 1;
+                for (let index = 4; index < liDates.length; index++) {
+                  sRowData[liDates[index].CAL_DATE] =
+                    that.searchData[i]["WEEK" + weekIndex];
+                  weekIndex++;
+                }
+                iRowData.push(sRowData);
+                sRowData = {};
+              }
+              var oModel = new sap.ui.model.json.JSONModel();
+              oModel.setData({
+                rows: iRowData,
+                columns: liDates,
+              });
+              that.oTable.setModel(oModel);
+              that.oTable.bindColumns("/columns", function (sId, oContext) {
+                var columnName = oContext.getObject().CAL_DATE;
+                return new sap.ui.table.Column({
+                    width: "8rem",
+                    label: columnName,
+                    template: columnName,
+                  });  
+            // }
+              });
+
+              that.oTable.bindRows("/rows");
+
+            
+
+      },
       generateDateseries: function (imFromDate, imToDate) {
         var lsDates = {},
           liDates = [];

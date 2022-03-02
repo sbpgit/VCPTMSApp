@@ -131,12 +131,13 @@
         </VBox>
 	</Toolbar> -->
     <content>
+    <SearchField id="headSearch"  liveChange="onSearchCompReq" placeholder="Component, Structure Node/ Type"/>
     <t:Table id="idCompReq" 
     fixedColumnCount="4"
 				selectionMode="Single"
     alternateRowColors="true"
     enableSelectAll="false"
-				visibleRowCount="3">
+				visibleRowCount="12">
                 <t:columns>
 				</t:columns>
         </t:Table>
