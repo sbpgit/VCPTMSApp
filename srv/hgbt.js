@@ -777,7 +777,7 @@ exports._runRegressionHgbtGroupV1 = function(req) {
 
 exports._runHgbtPredictionsV1 = function(req) {
    //var groupId = req.data.groupId;
-   var groupId = req.data.profile + '#' + req.data.groupId + '#' + req.data.Location + '#' + req.data.Product;
+   var groupId = req.data.profile + '#' + req.data.Type + '#' + req.data.groupId + '#' + req.data.Location + '#' + req.data.Product;
 
    var conn = hana.createConnection();
 

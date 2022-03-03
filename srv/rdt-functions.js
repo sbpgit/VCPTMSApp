@@ -678,7 +678,7 @@ exports._runRdtPredictions = function(req) {
 
   // var groupId = req.data.groupId;
 
-   var groupId = req.data.profile + '#' + req.data.groupId + '#' + req.data.Location + '#' + req.data.Product;
+   var groupId = req.data.profile + '#' + req.data.Type + '#' + req.data.groupId + '#' + req.data.Location + '#' + req.data.Product;
    //var outputGroupId = req.data.groupId;
 
    var conn = hana.createConnection();
