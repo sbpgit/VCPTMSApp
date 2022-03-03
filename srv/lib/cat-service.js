@@ -2,17 +2,19 @@
 const DbConnect = require("./dbConnect");
 const GenFunctions = require("./gen-functions");
 const cds = require("@sap/cds");
+const hana = require('@sap/hana-client');
 const { createLogger, format, transports } = require("winston");
 const { combine, timestamp, label, prettyPrint } = format;
 const ComponentReq = require("./component-req");
 const GenTimeseries = require("./gen-timeseries");
-// const genTimeseries = new GenTimeseries;
-
-// const genFunctions = new GenFunctions();
-
-//  module.exports = async function () {
-//      await genTimeseries.GenTimeseries();
-//  }
+const containerSchema = cds.env.requires.db.credentials.schema;
+const conn_params_container = {
+    serverNode  : cds.env.requires.db.credentials.host + ":" + cds.env.requires.db.credentials.port,
+    uid         : cds.env.requires.db.credentials.user, //cds userid environment variable
+    pwd         : cds.env.requires.db.credentials.password,//cds password environment variable
+    encrypt: 'TRUE',
+    ssltruststore: cds.env.requires.hana.credentials.certificate
+};
 
 module.exports = (srv) => {
   srv.on("getCSRFToken", async (req) => {
@@ -20,6 +22,8 @@ module.exports = (srv) => {
   });
   // Compoenent requirement
   srv.on("getCompreqQty", async (req) => {
+    var tableObjH = [],
+    rowObjH = [];
     let liresult;
     // const comreq = new ComponentReq();
     // comreq.genComponentReq(req.data, liresult);
@@ -28,6 +32,20 @@ module.exports = (srv) => {
     let liprodpred = [];
     let lsprodpred = {};
     let lVariRatio = 1;
+    var conn = hana.createConnection(),
+    result,
+    stmt;
+
+  conn.connect(conn_params_container);
+  var sqlStr = "SET SCHEMA " + containerSchema;
+  // console.log('sqlStr: ', sqlStr);
+  try {
+    stmt = conn.prepare(sqlStr);
+    result = stmt.exec();
+    stmt.drop();
+  } catch (error) {
+    console.log(error);
+  }
     // const
     const liStrucQty = await cds.run(
       `SELECT *
@@ -112,48 +130,66 @@ module.exports = (srv) => {
           lsCompQty.COMP_QTY = Math.ceil(
             liBomoddemd[j].ORD_QTY * lVariRatio * liBomoddemd[j].COMP_QTY
           );
+          rowObjH.push(
+            lsCompQty.LOCATION_ID,
+            lsCompQty.PRODUCT_ID,
+            lsCompQty.VERSION,
+            lsCompQty.SCENARIO,
+            lsCompQty.ITEM_NUM,
+            lsCompQty.COMPONENT,
+            lsCompQty.CAL_DATE,
+            lsCompQty.STRUC_NODE,
+            parseInt(lsCompQty.CAL_COMP_QTY),
+            parseInt(lsCompQty.COMP_QTY)
+          );
           liCompQty.push(GenFunctions.parse(lsCompQty));
-        //   await cds.run(
-        //     DELETE.from("CP_COMPQTYDETERMINE").where({
-        //       xpr: [
-        //         { ref: ["LOCATION_ID"] },
-        //         "=",
-        //         { val: liBomoddemd[j].LOCATION_ID },
-        //         "AND",
-        //         { ref: ["PRODUCT_ID"] },
-        //         "=",
-        //         { val: liBomoddemd[j].PRODUCT_ID },
-        //         "AND",
-        //         { ref: ["VERSION"] },
-        //         "=",
-        //         { val: liBomoddemd[j].VERSION },
-        //         "AND",
-        //         { ref: ["SCENARIO"] },
-        //         "=",
-        //         { val: liBomoddemd[j].SCENARIO },
-        //         "AND",
-        //         { ref: ["ITEM_NUM"] },
-        //         "=",
-        //         { val: liBomoddemd[j].ITEM_NUM },
-        //         "AND",
-        //         { ref: ["COMPONENT"] },
-        //         "=",
-        //         { val: liBomoddemd[j].COMPONENT },
-        //         "AND",
-        //         { ref: ["CAL_DATE"] },
-        //         "=",
-        //         { val: liBomoddemd[j].CAL_DATE },
-        //       ],
-        //     })
-        //   );
+          tableObjH.push(rowObjH);
+          rowObjH=[];
+          try{
+            var sqlStr =
+            "DELETE FROM CP_COMPQTYDETERMINE WHERE LOCATION_ID = " +
+            "'" +
+            liBomoddemd[j].LOCATION_ID +
+            "' AND PRODUCT_ID = " +
+            "'" +
+            liBomoddemd[j].PRODUCT_ID +
+            "' AND VERSION = " +
+            "'" +
+            liBomoddemd[j].VERSION +
+            "' AND SCENARIO = " +
+            "'" +
+            liBomoddemd[j].SCENARIO +
+            "' AND ITEM_NUM = " +
+            "'" +
+            liBomoddemd[j].ITEM_NUM +
+            "' AND COMPONENT = " +
+            "'" +
+            liBomoddemd[j].COMPONENT +
+            "' AND CAL_DATE = " +
+            "'" +
+            liBomoddemd[j].CAL_DATE +
+            "'";
+          var stmt = conn.prepare(sqlStr);
+          await stmt.exec();
+          stmt.drop();
+          
+        }
+          catch(error) {
+            var e = error;
+          }
         }
       }
       // }
     }
     if (liCompQty.length > 0) {
       try {
-        await cds.run(INSERT.into("CP_COMPQTYDETERMINE").entries(liCompQty));
-        liresult = "Component requirements generated successfully";
+       // await cds.run(INSERT.into("CP_COMPQTYDETERMINE").entries(liCompQty));
+       var sqlStr =
+       "INSERT INTO CP_COMPQTYDETERMINE(LOCATION_ID, PRODUCT_ID, VERSION, SCENARIO, ITEM_NUM, COMPONENT, CAL_DATE, STRUC_NODE, CAL_COMP_QTY, COMP_QTY) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+     var stmt = conn.prepare(sqlStr);
+     await stmt.execBatch(tableObjH);
+     stmt.drop(); 
+       liresult = "Component requirements generated successfully";
       } catch (error) {
         liresult = "Failed to generate Component requirements";
       }
@@ -163,10 +199,6 @@ module.exports = (srv) => {
     return liresult;
   });
   srv.on("getCompReqFWeekly", async (req) => {
-    // let liresult;
-    // const comreq = new ComponentReq();
-    // comreq.genCompReqWeekly(req.data );//, liresult);
-    // return liresult;
     let vDateFrom = req.data.FROMDATE;//"2022-03-04";
     let vDateTo = req.data.TODATE;//"2023-01-03";
     let liCompWeekly = [];
@@ -178,45 +210,7 @@ module.exports = (srv) => {
       vComp,
       lsDates = {};
     let columnname = "WEEK";
-   // const liCompQty;
-   // vDateFrom = vDateFrom.toISOString().split('T')[0];
-   // vDateTo = vDateTo.toISOString().split('T')[0];
-    // lsCompWeekly[columnname + 1] = "hello";
-//  if ( req.data.COMPONENT !== undefined && req.data.STRUCNODE !== undefined){
-//     const liCompQty = await cds.run(
-//         `
-//         SELECT * FROM "CP_COMPQTYDETERMINE"
-//         WHERE "LOCATION_ID" = '` +
-//           req.data.LOCATION_ID +
-//           `'
-//              AND "PRODUCT_ID" = '` +
-//           req.data.PRODUCT_ID +
-//           `' AND "VERSION" = '` +
-//           req.data.VERSION +
-//           `' AND "SCENARIO" = '` +
-//           req.data.SCENARIO +
-//           `' AND "COMPONENT" = '` +
-//           req.data.COMPONENT + 
-//           `'AND "STRUC_NODE" = '` +
-//           req.data.STRUCNODE + 
-//           `' AND ( "CAL_DATE" <= '` +
-//           vDateTo +
-//           `'
-//               AND "CAL_DATE" >= '` +
-//           vDateFrom +
-//           `')
-//              ORDER BY 
-//                   "LOCATION_ID" ASC, 
-//                   "PRODUCT_ID" ASC,
-//                   "VERSION" ASC,
-//                   "SCENARIO" ASC,
-//                   "ITEM_NUM" ASC,
-//                   "COMPONENT" ASC,
-//                   "CAL_DATE" ASC,
-//                   "STRUC_NODE" ASC`
-//       );
-//     }
-     // else{
+   
         const liCompQty = await cds.run(
             `
             SELECT * FROM "CP_COMPQTYDETERMINE"
@@ -231,8 +225,7 @@ module.exports = (srv) => {
               req.data.SCENARIO +
               `' AND ( "CAL_DATE" <= '` +
               vDateTo +
-              `'
-                  AND "CAL_DATE" >= '` +
+              `' AND "CAL_DATE" >= '` +
               vDateFrom +
               `')
                  ORDER BY 
@@ -245,7 +238,6 @@ module.exports = (srv) => {
                       "CAL_DATE" ASC,
                       "STRUC_NODE" ASC`
           );
-  //    }
       const liComp = await cds.run(
           `
           SELECT DISTINCT "LOCATION_ID",
@@ -253,12 +245,12 @@ module.exports = (srv) => {
                           "VERSION",
                           "SCENARIO",
                           "ITEM_NUM",
-                          "COMPONENT"
+                          "COMPONENT",
+                          "STRUC_NODE"
           FROM "CP_COMPQTYDETERMINE"
           WHERE "LOCATION_ID" = '` +
             req.data.LOCATION_ID +
-            `'
-               AND "PRODUCT_ID" = '` +
+            `' AND "PRODUCT_ID" = '` +
             req.data.PRODUCT_ID +
             `' AND "VERSION" = '` +
             req.data.VERSION +
@@ -279,15 +271,15 @@ module.exports = (srv) => {
                     "COMPONENT" ASC`
         );
       var vDateSeries = vDateFrom;
-      lsDates.CAL_DATE = GenFunctions.removeDays(GenFunctions.getNextSunday(vDateSeries),1);
+      lsDates.CAL_DATE = GenFunctions.getNextSundayCmp(vDateSeries);
+      vDateSeries = lsDates.CAL_DATE; 
       liDates.push(lsDates);
       lsDates = {};
       while (vDateSeries <= vDateTo) {
         vDateSeries = GenFunctions.addDays(vDateSeries, 7);
-        lsDates.CAL_DATE = GenFunctions.removeDays(
-          GenFunctions.getNextSunday(vDateSeries),
-          1
-        );
+        
+        lsDates.CAL_DATE = GenFunctions.getNextSundayCmp(vDateSeries);
+        vDateSeries = lsDates.CAL_DATE; 
   
         liDates.push(lsDates);
         lsDates = {};
@@ -296,53 +288,48 @@ module.exports = (srv) => {
       for (let j = 0; j < liComp.length; j++) {
         // Initially set vWeekIndex to j to geneate Week columns
         // vCompIndex is to get Componnent quantity for all dates
-       // if (j === 0) {
-          vWeekIndex = 0;//j
-          vCompIndex = 0;//j
-       // }
+        vWeekIndex = 0;//j
         lsCompWeekly.LOCATION_ID = liComp[j].LOCATION_ID;
         lsCompWeekly.PRODUCT_ID = liComp[j].PRODUCT_ID;
         lsCompWeekly.ITEM_NUM = liComp[j].ITEM_NUM;
         lsCompWeekly.COMPONENT = liComp[j].COMPONENT;
         lsCompWeekly.VERSION = liComp[j].VERSION;
         lsCompWeekly.SCENARIO = liComp[j].SCENARIO;
-        // lsCompWeekly.STRUCNODE = liComp[j].STRUC_NODE;
         lsCompWeekly.QTYTYPE = "Normalized";
+        
         for (let i = 0; i < liDates.length; i++) {
           vWeekIndex = vWeekIndex + 1;
-          // In there is no change in componenet and CAL_DATE matches with the liDates series
-          if (
-            liCompQty[vCompIndex].COMPONENT === lsCompWeekly.COMPONENT &&
-            liCompQty[vCompIndex].CAL_DATE === liDates[i].CAL_DATE
-          ) {
-            lsCompWeekly.STRUC_NODE = liCompQty[vCompIndex].STRUC_NODE;
-            lsCompWeekly[columnname + vWeekIndex] = liCompQty[vCompIndex].COMP_QTY;
-            vCompIndex = vCompIndex + 1;
-          } else {
-            lsCompWeekly.STRUC_NODE = liCompQty[j].STRUC_NODE;
+          for( vCompIndex = 0; vCompIndex < liCompQty.length ; vCompIndex++){
+              
             lsCompWeekly[columnname + vWeekIndex] = 0;
+            if (
+                (liCompQty[vCompIndex].COMPONENT === lsCompWeekly.COMPONENT &&
+                liCompQty[vCompIndex].CAL_DATE === liDates[i].CAL_DATE)
+              ) {
+                lsCompWeekly.STRUC_NODE = liCompQty[vCompIndex].STRUC_NODE;
+                lsCompWeekly[columnname + vWeekIndex] = liCompQty[vCompIndex].COMP_QTY;
+                break;
+              } 
           }
         }
         liCompWeekly.push(GenFunctions.parse(lsCompWeekly));
-        
         vWeekIndex = 0;
-        vCompIndex = 0;
         lsCompWeekly.QTYTYPE = "Calculated";
-        for (let k = 0; k < liDates.length; k++) {
-          vWeekIndex = vWeekIndex + 1;
-          // In there is no change in componenet and CAL_DATE matches with the liDates series
-          if (
-            liCompQty[vCompIndex].COMPONENT === lsCompWeekly.COMPONENT &&
-            liCompQty[vCompIndex].CAL_DATE === liDates[k].CAL_DATE
-          ) {
-            lsCompWeekly.STRUC_NODE = liCompQty[vCompIndex].STRUC_NODE;
-            lsCompWeekly[columnname + vWeekIndex] = liCompQty[vCompIndex].CAL_COMP_QTY;
-            vCompIndex = vCompIndex + 1;
-          } else {
-          lsCompWeekly.STRUC_NODE = liCompQty[j].STRUC_NODE;
-            lsCompWeekly[columnname + vWeekIndex] = 0;
+        for (let i = 0; i < liDates.length; i++) {
+            vWeekIndex = vWeekIndex + 1;
+            for( vCompIndex = 0; vCompIndex < liCompQty.length ; vCompIndex++){
+                
+              lsCompWeekly[columnname + vWeekIndex] = 0;
+              if (
+                  (liCompQty[vCompIndex].COMPONENT === lsCompWeekly.COMPONENT &&
+                  liCompQty[vCompIndex].CAL_DATE === liDates[i].CAL_DATE)
+                ) {
+                  lsCompWeekly.STRUC_NODE = liCompQty[vCompIndex].STRUC_NODE;
+                  lsCompWeekly[columnname + vWeekIndex] = liCompQty[vCompIndex].CAL_COMP_QTY;
+                  break;
+                } 
+            }
           }
-        }
         liCompWeekly.push(GenFunctions.parse(lsCompWeekly));
         lsCompWeekly = {};
       }
@@ -354,11 +341,9 @@ module.exports = (srv) => {
 
   srv.on("CREATE", "genProfileOD", _createProfileOD);
 
-  // srv.on("CREATE", "getNodes", _createNodes);
+//   srv.on("CREATE", "genProdAccessNode", _createPrdAccessNode);
 
-  srv.on("CREATE", "genProdAccessNode", _createPrdAccessNode);
-
-  srv.on("CREATE", "genCompStrcNode", _createCompStrcNode);
+//   srv.on("CREATE", "genCompStrcNode", _createCompStrcNode);
   srv.on("genProdAN", async (req) => {
     let { genProdAccessNode } = srv.entities;
     let liresults = [];
@@ -495,8 +480,6 @@ module.exports = (srv) => {
         liresults.push(lsresults);
         try {
           await cds.run(INSERT.into("CP_PVS_NODES").entries(liresults));
-          // responseMessage = " Created successfully ";
-          // createResults.push(responseMessage);
         } catch (e) {
           //DONOTHING
           responseMessage = " Creation failed";
@@ -529,11 +512,7 @@ module.exports = (srv) => {
           lsresults.PARENT_NODE = req.data.PARENT_NODE;
           try {
             await cds.delete("CP_PVS_NODES", lsresults);
-            // responseMessage = " Deletion successfully ";
-            // createResults.push(responseMessage);
           } catch (e) {
-            // responseMessage = " Deletion failed";
-            // createResults.push(responseMessage);
           }
         }
         lsresults = {};
@@ -762,85 +741,6 @@ module.exports = (srv) => {
     console.log("test");
   });
 };
-// Assign component to a Structure node
-async function _createCompStrcNode(req) {
-  let liresults = [];
-  let lsresults = {};
-  let createResults = [];
-  let res;
-  var responseMessage;
-  res = req._.req.res;
-  if (req.data.STRUC_NODE === "D") {
-    lsresults.LOCATION_ID = req.data.LOCATION_ID;
-    lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
-    lsresults.ITEM_NUM = req.data.ITEM_NUM;
-    lsresults.COMPONENT = req.data.COMPONENT;
-    try {
-      await cds.delete("CP_PVS_BOM", lsresults);
-      responseMessage = " Deletion successfully ";
-      createResults.push(responseMessage);
-    } catch (e) {
-      responseMessage = " Deletion failed ";
-      createResults.push(responseMessage);
-      //DONOTHING
-    }
-  } else {
-    lsresults.LOCATION_ID = req.data.LOCATION_ID;
-    lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
-    lsresults.ITEM_NUM = req.data.ITEM_NUM;
-    lsresults.COMPONENT = req.data.COMPONENT;
-    lsresults.STRUC_NODE = req.data.STRUC_NODE;
-    liresults.push(lsresults);
-    lsresults = {};
-    try {
-      await cds.run(INSERT.into("CP_PVS_BOM").entries(liresults));
-      responseMessage = " Created successfully ";
-      createResults.push(responseMessage);
-    } catch (e) {
-      responseMessage = " Creation failed";
-      createResults.push(responseMessage);
-    }
-  }
-  res.send({ value: createResults });
-}
-// Add Product to an Access node
-async function _createPrdAccessNode(req) {
-  let liresults = [];
-  let lsresults = {};
-  let createResults = [];
-  let res;
-  var responseMessage;
-  res = req._.req.res;
-  if (req.data.ACCESS_NODE === "D") {
-    lsresults.LOCATION_ID = req.data.LOCATION_ID;
-    lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
-    try {
-      await cds.delete("CP_PROD_ACCNODE", lsresults);
-      responseMessage = " Deletion successfully ";
-      createResults.push(responseMessage);
-    } catch (e) {
-      responseMessage = " Deletion failed ";
-      createResults.push(responseMessage);
-      //DONOTHING
-    }
-  } else {
-    lsresults.LOCATION_ID = req.data.LOCATION_ID;
-    lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
-    lsresults.ACCESS_NODE = req.data.ACCESS_NODE;
-    liresults.push(lsresults);
-    lsresults = {};
-    try {
-      await cds.run(INSERT.into("CP_PROD_ACCNODE").entries(liresults));
-      responseMessage = " Created successfully ";
-      createResults.push(responseMessage);
-    } catch (e) {
-      responseMessage = " Creation failed";
-      createResults.push(responseMessage);
-    }
-  }
-  res.send({ value: createResults });
-  // lsresults = select.from
-}
 
 // Create or delete Profiles
 async function _createProfiles(req) {
@@ -1125,3 +1025,37 @@ async function _createProfileOD(req) {
         return results;     
     })*/
 //srv.on("")
+
+// await cds.run(
+//     DELETE.from("CP_COMPQTYDETERMINE").where({
+//       xpr: [
+//         { ref: ["LOCATION_ID"] },
+//         "=",
+//         { val: liBomoddemd[j].LOCATION_ID },
+//         "AND",
+//         { ref: ["PRODUCT_ID"] },
+//         "=",
+//         { val: liBomoddemd[j].PRODUCT_ID },
+//         "AND",
+//         { ref: ["VERSION"] },
+//         "=",
+//         { val: liBomoddemd[j].VERSION },
+//         "AND",
+//         { ref: ["SCENARIO"] },
+//         "=",
+//         { val: liBomoddemd[j].SCENARIO },
+//         "AND",
+//         { ref: ["ITEM_NUM"] },
+//         "=",
+//         { val: liBomoddemd[j].ITEM_NUM },
+//         "AND",
+//         { ref: ["COMPONENT"] },
+//         "=",
+//         { val: liBomoddemd[j].COMPONENT },
+//         "AND",
+//         { ref: ["CAL_DATE"] },
+//         "=",
+//         { val: liBomoddemd[j].CAL_DATE },
+//       ],
+//     })
+//   );

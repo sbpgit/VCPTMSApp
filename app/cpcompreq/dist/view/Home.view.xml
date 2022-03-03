@@ -6,15 +6,15 @@
     xmlns:f="sap.ui.layout.form"
     xmlns:html="http://www.w3.org/1999/xhtml" 
     xmlns:t="sap.ui.table">
-    <Page>
+    <Page title="{i18n>pageTitle}" class="boldText" titleAlignment="Center">
     
-		<customHeader>
+		<!-- <customHeader>
 			<Bar>
 				<contentMiddle>
 					<Title text="{i18n>pageTitle}" class="boldText"></Title>
 				</contentMiddle>
 			</Bar>
-		</customHeader>
+		</customHeader> -->
      <f:Form editable="true">
                 <f:layout>
                     <f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" 
@@ -82,55 +82,47 @@
                             </f:FormElement>
                             <f:FormElement>
                                 <Button text="Go" width="30%" press="onGetData" tooltip="Get data based on filters"/>
-                                <Button text="Reset" press="onResetDate" tooltip="Reset Valid To Date"/>
+                                <Button text="Reset" width="60%" press="onResetDate" tooltip="Reset Valid To Date"/>
                             </f:FormElement>
                         </f:formElements>
                         </f:FormContainer>
-                        <f:FormContainer>
+                        <f:FormContainer  visible="false" >
                         <f:formElements>
-                            <f:FormElement>
+                            <f:FormElement visible="false">
                                 <f:label>
                                     <Label text="Component"/>
                                 </f:label>
                                 <f:fields>
-                                <Input id="idcomp" value="" width="225px" placeholder="Component" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                <Input id="idcomp" value="" width="225px" placeholder="Component" visible="false" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                                 </f:fields>
                             </f:FormElement>
-                            <f:FormElement>
+                            <f:FormElement visible="false">
                                 <f:label>
                                     <Label text="Structure Node"/>
                                 </f:label>
                                 <f:fields>
-                                <Input id="idstru" value="" width="225px" placeholder="Structure Node" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                <Input id="idstru" value="" width="225px" placeholder="Structure Node" visible="false" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                                 </f:fields>
+                            </f:FormElement>
+                            <f:FormElement>
+                            <HBox>
+                                <Button text="Go"  press="onGetData" tooltip="Get data based on filters"/>
+                                <Button text="Reset"  press="onResetDate" tooltip="Reset Valid To Date"/>
+                                </HBox>
                             </f:FormElement>
                         </f:formElements>
                     </f:FormContainer>
                 </f:formContainers>
             </f:Form>
-    <!-- <Toolbar height="12%">
-        <VBox>
-            <HBox id="idDates">
-                <Text text="{i18n>validfrom} : " class="boldText"></Text>
-                
-                <DatePicker id="fromDate" width="auto"  value="2022-03-04" displayFormat="yyyy-MM-dd" valueFormat="yyyy-MM-dd" change="handleDateChange"/>
-
-                <Text text="{i18n>validto} : " class="boldText"></Text>
-                <DatePicker id="toDate" width="auto" value="2023-01-03" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="handleDateChange"/>
-
-                <Button text="Go" press="onGetData" tooltip="Get data based on dates"/>
-
-                <Button text="Reset" press="onResetDate" tooltip="Reset Valid To Date"/>
-            </HBox>
-        </VBox>
-	</Toolbar> -->
+    
     <content>
+    <SearchField id="headSearch"  liveChange="onSearchCompReq" placeholder="Component, Structure Node/ Type" width="30%"/>
     <t:Table id="idCompReq" 
     fixedColumnCount="4"
-				selectionMode="Single"
+	selectionMode="Single"
     alternateRowColors="true"
     enableSelectAll="false"
-				visibleRowCount="3">
+	visibleRowCount="15">
                 <t:columns>
 				</t:columns>
         </t:Table>

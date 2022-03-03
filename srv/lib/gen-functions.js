@@ -65,14 +65,22 @@ class GenFunctions {
         return i - 1;
     }   
     static addDays(imDate, imDays) {
+        var vDate,vMonth,vYear;
         const lDate = new Date(imDate);
         const lNextWeekDay = new Date(lDate.getFullYear(), lDate.getMonth(), lDate.getDate() + imDays);
 
-        return lNextWeekDay.toISOString().split('T')[0];
+        vDate = lNextWeekDay.getDate();
+        vMonth = lNextWeekDay.getMonth() + 1;
+        vYear = lNextWeekDay.getFullYear(); 
+        if(vDate < 10){
+            vDate = "0"+vDate;
+        }
+        if(vMonth < 10){
+            vMonth = "0"+vMonth;
+        }
+        return vYear+"-"+vMonth+"-"+vDate;
+      //  return lNextWeekDay.toISOString().split('T')[0];
       
-        // var result = new Date(date);
-        // result.setDate(result.getDate() + days);
-        // return result;
       } 
       static removeDays(imDate, imDays) {
         const lDate = new Date(imDate);
@@ -84,6 +92,29 @@ class GenFunctions {
         // result.setDate(result.getDate() + days);
         // return result;
       } 
+      static getNextSundayCmp(imDate) {
+        var vDate,vMonth,vYear;
+        const lDate = new Date(imDate);
+        let lDay = lDate.getDay();
+        if (lDay !== 0) lDay = 7 - lDay;
+        const lNextSun = new Date(
+          lDate.getFullYear(),
+          lDate.getMonth(),
+          lDate.getDate() + lDay
+        );
+        vDate = lNextSun.getDate();
+        vMonth = lNextSun.getMonth() + 1;
+        vYear = lNextSun.getFullYear(); 
+        if(vDate < 10){
+            vDate = "0"+vDate;
+        }
+        if(vMonth < 10){
+            vMonth = "0"+vMonth;
+        }
+        return vYear+"-"+vMonth+"-"+vDate;
+
+      //  return lNextSun.toISOString().split('T')[0];
+    }
 }
 
 module.exports = GenFunctions;

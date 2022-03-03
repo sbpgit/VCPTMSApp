@@ -289,11 +289,13 @@ sap.ui.define(
         lsDates = {};
         
         lsDates.CAL_DATE = that.getNextSunday(vDateSeries);
+        vDateSeries = lsDates.CAL_DATE;
         liDates.push(lsDates);
         lsDates = {};
         while (vDateSeries <= imToDate) {
           vDateSeries = that.addDays(vDateSeries, 7);
-          lsDates.CAL_DATE = that.getNextSunday(vDateSeries);
+          lsDates.CAL_DATE =  that.getNextSunday(vDateSeries);
+          vDateSeries = lsDates.CAL_DATE;
           liDates.push(lsDates);
           lsDates = {};
         }
@@ -306,6 +308,7 @@ sap.ui.define(
         return lireturn;
       },
       getNextSunday: function (imDate) {
+        var vDate,vMonth,vYear;
         const lDate = new Date(imDate);
         let lDay = lDate.getDay();
         if (lDay !== 0) lDay = 7 - lDay;
@@ -314,18 +317,39 @@ sap.ui.define(
           lDate.getMonth(),
           lDate.getDate() + lDay
         );
+        vDate = lNextSun.getDate();
+        vMonth = lNextSun.getMonth() + 1;
+        vYear = lNextSun.getFullYear(); 
+        if(vDate < 10){
+            vDate = "0"+vDate;
+        }
+        if(vMonth < 10){
+            vMonth = "0"+vMonth;
+        }
+        return vYear+"-"+vMonth+"-"+vDate;
 
-        return lNextSun.toISOString().split("T")[0];
+       // return lNextSun.toISOString().split("T")[0];
       },
       addDays: function (imDate, imDays) {
+          
+        var vDate,vMonth,vYear;
         const lDate = new Date(imDate);
         const lNextWeekDay = new Date(
           lDate.getFullYear(),
           lDate.getMonth(),
           lDate.getDate() + imDays
         );
-
-        return lNextWeekDay.toISOString().split("T")[0];
+        vDate = lNextWeekDay.getDate();
+        vMonth = lNextWeekDay.getMonth() + 1;
+        vYear = lNextWeekDay.getFullYear(); 
+        if(vDate < 10){
+            vDate = "0"+vDate;
+        }
+        if(vMonth < 10){
+            vMonth = "0"+vMonth;
+        }
+        return vYear+"-"+vMonth+"-"+vDate;
+        //return lNextWeekDay.toISOString().split("T")[0];
       },
       removeDays: function (imDate, imDays) {
         const lDate = new Date(imDate);
