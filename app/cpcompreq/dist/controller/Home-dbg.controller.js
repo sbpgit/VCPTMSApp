@@ -258,6 +258,70 @@ sap.ui.define(
           );
         }
       },
+
+
+      onSearchCompReq:function(oEvent){
+        var sRowData = {},
+        iRowData = [],
+        weekIndex;
+      that.oTable = that.byId("idCompReq");
+      that.oGModel = that.getModel("oGModel");
+
+        var query =
+            oEvent.getParameter("value") || oEvent.getParameter("newValue");
+            that.Data = that.rowData;
+            that.searchData = [];
+
+            for(var i=0; i<that.Data.length; i++){
+                if(that.Data[i].COMPONENT.includes(query) || 
+                   that.Data[i].STRUC_NODE.includes(query) || 
+                   that.Data[i].QTYTYPE.includes(query) ){
+                    that.searchData.push(that.Data[i]);
+                }
+            }
+
+            var rowData;
+              var fromDate = new Date(that.byId("fromDate").getDateValue()),
+                toDate = new Date(that.byId("toDate").getDateValue());
+              fromDate = fromDate.toISOString().split("T")[0];
+              toDate = toDate.toISOString().split("T")[0];
+              var liDates = that.generateDateseries(fromDate, toDate);
+
+              for (var i = 0; i < that.searchData.length; i++) {
+                sRowData.ItemNum = that.searchData[i].ITEM_NUM;
+                sRowData.Component = that.searchData[i].COMPONENT;
+                sRowData.StructureNode = that.searchData[i].STRUC_NODE;
+                sRowData.Type = that.searchData[i].QTYTYPE;
+                weekIndex = 1;
+                for (let index = 4; index < liDates.length; index++) {
+                  sRowData[liDates[index].CAL_DATE] =
+                    that.searchData[i]["WEEK" + weekIndex];
+                  weekIndex++;
+                }
+                iRowData.push(sRowData);
+                sRowData = {};
+              }
+              var oModel = new sap.ui.model.json.JSONModel();
+              oModel.setData({
+                rows: iRowData,
+                columns: liDates,
+              });
+              that.oTable.setModel(oModel);
+              that.oTable.bindColumns("/columns", function (sId, oContext) {
+                var columnName = oContext.getObject().CAL_DATE;
+                return new sap.ui.table.Column({
+                    width: "8rem",
+                    label: columnName,
+                    template: columnName,
+                  });  
+            // }
+              });
+
+              that.oTable.bindRows("/rows");
+
+            
+
+      },
       generateDateseries: function (imFromDate, imToDate) {
         var lsDates = {},
           liDates = [];
@@ -289,11 +353,13 @@ sap.ui.define(
         //   lsDates = {};
         //lsDates.CAL_DATE = that.removeDays(that.getNextSunday(vDateSeries), 1);
         lsDates.CAL_DATE = that.getNextSunday(vDateSeries);
+        vDateSeries = lsDates.CAL_DATE;
         liDates.push(lsDates);
         lsDates = {};
         while (vDateSeries <= imToDate) {
           vDateSeries = that.addDays(vDateSeries, 7);
-          lsDates.CAL_DATE = that.getNextSunday(vDateSeries);
+          lsDates.CAL_DATE =  that.getNextSunday(vDateSeries);
+          vDateSeries = lsDates.CAL_DATE;
           liDates.push(lsDates);
           lsDates = {};
         }
@@ -306,6 +372,7 @@ sap.ui.define(
         return lireturn;
       },
       getNextSunday: function (imDate) {
+        var vDate,vMonth,vYear;
         const lDate = new Date(imDate);
         let lDay = lDate.getDay();
         if (lDay !== 0) lDay = 7 - lDay;
@@ -314,18 +381,39 @@ sap.ui.define(
           lDate.getMonth(),
           lDate.getDate() + lDay
         );
+        vDate = lNextSun.getDate();
+        vMonth = lNextSun.getMonth() + 1;
+        vYear = lNextSun.getFullYear(); 
+        if(vDate < 10){
+            vDate = "0"+vDate;
+        }
+        if(vMonth < 10){
+            vMonth = "0"+vMonth;
+        }
+        return vYear+"-"+vMonth+"-"+vDate;
 
-        return lNextSun.toISOString().split("T")[0];
+       // return lNextSun.toISOString().split("T")[0];
       },
       addDays: function (imDate, imDays) {
+          
+        var vDate,vMonth,vYear;
         const lDate = new Date(imDate);
         const lNextWeekDay = new Date(
           lDate.getFullYear(),
           lDate.getMonth(),
           lDate.getDate() + imDays
         );
-
-        return lNextWeekDay.toISOString().split("T")[0];
+        vDate = lNextWeekDay.getDate();
+        vMonth = lNextWeekDay.getMonth() + 1;
+        vYear = lNextWeekDay.getFullYear(); 
+        if(vDate < 10){
+            vDate = "0"+vDate;
+        }
+        if(vMonth < 10){
+            vMonth = "0"+vMonth;
+        }
+        return vYear+"-"+vMonth+"-"+vDate;
+        //return lNextWeekDay.toISOString().split("T")[0];
       },
       removeDays: function (imDate, imDays) {
         const lDate = new Date(imDate);

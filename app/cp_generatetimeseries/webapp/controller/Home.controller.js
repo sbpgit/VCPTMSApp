@@ -378,10 +378,10 @@ sap.ui.define(
                             PRODUCT_ID: Selprod,
                         },
                         success: function (oData) {
-                            MessageToast.show("TimeSeries Generated");
+                            MessageToast.show("Timeseries generated successfully");
                         },
                         error: function (oData, error) {
-                          MessageToast.show("Failed to generate TimeSeries");
+                          MessageToast.show("Failed to generate Timeseries");
                         },
                       });
 
@@ -401,10 +401,10 @@ sap.ui.define(
                         PRODUCT_ID: Selprod,
                     },
                     success: function (oData) {
-                        MessageToast.show("Future TimeSeries Generated");
+                        MessageToast.show("Future Timeseries generated successfully");
                     },
                     error: function (oData, error) {
-                      MessageToast.show("Failed to generate future TimeSeries");
+                      MessageToast.show("Failed to generate future Timeseries");
                     },
                   });
 
@@ -427,7 +427,7 @@ sap.ui.define(
                         SCENARIO : selScen,
                     },
                     success: function (oData) {
-                        MessageToast.show("Generated components requirments");
+                        MessageToast.show("Generated components requirements");
                     },
                     error: function (oData, error) {
                       MessageToast.show("Failed to generate Components Requirments");

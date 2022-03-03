@@ -72,6 +72,37 @@
                         <f:fields>
                             <MultiInput id="odInput" placeholder="{i18n>objdep}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"
                                 tokenUpdate="handleTokenUpdate"/>
+                                
+                            <SegmentedButton selectedKey="OD" class="sapUiSmallMarginBottom">
+                                <items>
+                                    <SegmentedButtonItem text="Object Dep." key="OD"/>
+                                    <SegmentedButtonItem text="Restriction" key="rt" />
+                                </items>
+                            </SegmentedButton>
+                        </f:fields>
+                    </f:FormElement>
+                   <f:FormElement>
+                                <f:label>
+                                    <Label text="Model Version"/>
+                                </f:label>
+                                <f:fields>
+                                <Input id="idmdlver" value="" placeholder=" Model Version" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                </f:fields>
+                    </f:FormElement> 
+                   <f:FormElement>
+                                <f:label>
+                                    <Label text="IBP Version"/>
+                                </f:label>
+                                <f:fields>
+                                <Input id="idver" value="" placeholder="Version" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                </f:fields>
+                    </f:FormElement>                    
+                    <f:FormElement>
+                        <f:label>
+                            <Label text="IBP Scenario"/>
+                        </f:label>
+                        <f:fields>
+                        <Input id="idscen" value="" placeholder="Scenario" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                         </f:fields>
                     </f:FormElement>
                     <f:FormElement>
@@ -79,7 +110,6 @@
                             <Label text="{i18n>predpf}" />
                         </f:label>
                         <f:fields>
-                            <!-- <Input id="pmInput" placeholder="{i18n>predpf}"/> -->
                             <MultiInput id="pmInput" placeholder="{i18n>predpf}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"
                                 tokenUpdate="handleTokenUpdate"/>
                         </f:fields>
@@ -90,11 +120,13 @@
                         </f:label>
                         <f:fields>
                             <CheckBox id="idCheck" select="onCheck"/>
+                            
+				        <Button type="Emphasized" text="{i18n>Run}" press="onRun2" width="100%"/>
                         </f:fields>
                     </f:FormElement>
                 </f:formElements>
             </f:FormContainer>
-            <f:FormContainer>
+            <!-- <f:FormContainer>
                 <f:formElements>
                     <f:FormElement>
                         <f:label>
@@ -136,7 +168,7 @@
                         </f:fields>
                     </f:FormElement>
                 </f:formElements> 
-             </f:FormContainer>
+             </f:FormContainer> -->
 
         </f:formContainers>
 
