@@ -641,9 +641,9 @@ entity TS_PREDICTIONS{
     key OBJ_TYPE         : String(2) @title : 'Object Type';
     key OBJ_DEP          : String(30)@title : 'Object Dependency';
     key OBJ_COUNTER      : Integer   @title : 'Object Counter';
-    key MODEL_TYPE       : String(10) @title : 'PAL Model Type';
+    MODEL_TYPE       : String(10) @title : 'PAL Model Type';
     key MODEL_VERSION    : String(20) @title : 'OBJ Model Version'; 
-    key MODEL_PROFILE    : String(50) @title : 'PAL Model Profile';
+    MODEL_PROFILE    : String(50) @title : 'PAL Model Profile';
     key VERSION          : String(10)    @title : 'Version';
     key SCENARIO         : String(32)    @title : 'Scenario';
     PREDICTED            : Double    @title : 'Predicted';
@@ -675,9 +675,9 @@ entity TS_OBJDEP_CHAR_IMPACT_F {
     key OBJ_DEP     : String(30)@title : 'Object Dependency';
     key OBJ_COUNTER : Integer   @title : 'Object Counter';
     key ROW_ID      : Integer   @title : ' Attribute Index';
-    key MODEL_TYPE       : String(10) @title : 'PAL Model Type';
+    MODEL_TYPE       : String(10) @title : 'PAL Model Type';
     key MODEL_VERSION    : String(20) @title : 'OBJ Model Version'; 
-    key MODEL_PROFILE    : String(50) @title : 'PAL Model Profile';
+    MODEL_PROFILE    : String(50) @title : 'PAL Model Profile';
     key VERSION     : String(10)    @title : 'Version';
     key SCENARIO    : String(32)    @title : 'Scenario';
     CHAR_COUNT      : Double   @title : 'Character Count';
