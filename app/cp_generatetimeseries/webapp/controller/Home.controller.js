@@ -352,10 +352,27 @@ sap.ui.define(
                   
                 }  else if (sId.includes("Ver")) {
                     this.oVer = that.byId("idver");
+                    that.oScen = that.byId("idscen");
                     aSelectedItems = oEvent.getParameter("selectedItems");
                     that.oVer.setValue(aSelectedItems[0].getTitle());
+                    that.oScen.setValue("");
                     that.byId("buttonCompReq").setEnabled(false);
-                    // that.oGModel.setProperty("/SelectedVer", aSelectedItems[0].getTitle());
+
+                    this.getModel("BModel").read("/getIbpVerScn", {
+                        filters: [
+                          new Filter("LOCATION_ID",FilterOperator.EQ, that.byId("idloComp").getValue()),
+                          new Filter("PRODUCT_ID",FilterOperator.EQ, that.byId("idProComp").getValue()),
+                          new Filter("VERSION",FilterOperator.EQ, aSelectedItems[0].getTitle()),
+                        ],
+                        success: function (oData) {
+        
+                          that.scenModel.setData(oData);
+                          that.oScenList.setModel(that.scenModel);
+                        },
+                        error: function (oData, error) {
+                          MessageToast.show("error");
+                        },
+                      });
                   
                 } else if (sId.includes("scen")) {
                   this.oScen = that.byId("idscen");
