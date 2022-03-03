@@ -73,7 +73,8 @@
                             <MultiInput id="odInput" placeholder="{i18n>objdep}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"
                                 tokenUpdate="handleTokenUpdate"/>
                                 
-                            <SegmentedButton selectedKey="OD" class="sapUiSmallMarginBottom">
+                            <SegmentedButton id="idOdRes" selectedKey="OD" class="sapUiSmallMarginBottom"
+                            selectionChange="onSelectionChange">
                                 <items>
                                     <SegmentedButtonItem text="Object Dep." key="OD"/>
                                     <SegmentedButtonItem text="Restriction" key="rt" />
@@ -86,25 +87,11 @@
                                     <Label text="Model Version"/>
                                 </f:label>
                                 <f:fields>
-                                <Input id="idmdlver" value="" placeholder=" Model Version" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
-                                </f:fields>
-                    </f:FormElement> 
-                   <f:FormElement>
-                                <f:label>
-                                    <Label text="IBP Version"/>
-                                </f:label>
-                                <f:fields>
-                                <Input id="idver" value="" placeholder="Version" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
-                                </f:fields>
+                               <ComboBox id="idmdlver" selectedKey="act" selectionChange="onSelectionChange">
+                                        <core:Item key="act" text="Active"/>
+                                        <core:Item key="sim" text="Simulation"/>
+                                </ComboBox> </f:fields>
                     </f:FormElement>                    
-                    <f:FormElement>
-                        <f:label>
-                            <Label text="IBP Scenario"/>
-                        </f:label>
-                        <f:fields>
-                        <Input id="idscen" value="" placeholder="Scenario" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
-                        </f:fields>
-                    </f:FormElement>
                     <f:FormElement>
                         <f:label>
                             <Label text="{i18n>predpf}" />
@@ -199,6 +186,12 @@
                 <Text text="{i18n>profile}"/>
             </Column>
             <Column>
+                <Text text="{i18n>override}"/>
+            </Column>
+            <Column>
+                <Text text="{i18n>modelVersion}"/>
+            </Column>
+            <Column>
                 <Text text="{i18n>dim}"/>
             </Column>
         </columns>
@@ -208,7 +201,9 @@
                     <Text text="{Location}"/>                    
                     <Text text="{Product}"/>                    
                     <Text text="{GroupID}"/>                    
-                    <Text text="{profile}"/>
+                    <Text text="{profile}"/>                   
+                    <Text text="{override}"/>                
+                    <Text text="{modelVersion}"/>
                     <ObjectStatus
                     class="sapUiSmallMarginBottom"
                     text="{dimensions}"

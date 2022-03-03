@@ -213,7 +213,7 @@ module.exports = (srv) => {
    
         const liCompQty = await cds.run(
             `
-            SELECT * FROM "CP_COMPQTYDETERMINE"
+            SELECT * FROM "V_COMREQ"
             WHERE "LOCATION_ID" = '` +
               req.data.LOCATION_ID +
               `'
@@ -247,7 +247,7 @@ module.exports = (srv) => {
                           "ITEM_NUM",
                           "COMPONENT",
                           "STRUC_NODE"
-          FROM "CP_COMPQTYDETERMINE"
+          FROM "V_COMREQ"
           WHERE "LOCATION_ID" = '` +
             req.data.LOCATION_ID +
             `' AND "PRODUCT_ID" = '` +
@@ -307,7 +307,7 @@ module.exports = (srv) => {
                 liCompQty[vCompIndex].CAL_DATE === liDates[i].CAL_DATE)
               ) {
                 lsCompWeekly.STRUC_NODE = liCompQty[vCompIndex].STRUC_NODE;
-                lsCompWeekly[columnname + vWeekIndex] = liCompQty[vCompIndex].COMP_QTY;
+                lsCompWeekly[columnname + vWeekIndex] = liCompQty[vCompIndex].ORD_QTY;
                 break;
               } 
           }

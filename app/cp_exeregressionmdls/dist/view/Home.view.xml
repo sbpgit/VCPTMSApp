@@ -72,14 +72,31 @@
                         <f:fields>
                             <MultiInput id="odInput" placeholder="{i18n>objdep}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"
                                 tokenUpdate="handleTokenUpdate"/>
+                                
+                            <SegmentedButton id="idOdRes" selectedKey="OD" class="sapUiSmallMarginBottom"
+                            selectionChange="onSelectionChange">
+                                <items>
+                                    <SegmentedButtonItem text="Object Dep." key="OD"/>
+                                    <SegmentedButtonItem text="Restriction" key="rt" />
+                                </items>
+                            </SegmentedButton>
                         </f:fields>
                     </f:FormElement>
+                   <f:FormElement>
+                                <f:label>
+                                    <Label text="Model Version"/>
+                                </f:label>
+                                <f:fields>
+                               <ComboBox id="idmdlver" selectedKey="act" selectionChange="onSelectionChange">
+                                        <core:Item key="act" text="Active"/>
+                                        <core:Item key="sim" text="Simulation"/>
+                                </ComboBox> </f:fields>
+                    </f:FormElement>                    
                     <f:FormElement>
                         <f:label>
                             <Label text="{i18n>predpf}" />
                         </f:label>
                         <f:fields>
-                            <!-- <Input id="pmInput" placeholder="{i18n>predpf}"/> -->
                             <MultiInput id="pmInput" placeholder="{i18n>predpf}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"
                                 tokenUpdate="handleTokenUpdate"/>
                         </f:fields>
@@ -90,11 +107,13 @@
                         </f:label>
                         <f:fields>
                             <CheckBox id="idCheck" select="onCheck"/>
+                            
+				        <Button type="Emphasized" text="{i18n>Run}" press="onRun2" width="100%"/>
                         </f:fields>
                     </f:FormElement>
                 </f:formElements>
             </f:FormContainer>
-            <f:FormContainer>
+            <!-- <f:FormContainer>
                 <f:formElements>
                     <f:FormElement>
                         <f:label>
@@ -136,7 +155,7 @@
                         </f:fields>
                     </f:FormElement>
                 </f:formElements> 
-             </f:FormContainer>
+             </f:FormContainer> -->
 
         </f:formContainers>
 
@@ -167,6 +186,12 @@
                 <Text text="{i18n>profile}"/>
             </Column>
             <Column>
+                <Text text="{i18n>override}"/>
+            </Column>
+            <Column>
+                <Text text="{i18n>modelVersion}"/>
+            </Column>
+            <Column>
                 <Text text="{i18n>dim}"/>
             </Column>
         </columns>
@@ -176,7 +201,9 @@
                     <Text text="{Location}"/>                    
                     <Text text="{Product}"/>                    
                     <Text text="{GroupID}"/>                    
-                    <Text text="{profile}"/>
+                    <Text text="{profile}"/>                   
+                    <Text text="{override}"/>                
+                    <Text text="{modelVersion}"/>
                     <ObjectStatus
                     class="sapUiSmallMarginBottom"
                     text="{dimensions}"
