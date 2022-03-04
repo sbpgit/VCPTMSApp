@@ -639,8 +639,10 @@ sap.ui.define(
             var selectedButton = that.byId("idType").getSelectedKey();
 
             if(selectedButton === "RT"){
+                that.oObjDep.removeAllTokens();
                 that.byId("odInput").setPlaceholder("Restriction");
                 that.byId("odInput").setShowValueHelp(false);
+                
             } else{
                 that.byId("odInput").setPlaceholder("Object Dependency");
                 that.byId("odInput").setShowValueHelp(true);

@@ -198,6 +198,29 @@ sap.ui.define(
 
           var selRow = this.byId("profList").getSelectedItems()[0].getBindingContext().getProperty();
 
+        //   sap.ui.core.BusyIndicator.show();
+        //   that.getModel("BModel").callFunction("/createProfilePara", {
+        //     method: "GET",
+        //     urlParameters: {
+        //         PROFILE: selRow.PROFILE,
+        //         METHOD: selRow.METHOD,
+        //         PARA_NAME: "",
+        //         PARA_DESC: "",
+        //         INTVAL: null,
+        //         DOUBLEVAL: null,
+        //         STRVAL: null,
+        //     },
+        //     success: function (oData) {
+        //       sap.ui.core.BusyIndicator.hide();
+        //       sap.m.MessageToast.show("Profile unassigned successfully");
+        //       that.onGetData();
+        //     },
+        //     error: function (error) {
+        //       sap.m.MessageToast.show("Error while unassigning Profiles");
+        //       sap.ui.core.BusyIndicator.hide();
+        //     },
+        //   });
+
           jsonProfilePara = {
               PROFILE: selRow.PROFILE,
               METHOD: selRow.METHOD,
