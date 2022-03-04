@@ -1,8 +1,8 @@
 
 //using { sbp.pal as pal } from '../db/pal-schema';
 using { cp as pal } from '../db/pal-schema';
- service PalService @(requires: 'authenticated-user'){
-//service PalService{
+// service PalService @(requires: 'authenticated-user'){
+service PalService{
 
     entity hgbtRegressionsV1 as projection on pal.PalHgbtRegressionsV1;
     entity hgbtByGroup as projection on pal.PalHgbtByGroup;
