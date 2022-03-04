@@ -162,21 +162,20 @@ sap.ui.define(
             that.oProdList.getBinding("items").filter([]);
           }
         } else if (sId.includes("comp")) {
-            that._oCore
-              .byId(this._valueHelpDialogComp.getId() + "-searchField")
-              .setValue("");
-            if (that.oCompList.getBinding("items")) {
-              that.oCompList.getBinding("items").filter([]);
-            }
-          } else if (sId.includes("press")) {
-            that._oCore
-              .byId(this._valueHelpDialogObjDep.getId() + "-searchField")
-              .setValue("");
-            if (that.oObjDepList.getBinding("items")) {
-              that.oObjDepList.getBinding("items").filter([]);
-            }
+          that._oCore
+            .byId(this._valueHelpDialogComp.getId() + "-searchField")
+            .setValue("");
+          if (that.oCompList.getBinding("items")) {
+            that.oCompList.getBinding("items").filter([]);
           }
-        else if (sId.includes("prod")) {
+        } else if (sId.includes("press")) {
+          that._oCore
+            .byId(this._valueHelpDialogObjDep.getId() + "-searchField")
+            .setValue("");
+          if (that.oObjDepList.getBinding("items")) {
+            that.oObjDepList.getBinding("items").filter([]);
+          }
+        } else if (sId.includes("prod")) {
           that._oCore
             .byId(this._valueHelpDialogObjDep.getId() + "-searchField")
             .setValue("");
@@ -449,7 +448,7 @@ sap.ui.define(
           that.byId("idloc").getValue() &&
           that.byId("prodInput").getTokens().length !== 0 //&&
           //that.byId("compInput").getTokens().length !== 0 &&
-        //  that.byId("objDepInput").getTokens().length !== 0
+          //  that.byId("objDepInput").getTokens().length !== 0
         ) {
           var aSelectedItem = that.oProdList.getSelectedItems();
           var aSelectedComp = that.oCompList.getSelectedItems();
@@ -503,7 +502,7 @@ sap.ui.define(
             },
           });
         } else {
-          MessageToast.show("Select all filter to get data");
+          MessageToast.show("Please select Location and Product");
         }
       },
 
@@ -593,7 +592,11 @@ sap.ui.define(
             PROFILEOD: [],
           },
           jsonProfileOD,
-          sProfile = sap.ui.getCore().byId("idListTab").getSelectedItems()[0].getTitle();
+          sProfile = sap.ui
+            .getCore()
+            .byId("idListTab")
+            .getSelectedItems()[0]
+            .getTitle();
         var selected;
         for (var i = 0; i < sItem.length; i++) {
           selected = sItem[i].getBindingContext().getProperty();
@@ -607,33 +610,58 @@ sap.ui.define(
           };
           aData.PROFILEOD.push(jsonProfileOD);
           jsonProfileOD = {};
+
+          sap.ui.core.BusyIndicator.show();
+          that.getModel("BModel").callFunction("/asssignProfilesOD", {
+            method: "GET",
+            urlParameters: {
+              FLAG: "I",
+              LOCATION_ID: selected.LOCATION_ID,
+              PRODUCT_ID: selected.PRODUCT_ID,
+              COMPONENT: selected.COMPONENT,
+              OBJ_DEP: selected.OBJ_DEP,
+              STRUC_NODE: selected.STRUC_NODE,
+              PROFILE: sProfile,
+              //  PROFILEOD: aData.PROFILEOD,
+            },
+            success: function (oData) {
+              sap.ui.core.BusyIndicator.hide();
+              sap.m.MessageToast.show("Profile assigned successfully");
+              that.handleProfileClose();
+              that.onGetData();
+            },
+            error: function (error) {
+              sap.m.MessageToast.show("Error in assigning Profiles");
+              sap.ui.core.BusyIndicator.hide();
+              that.handleProfileClose();
+            },
+          });
         }
+        // var uri = "v2/catalog/genProfileOD";
 
-        var uri = "v2/catalog/genProfileOD";
-
-        $.ajax({
-          url: uri,
-          type: "POST",
-          contentType: "application/json",
-          data: JSON.stringify({
-            FLAG: "I",
-            PROFILEOD: aData.PROFILEOD,
-          }),
-          dataType: "json",
-          async: false,
-          timeout: 0,
-          error: function (data) {
-            sap.m.MessageToast.show("Error in assigning Profiles");
-            sap.ui.core.BusyIndicator.hide();
-            that.handleProfileClose();
-          },
-          success: function (data) {
-            sap.ui.core.BusyIndicator.hide();
-            sap.m.MessageToast.show("Profile assigned successfully");
-            that.handleProfileClose();
-            that.onGetData();
-          },
-        });
+        // $.ajax({
+        //   url: uri,
+        //   type: "POST",
+        //   contentType: "application/json",
+        //   data: JSON.stringify({
+        //     FLAG: "I",
+        //     PROFILEOD: aData.PROFILEOD,
+        //   }),
+        //   dataType: "json",
+        //   async: false,
+        //   timeout: 0,
+        //   error: function (data) {
+        //     sap.m.MessageToast.show("Error in assigning Profiles");
+        //     sap.ui.core.BusyIndicator.hide();
+        //     that.handleProfileClose();
+        //   },
+        //   success: function (data) {
+        //     sap.ui.core.BusyIndicator.hide();
+        //     sap.m.MessageToast.show("Profile assigned successfully");
+        //     that.handleProfileClose();
+        //     that.onGetData();
+        //   },
+        // });
       },
 
       onUnAssign: function () {
@@ -654,31 +682,53 @@ sap.ui.define(
           };
           aData.PROFILEOD.push(jsonProfileOD);
           jsonProfileOD = {};
+
+          sap.ui.core.BusyIndicator.show();
+          that.getModel("BModel").callFunction("/asssignProfilesOD", {
+            method: "GET",
+            urlParameters: {
+              FLAG: "D",
+              LOCATION_ID: selected.LOCATION_ID,
+              PRODUCT_ID: selected.PRODUCT_ID,
+              COMPONENT: selected.COMPONENT,
+              OBJ_DEP: selected.OBJ_DEP,
+              STRUC_NODE: "",
+              PROFILE: selected.PROFILE,
+            },
+            success: function (oData) {
+              sap.ui.core.BusyIndicator.hide();
+              sap.m.MessageToast.show("Profile unassigned successfully");
+              that.onGetData();
+            },
+            error: function (error) {
+              sap.m.MessageToast.show("Error while unassigning Profiles");
+              sap.ui.core.BusyIndicator.hide();
+            },
+          });
         }
+        // var uri = "v2/catalog/genProfileOD";
 
-        var uri = "v2/catalog/genProfileOD";
-
-        $.ajax({
-          url: uri,
-          type: "POST",
-          contentType: "application/json",
-          data: JSON.stringify({
-            FLAG: "D",
-            PROFILEOD: aData.PROFILEOD,
-          }),
-          dataType: "json",
-          async: false,
-          timeout: 0,
-          error: function (data) {
-            sap.m.MessageToast.show("Error in unassigning Profiles");
-            sap.ui.core.BusyIndicator.hide();
-          },
-          success: function (data) {
-            sap.ui.core.BusyIndicator.hide();
-            sap.m.MessageToast.show("Profile unassigned successfully");
-            that.onGetData();
-          },
-        });
+        // $.ajax({
+        //   url: uri,
+        //   type: "POST",
+        //   contentType: "application/json",
+        //   data: JSON.stringify({
+        //     FLAG: "D",
+        //     PROFILEOD: aData.PROFILEOD,
+        //   }),
+        //   dataType: "json",
+        //   async: false,
+        //   timeout: 0,
+        //   error: function (data) {
+        //     sap.m.MessageToast.show("Error in unassigning Profiles");
+        //     sap.ui.core.BusyIndicator.hide();
+        //   },
+        //   success: function (data) {
+        //     sap.ui.core.BusyIndicator.hide();
+        //     sap.m.MessageToast.show("Profile unassigned successfully");
+        //     that.onGetData();
+        //   },
+        // });
       },
     });
   }
