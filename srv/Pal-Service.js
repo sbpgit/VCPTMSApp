@@ -762,6 +762,8 @@ async function _generatePredictions(req) {
                      ' AND "GroupID" =' + "'" +   vcRulesListReq[index].GroupID + "'" +
                      ' AND "Type" =' + "'" +   vcRulesListReq[index].Type + "'" +
                      ' AND "Product" =' + "'" +   vcRulesListReq[index].Product + "'" + 
+                     ' AND "VERSION" =' + "'" +   vcRulesListReq[index].version + "'" +
+                     ' AND "SCENARIO" =' + "'" +   vcRulesListReq[index].scenario + "'" +
                      ' GROUP BY "Location", "Product", "GroupID", "Type", "VERSION", "SCENARIO"';
             console.log('sqlStr: ', sqlStr);            
             stmt = conn.prepare(sqlStr);

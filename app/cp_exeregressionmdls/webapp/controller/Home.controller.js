@@ -180,11 +180,20 @@ sap.ui.define(
                   vcRulesList: [],
                 },
                 vRuleslist;
+                
+            var oMdlVer =   that.byId("idmdlver").getSelectedKey(),
+            vMdlVer;
             aItems = this.oODList.getSelectedItems();
             prodItems = this.oProdList.getSelectedItems(),
             predProfile= that.oPredProfile.getTokens()[0].getText(),
             selected = that.byId("idCheck").getSelected();
-  
+            if(oMdlVer === "act"){
+                vMdlVer = "Active";
+            }
+            else{
+                vMdlVer = "Simulation";
+            }
+            
             
             if (this.oObjDep.getTokens().length > 0 && this.oPredProfile.getTokens().length > 0 ){
   
@@ -195,10 +204,12 @@ sap.ui.define(
                     vRuleslist;
                   vRuleslist = {
                     profile: predProfile,
-                    override: true,
+                    override: selected,
                     Location: aItems[1].getInfo(),
                     Product: "All",
                     GroupID: "All",
+                    Type : "OD",
+                    modelVersion : vMdlVer
                   };
                   oEntry.vcRulesList.push(vRuleslist);
   
@@ -241,6 +252,8 @@ sap.ui.define(
                   Location: aItems[i].getInfo(),
                   Product: aItems[i].getDescription(),
                   GroupID: aItems[i].getTitle(),
+                  Type : "OD",
+                  modelVersion : vMdlVer
                 };
                 oEntry.vcRulesList.push(vRuleslist);
   
@@ -281,164 +294,7 @@ sap.ui.define(
               MessageToast.show(that.i18n.getText("errInput"));
             }
           },
-          // onRun2: function () {
-          //   this.oModel = this.getModel("PModel");
-          //   var aItems,
-          //     i,
-          //     regData = [],
-          //     vFlag;
-          //   aItems = this.oODList.getSelectedItems();
-  
-          //   that.byId("rmdlList").setModel(this.otabModel);
-          //   if (
-          //     this.oObjDep.getTokens().length > 0 &&
-          //     this.oPredProfile.getTokens().length > 0
-          //   ) {
-          //     // var vToken = this.getToken();
-          //     for (i = 0; i < aItems.length; i++) {
-          //       var oEntry = {
-          //           vcRulesList: [],
-          //         },
-          //         vRuleslist;
-          //       vRuleslist = {
-          //         Location: aItems[i].getInfo(),
-          //         Product: aItems[i].getDescription(),
-          //         GroupID: aItems[i].getTitle(),
-          //       };
-          //       oEntry.vcRulesList.push(vRuleslist);
-          //       var uri = "/v2/pal/generateRegModels";
-          //       $.ajax({
-          //         url: uri,
-          //         type: "post",
-          //         contentType: "application/json",
-          //         data: JSON.stringify({
-          //           vcRulesList: oEntry.vcRulesList,
-          //         }),
-          //         // headers: {
-          //         //     "X-CSRF-Token": vToken
-          //         // },
-          //         dataType: "json",
-          //         async: false,
-          //         timeout: 0,
-          //         error: function (data) {
-          //           sap.m.MessageToast.show(that.i18n.getText("genRegErr"));
-          //         },
-          //         success: function (data) {
-          //           sap.m.MessageToast.show(that.i18n.getText("genRegSucc"));
-          //           regData.push(data.d.values[0].vcRulesList[0]);
-  
-          //           that.otabModel.setData({
-          //             results: regData,
-          //           });
-          //           that.oPanel.setProperty("visible", true);
-          //           vFlag = "X";
-          //         },
-          //       });
-          //     }
-          //     if (vFlag === "X") {
-          //       that.resetInputs();
-          //     }
-          //   } else {
-          //     MessageToast.show(that.i18n.getText("errInput"));
-          //   }
-  
-          //   // that.otabModel.setData({
-          //   //     regression: regData});
-          //   //     that.oTable.setModel(that.otabModel);
-          //   // oModel.read("/generateRegModels",{
-          //   //     filters: oEntry,
-          //   //     success: function (oData) {
-          //   //         MessageToast.show("success");
-          //   // 	},
-          //   // 	error: function (oError) {
-          //   // 		MessageToast.show("error");
-          //   // 	}
-          //   // }
-          //   // );
-          //   //oModel.setUseBatch(true);
-          //   // oModel.createEntry("/generateRegModels", {
-          //   //     properties: oEntry
-          //   // });
-          //   // oModel.submitChanges({
-          //   // 	success: function (oData) {
-          //   // 		// MessageToast.show(that.i18n.getText("saveSessTabsSuc"));
-          //   // 	},
-          //   // 	error: function (oError) {
-          //   // 		MessageToast.show("error");
-          //   // 	}
-          //   // });
-          // },
-          onRun: function () {
-            this.oModel = this.getModel("PModel");
-            var oEntry = [];
-            var vVcRulesList = {
-              vcRulesList: [],
-            };
-            var vruleslist = {
-              Location: "FR10",
-              Product: "KM_M219VBVS_BVS",
-              GroupID: "M219VV00105NN_1",
-            };
-            vVcRulesList.vcRulesList.push(vruleslist);
-            /******************          */
-            var uri = "/v2/pal/generateRegModels";
-            $.ajax({
-              url: uri,
-              type: "post",
-              contentType: "application/json",
-              data: JSON.stringify({
-                vcRulesList: vVcRulesList.vcRulesList,
-              }),
-              dataType: "json",
-              async: false,
-              timeout: 0,
-              error: function (data) {
-                sap.m.MessageToast.show(JSON.stringify(data));
-              },
-              success: function (data) {
-                sap.m.MessageToast.show("Generated Regression Models");
-              },
-            });
-            /************************** */
-            /*this.oModel.create("/generateRegModels", vVcRulesList, {
-              success: function (oData) {
-                MessageToast.show("Generated regression model");              
-              },
-              error: function (oError) {
-                MessageToast.show("error");
-              },
-            });*/
-            //   this.oModel.create("/generatePredictions", vVcRulesList, {
-            //     success: function (oData) {
-            //       MessageToast.show("success");
-            //     },
-            //     error: function (oError) {
-            //       MessageToast.show("error");
-            //     },
-            //   });
-            // oModel.read("/generateRegModels",{
-            //     filters: oEntry,
-            //     success: function (oData) {
-            //         MessageToast.show("success");
-            // 	},
-            // 	error: function (oError) {
-            // 		MessageToast.show("error");
-            // 	}
-            // }
-            // );
-            //oModel.setUseBatch(true);
-            // oModel.createEntry("/generateRegModels", {
-            //     properties: oEntry
-            // });
-            // oModel.submitChanges({
-            // 	success: function (oData) {
-            // 		// MessageToast.show(that.i18n.getText("saveSessTabsSuc"));
-            // 	},
-            // 	error: function (oError) {
-            // 		MessageToast.show("error");
-            // 	}
-            // });
-          },
+        
           handleValueHelp: function (oEvent) {
             var sId = oEvent.getParameter("id");
             if (sId.includes("loc")) {
@@ -484,45 +340,12 @@ sap.ui.define(
                             }
                             that.odModel.setData(oData);
                             that.oODList.setModel(that.odModel);
-  
-              //   if (this.oODList.getBinding("items")) {
-              //     var sItems = that.oProdList.getSelectedItems();
-              //     that.objDepData = [];
-  
-              //       if(this.oProdList.getSelectedItem().getTitle() === "All"){
-  
-              //             for(var j=0; j<that.objDep.length; j++){
-              //                 if(that.objDep[j].LOCATION_ID === that.oLocList.getSelectedItem().getTitle()){
-              //                     that.objDepData.push(that.objDep[j]);
-              //                 }
-  
-              //             }                
-              //         } else {
-              //             for(var i=0; i<sItems.length; i++){
-              //                 for(var j=0; j<that.objDep.length; j++){
-              //                     if(that.objDep[j].LOCATION_ID === that.oLocList.getSelectedItem().getTitle() && 
-              //                     that.objDep[j].PRODUCT_ID === sItems[i].getTitle()){
-              //                         that.objDepData.push(that.objDep[j]);
-              //                     }
-              //                 }
-              //             }
-              //         }   
-  
-  
-              //         if(that.objDepData.length > 1){
-              //             that.objDepData.unshift({
-              //                 OBJ_DEP: "All",
-              //                 LOCATION_ID:"All",
-              //                 PRODUCT_ID:"All"
-              //             });
-              //         }
-              //     that.odModel.setData({ results: that.objDepData });
-              //     that.oODList.setModel(that.odModel);
-              //   }
-              if(that.oProdList.getSelectedItems()[0].getTitle() === "All"){
+              if(aSelectedItem.length > 0){
+                  if(that.oProdList.getSelectedItems()[0].getTitle() === "All"){
     
                       that._valueHelpDialogOD.getAggregation("_dialog").getContent()[1].selectAll();
                   }
+                }
                   that._valueHelpDialogOD.open();
                   
                 },
