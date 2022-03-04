@@ -7,7 +7,7 @@
     <Page >
 		<customHeader>
 			<Toolbar >
-				<Title id="profTitle" text="{i18n>profTitle}"  ></Title>
+				<Title id="profTitle" text="{i18n>profTitle}" class="boldText"  ></Title>
 				<ToolbarSpacer/>
                 <Button id="idAdd" text="Create" icon="sap-icon://add" press="onCreate" tooltip = "Create"/>
                 <Button id="idCopy" text="Copy" icon="sap-icon://copy" press="onCreate" tooltip = "Copy"/>

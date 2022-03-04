@@ -5,7 +5,7 @@
     xmlns:html="http://www.w3.org/1999/xhtml">
     <Page id="page" showHeader="false">
         <content>
-        <Panel id="idBomPanel" expandable="true" headerText="BOM Components" width="auto" class="sapUiResponsiveMargin">
+        <Panel id="idBomPanel" expandable="true" headerText="BOM Components" width="auto" class="boldText">
 		<content>
             <Toolbar height="8%">
                 <ToolbarSpacer/>
@@ -54,7 +54,7 @@
                         </Table>
         </content>
 	</Panel>
-    <Panel id="idCharPanel" expandable="true" headerText="Object Dependency Characteristics" width="auto" class="sapUiResponsiveMargin">
+    <Panel id="idCharPanel" expandable="true" headerText="Object Dependency Characteristics" width="auto" class="boldText">
 		<content>
         <Table id="idBomOnNextPanel" items="{path: '/BOMPanelresults'}" >
                             <columns>

@@ -1,1 +1,21 @@
 /* Enter your custom styles here */
+
+div#container-cp\.odp\.cpodprofiles---Home--page-title {
+    font-weight: bold;
+}
+
+h2#LocSlctList-dialog-title {
+    font-weight: bold;
+}
+h2#prodSlctList-dialog-title {
+    font-weight: bold;
+}
+h2#CompSlctList-dialog-title {
+    font-weight: bold;
+}
+h2#ObjDepSlctList-dialog-title {
+    font-weight: bold;
+}
+h2#idList-title {
+    font-weight: bold;
+}

@@ -78,6 +78,11 @@ sap.ui.define(
                 that = this;;
                 this.oLoc = this.byId("locInput");
                 this.oProd = this.byId("prodInput");
+
+                that._valueHelpDialogProd.setTitleAlignment("Center");
+                that._valueHelpDialogLoc.setTitleAlignment("Center");
+                that._valueHelpDialogVer.setTitleAlignment("Center");
+                that._valueHelpDialogScen.setTitleAlignment("Center");
         
                 this.oProdList = this._oCore.byId(
                   this._valueHelpDialogProd.getId() + "-list"
@@ -339,9 +344,6 @@ sap.ui.define(
                             success: function (oData) {
                               that.verModel.setData(oData);
                               that.oVerList.setModel(that.verModel);
-            
-                              that.scenModel.setData(oData);
-                              that.oScenList.setModel(that.scenModel);
                             },
                             error: function (oData, error) {
                               MessageToast.show("error");

@@ -49,6 +49,7 @@ sap.ui.define(
             new Filter("SALESDOC_ITEM", FilterOperator.EQ, Item.SALESDOC_ITEM),
           ],
           success: function (oData) {
+            sap.ui.core.BusyIndicator.hide();
             var Data = [];
                 for(var i=0; i<oData.results.length; i++ ){
                     if(oData.results[i].CHAR_NAME !== null || oData.results[i].CHAR_VALUE !== null ){
@@ -71,7 +72,7 @@ sap.ui.define(
             that.oGModel.setProperty("/sCustGrp", oData.results[0].CUSTOMER_GROUP);
             that.oGModel.setProperty("/sNetValue", oData.results[0].NET_VALUE);
 
-            sap.ui.core.BusyIndicator.hide();
+            
           },
           error: function (oRes) {
             MessageToast.show("error");

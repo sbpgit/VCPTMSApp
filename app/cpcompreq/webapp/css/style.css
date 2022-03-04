@@ -13,3 +13,22 @@ button#__button1 {
     font-weight: bold !important;
     text-align: center
 }
+
+div#__page0-title {
+    font-weight: bold;
+}
+
+h2#LocSlctList-dialog-title {
+    font-weight: bold;
+}
+
+h2#prodSlctList-dialog-title {
+    font-weight: bold;
+}
+h2#VerSlctList-dialog-title {
+    font-weight: bold;
+}
+
+h2#scenSlctList-dialog-title {
+    font-weight: bold;
+}
