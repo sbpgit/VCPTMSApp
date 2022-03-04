@@ -95,6 +95,13 @@ sap.ui.define(
         this.oComp = this.byId("idcomp");
         this.oStru = this.byId("idstru");
 
+        that._valueHelpDialogProd.setTitleAlignment("Center");
+        that._valueHelpDialogLoc.setTitleAlignment("Center");
+        that._valueHelpDialogVer.setTitleAlignment("Center");
+        that._valueHelpDialogScen.setTitleAlignment("Center");
+        that._valueHelpDialogComp.setTitleAlignment("Center");
+        that._valueHelpDialogStru.setTitleAlignment("Center");
+
         this.oProdList = this._oCore.byId(
           this._valueHelpDialogProd.getId() + "-list"
         );

@@ -13,7 +13,7 @@
 			<OverflowToolbar>
 				<Text text="" width="30%"/>
 				<ToolbarSpacer/>
-				<Title text="Build Regression Models"/>
+				<Title text="Build Regression Models" class="boldText"/>
 				<ToolbarSpacer/>
 				<Text text="" width="40%"/>
 			</OverflowToolbar>

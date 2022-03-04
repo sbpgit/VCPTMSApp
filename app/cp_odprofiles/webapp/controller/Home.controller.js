@@ -83,6 +83,11 @@ sap.ui.define(
         this.oComp = this.byId("compInput");
         this.oObjDep = this.byId("objDepInput");
 
+        that._valueHelpDialogProd.setTitleAlignment("Center");
+        that._valueHelpDialogLoc.setTitleAlignment("Center");
+        that._valueHelpDialogComp.setTitleAlignment("Center");
+        that._valueHelpDialogObjDep.setTitleAlignment("Center");
+
         this.oProdList = this._oCore.byId(
           this._valueHelpDialogProd.getId() + "-list"
         );
@@ -161,14 +166,14 @@ sap.ui.define(
           if (that.oProdList.getBinding("items")) {
             that.oProdList.getBinding("items").filter([]);
           }
-        } else if (sId.includes("comp")) {
+        } else if (sId.includes("Comp")) {
             that._oCore
               .byId(this._valueHelpDialogComp.getId() + "-searchField")
               .setValue("");
             if (that.oCompList.getBinding("items")) {
               that.oCompList.getBinding("items").filter([]);
             }
-          } else if (sId.includes("press")) {
+          } else if (sId.includes("ObjDep")) {
             that._oCore
               .byId(this._valueHelpDialogObjDep.getId() + "-searchField")
               .setValue("");
@@ -176,14 +181,14 @@ sap.ui.define(
               that.oObjDepList.getBinding("items").filter([]);
             }
           }
-        else if (sId.includes("prod")) {
-          that._oCore
-            .byId(this._valueHelpDialogObjDep.getId() + "-searchField")
-            .setValue("");
-          if (that.oObjDepList.getBinding("items")) {
-            that.oObjDepList.getBinding("items").filter([]);
-          }
-        }
+        // else if (sId.includes("ObjDep")) {
+        //   that._oCore
+        //     .byId(this._valueHelpDialogObjDep.getId() + "-searchField")
+        //     .setValue("");
+        //   if (that.oObjDepList.getBinding("items")) {
+        //     that.oObjDepList.getBinding("items").filter([]);
+        //   }
+        // }
       },
       handleSearch: function (oEvent) {
         var query =
@@ -347,8 +352,8 @@ sap.ui.define(
                   that.CompModel.setData(oData);
                   that.oCompList.setModel(that.CompModel);
 
-                  // that.ObjDepModel.setData(oData);
-                  // that.oObjDepList.setModel(that.ObjDepModel);
+                  that.ObjDepModel.setData(oData);
+                  that.oObjDepList.setModel(that.ObjDepModel);
                 },
                 error: function (oData, error) {
                   MessageToast.show("error");
