@@ -644,8 +644,8 @@ entity TS_PREDICTIONS{
     MODEL_TYPE       : String(10) @title : 'PAL Model Type';
     key MODEL_VERSION    : String(20) @title : 'OBJ Model Version'; 
     MODEL_PROFILE    : String(50) @title : 'PAL Model Profile';
-    VERSION          : String(10)    @title : 'Version';
-    SCENARIO         : String(32)    @title : 'Scenario';
+    key VERSION          : String(10)    @title : 'Version';
+    key SCENARIO         : String(32)    @title : 'Scenario';
     PREDICTED            : Double    @title : 'Predicted';
     PREDICTED_TIME       : Timestamp @title : 'Predicted Time';
     PREDICTED_STATUS     : String(8) @title : 'Predicted Status';
@@ -660,8 +660,8 @@ entity IBP_RESULTPLAN_TS{
     key OBJ_COUNTER      : Integer   @title : 'Object Counter';
     MODEL_VERSION        : String(20) @title : 'OBJ Model Version'; 
     MODEL_PROFILE        : String(50) @title : 'PAL Model Profile';
-    VERSION          : String(10)    @title : 'Version';
-    SCENARIO         : String(32)    @title : 'Scenario';
+    key VERSION          : String(10)    @title : 'Version';
+    key SCENARIO         : String(32)    @title : 'Scenario';
     PREDICTED            : Double    @title : 'Predicted';
     PREDICTED_TIME       : Timestamp @title : 'Predicted Time';
     PREDICTED_STATUS     : String(8) @title : 'Predicted Status';
@@ -678,8 +678,8 @@ entity TS_OBJDEP_CHAR_IMPACT_F {
     MODEL_TYPE       : String(10) @title : 'PAL Model Type';
     key MODEL_VERSION    : String(20) @title : 'OBJ Model Version'; 
     MODEL_PROFILE    : String(50) @title : 'PAL Model Profile';
-    VERSION     : String(10)    @title : 'Version';
-    SCENARIO    : String(32)    @title : 'Scenario';
+    key VERSION     : String(10)    @title : 'Version';
+    key SCENARIO    : String(32)    @title : 'Scenario';
     CHAR_COUNT      : Double   @title : 'Character Count';
     CHAR_IMPACT_VAL     : Double   @title : 'Character Impact Value';
     CHAR_IMPACT_PERCENT : Double   @title : 'Character Impact Percent';
