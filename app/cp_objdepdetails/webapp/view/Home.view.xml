@@ -40,7 +40,7 @@
                             <contentMiddle>
                                 <HBox>
                                     <Text text="Object Dependency : " class="boldText"></Text>
-                                    <Text text=" {oGModel>/objDep}"></Text>
+                                    <Text text=" {oGModel>/objDep}" class="boldText"></Text>
                                 </HBox>
                             </contentMiddle>
                         </Bar>

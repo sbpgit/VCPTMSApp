@@ -92,6 +92,11 @@ sap.ui.define(
         //   this.oLoc = sap.ui.getCore().byId(sap.ui.getCore().byId("SimpleFormToolbar").getContent()[1].getId());
         //   this.oProd = sap.ui.getCore().byId(sap.ui.getCore().byId("SimpleFormToolbar").getContent()[3].getId());
         //   this.oAccn = sap.ui.getCore().byId(sap.ui.getCore().byId("SimpleFormToolbar").getContent()[5].getId());
+
+        that._valueHelpDialogProd.setTitleAlignment("Center");
+        that._valueHelpDialogLoc.setTitleAlignment("Center");
+        that._oAccesNodeList.setTitleAlignment("Center");
+
           this.oProdList = this._oCore.byId(
             this._valueHelpDialogProd.getId() + "-list"
           );

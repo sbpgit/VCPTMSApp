@@ -32,6 +32,8 @@ sap.ui.define(
             this.ppfModel = new JSONModel();
             this.oODPModel = new JSONModel();
             this.otabModel = new JSONModel();
+            this.verModel = new JSONModel();
+            this.scenModel = new JSONModel();
             this.prodModel.setSizeLimit(5000);
             this.odModel.setSizeLimit(5000);
             this._oCore = sap.ui.getCore();
@@ -63,6 +65,20 @@ sap.ui.define(
               );
               this.getView().addDependent(this._valueHelpDialogPPF);
             }
+            if (!this._valueHelpDialogVer) {
+                this._valueHelpDialogVer = sap.ui.xmlfragment(
+                  "cp.execpred.cpexecprediction.view.VersionDialog",
+                  this
+                );
+                this.getView().addDependent(this._valueHelpDialogVer);
+              }
+              if (!this._valueHelpDialogScen) {
+                this._valueHelpDialogScen = sap.ui.xmlfragment(
+                  "cp.execpred.cpexecprediction.view.ScenarioDialog",
+                  this
+                );
+                this.getView().addDependent(this._valueHelpDialogScen);
+              }
             this.getRouter()
               .getRoute("Home")
               .attachPatternMatched(this._onPatternMatched.bind(this));
@@ -80,7 +96,17 @@ sap.ui.define(
             this.oProd = this.byId("prodInput");
             this.oObjDep = this.byId("odInput");
             this.oPredProfile = this.byId("pmInput");
+            this.oVer = this.byId("idver");
+            this.oScen = this.byId("idscen");
             this.aVcRulesList = [];
+
+            that._valueHelpDialogProd.setTitleAlignment("Center");
+            that._valueHelpDialogLoc.setTitleAlignment("Center");
+            that._valueHelpDialogOD.setTitleAlignment("Center");
+            that._valueHelpDialogPPF.setTitleAlignment("Center");
+            that._valueHelpDialogVer.setTitleAlignment("Center");
+            that._valueHelpDialogScen.setTitleAlignment("Center");
+
             this.oProdList = this._oCore.byId(
               this._valueHelpDialogProd.getId() + "-list"
             );
@@ -93,6 +119,15 @@ sap.ui.define(
             this.oPPFList = this._oCore.byId(
               this._valueHelpDialogPPF.getId() + "-list"
             );
+
+            this.oVerList = this._oCore.byId(
+                this._valueHelpDialogVer.getId() + "-list"
+            );
+
+            this.oScenList = this._oCore.byId(
+                this._valueHelpDialogScen.getId() + "-list"
+            );
+
             this.getModel("BModel").read("/getLocation", {
               success: function (oData) {
                 that.locModel.setData(oData);
@@ -162,7 +197,8 @@ sap.ui.define(
             } else if (sId.includes("od") || sId.includes("__button1")) {
               
               if (that.oLoc.getValue() && that.oProd.getTokens().length !== 0) {
-                  var aSelectedItem = that.oProdList.getSelectedItems();                
+                //   if(that.byId("idType").getSelectedKey() === "OD"){
+                    var aSelectedItem = that.oProdList.getSelectedItems();                
   
                   var oFilters = [];
                   var sFilter = new sap.ui.model.Filter({
@@ -183,7 +219,8 @@ sap.ui.define(
                           oFilters.push(sFilter);
                     }
                   }
-  
+
+                  
   
                   this.getModel("BModel").read("/getBomOdCond", {
                       filters: oFilters,
@@ -198,41 +235,6 @@ sap.ui.define(
                           }
                           that.odModel.setData(oData);
                           that.oODList.setModel(that.odModel);
-              //   //if (this.oODList.getBinding("items")) {
-  
-              //     // var oDlistItems = sap.ui.getCore().byId("odSlctList").getItems();
-              //     var sItems = that.oProdList.getSelectedItems();
-              //    // that.objDepData = [];
-  
-              //       if(that.oProdList.getSelectedItem().getTitle() === "All"){
-  
-              //             for(var j=0; j<that.objDep.length; j++){
-              //                 if(that.objDep[j].LOCATION_ID === that.oLocList.getSelectedItem().getTitle()){
-              //                     that.objDepData.push(that.objDep[j]);
-              //                 }
-  
-              //             }                
-              //         } else {
-              //             // for(var i=0; i<sItems.length; i++){
-              //             //     for(var j=0; j<that.objDep.length; j++){
-              //             //         if(that.objDep[j].LOCATION_ID === that.oLocList.getSelectedItem().getTitle() && 
-              //             //         that.objDep[j].PRODUCT_ID === sItems[i].getTitle()){
-              //             //             that.objDepData.push(that.objDep[j]);
-              //             //         }
-              //             //     }
-              //             // }
-              //         }   
-              // if(that.objDepData.length > 0){
-              //     that.objDepData.unshift({
-              //         OBJ_DEP: "All",
-              //         LOCATION_ID:"All",
-              //         PRODUCT_ID:"All"
-              //     });
-              // }
-                      
-                  // that.odModel.setData({ results: that.objDepData });
-                  // that.oODList.setModel(that.odModel);
-                //}
                 if(that.oProdList.getSelectedItems()[0].getTitle() === "All"){
   
                     that._valueHelpDialogOD.getAggregation("_dialog").getContent()[1].selectAll();
@@ -244,12 +246,30 @@ sap.ui.define(
                 MessageToast.show("error");
               },
             });
+                // } else {
+                //     that.odModel.setData([]);
+                //     that.oODList.setModel(that.odModel);
+                //     that.oObjDep.removeAllTokens();
+                //     that.oODList.
+                //     that._valueHelpDialogOD.open();
+                // }
+                  
               } else {
                 MessageToast.show(that.i18n.getText("noLocProd"));
               }
-            } else {
-              this._valueHelpDialogPPF.open();
-            }
+            } else if (sId.includes("ver")) {
+                if (that.oLoc.getValue() && that.oProd.getTokens().length !== 0) {
+                    that._valueHelpDialogVer.open();
+                  } else {
+                    MessageToast.show(that.i18n.getText("noLocProd"));
+                  }            
+              }  else if (sId.includes("scen")) {
+                if (that.oLoc.getValue() && that.oProd.getTokens().length !== 0 && that.oVer.getValue() ) {
+                    that._valueHelpDialogScen.open();
+                  } else {
+                    MessageToast.show("Select Location, Product and Version");
+                  } 
+              }
           },
           handleClose: function (oEvent) {
             var sId = oEvent.getParameter("id");
@@ -274,14 +294,21 @@ sap.ui.define(
               if (that.oODList.getBinding("items")) {
                 that.oODList.getBinding("items").filter([]);
               }
-            } else {
-              that._oCore
-                .byId(this._valueHelpDialogPPF.getId() + "-searchField")
-                .setValue("");
-              if (that.oPPFList.getBinding("items")) {
-                that.oPPFList.getBinding("items").filter([]);
+            } else if (sId.includes("Ver")) {
+                that._oCore
+                  .byId(this._valueHelpDialogVer.getId() + "-searchField")
+                  .setValue("");
+                if (that.oVerList.getBinding("items")) {
+                  that.oVerList.getBinding("items").filter([]);
+                }
+            } else if (sId.includes("scen")) {
+                that._oCore
+                  .byId(this._valueHelpDialogScen.getId() + "-searchField")
+                  .setValue("");
+                if (that.oScenList.getBinding("items")) {
+                  that.oScenList.getBinding("items").filter([]);
+                }
               }
-            }
           },
           handleSearch: function (oEvent) {
             var query =
@@ -335,26 +362,50 @@ sap.ui.define(
               }
               that.oODList.getBinding("items").filter(oFilters);
               // Save dialog
-            } else {
-              if (query !== "") {
-                oFilters.push(
-                  new Filter({
-                    filters: [
-                      new Filter("PROFILE", FilterOperator.Contains, query),
-                      new Filter("METHOD", FilterOperator.Contains, query),
-                      new Filter("PRF_DESC", FilterOperator.Contains, query),
-                    ],
-                    and: false,
-                  })
-                );
+            // } else {
+            //   if (query !== "") {
+            //     oFilters.push(
+            //       new Filter({
+            //         filters: [
+            //           new Filter("PROFILE", FilterOperator.Contains, query),
+            //           new Filter("METHOD", FilterOperator.Contains, query),
+            //           new Filter("PRF_DESC", FilterOperator.Contains, query),
+            //         ],
+            //         and: false,
+            //       })
+            //     );
+            //   }
+            //   that.oPPFList.getBinding("items").filter(oFilters);
+            } else if (sId.includes("ver")) {
+                if (query !== "") {
+                  oFilters.push(
+                    new Filter({
+                      filters: [
+                        new Filter("VERSION", FilterOperator.Contains, query),
+                      ],
+                      and: false,
+                    })
+                  );
+                }
+                that.oVerList.getBinding("items").filter(oFilters);
+            } else if (sId.includes("scen")) {
+                if (query !== "") {
+                  oFilters.push(
+                    new Filter({
+                      filters: [
+                        new Filter("SCENARIO", FilterOperator.Contains, query),
+                      ],
+                      and: false,
+                    })
+                  );
+                }
+                that.oScenList.getBinding("items").filter(oFilters);
               }
-              that.oPPFList.getBinding("items").filter(oFilters);
-            }
           },
           handleSelection: function (oEvent) {
             var sId = oEvent.getParameter("id"),
               oItem = oEvent.getParameter("selectedItems"),
-              aSelectedItems,
+              aSelectedItems, aSelectedVer,
               aODdata = [];
             //Location list
             if (sId.includes("Loc")) {
@@ -400,6 +451,43 @@ sap.ui.define(
                     })
                   );
                 });
+
+
+                var aSelectedItem = that.oProdList.getSelectedItems();                
+  
+                  var oFilters = [];
+                  var sFilter = new sap.ui.model.Filter({
+                      path: "LOCATION_ID",
+                      operator: sap.ui.model.FilterOperator.EQ,
+                      value1: that.oLocList.getSelectedItem().getTitle()
+                  });
+                  oFilters.push(sFilter);
+  
+                  for(var i=0; i < aSelectedItem.length; i++){
+  
+                  if(aSelectedItem[i].getTitle() !== "All"){                    
+                      sFilter = new sap.ui.model.Filter({
+                      path: "PRODUCT_ID",
+                      operator: sap.ui.model.FilterOperator.EQ,
+                      value1: aSelectedItem[i].getTitle()
+                      });
+                          oFilters.push(sFilter);
+                    }
+                  }
+
+                this.getModel("BModel").read("/getIbpVerScn", {
+                    filters: oFilters,
+                    success: function (oData) {
+                      that.verModel.setData(oData);
+                      that.oVerList.setModel(that.verModel);
+                    },
+                    error: function (oData, error) {
+                      MessageToast.show("error");
+                    },
+                  });
+  
+
+
               } else {
                   that.oProd.removeAllTokens();
               }
@@ -440,20 +528,72 @@ sap.ui.define(
                       that.byId("idCheck").setSelected(false);
            
               }
-            } else {
-              that.oPPFList.getBinding("items").filter([]);
-              aSelectedItems = oEvent.getParameter("selectedItems");
-              that.oPredProfile.removeAllTokens();
-              if (aSelectedItems && aSelectedItems.length > 0) {
-                aSelectedItems.forEach(function (oItem) {
-                  that.oPredProfile.addToken(
-                    new sap.m.Token({
-                      key: oItem.getTitle(),
-                      text: oItem.getTitle(),
-                    })
-                  );
+            // } else {
+            //   that.oPPFList.getBinding("items").filter([]);
+            //   aSelectedItems = oEvent.getParameter("selectedItems");
+            //   that.oPredProfile.removeAllTokens();
+            //   if (aSelectedItems && aSelectedItems.length > 0) {
+            //     aSelectedItems.forEach(function (oItem) {
+            //       that.oPredProfile.addToken(
+            //         new sap.m.Token({
+            //           key: oItem.getTitle(),
+            //           text: oItem.getTitle(),
+            //         })
+            //       );
+            //     });
+            //   }
+            } else if (sId.includes("Ver")) {
+                this.oVer = that.byId("idver");
+                that.oScen = that.byId("idscen");
+                aSelectedVer = oEvent.getParameter("selectedItems");
+                that.oVer.setValue(aSelectedVer[0].getTitle());
+                that.oScen.setValue("");
+
+                var aSelectedItem = that.oProdList.getSelectedItems();                
+  
+                  var oFilters = [];
+                  var sFilter = new sap.ui.model.Filter({
+                      path: "LOCATION_ID",
+                      operator: sap.ui.model.FilterOperator.EQ,
+                      value1: that.oLocList.getSelectedItem().getTitle()
+                  });
+                  oFilters.push(sFilter);
+
+                  var sFilter = new sap.ui.model.Filter({
+                    path: "VERSION",
+                    operator: sap.ui.model.FilterOperator.EQ,
+                    value1: aSelectedVer[0].getTitle()
                 });
-              }
+                oFilters.push(sFilter);
+  
+                  for(var i=0; i < aSelectedItem.length; i++){
+  
+                  if(aSelectedItem[i].getTitle() !== "All"){                    
+                      sFilter = new sap.ui.model.Filter({
+                      path: "PRODUCT_ID",
+                      operator: sap.ui.model.FilterOperator.EQ,
+                      value1: aSelectedItem[i].getTitle()
+                      });
+                          oFilters.push(sFilter);
+                    }
+                  }
+
+                this.getModel("BModel").read("/getIbpVerScn", {
+                    filters: oFilters,
+                    success: function (oData) {
+                        that.scenModel.setData(oData);
+                        that.oScenList.setModel(that.scenModel);
+                    },
+                    error: function (oData, error) {
+                      MessageToast.show("error");
+                    },
+                  });
+              
+            } else if (sId.includes("scen")) {
+              this.oScen = that.byId("idscen");
+              aSelectedItems = oEvent.getParameter("selectedItems");
+                that.oScen.setValue(aSelectedItems[0].getTitle());
+              
             }
             that.handleClose(oEvent);
           },
@@ -493,6 +633,21 @@ sap.ui.define(
               }
             }
           },
+
+          onButtonChange:function(oEvent){
+
+            var selectedButton = that.byId("idType").getSelectedKey();
+
+            if(selectedButton === "RT"){
+                that.oObjDep.removeAllTokens();
+                that.byId("odInput").setPlaceholder("Restriction");
+                that.byId("odInput").setShowValueHelp(false);
+                
+            } else{
+                that.byId("odInput").setPlaceholder("Object Dependency");
+                that.byId("odInput").setShowValueHelp(true);
+            }
+          },
   
   
           onRun2: function(){
@@ -518,7 +673,7 @@ sap.ui.define(
           },
           onRunSend: function () {
             this.oModel = this.getModel("PModel");
-            var aItems, prodItems, predProfile, selected,
+            var aItems, prodItems, predProfile, selected, SelModelVer, SelType, SelVer, SelScen,
               i,
               regData = [],
               vFlag;
@@ -528,11 +683,17 @@ sap.ui.define(
                 vRuleslist;
             aItems = this.oODList.getSelectedItems();
             prodItems = this.oProdList.getSelectedItems(),
-            predProfile= that.oPredProfile.getTokens()[0].getText(),
+            // predProfile= that.oPredProfile.getTokens()[0].getText(),
             selected = that.byId("idCheck").getSelected();
+            SelModelVer = this.byId("idModelVer").getSelectedKey() ;
+            SelType = this.byId("idType").getSelectedKey();
+            SelVer = this.oVer.getValue() ;
+            SelScen = this.oScen.getValue() ;
+
+            
   
             
-            if (this.oObjDep.getTokens().length > 0 && this.oPredProfile.getTokens().length > 0 ){
+            if (this.oObjDep.getTokens().length > 0 && this.oVer.getValue() && this.oScen.getValue()){
   
               if(aItems[0].getTitle() === "All" && prodItems[0].getTitle() === "All"){
                   var oEntry = {
@@ -540,11 +701,16 @@ sap.ui.define(
                     },
                     vRuleslist;
                   vRuleslist = {
-                    profile: predProfile,
+                    // profile: predProfile,
                     override: true,
                     Location: aItems[1].getInfo(),
                     Product: "All",
                     GroupID: "All",
+
+                    Type : SelType,
+                    modelVersion : SelModelVer,
+                    version : SelVer,
+                    scenario : SelScen
                   };
                   oEntry.vcRulesList.push(vRuleslist);
   
@@ -578,15 +744,17 @@ sap.ui.define(
               } else {
               for (i = 0; i < aItems.length; i++) {
                   if(aItems[i].getTitle() !== "All"){
-  
-                  
-                
+
                 vRuleslist = {
-                  profile: predProfile,
+                //   profile: predProfile,
                   override: selected,
                   Location: aItems[i].getInfo(),
                   Product: aItems[i].getDescription(),
                   GroupID: aItems[i].getTitle(),
+                  Type : SelType,
+                  modelVersion : SelModelVer,
+                  version : SelVer,
+                  scenario : SelScen
                 };
                 oEntry.vcRulesList.push(vRuleslist);
   
@@ -646,6 +814,8 @@ sap.ui.define(
           },
           resetInputs: function(){
               this.oLoc.setValue("");
+              this.oVer.setValue("");
+              this.oScen.setValue("");
               this.oObjDep.destroyTokens();
               this.oLocList.removeSelections();
               this.oODList.removeSelections();

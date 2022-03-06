@@ -78,6 +78,13 @@ sap.ui.define(
             this.oObjDep = this.byId("odInput");
             this.oPredProfile = this.byId("pmInput");
             this.aVcRulesList = [];
+            that._valueHelpDialogLoc.setTitleAlignment("Center");
+            that._valueHelpDialogProd.setTitleAlignment("Center");
+            that._valueHelpDialogOD.setTitleAlignment("Center");
+            that._valueHelpDialogPPF.setTitleAlignment("Center");
+
+
+
             this.oProdList = this._oCore.byId(
               this._valueHelpDialogProd.getId() + "-list"
             );

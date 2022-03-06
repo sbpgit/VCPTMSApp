@@ -95,6 +95,13 @@ sap.ui.define(
         this.oComp = this.byId("idcomp");
         this.oStru = this.byId("idstru");
 
+        that._valueHelpDialogProd.setTitleAlignment("Center");
+        that._valueHelpDialogLoc.setTitleAlignment("Center");
+        that._valueHelpDialogVer.setTitleAlignment("Center");
+        that._valueHelpDialogScen.setTitleAlignment("Center");
+        that._valueHelpDialogComp.setTitleAlignment("Center");
+        that._valueHelpDialogStru.setTitleAlignment("Center");
+
         this.oProdList = this._oCore.byId(
           this._valueHelpDialogProd.getId() + "-list"
         );
@@ -262,12 +269,41 @@ sap.ui.define(
           return new sap.ui.table.Column({
             width: "5rem",
             label: columnName,
-            template: columnName,
+            // template: columnName,
+            template: new sap.m.Link({text:"{"+ columnName +"}",
+                      press:that.linkPressed,
+            }),
           });
           // }
         });
 
         that.oTable.bindRows("/rows");
+      },
+
+      linkPressed:function(oEvent){
+        var selColumnId = oEvent.getSource().getAriaLabelledBy()[0];
+        if(selColumnId === "__column0" || selColumnId === "__column1" ||
+           selColumnId === "__column2" || selColumnId === "__column3"){
+
+            sap.m.MessageToast.show("Please click on the date column data");
+        } else {
+         var tableColumns = that.byId("idCompReq").getColumns(),
+            selColumnDate,
+            selColumnValue = oEvent.getSource().getText(),
+            ObindingData = oEvent.getSource().getBindingContext().getObject(),
+            selComponent = ObindingData.Component,
+            selItem = ObindingData.ItemNum,
+            selStruNode = ObindingData.StructureNode,
+            selType = ObindingData.Type;
+            for(var i =0; i<tableColumns.length; i++){
+                if(selColumnId === tableColumns[i].sId){
+                    selColumnDate = that.byId("idCompReq").getColumns()[i].getLabel().getText();
+                }
+            }
+
+            sap.m.MessageToast.show("Selected Date - " + " " + selColumnDate + " " + "Value - " + " " + selColumnValue);
+        }
+        
       },
 
       generateDateseries: function (imFromDate, imToDate) {

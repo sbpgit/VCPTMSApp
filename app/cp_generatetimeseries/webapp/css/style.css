@@ -9,3 +9,27 @@ button#container-cpappf\.cpgeneratetimeseries---Home--idTimeSeries {
 button#container-cpappf\.cpgeneratetimeseries---Home--buttonCompReq {
     margin-left: 300px;
 }
+div#container-cpappf\.cpgeneratetimeseries---Home--page-title {
+    font-weight: bold;
+}
+
+.boldText {
+    font-weight: bold !important;
+    text-align: center
+}
+
+h2#LocSlctList-dialog-title {
+    font-weight: bold;
+}
+
+h2#prodSlctList-dialog-title {
+    font-weight: bold;
+}
+
+h2#VerSlctList-dialog-title {
+    font-weight: bold;
+}
+
+h2#scenSlctList-dialog-title {
+    font-weight: bold;
+}
