@@ -152,6 +152,14 @@ modules:
       - cpappfcpgeneratetimeseries.zip
       name: cpappfcpgeneratetimeseries
       target-path: resources/
+    - artifacts:
+      - cpapplopcpprodlocline.zip
+      name: cpapplopcpprodlocline
+      target-path: resources/
+    - artifacts:
+      - cpapprtrhdrcprtrheader.zip
+      name: cpapprtrhdrcprtrheader
+      target-path: resources/
 - name: cpibpfdemcpibpfdem
   type: html5
   path: app/cp_ibpfdem
@@ -345,6 +353,26 @@ modules:
 - name: cpappfcpgeneratetimeseries
   type: html5
   path: app/cp_generatetimeseries
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpapplopcpprodlocline
+  type: html5
+  path: app/cpprodlocline
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpapprtrhdrcprtrheader
+  type: html5
+  path: app/cprtrheader
   build-parameters:
     build-result: dist
     builder: custom

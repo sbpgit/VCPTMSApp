@@ -95,11 +95,17 @@ service CatalogService @(impl : './lib/cat-service.js') {
     @readonly
     entity getIBPFres           as projection on od.IBP_RESULTPLAN;
      @readonly
-    entity getODHdrRstr         as projection on V_ODRESTRICT;
+    entity getODHdrRstr         as projection on od.RESTRICT_DETAILS;//V_ODRESTRICT;
 
     //
     @readonly
     entity getSaleshCfg         as projection on V_SALESHCFG_CHARVAL;
+
+    @odata.draft.enabled
+    entity genProdLocLine       as projection on od.PROD_LOC_LINE;
+
+    @odata.draft.enabled
+    entity genRtrHeader        as projection on od.RESTRICT_HEADER;
 
    // @odata.draft.enabled
     entity genProdAccessNode      as projection on od.PROD_ACCNODE;

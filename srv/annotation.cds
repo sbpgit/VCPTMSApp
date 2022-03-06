@@ -2,6 +2,7 @@ using cp as service from '../db/data-model';
 using cp as pal from '../db/pal-schema';
 using V_CLASSCHAR as srv from '../db/data-model';
 using V_SALESHCFG_CHARVAL from '../db/data-model';
+using V_ODRESTRICT from '../db/data-model';
 //using V_TIMESERIES as tssrv from '../db/data-model';
 //using V_PRODUCT as prd from '../db/data-model';
 
@@ -1596,18 +1597,18 @@ annotate V_SALESHCFG_CHARVAL with @(
 annotate V_ODRESTRICT with @(
     UI        : {
         SelectionFields     : [
-            OBJ_DEP,
+            RESTRICTION,
             CLASS_NAME,
             CHAR_NAME
         ],
         LineItem            : [
             {
                 $Type : 'UI.DataField', //Label : 'Product ID',
-                Value : OBJ_DEP
+                Value : RESTRICTION
             },
             {
                 $Type : 'UI.DataField', //Label : 'Description',
-                Value : OBJ_COUNTER
+                Value : RTR_COUNTER
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Series',
@@ -1636,19 +1637,19 @@ annotate V_ODRESTRICT with @(
         ]
         ,
         HeaderInfo          : {
-            Title          : {Value : OBJ_DEP},
-            Description    : {Value : OBJ_COUNTER},
+            Title          : {Value : RESTRICTION},
+            Description    : {Value : RTR_COUNTER},
             TypeName       : 'Restrictions',
             TypeNamePlural : 'Restrictions',
         },
         FieldGroup #Details : {Data : [
             {
                 $Type : 'UI.DataField', //Label : 'Product ID',
-                Value : OBJ_DEP
+                Value : RESTRICTION
             },
             {
                 $Type : 'UI.DataField', //Label : 'Description',
-                Value : OBJ_COUNTER
+                Value : RTR_COUNTER
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Series',
@@ -1697,6 +1698,141 @@ annotate V_ODRESTRICT with @(
         Facets : [{
             $Type  : 'UI.ReferenceFacet',
             Label  : 'Restriction',
+            Target : '@UI.FieldGroup#Details'
+        }]
+    }]
+);
+
+/*************************************/
+// Restrictions OD
+/*****************************/
+annotate service.RESTRICT_HEADER with @(
+    UI        : {
+        SelectionFields     : [
+            LOCATION_ID,
+            LINE_ID,
+            RESTRICTION
+        ],
+        LineItem            : [
+            {
+                $Type : 'UI.DataField', //Label : 'Product ID',
+                Value : LOCATION_ID
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product ID',
+                Value : LINE_ID
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product ID',
+                Value : RESTRICTION
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Description',
+                Value : RTR_DESC
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : VALID_FROM
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : VALID_TO
+            }
+        ]
+        ,
+        HeaderInfo          : {
+            Title          : {Value : LOCATION_ID},
+            Description    : {Value : RESTRICTION},
+            TypeName       : 'Restrictions',
+            TypeNamePlural : 'Restrictions',
+        },
+        FieldGroup #Details : {Data : [
+            {
+                $Type : 'UI.DataField', //Label : 'Product ID',
+                Value : RESTRICTION
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Description',
+                Value : RTR_DESC
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : VALID_FROM
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : VALID_TO
+            }
+             
+        ]}
+    },
+    //Page Facets
+    UI.Facets : [{
+        $Type  : 'UI.CollectionFacet',
+        ID     : 'RESTRICTION',
+        Label  : 'Restriction Details',
+        Facets : [{
+            $Type  : 'UI.ReferenceFacet',
+            Label  : 'Restriction Details',
+            Target : '@UI.FieldGroup#Details'
+        }]
+    }]
+);
+
+
+/*************************************/
+// Restrictions OD
+/*****************************/
+annotate service.PROD_LOC_LINE with @(
+    UI        : {
+        SelectionFields     : [
+            LOCATION_ID,
+            LINE_ID,
+            PRODUCT_ID
+        ],
+        LineItem            : [
+            {
+                $Type : 'UI.DataField', //Label : 'Product ID',
+                Value : LOCATION_ID
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product ID',
+                Value : LINE_ID
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product ID',
+                Value : PRODUCT_ID
+            }
+        ],
+        HeaderInfo          : {
+            Title          : {Value : LOCATION_ID},
+            Description    : {Value : LOCATION_ID},
+            TypeName       : 'Product Lines',
+            TypeNamePlural : 'Product Lines',
+        },
+        FieldGroup #Details : {Data : [
+            {
+                $Type : 'UI.DataField', //Label : 'Product ID',
+                Value : LOCATION_ID
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Description',
+                Value : LINE_ID
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : PRODUCT_ID
+            }             
+        ]}
+    },
+    //Page Facets
+    UI.Facets : [{
+        $Type  : 'UI.CollectionFacet',
+        ID     : 'PRODUCT_ID',
+        Label  : 'Product Lines',
+        Facets : [{
+            $Type  : 'UI.ReferenceFacet',
+            Label  : 'Product Lines',
             Target : '@UI.FieldGroup#Details'
         }]
     }]

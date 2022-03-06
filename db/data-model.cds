@@ -83,15 +83,32 @@ context cp {
             VALID_FROM  : Date          @title : 'Valid From';
             VALID_TO    : Date          @title : 'Valid To';
     };
- entity PRODRESTRICT : managed {
+
+    entity PRODRESTRICT : managed {
         key LOCATION_ID : String(4)     @title : 'Location '; //Association to ZLOCATION;//
         key PRODUCT_ID  : String(40)    @title : 'Product';
-        key RESTRICTION  : String(30)@title : 'Restriction';
-        key RTR_COUNTER  : Integer   @title : 'Restriction Counter';
-            RTR_QTY    : Decimal(13, 3)@title : 'Component Quantity';
+        key RESTRICTION : String(30)    @title : 'Restriction';
+        key RTR_COUNTER : Integer       @title : 'Restriction Counter';
+            RTR_QTY     : Decimal(13, 3)@title : 'Component Quantity';
             VALID_FROM  : Date          @title : 'Valid From';
             VALID_TO    : Date          @title : 'Valid To';
     };
+
+    entity PROD_LOC_LINE {
+        key LOCATION_ID : String(4) @title : 'Location ';
+        key LINE_ID     : String(40)@title : 'Line';
+        key PRODUCT_ID  : String(40)@title : 'Product';
+    };
+
+    entity RESTRICT_HEADER {
+        key LOCATION_ID : String(4) @title : 'Location ';
+        key LINE_ID     : String(40)@title : 'Line';
+        key RESTRICTION : String(30)@title : 'Restriction';
+            RTR_DESC    : String(30)@title : 'Restriction Desc';
+            VALID_FROM  : Date      @title : 'Valid From';
+            VALID_TO    : Date      @title : 'Valid To';
+
+    }
 
     entity OBJDEP_HEADER {
         key OBJ_DEP      : String(30)@title : 'Object Dependency';
@@ -103,9 +120,21 @@ context cp {
             OD_CONDITION : String(2) @title : 'Object Dependency condition ';
             ROW_ID       : Integer   @title : 'Attribute Index ';
     };
-    entity RESTRICT_HEADER {
+
+    entity RESTRICT_DETAILS {
         key RESTRICTION  : String(30)@title : 'Restriction';
         key RTR_COUNTER  : Integer   @title : 'Restriction Counter';
+        key CLASS_NUM    : String(18)@title : 'Internal class number';
+        key CHAR_NUM     : String(10)@title : 'Internal Char. number';
+        key CHAR_COUNTER : Integer   @title : 'Characteristic counter';
+        key CHARVAL_NUM  : String(10)@title : 'Internal Char. number';
+            OD_CONDITION : String(2) @title : 'Object Dependency condition ';
+            ROW_ID       : Integer   @title : 'Attribute Index ';
+    };
+
+    entity ODRESTRICT {
+        key OBJ_DEP      : String(30)@title : 'Object Dependency';
+        key OBJ_COUNTER  : Integer   @title : 'Object Dependency Counter';
         key CLASS_NUM    : String(18)@title : 'Internal class number';
         key CHAR_NUM     : String(10)@title : 'Internal Char. number';
         key CHAR_COUNTER : Integer   @title : 'Characteristic counter';
@@ -145,28 +174,6 @@ context cp {
             CREATED_TIME : Time      @title : 'Created Time';
     };
 
-    // entity PROD_CONFIG {
-    //     key PRODUCT_ID     : String(40)@title : 'Product Id';
-    //     key LOCATION_ID    : String(4) @title : 'Location ID';
-    //     key CLASS          : String(18)@title : 'Class';
-    //     key CHAR_NUM       : String(10)@title : 'Internal number Char.';
-    //     key CHARVAL_NUM    : String(10)@title : 'Internal number Char. Value ';
-    //         CHARVAL_DESC   : String(70)@title : 'Character Value Desc';
-    //         CHAR_ATTR      : String(30)@title : 'Characteristic Attribute';
-    //         CHAR_DESC      : String(50)@title : 'Characteristic Description';
-    //         CUSTOMER_GROUP : String(2) @title : 'Customer Group';
-    //         RESERVE_FIELD1 : String(20)@title : 'Reserve Field1';
-    //         RESERVE_FIELD2 : String(20)@title : 'Reserve Field2';
-    //         RESERVE_FIELD3 : String(20)@title : 'Reserve Field3';
-    //         RESERVE_FIELD4 : String(20)@title : 'Reserve Field4';
-    //         RESERVE_FIELD5 : String(20)@title : 'Reserve Field5';
-    //         CHANGED_DATE   : Date      @title : 'Changed Date';
-    //         CHANGED_BY     : String(12)@title : 'Changed By';
-    //         CREATED_DATE   : Date      @title : 'Created Date';
-    //         CREATED_BY     : String(12)@title : 'Created By';
-    //         CHANGED_TIME   : Time      @title : 'Changed Time';
-    //         CREATED_TIME   : Time      @title : 'Created Time';
-    // };
 
     entity PROD_ATTRIBUTES {
         key LOCATION_ID   : String(4) @title : 'Location ID';
@@ -490,7 +497,7 @@ context cp {
         key COMPONENT   : String(40);
         key PROFILE     : String(50);
         key OBJ_DEP     : String(30);
-        key OBJ_TYPE     : String(2) default 'OD' @title : 'Object Type';
+        key OBJ_TYPE    : String(2) default 'OD'@title : 'Object Type';
             STRUC_NODE  : String(50);
     }
 
@@ -524,16 +531,6 @@ context cp {
             };
     }
 
-    entity ODRESTRICT {
-        key OBJ_DEP      : String(30)@title : 'Object Dependency';
-        key OBJ_COUNTER  : Integer   @title : 'Object Dependency Counter';
-        key CLASS_NUM    : String(18)@title : 'Internal class number';
-        key CHAR_NUM     : String(10)@title : 'Internal Char. number';
-        key CHAR_COUNTER : Integer   @title : 'Characteristic counter';
-        key CHARVAL_NUM  : String(10)@title : 'Internal Char. number';
-            OD_CONDITION : String(2) @title : 'Object Dependency condition ';
-            ROW_ID       : Integer   @title : 'Attribute Index ';
-    };
 
     entity COMPQTYDETERMINE {
         key LOCATION_ID  : String(4) @title : 'Location ID';
@@ -549,10 +546,10 @@ context cp {
     }
 
     entity LOCPRODCOMP_TEMP {
-        key LOCATION_ID  : String(4) @title : 'Location ID';
-        key PRODUCT_ID   : String(40)@title : 'Product ID';
-        key ITEM_NUM     : String(5) @title : 'Item Number ';
-        key COMPONENT    : String(40)@title : 'Component';
+        key LOCATION_ID : String(4) @title : 'Location ID';
+        key PRODUCT_ID  : String(40)@title : 'Product ID';
+        key ITEM_NUM    : String(5) @title : 'Item Number ';
+        key COMPONENT   : String(40)@title : 'Component';
     }
 // entity PAL_MODEL_PARAMETERS {
 //     key MODEL_TYPE : String(10)  @title : 'Model Type';
@@ -735,8 +732,8 @@ entity![V_TSODCHAR_F]{
 
 @cds.persistence.exists
 entity![V_ODRESTRICT]{
-    key![OBJ_DEP]      : String(30)@title : 'Object Dependency';
-    key![OBJ_COUNTER]  : Integer   @title : 'Object Counter';
+    key![RESTRICTION]  : String(30)@title : 'RESTRICTION';
+    key![RTR_COUNTER]  : Integer   @title : 'RTR_COUNTER';
     key![CLASS_NUM]    : String(18)@title : 'Internal No. Class ';
     key![CLASS_NAME]   : String(20)@title : 'Class Name';
     key![CHAR_NUM]     : String(10)@title : 'Internal No. Characteristic';
@@ -760,12 +757,12 @@ entity![V_BOMPVS]{
     key![STRUC_NODE]  : String(50)    @title : 'STRUC_NODE';
 }
 
-@cds.persistence.exists 
-Entity ![V_IBPVERSCENARIO] {
-key     ![LOCATION_ID]: String(4)  @title: 'LOCATION_ID' ; 
-key     ![PRODUCT_ID]: String(40)  @title: 'PRODUCT_ID' ; 
-key     ![VERSION]: String(10)  @title: 'VERSION' ; 
-key     ![SCENARIO]: String(32)  @title: 'SCENARIO' ; 
+@cds.persistence.exists
+entity![V_IBPVERSCENARIO]{
+    key![LOCATION_ID] : String(4) @title : 'LOCATION_ID';
+    key![PRODUCT_ID]  : String(40)@title : 'PRODUCT_ID';
+    key![VERSION]     : String(10)@title : 'VERSION';
+    key![SCENARIO]    : String(32)@title : 'SCENARIO';
 }
 /*
 @cds.persistence.exists
