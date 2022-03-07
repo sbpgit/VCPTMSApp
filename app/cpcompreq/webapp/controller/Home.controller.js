@@ -177,7 +177,8 @@ sap.ui.define(
           Loc !== undefined &&
           Prod !== undefined &&
           ver !== undefined &&
-          scen !== undefined //&&
+          scen !== undefined &&
+          modelVersion !== undefined
           //   comp !== undefined &&
           //   stru !== undefined
         ) {
@@ -196,6 +197,7 @@ sap.ui.define(
               SCENARIO: scen,
               COMPONENT: comp,
               STRUCNODE: stru,
+              MODEL_VERSION:modelVersion,
               FROMDATE: vFromDate,
               TODATE: vToDate,
             },
@@ -305,6 +307,17 @@ sap.ui.define(
         that.oTable.setModel(oModel);
         that.oTable.bindColumns("/columns", function (sId, oContext) {
           var columnName = oContext.getObject().CAL_DATE;
+          if(columnName === "Component" ||
+          columnName === "ItemNum" ||
+          columnName === "StructureNode" ||
+          columnName === "Type" ){
+            return new sap.ui.table.Column({
+                width: "8rem",
+                label: columnName,
+                template: columnName,
+              });
+          }
+          else{
           return new sap.ui.table.Column({
             width: "8rem",
             label: columnName,
@@ -313,6 +326,7 @@ sap.ui.define(
                       press:that.linkPressed,
             }),
           });
+        }
           // }
         });
 

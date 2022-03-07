@@ -34,6 +34,7 @@ sap.ui.define(
       },
       onAfterRendering: function () {
         that = this;
+        this.vDate = new Date().toISOString().split("T")[0];
         // oGModel = this.getModel("oGModel");
         // this.i18n = this.getResourceBundle();
         that.oList = this.byId("profList");
@@ -171,6 +172,8 @@ sap.ui.define(
                 PROFILE: oEntry.PROFILE,
                 METHOD: oEntry.METHOD,
                 PRF_DESC : oEntry.PRF_DESC,
+                CREATED_DATE:that.vDate,
+                CREATED_BY:""
             },
             success: function (oData) {
                 sap.ui.core.BusyIndicator.hide();
@@ -224,10 +227,13 @@ sap.ui.define(
                 PROFILE: selRow.PROFILE,
                 METHOD: selRow.METHOD,
                 PARA_NAME: "",
+                INTVAL: 0,
+                DOUBLEVAL: 0.0,
+                STRVAL: "",
                 PARA_DESC: "",
-                INTVAL: null,
-                DOUBLEVAL: null,
-                STRVAL: null,
+                PARA_DEP :"",
+                CREATED_DATE:that.vDate,
+                CREATED_BY:""
             },
             success: function (oData) {
             sap.ui.core.BusyIndicator.hide();
