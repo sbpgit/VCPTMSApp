@@ -57,8 +57,9 @@
                     </f:Form>
                 <!-- </VBox> -->
             <!-- </Toolbar> -->
+            <SearchField id="DetailSearch"  liveChange="onDetailSearch" placeholder="Class Name/ Char Name/ Char Value"/>
             <Table id="charList" items="{path: '/classresults'}">
-                <columns>
+             <columns>
                     <Column hAlign="Left">
                         <Text text="{i18n>classname}" />
                     </Column>

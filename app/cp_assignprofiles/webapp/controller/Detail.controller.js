@@ -374,6 +374,7 @@ sap.ui.define(
           that.getModel("BModel").callFunction("/createProfilePara", {
             method: "GET",
             urlParameters: {
+                FLAG : operationFlag,
                 PROFILE: selRow.PROFILE,
                 METHOD: selRow.METHOD,
                 PARA_NAME: PARA_NAME,

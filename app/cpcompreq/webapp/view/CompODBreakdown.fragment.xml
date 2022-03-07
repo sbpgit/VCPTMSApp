@@ -7,7 +7,7 @@
 	xmlns:f="sap.f">
 	<Dialog
 		id="charOdDialog"
-		title="Component-Obj. Dependency">
+		title="Component-Obj. Dependency" contentWidth="850px">
         <content>
                 <f:GridContainer
 				id="grid1"
@@ -21,15 +21,16 @@
 				<f:layoutXS>
 					<f:GridContainerSettings rowSize="60px" columnSize="150px" gap="8px" />
 				</f:layoutXS> -->
-                    <f:Card class="sapUiMediumMargin" width="500px">
+                    <f:Card class="sapUiMediumMargin" >
 					<f:layoutData>
-						<f:GridContainerItemLayoutData minRows="5" columns="8" />
+						<f:GridContainerItemLayoutData columns="15" rows="5" />
 					</f:layoutData>
                         <f:header>
                             <card:Header title="{COMPONENT}-{OBJ_DEP}" subtitle="{PREDICTED}" />
                         </f:header>
                         <f:content>
-                            <viz:VizFrame xmlns="sap.viz" id="idpiechart" vizType="pie">	
+                            <viz:VizFrame xmlns="sap.viz" id="idpiechart" vizType="pie"
+                            vizProperties="{plotArea: { dataLabel: { visible: true } }, title: { text: '' }}" width="850px" height="400px">	
                             <viz:dataset>
                                 <viz.data:FlattenedDataset data="{/results}">
                                     <viz.data:dimensions>
@@ -77,8 +78,8 @@
                                 </ColumnListItem>
                             </items>
                         </Table>	
-                        </f:content> -->
-	                <!-- </f:Card>  -->
+                        </f:content>
+	                </f:Card>  -->
 			</f:GridContainer>
         </content>
 		<beginButton>

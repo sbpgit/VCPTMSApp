@@ -220,6 +220,7 @@ sap.ui.define(
           that.getModel("BModel").callFunction("/createProfilePara", {
             method: "GET",
             urlParameters: {
+                FLAG : "D",
                 PROFILE: selRow.PROFILE,
                 METHOD: selRow.METHOD,
                 PARA_NAME: "",
