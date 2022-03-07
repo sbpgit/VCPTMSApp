@@ -155,6 +155,7 @@ sap.ui.define(
         that.onAfterRendering();
       },
       onGetData: function (oEvent) {
+        sap.ui.core.BusyIndicator.show();
         var sRowData = {},
           iRowData = [],
           weekIndex;
@@ -201,13 +202,14 @@ sap.ui.define(
               TODATE: vToDate,
             },
             success: function (data) {
+                sap.ui.core.BusyIndicator.hide();
               that.rowData = data.results;
-              sap.ui.core.BusyIndicator.hide();
 
               that.oGModel.setProperty("/TData", data.results);
               that.TableGenerate();
             },
             error: function (data) {
+                sap.ui.core.BusyIndicator.hide();
               sap.m.MessageToast.show("Error While fetching data");
             },
           });
@@ -245,12 +247,13 @@ sap.ui.define(
         that.oTable = that.byId("idCompReq");
         that.oGModel = that.getModel("oGModel");
         var selected = that.byId("idCheck").getSelected();
+        that.byId("idCheck1").setSelected(false);
 
         that.Data = that.rowData;
         that.searchData = [];
 
         if(selected){
-            that.byId("idCheck1").setSelected(false);
+            
             for (var i = 0; i < that.Data.length; i++) {
             if (that.Data[i].QTYTYPE === "Normalized" ) {
                 that.searchData.push(that.Data[i]);
@@ -411,79 +414,25 @@ sap.ui.define(
 
                // this.getModel("BModel").read("/getOdCharImpact", {
                 this.getModel("BModel").read("/getBOMPred", {
-                    filters: [
-                      new Filter(
-                        "LOCATION_ID",
-                        FilterOperator.EQ,
-                        that.oGModel.getProperty("/SelectedLoc")
-                      ),
-                      new Filter(
-                        "PRODUCT_ID",
-                        FilterOperator.EQ,
-                        that.oGModel.getProperty("/SelectedProd")
-                      ),
-                      new Filter(
-                        "VERSION",
-                        FilterOperator.EQ,
-                        that.oGModel.getProperty("/SelectedVer")
-                      ),
-                      new Filter(
-                        "SCENARIO",
-                        FilterOperator.EQ,
-                        that.oGModel.getProperty("/SelectedScen")
-                      ),
-                      new Filter(
-                        "COMPONENT",
-                        FilterOperator.EQ,
-                        selComponent 
-                      ),
-                      new Filter(
-                        "CAL_DATE",
-                        FilterOperator.EQ,
-                        selColumnDate 
-                      )
+                    filters: [new Filter("LOCATION_ID",FilterOperator.EQ, that.oGModel.getProperty("/SelectedLoc")),
+                      new Filter("PRODUCT_ID",FilterOperator.EQ, that.oGModel.getProperty("/SelectedProd")),
+                      new Filter("VERSION",FilterOperator.EQ, that.oGModel.getProperty("/SelectedVer")),
+                      new Filter("SCENARIO",FilterOperator.EQ, that.oGModel.getProperty("/SelectedScen")),
+                      new Filter("COMPONENT",FilterOperator.EQ, selComponent ),
+                      new Filter("CAL_DATE",FilterOperator.EQ, selColumnDate )
                     ],
                     success: function (oData) {
                     //   that.ogrid
                       that.charModel.setData(oData);
                       that.oGridList.setModel(that.charModel);
                       that.getModel("BModel").read("/getOdCharImpact", {
-                        filters: [
-                          new Filter(
-                            "LOCATION_ID",
-                            FilterOperator.EQ,
-                            that.oGModel.getProperty("/SelectedLoc")
-                          ),
-                          new Filter(
-                            "PRODUCT_ID",
-                            FilterOperator.EQ,
-                            that.oGModel.getProperty("/SelectedProd")
-                          ),
-                          new Filter(
-                            "VERSION",
-                            FilterOperator.EQ,
-                            that.oGModel.getProperty("/SelectedVer")
-                          ),
-                          new Filter(
-                            "SCENARIO",
-                            FilterOperator.EQ,
-                            that.oGModel.getProperty("/SelectedScen")
-                          ),
-                          new Filter(
-                            "COMPONENT",
-                            FilterOperator.EQ,
-                            selComponent 
-                          ),
-                          new Filter(
-                            "CAL_DATE",
-                            FilterOperator.EQ,
-                            selColumnDate 
-                          )
-                        //   new Filter(
-                        //     "MODEL_VERSION",
-                        //     FilterOperator.EQ,
-                        //     "ACTIVE"
-                        //   )
+                        filters: [new Filter("LOCATION_ID", FilterOperator.EQ, that.oGModel.getProperty("/SelectedLoc")),
+                          new Filter("PRODUCT_ID",FilterOperator.EQ, that.oGModel.getProperty("/SelectedProd")),
+                          new Filter("VERSION", FilterOperator.EQ, that.oGModel.getProperty("/SelectedVer")),
+                          new Filter("SCENARIO", FilterOperator.EQ, that.oGModel.getProperty("/SelectedScen")),
+                          new Filter("COMPONENT",FilterOperator.EQ, selComponent ),
+                          new Filter("CAL_DATE",FilterOperator.EQ, selColumnDate ),
+                        //   new Filter("MODEL_VERSION",FilterOperator.EQ, "ACTIVE")
                         ],
                         success: function (oData) {
                         //   that.ogrid

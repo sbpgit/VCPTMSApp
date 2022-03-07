@@ -376,10 +376,10 @@ sap.ui.define(
           sap.ui.core.BusyIndicator.show();
           that.getModel("BModel").callFunction("/createProfilePara", {
             method: "GET",
-            urlParameters: { 
+            urlParameters: {
                 FLAG : operationFlag,
-                PROFILE: PROFILE,
-                METHOD: METHOD,
+                PROFILE: selRow.PROFILE,
+                METHOD: selRow.METHOD,
                 PARA_NAME: PARA_NAME,
                 INTVAL: jsonProfilePara.INTVAL,
                 DOUBLEVAL: jsonProfilePara.DOUBLEVAL,

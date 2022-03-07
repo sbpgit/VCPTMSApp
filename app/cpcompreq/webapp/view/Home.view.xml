@@ -96,7 +96,7 @@
                             </f:fields>
                         </f:FormElement>
 
-                        <f:FormElement>
+                        <!-- <f:FormElement>
                             <f:label>
                                 <Label text="Normalized" />
                             </f:label>
@@ -112,7 +112,7 @@
                             <f:fields>
                                 <CheckBox id="idCheck1" select="onNonZero"/>
                             </f:fields>
-                        </f:FormElement>
+                        </f:FormElement> -->
                     </f:formElements>
                 </f:FormContainer>
                 <f:FormContainer visible="false">
@@ -145,7 +145,11 @@
         </f:Form>
 
         <content>
-            <SearchField id="headSearch" liveChange="onSearchCompReq" placeholder="Component, Structure Node/ Type" width="30%"/>
+        <HBox>
+            <SearchField id="headSearch" liveChange="onSearchCompReq" placeholder="Component, Structure Node/ Type" width="500px"/>
+            <CheckBox id="idCheck" select="onCheck" text="Normalized"  />
+		    <CheckBox id="idCheck1" select="onNonZero" text="Get Non-Zero" />
+            </HBox>
             <t:Table id="idCompReq" fixedColumnCount="4" selectionMode="Single" alternateRowColors="true" enableSelectAll="false" visibleRowCount="15" >
                 <t:columns>
                 </t:columns>
