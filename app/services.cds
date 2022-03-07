@@ -31,3 +31,6 @@ using from './cplocation/annotations';
 using from './cpbompvs/annotations';
 using from './cpcompreq/annotations';
 using from './cp_generatetimeseries/annotations';
+
+using from './cpprodlocline/annotations';
+using from './cprtrheader/annotations';

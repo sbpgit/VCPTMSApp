@@ -260,7 +260,7 @@ sap.ui.define(
         that.oTable.bindColumns("/columns", function (sId, oContext) {
           var columnName = oContext.getObject().CAL_DATE;
           return new sap.ui.table.Column({
-            width: "8rem",
+            width: "5rem",
             label: columnName,
             template: columnName,
           });
