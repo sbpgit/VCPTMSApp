@@ -8,12 +8,12 @@
     xmlns:f="sap.ui.layout.form"
     xmlns:u="sap.ui.unified"
 >
-<Page title="Build Regression Models">
+<Page title="Build Models">
 <customHeader>
 			<OverflowToolbar>
 				<Text text="" width="30%"/>
 				<ToolbarSpacer/>
-				<Title text="Build Regression Models" class="boldText"/>
+				<Title text="Build Models" class="boldText"/>
 				<ToolbarSpacer/>
 				<Text text="" width="40%"/>
 			</OverflowToolbar>

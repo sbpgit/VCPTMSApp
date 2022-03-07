@@ -764,6 +764,37 @@ entity![V_IBPVERSCENARIO]{
     key![VERSION]     : String(10)@title : 'VERSION';
     key![SCENARIO]    : String(32)@title : 'SCENARIO';
 }
+
+
+@cds.persistence.exists 
+Entity ![V_TS_ODCHARPREDICTIONS] {
+key     ![LOCATION_ID]: String(4)  @title: 'LOCATION_ID' ; 
+key     ![PRODUCT_ID]: String(40)  @title: 'PRODUCT_ID' ; 
+key     ![COMPONENT]: String(40)  @title: 'COMPONENT' ; 
+key     ![OBJ_DEP]: String(30)  @title: 'OBJ_DEP' ; 
+key     ![OBJ_COUNTER]: Integer  @title: 'OBJ_COUNTER' ; 
+key     ![MODEL_VERSION]: String(20)  @title: 'MODEL_VERSION' ; 
+key     ![VERSION]: String(10)  @title: 'VERSION' ; 
+key     ![SCENARIO]: String(32)  @title: 'SCENARIO' ; 
+key     ![CAL_DATE]: Date  @title: 'CAL_DATE' ; 
+key     ![PREDICTED]: Double  @title: 'PREDICTED' ; 
+key     ![ROW_ID]: Integer  @title: 'ROW_ID' ; 
+key     ![CHAR_NAME]: String(30)  @title: 'CHAR_NAME' ; 
+key     ![PREDICTED_VAL]: Double  @title: 'PREDICTED_VAL' ; 
+}
+@cds.persistence.exists 
+Entity ![V_BOM_TSPREDICTION] {
+key     ![LOCATION_ID]: String(4)  @title: 'LOCATION_ID' ; 
+key     ![PRODUCT_ID]: String(40)  @title: 'PRODUCT_ID' ; 
+key     ![ITEM_NUM]: String(5)  @title: 'ITEM_NUM' ; 
+key     ![COMPONENT]: String(40)  @title: 'COMPONENT' ; 
+key     ![OBJ_DEP]: String(30)  @title: 'OBJ_DEP' ; 
+key     ![MODEL_VERSION]: String(20)  @title: 'MODEL_VERSION' ; 
+key     ![VERSION]: String(10)  @title: 'VERSION' ; 
+key     ![SCENARIO]: String(32)  @title: 'SCENARIO' ; 
+key     ![CAL_DATE]: Date  @title: 'CAL_DATE' ; 
+key     ![PREDICTED]: Double  @title: 'PREDICTED' ; 
+}
 /*
 @cds.persistence.exists
 @cds.persistence.calcview
