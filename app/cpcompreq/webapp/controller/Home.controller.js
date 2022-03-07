@@ -166,7 +166,8 @@ sap.ui.define(
           ver = that.oGModel.getProperty("/SelectedVer"),
           scen = that.oGModel.getProperty("/SelectedScen"),
           comp = that.oGModel.getProperty("/SelectedComp"),
-          stru = that.oGModel.getProperty("/SelectedStru");
+          stru = that.oGModel.getProperty("/SelectedStru"),
+          modelVersion = that.byId("idModelVer").getSelectedKey();
         var vFromDate = this.byId("fromDate").getDateValue();
         var vToDate = this.byId("toDate").getDateValue();
         vFromDate = that.getDateFn(vFromDate);
@@ -238,6 +239,32 @@ sap.ui.define(
         that.TableGenerate();
       },
 
+      onCheck:function(){
+        that.oTable = that.byId("idCompReq");
+        that.oGModel = that.getModel("oGModel");
+        var selected = that.byId("idCheck").getSelected();
+
+        that.Data = that.rowData;
+        that.searchData = [];
+
+        if(selected){
+            that.byId("idCheck1").setSelected(false);
+            for (var i = 0; i < that.Data.length; i++) {
+            if (that.Data[i].QTYTYPE === "Normalized" ) {
+                that.searchData.push(that.Data[i]);
+            }
+            }
+        } else {
+            that.searchData = that.rowData;
+        }
+        
+
+
+        that.oGModel.setProperty("/TData", that.searchData);
+        that.TableGenerate();
+
+      },
+
       TableGenerate: function () {
         var sRowData = {},
           iRowData = [],
@@ -287,6 +314,61 @@ sap.ui.define(
         });
 
         that.oTable.bindRows("/rows");
+      },
+
+      onNonZero:function(oEvent){
+        that.oTable = that.byId("idCompReq");
+        that.oGModel = that.getModel("oGModel");
+        var selected = that.byId("idCheck1").getSelected(),
+            Normaselected = that.byId("idCheck").getSelected(),
+            name, counter;
+
+
+        that.Data = that.rowData;
+        that.FinalData = [];
+        that.searchData = [];
+
+        var columns = that.oTable.getColumns().length - 3,
+            data = that.tableData;
+
+
+            if(Normaselected){
+                for (var i = 0; i < that.Data.length; i++) {
+                if (that.Data[i].QTYTYPE === "Normalized" ) {
+                    that.searchData.push(that.Data[i]);
+                }
+                }
+            } else {
+                that.searchData = that.rowData;
+            }
+
+
+            
+            if(selected){
+
+            for(var i =0; i<that.searchData.length; i++){
+                counter = 0;
+                for(var j=1; j<columns; j++){
+
+                    if(that.searchData[i]["WEEK" + j] !== 0 && that.searchData[i]["WEEK" + j] !== null){
+                        counter = counter + 1;
+                        continue;
+                    }
+
+                }
+                if(counter !== 0){
+                    that.FinalData.push(that.searchData[i]);
+                }
+
+            }
+        } else {
+            that.FinalData = that.searchData;
+        }
+
+            that.oGModel.setProperty("/TData", that.FinalData);
+            that.TableGenerate();
+
+
       },
 
       linkPressed:function(oEvent){
