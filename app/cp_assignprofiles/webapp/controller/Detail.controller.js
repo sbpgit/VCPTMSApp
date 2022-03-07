@@ -228,28 +228,45 @@ sap.ui.define(
         oEntry.METHOD = that.byId("idAlgo")._getSelectedItemText();
 
         if (oEntry.PROFILE !== "" && oEntry.PRF_DESC !== "" && oEntry.METHOD !== "" ) {
-          var uri = "/v2/catalog/getProfiles";
-          $.ajax({
-            url: uri,
-            type: "post",
-            contentType: "application/json",
-            data: JSON.stringify({
-              PROFILE: oEntry.PROFILE,
-              METHOD: oEntry.METHOD,
-              PRF_DESC: oEntry.PRF_DESC
-            }),
-            dataType: "json",
-            async: false,
-            timeout: 0,
-            error: function (data) {
-              sap.m.MessageToast.show(JSON.stringify(data));
-            },
-            success: function (data) {
-              sap.ui.core.BusyIndicator.hide();
-              sap.m.MessageToast.show("Created Prediction Model");
-              that.tablesendbatch();
-            },
-          });
+            that.getModel("BModel").callFunction("/createProfiles", {
+                method: "GET",
+                urlParameters: {
+                    PROFILE: oEntry.PROFILE,
+                    METHOD: oEntry.METHOD,
+                    PRF_DESC : oEntry.PRF_DESC,
+                },
+                success: function (oData) {
+                    sap.ui.core.BusyIndicator.hide();
+                          sap.m.MessageToast.show("Created Prediction Model");
+                          that.tablesendbatch();
+                },
+                error: function (error) {
+                  sap.ui.core.BusyIndicator.hide();
+                sap.m.MessageToast.show("failed to created Prediction Model");
+                },
+              });
+        //   var uri = "/v2/catalog/getProfiles";
+        //   $.ajax({
+        //     url: uri,
+        //     type: "post",
+        //     contentType: "application/json",
+        //     data: JSON.stringify({
+        //       PROFILE: oEntry.PROFILE,
+        //       METHOD: oEntry.METHOD,
+        //       PRF_DESC: oEntry.PRF_DESC
+        //     }),
+        //     dataType: "json",
+        //     async: false,
+        //     timeout: 0,
+        //     error: function (data) {
+        //       sap.m.MessageToast.show(JSON.stringify(data));
+        //     },
+        //     success: function (data) {
+        //       sap.ui.core.BusyIndicator.hide();
+        //       sap.m.MessageToast.show("Created Prediction Model");
+        //       that.tablesendbatch();
+        //     },
+        //   });
         } else {
           MessageToast.show("Please fill all required fields");
           sap.ui.core.BusyIndicator.hide();
@@ -291,6 +308,7 @@ sap.ui.define(
             INTVAL = "",
             DOUBLEVAL = "",
             STRVAL = "";
+            jsonProfilePara = {};
           PROFILE = that.byId("idPn").getValue();
           METHOD = that.byId("idAlgo")._getSelectedItemText();
         //   CREATED_BY = that.byId("idCretBy").getValue();
@@ -352,31 +370,53 @@ sap.ui.define(
             };
           }
           aData.PROFILEPARA.push(jsonProfilePara);
-          jsonProfilePara = {};
-        }
-
-        var uri = "/v2/catalog/genProfileParam";
-        $.ajax({
-          url: uri,
-          type: "post",
-          contentType: "application/json",
-          data: JSON.stringify({
-              FLAG : operationFlag,
-            PROFILEPARA: aData.PROFILEPARA,
-          }),
-          dataType: "json",
-          async: false,
-          timeout: 0,
-          error: function (data) {
-            sap.ui.core.BusyIndicator.hide();
-            sap.m.MessageToast.show(JSON.stringify(data));
-          },
-          success: function (data) {
-            sap.ui.core.BusyIndicator.hide();
+          sap.ui.core.BusyIndicator.show();
+          that.getModel("BModel").callFunction("/createProfilePara", {
+            method: "GET",
+            urlParameters: {
+                PROFILE: selRow.PROFILE,
+                METHOD: selRow.METHOD,
+                PARA_NAME: PARA_NAME,
+                PARA_DESC: PARA_DESC,
+                INTVAL: jsonProfilePara.INTVAL,
+                DOUBLEVAL: jsonProfilePara.DOUBLEVAL,
+                STRVAL: jsonProfilePara.STRVAL,
+            },
+            success: function (oData) {
+                sap.ui.core.BusyIndicator.hide();
             sap.m.MessageToast.show("Created profile parameters");
             that.onBack();
-          },
-        });
+            },
+            error: function (error) {
+              sap.ui.core.BusyIndicator.hide();
+            sap.m.MessageToast.show("Failed to created profile parameters");
+            },
+          });
+          
+        }
+
+        // var uri = "/v2/catalog/genProfileParam";
+        // $.ajax({
+        //   url: uri,
+        //   type: "post",
+        //   contentType: "application/json",
+        //   data: JSON.stringify({
+        //       FLAG : operationFlag,
+        //     PROFILEPARA: aData.PROFILEPARA,
+        //   }),
+        //   dataType: "json",
+        //   async: false,
+        //   timeout: 0,
+        //   error: function (data) {
+        //     sap.ui.core.BusyIndicator.hide();
+        //     sap.m.MessageToast.show(JSON.stringify(data));
+        //   },
+        //   success: function (data) {
+        //     sap.ui.core.BusyIndicator.hide();
+        //     sap.m.MessageToast.show("Created profile parameters");
+        //     that.onBack();
+        //   },
+        // });
       },
     });
   }
