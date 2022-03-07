@@ -1,132 +1,160 @@
-<mvc:View
-    controllerName="cpapp.cpcompreq.controller.Home"
+<mvc:View controllerName="cpapp.cpcompreq.controller.Home"
     xmlns:mvc="sap.ui.core.mvc"
-    displayBlock="true" 
+    xmlns:core="sap.ui.core" displayBlock="true"
     xmlns="sap.m"
     xmlns:f="sap.ui.layout.form"
-    xmlns:html="http://www.w3.org/1999/xhtml" 
+    xmlns:html="http://www.w3.org/1999/xhtml"
     xmlns:t="sap.ui.table">
     <Page title="{i18n>pageTitle}" class="boldText" titleAlignment="Center">
-    
-		<!-- <customHeader>
+
+        <!-- <customHeader>
 			<Bar>
 				<contentMiddle>
 					<Title text="{i18n>pageTitle}" class="boldText"></Title>
 				</contentMiddle>
 			</Bar>
 		</customHeader> -->
-     <f:Form editable="true">
-                <f:layout>
-                    <f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" 
-                            adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" 
-                            columnsXL="4" columnsL="2" columnsM="2" singleContainerFullSize="false"
-                            breakpointXL= "1400" breakpointL= "800" breakpointM="600" />
-                </f:layout>
-                <f:formContainers>
-                    <f:FormContainer>
-                        <f:formElements>
-                            <f:FormElement>
-                                <f:label>
-                                    <Label text="Location"/>
-                                </f:label>
-                                <f:fields>
+        <f:Form editable="true">
+            <f:layout>
+                <f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="4" columnsL="2" columnsM="2" singleContainerFullSize="false" breakpointXL= "1400" breakpointL= "800" breakpointM="600" />
+            </f:layout>
+            <f:formContainers>
+                <f:FormContainer>
+                    <f:formElements>
+                        <f:FormElement>
+                            <f:label>
+                                <Label text="Location"/>
+                            </f:label>
+                            <f:fields>
                                 <Input id="idloc" value="" width="225px" placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
-                                </f:fields>
-                            </f:FormElement>
-                            <f:FormElement>
-                                <f:label>
-                                    <Label text="IBP Version"/>
-                                </f:label>
-                                <f:fields>
+                            </f:fields>
+                        </f:FormElement>
+                        <f:FormElement>
+                            <f:label>
+                                <Label text="IBP Version"/>
+                            </f:label>
+                            <f:fields>
                                 <Input id="idver" value="" width="225px" placeholder="Version" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
-                                </f:fields>
-                            </f:FormElement>
-                            <f:FormElement>
-                                <f:label>
-                                    <Label text="Valid From"/>
-                                </f:label>
-                                
-                                <f:fields>
-                                    <DatePicker id="fromDate" width="auto"  value="2022-03-04" displayFormat="yyyy-MM-dd" valueFormat="yyyy-MM-dd" change="handleDateChange"/>
-                                </f:fields>
-                            </f:FormElement>
-                            
-                        </f:formElements>
-                    </f:FormContainer>
-                    <f:FormContainer>
-                        <f:formElements>
-                            <f:FormElement>
-                                <f:label>
-                                    <Label text="Product"/>
-                                </f:label>
-                                <f:fields>
-                                    <Input id="idprod" placeholder="Product" value="" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
-                                </f:fields>
-                            </f:FormElement>
-                            <f:FormElement>
-                                <f:label>
-                                    <Label text="IBP Scenario"/>
-                                </f:label>
-                                <f:fields>
-                                <Input id="idscen" value="" width="225px" placeholder="Scenario" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
-                                </f:fields>
-                            </f:FormElement>
-                            <f:FormElement>
-                                <f:label>
-                                    <Label text="Valid To"/>
-                                </f:label>
-                                <f:fields>
-                                    <DatePicker id="toDate" width="auto" value="2023-01-03" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="handleDateChange"/>
+                            </f:fields>
+                        </f:FormElement>
+                        <f:FormElement>
+                            <f:label>
+                                <Label text="Valid From"/>
+                            </f:label>
 
-                                </f:fields>
-                            </f:FormElement>
-                            <f:FormElement>
-                                <Button text="Go" width="30%" press="onGetData" tooltip="Get data based on filters"/>
-                                <Button text="Reset" width="60%" press="onResetDate" tooltip="Reset Valid To Date"/>
-                            </f:FormElement>
-                        </f:formElements>
-                        </f:FormContainer>
-                        <f:FormContainer  visible="false" >
-                        <f:formElements>
-                            <f:FormElement visible="false">
-                                <f:label>
-                                    <Label text="Component"/>
-                                </f:label>
-                                <f:fields>
+                            <f:fields>
+                                <DatePicker id="fromDate" width="auto" value="2022-03-04" displayFormat="yyyy-MM-dd" valueFormat="yyyy-MM-dd" change="handleDateChange"/>
+                            </f:fields>
+                        </f:FormElement>
+
+                    </f:formElements>
+                </f:FormContainer>
+                <f:FormContainer>
+                    <f:formElements>
+                        <f:FormElement>
+                            <f:label>
+                                <Label text="Product"/>
+                            </f:label>
+                            <f:fields>
+                                <Input id="idprod" placeholder="Product" value="" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                            </f:fields>
+                        </f:FormElement>
+                        <f:FormElement>
+                            <f:label>
+                                <Label text="IBP Scenario"/>
+                            </f:label>
+                            <f:fields>
+                                <Input id="idscen" value="" width="225px" placeholder="Scenario" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                            </f:fields>
+                        </f:FormElement>
+                        <f:FormElement>
+                            <f:label>
+                                <Label text="Valid To"/>
+                            </f:label>
+                            <f:fields>
+                                <DatePicker id="toDate" width="auto" value="2023-01-03" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="handleDateChange"/>
+
+                            </f:fields>
+                        </f:FormElement>
+                        <f:FormElement>
+                            <Button text="Go" width="30%" press="onGetData" tooltip="Get data based on filters"/>
+                            <Button text="Reset" width="60%" press="onResetDate" tooltip="Reset Valid To Date"/>
+                        </f:FormElement>
+                    </f:formElements>
+                </f:FormContainer>
+                <f:FormContainer  >
+                    <f:formElements>
+                        <f:FormElement>
+                            <f:label>
+                                <Label text="Model Version"/>
+                            </f:label>
+                            <f:fields>
+                                <Select id="idModelVer" selectedKey="Active">
+                                    <core:ListItem key="Active" text="Active"/>
+                                    <core:ListItem key="Simulation" text="Simulation"/>
+                                </Select>
+                            </f:fields>
+                        </f:FormElement>
+
+                        <!-- <f:FormElement>
+                            <f:label>
+                                <Label text="Normalized" />
+                            </f:label>
+                            <f:fields>
+                                <CheckBox id="idCheck" select="onCheck"/>
+                            </f:fields>
+                        </f:FormElement>
+
+                        <f:FormElement>
+                            <f:label>
+                                <Label text="Get Non-Zero" />
+                            </f:label>
+                            <f:fields>
+                                <CheckBox id="idCheck1" select="onNonZero"/>
+                            </f:fields>
+                        </f:FormElement> -->
+                    </f:formElements>
+                </f:FormContainer>
+                <f:FormContainer visible="false">
+                    <f:formElements>
+                        <f:FormElement visible="false">
+                            <f:label>
+                                <Label text="Component"/>
+                            </f:label>
+                            <f:fields>
                                 <Input id="idcomp" value="" width="225px" placeholder="Component" visible="false" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
-                                </f:fields>
-                            </f:FormElement>
-                            <f:FormElement visible="false">
-                                <f:label>
-                                    <Label text="Structure Node"/>
-                                </f:label>
-                                <f:fields>
+                            </f:fields>
+                        </f:FormElement>
+                        <f:FormElement visible="false">
+                            <f:label>
+                                <Label text="Structure Node"/>
+                            </f:label>
+                            <f:fields>
                                 <Input id="idstru" value="" width="225px" placeholder="Structure Node" visible="false" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
-                                </f:fields>
-                            </f:FormElement>
-                            <f:FormElement>
+                            </f:fields>
+                        </f:FormElement>
+                        <f:FormElement>
                             <HBox>
-                                <Button text="Go"  press="onGetData" tooltip="Get data based on filters"/>
-                                <Button text="Reset"  press="onResetDate" tooltip="Reset Valid To Date"/>
-                                </HBox>
-                            </f:FormElement>
-                        </f:formElements>
-                    </f:FormContainer>
-                </f:formContainers>
-            </f:Form>
-    
-    <content>
-    <SearchField id="headSearch"  liveChange="onSearchCompReq" placeholder="Component, Structure Node/ Type" width="30%"/>
-    <t:Table id="idCompReq" 
-    fixedColumnCount="4"
-	selectionMode="Single"
-    alternateRowColors="true"
-    enableSelectAll="false"
-	visibleRowCount="15">
+                                <Button text="Go" press="onGetData" tooltip="Get data based on filters"/>
+                                <Button text="Reset" press="onResetDate" tooltip="Reset Valid To Date"/>
+                            </HBox>
+                        </f:FormElement>
+                    </f:formElements>
+                </f:FormContainer>
+            </f:formContainers>
+        </f:Form>
+
+        <content>
+        <HBox>
+            <SearchField id="headSearch" liveChange="onSearchCompReq" placeholder="Component, Structure Node/ Type" width="500px"/>
+            <CheckBox id="idCheck" select="onCheck" text="Normalized"  />
+		    <CheckBox id="idCheck1" select="onNonZero" text="Get Non-Zero" />
+            </HBox>
+            <t:Table id="idCompReq" fixedColumnCount="4" selectionMode="Single" alternateRowColors="true" enableSelectAll="false" visibleRowCount="15" >
                 <t:columns>
-				</t:columns>
-        </t:Table>
-    </content>
-	</Page>
+                </t:columns>
+            </t:Table>
+        </content>
+    </Page>
 
 </mvc:View>

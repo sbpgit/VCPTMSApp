@@ -34,6 +34,7 @@ sap.ui.define(
       },
       onAfterRendering: function () {
         that = this;
+        this.vDate = new Date().toISOString().split("T")[0];
         // oGModel = this.getModel("oGModel");
         // this.i18n = this.getResourceBundle();
         that.oList = this.byId("profList");
@@ -164,29 +165,49 @@ sap.ui.define(
         oEntry.PROFILE = selRow.PROFILE;
         oEntry.METHOD = selRow.METHOD;
         oEntry.PRF_DESC = "D";
-
-          var uri = "/v2/catalog/getProfiles";
-          $.ajax({
-            url: uri,
-            type: "post",
-            contentType: "application/json",
-            data: JSON.stringify({
-              PROFILE: oEntry.PROFILE,
-              METHOD: oEntry.METHOD,
-              PRF_DESC: oEntry.PRF_DESC
-            }),
-            dataType: "json",
-            async: false,
-            timeout: 0,
-            error: function (data) {
-              sap.m.MessageToast.show(JSON.stringify(data));
+          sap.ui.core.BusyIndicator.show();
+          that.getModel("BModel").callFunction("/createProfiles", {
+            method: "GET",
+            urlParameters: {
+                PROFILE: oEntry.PROFILE,
+                METHOD: oEntry.METHOD,
+                PRF_DESC : oEntry.PRF_DESC,
+                CREATED_DATE:that.vDate,
+                CREATED_BY:""
             },
-            success: function (data) {
+            success: function (oData) {
+                sap.ui.core.BusyIndicator.hide();
+                sap.m.MessageToast.show("Profile deleted");
+                that.tablesendbatch();
+            },
+            error: function (error) {
               sap.ui.core.BusyIndicator.hide();
-              sap.m.MessageToast.show("Profile deleted");
-              that.tablesendbatch();
+            sap.m.MessageToast.show("Failed to delete Profile parameters");
             },
           });
+
+        //   var uri = "/v2/catalog/getProfiles";
+        //   $.ajax({
+        //     url: uri,
+        //     type: "post",
+        //     contentType: "application/json",
+        //     data: JSON.stringify({
+        //       PROFILE: oEntry.PROFILE,
+        //       METHOD: oEntry.METHOD,
+        //       PRF_DESC: oEntry.PRF_DESC
+        //     }),
+        //     dataType: "json",
+        //     async: false,
+        //     timeout: 0,
+        //     error: function (data) {
+        //       sap.m.MessageToast.show(JSON.stringify(data));
+        //     },
+        //     success: function (data) {
+        //       sap.ui.core.BusyIndicator.hide();
+        //       sap.m.MessageToast.show("Profile deleted");
+        //       that.tablesendbatch();
+        //     },
+        //   });
 
       },
 
@@ -198,64 +219,68 @@ sap.ui.define(
 
           var selRow = this.byId("profList").getSelectedItems()[0].getBindingContext().getProperty();
 
-        //   sap.ui.core.BusyIndicator.show();
-        //   that.getModel("BModel").callFunction("/createProfilePara", {
-        //     method: "GET",
-        //     urlParameters: {
-        //         PROFILE: selRow.PROFILE,
-        //         METHOD: selRow.METHOD,
-        //         PARA_NAME: "",
-        //         PARA_DESC: "",
-        //         INTVAL: null,
-        //         DOUBLEVAL: null,
-        //         STRVAL: null,
-        //     },
-        //     success: function (oData) {
-        //       sap.ui.core.BusyIndicator.hide();
-        //       sap.m.MessageToast.show("Profile unassigned successfully");
-        //       that.onGetData();
-        //     },
-        //     error: function (error) {
-        //       sap.m.MessageToast.show("Error while unassigning Profiles");
-        //       sap.ui.core.BusyIndicator.hide();
-        //     },
-        //   });
-
-          jsonProfilePara = {
-              PROFILE: selRow.PROFILE,
-              METHOD: selRow.METHOD,
-              PARA_NAME: "",
-              PARA_DESC: "",
-              INTVAL: null,
-              DOUBLEVAL: null,
-              STRVAL: null,
-            };
-          
-          aData.PROFILEPARA.push(jsonProfilePara);
-
-
-        var uri = "/v2/catalog/genProfileParam";
-        $.ajax({
-          url: uri,
-          type: "post",
-          contentType: "application/json",
-          data: JSON.stringify({
-              FLAG : "D",
-            PROFILEPARA: aData.PROFILEPARA,
-          }),
-          dataType: "json",
-          async: false,
-          timeout: 0,
-          error: function (data) {
-            sap.ui.core.BusyIndicator.hide();
-            sap.m.MessageToast.show(JSON.stringify(data));
-          },
-          success: function (data) {
+          sap.ui.core.BusyIndicator.show();
+          that.getModel("BModel").callFunction("/createProfilePara", {
+            method: "GET",
+            urlParameters: {
+                FLAG : "D",
+                PROFILE: selRow.PROFILE,
+                METHOD: selRow.METHOD,
+                PARA_NAME: "",
+                INTVAL: 0,
+                DOUBLEVAL: 0.0,
+                STRVAL: "",
+                PARA_DESC: "",
+                PARA_DEP :"",
+                CREATED_DATE:that.vDate,
+                CREATED_BY:""
+            },
+            success: function (oData) {
             sap.ui.core.BusyIndicator.hide();
             sap.m.MessageToast.show("Profile parameters deleted");
             that.onAfterRendering();
-          },
-        });
+            },
+            error: function (error) {
+              sap.ui.core.BusyIndicator.hide();
+            sap.m.MessageToast.show("Failed to delete Profile parameters");
+            },
+          });
+
+        //   jsonProfilePara = {
+        //       PROFILE: selRow.PROFILE,
+        //       METHOD: selRow.METHOD,
+        //       PARA_NAME: "",
+        //       PARA_DESC: "",
+        //       INTVAL: null,
+        //       DOUBLEVAL: null,
+        //       STRVAL: null,
+        //     };
+          
+        //   aData.PROFILEPARA.push(jsonProfilePara);
+
+
+        // var uri = "/v2/catalog/genProfileParam";
+        // $.ajax({
+        //   url: uri,
+        //   type: "post",
+        //   contentType: "application/json",
+        //   data: JSON.stringify({
+        //       FLAG : "D",
+        //     PROFILEPARA: aData.PROFILEPARA,
+        //   }),
+        //   dataType: "json",
+        //   async: false,
+        //   timeout: 0,
+        //   error: function (data) {
+        //     sap.ui.core.BusyIndicator.hide();
+        //     sap.m.MessageToast.show(JSON.stringify(data));
+        //   },
+        //   success: function (data) {
+        //     sap.ui.core.BusyIndicator.hide();
+        //     sap.m.MessageToast.show("Profile parameters deleted");
+        //     that.onAfterRendering();
+        //   },
+        // });
 
           
         }

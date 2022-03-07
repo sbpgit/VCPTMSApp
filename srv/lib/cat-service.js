@@ -403,27 +403,27 @@ module.exports = (srv) => {
     var responseMessage;
     var datetime = new Date();
     var curDate = datetime.toISOString().slice(0, 10);
-    const aProfilePara_req = req.data.PROFILEPARA;
+   // const aProfilePara_req = req.data.PROFILEPARA;
     if (req.data.FLAG === "I" || req.data.FLAG === "E") {
-      for (let i = 0; i < aProfilePara_req.length; i++) {
-        lsprofilesPara.PROFILE = aProfilePara_req[i].PROFILE;
+       //for (let i = 0; i < aProfilePara_req.length; i++) {
+        lsprofilesPara.PROFILE = req.data.PROFILE;
         if (lsprofilesPara.PROFILE !== undefined) {
-          lsprofilesPara.METHOD = aProfilePara_req[i].METHOD;
-          lsprofilesPara.PARA_NAME = aProfilePara_req[i].PARA_NAME;
-          lsprofilesPara.INTVAL = aProfilePara_req[i].INTVAL;
-          lsprofilesPara.DOUBLEVAL = aProfilePara_req[i].DOUBLEVAL;
-          lsprofilesPara.STRVAL = aProfilePara_req[i].STRVAL;
-          lsprofilesPara.PARA_DESC = aProfilePara_req[i].PARA_DESC;
-          lsprofilesPara.PARA_DEP = null; //aProfilePara_req[i].PARA_DEP;
+          lsprofilesPara.METHOD = req.data.METHOD;
+          lsprofilesPara.PARA_NAME = req.data.PARA_NAME;
+          lsprofilesPara.INTVAL = req.data.INTVAL;
+          lsprofilesPara.DOUBLEVAL = req.data.DOUBLEVAL;
+          lsprofilesPara.STRVAL = req.data.STRVAL;
+          lsprofilesPara.PARA_DESC = req.data.PARA_DESC;
+          lsprofilesPara.PARA_DEP = null; //req.data.PARA_DEP;
           lsprofilesPara.CREATED_DATE = curDate;
-          lsprofilesPara.CREATED_BY = aProfilePara_req[i].CREATED_BY;
+          lsprofilesPara.CREATED_BY = "";//req.data.CREATED_BY;
           if (req.data.FLAG === "E") {
             await cds.delete("CP_PAL_PROFILEMETH_PARA", lsprofilesPara);
           }
           liProfilesPara.push(GenFunctions.parse(lsprofilesPara));
         }
         lsprofilesPara = {};
-      }
+   //   }
       try {
         if (liProfilesPara.length > 0) {
           await cds.run(
@@ -438,7 +438,7 @@ module.exports = (srv) => {
       }
     } else if (req.data.FLAG === "D") {
       for (let i = 0; i < aProfilePara_req.length; i++) {
-        lsprofilesPara.PROFILE = aProfilePara_req[i].PROFILE;
+        lsprofilesPara.PROFILE = req.data.PROFILE;
         break;
       }
       try {
