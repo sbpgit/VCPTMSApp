@@ -43,6 +43,7 @@ sap.ui.define(
       },
       onAfterRendering: function () {
         that = this;
+        this.vDate = new Date().toISOString().split("T")[0];
         that.oGModel = that.getModel("oGModel");
         var selButton = that.oGModel.getProperty("/sId");
 
@@ -234,15 +235,17 @@ sap.ui.define(
                     PROFILE: oEntry.PROFILE,
                     METHOD: oEntry.METHOD,
                     PRF_DESC : oEntry.PRF_DESC,
+                    CREATED_DATE:that.vDate,
+                    CREATED_BY:""
                 },
                 success: function (oData) {
                     sap.ui.core.BusyIndicator.hide();
-                          sap.m.MessageToast.show("Created Prediction Model");
+                          sap.m.MessageToast.show("Created Prediction profile");
                           that.tablesendbatch();
                 },
                 error: function (error) {
                   sap.ui.core.BusyIndicator.hide();
-                sap.m.MessageToast.show("failed to created Prediction Model");
+                sap.m.MessageToast.show("failed to created Prediction profile");
                 },
               });
         //   var uri = "/v2/catalog/getProfiles";
@@ -320,7 +323,7 @@ sap.ui.define(
               INTVAL = parseInt(table[i].getCells()[3].getText());
             } else {
               if (table[i].getCells()[4].getValue() == "No default value") {
-                INTVAL = null;
+                INTVAL = "0";
               } else {
                 INTVAL = parseInt(table[i].getCells()[4].getValue());
               }
@@ -331,15 +334,15 @@ sap.ui.define(
               PARA_NAME: PARA_NAME,
               PARA_DESC: PARA_DESC,
               INTVAL: INTVAL,
-              DOUBLEVAL: null,
-              STRVAL: null,
+              DOUBLEVAL: "0.0",
+              STRVAL: "",
             };
           } else if (table[i].getCells()[2].getSelectedKey() === "DOUBLE") {
             if (table[i].getCells()[4].getValue() === "") {
               DOUBLEVAL = parseFloat(table[i].getCells()[3].getText());
             } else {
               if (table[i].getCells()[4].getValue() == "No default value") {
-                DOUBLEVAL = null;
+                DOUBLEVAL = "0.0";
               } else {
                 DOUBLEVAL = parseFloat(table[i].getCells()[4].getValue());
               }
@@ -349,9 +352,9 @@ sap.ui.define(
               METHOD: METHOD,
               PARA_NAME: PARA_NAME,
               PARA_DESC: PARA_DESC,
-              INTVAL: null,
+              INTVAL: "0",
               DOUBLEVAL: DOUBLEVAL,
-              STRVAL: null,
+              STRVAL: "",
             };
           } else if (table[i].getCells()[2].getSelectedKey() === "NVARCHAR") {
             if (table[i].getCells()[4].getValue() === "") {
@@ -364,8 +367,8 @@ sap.ui.define(
               METHOD: METHOD,
               PARA_NAME: PARA_NAME,
               PARA_DESC: PARA_DESC,
-              INTVAL: null,
-              DOUBLEVAL: null,
+              INTVAL:"0",
+              DOUBLEVAL: "0.0",
               STRVAL: STRVAL,
             };
           }
@@ -373,14 +376,18 @@ sap.ui.define(
           sap.ui.core.BusyIndicator.show();
           that.getModel("BModel").callFunction("/createProfilePara", {
             method: "GET",
-            urlParameters: {
-                PROFILE: selRow.PROFILE,
-                METHOD: selRow.METHOD,
+            urlParameters: { 
+                FLAG : operationFlag,
+                PROFILE: PROFILE,
+                METHOD: METHOD,
                 PARA_NAME: PARA_NAME,
-                PARA_DESC: PARA_DESC,
                 INTVAL: jsonProfilePara.INTVAL,
                 DOUBLEVAL: jsonProfilePara.DOUBLEVAL,
-                STRVAL: jsonProfilePara.STRVAL,
+                STRVAL: jsonProfilePara.STRVAL,                
+                PARA_DESC: PARA_DESC,
+                PARA_DEP :"",
+                CREATED_DATE:that.vDate,
+                CREATED_BY:""
             },
             success: function (oData) {
                 sap.ui.core.BusyIndicator.hide();
@@ -389,7 +396,7 @@ sap.ui.define(
             },
             error: function (error) {
               sap.ui.core.BusyIndicator.hide();
-            sap.m.MessageToast.show("Failed to created profile parameters");
+            sap.m.MessageToast.show("Failed to create profile parameters");
             },
           });
           
