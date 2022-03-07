@@ -14,7 +14,7 @@
 				class="sapUiSmallMargin"
 				width="100%"
 				snapToRow="true"
-				items="{/results}">
+				items="{path :'/results'}">
                 	<!-- <f:layout>
 					<f:GridContainerSettings rowSize="80px" columnSize="200px" gap="8px" />
 				</f:layout>
@@ -32,7 +32,7 @@
                             <viz:VizFrame xmlns="sap.viz" id="idpiechart" vizType="pie"
                             vizProperties="{plotArea: { dataLabel: { visible: true } }, title: { text: '' }}" width="850px" height="400px">	
                             <viz:dataset>
-                                <viz.data:FlattenedDataset data="{/results}">
+                                <viz.data:FlattenedDataset data="{path :'/results'}">
                                     <viz.data:dimensions>
                                         <viz.data:DimensionDefinition name="Characteristics"
                                             value="{CHAR_NAME}" />
