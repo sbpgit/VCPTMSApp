@@ -245,12 +245,13 @@ sap.ui.define(
         that.oTable = that.byId("idCompReq");
         that.oGModel = that.getModel("oGModel");
         var selected = that.byId("idCheck").getSelected();
+        that.byId("idCheck1").setSelected(false);
 
         that.Data = that.rowData;
         that.searchData = [];
 
         if(selected){
-            that.byId("idCheck1").setSelected(false);
+            
             for (var i = 0; i < that.Data.length; i++) {
             if (that.Data[i].QTYTYPE === "Normalized" ) {
                 that.searchData.push(that.Data[i]);
