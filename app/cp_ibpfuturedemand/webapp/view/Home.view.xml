@@ -61,7 +61,7 @@
         </f:Form>
 
         <content>
-        <SearchField id="headSearch"  liveChange="onSearch" placeholder="Profile or Description"/>
+        <SearchField id="headSearch"  liveChange="onSearch" placeholder="Week Date/ Quantity"/>
                 <Table id="IBPfdemList"  items="{path: '/results'}" itemPress="onhandlePress" growingScrollToLoad="true" 
                          mode="SingleSelectMaster" selectionChange="onhandlePress" rememberSelections="false">
 				<columns>
@@ -91,7 +91,8 @@
                             <Text text="{PRODUCT_ID}"/>
                             <Text text="{VERSION}"/>
                             <Text text="{SCENARIO}"/>
-                            <Text text="{path: 'WEEK_DATE', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'MM/dd/yyyy' }}"/>
+                            <!-- <Text text="{path: 'WEEK_DATE', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'MM/dd/yyyy' }}"/> -->
+                            <DatePicker valueFormat="MM/dd/yyyy" displayFormat="MM/dd/yyyy" value="{WEEK_DATE}" editable="false" />
                             <Text text="{QUANTITY}"/>
 						</cells>
 					</ColumnListItem>

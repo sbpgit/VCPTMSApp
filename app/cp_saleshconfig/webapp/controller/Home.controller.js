@@ -90,7 +90,11 @@ sap.ui.define(
         if (sId.includes("loc")) {
           that._valueHelpDialogLoc.open();
         } else if (sId.includes("prod")) {
+            if(that.byId("idloc").getValue() !== ""){
           that._valueHelpDialogProd.open();
+            } else {
+                MessageToast.show("Select Location");
+            }
         }
       },
       handleClose: function (oEvent) {

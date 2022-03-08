@@ -1,1 +1,19 @@
 /* Enter your custom styles here */
+
+div#__page0-title {
+    font-weight: bold;
+}
+
+div#__xmlview0--idPage-title {
+    font-weight: bold;
+}
+
+button#__button0 {
+    margin-left: 120px;
+    margin-right: 20px;
+    min-width: 70px;
+}
+
+button#__button1 {
+    min-width: 70px;
+}

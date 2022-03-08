@@ -81,6 +81,12 @@ sap.ui.define(
         that._valueHelpDialogVer.setTitleAlignment("Center");
         that._valueHelpDialogScen.setTitleAlignment("Center");
 
+        that.byId("headSearch").setValue("");
+        that.byId("IBPfdemList").removeSelections();
+        if(that.byId("IBPfdemList").getItems().length){
+        that.onSearch();
+        }
+
         this.oProdList = this._oCore.byId(
           this._valueHelpDialogProd.getId() + "-list"
         );
@@ -107,7 +113,6 @@ sap.ui.define(
         });
       },
       onResetDate: function () {
-        oGModel.setProperty("/resetFlag", "X");
           that.oLoc.setValue("");
           that.oProd.setValue("");
           that.oVer.setValue("");
@@ -115,7 +120,7 @@ sap.ui.define(
         that.onAfterRendering();
       },
       onGetData: function (oEvent) {
-        sap.ui.core.BusyIndicator.show();
+        
         
 
         var Loc = that.byId("idloc").getValue(),
@@ -124,20 +129,24 @@ sap.ui.define(
           scen = that.byId("idscen").getValue();
 
         if (Loc !== "" && Prod !== "" && ver !== "" && scen !== ""     ) {
-          
-          that.getModel("BModel").read("/getIBPFdem ", {
-            // filters: [
-            //     new Filter("LOCATION_ID", FilterOperator.EQ, Loc),
-            //     new Filter("PRODUCT_ID", FilterOperator.EQ, Prod),
-            //     new Filter("VERSION", FilterOperator.EQ, ver),
-            //     new Filter("SCENARIO", FilterOperator.EQ, scen),
-            //   ],
-            success: function (data) {
+            sap.ui.core.BusyIndicator.show();
+          that.getModel("BModel").read("/getIBPFdem", {
+            filters: [
+                new Filter("LOCATION_ID", FilterOperator.EQ, Loc),
+                new Filter("PRODUCT_ID", FilterOperator.EQ, Prod),
+                new Filter("VERSION", FilterOperator.EQ, ver),
+                new Filter("SCENARIO", FilterOperator.EQ, scen)
+              ],
+            success: function (oData) {
+                oData.results.forEach(function (row) {
+                   row.WEEK_DATE = that.getInMMddyyyyFormat(row.WEEK_DATE);
+                }, that);
                 sap.ui.core.BusyIndicator.hide();
                 that.TableModel.setData({
                     results: oData.results,
                   });
                   that.byId("IBPfdemList").setModel(that.TableModel);
+                  
               
             },
             error: function (data) {
@@ -151,6 +160,22 @@ sap.ui.define(
           );
         }
       },
+
+
+		getInMMddyyyyFormat: function (oDate) {
+			if (!oDate) {
+				oDate = new Date();
+			}
+			var month = oDate.getMonth() + 1;
+			var date = oDate.getDate();
+			if (month < 10) {
+				month = "0" + month;
+			}
+			if (date < 10) {
+				date = "0" + date;
+			}
+			return month + "/" + date + "/" + oDate.getFullYear();
+		},
 
       handleValueHelp: function (oEvent) {
         var sId = oEvent.getParameter("id");
@@ -244,7 +269,7 @@ sap.ui.define(
             );
           }
           that.oProdList.getBinding("items").filter(oFilters);
-        } else if (sId.includes("ver")) {
+        } else if (sId.includes("Ver")) {
           if (query !== "") {
             oFilters.push(
               new Filter({
@@ -390,7 +415,63 @@ sap.ui.define(
         } 
         that.handleClose(oEvent);
       },
-      
+
+      onhandlePress:function(oEvent){
+
+        var selRow = this.byId("IBPfdemList").getSelectedItems();
+        that.oGModel = that.getModel("oGModel");
+
+        var selItem = selRow[0].getBindingContext().getProperty();
+            
+            that.oGModel.setProperty("/sLoc", selItem.LOCATION_ID);
+            that.oGModel.setProperty("/sProd", selItem.PRODUCT_ID);
+            that.oGModel.setProperty("/sVer", selItem.VERSION);
+            that.oGModel.setProperty("/sScen", selItem.SCENARIO);
+
+           var week = new Date(selItem.WEEK_DATE),
+                month = week.getMonth() + 1,
+                day = week.getDate(),
+                weekDate;
+                if(month < 10){
+                    month = "0" + month;
+                }
+                if(week.getDate() < 10){
+                    day = "0" + week.getDate()
+                }
+
+                weekDate = week.getFullYear() + "-" + month + "-" + day ;
+
+            that.oGModel.setProperty("/sWeek", weekDate);
+            
+            var oRouter = sap.ui.core.UIComponent.getRouterFor(that);
+            oRouter.navTo("Detail", {}, true);
+      },
+
+
+      onSearch:function(oEvent){
+          if(oEvent){
+            var query = oEvent.getParameter("value") || oEvent.getParameter("newValue");
+          } else {
+            var query = that.byId("headSearch").getValue();
+          }
+        var oFilters = [];
+        // Check if search filter is to be applied
+        query = query ? query.trim() : "";
+        
+          if (query !== "") {
+            oFilters.push(
+              new Filter({
+                filters: [
+                  new Filter("WEEK_DATE", FilterOperator.Contains, query),
+                  new Filter("QUANTITY", FilterOperator.Contains, query),
+                ],
+                and: false,
+              })
+            );
+          }
+          that.byId("IBPfdemList").getBinding("items").filter(oFilters);
+
+      }
       
     });
   }

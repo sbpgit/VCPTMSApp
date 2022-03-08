@@ -76,10 +76,10 @@
 
                             </f:fields>
                         </f:FormElement>
-                        <f:FormElement>
+                        <!-- <f:FormElement>
                             <Button text="Go" width="30%" press="onGetData" tooltip="Get data based on filters"/>
                             <Button text="Reset" width="60%" press="onResetDate" tooltip="Reset Valid To Date"/>
-                        </f:FormElement>
+                        </f:FormElement> -->
                     </f:formElements>
                 </f:FormContainer>
                 <f:FormContainer  >
@@ -94,6 +94,12 @@
                                     <core:ListItem key="Simulation" text="Simulation"/>
                                 </Select>
                             </f:fields>
+                        </f:FormElement>
+                        <f:FormElement>
+                            <HBox>
+                                <Button text="Go" press="onGetData" tooltip="Get data based on filters"/>
+                                <Button text="Reset" press="onResetDate" tooltip="Reset Valid To Date"/>
+                            </HBox>
                         </f:FormElement>
 
                         <!-- <f:FormElement>
@@ -133,12 +139,12 @@
                                 <Input id="idstru" value="" width="225px" placeholder="Structure Node" visible="false" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                             </f:fields>
                         </f:FormElement>
-                        <f:FormElement>
+                        <!-- <f:FormElement>
                             <HBox>
                                 <Button text="Go" press="onGetData" tooltip="Get data based on filters"/>
                                 <Button text="Reset" press="onResetDate" tooltip="Reset Valid To Date"/>
                             </HBox>
-                        </f:FormElement>
+                        </f:FormElement> -->
                     </f:formElements>
                 </f:FormContainer>
             </f:formContainers>
@@ -147,8 +153,8 @@
         <content>
         <HBox>
             <SearchField id="headSearch" liveChange="onSearchCompReq" placeholder="Component, Structure Node/ Type" width="500px"/>
-            <CheckBox id="idCheck" select="onCheck" text="Normalized"  />
-		    <CheckBox id="idCheck1" select="onNonZero" text="Get Non-Zero" />
+            <!-- <CheckBox id="idCheck" select="onCheck" text="Normalized"  /> -->
+		    <CheckBox id="idCheck1" select="onNonZero" text="Get Non-Zero" selected="true"/>
             </HBox>
             <t:Table id="idCompReq" fixedColumnCount="4" selectionMode="Single" alternateRowColors="true" enableSelectAll="false" visibleRowCount="15" >
                 <t:columns>
