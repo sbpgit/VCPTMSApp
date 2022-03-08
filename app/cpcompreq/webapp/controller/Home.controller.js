@@ -402,6 +402,12 @@ sap.ui.define(
 
             sap.m.MessageToast.show("Please click on any quantity");
         } else {
+            var oGraph = sap.ui.getCore().byId("idpiechart");
+            that.charModel.setData([]);
+            that.oGridList.setModel(that.charModel);
+            that.graphModel.setData([]);
+            oGraph.setModel(that.graphModel);
+
          var tableColumns = that.byId("idCompReq").getColumns(),
             selColumnDate,
             selColumnValue = oEvent.getSource().getText(),

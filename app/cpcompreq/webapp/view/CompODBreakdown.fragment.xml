@@ -14,7 +14,7 @@
 				class="sapUiSmallMargin"
 				width="100%"
 				snapToRow="true"
-				items="{/results}">
+				items="{path :'/results'}">
                 	
 					<f:layout>
 						<f:GridContainerSettings rowSize="5rem" columnSize="5rem" gap="1rem" />
