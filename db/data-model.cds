@@ -825,6 +825,23 @@ key     ![CAL_DATE]: Date  @title: 'CAL_DATE' ;
 key     ![CHAR_IMPACT_VAL]: Double  @title: 'CHAR_IMPACT_VAL' ; 
 key     ![PREDICTED_VAL]: Double  @title: 'PREDICTED_VAL' ; 
 }
+
+@cds.persistence.exists 
+Entity ![V_FCHARPLAN] {
+key     ![WEEK_DATE]: Date  @title: 'Week Date' ; 
+key     ![LOCATION_ID]: String(4)  @title: 'Location' ; 
+key     ![PRODUCT_ID]: String(40)  @title: 'Product' ; 
+key     ![CLASS_NUM]: String(20)  @title: 'Int. Counter for Class' ; 
+key     ![CLASS_NAME]: String(20)  @title: 'Class Name' ; 
+key     ![CHAR_NUM]: String(30)  @title: 'Int. Counter for Characteristic ' ; 
+key     ![CHAR_NAME]: String(30)  @title: 'Characteristic' ; 
+key     ![CHARVAL_NUM]: String(70)  @title: 'Int.counter for Characteristic' ; 
+key     ![CHAR_VALUE]: String(70)  @title: 'Characteristic Value ' ; 
+key     ![VERSION]: String(10)  @title: 'Version' ; 
+key     ![SCENARIO]: String(32)  @title: 'Scenario' ; 
+key     ![OPT_PERCENT]: Decimal(5, 2)  @title: 'Option Percent' ; 
+key     ![OPT_QTY]: Decimal(13, 3)  @title: 'Option Quantity' ; 
+}
 /*
 @cds.persistence.exists
 @cds.persistence.calcview

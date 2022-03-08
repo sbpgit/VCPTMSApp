@@ -2064,3 +2064,57 @@ annotate pal.TS_PREDICTIONS with @(
     }]
 
 );
+/*******************************************/
+// IBP Future Character Plan View
+/*******************************************/
+annotate V_FCHARPLAN with @(
+    UI        : {
+        SelectionFields                : [
+            LOCATION_ID,
+            PRODUCT_ID
+        ],
+        LineItem                       : [
+            
+            {
+                $Type : 'UI.DataField', //Label : 'Description',
+                Value : LOCATION_ID
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product ID',
+                Value : PRODUCT_ID
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Family',
+                Value : CLASS_NAME
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : CHAR_NAME
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : CHAR_VALUE
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Family',
+                Value : VERSION
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : SCENARIO
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : WEEK_DATE
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : OPT_PERCENT
+            },
+            {
+                $Type : 'UI.DataField',
+                Value :OPT_QTY
+            }
+        ]
+    }
+);

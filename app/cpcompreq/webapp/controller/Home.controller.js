@@ -253,22 +253,23 @@ sap.ui.define(
       onCheck:function(){
         that.oTable = that.byId("idCompReq");
         that.oGModel = that.getModel("oGModel");
-        var selected = that.byId("idCheck").getSelected();
-        that.byId("idCheck1").setSelected(false);
+        // var selected = that.byId("idCheck").getSelected();
+       that.byId("idCheck1").setSelected(false);
 
         that.Data = that.rowData;
         that.searchData = [];
 
-        if(selected){
+        // if(selected){
             
-            for (var i = 0; i < that.Data.length; i++) {
-            if (that.Data[i].QTYTYPE === "Normalized" ) {
-                that.searchData.push(that.Data[i]);
-            }
-            }
-        } else {
+        //     for (var i = 0; i < that.Data.length; i++) {
+        //     if (that.Data[i].QTYTYPE === "Normalized" ) {
+        //         that.searchData.push(that.Data[i]);
+        //     }
+        //     }
+        // } 
+        // else {
             that.searchData = that.rowData;
-        }
+       // }
         
 
 
@@ -298,7 +299,7 @@ sap.ui.define(
           sRowData.StructureNode = that.tableData[i].STRUC_NODE;
           sRowData.Type = that.tableData[i].QTYTYPE;
           weekIndex = 1;
-          for (let index = 4; index < liDates.length; index++) {
+          for (let index = 3; index < liDates.length; index++) {
             sRowData[liDates[index].CAL_DATE] =
               that.tableData[i]["WEEK" + weekIndex];
             weekIndex++;
@@ -316,8 +317,8 @@ sap.ui.define(
           var columnName = oContext.getObject().CAL_DATE;
           if(columnName === "Component" ||
           columnName === "ItemNum" ||
-          columnName === "StructureNode" ||
-          columnName === "Type" ){
+          columnName === "StructureNode" ){//||
+       //   columnName === "Type" ){
             return new sap.ui.table.Column({
                 width: "8rem",
                 label: columnName,
@@ -344,7 +345,7 @@ sap.ui.define(
         that.oTable = that.byId("idCompReq");
         that.oGModel = that.getModel("oGModel");
         var selected = that.byId("idCheck1").getSelected(),
-            Normaselected = that.byId("idCheck").getSelected(),
+            // Normaselected = that.byId("idCheck").getSelected(),
             name, counter;
 
 
@@ -356,15 +357,15 @@ sap.ui.define(
             data = that.tableData;
 
 
-            if(Normaselected){
-                for (var i = 0; i < that.Data.length; i++) {
-                if (that.Data[i].QTYTYPE === "Normalized" ) {
-                    that.searchData.push(that.Data[i]);
-                }
-                }
-            } else {
+            // if(Normaselected){
+            //     for (var i = 0; i < that.Data.length; i++) {
+            //     if (that.Data[i].QTYTYPE === "Normalized" ) {
+            //         that.searchData.push(that.Data[i]);
+            //     }
+            //     }
+            //} else {
                 that.searchData = that.rowData;
-            }
+           // }
 
 
             
@@ -527,9 +528,9 @@ sap.ui.define(
         lsDates.CAL_DATE = "StructureNode";
         liDates.push(lsDates);
         lsDates = {};
-        lsDates.CAL_DATE = "Type";
-        liDates.push(lsDates);
-        lsDates = {};
+        // lsDates.CAL_DATE = "Type";
+        // liDates.push(lsDates);
+        // lsDates = {};
         
         lsDates.CAL_DATE = that.getNextSunday(vDateSeries);
         vDateSeries = lsDates.CAL_DATE;

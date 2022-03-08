@@ -22,7 +22,7 @@
                                 <f:label>
                                     <Label text="Location"/>
                                 </f:label>
-                                <Input id="idloc" value="" width="225px" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                                <Input id="idloc" value="" width="225px" placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
                             </f:FormElement>
                             <f:FormElement>
                                 <f:label>
@@ -43,7 +43,7 @@
                                 <!-- <Input id="idprod" value="" width="225px"  showValueHelp="true" valueHelpOnly="true" 
                                 valueHelpRequest="handleValueHelp"/> -->
                                 <f:fields>
-                            <MultiInput id="prodInput" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true"
+                            <MultiInput id="prodInput" placeholder="Product" showValueHelp="true" valueHelpOnly="true"
                                 valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
                         </f:fields>
                             </f:FormElement>

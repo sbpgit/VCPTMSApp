@@ -32,7 +32,9 @@ sap.ui.define(
         that.scenModel = new JSONModel();
         that.compModel = new JSONModel();
         that.struModel = new JSONModel();
-
+        that.charModel = new JSONModel();
+        that.graphModel = new JSONModel();
+        that.graphtModel = new JSONModel();
         that.locModel.setSizeLimit(1000);
         that.prodModel.setSizeLimit(1000);
         that.verModel.setSizeLimit(1000);
@@ -83,10 +85,19 @@ sap.ui.define(
           );
           this.getView().addDependent(this._valueHelpDialogStru);
         }
+        if (!this._odGraphDialog) {
+            this._odGraphDialog = sap.ui.xmlfragment(
+              "cpapp.cpcompreq.view.CompODBreakdown",
+              this
+            );
+            this.getView().addDependent(this._odGraphDialog);
+          }
       },
       onAfterRendering: function () {
         // sap.ui.core.BusyIndicator.show();
-
+        this.oResourceBundle = this.getView().getModel("i18n").getResourceBundle();
+        that.colComp = "";
+        that.colDate = ""; 
         that.oList = this.byId("idTab");
         this.oLoc = this.byId("idloc");
         this.oProd = this.byId("idprod");
@@ -94,6 +105,13 @@ sap.ui.define(
         this.oScen = this.byId("idscen");
         this.oComp = this.byId("idcomp");
         this.oStru = this.byId("idstru");
+        this.oPanel = this.byId("idPanel");
+        that._valueHelpDialogProd.setTitleAlignment("Center");
+        that._valueHelpDialogLoc.setTitleAlignment("Center");
+        that._valueHelpDialogVer.setTitleAlignment("Center");
+        that._valueHelpDialogScen.setTitleAlignment("Center");
+        that._valueHelpDialogComp.setTitleAlignment("Center");
+        that._valueHelpDialogStru.setTitleAlignment("Center");
 
         this.oProdList = this._oCore.byId(
           this._valueHelpDialogProd.getId() + "-list"
@@ -113,7 +131,7 @@ sap.ui.define(
         this.oStruList = this._oCore.byId(
           this._valueHelpDialogStru.getId() + "-list"
         );
-
+        this.oGridList = this._oCore.byId(sap.ui.getCore().byId("charOdDialog").getContent()[0].getId());
         sap.ui.core.BusyIndicator.show();
         this.getModel("BModel").read("/getLocation", {
           success: function (oData) {
@@ -139,6 +157,7 @@ sap.ui.define(
         that.onAfterRendering();
       },
       onGetData: function (oEvent) {
+        sap.ui.core.BusyIndicator.show();
         var sRowData = {},
           iRowData = [],
           weekIndex;
@@ -150,7 +169,13 @@ sap.ui.define(
           ver = that.oGModel.getProperty("/SelectedVer"),
           scen = that.oGModel.getProperty("/SelectedScen"),
           comp = that.oGModel.getProperty("/SelectedComp"),
-          stru = that.oGModel.getProperty("/SelectedStru");
+          stru = that.oGModel.getProperty("/SelectedStru"),
+          modelVersion = that.byId("idModelVer").getSelectedKey();
+          
+          that.oGModel.setProperty(
+            "/SelectedMV",
+            that.byId("idModelVer").getSelectedKey()
+          );
         var vFromDate = this.byId("fromDate").getDateValue();
         var vToDate = this.byId("toDate").getDateValue();
         vFromDate = that.getDateFn(vFromDate);
@@ -159,7 +184,8 @@ sap.ui.define(
           Loc !== undefined &&
           Prod !== undefined &&
           ver !== undefined &&
-          scen !== undefined //&&
+          scen !== undefined &&
+          modelVersion !== undefined
           //   comp !== undefined &&
           //   stru !== undefined
         ) {
@@ -180,15 +206,17 @@ sap.ui.define(
               STRUCNODE: stru,
               FROMDATE: vFromDate,
               TODATE: vToDate,
+              MODEL_VERSION:modelVersion
             },
             success: function (data) {
+                sap.ui.core.BusyIndicator.hide();
               that.rowData = data.results;
-              sap.ui.core.BusyIndicator.hide();
 
               that.oGModel.setProperty("/TData", data.results);
               that.TableGenerate();
             },
             error: function (data) {
+                sap.ui.core.BusyIndicator.hide();
               sap.m.MessageToast.show("Error While fetching data");
             },
           });
@@ -222,6 +250,34 @@ sap.ui.define(
         that.TableGenerate();
       },
 
+      onCheck:function(){
+        that.oTable = that.byId("idCompReq");
+        that.oGModel = that.getModel("oGModel");
+        // var selected = that.byId("idCheck").getSelected();
+       that.byId("idCheck1").setSelected(false);
+
+        that.Data = that.rowData;
+        that.searchData = [];
+
+        // if(selected){
+            
+        //     for (var i = 0; i < that.Data.length; i++) {
+        //     if (that.Data[i].QTYTYPE === "Normalized" ) {
+        //         that.searchData.push(that.Data[i]);
+        //     }
+        //     }
+        // } 
+        // else {
+            that.searchData = that.rowData;
+       // }
+        
+
+
+        that.oGModel.setProperty("/TData", that.searchData);
+        that.TableGenerate();
+
+      },
+
       TableGenerate: function () {
         var sRowData = {},
           iRowData = [],
@@ -243,7 +299,7 @@ sap.ui.define(
           sRowData.StructureNode = that.tableData[i].STRUC_NODE;
           sRowData.Type = that.tableData[i].QTYTYPE;
           weekIndex = 1;
-          for (let index = 4; index < liDates.length; index++) {
+          for (let index = 3; index < liDates.length; index++) {
             sRowData[liDates[index].CAL_DATE] =
               that.tableData[i]["WEEK" + weekIndex];
             weekIndex++;
@@ -259,17 +315,205 @@ sap.ui.define(
         that.oTable.setModel(oModel);
         that.oTable.bindColumns("/columns", function (sId, oContext) {
           var columnName = oContext.getObject().CAL_DATE;
+          if(columnName === "Component" ||
+          columnName === "ItemNum" ||
+          columnName === "StructureNode" ){//||
+       //   columnName === "Type" ){
+            return new sap.ui.table.Column({
+                width: "8rem",
+                label: columnName,
+                template: columnName,
+              });
+          }
+          else{
           return new sap.ui.table.Column({
-            width: "5rem",
+            width: "8rem",
             label: columnName,
-            template: columnName,
+            // template: columnName,
+            template: new sap.m.Link({text:"{"+ columnName +"}",
+                      press:that.linkPressed,
+            }),
           });
+        }
           // }
         });
 
         that.oTable.bindRows("/rows");
       },
 
+      onNonZero:function(oEvent){
+        that.oTable = that.byId("idCompReq");
+        that.oGModel = that.getModel("oGModel");
+        var selected = that.byId("idCheck1").getSelected(),
+            // Normaselected = that.byId("idCheck").getSelected(),
+            name, counter;
+
+
+        that.Data = that.rowData;
+        that.FinalData = [];
+        that.searchData = [];
+
+        var columns = that.oTable.getColumns().length - 3,
+            data = that.tableData;
+
+
+            // if(Normaselected){
+            //     for (var i = 0; i < that.Data.length; i++) {
+            //     if (that.Data[i].QTYTYPE === "Normalized" ) {
+            //         that.searchData.push(that.Data[i]);
+            //     }
+            //     }
+            //} else {
+                that.searchData = that.rowData;
+           // }
+
+
+            
+            if(selected){
+
+            for(var i =0; i<that.searchData.length; i++){
+                counter = 0;
+                for(var j=1; j<columns; j++){
+
+                    if(that.searchData[i]["WEEK" + j] !== 0 && that.searchData[i]["WEEK" + j] !== null){
+                        counter = counter + 1;
+                        continue;
+                    }
+
+                }
+                if(counter !== 0){
+                    that.FinalData.push(that.searchData[i]);
+                }
+
+            }
+        } else {
+            that.FinalData = that.searchData;
+        }
+
+            that.oGModel.setProperty("/TData", that.FinalData);
+            that.TableGenerate();
+
+
+      },
+
+      linkPressed:function(oEvent){
+        var selColumnId = oEvent.getSource().getAriaLabelledBy()[0];
+        if(selColumnId === "__column0" || selColumnId === "__column1" ||
+           selColumnId === "__column2" || selColumnId === "__column3"){
+
+            sap.m.MessageToast.show("Please click on any quantity");
+        } else {
+            var oGraph = sap.ui.getCore().byId("idpiechart");
+            that.charModel.setData([]);
+            that.oGridList.setModel(that.charModel);
+            that.graphModel.setData([]);
+            oGraph.setModel(that.graphModel);
+
+         var tableColumns = that.byId("idCompReq").getColumns(),
+            selColumnDate,
+            selColumnValue = oEvent.getSource().getText(),
+            ObindingData = oEvent.getSource().getBindingContext().getObject(),
+            selComponent = ObindingData.Component,
+            selItem = ObindingData.ItemNum,
+            selStruNode = ObindingData.StructureNode,
+            selType = ObindingData.Type;
+            that.colComp = selComponent;
+            for(var i =0; i<tableColumns.length; i++){
+                if(selColumnId === tableColumns[i].sId){
+                    selColumnDate = that.byId("idCompReq").getColumns()[i].getLabel().getText();
+                }
+            }
+            
+            that.colDate = selColumnDate;
+          //  sap.ui.getCore().byId("graphCard").getHeader().setTitle("Component"+selColumnValue);
+          
+            var oGraph = sap.ui.getCore().byId("idpiechart");
+            //  var oGridTable = sap.ui.getCore().byId(sap.ui.getCore().byId("__card1").getCardContent().getId());
+            if(selColumnValue > 0){
+
+                //this.getModel("PModel").read("/getPredictions", {
+                this.getModel("BModel").read("/getBOMPred", {
+                    filters: [new Filter("LOCATION_ID",FilterOperator.EQ, that.oGModel.getProperty("/SelectedLoc")),
+                      new Filter("PRODUCT_ID",FilterOperator.EQ, that.oGModel.getProperty("/SelectedProd")),
+                      new Filter("VERSION",FilterOperator.EQ, that.oGModel.getProperty("/SelectedVer")),
+                      new Filter("SCENARIO",FilterOperator.EQ, that.oGModel.getProperty("/SelectedScen")),
+                      new Filter("COMPONENT",FilterOperator.EQ, selComponent ),
+                      new Filter("CAL_DATE",FilterOperator.EQ, selColumnDate ),
+                      new Filter("MODEL_VERSION",FilterOperator.EQ, that.oGModel.getProperty("/SelectedMV"))
+                    ],
+                    success: function (oData) {
+                    //   that.ogrid
+                      that.charModel.setData(oData);
+                      that.oGridList.setModel(that.charModel);
+                   //   that.graphModel.setData(oData);
+                      that._odGraphDialog.open();
+                    //   that.getModel("BModel").read("/getOdCharImpact", {
+                    //     filters: [new Filter("LOCATION_ID", FilterOperator.EQ, that.oGModel.getProperty("/SelectedLoc")),
+                    //       new Filter("PRODUCT_ID",FilterOperator.EQ, that.oGModel.getProperty("/SelectedProd")),
+                    //       new Filter("VERSION", FilterOperator.EQ, that.oGModel.getProperty("/SelectedVer")),
+                    //       new Filter("SCENARIO", FilterOperator.EQ, that.oGModel.getProperty("/SelectedScen")),
+                    //       new Filter("COMPONENT",FilterOperator.EQ, selComponent ),
+                    //       new Filter("CAL_DATE",FilterOperator.EQ, selColumnDate ),
+                    //       new Filter("MODEL_VERSION",FilterOperator.EQ, that.oGModel.getProperty("/SelectedMV"))
+                    //     //   new Filter("MODEL_VERSION",FilterOperator.EQ, "ACTIVE")
+                    //     ],
+                    //     success: function (oData) {
+                    //     //   that.ogrid
+                    //       that.graphModel.setData(oData);
+                    //       oGraph.setModel(that.graphModel);
+                    //       that.graphtModel.setData(oData);
+                    //     //   oGridTable.setModel(that.graphtModel);
+                    //       that._odGraphDialog.open();
+                    //     },
+                    //     error: function (oData, error) {
+                    //       MessageToast.show("error");
+                    //     },
+                    //   });
+                      //that._odGraphDialog.open();
+                    },
+                    error: function (oData, error) {
+                      MessageToast.show("error");
+                    },
+                  });
+                   
+            }
+            
+            //sap.m.MessageToast.show("Selected Date - " + " " + selColumnDate + " " + "Value - " + " " + selColumnValue);
+        }
+        
+      },
+      onExpand: function(oEvent){
+        var oHdr= oEvent.getSource().getHeaderText();
+        //return objDep.split("_")[0];
+        var objDep = oHdr.split(":");
+        
+        var oGraphChart = sap.ui.getCore().byId("idpiechart");
+        // that.getModel("PModel").read("/getODImpactVals", {getOdCharImpact
+        that.getModel("BModel").read("/getOdCharImpact", {
+            filters: [new Filter("LOCATION_ID", FilterOperator.EQ, that.oGModel.getProperty("/SelectedLoc")),
+              new Filter("PRODUCT_ID",FilterOperator.EQ, that.oGModel.getProperty("/SelectedProd")),
+              new Filter("VERSION", FilterOperator.EQ, that.oGModel.getProperty("/SelectedVer")),
+              new Filter("SCENARIO", FilterOperator.EQ, that.oGModel.getProperty("/SelectedScen")),
+            //   new Filter("COMPONENT",FilterOperator.EQ, that.colComp),
+              new Filter("CAL_DATE",FilterOperator.EQ, that.colDate ),
+              new Filter("OBJ_DEP",FilterOperator.EQ, objDep[0].split("_")[0]),
+              new Filter("OBJ_COUNTER",FilterOperator.EQ, objDep[0].split("_")[1]),
+              new Filter("MODEL_VERSION",FilterOperator.EQ, that.oGModel.getProperty("/SelectedMV"))
+            //   new Filter("MODEL_VERSION",FilterOperator.EQ, "ACTIVE")
+            ],
+            success: function (oData) {
+            //   that.ogrid
+              that.graphModel.setData(oData);
+              oGraphChart.setModel(that.graphModel);
+            //  that.graphtModel.setData(oData);
+            //   oGridTable.setModel(that.graphtModel);
+            //  that._odGraphDialog.open();
+            },
+            error: function (oData, error) {
+              MessageToast.show("error");
+            },
+          });
+      },
       generateDateseries: function (imFromDate, imToDate) {
         var lsDates = {},
           liDates = [];
@@ -284,9 +528,9 @@ sap.ui.define(
         lsDates.CAL_DATE = "StructureNode";
         liDates.push(lsDates);
         lsDates = {};
-        lsDates.CAL_DATE = "Type";
-        liDates.push(lsDates);
-        lsDates = {};
+        // lsDates.CAL_DATE = "Type";
+        // liDates.push(lsDates);
+        // lsDates = {};
         
         lsDates.CAL_DATE = that.getNextSunday(vDateSeries);
         vDateSeries = lsDates.CAL_DATE;
@@ -443,7 +687,9 @@ sap.ui.define(
           if (that.oStruList.getBinding("items")) {
             that.oStruList.getBinding("items").filter([]);
           }
-        }
+        }else if (sId.includes("__button4")) {
+            that._odGraphDialog.close();
+          }
       },
       handleSearch: function (oEvent) {
         var query =

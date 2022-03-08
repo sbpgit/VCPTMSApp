@@ -333,7 +333,8 @@ sap.ui.define(
                 oCell.push(cell1);
 
                 var cell1 = new sap.m.Text({
-                  text: "{ODCOUNT}",
+                //   text: "{ODCOUNT}",
+                  text: "{path: 'ODCOUNT', type: 'sap.ui.model.type.Float', formatOptions: { maxFractionDigits: 3, roundingMode: 'HALF_AWAY_FROM_ZERO ' }}"
                 });
                 oCell.push(cell1);
 

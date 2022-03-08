@@ -1,0 +1,100 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" 
+	xmlns:grid="sap.ui.layout.cssgrid" xmlns:layout="sap.ui.layout"
+    xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
+    xmlns:viz.data="sap.viz.ui5.data"
+    xmlns:viz="sap.viz.ui5.controls"
+	xmlns:card="sap.f.cards"
+	xmlns:f="sap.f">
+	<Dialog
+		id="charOdDialog"
+		title="Component Quantity Breakdown" contentWidth="850px">
+        <content>
+                <f:GridContainer
+				id="grid1"
+				class="sapUiSmallMargin"
+				width="100%"
+				snapToRow="true"
+				items="{path :'/results'}">
+                	
+					<f:layout>
+						<f:GridContainerSettings rowSize="5rem" columnSize="5rem" gap="1rem" />
+					</f:layout>
+					<f:layoutS>
+						<f:GridContainerSettings rowSize="5rem" columnSize="5rem" gap="0.5rem" />
+					</f:layoutS>
+                    <Panel id="idPanel" headerText="{OBJ_DEP}_{OBJ_COUNTER}: {PREDICTED}" expandable="true" width="850px" height="400px" expand="onExpand" >
+                        <!-- <headerToolbar>
+                                <Title text="{OBJ_DEP}_{OBJ_COUNTER} :{PREDICTED}" />
+                         
+                        </headerToolbar> -->
+                        <content>
+                            <!-- <f:Card id="graphCard" class="sapUiMediumMargin" >
+                                <f:layoutData>
+                                    <f:GridContainerItemLayoutData columns="15" rows="5" />
+                                </f:layoutData>
+                                    <f:header>
+                                        <card:Header title="" subtitle="" />
+                                    </f:header>
+                                    <f:content> -->
+                                        <viz:VizFrame xmlns="sap.viz" id="idpiechart" vizType="pie"
+                                        vizProperties="{plotArea: { dataLabel: { visible: true } }, title: { text: '' }}" width="850px" height="400px">	
+                                        <viz:dataset>
+                                            <viz.data:FlattenedDataset data="{/results}">
+                                                <viz.data:dimensions>
+                                                    <viz.data:DimensionDefinition name="Characteristics"
+                                                        value="{CHAR_NAME}" />
+                                                </viz.data:dimensions>
+                                                <viz.data:measures>
+                                                    <viz.data:MeasureDefinition name="Prediction"
+                                                        value="{PREDICTED_VAL}" />
+                                                </viz.data:measures>
+                                            </viz.data:FlattenedDataset>
+                                        </viz:dataset>
+
+                                        <viz:feeds>
+                                            <viz.feeds:FeedItem uid="size" type="Measure"
+                                                values="Prediction"/>
+                                            <viz.feeds:FeedItem uid="color" type="Dimension"
+                                                values="Characteristics" />
+                                        </viz:feeds>
+                                    </viz:VizFrame>		
+                                    <!-- </f:content>
+	                        </f:Card> -->
+                        </content>
+                   </Panel>
+                         <!-- <f:Card class="sapUiMediumMargin" width="300px">
+					<f:layoutData>
+						<f:GridContainerItemLayoutData minRows="3" columns="5" />
+					</f:layoutData>
+                        <f:content>
+                        <Table id="charpred" items="{/results}">
+                        
+                            <columns>
+                                <Column>
+                                    <Text text="Characteristics"/>
+                                </Column>
+                                <Column>
+                                    <Text text="Prediction"/>
+                                </Column>
+                                
+                            </columns>
+                            <items>
+                                <ColumnListItem vAlign="Middle">
+                                    <cells>
+                                        <Text text="{CHAR_NAME}"/>                    
+                                        <Text text="{PREDICTED_VAL}"/>  
+                                    </cells>
+                                </ColumnListItem>
+                            </items>
+                        </Table>	
+                        </f:content>
+	                </f:Card>  -->
+			</f:GridContainer>
+        </content>
+		<beginButton>
+			<Button
+				text="Close"
+				press="handleClose"/>
+		</beginButton>
+	</Dialog>
+</core:FragmentDefinition>

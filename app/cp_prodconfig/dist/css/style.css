@@ -3,7 +3,9 @@
 .boldText{
 	font-weight: bold;
 }
-
+div#__title0 {
+    margin-left: 650px;
+}
 
 .sapUiLargeMarginEnd {
     margin-right: 13rem !important;

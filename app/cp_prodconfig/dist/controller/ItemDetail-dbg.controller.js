@@ -43,7 +43,27 @@ sap.ui.define([
               });
 
 
-        }
+        },
+
+        onDetailSearch: function (oEvent) {
+            var query =
+                oEvent.getParameter("value") || oEvent.getParameter("newValue"),
+              oFilters = [];
+    
+            if (query !== "") {
+              oFilters.push(
+                new Filter({
+                  filters: [
+                    new Filter("CLASS_NAME", FilterOperator.Contains, query),
+                    new Filter("CHAR_NAME", FilterOperator.Contains, query),
+                    new Filter("CHAR_VALUE", FilterOperator.Contains, query)
+                  ],
+                  and: false,
+                })
+              );
+            }
+            this.byId("charList").getBinding("items").filter(oFilters);
+          },
 
 	});
 

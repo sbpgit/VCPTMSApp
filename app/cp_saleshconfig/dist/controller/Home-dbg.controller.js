@@ -55,6 +55,8 @@ sap.ui.define(
         that = this;
         that.oList = this.byId("idTab");
         this.oProd = this.byId("prodInput");
+        that._valueHelpDialogLoc.setTitleAlignment("Center");
+        that._valueHelpDialogProd.setTitleAlignment("Center");
 
         this.oProdList = this._oCore.byId(
           this._valueHelpDialogProd.getId() + "-list"
