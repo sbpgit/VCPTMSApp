@@ -160,6 +160,10 @@ modules:
       - cpapprtrhdrcprtrheader.zip
       name: cpapprtrhdrcprtrheader
       target-path: resources/
+    - artifacts:
+      - cpappfcpibpfuturedemand.zip
+      name: cpappfcpibpfuturedemand
+      target-path: resources/
 - name: cpibpfdemcpibpfdem
   type: html5
   path: app/cp_ibpfdem
@@ -373,6 +377,16 @@ modules:
 - name: cpapprtrhdrcprtrheader
   type: html5
   path: app/cprtrheader
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappfcpibpfuturedemand
+  type: html5
+  path: app/cp_ibpfuturedemand
   build-parameters:
     build-result: dist
     builder: custom
