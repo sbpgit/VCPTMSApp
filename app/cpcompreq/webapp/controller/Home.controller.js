@@ -214,6 +214,10 @@ sap.ui.define(
 
               that.oGModel.setProperty("/TData", data.results);
               that.TableGenerate();
+              var selected = that.byId("idCheck1").getSelected();
+              if(selected){
+              that.onNonZero();
+              }
             },
             error: function (data) {
                 sap.ui.core.BusyIndicator.hide();
@@ -221,6 +225,7 @@ sap.ui.define(
             },
           });
         } else {
+            sap.ui.core.BusyIndicator.hide();
           sap.m.MessageToast.show(
             "Please select a Location/Product/Version/Scenario"
           );
@@ -233,7 +238,13 @@ sap.ui.define(
 
         var query =
           oEvent.getParameter("value") || oEvent.getParameter("newValue");
-        that.Data = that.rowData;
+
+          if(query === ""){
+            that.onNonZero();
+          } else {
+          that.oGModel = that.getModel("oGModel");
+        that.Data = that.oGModel.getProperty("/TData");
+        // that.Data = that.rowData;
         that.searchData = [];
 
         for (var i = 0; i < that.Data.length; i++) {
@@ -248,35 +259,35 @@ sap.ui.define(
 
         that.oGModel.setProperty("/TData", that.searchData);
         that.TableGenerate();
+    }
       },
 
-      onCheck:function(){
-        that.oTable = that.byId("idCompReq");
-        that.oGModel = that.getModel("oGModel");
-        // var selected = that.byId("idCheck").getSelected();
-       that.byId("idCheck1").setSelected(false);
+    //   onCheck:function(){
+    //     that.oTable = that.byId("idCompReq");
+    //     that.oGModel = that.getModel("oGModel");
+    //     var selected = that.byId("idCheck").getSelected();
+    //     that.byId("idCheck1").setSelected(false);
 
-        that.Data = that.rowData;
-        that.searchData = [];
+    //     that.Data = that.rowData;
+    //     that.searchData = [];
 
-        // if(selected){
+    //     if(selected){
             
-        //     for (var i = 0; i < that.Data.length; i++) {
-        //     if (that.Data[i].QTYTYPE === "Normalized" ) {
-        //         that.searchData.push(that.Data[i]);
-        //     }
-        //     }
-        // } 
-        // else {
-            that.searchData = that.rowData;
-       // }
+    //         for (var i = 0; i < that.Data.length; i++) {
+    //         if (that.Data[i].QTYTYPE === "Normalized" ) {
+    //             that.searchData.push(that.Data[i]);
+    //         }
+    //         }
+    //     } else {
+    //         that.searchData = that.rowData;
+    //     }
         
 
 
-        that.oGModel.setProperty("/TData", that.searchData);
-        that.TableGenerate();
+    //     that.oGModel.setProperty("/TData", that.searchData);
+    //     that.TableGenerate();
 
-      },
+    //   },
 
       TableGenerate: function () {
         var sRowData = {},
@@ -345,51 +356,28 @@ sap.ui.define(
         that.oTable = that.byId("idCompReq");
         that.oGModel = that.getModel("oGModel");
         var selected = that.byId("idCheck1").getSelected(),
-            // Normaselected = that.byId("idCheck").getSelected(),
             name, counter;
-
-
-        that.Data = that.rowData;
+        that.searchData = that.rowData;
         that.FinalData = [];
-        that.searchData = [];
 
         var columns = that.oTable.getColumns().length - 3,
             data = that.tableData;
-
-
-            // if(Normaselected){
-            //     for (var i = 0; i < that.Data.length; i++) {
-            //     if (that.Data[i].QTYTYPE === "Normalized" ) {
-            //         that.searchData.push(that.Data[i]);
-            //     }
-            //     }
-            //} else {
-                that.searchData = that.rowData;
-           // }
-
-
-            
             if(selected){
-
             for(var i =0; i<that.searchData.length; i++){
                 counter = 0;
                 for(var j=1; j<columns; j++){
-
                     if(that.searchData[i]["WEEK" + j] !== 0 && that.searchData[i]["WEEK" + j] !== null){
                         counter = counter + 1;
-                        continue;
+                        break;
                     }
-
                 }
                 if(counter !== 0){
                     that.FinalData.push(that.searchData[i]);
                 }
-
             }
         } else {
             that.FinalData = that.searchData;
         }
-
             that.oGModel.setProperty("/TData", that.FinalData);
             that.TableGenerate();
 
@@ -513,6 +501,10 @@ sap.ui.define(
               MessageToast.show("error");
             },
           });
+      },
+
+      handleDialogClose(){
+        that._odGraphDialog.close();
       },
       generateDateseries: function (imFromDate, imToDate) {
         var lsDates = {},

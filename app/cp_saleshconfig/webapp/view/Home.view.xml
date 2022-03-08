@@ -92,9 +92,6 @@
                     <Column hAlign="Left" vAlign="Middle">
                         <Text text="{i18n>ordQuan}"/>
                     </Column>
-                    <Column hAlign="Left" vAlign="Middle">
-                        <Text text="{i18n>netvalue}"/>
-                    </Column>
                 </columns>
                 <items>
                     <ColumnListItem>
@@ -107,7 +104,6 @@
                         <Text text="{CUSTOMER_GROUP}"/>
                         <Text text="{LOCATION_ID}"/>
                         <Text text="{ORD_QTY}"/>
-                        <Text text="{NET_VALUE}"/>
                         </cells>
                     </ColumnListItem>
                 </items>

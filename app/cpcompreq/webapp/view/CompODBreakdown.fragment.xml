@@ -7,7 +7,7 @@
 	xmlns:f="sap.f">
 	<Dialog
 		id="charOdDialog"
-		title="Component Quantity Breakdown" contentWidth="850px">
+		title="Component Quantity Breakdown" contentWidth="950px" horizontalScrolling="false">
         <content>
                 <f:GridContainer
 				id="grid1"
@@ -94,7 +94,7 @@
 		<beginButton>
 			<Button
 				text="Close"
-				press="handleClose"/>
+				press="handleDialogClose"/>
 		</beginButton>
 	</Dialog>
 </core:FragmentDefinition>
