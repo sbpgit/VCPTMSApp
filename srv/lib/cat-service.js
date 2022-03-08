@@ -214,7 +214,7 @@ module.exports = (srv) => {
 
     const liCompQty = await cds.run(
       `
-            SELECT * FROM "V_COMREQ"
+            SELECT * FROM "V_COMP_REQ"
             WHERE "LOCATION_ID" = '` +
         req.data.LOCATION_ID +
         `'
@@ -228,7 +228,9 @@ module.exports = (srv) => {
         vDateTo +
         `' AND "CAL_DATE" >= '` +
         vDateFrom +
-        `')
+        `') AND "MODEL_VERSION" = '`+
+        req.data.MODEL_VERSION +
+        `'
                  ORDER BY 
                       "LOCATION_ID" ASC, 
                       "PRODUCT_ID" ASC,
@@ -248,7 +250,7 @@ module.exports = (srv) => {
                           "ITEM_NUM",
                           "COMPONENT",
                           "STRUC_NODE"
-          FROM "V_COMREQ"
+          FROM "V_COMP_REQ"
           WHERE "LOCATION_ID" = '` +
         req.data.LOCATION_ID +
         `' AND "PRODUCT_ID" = '` +
@@ -262,7 +264,9 @@ module.exports = (srv) => {
         `'
                 AND "CAL_DATE" >= '` +
         vDateFrom +
-        `')
+        `') AND "MODEL_VERSION" = '`+
+        req.data.MODEL_VERSION +
+        `'
                ORDER BY 
                     "LOCATION_ID" ASC, 
                     "PRODUCT_ID" ASC,
@@ -308,7 +312,7 @@ module.exports = (srv) => {
           ) {
             lsCompWeekly.STRUC_NODE = liCompQty[vCompIndex].STRUC_NODE;
             lsCompWeekly[columnname + vWeekIndex] =
-              liCompQty[vCompIndex].ORD_QTY;
+              liCompQty[vCompIndex].COMP_QTY;
             break;
           }
         }
@@ -326,7 +330,7 @@ module.exports = (srv) => {
           ) {
             lsCompWeekly.STRUC_NODE = liCompQty[vCompIndex].STRUC_NODE;
             lsCompWeekly[columnname + vWeekIndex] =
-              liCompQty[vCompIndex].CAL_COMP_QTY;
+              parseInt(liCompQty[vCompIndex].ACT_COMP_QTY);
             break;
           }
         }

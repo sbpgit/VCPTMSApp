@@ -436,22 +436,22 @@ sap.ui.define(
                         Selprod = that.byId("idProComp").getValue(),
                         selVer = that.byId("idver").getValue(),
                         selScen = that.byId("idscen").getValue(); 
-
-                this.getModel("BModel").callFunction("/getCompreqQty", {
-                    method: "GET",
-                    urlParameters: {
-                        LOCATION_ID: Selloc,
-                        PRODUCT_ID: Selprod,
-                        VERSION: selVer,
-                        SCENARIO : selScen,
-                    },
-                    success: function (oData) {
                         MessageToast.show("Generated components requirements");
-                    },
-                    error: function (oData, error) {
-                      MessageToast.show("Failed to generate Components Requirments");
-                    },
-                  });
+                // this.getModel("BModel").callFunction("/getCompreqQty", {
+                //     method: "GET",
+                //     urlParameters: {
+                //         LOCATION_ID: Selloc,
+                //         PRODUCT_ID: Selprod,
+                //         VERSION: selVer,
+                //         SCENARIO : selScen,
+                //     },
+                //     success: function (oData) {
+                //         MessageToast.show("Generated components requirements");
+                //     },
+                //     error: function (oData, error) {
+                //       MessageToast.show("Failed to generate Components Requirments");
+                //     },
+                //   });
 
                 }
 

@@ -3,8 +3,8 @@
   "authenticationMethod": "route",
   "routes": [
     {
-      "source": "^/catalog/(.*)$",
-      "target": "/catalog/$1",
+      "source": "^/pal/(.*)$",
+      "target": "/pal/$1",
       "destination": "ConfigProd",
       "authenticationType": "xsuaa",
       "csrfProtection": false

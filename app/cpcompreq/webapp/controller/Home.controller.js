@@ -95,7 +95,9 @@ sap.ui.define(
       },
       onAfterRendering: function () {
         // sap.ui.core.BusyIndicator.show();
-
+        this.oResourceBundle = this.getView().getModel("i18n").getResourceBundle();
+        that.colComp = "";
+        that.colDate = ""; 
         that.oList = this.byId("idTab");
         this.oLoc = this.byId("idloc");
         this.oProd = this.byId("idprod");
@@ -103,7 +105,7 @@ sap.ui.define(
         this.oScen = this.byId("idscen");
         this.oComp = this.byId("idcomp");
         this.oStru = this.byId("idstru");
-
+        this.oPanel = this.byId("idPanel");
         that._valueHelpDialogProd.setTitleAlignment("Center");
         that._valueHelpDialogLoc.setTitleAlignment("Center");
         that._valueHelpDialogVer.setTitleAlignment("Center");
@@ -169,6 +171,11 @@ sap.ui.define(
           comp = that.oGModel.getProperty("/SelectedComp"),
           stru = that.oGModel.getProperty("/SelectedStru"),
           modelVersion = that.byId("idModelVer").getSelectedKey();
+          
+          that.oGModel.setProperty(
+            "/SelectedMV",
+            that.byId("idModelVer").getSelectedKey()
+          );
         var vFromDate = this.byId("fromDate").getDateValue();
         var vToDate = this.byId("toDate").getDateValue();
         vFromDate = that.getDateFn(vFromDate);
@@ -197,9 +204,9 @@ sap.ui.define(
               SCENARIO: scen,
               COMPONENT: comp,
               STRUCNODE: stru,
-              MODEL_VERSION:modelVersion,
               FROMDATE: vFromDate,
               TODATE: vToDate,
+              MODEL_VERSION:modelVersion
             },
             success: function (data) {
                 sap.ui.core.BusyIndicator.hide();
@@ -403,49 +410,58 @@ sap.ui.define(
             selItem = ObindingData.ItemNum,
             selStruNode = ObindingData.StructureNode,
             selType = ObindingData.Type;
+            that.colComp = selComponent;
             for(var i =0; i<tableColumns.length; i++){
                 if(selColumnId === tableColumns[i].sId){
                     selColumnDate = that.byId("idCompReq").getColumns()[i].getLabel().getText();
                 }
             }
+            
+            that.colDate = selColumnDate;
+          //  sap.ui.getCore().byId("graphCard").getHeader().setTitle("Component"+selColumnValue);
+          
             var oGraph = sap.ui.getCore().byId("idpiechart");
-            // var oGridTable = sap.ui.getCore().byId(sap.ui.getCore().byId("__card1").getCardContent().getId());
+            //  var oGridTable = sap.ui.getCore().byId(sap.ui.getCore().byId("__card1").getCardContent().getId());
             if(selColumnValue > 0){
 
-               // this.getModel("BModel").read("/getOdCharImpact", {
+                //this.getModel("PModel").read("/getPredictions", {
                 this.getModel("BModel").read("/getBOMPred", {
                     filters: [new Filter("LOCATION_ID",FilterOperator.EQ, that.oGModel.getProperty("/SelectedLoc")),
                       new Filter("PRODUCT_ID",FilterOperator.EQ, that.oGModel.getProperty("/SelectedProd")),
                       new Filter("VERSION",FilterOperator.EQ, that.oGModel.getProperty("/SelectedVer")),
                       new Filter("SCENARIO",FilterOperator.EQ, that.oGModel.getProperty("/SelectedScen")),
                       new Filter("COMPONENT",FilterOperator.EQ, selComponent ),
-                      new Filter("CAL_DATE",FilterOperator.EQ, selColumnDate )
+                      new Filter("CAL_DATE",FilterOperator.EQ, selColumnDate ),
+                      new Filter("MODEL_VERSION",FilterOperator.EQ, that.oGModel.getProperty("/SelectedMV"))
                     ],
                     success: function (oData) {
                     //   that.ogrid
                       that.charModel.setData(oData);
                       that.oGridList.setModel(that.charModel);
-                      that.getModel("BModel").read("/getOdCharImpact", {
-                        filters: [new Filter("LOCATION_ID", FilterOperator.EQ, that.oGModel.getProperty("/SelectedLoc")),
-                          new Filter("PRODUCT_ID",FilterOperator.EQ, that.oGModel.getProperty("/SelectedProd")),
-                          new Filter("VERSION", FilterOperator.EQ, that.oGModel.getProperty("/SelectedVer")),
-                          new Filter("SCENARIO", FilterOperator.EQ, that.oGModel.getProperty("/SelectedScen")),
-                          new Filter("COMPONENT",FilterOperator.EQ, selComponent ),
-                          new Filter("CAL_DATE",FilterOperator.EQ, selColumnDate ),
-                        //   new Filter("MODEL_VERSION",FilterOperator.EQ, "ACTIVE")
-                        ],
-                        success: function (oData) {
-                        //   that.ogrid
-                          that.graphModel.setData(oData);
-                          oGraph.setModel(that.graphModel);
-                          that.graphtModel.setData(oData);
-                        //   oGridTable.setModel(that.graphtModel);
-                          that._odGraphDialog.open();
-                        },
-                        error: function (oData, error) {
-                          MessageToast.show("error");
-                        },
-                      });
+                   //   that.graphModel.setData(oData);
+                      that._odGraphDialog.open();
+                    //   that.getModel("BModel").read("/getOdCharImpact", {
+                    //     filters: [new Filter("LOCATION_ID", FilterOperator.EQ, that.oGModel.getProperty("/SelectedLoc")),
+                    //       new Filter("PRODUCT_ID",FilterOperator.EQ, that.oGModel.getProperty("/SelectedProd")),
+                    //       new Filter("VERSION", FilterOperator.EQ, that.oGModel.getProperty("/SelectedVer")),
+                    //       new Filter("SCENARIO", FilterOperator.EQ, that.oGModel.getProperty("/SelectedScen")),
+                    //       new Filter("COMPONENT",FilterOperator.EQ, selComponent ),
+                    //       new Filter("CAL_DATE",FilterOperator.EQ, selColumnDate ),
+                    //       new Filter("MODEL_VERSION",FilterOperator.EQ, that.oGModel.getProperty("/SelectedMV"))
+                    //     //   new Filter("MODEL_VERSION",FilterOperator.EQ, "ACTIVE")
+                    //     ],
+                    //     success: function (oData) {
+                    //     //   that.ogrid
+                    //       that.graphModel.setData(oData);
+                    //       oGraph.setModel(that.graphModel);
+                    //       that.graphtModel.setData(oData);
+                    //     //   oGridTable.setModel(that.graphtModel);
+                    //       that._odGraphDialog.open();
+                    //     },
+                    //     error: function (oData, error) {
+                    //       MessageToast.show("error");
+                    //     },
+                    //   });
                       //that._odGraphDialog.open();
                     },
                     error: function (oData, error) {
@@ -459,7 +475,38 @@ sap.ui.define(
         }
         
       },
-
+      onExpand: function(oEvent){
+        var oHdr= oEvent.getSource().getHeaderText();
+        //return objDep.split("_")[0];
+        var objDep = oHdr.split(":");
+        
+        var oGraphChart = sap.ui.getCore().byId("idpiechart");
+        // that.getModel("PModel").read("/getODImpactVals", {getOdCharImpact
+        that.getModel("BModel").read("/getOdCharImpact", {
+            filters: [new Filter("LOCATION_ID", FilterOperator.EQ, that.oGModel.getProperty("/SelectedLoc")),
+              new Filter("PRODUCT_ID",FilterOperator.EQ, that.oGModel.getProperty("/SelectedProd")),
+              new Filter("VERSION", FilterOperator.EQ, that.oGModel.getProperty("/SelectedVer")),
+              new Filter("SCENARIO", FilterOperator.EQ, that.oGModel.getProperty("/SelectedScen")),
+            //   new Filter("COMPONENT",FilterOperator.EQ, that.colComp),
+              new Filter("CAL_DATE",FilterOperator.EQ, that.colDate ),
+              new Filter("OBJ_DEP",FilterOperator.EQ, objDep[0].split("_")[0]),
+              new Filter("OBJ_COUNTER",FilterOperator.EQ, objDep[0].split("_")[1]),
+              new Filter("MODEL_VERSION",FilterOperator.EQ, that.oGModel.getProperty("/SelectedMV"))
+            //   new Filter("MODEL_VERSION",FilterOperator.EQ, "ACTIVE")
+            ],
+            success: function (oData) {
+            //   that.ogrid
+              that.graphModel.setData(oData);
+              oGraphChart.setModel(that.graphModel);
+            //  that.graphtModel.setData(oData);
+            //   oGridTable.setModel(that.graphtModel);
+            //  that._odGraphDialog.open();
+            },
+            error: function (oData, error) {
+              MessageToast.show("error");
+            },
+          });
+      },
       generateDateseries: function (imFromDate, imToDate) {
         var lsDates = {},
           liDates = [];

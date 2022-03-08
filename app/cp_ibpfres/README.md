@@ -7,7 +7,7 @@
 |**Generation Platform**<br>CLI|
 |**Floorplan Used**<br>List Report Object Page V4|
 |**Service Type**<br>Local Cap|
-|**Service URL**<br>/catalog/
+|**Service URL**<br>/pal/
 |**Module Name**<br>cp_ibpfres|
 |**Application Title**<br>Future Plan Result|
 |**Namespace**<br>cp.ibpfres|
@@ -16,7 +16,7 @@
 |**Enable Code Assist Libraries**<br>False|
 |**Add Eslint configuration**<br>False|
 |**Enable Telemetry**<br>True|
-|**Main Entity**<br>getIBPFres|
+|**Main Entity**<br>getPredictions|
 
 ## cp_ibpfres
 

@@ -1927,3 +1927,140 @@ annotate service.PROD_ACCNODE with @(
         ]
     }
 );
+/*******************************************/
+// IBP Future Character Plan
+/*******************************************/
+annotate pal.TS_PREDICTIONS with @(
+    UI        : {
+        SelectionFields                : [
+            LOCATION_ID,
+            PRODUCT_ID,
+            OBJ_DEP
+        ],
+        LineItem                       : [
+            {
+                $Type : 'UI.DataField',
+                Value : CAL_DATE,
+                ![@UI.Importance]   : #High
+            },            
+            {
+                $Type : 'UI.DataField', //Label : 'Description',
+                Value : LOCATION_ID,
+                ![@UI.Importance]   : #High
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product ID',
+                Value : PRODUCT_ID,
+                ![@UI.Importance]   : #High
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Family',
+                Value : OBJ_TYPE
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Family',
+                Value : OBJ_DEP
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Family',
+                Value : OBJ_COUNTER
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Family',
+                Value : VERSION
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : SCENARIO
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Family',
+                Value : PREDICTED 
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Family',
+                Value : PREDICTED_TIME
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Family',
+                Value : PREDICTED_STATUS
+            }
+        ],
+            HeaderInfo          : {
+            Title          : {Value : LOCATION_ID},
+            Description    : {Value : PRODUCT_ID},
+            TypeName       : 'Object Dependencies Predicted',
+            TypeNamePlural : 'Object Dependencies Predicted',
+        },
+        FieldGroup #Details : {Data : [
+            {
+                $Type : 'UI.DataField', //Label : 'Product ID',
+                Value : LOCATION_ID
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Description',
+                Value : CAL_DATE
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : PRODUCT_ID
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Family',
+                Value : OBJ_TYPE
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Family',
+                Value : OBJ_DEP
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Family',
+                Value : OBJ_COUNTER
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Family',
+                Value : VERSION
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : SCENARIO
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Family',
+                Value : MODEL_TYPE
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Family',
+                Value : MODEL_VERSION
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Family',
+                Value : MODEL_PROFILE
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Family',
+                Value : PREDICTED 
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Family',
+                Value : PREDICTED_TIME
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Family',
+                Value : PREDICTED_STATUS
+            }         
+        ]}
+    },
+    //Page Facets
+    UI.Facets : [{
+        $Type  : 'UI.CollectionFacet',
+        ID     : 'OBJ_DEP',
+        Label  : 'Object Dependencies Predicted',
+        Facets : [{
+            $Type  : 'UI.ReferenceFacet',
+            Label  : 'Object Dependencies Predicted',
+            Target : '@UI.FieldGroup#Details'
+        }]
+    }]
+
+);

@@ -38,7 +38,7 @@
                     "action": "Display",
                     "title": "{{flpTitle}}",
                     "subTitle": "{{flpSubtitle}}",
-                    "icon": ""
+                    "icon": "sap-icon://add-coursebook"
                 }
             }
         }
