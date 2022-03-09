@@ -88,9 +88,9 @@ sap.ui.define(
             oFilters.push(
               new Filter({
                 filters: [
-                  new Filter("CLASS_NUM", FilterOperator.Contains, query),
-                  new Filter("CHAR_NUM", FilterOperator.Contains, query),
-                  new Filter("CHARVAL_NUM", FilterOperator.Contains, query),
+                  new Filter("CLASS_NAME", FilterOperator.Contains, query),
+                  new Filter("CHAR_NAME", FilterOperator.Contains, query),
+                  new Filter("CHAR_VALUE", FilterOperator.Contains, query),
                 ],
                 and: false,
               })

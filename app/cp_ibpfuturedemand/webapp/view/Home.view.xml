@@ -71,7 +71,7 @@
         </f:Form>
 
         <content>
-        <SearchField id="headSearch"  liveChange="onSearch" placeholder="Week Date/ Quantity"/>
+        <SearchField id="headSearch"  liveChange="onSearch" placeholder="Week Date/ Quantity/ Version/ Scenario"/>
                 <Table id="IBPfdemList"  items="{path: '/results'}" itemPress="onhandlePress" growingScrollToLoad="true" 
                          mode="SingleSelectMaster" selectionChange="onhandlePress" rememberSelections="false">
 				<columns>

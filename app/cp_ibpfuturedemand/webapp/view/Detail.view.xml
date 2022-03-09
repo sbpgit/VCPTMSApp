@@ -3,7 +3,7 @@
     xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns:l="sap.ui.layout"
 	xmlns:f="sap.ui.layout.form"
 >
-    <Page id="idPage" title="IBP Plan" titleAlignment="Center" showNavButton="true" navButtonPress="onBack" showFooter="true" class="boldText">
+    <Page id="idPage" title="IBP Future Plan" titleAlignment="Center" showNavButton="true" navButtonPress="onBack" showFooter="true" class="boldText">
 
 			
         <content>
@@ -51,7 +51,7 @@
                             </f:FormContainer>
                         </f:formContainers>
                     </f:Form>
-            <SearchField id="DetailSearch"  liveChange="onDetailSearch" placeholder="Class #/ Char #/ Char Value #"/>
+            <SearchField id="DetailSearch"  liveChange="onDetailSearch" placeholder="Class Name/ Char Name/ Char Value"/>
             
         <Table id="idPlanTable"  items="{path: '/results'}"  >
 				<columns>

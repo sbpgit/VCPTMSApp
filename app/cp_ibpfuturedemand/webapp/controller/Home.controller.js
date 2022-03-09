@@ -126,15 +126,49 @@ sap.ui.define(
           ver = that.byId("idver").getValue(),
           scen = that.byId("idscen").getValue();
 
-        if (Loc !== "" && Prod !== "" && ver !== "" && scen !== ""     ) {
+          var oFilters = [];
+          var sFilter = new sap.ui.model.Filter({
+              path: "LOCATION_ID",
+              operator: sap.ui.model.FilterOperator.EQ,
+              value1: Loc
+          });
+          oFilters.push(sFilter);
+
+          var sFilter = new sap.ui.model.Filter({
+            path: "PRODUCT_ID",
+            operator: sap.ui.model.FilterOperator.EQ,
+            value1: Prod
+        });
+        oFilters.push(sFilter);
+
+        if(ver){
+            var sFilter = new sap.ui.model.Filter({
+                path: "VERSION",
+                operator: sap.ui.model.FilterOperator.EQ,
+                value1: ver
+            });
+            oFilters.push(sFilter);
+        }
+        if(scen){
+            var sFilter = new sap.ui.model.Filter({
+                path: "SCENARIO",
+                operator: sap.ui.model.FilterOperator.EQ,
+                value1: ver
+            });
+            oFilters.push(scen);
+        }
+
+
+        if (Loc !== "" && Prod !== "" ) {
             sap.ui.core.BusyIndicator.show();
           that.getModel("BModel").read("/getIBPFdem", {
-            filters: [
-                new Filter("LOCATION_ID", FilterOperator.EQ, Loc),
-                new Filter("PRODUCT_ID", FilterOperator.EQ, Prod),
-                new Filter("VERSION", FilterOperator.EQ, ver),
-                new Filter("SCENARIO", FilterOperator.EQ, scen)
-              ],
+            filters: oFilters,
+            // filters: [
+            //     new Filter("LOCATION_ID", FilterOperator.EQ, Loc),
+            //     new Filter("PRODUCT_ID", FilterOperator.EQ, Prod),
+            //     new Filter("VERSION", FilterOperator.EQ, ver),
+            //     new Filter("SCENARIO", FilterOperator.EQ, scen)
+            //   ],
             success: function (oData) {
                 oData.results.forEach(function (row) {
                    row.WEEK_DATE = that.getInMMddyyyyFormat(row.WEEK_DATE);
@@ -462,6 +496,8 @@ sap.ui.define(
                 filters: [
                   new Filter("WEEK_DATE", FilterOperator.Contains, query),
                   new Filter("QUANTITY", FilterOperator.Contains, query),
+                  new Filter("VERSION", FilterOperator.Contains, query),
+                  new Filter("SCENARIO", FilterOperator.Contains, query),
                 ],
                 and: false,
               })
