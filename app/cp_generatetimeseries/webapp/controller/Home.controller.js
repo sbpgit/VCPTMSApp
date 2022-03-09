@@ -389,7 +389,7 @@ sap.ui.define(
                 onTimeS:function(){
                     var Selloc =that.oGModel.getProperty("/SelectedLoc"),
                         Selprod = that.oGModel.getProperty("/SelectedProd"); 
-
+                        sap.ui.core.BusyIndicator.show();                    
                     this.getModel("BModel").callFunction("/generate_timeseries", {
                         method: "GET",
                         urlParameters: {
@@ -398,9 +398,11 @@ sap.ui.define(
                         },
                         success: function (oData) {
                             MessageToast.show("Timeseries generated successfully");
+                            sap.ui.core.BusyIndicator.hide();
                         },
                         error: function (oData, error) {
                           MessageToast.show("Failed to generate Timeseries");
+                          sap.ui.core.BusyIndicator.hide();
                         },
                       });
 
@@ -412,7 +414,7 @@ sap.ui.define(
 
                     var Selloc =that.oGModel.getProperty("/SelectedLoc"),
                     Selprod = that.oGModel.getProperty("/SelectedProd"); 
-
+                    sap.ui.core.BusyIndicator.show();
                 this.getModel("BModel").callFunction("/generate_timeseriesF", {
                     method: "GET",
                     urlParameters: {
@@ -421,9 +423,10 @@ sap.ui.define(
                     },
                     success: function (oData) {
                         MessageToast.show("Future Timeseries generated successfully");
+                        sap.ui.core.BusyIndicator.hide();
                     },
                     error: function (oData, error) {
-                      MessageToast.show("Failed to generate future Timeseries");
+                      MessageToast.show("Failed to generate future Timeseries");sap.ui.core.BusyIndicator.hide();
                     },
                   });
 

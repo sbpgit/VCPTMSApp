@@ -7,7 +7,7 @@
 	xmlns:f="sap.f">
 	<Dialog
 		id="charOdDialog"
-		title="Component Quantity Breakdown" contentWidth="950px" horizontalScrolling="false">
+		title="Component Quantity Breakdown" contentWidth="850px">
         <content>
                 <f:GridContainer
 				id="grid1"
@@ -47,8 +47,6 @@
                                                 <viz.data:measures>
                                                     <viz.data:MeasureDefinition name="Prediction"
                                                         value="{PREDICTED_VAL}" />
-                                                    <!-- <viz.data:MeasureDefinition name="Option%"
-                                                        value="{OPT_PERCENT}" /> -->
                                                 </viz.data:measures>
                                             </viz.data:FlattenedDataset>
                                         </viz:dataset>
@@ -56,8 +54,6 @@
                                         <viz:feeds>
                                             <viz.feeds:FeedItem uid="size" type="Measure"
                                                 values="Prediction"/>
-                                            <!-- <viz.feeds:FeedItem uid="size" type="Measure"
-                                                values="Option%"/> -->
                                             <viz.feeds:FeedItem uid="color" type="Dimension"
                                                 values="Characteristics" />
                                         </viz:feeds>
@@ -98,7 +94,7 @@
 		<beginButton>
 			<Button
 				text="Close"
-				press="handleDialogClose"/>
+				press="handleClose"/>
 		</beginButton>
 	</Dialog>
 </core:FragmentDefinition>

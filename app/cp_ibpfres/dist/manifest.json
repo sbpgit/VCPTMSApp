@@ -11,7 +11,7 @@
         "description": "{{appDescription}}",
         "dataSources": {
             "mainService": {
-                "uri": "catalog/",
+                "uri": "pal/",
                 "type": "OData",
                 "settings": {
                     "odataVersion": "4.0"
@@ -92,42 +92,42 @@
             "routes": [
                 {
                     "pattern": ":?query:",
-                    "name": "getIBPFresList",
-                    "target": "getIBPFresList"
+                    "name": "getPredictionsList",
+                    "target": "getPredictionsList"
                 },
                 {
-                    "pattern": "getIBPFres({key}):?query:",
-                    "name": "getIBPFresObjectPage",
-                    "target": "getIBPFresObjectPage"
+                    "pattern": "getPredictions({key}):?query:",
+                    "name": "getPredictionsObjectPage",
+                    "target": "getPredictionsObjectPage"
                 }
             ],
             "targets": {
-                "getIBPFresList": {
+                "getPredictionsList": {
                     "type": "Component",
-                    "id": "getIBPFresList",
+                    "id": "getPredictionsList",
                     "name": "sap.fe.templates.ListReport",
                     "options": {
                         "settings": {
-                            "entitySet": "getIBPFres",
+                            "entitySet": "getPredictions",
                             "variantManagement": "Page",
                             "navigation": {
-                                "getIBPFres": {
+                                "getPredictions": {
                                     "detail": {
-                                        "route": "getIBPFresObjectPage"
+                                        "route": "getPredictionsObjectPage"
                                     }
                                 }
                             }
                         }
                     }
                 },
-                "getIBPFresObjectPage": {
+                "getPredictionsObjectPage": {
                     "type": "Component",
-                    "id": "getIBPFresObjectPage",
+                    "id": "getPredictionsObjectPage",
                     "name": "sap.fe.templates.ObjectPage",
                     "options": {
                         "settings": {
                             "editableHeaderContent": false,
-                            "entitySet": "getIBPFres"
+                            "entitySet": "getPredictions"
                         }
                     }
                 }

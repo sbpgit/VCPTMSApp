@@ -19,6 +19,14 @@
                     "odataVersion": "2.0",
                     "localUri": "localService/metadata.xml"
                 }
+            },
+            "palService": {
+                "uri": "v2/pal/",
+                "type": "OData",
+                "settings": {
+                    "odataVersion": "2.0",
+                    "localUri": "localService/PalService/metadata.xml"
+                }
             }
         },
         "crossNavigation": {
@@ -32,7 +40,7 @@
                     "action": "display",
                     "title": "{{flpTitle}}",
                     "subTitle": "{{flpSubtitle}}",
-                    "icon": ""
+                    "icon": "sap-icon://manager-insight"
                 }
             }
         }
@@ -97,6 +105,14 @@
                     "autoExpandSelect": true,
                     "earlyRequests": true,
                     "groupId": "$direct"
+                }
+            },
+            "PModel": {
+                "dataSource": "palService",
+                "preload": true,
+                "settings": {
+                    "useBatch": true,
+                    "defaultBindingMode": "TwoWay"
                 }
             }
         },

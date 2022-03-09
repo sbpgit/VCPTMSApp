@@ -1,5 +1,5 @@
 <core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
-	<Dialog id="idCharList" title="Object Dependency Char" contentWidth="800px">
+	<Dialog id="idCharList" title="Object Dependency Char" contentWidth="800px" titleAlignment="Center">
 		<content>
 			<SearchField id="charSearch" liveChange="oncharSearch" placeholder="Class Name / Char Name/ Char Value"/>
         <Table id="idChartab" items="{ path: '/charResults'}" sticky="ColumnHeaders">

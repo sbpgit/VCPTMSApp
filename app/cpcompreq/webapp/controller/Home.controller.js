@@ -225,6 +225,7 @@ sap.ui.define(
             },
           });
         } else {
+            sap.ui.core.BusyIndicator.hide();
           sap.m.MessageToast.show(
             "Please select a Location/Product/Version/Scenario"
           );
@@ -309,7 +310,7 @@ sap.ui.define(
           sRowData.StructureNode = that.tableData[i].STRUC_NODE;
           sRowData.Type = that.tableData[i].QTYTYPE;
           weekIndex = 1;
-          for (let index = 4; index < liDates.length; index++) {
+          for (let index = 3; index < liDates.length; index++) {
             sRowData[liDates[index].CAL_DATE] =
               that.tableData[i]["WEEK" + weekIndex];
             weekIndex++;
@@ -327,8 +328,8 @@ sap.ui.define(
           var columnName = oContext.getObject().CAL_DATE;
           if(columnName === "Component" ||
           columnName === "ItemNum" ||
-          columnName === "StructureNode" ||
-          columnName === "Type" ){
+          columnName === "StructureNode" ){//||
+       //   columnName === "Type" ){
             return new sap.ui.table.Column({
                 width: "8rem",
                 label: columnName,
@@ -386,7 +387,7 @@ sap.ui.define(
       linkPressed:function(oEvent){
         var selColumnId = oEvent.getSource().getAriaLabelledBy()[0];
         if(selColumnId === "__column0" || selColumnId === "__column1" ||
-           selColumnId === "__column2" || selColumnId === "__column3"){
+           selColumnId === "__column2"){
 
             sap.m.MessageToast.show("Please click on any quantity");
         } else {
@@ -519,9 +520,9 @@ sap.ui.define(
         lsDates.CAL_DATE = "StructureNode";
         liDates.push(lsDates);
         lsDates = {};
-        lsDates.CAL_DATE = "Type";
-        liDates.push(lsDates);
-        lsDates = {};
+        // lsDates.CAL_DATE = "Type";
+        // liDates.push(lsDates);
+        // lsDates = {};
         
         lsDates.CAL_DATE = that.getNextSunday(vDateSeries);
         vDateSeries = lsDates.CAL_DATE;

@@ -5,11 +5,28 @@
 
 div#__title0 {
     margin-left: 700px;
+    font-weight: bold !important;
 }
 div#__xmlview3--struTitle {
     margin-left: 350px;
+    font-weight: bold !important;
 }
 
 .boldText {
     font-weight: bold !important;
+}
+
+h2#__dialog2-title {
+    font-weight: bold;
+}
+
+h2#ViewList-dialog-title {
+    font-weight: bold;
+}
+
+h2#__dialog3-title {
+    font-weight: bold;
+}
+h2#__dialog4-title {
+    font-weight: bold;
 }

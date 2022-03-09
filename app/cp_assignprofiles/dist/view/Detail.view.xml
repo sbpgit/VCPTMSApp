@@ -3,7 +3,7 @@
     xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns:l="sap.ui.layout"
 	xmlns:f="sap.ui.layout.form"
 >
-    <Page id="idPage" title="Create Profile" titleAlignment="Center" showNavButton="true" navButtonPress="onBack" showFooter="true">
+    <Page id="idPage" title="Create Profile" titleAlignment="Center" showNavButton="true" navButtonPress="onBack" showFooter="true" class="boldText">
     
     <VBox class="sapUiSmallMargin">
 			<f:SimpleForm id="FormToolbar" editable="true" layout="ResponsiveGridLayout" labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="3"

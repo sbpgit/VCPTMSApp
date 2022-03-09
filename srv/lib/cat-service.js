@@ -306,7 +306,11 @@ module.exports = (srv) => {
         vWeekIndex = vWeekIndex + 1;
         for (vCompIndex = 0; vCompIndex < liCompQty.length; vCompIndex++) {
           lsCompWeekly[columnname + vWeekIndex] = 0;
-          if (
+          if ( 
+            //   liCompQty[vCompIndex].LOCATION_ID === lsCompWeekly.LOCATION_ID &&
+            // liCompQty[vCompIndex].PRODUCT_ID === lsCompWeekly.PRODUCT_ID &&
+            // liCompQty[vCompIndex].ITEM_NUM === lsCompWeekly.ITEM_NUM &&
+            // liCompQty[vCompIndex].VERSION === lsCompWeekly.VERSION &&
             liCompQty[vCompIndex].COMPONENT === lsCompWeekly.COMPONENT &&
             liCompQty[vCompIndex].CAL_DATE === liDates[i].CAL_DATE
           ) {
@@ -318,24 +322,24 @@ module.exports = (srv) => {
         }
       }
       liCompWeekly.push(GenFunctions.parse(lsCompWeekly));
-      vWeekIndex = 0;
-      lsCompWeekly.QTYTYPE = "Calculated";
-      for (let i = 0; i < liDates.length; i++) {
-        vWeekIndex = vWeekIndex + 1;
-        for (vCompIndex = 0; vCompIndex < liCompQty.length; vCompIndex++) {
-          lsCompWeekly[columnname + vWeekIndex] = 0;
-          if (
-            liCompQty[vCompIndex].COMPONENT === lsCompWeekly.COMPONENT &&
-            liCompQty[vCompIndex].CAL_DATE === liDates[i].CAL_DATE
-          ) {
-            lsCompWeekly.STRUC_NODE = liCompQty[vCompIndex].STRUC_NODE;
-            lsCompWeekly[columnname + vWeekIndex] =
-              parseInt(liCompQty[vCompIndex].ACT_COMP_QTY);
-            break;
-          }
-        }
-      }
-      liCompWeekly.push(GenFunctions.parse(lsCompWeekly));
+    //   vWeekIndex = 0;
+    //   lsCompWeekly.QTYTYPE = "Calculated";
+    //   for (let i = 0; i < liDates.length; i++) {
+    //     vWeekIndex = vWeekIndex + 1;
+    //     for (vCompIndex = 0; vCompIndex < liCompQty.length; vCompIndex++) {
+    //       lsCompWeekly[columnname + vWeekIndex] = 0;
+    //       if (
+    //         liCompQty[vCompIndex].COMPONENT === lsCompWeekly.COMPONENT &&
+    //         liCompQty[vCompIndex].CAL_DATE === liDates[i].CAL_DATE
+    //       ) {
+    //         lsCompWeekly.STRUC_NODE = liCompQty[vCompIndex].STRUC_NODE;
+    //         lsCompWeekly[columnname + vWeekIndex] =
+    //           parseInt(liCompQty[vCompIndex].ACT_COMP_QTY);
+    //         break;
+    //       }
+    //     }
+    //   }
+    //   liCompWeekly.push(GenFunctions.parse(lsCompWeekly));
       lsCompWeekly = {};
     }
     return liCompWeekly;

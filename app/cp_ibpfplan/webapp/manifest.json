@@ -35,7 +35,7 @@
                     "action": "Display",
                     "title": "{{flpTitle}}",
                     "subTitle": "{{flpSubtitle}}",
-                    "icon": ""
+                    "icon": "sap-icon://paper-plane"
                 }
             }
         }
@@ -94,11 +94,6 @@
                     "pattern": ":?query:",
                     "name": "getIBPFplanList",
                     "target": "getIBPFplanList"
-                },
-                {
-                    "pattern": "getIBPFplan({key}):?query:",
-                    "name": "getIBPFplanObjectPage",
-                    "target": "getIBPFplanObjectPage"
                 }
             ],
             "targets": {
@@ -109,25 +104,7 @@
                     "options": {
                         "settings": {
                             "entitySet": "getIBPFplan",
-                            "variantManagement": "Page",
-                            "navigation": {
-                                "getIBPFplan": {
-                                    "detail": {
-                                        "route": "getIBPFplanObjectPage"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "getIBPFplanObjectPage": {
-                    "type": "Component",
-                    "id": "getIBPFplanObjectPage",
-                    "name": "sap.fe.templates.ObjectPage",
-                    "options": {
-                        "settings": {
-                            "editableHeaderContent": false,
-                            "entitySet": "getIBPFplan"
+                            "variantManagement": "Page"
                         }
                     }
                 }

@@ -78,6 +78,11 @@ sap.ui.define(
                 that = this;;
                 this.oLoc = this.byId("locInput");
                 this.oProd = this.byId("prodInput");
+
+                that._valueHelpDialogProd.setTitleAlignment("Center");
+                that._valueHelpDialogLoc.setTitleAlignment("Center");
+                that._valueHelpDialogVer.setTitleAlignment("Center");
+                that._valueHelpDialogScen.setTitleAlignment("Center");
         
                 this.oProdList = this._oCore.byId(
                   this._valueHelpDialogProd.getId() + "-list"
@@ -339,9 +344,6 @@ sap.ui.define(
                             success: function (oData) {
                               that.verModel.setData(oData);
                               that.oVerList.setModel(that.verModel);
-            
-                              that.scenModel.setData(oData);
-                              that.oScenList.setModel(that.scenModel);
                             },
                             error: function (oData, error) {
                               MessageToast.show("error");
@@ -387,7 +389,7 @@ sap.ui.define(
                 onTimeS:function(){
                     var Selloc =that.oGModel.getProperty("/SelectedLoc"),
                         Selprod = that.oGModel.getProperty("/SelectedProd"); 
-
+                        sap.ui.core.BusyIndicator.show();                    
                     this.getModel("BModel").callFunction("/generate_timeseries", {
                         method: "GET",
                         urlParameters: {
@@ -396,9 +398,11 @@ sap.ui.define(
                         },
                         success: function (oData) {
                             MessageToast.show("Timeseries generated successfully");
+                            sap.ui.core.BusyIndicator.hide();
                         },
                         error: function (oData, error) {
                           MessageToast.show("Failed to generate Timeseries");
+                          sap.ui.core.BusyIndicator.hide();
                         },
                       });
 
@@ -410,7 +414,7 @@ sap.ui.define(
 
                     var Selloc =that.oGModel.getProperty("/SelectedLoc"),
                     Selprod = that.oGModel.getProperty("/SelectedProd"); 
-
+                    sap.ui.core.BusyIndicator.show();
                 this.getModel("BModel").callFunction("/generate_timeseriesF", {
                     method: "GET",
                     urlParameters: {
@@ -419,9 +423,10 @@ sap.ui.define(
                     },
                     success: function (oData) {
                         MessageToast.show("Future Timeseries generated successfully");
+                        sap.ui.core.BusyIndicator.hide();
                     },
                     error: function (oData, error) {
-                      MessageToast.show("Failed to generate future Timeseries");
+                      MessageToast.show("Failed to generate future Timeseries");sap.ui.core.BusyIndicator.hide();
                     },
                   });
 
@@ -434,22 +439,22 @@ sap.ui.define(
                         Selprod = that.byId("idProComp").getValue(),
                         selVer = that.byId("idver").getValue(),
                         selScen = that.byId("idscen").getValue(); 
-
-                this.getModel("BModel").callFunction("/getCompreqQty", {
-                    method: "GET",
-                    urlParameters: {
-                        LOCATION_ID: Selloc,
-                        PRODUCT_ID: Selprod,
-                        VERSION: selVer,
-                        SCENARIO : selScen,
-                    },
-                    success: function (oData) {
                         MessageToast.show("Generated components requirements");
-                    },
-                    error: function (oData, error) {
-                      MessageToast.show("Failed to generate Components Requirments");
-                    },
-                  });
+                // this.getModel("BModel").callFunction("/getCompreqQty", {
+                //     method: "GET",
+                //     urlParameters: {
+                //         LOCATION_ID: Selloc,
+                //         PRODUCT_ID: Selprod,
+                //         VERSION: selVer,
+                //         SCENARIO : selScen,
+                //     },
+                //     success: function (oData) {
+                //         MessageToast.show("Generated components requirements");
+                //     },
+                //     error: function (oData, error) {
+                //       MessageToast.show("Failed to generate Components Requirments");
+                //     },
+                //   });
 
                 }
 
