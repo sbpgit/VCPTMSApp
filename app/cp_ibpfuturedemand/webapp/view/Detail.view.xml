@@ -77,9 +77,9 @@
 				<items>
 					<ColumnListItem>
 						<!-- <cells> -->
-							<Text text="{CLASS_NUM}"/>
-                            <Text text="{CHAR_NUM}"/>
-                            <Text text="{CHARVAL_NUM}"/> 
+							<Text text="{CLASS_NAME}"/>
+                            <Text text="{CHAR_NAME}"/>
+                            <Text text="{CHAR_VALUE}"/> 
                             <Text text="{OPT_PERCENT}"/>
                             <Text text="{OPT_QTY}"/> 
                             <Text text="{path: 'WEEK_DATE', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'yyyy/MM/dd' }}"/>

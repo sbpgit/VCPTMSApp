@@ -387,7 +387,7 @@ sap.ui.define(
       linkPressed:function(oEvent){
         var selColumnId = oEvent.getSource().getAriaLabelledBy()[0];
         if(selColumnId === "__column0" || selColumnId === "__column1" ||
-           selColumnId === "__column2" || selColumnId === "__column3"){
+           selColumnId === "__column2"){
 
             sap.m.MessageToast.show("Please click on any quantity");
         } else {
