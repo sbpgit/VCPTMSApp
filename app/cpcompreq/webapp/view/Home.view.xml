@@ -101,24 +101,6 @@
                                 <Button text="Reset" press="onResetDate" tooltip="Reset Valid To Date"/>
                             </HBox>
                         </f:FormElement>
-
-                        <!-- <f:FormElement>
-                            <f:label>
-                                <Label text="Normalized" />
-                            </f:label>
-                            <f:fields>
-                                <CheckBox id="idCheck" select="onCheck"/>
-                            </f:fields>
-                        </f:FormElement>
-
-                        <f:FormElement>
-                            <f:label>
-                                <Label text="Get Non-Zero" />
-                            </f:label>
-                            <f:fields>
-                                <CheckBox id="idCheck1" select="onNonZero"/>
-                            </f:fields>
-                        </f:FormElement> -->
                     </f:formElements>
                 </f:FormContainer>
                 <f:FormContainer visible="false">
@@ -152,7 +134,7 @@
 
         <content>
         <HBox>
-            <SearchField id="headSearch" liveChange="onSearchCompReq" placeholder="Component, Structure Node/ Type" width="500px"/>
+            <SearchField id="headSearch" liveChange="onSearchCompReq" placeholder="Component, Structure Node" width="500px"/>
             <!-- <CheckBox id="idCheck" select="onCheck" text="Normalized"  /> -->
 		    <CheckBox id="idCheck1" select="onNonZero" text="Get Non-Zero" selected="true"/>
             </HBox>

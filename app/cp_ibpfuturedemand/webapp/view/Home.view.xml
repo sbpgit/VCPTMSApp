@@ -51,9 +51,19 @@
                                 <Input id="idscen" value="" width="225px" placeholder="Scenario" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                             </f:fields>
                         </f:FormElement>
-                        <f:FormElement>
+                        <!-- <f:FormElement>
                             <Button text="Go" width="30%" press="onGetData" tooltip="Get data based on filters"/>
                             <Button text="Reset" width="60%" press="onResetDate" tooltip="Reset Valid To Date"/>
+                        </f:FormElement> -->
+                    </f:formElements>
+                </f:FormContainer>
+                <f:FormContainer  >
+                    <f:formElements>
+                        <f:FormElement>
+                            <HBox>
+                                <Button text="Go"  press="onGetData" tooltip="Get data based on filters"/>
+                                <Button text="Reset"  press="onResetDate" tooltip="Reset Valid To Date"/>
+                            </HBox>
                         </f:FormElement>
                     </f:formElements>
                 </f:FormContainer>

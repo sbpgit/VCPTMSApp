@@ -120,8 +120,6 @@ sap.ui.define(
         that.onAfterRendering();
       },
       onGetData: function (oEvent) {
-        
-        
 
         var Loc = that.byId("idloc").getValue(),
           Prod = that.byId("idprod").getValue(),
