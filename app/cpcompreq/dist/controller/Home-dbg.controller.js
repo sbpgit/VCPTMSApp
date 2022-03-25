@@ -132,6 +132,7 @@ sap.ui.define(
           this._valueHelpDialogStru.getId() + "-list"
         );
         this.oGridList = this._oCore.byId(sap.ui.getCore().byId("charOdDialog").getContent()[0].getId());
+        this.oGraphchart = this._oCore.byId(sap.ui.getCore().byId("idPanel").getContent()[0].getId());
         sap.ui.core.BusyIndicator.show();
         this.getModel("BModel").read("/getLocation", {
           success: function (oData) {
@@ -214,6 +215,10 @@ sap.ui.define(
 
               that.oGModel.setProperty("/TData", data.results);
               that.TableGenerate();
+              var selected = that.byId("idCheck1").getSelected();
+              if(selected){
+              that.onNonZero();
+              }
             },
             error: function (data) {
                 sap.ui.core.BusyIndicator.hide();
@@ -221,6 +226,7 @@ sap.ui.define(
             },
           });
         } else {
+            sap.ui.core.BusyIndicator.hide();
           sap.m.MessageToast.show(
             "Please select a Location/Product/Version/Scenario"
           );
@@ -233,11 +239,18 @@ sap.ui.define(
 
         var query =
           oEvent.getParameter("value") || oEvent.getParameter("newValue");
-        that.Data = that.rowData;
+
+          if(query === ""){
+            that.onNonZero();
+          } else {
+          that.oGModel = that.getModel("oGModel");
+        that.Data = that.oGModel.getProperty("/TData");
+        // that.Data = that.rowData;
         that.searchData = [];
 
         for (var i = 0; i < that.Data.length; i++) {
           if (
+            // that.Data[i].COMPONENT.includes(query) ||
             that.Data[i].COMPONENT.includes(query) ||
             that.Data[i].STRUC_NODE.includes(query) ||
             that.Data[i].QTYTYPE.includes(query)
@@ -248,35 +261,35 @@ sap.ui.define(
 
         that.oGModel.setProperty("/TData", that.searchData);
         that.TableGenerate();
+    }
       },
 
-      onCheck:function(){
-        that.oTable = that.byId("idCompReq");
-        that.oGModel = that.getModel("oGModel");
-        // var selected = that.byId("idCheck").getSelected();
-       that.byId("idCheck1").setSelected(false);
+    //   onCheck:function(){
+    //     that.oTable = that.byId("idCompReq");
+    //     that.oGModel = that.getModel("oGModel");
+    //     var selected = that.byId("idCheck").getSelected();
+    //     that.byId("idCheck1").setSelected(false);
 
-        that.Data = that.rowData;
-        that.searchData = [];
+    //     that.Data = that.rowData;
+    //     that.searchData = [];
 
-        // if(selected){
+    //     if(selected){
             
-        //     for (var i = 0; i < that.Data.length; i++) {
-        //     if (that.Data[i].QTYTYPE === "Normalized" ) {
-        //         that.searchData.push(that.Data[i]);
-        //     }
-        //     }
-        // } 
-        // else {
-            that.searchData = that.rowData;
-       // }
+    //         for (var i = 0; i < that.Data.length; i++) {
+    //         if (that.Data[i].QTYTYPE === "Normalized" ) {
+    //             that.searchData.push(that.Data[i]);
+    //         }
+    //         }
+    //     } else {
+    //         that.searchData = that.rowData;
+    //     }
         
 
 
-        that.oGModel.setProperty("/TData", that.searchData);
-        that.TableGenerate();
+    //     that.oGModel.setProperty("/TData", that.searchData);
+    //     that.TableGenerate();
 
-      },
+    //   },
 
       TableGenerate: function () {
         var sRowData = {},
@@ -295,7 +308,8 @@ sap.ui.define(
 
         for (var i = 0; i < that.tableData.length; i++) {
           sRowData.ItemNum = that.tableData[i].ITEM_NUM;
-          sRowData.Component = that.tableData[i].COMPONENT;
+          sRowData.Assembly = that.tableData[i].COMPONENT;
+          //sRowData.Component = that.tableData[i].COMPONENT;
           sRowData.StructureNode = that.tableData[i].STRUC_NODE;
           sRowData.Type = that.tableData[i].QTYTYPE;
           weekIndex = 1;
@@ -315,7 +329,8 @@ sap.ui.define(
         that.oTable.setModel(oModel);
         that.oTable.bindColumns("/columns", function (sId, oContext) {
           var columnName = oContext.getObject().CAL_DATE;
-          if(columnName === "Component" ||
+          if (columnName === "Assembly" ||
+          //(columnName === "Component" ||
           columnName === "ItemNum" ||
           columnName === "StructureNode" ){//||
        //   columnName === "Type" ){
@@ -345,51 +360,28 @@ sap.ui.define(
         that.oTable = that.byId("idCompReq");
         that.oGModel = that.getModel("oGModel");
         var selected = that.byId("idCheck1").getSelected(),
-            // Normaselected = that.byId("idCheck").getSelected(),
             name, counter;
-
-
-        that.Data = that.rowData;
+        that.searchData = that.rowData;
         that.FinalData = [];
-        that.searchData = [];
 
         var columns = that.oTable.getColumns().length - 3,
             data = that.tableData;
-
-
-            // if(Normaselected){
-            //     for (var i = 0; i < that.Data.length; i++) {
-            //     if (that.Data[i].QTYTYPE === "Normalized" ) {
-            //         that.searchData.push(that.Data[i]);
-            //     }
-            //     }
-            //} else {
-                that.searchData = that.rowData;
-           // }
-
-
-            
             if(selected){
-
             for(var i =0; i<that.searchData.length; i++){
                 counter = 0;
                 for(var j=1; j<columns; j++){
-
                     if(that.searchData[i]["WEEK" + j] !== 0 && that.searchData[i]["WEEK" + j] !== null){
                         counter = counter + 1;
-                        continue;
+                        break;
                     }
-
                 }
                 if(counter !== 0){
                     that.FinalData.push(that.searchData[i]);
                 }
-
             }
         } else {
             that.FinalData = that.searchData;
         }
-
             that.oGModel.setProperty("/TData", that.FinalData);
             that.TableGenerate();
 
@@ -399,21 +391,23 @@ sap.ui.define(
       linkPressed:function(oEvent){
         var selColumnId = oEvent.getSource().getAriaLabelledBy()[0];
         if(selColumnId === "__column0" || selColumnId === "__column1" ||
-           selColumnId === "__column2" || selColumnId === "__column3"){
+           selColumnId === "__column2"){
 
             sap.m.MessageToast.show("Please click on any quantity");
         } else {
-            var oGraph = sap.ui.getCore().byId("idpiechart");
+            //var oGraph = 
+          //  that.oGraphchart = sap.ui.getCore().byId("idpiechart");
             that.charModel.setData([]);
             that.oGridList.setModel(that.charModel);
             that.graphModel.setData([]);
-            oGraph.setModel(that.graphModel);
+           // oGraph.
+            that.oGraphchart.setModel(that.graphModel);
 
          var tableColumns = that.byId("idCompReq").getColumns(),
             selColumnDate,
             selColumnValue = oEvent.getSource().getText(),
             ObindingData = oEvent.getSource().getBindingContext().getObject(),
-            selComponent = ObindingData.Component,
+            selComponent = ObindingData.Asssembly,//Component,
             selItem = ObindingData.ItemNum,
             selStruNode = ObindingData.StructureNode,
             selType = ObindingData.Type;
@@ -427,7 +421,7 @@ sap.ui.define(
             that.colDate = selColumnDate;
           //  sap.ui.getCore().byId("graphCard").getHeader().setTitle("Component"+selColumnValue);
           
-            var oGraph = sap.ui.getCore().byId("idpiechart");
+            // var oGraph = sap.ui.getCore().byId("idpiechart");
             //  var oGridTable = sap.ui.getCore().byId(sap.ui.getCore().byId("__card1").getCardContent().getId());
             if(selColumnValue > 0){
 
@@ -487,7 +481,7 @@ sap.ui.define(
         //return objDep.split("_")[0];
         var objDep = oHdr.split(":");
         
-        var oGraphChart = sap.ui.getCore().byId("idpiechart");
+      //  var oGraphChart = sap.ui.getCore().byId("idpiechart");
         // that.getModel("PModel").read("/getODImpactVals", {getOdCharImpact
         that.getModel("BModel").read("/getOdCharImpact", {
             filters: [new Filter("LOCATION_ID", FilterOperator.EQ, that.oGModel.getProperty("/SelectedLoc")),
@@ -504,7 +498,7 @@ sap.ui.define(
             success: function (oData) {
             //   that.ogrid
               that.graphModel.setData(oData);
-              oGraphChart.setModel(that.graphModel);
+              that.oGraphchart.setModel(that.graphModel);
             //  that.graphtModel.setData(oData);
             //   oGridTable.setModel(that.graphtModel);
             //  that._odGraphDialog.open();
@@ -514,12 +508,16 @@ sap.ui.define(
             },
           });
       },
+
+      handleDialogClose(){
+        that._odGraphDialog.close();
+      },
       generateDateseries: function (imFromDate, imToDate) {
         var lsDates = {},
           liDates = [];
         var vDateSeries = imFromDate;
 
-        lsDates.CAL_DATE = "Component";
+        lsDates.CAL_DATE = "Assembly";//Component";
         liDates.push(lsDates);
         lsDates = {};
         lsDates.CAL_DATE = "ItemNum";

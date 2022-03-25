@@ -76,10 +76,10 @@
 
                             </f:fields>
                         </f:FormElement>
-                        <f:FormElement>
+                        <!-- <f:FormElement>
                             <Button text="Go" width="30%" press="onGetData" tooltip="Get data based on filters"/>
                             <Button text="Reset" width="60%" press="onResetDate" tooltip="Reset Valid To Date"/>
-                        </f:FormElement>
+                        </f:FormElement> -->
                     </f:formElements>
                 </f:FormContainer>
                 <f:FormContainer  >
@@ -95,24 +95,12 @@
                                 </Select>
                             </f:fields>
                         </f:FormElement>
-
-                        <!-- <f:FormElement>
-                            <f:label>
-                                <Label text="Normalized" />
-                            </f:label>
-                            <f:fields>
-                                <CheckBox id="idCheck" select="onCheck"/>
-                            </f:fields>
-                        </f:FormElement>
-
                         <f:FormElement>
-                            <f:label>
-                                <Label text="Get Non-Zero" />
-                            </f:label>
-                            <f:fields>
-                                <CheckBox id="idCheck1" select="onNonZero"/>
-                            </f:fields>
-                        </f:FormElement> -->
+                            <HBox>
+                                <Button text="Go" press="onGetData" tooltip="Get data based on filters"/>
+                                <Button text="Reset" press="onResetDate" tooltip="Reset Valid To Date"/>
+                            </HBox>
+                        </f:FormElement>
                     </f:formElements>
                 </f:FormContainer>
                 <f:FormContainer visible="false">
@@ -133,12 +121,12 @@
                                 <Input id="idstru" value="" width="225px" placeholder="Structure Node" visible="false" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                             </f:fields>
                         </f:FormElement>
-                        <f:FormElement>
+                        <!-- <f:FormElement>
                             <HBox>
                                 <Button text="Go" press="onGetData" tooltip="Get data based on filters"/>
                                 <Button text="Reset" press="onResetDate" tooltip="Reset Valid To Date"/>
                             </HBox>
-                        </f:FormElement>
+                        </f:FormElement> -->
                     </f:formElements>
                 </f:FormContainer>
             </f:formContainers>
@@ -146,9 +134,9 @@
 
         <content>
         <HBox>
-            <SearchField id="headSearch" liveChange="onSearchCompReq" placeholder="Component/Structure Node" width="500px"/>
+            <SearchField id="headSearch" liveChange="onSearchCompReq" placeholder="Component, Structure Node" width="500px"/>
             <!-- <CheckBox id="idCheck" select="onCheck" text="Normalized"  /> -->
-		    <CheckBox id="idCheck1" select="onNonZero" text="Get Non-Zero" />
+		    <CheckBox id="idCheck1" select="onNonZero" text="Get Non-Zero" selected="true" />
             </HBox>
             <t:Table id="idCompReq" fixedColumnCount="3" selectionMode="Single" alternateRowColors="true" enableSelectAll="false" visibleRowCount="15" >
                 <t:columns>

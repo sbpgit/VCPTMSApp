@@ -164,6 +164,10 @@ modules:
       - cpappfcpibpfuturedemand.zip
       name: cpappfcpibpfuturedemand
       target-path: resources/
+    - artifacts:
+      - cpappcpasmbcompreq.zip
+      name: cpappcpasmbcompreq
+      target-path: resources/
 - name: cpibpfdemcpibpfdem
   type: html5
   path: app/cp_ibpfdem
@@ -387,6 +391,16 @@ modules:
 - name: cpappfcpibpfuturedemand
   type: html5
   path: app/cp_ibpfuturedemand
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappcpasmbcompreq
+  type: html5
+  path: app/cpasmbcompreq
   build-parameters:
     build-result: dist
     builder: custom

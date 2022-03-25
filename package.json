@@ -48,7 +48,8 @@
         "watch-cpassignnode": "cds watch --open cpassignnode/webapp/index.html#fe-lrop-v4",
         "watch-cpcompreq": "cds watch --open cpcompreq/webapp/index.html#fe-lrop-v4",
         "watch-cpprodlocline": "cds watch --open cpprodlocline/webapp/index.html#fe-lrop-v4",
-        "watch-cprtrheader": "cds watch --open cprtrheader/webapp/index.html#fe-lrop-v4"
+        "watch-cprtrheader": "cds watch --open cprtrheader/webapp/index.html#fe-lrop-v4",
+        "watch-cpasmbcompreq": "cds watch --open cpasmbcompreq/webapp/index.html#fe-lrop-v4"
     },
     "eslintConfig": {
         "extends": "eslint:recommended",
@@ -130,9 +131,10 @@
         "app/cpassignnode",
         "app/cpcompreq",
         "app/cpprodlocline",
-        "app/cprtrheader"
+        "app/cprtrheader",
+        "app/cpasmbcompreq"
     ],
     "devDependencies": {
-        "@sap/ux-specification": "^1.96.4"
+        "@sap/ux-specification": "^1.96.6"
     }
 }

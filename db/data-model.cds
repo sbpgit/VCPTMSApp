@@ -551,6 +551,17 @@ context cp {
         key ITEM_NUM    : String(5) @title : 'Item Number ';
         key COMPONENT   : String(40)@title : 'Component';
     }
+
+    entity ASSEMBLY_COMP{
+        key LOCATION_ID : String(4) @title : 'Location ID';
+        // key PRODUCT_ID  : String(40)@title : 'Product ID';
+        key ASSEMBLY   : String(40)@title :  'Assembly Component';
+        key COMPONENT   : String(40)@title : 'Component';
+            COMP_QTY     : Integer ;
+            VALID_FROM  : Date      @title : 'Valid From';
+            VALID_TO    : Date      @title : 'Valid To';
+
+    }
 // entity PAL_MODEL_PARAMETERS {
 //     key MODEL_TYPE : String(10)  @title : 'Model Type';
 //     key PROFILE_ID : Integer     @title : 'Profile ID';
@@ -824,6 +835,7 @@ key     ![SCENARIO]: String(32)  @title: 'SCENARIO' ;
 key     ![CAL_DATE]: Date  @title: 'CAL_DATE' ; 
 key     ![CHAR_IMPACT_VAL]: Double  @title: 'CHAR_IMPACT_VAL' ; 
 key     ![PREDICTED_VAL]: Double  @title: 'PREDICTED_VAL' ; 
+key     ![OPT_PERCENT]: Double  @title: 'Option Percnetage' ; 
 }
 
 @cds.persistence.exists 
