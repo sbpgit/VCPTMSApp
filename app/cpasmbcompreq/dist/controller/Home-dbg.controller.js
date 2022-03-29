@@ -347,11 +347,11 @@ sap.ui.define(
             return new sap.ui.table.Column({
               width: "8rem",
               label: columnName,
-              // template: columnName,
-              template: new sap.m.Link({
-                text: "{" + columnName + "}",
-                press: that.linkPressed,
-              }),
+              template: columnName,
+            //   template: new sap.m.Link({
+            //     text: "{" + columnName + "}",
+            //     press: that.linkPressed,
+            //   }),
             });
           }
           // }

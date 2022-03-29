@@ -310,12 +310,12 @@ sap.ui.define(
         var liDates = that.generateDateseries(fromDate, toDate);
 
         for (var i = 0; i < that.tableData.length; i++) {
-          sRowData.ItemNum = that.tableData[i].ITEM_NUM;
+        //   sRowData.ItemNum = that.tableData[i].ITEM_NUM;
           sRowData.Component = that.tableData[i].COMPONENT;
-          sRowData.StructureNode = that.tableData[i].STRUC_NODE;
-          sRowData.Type = that.tableData[i].QTYTYPE;
+        //   sRowData.StructureNode = that.tableData[i].STRUC_NODE;
+        //   sRowData.Type = that.tableData[i].QTYTYPE;
           weekIndex = 1;
-          for (let index = 3; index < liDates.length; index++) {
+          for (let index = 1; index < liDates.length; index++) {
             sRowData[liDates[index].CAL_DATE] =
               that.tableData[i]["WEEK" + weekIndex];
             weekIndex++;
@@ -332,9 +332,9 @@ sap.ui.define(
         that.oTable.bindColumns("/columns", function (sId, oContext) {
           var columnName = oContext.getObject().CAL_DATE;
           if (
-            columnName === "Component" ||
-            columnName === "ItemNum" ||
-            columnName === "StructureNode"
+            columnName === "Component"// ||
+            // columnName === "ItemNum" ||
+            // columnName === "StructureNode"
           ) {
             //||
             //   columnName === "Type" ){
@@ -347,7 +347,7 @@ sap.ui.define(
             return new sap.ui.table.Column({
               width: "8rem",
               label: columnName,
-              // template: columnName,
+            //   template: columnName,
               template: new sap.m.Link({
                 text: "{" + columnName + "}",
                 press: that.linkPressed,
@@ -575,12 +575,12 @@ sap.ui.define(
         lsDates.CAL_DATE = "Component";
         liDates.push(lsDates);
         lsDates = {};
-        lsDates.CAL_DATE = "ItemNum";
-        liDates.push(lsDates);
-        lsDates = {};
-        lsDates.CAL_DATE = "StructureNode";
-        liDates.push(lsDates);
-        lsDates = {};
+        // lsDates.CAL_DATE = "ItemNum";
+        // liDates.push(lsDates);
+        // lsDates = {};
+        // lsDates.CAL_DATE = "StructureNode";
+        // liDates.push(lsDates);
+        // lsDates = {};
         // lsDates.CAL_DATE = "Type";
         // liDates.push(lsDates);
         // lsDates = {};

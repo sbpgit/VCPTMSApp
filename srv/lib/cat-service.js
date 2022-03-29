@@ -121,6 +121,7 @@ module.exports = (srv) => {
       lsCompWeekly.LOCATION_ID = liComp[j].LOCATION_ID;
       lsCompWeekly.PRODUCT_ID = liComp[j].PRODUCT_ID;
       lsCompWeekly.ITEM_NUM = liComp[j].ITEM_NUM;
+    //   lsCompWeekly.ASSEMBLY = liComp[j].COMPONENT;
       lsCompWeekly.COMPONENT = liComp[j].COMPONENT;
       lsCompWeekly.VERSION = liComp[j].VERSION;
       lsCompWeekly.SCENARIO = liComp[j].SCENARIO;
@@ -166,8 +167,8 @@ module.exports = (srv) => {
   });
   srv.on("getAsmbCompReqFWeekly", async (req) => {
     let { genAsmbComp } = srv.entities;
-    let vDateFrom = "2022-03-04";//req.data.FROMDATE; //"2022-03-04";
-    let vDateTo = "2022-10-30";//req.data.TODATE; //"2023-01-03";
+    let vDateFrom = req.data.FROMDATE; //"2022-03-04";
+    let vDateTo = req.data.TODATE; //"2023-01-03";
     let liCompWeekly = [];
     let lsCompWeekly = {};
     let liDates = [],
@@ -184,7 +185,7 @@ module.exports = (srv) => {
 
     const liCompQty = await cds.run(
       `
-            SELECT * FROM "V_COMP_REQ"
+            SELECT * FROM "V_ASMCOMPQTY_CONSD"
             WHERE "LOCATION_ID" = '` +
         req.data.LOCATION_ID +
         `'
@@ -206,10 +207,8 @@ module.exports = (srv) => {
                       "PRODUCT_ID" ASC,
                       "VERSION" ASC,
                       "SCENARIO" ASC,
-                      "ITEM_NUM" ASC,
                       "COMPONENT" ASC,
-                      "CAL_DATE" ASC,
-                      "STRUC_NODE" ASC`
+                      "CAL_DATE" ASC`
     );
     const liComp = await cds.run(
       `
@@ -217,10 +216,8 @@ module.exports = (srv) => {
                           "PRODUCT_ID",
                           "VERSION",
                           "SCENARIO",
-                          "ITEM_NUM",
-                          "COMPONENT",
-                          "STRUC_NODE"
-          FROM "V_COMP_REQ"
+                          "COMPONENT"
+          FROM "V_ASMCOMPQTY_CONSD"
           WHERE "LOCATION_ID" = '` +
         req.data.LOCATION_ID +
         `' AND "PRODUCT_ID" = '` +
@@ -242,7 +239,6 @@ module.exports = (srv) => {
                     "PRODUCT_ID" ASC,
                     "VERSION" ASC,
                     "SCENARIO" ASC,
-                    "ITEM_NUM" ASC,
                     "COMPONENT" ASC`
     );
     var vDateSeries = vDateFrom;
@@ -259,48 +255,40 @@ module.exports = (srv) => {
       liDates.push(lsDates);
       lsDates = {};
     }
-
-   // for (let j = 0; j < liComp.length; j++) {
-      // Initially set vWeekIndex to j to geneate Week columns
-      // vCompIndex is to get Componnent quantity for all dates
-      
-
-      for (let iasmb = 0; iasmb < liasmbcomp.length; iasmb++) {
-        // if (liasmbcomp[iasmb].LOCATION_ID === lsCompWeekly.LOCATION_ID &&
-        //     // liasmbcomp[iasmb].PRODUCT_ID === lsCompWeekly.PRODUCT_ID &&
-        //     // liasmbcomp[iasmb].ITEM_NUM === lsCompWeekly.ITEM_NUM &&
-        //     liasmbcomp[iasmb].ASSEMBLY === vComp) {
-                vWeekIndex = 0; //j
-
-          for (let i = 0; i < liDates.length; i++) {
-            vWeekIndex = vWeekIndex + 1;
-            for (vCompIndex = 0; vCompIndex < liCompQty.length; vCompIndex++) {
-              lsCompWeekly[columnname + vWeekIndex] = 0;
-              if (
-                liCompQty[vCompIndex].COMPONENT === liasmbcomp[iasmb].ASSEMBLY &&
-                liCompQty[vCompIndex].CAL_DATE === liDates[i].CAL_DATE
-              ) {
-                lsCompWeekly.LOCATION_ID = liCompQty[vCompIndex].LOCATION_ID;
-                lsCompWeekly.PRODUCT_ID = liCompQty[vCompIndex].PRODUCT_ID;
-                lsCompWeekly.ITEM_NUM = liCompQty[vCompIndex].ITEM_NUM;
-                lsCompWeekly.VERSION = liCompQty[vCompIndex].VERSION;
-                lsCompWeekly.SCENARIO = liCompQty[vCompIndex].SCENARIO;
-                lsCompWeekly.QTYTYPE = "Normalized";
-                lsCompWeekly.COMPONENT = liasmbcomp[iasmb].COMPONENT;
-                lsCompWeekly.STRUC_NODE = liCompQty[vCompIndex].STRUC_NODE;
-                lsCompWeekly[columnname + vWeekIndex] =
-                liCompQty[vCompIndex].COMP_QTY * liasmbcomp[iasmb].COMP_QTY;
-                break;
-              }
+    vComp = 0;
+   
+    for (let j = 0; j < liComp.length; j++) {
+        // Initially set vWeekIndex to j to geneate Week columns
+        // vCompIndex is to get Componnent quantity for all dates
+        vWeekIndex = 0; //j
+        lsCompWeekly.LOCATION_ID = liComp[j].LOCATION_ID;
+        lsCompWeekly.PRODUCT_ID = liComp[j].PRODUCT_ID;
+        lsCompWeekly.ITEM_NUM = '';
+      //   lsCompWeekly.ASSEMBLY = liComp[j].COMPONENT;
+        lsCompWeekly.COMPONENT = liComp[j].COMPONENT;
+        lsCompWeekly.VERSION = liComp[j].VERSION;
+        lsCompWeekly.SCENARIO = liComp[j].SCENARIO;
+        lsCompWeekly.QTYTYPE = "Normalized";
+  
+        for (let i = 0; i < liDates.length; i++) {
+          vWeekIndex = vWeekIndex + 1;
+          for (vCompIndex = 0; vCompIndex < liCompQty.length; vCompIndex++) {
+            lsCompWeekly[columnname + vWeekIndex] = 0;
+            if (
+              liCompQty[vCompIndex].COMPONENT === lsCompWeekly.COMPONENT &&
+              liCompQty[vCompIndex].CAL_DATE === liDates[i].CAL_DATE
+            ) {
+            //   lsCompWeekly.STRUC_NODE = liCompQty[vCompIndex].STRUC_NODE;
+              lsCompWeekly[columnname + vWeekIndex] =
+                liCompQty[vCompIndex].COMP_QTY;
+              break;
             }
-          
+          }
         }
-    // }
-      liCompWeekly.push(GenFunctions.parse(lsCompWeekly));
-      lsCompWeekly = {};
-  // }
-    }
-    return liCompWeekly;
+        liCompWeekly.push(GenFunctions.parse(lsCompWeekly));
+        lsCompWeekly = {};
+      }
+      return liCompWeekly;
   });
   srv.on("CREATE", "getProfiles", _createProfiles);
 

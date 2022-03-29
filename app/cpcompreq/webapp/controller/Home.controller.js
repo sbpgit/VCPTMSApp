@@ -407,7 +407,7 @@ sap.ui.define(
             selColumnDate,
             selColumnValue = oEvent.getSource().getText(),
             ObindingData = oEvent.getSource().getBindingContext().getObject(),
-            selComponent = ObindingData.Asssembly,//Component,
+            selComponent = ObindingData.Assembly,//Component,
             selItem = ObindingData.ItemNum,
             selStruNode = ObindingData.StructureNode,
             selType = ObindingData.Type;

@@ -854,6 +854,19 @@ key     ![SCENARIO]: String(32)  @title: 'Scenario' ;
 key     ![OPT_PERCENT]: Decimal(5, 2)  @title: 'Option Percent' ; 
 key     ![OPT_QTY]: Decimal(13, 3)  @title: 'Option Quantity' ; 
 }
+
+@cds.persistence.exists 
+Entity ![V_ASMCOMP_REQ] {
+key     ![CAL_DATE]: Date  @title: 'CAL_DATE' ; 
+key     ![LOCATION_ID]: String(4)  @title: 'LOCATION_ID' ; 
+key     ![PRODUCT_ID]: String(40)  @title: 'PRODUCT_ID' ; 
+key     ![ASSEMBLY]: String(40)  @title: 'ASSEMBLY' ; 
+key     ![COMPONENT]: String(40)  @title: 'COMPONENT' ; 
+key     ![COMP_QTY]: Double  @title: 'COMP_QTY' ; 
+key     ![VERSION]: String(10)  @title: 'VERSION' ; 
+key     ![SCENARIO]: String(32)  @title: 'SCENARIO' ; 
+key     ![MODEL_VERSION]: String(20)  @title: 'MODEL_VERSION' ; 
+}
 /*
 @cds.persistence.exists
 @cds.persistence.calcview
