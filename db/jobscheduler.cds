@@ -1,4 +1,5 @@
-context cp1 {
+namespace js;
+
 type Jobs {
   action           : String;
   active           : Boolean;
@@ -43,5 +44,4 @@ type RunLogs {
   scheduleTimestamp   : String;
   completionTimestamp : String;
   runText             : String;
-}
 }
