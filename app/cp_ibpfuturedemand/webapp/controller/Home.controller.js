@@ -153,9 +153,9 @@ sap.ui.define(
             var sFilter = new sap.ui.model.Filter({
                 path: "SCENARIO",
                 operator: sap.ui.model.FilterOperator.EQ,
-                value1: ver
+                value1: scen
             });
-            oFilters.push(scen);
+            oFilters.push(sFilter);
         }
 
 
