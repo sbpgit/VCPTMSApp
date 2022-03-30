@@ -3,43 +3,34 @@ const { v1: uuidv1} = require('uuid')
 const hana = require('@sap/hana-client');
 const varmaFuncs = require('./varma.js');
 
-// const conn_params = {
-//     serverNode  : cds.env.requires.db.credentials.host + ":" + cds.env.requires.db.credentials.port,
-//     uid         : "SBPTECHTEAM", //process.env.uidClassicalSchema, //cf environment variable
-//     pwd         : "Sbpcorp@22", //process.env.uidClassicalSchemaPassword,//cf environment variable
-//     encrypt: 'TRUE',
-//     ssltruststore: cds.env.requires.hana.credentials.certificate
-// };
-// const vcConfigTimePeriod = "PeriodOfYear"; //process.env.TimePeriod; //cf environment variable
-// const classicalSchema = "DB_CONFIG_PROD_CLIENT1"; //process.env.classicalSchema; //cf environment variable
-
-
 const conn_params = {
-    serverNode  : cds.env.requires.db.credentials.host + ":" + cds.env.requires.db.credentials.port,
-    uid         : process.env.uidClassicalSchema, //cf environment variable"SBPTECHTEAM",//
+    serverNode  : process.env.classicalSchemaNodePort, //cds.env.requires.db.credentials.host + ":" + cds.env.requires.db.credentials.port,
+    uid         : process.env.uidClassicalSchema, //cf environment variable "SBPTECHTEAM",//
     pwd         : process.env.uidClassicalSchemaPassword,//cf environment variable"Sbpcorp@22",//
-    encrypt: 'TRUE',
-    ssltruststore: cds.env.requires.hana.credentials.certificate
+    encrypt: 'TRUE'
+    // ssltruststore: cds.env.requires.hana.credentials.certificate
 };
 const vcConfigTimePeriod = process.env.TimePeriod; //cf environment variable"PeriodOfYear";//
 const classicalSchema = process.env.classicalSchema; //cf environment variable"DB_CONFIG_PROD_CLIENT1";//
 
-const containerSchema = cds.env.requires.db.credentials.schema;
-const conn_params_container = {
-    serverNode  : cds.env.requires.db.credentials.host + ":" + cds.env.requires.db.credentials.port,
-    uid         : cds.env.requires.db.credentials.user, //cds userid environment variable
-    pwd         : cds.env.requires.db.credentials.password,//cds password environment variable
-    encrypt: 'TRUE',
-    ssltruststore: cds.env.requires.hana.credentials.certificate
-};
+// const conn_params = {
+//     serverNode  : cds.env.requires.db.credentials.host + ":" + cds.env.requires.db.credentials.port,
+//     uid         : "SBPTECHTEAM",//
+//     pwd         : "Sbpcorp@22",//
+//     encrypt: 'TRUE'
+//     // ssltruststore: cds.env.requires.hana.credentials.certificate
+// };
+// const vcConfigTimePeriod = "PeriodOfYear"; //process.env.TimePeriod; //cf environment variable"PeriodOfYear";//
+// const classicalSchema = "DB_CONFIG_PROD_CLIENT1" ;//process.env.classicalSchema; //cf environment variable"DB_CONFIG_PROD_CLIENT1";//
 
-exports._genVarmaModels = function(req) {
+
+exports._genVarmaModels = async function(req) {
    
     varmaFuncs._updateVarmaGroupParams(req);
     
     varmaFuncs._updateVarmaGroupData(req);
 
-    varmaFuncs._genVarmaModelsGroup(req); 
+    await varmaFuncs._genVarmaModelsGroup(req); 
   
 }
 
@@ -300,7 +291,7 @@ exports._updateVarmaGroupData = function(req) {
     console.log(' _updateVarmaGroupData Completed ');
 }
 
-exports._genVarmaModelsGroup = function(req) {
+exports._genVarmaModelsGroup = async function(req) {
     console.log('Executing VARMA Models at GROUP');
     var varmaType = req.data.varmaType;
     var varmaModelVersion = req.data.modelVersion;
@@ -517,7 +508,7 @@ exports._genVarmaModelsGroup = function(req) {
             irfOp : irfObj }
         ]}}
 
-    cds.run(cqnQuery);
+    await cds.run(cqnQuery);
 
     console.log('Varama Model Results', modelsObj);
 
@@ -539,15 +530,15 @@ exports._genVarmaModelsGroup = function(req) {
 
     console.log("inGroups ", inGroups, "Number of Groups",inGroups.length);
 
-    var conn_container = hana.createConnection();
+    // var conn_container = hana.createConnection();
  
-    conn_container.connect(conn_params_container);
+    // conn_container.connect(conn_params_container);
 
-    sqlStr = 'SET SCHEMA ' + containerSchema; 
-    // console.log('sqlStr: ', sqlStr);            
-    stmt=conn_container.prepare(sqlStr);
-    result=stmt.exec();
-    stmt.drop();
+    // sqlStr = 'SET SCHEMA ' + containerSchema; 
+    // // console.log('sqlStr: ', sqlStr);            
+    // stmt=conn_container.prepare(sqlStr);
+    // result=stmt.exec();
+    // stmt.drop();
 
     var tableObj = [];
     for (let grpIndex = 0; grpIndex < inGroups.length; grpIndex++)
@@ -645,16 +636,17 @@ exports._genVarmaModelsGroup = function(req) {
             
         console.log("CP_OD_MODEL_VERSIONS VARMA sql update sqlStr", sqlStr);
 
-        stmt=conn_container.prepare(sqlStr);
-        stmt.exec();
-        stmt.drop();
+        await cds.run(sqlStr);
+        // stmt=conn_container.prepare(sqlStr);
+        // stmt.exec();
+        // stmt.drop();
     }
-    conn_container.disconnect();
+    // conn_container.disconnect();
 
 
     cqnQuery = {INSERT:{ into: { ref: ['CP_PALVARMABYGROUP'] }, entries:  tableObj }};
 
-    cds.run(cqnQuery);
+    await cds.run(cqnQuery);
 /////
 
     let returnObj = [];	
@@ -678,7 +670,7 @@ exports._genVarmaModelsGroup = function(req) {
     });
 }
 
-exports._runVarmaPredictions = function(req) {
+exports._runVarmaPredictions = async function(req) {
 
   //  var groupId = req.data.groupId;
   var groupId = req.data.profile + '#' + req.data.Type + '#' + req.data.groupId + '#' + req.data.Location + '#' + req.data.Product;
@@ -720,7 +712,7 @@ exports._runVarmaPredictions = function(req) {
     
    varmaFuncs._updateVarmaPredictionData(req);
 
-   varmaFuncs._runPredictionVarmaGroup(req); 
+   await varmaFuncs._runPredictionVarmaGroup(req); 
 }
 
 
@@ -966,7 +958,7 @@ exports._updateVarmaPredictionData = function(req) {
     
 }
 
-exports._runPredictionVarmaGroup = function(req) {
+exports._runPredictionVarmaGroup = async function(req) {
 
     var conn = hana.createConnection();
  
@@ -1032,7 +1024,7 @@ exports._runPredictionVarmaGroup = function(req) {
 
         console.log('PredictionVarma Group: ', groupId);
         //predictionResults = predictionResults + _runHgbtPrediction(groupId);
-        let predictionObj = varmaFuncs._runVarmaPrediction(varmaType, groupId, version, scenario, modelVersion);
+        let predictionObj = await varmaFuncs._runVarmaPrediction(varmaType, groupId, version, scenario, modelVersion);
         //value.push({predictionObj});
         predResults.push(predictionObj);
 
@@ -1047,7 +1039,7 @@ exports._runPredictionVarmaGroup = function(req) {
 }
 
 
-exports._runVarmaPrediction = function(varmaType, group, version, scenario, modelVersion) {
+exports._runVarmaPrediction = async function(varmaType, group, version, scenario, modelVersion) {
 
 
     console.log('_runVarmaPrediction - group', group, 'Version ', version, 'Scenario ', scenario, 'Model Version', modelVersion);
@@ -1559,19 +1551,19 @@ exports._runVarmaPrediction = function(varmaType, group, version, scenario, mode
           predictionData : predDataObj, predictedResults : resultsObj}
          ]}}
 
-    cds.run(cqnQuery);
+    await cds.run(cqnQuery);
 
     conn.disconnect();
 
-    conn = hana.createConnection();
+    // conn = hana.createConnection();
  
-    conn.connect(conn_params_container);
+    // conn.connect(conn_params_container);
 
-    sqlStr = 'SET SCHEMA ' + containerSchema; 
-    // console.log('sqlStr: ', sqlStr);            
-    stmt=conn.prepare(sqlStr);
-    result=stmt.exec();
-    stmt.drop();
+    // sqlStr = 'SET SCHEMA ' + containerSchema; 
+    // // console.log('sqlStr: ', sqlStr);            
+    // stmt=conn.prepare(sqlStr);
+    // result=stmt.exec();
+    // stmt.drop();
     
     let tpGrpStr=groupId.split('#');
     tpGroupId = tpGrpStr[2] + '#' + tpGrpStr[3] + '#' + tpGrpStr[4];
@@ -1585,9 +1577,10 @@ exports._runVarmaPrediction = function(varmaType, group, version, scenario, mode
             ' AND "SCENARIO" = ' + "'" + scenario + "'" +
             ' ORDER BY ' + '"' + vcConfigTimePeriod + '"' + ' ASC';
     console.log("V_FUTURE_DEP_TS Distinct Periods sqlStr", sqlStr)
-    stmt=conn.prepare(sqlStr);
-    var distPeriods=stmt.exec();
-    stmt.drop();
+    // stmt=conn.prepare(sqlStr);
+    // var distPeriods=stmt.exec();
+    // stmt.drop();
+    var distPeriods= await cds.run(sqlStr);
     console.log("Time Periods for Group :", groupId, " Results: ", distPeriods);
     var predictedTime = new Date().toISOString();
     var trimmedPeriod = vcConfigTimePeriod.replace(/^(["]*)/g, '');
@@ -1614,9 +1607,11 @@ exports._runVarmaPrediction = function(varmaType, group, version, scenario, mode
                 ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
         console.log("V_FUTURE_DEP_TS P SELECT sqlStr ", sqlStr);
 
-        stmt=conn.prepare(sqlStr);
-        result=stmt.exec();
-        stmt.drop();
+        // stmt=conn.prepare(sqlStr);
+        // result=stmt.exec();
+        // stmt.drop();
+
+        result = await cds.run(sqlStr);
         console.log("V_FUTURE_DEP_TS P SELECT sqlStr result ", result);
 
         sqlStr = 'UPSERT "CP_TS_PREDICTIONS" VALUES (' + "'" + result[0].CAL_DATE + "'" + "," +
@@ -1638,10 +1633,11 @@ exports._runVarmaPrediction = function(varmaType, group, version, scenario, mode
             //' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
         console.log("V_PREDICTIONS Predicted Value sql update sqlStr", sqlStr);
 
-        stmt=conn.prepare(sqlStr);
-        stmt.exec();
-        stmt.drop();
+        // stmt=conn.prepare(sqlStr);
+        // stmt.exec();
+        // stmt.drop();
 
+        await cds.run(sqlStr);
         // let method = 'VARMA';
         // sqlStr = 'SELECT CP_PAL_PROFILEOD.PROFILE, METHOD FROM CP_PAL_PROFILEOD ' +
         //         'INNER JOIN CP_PAL_PROFILEMETH ON '+
@@ -1678,9 +1674,10 @@ exports._runVarmaPrediction = function(varmaType, group, version, scenario, mode
 
             console.log("CP_IBP_RESULTPLAN_TS Predicted Value VARMA sql update sqlStr", sqlStr);
 
-            stmt=conn.prepare(sqlStr);
-            stmt.exec();
-            stmt.drop();
+            // stmt=conn.prepare(sqlStr);
+            // stmt.exec();
+            // stmt.drop();
+            await cds.run(sqlStr);
         }
 
     }
@@ -1711,7 +1708,7 @@ exports._runVarmaPrediction = function(varmaType, group, version, scenario, mode
         stmt.drop();
     }
     */
-    conn.disconnect();
+    // conn.disconnect();
 
  
     let returnObj = [];	

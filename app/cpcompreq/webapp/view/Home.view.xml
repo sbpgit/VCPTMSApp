@@ -133,10 +133,10 @@
         </f:Form>
 
         <content>
-            <HBox>
-                <SearchField id="headSearch" liveChange="onSearchCompReq" placeholder="Component, Structure Node" width="500px"/>
-                <!-- <CheckBox id="idCheck" select="onCheck" text="Normalized" /> -->
-                <CheckBox id="idCheck1" select="onNonZero" text="Get Non-Zero" selected="true"/>
+        <HBox>
+            <SearchField id="headSearch" liveChange="onSearchCompReq" placeholder="Component, Structure Node" width="500px"/>
+            <!-- <CheckBox id="idCheck" select="onCheck" text="Normalized"  /> -->
+		    <CheckBox id="idCheck1" select="onNonZero" text="Get Non-Zero" selected="true" />
             </HBox>
             <t:Table id="idCompReq" fixedColumnCount="3" selectionMode="Single" alternateRowColors="true" enableSelectAll="false" visibleRowCount="15">
                 <t:columns>

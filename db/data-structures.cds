@@ -61,6 +61,7 @@ context cp_ds {
         LOCATION_ID : String(4);
         PRODUCT_ID  : String(40);
         ITEM_NUM    : String(5);
+        // ASSEMBLY    : String(40);
         COMPONENT   : String(40);
         VERSION     : String(10);
         SCENARIO    : String(32);

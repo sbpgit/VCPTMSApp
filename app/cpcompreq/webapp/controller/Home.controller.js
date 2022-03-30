@@ -132,6 +132,7 @@ sap.ui.define(
           this._valueHelpDialogStru.getId() + "-list"
         );
         this.oGridList = this._oCore.byId(sap.ui.getCore().byId("charOdDialog").getContent()[0].getId());
+        this.oGraphchart = this._oCore.byId(sap.ui.getCore().byId("idPanel").getContent()[0].getId());
         sap.ui.core.BusyIndicator.show();
         this.getModel("BModel").read("/getLocation", {
           success: function (oData) {
@@ -249,6 +250,7 @@ sap.ui.define(
 
         for (var i = 0; i < that.Data.length; i++) {
           if (
+            // that.Data[i].COMPONENT.includes(query) ||
             that.Data[i].COMPONENT.includes(query) ||
             that.Data[i].STRUC_NODE.includes(query) ||
             that.Data[i].QTYTYPE.includes(query)
@@ -306,7 +308,8 @@ sap.ui.define(
 
         for (var i = 0; i < that.tableData.length; i++) {
           sRowData.ItemNum = that.tableData[i].ITEM_NUM;
-          sRowData.Component = that.tableData[i].COMPONENT;
+          sRowData.Assembly = that.tableData[i].COMPONENT;
+          //sRowData.Component = that.tableData[i].COMPONENT;
           sRowData.StructureNode = that.tableData[i].STRUC_NODE;
           sRowData.Type = that.tableData[i].QTYTYPE;
           weekIndex = 1;
@@ -326,7 +329,8 @@ sap.ui.define(
         that.oTable.setModel(oModel);
         that.oTable.bindColumns("/columns", function (sId, oContext) {
           var columnName = oContext.getObject().CAL_DATE;
-          if(columnName === "Component" ||
+          if (columnName === "Assembly" ||
+          //(columnName === "Component" ||
           columnName === "ItemNum" ||
           columnName === "StructureNode" ){//||
        //   columnName === "Type" ){
@@ -391,17 +395,19 @@ sap.ui.define(
 
             sap.m.MessageToast.show("Please click on any quantity");
         } else {
-            var oGraph = sap.ui.getCore().byId("idpiechart");
+            //var oGraph = 
+          //  that.oGraphchart = sap.ui.getCore().byId("idpiechart");
             that.charModel.setData([]);
             that.oGridList.setModel(that.charModel);
             that.graphModel.setData([]);
-            oGraph.setModel(that.graphModel);
+           // oGraph.
+            that.oGraphchart.setModel(that.graphModel);
 
          var tableColumns = that.byId("idCompReq").getColumns(),
             selColumnDate,
             selColumnValue = oEvent.getSource().getText(),
             ObindingData = oEvent.getSource().getBindingContext().getObject(),
-            selComponent = ObindingData.Component,
+            selComponent = ObindingData.Assembly,//Component,
             selItem = ObindingData.ItemNum,
             selStruNode = ObindingData.StructureNode,
             selType = ObindingData.Type;
@@ -415,7 +421,7 @@ sap.ui.define(
             that.colDate = selColumnDate;
           //  sap.ui.getCore().byId("graphCard").getHeader().setTitle("Component"+selColumnValue);
           
-            var oGraph = sap.ui.getCore().byId("idpiechart");
+            // var oGraph = sap.ui.getCore().byId("idpiechart");
             //  var oGridTable = sap.ui.getCore().byId(sap.ui.getCore().byId("__card1").getCardContent().getId());
             if(selColumnValue > 0){
 
@@ -475,7 +481,7 @@ sap.ui.define(
         //return objDep.split("_")[0];
         var objDep = oHdr.split(":");
         
-        var oGraphChart = sap.ui.getCore().byId("idpiechart");
+      //  var oGraphChart = sap.ui.getCore().byId("idpiechart");
         // that.getModel("PModel").read("/getODImpactVals", {getOdCharImpact
         that.getModel("BModel").read("/getOdCharImpact", {
             filters: [new Filter("LOCATION_ID", FilterOperator.EQ, that.oGModel.getProperty("/SelectedLoc")),
@@ -492,7 +498,7 @@ sap.ui.define(
             success: function (oData) {
             //   that.ogrid
               that.graphModel.setData(oData);
-              oGraphChart.setModel(that.graphModel);
+              that.oGraphchart.setModel(that.graphModel);
             //  that.graphtModel.setData(oData);
             //   oGridTable.setModel(that.graphtModel);
             //  that._odGraphDialog.open();
@@ -511,7 +517,7 @@ sap.ui.define(
           liDates = [];
         var vDateSeries = imFromDate;
 
-        lsDates.CAL_DATE = "Component";
+        lsDates.CAL_DATE = "Assembly";//Component";
         liDates.push(lsDates);
         lsDates = {};
         lsDates.CAL_DATE = "ItemNum";

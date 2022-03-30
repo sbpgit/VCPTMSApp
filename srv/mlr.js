@@ -3,38 +3,27 @@ const { v1: uuidv1} = require('uuid')
 const hana = require('@sap/hana-client');
 const mlrFuncs = require('./mlr.js');
 
-// const conn_params = {
-//     serverNode  : cds.env.requires.db.credentials.host + ":" + cds.env.requires.db.credentials.port,
-//     uid         : "SBPTECHTEAM", //process.env.uidClassicalSchema, //cf environment variable
-//     pwd         : "Sbpcorp@22", //process.env.uidClassicalSchemaPassword,//cf environment variable
-//     encrypt: 'TRUE',
-//     ssltruststore: cds.env.requires.hana.credentials.certificate
-// };
-// const vcConfigTimePeriod = "PeriodOfYear"; //process.env.TimePeriod; //cf environment variable
-// const classicalSchema = "DB_CONFIG_PROD_CLIENT1"; //process.env.classicalSchema; //cf environment variable
-
-
 const conn_params = {
-    serverNode  : cds.env.requires.db.credentials.host + ":" + cds.env.requires.db.credentials.port,
-    uid         : process.env.uidClassicalSchema, //cf environment variable"SBPTECHTEAM",//
+    serverNode  : process.env.classicalSchemaNodePort, //cds.env.requires.db.credentials.host + ":" + cds.env.requires.db.credentials.port,
+    uid         : process.env.uidClassicalSchema, //cf environment variable "SBPTECHTEAM",//
     pwd         : process.env.uidClassicalSchemaPassword,//cf environment variable"Sbpcorp@22",//
-    encrypt: 'TRUE',
-    ssltruststore: cds.env.requires.hana.credentials.certificate
+    encrypt: 'TRUE'
+    // ssltruststore: cds.env.requires.hana.credentials.certificate
 };
 const vcConfigTimePeriod = process.env.TimePeriod; //cf environment variable"PeriodOfYear";//
 const classicalSchema = process.env.classicalSchema; //cf environment variable"DB_CONFIG_PROD_CLIENT1";//
 
-const containerSchema = cds.env.requires.db.credentials.schema;
-const conn_params_container = {
-    serverNode  : cds.env.requires.db.credentials.host + ":" + cds.env.requires.db.credentials.port,
-    uid         : cds.env.requires.db.credentials.user, //cds userid environment variable
-    pwd         : cds.env.requires.db.credentials.password,//cds password environment variable
-    encrypt: 'TRUE',
-    ssltruststore: cds.env.requires.hana.credentials.certificate
-};
+// const conn_params = {
+//     serverNode  : cds.env.requires.db.credentials.host + ":" + cds.env.requires.db.credentials.port,
+//     uid         : "SBPTECHTEAM",//
+//     pwd         : "Sbpcorp@22",//
+//     encrypt: 'TRUE'
+//     // ssltruststore: cds.env.requires.hana.credentials.certificate
+// };
+// const vcConfigTimePeriod = "PeriodOfYear"; //process.env.TimePeriod; //cf environment variable"PeriodOfYear";//
+// const classicalSchema = "DB_CONFIG_PROD_CLIENT1" ;//process.env.classicalSchema; //cf environment variable"DB_CONFIG_PROD_CLIENT1";//
 
-
-exports._runMlrRegressions = function(req) {
+exports._runMlrRegressions = async function(req) {
   
 
    //const regressionParameters = req.data.regressionParameters;
@@ -47,7 +36,7 @@ exports._runMlrRegressions = function(req) {
   
    mlrFuncs._updateMlrGroupData(req);
 
-   mlrFuncs._runRegressionMlrGroup(req); 
+   await mlrFuncs._runRegressionMlrGroup(req); 
   
 }
 
@@ -321,7 +310,7 @@ exports._updateMlrGroupData  = function(req) {
 }
 
 
-exports._runRegressionMlrGroup = function(req) {
+exports._runRegressionMlrGroup = async function(req) {
 
     //console.log('Executing Multi Linear Regression at GROUP');
     var mlrType = req.data.mlrType;
@@ -629,15 +618,15 @@ exports._runRegressionMlrGroup = function(req) {
     //let mlrGroupParams = req.data.regressionParameters;
 //    console.log("inGroups ", inGroups, "Number of Groups",inGroups.length);
 
-    var conn_container = hana.createConnection();
+    // var conn_container = hana.createConnection();
  
-    conn_container.connect(conn_params_container);
+    // conn_container.connect(conn_params_container);
 
-    sqlStr = 'SET SCHEMA ' + containerSchema; 
-    // console.log('sqlStr: ', sqlStr);            
-    stmt=conn_container.prepare(sqlStr);
-    result=stmt.exec();
-    stmt.drop();
+    // sqlStr = 'SET SCHEMA ' + containerSchema; 
+    // // console.log('sqlStr: ', sqlStr);            
+    // stmt=conn_container.prepare(sqlStr);
+    // result=stmt.exec();
+    // stmt.drop();
 
     var tableObj = [];	
 
@@ -756,11 +745,12 @@ exports._runRegressionMlrGroup = function(req) {
             
         console.log("CP_OD_MODEL_VERSIONS MLR sql update sqlStr", sqlStr);
 
-        stmt=conn_container.prepare(sqlStr);
-        stmt.exec();
-        stmt.drop();
+        // stmt=conn_container.prepare(sqlStr);
+        // stmt.exec();
+        // stmt.drop();
+        await cds.run(sqlStr);
     }
-    conn_container.disconnect();
+    // conn_container.disconnect();
 
 
     cqnQuery = {INSERT:{ into: { ref: ['CP_PALMLRBYGROUP'] }, entries:  tableObj }};
@@ -793,7 +783,7 @@ exports._runRegressionMlrGroup = function(req) {
 }
 
 
-exports._runMlrPredictions = function(req) {
+exports._runMlrPredictions = async function(req) {
   
 
    //const predictionParameters = req.data.predictionParameters;
@@ -841,7 +831,7 @@ exports._runMlrPredictions = function(req) {
   
    mlrFuncs._updateMlrPredictionData(req);
 
-   mlrFuncs._runPredictionMlrGroup(req); 
+   await mlrFuncs._runPredictionMlrGroup(req); 
   
 }
 
@@ -1079,7 +1069,7 @@ exports._updateMlrPredictionData = function(req) {
     console.log(' _updateMlrPredictionData Completed ');
 }
 
-exports._runPredictionMlrGroup = function(req) {
+exports._runPredictionMlrGroup = async function(req) {
 
     var conn = hana.createConnection();
  
@@ -1144,7 +1134,7 @@ exports._runPredictionMlrGroup = function(req) {
 
         console.log('PredictionMlr Group: ', groupId);
         //predictionResults = predictionResults + _runHgbtPrediction(groupId);
-        let predictionObj = mlrFuncs._runMlrPrediction(mlrpType, groupId, version, scenario,modelVersion);
+        let predictionObj = await mlrFuncs._runMlrPrediction(mlrpType, groupId, version, scenario,modelVersion);
         //value.push({predictionObj});
         predResults.push(predictionObj);
 
@@ -1159,7 +1149,7 @@ exports._runPredictionMlrGroup = function(req) {
 }
 
 
-exports._runMlrPrediction = function (mlrpType, group, version, scenario, modelVersion) {
+exports._runMlrPrediction = async function (mlrpType, group, version, scenario, modelVersion) {
 
     console.log('_runMlrPrediction - group', group, 'Version ', version, 'Scenario ', scenario,'Model Version', modelVersion);
 
@@ -1757,15 +1747,15 @@ exports._runMlrPrediction = function (mlrpType, group, version, scenario, modelV
 
     conn.disconnect();
 
-    var conn = hana.createConnection();
+    // var conn = hana.createConnection();
  
-    conn.connect(conn_params_container);
+    // conn.connect(conn_params_container);
 
-    sqlStr = 'SET SCHEMA ' + containerSchema; 
-    // console.log('sqlStr: ', sqlStr);            
-    stmt=conn.prepare(sqlStr);
-    result=stmt.exec();
-    stmt.drop();
+    // sqlStr = 'SET SCHEMA ' + containerSchema; 
+    // // console.log('sqlStr: ', sqlStr);            
+    // stmt=conn.prepare(sqlStr);
+    // result=stmt.exec();
+    // stmt.drop();
 
     let tpGrpStr=groupId.split('#');
     tpGroupId = tpGrpStr[2] + '#' + tpGrpStr[3] + '#' + tpGrpStr[4];
@@ -1779,10 +1769,11 @@ exports._runMlrPrediction = function (mlrpType, group, version, scenario, modelV
              ' ORDER BY ' + '"' + vcConfigTimePeriod + '"' + ' ASC';
 
     console.log("V_FUTURE_DEP_TS Distinct Periods sqlStr", sqlStr)
-    stmt=conn.prepare(sqlStr);
-    var distPeriods=stmt.exec();
-    stmt.drop();
-    //console.log("Time Periods for Group :", tpGroupId, " Results: ", distPeriods);
+    // stmt=conn.prepare(sqlStr);
+    // var distPeriods=stmt.exec();
+    // stmt.drop();
+    var distPeriods=await cds.run(sqlStr);
+    //console.log("Time Periods for Group :", tpGroupId, " Results: ", distPeriods,"periods#",distPeriods.length);
     var predictedTime = new Date().toISOString();
     var trimmedPeriod = vcConfigTimePeriod.replace(/^(["]*)/g, '');
     //console.log('trimmedPeriod : ', trimmedPeriod, 'vcConfigTimePeriod :', vcConfigTimePeriod);
@@ -1809,9 +1800,10 @@ exports._runMlrPrediction = function (mlrpType, group, version, scenario, modelV
                 ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
         //console.log("V_FUTURE_DEP_TS MLR SELECT sqlStr ", sqlStr);
 
-        stmt=conn.prepare(sqlStr);
-        result=stmt.exec();
-        stmt.drop();
+        // stmt=conn.prepare(sqlStr);
+        // result=stmt.exec();
+        // stmt.drop();
+        result = await cds.run(sqlStr);
         //console.log("V_FUTURE_DEP_TS MLR SELECT sqlStr result ", result);
 
         sqlStr = 'UPSERT "CP_TS_PREDICTIONS" VALUES (' + "'" + result[0].CAL_DATE + "'" + "," +
@@ -1836,9 +1828,10 @@ exports._runMlrPrediction = function (mlrpType, group, version, scenario, modelV
 
         //console.log("V_FUTURE_DEP_TS Predicted Value sql update sqlStr", sqlStr)
 
-        stmt=conn.prepare(sqlStr);
-        stmt.exec();
-        stmt.drop();
+        // stmt=conn.prepare(sqlStr);
+        // stmt.exec();
+        // stmt.drop();
+        await cds.run(sqlStr);
 
         // let method = 'MLR';
         // sqlStr = 'SELECT CP_PAL_PROFILEOD.PROFILE, METHOD FROM CP_PAL_PROFILEOD ' +
@@ -1876,14 +1869,15 @@ exports._runMlrPrediction = function (mlrpType, group, version, scenario, modelV
  
             //console.log("CP_IBP_RESULTPLAN_TS Predicted Value MLR sql update sqlStr", sqlStr);
 
-            stmt=conn.prepare(sqlStr);
-            stmt.exec();
-            stmt.drop();
+            // stmt=conn.prepare(sqlStr);
+            // stmt.exec();
+            // stmt.drop();
+            await cds.run(sqlStr);
         }
 
     }
 
-    conn.disconnect();
+    // conn.disconnect();
 
     var conn = hana.createConnection();
     conn.connect(conn_params);
@@ -1944,15 +1938,15 @@ exports._runMlrPrediction = function (mlrpType, group, version, scenario, modelV
 
 //    conn.disconnect();
 
-    var conn = hana.createConnection();
+    // var conn = hana.createConnection();
  
-    conn.connect(conn_params_container);
+    // conn.connect(conn_params_container);
 
-    sqlStr = 'SET SCHEMA ' + containerSchema; 
-    // console.log('sqlStr: ', sqlStr);            
-    stmt=conn.prepare(sqlStr);
-    result=stmt.exec();
-    stmt.drop();
+    // sqlStr = 'SET SCHEMA ' + containerSchema; 
+    // // console.log('sqlStr: ', sqlStr);            
+    // stmt=conn.prepare(sqlStr);
+    // result=stmt.exec();
+    // stmt.drop();
 
     for (let pIndex=0; pIndex<distPeriods.length; pIndex++)
     {     
@@ -1973,9 +1967,10 @@ exports._runMlrPrediction = function (mlrpType, group, version, scenario, modelV
         result = [];
 
 
-        stmt=conn.prepare(sqlStr);
-        result=stmt.exec();
-        stmt.drop();
+        // stmt=conn.prepare(sqlStr);
+        // result=stmt.exec();
+        // stmt.drop();
+        result = await cds.run(sqlStr);
         //console.log("V_FUTURE_DEP_TS MLR SELECT sqlStr result ", result, "length = ", result.length);
 
     
@@ -2035,15 +2030,16 @@ exports._runMlrPrediction = function (mlrpType, group, version, scenario, modelV
             
             //console.log("CP_TS_OBJDEP_CHAR_IMPACT_F MLR UPSERT sqlStr ", sqlStr); 
   
-            stmt=conn.prepare(sqlStr);
-            stmt.exec();
-            stmt.drop(); 
+            // stmt=conn.prepare(sqlStr);
+            // stmt.exec();
+            // stmt.drop(); 
+            await cds.run(sqlStr);
   
         }
   
 
     }
-    conn.disconnect();
+    // conn.disconnect();
 
     let returnObj = [];	
     let createdAt = createtAtObj;

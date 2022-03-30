@@ -18,7 +18,8 @@ using V_BOMPVS from '../db/data-model';
 using V_TS_ODCHARPREDICTIONS from '../db/data-model';
 using V_COMPOD_TSPRED from '../db/data-model';
 using V_ODCHARIMPACT_VALUE from '../db/data-model';
-using V_FCHARPLAN from '../db/data-model';
+using { V_FCHARPLAN ,V_ASMCOMP_REQ } from '../db/data-model';
+// using V_ASMCOMP_REQ from '../db/data-model';
 service CatalogService @(impl : './lib/cat-service.js') {
     // Service on HDI entities
     //@odata.draft.enabled
@@ -137,6 +138,8 @@ service CatalogService @(impl : './lib/cat-service.js') {
     entity getIbpVerScn        as projection on V_IBPVERSCENARIO;
     entity getOdCharImpact     as projection on V_ODCHARIMPACT_VALUE;//V_TS_ODCHARPREDICTIONS;
     entity getBOMPred          as projection on V_COMPOD_TSPRED;//V_BOM_TSPREDICTION;
+    entity getAsmbCompReq      as projection on V_ASMCOMP_REQ;
+    entity getAsmbComp          as projection on od.ASSEMBLY_COMP;
     //Component requirement qunatity determination
     function getCompreqQty(LOCATION_ID:String(4), PRODUCT_ID:String(40), VERSION : String(10), SCENARIO    : String(32) ) returns String;
     // Create PVS node structure
@@ -156,6 +159,10 @@ service CatalogService @(impl : './lib/cat-service.js') {
     function genODFuture(OBJ_DEP:String(30),OBJ_COUNTER:String(10)) returns array of ds.odfuture;
     // Component weekly
     function getCompReqFWeekly(LOCATION_ID:String(4), PRODUCT_ID:String(40), VERSION : String(10), SCENARIO : String(32), COMPONENT:String(40), STRUCNODE  : String(50), FROMDATE: Date, TODATE: Date, MODEL_VERSION    : String(20)) returns array of ds.compreq;
+
+    // Assembly Component weekly
+    function getAsmbCompReqFWeekly(LOCATION_ID:String(4), PRODUCT_ID:String(40), VERSION : String(10), SCENARIO : String(32), FROMDATE: Date, TODATE: Date, MODEL_VERSION    : String(20)) returns array of ds.compreq;
+
     //productaccess node
     function genProdAN(LOCATION_ID:String(4), PRODUCT_ID:String(40), ACCESS_NODE:String(50)) returns array of genProdAccessNode;
     //component structure node

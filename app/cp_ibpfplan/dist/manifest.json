@@ -35,7 +35,7 @@
                     "action": "Display",
                     "title": "{{flpTitle}}",
                     "subTitle": "{{flpSubtitle}}",
-                    "icon": ""
+                    "icon": "sap-icon://paper-plane"
                 }
             }
         }

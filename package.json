@@ -10,14 +10,18 @@
         "@sap/cds": "^5.7.5",
         "@sap/cds-mtx": "^2.5.1",
         "@sap/cds-odata-v2-adapter-proxy": "^1.8.9",
+        "@sap/jobs-client": "^1.6.3",
+        "sap-cf-mailer": "^0.0.5",
         "@sap/hana-client": "^2.10.15",
         "@sap/hdi-deploy": "^4.2.0",
         "@sap/xsenv": "^3.1.1",
         "@sap/xssec": "^2.2.5",
         "await-sleep": "^0.0.1",
+        "axios": "^0.21.1",
         "debug": "^4.3.2",
         "express": "^4",
         "https": "^1.0.0",
+        "qs": "^6",
         "passport": "^0.5.2",
         "request": "^2.88.2",
         "sync": "^0.2.5",
@@ -48,7 +52,8 @@
         "watch-cpassignnode": "cds watch --open cpassignnode/webapp/index.html#fe-lrop-v4",
         "watch-cpcompreq": "cds watch --open cpcompreq/webapp/index.html#fe-lrop-v4",
         "watch-cpprodlocline": "cds watch --open cpprodlocline/webapp/index.html#fe-lrop-v4",
-        "watch-cprtrheader": "cds watch --open cprtrheader/webapp/index.html#fe-lrop-v4"
+        "watch-cprtrheader": "cds watch --open cprtrheader/webapp/index.html#fe-lrop-v4",
+        "watch-cpasmbcompreq": "cds watch --open cpasmbcompreq/webapp/index.html#fe-lrop-v4"
     },
     "eslintConfig": {
         "extends": "eslint:recommended",
@@ -130,9 +135,10 @@
         "app/cpassignnode",
         "app/cpcompreq",
         "app/cpprodlocline",
-        "app/cprtrheader"
+        "app/cprtrheader",
+        "app/cpasmbcompreq"
     ],
     "devDependencies": {
-        "@sap/ux-specification": "^1.96.4"
+        "@sap/ux-specification": "^1.96.6"
     }
 }

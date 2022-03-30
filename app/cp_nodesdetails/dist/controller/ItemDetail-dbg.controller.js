@@ -393,6 +393,8 @@ sap.ui.define([
                     upper = sap.ui.getCore().byId("idUpper").getValue();
                 }
 
+                if(upper >= lower){
+
                 that.getModel("BModel").callFunction("/genpvs", {
                     method: "GET",
                     urlParameters: {
@@ -420,6 +422,9 @@ sap.ui.define([
                       sap.ui.core.BusyIndicator.hide();
                     },
                   });
+                } else {
+                    MessageToast.show("Lower limit is greater then Upper limit");
+                }
         },
 
         onAssignViewNode:function(oEvent){
