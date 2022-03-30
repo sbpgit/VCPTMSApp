@@ -1,0 +1,30 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns:l="sap.ui.layout"
+	xmlns:f="sap.ui.layout.form">
+	<Dialog title="Assembly - Component" contentWidth="800px" >
+        <Table id="idAsmbComp"  items="{path: '/results'}" >
+				<columns>
+					<Column hAlign="Left" vAlign="Middle">
+						<Text text="{i18n>asmb}" />
+					</Column>
+					<Column hAlign="Left" vAlign="Middle">
+						<Text text="{i18n>comp}"/>
+					</Column>
+                    <Column hAlign="Left" vAlign="Middle">
+						<Text text="{i18n>qty}"/>
+					</Column>
+				</columns>
+				<items>
+					<ColumnListItem>
+						<cells>
+							<Link text="{ASSEMBLY}" press="OnAsmbPress"/>
+                            <Text text="{COMPONENT}"/>
+                            <Text text="{COMP_QTY}"/>
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+		<buttons>
+			<Button type='Reject' text="{i18n>close}" press="onAsmbCompClose"></Button>
+		</buttons>
+	</Dialog>
+</core:FragmentDefinition>
