@@ -26,6 +26,16 @@ modules:
   - name: config_products-db
     properties:
       TARGET_CONTAINER: ~{hdi-service-name}
+  # - name: cross-container-service-1
+  #   group: SERVICE_REPLACEMENTS
+  #   properties:
+  #     key: ServiceName_1
+  #     service: ~{the-service-name}
+  # - name: cross-container-service-2
+  #   group: SERVICE_REPLACEMENTS
+  #   properties:
+  #     key: ServiceName_2
+  #     service: ~{the-service-name}
   parameters:
     buildpack: nodejs_buildpack
   build-parameters:
@@ -447,6 +457,18 @@ resources:
     service: xsuaa
     service-name: config_products-xsuaa-service
     service-plan: application
+# - name: cross-container-service-1
+#   type: org.cloudfoundry.existing-service
+#   parameters:
+#     service-name: CCLI_ACCESS
+#   properties:
+#     the-service-name: ${service-name}
+# - name: cross-container-service-2
+#   type: org.cloudfoundry.existing-service
+#   parameters:
+#     service-name: CCLI_ACCESS
+#   properties:
+#     the-service-name: ${service-name}
 parameters:
   deploy_mode: html5-repo
   enable-parallel-deployments: true

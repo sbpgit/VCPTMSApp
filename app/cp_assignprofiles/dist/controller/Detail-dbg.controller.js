@@ -378,8 +378,8 @@ sap.ui.define(
             method: "GET",
             urlParameters: {
                 FLAG : operationFlag,
-                PROFILE: selRow.PROFILE,
-                METHOD: selRow.METHOD,
+                PROFILE: PROFILE,
+                METHOD: METHOD,
                 PARA_NAME: PARA_NAME,
                 INTVAL: jsonProfilePara.INTVAL,
                 DOUBLEVAL: jsonProfilePara.DOUBLEVAL,

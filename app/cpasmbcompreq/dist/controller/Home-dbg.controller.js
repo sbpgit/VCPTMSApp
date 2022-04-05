@@ -35,6 +35,7 @@ sap.ui.define(
         that.charModel = new JSONModel();
         that.graphModel = new JSONModel();
         that.graphtModel = new JSONModel();
+        that.AsmbCompModel = new JSONModel();
         that.locModel.setSizeLimit(1000);
         that.prodModel.setSizeLimit(1000);
         that.verModel.setSizeLimit(1000);
@@ -91,6 +92,13 @@ sap.ui.define(
             this
           );
           this.getView().addDependent(this._odGraphDialog);
+        }
+        if (!this._AsmbCompDialog) {
+          this._AsmbCompDialog = sap.ui.xmlfragment(
+            "cpapp.cpasmbcompreq.view.AsmbCompDialog",
+            this
+          );
+          this.getView().addDependent(this._AsmbCompDialog);
         }
       },
       onAfterRendering: function () {
@@ -209,8 +217,8 @@ sap.ui.define(
               PRODUCT_ID: Prod,
               VERSION: ver,
               SCENARIO: scen,
-            //   COMPONENT: comp,
-            //   STRUCNODE: stru,
+              //   COMPONENT: comp,
+              //   STRUCNODE: stru,
               FROMDATE: vFromDate,
               TODATE: vToDate,
               MODEL_VERSION: modelVersion,
@@ -310,12 +318,12 @@ sap.ui.define(
         var liDates = that.generateDateseries(fromDate, toDate);
 
         for (var i = 0; i < that.tableData.length; i++) {
-          sRowData.ItemNum = that.tableData[i].ITEM_NUM;
+          //   sRowData.ItemNum = that.tableData[i].ITEM_NUM;
           sRowData.Component = that.tableData[i].COMPONENT;
-          sRowData.StructureNode = that.tableData[i].STRUC_NODE;
-          sRowData.Type = that.tableData[i].QTYTYPE;
+          //   sRowData.StructureNode = that.tableData[i].STRUC_NODE;
+          //   sRowData.Type = that.tableData[i].QTYTYPE;
           weekIndex = 1;
-          for (let index = 3; index < liDates.length; index++) {
+          for (let index = 1; index < liDates.length; index++) {
             sRowData[liDates[index].CAL_DATE] =
               that.tableData[i]["WEEK" + weekIndex];
             weekIndex++;
@@ -332,9 +340,9 @@ sap.ui.define(
         that.oTable.bindColumns("/columns", function (sId, oContext) {
           var columnName = oContext.getObject().CAL_DATE;
           if (
-            columnName === "Component" ||
-            columnName === "ItemNum" ||
-            columnName === "StructureNode"
+            columnName === "Component" // ||
+            // columnName === "ItemNum" ||
+            // columnName === "StructureNode"
           ) {
             //||
             //   columnName === "Type" ){
@@ -347,11 +355,12 @@ sap.ui.define(
             return new sap.ui.table.Column({
               width: "8rem",
               label: columnName,
-              template: columnName,
-            //   template: new sap.m.Link({
-            //     text: "{" + columnName + "}",
-            //     press: that.linkPressed,
-            //   }),
+              //   template: columnName,
+              template: new sap.m.Link({
+                text: "{" + columnName + "}",
+                // press: that.linkPressed,
+                press: that.asmbcompLinkpress,
+              }),
             });
           }
           // }
@@ -394,17 +403,124 @@ sap.ui.define(
         that.TableGenerate();
       },
 
+      asmbcompLinkpress: function (oEvent) {
+        var selColumnId = oEvent.getSource().getAriaLabelledBy()[0];
+        var tableColumns = that.byId("idCompReq").getColumns(),
+          selColumnDate,
+          selColumnValue = oEvent.getSource().getText(),
+          ObindingData = oEvent.getSource().getBindingContext().getObject(),
+          selComponent = ObindingData.Component,
+          selItem = ObindingData.ItemNum,
+          selStruNode = ObindingData.StructureNode,
+          selType = ObindingData.Type;
+        that.colComp = selComponent;
+        for (var i = 0; i < tableColumns.length; i++) {
+          if (selColumnId === tableColumns[i].sId) {
+            selColumnDate = that
+              .byId("idCompReq")
+              .getColumns()
+              [i].getLabel()
+              .getText();
+          }
+        }
+
+        that.colDate = selColumnDate;
+        that.oGModel.setProperty("/SelectedDate", selColumnDate);
+        if (selColumnValue > 0) {
+          this.getModel("BModel").read("/getAsmbCompReq", {
+            filters: [
+              new Filter(
+                "LOCATION_ID",
+                FilterOperator.EQ,
+                that.oGModel.getProperty("/SelectedLoc")
+              ),
+              new Filter(
+                "PRODUCT_ID",
+                FilterOperator.EQ,
+                that.oGModel.getProperty("/SelectedProd")
+              ),
+              new Filter(
+                "VERSION",
+                FilterOperator.EQ,
+                that.oGModel.getProperty("/SelectedVer")
+              ),
+              new Filter(
+                "SCENARIO",
+                FilterOperator.EQ,
+                that.oGModel.getProperty("/SelectedScen")
+              ),
+              new Filter("COMPONENT", FilterOperator.EQ, selComponent),
+              new Filter("CAL_DATE", FilterOperator.EQ, selColumnDate),
+              new Filter(
+                "MODEL_VERSION",
+                FilterOperator.EQ,
+                that.oGModel.getProperty("/SelectedMV")
+              ),
+            ],
+            success: function (oData) {
+              that.AsmbCompModel.setData(oData);
+              that.oAsmbCompList = sap.ui.getCore().byId("idAsmbComp");
+              that.oAsmbCompList.setModel(that.AsmbCompModel);
+
+              that._AsmbCompDialog.open();
+            },
+            error: function (oData, error) {
+              MessageToast.show("error");
+            },
+          });
+        }
+      },
+
+      onAsmbCompClose: function () {
+        that._AsmbCompDialog.close();
+      },
+
+      OnAsmbPress: function (oEvent) {
+        that.charModel.setData([]);
+        that.oGridList.setModel(that.charModel);
+        that.graphModel.setData([]);
+        // oGraph.
+        that.oGraphchart.setModel(that.graphModel);
+        var oLoc = that.oGModel.getProperty("/SelectedLoc"),
+          oProd = that.oGModel.getProperty("/SelectedProd"),
+          oVer = that.oGModel.getProperty("/SelectedVer"),
+          oScen = that.oGModel.getProperty("/SelectedScen"),
+          oMOdelVer = that.oGModel.getProperty("/SelectedMV"),
+          oCalDate = that.oGModel.getProperty("/SelectedDate"),
+          oAsmbly = oEvent.getSource().getText();
+
+        this.getModel("BModel").read("/getBOMPred", {
+          filters: [
+            new Filter("LOCATION_ID", FilterOperator.EQ, oLoc),
+            new Filter("PRODUCT_ID", FilterOperator.EQ, oProd),
+            new Filter("VERSION", FilterOperator.EQ, oVer),
+            new Filter("SCENARIO", FilterOperator.EQ, oScen),
+            new Filter("COMPONENT", FilterOperator.EQ, oAsmbly),
+            new Filter("CAL_DATE", FilterOperator.EQ, oCalDate),
+            new Filter("MODEL_VERSION", FilterOperator.EQ, oMOdelVer),
+          ],
+          success: function (oData) {
+            that.charModel.setData(oData);
+            that.oGridList.setModel(that.charModel);
+            that._odGraphDialog.open();
+          },
+          error: function (oData, error) {
+            MessageToast.show("error");
+          },
+        });
+      },
+
       linkPressed: function (oEvent) {
         var selColumnId = oEvent.getSource().getAriaLabelledBy()[0];
-        if (
-          selColumnId === "__column0" ||
-          selColumnId === "__column1" ||
-          selColumnId === "__column2"
-        ) {
-          sap.m.MessageToast.show("Please click on any quantity");
-        } else {
-          //var oGraph =
-          //  that.oGraphchart = sap.ui.getCore().byId("idpiechart");
+        // if (
+        //   selColumnId === "__column0" ||
+        //   selColumnId === "__column1" ||
+        //   selColumnId === "__column2"
+        // ) {
+        //   sap.m.MessageToast.show("Please click on any quantity");
+        // } else {
+        //   //var oGraph =
+        //   //  that.oGraphchart = sap.ui.getCore().byId("idpiechart");
           that.charModel.setData([]);
           that.oGridList.setModel(that.charModel);
           that.graphModel.setData([]);
@@ -459,8 +575,8 @@ sap.ui.define(
                   FilterOperator.EQ,
                   that.oGModel.getProperty("/SelectedScen")
                 ),
-                new Filter("COMPONENT", FilterOperator.EQ, selComponent),
-                new Filter("CAL_DATE", FilterOperator.EQ, selColumnDate),
+                new Filter("COMPONENT", FilterOperator.EQ, oEvent.getSource().getText()),
+                new Filter("CAL_DATE", FilterOperator.EQ, that.oGModel.getProperty("/SelectedDate")),
                 new Filter(
                   "MODEL_VERSION",
                   FilterOperator.EQ,
@@ -501,7 +617,7 @@ sap.ui.define(
                 MessageToast.show("error");
               },
             });
-          }
+        //   }
 
           //sap.m.MessageToast.show("Selected Date - " + " " + selColumnDate + " " + "Value - " + " " + selColumnValue);
         }
@@ -575,12 +691,12 @@ sap.ui.define(
         lsDates.CAL_DATE = "Component";
         liDates.push(lsDates);
         lsDates = {};
-        lsDates.CAL_DATE = "ItemNum";
-        liDates.push(lsDates);
-        lsDates = {};
-        lsDates.CAL_DATE = "StructureNode";
-        liDates.push(lsDates);
-        lsDates = {};
+        // lsDates.CAL_DATE = "ItemNum";
+        // liDates.push(lsDates);
+        // lsDates = {};
+        // lsDates.CAL_DATE = "StructureNode";
+        // liDates.push(lsDates);
+        // lsDates = {};
         // lsDates.CAL_DATE = "Type";
         // liDates.push(lsDates);
         // lsDates = {};

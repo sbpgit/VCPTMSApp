@@ -64,6 +64,19 @@ module.exports = srv => {
      
     })
 
+    srv.on ('generateModels',    async req => {
+        console.log('req.data: ', req.data);   
+        var data = req.data.vcRuleList;
+        return (await _generateRegModels(req));   
+    })
+
+
+    srv.on ('genPredictions',    async req => {
+        console.log('req.data: ', req.data);   
+        var data = req.data.vcRuleList;
+        return (await _generatePredictions(req));
+    })
+
     //srv.on ('execCorrelation', function(a,b) { 
     /*
     srv.on ('execCorrelation',    async req => {
@@ -1340,7 +1353,7 @@ async function _generateRegModels (req) {
 
    const vcRulesListReq = req.data.vcRulesList;
 
-//   console.log('_generateRegModels vcRulesListReq: ', vcRulesListReq); 
+   console.log('_generateRegModels vcRulesListReq: ', vcRulesListReq); 
 //    let resp = req._.req.res;
 //    resp.statusCode = 201;
 
