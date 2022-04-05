@@ -26,11 +26,15 @@ sap.ui.define(
     var that, oGModel;
 
     return BaseController.extend("cp.odp.cpodprofiles.controller.Home", {
+      /**
+       * Called when a controller is instantiated and its View controls (if available) are already created.
+       * Can be used to modify the View before it is displayed, to bind event handlers and do other one-time initialization.
+       */
       onInit: function () {
         that = this;
+        // Declaring JSON Models and size limits
         that.oListModel = new JSONModel();
         that.oProfileModel = new JSONModel();
-
         that.locModel = new JSONModel();
         that.prodModel = new JSONModel();
         that.CompModel = new JSONModel();
@@ -42,6 +46,7 @@ sap.ui.define(
         that.CompModel.setSizeLimit(1000);
         that.ObjDepModel.setSizeLimit(1000);
 
+        // Declaring Value Help Dialogs
         this._oCore = sap.ui.getCore();
         if (!this._valueHelpDialogLoc) {
           this._valueHelpDialogLoc = sap.ui.xmlfragment(
@@ -75,6 +80,10 @@ sap.ui.define(
           .getRoute("Home")
           .attachPatternMatched(this._onPatternMatched.bind(this));
       },
+
+      /*
+       * Called when the URL matches pattern "Home".
+       */
       _onPatternMatched: function () {
         that = this;
         that.oList = this.byId("idTab");
@@ -105,8 +114,13 @@ sap.ui.define(
         // Calling function
         this.getData();
       },
+
+      /**
+       * Getting Data Initially and binding to Locations dialog
+       */
       getData: function () {
         sap.ui.core.BusyIndicator.show();
+        // Calling service to get Location data
         this.getModel("BModel").read("/getLocation", {
           success: function (oData) {
             that.locModel.setData(oData);
@@ -119,16 +133,24 @@ sap.ui.define(
         });
       },
 
+      /**
+       * This function is called when click on Value help on Input box.
+       * In this function based in sId will open the dialogs.
+       * @param {object} oEvent -the event information.
+       */
       handleValueHelp: function (oEvent) {
         var sId = oEvent.getParameter("id");
+        // Loc Dialog
         if (sId.includes("loc")) {
           that._valueHelpDialogLoc.open();
+          // Prod Dialog
         } else if (sId.includes("prod")) {
           if (that.byId("idloc").getValue()) {
             that._valueHelpDialogProd.open();
           } else {
             MessageToast.show("Select Location");
           }
+          // Component Dialog
         } else if (sId.includes("comp")) {
           if (
             that.byId("idloc").getValue() &&
@@ -138,6 +160,7 @@ sap.ui.define(
           } else {
             MessageToast.show("No Product Location selected");
           }
+          // Obj Dep Dialog
         } else if (sId.includes("objDep")) {
           if (
             that.byId("idloc").getValue() &&
@@ -150,8 +173,13 @@ sap.ui.define(
         }
       },
 
+      /**
+       * Called when 'Close/Cancel' button in any dialog is pressed.
+       * In this function based in sId will close the dialogs.
+       */
       handleClose: function (oEvent) {
         var sId = oEvent.getParameter("id");
+        // Loc Dialog
         if (sId.includes("loc")) {
           that._oCore
             .byId(this._valueHelpDialogLoc.getId() + "-searchField")
@@ -159,6 +187,7 @@ sap.ui.define(
           if (that.oLocList.getBinding("items")) {
             that.oLocList.getBinding("items").filter([]);
           }
+          // Prod Dialog
         } else if (sId.includes("prod")) {
           that._oCore
             .byId(this._valueHelpDialogProd.getId() + "-searchField")
@@ -166,6 +195,7 @@ sap.ui.define(
           if (that.oProdList.getBinding("items")) {
             that.oProdList.getBinding("items").filter([]);
           }
+          // Component Dialog
         } else if (sId.includes("Comp")) {
           that._oCore
             .byId(this._valueHelpDialogComp.getId() + "-searchField")
@@ -173,6 +203,7 @@ sap.ui.define(
           if (that.oCompList.getBinding("items")) {
             that.oCompList.getBinding("items").filter([]);
           }
+          // Obj Dep Dialog
         } else if (sId.includes("ObjDep")) {
           that._oCore
             .byId(this._valueHelpDialogObjDep.getId() + "-searchField")
@@ -181,30 +212,27 @@ sap.ui.define(
             that.oObjDepList.getBinding("items").filter([]);
           }
         }
-        // else if (sId.includes("ObjDep")) {
-        //   that._oCore
-        //     .byId(this._valueHelpDialogObjDep.getId() + "-searchField")
-        //     .setValue("");
-        //   if (that.oObjDepList.getBinding("items")) {
-        //     that.oObjDepList.getBinding("items").filter([]);
-        //   }
-        // }
       },
+
+      /**
+       * Called when something is entered into the search field.
+       * @param {object} oEvent -the event information.
+       */
       handleSearch: function (oEvent) {
-        var query =
+        var sQuery =
             oEvent.getParameter("value") || oEvent.getParameter("newValue"),
           sId = oEvent.getParameter("id"),
           oFilters = [];
         // Check if search filter is to be applied
-        query = query ? query.trim() : "";
+        sQuery = sQuery ? sQuery.trim() : "";
         // Location
         if (sId.includes("Loc")) {
-          if (query !== "") {
+          if (sQuery !== "") {
             oFilters.push(
               new Filter({
                 filters: [
-                  new Filter("LOCATION_ID", FilterOperator.Contains, query),
-                  new Filter("LOCATION_DESC", FilterOperator.Contains, query),
+                  new Filter("LOCATION_ID", FilterOperator.Contains, sQuery),
+                  new Filter("LOCATION_DESC", FilterOperator.Contains, sQuery),
                 ],
                 and: false,
               })
@@ -213,38 +241,40 @@ sap.ui.define(
           that.oLocList.getBinding("items").filter(oFilters);
           // Product
         } else if (sId.includes("prod")) {
-          if (query !== "") {
+          if (sQuery !== "") {
             oFilters.push(
               new Filter({
                 filters: [
-                  new Filter("PRODUCT_ID", FilterOperator.Contains, query),
-                  new Filter("PROD_DESC", FilterOperator.Contains, query),
+                  new Filter("PRODUCT_ID", FilterOperator.Contains, sQuery),
+                  new Filter("PROD_DESC", FilterOperator.Contains, sQuery),
                 ],
                 and: false,
               })
             );
           }
           that.oProdList.getBinding("items").filter(oFilters);
+          // Component
         } else if (sId.includes("Comp")) {
-          if (query !== "") {
+          if (sQuery !== "") {
             oFilters.push(
               new Filter({
                 filters: [
-                  new Filter("COMPONENT", FilterOperator.Contains, query),
-                  new Filter("ITEM_NUM", FilterOperator.Contains, query),
+                  new Filter("COMPONENT", FilterOperator.Contains, sQuery),
+                  new Filter("ITEM_NUM", FilterOperator.Contains, sQuery),
                 ],
                 and: false,
               })
             );
           }
           that.oCompList.getBinding("items").filter(oFilters);
+          // Object Dependency
         } else if (sId.includes("ObjDep")) {
-          if (query !== "") {
+          if (sQuery !== "") {
             oFilters.push(
               new Filter({
                 filters: [
-                  new Filter("OBJ_DEP", FilterOperator.Contains, query),
-                  new Filter("OBJDEP_DESC", FilterOperator.Contains, query),
+                  new Filter("OBJ_DEP", FilterOperator.Contains, sQuery),
+                  new Filter("OBJDEP_DESC", FilterOperator.Contains, sQuery),
                 ],
                 and: false,
               })
@@ -254,6 +284,11 @@ sap.ui.define(
         }
       },
 
+      /**
+       * This function is called when selection on dialogs list.
+       * Selections will be made based on sId.
+       * @param {object} oEvent -the event information.
+       */
       handleSelection: function (oEvent) {
         var sId = oEvent.getParameter("id"),
           oItem = oEvent.getParameter("selectedItems"),
@@ -262,8 +297,9 @@ sap.ui.define(
         //Location list
         if (sId.includes("Loc")) {
           this.oLoc = that.byId("idloc");
-          aSelectedItems = oEvent.getParameter("selectedItems");
-          that.oLoc.setValue(aSelectedItems[0].getTitle());
+          var aSelectedLoc = oEvent.getParameter("selectedItems");
+          that.oLoc.setValue(aSelectedLoc[0].getTitle());
+          // Removing other input values when location is selected
           that.oProd.removeAllTokens();
           that.oComp.removeAllTokens();
           that.oObjDep.removeAllTokens();
@@ -279,12 +315,13 @@ sap.ui.define(
             .getAggregation("_dialog")
             .getContent()[1]
             .removeSelections();
+          // service to get the products based of location
           this.getModel("BModel").read("/getLocProdDet", {
             filters: [
               new Filter(
                 "LOCATION_ID",
                 FilterOperator.EQ,
-                aSelectedItems[0].getTitle()
+                aSelectedLoc[0].getTitle()
               ),
             ],
             success: function (oData) {
@@ -299,8 +336,8 @@ sap.ui.define(
           // Prod list
         } else if (sId.includes("prod")) {
           this.oProd = that.byId("prodInput");
-          aSelectedItems = oEvent.getParameter("selectedItems");
-          //   that.oProd.setValue(aSelectedItems[0].getTitle());
+          var aSelectedProd = oEvent.getParameter("selectedItems");
+          // Removing selections of component and obj Dep
           that.oComp.removeAllTokens();
           that.oObjDep.removeAllTokens();
           this._valueHelpDialogComp
@@ -311,9 +348,9 @@ sap.ui.define(
             .getAggregation("_dialog")
             .getContent()[1]
             .removeSelections();
-          if (aSelectedItems && aSelectedItems.length > 0) {
+          if (aSelectedProd && aSelectedProd.length > 0) {
             that.oProd.removeAllTokens();
-            aSelectedItems.forEach(function (oItem) {
+            aSelectedProd.forEach(function (oItem) {
               that.oProd.addToken(
                 new sap.m.Token({
                   key: oItem.getTitle(),
@@ -325,8 +362,9 @@ sap.ui.define(
               that.byId("idloc").getValue() &&
               that.byId("prodInput").getTokens().length !== 0
             ) {
-              var aSelectedItem = that.oProdList.getSelectedItems();
+              var aSelectedProd = that.oProdList.getSelectedItems();
 
+              // Declaration of filters
               var oFilters = [];
               var sFilter = new sap.ui.model.Filter({
                 path: "LOCATION_ID",
@@ -335,15 +373,16 @@ sap.ui.define(
               });
               oFilters.push(sFilter);
 
-              for (var i = 0; i < aSelectedItem.length; i++) {
+              for (var i = 0; i < aSelectedProd.length; i++) {
                 sFilter = new sap.ui.model.Filter({
                   path: "PRODUCT_ID",
                   operator: sap.ui.model.FilterOperator.EQ,
-                  value1: aSelectedItem[i].getTitle(),
+                  value1: aSelectedProd[i].getTitle(),
                 });
                 oFilters.push(sFilter);
               }
 
+              // Calling service to get the component list
               this.getModel("BModel").read("/getBomOdCond", {
                 filters: oFilters,
                 success: function (oData) {
@@ -365,12 +404,13 @@ sap.ui.define(
           } else {
             that.oProd.removeAllTokens();
           }
+          // Component List
         } else if (sId.includes("Comp")) {
           this.oComp = that.byId("compInput");
-          aSelectedItems = oEvent.getParameter("selectedItems");
-          if (aSelectedItems && aSelectedItems.length > 0) {
+          var aSelectedComp = oEvent.getParameter("selectedItems");
+          if (aSelectedComp && aSelectedComp.length > 0) {
             that.oComp.removeAllTokens();
-            aSelectedItems.forEach(function (oItem) {
+            aSelectedComp.forEach(function (oItem) {
               that.oComp.addToken(
                 new sap.m.Token({
                   key: oItem.getTitle(),
@@ -383,9 +423,10 @@ sap.ui.define(
               that.byId("idloc").getValue() &&
               that.byId("prodInput").getTokens().length !== 0
             ) {
-              var aSelectedItem = that.oProdList.getSelectedItems();
+              var aSelectedProd = that.oProdList.getSelectedItems();
               var aSelectedComp = that.oCompList.getSelectedItems();
 
+              // Declaration of filters
               var oFilters = [];
               var sFilter = new sap.ui.model.Filter({
                 path: "LOCATION_ID",
@@ -394,11 +435,11 @@ sap.ui.define(
               });
               oFilters.push(sFilter);
 
-              for (var i = 0; i < aSelectedItem.length; i++) {
+              for (var i = 0; i < aSelectedProd.length; i++) {
                 sFilter = new sap.ui.model.Filter({
                   path: "PRODUCT_ID",
                   operator: sap.ui.model.FilterOperator.EQ,
-                  value1: aSelectedItem[i].getTitle(),
+                  value1: aSelectedProd[i].getTitle(),
                 });
                 oFilters.push(sFilter);
               }
@@ -411,7 +452,7 @@ sap.ui.define(
                 });
                 oFilters.push(sFilter);
               }
-
+              // Calling service to get the Obj Dep list
               this.getModel("BModel").read("/getBomOdCond", {
                 filters: oFilters,
                 success: function (oData) {
@@ -428,12 +469,13 @@ sap.ui.define(
           } else {
             that.oComp.removeAllTokens();
           }
+          // Obj Dep List
         } else if (sId.includes("ObjDep")) {
           this.oObjDep = that.byId("objDepInput");
-          aSelectedItems = oEvent.getParameter("selectedItems");
-          if (aSelectedItems && aSelectedItems.length > 0) {
+          var aSelectedObjDep = oEvent.getParameter("selectedItems");
+          if (aSelectedObjDep && aSelectedObjDep.length > 0) {
             that.oObjDep.removeAllTokens();
-            aSelectedItems.forEach(function (oItem) {
+            aSelectedObjDep.forEach(function (oItem) {
               that.oObjDep.addToken(
                 new sap.m.Token({
                   key: oItem.getTitle(),
@@ -448,18 +490,22 @@ sap.ui.define(
         that.handleClose(oEvent);
       },
 
+      /**
+       * This function is called when click on "Go" button after filling all Input box values.
+       * @param {object} oEvent -the event information.
+       */
       onGetData: function () {
         that.oList.removeSelections();
+        // Checking for Location and Product is not empty
         if (
           that.byId("idloc").getValue() &&
-          that.byId("prodInput").getTokens().length !== 0 //&&
-          //that.byId("compInput").getTokens().length !== 0 &&
-          //  that.byId("objDepInput").getTokens().length !== 0
+          that.byId("prodInput").getTokens().length !== 0
         ) {
-          var aSelectedItem = that.oProdList.getSelectedItems();
+          // Getting the selections of value help dialog
+          var aSelectedProd = that.oProdList.getSelectedItems();
           var aSelectedComp = that.oCompList.getSelectedItems();
           var aSelectedObjDep = that.oObjDepList.getSelectedItems();
-
+          // Declaration of filters
           var oFilters = [];
           var sFilter = new sap.ui.model.Filter({
             path: "LOCATION_ID",
@@ -468,11 +514,11 @@ sap.ui.define(
           });
           oFilters.push(sFilter);
 
-          for (var i = 0; i < aSelectedItem.length; i++) {
+          for (var i = 0; i < aSelectedProd.length; i++) {
             sFilter = new sap.ui.model.Filter({
               path: "PRODUCT_ID",
               operator: sap.ui.model.FilterOperator.EQ,
-              value1: aSelectedItem[i].getTitle(),
+              value1: aSelectedProd[i].getTitle(),
             });
             oFilters.push(sFilter);
           }
@@ -495,6 +541,7 @@ sap.ui.define(
             oFilters.push(sFilter);
           }
 
+          // Calling service to get the data based on filters declared
           this.getModel("BModel").read("/getODProfiles", {
             filters: oFilters,
             success: function (oData) {
@@ -512,10 +559,15 @@ sap.ui.define(
         }
       },
 
+      /**
+       * This function is called when click on Assign button.
+       * In this function it will open the Profile dialog to select the profiles from list
+       * @param {object} oEvent -the event information.
+       */
       onAssign: function () {
         that.oGModel = that.getModel("oGModel");
-        var selTabItem = that.byId("idTab").getSelectedItems();
-        if (selTabItem.length) {
+        var aSelTabItem = that.byId("idTab").getSelectedItems();
+        if (aSelTabItem.length) {
           if (!that._onProfiles) {
             that._onProfiles = sap.ui.xmlfragment(
               "cp.odp.cpodprofiles.view.Profiles",
@@ -526,6 +578,7 @@ sap.ui.define(
 
           that.oProfileList = sap.ui.getCore().byId("idListTab");
           that._onProfiles.setTitleAlignment("Center");
+          // Calling service to get the Profiles list
           this.getModel("BModel").read("/getProfiles", {
             success: function (oData) {
               that.oProfileModel.setData({
@@ -534,7 +587,7 @@ sap.ui.define(
               that.oProfileList.setModel(that.oProfileModel);
               that.oProfileList.removeSelections(true);
               that._onProfiles.open();
-              that.oGModel.setProperty("/selItem", selTabItem);
+              that.oGModel.setProperty("/selItem", aSelTabItem);
             },
             error: function () {
               MessageToast.show("Failed to get profiles");
@@ -545,22 +598,29 @@ sap.ui.define(
         }
       },
 
+      /**
+       * Called when 'Close/Cancel' button in any dialog is pressed.
+       */
       handleProfileClose: function () {
         that.byId("idTab").removeSelections();
         that._onProfiles.close();
       },
 
+      /**
+       * Called when something is entered into the search field.
+       * @param {object} oEvent -the event information.
+       */
       handleprofileSearch: function (oEvent) {
-        var query =
+        var sQuery =
             oEvent.getParameter("value") || oEvent.getParameter("newValue"),
           oFilters = [];
 
-        if (query !== "") {
+        if (sQuery !== "") {
           oFilters.push(
             new Filter({
               filters: [
-                new Filter("PROFILE", FilterOperator.Contains, query),
-                new Filter("PRF_DESC", FilterOperator.Contains, query),
+                new Filter("PROFILE", FilterOperator.Contains, sQuery),
+                new Filter("PRF_DESC", FilterOperator.Contains, sQuery),
               ],
               and: false,
             })
@@ -569,21 +629,25 @@ sap.ui.define(
         that.oProfileList.getBinding("items").filter(oFilters);
       },
 
+      /**
+       * Called when something is entered into the search field.
+       * @param {object} oEvent -the event information.
+       */
       onTableSearch: function (oEvent) {
-        var query =
+        var sQuery =
             oEvent.getParameter("value") || oEvent.getParameter("newValue"),
           oFilters = [];
 
-        if (query !== "") {
+        if (sQuery !== "") {
           oFilters.push(
             new Filter({
               filters: [
-                new Filter("LOCATION_ID", FilterOperator.Contains, query),
-                new Filter("PRODUCT_ID", FilterOperator.Contains, query),
-                new Filter("COMPONENT", FilterOperator.Contains, query),
-                new Filter("OBJ_DEP", FilterOperator.Contains, query),
-                new Filter("STRUC_NODE", FilterOperator.Contains, query),
-                new Filter("PROFILE", FilterOperator.Contains, query),
+                new Filter("LOCATION_ID", FilterOperator.Contains, sQuery),
+                new Filter("PRODUCT_ID", FilterOperator.Contains, sQuery),
+                new Filter("COMPONENT", FilterOperator.Contains, sQuery),
+                new Filter("OBJ_DEP", FilterOperator.Contains, sQuery),
+                new Filter("STRUC_NODE", FilterOperator.Contains, sQuery),
+                new Filter("PROFILE", FilterOperator.Contains, sQuery),
               ],
               and: false,
             })
@@ -592,43 +656,41 @@ sap.ui.define(
         that.oList.getBinding("items").filter(oFilters);
       },
 
+      /**
+       * This function is called when selecting Profile from the dialog.
+       * After selecting Profile that will assign to selected list from table.
+       * @param {object} oEvent -the event information.
+       */
       onProfileSel: function (oEvent) {
-        var sItem = that.oGModel.getProperty("/selItem"),
+        // Getting the selected items of table
+        var aItem = that.oGModel.getProperty("/selItem"),
           aData = {
             PROFILEOD: [],
           },
           jsonProfileOD,
+          // Getting the selected profile from dialog
           sProfile = sap.ui
             .getCore()
             .byId("idListTab")
             .getSelectedItems()[0]
             .getTitle();
-        var selected;
-        for (var i = 0; i < sItem.length; i++) {
-          selected = sItem[i].getBindingContext().getProperty();
-          jsonProfileOD = {
-            LOCATION_ID: selected.LOCATION_ID,
-            PRODUCT_ID: selected.PRODUCT_ID,
-            COMPONENT: selected.COMPONENT,
-            OBJ_DEP: selected.OBJ_DEP,
-            STRUC_NODE: selected.STRUC_NODE,
-            PROFILE: sProfile,
-          };
-          aData.PROFILEOD.push(jsonProfileOD);
-          jsonProfileOD = {};
+        var oSelected;
+        // Looping through the selected list to assign selected Profile
+        for (var i = 0; i < aItem.length; i++) {
+          oSelected = aItem[i].getBindingContext().getProperty();
 
           sap.ui.core.BusyIndicator.show();
+          // Calling service to assign profile
           that.getModel("BModel").callFunction("/asssignProfilesOD", {
             method: "GET",
             urlParameters: {
               FLAG: "I",
-              LOCATION_ID: selected.LOCATION_ID,
-              PRODUCT_ID: selected.PRODUCT_ID,
-              COMPONENT: selected.COMPONENT,
-              OBJ_DEP: selected.OBJ_DEP,
-              STRUC_NODE: selected.STRUC_NODE,
+              LOCATION_ID: oSelected.LOCATION_ID,
+              PRODUCT_ID: oSelected.PRODUCT_ID,
+              COMPONENT: oSelected.COMPONENT,
+              OBJ_DEP: oSelected.OBJ_DEP,
+              STRUC_NODE: oSelected.STRUC_NODE,
               PROFILE: sProfile,
-              //  PROFILEOD: aData.PROFILEOD,
             },
             success: function (oData) {
               sap.ui.core.BusyIndicator.hide();
@@ -643,63 +705,36 @@ sap.ui.define(
             },
           });
         }
-        // var uri = "v2/catalog/genProfileOD";
-
-        // $.ajax({
-        //   url: uri,
-        //   type: "POST",
-        //   contentType: "application/json",
-        //   data: JSON.stringify({
-        //     FLAG: "I",
-        //     PROFILEOD: aData.PROFILEOD,
-        //   }),
-        //   dataType: "json",
-        //   async: false,
-        //   timeout: 0,
-        //   error: function (data) {
-        //     sap.m.MessageToast.show("Error in assigning Profiles");
-        //     sap.ui.core.BusyIndicator.hide();
-        //     that.handleProfileClose();
-        //   },
-        //   success: function (data) {
-        //     sap.ui.core.BusyIndicator.hide();
-        //     sap.m.MessageToast.show("Profile assigned successfully");
-        //     that.handleProfileClose();
-        //     that.onGetData();
-        //   },
-        // });
       },
 
+      /**
+       * This function is called when click on UnAssign button.
+       * In this function removing the assigned profile to the selected table list.
+       * @param {object} oEvent -the event information.
+       */
       onUnAssign: function () {
         var aData = {
             PROFILEOD: [],
           },
           jsonProfileOD;
-        var selected;
-        var sItem = that.byId("idTab").getSelectedItems();
-        for (var i = 0; i < sItem.length; i++) {
-          selected = sItem[i].getBindingContext().getProperty();
-          jsonProfileOD = {
-            LOCATION_ID: selected.LOCATION_ID,
-            PRODUCT_ID: selected.PRODUCT_ID,
-            COMPONENT: selected.COMPONENT,
-            OBJ_DEP: selected.OBJ_DEP,
-            PROFILE: selected.PROFILE,
-          };
-          aData.PROFILEOD.push(jsonProfileOD);
-          jsonProfileOD = {};
+        var oSelected;
+        // Getting the oSelected list of table which profiles need to delete
+        var aItem = that.byId("idTab").getSelectedItems();
+        // Looping through the selected list to remove the assigned profiles
+        for (var i = 0; i < aItem.length; i++) {
+          oSelected = aItem[i].getBindingContext().getProperty();
 
           sap.ui.core.BusyIndicator.show();
           that.getModel("BModel").callFunction("/asssignProfilesOD", {
             method: "GET",
             urlParameters: {
               FLAG: "D",
-              LOCATION_ID: selected.LOCATION_ID,
-              PRODUCT_ID: selected.PRODUCT_ID,
-              COMPONENT: selected.COMPONENT,
-              OBJ_DEP: selected.OBJ_DEP,
+              LOCATION_ID: oSelected.LOCATION_ID,
+              PRODUCT_ID: oSelected.PRODUCT_ID,
+              COMPONENT: oSelected.COMPONENT,
+              OBJ_DEP: oSelected.OBJ_DEP,
               STRUC_NODE: "",
-              PROFILE: selected.PROFILE,
+              PROFILE: oSelected.PROFILE,
             },
             success: function (oData) {
               sap.ui.core.BusyIndicator.hide();
@@ -712,29 +747,6 @@ sap.ui.define(
             },
           });
         }
-        // var uri = "v2/catalog/genProfileOD";
-
-        // $.ajax({
-        //   url: uri,
-        //   type: "POST",
-        //   contentType: "application/json",
-        //   data: JSON.stringify({
-        //     FLAG: "D",
-        //     PROFILEOD: aData.PROFILEOD,
-        //   }),
-        //   dataType: "json",
-        //   async: false,
-        //   timeout: 0,
-        //   error: function (data) {
-        //     sap.m.MessageToast.show("Error in unassigning Profiles");
-        //     sap.ui.core.BusyIndicator.hide();
-        //   },
-        //   success: function (data) {
-        //     sap.ui.core.BusyIndicator.hide();
-        //     sap.m.MessageToast.show("Profile unassigned successfully");
-        //     that.onGetData();
-        //   },
-        // });
       },
     });
   }

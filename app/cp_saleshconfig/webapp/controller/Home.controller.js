@@ -26,8 +26,13 @@ sap.ui.define(
     var that, oGModel;
 
     return BaseController.extend("cp.appf.cpsaleshconfig.controller.Home", {
+      /**
+       * Called when a controller is instantiated and its View controls (if available) are already created.
+       * Can be used to modify the View before it is displayed, to bind event handlers and do other one-time initialization.
+       */
       onInit: function () {
         that = this;
+        // Declaring JSON Models and size limits
         that.oListModel = new JSONModel();
         this.locModel = new JSONModel();
         this.prodModel = new JSONModel();
@@ -35,6 +40,7 @@ sap.ui.define(
         that.locModel.setSizeLimit(1000);
         that.prodModel.setSizeLimit(1000);
 
+        // Declaring value help dialogs
         this._oCore = sap.ui.getCore();
         if (!this._valueHelpDialogLoc) {
           this._valueHelpDialogLoc = sap.ui.xmlfragment(
@@ -51,6 +57,11 @@ sap.ui.define(
           this.getView().addDependent(this._valueHelpDialogProd);
         }
       },
+
+      /**
+       * Called after the view has been rendered.
+       * Calls the getdata[function] to get Data.
+       */
       onAfterRendering: function () {
         that = this;
         that.oList = this.byId("idTab");
@@ -72,6 +83,10 @@ sap.ui.define(
         // Calling function
         this.getData();
       },
+
+      /**
+       * Getting Data Initially and binding to elements.
+       */
       getData: function () {
         this.getModel("BModel").read("/getLocation", {
           success: function (oData) {
@@ -85,20 +100,33 @@ sap.ui.define(
         });
       },
 
+      /**
+       * This function is called when click on Input box Value Help.
+       * Dialogs will be open based on sId.
+       * @param {object} oEvent -the event information.
+       */
       handleValueHelp: function (oEvent) {
         var sId = oEvent.getParameter("id");
+        // Loc Dialog
         if (sId.includes("loc")) {
           that._valueHelpDialogLoc.open();
+          // Prod Dialog
         } else if (sId.includes("prod")) {
-            if(that.byId("idloc").getValue() !== ""){
-          that._valueHelpDialogProd.open();
-            } else {
-                MessageToast.show("Select Location");
-            }
+          if (that.byId("idloc").getValue() !== "") {
+            that._valueHelpDialogProd.open();
+          } else {
+            MessageToast.show("Select Location");
+          }
         }
       },
+
+      /**
+       * Called when 'Close/Cancel' button in any dialog is pressed.
+       * Dialogs will be closed based on sId
+       */
       handleClose: function (oEvent) {
         var sId = oEvent.getParameter("id");
+        // Loc Dialog
         if (sId.includes("loc")) {
           that._oCore
             .byId(this._valueHelpDialogLoc.getId() + "-searchField")
@@ -106,6 +134,7 @@ sap.ui.define(
           if (that.oLocList.getBinding("items")) {
             that.oLocList.getBinding("items").filter([]);
           }
+          // Prod Dialog
         } else if (sId.includes("prod")) {
           that._oCore
             .byId(this._valueHelpDialogProd.getId() + "-searchField")
@@ -115,21 +144,26 @@ sap.ui.define(
           }
         }
       },
+
+      /**
+       * Called when something is entered into the search field.
+       * @param {object} oEvent -the event information.
+       */
       handleSearch: function (oEvent) {
-        var query =
+        var sQuery =
             oEvent.getParameter("value") || oEvent.getParameter("newValue"),
           sId = oEvent.getParameter("id"),
           oFilters = [];
         // Check if search filter is to be applied
-        query = query ? query.trim() : "";
+        sQuery = sQuery ? sQuery.trim() : "";
         // Location
         if (sId.includes("loc")) {
-          if (query !== "") {
+          if (sQuery !== "") {
             oFilters.push(
               new Filter({
                 filters: [
-                  new Filter("LOCATION_ID", FilterOperator.Contains, query),
-                  new Filter("LOCATION_DESC", FilterOperator.Contains, query),
+                  new Filter("LOCATION_ID", FilterOperator.Contains, sQuery),
+                  new Filter("LOCATION_DESC", FilterOperator.Contains, sQuery),
                 ],
                 and: false,
               })
@@ -138,12 +172,12 @@ sap.ui.define(
           that.oLocList.getBinding("items").filter(oFilters);
           // Product
         } else if (sId.includes("prod")) {
-          if (query !== "") {
+          if (sQuery !== "") {
             oFilters.push(
               new Filter({
                 filters: [
-                  new Filter("PRODUCT_ID", FilterOperator.Contains, query),
-                  new Filter("PROD_DESC", FilterOperator.Contains, query),
+                  new Filter("PRODUCT_ID", FilterOperator.Contains, sQuery),
+                  new Filter("PROD_DESC", FilterOperator.Contains, sQuery),
                 ],
                 and: false,
               })
@@ -153,6 +187,11 @@ sap.ui.define(
         }
       },
 
+      /**
+       * This function is called when selection of values in dialogs.
+       * after selecting value, based on selection get data of other filters.
+       * @param {object} oEvent -the event information.
+       */
       handleSelection: function (oEvent) {
         var sId = oEvent.getParameter("id"),
           oItem = oEvent.getParameter("selectedItems"),
@@ -164,7 +203,10 @@ sap.ui.define(
           aSelectedItems = oEvent.getParameter("selectedItems");
           that.oLoc.setValue(aSelectedItems[0].getTitle());
           that.oProd.removeAllTokens();
-          this._valueHelpDialogProd.getAggregation("_dialog").getContent()[1].removeSelections();
+          this._valueHelpDialogProd
+            .getAggregation("_dialog")
+            .getContent()[1]
+            .removeSelections();
           this.getModel("BModel").read("/getLocProdDet", {
             filters: [
               new Filter(
@@ -186,8 +228,8 @@ sap.ui.define(
         } else if (sId.includes("prod")) {
           this.oProd = that.byId("prodInput");
           aSelectedItems = oEvent.getParameter("selectedItems");
-        //   that.oProd.setValue(aSelectedItems[0].getTitle());
-        if (aSelectedItems && aSelectedItems.length > 0) {
+          //   that.oProd.setValue(aSelectedItems[0].getTitle());
+          if (aSelectedItems && aSelectedItems.length > 0) {
             that.oProd.removeAllTokens();
             aSelectedItems.forEach(function (oItem) {
               that.oProd.addToken(
@@ -198,20 +240,29 @@ sap.ui.define(
               );
             });
           } else {
-              that.oProd.removeAllTokens();
+            that.oProd.removeAllTokens();
           }
         }
         that.handleClose(oEvent);
       },
 
+      /**
+       * This function is called when click on Go button.
+       * @param {object} oEvent -the event information.
+       */
       onGetData: function (oEvent) {
         var fromDate = new Date(that.byId("idDate").getValue()),
           month,
           date;
 
-        if (that.oLoc.getValue() && that.oProdList.getSelectedItems().length !== 0 ) {
+        // Checking for Loc and Prod are not initial
+        if (
+          that.oLoc.getValue() &&
+          that.oProdList.getSelectedItems().length !== 0
+        ) {
           var aSelectedItem = that.oProdList.getSelectedItems();
           var oFilters = [];
+          // Conversion of date format
           if (that.byId("idDate").getValue() !== "") {
             month = fromDate.getMonth() + 1;
 
@@ -256,6 +307,7 @@ sap.ui.define(
           }
 
           sap.ui.core.BusyIndicator.show();
+          // Calling service based on selected filters
           this.getModel("BModel").read("/getSalesh", {
             filters: oFilters,
             success: function (oData) {
@@ -276,32 +328,49 @@ sap.ui.define(
         }
       },
 
+      /**
+       * Called when it routes to a page containing the item details.
+       * @param {object} oEvent -the event information.
+       */
       onhandlePress: function (oEvent) {
         that.oGModel = that.getModel("oGModel");
-        var sTableItem = that.byId("idTab").getSelectedItem().getBindingContext().getObject();
-        that.oGModel.setProperty("/selItem", sTableItem);
-        that.oGModel.setProperty("/sSalOrd", sTableItem.SALES_DOC);
-        that.oGModel.setProperty("/sSalOrdItem", sTableItem.SALESDOC_ITEM);
-        that.oGModel.setProperty("/sPrdid", sTableItem.PRODUCT_ID);
-        that.oGModel.setProperty("/sLocid", sTableItem.LOCATION_ID);
-        that.oGModel.setProperty("/date",oEvent.getSource().getSelectedItem().getCells()[2].getText());
-
+        // Getting the selected item from table
+        var oTableItem = that
+          .byId("idTab")
+          .getSelectedItem()
+          .getBindingContext()
+          .getObject();
+        // Setting the properties of selected item
+        that.oGModel.setProperty("/selItem", oTableItem);
+        that.oGModel.setProperty("/sSalOrd", oTableItem.SALES_DOC);
+        that.oGModel.setProperty("/sSalOrdItem", oTableItem.SALESDOC_ITEM);
+        that.oGModel.setProperty("/sPrdid", oTableItem.PRODUCT_ID);
+        that.oGModel.setProperty("/sLocid", oTableItem.LOCATION_ID);
+        that.oGModel.setProperty(
+          "/date",
+          oEvent.getSource().getSelectedItem().getCells()[2].getText()
+        );
+        // Navigating to detail page
         var oRouter = sap.ui.core.UIComponent.getRouterFor(that);
         oRouter.navTo("Detail", {}, true);
       },
 
+      /**
+       * Called when something is entered into the search field.
+       * @param {object} oEvent -the event information.
+       */
       onTableSearch: function (oEvent) {
-        var query =
+        var sQuery =
             oEvent.getParameter("value") || oEvent.getParameter("newValue"),
           oFilters = [];
 
-        if (query !== "") {
+        if (sQuery !== "") {
           oFilters.push(
             new Filter({
               filters: [
-                new Filter("SALES_DOC", FilterOperator.Contains, query),
-                new Filter("PRODUCT_ID", FilterOperator.Contains, query),
-                new Filter("LOCATION_ID", FilterOperator.Contains, query),
+                new Filter("SALES_DOC", FilterOperator.Contains, sQuery),
+                new Filter("PRODUCT_ID", FilterOperator.Contains, sQuery),
+                new Filter("LOCATION_ID", FilterOperator.Contains, sQuery),
               ],
               and: false,
             })
