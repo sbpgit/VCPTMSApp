@@ -36,3 +36,6 @@ using from './cpprodlocline/annotations';
 using from './cprtrheader/annotations';
 using from './cp_ibpfuturedemand/annotations';
 using from './cpasmbcompreq/annotations';
+using from './cpnewprod/annotations';
+using from './cpproduct/annotations';
+using from './cpcustgroup/annotations';

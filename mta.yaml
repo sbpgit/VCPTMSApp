@@ -26,16 +26,11 @@ modules:
   - name: config_products-db
     properties:
       TARGET_CONTAINER: ~{hdi-service-name}
-  # - name: cross-container-service-1
-  #   group: SERVICE_REPLACEMENTS
-  #   properties:
-  #     key: ServiceName_1
-  #     service: ~{the-service-name}
-  # - name: cross-container-service-2
-  #   group: SERVICE_REPLACEMENTS
-  #   properties:
-  #     key: ServiceName_2
-  #     service: ~{the-service-name}
+  - name: cross-container-service-1
+    group: SERVICE_REPLACEMENTS
+    properties:
+      key: ServiceName_1
+      service: ~{the-service-name}
   parameters:
     buildpack: nodejs_buildpack
   build-parameters:
@@ -177,6 +172,18 @@ modules:
     - artifacts:
       - cpappcpasmbcompreq.zip
       name: cpappcpasmbcompreq
+      target-path: resources/
+    - artifacts:
+      - cpappcpnewprod.zip
+      name: cpappcpnewprod
+      target-path: resources/
+    - artifacts:
+      - cpappcpproduct.zip
+      name: cpappcpproduct
+      target-path: resources/
+    - artifacts:
+      - cpappcpcustgroup.zip
+      name: cpappcpcustgroup
       target-path: resources/
 - name: cpibpfdemcpibpfdem
   type: html5
@@ -418,6 +425,36 @@ modules:
     - npm install
     - npm run build:cf
     supported-platforms: []
+- name: cpappcpnewprod
+  type: html5
+  path: app/cpnewprod
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappcpproduct
+  type: html5
+  path: app/cpproduct
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappcpcustgroup
+  type: html5
+  path: app/cpcustgroup
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
 resources:
 - name: config_products-db
   type: com.sap.xs.hdi-container
@@ -457,18 +494,12 @@ resources:
     service: xsuaa
     service-name: config_products-xsuaa-service
     service-plan: application
-# - name: cross-container-service-1
-#   type: org.cloudfoundry.existing-service
-#   parameters:
-#     service-name: CCLI_ACCESS
-#   properties:
-#     the-service-name: ${service-name}
-# - name: cross-container-service-2
-#   type: org.cloudfoundry.existing-service
-#   parameters:
-#     service-name: CCLI_ACCESS
-#   properties:
-#     the-service-name: ${service-name}
+- name: cross-container-service-1
+  type: org.cloudfoundry.existing-service
+  parameters:
+    service-name: CCL1_ACCESS
+  properties:
+    the-service-name: ${service-name}
 parameters:
   deploy_mode: html5-repo
   enable-parallel-deployments: true
