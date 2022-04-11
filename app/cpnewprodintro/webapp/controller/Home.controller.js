@@ -23,13 +23,21 @@ sap.ui.define(
     "use strict";
     var oGModel, that;
     return BaseController.extend("cpapp.cpnewprodintro.controller.Home", {
+      /**
+       * Called when a controller is instantiated and its View controls (if available) are already created.
+       * Can be used to modify the View before it is displayed, to bind event handlers and do other one-time initialization.
+       */
       onInit: function () {
         that = this;
+        // Declaration of Json Model and size category
+        that.ProdListModel = new JSONModel();
         that.locModel = new JSONModel();
         that.prodModel = new JSONModel();
+        that.ProdListModel.setSizeLimit(1000);
         that.locModel.setSizeLimit(1000);
         that.prodModel.setSizeLimit(1000);
 
+        // Declaration of Dialogs
         this._oCore = sap.ui.getCore();
         if (!this._valueHelpDialogCreate) {
           this._valueHelpDialogCreate = sap.ui.xmlfragment(
@@ -55,6 +63,11 @@ sap.ui.define(
           this.getView().addDependent(this._valueHelpDialogProd);
         }
       },
+
+      /**
+       * Called after the view has been rendered.
+       * Calls the getData[function] to get Data.
+       */
       onAfterRendering: function () {
         this.oResourceBundle = this.getView()
           .getModel("i18n")
@@ -71,41 +84,79 @@ sap.ui.define(
         this.oLocList = this._oCore.byId(
           this._valueHelpDialogLoc.getId() + "-list"
         );
-        sap.ui.core.BusyIndicator.show();
+
+        // Calling service to get the location data
         this.getModel("BModel").read("/getLocation", {
+            success: function (oData) {
+              sap.ui.core.BusyIndicator.hide();
+              that.locModel.setData(oData);
+              that.oLocList.setModel(that.locModel);
+            },
+            error: function (oData, error) {
+              sap.ui.core.BusyIndicator.hide();
+              MessageToast.show("error");
+            },
+          });
+
+        that.getData();
+      },
+
+      /**
+       * Getting Data Initially and binding to elements.
+       */
+      getData: function () {
+        sap.ui.core.BusyIndicator.show();
+
+        // Calling service to get the product data
+        this.getModel("BModel").read("/maintainNewProd", {
           success: function (oData) {
-            that.locModel.setData(oData);
-            that.oLocList.setModel(that.locModel);
             sap.ui.core.BusyIndicator.hide();
+            that.ProdListModel.setData(oData);
+            that.oList.setModel(that.ProdListModel);
+            
           },
           error: function (oData, error) {
+            sap.ui.core.BusyIndicator.hide();
             MessageToast.show("error");
           },
         });
+
+        
       },
 
+      /**
+       * This function is called when click on Create or Edit button.
+       * In this function data will be set based on buttion click.
+       * @param {object} oEvent -the event information.
+       */
       onCreate: function (oEvent) {
         oGModel = this.getModel("oGModel");
         oGModel.setProperty("/sFlag", "");
+
         // Opening dialog and setting data based on selected button
         if (oEvent.getSource().getTooltip().includes("Create")) {
+
           that._valueHelpDialogCreate.setTitle("New Product Creation");
+
           sap.ui.getCore().byId("idloc").setValue("");
           sap.ui.getCore().byId("idrefprod").setValue("");
           sap.ui.getCore().byId("idProd").setValue("");
           oGModel.setProperty("/sFlag", "C");
+
           that._valueHelpDialogCreate.open();
+
         } else {
+
           if (this.byId("ProdList").getSelectedItems().length) {
             var oTableItem = this.byId("ProdList").getSelectedItem().getCells();
+
             that._valueHelpDialogCreate.setTitle("Update Product");
+            
             sap.ui.getCore().byId("idloc").setValue(oTableItem[0].getText());
-            sap.ui
-              .getCore()
-              .byId("idrefprod")
-              .setValue(oTableItem[1].getText());
+            sap.ui.getCore().byId("idrefprod").setValue(oTableItem[1].getText());
             sap.ui.getCore().byId("idProd").setValue(oTableItem[2].getText());
             oGModel.setProperty("/sFlag", "E");
+
             that._valueHelpDialogCreate.open();
           } else {
             MessageToast.show("Select product to update");
@@ -155,8 +206,8 @@ sap.ui.define(
             that.oProdList.getBinding("items").filter([]);
           }
         } else if (sId.includes("__button1")) {
-            that._valueHelpDialogCreate.close();
-          }
+          that._valueHelpDialogCreate.close();
+        }
       },
 
       /**
@@ -185,7 +236,7 @@ sap.ui.define(
           }
           that.oLocList.getBinding("items").filter(oFilters);
           // Product
-        } else if (sId.includes("prod")) {
+        } else if (sId.includes("prodSlctList")) {
           if (sQuery !== "") {
             oFilters.push(
               new Filter({
@@ -198,6 +249,22 @@ sap.ui.define(
             );
           }
           that.oProdList.getBinding("items").filter(oFilters);
+        } else if(sId.includes("idSearch")){
+
+            if (sQuery !== "") {
+                oFilters.push(
+                  new Filter({
+                    filters: [
+                      new Filter("LOCATION_ID", FilterOperator.Contains, sQuery),
+                      new Filter("REF_PRODID", FilterOperator.Contains, sQuery),
+                      new Filter("PRODUCT_ID", FilterOperator.Contains, sQuery),
+                    ],
+                    and: false,
+                  })
+                );
+              }
+              that.oList.getBinding("items").filter(oFilters);
+            
         }
       },
 
@@ -258,6 +325,98 @@ sap.ui.define(
           );
         }
         that.handleClose(oEvent);
+      },
+
+      /**
+       * This function is called when click on save button in dialog to create or update the product.
+       * @param {object} oEvent -the event information.
+       */
+      onProdSave: function (oEvent) {
+        var oLoc = this._oCore.byId("idloc").getValue(),
+          oRefProd = this._oCore.byId("idrefprod").getValue(),
+          oProd = this._oCore.byId("idProd").getValue(),
+          oFlag = oGModel.getProperty("/sFlag");
+
+        if (oRefProd === oProd) {
+          MessageToast.show(
+            "Reference product and new product can not be same"
+          );
+        } else {
+          that.getModel("BModel").callFunction("/maintainNewProd", {
+            method: "GET",
+            urlParameters: {
+              LOCATION_ID: oLoc,
+              REF_PRODID: oRefProd,
+              PRODUCT_ID: oProd,
+              FLAG: oFlag,
+            },
+            success: function (oData) {
+              sap.ui.core.BusyIndicator.hide();
+              if (oFlag === "C") {
+                MessageToast.show("New product created successfully");
+              } else {
+                MessageToast.show("Successfully updated the product");
+              }
+              that.onAfterRendering();
+            },
+            error: function (oData) {
+              MessageToast.show("Failed to create /updaate the producr");
+              sap.ui.core.BusyIndicator.hide();
+            },
+          });
+        }
+      },
+
+      /**
+       * This function is called when click on Delete button on product list.
+       * @param {object} oEvent -the event information.
+       */
+      onProdeDel: function (oEvent) {
+        // Getting the selected product to delete
+        var oItem = oEvent.getSource().getParent().getCells();
+        var oLoc = oItem[0].getText(),
+          oRefProd = oItem[1].getText(),
+          oProd = oItem[2].getText();
+        // Getting the conformation popup before deleting
+        var sText =
+          "Do you want to delete te selected product" +
+          " - " +
+          oProd +
+          "-" +
+          "Please confirm";
+        sap.m.MessageBox.show(sText, {
+          title: "Confirmation",
+          actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
+          onClose: function (oAction) {
+            if (oAction === sap.m.MessageBox.Action.YES) {
+              sap.ui.core.BusyIndicator.show();
+
+              that.getModel("BModel").callFunction("/maintainNewProd", {
+                method: "GET",
+                urlParameters: {
+                  LOCATION_ID: oLoc,
+                  REF_PRODID: oRefProd,
+                  PRODUCT_ID: oProd,
+                  FLAG: "D",
+                },
+                success: function (oData) {
+                  sap.ui.core.BusyIndicator.hide();
+                  if (oData.results.length > 0) {
+                    MessageToast.show("Product deleted successfully");
+                  } else {
+                    MessageToast.show("Deletion failed");
+                  }
+                  // Refreshing data after successfull deletion
+                  that.onAfterRendering();
+                },
+                error: function () {
+                  sap.ui.core.BusyIndicator.hide();
+                  MessageToast.show("Failed to delete product");
+                },
+              });
+            }
+          },
+        });
       },
     });
   }
