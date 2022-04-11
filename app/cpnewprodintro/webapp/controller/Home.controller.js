@@ -156,6 +156,9 @@ sap.ui.define(
             sap.ui.getCore().byId("idloc").setValue(oTableItem[0].getText());
             sap.ui.getCore().byId("idProd").setValue(oTableItem[1].getText());
             sap.ui.getCore().byId("idrefprod").setValue(oTableItem[2].getText());
+
+            sap.ui.getCore().byId("idloc").setEditable(false);
+            sap.ui.getCore().byId("idProd").setEditable(false);
             
             oGModel.setProperty("/sFlag", "E");
 
@@ -414,7 +417,7 @@ sap.ui.define(
           oRefProd = oItem[2].getText();
         // Getting the conformation popup before deleting
         var sText =
-          "Do you want to delete te selected product" +
+          "Do you want to delete the selected product" +
           " - " +
           oProd +
           " - " +

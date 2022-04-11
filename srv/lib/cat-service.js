@@ -870,9 +870,9 @@ module.exports = (srv) => {
             lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
             try {
                 await cds.delete("CP_NEWPROD_INTRO", lsresults);
-                responseMessage = " deletion failed";
+                responseMessage = " Deletion successfull";
             } catch (e) {
-                responseMessage = " Creation failed";
+                responseMessage = " Deletion failed";
             }
         }
         lsresults = {};

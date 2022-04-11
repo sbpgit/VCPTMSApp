@@ -522,27 +522,11 @@ context cp {
 
     }
 
-<<<<<<< HEAD
-     entity NEWPROD_INTRO{
-=======
     entity NEWPROD_INTRO{
->>>>>>> 0b945ce9dae2fa2a40c6f10cfc63c7f8ba94c2a9
         key PRODUCT_ID: String(40)@title : 'New Product';
         key LOCATION_ID : String(4) @title : 'Location';
         REF_PRODID: String(40)@title : ' Ref. Product';
     }
-<<<<<<< HEAD
-// entity PAL_MODEL_PARAMETERS {
-//     key MODEL_TYPE : String(10)  @title : 'Model Type';
-//     key PROFILE_ID : Integer     @title : 'Profile ID';
-//     key PARA_NAME  : String(100) @title : 'Parameter Name';
-//         INTVAL     : Integer;
-//         DOUBLEVAL  : Double;
-//         STRVAL     : String(20);
-//         PARA_DESC  : String(1000)@title : 'Parameter Description';
-// };
-=======
->>>>>>> 0b945ce9dae2fa2a40c6f10cfc63c7f8ba94c2a9
 }
 
 @cds.persistence.exists

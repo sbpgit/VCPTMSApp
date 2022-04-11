@@ -119,18 +119,11 @@ service CatalogService @(impl : './lib/cat-service.js') {
     @odata.draft.enabled
     entity genRtrHeader        as projection on od.RESTRICT_HEADER;
 
-<<<<<<< HEAD
-    @odata.draft.enabled
-    entity genNewProd          as projection on od.NEWPROD_INTRO;
-
-   // @odata.draft.enabled
-=======
 //Mainitain new product introduction
     @odata.draft.enabled
     entity genNewProd          as projection on od.NEWPROD_INTRO;
 
 // Get Product access node
->>>>>>> 0b945ce9dae2fa2a40c6f10cfc63c7f8ba94c2a9
     entity genProdAccessNode      as projection on od.PROD_ACCNODE;
 
 // PVS BOM details
@@ -231,18 +224,9 @@ service CatalogService @(impl : './lib/cat-service.js') {
                 OBJ_DEP     : String(30),
                 STRUC_NODE  : String(50)
             ) returns String;
-<<<<<<< HEAD
-
-=======
 // function for new product introduction
->>>>>>> 0b945ce9dae2fa2a40c6f10cfc63c7f8ba94c2a9
     function maintainNewProd (FLAG : String(1),
                 LOCATION_ID : String(4),
                 PRODUCT_ID  : String(40),
                 REF_PRODID : String(40)) returns String;
-<<<<<<< HEAD
-
-                
-=======
->>>>>>> 0b945ce9dae2fa2a40c6f10cfc63c7f8ba94c2a9
 }
