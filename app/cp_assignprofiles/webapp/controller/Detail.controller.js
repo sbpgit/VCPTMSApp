@@ -113,7 +113,6 @@ sap.ui.define(
       /**
        * Getting Data of the profile parameters based on selected method and binding to elements
        */
-      // function to get the profile parameters based on selected method
       getParameters: function () {
         var sSelProfile = that.oGModel.getProperty("/sProfile"),
           sSelMethod = that.oGModel.getProperty("/sMethod");
@@ -183,7 +182,6 @@ sap.ui.define(
       /**
        * This function is to validate the data changed based on datatype.
        */
-      // function to validate the data changed based on datatype
       onLive: function (oEvent) {
         that.byId("idSave").setEnabled(true);
         if (oEvent) {

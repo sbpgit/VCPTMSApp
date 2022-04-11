@@ -23,9 +23,6 @@
                     </OverflowToolbar>
                 </headerToolbar>
                 <f:Form editable="true">
-                    <!-- <f:title>
-            <core:Title text="{i18n>filterPanel}"/>
-        </f:title>  -->
                     <f:layout>
                         <f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2" singleContainerFullSize="false" />
                     </f:layout>
@@ -67,7 +64,6 @@
                                         <Label text="Model Version"/>
                                     </f:label>
                                     <f:fields>
-                                        <!-- <Input id="idmdlver" value="" placeholder=" Model Version" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" /> -->
                                         <Select id="idModelVer" selectedKey="Active">
                                             <core:ListItem key="Active" text="Active"/>
                                             <core:ListItem key="Simulation" text="Simulation"/>
@@ -90,29 +86,18 @@
                                         <Input id="idscen" value="" placeholder="Scenario" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                                     </f:fields>
                                 </f:FormElement>
-                                <!-- <f:FormElement>
-                                    <f:label>
-                                        <Label text="{i18n>predpf}" />
-                                    </f:label>
-                                    <f:fields>
-                                        <MultiInput id="pmInput" placeholder="{i18n>predpf}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
-                                    </f:fields>
-                                </f:FormElement> -->
                                 <f:FormElement>
                                     <f:label>
                                         <Label text="Override Assignment" />
                                     </f:label>
                                     <f:fields>
                                         <CheckBox id="idCheck" select="onCheck"/>
-
                                         <Button type="Emphasized" text="{i18n>Run}" press="onRun2" width="100%"/>
                                     </f:fields>
                                 </f:FormElement>
                             </f:formElements>
                         </f:FormContainer>
-
                     </f:formContainers>
-
                 </f:Form>
 
             </Panel>
@@ -122,8 +107,6 @@
                         <OverflowToolbar>
                             <Title text="{i18n>predmodel}"/>
                             <ToolbarSpacer/>
-                            <!-- 
-				<Button type="Ghost" icon="sap-icon://add-activity-2" tooltip="{i18n>addEntry}" press="onSingleEntry"/> -->
                         </OverflowToolbar>
                     </headerToolbar>
                     <columns>

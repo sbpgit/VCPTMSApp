@@ -1,53 +1,49 @@
-<mvc:View
-    controllerName="cp.appf.cpassignprofiles.controller.Home"
-    xmlns:mvc="sap.ui.core.mvc"
-    displayBlock="true"
-    xmlns="sap.m"
->
+<mvc:View controllerName="cp.appf.cpassignprofiles.controller.Home"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns="sap.m">
     <Page >
-		<customHeader>
-			<Toolbar >
-				<Title id="profTitle" text="{i18n>profTitle}" class="boldText"  ></Title>
-				<ToolbarSpacer/>
+        <customHeader>
+            <Toolbar >
+                <Title id="profTitle" text="{i18n>profTitle}" class="boldText"></Title>
+                <ToolbarSpacer/>
                 <Button id="idAdd" text="Create" icon="sap-icon://add" press="onCreate" tooltip = "Create"/>
                 <Button id="idCopy" text="Copy" icon="sap-icon://copy" press="onCreate" tooltip = "Copy"/>
-				<Button id="idEdit" text="Edit" icon="sap-icon://edit" press="onCreate" tooltip = "Edit"/>
-				<Button id="idDelete" text="Delete" icon="sap-icon://delete" press="onDelete" tooltip = "Delete"/>
-			</Toolbar>
-		</customHeader>
-		<content>
-			<SearchField id="headSearch"  liveChange="onSearch" placeholder="Profile or Description"/>
-                <Table id="profList"  items="{path: '/results'}" mode="SingleSelectLeft" >
-				<columns>
-					<Column hAlign="Left" vAlign="Middle">
-						<Text text="{i18n>prof}" />
-					</Column>
-					<Column hAlign="Left" vAlign="Middle">
-						<Text text="{i18n>method}"/>
-					</Column>
+                <Button id="idEdit" text="Edit" icon="sap-icon://edit" press="onCreate" tooltip = "Edit"/>
+                <Button id="idDelete" text="Delete" icon="sap-icon://delete" press="onDelete" tooltip = "Delete"/>
+            </Toolbar>
+        </customHeader>
+        <content>
+            <SearchField id="headSearch" liveChange="onSearch" placeholder="Profile or Description"/>
+            <Table id="profList" items="{path: '/results'}" mode="SingleSelectLeft">
+                <columns>
                     <Column hAlign="Left" vAlign="Middle">
-						<Text text="{i18n>profDesc}"/>
-					</Column>
+                        <Text text="{i18n>prof}" />
+                    </Column>
                     <Column hAlign="Left" vAlign="Middle">
-						<Text text="{i18n>auth}"/>
-					</Column>
+                        <Text text="{i18n>method}"/>
+                    </Column>
                     <Column hAlign="Left" vAlign="Middle">
-						<Text text=""/>
-					</Column>
-				</columns>
-				<items>
-					<ColumnListItem>
-						<cells>
-							<ObjectIdentifier title="{PROFILE}" />
+                        <Text text="{i18n>profDesc}"/>
+                    </Column>
+                    <Column hAlign="Left" vAlign="Middle">
+                        <Text text="{i18n>auth}"/>
+                    </Column>
+                    <Column hAlign="Left" vAlign="Middle">
+                        <Text text=""/>
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem>
+                        <cells>
+                            <ObjectIdentifier title="{PROFILE}" />
                             <Text text="{METHOD}"/>
                             <Text text="{PRF_DESC}"/>
                             <Text text="{AUTHORIZATION}"/>
-                            <Button id="idDisplay" icon="sap-icon://display" tooltip="Display" 
-                                    press="onParameters" iconDensityAware="false" type="Transparent"/>
-						</cells>
-					</ColumnListItem>
-				</items>
-			</Table>
-		</content>
-	</Page>
+                            <Button id="idDisplay" icon="sap-icon://display" tooltip="Display" press="onParameters" iconDensityAware="false" type="Transparent"/>
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </content>
+    </Page>
 </mvc:View>

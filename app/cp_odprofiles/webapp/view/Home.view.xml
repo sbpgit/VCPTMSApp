@@ -6,80 +6,69 @@
     xmlns="sap.m">
 
     <Page id="page" title="{i18n>title}" titleAlignment="Center">
-        <!-- <Toolbar height="15%"> -->
-            <f:Form editable="true">
-                <f:layout>
-                    <f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" 
-                            adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" 
-                            columnsXL="4" columnsL="2" columnsM="2" singleContainerFullSize="false"
-                            breakpointXL= "1400" breakpointL= "800" breakpointM="600" />
-                </f:layout>
-                <f:formContainers>
-                    <f:FormContainer>
-                        <f:formElements>
-                            <f:FormElement>
-                                <f:label>
-                                    <Label text="Location"/>
-                                </f:label>
-                                <f:fields>
-                                <Input id="idloc" value=""  placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
-                                </f:fields>
-                            </f:FormElement>
-                            <f:FormElement>
-                                <f:label>
-                                    <Label text="Component"/>
-                                </f:label>
-                                
-                                <f:fields>
-                                    <MultiInput id="compInput" placeholder="Component" showValueHelp="true" valueHelpOnly="true"
-                                        valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
-                                </f:fields>
-                            </f:FormElement>
-                            
-                        </f:formElements>
-                    </f:FormContainer>
-                    <f:FormContainer>
-                        <f:formElements>
-                            <f:FormElement>
-                                <f:label>
-                                    <Label text="Product"/>
-                                </f:label>
-                                <f:fields>
-                                    <MultiInput id="prodInput" placeholder="Product" showValueHelp="true" valueHelpOnly="true"
-                                        valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
-                                </f:fields>
-                            </f:FormElement>
-                            <f:FormElement>
-                                <f:label>
-                                    <Label text="Object Dep"/>
-                                </f:label>
-                                <f:fields>
-                                    <MultiInput id="objDepInput" placeholder="Object Dep" showValueHelp="true" valueHelpOnly="true"
-                                        valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
-                                </f:fields>
-                            </f:FormElement>
-                            <f:FormElement>
-                                <Button text="Go" width="30%" press="onGetData" tooltip="Get data based on filters"/>
-                            </f:FormElement>
-                        </f:formElements>
-                    </f:FormContainer>
-                </f:formContainers>
-            </f:Form>
-            
-        <!-- </Toolbar> -->
+        <f:Form editable="true">
+            <f:layout>
+                <f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="4" columnsL="2" columnsM="2" singleContainerFullSize="false" breakpointXL= "1400" breakpointL= "800" breakpointM="600" />
+            </f:layout>
+            <f:formContainers>
+                <f:FormContainer>
+                    <f:formElements>
+                        <f:FormElement>
+                            <f:label>
+                                <Label text="Location"/>
+                            </f:label>
+                            <f:fields>
+                                <Input id="idloc" value="" placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                            </f:fields>
+                        </f:FormElement>
+                        <f:FormElement>
+                            <f:label>
+                                <Label text="Component"/>
+                            </f:label>
+                            <f:fields>
+                                <MultiInput id="compInput" placeholder="Component" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
+                            </f:fields>
+                        </f:FormElement>
+                    </f:formElements>
+                </f:FormContainer>
+                <f:FormContainer>
+                    <f:formElements>
+                        <f:FormElement>
+                            <f:label>
+                                <Label text="Product"/>
+                            </f:label>
+                            <f:fields>
+                                <MultiInput id="prodInput" placeholder="Product" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
+                            </f:fields>
+                        </f:FormElement>
+                        <f:FormElement>
+                            <f:label>
+                                <Label text="Object Dep"/>
+                            </f:label>
+                            <f:fields>
+                                <MultiInput id="objDepInput" placeholder="Object Dep" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
+                            </f:fields>
+                        </f:FormElement>
+                        <f:FormElement>
+                            <Button text="Go" width="30%" press="onGetData" tooltip="Get data based on filters"/>
+                        </f:FormElement>
+                    </f:formElements>
+                </f:FormContainer>
+            </f:formContainers>
+        </f:Form>
+
         <content>
-            <Table id="idTab" items="{path: '/results'}" mode="MultiSelect" sticky="ColumnHeaders" >
+            <Table id="idTab" items="{path: '/results'}" mode="MultiSelect" sticky="ColumnHeaders">
                 <headerToolbar>
-				<Toolbar>
-					<content>
-						<SearchField id="idSearch" placeholder="Location/ Product/ Component/ Object Dep"  
-                        liveChange="onTableSearch" width="600px"/>
-                        <ToolbarSpacer/>
-			        <Button id="idAssign" type='Ghost' text="Assign" press="onAssign"></Button>
-                    <Button id="idUnAssign" type='Ghost' text="UnAssign" press="onUnAssign"></Button>
-					</content>
-				</Toolbar>		
-				</headerToolbar>
+                    <Toolbar>
+                        <content>
+                            <SearchField id="idSearch" placeholder="Location/ Product/ Component/ Object Dep" liveChange="onTableSearch" width="600px"/>
+                            <ToolbarSpacer/>
+                            <Button id="idAssign" type='Ghost' text="Assign" press="onAssign"></Button>
+                            <Button id="idUnAssign" type='Ghost' text="UnAssign" press="onUnAssign"></Button>
+                        </content>
+                    </Toolbar>
+                </headerToolbar>
                 <columns>
                     <Column hAlign="Left" vAlign="Middle">
                         <Text text="{i18n>locId}" />
@@ -105,7 +94,6 @@
                 </columns>
                 <items>
                     <ColumnListItem>
-                        <!-- <cells> -->
                         <Text text="{LOCATION_ID}"/>
                         <Text text="{PRODUCT_ID}"/>
                         <Text text="{COMPONENT}"/>
@@ -113,17 +101,10 @@
                         <Text text="{OBJDEP_DESC}"/>
                         <Text text="{STRUC_NODE}"/>
                         <Text text="{PROFILE}"/>
-                        <!-- </cells> -->
                     </ColumnListItem>
                 </items>
             </Table>
         </content>
-        <!-- <footer>
-			<Toolbar id="idButton" >
-                <ToolbarSpacer/>
-			        <Button id="idAdd" type='Ghost' text="Assign Profile" press="onAdd"></Button>
-            </Toolbar>
-		</footer> -->
     </Page>
 
 </mvc:View>

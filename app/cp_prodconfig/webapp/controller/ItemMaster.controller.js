@@ -112,16 +112,16 @@ sap.ui.define(
        * @param {object} oEvent -the event information.
        */
       onSearch: function (oEvent) {
-        var aQuery =
+        var sQuery =
             oEvent.getParameter("value") || oEvent.getParameter("newValue"),
           oFilters = [];
 
-        if (aQuery !== "") {
+        if (sQuery !== "") {
           oFilters.push(
             new Filter({
               filters: [
-                new Filter("PRODUCT_ID", FilterOperator.Contains, aQuery),
-                new Filter("CLASS_NAME", FilterOperator.Contains, aQuery),
+                new Filter("PRODUCT_ID", FilterOperator.Contains, sQuery),
+                new Filter("CLASS_NAME", FilterOperator.Contains, sQuery),
               ],
               and: false,
             })

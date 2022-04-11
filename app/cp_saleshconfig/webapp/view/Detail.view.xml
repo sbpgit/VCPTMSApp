@@ -7,37 +7,6 @@
     xmlns="sap.m">
 
     <Page id="page" title="{i18n>title}" titleAlignment="Center" showNavButton="true" navButtonPress="onBack">
-        <!-- <Toolbar height="8%">
-        <VBox>
-        <HBox>
-            <HBox>
-						<Text text="Sales Order : " class="boldText"></Text>
-						<Text text=" {oGModel>/sSalOrd}"></Text>
-					</HBox>
-                    <HBox>
-						<Text text="{i18n>prodid} : " class="boldText"></Text>
-						<Text text=" {oGModel>/sPrdid}"></Text>
-					</HBox>
-                    
-        </HBox>
-            <HBox>
-					
-                    <HBox>
-						<Text text="Sales Order Item: " class="boldText"></Text>
-						<Text text=" {oGModel>/sSalOrdItem}"></Text>
-					</HBox>
-                    <HBox>
-						<Text text="{i18n>locid} : " class="boldText"></Text>
-						<Text text=" {oGModel>/sLocid}"></Text>
-					</HBox>
-					<HBox>
-						<Text text="{i18n>docdate} : " class="boldText"></Text>
-						<Text text=" {oGModel>/date}"></Text>
-					</HBox>
-				</HBox>
-        </VBox>
-            
-        </Toolbar> -->
         <VBox class="sapUiSmallMargin">
 		<f:SimpleForm id="SimpleFormDisplayColumn_threeGroups234"
 			editable="false"
@@ -58,8 +27,6 @@
 				<Text text="{oGModel>/sSalOrdItem}" />                                
                 <Label text="{i18n>docdate}" />
 				<Text text="{oGModel>/date}"/>
-                
-        
 				<core:Title text="SO Config Details" />
 				<Label text="{i18n>schLine}" />
 				<Text text="{oGModel>/sSchedNo}" />
@@ -73,8 +40,6 @@
 				<Text text="{path: 'oGModel>/sMatAvailData', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'MM/dd/yyyy' }}" />
                 <Label text="{i18n>Custgrp}" />
 				<Text text="{oGModel>/sCustGrp}" />
-				<!-- <Label text="{i18n>netvalue}" />
-				<Text text="{oGModel>/sNetValue}" /> -->
 			</f:content>
 		</f:SimpleForm>
 	</VBox>

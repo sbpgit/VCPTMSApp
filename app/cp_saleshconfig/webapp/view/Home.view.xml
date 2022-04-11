@@ -7,7 +7,6 @@
     xmlns="sap.m">
 
     <Page id="page" title="{i18n>title}" titleAlignment="Center">
-        <!-- <Toolbar height="12%"> -->
             <f:Form editable="true">
                 <f:layout>
                     <f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" 
@@ -28,10 +27,8 @@
                                 <f:label>
                                     <Label text="Doc Create Date"/>
                                 </f:label>
-                                <DatePicker id="idDate" width="225px"  displayFormat="yyyy-MM-dd" change="handleDateChange"/>
-                                
-                            </f:FormElement>
-                            
+                                <DatePicker id="idDate" width="225px"  displayFormat="yyyy-MM-dd" change="handleDateChange"/>                          
+                            </f:FormElement>        
                         </f:formElements>
                     </f:FormContainer>
                     <f:FormContainer>
@@ -52,8 +49,6 @@
                     </f:FormContainer>
                 </f:formContainers>
             </f:Form>
-            
-        <!-- </Toolbar> -->
         <content>
             <Table id="idTab" items="{path: '/results'}" growingScrollToLoad="true" rememberSelections="false"
 				itemPress="onhandlePress" mode="SingleSelectMaster" selectionChange="onhandlePress" sticky="ColumnHeaders" >
@@ -108,5 +103,4 @@
             </Table>
         </content>
     </Page>
-
 </mvc:View>

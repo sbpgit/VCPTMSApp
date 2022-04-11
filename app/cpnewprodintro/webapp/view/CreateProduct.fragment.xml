@@ -1,0 +1,27 @@
+<core:FragmentDefinition xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns:l="sap.ui.layout"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:u="sap.ui.unified">
+    <Dialog title="" contentWidth="450px" titleAlignment="Center">
+        <VBox class="sapUiSmallMargin">
+            <f:SimpleForm id="SimpleFormToolbar" editable="true" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="4" labelSpanM="4" labelSpanS="4" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1" singleContainerFullSize="false">
+                <f:content>
+                    <Label text="{i18n>Location}"/>
+                    <Input id="idloc" value="" width="225px" placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                    <Label text="{i18n>refProd}"/>
+                    <Input id="idrefprod" value="" width="225px" placeholder="Reference Product" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                    <Label text="{i18n>prod}"/>
+                    <Input id="idProd" value="" width="225px"/>
+
+                </f:content>
+            </f:SimpleForm>
+
+        </VBox>
+        <buttons>
+            <Button type='Ghost' text="{i18n>save}" press="onProdSave"></Button>
+            <Button type='Reject' text="{i18n>close}" press="handleClose"></Button>
+        </buttons>
+    </Dialog>
+</core:FragmentDefinition>

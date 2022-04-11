@@ -11,25 +11,20 @@
                         <l:SplitterLayoutData resizable="false" size="25%"/>
                     </layoutData>
                     <content>
-                        <!-- <SearchField id="headSearch" liveChange="onSearch" placeholder="Object Dependency"/> -->
                         <SearchField id="headSearch" search="onSearch" placeholder="Object Dependency"/>
-                        <List id="objDepList" growing="true"  growingThreshold="800" headerText="Object Dependency" 
-                        items="{ path : '/results', sorter : { path : 'OBJ_DEP'}}" mode="SingleSelectMaster" 
-                        noDataText="No Data" selectionChange="onhandlePress">
+                        <List id="objDepList" growing="true" growingThreshold="800" headerText="Object Dependency" items="{ path : '/results', sorter : { path : 'OBJ_DEP'}}" mode="SingleSelectMaster" noDataText="No Data" selectionChange="onhandlePress">
                             <items>
-                                <!-- <StandardListItem title="{OBJ_DEP}" description="{OBJDEP_DESC}" /> -->
-                        <ObjectListItem  press="onhandlePress" title="{OBJ_DEP}" >
-						<firstStatus>
-							<ObjectStatus text="{LOCATION_ID}" />
-						</firstStatus>
-						<secondStatus>
-							<ObjectStatus text="{PRODUCT_ID}"/>
-						</secondStatus>
-						<attributes>
-							<ObjectAttribute text="{OBJDEP_DESC}"/>
-						</attributes>
-					</ObjectListItem>
-
+                                <ObjectListItem press="onhandlePress" title="{OBJ_DEP}">
+                                    <firstStatus>
+                                        <ObjectStatus text="{LOCATION_ID}" />
+                                    </firstStatus>
+                                    <secondStatus>
+                                        <ObjectStatus text="{PRODUCT_ID}"/>
+                                    </secondStatus>
+                                    <attributes>
+                                        <ObjectAttribute text="{OBJDEP_DESC}"/>
+                                    </attributes>
+                                </ObjectListItem>
                             </items>
                         </List>
                     </content>
@@ -50,25 +45,20 @@
                     </layoutData>
                     <Panel id="idhisPanel" expandable="true" headerText="Object Dependency History Details" width="auto" class="sapUiResponsiveMargin">
                         <content>
-                        <Table id="idMyTable" >
-                        <infoToolbar>
-                            <OverflowToolbar>
-                            	<ToolbarSpacer />
-                                <Button id="idDisplay" icon="sap-icon://display" tooltip="Display" 
-                                    press="onParameters"  />
-                            </OverflowToolbar>
-                        </infoToolbar>
-
-                        </Table>
-
+                            <Table id="idMyTable">
+                                <infoToolbar>
+                                    <OverflowToolbar>
+                                        <ToolbarSpacer />
+                                        <Button id="idDisplay" icon="sap-icon://display" tooltip="Display" press="onParameters" />
+                                    </OverflowToolbar>
+                                </infoToolbar>
+                            </Table>
                         </content>
                     </Panel>
                     <Panel id="idFutPanel" expandable="true" headerText="Object Dependency Prediction" width="auto" class="sapUiResponsiveMargin">
                         <content>
-                        <Table id="idFutTable" >
-
-                        </Table>
-
+                            <Table id="idFutTable">
+                            </Table>
                         </content>
                     </Panel>
                 </Page>

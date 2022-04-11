@@ -12,6 +12,10 @@ sap.ui.define([
     
         return BaseController.extend("cpappf.cpnodesdetails.controller.Details", {
     
+            /** 
+* Called when a controller is instantiated and its View controls (if available) are already created.
+* Can be used to modify the View before it is displayed, to bind event handlers and do other one-time initialization.
+*/
             onInit: function () {
                 that = this;
                 // DetailHome = this;
@@ -39,8 +43,6 @@ sap.ui.define([
     
                 this.setModel(oViewModel, "appView");
     
-                
-    
                 if (Device.support.touch) {
                     Device.orientation.attachHandler(function (oEvt) {
                         NotificationObj.onAfterRendering();
@@ -59,6 +61,11 @@ sap.ui.define([
                 this.bus.unsubscribe("nav", "toDetailPage", this.toDetailPage, this);
                 this.bus.unsubscribe("nav", "backToBegin", this.backToBegin, this);
             },
+
+            /** 
+* Called after the view has been rendered.
+*/
+
             onAfterRendering: function () {
                 that = this;
     
@@ -162,10 +169,8 @@ sap.ui.define([
     
             /** 
              * Called when the URL matches pattern "Details"
-             * @constructor 
              */
             _onPatternMatched: function () {
-                
                 this.oFlexibleColumnLayout.setLayout(sap.f.LayoutType.OneColumn);
                 var aPages = this.oFlexibleColumnLayout.getBeginColumnPages();
             /* If Begin page has already been added, navigate to it and call 'onAfterRendering' explicitly */

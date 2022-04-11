@@ -223,7 +223,6 @@ sap.ui.define(
       /**
        * This function is called when deleting Profile Parameters.
        */
-      // Deleting Profile Parameters
       tablesendbatch: function () {
         var sSelRow = this.byId("profList")
           .getSelectedItems()[0]
