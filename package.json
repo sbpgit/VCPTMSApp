@@ -9,7 +9,7 @@
         "@sap/audit-logging": "^5.3.0",
         "@sap/cds": "^5.7.5",
         "@sap/cds-mtx": "^2.5.1",
-        "@sap/cds-odata-v2-adapter-proxy": "^1.8.9",
+        "@sap/cds-odata-v2-adapter-proxy": "^1.8.11",
         "@sap/hana-client": "^2.10.15",
         "@sap/hdi-deploy": "^4.2.0",
         "@sap/jobs-client": "^1.6.3",
@@ -91,6 +91,9 @@
                     "*": false
                 }
             },
+            "build": {
+                "target": "."
+            },
             "db": {
                 "kind": "hana",
                 "pool": {
@@ -136,9 +139,12 @@
         "app/cpcompreq",
         "app/cpprodlocline",
         "app/cprtrheader",
-        "app/cpasmbcompreq"
+        "app/cpasmbcompreq",
+        "app/cpnewprod",
+        "app/cpproduct",
+        "app/cpcustgroup"
     ],
     "devDependencies": {
-        "@sap/ux-specification": "^1.96.6"
+        "@sap/ux-specification": "^1.84.35"
     }
 }

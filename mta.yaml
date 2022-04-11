@@ -26,6 +26,11 @@ modules:
   - name: config_products-db
     properties:
       TARGET_CONTAINER: ~{hdi-service-name}
+  - name: cross-container-service-1
+    group: SERVICE_REPLACEMENTS
+    properties:
+      key: ServiceName_1
+      service: ~{the-service-name}
   parameters:
     buildpack: nodejs_buildpack
   build-parameters:
@@ -173,8 +178,16 @@ modules:
       name: cpappfcpnewprodintro
       target-path: resources/
     - artifacts:
-      - cpappcpnewprodintro.zip
-      name: cpappcpnewprodintro
+      - cpappcpnewprod.zip
+      name: cpappcpnewprod
+      target-path: resources/
+    - artifacts:
+      - cpappcpproduct.zip
+      name: cpappcpproduct
+      target-path: resources/
+    - artifacts:
+      - cpappcpcustgroup.zip
+      name: cpappcpcustgroup
       target-path: resources/
 - name: cpibpfdemcpibpfdem
   type: html5
@@ -426,9 +439,29 @@ modules:
     - npm install
     - npm run build:cf
     supported-platforms: []
-- name: cpappcpnewprodintro
+- name: cpappcpnewprod
   type: html5
-  path: app/cpnewprodintro
+  path: app/cpnewprod
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappcpproduct
+  type: html5
+  path: app/cpproduct
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappcpcustgroup
+  type: html5
+  path: app/cpcustgroup
   build-parameters:
     build-result: dist
     builder: custom
@@ -475,6 +508,12 @@ resources:
     service: xsuaa
     service-name: config_products-xsuaa-service
     service-plan: application
+- name: cross-container-service-1
+  type: org.cloudfoundry.existing-service
+  parameters:
+    service-name: CCL1_ACCESS
+  properties:
+    the-service-name: ${service-name}
 parameters:
   deploy_mode: html5-repo
   enable-parallel-deployments: true

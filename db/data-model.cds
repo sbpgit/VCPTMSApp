@@ -1,5 +1,3 @@
-//namespace config.products;
-//namespace app.schema;
 using {
     managed,
     cuid,
@@ -7,8 +5,7 @@ using {
 } from '@sap/cds/common';
 
 context cp {
-    //namespace app.schema;
-
+// Table for Location
     entity LOCATION : managed {
         key LOCATION_ID    : String(4)     @title : 'Location ';
             LOCATION_DESC  : String(30)    @title : 'Location Descritpion';
@@ -61,7 +58,7 @@ context cp {
             PROCUREMENT_TYPE  : String(1) @title : 'Procurement Type';
             PLANNING_STRATEGY : String(2) @title : 'Planning Strategy';
     };
-
+// BOM header
     entity BOMHEADER : managed {
         key LOCATION_ID : String(4)     @title : 'Location '; //Association to ZLOCATION;//
         key PRODUCT_ID  : String(40)    @title : 'Product';
@@ -71,7 +68,7 @@ context cp {
             VALID_FROM  : Date          @title : 'Valid From';
             VALID_TO    : Date          @title : 'Valid To';
     };
-
+// BOM object dependency
     entity BOM_OBJDEPENDENCY {
         key LOCATION_ID : String(4)     @title : 'Location '; //Association to ZLOCATION;//
         key PRODUCT_ID  : String(40)    @title : 'Product';
@@ -83,7 +80,7 @@ context cp {
             VALID_FROM  : Date          @title : 'Valid From';
             VALID_TO    : Date          @title : 'Valid To';
     };
-
+// Product restrictions
     entity PRODRESTRICT : managed {
         key LOCATION_ID : String(4)     @title : 'Location '; //Association to ZLOCATION;//
         key PRODUCT_ID  : String(40)    @title : 'Product';
@@ -93,13 +90,13 @@ context cp {
             VALID_FROM  : Date          @title : 'Valid From';
             VALID_TO    : Date          @title : 'Valid To';
     };
-
+// location-Product-Line
     entity PROD_LOC_LINE {
         key LOCATION_ID : String(4) @title : 'Location ';
         key LINE_ID     : String(40)@title : 'Line';
         key PRODUCT_ID  : String(40)@title : 'Product';
     };
-
+// Restriction Header
     entity RESTRICT_HEADER {
         key LOCATION_ID : String(4) @title : 'Location ';
         key LINE_ID     : String(40)@title : 'Line';
@@ -109,7 +106,7 @@ context cp {
             VALID_TO    : Date      @title : 'Valid To';
 
     }
-
+// Object dependency header
     entity OBJDEP_HEADER {
         key OBJ_DEP      : String(30)@title : 'Object Dependency';
         key OBJ_COUNTER  : Integer   @title : 'Object Dependency Counter';
@@ -120,7 +117,7 @@ context cp {
             OD_CONDITION : String(2) @title : 'Object Dependency condition ';
             ROW_ID       : Integer   @title : 'Attribute Index ';
     };
-
+// Restriction details
     entity RESTRICT_DETAILS {
         key RESTRICTION  : String(30)@title : 'Restriction';
         key RTR_COUNTER  : Integer   @title : 'Restriction Counter';
@@ -131,7 +128,7 @@ context cp {
             OD_CONDITION : String(2) @title : 'Object Dependency condition ';
             ROW_ID       : Integer   @title : 'Attribute Index ';
     };
-
+// Object dependency restriction
     entity ODRESTRICT {
         key OBJ_DEP      : String(30)@title : 'Object Dependency';
         key OBJ_COUNTER  : Integer   @title : 'Object Dependency Counter';
@@ -142,7 +139,7 @@ context cp {
             OD_CONDITION : String(2) @title : 'Object Dependency condition ';
             ROW_ID       : Integer   @title : 'Attribute Index ';
     };
-
+// PIR Characteristitcs
     entity PIR_CH {
         key PRODUCT_ID   : String(40)@title : 'Product';
         key PLANT        : String(4) @title : 'Plant';
@@ -162,7 +159,7 @@ context cp {
             CHANGED_TIME : Time      @title : 'Changed Time';
             CREATED_TIME : Time      @title : 'Created Time';
     };
-
+// Product class
     entity PRODUCT_CLASS {
         key PRODUCT_ID   : String(40)@title : 'Product Id';
         key CLASS_NUM    : String(18)@title : 'Class Num';
@@ -174,7 +171,7 @@ context cp {
             CREATED_TIME : Time      @title : 'Created Time';
     };
 
-
+// Product attributes
     entity PROD_ATTRIBUTES {
         key LOCATION_ID   : String(4) @title : 'Location ID';
         key PRODUCT_ID    : String(40)@title : 'Product Id';
@@ -184,7 +181,7 @@ context cp {
             PROD_MDLRANGE : String(30)@title : 'Product Model Range';
             PROD_SERIES   : String(30)@title : 'Product Series';
     };
-
+// Sales history
     entity SALESH {
         key SALES_DOC        : String(10)    @title : 'Sales Document';
         key SALESDOC_ITEM    : String(6)     @title : 'Sales Document Item';
@@ -206,7 +203,7 @@ context cp {
             CHANGED_TIME     : Time          @title : 'Changed Time';
             CREATED_TIME     : Time          @title : 'Created Time';
     };
-
+// Sales History configuration
     entity SALESH_CONFIG {
         key SALES_DOC     : String(10)@title : 'Sales Document';
         key SALESDOC_ITEM : String(6) @title : 'Sales Document Item';
@@ -221,7 +218,7 @@ context cp {
             CHANGED_TIME  : Time      @title : 'Changed Time';
             CREATED_TIME  : Time      @title : 'Created Time';
     };
-
+// Sales History configuration summary
     entity SALESH_CFG_SMRY {
         key WEEK_DATE      : Date          @title : 'Week Date';
         key CHAR_NUM       : String(10)    @title : 'Internal number Char.';
@@ -243,7 +240,7 @@ context cp {
             CHANGED_TIME   : Time          @title : 'Changed Time';
             CREATED_TIME   : Time          @title : 'Created TIme';
     };
-
+// Sales history summary
     entity SALESH_SUMMARY {
         key WEEK_DATE      : Date          @title : 'Week Date';
         key PRODUCT_ID     : String(40)    @title : 'Product ID';
@@ -263,7 +260,7 @@ context cp {
             CHANGED_TIME   : Time          @title : 'Changed Time';
             CREATED_TIME   : Time          @title : 'Created TIme';
     };
-
+// Object dep. Timeseries history
     entity TS_OBJDEPHDR {
         key CAL_DATE     : Date      @title : 'Date';
         key LOCATION_ID  : String(4) @title : 'Location ID';
@@ -274,7 +271,7 @@ context cp {
             SUCCESS      : Integer   @title : 'Count';
             SUCCESS_RATE : Double    @title : 'Sucess Rate';
     };
-
+// Timeseries Object dep. characteristics
     entity TS_OBJDEP_CHARHDR {
         key CAL_DATE     : Date      @title : 'Date';
         key LOCATION_ID  : String(4) @title : 'Location ID';
@@ -286,7 +283,7 @@ context cp {
             SUCCESS      : Integer   @title : 'Count';
             SUCCESS_RATE : Double    @title : 'Sucess Rate';
     };
-
+// Object dep. Timeseries future
     entity TS_OBJDEPHDR_F {
         key CAL_DATE         : Date      @title : 'Date';
         key LOCATION_ID      : String(4) @title : 'Location ID';
@@ -299,8 +296,7 @@ context cp {
             PREDICTED_STATUS : String(8) @title : 'Predicted Status';
     };
 
-    //  key OBJ_COUNTER : Integer   @title : 'Object Counter';
-    //SUCCESS     : Integer   @title : 'Count';
+// Object dep. characteristics Timeseries- future
     entity TS_OBJDEP_CHARHDR_F {
         key CAL_DATE     : Date      @title : 'Date';
         key LOCATION_ID  : String(4) @title : 'Location ID';
@@ -344,15 +340,7 @@ context cp {
             CHARVAL_DESC : String(150)@title : 'Charateristic Value Desc.';
             CATCH_ALL    : String(1)  @title : 'Catch all';
     };
-
-    //entity for Access nodes
-    // entity ACCESS_NODES : managed {
-    //     key CHILD_NODE  : String(50);// @title : 'Child Node';
-    //     key PARENT_NODE : String(50);// @title : 'Parent Node';
-    //         NODE_TYPE   : String(2);//  @title : 'Node Type';
-    //         NODE_DESC   : String(200);//@tile  : 'Node Descriptions';
-    //         AUTH_GROUP  : String(4);//  @title : 'Authorization Group';
-    // };
+// PVS node master
     entity PVS_NODES : managed {
         key CHILD_NODE   : String(50); // @title : 'Child Node';
         key PARENT_NODE  : String(50); // @title : 'Parent Node';
@@ -363,13 +351,13 @@ context cp {
             UPPERLIMIT   : Integer;
             LOWERLIMIT   : Integer;
     };
-
+// Product Access nodes
     entity PROD_ACCNODE : managed {
         key LOCATION_ID : String(4) @title : 'Location ID';
         key PRODUCT_ID  : String(40)@title : 'Product ID';
             ACCESS_NODE : String(50)@title : 'Access Node';
     };
-
+// PVS for BOM
     entity PVS_BOM : managed {
         key LOCATION_ID : String(4) @title : 'Location ID';
         key PRODUCT_ID  : String(40)@title : 'Product ID';
@@ -377,43 +365,42 @@ context cp {
         key COMPONENT   : String(40)@title : 'Component';
             STRUC_NODE  : String(50)@title : 'Structure Node'
     }
-
+// Order count on weekly basis for a location
     entity TS_ORDERRATE : managed {
         key WEEK_DATE   : Date     @title : 'Date';
         key LOCATION_ID : String(4)@title : 'Location ID';
-            //key PRODUCT_ID  : String(40)@title : 'Product ID';
             ORDER_COUNT : Integer  @title : 'Order Count';
     }
-
+// Authorization object master
     entity AUTH_OBJ : managed {
         key AUTH_OBJ    : String(100)@title : 'Authorization Object';
             DESCRIPTION : String(250)@title : 'Description';
     }
-
+// Auth. object parameters
     entity AUTH_OBJ_PARA : managed {
         key AUTH_OBJ    : String(100)@title : 'Authorization Object';
         key PARAMETER   : String(100)@title : 'Parameter';
             DESCRIPTION : String(250)@title : 'Description';
     }
-
+// Roles master
     entity AUTH_ROLE : managed {
         key ROLE_ID     : String(100)@title : 'Role ID';
             DESCRIPTION : String(250)@title : 'Description';
     }
-
+// Authorization object for roles and its parameters
     entity AUTH_ROLE_OBJ : managed {
         key ROLE_ID       : String(100)@title : 'Role ID';
         key AUTH_OBJ      : String(100)@title : 'Authorization Object';
         key PARAMETER     : String(100)@title : 'Parameter';
             PARAMETER_VAL : String(250)@title : 'Parameter';
     }
-
+// Roles for a user
     entity AUTH_EMP_ROLE : managed {
         key USER    : String(100)@title : 'User';
         key ROLE_ID : String(100)@title : 'Role ID';
     }
 
-    // IBP structures
+    // IBP Future demand 
     entity IBP_FUTUREDEMAND {
         key LOCATION_ID : String(4)     @title : 'Location ID';
         key PRODUCT_ID  : String(40)    @title : 'Product ID';
@@ -422,23 +409,20 @@ context cp {
         key WEEK_DATE   : Date          @title : 'Weekly Date';
             QUANTITY    : Decimal(13, 3)@title : 'Demand Quantity';
     }
-
+// IBp Future characteristic plan
     entity IBP_FCHARPLAN {
         key LOCATION_ID : String(4)     @title : 'Location ID';
         key PRODUCT_ID  : String(40)    @title : 'Product ID';
         key CLASS_NUM   : String(20)    @title : 'Class Name';
         key CHAR_NUM    : String(30)    @title : 'Charateristic Name';
         key CHARVAL_NUM : String(70)    @title : 'Charateristic Value';
-            // key CLASS_NAME  : String(20)    @title : 'Class Name';
-            // key CHAR_NAME   : String(30)    @title : 'Charateristic Name';
-            // key CHAR_VALUE  : String(70)    @title : 'Charateristic Value';
         key VERSION     : String(10)    @title : 'Version';
         key SCENARIO    : String(32)    @title : 'Scenario';
         key WEEK_DATE   : Date          @title : 'Weekly Date';
             OPT_PERCENT : Decimal(5, 2) @title : 'Option Percnetage';
             OPT_QTY     : Decimal(13, 3)@title : 'Option Quantity';
     }
-
+// IBP result plan table
     entity IBP_RESULTPLAN {
         key LOCATION_ID      : String(4) @title : 'Location ID';
         key PRODUCT_ID       : String(40)@title : 'Product ID';
@@ -450,25 +434,7 @@ context cp {
             PREDICTED_TIME   : Timestamp @title : 'Predicted Time';
             PREDICTED_STATUS : String(8) @title : 'Predicted Status';
     }
-
-    // entity PAL_METHD_PARA : managed {
-    //     key METHOD    : String(50) @title : 'Method Name';
-    //     key PARA_NAME : String(100)@title : 'Parameter Name';
-    //         paratype defvalue
-    // }
-
-    // entity PAL_PARAMETERS {
-    //     key METHOD      : String(20)  @title : 'Method Name';
-    //     key PARA_NAME   : String(30)  @title : 'Parameter Name';
-    //         DATATYPE    : String(30)  @title : 'Data Type';
-    //         DEFAULTVAL  : String(100) @title : 'Default Value';
-    //         INTVAL      : Integer     @title : 'Integer';
-    //         DOUBLEVAL   : Double      @title : 'Double';
-    //         STRVAL      : String(50)  @title : 'String';
-    //         DESCRIPTION : String(1000)@title : ' Description';
-    //         DEPENDENCY  : String(1000)@title : ' Dependency';
-    // }
-
+// PAL profiles
     entity PAL_PROFILEMETH {
         key PROFILE      : String(50) @title : 'Profile';
             METHOD       : String(50) @title : 'Method Name';
@@ -476,7 +442,7 @@ context cp {
             CREATED_DATE : Date       @title : 'Date';
             CREATED_BY   : String(12) @title : 'Created By'
     }
-
+// PAL profile parameters
     entity PAL_PROFILEMETH_PARA {
         key PROFILE      : String(50);
         key METHOD       : String(50);
@@ -490,7 +456,7 @@ context cp {
             CREATED_BY   : String(12);
     }
 
-
+//PAL profile object dep. assigned to a structure node
     entity PAL_PROFILEOD : managed {
         key LOCATION_ID : String(4);
         key PRODUCT_ID  : String(40);
@@ -531,7 +497,7 @@ context cp {
             };
     }
 
-
+// Component Quantity
     entity COMPQTYDETERMINE {
         key LOCATION_ID  : String(4) @title : 'Location ID';
         key PRODUCT_ID   : String(40)@title : 'Product ID';
@@ -544,17 +510,10 @@ context cp {
             CAL_COMP_QTY : Integer   @title : 'Component Quantity before variation';
             COMP_QTY     : Integer   @title : 'Component Quantity with variation';
     }
-
-    entity LOCPRODCOMP_TEMP {
-        key LOCATION_ID : String(4) @title : 'Location ID';
-        key PRODUCT_ID  : String(40)@title : 'Product ID';
-        key ITEM_NUM    : String(5) @title : 'Item Number ';
-        key COMPONENT   : String(40)@title : 'Component';
-    }
+// Assembly- component for a location
 
     entity ASSEMBLY_COMP{
         key LOCATION_ID : String(4) @title : 'Location ID';
-        // key PRODUCT_ID  : String(40)@title : 'Product ID';
         key ASSEMBLY   : String(40)@title :  'Assembly Component';
         key COMPONENT   : String(40)@title : 'Component';
             COMP_QTY     : Integer ;
@@ -563,11 +522,16 @@ context cp {
 
     }
 
+<<<<<<< HEAD
      entity NEWPROD_INTRO{
+=======
+    entity NEWPROD_INTRO{
+>>>>>>> 0b945ce9dae2fa2a40c6f10cfc63c7f8ba94c2a9
         key PRODUCT_ID: String(40)@title : 'New Product';
         key LOCATION_ID : String(4) @title : 'Location';
         REF_PRODID: String(40)@title : ' Ref. Product';
     }
+<<<<<<< HEAD
 // entity PAL_MODEL_PARAMETERS {
 //     key MODEL_TYPE : String(10)  @title : 'Model Type';
 //     key PROFILE_ID : Integer     @title : 'Profile ID';
@@ -577,6 +541,8 @@ context cp {
 //         STRVAL     : String(20);
 //         PARA_DESC  : String(1000)@title : 'Parameter Description';
 // };
+=======
+>>>>>>> 0b945ce9dae2fa2a40c6f10cfc63c7f8ba94c2a9
 }
 
 @cds.persistence.exists
@@ -658,15 +624,6 @@ entity![V_BOMODCOND]{
     key![COMP_QTY]    : Decimal(13, 3)@title : 'COMP_QTY';
     key![VALID_FROM]  : Date          @title : 'VALID_FROM';
     key![VALID_TO]    : Date          @title : 'VALID_TO';
-// key     ![CLASS_NUM]: String(18)  @title: 'CLASS_NUM' ;
-// key     ![CLASS_NAME]: String(20)  @title: 'CLASS_NAME' ;
-// key     ![CHAR_NUM]: String(10)  @title: 'CHAR_NUM' ;
-// key     ![CHAR_NAME]: String(30)  @title: 'CHAR_NAME' ;
-// key     ![CHARVAL_NUM]: String(10)  @title: 'CHARVAL_NUM' ;
-// key     ![CHAR_VALUE]: String(70)  @title: 'CHAR_VALUE' ;
-// key     ![OD_CONDITION]: String(2)  @title: 'OD_CONDITION' ;
-// key     ![CHAR_COUNTER]: Integer  @title: 'CHAR_COUNTER' ;
-// key     ![ROW_ID]: Integer  @title: 'ROW_ID' ;
 }
 
 @cds.persistence.exists
@@ -686,7 +643,6 @@ entity![V_SALESHCFG_CHARVAL]{
     key![DOC_CREATEDDATE]  : Date          @title : 'Doc. Created Date';
     key![SCHEDULELINE_NUM] : String(4)     @title : 'Schedule Line No.';
     key![PRODUCT_ID]       : String(40)    @title : 'Product ID';
-       // key     ![REASON_REJ]: String(2)  @title: 'Reason for Rej.' ;
     key![UOM]              : String(3)     @title : 'UOM';
     key![CONFIRMED_QTY]    : Decimal(13, 3)@title : 'Confirmed Qty';
     key![ORD_QTY]          : Decimal(13, 3)@title : 'Ordered Qty';
@@ -696,12 +652,6 @@ entity![V_SALESHCFG_CHARVAL]{
     key![LOCATION_ID]      : String(4)     @title : 'Location ID';
     key![CHAR_NAME]        : String(30)    @title : 'Characteristic';
     key![CHAR_VALUE]       : String(70)    @title : 'Characteristic Value';
-// key     ![CHANGED_DATE]: Date  @title: 'Changed Date' ;
-// key     ![CHANGED_BY]: String(12)  @title: 'Changed By' ;
-// key     ![CREATED_DATE]: Date  @title: 'Created Date' ;
-// key     ![CREATED_BY]: String(12)  @title: 'Created By' ;
-// key     ![CHANGED_TIME]: Time  @title: 'Changed Time' ;
-// key     ![CREATED_TIME]: Time  @title: 'Created Time' ;
 }
 
 @cds.persistence.exists
@@ -873,261 +823,3 @@ key     ![VERSION]: String(10)  @title: 'VERSION' ;
 key     ![SCENARIO]: String(32)  @title: 'SCENARIO' ; 
 key     ![MODEL_VERSION]: String(20)  @title: 'MODEL_VERSION' ; 
 }
-/*
-@cds.persistence.exists
-@cds.persistence.calcview
-entity![V_TIMESERIES]{
-    key![DATE]             : Date      @title : 'Date';
-    key![OBJECTDEPENDENCY] : String(15)@title : 'obj. Dependency';
-    key![SUCESS]           : String(10)@title : 'Obj. Dependency Count';
-    key![ATTRIBUTE1]       : String(10)@title : 'Attribute1';
-    key![ATTRIBUTE2]       : String(10)@title : 'Attribute2';
-    key![ATTRIBUTE3]       : String(10)@title : 'Attribute3';
-    key![ATTRIBUTE4]       : String(10)@title : 'Attribute4';
-    key![ATTRIBUTE5]       : String(10)@title : 'Attribute5';
-    key![ATTRIBUTE6]       : String(10)@title : 'Attribute6';
-    key![ATTRIBUTE7]       : String(10)@title : 'Attribute7';
-    key![ATTRIBUTE8]       : String(10)@title : 'Attribute8';
-    key![ATTRIBUTE9]       : String(10)@title : 'Attribute9';
-    key![ATTRIBUTE10]      : String(10)@title : 'Attribute10';
-    key![ATTRIBUTE11]      : String(10)@title : 'Attribute11';
-    key![ATTRIBUTE12]      : String(10)@title : 'Attribute12';
-    key![RANK]             : Double    @title : 'Rank';
-};
-
-@cds.persistence.exists
-@cds.persistence.calcview
-entity![V_PRODUCT]{
-    key![PRODUCT_ID]     : String(40)@title : 'ProductId';
-    key![PROD_DESC]      : String(40)@title : 'Product Desc';
-    key![PROD_FAMILY]    : String(40)@title : 'Product Family';
-    key![PROD_GROUP]     : String(20)@title : 'Product Group';
-    key![PROD_MODEL]     : String(20)@title : 'Product Model';
-    key![PROD_MDLRANGE]  : String(20)@title : 'Product Model Range';
-    key![PROD_SERIES]    : String(20)@title : 'Product Series';
-    key![RESERVE_FIELD1] : String(20)@title : 'Reserve Field1';
-    key![RESERVE_FIELD2] : String(20)@title : 'Reserve Field2';
-    key![RESERVE_FIELD3] : String(20)@title : 'Reserve Field3';
-    key![RESERVE_FIELD4] : String(20)@title : 'Reserve Field4';
-    key![RESERVE_FIELD5] : String(20)@title : 'Reserve Field5';
-    key![CHANGED_BY]     : String(12)@title : 'Changed By';
-    key![CHANGED_TIME]   : Time      @title : 'Changed Time';
-    key![CREATED_BY]     : String(12)@title : 'Created By';
-    key![CREATED_TIME]   : Time      @title : 'CreatedTime';
-    key![CHANGED_DATE]   : Date      @title : 'Changed Date';
-    key![CREATED_DATE]   : Date      @title : 'Created Date';
-    key![RANK]           : Double    @title : 'Rank';
-};
-
-@cds.persistence.exists
-@cds.persistence.calcview
-entity![V_LOCATION]{
-    key![LOCATION_ID]    : String(4) @title : 'Location ID';
-    key![LOCATION_DESC]  : String(30)@title : 'Location Desc';
-    key![LOCATION_TYPE]  : String(1) @title : 'Location Type';
-    key![RESERVE_FIELD1] : String(20)@title : 'Reserve Field1';
-    key![RESERVE_FIELD2] : String(20)@title : 'Reserve Field2';
-    key![RESERVE_FIELD3] : String(20)@title : 'Reserve Field3';
-    key![RESERVE_FIELD4] : String(20)@title : 'Reserve Field4';
-    key![RESERVE_FIELD5] : String(20)@title : 'Reserve Field5';
-    key![CHANGED_DATE]   : Date      @title : 'Changed Date';
-    key![CHANGED_BY]     : String(12)@title : 'Changed By';
-    key![CREATED_DATE]   : Date      @title : 'Created Date';
-    key![CREATED_BY]     : String(12)@title : 'Created By';
-    key![CHANGED_TIME]   : Time      @title : 'Changed Time';
-    key![CREATED_TIME]   : Time      @title : 'Created Time';
-    key![RANK]           : Double    @title : 'Rank';
-};
-
-@cds.persistence.exists
-@cds.persistence.calcview
-entity![V_CUSTOMERGROUP]{
-    key![CUSTOMER_GRP]   : String(2) @title : 'CUSTOMER_GRP: CUSTOMER_GRP';
-    key![CUSTOMER_DESC]  : String(20)@title : 'CUSTOMER_DESC: CUSTOMER_DESC';
-    key![RESERVE_FIELD1] : String(20)@title : 'RESERVE_FIELD1: RESERVE_FIELD1';
-    key![RESERVE_FIELD2] : String(20)@title : 'RESERVE_FIELD2: RESERVE_FIELD2';
-    key![RESERVE_FIELD3] : String(20)@title : 'RESERVE_FIELD3: RESERVE_FIELD3';
-    key![RESERVE_FIELD4] : String(20)@title : 'RESERVE_FIELD4: RESERVE_FIELD4';
-    key![RESERVE_FIELD5] : String(20)@title : 'RESERVE_FIELD5: RESERVE_FIELD5';
-    key![CHANGED_DATE]   : Date      @title : 'CHANGED_DATE: CHANGED_DATE';
-    key![CHANGED_BY]     : String(12)@title : 'CHANGED_BY: CHANGED_BY';
-    key![CREATED_DATE]   : Date      @title : 'CREATED_DATE: CREATED_DATE';
-    key![CREATED_BY]     : String(12)@title : 'CREATED_BY: CREATED_BY';
-    key![CHANGED_TIME]   : Time      @title : 'CHANGED_TIME: CHANGED_TIME';
-    key![CREATED_TIME]   : Time      @title : 'CREATED_TIME: CREATED_TIME';
-    key![RANK]           : Double    @title : 'RANK: RANK';
-};
-
-@cds.persistence.exists
-@cds.persistence.calcview
-entity![V_PRODCONFIG]{
-    key![PRODUCT_ID]     : String(40)@title : 'Product ID';
-    key![LOCATION_ID]    : String(4) @title : 'Location ID';
-    key![CLASS]          : String(18)@title : 'Class';
-    key![CHAR_NAME]      : String(30)@title : 'Charateristic Name';
-    key![CHAR_VALUE]     : String(70)@title : 'Charateristic Value';
-    key![CHARVAL_DESC]   : String(70)@title : 'Char. Value Description';
-    key![CHAR_ATTR]      : String(30)@title : 'Char. Attributes';
-    key![CHAR_DESC]      : String(50)@title : 'Char. Description';
-    key![CUSTOMER_GRP]   : String(2) @title : 'Customer Group';
-    key![RESERVE_FIELD1] : String(20)@title : 'Reserve Field1';
-    key![RESERVE_FIELD2] : String(20)@title : 'Reserve Field2';
-    key![RESERVE_FIELD3] : String(20)@title : 'Reserve Field3';
-    key![RESERVE_FIELD4] : String(20)@title : 'Reserve Field4';
-    key![RESERVE_FIELD5] : String(20)@title : 'Reserve Field5';
-    key![CHANGED_DATE]   : Date      @title : 'Changed Date';
-    key![CHANGED_BY]     : String(12)@title : 'Changed By';
-    key![CREATED_DATE]   : Date      @title : 'Created Date';
-    key![CREATED_BY]     : String(12)@title : 'Created By';
-    key![CHANGED_TIME]   : Time      @title : 'Changed By';
-    key![CREATED_TIME]   : Time      @title : 'Created Time';
-    key![RANK]           : Double    @title : 'Rank';
-};
-
-@cds.persistence.exists
-@cds.persistence.calcview
-entity![V_SALESH]{
-    key![SALES_DOC]        : String(10)    @title : 'Sales Document';
-    key![SALESDOC_ITEM]    : String(6)     @title : 'Sales Document Item';
-    key![DOC_CREATEDDATE]  : Date          @title : 'Doc.created date';
-    key![SCHEDULELINE_NUM] : String(4)     @title : 'Scheduleline No.';
-    key![PRODUCT_ID]       : String(40)    @title : 'Product ID';
-    key![REASON_REJ]       : String(2)     @title : 'Reason for Rejection';
-    key![UOM]              : String(3)     @title : 'UOM';
-    key![MAT_AVAILDATE]    : Date          @title : 'Mat. Availability Date';
-    key![CUSTOMER_GRP]     : String(2)     @title : 'Cusotmer Group';
-    key![LOCATION_ID]      : String(4)     @title : 'Location ID';
-    key![CHANGED_DATE]     : Date          @title : 'Changed Date';
-    key![CHANGED_BY]       : String(12)    @title : 'Changed By';
-    key![CREATED_DATE]     : Date          @title : 'Created Date';
-    key![CREATED_BY]       : String(12)    @title : 'Created By';
-    key![CONFIRMED_QTY]    : Decimal(13, 3)@title : 'Confirmed Quantity';
-    key![ORD_QTY]          : Decimal(13, 3)@title : 'Order Quantity';
-    key![NET_VALUE]        : Decimal(15, 2)@title : 'Net Value';
-    key![CHANGED_TIME]     : Time          @title : 'Changed By';
-    key![CREATED_TIME]     : Time          @title : 'Created Time';
-};
-
-@cds.persistence.exists
-@cds.persistence.calcview
-entity![V_LOCPROD]{
-    key![LOCATION_ID]       : String(4) @title : 'Location';
-    key![PRODUCT_ID]        : String(40)@title : 'Product';
-    key![LOT_SIZE]          : String(2) @title : 'Lot Size';
-    key![PROCURMENT_TYPE]   : String(1) @title : 'Procurement Type';
-    key![PLANNING_STRATEGY] : String(2) @title : 'Planning Strategy';
-    key![RANK]              : Double    @title : 'Rank';
-};
-
-@cds.persistence.exists
-@cds.persistence.calcview
-entity![V_SALESH_CONFIG]{
-    key![SALES_DOC]      : String(10)@title : 'Sales Document';
-    key![SALESDOC_ITEM]  : String(6) @title : 'Sales Document Item';
-    key![CHAR_NAME]      : String(30)@title : 'Characteristic Name';
-    key![CHAR_VALUE]     : String(70)@title : 'Characteristic Value';
-    key![PRODUCT_ID]     : String(40)@title : 'Product ID';
-    key![PROD_AVAILDATE] : Date      @title : 'Product Availability Date';
-    key![CHANGED_DATE]   : Date      @title : 'Changed Date';
-    key![CHANGED_BY]     : String(12)@title : 'Changed By';
-    key![CREATED_DATE]   : Date      @title : 'Created Date';
-    key![CREATED_BY]     : String(12)@title : 'Created By';
-    key![CHANGED_TIME]   : Time      @title : 'Changed By';
-    key![CREATED_TIME]   : Time      @title : 'Created Time';
-    key![RANK]           : Double    @title : 'Rank';
-};
-
-@cds.persistence.exists
-@cds.persistence.calcview
-entity![V_BOMHEADER]{
-    key![LOCATION_ID]  : String(4)     @title : 'Location ID';
-    key![PRODUCT_ID]   : String(40)    @title : 'Product ID';
-    key![ITEM_NUM]     : String(6)     @title : 'Item No.';
-    key![COMPONENT]    : String(40)    @title : 'Component';
-    key![VALID_FROM]   : Date          @title : 'Valid From';
-    key![VALID_TO]     : Date          @title : 'Valid To';
-    key![CHANGED_DATE] : Date          @title : 'Changed Date';
-    key![CHANGED_BY]   : String(12)    @title : 'Changed By';
-    key![CREATED_DATE] : Date          @title : 'Created Date';
-    key![CREATED_BY]   : String(12)    @title : 'Created By';
-    key![COMP_QTY]     : Decimal(13, 3)@title : 'Component Quantity';
-    key![CHANGED_TIME] : Time          @title : 'Changed By';
-    key![CREATED_TIME] : Time          @title : 'Created Time';
-};
-
-
-@cds.persistence.exists
-@cds.persistence.calcview
-entity![V_BOMOD]{
-    key![LOCATION_ID] : String(4)     @title : 'Location ID';
-    key![PRODUCT_ID]  : String(40)    @title : 'Product ID';
-    key![ITEM_NUM]    : String(6)     @title : 'Item No.';
-    key![COMPONENT]   : String(40)    @title : 'Component';
-    key![OBJ_DEP]     : String(30)    @title : 'Object Dependency';
-    key![OBJDEP_DESC] : String(30)    @title : 'Obj. Dependency description';
-    key![VALID_FROM]  : Date          @title : 'Valid From';
-    key![VALID_TO]    : Date          @title : 'Valid To';
-    key![COMP_QTY]    : Decimal(13, 3)@title : 'Component Quantity';
-};
-
-
-@cds.persistence.exists
-@cds.persistence.calcview
-entity![V_PIRCH]{
-    key![PRODUCT_ID]   : String(40)@title : 'Product ID';
-    key![PLANT]        : String(4) @title : 'Plant';
-    key![REQ_DATE]     : Date      @title : 'Reqest Date';
-    key![PT_NUMBER]    : String(10)@title : 'PT Number';
-    key![PT_LINE]      : String(5) @title : 'PT Line';
-    key![SESSION_ID]   : String(32)@title : 'Session ID';
-    key![CHAR_NAME]    : String(30)@title : 'Characteristic Name';
-    key![CHAR_VALUE]   : String(70)@title : 'Characteristic Value';
-    key![FLAG_USAGE]   : String(1) @title : 'Flag Usage';
-    key![PROCESS_FLAG] : String(1) @title : 'Process Flag';
-    key![CHANGED_BY]   : Date      @title : 'Changed By';
-    key![CHANGED_TIME] : String(12)@title : 'Changed Time';
-    key![CREATED_BY]   : Date      @title : 'Created By';
-    key![CREATED_TIME] : String(12)@title : 'Created Time';
-    key![CHANGE_QTY]   : Double    @title : 'Change Qunatity';
-    key![CHANGED_DATE] : Time      @title : 'Changed Date';
-    key![CREATED_DATE] : Time      @title : 'Created Date';
-};
-
-@cds.persistence.exists
-@cds.persistence.calcview
-entity![V_PRODATTR]{
-    key![LOCATION_ID]   : String(4) @title : 'Location ID';
-    key![PRODUCT_ID]    : String(40)@title : 'Product ID';
-    key![PROD_FAMILY]   : String(30)@title : 'Product Family';
-    key![PROD_GROUP]    : String(30)@title : 'Product Group';
-    key![PROD_MODEL]    : String(30)@title : 'Product Model';
-    key![PROD_MDLRANGE] : String(30)@title : 'Product Model Range';
-    key![PROD_SERIES]   : String(30)@title : 'Product Series';
-    key![RANK]          : Double    @title : 'Rank';
-};
-
-
-@cds.persistence.exists
-@cds.persistence.calcview
-entity![V_ODHDR]{
-    key![CAL_DATE]    : Date      @title : 'Date';
-    key![LOCATION_ID] : String(4) @title : 'Location ID';
-    key![PRODUCT_ID]  : String(40)@title : 'Product ID';
-    key![OBJ_TYPE]    : String(2) @title : 'Object Type';
-    key![OBJ_DEP]     : String(15)@title : 'Object Dependency';
-    key![SUCCESS]     : Integer   @title : 'Success Count';
-};
-
-
-@cds.persistence.exists
-@cds.persistence.calcview
-entity![V_ODCHARHDR]{
-    key![CAL_DATE]    : Date      @title : 'Date';
-    key![LOCATION_ID] : String(4) @title : 'Location ID';
-    key![PRODUCT_ID]  : String(40)@title : 'Product ID';
-    key![OBJ_TYPE]    : String(2) @title : 'Object Type';
-    key![OBJ_DEP]     : String(15)@title : 'Object Dependency';
-    key![ROW_ID]      : Integer   @title : 'Attribute Index';
-    key![SUCCESS]     : Integer   @title : 'Success Count';
-}
-*/

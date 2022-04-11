@@ -16,28 +16,34 @@ annotate service.PRODUCT with @(
         ],
         LineItem                       : [
             {
-                $Type : 'UI.DataField', //Label : 'Product ID',
-                Value : PRODUCT_ID
+                $Type : 'UI.DataField', 
+                Value : PRODUCT_ID,
+                ![@UI.Importance]   : #High
             },
             {
-                $Type : 'UI.DataField', //Label : 'Description',
-                Value : PROD_DESC
-            },
-            {
-                $Type : 'UI.DataField', //Label : 'Product Family',
-                Value : PROD_FAMILY
-            },
-            {
-                $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : PROD_SERIES
+                $Type : 'UI.DataField', 
+                Value : PROD_DESC,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField',
-                Value : PROD_MODEL
+                Value : PROD_FAMILY,
+                ![@UI.Importance]   : #High
+            },
+            {
+                $Type : 'UI.DataField', 
+                Value : PROD_SERIES,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField',
-                Value : PROD_MDLRANGE
+                Value : PROD_MODEL,
+                ![@UI.Importance]   : #High
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : PROD_MDLRANGE,
+                ![@UI.Importance]   : #High
             }
         ],
         HeaderInfo                     : {
@@ -179,74 +185,8 @@ annotate service.LOCATION with @(
             ![@UI.Importance] : #High
             }
         ]
-        // ,
-        // HeaderInfo              : {
-        //     Title          : {Value : LOCATION_ID},
-        //     Description    : {Value : LOCATION_DESC},
-        //     TypeName       : 'Location',
-        //     TypeNamePlural : 'Location',
-        // },
-        // HeaderFacets            : [{
-        //     $Type             : 'UI.ReferenceFacet',
-        //     Target            : '@UI.FieldGroup#Description',
-        //     ![@UI.Importance] : #Medium
-        // }],
-        // FieldGroup #Description : {Data : [{
-        //     $Type : 'UI.DataField',
-        //     Value : LOCATION_DESC
-        // }]},
-        // FieldGroup #Details     : {Data : [
-        //     {
-        //         $Type : 'UI.DataField',
-        //         Value : LOCATION_DESC
-        //     },
-        //     {
-        //         $Type : 'UI.DataField',
-        //         Value : LOCATION_TYPE
-        //     },
-        //     {
-        //         $Type : 'UI.DataField',
-        //         Value : LATITUDE
-        //     },
-        //     {
-        //         $Type : 'UI.DataField',
-        //         Value : LONGITUTE
-        //     },
-        //     {
-        //         $Type : 'UI.DataField',
-        //         Value : RESERVE_FIELD1
-        //     },
-        //     {
-        //         $Type : 'UI.DataField',
-        //         Value : RESERVE_FIELD2
-        //     },
-        //     {
-        //         $Type : 'UI.DataField',
-        //         Value : RESERVE_FIELD3
-        //     },
-        //     {
-        //         $Type : 'UI.DataField',
-        //         Value : RESERVE_FIELD4
-        //     },
-        //     {
-        //         $Type : 'UI.DataField',
-        //         Value : RESERVE_FIELD5
-        //     }
-        // ]}
+        
     }
-   // ,
-
-    // // Page Facets
-    // UI.Facets : [{
-    //     $Type  : 'UI.CollectionFacet',
-    //     ID     : 'LocDetails',
-    //     Label  : 'Location Details',
-    //     Facets : [{
-    //         $Type  : 'UI.ReferenceFacet',
-    //         Label  : 'Location Details',
-    //         Target : '@UI.FieldGroup#Details'
-    //     }]
-    // }]
 );
 
 
@@ -257,11 +197,13 @@ annotate service.CUSTOMERGROUP with @(
         LineItem                : [
             {
                 Label : 'Customer Group',
-                Value : CUSTOMER_GROUP
+                Value : CUSTOMER_GROUP,
+                ![@UI.Importance]   : #High
             },
             {
                 Label : 'Description',
-                Value : CUSTOMER_DESC
+                Value : CUSTOMER_DESC,
+                ![@UI.Importance]   : #High
             }
         ],
         HeaderInfo              : {
@@ -334,28 +276,34 @@ annotate service.PROD_ATTRIBUTES with @(
         ],
         LineItem            : [
             {
-                $Type : 'UI.DataField', //Label : 'Product ID',
-                Value : PRODUCT_ID
+                $Type : 'UI.DataField', 
+                Value : PRODUCT_ID,
+                ![@UI.Importance]   : #High
             },
             {
-                $Type : 'UI.DataField', //Label : 'Description',
-                Value : PROD_GROUP
+                $Type : 'UI.DataField', 
+                Value : PROD_GROUP,
+                ![@UI.Importance]   : #High
             },
             {
-                $Type : 'UI.DataField', //Label : 'Product Family',
-                Value : PROD_FAMILY
+                $Type : 'UI.DataField',
+                Value : PROD_FAMILY,
+                ![@UI.Importance]   : #High
             },
             {
-                $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : PROD_SERIES
+                $Type : 'UI.DataField',
+                Value : PROD_SERIES,
+                ![@UI.Importance]   : #High
             },
             {
-                $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : PROD_MODEL
+                $Type : 'UI.DataField', 
+                Value : PROD_MODEL,
+                ![@UI.Importance]   : #High
             },
             {
-                $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : PROD_MDLRANGE
+                $Type : 'UI.DataField', 
+                Value : PROD_MDLRANGE,
+                ![@UI.Importance]   : #High
             }
         ],
         HeaderInfo          : {
@@ -403,201 +351,7 @@ annotate service.PROD_ATTRIBUTES with @(
 // Product Configuration
 
 
-// Product Configuration
-annotate service.SALESH with @(
-    UI        : {
-        SelectionFields         : [
-            SALES_DOC,
-            DOC_CREATEDDATE,
-            PRODUCT_ID
-        ],
-        LineItem                : [
-            {
-                $Type : 'UI.DataField', //Label : 'Product ID',
-                Value : SALES_DOC
-            },
-            {
-                $Type : 'UI.DataField', //Label : 'Description',
-                Value : SALESDOC_ITEM
-            },
-            {
-                $Type : 'UI.DataField', //Label : 'Product Family',
-                Value : DOC_CREATEDDATE
-            },
-            {
-                $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : SCHEDULELINE_NUM
-            },
-            {
-                $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : PRODUCT_ID
-            },
-            {
-                $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : CUSTOMER_GROUP
-            },
-            {
-                $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : LOCATION_ID
-            },
-            {
-                $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : ORD_QTY
-            },
-            {
-                $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : NET_VALUE
-            }
 
-        ],
-        HeaderInfo              : {
-            Title          : {Value : SALES_DOC},
-            Description    : {Value : SALESDOC_ITEM},
-            TypeName       : 'Product',
-            TypeNamePlural : 'Products',
-        },
-        HeaderFacets            : [{
-            $Type             : 'UI.ReferenceFacet',
-            Target            : '@UI.FieldGroup#Description',
-            ![@UI.Importance] : #Medium
-        }],
-        FieldGroup #Description : {Data : [
-            {
-                $Type : 'UI.DataField',
-                Value : DOC_CREATEDDATE
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : SCHEDULELINE_NUM
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : CONFIRMED_QTY
-            }
-        ]},
-        FieldGroup #Details     : {Data : [
-            {
-                $Type : 'UI.DataField',
-                Value : PRODUCT_ID
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : REASON_REJ
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : UOM
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : MAT_AVAILDATE
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : CUSTOMER_GROUP
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : LOCATION_ID
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : ORD_QTY
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : NET_VALUE
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : DOC_CREATEDDATE
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : SCHEDULELINE_NUM
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : CONFIRMED_QTY
-            }
-        ]}
-    },
-    // Page Facets
-    UI.Facets : [{
-        $Type  : 'UI.CollectionFacet',
-        ID     : 'saleshis',
-        Label  : 'Sales History',
-        Facets : [{
-            $Type  : 'UI.ReferenceFacet',
-            Label  : 'Sales History',
-            Target : '@UI.FieldGroup#Details'
-        }]
-    }]
-);
-
-// SALES History configuration
-annotate service.SALESH_CONFIG with @(
-    UI        : {
-        SelectionFields     : [
-            SALES_DOC,
-            PRODUCT_ID
-        ],
-        LineItem            : [
-            {
-                $Type : 'UI.DataField', //Label : 'Product ID',
-                Value : SALES_DOC
-            },
-            {
-                $Type : 'UI.DataField', //Label : 'Description',
-                Value : SALESDOC_ITEM
-            },
-            {
-                $Type : 'UI.DataField', //Label : 'Product Family',
-                Value : PRODUCT_ID
-            },
-            {
-                $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : CHAR_NUM
-            },
-            {
-                $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : CHARVAL_NUM
-            }
-
-        ],
-        HeaderInfo          : {
-            Title          : {Value : SALES_DOC},
-            Description    : {Value : SALESDOC_ITEM},
-            TypeName       : 'Sales Doc',
-            TypeNamePlural : 'Sales Documents',
-        },
-        FieldGroup #Details : {Data : [
-            {
-                $Type : 'UI.DataField',
-                Value : PRODUCT_ID
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : CHAR_NUM
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : CHARVAL_NUM
-            }
-        ]}
-    },
-    // Page Facets
-    UI.Facets : [{
-        $Type  : 'UI.CollectionFacet',
-        ID     : 'salescfg',
-        Label  : 'Sales History Configuration',
-        Facets : [{
-            $Type  : 'UI.ReferenceFacet',
-            Label  : 'Sales History Configuration',
-            Target : '@UI.FieldGroup#Details'
-        }]
-    }]
-); 
 // Sales configuration summary
 annotate service.SALESH_CFG_SMRY with @(
     UI        : {
@@ -607,32 +361,39 @@ annotate service.SALESH_CFG_SMRY with @(
         ],
         LineItem                : [
             {
-                $Type : 'UI.DataField', //Label : 'Product ID',
-                Value : WEEK_DATE
+                $Type : 'UI.DataField', 
+                Value : WEEK_DATE,
+                ![@UI.Importance]   : #High
             },
             {
-                $Type : 'UI.DataField', //Label : 'Description',
-                Value : CHAR_NUM
+                $Type : 'UI.DataField',
+                Value : CHAR_NUM,
+                ![@UI.Importance]   : #High
             },
             {
-                $Type : 'UI.DataField', //Label : 'Product Family',
-                Value : CHARVAL_NUM
+                $Type : 'UI.DataField', 
+                Value : CHARVAL_NUM,
+                ![@UI.Importance]   : #High
             },
             {
-                $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : CLASS_NUM
+                $Type : 'UI.DataField', 
+                Value : CLASS_NUM,
+                ![@UI.Importance]   : #High
             },
             {
-                $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : PRODUCT_ID
+                $Type : 'UI.DataField', 
+                Value : PRODUCT_ID,
+                ![@UI.Importance]   : #High
             },
             {
-                $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : CUSTOMER_GROUP
+                $Type : 'UI.DataField',
+                Value : CUSTOMER_GROUP,
+                ![@UI.Importance]   : #High
             },
             {
-                $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : LOCATION_ID
+                $Type : 'UI.DataField', 
+                Value : LOCATION_ID,
+                ![@UI.Importance]   : #High
             }
 
         ],
@@ -706,23 +467,23 @@ annotate service.PIR_CH with @(
         ],
         LineItem                : [
             {
-                $Type : 'UI.DataField', //Label : 'Product ID',
+                $Type : 'UI.DataField', 
                 Value : PRODUCT_ID
             },
             {
-                $Type : 'UI.DataField', //Label : 'Description',
+                $Type : 'UI.DataField', 
                 Value : PLANT
             },
             {
-                $Type : 'UI.DataField', //Label : 'Product Family',
+                $Type : 'UI.DataField', 
                 Value : CHAR_NAME
             },
             {
-                $Type : 'UI.DataField', //Label : 'Product Family',
+                $Type : 'UI.DataField', 
                 Value : CHAR_VALUE
             },
             {
-                $Type : 'UI.DataField', //Label : 'Product Series',
+                $Type : 'UI.DataField',
                 Value : CH_QTY
             }
 
@@ -799,168 +560,6 @@ annotate service.PIR_CH with @(
     }]
 );
 
-//BOM Object Dependency
-annotate service.BOM_OBJDEPENDENCY with @(
-    UI        : {
-        SelectionFields     : [
-            PRODUCT_ID,
-            LOCATION_ID
-        ],
-        LineItem            : [
-            {
-                $Type : 'UI.DataField', //Label : 'Product Family',
-                Value : PRODUCT_ID
-            },
-            {
-                $Type : 'UI.DataField', //Label : 'Product ID',
-                Value : LOCATION_ID
-            },
-            {
-                $Type : 'UI.DataField', //Label : 'Description',
-                Value : ITEM_NUM
-            },
-            {
-                $Type : 'UI.DataField', //Label : 'Product ID',
-                Value : COMPONENT
-            },
-            {
-                $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : VALID_FROM
-            },
-            {
-                $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : VALID_TO
-            }
-        ],
-        HeaderInfo          : {
-            Title          : {Value : PRODUCT_ID},
-            Description    : {Value : LOCATION_ID},
-            TypeName       : 'Product',
-            TypeNamePlural : 'Products',
-        },
-        FieldGroup #Details : {Data : [
-            {
-                $Type : 'UI.DataField',
-                Value : ITEM_NUM
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : OBJ_DEP
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : COMPONENT
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : OBJDEP_DESC
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : COMP_QTY
-            },
-            {
-                $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : VALID_FROM
-            },
-            {
-                $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : VALID_TO
-            }
-        ]}
-    },
-    // Page Facets
-    UI.Facets : [{
-        $Type  : 'UI.CollectionFacet',
-        ID     : 'bomod',
-        Label  : 'BOM Object Dependency',
-        Facets : [{
-            $Type  : 'UI.ReferenceFacet',
-            Label  : 'BOM Object Dependency',
-            Target : '@UI.FieldGroup#Details'
-        }]
-    }]
-);
-
-//BOM Header
-annotate service.BOMHEADER with @(
-    UI        : {
-        SelectionFields     : [
-            LOCATION_ID,
-            PRODUCT_ID
-        ],
-        LineItem            : [
-            {
-                $Type : 'UI.DataField', //Label : 'Product Family',
-                Value : LOCATION_ID
-            },
-            {
-                $Type : 'UI.DataField', //Label : 'Product ID',
-                Value : PRODUCT_ID
-            },
-            {
-                $Type : 'UI.DataField', //Label : 'Description',
-                Value : ITEM_NUM
-            },
-            {
-                $Type : 'UI.DataField', //Label : 'Product ID',
-                Value : COMPONENT
-            },
-            {
-                $Type : 'UI.DataField', //Label : 'Description',
-                Value : COMP_QTY
-            },
-            {
-                $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : VALID_FROM
-            },
-            {
-                $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : VALID_TO
-            }
-        ],
-        HeaderInfo          : {
-            Title          : {Value : PRODUCT_ID},
-            Description    : {Value : LOCATION_ID},
-            TypeName       : 'Product BOM',
-            TypeNamePlural : 'Products BOM',
-        },
-        FieldGroup #Details : {Data : [
-            {
-                $Type : 'UI.DataField',
-                Value : ITEM_NUM
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : COMPONENT
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : COMP_QTY
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : VALID_FROM
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : VALID_TO
-            }
-        ]}
-    },
-    // Page Facets
-    UI.Facets : [{
-        $Type  : 'UI.CollectionFacet',
-        ID     : 'prdbom',
-        Label  : 'Product BOM',
-        Facets : [{
-            $Type  : 'UI.ReferenceFacet',
-            Label  : 'Product BOM',
-            Target : '@UI.FieldGroup#Details'
-        }]
-    }]
-);
-
 //TS_OBJHEADER
 annotate service.TS_OBJDEPHDR with @(
     UI        : {
@@ -972,31 +571,38 @@ annotate service.TS_OBJDEPHDR with @(
         LineItem            : [
             {
                 $Type : 'UI.DataField', //Label : 'Product Family',
-                Value : CAL_DATE
+                Value : CAL_DATE,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Family',
-                Value : LOCATION_ID
+                Value : LOCATION_ID,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product ID',
-                Value : PRODUCT_ID
+                Value : PRODUCT_ID,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField', //Label : 'Description',
-                Value : OBJ_TYPE
+                Value : OBJ_TYPE,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product ID',
-                Value : OBJ_DEP
+                Value : OBJ_DEP,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField', //Label : 'Description',
-                Value : OBJ_COUNTER
+                Value : OBJ_COUNTER,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : SUCCESS
+                Value : SUCCESS,
+                ![@UI.Importance]   : #High
             }
         ],
         HeaderInfo          : {
@@ -1059,36 +665,44 @@ annotate service.TS_OBJDEP_CHARHDR with @(
         ],
         LineItem            : [
             {
-                $Type : 'UI.DataField', //Label : 'Product Family',
-                Value : CAL_DATE
+                $Type : 'UI.DataField', 
+                Value : CAL_DATE,
+                ![@UI.Importance]   : #High
             },
             {
-                $Type : 'UI.DataField', //Label : 'Product Family',
-                Value : LOCATION_ID
+                $Type : 'UI.DataField',
+                Value : LOCATION_ID,
+                ![@UI.Importance]   : #High
             },
             {
-                $Type : 'UI.DataField', //Label : 'Product ID',
-                Value : PRODUCT_ID
+                $Type : 'UI.DataField', 
+                Value : PRODUCT_ID,
+                ![@UI.Importance]   : #High
             },
             {
-                $Type : 'UI.DataField', //Label : 'Description',
-                Value : OBJ_TYPE
+                $Type : 'UI.DataField', 
+                Value : OBJ_TYPE,
+                ![@UI.Importance]   : #High
             },
             {
-                $Type : 'UI.DataField', //Label : 'Product ID',
-                Value : OBJ_DEP
+                $Type : 'UI.DataField', 
+                Value : OBJ_DEP,
+                ![@UI.Importance]   : #High
             },
             {
-                $Type : 'UI.DataField', //Label : 'Description',
-                Value : OBJ_COUNTER
+                $Type : 'UI.DataField', 
+                Value : OBJ_COUNTER,
+                ![@UI.Importance]   : #High
             },
             {
-                $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : ROW_ID
+                $Type : 'UI.DataField', 
+                Value : ROW_ID,
+                ![@UI.Importance]   : #High
             },
             {
-                $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : SUCCESS
+                $Type : 'UI.DataField', 
+                Value : SUCCESS,
+                ![@UI.Importance]   : #High
             }
         ],
         HeaderInfo          : {
@@ -1154,36 +768,39 @@ annotate V_CLASSCHAR with @(
         ],
         LineItem            : [
             {
-                $Type : 'UI.DataField', //Label : 'Product Family',
-                Value : CLASS_NAME
+                $Type : 'UI.DataField', 
+                Value : CLASS_NAME,
+                ![@UI.Importance]   : #High
             },
             {
-                $Type : 'UI.DataField', //Label : 'Product Family',
-                Value : CLASS_TYPE
-            },
-            {
-                $Type : 'UI.DataField', //Label : 'Product ID',
-                Value : CLASS_DESC
-            },
-            {
-                $Type : 'UI.DataField', //Label : 'Description',
-                Value : CHAR_NAME
+                $Type : 'UI.DataField', 
+                Value : CLASS_TYPE,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product ID',
-                Value : CHAR_GROUP
+                Value : CLASS_DESC,
+                ![@UI.Importance]   : #High
             },
             {
-                $Type : 'UI.DataField', //Label : 'Description',
-                Value : CHAR_CATGRY
+                $Type : 'UI.DataField', 
+                Value : CHAR_NAME,
+                ![@UI.Importance]   : #High
             },
-           /* {
-                $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : ENTRY_REQ
-            },*/
             {
-                $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : AUTHGROUP
+                $Type : 'UI.DataField', 
+                Value : CHAR_GROUP,
+                ![@UI.Importance]   : #High
+            },
+            {
+                $Type : 'UI.DataField', 
+                Value : CHAR_CATGRY,
+                ![@UI.Importance]   : #High
+            },
+            {
+                $Type : 'UI.DataField', 
+                Value : AUTHGROUP,
+                ![@UI.Importance]   : #High
             }
         ],
         HeaderInfo          : {
@@ -1255,28 +872,34 @@ annotate service.IBP_FUTUREDEMAND with @(
         LineItem                       : [
             
             {
-                $Type : 'UI.DataField', //Label : 'Description',
-                Value : LOCATION_ID
+                $Type : 'UI.DataField', 
+                Value : LOCATION_ID,
+                ![@UI.Importance]   : #High
             },
             {
-                $Type : 'UI.DataField', //Label : 'Product ID',
-                Value : PRODUCT_ID
+                $Type : 'UI.DataField', 
+                Value : PRODUCT_ID,
+                ![@UI.Importance]   : #High
             },
             {
-                $Type : 'UI.DataField', //Label : 'Product Family',
-                Value : VERSION
-            },
-            {
-                $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : SCENARIO
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : WEEK_DATE
+                $Type : 'UI.DataField', 
+                Value : VERSION,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField',
-                Value : QUANTITY
+                Value : SCENARIO,
+                ![@UI.Importance]   : #High
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : WEEK_DATE,
+                ![@UI.Importance]   : #High
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : QUANTITY,
+                ![@UI.Importance]   : #High
             }
         ]
     }
@@ -1293,44 +916,54 @@ annotate service.IBP_FCHARPLAN with @(
         LineItem                       : [
             
             {
-                $Type : 'UI.DataField', //Label : 'Description',
-                Value : LOCATION_ID
+                $Type : 'UI.DataField',
+                Value : LOCATION_ID,
+                ![@UI.Importance]   : #High
             },
             {
-                $Type : 'UI.DataField', //Label : 'Product ID',
-                Value : PRODUCT_ID
+                $Type : 'UI.DataField', 
+                Value : PRODUCT_ID,
+                ![@UI.Importance]   : #High
             },
             {
-                $Type : 'UI.DataField', //Label : 'Product Family',
-                Value : CLASS_NUM
+                $Type : 'UI.DataField', 
+                Value : CLASS_NUM,
+                ![@UI.Importance]   : #High
             },
             {
-                $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : CHAR_NUM
+                $Type : 'UI.DataField', 
+                Value : CHAR_NUM,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField',
-                Value : CHARVAL_NUM
-            },
-            {
-                $Type : 'UI.DataField', //Label : 'Product Family',
-                Value : VERSION
-            },
-            {
-                $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : SCENARIO
+                Value : CHARVAL_NUM,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField',
-                Value : WEEK_DATE
+                Value : VERSION,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField',
-                Value : OPT_PERCENT
+                Value : SCENARIO,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField',
-                Value :OPT_QTY
+                Value : WEEK_DATE,
+                ![@UI.Importance]   : #High
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : OPT_PERCENT,
+                ![@UI.Importance]   : #High
+            },
+            {
+                $Type : 'UI.DataField',
+                Value :OPT_QTY,
+                ![@UI.Importance]   : #High
             }
         ]
     }
@@ -1390,33 +1023,33 @@ annotate service.LOCATION_PRODUCT with @(
         LineItem                : [
             {
                 $Type : 'UI.DataField',
-                //Label : 'Location ID',
-                Value : LOCATION_ID
+                Value : LOCATION_ID,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField',
-                //Label : 'Description',
-                Value : PRODUCT_ID
+                Value : PRODUCT_ID,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField',
-                //Label : 'Location Type',
-                Value : LOTSIZE_KEY
+                Value : LOTSIZE_KEY,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField',
-                //Label : 'Location Type',
-                Value : LOT_SIZE
+                Value : LOT_SIZE,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField',
-                //Label : 'Location Type',
-                Value : PROCUREMENT_TYPE
+                Value : PROCUREMENT_TYPE,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField',
-                //Label : 'Location Type',
-                Value : PLANNING_STRATEGY
+                Value : PLANNING_STRATEGY,
+                ![@UI.Importance]   : #High
             }
         ],
         HeaderInfo              : {
@@ -1483,35 +1116,43 @@ annotate V_SALESHCFG_CHARVAL with @(
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Family',
-                Value : DOC_CREATEDDATE
+                Value : DOC_CREATEDDATE,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : SCHEDULELINE_NUM
+                Value : SCHEDULELINE_NUM,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : PRODUCT_ID
+                Value : PRODUCT_ID,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : CUSTOMER_GROUP
+                Value : CUSTOMER_GROUP,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : LOCATION_ID
+                Value : LOCATION_ID,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : ORD_QTY
+                Value : ORD_QTY,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : NET_VALUE
+                Value : NET_VALUE,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : MAT_AVAILDATE
+                Value : MAT_AVAILDATE,
+                ![@UI.Importance]   : #High
             }
 
         ],
@@ -1604,35 +1245,43 @@ annotate V_ODRESTRICT with @(
         LineItem            : [
             {
                 $Type : 'UI.DataField', //Label : 'Product ID',
-                Value : RESTRICTION
+                Value : RESTRICTION,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField', //Label : 'Description',
-                Value : RTR_COUNTER
+                Value : RTR_COUNTER,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : CLASS_NAME
+                Value : CLASS_NAME,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : CHAR_NAME
+                Value : CHAR_NAME,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : CHAR_VALUE
+                Value : CHAR_VALUE,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : CHAR_COUNTER
+                Value : CHAR_COUNTER,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : OD_CONDITION
+                Value : OD_CONDITION,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : ROW_ID
+                Value : ROW_ID,
+                ![@UI.Importance]   : #High
             }            
         ]
         ,
@@ -1716,27 +1365,33 @@ annotate service.RESTRICT_HEADER with @(
         LineItem            : [
             {
                 $Type : 'UI.DataField', //Label : 'Product ID',
-                Value : LOCATION_ID
+                Value : LOCATION_ID,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product ID',
-                Value : LINE_ID
+                Value : LINE_ID,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product ID',
-                Value : RESTRICTION
+                Value : RESTRICTION,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField', //Label : 'Description',
-                Value : RTR_DESC
+                Value : RTR_DESC,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : VALID_FROM
+                Value : VALID_FROM,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : VALID_TO
+                Value : VALID_TO,
+                ![@UI.Importance]   : #High
             }
         ]
         ,
@@ -1782,7 +1437,7 @@ annotate service.RESTRICT_HEADER with @(
 
 /*************************************/
 // Restrictions OD
-/*****************************/
+/*************************************/
 annotate service.PROD_LOC_LINE with @(
     UI        : {
         SelectionFields     : [
@@ -1793,15 +1448,18 @@ annotate service.PROD_LOC_LINE with @(
         LineItem            : [
             {
                 $Type : 'UI.DataField', //Label : 'Product ID',
-                Value : LOCATION_ID
+                Value : LOCATION_ID,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product ID',
-                Value : LINE_ID
+                Value : LINE_ID,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product ID',
-                Value : PRODUCT_ID
+                Value : PRODUCT_ID,
+                ![@UI.Importance]   : #High
             }
         ],
         HeaderInfo          : {
@@ -1865,35 +1523,43 @@ annotate pal.IBP_RESULTPLAN_TS with @(
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Family',
-                Value : OBJ_TYPE
+                Value : OBJ_TYPE,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Family',
-                Value : OBJ_DEP
+                Value : OBJ_DEP,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Family',
-                Value : OBJ_COUNTER
+                Value : OBJ_COUNTER,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Family',
-                Value : VERSION
+                Value : VERSION,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : SCENARIO
+                Value : SCENARIO,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Family',
-                Value : PREDICTED 
+                Value : PREDICTED,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Family',
-                Value : PREDICTED_TIME
+                Value : PREDICTED_TIME,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Family',
-                Value : PREDICTED_STATUS
+                Value : PREDICTED_STATUS,
+                ![@UI.Importance]   : #High
             }
         ]
     }
@@ -1955,35 +1621,43 @@ annotate pal.TS_PREDICTIONS with @(
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Family',
-                Value : OBJ_TYPE
+                Value : OBJ_TYPE,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Family',
-                Value : OBJ_DEP
+                Value : OBJ_DEP,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Family',
-                Value : OBJ_COUNTER
+                Value : OBJ_COUNTER,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Family',
-                Value : VERSION
+                Value : VERSION,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : SCENARIO
+                Value : SCENARIO,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Family',
-                Value : PREDICTED 
+                Value : PREDICTED ,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Family',
-                Value : PREDICTED_TIME
+                Value : PREDICTED_TIME,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Family',
-                Value : PREDICTED_STATUS
+                Value : PREDICTED_STATUS,
+                ![@UI.Importance]   : #High
             }
         ],
             HeaderInfo          : {
@@ -2077,44 +1751,129 @@ annotate V_FCHARPLAN with @(
             
             {
                 $Type : 'UI.DataField', //Label : 'Description',
-                Value : LOCATION_ID
+                Value : LOCATION_ID,
+                ![@UI.Importance]   : #High
             },
+            {
+                $Type : 'UI.DataField', //Label : 'Product ID',
+                Value : PRODUCT_ID,
+                ![@UI.Importance]   : #High
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Family',
+                Value : CLASS_NAME,
+                ![@UI.Importance]   : #High
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : CHAR_NAME,
+                ![@UI.Importance]   : #High
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : CHAR_VALUE,
+                ![@UI.Importance]   : #High
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Family',
+                Value : VERSION,
+                ![@UI.Importance]   : #High
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : SCENARIO,
+                ![@UI.Importance]   : #High
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : WEEK_DATE,
+                ![@UI.Importance]   : #High
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : OPT_PERCENT,
+                ![@UI.Importance]   : #High
+            },
+            {
+                $Type : 'UI.DataField',
+                Value :OPT_QTY,
+                ![@UI.Importance]   : #High
+            }
+        ]
+    }
+);
+/*****************************/
+/* New Product introduction*/
+/*****************************/
+annotate cp.NEWPROD_INTRO with @(
+    UI        : {
+        SelectionFields                : [
+            LOCATION_ID,
+            PRODUCT_ID,
+            REF_PRODID
+        ],
+        LineItem                       : [
+            {
+                $Type : 'UI.DataField',
+                Value : PRODUCT_ID,
+                ![@UI.Importance]   : #High
+            },            
+            {
+                $Type : 'UI.DataField', //Label : 'Description',
+                Value : LOCATION_ID,
+                ![@UI.Importance]   : #High
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product ID',
+                Value : REF_PRODID,
+                ![@UI.Importance]   : #High
+            }
+        ],
+            HeaderInfo          : {
+            Title          : {Value : LOCATION_ID},
+            Description    : {Value : REF_PRODID},
+            TypeName       : 'New Product Introduction',
+            TypeNamePlural : 'New Product Introduction',
+        },
+        FieldGroup #Details : {Data : [
             {
                 $Type : 'UI.DataField', //Label : 'Product ID',
                 Value : PRODUCT_ID
             },
             {
-                $Type : 'UI.DataField', //Label : 'Product Family',
-                Value : CLASS_NAME
+                $Type : 'UI.DataField', //Label : 'Description',
+                Value : LOCATION_ID
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : CHAR_NAME
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : CHAR_VALUE
-            },
-            {
-                $Type : 'UI.DataField', //Label : 'Product Family',
-                Value : VERSION
-            },
-            {
-                $Type : 'UI.DataField', //Label : 'Product Series',
-                Value : SCENARIO
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : WEEK_DATE
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : OPT_PERCENT
-            },
-            {
-                $Type : 'UI.DataField',
-                Value :OPT_QTY
-            }
-        ]
-    }
+                Value : REF_PRODID
+            }  
+        ]}
+    },
+    //Page Facets
+    UI.Facets : [{
+        $Type  : 'UI.CollectionFacet',
+        ID     : 'NEWPROD',
+        Label  : 'New Product Introduction',
+        Facets : [{
+            $Type  : 'UI.ReferenceFacet',
+            Label  : 'New Product Introduction',
+            Target : '@UI.FieldGroup#Details'
+        }]
+    }]
+
 );
+annotate cp.NEWPROD_INTRO with {
+    LOCATION_ID
+    @(Common.ValueList : {
+            $Type : 'Common.ValueListType',
+            CollectionPath : 'CP_LOCATION',
+            Parameters     : [
+            {
+                $Type             : 'Common.ValueListParameterInOut',
+                LocalDataProperty : LOCATION_ID,
+                ValueListProperty : 'LOCATION_ID',
+            }
+            ]
+    });
+}
