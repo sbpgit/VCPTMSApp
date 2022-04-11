@@ -562,6 +562,12 @@ context cp {
             VALID_TO    : Date      @title : 'Valid To';
 
     }
+
+     entity NEWPROD_INTRO{
+        key PRODUCT_ID: String(40)@title : 'New Product';
+        key LOCATION_ID : String(4) @title : 'Location';
+        REF_PRODID: String(40)@title : ' Ref. Product';
+    }
 // entity PAL_MODEL_PARAMETERS {
 //     key MODEL_TYPE : String(10)  @title : 'Model Type';
 //     key PROFILE_ID : Integer     @title : 'Profile ID';

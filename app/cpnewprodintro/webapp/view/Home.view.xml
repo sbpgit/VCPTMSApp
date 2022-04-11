@@ -21,11 +21,12 @@
                         <Text text="{i18n>loc}" />
                     </Column>
                     <Column hAlign="Center">
-                        <Text text="{i18n>refProd}"/>
-                    </Column>
-                    <Column hAlign="Center">
                         <Text text="{i18n>prod}"/>
                     </Column>
+                    <Column hAlign="Center">
+                        <Text text="{i18n>refProd}"/>
+                    </Column>
+                    
                     <Column hAlign="Right">
                         <Text text="" />
                     </Column>
@@ -34,8 +35,8 @@
                     <ColumnListItem>
                         <cells>
                             <Text text="{LOCATION_ID}" />
-                            <Text text="{REF_PRODID}" />
                             <Text text="{PRODUCT_ID}" />
+                            <Text text="{REF_PRODID}" />
                             <Button id="idProd" icon="sap-icon://decline" tooltip="Delete" press="onProdeDel" iconDensityAware="false" type="Transparent"/>
                         </cells>
                     </ColumnListItem>

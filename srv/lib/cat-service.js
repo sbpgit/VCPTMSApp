@@ -856,6 +856,46 @@ module.exports = (srv) => {
     return results;
   });
 
+   // Maintain new product introsduction
+   srv.on("maintainNewProd", async (req) => {
+    let liresults = [];
+    let lsresults = {};
+    var responseMessage;
+   
+    if (req.data.FLAG === "C" || req.data.FLAG === "E") {
+        lsresults.LOCATION_ID = req.data.LOCATION_ID;
+        lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
+        if (req.data.FLAG === "E") {
+            try {
+                await cds.delete("CP_NEWPROD_INTRO", lsresults);
+            } catch (e) {
+                //DONOTHING
+            }
+        }
+        lsresults.REF_PRODID = req.data.REF_PRODID;
+        liresults.push(lsresults);
+        try {
+            await cds.run(INSERT.into("CP_NEWPROD_INTRO").entries(liresults));
+            responseMessage = " Creation/Updation successful";
+        } catch (e) {
+            //DONOTHING
+            responseMessage = " Creation failed";
+            // createResults.push(responseMessage);
+        }
+        lsresults = {};
+    } else if (req.data.FLAG === "D") {
+        lsresults.LOCATION_ID = req.data.LOCATION_ID;
+        lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
+        try {
+            await cds.delete("CP_NEWPROD_INTRO", lsresults);
+            responseMessage = " deletion failed";
+        } catch (e) {
+            responseMessage = " Creation failed";
+        }
+    }
+    lsresults = {};
+    return responseMessage;
+});
   // Generate Timeseries
   srv.on("generate_timeseries", async (req) => {
     const obgenTimeseries = new GenTimeseries();

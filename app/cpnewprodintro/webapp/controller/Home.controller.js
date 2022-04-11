@@ -73,6 +73,7 @@ sap.ui.define(
           .getModel("i18n")
           .getResourceBundle();
         that.oList = this.byId("ProdList");
+        that.oList.removeSelections();
         this.oLoc = sap.ui.getCore().byId("idloc");
         this.oProd = sap.ui.getCore().byId("idrefprod");
         that._valueHelpDialogProd.setTitleAlignment("Center");
@@ -108,7 +109,7 @@ sap.ui.define(
         sap.ui.core.BusyIndicator.show();
 
         // Calling service to get the product data
-        this.getModel("BModel").read("/maintainNewProd", {
+        this.getModel("BModel").read("/genNewProd", {
           success: function (oData) {
             sap.ui.core.BusyIndicator.hide();
             that.ProdListModel.setData(oData);
@@ -153,8 +154,9 @@ sap.ui.define(
             that._valueHelpDialogCreate.setTitle("Update Product");
             
             sap.ui.getCore().byId("idloc").setValue(oTableItem[0].getText());
-            sap.ui.getCore().byId("idrefprod").setValue(oTableItem[1].getText());
-            sap.ui.getCore().byId("idProd").setValue(oTableItem[2].getText());
+            sap.ui.getCore().byId("idProd").setValue(oTableItem[1].getText());
+            sap.ui.getCore().byId("idrefprod").setValue(oTableItem[2].getText());
+            
             oGModel.setProperty("/sFlag", "E");
 
             that._valueHelpDialogCreate.open();
@@ -171,17 +173,55 @@ sap.ui.define(
        */
       handleValueHelp: function (oEvent) {
         var sId = oEvent.getParameter("id");
+        oGModel.setProperty("/OpenProdInut", "");
         // Location Dialog
         if (sId.includes("loc")) {
           that._valueHelpDialogLoc.open();
           // Product Dialog
         } else if (sId.includes("prod")) {
+            that.ProdData();
           if (sap.ui.getCore().byId("idloc").getValue()) {
+            oGModel.setProperty("/OpenProdInut", "P");
             that._valueHelpDialogProd.open();
           } else {
             MessageToast.show("Select Location");
           }
-        }
+        } else if (sId.includes("idProd")) {
+            that.ProdData();
+            if (sap.ui.getCore().byId("idloc").getValue()) {
+                oGModel.setProperty("/OpenProdInut", "NP");
+              that._valueHelpDialogProd.open();
+            } else {
+              MessageToast.show("Select Location");
+            }
+          }
+      },
+
+      /**
+       * This function is called to get the product data.
+       */
+      ProdData:function(){
+        sap.ui.core.BusyIndicator.show();
+            // Calling service to get the Product data
+            this.getModel("BModel").read("/getLocProdDet", {
+                filters: [
+                new Filter(
+                    "LOCATION_ID",
+                    FilterOperator.EQ,
+                    this._oCore.byId("idloc").getValue()
+                ),
+                ],
+                success: function (oData) {
+                sap.ui.core.BusyIndicator.hide();
+                that.prodModel.setData(oData);
+                that.oProdList.setModel(that.prodModel);
+                },
+                error: function (oData, error) {
+                sap.ui.core.BusyIndicator.hide();
+                MessageToast.show("error");
+                },
+            });
+
       },
 
       /**
@@ -189,6 +229,7 @@ sap.ui.define(
        */
       handleClose: function (oEvent) {
         var sId = oEvent.getParameter("id");
+        this.byId("ProdList").removeSelections();
         // Location Dialog
         if (sId.includes("Loc")) {
           that._oCore
@@ -294,36 +335,29 @@ sap.ui.define(
           sap.ui.getCore().byId("idProd").setValue("");
           that.oGModel.setProperty("/SelectedProd", "");
 
-          // Calling service to get the Product data
-          this.getModel("BModel").read("/getLocProdDet", {
-            filters: [
-              new Filter(
-                "LOCATION_ID",
-                FilterOperator.EQ,
-                aSelectedItems[0].getTitle()
-              ),
-            ],
-            success: function (oData) {
-              sap.ui.core.BusyIndicator.hide();
-              that.prodModel.setData(oData);
-              that.oProdList.setModel(that.prodModel);
-            },
-            error: function (oData, error) {
-              sap.ui.core.BusyIndicator.hide();
-              MessageToast.show("error");
-            },
-          });
 
           // Product list
         } else if (sId.includes("prod")) {
-          that.oProd = sap.ui.getCore().byId("idrefprod");
-          aSelectedItems = oEvent.getParameter("selectedItems");
-          that.oProd.setValue(aSelectedItems[0].getTitle());
-          that.oGModel.setProperty(
-            "/SelectedProd",
-            aSelectedItems[0].getTitle()
-          );
-        }
+            if(oGModel.getProperty("/OpenProdInut") === "P"){
+                that.oProd = sap.ui.getCore().byId("idrefprod");
+                aSelectedItems = oEvent.getParameter("selectedItems");
+                that.oProd.setValue(aSelectedItems[0].getTitle());
+                that.oGModel.setProperty(
+                    "/SelectedProd",
+                    aSelectedItems[0].getTitle()
+                );
+            } else if (oGModel.getProperty("/OpenProdInut") === "NP"){
+                that.oNewProd = sap.ui.getCore().byId("idProd");
+                aSelectedItems = oEvent.getParameter("selectedItems");
+                that.oNewProd.setValue(aSelectedItems[0].getTitle());
+                that.oGModel.setProperty(
+                "/SelectednewProd",
+                aSelectedItems[0].getTitle()
+                );
+            }
+          
+
+         }
         that.handleClose(oEvent);
       },
 
@@ -346,8 +380,8 @@ sap.ui.define(
             method: "GET",
             urlParameters: {
               LOCATION_ID: oLoc,
-              REF_PRODID: oRefProd,
               PRODUCT_ID: oProd,
+              REF_PRODID: oRefProd,
               FLAG: oFlag,
             },
             success: function (oData) {
@@ -357,6 +391,7 @@ sap.ui.define(
               } else {
                 MessageToast.show("Successfully updated the product");
               }
+              that._valueHelpDialogCreate.close();
               that.onAfterRendering();
             },
             error: function (oData) {
@@ -375,14 +410,14 @@ sap.ui.define(
         // Getting the selected product to delete
         var oItem = oEvent.getSource().getParent().getCells();
         var oLoc = oItem[0].getText(),
-          oRefProd = oItem[1].getText(),
-          oProd = oItem[2].getText();
+          oProd = oItem[1].getText(),
+          oRefProd = oItem[2].getText();
         // Getting the conformation popup before deleting
         var sText =
           "Do you want to delete te selected product" +
           " - " +
           oProd +
-          "-" +
+          " - " +
           "Please confirm";
         sap.m.MessageBox.show(sText, {
           title: "Confirmation",
@@ -401,11 +436,8 @@ sap.ui.define(
                 },
                 success: function (oData) {
                   sap.ui.core.BusyIndicator.hide();
-                  if (oData.results.length > 0) {
-                    MessageToast.show("Product deleted successfully");
-                  } else {
-                    MessageToast.show("Deletion failed");
-                  }
+                  
+                  MessageToast.show("Product deleted successfully");
                   // Refreshing data after successfull deletion
                   that.onAfterRendering();
                 },

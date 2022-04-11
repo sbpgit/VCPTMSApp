@@ -112,6 +112,9 @@ service CatalogService @(impl : './lib/cat-service.js') {
     @odata.draft.enabled
     entity genRtrHeader        as projection on od.RESTRICT_HEADER;
 
+    @odata.draft.enabled
+    entity genNewProd          as projection on od.NEWPROD_INTRO;
+
    // @odata.draft.enabled
     entity genProdAccessNode      as projection on od.PROD_ACCNODE;
 
@@ -190,4 +193,11 @@ service CatalogService @(impl : './lib/cat-service.js') {
                 OBJ_DEP     : String(30),
                 STRUC_NODE  : String(50)
             ) returns String;
+
+    function maintainNewProd (FLAG : String(1),
+                LOCATION_ID : String(4),
+                PRODUCT_ID  : String(40),
+                REF_PRODID : String(40)) returns String;
+
+                
 }
