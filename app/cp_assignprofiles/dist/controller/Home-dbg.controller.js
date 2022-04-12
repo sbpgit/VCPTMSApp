@@ -26,17 +26,25 @@ sap.ui.define(
     var that, oGModel;
 
     return BaseController.extend("cp.appf.cpassignprofiles.controller.Home", {
+      /**
+       * Called when a controller is instantiated and its View controls (if available) are already created.
+       * Can be used to modify the View before it is displayed, to bind event handlers and do other one-time initialization.
+       */
       onInit: function () {
         that = this;
+        // Declaring JSON Models
         that.oListModel = new JSONModel();
         that.oParamModel = new JSONModel();
         that.oAlgoListModel = new JSONModel();
       },
+
+      /**
+       * Called after the view has been rendered
+       * Calls the getData[function] to get Data
+       */
       onAfterRendering: function () {
         that = this;
-        this.vDate = new Date().toISOString().split("T")[0];
-        // oGModel = this.getModel("oGModel");
-        // this.i18n = this.getResourceBundle();
+        this.dDate = new Date().toISOString().split("T")[0];
         that.oList = this.byId("profList");
         this.byId("headSearch").setValue("");
         that.oList.removeSelections();
@@ -46,6 +54,10 @@ sap.ui.define(
         // Calling function
         this.getData();
       },
+
+      /**
+       * Getting Data Initially and binding to elements
+       */
       getData: function () {
         this.getModel("BModel").read("/getProfiles", {
           success: function (oData) {
@@ -60,18 +72,22 @@ sap.ui.define(
         });
       },
 
+      /**
+       * Called when something is entered into the search field
+       * @param {object} oEvent -the event information
+       */
       onSearch: function (oEvent) {
-        var query =
+        var sQuery =
             oEvent.getParameter("value") || oEvent.getParameter("newValue"),
           oFilters = [];
 
-        if (query !== "") {
+        if (sQuery !== "") {
           oFilters.push(
             new Filter({
               filters: [
-                new Filter("PROFILE", FilterOperator.Contains, query),
-                new Filter("PRF_DESC", FilterOperator.Contains, query),
-                new Filter("METHOD", FilterOperator.Contains, query)
+                new Filter("PROFILE", FilterOperator.Contains, sQuery),
+                new Filter("PRF_DESC", FilterOperator.Contains, sQuery),
+                new Filter("METHOD", FilterOperator.Contains, sQuery),
               ],
               and: false,
             })
@@ -80,12 +96,19 @@ sap.ui.define(
         that.oList.getBinding("items").filter(oFilters);
       },
 
+      /**
+       * This function is called when a click on parameter button.
+       */
       onParameters: function (oEvent) {
-        var selProfie = oEvent.getSource().getParent().getCells()[0].getTitle();
-        var selMethod = oEvent.getSource().getParent().getCells()[1].getText();
-
-        var Title =
-          "Parameters " + " " + " - " + selProfie + " " + " - " + selMethod;
+        var sSelProfie = oEvent
+          .getSource()
+          .getParent()
+          .getCells()[0]
+          .getTitle();
+        var sSelMethod = oEvent.getSource().getParent().getCells()[1].getText();
+        // Setting title for fragment
+        var sTitle =
+          "Parameters " + " " + " - " + sSelProfie + " " + " - " + sSelMethod;
 
         if (!that._onParameter) {
           that._onParameter = sap.ui.xmlfragment(
@@ -94,15 +117,15 @@ sap.ui.define(
           );
           that.getView().addDependent(that._onParameter);
         }
+        // Setting title for fragment
         that._onParameter.setTitleAlignment("Center");
-        that._onParameter.setTitle(Title);
+        that._onParameter.setTitle(sTitle);
         that.paramList = sap.ui.getCore().byId("idParam");
 
         this.getModel("BModel").read("/getProfileParameters", {
-          //   filters: [oFilters],
           filters: [
-            new Filter("PROFILE", FilterOperator.EQ, selProfie),
-            new Filter("METHOD", FilterOperator.EQ, selMethod),
+            new Filter("PROFILE", FilterOperator.EQ, sSelProfie),
+            new Filter("METHOD", FilterOperator.EQ, sSelMethod),
           ],
           success: function (oData) {
             that.oParamModel.setData({
@@ -116,202 +139,125 @@ sap.ui.define(
           },
         });
       },
+
+      /**
+       * Called when 'Close/Cancel' button in any dialog is pressed.
+       */
       onParaClose: function () {
         that._onParameter.close();
-        //   that._onParameter.destroy(true);
-        //   that._onParameter = "";
       },
 
+      /**
+       * This function is called when a click on buttons Create/ Copy/ Edit.
+       */
       onCreate: function (oEvent) {
         that.oGModel = that.getModel("oGModel");
-
+        // Getting button tooltip to perform action
         var sId = oEvent.getSource().getTooltip();
-        
+
         that.oGModel.setProperty("/sId", sId);
         if (sId === "Copy" || sId === "Edit") {
-          var selRow = this.byId("profList").getSelectedItems();
+          var sSelRow = this.byId("profList").getSelectedItems();
 
-          if (selRow.length) {
-            var SelUsername = this.byId("profList").getSelectedItem().getBindingContext().getProperty().CREATED_BY;
-            var selAlgo = selRow[0].getBindingContext().getProperty();
-            that.oGModel.setProperty("/sProfile", selAlgo.PROFILE);
-            that.oGModel.setProperty("/sProf_desc", selAlgo.PRF_DESC);
-            that.oGModel.setProperty("/sMethod", selAlgo.METHOD);
-            that.oGModel.setProperty("/sCreatedBy", SelUsername);
-            
+          if (sSelRow.length) {
+            var sSelUsername = this.byId("profList")
+              .getSelectedItem()
+              .getBindingContext()
+              .getProperty().CREATED_BY;
+            var sSelAlgo = sSelRow[0].getBindingContext().getProperty();
+            that.oGModel.setProperty("/sProfile", sSelAlgo.PROFILE);
+            that.oGModel.setProperty("/sProf_desc", sSelAlgo.PRF_DESC);
+            that.oGModel.setProperty("/sMethod", sSelAlgo.METHOD);
+            that.oGModel.setProperty("/sCreatedBy", sSelUsername);
+
+            // Called when it routes to a page containing the item details
             var oRouter = sap.ui.core.UIComponent.getRouterFor(that);
             oRouter.navTo("Detail", {}, true);
           } else {
             MessageToast.show("Please select one row");
           }
-        } else if (sId === "Create"){
+        } else if (sId === "Create") {
           var oRouter = sap.ui.core.UIComponent.getRouterFor(that);
           oRouter.navTo("Detail", {}, true);
         }
       },
-      onAddClose: function () {
-        that._onAddppf.close();
-        //   that._onAddppf.destroy(true);
-        //   that._onAddppf = "";
-      },
 
-      onDelete:function(oEvent){
-
-        var selRow = this.byId("profList").getSelectedItems()[0].getBindingContext().getProperty();
+      /**
+       * This function is called when a click on Deleting profile button.
+       */
+      onDelete: function (oEvent) {
+        var sSelRow = this.byId("profList")
+          .getSelectedItems()[0]
+          .getBindingContext()
+          .getProperty();
 
         sap.ui.core.BusyIndicator.show();
         var oEntry = {};
 
-        oEntry.PROFILE = selRow.PROFILE;
-        oEntry.METHOD = selRow.METHOD;
+        oEntry.PROFILE = sSelRow.PROFILE;
+        oEntry.METHOD = sSelRow.METHOD;
         oEntry.PRF_DESC = "D";
-          sap.ui.core.BusyIndicator.show();
-          that.getModel("BModel").callFunction("/createProfiles", {
-            method: "GET",
-            urlParameters: {
-                PROFILE: oEntry.PROFILE,
-                METHOD: oEntry.METHOD,
-                PRF_DESC : oEntry.PRF_DESC,
-                CREATED_DATE:that.vDate,
-                CREATED_BY:""
-            },
-            success: function (oData) {
-                sap.ui.core.BusyIndicator.hide();
-                sap.m.MessageToast.show("Profile deleted");
-                that.tablesendbatch();
-            },
-            error: function (error) {
-              sap.ui.core.BusyIndicator.hide();
+        sap.ui.core.BusyIndicator.show();
+        that.getModel("BModel").callFunction("/createProfiles", {
+          method: "GET",
+          urlParameters: {
+            PROFILE: oEntry.PROFILE,
+            METHOD: oEntry.METHOD,
+            PRF_DESC: oEntry.PRF_DESC,
+            CREATED_DATE: that.dDate,
+            CREATED_BY: "",
+          },
+          success: function (oData) {
+            sap.ui.core.BusyIndicator.hide();
+            sap.m.MessageToast.show("Profile deleted");
+            //Calling function to delete Profile Parameters
+            that.tablesendbatch();
+          },
+          error: function (error) {
+            sap.ui.core.BusyIndicator.hide();
             sap.m.MessageToast.show("Failed to delete Profile parameters");
-            },
-          });
-
-        //   var uri = "/v2/catalog/getProfiles";
-        //   $.ajax({
-        //     url: uri,
-        //     type: "post",
-        //     contentType: "application/json",
-        //     data: JSON.stringify({
-        //       PROFILE: oEntry.PROFILE,
-        //       METHOD: oEntry.METHOD,
-        //       PRF_DESC: oEntry.PRF_DESC
-        //     }),
-        //     dataType: "json",
-        //     async: false,
-        //     timeout: 0,
-        //     error: function (data) {
-        //       sap.m.MessageToast.show(JSON.stringify(data));
-        //     },
-        //     success: function (data) {
-        //       sap.ui.core.BusyIndicator.hide();
-        //       sap.m.MessageToast.show("Profile deleted");
-        //       that.tablesendbatch();
-        //     },
-        //   });
-
+          },
+        });
       },
 
-      tablesendbatch:function(){
-          var aData = {
-            PROFILEPARA: [],
+      /**
+       * This function is called when deleting Profile Parameters.
+       */
+      // Deleting Profile Parameters
+      tablesendbatch: function () {
+        var sSelRow = this.byId("profList")
+          .getSelectedItems()[0]
+          .getBindingContext()
+          .getProperty();
+
+        sap.ui.core.BusyIndicator.show();
+        that.getModel("BModel").callFunction("/createProfilePara", {
+          method: "GET",
+          urlParameters: {
+            FLAG: "D",
+            PROFILE: sSelRow.PROFILE,
+            METHOD: sSelRow.METHOD,
+            PARA_NAME: "",
+            INTVAL: 0,
+            DOUBLEVAL: 0.0,
+            STRVAL: "",
+            PARA_DESC: "",
+            PARA_DEP: "",
+            CREATED_DATE: that.dDate,
+            CREATED_BY: "",
           },
-          jsonProfilePara;
-
-          var selRow = this.byId("profList").getSelectedItems()[0].getBindingContext().getProperty();
-
-          sap.ui.core.BusyIndicator.show();
-          that.getModel("BModel").callFunction("/createProfilePara", {
-            method: "GET",
-            urlParameters: {
-                FLAG : "D",
-                PROFILE: selRow.PROFILE,
-                METHOD: selRow.METHOD,
-                PARA_NAME: "",
-                INTVAL: 0,
-                DOUBLEVAL: 0.0,
-                STRVAL: "",
-                PARA_DESC: "",
-                PARA_DEP :"",
-                CREATED_DATE:that.vDate,
-                CREATED_BY:""
-            },
-            success: function (oData) {
+          success: function (oData) {
             sap.ui.core.BusyIndicator.hide();
             sap.m.MessageToast.show("Profile parameters deleted");
+            // Refreshing the page after deletion
             that.onAfterRendering();
-            },
-            error: function (error) {
-              sap.ui.core.BusyIndicator.hide();
+          },
+          error: function (error) {
+            sap.ui.core.BusyIndicator.hide();
             sap.m.MessageToast.show("Failed to delete Profile parameters");
-            },
-          });
-
-        //   jsonProfilePara = {
-        //       PROFILE: selRow.PROFILE,
-        //       METHOD: selRow.METHOD,
-        //       PARA_NAME: "",
-        //       PARA_DESC: "",
-        //       INTVAL: null,
-        //       DOUBLEVAL: null,
-        //       STRVAL: null,
-        //     };
-          
-        //   aData.PROFILEPARA.push(jsonProfilePara);
-
-
-        // var uri = "/v2/catalog/genProfileParam";
-        // $.ajax({
-        //   url: uri,
-        //   type: "post",
-        //   contentType: "application/json",
-        //   data: JSON.stringify({
-        //       FLAG : "D",
-        //     PROFILEPARA: aData.PROFILEPARA,
-        //   }),
-        //   dataType: "json",
-        //   async: false,
-        //   timeout: 0,
-        //   error: function (data) {
-        //     sap.ui.core.BusyIndicator.hide();
-        //     sap.m.MessageToast.show(JSON.stringify(data));
-        //   },
-        //   success: function (data) {
-        //     sap.ui.core.BusyIndicator.hide();
-        //     sap.m.MessageToast.show("Profile parameters deleted");
-        //     that.onAfterRendering();
-        //   },
-        // });
-
-          
-        }
-      
-
-    //   onAlgorChange: function (oEvent) {
-    //     var selAlgo = sap.ui.getCore().byId("idAlgo")._getSelectedItemText();
-    //     that.alogoList = sap.ui.getCore().byId("idTab");
-
-    //     var oFilters = new Filter("METHOD", FilterOperator.EQ, selAlgo);
-
-    //     this.getModel("PModel").read("/get_palparameters", {
-    //       filters: [oFilters],
-
-    //       success: function (oData) {
-    //         oData.results.forEach(function (row) {
-    //           row.FLAG = row.DATATYPE;
-    //         }, that);
-
-    //         that.oAlgoListModel.setData({
-    //           results: oData.results,
-    //         });
-    //         that.alogoList.setModel(that.oAlgoListModel);
-    //       },
-    //       error: function () {
-    //         MessageToast.show("Failed to get data");
-    //       },
-    //     });
-    //   }
-
-      
+          },
+        });
+      },
     });
   }
 );
