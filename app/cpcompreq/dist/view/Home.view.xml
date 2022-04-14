@@ -43,7 +43,7 @@
                             </f:label>
 
                             <f:fields>
-                                <DatePicker id="fromDate" width="auto" value="2022-03-10" displayFormat="yyyy-MM-dd" valueFormat="yyyy-MM-dd" change="handleDateChange"/>
+                                <DatePicker id="fromDate" width="225px" value="2022-03-10" displayFormat="yyyy-MM-dd" valueFormat="yyyy-MM-dd" change="handleDateChange"/>
                             </f:fields>
                         </f:FormElement>
 
@@ -56,7 +56,7 @@
                                 <Label text="Product"/>
                             </f:label>
                             <f:fields>
-                                <Input id="idprod" placeholder="Product" value="" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                                <Input id="idprod" width="225px" placeholder="Product" value="" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
                             </f:fields>
                         </f:FormElement>
                         <f:FormElement>
@@ -72,7 +72,7 @@
                                 <Label text="Valid To"/>
                             </f:label>
                             <f:fields>
-                                <DatePicker id="toDate" width="auto" value="2022-08-31" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="handleDateChange"/>
+                                <DatePicker id="toDate" width="225px" value="2022-08-31" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="handleDateChange"/>
 
                             </f:fields>
                         </f:FormElement>
@@ -89,7 +89,7 @@
                                 <Label text="Model Version"/>
                             </f:label>
                             <f:fields>
-                                <Select id="idModelVer" selectedKey="Active">
+                                <Select id="idModelVer" selectedKey="Active" width="225px">
                                     <core:ListItem key="Active" text="Active"/>
                                     <core:ListItem key="Simulation" text="Simulation"/>
                                 </Select>
@@ -135,8 +135,8 @@
         <content>
         <HBox>
             <SearchField id="headSearch" liveChange="onSearchCompReq" placeholder="Component, Structure Node" width="500px"/>
-            <!-- <CheckBox id="idCheck" select="onCheck" text="Normalized"  /> -->
-		    <CheckBox id="idCheck1" select="onNonZero" text="Get Non-Zero" selected="true" />
+            <CheckBox id="idCheck1" select="onNonZero" text="Get Non-Zero" selected="true" />
+            
             </HBox>
             <t:Table id="idCompReq" fixedColumnCount="3" selectionMode="Single" alternateRowColors="true" enableSelectAll="false" visibleRowCount="15">
                 <t:columns>

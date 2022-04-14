@@ -26,30 +26,44 @@ sap.ui.define(
     var that, oGModel;
 
     return BaseController.extend("cp.appf.cpassignprofiles.controller.Detail", {
+      /**
+       * Called when a controller is instantiated and its View controls (if available) are already created.
+       * Can be used to modify the View before it is displayed, to bind event handlers and do other one-time initialization.
+       */
       onInit: function () {
         that = this;
+        // Declaring JSON Models
         that.oListModel = new JSONModel();
         that.oParamModel = new JSONModel();
         that.oAlgoListModel = new JSONModel();
       },
+
+      /**
+       * Go back to Home page
+       */
       onBack: function () {
-          var data = [];
+        var aData = [];
         that.oAlgoListModel.setData({
-            results: data, 
-          });
-          that.byId("idTab").setModel(that.oAlgoListModel);
+          results: aData,
+        });
+        that.byId("idTab").setModel(that.oAlgoListModel);
         var oRouter = sap.ui.core.UIComponent.getRouterFor(that);
         oRouter.navTo("Home", {}, true);
       },
+
+      /**
+       * Called after the view has been rendered
+       * Calls the getParameters[function] to get Data
+       */
       onAfterRendering: function () {
         that = this;
         this.vDate = new Date().toISOString().split("T")[0];
         that.oGModel = that.getModel("oGModel");
-        var selButton = that.oGModel.getProperty("/sId");
+        var sSelButton = that.oGModel.getProperty("/sId");
 
-        if (selButton === "Copy" || selButton === "Edit") {
-          // that.byId("idPn").setValue(that.oGModel.getProperty("/sProfile"));
-          if (selButton === "Edit") {
+        // Setting the values based on button click
+        if (sSelButton === "Copy" || sSelButton === "Edit") {
+          if (sSelButton === "Edit") {
             that.byId("idPn").setValue(that.oGModel.getProperty("/sProfile"));
             that.byId("idPn").setEditable(false);
             this.byId("idPage").setTitle("Edit Profile");
@@ -58,54 +72,63 @@ sap.ui.define(
             that.byId("idPn").setEditable(true);
             this.byId("idPage").setTitle("Create Profile");
           }
-
-          that.byId("idPdesc").setValue(that.oGModel.getProperty("/sProf_desc"));
-        //   that.byId("idCretBy").setValue(that.oGModel.getProperty("/sCreatedBy"));
+          // Setting description in input box
+          that
+            .byId("idPdesc")
+            .setValue(that.oGModel.getProperty("/sProf_desc"));
           that.byId("idAuth").setValue("");
 
-          var methodText = that.oGModel.getProperty("/sMethod");
+          // Getting selected method for copy/ edit
+          var sMethodText = that.oGModel.getProperty("/sMethod");
 
-          if (methodText === "MLR") {
+          //Setting the selected key for algorithm
+          if (sMethodText === "MLR") {
             that.byId("idAlgo").setSelectedKey("M");
-          } else if (methodText === "HGBT") {
+          } else if (sMethodText === "HGBT") {
             that.byId("idAlgo").setSelectedKey("H");
-          } else if (methodText === "VARMA") {
+          } else if (sMethodText === "VARMA") {
             that.byId("idAlgo").setSelectedKey("V");
-          } else if (methodText === "RDT") {
+          } else if (sMethodText === "RDT") {
             that.byId("idAlgo").setSelectedKey("R");
           } else {
             that.byId("idAlgo").setSelectedKey("N");
           }
-          // that.onAlgorChange();
+          // calling the function
           that.getParameters();
         } else {
+          // removing values for input box when create new
           that.byId("idPn").setValue("");
           that.byId("idPdesc").setValue("");
-        //   that.byId("idCretBy").setValue("");
           that.byId("idAuth").setValue("");
           that.byId("idAlgo").setSelectedKey("N");
           that.byId("idPn").setEditable(true);
-          var data = [];
+          var oData = [];
           that.oAlgoListModel.setData({
-            results: data,
+            results: oData,
           });
           that.byId("idTab").setModel(that.oAlgoListModel);
         }
       },
+
+      /**
+       * Getting Data of the profile parameters based on selected method and binding to elements
+       */
+      // function to get the profile parameters based on selected method
       getParameters: function () {
-        var selProfile = that.oGModel.getProperty("/sProfile"),
-          selMethod = that.oGModel.getProperty("/sMethod");
+        var sSelProfile = that.oGModel.getProperty("/sProfile"),
+          sSelMethod = that.oGModel.getProperty("/sMethod");
 
         this.getModel("BModel").read("/getProfileParameters", {
           filters: [
-            new Filter("PROFILE", FilterOperator.EQ, selProfile),
-            new Filter("METHOD", FilterOperator.EQ, selMethod),
+            new Filter("PROFILE", FilterOperator.EQ, sSelProfile),
+            new Filter("METHOD", FilterOperator.EQ, sSelMethod),
           ],
           success: function (oData) {
             that.alogoList = that.byId("idTab");
 
+            // Adding new fields
             oData.results.forEach(function (row) {
-                row.DESCRIPTION = row.PARA_DESC
+              row.DESCRIPTION = row.PARA_DESC;
               if (row.INTVAL !== null) {
                 row.DATATYPE = "INTEGER";
                 row.DEFAULTVAL = row.INTVAL;
@@ -129,11 +152,14 @@ sap.ui.define(
         });
       },
 
+      /**
+       * This function is to get the profile parameters based on selected method.
+       */
       onAlgorChange: function (oEvent) {
-        var selAlgo = that.byId("idAlgo")._getSelectedItemText();
+        var sSelAlgo = that.byId("idAlgo")._getSelectedItemText();
         that.alogoList = that.byId("idTab");
 
-        var oFilters = new Filter("METHOD", FilterOperator.EQ, selAlgo);
+        var oFilters = new Filter("METHOD", FilterOperator.EQ, sSelAlgo);
 
         this.getModel("PModel").read("/get_palparameters", {
           filters: [oFilters],
@@ -154,155 +180,196 @@ sap.ui.define(
         });
       },
 
+      /**
+       * This function is to validate the data changed based on datatype.
+       */
+      // function to validate the data changed based on datatype
       onLive: function (oEvent) {
         that.byId("idSave").setEnabled(true);
         if (oEvent) {
-          var Query = oEvent.getParameter("newValue"),
+          var sQuery = oEvent.getParameter("newValue"),
             selId = oEvent.getParameter("id").split("-")[6];
         } else {
           var selId = that.typeChange;
-          Query = that.byId("idTab").getItems()[selId].getCells()[4].getValue();
+          sQuery = that
+            .byId("idTab")
+            .getItems()
+            [selId].getCells()[4]
+            .getValue();
         }
-        var SelType = that.byId("idTab").getItems()[selId].getCells()[2].getSelectedKey(),
-          count = 0;
+        var sSelType = that
+            .byId("idTab")
+            .getItems()
+            [selId].getCells()[2]
+            .getSelectedKey(),
+          iCount = 0;
+        // Declaration of special characters
         var specials = /^[^*|\":<>[\]{}!`\\()';@&$]+$/;
-        if (SelType === "DOUBLE") {
+        // Checking the datatype of the field and validationg the value
+        if (sSelType === "DOUBLE") {
           that.byId("idTab").getItems()[selId].getCells()[4].setType("Number");
         }
-
-        if (SelType === "INTEGER") {
-          if ( (Query % 1 === 0 &&  parseInt(Query).toString() === Query.toString()) || Query === "" ) {
-            that.byId("idTab").getItems()[selId].getCells()[4].setValueState("None");
-            count = 0;
+        // Checking the datatype of the field and validationg the value
+        if (sSelType === "INTEGER") {
+          if (
+            (sQuery % 1 === 0 &&
+              parseInt(sQuery).toString() === sQuery.toString()) ||
+            sQuery === ""
+          ) {
+            that
+              .byId("idTab")
+              .getItems()
+              [selId].getCells()[4]
+              .setValueState("None");
+            iCount = 0;
           } else {
-            that.byId("idTab").getItems()[selId].getCells()[4].setValueState("Error");
-            count = count + 1;
+            that
+              .byId("idTab")
+              .getItems()
+              [selId].getCells()[4]
+              .setValueState("Error");
+            iCount = iCount + 1;
           }
-        } else if (SelType === "NVARCHAR") {
+          // Checking the datatype of the field and validationg the value
+        } else if (sSelType === "NVARCHAR") {
           var letters = /^[A-Za-z0-9 ]+$/;
-          if ((letters.test(Query) && specials.test(Query)) || Query === "") {
-            that.byId("idTab").getItems()[selId].getCells()[4].setValueState("None");
-            count = 0;
+          if (
+            (letters.test(sQuery) && specials.test(sQuery)) ||
+            sQuery === ""
+          ) {
+            that
+              .byId("idTab")
+              .getItems()
+              [selId].getCells()[4]
+              .setValueState("None");
+            iCount = 0;
           } else {
-            that.byId("idTab").getItems()[selId].getCells()[4].setValueState("Error");
-            count = count + 1;
+            that
+              .byId("idTab")
+              .getItems()
+              [selId].getCells()[4]
+              .setValueState("Error");
+            iCount = iCount + 1;
           }
-        } else if (SelType === "DOUBLE") {
-          if (!/^\d+$/.test(Query) && Query !== "") {
-            if (Query.split(".")[1] !== "" && Query !== ".") {
-              that.byId("idTab").getItems()[selId].getCells()[4].setValueState("None");
-              count = 0;
+          // Checking the datatype of the field and validationg the value
+        } else if (sSelType === "DOUBLE") {
+          if (!/^\d+$/.test(sQuery) && sQuery !== "") {
+            if (sQuery.split(".")[1] !== "" && sQuery !== ".") {
+              that
+                .byId("idTab")
+                .getItems()
+                [selId].getCells()[4]
+                .setValueState("None");
+              iCount = 0;
             } else {
-              that.byId("idTab").getItems()[selId].getCells()[4].setValueState("Error");
-              count = count + 1;
+              that
+                .byId("idTab")
+                .getItems()
+                [selId].getCells()[4]
+                .setValueState("Error");
+              iCount = iCount + 1;
             }
           } else {
-            if (Query === "") {
-              that.byId("idTab").getItems()[selId].getCells()[4].setValueState("None");
-              count = 0;
+            if (sQuery === "") {
+              that
+                .byId("idTab")
+                .getItems()
+                [selId].getCells()[4]
+                .setValueState("None");
+              iCount = 0;
             } else {
-              that.byId("idTab").getItems()[selId].getCells()[4].setValueState("Error");
-              count = count + 1;
+              that
+                .byId("idTab")
+                .getItems()
+                [selId].getCells()[4]
+                .setValueState("Error");
+              iCount = iCount + 1;
             }
           }
         }
-        if (count === 0) {
+        // Validating the values and enabling or disabling the save button
+        if (iCount === 0) {
           that.byId("idSave").setEnabled(true);
         } else {
           that.byId("idSave").setEnabled(false);
         }
       },
 
+      /**
+       * This function is called when submitting the Prediction profile.
+       */
       onSubmit: function (oEvent) {
         sap.ui.core.BusyIndicator.show();
-        var selOperation = that.oGModel.getProperty("/sId");
-        var operationFlag = "";
-        if(selOperation === "Edit"){
-            operationFlag = "E"
+        var sSelOperation = that.oGModel.getProperty("/sId");
+        var sOperationFlag = "";
+        if (sSelOperation === "Edit") {
+          sOperationFlag = "E";
         }
         var oEntry = {};
 
         oEntry.PROFILE = that.byId("idPn").getValue();
         oEntry.PRF_DESC = that.byId("idPdesc").getValue();
-        oEntry.CREATED_BY = operationFlag;
-        // oEntry.AUTHORIZATION = that.byId("auth").getValue();
+        oEntry.CREATED_BY = sOperationFlag;
         oEntry.METHOD = that.byId("idAlgo")._getSelectedItemText();
 
-        if (oEntry.PROFILE !== "" && oEntry.PRF_DESC !== "" && oEntry.METHOD !== "" ) {
-            that.getModel("BModel").callFunction("/createProfiles", {
-                method: "GET",
-                urlParameters: {
-                    PROFILE: oEntry.PROFILE,
-                    METHOD: oEntry.METHOD,
-                    PRF_DESC : oEntry.PRF_DESC,
-                    CREATED_DATE:that.vDate,
-                    CREATED_BY:""
-                },
-                success: function (oData) {
-                    sap.ui.core.BusyIndicator.hide();
-                          sap.m.MessageToast.show("Created Prediction profile");
-                          that.tablesendbatch();
-                },
-                error: function (error) {
-                  sap.ui.core.BusyIndicator.hide();
-                sap.m.MessageToast.show("failed to created Prediction profile");
-                },
-              });
-        //   var uri = "/v2/catalog/getProfiles";
-        //   $.ajax({
-        //     url: uri,
-        //     type: "post",
-        //     contentType: "application/json",
-        //     data: JSON.stringify({
-        //       PROFILE: oEntry.PROFILE,
-        //       METHOD: oEntry.METHOD,
-        //       PRF_DESC: oEntry.PRF_DESC
-        //     }),
-        //     dataType: "json",
-        //     async: false,
-        //     timeout: 0,
-        //     error: function (data) {
-        //       sap.m.MessageToast.show(JSON.stringify(data));
-        //     },
-        //     success: function (data) {
-        //       sap.ui.core.BusyIndicator.hide();
-        //       sap.m.MessageToast.show("Created Prediction Model");
-        //       that.tablesendbatch();
-        //     },
-        //   });
+        if (
+          oEntry.PROFILE !== "" &&
+          oEntry.PRF_DESC !== "" &&
+          oEntry.METHOD !== ""
+        ) {
+          that.getModel("BModel").callFunction("/createProfiles", {
+            method: "GET",
+            urlParameters: {
+              PROFILE: oEntry.PROFILE,
+              METHOD: oEntry.METHOD,
+              PRF_DESC: oEntry.PRF_DESC,
+              CREATED_DATE: that.vDate,
+              CREATED_BY: "",
+            },
+            success: function (oData) {
+              sap.ui.core.BusyIndicator.hide();
+              sap.m.MessageToast.show("Created Prediction profile");
+              // Calling the function to submit the profile parameters
+              that.tablesendbatch();
+            },
+            error: function (error) {
+              sap.ui.core.BusyIndicator.hide();
+              sap.m.MessageToast.show("failed to created Prediction profile");
+            },
+          });
         } else {
           MessageToast.show("Please fill all required fields");
           sap.ui.core.BusyIndicator.hide();
         }
       },
 
+      /**
+       * This function is to submit the profile parameters.
+       */
       tablesendbatch: function (oEvent) {
-        var table = that.byId("idTab").getItems(),
+        var oTable = that.byId("idTab").getItems(),
           aData = {
             PROFILEPARA: [],
           },
-          jsonProfilePara,
-          vIntval = 0;
-        let vDoubleVal = null;
-        // var oTabEntry={},
-        // PROFILE, METHOD, CREATED_BY, PARA_NAME, INTVAL, DOUBLEVAL, STRVAL;
+          jsonProfilePara;
         that.getModel("BModel").setUseBatch(true);
         that.batchReq = true;
-        that.count = table.length;
+        that.iCount = oTable.length;
         that.comp = 0;
 
         sap.ui.core.BusyIndicator.show();
-        var selOperation = that.oGModel.getProperty("/sId");
-        var operationFlag;
+        var sSelOperation = that.oGModel.getProperty("/sId");
+        var sOperationFlag;
 
-          if(selOperation === "Create" || selOperation === "Copy" ){
-            operationFlag = "I";
-          } else if(selOperation === "Edit"){
-            operationFlag = "E";
-          }
-        
+        // Setting the falg based on button selected
+        if (sSelOperation === "Create" || sSelOperation === "Copy") {
+          sOperationFlag = "I";
+        } else if (sSelOperation === "Edit") {
+          sOperationFlag = "E";
+        }
 
-        for (var i = 0; i < table.length; i++) {
+        // Changeing INTVAL, DOUBLEVAL, STRVAL values based on datatype
+        for (var i = 0; i < oTable.length; i++) {
           var PROFILE,
             METHOD,
             CREATED_BY,
@@ -311,21 +378,20 @@ sap.ui.define(
             INTVAL = "",
             DOUBLEVAL = "",
             STRVAL = "";
-            jsonProfilePara = {};
+          jsonProfilePara = {};
           PROFILE = that.byId("idPn").getValue();
           METHOD = that.byId("idAlgo")._getSelectedItemText();
-        //   CREATED_BY = that.byId("idCretBy").getValue();
-          PARA_NAME = table[i].getCells()[0].getText();
-          PARA_DESC = table[i].getCells()[1].getText();
+          PARA_NAME = oTable[i].getCells()[0].getText();
+          PARA_DESC = oTable[i].getCells()[1].getText();
 
-          if (table[i].getCells()[2].getSelectedKey() === "INTEGER") {
-            if (table[i].getCells()[4].getValue() === "") {
-              INTVAL = parseInt(table[i].getCells()[3].getText());
+          if (oTable[i].getCells()[2].getSelectedKey() === "INTEGER") {
+            if (oTable[i].getCells()[4].getValue() === "") {
+              INTVAL = parseInt(oTable[i].getCells()[3].getText());
             } else {
-              if (table[i].getCells()[4].getValue() == "No default value") {
+              if (oTable[i].getCells()[4].getValue() == "No default value") {
                 INTVAL = "0";
               } else {
-                INTVAL = parseInt(table[i].getCells()[4].getValue());
+                INTVAL = parseInt(oTable[i].getCells()[4].getValue());
               }
             }
             jsonProfilePara = {
@@ -337,14 +403,14 @@ sap.ui.define(
               DOUBLEVAL: "0.0",
               STRVAL: "",
             };
-          } else if (table[i].getCells()[2].getSelectedKey() === "DOUBLE") {
-            if (table[i].getCells()[4].getValue() === "") {
-              DOUBLEVAL = parseFloat(table[i].getCells()[3].getText());
+          } else if (oTable[i].getCells()[2].getSelectedKey() === "DOUBLE") {
+            if (oTable[i].getCells()[4].getValue() === "") {
+              DOUBLEVAL = parseFloat(oTable[i].getCells()[3].getText());
             } else {
-              if (table[i].getCells()[4].getValue() == "No default value") {
+              if (oTable[i].getCells()[4].getValue() == "No default value") {
                 DOUBLEVAL = "0.0";
               } else {
-                DOUBLEVAL = parseFloat(table[i].getCells()[4].getValue());
+                DOUBLEVAL = parseFloat(oTable[i].getCells()[4].getValue());
               }
             }
             jsonProfilePara = {
@@ -356,18 +422,18 @@ sap.ui.define(
               DOUBLEVAL: DOUBLEVAL,
               STRVAL: "",
             };
-          } else if (table[i].getCells()[2].getSelectedKey() === "NVARCHAR") {
-            if (table[i].getCells()[4].getValue() === "") {
-              STRVAL = table[i].getCells()[3].getText();
+          } else if (oTable[i].getCells()[2].getSelectedKey() === "NVARCHAR") {
+            if (oTable[i].getCells()[4].getValue() === "") {
+              STRVAL = oTable[i].getCells()[3].getText();
             } else {
-              STRVAL = table[i].getCells()[4].getValue();
+              STRVAL = oTable[i].getCells()[4].getValue();
             }
             jsonProfilePara = {
               PROFILE: PROFILE,
               METHOD: METHOD,
               PARA_NAME: PARA_NAME,
               PARA_DESC: PARA_DESC,
-              INTVAL:"0",
+              INTVAL: "0",
               DOUBLEVAL: "0.0",
               STRVAL: STRVAL,
             };
@@ -377,53 +443,30 @@ sap.ui.define(
           that.getModel("BModel").callFunction("/createProfilePara", {
             method: "GET",
             urlParameters: {
-                FLAG : operationFlag,
-                PROFILE: PROFILE,
-                METHOD: METHOD,
-                PARA_NAME: PARA_NAME,
-                INTVAL: jsonProfilePara.INTVAL,
-                DOUBLEVAL: jsonProfilePara.DOUBLEVAL,
-                STRVAL: jsonProfilePara.STRVAL,                
-                PARA_DESC: PARA_DESC,
-                PARA_DEP :"",
-                CREATED_DATE:that.vDate,
-                CREATED_BY:""
+              FLAG: sOperationFlag,
+              PROFILE: PROFILE,
+              METHOD: METHOD,
+              PARA_NAME: PARA_NAME,
+              INTVAL: jsonProfilePara.INTVAL,
+              DOUBLEVAL: jsonProfilePara.DOUBLEVAL,
+              STRVAL: jsonProfilePara.STRVAL,
+              PARA_DESC: PARA_DESC,
+              PARA_DEP: "",
+              CREATED_DATE: that.vDate,
+              CREATED_BY: "",
             },
             success: function (oData) {
-                sap.ui.core.BusyIndicator.hide();
-            sap.m.MessageToast.show("Created profile parameters");
-            that.onBack();
+              sap.ui.core.BusyIndicator.hide();
+              sap.m.MessageToast.show("Created profile parameters");
+              // On successfull of cretion of Prediction profile and profile parameters navigating to Home view
+              that.onBack();
             },
             error: function (error) {
               sap.ui.core.BusyIndicator.hide();
-            sap.m.MessageToast.show("Failed to create profile parameters");
+              sap.m.MessageToast.show("Failed to create profile parameters");
             },
           });
-          
         }
-
-        // var uri = "/v2/catalog/genProfileParam";
-        // $.ajax({
-        //   url: uri,
-        //   type: "post",
-        //   contentType: "application/json",
-        //   data: JSON.stringify({
-        //       FLAG : operationFlag,
-        //     PROFILEPARA: aData.PROFILEPARA,
-        //   }),
-        //   dataType: "json",
-        //   async: false,
-        //   timeout: 0,
-        //   error: function (data) {
-        //     sap.ui.core.BusyIndicator.hide();
-        //     sap.m.MessageToast.show(JSON.stringify(data));
-        //   },
-        //   success: function (data) {
-        //     sap.ui.core.BusyIndicator.hide();
-        //     sap.m.MessageToast.show("Created profile parameters");
-        //     that.onBack();
-        //   },
-        // });
       },
     });
   }

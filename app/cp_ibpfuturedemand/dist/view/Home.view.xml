@@ -40,7 +40,7 @@
                                 <Label text="Product"/>
                             </f:label>
                             <f:fields>
-                                <Input id="idprod" placeholder="Product" value="" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                                <Input id="idprod" width="225px" placeholder="Product" value="" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
                             </f:fields>
                         </f:FormElement>
                         <f:FormElement>
