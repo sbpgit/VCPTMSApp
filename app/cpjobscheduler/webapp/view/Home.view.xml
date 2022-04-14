@@ -1,0 +1,50 @@
+<mvc:View controllerName="cpapp.cpjobscheduler.controller.Home"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns="sap.m">
+    <Page >
+        <customHeader>
+            <Toolbar >
+                <Title id="idTitle" text="{i18n>title}" class="boldText"></Title>
+                <ToolbarSpacer/>
+                <Button id="idCreate" text="Create Job" type="Emphasized" press="onCreateJob" tooltip = "Create Job"/>
+                <Button id="idJob" text="Open Job" type="Emphasized" press="onOpenJob" tooltip = "Open Job"/>
+                <Label text="Date Range"/>
+					<DateRangeSelection id="idDateRange" width="20%" delimiter="To" dateValue="" secondDateValue="" valueFormat="yyyy-MM-dd"
+							displayFormat="yyyy-MM-dd" change="handleDateChange" maxDate=""/>
+            </Toolbar>
+        </customHeader>
+        <content>
+            <SearchField id="headSearch" liveChange="onSearch" placeholder="Job"/>
+            <Table id="jobList" items="{path: '/results'}" >
+                <columns>
+                    <Column hAlign="Left" vAlign="Middle">
+                        <Text text="{i18n>jobid}" />
+                    </Column>
+                    <Column hAlign="Left" vAlign="Middle">
+                        <Text text="{i18n>name}"/>
+                    </Column>
+                    <Column hAlign="Left" vAlign="Middle">
+                        <Text text="{i18n>startTime}"/>
+                    </Column>
+                    <Column hAlign="Left" vAlign="Middle">
+                        <Text text="{i18n>endTime}"/>
+                    </Column>
+                    <Column hAlign="Left" vAlign="Middle">
+                        <Text text="{i18n>createdat}"/>
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem>
+                        <cells>
+                            <ObjectIdentifier title="{jobId}" />
+                            <Text text="{name}"/>
+                            <Text text="{startTime}"/>
+                            <Text text="{endTime}"/>
+                            <Text text="{crestedAt}"/>
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </content>
+    </Page>
+</mvc:View>
