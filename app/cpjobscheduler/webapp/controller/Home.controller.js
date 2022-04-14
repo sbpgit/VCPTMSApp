@@ -58,7 +58,7 @@ sap.ui.define(
           },
         });
 
-        that.getModel("BModel").callFunction("/js_Jobs", {
+        that.getModel("JModel").callFunction("/js_Jobs", {
           method: "GET",
         //   urlParameters: {
         //     startTime: dFromDate,
@@ -94,10 +94,10 @@ sap.ui.define(
             dToDate = dDate[0];
 
         this.getModel("JModel").read("/js_Jobs", {
-          filters: [
-              new Filter("startTime", FilterOperator.EQ, dFromDate),
-              new Filter("endTime", FilterOperator.EQ, dToDate),
-          ],
+        //   filters: [
+        //       new Filter("startTime", FilterOperator.EQ, dFromDate),
+        //       new Filter("endTime", FilterOperator.EQ, dToDate),
+        //   ],
           success: function (oData) {
             that.listModel.setData({
                 results: oData.results,
@@ -109,12 +109,12 @@ sap.ui.define(
           },
         });
 
-        that.getModel("BModel").callFunction("/js_Jobs", {
+        that.getModel("JModel").callFunction("/js_Jobs", {
             method: "GET",
-            urlParameters: {
-              startTime: dFromDate,
-              endTime: dToDate
-            },
+            // urlParameters: {
+            //   startTime: dFromDate,
+            //   endTime: dToDate
+            // },
             success: function (oData) {
               that.listModel.setData({
                 results: oData.results,
