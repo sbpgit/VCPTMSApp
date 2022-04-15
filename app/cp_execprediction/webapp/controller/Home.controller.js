@@ -660,7 +660,7 @@ sap.ui.define(
               },
             });
           } else {
-            that.onRunSend();
+            that.onRunSend1();
           }
         },
 
@@ -958,8 +958,31 @@ sap.ui.define(
                   oEntry.vcRulesList.push(vRuleslist);
                 }
               }
+              sap.ui.core.BusyIndicator.show();
               var uri = "/v2/pal/genPredictions";
+            //   that.getModel("PModel").setUseBatch(true);
+            //   that.getModel("PModel").callFunction("/genPredictions", {
+            //     method: "POST",
+            //     urlParameters: JSON.stringify({
+            //               vcRulesList: oEntry.vcRulesList,
+            //             }),
+            //     success: function (oData) {
+            //       sap.ui.core.BusyIndicator.hide();
+            //       sap.m.MessageToast.show(that.i18n.getText("genPredSuccess"));
+            //       regData.push(data.d.values[0].vcRulesList);
 
+            //       that.otabModel.setData({
+            //         results: regData[0],
+            //       });
+            //       that.byId("pmdlList").setModel(that.otabModel);
+            //       that.oPanel.setProperty("visible", true);
+            //       vFlag = "X";
+            //     },
+            //     error: function (error) {
+            //       sap.ui.core.BusyIndicator.hide();
+            //       sap.m.MessageToast.show(that.i18n.getText("genPredErr"));
+            //     },
+            //   });
               $.ajax({
                 url: uri,
                 type: "POST",

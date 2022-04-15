@@ -11,15 +11,6 @@
         <content>
         <List id="grid1" growingScrollToLoad="true"
 				items="{path :'/results'}">
-				<!-- <headerToolbar>
-					<Toolbar>
-						<content>
-							<Title text="{i18n>ProjectList}"/>
-							<ToolbarSpacer/>
-							<SearchField id="searchField" search="onListSearch" liveChange="onListSearch" width="auto" class="searchField" />
-						</content>
-					</Toolbar>
-				</headerToolbar> -->
 				<items>
 					<CustomListItem>
 						<Panel id="idPanel" headerText="{OBJ_DEP}_{OBJ_COUNTER}: {PREDICTED}" expandable="true" expanded="false" expand="onExpand">

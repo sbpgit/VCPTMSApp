@@ -1,93 +1,89 @@
-<mvc:View
-    controllerName="cp.appf.cpibpfuturedemand.controller.Detail" xmlns="sap.m" xmlns:core="sap.ui.core" 
-    xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns:l="sap.ui.layout"
-	xmlns:f="sap.ui.layout.form"
->
+<mvc:View controllerName="cp.appf.cpibpfuturedemand.controller.Detail"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns:l="sap.ui.layout"
+    xmlns:f="sap.ui.layout.form">
     <Page id="idPage" title="IBP Future Plan" titleAlignment="Center" showNavButton="true" navButtonPress="onBack" showFooter="true" class="boldText">
 
-			
+
         <content>
-        <f:Form id="idFormChg" editable="true">
-                        <f:layout>
-                            <f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" 
-                            adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" 
-                            columnsXL="4" columnsL="2" columnsM="2" singleContainerFullSize="false"
-                            breakpointXL= "1400" breakpointL= "800" breakpointM="600" />
-                        </f:layout>
-                        <f:formContainers>
-                            <f:FormContainer>
-                                <f:formElements>
-                                    <f:FormElement label="{i18n>loc}" class="boldText">
-                                        <f:fields>
-                                            <Text text="{oGModel>/sLoc}" />
-                                        </f:fields>
-                                    </f:FormElement>
-                                    <f:FormElement label="{i18n>version}" class="boldText">
-                                        <f:fields>
-                                            <Text text="{oGModel>/sVer}" />
-                                        </f:fields>
-                                    </f:FormElement>
-                                    <f:FormElement label="{i18n>week}" class="boldText">
-                                        <f:fields>
-                                            <Text text="{oGModel>/sWeek}" />
-                                        </f:fields>
-                                    </f:FormElement>
-                                </f:formElements>
-                            </f:FormContainer>
-                            <f:FormContainer>
-                                <f:formElements>
-                                    <f:FormElement label="{i18n>prod}" class="boldText">
-                                        <f:fields>
-                                            <Text text="{oGModel>/sProd}" />
-                                        </f:fields>
-                                    </f:FormElement>
-                                    <f:FormElement label="{i18n>scen}" class="boldText">
-                                        <f:fields>
-                                            <Text text="{oGModel>/sScen}" />
-                                        </f:fields>
-                                    </f:FormElement>
-                                    
-                                </f:formElements>
-                            </f:FormContainer>
-                        </f:formContainers>
-                    </f:Form>
-            <SearchField id="DetailSearch"  liveChange="onDetailSearch" placeholder="Class Name/ Char Name/ Char Value"/>
-            
-        <Table id="idPlanTable"  items="{path: '/results'}"  >
-				<columns>
-					<Column hAlign="Left" vAlign="Middle" >
-						<Text text="{i18n>classno}" />
-					</Column>
-                    <Column hAlign="Left" vAlign="Middle" >
-						<Text text="{i18n>charno}" />
-					</Column>
-					<Column hAlign="Left" vAlign="Middle" >
-						<Text text="{i18n>charvalue}"/>
-					</Column>
+            <f:Form id="idFormChg" editable="true">
+                <f:layout>
+                    <f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="4" columnsL="2" columnsM="2" singleContainerFullSize="false" breakpointXL= "1400" breakpointL= "800" breakpointM="600" />
+                </f:layout>
+                <f:formContainers>
+                    <f:FormContainer>
+                        <f:formElements>
+                            <f:FormElement label="{i18n>loc}" class="boldText">
+                                <f:fields>
+                                    <Text text="{oGModel>/sLoc}" />
+                                </f:fields>
+                            </f:FormElement>
+                            <f:FormElement label="{i18n>version}" class="boldText">
+                                <f:fields>
+                                    <Text text="{oGModel>/sVer}" />
+                                </f:fields>
+                            </f:FormElement>
+                            <f:FormElement label="{i18n>week}" class="boldText">
+                                <f:fields>
+                                    <Text text="{oGModel>/sWeek}" />
+                                </f:fields>
+                            </f:FormElement>
+                        </f:formElements>
+                    </f:FormContainer>
+                    <f:FormContainer>
+                        <f:formElements>
+                            <f:FormElement label="{i18n>prod}" class="boldText">
+                                <f:fields>
+                                    <Text text="{oGModel>/sProd}" />
+                                </f:fields>
+                            </f:FormElement>
+                            <f:FormElement label="{i18n>scen}" class="boldText">
+                                <f:fields>
+                                    <Text text="{oGModel>/sScen}" />
+                                </f:fields>
+                            </f:FormElement>
+
+                        </f:formElements>
+                    </f:FormContainer>
+                </f:formContainers>
+            </f:Form>
+            <SearchField id="DetailSearch" liveChange="onDetailSearch" placeholder="Class Name/ Char Name/ Char Value"/>
+
+            <Table id="idPlanTable" items="{path: '/results'}">
+                <columns>
                     <Column hAlign="Left" vAlign="Middle">
-						<Text text="{i18n>optpersent}"/>
-					</Column>                    
+                        <Text text="{i18n>classno}" />
+                    </Column>
                     <Column hAlign="Left" vAlign="Middle">
-						<Text text="{i18n>optQty}"/>
-					</Column>
-                    <Column hAlign="Left" vAlign="Middle" >
-						<Text text="{i18n>week}"/>
-					</Column>
-				</columns>
-				<items>
-					<ColumnListItem>
-						<!-- <cells> -->
-							<Text text="{CLASS_NAME}"/>
-                            <Text text="{CHAR_NAME}"/>
-                            <Text text="{CHAR_VALUE}"/> 
-                            <Text text="{OPT_PERCENT}"/>
-                            <Text text="{OPT_QTY}"/> 
-                            <Text text="{path: 'WEEK_DATE', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'yyyy/MM/dd' }}"/>
-						<!-- </cells> -->
-					</ColumnListItem>
-				</items>
-			</Table>
-            </content>
-		
-	</Page>
+                        <Text text="{i18n>charno}" />
+                    </Column>
+                    <Column hAlign="Left" vAlign="Middle">
+                        <Text text="{i18n>charvalue}"/>
+                    </Column>
+                    <Column hAlign="Left" vAlign="Middle">
+                        <Text text="{i18n>optpersent}"/>
+                    </Column>
+                    <Column hAlign="Left" vAlign="Middle">
+                        <Text text="{i18n>optQty}"/>
+                    </Column>
+                    <Column hAlign="Left" vAlign="Middle">
+                        <Text text="{i18n>week}"/>
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem>
+                        <Text text="{CLASS_NAME}"/>
+                        <Text text="{CHAR_NAME}"/>
+                        <Text text="{CHAR_VALUE}"/>
+                        <Text text="{OPT_PERCENT}"/>
+                        <Text text="{OPT_QTY}"/>
+                        <Text text="{path: 'WEEK_DATE', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'yyyy/MM/dd' }}"/>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </content>
+
+    </Page>
 </mvc:View>

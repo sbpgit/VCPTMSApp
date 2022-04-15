@@ -37,6 +37,8 @@ using from './cprtrheader/annotations';
 using from './cp_ibpfuturedemand/annotations';
 using from './cpasmbcompreq/annotations';
 using from './cpnewprodintro/annotations';
-using from './cpnewprod/annotations';
+// using from './cpnewprod/annotations';
 using from './cpproduct/annotations';
 using from './cpcustgroup/annotations';
+
+using from './cpnewpartialprod/annotations';

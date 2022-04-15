@@ -20,14 +20,6 @@ sap.ui.define([
 				oViewModel.setProperty("/busy", false);
 				oViewModel.setProperty("/delay", iOriginalBusyDelay);
 			};
-
-			// // disable busy indication when the metadata is loaded and in case of errors
-			// this.getOwnerComponent().getModel("PModel").metadataLoaded().
-			// 	then(fnSetAppNotBusy);
-			// this.getOwnerComponent().getModel("Pmodel").attachMetadataFailed(fnSetAppNotBusy);
-
-			// // apply content density mode to root view
-			// this.getView().addStyleClass(sap.ui.Device.system.desktop ? "sapUiSizeCompact" : "sapUiSizeCozy");
 		}
 	});
 });

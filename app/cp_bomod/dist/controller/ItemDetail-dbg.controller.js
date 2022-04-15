@@ -63,6 +63,17 @@ sap.ui.define(
                 results: [],
               });
               that.byId("idBom").setModel(that.oBomModel);
+
+              that.oCharModel.setData({
+                charResults: [],
+              });
+              that.byId("idChartab").setModel(that.oCharModel);
+
+              that.oBomOnPanelModel.setData({
+                BOMPanelresults: [],
+              });
+              that.byId("idBomOnNextPanel").setModel(that.oBomOnPanelModel);
+
             } else {
               that.oBomModel.setData({
                 results: oData.results,

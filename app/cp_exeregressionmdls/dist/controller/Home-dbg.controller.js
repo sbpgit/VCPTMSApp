@@ -211,7 +211,7 @@ sap.ui.define(
               };
               oEntry.vcRulesList.push(vRuleslist);
 
-              var uri = "/v2/pal/generateRegModels";
+              var uri = "/v2/pal/generateModels";
               $.ajax({
                 url: uri,
                 type: "POST",
@@ -252,7 +252,7 @@ sap.ui.define(
                   oEntry.vcRulesList.push(vRuleslist);
                 }
               }
-              var uri = "/v2/pal/generateRegModels";
+              var uri = "/v2/pal/generateModels";
               $.ajax({
                 url: uri,
                 type: "POST",

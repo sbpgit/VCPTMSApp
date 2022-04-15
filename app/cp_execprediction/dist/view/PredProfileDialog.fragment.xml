@@ -1,7 +1,6 @@
 <core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
 	<SelectDialog id="ppfSlctList" title="{i18n>predpf}" rememberSelections="true" search="handleSearch" liveChange="handleSearch"
 		confirm="handleSelection" cancel="handleClose" multiSelect="false" contentWidth="320px" items="{/results}" growing="false">
-		<!-- <StandardListItem title="{PROFILE}" description="{PRF_DESC}" info="{METHOD}" type="Active"/> -->
         <StandardListItem title="{PROFILE}" description="{METHOD}" info="{OBJ_DEP}" type="Active"/>
 	</SelectDialog>
 </core:FragmentDefinition>

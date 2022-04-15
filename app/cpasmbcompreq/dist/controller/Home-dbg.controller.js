@@ -485,7 +485,7 @@ sap.ui.define(
         that.charModel.setData([]);
         that.oGridList.setModel(that.charModel);
         that.graphModel.setData([]);
-        // oGraph.
+
         that.oGraphchart.setModel(that.graphModel);
         var oLoc = that.oGModel.getProperty("/SelectedLoc"),
           oProd = that.oGModel.getProperty("/SelectedProd"),
@@ -547,7 +547,6 @@ sap.ui.define(
               FilterOperator.EQ,
               that.oGModel.getProperty("/SelectedScen")
             ),
-            //   new Filter("COMPONENT",FilterOperator.EQ, that.colComp),
             new Filter("CAL_DATE", FilterOperator.EQ, that.colDate),
             new Filter("OBJ_DEP", FilterOperator.EQ, objDep[0].split("_")[0]),
             new Filter(
@@ -640,7 +639,9 @@ sap.ui.define(
         return vYear + "-" + vMonth + "-" + vDate;
       },
 
-      // Adding days to generate sequence of dates
+      /**
+       * Adding days to generate sequence of dates
+       */
       addDays: function (imDate, imDays) {
         var vDate, vMonth, vYear;
         const lDate = new Date(imDate);

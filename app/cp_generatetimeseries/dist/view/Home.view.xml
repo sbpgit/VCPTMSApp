@@ -5,108 +5,104 @@
     xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
     xmlns="sap.m">
 
-    <Page id="page" title="{i18n>title}" titleAlignment="Center" >
+    <Page id="page" title="{i18n>title}" titleAlignment="Center">
         <content>
-        <Panel id="idTimeseries" expandable="true" headerText="Timeseries" width="auto" class="sapUiResponsiveMargin">
-        <content>
-            <f:Form editable="true">
-                <f:layout>
-                    <f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" 
-                    adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" 
-                    columnsXL="3" columnsL="2" columnsM="2" singleContainerFullSize="false" breakpointXL= "1400" breakpointL= "800" breakpointM="600" />
-                </f:layout>
-                <f:formContainers>
-                    <f:FormContainer>
-                        <f:formElements>
-                            <f:FormElement>
-                                <f:label>
-                                    <Label text="Location"/>
-                                </f:label>
-                                <f:fields>
-                                    <Input id="idloc" value="" width="225px" placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
-                                </f:fields>
-                            </f:FormElement>
-                        </f:formElements>
-                    </f:FormContainer>
-                    <f:FormContainer>
-                        <f:formElements>
-                            <f:FormElement>
-                                <f:label>
-                                    <Label text="Product"/>
-                                </f:label>
-                                <f:fields>
-                                    <Input id="idProd" value="" width="225px" placeholder="Product" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+            <Panel id="idTimeseries" expandable="true" headerText="Timeseries" width="auto" class="sapUiResponsiveMargin">
+                <content>
+                    <f:Form editable="true">
+                        <f:layout>
+                            <f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="3" columnsL="2" columnsM="2" singleContainerFullSize="false" breakpointXL= "1400" breakpointL= "800" breakpointM="600" />
+                        </f:layout>
+                        <f:formContainers>
+                            <f:FormContainer>
+                                <f:formElements>
+                                    <f:FormElement>
+                                        <f:label>
+                                            <Label text="Location"/>
+                                        </f:label>
+                                        <f:fields>
+                                            <Input id="idloc" value="" width="225px" placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                                        </f:fields>
+                                    </f:FormElement>
+                                </f:formElements>
+                            </f:FormContainer>
+                            <f:FormContainer>
+                                <f:formElements>
+                                    <f:FormElement>
+                                        <f:label>
+                                            <Label text="Product"/>
+                                        </f:label>
+                                        <f:fields>
+                                            <Input id="idProd" value="" width="225px" placeholder="Product" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
 
-                                </f:fields>
-                            </f:FormElement>
-                        </f:formElements>
-                    </f:FormContainer>
-                </f:formContainers>
-            </f:Form>
-            <ToolbarSpacer/>
-            <Button id="idTimeSeries" text="Generate Timeseries" press="onTimeS" tooltip="Generate TimeSeries" enabled="false"/>
-            <Button id="idFTimeSeries" text="Generate Future Timeseries" press="onTimeF" tooltip="Generate Future TimeSeries"  enabled="false"/>
-            
+                                        </f:fields>
+                                    </f:FormElement>
+                                </f:formElements>
+                            </f:FormContainer>
+                        </f:formContainers>
+                    </f:Form>
+                    <ToolbarSpacer/>
+                    <Button id="idTimeSeries" text="Generate Timeseries" press="onTimeS" tooltip="Generate TimeSeries" enabled="false"/>
+                    <Button id="idFTimeSeries" text="Generate Future Timeseries" press="onTimeF" tooltip="Generate Future TimeSeries" enabled="false"/>
+
+                </content>
+            </Panel>
+
+            <Panel id="idComprwq" expandable="true" headerText="Components Requirements" width="auto" class="sapUiResponsiveMargin">
+                <content>
+                    <f:Form editable="true">
+                        <f:layout>
+                            <f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="3" columnsL="2" columnsM="2" singleContainerFullSize="false" breakpointXL= "1400" breakpointL= "800" breakpointM="600" />
+                        </f:layout>
+                        <f:formContainers>
+                            <f:FormContainer>
+                                <f:formElements>
+                                    <f:FormElement>
+                                        <f:label>
+                                            <Label text="Location"/>
+                                        </f:label>
+                                        <f:fields>
+                                            <Input id="idloComp" value="" width="225px" placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                                        </f:fields>
+                                    </f:FormElement>
+                                    <f:FormElement>
+                                        <f:label>
+                                            <Label text="IBP Version"/>
+                                        </f:label>
+                                        <f:fields>
+                                            <Input id="idver" value="" width="225px" placeholder="IBP Version" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                                        </f:fields>
+                                    </f:FormElement>
+                                </f:formElements>
+                            </f:FormContainer>
+                            <f:FormContainer>
+                                <f:formElements>
+                                    <f:FormElement>
+                                        <f:label>
+                                            <Label text="Product"/>
+                                        </f:label>
+                                        <f:fields>
+                                            <Input id="idProComp" value="" width="225px" placeholder="Product" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+
+                                        </f:fields>
+                                    </f:FormElement>
+                                    <f:FormElement>
+                                        <f:label>
+                                            <Label text="IBP Scenario"/>
+                                        </f:label>
+                                        <f:fields>
+                                            <Input id="idscen" value="" width="225px" placeholder="IBP Scenario" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                                        </f:fields>
+                                    </f:FormElement>
+                                </f:formElements>
+                            </f:FormContainer>
+                        </f:formContainers>
+                    </f:Form>
+                    <ToolbarSpacer/>
+                    <Button id="buttonCompReq" text="Components Requirements" press="onCompReq" tooltip="Components Requirments" enabled="false"/>
+
+                </content>
+            </Panel>
         </content>
-        </Panel>
-
-        <Panel id="idComprwq" expandable="true" headerText="Components Requirements" width="auto" class="sapUiResponsiveMargin">
-		<content>
-        <f:Form editable="true">
-                <f:layout>
-                    <f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" 
-                    adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" 
-                    columnsXL="3" columnsL="2" columnsM="2" singleContainerFullSize="false" breakpointXL= "1400" breakpointL= "800" breakpointM="600" />
-                </f:layout>
-                <f:formContainers>
-                    <f:FormContainer>
-                        <f:formElements>
-                            <f:FormElement>
-                                <f:label>
-                                    <Label text="Location"/>
-                                </f:label>
-                                <f:fields>
-                                    <Input id="idloComp" value="" width="225px" placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
-                                </f:fields>
-                            </f:FormElement>
-                            <f:FormElement>
-                                <f:label>
-                                    <Label text="IBP Version"/>
-                                </f:label>
-                                <f:fields>
-                                    <Input id="idver" value="" width="225px" placeholder="IBP Version" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
-                                </f:fields>
-                            </f:FormElement>
-                        </f:formElements>
-                    </f:FormContainer>
-                    <f:FormContainer>
-                        <f:formElements>
-                            <f:FormElement>
-                                <f:label>
-                                    <Label text="Product"/>
-                                </f:label>
-                                <f:fields>
-                                    <Input id="idProComp" value="" width="225px" placeholder="Product" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
-
-                                </f:fields>
-                            </f:FormElement>
-                            <f:FormElement>
-                                <f:label>
-                                    <Label text="IBP Scenario"/>
-                                </f:label>
-                                <f:fields>
-                                    <Input id="idscen" value="" width="225px" placeholder="IBP Scenario" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
-                                </f:fields>
-                            </f:FormElement>
-                        </f:formElements>
-                    </f:FormContainer>
-                </f:formContainers>
-            </f:Form>
-            <ToolbarSpacer/>
-            <Button id="buttonCompReq" text="Components Requirements" press="onCompReq" tooltip="Components Requirments" enabled="false"/>
-
-        </content>
-	</Panel>
-    </content>
     </Page>
 </mvc:View>

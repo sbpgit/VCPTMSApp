@@ -256,10 +256,9 @@ sap.ui.define(
         }
       },
 
-      /** 
-/** 
-* Called when 'Close/Cancel' button in any dialog is pressed.
-*/
+      /**
+       * Called when 'Close/Cancel' button in any dialog is pressed.
+       */
       handleClose: function (oEvent) {
         var sId = oEvent.getParameter("id");
         // Loc Dialog
@@ -519,9 +518,7 @@ sap.ui.define(
         }
 
         weekDate = week.getFullYear() + "-" + month + "-" + day;
-
         that.oGModel.setProperty("/sWeek", weekDate);
-
         var oRouter = sap.ui.core.UIComponent.getRouterFor(that);
         oRouter.navTo("Detail", {}, true);
       },

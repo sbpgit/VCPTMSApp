@@ -433,7 +433,6 @@ sap.ui.define(
           that.charModel.setData([]);
           that.oGridList.setModel(that.charModel);
           that.graphModel.setData([]);
-          // oGraph.
           that.oGraphchart.setModel(that.graphModel);
           // Getting selected row details
           var tableColumns = that.byId("idCompReq").getColumns(),
@@ -457,7 +456,6 @@ sap.ui.define(
 
           that.colDate = selColumnDate;
           if (selColumnValue > 0) {
-            //this.getModel("PModel").read("/getPredictions", {
             this.getModel("BModel").read("/getBOMPred", {
               filters: [
                 new Filter(

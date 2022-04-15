@@ -1,7 +1,8 @@
 <mvc:View xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m"
     xmlns:f="sap.ui.layout.form" controllerName="cpappf.cpnodesdetails.controller.ItemDetail"
-    xmlns:html="http://www.w3.org/1999/xhtml"  xmlns:t="sap.ui.table">
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:t="sap.ui.table">
     <Page id="idClassChar">
         <customHeader>
             <Toolbar height="50%">
@@ -14,23 +15,23 @@
             </Toolbar>
         </customHeader>
         <Toolbar height="8%">
-				<VBox>
-					<HBox>
-						<Text text="Access Node : " class="boldText"></Text>
-						<Text text=" {oGModel>/SelectedAccessNode}"></Text>
-					</HBox>
-					<HBox>
-						<Text text="Description : " class="boldText"></Text>
-						<Text text=" {oGModel>/SelectedDesc}"></Text>
-					</HBox>
-				</VBox>
-			</Toolbar>
+            <VBox>
+                <HBox>
+                    <Text text="Access Node : " class="boldText"></Text>
+                    <Text text=" {oGModel>/SelectedAccessNode}"></Text>
+                </HBox>
+                <HBox>
+                    <Text text="Description : " class="boldText"></Text>
+                    <Text text=" {oGModel>/SelectedDesc}"></Text>
+                </HBox>
+            </VBox>
+        </Toolbar>
 
         <content>
             <IconTabBar id="detailNode" expanded="true" select="onTabChange" class="sapUiResponsiveContentPadding">
                 <items>
                     <IconTabFilter id="struNodeTab" text="Structure Node" key="struNode">
-                    <SearchField id="idDetailSearch" liveChange="onDetailSearch" placeholder="Structure Node/ Desc"/>
+                        <SearchField id="idDetailSearch" liveChange="onDetailSearch" placeholder="Structure Node/ Desc"/>
                         <Table id="sturList" items="{path: '/Struresults'}" mode="SingleSelectMaster">
                             <columns>
                                 <Column hAlign="Center">
@@ -63,80 +64,56 @@
                         </Table>
                     </IconTabFilter>
                     <IconTabFilter id="viewNodeTab" text="View Node" key="viewNode">
-                    <SearchField id="idDetailViewNode" liveChange="onViewNodeSearch" placeholder="View Node/ Structure Node"/>
-                    <t:TreeTable id="nodeTable" enableSelectAll="false" ariaLabelledBy="title" selectionMode="None"
-					visibleRowCount="15"  
-					 rows="{
+                        <SearchField id="idDetailViewNode" liveChange="onViewNodeSearch" placeholder="View Node/ Structure Node"/>
+                        <t:TreeTable id="nodeTable" enableSelectAll="false" ariaLabelledBy="title" selectionMode="None" visibleRowCount="15" rows="{
 								path:'/ViewListresults',
 								parameters: {arrayNames:['children'], numberOfExpandedLevels: 1},
 								events: {
 									change: '.onDataReceived'
 								}
 							}">
-					<t:columns>
-						<t:Column width="10rem">
-							<Label text="View Node"/>
-							<t:template>
-								<HBox justifyContent="Center" visible="{_isParent}">
-									<Text text="{PARENT_NODE}"  />
-									
-								</HBox>
-							</t:template>
-						</t:Column>
-						<t:Column width="14rem">
-							<Label text="Structure Node"/>
-							<t:template>
-								<HBox justifyContent="Center" visible="{= ${children}.length === 0 ? true : !${_isParent}}">
-									<Text text="{CHILD_NODE}" />
-								</HBox>
-							</t:template>
-						</t:Column>
-						<t:Column width="15rem">
-							<Label text="Description"/>
-							<t:template>
-								<HBox justifyContent="Center" visible="{= ${children}.length === 0 ? true : !${_isParent}}">
-								<Text text="{NODE_DESC}"/>
-								</HBox>
-							</t:template>
-						</t:Column>
-                        <t:Column hAlign="Center">
-							<Label text=""/>
-							<t:template>
-                            <VBox>
-                                <HBox>
-                                <Button press="onViewNOdeDelete" icon="sap-icon://decline" tooltip="Delete View Node" 
-                                        visible="{= ${Flag} === 'X' ? true : false}"  iconDensityAware="false" type="Transparent"/>	
-                                </HBox>
-								<HBox visible="{= ${children}.length === 0 ? true : !${_isParent}}">							
-								<Button press="onStruViewDelete" icon="sap-icon://delete" tooltip="Unassign Structure Node" 
-                                        visible="{= ${NODE_DESC} !== '' ? true : false}"  type="Emphasized"/>
-								</HBox>
-                                </VBox>
-							</t:template>
-						</t:Column>
-						
-					</t:columns>
-				</t:TreeTable>
+                            <t:columns>
+                                <t:Column width="10rem">
+                                    <Label text="View Node"/>
+                                    <t:template>
+                                        <HBox justifyContent="Center" visible="{_isParent}">
+                                            <Text text="{PARENT_NODE}" />
 
-                        <!-- <Table id="ViewList" items="{path: '/ViewListresults'}" mode="SingleSelectMaster">
-                            <columns>
+                                        </HBox>
+                                    </t:template>
+                                </t:Column>
+                                <t:Column width="14rem">
+                                    <Label text="Structure Node"/>
+                                    <t:template>
+                                        <HBox justifyContent="Center" visible="{= ${children}.length === 0 ? true : !${_isParent}}">
+                                            <Text text="{CHILD_NODE}" />
+                                        </HBox>
+                                    </t:template>
+                                </t:Column>
+                                <t:Column width="15rem">
+                                    <Label text="Description"/>
+                                    <t:template>
+                                        <HBox justifyContent="Center" visible="{= ${children}.length === 0 ? true : !${_isParent}}">
+                                            <Text text="{NODE_DESC}"/>
+                                        </HBox>
+                                    </t:template>
+                                </t:Column>
+                                <t:Column hAlign="Center">
+                                    <Label text=""/>
+                                    <t:template>
+                                        <VBox>
+                                            <HBox>
+                                                <Button press="onViewNOdeDelete" icon="sap-icon://decline" tooltip="Delete View Node" visible="{= ${Flag} === 'X' ? true : false}" iconDensityAware="false" type="Transparent"/>
+                                            </HBox>
+                                            <HBox visible="{= ${children}.length === 0 ? true : !${_isParent}}">
+                                                <Button press="onStruViewDelete" icon="sap-icon://delete" tooltip="Unassign Structure Node" visible="{= ${NODE_DESC} !== '' ? true : false}" type="Emphasized"/>
+                                            </HBox>
+                                        </VBox>
+                                    </t:template>
+                                </t:Column>
 
-                                <Column hAlign="Center">
-                                    <Text text="{i18n>viewNode}"/>
-                                </Column>
-                                <Column hAlign="Center">
-                                    <Text text="{i18n>nodeDesc}" />
-                                </Column>
-                            </columns>
-                            <items>
-                                <ColumnListItem>
-                                    <cells>
-                                        <Text text="{CHILD_NODE}" />
-                                        <Text text="{NODE_DESC}" />
-                                    </cells>
-                                </ColumnListItem>
-                            </items>
-                        </Table> -->
+                            </t:columns>
+                        </t:TreeTable>
 
                     </IconTabFilter>
                 </items>
