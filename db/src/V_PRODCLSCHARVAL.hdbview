@@ -1,0 +1,19 @@
+----------------------------------------------------------------------------------------
+-- Name:            V_PRODCLSCHARVAL
+-- Description:     Get products, location and class  details
+-- Join Details:    A: CP_NEWPROD_CHAR -  New product characterstics
+--                  B: V_CLASSCHARVAL - View for class, characteristics and its values
+-----------------------------------------------------------------------------------------
+VIEW "V_PRODCLSCHARVAL"
+AS SELECT distinct A.PRODUCT_ID,
+          A.CLASS_NUM,
+          B.CLASS_NAME,
+          B.CHAR_NUM,
+          B.CHAR_NAME,
+          B.CHARVAL_NUM,
+          B.CHAR_VALUE
+    FROM  CP_PRODUCT_CLASS AS A
+    INNER JOIN "V_CLASSCHARVAL" AS B
+    ON A.CLASS_NUM = B.CLASS_NUM
+    -- AND A.CHAR_NUM  = B.CHAR_NUM
+    -- AND A.CHARVAL_NUM = B.CHARVAL_NUM

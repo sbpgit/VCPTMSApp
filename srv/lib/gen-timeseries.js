@@ -330,9 +330,14 @@ class GenTimeseries {
         //   INSERT.into("CP_TS_OBJDEP_CHARHDR").entries(liObjDepChar)
         // );
         // tableObj.push(liObjDepChar);
+        // var sqlStr =
+        //   'INSERT INTO "CP_TS_OBJDEP_CHARHDR"' +
+        //   "(CAL_DATE, LOCATION_ID, PRODUCT_ID, OBJ_TYPE, OBJ_DEP, OBJ_COUNTER, ROW_ID, SUCCESS, SUCCESS_RATE) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
         var sqlStr =
           'INSERT INTO "CP_TS_OBJDEP_CHARHDR"' +
-          "(CAL_DATE, LOCATION_ID, PRODUCT_ID, OBJ_TYPE, OBJ_DEP, OBJ_COUNTER, ROW_ID, SUCCESS, SUCCESS_RATE) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+          "(CAL_DATE, LOCATION_ID, PRODUCT_ID, OBJ_TYPE, OBJ_DEP, OBJ_COUNTER, ROW_ID, SUCCESS, SUCCESS_RATE)" +
+          " SELECT CAL_DATE, LOCATION_ID,PRODUCT_ID, OBJ_TYPE, OBJ_DEP, OBJ_COUNTER, ROW_ID, SUCCESS, SUCCESS_RATE FROM V_ODCHAR_TIMESERIES";
+          
         var stmt = conn.prepare(sqlStr);
         await stmt.execBatch(tableObj);
         stmt.drop();
@@ -521,9 +526,9 @@ class GenTimeseries {
         var sqlStr =
           'INSERT INTO "CP_TS_OBJDEPHDR"' +
           "(CAL_DATE, LOCATION_ID, PRODUCT_ID, OBJ_TYPE, OBJ_DEP, OBJ_COUNTER, SUCCESS, SUCCESS_RATE) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
-        var stmt = conn.prepare(sqlStr);
-        await stmt.execBatch(tableObjH);
-        stmt.drop();
+        // var stmt = conn.prepare(sqlStr);
+        // await stmt.execBatch(tableObjH);
+        // stmt.drop();
       } catch (e) {
         this.logger.error(e.message + "/" + e.query);
       }

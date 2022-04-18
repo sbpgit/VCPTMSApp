@@ -3,7 +3,7 @@ using cp_ds as ds from '../db/data-structures';
 using V_CHARVAL from '../db/data-model';
 using V_OBDHDR from '../db/data-model';
 using V_CLASSCHARVAL from '../db/data-model';
-using V_PRODCLSCHAR from '../db/data-model';
+using { V_PRODCLSCHAR , V_PRODCLSCHARVAL} from '../db/data-model';
 using V_ODPROFILES from '../db/data-model';
 using V_BOMODCOND from '../db/data-model';
 using V_SALESHCFG_CHARVAL from '../db/data-model';
@@ -152,6 +152,9 @@ service CatalogService @(impl : './lib/cat-service.js') {
 
 // Get products, location and class  details
     entity getProdClass         as projection on V_PRODCLSCHAR;
+    
+// Get products, location and class  details
+    entity getProdClsChar         as projection on V_PRODCLSCHARVAL;
 
 // Get class , characteristics and its values
     entity getClassChar         as projection on V_CLASSCHARVAL;

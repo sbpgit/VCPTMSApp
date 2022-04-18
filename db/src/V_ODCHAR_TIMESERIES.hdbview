@@ -7,10 +7,10 @@
 -----------------------------------------------------------------------------------------
 VIEW "V_ODCHAR_TIMESERIES"
 AS  
-SELECT  "V_ORD_COUNT"."WEEK_DATE",
+SELECT  "V_ORD_COUNT"."WEEK_DATE" as "CAL_DATE",
 		"V_ORD_COUNT"."LOCATION_ID", 
 		"V_ORD_COUNT"."PRODUCT_ID", 
-		'OD', 
+		'OD' as "OBJ_TYPE", 
 		"V_OBDHDR"."OBJ_DEP", 
 		"V_OBDHDR"."OBJ_COUNTER", 
 		"V_OBDHDR"."ROW_ID", 

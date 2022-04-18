@@ -565,6 +565,7 @@ context cp {
         key CLASS_NUM   : String(20) @title : 'Class Name';
         key CHAR_NUM    : String(30) @title : 'Charateristic Name';
         key CHARVAL_NUM : String(70) @title : 'Charateristic Value';
+            REF_PRODID  : String(40) @title : ' Ref. Product';
     }
 
     entity ACTUAL_ASMB {
@@ -859,4 +860,14 @@ entity![V_ASMCOMP_REQ]{
     key![VERSION]       : String(10) @title : 'VERSION';
     key![SCENARIO]      : String(32) @title : 'SCENARIO';
     key![MODEL_VERSION] : String(20) @title : 'MODEL_VERSION';
+}
+@cds.persistence.exists 
+Entity ![V_PRODCLSCHARVAL] {
+key     ![PRODUCT_ID]: String(40)  @title: 'PRODUCT_ID' ; 
+key     ![CLASS_NUM]: String(18)  @title: 'CLASS_NUM' ; 
+key     ![CLASS_NAME]: String(20)  @title: 'CLASS_NAME' ; 
+key     ![CHAR_NUM]: String(10)  @title: 'CHAR_NUM' ; 
+key     ![CHAR_NAME]: String(30)  @title: 'CHAR_NAME' ; 
+key     ![CHARVAL_NUM]: String(15)  @title: 'CHARVAL_NUM' ; 
+key     ![CHAR_VALUE]: String(70)  @title: 'CHAR_VALUE' ; 
 }
