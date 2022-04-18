@@ -99,6 +99,20 @@ module.exports = srv => {
         return (await _generatePredictions(req));
     })
 
+
+    srv.on ('f_generateModels',    async req => {
+        console.log('req.data: ', req.data);   
+        var data = req.data.vcRuleList;
+        return (await _generateRegModels(req));   
+    })
+
+
+    srv.on ('f_genPredictions',    async req => {
+        console.log('req.data: ', req.data);   
+        var data = req.data.vcRuleList;
+        return (await _generatePredictions(req));
+    })
+
     //srv.on ('execCorrelation', function(a,b) { 
     /*
     srv.on ('execCorrelation',    async req => {
