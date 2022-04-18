@@ -863,7 +863,7 @@ entity![V_ASMCOMP_REQ]{
 }
 @cds.persistence.exists 
 Entity ![V_PRODCLSCHARVAL] {
-key     ![PRODUCT_ID]: String(40)  @title: 'PRODUCT_ID' ; 
+key     ![PRODUCT_ID]: String(40)  @title: 'Product' ; 
 key     ![CLASS_NUM]: String(18)  @title: 'CLASS_NUM' ; 
 key     ![CLASS_NAME]: String(20)  @title: 'CLASS_NAME' ; 
 key     ![CHAR_NUM]: String(10)  @title: 'CHAR_NUM' ; 
