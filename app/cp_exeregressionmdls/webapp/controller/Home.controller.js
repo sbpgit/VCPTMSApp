@@ -596,50 +596,7 @@ sap.ui.define(
           that.handleClose(oEvent);
         },
 
-        /**
-         * This function is called when selecting and unselecting the multiple items in dialogs.
-         * Tockens will be updated based on sId.
-         * @param {object} oEvent -the event information.
-         */
-        handleTokenUpdate: function (oEvent) {
-          var sId = oEvent.getSource().getId(),
-            oRTokens = oEvent.getParameter("removedTokens"),
-            sRemovedTokenTitle,
-            aItems,
-            i;
-          if (oRTokens) {
-            sRemovedTokenTitle = oRTokens[0].getProperty("key");
-          } else {
-            sRemovedTokenTitle = oEvent.getParameter("item").getName();
-          }
-          //Prod list
-          if (sId.includes("prod")) {
-            aItems = that.oProdList.getSelectedItems();
-            for (i = 0; i < aItems.length; i++) {
-              if (aItems[i].getTitle() === sRemovedTokenTitle) {
-                aItems[i].setSelected(false);
-              }
-            }
-
-            // ObjDep List
-          } else if (sId.includes("od")) {
-            aItems = that.oProdList.getSelectedItems();
-            for (i = 0; i < aItems.length; i++) {
-              if (aItems[i].getTitle() === sRemovedTokenTitle) {
-                aItems[i].setSelected(false);
-              }
-            }
-
-            // Prediction Profile
-          } else if (sId.includes("pmInput")) {
-            aItems = that.oProdList.getSelectedItems();
-            for (i = 0; i < aItems.length; i++) {
-              if (aItems[i].getTitle() === sRemovedTokenTitle) {
-                aItems[i].setSelected(false);
-              }
-            }
-          }
-        },
+        
 
         // Getting CSRF Token
         getToken: function () {

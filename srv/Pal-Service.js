@@ -32,6 +32,28 @@ const varmaMethods = require('./varma.js');
 const rdtMethods = require('./rdt-functions.js');
 // End of RDT functions
 
+const JobSchedulerClient = require("@sap/jobs-client");
+const xsenv = require("@sap/xsenv");
+
+
+function getJobscheduler(req) {
+
+    xsenv.loadEnv();
+    const services = xsenv.getServices({
+      jobscheduler: { tags: "jobscheduler" },
+    });
+    if (services.jobscheduler) {
+      const options = {
+        baseURL: services.jobscheduler.url,
+        user: services.jobscheduler.user,
+        password: services.jobscheduler.password,
+      };
+      return new JobSchedulerClient.Scheduler(options);
+    } else {
+      req.error("no jobscheduler service instance found");
+    }
+  }
+
 module.exports = srv => {
   
    srv.on ('CREATE', 'mlrRegressions',    mlrMethods._runMlrRegressions)
@@ -939,7 +961,8 @@ async function _generatePredictions(req) {
     console.log('Response completed Time  :', createtAt);
 
     var res = req._.req.res;
-    res.statusCode = 201;
+    // res.statusCode = 201;
+    res.statusCode = 202;
     res.send({values});
 
     for (let i = 0; i < vcRulesList.length; i++)
@@ -1073,6 +1096,31 @@ async function _generatePredictions(req) {
 //    console.log('_generatePredictions Sleep Start Time',new Date());
 //    await sleep(2000*vcRulesList.length);
 //    console.log('_generatePredictions Sleep Completed Time',new Date());
+
+
+    let dataObj = {};
+    dataObj["success"] = true;
+    dataObj["message"] = "generate Predictions Job Completed Successfully at " +  new Date();
+
+    const scheduler = getJobscheduler(req);
+
+    var updateReq = {
+        jobId: req.headers['x-sap-job-id'],
+        scheduleId: req.headers['x-sap-job-schedule-id'],
+        runId: req.headers['x-sap-job-run-id'],
+        data : dataObj
+        };
+
+        console.log("generatePredictions job update req",updateReq);
+
+        scheduler.updateJobRunLog(updateReq, function(err, result) {
+        if (err) {
+            return console.log('Error updating run log: %s', err);
+        }
+        //Run log updated successfully
+        console.log("generatePredictions job update results",result);
+
+        });
 } 
 
 async function _getRuleListTypeForGenModels(vcRulesList, modelType, numChars)
@@ -1553,7 +1601,9 @@ async function _generateRegModels (req) {
     console.log('Response completed Time  :', createtAt);
 
     var res = req._.req.res;
-    res.statusCode = 201;
+    // res.statusCode = 201;
+    res.statusCode = 202;
+
 
 //    res.end();
 //    req.res.contentType('application/json');
@@ -2181,11 +2231,35 @@ if (hasCharCount1 == true)
     res.send({values});
 */
    
-    // const sleep = require('await-sleep');
-    // console.log('_generateRegModels Sleeping for ', 1000*vcRulesList.length, ' Milli Seconds');
-    // console.log('_generateRegModels Sleep Start Time',new Date());
-    // await sleep(1000*vcRulesList.length);
-    // console.log('_generateRegModels Sleep Completed Time',new Date());
+    const sleep = require('await-sleep');
+    console.log('_generateRegModels Sleeping for ', 500*vcRulesList.length, ' Milli Seconds');
+    console.log('_generateRegModels Sleep Start Time',new Date());
+    await sleep(500*vcRulesList.length);
+    console.log('_generateRegModels Sleep Completed Time',new Date());
+
+    let dataObj = {};
+    dataObj["success"] = true;
+    dataObj["message"] = "generate Models Job Completed Successfully at " +  new Date();
+
+    const scheduler = getJobscheduler(req);
+
+    var updateReq = {
+        jobId: req.headers['x-sap-job-id'],
+        scheduleId: req.headers['x-sap-job-schedule-id'],
+        runId: req.headers['x-sap-job-run-id'],
+        data : dataObj
+        };
+
+    console.log("generateModels job update req",updateReq);
+
+    scheduler.updateJobRunLog(updateReq, function(err, result) {
+    if (err) {
+        return console.log('Error updating run log: %s', err);
+    }
+    //Run log updated successfully
+    console.log("generatePredictions job update results",result);
+
+    });
 
 }
 

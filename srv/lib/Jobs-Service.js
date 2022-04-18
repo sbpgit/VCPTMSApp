@@ -8,7 +8,11 @@ const qs = require("qs");
 const axios = require("axios");
 // const { cf } = require("cf-http-client");
 
+// const jobFuncs = require('./Jobs-Service.js');
+
 function getJobscheduler(req) {
+// exports.getJobscheduler = function(req){
+
   xsenv.loadEnv();
   const services = xsenv.getServices({
     jobscheduler: { tags: "jobscheduler" },

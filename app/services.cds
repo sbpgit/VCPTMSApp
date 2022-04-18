@@ -42,3 +42,4 @@ using from './cpproduct/annotations';
 using from './cpcustgroup/annotations';
 
 using from './cpnewpartialprod/annotations';
+using from './cpjobscheduler/annotations';

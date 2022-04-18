@@ -189,6 +189,10 @@ modules:
       - cpappcpnewpartialprod.zip
       name: cpappcpnewpartialprod
       target-path: resources/
+    - artifacts:
+      - cpappcpjobscheduler.zip
+      name: cpappcpjobscheduler
+      target-path: resources/
 - name: cpibpfdemcpibpfdem
   type: html5
   path: app/cp_ibpfdem
@@ -462,6 +466,16 @@ modules:
 - name: cpappcpnewpartialprod
   type: html5
   path: app/cpnewpartialprod
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappcpjobscheduler
+  type: html5
+  path: app/cpjobscheduler
   build-parameters:
     build-result: dist
     builder: custom

@@ -1,4 +1,4 @@
-PROCEDURE P_UPSERT_IBP_MASTER_TABLES() LANGUAGE SQLSCRIPT
+PROCEDURE P_UPSERT_IBP_MASTER_TABLES(OUT master_data_rows IBP_MASTER_GEN_RESULTS) LANGUAGE SQLSCRIPT
 AS
 BEGIN
 
@@ -51,4 +51,7 @@ UPSERT IBP_MASTER_GEN_RESULTS VALUES
          (class_rows,cust_rows,product_rows, 
          location_product_rows,loc_prod_comp_rows,
          restriction_rows,loc_resrtiction_rows,ts) WITH PRIMARY KEY;
+
+master_data_rows = SELECT * FROM IBP_MASTER_GEN_RESULTS WHERE "timestamp" = ts;
+
 END;
