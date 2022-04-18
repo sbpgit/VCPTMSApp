@@ -178,16 +178,16 @@ modules:
       name: cpappfcpnewprodintro
       target-path: resources/
     - artifacts:
-      - cpappcpnewprod.zip
-      name: cpappcpnewprod
-      target-path: resources/
-    - artifacts:
       - cpappcpproduct.zip
       name: cpappcpproduct
       target-path: resources/
     - artifacts:
       - cpappcpcustgroup.zip
       name: cpappcpcustgroup
+      target-path: resources/
+    - artifacts:
+      - cpappcpnewpartialprod.zip
+      name: cpappcpnewpartialprod
       target-path: resources/
 - name: cpibpfdemcpibpfdem
   type: html5
@@ -439,16 +439,6 @@ modules:
     - npm install
     - npm run build:cf
     supported-platforms: []
-- name: cpappcpnewprod
-  type: html5
-  path: app/cpnewprod
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    supported-platforms: []
 - name: cpappcpproduct
   type: html5
   path: app/cpproduct
@@ -462,6 +452,16 @@ modules:
 - name: cpappcpcustgroup
   type: html5
   path: app/cpcustgroup
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappcpnewpartialprod
+  type: html5
+  path: app/cpnewpartialprod
   build-parameters:
     build-result: dist
     builder: custom
