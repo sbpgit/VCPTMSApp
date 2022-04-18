@@ -9,6 +9,7 @@ modules:
   requires:
   - name: config_products-db
   - name: uaa_config_products
+  - name: jobscheduler_inst
   provides:
   - name: srv-api
     properties:
@@ -528,6 +529,13 @@ resources:
     service-name: CCL1_ACCESS
   properties:
     the-service-name: ${service-name}
+- name: jobscheduler_inst
+  type: org.cloudfoundry.managed-service
+  parameters:
+       service: jobscheduler
+       service-plan: standard
+       config:
+          enable-xsuaa-support: true
 parameters:
   deploy_mode: html5-repo
   enable-parallel-deployments: true
