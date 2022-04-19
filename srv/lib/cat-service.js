@@ -843,7 +843,7 @@ module.exports = (srv) => {
         let liresults = [];
         let lsresults = {};
         var responseMessage;
-       
+
         if (req.data.FLAG === "C" || req.data.FLAG === "E") {
             lsresults.LOCATION_ID = req.data.LOCATION_ID;
             lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
@@ -878,6 +878,19 @@ module.exports = (srv) => {
         lsresults = {};
 
         return responseMessage;
+    });
+    srv.on("maintainNewProdChar", async (req) => {
+        let liresults = [];
+        let lsresults = {};
+        let liProdChar = [];
+        let lsProdChar = {};
+        var responseMessage;
+        if (req.data.FLAG === "C" || req.data.FLAG === "E") {
+            liProdChar = req.data.PRODCHAR;
+        }
+        else if (req.data.FLAG === "D") {
+        }
+
     });
     // Generate Timeseries
     srv.on("generate_timeseries", async (req) => {

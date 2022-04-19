@@ -1,0 +1,894 @@
+{
+  message: [32m'Started timeseries Service'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-14T07:26:44.116Z'[39m
+}
+{
+  message: [32m'Date: 2019-08-04| Success Records: 93108| Total Records:9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-14T07:26:47.214Z'[39m
+}
+{
+  message: [32m'Insert Char Length: 9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-14T07:26:48.168Z'[39m
+}
+{
+  message: [32m"transaction rolled back by lock wait timeout: TrexColumnUpdate failed on table '22E31DBAE729415AB87E36A13434327D:CP_TS_OBJDEP_CHARHDR' with error: transaction rolled back by lock wait timeout: Lock-wait time out exceeded [OWNER=348864716802, TYPE=RECORD_LOCK, CURRENT_MODE=EXCLUSIVE, REQUESTED_MODE=EXCLUSIVE], rc=4628/undefined"[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-14T07:56:48.408Z'[39m
+}
+{
+  message: [32m'Insert Head Length: 2184'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-14T07:56:52.245Z'[39m
+}
+{
+  message: [32m'Started timeseries Service'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-14T08:54:10.855Z'[39m
+}
+{
+  message: [32m'Date: 2019-08-04| Success Records: 93108| Total Records:9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-14T08:54:13.683Z'[39m
+}
+{
+  message: 'Started timeseries Service',
+  level: 'info',
+  label: 'Timeseries',
+  timestamp: '2022-04-14T09:13:59.521Z'
+}
+{
+  message: 'Date: 2019-08-04| Success Records: 93108| Total Records:9450',
+  level: 'info',
+  label: 'Timeseries',
+  timestamp: '2022-04-14T09:15:17.259Z'
+}
+{
+  message: 'Insert Char Length: 9450',
+  level: 'info',
+  label: 'Timeseries',
+  timestamp: '2022-04-14T09:15:23.349Z'
+}
+{
+  message: "transaction rolled back by lock wait timeout: TrexColumnUpdate failed on table '22E31DBAE729415AB87E36A13434327D:CP_TS_OBJDEP_CHARHDR' with error: transaction rolled back by lock wait timeout: Lock-wait time out exceeded [OWNER=349026193410, TYPE=RECORD_LOCK, CURRENT_MODE=EXCLUSIVE, REQUESTED_MODE=EXCLUSIVE], rc=4628/undefined",
+  level: 'error',
+  label: 'Timeseries',
+  timestamp: '2022-04-14T09:45:37.983Z'
+}
+{
+  message: 'Started timeseries Service',
+  level: 'info',
+  label: 'Timeseries',
+  timestamp: '2022-04-18T08:54:04.430Z'
+}
+{
+  message: 'Date: 2019-08-04| Success Records: 93108| Total Records:9450',
+  level: 'info',
+  label: 'Timeseries',
+  timestamp: '2022-04-18T08:54:27.271Z'
+}
+{
+  message: 'Insert Char Length: 9450',
+  level: 'info',
+  label: 'Timeseries',
+  timestamp: '2022-04-18T08:54:36.170Z'
+}
+{
+  message: 'invalid column name: OD: line 1 col 176 (at pos 175)/undefined',
+  level: 'error',
+  label: 'Timeseries',
+  timestamp: '2022-04-18T08:55:39.729Z'
+}
+{
+  message: 'Insert Head Length: 2184',
+  level: 'info',
+  label: 'Timeseries',
+  timestamp: '2022-04-18T08:55:43.128Z'
+}
+{
+  message: [32m'Started timeseries Service'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T09:18:39.026Z'[39m
+}
+{
+  message: [32m'Date: 2019-08-04| Success Records: 93108| Total Records:9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T09:18:43.364Z'[39m
+}
+{
+  message: [32m'Insert Char Length: 9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T09:18:44.947Z'[39m
+}
+{
+  message: [32m'Too many parameters for the SQL statement/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T09:18:45.241Z'[39m
+}
+{
+  message: [32m'Insert Head Length: 2184'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T09:18:49.525Z'[39m
+}
+{
+  message: [32m'Started timeseries Service'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:01:29.186Z'[39m
+}
+{
+  message: [32m'Date: 2019-08-04| Success Records: 93108| Total Records:9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:01:32.451Z'[39m
+}
+{
+  message: [32m'Insert Char Length: 9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:01:33.501Z'[39m
+}
+{
+  message: [32m'Too many parameters for the SQL statement/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:01:33.687Z'[39m
+}
+{
+  message: [32m'Insert Head Length: 2184'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:01:36.111Z'[39m
+}
+{
+  message: [32m'Date: 2019-08-18| Success Records: 4977| Total Records:9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:01:36.439Z'[39m
+}
+{
+  message: [32m'Insert Char Length: 9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:01:37.183Z'[39m
+}
+{
+  message: [32m'Too many parameters for the SQL statement/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:01:37.269Z'[39m
+}
+{
+  message: [32m'Insert Head Length: 2184'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:01:37.588Z'[39m
+}
+{
+  message: [32m'Date: 2019-09-22| Success Records: 5158| Total Records:9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:01:37.813Z'[39m
+}
+{
+  message: [32m'Insert Char Length: 9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:01:38.542Z'[39m
+}
+{
+  message: [32m'Too many parameters for the SQL statement/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:01:38.633Z'[39m
+}
+{
+  message: [32m'Insert Head Length: 2184'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:01:38.876Z'[39m
+}
+{
+  message: [32m'Date: 2020-01-05| Success Records: 23812| Total Records:9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:01:39.350Z'[39m
+}
+{
+  message: [32m'Insert Char Length: 9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:01:40.106Z'[39m
+}
+{
+  message: [32m'Too many parameters for the SQL statement/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:01:40.219Z'[39m
+}
+{
+  message: [32m'Insert Head Length: 2184'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:01:40.966Z'[39m
+}
+{
+  message: [32m'Date: 2020-01-26| Success Records: 29176| Total Records:9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:01:41.936Z'[39m
+}
+{
+  message: [32m'Insert Char Length: 9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:01:42.975Z'[39m
+}
+{
+  message: [32m'Too many parameters for the SQL statement/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:01:43.112Z'[39m
+}
+{
+  message: [32m'Insert Head Length: 2184'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:01:44.050Z'[39m
+}
+{
+  message: [32m'Date: 2020-03-01| Success Records: 20183| Total Records:9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:01:44.514Z'[39m
+}
+{
+  message: [32m'Insert Char Length: 9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:01:45.514Z'[39m
+}
+{
+  message: [32m'Too many parameters for the SQL statement/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:01:45.605Z'[39m
+}
+{
+  message: [32m'Insert Head Length: 2184'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:01:46.300Z'[39m
+}
+{
+  message: [32m'Date: 2020-03-15| Success Records: 14799| Total Records:9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:01:46.609Z'[39m
+}
+{
+  message: [32m'Insert Char Length: 9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:01:47.497Z'[39m
+}
+{
+  message: [32m'Too many parameters for the SQL statement/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:01:47.580Z'[39m
+}
+{
+  message: [32m'Insert Head Length: 2184'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:01:48.095Z'[39m
+}
+{
+  message: [32m'Date: 2020-03-29| Success Records: 97920| Total Records:9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:01:49.437Z'[39m
+}
+{
+  message: [32m'Insert Char Length: 9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:01:50.438Z'[39m
+}
+{
+  message: [32m'Too many parameters for the SQL statement/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:01:50.593Z'[39m
+}
+{
+  message: [32m'Insert Head Length: 2184'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:01:52.903Z'[39m
+}
+{
+  message: [32m'Date: 2020-04-05| Success Records: 9414| Total Records:9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:01:53.165Z'[39m
+}
+{
+  message: [32m'Insert Char Length: 9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:01:53.858Z'[39m
+}
+{
+  message: [32m'Too many parameters for the SQL statement/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:01:53.968Z'[39m
+}
+{
+  message: [32m'Insert Head Length: 2184'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:01:55.983Z'[39m
+}
+{
+  message: [32m'Date: 2020-04-12| Success Records: 4932| Total Records:9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:01:57.488Z'[39m
+}
+{
+  message: [32m'Insert Char Length: 9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:01:58.342Z'[39m
+}
+{
+  message: [32m'Too many parameters for the SQL statement/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:01:58.552Z'[39m
+}
+{
+  message: [32m'Insert Head Length: 2184'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:01:58.923Z'[39m
+}
+{
+  message: [32m'Date: 2020-04-19| Success Records: 25016| Total Records:9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:01:59.606Z'[39m
+}
+{
+  message: [32m'Insert Char Length: 9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:02:00.698Z'[39m
+}
+{
+  message: [32m'Too many parameters for the SQL statement/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:02:00.879Z'[39m
+}
+{
+  message: [32m'Insert Head Length: 2184'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:02:01.746Z'[39m
+}
+{
+  message: [32m'Date: 2020-04-26| Success Records: 98493| Total Records:9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:02:03.413Z'[39m
+}
+{
+  message: [32m'Insert Char Length: 9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:02:05.069Z'[39m
+}
+{
+  message: [32m'Too many parameters for the SQL statement/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:02:05.252Z'[39m
+}
+{
+  message: [32m'Insert Head Length: 2184'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:02:08.645Z'[39m
+}
+{
+  message: [32m'Date: 2020-05-03| Success Records: 168032| Total Records:9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:02:10.944Z'[39m
+}
+{
+  message: [32m'Insert Char Length: 9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:02:11.967Z'[39m
+}
+{
+  message: [32m'Too many parameters for the SQL statement/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:02:12.065Z'[39m
+}
+{
+  message: [32m'Insert Head Length: 2184'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:02:22.255Z'[39m
+}
+{
+  message: [32m'Date: 2020-05-10| Success Records: 67369| Total Records:9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:02:23.632Z'[39m
+}
+{
+  message: [32m'Insert Char Length: 9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:02:24.659Z'[39m
+}
+{
+  message: [32m'Too many parameters for the SQL statement/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:02:24.884Z'[39m
+}
+{
+  message: [32m'Insert Head Length: 2184'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:02:27.388Z'[39m
+}
+{
+  message: [32m'Date: 2020-05-17| Success Records: 103663| Total Records:9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:02:29.209Z'[39m
+}
+{
+  message: [32m'Insert Char Length: 9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:02:30.397Z'[39m
+}
+{
+  message: [32m'Too many parameters for the SQL statement/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:02:30.557Z'[39m
+}
+{
+  message: [32m'Insert Head Length: 2184'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:02:33.476Z'[39m
+}
+{
+  message: [32m'Date: 2020-05-24| Success Records: 19985| Total Records:9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:02:37.185Z'[39m
+}
+{
+  message: [32m'Insert Char Length: 9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:02:38.475Z'[39m
+}
+{
+  message: [32m'Too many parameters for the SQL statement/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:02:38.627Z'[39m
+}
+{
+  message: [32m'Insert Head Length: 2184'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:02:40.181Z'[39m
+}
+{
+  message: [32m'Date: 2020-05-31| Success Records: 4631| Total Records:9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:02:44.232Z'[39m
+}
+{
+  message: [32m'Insert Char Length: 9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:02:45.084Z'[39m
+}
+{
+  message: [32m'Too many parameters for the SQL statement/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:02:45.420Z'[39m
+}
+{
+  message: [32m'Insert Head Length: 2184'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:02:46.674Z'[39m
+}
+{
+  message: [32m'Date: 2020-06-07| Success Records: 46720| Total Records:9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:02:47.981Z'[39m
+}
+{
+  message: [32m'Insert Char Length: 9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:02:48.934Z'[39m
+}
+{
+  message: [32m'Too many parameters for the SQL statement/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:02:49.057Z'[39m
+}
+{
+  message: [32m'Insert Head Length: 2184'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:02:50.587Z'[39m
+}
+{
+  message: [32m'Date: 2020-06-14| Success Records: 155145| Total Records:9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:02:53.092Z'[39m
+}
+{
+  message: [32m'Insert Char Length: 9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:02:54.343Z'[39m
+}
+{
+  message: [32m'Too many parameters for the SQL statement/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:02:54.440Z'[39m
+}
+{
+  message: [32m'Insert Head Length: 2184'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:03:12.193Z'[39m
+}
+{
+  message: [32m'Date: 2020-06-21| Success Records: 202975| Total Records:9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:03:16.117Z'[39m
+}
+{
+  message: [32m'Insert Char Length: 9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:03:18.276Z'[39m
+}
+{
+  message: [32m'Too many parameters for the SQL statement/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:03:18.512Z'[39m
+}
+{
+  message: [32m'Insert Head Length: 2184'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:03:24.612Z'[39m
+}
+{
+  message: [32m'Date: 2020-06-28| Success Records: 148141| Total Records:9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:03:39.427Z'[39m
+}
+{
+  message: [32m'Insert Char Length: 9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:03:43.100Z'[39m
+}
+{
+  message: [32m'Too many parameters for the SQL statement/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:03:43.415Z'[39m
+}
+{
+  message: [32m'Insert Head Length: 2184'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:03:54.444Z'[39m
+}
+{
+  message: [32m'Date: 2020-07-05| Success Records: 135762| Total Records:9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:03:56.705Z'[39m
+}
+{
+  message: [32m'Insert Char Length: 9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:03:57.818Z'[39m
+}
+{
+  message: [32m'Too many parameters for the SQL statement/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:03:58.003Z'[39m
+}
+{
+  message: [32m'Insert Head Length: 2184'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:04:21.992Z'[39m
+}
+{
+  message: [32m'Date: 2020-07-12| Success Records: 149558| Total Records:9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:04:25.292Z'[39m
+}
+{
+  message: [32m'Insert Char Length: 9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:04:27.059Z'[39m
+}
+{
+  message: [32m'Too many parameters for the SQL statement/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:04:27.286Z'[39m
+}
+{
+  message: [32m'Insert Head Length: 2184'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:04:56.751Z'[39m
+}
+{
+  message: [32m'Date: 2020-07-19| Success Records: 170907| Total Records:9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:04:59.936Z'[39m
+}
+{
+  message: [32m'Insert Char Length: 9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:05:01.418Z'[39m
+}
+{
+  message: [32m'Too many parameters for the SQL statement/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:05:01.648Z'[39m
+}
+{
+  message: [32m'Insert Head Length: 2184'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:05:24.246Z'[39m
+}
+{
+  message: [32m'Date: 2020-07-26| Success Records: 5288| Total Records:9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:05:25.210Z'[39m
+}
+{
+  message: [32m'Insert Char Length: 9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:05:26.031Z'[39m
+}
+{
+  message: [32m'Too many parameters for the SQL statement/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:05:26.227Z'[39m
+}
+{
+  message: [32m'Insert Head Length: 2184'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:05:32.954Z'[39m
+}
+{
+  message: [32m'Date: 2020-08-02| Success Records: 9470| Total Records:9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:05:33.488Z'[39m
+}
+{
+  message: [32m'Insert Char Length: 9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:05:34.178Z'[39m
+}
+{
+  message: [32m'Too many parameters for the SQL statement/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:05:34.393Z'[39m
+}
+{
+  message: [32m'Insert Head Length: 2184'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:05:36.807Z'[39m
+}
+{
+  message: [32m'Date: 2020-08-09| Success Records: 188472| Total Records:9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:05:40.151Z'[39m
+}
+{
+  message: [32m'Insert Char Length: 9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:05:42.206Z'[39m
+}
+{
+  message: [32m'Too many parameters for the SQL statement/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:05:42.455Z'[39m
+}
+{
+  message: [32m'Insert Head Length: 2184'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:06:17.030Z'[39m
+}
+{
+  message: [32m'Date: 2020-08-16| Success Records: 182481| Total Records:9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:06:19.935Z'[39m
+}
+{
+  message: [32m'Insert Char Length: 9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:06:21.078Z'[39m
+}
+{
+  message: [32m'Too many parameters for the SQL statement/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:06:21.446Z'[39m
+}
+{
+  message: [32m'Insert Head Length: 2184'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:06:37.070Z'[39m
+}
+{
+  message: [32m'Date: 2020-08-23| Success Records: 131696| Total Records:9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:06:51.660Z'[39m
+}
+{
+  message: [32m'Insert Char Length: 9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:06:53.533Z'[39m
+}
+{
+  message: [32m'Too many parameters for the SQL statement/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:06:53.837Z'[39m
+}
+{
+  message: [32m'Insert Head Length: 2184'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:06:57.234Z'[39m
+}
+{
+  message: [32m'Date: 2020-08-30| Success Records: 173824| Total Records:9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:06:59.976Z'[39m
+}
+{
+  message: [32m'Insert Char Length: 9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:07:01.153Z'[39m
+}
+{
+  message: [32m'Too many parameters for the SQL statement/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:07:01.448Z'[39m
+}
+{
+  message: [32m'Insert Head Length: 2184'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:07:42.000Z'[39m
+}
+{
+  message: [32m'Date: 2020-09-06| Success Records: 201478| Total Records:9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:08:05.169Z'[39m
+}
+{
+  message: [32m'Insert Char Length: 9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:08:08.523Z'[39m
+}
+{
+  message: [32m'Too many parameters for the SQL statement/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:08:08.920Z'[39m
+}
+{
+  message: [32m'Insert Head Length: 2184'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:08:41.756Z'[39m
+}
+{
+  message: [32m'Date: 2020-09-13| Success Records: 134098| Total Records:9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:08:51.620Z'[39m
+}
+{
+  message: [32m'Insert Char Length: 9450'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:08:53.555Z'[39m
+}
+{
+  message: [32m'Too many parameters for the SQL statement/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-04-18T10:08:53.888Z'[39m
+}

@@ -1,0 +1,1 @@
+sap.ui.define(["cpapp/cpjobscheduler/controller/BaseController","sap/ui/model/json/JSONModel","sap/m/MessageToast","sap/ui/Device"],function(e,o,n,r){"use strict";var t;return e.extend("cpapp.cpjobscheduler.controller.OpenJobs",{onInit:function(){t=this},onAfterRendering:function(){},navBack:function(){var e=sap.ui.core.UIComponent.getRouterFor(t);e.navTo("Home",{},true)}})});

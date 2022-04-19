@@ -8,6 +8,7 @@
     "dependencies": {
         "@sap/audit-logging": "^5.3.0",
         "@sap/cds": "^5.7.5",
+        "@sap/cds-dk": "^4.9.2",
         "@sap/cds-mtx": "^2.5.1",
         "@sap/cds-odata-v2-adapter-proxy": "^1.8.11",
         "@sap/hana-client": "^2.10.15",
@@ -19,6 +20,7 @@
         "axios": "^0.21.1",
         "debug": "^4.3.2",
         "express": "^4",
+        "hana-cli": "^3.202203.3",
         "https": "^1.0.0",
         "passport": "^0.5.2",
         "qs": "^6",
