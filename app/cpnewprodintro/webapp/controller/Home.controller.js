@@ -134,39 +134,42 @@ sap.ui.define(
         oGModel = this.getModel("oGModel");
         oGModel.setProperty("/sFlag", "");
 
-        // Opening dialog and setting data based on selected button
-        if (oEvent.getSource().getTooltip().includes("Create")) {
+        var oRouter = sap.ui.core.UIComponent.getRouterFor(that);
+        oRouter.navTo("Detail", {}, true);
 
-          that._valueHelpDialogCreate.setTitle("New Product Creation");
+        // // Opening dialog and setting data based on selected button
+        // if (oEvent.getSource().getTooltip().includes("Create")) {
 
-          sap.ui.getCore().byId("idloc").setValue("");
-          sap.ui.getCore().byId("idrefprod").setValue("");
-          sap.ui.getCore().byId("idProd").setValue("");
-          oGModel.setProperty("/sFlag", "C");
+        //   that._valueHelpDialogCreate.setTitle("New Product Creation");
 
-          that._valueHelpDialogCreate.open();
+        //   sap.ui.getCore().byId("idloc").setValue("");
+        //   sap.ui.getCore().byId("idrefprod").setValue("");
+        //   sap.ui.getCore().byId("idProd").setValue("");
+        //   oGModel.setProperty("/sFlag", "C");
 
-        } else {
+        //   that._valueHelpDialogCreate.open();
 
-          if (this.byId("ProdList").getSelectedItems().length) {
-            var oTableItem = this.byId("ProdList").getSelectedItem().getCells();
+        // } else {
 
-            that._valueHelpDialogCreate.setTitle("Update Product");
+        //   if (this.byId("ProdList").getSelectedItems().length) {
+        //     var oTableItem = this.byId("ProdList").getSelectedItem().getCells();
+
+        //     that._valueHelpDialogCreate.setTitle("Update Product");
             
-            sap.ui.getCore().byId("idloc").setValue(oTableItem[0].getText());
-            sap.ui.getCore().byId("idProd").setValue(oTableItem[1].getText());
-            sap.ui.getCore().byId("idrefprod").setValue(oTableItem[2].getText());
+        //     sap.ui.getCore().byId("idloc").setValue(oTableItem[0].getText());
+        //     sap.ui.getCore().byId("idProd").setValue(oTableItem[1].getText());
+        //     sap.ui.getCore().byId("idrefprod").setValue(oTableItem[2].getText());
 
-            sap.ui.getCore().byId("idloc").setEditable(false);
-            sap.ui.getCore().byId("idProd").setEditable(false);
+        //     sap.ui.getCore().byId("idloc").setEditable(false);
+        //     sap.ui.getCore().byId("idProd").setEditable(false);
             
-            oGModel.setProperty("/sFlag", "E");
+        //     oGModel.setProperty("/sFlag", "E");
 
-            that._valueHelpDialogCreate.open();
-          } else {
-            MessageToast.show("Select product to update");
-          }
-        }
+        //     that._valueHelpDialogCreate.open();
+        //   } else {
+        //     MessageToast.show("Select product to update");
+        //   }
+        // }
       },
 
       /**

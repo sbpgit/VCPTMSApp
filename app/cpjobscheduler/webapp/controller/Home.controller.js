@@ -37,28 +37,30 @@ sap.ui.define(
       onAfterRendering: function () {
         that.oList = that.byId("jobList");
 
-        // var dDate = that.byId("idDateRange").getValue();
-        // dDate = dDate.split(" To ");
-        // var dFromDate = dDate[0],
-        //     dToDate = dDate[0];
+        var nowH = new Date();
+		//past 15 days selected date
+		var oDateL = new Date(nowH.getFullYear(), nowH.getMonth(), nowH.getDate() - 15);
 
-        this.getModel("JModel").read("/js_Jobs", {
-        //   filters: [
-        //       new Filter("startTime", FilterOperator.EQ, dFromDate),
-        //       new Filter("endTime", FilterOperator.EQ, dToDate),
-        //   ],
-          success: function (oData) {
-            that.listModel.setData({
-              results: oData.results,
-            });
-            that.oList.setModel(that.listModel);
-          },
-          error: function () {
-            MessageToast.show("Failed to get data");
-          },
-        });
+		this.byId("idDateRange").setDateValue(oDateL);
+		this.byId("idDateRange").setSecondDateValue(nowH);
 
-        that.getModel("JModel").callFunction("/js_Jobs", {
+        // this.getModel("JModel").read("/readJobs", {
+        //   //   filters: [
+        //   //       new Filter("startTime", FilterOperator.EQ, dFromDate),
+        //   //       new Filter("endTime", FilterOperator.EQ, dToDate),
+        //   //   ],
+        //   success: function (oData) {
+        //     that.listModel.setData({
+        //       results: oData.results,
+        //     });
+        //     that.oList.setModel(that.listModel);
+        //   },
+        //   error: function () {
+        //     MessageToast.show("Failed to get data");
+        //   },
+        // });
+
+        that.getModel("JModel").callFunction("/readJobs", {
           method: "GET",
         //   urlParameters: {
         //     startTime: dFromDate,
@@ -91,30 +93,30 @@ sap.ui.define(
         var dDate = oEvent.getParameters().newValue;
         dDate = dDate.split(" To ");
         var dFromDate = dDate[0],
-            dToDate = dDate[0];
+          dToDate = dDate[0];
 
-        this.getModel("JModel").read("/js_Jobs", {
-        //   filters: [
-        //       new Filter("startTime", FilterOperator.EQ, dFromDate),
-        //       new Filter("endTime", FilterOperator.EQ, dToDate),
-        //   ],
-          success: function (oData) {
-            that.listModel.setData({
-                results: oData.results,
-              });
-              that.oList.setModel(that.listModel);
-          },
-          error: function () {
-            MessageToast.show("Failed to get data");
-          },
-        });
+        // this.getModel("JModel").read("/readJobs", {
+        //   //   filters: [
+        //   //       new Filter("startTime", FilterOperator.EQ, dFromDate),
+        //   //       new Filter("endTime", FilterOperator.EQ, dToDate),
+        //   //   ],
+        //   success: function (oData) {
+        //     that.listModel.setData({
+        //       results: oData.results,
+        //     });
+        //     that.oList.setModel(that.listModel);
+        //   },
+        //   error: function () {
+        //     MessageToast.show("Failed to get data");
+        //   },
+        // });
 
-        that.getModel("JModel").callFunction("/js_Jobs", {
+        that.getModel("JModel").callFunction("/readJobs", {
             method: "GET",
-            // urlParameters: {
-            //   startTime: dFromDate,
-            //   endTime: dToDate
-            // },
+            urlParameters: {
+              startTime: dFromDate,
+              endTime: dToDate
+            },
             success: function (oData) {
               that.listModel.setData({
                 results: oData.results,
@@ -126,14 +128,6 @@ sap.ui.define(
               MessageToast.show("Failed to get data");
             },
           });
-
-
-
-
-
-
-
-
       },
     });
   }

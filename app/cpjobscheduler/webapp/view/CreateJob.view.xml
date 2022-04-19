@@ -56,10 +56,10 @@
                                     <f:fields>
                                         <MultiInput id="ModInput" placeholder="{i18n>objdep}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
 
-                                        <SegmentedButton id="MidOdRes" selectedKey="OD" class="sapUiSmallMarginBottom" selectionChange="onSelectionChange">
+                                        <SegmentedButton id="MidOdRes" selectedKey="OD" class="sapUiSmallMarginBottom" selectionChange="onMGSegmentChange">
                                             <items>
                                                 <SegmentedButtonItem text="Object Dep." key="OD"/>
-                                                <SegmentedButtonItem text="Restriction" key="rt" />
+                                                <SegmentedButtonItem text="Restriction" key="RT" />
                                             </items>
                                         </SegmentedButton>
                                     </f:fields>
@@ -136,7 +136,7 @@
                                     </f:label>
                                     <f:fields>
                                         <MultiInput id="PodInput" placeholder="{i18n>objdep}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
-                                        <SegmentedButton id="PidType" selectionChange="onButtonChange" selectedKey="OD" class="sapUiSmallMarginBottom">
+                                        <SegmentedButton id="PidType" selectionChange="onPSegmentChange" selectedKey="OD" class="sapUiSmallMarginBottom">
                                             <items>
                                                 <SegmentedButtonItem text="Object Dep." key="OD"/>
                                                 <SegmentedButtonItem text="Restriction" key="RT" />
