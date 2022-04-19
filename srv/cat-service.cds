@@ -208,9 +208,9 @@ service CatalogService @(impl : './lib/cat-service.js') {
     function asssignProfilesOD(FLAG : String(1), LOCATION_ID : String(4), PRODUCT_ID : String(40), COMPONENT : String(40), PROFILE : String(50), OBJ_DEP : String(30), STRUC_NODE : String(50))                                                                                  returns String;
     // function for new product introduction
     function maintainNewProd(FLAG : String(1), LOCATION_ID : String(4), PRODUCT_ID : String(40), REF_PRODID : String(40))                                                                                                                                                        returns String;
-
+// Maintain partial configurations
     function maintainNewProdChar(FLAG : String(1), 
-    PRODCHAR : array of ds.newprodchar ) returns String;
+    PRODCHAR : String ) returns String;
     //    { PRODUCT_ID : String(40);
     //     REF_PRODID : String(40); CLASS_NUM : String(20); CHAR_NUM : String(30); CHARVAL_NUM : String(70)
     // }
