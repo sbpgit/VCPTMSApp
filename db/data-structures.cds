@@ -55,7 +55,13 @@ context cp_ds {
         ROW_ID11    : String(10);
         ROW_ID12    : String(10);
     }
-
+    type newprodchar{
+        PRODUCT_ID : String(40);
+        REF_PRODID : String(40); 
+        CLASS_NUM : String(20); 
+        CHAR_NUM : String(30); 
+        CHARVAL_NUM : String(70)    
+    }
     type compreq {
         // CAL_DATE    : Date;
         LOCATION_ID : String(4);

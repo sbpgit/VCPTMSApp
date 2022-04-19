@@ -209,8 +209,10 @@ service CatalogService @(impl : './lib/cat-service.js') {
     // function for new product introduction
     function maintainNewProd(FLAG : String(1), LOCATION_ID : String(4), PRODUCT_ID : String(40), REF_PRODID : String(40))                                                                                                                                                        returns String;
 
-    function maintainNewProdChar(FLAG : String(1), PRODCHAR : array of {
-        PRODUCT_ID : String(40);
-        REF_PRODID : String(40); CLASS_NUM : String(20); CHAR_NUM : String(30); CHARVAL_NUM : String(70)
-    })                                                                                                                                                                                                                                                                           returns String;
+    function maintainNewProdChar(FLAG : String(1), 
+    PRODCHAR : array of ds.newprodchar ) returns String;
+    //    { PRODUCT_ID : String(40);
+    //     REF_PRODID : String(40); CLASS_NUM : String(20); CHAR_NUM : String(30); CHARVAL_NUM : String(70)
+    // }
+   // )                                                                                                                                                                                                                                                                           returns String;
 }
