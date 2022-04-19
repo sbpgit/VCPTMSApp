@@ -13757,6 +13757,28 @@
         }
       }
     },
+    "PalService.fgModels": {
+      "kind": "function",
+      "params": {
+        "vcRulesList": {
+          "type": "cds.String"
+        }
+      },
+      "returns": {
+        "type": "cds.String"
+      }
+    },
+    "PalService.fgPredictions": {
+      "kind": "function",
+      "params": {
+        "vcRulesList": {
+          "type": "cds.String"
+        }
+      },
+      "returns": {
+        "type": "cds.String"
+      }
+    },
     "CatalogService": {
       "@source": "srv/cat-service.cds",
       "kind": "service",
@@ -19289,6 +19311,47 @@
         }
       }
     },
+    "CatalogService.getNewProdChar": {
+      "kind": "entity",
+      "projection": {
+        "from": {
+          "ref": [
+            "cp.NEWPROD_CHAR"
+          ]
+        }
+      },
+      "elements": {
+        "PRODUCT_ID": {
+          "@title": "New Product",
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+        "CLASS_NUM": {
+          "@title": "Class Name",
+          "key": true,
+          "type": "cds.String",
+          "length": 20
+        },
+        "CHAR_NUM": {
+          "@title": "Charateristic Name",
+          "key": true,
+          "type": "cds.String",
+          "length": 30
+        },
+        "CHARVAL_NUM": {
+          "@title": "Charateristic Value",
+          "key": true,
+          "type": "cds.String",
+          "length": 70
+        },
+        "REF_PRODID": {
+          "@title": " Ref. Product",
+          "type": "cds.String",
+          "length": 40
+        }
+      }
+    },
     "CatalogService.getCompreqQty": {
       "kind": "function",
       "params": {
@@ -19691,6 +19754,44 @@
         "REF_PRODID": {
           "type": "cds.String",
           "length": 40
+        }
+      },
+      "returns": {
+        "type": "cds.String"
+      }
+    },
+    "CatalogService.maintainNewProdChar": {
+      "kind": "function",
+      "params": {
+        "FLAG": {
+          "type": "cds.String",
+          "length": 1
+        },
+        "PRODCHAR": {
+          "items": {
+            "elements": {
+              "PRODUCT_ID": {
+                "type": "cds.String",
+                "length": 40
+              },
+              "REF_PRODID": {
+                "type": "cds.String",
+                "length": 40
+              },
+              "CLASS_NUM": {
+                "type": "cds.String",
+                "length": 20
+              },
+              "CHAR_NUM": {
+                "type": "cds.String",
+                "length": 30
+              },
+              "CHARVAL_NUM": {
+                "type": "cds.String",
+                "length": 70
+              }
+            }
+          }
         }
       },
       "returns": {

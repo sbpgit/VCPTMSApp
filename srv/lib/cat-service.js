@@ -885,12 +885,51 @@ module.exports = (srv) => {
         let liProdChar = [];
         let lsProdChar = {};
         var responseMessage;
+        liProdChar = req.data.PRODCHAR;
         if (req.data.FLAG === "C" || req.data.FLAG === "E") {
-            liProdChar = req.data.PRODCHAR;
+            for( var i = 0; i< liProdChar.length; i++){
+                lsresults.PRODUCT_ID = liProdChar[i].PRODUCT_ID;
+                lsresults.REF_PRODID = liProdChar[i].REF_PRODID;
+                if (req.data.FLAG === "E" && i === 0) {
+                    try {
+                        await cds.delete("CP_NEWPROD_CHAR", lsresults);
+                    } catch (e) {
+                        //DONOTHING
+                    }
+                }
+                lsresults.CLASS_NUM = liProdChar[i].CLASS_NUM; 
+                lsresults.CHAR_NUM = liProdChar[i].CHAR_NUM; 
+                lsresults.CHARVAL_NUM = liProdChar[i].CHARVAL_NUM;
+                liresults.push(lsresults);
+                lsresults = {};
+            }
+            if(liresults.lenght > 0){
+                try {
+                    await cds.run(INSERT.into("CP_NEWPROD_CHAR").entries(liresults));
+                    responseMessage = " Creation/Updation successful";
+                } catch (e) {
+                    //DONOTHING
+                    responseMessage = " Creation failed";
+                    // createResults.push(responseMessage);
+                }
+            }
         }
         else if (req.data.FLAG === "D") {
+            for( var i = 0; i< liProdChar.length; i++){
+                lsresults.PRODUCT_ID = liProdChar[i].PRODUCT_ID;
+                lsresults.REF_PRODID = liProdChar[i].REF_PRODID;
+                if (req.data.FLAG === "E" && i === 0) {
+                    try {
+                        await cds.delete("CP_NEWPROD_CHAR", lsresults);
+                        break;
+                    } catch (e) {
+                        //DONOTHING
+                    }
+                }
+            }
         }
-
+        lsresults = {};
+        return responseMessage;
     });
     // Generate Timeseries
     srv.on("generate_timeseries", async (req) => {

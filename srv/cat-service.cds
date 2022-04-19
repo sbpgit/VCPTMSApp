@@ -175,6 +175,8 @@ service CatalogService @(impl : './lib/cat-service.js') {
     entity getAsmbCompReq       as projection on V_ASMCOMP_REQ;
     // Master data for Assembly and component
     entity getAsmbComp          as projection on od.ASSEMBLY_COMP;
+    // Get new product characteristics
+    entity getNewProdChar       as projection on od.NEWPROD_CHAR;
     //Component requirement qunatity determination
     function getCompreqQty(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32))                                                                                                                                                        returns String;
     // Create PVS node structure
@@ -184,7 +186,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
     // Generate Timeseries
     function generate_timeseriesF(LOCATION_ID : String(4), PRODUCT_ID : String(40))                                                                                                                                                                                              returns String;
     // Get Object dependency
-    function get_objdep()                                                                                                                                                                                                                                                        returns array of ds.objectDep; //objectDep;
+    function get_objdep() returns array of ds.objectDep; //objectDep;
 
     // Generate OD history timeseries
     function genODHistory(OBJ_DEP : String(30), OBJ_COUNTER : String(10))                                                                                                                                                                                                        returns array of ds.odhistory;
