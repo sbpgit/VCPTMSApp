@@ -636,7 +636,7 @@ sap.ui.define(
             
             },
 
-        onRunSend: function () {
+        onRunSend1: function () {
 
             this.oModel = this.getModel("PModel");
           var aItems,
@@ -724,7 +724,7 @@ sap.ui.define(
          * or if some items are selected then sending the selected items in filters.
          * @param {object} oEvent -the event information.
          */
-        onRunSend1: function () {
+        onRunSend: function () {
           this.oModel = this.getModel("PModel");
           var aItems,
             oProdItems,
@@ -774,106 +774,30 @@ sap.ui.define(
               };
               oEntry.vcRulesList.push(vRuleslist);
 
-              //   var oFilters = [];
-              //   var sFilter = new sap.ui.model.Filter({
-              //     path: "override",
-              //     operator: sap.ui.model.FilterOperator.EQ,
-              //     value1: true,
-              //   });
-              //   oFilters.push(sFilter);
+              
 
-              //   sFilter = new sap.ui.model.Filter({
-              //     path: "Location",
-              //     operator: sap.ui.model.FilterOperator.EQ,
-              //     value1: aItems[1].getInfo(),
-              //   });
-              //   oFilters.push(sFilter);
+              that.getModel("PModel").callFunction("/fgPredictions", {
+                method: "GET",
+                urlParameters: JSON.stringify({
+                        vcRulesList: oEntry.vcRulesList,
+                      }),
+                success: function (oData) {
+                  sap.ui.core.BusyIndicator.hide();
+                  sap.m.MessageToast.show(that.i18n.getText("genPredSuccess"));
+                  regData.push(data.d.values[0].vcRulesList);
 
-              //   var sFilter = new sap.ui.model.Filter({
-              //     path: "Product",
-              //     operator: sap.ui.model.FilterOperator.EQ,
-              //     value1: "All",
-              //   });
-              //   oFilters.push(sFilter);
-
-              //   var sFilter = new sap.ui.model.Filter({
-              //     path: "GroupID",
-              //     operator: sap.ui.model.FilterOperator.EQ,
-              //     value1: "All",
-              //   });
-              //   oFilters.push(sFilter);
-
-              //   var sFilter = new sap.ui.model.Filter({
-              //     path: "Type",
-              //     operator: sap.ui.model.FilterOperator.EQ,
-              //     value1: oSelType,
-              //   });
-              //   oFilters.push(sFilter);
-
-              //   var sFilter = new sap.ui.model.Filter({
-              //     path: "modelVersion",
-              //     operator: sap.ui.model.FilterOperator.EQ,
-              //     value1: oSelModelVer,
-              //   });
-              //   oFilters.push(sFilter);
-
-              //   var sFilter = new sap.ui.model.Filter({
-              //     path: "version",
-              //     operator: sap.ui.model.FilterOperator.EQ,
-              //     value1: oSelVer,
-              //   });
-              //   oFilters.push(sFilter);
-
-              //   var sFilter = new sap.ui.model.Filter({
-              //     path: "scenario",
-              //     operator: sap.ui.model.FilterOperator.EQ,
-              //     value1: oSelScen,
-              //   });
-              //   oFilters.push(sFilter);
-
-              var oEntry = {};
-
-                  oEntry.override = true;
-                  oEntry.Location = aItems[1].getInfo();
-                  oEntry.Product = "All";
-                  oEntry.GroupID = "All";
-                  oEntry.Type = oSelType;
-                  oEntry.modelVersion = oSelModelVer;
-                  oEntry.version = oSelVer;
-                  oEntry.scenario = oSelScen;
-
-                this.getModel("PModel").create("/genPredictions", oEntry, {
-                  success: function (oData) {
-                    that.verModel.setData(oData);
-                    that.oVerList.setModel(that.verModel);
-                  },
-                  error: function (oData, error) {
-                    MessageToast.show("error");
-                  },
-                });
-
-            //   that.getModel("PModel").callFunction("/genPredictions", {
-            //     method: "POST",
-            //     urlParameters: {
-            //       vcRulesList: oEntry.vcRulesList,
-            //       // override: true,
-            //       // Location: aItems[1].getInfo(),
-            //       // Product: "All",
-            //       // GroupID: "All",
-            //       // Type: oSelType,
-            //       // modelVersion: oSelModelVer,
-            //       // version: oSelVer,
-            //       // scenario: oSelScen,
-            //     },
-            //     success: function (data) {
-            //       that.rowData = data.results;
-            //       sap.ui.core.BusyIndicator.hide();
-            //     },
-            //     error: function (data) {
-            //       sap.ui.core.BusyIndicator.hide();
-            //       sap.m.MessageToast.show(JSON.stringify(data));
-            //     },
-            //   });
+                  that.otabModel.setData({
+                    results: regData[0],
+                  });
+                  that.byId("pmdlList").setModel(that.otabModel);
+                  that.oPanel.setProperty("visible", true);
+                  vFlag = "X";
+                },
+                error: function (error) {
+                  sap.ui.core.BusyIndicator.hide();
+                  sap.m.MessageToast.show(that.i18n.getText("genPredErr"));
+                },
+              });
 
               // var uri = "/v2/pal/genPredictions";
               // $.ajax({
@@ -920,43 +844,25 @@ sap.ui.define(
               }
               sap.ui.core.BusyIndicator.show();
               var uri = "/v2/pal/genPredictions";
-            //   that.getModel("PModel").setUseBatch(true);
-            //   that.getModel("PModel").callFunction("/genPredictions", {
-            //     method: "POST",
-            //     urlParameters: JSON.stringify({
-            //               vcRulesList: oEntry.vcRulesList,
-            //             }),
-            //     success: function (oData) {
-            //       sap.ui.core.BusyIndicator.hide();
-            //       sap.m.MessageToast.show(that.i18n.getText("genPredSuccess"));
-            //       regData.push(data.d.values[0].vcRulesList);
-
-            //       that.otabModel.setData({
-            //         results: regData[0],
-            //       });
-            //       that.byId("pmdlList").setModel(that.otabModel);
-            //       that.oPanel.setProperty("visible", true);
-            //       vFlag = "X";
-            //     },
-            //     error: function (error) {
-            //       sap.ui.core.BusyIndicator.hide();
-            //       sap.m.MessageToast.show(that.i18n.getText("genPredErr"));
-            //     },
-            //   });
-              $.ajax({
-                url: uri,
-                type: "POST",
-                contentType: "application/json",
-                data: JSON.stringify({
-                  vcRulesList: oEntry.vcRulesList,
-                }),
-                dataType: "json",
-                async: false,
-                timeout: 0,
-                error: function (data) {
-                  sap.m.MessageToast.show(that.i18n.getText("genPredErr"));
+              that.getModel("PModel").setUseBatch(true);
+              that.getModel("PModel").callFunction("/fgPredictions", {
+                method: "GET",
+                // urlParameters: JSON.stringify({
+                //           vcRulesList: oEntry.vcRulesList,
+                //         }),
+                urlParameters: {
+                    vcRulesList: JSON.stringify(oEntry.vcRulesList)
+                    // [{ override: oEntry.vcRulesList[0].override, Location: oEntry.vcRulesList[0].Location,Product: oEntry.vcRulesList[0].Product, GroupID: oEntry.vcRulesList[0].GroupID, Type: oEntry.vcRulesList[0].Type, modelVersion: oEntry.vcRulesList[0].modelVersion, version: oEntry.vcRulesList[0].version, scenario: oEntry.vcRulesList[0].scenario}]
                 },
-                success: function (data) {
+            //     urltempParams = {}
+            //     var dataStr = "'" + [{ override: oEntry.vcRulesList[0].override, Location: oEntry.vcRulesList[0].Location,Product: oEntry.vcRulesList[0].Product, GroupID: oEntry.vcRulesList[0].GroupID, Type: oEntry.vcRulesList[0].Type, modelVersion: oEntry.vcRulesList[0].modelVersion, version: oEntry.vcRulesList[0].version, scenario: oEntry.vcRulesList[0].scenario}]
+            // } +
+
+                // urlParameters:{
+                //     vcRulesList: oEntry.vcRulesList},
+                  
+                success: function (oData) {
+                  sap.ui.core.BusyIndicator.hide();
                   sap.m.MessageToast.show(that.i18n.getText("genPredSuccess"));
                   regData.push(data.d.values[0].vcRulesList);
 
@@ -967,7 +873,36 @@ sap.ui.define(
                   that.oPanel.setProperty("visible", true);
                   vFlag = "X";
                 },
+                error: function (error) {
+                  sap.ui.core.BusyIndicator.hide();
+                  sap.m.MessageToast.show(that.i18n.getText("genPredErr"));
+                },
               });
+            //   $.ajax({
+            //     url: uri,
+            //     type: "POST",
+            //     contentType: "application/json",
+            //     data: JSON.stringify({
+            //       vcRulesList: oEntry.vcRulesList,
+            //     }),
+            //     dataType: "json",
+            //     async: false,
+            //     timeout: 0,
+            //     error: function (data) {
+            //       sap.m.MessageToast.show(that.i18n.getText("genPredErr"));
+            //     },
+            //     success: function (data) {
+            //       sap.m.MessageToast.show(that.i18n.getText("genPredSuccess"));
+            //       regData.push(data.d.values[0].vcRulesList);
+
+            //       that.otabModel.setData({
+            //         results: regData[0],
+            //       });
+            //       that.byId("pmdlList").setModel(that.otabModel);
+            //       that.oPanel.setProperty("visible", true);
+            //       vFlag = "X";
+            //     },
+            //   });
             }
             if (vFlag === "X") {
               that.resetInputs();
