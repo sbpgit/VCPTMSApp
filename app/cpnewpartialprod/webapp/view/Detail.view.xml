@@ -1,4 +1,4 @@
-<mvc:View controllerName="cpapp.cpnewprodintro.controller.Detail"
+<mvc:View controllerName="cpapp.cpnewpartialprod.controller.Detail"
     xmlns="sap.m"
     xmlns:core="sap.ui.core"
     xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
@@ -50,7 +50,12 @@
                             <Text text="{LOCATION_ID}" />
                             <Text text="{PRODUCT_ID}" />
                             <Text text="{REF_PRODID}" />
-                            <Button id="idProd" icon="sap-icon://decline" tooltip="Delete" press="onProdeDel" iconDensityAware="false" type="Transparent"/>
+                            <Switch state="true" customTextOn="Yes" customTextOff="No">
+                                <layoutData>
+                                    <FlexItemData growFactor="1" />
+                                </layoutData>
+                            </Switch>
+                            <!-- <Button id="idProd" icon="sap-icon://decline" tooltip="Delete" press="onProdeDel" iconDensityAware="false" type="Transparent"/> -->
                         </cells>
                     </ColumnListItem>
                 </items>

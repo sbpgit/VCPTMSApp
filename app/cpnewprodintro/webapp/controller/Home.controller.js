@@ -122,6 +122,49 @@ sap.ui.define(
           },
         });
 
+
+        var oEntry = {
+            PRODCHAR: [],
+          },
+          vRuleslist;
+        vRuleslist = {
+            PRODUCT_ID: '8150RW_1',
+            REF_PROD: '8150RW',
+            CLASS_NUM:'20797',            
+            CHAR_NUM:'31655',            
+            CHARVAL_NUM:'31655-0001'
+        };
+        oEntry.PRODCHAR.push(vRuleslist);
+
+        that.getModel("BModel").callFunction("/maintainNewProdChar", {
+            method: "GET",
+            // urlParameters: {
+            //     vcRulesList: JSON.stringify(oEntry.vcRulesList)
+            // },
+            urlParameters: {
+                FLAG : 'C',
+                PRODCHAR: oEntry.PRODCHAR
+            },
+        
+              
+            success: function (oData) {
+              sap.ui.core.BusyIndicator.hide();
+              sap.m.MessageToast.show(that.i18n.getText("genPredSuccess"));
+              regData.push(data.d.values[0].vcRulesList);
+
+              that.otabModel.setData({
+                results: regData[0],
+              });
+              that.byId("pmdlList").setModel(that.otabModel);
+              that.oPanel.setProperty("visible", true);
+              vFlag = "X";
+            },
+            error: function (error) {
+              sap.ui.core.BusyIndicator.hide();
+              sap.m.MessageToast.show(that.i18n.getText("genPredErr"));
+            },
+          });
+
         
       },
 
@@ -134,42 +177,42 @@ sap.ui.define(
         oGModel = this.getModel("oGModel");
         oGModel.setProperty("/sFlag", "");
 
-        var oRouter = sap.ui.core.UIComponent.getRouterFor(that);
-        oRouter.navTo("Detail", {}, true);
+        // var oRouter = sap.ui.core.UIComponent.getRouterFor(that);
+        // oRouter.navTo("Detail", {}, true);
 
-        // // Opening dialog and setting data based on selected button
-        // if (oEvent.getSource().getTooltip().includes("Create")) {
+        // Opening dialog and setting data based on selected button
+        if (oEvent.getSource().getTooltip().includes("Create")) {
 
-        //   that._valueHelpDialogCreate.setTitle("New Product Creation");
+          that._valueHelpDialogCreate.setTitle("New Product Creation");
 
-        //   sap.ui.getCore().byId("idloc").setValue("");
-        //   sap.ui.getCore().byId("idrefprod").setValue("");
-        //   sap.ui.getCore().byId("idProd").setValue("");
-        //   oGModel.setProperty("/sFlag", "C");
+          sap.ui.getCore().byId("idloc").setValue("");
+          sap.ui.getCore().byId("idrefprod").setValue("");
+          sap.ui.getCore().byId("idProd").setValue("");
+          oGModel.setProperty("/sFlag", "C");
 
-        //   that._valueHelpDialogCreate.open();
+          that._valueHelpDialogCreate.open();
 
-        // } else {
+        } else {
 
-        //   if (this.byId("ProdList").getSelectedItems().length) {
-        //     var oTableItem = this.byId("ProdList").getSelectedItem().getCells();
+          if (this.byId("ProdList").getSelectedItems().length) {
+            var oTableItem = this.byId("ProdList").getSelectedItem().getCells();
 
-        //     that._valueHelpDialogCreate.setTitle("Update Product");
+            that._valueHelpDialogCreate.setTitle("Update Product");
             
-        //     sap.ui.getCore().byId("idloc").setValue(oTableItem[0].getText());
-        //     sap.ui.getCore().byId("idProd").setValue(oTableItem[1].getText());
-        //     sap.ui.getCore().byId("idrefprod").setValue(oTableItem[2].getText());
+            sap.ui.getCore().byId("idloc").setValue(oTableItem[0].getText());
+            sap.ui.getCore().byId("idProd").setValue(oTableItem[1].getText());
+            sap.ui.getCore().byId("idrefprod").setValue(oTableItem[2].getText());
 
-        //     sap.ui.getCore().byId("idloc").setEditable(false);
-        //     sap.ui.getCore().byId("idProd").setEditable(false);
+            sap.ui.getCore().byId("idloc").setEditable(false);
+            sap.ui.getCore().byId("idProd").setEditable(false);
             
-        //     oGModel.setProperty("/sFlag", "E");
+            oGModel.setProperty("/sFlag", "E");
 
-        //     that._valueHelpDialogCreate.open();
-        //   } else {
-        //     MessageToast.show("Select product to update");
-        //   }
-        // }
+            that._valueHelpDialogCreate.open();
+          } else {
+            MessageToast.show("Select product to update");
+          }
+        }
       },
 
       /**
