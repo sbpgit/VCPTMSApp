@@ -89,14 +89,28 @@ module.exports = srv => {
     srv.on ('generateModels',    async req => {
         console.log('req.data: ', req.data);   
         var data = req.data.vcRuleList;
-        return (await _generateRegModels(req));   
+        return (await _generateRegModels(req,false));   
     })
 
 
     srv.on ('genPredictions',    async req => {
         console.log('req.data: ', req.data);   
         var data = req.data.vcRuleList;
-        return (await _generatePredictions(req));
+        return (await _generatePredictions(req),false);
+    })
+
+
+    srv.on ('fgModels',    async req => {
+        console.log('req.data: ', req.data.vcRulesList);   
+        var data = req.data.vcRuleList;
+        return (await _generateRegModels(req,true));   
+    })
+
+
+    srv.on ('fgPredictions',    async req => {
+        console.log('req.data: ', req.data);   
+        var data = req.data.vcRuleList;
+        return (await _generatePredictions(req,true));
     })
 
     //srv.on ('execCorrelation', function(a,b) { 
@@ -663,8 +677,18 @@ async function _postPredictionRequest(url,paramsObj,numChars,dataObj,modelType,v
 }
 
 
-async function _generatePredictions(req) {
- const vcRulesListReq = req.data.vcRulesList;
+async function _generatePredictions(req,isGet) {
+
+ var vcRulesListReq = {};
+ if (isGet == true) //GET -- Kludge
+ {
+     vcRulesListReq = JSON.parse(req.data.vcRulesList);
+ }
+ else
+ {
+     vcRulesListReq = req.data.vcRulesList;
+ }
+
    const sleep = require('await-sleep');
 
    console.log('_generatePredictions VC Rules List: ', vcRulesListReq); 
@@ -1104,23 +1128,26 @@ async function _generatePredictions(req) {
 
     const scheduler = getJobscheduler(req);
 
-    var updateReq = {
-        jobId: req.headers['x-sap-job-id'],
-        scheduleId: req.headers['x-sap-job-schedule-id'],
-        runId: req.headers['x-sap-job-run-id'],
-        data : dataObj
-        };
+    if (req.headers['x-sap-job-id'] > 0)
+    {
+        var updateReq = {
+            jobId: req.headers['x-sap-job-id'],
+            scheduleId: req.headers['x-sap-job-schedule-id'],
+            runId: req.headers['x-sap-job-run-id'],
+            data : dataObj
+            };
 
-        console.log("generatePredictions job update req",updateReq);
+            console.log("generatePredictions job update req",updateReq);
 
-        scheduler.updateJobRunLog(updateReq, function(err, result) {
-        if (err) {
-            return console.log('Error updating run log: %s', err);
-        }
-        //Run log updated successfully
-        console.log("generatePredictions job update results",result);
+            scheduler.updateJobRunLog(updateReq, function(err, result) {
+            if (err) {
+                return console.log('Error updating run log: %s', err);
+            }
+            //Run log updated successfully
+            console.log("generatePredictions job update results",result);
 
-        });
+            });
+    }
 } 
 
 async function _getRuleListTypeForGenModels(vcRulesList, modelType, numChars)
@@ -1397,9 +1424,16 @@ async function _getParamsObjForGenModels(vcRulesList, modelType, numChars)
 
 }
 
-async function _generateRegModels (req) {
-
-   const vcRulesListReq = req.data.vcRulesList;
+async function _generateRegModels (req,isGet) {
+   var vcRulesListReq = {};
+   if (isGet == true)
+   {
+       vcRulesListReq = JSON.parse(req.data.vcRulesList);
+   }
+   else
+   {
+       vcRulesListReq = req.data.vcRulesList;
+   }
 
    console.log('_generateRegModels vcRulesListReq: ', vcRulesListReq); 
 //    let resp = req._.req.res;
@@ -2241,25 +2275,28 @@ if (hasCharCount1 == true)
     dataObj["success"] = true;
     dataObj["message"] = "generate Models Job Completed Successfully at " +  new Date();
 
-    const scheduler = getJobscheduler(req);
+    if (req.headers['x-sap-job-id'] > 0)
+    {
+        const scheduler = getJobscheduler(req);
 
-    var updateReq = {
-        jobId: req.headers['x-sap-job-id'],
-        scheduleId: req.headers['x-sap-job-schedule-id'],
-        runId: req.headers['x-sap-job-run-id'],
-        data : dataObj
-        };
+        var updateReq = {
+            jobId: req.headers['x-sap-job-id'],
+            scheduleId: req.headers['x-sap-job-schedule-id'],
+            runId: req.headers['x-sap-job-run-id'],
+            data : dataObj
+            };
 
-    console.log("generateModels job update req",updateReq);
+        console.log("generateModels job update req",updateReq);
 
-    scheduler.updateJobRunLog(updateReq, function(err, result) {
-    if (err) {
-        return console.log('Error updating run log: %s', err);
+        scheduler.updateJobRunLog(updateReq, function(err, result) {
+        if (err) {
+            return console.log('Error updating run log: %s', err);
+        }
+        //Run log updated successfully
+        console.log("generatePredictions job update results",result);
+
+        });
     }
-    //Run log updated successfully
-    console.log("generatePredictions job update results",result);
-
-    });
 
 }
 

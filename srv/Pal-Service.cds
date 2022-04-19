@@ -68,6 +68,36 @@ service PalService{
             modelVersion : String(20);// Active, Simulation// Active, Simulation
             dimensions   : Integer;
         });
+
+
+        // function f_generateModels(vcRulesList : array of{
+        //     profile      : String(50);
+        //     override     : Boolean;
+        //     Location     : String(4);
+        //     Product      : String(40);
+        //     GroupID      : String(20);
+        //     Type         : String(10); // //OD - Object Dependency, Restriction
+        //     modelVersion : String(20);// Active, Simulation
+        //     //modelType : Integer;//  @assert.range: [ 1, 2 ]; // 1 - MLR, 2 - HGBT
+        //     dimensions   : Integer;
+        // }) returns String;
+
+        function fgModels(vcRulesList : String) returns String;
+        function fgPredictions(vcRulesList : String) returns String;
+
+
+        // function f_genPredictions(vcRulesList : array of {
+        //     profile      : String(50);
+        //     override     : Boolean;
+        //     version      : String(10); // default 'BASELINE'; // IBP Version
+        //     scenario     : String(32); // default 'BSL_SCENARIO'; // IBP Scenario
+        //     Location     : String(4);
+        //     Product      : String(40);
+        //     GroupID      : String(20);
+        //     Type         : String(10); // //OD - Object Dependency, Restriction
+        //     modelVersion : String(20);// Active, Simulation// Active, Simulation
+        //     dimensions   : Integer;
+        // }) returns String;
 }
 
    
