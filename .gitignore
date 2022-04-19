@@ -5,3 +5,5 @@ gen/db/.env
 default-env.json
 
 node_modules
+node_modules
+node_modules
