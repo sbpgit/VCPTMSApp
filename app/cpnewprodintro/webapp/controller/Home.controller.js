@@ -143,7 +143,7 @@ sap.ui.define(
             // },
             urlParameters: {
                 FLAG : 'C',
-                PRODCHAR: oEntry.PRODCHAR
+                PRODCHAR: JSON.stringify(oEntry.PRODCHAR)
             },
         
               

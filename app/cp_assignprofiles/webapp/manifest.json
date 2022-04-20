@@ -153,6 +153,7 @@
                       "viewType": "XML",
                       "transition": "slide",
                       "clearControlAggregation": true,
+                      "viewId": "Detail",
                       "viewName": "Detail"
                   }
             }

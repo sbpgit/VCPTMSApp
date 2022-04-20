@@ -6,7 +6,7 @@
     <Page id="idClassChar">
         <customHeader>
             <Toolbar >
-                <Title id="profTitle" text="{i18n>title}" class="boldText"></Title>
+                <Title id="Title" text="{i18n>title}" class="boldText"></Title>
                 <ToolbarSpacer/>
                 <Button id="idAdd" text="Create" icon="sap-icon://add" press="onCreate" tooltip = "Create new product"/>
                 <Button id="idUpdate" text="Update" icon="sap-icon://edit" press="onCreate" tooltip = "Update product"/>
