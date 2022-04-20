@@ -6,7 +6,7 @@
     <Page id="idClassChar">
         <customHeader>
             <Toolbar >
-                <Title id="profTitle" text="{i18n>title}" class="boldText"></Title>
+                <Title id="Title" text="{i18n>title}" class="boldText"></Title>
                 <ToolbarSpacer/>
                 <Button id="idAdd" text="Create" icon="sap-icon://add" press="onCreate" tooltip = "Create new product"/>
                 <Button id="idUpdate" text="Update" icon="sap-icon://edit" press="onCreate" tooltip = "Update product"/>
@@ -26,6 +26,9 @@
                     <Column hAlign="Center">
                         <Text text="{i18n>refProd}"/>
                     </Column>
+                    <Column hAlign="Right" width="15px">
+                        <Text text="" />
+                    </Column>
                     
                     <Column hAlign="Right">
                         <Text text="" />
@@ -37,7 +40,9 @@
                             <Text text="{LOCATION_ID}" />
                             <Text text="{PRODUCT_ID}" />
                             <Text text="{REF_PRODID}" />
+                            <Button id="idDisplay" icon="sap-icon://display" tooltip="Display" press="onCharDetails" iconDensityAware="false" type="Transparent"/>
                             <Button id="idProd" icon="sap-icon://decline" tooltip="Delete" press="onProdeDel" iconDensityAware="false" type="Transparent"/>
+                        
                         </cells>
                     </ColumnListItem>
                 </items>

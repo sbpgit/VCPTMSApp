@@ -156,14 +156,14 @@
                 "Home": {
                     "viewType": "XML",
                     "transition": "slide",
-                    "clearControlAggregation": false,
+                    "clearControlAggregation": true,
                     "viewId": "Home",
                     "viewName": "Home"
                 },
                 "Detail": {
                     "viewType": "XML",
                     "transition": "slide",
-                    "clearControlAggregation": false,
+                    "clearControlAggregation": true,
                     "viewId": "Detail",
                     "viewName": "Detail"
                 }

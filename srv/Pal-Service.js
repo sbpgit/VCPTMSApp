@@ -12,8 +12,17 @@ const conn_params = {
 };
 
 const vcConfigTimePeriod = process.env.TimePeriod; //cf environment variable"PeriodOfYear";//
-// const vcConfigTimePeriod = "PeriodOfYear"; //process.env.TimePeriod; //cf environment variable"PeriodOfYear";//
 const classicalSchema = process.env.classicalSchema; //cf environment variable"DB_CONFIG_PROD_CLIENT1";//"DB_CONFIG_PROD_CLIENT1";//
+
+// const conn_params = {
+//     serverNode  : cds.env.requires.db.credentials.host + ":" + cds.env.requires.db.credentials.port,
+//     uid         : "SBPTECHTEAM",//
+//     pwd         : "Sbpcorp@22",//
+//     encrypt: 'TRUE'
+//     // ssltruststore: cds.env.requires.hana.credentials.certificate
+// };
+// const vcConfigTimePeriod = "PeriodOfYear"; //process.env.TimePeriod; //cf environment variable"PeriodOfYear";//
+// const classicalSchema = "DB_CONFIG_PROD_CLIENT1" ;//process.env.classicalSchema; //cf environment variable"DB_CONFIG_PROD_CLIENT1";//
 
 
 // Begin of HGBT Functions
@@ -93,24 +102,28 @@ module.exports = srv => {
     })
 
 
+    // srv.on ('genPredictions',    async function (req, res) {
     srv.on ('genPredictions',    async req => {
         console.log('req.data: ', req.data);   
         var data = req.data.vcRuleList;
-        return (await _generatePredictions(req),false);
+        return (await _generatePredictions(req,false));
+        // return (await _generatePredictions(req,res,false));
     })
 
 
     srv.on ('fgModels',    async req => {
         console.log('req.data: ', req.data.vcRulesList);   
-        var data = req.data.vcRuleList;
+        // var data = req.data.vcRuleList;
         return (await _generateRegModels(req,true));   
     })
 
 
+    // srv.on ('fgPredictions',    async function (req, res) {
     srv.on ('fgPredictions',    async req => {
         console.log('req.data: ', req.data);   
         var data = req.data.vcRuleList;
         return (await _generatePredictions(req,true));
+        // return (await _generatePredictions(req,res,true));
     })
 
     //srv.on ('execCorrelation', function(a,b) { 
@@ -677,6 +690,7 @@ async function _postPredictionRequest(url,paramsObj,numChars,dataObj,modelType,v
 }
 
 
+// async function _generatePredictions(req,res,isGet) {
 async function _generatePredictions(req,isGet) {
 
  var vcRulesListReq = {};
@@ -984,10 +998,19 @@ async function _generatePredictions(req,isGet) {
     console.log('values :', values);
     console.log('Response completed Time  :', createtAt);
 
-    var res = req._.req.res;
-    // res.statusCode = 201;
-    res.statusCode = 202;
-    res.send({values});
+    if (isGet == true)
+    {
+        req.reply({values});
+        // req.reply();
+    }
+    else
+    {
+        let res = req._.req.res;
+        // res.statusCode = 201;
+        res.statusCode = 202;
+        res.send({values});
+    }
+    
 
     for (let i = 0; i < vcRulesList.length; i++)
     {
@@ -1126,10 +1149,11 @@ async function _generatePredictions(req,isGet) {
     dataObj["success"] = true;
     dataObj["message"] = "generate Predictions Job Completed Successfully at " +  new Date();
 
-    const scheduler = getJobscheduler(req);
 
     if (req.headers['x-sap-job-id'] > 0)
     {
+        const scheduler = getJobscheduler(req);
+
         var updateReq = {
             jobId: req.headers['x-sap-job-id'],
             scheduleId: req.headers['x-sap-job-schedule-id'],
@@ -1634,14 +1658,30 @@ async function _generateRegModels (req,isGet) {
     console.log('values :', values);
     console.log('Response completed Time  :', createtAt);
 
-    var res = req._.req.res;
-    // res.statusCode = 201;
-    res.statusCode = 202;
+//     var res = req._.req.res;
+//     // res.statusCode = 201;
+//     res.statusCode = 202;
 
 
-//    res.end();
-//    req.res.contentType('application/json');
-    res.send({values});
+// //    res.end();
+// //    req.res.contentType('application/json');
+//     res.send({values});
+
+    // req.statusCode = 202;
+    // req.reply({values});
+
+    if (isGet == true)
+    {
+        req.reply({values});
+        // req.reply();
+    }
+    else
+    {
+        let res = req._.req.res;
+        // res.statusCode = 201;
+        res.statusCode = 202;
+        res.send({values});
+    }
     
 //    console.log("Response Headers ", res.getHeaders());
 //    res.removeHeader("x-powered-by");
