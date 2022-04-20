@@ -173,18 +173,68 @@ module.exports = async function (srv) {
     });
   });
   
+  srv.on("addMLJob", (req) => {
+    console.log("addMLJob jobDetails :", JSON.parse(req.data.jobDetails));
+
+    return new Promise((resolve, reject) => {
+      const scheduler = getJobscheduler(req);
+      console.log("addMLJob req.data :", req.data);
+      var inputData = JSON.parse(req.data.jobDetails);
+      console.log("createMLJob inputData :", inputData);
+      let baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+      let actionUrl = baseUrl + inputData.action;
+
+      if (scheduler) {
+        var myJob = {
+          name: inputData.name,
+          description: inputData.description,
+          action: actionUrl,
+          active: true,
+          httpMethod: "POST",
+          schedules: inputData.schedules
+        //   [
+        //     {
+        //       cron: req.data.cron,
+        //       description:
+        //         req.data.cronDesctiption,
+        //       data: req.data.actionData,
+        //       active: true,
+        //       startTime: {
+        //         date: req.data.cronStartTime, //"2021-01-04 15:00 +0000",
+        //         format: req.data.timeFormat //"YYYY-MM-DD HH:mm Z",
+        //       },
+        //     },
+        //   ],
+        };
+        console.log("myJob :", myJob)
+        var scJob = { job: myJob };
+        scheduler.createJob(scJob, function (err, result) {
+          if (err) {
+            reject(req.error(err.message));
+          } else {
+            // job was created successfully
+            resolve(result._id);
+          }
+        });
+      }
+    });
+  });
+
   srv.on("createMLJob", (req) => {
     return new Promise((resolve, reject) => {
       const scheduler = getJobscheduler(req);
       console.log("createMLJob req.data :", req.data);
       var inputData = req.data.jobDetails;
       console.log("createMLJob inputData :", inputData);
+      let baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+      let actionUrl = baseUrl + inputData.action;
+
 
       if (scheduler) {
         var myJob = {
           name: inputData.name,
           description: inputData.description,
-          action: inputData.action,
+          action: actionUrl,
           active: true,
           httpMethod: "POST",
           schedules: inputData.schedules
