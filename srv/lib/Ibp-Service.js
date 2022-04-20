@@ -2,7 +2,6 @@ const cds = require('@sap/cds')
 const JobSchedulerClient = require("@sap/jobs-client");
 const xsenv = require("@sap/xsenv");
 
-
 function getJobscheduler(req) {
 
     xsenv.loadEnv();

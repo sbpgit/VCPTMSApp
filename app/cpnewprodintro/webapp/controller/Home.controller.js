@@ -129,7 +129,7 @@ sap.ui.define(
           vRuleslist;
         vRuleslist = {
             PRODUCT_ID: '8150RW_1',
-            REF_PROD: '8150RW',
+            REF_PRODID: '8150RW',
             CLASS_NUM:'20797',            
             CHAR_NUM:'31655',            
             CHARVAL_NUM:'31655-0001'
@@ -138,12 +138,9 @@ sap.ui.define(
 
         that.getModel("BModel").callFunction("/maintainNewProdChar", {
             method: "GET",
-            // urlParameters: {
-            //     vcRulesList: JSON.stringify(oEntry.vcRulesList)
-            // },
             urlParameters: {
                 FLAG : 'C',
-                PRODCHAR: oEntry.PRODCHAR
+                PRODCHAR: JSON.stringify(oEntry.PRODCHAR)
             },
         
               
