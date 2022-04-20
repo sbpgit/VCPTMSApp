@@ -44,6 +44,7 @@ sap.ui.define(
           that.charnameModel.setSizeLimit(1000);
           that.charvalueModel.setSizeLimit(1000);
   
+          that.oData ={};
           // Declaration of Dialogs
           this._oCore = sap.ui.getCore();
   
@@ -123,28 +124,39 @@ sap.ui.define(
           this.oCharvalueList = this._oCore.byId(
             this._valueHelpDialogcharValue.getId() + "-list"
           );
+          that.aData=[];
 
           if(oGModel.getProperty("/sFlag") === "E"){
-              that.byId("idClassChar").setTitle("Update Job");
+              that.byId("idClassChar").setTitle("Update Product");
             that.byId("idloc").setEditable(false);
             that.byId("idProd").setEditable(false);
 
             that.byId("idloc").setValue(oGModel.getProperty("/Loc"));
             that.byId("idProd").setValue(oGModel.getProperty("/Prod"));
             that.byId("idrefprod").setValue(oGModel.getProperty("/refProd"));
+            that.getCharData();
+            that.byId("idprodPanel").setExpanded(false);
+            that.byId("idCharPanel").setExpanded(true);
               
           } else if(oGModel.getProperty("/sFlag") === "C"){
-            that.byId("idClassChar").setTitle("Create Job");
+            that.byId("idClassChar").setTitle("New Product");
             that.byId("idloc").setEditable(true);
             that.byId("idProd").setEditable(true);
 
             that.byId("idloc").setValue("");
             that.byId("idProd").setValue("");
             that.byId("idrefprod").setValue("");
+            
+                that.ListModel.setData({
+                    results: that.aData
+                });
+                that.byId("idprodPanel").setExpanded(true);
+                that.byId("idCharPanel").setExpanded(false);
+                
           }
 
-            that.byId("idprodPanel").setExpanded(true);
-            that.byId("idCharPanel").setExpanded(false);
+
+            
   
           // Calling service to get the location data
           this.getModel("BModel").read("/getLocation", {
@@ -166,6 +178,46 @@ sap.ui.define(
         onBack: function(){
             var oRouter = sap.ui.core.UIComponent.getRouterFor(that);
         oRouter.navTo("Home", {}, true);
+        },
+
+        getCharData:function(){
+            var sSelProd = oGModel.getProperty("/Prod"),
+            sSelrefProd = oGModel.getProperty("/refProd");
+
+
+            this.getModel("BModel").read("/getProdClsChar", {
+                filters: [
+                  new Filter("PRODUCT_ID", FilterOperator.EQ, sSelrefProd),
+                  new Filter("NEW_PRODID", FilterOperator.EQ, sSelProd),
+                ],
+                success: function (oData) {
+                    that.ListModel.setData({
+                        results: oData.results
+                    });
+                    that.byId("idCharList").setModel(that.ListModel);
+
+                    var listCharData = oData.results;
+            
+                  if(listCharData.length){
+                      for(var j=0; j< listCharData.length; j++){
+                          that.oData = {
+                              "CLASS_NAME": listCharData[j].CLASS_NAME,
+                              "CLASS_NUM": listCharData[j].CLASS_NUM,
+                              "CHAR_NAME": listCharData[j].CHAR_NAME,
+                              "CHAR_NUM": listCharData[j].CHAR_NUM,
+                              "CHAR_VALUE": listCharData[j].CHAR_VALUE,
+                              "CHARVAL_NUM":listCharData[j].CHARVAL_NUM 
+                          };
+                          that.aData.push(that.oData);
+                      }
+                  }
+                    that.charData();
+                },
+                error: function () {
+                  MessageToast.show("Failed to get data");
+                },
+              });
+
         },
 
         /**
@@ -363,6 +415,12 @@ sap.ui.define(
                     });
                     that.byId("idCharList").setModel(that.ListModel);
                     that.charData();
+                    that.byId("idClassname").setValue("");
+                that.byId("idClassno").setValue("");
+                that.byId("idCharname").setValue("");
+                that.byId("idCharno").setValue("");
+                that.byId("idCharval").setValue("");
+                that.byId("idCharvalno").setValue("");
                     that.byId("idprodPanel").setExpanded(false);
                     that.byId("idCharPanel").setExpanded(true);
 
@@ -515,9 +573,13 @@ sap.ui.define(
               var oClassName = that.byId("idClassname").getValue(),
                   oCharName = that.byId("idCharname").getValue(),
                   oCharVel = that.byId("idCharval").getValue();
-            if(oClassName !== "" && oCharName !== "" && oCharVel !== "" ){
 
-            
+                  
+
+            if(oClassName !== "" && oCharName !== "" && oCharVel !== "" ){
+                
+
+
             this.oData = {
                 "CLASS_NAME": oClassName,
                 "CLASS_NUM": that.byId("idClassno").getValue(),
@@ -526,8 +588,6 @@ sap.ui.define(
                 "CHAR_VALUE": oCharVel,
                 "CHARVAL_NUM": that.byId("idCharvalno").getValue()
             };
-
-    
                 // Add entry to the table model
                 that.aData.push(that.oData);
 
@@ -544,7 +604,7 @@ sap.ui.define(
                 that.byId("idCharvalno").setValue("");
 
             } else {
-                MessageToast.show("Select all inputs");
+                MessageToast.show("Please select all inputs");
             }
 
 
@@ -622,7 +682,7 @@ sap.ui.define(
 
                     vRuleslist = {
                         PRODUCT_ID: that.byId("idProd").getValue(),
-                        REF_PROD: that.byId("idrefprod").getValue(),
+                        REF_PRODID: that.byId("idrefprod").getValue(),
                         CLASS_NUM:aData[i].CLASS_NUM,            
                         CHAR_NUM:aData[i].CHAR_NUM,            
                         CHARVAL_NUM:aData[i].CHARVAL_NUM
@@ -630,23 +690,23 @@ sap.ui.define(
                     oEntry.PRODCHAR.push(vRuleslist);
                 }
     
-            // that.getModel("BModel").callFunction("/maintainNewProdChar", {
-            //     method: "GET",
-            //     urlParameters: {
-            //         FLAG : 'C',
-            //         PRODCHAR: JSON.stringify(oEntry.PRODCHAR)
-            //     },
-            //     success: function (oData) {
-            //       sap.ui.core.BusyIndicator.hide();
-            //       sap.m.MessageToast.show("success");
-            //       that.onBack();
-            //     },
-            //     error: function (error) {
-            //       sap.ui.core.BusyIndicator.hide();
-            //       sap.m.MessageToast.show("Error");
-            //       that.onBack();
-            //     },
-            //   });
+            that.getModel("BModel").callFunction("/maintainNewProdChar", {
+                method: "GET",
+                urlParameters: {
+                    FLAG : 'C',
+                    PRODCHAR: JSON.stringify(oEntry.PRODCHAR)
+                },
+                success: function (oData) {
+                  sap.ui.core.BusyIndicator.hide();
+                  sap.m.MessageToast.show("success");
+                  that.onBack();
+                },
+                error: function (error) {
+                  sap.ui.core.BusyIndicator.hide();
+                  sap.m.MessageToast.show("Error");
+                  that.onBack();
+                },
+              });
 
             
           },

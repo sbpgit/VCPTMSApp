@@ -1,16 +1,16 @@
 <core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns:l="sap.ui.layout"
 	xmlns:f="sap.ui.layout.form">
-	<Dialog title="Char Details" contentWidth="800px" >
+	<Dialog title="Product Characteristics" contentWidth="800px" >
         <Table id="idCharDetail"  items="{path: '/results'}" >
 				<columns>
-					<Column hAlign="Left" vAlign="Middle" width="200px">
-						<Text text="{i18n>classname}" />
+					<Column hAlign="Left" vAlign="Middle" >
+						<Text text="{i18n>class}" />
 					</Column>
 					<Column hAlign="Left" vAlign="Middle">
-						<Text text="{i18n>charname}"/>
+						<Text text="{i18n>charn}"/>
 					</Column>
-                    <Column hAlign="Left" vAlign="Middle" width="120px">
-						<Text text="{i18n>charval}"/>
+                    <Column hAlign="Left" vAlign="Middle" >
+						<Text text="{i18n>charv}"/>
 					</Column>
 				</columns>
 				<items>

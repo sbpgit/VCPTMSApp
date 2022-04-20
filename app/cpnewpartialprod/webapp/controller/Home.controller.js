@@ -31,9 +31,11 @@ sap.ui.define(
           that = this;
           // Declaration of Json Model and size category
           that.ProdListModel = new JSONModel();
+          that.charModel = new JSONModel();
         //   that.locModel = new JSONModel();
         //   that.prodModel = new JSONModel();
           that.ProdListModel.setSizeLimit(1000);
+          that.charModel.setSizeLimit(1000);
         //   that.locModel.setSizeLimit(1000);
         //   that.prodModel.setSizeLimit(1000);
   
@@ -134,14 +136,12 @@ sap.ui.define(
           oGModel = this.getModel("oGModel");
           oGModel.setProperty("/sFlag", "");
   
-          
-  
         
           if (oEvent.getSource().getTooltip().includes("Create")) {
             oGModel.setProperty("/sFlag", "C");
             var oRouter = sap.ui.core.UIComponent.getRouterFor(that);
-          oRouter.navTo("Detail", {}, true);  
-          } else {
+            oRouter.navTo("Detail", {}, true);  
+            } else {
   
             if (this.byId("ProdList").getSelectedItems().length) {
               var oTableItem = this.byId("ProdList").getSelectedItem().getCells();
@@ -453,35 +453,35 @@ sap.ui.define(
        * This function is called when a click on parameter button.
        */
       onCharDetails: function (oEvent) {
-        var sSelProd = oEvent.getSource().getParent().getCells()[0].getTitle();
-        var sSelrefProd = oEvent.getSource().getParent().getCells()[1].getText();
+        var sSelProd = oEvent.getSource().getParent().getCells()[1].getText();
+        var sSelrefProd = oEvent.getSource().getParent().getCells()[2].getText();
         // Setting title for fragment
-        // var sTitle =
+        // var sTitle = "Char Details";
         //   "Parameters " + " " + " - " + sSelProfie + " " + " - " + sSelMethod;
 
-        if (!that._onParameter) {
-          that._onParameter = sap.ui.xmlfragment(
+        if (!that._onCharDetails) {
+          that._onCharDetails = sap.ui.xmlfragment(
             "cpapp.cpnewpartialprod.view.CharDetails",
             that
           );
-          that.getView().addDependent(that._onParameter);
+          that.getView().addDependent(that._onCharDetails);
         }
         // Setting title for fragment
-        that._onParameter.setTitleAlignment("Center");
-        that._onParameter.setTitle(sTitle);
-        that.paramList = sap.ui.getCore().byId("idParam");
+        that._onCharDetails.setTitleAlignment("Center");
+        // that._onCharDetails.setTitle(sTitle);
+        that.CharDetailList = sap.ui.getCore().byId("idCharDetail");
 
         this.getModel("BModel").read("/getProdClsChar", {
           filters: [
-            new Filter("PROFILE", FilterOperator.EQ, sSelProfie),
-            new Filter("METHOD", FilterOperator.EQ, sSelMethod),
+            new Filter("PRODUCT_ID", FilterOperator.EQ, sSelrefProd),
+            new Filter("NEW_PRODID", FilterOperator.EQ, sSelProd),
           ],
           success: function (oData) {
-            that.oParamModel.setData({
+            that.charModel.setData({
               results: oData.results,
             });
-            that.paramList.setModel(that.oParamModel);
-            that._onParameter.open();
+            that.CharDetailList.setModel(that.charModel);
+            that._onCharDetails.open();
           },
           error: function () {
             MessageToast.show("Failed to get data");
@@ -492,8 +492,8 @@ sap.ui.define(
       /**
        * Called when 'Close/Cancel' button in any dialog is pressed.
        */
-      onParaClose: function () {
-        that._onParameter.close();
+      onCharClose: function () {
+        that._onCharDetails.close();
       },
 
 
