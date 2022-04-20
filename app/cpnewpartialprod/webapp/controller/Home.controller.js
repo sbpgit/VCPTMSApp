@@ -362,42 +362,42 @@ sap.ui.define(
          * This function is called when click on save button in dialog to create or update the product.
          * @param {object} oEvent -the event information.
          */
-        onProdSave: function (oEvent) {
-          var oLoc = this._oCore.byId("idloc").getValue(),
-            oRefProd = this._oCore.byId("idrefprod").getValue(),
-            oProd = this._oCore.byId("idProd").getValue(),
-            oFlag = oGModel.getProperty("/sFlag");
+        // onProdSave: function (oEvent) {
+        //   var oLoc = this._oCore.byId("idloc").getValue(),
+        //     oRefProd = this._oCore.byId("idrefprod").getValue(),
+        //     oProd = this._oCore.byId("idProd").getValue(),
+        //     oFlag = oGModel.getProperty("/sFlag");
   
-          if (oRefProd === oProd) {
-            MessageToast.show(
-              "Reference product and new product can not be same"
-            );
-          } else {
-            that.getModel("BModel").callFunction("/maintainNewProd", {
-              method: "GET",
-              urlParameters: {
-                LOCATION_ID: oLoc,
-                PRODUCT_ID: oProd,
-                REF_PRODID: oRefProd,
-                FLAG: oFlag,
-              },
-              success: function (oData) {
-                sap.ui.core.BusyIndicator.hide();
-                if (oFlag === "C") {
-                  MessageToast.show("New product created successfully");
-                } else {
-                  MessageToast.show("Successfully updated the product");
-                }
-                that._valueHelpDialogCreate.close();
-                that.onAfterRendering();
-              },
-              error: function (oData) {
-                MessageToast.show("Failed to create /updaate the producr");
-                sap.ui.core.BusyIndicator.hide();
-              },
-            });
-          }
-        },
+        //   if (oRefProd === oProd) {
+        //     MessageToast.show(
+        //       "Reference product and new product can not be same"
+        //     );
+        //   } else {
+        //     that.getModel("BModel").callFunction("/maintainNewProd", {
+        //       method: "GET",
+        //       urlParameters: {
+        //         LOCATION_ID: oLoc,
+        //         PRODUCT_ID: oProd,
+        //         REF_PRODID: oRefProd,
+        //         FLAG: oFlag,
+        //       },
+        //       success: function (oData) {
+        //         sap.ui.core.BusyIndicator.hide();
+        //         if (oFlag === "C") {
+        //           MessageToast.show("New product created successfully");
+        //         } else {
+        //           MessageToast.show("Successfully updated the product");
+        //         }
+        //         that._valueHelpDialogCreate.close();
+        //         that.onAfterRendering();
+        //       },
+        //       error: function (oData) {
+        //         MessageToast.show("Failed to create /updaate the producr");
+        //         sap.ui.core.BusyIndicator.hide();
+        //       },
+        //     });
+        //   }
+        // },
   
         /**
          * This function is called when click on Delete button on product list.
@@ -447,6 +447,61 @@ sap.ui.define(
             },
           });
         },
+
+ 
+      /**
+       * This function is called when a click on parameter button.
+       */
+      onCharDetails: function (oEvent) {
+        var sSelProd = oEvent.getSource().getParent().getCells()[0].getTitle();
+        var sSelrefProd = oEvent.getSource().getParent().getCells()[1].getText();
+        // Setting title for fragment
+        // var sTitle =
+        //   "Parameters " + " " + " - " + sSelProfie + " " + " - " + sSelMethod;
+
+        if (!that._onParameter) {
+          that._onParameter = sap.ui.xmlfragment(
+            "cpapp.cpnewpartialprod.view.CharDetails",
+            that
+          );
+          that.getView().addDependent(that._onParameter);
+        }
+        // Setting title for fragment
+        that._onParameter.setTitleAlignment("Center");
+        that._onParameter.setTitle(sTitle);
+        that.paramList = sap.ui.getCore().byId("idParam");
+
+        this.getModel("BModel").read("/getProdClsChar", {
+          filters: [
+            new Filter("PROFILE", FilterOperator.EQ, sSelProfie),
+            new Filter("METHOD", FilterOperator.EQ, sSelMethod),
+          ],
+          success: function (oData) {
+            that.oParamModel.setData({
+              results: oData.results,
+            });
+            that.paramList.setModel(that.oParamModel);
+            that._onParameter.open();
+          },
+          error: function () {
+            MessageToast.show("Failed to get data");
+          },
+        });
+      },
+
+      /**
+       * Called when 'Close/Cancel' button in any dialog is pressed.
+       */
+      onParaClose: function () {
+        that._onParameter.close();
+      },
+
+
+
+
+
+
+
       });
     }
   );
