@@ -879,13 +879,13 @@ module.exports = (srv) => {
 
         return responseMessage;
     });
+    // Maintain partial configurations for new product
     srv.on("maintainNewProdChar", async (req) => {
         let liresults = [];
         let lsresults = {};
-        let liProdChar = [];
-        let lsProdChar = {};
+        let liProdChar = {};
         var responseMessage;
-        liProdChar = req.data.PRODCHAR;
+        liProdChar = JSON.parse(req.data.PRODCHAR);
         if (req.data.FLAG === "C" || req.data.FLAG === "E") {
             for( var i = 0; i< liProdChar.length; i++){
                 lsresults.PRODUCT_ID = liProdChar[i].PRODUCT_ID;
@@ -903,7 +903,7 @@ module.exports = (srv) => {
                 liresults.push(lsresults);
                 lsresults = {};
             }
-            if(liresults.lenght > 0){
+            if(liresults.length > 0){
                 try {
                     await cds.run(INSERT.into("CP_NEWPROD_CHAR").entries(liresults));
                     responseMessage = " Creation/Updation successful";

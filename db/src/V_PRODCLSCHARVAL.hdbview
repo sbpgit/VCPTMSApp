@@ -6,6 +6,7 @@
 -----------------------------------------------------------------------------------------
 VIEW "V_PRODCLSCHARVAL"
 AS SELECT distinct A.PRODUCT_ID,
+          C.PRODUCT_ID AS NEW_PRODID,
           A.CLASS_NUM,
           B.CLASS_NAME,
           B.CHAR_NUM,
@@ -15,5 +16,8 @@ AS SELECT distinct A.PRODUCT_ID,
     FROM  CP_PRODUCT_CLASS AS A
     INNER JOIN "V_CLASSCHARVAL" AS B
     ON A.CLASS_NUM = B.CLASS_NUM
-    -- AND A.CHAR_NUM  = B.CHAR_NUM
-    -- AND A.CHARVAL_NUM = B.CHARVAL_NUM
+    LEFT OUTER JOIN "CP_NEWPROD_CHAR" AS C
+    ON A.PRODUCT_ID = C.REF_PRODID
+    AND A.CLASS_NUM = C.CLASS_NUM
+    AND B.CHAR_NUM  = C.CHAR_NUM
+    AND B.CHARVAL_NUM = C.CHARVAL_NUM
