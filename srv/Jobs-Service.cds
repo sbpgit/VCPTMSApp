@@ -2,6 +2,7 @@ using js from '../db/jobscheduler';
 
 service JobsService @(impl : './lib/Jobs-Service.js') {
 
+  function lreadJobs() returns String;
     // job-scheduler
   function readJobs() returns array of js.Jobs;
   function readJobDetails(jobId : Integer) returns js.Jobs;

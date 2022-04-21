@@ -30,6 +30,48 @@ function getJobscheduler(req) {
 }
 
 module.exports = async function (srv) {
+
+  srv.on("lreadJobs", async req => {
+    var request = require('request');
+    let baseUrl = "https://sbpprovider-dev-config-products-srv.cfapps.us10.hana.ondemand.com"; 
+    let readJobsUrl = baseUrl + '/jobs/readJobs()';
+
+    options = {
+        'method': 'GET',
+        'url': readJobsUrl, 
+        'headers' : {
+            'Accept': 'application/json',
+            'Accept-Charset': 'utf-8'
+        }   
+    }
+    var values = [];
+    let ret_response ="";
+
+    await request(options, async function (error, response) {
+   
+        console.log('statusCode:', response.statusCode); // Print the response status code if a response was received
+        if (error) 
+        {
+            console.log('lreadJobs - Error ', error);
+            // values.push(JSON.parse(error));
+            //throw new Error(error);
+            ret_response = JSON.parse(error);
+        }
+        if (response.statusCode == 200)
+        {
+            // values.push(JSON.parse(response.body));
+            ret_response = JSON.parse(response.body);
+        }
+    })
+    const sleep = require('await-sleep');
+    await sleep(1000);
+    // console.log('ret_response.value ', ret_response.value);
+    // console.log('length of ret_response.value ', ret_response.value.length);
+
+    req.reply(ret_response);
+
+  });
+
   srv.on("readJobs", (req) => {
     return new Promise((resolve, reject) => {
       const scheduler = getJobscheduler(req);
