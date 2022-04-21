@@ -72,6 +72,51 @@ module.exports = async function (srv) {
 
   });
 
+
+  srv.on("laddMLJob", async req => {
+    var request = require('request');
+    let baseUrl = "https://sbpprovider-dev-config-products-srv.cfapps.us10.hana.ondemand.com"; 
+    // let addJobsUrl = baseUrl + '/jobs/addMLJob(' + "'" + JSON.stringify(req.data) + "'" + ')';
+    // console.log('req.data.jobDetails ', req.data.jobDetails);
+    let jobDetails = req.data.jobDetails;
+   // str.replace(/[/_]/g, "%2F");
+    let jDetails = jobDetails.replace(/[/_]/g, "%2F");
+    console.log('jDetails ', jDetails);
+
+    let addJobsUrl = baseUrl + '/jobs/addMLJob(jobDetails=' + "'" + jDetails + "'" + ')';
+
+    console.log('addJobsUrl ', addJobsUrl);
+
+    options = {
+        'method': 'GET',
+        'url': addJobsUrl, 
+        'headers' : {
+            'Accept': 'application/json',
+            'Accept-Charset': 'utf-8'
+        }   
+    }
+    var values = [];
+    let ret_response ="";
+
+    await request(options, async function (error, response) {
+   
+        console.log('statusCode:', response.statusCode); // Print the response status code if a response was received
+        if (error) 
+        {
+            console.log('laddMLJob - Error ', error);
+            ret_response = JSON.parse(error);
+        }
+        if (response.statusCode == 200)
+        {
+            ret_response = JSON.parse(response.body);
+        }
+    })
+    const sleep = require('await-sleep');
+    await sleep(1000);
+    req.reply(ret_response);
+
+  });
+
   srv.on("readJobs", (req) => {
     return new Promise((resolve, reject) => {
       const scheduler = getJobscheduler(req);
