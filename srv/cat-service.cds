@@ -1,5 +1,7 @@
 using cp as od from '../db/data-model';
 using cp_ds as ds from '../db/data-structures';
+using {IBPDemandsrv as external} from './external/IBPDemandsrv.csn';
+
 using V_CHARVAL from '../db/data-model';
 using V_OBDHDR from '../db/data-model';
 using V_CLASSCHARVAL from '../db/data-model';
@@ -177,6 +179,8 @@ service CatalogService @(impl : './lib/cat-service.js') {
     entity getAsmbComp          as projection on od.ASSEMBLY_COMP;
     // Get new product characteristics
     entity getNewProdChar       as projection on od.NEWPROD_CHAR;
+
+    
     //Component requirement qunatity determination
     function getCompreqQty(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32))                                                                                                                                                        returns String;
     // Create PVS node structure
@@ -208,7 +212,8 @@ service CatalogService @(impl : './lib/cat-service.js') {
     function asssignProfilesOD(FLAG : String(1), LOCATION_ID : String(4), PRODUCT_ID : String(40), COMPONENT : String(40), PROFILE : String(50), OBJ_DEP : String(30), STRUC_NODE : String(50))                                                                                  returns String;
     // function for new product introduction
     function maintainNewProd(FLAG : String(1), LOCATION_ID : String(4), PRODUCT_ID : String(40), REF_PRODID : String(40))                                                                                                                                                        returns String;
-// Maintain partial configurations
+    function importIBPDemd() returns String;
+    // Maintain partial configurations
     function maintainNewProdChar(FLAG : String(1), 
     PRODCHAR : String ) returns String;
     //    { PRODUCT_ID : String(40);
@@ -216,3 +221,8 @@ service CatalogService @(impl : './lib/cat-service.js') {
     // }
    // )                                                                                                                                                                                                                                                                           returns String;
 }
+
+// service IBPService @(impl : './lib/Ibp-Service.js') {
+   
+
+// }
