@@ -10,6 +10,9 @@ const axios = require("axios");
 
 // const jobFuncs = require('./Jobs-Service.js');
 
+const request = require('request');
+const lbaseUrl = "https://sbpprovider-dev-config-products-srv.cfapps.us10.hana.ondemand.com"; 
+
 function getJobscheduler(req) {
 // exports.getJobscheduler = function(req){
 
@@ -30,6 +33,253 @@ function getJobscheduler(req) {
 }
 
 module.exports = async function (srv) {
+
+  srv.on("lreadJobs", async req => {
+    // var request = require('request');
+    // let baseUrl = "https://sbpprovider-dev-config-products-srv.cfapps.us10.hana.ondemand.com"; 
+    let readJobsUrl = lbaseUrl + '/jobs/readJobs()';
+
+    options = {
+        'method': 'GET',
+        'url': readJobsUrl, 
+        'headers' : {
+            'Accept': 'application/json',
+            'Accept-Charset': 'utf-8'
+        }   
+    }
+    var values = [];
+    let ret_response ="";
+
+    await request(options, async function (error, response) {
+   
+        console.log('statusCode:', response.statusCode); // Print the response status code if a response was received
+        if (error) 
+        {
+            console.log('lreadJobs - Error ', error);
+            // values.push(JSON.parse(error));
+            //throw new Error(error);
+            ret_response = JSON.parse(error);
+        }
+        if (response.statusCode == 200)
+        {
+            // values.push(JSON.parse(response.body));
+            ret_response = JSON.parse(response.body);
+        }
+    })
+    const sleep = require('await-sleep');
+    await sleep(1000);
+    // console.log('ret_response.value ', ret_response.value);
+    // console.log('length of ret_response.value ', ret_response.value.length);
+
+    req.reply(ret_response);
+
+  });
+
+  srv.on("lreadJobDetails", async(req) => {
+    let jobId = req.data.jobId;
+
+    console.log('lreadJobDetails  jobId', jobId);
+
+    let lreadJobDetailsUrl = lbaseUrl + '/jobs/readJobDetails(jobId='  + jobId + ')';
+
+    console.log('lreadJobDetailsUrl ', lreadJobDetailsUrl);
+
+    options = {
+        'method': 'GET',
+        'url': lreadJobDetailsUrl, 
+        'headers' : {
+            'Accept': 'application/json',
+            'Accept-Charset': 'utf-8'
+        }   
+    }
+    var values = [];
+    let ret_response ="";
+
+    await request(options, async function (error, response) {
+   
+        console.log('statusCode:', response.statusCode); // Print the response status code if a response was received
+        if (error) 
+        {
+            console.log('lreadJobDetails - Error ', error);
+            ret_response = JSON.parse(error);
+        }
+        if (response.statusCode == 200)
+        {
+            ret_response = JSON.parse(response.body);
+        }
+    })
+    const sleep = require('await-sleep');
+    await sleep(1000);
+    req.reply(ret_response);
+
+  });
+
+  srv.on("lreadJobSchedules", async(req) => {
+    let jobId = req.data.jobId;
+
+    console.log('lreadJobSchedules  jobId', jobId);
+
+    let lreadJobSchedulesUrl = lbaseUrl + '/jobs/readJobSchedules(jobId='  + jobId + ')';
+
+    console.log('lreadJobSchedulesUrl ', lreadJobSchedulesUrl);
+
+    options = {
+        'method': 'GET',
+        'url': lreadJobSchedulesUrl, 
+        'headers' : {
+            'Accept': 'application/json',
+            'Accept-Charset': 'utf-8'
+        }   
+    }
+    var values = [];
+    let ret_response ="";
+
+    await request(options, async function (error, response) {
+   
+        console.log('statusCode:', response.statusCode); // Print the response status code if a response was received
+        if (error) 
+        {
+            console.log('lreadJobSchedules - Error ', error);
+            ret_response = JSON.parse(error);
+        }
+        if (response.statusCode == 200)
+        {
+            ret_response = JSON.parse(response.body);
+        }
+    })
+    const sleep = require('await-sleep');
+    await sleep(1000);
+    req.reply(ret_response);
+
+  });
+
+
+  srv.on("lreadJobActionLogs", async(req) => {
+    let jobId = req.data.jobId;
+
+    console.log('lreadJobActionLogs  jobId', jobId);
+
+    let lreadJobActionLogsUrl = lbaseUrl + '/jobs/readJobActionLogs(jobId='  + jobId + ')';
+
+    console.log('lreadJobActionLogsUrl ', lreadJobActionLogsUrl);
+
+    options = {
+        'method': 'GET',
+        'url': lreadJobActionLogsUrl, 
+        'headers' : {
+            'Accept': 'application/json',
+            'Accept-Charset': 'utf-8'
+        }   
+    }
+    var values = [];
+    let ret_response ="";
+
+    await request(options, async function (error, response) {
+   
+        console.log('statusCode:', response.statusCode); // Print the response status code if a response was received
+        if (error) 
+        {
+            console.log('lreadJobActionLogs - Error ', error);
+            ret_response = JSON.parse(error);
+        }
+        if (response.statusCode == 200)
+        {
+            ret_response = JSON.parse(response.body);
+        }
+    })
+    const sleep = require('await-sleep');
+    await sleep(1000);
+    req.reply(ret_response);
+
+  });
+
+  srv.on("lreadJobRunLogs", async(req) => {
+    let jobId = req.data.jobId;
+    let scheduleId = req.data.scheduleId;
+    let page_size = req.data.page_size;
+    let offset = req.data.offset;
+
+
+    console.log('lreadJobRunLogs  jobId :', jobId, 'scheduleId :', scheduleId, 'page_size :', page_size, 'offset =', offset);
+
+    let lreadJobRunLogsUrl = lbaseUrl + 
+    '/jobs/readJobRunLogs(jobId='  + jobId + ',' + 'scheduleId=' + "'" + scheduleId + "'" + "," + 'page_size='  + page_size + ',' + 'offset='  + offset + ')';
+
+    console.log('lreadJobRunLogsUrl ', lreadJobRunLogsUrl);
+
+    options = {
+        'method': 'GET',
+        'url': lreadJobRunLogsUrl, 
+        'headers' : {
+            'Accept': 'application/json',
+            'Accept-Charset': 'utf-8'
+        }   
+    }
+    var values = [];
+    let ret_response ="";
+
+    await request(options, async function (error, response) {
+   
+        console.log('statusCode:', response.statusCode); // Print the response status code if a response was received
+        if (error) 
+        {
+            console.log('lreadJobRunLogs - Error ', error);
+            ret_response = JSON.parse(error);
+        }
+        if (response.statusCode == 200)
+        {
+            ret_response = JSON.parse(response.body);
+        }
+    })
+    const sleep = require('await-sleep');
+    await sleep(1000);
+    req.reply(ret_response);
+
+  });
+
+  srv.on("laddMLJob", async req => {
+    
+    // let addJobsUrl = baseUrl + '/jobs/addMLJob(' + "'" + JSON.stringify(req.data) + "'" + ')';
+    // console.log('req.data.jobDetails ', req.data.jobDetails);
+    let jobDetails = req.data.jobDetails;
+   // str.replace(/[/_]/g, "%2F");
+    let jDetails = jobDetails.replace(/[/_]/g, "%2F");
+    console.log('jDetails ', jDetails);
+
+    let addJobsUrl = lbaseUrl + '/jobs/addMLJob(jobDetails=' + "'" + jDetails + "'" + ')';
+
+    console.log('addJobsUrl ', addJobsUrl);
+
+    options = {
+        'method': 'GET',
+        'url': addJobsUrl, 
+        'headers' : {
+            'Accept': 'application/json',
+            'Accept-Charset': 'utf-8'
+        }   
+    }
+    var values = [];
+    let ret_response ="";
+
+    await request(options, async function (error, response) {
+   
+        console.log('statusCode:', response.statusCode); // Print the response status code if a response was received
+        if (error) 
+        {
+            console.log('laddMLJob - Error ', error);
+            ret_response = JSON.parse(error);
+        }
+        if (response.statusCode == 200)
+        {
+            ret_response = JSON.parse(response.body);
+        }
+    })
+    const sleep = require('await-sleep');
+    await sleep(1000);
+    req.reply(ret_response);
+
+  });
+
   srv.on("readJobs", (req) => {
     return new Promise((resolve, reject) => {
       const scheduler = getJobscheduler(req);
@@ -173,18 +423,68 @@ module.exports = async function (srv) {
     });
   });
   
+  srv.on("addMLJob", (req) => {
+    console.log("addMLJob jobDetails :", JSON.parse(req.data.jobDetails));
+
+    return new Promise((resolve, reject) => {
+      const scheduler = getJobscheduler(req);
+      console.log("addMLJob req.data :", req.data);
+      var inputData = JSON.parse(req.data.jobDetails);
+      console.log("createMLJob inputData :", inputData);
+      let baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+      let actionUrl = baseUrl + inputData.action;
+
+      if (scheduler) {
+        var myJob = {
+          name: inputData.name,
+          description: inputData.description,
+          action: actionUrl,
+          active: true,
+          httpMethod: "POST",
+          schedules: inputData.schedules
+        //   [
+        //     {
+        //       cron: req.data.cron,
+        //       description:
+        //         req.data.cronDesctiption,
+        //       data: req.data.actionData,
+        //       active: true,
+        //       startTime: {
+        //         date: req.data.cronStartTime, //"2021-01-04 15:00 +0000",
+        //         format: req.data.timeFormat //"YYYY-MM-DD HH:mm Z",
+        //       },
+        //     },
+        //   ],
+        };
+        console.log("myJob :", myJob)
+        var scJob = { job: myJob };
+        scheduler.createJob(scJob, function (err, result) {
+          if (err) {
+            reject(req.error(err.message));
+          } else {
+            // job was created successfully
+            resolve(result._id);
+          }
+        });
+      }
+    });
+  });
+
   srv.on("createMLJob", (req) => {
     return new Promise((resolve, reject) => {
       const scheduler = getJobscheduler(req);
       console.log("createMLJob req.data :", req.data);
       var inputData = req.data.jobDetails;
       console.log("createMLJob inputData :", inputData);
+      let baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+      let actionUrl = baseUrl + inputData.action;
+
 
       if (scheduler) {
         var myJob = {
           name: inputData.name,
           description: inputData.description,
-          action: inputData.action,
+          action: actionUrl,
           active: true,
           httpMethod: "POST",
           schedules: inputData.schedules
