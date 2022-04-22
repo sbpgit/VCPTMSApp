@@ -8,6 +8,8 @@ service JobsService @(impl : './lib/Jobs-Service.js') {
   function lreadJobActionLogs(jobId : Integer) returns String;
   function lreadJobRunLogs(jobId : Integer, scheduleId : String, page_size : Integer, offset : Integer) returns String;
   function laddMLJob(jobDetails : String) returns String;
+//   function lupdateJob(jobId : Integer, active : Boolean) returns String;
+//   function ldeleteJob(jobId : Integer) returns String;
 
 
 
@@ -20,6 +22,8 @@ service JobsService @(impl : './lib/Jobs-Service.js') {
   function readJobActionLogs(jobId : Integer) returns String; // array of js.ActionLogs;
   function readJobRunLogs(jobId : Integer, scheduleId : String, page_size : Integer, offset : Integer) returns array of js.RunLogs;
   function addMLJob(jobDetails : String) returns Integer;
+//   function updateMLJob(jobId : Integer, active : Boolean) returns String;
+//   function deleteMLJob(jobId : Integer) returns String;
 
   action createJob(url : String, cron : String) returns Integer;
   action createMLJob(jobDetails : js.mlJobs) returns Integer;

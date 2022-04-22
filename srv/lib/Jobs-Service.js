@@ -280,6 +280,89 @@ module.exports = async function (srv) {
 
   });
 
+
+//   srv.on("lupdateJob", async(req) => {
+//     let jobId = req.data.jobId;
+//     let active = req.data.active;
+    
+
+//     console.log('lupdateJob  jobId :', jobId, 'active :', active);
+
+//     let lupdateJobsUrl = lbaseUrl + 
+//     '/jobs/updateMLJob(jobId='  + jobId + ',' + 'active='  + active +')';
+
+//     console.log('lupdateJobUrl ', lupdateJobUrl);
+
+//     options = {
+//         'method': 'GET',
+//         'url': lupdateJobUrl, 
+//         'headers' : {
+//             'Accept': 'application/json',
+//             'Accept-Charset': 'utf-8'
+//         }   
+//     }
+//     let ret_response ="";
+
+//     await request(options, async function (error, response) {
+   
+//         console.log('statusCode:', response.statusCode); // Print the response status code if a response was received
+//         if (error) 
+//         {
+//             console.log('lupdateJob - Error ', error);
+//             ret_response = JSON.parse(error);
+//         }
+//         if (response.statusCode == 200)
+//         {
+//             ret_response = JSON.parse(response.body);
+//         }
+//     })
+//     const sleep = require('await-sleep');
+//     await sleep(1000);
+//     req.reply(ret_response);
+
+//   });
+
+//   srv.on("ldeleteJob", async(req) => {
+//     let jobId = req.data.jobId;
+//     let active = req.data.active;
+    
+
+//     console.log('ldeleteJob  jobId :', jobId);
+
+//     let ldeleteJobUrl = lbaseUrl + 
+//     '/jobs/deleteMLJob(jobId='  + jobId +')';
+
+//     console.log('ldeleteJobUrl ', ldeleteJobUrl);
+
+//     options = {
+//         'method': 'GET',
+//         'url': ldeleteJobUrl, 
+//         'headers' : {
+//             'Accept': 'application/json',
+//             'Accept-Charset': 'utf-8'
+//         }   
+//     }
+//     let ret_response ="";
+
+//     await request(options, async function (error, response) {
+   
+//         console.log('statusCode:', response.statusCode); // Print the response status code if a response was received
+//         if (error) 
+//         {
+//             console.log('ldeleteJob - Error ', error);
+//             ret_response = JSON.parse(error);
+//         }
+//         if (response.statusCode == 200)
+//         {
+//             ret_response = JSON.parse(response.body);
+//         }
+//     })
+//     const sleep = require('await-sleep');
+//     await sleep(1000);
+//     req.reply(ret_response);
+
+//   });
+
   srv.on("readJobs", (req) => {
     return new Promise((resolve, reject) => {
       const scheduler = getJobscheduler(req);
@@ -430,7 +513,7 @@ module.exports = async function (srv) {
       const scheduler = getJobscheduler(req);
       console.log("addMLJob req.data :", req.data);
       var inputData = JSON.parse(req.data.jobDetails);
-      console.log("createMLJob inputData :", inputData);
+      console.log("addMLJob inputData :", inputData);
       let baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
       let actionUrl = baseUrl + inputData.action;
 
@@ -441,6 +524,8 @@ module.exports = async function (srv) {
           action: actionUrl,
           active: true,
           httpMethod: "POST",
+          startTime: inputData.startTime,
+          endTime: inputData.endTime,
           schedules: inputData.schedules
         //   [
         //     {
@@ -487,6 +572,8 @@ module.exports = async function (srv) {
           action: actionUrl,
           active: true,
           httpMethod: "POST",
+          startTime: inputData.startTime,
+          endTime: inputData.endTime,
           schedules: inputData.schedules
         //   [
         //     {
