@@ -3,7 +3,15 @@ using js from '../db/jobscheduler';
 service JobsService @(impl : './lib/Jobs-Service.js') {
 
   function lreadJobs() returns String;
+  function lreadJobDetails(jobId : Integer) returns String;
+  function lreadJobSchedules(jobId : Integer) returns String;
+  function lreadJobActionLogs(jobId : Integer) returns String;
+  function lreadJobRunLogs(jobId : Integer, scheduleId : String, page_size : Integer, offset : Integer) returns String;
   function laddMLJob(jobDetails : String) returns String;
+
+
+
+
 
     // job-scheduler
   function readJobs() returns array of js.Jobs;
