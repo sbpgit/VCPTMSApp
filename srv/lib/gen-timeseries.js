@@ -326,17 +326,17 @@ class GenTimeseries {
 
       this.logger.info("Insert Char Length: " + liObjDepChar.length);
       try {
-        // await cds.run(
-        //   INSERT.into("CP_TS_OBJDEP_CHARHDR").entries(liObjDepChar)
-        // );
-        // tableObj.push(liObjDepChar);
-        // var sqlStr =
-        //   'INSERT INTO "CP_TS_OBJDEP_CHARHDR"' +
-        //   "(CAL_DATE, LOCATION_ID, PRODUCT_ID, OBJ_TYPE, OBJ_DEP, OBJ_COUNTER, ROW_ID, SUCCESS, SUCCESS_RATE) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        await cds.run(
+          INSERT.into("CP_TS_OBJDEP_CHARHDR").entries(liObjDepChar)
+        );
+        tableObj.push(liObjDepChar);
         var sqlStr =
           'INSERT INTO "CP_TS_OBJDEP_CHARHDR"' +
-          "(CAL_DATE, LOCATION_ID, PRODUCT_ID, OBJ_TYPE, OBJ_DEP, OBJ_COUNTER, ROW_ID, SUCCESS, SUCCESS_RATE)" +
-          " SELECT CAL_DATE, LOCATION_ID,PRODUCT_ID, OBJ_TYPE, OBJ_DEP, OBJ_COUNTER, ROW_ID, SUCCESS, SUCCESS_RATE FROM V_ODCHAR_TIMESERIES";
+          "(CAL_DATE, LOCATION_ID, PRODUCT_ID, OBJ_TYPE, OBJ_DEP, OBJ_COUNTER, ROW_ID, SUCCESS, SUCCESS_RATE) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        // var sqlStr =
+        //   'INSERT INTO "CP_TS_OBJDEP_CHARHDR"' +
+        //   "(CAL_DATE, LOCATION_ID, PRODUCT_ID, OBJ_TYPE, OBJ_DEP, OBJ_COUNTER, ROW_ID, SUCCESS, SUCCESS_RATE)" +
+        //   " SELECT CAL_DATE, LOCATION_ID,PRODUCT_ID, OBJ_TYPE, OBJ_DEP, OBJ_COUNTER, ROW_ID, SUCCESS, SUCCESS_RATE FROM V_ODCHAR_TIMESERIES";
           
         var stmt = conn.prepare(sqlStr);
         await stmt.execBatch(tableObj);
