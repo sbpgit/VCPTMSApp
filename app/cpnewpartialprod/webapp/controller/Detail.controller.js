@@ -23,12 +23,13 @@ sap.ui.define(
       "use strict";
       var oGModel, that;
       return BaseController.extend("cpapp.cpnewpartialprod.controller.Detail", {
-        /**
-         * Called when a controller is instantiated and its View controls (if available) are already created.
-         * Can be used to modify the View before it is displayed, to bind event handlers and do other one-time initialization.
-         */
+       /** 
+* Called when a controller is instantiated and its View controls (if available) are already created.
+* Can be used to modify the View before it is displayed, to bind event handlers and do other one-time initialization.
+*/
         onInit: function () {
           that = this;
+          // Declaration of Json Model and size category
           that.ListModel = new JSONModel();
           that.locModel = new JSONModel();
           that.prodModel = new JSONModel();
@@ -91,6 +92,10 @@ sap.ui.define(
           that.aData=[];
         },
 
+        /** 
+* Called after the view has been rendered.
+* Calls the getCharData[function] to get Data of Product Characteristics.
+*/
         onAfterRendering:function(){
 
             this.oResourceBundle = this.getView()
@@ -125,7 +130,7 @@ sap.ui.define(
             this._valueHelpDialogcharValue.getId() + "-list"
           );
           that.aData=[];
-
+            // setting data based on button click in Home view
           if(oGModel.getProperty("/sFlag") === "E"){
               that.byId("idClassChar").setTitle("Update Product");
             that.byId("idloc").setEditable(false);
@@ -369,7 +374,49 @@ sap.ui.define(
                 );
               }
               that.oProdList.getBinding("items").filter(oFilters);
-            } 
+              // Class
+            } else if (sId.includes("className")) {
+                if (sQuery !== "") {
+                  oFilters.push(
+                    new Filter({
+                      filters: [
+                        new Filter("CLASS_NAME", FilterOperator.Contains, sQuery),
+                        new Filter("CLASS_NUM", FilterOperator.Contains, sQuery),
+                      ],
+                      and: false,
+                    })
+                  );
+                }
+                that.oClassnameList.getBinding("items").filter(oFilters);
+                // Char Name
+              } else if (sId.includes("charName")) {
+                if (sQuery !== "") {
+                  oFilters.push(
+                    new Filter({
+                      filters: [
+                        new Filter("CHAR_NAME", FilterOperator.Contains, sQuery),
+                        new Filter("CHAR_NUM", FilterOperator.Contains, sQuery),
+                      ],
+                      and: false,
+                    })
+                  );
+                }
+                that.oCharnameList.getBinding("items").filter(oFilters);
+                // Char Value
+              } else if (sId.includes("charVal")) {
+                if (sQuery !== "") {
+                  oFilters.push(
+                    new Filter({
+                      filters: [
+                        new Filter("CHAR_VALUE", FilterOperator.Contains, sQuery),
+                        new Filter("CHARVAL_NUM", FilterOperator.Contains, sQuery),
+                      ],
+                      and: false,
+                    })
+                  );
+                }
+                that.oCharvalueList.getBinding("items").filter(oFilters);
+              } 
           },
 
           /**
@@ -416,11 +463,11 @@ sap.ui.define(
                     that.byId("idCharList").setModel(that.ListModel);
                     that.charData();
                     that.byId("idClassname").setValue("");
-                that.byId("idClassno").setValue("");
-                that.byId("idCharname").setValue("");
-                that.byId("idCharno").setValue("");
-                that.byId("idCharval").setValue("");
-                that.byId("idCharvalno").setValue("");
+                    that.byId("idClassno").setValue("");
+                    that.byId("idCharname").setValue("");
+                    that.byId("idCharno").setValue("");
+                    that.byId("idCharval").setValue("");
+                    that.byId("idCharvalno").setValue("");
                     that.byId("idprodPanel").setExpanded(false);
                     that.byId("idCharPanel").setExpanded(true);
 
@@ -433,8 +480,6 @@ sap.ui.define(
                     aSelectedItems[0].getTitle()
                     );
                 }
-              
-    
              } else if (sId.includes("className")) {
                 
                     that.oClassName = that.byId("idClassname");
@@ -470,7 +515,7 @@ sap.ui.define(
                         that.charnameModel.setData({
                             results: removeDuplicate(oData.results, 'CHAR_NAME')
                         });
-                        // that.charnameModel.setData(oData);
+                        
                         that.oCharnameList.setModel(that.charnameModel);
                         },
                         error: function (oData, error) {
@@ -517,7 +562,7 @@ sap.ui.define(
                     that.charvalueModel.setData({
                         results: removeDuplicate(oData.results, 'CHAR_VALUE')
                     });
-                    // that.charvalueModel.setData(oData);
+                    
                     that.oCharvalueList.setModel(that.charvalueModel);
                     },
                     error: function (oData, error) {
@@ -530,9 +575,7 @@ sap.ui.define(
                 that.oCharValue = that.byId("idCharval");
                 aSelectedItems = oEvent.getParameter("selectedItems");
                 that.oCharValue.setValue(aSelectedItems[0].getTitle());
-
                 that.byId("idCharvalno").setValue(aSelectedItems[0].getDescription());
-                
                 
              }
             that.handleClose(oEvent);
@@ -557,7 +600,6 @@ sap.ui.define(
                 that.classnameModel.setData({
                     results: removeDuplicate(oData.results, 'CLASS_NAME')
                 });
-                // that.classnameModel.setData(oData);
                 that.oClassnameList.setModel(that.classnameModel);
                 },
                 error: function (oData, error) {
@@ -574,20 +616,16 @@ sap.ui.define(
                   oCharName = that.byId("idCharname").getValue(),
                   oCharVel = that.byId("idCharval").getValue();
 
-                  
-
             if(oClassName !== "" && oCharName !== "" && oCharVel !== "" ){
                 
-
-
-            this.oData = {
-                "CLASS_NAME": oClassName,
-                "CLASS_NUM": that.byId("idClassno").getValue(),
-                "CHAR_NAME": oCharName,
-                "CHAR_NUM": that.byId("idCharno").getValue(),
-                "CHAR_VALUE": oCharVel,
-                "CHARVAL_NUM": that.byId("idCharvalno").getValue()
-            };
+                this.oData = {
+                    "CLASS_NAME": oClassName,
+                    "CLASS_NUM": that.byId("idClassno").getValue(),
+                    "CHAR_NAME": oCharName,
+                    "CHAR_NUM": that.byId("idCharno").getValue(),
+                    "CHAR_VALUE": oCharVel,
+                    "CHARVAL_NUM": that.byId("idCharvalno").getValue()
+                };
                 // Add entry to the table model
                 that.aData.push(that.oData);
 
@@ -606,7 +644,6 @@ sap.ui.define(
             } else {
                 MessageToast.show("Please select all inputs");
             }
-
 
           },
 
@@ -630,7 +667,7 @@ sap.ui.define(
           },
 
           /**
-         * This function is called when click on save button in dialog to create or update the product.
+         * This function is called when click on save button to create or update the product.
          * @param {object} oEvent -the event information.
          */
         onProdSave: function (oEvent) {
@@ -660,8 +697,7 @@ sap.ui.define(
                     MessageToast.show("Successfully updated the product");
                   }
 
-                that.createChar();
-                  
+                that.createChar();                  
                   
                 },
                 error: function (oData) {
@@ -706,9 +742,7 @@ sap.ui.define(
                   sap.m.MessageToast.show("Error");
                   that.onBack();
                 },
-              });
-
-            
+              });            
           },
 
 

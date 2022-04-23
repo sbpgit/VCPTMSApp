@@ -144,7 +144,8 @@
         "app/cpasmbcompreq",
         "app/cpnewprod",
         "app/cpproduct",
-        "app/cpcustgroup"
+        "app/cpcustgroup",
+        "app/cp_atest"
     ],
     "devDependencies": {
         "@sap/ux-specification": "^1.84.35"

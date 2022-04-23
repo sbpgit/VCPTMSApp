@@ -44,23 +44,7 @@ sap.ui.define(
 		this.byId("idDateRange").setDateValue(oDateL);
 		this.byId("idDateRange").setSecondDateValue(nowH);
 
-        // this.getModel("JModel").read("/readJobs", {
-        //   //   filters: [
-        //   //       new Filter("startTime", FilterOperator.EQ, dFromDate),
-        //   //       new Filter("endTime", FilterOperator.EQ, dToDate),
-        //   //   ],
-        //   success: function (oData) {
-        //     that.listModel.setData({
-        //       results: oData.results,
-        //     });
-        //     that.oList.setModel(that.listModel);
-        //   },
-        //   error: function () {
-        //     MessageToast.show("Failed to get data");
-        //   },
-        // });
-
-        that.getModel("JModel").callFunction("/readJobs", {
+        that.getModel("JModel").callFunction("/lreadJobs", {
           method: "GET",
         //   urlParameters: {
         //     startTime: dFromDate,
@@ -68,7 +52,7 @@ sap.ui.define(
         //   },
           success: function (oData) {
             that.listModel.setData({
-              results: oData.results,
+              results: oData.lreadJobs.value,
             });
             that.oList.setModel(that.listModel);
           },
@@ -95,23 +79,7 @@ sap.ui.define(
         var dFromDate = dDate[0],
           dToDate = dDate[0];
 
-        // this.getModel("JModel").read("/readJobs", {
-        //   //   filters: [
-        //   //       new Filter("startTime", FilterOperator.EQ, dFromDate),
-        //   //       new Filter("endTime", FilterOperator.EQ, dToDate),
-        //   //   ],
-        //   success: function (oData) {
-        //     that.listModel.setData({
-        //       results: oData.results,
-        //     });
-        //     that.oList.setModel(that.listModel);
-        //   },
-        //   error: function () {
-        //     MessageToast.show("Failed to get data");
-        //   },
-        // });
-
-        that.getModel("JModel").callFunction("/readJobs", {
+        that.getModel("JModel").callFunction("/lreadJobs", {
             method: "GET",
             urlParameters: {
               startTime: dFromDate,

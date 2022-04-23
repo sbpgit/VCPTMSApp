@@ -74,6 +74,13 @@ sap.ui.define([
             );
             this.getView().addDependent(this._valueHelpDialogScen);
           }
+          if (!this._valueHelpDialogJobDetail) {
+            this._valueHelpDialogJobDetail = sap.ui.xmlfragment(
+              "cpapp.cpjobscheduler.view.Details",
+              this
+            );
+            this.getView().addDependent(this._valueHelpDialogJobDetail);
+          }
 		},
 
 		onAfterRendering: function () {
@@ -835,6 +842,28 @@ sap.ui.define([
                 .getItems()[0]
                 .setSelected(false);
             }
+          },
+
+          onModelGen:function(){
+            var cSelected = that.byId("MidCheck").getSelected();
+            var sText = "Do you want to override assignments?";
+                if (cSelected === true) {
+                    sap.m.MessageBox.show(sText, {
+                    title: "Confirmation",
+                    actions: [
+                        sap.m.MessageBox.Action.YES,
+                        sap.m.MessageBox.Action.NO,
+                    ],
+                    onClose: function (oAction) {
+                        if (oAction === sap.m.MessageBox.Action.YES) {
+                        that._valueHelpDialogJobDetail.open();
+                        }
+                    },
+                    });
+                } else {
+                    that._valueHelpDialogJobDetail.open();
+                }
+
           },
 
 

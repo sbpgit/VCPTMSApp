@@ -27,6 +27,14 @@
                     "odataVersion": "2.0",
                     "localUri": "localService/CatalogService/metadata.xml"
                 }
+            },
+            "Jobs": {
+              "uri": "/v2/jobs/",
+              "type": "OData",
+              "settings": {
+                "odataVersion": "2.0",
+                "localUri": "localService/metadata.xml"
+              }
             }
         },
         "crossNavigation": {
@@ -108,7 +116,20 @@
 			"GModel": {
 				"type": "sap.ui.model.json.JSONModel",
 				"preload": true
-			}
+			},
+            "JModel": {
+              "dataSource": "Jobs",
+              "preload": true,
+                "settings": {
+                    "synchronizationMode": "None",
+                    "operationMode": "Server",
+                    "useBatch": true,
+					"defaultBindingMode": "TwoWay",
+                    "autoExpandSelect": true,
+                    "earlyRequests": true,
+                    "groupId": "$direct"
+                }
+            }
         },
         "resources": {
             "css": [
