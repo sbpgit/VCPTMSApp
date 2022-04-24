@@ -22,7 +22,7 @@ Content-Type: application/json
 GET http://localhost:4004/jobs/lreadJobs()
 
 ### READ JOB DETAILS LOCALLY
-GET http://localhost:4004/jobs/lreadJobDetails(jobId=484896)
+GET http://localhost:4004/jobs/lreadJobDetails(jobId=499941,displaySchedules=false)
 
 ### READ JOB SCHEDULES LOCALLY
 GET http://localhost:4004/jobs/lreadJobSchedules(jobId=506898)
@@ -37,8 +37,8 @@ GET http://localhost:4004/jobs/lreadJobRunLogs(jobId=484896,scheduleId='90a07299
 GET http://localhost:4004/jobs/laddMLJob(jobDetails='{"name": "generateModelsx","description" : "Generate Machine Learning Models","action" :"%2Fpal%2FgenerateModels","active" : true,"active" : true,"httpMethod" : "POST","startTime" : "2022-04-22 14:00 +0000","endTime" : "2022-05-22 14:00+0000","schedules" : [{"data" : {"vcRulesList":[{"profile" : "SBP_VARMA_0","override" : true,"Location":"RX01","Product":"8150RW","GroupID": "1973254_1","Type" : "OD","modelVersion" : "Simulation"}]},"cron": "* * * * * *%2F5 0","active": true,"startTime": "2022-04-22 14:00 +0000"}]}')
 
 
-### READ JOB RUN LOGS LOCALLY
-GET http://localhost:4004/jobs/lupdateJob(jobId=484896
+### UPDATE JOB LOCALLY
+GET http://localhost:4004/jobs/lupdateJob(jobDetails='{"jobId" : 499941,"active": true,"startTime" : "2022-04-22 00:00 +0000","endTime" : "2022-05-22 00:00 +0000"}')
 
 ### POST Regressions
 POST http://localhost:4004/jobs/createMLJob
