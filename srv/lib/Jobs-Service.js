@@ -77,10 +77,12 @@ module.exports = async function (srv) {
 
   srv.on("lreadJobDetails", async(req) => {
     let jobId = req.data.jobId;
+    let displaySchedules = req.data.displaySchedules;
 
-    console.log('lreadJobDetails  jobId', jobId);
 
-    let lreadJobDetailsUrl = lbaseUrl + '/jobs/readJobDetails(jobId='  + jobId + ')';
+    console.log('lreadJobDetails  jobId', jobId, 'displayJobSchedules ', displaySchedules);
+    let   lreadJobDetailsUrl = lbaseUrl + '/jobs/readJobDetails(jobId='  + jobId + ',displaySchedules=' + displaySchedules+')';
+
 
     console.log('lreadJobDetailsUrl ', lreadJobDetailsUrl);
 
@@ -281,46 +283,45 @@ module.exports = async function (srv) {
   });
 
 
-//   srv.on("lupdateJob", async(req) => {
-//     let jobId = req.data.jobId;
-//     let active = req.data.active;
-    
+  srv.on("lupdateJob", async(req) => {
 
-//     console.log('lupdateJob  jobId :', jobId, 'active :', active);
+    let jobDetails = req.data.jobDetails;
+    // str.replace(/[/_]/g, "%2F");
+     let jDetails = jobDetails.replace(/[/_]/g, "%2F");
+     console.log('jDetails ', jDetails);
+ 
+     let lupdateJobUrl = lbaseUrl + '/jobs/updateMLJob(jobDetails=' + "'" + jDetails + "'" + ')';
 
-//     let lupdateJobsUrl = lbaseUrl + 
-//     '/jobs/updateMLJob(jobId='  + jobId + ',' + 'active='  + active +')';
+    console.log('lupdateJobUrl ', lupdateJobUrl);
 
-//     console.log('lupdateJobUrl ', lupdateJobUrl);
+    options = {
+        'method': 'GET',
+        'url': lupdateJobUrl, 
+        'headers' : {
+            'Accept': 'application/json',
+            'Accept-Charset': 'utf-8'
+        }   
+    }
+    let ret_response ="";
 
-//     options = {
-//         'method': 'GET',
-//         'url': lupdateJobUrl, 
-//         'headers' : {
-//             'Accept': 'application/json',
-//             'Accept-Charset': 'utf-8'
-//         }   
-//     }
-//     let ret_response ="";
-
-//     await request(options, async function (error, response) {
+    await request(options, async function (error, response) {
    
-//         console.log('statusCode:', response.statusCode); // Print the response status code if a response was received
-//         if (error) 
-//         {
-//             console.log('lupdateJob - Error ', error);
-//             ret_response = JSON.parse(error);
-//         }
-//         if (response.statusCode == 200)
-//         {
-//             ret_response = JSON.parse(response.body);
-//         }
-//     })
-//     const sleep = require('await-sleep');
-//     await sleep(1000);
-//     req.reply(ret_response);
+        console.log('statusCode:', response.statusCode); // Print the response status code if a response was received
+        if (error) 
+        {
+            console.log('lupdateJob - Error ', error);
+            ret_response = JSON.parse(error);
+        }
+        if (response.statusCode == 200)
+        {
+            ret_response = JSON.parse(response.body);
+        }
+    })
+    const sleep = require('await-sleep');
+    await sleep(1000);
+    req.reply(ret_response);
 
-//   });
+  });
 
 //   srv.on("ldeleteJob", async(req) => {
 //     let jobId = req.data.jobId;
@@ -390,17 +391,21 @@ module.exports = async function (srv) {
     return new Promise((resolve, reject) => {
       const scheduler = getJobscheduler(req);
       if (scheduler) {
-        var query = {
-          //by Id
-          jobId: req.data.jobId,
-        };
+
+        console.log("readJobDetails req.data", req.data, 'displaySchedules',req.data.displaySchedules);
+
+        let query = {
+            jobId: req.data.jobId,
+            displaySchedules: req.data.displaySchedules
+          };        
+        console.log("readJobDetails query", query);
         scheduler.fetchJob(query, function (err, result) {
           if (err) {
             reject(req.error("Error retrieving job"));
           } else {
             // job was created successfully
-            console.log("readJobDetails ", result.results);
-
+            // console.log("readJobDetails ", result.results);
+            console.log("readJobDetails ", result);
             resolve(result);
           }
         });
@@ -603,15 +608,70 @@ module.exports = async function (srv) {
     });
   });
 
+
+  srv.on("updateMLJob", (req) => {
+    console.log("updateMLJob jobDetails :", JSON.parse(req.data.jobDetails));
+
+    return new Promise((resolve, reject) => {
+      const scheduler = getJobscheduler(req);
+      console.log("updateMLJob req.data :", req.data);
+      var inputData = JSON.parse(req.data.jobDetails);
+      console.log("updateMLJob inputData :", inputData);
+    //   let baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+
+
+
+    
+      if (scheduler) {
+        // var myJob = {
+        //   jobDetails: inputData.jobDetails,
+        // };
+        // console.log("myJob :", myJob)
+        // var scJob = { job: myJob };
+        // var suJob = { jobId: req.data.jobId, job: theJob };
+        // scheduler.updateJob(scJob, function (err, result) {
+
+        var theJob = {
+            active: inputData.active,
+            description: inputData.description,
+            httpMethod: inputData.httpMethod,
+            startTime: inputData.startTime,
+            endTime: inputData.endTime,
+          };
+
+        console.log("updateJob theJob :", theJob)
+        var suJob = { jobId: inputData.jobId, job: theJob };
+
+        scheduler.updateJob(suJob, (err, result) => {
+          if (err) {
+            reject(req.error(err.message));
+          } else {
+            resolve(JSON.stringify(result));
+          }
+        });
+      }
+    });
+  });
+
   srv.on("updateJob", (req) => {
     return new Promise((resolve, reject) => {
       const scheduler = getJobscheduler(req);
       if (scheduler) {
-        var theJob = {
-          active: req.data.active,
-        };
+        var inputData = req.data.jobDetails;
 
-        var suJob = { jobId: req.data.jobId, job: theJob };
+        var theJob = {
+            active: inputData.active,
+            description: inputData.description,
+            httpMethod: inputData.httpMethod,
+            startTime: inputData.startTime,
+            endTime: inputData.endTime,
+          };
+
+        console.log("updateJob theJob :", theJob)
+        var suJob = { jobId: inputData.jobId, job: theJob };
+
+
+        // var suJob = { jobId: req.data.jobId, job: theJob };
         scheduler.updateJob(suJob, (err, result) => {
           if (err) {
             reject(req.error(err.message));
