@@ -122,6 +122,46 @@ sap.ui.define(
           },
         });
 
+
+        var oEntry = {
+            PRODCHAR: [],
+          },
+          vRuleslist;
+        vRuleslist = {
+            PRODUCT_ID: '8150RW_1',
+            REF_PRODID: '8150RW',
+            CLASS_NUM:'20797',            
+            CHAR_NUM:'31655',            
+            CHARVAL_NUM:'31655-0001'
+        };
+        oEntry.PRODCHAR.push(vRuleslist);
+
+        that.getModel("BModel").callFunction("/maintainNewProdChar", {
+            method: "GET",
+            urlParameters: {
+                FLAG : 'C',
+                PRODCHAR: JSON.stringify(oEntry.PRODCHAR)
+            },
+        
+              
+            success: function (oData) {
+              sap.ui.core.BusyIndicator.hide();
+              sap.m.MessageToast.show(that.i18n.getText("genPredSuccess"));
+              regData.push(data.d.values[0].vcRulesList);
+
+              that.otabModel.setData({
+                results: regData[0],
+              });
+              that.byId("pmdlList").setModel(that.otabModel);
+              that.oPanel.setProperty("visible", true);
+              vFlag = "X";
+            },
+            error: function (error) {
+              sap.ui.core.BusyIndicator.hide();
+              sap.m.MessageToast.show(that.i18n.getText("genPredErr"));
+            },
+          });
+
         
       },
 
@@ -133,6 +173,9 @@ sap.ui.define(
       onCreate: function (oEvent) {
         oGModel = this.getModel("oGModel");
         oGModel.setProperty("/sFlag", "");
+
+        // var oRouter = sap.ui.core.UIComponent.getRouterFor(that);
+        // oRouter.navTo("Detail", {}, true);
 
         // Opening dialog and setting data based on selected button
         if (oEvent.getSource().getTooltip().includes("Create")) {

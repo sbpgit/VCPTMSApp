@@ -203,8 +203,8 @@ module.exports = async function (srv) {
   }
  module.exports = cds.service.impl(async function() {
          const { VCPTEST } = this.entities;
-         const service = await cdse.connect.to('IBPDemandsrv');
-        //  const service = await cds.connect.to('IBPDemandsrv');
+        //  const service = await cdse.connect.to('IBPDemandsrv');
+         const service = await cds.connect.to('IBPDemandsrv');
          this.on('READ', VCPTEST, request => {
              return service.tx(request).run(request.query);
          });

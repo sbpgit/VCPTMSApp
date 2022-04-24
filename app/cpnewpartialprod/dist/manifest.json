@@ -15,8 +15,16 @@
                 "uri": "v2/catalog/",
                 "type": "OData",
                 "settings": {
-                    "localUri": "localService/metadata.xml",
+                    "localUri": "localService/CatalogService/metadata.xml",
                     "odataVersion": "2.0"
+                }
+            },
+            "Pal": {
+                "uri": "v2/pal/",
+                "type": "OData",
+                "settings": {
+                    "odataVersion": "2.0",
+                    "localUri": "localService/metadata.xml"
                 }
             }
         },
@@ -54,6 +62,12 @@
     },
     "sap.ui5": {
         "flexEnabled": true,
+        "rootView": {
+            "viewName": "cpapp.cpnewpartialprod.view.App",
+            "type": "XML",
+            "async": true,
+            "id": "App"
+        },
         "dependencies": {
             "minUI5Version": "1.99.0",
             "libs": {
@@ -78,8 +92,26 @@
                     "bundleName": "cpapp.cpnewpartialprod.i18n.i18n"
                 }
             },
+            "oGModel": {
+                "type": "sap.ui.model.json.JSONModel",
+                "settings": {
+                    "defaultBindingMode": "TwoWay"
+                },
+                "preload": true
+            },
             "BModel": {
-                "dataSource": "CatalogService",
+                "dataSource": "mainService",
+                "preload": true,
+                "settings": {
+                    "synchronizationMode": "None",
+                    "operationMode": "Server",
+                    "autoExpandSelect": true,
+                    "earlyRequests": true,
+                    "groupId": "$direct"
+                }
+            },
+            "PModel": {
+                "dataSource": "Pal",
                 "preload": true,
                 "settings": {
                     "useBatch": true,
@@ -111,23 +143,31 @@
                     "target": [
                         "Home"
                     ]
+                },
+                {
+                    "name": "Detail",
+                    "pattern": "Detail",
+                    "target": [
+                        "Detail"
+                    ]
                 }
             ],
             "targets": {
                 "Home": {
                     "viewType": "XML",
                     "transition": "slide",
-                    "clearControlAggregation": false,
+                    "clearControlAggregation": true,
                     "viewId": "Home",
                     "viewName": "Home"
+                },
+                "Detail": {
+                    "viewType": "XML",
+                    "transition": "slide",
+                    "clearControlAggregation": true,
+                    "viewId": "Detail",
+                    "viewName": "Detail"
                 }
             }
-        },
-        "rootView": {
-            "viewName": "cpapp.cpnewpartialprod.view.App",
-            "type": "XML",
-            "async": true,
-            "id": "App"
         }
     },
     "sap.cloud": {

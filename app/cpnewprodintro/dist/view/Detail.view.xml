@@ -1,0 +1,61 @@
+<mvc:View controllerName="cpapp.cpnewprodintro.controller.Detail"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns:l="sap.ui.layout"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:u="sap.ui.unified">
+    <Page id="idClassChar" title="Create Job" titleAlignment="Center" showNavButton="true" navButtonPress="onBack" 
+            showFooter="true" >
+        <!-- <customHeader> -->
+            <Toolbar height="20%" >
+                <VBox class="sapUiSmallMargin" width="1200px">
+            <f:SimpleForm id="SimpleFormToolbar" editable="true" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="4" labelSpanM="4" labelSpanS="4" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1" singleContainerFullSize="false">
+                <f:content>
+                    <Label text="{i18n>loc}"/>
+                    <Input id="idlocC" value="" width="225px" placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                    <Label text="{i18n>prod}"/>
+                    <Input id="idProdC" value="" width="225px" placeholder="New Product" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                    <Label text="{i18n>refProd}"/>
+                    <Input id="idrefprodC" value="" width="225px" placeholder="Reference Product" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+
+                </f:content>
+            </f:SimpleForm>
+
+        </VBox>
+            </Toolbar>
+        <!-- </customHeader> -->
+
+        <content>
+            <SearchField id="idSearch" liveChange="handleSearch" placeholder="Class Name, Char Name"/>
+            <Table id="ProdList" items="{path: '/results'}" mode="SingleSelectMaster">
+                <columns>
+                    <Column hAlign="Center">
+                        <Text text="{i18n>loc}" />
+                    </Column>
+                    <Column hAlign="Center">
+                        <Text text="{i18n>prod}"/>
+                    </Column>
+                    <Column hAlign="Center">
+                        <Text text="{i18n>refProd}"/>
+                    </Column>
+                    
+                    <Column hAlign="Right">
+                        <Text text="" />
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem>
+                        <cells>
+                            <Text text="{LOCATION_ID}" />
+                            <Text text="{PRODUCT_ID}" />
+                            <Text text="{REF_PRODID}" />
+                            <Button id="idProd" icon="sap-icon://decline" tooltip="Delete" press="onProdeDel" iconDensityAware="false" type="Transparent"/>
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+
+        </content>
+    </Page>
+</mvc:View>

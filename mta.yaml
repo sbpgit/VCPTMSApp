@@ -10,6 +10,7 @@ modules:
   - name: config_products-db
   - name: uaa_config_products
   - name: jobscheduler_inst
+  - name: config_products-destination-content
   provides:
   - name: srv-api
     properties:

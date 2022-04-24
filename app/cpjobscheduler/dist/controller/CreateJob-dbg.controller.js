@@ -236,13 +236,17 @@ sap.ui.define([
             } else if (sId.includes("scen")) {
               if (
                 that.oLoc.getValue() &&
-                that.oProd.getTokens().length !== 0 &&
+                that.oProd.getValue() &&
                 that.oVer.getValue()
               ) {
                 that._valueHelpDialogScen.open();
               } else {
                 MessageToast.show("Select Location, Product and Version");
               }
+            } else if(sId.includes("MpmInput")){
+
+                that._valueHelpDialogPPF.open();
+
             }
           },
   
@@ -293,7 +297,24 @@ sap.ui.define([
               if (that.oScenList.getBinding("items")) {
                 that.oScenList.getBinding("items").filter([]);
               }
+            // Prediction Profile Dalog
+        } else if (sId.includes("scen")) {
+            that._oCore
+              .byId(this._valueHelpDialogScen.getId() + "-searchField")
+              .setValue("");
+            if (that.oScenList.getBinding("items")) {
+              that.oScenList.getBinding("items").filter([]);
             }
+          } else if(sId.includes("ppfSlctList")){
+            that._oCore
+            .byId(this._valueHelpDialogPPF.getId() + "-searchField")
+            .setValue("");
+          if (that.oPPFList.getBinding("items")) {
+            that.oPPFList.getBinding("items").filter([]);
+          }
+          }
+
+
           },
   
           /**
@@ -382,7 +403,22 @@ sap.ui.define([
                 );
               }
               that.oScenList.getBinding("items").filter(oFilters);
-            }
+              // prediction Profile
+            } else if (sId.includes("ppfSlctList")) {
+                if (sQuery !== "") {
+                  oFilters.push(
+                    new Filter({
+                      filters: [
+                        new Filter("PROFILE", FilterOperator.Contains, sQuery),
+                        new Filter("PRF_DESC", FilterOperator.Contains, sQuery),
+                        new Filter("METHOD", FilterOperator.Contains, sQuery),
+                      ],
+                      and: false,
+                    })
+                  );
+                }
+                that.oPPFList.getBinding("items").filter(oFilters);
+              }
           },
 
           JobType:function(){
@@ -653,8 +689,48 @@ sap.ui.define([
             } else if (sId.includes("scen")) {
               var aSelectedScen = oEvent.getParameter("selectedItems");
               that.oScen.setValue(aSelectedScen[0].getTitle());
-            }
+            // Scenario List
+        } else if (sId.includes("ppfSlctList")) {
+            var aSelectedPPF = oEvent.getParameter("selectedItems");
+            that.oPredProfile.setValue(aSelectedPPF[0].getTitle());
+          }
             that.handleClose(oEvent);
+          },
+
+
+        /**
+         * This function is called when click on segment button change.
+         * @param {object} oEvent -the event information.
+         */
+        onMGSegmentChange: function (oEvent) {
+            var selectedButton = that.byId("MidOdRes").getSelectedKey();
+  
+            if (selectedButton === "RT") {
+              that.oObjDep.removeAllTokens();
+              that.byId("ModInput").setPlaceholder("Restriction");
+              that.byId("ModInput").setShowValueHelp(false);
+            } else  if(selectedButton === "OD") {
+              that.byId("ModInput").setPlaceholder("Object Dependency");
+              that.byId("ModInput").setShowValueHelp(true);
+            }
+          },
+          
+          
+        /**
+         * This function is called when click on segment button change.
+         * @param {object} oEvent -the event information.
+         */
+        onPSegmentChange: function (oEvent) {
+            var selectedButton = that.byId("PidType").getSelectedKey();
+  
+            if (selectedButton === "RT") {
+              that.oObjDep.removeAllTokens();
+              that.byId("PodInput").setPlaceholder("Restriction");
+              that.byId("PodInput").setShowValueHelp(false);
+            } else if(selectedButton === "OD") {
+              that.byId("PodInput").setPlaceholder("Object Dependency");
+              that.byId("PodInput").setShowValueHelp(true);
+            }
           },
 
           /**
