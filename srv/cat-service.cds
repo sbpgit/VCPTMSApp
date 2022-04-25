@@ -74,11 +74,11 @@ service CatalogService @(impl : './lib/cat-service.js') {
     entity getProdAttr          as projection on od.PROD_ATTRIBUTES;
 
     //History timeseries for Object dependency
-    @readonly
+   
     entity getODHdr             as projection on od.TS_OBJDEPHDR;
 
     //History timeseries for Object dependency characteristics
-    @readonly
+   
     entity getODCharHdr         as projection on od.TS_OBJDEP_CHARHDR
 
     //Get Charateristics and it values
