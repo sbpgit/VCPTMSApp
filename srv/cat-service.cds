@@ -7,9 +7,10 @@ using V_OBDHDR from '../db/data-model';
 using V_CLASSCHARVAL from '../db/data-model';
 using {
     V_PRODCLSCHAR,
-    V_PRODCLSCHARVAL
+    V_PRODCLSCHARVAL,
+    V_ODPROFILES
 } from '../db/data-model';
-using V_ODPROFILES from '../db/data-model';
+// using V_ODPROFILES from '../db/data-model';
 using V_BOMODCOND from '../db/data-model';
 using V_SALESHCFG_CHARVAL from '../db/data-model';
 using V_ODCHARVAL from '../db/data-model';
@@ -222,7 +223,14 @@ service CatalogService @(impl : './lib/cat-service.js') {
    // )                                                                                                                                                                                                                                                                           returns String;
 }
 
-// service IBPService @(impl : './lib/Ibp-Service.js') {
-   
+service IBPImportSrv @(impl : './lib/Ibp-Service.js') {
+    @cds.autoexpose
+    entity VCPTEST as projection on external.VCPTEST{
+        key PRDID,LOCID,PERIODID0_TSTAMP,PLANNEDINDEPENDENTREQ,VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME
+    };
 
-// }
+}
+@protocol : 'rest'
+service IbpImportRest {
+    entity getIBPDemdext as projection on IBPImportSrv.VCPTEST;
+}
