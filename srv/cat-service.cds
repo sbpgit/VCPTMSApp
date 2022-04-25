@@ -223,10 +223,11 @@ service CatalogService @(impl : './lib/cat-service.js') {
    // )                                                                                                                                                                                                                                                                           returns String;
 }
 
-service IBPImportSrv @(impl : './lib/Ibp-Service.js') {
+service IBPImportSrv @(impl : './lib/cat-service.js') {
     @cds.autoexpose
     entity VCPTEST as projection on external.VCPTEST{
         key PRDID,LOCID,PERIODID0_TSTAMP,PLANNEDINDEPENDENTREQ,VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME
+        where PLANNEDINDEPENDENTREQ gt 0
     };
 
 }
