@@ -323,46 +323,45 @@ module.exports = async function (srv) {
 
   });
 
-//   srv.on("ldeleteJob", async(req) => {
-//     let jobId = req.data.jobId;
-//     let active = req.data.active;
+  srv.on("ldeleteJob", async(req) => {
+    let jobId = req.data.jobId;
     
 
-//     console.log('ldeleteJob  jobId :', jobId);
+    console.log('ldeleteJob  jobId :', jobId);
 
-//     let ldeleteJobUrl = lbaseUrl + 
-//     '/jobs/deleteMLJob(jobId='  + jobId +')';
+    let ldeleteJobUrl = lbaseUrl + 
+    '/jobs/deleteMLJob(jobId='  + jobId +')';
 
-//     console.log('ldeleteJobUrl ', ldeleteJobUrl);
+    console.log('ldeleteJobUrl ', ldeleteJobUrl);
 
-//     options = {
-//         'method': 'GET',
-//         'url': ldeleteJobUrl, 
-//         'headers' : {
-//             'Accept': 'application/json',
-//             'Accept-Charset': 'utf-8'
-//         }   
-//     }
-//     let ret_response ="";
+    options = {
+        'method': 'GET',
+        'url': ldeleteJobUrl, 
+        'headers' : {
+            'Accept': 'application/json',
+            'Accept-Charset': 'utf-8'
+        }   
+    }
+    let ret_response ="";
 
-//     await request(options, async function (error, response) {
+    await request(options, async function (error, response) {
    
-//         console.log('statusCode:', response.statusCode); // Print the response status code if a response was received
-//         if (error) 
-//         {
-//             console.log('ldeleteJob - Error ', error);
-//             ret_response = JSON.parse(error);
-//         }
-//         if (response.statusCode == 200)
-//         {
-//             ret_response = JSON.parse(response.body);
-//         }
-//     })
-//     const sleep = require('await-sleep');
-//     await sleep(1000);
-//     req.reply(ret_response);
+        console.log('statusCode:', response.statusCode); // Print the response status code if a response was received
+        if (error) 
+        {
+            console.log('ldeleteJob - Error ', error);
+            ret_response = JSON.parse(error);
+        }
+        if (response.statusCode == 200)
+        {
+            ret_response = JSON.parse(response.body);
+        }
+    })
+    const sleep = require('await-sleep');
+    await sleep(1000);
+    req.reply(ret_response);
 
-//   });
+  });
 
   srv.on("readJobs", (req) => {
     return new Promise((resolve, reject) => {
@@ -684,6 +683,30 @@ module.exports = async function (srv) {
     });
   });
 
+
+  srv.on("deleteMLJob", (req) => {
+    console.log("deleteMLJob jobDetails :", JSON.parse(req.data.jobId));
+
+    return new Promise((resolve, reject) => {
+      const scheduler = getJobscheduler(req);
+      console.log("deletMLJob req.data :", req.data);
+        
+      if (scheduler) {
+        
+
+        var suJob = { jobId: req.data.jobId };
+
+        scheduler.deleteJob(suJob, (err, result) => {
+          if (err) {
+            reject(req.error(err.message));
+          } else {
+            resolve(JSON.stringify(result));
+          }
+        });
+      }
+    });
+  });
+
   srv.on(["deleteJob"], (req) => {
     return new Promise((resolve, reject) => {
       const scheduler = getJobscheduler(req);
@@ -702,4 +725,41 @@ module.exports = async function (srv) {
       }
     });
   });
+
+  srv.on("createJobSchedule", (req) => {
+    return new Promise((resolve, reject) => {
+      const scheduler = getJobscheduler(req);
+      console.log("createJobSchedule req.data :", req.data);
+      var inputData = req.data.jobSchedule;
+      console.log("createJobSchedule inputData :", inputData);
+
+      if (scheduler) {
+        var myJob = {
+          name: inputData.data,
+          description: inputData.description,
+          active: inputData.active,
+          startTime: inputData.startTime,
+          endTime: inputData.endTime,
+          cron : inputData.cron,
+          time : inputData.time,
+          repeatInterval : inputData.repeatInterval,
+          repeatAt : inputData.repeatAt
+        };
+        var scJob = { jobId: req.data.jobId, job: myJob };
+        console.log("scJob :", scJob)
+
+
+        scheduler.createJobSchedule(scJob, function (err, result) {
+          if (err) {
+            reject(req.error(err.message));
+          } else {
+            // job was created successfully
+            resolve(result);
+          }
+        });
+      }
+    });
+  });
 };
+
+
