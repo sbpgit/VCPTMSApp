@@ -725,4 +725,41 @@ module.exports = async function (srv) {
       }
     });
   });
+
+  srv.on("createJobSchedule", (req) => {
+    return new Promise((resolve, reject) => {
+      const scheduler = getJobscheduler(req);
+      console.log("createJobSchedule req.data :", req.data);
+      var inputData = req.data.jobSchedule;
+      console.log("createJobSchedule inputData :", inputData);
+
+      if (scheduler) {
+        var myJob = {
+          name: inputData.data,
+          description: inputData.description,
+          active: inputData.active,
+          startTime: inputData.startTime,
+          endTime: inputData.endTime,
+          cron : inputData.cron,
+          time : inputData.time,
+          repeatInterval : inputData.repeatInterval,
+          repeatAt : inputData.repeatAt
+        };
+        var scJob = { jobId: req.data.jobId, job: myJob };
+        console.log("scJob :", scJob)
+
+
+        scheduler.createJobSchedule(scJob, function (err, result) {
+          if (err) {
+            reject(req.error(err.message));
+          } else {
+            // job was created successfully
+            resolve(result);
+          }
+        });
+      }
+    });
+  });
 };
+
+

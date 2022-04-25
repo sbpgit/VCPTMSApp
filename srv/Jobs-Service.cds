@@ -17,7 +17,9 @@ service JobsService @(impl : './lib/Jobs-Service.js') {
 
     // job-scheduler
   function readJobs() returns array of js.Jobs;
-  function readJobDetails(jobId : Integer, displaySchedules: Boolean) returns js.mlJobs;
+  function readJobDetails(jobId : Integer, displaySchedules: Boolean) returns String;
+
+//   function readJobDetails(jobId : Integer, displaySchedules: Boolean) returns js.mlJobs;
 //   function readJobDetails(jobId : Integer, displaySchedules: Integer) returns js.mlJobs;
   function readJobSchedules(jobId : Integer) returns array of js.Schedules;
   function readJobActionLogs(jobId : Integer) returns String; // array of js.ActionLogs;
@@ -31,4 +33,5 @@ service JobsService @(impl : './lib/Jobs-Service.js') {
 //   action updateJob(jobId : Integer, active : Boolean) returns String;
   action updateJob(jobDetails : js.Jobs) returns String;
   action deleteJob(jobId : Integer) returns String;
+  action createJobSchedule(jobId : Integer, jobSchedule : js.Schedules) returns String;
 }

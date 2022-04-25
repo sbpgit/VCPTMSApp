@@ -22,7 +22,7 @@ Content-Type: application/json
 GET http://localhost:4004/jobs/lreadJobs()
 
 ### READ JOB DETAILS LOCALLY
-GET http://localhost:4004/jobs/lreadJobDetails(jobId=499941,displaySchedules=false)
+GET http://localhost:4004/jobs/lreadJobDetails(jobId=499941,displaySchedules=true)
 
 ### READ JOB SCHEDULES LOCALLY
 GET http://localhost:4004/jobs/lreadJobSchedules(jobId=506898)
