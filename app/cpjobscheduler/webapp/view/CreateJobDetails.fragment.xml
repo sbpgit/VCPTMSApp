@@ -36,6 +36,13 @@
                     <core:Title text = "Schedules Details:" class ="boldunderlineText"/>
 
                     <Label text="{i18n>cron}"/>
+                    <Select id="idCrontype" change="onCronChange" selectedKey="Mi" class="buttonDesktop">
+							<core:ListItem key="Mo" text="{i18n>mnthly}"/>
+							<core:ListItem key="We" text="{i18n>wekkly}"/>
+                            <core:ListItem key="Da" text="{i18n>daily}"/>
+							<core:ListItem key="Ho" text="{i18n>hours}"/>
+                            <core:ListItem key="Mi" text="{i18n>min}"/>
+					</Select>  
 					<Input id="idcron" value="" />
                     <Label text="{i18n>Schedstarttime}"/>
 					<DateTimePicker id="idSSTime" valueFormat= "yyyy-mm-dd HH:mm" change="handleChange" class="sapUiSmallMarginBottom"/>
@@ -45,7 +52,7 @@
 			</f:SimpleForm>
 		</VBox>
 		<buttons>
-			<Button id="idSavebt" type='Ghost' text="Save" press="onRunSend"></Button>
+			<Button id="idSavebt" type='Ghost' text="{i18n>save}" press="onRunSend"></Button>
 			<Button type='Reject' text="{i18n>close}" press="onRunClose"></Button>
 		</buttons>
 	</Dialog>

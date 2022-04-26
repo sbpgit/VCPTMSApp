@@ -123,21 +123,25 @@ sap.ui.define([
             // Calling service to get the Location data
             this.getModel("BModel").read("/getLocation", {
               success: function (oData) {
+                sap.ui.core.BusyIndicator.hide();
                 that.locModel.setData(oData);
                 that.oLocList.setModel(that.locModel);
-                sap.ui.core.BusyIndicator.hide();
+                
               },
               error: function (oData, error) {
+                sap.ui.core.BusyIndicator.hide();
                 MessageToast.show("error");
               },
             });
             // Calling service to get the Profiles data
             this.getModel("BModel").read("/getProfiles", {
               success: function (oData) {
+                sap.ui.core.BusyIndicator.hide();
                 that.ppfModel.setData(oData);
                 that.oPPFList.setModel(that.ppfModel);
               },
               error: function (oData, error) {
+                sap.ui.core.BusyIndicator.hide();
                 MessageToast.show("error");
               },
             });
@@ -899,28 +903,7 @@ sap.ui.define([
                       oEntry.vcRulesList.push(vRuleslist);
                     
                   }
-            // aItems = this.oODList.getSelectedItems();
-            // oProdItems = this.oProdList.getSelectedItems();
-            // cSelected = that.byId("MidCheck").getSelected();
-            // oSelModelVer = this.byId("Midmdlver").getSelectedKey();
-            // oSelType = this.byId("MidType").getSelectedKey();
-            // oPredProfile = that.byId("MpmInput").getValue();
-
-
-            // if (this.oObjDep.getTokens().length > 0 && this.oVer.getValue() && this.oScen.getValue() ) {
-          
-            //     for (i = 0; i < aItems.length; i++) {
-            //         vRuleslist = {
-            //             profile: oPredProfile,
-            //           override: cSelected,
-            //           Location: aItems[i].getInfo(),
-            //           Product: aItems[i].getDescription(),
-            //           GroupID: aItems[i].getTitle(),
-            //           Type: oSelType,
-            //           modelVersion: oSelModelVer,
-            //         };
-            //         oEntry.vcRulesList.push(vRuleslist);
-            //     }
+                  
                 this.oGModel.setProperty("/vcrulesData", oEntry.vcRulesList);
 
 
@@ -1035,6 +1018,10 @@ sap.ui.define([
 
           },
 
+          onCronChange:function(){
+                sap.ui.getCore().byId("idCrontype").setSelectedKey("Mi");
+          },
+
 
           onRunSend:function(){
             // this.oGModel = this.getModel("GModel");
@@ -1056,8 +1043,8 @@ sap.ui.define([
                 // JobName = sName + "_" + dDate[0].replaceAll(",", "") + "_" + dDate[1],
                 JobName = sName + new Date().getTime(),
                 actionText;
-                // cron = "* * * * * *%2F" + cron +  " " + "0";
-                cron = "* * * *%2F" + cron +  " " + "0" +  " " + "0" +  " " + "0";
+                cron = "* * * * * *%2F" + cron +  " " + "0";
+                // cron = "* * * *%2F" + cron +  " " + "0" +  " " + "0" +  " " + "0";
 
                 djSdate = djSdate[0] + " " + tjStime[0] + ":" + tjStime[1] + " " + "+0000";
                 djEdate = djEdate[0] + " " + tjEtime[0] + ":" + tjEtime[1] + " " + "+0000";
