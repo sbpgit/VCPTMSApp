@@ -826,7 +826,7 @@ srv.on("laddJobSchedule", async req => {
 
       if (scheduler) {
         var myJob = {
-          name: inputData.data,
+          data: inputData.data,
           description: inputData.description,
           active: inputData.active,
           startTime: inputData.startTime,
@@ -871,7 +871,7 @@ srv.on("addJobSchedule", (req) => {
       if (scheduler) {
         
         var myJob = {
-            name: inputData.data,
+            data: inputData.data,
             description: inputData.description,
             active: inputData.active,
             startTime: inputData.startTime,

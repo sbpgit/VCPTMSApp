@@ -45,7 +45,7 @@ GET http://localhost:4004/jobs/ldeleteJob(jobId=505387)
 
 
 ### ADD  JOB SCHEDULE LOCALLY
-GET http://localhost:4004/jobs/laddJobSchedule(schedule='{"jobId":499941, "data" : {"vcRulesList":[{"profile" : "SBP_HGBT_0","override" : true,"Location":"RX01","Product":"8150RW","modelVersion" : "Simulation"}]},"description" : "Recurring Cron Generate Model for OD 1973254_1","active" : true,"cron": "* * * * * *%2F60 0","startTime": "2022-04-25 23:00 +0000","endTime" : "2022-04-26 15:00 +0000" }')
+GET http://localhost:4004/jobs/laddJobSchedule(schedule='{"jobId":499941, "data" : {"vcRulesList":[{"profile" : "SBP_HGBT_0","override" : true,"Location":"RX01","Product":"8150RW","GroupID": "1973253_1","Type" : "OD","modelVersion" : "Simulation"}]},"description" : "Recurring Cron Generate Model for OD 1973253_1","active" : true,"cron": "* * * * * *%2F5 0","startTime": "2022-04-25 23:00 +0000","endTime" : "2022-04-26 15:00 +0000" }')
 
 
 ### DELETE  JOB SCHEDULE LOCALLY
