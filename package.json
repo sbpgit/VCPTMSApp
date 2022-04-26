@@ -113,6 +113,8 @@
       },
       "uaa": {
         "kind": "xsuaa"
+<<<<<<< HEAD
+=======
       },
       "IBPDemandsrv": {
         "kind": "odata-v2",
@@ -130,6 +132,7 @@
             "destination": "IBPDemandsrv"
           }
         }
+>>>>>>> 717181e28f1fe74d03996cbde3b43e1a261b3b02
       }
     },
     "hana": {

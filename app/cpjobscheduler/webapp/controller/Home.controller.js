@@ -17,24 +17,31 @@ sap.ui.define(
     Device
   ) {
     "use strict";
-    var that;
+    var that, oGModel;
 
     return BaseController.extend("cpapp.cpjobscheduler.controller.Prediction", {
-      /* =========================================================== */
-      /* lifecycle methods                                           */
-      /* =========================================================== */
-
-      /**
-       * Called when the worklist controller is instantiated.
-       * @public
-       */
+      
       onInit: function () {
         that = this;
         this.listModel = new JSONModel();
+        this.JobLogsModel = new JSONModel();
+        this.JobDataModel = new JSONModel();
+
         this.listModel.setSizeLimit(2000);
+        this.JobLogsModel.setSizeLimit(1000);
+        this.JobDataModel.setSizeLimit(1000);
+
+        if (!this._valueHelpDialogJobData) {
+            this._valueHelpDialogJobData = sap.ui.xmlfragment(
+              "cpapp.cpjobscheduler.view.JobData",
+              this
+            );
+            this.getView().addDependent(this._valueHelpDialogJobData);
+          }
       },
 
       onAfterRendering: function () {
+        oGModel = this.getModel("oGModel");
         that.oList = that.byId("jobList");
 
         var nowH = new Date();
@@ -44,23 +51,7 @@ sap.ui.define(
 		this.byId("idDateRange").setDateValue(oDateL);
 		this.byId("idDateRange").setSecondDateValue(nowH);
 
-        // this.getModel("JModel").read("/readJobs", {
-        //   //   filters: [
-        //   //       new Filter("startTime", FilterOperator.EQ, dFromDate),
-        //   //       new Filter("endTime", FilterOperator.EQ, dToDate),
-        //   //   ],
-        //   success: function (oData) {
-        //     that.listModel.setData({
-        //       results: oData.results,
-        //     });
-        //     that.oList.setModel(that.listModel);
-        //   },
-        //   error: function () {
-        //     MessageToast.show("Failed to get data");
-        //   },
-        // });
-
-        that.getModel("JModel").callFunction("/readJobs", {
+        that.getModel("JModel").callFunction("/lreadJobs", {
           method: "GET",
         //   urlParameters: {
         //     startTime: dFromDate,
@@ -68,7 +59,7 @@ sap.ui.define(
         //   },
           success: function (oData) {
             that.listModel.setData({
-              results: oData.results,
+              results: oData.lreadJobs.value,
             });
             that.oList.setModel(that.listModel);
           },
@@ -95,23 +86,7 @@ sap.ui.define(
         var dFromDate = dDate[0],
           dToDate = dDate[0];
 
-        // this.getModel("JModel").read("/readJobs", {
-        //   //   filters: [
-        //   //       new Filter("startTime", FilterOperator.EQ, dFromDate),
-        //   //       new Filter("endTime", FilterOperator.EQ, dToDate),
-        //   //   ],
-        //   success: function (oData) {
-        //     that.listModel.setData({
-        //       results: oData.results,
-        //     });
-        //     that.oList.setModel(that.listModel);
-        //   },
-        //   error: function () {
-        //     MessageToast.show("Failed to get data");
-        //   },
-        // });
-
-        that.getModel("JModel").callFunction("/readJobs", {
+        that.getModel("JModel").callFunction("/lreadJobs", {
             method: "GET",
             urlParameters: {
               startTime: dFromDate,
@@ -129,6 +104,99 @@ sap.ui.define(
             },
           });
       },
+
+    //   onhandlePress:function(oEvent){
+    //     oGModel = this.getModel("oGModel");
+    //     var oJobId = oEvent.getParameter("listItem").getCells()[0].getTitle();
+        onJobLogs:function(oEvent){
+        oGModel = this.getModel("oGModel");
+        var oJobId = oEvent.getSource().getParent().getCells()[0].getTitle();
+
+        oGModel.setProperty("/SelJob", oJobId);
+
+        that.getModel("JModel").callFunction("/lreadJobSchedules", {
+            method: "GET",
+            urlParameters: {
+                jobId: oJobId
+            },
+            success: function (oData) {
+                oGModel.setProperty("/scheduleId", oData.lreadJobSchedules.value[0].scheduleId);
+                that.JobDetails();
+            },
+            error: function (error) {
+              sap.ui.core.BusyIndicator.hide();
+              MessageToast.show("Failed to get data");
+            },
+          });
+
+      },
+
+
+    //   JobDetails:function(){
+    //     var oSelJobId = oGModel.getProperty("/SelJob"),
+    //         oSelScheduleId = oGModel.getProperty("/scheduleId");
+
+    onhandlePress:function(oEvent){
+        oGModel = this.getModel("oGModel");
+        var oJobId = oEvent.getParameter("listItem").getCells()[0].getTitle();
+
+            // that.getModel("JModel").callFunction("/lreadJobRunLogs", {
+                that.getModel("JModel").callFunction("/lreadJobDetails", {
+                method: "GET",
+                urlParameters: {
+                    jobId: oJobId,
+                    displaySchedules:true
+                    // scheduleId:oSelScheduleId,
+                    // page_size: "5",
+                    // offset: "1"
+                },
+                success: function (oData) {
+                    var aData = oData.lreadJobDetails.value.schedules;
+                    that.JobLogsModel.setData({
+                        results: aData,
+                      });
+                      that.byId("idJobLogs").setModel(that.JobLogsModel);
+
+                    var aJobDetails = oData.lreadJobDetails.value.schedules[0].data;
+
+                    aJobDetails = $.parseJSON(aJobDetails);
+                    oGModel.setProperty("/aJobDetails", aJobDetails);
+
+                      that.byId("JobPanel").setExpanded(false);
+                      that.byId("jobDetailsPanel").setExpanded(true);
+                    // that._valueHelpDialogJobLogs.open();
+                },
+                error: function (error) {
+                  sap.ui.core.BusyIndicator.hide();
+                  MessageToast.show("Failed to get data");
+                },
+              });
+      },
+
+      onScheData:function(){
+        var aData = oGModel.getProperty("/aJobDetails").vcRulesList;
+
+        that.JobDataModel.setData({
+            results: aData,
+          });
+          sap.ui.getCore().byId("idJobData").setModel(that.JobDataModel);
+
+        that._valueHelpDialogJobData.open();
+
+      },
+
+      onjobClose:function(){
+        that._valueHelpDialogJobData.close();
+      }
+      
+
+
+
+
+
+
+
+
     });
   }
 );

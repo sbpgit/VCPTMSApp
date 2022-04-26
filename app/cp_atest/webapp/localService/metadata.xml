@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+    <edmx:DataServices>
+        <Schema Namespace="JobsService" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+            <EntityContainer Name="EntityContainer">
+                <FunctionImport Name="readJobs" Function="JobsService.readJobs"/>
+                <FunctionImport Name="readJobDetails" Function="JobsService.readJobDetails"/>
+                <FunctionImport Name="readJobSchedules" Function="JobsService.readJobSchedules"/>
+                <FunctionImport Name="readJobActionLogs" Function="JobsService.readJobActionLogs"/>
+                <FunctionImport Name="readJobRunLogs" Function="JobsService.readJobRunLogs"/>
+                <FunctionImport Name="addMLJob" Function="JobsService.addMLJob"/>
+                <ActionImport Name="createJob" Action="JobsService.createJob"/>
+                <ActionImport Name="createMLJob" Action="JobsService.createMLJob"/>
+                <ActionImport Name="updateJob" Action="JobsService.updateJob"/>
+                <ActionImport Name="deleteJob" Action="JobsService.deleteJob"/>
+            </EntityContainer>
+            <ComplexType Name="js_Jobs">
+                <Property Name="name" Type="Edm.String"/>
+                <Property Name="description" Type="Edm.String"/>
+                <Property Name="action" Type="Edm.String"/>
+                <Property Name="active" Type="Edm.Boolean"/>
+                <Property Name="httpMethod" Type="Edm.String"/>
+                <Property Name="startTime" Type="Edm.String"/>
+                <Property Name="endTime" Type="Edm.String"/>
+                <Property Name="ACTIVECOUNT" Type="Edm.Int32"/>
+                <Property Name="createdAt" Type="Edm.String"/>
+                <Property Name="INACTIVECOUNT" Type="Edm.Int32"/>
+                <Property Name="jobId" Type="Edm.Int32"/>
+                <Property Name="jobType" Type="Edm.String"/>
+                <Property Name="signatureVersion" Type="Edm.Int32"/>
+                <Property Name="subDomain" Type="Edm.String"/>
+                <Property Name="user" Type="Edm.String"/>
+                <Property Name="_id" Type="Edm.Int32"/>
+            </ComplexType>
+            <ComplexType Name="js_Schedules">
+                <Property Name="data" Type="Edm.String"/>
+                <Property Name="description" Type="Edm.String"/>
+                <Property Name="active" Type="Edm.Boolean"/>
+                <Property Name="startTime" Type="Edm.String"/>
+                <Property Name="endTime" Type="Edm.String"/>
+                <Property Name="cron" Type="Edm.String"/>
+                <Property Name="time" Type="Edm.String"/>
+                <Property Name="repeatInterval" Type="Edm.String"/>
+                <Property Name="repeatAt" Type="Edm.String"/>
+                <Property Name="nextRunAt" Type="Edm.String"/>
+                <Property Name="scheduleId" Type="Edm.String"/>
+                <Property Name="type" Type="Edm.String"/>
+            </ComplexType>
+            <ComplexType Name="js_RunLogs">
+                <Property Name="runId" Type="Edm.String"/>
+                <Property Name="httpStatus" Type="Edm.Int32"/>
+                <Property Name="executionTimestamp" Type="Edm.String"/>
+                <Property Name="runStatus" Type="Edm.String"/>
+                <Property Name="runState" Type="Edm.String"/>
+                <Property Name="statusMessage" Type="Edm.String"/>
+                <Property Name="scheduleTimestamp" Type="Edm.String"/>
+                <Property Name="completionTimestamp" Type="Edm.String"/>
+                <Property Name="runText" Type="Edm.String"/>
+            </ComplexType>
+            <ComplexType Name="js_mlJobs">
+                <Property Name="name" Type="Edm.String"/>
+                <Property Name="description" Type="Edm.String"/>
+                <Property Name="action" Type="Edm.String"/>
+                <Property Name="active" Type="Edm.Boolean"/>
+                <Property Name="httpMethod" Type="Edm.String"/>
+                <Property Name="startTime" Type="Edm.String"/>
+                <Property Name="endTime" Type="Edm.String"/>
+                <Property Name="ACTIVECOUNT" Type="Edm.Int32"/>
+                <Property Name="createdAt" Type="Edm.String"/>
+                <Property Name="INACTIVECOUNT" Type="Edm.Int32"/>
+                <Property Name="jobId" Type="Edm.Int32"/>
+                <Property Name="jobType" Type="Edm.String"/>
+                <Property Name="signatureVersion" Type="Edm.Int32"/>
+                <Property Name="subDomain" Type="Edm.String"/>
+                <Property Name="user" Type="Edm.String"/>
+                <Property Name="_id" Type="Edm.Int32"/>
+                <Property Name="schedules" Type="Collection(JobsService.js_mlSchedules)" Nullable="false"/>
+            </ComplexType>
+            <ComplexType Name="js_mlSchedules">
+                <Property Name="data" Type="JobsService.js_mlSchedules_data"/>
+                <Property Name="description" Type="Edm.String"/>
+                <Property Name="active" Type="Edm.Boolean"/>
+                <Property Name="startTime" Type="Edm.String"/>
+                <Property Name="endTime" Type="Edm.String"/>
+                <Property Name="cron" Type="Edm.String"/>
+                <Property Name="time" Type="Edm.String"/>
+                <Property Name="repeatInterval" Type="Edm.String"/>
+                <Property Name="repeatAt" Type="Edm.String"/>
+            </ComplexType>
+            <ComplexType Name="js_mlSchedules_data">
+                <Property Name="vcRulesList" Type="Collection(JobsService.js_mlSchedules_data_vcRulesList)" Nullable="false"/>
+            </ComplexType>
+            <ComplexType Name="js_mlSchedules_data_vcRulesList">
+                <Property Name="profile" Type="Edm.String" MaxLength="50"/>
+                <Property Name="override" Type="Edm.Boolean"/>
+                <Property Name="version" Type="Edm.String" MaxLength="10"/>
+                <Property Name="scenario" Type="Edm.String" MaxLength="32"/>
+                <Property Name="Location" Type="Edm.String" MaxLength="4"/>
+                <Property Name="Product" Type="Edm.String" MaxLength="40"/>
+                <Property Name="GroupID" Type="Edm.String" MaxLength="20"/>
+                <Property Name="Type" Type="Edm.String" MaxLength="10"/>
+                <Property Name="modelVersion" Type="Edm.String" MaxLength="20"/>
+                <Property Name="dimensions" Type="Edm.Int32"/>
+            </ComplexType>
+            <Function Name="readJobs" IsBound="false" IsComposable="false">
+                <ReturnType Type="Collection(JobsService.js_Jobs)" Nullable="false"/>
+            </Function>
+            <Function Name="readJobDetails" IsBound="false" IsComposable="false">
+                <Parameter Name="jobId" Type="Edm.Int32"/>
+                <ReturnType Type="JobsService.js_Jobs"/>
+            </Function>
+            <Function Name="readJobSchedules" IsBound="false" IsComposable="false">
+                <Parameter Name="jobId" Type="Edm.Int32"/>
+                <ReturnType Type="Collection(JobsService.js_Schedules)" Nullable="false"/>
+            </Function>
+            <Function Name="readJobActionLogs" IsBound="false" IsComposable="false">
+                <Parameter Name="jobId" Type="Edm.Int32"/>
+                <ReturnType Type="Edm.String"/>
+            </Function>
+            <Function Name="readJobRunLogs" IsBound="false" IsComposable="false">
+                <Parameter Name="jobId" Type="Edm.Int32"/>
+                <Parameter Name="scheduleId" Type="Edm.String"/>
+                <Parameter Name="page_size" Type="Edm.Int32"/>
+                <Parameter Name="offset" Type="Edm.Int32"/>
+                <ReturnType Type="Collection(JobsService.js_RunLogs)" Nullable="false"/>
+            </Function>
+            <Function Name="addMLJob" IsBound="false" IsComposable="false">
+                <Parameter Name="jobDetails" Type="Edm.String"/>
+                <ReturnType Type="Edm.Int32"/>
+            </Function>
+            <Action Name="createJob" IsBound="false">
+                <Parameter Name="url" Type="Edm.String"/>
+                <Parameter Name="cron" Type="Edm.String"/>
+                <ReturnType Type="Edm.Int32"/>
+            </Action>
+            <Action Name="createMLJob" IsBound="false">
+                <Parameter Name="jobDetails" Type="JobsService.js_mlJobs"/>
+                <ReturnType Type="Edm.Int32"/>
+            </Action>
+            <Action Name="updateJob" IsBound="false">
+                <Parameter Name="jobId" Type="Edm.Int32"/>
+                <Parameter Name="active" Type="Edm.Boolean"/>
+                <ReturnType Type="Edm.String"/>
+            </Action>
+            <Action Name="deleteJob" IsBound="false">
+                <Parameter Name="jobId" Type="Edm.Int32"/>
+                <ReturnType Type="Edm.String"/>
+            </Action>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>

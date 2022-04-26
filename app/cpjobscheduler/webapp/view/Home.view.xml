@@ -14,8 +14,9 @@
             </Toolbar>
         </customHeader>
         <content>
+        <Panel id="JobPanel" expandable="true" expanded="true" headerText="Jobs List" >
             <SearchField id="headSearch" liveChange="onSearch" placeholder="Job"/>
-            <Table id="jobList" items="{path: '/results'}" >
+            <Table id="jobList" items="{path: '/results'}" growingScrollToLoad="true" rememberSelections="false" itemPress="onhandlePress" mode="SingleSelectMaster" selectionChange="onhandlePress">
                 <columns>
                     <Column hAlign="Left" vAlign="Middle">
                         <Text text="{i18n>jobid}" />
@@ -32,19 +33,64 @@
                     <Column hAlign="Left" vAlign="Middle">
                         <Text text="{i18n>createdat}"/>
                     </Column>
+                    <Column hAlign="Left" vAlign="Middle">
+                        <Text text=""/>
+                    </Column>
                 </columns>
                 <items>
                     <ColumnListItem>
                         <cells>
                             <ObjectIdentifier title="{jobId}" />
                             <Text text="{name}"/>
-                            <Text text="{path: 'startTime', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'yyyy/MM/dd' }}"/>
+                            <!-- <Text text="{path: 'startTime', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'yyyy/MM/dd' }}"/>
                             <Text text="{path: 'endTime', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'yyyy/MM/dd' }}"/>
-                            <Text text="{path: 'crestedAt', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'yyyy/MM/dd' }}"/>
+                            <Text text="{path: 'createdAt', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'yyyy/MM/dd' }}"/> -->
+                            <Text text="{startTime}"/>
+                            <Text text="{endTime}"/>
+                            <Text text="{createdAt}"/>
+                            <Button id="idDisplay" icon="sap-icon://display" tooltip="Display" press="onJobLogs" iconDensityAware="false" type="Transparent"/>
                         </cells>
                     </ColumnListItem>
                 </items>
             </Table>
+            </Panel>
+
+            <Panel id="jobDetailsPanel" expandable="true" expanded="false" headerText="Job Details" >
+            <Table id="idJobLogs"  items="{path: '/results'}" >
+				<columns>
+					<Column hAlign="Left" vAlign="Middle" >
+						<Text text="{i18n>type}" />
+					</Column>
+					<Column hAlign="Left" vAlign="Middle">
+						<Text text="{i18n>cron}"/>
+					</Column>
+                    <Column hAlign="Left" vAlign="Middle">
+						<Text text="{i18n>nextRunAt}"/>
+					</Column>
+                    <Column hAlign="Left" vAlign="Middle" >
+						<Text text="{i18n>startTime}"/>
+					</Column>
+                    <Column hAlign="Left" vAlign="Middle">
+						<Text text="{i18n>endTime}"/>
+					</Column>
+                    <Column hAlign="Left" vAlign="Middle">
+                        <Text text=""/>
+                    </Column>
+				</columns>
+				<items>
+					<ColumnListItem>
+						<cells>
+							<Text text="{type}" />
+                            <Text text="{cron}"/>
+                            <Text text="{nextRunAt}"/>
+                            <Text text="{startTime}"/>
+                            <Text text="{endTime}"/>
+                            <Button id="idscheData" icon="sap-icon://display" tooltip="Schedule Data" press="onScheData" iconDensityAware="false" type="Transparent"/>
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+            </Panel>
         </content>
     </Page>
 </mvc:View>

@@ -100,7 +100,6 @@
                 </f:Form>
             </Panel>
             
-
             <Panel id="PredPanel" visible="false" expandable="true" expanded="true">
                 <headerToolbar>
                     <OverflowToolbar>
@@ -177,7 +176,7 @@
                                     </f:label>
                                     <f:fields>
                                         <CheckBox id="PidCheck" select="onCheck"/>
-                                        <Button type="Emphasized" text="{i18n>Run}" press="onRunPred" width="100%"/>
+                                        <Button type="Emphasized" text="{i18n>Run}" press="onPrediction" width="100%"/>
                                     </f:fields>
                                 </f:FormElement>
                             </f:formElements>

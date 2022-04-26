@@ -195,6 +195,10 @@ modules:
       - cpappcpjobscheduler.zip
       name: cpappcpjobscheduler
       target-path: resources/
+    - artifacts:
+      - cpappcpatest.zip
+      name: cpappcpatest
+      target-path: resources/
 - name: cpibpfdemcpibpfdem
   type: html5
   path: app/cp_ibpfdem
@@ -485,6 +489,16 @@ modules:
     - npm install
     - npm run build:cf
     supported-platforms: []
+- name: cpappcpatest
+  type: html5
+  path: app/cp_atest
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
 resources:
 - name: config_products-db
   type: com.sap.xs.hdi-container
@@ -533,10 +547,10 @@ resources:
 - name: jobscheduler_inst
   type: org.cloudfoundry.managed-service
   parameters:
-       service: jobscheduler
-       service-plan: standard
-       config:
-          enable-xsuaa-support: true
+    config:
+      enable-xsuaa-support: true
+    service: jobscheduler
+    service-plan: standard
 parameters:
   deploy_mode: html5-repo
   enable-parallel-deployments: true
