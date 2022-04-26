@@ -887,7 +887,7 @@ module.exports = (srv) => {
         var responseMessage;
         liProdChar = JSON.parse(req.data.PRODCHAR);
         if (req.data.FLAG === "C" || req.data.FLAG === "E") {
-            for( var i = 0; i< liProdChar.length; i++){
+            for (var i = 0; i < liProdChar.length; i++) {
                 lsresults.PRODUCT_ID = liProdChar[i].PRODUCT_ID;
                 lsresults.REF_PRODID = liProdChar[i].REF_PRODID;
                 if (req.data.FLAG === "E" && i === 0) {
@@ -897,13 +897,13 @@ module.exports = (srv) => {
                         //DONOTHING
                     }
                 }
-                lsresults.CLASS_NUM = liProdChar[i].CLASS_NUM; 
-                lsresults.CHAR_NUM = liProdChar[i].CHAR_NUM; 
+                lsresults.CLASS_NUM = liProdChar[i].CLASS_NUM;
+                lsresults.CHAR_NUM = liProdChar[i].CHAR_NUM;
                 lsresults.CHARVAL_NUM = liProdChar[i].CHARVAL_NUM;
                 liresults.push(lsresults);
                 lsresults = {};
             }
-            if(liresults.length > 0){
+            if (liresults.length > 0) {
                 try {
                     await cds.run(INSERT.into("CP_NEWPROD_CHAR").entries(liresults));
                     responseMessage = " Creation/Updation successful";
@@ -915,7 +915,7 @@ module.exports = (srv) => {
             }
         }
         else if (req.data.FLAG === "D") {
-            for( var i = 0; i< liProdChar.length; i++){
+            for (var i = 0; i < liProdChar.length; i++) {
                 lsresults.PRODUCT_ID = liProdChar[i].PRODUCT_ID;
                 lsresults.REF_PRODID = liProdChar[i].REF_PRODID;
                 if (req.data.FLAG === "E" && i === 0) {
@@ -943,17 +943,48 @@ module.exports = (srv) => {
         console.log("test");
     });
 };
-module.exports = cds.service.impl(async function() {
-    const { VCPTEST } = this.entities;
-   //  const service = await cdse.connect.to('IBPDemandsrv');
-    const service = await cds.connect.to('IBPDemandsrv');
-    this.on('READ', VCPTEST, request => {
-        try{
-        return service.tx(request).run(request.query);
-        }
-        catch(err){
-            console.log(err);
-        }
-    });
-});
+// module.exports = cds.service.impl(async function () {
+//     const { VCPTEST } = this.entities;
+//     //  const service = await cdse.connect.to('IBPDemandsrv');
+//     const service = await cds.connect.to('IBPDemandsrv');
+//     this.on('READ', VCPTEST, request => {
+//         try {
+//             return service.tx(request).run(request.query);
+//         }
+//         catch (err) {
+//             console.log(err);
+//         }
+//     });
+//     this.after("READ", VCPTEST, async (req) => {
+//         const { VCPTEST } = this.entities;
+//         const tx = cds.tx(req)
+//         // const iBPData = await cds.run(SELECT.from(VCPTEST));
+//         for (var i in req) {
+//             if (req[i].PLANNEDINDEPENDENTREQ > 0) {
+//                 let modQuery = {
+//                     UPSERT: {
+//                         into: { ref: ['CP_IBP_FUTUREDEMAND_TEMP'] }, entries: [
+//                             {
+//                                 LOCATION_ID: req[i].LOCID,
+//                                 PRODUCT_ID: req[i].PRDID,
+//                                 VERSION: req[i].VERSIONID,
+//                                 SCENARIO: req[i].SCENARIOID,
+//                                 WEEK_DATE: req[i].PERIODID0_TSTAMP,
+//                                 QUANTITY: req[i].PLANNEDINDEPENDENTREQ
+
+//                             }
+//                         ]
+//                     }
+//                 }
+//                 try {
+//                     await cds.run(modQuery);
+//                     // await cds.run(INSERT.into('CP_IBP_FUTUREDEMAND_TEMP') .as (SELECT.from('VCPTEST').where({ PLANNEDINDEPENDENTREQ: { '>': 0 } })));
+//                 }
+//                 catch (err) {
+//                     console.log(err);
+//                 }
+//             }
+//         }
+//     })
+// });
 

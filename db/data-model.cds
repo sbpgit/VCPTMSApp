@@ -435,7 +435,14 @@ context cp {
         key WEEK_DATE   : Date           @title : 'Weekly Date';
             QUANTITY    : Decimal(13, 3) @title : 'Demand Quantity';
     }
-
+entity IBP_FUTUREDEMAND_TEMP {
+        key LOCATION_ID : String(4)      @title : 'Location ID';
+        key PRODUCT_ID  : String(40)     @title : 'Product ID';
+        key VERSION     : String(10)     @title : 'Version';
+        key SCENARIO    : String(32)     @title : 'Scenario';
+        key WEEK_DATE   : Date           @title : 'Weekly Date';
+            QUANTITY    : Decimal(13, 3) @title : 'Demand Quantity';
+    }
     // IBp Future characteristic plan
     entity IBP_FCHARPLAN {
         key LOCATION_ID : String(4)      @title : 'Location ID';
