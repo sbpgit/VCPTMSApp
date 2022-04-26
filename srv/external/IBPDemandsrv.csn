@@ -23,17 +23,6 @@
         }
       }
     },
-    "IBPDemandsrv.commit": {
-      "kind": "function",
-      "params": {
-        "P_TransactionID": {
-          "type": "cds.LargeString"
-        }
-      },
-      "returns": {
-        "type": "IBPDemandsrv.ValueResultSet"
-      }
-    },
     "IBPDemandsrv.getExportResult": {
       "kind": "function",
       "params": {

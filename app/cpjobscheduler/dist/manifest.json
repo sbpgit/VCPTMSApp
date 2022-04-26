@@ -27,7 +27,7 @@
                     "localUri": "localService/metadata.xml"
                 }
             },
-            "jobs": {
+            "Jobs": {
                 "uri": "v2/jobs/",
                 "type": "OData",
                 "settings": {
@@ -127,12 +127,8 @@
                 }
             },
             "JModel": {
-                "dataSource": "jobs",
-                "preload": true,
-                "settings": {
-                    "useBatch": true,
-                    "defaultBindingMode": "TwoWay"
-                }
+                "dataSource": "Jobs",
+                "preload": true
             }
         },
         "resources": {

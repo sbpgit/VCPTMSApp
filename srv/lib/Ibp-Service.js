@@ -1,17 +1,11 @@
 const cds = require('@sap/cds')
 const JobSchedulerClient = require("@sap/jobs-client");
 const xsenv = require("@sap/xsenv");
-const cdse = require('cdse');
-/////////////////////////
-// const fetch = require('node-fetch');
-// const express = require('express');
-// const https = require("https");  
-// const basic = require('basic-authorization-header');
-////////////////////////
-const ibpParams = {
-    uid:    "BTPUSER",//process.env.ibpDemand,
-    pwd: 	"Sbp@btpproductdevelopment01" //cds.env.requires.db.credentials.ibpPwd, 
-}
+
+// const ibpParams = {
+//     uid:    "BTPUSER",//process.env.ibpDemand,
+//     pwd: 	"Sbp@btpproductdevelopment01" //cds.env.requires.db.credentials.ibpPwd, 
+// }
 // const app = express();
 function getJobscheduler(req) {
 
@@ -159,53 +153,17 @@ module.exports = async function (srv) {
           });
 
      })
-   
-
-    // module.exports = cds.service.impl(async function() {
-        //  const { VCPTEST } = this.entities;
-        //  const service = await cds.connect.to('IBPDemandsrv');
-        //  this.on('READ', VCPTEST, request => {
-        //      return service.tx(request).run(request.query);
-        //  });
-   //  });
-    //  srv.on("importIBPDemd", async (req)=>{
-    //     app.get("/", (req, res) => {
-    //         const url = "https://my400323-api.scmibp.ondemand.com/sap/opu/odata/ibp/PLANNING_DATA_API_SRV/VCPTEST?$select=PRDID,LOCID,PERIODID0_TSTAMP,PLANNEDINDEPENDENTREQ,VERSIONID,VERSIONNAME,%20SCENARIOID,SCENARIONAME&$filter=PLANNEDINDEPENDENTREQ%20gt%200"
-    //         const uname = ibpParams.uid;
-    //         const pasword = ibpParams.pwd;
-    //         const options = {
-    //           auth : uname:pasword//here you put your credentials
-    //         }
-        
-    //         https.get(url, options, (response) => {
-    //             console.log(response.statusCode);
-    //             console.log(auth);
-    //             response.responseType="text";
-    //             response.on("data", (data)=> {
-    //                 const translationLot = JSON.parse(data)
-    //                 console.log(translationLot);
-    //             })
-    //         })
-    //         res.send("Server is up and running")
-    //       });
-
-         //const
-        // fetch('https://my400323-api.scmibp.ondemand.com/sap/opu/odata/ibp/PLANNING_DATA_API_SRV/VCPTEST?$select=PRDID,LOCID,PERIODID0_TSTAMP,PLANNEDINDEPENDENTREQ,VERSIONID,VERSIONNAME,%20SCENARIOID,SCENARIONAME&$filter=PLANNEDINDEPENDENTREQ%20gt%200',{
-        //     headers: {
-        //         'Authorization': 'Basic ' + Buffer.from(`${ibpParams.uid}:${ibpParams.pwd}`, 'binary').toString('base64')
-        //     }
-        // })
-        // .then(res => res.json())
-        // .then(json => 
-        //     console.log(json));
-    //  })
-
   }
 //  module.exports = cds.service.impl(async function() {
 //          const { VCPTEST } = this.entities;
-//          const service = await cdse.connect.to('IBPDemandsrv');
-//         //  const service = await cds.connect.to('IBPDemandsrv');
+//         //  const service = await cdse.connect.to('IBPDemandsrv');
+//          const service = await cds.connect.to('IBPDemandsrv');
 //          this.on('READ', VCPTEST, request => {
+//              try{
 //              return service.tx(request).run(request.query);
+//              }
+//              catch(err){
+//                  console.log(err);
+//              }
 //          });
 //     });

@@ -143,6 +143,13 @@
                     "target": [
                         "Home"
                     ]
+                },
+                {
+                    "name": "Detail",
+                    "pattern": "Detail",
+                    "target": [
+                        "Detail"
+                    ]
                 }
             ],
             "targets": {
@@ -152,6 +159,13 @@
                     "clearControlAggregation": false,
                     "viewId": "Home",
                     "viewName": "Home"
+                },
+                "Detail": {
+                    "viewType": "XML",
+                    "transition": "slide",
+                    "clearControlAggregation": false,
+                    "viewId": "Detail",
+                    "viewName": "Detail"
                 }
             }
         }

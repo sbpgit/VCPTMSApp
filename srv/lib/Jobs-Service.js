@@ -245,7 +245,9 @@ module.exports = async function (srv) {
     // console.log('req.data.jobDetails ', req.data.jobDetails);
     let jobDetails = req.data.jobDetails;
    // str.replace(/[/_]/g, "%2F");
-    let jDetails = jobDetails.replace(/[/_]/g, "%2F");
+    // let jDetails = jobDetails.replace(/[/_]/g, "%2F");
+    let jDetails = jobDetails.replace(/[/]/g, "%2F");
+
     console.log('jDetails ', jDetails);
 
     let addJobsUrl = lbaseUrl + '/jobs/addMLJob(jobDetails=' + "'" + jDetails + "'" + ')';
@@ -287,7 +289,7 @@ module.exports = async function (srv) {
 
     let jobDetails = req.data.jobDetails;
     // str.replace(/[/_]/g, "%2F");
-     let jDetails = jobDetails.replace(/[/_]/g, "%2F");
+     let jDetails = jobDetails.replace(/[/]/g, "%2F");
      console.log('jDetails ', jDetails);
  
      let lupdateJobUrl = lbaseUrl + '/jobs/updateMLJob(jobDetails=' + "'" + jDetails + "'" + ')';
@@ -323,46 +325,134 @@ module.exports = async function (srv) {
 
   });
 
-//   srv.on("ldeleteJob", async(req) => {
-//     let jobId = req.data.jobId;
-//     let active = req.data.active;
+  srv.on("ldeleteJob", async(req) => {
+    let jobId = req.data.jobId;
     
 
-//     console.log('ldeleteJob  jobId :', jobId);
+    console.log('ldeleteJob  jobId :', jobId);
 
-//     let ldeleteJobUrl = lbaseUrl + 
-//     '/jobs/deleteMLJob(jobId='  + jobId +')';
+    let ldeleteJobUrl = lbaseUrl + 
+    '/jobs/deleteMLJob(jobId='  + jobId +')';
 
-//     console.log('ldeleteJobUrl ', ldeleteJobUrl);
+    console.log('ldeleteJobUrl ', ldeleteJobUrl);
 
-//     options = {
-//         'method': 'GET',
-//         'url': ldeleteJobUrl, 
-//         'headers' : {
-//             'Accept': 'application/json',
-//             'Accept-Charset': 'utf-8'
-//         }   
-//     }
-//     let ret_response ="";
+    options = {
+        'method': 'GET',
+        'url': ldeleteJobUrl, 
+        'headers' : {
+            'Accept': 'application/json',
+            'Accept-Charset': 'utf-8'
+        }   
+    }
+    let ret_response ="";
 
-//     await request(options, async function (error, response) {
+    await request(options, async function (error, response) {
    
-//         console.log('statusCode:', response.statusCode); // Print the response status code if a response was received
-//         if (error) 
-//         {
-//             console.log('ldeleteJob - Error ', error);
-//             ret_response = JSON.parse(error);
-//         }
-//         if (response.statusCode == 200)
-//         {
-//             ret_response = JSON.parse(response.body);
-//         }
-//     })
-//     const sleep = require('await-sleep');
-//     await sleep(1000);
-//     req.reply(ret_response);
+        console.log('statusCode:', response.statusCode); // Print the response status code if a response was received
+        if (error) 
+        {
+            console.log('ldeleteJob - Error ', error);
+            ret_response = JSON.parse(error);
+        }
+        if (response.statusCode == 200)
+        {
+            ret_response = JSON.parse(response.body);
+        }
+    })
+    const sleep = require('await-sleep');
+    await sleep(1000);
+    req.reply(ret_response);
 
-//   });
+  });
+
+
+
+srv.on("laddJobSchedule", async req => {
+    
+
+    let scheduleDetails = req.data.schedule;
+
+    console.log("laddJobSchedule req.data :", req.data);
+    let sDetails = scheduleDetails.replace(/[/]/g, "%2F");
+
+    console.log("laddJobSchedule sDetails :", sDetails);
+
+    let addJobScheduleUrl = lbaseUrl + '/jobs/addJobSchedule(schedule=' + "'" + sDetails + "'" + ')';
+
+    console.log('addJobScheduleUrl ', addJobScheduleUrl);
+
+    options = {
+        'method': 'GET',
+        'url': addJobScheduleUrl, 
+        'headers' : {
+            'Accept': 'application/json',
+            'Accept-Charset': 'utf-8'
+        }   
+    }
+    let ret_response ="";
+
+    await request(options, async function (error, response) {
+   
+        console.log('statusCode:', response.statusCode); // Print the response status code if a response was received
+        if (error) 
+        {
+            console.log('laddJobSchedule - Error ', error);
+            ret_response = JSON.parse(error);
+        }
+        if (response.statusCode == 200)
+        {
+            ret_response = JSON.parse(response.body);
+        }
+    })
+    const sleep = require('await-sleep');
+    await sleep(1000);
+    req.reply(ret_response);
+
+  });
+
+
+  srv.on("ldeleteMLJobSchedule", async req => {
+    
+
+    let scheduleDetails = req.data.scheduleDetails;
+
+    console.log("ldeleteMLJobSchedule req.data :", req.data);
+    let sDetails = scheduleDetails.replace(/[/]/g, "%2F");
+
+    console.log("ldeleteMLJobSchedule sDetails :", sDetails);
+
+    let ldeleteMLJobScheduleUrl = lbaseUrl + '/jobs/deleteMLJobSchedule(scheduleDetails=' + "'" + sDetails + "'" + ')';
+
+    console.log('ldeleteMLJobScheduleUrl ', ldeleteMLJobScheduleUrl);
+
+    options = {
+        'method': 'GET',
+        'url': ldeleteMLJobScheduleUrl, 
+        'headers' : {
+            'Accept': 'application/json',
+            'Accept-Charset': 'utf-8'
+        }   
+    }
+    let ret_response ="";
+
+    await request(options, async function (error, response) {
+   
+        console.log('statusCode:', response.statusCode); // Print the response status code if a response was received
+        if (error) 
+        {
+            console.log('ldeleteMLJobSchedule - Error ', error);
+            ret_response = JSON.parse(error);
+        }
+        if (response.statusCode == 200)
+        {
+            ret_response = JSON.parse(response.body);
+        }
+    })
+    const sleep = require('await-sleep');
+    await sleep(1000);
+    req.reply(ret_response);
+
+  });
 
   srv.on("readJobs", (req) => {
     return new Promise((resolve, reject) => {
@@ -684,6 +774,30 @@ module.exports = async function (srv) {
     });
   });
 
+
+  srv.on("deleteMLJob", (req) => {
+    console.log("deleteMLJob jobDetails :", JSON.parse(req.data.jobId));
+
+    return new Promise((resolve, reject) => {
+      const scheduler = getJobscheduler(req);
+      console.log("deletMLJob req.data :", req.data);
+        
+      if (scheduler) {
+        
+
+        var suJob = { jobId: req.data.jobId };
+
+        scheduler.deleteJob(suJob, (err, result) => {
+          if (err) {
+            reject(req.error(err.message));
+          } else {
+            resolve(JSON.stringify(result));
+          }
+        });
+      }
+    });
+  });
+
   srv.on(["deleteJob"], (req) => {
     return new Promise((resolve, reject) => {
       const scheduler = getJobscheduler(req);
@@ -702,4 +816,147 @@ module.exports = async function (srv) {
       }
     });
   });
+
+  srv.on("createJobSchedule", (req) => {
+    return new Promise((resolve, reject) => {
+      const scheduler = getJobscheduler(req);
+      console.log("createJobSchedule req.data :", req.data);
+      var inputData = req.data.jobSchedule;
+      console.log("createJobSchedule inputData :", inputData);
+
+      if (scheduler) {
+        var myJob = {
+          name: inputData.data,
+          description: inputData.description,
+          active: inputData.active,
+          startTime: inputData.startTime,
+          endTime: inputData.endTime,
+          cron : inputData.cron,
+          time : inputData.time,
+          repeatInterval : inputData.repeatInterval,
+          repeatAt : inputData.repeatAt
+        };
+        var scJob = { jobId: req.data.jobId, schedule: myJob };
+        console.log("scJob :", scJob)
+
+
+        scheduler.createJobSchedule(scJob, function (err, result) {
+          if (err) {
+            reject(req.error(err.message));
+          } else {
+            // job was created successfully
+            resolve(result);
+          }
+        });
+      }
+    });
+  });
+
+
+srv.on("addJobSchedule", (req) => {
+    // console.log("addJobSchedule jobId ", req.data.jobId, "schedule :", JSON.parse(req.data.schedule));
+    console.log( "schedule :", JSON.parse(req.data.schedule));
+
+
+    return new Promise((resolve, reject) => {
+      const scheduler = getJobscheduler(req);
+      console.log("addJobSchedule req.data :", req.data);
+      var inputData = JSON.parse(req.data.schedule);
+      console.log("addJobSchedule inputData :", inputData);
+    //   let baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+
+
+
+    
+      if (scheduler) {
+        
+        var myJob = {
+            name: inputData.data,
+            description: inputData.description,
+            active: inputData.active,
+            startTime: inputData.startTime,
+            endTime: inputData.endTime,
+            cron : inputData.cron,
+            time : inputData.time,
+            repeatInterval : inputData.repeatInterval,
+            repeatAt : inputData.repeatAt
+          };
+
+          var scJob = { jobId: inputData.jobId, schedule: myJob };
+        //   var scJob = { jobId: req.data.jobId, schedule: myJob };
+
+          console.log("scJob :", scJob)
+
+        scheduler.createJobSchedule(scJob, (err, result) => {
+          if (err) {
+            reject(req.error(err.message));
+          } else {
+            resolve(JSON.stringify(result));
+          }
+        });
+      }
+    });
+  });
+
+  srv.on(["deleteJobSchedule"], (req) => {
+
+    return new Promise((resolve, reject) => {
+      const scheduler = getJobscheduler(req);
+      if (scheduler) {
+
+
+        var inputData = req.data;
+        console.log("deleteJobSchedule inputData :", inputData);
+
+        var jreq = {
+          jobId: req.data.jobId,
+          scheduleId: req.data.scheduleId
+        };
+        scheduler.deleteJobSchedule(jreq, (err, result) => {
+          if (err) {
+            reject(req.error(err.message));
+          } else {
+            // job was created successfully
+            resolve(JSON.stringify(result));
+          }
+        });
+      }
+    });
+  });
+
+
+  srv.on("deleteMLJobSchedule", (req) => {
+    console.log("deleteMLJobSchedule scheduleDetails :", JSON.parse(req.data.scheduleDetails));
+
+  
+
+    return new Promise((resolve, reject) => {
+      const scheduler = getJobscheduler(req);
+        
+      if (scheduler) {
+        let scheduleDetails = JSON.parse(req.data.scheduleDetails);
+        console.log("deleteMLJobSchedule scheduleDetails :", scheduleDetails);
+
+        // str.replace(/[/_]/g, "%2F");
+        //  let sDetails = scheduleDetails.replace(/[/]/g, "%2F");
+        //  console.log('sDetails ', sDetails);
+        var jreq = {
+          jobId: scheduleDetails.jobId,
+          scheduleId: scheduleDetails.scheduleId
+        };
+
+        console.log("deleteMLJobSchedule jreq :", jreq);
+
+        scheduler.deleteJobSchedule(jreq, (err, result) => {
+          if (err) {
+            reject(req.error(err.message));
+          } else {
+            resolve(JSON.stringify(result));
+          }
+        });
+      }
+    });
+  });
+
+
 };

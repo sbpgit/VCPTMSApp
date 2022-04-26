@@ -7,9 +7,10 @@ using V_OBDHDR from '../db/data-model';
 using V_CLASSCHARVAL from '../db/data-model';
 using {
     V_PRODCLSCHAR,
-    V_PRODCLSCHARVAL
+    V_PRODCLSCHARVAL,
+    V_ODPROFILES
 } from '../db/data-model';
-using V_ODPROFILES from '../db/data-model';
+// using V_ODPROFILES from '../db/data-model';
 using V_BOMODCOND from '../db/data-model';
 using V_SALESHCFG_CHARVAL from '../db/data-model';
 using V_ODCHARVAL from '../db/data-model';
@@ -74,11 +75,11 @@ service CatalogService @(impl : './lib/cat-service.js') {
     entity getProdAttr          as projection on od.PROD_ATTRIBUTES;
 
     //History timeseries for Object dependency
-    @readonly
+   
     entity getODHdr             as projection on od.TS_OBJDEPHDR;
 
     //History timeseries for Object dependency characteristics
-    @readonly
+   
     entity getODCharHdr         as projection on od.TS_OBJDEP_CHARHDR
 
     //Get Charateristics and it values
@@ -222,7 +223,15 @@ service CatalogService @(impl : './lib/cat-service.js') {
    // )                                                                                                                                                                                                                                                                           returns String;
 }
 
-// service IBPService @(impl : './lib/Ibp-Service.js') {
-   
+service IBPImportSrv @(impl : './lib/cat-service.js') {
+    @cds.autoexpose
+    entity VCPTEST as projection on external.VCPTEST{
+        key PRDID,LOCID,PERIODID0_TSTAMP,PLANNEDINDEPENDENTREQ,VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME
+        // where PLANNEDINDEPENDENTREQ gt 0
+    };
 
-// }
+}
+@protocol : 'rest'
+service IbpImportRest {
+    entity getIBPDemdext as projection on IBPImportSrv.VCPTEST;
+}

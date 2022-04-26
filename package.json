@@ -19,6 +19,7 @@
     "await-sleep": "^0.0.1",
     "axios": "^0.21.1",
     "cdse": "^1.1.12",
+    "cors": "^2.8.5",
     "debug": "^4.3.2",
     "express": "^4.17.3",
     "hana-cli": "^3.202203.3",
@@ -113,6 +114,26 @@
       },
       "uaa": {
         "kind": "xsuaa"
+<<<<<<< HEAD
+=======
+      },
+      "IBPDemandsrv": {
+        "kind": "odata-v2",
+        "model": "srv/external/IBPDemandsrv",
+        "[development]": {
+          "credentials": {
+            "url": "https://my400323-api.scmibp.ondemand.com/sap/opu/odata/ibp/PLANNING_DATA_API_SRV",
+            "authentication": "BasicAuthentication",
+            "username": "BTPUSER",
+            "password": "Sbp@btpproductdevelopment01"
+          }
+        },
+        "[production]": {
+          "credentials": {
+            "destination": "IBPDemandsrv"
+          }
+        }
+>>>>>>> 717181e28f1fe74d03996cbde3b43e1a261b3b02
       }
     },
     "hana": {
