@@ -2,6 +2,7 @@ using js from '../db/jobscheduler';
 
 service JobsService @(impl : './lib/Jobs-Service.js') {
 
+// LOCAL API's for UI purpose
   function lreadJobs() returns String;
   function lreadJobDetails(jobId : Integer, displaySchedules: Boolean) returns String;
   function lreadJobSchedules(jobId : Integer) returns String;
@@ -12,20 +13,13 @@ service JobsService @(impl : './lib/Jobs-Service.js') {
   function ldeleteJob(jobId : Integer) returns String;
   function laddJobSchedule(schedule : String) returns String;
   function ldeleteMLJobSchedule(scheduleDetails : String) returns String;
+  function lupdateMLJobSchedule(schedule : String) returns String;
 
 
 
-
-
-
-
-
-    // job-scheduler
+    // GET API's job-scheduler
   function readJobs() returns array of js.Jobs;
   function readJobDetails(jobId : Integer, displaySchedules: Boolean) returns String;
-
-//   function readJobDetails(jobId : Integer, displaySchedules: Boolean) returns js.mlJobs;
-//   function readJobDetails(jobId : Integer, displaySchedules: Integer) returns js.mlJobs;
   function readJobSchedules(jobId : Integer) returns array of js.Schedules;
   function readJobActionLogs(jobId : Integer) returns String; // array of js.ActionLogs;
   function readJobRunLogs(jobId : Integer, scheduleId : String, page_size : Integer, offset : Integer) returns array of js.RunLogs;
@@ -34,9 +28,10 @@ service JobsService @(impl : './lib/Jobs-Service.js') {
   function addMLJob(jobDetails : String) returns Integer;
   function updateMLJob(jobDetails : String) returns String;
   function deleteMLJob(jobId : Integer) returns String;
-//   function addJobSchedule(jobId : Integer,schedule : String) returns String;
   function addJobSchedule(schedule : String) returns String;
   function deleteMLJobSchedule(scheduleDetails : String) returns String;
+  function updateMLJobSchedule(schedule : String) returns String;
+
 
 
   action createJob(url : String, cron : String) returns Integer;
@@ -46,4 +41,6 @@ service JobsService @(impl : './lib/Jobs-Service.js') {
   action deleteJob(jobId : Integer) returns String;
   action createJobSchedule(jobId : Integer, jobSchedule : js.mlSchedules) returns String;
   action deleteJobSchedule(jobId : Integer, scheduleId : String) returns String;
+  action updateJobSchedule(jobId : Integer, scheduleId : String,jobSchedule : js.mlSchedules) returns String;
+
 }
