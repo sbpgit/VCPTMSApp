@@ -18,6 +18,7 @@
     "@sap/xssec": "^2.2.5",
     "await-sleep": "^0.0.1",
     "axios": "^0.21.1",
+    "cdse": "^1.1.12",
     "debug": "^4.3.2",
     "express": "^4.17.3",
     "hana-cli": "^3.202203.3",
@@ -25,6 +26,7 @@
     "passport": "^0.5.2",
     "qs": "^6",
     "request": "^2.88.2",
+    "request-promise": "^4.2.6",
     "sap-cf-mailer": "0.0.5",
     "sync": "^0.2.5",
     "uuid": "^8.3.2"
@@ -111,13 +113,6 @@
       },
       "uaa": {
         "kind": "xsuaa"
-      },
-      "IBPDemandsrv": {
-        "kind": "odata-v2",
-        "model": "srv/external/IBPDemandsrv",
-        "credentials": {
-          "destination": "IBPDemandsrv"        
-        }
       }
     },
     "hana": {

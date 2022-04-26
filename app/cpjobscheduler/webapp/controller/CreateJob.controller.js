@@ -4,9 +4,10 @@ sap.ui.define([
 	"sap/ui/model/json/JSONModel",
 	"sap/ui/core/routing/History",
 	"sap/m/MessageToast",
+    "sap/m/MessageBox",
 	"sap/ui/model/Filter",
     "sap/ui/model/FilterOperator",
-], function (BaseController, JSONModel, History, MessageToast, Filter, FilterOperator) {
+], function (BaseController, JSONModel, History, MessageToast,MessageBox, Filter, FilterOperator) {
 	"use strict";
 	var that;
 
@@ -76,7 +77,7 @@ sap.ui.define([
           }
           if (!this._valueHelpDialogJobDetail) {
             this._valueHelpDialogJobDetail = sap.ui.xmlfragment(
-              "cpapp.cpjobscheduler.view.Details",
+              "cpapp.cpjobscheduler.view.CreateJobDetails",
               this
             );
             this.getView().addDependent(this._valueHelpDialogJobDetail);
@@ -86,7 +87,7 @@ sap.ui.define([
 		onAfterRendering: function () {
             sap.ui.core.BusyIndicator.show();
             this.i18n = this.getResourceBundle();
-            this.oGModel = this.getModel("GModel");
+            this.oGModel = this.getModel("oGModel");
             
   
             that._valueHelpDialogProd.setTitleAlignment("Center");
@@ -140,6 +141,12 @@ sap.ui.define([
                 MessageToast.show("error");
               },
             });
+
+            that.byId("modelGenPanel").setVisible(true);
+                that.byId("PredPanel").setVisible(false);
+                that.byId("timeSeriesPanel").setVisible(false);
+                that.byId("IbpPanel").setVisible(false);
+                that.byId("idJobType").setSelectedKey("M");
 		},
 
 		/** 
@@ -243,7 +250,7 @@ sap.ui.define([
             } else if (sId.includes("scen")) {
               if (
                 that.oLoc.getValue() &&
-                that.oProd.getValue() &&
+                that.oProd.getTokens().length &&
                 that.oVer.getValue()
               ) {
                 that._valueHelpDialogScen.open();
@@ -846,6 +853,150 @@ sap.ui.define([
 
           onModelGen:function(){
             var cSelected = that.byId("MidCheck").getSelected();
+            sap.ui.getCore().byId("idSavebt").setText("Generate Model");
+
+
+            this.oModel = this.getModel("PModel");
+            var aItems,
+              oProdItems,
+              oPredProfile,
+              cSelected,
+              oSelModelVer,
+              oSelType,
+              oPredProfile,
+              i,
+              regData = [],
+              vFlag;
+            var oEntry = {
+                vcRulesList: [],
+              },
+              vRuleslist,
+              finalList={};
+              var oMdlVer = that.byId("Midmdlver").getSelectedKey(),
+              vMdlVer;
+            aItems = this.oODList.getSelectedItems();
+            oProdItems = this.oProdList.getSelectedItems(),
+              oPredProfile = that.oPredProfile.getValue(),
+              cSelected = that.byId("MidCheck").getSelected();
+            if (oMdlVer === "act") {
+              vMdlVer = "Active";
+            } else {
+              vMdlVer = "Simulation";
+            }
+  
+            if (this.oObjDep.getTokens().length > 0 && this.oPredProfile.getValue() ) {
+          
+                for (i = 0; i < aItems.length; i++) {
+                      vRuleslist = {
+                        profile: oPredProfile,
+                        override: cSelected,
+                        Location: aItems[i].getInfo(),
+                        Product: aItems[i].getDescription(),
+                        GroupID: aItems[i].getTitle(),
+                        Type: "OD",
+                        modelVersion: vMdlVer,
+                      };
+                      oEntry.vcRulesList.push(vRuleslist);
+                    
+                  }
+            // aItems = this.oODList.getSelectedItems();
+            // oProdItems = this.oProdList.getSelectedItems();
+            // cSelected = that.byId("MidCheck").getSelected();
+            // oSelModelVer = this.byId("Midmdlver").getSelectedKey();
+            // oSelType = this.byId("MidType").getSelectedKey();
+            // oPredProfile = that.byId("MpmInput").getValue();
+
+
+            // if (this.oObjDep.getTokens().length > 0 && this.oVer.getValue() && this.oScen.getValue() ) {
+          
+            //     for (i = 0; i < aItems.length; i++) {
+            //         vRuleslist = {
+            //             profile: oPredProfile,
+            //           override: cSelected,
+            //           Location: aItems[i].getInfo(),
+            //           Product: aItems[i].getDescription(),
+            //           GroupID: aItems[i].getTitle(),
+            //           Type: oSelType,
+            //           modelVersion: oSelModelVer,
+            //         };
+            //         oEntry.vcRulesList.push(vRuleslist);
+            //     }
+                this.oGModel.setProperty("/vcrulesData", oEntry.vcRulesList);
+
+
+            var sText = "Do you want to override assignments?";
+                if (cSelected === true) {
+                    sap.m.MessageBox.show(sText, {
+                    title: "Confirmation",
+                    actions: [
+                        sap.m.MessageBox.Action.YES,
+                        sap.m.MessageBox.Action.NO,
+                    ],
+                    onClose: function (oAction) {
+                        if (oAction === sap.m.MessageBox.Action.YES) {
+                        that._valueHelpDialogJobDetail.open();
+                        }
+                    },
+                    });
+                } else {
+                    that._valueHelpDialogJobDetail.open();
+                }
+            } else {
+                MessageToast.show("Please select all fields");
+            }
+
+          },
+
+          onPrediction:function(){
+            var cSelected = that.byId("PidCheck").getSelected();
+            sap.ui.getCore().byId("idSavebt").setText("Run Prediction");
+
+            this.oModel = this.getModel("PModel");
+            var aItems,
+              oProdItems,
+              oPredProfile,
+              cSelected,
+              oSelModelVer,
+              oSelType,
+              oSelVer,
+              oSelScen,
+              i,
+              regData = [],
+              vFlag;
+            var oEntry = {
+                vcRulesList: [],
+              },
+              vRuleslist,
+              finalList={};
+            aItems = this.oODList.getSelectedItems();
+            oProdItems = this.oProdList.getSelectedItems();
+            cSelected = that.byId("PidCheck").getSelected();
+            oSelModelVer = this.byId("PidModelVer").getSelectedKey();
+            oSelType = this.byId("PidType").getSelectedKey();
+            oSelVer = this.oVer.getValue();
+            oSelScen = this.oScen.getValue();
+
+
+            if (this.oObjDep.getTokens().length > 0 && this.oVer.getValue() && this.oScen.getValue() ) {
+          
+                for (i = 0; i < aItems.length; i++) {
+                    vRuleslist = {
+                      //   profile: oPredProfile,
+                      override: cSelected,
+                      Location: aItems[i].getInfo(),
+                      Product: aItems[i].getDescription(),
+                      GroupID: aItems[i].getTitle(),
+                      Type: oSelType,
+                      modelVersion: oSelModelVer,
+                      version: oSelVer,
+                      scenario: oSelScen,
+                    };
+                    oEntry.vcRulesList.push(vRuleslist);
+                }
+                this.oGModel.setProperty("/vcrulesData", oEntry.vcRulesList);
+
+
+
             var sText = "Do you want to override assignments?";
                 if (cSelected === true) {
                     sap.m.MessageBox.show(sText, {
@@ -864,7 +1015,110 @@ sap.ui.define([
                     that._valueHelpDialogJobDetail.open();
                 }
 
+            } else {
+                MessageToast.show("Please select all fields");
+            }
           },
+
+          onRunClose:function(){
+            this._oCore.byId("idname").setValue();
+            this._oCore.byId("idDesc").setValue();
+            this._oCore.byId("idSTime").setValue();
+            this._oCore.byId("idETime").setValue();
+
+            this._oCore.byId("idcron").setValue();
+            this._oCore.byId("idSSTime").setValue();
+            this._oCore.byId("idSETime").setValue();
+
+
+            that._valueHelpDialogJobDetail.close();
+
+          },
+
+
+          onRunSend:function(){
+            // this.oGModel = this.getModel("GModel");
+            var bButton = sap.ui.getCore().byId("idSavebt").getText(),
+                sName = sap.ui.getCore().byId("idname").getValue(),
+                djSdate = this._oCore.byId("idSTime").getDateValue().toISOString().split("T"),
+                tjStime = djSdate[1].split(":"),
+                djEdate = this._oCore.byId("idETime").getDateValue().toISOString().split("T"),
+                tjEtime = djEdate[1].split(":"),
+                dsSDate = this._oCore.byId("idSSTime").getDateValue().toISOString().split("T"),
+                tsStime = dsSDate[1].split(":"),
+                dsEDate = this._oCore.byId("idSETime").getDateValue().toISOString().split("T"),
+                tsEtime = dsEDate[1].split(":"),
+                cron = sap.ui.getCore().byId("idcron").getValue(),
+
+
+
+                dDate = new Date().toLocaleString().split(" "),
+                // JobName = sName + "_" + dDate[0].replaceAll(",", "") + "_" + dDate[1],
+                JobName = sName + new Date().getTime(),
+                actionText;
+                // cron = "* * * * * *%2F" + cron +  " " + "0";
+                cron = "* * * *%2F" + cron +  " " + "0" +  " " + "0" +  " " + "0";
+
+                djSdate = djSdate[0] + " " + tjStime[0] + ":" + tjStime[1] + " " + "+0000";
+                djEdate = djEdate[0] + " " + tjEtime[0] + ":" + tjEtime[1] + " " + "+0000";
+                dsSDate = dsSDate[0] + " " + tsStime[0] + ":" + tsStime[1] + " " + "+0000";
+                dsEDate = dsEDate[0] + " " + tsEtime[0] + ":" + tsEtime[1] + " " + "+0000";
+
+
+
+
+                if(bButton.includes("Prediction")){
+                    actionText= "%2Fpal%2FgenPredictions"
+                } else if(bButton.includes("Model")){
+                    actionText= "%2Fpal%2FgenerateModels"
+                }
+
+                var vcRuleList = this.oGModel.getProperty("/vcrulesData");
+
+            var finalList = {
+                name: JobName,
+                description:sap.ui.getCore().byId("idDesc").getValue(),
+                action: actionText,
+                active:true,
+                httpMethod: "POST",
+                startTime: djSdate,
+                endTime : djEdate,
+                schedules:[
+                    {
+                        data: vcRuleList,
+                        cron: cron,
+                        active:true,
+                        startTime: dsSDate,
+                        endTime : dsEDate
+                    }
+                ]
+            }
+
+
+            that.getModel("JModel").callFunction("/laddMLJob", {
+                method: "GET",
+                urlParameters: {
+                  jobDetails: JSON.stringify(finalList)
+                    },
+                success: function (oData) {
+                  sap.ui.core.BusyIndicator.hide();
+                  sap.m.MessageToast.show(that.i18n.getText("genPredSuccess"));
+                // regData.push(oData.fgPredictions.values[0].vcRulesList);
+
+                //   that.otabModel.setData({
+                //     results: regData[0],
+                //   });
+                //   that.byId("pmdlList").setModel(that.otabModel);
+                //   that.oPanel.setProperty("visible", true);
+                //   vFlag = "X";
+                },
+                error: function (error) {
+                  sap.ui.core.BusyIndicator.hide();
+                  sap.m.MessageToast.show(that.i18n.getText("genPredErr"));
+                },
+              });
+
+          }
 
 
 

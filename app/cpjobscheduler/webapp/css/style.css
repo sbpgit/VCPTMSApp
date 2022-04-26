@@ -3,6 +3,17 @@
 .boldText {
     font-weight: bold !important;
 }
+.boldunderlineText {
+    font-weight: bold !important;
+    text-decoration: underline !important;
+}
+
+h5#__title4 {
+    text-decoration: underline;
+}
+h5#__title5 {
+    text-decoration: underline;
+}
 
 div#container-cpapp\.cpjobscheduler---Home--idTitle {
     margin-left: 500px;

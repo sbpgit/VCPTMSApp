@@ -205,19 +205,19 @@ sap.ui.define(
                   }
 
                var finalList = {
-                    name: "generateModels13", // dynamic
+                    name: "generateModels14", // dynamic
                     dscription:"Generate Machine Learning Models", //dynamic
                     action: "%2Fpal%2FgenerateModels",
                     active:true, //dynamic
                     httpMethod: "POST",
-                    startTime:"2022-04-22 14:00 +0000",// dynamic
-                    endTime :"2022-04-23 14:00 +0000", //dynamic
+                    startTime:"2022-04-26 14:00 +0000",// dynamic
+                    endTime :"2022-04-27 14:00 +0000", //dynamic
                     schedules:[
                         {
                             data: oEntry.vcRulesList,
                             cron:"* * * * * *%2F5 0", // dynamic
                             active:true,// dynamic
-                            startTime: "2022-04-22 14:00 +0000" // dynamic
+                            startTime: "2022-04-26 14:00 +0000" // dynamic
                         }
                     ]
                 }
