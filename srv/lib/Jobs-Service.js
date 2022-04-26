@@ -410,7 +410,49 @@ srv.on("laddJobSchedule", async req => {
 
   });
 
+  srv.on("lupdateMLJobSchedule", async req => {
+    
 
+    let scheduleDetails = req.data.schedule;
+
+    console.log("lupdateMLJobSchedule req.data :", req.data);
+    let sDetails = scheduleDetails.replace(/[/]/g, "%2F");
+
+    console.log("lupdateMLJobSchedule sDetails :", sDetails);
+
+    let updateMLJobScheduleUrl = lbaseUrl + '/jobs/updateMLJobSchedule(schedule=' + "'" + sDetails + "'" + ')';
+
+    console.log('updateMLJobScheduleUrl ', updateMLJobScheduleUrl);
+
+    options = {
+        'method': 'GET',
+        'url': updateMLJobScheduleUrl, 
+        'headers' : {
+            'Accept': 'application/json',
+            'Accept-Charset': 'utf-8'
+        }   
+    }
+    let ret_response ="";
+
+    await request(options, async function (error, response) {
+   
+        console.log('statusCode:', response.statusCode); // Print the response status code if a response was received
+        if (error) 
+        {
+            console.log('updateMLJobSchedule - Error ', error);
+            ret_response = JSON.parse(error);
+        }
+        if (response.statusCode == 200)
+        {
+            ret_response = JSON.parse(response.body);
+        }
+    })
+    const sleep = require('await-sleep');
+    await sleep(1000);
+    req.reply(ret_response);
+
+  });
+  
   srv.on("ldeleteMLJobSchedule", async req => {
     
 
@@ -898,6 +940,51 @@ srv.on("addJobSchedule", (req) => {
     });
   });
 
+  srv.on("updateMLJobSchedule", (req) => {
+    // console.log("addJobSchedule jobId ", req.data.jobId, "schedule :", JSON.parse(req.data.schedule));
+    console.log( "schedule :", JSON.parse(req.data.schedule));
+
+
+    return new Promise((resolve, reject) => {
+      const scheduler = getJobscheduler(req);
+      console.log("updateMLJobSchedule req.data :", req.data);
+      var inputData = JSON.parse(req.data.schedule);
+      console.log("updateMLJobSchedule inputData :", inputData);
+    //   let baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+
+
+
+    
+      if (scheduler) {
+        
+        var myJob = {
+            data: inputData.data,
+            description: inputData.description,
+            active: inputData.active,
+            startTime: inputData.startTime,
+            endTime: inputData.endTime,
+            cron : inputData.cron,
+            time : inputData.time,
+            repeatInterval : inputData.repeatInterval,
+            repeatAt : inputData.repeatAt
+          };
+
+          var scJob = { jobId: inputData.jobId, scheduleId: inputData.scheduleId, schedule: myJob };
+        //   var scJob = { jobId: req.data.jobId, schedule: myJob };
+
+          console.log("scJob :", scJob)
+
+        scheduler.updateJobSchedule(scJob, (err, result) => {
+          if (err) {
+            reject(req.error(err.message));
+          } else {
+            resolve(JSON.stringify(result));
+          }
+        });
+      }
+    });
+  });
+
   srv.on(["deleteJobSchedule"], (req) => {
 
     return new Promise((resolve, reject) => {
@@ -952,6 +1039,42 @@ srv.on("addJobSchedule", (req) => {
             reject(req.error(err.message));
           } else {
             resolve(JSON.stringify(result));
+          }
+        });
+      }
+    });
+  });
+
+
+  srv.on("updateJobSchedule", (req) => {
+    return new Promise((resolve, reject) => {
+      const scheduler = getJobscheduler(req);
+      console.log("updateJobSchedule req.data :", req.data);
+      var inputData = req.data.jobSchedule;
+      console.log("updateJobSchedule inputData :", inputData);
+
+      if (scheduler) {
+        var myJob = {
+          data: inputData.data,
+          description: inputData.description,
+          active: inputData.active,
+          startTime: inputData.startTime,
+          endTime: inputData.endTime,
+          cron : inputData.cron,
+          time : inputData.time,
+          repeatInterval : inputData.repeatInterval,
+          repeatAt : inputData.repeatAt
+        };
+        var scJob = { jobId: req.data.jobId, scheduleId: req.data.scheduleId, schedule: myJob };
+        console.log("scJob :", scJob)
+
+
+        scheduler.updateJobSchedule(scJob, function (err, result) {
+          if (err) {
+            reject(req.error(err.message));
+          } else {
+            // job was created successfully
+            resolve(result);
           }
         });
       }
