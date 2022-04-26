@@ -11,6 +11,8 @@ service JobsService @(impl : './lib/Jobs-Service.js') {
   function lupdateJob(jobDetails : String) returns String;
   function ldeleteJob(jobId : Integer) returns String;
   function laddJobSchedule(schedule : String) returns String;
+  function ldeleteMLJobSchedule(scheduleDetails : String) returns String;
+
 
 
 

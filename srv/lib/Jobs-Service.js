@@ -410,6 +410,50 @@ srv.on("laddJobSchedule", async req => {
 
   });
 
+
+  srv.on("ldeleteMLJobSchedule", async req => {
+    
+
+    let scheduleDetails = req.data.scheduleDetails;
+
+    console.log("ldeleteMLJobSchedule req.data :", req.data);
+    let sDetails = scheduleDetails.replace(/[/]/g, "%2F");
+
+    console.log("ldeleteMLJobSchedule sDetails :", sDetails);
+
+    let ldeleteMLJobScheduleUrl = lbaseUrl + '/jobs/deleteMLJobSchedule(scheduleDetails=' + "'" + sDetails + "'" + ')';
+
+    console.log('ldeleteMLJobScheduleUrl ', ldeleteMLJobScheduleUrl);
+
+    options = {
+        'method': 'GET',
+        'url': ldeleteMLJobScheduleUrl, 
+        'headers' : {
+            'Accept': 'application/json',
+            'Accept-Charset': 'utf-8'
+        }   
+    }
+    let ret_response ="";
+
+    await request(options, async function (error, response) {
+   
+        console.log('statusCode:', response.statusCode); // Print the response status code if a response was received
+        if (error) 
+        {
+            console.log('ldeleteMLJobSchedule - Error ', error);
+            ret_response = JSON.parse(error);
+        }
+        if (response.statusCode == 200)
+        {
+            ret_response = JSON.parse(response.body);
+        }
+    })
+    const sleep = require('await-sleep');
+    await sleep(1000);
+    req.reply(ret_response);
+
+  });
+
   srv.on("readJobs", (req) => {
     return new Promise((resolve, reject) => {
       const scheduler = getJobscheduler(req);
@@ -890,14 +934,15 @@ srv.on("addJobSchedule", (req) => {
       const scheduler = getJobscheduler(req);
         
       if (scheduler) {
-        console.log("deleteMLJobSchedule req.data :", req.data);
-        let scheduleDetails = req.data.scheduleDetails;
+        let scheduleDetails = JSON.parse(req.data.scheduleDetails);
+        console.log("deleteMLJobSchedule scheduleDetails :", scheduleDetails);
+
         // str.replace(/[/_]/g, "%2F");
-         let sDetails = scheduleDetails.replace(/[/]/g, "%2F");
-         console.log('sDetails ', sDetails);
+        //  let sDetails = scheduleDetails.replace(/[/]/g, "%2F");
+        //  console.log('sDetails ', sDetails);
         var jreq = {
-          jobId: sDetails.jobId,
-          scheduleId: sDetails.scheduleId
+          jobId: scheduleDetails.jobId,
+          scheduleId: scheduleDetails.scheduleId
         };
 
         console.log("deleteMLJobSchedule jreq :", jreq);
