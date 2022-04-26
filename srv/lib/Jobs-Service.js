@@ -245,7 +245,9 @@ module.exports = async function (srv) {
     // console.log('req.data.jobDetails ', req.data.jobDetails);
     let jobDetails = req.data.jobDetails;
    // str.replace(/[/_]/g, "%2F");
-    let jDetails = jobDetails.replace(/[/_]/g, "%2F");
+    // let jDetails = jobDetails.replace(/[/_]/g, "%2F");
+    let jDetails = jobDetails.replace(/[/]/g, "%2F");
+
     console.log('jDetails ', jDetails);
 
     let addJobsUrl = lbaseUrl + '/jobs/addMLJob(jobDetails=' + "'" + jDetails + "'" + ')';
@@ -287,7 +289,7 @@ module.exports = async function (srv) {
 
     let jobDetails = req.data.jobDetails;
     // str.replace(/[/_]/g, "%2F");
-     let jDetails = jobDetails.replace(/[/_]/g, "%2F");
+     let jDetails = jobDetails.replace(/[/]/g, "%2F");
      console.log('jDetails ', jDetails);
  
      let lupdateJobUrl = lbaseUrl + '/jobs/updateMLJob(jobDetails=' + "'" + jDetails + "'" + ')';
@@ -371,7 +373,7 @@ srv.on("laddJobSchedule", async req => {
     let scheduleDetails = req.data.schedule;
 
     console.log("laddJobSchedule req.data :", req.data);
-    let sDetails = scheduleDetails.replace(/[/_]/g, "%2F");
+    let sDetails = scheduleDetails.replace(/[/]/g, "%2F");
 
     console.log("laddJobSchedule sDetails :", sDetails);
 
@@ -851,5 +853,65 @@ srv.on("addJobSchedule", (req) => {
       }
     });
   });
+
+  srv.on(["deleteJobSchedule"], (req) => {
+
+    return new Promise((resolve, reject) => {
+      const scheduler = getJobscheduler(req);
+      if (scheduler) {
+
+
+        var inputData = req.data;
+        console.log("deleteJobSchedule inputData :", inputData);
+
+        var jreq = {
+          jobId: req.data.jobId,
+          scheduleId: req.data.scheduleId
+        };
+        scheduler.deleteJobSchedule(jreq, (err, result) => {
+          if (err) {
+            reject(req.error(err.message));
+          } else {
+            // job was created successfully
+            resolve(JSON.stringify(result));
+          }
+        });
+      }
+    });
+  });
+
+
+  srv.on("deleteMLJobSchedule", (req) => {
+    console.log("deleteMLJobSchedule scheduleDetails :", JSON.parse(req.data.scheduleDetails));
+
+  
+
+    return new Promise((resolve, reject) => {
+      const scheduler = getJobscheduler(req);
+        
+      if (scheduler) {
+        console.log("deleteMLJobSchedule req.data :", req.data);
+        let scheduleDetails = req.data.scheduleDetails;
+        // str.replace(/[/_]/g, "%2F");
+         let sDetails = scheduleDetails.replace(/[/]/g, "%2F");
+         console.log('sDetails ', sDetails);
+        var jreq = {
+          jobId: sDetails.jobId,
+          scheduleId: sDetails.scheduleId
+        };
+
+        console.log("deleteMLJobSchedule jreq :", jreq);
+
+        scheduler.deleteJobSchedule(jreq, (err, result) => {
+          if (err) {
+            reject(req.error(err.message));
+          } else {
+            resolve(JSON.stringify(result));
+          }
+        });
+      }
+    });
+  });
+
 
 };

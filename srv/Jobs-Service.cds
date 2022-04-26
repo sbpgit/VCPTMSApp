@@ -34,6 +34,8 @@ service JobsService @(impl : './lib/Jobs-Service.js') {
   function deleteMLJob(jobId : Integer) returns String;
 //   function addJobSchedule(jobId : Integer,schedule : String) returns String;
   function addJobSchedule(schedule : String) returns String;
+  function deleteMLJobSchedule(scheduleDetails : String) returns String;
+
 
   action createJob(url : String, cron : String) returns Integer;
   action createMLJob(jobDetails : js.mlJobs) returns Integer;
@@ -41,4 +43,5 @@ service JobsService @(impl : './lib/Jobs-Service.js') {
   action updateJob(jobDetails : js.Jobs) returns String;
   action deleteJob(jobId : Integer) returns String;
   action createJobSchedule(jobId : Integer, jobSchedule : js.mlSchedules) returns String;
+  action deleteJobSchedule(jobId : Integer, scheduleId : String) returns String;
 }
