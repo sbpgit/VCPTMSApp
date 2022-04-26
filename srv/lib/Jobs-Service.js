@@ -363,6 +363,51 @@ module.exports = async function (srv) {
 
   });
 
+
+
+srv.on("laddJobSchedule", async req => {
+    
+
+    let scheduleDetails = req.data.schedule;
+
+    console.log("laddJobSchedule req.data :", req.data);
+    let sDetails = scheduleDetails.replace(/[/_]/g, "%2F");
+
+    console.log("laddJobSchedule sDetails :", sDetails);
+
+    let addJobScheduleUrl = lbaseUrl + '/jobs/addJobSchedule(schedule=' + "'" + sDetails + "'" + ')';
+
+    console.log('addJobScheduleUrl ', addJobScheduleUrl);
+
+    options = {
+        'method': 'GET',
+        'url': addJobScheduleUrl, 
+        'headers' : {
+            'Accept': 'application/json',
+            'Accept-Charset': 'utf-8'
+        }   
+    }
+    let ret_response ="";
+
+    await request(options, async function (error, response) {
+   
+        console.log('statusCode:', response.statusCode); // Print the response status code if a response was received
+        if (error) 
+        {
+            console.log('laddJobSchedule - Error ', error);
+            ret_response = JSON.parse(error);
+        }
+        if (response.statusCode == 200)
+        {
+            ret_response = JSON.parse(response.body);
+        }
+    })
+    const sleep = require('await-sleep');
+    await sleep(1000);
+    req.reply(ret_response);
+
+  });
+
   srv.on("readJobs", (req) => {
     return new Promise((resolve, reject) => {
       const scheduler = getJobscheduler(req);
@@ -745,7 +790,7 @@ module.exports = async function (srv) {
           repeatInterval : inputData.repeatInterval,
           repeatAt : inputData.repeatAt
         };
-        var scJob = { jobId: req.data.jobId, job: myJob };
+        var scJob = { jobId: req.data.jobId, schedule: myJob };
         console.log("scJob :", scJob)
 
 
@@ -760,6 +805,51 @@ module.exports = async function (srv) {
       }
     });
   });
+
+
+srv.on("addJobSchedule", (req) => {
+    // console.log("addJobSchedule jobId ", req.data.jobId, "schedule :", JSON.parse(req.data.schedule));
+    console.log( "schedule :", JSON.parse(req.data.schedule));
+
+
+    return new Promise((resolve, reject) => {
+      const scheduler = getJobscheduler(req);
+      console.log("addJobSchedule req.data :", req.data);
+      var inputData = JSON.parse(req.data.schedule);
+      console.log("addJobSchedule inputData :", inputData);
+    //   let baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+
+
+
+    
+      if (scheduler) {
+        
+        var myJob = {
+            name: inputData.data,
+            description: inputData.description,
+            active: inputData.active,
+            startTime: inputData.startTime,
+            endTime: inputData.endTime,
+            cron : inputData.cron,
+            time : inputData.time,
+            repeatInterval : inputData.repeatInterval,
+            repeatAt : inputData.repeatAt
+          };
+
+          var scJob = { jobId: inputData.jobId, schedule: myJob };
+        //   var scJob = { jobId: req.data.jobId, schedule: myJob };
+
+          console.log("scJob :", scJob)
+
+        scheduler.createJobSchedule(scJob, (err, result) => {
+          if (err) {
+            reject(req.error(err.message));
+          } else {
+            resolve(JSON.stringify(result));
+          }
+        });
+      }
+    });
+  });
+
 };
-
-
