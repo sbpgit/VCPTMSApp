@@ -1,28 +1,28 @@
 <core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns:l="sap.ui.layout"
 	xmlns:f="sap.ui.layout.form">
-	<Dialog title="Schedule Job Data" contentWidth="850px">
+	<Dialog title="Job Schedule Data" contentWidth="850px">
         <Table id="idJobData"  items="{path: '/results'}" >
 				<columns>
 					<Column hAlign="Left" vAlign="Middle" >
-						<Text text="{i18n>Location}" />
+						<Text text="{i18n>loc}" />
 					</Column>
 					<Column hAlign="Left" vAlign="Middle">
-						<Text text="{i18n>Product}"/>
+						<Text text="{i18n>prod}"/>
 					</Column>
                     <Column hAlign="Left" vAlign="Middle">
-						<Text text="{i18n>GroupID}"/>
+						<Text text="{i18n>groupid}"/>
 					</Column>
                     <Column hAlign="Left" vAlign="Middle" >
-						<Text text="{i18n>Type}"/>
+						<Text text="{i18n>type}"/>
 					</Column>
                     <Column hAlign="Left" vAlign="Middle">
-						<Text text="{i18n>modelVersion}"/>
+						<Text text="{i18n>modelver}"/>
 					</Column>
                     <Column hAlign="Left" vAlign="Middle">
-						<Text text="{i18n>scenario}"/>
+						<Text text="{i18n>ibpscen}"/>
 					</Column>
                     <Column hAlign="Left" vAlign="Middle">
-						<Text text="{i18n>version}"/>
+						<Text text="{i18n>ibpver}"/>
 					</Column>
 				</columns>
 				<items>
