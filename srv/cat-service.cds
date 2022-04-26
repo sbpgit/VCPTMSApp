@@ -1,6 +1,5 @@
 using cp as od from '../db/data-model';
 using cp_ds as ds from '../db/data-structures';
-using {IBPDemandsrv as external} from './external/IBPDemandsrv.csn';
 
 using V_CHARVAL from '../db/data-model';
 using V_OBDHDR from '../db/data-model';
@@ -221,17 +220,4 @@ service CatalogService @(impl : './lib/cat-service.js') {
     //     REF_PRODID : String(40); CLASS_NUM : String(20); CHAR_NUM : String(30); CHARVAL_NUM : String(70)
     // }
    // )                                                                                                                                                                                                                                                                           returns String;
-}
-
-service IBPImportSrv @(impl : './lib/cat-service.js') {
-    @cds.autoexpose
-    entity VCPTEST as projection on external.VCPTEST{
-        key PRDID,LOCID,PERIODID0_TSTAMP,PLANNEDINDEPENDENTREQ,VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME
-        // where PLANNEDINDEPENDENTREQ gt 0
-    };
-
-}
-@protocol : 'rest'
-service IbpImportRest {
-    entity getIBPDemdext as projection on IBPImportSrv.VCPTEST;
 }
