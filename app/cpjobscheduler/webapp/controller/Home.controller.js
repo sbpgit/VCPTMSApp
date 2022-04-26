@@ -51,6 +51,9 @@ sap.ui.define(
 		this.byId("idDateRange").setDateValue(oDateL);
 		this.byId("idDateRange").setSecondDateValue(nowH);
 
+        that.byId("JobPanel").setExpanded(true);
+        that.byId("jobDetailsPanel").setExpanded(false);
+
         that.getModel("JModel").callFunction("/lreadJobs", {
           method: "GET",
         //   urlParameters: {

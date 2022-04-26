@@ -1018,8 +1018,33 @@ sap.ui.define([
 
           },
 
-          onCronChange:function(){
+          onCronChange:function(oEvent){
                 sap.ui.getCore().byId("idCrontype").setSelectedKey("Mi");
+          },
+
+          handleChange:function(oEvent){
+            var sId = oEvent.getParameter("id");
+
+            if(sId.includes("idSTime") || sId.includes("idSSTime")){
+              var  djSdate = this._oCore.byId("idSTime").getDateValue();
+            //   .toISOString().split("T"),
+            //        tjStime = djSdate[1].split(":");
+
+            //        djSdate = djSdate[0] + " " + tjStime[0] + ":" + tjStime[1];
+
+                sap.ui.getCore().byId("idSTime").setDateValue(djSdate);
+                sap.ui.getCore().byId("idSSTime").setDateValue(djSdate);
+            } else if(sId.includes("idETime") || sId.includes("idSETime")){
+                var djEdate = this._oCore.byId("idETime").getDateValue();
+                // .toISOString().split("T"),
+                //     tjEtime = djEdate[1].split(":");
+
+                //     djEdate = djEdate[0] + " " + tjEtime[0] + ":" + tjEtime[1];
+
+                sap.ui.getCore().byId("idETime").setDateValue(djEdate);
+                sap.ui.getCore().byId("idSETime").setDateValue(djEdate);
+            }
+
           },
 
 
@@ -1027,17 +1052,31 @@ sap.ui.define([
             // this.oGModel = this.getModel("GModel");
             var bButton = sap.ui.getCore().byId("idSavebt").getText(),
                 sName = sap.ui.getCore().byId("idname").getValue(),
-                djSdate = this._oCore.byId("idSTime").getDateValue().toISOString().split("T"),
-                tjStime = djSdate[1].split(":"),
-                djEdate = this._oCore.byId("idETime").getDateValue().toISOString().split("T"),
-                tjEtime = djEdate[1].split(":"),
-                dsSDate = this._oCore.byId("idSSTime").getDateValue().toISOString().split("T"),
-                tsStime = dsSDate[1].split(":"),
-                dsEDate = this._oCore.byId("idSETime").getDateValue().toISOString().split("T"),
-                tsEtime = dsEDate[1].split(":"),
-                cron = sap.ui.getCore().byId("idcron").getValue(),
+                lgTime = new Date().getTimezoneOffset(),
+                djSdate = this._oCore.byId("idSTime").getDateValue(),
+                djEdate = this._oCore.byId("idETime").getDateValue(),
+                dsSDate = this._oCore.byId("idSSTime").getDateValue(),
+                dsEDate = this._oCore.byId("idSETime").getDateValue(),
+                tjStime, tjEtime, tsStime, tsEtime;
 
 
+
+
+                // djSdate = new Date(djSdate.setTime(djSdate.getTime() - (lgTime* 60 * 1000)));
+                // djEdate = new Date(djEdate.setTime(djEdate.getTime() - (lgTime* 60 * 1000)));
+                // dsSDate = new Date(dsSDate.setTime(dsSDate.getTime() - (lgTime* 60 * 1000)));
+                // dsEDate = new Date(dsEDate.setTime(dsEDate.getTime() - (lgTime* 60 * 1000)));
+                
+                djSdate = djSdate.toISOString().split("T");
+                tjStime = djSdate[1].split(":");
+                djEdate = djEdate.toISOString().split("T");
+                tjEtime = djEdate[1].split(":");
+                dsSDate = dsSDate.toISOString().split("T");
+                tsStime = dsSDate[1].split(":");
+                dsEDate = dsEDate.toISOString().split("T");
+                tsEtime = dsEDate[1].split(":");
+
+                var cron = sap.ui.getCore().byId("idcron").getValue(),
 
                 dDate = new Date().toLocaleString().split(" "),
                 // JobName = sName + "_" + dDate[0].replaceAll(",", "") + "_" + dDate[1],
@@ -1089,7 +1128,9 @@ sap.ui.define([
                     },
                 success: function (oData) {
                   sap.ui.core.BusyIndicator.hide();
-                  sap.m.MessageToast.show(that.i18n.getText("genPredSuccess"));
+                  sap.m.MessageToast.show(oData.laddMLJob.value + ": Job Created");
+                  that.onRunClose();
+                  that.onBack();
                 // regData.push(oData.fgPredictions.values[0].vcRulesList);
 
                 //   that.otabModel.setData({
@@ -1101,6 +1142,7 @@ sap.ui.define([
                 },
                 error: function (error) {
                   sap.ui.core.BusyIndicator.hide();
+                  that.onRunClose();
                   sap.m.MessageToast.show(that.i18n.getText("genPredErr"));
                 },
               });
