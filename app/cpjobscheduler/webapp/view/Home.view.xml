@@ -18,11 +18,14 @@
             <SearchField id="headSearch" liveChange="onSearch" placeholder="Job"/>
             <Table id="jobList" items="{path: '/results'}" growingScrollToLoad="true" rememberSelections="false" itemPress="onhandlePress" mode="SingleSelectMaster" selectionChange="onhandlePress">
                 <columns>
-                    <Column hAlign="Left" vAlign="Middle">
+                    <Column hAlign="Left" vAlign="Middle" width="90px">
                         <Text text="{i18n>jobid}" />
                     </Column>
-                    <Column hAlign="Left" vAlign="Middle">
+                    <Column hAlign="Left" vAlign="Middle" width="250px">
                         <Text text="{i18n>name}"/>
+                    </Column>
+                    <Column hAlign="Left" vAlign="Middle" width="250px">
+                        <Text text="{i18n>desc}"/>
                     </Column>
                     <Column hAlign="Left" vAlign="Middle">
                         <Text text="{i18n>startTime}"/>
@@ -33,7 +36,7 @@
                     <Column hAlign="Left" vAlign="Middle">
                         <Text text="{i18n>createdat}"/>
                     </Column>
-                    <Column hAlign="Left" vAlign="Middle">
+                    <Column hAlign="Right" vAlign="Middle">
                         <Text text=""/>
                     </Column>
                 </columns>
@@ -42,6 +45,7 @@
                         <cells>
                             <ObjectIdentifier title="{jobId}" />
                             <Text text="{name}"/>
+                            <Text text="{description}"/>
                             <!-- <Text text="{path: 'startTime', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'yyyy/MM/dd' }}"/>
                             <Text text="{path: 'endTime', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'yyyy/MM/dd' }}"/>
                             <Text text="{path: 'createdAt', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'yyyy/MM/dd' }}"/> -->
