@@ -127,6 +127,7 @@ module.exports = async function (srv) {
                               " \n Variant Configuration Demand Rows : " + results[0].vcdemand_rows +
                               " \n Location Product Customer Demand Rows : " + results[0].demand_rows +
                               " \n Location Product Component Demand Rows : " + results[0].comp_demand_rows +
+                              " \n Location Product Component Requirement Rows : " + results[0].compreq_rows +
                               " \n TimeStamp : " + results[0].timestamp ;
 
 
