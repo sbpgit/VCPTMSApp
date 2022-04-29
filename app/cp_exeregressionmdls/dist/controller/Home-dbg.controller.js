@@ -155,6 +155,108 @@ sap.ui.define(
           }
         },
 
+        /**
+           * This function is called when click on Yes button in confirmation popup.
+           * In this function will get the Prediction model data.
+           * In this function if All Products and Obj Dep are selected then sending filter as All for both,
+           * or if some items are selected then sending the selected items in filters.
+           * @param {object} oEvent -the event information.
+           */
+          onRunSend: function () {
+            this.oModel = this.getModel("PModel");
+            var aItems,
+              oProdItems,
+              oPredProfile,
+              cSelected,
+              i,
+              regData = [],
+              vFlag;
+            var oEntry = {
+                vcRulesList: [],
+              },
+              vRuleslist;
+  
+            var oMdlVer = that.byId("idmdlver").getSelectedKey(),
+              vMdlVer;
+            aItems = this.oODList.getSelectedItems();
+            (oProdItems = this.oProdList.getSelectedItems()),
+              (oPredProfile = that.oPredProfile.getTokens()[0].getText()),
+              (cSelected = that.byId("idCheck").getSelected());
+            if (oMdlVer === "act") {
+              vMdlVer = "Active";
+            } else {
+              vMdlVer = "Simulation";
+            }
+  
+            if (this.oObjDep.getTokens().length > 0 && this.oPredProfile.getTokens().length > 0 ) {
+          
+                for (i = 0; i < aItems.length; i++) {
+                      vRuleslist = {
+                        profile: oPredProfile,
+                        override: cSelected,
+                        Location: aItems[i].getInfo(),
+                        Product: aItems[i].getDescription(),
+                        GroupID: aItems[i].getTitle(),
+                        Type: "OD",
+                        modelVersion: vMdlVer,
+                      };
+                      oEntry.vcRulesList.push(vRuleslist);
+                    
+                  }
+
+               var finalList = {
+                    name: "generateModels14", // dynamic
+                    dscription:"Generate Machine Learning Models", //dynamic
+                    action: "%2Fpal%2FgenerateModels",
+                    active:true, //dynamic
+                    httpMethod: "POST",
+                    startTime:"2022-04-26 14:00 +0000",// dynamic
+                    endTime :"2022-04-27 14:00 +0000", //dynamic
+                    schedules:[
+                        {
+                            data: oEntry.vcRulesList,
+                            cron:"* * * * * *%2F5 0", // dynamic
+                            active:true,// dynamic
+                            startTime: "2022-04-26 14:00 +0000" // dynamic
+                        }
+                    ]
+                }
+
+                // sap.ui.core.BusyIndicator.show();
+                // var uri = "/v2/pal/genPredictions";
+                // that.getModel("JModel").setUseBatch(true);
+                that.getModel("JModel").callFunction("/laddMLJob", {
+                  method: "GET",
+                  urlParameters: {
+                    jobDetails: JSON.stringify(finalList)
+                      },
+                  success: function (oData) {
+                    sap.ui.core.BusyIndicator.hide();
+                    sap.m.MessageToast.show(that.i18n.getText("genPredSuccess"));
+                  regData.push(oData.fgPredictions.values[0].vcRulesList);
+  
+                    that.otabModel.setData({
+                      results: regData[0],
+                    });
+                    that.byId("pmdlList").setModel(that.otabModel);
+                    that.oPanel.setProperty("visible", true);
+                    vFlag = "X";
+                  },
+                  error: function (error) {
+                    sap.ui.core.BusyIndicator.hide();
+                    sap.m.MessageToast.show(that.i18n.getText("genPredErr"));
+                  },
+                });
+              
+              if (vFlag === "X") {
+                that.resetInputs();
+              }
+            
+            } else {
+              MessageToast.show(that.i18n.getText("errInput"));
+            }
+          },
+
         /*
          * This function is called when click on Yes button in confirmation popup.
          * In this function will get the Regression model data.
@@ -162,7 +264,7 @@ sap.ui.define(
          * or if some items are selected then sending the selected items in filters.
          * @param {object} oEvent -the event information.
          */
-        onRunSend: function () {
+        onRunSend1: function () {
           this.oModel = this.getModel("PModel");
           var aItems,
             oProdItems,
@@ -188,10 +290,7 @@ sap.ui.define(
             vMdlVer = "Simulation";
           }
 
-          if (
-            this.oObjDep.getTokens().length > 0 &&
-            this.oPredProfile.getTokens().length > 0
-          ) {
+          if (this.oObjDep.getTokens().length > 0 && this.oPredProfile.getTokens().length > 0 ) {
             if (
               aItems[0].getTitle() === "All" &&
               oProdItems[0].getTitle() === "All"
@@ -329,13 +428,13 @@ sap.ui.define(
                 filters: oFilters,
                 success: function (oData) {
                   that.objDepData = oData.results;
-                  if (that.objDepData.length > 0) {
-                    that.objDepData.unshift({
-                      OBJ_DEP: "All",
-                      LOCATION_ID: "All",
-                      PRODUCT_ID: "All",
-                    });
-                  }
+                //   if (that.objDepData.length > 0) {
+                //     that.objDepData.unshift({
+                //       OBJ_DEP: "All",
+                //       LOCATION_ID: "All",
+                //       PRODUCT_ID: "All",
+                //     });
+                //   }
                   that.odModel.setData(oData);
                   that.oODList.setModel(that.odModel);
                   if (aSelectedProd.length > 0) {
@@ -517,12 +616,12 @@ sap.ui.define(
                 ),
               ],
               success: function (oData) {
-                if (oData.results.length > 0) {
-                  oData.results.unshift({
-                    PRODUCT_ID: "All",
-                    PROD_DESC: "All",
-                  });
-                }
+                // if (oData.results.length > 0) {
+                //   oData.results.unshift({
+                //     PRODUCT_ID: "All",
+                //     PROD_DESC: "All",
+                //   });
+                // }
                 that.prodModel.setData(oData);
                 that.oProdList.setModel(that.prodModel);
               },

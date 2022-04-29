@@ -5,7 +5,7 @@ sap.ui.define([
 	"sap/ui/core/routing/History",
 	"sap/m/MessageToast",
     "sap/m/MessageBox",
-	"sap/ui/model/Filter",
+	"sap/ui/model/Filter" ,
     "sap/ui/model/FilterOperator",
 ], function (BaseController, JSONModel, History, MessageToast,MessageBox, Filter, FilterOperator) {
 	"use strict";
