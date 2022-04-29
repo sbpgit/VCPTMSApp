@@ -25,7 +25,7 @@ GET http://localhost:4004/jobs/lreadJobs()
 GET http://localhost:4004/jobs/lreadJobDetails(jobId=499941,displaySchedules=true)
 
 ### READ JOB SCHEDULES LOCALLY
-GET http://localhost:4004/jobs/lreadJobSchedules(jobId=484896)
+GET http://localhost:4004/jobs/lreadJobSchedules(jobId=506898)
 
 ### READ JOB ACTION LOGS LOCALLY
 GET http://localhost:4004/jobs/lreadJobActionLogs(jobId=484896)
@@ -46,6 +46,10 @@ GET http://localhost:4004/jobs/ldeleteJob(jobId=505387)
 
 ### ADD  JOB SCHEDULE LOCALLY
 GET http://localhost:4004/jobs/laddJobSchedule(schedule='{"jobId":499941, "data" : {"vcRulesList":[{"profile" : "SBP_HGBT_0","override" : true,"Location":"RX01","Product":"8150RW","GroupID": "1973253_1","Type" : "OD","modelVersion" : "Simulation"}]},"description" : "Recurring Cron Generate Model for OD 1973253_1","active" : true,"cron": "* * * * * *%2F5 0","startTime": "2022-04-25 23:00 +0000","endTime" : "2022-04-26 15:00 +0000" }')
+
+
+### UPDATE JOB SCHEDULE LOCALLY
+GET http://localhost:4004/jobs/lupdateMLJobSchedule(schedule='{"jobId":499941, "scheduleId" : "633977c8-09d6-4a57-b03e-b12d03c3d9e8", "data" : {"vcRulesList":[{"profile" : "SBP_HGBT_0","override" : true,"Location":"RX01","Product":"8150RW","GroupID": "1973253_1","Type" : "OD","modelVersion" : "Simulation"}]},"description" : "Recurring Cron (Every Hour) Generate Model for OD 1973253_1","active" : true,"cron": "* * * * * *%2F60 0","startTime": "2022-04-25 23:00 +0000","endTime" : "2022-04-26 15:00 +0000" }')
 
 
 ### DELETE  JOB SCHEDULE LOCALLY

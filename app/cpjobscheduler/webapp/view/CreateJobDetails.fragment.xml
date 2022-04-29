@@ -17,12 +17,12 @@
                             columnsM="1"
 				singleContainerFullSize="false" ariaLabelledBy="Title1">
 				<f:content>
-                    <core:Title text="Job Details:" class ="boldunderlineText"/>
+                    <core:Title text="Job Header:" class ="boldunderlineText"/>
 
 					<Label text="{i18n>name}"/>
 					<Input id="idname" value="" width="400px"/>
 					<Label text="{i18n>desc}"/>
-					<Input id="idDesc" value="" width="400px"/>  
+					<Input id="idDesc" value="{oGModel>/JobDdesc}" width="400px"/>  
                     <Label text="{i18n>active}"/>
 					<Select id="idActive" change="onActiveChange" selectedKey="T" class="buttonDesktop" width="400px">
 							<core:ListItem key="T" text="{i18n>true}"/>
@@ -33,7 +33,7 @@
                     <Label text="{i18n>endTime}"/>
 					<DateTimePicker id="idETime" width="400px" valueFormat= "yyyy-mm-dd HH:mm"  change="handleChange" class="sapUiSmallMarginBottom"/>
 
-                    <core:Title text = "Schedules Details:" class ="boldunderlineText"/>
+                    <core:Title text = "Recurring Details:" class ="boldunderlineText"/>
 
                     <Label text="{i18n>cron}"/>
                     <HBox>
@@ -55,8 +55,8 @@
 			</f:SimpleForm>
 		</VBox>
 		<buttons>
-			<Button id="idSavebt" type='Ghost' text="{i18n>save}" press="onRunSend"></Button>
-			<Button type='Reject' text="{i18n>close}" press="onRunClose"></Button>
+			<Button id="idSavebt" type='Ghost' text="{i18n>createjob}" press="onJobCreate"></Button>
+			<Button type='Reject' text="{i18n>close}" press="onCreateJobClose"></Button>
 		</buttons>
 	</Dialog>
 </core:FragmentDefinition>
