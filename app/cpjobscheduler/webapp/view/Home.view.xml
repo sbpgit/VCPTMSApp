@@ -6,7 +6,7 @@
             <Toolbar >
                 <Title id="idTitle" text="{i18n>title}" class="boldText"></Title>
                 <ToolbarSpacer/>
-                <Button id="idCreate" text="{i18n>createjob}" type="Emphasized" press="onCreateJob" tooltip = "Create Job"/>
+                <Button id="idCreate" text="{i18n>createjob}" type="Emphasized" press="onCreateJob" tooltip = "Create Job"/>                
                 <Button id="idJob" text="{i18n>openjob}" type="Emphasized" press="onOpenJob" tooltip = "Open Job"/>
                 <Label text="{i18n>daterange}"/>
 					<DateRangeSelection id="idDateRange" width="20%" delimiter="To" dateValue="" secondDateValue="" valueFormat="yyyy-MM-dd"
@@ -14,9 +14,10 @@
             </Toolbar>
         </customHeader>
         <content>
-        <Panel id="JobPanel" expandable="true" expanded="true" headerText="{i18n>jobList}" >
+        <Panel id="JobPanel" expandable="true" expanded="true" headerText="{i18n>jobList}" expand="onPanelExpand">
             <SearchField id="headSearch" liveChange="onSearch" placeholder="Job"/>
-            <Table id="jobList" items="{path: '/results'}" growingScrollToLoad="true" rememberSelections="false" itemPress="onhandlePress" mode="SingleSelectMaster" selectionChange="onhandlePress">
+            <Table id="jobList" items="{path: '/results'}" growingScrollToLoad="true" rememberSelections="false" 
+                    itemPress="onhandlePress" mode="SingleSelectMaster" selectionChange="onhandlePress">
                 <columns>
                     <Column hAlign="Left" vAlign="Middle" width="90px">
                         <Text text="{i18n>jobid}" />
@@ -52,7 +53,10 @@
                             <Text text="{startTime}"/>
                             <Text text="{endTime}"/>
                             <Text text="{createdAt}"/>
-                            <Button id="idJobDele" icon="sap-icon://decline" tooltip="Delete Job" press="onJobDelete" iconDensityAware="false" type="Transparent"/>
+                            <HBox>
+                            <Button id="idJobDele" width="90px" icon="sap-icon://decline" tooltip="Delete Job" press="onJobDelete" iconDensityAware="false" type="Transparent"/>
+                            <Button id="idJobUpdate" width="40px" icon="sap-icon://edit"  press="onUpdateJob" tooltip = "Update Job" iconDensityAware="false" type="Transparent"/>
+                            </HBox>
                         </cells>
                     </ColumnListItem>
                 </items>
@@ -93,7 +97,11 @@
                             <Text text="{nextRunAt}"/>
                             <Text text="{startTime}"/>
                             <Text text="{endTime}"/>
-                            <Button id="idscheData" icon="sap-icon://display" tooltip="Schedule Data" press="onScheData" iconDensityAware="false" type="Transparent"/>
+                            <HBox>
+                            <Button id="idscheData" width="50px" icon="sap-icon://display" tooltip="Schedule Data" press="onScheData" iconDensityAware="false" type="Transparent"/>	
+                            <Button id="idScheUpdate" width="40px" icon="sap-icon://edit"  press="onScheUpdate" tooltip = "Update Schedule" iconDensityAware="false" type="Transparent"/>					
+                            <Button id="idScheDele" width="50px" icon="sap-icon://decline" press="onScheDelete" tooltip="Delete Schedule" iconDensityAware="false" type="Transparent"/>
+                            </HBox>
 						</cells>
 					</ColumnListItem>
 				</items>
