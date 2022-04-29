@@ -126,6 +126,7 @@ sap.ui.define([
                 sap.ui.core.BusyIndicator.hide();
                 that.locModel.setData(oData);
                 that.oLocList.setModel(that.locModel);
+                that.oProd.removeAllTokens();
                 
               },
               error: function (oData, error) {
@@ -146,23 +147,48 @@ sap.ui.define([
               },
             });
 
-            that.byId("modelGenPanel").setVisible(true);
-                that.byId("PredPanel").setVisible(false);
-                that.byId("timeSeriesPanel").setVisible(false);
-                that.byId("IbpPanel").setVisible(false);
-                that.byId("idJobType").setSelectedKey("M");
+                if(that.oGModel.getProperty("/newSch")=== "X"){
+                 var key = that.oGModel.getProperty("/JobType");
+                    that.byId("idJobType").setSelectedKey(key);
+                    if(key === "M"){
+                        that.byId("modelGenPanel").setVisible(true);
+                        that.byId("PredPanel").setVisible(false);
+                    } else if(key === "P"){
+                        that.byId("modelGenPanel").setVisible(false);
+                        that.byId("PredPanel").setVisible(true);
+                    }
+                    } else {
+                        sap.ui.getCore().byId("idname").setEditable(true);
+                        sap.ui.getCore().byId("idDesc").setEditable(true);
+                        sap.ui.getCore().byId("idActive").setEditable(true);
+                        sap.ui.getCore().byId("idSTime").setEnabled(true);
+                        sap.ui.getCore().byId("idETime").setEnabled(true);
+                        that.byId("modelGenPanel").setVisible(true);
+                        that.byId("PredPanel").setVisible(false);
+                        that.byId("timeSeriesPanel").setVisible(false);
+                        that.byId("IbpPanel").setVisible(false);
+                        that.byId("idJobType").setSelectedKey("M");
+                    }
 		},
 
 		/** 
 		 * Navigates back
 		 */
 		onBack: function () {
+            that.oGModel.setProperty("/newSch", "");
+            that.oGModel.setProperty("/JobType", "");
 			var oRouter = sap.ui.core.UIComponent.getRouterFor(that);
             oRouter.navTo("Home", {}, true);
 		},
 
         onJobSelect:function(oEvent){
-            var oSelJob = that.byId("idJobType").getSelectedKey();
+            var oSelJob ;
+            if(that.oGModel.getProperty("/newSch")=== "X"){
+                oSelJob = that.oGModel.getProperty("/JobType");
+                that.byId("idJobType").setSelectedKey(oSelJob);
+                MessageToast.show("you cannot select other Job type when you creating schedule for existing job");
+            } else{
+             oSelJob = that.byId("idJobType").getSelectedKey();
 
             if(oSelJob === "M"){
                 that.byId("modelGenPanel").setVisible(true);
@@ -188,7 +214,27 @@ sap.ui.define([
 
             this.oGModel.setProperty("/JobDdesc", that.byId("idJobType").getSelectedItem().getText());
 
-            that.byId("MlocInput").setValue("");
+            // that.byId("MlocInput").setValue("");
+            // that.byId("MprodInput").setValue("");
+            // // that.byId("ModInput").setValue("");
+            // that.byId("MpmInput").setValue("");
+            
+            // that.byId("PlocInput").setValue("");
+            // that.byId("PprodInput").setValue("");
+            // // that.byId("PodInput").setValue("");
+            // that.byId("Pidver").setValue("");
+            // that.byId("Pidscen").setValue("");
+
+            // that.byId("TprodInput").setValue("");
+            // that.byId("TlocInput").setValue("");
+
+            // that.byId("IlocInput").setValue("");
+            // // that.byId("IprodInput").setValue("");
+            // // that.byId("").setValue("");
+
+        }
+
+        that.byId("MlocInput").setValue("");
             that.byId("MprodInput").setValue("");
             // that.byId("ModInput").setValue("");
             that.byId("MpmInput").setValue("");
@@ -203,6 +249,10 @@ sap.ui.define([
             that.byId("TlocInput").setValue("");
 
             that.byId("IlocInput").setValue("");
+            that.byId("IprodInput").setValue("");
+            // that.byId("PodInput").setValue("");
+            that.byId("Iidver").setValue("");
+            that.byId("Iidscen").setValue("");
             // that.byId("IprodInput").setValue("");
             // that.byId("").setValue("");
 
@@ -247,7 +297,7 @@ sap.ui.define([
             //   }
               // Version Dialog
             } else if (sId.includes("ver")) {
-              if (that.oLoc.getValue() && that.oProd.getTokens().length !== 0) {
+              if (that.oLoc.getValue() && (that.oProd.getTokens().length !== 0 || that.oProd.getValue() ) ) {
                 that._valueHelpDialogVer.open();
               } else {
                 MessageToast.show(that.i18n.getText("noLocProd"));
@@ -256,7 +306,7 @@ sap.ui.define([
             } else if (sId.includes("scen")) {
               if (
                 that.oLoc.getValue() &&
-                that.oProd.getTokens().length &&
+                (that.oProd.getTokens().length !== 0 || that.oProd.getValue() ) &&
                 that.oVer.getValue()
               ) {
                 that._valueHelpDialogScen.open();
@@ -441,7 +491,7 @@ sap.ui.define([
                     that.oProd = this.byId("MprodInput");
                     // that.oObjDep = this.byId("ModInput");
                     that.oPredProfile = this.byId("MpmInput");
-                    that.oProd.removeAllTokens();
+                    // that.oProd.removeAllTokens();
                     // that.oObjDep.removeAllTokens();
                 } else if(oJobKey === "P"){
                     that.oLoc = this.byId("PlocInput");
@@ -449,14 +499,23 @@ sap.ui.define([
                     // that.oObjDep = this.byId("PodInput");
                     that.oVer = this.byId("Pidver");
                     that.oScen = this.byId("Pidscen");
-                    that.oProd.removeAllTokens();
+                    // that.oProd.removeAllTokens();
                     // that.oObjDep.removeAllTokens();
                 } else if(oJobKey === "T"){
                     that.oLoc = this.byId("TlocInput");
                     that.oProd = this.byId("TprodInput");
                 } else if(oJobKey === "I"){
                     that.oLoc = this.byId("IlocInput");
-                    // that.oProd = this.byId("IprodInput");
+                    that.oProd = this.byId("IprodInput");
+                    that.oVer = this.byId("Iidver");
+                    that.oScen = this.byId("Iidscen");
+                }
+
+                if(that.oGModel.getProperty("/newSch") !== "X"){
+                    if(oJobKey === "M" || oJobKey === "P"){
+                        that.oProd.removeAllTokens();
+                    }
+                    
                 }
 
           },
@@ -480,7 +539,7 @@ sap.ui.define([
                 var aSelectedLoc = oEvent.getParameter("selectedItems");
               that.oLoc.setValue(aSelectedLoc[0].getTitle());
               
-              if(oJobType === "M" || oJobType === "P"){
+              if(oJobType === "M" || oJobType === "P" || oJobType === "I"){
               that.oProd.removeAllTokens();
             //   that.oObjDep.removeAllTokens();
               this._valueHelpDialogProd.getAggregation("_dialog").getContent()[1].removeSelections();
@@ -597,7 +656,7 @@ sap.ui.define([
   
                 
 
-                if(oJobType === "P"){
+                if(oJobType === "P" || oJobType === "I"){
                     // Calling sercive to get the IBP Vaersions list
                 this.getModel("BModel").read("/getIbpVerScn", {
                     filters: oFilters,
@@ -852,7 +911,9 @@ sap.ui.define([
 
           onModelGen:function(){
             var cSelected = that.byId("MidCheck").getSelected();
-            // sap.ui.getCore().byId("idSavebt").setText("Generate Model");
+            if(that.oGModel.getProperty("/newSch")=== "X"){
+            sap.ui.getCore().byId("idSavebt").setText("Add Schedule");
+            }
             that.oGModel.setProperty("/runText", "Generate Model");
 
 
@@ -902,6 +963,11 @@ sap.ui.define([
                     
                   }
                   
+                  if(that.oGModel.getProperty("/newSch")=== "X"){
+                    that.jobDataAddSche();
+
+                    }
+                  
                 this.oGModel.setProperty("/vcrulesData", oEntry.vcRulesList);
 
 
@@ -931,6 +997,9 @@ sap.ui.define([
           onPrediction:function(){
             var cSelected = that.byId("PidCheck").getSelected();
             // sap.ui.getCore().byId("idSavebt").setText("Run Prediction");
+            if(that.oGModel.getProperty("/newSch")=== "X"){
+                sap.ui.getCore().byId("idSavebt").setText("Add Schedule");
+                }
             that.oGModel.setProperty("/runText", "Run Prediction");
 
             this.oModel = this.getModel("PModel");
@@ -979,6 +1048,11 @@ sap.ui.define([
                 }
                 this.oGModel.setProperty("/vcrulesData", oEntry.vcRulesList);
 
+                if(that.oGModel.getProperty("/newSch")=== "X"){
+                    that.jobDataAddSche();
+
+                    }
+
 
 
             var sText = "Do you want to override assignments?";
@@ -1004,17 +1078,60 @@ sap.ui.define([
             }
           },
 
+
+          jobDataAddSche:function(oEvent){
+            var oJobData = that.oGModel.getProperty("/Jobdata");
+
+            sap.ui.getCore().byId("idname").setValue(oJobData.name);
+            sap.ui.getCore().byId("idname").setEditable(false);
+
+            sap.ui.getCore().byId("idDesc").setValue(oJobData.description);
+            sap.ui.getCore().byId("idDesc").setEditable(false);
+
+            if(oJobData.active === true){
+                sap.ui.getCore().byId("idActive").setSelectedKey("T");
+                sap.ui.getCore().byId("idActive").setEditable(false);
+            } else if(oJobData.active === false){
+                sap.ui.getCore().byId("idActive").setSelectedKey("F");
+                sap.ui.getCore().byId("idActive").setEditable(false);
+            }
+
+            sap.ui.getCore().byId("idSTime").setDateValue(new Date(oJobData.startTime));
+            sap.ui.getCore().byId("idSTime").setEnabled(false);
+
+            sap.ui.getCore().byId("idETime").setDateValue(new Date(oJobData.endTime));
+            sap.ui.getCore().byId("idETime").setEnabled(false);
+
+
+
+          },
+
+          onJobTypeChange:function(){
+            var selKey = sap.ui.getCore().byId("idJobtype").getSelectedKey();
+
+            if(selKey === "Im"){
+                sap.ui.getCore().byId("idSchTime").setVisible(true);
+                sap.ui.getCore().byId("idCronValues").setVisible(false);
+                sap.ui.getCore().byId("idSchTime").setDateValue();
+            } else if(selKey === "Cr"){
+                sap.ui.getCore().byId("idSchTime").setVisible(false);
+                sap.ui.getCore().byId("idCronValues").setVisible(true);
+            }
+
+          },
+
           onCreateJobClose:function(){
             this._oCore.byId("idname").setValue();
             this._oCore.byId("idDesc").setValue();
             this._oCore.byId("idSTime").setValue();
             this._oCore.byId("idETime").setValue();
 
-            this._oCore.byId("idcron").setValue();
+            // this._oCore.byId("idcron").setValue();
             this._oCore.byId("idSSTime").setValue();
             this._oCore.byId("idSETime").setValue();
 
             that.oGModel.setProperty("/runText", "");
+            sap.ui.getCore().byId("idSTime").setEnabled(true);
 
 
             that._valueHelpDialogJobDetail.close();
@@ -1028,25 +1145,15 @@ sap.ui.define([
           handleChange:function(oEvent){
             var sId = oEvent.getParameter("id");
 
-            if(sId.includes("idSTime") || sId.includes("idSSTime")){
+            if(sId.includes("idSTime")){
               var  djSdate = this._oCore.byId("idSTime").getDateValue();
-            //   .toISOString().split("T"),
-            //        tjStime = djSdate[1].split(":");
-
-            //        djSdate = djSdate[0] + " " + tjStime[0] + ":" + tjStime[1];
-
                 sap.ui.getCore().byId("idSTime").setDateValue(djSdate);
                 sap.ui.getCore().byId("idSSTime").setDateValue(djSdate);
-            } else if(sId.includes("idETime") || sId.includes("idSETime")){
+            } else if(sId.includes("idETime")){
                 var djEdate = this._oCore.byId("idETime").getDateValue();
-                // .toISOString().split("T"),
-                //     tjEtime = djEdate[1].split(":");
-
-                //     djEdate = djEdate[0] + " " + tjEtime[0] + ":" + tjEtime[1];
-
                 sap.ui.getCore().byId("idETime").setDateValue(djEdate);
                 sap.ui.getCore().byId("idSETime").setDateValue(djEdate);
-            }
+            } 
 
           },
 
@@ -1079,13 +1186,13 @@ sap.ui.define([
                 dsEDate = dsEDate.toISOString().split("T");
                 tsEtime = dsEDate[1].split(":");
 
-                var cron = sap.ui.getCore().byId("idcron").getValue(),
+                // var cron = sap.ui.getCore().byId("idcron").getValue(),
 
-                dDate = new Date().toLocaleString().split(" "),
+                var dDate = new Date().toLocaleString().split(" "),
                 // JobName = sName + "_" + dDate[0].replaceAll(",", "") + "_" + dDate[1],
                 JobName = sName + new Date().getTime(),
                 actionText;
-                cron = "* * * * * *%2F" + cron +  " " + "0";
+                // cron = "* * * * * *%2F" + cron +  " " + "0";
                 // cron = "* * * *%2F" + cron +  " " + "0" +  " " + "0" +  " " + "0";
 
                 djSdate = djSdate[0] + " " + tjStime[0] + ":" + tjStime[1] + " " + "+0000";
@@ -1094,6 +1201,54 @@ sap.ui.define([
                 dsEDate = dsEDate[0] + " " + tsEtime[0] + ":" + tsEtime[1] + " " + "+0000";
 
 
+                var oJobType = sap.ui.getCore().byId("idJobtype").getSelectedKey(),
+                    onetime = "", Cron = "";
+                if(oJobType === "Im"){
+                    onetime = sap.ui.getCore().byId("idSchTime").getDateValue();
+                    Cron = "";
+                    if(onetime === null){
+                        onetime = "";
+                    }
+                } else if(oJobType === "Cr"){
+                    var mnth = sap.ui.getCore().byId("idmnth").getValue(),
+                        date = sap.ui.getCore().byId("iddate").getValue(),
+                        day = sap.ui.getCore().byId("idWeek").getSelectedKey(),
+                        hour = sap.ui.getCore().byId("idhrs").getValue(),
+                        min = sap.ui.getCore().byId("idmin").getValue();
+
+                        if(mnth === ""){
+                            mnth = "*";
+                        } else {
+                            mnth = "*%2F" + mnth;
+                        }
+                        if(date === ""){
+                            date = "*";
+                        } else {
+                            date = "*%2F" + date;
+                        }
+                        if(day === "0"){
+                            day = "*";
+                        } else {
+                            day = "*%2F" + day;
+                        }
+                        if(hour === ""){
+                            hour = "*";
+                        } else {
+                            hour = "*%2F" + hour;
+                        }
+                        if(min === "" ){
+                            min = "0";
+                        } else if(min === "0" ) {
+                            min = min;
+                        } else {
+                            min = "*%2F" + min;
+                        }
+
+                    Cron = "*" + " " + mnth + " " + date + " " + day + " " + hour + " " + min + " " + "0";
+
+                }
+
+                var testCron = "* * * * * *" + " " + hour +  " " + "0";
 
 
                 if(bButton.includes("Prediction")){
@@ -1104,6 +1259,8 @@ sap.ui.define([
 
                 var vcRuleList = this.oGModel.getProperty("/vcrulesData");
 
+            if(that.oGModel.getProperty("/newSch") !== "X"){
+
             var finalList = {
                 name: JobName,
                 description:sap.ui.getCore().byId("idDesc").getValue(),
@@ -1112,16 +1269,20 @@ sap.ui.define([
                 httpMethod: "POST",
                 startTime: djSdate,
                 endTime : djEdate,
+                createdAt:djSdate,
                 schedules:[
                     {
                         data: vcRuleList,
-                        cron: cron,
+                        cron: Cron,
+                        // time: onetime,
+                        description:"Test Description",
                         active:true,
                         startTime: dsSDate,
                         endTime : dsEDate
                     }
                 ]
             }
+
 
 
             that.getModel("JModel").callFunction("/laddMLJob", {
@@ -1149,6 +1310,47 @@ sap.ui.define([
                   sap.m.MessageToast.show(that.i18n.getText("genPredErr"));
                 },
               });
+
+                } else{
+
+                    var finalList = {
+                        jobId:that.oGModel.getProperty("/Jobdata").jobId,
+                                data: vcRuleList,
+                                cron: Cron,
+                                time: onetime,
+                                // description:"Test Description",
+                                active:true,
+                                startTime: dsSDate,
+                                endTime : dsEDate
+                    }
+
+            that.getModel("JModel").callFunction("/laddJobSchedule", {
+                method: "GET",
+                urlParameters: {
+                    schedule: JSON.stringify(finalList)
+                    },
+                success: function (oData) {
+                  sap.ui.core.BusyIndicator.hide();
+                  sap.m.MessageToast.show(oData.laddJobSchedule.value );
+                  that.onCreateJobClose();
+                  that.onBack();
+                // regData.push(oData.fgPredictions.values[0].vcRulesList);
+
+                //   that.otabModel.setData({
+                //     results: regData[0],
+                //   });
+                //   that.byId("pmdlList").setModel(that.otabModel);
+                //   that.oPanel.setProperty("visible", true);
+                //   vFlag = "X";
+                },
+                error: function (error) {
+                  sap.ui.core.BusyIndicator.hide();
+                  that.onCreateJobClose();
+                  sap.m.MessageToast.show(that.i18n.getText("genPredErr"));
+                },
+              });
+
+            }
 
           }
 

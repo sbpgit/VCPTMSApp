@@ -38,7 +38,7 @@ GET http://localhost:4004/jobs/laddMLJob(jobDetails='{"name": "generateModelsz",
 
 
 ### UPDATE JOB LOCALLY
-GET http://localhost:4004/jobs/lupdateJob(jobDetails='{"jobId" : 499941,"active": true,"startTime" : "2022-04-22 00:00 +0000","endTime" : "2022-05-22 00:00 +0000"}')
+GET http://localhost:4004/jobs/lupdateJob(jobDetails='{"jobId" : 513493,"active": true,"startTime" : "2022-04-29 00:00 +0000","endTime" : "2022-06-22 00:00 +0000"}')
 
 ### DELETE JOB LOCALLY
 GET http://localhost:4004/jobs/ldeleteJob(jobId=505387)
