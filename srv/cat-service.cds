@@ -188,7 +188,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
     // Generate Timeseries
     function generate_timeseries(LOCATION_ID : String(4), PRODUCT_ID : String(40))                                                                                                                                                                                               returns String;
     // Generate Timeseries
-    function generate_timeseriesF(LOCATION_ID : String(4), PRODUCT_ID : String(40))                                                                                                                                                                                              returns String;
+    function generate_timeseriesF(LOCATION_ID : String(4), PRODUCT_ID : String(40),PAST_DAYS : Integer)                                                                                                                                                                                              returns String;
     // Get Object dependency
     function get_objdep() returns array of ds.objectDep; //objectDep;
 
@@ -216,8 +216,4 @@ service CatalogService @(impl : './lib/cat-service.js') {
     // Maintain partial configurations
     function maintainNewProdChar(FLAG : String(1), 
     PRODCHAR : String ) returns String;
-    //    { PRODUCT_ID : String(40);
-    //     REF_PRODID : String(40); CLASS_NUM : String(20); CHAR_NUM : String(30); CHARVAL_NUM : String(70)
-    // }
-   // )                                                                                                                                                                                                                                                                           returns String;
 }

@@ -20,7 +20,7 @@
             </f:SimpleForm>
         </VBox>
         <content>
-            <Panel id="modelGenPanel" expandable="true" expanded="true" >
+            <Panel id="modelGenPanel" expandable="true" expanded="true" visible="false">
                 <headerToolbar>
                     <OverflowToolbar>
                         <Title text="{i18n>modelGenPanel}"/>
@@ -244,12 +244,49 @@
                 </content>
 
                 <VBox class="sapUiSmallMargin">
-            <f:SimpleForm id="FormToolbar1" editable="true" layout="ResponsiveGridLayout" labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="3" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1" singleContainerFullSize="false" ariaLabelledBy="Title1">
-                <f:content>
-                    <Label text="{i18n>loc}" required="true"/>
-                    <Input id="IlocInput" width="225px" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
-                </f:content>
-            </f:SimpleForm>
+            <f:Form editable="true">
+                    <f:layout>
+                        <f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2" singleContainerFullSize="false" />
+                    </f:layout>
+                    <f:formContainers>
+                        <f:FormContainer>
+                            <f:formElements>
+                                <f:FormElement>
+                                    <f:label>
+                                        <Label text="{i18n>loc}" required="true"/>
+                                    </f:label>
+                                    <f:fields>
+                                        <Input id="IlocInput" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                                    </f:fields>
+                                </f:FormElement>
+                                <f:FormElement>
+                                    <f:label>
+                                        <Label text="{i18n>prod}" required="true"/>
+                                    </f:label>
+                                    <f:fields>
+                                        <MultiInput id="IprodInput" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
+                                    </f:fields>
+                                </f:FormElement>
+                                <f:FormElement>
+                                    <f:label>
+                                        <Label text="{i18n>ibpver}"/>
+                                    </f:label>
+                                    <f:fields>
+                                        <Input id="Iidver" value="" placeholder="{i18n>ibpver}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                    </f:fields>
+                                </f:FormElement>
+                                <f:FormElement>
+                                    <f:label>
+                                        <Label text="{i18n>ibpscen}"/>
+                                    </f:label>
+                                    <f:fields>
+                                        <Input id="Iidscen" value="" placeholder="{i18n>ibpscen}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                    </f:fields>
+                                </f:FormElement>
+                            </f:formElements>
+                        </f:FormContainer>
+                    </f:formContainers>
+                </f:Form>
         </VBox>
         <Button type="Emphasized" text="Create Job" press="onIbpJobCreate" width="10%"/>
 

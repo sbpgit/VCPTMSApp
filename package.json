@@ -6,6 +6,7 @@
   "license": "UNLICENSED",
   "private": true,
   "dependencies": {
+    "@sap-cloud-sdk/core": "^1.54.0",
     "@sap/audit-logging": "^5.3.0",
     "@sap/cds": "^5.7.5",
     "@sap/cds-dk": "^4.9.2",
@@ -85,6 +86,9 @@
     }
   },
   "cds": {
+    "features": {
+      "fetch_csrf": true
+    },
     "requires": {
       "auth": {
         "kind": "basic-auth",
@@ -128,6 +132,23 @@
         "[production]": {
           "credentials": {
             "destination": "IBPDemandsrv"
+          }
+        }
+      },
+      "IBPMasterDataAPI": {
+        "kind": "odata-v2",
+        "model": "srv/external/IBPMasterDataAPI",
+        "[development]": {
+          "credentials": {
+            "url": "https://my400323-api.scmibp.ondemand.com/sap/opu/odata/IBP/MASTER_DATA_API_SRV",
+            "authentication": "BasicAuthentication",
+            "username": "BTPUSER",
+            "password": "Sbp@btpproductdevelopment01"
+          }
+        },
+        "[production]": {
+          "credentials": {
+            "destination": "IBPMasterDataAPI"
           }
         }
       }

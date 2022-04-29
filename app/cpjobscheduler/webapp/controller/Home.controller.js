@@ -38,11 +38,20 @@ sap.ui.define(
             );
             this.getView().addDependent(this._valueHelpDialogJobData);
           }
+
+          if (!this._valueHelpDialogUpdateJob) {
+            this._valueHelpDialogUpdateJob = sap.ui.xmlfragment(
+              "cpapp.cpjobscheduler.view.UpdateJobDialog",
+              this
+            );
+            this.getView().addDependent(this._valueHelpDialogUpdateJob);
+          }
       },
 
       onAfterRendering: function () {
         oGModel = this.getModel("oGModel");
         that.oList = that.byId("jobList");
+        that.oList.removeSelections(true);
 
         var nowH = new Date();
 		//past 15 days selected date
@@ -53,7 +62,7 @@ sap.ui.define(
 
         that.byId("JobPanel").setExpanded(true);
         that.byId("jobDetailsPanel").setExpanded(false);
-
+        sap.ui.core.BusyIndicator.show();
         that.getModel("JModel").callFunction("/lreadJobs", {
           method: "GET",
         //   urlParameters: {
@@ -61,6 +70,7 @@ sap.ui.define(
         //     endTime: dToDate
         //   },
           success: function (oData) {
+            sap.ui.core.BusyIndicator.hide();
             that.listModel.setData({
               results: oData.lreadJobs.value,
             });
@@ -71,6 +81,15 @@ sap.ui.define(
             MessageToast.show("Failed to get data");
           },
         });
+      },
+
+      onPanelExpand:function(){
+        var panel = that.byId("JobPanel").getExpanded();
+
+        if(panel === true){
+            that.byId("jobList").removeSelections(true);
+        }
+
       },
 
       onCreateJob: function (oEvent) {
@@ -143,6 +162,9 @@ sap.ui.define(
         oGModel = this.getModel("oGModel");
         var oJobId = oEvent.getParameter("listItem").getCells()[0].getTitle();
 
+        oGModel.setProperty("/newSch", "");
+        oGModel.setProperty("/Jobdata", oEvent.getParameter("listItem").getBindingContext().getObject());
+
             // that.getModel("JModel").callFunction("/lreadJobRunLogs", {
                 that.getModel("JModel").callFunction("/lreadJobDetails", {
                 method: "GET",
@@ -164,6 +186,12 @@ sap.ui.define(
 
                     aJobDetails = $.parseJSON(aJobDetails);
                     oGModel.setProperty("/aJobDetails", aJobDetails);
+                      if(aJobDetails[0].profile !== undefined){
+                        oGModel.setProperty("/JobType", "M");
+                      } else if(aJobDetails[0].version !== undefined){
+                        oGModel.setProperty("/JobType", "P");
+                      }
+
 
                       that.byId("JobPanel").setExpanded(false);
                       that.byId("jobDetailsPanel").setExpanded(true);
@@ -190,7 +218,160 @@ sap.ui.define(
 
       onjobClose:function(){
         that._valueHelpDialogJobData.close();
-      }
+      },
+
+
+      onAddSchedule:function(){
+
+        oGModel.setProperty("/newSch", "X");
+        that.onCreateJob();
+
+      }, 
+
+      onJobDelete:function(oEvent){
+        var oJobId = oEvent.getSource().getParent().getBindingContext().getObject().jobId;
+
+        oGModel.setProperty("/DeleteJob", oJobId);
+
+        that.getModel("JModel").callFunction("/ldeleteJob", {
+            method: "GET",
+            urlParameters: {
+                jobId : oJobId
+                },
+            success: function (oData) {
+              sap.ui.core.BusyIndicator.hide();
+              if(oData.ldeleteJob.value.includes("true")){
+              sap.m.MessageToast.show(oGModel.getProperty("/DeleteJob") + ": Job Deleted");
+              }
+              that.onAfterRendering();
+              
+            },
+            error: function (error) {
+              sap.ui.core.BusyIndicator.hide();
+              sap.m.MessageToast.show("Deletion failed");
+            },
+          });
+      },
+
+      onUpdateJob:function(oEvent){
+        var oJobId = oEvent.getSource().getParent().getBindingContext().getObject(),
+            bActive, dStartTime, dEndTime;
+            oGModel.setProperty("/JobDetailstoUpdate", oJobId);
+            oGModel.setProperty("/updatejob", oJobId.jobId);
+            oGModel.setProperty("/updatejobDesc", oJobId.description);
+            if(oJobId.active === true){
+                bActive = "T";
+            } else if(oJobId.active === false){
+                bActive = "F";
+            }
+            sap.ui.getCore().byId("idUJActive").setSelectedKey(bActive);
+
+            dStartTime = new Date(oJobId.startTime);
+            dEndTime = new Date(oJobId.endTime);
+            sap.ui.getCore().byId("idUJSTime").setDateValue(dStartTime);
+            sap.ui.getCore().byId("idUJETime").setDateValue(dEndTime);
+
+            this._valueHelpDialogUpdateJob.open();
+      },
+
+      onUpdateJobClose:function(){
+        this._valueHelpDialogUpdateJob.close();
+
+      },
+
+      onJobUpdateSave:function(){
+        var aSelJonDetails = oGModel.getProperty("/JobDetailstoUpdate");
+        var bActive = sap.ui.getCore().byId("idUJActive").getSelectedKey(),
+            dUPSdate = sap.ui.getCore().byId("idUJSTime").getDateValue(),
+            dUJEdate = sap.ui.getCore().byId("idUJETime").getDateValue(),
+            tUJStime, tUJEtime,
+            oJobid = sap.ui.getCore().byId("idUJob").getValue(),
+            oJobDesc = sap.ui.getCore().byId("idUJDesc").getValue(),
+            action = aSelJonDetails.action,
+            name = aSelJonDetails.name;
+
+
+            dUPSdate = dUPSdate.toISOString().split("T");
+            tUJStime = dUPSdate[1].split(":");
+            dUJEdate = dUJEdate.toISOString().split("T");
+            tUJEtime = dUJEdate[1].split(":");
+
+            dUPSdate = dUPSdate[0] + " " + tUJStime[0] + ":" + tUJStime[1] + " " + "+0000";
+            dUJEdate = dUJEdate[0] + " " + tUJEtime[0] + ":" + tUJEtime[1] + " " + "+0000";
+
+                if(bActive === "T"){
+                    bActive = true;
+                } else if(bActive === "F"){
+                    bActive = false;
+                }
+
+                var finalList = {
+                    jobId:oJobid,
+                    name:name,
+                    description:oJobDesc,
+                    action:action,
+                    httpMethod: "POST",
+                    active:bActive,
+                    startTime:dUPSdate,
+                    endTime:dUJEdate,
+                            
+                }
+
+            that.getModel("JModel").callFunction("/lupdateJob", {
+                method: "GET",
+                urlParameters: {
+                    jobDetails: JSON.stringify(finalList)
+                    },
+                success: function (oData) {
+                sap.ui.core.BusyIndicator.hide();
+                if(oData.lupdateJob.value.includes("true")){
+                    sap.m.MessageToast.show(oGModel.getProperty("/JobDetailstoUpdate").jobId + ": Job Updated");
+                    }
+                that._valueHelpDialogUpdateJob.close();
+                that.onAfterRendering();
+                },
+                error: function (error) {
+                sap.ui.core.BusyIndicator.hide();
+                that.onCreateJobClose();
+                sap.m.MessageToast.show("Failed to update job details");
+                },
+            });
+
+
+      },
+
+      onScheDelete:function(oEvent){
+        var oJobId = oGModel.getProperty("/Jobdata").jobId,
+            oScheId = oEvent.getSource().getParent().getBindingContext().getObject().scheduleId;
+
+        oGModel.setProperty("/DeleteSchJob", oJobId);
+        oGModel.setProperty("/DeleteSch", oScheId);
+
+                    var finalList = {
+                        jobId : oJobId,
+                        scheduleId: oScheId
+                    }
+
+
+        that.getModel("JModel").callFunction("/ldeleteMLJobSchedule", {
+            method: "GET",
+                urlParameters: {
+                    scheduleDetails: JSON.stringify(finalList)
+                    },
+            success: function (oData) {
+              sap.ui.core.BusyIndicator.hide();
+              if(oData.ldeleteMLJobSchedule.value.includes("true")){
+              sap.m.MessageToast.show(oGModel.getProperty("/DeleteSch") + ": Schedule Deleted");
+              }
+              that.onAfterRendering();
+              
+            },
+            error: function (error) {
+              sap.ui.core.BusyIndicator.hide();
+              sap.m.MessageToast.show("Deletion failed");
+            },
+          });
+      },
       
 
 

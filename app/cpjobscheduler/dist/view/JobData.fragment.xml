@@ -1,0 +1,46 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns:l="sap.ui.layout"
+	xmlns:f="sap.ui.layout.form">
+	<Dialog title="Schedule Job Data" contentWidth="850px">
+        <Table id="idJobData"  items="{path: '/results'}" >
+				<columns>
+					<Column hAlign="Left" vAlign="Middle" >
+						<Text text="{i18n>Location}" />
+					</Column>
+					<Column hAlign="Left" vAlign="Middle">
+						<Text text="{i18n>Product}"/>
+					</Column>
+                    <Column hAlign="Left" vAlign="Middle">
+						<Text text="{i18n>GroupID}"/>
+					</Column>
+                    <Column hAlign="Left" vAlign="Middle" >
+						<Text text="{i18n>Type}"/>
+					</Column>
+                    <Column hAlign="Left" vAlign="Middle">
+						<Text text="{i18n>modelVersion}"/>
+					</Column>
+                    <Column hAlign="Left" vAlign="Middle">
+						<Text text="{i18n>scenario}"/>
+					</Column>
+                    <Column hAlign="Left" vAlign="Middle">
+						<Text text="{i18n>version}"/>
+					</Column>
+				</columns>
+				<items>
+					<ColumnListItem>
+						<cells>
+							<Text text="{Location}" />
+                            <Text text="{Product}"/>
+                            <Text text="{GroupID}"/>
+                            <Text text="{Type}"/>
+                            <Text text="{modelVersion}"/>
+                            <Text text="{scenario}"/>
+                            <Text text="{version}"/>
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+		<buttons>
+			<Button type='Reject' text="{i18n>close}" press="onjobClose"></Button>
+		</buttons>
+	</Dialog>
+</core:FragmentDefinition>
