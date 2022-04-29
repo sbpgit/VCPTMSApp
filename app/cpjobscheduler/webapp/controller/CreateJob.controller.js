@@ -1131,14 +1131,9 @@ sap.ui.define([
                     },
                 success: function (oData) {
                   sap.ui.core.BusyIndicator.hide();
-<<<<<<< HEAD
-                  sap.m.MessageToast.show(oData.laddMLJob.value + ": Job created");
-                  that.onRunClose();
-=======
                   sap.m.MessageToast.show(oData.laddMLJob.value + ": Job Created");
                   that.onCreateJobClose();
                   that.onBack();
->>>>>>> e85693755e874dcc0a846e536d36c0a2afb2fd6c
                 // regData.push(oData.fgPredictions.values[0].vcRulesList);
 
                 //   that.otabModel.setData({
@@ -1150,13 +1145,8 @@ sap.ui.define([
                 },
                 error: function (error) {
                   sap.ui.core.BusyIndicator.hide();
-<<<<<<< HEAD
-                  sap.m.MessageToast.show("Error while creating the job");
-                  that._valueHelpDialogJobDetail.close();
-=======
                   that.onCreateJobClose();
                   sap.m.MessageToast.show(that.i18n.getText("genPredErr"));
->>>>>>> e85693755e874dcc0a846e536d36c0a2afb2fd6c
                 },
               });
 
