@@ -4,6 +4,17 @@ class GenFunctions {
     constructor() {
     }
 
+    static getCurrentDate() {
+        const lDate = new Date();
+        return lDate.toISOString().split('T')[0];
+    }
+    static getLastWeekDate(imDate) {
+        const lDate = new Date(imDate);
+        const lLastWeek = new Date(lDate.getFullYear(), lDate.getMonth(), lDate.getDate() - 7);
+
+        return lLastWeek.toISOString().split('T')[0];
+    }    
+
     static getNextSunday(imDate) {
         const lDate = new Date(imDate);
         let lDay = lDate.getDay();
