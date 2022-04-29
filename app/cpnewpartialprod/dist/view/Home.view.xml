@@ -40,7 +40,7 @@
                             <Text text="{LOCATION_ID}" />
                             <Text text="{PRODUCT_ID}" />
                             <Text text="{REF_PRODID}" />
-                            <Button id="idDisplay" icon="sap-icon://display" tooltip="Display" press="onCharDetails" iconDensityAware="false" type="Transparent"/>
+                            <Button id="idDisplay" icon="sap-icon://display" tooltip="Product Characteristics" press="onCharDetails" iconDensityAware="false" type="Transparent"/>
                             <Button id="idProd" icon="sap-icon://decline" tooltip="Delete" press="onProdeDel" iconDensityAware="false" type="Transparent"/>
                         
                         </cells>
