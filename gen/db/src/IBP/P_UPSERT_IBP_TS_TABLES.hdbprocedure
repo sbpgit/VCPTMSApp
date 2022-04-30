@@ -15,13 +15,16 @@ BEGIN
     DECLARE CURSOR vc_weekdate  FOR select DISTINCT "WEEK_DATE" from "V_IBP_SALESH_WEEK_DATE";
     DECLARE CURSOR custlocprod_weekdate  FOR select DISTINCT "WEEK_DATE" from "V_IBP_SALESH_CUST_LOC_PROD_WEEK_DATE";
     DECLARE CURSOR complocprod_weekdate  FOR select DISTINCT "WEEK_DATE" from "V_IBP_SALESH_COMP_LOC_PROD_WEEK_DATE";
+    DECLARE CURSOR compreq_loc_prod_weekdate  FOR select DISTINCT "WEEK_DATE" from "V_IBP_LOCATION_PRODUCT_COMPONENT_WEEK_DATE";
 
-    DECLARE vcdemand_rows, demand_rows, comp_demand_rows INT;
+
+    DECLARE vcdemand_rows, demand_rows, comp_demand_rows, compreq_rows INT;
     DECLARE ts TIMESTAMP;   
 
     vcdemand_rows = 0;
     demand_rows = 0;
     comp_demand_rows = 0;
+    compreq_rows = 0;
 
     FOR cur_row as vc_weekdate DO
 		UPSERT "IBP_LOCPRODCUSTCLASSCHARVAL_TS"
@@ -61,10 +64,23 @@ BEGIN
 		COMMIT;
     END FOR;
 
+
+    FOR cur_row as compreq_loc_prod_weekdate DO
+        UPSERT "IBP_LOCATION_PRODUCT_COMPREQ_TS"
+        ("KEYFIGUREDATE","LOCID","PRDID","COMPONENTREQUIREMENTQTY","PRDFR",
+         "MODEL_VERSION","VERSION","SCENARIO","VCSTRUCTURENODE")
+        SELECT DISTINCT "WEEK_DATE", "LOCID", "PRDID", "COMPONENTREQUIREMENTQTY", 
+        "PRDFR","MODEL_VERSION","VERSION","SCENARIO", "VCSTRUCTURENODE"
+        FROM V_IBP_LOCATION_PRODUCT_COMPONENT_WEEK_DATE  WHERE "WEEK_DATE" = cur_row."WEEK_DATE";
+
+        compreq_rows = compreq_rows + ::ROWCOUNT;
+        COMMIT;
+    END FOR;
+
     ts = current_utctimestamp;
 
     UPSERT IBP_TS_GEN_RESULTS VALUES 
-         (vcdemand_rows,demand_rows,comp_demand_rows, ts) WITH PRIMARY KEY;
+         (vcdemand_rows,demand_rows,comp_demand_rows, compreq_rows,ts) WITH PRIMARY KEY;
 
     ts_data_rows = SELECT * FROM IBP_TS_GEN_RESULTS WHERE "timestamp" = ts;
 

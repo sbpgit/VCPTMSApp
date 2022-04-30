@@ -5,7 +5,7 @@ sap.ui.define([
 	"sap/ui/core/routing/History",
 	"sap/m/MessageToast",
     "sap/m/MessageBox",
-	"sap/ui/model/Filter",
+	"sap/ui/model/Filter" ,
     "sap/ui/model/FilterOperator",
 ], function (BaseController, JSONModel, History, MessageToast,MessageBox, Filter, FilterOperator) {
 	"use strict";
@@ -123,21 +123,25 @@ sap.ui.define([
             // Calling service to get the Location data
             this.getModel("BModel").read("/getLocation", {
               success: function (oData) {
+                sap.ui.core.BusyIndicator.hide();
                 that.locModel.setData(oData);
                 that.oLocList.setModel(that.locModel);
-                sap.ui.core.BusyIndicator.hide();
+                
               },
               error: function (oData, error) {
+                sap.ui.core.BusyIndicator.hide();
                 MessageToast.show("error");
               },
             });
             // Calling service to get the Profiles data
             this.getModel("BModel").read("/getProfiles", {
               success: function (oData) {
+                sap.ui.core.BusyIndicator.hide();
                 that.ppfModel.setData(oData);
                 that.oPPFList.setModel(that.ppfModel);
               },
               error: function (oData, error) {
+                sap.ui.core.BusyIndicator.hide();
                 MessageToast.show("error");
               },
             });
@@ -182,14 +186,16 @@ sap.ui.define([
                 that.byId("IbpPanel").setVisible(true);
             }
 
+            this.oGModel.setProperty("/JobDdesc", that.byId("idJobType").getSelectedItem().getText());
+
             that.byId("MlocInput").setValue("");
             that.byId("MprodInput").setValue("");
-            that.byId("ModInput").setValue("");
+            // that.byId("ModInput").setValue("");
             that.byId("MpmInput").setValue("");
             
             that.byId("PlocInput").setValue("");
             that.byId("PprodInput").setValue("");
-            that.byId("PodInput").setValue("");
+            // that.byId("PodInput").setValue("");
             that.byId("Pidver").setValue("");
             that.byId("Pidscen").setValue("");
 
@@ -197,7 +203,7 @@ sap.ui.define([
             that.byId("TlocInput").setValue("");
 
             that.byId("IlocInput").setValue("");
-            that.byId("IprodInput").setValue("");
+            // that.byId("IprodInput").setValue("");
             // that.byId("").setValue("");
 
             // Calling function to set the id of inputs 
@@ -232,13 +238,13 @@ sap.ui.define([
                 MessageToast.show(that.i18n.getText("Select Location"));
             }
               // Object Dependency Dialog
-            } else if (sId.includes("od") ) {
-              if (that.oLoc.getValue() && that.oProd.getTokens().length !== 0) {
-                that._valueHelpDialogOD.open();
+            // } else if (sId.includes("od") ) {
+            //   if (that.oLoc.getValue() && that.oProd.getTokens().length !== 0) {
+            //     that._valueHelpDialogOD.open();
                 
-              } else {
-                MessageToast.show(that.i18n.getText("noLocProd"));
-              }
+            //   } else {
+            //     MessageToast.show(that.i18n.getText("noLocProd"));
+            //   }
               // Version Dialog
             } else if (sId.includes("ver")) {
               if (that.oLoc.getValue() && that.oProd.getTokens().length !== 0) {
@@ -287,15 +293,15 @@ sap.ui.define([
               if (that.oProdList.getBinding("items")) {
                 that.oProdList.getBinding("items").filter([]);
               }
-              // Object Dependency Dialog
-            } else if (sId.includes("od") || sId.includes("__button1")) {
-              that._oCore
-                .byId(this._valueHelpDialogOD.getId() + "-searchField")
-                .setValue("");
-              if (that.oODList.getBinding("items")) {
-                that.oODList.getBinding("items").filter([]);
-              }
-              // Version Dialog
+            //   // Object Dependency Dialog
+            // } else if (sId.includes("od") || sId.includes("__button1")) {
+            //   that._oCore
+            //     .byId(this._valueHelpDialogOD.getId() + "-searchField")
+            //     .setValue("");
+            //   if (that.oODList.getBinding("items")) {
+            //     that.oODList.getBinding("items").filter([]);
+            //   }
+            //   // Version Dialog
             } else if (sId.includes("Ver")) {
               that._oCore
                 .byId(this._valueHelpDialogVer.getId() + "-searchField")
@@ -312,13 +318,6 @@ sap.ui.define([
                 that.oScenList.getBinding("items").filter([]);
               }
             // Prediction Profile Dalog
-        } else if (sId.includes("scen")) {
-            that._oCore
-              .byId(this._valueHelpDialogScen.getId() + "-searchField")
-              .setValue("");
-            if (that.oScenList.getBinding("items")) {
-              that.oScenList.getBinding("items").filter([]);
-            }
           } else if(sId.includes("ppfSlctList")){
             that._oCore
             .byId(this._valueHelpDialogPPF.getId() + "-searchField")
@@ -375,23 +374,23 @@ sap.ui.define([
                 );
               }
               that.oProdList.getBinding("items").filter(oFilters);
-              // Object Dependency
-            } else if (sId.includes("od")) {
-              if (sQuery !== "") {
-                oFilters.push(
-                  new Filter({
-                    filters: [
-                      new Filter("LOCATION_ID", FilterOperator.Contains, sQuery),
-                      new Filter("PRODUCT_ID", FilterOperator.Contains, sQuery),
-                      new Filter("COMPONENT", FilterOperator.Contains, sQuery),
-                      new Filter("OBJ_DEP", FilterOperator.Contains, sQuery),
-                    ],
-                    and: false,
-                  })
-                );
-              }
-              that.oODList.getBinding("items").filter(oFilters);
-              // Version
+            //   // Object Dependency
+            // } else if (sId.includes("od")) {
+            //   if (sQuery !== "") {
+            //     oFilters.push(
+            //       new Filter({
+            //         filters: [
+            //           new Filter("LOCATION_ID", FilterOperator.Contains, sQuery),
+            //           new Filter("PRODUCT_ID", FilterOperator.Contains, sQuery),
+            //           new Filter("COMPONENT", FilterOperator.Contains, sQuery),
+            //           new Filter("OBJ_DEP", FilterOperator.Contains, sQuery),
+            //         ],
+            //         and: false,
+            //       })
+            //     );
+            //   }
+            //   that.oODList.getBinding("items").filter(oFilters);
+            //   // Version
             } else if (sId.includes("ver")) {
               if (sQuery !== "") {
                 oFilters.push(
@@ -440,24 +439,24 @@ sap.ui.define([
                 if(oJobKey === "M"){
                     that.oLoc = this.byId("MlocInput");
                     that.oProd = this.byId("MprodInput");
-                    that.oObjDep = this.byId("ModInput");
+                    // that.oObjDep = this.byId("ModInput");
                     that.oPredProfile = this.byId("MpmInput");
                     that.oProd.removeAllTokens();
-                    that.oObjDep.removeAllTokens();
+                    // that.oObjDep.removeAllTokens();
                 } else if(oJobKey === "P"){
                     that.oLoc = this.byId("PlocInput");
                     that.oProd = this.byId("PprodInput");
-                    that.oObjDep = this.byId("PodInput");
+                    // that.oObjDep = this.byId("PodInput");
                     that.oVer = this.byId("Pidver");
                     that.oScen = this.byId("Pidscen");
                     that.oProd.removeAllTokens();
-                    that.oObjDep.removeAllTokens();
+                    // that.oObjDep.removeAllTokens();
                 } else if(oJobKey === "T"){
                     that.oLoc = this.byId("TlocInput");
                     that.oProd = this.byId("TprodInput");
                 } else if(oJobKey === "I"){
                     that.oLoc = this.byId("IlocInput");
-                    that.oProd = this.byId("IprodInput");
+                    // that.oProd = this.byId("IprodInput");
                 }
 
           },
@@ -483,9 +482,9 @@ sap.ui.define([
               
               if(oJobType === "M" || oJobType === "P"){
               that.oProd.removeAllTokens();
-              that.oObjDep.removeAllTokens();
+            //   that.oObjDep.removeAllTokens();
               this._valueHelpDialogProd.getAggregation("_dialog").getContent()[1].removeSelections();
-              this._valueHelpDialogOD.getAggregation("_dialog").getContent()[1].removeSelections();
+            //   this._valueHelpDialogOD.getAggregation("_dialog").getContent()[1].removeSelections();
               }
               if(oJobType === "P"){
                   that.oVer.setValue("");
@@ -556,8 +555,8 @@ sap.ui.define([
                     that.oProd.setValue(aSelectedProd[0].getTitle());
                 }
                 if(oJobType === "M" || oJobType === "P"){
-                    that.oObjDep.removeAllTokens();
-                    this._valueHelpDialogOD.getAggregation("_dialog").getContent()[1].removeSelections();
+                    // that.oObjDep.removeAllTokens();
+                    // this._valueHelpDialogOD.getAggregation("_dialog").getContent()[1].removeSelections();
                     that.oProd.removeAllTokens();
                     aSelectedProd.forEach(function (oItem) {
                         that.oProd.addToken(
@@ -568,29 +567,29 @@ sap.ui.define([
                         );
                         });
 
-                        // Calling service to get the Object dependency
-                        this.getModel("BModel").read("/getBomOdCond", {
-                            filters: oFilters,
-                            success: function (oData) {
-                            that.objDepData = oData.results;
-                            if (that.objDepData.length > 0) {
-                                that.objDepData.unshift({
-                                OBJ_DEP: "All",
-                                LOCATION_ID: "All",
-                                PRODUCT_ID: "All",
-                                });
-                            }
-                            that.odModel.setData(oData);
-                            that.oODList.setModel(that.odModel);
-                            if ( that.oProdList.getSelectedItems()[0].getTitle() === "All") {
-                                that._valueHelpDialogOD.getAggregation("_dialog").getContent()[1].selectAll();
-                            }
+                        // // Calling service to get the Object dependency
+                        // this.getModel("BModel").read("/getBomOdCond", {
+                        //     filters: oFilters,
+                        //     success: function (oData) {
+                        //     that.objDepData = oData.results;
+                        //     if (that.objDepData.length > 0) {
+                        //         that.objDepData.unshift({
+                        //         OBJ_DEP: "All",
+                        //         LOCATION_ID: "All",
+                        //         PRODUCT_ID: "All",
+                        //         });
+                        //     }
+                        //     that.odModel.setData(oData);
+                        //     that.oODList.setModel(that.odModel);
+                        //     if ( that.oProdList.getSelectedItems()[0].getTitle() === "All") {
+                        //         that._valueHelpDialogOD.getAggregation("_dialog").getContent()[1].selectAll();
+                        //     }
                             
-                            },
-                            error: function (oData, error) {
-                            MessageToast.show("error");
-                            },
-                        });
+                        //     },
+                        //     error: function (oData, error) {
+                        //     MessageToast.show("error");
+                        //     },
+                        // });
                     }
               
   
@@ -618,42 +617,42 @@ sap.ui.define([
                 that.oProd.removeAllTokens();
                 }
               }
-              // Object ependency
-            } else if (sId.includes("od")) {
-              var aSelectedODItems;
-              that.oODList.getBinding("items").filter([]);
+            //   // Object ependency
+            // } else if (sId.includes("od")) {
+            //   var aSelectedODItems;
+            //   that.oODList.getBinding("items").filter([]);
   
-              aSelectedODItems = oEvent.getParameter("selectedItems");
+            //   aSelectedODItems = oEvent.getParameter("selectedItems");
   
-              if (aSelectedODItems && aSelectedODItems.length > 0) {
-                  if(oJobType === "M"){
-                    if (aSelectedODItems[0].getTitle() === "All") {
-                        that.byId("MidCheck").setSelected(true);
-                      } else {
-                        that.byId("MidCheck").setSelected(false);
-                      }
-                  } else if(oJobType === "P"){
-                    if (aSelectedODItems[0].getTitle() === "All") {
-                    that.byId("PidCheck").setSelected(true);
-                    } else {
-                    that.byId("PidCheck").setSelected(false);
-                    }
-                }
-                that.oObjDep.removeAllTokens();
-                aSelectedODItems.forEach(function (oItem) {
-                  that.oObjDep.addToken(
-                    new sap.m.Token({
-                      key: oItem.getTitle(),
-                      text: oItem.getTitle(),
-                    })
-                  );
-                });
-              } else {
-                that.oObjDep.removeAllTokens();
-                that.byId("MidCheck").setSelected(false);
-                that.byId("PidCheck").setSelected(false);
-              }
-              // Versions List
+            //   if (aSelectedODItems && aSelectedODItems.length > 0) {
+            //       if(oJobType === "M"){
+            //         if (aSelectedODItems[0].getTitle() === "All") {
+            //             that.byId("MidCheck").setSelected(true);
+            //           } else {
+            //             that.byId("MidCheck").setSelected(false);
+            //           }
+            //       } else if(oJobType === "P"){
+            //         if (aSelectedODItems[0].getTitle() === "All") {
+            //         that.byId("PidCheck").setSelected(true);
+            //         } else {
+            //         that.byId("PidCheck").setSelected(false);
+            //         }
+            //     }
+            //     that.oObjDep.removeAllTokens();
+            //     aSelectedODItems.forEach(function (oItem) {
+            //       that.oObjDep.addToken(
+            //         new sap.m.Token({
+            //           key: oItem.getTitle(),
+            //           text: oItem.getTitle(),
+            //         })
+            //       );
+            //     });
+            //   } else {
+            //     that.oObjDep.removeAllTokens();
+            //     that.byId("MidCheck").setSelected(false);
+            //     that.byId("PidCheck").setSelected(false);
+            //   }
+            //   // Versions List
             } else if (sId.includes("Ver")) {
               
               aSelectedVer = oEvent.getParameter("selectedItems");
@@ -716,36 +715,36 @@ sap.ui.define([
          * This function is called when click on segment button change.
          * @param {object} oEvent -the event information.
          */
-        onMGSegmentChange: function (oEvent) {
-            var selectedButton = that.byId("MidOdRes").getSelectedKey();
+        // onMGSegmentChange: function (oEvent) {
+        //     var selectedButton = that.byId("MidOdRes").getSelectedKey();
   
-            if (selectedButton === "RT") {
-              that.oObjDep.removeAllTokens();
-              that.byId("ModInput").setPlaceholder("Restriction");
-              that.byId("ModInput").setShowValueHelp(false);
-            } else  if(selectedButton === "OD") {
-              that.byId("ModInput").setPlaceholder("Object Dependency");
-              that.byId("ModInput").setShowValueHelp(true);
-            }
-          },
+        //     if (selectedButton === "RT") {
+        //       that.oObjDep.removeAllTokens();
+        //       that.byId("ModInput").setPlaceholder("Restriction");
+        //       that.byId("ModInput").setShowValueHelp(false);
+        //     } else  if(selectedButton === "OD") {
+        //       that.byId("ModInput").setPlaceholder("Object Dependency");
+        //       that.byId("ModInput").setShowValueHelp(true);
+        //     }
+        //   },
           
           
         /**
          * This function is called when click on segment button change.
          * @param {object} oEvent -the event information.
          */
-        onPSegmentChange: function (oEvent) {
-            var selectedButton = that.byId("PidType").getSelectedKey();
+        // onPSegmentChange: function (oEvent) {
+        //     var selectedButton = that.byId("PidType").getSelectedKey();
   
-            if (selectedButton === "RT") {
-              that.oObjDep.removeAllTokens();
-              that.byId("PodInput").setPlaceholder("Restriction");
-              that.byId("PodInput").setShowValueHelp(false);
-            } else if(selectedButton === "OD") {
-              that.byId("PodInput").setPlaceholder("Object Dependency");
-              that.byId("PodInput").setShowValueHelp(true);
-            }
-          },
+        //     if (selectedButton === "RT") {
+        //       that.oObjDep.removeAllTokens();
+        //       that.byId("PodInput").setPlaceholder("Restriction");
+        //       that.byId("PodInput").setShowValueHelp(false);
+        //     } else if(selectedButton === "OD") {
+        //       that.byId("PodInput").setPlaceholder("Object Dependency");
+        //       that.byId("PodInput").setShowValueHelp(true);
+        //     }
+        //   },
 
           /**
          * This function is called when Selecting or Unselecting of a items in Product dialog.
@@ -805,55 +804,56 @@ sap.ui.define([
            * This function is called when Selecting or Unselecting of a items in Obj Dep dialog.
            * @param {object} oEvent -the event information.
            */
-          handleObjDepChange: function (oEvent) {
-            var oSelected = oEvent.getParameter("listItem").getTitle();
-            var aItems = sap.ui.getCore().byId("odSlctList").getItems();
-            var oSelItems = this._valueHelpDialogOD
-              .getAggregation("_dialog")
-              .getContent()[1]
-              .getSelectedItems();
-            if (
-              oSelected === "All" &&
-              oEvent.getParameter("selected") &&
-              aItems.length !== 1
-            ) {
-              this._valueHelpDialogOD
-                .getAggregation("_dialog")
-                .getContent()[1]
-                .selectAll();
-            } else if (oSelected === "All" && !oEvent.getParameter("selected")) {
-              this._valueHelpDialogOD
-                .getAggregation("_dialog")
-                .getContent()[1]
-                .removeSelections();
-            } else if (
-              oSelected !== "All" &&
-              !oEvent.getParameter("selected") &&
-              aItems.length - 1 === oSelItems.length
-            ) {
-              sap.ui
-                .getCore()
-                .byId("odSlctList")
-                .getItems()[0]
-                .setSelected(false);
-            } else if (
-              oSelected !== "All" &&
-              oEvent.getParameter("selected") &&
-              aItems.length - 1 === oSelItems.length
-            ) {
-              sap.ui.getCore().byId("odSlctList").getItems()[0].setSelected(true);
-            } else if (oSelected === "All" && aItems.length === 1) {
-              sap.ui
-                .getCore()
-                .byId("odSlctList")
-                .getItems()[0]
-                .setSelected(false);
-            }
-          },
+        //   handleObjDepChange: function (oEvent) {
+        //     var oSelected = oEvent.getParameter("listItem").getTitle();
+        //     var aItems = sap.ui.getCore().byId("odSlctList").getItems();
+        //     var oSelItems = this._valueHelpDialogOD
+        //       .getAggregation("_dialog")
+        //       .getContent()[1]
+        //       .getSelectedItems();
+        //     if (
+        //       oSelected === "All" &&
+        //       oEvent.getParameter("selected") &&
+        //       aItems.length !== 1
+        //     ) {
+        //       this._valueHelpDialogOD
+        //         .getAggregation("_dialog")
+        //         .getContent()[1]
+        //         .selectAll();
+        //     } else if (oSelected === "All" && !oEvent.getParameter("selected")) {
+        //       this._valueHelpDialogOD
+        //         .getAggregation("_dialog")
+        //         .getContent()[1]
+        //         .removeSelections();
+        //     } else if (
+        //       oSelected !== "All" &&
+        //       !oEvent.getParameter("selected") &&
+        //       aItems.length - 1 === oSelItems.length
+        //     ) {
+        //       sap.ui
+        //         .getCore()
+        //         .byId("odSlctList")
+        //         .getItems()[0]
+        //         .setSelected(false);
+        //     } else if (
+        //       oSelected !== "All" &&
+        //       oEvent.getParameter("selected") &&
+        //       aItems.length - 1 === oSelItems.length
+        //     ) {
+        //       sap.ui.getCore().byId("odSlctList").getItems()[0].setSelected(true);
+        //     } else if (oSelected === "All" && aItems.length === 1) {
+        //       sap.ui
+        //         .getCore()
+        //         .byId("odSlctList")
+        //         .getItems()[0]
+        //         .setSelected(false);
+        //     }
+        //   },
 
           onModelGen:function(){
             var cSelected = that.byId("MidCheck").getSelected();
-            sap.ui.getCore().byId("idSavebt").setText("Generate Model");
+            // sap.ui.getCore().byId("idSavebt").setText("Generate Model");
+            that.oGModel.setProperty("/runText", "Generate Model");
 
 
             this.oModel = this.getModel("PModel");
@@ -864,6 +864,7 @@ sap.ui.define([
               oSelModelVer,
               oSelType,
               oPredProfile,
+              oLocItem,
               i,
               regData = [],
               vFlag;
@@ -875,6 +876,7 @@ sap.ui.define([
               var oMdlVer = that.byId("Midmdlver").getSelectedKey(),
               vMdlVer;
             aItems = this.oODList.getSelectedItems();
+            oLocItem = that.oLoc.getValue();
             oProdItems = this.oProdList.getSelectedItems(),
               oPredProfile = that.oPredProfile.getValue(),
               cSelected = that.byId("MidCheck").getSelected();
@@ -884,43 +886,22 @@ sap.ui.define([
               vMdlVer = "Simulation";
             }
   
-            if (this.oObjDep.getTokens().length > 0 && this.oPredProfile.getValue() ) {
+            if (this.oProd.getTokens().length > 0 && this.oPredProfile.getValue() ) {
           
-                for (i = 0; i < aItems.length; i++) {
+                for (i = 0; i < oProdItems.length; i++) {
                       vRuleslist = {
                         profile: oPredProfile,
                         override: cSelected,
-                        Location: aItems[i].getInfo(),
-                        Product: aItems[i].getDescription(),
-                        GroupID: aItems[i].getTitle(),
+                        Location: oLocItem,
+                        Product: oProdItems[i].getTitle(),
+                        GroupID: "All",
                         Type: "OD",
                         modelVersion: vMdlVer,
                       };
                       oEntry.vcRulesList.push(vRuleslist);
                     
                   }
-            // aItems = this.oODList.getSelectedItems();
-            // oProdItems = this.oProdList.getSelectedItems();
-            // cSelected = that.byId("MidCheck").getSelected();
-            // oSelModelVer = this.byId("Midmdlver").getSelectedKey();
-            // oSelType = this.byId("MidType").getSelectedKey();
-            // oPredProfile = that.byId("MpmInput").getValue();
-
-
-            // if (this.oObjDep.getTokens().length > 0 && this.oVer.getValue() && this.oScen.getValue() ) {
-          
-            //     for (i = 0; i < aItems.length; i++) {
-            //         vRuleslist = {
-            //             profile: oPredProfile,
-            //           override: cSelected,
-            //           Location: aItems[i].getInfo(),
-            //           Product: aItems[i].getDescription(),
-            //           GroupID: aItems[i].getTitle(),
-            //           Type: oSelType,
-            //           modelVersion: oSelModelVer,
-            //         };
-            //         oEntry.vcRulesList.push(vRuleslist);
-            //     }
+                  
                 this.oGModel.setProperty("/vcrulesData", oEntry.vcRulesList);
 
 
@@ -949,7 +930,8 @@ sap.ui.define([
 
           onPrediction:function(){
             var cSelected = that.byId("PidCheck").getSelected();
-            sap.ui.getCore().byId("idSavebt").setText("Run Prediction");
+            // sap.ui.getCore().byId("idSavebt").setText("Run Prediction");
+            that.oGModel.setProperty("/runText", "Run Prediction");
 
             this.oModel = this.getModel("PModel");
             var aItems,
@@ -959,6 +941,7 @@ sap.ui.define([
               oSelModelVer,
               oSelType,
               oSelVer,
+              oLocItem,
               oSelScen,
               i,
               regData = [],
@@ -969,24 +952,25 @@ sap.ui.define([
               vRuleslist,
               finalList={};
             aItems = this.oODList.getSelectedItems();
+            oLocItem = that.oLoc.getValue();
             oProdItems = this.oProdList.getSelectedItems();
             cSelected = that.byId("PidCheck").getSelected();
             oSelModelVer = this.byId("PidModelVer").getSelectedKey();
-            oSelType = this.byId("PidType").getSelectedKey();
+            // oSelType = this.byId("PidType").getSelectedKey();
             oSelVer = this.oVer.getValue();
             oSelScen = this.oScen.getValue();
 
 
-            if (this.oObjDep.getTokens().length > 0 && this.oVer.getValue() && this.oScen.getValue() ) {
+            if (this.oProd.getTokens().length > 0 && this.oVer.getValue() && this.oScen.getValue() ) {
           
-                for (i = 0; i < aItems.length; i++) {
+                for (i = 0; i < oProdItems.length; i++) {
                     vRuleslist = {
                       //   profile: oPredProfile,
                       override: cSelected,
-                      Location: aItems[i].getInfo(),
-                      Product: aItems[i].getDescription(),
-                      GroupID: aItems[i].getTitle(),
-                      Type: oSelType,
+                      Location: oLocItem,
+                      Product: oProdItems[i].getTitle(),
+                      GroupID: "All",
+                      Type: "OD",
                       modelVersion: oSelModelVer,
                       version: oSelVer,
                       scenario: oSelScen,
@@ -1020,7 +1004,7 @@ sap.ui.define([
             }
           },
 
-          onRunClose:function(){
+          onCreateJobClose:function(){
             this._oCore.byId("idname").setValue();
             this._oCore.byId("idDesc").setValue();
             this._oCore.byId("idSTime").setValue();
@@ -1030,34 +1014,79 @@ sap.ui.define([
             this._oCore.byId("idSSTime").setValue();
             this._oCore.byId("idSETime").setValue();
 
+            that.oGModel.setProperty("/runText", "");
+
 
             that._valueHelpDialogJobDetail.close();
 
           },
 
+          onCronChange:function(oEvent){
+                sap.ui.getCore().byId("idCrontype").setSelectedKey("Mi");
+          },
 
-          onRunSend:function(){
+          handleChange:function(oEvent){
+            var sId = oEvent.getParameter("id");
+
+            if(sId.includes("idSTime") || sId.includes("idSSTime")){
+              var  djSdate = this._oCore.byId("idSTime").getDateValue();
+            //   .toISOString().split("T"),
+            //        tjStime = djSdate[1].split(":");
+
+            //        djSdate = djSdate[0] + " " + tjStime[0] + ":" + tjStime[1];
+
+                sap.ui.getCore().byId("idSTime").setDateValue(djSdate);
+                sap.ui.getCore().byId("idSSTime").setDateValue(djSdate);
+            } else if(sId.includes("idETime") || sId.includes("idSETime")){
+                var djEdate = this._oCore.byId("idETime").getDateValue();
+                // .toISOString().split("T"),
+                //     tjEtime = djEdate[1].split(":");
+
+                //     djEdate = djEdate[0] + " " + tjEtime[0] + ":" + tjEtime[1];
+
+                sap.ui.getCore().byId("idETime").setDateValue(djEdate);
+                sap.ui.getCore().byId("idSETime").setDateValue(djEdate);
+            }
+
+          },
+
+
+          onJobCreate:function(){
             // this.oGModel = this.getModel("GModel");
-            var bButton = sap.ui.getCore().byId("idSavebt").getText(),
+            var bButton = that.oGModel.getProperty("/runText") ,
                 sName = sap.ui.getCore().byId("idname").getValue(),
-                djSdate = this._oCore.byId("idSTime").getDateValue().toISOString().split("T"),
-                tjStime = djSdate[1].split(":"),
-                djEdate = this._oCore.byId("idETime").getDateValue().toISOString().split("T"),
-                tjEtime = djEdate[1].split(":"),
-                dsSDate = this._oCore.byId("idSSTime").getDateValue().toISOString().split("T"),
-                tsStime = dsSDate[1].split(":"),
-                dsEDate = this._oCore.byId("idSETime").getDateValue().toISOString().split("T"),
-                tsEtime = dsEDate[1].split(":"),
-                cron = sap.ui.getCore().byId("idcron").getValue(),
+                lgTime = new Date().getTimezoneOffset(),
+                djSdate = this._oCore.byId("idSTime").getDateValue(),
+                djEdate = this._oCore.byId("idETime").getDateValue(),
+                dsSDate = this._oCore.byId("idSSTime").getDateValue(),
+                dsEDate = this._oCore.byId("idSETime").getDateValue(),
+                tjStime, tjEtime, tsStime, tsEtime;
 
 
+
+
+                // djSdate = new Date(djSdate.setTime(djSdate.getTime() - (lgTime* 60 * 1000)));
+                // djEdate = new Date(djEdate.setTime(djEdate.getTime() - (lgTime* 60 * 1000)));
+                // dsSDate = new Date(dsSDate.setTime(dsSDate.getTime() - (lgTime* 60 * 1000)));
+                // dsEDate = new Date(dsEDate.setTime(dsEDate.getTime() - (lgTime* 60 * 1000)));
+                
+                djSdate = djSdate.toISOString().split("T");
+                tjStime = djSdate[1].split(":");
+                djEdate = djEdate.toISOString().split("T");
+                tjEtime = djEdate[1].split(":");
+                dsSDate = dsSDate.toISOString().split("T");
+                tsStime = dsSDate[1].split(":");
+                dsEDate = dsEDate.toISOString().split("T");
+                tsEtime = dsEDate[1].split(":");
+
+                var cron = sap.ui.getCore().byId("idcron").getValue(),
 
                 dDate = new Date().toLocaleString().split(" "),
                 // JobName = sName + "_" + dDate[0].replaceAll(",", "") + "_" + dDate[1],
                 JobName = sName + new Date().getTime(),
                 actionText;
-                // cron = "* * * * * *%2F" + cron +  " " + "0";
-                cron = "* * * *%2F" + cron +  " " + "0" +  " " + "0" +  " " + "0";
+                cron = "* * * * * *%2F" + cron +  " " + "0";
+                // cron = "* * * *%2F" + cron +  " " + "0" +  " " + "0" +  " " + "0";
 
                 djSdate = djSdate[0] + " " + tjStime[0] + ":" + tjStime[1] + " " + "+0000";
                 djEdate = djEdate[0] + " " + tjEtime[0] + ":" + tjEtime[1] + " " + "+0000";
@@ -1102,7 +1131,9 @@ sap.ui.define([
                     },
                 success: function (oData) {
                   sap.ui.core.BusyIndicator.hide();
-                  sap.m.MessageToast.show(that.i18n.getText("genPredSuccess"));
+                  sap.m.MessageToast.show(oData.laddMLJob.value + ": Job Created");
+                  that.onCreateJobClose();
+                  that.onBack();
                 // regData.push(oData.fgPredictions.values[0].vcRulesList);
 
                 //   that.otabModel.setData({
@@ -1114,6 +1145,7 @@ sap.ui.define([
                 },
                 error: function (error) {
                   sap.ui.core.BusyIndicator.hide();
+                  that.onCreateJobClose();
                   sap.m.MessageToast.show(that.i18n.getText("genPredErr"));
                 },
               });

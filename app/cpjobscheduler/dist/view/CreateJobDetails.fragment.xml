@@ -1,6 +1,6 @@
 <core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns:l="sap.ui.layout"
 	xmlns:f="sap.ui.layout.form">
-	<Dialog contentWidth="500px" showHeader="false">
+	<Dialog contentWidth="700px" showHeader="false">
 		<VBox class="sapUiSmallMargin">
 			<f:SimpleForm id="FormToolbar" editable="true" layout="ResponsiveGridLayout" 
                           labelSpanXL="2"
@@ -17,36 +17,46 @@
                             columnsM="1"
 				singleContainerFullSize="false" ariaLabelledBy="Title1">
 				<f:content>
-                    <core:Title text="Job Details:" class ="boldunderlineText"/>
+                    <core:Title text="Job Header:" class ="boldunderlineText"/>
 
 					<Label text="{i18n>name}"/>
-					<Input id="idname" value="" />
+					<Input id="idname" value="" width="400px"/>
 					<Label text="{i18n>desc}"/>
-					<Input id="idDesc" value="" />  
+					<Input id="idDesc" value="{oGModel>/JobDdesc}" width="400px"/>  
                     <Label text="{i18n>active}"/>
-					<Select id="idActive" change="onActiveChange" selectedKey="T" class="buttonDesktop">
+					<Select id="idActive" change="onActiveChange" selectedKey="T" class="buttonDesktop" width="400px">
 							<core:ListItem key="T" text="{i18n>true}"/>
 							<core:ListItem key="F" text="{i18n>false}"/>
 					</Select>                
                     <Label text="{i18n>startTime}"/>
-					<DateTimePicker id="idSTime" valueFormat= "yyyy-mm-dd HH:mm" change="handleChange" class="sapUiSmallMarginBottom"/>
+					<DateTimePicker id="idSTime" width="400px" valueFormat= "yyyy-mm-dd HH:mm" change="handleChange" class="sapUiSmallMarginBottom"/>
                     <Label text="{i18n>endTime}"/>
-					<DateTimePicker id="idETime" valueFormat= "yyyy-mm-dd HH:mm"  change="handleChange" class="sapUiSmallMarginBottom"/>
+					<DateTimePicker id="idETime" width="400px" valueFormat= "yyyy-mm-dd HH:mm"  change="handleChange" class="sapUiSmallMarginBottom"/>
 
-                    <core:Title text = "Schedules Details:" class ="boldunderlineText"/>
+                    <core:Title text = "Recurring Details:" class ="boldunderlineText"/>
 
                     <Label text="{i18n>cron}"/>
-					<Input id="idcron" value="" />
+                    <HBox>
+                    <Select id="idCrontype" change="onCronChange" selectedKey="Mi" class="buttonDesktop" width="200px">
+							<core:ListItem key="Mo" text="{i18n>mnthly}"/>
+							<core:ListItem key="We" text="{i18n>wekkly}"/>
+                            <core:ListItem key="Da" text="{i18n>daily}"/>
+							<core:ListItem key="Ho" text="{i18n>hours}"/>
+                            <core:ListItem key="Mi" text="{i18n>min}"/>
+                            <core:ListItem key="Im" text="{i18n>imid}"/>
+					</Select>  
+					<Input id="idcron" value="" width="200px"/>
+                    </HBox>
                     <Label text="{i18n>Schedstarttime}"/>
-					<DateTimePicker id="idSSTime" valueFormat= "yyyy-mm-dd HH:mm" change="handleChange" class="sapUiSmallMarginBottom"/>
+					<DateTimePicker id="idSSTime" width="400px" valueFormat= "yyyy-mm-dd HH:mm" change="handleChange" class="sapUiSmallMarginBottom"/>
                     <Label text="{i18n>Schedendtime}"/>
-					<DateTimePicker id="idSETime" valueFormat= "yyyy-mm-dd HH:mm" change="handleChange" class="sapUiSmallMarginBottom"/>
+					<DateTimePicker id="idSETime" width="400px" valueFormat= "yyyy-mm-dd HH:mm" change="handleChange" class="sapUiSmallMarginBottom"/>
 				</f:content>
 			</f:SimpleForm>
 		</VBox>
 		<buttons>
-			<Button id="idSavebt" type='Ghost' text="Save" press="onRunSend"></Button>
-			<Button type='Reject' text="{i18n>close}" press="onRunClose"></Button>
+			<Button id="idSavebt" type='Ghost' text="{i18n>createjob}" press="onJobCreate"></Button>
+			<Button type='Reject' text="{i18n>close}" press="onCreateJobClose"></Button>
 		</buttons>
 	</Dialog>
 </core:FragmentDefinition>
