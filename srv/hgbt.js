@@ -1862,7 +1862,7 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
                 ' AND "VERSION" = ' + "'" + version + "'" +
                 ' AND "SCENARIO" = ' + "'" + scenario + "'" +
                 ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
-        //console.log("V_FUTURE_DEP_TS MLR SELECT sqlStr ", sqlStr);
+        console.log("V_FUTURE_DEP_TS HGBT SELECT sqlStr ", sqlStr);
 
         result = [];
 
@@ -1871,7 +1871,8 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
         // result=stmt.exec();
         // stmt.drop();
         result = await cds.run(sqlStr);
-        //console.log("V_FUTURE_DEP_TS MLR SELECT sqlStr result ", result, "length = ", result.length);
+        // console.log("V_FUTURE_DEP_TS HGBT SELECT sqlStr result ", result, "length = ", result.length);
+        // console.log("V_FUTURE_DEP_TS HGBT SELECT sqlStr result", result);
 
     
         var orderCount = 0;
@@ -2034,18 +2035,23 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
                 "'" + predicted*orderCount + "'" + "," +
                 "'" + predictedTime + "'" + ')' + ' WITH PRIMARY KEY';
             
-            //console.log("CP_TS_OBJDEP_CHAR_IMPACT_F MLR UPSERT sqlStr ", sqlStr); 
   
             // stmt=conn.prepare(sqlStr);
             // stmt.exec();
             // stmt.drop(); 
-            await cds.run(sqlStr);
+            try {
+                await cds.run(sqlStr);
+            }
+            catch (exception) {
+                console.log("ERROR -- CP_TS_OBJDEP_CHAR_IMPACT_F HGBT UPSERT sqlStr ", sqlStr); 
+                throw new Error(exception.toString());
+            }
   
         }
   
 
     }
-    conn.disconnect();
+    // conn.disconnect();
 
     let returnObj = [];	
     let createdAt = createtAtObj;
