@@ -1,11 +1,11 @@
-const { resolve } = require("@sap/cds");
+// const { resolve } = require("@sap/cds");
 const JobSchedulerClient = require("@sap/jobs-client");
 const xsenv = require("@sap/xsenv");
-const SapCfMailer = require("sap-cf-mailer").default;
+// const SapCfMailer = require("sap-cf-mailer").default;
 // const metering = require("./metering");
 // const { executeHttpRequest, getDestination } = require("@sap-cloud-sdk/core");
-const qs = require("qs");
-const axios = require("axios");
+// const qs = require("qs");
+// const axios = require("axios");
 // const { cf } = require("cf-http-client");
 
 // const jobFuncs = require('./Jobs-Service.js');

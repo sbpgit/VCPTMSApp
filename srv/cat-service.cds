@@ -86,11 +86,11 @@ service CatalogService @(impl : './lib/cat-service.js') {
     // Get PVS nodes ( Access, Structure and View nodes)
     entity getPVSNodes          as projection on od.PVS_NODES;
 
-    @odata.draft.enabled
-    entity getAuthObj           as projection on od.AUTH_OBJ;
+    // @odata.draft.enabled
+    // entity getAuthObj           as projection on od.AUTH_OBJ;
 
-    @odata.draft.enabled
-    entity getAOPara            as projection on od.AUTH_OBJ_PARA
+    // @odata.draft.enabled
+    // entity getAOPara            as projection on od.AUTH_OBJ_PARA
 
     @odata.draft.enabled
     entity getAEmpRole          as projection on od.AUTH_EMP_ROLE;

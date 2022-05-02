@@ -9,6 +9,7 @@ service JobsService @(impl : './lib/Jobs-Service.js') {
   function lreadJobActionLogs(jobId : Integer) returns String;
   function lreadJobRunLogs(jobId : Integer, scheduleId : String, page_size : Integer, offset : Integer) returns String;
   function laddMLJob(jobDetails : String) returns String;
+  function laddIBPBTPJob(jobDetails : String) returns String;
   function lupdateJob(jobDetails : String) returns String;
   function ldeleteJob(jobId : Integer) returns String;
   function laddJobSchedule(schedule : String) returns String;

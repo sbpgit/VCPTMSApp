@@ -394,17 +394,17 @@ context cp {
     }
 
     // Authorization object master
-    entity AUTH_OBJ : managed {
-        key AUTH_OBJ    : String(100) @title : 'Authorization Object';
-            DESCRIPTION : String(250) @title : 'Description';
-    }
+    // entity AUTH_OBJ : managed {
+    //     key AUTH_OBJ    : String(100) @title : 'Authorization Object';
+    //         DESCRIPTION : String(250) @title : 'Description';
+    // }
 
-    // Auth. object parameters
-    entity AUTH_OBJ_PARA : managed {
-        key AUTH_OBJ    : String(100) @title : 'Authorization Object';
-        key PARAMETER   : String(100) @title : 'Parameter';
-            DESCRIPTION : String(250) @title : 'Description';
-    }
+    // // Auth. object parameters
+    // entity AUTH_OBJ_PARA : managed {
+    //     key AUTH_OBJ    : String(100) @title : 'Authorization Object';
+    //     key PARAMETER   : String(100) @title : 'Parameter';
+    //         DESCRIPTION : String(250) @title : 'Description';
+    // }
 
     // Roles master
     entity AUTH_ROLE : managed {
@@ -417,7 +417,7 @@ context cp {
         key ROLE_ID       : String(100) @title : 'Role ID';
         key AUTH_OBJ      : String(100) @title : 'Authorization Object';
         key PARAMETER     : String(100) @title : 'Parameter';
-            PARAMETER_VAL : String(250) @title : 'Parameter';
+        key    PARAMETER_VAL : String(250) @title : 'Parameter';
     }
 
     // Roles for a user
@@ -457,6 +457,18 @@ entity IBP_FUTUREDEMAND_TEMP {
             OPT_QTY     : Decimal(13, 3) @title : 'Option Quantity';
     }
 
+    entity IBP_FCHARPLAN_TEMP {
+        key LOCATION_ID : String(4)      @title : 'Location ID';
+        key PRODUCT_ID  : String(40)     @title : 'Product ID';
+        key CLASS_NUM   : String(20)     @title : 'Class Name';
+        key CHAR_NUM    : String(30)     @title : 'Charateristic Name';
+        key CHARVAL_NUM : String(70)     @title : 'Charateristic Value';
+        key VERSION     : String(10)     @title : 'Version';
+        key SCENARIO    : String(32)     @title : 'Scenario';
+        key WEEK_DATE   : Date           @title : 'Weekly Date';
+            OPT_PERCENT : Decimal(5, 2)  @title : 'Option Percnetage';
+            OPT_QTY     : Decimal(13, 3) @title : 'Option Quantity';
+    }
     // IBP result plan table
     entity IBP_RESULTPLAN {
         key LOCATION_ID      : String(4)  @title : 'Location ID';

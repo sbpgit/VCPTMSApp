@@ -2033,8 +2033,13 @@ exports._runMlrPrediction = async function (mlrpType, group, version, scenario, 
             // stmt=conn.prepare(sqlStr);
             // stmt.exec();
             // stmt.drop(); 
-            await cds.run(sqlStr);
-  
+            try {
+                await cds.run(sqlStr);
+            }
+            catch (exception) {
+                console.log("ERROR -- CP_TS_OBJDEP_CHAR_IMPACT_F MLR UPSERT sqlStr ", sqlStr); 
+                throw new Error(exception.toString());
+            }  
         }
   
 
