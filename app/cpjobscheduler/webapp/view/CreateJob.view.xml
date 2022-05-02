@@ -90,7 +90,7 @@
                                     </f:label>
                                     <f:fields>
                                         <CheckBox id="MidCheck" select="onCheck"/>
-
+                                        <!-- <Button type="Emphasized" text="{i18n>mdlgene}" press="onModelGen" width="100%"/> -->
                                         <Button type="Emphasized" text="{i18n>mdlgene}" press="onModelGen" width="100%"/>
                                     </f:fields>
                                 </f:FormElement>
@@ -219,6 +219,14 @@
                                     </f:fields>
                                 </f:FormElement>
                                 <f:FormElement>
+                                    <f:label>
+                                        <Label text="{i18n>pastdays}" required="true"/>
+                                    </f:label>
+                                    <f:fields>
+                                    <Input id="TpastdaysInput" width="225px" placeholder="{i18n>pastdays}" />
+                                    </f:fields>
+                                </f:FormElement>
+                                <f:FormElement>
                                     <f:fields>
                                          <Button type="Emphasized" text="{i18n>genTimeseries}" press="onTimeSeries" width="30%"/>
                                     </f:fields>
@@ -237,8 +245,8 @@
                 </headerToolbar>
                 <content>
                 <RadioButtonGroup id="idRbtn" columns="2" >
-                    <RadioButton id="idFromIBP" text="Import From IBP" />
-                    <RadioButton id="idToIBP" text="Export to IBP" />
+                    <RadioButton id="idIBPDemand" text="IBP Demand" />
+                    <RadioButton id="idIBPFutPlan" text="IBP Future Plan" />
                 </RadioButtonGroup>
 
                 </content>
@@ -288,7 +296,7 @@
                     </f:formContainers>
                 </f:Form>
         </VBox>
-        <Button type="Emphasized" text="Create Job" press="onIbpJobCreate" width="10%"/>
+        <Button type="Emphasized" text="Create IBP Job" press="onIbpJobCreate" width="10%"/>
 
                 <!-- <f:Form editable="true">
                     <f:layout>

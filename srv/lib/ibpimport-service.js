@@ -259,7 +259,6 @@ module.exports = cds.service.impl(async function () {
         };
         flag = '';
         for (var i in req) {
-            var jsonDate = req[i].PERIODID4_TSTAMP;
             var vWeekDate = dateJSONToEDM(req[i].PERIODID4_TSTAMP);
             // var vWeekDate = vTstamp.split('T');
             //  if (req[i].LOCID === 'RX01') {

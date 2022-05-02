@@ -539,7 +539,7 @@ sap.ui.define([
                 var aSelectedLoc = oEvent.getParameter("selectedItems");
               that.oLoc.setValue(aSelectedLoc[0].getTitle());
               
-              if(oJobType === "M" || oJobType === "P" || oJobType === "I"){
+              if(oJobType === "M" || oJobType === "P" ){
               that.oProd.removeAllTokens();
             //   that.oObjDep.removeAllTokens();
               this._valueHelpDialogProd.getAggregation("_dialog").getContent()[1].removeSelections();
@@ -936,7 +936,7 @@ sap.ui.define([
               finalList={};
               var oMdlVer = that.byId("Midmdlver").getSelectedKey(),
               vMdlVer;
-            aItems = this.oODList.getSelectedItems();
+            // aItems = this.oODList.getSelectedItems();
             oLocItem = that.oLoc.getValue();
             oProdItems = this.oProdList.getSelectedItems(),
               oPredProfile = that.oPredProfile.getValue(),
@@ -1020,7 +1020,7 @@ sap.ui.define([
               },
               vRuleslist,
               finalList={};
-            aItems = this.oODList.getSelectedItems();
+            // aItems = this.oODList.getSelectedItems();
             oLocItem = that.oLoc.getValue();
             oProdItems = this.oProdList.getSelectedItems();
             cSelected = that.byId("PidCheck").getSelected();
@@ -1076,6 +1076,106 @@ sap.ui.define([
             } else {
                 MessageToast.show("Please select all fields");
             }
+          },
+
+
+          onTimeSeries:function(){
+                    var aItems,
+                    oProdItem,
+                    oLocItem,
+                    oPastDays,
+                    i;
+                var 
+                vRuleslist;
+
+                oLocItem = that.oLoc.getValue();
+                oProdItem = this.oProd.getValue();
+                oPastDays = that.byId("TpastdaysInput").getValue();
+                
+
+                that.oGModel.setProperty("/runText", "Time Series");
+
+
+                if (this.oProd.getValue() && oPastDays ) {
+                        vRuleslist = {
+                            LOCATION_ID: oLocItem,
+                            PRODUCT_ID: oProdItem,
+                            PAST_DAYS: oPastDays,
+                        };
+                        
+                    this.oGModel.setProperty("/vcrulesData", vRuleslist);
+
+                        that._valueHelpDialogJobDetail.open();
+                    
+                } else {
+                    MessageToast.show("Please select all fields");
+                }
+
+          },
+
+          onIbpJobCreate:function(){
+
+            var aItems,
+                oProdItem,
+                oSelVer,
+                oLocItem,
+                oSelScen,
+                fromDate,
+                toDate,
+                i;
+            var oEntry = {
+                vcRulesList: [],
+              },
+              vRuleslist,
+              finalList={};
+
+            oLocItem = that.oLoc.getValue();
+            oProdItem = this.oProd.getValue();
+            oSelVer = that.oVer.getValue();
+            oSelScen = that.oScen.getValue();
+            
+            var nowH = new Date();
+            fromDate = nowH.toISOString().split("T")[0];
+            toDate = new Date(nowH.getFullYear(), nowH.getMonth(), nowH.getDate() + 90);
+            toDate = toDate.toISOString().split("T")[0];
+            
+
+            var RadioBtn = this.byId("idRbtn").getSelectedButton().getText();
+
+            that.oGModel.setProperty("/runText", RadioBtn);
+
+
+            if (this.oProd.getValue() && this.oVer.getValue() && this.oScen.getValue() ) {
+                if(RadioBtn.includes("Demand")){
+                    vRuleslist = {
+                        LOCATION_ID: oLocItem,
+                        PRODUCT_ID: oProdItem,
+                        VERSION: oSelVer,
+                        SCENARIO: oSelScen,
+                    };
+                    // oEntry.vcRulesList.push(vRuleslist);
+                } else if(RadioBtn.includes("Future")){
+                    vRuleslist = {
+                        LOCATION_ID: oLocItem,
+                        PRODUCT_ID: oProdItem,
+                        VERSION: oSelVer,
+                        SCENARIO: oSelScen,
+                        FROMDATE: fromDate,
+                        TODATE:toDate
+                    };
+                    // oEntry.vcRulesList.push(vRuleslist);
+                }
+
+                this.oGModel.setProperty("/vcrulesData", vRuleslist);
+                this.oGModel.setProperty("/SelRadioBtn", RadioBtn);
+
+            
+                    that._valueHelpDialogJobDetail.open();
+                
+            } else {
+                MessageToast.show("Please select all fields");
+            }
+
           },
 
 
@@ -1218,6 +1318,8 @@ sap.ui.define([
 
                         if(mnth === ""){
                             mnth = "*";
+                        // } else if(mnth.includes(":")){
+                        //     mnth = mnth;
                         } else {
                             mnth = "*%2F" + mnth;
                         }
@@ -1248,73 +1350,34 @@ sap.ui.define([
 
                 }
 
-                var testCron = "* * * * * *" + " " + hour +  " " + "0";
-
 
                 if(bButton.includes("Prediction")){
-                    actionText= "%2Fpal%2FgenPredictions"
+                    actionText= "%2Fpal%2FgenPredictions";
                 } else if(bButton.includes("Model")){
-                    actionText= "%2Fpal%2FgenerateModels"
+                    actionText= "%2Fpal%2FgenerateModels";
+                } else if(bButton.includes("Time")){
+                    actionText= "%2Fcatalog%2Fgenerate_timeseries";
+                } else if(bButton.includes("Demand")){
+                    actionText= "%2Fibpimport-srv%2FgetFDemandQty";
+                } else if(bButton.includes("Future")){
+                    actionText= "%2Fibpimport-srv%2FgetFCharPlan";
                 }
 
                 var vcRuleList = this.oGModel.getProperty("/vcrulesData");
 
             if(that.oGModel.getProperty("/newSch") !== "X"){
-
-            var finalList = {
-                name: JobName,
-                description:sap.ui.getCore().byId("idDesc").getValue(),
-                action: actionText,
-                active:true,
-                httpMethod: "POST",
-                startTime: djSdate,
-                endTime : djEdate,
-                createdAt:djSdate,
-                schedules:[
-                    {
-                        data: vcRuleList,
-                        cron: Cron,
-                        // time: onetime,
-                        description:"Test Description",
-                        active:true,
-                        startTime: dsSDate,
-                        endTime : dsEDate
-                    }
-                ]
-            }
-
-
-
-            that.getModel("JModel").callFunction("/laddMLJob", {
-                method: "GET",
-                urlParameters: {
-                  jobDetails: JSON.stringify(finalList)
-                    },
-                success: function (oData) {
-                  sap.ui.core.BusyIndicator.hide();
-                  sap.m.MessageToast.show(oData.laddMLJob.value + ": Job Created");
-                  that.onCreateJobClose();
-                  that.onBack();
-                // regData.push(oData.fgPredictions.values[0].vcRulesList);
-
-                //   that.otabModel.setData({
-                //     results: regData[0],
-                //   });
-                //   that.byId("pmdlList").setModel(that.otabModel);
-                //   that.oPanel.setProperty("visible", true);
-                //   vFlag = "X";
-                },
-                error: function (error) {
-                  sap.ui.core.BusyIndicator.hide();
-                  that.onCreateJobClose();
-                  sap.m.MessageToast.show(that.i18n.getText("genPredErr"));
-                },
-              });
-
-                } else{
-
+                if(bButton.includes("Demand") || bButton.includes("Future") ){
                     var finalList = {
-                        jobId:that.oGModel.getProperty("/Jobdata").jobId,
+                        name: JobName,
+                        description:sap.ui.getCore().byId("idDesc").getValue(),
+                        action: actionText,
+                        active:true,
+                        httpMethod: "POST",
+                        startTime: djSdate,
+                        endTime : djEdate,
+                        createdAt:djSdate,
+                        schedules:
+                            {
                                 data: vcRuleList,
                                 cron: Cron,
                                 time: onetime,
@@ -1322,33 +1385,150 @@ sap.ui.define([
                                 active:true,
                                 startTime: dsSDate,
                                 endTime : dsEDate
+                            }
+                        
+                        
                     }
 
-            that.getModel("JModel").callFunction("/laddJobSchedule", {
-                method: "GET",
-                urlParameters: {
-                    schedule: JSON.stringify(finalList)
-                    },
-                success: function (oData) {
-                  sap.ui.core.BusyIndicator.hide();
-                  sap.m.MessageToast.show(oData.laddJobSchedule.value );
-                  that.onCreateJobClose();
-                  that.onBack();
-                // regData.push(oData.fgPredictions.values[0].vcRulesList);
 
-                //   that.otabModel.setData({
-                //     results: regData[0],
-                //   });
-                //   that.byId("pmdlList").setModel(that.otabModel);
-                //   that.oPanel.setProperty("visible", true);
-                //   vFlag = "X";
-                },
-                error: function (error) {
-                  sap.ui.core.BusyIndicator.hide();
-                  that.onCreateJobClose();
-                  sap.m.MessageToast.show(that.i18n.getText("genPredErr"));
-                },
-              });
+
+                    that.getModel("JModel").callFunction("/laddMLJob", {
+                        method: "GET",
+                        urlParameters: {
+                        jobDetails: JSON.stringify(finalList)
+                            },
+                        success: function (oData) {
+                        sap.ui.core.BusyIndicator.hide();
+                        sap.m.MessageToast.show(oData.laddMLJob.value + ": Job Created");
+                        that.onCreateJobClose();
+                        that.onBack();
+                        },
+                        error: function (error) {
+                        sap.ui.core.BusyIndicator.hide();
+                        that.onCreateJobClose();
+                        sap.m.MessageToast.show(that.i18n.getText("genPredErr"));
+                        },
+                    });
+
+                } else if(bButton.includes("Time") ){
+                    var finalList = {
+                        name: JobName,
+                        description:sap.ui.getCore().byId("idDesc").getValue(),
+                        action: actionText,
+                        active:true,
+                        httpMethod: "POST",
+                        startTime: djSdate,
+                        endTime : djEdate,
+                        createdAt:djSdate,
+                        schedules:
+                            {
+                                data: vcRuleList,
+                                cron: Cron,
+                                time: onetime,
+                                // description:"Test Description",
+                                active:true,
+                                startTime: dsSDate,
+                                endTime : dsEDate
+                            }
+                        
+                        
+                    }
+
+
+
+                    that.getModel("JModel").callFunction("/laddMLJob", {
+                        method: "GET",
+                        urlParameters: {
+                        jobDetails: JSON.stringify(finalList)
+                            },
+                        success: function (oData) {
+                        sap.ui.core.BusyIndicator.hide();
+                        sap.m.MessageToast.show(oData.laddMLJob.value + ": Job Created");
+                        that.onCreateJobClose();
+                        that.onBack();
+                        },
+                        error: function (error) {
+                        sap.ui.core.BusyIndicator.hide();
+                        that.onCreateJobClose();
+                        sap.m.MessageToast.show(that.i18n.getText("genPredErr"));
+                        },
+                    });
+
+                } else {
+                    var finalList = {
+                        name: JobName,
+                        description:sap.ui.getCore().byId("idDesc").getValue(),
+                        action: actionText,
+                        active:true,
+                        httpMethod: "POST",
+                        startTime: djSdate,
+                        endTime : djEdate,
+                        createdAt:djSdate,
+                        schedules:[
+                            {
+                                data: vcRuleList,
+                                cron: Cron,
+                                time: onetime,
+                                // description:"Test Description",
+                                active:true,
+                                startTime: dsSDate,
+                                endTime : dsEDate
+                            }
+                        ]
+                    }
+
+
+
+                    that.getModel("JModel").callFunction("/laddMLJob", {
+                        method: "GET",
+                        urlParameters: {
+                        jobDetails: JSON.stringify(finalList)
+                            },
+                        success: function (oData) {
+                        sap.ui.core.BusyIndicator.hide();
+                        sap.m.MessageToast.show(oData.laddMLJob.value + ": Job Created");
+                        that.onCreateJobClose();
+                        that.onBack();
+                        },
+                        error: function (error) {
+                        sap.ui.core.BusyIndicator.hide();
+                        that.onCreateJobClose();
+                        sap.m.MessageToast.show(that.i18n.getText("genPredErr"));
+                        },
+                    });
+                }
+             } else{
+
+                    var finalList = {
+                        jobId:that.oGModel.getProperty("/Jobdata").jobId,
+                            data: vcRuleList,
+                            cron: Cron,
+                            time: onetime,
+                            // description:"Test Description",
+                            active:true,
+                            startTime: dsSDate,
+                            endTime : dsEDate
+                            }
+
+                    that.getModel("JModel").callFunction("/laddJobSchedule", {
+                        method: "GET",
+                        urlParameters: {
+                            schedule: JSON.stringify(finalList)
+                            },
+                        success: function (oData) {
+                        sap.ui.core.BusyIndicator.hide();
+                        if(oData.laddJobSchedule.value){
+                        sap.m.MessageToast.show("Schedule created successfully");
+                        }
+                        that.onCreateJobClose();
+                        that.onBack();
+                        },
+                        error: function (error) {
+                        sap.ui.core.BusyIndicator.hide();
+                        that.onCreateJobClose();
+                        sap.m.MessageToast.show(that.i18n.getText("genPredErr"));
+                        },
+                    });
 
             }
 
