@@ -1771,7 +1771,7 @@ if (hasCharCount1 == true)
 
         let dataObj = await _getDataObjForGenModels(ruleList, modelType, 1);
         url =  baseUrl + '/pal/rdtRegressions';
-        await _postRegressionRequest(url,paramsObj,1,dataObj,modelType,ruleList);
+        await _postRegressionRequest(req,url,paramsObj,1,dataObj,modelType,ruleList);
     }
 
     modelType = 'VARMA';
@@ -1801,7 +1801,7 @@ if (hasCharCount1 == true)
 
             let dataObj = await _getDataObjForGenModels(ruleList, modelType, 2);
             url = baseUrl + '/pal/mlrRegressions';
-            await _postRegressionRequest(url,paramsObj,2,dataObj,modelType,ruleList);
+            await _postRegressionRequest(req,url,paramsObj,2,dataObj,modelType,ruleList);
         }
         
     //    
@@ -1815,7 +1815,7 @@ if (hasCharCount1 == true)
 
             let dataObj = await _getDataObjForGenModels(ruleList, modelType, 2);
             url =  baseUrl + '/pal/hgbtRegressionsV1';
-            await _postRegressionRequest(url,paramsObj,2,dataObj,modelType,ruleList);
+            await _postRegressionRequest(req,url,paramsObj,2,dataObj,modelType,ruleList);
         }
 
         modelType = 'RDT';
@@ -2171,7 +2171,7 @@ if (hasCharCount1 == true)
 
             let dataObj = await _getDataObjForGenModels(ruleList, modelType, 9);
             url =  baseUrl + '/pal/rdtRegressions';
-            await _postRegressionRequest(url,paramsObj,9,dataObj,modelType,ruleList);
+            await _postRegressionRequest(req,url,paramsObj,9,dataObj,modelType,ruleList);
         }
         modelType = 'VARMA';
         ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 9);
@@ -2621,7 +2621,7 @@ async function _postRegressionRequest(req,url,paramsObj,numChars,dataObj,modelTy
     let username = "SBPTECHTEAM";
     let password = "Sbpcorp@22";
     var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
-    console.log("_postRegressionRequest - AUTH", auth);
+    // console.log("_postRegressionRequest - AUTH", auth);
     console.log("vcRuleListObj ", vcRuleListObj);
 
     if (modelType == 'HGBT')
@@ -2739,22 +2739,22 @@ async function _postRegressionRequest(req,url,paramsObj,numChars,dataObj,modelTy
 
             throw new Error(error);
         }
-        if (response.statusCode == 423)
-        {
-            let responseData = JSON.parse(response.body);
-            console.log('responseData ', responseData);
-        }
+        // if (response.statusCode == 423)
+        // {
+        //     let responseData = JSON.parse(response.body);
+        //     console.log('responseData ', responseData);
+        // }
         if (response.statusCode == 200)
         {
 
             let responseData = JSON.parse(response.body);
         //    console.log('hgbt responseData ', responseData);
 
-            //var cqnQuery;
+            var cqnQuery = "";
             if (modelType == 'HGBT')
             {
                 console.log('hgbt regressionsID ', responseData.value[0].hgbtID);
-                let cqnQuery = {INSERT:{ into: { ref: ['CP_PALGENREGRESSIONMODELS'] }, entries: [
+                cqnQuery = {INSERT:{ into: { ref: ['CP_PALGENREGRESSIONMODELS'] }, entries: [
 
                     {   regressionsID: responseData.value[0].hgbtID, 
                         createdAt : responseData.value[0].createdAt, 
@@ -2763,14 +2763,13 @@ async function _postRegressionRequest(req,url,paramsObj,numChars,dataObj,modelTy
                     }
                 ]}}
 //                console.log('cqnQuery ', cqnQuery);
-
-             await cds.run(cqnQuery);
+            //  await cds.run(cqnQuery);
             }
             else if (modelType == 'RDT')
             {
   
                   console.log('rdt regressionsID ', responseData.value[0].rdtID);
-                  let cqnQuery = {INSERT:{ into: { ref: ['CP_PALGENREGRESSIONMODELS'] }, entries: [
+                  cqnQuery = {INSERT:{ into: { ref: ['CP_PALGENREGRESSIONMODELS'] }, entries: [
   
                       {   regressionsID: responseData.value[0].rdtID, 
                           createdAt : responseData.value[0].createdAt, 
@@ -2780,12 +2779,12 @@ async function _postRegressionRequest(req,url,paramsObj,numChars,dataObj,modelTy
                   ]}}
   //                console.log('cqnQuery ', cqnQuery);
   
-               await cds.run(cqnQuery);
+            //    await cds.run(cqnQuery);
               }
             else if (modelType == 'MLR')
             {
               //  console.log('mlr regressionsID ', responseData.value[0].mlrID);
-                let cqnQuery = {INSERT:{ into: { ref: ['CP_PALGENREGRESSIONMODELS'] }, entries: [
+                cqnQuery = {INSERT:{ into: { ref: ['CP_PALGENREGRESSIONMODELS'] }, entries: [
                     {   regressionsID: responseData.value[0].mlrID, 
                         createdAt : responseData.value[0].createdAt, 
                         modelType : modelType,
@@ -2794,12 +2793,12 @@ async function _postRegressionRequest(req,url,paramsObj,numChars,dataObj,modelTy
                 ]}}
 //                console.log('cqnQuery ', cqnQuery);
 
-                await cds.run(cqnQuery);
+                // await cds.run(cqnQuery);
             }
             else if (modelType == 'VARMA')
             {
                 console.log('varma ID ', responseData.value[0].varmaID);
-                let cqnQuery = {INSERT:{ into: { ref: ['CP_PALGENREGRESSIONMODELS'] }, entries: [
+                cqnQuery = {INSERT:{ into: { ref: ['CP_PALGENREGRESSIONMODELS'] }, entries: [
                     {   regressionsID: responseData.value[0].varmaID, 
                         createdAt : responseData.value[0].createdAt, 
                         modelType : modelType,
@@ -2807,13 +2806,91 @@ async function _postRegressionRequest(req,url,paramsObj,numChars,dataObj,modelTy
                     }
                 ]}}
 //                console.log('cqnQuery ', cqnQuery);
+                // await cds.run(cqnQuery);
+            }
 
-                await cds.run(cqnQuery);
+            let successObj = {};
+            successObj["success"] = true;
+
+            for (let modelsIdx = 0; modelsIdx <vcRuleListObj.length; modelsIdx++)
+            {
+                successObj["message"] = 'generate Models Response StatusCode : ' + response.statusCode + ' AT :' + new Date() +
+                                     '\n Response Details :' + 
+                                     '\n Models ID :' + cqnQuery.INSERT.entries[0].regressionsID +
+                                     '\n createdAt :' + cqnQuery.INSERT.entries[0].createdAt +
+                                     '\n modelType :' + cqnQuery.INSERT.entries[0].modelType +
+                                     '\n Location : ' + vcRuleListObj[modelsIdx].Location +
+                                     '\n Product : ' + vcRuleListObj[modelsIdx].Product +
+                                     '\n Group ID : ' + vcRuleListObj[modelsIdx].GroupID +
+                                     '\n Type : ' + vcRuleListObj[modelsIdx].Type +
+                                     '\n modelVersion : ' + vcRuleListObj[modelsIdx].modelVersion +
+                                     '\n profileID : ' + vcRuleListObj[modelsIdx].profileID +
+                                     '\n override : ' + vcRuleListObj[modelsIdx].override +
+                                     '\n dimensions : ' + vcRuleListObj[modelsIdx].dimensions ;
+
+
+                if (req.headers['x-sap-job-id'] > 0)
+                {
+                    const scheduler = getJobscheduler(req);
+
+                    var updateReq = {
+                        jobId: req.headers['x-sap-job-id'],
+                        scheduleId: req.headers['x-sap-job-schedule-id'],
+                        runId: req.headers['x-sap-job-run-id'],
+                        data : successObj
+                        };
+
+                    console.log("generatePredictions job update req",updateReq);
+
+                    scheduler.updateJobRunLog(updateReq, function(err, result) 
+                    {
+                        if (err) {
+                            return console.log('Error updating run log: %s', err);
+                        }
+
+                    })
+                }
             }
         }
         else
         {
             console.error('_postRegressionRequest - error:', error); // Print the error if one occurred
+
+            let errorObj = {};
+            errorObj["success"] = false;
+ 
+            errorObj["message"] = 'ERROR generate Models Response StatusCode : ' + response.statusCode + ' AT ' + new Date() +
+                                     '\n Response Details :' + 
+                                     '\n Location : ' + vcRuleListObj[0].Location +
+                                     '\n Product : ' + vcRuleListObj[0].Product +
+                                     '\n Type : ' + vcRuleListObj[0].Type +
+                                     '\n Models generation Response : ' + JSON.parse(response.body);
+                                    //  '\n Group ID : ' + vcRuleListObj[0].GroupID +
+                                    //  '\n Type : ' + vcRuleListObj[0].Type +
+                                    //  '\n modelVersion : ' + vcRuleListObj[0].modelVersion +
+                                    //  '\n Version : ' + vcRuleListObj[0].Version +
+                                    //  '\n Scenario : ' + vcRuleListObj[0].Scenario;
+            if (req.headers['x-sap-job-id'] > 0)
+            {
+                const scheduler = getJobscheduler(req);
+
+                var updateReq = {
+                    jobId: req.headers['x-sap-job-id'],
+                    scheduleId: req.headers['x-sap-job-schedule-id'],
+                    runId: req.headers['x-sap-job-run-id'],
+                    data : errorObj
+                    };
+
+                console.log("generatePredictions job update req",updateReq);
+
+                scheduler.updateJobRunLog(updateReq, function(err, result) {
+                if (err) {
+                    return console.log('Error updating run log: %s', err);
+                }
+
+
+                });
+            }
         }
     });
 }
