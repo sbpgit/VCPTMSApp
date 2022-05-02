@@ -756,12 +756,12 @@ sap.ui.define(
                 },
                 success: function (oData) {
                   sap.ui.core.BusyIndicator.hide();
-                  sap.m.MessageToast.show("success");
+                  sap.m.MessageToast.show("Exported product to IBP");
                   that.onBack();
                 },
                 error: function (error) {
                   sap.ui.core.BusyIndicator.hide();
-                  sap.m.MessageToast.show("Error");
+                  sap.m.MessageToast.show("Export product to IBP");
                   that.onBack();
                 }
               });            
