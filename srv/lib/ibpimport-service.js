@@ -96,32 +96,32 @@ module.exports = cds.service.impl(async function () {
             //  }
         }
         if (flag === 'X') {
-            let dataObj = {};
-            dataObj["success"] = true;
-            dataObj["message"] = "Import of IBP Demand data is successfull at " + new Date();
+            // let dataObj = {};
+            // dataObj["success"] = true;
+            // dataObj["message"] = "Import of IBP Demand data is successfull at " + new Date();
 
 
-            if (req.headers['x-sap-job-id'] > 0) {
-                const scheduler = getJobscheduler(req);
+            // if (req.headers['x-sap-job-id'] > 0) {
+            //     const scheduler = getJobscheduler(req);
 
-                var updateReq = {
-                    jobId: req.headers['x-sap-job-id'],
-                    scheduleId: req.headers['x-sap-job-schedule-id'],
-                    runId: req.headers['x-sap-job-run-id'],
-                    data: dataObj
-                };
+            //     var updateReq = {
+            //         jobId: req.headers['x-sap-job-id'],
+            //         scheduleId: req.headers['x-sap-job-schedule-id'],
+            //         runId: req.headers['x-sap-job-run-id'],
+            //         data: dataObj
+            //     };
 
-                console.log("IBP Demand import update req", updateReq);
+            //     console.log("IBP Demand import update req", updateReq);
 
-                scheduler.updateJobRunLog(updateReq, function (err, result) {
-                    if (err) {
-                        return console.log('Error updating run log: %s', err);
-                    }
-                    //Run log updated successfully
-                    console.log("IBP Demand import job update results", result);
+            //     scheduler.updateJobRunLog(updateReq, function (err, result) {
+            //         if (err) {
+            //             return console.log('Error updating run log: %s', err);
+            //         }
+            //         //Run log updated successfully
+            //         console.log("IBP Demand import job update results", result);
 
-                });
-            }
+            //     });
+            // }
             return "Successfully imported demand from IBP";
         } else {
             let dataObj = {};
@@ -153,6 +153,96 @@ module.exports = cds.service.impl(async function () {
             return "Failed to import Demand from IBP";
         }
     });
+    this.on("generateFDemandQty", async (request) => {
+        var flag;
+        var resUrl = "/SBPVCP?$select=PRDID,LOCID,PERIODID0_TSTAMP,PLANNEDINDEPENDENTREQ,VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and VERSIONID eq '" + request.data.VERSION + "' and SCENARIOID eq '" + request.data.SCENARIO + "'";
+        var req = await service.tx(req).get(resUrl);
+        const dateJSONToEDM = jsonDate => {
+            const content = /\d+/.exec(String(jsonDate));
+            const timestamp = content ? Number(content[0]) : 0;
+            const date = new Date(timestamp);
+            const string = date.toISOString().split('T')[0];
+            return string;
+        };
+        flag = '';
+        for (var i in req) {
+            var vWeekDate = dateJSONToEDM(req[i].PERIODID0_TSTAMP);
+            // var vWeekDate = vTstamp.split('T');
+            //  if (req[i].LOCID === 'RX01') {
+            let modQuery = 'UPSERT "CP_IBP_FUTUREDEMAND" VALUES (' +
+                "'" + req[i].LOCID + "'" + "," +
+                "'" + req[i].PRDID + "'" + "," +
+                "'" + req[i].VERSIONID + "'" + "," +
+                "'" + req[i].SCENARIOID + "'" + "," +
+                "'" + vWeekDate + "'" + "," +
+                "'" + req[i].PLANNEDINDEPENDENTREQ + "'" + ')' + ' WITH PRIMARY KEY';
+            try {
+                await cds.run(modQuery);
+                flag = 'X';
+            }
+            catch (err) {
+                console.log(err);
+            }
+            //  }
+        }
+        if (flag === 'X') {
+            let dataObj = {};
+            dataObj["success"] = true;
+            dataObj["message"] = "Import of IBP Demand data is successfull at " + new Date();
+
+
+            if (req.headers['x-sap-job-id'] > 0) {
+                const scheduler = getJobscheduler(req);
+
+                var updateReq = {
+                    jobId: req.headers['x-sap-job-id'],
+                    scheduleId: req.headers['x-sap-job-schedule-id'],
+                    runId: req.headers['x-sap-job-run-id'],
+                    data: dataObj
+                };
+
+                console.log("IBP Demand import update req", updateReq);
+
+                scheduler.updateJobRunLog(updateReq, function (err, result) {
+                    if (err) {
+                        return console.log('Error updating run log: %s', err);
+                    }
+                    //Run log updated successfully
+                    console.log("IBP Demand import job update results", result);
+
+                });
+            }
+           // return "Successfully imported demand from IBP";
+        } else {
+            let dataObj = {};
+            dataObj["failed"] = false;
+            dataObj["message"] = "Import of IBP Demand data is failed at" + new Date();
+
+
+            if (req.headers['x-sap-job-id'] > 0) {
+                const scheduler = getJobscheduler(req);
+
+                var updateReq = {
+                    jobId: req.headers['x-sap-job-id'],
+                    scheduleId: req.headers['x-sap-job-schedule-id'],
+                    runId: req.headers['x-sap-job-run-id'],
+                    data: dataObj
+                };
+
+                console.log("generatePredictions job update req", updateReq);
+
+                scheduler.updateJobRunLog(updateReq, function (err, result) {
+                    if (err) {
+                        return console.log('Error updating run log: %s', err);
+                    }
+                    //Run log updated successfully
+                    console.log("IBP Demand import job update results", result);
+
+                });
+            }
+          //  return "Failed to import Demand from IBP";
+        }
+    });
     this.on("getFCharPlan", async (request) => {
         var flag;
         var vFromDate = request.data.FromDate.toISOString();
@@ -168,7 +258,7 @@ module.exports = cds.service.impl(async function () {
         };
         flag = '';
         for (var i in req) {
-            var vWeekDate = dateJSONToEDM(req[i].PERIODID0_TSTAMP);
+            var vWeekDate = dateJSONToEDM(req[i].PERIODID4_TSTAMP);
             // var vWeekDate = vTstamp.split('T');
             //  if (req[i].LOCID === 'RX01') {
             let modQuery = 'UPSERT "CP_IBP_FCHARPLAN_TEMP" VALUES (' +
