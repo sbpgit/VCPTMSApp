@@ -1,11 +1,11 @@
-const { resolve } = require("@sap/cds");
+// const { resolve } = require("@sap/cds");
 const JobSchedulerClient = require("@sap/jobs-client");
 const xsenv = require("@sap/xsenv");
-const SapCfMailer = require("sap-cf-mailer").default;
+// const SapCfMailer = require("sap-cf-mailer").default;
 // const metering = require("./metering");
-const { executeHttpRequest, getDestination } = require("@sap-cloud-sdk/core");
-const qs = require("qs");
-const axios = require("axios");
+// const { executeHttpRequest, getDestination } = require("@sap-cloud-sdk/core");
+// const qs = require("qs");
+// const axios = require("axios");
 // const { cf } = require("cf-http-client");
 
 // const jobFuncs = require('./Jobs-Service.js');
@@ -271,51 +271,6 @@ module.exports = async function (srv) {
         if (error) 
         {
             console.log('laddMLJob - Error ', error);
-            ret_response = JSON.parse(error);
-        }
-        if (response.statusCode == 200)
-        {
-            ret_response = JSON.parse(response.body);
-        }
-    })
-    const sleep = require('await-sleep');
-    await sleep(1000);
-    req.reply(ret_response);
-
-  });
-  
-  srv.on("laddIBPBTPJob", async req => {
-    
-    // let addJobsUrl = baseUrl + '/jobs/addMLJob(' + "'" + JSON.stringify(req.data) + "'" + ')';
-    // console.log('req.data.jobDetails ', req.data.jobDetails);
-    let jobDetails = req.data.jobDetails;
-   // str.replace(/[/_]/g, "%2F");
-    // let jDetails = jobDetails.replace(/[/_]/g, "%2F");
-    let jDetails = jobDetails.replace(/[/]/g, "%2F");
-
-    console.log('jDetails ', jDetails);
-
-    let addJobsUrl = lbaseUrl + '/jobs/addIBPBTPJob(jobDetails=' + "'" + jDetails + "'" + ')';
-
-    console.log('addJobsUrl ', addJobsUrl);
-
-    options = {
-        'method': 'GET',
-        'url': addJobsUrl, 
-        'headers' : {
-            'Accept': 'application/json',
-            'Accept-Charset': 'utf-8'
-        }   
-    }
-    var values = [];
-    let ret_response ="";
-
-    await request(options, async function (error, response) {
-   
-        console.log('statusCode:', response.statusCode); // Print the response status code if a response was received
-        if (error) 
-        {
-            console.log('laddIBPBTPJob - Error ', error);
             ret_response = JSON.parse(error);
         }
         if (response.statusCode == 200)
