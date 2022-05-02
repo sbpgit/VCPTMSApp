@@ -91,4 +91,42 @@ type mlSchedules {
 //   scheduleId     : String;
 //   type           : String;
 }
+type btpibpJobs {
+  name             : String;
+  description      : String;
+  action           : String;
+  active           : Boolean;
+  httpMethod       : String;
+  startTime        : String;
+  endTime          : String;
+  ACTIVECOUNT      : Integer;
+  createdAt        : String;
+  INACTIVECOUNT    : Integer;
+  jobId            : Integer;
+  jobType          : String;
+  signatureVersion : Integer;
+  subDomain        : String;
+  user             : String;
+  _id              : Integer;
+  schedules        : array of btpibpSchedules;
+}
 
+type btpibpSchedules {
+  data  : { 
+            LOCATION_ID     : String(4);
+            PRODUCT_ID      : String(40);
+            VERSION      : String(10); // default 'BASELINE'; // IBP Version
+            SCENARIO     : String(32); // default 'BSL_SCENARIO'; // IBP Scenario
+            FROM_DATE    : Date;
+            TO_DATE      : Date;
+            PAST_DAYS    : Integer;
+         };
+  description    : String;
+  active         : Boolean;
+  startTime      : String;
+  endTime        : String;
+  cron           : String;
+  time           : String;
+  repeatInterval : String;
+  repeatAt       : String;
+}
