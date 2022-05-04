@@ -17,7 +17,7 @@ const conn_params_container = {
     uid: cds.env.requires.db.credentials.user, //cds userid environment variable
     pwd: cds.env.requires.db.credentials.password, //cds password environment variable
     encrypt: "TRUE",
-    ssltruststore: cds.env.requires.hana.credentials.certificate,
+  //  ssltruststore: cds.env.requires.hana.credentials.certificate,
 };
 
 module.exports = (srv) => {
