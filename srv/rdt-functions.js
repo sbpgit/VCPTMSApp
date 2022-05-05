@@ -498,24 +498,27 @@ exports._runRegressionRdtGroup = async function(req) {
     var idObj = uuidv1();
     console.log("_runRegressionRdtGroup location ", req.data.Location, " product ", req.data.Product);
 
-    let cqnQuery = {INSERT:{ into: { ref: ['CP_PALRDTREGRESSIONS'] }, entries: [
-        //  {   ID: idObj, createdAt : createtAtObj, 
-        {   rdtID: idObj, 
-            createdAt : createtAtObj.toISOString(), //2021-12-14T12:00:35.940Z', //new Date(),
-            Location : req.data.Location,
-            Product : req.data.Product,
-            regressionParameters:req.data.regressionParameters, 
-            rdtType : req.data.rdtType,
-            regressionData : req.data.regressionData, 
-            modelsOp : modelsObj,
-            importanceOp : impObj,
-            outOfBagOp : outOfBagObj}
-        ]}}
-        
-        
-    console.log("CP_PALRDTREGRESSIONS cqnQuery Start " , new Date());
+    // commenting out from Memory usage Perspective
 
-    await cds.run(cqnQuery);
+
+    // let cqnQuery = {INSERT:{ into: { ref: ['CP_PALRDTREGRESSIONS'] }, entries: [
+    //     //  {   ID: idObj, createdAt : createtAtObj, 
+    //     {   rdtID: idObj, 
+    //         createdAt : createtAtObj.toISOString(), //2021-12-14T12:00:35.940Z', //new Date(),
+    //         Location : req.data.Location,
+    //         Product : req.data.Product,
+    //         regressionParameters:req.data.regressionParameters, 
+    //         rdtType : req.data.rdtType,
+    //         regressionData : req.data.regressionData, 
+    //         modelsOp : modelsObj,
+    //         importanceOp : impObj,
+    //         outOfBagOp : outOfBagObj}
+    //     ]}}
+        
+        
+    // console.log("CP_PALRDTREGRESSIONS cqnQuery Start " , new Date());
+
+    // await cds.run(cqnQuery);
     console.log("CP_PALRDTREGRESSIONS cqnQuery Completed " , new Date());
 
 
@@ -1558,15 +1561,18 @@ exports._runRdtPrediction = async function(rdtType, group, version, scenario,mod
     // let outputGroupId = grpStr[0];
     // let location = grpStr[1];
     // let product = grpStr[2];
-    var cqnQuery = {INSERT:{ into: { ref: ['CP_PALRDTPREDICTIONS'] }, entries: [
-         {rdtID: idObj, createdAt : createtAtObj.toISOString(), Location : location, 
-          Product : product, groupId : GroupId, Type: odType, modelVersion: modelVersion, profile: profileId,
-          Version : version, Scenario : scenario,
-          predictionParameters:predParamsObj, rdtType : rdtType, 
-          predictionData : predDataObj, predictedResults : resultsObj}
-         ]}}
 
-    await cds.run(cqnQuery);
+    // commenting out from Memory usage Perspective
+
+    // var cqnQuery = {INSERT:{ into: { ref: ['CP_PALRDTPREDICTIONS'] }, entries: [
+    //      {rdtID: idObj, createdAt : createtAtObj.toISOString(), Location : location, 
+    //       Product : product, groupId : GroupId, Type: odType, modelVersion: modelVersion, profile: profileId,
+    //       Version : version, Scenario : scenario,
+    //       predictionParameters:predParamsObj, rdtType : rdtType, 
+    //       predictionData : predDataObj, predictedResults : resultsObj}
+    //      ]}}
+
+    // await cds.run(cqnQuery);
 
     conn.disconnect();
 

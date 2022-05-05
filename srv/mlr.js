@@ -557,23 +557,24 @@ exports._runRegressionMlrGroup = async function(req) {
     let idObj = uuidv1();
     //let uuidObj = uuidv1();
 
-   
-    var cqnQuery = {INSERT:{ into: { ref: ['CP_PALMLRREGRESSIONS'] }, entries: [
-        //  {   ID: idObj, createdAt : createtAtObj, 
-        {   mlrID: idObj, createdAt : createtAtObj.toISOString(),
-            Location : req.data.Location,
-            Product : req.data.Product, 
-            regressionParameters:req.data.regressionParameters, 
-            mlrType : req.data.mlrType,
-            regressionData : req.data.regressionData, 
-            coefficientOp : coefficientsObj,
-            pmmlOp : pmmlObj,
-            fittedOp : fittedObj,
-            statisticsOp : statisticsObj,
-            optimalParamOp : paramSelectionObj}
-        ]}}
+// commenting out from Memory usage Perspective
+ 
+    // var cqnQuery = {INSERT:{ into: { ref: ['CP_PALMLRREGRESSIONS'] }, entries: [
+    //     //  {   ID: idObj, createdAt : createtAtObj, 
+    //     {   mlrID: idObj, createdAt : createtAtObj.toISOString(),
+    //         Location : req.data.Location,
+    //         Product : req.data.Product, 
+    //         regressionParameters:req.data.regressionParameters, 
+    //         mlrType : req.data.mlrType,
+    //         regressionData : req.data.regressionData, 
+    //         coefficientOp : coefficientsObj,
+    //         pmmlOp : pmmlObj,
+    //         fittedOp : fittedObj,
+    //         statisticsOp : statisticsObj,
+    //         optimalParamOp : paramSelectionObj}
+    //     ]}}
 
-    cds.run(cqnQuery);
+    // cds.run(cqnQuery);
 //    console.log("PalMlrRegressions",cqnQuery);
 
 
@@ -1734,16 +1735,17 @@ exports._runMlrPrediction = async function (mlrpType, group, version, scenario, 
     var createtAtObj = new Date();
     //let idObj = groupId;
     let idObj = uuidv1();
-    
-    var cqnQuery = {INSERT:{ into: { ref: ['CP_PALMLRPREDICTIONS'] }, entries: [
-         {mlrpID: idObj, createdAt : createtAtObj.toISOString(), Location : location, 
-          Product : product, groupId : GroupId, Type: odType, modelVersion: modelVersion, 
-          profile: profileId, Version : version, Scenario : scenario,
-          predictionParameters:predParamsObj, mlrpType : mlrpType, 
-          predictionData : predDataObj, fittedResults : fittedObj}
-         ]}}
+     // commenting out from Memory usage Perspective
+   
+    // var cqnQuery = {INSERT:{ into: { ref: ['CP_PALMLRPREDICTIONS'] }, entries: [
+    //      {mlrpID: idObj, createdAt : createtAtObj.toISOString(), Location : location, 
+    //       Product : product, groupId : GroupId, Type: odType, modelVersion: modelVersion, 
+    //       profile: profileId, Version : version, Scenario : scenario,
+    //       predictionParameters:predParamsObj, mlrpType : mlrpType, 
+    //       predictionData : predDataObj, fittedResults : fittedObj}
+    //      ]}}
 
-    cds.run(cqnQuery);
+    // cds.run(cqnQuery);
 
     conn.disconnect();
 

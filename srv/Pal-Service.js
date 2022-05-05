@@ -502,9 +502,6 @@ async function _postPredictionRequest(req,url,paramsObj,numChars,dataObj,modelTy
                         vcRulesList : vcRuleListObj
                     }
                 ]}}
-//                console.log('cqnQuery ', cqnQuery);
-
-                // await cds.run(cqnQuery);
 
             }
             else if (modelType == 'RDT')
@@ -518,9 +515,6 @@ async function _postPredictionRequest(req,url,paramsObj,numChars,dataObj,modelTy
                         vcRulesList : vcRuleListObj
                     }
                 ]}}
-//                console.log('cqnQuery ', cqnQuery);
-
-                // await cds.run(cqnQuery);
 
             }
             else if (modelType == 'MLR')
@@ -533,9 +527,7 @@ async function _postPredictionRequest(req,url,paramsObj,numChars,dataObj,modelTy
                         vcRulesList : vcRuleListObj
                     }
                 ]}}
-//                console.log('cqnQuery ', cqnQuery);
 
-                // await cds.run(cqnQuery);
             }
             else if (modelType == 'VARMA')
             {
@@ -547,48 +539,49 @@ async function _postPredictionRequest(req,url,paramsObj,numChars,dataObj,modelTy
                         vcRulesList : vcRuleListObj
                     }
                 ]}}
-//                console.log('cqnQuery ', cqnQuery);
 
-                // await cds.run(cqnQuery);
             }
+            //    console.log('cqnQuery ', cqnQuery);
 
-            let successObj = {};
-            successObj["success"] = true;
-            successObj["message"] = 'generate Predictions Response StatusCode : ' + response.statusCode + ' AT :' + new Date() +
-                                     '\n Response Details :' + 
-                                     '\n predictionsID :' + cqnQuery.INSERT.entries[0].predictionsID +
-                                     '\n createdAt :' + cqnQuery.INSERT.entries[0].createdAt +
-                                     '\n modelType :' + cqnQuery.INSERT.entries[0].modelType +
-                                     '\n Location : ' + vcRuleListObj[0].Location +
-                                     '\n Product : ' + vcRuleListObj[0].Product +
-                                     '\n Group ID : ' + vcRuleListObj[0].GroupID +
-                                     '\n Type : ' + vcRuleListObj[0].Type +
-                                     '\n modelVersion : ' + vcRuleListObj[0].modelVersion +
-                                     '\n Version : ' + vcRuleListObj[0].Version +
-                                     '\n Scenario : ' + vcRuleListObj[0].Scenario;
-
-
-            if (req.headers['x-sap-job-id'] > 0)
-            {
-                const scheduler = getJobscheduler(req);
-
-                var updateReq = {
-                    jobId: req.headers['x-sap-job-id'],
-                    scheduleId: req.headers['x-sap-job-schedule-id'],
-                    runId: req.headers['x-sap-job-run-id'],
-                    data : successObj
-                    };
-
-                console.log("generatePredictions job update req",updateReq);
-
-                scheduler.updateJobRunLog(updateReq, function(err, result) {
-                if (err) {
-                    return console.log('Error updating run log: %s', err);
-                }
+            await cds.run(cqnQuery);
+// Commenting as Job Scheduler marsks updateReq as success while other Predictions are in Progress
+            // let successObj = {};
+            // successObj["success"] = true;
+            // successObj["message"] = 'generate Predictions Response StatusCode : ' + response.statusCode + ' AT :' + new Date() +
+            //                          '\n Response Details :' + 
+            //                          '\n predictionsID :' + cqnQuery.INSERT.entries[0].predictionsID +
+            //                          '\n createdAt :' + cqnQuery.INSERT.entries[0].createdAt +
+            //                          '\n modelType :' + cqnQuery.INSERT.entries[0].modelType +
+            //                          '\n Location : ' + vcRuleListObj[0].Location +
+            //                          '\n Product : ' + vcRuleListObj[0].Product +
+            //                          '\n Group ID : ' + vcRuleListObj[0].GroupID +
+            //                          '\n Type : ' + vcRuleListObj[0].Type +
+            //                          '\n modelVersion : ' + vcRuleListObj[0].modelVersion +
+            //                          '\n Version : ' + vcRuleListObj[0].Version +
+            //                          '\n Scenario : ' + vcRuleListObj[0].Scenario;
 
 
-                });
-            }
+            // if (req.headers['x-sap-job-id'] > 0)
+            // {
+            //     const scheduler = getJobscheduler(req);
+
+            //     var updateReq = {
+            //         jobId: req.headers['x-sap-job-id'],
+            //         scheduleId: req.headers['x-sap-job-schedule-id'],
+            //         runId: req.headers['x-sap-job-run-id'],
+            //         data : successObj
+            //         };
+
+            //     console.log("generatePredictions job update req",updateReq);
+
+            //     scheduler.updateJobRunLog(updateReq, function(err, result) {
+            //     if (err) {
+            //         return console.log('Error updating run log: %s', err);
+            //     }
+
+
+            //     });
+            // }
 
         }
         else
@@ -2372,7 +2365,7 @@ if (hasCharCount1 == true)
             return console.log('Error updating run log: %s', err);
         }
         //Run log updated successfully
-        console.log("generatePredictions job update results",result);
+        console.log("generate Models job update results",result);
 
         });
     }
@@ -2762,8 +2755,6 @@ async function _postRegressionRequest(req,url,paramsObj,numChars,dataObj,modelTy
                         vcRulesList : vcRuleListObj
                     }
                 ]}}
-//                console.log('cqnQuery ', cqnQuery);
-            //  await cds.run(cqnQuery);
             }
             else if (modelType == 'RDT')
             {
@@ -2777,9 +2768,6 @@ async function _postRegressionRequest(req,url,paramsObj,numChars,dataObj,modelTy
                           vcRulesList : vcRuleListObj
                       }
                   ]}}
-  //                console.log('cqnQuery ', cqnQuery);
-  
-            //    await cds.run(cqnQuery);
               }
             else if (modelType == 'MLR')
             {
@@ -2791,9 +2779,6 @@ async function _postRegressionRequest(req,url,paramsObj,numChars,dataObj,modelTy
                         vcRulesList : vcRuleListObj
                     }
                 ]}}
-//                console.log('cqnQuery ', cqnQuery);
-
-                // await cds.run(cqnQuery);
             }
             else if (modelType == 'VARMA')
             {
@@ -2805,52 +2790,54 @@ async function _postRegressionRequest(req,url,paramsObj,numChars,dataObj,modelTy
                         vcRulesList : vcRuleListObj
                     }
                 ]}}
-//                console.log('cqnQuery ', cqnQuery);
-                // await cds.run(cqnQuery);
             }
 
-            let successObj = {};
-            successObj["success"] = true;
+            //    console.log('cqnQuery ', cqnQuery);
+            await cds.run(cqnQuery);
+// Commenting as Job Scheduler marsks updateReq as success while other Models gen are in Progress
 
-            for (let modelsIdx = 0; modelsIdx <vcRuleListObj.length; modelsIdx++)
-            {
-                successObj["message"] = 'generate Models Response StatusCode : ' + response.statusCode + ' AT :' + new Date() +
-                                     '\n Response Details :' + 
-                                     '\n Models ID :' + cqnQuery.INSERT.entries[0].regressionsID +
-                                     '\n createdAt :' + cqnQuery.INSERT.entries[0].createdAt +
-                                     '\n modelType :' + cqnQuery.INSERT.entries[0].modelType +
-                                     '\n Location : ' + vcRuleListObj[modelsIdx].Location +
-                                     '\n Product : ' + vcRuleListObj[modelsIdx].Product +
-                                     '\n Group ID : ' + vcRuleListObj[modelsIdx].GroupID +
-                                     '\n Type : ' + vcRuleListObj[modelsIdx].Type +
-                                     '\n modelVersion : ' + vcRuleListObj[modelsIdx].modelVersion +
-                                     '\n profileID : ' + vcRuleListObj[modelsIdx].profileID +
-                                     '\n override : ' + vcRuleListObj[modelsIdx].override +
-                                     '\n dimensions : ' + vcRuleListObj[modelsIdx].dimensions ;
+            // let successObj = {};
+            // successObj["success"] = true;
+
+            // for (let modelsIdx = 0; modelsIdx <vcRuleListObj.length; modelsIdx++)
+            // {
+            //     successObj["message"] = 'generate Models Response StatusCode : ' + response.statusCode + ' AT :' + new Date() +
+            //                          '\n Response Details :' + 
+            //                          '\n Models ID :' + cqnQuery.INSERT.entries[0].regressionsID +
+            //                          '\n createdAt :' + cqnQuery.INSERT.entries[0].createdAt +
+            //                          '\n modelType :' + cqnQuery.INSERT.entries[0].modelType +
+            //                          '\n Location : ' + vcRuleListObj[modelsIdx].Location +
+            //                          '\n Product : ' + vcRuleListObj[modelsIdx].Product +
+            //                          '\n Group ID : ' + vcRuleListObj[modelsIdx].GroupID +
+            //                          '\n Type : ' + vcRuleListObj[modelsIdx].Type +
+            //                          '\n modelVersion : ' + vcRuleListObj[modelsIdx].modelVersion +
+            //                          '\n profileID : ' + vcRuleListObj[modelsIdx].profileID +
+            //                          '\n override : ' + vcRuleListObj[modelsIdx].override +
+            //                          '\n dimensions : ' + vcRuleListObj[modelsIdx].dimensions ;
 
 
-                if (req.headers['x-sap-job-id'] > 0)
-                {
-                    const scheduler = getJobscheduler(req);
+            //     if (req.headers['x-sap-job-id'] > 0)
+            //     {
+            //         const scheduler = getJobscheduler(req);
 
-                    var updateReq = {
-                        jobId: req.headers['x-sap-job-id'],
-                        scheduleId: req.headers['x-sap-job-schedule-id'],
-                        runId: req.headers['x-sap-job-run-id'],
-                        data : successObj
-                        };
+            //         var updateReq = {
+            //             jobId: req.headers['x-sap-job-id'],
+            //             scheduleId: req.headers['x-sap-job-schedule-id'],
+            //             runId: req.headers['x-sap-job-run-id'],
+            //             data : successObj
+            //             };
 
-                    console.log("generatePredictions job update req",updateReq);
+            //         console.log("generatePredictions job update req",updateReq);
 
-                    scheduler.updateJobRunLog(updateReq, function(err, result) 
-                    {
-                        if (err) {
-                            return console.log('Error updating run log: %s', err);
-                        }
+            //         scheduler.updateJobRunLog(updateReq, function(err, result) 
+            //         {
+            //             if (err) {
+            //                 return console.log('Error updating run log: %s', err);
+            //             }
 
-                    })
-                }
-            }
+            //         })
+            //     }
+            // }
         }
         else
         {

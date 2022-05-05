@@ -496,21 +496,22 @@ exports._genVarmaModelsGroup = async function(req) {
     let idObj = uuidv1();
     //let uuidObj = uuidv1();
 
-    
-    let cqnQuery = {INSERT:{ into: { ref: ['CP_PALVARMAMODELS'] }, entries: [
-        {   varmaID: idObj, createdAt : createtAtObj.toISOString(), 
-            Location : req.data.Location,
-            Product : req.data.Product,
-            controlParameters:req.data.controlParameters, 
-            varmaData : req.data.varmaData, 
-            modelsOp : modelsObj,
-            fittedOp : fittedObj,
-            irfOp : irfObj }
-        ]}}
+     // commenting out from Memory usage Perspective
+   
+    // let cqnQuery = {INSERT:{ into: { ref: ['CP_PALVARMAMODELS'] }, entries: [
+    //     {   varmaID: idObj, createdAt : createtAtObj.toISOString(), 
+    //         Location : req.data.Location,
+    //         Product : req.data.Product,
+    //         controlParameters:req.data.controlParameters, 
+    //         varmaData : req.data.varmaData, 
+    //         modelsOp : modelsObj,
+    //         fittedOp : fittedObj,
+    //         irfOp : irfObj }
+    //     ]}}
 
-    await cds.run(cqnQuery);
+    // await cds.run(cqnQuery);
 
-    console.log('Varama Model Results', modelsObj);
+    // console.log('Varama Model Results', modelsObj);
 
 /////
     controlParameters = req.data.controlParameters;
@@ -1543,15 +1544,17 @@ exports._runVarmaPrediction = async function(varmaType, group, version, scenario
     //let idObj = groupId;
     let idObj = uuidv1();
     
-    var cqnQuery = {INSERT:{ into: { ref: ['CP_PALVARMAPREDICTIONS'] }, entries: [
-         {varmaID: idObj, createdAt : createtAtObj.toISOString(), Location : location, 
-          Product : product, groupId : GroupId, Type: odType, modelVersion: modelVersion, profile: profileId, 
-          Version : version, Scenario : scenario,
-          predictionParameters:predParamsObj, varmaType : varmaType, 
-          predictionData : predDataObj, predictedResults : resultsObj}
-         ]}}
+    // commenting out from Memory usage Perspective
 
-    await cds.run(cqnQuery);
+    // var cqnQuery = {INSERT:{ into: { ref: ['CP_PALVARMAPREDICTIONS'] }, entries: [
+    //      {varmaID: idObj, createdAt : createtAtObj.toISOString(), Location : location, 
+    //       Product : product, groupId : GroupId, Type: odType, modelVersion: modelVersion, profile: profileId, 
+    //       Version : version, Scenario : scenario,
+    //       predictionParameters:predParamsObj, varmaType : varmaType, 
+    //       predictionData : predDataObj, predictedResults : resultsObj}
+    //      ]}}
+
+    // await cds.run(cqnQuery);
 
     conn.disconnect();
 

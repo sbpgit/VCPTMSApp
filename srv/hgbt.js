@@ -549,11 +549,11 @@ exports._runRegressionHgbtGroupV1 = async function(req) {
             paramSelectionOp : paramSelectionObj}
         ]}}
         
-        
-    console.log("CP_PALHGBTREGRESSIONSV1 cqnQuery Start " , new Date());
+    // commenting out from Memory usage Perspective
+    // console.log("CP_PALHGBTREGRESSIONSV1 cqnQuery Start " , new Date());
 
-    await cds.run(cqnQuery);
-    console.log("CP_PALHGBTREGRESSIONSV1 cqnQuery Completed " , new Date());
+    // await cds.run(cqnQuery);
+    // console.log("CP_PALHGBTREGRESSIONSV1 cqnQuery Completed " , new Date());
 
 
 /////
@@ -1644,16 +1644,18 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
     var createtAtObj = new Date();
     //let idObj = groupId;
     let idObj = uuidv1();
+    
+    // commenting out from Memory usage Perspective
 
-    var cqnQuery = {INSERT:{ into: { ref: ['CP_PALHGBTPREDICTIONSV1'] }, entries: [
-         {hgbtID: idObj, createdAt : createtAtObj.toISOString(), Location : location, 
-          Product : product, groupId : GroupId, Type: odType, modelVersion: modelVersion, profile: profileId, 
-          Version : version, Scenario : scenario, 
-          predictionParameters:predParamsObj, hgbtType : hgbtType, 
-          predictionData : predDataObj, predictedResults : resultsObj}
-         ]}}
+    // var cqnQuery = {INSERT:{ into: { ref: ['CP_PALHGBTPREDICTIONSV1'] }, entries: [
+    //      {hgbtID: idObj, createdAt : createtAtObj.toISOString(), Location : location, 
+    //       Product : product, groupId : GroupId, Type: odType, modelVersion: modelVersion, profile: profileId, 
+    //       Version : version, Scenario : scenario, 
+    //       predictionParameters:predParamsObj, hgbtType : hgbtType, 
+    //       predictionData : predDataObj, predictedResults : resultsObj}
+    //      ]}}
 
-    await cds.run(cqnQuery);
+    // await cds.run(cqnQuery);
 
     conn.disconnect();
 
