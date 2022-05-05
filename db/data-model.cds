@@ -581,6 +581,7 @@ entity IBP_FUTUREDEMAND_TEMP {
     // New product charactersitics
     entity NEWPROD_CHAR {
         key PRODUCT_ID  : String(40) @title : 'New Product';
+        key LOCATION_ID    : String(4)      @title : 'Location ';
         key CLASS_NUM   : String(20) @title : 'Class Name';
         key CHAR_NUM    : String(30) @title : 'Charateristic Name';
         key CHARVAL_NUM : String(70) @title : 'Charateristic Value';

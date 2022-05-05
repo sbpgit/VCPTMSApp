@@ -10,7 +10,7 @@ const conn_params_container = {
   uid: cds.env.requires.db.credentials.user,     //cds userid environment variable
   pwd: cds.env.requires.db.credentials.password, //cds password environment variable
   encrypt: "TRUE",
- // ssltruststore: cds.env.requires.hana.credentials.certificate,
+  //ssltruststore: cds.env.requires.hana.credentials.certificate,
 };
 
 const conn = hana.createConnection()
@@ -47,6 +47,7 @@ class GenTimeseries {
     const lStartTime = new Date();
     this.logger.info("Started timeseries Service");
 
+    let lDate = new Date();
     let lStartDate = new Date(lDate.getFullYear(), lDate.getMonth(), lDate.getDate() - adata.PAST_DAYS);
 
     // Get Sales Count Information
@@ -55,8 +56,8 @@ class GenTimeseries {
               FROM V_ORD_COUNT
               WHERE "LOCATION_ID" = '` + adata.LOCATION_ID + `'
               AND "PRODUCT_ID" = '` + adata.PRODUCT_ID + `'
-              AND "WEEK_DATE" >= '` + lStartDate + `'
-              AND "WEEK_DATE" <= '` +GenF .getCurrentDate() + `'
+              AND "WEEK_DATE" >= '` + lStartDate.toISOString().split('T')[0] + `'
+              AND "WEEK_DATE" <= '` + GenF.getCurrentDate() + `'
               ORDER BY 
                   "LOCATION_ID" ASC, 
                   "PRODUCT_ID" ASC,
@@ -70,7 +71,7 @@ class GenTimeseries {
           // For every change in Week Date
          await this.insertInitialTS(liSalesCount[i].LOCATION_ID, liSalesCount[i].PRODUCT_ID, liSalesCount[i].WEEK_DATE);
 
-        // For every change in Product
+         // For every change in Product
         if ( i === 0 ||
             liSalesCount[i].LOCATION_ID !== liSalesCount[GenF.subOne(i, liSalesCount.length)].LOCATION_ID ||
             liSalesCount[i].PRODUCT_ID  !== liSalesCount[GenF.subOne(i, liSalesCount.length)].PRODUCT_ID) {
@@ -84,6 +85,21 @@ class GenTimeseries {
                                  AND PRODUCT_ID  = '` + liSalesCount[i].PRODUCT_ID  + `'`
                 );
 
+                // Get New Prodcuts
+                liNewProd = await cds.run(
+                    `SELECT DISTINCT *
+                                FROM "CP_NEWPROD_INTRO"
+                               WHERE LOCATION_ID = '` + liSalesCount[i].LOCATION_ID + `'
+                                 AND REF_PRODID  = '` + liSalesCount[i].PRODUCT_ID  + `'`
+                );
+
+                // Get New Prodcuts Characteristics
+                liNewProdChar = await cds.run(
+                    `SELECT DISTINCT *
+                                FROM "CP_NEWPROD_CHAR"
+                               WHERE LOCATION_ID = '` + liSalesCount[i].LOCATION_ID + `'
+                                 AND REF_PRODID  = '` + liSalesCount[i].PRODUCT_ID  + `'`
+                );
        }
 
         await this.processODChar(liSalesCount[i].LOCATION_ID, liSalesCount[i].PRODUCT_ID, liSalesCount[i].WEEK_DATE, liSalesCount[i].ORD_QTY, liODCharTemp );
@@ -91,10 +107,7 @@ class GenTimeseries {
 
         this.logger.info("Processed Date " + liSalesCount[i].WEEK_DATE);
     }    
-
-
-
-
+    
     this.logger.info("Process Completed");
 
 /*
@@ -625,7 +638,7 @@ async insertInitialTS(lLocation, lProduct, lDate) {
         sqlStr= 
             conn.prepare(`DELETE FROM "CP_TS_OBJDEP_CHARHDR" WHERE LOCATION_ID = '`+ lLocation +`'
                                                                AND PRODUCT_ID = '`+ lProduct +`'
-                                                               AND WEEK_DATE  = '`+ lDate +`'`);
+                                                               AND CAL_DATE  = '`+ lDate +`'`);
         sqlStr.exec();
         sqlStr.drop();        
       } catch (error) {
@@ -634,9 +647,9 @@ async insertInitialTS(lLocation, lProduct, lDate) {
     
       try {
           sqlStr= 
-        conn.prepare(`DELETE FROM "CP_TS_OBJDEPHDR" WHERE WHERE LOCATION_ID = '`+ lLocation +`'
-                                                            AND PRODUCT_ID = '`+ lProduct +`'
-                                                            AND WEEK_DATE  = '`+ lDate +`'`);
+        conn.prepare(`DELETE FROM "CP_TS_OBJDEPHDR" WHERE LOCATION_ID = '`+ lLocation +`'
+                                                      AND PRODUCT_ID = '`+ lProduct +`'
+                                                      AND CAL_DATE  = '`+ lDate +`'`);
         sqlStr.exec();
         sqlStr.drop();           
       } catch (error) {

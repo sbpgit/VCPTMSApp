@@ -12,6 +12,7 @@
     "@sap/cds-dk": "^4.9.2",
     "@sap/cds-mtx": "^2.5.1",
     "@sap/cds-odata-v2-adapter-proxy": "^1.8.11",
+    "@sap/hana-client": "^2.12.22",
     "@sap/hdi-deploy": "^4.2.0",
     "@sap/jobs-client": "^1.6.3",
     "@sap/xsenv": "^3.2.2",
@@ -22,6 +23,7 @@
     "debug": "^4.3.2",
     "express": "^4.17.3",
     "hana-cli": "^3.202203.3",
+    "hdb": "^0.19.0",
     "https": "^1.0.0",
     "passport": "^0.5.2",
     "qs": "^6",
@@ -29,8 +31,7 @@
     "request-promise": "^4.2.6",
     "sap-cf-mailer": "0.0.5",
     "sync": "^0.2.5",
-    "uuid": "^8.3.2",
-    "hdb": "^0.19.0"
+    "uuid": "^8.3.2"
   },
   "engines": {
     "node": "^12 || ^14"
@@ -111,7 +112,7 @@
         ]
       },
       "db": {
-        "kind": "hana-cloud",
+        "kind": "hana",
         "pool": {
           "acquireTimeoutMillis": 120000,
           "evictionRunIntervalMillis": 120000,
