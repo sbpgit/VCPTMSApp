@@ -39,7 +39,7 @@ exports._runHgbtRegressionsV1 = async function(req) {
 exports._updateHgbtGroupParamsV1 = function(req) {
     const hgbtGroupParams = req.data.regressionParameters;
 
-    console.log('_updateHgbtGroupParamsV1: ', hgbtGroupParams);         
+    // console.log('_updateHgbtGroupParamsV1: ', hgbtGroupParams);         
 
 
     var conn = hana.createConnection();
@@ -284,7 +284,7 @@ exports._updateHgbtGroupDataV1 = function(req) {
         sqlStr = "INSERT INTO PAL_HGBT_DATA_GRP_TAB_12T(GROUP_ID,ATT1,ATT2,ATT3,ATT4,ATT5,ATT6,ATT7,ATT8,ATT9,ATT10,ATT11,ATT12,TARGET) VALUES(?, ?, ?, ?, ?,?,?,?,?,?,?,?,?,?)";
         stmt = conn.prepare(sqlStr);
     }
-    console.log(' _updateHgbtGroupData sqlStr ', sqlStr);
+    // console.log(' _updateHgbtGroupData sqlStr ', sqlStr);
 
     stmt.execBatch(tableObj);
     stmt.drop();
@@ -299,7 +299,7 @@ exports._runRegressionHgbtGroupV1 = async function(req) {
     var hgbtType = req.data.hgbtType;
     var hgbtModelVersion = req.data.modelVersion;
 
-    console.log('Executing HGBT Regression at GROUP REQ HGBT Model Version', hgbtModelVersion);
+    // console.log('Executing HGBT Regression at GROUP REQ HGBT Model Version', hgbtModelVersion);
 
     var hgbtDataTable;
     if (hgbtType == 1)
@@ -436,7 +436,7 @@ exports._runRegressionHgbtGroupV1 = async function(req) {
         sqlStr = 'call HGBT_MAIN_11T(' + hgbtDataTable + ', ?,?,?,?,?)';
     else if (hgbtType == 12)
         sqlStr = 'call HGBT_MAIN_12T(' + hgbtDataTable + ', ?,?,?,?,?)';
-    console.log('_runRegressionHgbtGroup sqlStr',sqlStr);
+    // console.log('_runRegressionHgbtGroup sqlStr',sqlStr);
 
     stmt=conn.prepare(sqlStr);
     var modelResults=stmt.exec();
@@ -531,7 +531,7 @@ exports._runRegressionHgbtGroupV1 = async function(req) {
     var createtAtObj = new Date();
     var idObj = uuidv1();
 
-    console.log("_runRegressionHgbtGroupV1 location ", req.data.Location, " product ", req.data.Product);
+    // console.log("_runRegressionHgbtGroupV1 location ", req.data.Location, " product ", req.data.Product);
 
 
     let cqnQuery = {INSERT:{ into: { ref: ['CP_PALHGBTREGRESSIONSV1'] }, entries: [
@@ -593,7 +593,7 @@ exports._runRegressionHgbtGroupV1 = async function(req) {
         let paramsGroupObj = [];
         let impGroupObj = [];
         let paramSelectionGroupObj = [];
-        console.log("GROUP_ID ", inGroups[grpIndex]);
+        // console.log("GROUP_ID ", inGroups[grpIndex]);
 
         
         for (let i = 0; i < regressionParameters.length; i++)
@@ -656,7 +656,7 @@ exports._runRegressionHgbtGroupV1 = async function(req) {
         let location = grpStr[3];
         let product = grpStr[4];
 
-        console.log("_runRegressionHgbtGroupV1  grpStr ", grpStr, "profileID ",profileID, "type ", type, "GroupId ",GroupId, " location ", location, " product ", product);
+        // console.log("_runRegressionHgbtGroupV1  grpStr ", grpStr, "profileID ",profileID, "type ", type, "GroupId ",GroupId, " location ", location, " product ", product);
 
         var rowObj = {   hgbtGroupID: idObj, 
             //createdAt : createtAtObj, 
@@ -688,7 +688,7 @@ exports._runRegressionHgbtGroupV1 = async function(req) {
                     "'" + hgbtModelVersion + "'" + "," +
                     "'" + profileID  + "'" + ')' + ' WITH PRIMARY KEY';
             
-        console.log("CP_OD_MODEL_VERSIONS HGBT sql update sqlStr", sqlStr);
+        // console.log("CP_OD_MODEL_VERSIONS HGBT sql update sqlStr", sqlStr);
 
         await cds.run(sqlStr);
         // stmt=conn_container.prepare(sqlStr);
@@ -1062,7 +1062,7 @@ exports._runPredictionHgbtGroupV1 = async function(req) {
     var scenario = req.data.Scenario;
     var modelVersion = req.data.modelVersion;
 
-    console.log('_runPredictionHgbtGroupV1 hgbtType : ', hgbtType);
+    // console.log('_runPredictionHgbtGroupV1 hgbtType : ', hgbtType);
 
 
     if (hgbtType == 1)
@@ -1099,10 +1099,10 @@ exports._runPredictionHgbtGroupV1 = async function(req) {
     stmt=conn.prepare(sqlStr);
     results=stmt.exec();
     stmt.drop();
-    console.log(results);
+    // console.log(results);
 
     var distinctGroups = results.length;
-    console.log('distinctGroups Count: ', distinctGroups);
+    // console.log('distinctGroups Count: ', distinctGroups);
     
     var predResults = [];			
     for (var index=0; index<distinctGroups; index++)
@@ -1110,7 +1110,7 @@ exports._runPredictionHgbtGroupV1 = async function(req) {
         //var groupId = ruleIds[index];
         var groupId = results[index].GROUP_ID;
 
-        console.log('PredictionHgbt Group: ', groupId);
+        // console.log('PredictionHgbt Group: ', groupId);
         //predictionResults = predictionResults + _runHgbtPrediction(groupId);
         let predictionObj = await hgbtFuncs._runHgbtPredictionV1(hgbtType, groupId, version, scenario,modelVersion);
         //value.push({predictionObj});
@@ -1128,7 +1128,7 @@ exports._runPredictionHgbtGroupV1 = async function(req) {
 
 exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario, modelVersion) {
 
-    console.log('_runHgbtPredictionV1 - group', group, 'Version ', version, 'Scenario ', scenario, 'Model Version', modelVersion);
+    // console.log('_runHgbtPredictionV1 - group', group, 'Version ', version, 'Scenario ', scenario, 'Model Version', modelVersion);
 
     var conn = hana.createConnection();
  
@@ -1619,7 +1619,7 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
 
 
     sqlStr = "call _SYS_AFL.PAL_HGBT_PREDICT(" + "#PAL_HGBT_PREDICTDATA_TAB_" + groupId + "," + "#PAL_HGBT_MODEL_TAB_" + groupId + "," + "#PAL_HGBT_PARAMETER_TAB_" + groupId + "," + "?)";
-    console.log('_runHgbtPredictionV1 hgbtType ', hgbtType);
+    // console.log('_runHgbtPredictionV1 hgbtType ', hgbtType);
 
     console.log('_runHgbtPredictionV1 sqlStr ', sqlStr);
 
@@ -1684,10 +1684,10 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
     // var distPeriods=stmt.exec();
     // stmt.drop();
     var distPeriods = await cds.run(sqlStr);
-    console.log("Time Periods for Group :", tpGroupId, " Results: ", distPeriods, "periods#",distPeriods.length);
+    // console.log("Time Periods for Group :", tpGroupId, " Results: ", distPeriods, "periods#",distPeriods.length);
     var predictedTime = new Date().toISOString();
     var trimmedPeriod = vcConfigTimePeriod.replace(/^(["]*)/g, '');
-    console.log('trimmedPeriod : ', trimmedPeriod, 'vcConfigTimePeriod :', vcConfigTimePeriod);
+    // console.log('trimmedPeriod : ', trimmedPeriod, 'vcConfigTimePeriod :', vcConfigTimePeriod);
 
     for (var index=0; index<distPeriods.length; index++)
     {     
@@ -1706,7 +1706,7 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
                     ' AND "VERSION" = ' + "'" + version + "'" +
                     ' AND "SCENARIO" = ' + "'" + scenario + "'" +
                     ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
-        console.log("V_FUTURE_DEP_TS HGBT SELECT sqlStr ", sqlStr);
+        // console.log("V_FUTURE_DEP_TS HGBT SELECT sqlStr ", sqlStr);
 
         // stmt=conn.prepare(sqlStr);
         // result=stmt.exec();
@@ -1731,7 +1731,7 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
             
             //' WHERE "GroupID" = ' + "'" + groupId + "'" + 
             //' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
-        console.log("V_PREDICTIONS Predicted Value HGBT sql update sqlStr", sqlStr);
+        // console.log("V_PREDICTIONS Predicted Value HGBT sql update sqlStr", sqlStr);
 
         // stmt=conn.prepare(sqlStr);
         // stmt.exec();
@@ -1772,7 +1772,7 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
                     "'" + 'SUCCESS' + "'" + ')' + ' WITH PRIMARY KEY';
             
  
-            console.log("CP_IBP_RESULTPLAN_TS Predicted Value HGBT sql update sqlStr", sqlStr);
+            // console.log("CP_IBP_RESULTPLAN_TS Predicted Value HGBT sql update sqlStr", sqlStr);
 
             // stmt=conn.prepare(sqlStr);
             // stmt.exec();

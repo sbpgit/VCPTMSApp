@@ -1273,7 +1273,7 @@ async function _getRuleListTypeForGenModels(vcRulesList, modelType, numChars)
                         sqlStr = 'SELECT * FROM "CP_PAL_PROFILEMETH_PARA"' +
                             ' WHERE "PROFILE" = ' + "'" + profileID + "'" +
                             ' AND "METHOD" = ' + "'" + modelType + "'";
-                        console.log('sqlStr: ', sqlStr);            
+                        // console.log('sqlStr: ', sqlStr);            
                         // stmt=conn.prepare(sqlStr);
                         // results=stmt.exec();
                         // stmt.drop();
@@ -1726,6 +1726,8 @@ async function _generateRegModels (req,isGet) {
 
 
 //    req.reply();
+console.log('_generateRegModels Start Time',new Date());
+
 
 if (hasCharCount1 == true)
 {
@@ -2336,12 +2338,13 @@ if (hasCharCount1 == true)
     res.statusCode = 201;
     res.send({values});
 */
-   
-    const sleep = require('await-sleep');
-    console.log('_generateRegModels Sleeping for ', 500*vcRulesList.length, ' Milli Seconds');
-    console.log('_generateRegModels Sleep Start Time',new Date());
-    await sleep(500*vcRulesList.length);
-    console.log('_generateRegModels Sleep Completed Time',new Date());
+    console.log('_generateRegModels End Time',new Date());
+
+    // const sleep = require('await-sleep');
+    // console.log('_generateRegModels Sleeping for ', 500*vcRulesList.length, ' Milli Seconds');
+    // console.log('_generateRegModels Sleep Start Time',new Date());
+    // await sleep(500*vcRulesList.length);
+    // console.log('_generateRegModels Sleep Completed Time',new Date());
 
     let dataObj = {};
     dataObj["success"] = true;
