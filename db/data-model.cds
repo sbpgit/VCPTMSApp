@@ -49,6 +49,21 @@ context cp {
             AUTH_GROUP     : String(4)  @title : 'Authorization Group';
     };
 
+    entity PRODUCT_TEMP : managed {
+        key PRODUCT_ID     : String(40) @title : 'Product';
+            PROD_DESC      : String(40) @title : 'Product Description';
+            PROD_FAMILY    : String(30) @title : 'Product Family';
+            PROD_GROUP     : String(30) @title : 'Product Group';
+            PROD_MODEL     : String(30) @title : 'Product Model';
+            PROD_MDLRANGE  : String(30) @title : 'Product Range';
+            PROD_SERIES    : String(30) @title : 'Product Series';
+            RESERVE_FIELD1 : String(20) @title : 'Reserve Field1';
+            RESERVE_FIELD2 : String(20) @title : 'Reserve Field2';
+            RESERVE_FIELD3 : String(20) @title : 'Reserve Field3';
+            RESERVE_FIELD4 : String(20) @title : 'Reserve Field4';
+            RESERVE_FIELD5 : String(20) @title : 'Reserve Field5';
+            AUTH_GROUP     : String(4)  @title : 'Authorization Group';
+    };
     // Product and LOcation table
     entity LOCATION_PRODUCT {
         key LOCATION_ID       : String(4)  @title : 'Location ';

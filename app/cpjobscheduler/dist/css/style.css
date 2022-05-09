@@ -3,6 +3,34 @@
 .boldText {
     font-weight: bold !important;
 }
+.boldunderlineText {
+    font-weight: bold !important;
+    text-decoration: underline !important;
+}
+
+div#container-cpapp\.cpjobscheduler---CreateJob--idRbtn {
+    margin-left: 160px;
+    margin-top: 20px;
+}
+
+
+
+button#__button3 {
+    margin-left: 430px;
+}
+
+h5#__title4 {
+    text-decoration: underline;
+}
+h5#__title5 {
+    text-decoration: underline;
+}
+button#__button6 {
+    margin-left: 485px;
+}
+button#__button5 {
+    margin-left: 200px;
+}
 
 div#container-cpapp\.cpjobscheduler---Home--idTitle {
     margin-left: 500px;

@@ -889,6 +889,7 @@ module.exports = (srv) => {
         if (req.data.FLAG === "C" || req.data.FLAG === "E") {
             for (var i = 0; i < liProdChar.length; i++) {
                 lsresults.PRODUCT_ID = liProdChar[i].PRODUCT_ID;
+                lsresults.LOCATION_ID = liProdChar[i].LOCATION_ID;
                 lsresults.REF_PRODID = liProdChar[i].REF_PRODID;
                 if (req.data.FLAG === "E" && i === 0) {
                     try {

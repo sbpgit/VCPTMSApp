@@ -10,7 +10,7 @@ modules:
       - name: config_products-db
       - name: uaa_config_products
       - name: jobscheduler_inst
-      - name: config_products-destination-content
+      - name: config_products-destination-service
     provides:
       - name: srv-api
         properties:
@@ -28,7 +28,7 @@ modules:
       - name: config_products-db
         properties:
           TARGET_CONTAINER: ~{hdi-service-name}
-      - name: CCL1_ACCESS
+      - name: cross-container-service-1
       #   group: SERVICE_REPLACEMENTS
       #   properties:
       #     key: ServiceName_1
@@ -507,8 +507,13 @@ resources:
       service-plan: hdi-shared
     properties:
       hdi-service-name: ${service-name}
+  # - name: extapi-destination
+  #   type: org.cloudfoundry.existing-service
+  #   parameters:
+  #     service-name: extapi-destination
   - name: config_products-destination-service
-    type: org.cloudfoundry.managed-service
+    type: org.cloudfoundry.existing-service
+    # type: org.cloudfoundry.managed-service
     parameters:
       config:
         HTML5Runtime_enabled: true
@@ -538,7 +543,7 @@ resources:
       service: xsuaa
       service-name: config_products-xsuaa-service
       service-plan: application
-  - name: CCL1_ACCESS
+  - name: cross-container-service-1
     type: org.cloudfoundry.existing-service
     parameters:
       service-name: CCL1_ACCESS

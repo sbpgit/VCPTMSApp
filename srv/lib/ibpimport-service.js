@@ -199,7 +199,220 @@ module.exports = cds.service.impl(async function () {
         return await servicePost.tx(req).get(resUrl)
         // GetExportResult
     });
-    ////
+    // Master data products to IBP
+    this.on("createIBPMasterProd", async (req) => {
+        var oReq = {
+            masterProd: [],
+        },
+            vmasterProd;
+
+        const limasterprod = await cds.run(
+            `
+             SELECT PRODUCT_ID,
+                    PROD_DESC,
+                    PROD_FAMILY,
+                    PROD_GROUP,
+                    PROD_MODEL,
+                    PROD_MDLRANGE,
+                    PROD_SERIES
+               FROM "CP_PRODUCT" `);
+
+        //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
+        for (i = 0; i < limasterprod.length; i++) {
+            vmasterProd = {
+                "VCMODELRANGE": limasterprod[i].PROD_MDLRANGE,
+                "PRDFAMILY": limasterprod[i].PROD_FAMILY,
+                "PRDID": limasterprod[i].PRODUCT_ID,
+                "PRDGROUP": limasterprod[i].PROD_GROUP,
+                "VCMODEL": limasterprod[i].PROD_MODEL,
+                "PRDDESCR": limasterprod[i].PROD_DESC,
+                "PRDSERIES": limasterprod[i].PROD_SERIES
+            };
+            oReq.masterProd.push(vmasterProd);
+
+        }
+        var vTransID = new Date().getTime().toString();
+        var oEntry =
+        {
+            "TransactionID": vTransID,
+            "RequestedAttributes": "VCMODELRANGE,PRDFAMILY,PRDID,PRDGROUP,VCMODEL,PRDDESCR",
+            "DoCommit": true,
+            "NavVCPPRODUCT": oReq.masterProd
+        }
+        await servicePost.tx(req).post("/VCPPRODUCTTrans", oEntry);
+        var resUrl = "/GetExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
+        return await servicePost.tx(req).get(resUrl)
+        // GetExportResult
+    });
+    // Create Locations in IBP
+    this.on("createIBPLocation", async (req) => {
+        var oReq = {
+            newLoc: [],
+        },
+            vNewLoc;
+
+        const linewloc = await cds.run(
+            `
+            SELECT "LOCATION_ID",
+                   "LOCATION_DESC"
+                   FROM "CP_LOCATION" `);
+
+        //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
+        for (i = 0; i < linewloc.length; i++) {
+            vNewLoc = {
+                "LOCID": linewloc[i].LOCATION_ID,
+                "LOCDESCR": linewloc[i].LOCATION_DESC,
+            };
+            oReq.newLoc.push(vNewLoc);
+
+        }
+        var vTransID = new Date().getTime().toString();
+        var oEntry =
+        {
+            "TransactionID": vTransID,
+            "RequestedAttributes": "LOCID,LOCDESCR",
+            "DoCommit": true,
+            "NavVCPLOCATION": oReq.newLoc
+        }
+        await servicePost.tx(req).post("/VCPLOCATIONTrans", oEntry);
+        var resUrl = "/GetExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
+        return await servicePost.tx(req).get(resUrl)
+        // GetExportResult
+    });
+    // Create customer group in IBP
+    this.on("createIBPCustomer", async (req) => {
+        var oReq = {
+            cust: [],
+        },
+            vcust;
+
+        const licust = await cds.run(
+            `
+            SELECT "CUSTOMER_GROUP",
+                   "CUSTOMER_DESC"
+                   FROM "CP_CUSTOMERGROUP" `);
+
+        //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
+        for (i = 0; i < licust.length; i++) {
+            vcust = {
+                "CUSTID": licust[i].CUSTOMER_GROUP,
+                "CUSTDESCR": licust[i].CUSTOMER_DESC,
+            };
+            oReq.cust.push(vcust);
+
+        }
+        var vTransID = new Date().getTime().toString();
+        var oEntry =
+        {
+            "TransactionID": vTransID,
+            "RequestedAttributes": "CUSTID,CUSTDESCR",
+            "DoCommit": true,
+            "NavVCPCUSTOMER": oReq.cust
+        }
+        await servicePost.tx(req).post("/VCPCUSTOMERTrans", oEntry);
+        var resUrl = "/GetExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
+        return await servicePost.tx(req).get(resUrl)
+        // GetExportResult
+    });
+     // Create class in IBP
+     this.on("createIBPClass", async (req) => {
+        var oReq = {
+            class: [],
+        },
+            vclass;
+
+        const liclass = await cds.run(
+            `
+            SELECT CLASS_NUM,
+                    CLASS_NAME,
+                    CHAR_NUM,
+                    CHAR_NAME,
+                    CHAR_VALUE,
+                    CHARVAL_NUM
+                    FROM V_CLASSCHARVAL 
+                WHERE CLASS_NUM = '`+req.data.CLASS_NUM+`'`);
+
+        //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
+        for (i = 0; i < liclass.length; i++) {
+            vclass = {
+                "VCCHAR": liclass[i].CHAR_NUM,  
+                "VCCHARVALUE": liclass[i].CHARVAL_NUM,
+                "VCCLASS": liclass[i].CLASS_NUM,
+                "VCCHARNAME": liclass[i].CHAR_NAME,
+                "VCCHARVALUENAME": liclass[i].CHAR_VALUE,
+                "VCCLASSNAME": liclass[i].CLASS_NAME
+            };
+            oReq.class.push(vclass);
+
+        }
+        var vTransID = new Date().getTime().toString();
+        var oEntry =
+        {
+            "TransactionID": vTransID,
+            "RequestedAttributes": "VCCHAR,VCCHARVALUE,VCCLASS,VCCHARNAME,VCCHARVALUENAME,VCCLASSNAME",
+            "DoCommit": true,
+            "NavVCPCLASS": oReq.class
+        }
+        await servicePost.tx(req).post("/VCPCLASSTrans", oEntry);
+        var resUrl = "/GetExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
+        return await servicePost.tx(req).get(resUrl)
+        // GetExportResult
+    });
+     // Create class in IBP
+     this.on("createIBPSalesTrans", async (req) => {
+        var oReq = {
+            sales: [],
+        },
+            vsales;
+
+        const lisales = await cds.run(
+            `
+            SELECT  sum(ORD_QTY ) as ACTUALDEMD,
+                    "DOC_CREATEDDATE",
+                    "PRODUCT_ID",
+                    "CUSTOMER_GROUP",
+                    "LOCATION_ID"
+                    FROM CP_SALESH 
+                    WHERE LOCATION_ID = '`+req.data.LOCATION_ID+`'
+                       AND PRODUCT_ID = '`+req.data.PRODUCT_ID+
+                    `' AND CUSTOMER_GROUP = '`+req.data.CUSTOMER_GROUP+
+                    `' 
+                GROUP BY "DOC_CREATEDDATE",
+                    "PRODUCT_ID",
+                    "CUSTOMER_GROUP",
+                    "LOCATION_ID"
+                ORDER BY "DOC_CREATEDDATE" desc`);
+
+        //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
+        for (i = 0; i < lisales.length; i++) {
+            var vWeekDate = new Date(lisales[0].DOC_CREATEDDATE).toISOString().split('Z');
+            var vDemd = lisales[i].ACTUALDEMD.split('.');
+            vsales = {
+                "LOCID": lisales[i].LOCATION_ID,
+                "PRDID": lisales[i].PRODUCT_ID,
+                "CUSTID": lisales[i].CUSTOMER_GROUP,
+                "ACTUALDEMAND": vDemd[0],
+                "PERIODID0_TSTAMP":vWeekDate[0]
+            };
+            oReq.sales.push(vsales);
+
+        }
+        var vTransID = new Date().getTime().toString();
+        var oEntry =
+        {
+            "Transactionid": vTransID,
+            "AggregationLevelFieldsString": "LOCID,PRDID,CUSTID,ACTUALDEMAND,PERIODID0_TSTAMP",
+            "VersionID": "",
+            "DoCommit": true,
+            "ScenarioID": "",
+            "NavSBPVCP": oReq.sales
+        }
+        await service.tx(req).post("/SBPVCPTrans", oEntry);
+        var resUrl = "/GetExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
+        return await service.tx(req).get(resUrl)
+        // GetExportResult
+    });
+    //// Future Demand Qty
 
     this.on("generateFDemandQty", async (request) => {
         var flag;
@@ -286,7 +499,7 @@ module.exports = cds.service.impl(async function () {
             }
         }
     });
-    
+
     // Generate char plan
     this.on("generateFCharPlan", async (request) => {
         var flag;

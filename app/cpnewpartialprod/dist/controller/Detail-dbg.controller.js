@@ -697,7 +697,8 @@ sap.ui.define(
                     MessageToast.show("Successfully updated the product");
                   }
 
-                that.createChar();                  
+                that.createChar();  
+                that.createIBPProd();                
                   
                 },
                 error: function (oData) {
@@ -718,6 +719,7 @@ sap.ui.define(
 
                     vRuleslist = {
                         PRODUCT_ID: that.byId("idProd").getValue(),
+                        LOCATION_ID: that.byId("idloc").getValue(),
                         REF_PRODID: that.byId("idrefprod").getValue(),
                         CLASS_NUM:aData[i].CLASS_NUM,            
                         CHAR_NUM:aData[i].CHAR_NUM,            
@@ -735,22 +737,36 @@ sap.ui.define(
                 success: function (oData) {
                   sap.ui.core.BusyIndicator.hide();
                   sap.m.MessageToast.show("success");
-                  that.onBack();
+                 // that.onBack();
                 },
                 error: function (error) {
                   sap.ui.core.BusyIndicator.hide();
                   sap.m.MessageToast.show("Error");
-                  that.onBack();
+                //  that.onBack();
                 },
               });            
           },
-
-
-
-
-
-
-        
+          createIBPProd:function(){            
+            
+            sap.ui.core.BusyIndicator.show();
+            that.getModel("IBPModel").callFunction("/createIBPProduct", {
+                method: "GET",
+                urlParameters: {
+                    LOCATION_ID: that.byId("idloc").getValue(),
+                    PRODUCT_ID: that.byId("idProd").getValue()
+                },
+                success: function (oData) {
+                  sap.ui.core.BusyIndicator.hide();
+                  sap.m.MessageToast.show("Exported product to IBP");
+                  that.onBack();
+                },
+                error: function (error) {
+                  sap.ui.core.BusyIndicator.hide();
+                  sap.m.MessageToast.show("Export product to IBP");
+                  that.onBack();
+                }
+              });            
+          }        
     });
 }
 );

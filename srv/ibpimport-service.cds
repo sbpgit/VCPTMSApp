@@ -12,6 +12,11 @@ service IBPImportSrv @(impl : './lib/ibpimport-service.js') {
     function getFCharPlan() returns String;
     // function getFCharPlan(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), FROMDATE : Date, TODATE : Date) returns String;
     function createIBPProduct(LOCATION_ID : String(4),PRODUCT_ID : String(40)) returns String;
+    function createIBPMasterProd(LOCATION_ID : String(4)) returns String;
+    function createIBPLocation() returns String;
+    function createIBPCustomer() returns String;
+    function createIBPClass(CLASS_NUM: String(18)) returns String;    
+    function createIBPSalesTrans(LOCATION_ID : String(4),PRODUCT_ID : String(40),CUSTOMER_GROUP : String(2)) returns String;
 
 
     action generateFDemandQty(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32));
