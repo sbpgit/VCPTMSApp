@@ -27,6 +27,10 @@ GET http://localhost:4004/jobs/lreadJobDetails(jobId=499941,displaySchedules=tru
 ### READ JOB SCHEDULES LOCALLY
 GET http://localhost:4004/jobs/lreadJobSchedules(jobId=506898)
 
+### READ JOB SCHEDULE LOCALLY
+GET http://localhost:4004/jobs/lreadJobSchedule(jobId=484896,scheduleId='90a07299-d097-47dd-b293-5f06a869c18e',displayLogs=true)
+
+
 ### READ JOB ACTION LOGS LOCALLY
 GET http://localhost:4004/jobs/lreadJobActionLogs(jobId=484896)
 

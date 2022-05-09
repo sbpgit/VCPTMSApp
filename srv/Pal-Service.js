@@ -96,23 +96,23 @@ module.exports = srv => {
     })
 
     srv.on ('generateModels',    async req => {
-        console.log('req.data: ', req.data);   
-        var data = req.data.vcRuleList;
+        // console.log('req.data: ', req.data);   
+        // var data = req.data.vcRuleList;
         return (await _generateRegModels(req,false));   
     })
 
 
     // srv.on ('genPredictions',    async function (req, res) {
     srv.on ('genPredictions',    async req => {
-        console.log('req.data: ', req.data);   
-        var data = req.data.vcRuleList;
+        // console.log('req.data: ', req.data);   
+        // var data = req.data.vcRuleList;
         return (await _generatePredictions(req,false));
         // return (await _generatePredictions(req,res,false));
     })
 
 
     srv.on ('fgModels',    async req => {
-        console.log('req.data: ', req.data.vcRulesList);   
+        // console.log('req.data: ', req.data.vcRulesList);   
         // var data = req.data.vcRuleList;
         return (await _generateRegModels(req,true));   
     })
@@ -120,8 +120,8 @@ module.exports = srv => {
 
     // srv.on ('fgPredictions',    async function (req, res) {
     srv.on ('fgPredictions',    async req => {
-        console.log('req.data: ', req.data);   
-        var data = req.data.vcRuleList;
+        // console.log('req.data: ', req.data);   
+        // var data = req.data.vcRuleList;
         return (await _generatePredictions(req,true));
         // return (await _generatePredictions(req,res,true));
     })
@@ -611,7 +611,7 @@ async function _postPredictionRequest(req,url,paramsObj,numChars,dataObj,modelTy
                     data : errorObj
                     };
 
-                console.log("generatePredictions job update req",updateReq);
+                // console.log("generatePredictions job update req",updateReq);
 
                 scheduler.updateJobRunLog(updateReq, function(err, result) {
                 if (err) {
@@ -737,7 +737,7 @@ async function _generatePredictions(req,isGet) {
 
    const sleep = require('await-sleep');
 
-   console.log('_generatePredictions VC Rules List: ', vcRulesListReq); 
+//    console.log('_generatePredictions VC Rules List: ', vcRulesListReq); 
 
 
     // var conn = hana.createConnection();
@@ -817,7 +817,7 @@ async function _generatePredictions(req,isGet) {
         // stmt.drop();
         results = await cds.run(sqlStr);
         // results = cds.run(sqlStr);
-        console.log('results: ', results);            
+        // console.log('results: ', results);            
 
         for (let index=0; index<results.length; index++) 
         {
@@ -839,13 +839,13 @@ async function _generatePredictions(req,isGet) {
                      ' AND CONCAT("OBJ_DEP", CONCAT(' + "'" + '_' + "'" + ',"OBJ_COUNTER")) =' + "'" +   GroupID + "'" +
                      ' AND "OBJ_TYPE" =' + "'" +   Type + "'" +
                      ' AND "MODEL_VERSION" =' + "'" +   modelVersion + "'"; 
-            console.log('sqlStr: ', sqlStr);            
+            // console.log('sqlStr: ', sqlStr);            
             // stmt = conn.prepare(sqlStr);
             // let mpResults=stmt.exec();
             // stmt.drop();
             let mpResults = await cds.run(sqlStr);
             // let mpResults = cds.run(sqlStr);
-            console.log('mpResults: ', mpResults);            
+            // console.log('mpResults: ', mpResults);            
 
             if (mpResults.length > 0)
             {
@@ -869,12 +869,12 @@ async function _generatePredictions(req,isGet) {
                      ' AND "VERSION" =' + "'" +   vcRulesListReq[index].version + "'" +
                      ' AND "SCENARIO" =' + "'" +   vcRulesListReq[index].scenario + "'" +
                      ' GROUP BY "Location", "Product", "GroupID", "Type", "VERSION", "SCENARIO"';
-            console.log('sqlStr: ', sqlStr);            
+            // console.log('sqlStr: ', sqlStr);            
             // stmt = conn.prepare(sqlStr);
             // results=stmt.exec();
             // stmt.drop();
             results = await cds.run(sqlStr);
-            console.log('results: ', results);            
+            // console.log('results: ', results);            
 
             // results = cds.run(sqlStr);
 
@@ -901,13 +901,13 @@ async function _generatePredictions(req,isGet) {
                      ' AND CONCAT("OBJ_DEP", CONCAT(' + "'" + '_' + "'" + ',"OBJ_COUNTER")) =' + "'" +   GroupID + "'" +
                      ' AND "OBJ_TYPE" =' + "'" +   Type + "'" +
                      ' AND "MODEL_VERSION" =' + "'" +   modelVersion + "'";
-                console.log('sqlStr: ', sqlStr);            
+                // console.log('sqlStr: ', sqlStr);            
                 // stmt = conn.prepare(sqlStr);
                 // let mpResults=stmt.exec();
                 // stmt.drop();
                 let mpResults = await cds.run(sqlStr);
                 // let mpResults = cds.run(sqlStr);
-                console.log('mpResults: ', mpResults);            
+                // console.log('mpResults: ', mpResults);            
 
 
                 if (mpResults.length > 0)
@@ -938,14 +938,14 @@ async function _generatePredictions(req,isGet) {
                     ' AND "Location" =' + "'" +   vcRulesList[i].Location + "'" +
                     ' AND "VERSION" =' + "'" +   vcRulesList[i].Version + "'" +
                     ' AND "SCENARIO" =' + "'" +   vcRulesList[i].Scenario + "'";   
-        console.log('sqlStr: ', sqlStr);            
+        // console.log('sqlStr: ', sqlStr);            
         // stmt=conn.prepare(sqlStr);
         // results=stmt.exec();
         // stmt.drop();
 
         results = await cds.run(sqlStr);
         // results = cds.run(sqlStr);
-        console.log('V_PREDICTION_TS DISTINCT CHARS results: ', results);            
+        // console.log('V_PREDICTION_TS DISTINCT CHARS results: ', results);            
 
         vcRulesList[i].dimensions = results[0].NUMCHARS;
         
@@ -962,7 +962,7 @@ async function _generatePredictions(req,isGet) {
                     ' AND "OBJ_DEP" = ' + "'" + vcRulesList[i].GroupID + "'" +
                     ' AND OBJ_TYPE = ' + "'" + vcRulesList[i].Type + "'" ;
                 //  ' AND "MODELTYPE" = ' + "'" + modelType +"'"; 
-            console.log('sqlStr: ', sqlStr);            
+            // console.log('sqlStr: ', sqlStr);            
             // stmt=conn.prepare(sqlStr);
             // results=stmt.exec();
             // stmt.drop();
@@ -1016,7 +1016,7 @@ async function _generatePredictions(req,isGet) {
                 vcRulesList[i].modelType ="NA"; 
             }
         }
-        console.log(' i = ', i, ' vcRulesList[i].modelType = ',vcRulesList[i].modelType);            
+        // console.log(' i = ', i, ' vcRulesList[i].modelType = ',vcRulesList[i].modelType);            
 
     }
     // conn.disconnect();
@@ -1027,8 +1027,8 @@ async function _generatePredictions(req,isGet) {
    // values.push({id, createtAt, modelType, vcRulesList});    
     values.push({id, createtAt, vcRulesList});    
 
-    console.log('values :', values);
-    console.log('Response completed Time  :', createtAt);
+    // console.log('values :', values);
+    // console.log('Response completed Time  :', createtAt);
 
     if (isGet == true)
     {
@@ -1054,7 +1054,7 @@ async function _generatePredictions(req,isGet) {
 
         var baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
         // var baseUrl = 'http' + '://' + req.headers.host;
-        console.log('_generatePredictions: protocol', req.headers['x-forwarded-proto'], 'hostName :', req.headers.host);
+        // console.log('_generatePredictions: protocol', req.headers['x-forwarded-proto'], 'hostName :', req.headers.host);
         if ( modelType == 'HGBT')
             url =  baseUrl + '/pal/hgbtPredictionsV1';
         else if (modelType == 'RDT')
@@ -1064,7 +1064,7 @@ async function _generatePredictions(req,isGet) {
         else if (modelType == 'VARMA')
             url = baseUrl + '/pal/varmaPredictions';
 
-        console.log('_generatePredictions: url', url);
+        // console.log('_generatePredictions: url', url);
         let dataObj =[];
         if (vcRulesList[i].dimensions == 1)
         {
@@ -1193,14 +1193,14 @@ async function _generatePredictions(req,isGet) {
             data : dataObj
             };
 
-            console.log("generatePredictions job update req",updateReq);
+            // console.log("generatePredictions job update req",updateReq);
 
             scheduler.updateJobRunLog(updateReq, function(err, result) {
             if (err) {
                 return console.log('Error updating run log: %s', err);
             }
             //Run log updated successfully
-            console.log("generatePredictions job update results",result);
+            // console.log("generatePredictions job update results",result);
 
             });
     }
@@ -1303,7 +1303,7 @@ async function _getRuleListTypeForGenModels(vcRulesList, modelType, numChars)
                     sqlStr = 'SELECT * FROM "CP_PAL_PROFILEMETH_PARA"' +
                             ' WHERE "PROFILE" = ' + "'" + vcRulesList[i].profile + "'" +
                             ' AND "METHOD" = ' + "'" + modelType + "'";
-                    console.log('sqlStr: ', sqlStr);            
+                    // console.log('sqlStr: ', sqlStr);            
                     // stmt=conn.prepare(sqlStr);
                     // results=stmt.exec();
                     // stmt.drop();
@@ -1362,7 +1362,7 @@ async function _getParamsObjForGenModels(vcRulesList, modelType, numChars)
                             ' AND "LOCATION_ID" = ' + "'" + vcRulesList[i].Location + "'" + 
                             ' AND "OBJ_DEP" = ' + "'" + vcRulesList[i].GroupID + "'" +
                             ' AND "OBJ_TYPE" = ' + "'" + vcRulesList[i].Type + "'" ;
-            console.log(' _getParamsObjForGenModels sqlStr: ', sqlStr);            
+            // console.log(' _getParamsObjForGenModels sqlStr: ', sqlStr);            
             // stmt=conn.prepare(sqlStr);
             // results=stmt.exec();
             // stmt.drop();
@@ -1372,12 +1372,12 @@ async function _getParamsObjForGenModels(vcRulesList, modelType, numChars)
             if (results.length > 0)
             {
                 profileID = results[0].PROFILE;
-                console.log("_getParamsObjForGenModels CP_PAL_PROFILEOD profileID =  ", profileID);
+                // console.log("_getParamsObjForGenModels CP_PAL_PROFILEOD profileID =  ", profileID);
                 results = [];
 
                 sqlStr = 'SELECT * FROM "CP_PAL_PROFILEMETH_PARA"' +
                             ' WHERE "PROFILE" = ' + "'" + profileID + "'"; 
-                console.log('sqlStr: ', sqlStr);            
+                // console.log('sqlStr: ', sqlStr);            
                 // stmt=conn.prepare(sqlStr);
                 // results=stmt.exec();
                 // stmt.drop();
@@ -1491,7 +1491,7 @@ async function _generateRegModels (req,isGet) {
        vcRulesListReq = req.data.vcRulesList;
    }
 
-   console.log('_generateRegModels vcRulesListReq: ', vcRulesListReq); 
+//    console.log('_generateRegModels vcRulesListReq: ', vcRulesListReq); 
 //    let resp = req._.req.res;
 //    resp.statusCode = 201;
 
@@ -1505,11 +1505,11 @@ async function _generateRegModels (req,isGet) {
     var baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
     // var baseUrl = 'http' + '://' + req.headers.host;
 
-    console.log('_generateRegModels: protocol', req.headers['x-forwarded-proto'], 'hostName :', req.headers.host);
+    // console.log('_generateRegModels: protocol', req.headers['x-forwarded-proto'], 'hostName :', req.headers.host);
 
-    console.log('_generateRegModels: url', url);
+    // console.log('_generateRegModels: url', url);
 
-    console.log('_generateRegModels VC Rules List: ', vcRulesListReq); 
+    // console.log('_generateRegModels VC Rules List: ', vcRulesListReq); 
 
          
     // // var conn = hana.createConnection();
@@ -1597,7 +1597,7 @@ async function _generateRegModels (req,isGet) {
 
         }
         //vcRulesList = JSON.stringify(vcRulesList);
-        console.log('_generateRegModels All Rules List: ', vcRulesList); 
+        // console.log('_generateRegModels All Rules List: ', vcRulesList); 
 
     }
     else
@@ -1611,7 +1611,7 @@ async function _generateRegModels (req,isGet) {
                         ' AND "Type" =' + "'" +   vcRulesListReq[i].Type + "'" +
                         ' GROUP BY "Location", "Product", "GroupID", "Type"' +
                         ' HAVING COUNT(DISTINCT "' + vcConfigTimePeriod + '") > 20';// + 'ORDER BY "WeekOfYear"';   
-            console.log('sqlStr: ', sqlStr);            
+            // console.log('sqlStr: ', sqlStr);            
             // stmt=conn.prepare(sqlStr);
             // results=stmt.exec();
             // stmt.drop();
@@ -1643,7 +1643,7 @@ async function _generateRegModels (req,isGet) {
                     ' AND "GroupID" =' + "'" +   vcRulesList[i].GroupID + "'" +
                     ' AND "Type" =' + "'" +   vcRulesList[i].Type + "'" +
                     ' AND "Location" =' + "'" +   vcRulesList[i].Location + "'";// + 'ORDER BY "WeekOfYear"';   
-        console.log('sqlStr: ', sqlStr);            
+        // console.log('sqlStr: ', sqlStr);            
         // stmt=conn.prepare(sqlStr);
         // results=stmt.exec();
         // stmt.drop();
@@ -1687,8 +1687,8 @@ async function _generateRegModels (req,isGet) {
     //values.push({id, createtAt, modelType, vcRulesList}); 
     values.push({id, createtAt, vcRulesList});    
    
-    console.log('values :', values);
-    console.log('Response completed Time  :', createtAt);
+    // console.log('values :', values);
+    // console.log('Response completed Time  :', createtAt);
 
 //     var res = req._.req.res;
 //     // res.statusCode = 201;
@@ -2361,14 +2361,14 @@ if (hasCharCount1 == true)
             data : dataObj
             };
 
-        console.log("generateModels job update req",updateReq);
+        // console.log("generateModels job update req",updateReq);
 
         scheduler.updateJobRunLog(updateReq, function(err, result) {
         if (err) {
             return console.log('Error updating run log: %s', err);
         }
         //Run log updated successfully
-        console.log("generate Models job update results",result);
+        // console.log("generate Models job update results",result);
 
         });
     }
@@ -2428,7 +2428,7 @@ async function _getDataObjForGenModels(vcRulesList, modelType, numChars) {
                     ' ORDER BY "' + vcConfigTimePeriod + '", "Attribute"';
         }
 
-        console.log('_getDataObjForGenModels sqlStr :',sqlStr, 'i = ', i);
+        // console.log('_getDataObjForGenModels sqlStr :',sqlStr, 'i = ', i);
         // stmt=conn.prepare(sqlStr);
         // results=stmt.exec();
         // stmt.drop();
@@ -2618,7 +2618,7 @@ async function _postRegressionRequest(req,url,paramsObj,numChars,dataObj,modelTy
     let password = "Sbpcorp@22";
     var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
     // console.log("_postRegressionRequest - AUTH", auth);
-    console.log("vcRuleListObj ", vcRuleListObj);
+    // console.log("vcRuleListObj ", vcRuleListObj);
 
     if (modelType == 'HGBT')
     {
@@ -2721,14 +2721,14 @@ async function _postRegressionRequest(req,url,paramsObj,numChars,dataObj,modelTy
                     data : errObj
                     };
 
-                console.log("generateModels job update req",updateReq);
+                // console.log("generateModels job update req",updateReq);
 
                 scheduler.updateJobRunLog(updateReq, function(err, result) {
                 if (err) {
                     return console.log('Error updating run log: %s', err);
                 }
                 //Run log updated successfully
-                console.log("generatePredictions job update results",result);
+                // console.log("generateModels job update results",result);
 
                 });
             }
@@ -2749,7 +2749,7 @@ async function _postRegressionRequest(req,url,paramsObj,numChars,dataObj,modelTy
             var cqnQuery = "";
             if (modelType == 'HGBT')
             {
-                console.log('hgbt regressionsID ', responseData.value[0].hgbtID);
+                // console.log('hgbt regressionsID ', responseData.value[0].hgbtID);
                 cqnQuery = {INSERT:{ into: { ref: ['CP_PALGENREGRESSIONMODELS'] }, entries: [
 
                     {   regressionsID: responseData.value[0].hgbtID, 
@@ -2762,7 +2762,7 @@ async function _postRegressionRequest(req,url,paramsObj,numChars,dataObj,modelTy
             else if (modelType == 'RDT')
             {
   
-                  console.log('rdt regressionsID ', responseData.value[0].rdtID);
+                //   console.log('rdt regressionsID ', responseData.value[0].rdtID);
                   cqnQuery = {INSERT:{ into: { ref: ['CP_PALGENREGRESSIONMODELS'] }, entries: [
   
                       {   regressionsID: responseData.value[0].rdtID, 
@@ -2785,7 +2785,7 @@ async function _postRegressionRequest(req,url,paramsObj,numChars,dataObj,modelTy
             }
             else if (modelType == 'VARMA')
             {
-                console.log('varma ID ', responseData.value[0].varmaID);
+                // console.log('varma ID ', responseData.value[0].varmaID);
                 cqnQuery = {INSERT:{ into: { ref: ['CP_PALGENREGRESSIONMODELS'] }, entries: [
                     {   regressionsID: responseData.value[0].varmaID, 
                         createdAt : responseData.value[0].createdAt, 
@@ -2871,7 +2871,7 @@ async function _postRegressionRequest(req,url,paramsObj,numChars,dataObj,modelTy
                     data : errorObj
                     };
 
-                console.log("generatePredictions job update req",updateReq);
+                // console.log("generatePredictions job update req",updateReq);
 
                 scheduler.updateJobRunLog(updateReq, function(err, result) {
                 if (err) {
