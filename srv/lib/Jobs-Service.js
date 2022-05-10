@@ -156,6 +156,50 @@ module.exports = async function (srv) {
   });
 
 
+  srv.on("lreadJobSchedule", async(req) => {
+    let jobId = req.data.jobId;
+    let scheduleId = req.data.scheduleId;
+    let displayLogs = req.data.displayLogs;
+    console.log('lreadJobSchedule  jobId :', jobId, 'scheduleId :', scheduleId, 'displayLogs :', displayLogs);
+
+
+
+    let lreadJobScheduleUrl = lbaseUrl + 
+    '/jobs/readJobSchedule(jobId='  + jobId + ',' + 'scheduleId=' + "'" + scheduleId + "'" + "," + 'displayLogs='  + displayLogs + ')';
+
+
+    console.log('lreadJobScheduleUrl ', lreadJobScheduleUrl);
+
+    options = {
+        'method': 'GET',
+        'url': lreadJobScheduleUrl, 
+        'headers' : {
+            'Accept': 'application/json',
+            'Accept-Charset': 'utf-8'
+        }   
+    }
+    var values = [];
+    let ret_response ="";
+
+    await request(options, async function (error, response) {
+   
+        console.log('statusCode:', response.statusCode); // Print the response status code if a response was received
+        if (error) 
+        {
+            console.log('lreadJobSchedule - Error ', error);
+            ret_response = JSON.parse(error);
+        }
+        if (response.statusCode == 200)
+        {
+            ret_response = JSON.parse(response.body);
+        }
+    })
+    const sleep = require('await-sleep');
+    await sleep(1000);
+    req.reply(ret_response);
+
+  });
+
   srv.on("lreadJobActionLogs", async(req) => {
     let jobId = req.data.jobId;
 
@@ -559,6 +603,39 @@ srv.on("laddJobSchedule", async req => {
           } else {
             // job was created successfully
             resolve(result.results);
+          }
+        });
+      }
+    });
+  });
+
+  srv.on("readJobSchedule", (req) => {
+    return new Promise((resolve, reject) => {
+      const scheduler = getJobscheduler(req);
+      var displayLogs = false;
+      console.log(" readJobSchedule displayLogs ", req.data.displayLogs);
+
+      if (req.data.displayLogs == 'true')
+      {
+        displayLogs = true;
+      }
+      if (scheduler) {
+        var query = {
+          //by Id
+          jobId: req.data.jobId,
+          scheduleId: req.data.scheduleId,
+          displayLogs: displayLogs
+        };
+
+        console.log(" readJobSchedule query ", query);
+        scheduler.fetchJobSchedule(query, function (err, result) {
+          if (err) {
+            reject(req.error("Error retrieving job schedules"));
+          } else {
+            // job was created successfully
+            console.log("readJobSchedule ", result);
+
+            resolve(result);
           }
         });
       }

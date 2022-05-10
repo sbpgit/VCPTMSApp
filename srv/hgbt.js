@@ -575,7 +575,7 @@ exports._runRegressionHgbtGroupV1 = async function(req) {
     }
 
     //let mlrGroupParams = req.data.regressionParameters;
-    console.log("inGroups ", inGroups, "Number of Groups",inGroups.length);
+    // console.log("inGroups ", inGroups, "Number of Groups",inGroups.length);
     // var conn_container = hana.createConnection();
  
     // conn_container.connect(conn_params_container);
@@ -703,9 +703,9 @@ exports._runRegressionHgbtGroupV1 = async function(req) {
     cqnQuery = {INSERT:{ into: { ref: ['CP_PALHGBTBYGROUP'] }, entries:  tableObj }};
 //    console.log("CP_PALHGBTBYGROUP cQnQuery " , cqnQuery);
 
-    console.log("CP_PALHGBTBYGROUP cqnQuery Start " , new Date());
+    // console.log("CP_PALHGBTBYGROUP cqnQuery Start " , new Date());
     await cds.run(cqnQuery);
-    console.log("CP_PALHGBTBYGROUP cqnQuery Completed " , new Date());
+    // console.log("CP_PALHGBTBYGROUP cqnQuery Completed " , new Date());
 /*cqn
     cqnQuery = {UPDATE:{ entity: 'CP_PALHGBTBYGROUP'},
         data: { createdAt : createtAtObj },
@@ -783,7 +783,7 @@ exports._runHgbtPredictionsV1 = async function(req) {
    stmt=conn.prepare(sqlStr);
    results = stmt.exec();
    stmt.drop();
-   console.log('_runHgbtPredictions - sqlStr : ', sqlStr);            
+//    console.log('_runHgbtPredictions - sqlStr : ', sqlStr);            
 
    var modelExists = results[0].ModelExists;
    console.log('_runHgbtPredictions - modelExists: ', modelExists);            
@@ -1671,7 +1671,7 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
 
     let tpGrpStr=groupId.split('#');
     tpGroupId = tpGrpStr[2] + '#' + tpGrpStr[3] + '#' + tpGrpStr[4];
-    console.log('tpGroupId: ', tpGroupId);            
+    // console.log('tpGroupId: ', tpGroupId);            
 
     sqlStr = 'SELECT DISTINCT ' + '"' + vcConfigTimePeriod + '"' + 
             ' from  V_FUTURE_DEP_TS WHERE  "GroupID" = ' + "'" + tpGroupId + "'" + 
@@ -1864,7 +1864,7 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
                 ' AND "VERSION" = ' + "'" + version + "'" +
                 ' AND "SCENARIO" = ' + "'" + scenario + "'" +
                 ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
-        console.log("V_FUTURE_DEP_TS HGBT SELECT sqlStr ", sqlStr);
+        // console.log("V_FUTURE_DEP_TS HGBT SELECT sqlStr ", sqlStr);
 
         result = [];
 

@@ -6,6 +6,7 @@ service JobsService @(impl : './lib/Jobs-Service.js') {
   function lreadJobs() returns String;
   function lreadJobDetails(jobId : Integer, displaySchedules: Boolean) returns String;
   function lreadJobSchedules(jobId : Integer) returns String;
+  function lreadJobSchedule(jobId : Integer, scheduleId : String, displayLogs: Boolean) returns String;
   function lreadJobActionLogs(jobId : Integer) returns String;
   function lreadJobRunLogs(jobId : Integer, scheduleId : String, page_size : Integer, offset : Integer) returns String;
   function laddMLJob(jobDetails : String) returns String;
@@ -22,6 +23,8 @@ service JobsService @(impl : './lib/Jobs-Service.js') {
   function readJobs() returns array of js.Jobs;
   function readJobDetails(jobId : Integer, displaySchedules: Boolean) returns String;
   function readJobSchedules(jobId : Integer) returns array of js.Schedules;
+  function readJobSchedule(jobId : Integer, scheduleId : String, displayLogs: Boolean) returns String;
+
   function readJobActionLogs(jobId : Integer) returns String; // array of js.ActionLogs;
   function readJobRunLogs(jobId : Integer, scheduleId : String, page_size : Integer, offset : Integer) returns array of js.RunLogs;
   
