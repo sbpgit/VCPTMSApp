@@ -77,6 +77,9 @@
 						<Text text="{i18n>cron}"/>
 					</Column>
                     <Column hAlign="Left" vAlign="Middle">
+						<Text text="{i18n>onetime}"/>
+					</Column>
+                    <Column hAlign="Left" vAlign="Middle">
 						<Text text="{i18n>nextRunAt}"/>
 					</Column>
                     <Column hAlign="Left" vAlign="Middle" >
@@ -84,6 +87,9 @@
 					</Column>
                     <Column hAlign="Left" vAlign="Middle">
 						<Text text="{i18n>endTime}"/>
+					</Column>
+                    <Column hAlign="Left" vAlign="Middle">
+						<Text text=""/>
 					</Column>
                     <Column hAlign="Left" vAlign="Middle">
                         <Text text=""/>
@@ -94,9 +100,11 @@
 						<cells>
 							<Text text="{type}" />
                             <Text text="{cron}"/>
+                            <Text text="{time}"/>
                             <Text text="{nextRunAt}"/>
                             <Text text="{startTime}"/>
                             <Text text="{endTime}"/>
+                            <Button id="idStatus" width="100px" text="Status" tooltip="Schedule status" press="onSchestatus" iconDensityAware="false" type="Emphasized"/>
                             <HBox>
                             <Button id="idscheData" width="50px" icon="sap-icon://display" tooltip="Schedule Data" press="onScheData" iconDensityAware="false" type="Transparent"/>	
                             <Button id="idScheUpdate" width="40px" icon="sap-icon://edit"  press="onScheUpdate" tooltip = "Update Schedule" iconDensityAware="false" type="Transparent"/>					
