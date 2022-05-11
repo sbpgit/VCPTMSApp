@@ -78,13 +78,14 @@ module.exports = cds.service.impl(async function () {
         flag = '';
         for (var i in req) {
             var vWeekDate = dateJSONToEDM(req[i].PERIODID0_TSTAMP);
+            var vScenario = 'BSL_SCENARIO';
             // var vWeekDate = vTstamp.split('T');
             //  if (req[i].LOCID === 'RX01') {
-            let modQuery = 'UPSERT "CP_IBP_FUTUREDEMAND_TEMP" VALUES (' +
+            let modQuery = 'UPSERT "CP_IBP_FUTUREDEMAND" VALUES (' +
                 "'" + req[i].LOCID + "'" + "," +
                 "'" + req[i].PRDID + "'" + "," +
                 "'" + req[i].VERSIONID + "'" + "," +
-                "'" + req[i].SCENARIOID + "'" + "," +
+                "'" + vScenario + "'" + "," +
                 "'" + vWeekDate + "'" + "," +
                 "'" + req[i].PLANNEDINDEPENDENTREQ + "'" + ')' + ' WITH PRIMARY KEY';
             try {
@@ -119,16 +120,17 @@ module.exports = cds.service.impl(async function () {
         flag = '';
         for (var i in req) {
             var vWeekDate = dateJSONToEDM(req[i].PERIODID4_TSTAMP);
+            var vScenario = 'BSL_SCENARIO';
             // var vWeekDate = vTstamp.split('T');
             //  if (req[i].LOCID === 'RX01') {
-            let modQuery = 'UPSERT "CP_IBP_FCHARPLAN_TEMP" VALUES (' +
+            let modQuery = 'UPSERT "CP_IBP_FCHARPLAN" VALUES (' +
                 "'" + req[i].LOCID + "'" + "," +
                 "'" + req[i].PRDID + "'" + "," +
                 "'" + req[i].VCCLASS + "'" + "," +
                 "'" + req[i].VCCHAR + "'" + "," +
                 "'" + req[i].VCCHARVALUE + "'" + "," +
                 "'" + req[i].VERSIONID + "'" + "," +
-                "'" + req[i].SCENARIOID + "'" + "," +
+                "'" + vScenario + "'" + "," +
                 "'" + vWeekDate + "'" + "," +
                 "'" + req[i].OPTIONPERCENTAGE + "'" + "," +
                 "'" + req[i].FINALDEMANDVC + "'" + ')' + ' WITH PRIMARY KEY';
@@ -314,8 +316,8 @@ module.exports = cds.service.impl(async function () {
         return await servicePost.tx(req).get(resUrl)
         // GetExportResult
     });
-     // Create class in IBP
-     this.on("createIBPClass", async (req) => {
+    // Create class in IBP
+    this.on("createIBPClass", async (req) => {
         var oReq = {
             class: [],
         },
@@ -330,12 +332,12 @@ module.exports = cds.service.impl(async function () {
                     CHAR_VALUE,
                     CHARVAL_NUM
                     FROM V_CLASSCHARVAL 
-                WHERE CLASS_NUM = '`+req.data.CLASS_NUM+`'`);
+                WHERE CLASS_NUM = '`+ req.data.CLASS_NUM + `'`);
 
         //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
         for (i = 0; i < liclass.length; i++) {
             vclass = {
-                "VCCHAR": liclass[i].CHAR_NUM,  
+                "VCCHAR": liclass[i].CHAR_NUM,
                 "VCCHARVALUE": liclass[i].CHARVAL_NUM,
                 "VCCLASS": liclass[i].CLASS_NUM,
                 "VCCHARNAME": liclass[i].CHAR_NAME,
@@ -358,8 +360,8 @@ module.exports = cds.service.impl(async function () {
         return await servicePost.tx(req).get(resUrl)
         // GetExportResult
     });
-     // Create class in IBP
-     this.on("createIBPSalesTrans", async (req) => {
+    // Create class in IBP
+    this.on("createIBPSalesTrans", async (req) => {
         var oReq = {
             sales: [],
         },
@@ -373,10 +375,10 @@ module.exports = cds.service.impl(async function () {
                     "CUSTOMER_GROUP",
                     "LOCATION_ID"
                     FROM CP_SALESH 
-                    WHERE LOCATION_ID = '`+req.data.LOCATION_ID+`'
-                       AND PRODUCT_ID = '`+req.data.PRODUCT_ID+
-                    `' AND CUSTOMER_GROUP = '`+req.data.CUSTOMER_GROUP+
-                    `' 
+                    WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
+                       AND PRODUCT_ID = '`+ req.data.PRODUCT_ID +
+            `' AND CUSTOMER_GROUP = '` + req.data.CUSTOMER_GROUP +
+            `' 
                 GROUP BY "DOC_CREATEDDATE",
                     "PRODUCT_ID",
                     "CUSTOMER_GROUP",
@@ -392,7 +394,7 @@ module.exports = cds.service.impl(async function () {
                 "PRDID": lisales[i].PRODUCT_ID,
                 "CUSTID": lisales[i].CUSTOMER_GROUP,
                 "ACTUALDEMAND": vDemd[0],
-                "PERIODID0_TSTAMP":vWeekDate[0]
+                "PERIODID0_TSTAMP": vWeekDate[0]
             };
             oReq.sales.push(vsales);
 
@@ -408,10 +410,300 @@ module.exports = cds.service.impl(async function () {
             "NavSBPVCP": oReq.sales
         }
         await service.tx(req).post("/SBPVCPTrans", oEntry);
-        var resUrl = "/GetExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
-        return await service.tx(req).get(resUrl)
+
+        // var resUrl = "/SBPVCPMessage?$select=Transactionid,ExceptionId,MsgText&$filter=Transactionid eq '" + vTransID + "'";
+        var resUrl = "/getExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
+        var res = await service.tx(req).get(resUrl);
+        return res[0].Value;
+        //return aResponse.MsgText;
+        // var resUrl = "/getExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
+        // return await service.tx(req).get(resUrl)
         // GetExportResult
     });
+    /***************************************************************************/
+    //////////////////////// Services for CF/////////////////////////////////////
+    /**************************************************************************/
+    // Master data products to IBP
+    this.on("exportIBPMasterProd", async (req) => {
+        var oReq = {
+            masterProd: [],
+        },
+            vmasterProd;
+
+        const limasterprod = await cds.run(
+            `
+         SELECT PRODUCT_ID,
+                PROD_DESC,
+                PROD_FAMILY,
+                PROD_GROUP,
+                PROD_MODEL,
+                PROD_MDLRANGE,
+                PROD_SERIES
+           FROM "CP_PRODUCT" `);
+
+        //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
+        for (i = 0; i < limasterprod.length; i++) {
+            vmasterProd = {
+                "VCMODELRANGE": limasterprod[i].PROD_MDLRANGE,
+                "PRDFAMILY": limasterprod[i].PROD_FAMILY,
+                "PRDID": limasterprod[i].PRODUCT_ID,
+                "PRDGROUP": limasterprod[i].PROD_GROUP,
+                "VCMODEL": limasterprod[i].PROD_MODEL,
+                "PRDDESCR": limasterprod[i].PROD_DESC,
+                "PRDSERIES": limasterprod[i].PROD_SERIES
+            };
+            oReq.masterProd.push(vmasterProd);
+
+        }
+        var vTransID = new Date().getTime().toString();
+        var oEntry =
+        {
+            "TransactionID": vTransID,
+            "RequestedAttributes": "VCMODELRANGE,PRDFAMILY,PRDID,PRDGROUP,VCMODEL,PRDDESCR",
+            "DoCommit": true,
+            "NavVCPPRODUCT": oReq.masterProd
+        }
+        await servicePost.tx(req).post("/VCPPRODUCTTrans", oEntry);
+        var resUrl = "/GetExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
+        return await servicePost.tx(req).get(resUrl)
+        // GetExportResult
+    });
+    // Create Locations in IBP
+    this.on("exportIBPLocation", async (req) => {
+        var oReq = {
+            newLoc: [],
+        },
+            vNewLoc;
+
+        const linewloc = await cds.run(
+            `
+        SELECT "LOCATION_ID",
+               "LOCATION_DESC"
+               FROM "CP_LOCATION" `);
+
+        //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
+        for (i = 0; i < linewloc.length; i++) {
+            vNewLoc = {
+                "LOCID": linewloc[i].LOCATION_ID,
+                "LOCDESCR": linewloc[i].LOCATION_DESC,
+            };
+            oReq.newLoc.push(vNewLoc);
+
+        }
+        var vTransID = new Date().getTime().toString();
+        var oEntry =
+        {
+            "TransactionID": vTransID,
+            "RequestedAttributes": "LOCID,LOCDESCR",
+            "DoCommit": true,
+            "NavVCPLOCATION": oReq.newLoc
+        }
+        await servicePost.tx(req).post("/VCPLOCATIONTrans", oEntry);
+        var resUrl = "/GetExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
+        return await servicePost.tx(req).get(resUrl)
+        // GetExportResult
+    });
+    // Create customer group in IBP
+    this.on("exportIBPCustomer", async (req) => {
+        var oReq = {
+            cust: [],
+        },
+            vcust;
+
+        const licust = await cds.run(
+            `
+        SELECT "CUSTOMER_GROUP",
+               "CUSTOMER_DESC"
+               FROM "CP_CUSTOMERGROUP" `);
+
+        //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
+        for (i = 0; i < licust.length; i++) {
+            vcust = {
+                "CUSTID": licust[i].CUSTOMER_GROUP,
+                "CUSTDESCR": licust[i].CUSTOMER_DESC,
+            };
+            oReq.cust.push(vcust);
+
+        }
+        var vTransID = new Date().getTime().toString();
+        var oEntry =
+        {
+            "TransactionID": vTransID,
+            "RequestedAttributes": "CUSTID,CUSTDESCR",
+            "DoCommit": true,
+            "NavVCPCUSTOMER": oReq.cust
+        }
+        await servicePost.tx(req).post("/VCPCUSTOMERTrans", oEntry);
+        var resUrl = "/GetExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
+        return await servicePost.tx(req).get(resUrl)
+        // GetExportResult
+    });
+    // Create class in IBP
+    this.on("exportIBPClass", async (req) => {
+        var oReq = {
+            class: [],
+        },
+            vclass;
+
+        const liclass = await cds.run(
+            `
+        SELECT CLASS_NUM,
+                CLASS_NAME,
+                CHAR_NUM,
+                CHAR_NAME,
+                CHAR_VALUE,
+                CHARVAL_NUM
+                FROM V_CLASSCHARVAL 
+            WHERE CLASS_NUM = '`+ req.data.CLASS_NUM + `'`);
+
+        //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
+        for (i = 0; i < liclass.length; i++) {
+            vclass = {
+                "VCCHAR": liclass[i].CHAR_NUM,
+                "VCCHARVALUE": liclass[i].CHARVAL_NUM,
+                "VCCLASS": liclass[i].CLASS_NUM,
+                "VCCHARNAME": liclass[i].CHAR_NAME,
+                "VCCHARVALUENAME": liclass[i].CHAR_VALUE,
+                "VCCLASSNAME": liclass[i].CLASS_NAME
+            };
+            oReq.class.push(vclass);
+
+        }
+        var vTransID = new Date().getTime().toString();
+        var oEntry =
+        {
+            "TransactionID": vTransID,
+            "RequestedAttributes": "VCCHAR,VCCHARVALUE,VCCLASS,VCCHARNAME,VCCHARVALUENAME,VCCLASSNAME",
+            "DoCommit": true,
+            "NavVCPCLASS": oReq.class
+        }
+        await servicePost.tx(req).post("/VCPCLASSTrans", oEntry);
+        var resUrl = "/GetExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
+        return await servicePost.tx(req).get(resUrl)
+        // GetExportResult
+    });
+    // Create class in IBP
+    this.on("exportIBPSalesTrans", async (req) => {
+        var oReq = {
+            sales: [],
+        },
+            vsales, flag = '';
+
+        const lisales = await cds.run(
+            `
+        SELECT  sum(ORD_QTY ) as ACTUALDEMD,
+                "DOC_CREATEDDATE",
+                "PRODUCT_ID",
+                "CUSTOMER_GROUP",
+                "LOCATION_ID"
+                FROM CP_SALESH 
+                WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
+                   AND PRODUCT_ID = '`+ req.data.PRODUCT_ID +
+            `' AND CUSTOMER_GROUP = '` + req.data.CUSTOMER_GROUP +
+            `' 
+            GROUP BY "DOC_CREATEDDATE",
+                "PRODUCT_ID",
+                "CUSTOMER_GROUP",
+                "LOCATION_ID"
+            ORDER BY "DOC_CREATEDDATE" desc`);
+
+        //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
+        for (i = 0; i < lisales.length; i++) {
+            var vWeekDate = new Date(lisales[0].DOC_CREATEDDATE).toISOString().split('Z');
+            var vDemd = lisales[i].ACTUALDEMD.split('.');
+            vsales = {
+                "LOCID": lisales[i].LOCATION_ID,
+                "PRDID": lisales[i].PRODUCT_ID,
+                "CUSTID": lisales[i].CUSTOMER_GROUP,
+                "ACTUALDEMAND": vDemd[0],
+                "PERIODID0_TSTAMP": vWeekDate[0]
+            };
+            oReq.sales.push(vsales);
+
+        }
+        var vTransID = new Date().getTime().toString();
+        var oEntry =
+        {
+            "Transactionid": vTransID,
+            "AggregationLevelFieldsString": "LOCID,PRDID,CUSTID,ACTUALDEMAND,PERIODID0_TSTAMP",
+            "VersionID": "",
+            "DoCommit": true,
+            "ScenarioID": "",
+            "NavSBPVCP": oReq.sales
+        }
+        await service.tx(req).post("/SBPVCPTrans", oEntry);
+
+        // var resUrl = "/SBPVCPMessage?$select=Transactionid,ExceptionId,MsgText&$filter=Transactionid eq '" + vTransID + "'";
+        var resUrl = "/getExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
+        try {
+            await service.tx(req).get(resUrl);
+            flag = 'X';
+        }
+        catch{
+
+        }
+        if (flag === 'X') {
+            let dataObj = {};
+            dataObj["success"] = true;
+            dataObj["message"] = "Import of IBP Future char.plan data is successfull at " + new Date();
+
+
+            if (req.headers['x-sap-job-id'] > 0) {
+                const scheduler = getJobscheduler(req);
+
+                var updateReq = {
+                    jobId: req.headers['x-sap-job-id'],
+                    scheduleId: req.headers['x-sap-job-schedule-id'],
+                    runId: req.headers['x-sap-job-run-id'],
+                    data: dataObj
+                };
+
+                console.log("Sales History has exported to update req", updateReq);
+
+                scheduler.updateJobRunLog(updateReq, function (err, result) {
+                    if (err) {
+                        return console.log('Error updating run log: %s', err);
+                    }
+                    //Run log updated successfully
+                    console.log("Sales History export job update results", result);
+
+                });
+            }
+            //return "Successfully imported IBP Future char.plan";
+        } else {
+            let dataObj = {};
+            dataObj["failed"] = false;
+            dataObj["message"] = "Sales History export has failed at" + new Date();
+
+
+            if (req.headers['x-sap-job-id'] > 0) {
+                const scheduler = getJobscheduler(req);
+
+                var updateReq = {
+                    jobId: req.headers['x-sap-job-id'],
+                    scheduleId: req.headers['x-sap-job-schedule-id'],
+                    runId: req.headers['x-sap-job-run-id'],
+                    data: dataObj
+                };
+
+                console.log("Sales History export job update req", updateReq);
+
+                scheduler.updateJobRunLog(updateReq, function (err, result) {
+                    if (err) {
+                        return console.log('Error updating run log: %s', err);
+                    }
+                    //Run log updated successfully
+                    console.log("Sales History export job update results", result);
+
+                });
+            }
+            // return "Failed to import IBP Future char.plan";
+        }
+        // GetExportResult
+    });
+
+
+
     //// Future Demand Qty
 
     this.on("generateFDemandQty", async (request) => {
@@ -449,7 +741,7 @@ module.exports = cds.service.impl(async function () {
             dataObj["message"] = "Import of IBP Demand data is successfull at " + new Date();
 
 
-            if (req.headers['x-sap-job-id'] > 0) {
+           // if (req.headers['x-sap-job-id'] > 0) {
                 const scheduler = getJobscheduler(req);
 
                 var updateReq = {
@@ -469,7 +761,7 @@ module.exports = cds.service.impl(async function () {
                     console.log("IBP Demand import job update results", result);
 
                 });
-            }
+          //  }
         } else {
             let dataObj = {};
             dataObj["failed"] = false;
@@ -503,9 +795,13 @@ module.exports = cds.service.impl(async function () {
     // Generate char plan
     this.on("generateFCharPlan", async (request) => {
         var flag;
-        // var vFromDate = request.data.FromDate.toISOString();
-        // var vToDate = request.data.ToDate.toISOString();
-        var resUrl = "/SBPVCP?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and VERSIONID eq '" + request.data.VERSION + "' and SCENARIOID eq '" + request.data.SCENARIO + "' and PERIODID4_TSTAMP gt datetime'2022-04-01T00:00:00' and PERIODID4_TSTAMP lt datetime'2022-06-30T00:00:00' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
+        var vFromDate = request.data.FromDate.toISOString();
+        var vToDate = request.data.ToDate.toISOString();
+        var vNextMonthDate = GenF.addMonths(vFromDate, 1).toISOString();
+        while (vNextMonthDate < vToDate) {            
+            var resUrl = "/SBPVCP?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and VERSIONID eq '" + request.data.VERSION + "' and SCENARIOID eq '" + request.data.SCENARIO + "' and PERIODID4_TSTAMP gt datetime'2022-04-01T00:00:00' and PERIODID4_TSTAMP lt datetime'2022-06-30T00:00:00' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
+            vNextMonthDate = GenF.addMonths(vNextMonthDate, 1).toISOString();    
+        }
         var req = await service.tx(req).get(resUrl);
         const dateJSONToEDM = jsonDate => {
             const content = /\d+/.exec(String(jsonDate));

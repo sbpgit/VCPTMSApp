@@ -216,4 +216,10 @@ service CatalogService @(impl : './lib/cat-service.js') {
     // Maintain partial configurations
     function maintainNewProdChar(FLAG : String(1), 
     PRODCHAR : String ) returns String;
+
+// Timeseries for job creation
+    action generateTimeseries(LOCATION_ID : String(4), PRODUCT_ID : String(40),PAST_DAYS : Integer);
+    // Generate Timeseries
+    action generateTimeseriesF(LOCATION_ID : String(4), PRODUCT_ID : String(40)) ;
+       
 }
