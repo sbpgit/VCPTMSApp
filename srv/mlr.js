@@ -730,9 +730,17 @@ exports._runRegressionMlrGroup = async function(req) {
             optimalParamOp : paramSelectionGroupObj};
         tableObj.push(rowObj);
         
-        let objStr=GroupId.split('_');
-        let obj_dep = objStr[0];
-        let obj_counter = objStr[1];
+        // let objStr=GroupId.split('_');
+        // let obj_dep = objStr[0];
+        // let obj_counter = objStr[1];
+        let objStr = GroupId;
+
+        let lastIndex = objStr.lastIndexOf('_');
+        let obj_dep = objStr.slice(0, lastIndex);
+        // console.log(obj_dep);
+
+        let obj_counter = objStr.slice(lastIndex + 1);
+        // console.log(obj_counter); 
 
         sqlStr = 'UPSERT "CP_OD_MODEL_VERSIONS" VALUES (' +
                     "'" + location + "'" + "," +
