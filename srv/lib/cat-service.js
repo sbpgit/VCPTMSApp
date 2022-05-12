@@ -17,10 +17,43 @@ const conn_params_container = {
     uid: cds.env.requires.db.credentials.user, //cds userid environment variable
     pwd: cds.env.requires.db.credentials.password, //cds password environment variable
     encrypt: "TRUE",
-  //  ssltruststore: cds.env.requires.hana.credentials.certificate,
+    //  ssltruststore: cds.env.requires.hana.credentials.certificate,
 };
 
 module.exports = (srv) => {
+    // srv.
+    srv.after('READ', 'getLocation', async (data, req) => {
+        vUser = req.headers['x-username'];
+        const li_roleparam = await cds.run(
+            `
+            SELECT * FROM "V_USERROLE"
+            WHERE "USER" = '`+ vUser + `'
+            AND PARAMETER = 'LOCATION_ID'`
+        );
+        // var cnRs = 0;
+        //     return data.map(async data => {
+        //         const li_roleparam = await cds.run(
+        //             `
+        //             SELECT * FROM "V_USERROLE"
+        //             WHERE "USER" = '`+vUser+`'
+        //             AND "PARAMETER_VAL" = '`+data.LOCATION_ID+`'
+        //             AND "PARAMETER" = 'LOCATION_ID'`
+        //         );
+        //         if(li_roleparam.length === 0){
+
+        //             req.results.splice(cnRs, 1);
+        //         }
+        //         cr++;
+        //       })
+
+        for (var cnRs = req.results.length - 1; cnRs >= 0; cnRs--) {
+            for (var cnRL = 0; cnRL < li_roleparam.length; cnRL++) {
+                if (li_roleparam[cnRL].PARAMETER_VAL !== req.results[cnRs].LOCATION_ID) {
+                    req.results.splice(cnRs, 1);
+                }
+            }
+        }
+    })
     // Service for weekly component requirements- assembly
     srv.on("getCompReqFWeekly", async (req) => {
         let vDateFrom = req.data.FROMDATE; //"2022-03-04";
@@ -273,11 +306,6 @@ module.exports = (srv) => {
         }
         return liCompWeekly;
     });
-    //   srv.on("CREATE", "getProfiles", _createProfiles);
-
-    //   srv.on("CREATE", "genProfileParam", _createProfileParameters);
-
-    //   srv.on("CREATE", "genProfileOD", _createProfileOD);
     // Create profiles
     srv.on("createProfiles", async (req) => {
         let liProfiles = [];
@@ -918,6 +946,7 @@ module.exports = (srv) => {
         else if (req.data.FLAG === "D") {
             for (var i = 0; i < liProdChar.length; i++) {
                 lsresults.PRODUCT_ID = liProdChar[i].PRODUCT_ID;
+                lsresults.LOCATION_ID = liProdChar[i].LOCATION_ID;
                 lsresults.REF_PRODID = liProdChar[i].REF_PRODID;
                 if (req.data.FLAG === "E" && i === 0) {
                     try {
@@ -932,6 +961,18 @@ module.exports = (srv) => {
         lsresults = {};
         return responseMessage;
     });
+
+    // Generate Timeseries using action call
+    srv.on("generateTimeseries", async (req) => {
+        const obgenTimeseries = new GenTimeseries();
+        await obgenTimeseries.genTimeseries(req.data);
+        console.log("test");
+    });
+    srv.on("generateTimeseriesF", async (req) => {
+        const obgenTimeseries = new GenTimeseries();
+        await obgenTimeseries.genTimeseriesF(req.data);
+        console.log("test");
+    });
     // Generate Timeseries
     srv.on("generate_timeseries", async (req) => {
         const obgenTimeseries = new GenTimeseries();
@@ -944,48 +985,3 @@ module.exports = (srv) => {
         console.log("test");
     });
 };
-// module.exports = cds.service.impl(async function () {
-//     const { VCPTEST } = this.entities;
-//     //  const service = await cdse.connect.to('IBPDemandsrv');
-//     const service = await cds.connect.to('IBPDemandsrv');
-//     this.on('READ', VCPTEST, request => {
-//         try {
-//             return service.tx(request).run(request.query);
-//         }
-//         catch (err) {
-//             console.log(err);
-//         }
-//     });
-//     this.after("READ", VCPTEST, async (req) => {
-//         const { VCPTEST } = this.entities;
-//         const tx = cds.tx(req)
-//         // const iBPData = await cds.run(SELECT.from(VCPTEST));
-//         for (var i in req) {
-//             if (req[i].PLANNEDINDEPENDENTREQ > 0) {
-//                 let modQuery = {
-//                     UPSERT: {
-//                         into: { ref: ['CP_IBP_FUTUREDEMAND_TEMP'] }, entries: [
-//                             {
-//                                 LOCATION_ID: req[i].LOCID,
-//                                 PRODUCT_ID: req[i].PRDID,
-//                                 VERSION: req[i].VERSIONID,
-//                                 SCENARIO: req[i].SCENARIOID,
-//                                 WEEK_DATE: req[i].PERIODID0_TSTAMP,
-//                                 QUANTITY: req[i].PLANNEDINDEPENDENTREQ
-
-//                             }
-//                         ]
-//                     }
-//                 }
-//                 try {
-//                     await cds.run(modQuery);
-//                     // await cds.run(INSERT.into('CP_IBP_FUTUREDEMAND_TEMP') .as (SELECT.from('VCPTEST').where({ PLANNEDINDEPENDENTREQ: { '>': 0 } })));
-//                 }
-//                 catch (err) {
-//                     console.log(err);
-//                 }
-//             }
-//         }
-//     })
-// });
-
