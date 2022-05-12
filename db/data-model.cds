@@ -430,9 +430,10 @@ context cp {
     // Authorization object for roles and its parameters
     entity AUTH_ROLE_OBJ : managed {
         key ROLE_ID       : String(100) @title : 'Role ID';
-        key AUTH_OBJ      : String(100) @title : 'Authorization Object';
+        // key AUTH_OBJ      : String(100) @title : 'Authorization Object';
         key PARAMETER     : String(100) @title : 'Parameter';
         key    PARAMETER_VAL : String(250) @title : 'Parameter';
+        ROLE : Association to many AUTH_EMP_ROLE on ROLE.ROLE_ID = ROLE_ID;
     }
 
     // Roles for a user

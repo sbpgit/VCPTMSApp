@@ -90,8 +90,8 @@
                                     </f:label>
                                     <f:fields>
                                         <CheckBox id="MidCheck" select="onCheck"/>
-                                        <!-- <Button type="Emphasized" text="{i18n>mdlgene}" press="onModelGen" width="100%"/> -->
                                         <Button type="Emphasized" text="{i18n>mdlgene}" press="onModelGen" width="100%"/>
+                                        <!-- <Button type="Emphasized" text="{i18n>mdlgene}" press="onModelGen" width="100%"/> -->
                                     </f:fields>
                                 </f:FormElement>
                             </f:formElements>
@@ -106,7 +106,7 @@
                         <Title text="{i18n>predPanel}"/>
                     </OverflowToolbar>
                 </headerToolbar>
-                <f:Form editable="true">
+                <f:Form editable="true" id="formIdPred">
                     <f:layout>
                         <f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2" singleContainerFullSize="false" />
                     </f:layout>
@@ -176,6 +176,7 @@
                                     </f:label>
                                     <f:fields>
                                         <CheckBox id="PidCheck" select="onCheck"/>
+                                        <!-- <Button type="Emphasized" text="{i18n>predi}" press="onPrediction" width="100%"/> -->
                                         <Button type="Emphasized" text="{i18n>predi}" press="onPrediction" width="100%"/>
                                     </f:fields>
                                 </f:FormElement>
@@ -191,7 +192,7 @@
                         <Title text="{i18n>timeseriesPanel}"/>
                     </OverflowToolbar>
                 </headerToolbar>
-                <f:Form editable="true">
+                <f:Form editable="true" >
                     <f:layout>
                         <f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2" singleContainerFullSize="false" />
                     </f:layout>
@@ -241,18 +242,32 @@
                 <headerToolbar>
                     <OverflowToolbar>
                         <Title text="{i18n>ibpPanel}"/>
+                        <Select id="idIBPselect" change="onIBPSelect" selectedKey="I" width="200px">
+                        <core:ListItem key="I" text="{i18n>import}"/>
+                        <core:ListItem key="E" text="{i18n>export}"/>
+                </Select>
                     </OverflowToolbar>
                 </headerToolbar>
+                
+                
                 <content>
-                <RadioButtonGroup id="idRbtn" columns="2" >
+                <RadioButtonGroup id="idRbtnImport" columns="2" >
                     <RadioButton id="idIBPDemand" text="IBP Demand" />
                     <RadioButton id="idIBPFutPlan" text="IBP Future Plan" />
+                </RadioButtonGroup>
+
+                <RadioButtonGroup id="idRbtnExport" columns="5" select="RadioChange" visible="false">
+                    <RadioButton id="idIBPLoc" text="Location" />
+                    <RadioButton id="idIBPCustGrp" text="Customer Group" />
+                    <RadioButton id="idIBPProd" text="Product" />
+                    <RadioButton id="idIBPClass" text="Class" />
+                    <RadioButton id="idIBPSalesHis" text="Sales History" />
                 </RadioButtonGroup>
 
                 </content>
 
                 <VBox class="sapUiSmallMargin">
-            <f:Form editable="true">
+            <f:Form editable="true" id="IBPimport">
                     <f:layout>
                         <f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2" singleContainerFullSize="false" />
                     </f:layout>
@@ -296,7 +311,90 @@
                     </f:formContainers>
                 </f:Form>
         </VBox>
-        <Button type="Emphasized" text="Create IBP Job" press="onIbpJobCreate" width="10%"/>
+
+        <VBox class="sapUiSmallMargin">
+            <f:Form editable="true" id="IBPProdExport" visible="false">
+                    <f:layout>
+                        <f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2" singleContainerFullSize="false" />
+                    </f:layout>
+                    <f:formContainers>
+                        <f:FormContainer>
+                            <f:formElements>
+                                <f:FormElement>
+                                    <f:label>
+                                        <Label text="{i18n>loc}" required="true"/>
+                                    </f:label>
+                                    <f:fields>
+                                        <Input id="IBPlocInput" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                                    </f:fields>
+                                </f:FormElement>
+                            </f:formElements>
+                        </f:FormContainer>
+                    </f:formContainers>
+                </f:Form>
+        </VBox>
+
+        <VBox class="sapUiSmallMargin">
+            <f:Form editable="true" id="IBPClassExport" visible="false">
+                    <f:layout>
+                        <f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2" singleContainerFullSize="false" />
+                    </f:layout>
+                    <f:formContainers>
+                        <f:FormContainer>
+                            <f:formElements>
+                                <f:FormElement>
+                                    <f:label>
+                                        <Label text="{i18n>class}" required="true"/>
+                                    </f:label>
+                                    <f:fields>
+                                        <Input id="IBPclassInput" placeholder="{i18n>class}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                                    </f:fields>
+                                </f:FormElement>
+                            </f:formElements>
+                        </f:FormContainer>
+                    </f:formContainers>
+                </f:Form>
+        </VBox>
+
+        <VBox class="sapUiSmallMargin">
+            <f:Form editable="true" id="IBPSalesHisExport" visible="false">
+                    <f:layout>
+                        <f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2" singleContainerFullSize="false" />
+                    </f:layout>
+                    <f:formContainers>
+                        <f:FormContainer>
+                            <f:formElements>
+                                <f:FormElement>
+                                    <f:label>
+                                        <Label text="{i18n>loc}" required="true"/>
+                                    </f:label>
+                                    <f:fields>
+                                        <Input id="ExIBPlocInput" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                                    </f:fields>
+                                </f:FormElement>
+                                <f:FormElement>
+                                    <f:label>
+                                        <Label text="{i18n>prod}" required="true"/>
+                                    </f:label>
+                                    <f:fields>
+                                        <MultiInput id="ExIBPprodInput" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
+                                    </f:fields>
+                                </f:FormElement>
+                                <f:FormElement>
+                                    <f:label>
+                                        <Label text="{i18n>salesHis}"/>
+                                    </f:label>
+                                    <f:fields>
+                                        <Input id="ExIBPSalesHis" value="" placeholder="{i18n>salesHis}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                    </f:fields>
+                                </f:FormElement>
+                            </f:formElements>
+                        </f:FormContainer>
+                    </f:formContainers>
+                </f:Form>
+        </VBox>
+        <Button id="idbtImport" type="Emphasized" text="Create IBP Job" press="onIbpJobCreate" width="10%"/>
+        <Button id="idbtExport" type="Emphasized" text="Export Location" press="onIbpJobExport" width="10%" visible="false"/>
 
                 <!-- <f:Form editable="true">
                     <f:layout>

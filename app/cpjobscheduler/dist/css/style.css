@@ -11,13 +11,13 @@
 div#container-cpapp\.cpjobscheduler---CreateJob--idRbtn {
     margin-left: 160px;
     margin-top: 20px;
-}
+} 
 
 
 
-button#__button3 {
+/* button#__button3 {
     margin-left: 430px;
-}
+} */
 
 h5#__title4 {
     text-decoration: underline;
@@ -25,26 +25,26 @@ h5#__title4 {
 h5#__title5 {
     text-decoration: underline;
 }
-button#__button6 {
+/* button#__button6 {
     margin-left: 485px;
 }
 button#__button5 {
     margin-left: 200px;
-}
+} */
 
 div#container-cpapp\.cpjobscheduler---Home--idTitle {
     margin-left: 500px;
 }
 
 /* Time series Button*/
-div#__container3--Grid-wrapperfor-__button2 {
+/* div#__container3--Grid-wrapperfor-__button2 {
     margin-left: 200px;
-}
+} */
 
 /* IBP Import Button*/
-div#__container4--Grid-wrapperfor-__button3 {
+/* div#__container4--Grid-wrapperfor-__button3 {
     margin-left: 255px;
-}
+} */
 
 div#container-cpapp\.cpjobscheduler---CreateJob--idCreateJob-title {
     font-weight: bold;
@@ -73,4 +73,18 @@ div#__title2 {
 
 div#__title3 {
     font-weight: bold;
+} 
+
+
+button#__button7 {
+    margin-left: 475px;
+}
+
+button#__button6 {
+    margin-left: 200px;
+}
+
+
+div#container-cpapp\.cpjobscheduler---CreateJob--idIBPselect {
+    margin-left: 170px;
 }

@@ -13,7 +13,7 @@ const conn_params_container = {
   uid: cds.env.requires.db.credentials.user, //cds userid environment variable
   pwd: cds.env.requires.db.credentials.password, //cds password environment variable
   encrypt: "TRUE"//,
- // ssltruststore: cds.env.requires.hana.credentials.certificate,
+  //ssltruststore: cds.env.requires.hana.credentials.certificate,
 };
 
 const conn = hana.createConnection();
@@ -810,7 +810,7 @@ class GenTimeseries {
                 for (let cntSO = liSales.length - 1; cntSO >= 0; cntSO--) {
                     if(liSales[cntSO].SALES_DOC === iSOIgnore[cntSOI].SALES_DOC &&
                         liSales[cntSO].SALESDOC_ITEM === iSOIgnore[cntSOI].SALESDOC_ITEM){
-                            liSales.splice(cntSO, cntSO);
+                            liSales.splice(cntSO, 1);
                     }
                 }
             }
@@ -1052,12 +1052,8 @@ class GenTimeseries {
       this.logger.info("Date: " + liFutureCharPlan[lFutInd].WEEK_DATE);
       if (
         lFutInd === 0 ||
-        liFutureCharPlan[lFutInd].LOCATION_ID !==
-          liFutureCharPlan[GenF.subOne(lFutInd, liFutureCharPlan.length)]
-            .LOCATION_ID ||
-        liFutureCharPlan[lFutInd].PRODUCT_ID !==
-          liFutureCharPlan[GenF.subOne(lFutInd, liFutureCharPlan.length)]
-            .PRODUCT_ID
+        liFutureCharPlan[lFutInd].LOCATION_ID !== liFutureCharPlan[GenF.subOne(lFutInd, liFutureCharPlan.length)].LOCATION_ID ||
+        liFutureCharPlan[lFutInd].PRODUCT_ID !== liFutureCharPlan[GenF.subOne(lFutInd, liFutureCharPlan.length)].PRODUCT_ID
       ) {
         try {
           var sqlStr =
@@ -1084,7 +1080,7 @@ class GenTimeseries {
             `SELECT DISTINCT *
                         FROM V_RESTRICTION
                        WHERE LOCATION_ID = '` + liFutureCharPlan[lFutInd].LOCATION_ID + `'
-                         AND PRODUCT_ID = '` + liFutureCharPlan[lFutInd].LOCATION_ID + `'
+                         AND PRODUCT_ID = '` + liFutureCharPlan[lFutInd].PRODUCT_ID + `'
                          AND VALID_FROM < '`+ GenF.getCurrentDate() +`'
                          AND VALID_TO >= '`+ GenF.getCurrentDate() +`'`
         );

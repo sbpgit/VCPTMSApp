@@ -17,10 +17,43 @@ const conn_params_container = {
     uid: cds.env.requires.db.credentials.user, //cds userid environment variable
     pwd: cds.env.requires.db.credentials.password, //cds password environment variable
     encrypt: "TRUE",
-  //  ssltruststore: cds.env.requires.hana.credentials.certificate,
+    //  ssltruststore: cds.env.requires.hana.credentials.certificate,
 };
 
 module.exports = (srv) => {
+    // srv.
+    srv.after('READ', 'getLocation', async (data, req) => {
+        vUser = req.headers['x-username'];
+        const li_roleparam = await cds.run(
+            `
+            SELECT * FROM "V_USERROLE"
+            WHERE "USER" = '`+ vUser + `'
+            AND PARAMETER = 'LOCATION_ID'`
+        );
+        // var cnRs = 0;
+        //     return data.map(async data => {
+        //         const li_roleparam = await cds.run(
+        //             `
+        //             SELECT * FROM "V_USERROLE"
+        //             WHERE "USER" = '`+vUser+`'
+        //             AND "PARAMETER_VAL" = '`+data.LOCATION_ID+`'
+        //             AND "PARAMETER" = 'LOCATION_ID'`
+        //         );
+        //         if(li_roleparam.length === 0){
+
+        //             req.results.splice(cnRs, 1);
+        //         }
+        //         cr++;
+        //       })
+
+        for (var cnRs = req.results.length - 1; cnRs >= 0; cnRs--) {
+            for (var cnRL = 0; cnRL < li_roleparam.length; cnRL++) {
+                if (li_roleparam[cnRL].PARAMETER_VAL !== req.results[cnRs].LOCATION_ID) {
+                    req.results.splice(cnRs, 1);
+                }
+            }
+        }
+    })
     // Service for weekly component requirements- assembly
     srv.on("getCompReqFWeekly", async (req) => {
         let vDateFrom = req.data.FROMDATE; //"2022-03-04";
@@ -928,7 +961,7 @@ module.exports = (srv) => {
         lsresults = {};
         return responseMessage;
     });
-    
+
     // Generate Timeseries using action call
     srv.on("generateTimeseries", async (req) => {
         const obgenTimeseries = new GenTimeseries();
