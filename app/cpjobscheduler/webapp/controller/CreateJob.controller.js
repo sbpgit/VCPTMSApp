@@ -189,16 +189,16 @@ sap.ui.define([
                         that.byId("PredPanel").setVisible(true);
                         that.byId("timeSeriesPanel").setVisible(false);
                         that.byId("IbpPanel").setVisible(false);
+                    } else if(key === "T"){
+                        that.byId("modelGenPanel").setVisible(false);
+                        that.byId("PredPanel").setVisible(false);
+                        that.byId("timeSeriesPanel").setVisible(true);
+                        that.byId("IbpPanel").setVisible(false);
                     } else if(key === "I"){
                         that.byId("modelGenPanel").setVisible(false);
                         that.byId("PredPanel").setVisible(false);
                         that.byId("timeSeriesPanel").setVisible(false);
                         that.byId("IbpPanel").setVisible(true);
-                    } else if(key === "P"){
-                        that.byId("modelGenPanel").setVisible(false);
-                        that.byId("PredPanel").setVisible(false);
-                        that.byId("timeSeriesPanel").setVisible(true);
-                        that.byId("IbpPanel").setVisible(false);
                     }
 
                     if(that.oGModel.getProperty("/UpdateSch")=== "X"){
@@ -232,6 +232,7 @@ sap.ui.define([
                         that.byId("timeSeriesPanel").setVisible(false);
                         that.byId("IbpPanel").setVisible(false);
                         that.byId("idJobType").setSelectedKey("M");
+                        sap.ui.getCore().byId("idJobtype").setEnabled(true);
                     }
 		},
 
@@ -292,7 +293,7 @@ sap.ui.define([
             this.oGModel.setProperty("/JobDdesc", that.byId("idJobType").getSelectedItem().getText());
 
         }
-        if(that.oGModel.getProperty("/UpdateSch") === ""){
+        if(that.oGModel.getProperty("/UpdateSch") !== "X"){
             that.byId("MlocInput").setValue("");
             that.byId("MprodInput").setValue("");
             // that.byId("ModInput").setValue("");
@@ -309,11 +310,16 @@ sap.ui.define([
 
             that.byId("IlocInput").setValue("");
             that.byId("IprodInput").setValue("");
-            // that.byId("PodInput").setValue("");
             that.byId("Iidver").setValue("");
             that.byId("Iidscen").setValue("");
-            // that.byId("IprodInput").setValue("");
-            // that.byId("").setValue("");
+
+            that.byId("EPlocInput").setValue("");
+
+            that.byId("IBPclassInput").setValue("");
+
+            that.byId("ESHlocInput").setValue("");
+            that.byId("ESHprodInput").setValue("");
+            that.byId("ECust").setValue("");
 
         }
 
@@ -413,19 +419,19 @@ sap.ui.define([
 
                 that._valueHelpDialogCustDetails.open();
             } else if(sId.includes("classInput")){
-            //     sap.ui.core.BusyIndicator.show();
-            //   // Calling service to get the Customer data
-            // this.getModel("BModel").read("/getClass", {
-            //     success: function (oData) {
-            //       sap.ui.core.BusyIndicator.hide();
-            //       that.classModel.setData(oData);
-            //       that.oClassList.setModel(that.classModel);
-            //     },
-            //     error: function (oData, error) {
-            //       sap.ui.core.BusyIndicator.hide();
-            //       MessageToast.show("error");
-            //     },
-            //   });
+                sap.ui.core.BusyIndicator.show();
+              // Calling service to get the Customer data
+            this.getModel("BModel").read("/getClass", {
+                success: function (oData) {
+                  sap.ui.core.BusyIndicator.hide();
+                  that.classModel.setData(oData);
+                  that.oClassList.setModel(that.classModel);
+                },
+                error: function (oData, error) {
+                  sap.ui.core.BusyIndicator.hide();
+                  MessageToast.show("error");
+                },
+              });
 
                 that._valueHelpDialogClassDetails.open();
             }
@@ -835,7 +841,11 @@ sap.ui.define([
         } else if (sId.includes("CustSlctList")) {
             var aSelectedCust = oEvent.getParameter("selectedItems");
             that.oCust.setValue(aSelectedCust[0].getTitle());
-          }
+            // Scenario List
+        } else if (sId.includes("ClassSlctList")) {
+            var aSelectedCust = oEvent.getParameter("selectedItems");
+            that.oClass.setValue(aSelectedCust[0].getDescription());
+        }
             that.handleClose(oEvent);
           },
 
@@ -1618,9 +1628,9 @@ sap.ui.define([
             var oProdItem,
                 oLocItem,
                 oClassNum,
-                oCustGrpItem
+                oCustGrpItem,
                 i,
-              vRuleslist;;
+              vRuleslist;
 
 
 
@@ -1629,12 +1639,15 @@ sap.ui.define([
 
               if(rRadioBtn === "Location" || rRadioBtn === "Customer Group"){
                 that._valueHelpDialogJobDetail.open();
+                vRuleslist = {};
+                this.oGModel.setProperty("/vcrulesData", vRuleslist);
 
               } else if(rRadioBtn === "Product"){
                 oLocItem = that.oLoc.getValue();
                     vRuleslist = {
                         LOCATION_ID: oLocItem,
                     };
+                    this.oGModel.setProperty("/vcrulesData", vRuleslist);
 
                 that._valueHelpDialogJobDetail.open();
 
@@ -1645,6 +1658,7 @@ sap.ui.define([
                         CLASS_NUM: oClassNum,
                     };
 
+                    this.oGModel.setProperty("/vcrulesData", vRuleslist);
                 that._valueHelpDialogJobDetail.open();
 
               } else if(rRadioBtn === "Sales History"){
@@ -1658,6 +1672,7 @@ sap.ui.define([
                         CUSTOMER_GROUP: oCustGrpItem,
                         DOC_DATE: dDate
                     };
+                    this.oGModel.setProperty("/vcrulesData", vRuleslist);
 
                 that._valueHelpDialogJobDetail.open();
               }
@@ -1786,6 +1801,7 @@ sap.ui.define([
 
             that.oGModel.setProperty("/runText", "");
             sap.ui.getCore().byId("idSTime").setEnabled(true);
+            sap.ui.getCore().byId("idJobtype").setSelectedKey("Cr");
 
 
             that._valueHelpDialogJobDetail.close();
@@ -1935,19 +1951,34 @@ sap.ui.define([
 
 
                 if(that.oGModel.getProperty("/newSch") === "X"){
+                    var oJobType = that.byId("idJobType").getSelectedKey();
+                    if(oJobType === "M" || oJobType === "P"){
 
-                    var finalList = {
-                        jobId:that.oGModel.getProperty("/Jobdata").jobId,
-                            data: {
-                                vcRulesList:vcRuleList
-                            },
-                            cron: Cron,
-                            time: onetime,
-                            // description:"Test Description",
-                            active:true,
-                            startTime: dsSDate,
-                            endTime : dsEDate
-                            }
+                        var finalList = {
+                            jobId:that.oGModel.getProperty("/Jobdata").jobId,
+                                data: {
+                                    vcRulesList:vcRuleList
+                                },
+                                cron: Cron,
+                                time: onetime,
+                                // description:"Test Description",
+                                active:true,
+                                startTime: dsSDate,
+                                endTime : dsEDate
+                                }
+
+                    } else {
+                            var finalList = {
+                                jobId:that.oGModel.getProperty("/Jobdata").jobId,
+                                    data: vcRuleList,
+                                    cron: Cron,
+                                    time: onetime,
+                                    // description:"Test Description",
+                                    active:true,
+                                    startTime: dsSDate,
+                                    endTime : dsEDate
+                                    }
+                    }
 
                     that.getModel("JModel").callFunction("/laddJobSchedule", {
                         method: "GET",
@@ -1970,20 +2001,32 @@ sap.ui.define([
                     });
 
             } else if(that.oGModel.getProperty("/UpdateSch") === "X"){
-
-                var finalList = {
-                    jobId:that.oGModel.getProperty("/Jobdata").jobId,
-                    scheduleId: that.oGModel.getProperty("/aScheUpdate").scheduleId,
-                        data: {
-                            vcRulesList:vcRuleList
-                        },
-                        cron: Cron,
-                        time: onetime,
-                        // description:"Test Description",
-                        active:true,
-                        startTime: dsSDate,
-                        endTime : dsEDate
+                if(oJobType === "M" || oJobType === "P"){
+                    var finalList = {
+                        jobId:that.oGModel.getProperty("/Jobdata").jobId,
+                        scheduleId: that.oGModel.getProperty("/aScheUpdate").scheduleId,
+                            data: {
+                                vcRulesList:vcRuleList
+                            },
+                            cron: Cron,
+                            time: onetime,
+                            // description:"Test Description",
+                            active:true,
+                            startTime: dsSDate,
+                            endTime : dsEDate
                         }
+                } else {
+                    var finalList = {
+                        jobId:that.oGModel.getProperty("/Jobdata").jobId,
+                            data: vcRuleList,
+                            cron: Cron,
+                            time: onetime,
+                            // description:"Test Description",
+                            active:true,
+                            startTime: dsSDate,
+                            endTime : dsEDate
+                            }
+                }
 
                 that.getModel("JModel").callFunction("/lupdateMLJobSchedule", {
                     method: "GET",
@@ -2048,6 +2091,102 @@ sap.ui.define([
                     //     },
                     // });
 
+                } else if(bButton.includes("Location") || bButton.includes("Customer")){
+
+                    var finalList = {
+                        name: JobName,
+                        description:sap.ui.getCore().byId("idDesc").getValue(),
+                        action: actionText,
+                        active:true,
+                        httpMethod: "POST",
+                        startTime: djSdate,
+                        endTime : djEdate,
+                        createdAt:djSdate,
+                        schedules:[
+                            {
+                                data: vcRuleList,
+                                cron: Cron,
+                                time: onetime,
+                                // description:"Test Description",
+                                active:true,
+                                startTime: dsSDate,
+                                endTime : dsEDate
+                            }
+                        ]
+                    }
+
+                } else if(bButton.includes("Product")){
+
+                    var finalList = {
+                        name: JobName,
+                        description:sap.ui.getCore().byId("idDesc").getValue(),
+                        action: actionText,
+                        active:true,
+                        httpMethod: "POST",
+                        startTime: djSdate,
+                        endTime : djEdate,
+                        createdAt:djSdate,
+                        schedules: [
+                            {
+                                data: vcRuleList,
+                                cron: Cron,
+                                time: onetime,
+                                // description:"Test Description",
+                                active:true,
+                                startTime: dsSDate,
+                                endTime : dsEDate
+                            }
+                        ]
+                    }
+
+                } else if(bButton.includes("Class")){
+
+                    var finalList = {
+                        name: JobName,
+                        description:sap.ui.getCore().byId("idDesc").getValue(),
+                        action: actionText,
+                        active:true,
+                        httpMethod: "POST",
+                        startTime: djSdate,
+                        endTime : djEdate,
+                        createdAt:djSdate,
+                        schedules:[
+                            {
+                                data: vcRuleList,
+                                cron: Cron,
+                                time: onetime,
+                                // description:"Test Description",
+                                active:true,
+                                startTime: dsSDate,
+                                endTime : dsEDate
+                            }
+                        ]
+                    }
+
+                } else if(bButton.includes("Sales")){
+
+                    var finalList = {
+                        name: JobName,
+                        description:sap.ui.getCore().byId("idDesc").getValue(),
+                        action: actionText,
+                        active:true,
+                        httpMethod: "POST",
+                        startTime: djSdate,
+                        endTime : djEdate,
+                        createdAt:djSdate,
+                        schedules:[
+                            {
+                                data: vcRuleList,
+                                cron: Cron,
+                                time: onetime,
+                                // description:"Test Description",
+                                active:true,
+                                startTime: dsSDate,
+                                endTime : dsEDate
+                            }
+                        ]
+                    }
+                    
                 } else if(bButton.includes("Time") ){
                     var finalList = {
                         name: JobName,
@@ -2058,7 +2197,7 @@ sap.ui.define([
                         startTime: djSdate,
                         endTime : djEdate,
                         createdAt:djSdate,
-                        schedules:
+                        schedules:[
                             {
                                 data: vcRuleList,
                                 cron: Cron,
@@ -2068,8 +2207,7 @@ sap.ui.define([
                                 startTime: dsSDate,
                                 endTime : dsEDate
                             }
-                        
-                        
+                        ]
                     }
 
 
