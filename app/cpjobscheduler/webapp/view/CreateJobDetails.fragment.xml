@@ -29,21 +29,21 @@
 							<core:ListItem key="F" text="{i18n>false}"/>
 					</Select>                
                     <Label text="{i18n>startTime}"/>
-					<DateTimePicker id="idSTime" width="400px" valueFormat= "yyyy-mm-dd HH:mm" change="handleChange" class="sapUiSmallMarginBottom"/>
+					<DateTimePicker id="idSTime" width="400px" valueFormat= "yyyy-mm-dd HH:mm" change="handleDateChange" class="sapUiSmallMarginBottom"/>
                     <Label text="{i18n>endTime}"/>
-					<DateTimePicker id="idETime" width="400px" valueFormat= "yyyy-mm-dd HH:mm"  change="handleChange" class="sapUiSmallMarginBottom"/>
+					<DateTimePicker id="idETime" width="400px" valueFormat= "yyyy-mm-dd HH:mm"  change="handleDateChange" class="sapUiSmallMarginBottom"/>
 
                     <core:Title text = "Recurring Details:" class ="boldunderlineText"/>
                     
-                    <Label text="{i18n>Job Type}"/>
+                    <Label text="{i18n>jobtype}"/>
                     <VBox>
-                    <Select id="idJobtype" change="onJobTypeChange" selectedKey="Cr" class="buttonDesktop" width="200px">
-							
+                    <Select id="idJobtype" change="onJobTypeChange" selectedKey="Cr" enabled="true" class="buttonDesktop" width="200px">
+							<core:ListItem key="Cr" text="{i18n>cron}"/>
                             <core:ListItem key="Im" text="{i18n>onetime}"/>
-                            <core:ListItem key="Cr" text="{i18n>cron}"/>
+                            
 					</Select>  
                     
-                    <DateTimePicker id="idSchTime" width="400px" valueFormat= "yyyy-mm-dd HH:mm" class="sapUiSmallMarginBottom" visible="false"/>
+                    
                     <HBox id="idCronValues" >
                     <Input id="idmnth" value="" width="80px" placeholder="Month"/>
                     <Input id="iddate" value="" width="80px" placeholder="Date"/>
@@ -59,8 +59,8 @@
 					</Select>  
                     <Input id="idhrs" value="" width="80px" placeholder="Hours"/>
                     <Input id="idmin" value="" width="80px" placeholder="minutes"/>
-
                     </HBox>
+                    <DateTimePicker id="idSchTime" width="400px" valueFormat= "yyyy-mm-dd HH:mm" class="sapUiSmallMarginBottom" visible="false"/>
                     </VBox>
 
 
@@ -77,9 +77,9 @@
 					<Input id="idcron" value="" width="200px"/>
                     </HBox> -->
                     <Label text="{i18n>Schedstarttime}"/>
-					<DateTimePicker id="idSSTime" width="400px" valueFormat= "yyyy-mm-dd HH:mm" change="handleChange" class="sapUiSmallMarginBottom"/>
+					<DateTimePicker id="idSSTime" width="400px" valueFormat= "yyyy-mm-dd HH:mm" change="handleDateChange" class="sapUiSmallMarginBottom"/>
                     <Label text="{i18n>Schedendtime}"/>
-					<DateTimePicker id="idSETime" width="400px" valueFormat= "yyyy-mm-dd HH:mm" change="handleChange" class="sapUiSmallMarginBottom"/>
+					<DateTimePicker id="idSETime" width="400px" valueFormat= "yyyy-mm-dd HH:mm" change="handleDateChange" class="sapUiSmallMarginBottom"/>
 				</f:content>
 			</f:SimpleForm>
 		</VBox>

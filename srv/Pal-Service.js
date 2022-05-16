@@ -1164,9 +1164,9 @@ async function _generatePredictions(req,isGet) {
         }
         // Wait before posting Next Prediction Request
         // It allows CDS (cqn Query) to commit PalMlrPredictions / PalHgbtPredictions / PalVarmaPredictions
-        console.log('_generatePredictions Sleeping for ', dataObj.length*200, ' Milli Seconds');
+        console.log('_generatePredictions Sleeping for ', dataObj.length*500, ' Milli Seconds');
         console.log('_generatePredictions Sleep Start Time',new Date(), 'charcount ', 'index ',i, 'dimensions', vcRulesList[i].dimensions);
-        await sleep(dataObj.length*200);
+        await sleep(dataObj.length*500);
         console.log('_generatePredictions Sleep Completed Time',new Date(), 'charcount ', vcRulesList[i].dimensions);
     }
 
