@@ -1,10 +1,10 @@
 COLUMN TABLE "CP_VC_HISTORY_TS"(
-	"PeriodOfYear" INTEGER,
+	"PeriodOfYear" INTEGER NOT NULL,
 	"Location" NVARCHAR(5) NOT NULL,
 	"Product" NVARCHAR(40) NOT NULL,
 	"Type" NVARCHAR(2) NOT NULL,
 	"GroupID" NVARCHAR(100) NOT NULL,
-	"Row" INTEGER,
+	"Row" INTEGER NOT NULL,
 	"Attribute" NVARCHAR(10) NOT NULL,
 	"CharCount" DOUBLE,
     "CharCountPercent" DOUBLE,
