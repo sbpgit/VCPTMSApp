@@ -1,6 +1,11 @@
 using js from '../db/jobscheduler';
 
 service JobsService @(impl : './lib/Jobs-Service.js') {
+   @readonly
+  entity jobs as projection on js.JOBS;
+  action updateJobs();
+  // KLUDGE function API for Alternate to POST updateJobs()
+  function fUpdateJobs() returns String;
 
 // LOCAL API's for UI purpose
   function lreadJobs() returns String;

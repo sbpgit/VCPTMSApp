@@ -1,6 +1,8 @@
 // const { resolve } = require("@sap/cds");
 const JobSchedulerClient = require("@sap/jobs-client");
 const xsenv = require("@sap/xsenv");
+const { v1: uuidv1} = require('uuid')
+
 // const SapCfMailer = require("sap-cf-mailer").default;
 // const metering = require("./metering");
 // const { executeHttpRequest, getDestination } = require("@sap-cloud-sdk/core");
@@ -33,6 +35,49 @@ function getJobscheduler(req) {
 }
 
 module.exports = async function (srv) {
+
+  srv.on ('updateJobs',    async req => {
+     return (await _updateJobs(req,false));
+  })
+
+  srv.on ('fUpdateJobs',    async req => {
+    return (await _updateJobs(req,true));
+  })
+
+  async function _updateJobs(req,isGet) {
+
+    var reqData = {};
+    // if (isGet == true) //GET -- Kludge
+    // {
+    //     reqData = JSON.parse(req.data);
+    // }
+    // else
+    // {
+    //     reqData = req.data;
+    // }
+
+    console.log("_updateJobs reqData : ", reqData);
+    let createtAt = new Date();
+    let id = uuidv1();
+    let values = [];	
+
+   // values.push({id, createtAt, modelType, vcRulesList});    
+    values.push({id, createtAt, reqData});    
+
+    // console.log('values :', values);
+    // console.log('Response completed Time  :', createtAt);
+
+    if (isGet == true)
+    {
+        req.reply({values});
+    }
+    else
+    {
+        let res = req._.req.res;
+        res.statusCode = 202;
+        res.send({values});
+    }
+  }   
 
   srv.on("lreadJobs", async req => {
     // var request = require('request');
