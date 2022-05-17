@@ -181,6 +181,8 @@ service CatalogService @(impl : './lib/cat-service.js') {
     // Get new product characteristics
     entity getNewProdChar       as projection on od.NEWPROD_CHAR;
 
+    entity getPartialProdchar   as projection on od.PARTIALPROD_CHAR;
+
     
     //Component requirement qunatity determination
     function getCompreqQty(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32))                                                                                                                                                        returns String;
@@ -213,11 +215,14 @@ service CatalogService @(impl : './lib/cat-service.js') {
     function asssignProfilesOD(FLAG : String(1), LOCATION_ID : String(4), PRODUCT_ID : String(40), COMPONENT : String(40), PROFILE : String(50), OBJ_DEP : String(30), STRUC_NODE : String(50))                                                                                  returns String;
     // function for new product introduction
     function maintainNewProd(FLAG : String(1), LOCATION_ID : String(4), PRODUCT_ID : String(40), REF_PRODID : String(40))                                                                                                                                                        returns String;
+    function maintainPartialProd(FLAG : String(1), LOCATION_ID : String(4), PRODUCT_ID : String(40), REF_PRODID : String(40))                                                                                                                                                        returns String;
+    
     function importIBPDemd() returns String;
     // Maintain partial configurations
     function maintainNewProdChar(FLAG : String(1), 
     PRODCHAR : String ) returns String;
-
+    function maintainPartialProdChar(FLAG : String(1), 
+    PRODCHAR : String ) returns String;
 // Timeseries for job creation
     action generateTimeseries(LOCATION_ID : String(4), PRODUCT_ID : String(40),PAST_DAYS : Integer);
     // Generate Timeseries

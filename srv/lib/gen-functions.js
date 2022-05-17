@@ -131,12 +131,13 @@ class GenFunctions {
         return m ? (new Date(+m[1])).toLocaleDateString('en-US', {month: '2-digit', day: '2-digit', year: 'numeric'}) : d;
     }
     static addMonths(imDate, months){
-        var d = imDate.getDate();
-        imDate.setMonth(imDate.getMonth() + +months);
-        if (imDate.getDate() != d) {
-            imDate.setDate(0);
-        }
-        return imDate;
+         var d = new Date(imDate);//.getDate();
+        // imDate.setMonth(imDate.getMonth() + +months);
+        // if (imDate.getDate() != d) {
+        //     imDate.setDate(0);
+        // }
+        var newDate = new Date(d.setMonth(d.getMonth()+months));
+        return newDate;
     }
 }
 
