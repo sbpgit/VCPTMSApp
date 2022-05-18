@@ -1,6 +1,8 @@
 // const { resolve } = require("@sap/cds");
 const JobSchedulerClient = require("@sap/jobs-client");
 const xsenv = require("@sap/xsenv");
+const { v1: uuidv1} = require('uuid')
+
 // const SapCfMailer = require("sap-cf-mailer").default;
 // const metering = require("./metering");
 // const { executeHttpRequest, getDestination } = require("@sap-cloud-sdk/core");
@@ -34,6 +36,179 @@ function getJobscheduler(req) {
 
 module.exports = async function (srv) {
 
+  srv.on ('updateJobs',    async req => {
+     return (await _updateJobs(req,false));
+  })
+
+  srv.on ('fUpdateJobs',    async req => {
+    return (await _updateJobs(req,true));
+  })
+
+  async function _updateJobs(req,isGet) {
+
+    var reqData = {};
+    // if (isGet == true) //GET -- Kludge
+    // {
+    //     reqData = JSON.parse(req.data);
+    // }
+    // else
+    // {
+    //     reqData = req.data;
+    // }
+
+    console.log("_updateJobs reqData : ", reqData);
+    let createtAt = new Date();
+    let id = uuidv1();
+    let values = [];	
+
+   // values.push({id, createtAt, modelType, vcRulesList});    
+    values.push({id, createtAt, reqData});    
+
+    // console.log('values :', values);
+    // console.log('Response completed Time  :', createtAt);
+
+    if (isGet == true)
+    {
+        req.reply({values});
+    }
+    else
+    {
+        let res = req._.req.res;
+        res.statusCode = 202;
+        res.send({values});
+    }
+
+    let readJobsUrl = lbaseUrl + '/jobs/readJobs()';
+
+    options = {
+        'method': 'GET',
+        'url': readJobsUrl, 
+        'headers' : {
+            'Accept': 'application/json',
+            'Accept-Charset': 'utf-8'
+        }   
+    }
+    
+    let ret_response ="";
+
+    await request(options, async function (error, response) {
+   
+        console.log('statusCode:', response.statusCode); // Print the response status code if a response was received
+        if (error) 
+        {
+            console.log('readJobs - Error ', error);
+            ret_response = JSON.parse(error);
+        }
+        if (response.statusCode == 200)
+        {
+            ret_response = JSON.parse(response.body);
+        }
+    })
+    const sleep = require('await-sleep');
+    await sleep(1000);
+    console.log('ret_response.value ', ret_response.value);
+    console.log('length of ret_response.value ', ret_response.value.length);
+
+    let jobScheduleIds = [];
+
+    for (let jobIndex =0; jobIndex <ret_response.value.length; jobIndex ++)
+    {
+
+        let jobId = ret_response.value[jobIndex].jobId;
+
+        console.log('lreadJobSchedules  jobId', jobId);
+
+        let lreadJobSchedulesUrl = lbaseUrl + '/jobs/readJobSchedules(jobId='  + jobId + ')';
+
+        console.log('lreadJobSchedulesUrl ', lreadJobSchedulesUrl);
+
+        options = {
+            'method': 'GET',
+            'url': lreadJobSchedulesUrl, 
+            'headers' : {
+                'Accept': 'application/json',
+                'Accept-Charset': 'utf-8'
+            }   
+        }
+        // var values = [];
+        let ret_sched_response ="";
+
+        await request(options, async function (error, response) {
+    
+            console.log('statusCode:', response.statusCode); // Print the response status code if a response was received
+            if (error) 
+            {
+                console.log('lreadJobSchedules - Error ', error);
+                ret_sched_response = JSON.parse(error);
+            }
+            if (response.statusCode == 200)
+            {
+                ret_sched_response = JSON.parse(response.body);
+            }
+        })
+        const sleep = require('await-sleep');
+        await sleep(1000);
+        // req.reply(ret_sched_response);
+
+        for (let schIndex =0; schIndex <ret_sched_response.value.length; schIndex ++)
+        {
+            let scheduleId = ret_sched_response.value[schIndex].scheduleId;
+            jobScheduleIds.push({jobId,scheduleId});
+
+            let sqlStr = 'UPSERT "JS_JOBS" VALUES (' +
+                "'" + ret_response.value[jobIndex].jobId + "'" + "," +
+                "'" + ret_response.value[jobIndex].name + "'" + "," +
+                "'" + ret_response.value[jobIndex].action + "'" + "," +
+                      ret_response.value[jobIndex].active + "," +
+                "'" + ret_response.value[jobIndex].httpMethod + "'" + "," +
+                "'" + ret_response.value[jobIndex].createdAt + "'" + "," +
+                "'" + ret_response.value[jobIndex].description + "'" + "," +
+                "'" + ret_response.value[jobIndex].jobType + "'" + "," +
+                "'" + ret_response.value[jobIndex].startTime + "'" + "," +
+                "'" + ret_response.value[jobIndex].endTime + "'" + "," +
+                      ret_response.value[jobIndex].ACTIVECOUNT + "," +
+                      ret_response.value[jobIndex].INACTIVECOUNT + "," +
+                      ret_response.value[jobIndex].signatureVersion + "," +
+                "'" + ret_response.value[jobIndex].subDomain + "'" + "," +
+                "'" + ret_response.value[jobIndex].user + "'" + "," +
+                "'" + scheduleId + "'" + ')' + ' WITH PRIMARY KEY';
+                console.log("readjobs sqlStr : ", sqlStr);
+
+                await cds.run(sqlStr);
+        }
+
+    }
+
+    console.log("jobScheduleIds ", jobScheduleIds);
+
+
+    // let sqlStr ="";
+    // for (index =0; index <ret_response.value.length; index ++)
+    // {
+    //     sqlStr = 'UPSERT "JS_JOBS" VALUES (' +
+    //     "'" + ret_response.value[index].jobId + "'" + "," +
+    //     "'" + ret_response.value[index].name + "'" + "," +
+    //     "'" + ret_response.value[index].action + "'" + "," +
+    //           ret_response.value[index].active + "," +
+    //     "'" + ret_response.value[index].httpMethod + "'" + "," +
+    //     "'" + ret_response.value[index].createdAt + "'" + "," +
+    //     "'" + ret_response.value[index].description + "'" + "," +
+    //     "'" + ret_response.value[index].jobType + "'" + "," +
+    //     "'" + ret_response.value[index].startTime + "'" + "," +
+    //     "'" + ret_response.value[index].endTime + "'" + "," +
+    //           ret_response.value[index].ACTIVECOUNT + "," +
+    //           ret_response.value[index].INACTIVECOUNT + "," +
+    //           ret_response.value[index].signatureVersion + "," +
+    //     "'" + ret_response.value[index].subDomain + "'" + "," +
+    //     "'" + ret_response.value[index].user + "'" + ')' + ' WITH PRIMARY KEY';
+    //     console.log("readjobs sqlStr : ", sqlStr);
+
+    //     await cds.run(sqlStr);
+    // }
+
+  }   
+
+  
   srv.on("lreadJobs", async req => {
     // var request = require('request');
     // let baseUrl = "https://sbpprovider-dev-config-products-srv.cfapps.us10.hana.ondemand.com"; 
