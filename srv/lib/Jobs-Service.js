@@ -15,6 +15,7 @@ const { v1: uuidv1} = require('uuid')
 const request = require('request');
 const lbaseUrl = "https://sbpprovider-dev-config-products-srv.cfapps.us10.hana.ondemand.com"; 
 
+
 function getJobscheduler(req) {
 // exports.getJobscheduler = function(req){
 
@@ -44,7 +45,262 @@ module.exports = async function (srv) {
     return (await _updateJobs(req,true));
   })
 
-  async function _updateJobs(req,isGet) {
+async function _updateJobs(req,isGet) {
+
+    var reqData = {};
+
+    console.log("_updateJobs reqData : ", reqData);
+    let createtAt = new Date();
+    let id = uuidv1();
+    let values = [];	
+
+   // values.push({id, createtAt, modelType, vcRulesList});    
+    values.push({id, createtAt, reqData});    
+
+    // console.log('values :', values);
+    // console.log('Response completed Time  :', createtAt);
+
+    if (isGet == true)
+    {
+        req.reply({values});
+    }
+    else
+    {
+        let res = req._.req.res;
+        res.statusCode = 202;
+        res.send({values});
+    }
+
+
+    const baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+    // var baseUrl = 'http' + '://' + req.headers.host;
+    console.log('_generatePredictions: protocol', req.headers['x-forwarded-proto'], 'hostName :', req.headers.host);
+
+    // let readJobsUrl = lbaseUrl + '/jobs/readJobs()';
+    let readJobsUrl = baseUrl + '/jobs/readJobs()';
+
+    options = {
+        'method': 'GET',
+        'url': readJobsUrl, 
+        'headers' : {
+            'Accept': 'application/json',
+            'Accept-Charset': 'utf-8'
+        }   
+    }
+    
+    let ret_response ="";
+
+    await request(options, async function (error, response) {
+   
+        console.log('statusCode:', response.statusCode); // Print the response status code if a response was received
+        if (error) 
+        {
+            console.log('readJobs - Error ', error);
+            ret_response = JSON.parse(error);
+        }
+        if (response.statusCode == 200)
+        {
+            ret_response = JSON.parse(response.body);
+        }
+    })
+
+    const sleep = require('await-sleep');
+    await sleep(1000);
+    console.log('ret_response.value ', ret_response.value);
+    console.log('length of ret_response.value ', ret_response.value.length);
+
+    let jobScheduleIds = [];
+
+    for (let jobIndex =0; jobIndex <ret_response.value.length; jobIndex ++)
+    {
+
+        let jobId = ret_response.value[jobIndex].jobId;
+
+        console.log('lreadJobSchedules  jobId', jobId, 'Name ',ret_response.value[jobIndex].name);
+
+        // let lreadJobSchedulesUrl = lbaseUrl + '/jobs/readJobSchedules(jobId='  + jobId + ')';
+        let lreadJobSchedulesUrl = baseUrl + '/jobs/readJobSchedules(jobId='  + jobId + ')';
+
+        console.log('lreadJobSchedulesUrl ', lreadJobSchedulesUrl);
+
+        options = {
+            'method': 'GET',
+            'url': lreadJobSchedulesUrl, 
+            'headers' : {
+                'Accept': 'application/json',
+                'Accept-Charset': 'utf-8'
+            }   
+        }
+        // var values = [];
+        let ret_sched_response ="";
+        let respAck = false;
+
+        await request(options, async function (error, response) {
+    
+            console.log('statusCode:', response.statusCode); // Print the response status code if a response was received
+            if (error) 
+            {
+                console.log('lreadJobSchedules - Error ', error);
+                ret_sched_response = JSON.parse(error);
+                respAck = true;
+            }
+            if (response.statusCode == 200)
+            {
+                ret_sched_response = JSON.parse(response.body);
+                respAck = true;
+            }
+        })
+        const sleep = require('await-sleep');
+        await sleep(1500);
+        // req.reply(ret_sched_response);
+
+        if (respAck)
+        {
+            console.log("ret_sched_response.length ", ret_sched_response.value.length);
+
+            for (let schIndex =0; schIndex < ret_sched_response.value.length; schIndex ++)
+            {
+                let scheduleId = ret_sched_response.value[schIndex].scheduleId;
+                jobScheduleIds.push({jobId,scheduleId});
+
+                let sqlStr = 'UPSERT "JS_JOBS" VALUES (' +
+                    "'" + ret_response.value[jobIndex].jobId + "'" + "," +
+                    "'" + ret_response.value[jobIndex].name + "'" + "," +
+                    "'" + ret_response.value[jobIndex].action + "'" + "," +
+                        ret_response.value[jobIndex].active + "," +
+                    "'" + ret_response.value[jobIndex].httpMethod + "'" + "," +
+                    "'" + ret_response.value[jobIndex].createdAt + "'" + "," +
+                    "'" + ret_response.value[jobIndex].description + "'" + "," +
+                    "'" + ret_response.value[jobIndex].jobType + "'" + "," +
+                    "'" + ret_response.value[jobIndex].startTime + "'" + "," +
+                    "'" + ret_response.value[jobIndex].endTime + "'" + "," +
+                        ret_response.value[jobIndex].ACTIVECOUNT + "," +
+                        ret_response.value[jobIndex].INACTIVECOUNT + "," +
+                        ret_response.value[jobIndex].signatureVersion + "," +
+                    "'" + ret_response.value[jobIndex].subDomain + "'" + "," +
+                    "'" + ret_response.value[jobIndex].user + "'" + "," +
+                    "'" + scheduleId + "'" + ')' + ' WITH PRIMARY KEY';
+                    console.log("readjobs sqlStr : ", sqlStr);
+
+                    await cds.run(sqlStr);
+            }
+        }
+
+    }
+
+    console.log("jobScheduleIds ", jobScheduleIds);
+
+    let jobScheduleLogs = [];
+
+    for (let jobSchLogIndex =0; jobSchLogIndex <jobScheduleIds.length; jobSchLogIndex ++)
+    {
+
+        let jobId = jobScheduleIds[jobSchLogIndex].jobId;
+        let scheduleId = jobScheduleIds[jobSchLogIndex].scheduleId;
+        let displayLogs = true;
+        console.log('lreadJobSchedule  jobId :', jobId, 'scheduleId :', scheduleId, 'displayLogs :', displayLogs);
+
+        // let lreadJobScheduleUrl = lbaseUrl + 
+        let lreadJobScheduleUrl = baseUrl + 
+        '/jobs/readJobSchedule(jobId='  + jobId + ',' + 'scheduleId=' + "'" + scheduleId + "'" + "," + 'displayLogs='  + displayLogs + ')';
+
+        console.log('lreadJobScheduleUrl ', lreadJobScheduleUrl);
+
+        options = {
+            'method': 'GET',
+            'url': lreadJobScheduleUrl, 
+            'headers' : {
+                'Accept': 'application/json',
+                'Accept-Charset': 'utf-8'
+            }   
+        }
+        // var values = [];
+        let ret_schedlog_response ="";
+        respAck = false;
+        await request(options, async function (error, response) {
+    
+            console.log('statusCode:', response.statusCode); // Print the response status code if a response was received
+            if (error) 
+            {
+                console.log('lreadJobSchedule - Error ', error);
+                ret_schedlog_response = JSON.parse(error);
+                respAck = true;
+            }
+            if (response.statusCode == 200)
+            {
+                ret_schedlog_response = JSON.parse(response.body);
+                respAck = true;
+            }
+        })
+        const sleep = require('await-sleep');
+        await sleep(1500);
+
+        console.log("ret_schedlog_response respAck ", respAck);
+        // console.log("ret_schedlog_response ret_schedlog_response ", ret_schedlog_response);
+        
+
+        // console.log("ret_schedlog_response logs length", ret_schedlog_response.value.logs.length);
+
+
+        // req.reply(ret_response);
+        if (respAck)
+        {
+            // console.log("ret_schedlog_response logs ", ret_schedlog_response.value.logs);
+            // console.log("ret_schedlog_response logs length ", ret_schedlog_response.value.logs.length);
+
+            for (let logIndex =0; logIndex < (ret_schedlog_response.value.logs.length); logIndex ++)
+            {
+                let runId = ret_schedlog_response.value.logs[logIndex].runId;
+                jobScheduleLogs.push({jobId,scheduleId,runId});
+
+                let jsSqlStr = 'UPSERT "JS_SCHEDULES" VALUES (' +
+                    "'" + ret_schedlog_response.value.scheduleId + "'" + "," +
+                    "'" + ret_schedlog_response.value.description + "'" + "," +
+                    "'" + ret_schedlog_response.value.data + "'" + "," +
+                    "'" + ret_schedlog_response.value.type + "'" + "," +
+                        ret_schedlog_response.value.active + "," +
+                    "'" + ret_schedlog_response.value.startTime + "'" + "," +
+                    "'" + ret_schedlog_response.value.endTime + "'" + "," +
+                    "'" + ret_schedlog_response.value.time + "'" + "," +
+                    "'" + ret_schedlog_response.value.nextRunAt + "'" + "," +
+                    "'" + runId + "'" + ')' + ' WITH PRIMARY KEY';
+                
+                console.log("jobScheduleLogs jsSqlStr : ", jsSqlStr);
+                let httpStatus = ret_schedlog_response.value.logs[logIndex].httpStatus;
+                let executionTimestamp = ret_schedlog_response.value.logs[logIndex].executionTimestamp;
+                let runStatus = ret_schedlog_response.value.logs[logIndex].runStatus;
+                let runState = ret_schedlog_response.value.logs[logIndex].runState;
+                let statusMessage = ret_schedlog_response.value.logs[logIndex].statusMessage;
+                let scheduleTimestamp = ret_schedlog_response.value.logs[logIndex].scheduleTimestamp;
+                let completionTimestamp = ret_schedlog_response.value.logs[logIndex].completionTimestamp;
+                let runText = ret_schedlog_response.value.logs[logIndex].runText;
+                let runStr = runText.replace(/'/g, '"');
+                let logsSqlStr = 'UPSERT "JS_LOGS" VALUES (' +
+                    "'" + runId + "'" + "," +
+                          httpStatus  + "," +
+                    "'" + executionTimestamp + "'" + "," +
+                    "'" + runStatus + "'" + "," +
+                    "'" + runState + "'" + "," +
+                    "'" + statusMessage + "'" + "," +
+                    "'" + completionTimestamp + "'" + "," +
+                    "'" + scheduleTimestamp + "'" + "," +
+                    "'" + runStr + "'" + ')' + ' WITH PRIMARY KEY';
+                
+                console.log("jobScheduleLogs logsSqlStr : ", logsSqlStr);
+                
+                // await sleep(200);
+
+                await cds.run(logsSqlStr);
+
+            }
+        }
+    }  
+
+    console.log("jobScheduleLogs ", jobScheduleLogs);
+
+  }   
+
+  async function _updateJobslocal(req,isGet) {
 
     var reqData = {};
     // if (isGet == true) //GET -- Kludge
@@ -116,7 +372,7 @@ module.exports = async function (srv) {
 
         let jobId = ret_response.value[jobIndex].jobId;
 
-        console.log('lreadJobSchedules  jobId', jobId);
+        console.log('lreadJobSchedules  jobId', jobId, 'Name ',ret_response.value[jobIndex].name);
 
         let lreadJobSchedulesUrl = lbaseUrl + '/jobs/readJobSchedules(jobId='  + jobId + ')';
 
@@ -132,6 +388,7 @@ module.exports = async function (srv) {
         }
         // var values = [];
         let ret_sched_response ="";
+        let respAck = false;
 
         await request(options, async function (error, response) {
     
@@ -140,71 +397,138 @@ module.exports = async function (srv) {
             {
                 console.log('lreadJobSchedules - Error ', error);
                 ret_sched_response = JSON.parse(error);
+                respAck = true;
             }
             if (response.statusCode == 200)
             {
                 ret_sched_response = JSON.parse(response.body);
+                respAck = true;
             }
         })
         const sleep = require('await-sleep');
-        await sleep(1000);
+        await sleep(1500);
         // req.reply(ret_sched_response);
 
-        for (let schIndex =0; schIndex <ret_sched_response.value.length; schIndex ++)
+        if (respAck)
         {
-            let scheduleId = ret_sched_response.value[schIndex].scheduleId;
-            jobScheduleIds.push({jobId,scheduleId});
+            console.log("ret_sched_response.length ", ret_sched_response.value.length);
 
-            let sqlStr = 'UPSERT "JS_JOBS" VALUES (' +
-                "'" + ret_response.value[jobIndex].jobId + "'" + "," +
-                "'" + ret_response.value[jobIndex].name + "'" + "," +
-                "'" + ret_response.value[jobIndex].action + "'" + "," +
-                      ret_response.value[jobIndex].active + "," +
-                "'" + ret_response.value[jobIndex].httpMethod + "'" + "," +
-                "'" + ret_response.value[jobIndex].createdAt + "'" + "," +
-                "'" + ret_response.value[jobIndex].description + "'" + "," +
-                "'" + ret_response.value[jobIndex].jobType + "'" + "," +
-                "'" + ret_response.value[jobIndex].startTime + "'" + "," +
-                "'" + ret_response.value[jobIndex].endTime + "'" + "," +
-                      ret_response.value[jobIndex].ACTIVECOUNT + "," +
-                      ret_response.value[jobIndex].INACTIVECOUNT + "," +
-                      ret_response.value[jobIndex].signatureVersion + "," +
-                "'" + ret_response.value[jobIndex].subDomain + "'" + "," +
-                "'" + ret_response.value[jobIndex].user + "'" + "," +
-                "'" + scheduleId + "'" + ')' + ' WITH PRIMARY KEY';
-                console.log("readjobs sqlStr : ", sqlStr);
+            for (let schIndex =0; schIndex < ret_sched_response.value.length; schIndex ++)
+            {
+                let scheduleId = ret_sched_response.value[schIndex].scheduleId;
+                jobScheduleIds.push({jobId,scheduleId});
 
-                await cds.run(sqlStr);
+                let sqlStr = 'UPSERT "JS_JOBS" VALUES (' +
+                    "'" + ret_response.value[jobIndex].jobId + "'" + "," +
+                    "'" + ret_response.value[jobIndex].name + "'" + "," +
+                    "'" + ret_response.value[jobIndex].action + "'" + "," +
+                        ret_response.value[jobIndex].active + "," +
+                    "'" + ret_response.value[jobIndex].httpMethod + "'" + "," +
+                    "'" + ret_response.value[jobIndex].createdAt + "'" + "," +
+                    "'" + ret_response.value[jobIndex].description + "'" + "," +
+                    "'" + ret_response.value[jobIndex].jobType + "'" + "," +
+                    "'" + ret_response.value[jobIndex].startTime + "'" + "," +
+                    "'" + ret_response.value[jobIndex].endTime + "'" + "," +
+                        ret_response.value[jobIndex].ACTIVECOUNT + "," +
+                        ret_response.value[jobIndex].INACTIVECOUNT + "," +
+                        ret_response.value[jobIndex].signatureVersion + "," +
+                    "'" + ret_response.value[jobIndex].subDomain + "'" + "," +
+                    "'" + ret_response.value[jobIndex].user + "'" + "," +
+                    "'" + scheduleId + "'" + ')' + ' WITH PRIMARY KEY';
+                    console.log("readjobs sqlStr : ", sqlStr);
+
+                    await cds.run(sqlStr);
+            }
         }
 
     }
 
     console.log("jobScheduleIds ", jobScheduleIds);
 
+    let jobScheduleLogs = [];
 
-    // let sqlStr ="";
-    // for (index =0; index <ret_response.value.length; index ++)
-    // {
-    //     sqlStr = 'UPSERT "JS_JOBS" VALUES (' +
-    //     "'" + ret_response.value[index].jobId + "'" + "," +
-    //     "'" + ret_response.value[index].name + "'" + "," +
-    //     "'" + ret_response.value[index].action + "'" + "," +
-    //           ret_response.value[index].active + "," +
-    //     "'" + ret_response.value[index].httpMethod + "'" + "," +
-    //     "'" + ret_response.value[index].createdAt + "'" + "," +
-    //     "'" + ret_response.value[index].description + "'" + "," +
-    //     "'" + ret_response.value[index].jobType + "'" + "," +
-    //     "'" + ret_response.value[index].startTime + "'" + "," +
-    //     "'" + ret_response.value[index].endTime + "'" + "," +
-    //           ret_response.value[index].ACTIVECOUNT + "," +
-    //           ret_response.value[index].INACTIVECOUNT + "," +
-    //           ret_response.value[index].signatureVersion + "," +
-    //     "'" + ret_response.value[index].subDomain + "'" + "," +
-    //     "'" + ret_response.value[index].user + "'" + ')' + ' WITH PRIMARY KEY';
-    //     console.log("readjobs sqlStr : ", sqlStr);
+    for (let jobSchLogIndex =0; jobSchLogIndex <jobScheduleIds.length; jobSchLogIndex ++)
+    {
 
-    //     await cds.run(sqlStr);
-    // }
+        let jobId = jobScheduleIds[jobSchLogIndex].jobId;
+        let scheduleId = jobScheduleIds[jobSchLogIndex].scheduleId;
+        let displayLogs = true;
+        console.log('lreadJobSchedule  jobId :', jobId, 'scheduleId :', scheduleId, 'displayLogs :', displayLogs);
+
+        let lreadJobScheduleUrl = lbaseUrl + 
+        '/jobs/readJobSchedule(jobId='  + jobId + ',' + 'scheduleId=' + "'" + scheduleId + "'" + "," + 'displayLogs='  + displayLogs + ')';
+
+        console.log('lreadJobScheduleUrl ', lreadJobScheduleUrl);
+
+        options = {
+            'method': 'GET',
+            'url': lreadJobScheduleUrl, 
+            'headers' : {
+                'Accept': 'application/json',
+                'Accept-Charset': 'utf-8'
+            }   
+        }
+        // var values = [];
+        let ret_schedlog_response ="";
+        respAck = false;
+        await request(options, async function (error, response) {
+    
+            console.log('statusCode:', response.statusCode); // Print the response status code if a response was received
+            if (error) 
+            {
+                console.log('lreadJobSchedule - Error ', error);
+                ret_schedlog_response = JSON.parse(error);
+                respAck = true;
+            }
+            if (response.statusCode == 200)
+            {
+                ret_schedlog_response = JSON.parse(response.body);
+                respAck = true;
+            }
+        })
+        const sleep = require('await-sleep');
+        await sleep(1500);
+
+        console.log("ret_schedlog_response respAck ", respAck);
+        // console.log("ret_schedlog_response ret_schedlog_response ", ret_schedlog_response);
+        
+
+        // console.log("ret_schedlog_response logs length", ret_schedlog_response.value.logs.length);
+
+
+        // req.reply(ret_response);
+        if (respAck)
+        {
+            // console.log("ret_schedlog_response logs ", ret_schedlog_response.value.logs);
+            // console.log("ret_schedlog_response logs length ", ret_schedlog_response.value.logs.length);
+
+            for (let logIndex =0; logIndex < (ret_schedlog_response.value.logs.length); logIndex ++)
+            {
+                let runId = ret_schedlog_response.value.logs[logIndex].runId;
+                jobScheduleLogs.push({jobId,scheduleId,runId});
+
+                let jsSqlStr = 'UPSERT "JS_SCHEDULES" VALUES (' +
+                    "'" + ret_schedlog_response.value.scheduleId + "'" + "," +
+                    "'" + ret_schedlog_response.value.description + "'" + "," +
+                    "'" + ret_schedlog_response.value.data + "'" + "," +
+                    "'" + ret_schedlog_response.value.type + "'" + "," +
+                        ret_schedlog_response.value.active + "," +
+                    "'" + ret_schedlog_response.value.startTime + "'" + "," +
+                    "'" + ret_schedlog_response.value.endTime + "'" + "," +
+                    "'" + ret_schedlog_response.value.time + "'" + "," +
+                    "'" + runId + "'" + ')' + ' WITH PRIMARY KEY';
+                
+                console.log("jobScheduleLogs jsSqlStr : ", jsSqlStr);
+                
+                // await sleep(200);
+
+                await cds.run(jsSqlStr);
+
+            }
+        }
+    }  
+
+    console.log("jobScheduleLogs ", jobScheduleLogs);
 
   }   
 
