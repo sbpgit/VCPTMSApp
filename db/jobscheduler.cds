@@ -155,7 +155,7 @@ entity JOBS  {
 entity SCHEDULES {
     key SCHEDULE_ID  : String(50) @title : 'Schedule ID';
     SCH_DESC : String(100) @title : 'Schedule Description'; 
-    SCH_DATA : String(50) @title : 'Schedule Data';
+    SCH_DATA : String @title : 'Schedule Data';
     SCH_TYPE : String(50) @title : 'Cron/one-time';
     SCH_ACTIVE : Boolean @title : 'Schedule Active';
     SCH_STARTTIME : String(50) @title : 'Schedule Startime';

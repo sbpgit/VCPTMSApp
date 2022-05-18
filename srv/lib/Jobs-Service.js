@@ -266,6 +266,9 @@ async function _updateJobs(req,isGet) {
                     "'" + runId + "'" + ')' + ' WITH PRIMARY KEY';
                 
                 console.log("jobScheduleLogs jsSqlStr : ", jsSqlStr);
+                
+                await cds.run(jsSqlStr);
+
                 let httpStatus = ret_schedlog_response.value.logs[logIndex].httpStatus;
                 let executionTimestamp = ret_schedlog_response.value.logs[logIndex].executionTimestamp;
                 let runStatus = ret_schedlog_response.value.logs[logIndex].runStatus;
