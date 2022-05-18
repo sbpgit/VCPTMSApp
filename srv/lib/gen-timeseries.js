@@ -12,8 +12,8 @@ const conn_params_container = {
     cds.env.requires.db.credentials.port,
   uid: cds.env.requires.db.credentials.user, //cds userid environment variable
   pwd: cds.env.requires.db.credentials.password, //cds password environment variable
-  encrypt: "TRUE"//,
-  //ssltruststore: cds.env.requires.hana.credentials.certificate,
+  encrypt: "TRUE"
+ // ssltruststore: cds.env.requires.hana.credentials.certificate,
 };
 
 const conn = hana.createConnection();
@@ -59,15 +59,15 @@ class GenTimeseries {
     // Get Sales Count Information
     const liSalesCount = await cds.run(
       `SELECT *
-              FROM V_ORD_COUNT
-              WHERE "LOCATION_ID" = '` + adata.LOCATION_ID + `'
-              AND "PRODUCT_ID" = '` + adata.PRODUCT_ID + `'
-              AND "WEEK_DATE" >= '` + lStartDate.toISOString().split("T")[0] + `'
-              AND "WEEK_DATE" <= '` + GenF.getCurrentDate() + `'
-              ORDER BY 
-                  "LOCATION_ID" ASC, 
-                  "PRODUCT_ID" ASC,
-                  "WEEK_DATE" ASC`
+         FROM V_ORD_COUNT
+        WHERE "LOCATION_ID" = '` + adata.LOCATION_ID + `'
+          AND "PRODUCT_ID" = '` + adata.PRODUCT_ID + `'
+          AND "WEEK_DATE" >= '` + lStartDate.toISOString().split("T")[0] + `'
+          AND "WEEK_DATE" <= '` + GenF.getCurrentDate() + `'
+        ORDER BY 
+              "LOCATION_ID" ASC, 
+              "PRODUCT_ID" ASC,
+              "WEEK_DATE" ASC`
     );
 
     let liODCharTemp = [];
@@ -82,14 +82,13 @@ class GenTimeseries {
         liSalesCount[i].PRODUCT_ID,
         liSalesCount[i].PRODUCT_ID
       );
+      
 
       // For every change in Product
       if (
-        i === 0 ||
-        liSalesCount[i].LOCATION_ID !==
-          liSalesCount[GenF.subOne(i, liSalesCount.length)].LOCATION_ID ||
-        liSalesCount[i].PRODUCT_ID !==
-          liSalesCount[GenF.subOne(i, liSalesCount.length)].PRODUCT_ID
+        i === 0 || 
+        liSalesCount[i].LOCATION_ID !== liSalesCount[GenF.subOne(i, liSalesCount.length)].LOCATION_ID ||
+        liSalesCount[i].PRODUCT_ID !== liSalesCount[GenF.subOne(i, liSalesCount.length)].PRODUCT_ID
       ) {
         // Get Distinct Chan Num and Value
         liODCharTemp = await cds.run(
@@ -100,7 +99,7 @@ class GenTimeseries {
                   WHERE LOCATION_ID = '` + liSalesCount[i].LOCATION_ID + `'
                     AND PRODUCT_ID  = '` + liSalesCount[i].PRODUCT_ID + `'`
         );
-        // Get Distinct Chan Num and Value
+        // Get Distinct Chan Num and Value for Restrictions
         liRTCharTemp = await cds.run(
             `SELECT DISTINCT CHAR_NUM,
                              CHARVAL_NUM,
@@ -114,7 +113,7 @@ class GenTimeseries {
 
       }
 
-      this.processODChar(
+      await this.processODChar(
         liSalesCount[i].LOCATION_ID,
         liSalesCount[i].PRODUCT_ID,
         liSalesCount[i].WEEK_DATE,
@@ -122,7 +121,7 @@ class GenTimeseries {
         liODCharTemp
       );
 
-      this.processRTChar(
+      await this.processRTChar(
         liSalesCount[i].LOCATION_ID,
         liSalesCount[i].PRODUCT_ID,
         liSalesCount[i].WEEK_DATE,
@@ -130,21 +129,29 @@ class GenTimeseries {
         liRTCharTemp
       );      
 
-      this.processODHead(
+      await this.processODHead(
         liSalesCount[i].LOCATION_ID,
         liSalesCount[i].PRODUCT_ID,
         liSalesCount[i].WEEK_DATE,
         liSalesCount[i].ORD_QTY
       );
 
-      this.processRTHead(
+      await this.processRTHead(
         liSalesCount[i].LOCATION_ID,
         liSalesCount[i].PRODUCT_ID,
         liSalesCount[i].WEEK_DATE,
         liSalesCount[i].ORD_QTY
-      );      
+      ); 
+          
 
-      this.processNewProducts(
+      await this.processNewProducts(
+        liSalesCount[i].LOCATION_ID,
+        liSalesCount[i].PRODUCT_ID,
+        liSalesCount[i].WEEK_DATE,
+        liODCharTemp
+      )
+
+      await this.processPartialProducts(
         liSalesCount[i].LOCATION_ID,
         liSalesCount[i].PRODUCT_ID,
         liSalesCount[i].WEEK_DATE,
@@ -696,7 +703,7 @@ class GenTimeseries {
            FROM CP_NEWPROD_INTRO
           WHERE LOCATION_ID = '` + lLocation + `'
             AND REF_PRODID = '` + lProduct + `'`
-      );    
+    );    
 
       for (let cntNew = 0; cntNew < liNewProd.length; cntNew++) {
 
@@ -749,13 +756,44 @@ class GenTimeseries {
             sqlStr.exec();
             sqlStr.drop();
 
-        } else {                                // For new Product Partial Configuration
+        }
 
-            await this.insertInitialTS(
+      }
+
+      this.logger.info(" New Product Completed Date: " + lDate);
+
+  }
+
+/**
+ * Process New Products or Partial Quantity
+ * @param {Location} lLocation 
+ * @param {Product} lProduct 
+ * @param {Date} lDate 
+ * @param {Order Qty} lOrdQty 
+ */
+async processPartialProducts(lLocation, lProduct, lDate, liODCharTemp) {
+
+    const liPartialProd = await cds.run(
+        `SELECT *
+           FROM CP_PARTIALPROD_INTRO
+          WHERE LOCATION_ID = '` + lLocation + `'
+            AND REF_PRODID = '` + lProduct + `'`
+    );    
+
+      for (let cntPartial = 0; cntPartial < liPartialProd.length; cntPartial++) {
+
+        const liPartialProdChar = await cds.run(
+            `SELECT *
+               FROM CP_PARTIALPROD_CHAR
+              WHERE LOCATION_ID = '` + lLocation + `'
+                AND PRODUCT_ID = '` + liPartialProd[cntPartial].PRODUCT_ID + `'`
+        );    
+
+             await this.insertInitialTS(
                 lLocation,
                 lDate,
                 lProduct,
-                liNewProd[cntNew].PRODUCT_ID
+                liPartialProd[cntPartial].PRODUCT_ID
               );
 
             
@@ -782,12 +820,12 @@ class GenTimeseries {
               let lSuccess = '';
 
             // Filter Sales Orders that belong to this Partially configured product           
-              for (let cntNewC = 0; cntNewC < liNewProdChar.length; cntNewC++) {
+              for (let cntPartialC = 0; cntPartialC < liPartialProdChar.length; cntPartialC++) {
                     lSuccess = '';
                     for (let cntSO = 0; cntSO < liSales.length; cntSO++) {
                         
-                        if (liSales[cntSO].CHAR_NUM === liNewProdChar[cntNewC].CHAR_NUM &&
-                            liSales[cntSO].CHARVAL_NUM === liNewProdChar[cntNewC].CHARVAL_NUM ) {
+                        if (liSales[cntSO].CHAR_NUM === liPartialProdChar[cntPartialC].CHAR_NUM &&
+                            liSales[cntSO].CHARVAL_NUM === liPartialProdChar[cntPartialC].CHARVAL_NUM ) {
                                 lSuccess = 'X';
                         }
                         
@@ -810,7 +848,7 @@ class GenTimeseries {
                 for (let cntSO = liSales.length - 1; cntSO >= 0; cntSO--) {
                     if(liSales[cntSO].SALES_DOC === iSOIgnore[cntSOI].SALES_DOC &&
                         liSales[cntSO].SALESDOC_ITEM === iSOIgnore[cntSOI].SALESDOC_ITEM){
-                            liSales.splice(cntSO, 1);
+                            liSales.splice(cntSO, cntSO);
                     }
                 }
             }
@@ -875,7 +913,7 @@ class GenTimeseries {
                                           SUCCESS_RATE = ` + lSuccessRate + `
                                       WHERE CAL_DATE    = '` + lDate + `'
                                         AND LOCATION_ID = '` + lLocation + `'
-                                        AND PRODUCT_ID  = '` + liNewProd[cntNew].PRODUCT_ID + `'
+                                        AND PRODUCT_ID  = '` + liPartialProd[cntPartial].PRODUCT_ID + `'
                                         AND OBJ_TYPE    = 'OD'
                                         AND OBJ_DEP     = '` + liObjDet[i].OBJ_DEP + `'
                                         AND OBJ_COUNTER = '` + liObjDet[i].OBJ_COUNTER + `' 
@@ -985,7 +1023,7 @@ class GenTimeseries {
                                     SUCCESS_RATE = ` + lSuccessRate + `
                                 WHERE CAL_DATE    = '` + lDate + `'
                                   AND LOCATION_ID = '` + lLocation + `'
-                                  AND PRODUCT_ID  = '` + liNewProd[cntNew].PRODUCT_ID + `'
+                                  AND PRODUCT_ID  = '` + liPartialProd[cntPartial].PRODUCT_ID + `'
                                   AND OBJ_TYPE    = 'OD'
                                   AND OBJ_DEP     = '` + liODHead[cntODH].OBJ_DEP + `'
                                   AND OBJ_COUNTER = '` + liODHead[cntODH].OBJ_COUNTER + `'`
@@ -996,15 +1034,12 @@ class GenTimeseries {
 
 
 
-        }
-
 
       }
 
-      this.logger.info(" New Product Completed Date: " + lDate);
+      this.logger.info(" Partial Product Completed Date: " + lDate);
 
-  }
-
+  }  
 
   async genTimeseriesF(adata) {
     let sRowData = [],
