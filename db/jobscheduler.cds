@@ -137,7 +137,7 @@ entity JOBS  {
     key JOB_NAME  : String @title : 'Job Name';
     key ACTION : String @title : 'Action';
     key ACTIVE : Boolean @title : 'Active';
-    key HTTP_METHOD : Boolean @title : 'Http Method';
+    key HTTP_METHOD : String @title : 'Http Method';
     key CREATAT : String @title : 'Created At';
     JOB_DES : String @title : 'Job Description';
     JOB_TYPE: String@tiletle : 'Job Type';
