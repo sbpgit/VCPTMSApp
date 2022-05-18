@@ -17,18 +17,20 @@ Content-Type: application/json
     ]
 }
 
+### UPDATE JOBS LOCALLY
+GET http://localhost:4004/jobs/fUpdateJobs()
 
 ### READ JOBS LOCALLY
 GET http://localhost:4004/jobs/lreadJobs()
 
 ### READ JOB DETAILS LOCALLY
-GET http://localhost:4004/jobs/lreadJobDetails(jobId=499941,displaySchedules=true)
+GET http://localhost:4004/jobs/lreadJobDetails(jobId=530818,displaySchedules=true)
 
 ### READ JOB SCHEDULES LOCALLY
-GET http://localhost:4004/jobs/lreadJobSchedules(jobId=506898)
+GET http://localhost:4004/jobs/lreadJobSchedules(jobId=530931)
 
 ### READ JOB SCHEDULE LOCALLY
-GET http://localhost:4004/jobs/lreadJobSchedule(jobId=484896,scheduleId='90a07299-d097-47dd-b293-5f06a869c18e',displayLogs=true)
+GET http://localhost:4004/jobs/lreadJobSchedule(jobId=530818,scheduleId='fb51db58-73f9-4695-80ab-b30fa9825d94',displayLogs=true)
 
 
 ### READ JOB ACTION LOGS LOCALLY

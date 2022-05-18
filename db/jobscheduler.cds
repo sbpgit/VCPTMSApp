@@ -134,45 +134,50 @@ type btpibpSchedules {
 
 entity JOBS  {
     key JOB_ID  : Integer @title : 'Job ID';
-    key JOB_NAME  : String @title : 'Job Name';
-    key ACTION : String @title : 'Action';
+    key JOB_NAME  : String(50) @title : 'Job Name';
+    key ACTION : String(200) @title : 'Action';
     key ACTIVE : Boolean @title : 'Active';
-    key HTTP_METHOD : String @title : 'Http Method';
-    key CREATAT : String @title : 'Created At';
-    JOB_DES : String @title : 'Job Description';
-    JOB_TYPE: String@tiletle : 'Job Type';
-    START_TIME : String @title : 'Start TIme';
-    END_TIME : String @title : 'End Time';
+    key HTTP_METHOD : String(50) @title : 'Http Method';
+    key CREATAT : String(50) @title : 'Created At';
+    JOB_DES : String(100) @title : 'Job Description';
+    JOB_TYPE: String(50) @tiletle : 'Job Type';
+    START_TIME : String(50) @title : 'Start TIme';
+    END_TIME : String(50) @title : 'End Time';
     ACTIVECOUNT      : Integer  @title : 'Active Count';
     INACTIVECOUNT    : Integer @title : 'InActive Count';
-    SIGNATURE_VERSION : Integer;
-    SUB_DOMAIN        : String;
-    USER             : String;
-    schedules : Association to many SCHEDULES;
+    SIGNATURE_VERSION : Integer @title : 'Signature Version';
+    SUB_DOMAIN        : String @title : 'Sub Domain';
+    USER             : String(50) @title : 'User';
+    key SCHEDULE_ID : String(50) @title : 'Schedule ID';
+    // key schedules : Association to many SCHEDULES @title : 'Schedule ID';
 }
 
 entity SCHEDULES {
-    key SCHEDULE_ID  : String @title : 'Schedule ID';
-    SCH_DESC : String @title : 'Schedule Description'; 
-    SCH_DATA : String @title : 'Schedule Data';
-    SCH_TYPE : String @title : 'Cron/one-time';
+    key SCHEDULE_ID  : String(50) @title : 'Schedule ID';
+    SCH_DESC : String(100) @title : 'Schedule Description'; 
+    SCH_DATA : String(50) @title : 'Schedule Data';
+    SCH_TYPE : String(50) @title : 'Cron/one-time';
     SCH_ACTIVE : Boolean @title : 'Schedule Active';
-    SCH_STARTTIME : String @title : 'Schedule Startime';
-    SCH_END_TIME : String @title : 'Schedule Endtime';
-    SCH_TIME : String @title : 'Schedule Time'; 
-    logs : Association to many LOGS;
-}
+    SCH_STARTTIME : String(50) @title : 'Schedule Startime';
+    SCH_END_TIME : String(50) @title : 'Schedule Endtime';
+    SCH_TIME : String(50) @title : 'Schedule Time'; 
+    SCH_NEXTRUN : String(50) @title : 'Schedule Nextrun At'; 
+    // key logs : Association to many LOGS @title : 'LOG ID';
+    key RUN_ID : String(50) @ title : 'Run ID';
+};
+
 
 entity LOGS {
-    key RUN_ID : String @ title : 'Run ID';
-    HTTP_STATUS : Integer @ title : 'HTTP Status code';
-    EXECUTION_TIMESTAMP : String @ title : 'Execution TimeStamp'; //indicates when actually the scheduler invoked action endpoint
-    RUN_STATUS: String @ title : 'Ron Status';
-    RUN_STATE : String @ title : 'Run State';
-    SCHEDULED_TIMESTAMP: String @ title : 'Scheduled Timestamp'; //indicates when the schedule was picked up for calculation of next-run
-    COMPLETED_TIMESTAMP: String @ title : 'Completed Timestamp'; //indicates when the scheduler received response from the action endpoint
+    key RUN_ID : String(50) @title : 'Run ID';
+    HTTP_STATUS : Integer @title : 'HTTP Status code';
+    EXECUTION_TIMESTAMP : String(50) @title : 'Execution TimeStamp'; //indicates when actually the scheduler invoked action endpoint
+    RUN_STATUS: String(50) @title : 'Run Status';
+    RUN_STATE : String(50) @title : 'Run State';
+    STATUS_MESSAGE : String @title : 'Status Message';
+    SCHEDULED_TIMESTAMP: String(50) @title : 'Scheduled Timestamp'; //indicates when the schedule was picked up for calculation of next-run
+    COMPLETED_TIMESTAMP: String(50) @title : 'Completed Timestamp'; //indicates when the scheduler received response from the action endpoint
     runtext : array of {
-        text          : String @ title : 'Text';
+        text          : String @title : 'Text';
     }
 }
 
