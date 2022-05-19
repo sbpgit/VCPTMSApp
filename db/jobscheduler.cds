@@ -177,10 +177,18 @@ context js {
         STATUS_MESSAGE : String @title : 'Status Message';
         SCHEDULED_TIMESTAMP: String(50) @title : 'Scheduled Timestamp'; //indicates when the schedule was picked up for calculation of next-run
         COMPLETED_TIMESTAMP: String(50) @title : 'Completed Timestamp'; //indicates when the scheduler received response from the action endpoint
-        runtext : array of {
-            text          : String @title : 'Text';
-        }
+        // key TEXT_ID : String(50) @title : 'TextID';
+        // runtext : array of {
+        //     text          : String @title : 'Text';
+        // }
+        runtext : String @title : 'Run Text';
     }
+
+    // entity LOGSTEXT {
+    //     key TEXT_ID : String(50) @title : 'TextID';
+    //     key LINE_ID : String(50) @title : 'LineID';
+    //     runText : String  @title : 'Run Text';
+    // }
 
     // entity RUNTEXTS {
     //         key TEXT_ID : String @ title : 'Text ID';
@@ -204,5 +212,5 @@ key     ![RUN_STATE]: String(50)  @title: 'RUN_STATE' ;
 key     ![STATUS_MESSAGE]: String(5000)  @title: 'STATUS_MESSAGE' ; 
 key     ![SCHEDULED_TIMESTAMP]: String(50)  @title: 'SCHEDULED_TIMESTAMP' ; 
 key     ![COMPLETED_TIMESTAMP]: String(50)  @title: 'COMPLETED_TIMESTAMP' ; 
-// key     ![RUNTEXT]: LargeString  @title: 'RUNTEXT' ; 
+key     ![RUNTEXT]: LargeString  @title: 'RUNTEXT' ; 
 }
