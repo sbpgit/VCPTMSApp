@@ -593,9 +593,27 @@ entity IBP_FUTUREDEMAND_TEMP {
         key LOCATION_ID : String(4)  @title : 'Location';
             REF_PRODID  : String(40) @title : ' Ref. Product';
     }
+     // Partial product introduction
+    entity PARTIALPROD_INTRO {
+        key PRODUCT_ID  : String(40) @title : 'New Product';
+        key LOCATION_ID : String(4)  @title : 'Location';
+            REF_PRODID  : String(40) @title : ' Ref. Product';
+    }
 
     // New product charactersitics
     entity NEWPROD_CHAR {
+        key PRODUCT_ID  : String(40) @title : 'New Product';
+        key LOCATION_ID    : String(4)      @title : 'Location ';
+        key CLASS_NUM   : String(20) @title : 'Class Name';
+        key CHAR_NUM    : String(30) @title : 'Charateristic Name';
+        key CHARVAL_NUM : String(70) @title : 'Charateristic Value';
+            REF_CLASS_NUM   : String(20) @title : 'Class Name';
+            REF_CHAR_NUM    : String(30) @title : 'Charateristic Name';
+            REF_CHARVAL_NUM : String(70) @title : 'Charateristic Value';
+            REF_PRODID  : String(40) @title : ' Ref. Product';
+    }
+     // New product charactersitics
+    entity PARTIALPROD_CHAR {
         key PRODUCT_ID  : String(40) @title : 'New Product';
         key LOCATION_ID    : String(4)      @title : 'Location ';
         key CLASS_NUM   : String(20) @title : 'Class Name';

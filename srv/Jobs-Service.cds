@@ -1,6 +1,24 @@
 using js from '../db/jobscheduler';
+using V_JOBSTATUS from '../db/jobscheduler';
+
 
 service JobsService @(impl : './lib/Jobs-Service.js') {
+   @readonly
+  entity jobs as projection on js.JOBS;
+
+  @readonly
+  entity schedules as projection on js.SCHEDULES;
+
+  
+  @readonly
+  entity logs as projection on js.LOGS;
+
+  entity getJobStatus  as projection on V_JOBSTATUS;
+
+
+  action updateJobs();
+  // KLUDGE function API for Alternate to POST updateJobs()
+  function fUpdateJobs() returns String;
 
 // LOCAL API's for UI purpose
   function lreadJobs() returns String;

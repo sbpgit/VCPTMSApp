@@ -1715,7 +1715,7 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
                     ' AND "VERSION" = ' + "'" + version + "'" +
                     ' AND "SCENARIO" = ' + "'" + scenario + "'" +
                     ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
-        // console.log("V_FUTURE_DEP_TS HGBT SELECT sqlStr ", sqlStr);
+        console.log("V_FUTURE_DEP_TS HGBT SELECT sqlStr ", sqlStr);
 
         // stmt=conn.prepare(sqlStr);
         // result=stmt.exec();
@@ -1875,6 +1875,7 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
                 ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
         // console.log("V_FUTURE_DEP_TS HGBT SELECT sqlStr ", sqlStr);
 
+        let sqlStrTemp = sqlStr;
         result = [];
 
 
@@ -2017,7 +2018,7 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
             //     impact_percent = 100*impact_val/impact_percent;
             //impact_percent = 100.0*impact_val/(predictedVal);
 
-            //console.log("rIndex = ",rIndex,"impact_percent = ", impact_percent,"predictedVal = ", predictedVal, "intercept =",intercept);
+//            console.log("rIndex = ",rIndex,"impact_percent = ", impact_percent,"predictedVal = ", predictedVal, "intercept =",intercept);
             let predicted = predictedVal;
             let impactValPercent = 0;
             if( predicted*orderCount > 0 )
@@ -2054,6 +2055,7 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
                 await cds.run(sqlStr);
             }
             catch (exception) {
+                console.log("sqlStrTemp ", sqlStrTemp, "rIndex = ", rIndex);
                 console.log("ERROR -- CP_TS_OBJDEP_CHAR_IMPACT_F HGBT UPSERT sqlStr ", sqlStr); 
                 throw new Error(exception.toString());
             }
