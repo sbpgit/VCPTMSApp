@@ -24,7 +24,8 @@ using V_COMPOD_TSPRED from '../db/data-model';
 using V_ODCHARIMPACT_VALUE from '../db/data-model';
 using {
     V_FCHARPLAN,
-    V_ASMCOMP_REQ
+    V_ASMCOMP_REQ,
+    V_NEWPRODREFCHAR
 } from '../db/data-model';
 
 // using V_ASMCOMP_REQ from '../db/data-model';
@@ -179,7 +180,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
     // Master data for Assembly and component
     entity getAsmbComp          as projection on od.ASSEMBLY_COMP;
     // Get new product characteristics
-    entity getNewProdChar       as projection on od.NEWPROD_CHAR;
+    entity getNewProdChar       as projection on V_NEWPRODREFCHAR;//od.NEWPROD_CHAR;
 
     entity getPartialProdchar   as projection on od.PARTIALPROD_CHAR;
 

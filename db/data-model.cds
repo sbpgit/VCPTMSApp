@@ -926,3 +926,22 @@ key     ![CHAR_NAME]: String(30)  @title: 'CHAR_NAME' ;
 key     ![CHARVAL_NUM]: String(15)  @title: 'CHARVAL_NUM' ; 
 key     ![CHAR_VALUE]: String(70)  @title: 'CHAR_VALUE' ; 
 }
+
+@cds.persistence.exists 
+Entity ![V_NEWPRODREFCHAR] {
+key     ![PRODUCT_ID]: String(40)  @title: 'PRODUCT_ID' ; 
+key     ![LOCATION_ID]: String(4)  @title: 'LOCATION_ID' ; 
+key     ![REF_PRODID]: String(40)  @title: 'REF_PRODID' ; 
+key     ![CLASS_NUM]: String(20)  @title: 'CLASS_NUM' ; 
+key     ![CLASS_NAME]: String(20)  @title: 'CLASS_NAME' ; 
+key     ![CHAR_NUM]: String(30)  @title: 'CHAR_NUM' ; 
+key     ![CHAR_NAME]: String(30)  @title: 'CHAR_NAME' ; 
+key     ![CHARVAL_NUM]: String(70)  @title: 'CHARVAL_NUM' ; 
+key     ![CHAR_VALUE]: String(70)  @title: 'CHAR_VALUE' ; 
+key     ![REF_CLASS_NUM]: String(20)  @title: 'REF_CLASS_NUM' ; 
+key     ![REF_CLASSNAME]: String(20)  @title: 'REF_CLASSNAME' ; 
+key     ![REF_CHAR_NUM]: String(30)  @title: 'REF_CHAR_NUM' ; 
+key     ![REF_CHARNAME]: String(30)  @title: 'REF_CHARNAME' ; 
+key     ![REF_CHARVAL_NUM]: String(70)  @title: 'REF_CHARVAL_NUM' ; 
+key     ![REF_CHARVAL]: String(70)  @title: 'REF_CHARVAL' ; 
+}
