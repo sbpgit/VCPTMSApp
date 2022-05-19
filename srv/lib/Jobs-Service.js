@@ -74,7 +74,7 @@ async function _updateJobs(req,isGet) {
 
     const baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
     // var baseUrl = 'http' + '://' + req.headers.host;
-    console.log('_generatePredictions: protocol', req.headers['x-forwarded-proto'], 'hostName :', req.headers.host);
+    // console.log('_generatePredictions: protocol', req.headers['x-forwarded-proto'], 'hostName :', req.headers.host);
 
     // let readJobsUrl = lbaseUrl + '/jobs/readJobs()';
     let readJobsUrl = baseUrl + '/jobs/readJobs()';
@@ -266,6 +266,9 @@ async function _updateJobs(req,isGet) {
                     "'" + runId + "'" + ')' + ' WITH PRIMARY KEY';
                 
                 console.log("jobScheduleLogs jsSqlStr : ", jsSqlStr);
+                
+                await cds.run(jsSqlStr);
+
                 let httpStatus = ret_schedlog_response.value.logs[logIndex].httpStatus;
                 let executionTimestamp = ret_schedlog_response.value.logs[logIndex].executionTimestamp;
                 let runStatus = ret_schedlog_response.value.logs[logIndex].runStatus;
@@ -275,6 +278,9 @@ async function _updateJobs(req,isGet) {
                 let completionTimestamp = ret_schedlog_response.value.logs[logIndex].completionTimestamp;
                 let runText = ret_schedlog_response.value.logs[logIndex].runText;
                 let runStr = runText.replace(/'/g, '"');
+
+                // let textId = uuidv1();
+
                 let logsSqlStr = 'UPSERT "JS_LOGS" VALUES (' +
                     "'" + runId + "'" + "," +
                           httpStatus  + "," +
@@ -284,13 +290,28 @@ async function _updateJobs(req,isGet) {
                     "'" + statusMessage + "'" + "," +
                     "'" + completionTimestamp + "'" + "," +
                     "'" + scheduleTimestamp + "'" + "," +
+                    // "'" + textId + "'" + "," +
                     "'" + runStr + "'" + ')' + ' WITH PRIMARY KEY';
                 
                 console.log("jobScheduleLogs logsSqlStr : ", logsSqlStr);
+
+                // console.log("jobScheduleLogs runStr Length : ", runStr.length);
+
                 
                 // await sleep(200);
 
                 await cds.run(logsSqlStr);
+
+                // let rows = [];
+                // let rowObj = [];
+                // for (let lineIdx = 0; lineIdx < runText.length; lineIdx ++)
+                // {
+                //     let lineId = uuidv1();
+                //     rowObj.push(textId, lineId, runText[lineIdx]);
+                // }
+                // rows.push(rowObj);
+                // console.log("textId ", textId, "rows ", rows);
+
 
             }
         }

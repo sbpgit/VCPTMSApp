@@ -681,7 +681,7 @@ sap.ui.define(
                 "Reference product and new product can not be same"
               );
             } else {
-              that.getModel("BModel").callFunction("/maintainNewProd", {
+              that.getModel("BModel").callFunction("/maintainPartialProd", {
                 method: "GET",
                 urlParameters: {
                   LOCATION_ID: oLoc,
@@ -698,7 +698,7 @@ sap.ui.define(
                   }
 
                 that.createChar();  
-                that.createIBPProd();                
+                // that.createIBPProd();                
                   
                 },
                 error: function (oData) {
@@ -728,7 +728,7 @@ sap.ui.define(
                     oEntry.PRODCHAR.push(vRuleslist);
                 }
     
-            that.getModel("BModel").callFunction("/maintainNewProdChar", {
+            that.getModel("BModel").callFunction("/maintainPartialProdChar", {
                 method: "GET",
                 urlParameters: {
                     FLAG : 'C',
@@ -737,7 +737,7 @@ sap.ui.define(
                 success: function (oData) {
                   sap.ui.core.BusyIndicator.hide();
                   sap.m.MessageToast.show("success");
-                 // that.onBack();
+                 that.onBack();
                 },
                 error: function (error) {
                   sap.ui.core.BusyIndicator.hide();
@@ -746,27 +746,27 @@ sap.ui.define(
                 },
               });            
           },
-          createIBPProd:function(){            
+        //   createIBPProd:function(){            
             
-            sap.ui.core.BusyIndicator.show();
-            that.getModel("IBPModel").callFunction("/createIBPProduct", {
-                method: "GET",
-                urlParameters: {
-                    LOCATION_ID: that.byId("idloc").getValue(),
-                    PRODUCT_ID: that.byId("idProd").getValue()
-                },
-                success: function (oData) {
-                  sap.ui.core.BusyIndicator.hide();
-                  sap.m.MessageToast.show("Exported product to IBP");
-                  that.onBack();
-                },
-                error: function (error) {
-                  sap.ui.core.BusyIndicator.hide();
-                  sap.m.MessageToast.show("Export product to IBP");
-                  that.onBack();
-                }
-              });            
-          }        
+        //     sap.ui.core.BusyIndicator.show();
+        //     that.getModel("IBPModel").callFunction("/createIBPProduct", {
+        //         method: "GET",
+        //         urlParameters: {
+        //             LOCATION_ID: that.byId("idloc").getValue(),
+        //             PRODUCT_ID: that.byId("idProd").getValue()
+        //         },
+        //         success: function (oData) {
+        //           sap.ui.core.BusyIndicator.hide();
+        //           sap.m.MessageToast.show("Exported product to IBP");
+        //           that.onBack();
+        //         },
+        //         error: function (error) {
+        //           sap.ui.core.BusyIndicator.hide();
+        //           sap.m.MessageToast.show("Export product to IBP");
+        //           that.onBack();
+        //         }
+        //       });            
+        //   }        
     });
 }
 );
