@@ -196,10 +196,10 @@ sap.ui.define(
           that._onCharDetails.setTitleAlignment("Center");
           that.CharDetailList = sap.ui.getCore().byId("idCharDetail");
   
-          this.getModel("BModel").read("/getProdClsChar", {
+          this.getModel("BModel").read("/getNewProdChar", {
             filters: [
-              new Filter("PRODUCT_ID", FilterOperator.EQ, sSelrefProd),
-              new Filter("NEW_PRODID", FilterOperator.EQ, sSelProd),
+              new Filter("REF_PRODID", FilterOperator.EQ, sSelrefProd),
+              new Filter("PRODUCT_ID", FilterOperator.EQ, sSelProd),
             ],
             success: function (oData) {
               that.charModel.setData({
