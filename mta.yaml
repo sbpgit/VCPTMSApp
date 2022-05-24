@@ -520,21 +520,7 @@ resources:
 - name: config_products-destination-service
   type: org.cloudfoundry.existing-service
   parameters:
-  #   config:
-  #     HTML5Runtime_enabled: true
-  #     init_data:
-  #       instance:
-  #         destinations:
-  #         - Authentication: NoAuthentication
-  #           Name: ui5
-  #           ProxyType: Internet
-  #           Type: HTTP
-  #           URL: https://ui5.sap.com
-  #         existing_destinations_policy: update
-  #     version: 1.0.0
-    # service: destination
     service-name: config_products-destination-service
-    # service-plan: lite
 - name: config_products_html_repo_host
   type: org.cloudfoundry.managed-service
   parameters:
@@ -559,6 +545,24 @@ resources:
       enable-xsuaa-support: true
     service: jobscheduler
     service-plan: standard
+# - name: config_products-destination-service
+#   type: org.cloudfoundry.managed-service
+#   parameters:
+#     config:
+#       HTML5Runtime_enabled: false
+#       init_data:
+#         instance:
+#           destinations:
+#           - Authentication: NoAuthentication
+#             Name: ui5
+#             ProxyType: Internet
+#             Type: HTTP
+#             URL: https://ui5.sap.com
+#           existing_destinations_policy: update
+#       version: 1.0.0
+#     service: destination
+#     service-name: config_products-destination-service
+#     service-plan: lite
 parameters:
   deploy_mode: html5-repo
   enable-parallel-deployments: true

@@ -190,10 +190,10 @@ sap.ui.define(
             sSelrefProd = oGModel.getProperty("/refProd");
 
             sap.ui.core.BusyIndicator.show();
-            this.getModel("BModel").read("/getProdClsChar", {
+            this.getModel("BModel").read("/getNewProdChar", {
                 filters: [
-                  new Filter("PRODUCT_ID", FilterOperator.EQ, sSelrefProd),
-                  new Filter("NEW_PRODID", FilterOperator.EQ, sSelProd),
+                  new Filter("REF_PRODID", FilterOperator.EQ, sSelrefProd),
+                  new Filter("PRODUCT_ID", FilterOperator.EQ, sSelProd),
                 ],
                 success: function (oData) {
                     sap.ui.core.BusyIndicator.hide();
@@ -687,16 +687,16 @@ sap.ui.define(
                 this.oData = {
                     "CLASS_NAME": oClassName,
                     "CLASS_NUM": that.byId("idNClassno").getValue(),
-                    "REFCLASS_NAME": oRefClassName,
-                    "REFCLASS_NUM": that.byId("idClassno").getValue(),
+                    "REF_CLASSNAME": oRefClassName,
+                    "REF_CLASS_NUM": that.byId("idClassno").getValue(),
                     "CHAR_NAME": oCharName,
                     "CHAR_NUM": that.byId("idNCharno").getValue(),
-                    "REFCHAR_NAME": oRefCharName,
-                    "REFCHAR_NUM": that.byId("idCharno").getValue(),
+                    "REF_CHARNAME": oRefCharName,
+                    "REF_CHAR_NUM": that.byId("idCharno").getValue(),
                     "CHAR_VALUE": oCharVel,
                     "CHARVAL_NUM": that.byId("idNCharvalno").getValue(),
-                    "REFCHAR_VALUE": oRefCharVel,
-                    "REFCHARVAL_NUM": that.byId("idCharvalno").getValue()
+                    "REF_CHARVAL": oRefCharVel,
+                    "REF_CHARVAL_NUM": that.byId("idCharvalno").getValue()
                 };
                 // Add entry to the table model
                 that.aData.push(that.oData);
@@ -801,11 +801,11 @@ sap.ui.define(
                         LOCATION_ID: that.byId("idloc").getValue(),
                         REF_PRODID: that.byId("idrefprod").getValue(),
                         CLASS_NUM:aData[i].CLASS_NUM, 
-                        REFCLASS_NUM:aData[i].REFCLASS_NUM,           
+                        REF_CLASS_NUM:aData[i].REF_CLASS_NUM,           
                         CHAR_NUM:aData[i].CHAR_NUM, 
-                        REFCHAR_NUM:aData[i].REFCHAR_NUM,            
+                        REF_CHAR_NUM:aData[i].REF_CHAR_NUM,            
                         CHARVAL_NUM:aData[i].CHARVAL_NUM,
-                        REFCHARVAL_NUM:aData[i].REFCHARVAL_NUM
+                        REF_CHARVAL_NUM:aData[i].REF_CHARVAL_NUM
                     };
                     oEntry.PRODCHAR.push(vRuleslist);
                 }
@@ -819,7 +819,7 @@ sap.ui.define(
                 success: function (oData) {
                   sap.ui.core.BusyIndicator.hide();
                   sap.m.MessageToast.show("success");
-                 // that.onBack();
+                //  that.onBack();
                 },
                 error: function (error) {
                   sap.ui.core.BusyIndicator.hide();
@@ -828,27 +828,27 @@ sap.ui.define(
                 },
               });            
           },
-        //   createIBPProd:function(){            
+          createIBPProd:function(){            
             
-        //     sap.ui.core.BusyIndicator.show();
-        //     that.getModel("IBPModel").callFunction("/createIBPProduct", {
-        //         method: "GET",
-        //         urlParameters: {
-        //             LOCATION_ID: that.byId("idloc").getValue(),
-        //             PRODUCT_ID: that.byId("idProd").getValue()
-        //         },
-        //         success: function (oData) {
-        //           sap.ui.core.BusyIndicator.hide();
-        //           sap.m.MessageToast.show("Exported product to IBP");
-        //           that.onBack();
-        //         },
-        //         error: function (error) {
-        //           sap.ui.core.BusyIndicator.hide();
-        //           sap.m.MessageToast.show("Export product to IBP");
-        //           that.onBack();
-        //         }
-        //       });            
-        //   }        
+            sap.ui.core.BusyIndicator.show();
+            that.getModel("IBPModel").callFunction("/createIBPProduct", {
+                method: "GET",
+                urlParameters: {
+                    LOCATION_ID: that.byId("idloc").getValue(),
+                    PRODUCT_ID: that.byId("idProd").getValue()
+                },
+                success: function (oData) {
+                  sap.ui.core.BusyIndicator.hide();
+                  sap.m.MessageToast.show("Exported product to IBP");
+                  that.onBack();
+                },
+                error: function (error) {
+                  sap.ui.core.BusyIndicator.hide();
+                  sap.m.MessageToast.show("Export product to IBP");
+                  that.onBack();
+                }
+              });            
+          }        
     });
 }
 );

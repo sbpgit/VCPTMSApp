@@ -108,18 +108,18 @@
                         <cells>
                             <Text text="{CLASS_NAME}" />
                             <Text text="{CLASS_NUM}" />
-                            <Text text="{REFCLASS_NAME}" />
-                            <Text text="{REFCLASS_NUM}" />
+                            <Text text="{REF_CLASSNAME}" />
+                            <Text text="{REF_CLASS_NUM}" />
 
                             <Text text="{CHAR_NAME}" />
                             <Text text="{CHAR_NUM}" />
-                            <Text text="{REFCHAR_NAME}" />
-                            <Text text="{REFCHAR_NUM}" />
+                            <Text text="{REF_CHARNAME}" />
+                            <Text text="{REF_CHAR_NUM}" />
 
                             <Text text="{CHAR_VALUE}" />
                             <Text text="{CHARVAL_NUM}" />
-                            <Text text="{REFCHAR_VALUE}" />
-                            <Text text="{REFCHARVAL_NUM}" />
+                            <Text text="{REF_CHARVAL}" />
+                            <Text text="{REF_CHARVAL_NUM}" />
                             <Button id="idDel" icon="sap-icon://decline" tooltip="Delete" press="onCharDel" iconDensityAware="false" type="Transparent"/>
                         </cells>
                     </ColumnListItem>

@@ -11,7 +11,6 @@
         "@sap/cds": "^5.9.4",
         "@sap/cds-dk": "^4.9.2",
         "@sap/cds-mtx": "^2.5.1",
-        "@sap/cds-odata-v2-adapter-proxy": "^1.8.16",
         "@sap/hana-client": "^2.12.22",
         "@sap/hdi-deploy": "^4.2.0",
         "@sap/jobs-client": "^1.6.3",
@@ -60,7 +59,8 @@
         "watch-cpprodlocline": "cds watch --open cpprodlocline/webapp/index.html#fe-lrop-v4",
         "watch-cprtrheader": "cds watch --open cprtrheader/webapp/index.html#fe-lrop-v4",
         "watch-cpasmbcompreq": "cds watch --open cpasmbcompreq/webapp/index.html#fe-lrop-v4",
-        "watch-cpauthobjrole": "cds watch --open cpauthobjrole/webapp/index.html?sap-ui-xx-viewCache=false#fe-lrop-v4"
+        "watch-cpauthobjrole": "cds watch --open cpauthobjrole/webapp/index.html?sap-ui-xx-viewCache=false#fe-lrop-v4",
+        "watch-cpjobscheduler_logs": "cds watch --open cpjobscheduler_logs/webapp/index.html?sap-ui-xx-viewCache=false#fe-lrop-v4"
     },
     "eslintConfig": {
         "extends": "eslint:recommended",
@@ -195,9 +195,10 @@
         "app/cpnewprod",
         "app/cpproduct",
         "app/cpcustgroup",
-        "app/cpauthobjrole"
+        "app/cpauthobjrole",
+        "app/cpjobscheduler_logs"
     ],
     "devDependencies": {
-        "@sap/ux-specification": "^1.100.1"
+        "@sap/ux-specification": "^1.100.2"
     }
 }

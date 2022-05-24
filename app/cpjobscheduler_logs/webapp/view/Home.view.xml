@@ -1,0 +1,67 @@
+<mvc:View controllerName="cpapp.cpjobschedulerlogs.controller.Home"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns="sap.m">
+    <Page >
+        <customHeader>
+            <Toolbar >
+                <Title id="idTitle" text="{i18n>title}" class="boldText"></Title>
+                <ToolbarSpacer/>
+                <Label text="{i18n>daterange}"/>
+					<DateRangeSelection id="idDateRange" width="20%" delimiter="To" dateValue="" secondDateValue="" valueFormat="yyyy-MM-dd"
+							displayFormat="yyyy-MM-dd" change="handleDateChange" maxDate=""/>
+            </Toolbar>
+        </customHeader>
+        <content>
+            <SearchField id="headSearch" liveChange="onSearch" placeholder="Job"/>
+            <Table id="joblogList" items="{path: '/results'}" growingScrollToLoad="true" rememberSelections="false" 
+                    itemPress="onhandlePress" mode="SingleSelectMaster" selectionChange="onhandlePress">
+                <columns>
+                    <Column hAlign="Middle" vAlign="Middle" >
+                        <Text text="{i18n>jobid}" />
+                    </Column>
+                    <Column hAlign="Middle" vAlign="Middle" >
+                        <Text text="{i18n>jobname}"/>
+                    </Column>
+                    <Column hAlign="Middle" vAlign="Middle" >
+                        <Text text="{i18n>schStime}"/>
+                    </Column>
+                    <Column hAlign="Middle" vAlign="Middle">
+                        <Text text="{i18n>schEtime}"/>
+                    </Column>
+                    <Column hAlign="Middle" vAlign="Middle">
+                        <Text text="{i18n>schNRtime}"/>
+                    </Column>
+                    <Column hAlign="Middle" vAlign="Middle">
+                        <Text text="{i18n>compTime}"/>
+                    </Column>
+                    <Column hAlign="Middle" vAlign="Middle">
+                        <Text text="{i18n>runstatus}"/>
+                    </Column>
+                    <Column hAlign="Middle" vAlign="Middle">
+                        <Text text="{i18n>runstate}"/>
+                    </Column>
+                    
+                </columns>
+                <items>
+                    <ColumnListItem>
+                        <cells>
+                            <Text text="{JOB_ID}" />
+                            <Text text="{JOB_NAME}"/>
+                            <Text text="{SCH_STARTTIME}"/>
+                            <Text text="{SCH_END_TIME}"/>
+                            <Text text="{SCH_NEXTRUN}"/>
+                            <Text text="{COMPLETED_TIMESTAMP}"/>
+                            <!-- <Text text="{path: 'SCH_STARTTIME', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'yyyy/MM/dd' }}"/>
+                            <Text text="{path: 'SCH_END_TIME', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'yyyy/MM/dd' }}"/>
+                            <Text text="{path: 'SCH_NEXTRUN', type : 'sap.ui.model.type.DateTime',formatOptions: { style : 'medium'}}"/> -->
+                            <Text text="{RUN_STATUS}"/>
+                            <Text text="{RUN_STATE}"/>
+                            
+                            
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </content>
+    </Page>
+</mvc:View>

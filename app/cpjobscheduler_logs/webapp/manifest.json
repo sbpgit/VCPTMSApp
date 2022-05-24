@@ -1,7 +1,7 @@
 {
     "_version": "1.32.0",
     "sap.app": {
-        "id": "cpapp.cpnewprodintro",
+        "id": "cpapp.cpjobschedulerlogs",
         "type": "application",
         "i18n": "i18n/i18n.properties",
         "applicationVersion": {
@@ -10,40 +10,28 @@
         "title": "{{appTitle}}",
         "description": "{{appDescription}}",
         "resources": "resources.json",
+        "sourceTemplate": {
+            "id": "@sap-ux/fiori-freestyle-writer:basic",
+            "version": "0.11.9"
+        },
         "dataSources": {
             "mainService": {
-                "uri": "/v2/catalog/",
-                "type": "OData",
-                "settings": {
-                  "localUri": "localService/CatalogService/metadata.xml",
-                  "odataVersion": "2.0"
-                }
-              },
-              "Pal": {
-                "uri": "/v2/pal/",
+                "uri": "/v2/jobs/",
                 "type": "OData",
                 "settings": {
                   "odataVersion": "2.0",
                   "localUri": "localService/metadata.xml"
                 }
-              },
-              "IBP": {
-                "uri": "/v2/ibpimport-srv/",
-                "type": "OData",
-                "settings": {
-                  "odataVersion": "2.0",
-                  "localUri": "localService/metadata.xml"
-                }
-              }
+            }
         },
         "crossNavigation": {
             "inbounds": {
-                "cpapp-cpnewprodintro-inbound": {
+                "cpapp-cpjobschedulerlogs-inbound": {
                     "signature": {
                         "parameters": {},
                         "additionalParameters": "allowed"
                     },
-                    "semanticObject": "cpnewprodintro",
+                    "semanticObject": "cpjobscheduler_logs",
                     "action": "display",
                     "title": "{{flpTitle}}",
                     "subTitle": "{{flpSubtitle}}",
@@ -71,13 +59,13 @@
     "sap.ui5": {
         "flexEnabled": true,
         "rootView": {
-            "viewName": "cpapp.cpnewprodintro.view.App",
+            "viewName": "cpapp.cpjobschedulerlogs.view.App",
             "type": "XML",
             "async": true,
             "id": "App"
         },
         "dependencies": {
-            "minUI5Version": "1.99.0",
+            "minUI5Version": "1.101.0",
             "libs": {
                 "sap.m": {},
                 "sap.ui.core": {},
@@ -97,7 +85,7 @@
             "i18n": {
                 "type": "sap.ui.model.resource.ResourceModel",
                 "settings": {
-                    "bundleName": "cpapp.cpnewprodintro.i18n.i18n"
+                    "bundleName": "cpapp.cpjobschedulerlogs.i18n.i18n"
                 }
             },
             "oGModel": {
@@ -107,32 +95,9 @@
                 },
                 "preload": true
             },
-            "BModel": {
+            "JModel": {
                 "dataSource": "mainService",
-                "preload": true,
-                "settings": {
-                  "synchronizationMode": "None",
-                  "operationMode": "Server",
-                  "autoExpandSelect": true,
-                  "earlyRequests": true,
-                  "groupId": "$direct"
-                }
-              },
-              "PModel": {
-                "dataSource": "Pal",
-                "preload": true,
-                "settings": {
-                  "useBatch": true,
-                  "defaultBindingMode": "TwoWay"
-                }
-              },
-              "IBPModel": {
-                "dataSource": "IBP",
-                "preload": true,
-                "settings": {
-                  "useBatch": true,
-                  "defaultBindingMode": "TwoWay"
-                }
+                "preload": true
               }
         },
         "resources": {
@@ -147,7 +112,7 @@
                 "routerClass": "sap.m.routing.Router",
                 "viewType": "XML",
                 "async": true,
-                "viewPath": "cpapp.cpnewprodintro.view",
+                "viewPath": "cpapp.cpjobschedulerlogs.view",
                 "controlAggregation": "pages",
                 "controlId": "app",
                 "clearControlAggregation": false
@@ -159,29 +124,15 @@
                     "target": [
                         "Home"
                     ]
-                },
-                {
-                    "name": "Detail",
-                    "pattern": "Detail",
-                    "target": [
-                        "Detail"
-                    ]
                 }
             ],
             "targets": {
                 "Home": {
                     "viewType": "XML",
                     "transition": "slide",
-                    "clearControlAggregation": true,
+                    "clearControlAggregation": false,
                     "viewId": "Home",
                     "viewName": "Home"
-                },
-                "Detail": {
-                    "viewType": "XML",
-                    "transition": "slide",
-                    "clearControlAggregation": true,
-                    "viewId": "Detail",
-                    "viewName": "Detail"
                 }
             }
         }
