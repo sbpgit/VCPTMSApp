@@ -13,7 +13,7 @@
         </customHeader>
         <content>
             <SearchField id="headSearch" liveChange="onSearch" placeholder="Job"/>
-            <Table id="joblogList" items="{path: '/results', sorter : { path : 'COMPLETED_TIMESTAMP',desending:'true'} }" growingScrollToLoad="true" rememberSelections="false" 
+            <Table id="joblogList" items="{path: '/results', sorter : { path : 'COMPLETED_TIMESTAMP',Assending:'true'} }" growingScrollToLoad="true" rememberSelections="false" 
                     itemPress="onhandlePress" mode="SingleSelectMaster" selectionChange="onhandlePress">
                 <columns>
                     <Column hAlign="Middle" vAlign="Middle" >

@@ -197,10 +197,6 @@
         "app/cpproduct",
         "app/cpcustgroup",
         "app/cpauthobjrole",
-        "app/cpjobscheduler_logs",
         "app/cpjobscheduler_logs"
-    ],
-    "devDependencies": {
-        "@sap/ux-specification": "^1.100.2"
-    }
+    ]
 }

@@ -147,21 +147,21 @@ context cp {
         key CHAR_NUM     : String(10) @title : 'Internal Char. number';
         key CHAR_COUNTER : Integer    @title : 'Characteristic counter';
         key CHARVAL_NUM  : String(10) @title : 'Internal Char. number';
-            OD_CONDITION : String(2)  @title : 'Object Dependency condition ';
+            OD_CONDITION : String(2)  @title : 'Restriction condition ';
             ROW_ID       : Integer    @title : 'Attribute Index ';
     };
 
     // Object dependency restriction
-    entity ODRESTRICT {
-        key OBJ_DEP      : String(30) @title : 'Object Dependency';
-        key OBJ_COUNTER  : Integer    @title : 'Object Dependency Counter';
-        key CLASS_NUM    : String(18) @title : 'Internal class number';
-        key CHAR_NUM     : String(10) @title : 'Internal Char. number';
-        key CHAR_COUNTER : Integer    @title : 'Characteristic counter';
-        key CHARVAL_NUM  : String(10) @title : 'Internal Char. number';
-            OD_CONDITION : String(2)  @title : 'Object Dependency condition ';
-            ROW_ID       : Integer    @title : 'Attribute Index ';
-    };
+    // entity ODRESTRICT {
+    //     key OBJ_DEP      : String(30) @title : 'Object Dependency';
+    //     key OBJ_COUNTER  : Integer    @title : 'Object Dependency Counter';
+    //     key CLASS_NUM    : String(18) @title : 'Internal class number';
+    //     key CHAR_NUM     : String(10) @title : 'Internal Char. number';
+    //     key CHAR_COUNTER : Integer    @title : 'Characteristic counter';
+    //     key CHARVAL_NUM  : String(10) @title : 'Internal Char. number';
+    //         OD_CONDITION : String(2)  @title : 'Object Dependency condition ';
+    //         ROW_ID       : Integer    @title : 'Attribute Index ';
+    // };
 
     // PIR Characteristitcs
     entity PIR_CH {
