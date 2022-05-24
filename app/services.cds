@@ -47,3 +47,5 @@ using from './cpjobscheduler/annotations';
 using from './cp_atest/annotations';
 
 using from './cpauthobjrole/annotations';
+
+using from './cpjobscheduler_logs/annotations';

@@ -801,11 +801,11 @@ sap.ui.define(
                         LOCATION_ID: that.byId("idloc").getValue(),
                         REF_PRODID: that.byId("idrefprod").getValue(),
                         CLASS_NUM:aData[i].CLASS_NUM, 
-                        REF_CLASS_NUM:aData[i].REFCLASS_NUM,           
+                        REF_CLASS_NUM:aData[i].REF_CLASS_NUM,           
                         CHAR_NUM:aData[i].CHAR_NUM, 
-                        REF_CHAR_NUM:aData[i].REFCHAR_NUM,            
+                        REF_CHAR_NUM:aData[i].REF_CHAR_NUM,            
                         CHARVAL_NUM:aData[i].CHARVAL_NUM,
-                        REF_CHARVAL_NUM:aData[i].REFCHARVAL_NUM
+                        REF_CHARVAL_NUM:aData[i].REF_CHARVAL_NUM
                     };
                     oEntry.PRODCHAR.push(vRuleslist);
                 }
