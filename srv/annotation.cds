@@ -44,6 +44,11 @@ annotate service.PRODUCT with @(
                 $Type : 'UI.DataField',
                 Value : PROD_MDLRANGE,
                 ![@UI.Importance]   : #High
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : AUTH_GROUP,
+                ![@UI.Importance]   : #High
             }
         ],
         HeaderInfo                     : {

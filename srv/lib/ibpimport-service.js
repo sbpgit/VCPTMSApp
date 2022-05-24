@@ -66,7 +66,7 @@ module.exports = cds.service.impl(async function () {
     });
     this.on("getFDemandQty", async (request) => {
         var flag;
-        var resUrl = "/SBPVCP?$select=PRDID,LOCID,PERIODID0_TSTAMP,PLANNEDINDEPENDENTREQ,VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and VERSIONID eq '" + request.data.VERSION + "' and SCENARIOID eq '" + request.data.SCENARIO + "'";
+        var resUrl = "/SBPVCP?$select=PRDID,LOCID,PERIODID4_TSTAMP,TOTALDEMANDOUTPUT,PLANNEDINDEPENDENTREQ,UOMTOID,VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and VERSIONID eq '" + request.data.VERSION + "' and SCENARIOID eq '" + request.data.SCENARIO + "' and UOMTOID eq 'EX";
         var req = await service.tx(req).get(resUrl);
         const dateJSONToEDM = jsonDate => {
             const content = /\d+/.exec(String(jsonDate));
@@ -77,7 +77,7 @@ module.exports = cds.service.impl(async function () {
         };
         flag = '';
         for (var i in req) {
-            var vWeekDate = dateJSONToEDM(req[i].PERIODID0_TSTAMP);
+            var vWeekDate = dateJSONToEDM(req[i].PERIODID4_TSTAMP);
             var vScenario = 'BSL_SCENARIO';
             // var vWeekDate = vTstamp.split('T');
             //  if (req[i].LOCID === 'RX01') {
@@ -87,7 +87,7 @@ module.exports = cds.service.impl(async function () {
                 "'" + req[i].VERSIONID + "'" + "," +
                 "'" + vScenario + "'" + "," +
                 "'" + vWeekDate + "'" + "," +
-                "'" + req[i].PLANNEDINDEPENDENTREQ + "'" + ')' + ' WITH PRIMARY KEY';
+                "'" + req[i].TOTALDEMANDOUTPUT + "'" + ')' + ' WITH PRIMARY KEY';
             try {
                 await cds.run(modQuery);
                 flag = 'X';
@@ -974,7 +974,7 @@ module.exports = cds.service.impl(async function () {
 
     this.on("generateFDemandQty", async (request) => {
         var flag;
-        var resUrl = "/SBPVCP?$select=PRDID,LOCID,PERIODID0_TSTAMP,PLANNEDINDEPENDENTREQ,VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and VERSIONID eq '" + request.data.VERSION + "' and SCENARIOID eq '" + request.data.SCENARIO + "'";
+        var resUrl = "/SBPVCP?$select=PRDID,LOCID,PERIODID4_TSTAMP,TOTALDEMANDOUTPUT,PLANNEDINDEPENDENTREQ,VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and VERSIONID eq '" + request.data.VERSION + "' and SCENARIOID eq '" + request.data.SCENARIO + "'";
         var req = await service.tx(req).get(resUrl);
         const dateJSONToEDM = jsonDate => {
             const content = /\d+/.exec(String(jsonDate));
@@ -985,14 +985,14 @@ module.exports = cds.service.impl(async function () {
         };
         flag = '';
         for (var i in req) {
-            var vWeekDate = dateJSONToEDM(req[i].PERIODID0_TSTAMP);
+            var vWeekDate = dateJSONToEDM(req[i].PERIODID4_TSTAMP);
             let modQuery = 'UPSERT "CP_IBP_FUTUREDEMAND_TEMP" VALUES (' +
                 "'" + req[i].LOCID + "'" + "," +
                 "'" + req[i].PRDID + "'" + "," +
                 "'" + req[i].VERSIONID + "'" + "," +
                 "'" + req[i].SCENARIOID + "'" + "," +
                 "'" + vWeekDate + "'" + "," +
-                "'" + req[i].PLANNEDINDEPENDENTREQ + "'" + ')' + ' WITH PRIMARY KEY';
+                "'" + req[i].TOTALDEMANDOUTPUT + "'" + ')' + ' WITH PRIMARY KEY';
             try {
                 await cds.run(modQuery);
                 flag = 'X';

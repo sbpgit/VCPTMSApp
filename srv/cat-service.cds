@@ -116,7 +116,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
     entity getIBPFres           as projection on od.IBP_RESULTPLAN;
 
     //Object dependency restrict
-    @readonly
+    @odata.draft.enabled
     entity getODHdrRstr         as projection on V_ODRESTRICT;
 
     // Get sales history configuration and its characteristics
