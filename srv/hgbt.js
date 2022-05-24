@@ -1635,7 +1635,7 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
     stmt=conn.prepare(sqlStr);
     let predictionResults=stmt.exec();
     stmt.drop();
-    //console.log('Prediction Results ', predictionResults);
+    console.log('Prediction Results ', predictionResults);
 
     // --------------- BEGIN --------------------
 
@@ -1688,17 +1688,19 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
             ' AND "VERSION" = ' + "'" + version + "'" +
             ' AND "SCENARIO" = ' + "'" + scenario + "'" +
             ' ORDER BY ' + '"' + vcConfigTimePeriod + '"' + ' ASC';
-    // console.log("V_FUTURE_DEP_TS HGBT Distinct Periods sqlStr", sqlStr)
+    console.log("V_FUTURE_DEP_TS HGBT Distinct Periods sqlStr", sqlStr)
     // stmt=conn.prepare(sqlStr);
     // var distPeriods=stmt.exec();
     // stmt.drop();
     var distPeriods = await cds.run(sqlStr);
-    // console.log("Time Periods for Group :", tpGroupId, " Results: ", distPeriods, "periods#",distPeriods.length);
+    console.log("Time Periods for Group :", tpGroupId, " Results: ", distPeriods, "periods#",distPeriods.length, "resultsObj Length ",resultsObj.length);
     var predictedTime = new Date().toISOString();
     var trimmedPeriod = vcConfigTimePeriod.replace(/^(["]*)/g, '');
     // console.log('trimmedPeriod : ', trimmedPeriod, 'vcConfigTimePeriod :', vcConfigTimePeriod);
 
-    for (var index=0; index<distPeriods.length; index++)
+    // for (var index=0; index<distPeriods.length && index <resultsObj.length; index++)
+    for (var index=0; index <resultsObj.length; index++)
+
     {     
         let predictedVal = resultsObj[index].score;
         predictedVal =  (+predictedVal).toFixed(2);
@@ -1859,7 +1861,8 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
     // stmt.drop();
 
     //console.log("resultsObj = ", resultsObj);
-    for (let pIndex=0; pIndex<distPeriods.length; pIndex++)
+    // for (let pIndex=0; pIndex<distPeriods.length; pIndex++)
+    for (let pIndex=0; pIndex<resultsObj.length; pIndex++)
     {     
         let predictedVal = resultsObj[pIndex].score;
         predictedVal = ( +predictedVal).toFixed(2);
