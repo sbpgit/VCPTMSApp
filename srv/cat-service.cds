@@ -132,8 +132,10 @@ service CatalogService @(impl : './lib/cat-service.js') {
     entity genRtrHeader         as projection on od.RESTRICT_HEADER;
 
     //Mainitain new product introduction
-    @odata.draft.enabled
+    @readonly
     entity genNewProd           as projection on od.NEWPROD_INTRO;
+    @readonly
+    entity genPartialProd           as projection on od.PARTIALPROD_INTRO;
 
     // Get Product access node
     entity genProdAccessNode    as projection on od.PROD_ACCNODE;
