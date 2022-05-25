@@ -1,11 +1,16 @@
 <mvc:View controllerName="cpapp.cpjobschedulerlogs.controller.Home"
-    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
-    xmlns="sap.m">
+    xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:core="sap.ui.core">
     <Page >
         <customHeader>
             <Toolbar >
                 <Title id="idTitle" text="{i18n>title}" class="boldText"></Title>
                 <ToolbarSpacer/>
+                <Label text="{i18n>runstate}"/>
+                <Select id="idFilter" change="onSearch" selectedKey="A" class="buttonDesktop">
+							<core:ListItem key="A" text="{i18n>all}"/>
+							<core:ListItem key="E" text="{i18n>error}"/>
+							<core:ListItem key="S" text="{i18n>success}"/>
+						</Select>
                 <Label text="{i18n>daterange}"/>
 					<DateRangeSelection id="idDateRange" width="20%" delimiter="To" dateValue="" secondDateValue="" valueFormat="yyyy-MM-dd"
 							displayFormat="yyyy-MM-dd" change="handleDateChange" maxDate=""/>
@@ -13,31 +18,30 @@
         </customHeader>
         <content>
             <SearchField id="headSearch" liveChange="onSearch" placeholder="Job"/>
-            <Table id="joblogList" items="{path: '/results', sorter : { path : 'COMPLETED_TIMESTAMP',Assending:'true'} }" growingScrollToLoad="true" rememberSelections="false" 
-                    itemPress="onhandlePress" mode="SingleSelectMaster" selectionChange="onhandlePress">
+            <Table id="joblogList" items="{path: '/results', sorter : { path : 'COMPLETED_TIMESTAMP', descending: true} }" updateFinished="onUpdateFinished">
                 <columns>
-                    <Column hAlign="Middle" vAlign="Middle" >
+                    <Column hAlign="Center" vAlign="Middle" width="80px">
                         <Text text="{i18n>jobid}" />
                     </Column>
-                    <Column hAlign="Middle" vAlign="Middle" >
+                    <Column hAlign="Center" vAlign="Middle" >
                         <Text text="{i18n>jobname}"/>
                     </Column>
-                    <Column hAlign="Middle" vAlign="Middle" >
+                    <Column hAlign="Center" vAlign="Middle"  width="160px">
                         <Text text="{i18n>schStime}"/>
                     </Column>
-                    <Column hAlign="Middle" vAlign="Middle">
+                    <Column hAlign="Center" vAlign="Middle" width="160px">
                         <Text text="{i18n>schEtime}"/>
                     </Column>
-                    <Column hAlign="Middle" vAlign="Middle">
+                    <Column hAlign="Center" vAlign="Middle" width="160px">
                         <Text text="{i18n>schNRtime}"/>
                     </Column>
-                    <Column hAlign="Middle" vAlign="Middle">
+                    <Column hAlign="Center" vAlign="Middle" width="160px">
                         <Text text="{i18n>compTime}"/>
                     </Column>
-                    <Column hAlign="Middle" vAlign="Middle">
+                    <Column hAlign="Center" vAlign="Middle" width="120px">
                         <Text text="{i18n>runstatus}"/>
                     </Column>
-                    <Column hAlign="Middle" vAlign="Middle">
+                    <Column hAlign="Center" vAlign="Middle" width="120px">
                         <Text text="{i18n>runstate}"/>
                     </Column>
                     
