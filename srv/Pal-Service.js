@@ -355,7 +355,7 @@ async function _getDataObjForPredictions(vcRulesList, idx, modelType, numChars) 
             }
         }
     //}
-//    console.log('_getDataObjForPredictions ',JSON.stringify(dataObj));
+   console.log('_getDataObjForPredictions ',JSON.stringify(dataObj));
     return dataObj;
    
 }
@@ -735,6 +735,30 @@ async function _generatePredictions(req,isGet) {
      vcRulesListReq = req.data.vcRulesList;
  }
 
+ let createtAt = new Date();
+ let id = uuidv1();
+ let values = [];	
+ let message = "Request for Predictions Queued Sucessfully";
+
+ values.push({id, createtAt, message, vcRulesListReq});    
+
+ // console.log('values :', values);
+ // console.log('Response completed Time  :', createtAt);
+
+ if (isGet == true)
+ {
+     req.reply({values});
+     // req.reply();
+ }
+ else
+ {
+     let res = req._.req.res;
+     // res.statusCode = 201;
+     res.statusCode = 202;
+     res.send({values});
+ }
+ 
+
    const sleep = require('await-sleep');
 
 //    console.log('_generatePredictions VC Rules List: ', vcRulesListReq); 
@@ -1020,28 +1044,27 @@ async function _generatePredictions(req,isGet) {
 
     }
     // conn.disconnect();
-    let createtAt = new Date();
-    let id = uuidv1();
-    let values = [];	
+    // let createtAt = new Date();
+    // let id = uuidv1();
+    // let values = [];	
 
-   // values.push({id, createtAt, modelType, vcRulesList});    
-    values.push({id, createtAt, vcRulesList});    
+    // values.push({id, createtAt, vcRulesList});    
 
-    // console.log('values :', values);
-    // console.log('Response completed Time  :', createtAt);
+    // // console.log('values :', values);
+    // // console.log('Response completed Time  :', createtAt);
 
-    if (isGet == true)
-    {
-        req.reply({values});
-        // req.reply();
-    }
-    else
-    {
-        let res = req._.req.res;
-        // res.statusCode = 201;
-        res.statusCode = 202;
-        res.send({values});
-    }
+    // if (isGet == true)
+    // {
+    //     req.reply({values});
+    //     // req.reply();
+    // }
+    // else
+    // {
+    //     let res = req._.req.res;
+    //     // res.statusCode = 201;
+    //     res.statusCode = 202;
+    //     res.send({values});
+    // }
     
 
     for (let i = 0; i < vcRulesList.length; i++)
@@ -1229,7 +1252,7 @@ async function _getRuleListTypeForGenModels(vcRulesList, modelType, numChars)
             // {
             //     // Check for MLR For Constant value of Attribute across the Time Series
             //     sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", "Attribute" ' +
-            //             'FROM "CP_VC_HISTORY_TS" WHERE "Product" = ' + "'" + vcRulesList[i].Product + "'" +
+            //             'FROM "CP_VC_HISTORY_TS_TEMP" WHERE "Product" = ' + "'" + vcRulesList[i].Product + "'" +
             //             ' AND "Location" = ' + "'" + vcRulesList[i].Location + "'" + 
             //             ' AND "GroupID" = ' + "'" + vcRulesList[i].GroupID + "'" +
             //             ' GROUP BY "Location", "Product", "GroupID", "Attribute"' +
@@ -1492,11 +1515,29 @@ async function _generateRegModels (req,isGet) {
    }
 
 //    console.log('_generateRegModels vcRulesListReq: ', vcRulesListReq); 
-//    let resp = req._.req.res;
-//    resp.statusCode = 201;
+    let createtAt = new Date();
+    let id = uuidv1();
+    let values = [];	
+    let message = "Request for Models generation Queued Sucessfully";
 
-//    resp.send({vcRulesListReq});
-//     return;
+    values.push({id, createtAt, message, vcRulesListReq});    
+
+    // console.log('values :', values);
+    // console.log('Response completed Time  :', createtAt);
+
+
+    if (isGet == true)
+    {
+        req.reply({values});
+        // req.reply();
+    }
+    else
+    {
+        let res = req._.req.res;
+        // res.statusCode = 201;
+        res.statusCode = 202;
+        res.send({values});
+    }
 
     var url;
     //const modelType = req.data.modelType;
@@ -1547,7 +1588,7 @@ async function _generateRegModels (req,isGet) {
        if ( (vcRulesListReq[0].Location != "ALL") &&
             (vcRulesListReq[0].Product == "ALL") )
        {
-           sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", "Type", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "CP_VC_HISTORY_TS"' + 
+           sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", "Type", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "CP_VC_HISTORY_TS_TEMP"' + 
                     'WHERE "Location" =' + "'" +   vcRulesListReq[0].Location + "'" +
                     ' AND "Type" =' + "'" +   vcRulesListReq[0].Type + "'" +
                     ' GROUP BY "Location", "Product", "GroupID", "Type" HAVING COUNT(DISTINCT "' + vcConfigTimePeriod + '") > 20';
@@ -1555,7 +1596,7 @@ async function _generateRegModels (req,isGet) {
        else if ( (vcRulesListReq[0].Product != "ALL") &&
                  (vcRulesListReq[0].Location == "ALL") )
        {
-           sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", "Type", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "CP_VC_HISTORY_TS"' + 
+           sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", "Type", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "CP_VC_HISTORY_TS_TEMP"' + 
                     'WHERE "Product" =' + "'" +   vcRulesListReq[0].Product + "'" +
                     ' AND "Type" =' + "'" +   vcRulesListReq[0].Type + "'" +
                     ' GROUP BY "Location", "Product", "GroupID", "Type" HAVING COUNT(DISTINCT "' + vcConfigTimePeriod + '") > 20';
@@ -1563,7 +1604,7 @@ async function _generateRegModels (req,isGet) {
        else if ( (vcRulesListReq[0].Product != "ALL") &&
                  (vcRulesListReq[0].Location != "ALL") )
        {
-           sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", "Type", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "CP_VC_HISTORY_TS"' + 
+           sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", "Type", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "CP_VC_HISTORY_TS_TEMP"' + 
                'WHERE "Product" =' + "'" +   vcRulesListReq[0].Product + "'" +
                ' AND "Location" =' + "'" +   vcRulesListReq[0].Location + "'" +
                ' AND "Type" =' + "'" +   vcRulesListReq[0].Type + "'" +
@@ -1571,7 +1612,7 @@ async function _generateRegModels (req,isGet) {
        }
        else
        {
-            sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", "Type", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "CP_VC_HISTORY_TS"' + 
+            sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", "Type", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "CP_VC_HISTORY_TS_TEMP"' + 
                    // vcRulesListReq[0].tableName + 
                    'WHERE "Type" =' + "'" +   vcRulesListReq[0].Type + "'" +
                     ' GROUP BY "Location", "Product", "GroupID", "Type"  HAVING COUNT(DISTINCT "' + vcConfigTimePeriod + '") > 20';  
@@ -1604,7 +1645,7 @@ async function _generateRegModels (req,isGet) {
     {
         for (var i = 0; i < vcRulesListReq.length; i++)
         {
-            sqlStr = 'SELECT  "Location", "Product", "GroupID", "Type" FROM "CP_VC_HISTORY_TS" WHERE "Product" =' +
+            sqlStr = 'SELECT  "Location", "Product", "GroupID", "Type" FROM "CP_VC_HISTORY_TS_TEMP" WHERE "Product" =' +
                         "'" +  vcRulesListReq[i].Product + "'" +  
                         ' AND "GroupID" =' + "'" +   vcRulesListReq[i].GroupID + "'" +
                         ' AND "Location" =' + "'" +   vcRulesListReq[i].Location + "'" +
@@ -1637,8 +1678,8 @@ async function _generateRegModels (req,isGet) {
     for (var i = 0; i < vcRulesList.length; i++)
     {
         
-       // sqlStr = 'SELECT  COUNT(DISTINCT "Characteristic") AS numChars FROM CP_VC_HISTORY_TS WHERE "Product" =' +
-        sqlStr = 'SELECT  COUNT(DISTINCT "Row") AS numChars FROM "CP_VC_HISTORY_TS" WHERE "Product" =' +
+       // sqlStr = 'SELECT  COUNT(DISTINCT "Characteristic") AS numChars FROM CP_VC_HISTORY_TS_TEMP WHERE "Product" =' +
+        sqlStr = 'SELECT  COUNT(DISTINCT "Row") AS numChars FROM "CP_VC_HISTORY_TS_TEMP" WHERE "Product" =' +
                     "'" +  vcRulesList[i].Product + "'" +  
                     ' AND "GroupID" =' + "'" +   vcRulesList[i].GroupID + "'" +
                     ' AND "Type" =' + "'" +   vcRulesList[i].Type + "'" +
@@ -1678,42 +1719,28 @@ async function _generateRegModels (req,isGet) {
     
     //conn.disconnect();
 
-    let createtAt = new Date();
-    let id = uuidv1();
-    let values = [];	
+    // let createtAt = new Date();
+    // let id = uuidv1();
+    // let values = [];	
 
-
-  //  values.push({idObj, createtAtObj, responseVcRuleList});
-    //values.push({id, createtAt, modelType, vcRulesList}); 
-    values.push({id, createtAt, vcRulesList});    
+    // values.push({id, createtAt, vcRulesList});    
    
-    // console.log('values :', values);
-    // console.log('Response completed Time  :', createtAt);
-
-//     var res = req._.req.res;
-//     // res.statusCode = 201;
-//     res.statusCode = 202;
+    // // console.log('values :', values);
+    // // console.log('Response completed Time  :', createtAt);
 
 
-// //    res.end();
-// //    req.res.contentType('application/json');
-//     res.send({values});
-
-    // req.statusCode = 202;
-    // req.reply({values});
-
-    if (isGet == true)
-    {
-        req.reply({values});
-        // req.reply();
-    }
-    else
-    {
-        let res = req._.req.res;
-        // res.statusCode = 201;
-        res.statusCode = 202;
-        res.send({values});
-    }
+    // if (isGet == true)
+    // {
+    //     req.reply({values});
+    //     // req.reply();
+    // }
+    // else
+    // {
+    //     let res = req._.req.res;
+    //     // res.statusCode = 201;
+    //     res.statusCode = 202;
+    //     res.send({values});
+    // }
     
 //    console.log("Response Headers ", res.getHeaders());
 //    res.removeHeader("x-powered-by");
@@ -2406,7 +2433,7 @@ async function _getDataObjForGenModels(vcRulesList, modelType, numChars) {
              (modelType == 'RDT') )
         {
             sqlStr = 'SELECT DISTINCT "Attribute", "' + vcConfigTimePeriod + 
-                    '", SUM("CharCountPercent") AS "CharCount", SUM("TargetPercent") AS "Target" FROM "CP_VC_HISTORY_TS" WHERE "Product" =' +
+                    '", SUM("CharCountPercent") AS "CharCount", SUM("TargetPercent") AS "Target" FROM "CP_VC_HISTORY_TS_TEMP" WHERE "Product" =' +
 
                     "'" +  vcRulesList[i].Product + "'" +  
                     ' AND "GroupID" =' + "'" +   vcRulesList[i].GroupID + "'" +
@@ -2418,7 +2445,7 @@ async function _getDataObjForGenModels(vcRulesList, modelType, numChars) {
         else
         {
             sqlStr = 'SELECT DISTINCT "Attribute", "' + vcConfigTimePeriod + 
-                    '", SUM("CharCount") AS "CharCount", SUM("Target") AS "Target" FROM "CP_VC_HISTORY_TS" WHERE "Product" =' +
+                    '", SUM("CharCount") AS "CharCount", SUM("Target") AS "Target" FROM "CP_VC_HISTORY_TS_TEMP" WHERE "Product" =' +
 
                     "'" +  vcRulesList[i].Product + "'" +  
                     ' AND "GroupID" =' + "'" +   vcRulesList[i].GroupID + "'" +

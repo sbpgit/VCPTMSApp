@@ -103,4 +103,5 @@ AND CHARHDR."OBJ_COUNTER" = HDR."OBJ_COUNTER"
 --AND CHARHDR.CAL_DATE <= '2022-03-06'
 ORDER BY "PeriodOfYear", "Location", "Product","GroupID","Row";
 
+
 END;

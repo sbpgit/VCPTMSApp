@@ -1635,7 +1635,7 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
     stmt=conn.prepare(sqlStr);
     let predictionResults=stmt.exec();
     stmt.drop();
-    //console.log('Prediction Results ', predictionResults);
+    console.log('Prediction Results ', predictionResults);
 
     // --------------- BEGIN --------------------
 
@@ -1688,17 +1688,19 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
             ' AND "VERSION" = ' + "'" + version + "'" +
             ' AND "SCENARIO" = ' + "'" + scenario + "'" +
             ' ORDER BY ' + '"' + vcConfigTimePeriod + '"' + ' ASC';
-    // console.log("V_FUTURE_DEP_TS HGBT Distinct Periods sqlStr", sqlStr)
+    console.log("V_FUTURE_DEP_TS HGBT Distinct Periods sqlStr", sqlStr)
     // stmt=conn.prepare(sqlStr);
     // var distPeriods=stmt.exec();
     // stmt.drop();
     var distPeriods = await cds.run(sqlStr);
-    // console.log("Time Periods for Group :", tpGroupId, " Results: ", distPeriods, "periods#",distPeriods.length);
+    console.log("Time Periods for Group :", tpGroupId, " Results: ", distPeriods, "periods#",distPeriods.length, "resultsObj Length ",resultsObj.length);
     var predictedTime = new Date().toISOString();
     var trimmedPeriod = vcConfigTimePeriod.replace(/^(["]*)/g, '');
     // console.log('trimmedPeriod : ', trimmedPeriod, 'vcConfigTimePeriod :', vcConfigTimePeriod);
 
-    for (var index=0; index<distPeriods.length; index++)
+    // for (var index=0; index<distPeriods.length && index <resultsObj.length; index++)
+    for (var index=0; index <resultsObj.length; index++)
+
     {     
         let predictedVal = resultsObj[index].score;
         predictedVal =  (+predictedVal).toFixed(2);
@@ -1715,37 +1717,47 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
                     ' AND "VERSION" = ' + "'" + version + "'" +
                     ' AND "SCENARIO" = ' + "'" + scenario + "'" +
                     ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
-        console.log("V_FUTURE_DEP_TS HGBT SELECT sqlStr ", sqlStr);
+        // console.log("V_FUTURE_DEP_TS HGBT SELECT sqlStr ", sqlStr);
 
         // stmt=conn.prepare(sqlStr);
         // result=stmt.exec();
         // stmt.drop();
-        result = await cds.run(sqlStr);
+        let result = await cds.run(sqlStr);
         // console.log("V_FUTURE_DEP_TS HGBT SELECT sqlStr result ", result);
 
-        sqlStr = 'UPSERT "CP_TS_PREDICTIONS" VALUES (' + "'" + result[0].CAL_DATE + "'" + "," +
-                    "'" + result[0].Location + "'" + "," +
-                    "'" + result[0].Product + "'" + "," +
-                    "'" + result[0].Type + "'" + "," +
-                    "'" + result[0].OBJ_DEP + "'" + "," +
-                    "'" + result[0].OBJ_COUNTER + "'" + "," +
-                    "'" + 'HGBT' + "'" + "," +
-                    "'" + modelVersion  + "'" + "," +
-                    "'" + profileId  + "'" + "," +
-                    "'" + result[0].VERSION + "'" + "," +
-                    "'" + result[0].SCENARIO + "'" + "," + 
-                    "'" + predictedVal * result[0].OrderQuantity + "'" + "," +
-                    "'" + predictedTime + "'" + "," +
-                    "'" + 'SUCCESS' + "'" + ')' + ' WITH PRIMARY KEY';
-            
-            //' WHERE "GroupID" = ' + "'" + groupId + "'" + 
-            //' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
-        // console.log("V_PREDICTIONS Predicted Value HGBT sql update sqlStr", sqlStr);
+        if (result.length > 0)
+        {
+            sqlStr = 'UPSERT "CP_TS_PREDICTIONS" VALUES (' + "'" + result[0].CAL_DATE + "'" + "," +
+                        "'" + result[0].Location + "'" + "," +
+                        "'" + result[0].Product + "'" + "," +
+                        "'" + result[0].Type + "'" + "," +
+                        "'" + result[0].OBJ_DEP + "'" + "," +
+                        "'" + result[0].OBJ_COUNTER + "'" + "," +
+                        "'" + 'HGBT' + "'" + "," +
+                        "'" + modelVersion  + "'" + "," +
+                        "'" + profileId  + "'" + "," +
+                        "'" + result[0].VERSION + "'" + "," +
+                        "'" + result[0].SCENARIO + "'" + "," + 
+                        "'" + predictedVal * result[0].OrderQuantity + "'" + "," +
+                        "'" + predictedTime + "'" + "," +
+                        "'" + 'SUCCESS' + "'" + ')' + ' WITH PRIMARY KEY';
+                
+                //' WHERE "GroupID" = ' + "'" + groupId + "'" + 
+                //' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
+            // console.log("V_PREDICTIONS Predicted Value HGBT sql update sqlStr", sqlStr);
 
-        // stmt=conn.prepare(sqlStr);
-        // stmt.exec();
-        // stmt.drop();
-        await cds.run(sqlStr);
+            // stmt=conn.prepare(sqlStr);
+            // stmt.exec();
+            // stmt.drop();
+            // await cds.run(sqlStr);
+
+            try {
+                await cds.run(sqlStr);
+            }
+            catch (exception) {
+                console.log("sqlStr ", sqlStr, "index = ", index, "periodId : ",periodId, "predictedVal : ", predictedVal);
+                throw new Error(exception.toString());
+            }
 
         // let method = 'HGBT';
         // sqlStr = 'SELECT CP_PAL_PROFILEOD.PROFILE, METHOD FROM CP_PAL_PROFILEOD ' +
@@ -1764,32 +1776,39 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
 
         // if ( (results.length > 0) &&
         //      (results[0].METHOD = 'HGBT') &&
-        if(modelVersion == 'Active')
-        {
-            sqlStr = 'UPSERT "CP_IBP_RESULTPLAN_TS" VALUES (' + "'" + result[0].CAL_DATE + "'" + "," +
-                    "'" + result[0].Location + "'" + "," +
-                    "'" + result[0].Product + "'" + "," +
-                    "'" + result[0].Type + "'" + "," +
-                    "'" + result[0].OBJ_DEP + "'" + "," +
-                    "'" + result[0].OBJ_COUNTER + "'" + "," +
-                    "'" + modelVersion  + "'" + "," +
-                    "'" + profileId  + "'" + "," +
-                    "'" + result[0].VERSION + "'" + "," +
-                    "'" + result[0].SCENARIO + "'" + "," + 
-                    "'" + predictedVal * result[0].OrderQuantity + "'" + "," +
-                    "'" + predictedTime + "'" + "," +
-                    "'" + 'SUCCESS' + "'" + ')' + ' WITH PRIMARY KEY';
-            
- 
-            // console.log("CP_IBP_RESULTPLAN_TS Predicted Value HGBT sql update sqlStr", sqlStr);
+            if(modelVersion == 'Active')
+            {
+                sqlStr = 'UPSERT "CP_IBP_RESULTPLAN_TS" VALUES (' + "'" + result[0].CAL_DATE + "'" + "," +
+                        "'" + result[0].Location + "'" + "," +
+                        "'" + result[0].Product + "'" + "," +
+                        "'" + result[0].Type + "'" + "," +
+                        "'" + result[0].OBJ_DEP + "'" + "," +
+                        "'" + result[0].OBJ_COUNTER + "'" + "," +
+                        "'" + modelVersion  + "'" + "," +
+                        "'" + profileId  + "'" + "," +
+                        "'" + result[0].VERSION + "'" + "," +
+                        "'" + result[0].SCENARIO + "'" + "," + 
+                        "'" + predictedVal * result[0].OrderQuantity + "'" + "," +
+                        "'" + predictedTime + "'" + "," +
+                        "'" + 'SUCCESS' + "'" + ')' + ' WITH PRIMARY KEY';
+                
+    
+                // console.log("CP_IBP_RESULTPLAN_TS Predicted Value HGBT sql update sqlStr", sqlStr);
 
-            // stmt=conn.prepare(sqlStr);
-            // stmt.exec();
-            // stmt.drop();
-            await cds.run(sqlStr);
+                // stmt=conn.prepare(sqlStr);
+                // stmt.exec();
+                // stmt.drop();
+                // await cds.run(sqlStr);
+                try {
+                    await cds.run(sqlStr);
+                }
+                catch (exception) {
+                    console.log("sqlStr ", sqlStr, "index = ", index, "periodId : ",periodId, "predictedVal : ", predictedVal);
+                    throw new Error(exception.toString());
+                }
 
+            }
         }
-
 
     }
     // conn.disconnect();
@@ -1859,7 +1878,8 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
     // stmt.drop();
 
     //console.log("resultsObj = ", resultsObj);
-    for (let pIndex=0; pIndex<distPeriods.length; pIndex++)
+    // for (let pIndex=0; pIndex<distPeriods.length; pIndex++)
+    for (let pIndex=0; pIndex<resultsObj.length; pIndex++)
     {     
         let predictedVal = resultsObj[pIndex].score;
         predictedVal = ( +predictedVal).toFixed(2);
@@ -2029,35 +2049,40 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
             {
                 impactValPercent = 0;
             }
-            sqlStr = 'UPSERT "CP_TS_OBJDEP_CHAR_IMPACT_F" VALUES (' + "'" + result[rIndex].CAL_DATE + "'" + "," +
-                "'" + result[rIndex].Location + "'" + "," +
-                "'" + result[rIndex].Product + "'" + "," +
-                "'" + result[rIndex].Type + "'" + "," +
-                "'" + result[rIndex].OBJ_DEP + "'" + "," +
-                "'" + result[rIndex].OBJ_COUNTER + "'" + "," +
-                "'" + result[rIndex].ROW_ID + "'" + "," +
-                "'" + 'HGBT' + "'" + "," +
-                "'" + modelVersion  + "'" + "," +
-                "'" + profileId  + "'" + "," +
-                "'" + result[rIndex].VERSION + "'" + "," +
-                "'" + result[rIndex].SCENARIO + "'" + "," +
-                "'" + result[rIndex].CharCount + "'" + "," +
-                "'" + impact_val + "'" + "," +
-                "'" + impactValPercent + "'" + "," +
-                "'" + predicted*orderCount + "'" + "," +
-                "'" + predictedTime + "'" + ')' + ' WITH PRIMARY KEY';
-            
-  
-            // stmt=conn.prepare(sqlStr);
-            // stmt.exec();
-            // stmt.drop(); 
-            try {
-                await cds.run(sqlStr);
-            }
-            catch (exception) {
-                console.log("sqlStrTemp ", sqlStrTemp, "rIndex = ", rIndex);
-                console.log("ERROR -- CP_TS_OBJDEP_CHAR_IMPACT_F HGBT UPSERT sqlStr ", sqlStr); 
-                throw new Error(exception.toString());
+
+            if ( (impactValPercent >= 0) &&
+                 (impact_val >=0) )
+            {
+                sqlStr = 'UPSERT "CP_TS_OBJDEP_CHAR_IMPACT_F" VALUES (' + "'" + result[rIndex].CAL_DATE + "'" + "," +
+                    "'" + result[rIndex].Location + "'" + "," +
+                    "'" + result[rIndex].Product + "'" + "," +
+                    "'" + result[rIndex].Type + "'" + "," +
+                    "'" + result[rIndex].OBJ_DEP + "'" + "," +
+                    "'" + result[rIndex].OBJ_COUNTER + "'" + "," +
+                    "'" + result[rIndex].ROW_ID + "'" + "," +
+                    "'" + 'HGBT' + "'" + "," +
+                    "'" + modelVersion  + "'" + "," +
+                    "'" + profileId  + "'" + "," +
+                    "'" + result[rIndex].VERSION + "'" + "," +
+                    "'" + result[rIndex].SCENARIO + "'" + "," +
+                    "'" + result[rIndex].CharCount + "'" + "," +
+                    "'" + impact_val + "'" + "," +
+                    "'" + impactValPercent + "'" + "," +
+                    "'" + predicted*orderCount + "'" + "," +
+                    "'" + predictedTime + "'" + ')' + ' WITH PRIMARY KEY';
+                
+    
+                // stmt=conn.prepare(sqlStr);
+                // stmt.exec();
+                // stmt.drop(); 
+                try {
+                    await cds.run(sqlStr);
+                }
+                catch (exception) {
+                    console.log("sqlStrTemp ", sqlStrTemp, "rIndex = ", rIndex);
+                    console.log("ERROR -- CP_TS_OBJDEP_CHAR_IMPACT_F HGBT UPSERT sqlStr ", sqlStr); 
+                    throw new Error(exception.toString());
+                }
             }
   
         }

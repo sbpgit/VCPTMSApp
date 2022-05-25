@@ -715,6 +715,7 @@ sap.ui.define(
               },
               vRuleslist;
               var aData = that.ListModel.getData().results;
+              var oFlag = oGModel.getProperty("/sFlag");
               for(var i=0; i<aData.length; i++){
 
                     vRuleslist = {
@@ -731,7 +732,7 @@ sap.ui.define(
             that.getModel("BModel").callFunction("/maintainPartialProdChar", {
                 method: "GET",
                 urlParameters: {
-                    FLAG : 'C',
+                    FLAG : oFlag,
                     PRODCHAR: JSON.stringify(oEntry.PRODCHAR)
                 },
                 success: function (oData) {
