@@ -192,10 +192,6 @@ modules:
       name: cpappcpjobscheduler
       target-path: resources/
     - artifacts:
-      - cpappcpatest.zip
-      name: cpappcpatest
-      target-path: resources/
-    - artifacts:
       - cpappcpauthobjrole.zip
       name: cpappcpauthobjrole
       target-path: resources/
@@ -486,16 +482,6 @@ modules:
 - name: cpappcpjobscheduler
   type: html5
   path: app/cpjobscheduler
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    supported-platforms: []
-- name: cpappcpatest
-  type: html5
-  path: app/cp_atest
   build-parameters:
     build-result: dist
     builder: custom

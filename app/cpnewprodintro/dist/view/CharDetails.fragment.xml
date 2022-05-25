@@ -1,0 +1,45 @@
+<core:FragmentDefinition xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns:l="sap.ui.layout"
+    xmlns:f="sap.ui.layout.form">
+    <Dialog title="Product Characteristics" contentWidth="1200px">
+        <Table id="idCharDetail" items="{path: '/results'}">
+            <columns>
+                <Column hAlign="Left" vAlign="Middle">
+                    <Text text="{i18n>class}" />
+                </Column>
+                <Column hAlign="Left" vAlign="Middle">
+                    <Text text="{i18n>refclass}" />
+                </Column>
+                <Column hAlign="Left" vAlign="Middle">
+                    <Text text="{i18n>charn}"/>
+                </Column>
+                <Column hAlign="Left" vAlign="Middle">
+                    <Text text="{i18n>refcharn}"/>
+                </Column>
+                <Column hAlign="Left" vAlign="Middle">
+                    <Text text="{i18n>charv}"/>
+                </Column>
+                <Column hAlign="Left" vAlign="Middle">
+                    <Text text="{i18n>refcharv}"/>
+                </Column>
+            </columns>
+            <items>
+                <ColumnListItem>
+                    <cells>
+                        <Text text="{CLASS_NAME}" />
+                        <Text text="{REF_CLASSNAME}" />
+                        <Text text="{CHAR_NAME}"/>
+                        <Text text="{REF_CHARNAME}" />
+                        <Text text="{CHAR_VALUE}"/>
+                        <Text text="{REF_CHARVAL}" />
+                    </cells>
+                </ColumnListItem>
+            </items>
+        </Table>
+        <buttons>
+            <Button type='Reject' text="{i18n>close}" press="onCharClose"></Button>
+        </buttons>
+    </Dialog>
+</core:FragmentDefinition>

@@ -26,6 +26,14 @@
                     "odataVersion": "2.0",
                     "localUri": "localService/metadata.xml"
                 }
+            },
+            "IBP": {
+                "uri": "v2/ibpimport-srv/",
+                "type": "OData",
+                "settings": {
+                    "odataVersion": "2.0",
+                    "localUri": "localService/metadata.xml"
+                }
             }
         },
         "crossNavigation": {
@@ -117,6 +125,14 @@
                     "useBatch": true,
                     "defaultBindingMode": "TwoWay"
                 }
+            },
+            "IBPModel": {
+                "dataSource": "IBP",
+                "preload": true,
+                "settings": {
+                    "useBatch": true,
+                    "defaultBindingMode": "TwoWay"
+                }
             }
         },
         "resources": {
@@ -156,14 +172,14 @@
                 "Home": {
                     "viewType": "XML",
                     "transition": "slide",
-                    "clearControlAggregation": false,
+                    "clearControlAggregation": true,
                     "viewId": "Home",
                     "viewName": "Home"
                 },
                 "Detail": {
                     "viewType": "XML",
                     "transition": "slide",
-                    "clearControlAggregation": false,
+                    "clearControlAggregation": true,
                     "viewId": "Detail",
                     "viewName": "Detail"
                 }

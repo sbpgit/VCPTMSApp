@@ -16,7 +16,7 @@
         "@sap/hdi-deploy": "^4.2.0",
         "@sap/jobs-client": "^1.6.3",
         "@sap/xsenv": "^3.2.2",
-        "@sap/xssec": "^2.2.5",
+        "@sap/xssec": "^3.2.13",
         "await-sleep": "^0.0.1",
         "axios": "^0.21.1",
         "cdse": "^1.1.12",
@@ -30,6 +30,7 @@
         "request": "^2.88.2",
         "request-promise": "^4.2.6",
         "sap-cf-mailer": "0.0.5",
+        "sap-hdb-promisfied": "^2.202205.1",
         "sync": "^0.2.5",
         "uuid": "^8.3.2"
     },

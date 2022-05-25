@@ -44,7 +44,6 @@ using from './cpcustgroup/annotations';
 using from './cpnewpartialprod/annotations';
 using from './cpjobscheduler/annotations';
 
-using from './cp_atest/annotations';
 
 using from './cpauthobjrole/annotations';
 

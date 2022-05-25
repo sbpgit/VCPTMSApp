@@ -225,10 +225,14 @@ sap.ui.define(
                           oGModel.setProperty("/JobType", "M");
                         } else if(oData.lreadJobDetails.value.action.includes("Predictions")){
                           oGModel.setProperty("/JobType", "P");
-                        } else if(oData.lreadJobDetails.value.action.includes("DemandQty")){
-                          oGModel.setProperty("/JobType", "I");
-                        } else if(oData.lreadJobDetails.value.action.includes("CharPlan")){
+                        } else if(oData.lreadJobDetails.value.action.includes("timeseries")){
                           oGModel.setProperty("/JobType", "T");
+                        } else {
+                          oGModel.setProperty("/JobType", "I");
+                          var service = oGModel.getProperty("/Jobdata").action.split("/");
+                          var length = service.length - 1;
+                          service = service[length];
+                          oGModel.setProperty("/IBPService", service);
                         }
 
 
