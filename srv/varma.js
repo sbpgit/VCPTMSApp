@@ -1623,73 +1623,89 @@ exports._runVarmaPrediction = async function(varmaType, group, version, scenario
         // result=stmt.exec();
         // stmt.drop();
 
-        result = await cds.run(sqlStr);
+        let result = await cds.run(sqlStr);
         console.log("V_FUTURE_DEP_TS P SELECT sqlStr result ", result);
-
-        sqlStr = 'UPSERT "CP_TS_PREDICTIONS" VALUES (' + "'" + result[0].CAL_DATE + "'" + "," +
-                    "'" + result[0].Location + "'" + "," +
-                    "'" + result[0].Product + "'" + "," +
-                    "'" + result[0].Type + "'" + "," +
-                    "'" + result[0].OBJ_DEP + "'" + "," +
-                    "'" + result[0].OBJ_COUNTER + "'" + "," +
-                    "'" + 'VARMA' + "'" + "," +
-                    "'" + modelVersion  + "'" + "," +
-                    "'" + profileId  + "'" + "," +
-                    "'" + result[0].VERSION + "'" + "," +
-                    "'" + result[0].SCENARIO + "'" + "," +
-                    "'" + predictedVal + "'" + "," +
-                    "'" + predictedTime + "'" + "," +
-                    "'" + 'SUCCESS' + "'" + ')' + ' WITH PRIMARY KEY';
-            
-            //' WHERE "GroupID" = ' + "'" + groupId + "'" + 
-            //' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
-        console.log("V_PREDICTIONS Predicted Value sql update sqlStr", sqlStr);
-
-        // stmt=conn.prepare(sqlStr);
-        // stmt.exec();
-        // stmt.drop();
-
-        await cds.run(sqlStr);
-        // let method = 'VARMA';
-        // sqlStr = 'SELECT CP_PAL_PROFILEOD.PROFILE, METHOD FROM CP_PAL_PROFILEOD ' +
-        //         'INNER JOIN CP_PAL_PROFILEMETH ON '+
-        //         '"CP_PAL_PROFILEOD"."PROFILE" = "CP_PAL_PROFILEMETH"."PROFILE"' +
-        //         ' AND CP_PAL_PROFILEMETH.METHOD = ' + "'" + method + "'" +
-        //         ' AND LOCATION_ID = ' + "'" + result[0].Location + "'" +
-        //         ' AND PRODUCT_ID = ' + "'" + result[0].Product + "'" +
-        //         ' AND OBJ_DEP = ' + "'" + result[0].OBJ_DEP + '_' + result[0].OBJ_COUNTER + "'" +
-        //         ' AND OBJ_TYPE = ' + "'" + result[0].Type + "'";
-
-        // console.log("V_PREDICTIONS IBP Result Plan Predicted Value VARMA sql sqlStr", sqlStr);
-        // stmt=conn.prepare(sqlStr);
-        // results = stmt.exec();
-        // stmt.drop();
-
-        // if ( (results.length > 0) &&
-        //     (results[0].METHOD = 'VARMA') &&
-        if (modelVersion == 'Active')
+        if (result.length > 0)
         {
-            sqlStr = 'UPSERT "CP_IBP_RESULTPLAN_TS" VALUES (' + "'" + result[0].CAL_DATE + "'" + "," +
-                    "'" + result[0].Location + "'" + "," +
-                    "'" + result[0].Product + "'" + "," +
-                    "'" + result[0].Type + "'" + "," +
-                    "'" + result[0].OBJ_DEP + "'" + "," +
-                    "'" + result[0].OBJ_COUNTER + "'" + "," +
-                    "'" + modelVersion  + "'" + "," +
-                    "'" + profileId  + "'" + "," +
-                    "'" + result[0].VERSION + "'" + "," +
-                    "'" + result[0].SCENARIO + "'" + "," + 
-                    "'" + predictedVal + "'" + "," +
-                    "'" + predictedTime + "'" + "," +
-                    "'" + 'SUCCESS' + "'" + ')' + ' WITH PRIMARY KEY';
-            
-
-            console.log("CP_IBP_RESULTPLAN_TS Predicted Value VARMA sql update sqlStr", sqlStr);
+            sqlStr = 'UPSERT "CP_TS_PREDICTIONS" VALUES (' + "'" + result[0].CAL_DATE + "'" + "," +
+                        "'" + result[0].Location + "'" + "," +
+                        "'" + result[0].Product + "'" + "," +
+                        "'" + result[0].Type + "'" + "," +
+                        "'" + result[0].OBJ_DEP + "'" + "," +
+                        "'" + result[0].OBJ_COUNTER + "'" + "," +
+                        "'" + 'VARMA' + "'" + "," +
+                        "'" + modelVersion  + "'" + "," +
+                        "'" + profileId  + "'" + "," +
+                        "'" + result[0].VERSION + "'" + "," +
+                        "'" + result[0].SCENARIO + "'" + "," +
+                        "'" + predictedVal + "'" + "," +
+                        "'" + predictedTime + "'" + "," +
+                        "'" + 'SUCCESS' + "'" + ')' + ' WITH PRIMARY KEY';
+                
+                //' WHERE "GroupID" = ' + "'" + groupId + "'" + 
+                //' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
+            console.log("V_PREDICTIONS Predicted Value sql update sqlStr", sqlStr);
 
             // stmt=conn.prepare(sqlStr);
             // stmt.exec();
             // stmt.drop();
-            await cds.run(sqlStr);
+
+            // await cds.run(sqlStr);
+            try {
+                await cds.run(sqlStr);
+            }
+            catch (exception) {
+                console.log("sqlStr ", sqlStr, "index = ", index, "periodId : ",periodId, "predictedVal : ", predictedVal);
+                throw new Error(exception.toString());
+            }
+            // let method = 'VARMA';
+            // sqlStr = 'SELECT CP_PAL_PROFILEOD.PROFILE, METHOD FROM CP_PAL_PROFILEOD ' +
+            //         'INNER JOIN CP_PAL_PROFILEMETH ON '+
+            //         '"CP_PAL_PROFILEOD"."PROFILE" = "CP_PAL_PROFILEMETH"."PROFILE"' +
+            //         ' AND CP_PAL_PROFILEMETH.METHOD = ' + "'" + method + "'" +
+            //         ' AND LOCATION_ID = ' + "'" + result[0].Location + "'" +
+            //         ' AND PRODUCT_ID = ' + "'" + result[0].Product + "'" +
+            //         ' AND OBJ_DEP = ' + "'" + result[0].OBJ_DEP + '_' + result[0].OBJ_COUNTER + "'" +
+            //         ' AND OBJ_TYPE = ' + "'" + result[0].Type + "'";
+
+            // console.log("V_PREDICTIONS IBP Result Plan Predicted Value VARMA sql sqlStr", sqlStr);
+            // stmt=conn.prepare(sqlStr);
+            // results = stmt.exec();
+            // stmt.drop();
+
+            // if ( (results.length > 0) &&
+            //     (results[0].METHOD = 'VARMA') &&
+            if (modelVersion == 'Active')
+            {
+                sqlStr = 'UPSERT "CP_IBP_RESULTPLAN_TS" VALUES (' + "'" + result[0].CAL_DATE + "'" + "," +
+                        "'" + result[0].Location + "'" + "," +
+                        "'" + result[0].Product + "'" + "," +
+                        "'" + result[0].Type + "'" + "," +
+                        "'" + result[0].OBJ_DEP + "'" + "," +
+                        "'" + result[0].OBJ_COUNTER + "'" + "," +
+                        "'" + modelVersion  + "'" + "," +
+                        "'" + profileId  + "'" + "," +
+                        "'" + result[0].VERSION + "'" + "," +
+                        "'" + result[0].SCENARIO + "'" + "," + 
+                        "'" + predictedVal + "'" + "," +
+                        "'" + predictedTime + "'" + "," +
+                        "'" + 'SUCCESS' + "'" + ')' + ' WITH PRIMARY KEY';
+                
+
+                console.log("CP_IBP_RESULTPLAN_TS Predicted Value VARMA sql update sqlStr", sqlStr);
+
+                // stmt=conn.prepare(sqlStr);
+                // stmt.exec();
+                // stmt.drop();
+                // await cds.run(sqlStr);
+                try {
+                    await cds.run(sqlStr);
+                }
+                catch (exception) {
+                    console.log("sqlStr ", sqlStr, "index = ", index, "periodId : ",periodId, "predictedVal : ", predictedVal);
+                    throw new Error(exception.toString());
+                }
+            }
         }
 
     }
