@@ -6,7 +6,7 @@ using {
 
 context cp {
     // Table for Location
-    entity LOCATION : managed {
+    entity LOCATION {
         key LOCATION_ID    : String(4)      @title : 'Location ';
             LOCATION_DESC  : String(30)     @title : 'Location Descritpion';
             LOCATION_TYPE  : String(1)      @title : 'Location Type';
@@ -21,7 +21,7 @@ context cp {
     };
 
     // Customer group
-    entity CUSTOMERGROUP : managed {
+    entity CUSTOMERGROUP {
         key CUSTOMER_GROUP : String(2)  @title : 'Customer Group';
             CUSTOMER_DESC  : String(20) @title : 'Customer Description';
             RESERVE_FIELD1 : String(20) @title : 'Reserve Field1';
@@ -33,7 +33,7 @@ context cp {
     };
 
     // Product
-    entity PRODUCT : managed {
+    entity PRODUCT {
         key PRODUCT_ID     : String(40) @title : 'Product';
             PROD_DESC      : String(40) @title : 'Product Description';
             PROD_FAMILY    : String(30) @title : 'Product Family';
@@ -49,7 +49,7 @@ context cp {
             AUTH_GROUP     : String(4)  @title : 'Authorization Group';
     };
 
-    entity PRODUCT_TEMP : managed {
+    entity PRODUCT_TEMP {
         key PRODUCT_ID     : String(40) @title : 'Product';
             PROD_DESC      : String(40) @title : 'Product Description';
             PROD_FAMILY    : String(30) @title : 'Product Family';
@@ -75,7 +75,7 @@ context cp {
     };
 
     // BOM header
-    entity BOMHEADER : managed {
+    entity BOMHEADER {
         key LOCATION_ID : String(4)      @title : 'Location '; //Association to ZLOCATION;//
         key PRODUCT_ID  : String(40)     @title : 'Product';
         key ITEM_NUM    : String(5)      @title : 'Item Number ';
@@ -99,7 +99,7 @@ context cp {
     };
 
     // Product restrictions
-    entity PRODRESTRICT : managed {
+    entity PRODRESTRICT  {
         key LOCATION_ID : String(4)      @title : 'Location '; //Association to ZLOCATION;//
         key PRODUCT_ID  : String(40)     @title : 'Product';
         key RESTRICTION : String(30)     @title : 'Restriction';
@@ -344,7 +344,7 @@ context cp {
     };
 
     // Classes
-    entity CLASS : managed {
+    entity CLASS {
         key CLASS_NUM  : String(18)  @title : 'Internal class number';
             CLASS_NAME : String(20)  @title : 'Class Name';
             CLASS_TYPE : String(3)   @title : 'Class Type';
@@ -353,7 +353,7 @@ context cp {
     };
 
     //Characteristitcs
-    entity CHARACTERISTICS : managed {
+    entity CHARACTERISTICS {
         key CLASS_NUM   : String(18)  @title : 'Internal class number';
         key CHAR_NUM    : String(10)  @title : 'Internal Char. number';
             CHAR_NAME   : String(30)  @title : 'Charateristic Name';
@@ -365,7 +365,7 @@ context cp {
     };
 
     // Characteristic Values
-    entity CHAR_VALUES : managed {
+    entity CHAR_VALUES {
         key CHAR_NUM     : String(10)  @title : 'Internal Char. number';
         key CHARVAL_NUM  : String(15)  @title : 'Internal Char. number';
             CHAR_VALUE   : String(70)  @title : 'Charateristic Value';
