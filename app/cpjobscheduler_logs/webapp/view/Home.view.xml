@@ -3,22 +3,28 @@
     <Page >
         <customHeader>
             <Toolbar >
+                <ToolbarSpacer/>
                 <Title id="idTitle" text="{i18n>title}" class="boldText"></Title>
                 <ToolbarSpacer/>
-                <Label text="{i18n>runstate}"/>
-                <Select id="idFilter" change="onSearch" selectedKey="A" class="buttonDesktop">
-							<core:ListItem key="A" text="{i18n>all}"/>
-							<core:ListItem key="E" text="{i18n>error}"/>
-							<core:ListItem key="S" text="{i18n>success}"/>
-						</Select>
                 <Label text="{i18n>daterange}"/>
-					<DateRangeSelection id="idDateRange" width="20%" delimiter="To" dateValue="" secondDateValue="" valueFormat="yyyy-MM-dd"
+				<DateRangeSelection id="idDateRange" width="16%" delimiter="To" dateValue="" secondDateValue="" valueFormat="yyyy-MM-dd"
 							displayFormat="yyyy-MM-dd" change="handleDateChange" maxDate=""/>
             </Toolbar>
         </customHeader>
         <content>
-            <SearchField id="headSearch" liveChange="onSearch" placeholder="Job"/>
-            <Table id="joblogList" items="{path: '/results', sorter : { path : 'COMPLETED_TIMESTAMP', descending: true} }" updateFinished="onUpdateFinished">
+             <Table id="joblogList" items="{path: '/results', sorter : { path : 'COMPLETED_TIMESTAMP', descending: true} }" updateFinished="onUpdateFinished">
+                <infoToolbar>
+                    <OverflowToolbar>
+                        <SearchField id="headSearch" liveChange="onSearch" placeholder="JobID/Desc" width="30%"/>
+                        <ToolbarSpacer />
+                        <Label text="{i18n>runstate}"/>
+                        <Select id="idFilter" change="onSearch" selectedKey="A" class="buttonDesktop" width="20%">
+							<core:ListItem key="A" text="{i18n>all}"/>
+							<core:ListItem key="E" text="{i18n>error}"/>
+							<core:ListItem key="S" text="{i18n>success}"/>
+						</Select>
+                    </OverflowToolbar>
+                </infoToolbar>
                 <columns>
                     <Column hAlign="Center" vAlign="Middle" width="80px">
                         <Text text="{i18n>jobid}" />

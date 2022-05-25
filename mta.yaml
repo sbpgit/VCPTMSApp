@@ -75,14 +75,14 @@ modules:
   build-parameters:
     build-result: resources
     requires:
-    - artifacts:
-      - cpibpfdemcpibpfdem.zip
-      name: cpibpfdemcpibpfdem
-      target-path: resources/
-    - artifacts:
-      - cpibpfplancpibpfplan.zip
-      name: cpibpfplancpibpfplan
-      target-path: resources/
+    # - artifacts:
+    #   - cpibpfdemcpibpfdem.zip
+    #   name: cpibpfdemcpibpfdem
+    #   target-path: resources/
+    # - artifacts:
+    #   - cpibpfplancpibpfplan.zip
+    #   name: cpibpfplancpibpfplan
+    #   target-path: resources/
     - artifacts:
       - cpibpfrescpibpfres.zip
       name: cpibpfrescpibpfres
@@ -195,26 +195,26 @@ modules:
       - cpappcpauthobjrole.zip
       name: cpappcpauthobjrole
       target-path: resources/
-- name: cpibpfdemcpibpfdem
-  type: html5
-  path: app/cp_ibpfdem
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    supported-platforms: []
-- name: cpibpfplancpibpfplan
-  type: html5
-  path: app/cp_ibpfplan
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    supported-platforms: []
+# - name: cpibpfdemcpibpfdem
+#   type: html5
+#   path: app/cp_ibpfdem
+#   build-parameters:
+#     build-result: dist
+#     builder: custom
+#     commands:
+#     - npm install
+#     - npm run build:cf
+#     supported-platforms: []
+# - name: cpibpfplancpibpfplan
+#   type: html5
+#   path: app/cp_ibpfplan
+#   build-parameters:
+#     build-result: dist
+#     builder: custom
+#     commands:
+#     - npm install
+#     - npm run build:cf
+#     supported-platforms: []
 - name: cpibpfrescpibpfres
   type: html5
   path: app/cp_ibpfres

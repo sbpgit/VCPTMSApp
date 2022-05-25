@@ -1,7 +1,7 @@
 using CatalogService as service from '../../srv/cat-service';
 
-annotate service.getARObj with @odata.draft.enabled;
-annotate service.getAEmpRole ;
+annotate service.getARObj;
+annotate service.getAEmpRole;
 
 annotate service.getARObj with @(
     UI.SelectionFields : [

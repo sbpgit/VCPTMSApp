@@ -7,10 +7,10 @@ module.exports = (srv) => {
             const sp = await dbConn.loadProcedurePromisified(null, '"FG_PROD_SP"')
             const output = await dbConn.callProcedurePromisified(sp, [])
             console.log(output.results);
-            return true;
+            return output.results;
         } catch (error) {
             console.error(error);
-            return false;
+            return error;
         }
 
     });
