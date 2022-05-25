@@ -199,6 +199,10 @@ modules:
       - cpappcpauthobjrole.zip
       name: cpappcpauthobjrole
       target-path: resources/
+    - artifacts:
+      - cpappcpjobschedulerlogs.zip
+      name: cpappcpjobschedulerlogs
+      target-path: resources/
 - name: cpibpfdemcpibpfdem
   type: html5
   path: app/cp_ibpfdem
@@ -509,6 +513,40 @@ modules:
     - npm install
     - npm run build:cf
     supported-platforms: []
+- name: cpappcpjobschedulerlogs
+  type: html5
+  path: app/cpjobscheduler_logs
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: undefined-app-content
+  type: com.sap.application.content
+  path: .
+  requires:
+  - name: config_products_html_repo_host
+    parameters:
+      content-target: true
+  build-parameters:
+    build-result: resources
+    requires:
+    - artifacts:
+      - cpappcprestrictions.zip
+      name: cpappcprestrictions
+      target-path: resources/
+- name: cpappcprestrictions
+  type: html5
+  path: app/cprestrictions
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
 resources:
 - name: config_products-db
   type: com.sap.xs.hdi-container
@@ -545,24 +583,24 @@ resources:
       enable-xsuaa-support: true
     service: jobscheduler
     service-plan: standard
-# - name: config_products-destination-service
-#   type: org.cloudfoundry.managed-service
-#   parameters:
-#     config:
-#       HTML5Runtime_enabled: false
-#       init_data:
-#         instance:
-#           destinations:
-#           - Authentication: NoAuthentication
-#             Name: ui5
-#             ProxyType: Internet
-#             Type: HTTP
-#             URL: https://ui5.sap.com
-#           existing_destinations_policy: update
-#       version: 1.0.0
-#     service: destination
-#     service-name: config_products-destination-service
-#     service-plan: lite
+- name: undefined-destination-service
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      HTML5Runtime_enabled: false
+      init_data:
+        instance:
+          destinations:
+          - Authentication: NoAuthentication
+            Name: ui5
+            ProxyType: Internet
+            Type: HTTP
+            URL: https://ui5.sap.com
+          existing_destinations_policy: update
+      version: 1.0.0
+    service: destination
+    service-name: undefined-destination-service
+    service-plan: lite
 parameters:
   deploy_mode: html5-repo
   enable-parallel-deployments: true
