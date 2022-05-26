@@ -131,6 +131,7 @@
                     "name": "sap.fe.templates.ObjectPage",
                     "options": {
                         "settings": {
+                            "editFlow": "direct",
                             "editableHeaderContent": false,
                             "entitySet": "getARObj"
                         }
