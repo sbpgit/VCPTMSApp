@@ -76,6 +76,13 @@ sap.ui.define(
           );
           this.getView().addDependent(this._valueHelpDialogObjDep);
         }
+        if (!this._valueHelpDialogStruNode) {
+            this._valueHelpDialogStruNode = sap.ui.xmlfragment(
+              "cp.odp.cpodprofiles.view.StructureNodes",
+              this
+            );
+            this.getView().addDependent(this._valueHelpDialogStruNode);
+          }
         this.getRouter()
           .getRoute("Home")
           .attachPatternMatched(this._onPatternMatched.bind(this));

@@ -11,8 +11,63 @@
 			</Toolbar>
 		</customHeader>
 
+        <f:Form id="idFormChg" editable="true">
+                <f:layout>
+                    <f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="4" columnsL="2" columnsM="2" singleContainerFullSize="false" breakpointXL= "1400" breakpointL= "800" breakpointM="600" />
+                </f:layout>
+			<f:formContainers>
+				<f:FormContainer >
+					<f:formElements>
+						<f:FormElement label="{i18n>AccNode}" class="boldText">
+							<f:fields>
+								<Text text="{oGModel>/SelectedNode}" />
+							</f:fields>
+						</f:FormElement>
+						<f:FormElement label="{i18n>loc}" class="boldText">
+							<f:fields>
+								<Text text="{oGModel>/SelectedLoc}" />
+							</f:fields>
+						</f:FormElement>
+                        <f:FormElement label="{i18n>prod}" class="boldText">
+							<f:fields>
+								<Text text="{oGModel>/SelectedProd}" />
+							</f:fields>
+						</f:FormElement>
+					</f:formElements>
+				</f:FormContainer>
+				<f:FormContainer id="idDates">
+					<f:formElements>
+						<!-- <VBox id="idDates"> -->
+                        <f:FormElement label="{i18n>validfrom}" class="boldText">
+							<f:fields>
+								<DatePicker id="fromDate" width="auto"  displayFormat="yyyy-MM-dd" change="handleDateChange"/>
+							</f:fields>
+						</f:FormElement>
+						<f:FormElement label="{i18n>validto}" class="boldText">
+							<f:fields>
+								<DatePicker id="toDate" width="auto" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="handleDateChange"/>
+							</f:fields>
+						</f:FormElement>
+                        <f:FormElement >
+							<f:fields>
+								<Button text="Go" width="60px" press="onGetData" tooltip="Get data based on dates"/>
+                                <Button text="Reset" width="100px" press="onResetDate" tooltip="Reset Valid To Date"/>
+							</f:fields>
+						</f:FormElement>
+                        <!-- </VBox> -->
+					</f:formElements>
+				</f:FormContainer>
+				<!-- <f:FormContainer >
+					<f:formElements>
+						
+						
+					</f:formElements>
+				</f:FormContainer> -->
+			</f:formContainers>
+		</f:Form>
+
         
-        <Toolbar height="12%">
+        <!-- <Toolbar height="12%">
 				<VBox>
 					<HBox>
                     <Text text="{i18n>AccNode} : " class="boldText"></Text>
@@ -23,23 +78,19 @@
 						<Text text=" {oGModel>/SelectedLoc}"></Text>
 						<ToolbarSpacer/>
                         
-					<!-- </HBox>
-                    <HBox> -->
+					
                     <Text text="{i18n>prod} : " class="boldText"></Text>
 						<Text text=" {oGModel>/SelectedProd}"></Text>
-                    <!-- </HBox>
-                    <HBox> -->
+                    
                     
                     
                     </HBox>
 
                     <HBox id="idDates">
                         <Text text="{i18n>validfrom} : " class="boldText"></Text>
-						<!-- <Input id="fromDate" placeholder="MM/DD/YYYY" value="" /> -->
                         <DatePicker id="fromDate" width="auto"  displayFormat="yyyy-MM-dd" change="handleDateChange"/>
 
                         <Text text="{i18n>validto} : " class="boldText"></Text>
-						<!-- <Input id="toDate" placeholder="MM/DD/YYYY" value="12/31/9999" /> -->
                         <DatePicker id="toDate" width="auto" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="handleDateChange"/>
 
                         <Button text="Go" press="onGetData" tooltip="Get data based on dates"/>
@@ -49,7 +100,7 @@
                     </HBox>
 					
 				</VBox>
-			</Toolbar>
+			</Toolbar> -->
             <content>
             <IconTabBar id="detailNode" expanded="true" select="onTabChange" class="sapUiResponsiveContentPadding">
                 <items>

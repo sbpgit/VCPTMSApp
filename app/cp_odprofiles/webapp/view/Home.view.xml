@@ -6,7 +6,28 @@
     xmlns="sap.m">
 
     <Page id="page" title="{i18n>title}" titleAlignment="Center">
-        <f:Form editable="true">
+    <HBox>
+        <SearchField id="idSearch" placeholder="Search Component" liveChange="onTableSearch" width="250px"/>
+        <Text text="Location"/>
+        <Input id="idloc" value="" placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+        <Text text="Product"/>
+        <MultiInput id="prodInput" placeholder="Product" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
+        <Text text="Component"/>
+        <MultiInput id="compInput" placeholder="Component" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
+        <Label text="Object Dep" visible="false"/>
+        <MultiInput id="objDepInput"  visible="false" placeholder="Object Dep" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>                            
+        <ToolbarSpacer/>
+        <Button text="Go" width="30%" press="onGetData" type="Emphasized" tooltip="Get data based on filters"/>
+        
+    </HBox>
+    <HBox>
+        <!-- <Text text="Component"/>
+        <MultiInput id="compInput" placeholder="Component" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/> -->
+        <Text text="Structure" />
+         <MultiInput id="struInput" placeholder="Structure Node" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>                            
+        
+    </HBox>
+        <!-- <f:Form editable="true">
             <f:layout>
                 <f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="4" columnsL="2" columnsM="2" singleContainerFullSize="false" breakpointXL= "1400" breakpointL= "800" breakpointM="600" />
             </f:layout>
@@ -55,14 +76,14 @@
                     </f:formElements>
                 </f:FormContainer>
             </f:formContainers>
-        </f:Form>
+        </f:Form> -->
 
         <content>
             <Table id="idTab" items="{path: '/results'}" mode="MultiSelect" sticky="ColumnHeaders">
                 <headerToolbar>
                     <Toolbar>
                         <content>
-                            <SearchField id="idSearch" placeholder="Location/ Product/ Component" liveChange="onTableSearch" width="600px"/>
+                            <!-- <SearchField id="idSearch" placeholder="Location/ Product/ Component" liveChange="onTableSearch" width="600px"/> -->
                             <ToolbarSpacer/>
                             <Button id="idAssign" type='Ghost' text="Assign" press="onAssign"></Button>
                             <Button id="idUnAssign" type='Ghost' text="UnAssign" press="onUnAssign"></Button>

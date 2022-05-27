@@ -120,7 +120,7 @@ sap.ui.define(
           },
         });
       },
-
+      
       /**
        * This function is called when click on Reset button.
        * This will clear all the input box values.
@@ -143,6 +143,7 @@ sap.ui.define(
           oProd = that.byId("idprod").getValue(),
           oVer = that.byId("idver").getValue(),
           oScen = that.byId("idscen").getValue();
+          that.oGModel = that.getModel("oGModel");
 
         var oFilters = [];
 
@@ -184,15 +185,15 @@ sap.ui.define(
           that.getModel("BModel").read("/getIBPFdem", {
             filters: oFilters,
             success: function (oData) {
+                sap.ui.core.BusyIndicator.hide();
               oData.results.forEach(function (row) {
                 // Calling function to handle the date format
                 row.WEEK_DATE = that.getInMMddyyyyFormat(row.WEEK_DATE);
               }, that);
-              sap.ui.core.BusyIndicator.hide();
-              that.TableModel.setData({
-                results: oData.results,
-              });
-              that.byId("IBPfdemList").setModel(that.TableModel);
+              
+
+              that.oGModel.setProperty("/tableData", oData.results)
+              that.onNonZero();
             },
             error: function (data) {
               sap.ui.core.BusyIndicator.hide();
@@ -222,6 +223,38 @@ sap.ui.define(
         }
         return month + "/" + date + "/" + oDate.getFullYear();
       },
+
+      /**
+       * This function is called when checkbox Get Non-Zero is checked or unchecked.
+       * In this function removing the rows which have all row values as "0".
+       * @param {object} oEvent -the event information.
+       */
+      onNonZero: function (oEvent) {
+        that.oTable = that.byId("IBPfdemList");
+        that.oGModel = that.getModel("oGModel");
+        var selected = that.byId("idCheck1").getSelected(),
+          name,
+          counter;
+          that.aData = that.oGModel.getProperty("/tableData");
+        that.FinalData = [];
+
+        if (selected) {
+          // Filtering data which has row values, removing the rows which has all values as "0" or "null"
+          for (var i = 0; i < that.aData.length; i++) {
+            if(that.aData[i].QUANTITY !== "0"){
+              that.FinalData.push(that.aData[i]);
+            }
+          }
+        } else {
+          that.FinalData = that.aData;
+        }
+        
+        that.TableModel.setData({
+            results: that.FinalData,
+          });
+          that.byId("IBPfdemList").setModel(that.TableModel);
+      },
+
 
       /**
        * This function is called when click on Input box to open the Value help dialogs.

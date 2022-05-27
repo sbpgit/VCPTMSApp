@@ -200,25 +200,26 @@ sap.ui.define([
                         that.byId("timeSeriesPanel").setVisible(false);
                         that.byId("IbpPanel").setVisible(true);
                     }
+                    
 
                     if(that.oGModel.getProperty("/UpdateSch")=== "X"){
-                        sap.ui.getCore().byId("idJobtype").setEnabled(false);
+                        sap.ui.getCore().byId("idJobSchtype").setEnabled(false);
                     var keyType = that.oGModel.getProperty("/aScheUpdate").type;
 
                         if(keyType === "one-time"){
-                            sap.ui.getCore().byId("idJobtype").setSelectedKey("Im")
+                            sap.ui.getCore().byId("idJobSchtype").setSelectedKey("Im")
                             sap.ui.getCore().byId("idSchTime").setVisible(true);
                             sap.ui.getCore().byId("idCronValues").setVisible(false);
                             sap.ui.getCore().byId("idSchTime").setDateValue();
                         } else if(keyType === "recurring"){
-                            sap.ui.getCore().byId("idJobtype").setSelectedKey("Cr")
+                            sap.ui.getCore().byId("idJobSchtype").setSelectedKey("Cr")
                             sap.ui.getCore().byId("idSchTime").setVisible(false);
                             sap.ui.getCore().byId("idCronValues").setVisible(true);
                         }
 
                         that.onScheduleUpdate();
                     } else {
-                    sap.ui.getCore().byId("idJobtype").setEnabled(true);
+                    sap.ui.getCore().byId("idJobSchtype").setEnabled(true);
                     }                    
 
                     } else {
@@ -232,7 +233,7 @@ sap.ui.define([
                         that.byId("timeSeriesPanel").setVisible(false);
                         that.byId("IbpPanel").setVisible(false);
                         that.byId("idJobType").setSelectedKey("M");
-                        sap.ui.getCore().byId("idJobtype").setEnabled(true);
+                        sap.ui.getCore().byId("idJobSchtype").setEnabled(true);
                     }
 		},
 
@@ -295,21 +296,25 @@ sap.ui.define([
         }
         if(that.oGModel.getProperty("/UpdateSch") !== "X"){
             that.byId("MlocInput").setValue("");
-            that.byId("MprodInput").setValue("");
+            // that.byId("MprodInput").setValue("");
+            that.byId("MprodInput").removeAllTokens();
             // that.byId("ModInput").setValue("");
             that.byId("MpmInput").setValue("");
             
             that.byId("PlocInput").setValue("");
-            that.byId("PprodInput").setValue("");
+            // that.byId("PprodInput").setValue("");
+            that.byId("PprodInput").removeAllTokens();
             // that.byId("PodInput").setValue("");
             that.byId("Pidver").setValue("");
             that.byId("Pidscen").setValue("");
 
             that.byId("TprodInput").setValue("");
+            // that.byId("TprodInput").removeAllTokens();
             that.byId("TlocInput").setValue("");
 
             that.byId("IlocInput").setValue("");
-            that.byId("IprodInput").setValue("");
+            // that.byId("IprodInput").setValue("");
+            that.byId("IprodInput").removeAllTokens();
             that.byId("Iidver").setValue("");
             that.byId("Iidscen").setValue("");
 
@@ -318,7 +323,8 @@ sap.ui.define([
             that.byId("IBPclassInput").setValue("");
 
             that.byId("ESHlocInput").setValue("");
-            that.byId("ESHprodInput").setValue("");
+            // that.byId("ESHprodInput").setValue("");
+            that.byId("ESHprodInput").removeAllTokens();
             that.byId("ECust").setValue("");
 
         }
@@ -650,7 +656,7 @@ sap.ui.define([
                     that.oProd = this.byId("MprodInput");
                     // that.oObjDep = this.byId("ModInput");
                     that.oPredProfile = this.byId("MpmInput");
-                    // that.oProd.removeAllTokens();
+                    // that.oProd.removeAllTokens();5
                     // that.oObjDep.removeAllTokens();
                 } else if(oJobKey === "P"){
                     that.oLoc = this.byId("PlocInput");
@@ -686,12 +692,12 @@ sap.ui.define([
                     
                 }
 
-                if(that.oGModel.getProperty("/newSch") !== "X"){
-                    if(oJobKey === "M" || oJobKey === "P"){
-                        that.oProd.removeAllTokens();
-                    }
+                // if(that.oGModel.getProperty("/newSch") !== "X"){
+                //     if(oJobKey === "M" || oJobKey === "P"){
+                //         that.oProd.removeAllTokens();
+                //     }
                     
-                }
+                // }
 
           },
           
@@ -1102,6 +1108,9 @@ sap.ui.define([
             var oJobType = that.byId("idJobType").getSelectedKey();
             var sServiceText = that.oGModel.getProperty("/IBPService");
 
+            
+                    that.byId("idIBPselect").setEnabled("false");
+
             if(that.oGModel.getProperty("/JobType") === "I"){
                 if(sServiceText.includes("DemandQty") || sServiceText.includes("FCharPlan")){
                     that.byId("idIBPselect").setSelectedKey("I");
@@ -1140,7 +1149,7 @@ sap.ui.define([
                         that.oClass.setValue(oScheData.CLASS_NUM);
                     } else if(sServiceText.includes("SalesTrans")){
                         that.byId("idIBPSalesHis").setSelected(true);
-                        tthat.oLoc.setValue(oScheData.LOCATION_ID);
+                        that.oLoc.setValue(oScheData.LOCATION_ID);
                         that.oProd.setValue(oScheData.PRODUCT_ID);
                         that.oCust.setValue(oScheData.CUSTOMER_GROUP);
                     }
@@ -1226,6 +1235,45 @@ sap.ui.define([
 
         IBPjobUpdate:function(){
 
+            var selRadioBt = that.byId("idRbtnExport").getSelectedButton().getText();
+
+                if(selRadioBt === "Location"){
+                    // that.byId("idbtExport").setText("Export Locations");
+                    that.byId("IBPimport").setVisible(false);
+                    that.byId("IBPProdExport").setVisible(false);
+                    that.byId("IBPClassExport").setVisible(false);
+                    that.byId("IBPSalesHisExport").setVisible(false);
+                } else if(selRadioBt === "Customer Group"){
+                    // that.byId("idbtExport").setText("Export Customer Group");
+                    that.byId("IBPimport").setVisible(false);
+                    that.byId("IBPProdExport").setVisible(false);
+                    that.byId("IBPClassExport").setVisible(false);
+                    that.byId("IBPSalesHisExport").setVisible(false);
+                } else if(selRadioBt === "Product"){
+                    // that.byId("idbtExport").setText("Export Product");
+                    that.oLoc = that.byId("EPlocInput");
+                    that.byId("IBPimport").setVisible(false);
+                    that.byId("IBPProdExport").setVisible(true);
+                    that.byId("IBPClassExport").setVisible(false);
+                    that.byId("IBPSalesHisExport").setVisible(false);
+                } else if(selRadioBt === "Class"){
+                    // that.byId("idbtExport").setText("Export Class");
+                    that.oClass = this.byId("IBPclassInput");
+                    that.byId("IBPimport").setVisible(false);
+                    that.byId("IBPProdExport").setVisible(false);
+                    that.byId("IBPClassExport").setVisible(true);
+                    that.byId("IBPSalesHisExport").setVisible(false);
+                } else if(selRadioBt === "Sales History"){
+                    // that.byId("idbtExport").setText("Sales History");
+                    that.oLoc = this.byId("ESHlocInput");
+                    that.oProd = this.byId("ESHprodInput");  
+                    that.oCust = this.byId("ECust"); 
+                    that.byId("IBPimport").setVisible(false);
+                    that.byId("IBPProdExport").setVisible(false);
+                    that.byId("IBPClassExport").setVisible(false);
+                    that.byId("IBPSalesHisExport").setVisible(true);
+                }
+
 
         },
 
@@ -1260,7 +1308,7 @@ sap.ui.define([
                 that.byId("idbtImport").setVisible(false);
                 that.byId("idbtExport").setVisible(true);
 
-                that.byId("idbtExport").setText("Export Locations");
+                // that.byId("idbtExport").setText("Export Locations");
                 that.byId("IBPimport").setVisible(false);
                 that.byId("IBPProdExport").setVisible(false);
                 that.byId("IBPClassExport").setVisible(false);
@@ -1286,33 +1334,33 @@ sap.ui.define([
                 var selRadioBt = that.byId("idRbtnExport").getSelectedButton().getText();
 
                 if(selRadioBt === "Location"){
-                    that.byId("idbtExport").setText("Export Locations");
+                    // that.byId("idbtExport").setText("Export Locations");
                     that.byId("IBPimport").setVisible(false);
                     that.byId("IBPProdExport").setVisible(false);
                     that.byId("IBPClassExport").setVisible(false);
                     that.byId("IBPSalesHisExport").setVisible(false);
                 } else if(selRadioBt === "Customer Group"){
-                    that.byId("idbtExport").setText("Export Customer Group");
+                    // that.byId("idbtExport").setText("Export Customer Group");
                     that.byId("IBPimport").setVisible(false);
                     that.byId("IBPProdExport").setVisible(false);
                     that.byId("IBPClassExport").setVisible(false);
                     that.byId("IBPSalesHisExport").setVisible(false);
                 } else if(selRadioBt === "Product"){
-                    that.byId("idbtExport").setText("Export Product");
+                    // that.byId("idbtExport").setText("Export Product");
                     that.oLoc = that.byId("EPlocInput");
                     that.byId("IBPimport").setVisible(false);
                     that.byId("IBPProdExport").setVisible(true);
                     that.byId("IBPClassExport").setVisible(false);
                     that.byId("IBPSalesHisExport").setVisible(false);
                 } else if(selRadioBt === "Class"){
-                    that.byId("idbtExport").setText("Export Class");
+                    // that.byId("idbtExport").setText("Export Class");
                     that.oClass = this.byId("IBPclassInput");
                     that.byId("IBPimport").setVisible(false);
                     that.byId("IBPProdExport").setVisible(false);
                     that.byId("IBPClassExport").setVisible(true);
                     that.byId("IBPSalesHisExport").setVisible(false);
                 } else if(selRadioBt === "Sales History"){
-                    that.byId("idbtExport").setText("Sales History");
+                    // that.byId("idbtExport").setText("Sales History");
                     that.oLoc = this.byId("ESHlocInput");
                     that.oProd = this.byId("ESHprodInput");  
                     that.oCust = this.byId("ECust"); 
@@ -1356,7 +1404,8 @@ sap.ui.define([
               vMdlVer;
             // aItems = this.oODList.getSelectedItems();
             oLocItem = that.oLoc.getValue();
-            oProdItems = this.oProdList.getSelectedItems(),
+            // oProdItems = this.oProdList.getSelectedItems(),
+            oProdItems = that.oProd.getTokens(),
               oPredProfile = that.oPredProfile.getValue(),
               cSelected = that.byId("MidCheck").getSelected();
             if (oMdlVer === "act") {
@@ -1372,7 +1421,7 @@ sap.ui.define([
                         profile: oPredProfile,
                         override: cSelected,
                         Location: oLocItem,
-                        Product: oProdItems[i].getTitle(),
+                        Product: oProdItems[i].getText(),
                         GroupID: "ALL",
                         // GroupID: "1973254_1",
                         Type: "OD",
@@ -1460,7 +1509,7 @@ sap.ui.define([
               finalList={};
             // aItems = this.oODList.getSelectedItems();
             oLocItem = that.oLoc.getValue();
-            oProdItems = this.oProdList.getSelectedItems();
+            oProdItems = that.oProd.getTokens();
             cSelected = that.byId("PidCheck").getSelected();
             oSelModelVer = this.byId("PidModelVer").getSelectedKey();
             // oSelType = this.byId("PidType").getSelectedKey();
@@ -1475,7 +1524,7 @@ sap.ui.define([
                       //   profile: oPredProfile,
                       override: cSelected,
                       Location: oLocItem,
-                      Product: oProdItems[i].getTitle(),
+                      Product: oProdItems[i].getText(),
                       GroupID: "ALL",
                     //   GroupID: "1973254_1",
                       Type: "OD",
@@ -1685,6 +1734,10 @@ sap.ui.define([
               var rRadioBtn = that.byId("idRbtnExport").getSelectedButton().getText();
               that.oGModel.setProperty("/runText", rRadioBtn);
 
+              if(that.oGModel.getProperty("/newSch")=== "X" || that.oGModel.getProperty("/UpdateSch")=== "X"){
+                that.jobDataAddSche();
+              }
+
               if(rRadioBtn === "Location" || rRadioBtn === "Customer Group"){
                 that._valueHelpDialogJobDetail.open();
                 vRuleslist = {};
@@ -1810,7 +1863,7 @@ sap.ui.define([
           },
 
           onJobTypeChange:function(){
-            var selKey = sap.ui.getCore().byId("idJobtype").getSelectedKey();
+            var selKey = sap.ui.getCore().byId("idJobSchtype").getSelectedKey();
 
             // if(that.oGModel.getProperty("/UpdateSch") !== "X"){
 
@@ -1849,7 +1902,7 @@ sap.ui.define([
 
             that.oGModel.setProperty("/runText", "");
             sap.ui.getCore().byId("idSTime").setEnabled(true);
-            sap.ui.getCore().byId("idJobtype").setSelectedKey("Cr");
+            sap.ui.getCore().byId("idJobSchtype").setSelectedKey("Cr");
             that.byId("idIBPselect").setEditable("true");
 
 
@@ -1861,32 +1914,114 @@ sap.ui.define([
         //         sap.ui.getCore().byId("idCrontype").setSelectedKey("Mi");
         //   },
 
-        handleDateChange:function(oEvent){
-            var sId = oEvent.getParameter("id");
+        // handleDateChange:function(oEvent){
+        //     var sId = oEvent.getParameter("id");
 
-            if(sId.includes("idSTime")){
-              var  djSdate = this._oCore.byId("idSTime").getDateValue();
-                sap.ui.getCore().byId("idSTime").setDateValue(djSdate);
-                sap.ui.getCore().byId("idSSTime").setDateValue(djSdate);
-            } else if(sId.includes("idETime")){
-                var djEdate = this._oCore.byId("idETime").getDateValue();
-                sap.ui.getCore().byId("idETime").setDateValue(djEdate);
-                sap.ui.getCore().byId("idSETime").setDateValue(djEdate);
-            } 
+        //     if(sId.includes("idSTime")){
+        //       var  djSdate = this._oCore.byId("idSTime").getDateValue();
+        //         sap.ui.getCore().byId("idSTime").setDateValue(djSdate);
+        //         sap.ui.getCore().byId("idSSTime").setDateValue(djSdate);
+        //     } else if(sId.includes("idETime")){
+        //         var djEdate = this._oCore.byId("idETime").getDateValue();
+        //         sap.ui.getCore().byId("idETime").setDateValue(djEdate);
+        //         sap.ui.getCore().byId("idSETime").setDateValue(djEdate);
+        //     } 
 
-          },
+        //   },
 
+        onJobCreate:function(){
 
-          onJobCreate:function(){
             // this.oGModel = this.getModel("GModel");
             var bButton = that.oGModel.getProperty("/runText") ,
                 sName = sap.ui.getCore().byId("idname").getValue(),
-                lgTime = new Date().getTimezoneOffset(),
-                djSdate = this._oCore.byId("idSTime").getDateValue(),
+                lgTime = new Date().getTimezoneOffset();
+                if(that.oGModel.getProperty("/newSch") !== "X" && that.oGModel.getProperty("/UpdateSch") !== "X"){
+                    this._oCore.byId("idSTime").setDateValue(new Date(this._oCore.byId("idSSTime").getDateValue()));
+                    this._oCore.byId("idETime").setDateValue(new Date(this._oCore.byId("idSETime").getDateValue()));
+                } 
+
+            var djSdate = this._oCore.byId("idSTime").getDateValue(),
                 djEdate = this._oCore.byId("idETime").getDateValue(),
                 dsSDate = this._oCore.byId("idSSTime").getDateValue(),
                 dsEDate = this._oCore.byId("idSETime").getDateValue(),
                 tjStime, tjEtime, tsStime, tsEtime;
+
+                if(that.oGModel.getProperty("/newSch") === "X" || that.oGModel.getProperty("/UpdateSch") === "X"){
+                    if(djEdate < dsEDate){
+                        djEdate = dsEDate;
+
+                       var dDate = djEdate.toISOString().split("T"),
+                           dTime = dDate[1].split(".")[0];
+
+                           djEdate = dDate[0] + " " + dTime;
+
+                        var oJobUpdateData = that.oGModel.getProperty("/Jobdata");
+                        var finalList = {
+                            jobId:oJobUpdateData.jobId,
+                            name:oJobUpdateData.name,
+                            description:oJobUpdateData.description,
+                            action:oJobUpdateData.action,
+                            httpMethod: "POST",
+                            active:oJobUpdateData.active,
+                            startTime:oJobUpdateData.startTime,
+                            endTime:djEdate,
+                                    
+                        }
+                        sap.ui.core.BusyIndicator.show();
+                    that.getModel("JModel").callFunction("/lupdateJob", {
+                        method: "GET",
+                        urlParameters: {
+                            jobDetails: JSON.stringify(finalList)
+                            },
+                        success: function (oData) {
+                        // sap.ui.core.BusyIndicator.hide();
+                        that.onJobCreate1();
+
+                        
+                        },
+                        error: function (error) {
+                        sap.ui.core.BusyIndicator.hide();
+                       
+                        sap.m.MessageToast.show("Failed to update job details");
+                        },
+                    });
+
+
+
+
+
+                    } else {
+                        that.onJobCreate1();
+                    }
+                } else {
+                    that.onJobCreate1();
+                }
+
+
+        },
+
+
+          onJobCreate1:function(){
+            // this.oGModel = this.getModel("GModel");
+            var bButton = that.oGModel.getProperty("/runText") ,
+                sName = sap.ui.getCore().byId("idname").getValue(),
+                lgTime = new Date().getTimezoneOffset();
+                if(that.oGModel.getProperty("/newSch") !== "X" && that.oGModel.getProperty("/UpdateSch") !== "X"){
+                    this._oCore.byId("idSTime").setDateValue(new Date(this._oCore.byId("idSSTime").getDateValue()));
+                    this._oCore.byId("idETime").setDateValue(new Date(this._oCore.byId("idSETime").getDateValue()));
+                } 
+
+            var djSdate = this._oCore.byId("idSTime").getDateValue(),
+                djEdate = this._oCore.byId("idETime").getDateValue(),
+                dsSDate = this._oCore.byId("idSSTime").getDateValue(),
+                dsEDate = this._oCore.byId("idSETime").getDateValue(),
+                tjStime, tjEtime, tsStime, tsEtime;
+
+                if(that.oGModel.getProperty("/newSch") === "X" || that.oGModel.getProperty("/UpdateSch") === "X"){
+                    if(djEdate < dsEDate){
+                        djEdate = dsEDate;
+                    }
+                }
 
 
 
@@ -1920,15 +2055,15 @@ sap.ui.define([
                 dsEDate = dsEDate[0] + " " + tsEtime[0] + ":" + tsEtime[1] + " " + "+0000";
 
 
-                var oJobType = sap.ui.getCore().byId("idJobtype").getSelectedKey(),
+                var oJobschType = sap.ui.getCore().byId("idJobSchtype").getSelectedKey(),
                     onetime = "", Cron = "";
-                if(oJobType === "Im"){
+                if(oJobschType === "Im"){
                     onetime = sap.ui.getCore().byId("idSchTime").getDateValue();
                     Cron = "";
                     if(onetime === null){
                         onetime = "";
                     }
-                } else if(oJobType === "Cr"){
+                } else if(oJobschType === "Cr"){
                     var mnth = sap.ui.getCore().byId("idmnth").getValue(),
                         date = sap.ui.getCore().byId("iddate").getValue(),
                         day = sap.ui.getCore().byId("idWeek").getSelectedKey(),
@@ -1998,9 +2133,9 @@ sap.ui.define([
 
                 var vcRuleList = this.oGModel.getProperty("/vcrulesData");
 
-
+                var oJobType = that.byId("idJobType").getSelectedKey();
                 if(that.oGModel.getProperty("/newSch") === "X"){
-                    var oJobType = that.byId("idJobType").getSelectedKey();
+                    
                     if(oJobType === "M" || oJobType === "P"){
 
                         var finalList = {
@@ -2067,6 +2202,7 @@ sap.ui.define([
                 } else {
                     var finalList = {
                         jobId:that.oGModel.getProperty("/Jobdata").jobId,
+                        scheduleId: that.oGModel.getProperty("/aScheUpdate").scheduleId,
                             data: vcRuleList,
                             cron: Cron,
                             time: onetime,

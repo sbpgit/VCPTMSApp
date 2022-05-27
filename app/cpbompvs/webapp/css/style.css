@@ -1,8 +1,8 @@
 /* Enter your custom styles here */
 
-div#__title0 {
+/* div#__title0 {
     margin-left: 700px;
-}
+} */
 div#__xmlview3--struTitle {
     margin-left: 350px;
 }
@@ -15,32 +15,8 @@ header#__xmlview1--accessList-header {
     font-weight: bold;
 }
 
-div#__data27 {
-    margin-left: 50px;
-}
-div#__data30 {
-    margin-left: 50px;
-}
+button#__button9 {
 
-div#__data32 {
-    margin-top: 7px;
-    margin-right: 5px;
-}
-
-div#__data34 {
-    margin-top: 7px;
-    margin-right: 5px;
-    margin-left: 15px;
-}
-
-div#__data36 {
-    margin-left: 10px;
-}
-
-div#__data37 {
-    margin-left: 10px;
-}
-div#__xmlview3--idDates {
-    margin-top: 10px;
+    margin-left: 160px;
 }
 
