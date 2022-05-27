@@ -132,15 +132,15 @@ module.exports = (srv) => {
                     "COMPONENT" ASC`
         );
         var vDateSeries = vDateFrom;
-        lsDates.CAL_DATE = GenFunctions.getNextSundayCmp(vDateSeries);
+        lsDates.CAL_DATE = GenFunctions.getNextMondayCmp(vDateSeries);
         vDateSeries = lsDates.CAL_DATE;
         liDates.push(lsDates);
         lsDates = {};
         while (vDateSeries <= vDateTo) {
             vDateSeries = GenFunctions.addDays(vDateSeries, 7);
 
-            lsDates.CAL_DATE = GenFunctions.getNextSundayCmp(vDateSeries);
-            vDateSeries = lsDates.CAL_DATE;
+            lsDates.CAL_DATE = vDateSeries;//GenFunctions.getNextSundayCmp(vDateSeries);
+           // vDateSeries = lsDates.CAL_DATE;
 
             liDates.push(lsDates);
             lsDates = {};
@@ -258,15 +258,15 @@ module.exports = (srv) => {
                     "COMPONENT" ASC`
         );
         var vDateSeries = vDateFrom;
-        lsDates.CAL_DATE = GenFunctions.getNextSundayCmp(vDateSeries);
+        lsDates.CAL_DATE = GenFunctions.getNextMondayCmp(vDateSeries);
         vDateSeries = lsDates.CAL_DATE;
         liDates.push(lsDates);
         lsDates = {};
         while (vDateSeries <= vDateTo) {
             vDateSeries = GenFunctions.addDays(vDateSeries, 7);
 
-            lsDates.CAL_DATE = GenFunctions.getNextSundayCmp(vDateSeries);
-            vDateSeries = lsDates.CAL_DATE;
+            lsDates.CAL_DATE = vDateSeries ;//GenFunctions.getNextSundayCmp(vDateSeries);
+          //  vDateSeries = lsDates.CAL_DATE;
 
             liDates.push(lsDates);
             lsDates = {};

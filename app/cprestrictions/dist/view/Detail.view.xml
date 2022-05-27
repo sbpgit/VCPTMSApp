@@ -1,0 +1,7 @@
+<mvc:View controllerName="cpapp.cprestrictions.controller.Detail"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns="sap.m">
+    <Page id="idPage" title="Restrictions" titleAlignment="Center" showNavButton="true" navButtonPress="onBack" showFooter="true" class="boldText">
+        <content />
+    </Page>
+</mvc:View>

@@ -103,28 +103,29 @@ class GenFunctions {
         // result.setDate(result.getDate() + days);
         // return result;
       } 
-      static getNextSundayCmp(imDate) {
+      static getNextMondayCmp(imDate) {
         var vDate,vMonth,vYear;
         const lDate = new Date(imDate);
         let lDay = lDate.getDay();
         if (lDay !== 0) lDay = 7 - lDay;
+        lDay = lDay + 1;
         const lNextSun = new Date(
           lDate.getFullYear(),
           lDate.getMonth(),
           lDate.getDate() + lDay
         );
-        vDate = lNextSun.getDate();
-        vMonth = lNextSun.getMonth() + 1;
-        vYear = lNextSun.getFullYear(); 
-        if(vDate < 10){
-            vDate = "0"+vDate;
-        }
-        if(vMonth < 10){
-            vMonth = "0"+vMonth;
-        }
-        return vYear+"-"+vMonth+"-"+vDate;
+        // vDate = lNextSun.getDate();
+        // vMonth = lNextSun.getMonth() + 1;
+        // vYear = lNextSun.getFullYear(); 
+        // if(vDate < 10){
+        //     vDate = "0"+vDate;
+        // }
+        // if(vMonth < 10){
+        //     vMonth = "0"+vMonth;
+        // }
+        // return vYear+"-"+vMonth+"-"+vDate;
 
-      //  return lNextSun.toISOString().split('T')[0];
+       return lNextSun.toISOString().split('T')[0];
     }
     static getDateIfDate(d) {
         var m = d.match(/\/Date\((\d+)\)\//);

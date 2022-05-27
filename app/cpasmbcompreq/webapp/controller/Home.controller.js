@@ -591,7 +591,7 @@ sap.ui.define(
         liDates.push(lsDates);
         lsDates = {};
         // Calling function to get the next Sunday date of From date
-        lsDates.CAL_DATE = that.getNextSunday(vDateSeries);
+        lsDates.CAL_DATE = that.getNextMonday(vDateSeries);
         vDateSeries = lsDates.CAL_DATE;
         liDates.push(lsDates);
         lsDates = {};
@@ -599,8 +599,7 @@ sap.ui.define(
           // Calling function to add Days
           vDateSeries = that.addDays(vDateSeries, 7);
           // Calling function to get the next Sunday date of From date
-          lsDates.CAL_DATE = that.getNextSunday(vDateSeries);
-          vDateSeries = lsDates.CAL_DATE;
+          lsDates.CAL_DATE = vDateSeries;//that.getNextMonday(vDateSeries);
           liDates.push(lsDates);
           lsDates = {};
         }
@@ -617,11 +616,12 @@ sap.ui.define(
        * This function is called to get the next sunday date.
        * @param {object} imDate - From Date.
        */
-      getNextSunday: function (imDate) {
+      getNextMonday: function (imDate) {
         var vDate, vMonth, vYear;
         const lDate = new Date(imDate);
         let lDay = lDate.getDay();
         if (lDay !== 0) lDay = 7 - lDay;
+        lDay = lDay + 1;
         const lNextSun = new Date(
           lDate.getFullYear(),
           lDate.getMonth(),

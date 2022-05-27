@@ -12,8 +12,8 @@ const conn_params_container = {
     cds.env.requires.db.credentials.port,
   uid: cds.env.requires.db.credentials.user, //cds userid environment variable
   pwd: cds.env.requires.db.credentials.password, //cds password environment variable
-  encrypt: "TRUE"
- // ssltruststore: cds.env.requires.hana.credentials.certificate,
+  encrypt: "TRUE"//,
+//   ssltruststore: cds.env.requires.hana.credentials.certificate,
 };
 
 const conn = hana.createConnection();
@@ -64,99 +64,60 @@ class GenTimeseries {
           AND "PRODUCT_ID" = '` + adata.PRODUCT_ID + `'
           AND "WEEK_DATE" >= '` + lStartDate.toISOString().split("T")[0] + `'
           AND "WEEK_DATE" <= '` + GenF.getCurrentDate() + `'
-        ORDER BY 
-              "LOCATION_ID" ASC, 
-              "PRODUCT_ID" ASC,
-              "WEEK_DATE" ASC`
+        ORDER BY  "LOCATION_ID" ASC, 
+                  "PRODUCT_ID" ASC,
+                  "WEEK_DATE" ASC`
     );
 
-    let liODCharTemp = [];
-    let liRTCharTemp = [];
+    // Get Distinct Chan Num and Value
+    const liODCharTemp = await cds.run(
+        `SELECT DISTINCT CHAR_NUM,
+                        CHARVAL_NUM,
+                        OD_CONDITION
+                    FROM "V_OBDHDR"
+                WHERE LOCATION_ID = '` + adata.LOCATION_ID + `'
+                    AND PRODUCT_ID  = '` + adata.PRODUCT_ID + `'`
+        );
+    
+        // Get Distinct Chan Num and Value for Restrictions
+    const liRTCharTemp = await cds.run(
+            `SELECT DISTINCT CHAR_NUM,
+                            CHARVAL_NUM,
+                            OD_CONDITION
+                        FROM V_RESTRICTION
+                        WHERE LOCATION_ID = '` + adata.LOCATION_ID + `'
+                        AND PRODUCT_ID = '` + adata.PRODUCT_ID + `'
+                        AND VALID_FROM < '`+ GenF.getCurrentDate() +`'
+                        AND VALID_TO >= '`+ GenF.getCurrentDate() +`'`
+        );
+
 
     for (let i = 0; i < liSalesCount.length; i++) {
       // For every change in Week Date
-     
+      this.logger.info("Started OD Char Week: " + liSalesCount[i].WEEK_NO);
+
       await this.insertInitialTS(
         liSalesCount[i].LOCATION_ID,
-        liSalesCount[i].WEEK_DATE,
-        liSalesCount[i].PRODUCT_ID,
+        liSalesCount[i].WEEK_NO,
         liSalesCount[i].PRODUCT_ID
       );
-      
-
-      // For every change in Product
-      if (
-        i === 0 || 
-        liSalesCount[i].LOCATION_ID !== liSalesCount[GenF.subOne(i, liSalesCount.length)].LOCATION_ID ||
-        liSalesCount[i].PRODUCT_ID !== liSalesCount[GenF.subOne(i, liSalesCount.length)].PRODUCT_ID
-      ) {
-        // Get Distinct Chan Num and Value
-        liODCharTemp = await cds.run(
-          `SELECT DISTINCT CHAR_NUM,
-                        CHARVAL_NUM,
-                        OD_CONDITION
-                   FROM "V_OBDHDR"
-                  WHERE LOCATION_ID = '` + liSalesCount[i].LOCATION_ID + `'
-                    AND PRODUCT_ID  = '` + liSalesCount[i].PRODUCT_ID + `'`
-        );
-        // Get Distinct Chan Num and Value for Restrictions
-        liRTCharTemp = await cds.run(
-            `SELECT DISTINCT CHAR_NUM,
-                             CHARVAL_NUM,
-                             OD_CONDITION
-                        FROM V_RESTRICTION
-                       WHERE LOCATION_ID = '` + liSalesCount[i].LOCATION_ID + `'
-                         AND PRODUCT_ID = '` + liSalesCount[i].PRODUCT_ID + `'
-                         AND VALID_FROM < '`+ GenF.getCurrentDate() +`'
-                         AND VALID_TO >= '`+ GenF.getCurrentDate() +`'`
-        );
-
-      }
 
       await this.processODChar(
         liSalesCount[i].LOCATION_ID,
         liSalesCount[i].PRODUCT_ID,
         liSalesCount[i].WEEK_DATE,
+        liSalesCount[i].WEEK_NO,
         liSalesCount[i].ORD_QTY,
         liODCharTemp
       );
-
-      await this.processRTChar(
-        liSalesCount[i].LOCATION_ID,
-        liSalesCount[i].PRODUCT_ID,
-        liSalesCount[i].WEEK_DATE,
-        liSalesCount[i].ORD_QTY,
-        liRTCharTemp
-      );      
 
       await this.processODHead(
         liSalesCount[i].LOCATION_ID,
         liSalesCount[i].PRODUCT_ID,
         liSalesCount[i].WEEK_DATE,
+        liSalesCount[i].WEEK_NO,
         liSalesCount[i].ORD_QTY
       );
-
-      await this.processRTHead(
-        liSalesCount[i].LOCATION_ID,
-        liSalesCount[i].PRODUCT_ID,
-        liSalesCount[i].WEEK_DATE,
-        liSalesCount[i].ORD_QTY
-      ); 
-          
-
-      await this.processNewProducts(
-        liSalesCount[i].LOCATION_ID,
-        liSalesCount[i].PRODUCT_ID,
-        liSalesCount[i].WEEK_DATE,
-        liODCharTemp
-      )
-
-      await this.processPartialProducts(
-        liSalesCount[i].LOCATION_ID,
-        liSalesCount[i].PRODUCT_ID,
-        liSalesCount[i].WEEK_DATE,
-        liODCharTemp
-      )
 
       this.logger.info("Processed Date " + liSalesCount[i].WEEK_DATE);
     }
@@ -165,26 +126,14 @@ class GenTimeseries {
  
   }
 
-  async insertInitialTS(lLocation, lDate, lProduct, lRerProduct) {
+  async insertInitialTS(lLocation, lDate, lProduct) {
     let sqlStr;
 
     try {
       sqlStr = conn.prepare(
-        `DELETE FROM "CP_TS_OBJDEP_CHARHDR" WHERE LOCATION_ID = '` + lLocation + `'
-                                              AND PRODUCT_ID = '` + lRerProduct + `'
-                                              AND CAL_DATE  = '` + lDate + `'`
-      );
-      sqlStr.exec();
-      sqlStr.drop();
-    } catch (error) {
-      this.logger.error(error);
-    }
-
-    try {
-      sqlStr = conn.prepare(
-        `DELETE FROM "CP_TS_OBJDEPHDR" WHERE LOCATION_ID = '` + lLocation + `'
-                                         AND PRODUCT_ID = '` + lRerProduct + `'
-                                         AND CAL_DATE  = '` + lDate + `'`
+        `DELETE FROM "CP_VC_HISTORY_TS" WHERE "Location" = '` + lLocation + `'
+                                          AND "Product" = '` + lProduct + `'
+                                          AND "PeriodOfYear"  = '` + lDate + `'`
       );
       sqlStr.exec();
       sqlStr.drop();
@@ -193,93 +142,33 @@ class GenTimeseries {
     }
 
     sqlStr = conn.prepare(
-      `INSERT INTO "CP_TS_OBJDEPHDR" 
-                    SELECT DISTINCT '` + lDate + `',
-                                    '` + lLocation + `',
-                                    '` + lRerProduct + `',
-                                    'OD',
-                                    B.OBJ_DEP,
-                                    B.OBJ_COUNTER,
-                                    0,
-                                    0
-                            FROM CP_BOM_OBJDEPENDENCY AS A
-                        INNER JOIN CP_OBJDEP_HEADER AS B ON ( A.OBJ_DEP = B.OBJ_DEP ) 
-                        WHERE LOCATION_ID = '` + lLocation + `'
-                        AND PRODUCT_ID  = '` + lProduct + `'
-                        AND VALID_FROM <= '` + GenF.getCurrentDate() + `'
-                        AND VALID_TO   >= '` + GenF.getCurrentDate() + `'`
+        `INSERT INTO "CP_VC_HISTORY_TS"  
+                SELECT  WEEK_NO,
+                        V_ORD_COUNT.LOCATION_ID,
+                        V_ORD_COUNT.PRODUCT_ID,
+                        'OD',
+                        CONCAT( OBJ_DEP, CONCAT( '_', OBJ_COUNTER ) ),
+                        ROW_ID,
+                        CONCAT( 'att', ROW_ID ),
+                        '0',
+                        '0',
+                        '0',
+                        '0'
+                   FROM V_ORD_COUNT
+             INNER JOIN V_OBDHDR
+                     ON V_ORD_COUNT.LOCATION_ID = V_OBDHDR.LOCATION_ID
+                    AND V_ORD_COUNT.PRODUCT_ID = V_OBDHDR.PRODUCT_ID
+                  WHERE V_ORD_COUNT."LOCATION_ID" = '` + lLocation + `'
+                    AND V_ORD_COUNT."PRODUCT_ID" = '` + lProduct + `'
+                    AND V_ORD_COUNT.WEEK_NO = '` + lDate + `'`      
     );
     sqlStr.exec();
-    sqlStr.drop();
-
-    sqlStr = conn.prepare(
-      `INSERT INTO "CP_TS_OBJDEP_CHARHDR" 
-                    SELECT DISTINCT '` + lDate + `',
-                                    '` + lLocation + `',
-                                    '` + lRerProduct + `',
-                                    'OD',
-                                    B.OBJ_DEP,
-                                    B.OBJ_COUNTER,
-                                    B.ROW_ID,
-                                    0,
-                                    0
-                            FROM CP_BOM_OBJDEPENDENCY AS A
-                        INNER JOIN CP_OBJDEP_HEADER AS B ON ( A.OBJ_DEP = B.OBJ_DEP ) 
-                        WHERE LOCATION_ID = '` + lLocation +`'
-                          AND PRODUCT_ID  = '` + lProduct + `'
-                          AND VALID_FROM <= '` + GenF.getCurrentDate() + `'
-                          AND VALID_TO   >= '` + GenF.getCurrentDate() + `'`
-    );
-    sqlStr.exec();
-    sqlStr.drop();
-
-    // Insert Restruction
-    sqlStr = conn.prepare(
-        `INSERT INTO "CP_TS_OBJDEPHDR" 
-                      SELECT DISTINCT '` + lDate + `',
-                                      '` + lLocation + `',
-                                      '` + lRerProduct + `',
-                                      'RT',
-                                      RESTRICTION,
-                                      RTR_COUNTER,
-                                      0,
-                                      0
-                              FROM V_RESTRICTION
-                          WHERE LOCATION_ID = '` + lLocation + `'
-                          AND PRODUCT_ID  = '` + lProduct + `'
-                          AND VALID_FROM <= '` + GenF.getCurrentDate() + `'
-                          AND VALID_TO   >= '` + GenF.getCurrentDate() + `'`
-      );
-      sqlStr.exec();
-      sqlStr.drop();
-  
-      sqlStr = conn.prepare(
-        `INSERT INTO "CP_TS_OBJDEP_CHARHDR" 
-                      SELECT DISTINCT '` + lDate + `',
-                                      '` + lLocation + `',
-                                      '` + lRerProduct + `',
-                                      'RT',
-                                      RESTRICTION,
-                                      RTR_COUNTER,
-                                      ROW_ID,
-                                      0,
-                                      0
-                            FROM V_RESTRICTION
-                          WHERE LOCATION_ID = '` + lLocation +`'
-                            AND PRODUCT_ID  = '` + lProduct + `'
-                            AND VALID_FROM <= '` + GenF.getCurrentDate() + `'
-                            AND VALID_TO   >= '` + GenF.getCurrentDate() + `'`
-      );
-      sqlStr.exec();
-      sqlStr.drop();
-  
-
-
-    
+    sqlStr.drop();    
   }
 
 
-  async processODChar(lLocation, lProduct, lDate, lOrdQty, liODCharTemp) {
+  async processODChar(lLocation, lProduct, lDate, lWeekNo, lOrdQty, liODCharTemp) {
+
     let liODChar = [];
     for (let cntODC = 0; cntODC < liODCharTemp.length; cntODC++) {
       if (liODCharTemp[cntODC].OD_CONDITION === "EQ") {
@@ -338,16 +227,15 @@ class GenTimeseries {
         }
         for (let i = 0; i < liObjDet.length; i++) {
           let sqlStr = conn.prepare(
-            `UPDATE "CP_TS_OBJDEP_CHARHDR" 
-                            SET SUCCESS = ` + lTotQty + `, 
-                                SUCCESS_RATE = ` + lSuccessRate + `
-                            WHERE CAL_DATE    = '` + lDate + `'
-                              AND LOCATION_ID = '` + lLocation + `'
-                              AND PRODUCT_ID  = '` + lProduct + `'
-                              AND OBJ_TYPE    = 'OD'
-                              AND OBJ_DEP     = '` + liObjDet[i].OBJ_DEP + `'
-                              AND OBJ_COUNTER = '` + liObjDet[i].OBJ_COUNTER + `' 
-                              AND ROW_ID      = '` + liObjDet[i].ROW_ID + `'`
+            `UPDATE "CP_VC_HISTORY_TS" 
+                              SET "CharCount" = "CharCount" + ` + lTotQty + `,
+                                  "CharCountPercent" = ` + lSuccessRate + `
+                            WHERE "PeriodOfYear"    = '` + lWeekNo + `'
+                              AND "Location" = '` + lLocation + `'
+                              AND "Product"  = '` + lProduct + `'
+                              AND "Type"    = 'OD'
+                              AND "GroupID"     = '` + liObjDet[i].OBJ_DEP + '_' + liObjDet[i].OBJ_COUNTER + `'
+                              AND "Row" = '` + liObjDet[i].ROW_ID + `'`
           );
           sqlStr.exec();
           sqlStr.drop();
@@ -355,89 +243,11 @@ class GenTimeseries {
       }
     }
 
-    this.logger.info("Head Completed Date: " + lDate);
   }
 
-  async processRTChar(lLocation, lProduct, lDate, lOrdQty, liODCharTemp) {
-    let liODChar = [];
-    for (let cntODC = 0; cntODC < liODCharTemp.length; cntODC++) {
-      if (liODCharTemp[cntODC].OD_CONDITION === "EQ") {
-        liODChar = await cds.run(
-          `SELECT DISTINCT A."SALES_DOC",
-                        A."SALESDOC_ITEM",
-                        A."ORD_QTY"
-                    FROM CP_SALESH AS A
-                   INNER JOIN CP_SALESH_CONFIG AS B
-                      ON A.SALES_DOC = B.SALES_DOC
-                     AND A.SALESDOC_ITEM = B.SALESDOC_ITEM
-                   WHERE A.LOCATION_ID   = '` + lLocation + `'
-                     AND A.MAT_AVAILDATE <= '` + lDate + `' 
-                     AND A.MAT_AVAILDATE > '` + GenF.getLastWeekDate(lDate) + `' 
-                     AND B.CHAR_NUM      = '` + liODCharTemp[cntODC].CHAR_NUM + `' 
-                     AND B.CHARVAL_NUM   = '` + liODCharTemp[cntODC].CHARVAL_NUM + `' 
-                     AND B.PRODUCT_ID    = '` + lProduct + `'`
-        );
-      } else {
-        liODChar = await cds.run(
-          `SELECT  DISTINCT A."SALES_DOC",
-                            A."SALESDOC_ITEM",
-                            A."ORD_QTY"
-                       FROM CP_SALESH AS A
-                      INNER JOIN CP_SALESH_CONFIG AS B
-                         ON A.SALES_DOC = B.SALES_DOC
-                        AND A.SALESDOC_ITEM = B.SALESDOC_ITEM
-                      WHERE A.LOCATION_ID   = '` + lLocation + `'
-                        AND A.MAT_AVAILDATE <= '` + lDate + `' 
-                        AND A.MAT_AVAILDATE > '` + GenF.getLastWeekDate(lDate) + `' 
-                        AND B.CHAR_NUM      = '` + liODCharTemp[cntODC].CHAR_NUM + `' 
-                        AND B.CHARVAL_NUM   != '` + liODCharTemp[cntODC].CHARVAL_NUM + `' 
-                        AND B.PRODUCT_ID    = '` + lProduct + `'`
-        );
-      }
+  async processODHead(lLocation, lProduct, lDate, lWeekNo, lOrdQty) {
+    this.logger.info("Started OD Head Week: " + lWeekNo);
 
-      let lTotQty = 0;
-      for (let i = 0; i < liODChar.length; i++) {
-        lTotQty = parseInt(lTotQty) + parseInt(liODChar[i].ORD_QTY);
-      }
-      if (lTotQty > 0) {
-        const liObjDet = await cds.run(
-          `SELECT DISTINCT 
-                    RESTRICTION,
-                    RTR_COUNTER,
-                    ROW_ID
-                FROM V_RESTRICTION
-                WHERE LOCATION_ID = '` + lLocation + `'
-                    AND PRODUCT_ID = '` + lProduct + `'
-                    AND CHAR_NUM = '` + liODCharTemp[cntODC].CHAR_NUM + `'
-                    AND CHARVAL_NUM = '` + liODCharTemp[cntODC].CHARVAL_NUM + `'`
-        );
-        let lSuccessRate = 0;
-        if (lOrdQty > 0) {
-          lSuccessRate = ((lTotQty / lOrdQty) * 100).toFixed(2);
-        }
-        for (let i = 0; i < liObjDet.length; i++) {
-          let sqlStr = conn.prepare(
-            `UPDATE "CP_TS_OBJDEP_CHARHDR" 
-                            SET SUCCESS = ` + lTotQty + `, 
-                                SUCCESS_RATE = ` + lSuccessRate + `
-                            WHERE CAL_DATE    = '` + lDate + `'
-                              AND LOCATION_ID = '` + lLocation + `'
-                              AND PRODUCT_ID  = '` + lProduct + `'
-                              AND OBJ_TYPE    = 'RT'
-                              AND OBJ_DEP     = '` + liObjDet[i].RESTRICTION + `'
-                              AND OBJ_COUNTER = '` + liObjDet[i].RTR_COUNTER + `' 
-                              AND ROW_ID      = '` + liObjDet[i].ROW_ID + `'`
-          );
-          sqlStr.exec();
-          sqlStr.drop();
-        }
-      }
-    }
-
-    this.logger.info("Head Completed Date: " + lDate);
-  }
-
-  async processODHead(lLocation, lProduct, lDate, lOrdQty) {
     let liSales = await cds.run(
       `SELECT A.SALES_DOC,
 		        A.SALESDOC_ITEM,
@@ -548,500 +358,21 @@ class GenTimeseries {
       }
 
       let sqlStr = conn.prepare(
-        `UPDATE "CP_TS_OBJDEPHDR" 
-                                SET SUCCESS = ` + lTotQty + `, 
-                                    SUCCESS_RATE = ` + lSuccessRate + `
-                                WHERE CAL_DATE    = '` + lDate + `'
-                                  AND LOCATION_ID = '` + lLocation + `'
-                                  AND PRODUCT_ID  = '` + lProduct + `'
-                                  AND OBJ_TYPE    = 'OD'
-                                  AND OBJ_DEP     = '` + liODHead[cntODH].OBJ_DEP + `'
-                                  AND OBJ_COUNTER = '` + liODHead[cntODH].OBJ_COUNTER + `'`
+        `UPDATE "CP_VC_HISTORY_TS" 
+                SET "Target" = "Target" + ` + lTotQty + `,
+                    "TargetPercent" = ` + lSuccessRate + `
+            WHERE "PeriodOfYear"    = '` + lWeekNo + `'
+                AND "Location" = '` + lLocation + `'
+                AND "Product"  = '` + lProduct + `'
+                AND "Type"    = 'OD'
+                AND "GroupID"     = '` + liODHead[cntODH].OBJ_DEP + '_' + liODHead[cntODH].OBJ_COUNTER + `'`
       );
       sqlStr.exec();
       sqlStr.drop();
     }
   }
 
-  async processRTHead(lLocation, lProduct, lDate, lOrdQty) {
-    let liSales = await cds.run(
-      `SELECT A.SALES_DOC,
-		        A.SALESDOC_ITEM,
-		        A.ORD_QTY,
-		        B.CHAR_NUM,
-		        B.CHARVAL_NUM
-            FROM CP_SALESH AS A
-           INNER JOIN CP_SALESH_CONFIG AS B
-              ON A.SALES_DOC = B.SALES_DOC
-             AND A.SALESDOC_ITEM = B.SALESDOC_ITEM
-           WHERE A.LOCATION_ID   = '` + lLocation + `'
-             AND A.MAT_AVAILDATE <= '` + lDate + `' 
-             AND A.MAT_AVAILDATE > '` + GenF.getLastWeekDate(lDate) + `' 
-             AND B.PRODUCT_ID    = '` + lProduct +`'
-             ORDER BY A.SALES_DOC,
-                      A.SALESDOC_ITEM`
-    );
-
-    let liODHead = await cds.run(
-      `SELECT DISTINCT RESTRICTION,
-                       RTR_COUNTER
-                FROM "V_RESTRICTION"
-                WHERE LOCATION_ID = '` + lLocation + `'
-                AND PRODUCT_ID  = '` + lProduct + `'`
-    );
-
-    let lTotQty = 0;
-    for (let cntODH = 0; cntODH < liODHead.length; cntODH++) {
-      lTotQty = 0;
-
-      let liODCharTemp = await cds.run(
-        `SELECT DISTINCT CHAR_NUM,
-                                    CHARVAL_NUM,
-                                    OD_CONDITION,
-                                    CHAR_COUNTER
-                            FROM "V_RESTRICTION"
-                            WHERE LOCATION_ID = '` + lLocation + `'
-                                AND PRODUCT_ID  = '` + lProduct + `'
-                                AND RESTRICTION     = '` + liODHead[cntODH].RESTRICTION + `'
-                                AND RTR_COUNTER = '` + liODHead[cntODH].RTR_COUNTER +`'
-                                ORDER BY CHAR_COUNTER`
-      );
-
-      let lSuccess = "";
-      let lFail = "";
-      for (let cntSO = 0; cntSO < liSales.length; cntSO++) {
-        if (lFail === "") {
-          for (let cntODC = 0; cntODC < liODCharTemp.length; cntODC++) {
-            if (liSales[cntSO].CHAR_NUM === liODCharTemp[cntODC].CHAR_NUM) {
-              if (liODCharTemp[cntODC].OD_CONDITION === "EQ") {
-                if (
-                  liSales[cntSO].CHARVAL_NUM ===
-                  liODCharTemp[cntODC].CHARVAL_NUM
-                ) {
-                  lSuccess = "X";
-                  lFail = "";
-                } else {
-                  lFail = "X";
-                }
-              } else {
-                if (
-                  liSales[cntSO].CHARVAL_NUM !==
-                  liODCharTemp[cntODC].CHARVAL_NUM
-                ) {
-                  lSuccess = "X";
-                  lFail = "";
-                } else {
-                  lFail = "X";
-                }
-              }
-            }
-            if (
-              lFail === "X" &&
-              lSuccess === "" &&
-              liODCharTemp[cntODC].CHAR_COUNTER !==
-                liODCharTemp[GenF.addOne(cntODC, liODCharTemp.length)]
-                  .CHAR_COUNTER
-            ) {
-              break;
-            }
-            if (
-              liODCharTemp[cntODC].CHAR_COUNTER !==
-              liODCharTemp[GenF.addOne(cntODC, liODCharTemp.length)]
-                .CHAR_COUNTER
-            ) {
-              lSuccess = "";
-              lFail = "";
-            }
-          }
-        }
-        if (
-          liSales[cntSO].SALES_DOC !==
-            liSales[GenF.addOne(cntSO, liSales.length)].SALES_DOC ||
-          liSales[cntSO].SALESDOC_ITEM !==
-            liSales[GenF.addOne(cntSO, liSales.length)].SALESDOC_ITEM ||
-          cntSO === GenF.addOne(cntSO, liSales.length)
-        ) {
-          if (lFail === "") {
-            lTotQty = parseInt(lTotQty) + parseInt(liSales[cntSO].ORD_QTY);
-          }
-          lFail = "";
-        }
-      }
-
-      let lSuccessRate = 0;
-      if (lOrdQty > 0) {
-        lSuccessRate = ((lTotQty / lOrdQty) * 100).toFixed(2);
-      }
-
-      let sqlStr = conn.prepare(
-        `UPDATE "CP_TS_OBJDEPHDR" 
-            SET SUCCESS = ` + lTotQty + `, 
-                SUCCESS_RATE = ` + lSuccessRate + `
-            WHERE CAL_DATE    = '` + lDate + `'
-                AND LOCATION_ID = '` + lLocation + `'
-                AND PRODUCT_ID  = '` + lProduct + `'
-                AND OBJ_TYPE    = 'RT'
-                AND OBJ_DEP     = '` + liODHead[cntODH].RESTRICTION + `'
-                AND OBJ_COUNTER = '` + liODHead[cntODH].RTR_COUNTER + `'`
-      );
-      sqlStr.exec();
-      sqlStr.drop();
-    }
-  }
-
-/**
- * Process New Products or Partial Quantity
- * @param {Location} lLocation 
- * @param {Product} lProduct 
- * @param {Date} lDate 
- * @param {Order Qty} lOrdQty 
- */
-  async processNewProducts(lLocation, lProduct, lDate, liODCharTemp) {
-
-    const liNewProd = await cds.run(
-        `SELECT *
-           FROM CP_NEWPROD_INTRO
-          WHERE LOCATION_ID = '` + lLocation + `'
-            AND REF_PRODID = '` + lProduct + `'`
-    );    
-
-      for (let cntNew = 0; cntNew < liNewProd.length; cntNew++) {
-
-        const liNewProdChar = await cds.run(
-            `SELECT *
-               FROM CP_NEWPROD_CHAR
-              WHERE LOCATION_ID = '` + lLocation + `'
-                AND PRODUCT_ID = '` + liNewProd[cntNew].PRODUCT_ID + `'`
-        );    
-
-        
-        if(liNewProdChar.length === 0){      // For new Product
-                    
-            let sqlStr = conn.prepare(
-                `UPSERT "CP_TS_OBJDEP_CHARHDR" 
-                                    SELECT 
-                                    "CAL_DATE",
-                                    "LOCATION_ID",
-                                    '`+ liNewProd[cntNew].PRODUCT_ID +`',
-                                    "OBJ_TYPE",
-                                    "OBJ_DEP",
-                                    "OBJ_COUNTER",
-                                    "ROW_ID",
-                                    "SUCCESS",
-                                    "SUCCESS_RATE"
-                                FROM "CP_TS_OBJDEP_CHARHDR"
-                                WHERE LOCATION_ID = '` + lLocation +`'
-                                    AND PRODUCT_ID  = '` + lProduct + `'
-                                    AND CAL_DATE    = '` + lDate + `'`
-            );
-            sqlStr.exec();
-            sqlStr.drop();
-        
-            sqlStr = conn.prepare(
-                `UPSERT "CP_TS_OBJDEPHDR" 
-                                    SELECT 
-                                    "CAL_DATE",
-                                    "LOCATION_ID",
-                                    '`+ liNewProd[cntNew].PRODUCT_ID +`',
-                                    "OBJ_TYPE",
-                                    "OBJ_DEP",
-                                    "OBJ_COUNTER",
-                                    "SUCCESS",
-                                    "SUCCESS_RATE"
-                                FROM "CP_TS_OBJDEPHDR"
-                                WHERE LOCATION_ID = '` + lLocation +`'
-                                    AND PRODUCT_ID  = '` + lProduct + `'
-                                    AND CAL_DATE    = '` + lDate + `'`
-            );
-            sqlStr.exec();
-            sqlStr.drop();
-
-        }
-
-      }
-
-      this.logger.info(" New Product Completed Date: " + lDate);
-
-  }
-
-/**
- * Process New Products or Partial Quantity
- * @param {Location} lLocation 
- * @param {Product} lProduct 
- * @param {Date} lDate 
- * @param {Order Qty} lOrdQty 
- */
-async processPartialProducts(lLocation, lProduct, lDate, liODCharTemp) {
-
-    const liPartialProd = await cds.run(
-        `SELECT *
-           FROM CP_PARTIALPROD_INTRO
-          WHERE LOCATION_ID = '` + lLocation + `'
-            AND REF_PRODID = '` + lProduct + `'`
-    );    
-
-      for (let cntPartial = 0; cntPartial < liPartialProd.length; cntPartial++) {
-
-        const liPartialProdChar = await cds.run(
-            `SELECT *
-               FROM CP_PARTIALPROD_CHAR
-              WHERE LOCATION_ID = '` + lLocation + `'
-                AND PRODUCT_ID = '` + liPartialProd[cntPartial].PRODUCT_ID + `'`
-        );    
-
-             await this.insertInitialTS(
-                lLocation,
-                lDate,
-                lProduct,
-                liPartialProd[cntPartial].PRODUCT_ID
-              );
-
-            
-            let liSales = await cds.run(
-                `SELECT A.SALES_DOC,
-                          A.SALESDOC_ITEM,
-                          A.ORD_QTY,
-                          B.CHAR_NUM,
-                          B.CHARVAL_NUM
-                      FROM CP_SALESH AS A
-                     INNER JOIN CP_SALESH_CONFIG AS B
-                        ON A.SALES_DOC = B.SALES_DOC
-                       AND A.SALESDOC_ITEM = B.SALESDOC_ITEM
-                     WHERE A.LOCATION_ID   = '` + lLocation + `'
-                       AND A.MAT_AVAILDATE <= '` + lDate + `' 
-                       AND A.MAT_AVAILDATE > '` + GenF.getLastWeekDate(lDate) + `' 
-                       AND B.PRODUCT_ID    = '` + lProduct +`'
-                       ORDER BY A.SALES_DOC,
-                                A.SALESDOC_ITEM`
-              );   
-              
-              let iSOIgnore = [];
-              let sSOIgnore = {};
-              let lSuccess = '';
-
-            // Filter Sales Orders that belong to this Partially configured product           
-              for (let cntPartialC = 0; cntPartialC < liPartialProdChar.length; cntPartialC++) {
-                    lSuccess = '';
-                    for (let cntSO = 0; cntSO < liSales.length; cntSO++) {
-                        
-                        if (liSales[cntSO].CHAR_NUM === liPartialProdChar[cntPartialC].CHAR_NUM &&
-                            liSales[cntSO].CHARVAL_NUM === liPartialProdChar[cntPartialC].CHARVAL_NUM ) {
-                                lSuccess = 'X';
-                        }
-                        
-                        if (liSales[cntSO].SALES_DOC !== liSales[GenF.addOne(cntSO, liSales.length)].SALES_DOC ||
-                            liSales[cntSO].SALESDOC_ITEM !== liSales[GenF.addOne(cntSO, liSales.length)].SALESDOC_ITEM ||
-                            cntSO === GenF.addOne(cntSO, liSales.length)) {
-                            if (lSuccess !== 'X') {
-                                sSOIgnore = {};
-                                sSOIgnore['SALES_DOC'] = liSales[cntSO].SALES_DOC;
-                                sSOIgnore['SALESDOC_ITEM'] = liSales[cntSO].SALESDOC_ITEM;
-                                iSOIgnore.push(sSOIgnore);
-                            }
-                            lSuccess = '';
-                        }
-                    }
-              }
-
-            // Remove SO that are not for this Partial Configured Product
-            for (let cntSOI = 0; cntSOI < iSOIgnore.length; cntSOI++) {
-                for (let cntSO = liSales.length - 1; cntSO >= 0; cntSO--) {
-                    if(liSales[cntSO].SALES_DOC === iSOIgnore[cntSOI].SALES_DOC &&
-                        liSales[cntSO].SALESDOC_ITEM === iSOIgnore[cntSOI].SALESDOC_ITEM){
-                            liSales.splice(cntSO, cntSO);
-                    }
-                }
-            }
-
-            // Get Order Quantity
-            let lOrdQty = 0;
-            for (let cntSO = 0; cntSO < liSales.length; cntSO++) {
-                if( cntSO === 0 ||
-                    liSales[cntSO].SALES_DOC !== liSales[GenF.subOne(cntSO,liSales.length)].SALES_DOC ||
-                    liSales[cntSO].SALESDOC_ITEM !== liSales[GenF.subOne(cntSO,liSales.length)].SALESDOC_ITEM ){
-                        lOrdQty = parseInt(lOrdQty) + parseInt(liSales[cntSO].ORD_QTY);
-                    }
-            }
-
-// Determine Characteristic Timeseries
-              for (let cntODC = 0; cntODC < liODCharTemp.length; cntODC++) {
-                lSuccess = '';
-                let lTotQty = 0;
-                for (let cntSO = 0; cntSO < liSales.length; cntSO++) {
-                    if (liODCharTemp[cntODC].OD_CONDITION === "EQ") {
-                        if(liODCharTemp[cntODC].CHAR_NUM === liSales[cntSO].CHAR_NUM &&
-                           liODCharTemp[cntODC].CHARVAL_NUM === liSales[cntSO].CHARVAL_NUM ){
-                            lSuccess = 'X';
-                        }
-                    } else {
-                        if(liODCharTemp[cntODC].CHAR_NUM === liSales[cntSO].CHAR_NUM &&
-                           liODCharTemp[cntODC].CHARVAL_NUM !== liSales[cntSO].CHARVAL_NUM ){
-                            lSuccess = 'X';
-                        }
-                    }
-
-                    if (liSales[cntSO].SALES_DOC !== liSales[GenF.addOne(cntSO, liSales.length)].SALES_DOC ||
-                    liSales[cntSO].SALESDOC_ITEM !== liSales[GenF.addOne(cntSO, liSales.length)].SALESDOC_ITEM ||
-                    cntSO === GenF.addOne(cntSO, liSales.length)) {
-                    if (lSuccess === 'X') {
-                        lTotQty = parseInt(lTotQty) + parseInt(liSales[cntSO].ORD_QTY);
-                    }
-                    lSuccess = '';
-                    }
-                }
-
-                if (lTotQty > 0) {
-                  const liObjDet = await cds.run(
-                    `SELECT DISTINCT 
-                              OBJ_DEP,
-                              OBJ_COUNTER,
-                              ROW_ID
-                          FROM V_OBDHDR
-                          WHERE LOCATION_ID = '` + lLocation + `'
-                              AND PRODUCT_ID = '` + lProduct + `'
-                              AND CHAR_NUM = '` + liODCharTemp[cntODC].CHAR_NUM + `'
-                              AND CHARVAL_NUM = '` + liODCharTemp[cntODC].CHARVAL_NUM + `'`
-                  );
-                  let lSuccessRate = 0;
-                  if (lOrdQty > 0) {
-                    lSuccessRate = ((lTotQty / lOrdQty) * 100).toFixed(2);
-                  }
-                  for (let i = 0; i < liObjDet.length; i++) {
-                    let sqlStr = conn.prepare(
-                      `UPDATE "CP_TS_OBJDEP_CHARHDR" 
-                                      SET SUCCESS = ` + lTotQty + `, 
-                                          SUCCESS_RATE = ` + lSuccessRate + `
-                                      WHERE CAL_DATE    = '` + lDate + `'
-                                        AND LOCATION_ID = '` + lLocation + `'
-                                        AND PRODUCT_ID  = '` + liPartialProd[cntPartial].PRODUCT_ID + `'
-                                        AND OBJ_TYPE    = 'OD'
-                                        AND OBJ_DEP     = '` + liObjDet[i].OBJ_DEP + `'
-                                        AND OBJ_COUNTER = '` + liObjDet[i].OBJ_COUNTER + `' 
-                                        AND ROW_ID      = '` + liObjDet[i].ROW_ID + `'`
-                    );
-                    sqlStr.exec();
-                    sqlStr.drop();
-                  }
-                }
-              }
-
-// Determine Object Dependency Timeseries
-            let liODHead = await cds.run(
-            `SELECT DISTINCT OBJ_DEP,
-                                    OBJ_COUNTER
-                        FROM "V_OBDHDR"
-                        WHERE LOCATION_ID = '` + lLocation + `'
-                        AND PRODUCT_ID  = '` + lProduct + `'`
-            );
-
-    let lTotQty = 0;
-    for (let cntODH = 0; cntODH < liODHead.length; cntODH++) {
-      lTotQty = 0;
-
-      let liODCharTemp = await cds.run(
-        `SELECT DISTINCT CHAR_NUM,
-                                    CHARVAL_NUM,
-                                    OD_CONDITION,
-                                    CHAR_COUNTER
-                            FROM "V_OBDHDR"
-                            WHERE LOCATION_ID = '` + lLocation + `'
-                                AND PRODUCT_ID  = '` + lProduct + `'
-                                AND OBJ_DEP     = '` + liODHead[cntODH].OBJ_DEP + `'
-                                AND OBJ_COUNTER = '` + liODHead[cntODH].OBJ_COUNTER +`'
-                                ORDER BY CHAR_COUNTER`
-      );
-
-      let lSuccess = "";
-      let lFail = "";
-      for (let cntSO = 0; cntSO < liSales.length; cntSO++) {
-        if (lFail === "") {
-          for (let cntODC = 0; cntODC < liODCharTemp.length; cntODC++) {
-            if (liSales[cntSO].CHAR_NUM === liODCharTemp[cntODC].CHAR_NUM) {
-              if (liODCharTemp[cntODC].OD_CONDITION === "EQ") {
-                if (
-                  liSales[cntSO].CHARVAL_NUM ===
-                  liODCharTemp[cntODC].CHARVAL_NUM
-                ) {
-                  lSuccess = "X";
-                  lFail = "";
-                } else {
-                  lFail = "X";
-                }
-              } else {
-                if (
-                  liSales[cntSO].CHARVAL_NUM !==
-                  liODCharTemp[cntODC].CHARVAL_NUM
-                ) {
-                  lSuccess = "X";
-                  lFail = "";
-                } else {
-                  lFail = "X";
-                }
-              }
-            }
-            if (
-              lFail === "X" &&
-              lSuccess === "" &&
-              liODCharTemp[cntODC].CHAR_COUNTER !==
-                liODCharTemp[GenF.addOne(cntODC, liODCharTemp.length)]
-                  .CHAR_COUNTER
-            ) {
-              break;
-            }
-            if (
-              liODCharTemp[cntODC].CHAR_COUNTER !==
-              liODCharTemp[GenF.addOne(cntODC, liODCharTemp.length)]
-                .CHAR_COUNTER
-            ) {
-              lSuccess = "";
-              lFail = "";
-            }
-          }
-        }
-        if (
-          liSales[cntSO].SALES_DOC !==
-            liSales[GenF.addOne(cntSO, liSales.length)].SALES_DOC ||
-          liSales[cntSO].SALESDOC_ITEM !==
-            liSales[GenF.addOne(cntSO, liSales.length)].SALESDOC_ITEM ||
-          cntSO === GenF.addOne(cntSO, liSales.length)
-        ) {
-          if (lFail === "") {
-            lTotQty = parseInt(lTotQty) + parseInt(liSales[cntSO].ORD_QTY);
-          }
-          lFail = "";
-        }
-      }
-
-      let lSuccessRate = 0;
-      if (lOrdQty > 0) {
-        lSuccessRate = ((lTotQty / lOrdQty) * 100).toFixed(2);
-      }
-
-      let sqlStr = conn.prepare(
-        `UPDATE "CP_TS_OBJDEPHDR" 
-                                SET SUCCESS = ` + lTotQty + `, 
-                                    SUCCESS_RATE = ` + lSuccessRate + `
-                                WHERE CAL_DATE    = '` + lDate + `'
-                                  AND LOCATION_ID = '` + lLocation + `'
-                                  AND PRODUCT_ID  = '` + liPartialProd[cntPartial].PRODUCT_ID + `'
-                                  AND OBJ_TYPE    = 'OD'
-                                  AND OBJ_DEP     = '` + liODHead[cntODH].OBJ_DEP + `'
-                                  AND OBJ_COUNTER = '` + liODHead[cntODH].OBJ_COUNTER + `'`
-      );
-      sqlStr.exec();
-      sqlStr.drop();
-    }
-
-
-
-
-      }
-
-      this.logger.info(" Partial Product Completed Date: " + lDate);
-
-  }  
-
-  async genTimeseriesF(adata) {
+async genTimeseriesF(adata) {
     let sRowData = [],
       iTableDate = [];
     var conn = hana.createConnection(),

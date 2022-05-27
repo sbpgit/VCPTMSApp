@@ -53,7 +53,7 @@ sap.ui.define(
         sap.ui.core.BusyIndicator.show();
 
         // Calling service to get the product data
-        this.getModel("BModel").read("/genNewProd", {
+        this.getModel("BModel").read("/genPartialProd", {
           success: function (oData) {
             sap.ui.core.BusyIndicator.hide();
             that.ProdListModel.setData(oData);
