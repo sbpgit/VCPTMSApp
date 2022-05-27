@@ -6,7 +6,7 @@
     <Page id="idClassChar">
         <customHeader>
             <Toolbar height="50%">
-                <Title id="struTitle" text="Structure Node - View Nod" class="boldText"></Title>
+                <Title id="struTitle" text="Structure Node - View Node" class="boldText"></Title>
                 <ToolbarSpacer/>
                 <Button id="idAssign" text="Assign" press="onAssign" tooltip="Assign to View Node"/>
                 <Button id="idAstru" icon="sap-icon://add" press="onStruNode" tooltip="Add Structure Node"/>

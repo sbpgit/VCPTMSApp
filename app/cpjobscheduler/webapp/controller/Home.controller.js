@@ -299,22 +299,61 @@ sap.ui.define(
                 sap.ui.getCore().byId("idJobData").getColumns()[4].setVisible(true);
                 sap.ui.getCore().byId("idJobData").getColumns()[5].setVisible(false);
                 sap.ui.getCore().byId("idJobData").getColumns()[6].setVisible(false);
+                sap.ui.getCore().byId("idJobData").getColumns()[7].setVisible(false);
+                sap.ui.getCore().byId("idJobData").getColumns()[8].setVisible(false);
             } else if(oGModel.getProperty("/JobType") === "P"){
                 sap.ui.getCore().byId("idJobData").getColumns()[2].setVisible(true);
                 sap.ui.getCore().byId("idJobData").getColumns()[3].setVisible(true);
                 sap.ui.getCore().byId("idJobData").getColumns()[4].setVisible(true);
                 sap.ui.getCore().byId("idJobData").getColumns()[5].setVisible(true);
                 sap.ui.getCore().byId("idJobData").getColumns()[6].setVisible(true);
+                sap.ui.getCore().byId("idJobData").getColumns()[7].setVisible(false);
+                sap.ui.getCore().byId("idJobData").getColumns()[8].setVisible(false);
             } else if(oGModel.getProperty("/JobType") === "I"){
+                sap.ui.getCore().byId("idJobData").getColumns()[0].setVisible(false);
+                sap.ui.getCore().byId("idJobData").getColumns()[1].setVisible(false);
                 sap.ui.getCore().byId("idJobData").getColumns()[2].setVisible(false);
                 sap.ui.getCore().byId("idJobData").getColumns()[3].setVisible(false);
                 sap.ui.getCore().byId("idJobData").getColumns()[4].setVisible(false);
-                sap.ui.getCore().byId("idJobData").getColumns()[5].setVisible(true);
-                sap.ui.getCore().byId("idJobData").getColumns()[6].setVisible(true);
+                sap.ui.getCore().byId("idJobData").getColumns()[5].setVisible(false);
+                sap.ui.getCore().byId("idJobData").getColumns()[6].setVisible(false);
+                sap.ui.getCore().byId("idJobData").getColumns()[7].setVisible(false);
+                sap.ui.getCore().byId("idJobData").getColumns()[8].setVisible(false);
             }
-  
-          that._valueHelpDialogJobData.open();
-  
+            
+            if(oGModel.getProperty("/JobType") !== "I"){
+                that._valueHelpDialogJobData.open();
+            } else {
+                var oActionType = oGModel.getProperty("/IBPService");
+                var iCount = 0;
+
+                if(oActionType === "generateFDemandQty" || oActionType === "generateFCharPlan"){
+                    sap.ui.getCore().byId("idJobData").getColumns()[0].setVisible(true);
+                    sap.ui.getCore().byId("idJobData").getColumns()[1].setVisible(true);
+                    sap.ui.getCore().byId("idJobData").getColumns()[5].setVisible(true);
+                    sap.ui.getCore().byId("idJobData").getColumns()[6].setVisible(true);
+
+                } else if(oActionType === "exportIBPLocation" || oActionType === "exportIBPCustomer"){
+                    MessageToast.show("There is no schedule data to display for the selected job type");
+                    iCount = 1;
+
+                } else if(oActionType === "exportIBPMasterProd"){
+                    sap.ui.getCore().byId("idJobData").getColumns()[0].setVisible(true);
+
+                } else if(oActionType === "exportIBPClass"){
+                    sap.ui.getCore().byId("idJobData").getColumns()[7].setVisible(true);
+
+                } else if(oActionType === "exportIBPSalesTrans"){
+                    sap.ui.getCore().byId("idJobData").getColumns()[0].setVisible(true);
+                    sap.ui.getCore().byId("idJobData").getColumns()[1].setVisible(true);
+                    sap.ui.getCore().byId("idJobData").getColumns()[8].setVisible(true);
+
+                }
+                if(iCount === 0){
+                    that._valueHelpDialogJobData.open();
+                }
+
+            }
         },
 
         onSchestatus:function(oEvent){
