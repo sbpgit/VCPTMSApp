@@ -1882,102 +1882,62 @@ annotate cp.NEWPROD_INTRO with {
             ]
     });
 }
-// Product annotations
-// annotate service.AUTH_ROLE_OBJ with @(
-//     UI        : {
-//         SelectionFields                : [
-//             ROLE_ID,
-//             PARAMETER,
-//             PARAMETER_VAL
-//         ],
-//         LineItem                       : [
-//             {
-//                 $Type : 'UI.DataField', 
-//                 Value : ROLE_ID,
-//                 ![@UI.Importance]   : #High
-//             },
-//             {
-//                 $Type : 'UI.DataField', 
-//                 Value : PARAMETER,
-//                 ![@UI.Importance]   : #High
-//             },
-//             {
-//                 $Type : 'UI.DataField',
-//                 Value : PARAMETER_VAL,
-//                 ![@UI.Importance]   : #High
-//             }
-//         ],
-//         HeaderInfo                     : {
-//             Title          : {Value : ROLE_ID},
-//             // Description    : {Value : PROD_DESC},
-//             TypeName       : 'Product',
-//             TypeNamePlural : 'Products'
-//         },
-//         HeaderFacets            : [{
-//             $Type             : 'UI.ReferenceFacet',
-//             Target            : '@UI.FieldGroup#Description',
-//             ![@UI.Importance] : #Medium
-//         }],
-//         FieldGroup #Description : {Data : [{
-//             $Type : 'UI.DataField',
-//             Value : PROD_DESC
-//         }]},
-//         FieldGroup #Details            : {Data : [
-//             {
-//                 $Type : 'UI.DataField',
-//                 Value : PROD_DESC
-//             },
-//             {
-//                 $Type : 'UI.DataField',
-//                 Value : PROD_FAMILY
-//             },
-//             {
-//                 $Type : 'UI.DataField',
-//                 Value : PROD_GROUP
-//             },
-//             {
-//                 $Type : 'UI.DataField',
-//                 Value : PROD_SERIES
-//             },
-//             {
-//                 $Type : 'UI.DataField',
-//                 Value : PROD_MODEL
-//             },
-//             {
-//                 $Type : 'UI.DataField',
-//                 Value : PROD_MDLRANGE
-//             },
-//             {
-//                 $Type : 'UI.DataField',
-//                 Value : RESERVE_FIELD1
-//             },
-//             {
-//                 $Type : 'UI.DataField',
-//                 Value : RESERVE_FIELD2
-//             },
-//             {
-//                 $Type : 'UI.DataField',
-//                 Value : RESERVE_FIELD3
-//             },
-//             {
-//                 $Type : 'UI.DataField',
-//                 Value : RESERVE_FIELD4
-//             },
-//             {
-//                 $Type : 'UI.DataField',
-//                 Value : RESERVE_FIELD5
-//             }
-//         ]}
-//     },
-//     // Page Facets
-//     UI.Facets : [{
-//         $Type  : 'UI.CollectionFacet',
-//         ID     : 'ProdDetails',
-//         Label  : 'Product Details',
-//         Facets : [{
-//             $Type  : 'UI.ReferenceFacet',
-//             Label  : 'Product Details',
-//             Target : '@UI.FieldGroup#Details'
-//         }]
-//     }]
-// );
+//Auth object annotations
+annotate service.USER_AUTHOBJ with @(
+    UI        : {
+        SelectionFields                : [
+            USER,
+            AUTH_GROUP
+        ],
+        LineItem                       : [
+            {
+                $Type : 'UI.DataField', 
+                Value : USER,
+                ![@UI.Importance]   : #High
+            },
+            {
+                $Type : 'UI.DataField', 
+                Value : AUTH_GROUP,
+                ![@UI.Importance]   : #High
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : DESCRIPTION,
+                ![@UI.Importance]   : #High
+            }
+        ],
+        HeaderInfo                     : {
+            Title          : {Value : USER},
+            Description    : {Value : AUTH_GROUP},
+            TypeName       : 'Authorization',
+            TypeNamePlural : 'Authorizations'
+        },
+        // HeaderFacets            : [{
+        //     $Type             : 'UI.ReferenceFacet',
+        //     Target            : '@UI.FieldGroup#Description',
+        //     ![@UI.Importance] : #Medium
+        // }],
+        // FieldGroup #Description : {Data : [{
+        //     $Type : 'UI.DataField',
+        //     Value : DESCRIPTION
+        // }]}
+        //,
+        FieldGroup #Details            : {Data : [
+            {
+                $Type : 'UI.DataField',
+                Value : DESCRIPTION
+            }
+        ]}
+    },
+    // Page Facets
+    UI.Facets : [{
+        $Type  : 'UI.CollectionFacet',
+        ID     : 'USERAUTH',
+        Label  : 'User Authorization',
+        Facets : [{
+            $Type  : 'UI.ReferenceFacet',
+            Label  : 'User Authorization',
+            Target : '@UI.FieldGroup#Details'
+        }]
+    }]
+);

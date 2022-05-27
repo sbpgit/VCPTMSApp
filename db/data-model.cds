@@ -19,7 +19,19 @@ context cp {
             RESERVE_FIELD5 : String(20)     @title : 'Reserve Field5';
             AUTH_GROUP     : String(4)      @title : 'Authorization Group';
     };
-
+    entity LOCATION_TEMP {
+        key LOCATION_ID    : String(4)      @title : 'Location ';
+            LOCATION_DESC  : String(30)     @title : 'Location Descritpion';
+            LOCATION_TYPE  : String(1)      @title : 'Location Type';
+            LATITUDE       : Decimal(10, 8) @title : 'Latitude';
+            LONGITUTE      : Decimal(10, 8) @title : 'Longitude';
+            RESERVE_FIELD1 : String(20)     @title : 'Reserve Field1';
+            RESERVE_FIELD2 : String(20)     @title : 'Reserve Field2';
+            RESERVE_FIELD3 : String(20)     @title : 'Reserve Field3';
+            RESERVE_FIELD4 : String(20)     @title : 'Reserve Field4';
+            RESERVE_FIELD5 : String(20)     @title : 'Reserve Field5';
+            AUTH_GROUP     : String(4)      @title : 'Authorization Group';
+    };
     // Customer group
     entity CUSTOMERGROUP {
         key CUSTOMER_GROUP : String(2)  @title : 'Customer Group';
@@ -409,10 +421,11 @@ context cp {
     }
 
     // Authorization object master
-    // entity AUTH_OBJ : managed {
-    //     key AUTH_OBJ    : String(100) @title : 'Authorization Object';
-    //         DESCRIPTION : String(250) @title : 'Description';
-    // }
+    entity USER_AUTHOBJ  {
+        key USER    : String(100) @title : 'User';
+        key AUTH_GROUP   : String(4) @title : 'Authorization Object';
+            DESCRIPTION : String(250) @title : 'Description';
+    }
 
     // // Auth. object parameters
     // entity AUTH_OBJ_PARA : managed {

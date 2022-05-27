@@ -22,13 +22,13 @@ const conn_params_container = {
 
 module.exports = (srv) => {
     // srv.
-    srv.after('READ', 'getLocation', async (data, req) => {
+    srv.after('READ', 'getLocationtemp', async (data, req) => {
         vUser = req.headers['x-username'];
         const li_roleparam = await cds.run(
             `
-            SELECT * FROM "V_USERROLE"
-            WHERE "USER" = '`+ vUser + `'
-            AND PARAMETER = 'LOCATION_ID'`
+            SELECT * FROM "CP_USER_AUTHOBJ"
+            WHERE "USER" = '`+ vUser + `'`
+            // AND PARAMETER = 'LOCATION_ID'`
         );
         // var cnRs = 0;
         //     return data.map(async data => {
@@ -48,7 +48,7 @@ module.exports = (srv) => {
 
         for (var cnRs = req.results.length - 1; cnRs >= 0; cnRs--) {
             for (var cnRL = 0; cnRL < li_roleparam.length; cnRL++) {
-                if (li_roleparam[cnRL].PARAMETER_VAL !== req.results[cnRs].LOCATION_ID) {
+                if (li_roleparam[cnRL].AUTH_GROUP !== req.results[cnRs].AUTH_GROUP) {
                     req.results.splice(cnRs, 1);
                 }
             }
