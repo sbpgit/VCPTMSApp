@@ -171,10 +171,10 @@ modules:
       - cpappcpasmbcompreq.zip
       name: cpappcpasmbcompreq
       target-path: resources/
-    - artifacts:
-      - cpappfcpnewprodintro.zip
-      name: cpappfcpnewprodintro
-      target-path: resources/
+    # - artifacts:
+    #   - cpappfcpnewprodintro.zip
+    #   name: cpappfcpnewprodintro
+    #   target-path: resources/
     - artifacts:
       - cpappcpproduct.zip
       name: cpappcpproduct
@@ -443,16 +443,16 @@ modules:
     - npm install
     - npm run build:cf
     supported-platforms: []
-- name: cpappfcpnewprodintro
-  type: html5
-  path: app/cpnewprodintro
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    supported-platforms: []
+# - name: cpappfcpnewprodintro
+#   type: html5
+#   path: app/cpnewprodintro
+#   build-parameters:
+#     build-result: dist
+#     builder: custom
+#     commands:
+#     - npm install
+#     - npm run build:cf
+#     supported-platforms: []
 - name: cpappcpproduct
   type: html5
   path: app/cpproduct

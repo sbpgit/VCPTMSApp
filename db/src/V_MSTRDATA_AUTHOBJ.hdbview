@@ -1,0 +1,28 @@
+----------------------------------------------------------------------------------------
+-- Name:            V_MSTRDATA_AUTHOBJ
+-- Description:     View to fetch int. number and its values for Characteristics and its values
+-- Join Details:    A: CP_LOCATION_PRODUCT -  Table for LOCATION AND PRODUCT combination
+--                  B: CP_LOCATION - Mater table for location
+--                  C: CP_PRODUCT  - Master table for Product
+-----------------------------------------------------------------------------------------
+VIEW "V_MSTRDATA_AUTHOBJ" AS
+SELECT distinct
+    CP_LOCATION.AUTH_GROUP as LOC_AUTHOBJ,
+    CP_PRODUCT.AUTH_GROUP as PROD_AUTHOBJ,
+    -- CASE
+    -- WHEN CP_LOCATION.AUTH_GROUP IS NOT NULL THEN
+    --     CP_LOCATION.AUTH_GROUP
+    -- WHEN CP_PRODUCT.AUTH_GROUP IS NOT NULL THEN
+    --     CP_PRODUCT.AUTH_GROUP
+    -- END AS AUTH_GROUP,
+    CASE
+    WHEN CP_LOCATION.AUTH_GROUP IS NOT NULL THEN
+        'L'
+    WHEN CP_PRODUCT.AUTH_GROUP IS NOT NULL THEN
+        'P'
+    END AS AUTHGROUP_FOR
+FROM CP_LOCATION_PRODUCT
+  INNER JOIN CP_LOCATION 
+ ON CP_LOCATION_PRODUCT.LOCATION_ID = CP_LOCATION.LOCATION_ID
+ INNER JOIN CP_PRODUCT 
+ ON CP_LOCATION_PRODUCT.PRODUCT_ID = CP_PRODUCT.PRODUCT_ID;

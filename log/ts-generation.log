@@ -1882,3 +1882,339 @@
   label: [32m'Timeseries'[39m,
   timestamp: [32m'2022-04-29T02:46:37.225Z'[39m
 }
+{
+  message: [32m'Started timeseries Service'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T11:32:35.857Z'[39m
+}
+{
+  message: [32m'Date: 2022-04-04'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T11:32:35.969Z'[39m
+}
+{
+  message: [32m'unique constraint violated/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T11:32:40.272Z'[39m
+}
+{
+  message: [32m'Date: 2022-04-11'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T11:32:40.273Z'[39m
+}
+{
+  message: [32m'unique constraint violated/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T11:32:44.924Z'[39m
+}
+{
+  message: [32m'Date: 2022-04-18'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T11:32:44.925Z'[39m
+}
+{
+  message: [32m'unique constraint violated/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T11:32:49.245Z'[39m
+}
+{
+  message: [32m'Date: 2022-04-25'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T11:32:49.245Z'[39m
+}
+{
+  message: [32m'unique constraint violated/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T11:32:52.661Z'[39m
+}
+{
+  message: [32m'Date: 2022-05-02'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T11:32:52.661Z'[39m
+}
+{
+  message: [32m'unique constraint violated/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T11:32:55.646Z'[39m
+}
+{
+  message: [32m'Date: 2022-05-09'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T11:32:55.646Z'[39m
+}
+{
+  message: [32m'unique constraint violated/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T11:32:58.977Z'[39m
+}
+{
+  message: [32m'Date: 2022-05-16'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T11:32:58.978Z'[39m
+}
+{
+  message: [32m'unique constraint violated/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T11:33:02.921Z'[39m
+}
+{
+  message: [32m'Date: 2022-05-23'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T11:33:02.921Z'[39m
+}
+{
+  message: [32m'unique constraint violated/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T11:33:07.385Z'[39m
+}
+{
+  message: [32m'Date: 2022-05-30'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T11:33:07.386Z'[39m
+}
+{
+  message: [32m'unique constraint violated/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T11:33:11.312Z'[39m
+}
+{
+  message: [32m'Date: 2022-06-06'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T11:33:11.313Z'[39m
+}
+{
+  message: [32m'unique constraint violated/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T11:33:14.408Z'[39m
+}
+{
+  message: [32m'Date: 2022-06-13'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T11:33:14.409Z'[39m
+}
+{
+  message: [32m'unique constraint violated/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T11:33:18.541Z'[39m
+}
+{
+  message: [32m'Date: 2022-06-20'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T11:33:18.542Z'[39m
+}
+{
+  message: [32m'unique constraint violated/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T11:34:02.967Z'[39m
+}
+{
+  message: [32m'Completed timeseries Service'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T11:34:02.969Z'[39m
+}
+{
+  level: [32m'info'[39m,
+  message: [32m'Processing time : 1 Minutes'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T11:34:02.969Z'[39m
+}
+{
+  message: [32m'Started timeseries Service'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T12:44:02.689Z'[39m
+}
+{
+  message: [32m'Date: 2022-04-04'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T12:44:03.356Z'[39m
+}
+{
+  message: [32m'Started timeseries Service'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T12:45:02.507Z'[39m
+}
+{
+  message: [32m'Date: 2022-04-04'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T12:45:03.171Z'[39m
+}
+{
+  message: [32m'unique constraint violated/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T12:45:06.637Z'[39m
+}
+{
+  message: [32m'Date: 2022-04-11'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T12:45:06.637Z'[39m
+}
+{
+  message: [32m'unique constraint violated/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T12:45:09.908Z'[39m
+}
+{
+  message: [32m'Date: 2022-04-18'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T12:45:09.908Z'[39m
+}
+{
+  message: [32m'unique constraint violated/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T12:45:13.498Z'[39m
+}
+{
+  message: [32m'Date: 2022-04-25'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T12:45:13.499Z'[39m
+}
+{
+  message: [32m'unique constraint violated/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T12:45:16.301Z'[39m
+}
+{
+  message: [32m'Date: 2022-05-02'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T12:45:16.301Z'[39m
+}
+{
+  message: [32m'unique constraint violated/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T12:45:19.213Z'[39m
+}
+{
+  message: [32m'Date: 2022-05-09'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T12:45:19.213Z'[39m
+}
+{
+  message: [32m'unique constraint violated/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T12:45:21.737Z'[39m
+}
+{
+  message: [32m'Date: 2022-05-16'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T12:45:21.737Z'[39m
+}
+{
+  message: [32m'unique constraint violated/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T12:45:24.374Z'[39m
+}
+{
+  message: [32m'Date: 2022-05-23'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T12:45:24.375Z'[39m
+}
+{
+  message: [32m'unique constraint violated/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T12:45:27.670Z'[39m
+}
+{
+  message: [32m'Date: 2022-05-30'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T12:45:27.671Z'[39m
+}
+{
+  message: [32m'unique constraint violated/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T12:45:31.271Z'[39m
+}
+{
+  message: [32m'Date: 2022-06-06'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T12:45:31.271Z'[39m
+}
+{
+  message: [32m'unique constraint violated/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T12:45:33.620Z'[39m
+}
+{
+  message: [32m'Date: 2022-06-13'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T12:45:33.620Z'[39m
+}
+{
+  message: [32m'unique constraint violated/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T12:45:37.285Z'[39m
+}
+{
+  message: [32m'Date: 2022-06-20'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T12:45:37.285Z'[39m
+}
+{
+  message: [32m'unique constraint violated/undefined'[39m,
+  level: [32m'error'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T12:45:40.614Z'[39m
+}
+{
+  message: [32m'Completed timeseries Service'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T12:45:40.621Z'[39m
+}
+{
+  level: [32m'info'[39m,
+  message: [32m'Processing time : 0 Minutes'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-05-11T12:45:40.626Z'[39m
+}

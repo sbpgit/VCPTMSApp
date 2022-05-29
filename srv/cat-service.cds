@@ -38,6 +38,8 @@ service CatalogService @(impl : './lib/cat-service.js') {
     // Get locations
     @readonly
     entity getLocation          as projection on od.LOCATION;
+    @readonly
+    entity getLocationtemp          as projection on od.LOCATION_TEMP;
 
     // Get customer group
     @readonly
@@ -91,8 +93,8 @@ service CatalogService @(impl : './lib/cat-service.js') {
     // @odata.draft.enabled
     // entity getAuthObj           as projection on od.AUTH_OBJ;
 
-    // @odata.draft.enabled
-    // entity getAOPara            as projection on od.AUTH_OBJ_PARA
+    @odata.draft.enabled
+    entity getUserAuthObj            as projection on od.USER_AUTHOBJ;
 
     @odata.draft.enabled
     entity getAEmpRole          as projection on od.AUTH_EMP_ROLE;
