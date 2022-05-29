@@ -65,7 +65,10 @@
         </f:Form>
 
         <content>
-            <SearchField id="headSearch" liveChange="onSearch" placeholder="Week Date/ Quantity/ Version/ Scenario"/>
+        <HBox>
+            <SearchField id="headSearch" width="500px" liveChange="onSearch" placeholder="Week Date(MM/DD/yyyy)/ Quantity/ Version/ Scenario"/>
+            <CheckBox id="idCheck1" select="onNonZero" text="Get Non-Zero" selected="true" />
+            </HBox>
             <Table id="IBPfdemList" items="{path: '/results'}" itemPress="onhandlePress" growingScrollToLoad="true" mode="SingleSelectMaster" selectionChange="onhandlePress" rememberSelections="false">
                 <columns>
                     <Column hAlign="Left" vAlign="Middle">

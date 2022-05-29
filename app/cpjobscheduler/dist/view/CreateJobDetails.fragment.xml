@@ -27,17 +27,17 @@
 					<Select id="idActive" change="onActiveChange" selectedKey="T" class="buttonDesktop" width="400px">
 							<core:ListItem key="T" text="{i18n>true}"/>
 							<core:ListItem key="F" text="{i18n>false}"/>
-					</Select>                
-                    <Label text="{i18n>startTime}"/>
-					<DateTimePicker id="idSTime" width="400px" valueFormat= "yyyy-mm-dd HH:mm" change="handleDateChange" class="sapUiSmallMarginBottom"/>
-                    <Label text="{i18n>endTime}"/>
-					<DateTimePicker id="idETime" width="400px" valueFormat= "yyyy-mm-dd HH:mm"  change="handleDateChange" class="sapUiSmallMarginBottom"/>
-
+					</Select>
+                    <Label text="{i18n>startTime}" visible="false"/>
+					<DateTimePicker id="idSTime" visible="false" width="400px" valueFormat= "yyyy-mm-dd HH:mm" change="handleDateChange" class="sapUiSmallMarginBottom"/>
+                    <Label text="{i18n>endTime}" visible="false"/>
+					<DateTimePicker id="idETime" visible="false" width="400px" valueFormat= "yyyy-mm-dd HH:mm"  change="handleDateChange" class="sapUiSmallMarginBottom"/>
+                    
                     <core:Title text = "Recurring Details:" class ="boldunderlineText"/>
                     
                     <Label text="{i18n>jobtype}"/>
                     <VBox>
-                    <Select id="idJobtype" change="onJobTypeChange" selectedKey="Cr" enabled="true" class="buttonDesktop" width="200px">
+                    <Select id="idJobSchtype" change="onJobTypeChange" selectedKey="Cr" enabled="true" class="buttonDesktop" width="200px">
 							<core:ListItem key="Cr" text="{i18n>cron}"/>
                             <core:ListItem key="Im" text="{i18n>onetime}"/>
                             

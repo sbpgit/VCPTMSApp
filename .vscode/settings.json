@@ -13,5 +13,6 @@
     "eslint.options": {
         "configFile": "/extbin/npm/globals/lib/node_modules/@sap/cds-dk/lib/lint/.eslintrc.js"
     },
-    "SAP HANA Database Artifacts.lastSelectedTargetPath": "/home/user/projects/config_products/db/src"
+    "SAP HANA Database Artifacts.lastSelectedTargetPath": "/home/user/projects/config_products/db/src",
+    "git.ignoreLimitWarning": true
 }

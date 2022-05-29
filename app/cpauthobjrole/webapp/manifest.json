@@ -97,43 +97,43 @@
             "routes": [
                 {
                     "pattern": ":?query:",
-                    "name": "getARObjList",
-                    "target": "getARObjList"
+                    "name": "getUserAuthObjList",
+                    "target": "getUserAuthObjList"
                 },
                 {
-                    "pattern": "getARObj({key}):?query:",
-                    "name": "getARObjObjectPage",
-                    "target": "getARObjObjectPage"
+                    "pattern": "getUserAuthObj({key}):?query:",
+                    "name": "getUserAuthObjObjectPage",
+                    "target": "getUserAuthObjObjectPage"
                 }
             ],
             "targets": {
-                "getARObjList": {
+                "getUserAuthObjList": {
                     "type": "Component",
-                    "id": "getARObjList",
+                    "id": "getUserAuthObjList",
                     "name": "sap.fe.templates.ListReport",
                     "options": {
                         "settings": {
-                            "entitySet": "getARObj",
+                            "entitySet": "getUserAuthObj",
                             "variantManagement": "Page",
                             "navigation": {
-                                "getARObj": {
+                                "getUserAuthObj": {
                                     "detail": {
-                                        "route": "getARObjObjectPage"
+                                        "route": "getUserAuthObjObjectPage"
                                     }
                                 }
                             }
                         }
                     }
                 },
-                "getARObjObjectPage": {
+                "getUserAuthObjObjectPage": {
                     "type": "Component",
-                    "id": "getARObjObjectPage",
+                    "id": "getUserAuthObjObjectPage",
                     "name": "sap.fe.templates.ObjectPage",
                     "options": {
                         "settings": {
                             "editFlow":"direct",
                             "editableHeaderContent": false,
-                            "entitySet": "getARObj"
+                            "entitySet": "getUserAuthObj"
                         }
                     }
                 }

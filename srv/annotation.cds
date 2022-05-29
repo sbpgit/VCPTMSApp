@@ -1091,7 +1091,7 @@ annotate service.LOCATION_PRODUCT with @(
     // Page Facets
     UI.Facets : [{
         $Type  : 'UI.CollectionFacet',
-        ID     : 'Location Products',
+        ID     : 'LocationProducts',
         Label  : 'Location Products',
         Facets : [{
             $Type  : 'UI.ReferenceFacet',

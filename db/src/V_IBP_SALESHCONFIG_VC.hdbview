@@ -1,0 +1,41 @@
+    ----------------------------------------------------------------------------------------
+-- Name:            V_IBP_SALESHCONFIG_VC
+-- Description:     Get SUM OF order quantity for location product on a weekly basis
+-- Join Details:    V_IBP_SALESH_ACTDEMD -  weekly sales history with sum of ORD_QTY 
+--                  CP_SALESH_CONFIG -  Master table for sales history configuration 
+-----------------------------------------------------------------------------------------
+
+VIEW "V_IBP_SALESHCONFIG_VC" AS
+SELECT  CP_SALESH."LOCATION_ID",
+        CP_SALESH."PRODUCT_ID",
+        CP_SALESH."CUSTOMER_GROUP",
+        CASE
+        WHEN WEEKDAY("MAT_AVAILDATE") = 0 THEN ADD_DAYS("MAT_AVAILDATE", 0)
+        WHEN WEEKDAY("MAT_AVAILDATE") = 1 THEN ADD_DAYS("MAT_AVAILDATE", -1)
+        WHEN WEEKDAY("MAT_AVAILDATE") = 2 THEN ADD_DAYS("MAT_AVAILDATE", -2)
+        WHEN WEEKDAY("MAT_AVAILDATE") = 3 THEN ADD_DAYS("MAT_AVAILDATE", -3)
+        WHEN WEEKDAY("MAT_AVAILDATE") = 4 THEN ADD_DAYS("MAT_AVAILDATE", -4)
+        WHEN WEEKDAY("MAT_AVAILDATE") = 5 THEN ADD_DAYS("MAT_AVAILDATE", -5)
+        WHEN WEEKDAY("MAT_AVAILDATE") = 6 THEN ADD_DAYS("MAT_AVAILDATE", -6)
+        END AS "WEEK_DATE",
+        CP_SALESH_CONFIG."CHAR_NUM",
+        CP_SALESH_CONFIG."CHARVAL_NUM",
+        SUM(CP_SALESH."ORD_QTY") AS ORD_QTY
+        FROM CP_SALESH
+        INNER JOIN CP_SALESH_CONFIG
+        ON CP_SALESH.SALES_DOC = CP_SALESH_CONFIG.SALES_DOC
+        AND CP_SALESH.SALESDOC_ITEM = CP_SALESH_CONFIG.SALESDOC_ITEM
+        GROUP BY CP_SALESH."LOCATION_ID",
+        CP_SALESH."PRODUCT_ID",
+        CP_SALESH."CUSTOMER_GROUP",
+        CASE
+        WHEN WEEKDAY("MAT_AVAILDATE") = 0 THEN ADD_DAYS("MAT_AVAILDATE", 0)
+        WHEN WEEKDAY("MAT_AVAILDATE") = 1 THEN ADD_DAYS("MAT_AVAILDATE", -1)
+        WHEN WEEKDAY("MAT_AVAILDATE") = 2 THEN ADD_DAYS("MAT_AVAILDATE", -2)
+        WHEN WEEKDAY("MAT_AVAILDATE") = 3 THEN ADD_DAYS("MAT_AVAILDATE", -3)
+        WHEN WEEKDAY("MAT_AVAILDATE") = 4 THEN ADD_DAYS("MAT_AVAILDATE", -4)
+        WHEN WEEKDAY("MAT_AVAILDATE") = 5 THEN ADD_DAYS("MAT_AVAILDATE", -5)
+        WHEN WEEKDAY("MAT_AVAILDATE") = 6 THEN ADD_DAYS("MAT_AVAILDATE", -6)
+        END,        
+        CP_SALESH_CONFIG."CHAR_NUM",
+        CP_SALESH_CONFIG."CHARVAL_NUM"

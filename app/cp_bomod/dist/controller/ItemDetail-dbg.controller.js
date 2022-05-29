@@ -162,7 +162,7 @@ sap.ui.define(
         var sQuery = "",
           oFilters = [];
         if (oEvent) {
-          var sQuery = oEvent.getParameters().sQuery;
+          var sQuery = that.byId("bomSearch").getValue();
         }
 
         sQuery = sQuery.toUpperCase();
@@ -174,8 +174,8 @@ sap.ui.define(
         oFilters.push(
           new Filter({
             filters: [
-              new Filter("LOCATION_ID", FilterOperator.EQ, sPrdId),
-              new Filter("PRODUCT_ID", FilterOperator.EQ, sLocId),
+              new Filter("LOCATION_ID", FilterOperator.EQ, sLocId),
+              new Filter("PRODUCT_ID", FilterOperator.EQ, sPrdId),
             ],
             and: true,
           })
