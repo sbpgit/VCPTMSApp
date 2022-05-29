@@ -44,7 +44,12 @@ sap.ui.define(
 
       handleDateChange: function () {
         var dLow = that.byId("idDateRange").getDateValue(),
-          dHigh = that.byId("idDateRange").getSecondDateValue();
+          dHigh = that.byId("idDateRange").getSecondDateValue(),
+
+          lgTime = new Date().getTimezoneOffset();
+
+          dLow = new Date(dLow.setTime(dLow.getTime() - (lgTime* 60 * 1000)));
+          dHigh = new Date(dHigh.setTime(dHigh.getTime() - (lgTime* 60 * 1000)));
 
         dLow = dLow.toISOString().split("T")[0] + " " + "00:00:00";
         dHigh = dHigh.toISOString().split("T")[0] + " " + "23:59:59";
@@ -61,11 +66,6 @@ sap.ui.define(
         sap.ui.core.BusyIndicator.show();
         that.getModel("JModel").read("/getJobStatus", {
           filters: oFilters,
-          //   method: "GET",
-          //   urlParameters: {
-          //     startTime: dFromDate,
-          //     endTime: dToDate
-          //   },
           success: function (oData) {
             sap.ui.core.BusyIndicator.hide();
 

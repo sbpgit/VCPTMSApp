@@ -172,14 +172,7 @@
                       "target": [
                           "CreateJob"
                       ]
-                  },
-                  {
-                    "name": "OpenJob",
-                    "pattern": "OpenJob",
-                    "target": [
-                        "OpenJob"
-                    ]
-                }
+                  }
             ],
             "targets": {
                 "Home": {
@@ -195,14 +188,7 @@
                       "clearControlAggregation": true,
                       "viewId": "CreateJob",
                       "viewName": "CreateJob"
-                  },
-                  "OpenJob": {
-                    "viewType": "XML",
-                    "transition": "slide",
-                    "clearControlAggregation": true,
-                    "viewId": "OpenJob",
-                    "viewName": "OpenJob"
-                }
+                  }
             }
         }
     },

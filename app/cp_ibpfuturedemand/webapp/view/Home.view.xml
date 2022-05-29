@@ -71,10 +71,10 @@
             </HBox>
             <Table id="IBPfdemList" items="{path: '/results'}" itemPress="onhandlePress" growingScrollToLoad="true" mode="SingleSelectMaster" selectionChange="onhandlePress" rememberSelections="false">
                 <columns>
-                    <Column hAlign="Left" vAlign="Middle">
+                    <Column hAlign="Left" vAlign="Middle" visible="false">
                         <Text text="{i18n>loc}" />
                     </Column>
-                    <Column hAlign="Left" vAlign="Middle">
+                    <Column hAlign="Left" vAlign="Middle" visible="false">
                         <Text text="{i18n>prod}"/>
                     </Column>
                     <Column hAlign="Left" vAlign="Middle">

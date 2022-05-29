@@ -720,9 +720,11 @@ entity![V_BOMODCOND]{
 entity![V_ODPROFILES]{
     key![LOCATION_ID] : String(4)  @title : 'LOCATION_ID';
     key![PRODUCT_ID]  : String(40) @title : 'PRODUCT_ID';
+    key![ITEM_NUM]    : String(5)      @title : 'ITEM_NUM';
     key![COMPONENT]   : String(40) @title : 'COMPONENT';
     key![OBJ_DEP]     : String(42) @title : 'OBJ_DEP';
     key![OBJDEP_DESC] : String(30) @title : 'OBJDEP_DESC';
+    key![STRUC_NODE]  : String(50)     @title : 'STRUC_NODE';
     key![PROFILE]     : String(50) @title : 'PROFILE';
 }
 
