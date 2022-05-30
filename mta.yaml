@@ -23,7 +23,7 @@ modules:
     - ./node_modules
 - name: config_products-db-deployer
   type: hdb
-  path: gen/db
+  path: db
   requires:
   - name: config_products-db
     properties:
@@ -75,26 +75,6 @@ modules:
   build-parameters:
     build-result: resources
     requires:
-    # - artifacts:
-    #   - cpibpfdemcpibpfdem.zip
-    #   name: cpibpfdemcpibpfdem
-    #   target-path: resources/
-    # - artifacts:
-    #   - cpibpfplancpibpfplan.zip
-    #   name: cpibpfplancpibpfplan
-    #   target-path: resources/
-    - artifacts:
-      - cpibpfrescpibpfres.zip
-      name: cpibpfrescpibpfres
-      target-path: resources/
-    - artifacts:
-      - cpexecpredcpexecprediction.zip
-      name: cpexecpredcpexecprediction
-      target-path: resources/
-    - artifacts:
-      - cpexeregcpexeregressionmdls.zip
-      name: cpexeregcpexeregressionmdls
-      target-path: resources/
     - artifacts:
       - cpodpcpodprofiles.zip
       name: cpodpcpodprofiles
@@ -120,20 +100,8 @@ modules:
       name: cpappfcpbomod
       target-path: resources/
     - artifacts:
-      - cpappfcpobjdepdetails.zip
-      name: cpappfcpobjdepdetails
-      target-path: resources/
-    - artifacts:
-      - cpappcpibpresultplan.zip
-      name: cpappcpibpresultplan
-      target-path: resources/
-    - artifacts:
       - cpappfcpsaleshconfig.zip
       name: cpappfcpsaleshconfig
-      target-path: resources/
-    - artifacts:
-      - cpapprestrictcpodrestrict.zip
-      name: cpapprestrictcpodrestrict
       target-path: resources/
     - artifacts:
       - cpappfcpnodesdetails.zip
@@ -152,18 +120,6 @@ modules:
       name: cpappcpcompreq
       target-path: resources/
     - artifacts:
-      - cpappfcpgeneratetimeseries.zip
-      name: cpappfcpgeneratetimeseries
-      target-path: resources/
-    - artifacts:
-      - cpapplopcpprodlocline.zip
-      name: cpapplopcpprodlocline
-      target-path: resources/
-    - artifacts:
-      - cpapprtrhdrcprtrheader.zip
-      name: cpapprtrhdrcprtrheader
-      target-path: resources/
-    - artifacts:
       - cpappfcpibpfuturedemand.zip
       name: cpappfcpibpfuturedemand
       target-path: resources/
@@ -171,10 +127,6 @@ modules:
       - cpappcpasmbcompreq.zip
       name: cpappcpasmbcompreq
       target-path: resources/
-    # - artifacts:
-    #   - cpappfcpnewprodintro.zip
-    #   name: cpappfcpnewprodintro
-    #   target-path: resources/
     - artifacts:
       - cpappcpproduct.zip
       name: cpappcpproduct
@@ -182,10 +134,6 @@ modules:
     - artifacts:
       - cpappcpcustgroup.zip
       name: cpappcpcustgroup
-      target-path: resources/
-    - artifacts:
-      - cpappcpnewpartialprod.zip
-      name: cpappcpnewpartialprod
       target-path: resources/
     - artifacts:
       - cpappcpjobscheduler.zip
@@ -198,61 +146,7 @@ modules:
     - artifacts:
       - cpappcpjobschedulerlogs.zip
       name: cpappcpjobschedulerlogs
-      target-path: resources/    
-    - artifacts:
-      - cpappcprestrictions.zip
-      name: cpappcprestrictions
       target-path: resources/
-# - name: cpibpfdemcpibpfdem
-#   type: html5
-#   path: app/cp_ibpfdem
-#   build-parameters:
-#     build-result: dist
-#     builder: custom
-#     commands:
-#     - npm install
-#     - npm run build:cf
-#     supported-platforms: []
-# - name: cpibpfplancpibpfplan
-#   type: html5
-#   path: app/cp_ibpfplan
-#   build-parameters:
-#     build-result: dist
-#     builder: custom
-#     commands:
-#     - npm install
-#     - npm run build:cf
-#     supported-platforms: []
-- name: cpibpfrescpibpfres
-  type: html5
-  path: app/cp_ibpfres
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    supported-platforms: []
-- name: cpexecpredcpexecprediction
-  type: html5
-  path: app/cp_execprediction
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    supported-platforms: []
-- name: cpexeregcpexeregressionmdls
-  type: html5
-  path: app/cp_exeregressionmdls
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    supported-platforms: []
 - name: cpodpcpodprofiles
   type: html5
   path: app/cp_odprofiles
@@ -276,16 +170,6 @@ modules:
 - name: cplpcplocprod
   type: html5
   path: app/cp_locprod
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    supported-platforms: []
-- name: cpappfcpsaleshcfg
-  type: html5
-  path: app/cp_saleshcfg
   build-parameters:
     build-result: dist
     builder: custom
@@ -323,29 +207,9 @@ modules:
     - npm install
     - npm run build:cf
     supported-platforms: []
-- name: cpappcpibpresultplan
-  type: html5
-  path: app/cpibpresultplan
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    supported-platforms: []
 - name: cpappfcpsaleshconfig
   type: html5
   path: app/cp_saleshconfig
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    supported-platforms: []
-- name: cpapprestrictcpodrestrict
-  type: html5
-  path: app/cpodrestrict
   build-parameters:
     build-result: dist
     builder: custom
@@ -393,36 +257,6 @@ modules:
     - npm install
     - npm run build:cf
     supported-platforms: []
-- name: cpappfcpgeneratetimeseries
-  type: html5
-  path: app/cp_generatetimeseries
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    supported-platforms: []
-- name: cpapplopcpprodlocline
-  type: html5
-  path: app/cpprodlocline
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    supported-platforms: []
-- name: cpapprtrhdrcprtrheader
-  type: html5
-  path: app/cprtrheader
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    supported-platforms: []
 - name: cpappfcpibpfuturedemand
   type: html5
   path: app/cp_ibpfuturedemand
@@ -443,16 +277,6 @@ modules:
     - npm install
     - npm run build:cf
     supported-platforms: []
-# - name: cpappfcpnewprodintro
-#   type: html5
-#   path: app/cpnewprodintro
-#   build-parameters:
-#     build-result: dist
-#     builder: custom
-#     commands:
-#     - npm install
-#     - npm run build:cf
-#     supported-platforms: []
 - name: cpappcpproduct
   type: html5
   path: app/cpproduct
@@ -466,16 +290,6 @@ modules:
 - name: cpappcpcustgroup
   type: html5
   path: app/cpcustgroup
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    supported-platforms: []
-- name: cpappcpnewpartialprod
-  type: html5
-  path: app/cpnewpartialprod
   build-parameters:
     build-result: dist
     builder: custom
@@ -506,16 +320,6 @@ modules:
 - name: cpappcpjobschedulerlogs
   type: html5
   path: app/cpjobscheduler_logs
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    supported-platforms: []
-- name: cpappcprestrictions
-  type: html5
-  path: app/cprestrictions
   build-parameters:
     build-result: dist
     builder: custom

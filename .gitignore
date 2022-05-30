@@ -11,3 +11,8 @@ node_modules
     # added by cds deploy
     default-env.json
     
+# auto generated wildcard
+config_products/gen/db/.env
+    # added by cds deploy
+    default-env.json
+    

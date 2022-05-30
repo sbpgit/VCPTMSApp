@@ -16,52 +16,6 @@ context cp_ds {
         STRUC_NODE  : String(50);
     }
 
-    type odhistory {
-        CAL_DATE    : Date;
-        OBJ_DEP     : String(30);
-        OBJ_COUNTER : Integer;
-        ODCOUNT     : String(10);
-        ROW_ID1     : String(10);
-        ROW_ID2     : String(10);
-        ROW_ID3     : String(10);
-        ROW_ID4     : String(10);
-        ROW_ID5     : String(10);
-        ROW_ID6     : String(10);
-        ROW_ID7     : String(10);
-        ROW_ID8     : String(10);
-        ROW_ID9     : String(10);
-        ROW_ID10    : String(10);
-        ROW_ID11    : String(10);
-        ROW_ID12    : String(10);
-    }
-
-    type odfuture {
-        CAL_DATE    : Date;
-        OBJ_DEP     : String(30);
-        OBJ_COUNTER : Integer;
-        VERSION     : String(10);
-        SCENARIO    : String(32);
-        ODCOUNT     : String(10);
-        ROW_ID1     : String(10);
-        ROW_ID2     : String(10);
-        ROW_ID3     : String(10);
-        ROW_ID4     : String(10);
-        ROW_ID5     : String(10);
-        ROW_ID6     : String(10);
-        ROW_ID7     : String(10);
-        ROW_ID8     : String(10);
-        ROW_ID9     : String(10);
-        ROW_ID10    : String(10);
-        ROW_ID11    : String(10);
-        ROW_ID12    : String(10);
-    }
-    type newprodchar{
-        PRODUCT_ID : String(40);
-        REF_PRODID : String(40); 
-        CLASS_NUM : String(20); 
-        CHAR_NUM : String(30); 
-        CHARVAL_NUM : String(70)    
-    }
     type compreq {
         // CAL_DATE    : Date;
         LOCATION_ID : String(4);

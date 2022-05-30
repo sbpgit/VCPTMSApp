@@ -48,5 +48,8 @@
   "src/gen/sbp.pal.PalGenPredictions.hdbtable",
   "src/gen/sbp.pal.PalModelProfiles.hdbtable",
   "src/gen/sbp.pal.PalModelParameters.hdbtable",
-  "src/gen/sbp.pal.PAL_PARAMETERS.hdbtable"
+  "src/gen/sbp.pal.PAL_PARAMETERS.hdbtable",
+  "src/IBP/V_IBP_LOCATION_RESTRICTION.hdbview",
+  "src/IBP/V_IBP_RESTRICTION.hdbview",
+  "src/V_ODRESTRICT.hdbview"
 ]
