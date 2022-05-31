@@ -16,8 +16,8 @@
                 <items>
                     <ColumnListItem>
                         <cells>
-                            <ObjectIdentifier title="{PRODUCT_ID}" />
-                            <ObjectIdentifier title="{CLASS_NAME}" />
+                            <Text text="{PRODUCT_ID}" />
+                            <Text text="{CLASS_NAME}" />
                         </cells>
                     </ColumnListItem>
                 </items>

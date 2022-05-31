@@ -91,10 +91,20 @@ sap.ui.define(
                 row.jobId = row.jobId.toString();
   
               }, that);
-
+              oGModel.setProperty("/tableData", oData.lreadJobs.value);
+              var aData =[];
+              var dDate = that.byId("idDateRange").getValue().split("To");
+              var dLow = new Date(dDate[0]),
+                  dHigh = new Date(dDate[1] + " " + "23:59:59");
+              for(var i=0; i<oData.lreadJobs.value.length; i++){
+                  var startDate = new Date(oData.lreadJobs.value[i].startTime);
+                    if(dLow < startDate && dHigh > startDate){
+                        aData.push(oData.lreadJobs.value[i]);
+                    }
+              }
 
               that.listModel.setData({
-                results: oData.lreadJobs.value,
+                results: aData,
               });
               that.oList.setModel(that.listModel);
               that.onSearch();
@@ -144,28 +154,23 @@ sap.ui.define(
   
         
         handleDateChange: function (oEvent) {
-          var dDate = oEvent.getParameters().newValue;
-          dDate = dDate.split(" To ");
-          var dFromDate = dDate[0] + " " + "00:00:00",
-            dToDate = dDate[1] + " " + "00:00:00";
-  
-          that.getModel("JModel").callFunction("/lreadJobs", {
-              method: "GET",
-              urlParameters: {
-                startTime: dFromDate,
-                endTime: dToDate
-              },
-              success: function (oData) {
-                that.listModel.setData({
-                  results: oData.results,
-                });
-                that.oList.setModel(that.listModel);
-              },
-              error: function (error) {
-                sap.ui.core.BusyIndicator.hide();
-                MessageToast.show("Failed to get data");
-              },
+            var tabData = oGModel.getProperty("/tableData");
+            var aData =[];
+            var dDate = that.byId("idDateRange").getValue().split("To");
+            var dLow = new Date(dDate[0]),
+                dHigh = new Date(dDate[1] + " " + "23:59:59");
+            for(var i=0; i < tabData.length; i++){
+                var startDate = new Date(tabData[i].startTime);
+                  if(dLow < startDate && dHigh > startDate){
+                      aData.push(tabData[i]);
+                  }
+            }
+
+            that.listModel.setData({
+              results: aData,
             });
+            that.oList.setModel(that.listModel);
+            that.onSearch();
         },
   
       //   onhandlePress:function(oEvent){
@@ -258,6 +263,12 @@ sap.ui.define(
                           oGModel.setProperty("/JobType", "P");
                         } else if(oData.lreadJobDetails.value.action.includes("timeseries")){
                           oGModel.setProperty("/JobType", "T");
+                        } else if(oData.lreadJobDetails.value.action.includes("sdi")){
+                            oGModel.setProperty("/JobType", "S");
+                            var service = oGModel.getProperty("/Jobdata").action.split("/");
+                            var length = service.length - 1;
+                            service = service[length];
+                            oGModel.setProperty("/IBPService", service);
                         } else {
                           oGModel.setProperty("/JobType", "I");
                           var service = oGModel.getProperty("/Jobdata").action.split("/");
@@ -301,13 +312,15 @@ sap.ui.define(
             
           for(var i=0; i<aData.length; i++){
                 if(scheduleId === aData[i].scheduleId){
-                    if(oGModel.getProperty("/JobType") === "I"){
+                    if(oGModel.getProperty("/JobType") === "I" || oGModel.getProperty("/JobType") === "S"){
                       var data  = $.parseJSON(aData[i].data);
                       var aIData = {
                             Location: data.LOCATION_ID,
                             Product: data.PRODUCT_ID,
                             scenario: data.SCENARIO,
                             version: data.VERSION,
+                            fromdate:data.FROMDATE,
+                            todate:data.TODATE,
                         };
                         ScheData.push(aIData);
                     } else {
@@ -332,6 +345,8 @@ sap.ui.define(
                 sap.ui.getCore().byId("idJobData").getColumns()[6].setVisible(false);
                 sap.ui.getCore().byId("idJobData").getColumns()[7].setVisible(false);
                 sap.ui.getCore().byId("idJobData").getColumns()[8].setVisible(false);
+                sap.ui.getCore().byId("idJobData").getColumns()[9].setVisible(false);
+                sap.ui.getCore().byId("idJobData").getColumns()[10].setVisible(false);
             } else if(oGModel.getProperty("/JobType") === "P"){
                 sap.ui.getCore().byId("idJobData").getColumns()[2].setVisible(true);
                 sap.ui.getCore().byId("idJobData").getColumns()[3].setVisible(true);
@@ -340,6 +355,8 @@ sap.ui.define(
                 sap.ui.getCore().byId("idJobData").getColumns()[6].setVisible(true);
                 sap.ui.getCore().byId("idJobData").getColumns()[7].setVisible(false);
                 sap.ui.getCore().byId("idJobData").getColumns()[8].setVisible(false);
+                sap.ui.getCore().byId("idJobData").getColumns()[9].setVisible(false);
+                sap.ui.getCore().byId("idJobData").getColumns()[10].setVisible(false);
             } else if(oGModel.getProperty("/JobType") === "I"){
                 sap.ui.getCore().byId("idJobData").getColumns()[0].setVisible(false);
                 sap.ui.getCore().byId("idJobData").getColumns()[1].setVisible(false);
@@ -350,9 +367,11 @@ sap.ui.define(
                 sap.ui.getCore().byId("idJobData").getColumns()[6].setVisible(false);
                 sap.ui.getCore().byId("idJobData").getColumns()[7].setVisible(false);
                 sap.ui.getCore().byId("idJobData").getColumns()[8].setVisible(false);
+                sap.ui.getCore().byId("idJobData").getColumns()[9].setVisible(false);
+                sap.ui.getCore().byId("idJobData").getColumns()[10].setVisible(false);
             }
             
-            if(oGModel.getProperty("/JobType") !== "I"){
+            if(oGModel.getProperty("/JobType") !== "I" && oGModel.getProperty("/JobType") !== "S"){
                 that._valueHelpDialogJobData.open();
             } else {
                 var oActionType = oGModel.getProperty("/IBPService");
@@ -361,10 +380,10 @@ sap.ui.define(
                 if(oActionType === "generateFDemandQty" || oActionType === "generateFCharPlan"){
                     sap.ui.getCore().byId("idJobData").getColumns()[0].setVisible(true);
                     sap.ui.getCore().byId("idJobData").getColumns()[1].setVisible(true);
-                    sap.ui.getCore().byId("idJobData").getColumns()[5].setVisible(true);
+                    sap.ui.getCore().byId("idJobData").getColumns()[5].setVisible(false);
                     sap.ui.getCore().byId("idJobData").getColumns()[6].setVisible(true);
 
-                } else if(oActionType === "exportIBPLocation" || oActionType === "exportIBPCustomer"){
+                } else if(oActionType === "exportIBPLocation" || oActionType === "exportIBPCustomer" || oActionType.includes("ImportECC")){
                     MessageToast.show("There is no schedule data to display for the selected job type");
                     iCount = 1;
 
@@ -378,6 +397,23 @@ sap.ui.define(
                     sap.ui.getCore().byId("idJobData").getColumns()[0].setVisible(true);
                     sap.ui.getCore().byId("idJobData").getColumns()[1].setVisible(true);
                     sap.ui.getCore().byId("idJobData").getColumns()[8].setVisible(true);
+
+                } else if(oActionType === "exportIBPSalesConfig"){
+                    sap.ui.getCore().byId("idJobData").getColumns()[0].setVisible(true);
+                    sap.ui.getCore().byId("idJobData").getColumns()[1].setVisible(true);
+                    sap.ui.getCore().byId("idJobData").getColumns()[8].setVisible(true);
+
+                } else if(oActionType === "exportComponentReq"){
+                    sap.ui.getCore().byId("idJobData").getColumns()[0].setVisible(true);
+                    sap.ui.getCore().byId("idJobData").getColumns()[1].setVisible(true);
+                    sap.ui.getCore().byId("idJobData").getColumns()[9].setVisible(true);
+                sap.ui.getCore().byId("idJobData").getColumns()[10].setVisible(true);
+
+                } else if(oActionType === "exportActCompDemand"){
+                    sap.ui.getCore().byId("idJobData").getColumns()[0].setVisible(true);
+                    sap.ui.getCore().byId("idJobData").getColumns()[1].setVisible(true);
+                    sap.ui.getCore().byId("idJobData").getColumns()[9].setVisible(true);
+                sap.ui.getCore().byId("idJobData").getColumns()[10].setVisible(true);
 
                 }
                 if(iCount === 0){
