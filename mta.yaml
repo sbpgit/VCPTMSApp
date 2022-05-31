@@ -23,7 +23,7 @@ modules:
     - ./node_modules
 - name: config_products-db-deployer
   type: hdb
-  path: db
+  path: gen/db
   requires:
   - name: config_products-db
     properties:
@@ -88,10 +88,6 @@ modules:
       name: cplpcplocprod
       target-path: resources/
     - artifacts:
-      - cpappfcpsaleshcfg.zip
-      name: cpappfcpsaleshcfg
-      target-path: resources/
-    - artifacts:
       - cpappfcpprodconfig.zip
       name: cpappfcpprodconfig
       target-path: resources/
@@ -140,10 +136,6 @@ modules:
       name: cpappcpjobscheduler
       target-path: resources/
     - artifacts:
-      - cpappcpauthobjrole.zip
-      name: cpappcpauthobjrole
-      target-path: resources/
-    - artifacts:
       - cpappcpjobschedulerlogs.zip
       name: cpappcpjobschedulerlogs
       target-path: resources/
@@ -190,16 +182,6 @@ modules:
 - name: cpappfcpbomod
   type: html5
   path: app/cp_bomod
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    supported-platforms: []
-- name: cpappfcpobjdepdetails
-  type: html5
-  path: app/cp_objdepdetails
   build-parameters:
     build-result: dist
     builder: custom
@@ -300,16 +282,6 @@ modules:
 - name: cpappcpjobscheduler
   type: html5
   path: app/cpjobscheduler
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    supported-platforms: []
-- name: cpappcpauthobjrole
-  type: html5
-  path: app/cpauthobjrole
   build-parameters:
     build-result: dist
     builder: custom

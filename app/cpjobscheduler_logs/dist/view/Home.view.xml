@@ -7,7 +7,7 @@
                 <Title id="idTitle" text="{i18n>title}" class="boldText"></Title>
                 <ToolbarSpacer/>
                 <Label text="{i18n>daterange}"/>
-				<DateRangeSelection id="idDateRange" width="16%" delimiter="To" dateValue="" secondDateValue="" valueFormat="yyyy-MM-dd"
+				<DateRangeSelection id="idDateRange" width="20%" delimiter="To" dateValue="" secondDateValue="" valueFormat="yyyy-MM-dd"
 							displayFormat="yyyy-MM-dd" change="handleDateChange" maxDate=""/>
             </Toolbar>
         </customHeader>
