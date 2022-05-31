@@ -119,20 +119,6 @@ service CatalogService @(impl : './lib/cat-service.js') {
     @readonly
     entity getSaleshCfg         as projection on V_SALESHCFG_CHARVAL;
 
-    //Get product location line
-    // @odata.draft.enabled
-    // entity genProdLocLine       as projection on od.PROD_LOC_LINE;
-
-    // //Get Restriction header
-    // @odata.draft.enabled
-    // entity genRtrHeader         as projection on od.RESTRICT_HEADER;
-
-    //Mainitain new product introduction
-    // @readonly
-    // entity genNewProd           as projection on od.NEWPROD_INTRO;
-    // @readonly
-    // entity genPartialProd           as projection on od.PARTIALPROD_INTRO;
-
     // Get Product access node
     entity genProdAccessNode    as projection on od.PROD_ACCNODE;
     // PVS BOM details
@@ -177,11 +163,6 @@ service CatalogService @(impl : './lib/cat-service.js') {
     entity getAsmbCompReq       as projection on V_ASMCOMP_REQ;
     // Master data for Assembly and component
     entity getAsmbComp          as projection on od.ASSEMBLY_COMP;
-    // Get new product characteristics
-    // entity getNewProdChar       as projection on V_NEWPRODREFCHAR;//od.NEWPROD_CHAR;
-
-    // entity getPartialProdchar   as projection on od.PARTIALPROD_CHAR;
-
     
     //Component requirement qunatity determination
     function getCompreqQty(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32))                                                                                                                                                        returns String;
@@ -194,11 +175,6 @@ service CatalogService @(impl : './lib/cat-service.js') {
     // Get Object dependency
     function get_objdep() returns array of ds.objectDep; //objectDep;
 
-    // // Generate OD history timeseries
-    // function genODHistory(OBJ_DEP : String(30), OBJ_COUNTER : String(10))                                                                                                                                                                                                        returns array of ds.odhistory;
-    // // Generate OD Future timeseries
-    // function genODFuture(OBJ_DEP : String(30), OBJ_COUNTER : String(10))                                                                                                                                                                                                         returns array of ds.odfuture;
-    // Component weekly
     function getCompReqFWeekly(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), COMPONENT : String(40), STRUCNODE : String(50), FROMDATE : Date, TODATE : Date, MODEL_VERSION : String(20))                                        returns array of ds.compreq;
     // Assembly Component weekly
     function getAsmbCompReqFWeekly(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), FROMDATE : Date, TODATE : Date, MODEL_VERSION : String(20))                                                                                    returns array of ds.compreq;
@@ -212,16 +188,8 @@ service CatalogService @(impl : './lib/cat-service.js') {
     function createProfilePara(FLAG : String(1), PROFILE : String(50), METHOD : String(50), PARA_NAME : String(100), INTVAL : Integer, DOUBLEVAL : Double, STRVAL : String(20), PARA_DESC : String(1000), PARA_DEP : String(1000), CREATED_DATE : Date, CREATED_BY : String(12)) returns String;
     // Assign OD to a profile
     function asssignProfilesOD(FLAG : String(1), LOCATION_ID : String(4), PRODUCT_ID : String(40), COMPONENT : String(40), PROFILE : String(50), OBJ_DEP : String(30), STRUC_NODE : String(50))                                                                                  returns String;
-    // function for new product introduction
-    function maintainNewProd(FLAG : String(1), LOCATION_ID : String(4), PRODUCT_ID : String(40), REF_PRODID : String(40))                                                                                                                                                        returns String;
-    function maintainPartialProd(FLAG : String(1), LOCATION_ID : String(4), PRODUCT_ID : String(40), REF_PRODID : String(40))                                                                                                                                                        returns String;
-    
+   
     function importIBPDemd() returns String;
-    // Maintain partial configurations
-    function maintainNewProdChar(FLAG : String(1), 
-    PRODCHAR : String ) returns String;
-    function maintainPartialProdChar(FLAG : String(1), 
-    PRODCHAR : String ) returns String;
 // Timeseries for job creation
     action generateTimeseries(LOCATION_ID : String(4), PRODUCT_ID : String(40),PAST_DAYS : Integer);
     // Generate Timeseries

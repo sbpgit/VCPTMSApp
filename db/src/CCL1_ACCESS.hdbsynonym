@@ -1,7 +1,7 @@
 {
     "CONFIG_PRODUCTS.db::SYN_PRODUCT": {
         "target": {
-            "object": "VT_PRODUCTS",
+            "object": "VT_PRODUCT",
             "schema": "DB_CONFIG_PROD_CLIENT1"
         }
     },
@@ -10,7 +10,8 @@
             "object": "VT_CUSTOMERGROUP",
             "schema": "DB_CONFIG_PROD_CLIENT1"
         }
-    },
+    }
+    ,
     "CONFIG_PRODUCTS.db::SYN_LOCATION": {
         "target": {
             "object": "VT_LOCATION",
@@ -64,17 +65,17 @@
             "object": "VT_PRODUCTCLASS",
             "schema": "DB_CONFIG_PROD_CLIENT1"
         }
-    },
-    "CONFIG_PRODUCTS.db::SYN_SALESH": {
-        "target": {
-            "object": "VT_SALESH",
-            "schema": "DB_CONFIG_PROD_CLIENT1"
-        }
-    },
-    "CONFIG_PRODUCTS.db::SYN_SALESHCONFIG": {
-        "target": {
-            "object": "VT_SALESHCONFIG",
-            "schema": "DB_CONFIG_PROD_CLIENT1"
-        }
     }
+    // "CONFIG_PRODUCTS.db::SYN_SALESH": {
+    //     "target": {
+    //         "object": "VT_SALESH",
+    //         "schema": "DB_CONFIG_PROD_CLIENT1"
+    //     }
+    // },
+    // "CONFIG_PRODUCTS.db::SYN_SALESHCONFIG": {
+    //     "target": {
+    //         "object": "VT_SALESHCONFIG",
+    //         "schema": "DB_CONFIG_PROD_CLIENT1"
+    //     }
+    // }
 }
