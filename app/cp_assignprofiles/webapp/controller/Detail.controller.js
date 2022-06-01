@@ -189,11 +189,7 @@ sap.ui.define(
               selId = oEvent.getParameter("id").split("-")[6];
           } else {
             var selId = that.typeChange;
-            sQuery = that
-              .byId("idTab")
-              .getItems()
-              [selId].getCells()[4]
-              .getValue();
+            sQuery = that.byId("idTab").getItems()[selId].getCells()[4].getValue();
           }
           var sSelType = that
               .byId("idTab")
