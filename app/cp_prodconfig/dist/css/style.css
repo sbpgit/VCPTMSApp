@@ -1,23 +1,6 @@
 /* Enter your custom styles here */
 
-.boldText{
-	font-weight: bold;
-}
-/* div#__title0 {
-    margin-left: 650px;
-} */
 
-.sapUiLargeMarginEnd {
-    margin-right: 13rem !important;
-}
-
-.sapUiLargeMarginEnd1 {
-    margin-right: 11.5rem !important;
-}
-
-.sapUiLargeMarginEnd2 {
-    margin-right: 10.5rem !important;
-}
 
 .sapMBar .sapMBarRight.sapMBarContainer>*:first-child:last-child, .sapMBar .sapMBarLeft.sapMBarContainer>*:first-child:last-child, .sapMBar .sapMBarMiddle .sapMBarContainer>*:first-child:last-child {
 

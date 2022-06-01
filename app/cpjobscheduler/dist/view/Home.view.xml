@@ -6,8 +6,7 @@
             <Toolbar >
                 <Title id="idTitle" text="{i18n>title}" class="boldText"></Title>
                 <ToolbarSpacer/>
-                <Button id="idCreate" text="{i18n>createjob}" type="Emphasized" press="onCreateJob" tooltip = "Create Job"/>                
-                <!-- <Button id="idJob" text="{i18n>openjob}" type="Emphasized" press="onOpenJob" tooltip = "Open Job"/> -->
+                <Button id="idCreate" text="{i18n>createjob}" type="Emphasized" press="onCreateJob" tooltip = "Create Job"/> 
                 <Label text="{i18n>daterange}"/>
 					<DateRangeSelection id="idDateRange" width="20%" delimiter="To" dateValue="" secondDateValue="" valueFormat="yyyy-MM-dd"
 							displayFormat="yyyy-MM-dd" change="handleDateChange" maxDate=""/>
@@ -15,7 +14,7 @@
         </customHeader>
         <content>
         <Panel id="JobPanel" expandable="true" expanded="true" headerText="{i18n>jobList}" expand="onPanelExpand">
-            <SearchField id="headSearch" liveChange="onSearch" placeholder="Job"/>
+            <SearchField id="headSearch" liveChange="onSearch" placeholder="Job Id/ Name/ Description"/>
             <Table id="jobList" items="{path: '/results'}" growingScrollToLoad="true" rememberSelections="false" 
                     itemPress="onhandlePress" mode="SingleSelectMaster" selectionChange="onhandlePress">
                 <columns>

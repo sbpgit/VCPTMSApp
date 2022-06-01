@@ -14,6 +14,7 @@
                         <core:ListItem key="P" text="{i18n>predi}"/>
                         <core:ListItem key="T" text="{i18n>timeseries}"/>
                         <core:ListItem key="I" text="{i18n>ibpI}"/>
+                        <core:ListItem key="S" text="{i18n>sdi}"/>
                     </Select>
                 </f:content>
             </f:SimpleForm>
@@ -211,8 +212,8 @@
                                         <Label text="{i18n>prod}" required="true"/>
                                     </f:label>
                                     <f:fields>
-                                        <Input id="TprodInput" width="225px" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
-                                        <!-- <MultiInput id="TprodInput" width="225px" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/> -->
+                                        <!-- <Input id="TprodInput" width="225px" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/> -->
+                                        <MultiInput id="TprodInput" width="225px" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
                                     </f:fields>
                                 </f:FormElement>
                                 <f:FormElement>
@@ -245,17 +246,20 @@
                     </OverflowToolbar>
                 </headerToolbar>
                 <content>
-                    <RadioButtonGroup id="idRbtnImport" columns="2">
+                    <RadioButtonGroup id="idRbtnImport" columns="2" select="ImportRadioChange">
                         <RadioButton id="idIBPDemand" text="IBP Demand" />
                         <RadioButton id="idIBPFutPlan" text="IBP Future Plan" />
                     </RadioButtonGroup>
 
-                    <RadioButtonGroup id="idRbtnExport" columns="5" select="RadioChange" visible="false">
+                    <RadioButtonGroup id="idRbtnExport" columns="4" select="ExportRadioChange" visible="false">
                         <RadioButton id="idIBPLoc" text="Location" />
                         <RadioButton id="idIBPCustGrp" text="Customer Group" />
                         <RadioButton id="idIBPProd" text="Product" />
                         <RadioButton id="idIBPClass" text="Class" />
                         <RadioButton id="idIBPSalesHis" text="Sales History" />
+                        <RadioButton id="idIBPSalesHisConfig" text="Sales History Config" />
+                        <RadioButton id="idIBPActCompDemd" text="Actual Components Demand" />
+                        <RadioButton id="idIBPCompReqQty" text="Components Requirement Quantity" />
                     </RadioButtonGroup>
 
                 <!-- </content> -->
@@ -319,7 +323,7 @@
                                             <Label text="{i18n>loc}" required="true"/>
                                         </f:label>
                                         <f:fields>
-                                            <MultiInput id="EPlocInput" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                                            <Input id="EPlocInput" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
                                         </f:fields>
                                     </f:FormElement>
                                 </f:formElements>
@@ -386,10 +390,184 @@
                             </f:FormContainer>
                         </f:formContainers>
                     </f:Form>
+
+                    <f:Form editable="true" id="IBPSalesHisConfigExport" visible="false">
+                        <f:layout>
+                            <f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2" singleContainerFullSize="false" />
+                        </f:layout>
+                        <f:formContainers>
+                            <f:FormContainer>
+                                <f:formElements>
+                                    <f:FormElement>
+                                        <f:label>
+                                            <Label text="{i18n>loc}" required="true"/>
+                                        </f:label>
+                                        <f:fields>
+                                            <Input id="ESHConfiglocInput" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                                        </f:fields>
+                                    </f:FormElement>
+                                    <f:FormElement>
+                                        <f:label>
+                                            <Label text="{i18n>prod}" required="true"/>
+                                        </f:label>
+                                        <f:fields>
+                                            <MultiInput id="ESHConfigprodInput" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
+                                        </f:fields>
+                                    </f:FormElement>
+                                    <f:FormElement>
+                                        <f:label>
+                                            <Label text="{i18n>cust}"/>
+                                        </f:label>
+                                        <f:fields>
+                                            <Input id="ESHConfigCust" value="" placeholder="{i18n>cust}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                        </f:fields>
+                                    </f:FormElement>
+                                </f:formElements>
+                            </f:FormContainer>
+                        </f:formContainers>
+                    </f:Form>
+
+                    <f:Form editable="true" id="IBPActCompDemandExport" visible="false">
+                        <f:layout>
+                            <f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2" singleContainerFullSize="false" />
+                        </f:layout>
+                        <f:formContainers>
+                            <f:FormContainer>
+                                <f:formElements>
+                                    <f:FormElement>
+                                        <f:label>
+                                            <Label text="{i18n>loc}" required="true"/>
+                                        </f:label>
+                                        <f:fields>
+                                            <Input id="EACDemandlocInput" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                                        </f:fields>
+                                    </f:FormElement>
+                                    <f:FormElement>
+                                        <f:label>
+                                            <Label text="{i18n>prod}" required="true"/>
+                                        </f:label>
+                                        <f:fields>
+                                            <MultiInput id="EACDemandprodInput" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
+                                        </f:fields>
+                                    </f:FormElement>
+                                    <f:FormElement>
+                                        <f:label>
+                                            <Label text="{i18n>daterange}"/>
+                                        </f:label>
+                                        <f:fields>
+                                            <DateRangeSelection id="EACDemandDate" delimiter="To" dateValue="" secondDateValue="" valueFormat="yyyy-MM-dd"
+							                    displayFormat="yyyy-MM-dd" change="handleEACDemandDateChange" maxDate=""/>
+                                        </f:fields>
+                                    </f:FormElement>
+                                </f:formElements>
+                            </f:FormContainer>
+                        </f:formContainers>
+                    </f:Form>
+
+                    <f:Form editable="true" id="IBPCompReqQtyExport" visible="false">
+                        <f:layout>
+                            <f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2" singleContainerFullSize="false" />
+                        </f:layout>
+                        <f:formContainers>
+                            <f:FormContainer>
+                                <f:formElements>
+                                    <f:FormElement>
+                                        <f:label>
+                                            <Label text="{i18n>loc}" required="true"/>
+                                        </f:label>
+                                        <f:fields>
+                                            <Input id="ECRQtylocInput" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                                        </f:fields>
+                                    </f:FormElement>
+                                    <f:FormElement>
+                                        <f:label>
+                                            <Label text="{i18n>prod}" required="true"/>
+                                        </f:label>
+                                        <f:fields>
+                                            <MultiInput id="ECRQtyprodInput" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
+                                        </f:fields>
+                                    </f:FormElement>
+                                    <f:FormElement>
+                                        <f:label>
+                                            <Label text="{i18n>daterange}"/>
+                                        </f:label>
+                                        <f:fields>
+                                            <DateRangeSelection id="ECRQtyDate" delimiter="To" dateValue="" secondDateValue="" valueFormat="yyyy-MM-dd"
+							                    displayFormat="yyyy-MM-dd" change="handleECRQtyDateChange" maxDate=""/>
+                                        </f:fields>
+                                    </f:FormElement>
+                                </f:formElements>
+                            </f:FormContainer>
+                        </f:formContainers>
+                    </f:Form>
+
+
                 </VBox>
                 <Button id="idbtImport" type="Emphasized" text="Import From IBP" press="onIbpJobImport" width="10%"/>
                 <Button id="idbtExport" type="Emphasized" text="Export To IBP" press="onIbpJobExport" width="10%" visible="false"/>
                 </content>
+            </Panel>
+
+            <Panel id="sdiPanel" visible="false" expandable="true" expanded="true">
+            
+            <headerToolbar>
+                    <OverflowToolbar>
+                        <Title text="{i18n>sdi}" class="boldText" />
+                    </OverflowToolbar>
+                </headerToolbar>
+                <content>
+                <!-- <HBox> -->
+                <f:Form editable="true" id="idSdiform" >
+                        <f:layout>
+                            <f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2" singleContainerFullSize="false" />
+                        </f:layout>
+                        <f:formContainers>
+                            <f:FormContainer>
+                                <f:formElements>
+                                    <f:FormElement>
+                                        <f:label>
+                                            <Label text="{i18n>sdi}" required="true"/>
+                                        </f:label>
+                                        <f:fields>
+                                            <Select id="idSdi" change="onSdiChange" selectedKey="LO" class="buttonDesktop " width="400px">
+                                                    <core:ListItem key="Lo" text="{i18n>loc}"/>
+                                                    <core:ListItem key="CG" text="{i18n>custgrp}"/>
+                                                    <core:ListItem key="PR" text="{i18n>prod}"/>
+                                                    <core:ListItem key="LP" text="{i18n>locpprod}"/>
+                                                    <core:ListItem key="PC" text="{i18n>prodclas}"/>
+                                                    <core:ListItem key="BH" text="{i18n>bomheader}"/>
+                                                    <core:ListItem key="BO" text="{i18n>bomobjdep}"/>
+                                                    <core:ListItem key="OH" text="{i18n>objdephdr}"/>
+                                                    <core:ListItem key="CL" text="{i18n>class}"/>
+                                                    <core:ListItem key="CH" text="{i18n>char}"/>
+                                                    <core:ListItem key="CV" text="{i18n>charval}"/>
+                                                    <core:ListItem key="SH" text="{i18n>saleshis}"/>
+                                                    <core:ListItem key="SC" text="{i18n>salehisconfig}"/>
+                                            </Select>
+                                        </f:fields>
+                                    </f:FormElement>
+                                </f:formElements>
+                            </f:FormContainer>
+                        </f:formContainers>
+                    </f:Form>
+                <!-- <Label text="{i18n>sdi} :"/>
+				<Select id="idSdi" change="onSdiChange" selectedKey="LO" class="buttonDesktop " width="400px">
+						<core:ListItem key="Lo" text="{i18n>loc}"/>
+						<core:ListItem key="CG" text="{i18n>custgrp}"/>
+                        <core:ListItem key="PR" text="{i18n>prod}"/>
+						<core:ListItem key="LP" text="{i18n>locpprod}"/>
+                        <core:ListItem key="PC" text="{i18n>prodclas}"/>
+						<core:ListItem key="BH" text="{i18n>bomheader}"/>
+                        <core:ListItem key="BO" text="{i18n>bomobjdep}"/>
+						<core:ListItem key="CL" text="{i18n>class}"/>
+                        <core:ListItem key="CH" text="{i18n>char}"/>
+						<core:ListItem key="CV" text="{i18n>charval}"/>
+                        <core:ListItem key="SH" text="{i18n>saleshis}"/>
+						<core:ListItem key="SC" text="{i18n>salehisconfig}"/>
+				</Select>
+                </HBox> -->
+                <Button id="idbtSdi" type="Emphasized" text="SDI Integration" press="onSdiIntegration" width="10%"/>
+            </content>
             </Panel>
         </content>
 

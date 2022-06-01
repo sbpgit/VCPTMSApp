@@ -405,7 +405,7 @@ sap.ui.define(
             if (oTable[i].getCells()[4].getValue() === "") {
               DOUBLEVAL = parseFloat(oTable[i].getCells()[3].getText());
             } else {
-              if (oTable[i].getCells()[4].getValue() == "No default value") {
+              if (oTable[i].getCells()[4].getValue() === "No default value") {
                 DOUBLEVAL = "0.0";
               } else {
                 DOUBLEVAL = parseFloat(oTable[i].getCells()[4].getValue());
