@@ -1,36 +1,13 @@
 /* Enter your custom styles here */
-
-button#__button0 {
-    margin-right: 20px;
-    margin-left: 118px;
-    min-width: 70px;
-    margin-top: 33px;
-}
-
-button#__button1 {
-    min-width: 70px;
-    margin-top: 33px;
-}
-.boldText {
-    font-weight: bold !important;
-    text-align: center
-}
-
-div#__page0-title {
+.sapMIBar>.sapMBarLeft>.sapMBarChild:last-child, .sapMIBar .sapMBarPH>.sapMBarChild:last-child {
+    margin-right: 0;
     font-weight: bold;
 }
 
-h2#LocSlctList-dialog-title {
-    font-weight: bold;
+.sapUxAPObjectPageContainerNoBar>.sapUxAPObjectPageSection:first-child:not(.sapUxAPObjectPageSectionNoTitle) {
+    margin-top: 0.1rem !important;
 }
 
-h2#prodSlctList-dialog-title {
-    font-weight: bold;
-}
-h2#VerSlctList-dialog-title {
-    font-weight: bold;
-}
-
-h2#scenSlctList-dialog-title {
-    font-weight: bold;
+.sapUiSizeCompact .sapUxAPObjectPageSectionHeader, .sapUxAPObjectPageSectionHeader {
+    height: 0.1rem !important;
 }

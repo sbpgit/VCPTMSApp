@@ -3,123 +3,95 @@
     xmlns:core="sap.ui.core" displayBlock="true"
     xmlns="sap.m"
     xmlns:f="sap.ui.layout.form"
+    xmlns:ux="sap.uxap"
+    xmlns:l="sap.ui.layout"
     xmlns:html="http://www.w3.org/1999/xhtml"
     xmlns:t="sap.ui.table">
-    <Page title="{i18n>pageTitle}" class="boldText" titleAlignment="Center">
-        <f:Form editable="true">
-            <f:layout>
-                <f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="4" columnsL="2" columnsM="2" singleContainerFullSize="false" breakpointXL= "1400" breakpointL= "800" breakpointM="600" />
-            </f:layout>
-            <f:formContainers>
-                <f:FormContainer>
-                    <f:formElements>
-                        <f:FormElement>
-                            <f:label>
-                                <Label text="Location"/>
-                            </f:label>
-                            <f:fields>
-                                <Input id="idloc" value="" width="225px" placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
-                            </f:fields>
-                        </f:FormElement>
-                        <f:FormElement>
-                            <f:label>
-                                <Label text="IBP Version"/>
-                            </f:label>
-                            <f:fields>
-                                <Input id="idver" value="" width="225px" placeholder="Version" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
-                            </f:fields>
-                        </f:FormElement>
-                        <f:FormElement>
-                            <f:label>
-                                <Label text="Valid From"/>
-                            </f:label>
-                            <f:fields>
-                                <DatePicker id="fromDate" width="225px" value="2022-03-10" displayFormat="yyyy-MM-dd" valueFormat="yyyy-MM-dd" change="handleDateChange"/>
-                            </f:fields>
-                        </f:FormElement>
-                    </f:formElements>
-                </f:FormContainer>
-                <f:FormContainer>
-                    <f:formElements>
-                        <f:FormElement>
-                            <f:label>
-                                <Label text="Product"/>
-                            </f:label>
-                            <f:fields>
-                                <Input id="idprod" width="225px" placeholder="Product" value="" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
-                            </f:fields>
-                        </f:FormElement>
-                        <f:FormElement>
-                            <f:label>
-                                <Label text="IBP Scenario"/>
-                            </f:label>
-                            <f:fields>
-                                <Input id="idscen" value="" width="225px" placeholder="Scenario" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
-                            </f:fields>
-                        </f:FormElement>
-                        <f:FormElement>
-                            <f:label>
-                                <Label text="Valid To"/>
-                            </f:label>
-                            <f:fields>
-                                <DatePicker id="toDate" width="225px" value="2022-08-31" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="handleDateChange"/>
-                            </f:fields>
-                        </f:FormElement>
-                    </f:formElements>
-                </f:FormContainer>
-                <f:FormContainer  >
-                    <f:formElements>
-                        <f:FormElement>
-                            <f:label>
-                                <Label text="Model Version"/>
-                            </f:label>
-                            <f:fields>
-                                <Select id="idModelVer" selectedKey="Active" width="225px">
-                                    <core:ListItem key="Active" text="Active"/>
-                                    <core:ListItem key="Simulation" text="Simulation"/>
-                                </Select>
-                            </f:fields>
-                        </f:FormElement>
-                        <f:FormElement>
-                            <HBox>
-                                <Button text="Go" press="onGetData" tooltip="Get data based on filters"/>
-                                <Button text="Reset" press="onResetDate" tooltip="Reset Valid To Date"/>
-                            </HBox>
-                        </f:FormElement>
-                    </f:formElements>
-                </f:FormContainer>
-                <f:FormContainer visible="false">
-                    <f:formElements>
-                        <f:FormElement visible="false">
-                            <f:label>
-                                <Label text="Component"/>
-                            </f:label>
-                            <f:fields>
-                                <Input id="idcomp" value="" width="225px" placeholder="Component" visible="false" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
-                            </f:fields>
-                        </f:FormElement>
-                        <f:FormElement visible="false">
-                            <f:label>
-                                <Label text="Structure Node"/>
-                            </f:label>
-                            <f:fields>
-                                <Input id="idstru" value="" width="225px" placeholder="Structure Node" visible="false" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
-                            </f:fields>
-                        </f:FormElement>
-                    </f:formElements>
-                </f:FormContainer>
-            </f:formContainers>
-        </f:Form>
-        <content>
-        <HBox>
-            <SearchField id="headSearch" liveChange="onSearchCompReq" placeholder="Component, Structure Node" width="500px"/>
+<ux:ObjectPageLayout id="ObjectPageLayout">
+        <ux:headerTitle>
+            <ux:ObjectPageDynamicHeaderTitle>
+                <ux:expandedHeading>
+                    <Title text="{i18n>pageTitle}" class="boldText" titleAlignment="Center" />
+                </ux:expandedHeading>
+                <ux:snappedHeading>
+					<FlexBox fitContainer="true" alignItems="Center" >
+						<Title text="{i18n>pageTitle}" wrapping="true" />
+					</FlexBox>
+				</ux:snappedHeading>
+            </ux:ObjectPageDynamicHeaderTitle>
+        </ux:headerTitle>
+        <ux:headerContent>
+            <FlexBox wrap="Wrap" fitContainer="true">
+        <l:Grid defaultSpan="XL3 L3 M6 S12" >
+            <VBox >
+                <Text text=""/>
+                <SearchField id="headSearch" liveChange="onSearchCompReq" placeholder="Component, Structure Node" />
+            </VBox>
+            <VBox >
+                <Text text="Location"/>
+                <Input id="idloc" value=""  placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+            </VBox>
+            <VBox >
+                <Text text="Product"/>
+                <Input id="idprod"  placeholder="Product" value="" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+
+            </VBox>
+            <VBox >
+                <Text text="IBP Version"/>
+                <Input id="idver" value=""  placeholder="Version" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+            </VBox>
+            <VBox >
+                <Text text="IBP Scenario"/>
+                <Input id="idscen" value=""  placeholder="Scenario" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+
+            </VBox>
+            <VBox >
+                <Text text="Valid From"/>
+                <DatePicker id="fromDate"  value="2022-03-10" displayFormat="yyyy-MM-dd" valueFormat="yyyy-MM-dd" change="handleDateChange"/>
+
+            </VBox>
+            <VBox >
+                <Text text="Valid To"/>
+                <DatePicker id="toDate"  value="2022-08-31" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="handleDateChange"/>
+
+            </VBox>
+            <VBox >
+                <Label text="Model Version" />
+                <Select id="idModelVer" selectedKey="Active">
+                    <core:ListItem key="Active" text="Active"/>
+                    <core:ListItem key="Simulation" text="Simulation"/>
+                </Select>
+            </VBox>
+            <VBox >
             <CheckBox id="idCheck1" select="onNonZero" text="Get Non-Zero" selected="true" />
-            
-            </HBox>
+            </VBox>
+            <VBox>
+                <HBox>
+                    <Button text="Go" type="Emphasized" press="onGetData" tooltip="Get data based on filters" class="sapUiTinyMarginEnd"/>
+                    <Button text="Reset" type="Transparent" press="onResetDate" tooltip="Reset Valid To Date"/>
+                </HBox>
+            </VBox>
+            <Label text="Component" visible="false"/>
+            <Input id="idcomp"  value=""  placeholder="Component" visible="false" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+            <Label text="Structure Node" visible="false"/>
+            <Input id="idstru" value=""  placeholder="Structure Node" visible="false" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+        
+        </l:Grid>
+        </FlexBox>
+        </ux:headerContent>
+        <ux:sections>
+            <ux:ObjectPageSection >
+                <ux:subSections>
+                    <ux:ObjectPageSubSection>
+                        <ux:blocks>
             <t:Table id="idCompReq" fixedColumnCount="3" selectionMode="Single" alternateRowColors="true" enableSelectAll="false" visibleRowCount="15">
                 <t:columns>
                 </t:columns>
             </t:Table>
-        </content>
-    </Page>
+        </ux:blocks>
+                    </ux:ObjectPageSubSection>
+                </ux:subSections>
+            </ux:ObjectPageSection>
+        </ux:sections>
+    </ux:ObjectPageLayout>
 </mvc:View>

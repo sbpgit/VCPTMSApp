@@ -7,6 +7,7 @@ sap.ui.define(
     "sap/ui/model/FilterOperator",
     "sap/m/MessageToast",
     "sap/m/MessageBox",
+    "sap/ui/Device"
   ],
   /**
    * @param {typeof sap.ui.core.mvc.Controller} Controller
@@ -18,7 +19,8 @@ sap.ui.define(
     Filter,
     FilterOperator,
     MessageToast,
-    MessageBox
+    MessageBox,
+    Device
   ) {
     "use strict";
     var oGModel, that;
@@ -29,6 +31,10 @@ sap.ui.define(
        */
       onInit: function () {
         that = this;
+        // set device model
+			var oDeviceModel = new JSONModel(Device);
+			oDeviceModel.setDefaultBindingMode("OneWay");
+			this.setModel(oDeviceModel, "device");
         this.rowData;
         // Declaring JSON Models and size limits
         that.locModel = new JSONModel();

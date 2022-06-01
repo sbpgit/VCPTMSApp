@@ -43,11 +43,20 @@ sap.ui.define(
       },
 
       handleDateChange: function () {
-        var dLow = that.byId("idDateRange").getDateValue(),
-          dHigh = that.byId("idDateRange").getSecondDateValue();
+        var dDate = that.byId("idDateRange").getValue().split("To");
+              var dLow = dDate[0].trim() + " " + "00:00:00",
+                  dHigh = dDate[1].trim() + " " + "23:59:59";
 
-        dLow = dLow.toISOString().split("T")[0] + " " + "00:00:00";
-        dHigh = dHigh.toISOString().split("T")[0] + " " + "23:59:59";
+        // var dLow = that.byId("idDateRange").getDateValue(),
+        //   dHigh = that.byId("idDateRange").getSecondDateValue(),
+
+        //   lgTime = new Date().getTimezoneOffset();
+
+        //   dLow = new Date(dLow.setTime(dLow.getTime() - (lgTime* 60 * 1000)));
+        //   dHigh = new Date(dHigh.setTime(dHigh.getTime() - (lgTime* 60 * 1000)));
+
+        // dLow = dLow.toISOString().split("T")[0] + " " + "00:00:00";
+        // dHigh = dHigh.toISOString().split("T")[0] + " " + "23:59:59";
 
         var oFilters = [];
         var sFilter = new sap.ui.model.Filter({
@@ -61,11 +70,6 @@ sap.ui.define(
         sap.ui.core.BusyIndicator.show();
         that.getModel("JModel").read("/getJobStatus", {
           filters: oFilters,
-          //   method: "GET",
-          //   urlParameters: {
-          //     startTime: dFromDate,
-          //     endTime: dToDate
-          //   },
           success: function (oData) {
             sap.ui.core.BusyIndicator.hide();
 

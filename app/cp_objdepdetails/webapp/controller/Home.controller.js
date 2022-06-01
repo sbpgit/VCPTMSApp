@@ -87,12 +87,13 @@ sap.ui.define(
           oGModel.setProperty("/objCounter", oSelectedCounter);
           var oTable = that.getView().byId("idMyTable");
           that.oCharModel = new JSONModel();
+          var aaColList;
 
           // Resetting table data.
           // Destroying the table columns.
           oTable.destroyColumns();
           // adding empty arry of data.
-          var aaColList = new sap.m.ColumnListItem("aaColList", {
+          var aaColList = new sap.m.ColumnListItem( {
             cells: [],
           });
           // appending empty data to table.
@@ -222,7 +223,7 @@ sap.ui.define(
                 }
 
                 // Assigning cells to Column List Item
-                var aColList = new sap.m.ColumnListItem("aColList", {
+                var aColList = new sap.m.ColumnListItem( {
                   cells: oCell,
                 });
 
@@ -263,7 +264,7 @@ sap.ui.define(
           // Destroying columns.
           oTable.destroyColumns();
           // Adding empty array of data for column list item
-          var futColList = new sap.m.ColumnListItem("futColList", {
+          var futColList = new sap.m.ColumnListItem( {
             cells: [],
           });
           // Appending empty data for table to remove the previous data
@@ -403,7 +404,7 @@ sap.ui.define(
                   oCell.push(cell1);
                 }
 
-                var afutColList = new sap.m.ColumnListItem("afutColList", {
+                var afutColList = new sap.m.ColumnListItem( {
                   cells: oCell,
                 });
 
@@ -438,7 +439,7 @@ sap.ui.define(
           var oHisTable = that.getView().byId("idMyTable");
           // Refreshing data of Obj Dep History and Future on search
           if (oHisTable.getItems().length !== 0) {
-            var emptyHisColList = new sap.m.ColumnListItem("emptyHisColList", {
+            var emptyHisColList = new sap.m.ColumnListItem( {
               cells: [],
             });
 
@@ -452,7 +453,7 @@ sap.ui.define(
             }
 
             var oFutTable = that.getView().byId("idFutTable");
-            var emptyfutColList = new sap.m.ColumnListItem("emptyfutColList", {
+            var emptyfutColList = new sap.m.ColumnListItem( {
               cells: [],
             });
 
