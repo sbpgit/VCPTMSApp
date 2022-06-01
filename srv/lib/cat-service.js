@@ -373,6 +373,9 @@ module.exports = (srv) => {
             if (lsprofilesPara.PROFILE !== undefined) {
                 lsprofilesPara.METHOD = req.data.METHOD;
                 lsprofilesPara.PARA_NAME = req.data.PARA_NAME;
+                if (req.data.FLAG === "E") {
+                    await cds.delete("CP_PAL_PROFILEMETH_PARA", lsprofilesPara);
+                }
                 lsprofilesPara.INTVAL = req.data.INTVAL;
                 lsprofilesPara.DOUBLEVAL = req.data.DOUBLEVAL;
                 lsprofilesPara.STRVAL = req.data.STRVAL;
@@ -380,9 +383,6 @@ module.exports = (srv) => {
                 lsprofilesPara.PARA_DEP = null; //req.data.PARA_DEP;
                 lsprofilesPara.CREATED_DATE = curDate;
                 lsprofilesPara.CREATED_BY = ""; //req.data.CREATED_BY;
-                if (req.data.FLAG === "E") {
-                    await cds.delete("CP_PAL_PROFILEMETH_PARA", lsprofilesPara);
-                }
                 liProfilesPara.push(GenFunctions.parse(lsprofilesPara));
             }
             lsprofilesPara = {};
