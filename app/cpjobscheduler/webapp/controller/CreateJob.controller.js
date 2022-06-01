@@ -350,7 +350,7 @@ sap.ui.define([
                     that.byId("idSdi").setSelectedKey("CG");
                 } else if(sServiceText === "ImportECCProd"){
                     that.byId("idSdi").setSelectedKey("PR");
-                } else if(sServiceText === "locationproduct"){
+                } else if(sServiceText === "ImportECCLocProd"){
                     that.byId("idSdi").setSelectedKey("LP");
                 } else if(sServiceText === "ImportECCProdClass"){
                     that.byId("idSdi").setSelectedKey("PC");
@@ -358,6 +358,8 @@ sap.ui.define([
                     that.byId("idSdi").setSelectedKey("BH");
                 } else if(sServiceText === "ImportECCBomod"){
                     that.byId("idSdi").setSelectedKey("BO");
+                } else if(sServiceText === "ImportECCODhdr"){
+                    that.byId("idSdi").setSelectedKey("OH");
                 } else if(sServiceText === "ImportECCClass"){
                     that.byId("idSdi").setSelectedKey("CL");
                 } else if(sServiceText === "ImportECCChar"){
@@ -1377,7 +1379,7 @@ sap.ui.define([
                     that.byId("idSdi").setSelectedKey("CG");
                 } else if(sServiceText === "ImportECCProd"){
                     that.byId("idSdi").setSelectedKey("PR");
-                } else if(sServiceText === "locationproduct"){
+                } else if(sServiceText === "ImportECCLocProd"){
                     that.byId("idSdi").setSelectedKey("LP");
                 } else if(sServiceText === "ImportECCProdClass"){
                     that.byId("idSdi").setSelectedKey("PC");
@@ -1385,6 +1387,8 @@ sap.ui.define([
                     that.byId("idSdi").setSelectedKey("BH");
                 } else if(sServiceText === "ImportECCBomod"){
                     that.byId("idSdi").setSelectedKey("BO");
+                } else if(sServiceText === "ImportECCODhdr"){
+                    that.byId("idSdi").setSelectedKey("OH");
                 } else if(sServiceText === "ImportECCClass"){
                     that.byId("idSdi").setSelectedKey("CL");
                 } else if(sServiceText === "ImportECCChar"){
@@ -2482,13 +2486,15 @@ sap.ui.define([
                     } else if(sSdiType ==="PR"){
                         actionText =  "%2Fsdi%2FImportECCProd";
                     } else if(sSdiType === "LP"){
-                        actionText = "locationproduct";
+                        actionText = "%2Fsdi%2FImportECCLocProd";
                     } else if(sSdiType === "PC"){
                         actionText = "%2Fsdi%2FImportECCProdClass";
                     } else if(sSdiType === "BH"){
                         actionText = "%2Fsdi%2FImportECCBOM";
                     } else if(sSdiType === "BO"){
                         actionText = "%2Fsdi%2FImportECCBomod";
+                    } else if(sSdiType === "OH"){
+                        actionText = "%2Fsdi%2FImportECCODhdr";
                     } else if(sSdiType === "CL"){
                         actionText = "%2Fsdi%2FImportECCClass";
                     } else if(sSdiType === "CH"){

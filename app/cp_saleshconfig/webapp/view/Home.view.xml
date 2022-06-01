@@ -2,12 +2,27 @@
     xmlns:l="sap.ui.layout"
     xmlns:core="sap.ui.core"
     xmlns:f="sap.ui.layout.form"
+    xmlns:ux="sap.uxap"
     xmlns:mvc="sap.ui.core.mvc" 
     displayBlock="true"
     xmlns="sap.m">
 
-    <Page id="page" title="{i18n>title}" titleAlignment="Center">
-
+    <!-- <Page id="page" title="{i18n>title}" titleAlignment="Center"> -->
+    <ux:ObjectPageLayout id="ObjectPageLayout">
+        <ux:headerTitle>
+            <ux:ObjectPageDynamicHeaderTitle>
+                <ux:expandedHeading>
+                    <Title text="{i18n>title}" class="boldText" titleAlignment="Center" />
+                </ux:expandedHeading>
+                <ux:snappedHeading>
+					<FlexBox fitContainer="true" alignItems="Center" >
+						<Title text="{i18n>title}" wrapping="true" />
+					</FlexBox>
+				</ux:snappedHeading>
+            </ux:ObjectPageDynamicHeaderTitle>
+        </ux:headerTitle>
+        <ux:headerContent>
+            <FlexBox wrap="Wrap" fitContainer="true">
       <l:Grid defaultSpan="XL3 L3 M6 S12" >
             <VBox>
             <Label text="" />
@@ -26,12 +41,19 @@
                 <DatePicker id="idDate" displayFormat="yyyy-MM-dd" change="handleDateChange"/>
             </VBox>
             <VBox >
-            <Label text=""/>
+                <Label text=""/>
                 <Button text="Go" type="Emphasized" press="onGetData" tooltip="Get data based on filters"/>
             </VBox>
             </l:Grid>
         
-        <content>
+        <!-- <content> -->
+        </FlexBox>
+        </ux:headerContent>
+        <ux:sections>
+            <ux:ObjectPageSection >
+                <ux:subSections>
+                    <ux:ObjectPageSubSection>
+                        <ux:blocks>
             <Table id="idTab" items="{path: '/results'}" growingScrollToLoad="true" rememberSelections="false" itemPress="onhandlePress" mode="SingleSelectMaster" selectionChange="onhandlePress" sticky="ColumnHeaders">
                 
                 <columns>
@@ -75,6 +97,12 @@
                     </ColumnListItem>
                 </items>
             </Table>
-        </content>
-    </Page>
+            </ux:blocks>
+                    </ux:ObjectPageSubSection>
+                </ux:subSections>
+            </ux:ObjectPageSection>
+        </ux:sections>
+    </ux:ObjectPageLayout>
+        <!-- </content>
+    </Page> -->
 </mvc:View>

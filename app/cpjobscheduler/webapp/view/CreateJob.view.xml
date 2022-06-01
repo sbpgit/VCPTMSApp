@@ -537,6 +537,7 @@
                                                     <core:ListItem key="PC" text="{i18n>prodclas}"/>
                                                     <core:ListItem key="BH" text="{i18n>bomheader}"/>
                                                     <core:ListItem key="BO" text="{i18n>bomobjdep}"/>
+                                                    <core:ListItem key="OH" text="{i18n>objdephdr}"/>
                                                     <core:ListItem key="CL" text="{i18n>class}"/>
                                                     <core:ListItem key="CH" text="{i18n>char}"/>
                                                     <core:ListItem key="CV" text="{i18n>charval}"/>

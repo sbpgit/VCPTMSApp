@@ -7,3 +7,16 @@ div#__page0-title {
 div#__xmlview0--idPage-title {
     font-weight: bold;
 }
+
+.sapUxAPObjectPageContainerNoBar>.sapUxAPObjectPageSection:first-child:not(.sapUxAPObjectPageSectionNoTitle) {
+    margin-top: 0.1rem !important;
+}
+
+.sapUiSizeCompact .sapUxAPObjectPageSectionHeader, .sapUxAPObjectPageSectionHeader {
+    height: 0.1rem !important;
+}
+
+
+div#__title1-left-inner {
+    margin-left: 600px;
+}

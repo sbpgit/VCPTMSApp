@@ -321,6 +321,7 @@ sap.ui.define(
                             version: data.VERSION,
                             fromdate:data.FROMDATE,
                             todate:data.TODATE,
+                            CUSTOMER_GROUP:data.CUSTOMER_GROUP,
                         };
                         ScheData.push(aIData);
                     } else {
@@ -407,13 +408,13 @@ sap.ui.define(
                     sap.ui.getCore().byId("idJobData").getColumns()[0].setVisible(true);
                     sap.ui.getCore().byId("idJobData").getColumns()[1].setVisible(true);
                     sap.ui.getCore().byId("idJobData").getColumns()[9].setVisible(true);
-                sap.ui.getCore().byId("idJobData").getColumns()[10].setVisible(true);
+                    sap.ui.getCore().byId("idJobData").getColumns()[10].setVisible(true);
 
                 } else if(oActionType === "exportActCompDemand"){
                     sap.ui.getCore().byId("idJobData").getColumns()[0].setVisible(true);
                     sap.ui.getCore().byId("idJobData").getColumns()[1].setVisible(true);
                     sap.ui.getCore().byId("idJobData").getColumns()[9].setVisible(true);
-                sap.ui.getCore().byId("idJobData").getColumns()[10].setVisible(true);
+                    sap.ui.getCore().byId("idJobData").getColumns()[10].setVisible(true);
 
                 }
                 if(iCount === 0){
