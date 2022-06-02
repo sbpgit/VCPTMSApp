@@ -327,7 +327,7 @@ sap.ui.define(
 
         if (that.byId("sturList").getSelectedItems().length === 1) {
           var oSelNode = oGModel.getProperty("/SelectedNode");
-          var ooSelComponent = that
+          var oSelComponent = that
             .byId("sturList")
             .getSelectedItem()
             .getCells()[1]

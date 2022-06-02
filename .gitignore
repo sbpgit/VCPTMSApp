@@ -8,6 +8,30 @@ node_modules
 node_modules
 node_modules
 
-    # added by cds deploy
+    # added by cds deploy./app/cp_saleshcfg/node_modules
+
     default-env.json
+./app/cp_assignprofiles/node_modules
+./app/cp_bomod/node_modules
+./app/cp_execprediction/node_modules
+./app/cp_exeregressionmdls/node_modules
+./app/cp_generatetimeseries/node_modules
+./app/cp_ibpfres/node_modules
+./app/cp_locprod/node_modules
+./app/cp_objdepdetails/node_modules
+./app/cp_odprofiles/node_modules
+./app/cp_prodconfig/node_modules
+./app/cpasmbcompreq/node_modules
+./app/cpbompvs/node_modules
+./app/cpcompreq/node_modules
+./app/cpcustgroup/node_modules
+./app/cpibpresultplan/node_modules
+./app/cpjobscheduler/node_modules
+./app/cplocation/node_modules
+./app/cpnewpartialprod/node_modules
+./app/cpodrestrict/node_modules
+./app/cpprodlocline/node_modules
+./app/cprtrheader/node_modules
+
+
     
