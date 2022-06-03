@@ -63,5 +63,7 @@ node_modules
 ./app/cprestrictions/dist
 ./app/cprtrheader/dist
 
+./resources
+
 
     
