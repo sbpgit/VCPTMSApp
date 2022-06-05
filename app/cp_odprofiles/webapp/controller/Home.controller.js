@@ -653,7 +653,7 @@ sap.ui.define(
   
             sap.ui.core.BusyIndicator.show();
             // Calling service to assign profile
-            that.getModel("BModel").callFunction("/asssignProfilesOD", {
+            that.getModel("BModel").callFunction("/assignProfilesOD", {
               method: "GET",
               urlParameters: {
                 FLAG: "I",
@@ -696,7 +696,7 @@ sap.ui.define(
             oSelected = aItem[i].getBindingContext().getProperty();
   
             sap.ui.core.BusyIndicator.show();
-            that.getModel("BModel").callFunction("/asssignProfilesOD", {
+            that.getModel("BModel").callFunction("/assignProfilesOD", {
               method: "GET",
               urlParameters: {
                 FLAG: "D",

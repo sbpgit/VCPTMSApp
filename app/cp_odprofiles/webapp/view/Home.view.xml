@@ -85,12 +85,6 @@
                                     <Column hAlign="Left" vAlign="Middle">
                                         <Text text="{i18n>comp}"/>
                                     </Column>
-                                    <Column hAlign="Left" vAlign="Middle" visible='false'>
-                                        <Text text="{i18n>objdep}"/>
-                                    </Column>
-                                    <Column hAlign="Left" vAlign="Middle" visible='false'>
-                                        <Text text="{i18n>objDesc}"/>
-                                    </Column>
                                     <Column hAlign="Left" vAlign="Middle">
                                         <Text text="{i18n>strucnode}"/>
                                     </Column>
@@ -104,8 +98,6 @@
                                         <Text text="{PRODUCT_ID}"/>
                                         <Text text="{ITEM_NUM}"/>
                                         <Text text="{COMPONENT}"/>
-                                        <Text text="{OBJ_DEP}"/>
-                                        <Text text="{OBJDEP_DESC}"/>
                                         <Text text="{STRUC_NODE}"/>
                                         <Text text="{PROFILE}"/>
                                     </ColumnListItem>

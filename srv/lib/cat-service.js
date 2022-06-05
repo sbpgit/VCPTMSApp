@@ -140,7 +140,7 @@ module.exports = (srv) => {
             vDateSeries = GenFunctions.addDays(vDateSeries, 7);
 
             lsDates.CAL_DATE = vDateSeries;//GenFunctions.getNextSundayCmp(vDateSeries);
-           // vDateSeries = lsDates.CAL_DATE;
+            // vDateSeries = lsDates.CAL_DATE;
 
             liDates.push(lsDates);
             lsDates = {};
@@ -265,8 +265,8 @@ module.exports = (srv) => {
         while (vDateSeries <= vDateTo) {
             vDateSeries = GenFunctions.addDays(vDateSeries, 7);
 
-            lsDates.CAL_DATE = vDateSeries ;//GenFunctions.getNextSundayCmp(vDateSeries);
-          //  vDateSeries = lsDates.CAL_DATE;
+            lsDates.CAL_DATE = vDateSeries;//GenFunctions.getNextSundayCmp(vDateSeries);
+            //  vDateSeries = lsDates.CAL_DATE;
 
             liDates.push(lsDates);
             lsDates = {};
@@ -376,28 +376,47 @@ module.exports = (srv) => {
                 if (req.data.FLAG === "E") {
                     await cds.delete("CP_PAL_PROFILEMETH_PARA", lsprofilesPara);
                 }
+<<<<<<< HEAD
                 // lsprofilesPara.INTVAL = req.data.INTVAL;
                 // lsprofilesPara.DOUBLEVAL = req.data.DOUBLEVAL;
                 // lsprofilesPara.STRVAL = req.data.STRVAL;
                 if (req.data.INTVAL === NaN || req.data.INTVAL === 'NaN' || req.data.INTVAL === 'null' || req.data.INTVAL === null)  {
+=======
+                if (req.data.INTVAL === NaN) {
+>>>>>>> 6c85eeac704f4a585a38848f6d5953f521823834
                     lsprofilesPara.INTVAL = null;
                 }
                 else {
                     lsprofilesPara.INTVAL = req.data.INTVAL;
                 }
+<<<<<<< HEAD
                 if (req.data.STRVAL === NaN || req.data.STRVAL === 'NaN' || req.data.STRVAL === 'null' || req.data.STRVAL === null) {
+=======
+
+                if (req.data.STRVAL === NaN || req.data.STRVAL === 'NaN' || req.data.STRVAL === 'null') {
+>>>>>>> 6c85eeac704f4a585a38848f6d5953f521823834
                     lsprofilesPara.STRVAL = null;
                 }
                 else {
                     lsprofilesPara.STRVAL = req.data.STRVAL;
+<<<<<<< HEAD
                 } 
                 
                 if (req.data.DOUBLEVAL === NaN || req.data.DOUBLEVAL === 'NaN' || req.data.DOUBLEVAL === 'null'|| req.data.DOUBLEVAL === null) {
+=======
+                }
+
+                if (req.data.DOUBLEVAL === NaN) {
+>>>>>>> 6c85eeac704f4a585a38848f6d5953f521823834
                     lsprofilesPara.DOUBLEVAL = null;
                 }
                 else {
                     lsprofilesPara.DOUBLEVAL = req.data.DOUBLEVAL;
                 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6c85eeac704f4a585a38848f6d5953f521823834
                 lsprofilesPara.PARA_DESC = req.data.PARA_DESC;
                 lsprofilesPara.PARA_DEP = null; //req.data.PARA_DEP;
                 lsprofilesPara.CREATED_DATE = curDate;
@@ -440,7 +459,7 @@ module.exports = (srv) => {
         //res.send({ value: createResults });
     });
     // Assign profile sot object dependency
-    srv.on("asssignProfilesOD", async (req) => {
+    srv.on("assignProfilesOD", async (req) => {
         let liProfilesOD = [];
         let liProfilesDel = [];
         let lsprofilesOD = {};
@@ -449,40 +468,49 @@ module.exports = (srv) => {
         let res;
         var responseMessage;
         var datetime = new Date();
-        var curDate = datetime.toISOString().slice(0, 10);
-
-        const aProfileOD_req = req.data.PROFILEOD;
         res = req._.req.res;
-        //  for (let i = 0; i < aProfileOD_req.length; i++) {
-        lsprofilesOD.PROFILE = req.data.PROFILE;
-        if (lsprofilesOD.PROFILE !== undefined || req.data.FLAG === "D") {
-            lsprofilesOD.LOCATION_ID = req.data.LOCATION_ID;
-            lsprofilesOD.PRODUCT_ID = req.data.PRODUCT_ID;
-            lsprofilesOD.COMPONENT = req.data.COMPONENT;
-            lsprofilesOD.OBJ_DEP = req.data.OBJ_DEP;
+        const li_bomod = await cds.run(
+            `SELECT *
+            FROM "V_BOMODCOND"
+            WHERE "LOCATION_ID" = '` +
+            req.data.LOCATION_ID +
+            `'
+            AND "PRODUCT_ID" = '` +
+            req.data.PRODUCT_ID +
+            `'
+            AND"COMPONENT" = '` +
+            req.data.COMPONENT +
+            `'`
+        );
+        for (let i = 0; i < li_bomod.length; i++) {
             lsprofilesOD.PROFILE = req.data.PROFILE;
-            if (lsprofilesOD.STRUC_NODE !== undefined) {
-                lsprofilesOD.STRUC_NODE = req.data.STRUC_NODE;
-            } else {
-                lsprofilesOD.STRUC_NODE = "";
+            if (lsprofilesOD.PROFILE !== undefined || req.data.FLAG === "D") {
+                lsprofilesOD.LOCATION_ID = req.data.LOCATION_ID;
+                lsprofilesOD.PRODUCT_ID = req.data.PRODUCT_ID;
+                lsprofilesOD.COMPONENT = req.data.COMPONENT;
+                lsprofilesOD.OBJ_DEP = li_bomod[i].OBJ_DEP;
+                lsprofilesOD.OBJ_TYPE = 'OD';
+                lsprofilesOD.PROFILE = req.data.PROFILE;
+                if (lsprofilesOD.STRUC_NODE !== undefined) {
+                    lsprofilesOD.STRUC_NODE = req.data.STRUC_NODE;
+                } else {
+                    lsprofilesOD.STRUC_NODE = "";
+                }
+                liProfilesOD.push(GenFunctions.parse(lsprofilesOD));
+                // Delete before insert to override
+                lsprofilesDel.LOCATION_ID = req.data.LOCATION_ID;
+                lsprofilesDel.PRODUCT_ID = req.data.PRODUCT_ID;
+                lsprofilesDel.COMPONENT = req.data.COMPONENT;
+                liProfilesDel.push(GenFunctions.parse(lsprofilesDel));
+                try {
+                    await cds.delete("CP_PAL_PROFILEOD", lsprofilesDel);
+                    responseMessage = " Deletion successfull ";
+                } catch (e) {
+                    responseMessage = " Deletion failed";
+                }
             }
-            liProfilesOD.push(GenFunctions.parse(lsprofilesOD));
-            // Delete before insert to override
-            lsprofilesDel.LOCATION_ID = req.data.LOCATION_ID;
-            lsprofilesDel.PRODUCT_ID = req.data.PRODUCT_ID;
-            lsprofilesDel.COMPONENT = req.data.COMPONENT;
-            lsprofilesDel.OBJ_DEP = req.data.OBJ_DEP;
-
-            liProfilesDel.push(GenFunctions.parse(lsprofilesDel));
-            try {
-                await cds.delete("CP_PAL_PROFILEOD", lsprofilesDel);
-                responseMessage = " Deletion successfull ";
-            } catch (e) {
-                responseMessage = " Deletion failed";
-            }
+            lsprofilesOD = {};
         }
-        lsprofilesOD = {};
-        //   }
 
         if (req.data.FLAG === "I") {
             try {
@@ -497,9 +525,8 @@ module.exports = (srv) => {
             }
         } else {
             createResults.push(responseMessage);
-        }
+        }    //  End of if (req.data.FLAG === "I")
         return responseMessage;
-        //res.send({ value: createResults });
     });
     // Assign product to access node
     srv.on("genProdAN", async (req) => {
@@ -938,7 +965,7 @@ module.exports = (srv) => {
             for (var i = 0; i < liProdChar.length; i++) {
                 lsresults.PRODUCT_ID = liProdChar[i].PRODUCT_ID;
                 lsresults.LOCATION_ID = liProdChar[i].LOCATION_ID;
-               // lsresults.REF_PRODID = liProdChar[i].REF_PRODID;
+                // lsresults.REF_PRODID = liProdChar[i].REF_PRODID;
                 if (req.data.FLAG === "E" && i === 0) {
                     try {
                         await cds.delete("CP_NEWPROD_CHAR", lsresults);
@@ -949,7 +976,7 @@ module.exports = (srv) => {
                 lsresults.CLASS_NUM = liProdChar[i].CLASS_NUM;
                 lsresults.CHAR_NUM = liProdChar[i].CHAR_NUM;
                 lsresults.CHARVAL_NUM = liProdChar[i].CHARVAL_NUM;
-                
+
                 lsresults.REF_CLASS_NUM = liProdChar[i].CLASS_NUM;
                 lsresults.REF_CHAR_NUM = liProdChar[i].CHAR_NUM;
                 lsresults.REF_CHARVAL_NUM = liProdChar[i].CHARVAL_NUM;
@@ -971,7 +998,7 @@ module.exports = (srv) => {
             for (var i = 0; i < liProdChar.length; i++) {
                 lsresults.PRODUCT_ID = liProdChar[i].PRODUCT_ID;
                 lsresults.LOCATION_ID = liProdChar[i].LOCATION_ID;
-              //  lsresults.REF_PRODID = liProdChar[i].REF_PRODID;
+                //  lsresults.REF_PRODID = liProdChar[i].REF_PRODID;
                 if (req.data.FLAG === "E" && i === 0) {
                     try {
                         await cds.delete("CP_NEWPROD_CHAR", lsresults);
@@ -1038,7 +1065,7 @@ module.exports = (srv) => {
             for (var i = 0; i < liProdChar.length; i++) {
                 lsresults.PRODUCT_ID = liProdChar[i].PRODUCT_ID;
                 lsresults.LOCATION_ID = liProdChar[i].LOCATION_ID;
-               // lsresults.REF_PRODID = liProdChar[i].REF_PRODID;
+                // lsresults.REF_PRODID = liProdChar[i].REF_PRODID;
                 if (req.data.FLAG === "E" && i === 0) {
                     try {
                         await cds.delete("CP_PARTIALPROD_CHAR", lsresults);
@@ -1067,7 +1094,7 @@ module.exports = (srv) => {
             for (var i = 0; i < liProdChar.length; i++) {
                 lsresults.PRODUCT_ID = liProdChar[i].PRODUCT_ID;
                 lsresults.LOCATION_ID = liProdChar[i].LOCATION_ID;
-              //  lsresults.REF_PRODID = liProdChar[i].REF_PRODID;
+                //  lsresults.REF_PRODID = liProdChar[i].REF_PRODID;
                 if (req.data.FLAG === "E" && i === 0) {
                     try {
                         await cds.delete("CP_PARTIALPROD_CHAR", lsresults);
