@@ -376,9 +376,28 @@ module.exports = (srv) => {
                 if (req.data.FLAG === "E") {
                     await cds.delete("CP_PAL_PROFILEMETH_PARA", lsprofilesPara);
                 }
-                lsprofilesPara.INTVAL = req.data.INTVAL;
-                lsprofilesPara.DOUBLEVAL = req.data.DOUBLEVAL;
-                lsprofilesPara.STRVAL = req.data.STRVAL;
+                // lsprofilesPara.INTVAL = req.data.INTVAL;
+                // lsprofilesPara.DOUBLEVAL = req.data.DOUBLEVAL;
+                // lsprofilesPara.STRVAL = req.data.STRVAL;
+                if (req.data.INTVAL === NaN || req.data.INTVAL === 'NaN' || req.data.INTVAL === 'null' || req.data.INTVAL === null)  {
+                    lsprofilesPara.INTVAL = null;
+                }
+                else {
+                    lsprofilesPara.INTVAL = req.data.INTVAL;
+                }
+                if (req.data.STRVAL === NaN || req.data.STRVAL === 'NaN' || req.data.STRVAL === 'null' || req.data.STRVAL === null) {
+                    lsprofilesPara.STRVAL = null;
+                }
+                else {
+                    lsprofilesPara.STRVAL = req.data.STRVAL;
+                } 
+                
+                if (req.data.DOUBLEVAL === NaN || req.data.DOUBLEVAL === 'NaN' || req.data.DOUBLEVAL === 'null'|| req.data.DOUBLEVAL === null) {
+                    lsprofilesPara.DOUBLEVAL = null;
+                }
+                else {
+                    lsprofilesPara.DOUBLEVAL = req.data.DOUBLEVAL;
+                }
                 lsprofilesPara.PARA_DESC = req.data.PARA_DESC;
                 lsprofilesPara.PARA_DEP = null; //req.data.PARA_DEP;
                 lsprofilesPara.CREATED_DATE = curDate;
@@ -400,10 +419,11 @@ module.exports = (srv) => {
                 createResults.push(responseMessage);
             }
         } else if (req.data.FLAG === "D") {
-            for (let i = 0; i < aProfilePara_req.length; i++) {
-                lsprofilesPara.PROFILE = req.data.PROFILE;
-                break;
-            }
+            // for (let i = 0; i < aProfilePara_req.length; i++) {
+            //     lsprofilesPara.PROFILE = req.data.PROFILE;
+            //     break;
+            // }
+            lsprofilesPara.PROFILE = req.data.PROFILE;
             try {
                 if (lsprofilesPara.PROFILE !== undefined) {
                     await cds.delete("CP_PAL_PROFILEMETH_PARA", lsprofilesPara);
