@@ -376,47 +376,28 @@ module.exports = (srv) => {
                 if (req.data.FLAG === "E") {
                     await cds.delete("CP_PAL_PROFILEMETH_PARA", lsprofilesPara);
                 }
-<<<<<<< HEAD
                 // lsprofilesPara.INTVAL = req.data.INTVAL;
                 // lsprofilesPara.DOUBLEVAL = req.data.DOUBLEVAL;
                 // lsprofilesPara.STRVAL = req.data.STRVAL;
                 if (req.data.INTVAL === NaN || req.data.INTVAL === 'NaN' || req.data.INTVAL === 'null' || req.data.INTVAL === null)  {
-=======
-                if (req.data.INTVAL === NaN) {
->>>>>>> 6c85eeac704f4a585a38848f6d5953f521823834
                     lsprofilesPara.INTVAL = null;
                 }
                 else {
                     lsprofilesPara.INTVAL = req.data.INTVAL;
                 }
-<<<<<<< HEAD
                 if (req.data.STRVAL === NaN || req.data.STRVAL === 'NaN' || req.data.STRVAL === 'null' || req.data.STRVAL === null) {
-=======
-
-                if (req.data.STRVAL === NaN || req.data.STRVAL === 'NaN' || req.data.STRVAL === 'null') {
->>>>>>> 6c85eeac704f4a585a38848f6d5953f521823834
                     lsprofilesPara.STRVAL = null;
-                }
-                else {
-                    lsprofilesPara.STRVAL = req.data.STRVAL;
-<<<<<<< HEAD
                 } 
+                else{
+                    lsprofilesPara.STRVAL = req.data.STRVAL;
+                }
                 
                 if (req.data.DOUBLEVAL === NaN || req.data.DOUBLEVAL === 'NaN' || req.data.DOUBLEVAL === 'null'|| req.data.DOUBLEVAL === null) {
-=======
-                }
-
-                if (req.data.DOUBLEVAL === NaN) {
->>>>>>> 6c85eeac704f4a585a38848f6d5953f521823834
                     lsprofilesPara.DOUBLEVAL = null;
                 }
                 else {
                     lsprofilesPara.DOUBLEVAL = req.data.DOUBLEVAL;
                 }
-<<<<<<< HEAD
-=======
-
->>>>>>> 6c85eeac704f4a585a38848f6d5953f521823834
                 lsprofilesPara.PARA_DESC = req.data.PARA_DESC;
                 lsprofilesPara.PARA_DEP = null; //req.data.PARA_DEP;
                 lsprofilesPara.CREATED_DATE = curDate;
