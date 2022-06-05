@@ -735,8 +735,8 @@ entity![V_ODPROFILES]{
     key![PRODUCT_ID]  : String(40) @title : 'PRODUCT_ID';
     key![ITEM_NUM]    : String(5)      @title : 'ITEM_NUM';
     key![COMPONENT]   : String(40) @title : 'COMPONENT';
-    key![OBJ_DEP]     : String(42) @title : 'OBJ_DEP';
-    key![OBJDEP_DESC] : String(30) @title : 'OBJDEP_DESC';
+    // key![OBJ_DEP]     : String(42) @title : 'OBJ_DEP';
+    // key![OBJDEP_DESC] : String(30) @title : 'OBJDEP_DESC';
     key![STRUC_NODE]  : String(50)     @title : 'STRUC_NODE';
     key![PROFILE]     : String(50) @title : 'PROFILE';
 }

@@ -16,3 +16,8 @@
 .listGray {
     color: #c5cee0 !important;
 }
+
+.sapMTB-Info-CTX.sapMTB {
+    background: #ffff;
+    color: #fff;
+}

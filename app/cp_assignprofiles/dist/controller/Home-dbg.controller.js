@@ -243,7 +243,7 @@ sap.ui.define(
             PARA_DESC: "",
             PARA_DEP: "",
             CREATED_DATE: that.dDate,
-            CREATED_BY: "",
+            CREATED_BY: ""
           },
           success: function (oData) {
             sap.ui.core.BusyIndicator.hide();
