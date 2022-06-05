@@ -387,10 +387,10 @@ module.exports = (srv) => {
                 }
                 if (req.data.STRVAL === NaN || req.data.STRVAL === 'NaN' || req.data.STRVAL === 'null' || req.data.STRVAL === null) {
                     lsprofilesPara.STRVAL = null;
-                }
-                else {
-                    lsprofilesPara.STRVAL = req.data.STRVAL;
                 } 
+                else{
+                    lsprofilesPara.STRVAL = req.data.STRVAL;
+                }
                 
                 if (req.data.DOUBLEVAL === NaN || req.data.DOUBLEVAL === 'NaN' || req.data.DOUBLEVAL === 'null'|| req.data.DOUBLEVAL === null) {
                     lsprofilesPara.DOUBLEVAL = null;
