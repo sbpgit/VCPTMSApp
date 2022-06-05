@@ -1,8 +1,0 @@
-/* Enter your custom styles here */
-
-
-
-.sapMBar .sapMBarRight.sapMBarContainer>*:first-child:last-child, .sapMBar .sapMBarLeft.sapMBarContainer>*:first-child:last-child, .sapMBar .sapMBarMiddle .sapMBarContainer>*:first-child:last-child {
-
-    font-weight: bold;
-}

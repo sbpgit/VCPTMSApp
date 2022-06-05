@@ -210,8 +210,9 @@ modules:
 #     build-result: dist
 #     builder: custom
 #     commands:
-#     - npm install
-#     - npm run build:cf
+#   - npm install
+#   - npm run build:cf
+#   - rm -rf node_modules
 #     supported-platforms: []
 # - name: cpibpfplancpibpfplan
 #   type: html5
@@ -220,8 +221,9 @@ modules:
 #     build-result: dist
 #     builder: custom
 #     commands:
-#     - npm install
-#     - npm run build:cf
+#   - npm install
+#   - npm run build:cf
+#   - rm -rf node_modules
 #     supported-platforms: []
 - name: cpibpfrescpibpfres
   type: html5
@@ -232,6 +234,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     supported-platforms: []
 - name: cpexecpredcpexecprediction
   type: html5
@@ -242,6 +245,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     supported-platforms: []
 - name: cpexeregcpexeregressionmdls
   type: html5
@@ -252,6 +256,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     supported-platforms: []
 - name: cpodpcpodprofiles
   type: html5
@@ -262,6 +267,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     supported-platforms: []
 - name: cpappfcpassignprofiles
   type: html5
@@ -272,6 +278,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     supported-platforms: []
 - name: cplpcplocprod
   type: html5
@@ -282,6 +289,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     supported-platforms: []
 - name: cpappfcpsaleshcfg
   type: html5
@@ -292,6 +300,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     supported-platforms: []
 - name: cpappfcpprodconfig
   type: html5
@@ -302,6 +311,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     supported-platforms: []
 - name: cpappfcpbomod
   type: html5
@@ -312,6 +322,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     supported-platforms: []
 - name: cpappfcpobjdepdetails
   type: html5
@@ -322,6 +333,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     supported-platforms: []
 - name: cpappcpibpresultplan
   type: html5
@@ -332,6 +344,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     supported-platforms: []
 - name: cpappfcpsaleshconfig
   type: html5
@@ -342,6 +355,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     supported-platforms: []
 - name: cpapprestrictcpodrestrict
   type: html5
@@ -352,6 +366,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     supported-platforms: []
 - name: cpappfcpnodesdetails
   type: html5
@@ -362,6 +377,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     supported-platforms: []
 - name: cpappcplocation
   type: html5
@@ -372,6 +388,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     supported-platforms: []
 - name: cpappcpbompvs
   type: html5
@@ -382,6 +399,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     supported-platforms: []
 - name: cpappcpcompreq
   type: html5
@@ -392,6 +410,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     supported-platforms: []
 - name: cpappfcpgeneratetimeseries
   type: html5
@@ -402,6 +421,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     supported-platforms: []
 - name: cpapplopcpprodlocline
   type: html5
@@ -412,6 +432,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     supported-platforms: []
 - name: cpapprtrhdrcprtrheader
   type: html5
@@ -422,6 +443,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     supported-platforms: []
 - name: cpappfcpibpfuturedemand
   type: html5
@@ -432,6 +454,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     supported-platforms: []
 - name: cpappcpasmbcompreq
   type: html5
@@ -442,6 +465,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     supported-platforms: []
 # - name: cpappfcpnewprodintro
 #   type: html5
@@ -450,8 +474,9 @@ modules:
 #     build-result: dist
 #     builder: custom
 #     commands:
-#     - npm install
-#     - npm run build:cf
+#   - npm install
+#   - npm run build:cf
+#   - rm -rf node_modules
 #     supported-platforms: []
 - name: cpappcpproduct
   type: html5
@@ -462,6 +487,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     supported-platforms: []
 - name: cpappcpcustgroup
   type: html5
@@ -472,6 +498,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     supported-platforms: []
 - name: cpappcpnewpartialprod
   type: html5
@@ -482,6 +509,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     supported-platforms: []
 - name: cpappcpjobscheduler
   type: html5
@@ -492,6 +520,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     supported-platforms: []
 - name: cpappcpauthobjrole
   type: html5
@@ -502,6 +531,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     supported-platforms: []
 - name: cpappcpjobschedulerlogs
   type: html5
@@ -512,6 +542,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     supported-platforms: []
 - name: cpappcprestrictions
   type: html5
@@ -522,6 +553,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     supported-platforms: []
 resources:
 - name: config_products-db
