@@ -339,41 +339,6 @@ context cp {
             ORDER_COUNT : Integer   @title : 'Order Count';
     }
 
-    // Authorization object master
-    entity USER_AUTHOBJ  {
-        key USER    : String(100) @title : 'User';
-        key AUTH_GROUP   : String(4) @title : 'Authorization Object';
-            DESCRIPTION : String(250) @title : 'Description';
-    }
-
-    // // Auth. object parameters
-    // entity AUTH_OBJ_PARA : managed {
-    //     key AUTH_OBJ    : String(100) @title : 'Authorization Object';
-    //     key PARAMETER   : String(100) @title : 'Parameter';
-    //         DESCRIPTION : String(250) @title : 'Description';
-    // }
-
-    // Roles master
-    entity AUTH_ROLE : managed {
-        key ROLE_ID     : String(100) @title : 'Role ID';
-            DESCRIPTION : String(250) @title : 'Description';
-    }
-
-    // Authorization object for roles and its parameters
-    entity AUTH_ROLE_OBJ : managed {
-        key ROLE_ID       : String(100) @title : 'Role ID';
-        // key AUTH_OBJ      : String(100) @title : 'Authorization Object';
-        key PARAMETER     : String(100) @title : 'Parameter';
-        key    PARAMETER_VAL : String(250) @title : 'Parameter';
-        ROLE : Association to many AUTH_EMP_ROLE on ROLE.ROLE_ID = ROLE_ID;
-    }
-
-    // Roles for a user
-    entity AUTH_EMP_ROLE : managed {
-        key USER    : String(100) @title : 'User';
-        key ROLE_ID : String(100) @title : 'Role ID';
-    }
-
     // IBP Future demand
     entity IBP_FUTUREDEMAND {
         key LOCATION_ID : String(4)      @title : 'Location ID';
@@ -512,33 +477,6 @@ context cp {
     }
 }
 
-// @cds.persistence.exists
-// entity![V_CHARVAL]{
-//     key![CHAR_NUM]    : String(10) @title : 'Characteristic Internal No.';
-//     key![CHAR_NAME]   : String(30) @title : 'Characteristic Name';
-//     key![CHAR_VALUE]  : String(70) @title : 'Characteristic Val Internal No.';
-//     key![CHARVAL_NUM] : String(10) @title : 'CHARVAL_NUM';
-// }
-
-// @cds.persistence.exists
-// entity![V_CLASSCHAR]{
-//     key![CLASS_NUM]    : String(18)  @title : 'Internal class Number';
-//     key![CLASS_NAME]   : String(20)  @title : 'Class Name';
-//     key![CLASS_TYPE]   : String(3)   @title : 'Class Type';
-//     key![CLASS_DESC]   : String(50)  @title : 'Class Description';
-//     key![AUTHGROUP]    : String(4)   @title : 'Authorization group';
-//     key![CHAR_NUM]     : String(10)  @title : 'Internal characteristic Number';
-//     key![CHAR_NAME]    : String(30)  @title : 'Characteristic Name';
-//     key![CHAR_DESC]    : String(30)  @title : 'Characteristic Desc';
-//     key![CHAR_GROUP]   : String(10)  @title : 'Characteristic Group';
-//     key![CHAR_TYPE]    : String(4)   @title : 'Characteristic Type';
-//     key![CHAR_CATGRY]  : String(40)  @title : 'Characteristic Category';
-//     key![CHARVAL_NUM]  : String(10)  @title : 'Internal No. characteristic Value';
-//     key![CHAR_VALUE]   : String(70)  @title : 'characteristic Value';
-//     key![CHARVAL_DESC] : String(150) @title : 'characteristic Value Desc';
-//     key![RANK]         : Double      @title : 'Rank';
-// }
-
 @cds.persistence.exists
 entity![V_OBDHDR]{
     key![LOCATION_ID]  : String(4)  @title : 'Location';
@@ -593,14 +531,13 @@ entity![V_BOMODCOND]{
     key![VALID_TO]    : Date           @title : 'VALID_TO';
 }
 
+
 @cds.persistence.exists
 entity![V_ODPROFILES]{
     key![LOCATION_ID] : String(4)  @title : 'LOCATION_ID';
     key![PRODUCT_ID]  : String(40) @title : 'PRODUCT_ID';
     key![ITEM_NUM]    : String(5)      @title : 'ITEM_NUM';
     key![COMPONENT]   : String(40) @title : 'COMPONENT';
-    key![OBJ_DEP]     : String(42) @title : 'OBJ_DEP';
-    key![OBJDEP_DESC] : String(30) @title : 'OBJDEP_DESC';
     key![STRUC_NODE]  : String(50)     @title : 'STRUC_NODE';
     key![PROFILE]     : String(50) @title : 'PROFILE';
 }

@@ -12,7 +12,7 @@ const conn_params_container = {
     cds.env.requires.db.credentials.port,
   uid: cds.env.requires.db.credentials.user, //cds userid environment variable
   pwd: cds.env.requires.db.credentials.password, //cds password environment variable
-  encrypt: "TRUE"//,
+  encrypt: "TRUE",
 //   ssltruststore: cds.env.requires.hana.credentials.certificate,
 };
 
@@ -39,7 +39,7 @@ class GenTimeseries {
     try {
       conn.prepare("SET SCHEMA " + containerSchema).exec();
     } catch (error) {
-      this.logger.info(error);
+      this.logger.error(error);
     }
   }
 
@@ -78,23 +78,11 @@ class GenTimeseries {
                 WHERE LOCATION_ID = '` + adata.LOCATION_ID + `'
                     AND PRODUCT_ID  = '` + adata.PRODUCT_ID + `'`
         );
-    
-        // Get Distinct Chan Num and Value for Restrictions
-    const liRTCharTemp = await cds.run(
-            `SELECT DISTINCT CHAR_NUM,
-                            CHARVAL_NUM,
-                            OD_CONDITION
-                        FROM V_RESTRICTION
-                        WHERE LOCATION_ID = '` + adata.LOCATION_ID + `'
-                        AND PRODUCT_ID = '` + adata.PRODUCT_ID + `'
-                        AND VALID_FROM < '`+ GenF.getCurrentDate() +`'
-                        AND VALID_TO >= '`+ GenF.getCurrentDate() +`'`
-        );
 
 
     for (let i = 0; i < liSalesCount.length; i++) {
       // For every change in Week Date
-      this.logger.info("Started OD Char Week: " + liSalesCount[i].WEEK_NO);
+      this.logger.info("Processing OD Char Week: " + liSalesCount[i].WEEK_DATE + " No:" + liSalesCount[i].WEEK_NO );
 
       await this.insertInitialTS(
         liSalesCount[i].LOCATION_ID,
@@ -119,7 +107,19 @@ class GenTimeseries {
         liSalesCount[i].ORD_QTY
       );
 
-      this.logger.info("Processed Date " + liSalesCount[i].WEEK_DATE);
+      try {
+        let sqlStr = conn.prepare(
+          `DELETE FROM "CP_VC_HISTORY_TS" WHERE "Location" = '` + liSalesCount[i].LOCATION_ID + `'
+                                            AND "Product" = '` + liSalesCount[i].PRODUCT_ID + `'
+                                            AND "PeriodOfYear"  = '` + liSalesCount[i].WEEK_NO + `'
+                                            AND "Target" = 0`
+        );
+        await sqlStr.exec();
+        await sqlStr.drop();
+      } catch (error) {
+        this.logger.error(error.message);
+      }      
+
     }
 
     this.logger.info("Process Completed");
@@ -138,12 +138,12 @@ class GenTimeseries {
       sqlStr.exec();
       sqlStr.drop();
     } catch (error) {
-      this.logger.error(error);
+        this.logger.error(error.message);
     }
 
     sqlStr = conn.prepare(
         `INSERT INTO "CP_VC_HISTORY_TS"  
-                SELECT  WEEK_NO,
+                SELECT  DISTINCT WEEK_NO,
                         V_ORD_COUNT.LOCATION_ID,
                         V_ORD_COUNT.PRODUCT_ID,
                         'OD',
@@ -246,7 +246,19 @@ class GenTimeseries {
   }
 
   async processODHead(lLocation, lProduct, lDate, lWeekNo, lOrdQty) {
-    this.logger.info("Started OD Head Week: " + lWeekNo);
+
+    let liSalesHead = await cds.run(
+        `SELECT DISTINCT SALES_DOC,
+                SALESDOC_ITEM,
+                ORD_QTY
+              FROM CP_SALESH
+             WHERE LOCATION_ID   = '` + lLocation + `'
+               AND MAT_AVAILDATE <= '` + lDate + `' 
+               AND MAT_AVAILDATE > '` + GenF.getLastWeekDate(lDate) + `' 
+               AND PRODUCT_ID    = '` + lProduct +`'
+               ORDER BY SALES_DOC,
+                        SALESDOC_ITEM`
+      );
 
     let liSales = await cds.run(
       `SELECT A.SALES_DOC,
@@ -280,75 +292,52 @@ class GenTimeseries {
 
       let liODCharTemp = await cds.run(
         `SELECT DISTINCT CHAR_NUM,
-                                    CHARVAL_NUM,
-                                    OD_CONDITION,
-                                    CHAR_COUNTER
-                            FROM "V_OBDHDR"
-                            WHERE LOCATION_ID = '` + lLocation + `'
-                                AND PRODUCT_ID  = '` + lProduct + `'
-                                AND OBJ_DEP     = '` + liODHead[cntODH].OBJ_DEP + `'
-                                AND OBJ_COUNTER = '` + liODHead[cntODH].OBJ_COUNTER +`'
-                                ORDER BY CHAR_COUNTER`
+                        CHARVAL_NUM,
+                        OD_CONDITION,
+                        CHAR_COUNTER
+                FROM "V_OBDHDR"
+                WHERE LOCATION_ID = '` + lLocation + `'
+                    AND PRODUCT_ID  = '` + lProduct + `'
+                    AND OBJ_DEP     = '` + liODHead[cntODH].OBJ_DEP + `'
+                    AND OBJ_COUNTER = '` + liODHead[cntODH].OBJ_COUNTER +`'
+                    ORDER BY CHAR_COUNTER`
       );
 
       let lSuccess = "";
       let lFail = "";
-      for (let cntSO = 0; cntSO < liSales.length; cntSO++) {
-        if (lFail === "") {
-          for (let cntODC = 0; cntODC < liODCharTemp.length; cntODC++) {
-            if (liSales[cntSO].CHAR_NUM === liODCharTemp[cntODC].CHAR_NUM) {
-              if (liODCharTemp[cntODC].OD_CONDITION === "EQ") {
-                if (
-                  liSales[cntSO].CHARVAL_NUM ===
-                  liODCharTemp[cntODC].CHARVAL_NUM
-                ) {
-                  lSuccess = "X";
-                  lFail = "";
-                } else {
-                  lFail = "X";
+      for (let cntSoH = 0; cntSoH < liSalesHead.length; cntSoH++) {
+        lSuccess = '';
+        lFail = "";
+        for (let cntODC = 0; cntODC < liODCharTemp.length; cntODC++) {
+            if( liODCharTemp[cntODC].CHAR_COUNTER !== liODCharTemp[GenF.subOne(cntODC)].CHAR_COUNTER ){
+                    lSuccess = '';
+            }
+            
+            for (let cntSO = 0; cntSO < liSales.length; cntSO++) {
+                if(liSales[cntSO].SALES_DOC === liSalesHead[cntSoH].SALES_DOC &&
+                liSales[cntSO].SALESDOC_ITEM === liSalesHead[cntSoH].SALESDOC_ITEM &&
+                liSales[cntSO].CHAR_NUM === liODCharTemp[cntODC].CHAR_NUM){
+                    if (liODCharTemp[cntODC].OD_CONDITION === "EQ") {
+                        if ( liSales[cntSO].CHARVAL_NUM === liODCharTemp[cntODC].CHARVAL_NUM ) {
+                            lSuccess = "X";
+                        }
+                    } else {
+                        if ( liSales[cntSO].CHARVAL_NUM !== liODCharTemp[cntODC].CHARVAL_NUM ) {
+                            lSuccess = "X";
+                        }
+                    }
                 }
-              } else {
-                if (
-                  liSales[cntSO].CHARVAL_NUM !==
-                  liODCharTemp[cntODC].CHARVAL_NUM
-                ) {
-                  lSuccess = "X";
-                  lFail = "";
-                } else {
-                  lFail = "X";
+            }
+            if(lSuccess === ''){
+                if(liODCharTemp[cntODC].CHAR_COUNTER !== liODCharTemp[GenF.addOne(cntODC, liODCharTemp.length)]){
+                    lFail = 'X';
+                    break;
                 }
-              }
             }
-            if (
-              lFail === "X" &&
-              lSuccess === "" &&
-              liODCharTemp[cntODC].CHAR_COUNTER !==
-                liODCharTemp[GenF.addOne(cntODC, liODCharTemp.length)]
-                  .CHAR_COUNTER
-            ) {
-              break;
-            }
-            if (
-              liODCharTemp[cntODC].CHAR_COUNTER !==
-              liODCharTemp[GenF.addOne(cntODC, liODCharTemp.length)]
-                .CHAR_COUNTER
-            ) {
-              lSuccess = "";
-              lFail = "";
-            }
-          }
         }
-        if (
-          liSales[cntSO].SALES_DOC !==
-            liSales[GenF.addOne(cntSO, liSales.length)].SALES_DOC ||
-          liSales[cntSO].SALESDOC_ITEM !==
-            liSales[GenF.addOne(cntSO, liSales.length)].SALESDOC_ITEM ||
-          cntSO === GenF.addOne(cntSO, liSales.length)
-        ) {
-          if (lFail === "") {
-            lTotQty = parseInt(lTotQty) + parseInt(liSales[cntSO].ORD_QTY);
-          }
-          lFail = "";
+
+        if (lFail === "") {
+            lTotQty = parseInt(lTotQty) + parseInt(liSalesHead[cntSoH].ORD_QTY);
         }
       }
 
@@ -369,6 +358,7 @@ class GenTimeseries {
       );
       sqlStr.exec();
       sqlStr.drop();
+
     }
   }
 
@@ -387,7 +377,7 @@ async genTimeseriesF(adata) {
       result = stmt.exec();
       stmt.drop();
     } catch (error) {
-      console.log(error);
+        this.logger.error(error.message);
     }
     const lStartTime = new Date();
     this.logger.info("Started timeseries Service");
@@ -431,7 +421,7 @@ async genTimeseriesF(adata) {
           stmt.drop();
 
         } catch (error) {
-          var e = error;
+            this.logger.error(error.message);
         }
 
         liObdhdr = await cds.run(
