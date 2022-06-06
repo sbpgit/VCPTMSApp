@@ -8,15 +8,15 @@ div#__xmlview0--idPage-title {
     font-weight: bold;
 }
 
-button#__button0 {
-    margin-right: 20px;
-    min-width: 70px;
-    
-    margin-top: 32px;
+.sapUxAPObjectPageContainerNoBar>.sapUxAPObjectPageSection:first-child:not(.sapUxAPObjectPageSectionNoTitle) {
+    margin-top: 0.1rem !important;
 }
 
-button#__button1 {
-    min-width: 70px;
-    
-    margin-top: 32px;
+.sapUiSizeCompact .sapUxAPObjectPageSectionHeader, .sapUxAPObjectPageSectionHeader {
+    height: 0.1rem !important;
+}
+
+
+div#__title1-left-inner {
+    margin-left: 600px;
 }

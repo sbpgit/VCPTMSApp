@@ -14,7 +14,7 @@
                     <Label text="{i18n>profDesc}"/>
                     <Input id="idPdesc" value="" width="300px"/>
                     <Label text="{i18n>auth}"/>
-                    <Input id="idAuth" value="" width="300px"/>
+                    <Input id="idAuth" value="" width="300px" visible="false"/>
                     <Label text="{i18n>algo}"/>
                     <Select id="idAlgo" change="onAlgorChange" selectedKey="N" width="130px">
                         <core:ListItem key="N" text="No Data"/>
@@ -46,12 +46,12 @@
                     <Column hAlign="Left" vAlign="Middle">
                         <Text text="{i18n>uservalue}"/>
                     </Column>
-                    <Column hAlign="Left" vAlign="Middle" width="70px">
+                    <!-- <Column hAlign="Left" vAlign="Middle" width="70px">
                         <Text text="{i18n>notes}"/>
                     </Column>
                     <Column hAlign="Left" vAlign="Middle" visible="false">
                         <Text text=""/>
-                    </Column>
+                    </Column> -->
                 </columns>
                 <items>
                     <ColumnListItem>
@@ -64,8 +64,8 @@
                         </Select>
                         <Text text="{DEFAULTVAL}"/>
                         <Input id="idDatatype" value="" liveChange="onLive" valueState="None"/>
-                        <Button id="idNotes" icon="sap-icon://display" tooltip="Notes" press="onNotes" iconDensityAware="false" type="Transparent"/>
-                        <Text text="{FLAG}"/>
+                        <!-- <Button id="idNotes" icon="sap-icon://display" tooltip="Notes" press="onNotes" iconDensityAware="false" type="Transparent"/>
+                        <Text text="{FLAG}"/> -->
                     </ColumnListItem>
                 </items>
             </Table>

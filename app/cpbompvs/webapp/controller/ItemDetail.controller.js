@@ -47,7 +47,11 @@ sap.ui.define(
         oGModel = that.getOwnerComponent().getModel("oGModel");
 
         that.byId("detailNode").setSelectedKey("assignNode");
-        that.byId("idDates").setVisible(true);
+        that.byId("idTextfrom").setVisible(true);
+        that.byId("fromDate").setVisible(true);
+        that.byId("idTextto").setVisible(true);
+        that.byId("toDate").setVisible(true);
+        that.byId("idButton").setVisible(true);
         that.byId("fromDate").setValue("");
         that.byId("toDate").setValue("");
 
@@ -194,9 +198,17 @@ sap.ui.define(
       onTabChange: function (oEvent) {
         var seleTab = that.byId("detailNode").getSelectedKey();
         if (seleTab === "assignNode") {
-          that.byId("idDates").setVisible(true);
+            that.byId("idTextfrom").setVisible(true);
+            that.byId("fromDate").setVisible(true);
+            that.byId("idTextto").setVisible(true);
+            that.byId("toDate").setVisible(true);
+            that.byId("idButton").setVisible(true);
         } else if (seleTab === "StruNodeDetail") {
-          that.byId("idDates").setVisible(false);
+            that.byId("idTextfrom").setVisible(false);
+            that.byId("fromDate").setVisible(false);
+            that.byId("idTextto").setVisible(false);
+            that.byId("toDate").setVisible(false);
+            that.byId("idButton").setVisible(false);
         }
       },
 
@@ -315,7 +327,7 @@ sap.ui.define(
 
         if (that.byId("sturList").getSelectedItems().length === 1) {
           var oSelNode = oGModel.getProperty("/SelectedNode");
-          var ooSelComponent = that
+          var oSelComponent = that
             .byId("sturList")
             .getSelectedItem()
             .getCells()[1]
