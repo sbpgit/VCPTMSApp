@@ -2128,7 +2128,7 @@ sap.ui.define([
 
                     }
                     sap.ui.core.BusyIndicator.show();
-                    that.getModel("JModel").callFunction("/updateJob", {
+                    that.getModel("JModel").callFunction("/lupdateJob", {
                         method: "GET",
                         urlParameters: {
                             jobDetails: JSON.stringify(finalList)
@@ -2343,15 +2343,17 @@ sap.ui.define([
                     }
                 }
 
-                that.getModel("JModel").callFunction("/addJobSchedule", {
+                that.getModel("JModel").callFunction("/laddJobSchedule", {
                     method: "GET",
                     urlParameters: {
                         schedule: JSON.stringify(finalList)
                     },
                     success: function (oData) {
                         sap.ui.core.BusyIndicator.hide();
-                        if (oData.addJobSchedule.value) {
+                        if (oData.laddJobSchedule.value) {
                             sap.m.MessageToast.show("Schedule created successfully");
+                        } else {
+                            sap.m.MessageToast.show("Failed to create schedule");
                         }
 
                         that.onCreateJobClose();
@@ -2391,15 +2393,17 @@ sap.ui.define([
                     }
                 }
 
-                that.getModel("JModel").callFunction("/updateMLJobSchedule", {
+                that.getModel("JModel").callFunction("/lupdateMLJobSchedule", {
                     method: "GET",
                     urlParameters: {
                         schedule: JSON.stringify(finalList)
                     },
                     success: function (oData) {
                         sap.ui.core.BusyIndicator.hide();
-                        if (oData.updateMLJobSchedule.value) {
+                        if (oData.lupdateMLJobSchedule.value) {
                             sap.m.MessageToast.show("Schedule updated successfully");
+                        } else {
+                            sap.m.MessageToast.show("Failed to update schedule");
                         }
                         that.onCreateJobClose();
                         that.onBack();
@@ -2512,14 +2516,14 @@ sap.ui.define([
 
                 }
 
-                that.getModel("JModel").callFunction("/addMLJob", {
+                that.getModel("JModel").callFunction("/laddMLJob", {
                     method: "GET",
                     urlParameters: {
                         jobDetails: JSON.stringify(finalList)
                     },
                     success: function (oData) {
                         sap.ui.core.BusyIndicator.hide();
-                        sap.m.MessageToast.show(oData.addMLJob.value + ": Job Created");
+                        sap.m.MessageToast.show(oData.laddMLJob.value + ": Job Created");
                         that.onCreateJobClose();
                         that.onBack();
                     },

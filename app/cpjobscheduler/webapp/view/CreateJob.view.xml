@@ -472,8 +472,8 @@
 
 
                 </VBox>
-                <Button id="idbtImport" type="Emphasized" text="Import From IBP" press="onIbpJobImport" width="10%"/>
-                <Button id="idbtExport" type="Emphasized" text="Export To IBP" press="onIbpJobExport" width="10%" visible="false"/>
+                <Button id="idbtImport" type="Emphasized" text="Import From IBP" press="onIbpJobImport" width="18%"/>
+                <Button id="idbtExport" type="Emphasized" text="Export To IBP" press="onIbpJobExport" width="18%" visible="false"/>
                 </content>
             </Panel>
 
