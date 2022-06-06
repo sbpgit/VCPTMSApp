@@ -7,25 +7,43 @@
 
     <Page id="page" title="{i18n>title}" titleAlignment="Center">
     <HBox>
+        <VBox>
+        <Text text=""/>
         <SearchField id="idSearch" placeholder="Search Component" liveChange="onTableSearch" width="250px"/>
-        <Text text="Location"/>
+        </VBox>
+        <VBox>
+        <Text text="Location :"/>
         <Input id="idloc" value="" placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
-        <Text text="Product"/>
+        </VBox>
+        <VBox>
+        <Text text="Product :"/>
         <MultiInput id="prodInput" placeholder="Product" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
-        <Text text="Component"/>
-        <MultiInput id="compInput" placeholder="Component" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
-        <Label text="Object Dep" visible="false"/>
+        </VBox>
+        <VBox>
+        <Label text="Object Dep :" visible="false"/>
         <MultiInput id="objDepInput"  visible="false" placeholder="Object Dep" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>                            
-        <ToolbarSpacer/>
-        <Button text="Go" width="30%" press="onGetData" type="Emphasized" tooltip="Get data based on filters"/>
-        
+        </VBox>
+        <VBox>
+        <Text text="Component :"/>
+        <MultiInput id="compInput" placeholder="Component" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
+        </VBox>
     </HBox>
     <HBox>
-        <!-- <Text text="Component"/>
-        <MultiInput id="compInput" placeholder="Component" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/> -->
-        <Text text="Structure" />
-         <MultiInput id="struInput" placeholder="Structure Node" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>                            
+    <Text text=""/>
+    <Text text=""/>
+    <Text text=""/>
+    </HBox>
+    <HBox>
         
+        <VBox>
+        <Text text="Structure Node :" />
+        <Input id="struInput" placeholder="Structure Node" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>                            
+        </VBox>
+        <VBox>
+        <Text text=""/>
+        <ToolbarSpacer/>
+        <Button text="Go" width="170%" press="onGetData" type="Emphasized" tooltip="Get data based on filters"/>
+        </VBox>
     </HBox>
         <!-- <f:Form editable="true">
             <f:layout>
@@ -98,6 +116,9 @@
                         <Text text="{i18n>prdId}" />
                     </Column>
                     <Column hAlign="Left" vAlign="Middle">
+                        <Text text="Item No" />
+                    </Column>
+                    <Column hAlign="Left" vAlign="Middle">
                         <Text text="{i18n>comp}"/>
                     </Column>
                     <Column hAlign="Left" vAlign="Middle" visible='false'>
@@ -117,6 +138,7 @@
                     <ColumnListItem>
                         <Text text="{LOCATION_ID}"/>
                         <Text text="{PRODUCT_ID}"/>
+                        <Text text="{ITEM_NUM}"/>
                         <Text text="{COMPONENT}"/>
                         <Text text="{OBJ_DEP}"/>
                         <Text text="{OBJDEP_DESC}"/>

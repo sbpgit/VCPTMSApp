@@ -7,6 +7,8 @@ sap.ui.define(
       "sap/ui/core/routing/HashChanger",
       "sap/m/MessageToast",
       "sap/ui/Device",
+      "sap/ui/model/Filter",
+      "sap/ui/model/FilterOperator",
     ],
     function (
       BaseController,
@@ -14,7 +16,9 @@ sap.ui.define(
       History,
       HashChanger,
       MessageToast,
-      Device
+      Device,
+      Filter,
+      FilterOperator
     ) {
       "use strict";
       var that, oGModel;
@@ -62,6 +66,8 @@ sap.ui.define(
           oGModel = this.getModel("oGModel");
           that.oList = that.byId("jobList");
           that.oList.removeSelections(true);
+
+          that.getView().byId("headSearch").setValue();
   
           var nowH = new Date();
           //past 15 days selected date
@@ -81,16 +87,45 @@ sap.ui.define(
           //   },
             success: function (oData) {
               sap.ui.core.BusyIndicator.hide();
+              oData.lreadJobs.value.forEach(function (row) {
+                row.jobId = row.jobId.toString();
+  
+              }, that);
+
+
               that.listModel.setData({
                 results: oData.lreadJobs.value,
               });
               that.oList.setModel(that.listModel);
+              that.onSearch();
             },
             error: function (error) {
               sap.ui.core.BusyIndicator.hide();
               MessageToast.show("Failed to get data");
             },
           });
+        },
+
+        onSearch:function(oEvent){
+            var sQuery = that.getView().byId("headSearch").getValue(),
+          oFilters = [];
+        var aFilter = [];
+
+        if (sQuery !== "") {
+          var oFilters = new Filter({
+            filters: [
+              new Filter("jobId", FilterOperator.Contains, sQuery),
+              new Filter("name", FilterOperator.Contains, sQuery),
+              new Filter("description", FilterOperator.Contains, sQuery),
+            ],
+            and: false,
+          });
+          aFilter.push(oFilters);
+        }
+
+        that.byId("jobList").getBinding("items").filter(aFilter);
+
+
         },
   
         onPanelExpand:function(){
@@ -107,16 +142,12 @@ sap.ui.define(
           oRouter.navTo("CreateJob", {}, true);
         },
   
-        onOpenJob: function (oEvent) {
-          var oRouter = sap.ui.core.UIComponent.getRouterFor(that);
-          oRouter.navTo("OpenJob", {}, true);
-        },
-  
+        
         handleDateChange: function (oEvent) {
           var dDate = oEvent.getParameters().newValue;
           dDate = dDate.split(" To ");
-          var dFromDate = dDate[0],
-            dToDate = dDate[0];
+          var dFromDate = dDate[0] + " " + "00:00:00",
+            dToDate = dDate[1] + " " + "00:00:00";
   
           that.getModel("JModel").callFunction("/lreadJobs", {
               method: "GET",
