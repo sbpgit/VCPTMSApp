@@ -2128,7 +2128,7 @@ sap.ui.define([
 
                     }
                     sap.ui.core.BusyIndicator.show();
-                    that.getModel("JModel").callFunction("/lupdateJob", {
+                    that.getModel("JModel").callFunction("/updateJob", {
                         method: "GET",
                         urlParameters: {
                             jobDetails: JSON.stringify(finalList)
@@ -2343,14 +2343,14 @@ sap.ui.define([
                     }
                 }
 
-                that.getModel("JModel").callFunction("/laddJobSchedule", {
+                that.getModel("JModel").callFunction("/addJobSchedule", {
                     method: "GET",
                     urlParameters: {
                         schedule: JSON.stringify(finalList)
                     },
                     success: function (oData) {
                         sap.ui.core.BusyIndicator.hide();
-                        if (oData.laddJobSchedule.value) {
+                        if (oData.addJobSchedule.value) {
                             sap.m.MessageToast.show("Schedule created successfully");
                         }
 
@@ -2391,14 +2391,14 @@ sap.ui.define([
                     }
                 }
 
-                that.getModel("JModel").callFunction("/lupdateMLJobSchedule", {
+                that.getModel("JModel").callFunction("/updateMLJobSchedule", {
                     method: "GET",
                     urlParameters: {
                         schedule: JSON.stringify(finalList)
                     },
                     success: function (oData) {
                         sap.ui.core.BusyIndicator.hide();
-                        if (oData.lupdateMLJobSchedule.value) {
+                        if (oData.updateMLJobSchedule.value) {
                             sap.m.MessageToast.show("Schedule updated successfully");
                         }
                         that.onCreateJobClose();
@@ -2512,14 +2512,14 @@ sap.ui.define([
 
                 }
 
-                that.getModel("JModel").callFunction("/laddMLJob", {
+                that.getModel("JModel").callFunction("/addMLJob", {
                     method: "GET",
                     urlParameters: {
                         jobDetails: JSON.stringify(finalList)
                     },
                     success: function (oData) {
                         sap.ui.core.BusyIndicator.hide();
-                        sap.m.MessageToast.show(oData.laddMLJob.value + ": Job Created");
+                        sap.m.MessageToast.show(oData.addMLJob.value + ": Job Created");
                         that.onCreateJobClose();
                         that.onBack();
                     },
