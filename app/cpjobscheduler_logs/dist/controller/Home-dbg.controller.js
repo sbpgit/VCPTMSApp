@@ -43,16 +43,20 @@ sap.ui.define(
       },
 
       handleDateChange: function () {
-        var dLow = that.byId("idDateRange").getDateValue(),
-          dHigh = that.byId("idDateRange").getSecondDateValue(),
+        var dDate = that.byId("idDateRange").getValue().split("To");
+              var dLow = dDate[0].trim() + " " + "00:00:00",
+                  dHigh = dDate[1].trim() + " " + "23:59:59";
 
-          lgTime = new Date().getTimezoneOffset();
+        // var dLow = that.byId("idDateRange").getDateValue(),
+        //   dHigh = that.byId("idDateRange").getSecondDateValue(),
 
-          dLow = new Date(dLow.setTime(dLow.getTime() - (lgTime* 60 * 1000)));
-          dHigh = new Date(dHigh.setTime(dHigh.getTime() - (lgTime* 60 * 1000)));
+        //   lgTime = new Date().getTimezoneOffset();
 
-        dLow = dLow.toISOString().split("T")[0] + " " + "00:00:00";
-        dHigh = dHigh.toISOString().split("T")[0] + " " + "23:59:59";
+        //   dLow = new Date(dLow.setTime(dLow.getTime() - (lgTime* 60 * 1000)));
+        //   dHigh = new Date(dHigh.setTime(dHigh.getTime() - (lgTime* 60 * 1000)));
+
+        // dLow = dLow.toISOString().split("T")[0] + " " + "00:00:00";
+        // dHigh = dHigh.toISOString().split("T")[0] + " " + "23:59:59";
 
         var oFilters = [];
         var sFilter = new sap.ui.model.Filter({

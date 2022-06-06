@@ -5,7 +5,7 @@
     {
       "source": "^/catalog/(.*)$",
       "target": "/catalog/$1",
-      "destination": "ConfigProd",
+      "destination": "ConfigProdPrd",
       "authenticationType": "xsuaa",
       "csrfProtection": false
     },

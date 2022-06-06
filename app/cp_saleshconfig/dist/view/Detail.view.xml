@@ -16,18 +16,18 @@
 			columnsXL="2"
 			>
 			<f:content>
-				<core:Title text="SO Header" />
-                <Label text="{i18n>prodid} " class="boldText"/>
+				<core:Title text="SO Header" class="boldText"/>
+                <Label text="{i18n>prodid} " />
 				<Text text="{oGModel>/sPrdid}" />
                 <Label text="{i18n>locid}" />
 				<Text text="{oGModel>/sLocid}" />
-                <Label text="Sales Order" class="boldText"/>
+                <Label text="Sales Order" />
 				<Text text="{oGModel>/sSalOrd}" />
-                <Label text="Sales Order Item" class="boldText" />
+                <Label text="Sales Order Item"  />
 				<Text text="{oGModel>/sSalOrdItem}" />                                
                 <Label text="{i18n>docdate}" />
 				<Text text="{oGModel>/date}"/>
-				<core:Title text="SO Config Details" />
+				<core:Title text="" />
 				<Label text="{i18n>schLine}" />
 				<Text text="{oGModel>/sSchedNo}" />
 				<Label text="{i18n>reasonrej}" />
@@ -49,6 +49,7 @@
                 <headerToolbar>
 				<Toolbar>
 					<content>
+                    <Text text="SO Config Details" class="sapUiSmallMarginBeginEnd boldText"/>
 						<SearchField id="idDetailSearch" placeholder="Char Name/ Char Value"  
                         liveChange="onTableSearch" width="600px"/>
 					</content>

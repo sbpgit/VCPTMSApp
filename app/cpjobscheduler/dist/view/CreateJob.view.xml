@@ -49,21 +49,6 @@
                                         <MultiInput id="MprodInput" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
                                     </f:fields>
                                 </f:FormElement>
-                                <!-- <f:FormElement>
-                                    <f:label>
-                                        <Label text="{i18n>objdep}" required="true"/>
-                                    </f:label>
-                                    <f:fields>
-                                        <MultiInput id="ModInput" placeholder="{i18n>objdep}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
-
-                                        <SegmentedButton id="MidOdRes" selectedKey="OD" class="sapUiSmallMarginBottom" selectionChange="onMGSegmentChange">
-                                            <items>
-                                                <SegmentedButtonItem text="Object Dep." key="OD"/>
-                                                <SegmentedButtonItem text="Restriction" key="RT" />
-                                            </items>
-                                        </SegmentedButton>
-                                    </f:fields>
-                                </f:FormElement> -->
                                 <f:FormElement>
                                     <f:label>
                                         <Label text="{i18n>modelver}"/>
@@ -91,8 +76,7 @@
                                     <f:fields>
                                         <CheckBox id="MidCheck" select="onCheck"/>
                                         <Button type="Emphasized" text="{i18n>mdlgene}" press="onModelGen" width="100%"/>
-                                        <!-- <Button type="Emphasized" text="{i18n>mdlgene}" press="onModelGen" width="100%"/> -->
-                                    </f:fields>
+                                        </f:fields>
                                 </f:FormElement>
                             </f:formElements>
                         </f:FormContainer>
@@ -129,20 +113,6 @@
                                         <MultiInput id="PprodInput" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
                                     </f:fields>
                                 </f:FormElement>
-                                <!-- <f:FormElement>
-                                    <f:label>
-                                        <Label text="{i18n>objdep}" required="true"/>
-                                    </f:label>
-                                    <f:fields>
-                                        <MultiInput id="PodInput" placeholder="{i18n>objdep}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
-                                        <SegmentedButton id="PidType" selectionChange="onPSegmentChange" selectedKey="OD" class="sapUiSmallMarginBottom">
-                                            <items>
-                                                <SegmentedButtonItem text="Object Dep." key="OD"/>
-                                                <SegmentedButtonItem text="Restriction" key="RT" />
-                                            </items>
-                                        </SegmentedButton>
-                                    </f:fields>
-                                </f:FormElement> -->
                                 <f:FormElement>
                                     <f:label>
                                         <Label text="{i18n>modelver}"/>
@@ -176,7 +146,6 @@
                                     </f:label>
                                     <f:fields>
                                         <CheckBox id="PidCheck" select="onCheck"/>
-                                        <!-- <Button type="Emphasized" text="{i18n>predi}" press="onPrediction" width="100%"/> -->
                                         <Button type="Emphasized" text="{i18n>predi}" press="onPrediction" width="100%"/>
                                     </f:fields>
                                 </f:FormElement>
@@ -537,6 +506,7 @@
                                                     <core:ListItem key="PC" text="{i18n>prodclas}"/>
                                                     <core:ListItem key="BH" text="{i18n>bomheader}"/>
                                                     <core:ListItem key="BO" text="{i18n>bomobjdep}"/>
+                                                    <core:ListItem key="OH" text="{i18n>objdephdr}"/>
                                                     <core:ListItem key="CL" text="{i18n>class}"/>
                                                     <core:ListItem key="CH" text="{i18n>char}"/>
                                                     <core:ListItem key="CV" text="{i18n>charval}"/>
@@ -549,22 +519,6 @@
                             </f:FormContainer>
                         </f:formContainers>
                     </f:Form>
-                <!-- <Label text="{i18n>sdi} :"/>
-				<Select id="idSdi" change="onSdiChange" selectedKey="LO" class="buttonDesktop " width="400px">
-						<core:ListItem key="Lo" text="{i18n>loc}"/>
-						<core:ListItem key="CG" text="{i18n>custgrp}"/>
-                        <core:ListItem key="PR" text="{i18n>prod}"/>
-						<core:ListItem key="LP" text="{i18n>locpprod}"/>
-                        <core:ListItem key="PC" text="{i18n>prodclas}"/>
-						<core:ListItem key="BH" text="{i18n>bomheader}"/>
-                        <core:ListItem key="BO" text="{i18n>bomobjdep}"/>
-						<core:ListItem key="CL" text="{i18n>class}"/>
-                        <core:ListItem key="CH" text="{i18n>char}"/>
-						<core:ListItem key="CV" text="{i18n>charval}"/>
-                        <core:ListItem key="SH" text="{i18n>saleshis}"/>
-						<core:ListItem key="SC" text="{i18n>salehisconfig}"/>
-				</Select>
-                </HBox> -->
                 <Button id="idbtSdi" type="Emphasized" text="SDI Integration" press="onSdiIntegration" width="10%"/>
             </content>
             </Panel>

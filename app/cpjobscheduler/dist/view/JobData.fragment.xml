@@ -31,6 +31,12 @@
                     <Column hAlign="Left" vAlign="Middle">
 						<Text text="{i18n>cust}"/>
 					</Column>
+                    <Column hAlign="Left" vAlign="Middle">
+						<Text text="From Date"/>
+					</Column>
+                    <Column hAlign="Left" vAlign="Middle">
+						<Text text="To Date"/>
+					</Column>
 				</columns>
 				<items>
 					<ColumnListItem>
@@ -44,6 +50,8 @@
                             <Text text="{version}"/>
                             <Text text="{CLASS_NUM}"/>
                             <Text text="{CUSTOMER_GROUP}"/>
+                            <Text text="{fromdate}"/>
+                            <Text text="{todate}"/>
 						</cells>
 					</ColumnListItem>
 				</items>

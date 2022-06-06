@@ -25,7 +25,8 @@
 							<ObjectIdentifier title="{PARA_NAME}" />
                             <Text text="{PARA_DESC}"/>
                             <!-- <Text text="{METHOD}"/> -->
-                            <Text text="{= ${INTVAL} === null ? ${STRVAL} !== null ? ${STRVAL} : ${DOUBLEVAL} : ${INTVAL} }"/>
+                            <!-- <Text text="{= ${INTVAL} === null ? ${STRVAL} !== null ? ${STRVAL} : ${DOUBLEVAL} : ${INTVAL} }"/> -->
+                            <Text text="{= ${DOUBLEVAL} === null ? ${STRVAL} !== null ? ${STRVAL} : ${INTVAL} : ${DOUBLEVAL} }"/>
                             <!-- <Text text="{PRF_DESC}"/> -->
 						</cells>
 					</ColumnListItem>
