@@ -2,108 +2,107 @@
     xmlns:mvc="sap.ui.core.mvc"
     xmlns:core="sap.ui.core" displayBlock="true"
     xmlns="sap.m"
+    xmlns:l="sap.ui.layout"
+    xmlns:ux="sap.uxap"
     xmlns:f="sap.ui.layout.form"
     xmlns:html="http://www.w3.org/1999/xhtml">
+    <ux:ObjectPageLayout id="ObjectPageLayout">
+        <ux:headerTitle>
+            <ux:ObjectPageDynamicHeaderTitle>
+                <ux:expandedHeading>
+                    <Title text="{i18n>pageTitle}" class="boldText" titleAlignment="Center" />
+                </ux:expandedHeading>
+                <ux:snappedHeading>
+					<FlexBox fitContainer="true" alignItems="Center" >
+						<Title text="{i18n>pageTitle}" wrapping="true" />
+					</FlexBox>
+				</ux:snappedHeading>
+            </ux:ObjectPageDynamicHeaderTitle>
+        </ux:headerTitle>
+        <ux:headerContent>
+            <FlexBox wrap="Wrap" fitContainer="true">
+                <l:Grid defaultSpan="XL3 L3 M6 S12">
+                    <VBox >
+                        <Text text=""/>
+                        <SearchField id="headSearch" liveChange="onSearch" placeholder="Week Date(MM/DD/yyyy)/ Quantity/ Version/ Scenario"/>
+                    </VBox>
+                    <VBox >
+                        <Text text="Location"/>
+                        <Input id="idloc" value="" placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                    </VBox>
+                    <VBox >
+                        <Text text="Product"/>
+                        <Input id="idprod" placeholder="Product" value="" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
 
-    <Page title="{i18n>pageTitle}" class="boldText" titleAlignment="Center">
-        <f:Form editable="true">
-            <f:layout>
-                <f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="4" columnsL="2" columnsM="2" singleContainerFullSize="false" breakpointXL= "1400" breakpointL= "800" breakpointM="600" />
-            </f:layout>
-            <f:formContainers>
-                <f:FormContainer>
-                    <f:formElements>
-                        <f:FormElement>
-                            <f:label>
-                                <Label text="Location"/>
-                            </f:label>
-                            <f:fields>
-                                <Input id="idloc" value="" width="225px" placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
-                            </f:fields>
-                        </f:FormElement>
-                        <f:FormElement>
-                            <f:label>
-                                <Label text="IBP Version"/>
-                            </f:label>
-                            <f:fields>
-                                <Input id="idver" value="" width="225px" placeholder="Version" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
-                            </f:fields>
-                        </f:FormElement>
-                    </f:formElements>
-                </f:FormContainer>
-                <f:FormContainer>
-                    <f:formElements>
-                        <f:FormElement>
-                            <f:label>
-                                <Label text="Product"/>
-                            </f:label>
-                            <f:fields>
-                                <Input id="idprod" width="225px" placeholder="Product" value="" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
-                            </f:fields>
-                        </f:FormElement>
-                        <f:FormElement>
-                            <f:label>
-                                <Label text="IBP Scenario"/>
-                            </f:label>
-                            <f:fields>
-                                <Input id="idscen" value="" width="225px" placeholder="Scenario" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
-                            </f:fields>
-                        </f:FormElement>
-                    </f:formElements>
-                </f:FormContainer>
-                <f:FormContainer  >
-                    <f:formElements>
-                        <f:FormElement>
-                            <HBox>
-                                <Button text="Go" press="onGetData" tooltip="Get data based on filters"/>
-                                <Button text="Reset" press="onResetDate" tooltip="Reset Valid To Date"/>
-                            </HBox>
-                        </f:FormElement>
-                    </f:formElements>
-                </f:FormContainer>
-            </f:formContainers>
-        </f:Form>
+                    </VBox>
+                    <VBox >
+                        <Text text="IBP Version"/>
+                        <Input id="idver" value="" placeholder="Version" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                    </VBox>
+                    <VBox >
+                        <Text text="IBP Scenario"/>
+                        <Input id="idscen" value="" placeholder="Scenario" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
 
-        <content>
-        <HBox>
-            <SearchField id="headSearch" width="500px" liveChange="onSearch" placeholder="Week Date(MM/DD/yyyy)/ Quantity/ Version/ Scenario"/>
-            <CheckBox id="idCheck1" select="onNonZero" text="Get Non-Zero" selected="true" />
-            </HBox>
-            <Table id="IBPfdemList" items="{path: '/results'}" itemPress="onhandlePress" growingScrollToLoad="true" mode="SingleSelectMaster" selectionChange="onhandlePress" rememberSelections="false">
-                <columns>
-                    <Column hAlign="Left" vAlign="Middle" visible="false">
-                        <Text text="{i18n>loc}" />
-                    </Column>
-                    <Column hAlign="Left" vAlign="Middle" visible="false">
-                        <Text text="{i18n>prod}"/>
-                    </Column>
-                    <Column hAlign="Left" vAlign="Middle">
-                        <Text text="{i18n>version}"/>
-                    </Column>
-                    <Column hAlign="Left" vAlign="Middle">
-                        <Text text="{i18n>scen}"/>
-                    </Column>
-                    <Column hAlign="Left" vAlign="Middle">
-                        <Text text="{i18n>week}"/>
-                    </Column>
-                    <Column hAlign="Left" vAlign="Middle">
-                        <Text text="{i18n>quan}"/>
-                    </Column>
-                </columns>
-                <items>
-                    <ColumnListItem>
-                        <cells>
-                            <Text text="{LOCATION_ID}" />
-                            <Text text="{PRODUCT_ID}"/>
-                            <Text text="{VERSION}"/>
-                            <Text text="{SCENARIO}"/>
-                            <DatePicker valueFormat="MM/dd/yyyy" displayFormat="MM/dd/yyyy" value="{WEEK_DATE}" editable="false" />
-                            <Text text="{QUANTITY}"/>
-                        </cells>
-                    </ColumnListItem>
-                </items>
-            </Table>
-        </content>
-    </Page>
+                    </VBox>
+                    <VBox >
+                        <Text text=""/>
+                        <CheckBox id="idCheck1" select="onNonZero" text="Get Non-Zero" selected="true" />
+                    </VBox>
+                    <VBox>
+                        <Text text=""/>
+                        <HBox>
+                            <Button text="Go" type="Emphasized" press="onGetData" tooltip="Get data based on filters" class="sapUiTinyMarginEnd"/>
+                            <Button text="Reset" type="Transparent" press="onResetDate" tooltip="Reset Valid To Date"/>
+                        </HBox>
+                    </VBox>
+
+                </l:Grid>
+            </FlexBox>
+        </ux:headerContent>
+        <ux:sections>
+            <ux:ObjectPageSection >
+                <ux:subSections>
+                    <ux:ObjectPageSubSection>
+                        <ux:blocks>
+                            <Table id="IBPfdemList" items="{path: '/results'}" itemPress="onhandlePress" growingScrollToLoad="true" mode="SingleSelectMaster" selectionChange="onhandlePress" rememberSelections="false">
+                                <columns>
+                                    <Column hAlign="Left" vAlign="Middle" visible="false">
+                                        <Text text="{i18n>loc}" />
+                                    </Column>
+                                    <Column hAlign="Left" vAlign="Middle" visible="false">
+                                        <Text text="{i18n>prod}"/>
+                                    </Column>
+                                    <Column hAlign="Left" vAlign="Middle">
+                                        <Text text="{i18n>version}"/>
+                                    </Column>
+                                    <Column hAlign="Left" vAlign="Middle">
+                                        <Text text="{i18n>scen}"/>
+                                    </Column>
+                                    <Column hAlign="Left" vAlign="Middle">
+                                        <Text text="{i18n>week}"/>
+                                    </Column>
+                                    <Column hAlign="Left" vAlign="Middle">
+                                        <Text text="{i18n>quan}"/>
+                                    </Column>
+                                </columns>
+                                <items>
+                                    <ColumnListItem>
+                                        <cells>
+                                            <Text text="{LOCATION_ID}" />
+                                            <Text text="{PRODUCT_ID}"/>
+                                            <Text text="{VERSION}"/>
+                                            <Text text="{SCENARIO}"/>
+                                            <DatePicker valueFormat="MM/dd/yyyy" displayFormat="MM/dd/yyyy" value="{WEEK_DATE}" editable="false" />
+                                            <Text text="{QUANTITY}"/>
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
+                            </Table>
+                        </ux:blocks>
+                    </ux:ObjectPageSubSection>
+                </ux:subSections>
+            </ux:ObjectPageSection>
+        </ux:sections>
+    </ux:ObjectPageLayout>
 
 </mvc:View>

@@ -14,7 +14,7 @@
         </customHeader>
         <content>
         <Panel id="JobPanel" expandable="true" expanded="true" headerText="{i18n>jobList}" expand="onPanelExpand">
-            <SearchField id="headSearch" liveChange="onSearch" placeholder="Job"/>
+            <SearchField id="headSearch" liveChange="onSearch" placeholder="Job Id/ Name/ Description"/>
             <Table id="jobList" items="{path: '/results'}" growingScrollToLoad="true" rememberSelections="false" 
                     itemPress="onhandlePress" mode="SingleSelectMaster" selectionChange="onhandlePress">
                 <columns>
@@ -46,9 +46,6 @@
                             <ObjectIdentifier title="{jobId}" />
                             <Text text="{name}"/>
                             <Text text="{description}"/>
-                            <!-- <Text text="{path: 'startTime', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'yyyy/MM/dd' }}"/>
-                            <Text text="{path: 'endTime', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'yyyy/MM/dd' }}"/>
-                            <Text text="{path: 'createdAt', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'yyyy/MM/dd' }}"/> -->
                             <Text text="{startTime}"/>
                             <Text text="{endTime}"/>
                             <Text text="{createdAt}"/>

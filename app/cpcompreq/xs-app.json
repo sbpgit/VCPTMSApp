@@ -5,14 +5,14 @@
     {
       "source": "^/v2/catalog/(.*)$",
       "target": "/v2/catalog/$1",
-      "destination": "ConfigProd",
+      "destination": "ConfigProdPrd",
       "authenticationType": "xsuaa",
       "csrfProtection": true
     },
     {
         "source": "^/v2/pal/(.*)$",
         "target": "/v2/pal/$1",
-        "destination": "ConfigProd_DB",
+        "destination": "ConfigProdPrd_DB",
         "authenticationType": "xsuaa",
         "csrfProtection": true
     },

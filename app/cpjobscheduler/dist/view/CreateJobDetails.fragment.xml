@@ -62,20 +62,6 @@
                     </HBox>
                     <DateTimePicker id="idSchTime" width="400px" valueFormat= "yyyy-mm-dd HH:mm" class="sapUiSmallMarginBottom" visible="false"/>
                     </VBox>
-
-
-                    <!-- <Label text="{i18n>cron}"/>
-                    <HBox>
-                    <Select id="idCrontype" change="onCronChange" selectedKey="Mi" class="buttonDesktop" width="200px">
-							<core:ListItem key="Mo" text="{i18n>mnthly}"/>
-							<core:ListItem key="We" text="{i18n>wekkly}"/>
-                            <core:ListItem key="Da" text="{i18n>daily}"/>
-							<core:ListItem key="Ho" text="{i18n>hours}"/>
-                            <core:ListItem key="Mi" text="{i18n>min}"/>
-                            <core:ListItem key="Im" text="{i18n>imid}"/>
-					</Select>  
-					<Input id="idcron" value="" width="200px"/>
-                    </HBox> -->
                     <Label text="{i18n>Schedstarttime}"/>
 					<DateTimePicker id="idSSTime" width="400px" valueFormat= "yyyy-mm-dd HH:mm" change="handleDateChange" class="sapUiSmallMarginBottom"/>
                     <Label text="{i18n>Schedendtime}"/>
