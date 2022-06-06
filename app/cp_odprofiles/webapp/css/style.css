@@ -4,88 +4,11 @@ div#container-cp\.odp\.cpodprofiles---Home--page-title {
     font-weight: bold;
 }
 
-/* div#__container1--Grid-wrapperfor-__button0 {
-    margin-left: 118px;
+
+.sapUxAPObjectPageContainerNoBar>.sapUxAPObjectPageSection:first-child:not(.sapUxAPObjectPageSectionNoTitle) {
+    margin-top: 0.1rem !important;
 }
 
-h2#LocSlctList-dialog-title {
-    font-weight: bold;
-}
-h2#prodSlctList-dialog-title {
-    font-weight: bold;
-}
-h2#CompSlctList-dialog-title {
-    font-weight: bold;
-}
-h2#ObjDepSlctList-dialog-title {
-    font-weight: bold;
-}
-h2#idList-title {
-    font-weight: bold;
-}
-
-span#__text0 {
-    margin-top: 8px;
-    margin-left: 25px;
-    margin-right: 15px;
-}
-
-span#__text2 {
-    margin-left: 25px;
-    margin-top: 8px;
-    margin-right: 15px;
-}
-
-span#__text4 {
-    margin-top: 8px;
-    margin-left: 25px;
-    margin-right: 15px;
-}
-span#__text5 {
-    margin-top: 8px;
-    margin-left: 25px;
-    margin-right: 15px;
-}
-
-button#__button0 {
-    margin-left: 20px;
-    margin-right: 20px;
-}
-
-div#container-cp\.odp\.cpodprofiles---Home--idSearch {
-    margin-left: 20px;
-}
-
-div#__data33 {
-    margin-left: 20px;
-}
-
-span#__text7 {
-    margin-top: 8px;
-    margin-left: 20px;
-    margin-right: 15px;
-} */
-
-div#__hbox0 {
-    margin-left: 2%;
-}
-
-div#__hbox2 {
-    margin-left: 2%;
-}
-
-div#__vbox1 {
-    margin-left: 2%;
-}
-
-div#__vbox2 {
-    margin-left: 2%;
-}
-
-div#__vbox3 {
-    margin-left: 2%;
-}
-
-div#__vbox5 {
-    margin-right: 46%;
+.sapUiSizeCompact .sapUxAPObjectPageSectionHeader, .sapUxAPObjectPageSectionHeader {
+    height: 0.1rem !important;
 }
