@@ -555,9 +555,25 @@ async function _updateJobs(req,isGet) {
 
   
   srv.on("lreadJobs", async req => {
-    // var request = require('request');
-    // let baseUrl = "https://sbpprovider-dev-config-products-srv.cfapps.us10.hana.ondemand.com"; 
-    let readJobsUrl = lbaseUrl + '/jobs/readJobs()';
+
+    var readJobsUrl ="";
+
+    let hostName = req.headers.host;
+    console.log("lreadJobs hostName ", hostName);
+
+    if(hostName.includes("localhost:4004"))
+    {
+        readJobsUrl = lbaseUrl + '/jobs/readJobs()';  
+    }
+    else
+    {
+        let baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+        readJobsUrl = baseUrl + '/jobs/readJobs()';
+    }
+
+    console.log("lreadJobs readJobsUrl ", readJobsUrl);
+
+    // let readJobsUrl = lbaseUrl + '/jobs/readJobs()';
 
     options = {
         'method': 'GET',
@@ -587,7 +603,10 @@ async function _updateJobs(req,isGet) {
         }
     })
     const sleep = require('await-sleep');
-    await sleep(1000);
+    if(hostName.includes("localhost:4004"))
+    {
+        await sleep(1000);
+    }
     // console.log('ret_response.value ', ret_response.value);
     // console.log('length of ret_response.value ', ret_response.value.length);
 
@@ -600,8 +619,22 @@ async function _updateJobs(req,isGet) {
     let displaySchedules = req.data.displaySchedules;
 
 
+    var lreadJobDetailsUrl ="";
+
+    let hostName = req.headers.host;
+    console.log("lreadJobDetails hostName ", hostName);
+
+    if(hostName.includes("localhost:4004"))
+    {
+        lreadJobDetailsUrl = lbaseUrl + '/jobs/readJobDetails(jobId='  + jobId + ',displaySchedules=' + displaySchedules+')';  
+    }
+    else
+    {
+        let baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+        lreadJobDetailsUrl = baseUrl + '/jobs/readJobDetails(jobId='  + jobId + ',displaySchedules=' + displaySchedules+')';
+    }
+
     console.log('lreadJobDetails  jobId', jobId, 'displayJobSchedules ', displaySchedules);
-    let   lreadJobDetailsUrl = lbaseUrl + '/jobs/readJobDetails(jobId='  + jobId + ',displaySchedules=' + displaySchedules+')';
 
 
     console.log('lreadJobDetailsUrl ', lreadJobDetailsUrl);
@@ -631,7 +664,10 @@ async function _updateJobs(req,isGet) {
         }
     })
     const sleep = require('await-sleep');
-    await sleep(1000);
+    if(hostName.includes("localhost:4004"))
+    {
+        await sleep(1000);
+    }
     req.reply(ret_response);
 
   });
@@ -641,7 +677,23 @@ async function _updateJobs(req,isGet) {
 
     console.log('lreadJobSchedules  jobId', jobId);
 
-    let lreadJobSchedulesUrl = lbaseUrl + '/jobs/readJobSchedules(jobId='  + jobId + ')';
+    var lreadJobSchedulesUrl ="";
+
+    let hostName = req.headers.host;
+    console.log("lreadJobSchedules hostName ", hostName);
+
+    if(hostName.includes("localhost:4004"))
+    {
+        lreadJobSchedulesUrl = lbaseUrl + '/jobs/readJobSchedules(jobId='  + jobId + ')';
+    }
+    else
+    {
+        let baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+        lreadJobSchedulesUrl = baseUrl + '/jobs/readJobSchedules(jobId='  + jobId + ')';
+    }
+
+
+    // let lreadJobSchedulesUrl = lbaseUrl + '/jobs/readJobSchedules(jobId='  + jobId + ')';
 
     console.log('lreadJobSchedulesUrl ', lreadJobSchedulesUrl);
 
@@ -670,7 +722,10 @@ async function _updateJobs(req,isGet) {
         }
     })
     const sleep = require('await-sleep');
-    await sleep(1000);
+    if(hostName.includes("localhost:4004"))
+    {
+        await sleep(1000);
+    }
     req.reply(ret_response);
 
   });
@@ -682,10 +737,26 @@ async function _updateJobs(req,isGet) {
     let displayLogs = req.data.displayLogs;
     console.log('lreadJobSchedule  jobId :', jobId, 'scheduleId :', scheduleId, 'displayLogs :', displayLogs);
 
+    var lreadJobScheduleUrl ="";
+
+    let hostName = req.headers.host;
+    console.log("lreadJobSchedule hostName ", hostName);
+
+    if(hostName.includes("localhost:4004"))
+    {
+        lreadJobScheduleUrl = lbaseUrl + 
+        '/jobs/readJobSchedule(jobId='  + jobId + ',' + 'scheduleId=' + "'" + scheduleId + "'" + "," + 'displayLogs='  + displayLogs + ')';
+    }
+    else
+    {
+        let baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+        lreadJobScheduleUrl = baseUrl + 
+        '/jobs/readJobSchedule(jobId='  + jobId + ',' + 'scheduleId=' + "'" + scheduleId + "'" + "," + 'displayLogs='  + displayLogs + ')';
+    }
 
 
-    let lreadJobScheduleUrl = lbaseUrl + 
-    '/jobs/readJobSchedule(jobId='  + jobId + ',' + 'scheduleId=' + "'" + scheduleId + "'" + "," + 'displayLogs='  + displayLogs + ')';
+    // let lreadJobScheduleUrl = lbaseUrl + 
+    // '/jobs/readJobSchedule(jobId='  + jobId + ',' + 'scheduleId=' + "'" + scheduleId + "'" + "," + 'displayLogs='  + displayLogs + ')';
 
 
     console.log('lreadJobScheduleUrl ', lreadJobScheduleUrl);
@@ -715,7 +786,10 @@ async function _updateJobs(req,isGet) {
         }
     })
     const sleep = require('await-sleep');
-    await sleep(1000);
+    if(hostName.includes("localhost:4004"))
+    {
+        await sleep(1000);
+    }
     req.reply(ret_response);
 
   });
@@ -725,7 +799,22 @@ async function _updateJobs(req,isGet) {
 
     console.log('lreadJobActionLogs  jobId', jobId);
 
-    let lreadJobActionLogsUrl = lbaseUrl + '/jobs/readJobActionLogs(jobId='  + jobId + ')';
+    var lreadJobActionLogsUrl ="";
+
+    let hostName = req.headers.host;
+    console.log("lreadJobActionLogs hostName ", hostName);
+
+    if(hostName.includes("localhost:4004"))
+    {
+        lreadJobActionLogsUrl = lbaseUrl + '/jobs/readJobActionLogs(jobId='  + jobId + ')';
+    }
+    else
+    {
+        let baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+        lreadJobActionLogsUrl = baseUrl + '/jobs/readJobActionLogs(jobId='  + jobId + ')';
+    }
+
+    // let lreadJobActionLogsUrl = lbaseUrl + '/jobs/readJobActionLogs(jobId='  + jobId + ')';
 
     console.log('lreadJobActionLogsUrl ', lreadJobActionLogsUrl);
 
@@ -754,7 +843,10 @@ async function _updateJobs(req,isGet) {
         }
     })
     const sleep = require('await-sleep');
-    await sleep(1000);
+    if(hostName.includes("localhost:4004"))
+    {
+        await sleep(1000);
+    }
     req.reply(ret_response);
 
   });
@@ -768,8 +860,25 @@ async function _updateJobs(req,isGet) {
 
     console.log('lreadJobRunLogs  jobId :', jobId, 'scheduleId :', scheduleId, 'page_size :', page_size, 'offset =', offset);
 
-    let lreadJobRunLogsUrl = lbaseUrl + 
-    '/jobs/readJobRunLogs(jobId='  + jobId + ',' + 'scheduleId=' + "'" + scheduleId + "'" + "," + 'page_size='  + page_size + ',' + 'offset='  + offset + ')';
+    var lreadJobRunLogsUrl ="";
+
+    let hostName = req.headers.host;
+    console.log("lreadJobRunLogs hostName ", hostName);
+
+    if(hostName.includes("localhost:4004"))
+    {
+        lreadJobRunLogsUrl = lbaseUrl + 
+        '/jobs/readJobRunLogs(jobId='  + jobId + ',' + 'scheduleId=' + "'" + scheduleId + "'" + "," + 'page_size='  + page_size + ',' + 'offset='  + offset + ')';
+    }
+    else
+    {
+        let baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+        lreadJobRunLogsUrl = baseUrl + 
+        '/jobs/readJobRunLogs(jobId='  + jobId + ',' + 'scheduleId=' + "'" + scheduleId + "'" + "," + 'page_size='  + page_size + ',' + 'offset='  + offset + ')';
+    }
+
+    // let lreadJobRunLogsUrl = lbaseUrl + 
+    // '/jobs/readJobRunLogs(jobId='  + jobId + ',' + 'scheduleId=' + "'" + scheduleId + "'" + "," + 'page_size='  + page_size + ',' + 'offset='  + offset + ')';
 
     console.log('lreadJobRunLogsUrl ', lreadJobRunLogsUrl);
 
@@ -798,7 +907,10 @@ async function _updateJobs(req,isGet) {
         }
     })
     const sleep = require('await-sleep');
-    await sleep(1000);
+    if(hostName.includes("localhost:4004"))
+    {
+        await sleep(1000);
+    }
     req.reply(ret_response);
 
   });
@@ -814,7 +926,22 @@ async function _updateJobs(req,isGet) {
 
     console.log('jDetails ', jDetails);
 
-    let addJobsUrl = lbaseUrl + '/jobs/addMLJob(jobDetails=' + "'" + jDetails + "'" + ')';
+    var addJobsUrl ="";
+
+    let hostName = req.headers.host;
+    console.log("addJobsUrl hostName ", hostName);
+
+    if(hostName.includes("localhost:4004"))
+    {   
+        addJobsUrl = lbaseUrl + '/jobs/addMLJob(jobDetails=' + "'" + jDetails + "'" + ')';
+    }
+    else
+    {
+        let baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+        addJobsUrl = baseUrl + '/jobs/addMLJob(jobDetails=' + "'" + jDetails + "'" + ')';
+    }
+
+    // let addJobsUrl = lbaseUrl + '/jobs/addMLJob(jobDetails=' + "'" + jDetails + "'" + ')';
 
     console.log('addJobsUrl ', addJobsUrl);
 
@@ -843,7 +970,10 @@ async function _updateJobs(req,isGet) {
         }
     })
     const sleep = require('await-sleep');
-    await sleep(1000);
+    if(hostName.includes("localhost:4004"))
+    {
+        await sleep(1000);
+    }
     req.reply(ret_response);
 
   });
@@ -855,8 +985,24 @@ async function _updateJobs(req,isGet) {
     // str.replace(/[/_]/g, "%2F");
      let jDetails = jobDetails.replace(/[/]/g, "%2F");
      console.log('jDetails ', jDetails);
+
+     var lupdateJobUrl ="";
+
+    let hostName = req.headers.host;
+    console.log("lupdateJob hostName ", hostName);
+
+    if(hostName.includes("localhost:4004"))
+    {   
+        lupdateJobUrl = lbaseUrl + '/jobs/updateMLJob(jobDetails=' + "'" + jDetails + "'" + ')';
+    }
+    else
+    {
+        let baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+        lupdateJobUrl = baseUrl + '/jobs/updateMLJob(jobDetails=' + "'" + jDetails + "'" + ')';
+    }
+
  
-     let lupdateJobUrl = lbaseUrl + '/jobs/updateMLJob(jobDetails=' + "'" + jDetails + "'" + ')';
+    //  let lupdateJobUrl = lbaseUrl + '/jobs/updateMLJob(jobDetails=' + "'" + jDetails + "'" + ')';
 
     console.log('lupdateJobUrl ', lupdateJobUrl);
 
@@ -884,7 +1030,10 @@ async function _updateJobs(req,isGet) {
         }
     })
     const sleep = require('await-sleep');
-    await sleep(1000);
+    if(hostName.includes("localhost:4004"))
+    {
+        await sleep(1000);
+    }
     req.reply(ret_response);
 
   });
@@ -894,9 +1043,28 @@ async function _updateJobs(req,isGet) {
     
 
     console.log('ldeleteJob  jobId :', jobId);
+    
 
-    let ldeleteJobUrl = lbaseUrl + 
-    '/jobs/deleteMLJob(jobId='  + jobId +')';
+
+    var ldeleteJobUrl ="";
+
+    let hostName = req.headers.host;
+    console.log("ldeleteJob hostName ", hostName);
+
+    if(hostName.includes("localhost:4004"))
+    {   
+        ldeleteJobUrl = lbaseUrl + 
+        '/jobs/deleteMLJob(jobId='  + jobId +')';    
+    }
+    else
+    {
+        let baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+        ldeleteJobUrl = baseUrl + 
+        '/jobs/deleteMLJob(jobId='  + jobId +')';    
+    }
+
+    // let ldeleteJobUrl = lbaseUrl + 
+    // '/jobs/deleteMLJob(jobId='  + jobId +')';
 
     console.log('ldeleteJobUrl ', ldeleteJobUrl);
 
@@ -924,7 +1092,10 @@ async function _updateJobs(req,isGet) {
         }
     })
     const sleep = require('await-sleep');
-    await sleep(1000);
+    if(hostName.includes("localhost:4004"))
+    {
+        await sleep(1000);
+    }
     req.reply(ret_response);
 
   });
@@ -940,8 +1111,25 @@ srv.on("laddJobSchedule", async req => {
     let sDetails = scheduleDetails.replace(/[/]/g, "%2F");
 
     console.log("laddJobSchedule sDetails :", sDetails);
+    var addJobScheduleUrl ="";
 
-    let addJobScheduleUrl = lbaseUrl + '/jobs/addJobSchedule(schedule=' + "'" + sDetails + "'" + ')';
+    let hostName = req.headers.host;
+    console.log("laddJobSchedule hostName ", hostName);
+
+    if(hostName.includes("localhost:4004"))
+    {   
+        addJobScheduleUrl = lbaseUrl + '/jobs/addJobSchedule(schedule=' + "'" + sDetails + "'" + ')';
+    
+    }
+    else
+    {
+        let baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+        addJobScheduleUrl = baseUrl + '/jobs/addJobSchedule(schedule=' + "'" + sDetails + "'" + ')';
+
+    }
+    
+
+    // let addJobScheduleUrl = lbaseUrl + '/jobs/addJobSchedule(schedule=' + "'" + sDetails + "'" + ')';
 
     console.log('addJobScheduleUrl ', addJobScheduleUrl);
 
@@ -969,7 +1157,10 @@ srv.on("laddJobSchedule", async req => {
         }
     })
     const sleep = require('await-sleep');
-    await sleep(1000);
+    if(hostName.includes("localhost:4004"))
+    {
+        await sleep(1000);
+    }
     req.reply(ret_response);
 
   });
@@ -984,7 +1175,22 @@ srv.on("laddJobSchedule", async req => {
 
     console.log("lupdateMLJobSchedule sDetails :", sDetails);
 
-    let updateMLJobScheduleUrl = lbaseUrl + '/jobs/updateMLJobSchedule(schedule=' + "'" + sDetails + "'" + ')';
+    var updateMLJobScheduleUrl ="";
+
+    let hostName = req.headers.host;
+    console.log("lupdateMLJobSchedule hostName ", hostName);
+
+    if(hostName.includes("localhost:4004"))
+    {   
+        updateMLJobScheduleUrl = lbaseUrl + '/jobs/updateMLJobSchedule(schedule=' + "'" + sDetails + "'" + ')';
+    }
+    else
+    {
+        let baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+        updateMLJobScheduleUrl = baseUrl + '/jobs/updateMLJobSchedule(schedule=' + "'" + sDetails + "'" + ')';
+    }
+
+    // let updateMLJobScheduleUrl = lbaseUrl + '/jobs/updateMLJobSchedule(schedule=' + "'" + sDetails + "'" + ')';
 
     console.log('updateMLJobScheduleUrl ', updateMLJobScheduleUrl);
 
@@ -1012,7 +1218,10 @@ srv.on("laddJobSchedule", async req => {
         }
     })
     const sleep = require('await-sleep');
-    await sleep(1000);
+    if(hostName.includes("localhost:4004"))
+    {
+        await sleep(1000);
+    }
     req.reply(ret_response);
 
   });
@@ -1027,7 +1236,22 @@ srv.on("laddJobSchedule", async req => {
 
     console.log("ldeleteMLJobSchedule sDetails :", sDetails);
 
-    let ldeleteMLJobScheduleUrl = lbaseUrl + '/jobs/deleteMLJobSchedule(scheduleDetails=' + "'" + sDetails + "'" + ')';
+    var ldeleteMLJobScheduleUrl ="";
+
+    let hostName = req.headers.host;
+    console.log("ldeleteMLJobSchedule hostName ", hostName);
+
+    if(hostName.includes("localhost:4004"))
+    {   
+        ldeleteMLJobScheduleUrl = lbaseUrl + '/jobs/deleteMLJobSchedule(scheduleDetails=' + "'" + sDetails + "'" + ')';
+    }
+    else
+    {
+        let baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+        ldeleteMLJobScheduleUrl = baseUrl + '/jobs/deleteMLJobSchedule(scheduleDetails=' + "'" + sDetails + "'" + ')';
+    }
+
+    // let ldeleteMLJobScheduleUrl = lbaseUrl + '/jobs/deleteMLJobSchedule(scheduleDetails=' + "'" + sDetails + "'" + ')';
 
     console.log('ldeleteMLJobScheduleUrl ', ldeleteMLJobScheduleUrl);
 
@@ -1055,7 +1279,10 @@ srv.on("laddJobSchedule", async req => {
         }
     })
     const sleep = require('await-sleep');
-    await sleep(1000);
+    if(hostName.includes("localhost:4004"))
+    {
+        await sleep(1000);
+    }
     req.reply(ret_response);
 
   });
