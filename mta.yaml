@@ -101,7 +101,7 @@ modules:
       target-path: resources/
     - artifacts:
       - cpappfcpnodesdetails.zip
-      name: cpappfcpnodesdetails
+      name: cpappf  
       target-path: resources/
     - artifacts:
       - cpappcplocation.zip

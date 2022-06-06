@@ -114,16 +114,6 @@ class GenFunctions {
           lDate.getMonth(),
           lDate.getDate() + lDay
         );
-        // vDate = lNextSun.getDate();
-        // vMonth = lNextSun.getMonth() + 1;
-        // vYear = lNextSun.getFullYear(); 
-        // if(vDate < 10){
-        //     vDate = "0"+vDate;
-        // }
-        // if(vMonth < 10){
-        //     vMonth = "0"+vMonth;
-        // }
-        // return vYear+"-"+vMonth+"-"+vDate;
 
        return lNextSun.toISOString().split('T')[0];
     }

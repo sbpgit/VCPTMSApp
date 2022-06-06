@@ -653,7 +653,7 @@ sap.ui.define(
   
             sap.ui.core.BusyIndicator.show();
             // Calling service to assign profile
-            that.getModel("BModel").callFunction("/asssignProfilesOD", {
+            that.getModel("BModel").callFunction("/assignProfilesOD", {
               method: "GET",
               urlParameters: {
                 FLAG: "I",
@@ -684,10 +684,6 @@ sap.ui.define(
          * @param {object} oEvent -the event information.
          */
         onUnAssign: function () {
-          var aData = {
-              PROFILEOD: [],
-            },
-            jsonProfileOD;
           var oSelected;
           // Getting the oSelected list of table which profiles need to delete
           var aItem = that.byId("idTab").getSelectedItems();
@@ -696,7 +692,7 @@ sap.ui.define(
             oSelected = aItem[i].getBindingContext().getProperty();
   
             sap.ui.core.BusyIndicator.show();
-            that.getModel("BModel").callFunction("/asssignProfilesOD", {
+            that.getModel("BModel").callFunction("/assignProfilesOD", {
               method: "GET",
               urlParameters: {
                 FLAG: "D",

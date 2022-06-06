@@ -84,20 +84,6 @@ service CatalogService @(impl : './lib/cat-service.js') {
     entity getPVSNodes          as projection on od.PVS_NODES;
 
     entity getClass             as projection on od.CLASS;
-    // @odata.draft.enabled
-    // entity getAuthObj           as projection on od.AUTH_OBJ;
-
-    @odata.draft.enabled
-    entity getUserAuthObj            as projection on od.USER_AUTHOBJ;
-
-    @odata.draft.enabled
-    entity getAEmpRole          as projection on od.AUTH_EMP_ROLE;
-
-    @odata.draft.enabled
-    entity getAuthRole          as projection on od.AUTH_ROLE;
-
-    @odata.draft.enabled
-    entity getARObj             as projection on od.AUTH_ROLE_OBJ;
 
     //IBP Future demand
     @readonly
@@ -111,9 +97,6 @@ service CatalogService @(impl : './lib/cat-service.js') {
     @readonly
     entity getIBPFres           as projection on od.IBP_RESULTPLAN;
 
-    // //Object dependency restrict
-    // @odata.draft.enabled
-    // entity getODHdrRstr         as projection on V_ODRESTRICT;
 
     // Get sales history configuration and its characteristics
     @readonly
@@ -187,7 +170,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
     // Create Profile parameters
     function createProfilePara(FLAG : String(1), PROFILE : String(50), METHOD : String(50), PARA_NAME : String(100), INTVAL : Integer, DOUBLEVAL : Double, STRVAL : String(20), PARA_DESC : String(1000), PARA_DEP : String(1000), CREATED_DATE : Date, CREATED_BY : String(12)) returns String;
     // Assign OD to a profile
-    function asssignProfilesOD(FLAG : String(1), LOCATION_ID : String(4), PRODUCT_ID : String(40), COMPONENT : String(40), PROFILE : String(50), OBJ_DEP : String(30), STRUC_NODE : String(50))                                                                                  returns String;
+    function assignProfilesOD(FLAG : String(1), LOCATION_ID : String(4), PRODUCT_ID : String(40), COMPONENT : String(40), PROFILE : String(50), STRUC_NODE : String(50))                                                                                  returns String;
    
     function importIBPDemd() returns String;
 // Timeseries for job creation

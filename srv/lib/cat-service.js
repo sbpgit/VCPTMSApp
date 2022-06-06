@@ -21,39 +21,6 @@ const conn_params_container = {
 };
 
 module.exports = (srv) => {
-    // srv.
-    srv.after('READ', 'getLocationtemp', async (data, req) => {
-        vUser = req.headers['x-username'];
-        const li_roleparam = await cds.run(
-            `
-            SELECT * FROM "CP_USER_AUTHOBJ"
-            WHERE "USER" = '`+ vUser + `'`
-            // AND PARAMETER = 'LOCATION_ID'`
-        );
-        // var cnRs = 0;
-        //     return data.map(async data => {
-        //         const li_roleparam = await cds.run(
-        //             `
-        //             SELECT * FROM "V_USERROLE"
-        //             WHERE "USER" = '`+vUser+`'
-        //             AND "PARAMETER_VAL" = '`+data.LOCATION_ID+`'
-        //             AND "PARAMETER" = 'LOCATION_ID'`
-        //         );
-        //         if(li_roleparam.length === 0){
-
-        //             req.results.splice(cnRs, 1);
-        //         }
-        //         cr++;
-        //       })
-
-        for (var cnRs = req.results.length - 1; cnRs >= 0; cnRs--) {
-            for (var cnRL = 0; cnRL < li_roleparam.length; cnRL++) {
-                if (li_roleparam[cnRL].AUTH_GROUP !== req.results[cnRs].AUTH_GROUP) {
-                    req.results.splice(cnRs, 1);
-                }
-            }
-        }
-    })
     // Service for weekly component requirements- assembly
     srv.on("getCompReqFWeekly", async (req) => {
         let vDateFrom = req.data.FROMDATE; //"2022-03-04";
@@ -366,23 +333,37 @@ module.exports = (srv) => {
         var responseMessage;
         var datetime = new Date();
         var curDate = datetime.toISOString().slice(0, 10);
-        // const aProfilePara_req = req.data.PROFILEPARA;
         if (req.data.FLAG === "I" || req.data.FLAG === "E") {
-            //for (let i = 0; i < aProfilePara_req.length; i++) {
             lsprofilesPara.PROFILE = req.data.PROFILE;
             if (lsprofilesPara.PROFILE !== undefined) {
                 lsprofilesPara.METHOD = req.data.METHOD;
                 lsprofilesPara.PARA_NAME = req.data.PARA_NAME;
-                lsprofilesPara.INTVAL = req.data.INTVAL;
-                lsprofilesPara.DOUBLEVAL = req.data.DOUBLEVAL;
-                lsprofilesPara.STRVAL = req.data.STRVAL;
-                lsprofilesPara.PARA_DESC = req.data.PARA_DESC;
-                lsprofilesPara.PARA_DEP = null; //req.data.PARA_DEP;
-                lsprofilesPara.CREATED_DATE = curDate;
-                lsprofilesPara.CREATED_BY = ""; //req.data.CREATED_BY;
                 if (req.data.FLAG === "E") {
                     await cds.delete("CP_PAL_PROFILEMETH_PARA", lsprofilesPara);
                 }
+                if (req.data.INTVAL === NaN || req.data.INTVAL === 'NaN' || req.data.INTVAL === 'null' || req.data.INTVAL === null)  {
+                    lsprofilesPara.INTVAL = null;
+                }
+                else {
+                    lsprofilesPara.INTVAL = req.data.INTVAL;
+                }
+                if (req.data.STRVAL === NaN || req.data.STRVAL === 'NaN' || req.data.STRVAL === 'null' || req.data.STRVAL === null) {
+                    lsprofilesPara.STRVAL = null;
+                } 
+                else{
+                    lsprofilesPara.STRVAL = req.data.STRVAL;
+                }
+                
+                if (req.data.DOUBLEVAL === NaN || req.data.DOUBLEVAL === 'NaN' || req.data.DOUBLEVAL === 'null'|| req.data.DOUBLEVAL === null) {
+                    lsprofilesPara.DOUBLEVAL = null;
+                }
+                else {
+                    lsprofilesPara.DOUBLEVAL = req.data.DOUBLEVAL;
+                }
+                lsprofilesPara.PARA_DESC = req.data.PARA_DESC;
+                lsprofilesPara.PARA_DEP = null; 
+                lsprofilesPara.CREATED_DATE = curDate;
+                lsprofilesPara.CREATED_BY = ""; 
                 liProfilesPara.push(GenFunctions.parse(lsprofilesPara));
             }
             lsprofilesPara = {};
@@ -400,10 +381,7 @@ module.exports = (srv) => {
                 createResults.push(responseMessage);
             }
         } else if (req.data.FLAG === "D") {
-            for (let i = 0; i < aProfilePara_req.length; i++) {
-                lsprofilesPara.PROFILE = req.data.PROFILE;
-                break;
-            }
+            lsprofilesPara.PROFILE = req.data.PROFILE;
             try {
                 if (lsprofilesPara.PROFILE !== undefined) {
                     await cds.delete("CP_PAL_PROFILEMETH_PARA", lsprofilesPara);
@@ -416,11 +394,10 @@ module.exports = (srv) => {
             }
         }
         res = req._.req.res;
-        return responseMessage;
-        //res.send({ value: createResults });
+        return responseMessage;       
     });
     // Assign profile sot object dependency
-    srv.on("asssignProfilesOD", async (req) => {
+    srv.on("assignProfilesOD", async (req) => {
         let liProfilesOD = [];
         let liProfilesDel = [];
         let lsprofilesOD = {};
@@ -429,40 +406,49 @@ module.exports = (srv) => {
         let res;
         var responseMessage;
         var datetime = new Date();
-        var curDate = datetime.toISOString().slice(0, 10);
-
-        const aProfileOD_req = req.data.PROFILEOD;
         res = req._.req.res;
-        //  for (let i = 0; i < aProfileOD_req.length; i++) {
-        lsprofilesOD.PROFILE = req.data.PROFILE;
-        if (lsprofilesOD.PROFILE !== undefined || req.data.FLAG === "D") {
-            lsprofilesOD.LOCATION_ID = req.data.LOCATION_ID;
-            lsprofilesOD.PRODUCT_ID = req.data.PRODUCT_ID;
-            lsprofilesOD.COMPONENT = req.data.COMPONENT;
-            lsprofilesOD.OBJ_DEP = req.data.OBJ_DEP;
+        const li_bomod = await cds.run(
+            `SELECT *
+            FROM "V_BOMODCOND"
+            WHERE "LOCATION_ID" = '` +
+            req.data.LOCATION_ID +
+            `'
+            AND "PRODUCT_ID" = '` +
+            req.data.PRODUCT_ID +
+            `'
+            AND"COMPONENT" = '` +
+            req.data.COMPONENT +
+            `'`
+        );
+        for (let i = 0; i < li_bomod.length; i++) {
             lsprofilesOD.PROFILE = req.data.PROFILE;
-            if (lsprofilesOD.STRUC_NODE !== undefined) {
-                lsprofilesOD.STRUC_NODE = req.data.STRUC_NODE;
-            } else {
-                lsprofilesOD.STRUC_NODE = "";
+            if (lsprofilesOD.PROFILE !== undefined || req.data.FLAG === "D") {
+                lsprofilesOD.LOCATION_ID = req.data.LOCATION_ID;
+                lsprofilesOD.PRODUCT_ID = req.data.PRODUCT_ID;
+                lsprofilesOD.COMPONENT = req.data.COMPONENT;
+                lsprofilesOD.OBJ_DEP = li_bomod[i].OBJ_DEP;
+                lsprofilesOD.OBJ_TYPE = 'OD';
+                lsprofilesOD.PROFILE = req.data.PROFILE;
+                if (lsprofilesOD.STRUC_NODE !== undefined) {
+                    lsprofilesOD.STRUC_NODE = req.data.STRUC_NODE;
+                } else {
+                    lsprofilesOD.STRUC_NODE = "";
+                }
+                liProfilesOD.push(GenFunctions.parse(lsprofilesOD));
+                // Delete before insert to override
+                lsprofilesDel.LOCATION_ID = req.data.LOCATION_ID;
+                lsprofilesDel.PRODUCT_ID = req.data.PRODUCT_ID;
+                lsprofilesDel.COMPONENT = req.data.COMPONENT;
+                liProfilesDel.push(GenFunctions.parse(lsprofilesDel));
+                try {
+                    await cds.delete("CP_PAL_PROFILEOD", lsprofilesDel);
+                    responseMessage = " Deletion successfull ";
+                } catch (e) {
+                    responseMessage = " Deletion failed";
+                }
             }
-            liProfilesOD.push(GenFunctions.parse(lsprofilesOD));
-            // Delete before insert to override
-            lsprofilesDel.LOCATION_ID = req.data.LOCATION_ID;
-            lsprofilesDel.PRODUCT_ID = req.data.PRODUCT_ID;
-            lsprofilesDel.COMPONENT = req.data.COMPONENT;
-            lsprofilesDel.OBJ_DEP = req.data.OBJ_DEP;
-
-            liProfilesDel.push(GenFunctions.parse(lsprofilesDel));
-            try {
-                await cds.delete("CP_PAL_PROFILEOD", lsprofilesDel);
-                responseMessage = " Deletion successfull ";
-            } catch (e) {
-                responseMessage = " Deletion failed";
-            }
+            lsprofilesOD = {};
         }
-        lsprofilesOD = {};
-        //   }
 
         if (req.data.FLAG === "I") {
             try {
@@ -477,9 +463,8 @@ module.exports = (srv) => {
             }
         } else {
             createResults.push(responseMessage);
-        }
+        }    //  End of if (req.data.FLAG === "I")
         return responseMessage;
-        //res.send({ value: createResults });
     });
     // Assign product to access node
     srv.on("genProdAN", async (req) => {

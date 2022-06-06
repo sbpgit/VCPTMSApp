@@ -56,7 +56,7 @@
     },
     "CONFIG_PRODUCTS.db::SYN_LOCPROD": {
         "target": {
-            "object": "VT_LOCATIONPRODUCT",
+            "object": "VT_LOCPROD",
             "schema": "DB_CONFIG_PROD_CLIENT1"
         }
     },
@@ -65,17 +65,17 @@
             "object": "VT_PRODUCTCLASS",
             "schema": "DB_CONFIG_PROD_CLIENT1"
         }
+    },
+    "CONFIG_PRODUCTS.db::SYN_SALESH": {
+        "target": {
+            "object": "VT_SALESH",
+            "schema": "DB_CONFIG_PROD_CLIENT1"
+        }
+    },
+    "CONFIG_PRODUCTS.db::SYN_SALESHCONFIG": {
+        "target": {
+            "object": "VT_SALESHCONFIG",
+            "schema": "DB_CONFIG_PROD_CLIENT1"
+        }
     }
-    // "CONFIG_PRODUCTS.db::SYN_SALESH": {
-    //     "target": {
-    //         "object": "VT_SALESH",
-    //         "schema": "DB_CONFIG_PROD_CLIENT1"
-    //     }
-    // },
-    // "CONFIG_PRODUCTS.db::SYN_SALESHCONFIG": {
-    //     "target": {
-    //         "object": "VT_SALESHCONFIG",
-    //         "schema": "DB_CONFIG_PROD_CLIENT1"
-    //     }
-    // }
 }

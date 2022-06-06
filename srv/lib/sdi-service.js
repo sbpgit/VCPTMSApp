@@ -724,143 +724,212 @@ module.exports = (srv) => {
         }
 
     });
-    // srv.on("ImportECCSalesh", async (req) => {
-    //     var flag = '';
-    //     try {
-    //         const dbClass = require("sap-hdb-promisfied")
-    //         let dbConn = new dbClass(await dbClass.createConnectionFromEnv())
-    //         const sp = await dbConn.loadProcedurePromisified(null, '"FG_SALESH_SP"')
-    //         const output = await dbConn.callProcedurePromisified(sp, [])
-    //         console.log(output.results);
-    //         flag = 'X';
-    //     } catch (error) {
-    //         console.error(error);
-    //     }
-    //     if (flag === 'X') {
-    //         let dataObj = {};
-    //         dataObj["success"] = true;
-    //         dataObj["message"] = "Import of Sales History is successfull at " + new Date();
+    srv.on("ImportECCLocProd", async (req) => {
+        var flag = '';
+        try {
+            const dbClass = require("sap-hdb-promisfied")
+            let dbConn = new dbClass(await dbClass.createConnectionFromEnv())
+            const sp = await dbConn.loadProcedurePromisified(null, '"FG_LOCPROD_SP"')
+            const output = await dbConn.callProcedurePromisified(sp, [])
+            console.log(output.results);
+            flag = 'X';
+        } catch (error) {
+            console.error(error);
+        }
+        if (flag === 'X') {
+            let dataObj = {};
+            dataObj["success"] = true;
+            dataObj["message"] = "Import of Location-Product is successfull at " + new Date();
 
 
-    //         if (req.headers['x-sap-job-id'] > 0) {
-    //             const scheduler = getJobscheduler(req);
+            if (req.headers['x-sap-job-id'] > 0) {
+                const scheduler = getJobscheduler(req);
 
-    //             var updateReq = {
-    //                 jobId: req.headers['x-sap-job-id'],
-    //                 scheduleId: req.headers['x-sap-job-schedule-id'],
-    //                 runId: req.headers['x-sap-job-run-id'],
-    //                 data: dataObj
-    //             };
+                var updateReq = {
+                    jobId: req.headers['x-sap-job-id'],
+                    scheduleId: req.headers['x-sap-job-schedule-id'],
+                    runId: req.headers['x-sap-job-run-id'],
+                    data: dataObj
+                };
 
-    //             console.log("Sales History Imported, to update req", updateReq);
+                console.log("Location-Product Imported, to update req", updateReq);
 
-    //             scheduler.updateJobRunLog(updateReq, function (err, result) {
-    //                 if (err) {
-    //                     return console.log('Error updating run log: %s', err);
-    //                 }
-    //                 //Run log updated successfully
-    //                 console.log("Import of Sales History job update results", result);
+                scheduler.updateJobRunLog(updateReq, function (err, result) {
+                    if (err) {
+                        return console.log('Error updating run log: %s', err);
+                    }
+                    //Run log updated successfully
+                    console.log("Import of Location-Product job update results", result);
 
-    //             });
-    //         }
-    //     }
-    //     else {
-    //         let dataObj = {};
-    //         dataObj["failed"] = false;
-    //         dataObj["message"] = "Import of Sales History has failed at" + new Date();
-
-
-    //         if (req.headers['x-sap-job-id'] > 0) {
-    //             const scheduler = getJobscheduler(req);
-
-    //             var updateReq = {
-    //                 jobId: req.headers['x-sap-job-id'],
-    //                 scheduleId: req.headers['x-sap-job-schedule-id'],
-    //                 runId: req.headers['x-sap-job-run-id'],
-    //                 data: dataObj
-    //             };
-
-    //             console.log("Import of Sales History job update req", updateReq);
-
-    //             scheduler.updateJobRunLog(updateReq, function (err, result) {
-    //                 if (err) {
-    //                     return console.log('Error updating run log: %s', err);
-    //                 }
-    //                 //Run log updated successfully
-    //                 console.log("Import of Sales History job update results", result);
-
-    //             });
-    //         }
-    //     }
-
-    // });
-    // srv.on("ImportECCSaleshCfg", async (req) => {
-    //     var flag = '';
-    //     try {
-    //         const dbClass = require("sap-hdb-promisfied")
-    //         let dbConn = new dbClass(await dbClass.createConnectionFromEnv())
-    //         const sp = await dbConn.loadProcedurePromisified(null, '"FG_SALESHCFG_SP"')
-    //         const output = await dbConn.callProcedurePromisified(sp, [])
-    //         console.log(output.results);
-    //         flag = 'X';
-    //     } catch (error) {
-    //         console.error(error);
-    //     }
-    //     if (flag === 'X') {
-    //         let dataObj = {};
-    //         dataObj["success"] = true;
-    //         dataObj["message"] = "Import of Sales History Configuration is successfull at " + new Date();
+                });
+            }
+        }
+        else {
+            let dataObj = {};
+            dataObj["failed"] = false;
+            dataObj["message"] = "Import of Location-Product has failed at" + new Date();
 
 
-    //         if (req.headers['x-sap-job-id'] > 0) {
-    //             const scheduler = getJobscheduler(req);
+            if (req.headers['x-sap-job-id'] > 0) {
+                const scheduler = getJobscheduler(req);
 
-    //             var updateReq = {
-    //                 jobId: req.headers['x-sap-job-id'],
-    //                 scheduleId: req.headers['x-sap-job-schedule-id'],
-    //                 runId: req.headers['x-sap-job-run-id'],
-    //                 data: dataObj
-    //             };
+                var updateReq = {
+                    jobId: req.headers['x-sap-job-id'],
+                    scheduleId: req.headers['x-sap-job-schedule-id'],
+                    runId: req.headers['x-sap-job-run-id'],
+                    data: dataObj
+                };
 
-    //             console.log("Sales History Configuration Imported, to update req", updateReq);
+                console.log("Import of Location-Product job update req", updateReq);
 
-    //             scheduler.updateJobRunLog(updateReq, function (err, result) {
-    //                 if (err) {
-    //                     return console.log('Error updating run log: %s', err);
-    //                 }
-    //                 //Run log updated successfully
-    //                 console.log("Import of Sales History Configuration job update results", result);
+                scheduler.updateJobRunLog(updateReq, function (err, result) {
+                    if (err) {
+                        return console.log('Error updating run log: %s', err);
+                    }
+                    //Run log updated successfully
+                    console.log("Import of Location-Product job update results", result);
 
-    //             });
-    //         }
-    //     }
-    //     else {
-    //         let dataObj = {};
-    //         dataObj["failed"] = false;
-    //         dataObj["message"] = "Import of Sales History Configurationhas failed at" + new Date();
+                });
+            }
+        }
+    });
+    srv.on("ImportECCSalesh", async (req) => {
+        var flag = '';
+        try {
+            const dbClass = require("sap-hdb-promisfied")
+            let dbConn = new dbClass(await dbClass.createConnectionFromEnv())
+            const sp = await dbConn.loadProcedurePromisified(null, '"FG_SALESH_SP"')
+            const output = await dbConn.callProcedurePromisified(sp, [])
+            console.log(output.results);
+            flag = 'X';
+        } catch (error) {
+            console.error(error);
+        }
+        if (flag === 'X') {
+            let dataObj = {};
+            dataObj["success"] = true;
+            dataObj["message"] = "Import of Sales History is successfull at " + new Date();
 
 
-    //         if (req.headers['x-sap-job-id'] > 0) {
-    //             const scheduler = getJobscheduler(req);
+            if (req.headers['x-sap-job-id'] > 0) {
+                const scheduler = getJobscheduler(req);
 
-    //             var updateReq = {
-    //                 jobId: req.headers['x-sap-job-id'],
-    //                 scheduleId: req.headers['x-sap-job-schedule-id'],
-    //                 runId: req.headers['x-sap-job-run-id'],
-    //                 data: dataObj
-    //             };
+                var updateReq = {
+                    jobId: req.headers['x-sap-job-id'],
+                    scheduleId: req.headers['x-sap-job-schedule-id'],
+                    runId: req.headers['x-sap-job-run-id'],
+                    data: dataObj
+                };
 
-    //             console.log("Import of Sales History Configurationjob update req", updateReq);
+                console.log("Sales History Imported, to update req", updateReq);
 
-    //             scheduler.updateJobRunLog(updateReq, function (err, result) {
-    //                 if (err) {
-    //                     return console.log('Error updating run log: %s', err);
-    //                 }
-    //                 //Run log updated successfully
-    //                 console.log("Import of Sales History Configuration job update results", result);
+                scheduler.updateJobRunLog(updateReq, function (err, result) {
+                    if (err) {
+                        return console.log('Error updating run log: %s', err);
+                    }
+                    //Run log updated successfully
+                    console.log("Import of Sales History job update results", result);
 
-    //             });
-    //         }
-    //     }
-    // });
+                });
+            }
+        }
+        else {
+            let dataObj = {};
+            dataObj["failed"] = false;
+            dataObj["message"] = "Import of Sales History has failed at" + new Date();
+
+
+            if (req.headers['x-sap-job-id'] > 0) {
+                const scheduler = getJobscheduler(req);
+
+                var updateReq = {
+                    jobId: req.headers['x-sap-job-id'],
+                    scheduleId: req.headers['x-sap-job-schedule-id'],
+                    runId: req.headers['x-sap-job-run-id'],
+                    data: dataObj
+                };
+
+                console.log("Import of Sales History job update req", updateReq);
+
+                scheduler.updateJobRunLog(updateReq, function (err, result) {
+                    if (err) {
+                        return console.log('Error updating run log: %s', err);
+                    }
+                    //Run log updated successfully
+                    console.log("Import of Sales History job update results", result);
+
+                });
+            }
+        }
+
+    });
+    srv.on("ImportECCSaleshCfg", async (req) => {
+        var flag = '';
+        try {
+            const dbClass = require("sap-hdb-promisfied")
+            let dbConn = new dbClass(await dbClass.createConnectionFromEnv())
+            const sp = await dbConn.loadProcedurePromisified(null, '"FG_SALESHCFG_SP"')
+            const output = await dbConn.callProcedurePromisified(sp, [])
+            console.log(output.results);
+            flag = 'X';
+        } catch (error) {
+            console.error(error);
+        }
+        if (flag === 'X') {
+            let dataObj = {};
+            dataObj["success"] = true;
+            dataObj["message"] = "Import of Sales History Configuration is successfull at " + new Date();
+
+
+            if (req.headers['x-sap-job-id'] > 0) {
+                const scheduler = getJobscheduler(req);
+
+                var updateReq = {
+                    jobId: req.headers['x-sap-job-id'],
+                    scheduleId: req.headers['x-sap-job-schedule-id'],
+                    runId: req.headers['x-sap-job-run-id'],
+                    data: dataObj
+                };
+
+                console.log("Sales History Configuration Imported, to update req", updateReq);
+
+                scheduler.updateJobRunLog(updateReq, function (err, result) {
+                    if (err) {
+                        return console.log('Error updating run log: %s', err);
+                    }
+                    //Run log updated successfully
+                    console.log("Import of Sales History Configuration job update results", result);
+
+                });
+            }
+        }
+        else {
+            let dataObj = {};
+            dataObj["failed"] = false;
+            dataObj["message"] = "Import of Sales History Configurationhas failed at" + new Date();
+
+
+            if (req.headers['x-sap-job-id'] > 0) {
+                const scheduler = getJobscheduler(req);
+
+                var updateReq = {
+                    jobId: req.headers['x-sap-job-id'],
+                    scheduleId: req.headers['x-sap-job-schedule-id'],
+                    runId: req.headers['x-sap-job-run-id'],
+                    data: dataObj
+                };
+
+                console.log("Import of Sales History Configurationjob update req", updateReq);
+
+                scheduler.updateJobRunLog(updateReq, function (err, result) {
+                    if (err) {
+                        return console.log('Error updating run log: %s', err);
+                    }
+                    //Run log updated successfully
+                    console.log("Import of Sales History Configuration job update results", result);
+
+                });
+            }
+        }
+    });
 };
