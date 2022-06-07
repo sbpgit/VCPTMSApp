@@ -245,7 +245,7 @@ async function _updateJobs(req,isGet) {
         // req.reply(ret_response);
         if (respAck)
         {
-            // console.log("ret_schedlog_response logs ", ret_schedlog_response.value.logs);
+            console.log("ret_schedlog_response logs ", ret_schedlog_response.value.logs);
             // console.log("ret_schedlog_response logs length ", ret_schedlog_response.value.logs.length);
 
             for (let logIndex =0; logIndex < (ret_schedlog_response.value.logs.length); logIndex ++)
@@ -318,6 +318,30 @@ async function _updateJobs(req,isGet) {
     }  
 
     console.log("jobScheduleLogs ", jobScheduleLogs);
+
+    let purgeSqlStr = 'SELECT DISTINCT SCHEDULE_ID,' +
+                      'DAYS_BETWEEN(TO_TIMESTAMP(SCH_STARTTIME,' + "'" + 'YYYY-MM-DD HH24:MI:SS' + "')," +
+                      'CURRENT_DATE) AS DAYS, RUN_ID FROM JS_SCHEDULES' +
+                      ' WHERE DAYS_BETWEEN(TO_TIMESTAMP(SCH_STARTTIME,' + "'" + 'YYYY-MM-DD HH24:MI:SS' + "')," +
+                      'CURRENT_DATE) > 30';
+    console.log("purgeSqlStr ",purgeSqlStr);
+    let purgeIds = await cds.run(purgeSqlStr);
+    for (purgeIdx = 0; purgeIdx < purgeIds.length; purgeIdx++)
+    {
+        let sqlStr = 'DELETE FROM JS_LOGS WHERE RUN_ID = ' + "'" + purgeIds[purgeIdx].RUN_ID + "'";
+        console.log("JS_LOGS DELETE sqlStr ", sqlStr);
+        await cds.run(sqlStr);
+        console.log("JS_LOGS DELETE sqlStr ", sqlStr);
+
+        sqlStr = 'DELETE FROM JS_JOBS WHERE SCHEDULE_ID = ' + "'" + purgeIds[purgeIdx].SCHEDULE_ID + "'";
+        console.log("JS_SCHEDULES DELETE sqlStr ", sqlStr);
+        await cds.run(sqlStr);
+
+        sqlStr = 'DELETE FROM JS_SCHEDULES WHERE SCHEDULE_ID = ' + "'" + purgeIds[purgeIdx].SCHEDULE_ID + "'" +
+                 ' AND RUN_ID = ' + "'" + purgeIds[purgeIdx].RUN_ID + "'";
+        console.log("JS_SCHEDULES DELETE sqlStr ", sqlStr);
+        await cds.run(sqlStr);
+    }
 
     let dataObj = {};
     dataObj["success"] = true;
@@ -574,6 +598,30 @@ async function _updateJobs(req,isGet) {
     }  
 
     console.log("jobScheduleLogs ", jobScheduleLogs);
+
+    let purgeSqlStr = 'SELECT DISTINCT SCHEDULE_ID,' +
+                      'DAYS_BETWEEN(TO_TIMESTAMP(SCH_STARTTIME,' + "'" + 'YYYY-MM-DD HH24:MI:SS' + "')," +
+                      'CURRENT_DATE) AS DAYS, RUN_ID FROM JS_SCHEDULES' +
+                      ' WHERE DAYS_BETWEEN(TO_TIMESTAMP(SCH_STARTTIME,' + "'" + 'YYYY-MM-DD HH24:MI:SS' + "')," +
+                      'CURRENT_DATE) > 30';
+    console.log("purgeSqlStr ",purgeSqlStr);
+    let purgeIds = await cds.run(purgeSqlStr);
+    for (purgeIdx = 0; purgeIdx < purgeIds.length; purgeIdx++)
+    {
+        let sqlStr = 'DELETE FROM JS_LOGS WHERE RUN_ID = ' + "'" + purgeIds[purgeIdx].RUN_ID + "'";
+        console.log("JS_LOGS DELETE sqlStr ", sqlStr);
+        await cds.run(sqlStr);
+        console.log("JS_LOGS DELETE sqlStr ", sqlStr);
+
+        sqlStr = 'DELETE FROM JS_JOBS WHERE SCHEDULE_ID = ' + "'" + purgeIds[purgeIdx].SCHEDULE_ID + "'";
+        console.log("JS_SCHEDULES DELETE sqlStr ", sqlStr);
+        await cds.run(sqlStr);
+
+        sqlStr = 'DELETE FROM JS_SCHEDULES WHERE SCHEDULE_ID = ' + "'" + purgeIds[purgeIdx].SCHEDULE_ID + "'" +
+                 ' AND RUN_ID = ' + "'" + purgeIds[purgeIdx].RUN_ID + "'";
+        console.log("JS_SCHEDULES DELETE sqlStr ", sqlStr);
+        await cds.run(sqlStr);
+    }
 
   }   
 
