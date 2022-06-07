@@ -1,29 +1,29 @@
-git rm --cached  ./app/cp_assignprofiles/dist
-git rm --cached  ./app/cp_bomod/dist
-git rm --cached  ./app/cp_execprediction/dist
-git rm --cached  ./app/cp_exeregressionmdls/dist
-git rm --cached  ./app/cp_generatetimeseries/dist
-git rm --cached  ./app/cp_ibpfres/dist
-git rm --cached  ./app/cp_ibpfuturedemand/dist
-git rm --cached  ./app/cp_locprod/dist
-git rm --cached  ./app/cp_nodesdetails/dist
-git rm --cached  ./app/cp_objdepdetails/dist
-git rm --cached  ./app/cp_odprofiles/dist
-git rm --cached  ./app/cp_prodconfig/dist
-git rm --cached  ./app/cp_saleshcfg/dist
-git rm --cached  ./app/cp_saleshconfig/dist
-git rm --cached  ./app/cpasmbcompreq/dist
-git rm --cached  ./app/cpauthobjrole/dist
-git rm --cached  ./app/cpbompvs/dist
-git rm --cached  ./app/cpcompreq/dist
-git rm --cached  ./app/cpcustgroup/dist
-git rm --cached  ./app/cpibpresultplan/dist
-git rm --cached  ./app/cpjobscheduler/dist
-git rm --cached  ./app/cpjobscheduler_logs/dist
-git rm --cached  ./app/cplocation/dist
-git rm --cached  ./app/cpnewpartialprod/dist
-git rm --cached  ./app/cpodrestrict/dist
-git rm --cached  ./app/cpprodlocline/dist
-git rm --cached  ./app/cpproduct/dist
-git rm --cached  ./app/cprestrictions/dist
-git rm --cached  ./app/cprtrheader/dist
+git reset  ./app/cp_assignprofiles/dist
+git reset  ./app/cp_bomod/dist
+git reset  ./app/cp_execprediction/dist
+git reset  ./app/cp_exeregressionmdls/dist
+git reset  ./app/cp_generatetimeseries/dist
+git reset  ./app/cp_ibpfres/dist
+git reset  ./app/cp_ibpfuturedemand/dist
+git reset  ./app/cp_locprod/dist
+git reset  ./app/cp_nodesdetails/dist
+git reset  ./app/cp_objdepdetails/dist
+git reset  ./app/cp_odprofiles/dist
+git reset  ./app/cp_prodconfig/dist
+git reset  ./app/cp_saleshcfg/dist
+git reset  ./app/cp_saleshconfig/dist
+git reset  ./app/cpasmbcompreq/dist
+git reset  ./app/cpauthobjrole/dist
+git reset  ./app/cpbompvs/dist
+git reset  ./app/cpcompreq/dist
+git reset  ./app/cpcustgroup/dist
+git reset  ./app/cpibpresultplan/dist
+git reset  ./app/cpjobscheduler/dist
+git reset  ./app/cpjobscheduler_logs/dist
+git reset  ./app/cplocation/dist
+git reset  ./app/cpnewpartialprod/dist
+git reset  ./app/cpodrestrict/dist
+git reset  ./app/cpprodlocline/dist
+git reset  ./app/cpproduct/dist
+git reset  ./app/cprestrictions/dist
+git reset  ./app/cprtrheader/dist
