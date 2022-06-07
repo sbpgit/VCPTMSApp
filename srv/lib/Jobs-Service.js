@@ -47,7 +47,7 @@ module.exports = async function (srv) {
 
 async function _updateJobs(req,isGet) {
 
-    var reqData = {};
+    var reqData = "Request for Update Job Logs Queued Sucessfully";
 
     console.log("_updateJobs reqData : ", reqData);
     let createtAt = new Date();
@@ -318,6 +318,30 @@ async function _updateJobs(req,isGet) {
     }  
 
     console.log("jobScheduleLogs ", jobScheduleLogs);
+
+    let dataObj = {};
+    dataObj["success"] = true;
+    dataObj["message"] = "generate Job Logs Completed Successfully at " +  new Date();
+
+
+    if (req.headers['x-sap-job-id'] > 0)
+    {
+        const scheduler = getJobscheduler(req);
+
+        var updateReq = {
+            jobId: req.headers['x-sap-job-id'],
+            scheduleId: req.headers['x-sap-job-schedule-id'],
+            runId: req.headers['x-sap-job-run-id'],
+            data : dataObj
+            };
+
+            scheduler.updateJobRunLog(updateReq, function(err, result) {
+            if (err) {
+                return console.log('Error updating run log: %s', err);
+            }
+
+            });
+    }
 
   }   
 
@@ -603,10 +627,7 @@ async function _updateJobs(req,isGet) {
         }
     })
     const sleep = require('await-sleep');
-    if(hostName.includes("localhost:4004"))
-    {
-        await sleep(1000);
-    }
+    await sleep(1000);
     // console.log('ret_response.value ', ret_response.value);
     // console.log('length of ret_response.value ', ret_response.value.length);
 
@@ -664,10 +685,7 @@ async function _updateJobs(req,isGet) {
         }
     })
     const sleep = require('await-sleep');
-    if(hostName.includes("localhost:4004"))
-    {
-        await sleep(1000);
-    }
+    await sleep(1000);
     req.reply(ret_response);
 
   });
@@ -722,10 +740,7 @@ async function _updateJobs(req,isGet) {
         }
     })
     const sleep = require('await-sleep');
-    if(hostName.includes("localhost:4004"))
-    {
-        await sleep(1000);
-    }
+    await sleep(1000);
     req.reply(ret_response);
 
   });
@@ -786,10 +801,7 @@ async function _updateJobs(req,isGet) {
         }
     })
     const sleep = require('await-sleep');
-    if(hostName.includes("localhost:4004"))
-    {
-        await sleep(1000);
-    }
+    await sleep(1000);
     req.reply(ret_response);
 
   });
@@ -843,10 +855,7 @@ async function _updateJobs(req,isGet) {
         }
     })
     const sleep = require('await-sleep');
-    if(hostName.includes("localhost:4004"))
-    {
-        await sleep(1000);
-    }
+    await sleep(1000);
     req.reply(ret_response);
 
   });
@@ -907,10 +916,7 @@ async function _updateJobs(req,isGet) {
         }
     })
     const sleep = require('await-sleep');
-    if(hostName.includes("localhost:4004"))
-    {
-        await sleep(1000);
-    }
+    await sleep(1000);
     req.reply(ret_response);
 
   });
@@ -970,10 +976,7 @@ async function _updateJobs(req,isGet) {
         }
     })
     const sleep = require('await-sleep');
-    if(hostName.includes("localhost:4004"))
-    {
-        await sleep(1000);
-    }
+    await sleep(1000);
     req.reply(ret_response);
 
   });
@@ -1030,10 +1033,7 @@ async function _updateJobs(req,isGet) {
         }
     })
     const sleep = require('await-sleep');
-    if(hostName.includes("localhost:4004"))
-    {
-        await sleep(1000);
-    }
+    await sleep(1000);
     req.reply(ret_response);
 
   });
@@ -1092,10 +1092,7 @@ async function _updateJobs(req,isGet) {
         }
     })
     const sleep = require('await-sleep');
-    if(hostName.includes("localhost:4004"))
-    {
-        await sleep(1000);
-    }
+    await sleep(1000);
     req.reply(ret_response);
 
   });
@@ -1157,10 +1154,7 @@ srv.on("laddJobSchedule", async req => {
         }
     })
     const sleep = require('await-sleep');
-    if(hostName.includes("localhost:4004"))
-    {
-        await sleep(1000);
-    }
+    await sleep(1000);
     req.reply(ret_response);
 
   });
@@ -1218,10 +1212,7 @@ srv.on("laddJobSchedule", async req => {
         }
     })
     const sleep = require('await-sleep');
-    if(hostName.includes("localhost:4004"))
-    {
-        await sleep(1000);
-    }
+    await sleep(1000);
     req.reply(ret_response);
 
   });
@@ -1279,10 +1270,7 @@ srv.on("laddJobSchedule", async req => {
         }
     })
     const sleep = require('await-sleep');
-    if(hostName.includes("localhost:4004"))
-    {
-        await sleep(1000);
-    }
+    await sleep(1000);
     req.reply(ret_response);
 
   });
