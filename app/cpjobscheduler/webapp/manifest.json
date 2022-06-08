@@ -42,6 +42,14 @@
                   "odataVersion": "2.0",
                   "localUri": "localService/metadata.xml"
                 }
+              } ,
+              "SDI": {
+                "uri": "/v2/sdi/",
+                "type": "OData",
+                "settings": {
+                  "odataVersion": "2.0",
+                  "localUri": "localService/metadata.xml"
+                }
               }
         },
         "crossNavigation": {
@@ -140,6 +148,10 @@
               },
               "IModel": {
                 "dataSource": "IBP",
+                "preload": true
+              },
+              "SModel": {
+                "dataSource": "SDI",
                 "preload": true
               }
         },

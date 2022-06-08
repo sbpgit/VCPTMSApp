@@ -1,0 +1,14 @@
+/* Enter your custom styles here */
+
+div#container-cp\.odp\.cpodprofiles---Home--page-title {
+    font-weight: bold;
+}
+
+
+.sapUxAPObjectPageContainerNoBar>.sapUxAPObjectPageSection:first-child:not(.sapUxAPObjectPageSectionNoTitle) {
+    margin-top: 0.1rem !important;
+}
+
+.sapUiSizeCompact .sapUxAPObjectPageSectionHeader, .sapUxAPObjectPageSectionHeader {
+    height: 0.1rem !important;
+}
