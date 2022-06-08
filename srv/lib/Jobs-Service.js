@@ -1504,14 +1504,19 @@ srv.on("laddJobSchedule", async req => {
   });
   
   srv.on("addMLJob", (req) => {
-    console.log("addMLJob jobDetails :", JSON.parse(req.data.jobDetails));
+    // console.log("addMLJob jobDetails :", JSON.parse(req.data.jobDetails));
 
     return new Promise((resolve, reject) => {
       const scheduler = getJobscheduler(req);
       console.log("addMLJob req.data :", req.data);
 
       let jobDetails = req.data.jobDetails;
-      let jDetails = jobDetails.replace(/[/]/g, "%2F");
+      console.log("addMLJob jobDetails :", jobDetails);
+
+    //   let jDetails = jobDetails.replace(/[/]/g, "%2F");
+      let jDetails = jobDetails.replace(/%2F/g, "/");
+      console.log("addMLJob jDetails :", jDetails);
+
 
     //   var inputData = JSON.parse(req.data.jobDetails);
       var inputData = JSON.parse(jDetails);
@@ -1615,7 +1620,9 @@ srv.on("laddJobSchedule", async req => {
       console.log("updateMLJob req.data :", req.data);
 
       let jobDetails = req.data.jobDetails;
-      let jDetails = jobDetails.replace(/[/]/g, "%2F");
+    //   let jDetails = jobDetails.replace(/[/]/g, "%2F");
+    let jDetails = jobDetails.replace(/%2F/g, "/");
+
       var inputData = JSON.parse(jDetails);
     //   var inputData = JSON.parse(req.data.jobDetails);
       console.log("updateMLJob inputData :", inputData);
@@ -1820,7 +1827,9 @@ srv.on("addJobSchedule", (req) => {
       console.log("updateMLJobSchedule req.data :", req.data);
 
       let schedule = req.data.schedule;
-      let jSchedule = schedule.replace(/[/]/g, "%2F");
+    //   let jSchedule = schedule.replace(/[/]/g, "%2F");
+      let jDetails = jobDetails.replace(/%2F/g, "/");
+
       var inputData = JSON.parse(jSchedule);
 
     //   var inputData = JSON.parse(req.data.schedule);
