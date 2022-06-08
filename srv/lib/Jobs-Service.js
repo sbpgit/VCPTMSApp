@@ -1509,7 +1509,13 @@ srv.on("laddJobSchedule", async req => {
     return new Promise((resolve, reject) => {
       const scheduler = getJobscheduler(req);
       console.log("addMLJob req.data :", req.data);
-      var inputData = JSON.parse(req.data.jobDetails);
+
+      let jobDetails = req.data.jobDetails;
+      let jDetails = jobDetails.replace(/[/]/g, "%2F");
+
+    //   var inputData = JSON.parse(req.data.jobDetails);
+      var inputData = JSON.parse(jDetails);
+
       console.log("addMLJob inputData :", inputData);
       let baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
       let actionUrl = baseUrl + inputData.action;
@@ -1607,7 +1613,11 @@ srv.on("laddJobSchedule", async req => {
     return new Promise((resolve, reject) => {
       const scheduler = getJobscheduler(req);
       console.log("updateMLJob req.data :", req.data);
-      var inputData = JSON.parse(req.data.jobDetails);
+
+      let jobDetails = req.data.jobDetails;
+      let jDetails = jobDetails.replace(/[/]/g, "%2F");
+      var inputData = JSON.parse(jDetails);
+    //   var inputData = JSON.parse(req.data.jobDetails);
       console.log("updateMLJob inputData :", inputData);
     //   let baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
 
@@ -1808,7 +1818,12 @@ srv.on("addJobSchedule", (req) => {
     return new Promise((resolve, reject) => {
       const scheduler = getJobscheduler(req);
       console.log("updateMLJobSchedule req.data :", req.data);
-      var inputData = JSON.parse(req.data.schedule);
+
+      let schedule = req.data.schedule;
+      let jSchedule = schedule.replace(/[/]/g, "%2F");
+      var inputData = JSON.parse(jSchedule);
+
+    //   var inputData = JSON.parse(req.data.schedule);
       console.log("updateMLJobSchedule inputData :", inputData);
     //   let baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
 
