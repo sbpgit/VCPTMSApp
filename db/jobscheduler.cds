@@ -198,19 +198,21 @@ context js {
 
 @cds.persistence.exists 
 Entity ![V_JOBSTATUS] {
-key     ![JOB_ID]: Integer  @title: 'JOB_ID' ; 
-key     ![JOB_NAME]: String(50)  @title: 'JOB_NAME' ; 
-key     ![ACTION]: String(200)  @title: 'ACTION' ; 
-key     ![JOB_DES]: String(100)  @title: 'JOB_DES' ; 
-key     ![SCH_STARTTIME]: String(50)  @title: 'SCH_STARTTIME' ; 
-key     ![SCH_END_TIME]: String(50)  @title: 'SCH_END_TIME' ; 
-key     ![SCH_TIME]: String(50)  @title: 'SCH_TIME' ; 
-key     ![SCH_NEXTRUN]: String(50)  @title: 'SCH_NEXTRUN' ; 
-key     ![RUN_ID]: String(50)  @title: 'RUN_ID' ; 
-key     ![RUN_STATUS]: String(50)  @title: 'RUN_STATUS' ; 
-key     ![RUN_STATE]: String(50)  @title: 'RUN_STATE' ; 
-key     ![STATUS_MESSAGE]: String(5000)  @title: 'STATUS_MESSAGE' ; 
-key     ![SCHEDULED_TIMESTAMP]: String(50)  @title: 'SCHEDULED_TIMESTAMP' ; 
-key     ![COMPLETED_TIMESTAMP]: String(50)  @title: 'COMPLETED_TIMESTAMP' ; 
-key     ![RUNTEXT]: LargeString  @title: 'RUNTEXT' ; 
+key     ![JOB_ID]: Integer  @title: 'Job ID' ; 
+key     ![JOB_NAME]: String(50)  @title: 'Job Name' ; 
+key     ![ACTION]: String(200)  @title: 'Action' ; 
+key     ![JOB_DES]: String(100)  @title: 'Job Description' ; 
+key     ![SCH_STARTTIME]: String(50)  @title: 'Scheduled Start Time' ; 
+key     ![SCH_END_TIME]: String(50)  @title: 'Scheduled End time' ; 
+key     ![SCH_TIME]: String(50)  @title: 'Scheduled Time' ; 
+key     ![SCH_NEXTRUN]: String(50)  @title: 'Scheduled Next Run' ; 
+key     ![RUN_ID]: String(50)  @title: 'Run ID' ; 
+key     ![RUN_STATUS]: String(50)  @title: 'Run Status' ; 
+key     ![CRITICALSTATUS]: Integer  @title: 'CRITICALSTATUS' ; 
+key     ![RUN_STATE]: String(50)  @title: 'Run State' ; 
+key     ![CRITICALSTATE]: Integer  @title: 'CRITICALSTATE' ;
+key     ![STATUS_MESSAGE]: String(5000)  @title: 'Status Message' ; 
+key     ![SCHEDULED_TIMESTAMP]: String(50)  @title: 'Scheduled Timestamp' ; 
+key     ![COMPLETED_TIMESTAMP]: String(50)  @title: 'Completed Timestamp' ; 
+key     ![RUNTEXT]: LargeString  @title: 'Run Text' ; 
 }

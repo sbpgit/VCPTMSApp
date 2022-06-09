@@ -13,11 +13,12 @@
     }
     ,
     "CONFIG_PRODUCTS.db::SYN_LOCATION": {
-        "target": {
-            "object": "VT_LOCATION",
-            "schema": "DB_CONFIG_PROD_CLIENT1"
-        }
-    },
+       "target": {
+           "object": "VT_LOCATION",
+           "schema": "DB_CONFIG_PROD_CLIENT1"
+       }
+    }
+    ,
     "CONFIG_PRODUCTS.db::SYN_OBJDEPHDR": {
         "target": {
             "object": "VT_OBJDEPHEADER",

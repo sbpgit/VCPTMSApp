@@ -5,7 +5,7 @@
     {
         "source": "^/v2/pal/(.*)$",
         "target": "/v2/pal/$1",
-        "destination": "ConfigProdPrd_DB",
+        "destination": "ConfigProdPrd",
         "authenticationType": "none",
         "csrfProtection": true
       },

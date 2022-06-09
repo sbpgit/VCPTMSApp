@@ -2352,6 +2352,8 @@ sap.ui.define([
                         sap.ui.core.BusyIndicator.hide();
                         if (oData.laddJobSchedule.value) {
                             sap.m.MessageToast.show("Schedule created successfully");
+                        } else {
+                            sap.m.MessageToast.show("Failed to create schedule");
                         }
 
                         that.onCreateJobClose();
@@ -2400,6 +2402,8 @@ sap.ui.define([
                         sap.ui.core.BusyIndicator.hide();
                         if (oData.lupdateMLJobSchedule.value) {
                             sap.m.MessageToast.show("Schedule updated successfully");
+                        } else {
+                            sap.m.MessageToast.show("Failed to update schedule");
                         }
                         that.onCreateJobClose();
                         that.onBack();

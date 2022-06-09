@@ -5,7 +5,7 @@ version: 1.0.0
 modules:
 - name: config_products-srv
   type: nodejs
-  path: gen/srv
+  path: srv
   requires:
   - name: config_products-db
   - name: uaa_config_products
@@ -101,7 +101,7 @@ modules:
       target-path: resources/
     - artifacts:
       - cpappfcpnodesdetails.zip
-      name: cpappf  
+      name: cpappfcpnodesdetails
       target-path: resources/
     - artifacts:
       - cpappcplocation.zip
@@ -138,6 +138,10 @@ modules:
     - artifacts:
       - cpappcpjobschedulerlogs.zip
       name: cpappcpjobschedulerlogs
+      target-path: resources/
+    - artifacts:
+      - cpappcpjobschlogs.zip
+      name: cpappcpjobschlogs
       target-path: resources/
 - name: cpodpcpodprofiles
   type: html5
@@ -292,6 +296,16 @@ modules:
 - name: cpappcpjobschedulerlogs
   type: html5
   path: app/cpjobscheduler_logs
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappcpjobschlogs
+  type: html5
+  path: app/cp_jobschlogs
   build-parameters:
     build-result: dist
     builder: custom

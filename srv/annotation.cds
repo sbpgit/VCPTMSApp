@@ -1,8 +1,7 @@
 using cp as service from '../db/data-model';
 using cp as pal from '../db/pal-schema';
 using V_SALESHCFG_CHARVAL from '../db/data-model';
-//using V_TIMESERIES as tssrv from '../db/data-model';
-//using V_PRODUCT as prd from '../db/data-model';
+using V_JOBSTATUS from '../db/jobscheduler';
 
 
 // Product annotations
@@ -1273,6 +1272,127 @@ annotate service.USER_AUTHOBJ with @(
         Facets : [{
             $Type  : 'UI.ReferenceFacet',
             Label  : 'User Authorization',
+            Target : '@UI.FieldGroup#Details'
+        }]
+    }]
+);
+/*******************************************/
+// Job Status
+/*******************************************/
+annotate V_JOBSTATUS with @(
+    UI        : {
+        SelectionFields         : [
+            JOB_ID,
+            RUN_STATUS,
+            RUN_STATE
+        ],
+        LineItem                : [
+            {
+                $Type : 'UI.DataField',
+                Value : JOB_ID,
+                ![@UI.Importance]   : #High
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : JOB_NAME
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : SCH_STARTTIME
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : SCH_END_TIME
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : SCH_NEXTRUN
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : RUN_STATUS,
+                Criticality : CRITICALSTATUS
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : RUN_STATE,
+                Criticality : CRITICALSTATE
+            }
+        ],
+        HeaderInfo              : {
+            Title          : {Value : JOB_ID},
+            Description    : {Value : JOB_NAME},
+            TypeName       : 'Job Logs',
+            TypeNamePlural : 'Job Logs',
+        },
+        HeaderFacets            : [{
+            $Type             : 'UI.ReferenceFacet',
+            Target            : '@UI.FieldGroup#Description',
+            ![@UI.Importance] : #Medium
+        }],
+        FieldGroup #Description : {Data : [{
+            $Type : 'UI.DataField',
+            Value : RUN_STATE
+        }]},
+        FieldGroup #Details     : {Data : [
+            {
+                $Type : 'UI.DataField',
+                Value : JOB_DES
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : ACTION
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : SCH_STARTTIME
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : SCH_END_TIME
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : SCH_TIME
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : SCH_NEXTRUN
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : RUN_ID
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : RUN_STATUS
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : STATUS_MESSAGE
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : SCHEDULED_TIMESTAMP
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : COMPLETED_TIMESTAMP
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : RUNTEXT
+            }
+        ]}
+    },
+    // Page Facets
+    UI.Facets : [{
+        $Type  : 'UI.CollectionFacet',
+        ID     : 'Joblogs',
+        Label  : 'Job Scheduler Logs',
+        Facets : [{
+            $Type  : 'UI.ReferenceFacet',
+            Label  : 'Job Logs',
             Target : '@UI.FieldGroup#Details'
         }]
     }]
