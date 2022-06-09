@@ -14,7 +14,53 @@ const { v1: uuidv1} = require('uuid')
 
 const request = require('request');
 const lbaseUrl = "https://sbpprovider-dev-config-products-srv.cfapps.us10.hana.ondemand.com"; 
+const vcap = process.env;
+// const app_uris = process.env.VCAP_APPLICATION.application_uris;
 
+const vcap_app = process.env.VCAP_APPLICATION;
+
+function getBaseUrl()
+{
+    // console.log("getBaseUrl app_uris ",process.env.VCAP_APPLICATION.application_uris);
+
+    // let json_vcap = JSON.stringify(vcap);
+    // console.log("getBaseUrl application_uris", json_vcap.VCAP_APPLICATION.application_uris);
+
+    // console.log("getBaseUrl application_name", vcap.VCAP_APPLICATION.application_name);
+
+    // console.log("getBaseUrl application_uris[0]", vcap.VCAP_APPLICATION.application_uris);
+
+
+    // return vcap.VCAP_APPLICATION.application_uris;
+
+    var tag = new RegExp('"application_uris"(.*)');
+    var uri = vcap_app.match(tag);
+    if (uri)
+    {
+        console.log(uri[1]);
+        var tag1 = new RegExp('"(.*)');
+        uri =uri[1].match(tag1);
+        console.log(uri[1], uri[1].length);
+        let application_uris = "";
+        for (let index  = 0; index < uri[1].length; index++)
+        {
+            if( uri[1][index] != '"')
+            {
+                application_uris = application_uris + uri[1][index];
+            }
+            else
+            {
+                index = uri[1].length;
+            }
+        }
+        
+        console.log("application_uris ", application_uris);
+        
+        return application_uris;
+
+    }
+
+}
 
 function getJobscheduler(req) {
 // exports.getJobscheduler = function(req){
@@ -639,7 +685,8 @@ async function _updateJobs(req,isGet) {
     }
     else
     {
-        let baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+        // let baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+        let baseUrl = req.headers['x-forwarded-proto'] + '://' + getBaseUrl();
         readJobsUrl = baseUrl + '/jobs/readJobs()';
     }
 
@@ -699,7 +746,8 @@ async function _updateJobs(req,isGet) {
     }
     else
     {
-        let baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+        // let baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+        let baseUrl = req.headers['x-forwarded-proto'] + '://' + getBaseUrl();
         lreadJobDetailsUrl = baseUrl + '/jobs/readJobDetails(jobId='  + jobId + ',displaySchedules=' + displaySchedules+')';
     }
 
@@ -754,7 +802,8 @@ async function _updateJobs(req,isGet) {
     }
     else
     {
-        let baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+        // let baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+        let baseUrl = req.headers['x-forwarded-proto'] + '://' + getBaseUrl();
         lreadJobSchedulesUrl = baseUrl + '/jobs/readJobSchedules(jobId='  + jobId + ')';
     }
 
@@ -812,7 +861,8 @@ async function _updateJobs(req,isGet) {
     }
     else
     {
-        let baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+        // let baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+        let baseUrl = req.headers['x-forwarded-proto'] + '://' + getBaseUrl();
         lreadJobScheduleUrl = baseUrl + 
         '/jobs/readJobSchedule(jobId='  + jobId + ',' + 'scheduleId=' + "'" + scheduleId + "'" + "," + 'displayLogs='  + displayLogs + ')';
     }
@@ -870,7 +920,8 @@ async function _updateJobs(req,isGet) {
     }
     else
     {
-        let baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+        // let baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+        let baseUrl = req.headers['x-forwarded-proto'] + '://' + getBaseUrl();
         lreadJobActionLogsUrl = baseUrl + '/jobs/readJobActionLogs(jobId='  + jobId + ')';
     }
 
@@ -929,7 +980,8 @@ async function _updateJobs(req,isGet) {
     }
     else
     {
-        let baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+        // let baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+        let baseUrl = req.headers['x-forwarded-proto'] + '://' + getBaseUrl();
         lreadJobRunLogsUrl = baseUrl + 
         '/jobs/readJobRunLogs(jobId='  + jobId + ',' + 'scheduleId=' + "'" + scheduleId + "'" + "," + 'page_size='  + page_size + ',' + 'offset='  + offset + ')';
     }
@@ -980,6 +1032,7 @@ async function _updateJobs(req,isGet) {
 
     console.log('jDetails ', jDetails);
 
+
     var addJobsUrl ="";
 
     let hostName = req.headers.host;
@@ -991,7 +1044,8 @@ async function _updateJobs(req,isGet) {
     }
     else
     {
-        let baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+        // let baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+        let baseUrl = req.headers['x-forwarded-proto'] + '://' + getBaseUrl();
         addJobsUrl = baseUrl + '/jobs/addMLJob(jobDetails=' + "'" + jDetails + "'" + ')';
     }
 
@@ -1048,7 +1102,9 @@ async function _updateJobs(req,isGet) {
     }
     else
     {
-        let baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+        // let baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+        let baseUrl = req.headers['x-forwarded-proto'] + '://' + getBaseUrl();
+
         lupdateJobUrl = baseUrl + '/jobs/updateMLJob(jobDetails=' + "'" + jDetails + "'" + ')';
     }
 
@@ -1106,7 +1162,9 @@ async function _updateJobs(req,isGet) {
     }
     else
     {
-        let baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+        // let baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+        let baseUrl = req.headers['x-forwarded-proto'] + '://' + getBaseUrl();
+
         ldeleteJobUrl = baseUrl + 
         '/jobs/deleteMLJob(jobId='  + jobId +')';    
     }
@@ -1168,7 +1226,9 @@ srv.on("laddJobSchedule", async req => {
     }
     else
     {
-        let baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+        // let baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+        let baseUrl = req.headers['x-forwarded-proto'] + '://' + getBaseUrl();
+
         addJobScheduleUrl = baseUrl + '/jobs/addJobSchedule(schedule=' + "'" + sDetails + "'" + ')';
 
     }
@@ -1228,7 +1288,9 @@ srv.on("laddJobSchedule", async req => {
     }
     else
     {
-        let baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+        // let baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+        let baseUrl = req.headers['x-forwarded-proto'] + '://' + getBaseUrl();
+
         updateMLJobScheduleUrl = baseUrl + '/jobs/updateMLJobSchedule(schedule=' + "'" + sDetails + "'" + ')';
     }
 
@@ -1286,7 +1348,9 @@ srv.on("laddJobSchedule", async req => {
     }
     else
     {
-        let baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+        // let baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+        let baseUrl = req.headers['x-forwarded-proto'] + '://' + getBaseUrl();
+
         ldeleteMLJobScheduleUrl = baseUrl + '/jobs/deleteMLJobSchedule(scheduleDetails=' + "'" + sDetails + "'" + ')';
     }
 
@@ -1508,22 +1572,57 @@ srv.on("laddJobSchedule", async req => {
 
     return new Promise((resolve, reject) => {
       const scheduler = getJobscheduler(req);
-      console.log("addMLJob req.data :", req.data);
+    //   console.log("addMLJob req.data :", req.data);
 
       let jobDetails = req.data.jobDetails;
-      console.log("addMLJob jobDetails :", jobDetails);
+    //   console.log("addMLJob jobDetails :", jobDetails);
 
     //   let jDetails = jobDetails.replace(/[/]/g, "%2F");
       let jDetails = jobDetails.replace(/%2F/g, "/");
-      console.log("addMLJob jDetails :", jDetails);
+    //   console.log("addMLJob jDetails :", jDetails);
 
 
     //   var inputData = JSON.parse(req.data.jobDetails);
       var inputData = JSON.parse(jDetails);
 
-      console.log("addMLJob inputData :", inputData);
-      let baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+    //   console.log("addMLJob inputData :", inputData);
+    //   let baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+    //   let baseUrl = req.headers['x-forwarded-proto'] + '://' + cfUrl;
+    // Array Element 0 is throwing error, remove first character '[' and last caharacter ']'
+    // console.log("addMLJob VCAP_SERVICES :", process.env.VCAP_SERVICES);
+
+    // console.log("addMLJob VCAP_APPLICATION cf_api :", process.env.VCAP_APPLICATION.cf_api);
+    // console.log("addMLJob VCAP_APPLICATION application_name :", process.env.VCAP_APPLICATION.application_name);
+    // console.log("addMLJob VCAP_APPLICATION application_uris :", process.env.VCAP_APPLICATION.application_uris);
+    // let vcap_app = process.env.VCAP_APPLICATION;
+
+    // console.log("addMLJob VCAP_APPLICATION :", vcap_app);
+
+    // var vcap_app_string = JSON.stringify(vcap_app);
+    // var jsonParsed = JSON.parse(vcap_app);
+
+    // console.log("addMLJob VCAP_APPLICATION application_name :", vcap_app.application_name);
+
+    // console.log("addMLJob VCAP_APPLICATION application_uris :", vcap_app.application_uris);
+
+    // console.log("addMLJob VCAP_APPLICATION application_uris[0] :", process.env.application_uris[0]);
+
+
+    // let baseUrl = req.headers['x-forwarded-proto'] + '://' + vcap_app.application_uris;
+
+
+
+    // console.log("addMLJob JSON.stringify(vcap) :", JSON.stringify(vcap));
+
+
+    let baseUrl = req.headers['x-forwarded-proto'] + '://' + getBaseUrl();
+
       let actionUrl = baseUrl + inputData.action;
+
+      console.log("addMLJob baseUrl :", baseUrl);
+      console.log("addMLJob actionUrl :", actionUrl);
+
+
 
       if (scheduler) {
         var myJob = {
@@ -1569,7 +1668,9 @@ srv.on("laddJobSchedule", async req => {
       console.log("createMLJob req.data :", req.data);
       var inputData = req.data.jobDetails;
       console.log("createMLJob inputData :", inputData);
-      let baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+    //   let baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+    let baseUrl = req.headers['x-forwarded-proto'] + '://' + getBaseUrl();
+
       let actionUrl = baseUrl + inputData.action;
 
 
@@ -1828,7 +1929,9 @@ srv.on("addJobSchedule", (req) => {
 
       let schedule = req.data.schedule;
     //   let jSchedule = schedule.replace(/[/]/g, "%2F");
-      let jDetails = jobDetails.replace(/%2F/g, "/");
+      console.log("updateMLJobSchedule schedule :", schedule);
+
+      let jSchedule = schedule.replace(/%2F/g, "/");
 
       var inputData = JSON.parse(jSchedule);
 
