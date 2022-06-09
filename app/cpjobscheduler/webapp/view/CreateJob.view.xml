@@ -1,4 +1,4 @@
-<mvc:View controllerName="cpapp.cpjobscheduler.controller.CreateJob"
+<mvc:View controllerName="cpapp.cpjobschedulertest.controller.CreateJob"
     xmlns="sap.m"
     xmlns:core="sap.ui.core"
     xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
@@ -13,6 +13,7 @@
                         <core:ListItem key="M" text="{i18n>mdlgene}"/>
                         <core:ListItem key="P" text="{i18n>predi}"/>
                         <core:ListItem key="T" text="{i18n>timeseries}"/>
+                        <core:ListItem key="F" text="{i18n>timeseriesF}"/>
                         <core:ListItem key="I" text="{i18n>ibpI}"/>
                         <core:ListItem key="S" text="{i18n>sdi}"/>
                     </Select>
@@ -66,7 +67,6 @@
                                     </f:label>
                                     <f:fields>
                                         <Input id="MpmInput" placeholder="{i18n>predpf}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
-
                                     </f:fields>
                                 </f:FormElement>
                                 <f:FormElement>
@@ -181,7 +181,6 @@
                                         <Label text="{i18n>prod}" required="true"/>
                                     </f:label>
                                     <f:fields>
-                                        <!-- <Input id="TprodInput" width="225px" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/> -->
                                         <MultiInput id="TprodInput" width="225px" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
                                     </f:fields>
                                 </f:FormElement>
@@ -203,6 +202,48 @@
                     </f:formContainers>
                 </f:Form>
             </Panel>
+
+            <Panel id="timeSeriesFPanel" visible="false" expandable="true" expanded="true">
+                <headerToolbar>
+                    <OverflowToolbar>
+                        <Title text="{i18n>timeseriesFPanel}"/>
+                    </OverflowToolbar>
+                </headerToolbar>
+                <f:Form editable="true">
+                    <f:layout>
+                        <f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2" singleContainerFullSize="false" />
+                    </f:layout>
+                    <f:formContainers>
+                        <f:FormContainer>
+                            <f:formElements>
+                                <f:FormElement>
+                                    <f:label>
+                                        <Label text="{i18n>loc}" required="true"/>
+                                    </f:label>
+                                    <f:fields>
+                                        <Input id="TFlocInput" width="225px" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                                    </f:fields>
+                                </f:FormElement>
+                                <f:FormElement>
+                                    <f:label>
+                                        <Label text="{i18n>prod}" required="true"/>
+                                    </f:label>
+                                    <f:fields>
+                                        <MultiInput id="TFprodInput" width="225px" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
+                                    </f:fields>
+                                </f:FormElement>
+                                
+                                <f:FormElement>
+                                    <f:fields>
+                                        <Button type="Emphasized" text="{i18n>genTimeseriesF}" press="onTimeSeriesF" width="40%"/>
+                                    </f:fields>
+                                </f:FormElement>
+                            </f:formElements>
+                        </f:FormContainer>
+                    </f:formContainers>
+                </f:Form>
+            </Panel>
+
 
             <Panel id="IbpPanel" visible="false" expandable="true" expanded="true">
                 <headerToolbar>
@@ -231,7 +272,6 @@
                         <RadioButton id="idIBPCompReqQty" text="Components Requirement Quantity" />
                     </RadioButtonGroup>
 
-                <!-- </content> -->
 
                 <VBox class="sapUiSmallMargin">
                     <f:Form editable="true" id="IBPimport">
@@ -277,9 +317,7 @@
                             </f:FormContainer>
                         </f:formContainers>
                     </f:Form>
-                <!-- </VBox>
 
-                <VBox class="sapUiSmallMargin"> -->
                     <f:Form editable="true" id="IBPProdExport" visible="false">
                         <f:layout>
                             <f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2" singleContainerFullSize="false" />
@@ -299,9 +337,7 @@
                             </f:FormContainer>
                         </f:formContainers>
                     </f:Form>
-                <!-- </VBox>
-
-                <VBox class="sapUiSmallMargin"> -->
+                    
                     <f:Form editable="true" id="IBPClassExport" visible="false">
                         <f:layout>
                             <f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2" singleContainerFullSize="false" />
@@ -321,9 +357,7 @@
                             </f:FormContainer>
                         </f:formContainers>
                     </f:Form>
-                <!-- </VBox>
-
-                <VBox class="sapUiSmallMargin"> -->
+                    
                     <f:Form editable="true" id="IBPSalesHisExport" visible="false">
                         <f:layout>
                             <f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2" singleContainerFullSize="false" />
@@ -472,8 +506,8 @@
 
 
                 </VBox>
-                <Button id="idbtImport" type="Emphasized" text="Import From IBP" press="onIbpJobImport" width="18%"/>
-                <Button id="idbtExport" type="Emphasized" text="Export To IBP" press="onIbpJobExport" width="18%" visible="false"/>
+                <Button id="idbtImport" type="Emphasized" text="Import From IBP" press="onIbpJobImport" width="10%"/>
+                <Button id="idbtExport" type="Emphasized" text="Export To IBP" press="onIbpJobExport" width="10%" visible="false"/>
                 </content>
             </Panel>
 
@@ -485,7 +519,7 @@
                     </OverflowToolbar>
                 </headerToolbar>
                 <content>
-                <!-- <HBox> -->
+                
                 <f:Form editable="true" id="idSdiform" >
                         <f:layout>
                             <f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2" singleContainerFullSize="false" />
@@ -519,6 +553,7 @@
                             </f:FormContainer>
                         </f:formContainers>
                     </f:Form>
+                    
                 <Button id="idbtSdi" type="Emphasized" text="SDI Integration" press="onSdiIntegration" width="10%"/>
             </content>
             </Panel>
