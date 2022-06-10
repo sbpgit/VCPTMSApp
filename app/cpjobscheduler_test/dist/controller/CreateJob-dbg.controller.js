@@ -33,6 +33,12 @@ sap.ui.define([
             this.odModel.setSizeLimit(2000);
             this.ppfModel.setSizeLimit(1000);
 
+            that.oProd = "";
+            that.oPredProfile = "";
+            that.oVer = "";
+            that.oScen = "";
+            that.oCust = "";
+
           // Declaring fragments
           this._oCore = sap.ui.getCore();
           if (!this._valueHelpDialogLoc) {
@@ -863,11 +869,16 @@ sap.ui.define([
             //   that.oObjDep.removeAllTokens();
               this._valueHelpDialogProd.getAggregation("_dialog").getContent()[1].removeSelections();
             //   this._valueHelpDialogOD.getAggregation("_dialog").getContent()[1].removeSelections();
-              }
-              if(oJobType === "P"){
-                  that.oVer.setValue("");
-                that.oScen.setValue("");
-              }
+                } else if(that.oProd !== "") {
+                    that.oProd.setValue("");
+                }
+                if(oJobType === "P"){
+                    that.oVer.setValue("");
+                    that.oScen.setValue("");
+                }
+                if(oJobType === "I" && that.oCust !== ""){
+                    that.oCust.setValue("");
+                }
               if(oJobType === "T" || oJobType === "F" || oJobType === "I"){
                 var oProdItems = sap.ui.getCore().byId("prodSlctList").getItems();
                 for(var i=0; i<oProdItems.length; i++){

@@ -7,7 +7,6 @@
     displayBlock="true"
     xmlns="sap.m">
 
-    <!-- <Page id="page" title="{i18n>title}" titleAlignment="Center"> -->
     <ux:ObjectPageLayout id="ObjectPageLayout">
         <ux:headerTitle>
             <ux:ObjectPageDynamicHeaderTitle>
@@ -38,15 +37,14 @@
             </VBox>
             <VBox>
                 <Label text="Doc Create Date"/>
+                <HBox>
                 <DatePicker id="idDate" displayFormat="yyyy-MM-dd" change="handleDateChange"/>
-            </VBox>
-            <VBox >
-                <Label text=""/>
+                <VBox>
                 <Button text="Go" type="Emphasized" press="onGetData" tooltip="Get data based on filters"/>
+                </VBox>
+                </HBox>
             </VBox>
             </l:Grid>
-        
-        <!-- <content> -->
         </FlexBox>
         </ux:headerContent>
         <ux:sections>
@@ -103,6 +101,4 @@
             </ux:ObjectPageSection>
         </ux:sections>
     </ux:ObjectPageLayout>
-        <!-- </content>
-    </Page> -->
 </mvc:View>
