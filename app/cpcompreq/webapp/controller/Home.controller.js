@@ -231,9 +231,6 @@ sap.ui.define(
         var vFromDate = this.byId("fromDate").getDateValue();
         var vToDate = this.byId("toDate").getDateValue();
 
-        // Calling function to convert date string
-        vFromDate = that.getDateFn(vFromDate);
-        vToDate = that.getDateFn(vToDate);
 
         // checking if the inpus are not undefined
         if (
@@ -241,8 +238,15 @@ sap.ui.define(
           oProd !== undefined &&
           oVer !== undefined &&
           oScen !== undefined &&
-          oModelVersion !== undefined
+          oModelVersion !== undefined &&
+          vFromDate !== undefined && 
+          vFromDate !== " " && 
+          vToDate !== undefined && 
+          vToDate !== " "
         ) {
+            // Calling function to convert date string
+            vFromDate = that.getDateFn(vFromDate);
+            vToDate = that.getDateFn(vToDate);
           if (oComp === undefined) {
             oComp = "";
           }
@@ -286,7 +290,7 @@ sap.ui.define(
         } else {
           sap.ui.core.BusyIndicator.hide();
           sap.m.MessageToast.show(
-            "Please select a Location/Product/Version/Scenario"
+            "Please select a Location/Product/Version/Scenario/Date Range"
           );
         }
       },

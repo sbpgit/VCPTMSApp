@@ -7,7 +7,6 @@
     displayBlock="true"
     xmlns="sap.m">
 
-    <!-- <Page id="page" title="{i18n>title}" titleAlignment="Center"> -->
     <ux:ObjectPageLayout id="ObjectPageLayout">
         <ux:headerTitle>
             <ux:ObjectPageDynamicHeaderTitle>
@@ -29,24 +28,23 @@
             <SearchField id="idSearch" placeholder="Location/ Product/ Sales Doc" liveChange="onTableSearch" />
             </VBox>
             <VBox >
-                <Label text="Location" />
+                <Label text="Location" required="true"/>
                 <Input id="idloc" value=""  placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
             </VBox>
             <VBox>
-                <Label text="Product"/>
+                <Label text="Product" required="true"/>
                 <MultiInput id="prodInput"  placeholder="Product" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
             </VBox>
             <VBox>
-                <Label text="Doc Create Date"/>
+                <Label text="Doc. Created Date"/>
+                <HBox>
                 <DatePicker id="idDate" displayFormat="yyyy-MM-dd" change="handleDateChange"/>
-            </VBox>
-            <VBox >
-                <Label text=""/>
+                <VBox>
                 <Button text="Go" type="Emphasized" press="onGetData" tooltip="Get data based on filters"/>
+                </VBox>
+                </HBox>
             </VBox>
             </l:Grid>
-        
-        <!-- <content> -->
         </FlexBox>
         </ux:headerContent>
         <ux:sections>
@@ -103,6 +101,4 @@
             </ux:ObjectPageSection>
         </ux:sections>
     </ux:ObjectPageLayout>
-        <!-- </content>
-    </Page> -->
 </mvc:View>

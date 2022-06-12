@@ -64,7 +64,8 @@
         "watch-cpauthobjrole": "cds watch --open cpauthobjrole/webapp/index.html?sap-ui-xx-viewCache=false#fe-lrop-v4",
         "watch-cpjobscheduler_logs": "cds watch --open cpjobscheduler_logs/webapp/index.html?sap-ui-xx-viewCache=false#fe-lrop-v4",
         "watch-cprestrictions": "cds watch --open cprestrictions/webapp/index.html?sap-ui-xx-viewCache=false#fe-lrop-v4",
-        "watch-cp_jobschlogs": "cds watch --open cp_jobschlogs/webapp/index.html?sap-ui-xx-viewCache=false"
+        "watch-cp_jobschlogs": "cds watch --open cp_jobschlogs/webapp/index.html?sap-ui-xx-viewCache=false",
+        "watch-cpjoblogs": "cds watch --open cpjoblogs/webapp/index.html?sap-ui-xx-viewCache=false"
     },
     "eslintConfig": {
         "extends": "eslint:recommended",
@@ -202,7 +203,9 @@
         "app/cpauthobjrole",
         "app/cpjobscheduler_logs",
         "app/cprestrictions",
-        "app/cp_jobschlogs"
+        "app/cp_jobschlogs",
+        "app/cpjoblogs",
+        "app/cpjoblog"
     ],
     "devDependencies": {
         "@sap/ux-specification": "^1.100.4"

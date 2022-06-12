@@ -37,3 +37,23 @@ annotate service.getProducts with @(
         },
     ]
 );
+annotate service.getProducts with {
+    PRODUCT_ID @Common : {
+        ValueList       : {
+            $Type          : 'Common.ValueListType',
+            Label          : 'Products',
+            CollectionPath : 'getProducts',
+            Parameters     : [
+            {
+                $Type             : 'Common.ValueListParameterInOut',
+                LocalDataProperty : PRODUCT_ID,
+                ValueListProperty : 'PRODUCT_ID'
+            },
+            {
+                $Type             : 'Common.ValueListParameterDisplayOnly',
+                ValueListProperty : 'PROD_DESC'
+            }
+         ]
+        }   
+    }; 
+};

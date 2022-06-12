@@ -2,11 +2,8 @@
 	<Page id="pageId">
 		<customHeader>
 			<Bar>
-				<!-- <contentLeft> -->
-			<!-- <Button id="leftMenu" icon="sap-icon://menu2" tooltip="Side Menu Expand/Collapse" press="expandBegin" type="Transparent" visible="false"/>
-			</contentLeft> -->
 				<contentMiddle>
-					<Title text="{i18n>detailsTitle}" class="boldText"></Title>
+					<!-- <Title text="{i18n>detailsTitle}" class="boldText"></Title> -->
 				</contentMiddle>
 			</Bar>
 		</customHeader>

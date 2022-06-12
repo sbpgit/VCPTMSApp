@@ -25,34 +25,34 @@
             <FlexBox wrap="Wrap" fitContainer="true">
         <l:Grid defaultSpan="XL3 L3 M6 S12" >
             <VBox >
-                <Text text=""/>
+                <Label text=""/>
                 <SearchField id="headSearch" liveChange="onSearchCompReq" placeholder="Component, Structure Node" />
             </VBox>
             <VBox >
-                <Text text="Location"/>
+                <Label text="Location" required="true"/>
                 <Input id="idloc" value=""  placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
             </VBox>
             <VBox >
-                <Text text="Product"/>
+                <Label text="Product" required="true"/>
                 <Input id="idprod"  placeholder="Product" value="" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
 
             </VBox>
             <VBox >
-                <Text text="IBP Version"/>
+                <Label text="IBP Version" required="true"/>
                 <Input id="idver" value=""  placeholder="Version" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
             </VBox>
             <VBox >
-                <Text text="IBP Scenario"/>
+                <Label text="IBP Scenario" required="true"/>
                 <Input id="idscen" value=""  placeholder="Scenario" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
 
             </VBox>
             <VBox >
-                <Text text="Valid From"/>
+                <Label text="Valid From" required="true"/>
                 <DatePicker id="fromDate"  value="" displayFormat="yyyy-MM-dd" valueFormat="yyyy-MM-dd" change="handleDateChange"/>
 
             </VBox>
             <VBox >
-                <Text text="Valid To"/>
+                <Label text="Valid To" required="true"/>
                 <DatePicker id="toDate"  value="" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="handleDateChange"/>
 
             </VBox>

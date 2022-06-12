@@ -3,15 +3,26 @@
 
 
 
+.boldText {
 
+    font-weight: bold !important;
+
+}
+
+
+
+div#__vbox3 {
+    margin-left: 25%;
+}
+h5#__title3 {
+    font-weight: bold;
+}
 div#container-cp\.appf\.cpsaleshconfig---Home--page-title {
     font-weight: bold;
 }
-
 .sapUxAPObjectPageContainerNoBar>.sapUxAPObjectPageSection:first-child:not(.sapUxAPObjectPageSectionNoTitle) {
     margin-top: 0.1rem !important;
 }
-
 .sapUiSizeCompact .sapUxAPObjectPageSectionHeader, .sapUxAPObjectPageSectionHeader {
     height: 0.1rem !important;
 }

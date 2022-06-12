@@ -5,12 +5,13 @@ version: 1.0.0
 modules:
 - name: config_products-srv
   type: nodejs
-  path: srv
+  path: gen/srv
   requires:
   - name: config_products-db
   - name: uaa_config_products
   - name: jobscheduler_inst
   - name: config_products-destination-service
+  - name: config_products-mdestination-service
   provides:
   - name: srv-api
     properties:
@@ -39,6 +40,9 @@ modules:
   type: com.sap.application.content
   requires:
   - name: config_products-destination-service
+    parameters:
+      content-target: true
+  - name: config_products-mdestination-service
     parameters:
       content-target: true
   - name: config_products_html_repo_host
@@ -136,12 +140,8 @@ modules:
       name: cpappcpjobscheduler
       target-path: resources/
     - artifacts:
-      - cpappcpjobschedulerlogs.zip
-      name: cpappcpjobschedulerlogs
-      target-path: resources/
-    - artifacts:
-      - cpappcpjobschlogs.zip
-      name: cpappcpjobschlogs
+      - cpappcpjoblog.zip
+      name: cpappcpjoblog
       target-path: resources/
 - name: cpodpcpodprofiles
   type: html5
@@ -293,19 +293,9 @@ modules:
     - npm install
     - npm run build:cf
     supported-platforms: []
-- name: cpappcpjobschedulerlogs
+- name: cpappcpjoblog
   type: html5
-  path: app/cpjobscheduler_logs
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    supported-platforms: []
-- name: cpappcpjobschlogs
-  type: html5
-  path: app/cp_jobschlogs
+  path: app/cpjoblog
   build-parameters:
     build-result: dist
     builder: custom
@@ -325,6 +315,24 @@ resources:
   type: org.cloudfoundry.existing-service
   parameters:
     service-name: config_products-destination-service
+- name: config_products-mdestination-service
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      HTML5Runtime_enabled: true
+      init_data:
+        instance:
+          destinations:
+          - Authentication: NoAuthentication
+            Name: ui5
+            ProxyType: Internet
+            Type: HTTP
+            URL: https://ui5.sap.com
+          existing_destinations_policy: update
+      version: 1.0.0
+    service: destination
+    service-name: config_products-mdestination-service
+    service-plan: lite
 - name: config_products_html_repo_host
   type: org.cloudfoundry.managed-service
   parameters:

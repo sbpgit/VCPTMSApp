@@ -46,6 +46,9 @@
                             <ObjectIdentifier title="{jobId}" />
                             <Text text="{name}"/>
                             <Text text="{description}"/>
+                            <!-- <Text text="{path: 'startTime', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'yyyy/MM/dd' }}"/>
+                            <Text text="{path: 'endTime', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'yyyy/MM/dd' }}"/>
+                            <Text text="{path: 'createdAt', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'yyyy/MM/dd' }}"/> -->
                             <Text text="{startTime}"/>
                             <Text text="{endTime}"/>
                             <Text text="{createdAt}"/>

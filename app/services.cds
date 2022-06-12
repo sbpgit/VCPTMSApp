@@ -15,6 +15,5 @@ using from './cpasmbcompreq/annotations';
 using from './cpproduct/annotations';
 using from './cpcustgroup/annotations';
 using from './cpjobscheduler/annotations';
-using from './cpjobscheduler_logs/annotations';
 
-using from './cp_jobschlogs/annotations';
+using from './cpjoblog/annotations';

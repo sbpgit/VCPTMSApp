@@ -23,13 +23,13 @@ function getJobscheduler(req) {
     }
 }
 module.exports = cds.service.impl(async function () {
-    const { SBPVCP } = this.entities;
+    const { VCPQ } = this.entities;
     //  const service = await cdse.connect.to('IBPDemandsrv');
     const service = await cds.connect.to('IBPDemandsrv');
     const servicePost = await cds.connect.to('IBPMasterDataAPI');
     var vTransid;
     // var csrfProtection = csrf({ cookie: true })
-    this.on('READ', SBPVCP, request => {
+    this.on('READ', VCPQ, request => {
         try {
             return service.tx(request).run(request.query);
         }
@@ -37,7 +37,7 @@ module.exports = cds.service.impl(async function () {
             console.log(err);
         }
     });
-    // this.after("READ", SBPVCP, async (req) => {
+    // this.after("READ", VCPQ, async (req) => {
     //     const { VCPTEST } = this.entities;
     //     const tx = cds.tx(req);
     //     // const iBPData = await cds.run(SELECT.from(VCPTEST));
@@ -64,7 +64,7 @@ module.exports = cds.service.impl(async function () {
     
     this.on("getFDemandQty", async (request) => {
         var flag;
-        var resUrl = "/SBPVCP?$select=PRDID,LOCID,PERIODID4_TSTAMP,TOTALDEMANDOUTPUT,PLANNEDINDEPENDENTREQ,UOMTOID,VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and VERSIONID eq '" + request.data.VERSION + "' and SCENARIOID eq '" + request.data.SCENARIO + "' and UOMTOID eq 'EX";
+        var resUrl = "/VCPQ?$select=PRDID,LOCID,PERIODID4_TSTAMP,TOTALDEMANDOUTPUT,PLANNEDINDEPENDENTREQ,UOMTOID,VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and VERSIONID eq '" + request.data.VERSION + "' and SCENARIOID eq '" + request.data.SCENARIO + "' and UOMTOID eq 'EX";
         var req = await service.tx(req).get(resUrl);
         const dateJSONToEDM = jsonDate => {
             const content = /\d+/.exec(String(jsonDate));
@@ -118,14 +118,14 @@ module.exports = cds.service.impl(async function () {
         var vNextMonthDate = GenF.addMonths(request.data.FROMDATE, 1).toISOString().split('Z')[0];
         while (vLoop === 1) {
             if (vNextMonthDate <= vToDate) {
-                resUrl = "/SBPVCP?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and VERSIONID eq '" + request.data.VERSION + "' and SCENARIOID eq '" + request.data.SCENARIO + "' and PERIODID4_TSTAMP gt datetime'" + vFromDate + "' and PERIODID4_TSTAMP lt datetime'" + vNextMonthDate + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
+                resUrl = "/VCPQ?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and VERSIONID eq '" + request.data.VERSION + "' and SCENARIOID eq '" + request.data.SCENARIO + "' and PERIODID4_TSTAMP gt datetime'" + vFromDate + "' and PERIODID4_TSTAMP lt datetime'" + vNextMonthDate + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
                 vFromDate = vNextMonthDate;
                 vNextMonthDate = GenF.addMonths(vFromDate, 1).toISOString().split('Z')[0];
             }
             else if (vNextMonthDate > vDate) {
                 vNextMonthDate = vToDate;
                 vLoop = 0;
-                resUrl = "/SBPVCP?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and VERSIONID eq '" + request.data.VERSION + "' and SCENARIOID eq '" + request.data.SCENARIO + "' and PERIODID4_TSTAMP gt datetime'" + vFromDate + "' and PERIODID4_TSTAMP lt datetime'" + vNextMonthDate + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
+                resUrl = "/VCPQ?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and VERSIONID eq '" + request.data.VERSION + "' and SCENARIOID eq '" + request.data.SCENARIO + "' and PERIODID4_TSTAMP gt datetime'" + vFromDate + "' and PERIODID4_TSTAMP lt datetime'" + vNextMonthDate + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
             }
             else {
                 vLoop = 0;
@@ -165,57 +165,7 @@ module.exports = cds.service.impl(async function () {
             return "Failed to import IBP Future char.plan";
         }
     });
-    this.on("createIBPProduct", async (req) => {
-        var oReq = {
-            newProd: [],
-        },
-            vNewProd;
 
-        const linewprod = await cds.run(
-            `
-            SELECT A.PRODUCT_ID,
-            A.LOCATION_ID,
-            A.REF_PRODID,
-            B.PROD_DESC,
-            B.PROD_FAMILY,
-            B.PROD_GROUP,
-            B.PROD_MODEL,
-            B.PROD_MDLRANGE,
-            B.PROD_SERIES
-                   FROM "CP_NEWPROD_INTRO" AS A
-            INNER JOIN "CP_PRODUCT" AS B
-            ON A.REF_PRODID = B.PRODUCT_ID
-            WHERE A.LOCATION_ID = '`+ req.data.LOCATION_ID +
-            `' AND A.PRODUCT_ID = '` + req.data.PRODUCT_ID +
-            `'`);
-
-        //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
-        for (i = 0; i < linewprod.length; i++) {
-            vNewProd = {
-                "VCMODELRANGE": linewprod[i].PROD_MDLRANGE,
-                "PRDFAMILY": linewprod[i].PROD_FAMILY,
-                "PRDID": linewprod[i].PRODUCT_ID,
-                "PRDGROUP": linewprod[i].PROD_GROUP,
-                "VCMODEL": linewprod[i].PROD_MODEL,
-                "PRDDESCR": linewprod[i].PROD_DESC,
-                "PRDSERIES": linewprod[i].PROD_SERIES
-            };
-            oReq.newProd.push(vNewProd);
-
-        }
-        var vTransID = new Date().getTime().toString();
-        var oEntry =
-        {
-            "TransactionID": vTransID,
-            "RequestedAttributes": "VCMODELRANGE,PRDFAMILY,PRDID,PRDGROUP,VCMODEL,PRDDESCR",
-            "DoCommit": true,
-            "NavVCPPRODUCT": oReq.newProd
-        }
-        await servicePost.tx(req).post("/VCPPRODUCTTrans", oEntry);
-        var resUrl = "/GetExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
-        return await servicePost.tx(req).get(resUrl)
-        // GetExportResult
-    });
     // Master data products to IBP
     this.on("createIBPMasterProd", async (req) => {
         var oReq = {
@@ -258,10 +208,10 @@ module.exports = cds.service.impl(async function () {
             "TransactionID": vTransID,
             "RequestedAttributes": "VCMODELRANGE,PRDFAMILY,PRDID,PRDGROUP,VCMODEL,PRDDESCR",
             "DoCommit": true,
-            "NavVCPPRODUCT": oReq.masterProd
+            "NavVCQPRODUCT": oReq.masterProd
         }
-        await servicePost.tx(req).post("/VCPPRODUCTTrans", oEntry);
-        var resUrl = "/GetExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
+        await servicePost.tx(req).post("/VCQPRODUCTTrans", oEntry);
+        var resUrl = "/GetExportResult?P_EntityName='VCPQ'&P_TransactionID='" + vTransID + "'";
         return await servicePost.tx(req).get(resUrl)
         // GetExportResult
     });
@@ -293,10 +243,10 @@ module.exports = cds.service.impl(async function () {
             "TransactionID": vTransID,
             "RequestedAttributes": "LOCID,LOCDESCR",
             "DoCommit": true,
-            "NavVCPLOCATION": oReq.newLoc
+            "NavVCQLOCATION": oReq.newLoc
         }
-        await servicePost.tx(req).post("/VCPLOCATIONTrans", oEntry);
-        var resUrl = "/GetExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
+        await servicePost.tx(req).post("/VCQLOCATIONTrans", oEntry);
+        var resUrl = "/GetExportResult?P_EntityName='VCPQ'&P_TransactionID='" + vTransID + "'";
         return await servicePost.tx(req).get(resUrl)
         // GetExportResult
     });
@@ -328,10 +278,10 @@ module.exports = cds.service.impl(async function () {
             "TransactionID": vTransID,
             "RequestedAttributes": "CUSTID,CUSTDESCR",
             "DoCommit": true,
-            "NavVCPCUSTOMER": oReq.cust
+            "NavVCQCUSTOMER": oReq.cust
         }
-        await servicePost.tx(req).post("/VCPCUSTOMERTrans", oEntry);
-        var resUrl = "/GetExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
+        await servicePost.tx(req).post("/VCQCUSTOMERTrans", oEntry);
+        var resUrl = "/GetExportResult?P_EntityName='VCPQ'&P_TransactionID='" + vTransID + "'";
         return await servicePost.tx(req).get(resUrl)
         // GetExportResult
     });
@@ -372,10 +322,10 @@ module.exports = cds.service.impl(async function () {
             "TransactionID": vTransID,
             "RequestedAttributes": "VCCHAR,VCCHARVALUE,VCCLASS,VCCHARNAME,VCCHARVALUENAME,VCCLASSNAME",
             "DoCommit": true,
-            "NavVCPCLASS": oReq.class
+            "NavVCQCLASS": oReq.class
         }
-        await servicePost.tx(req).post("/VCPCLASSTrans", oEntry);
-        var resUrl = "/GetExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
+        await servicePost.tx(req).post("/VCQCLASSTrans", oEntry);
+        var resUrl = "/GetExportResult?P_EntityName='VCPQ'&P_TransactionID='" + vTransID + "'";
         try {
             
         return await servicePost.tx(req).get(resUrl)
@@ -425,11 +375,11 @@ module.exports = cds.service.impl(async function () {
             "VersionID": "",
             "DoCommit": true,
             "ScenarioID": "",
-            "NavSBPVCP": oReq.actcomp
+            "NavVCPQ": oReq.actcomp
         }
-        await service.tx(req).post("/SBPVCPTrans", oEntry);
+        await service.tx(req).post("/VCPQTrans", oEntry);
 
-        var resUrl = "/getExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
+        var resUrl = "/getExportResult?P_EntityName='VCPQ'&P_TransactionID='" + vTransID + "'";
         var res = await service.tx(req).get(resUrl);
         return res[0].Value;
     });
@@ -454,14 +404,14 @@ module.exports = cds.service.impl(async function () {
 
         //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
         for (i = 0; i < lisales.length; i++) {
-            var vWeekDate = new Date(lisales[0].WEEK_DATE).toISOString().split('Z');
+            var vWeekDate = new Date(lisales[i].WEEK_DATE).toISOString().split('Z');
             var vDemd = lisales[i].ORD_QTY.split('.');
             vsales = {
                 "LOCID": lisales[i].LOCATION_ID,
                 "PRDID": lisales[i].PRODUCT_ID,
                 "CUSTID": lisales[i].CUSTOMER_GROUP,
                 "ACTUALDEMAND": vDemd[0],
-                "PERIODID4_TSTAMP": vWeekDate[0]
+                "PERIODID0_TSTAMP": vWeekDate[0]
             };
             oReq.sales.push(vsales);
 
@@ -474,11 +424,11 @@ module.exports = cds.service.impl(async function () {
             "VersionID": "",
             "DoCommit": true,
             "ScenarioID": "",
-            "NavSBPVCP": oReq.sales
+            "NavVCPQ": oReq.sales
         }
-        await service.tx(req).post("/SBPVCPTrans", oEntry);
+        await service.tx(req).post("/VCPQTrans", oEntry);
 
-        var resUrl = "/getExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
+        var resUrl = "/getExportResult?P_TransactionID='" + vTransID + "'";
         var res = await service.tx(req).get(resUrl);
         return res[0].Value;
     });
@@ -495,6 +445,7 @@ module.exports = cds.service.impl(async function () {
                     "PRODUCT_ID",
                     "ORD_QTY",
                     "CUSTOMER_GROUP",
+                    "CLASS_NUM",
                     "CHAR_NUM",
                     "CHARVAL_NUM"
                     FROM V_IBP_SALESHCONFIG_VC
@@ -504,16 +455,17 @@ module.exports = cds.service.impl(async function () {
             `'`);
 
         for (i = 0; i < lisales.length; i++) {
-            var vWeekDate = new Date(lisales[0].WEEK_DATE).toISOString().split('Z');
+            var vWeekDate = new Date(lisales[i].WEEK_DATE).toISOString().split('Z');
             var vDemd = lisales[i].ORD_QTY.split('.');
             vsales = {
                 "LOCID": lisales[i].LOCATION_ID,
                 "PRDID": lisales[i].PRODUCT_ID,
-                "CUSTID": lisales[i].CUSTOMER_GROUP,
-                "ACTUALDEMAND": vDemd[0],
                 "VCCHAR": lisales[i].CHAR_NUM,
-                "VCCHARVALUE": lisales[i].CHARVAL_NUM,        
-                "PERIODID4_TSTAMP": vWeekDate[0]
+                "VCCHARVALUE": lisales[i].CHARVAL_NUM, 
+                "VCCLASS": lisales[i].CLASS_NUM,   
+                "ACTUALDEMAND": vDemd[0],    
+                "CUSTID": lisales[i].CUSTOMER_GROUP,
+                "PERIODID0_TSTAMP": vWeekDate[0]
             };
             oReq.sales.push(vsales);
 
@@ -522,15 +474,15 @@ module.exports = cds.service.impl(async function () {
         var oEntry =
         {
             "Transactionid": vTransID,
-            "AggregationLevelFieldsString": "LOCID,PRDID,VCCHAR,VCCHARVALUE,VCCLASS,ACTUALDEMANDVC,CUSTID,PERIODID4_TSTAMP",
+            "AggregationLevelFieldsString": "LOCID,PRDID,VCCHAR,VCCHARVALUE,VCCLASS,ACTUALDEMANDVC,CUSTID,PERIODID0_TSTAMP",
             "VersionID": "",
             "DoCommit": true,
             "ScenarioID": "",
-            "NavSBPVCP": oReq.sales
+            "NavVCPQ": oReq.sales
         }
-        await service.tx(req).post("/SBPVCPTrans", oEntry);
+        await service.tx(req).post("/VCPQTrans", oEntry);
 
-        var resUrl = "/getExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
+        var resUrl = "/getExportResult?P_EntityName='VCPQ'&P_TransactionID='" + vTransID + "'";
         var res = await service.tx(req).get(resUrl);
         return res[0].Value;
        
@@ -575,11 +527,11 @@ module.exports = cds.service.impl(async function () {
             "VersionID": "",
             "DoCommit": true,
             "ScenarioID": "",
-            "NavSBPVCP": oReq.actcompreq
+            "NavVCPQ": oReq.actcompreq
         }
-        await service.tx(req).post("/SBPVCPTrans", oEntry);
+        await service.tx(req).post("/VCPQTrans", oEntry);
 
-        var resUrl = "/getExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
+        var resUrl = "/getExportResult?P_TransactionID='" + vTransID + "'";
         var res = await service.tx(req).get(resUrl);
         return res[0].Value;
        
@@ -630,10 +582,10 @@ module.exports = cds.service.impl(async function () {
             "TransactionID": vTransID,
             "RequestedAttributes": "VCMODELRANGE,PRDFAMILY,PRDID,PRDGROUP,VCMODEL,PRDDESCR",
             "DoCommit": true,
-            "NavVCPPRODUCT": oReq.masterProd
+            "NavVCQPRODUCT": oReq.masterProd
         }
         await servicePost.tx(req).post("/VCPPRODUCTTrans", oEntry);
-        var resUrl = "/GetExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
+        var resUrl = "/GetExportResult?P_EntityName='VCPQ'&P_TransactionID='" + vTransID + "'";
         //return await servicePost.tx(req).get(resUrl);
         try {
             var vResponse = await servicePost.tx(req).get(resUrl);
@@ -728,10 +680,10 @@ module.exports = cds.service.impl(async function () {
             "TransactionID": vTransID,
             "RequestedAttributes": "LOCID,LOCDESCR",
             "DoCommit": true,
-            "NavVCPLOCATION": oReq.newLoc
+            "NavVCQLOCATION": oReq.newLoc
         }
         await servicePost.tx(req).post("/VCPLOCATIONTrans", oEntry);
-        var resUrl = "/GetExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
+        var resUrl = "/GetExportResult?P_EntityName='VCPQ'&P_TransactionID='" + vTransID + "'";
         try {
             var vResponse = await servicePost.tx(req).get(resUrl);
             flag = 'X';
@@ -825,10 +777,10 @@ module.exports = cds.service.impl(async function () {
             "TransactionID": vTransID,
             "RequestedAttributes": "CUSTID,CUSTDESCR",
             "DoCommit": true,
-            "NavVCPCUSTOMER": oReq.cust
+            "NavVCQCUSTOMER": oReq.cust
         }
         await servicePost.tx(req).post("/VCPCUSTOMERTrans", oEntry);
-        var resUrl = "/GetExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
+        var resUrl = "/GetExportResult?P_EntityName='VCPQ'&P_TransactionID='" + vTransID + "'";
         // return await servicePost.tx(req).get(resUrl)
         try {
             var aResponse = await servicePost.tx(req).get(resUrl);
@@ -931,10 +883,10 @@ module.exports = cds.service.impl(async function () {
             "TransactionID": vTransID,
             "RequestedAttributes": "VCCHAR,VCCHARVALUE,VCCLASS,VCCHARNAME,VCCHARVALUENAME,VCCLASSNAME",
             "DoCommit": true,
-            "NavVCPCLASS": oReq.class
+            "NavVCQCLASS": oReq.class
         }
         await servicePost.tx(req).post("/VCPCLASSTrans", oEntry);
-        var resUrl = "/GetExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
+        var resUrl = "/GetExportResult?P_EntityName='VCPQ'&P_TransactionID='" + vTransID + "'";
         try {
             aResponse = await servicePost.tx(req).get(resUrl);
             flag = 'X';
@@ -1021,14 +973,14 @@ module.exports = cds.service.impl(async function () {
     
             //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
             for (i = 0; i < lisales.length; i++) {
-                var vWeekDate = new Date(lisales[0].WEEK_DATE).toISOString().split('Z');
+                var vWeekDate = new Date(lisales[i].WEEK_DATE).toISOString().split('Z');
                 var vDemd = lisales[i].ORD_QTY.split('.');
                 vsales = {
                     "LOCID": lisales[i].LOCATION_ID,
                     "PRDID": lisales[i].PRODUCT_ID,
                     "CUSTID": lisales[i].CUSTOMER_GROUP,
                     "ACTUALDEMAND": vDemd[0],
-                    "PERIODID4_TSTAMP": vWeekDate[0]
+                    "PERIODID0_TSTAMP": vWeekDate[0]
                 };
                 oReq.sales.push(vsales);
     
@@ -1041,12 +993,12 @@ module.exports = cds.service.impl(async function () {
             "VersionID": "",
             "DoCommit": true,
             "ScenarioID": "",
-            "NavSBPVCP": oReq.sales
+            "NavVCPQ": oReq.sales
         }
-        await service.tx(req).post("/SBPVCPTrans", oEntry);
+        await service.tx(req).post("/VCPQTrans", oEntry);
 
-        // var resUrl = "/SBPVCPMessage?$select=Transactionid,ExceptionId,MsgText&$filter=Transactionid eq '" + vTransID + "'";
-        var resUrl = "/getExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
+        // var resUrl = "/VCPQMessage?$select=Transactionid,ExceptionId,MsgText&$filter=Transactionid eq '" + vTransID + "'";
+        var resUrl = "/getExportResult?P_TransactionID='" + vTransID + "'";
         try {
             return await service.tx(req).get(resUrl);
             flag = 'X';
@@ -1154,11 +1106,11 @@ module.exports = cds.service.impl(async function () {
             "VersionID": "",
             "DoCommit": true,
             "ScenarioID": "",
-            "NavSBPVCP": oReq.actcomp
+            "NavVCPQ": oReq.actcomp
         }
-        await service.tx(req).post("/SBPVCPTrans", oEntry);
+        await service.tx(req).post("/VCPQTrans", oEntry);
 
-        var resUrl = "/getExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
+        var resUrl = "/getExportResult?P_EntityName='VCPQ'&P_TransactionID='" + vTransID + "'";
         try {
             return await service.tx(req).get(resUrl);
             flag = 'X';
@@ -1231,49 +1183,51 @@ module.exports = cds.service.impl(async function () {
             sales: [],
         },
             vsales;
-        const lisales = await cds.run(
-            `
-            SELECT  "WEEK_DATE",
-                    "LOCATION_ID",
-                    "PRODUCT_ID",
-                    "ORD_QTY",
-                    "CUSTOMER_GROUP",
-                    "CHAR_NUM",
-                    "CHARVAL_NUM"
-                    FROM V_IBP_SALESHCONFIG_VC
-                    WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
-                       AND PRODUCT_ID = '`+ req.data.PRODUCT_ID +
-            `' AND CUSTOMER_GROUP = '` + req.data.CUSTOMER_GROUP +
-            `'`);
-
-        for (i = 0; i < lisales.length; i++) {
-            var vWeekDate = new Date(lisales[0].WEEK_DATE).toISOString().split('Z');
-            var vDemd = lisales[i].ORD_QTY.split('.');
-            vsales = {
-                "LOCID": lisales[i].LOCATION_ID,
-                "PRDID": lisales[i].PRODUCT_ID,
-                "CUSTID": lisales[i].CUSTOMER_GROUP,
-                "ACTUALDEMAND": vDemd[0],
-                "VCCHAR": lisales[i].CHAR_NUM,
-                "VCCHARVALUE": lisales[i].CHARVAL_NUM,        
-                "PERIODID4_TSTAMP": vWeekDate[0]
-            };
-            oReq.sales.push(vsales);
+            const lisales = await cds.run(
+                `
+                SELECT  "WEEK_DATE",
+                        "LOCATION_ID",
+                        "PRODUCT_ID",
+                        "ORD_QTY",
+                        "CUSTOMER_GROUP",
+                        "CLASS_NUM",
+                        "CHAR_NUM",
+                        "CHARVAL_NUM"
+                        FROM V_IBP_SALESHCONFIG_VC
+                        WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
+                           AND PRODUCT_ID = '`+ req.data.PRODUCT_ID +
+                `' AND CUSTOMER_GROUP = '` + req.data.CUSTOMER_GROUP +
+                `'`);
+    
+            for (i = 0; i < lisales.length; i++) {
+                var vWeekDate = new Date(lisales[i].WEEK_DATE).toISOString().split('Z');
+                var vDemd = lisales[i].ORD_QTY.split('.');
+                vsales = {
+                    "LOCID": lisales[i].LOCATION_ID,
+                    "PRDID": lisales[i].PRODUCT_ID,
+                    "VCCHAR": lisales[i].CHAR_NUM,
+                    "VCCHARVALUE": lisales[i].CHARVAL_NUM, 
+                    "VCCLASS": lisales[i].CLASS_NUM,   
+                    "ACTUALDEMAND": vDemd[0],    
+                    "CUSTID": lisales[i].CUSTOMER_GROUP,
+                    "PERIODID0_TSTAMP": vWeekDate[0]
+                };
+                oReq.sales.push(vsales);
 
         }
         var vTransID = new Date().getTime().toString();
         var oEntry =
         {
             "Transactionid": vTransID,
-            "AggregationLevelFieldsString": "LOCID,PRDID,VCCHAR,VCCHARVALUE,VCCLASS,ACTUALDEMANDVC,CUSTID,PERIODID4_TSTAMP",
+            "AggregationLevelFieldsString": "LOCID,PRDID,VCCHAR,VCCHARVALUE,VCCLASS,ACTUALDEMANDVC,CUSTID,PERIODID0_TSTAMP",
             "VersionID": "",
             "DoCommit": true,
             "ScenarioID": "",
-            "NavSBPVCP": oReq.sales
+            "NavVCPQ": oReq.sales
         }
-        await service.tx(req).post("/SBPVCPTrans", oEntry);
+        await service.tx(req).post("/VCPQTrans", oEntry);
 
-        var resUrl = "/getExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
+        var resUrl = "/getExportResult?P_TransactionID='" + vTransID + "'";
         try {
             return await service.tx(req).get(resUrl);
             flag = 'X';
@@ -1380,11 +1334,11 @@ module.exports = cds.service.impl(async function () {
             "VersionID": "",
             "DoCommit": true,
             "ScenarioID": "",
-            "NavSBPVCP": oReq.actcompreq
+            "NavVCPQ": oReq.actcompreq
         }
-        await service.tx(req).post("/SBPVCPTrans", oEntry);
+        await service.tx(req).post("/VCPQTrans", oEntry);
 
-        var resUrl = "/getExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
+        var resUrl = "/getExportResult?P_TransactionID='" + vTransID + "'";
         try {
             return await service.tx(req).get(resUrl);
             flag = 'X';
@@ -1457,7 +1411,7 @@ module.exports = cds.service.impl(async function () {
 
     this.on("generateFDemandQty", async (request) => {
         var flag;
-        var resUrl = "/SBPVCP?$select=PRDID,LOCID,PERIODID4_TSTAMP,TOTALDEMANDOUTPUT,PLANNEDINDEPENDENTREQ,VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and VERSIONID eq '" + request.data.VERSION + "' and SCENARIOID eq '" + request.data.SCENARIO + "'";
+        var resUrl = "/VCPQ?$select=PRDID,LOCID,PERIODID4_TSTAMP,TOTALDEMANDOUTPUT,PLANNEDINDEPENDENTREQ,VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and VERSIONID eq '" + request.data.VERSION + "' and SCENARIOID eq '" + request.data.SCENARIO + "'";
         var req = await service.tx(req).get(resUrl);
         const dateJSONToEDM = jsonDate => {
             const content = /\d+/.exec(String(jsonDate));
@@ -1558,14 +1512,14 @@ module.exports = cds.service.impl(async function () {
         var vNextMonthDate = GenF.addMonths(request.data.FROMDATE, 1).toISOString().split('Z')[0];
         while (vLoop === 1) {
             if (vNextMonthDate <= vToDate) {
-                resUrl = "/SBPVCP?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and VERSIONID eq '" + request.data.VERSION + "' and SCENARIOID eq '" + request.data.SCENARIO + "' and PERIODID4_TSTAMP gt datetime'" + vFromDate + "' and PERIODID4_TSTAMP lt datetime'" + vNextMonthDate + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
+                resUrl = "/VCPQ?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and VERSIONID eq '" + request.data.VERSION + "' and SCENARIOID eq '" + request.data.SCENARIO + "' and PERIODID4_TSTAMP gt datetime'" + vFromDate + "' and PERIODID4_TSTAMP lt datetime'" + vNextMonthDate + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
                 vFromDate = vNextMonthDate;
                 vNextMonthDate = GenF.addMonths(vFromDate, 1).toISOString().split('Z')[0];
             }
             else if (vNextMonthDate > vDate) {
                 vNextMonthDate = vToDate;
                 vLoop = 0;
-                resUrl = "/SBPVCP?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and VERSIONID eq '" + request.data.VERSION + "' and SCENARIOID eq '" + request.data.SCENARIO + "' and PERIODID4_TSTAMP gt datetime'" + vFromDate + "' and PERIODID4_TSTAMP lt datetime'" + vNextMonthDate + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
+                resUrl = "/VCPQ?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and VERSIONID eq '" + request.data.VERSION + "' and SCENARIOID eq '" + request.data.SCENARIO + "' and PERIODID4_TSTAMP gt datetime'" + vFromDate + "' and PERIODID4_TSTAMP lt datetime'" + vNextMonthDate + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
             }
             else {
                 vLoop = 0;

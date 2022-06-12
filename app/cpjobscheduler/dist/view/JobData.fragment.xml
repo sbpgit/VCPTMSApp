@@ -37,6 +37,9 @@
                     <Column hAlign="Left" vAlign="Middle">
 						<Text text="To Date"/>
 					</Column>
+                    <Column hAlign="Left" vAlign="Middle">
+						<Text text="Past Days"/>
+					</Column>
 				</columns>
 				<items>
 					<ColumnListItem>
@@ -52,6 +55,7 @@
                             <Text text="{CUSTOMER_GROUP}"/>
                             <Text text="{fromdate}"/>
                             <Text text="{todate}"/>
+                            <Text text="{PAST_DAYS}"/>
 						</cells>
 					</ColumnListItem>
 				</items>

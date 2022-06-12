@@ -230,15 +230,19 @@ sap.ui.define(
         );
         var vFromDate = this.byId("fromDate").getDateValue();
         var vToDate = this.byId("toDate").getDateValue();
-        vFromDate = that.getDateFn(vFromDate);
-        vToDate = that.getDateFn(vToDate);
         if (
           Loc !== undefined &&
           Prod !== undefined &&
           ver !== undefined &&
           scen !== undefined &&
-          modelVersion !== undefined
+          modelVersion !== undefined &&
+          vFromDate !== undefined && 
+          vFromDate !== " " && 
+          vToDate !== undefined && 
+          vToDate !== " "
         ) {
+            vFromDate = that.getDateFn(vFromDate);
+            vToDate = that.getDateFn(vToDate);
           // calling service based on filters
           that.getModel("BModel").callFunction("/getAsmbCompReqFWeekly", {
             method: "GET",
@@ -272,7 +276,7 @@ sap.ui.define(
         } else {
           sap.ui.core.BusyIndicator.hide();
           sap.m.MessageToast.show(
-            "Please select a Location/Product/Version/Scenario"
+            "Please select a Location/Product/Version/Scenario/Date Range"
           );
         }
       },

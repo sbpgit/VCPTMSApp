@@ -17,11 +17,15 @@
         <Toolbar height="8%">
             <VBox>
                 <HBox>
-                    <Text text="Access Node : " class="boldText"></Text>
+                    <Text text="Access Node : " ></Text>
                     <Text text=" {oGModel>/SelectedAccessNode}"></Text>
                 </HBox>
+                
+            </VBox>
+            <ToolbarSpacer/>
+            <VBox>
                 <HBox>
-                    <Text text="Description : " class="boldText"></Text>
+                    <Text text="Description : " ></Text>
                     <Text text=" {oGModel>/SelectedDesc}"></Text>
                 </HBox>
             </VBox>

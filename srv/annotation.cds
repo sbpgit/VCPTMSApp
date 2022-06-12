@@ -1306,10 +1306,6 @@ annotate V_JOBSTATUS with @(
             },
             {
                 $Type : 'UI.DataField',
-                Value : SCH_NEXTRUN
-            },
-            {
-                $Type : 'UI.DataField',
                 Value : RUN_STATUS,
                 Criticality : CRITICALSTATUS
             },
@@ -1378,10 +1374,6 @@ annotate V_JOBSTATUS with @(
             {
                 $Type : 'UI.DataField',
                 Value : COMPLETED_TIMESTAMP
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : RUNTEXT
             }
         ]}
     },
