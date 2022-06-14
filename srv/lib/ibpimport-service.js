@@ -37,34 +37,10 @@ module.exports = cds.service.impl(async function () {
             console.log(err);
         }
     });
-    // this.after("READ", VCPQ, async (req) => {
-    //     const { VCPTEST } = this.entities;
-    //     const tx = cds.tx(req);
-    //     // const iBPData = await cds.run(SELECT.from(VCPTEST));
-    //     for (var i in req) {
-    //         if (req[i].LOCID === 'RX01') {
-    //             let modQuery = 'UPSERT "CP_IBP_FUTUREDEMAND_TEMP" VALUES (' +
-    //                 "'" + req[i].LOCID + "'" + "," +
-    //                 "'" + req[i].PRDID + "'" + "," +
-    //                 "'" + req[i].VERSIONID + "'" + "," +
-    //                 "'" + req[i].SCENARIOID + "'" + "," +
-    //                 "'" + req[i].PERIODID0_TSTAMP + "'" + "," +
-    //                 "'" + req[i].PLANNEDINDEPENDENTREQ + "'" + ')' + ' WITH PRIMARY KEY';
-
-    //             try {
-    //                 await cds.run(modQuery);
-    //                 // await cds.run(INSERT.into('CP_IBP_FUTUREDEMAND_TEMP') .as (SELECT.from('VCPTEST').where({ PLANNEDINDEPENDENTREQ: { '>': 0 } })));
-    //             }
-    //             catch (err) {
-    //                 console.log(err);
-    //             }
-    //         }
-    //     }
-    // });
     
     this.on("getFDemandQty", async (request) => {
         var flag;
-        var resUrl = "/VCPQ?$select=PRDID,LOCID,PERIODID4_TSTAMP,TOTALDEMANDOUTPUT,PLANNEDINDEPENDENTREQ,UOMTOID,VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and VERSIONID eq '" + request.data.VERSION + "' and SCENARIOID eq '" + request.data.SCENARIO + "' and UOMTOID eq 'EX";
+        var resUrl = "/VCPQ?$select=PRDID,LOCID,PERIODID4_TSTAMP,TOTALDEMANDOUTPUT,PLANNEDINDEPENDENTREQ,UOMTOID,VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "'and UOMTOID eq 'EA'";
         var req = await service.tx(req).get(resUrl);
         const dateJSONToEDM = jsonDate => {
             const content = /\d+/.exec(String(jsonDate));
@@ -118,14 +94,14 @@ module.exports = cds.service.impl(async function () {
         var vNextMonthDate = GenF.addMonths(request.data.FROMDATE, 1).toISOString().split('Z')[0];
         while (vLoop === 1) {
             if (vNextMonthDate <= vToDate) {
-                resUrl = "/VCPQ?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and VERSIONID eq '" + request.data.VERSION + "' and SCENARIOID eq '" + request.data.SCENARIO + "' and PERIODID4_TSTAMP gt datetime'" + vFromDate + "' and PERIODID4_TSTAMP lt datetime'" + vNextMonthDate + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
+                resUrl = "/VCPQ?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and PERIODID4_TSTAMP gt datetime'" + vFromDate + "' and PERIODID4_TSTAMP lt datetime'" + vNextMonthDate + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
                 vFromDate = vNextMonthDate;
                 vNextMonthDate = GenF.addMonths(vFromDate, 1).toISOString().split('Z')[0];
             }
-            else if (vNextMonthDate > vDate) {
+            else if (vNextMonthDate > vToDate) {
                 vNextMonthDate = vToDate;
                 vLoop = 0;
-                resUrl = "/VCPQ?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and VERSIONID eq '" + request.data.VERSION + "' and SCENARIOID eq '" + request.data.SCENARIO + "' and PERIODID4_TSTAMP gt datetime'" + vFromDate + "' and PERIODID4_TSTAMP lt datetime'" + vNextMonthDate + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
+                resUrl = "/VCPQ?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and PERIODID4_TSTAMP gt datetime'" + vFromDate + "' and PERIODID4_TSTAMP lt datetime'" + vNextMonthDate + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
             }
             else {
                 vLoop = 0;
@@ -137,7 +113,7 @@ module.exports = cds.service.impl(async function () {
                 var vWeekDate = dateJSONToEDM(req[i].PERIODID4_TSTAMP).split('T')[0];
                 // var vWeekDate = vTstamp.split('T');
                 //  if (req[i].LOCID === 'RX01') {
-                let modQuery = 'UPSERT "CP_IBP_FCHARPLAN_TEMP" VALUES (' +
+                let modQuery = 'UPSERT "CP_IBP_FCHARPLAN" VALUES (' +
                     "'" + req[i].LOCID + "'" + "," +
                     "'" + req[i].PRDID + "'" + "," +
                     "'" + req[i].VCCLASS + "'" + "," +
@@ -371,7 +347,7 @@ module.exports = cds.service.impl(async function () {
         var oEntry =
         {
             "Transactionid": vTransID,
-            "AggregationLevelFieldsString": "LOCID,PRDID,ACTUALCOMPONENTDEMAND,PERIODID0_TSTAMP,PRDFR",
+            "AggregationLevelFieldsString": "LOCID,PRDID,ACTUALCOMPONENTDEMAND,PERIODID4_TSTAMP,PRDFR",
             "VersionID": "",
             "DoCommit": true,
             "ScenarioID": "",
@@ -463,7 +439,7 @@ module.exports = cds.service.impl(async function () {
                 "VCCHAR": lisales[i].CHAR_NUM,
                 "VCCHARVALUE": lisales[i].CHARVAL_NUM, 
                 "VCCLASS": lisales[i].CLASS_NUM,   
-                "ACTUALDEMAND": vDemd[0],    
+                "ACTUALDEMANDVC": vDemd[0],    
                 "CUSTID": lisales[i].CUSTOMER_GROUP,
                 "PERIODID0_TSTAMP": vWeekDate[0]
             };
@@ -514,7 +490,7 @@ module.exports = cds.service.impl(async function () {
                 "PRDID": liactcompreq[i].PRODUCT_ID,
                 "PRDFR": liactcompreq[i].COMPONENT,
                 "COMPONENTREQUIREMENTQTY": vDemd[0],        
-                "PERIODID4_TSTAMP": vWeekDate[0]
+                "PERIODID0_TSTAMP": vWeekDate[0]
             };
             oReq.actcompreq.push(vactcompreq);
 
@@ -523,7 +499,7 @@ module.exports = cds.service.impl(async function () {
         var oEntry =
         {
             "Transactionid": vTransID,
-            "AggregationLevelFieldsString": "LOCID,PRDID,PRDFR,COMPONENTREQUIREMENTQTY,PERIODID4_TSTAMP",
+            "AggregationLevelFieldsString": "LOCID,PRDID,PRDFR,COMPONENTREQUIREMENTQTY,PERIODID0_TSTAMP",
             "VersionID": "",
             "DoCommit": true,
             "ScenarioID": "",
@@ -1093,7 +1069,7 @@ module.exports = cds.service.impl(async function () {
                 "PRDID": liactcomp[i].PRODUCT_ID,
                 "ACTUALCOMPONENTDEMAND": vDemd[0],
                 "PRDFR": liactcomp[i].COMPONENT, 
-                "PERIODID4_TSTAMP": vWeekDate[0]
+                "PERIODID0_TSTAMP": vWeekDate[0]
             };
             oReq.actcomp.push(vactcomp);
 
@@ -1208,7 +1184,7 @@ module.exports = cds.service.impl(async function () {
                     "VCCHAR": lisales[i].CHAR_NUM,
                     "VCCHARVALUE": lisales[i].CHARVAL_NUM, 
                     "VCCLASS": lisales[i].CLASS_NUM,   
-                    "ACTUALDEMAND": vDemd[0],    
+                    "ACTUALDEMANDVC": vDemd[0],    
                     "CUSTID": lisales[i].CUSTOMER_GROUP,
                     "PERIODID0_TSTAMP": vWeekDate[0]
                 };
@@ -1321,7 +1297,7 @@ module.exports = cds.service.impl(async function () {
                 "PRDID": liactcompreq[i].PRODUCT_ID,
                 "PRDFR": liactcompreq[i].COMPONENT,
                 "COMPONENTREQUIREMENTQTY": vDemd[0],        
-                "PERIODID4_TSTAMP": vWeekDate[0]
+                "PERIODID0_TSTAMP": vWeekDate[0]
             };
             oReq.actcompreq.push(vactcompreq);
 
@@ -1330,7 +1306,7 @@ module.exports = cds.service.impl(async function () {
         var oEntry =
         {
             "Transactionid": vTransID,
-            "AggregationLevelFieldsString": "LOCID,PRDID,PRDFR,COMPONENTREQUIREMENTQTY,PERIODID4_TSTAMP",
+            "AggregationLevelFieldsString": "LOCID,PRDID,PRDFR,COMPONENTREQUIREMENTQTY,PERIODID0_TSTAMP",
             "VersionID": "",
             "DoCommit": true,
             "ScenarioID": "",
@@ -1411,7 +1387,7 @@ module.exports = cds.service.impl(async function () {
 
     this.on("generateFDemandQty", async (request) => {
         var flag;
-        var resUrl = "/VCPQ?$select=PRDID,LOCID,PERIODID4_TSTAMP,TOTALDEMANDOUTPUT,PLANNEDINDEPENDENTREQ,VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and VERSIONID eq '" + request.data.VERSION + "' and SCENARIOID eq '" + request.data.SCENARIO + "'";
+        var resUrl = "/VCPQ?$select=PRDID,LOCID,PERIODID4_TSTAMP,TOTALDEMANDOUTPUT,PLANNEDINDEPENDENTREQ,UOMTOID,VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "'and UOMTOID eq 'EA'";
         var req = await service.tx(req).get(resUrl);
         const dateJSONToEDM = jsonDate => {
             const content = /\d+/.exec(String(jsonDate));
@@ -1423,11 +1399,12 @@ module.exports = cds.service.impl(async function () {
         flag = '';
         for (var i in req) {
             var vWeekDate = dateJSONToEDM(req[i].PERIODID4_TSTAMP);
-            let modQuery = 'UPSERT "CP_IBP_FUTUREDEMAND_TEMP" VALUES (' +
+            var vScenario = 'BSL_SCENARIO';
+            let modQuery = 'UPSERT "CP_IBP_FUTUREDEMAND" VALUES (' +
                 "'" + req[i].LOCID + "'" + "," +
                 "'" + req[i].PRDID + "'" + "," +
                 "'" + req[i].VERSIONID + "'" + "," +
-                "'" + req[i].SCENARIOID + "'" + "," +
+                "'" + vScenario + "'" + "," +
                 "'" + vWeekDate + "'" + "," +
                 "'" + req[i].TOTALDEMANDOUTPUT + "'" + ')' + ' WITH PRIMARY KEY';
             try {
@@ -1512,14 +1489,14 @@ module.exports = cds.service.impl(async function () {
         var vNextMonthDate = GenF.addMonths(request.data.FROMDATE, 1).toISOString().split('Z')[0];
         while (vLoop === 1) {
             if (vNextMonthDate <= vToDate) {
-                resUrl = "/VCPQ?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and VERSIONID eq '" + request.data.VERSION + "' and SCENARIOID eq '" + request.data.SCENARIO + "' and PERIODID4_TSTAMP gt datetime'" + vFromDate + "' and PERIODID4_TSTAMP lt datetime'" + vNextMonthDate + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
+                resUrl = "/VCPQ?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and PERIODID4_TSTAMP gt datetime'" + vFromDate + "' and PERIODID4_TSTAMP lt datetime'" + vNextMonthDate + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
                 vFromDate = vNextMonthDate;
                 vNextMonthDate = GenF.addMonths(vFromDate, 1).toISOString().split('Z')[0];
             }
-            else if (vNextMonthDate > vDate) {
+            else if (vNextMonthDate > vToDate) {
                 vNextMonthDate = vToDate;
                 vLoop = 0;
-                resUrl = "/VCPQ?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and VERSIONID eq '" + request.data.VERSION + "' and SCENARIOID eq '" + request.data.SCENARIO + "' and PERIODID4_TSTAMP gt datetime'" + vFromDate + "' and PERIODID4_TSTAMP lt datetime'" + vNextMonthDate + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
+                resUrl = "/VCPQ?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and PERIODID4_TSTAMP gt datetime'" + vFromDate + "' and PERIODID4_TSTAMP lt datetime'" + vNextMonthDate + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
             }
             else {
                 vLoop = 0;
@@ -1528,17 +1505,16 @@ module.exports = cds.service.impl(async function () {
             var req = await service.tx(req).get(resUrl);
             flag = '';
             for (var i in req) {
-                var vWeekDate = dateJSONToEDM(req[i].PERIODID4_TSTAMP).split('T')[0];
-                // var vWeekDate = vTstamp.split('T');
-                //  if (req[i].LOCID === 'RX01') {
-                let modQuery = 'UPSERT "CP_IBP_FCHARPLAN_TEMP" VALUES (' +
+                var vWeekDate = dateJSONToEDM(req[i].PERIODID4_TSTAMP).split('T')[0];                
+                var vScenario = 'BSL_SCENARIO';
+                let modQuery = 'UPSERT "CP_IBP_FCHARPLAN" VALUES (' +
                     "'" + req[i].LOCID + "'" + "," +
                     "'" + req[i].PRDID + "'" + "," +
                     "'" + req[i].VCCLASS + "'" + "," +
                     "'" + req[i].VCCHAR + "'" + "," +
                     "'" + req[i].VCCHARVALUE + "'" + "," +
                     "'" + req[i].VERSIONID + "'" + "," +
-                    "'" + req[i].SCENARIOID + "'" + "," +
+                    "'" + vScenario + "'" + "," +
                     "'" + vWeekDate + "'" + "," +
                     "'" + req[i].OPTIONPERCENTAGE + "'" + "," +
                     "'" + req[i].FINALDEMANDVC + "'" + ')' + ' WITH PRIMARY KEY';

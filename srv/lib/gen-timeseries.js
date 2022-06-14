@@ -402,7 +402,6 @@ async genTimeseriesF(adata) {
     let lsObjdepF = {};
     let liObjdepF = [];
     let liObdhdr = [];
-    let liRestrict = [];
 
     for (let lFutInd = 0; lFutInd < liFutureCharPlan.length; lFutInd++) {
       this.logger.info("Date: " + liFutureCharPlan[lFutInd].WEEK_DATE);
@@ -429,16 +428,6 @@ async genTimeseriesF(adata) {
              FROM "V_OBDHDR"
             WHERE LOCATION_ID = '` + liFutureCharPlan[lFutInd].LOCATION_ID + `'
               AND PRODUCT_ID = '` + liFutureCharPlan[lFutInd].PRODUCT_ID + `'`
-        );
-
-        // Get Distinct Chan Num and Value
-        liRestrict = await cds.run(
-            `SELECT DISTINCT *
-                        FROM V_RESTRICTION
-                       WHERE LOCATION_ID = '` + liFutureCharPlan[lFutInd].LOCATION_ID + `'
-                         AND PRODUCT_ID = '` + liFutureCharPlan[lFutInd].PRODUCT_ID + `'
-                         AND VALID_FROM < '`+ GenF.getCurrentDate() +`'
-                         AND VALID_TO >= '`+ GenF.getCurrentDate() +`'`
         );
 
       }
@@ -523,73 +512,6 @@ async genTimeseriesF(adata) {
         liObjdepF.push(GenF.parse(lsObjdepF));
         tableObjH.push(rowObjH);
       }
-
-
-      for (let lObjInd = 0; lObjInd < liRestrict.length; lObjInd++) {
-        lsObjdepF = {};
-        rowObjH = [];
-        lsObjdepF.CAL_DATE = liFutureCharPlan[lFutInd].WEEK_DATE;
-        lsObjdepF.LOCATION_ID = liFutureCharPlan[lFutInd].LOCATION_ID;
-        lsObjdepF.PRODUCT_ID = liFutureCharPlan[lFutInd].PRODUCT_ID;
-        lsObjdepF.VERSION = liFutureCharPlan[lFutInd].VERSION;
-        lsObjdepF.SCENARIO = liFutureCharPlan[lFutInd].SCENARIO;
-        lsObjdepF.OBJ_TYPE = "RT";
-        lsObjdepF.OBJ_DEP = liRestrict[lObjInd].RESTRICTION;
-        lsObjdepF.OBJ_COUNTER = liRestrict[lObjInd].RTR_COUNTER;
-        lsObjdepF.ROW_ID = liRestrict[lObjInd].ROW_ID;
-        lsObjdepF.SUCCESS = 0;
-        for (
-          let lFutIndex = 0;
-          lFutIndex < liFutureCharPlanDate.length;
-          lFutIndex++
-        ) {
-          if (
-            liFutureCharPlanDate[lFutIndex].LOCATION_ID ===
-              liRestrict[lObjInd].LOCATION_ID &&
-            liFutureCharPlanDate[lFutIndex].PRODUCT_ID ===
-              liRestrict[lObjInd].PRODUCT_ID &&
-            liFutureCharPlanDate[lFutIndex].VERSION ===
-              liFutureCharPlan[lFutInd].VERSION &&
-            liFutureCharPlanDate[lFutIndex].SCENARIO ===
-              liFutureCharPlan[lFutInd].SCENARIO &&
-            liFutureCharPlanDate[lFutIndex].CLASS_NUM ===
-              liRestrict[lObjInd].CLASS_NUM &&
-            liFutureCharPlanDate[lFutIndex].CHAR_NUM ===
-              liRestrict[lObjInd].CHAR_NUM
-          ) {
-            if (
-              liRestrict[lObjInd].OD_CONDITION === "EQ" &&
-              liRestrict[lObjInd].CHARVAL_NUM ===
-                liFutureCharPlanDate[lFutIndex].CHARVAL_NUM
-            ) {
-              lsObjdepF.SUCCESS = liFutureCharPlanDate[lFutIndex].OPT_QTY;
-            }
-            if (
-              liRestrict[lObjInd].OD_CONDITION === "NE" &&
-              liRestrict[lObjInd].CHARVAL_NUM !==
-                liFutureCharPlanDate[lFutIndex].CHARVAL_NUM
-            ) {
-              lsObjdepF.SUCCESS = liFutureCharPlanDate[lFutIndex].OPT_QTY;
-            }
-          }
-        }
-
-        rowObjH.push(
-          lsObjdepF.CAL_DATE,
-          lsObjdepF.LOCATION_ID,
-          lsObjdepF.PRODUCT_ID,
-          lsObjdepF.OBJ_TYPE,
-          lsObjdepF.OBJ_DEP,
-          lsObjdepF.OBJ_COUNTER,
-          lsObjdepF.ROW_ID,
-          lsObjdepF.VERSION,
-          lsObjdepF.SCENARIO,
-          parseInt(lsObjdepF.SUCCESS),
-          vSuccessRate
-        );
-        liObjdepF.push(GenF.parse(lsObjdepF));
-        tableObjH.push(rowObjH);
-      }      
 
       /** Get Future Plan */
       const liFutureDemandPlanDate = await cds.run(

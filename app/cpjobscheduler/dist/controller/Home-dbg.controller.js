@@ -181,6 +181,8 @@ sap.ui.define(
           });
           that.oList.setModel(that.listModel);
           that.onSearch();
+          that.byId("JobPanel").setExpanded(true);
+          that.byId("jobDetailsPanel").setExpanded(false);
         },
 
         /**
@@ -237,11 +239,11 @@ sap.ui.define(
               } else if (oData.readJobDetails.action.includes("Predictions")) {
                 oGModel.setProperty("/JobType", "P");
               } else if (
-                oData.readJobDetails.action === "generate_timeseries"
+                oData.readJobDetails.action === "generateTimeseries"
               ) {
                 oGModel.setProperty("/JobType", "T");
               } else if (
-                oData.readJobDetails.action === "generate_timeseriesF"
+                oData.readJobDetails.action === "generateTimeseriesF"
               ) {
                 oGModel.setProperty("/JobType", "F");
               } else if (oData.readJobDetails.action.includes("sdi")) {
@@ -575,11 +577,11 @@ sap.ui.define(
                 .byId("idJobData")
                 .getColumns()[5]
                 .setVisible(false);
-              sap.ui
-                .getCore()
-                .byId("idJobData")
-                .getColumns()[6]
-                .setVisible(true);
+            //   sap.ui
+            //     .getCore()
+            //     .byId("idJobData")
+            //     .getColumns()[6]
+            //     .setVisible(true);
             } else if (
               oActionType === "exportIBPLocation" ||
               oActionType === "exportIBPCustomer" ||

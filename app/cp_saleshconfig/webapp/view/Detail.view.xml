@@ -6,7 +6,8 @@
     xmlns:f="sap.ui.layout.form"
     xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
     xmlns="sap.m">
-    
+    <Page title="{i18n>sodetails}" titleAlignment="Center" showNavButton="true" navButtonPress="onBack">
+
         <ux:ObjectPageLayout id="ObjectPageLayout">
         <ux:headerTitle>
             <ux:ObjectPageDynamicHeaderTitle>
@@ -100,5 +101,6 @@
             </ux:ObjectPageSection>
         </ux:sections>
     </ux:ObjectPageLayout>
+  </Page>
 
 </mvc:View>

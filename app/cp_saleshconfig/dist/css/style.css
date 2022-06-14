@@ -26,3 +26,6 @@ div#container-cp\.appf\.cpsaleshconfig---Home--page-title {
 .sapUiSizeCompact .sapUxAPObjectPageSectionHeader, .sapUxAPObjectPageSectionHeader {
     height: 0.1rem !important;
 }
+.sapMIBar>.sapMBarLeft>.sapMBarChild:last-child, .sapMIBar .sapMBarPH>.sapMBarChild:last-child {
+    font-weight: bold !important;
+}

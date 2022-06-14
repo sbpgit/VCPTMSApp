@@ -449,8 +449,8 @@ sap.ui.define(
 
             that.byId("IlocInput").setValue("");
             that.byId("IprodInput").setValue("");
-            that.byId("Iidver").setValue("");
-            that.byId("Iidscen").setValue("");
+            // that.byId("Iidver").setValue("");
+            // that.byId("Iidscen").setValue("");
 
             that.byId("EPlocInput").setValue("");
 
@@ -813,8 +813,8 @@ sap.ui.define(
                 .getText();
               that.oLoc = this.byId("IlocInput");
               that.oProd = this.byId("IprodInput");
-              that.oVer = this.byId("Iidver");
-              that.oScen = this.byId("Iidscen");
+            //   that.oVer = this.byId("Iidver");
+            //   that.oScen = this.byId("Iidscen");
             } else if (that.byId("idIBPselect").getSelectedKey() === "E") {
               that.ExportRadioChange();
             }
@@ -1929,9 +1929,9 @@ sap.ui.define(
         onIbpJobImport: function () {
           var aItems,
             oProdItem,
-            oSelVer,
+            // oSelVer,
             oLocItem,
-            oSelScen,
+            // oSelScen,
             fromDate,
             toDate,
             rRadioBtn;
@@ -1947,8 +1947,8 @@ sap.ui.define(
           }
           oLocItem = that.oLoc.getValue();
           oProdItem = this.oProd.getValue();
-          oSelVer = that.oVer.getValue();
-          oSelScen = "";
+        //   oSelVer = that.oVer.getValue();
+        //   oSelScen = "";
 
           var nowH = new Date();
           fromDate = nowH.toISOString().split("T")[0];
@@ -1973,23 +1973,23 @@ sap.ui.define(
           that.oGModel.setProperty("/runText", rRadioBtn);
 
           if (
-            this.oProd.getValue() &&
-            this.oVer.getValue() &&
-            this.oScen.getValue()
+            this.oProd.getValue() //&&
+            // this.oVer.getValue() &&
+            // this.oScen.getValue()
           ) {
             if (rRadioBtn.includes("Demand")) {
               vRuleslist = {
                 LOCATION_ID: oLocItem,
-                PRODUCT_ID: oProdItem,
-                VERSION: oSelVer,
-                SCENARIO: oSelScen,
+                PRODUCT_ID: oProdItem//,
+                // VERSION: oSelVer,
+                // SCENARIO: oSelScen,
               };
             } else if (rRadioBtn.includes("Future")) {
               vRuleslist = {
                 LOCATION_ID: oLocItem,
                 PRODUCT_ID: oProdItem,
-                VERSION: oSelVer,
-                SCENARIO: oSelScen,
+                // VERSION: oSelVer,
+                // SCENARIO: oSelScen,
                 FROMDATE: fromDate,
                 TODATE: toDate,
               };

@@ -331,7 +331,7 @@
                                             <MultiInput id="IprodInput" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
                                         </f:fields>
                                     </f:FormElement>
-                                    <f:FormElement>
+                                    <!-- <f:FormElement>
                                         <f:label>
                                             <Label text="{i18n>ibpver}"/>
                                         </f:label>
@@ -346,7 +346,7 @@
                                         <f:fields>
                                             <Input id="Iidscen" value="" placeholder="{i18n>ibpscen}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                                         </f:fields>
-                                    </f:FormElement>
+                                    </f:FormElement> -->
                                 </f:formElements>
                             </f:FormContainer>
                         </f:formContainers>
