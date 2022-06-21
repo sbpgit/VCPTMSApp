@@ -160,7 +160,7 @@ sap.ui.define(
             this._valueHelpDialogClassDetails.getId() + "-list"
           );
           // calling function to select the Job Type
-          that.onJobSelect();
+          that.fixDate();
           that.onJobSelect();
 
           // Calling service to get the Location data
@@ -425,7 +425,9 @@ sap.ui.define(
                 that.byId("idSdi").setSelectedKey("SH");
               } else if (sServiceText === "ImportECCSaleshCfg") {
                 that.byId("idSdi").setSelectedKey("SC");
-              }
+              }else if (sServiceText === "ImportECCAsmbcomp") {
+                that.byId("idSdi").setSelectedKey("AC");
+            }
             }
           }
           // Calling function to select the import or export for IBP Integration
@@ -1340,6 +1342,8 @@ sap.ui.define(
               that.byId("idSdi").setSelectedKey("SH");
             } else if (sServiceText === "ImportECCSaleshCfg") {
               that.byId("idSdi").setSelectedKey("SC");
+            }else if (sServiceText === "ImportECCAsmbcomp") {
+                that.byId("idSdi").setSelectedKey("AC");
             }
           }
         },
@@ -1417,7 +1421,7 @@ sap.ui.define(
               that.byId("IBPSalesHisConfigExport").setVisible(false);
               that.byId("IBPActCompDemandExport").setVisible(true);
               that.byId("IBPCompReqQtyExport").setVisible(false);
-            } else if (selRadioBt === "Components Requirement Quantity") {
+            } else if (selRadioBt === "Assembly Requirement Quantity") {
               that.oLoc = this.byId("ECRQtylocInput");
               that.oProd = this.byId("ECRQtyprodInput");
               that.oDateRange = this.byId("ECRQtyDate");
@@ -1621,7 +1625,7 @@ sap.ui.define(
             that.byId("IBPSalesHisConfigExport").setVisible(false);
             that.byId("IBPActCompDemandExport").setVisible(true);
             that.byId("IBPCompReqQtyExport").setVisible(false);
-          } else if (selRadioBt === "Components Requirement Quantity") {
+          } else if (selRadioBt === "Assembly Requirement Quantity") {
             that.oLoc = this.byId("ECRQtylocInput");
             that.oProd = this.byId("ECRQtyprodInput");
             that.oDate = this.byId("ECRQtyDate");
@@ -1654,7 +1658,24 @@ sap.ui.define(
           that.byId("ECRQtyprodInput").setValue();
           that.byId("ECRQtyDate").setValue();
         },
+        /** 
+         ** Validation for Date time
+        */
 
+            fixDate: function () {
+                var currDate = new Date();
+                that.oJSTime = sap.ui.getCore().byId("idSTime");
+                that.oJETime = sap.ui.getCore().byId("idETime");
+                that.oSchTime = sap.ui.getCore().byId("idSchTime");
+                that.oSSTime = sap.ui.getCore().byId("idSSTime");
+                that.oSETime = sap.ui.getCore().byId("idSETime");
+                that.oJSTime.setMinDate(currDate);
+                that.oJETime.setMinDate(currDate);
+                that.oSchTime.setMinDate(currDate);
+                that.oSSTime.setMinDate(currDate);
+                that.oSETime.setMinDate(currDate);
+
+            },
         /**
          * This function is called when click on create Job for Model Generation button.
          */
@@ -2116,11 +2137,12 @@ sap.ui.define(
           } else if (rRadioBtn === "Actual Components Demand") {
             oLocItem = that.oLoc.getValue();
             oProdItem = this.oProd.getValue();
-            var dLow = that.byId("EACDemandDate").getDateValue(),
-              dHigh = that.byId("EACDemandDate").getSecondDateValue();
+             var dLow = that.byId("EACDemandDate").getDateValue();
+            //   dHigh = that.byId("EACDemandDate").getSecondDateValue();
             if (oLocItem && oProdItem && dLow) {
-              var dLow = that.byId("EACDemandDate").getDateValue(),
-                dHigh = that.byId("EACDemandDate").getSecondDateValue();
+                var vDateRange = that.byId("EACDemandDate").getValue().split(' To ');
+                var dLow = vDateRange[0],
+                    dHigh = vDateRange[1];
 
               vRuleslist = {
                 LOCATION_ID: oLocItem,
@@ -2134,11 +2156,12 @@ sap.ui.define(
             } else {
               MessageToast.show("Please select all fields");
             }
-          } else if (rRadioBtn === "Components Requirement Quantity") {
+          } else if (rRadioBtn === "Assembly Requirement Quantity") {
             oLocItem = that.oLoc.getValue();
             oProdItem = this.oProd.getValue();
-            var dLow = that.byId("ECRQtyDate").getDateValue(),
-              dHigh = that.byId("ECRQtyDate").getSecondDateValue();
+            var vDateRange = that.byId("ECRQtyDate").getValue().split(' To ');
+            var dLow = vDateRange[0],
+                dHigh = vDateRange[1];
             if (oLocItem && oProdItem && dLow) {
               vRuleslist = {
                 LOCATION_ID: oLocItem,
@@ -2489,7 +2512,9 @@ sap.ui.define(
               actionText = "%2Fsdi%2FImportECCSalesh";
             } else if (sSdiType === "SC") {
               actionText = "%2Fsdi%2FImportECCSaleshCfg";
-            }
+            }else if (sSdiType === "AC") {
+                actionText = "%2Fsdi%2FImportECCAsmbcomp";
+              }
           } else {
             if (bButton.includes("Prediction")) {
               actionText = "%2Fpal%2FgenPredictions";
@@ -2517,7 +2542,7 @@ sap.ui.define(
               actionText = "%2Fibpimport-srv%2FexportIBPSalesConfig";
             } else if (bButton.includes("Actual Components Demand")) {
               actionText = "%2Fibpimport-srv%2FexportActCompDemand";
-            } else if (bButton.includes("Components Requirement")) {
+            } else if (bButton.includes("Assembly Requirement")) {
               actionText = "%2Fibpimport-srv%2FexportComponentReq";
             }
           }
@@ -2654,7 +2679,7 @@ sap.ui.define(
               bButton.includes("Sales History") ||
               bButton.includes("Sales History Config") ||
               bButton.includes("Actual Components") ||
-              bButton.includes("Components Requirement") ||
+              bButton.includes("Assembly Requirement") ||
               oSelJobType === "S"
             ) {
               var finalList = {

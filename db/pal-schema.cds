@@ -733,7 +733,7 @@ entity IBP_RESULTPLAN_TS {
     MODEL_PROFILE        : String(50) @title : 'PAL Model Profile';
     key VERSION          : String(10)    @title : 'Version';
     key SCENARIO         : String(32)    @title : 'Scenario';
-    PREDICTED            : Double    @title : 'Predicted';
+    PREDICTED            : Decimal(13,2)    @title : 'Predicted';
     PREDICTED_TIME       : Timestamp @title : 'Predicted Time';
     PREDICTED_STATUS     : String(8) @title : 'Predicted Status';
 };
@@ -751,10 +751,10 @@ entity TS_OBJDEP_CHAR_IMPACT_F {
     MODEL_PROFILE    : String(50) @title : 'PAL Model Profile';
     key VERSION     : String(10)    @title : 'Version';
     key SCENARIO    : String(32)    @title : 'Scenario';
-    CHAR_COUNT      : Double   @title : 'Character Count';
-    CHAR_IMPACT_VAL     : Double   @title : 'Character Impact Value';
-    CHAR_IMPACT_PERCENT : Double   @title : 'Character Impact Percent';
-    PREDICTED_VAL     : Double   @title : 'Predicted Value';
+    CHAR_COUNT      : Decimal(13,2)   @title : 'Character Count';
+    CHAR_IMPACT_VAL     : Decimal(13,2)   @title : 'Character Impact Value';
+    CHAR_IMPACT_PERCENT : Decimal(13,2)   @title : 'Character Impact Percent';
+    PREDICTED_VAL     : Decimal(13,2)   @title : 'Predicted Value';
     PREDICTED_TIME       : Timestamp @title : 'Predicted Time';
 
 };

@@ -19,8 +19,8 @@ service IBPImportSrv @(impl : './lib/ibpimport-service.js') {
     function createIBPSalesTrans(LOCATION_ID : String(4),PRODUCT_ID : String(40),CUSTOMER_GROUP : String(2)) returns String;
     
     function createIBPSalesConfig(LOCATION_ID : String(4),PRODUCT_ID : String(40),CUSTOMER_GROUP : String(2)) returns String;
-    function createComponentReq(LOCATION_ID : String(4),PRODUCT_ID : String(40),FROMDATE: Date, TODATE: Date) returns String;
-    function createActCompDemand(LOCATION_ID : String(4),PRODUCT_ID : String(40),FROMDATE: Date, TODATE: Date) returns String;
+    function createComponentReq(LOCATION_ID : String(4),PRODUCT_ID : String(40)) returns String;
+    function createActCompDemand(LOCATION_ID : String(4),PRODUCT_ID : String(40)) returns String;
 
     // Inbound to IBP
     action exportIBPMasterProd(LOCATION_ID : String(4));

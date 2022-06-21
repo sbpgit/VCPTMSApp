@@ -666,22 +666,18 @@ module.exports = (srv) => {
     srv.on("generateTimeseries", async (req) => {
         const obgenTimeseries = new GenTimeseries();
         await obgenTimeseries.genTimeseries(req.data);
-        console.log("test");
     });
     srv.on("generateTimeseriesF", async (req) => {
         const obgenTimeseries = new GenTimeseries();
         await obgenTimeseries.genTimeseriesF(req.data);
-        console.log("test");
     });
     // Generate Timeseries fucntion calls
     srv.on("generate_timeseries", async (req) => {
         const obgenTimeseries = new GenTimeseries();
         await obgenTimeseries.genTimeseries(req.data);
-        console.log("test");
     });
     srv.on("generate_timeseriesF", async (req) => {
         const obgenTimeseries = new GenTimeseries();
         await obgenTimeseries.genTimeseriesF(req.data);
-        console.log("test");
     });
 };

@@ -40,7 +40,7 @@ module.exports = cds.service.impl(async function () {
     
     this.on("getFDemandQty", async (request) => {
         var flag;
-        var resUrl = "/VCPQ?$select=PRDID,LOCID,PERIODID4_TSTAMP,TOTALDEMANDOUTPUT,PLANNEDINDEPENDENTREQ,UOMTOID,VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "'and UOMTOID eq 'EA'";
+        var resUrl = "/VCPQ?$select=PRDID,LOCID,PERIODID4_TSTAMP,TOTALDEMANDOUTPUT,UOMTOID,VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "'and UOMTOID eq 'EA'";
         var req = await service.tx(req).get(resUrl);
         const dateJSONToEDM = jsonDate => {
             const content = /\d+/.exec(String(jsonDate));
@@ -158,7 +158,8 @@ module.exports = cds.service.impl(async function () {
          A.PROD_GROUP,
          A.PROD_MODEL,
          A.PROD_MDLRANGE,
-         A.PROD_SERIES
+         A.PROD_SERIES,
+         A.RESERVE_FIELD3
            FROM "CP_PRODUCT" AS A
            INNER JOIN "CP_LOCATION_PRODUCT" AS B
            ON A.PRODUCT_ID = B.PRODUCT_ID 
@@ -173,7 +174,8 @@ module.exports = cds.service.impl(async function () {
                 "PRDGROUP": limasterprod[i].PROD_GROUP,
                 "VCMODEL": limasterprod[i].PROD_MODEL,
                 "PRDDESCR": limasterprod[i].PROD_DESC,
-                "PRDSERIES": limasterprod[i].PROD_SERIES
+                "PRDSERIES": limasterprod[i].PROD_SERIES,
+                "VCSTRUCTURENODE": limasterprod[i].RESERVE_FIELD3
             };
             oReq.masterProd.push(vmasterProd);
 
@@ -182,7 +184,7 @@ module.exports = cds.service.impl(async function () {
         var oEntry =
         {
             "TransactionID": vTransID,
-            "RequestedAttributes": "VCMODELRANGE,PRDFAMILY,PRDID,PRDGROUP,VCMODEL,PRDDESCR",
+            "RequestedAttributes": "VCMODELRANGE,PRDFAMILY,PRDID,PRDGROUP,VCMODEL,PRDDESCR,VCSTRUCTURENODE",
             "DoCommit": true,
             "NavVCQPRODUCT": oReq.masterProd
         }
@@ -318,7 +320,7 @@ module.exports = cds.service.impl(async function () {
             vactcomp;
         const liactcomp = await cds.run(
             `
-            SELECT  "WEEK_DATE",
+            SELECT DISTINCT "WEEK_DATE",
                     "LOCATION_ID",
                     "PRODUCT_ID",
                     "ACTUALCOMPONENTDEMAND",
@@ -326,12 +328,11 @@ module.exports = cds.service.impl(async function () {
                     FROM V_IBP_LOCPRODCOMP_ACTDEMD
                     WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
                        AND PRODUCT_ID = '`+ req.data.PRODUCT_ID +
-            `' AND WEEK_DATE >= '` + req.data.FROMDATE +
-            `' AND WEEK_DATE <= '` + req.data.TODATE + `'`);
+            `' AND WEEK_DATE >= '2020-08-01' AND WEEK_DATE <= '2021-11-30'`);
 
         //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
         for (i = 0; i < liactcomp.length; i++) {
-            var vWeekDate = new Date(liactcomp[0].WEEK_DATE).toISOString().split('Z');
+            var vWeekDate = new Date(liactcomp[i].WEEK_DATE).toISOString().split('Z');
             var vDemd = liactcomp[i].ACTUALCOMPONENTDEMAND.split('.');
             vactcomp = {
                 "LOCID": liactcomp[i].LOCATION_ID,
@@ -471,26 +472,24 @@ module.exports = cds.service.impl(async function () {
             vactcompreq;
         const liactcompreq = await cds.run(
             `
-            SELECT  "CAL_DATE",
+            SELECT DISTINCT "CAL_DATE",
                     "LOCATION_ID",
                     "PRODUCT_ID",
                     "COMPONENT",
-                    "COMP_QTY",
-                    FROM V_ASMCOMPQTY_CONSD
+                    "COMP_QTY"
+                    FROM V_COMP_REQ
                     WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
-                       AND PRODUCT_ID = '`+ req.data.PRODUCT_ID +
-                       `' AND WEEK_DATE >= '` + req.data.FROMDATE +
-                       `' AND WEEK_DATE <= '` + req.data.TODATE + `'`);
+                       AND PRODUCT_ID = '`+ req.data.PRODUCT_ID + `' AND CAL_DATE >= '2022-06-01' AND CAL_DATE <= '2022-08-01' AND COMP_QTY >= 0`);
 
         for (i = 0; i < liactcompreq.length; i++) {
-            var vWeekDate = new Date(liactcompreq[0].CAL_DATE).toISOString().split('Z');
-            var vDemd = liactcompreq[i].COMP_QTY.split('.');
+            var vWeekDate = new Date(liactcompreq[i].CAL_DATE).toISOString().split('Z');
+            var vDemd = liactcompreq[i].COMP_QTY.toFixed(2);
             vactcompreq = {
                 "LOCID": liactcompreq[i].LOCATION_ID,
                 "PRDID": liactcompreq[i].PRODUCT_ID,
                 "PRDFR": liactcompreq[i].COMPONENT,
-                "COMPONENTREQUIREMENTQTY": vDemd[0],        
-                "PERIODID0_TSTAMP": vWeekDate[0]
+                "COMPONENTREQUIREMENTQTY": vDemd,        
+                "PERIODID4_TSTAMP": vWeekDate[0]
             };
             oReq.actcompreq.push(vactcompreq);
 
@@ -499,7 +498,7 @@ module.exports = cds.service.impl(async function () {
         var oEntry =
         {
             "Transactionid": vTransID,
-            "AggregationLevelFieldsString": "LOCID,PRDID,PRDFR,COMPONENTREQUIREMENTQTY,PERIODID0_TSTAMP",
+            "AggregationLevelFieldsString": "LOCID,PRDID,PRDFR,COMPONENTREQUIREMENTQTY,PERIODID4_TSTAMP",
             "VersionID": "",
             "DoCommit": true,
             "ScenarioID": "",
@@ -532,7 +531,8 @@ module.exports = cds.service.impl(async function () {
          A.PROD_GROUP,
          A.PROD_MODEL,
          A.PROD_MDLRANGE,
-         A.PROD_SERIES
+         A.PROD_SERIES,
+         A.RESERVE_FIELD3
            FROM "CP_PRODUCT" AS A
            INNER JOIN "CP_LOCATION_PRODUCT" AS B
            ON A.PRODUCT_ID = B.PRODUCT_ID 
@@ -547,7 +547,8 @@ module.exports = cds.service.impl(async function () {
                 "PRDGROUP": limasterprod[i].PROD_GROUP,
                 "VCMODEL": limasterprod[i].PROD_MODEL,
                 "PRDDESCR": limasterprod[i].PROD_DESC,
-                "PRDSERIES": limasterprod[i].PROD_SERIES
+                "PRDSERIES": limasterprod[i].PROD_SERIES,
+                "VCSTRUCTURENODE": limasterprod[i].RESERVE_FIELD3
             };
             oReq.masterProd.push(vmasterProd);
 
@@ -556,7 +557,7 @@ module.exports = cds.service.impl(async function () {
         var oEntry =
         {
             "TransactionID": vTransID,
-            "RequestedAttributes": "VCMODELRANGE,PRDFAMILY,PRDID,PRDGROUP,VCMODEL,PRDDESCR",
+            "RequestedAttributes": "VCMODELRANGE,PRDFAMILY,PRDID,PRDGROUP,VCMODEL,PRDDESCR,PRDSERIES,VCSTRUCTURENODE",
             "DoCommit": true,
             "NavVCQPRODUCT": oReq.masterProd
         }
@@ -1062,7 +1063,7 @@ module.exports = cds.service.impl(async function () {
 
         //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
         for (i = 0; i < liactcomp.length; i++) {
-            var vWeekDate = new Date(liactcomp[0].WEEK_DATE).toISOString().split('Z');
+            var vWeekDate = new Date(liactcomp[i].WEEK_DATE).toISOString().split('Z');
             var vDemd = liactcomp[i].ACTUALCOMPONENTDEMAND.split('.');
             vactcomp = {
                 "LOCID": liactcomp[i].LOCATION_ID,
@@ -1278,26 +1279,27 @@ module.exports = cds.service.impl(async function () {
             vactcompreq;
         const liactcompreq = await cds.run(
             `
-            SELECT  "CAL_DATE",
+            SELECT DISTINCT "CAL_DATE",
                     "LOCATION_ID",
                     "PRODUCT_ID",
                     "COMPONENT",
-                    "COMP_QTY",
-                    FROM V_ASMCOMPQTY_CONSD
+                    "COMP_QTY"
+                    FROM V_COMP_REQ
                     WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
                        AND PRODUCT_ID = '`+ req.data.PRODUCT_ID +
-                       `' AND WEEK_DATE >= '` + req.data.FROMDATE +
-                       `' AND WEEK_DATE <= '` + req.data.TODATE + `'`);
+                       `' AND CAL_DATE >= '` + req.data.FROMDATE +
+                       `' AND CAL_DATE <= '` + req.data.TODATE + `'
+                       AND COMP_QTY >= 0`);
 
         for (i = 0; i < liactcompreq.length; i++) {
-            var vWeekDate = new Date(liactcompreq[0].CAL_DATE).toISOString().split('Z');
-            var vDemd = liactcompreq[i].COMP_QTY.split('.');
+            var vWeekDate = new Date(liactcompreq[i].CAL_DATE).toISOString().split('Z');
+            var vDemd = liactcompreq[i].COMP_QTY.toFixed(2);
             vactcompreq = {
                 "LOCID": liactcompreq[i].LOCATION_ID,
                 "PRDID": liactcompreq[i].PRODUCT_ID,
                 "PRDFR": liactcompreq[i].COMPONENT,
-                "COMPONENTREQUIREMENTQTY": vDemd[0],        
-                "PERIODID0_TSTAMP": vWeekDate[0]
+                "COMPONENTREQUIREMENTQTY": vDemd,        
+                "PERIODID4_TSTAMP": vWeekDate[0]
             };
             oReq.actcompreq.push(vactcompreq);
 
@@ -1306,7 +1308,7 @@ module.exports = cds.service.impl(async function () {
         var oEntry =
         {
             "Transactionid": vTransID,
-            "AggregationLevelFieldsString": "LOCID,PRDID,PRDFR,COMPONENTREQUIREMENTQTY,PERIODID0_TSTAMP",
+            "AggregationLevelFieldsString": "LOCID,PRDID,PRDFR,COMPONENTREQUIREMENTQTY,PERIODID4_TSTAMP",
             "VersionID": "",
             "DoCommit": true,
             "ScenarioID": "",
@@ -1387,7 +1389,7 @@ module.exports = cds.service.impl(async function () {
 
     this.on("generateFDemandQty", async (request) => {
         var flag;
-        var resUrl = "/VCPQ?$select=PRDID,LOCID,PERIODID4_TSTAMP,TOTALDEMANDOUTPUT,PLANNEDINDEPENDENTREQ,UOMTOID,VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "'and UOMTOID eq 'EA'";
+        var resUrl = "/VCPQ?$select=PRDID,LOCID,PERIODID4_TSTAMP,TOTALDEMANDOUTPUT,UOMTOID,VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "'and UOMTOID eq 'EA'";
         var req = await service.tx(req).get(resUrl);
         const dateJSONToEDM = jsonDate => {
             const content = /\d+/.exec(String(jsonDate));

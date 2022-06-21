@@ -932,4 +932,74 @@ module.exports = (srv) => {
             }
         }
     });
+    srv.on("ImportECCAsmbcomp", async (req) => {
+        var flag = '';
+        try {
+            const dbClass = require("sap-hdb-promisfied")
+            let dbConn = new dbClass(await dbClass.createConnectionFromEnv())
+            const sp = await dbConn.loadProcedurePromisified(null, '"FG_ASMBCOMP_SP"')
+            const output = await dbConn.callProcedurePromisified(sp, [])
+            console.log(output.results);
+            flag = 'X';
+        } catch (error) {
+            console.error(error);
+        }
+        if (flag === 'X') {
+            let dataObj = {};
+            dataObj["success"] = true;
+            dataObj["message"] = "Import of Location is successfull at " + new Date();
+
+
+            if (req.headers['x-sap-job-id'] > 0) {
+                const scheduler = getJobscheduler(req);
+
+                var updateReq = {
+                    jobId: req.headers['x-sap-job-id'],
+                    scheduleId: req.headers['x-sap-job-schedule-id'],
+                    runId: req.headers['x-sap-job-run-id'],
+                    data: dataObj
+                };
+
+                console.log("Location Imported, to update req", updateReq);
+
+                scheduler.updateJobRunLog(updateReq, function (err, result) {
+                    if (err) {
+                        return console.log('Error updating run log: %s', err);
+                    }
+                    //Run log updated successfully
+                    console.log("Import of Location job update results", result);
+
+                });
+            }
+        }
+        else {
+            let dataObj = {};
+            dataObj["failed"] = false;
+            dataObj["message"] = "Import of Location has failed at" + new Date();
+
+
+            if (req.headers['x-sap-job-id'] > 0) {
+                const scheduler = getJobscheduler(req);
+
+                var updateReq = {
+                    jobId: req.headers['x-sap-job-id'],
+                    scheduleId: req.headers['x-sap-job-schedule-id'],
+                    runId: req.headers['x-sap-job-run-id'],
+                    data: dataObj
+                };
+
+                console.log("Import of Location job update req", updateReq);
+
+                scheduler.updateJobRunLog(updateReq, function (err, result) {
+                    if (err) {
+                        return console.log('Error updating run log: %s', err);
+                    }
+                    //Run log updated successfully
+                    console.log("Import of Location job update results", result);
+
+                });
+            }
+        }
+
+    });
 };

@@ -108,7 +108,7 @@ class GenFunctions {
         const lDate = new Date(imDate);
         let lDay = lDate.getDay();
         if (lDay !== 0) lDay = 7 - lDay;
-        lDay = lDay + 1;
+        lDay = lDay - 6;
         const lNextSun = new Date(
           lDate.getFullYear(),
           lDate.getMonth(),

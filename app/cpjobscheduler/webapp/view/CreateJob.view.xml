@@ -302,7 +302,7 @@
                         <RadioButton id="idIBPSalesHis" text="Sales History" />
                         <RadioButton id="idIBPSalesHisConfig" text="Sales History Config" />
                         <RadioButton id="idIBPActCompDemd" text="Actual Components Demand" />
-                        <RadioButton id="idIBPCompReqQty" text="Components Requirement Quantity" />
+                        <RadioButton id="idIBPCompReqQty" text="Assembly Requirement Quantity" />
                     </RadioButtonGroup>
 
                 <!-- </content> -->
@@ -586,6 +586,7 @@
                                                     <core:ListItem key="CV" text="{i18n>charval}"/>
                                                     <core:ListItem key="SH" text="{i18n>saleshis}"/>
                                                     <core:ListItem key="SC" text="{i18n>salehisconfig}"/>
+                                                    <core:ListItem key="AC" text="{i18n>asmbcomp}"/>
                                             </Select>
                                         </f:fields>
                                     </f:FormElement>

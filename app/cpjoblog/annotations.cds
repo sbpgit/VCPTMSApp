@@ -21,38 +21,40 @@ annotate service.getJobStatus with {
             ]
         }   
     }; 
-    RUN_STATUS @Common : {
-        // Text            : LOCATION_ID_LOCATION_ID,
-        // TextArrangement : #TextOnly,
-        // //insert your value list here 
-        ValueList       : {
-            $Type          : 'Common.ValueListType',
-            Label          : 'Run Status',
-            CollectionPath : 'getJobStatus',
-            Parameters     : [
-            {
-                $Type             : 'Common.ValueListParameterInOut',
-                LocalDataProperty : RUN_STATUS,
-                ValueListProperty : 'RUN_STATUS'
-            }
-            ]
-        }   
-    };
-    RUN_STATE @Common : {
-        // Text            : LOCATION_ID_LOCATION_ID,
-        // TextArrangement : #TextOnly,
-        // //insert your value list here 
-        ValueList       : {
-            $Type          : 'Common.ValueListType',
-            Label          : 'RUN_STATE',
-            CollectionPath : 'getJobStatus',
-            Parameters     : [
-            {
-                $Type             : 'Common.ValueListParameterInOut',
-                LocalDataProperty : RUN_STATE,
-                ValueListProperty : 'RUN_STATE'
-            }
-            ]
-        }   
-    };
+    // RUN_STATUS @Common : {
+    //     // Text            : LOCATION_ID_LOCATION_ID,
+    //     // TextArrangement : #TextOnly,
+    //     // //insert your value list here 
+    //     ValueListWithFixedValues : true,
+    //     ValueList       : {
+    //         $Type          : 'Common.ValueListType',
+    //         Label          : 'Run Status',
+    //         CollectionPath : 'getJobStatus',
+    //         Parameters     : [
+    //         {
+    //             $Type             : 'Common.ValueListParameterInOut',
+    //             LocalDataProperty : RUN_STATUS,
+    //             ValueListProperty : 'CRITICALSTATUS'
+    //         }
+    //         ]
+    //     }   
+    // };
+    // RUN_STATE @Common : {
+    //     // Text            : LOCATION_ID_LOCATION_ID,
+    //     // TextArrangement : #TextOnly,
+    //     // //insert your value list here 
+    //     ValueListWithFixedValues : true,
+    //     ValueList       : {
+    //         $Type          : 'Common.ValueListType',
+    //         Label          : 'RUN_STATE',
+    //         CollectionPath : 'getJobStatus',
+    //         Parameters     : [
+    //         {
+    //             $Type             : 'Common.ValueListParameterInOut',
+    //             LocalDataProperty : RUN_STATE,
+    //             ValueListProperty : 'RUN_STATE'
+    //         }
+    //         ]
+    //     }   
+    // };
 }

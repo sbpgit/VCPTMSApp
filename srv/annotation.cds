@@ -1283,7 +1283,6 @@ annotate V_JOBSTATUS with @(
     UI        : {
         SelectionFields         : [
             JOB_ID,
-            RUN_STATUS,
             RUN_STATE
         ],
         LineItem                : [
