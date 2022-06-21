@@ -6,8 +6,16 @@
       "source": "^/v2/pal/(.*)$",
       "target": "/v2/pal/$1",
       "destination": "ConfigProdPrd",
+      "csrfProtection": true,
       "authenticationType": "xsuaa",
-      "csrfProtection": true
+      "scope":{
+          "GET": ["$XSAPPNAME.Display"],
+          "PUT": ["$XSAPPNAME.Display"],
+          "PATCH": ["$XSAPPNAME.Display"],
+          "POST": ["$XSAPPNAME.Display"],
+          "DELETE": ["$XSAPPNAME.Display"],
+          "default": ["$XSAPPNAME.Display"]
+      }
     },
     {
       "source": "^/v2/catalog/(.*)$",

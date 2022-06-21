@@ -6,8 +6,16 @@
         "source": "^/v2/catalog/(.*)$",
         "target": "/v2/catalog/$1",
         "destination": "ConfigProdPrd",
-        "authenticationType": "xsuaa",
-        "csrfProtection": true
+        "csrfProtection": true,
+        "authenticationType": "xsuaa",        
+        "scope":{
+            "GET": ["$XSAPPNAME.Display"],
+            "PUT": ["$XSAPPNAME.Display"],
+            "PATCH": ["$XSAPPNAME.Display"],
+            "POST": ["$XSAPPNAME.Display"],
+            "DELETE": ["$XSAPPNAME.Display"],
+            "default": ["$XSAPPNAME.Display"]
+        }
       },
       {
         "source": "^/resources/(.*)$",
@@ -31,7 +39,15 @@
       "source": "^(.*)$",
       "target": "$1",
       "service": "html5-apps-repo-rt",
-      "authenticationType": "xsuaa"
+      "authenticationType": "xsuaa",
+      "scope":{
+          "GET": ["XSAPPNAME.Display"],
+          "PUT": ["XSAPPNAME.Display"],
+          "PATCH": ["XSAPPNAME.Display"],
+          "POST": ["XSAPPNAME.Display"],
+          "DELETE": ["XSAPPNAME.Display"],
+          "default": ["XSAPPNAME.Display"]
+      }
     }
   ]
 }

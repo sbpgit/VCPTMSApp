@@ -6,8 +6,16 @@
       "source": "^/catalog/(.*)$",
       "target": "/catalog/$1",
       "destination": "ConfigProdPrd",
+      "csrfProtection": true,
       "authenticationType": "xsuaa",
-      "csrfProtection": false
+      "scope":{
+          "GET": ["$XSAPPNAME.Display"],
+          "PUT": ["$XSAPPNAME.Display"],
+          "PATCH": ["$XSAPPNAME.Display"],
+          "POST": ["$XSAPPNAME.Display"],
+          "DELETE": ["$XSAPPNAME.Display"],
+          "default": ["$XSAPPNAME.Display"]
+      }
     },
     {
       "source": "^/resources/(.*)$",

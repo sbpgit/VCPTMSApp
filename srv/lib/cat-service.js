@@ -30,8 +30,6 @@ module.exports = (srv) => {
         let liDates = [],
             vWeekIndex,
             vCompIndex,
-            vDateIndex,
-            vComp,
             lsDates = {};
         let columnname = "WEEK";
 
@@ -144,6 +142,7 @@ module.exports = (srv) => {
             liCompWeekly.push(GenFunctions.parse(lsCompWeekly));
             lsCompWeekly = {};
         }
+        liCompWeekly.sort(GenFunctions.dynamicSortMultiple("STRUC_NODE","COMPONENT","ITEM_NUM"));
         return liCompWeekly;
     });
 
@@ -271,6 +270,7 @@ module.exports = (srv) => {
             liCompWeekly.push(GenFunctions.parse(lsCompWeekly));
             lsCompWeekly = {};
         }
+        liCompWeekly.sort(GenFunctions.dynamicSortMultiple("STRUC_NODE","COMPONENT","ITEM_NUM"));
         return liCompWeekly;
     });
     // Create profiles

@@ -6,8 +6,16 @@
       "source": "^/v2/catalog/(.*)$",
       "target": "/v2/catalog/$1",
       "destination": "ConfigProdPrd",
+      "csrfProtection": true,
       "authenticationType": "xsuaa",
-      "csrfProtection": true
+      "scope":{
+        "GET": ["$XSAPPNAME.Display", "$XSAPPNAME.Planner"],
+        "PUT": ["$XSAPPNAME.Display", "$XSAPPNAME.Planner"],
+        "PATCH": ["$XSAPPNAME.Display", "$XSAPPNAME.Planner"],
+        "POST": ["$XSAPPNAME.Display", "$XSAPPNAME.Planner"],
+        "DELETE": ["$XSAPPNAME.Display", "$XSAPPNAME.Planner"],
+        "default": ["$XSAPPNAME.Display", "$XSAPPNAME.Planner"]
+     }
     },
     {
         "source": "^/v2/pal/(.*)$",

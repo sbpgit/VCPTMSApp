@@ -339,7 +339,7 @@ module.exports = cds.service.impl(async function () {
                 "PRDID": liactcomp[i].PRODUCT_ID,
                 "ACTUALCOMPONENTDEMAND": vDemd[0],
                 "PRDFR": liactcomp[i].COMPONENT, 
-                "PERIODID4_TSTAMP": vWeekDate[0]
+                "PERIODID0_TSTAMP": vWeekDate[0]
             };
             oReq.actcomp.push(vactcomp);
 
@@ -348,7 +348,7 @@ module.exports = cds.service.impl(async function () {
         var oEntry =
         {
             "Transactionid": vTransID,
-            "AggregationLevelFieldsString": "LOCID,PRDID,ACTUALCOMPONENTDEMAND,PERIODID4_TSTAMP,PRDFR",
+            "AggregationLevelFieldsString": "LOCID,PRDID,ACTUALCOMPONENTDEMAND,PERIODID0_TSTAMP,PRDFR",
             "VersionID": "",
             "DoCommit": true,
             "ScenarioID": "",
@@ -479,7 +479,7 @@ module.exports = cds.service.impl(async function () {
                     "COMP_QTY"
                     FROM V_COMP_REQ
                     WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
-                       AND PRODUCT_ID = '`+ req.data.PRODUCT_ID + `' AND CAL_DATE >= '2022-06-01' AND CAL_DATE <= '2022-08-01' AND COMP_QTY >= 0`);
+                       AND PRODUCT_ID = '`+ req.data.PRODUCT_ID + `' AND CAL_DATE >= '2022-06-01' AND CAL_DATE <= '2022-09-30' AND COMP_QTY >= 0`);
 
         for (i = 0; i < liactcompreq.length; i++) {
             var vWeekDate = new Date(liactcompreq[i].CAL_DATE).toISOString().split('Z');
@@ -489,7 +489,7 @@ module.exports = cds.service.impl(async function () {
                 "PRDID": liactcompreq[i].PRODUCT_ID,
                 "PRDFR": liactcompreq[i].COMPONENT,
                 "COMPONENTREQUIREMENTQTY": vDemd,        
-                "PERIODID4_TSTAMP": vWeekDate[0]
+                "PERIODID0_TSTAMP": vWeekDate[0]
             };
             oReq.actcompreq.push(vactcompreq);
 
@@ -498,7 +498,7 @@ module.exports = cds.service.impl(async function () {
         var oEntry =
         {
             "Transactionid": vTransID,
-            "AggregationLevelFieldsString": "LOCID,PRDID,PRDFR,COMPONENTREQUIREMENTQTY,PERIODID4_TSTAMP",
+            "AggregationLevelFieldsString": "LOCID,PRDID,PRDFR,COMPONENTREQUIREMENTQTY,PERIODID0_TSTAMP",
             "VersionID": "",
             "DoCommit": true,
             "ScenarioID": "",
@@ -1299,7 +1299,7 @@ module.exports = cds.service.impl(async function () {
                 "PRDID": liactcompreq[i].PRODUCT_ID,
                 "PRDFR": liactcompreq[i].COMPONENT,
                 "COMPONENTREQUIREMENTQTY": vDemd,        
-                "PERIODID4_TSTAMP": vWeekDate[0]
+                "PERIODID0_TSTAMP": vWeekDate[0]
             };
             oReq.actcompreq.push(vactcompreq);
 
@@ -1308,7 +1308,7 @@ module.exports = cds.service.impl(async function () {
         var oEntry =
         {
             "Transactionid": vTransID,
-            "AggregationLevelFieldsString": "LOCID,PRDID,PRDFR,COMPONENTREQUIREMENTQTY,PERIODID4_TSTAMP",
+            "AggregationLevelFieldsString": "LOCID,PRDID,PRDFR,COMPONENTREQUIREMENTQTY,PERIODID0_TSTAMP",
             "VersionID": "",
             "DoCommit": true,
             "ScenarioID": "",
