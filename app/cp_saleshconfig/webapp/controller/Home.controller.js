@@ -257,7 +257,7 @@ sap.ui.define(
 
         // Checking for Loc and Prod are not initial
         if (
-          that.oLoc.getValue() &&
+            that.byId("idloc").getValue() !== "" &&
           that.oProdList.getSelectedItems().length !== 0
         ) {
           var aSelectedItem = that.oProdList.getSelectedItems();
@@ -324,7 +324,7 @@ sap.ui.define(
             },
           });
         } else {
-          essageToast.show("Please fill all required fields");
+          MessageToast.show("Please fill all required inputs");
         }
       },
 

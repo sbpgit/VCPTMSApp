@@ -24,29 +24,29 @@
             <FlexBox wrap="Wrap" fitContainer="true">
                 <l:Grid defaultSpan="XL3 L3 M6 S12">
                     <VBox>
-                        <Text text=""/>
+                        <Label text=""/>
                         <SearchField id="idSearch" placeholder="Search Component" liveChange="onTableSearch"/>
                     </VBox>
                     <VBox>
-                        <Text text="Location :"/>
+                        <Label text="Location :" required= "true"/>
                         <Input id="idloc" value="" placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
                     </VBox>
                     <VBox>
-                        <Text text="Product :"/>
+                        <Label text="Product :" required= "true"/>
                         <MultiInput id="prodInput" placeholder="Product" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
                     </VBox>
 
                     <VBox>
-                        <Text text="Component :"/>
+                        <Label text="Component :"/>
                         <MultiInput id="compInput" placeholder="Component" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
                     </VBox>
 
                     <VBox>
-                        <Text text="Structure Node :" />
+                        <Label text="Structure Node :" />
                         <Input id="struInput" placeholder="Structure Node" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
                     </VBox>
                     <VBox>
-                        <Text text=""/>
+                        <Label text=""/>
                         <Button text="Go" press="onGetData" type="Emphasized" tooltip="Get data based on filters"/>
                     </VBox>
                     <VBox>

@@ -1,4 +1,4 @@
-<mvc:View controllerName="cpapp.cpjobschedulertest.controller.CreateJob"
+<mvc:View controllerName="cpapp.cpjobscheduler.controller.CreateJob"
     xmlns="sap.m"
     xmlns:core="sap.ui.core"
     xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
@@ -302,7 +302,7 @@
                         <RadioButton id="idIBPSalesHis" text="Sales History" />
                         <RadioButton id="idIBPSalesHisConfig" text="Sales History Config" />
                         <RadioButton id="idIBPActCompDemd" text="Actual Components Demand" />
-                        <RadioButton id="idIBPCompReqQty" text="Components Requirement Quantity" />
+                        <RadioButton id="idIBPCompReqQty" text="Assembly Requirement Quantity" />
                     </RadioButtonGroup>
 
                 <!-- </content> -->
@@ -331,7 +331,7 @@
                                             <MultiInput id="IprodInput" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
                                         </f:fields>
                                     </f:FormElement>
-                                    <f:FormElement>
+                                    <!-- <f:FormElement>
                                         <f:label>
                                             <Label text="{i18n>ibpver}"/>
                                         </f:label>
@@ -346,7 +346,7 @@
                                         <f:fields>
                                             <Input id="Iidscen" value="" placeholder="{i18n>ibpscen}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                                         </f:fields>
-                                    </f:FormElement>
+                                    </f:FormElement> -->
                                 </f:formElements>
                             </f:FormContainer>
                         </f:formContainers>
@@ -573,7 +573,7 @@
                                         </f:label>
                                         <f:fields>
                                             <Select id="idSdi" change="onSdiChange" selectedKey="LO" class="buttonDesktop " width="400px">
-                                                    <core:ListItem key="Lo" text="{i18n>loc}"/>
+                                                    <core:ListItem key="LO" text="{i18n>loc}"/>
                                                     <core:ListItem key="CG" text="{i18n>custgrp}"/>
                                                     <core:ListItem key="PR" text="{i18n>prod}"/>
                                                     <core:ListItem key="LP" text="{i18n>locpprod}"/>
@@ -586,6 +586,7 @@
                                                     <core:ListItem key="CV" text="{i18n>charval}"/>
                                                     <core:ListItem key="SH" text="{i18n>saleshis}"/>
                                                     <core:ListItem key="SC" text="{i18n>salehisconfig}"/>
+                                                    <core:ListItem key="AC" text="{i18n>asmbcomp}"/>
                                             </Select>
                                         </f:fields>
                                     </f:FormElement>
@@ -593,22 +594,6 @@
                             </f:FormContainer>
                         </f:formContainers>
                     </f:Form>
-                <!-- <Label text="{i18n>sdi} :"/>
-				<Select id="idSdi" change="onSdiChange" selectedKey="LO" class="buttonDesktop " width="400px">
-						<core:ListItem key="Lo" text="{i18n>loc}"/>
-						<core:ListItem key="CG" text="{i18n>custgrp}"/>
-                        <core:ListItem key="PR" text="{i18n>prod}"/>
-						<core:ListItem key="LP" text="{i18n>locpprod}"/>
-                        <core:ListItem key="PC" text="{i18n>prodclas}"/>
-						<core:ListItem key="BH" text="{i18n>bomheader}"/>
-                        <core:ListItem key="BO" text="{i18n>bomobjdep}"/>
-						<core:ListItem key="CL" text="{i18n>class}"/>
-                        <core:ListItem key="CH" text="{i18n>char}"/>
-						<core:ListItem key="CV" text="{i18n>charval}"/>
-                        <core:ListItem key="SH" text="{i18n>saleshis}"/>
-						<core:ListItem key="SC" text="{i18n>salehisconfig}"/>
-				</Select>
-                </HBox> -->
                 <Button id="idbtSdi" type="Emphasized" text="SDI Integration" press="onSdiIntegration" width="10%"/>
             </content>
             </Panel>

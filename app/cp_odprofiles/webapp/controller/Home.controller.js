@@ -684,10 +684,6 @@ sap.ui.define(
          * @param {object} oEvent -the event information.
          */
         onUnAssign: function () {
-          var aData = {
-              PROFILEOD: [],
-            },
-            jsonProfileOD;
           var oSelected;
           // Getting the oSelected list of table which profiles need to delete
           var aItem = that.byId("idTab").getSelectedItems();

@@ -1,7 +1,7 @@
 /*global location*/
 sap.ui.define(
   [
-    "cpapp/cpjobschedulertest/controller/BaseController",
+    "cpapp/cpjobscheduler/controller/BaseController",
     "sap/ui/model/json/JSONModel",
     "sap/m/MessageToast",
     "sap/m/MessageBox",
@@ -20,7 +20,7 @@ sap.ui.define(
     var that;
 
     return BaseController.extend(
-      "cpapp.cpjobschedulertest.controller.CreateJob",
+      "cpapp.cpjobscheduler.controller.CreateJob",
       {
         /**
          * Called when the worklist controller is instantiated.
@@ -52,63 +52,63 @@ sap.ui.define(
           this._oCore = sap.ui.getCore();
           if (!this._valueHelpDialogLoc) {
             this._valueHelpDialogLoc = sap.ui.xmlfragment(
-              "cpapp.cpjobschedulertest.view.LocDialog",
+              "cpapp.cpjobscheduler.view.LocDialog",
               this
             );
             this.getView().addDependent(this._valueHelpDialogLoc);
           }
           if (!this._valueHelpDialogProd) {
             this._valueHelpDialogProd = sap.ui.xmlfragment(
-              "cpapp.cpjobschedulertest.view.ProdDialog",
+              "cpapp.cpjobscheduler.view.ProdDialog",
               this
             );
             this.getView().addDependent(this._valueHelpDialogProd);
           }
           if (!this._valueHelpDialogOD) {
             this._valueHelpDialogOD = sap.ui.xmlfragment(
-              "cpapp.cpjobschedulertest.view.ObjDepDialog",
+              "cpapp.cpjobscheduler.view.ObjDepDialog",
               this
             );
             this.getView().addDependent(this._valueHelpDialogOD);
           }
           if (!this._valueHelpDialogPPF) {
             this._valueHelpDialogPPF = sap.ui.xmlfragment(
-              "cpapp.cpjobschedulertest.view.PredDialog",
+              "cpapp.cpjobscheduler.view.PredDialog",
               this
             );
             this.getView().addDependent(this._valueHelpDialogPPF);
           }
           if (!this._valueHelpDialogVer) {
             this._valueHelpDialogVer = sap.ui.xmlfragment(
-              "cpapp.cpjobschedulertest.view.VersionDialog",
+              "cpapp.cpjobscheduler.view.VersionDialog",
               this
             );
             this.getView().addDependent(this._valueHelpDialogVer);
           }
           if (!this._valueHelpDialogScen) {
             this._valueHelpDialogScen = sap.ui.xmlfragment(
-              "cpapp.cpjobschedulertest.view.ScenarioDialog",
+              "cpapp.cpjobscheduler.view.ScenarioDialog",
               this
             );
             this.getView().addDependent(this._valueHelpDialogScen);
           }
           if (!this._valueHelpDialogJobDetail) {
             this._valueHelpDialogJobDetail = sap.ui.xmlfragment(
-              "cpapp.cpjobschedulertest.view.CreateJobDetails",
+              "cpapp.cpjobscheduler.view.CreateJobDetails",
               this
             );
             this.getView().addDependent(this._valueHelpDialogJobDetail);
           }
           if (!this._valueHelpDialogCustDetails) {
             this._valueHelpDialogCustDetails = sap.ui.xmlfragment(
-              "cpapp.cpjobschedulertest.view.CustomerDialog",
+              "cpapp.cpjobscheduler.view.CustomerDialog",
               this
             );
             this.getView().addDependent(this._valueHelpDialogCustDetails);
           }
           if (!this._valueHelpDialogClassDetails) {
             this._valueHelpDialogClassDetails = sap.ui.xmlfragment(
-              "cpapp.cpjobschedulertest.view.ClassDialog",
+              "cpapp.cpjobscheduler.view.ClassDialog",
               this
             );
             this.getView().addDependent(this._valueHelpDialogClassDetails);
@@ -160,7 +160,7 @@ sap.ui.define(
             this._valueHelpDialogClassDetails.getId() + "-list"
           );
           // calling function to select the Job Type
-          that.onJobSelect();
+          that.fixDate();
           that.onJobSelect();
 
           // Calling service to get the Location data
@@ -425,7 +425,9 @@ sap.ui.define(
                 that.byId("idSdi").setSelectedKey("SH");
               } else if (sServiceText === "ImportECCSaleshCfg") {
                 that.byId("idSdi").setSelectedKey("SC");
-              }
+              }else if (sServiceText === "ImportECCAsmbcomp") {
+                that.byId("idSdi").setSelectedKey("AC");
+            }
             }
           }
           // Calling function to select the import or export for IBP Integration
@@ -449,8 +451,8 @@ sap.ui.define(
 
             that.byId("IlocInput").setValue("");
             that.byId("IprodInput").setValue("");
-            that.byId("Iidver").setValue("");
-            that.byId("Iidscen").setValue("");
+            // that.byId("Iidver").setValue("");
+            // that.byId("Iidscen").setValue("");
 
             that.byId("EPlocInput").setValue("");
 
@@ -813,8 +815,8 @@ sap.ui.define(
                 .getText();
               that.oLoc = this.byId("IlocInput");
               that.oProd = this.byId("IprodInput");
-              that.oVer = this.byId("Iidver");
-              that.oScen = this.byId("Iidscen");
+            //   that.oVer = this.byId("Iidver");
+            //   that.oScen = this.byId("Iidscen");
             } else if (that.byId("idIBPselect").getSelectedKey() === "E") {
               that.ExportRadioChange();
             }
@@ -1340,6 +1342,8 @@ sap.ui.define(
               that.byId("idSdi").setSelectedKey("SH");
             } else if (sServiceText === "ImportECCSaleshCfg") {
               that.byId("idSdi").setSelectedKey("SC");
+            }else if (sServiceText === "ImportECCAsmbcomp") {
+                that.byId("idSdi").setSelectedKey("AC");
             }
           }
         },
@@ -1417,7 +1421,7 @@ sap.ui.define(
               that.byId("IBPSalesHisConfigExport").setVisible(false);
               that.byId("IBPActCompDemandExport").setVisible(true);
               that.byId("IBPCompReqQtyExport").setVisible(false);
-            } else if (selRadioBt === "Components Requirement Quantity") {
+            } else if (selRadioBt === "Assembly Requirement Quantity") {
               that.oLoc = this.byId("ECRQtylocInput");
               that.oProd = this.byId("ECRQtyprodInput");
               that.oDateRange = this.byId("ECRQtyDate");
@@ -1621,7 +1625,7 @@ sap.ui.define(
             that.byId("IBPSalesHisConfigExport").setVisible(false);
             that.byId("IBPActCompDemandExport").setVisible(true);
             that.byId("IBPCompReqQtyExport").setVisible(false);
-          } else if (selRadioBt === "Components Requirement Quantity") {
+          } else if (selRadioBt === "Assembly Requirement Quantity") {
             that.oLoc = this.byId("ECRQtylocInput");
             that.oProd = this.byId("ECRQtyprodInput");
             that.oDate = this.byId("ECRQtyDate");
@@ -1654,7 +1658,24 @@ sap.ui.define(
           that.byId("ECRQtyprodInput").setValue();
           that.byId("ECRQtyDate").setValue();
         },
+        /** 
+         ** Validation for Date time
+        */
 
+            fixDate: function () {
+                var currDate = new Date();
+                that.oJSTime = sap.ui.getCore().byId("idSTime");
+                that.oJETime = sap.ui.getCore().byId("idETime");
+                that.oSchTime = sap.ui.getCore().byId("idSchTime");
+                that.oSSTime = sap.ui.getCore().byId("idSSTime");
+                that.oSETime = sap.ui.getCore().byId("idSETime");
+                that.oJSTime.setMinDate(currDate);
+                that.oJETime.setMinDate(currDate);
+                that.oSchTime.setMinDate(currDate);
+                that.oSSTime.setMinDate(currDate);
+                that.oSETime.setMinDate(currDate);
+
+            },
         /**
          * This function is called when click on create Job for Model Generation button.
          */
@@ -1849,13 +1870,13 @@ sap.ui.define(
           } else if (that.oGModel.getProperty("/UpdateSch") === "X") {
             sap.ui.getCore().byId("idSavebt").setText("Update Schedule");
           }
-          that.oGModel.setProperty("/runText", "Time Series");
+          that.oGModel.setProperty("/runText", "Time Series History");
 
           if (this.oProd.getValue() && oPastDays) {
             vRuleslist = {
               LOCATION_ID: oLocItem,
               PRODUCT_ID: oProdItem,
-              PAST_DAYS: oPastDays,
+              PAST_DAYS: parseInt(oPastDays),
             };
 
             this.oGModel.setProperty("/vcrulesData", vRuleslist);
@@ -1929,9 +1950,9 @@ sap.ui.define(
         onIbpJobImport: function () {
           var aItems,
             oProdItem,
-            oSelVer,
+            // oSelVer,
             oLocItem,
-            oSelScen,
+            // oSelScen,
             fromDate,
             toDate,
             rRadioBtn;
@@ -1947,8 +1968,8 @@ sap.ui.define(
           }
           oLocItem = that.oLoc.getValue();
           oProdItem = this.oProd.getValue();
-          oSelVer = that.oVer.getValue();
-          oSelScen = "";
+        //   oSelVer = that.oVer.getValue();
+        //   oSelScen = "";
 
           var nowH = new Date();
           fromDate = nowH.toISOString().split("T")[0];
@@ -1973,23 +1994,23 @@ sap.ui.define(
           that.oGModel.setProperty("/runText", rRadioBtn);
 
           if (
-            this.oProd.getValue() &&
-            this.oVer.getValue() &&
-            this.oScen.getValue()
+            this.oProd.getValue() //&&
+            // this.oVer.getValue() &&
+            // this.oScen.getValue()
           ) {
             if (rRadioBtn.includes("Demand")) {
               vRuleslist = {
                 LOCATION_ID: oLocItem,
-                PRODUCT_ID: oProdItem,
-                VERSION: oSelVer,
-                SCENARIO: oSelScen,
+                PRODUCT_ID: oProdItem//,
+                // VERSION: oSelVer,
+                // SCENARIO: oSelScen,
               };
             } else if (rRadioBtn.includes("Future")) {
               vRuleslist = {
                 LOCATION_ID: oLocItem,
                 PRODUCT_ID: oProdItem,
-                VERSION: oSelVer,
-                SCENARIO: oSelScen,
+                // VERSION: oSelVer,
+                // SCENARIO: oSelScen,
                 FROMDATE: fromDate,
                 TODATE: toDate,
               };
@@ -2116,11 +2137,12 @@ sap.ui.define(
           } else if (rRadioBtn === "Actual Components Demand") {
             oLocItem = that.oLoc.getValue();
             oProdItem = this.oProd.getValue();
-            var dLow = that.byId("EACDemandDate").getDateValue(),
-              dHigh = that.byId("EACDemandDate").getSecondDateValue();
+             var dLow = that.byId("EACDemandDate").getDateValue();
+            //   dHigh = that.byId("EACDemandDate").getSecondDateValue();
             if (oLocItem && oProdItem && dLow) {
-              var dLow = that.byId("EACDemandDate").getDateValue(),
-                dHigh = that.byId("EACDemandDate").getSecondDateValue();
+                var vDateRange = that.byId("EACDemandDate").getValue().split(' To ');
+                var dLow = vDateRange[0],
+                    dHigh = vDateRange[1];
 
               vRuleslist = {
                 LOCATION_ID: oLocItem,
@@ -2134,11 +2156,12 @@ sap.ui.define(
             } else {
               MessageToast.show("Please select all fields");
             }
-          } else if (rRadioBtn === "Components Requirement Quantity") {
+          } else if (rRadioBtn === "Assembly Requirement Quantity") {
             oLocItem = that.oLoc.getValue();
             oProdItem = this.oProd.getValue();
-            var dLow = that.byId("ECRQtyDate").getDateValue(),
-              dHigh = that.byId("ECRQtyDate").getSecondDateValue();
+            var vDateRange = that.byId("ECRQtyDate").getValue().split(' To ');
+            var dLow = vDateRange[0],
+                dHigh = vDateRange[1];
             if (oLocItem && oProdItem && dLow) {
               vRuleslist = {
                 LOCATION_ID: oLocItem,
@@ -2314,7 +2337,7 @@ sap.ui.define(
                 endTime: djEdate,
               };
               sap.ui.core.BusyIndicator.show();
-              that.getModel("JModel").callFunction("/updateMLJob", {
+              that.getModel("JModel").callFunction("/lupdateJob", {
                 method: "GET",
                 urlParameters: {
                   jobDetails: JSON.stringify(finalList),
@@ -2489,16 +2512,18 @@ sap.ui.define(
               actionText = "%2Fsdi%2FImportECCSalesh";
             } else if (sSdiType === "SC") {
               actionText = "%2Fsdi%2FImportECCSaleshCfg";
-            }
+            }else if (sSdiType === "AC") {
+                actionText = "%2Fsdi%2FImportECCAsmbcomp";
+              }
           } else {
             if (bButton.includes("Prediction")) {
               actionText = "%2Fpal%2FgenPredictions";
             } else if (bButton.includes("Model")) {
               actionText = "%2Fpal%2FgenerateModels";
-            } else if (bButton === "Time Series") {
-              actionText = "%2Fcatalog%2Fgenerate_timeseries";
+            } else if (bButton === "Time Series History") {
+              actionText = "%2Fcatalog%2FgenerateTimeseries";
             } else if (bButton === "Time Series Future") {
-              actionText = "%2Fcatalog%2Fgenerate_timeseries";
+              actionText = "%2Fcatalog%2FgenerateTimeseriesF";
             } else if (bButton === "IBP Demand") {
               actionText = "%2Fibpimport-srv%2FgenerateFDemandQty";
             } else if (bButton === "IBP Future Plan") {
@@ -2517,7 +2542,7 @@ sap.ui.define(
               actionText = "%2Fibpimport-srv%2FexportIBPSalesConfig";
             } else if (bButton.includes("Actual Components Demand")) {
               actionText = "%2Fibpimport-srv%2FexportActCompDemand";
-            } else if (bButton.includes("Components Requirement")) {
+            } else if (bButton.includes("Assembly Requirement")) {
               actionText = "%2Fibpimport-srv%2FexportComponentReq";
             }
           }
@@ -2553,14 +2578,14 @@ sap.ui.define(
               };
             }
             // Calling service to add new schedule
-            that.getModel("JModel").callFunction("/addJobSchedule", {
+            that.getModel("JModel").callFunction("/laddJobSchedule", {
               method: "GET",
               urlParameters: {
                 schedule: JSON.stringify(finalList),
               },
               success: function (oData) {
                 sap.ui.core.BusyIndicator.hide();
-                if (oData.addJobSchedule) {
+                if (oData.laddJobSchedule) {
                   sap.m.MessageToast.show("Schedule created successfully");
                 }
 
@@ -2601,14 +2626,14 @@ sap.ui.define(
               };
             }
             // Calling service to update the schedule
-            that.getModel("JModel").callFunction("/updateMLJobSchedule", {
+            that.getModel("JModel").callFunction("/lupdateMLJobSchedule", {
               method: "GET",
               urlParameters: {
                 schedule: JSON.stringify(finalList),
               },
               success: function (oData) {
                 sap.ui.core.BusyIndicator.hide();
-                if (oData.updateMLJobSchedule) {
+                if (oData.lupdateMLJobSchedule) {
                   sap.m.MessageToast.show("Schedule updated successfully");
                 }
                 that.onCreateJobClose();
@@ -2654,7 +2679,7 @@ sap.ui.define(
               bButton.includes("Sales History") ||
               bButton.includes("Sales History Config") ||
               bButton.includes("Actual Components") ||
-              bButton.includes("Components Requirement") ||
+              bButton.includes("Assembly Requirement") ||
               oSelJobType === "S"
             ) {
               var finalList = {
@@ -2724,14 +2749,14 @@ sap.ui.define(
               };
             }
 
-            that.getModel("JModel").callFunction("/addMLJob", {
+            that.getModel("JModel").callFunction("/laddMLJob", {
               method: "GET",
               urlParameters: {
                 jobDetails: JSON.stringify(finalList),
               },
               success: function (oData) {
                 sap.ui.core.BusyIndicator.hide();
-                sap.m.MessageToast.show(oData.addMLJob + ": Job Created");
+                sap.m.MessageToast.show(oData.laddMLJob.value + ": Job Created");
                 that.onCreateJobClose();
                 that.onBack();
               },

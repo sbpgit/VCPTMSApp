@@ -1,7 +1,7 @@
 /*global location*/
 sap.ui.define(
   [
-    "cpapp/cpjobschedulertest/controller/BaseController",
+    "cpapp/cpjobscheduler/controller/BaseController",
     "sap/ui/model/json/JSONModel",
     "sap/m/MessageToast",
     "sap/ui/model/Filter",
@@ -12,7 +12,7 @@ sap.ui.define(
     var that, oGModel;
 
     return BaseController.extend(
-      "cpapp.cpjobschedulertest.controller.Prediction",
+      "cpapp.cpjobscheduler.controller.Prediction",
       {
         /**
          * Called when a controller is instantiated and its View controls (if available) are already created.
@@ -33,7 +33,7 @@ sap.ui.define(
           // Declaration of Dialogs
           if (!this._valueHelpDialogJobData) {
             this._valueHelpDialogJobData = sap.ui.xmlfragment(
-              "cpapp.cpjobschedulertest.view.JobData",
+              "cpapp.cpjobscheduler.view.JobData",
               this
             );
             this.getView().addDependent(this._valueHelpDialogJobData);
@@ -41,7 +41,7 @@ sap.ui.define(
 
           if (!this._valueHelpDialogUpdateJob) {
             this._valueHelpDialogUpdateJob = sap.ui.xmlfragment(
-              "cpapp.cpjobschedulertest.view.UpdateJobDialog",
+              "cpapp.cpjobscheduler.view.UpdateJobDialog",
               this
             );
             this.getView().addDependent(this._valueHelpDialogUpdateJob);
@@ -49,7 +49,7 @@ sap.ui.define(
 
           if (!this._valueHelpDialogScheLog) {
             this._valueHelpDialogScheLog = sap.ui.xmlfragment(
-              "cpapp.cpjobschedulertest.view.ScheLog",
+              "cpapp.cpjobscheduler.view.ScheLog",
               this
             );
             this.getView().addDependent(this._valueHelpDialogScheLog);
@@ -81,23 +81,23 @@ sap.ui.define(
           that.byId("JobPanel").setExpanded(true);
           that.byId("jobDetailsPanel").setExpanded(false);
           sap.ui.core.BusyIndicator.show();
-          that.getModel("JModel").callFunction("/readJobs", {
+          that.getModel("JModel").callFunction("/lreadJobs", {
             method: "GET",
             success: function (oData) {
               sap.ui.core.BusyIndicator.hide();
-              oData.results.forEach(function (row) {
+              oData.lreadJobs.value.forEach(function (row) {
                 row.jobId = row.jobId.toString();
               }, that);
-              oGModel.setProperty("/tableData", oData.results);
+              oGModel.setProperty("/tableData", oData.lreadJobs.value);
               var aData = [];
               var dDate = that.byId("idDateRange").getValue().split("To");
               var dLow = new Date(dDate[0]),
                 dHigh = new Date(dDate[1] + " " + "23:59:59");
               // Filtering data based on selected dates
-              for (var i = 0; i < oData.results.length; i++) {
-                var startDate = new Date(oData.results[i].startTime);
+              for (var i = 0; i < oData.lreadJobs.value.length; i++) {
+                var startDate = new Date(oData.lreadJobs.value[i].startTime);
                 if (dLow < startDate && dHigh > startDate) {
-                  aData.push(oData.results[i]);
+                  aData.push(oData.lreadJobs.value[i]);
                 }
               }
 
@@ -181,6 +181,8 @@ sap.ui.define(
           });
           that.oList.setModel(that.listModel);
           that.onSearch();
+          that.byId("JobPanel").setExpanded(true);
+          that.byId("jobDetailsPanel").setExpanded(false);
         },
 
         /**
@@ -199,7 +201,7 @@ sap.ui.define(
           );
 
           // Calling service to get the Job details
-          that.getModel("JModel").callFunction("/readJobDetails", {
+          that.getModel("JModel").callFunction("/lreadJobDetails", {
             method: "GET",
             urlParameters: {
               jobId: oJobId,
@@ -207,8 +209,8 @@ sap.ui.define(
             },
             success: function (oData) {
               // Changing the Datetime stamp
-              oData.readJobDetails.schedules.forEach(function (row) {
-                if (!oData.readJobDetails.action.includes("DemandQty")) {
+              oData.lreadJobDetails.value.schedules.forEach(function (row) {
+                if (!oData.lreadJobDetails.value.action.includes("DemandQty")) {
                   if (row.time) {
                     var dDate = row.time.split("T"),
                       tTime = dDate[1].split(".")[0];
@@ -223,28 +225,28 @@ sap.ui.define(
                 }
               }, that);
 
-              var aData = oData.readJobDetails.schedules;
+              var aData = oData.lreadJobDetails.value.schedules;
               that.JobLogsModel.setData({
                 results: aData,
               });
               that.byId("idJobLogs").setModel(that.JobLogsModel);
-              var aJobDetails = oData.readJobDetails.schedules;
+              var aJobDetails = oData.lreadJobDetails.value.schedules;
 
               // Setting Job type to global model based on Job action
               oGModel.setProperty("/aJobDetails", aJobDetails);
-              if (oData.readJobDetails.action.includes("Models")) {
+              if (oData.lreadJobDetails.value.action.includes("Models")) {
                 oGModel.setProperty("/JobType", "M");
-              } else if (oData.readJobDetails.action.includes("Predictions")) {
+              } else if (oData.lreadJobDetails.value.action.includes("Predictions")) {
                 oGModel.setProperty("/JobType", "P");
               } else if (
-                oData.readJobDetails.action === "generate_timeseries"
+                oData.lreadJobDetails.value.action === "generateTimeseries"
               ) {
                 oGModel.setProperty("/JobType", "T");
               } else if (
-                oData.readJobDetails.action === "generate_timeseriesF"
+                oData.lreadJobDetails.value.action === "generateTimeseriesF"
               ) {
                 oGModel.setProperty("/JobType", "F");
-              } else if (oData.readJobDetails.action.includes("sdi")) {
+              } else if (oData.lreadJobDetails.value.action.includes("sdi")) {
                 oGModel.setProperty("/JobType", "S");
                 var service = oGModel.getProperty("/Jobdata").action.split("/");
                 var length = service.length - 1;
@@ -575,11 +577,11 @@ sap.ui.define(
                 .byId("idJobData")
                 .getColumns()[5]
                 .setVisible(false);
-              sap.ui
-                .getCore()
-                .byId("idJobData")
-                .getColumns()[6]
-                .setVisible(true);
+            //   sap.ui
+            //     .getCore()
+            //     .byId("idJobData")
+            //     .getColumns()[6]
+            //     .setVisible(true);
             } else if (
               oActionType === "exportIBPLocation" ||
               oActionType === "exportIBPCustomer" ||
@@ -695,7 +697,7 @@ sap.ui.define(
               .getObject().scheduleId;
 
           sap.ui.core.BusyIndicator.show();
-          that.getModel("JModel").callFunction("/readJobRunLogs", {
+          that.getModel("JModel").callFunction("/lreadJobRunLogs", {
             method: "GET",
             urlParameters: {
               jobId: oJobId,
@@ -706,7 +708,7 @@ sap.ui.define(
             success: function (oData) {
               sap.ui.core.BusyIndicator.hide();
               that.ScheLogModel.setData({
-                results: oData.results,
+                results: oData.lreadJobRunLogs.value,
               });
               sap.ui
                 .getCore()
@@ -755,14 +757,14 @@ sap.ui.define(
 
           oGModel.setProperty("/DeleteJob", oJobId);
 
-          that.getModel("JModel").callFunction("/deleteMLJob", {
+          that.getModel("JModel").callFunction("/ldeleteJob", {
             method: "GET",
             urlParameters: {
               jobId: oJobId,
             },
             success: function (oData) {
               sap.ui.core.BusyIndicator.hide();
-              if (oData.deleteMLJob.includes("true")) {
+              if (oData.ldeleteJob.value.includes("true")) {
                 sap.m.MessageToast.show(
                   oGModel.getProperty("/DeleteJob") + ": Job Deleted"
                 );
@@ -857,14 +859,14 @@ sap.ui.define(
             endTime: dUJEdate,
           };
 
-          that.getModel("JModel").callFunction("/updateMLJob", {
+          that.getModel("JModel").callFunction("/lupdateJob", {
             method: "GET",
             urlParameters: {
               jobDetails: JSON.stringify(finalList),
             },
             success: function (oData) {
               sap.ui.core.BusyIndicator.hide();
-              if (oData.updateMLJob.includes("true")) {
+              if (oData.lupdateJob.value.includes("true")) {
                 sap.m.MessageToast.show(
                   oGModel.getProperty("/JobDetailstoUpdate").jobId +
                     ": Job Updated"
@@ -902,14 +904,14 @@ sap.ui.define(
             scheduleId: oScheId,
           };
 
-          that.getModel("JModel").callFunction("/deleteMLJobSchedule", {
+          that.getModel("JModel").callFunction("/ldeleteMLJobSchedule", {
             method: "GET",
             urlParameters: {
               scheduleDetails: JSON.stringify(finalList),
             },
             success: function (oData) {
               sap.ui.core.BusyIndicator.hide();
-              if (oData.deleteMLJobSchedule.includes("true")) {
+              if (oData.ldeleteMLJobSchedule.value.includes("true")) {
                 sap.m.MessageToast.show(
                   oGModel.getProperty("/DeleteSch") + ": Schedule Deleted"
                 );

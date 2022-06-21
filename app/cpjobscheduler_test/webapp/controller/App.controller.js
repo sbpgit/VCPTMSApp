@@ -3,7 +3,7 @@ sap.ui.define(
     function (Controller) {
   "use strict";
 
-  return Controller.extend("cpapp.cpjobschedulertest.controller.App", {
+  return Controller.extend("cpapp.cpjobscheduler.controller.App", {
     onInit: function () {
       // apply content density mode to root view
       this.getView().addStyleClass(

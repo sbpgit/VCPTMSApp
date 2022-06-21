@@ -1,7 +1,7 @@
 {
     "_version": "1.32.0",
     "sap.app": {
-        "id": "cpapp.cpjobschedulertest",
+        "id": "cpapp.cpjobscheduler",
         "type": "application",
         "i18n": "i18n/i18n.properties",
         "applicationVersion": {
@@ -59,16 +59,16 @@
         },
         "crossNavigation": {
             "inbounds": {
-                "cpapp-cpjobschedulertest-inbound": {
+                "cpapp-cpjobscheduler-inbound": {
                     "signature": {
                         "parameters": {},
                         "additionalParameters": "allowed"
                     },
-                    "semanticObject": "cpjobscheduler_test",
+                    "semanticObject": "cpjobscheduler",
                     "action": "display",
                     "title": "{{flpTitle}}",
                     "subTitle": "{{flpSubtitle}}",
-                    "icon": ""
+                    "icon": "sap-icon://time-account"
                 }
             }
         }
@@ -92,7 +92,7 @@
     "sap.ui5": {
         "flexEnabled": true,
         "rootView": {
-            "viewName": "cpapp.cpjobschedulertest.view.App",
+            "viewName": "cpapp.cpjobscheduler.view.App",
             "type": "XML",
             "async": true,
             "id": "App"
@@ -118,7 +118,7 @@
             "i18n": {
                 "type": "sap.ui.model.resource.ResourceModel",
                 "settings": {
-                    "bundleName": "cpapp.cpjobschedulertest.i18n.i18n"
+                    "bundleName": "cpapp.cpjobscheduler.i18n.i18n"
                 }
             },
             "oGModel": {
@@ -172,7 +172,7 @@
                 "routerClass": "sap.m.routing.Router",
                 "viewType": "XML",
                 "async": true,
-                "viewPath": "cpapp.cpjobschedulertest.view",
+                "viewPath": "cpapp.cpjobscheduler.view",
                 "controlAggregation": "pages",
                 "controlId": "app",
                 "clearControlAggregation": false

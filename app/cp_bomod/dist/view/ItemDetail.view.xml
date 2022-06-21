@@ -5,12 +5,12 @@
     xmlns:html="http://www.w3.org/1999/xhtml">
     <Page id="page" showHeader="false">
         <content>
-            <Panel id="idBomPanel" expandable="true" headerText="BOM Components" width="auto" class="boldText">
+            <Panel id="idBomPanel" expandable="true" headerText="BOM Components" width="auto" >
                 <content>
                     <Toolbar height="8%">
+                        <Text text="Product : {oGModel>/prdId}" ></Text>
                         <ToolbarSpacer/>
-                        <Text text="Product : {oGModel>/prdId}  -  Location : {oGModel>/locId}" class="boldText"></Text>
-                        <ToolbarSpacer/>
+                        <Text text="Location : {oGModel>/locId}" ></Text>                        
                     </Toolbar>
                     <SearchField id="bomSearch" search="onbomSearch" placeholder="Component / Object Dependency"/>
                     <Table id="idBom" items="{path: '/results', sorter : { path : 'ITEM_NUM'} }" itemPress="onItemPress" rememberSelections="false" mode="SingleSelectMaster" selectionChange="onItemPress" sticky="ColumnHeaders">

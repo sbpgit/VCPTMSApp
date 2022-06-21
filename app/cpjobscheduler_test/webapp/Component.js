@@ -1,12 +1,12 @@
 sap.ui.define([
             "sap/ui/core/UIComponent",
             "sap/ui/Device",
-            "cpapp/cpjobschedulertest/model/models"
+            "cpapp/cpjobscheduler/model/models"
         ],
         function (UIComponent, Device, models) {
             "use strict";
     
-            return UIComponent.extend("cpapp.cpjobschedulertest.Component", {
+            return UIComponent.extend("cpapp.cpjobscheduler.Component", {
                 metadata: {
                     manifest: "json"
                 },

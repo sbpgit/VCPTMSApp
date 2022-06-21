@@ -6,7 +6,7 @@ sap.ui.define(
               "use strict";
           
               return Controller.extend(
-                "cpapp.cpjobschedulertest.controller.BaseController",
+                "cpapp.cpjobscheduler.controller.BaseController",
                 {
                   /**
                    * Convenience method for accessing the router.

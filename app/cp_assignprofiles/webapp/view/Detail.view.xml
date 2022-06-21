@@ -14,7 +14,7 @@
                     <Label text="{i18n>profDesc}"/>
                     <Input id="idPdesc" value="" width="300px"/>
                     <Label text="{i18n>auth}"/>
-                    <Input id="idAuth" value="" width="300px"/>
+                    <Input id="idAuth" value="" width="300px" visible="false"/>
                     <Label text="{i18n>algo}"/>
                     <Select id="idAlgo" change="onAlgorChange" selectedKey="N" width="130px">
                         <core:ListItem key="N" text="No Data"/>
