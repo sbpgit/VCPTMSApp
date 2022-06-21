@@ -324,9 +324,9 @@ async function _updateJobs(req,isGet) {
                 let completionTimestamp = ret_schedlog_response.value.logs[logIndex].completionTimestamp;
                 let runText = ret_schedlog_response.value.logs[logIndex].runText;
                 let runStr = runText.replace(/'/g, '"');
-                if (runStr.length > 5000)
+                if (runStr.length >= 5000)
                 {
-                    runStr.slice(0,4995) + "...";
+                    runStr = runStr.slice(0,4995) + "...";
                 }
 
                 // let textId = uuidv1();
