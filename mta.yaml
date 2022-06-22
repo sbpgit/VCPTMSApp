@@ -138,6 +138,14 @@ modules:
     - artifacts:
       - cpappcpjobschedulerlogs.zip
       name: cpappcpjobschedulerlogs
+      target-path: resources/    
+    - artifacts:
+      - cpappcpjoblog.zip
+      name: cpappcpjoblog
+      target-path: resources/        
+    - artifacts:
+      - cpappcpnewpartialprod.zip
+      name: cpappcpnewpartialprod
       target-path: resources/
 - name: cpodpcpodprofiles
   type: html5
@@ -292,6 +300,26 @@ modules:
 - name: cpappcpjobschedulerlogs
   type: html5
   path: app/cpjobscheduler_logs
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappcpjoblog
+  type: html5
+  path: app/cpjoblog
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappcpnewpartialprod
+  type: html5
+  path: app/cpnewpartialprod
   build-parameters:
     build-result: dist
     builder: custom

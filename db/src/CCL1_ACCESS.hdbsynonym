@@ -87,7 +87,7 @@
     },
     "CONFIG_PRODUCTS.db::SYN_ASMBCOMPONENT": {
         "target": {
-            "object": "VT_ASMBCOMPONENT",
+            "object": "VT_ASMBCOMP",
             "schema": "DB_CONFIG_PROD_CLIENT1"
         }
     }

@@ -3,7 +3,7 @@
         "object_owner": {
             "global_object_privileges": [
                 {
-                    "name": "VCPSDISource",
+                    "name": "MyFileSource",
                     "type": "REMOTE SOURCE",
                     "privileges": [
                         "CREATE VIRTUAL TABLE",
@@ -17,7 +17,7 @@
         "application_user": {
             "global_object_privileges": [
                 {
-                    "name": "VCPSDISource",
+                    "name": "MyFileSource",
                     "type": "REMOTE SOURCE",
                     "privileges": [
                         "CREATE VIRTUAL TABLE",

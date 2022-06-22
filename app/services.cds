@@ -51,8 +51,5 @@ using from './cpjobscheduler_logs/annotations';
 
 using from './cprestrictions/annotations';
 
-<<<<<<< HEAD
 using from './cp_jobschlogs/annotations';
-=======
 using from './cpjobscheduler_test/annotations';
->>>>>>> 77de88f04f3036129a94bcc91ba9d4f0fd4fa11c
