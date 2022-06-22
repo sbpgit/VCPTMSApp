@@ -1,0 +1,17 @@
+<mvc:View controllerName="cp.appf.cpbomod.controller.Details" xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:f="sap.f">
+	<Page id="pageId">
+		<customHeader>
+			<Bar>
+				<!-- <contentLeft> -->
+			<!-- <Button id="leftMenu" icon="sap-icon://menu2" tooltip="Side Menu Expand/Collapse" press="expandBegin" type="Transparent" visible="false"/>
+			</contentLeft> -->
+				<contentMiddle>
+					<Title text="{i18n>detailsTitle}" class="boldText"></Title>
+				</contentMiddle>
+			</Bar>
+		</customHeader>
+		<content>
+			<f:FlexibleColumnLayout id="fcl"></f:FlexibleColumnLayout>
+		</content>
+	</Page>
+</mvc:View>

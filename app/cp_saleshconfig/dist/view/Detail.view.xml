@@ -1,0 +1,79 @@
+<mvc:View
+    controllerName="cp.appf.cpsaleshconfig.controller.Detail"
+     xmlns:l="sap.ui.layout"
+    xmlns:core="sap.ui.core"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns="sap.m">
+
+    <Page id="page" title="{i18n>title}" titleAlignment="Center" showNavButton="true" navButtonPress="onBack">
+        <VBox class="sapUiSmallMargin">
+		<f:SimpleForm id="SimpleFormDisplayColumn_threeGroups234"
+			editable="false"
+			layout="ColumnLayout"
+			columnsM="2"
+			columnsL="2"
+			columnsXL="2"
+			>
+			<f:content>
+				<core:Title text="SO Header" class="boldText"/>
+                <Label text="{i18n>prodid} " />
+				<Text text="{oGModel>/sPrdid}" />
+                <Label text="{i18n>locid}" />
+				<Text text="{oGModel>/sLocid}" />
+                <Label text="Sales Order" />
+				<Text text="{oGModel>/sSalOrd}" />
+                <Label text="Sales Order Item"  />
+				<Text text="{oGModel>/sSalOrdItem}" />                                
+                <Label text="{i18n>docdate}" />
+				<Text text="{oGModel>/date}"/>
+				<core:Title text="" />
+				<Label text="{i18n>schLine}" />
+				<Text text="{oGModel>/sSchedNo}" />
+				<Label text="{i18n>reasonrej}" />
+				<Text text="{oGModel>/sRejReson}" />
+				<Label text="{i18n>conqty}" />
+				<Text text="{oGModel>/sConQty}" />
+                <Label text="{i18n>ordqty}" />
+				<Text text="{oGModel>/sOrdQty}" />
+				<Label text="{i18n>matavldate}" />
+				<Text text="{path: 'oGModel>/sMatAvailData', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'MM/dd/yyyy' }}" />
+                <Label text="{i18n>Custgrp}" />
+				<Text text="{oGModel>/sCustGrp}" />
+			</f:content>
+		</f:SimpleForm>
+	</VBox>
+            
+        <content>
+            <Table id="idDetailTab" items="{path: '/results'}" growingScrollToLoad="true" sticky="ColumnHeaders" >
+                <headerToolbar>
+				<Toolbar>
+					<content>
+                    <Text text="SO Config Details" class="sapUiSmallMarginBeginEnd boldText"/>
+						<SearchField id="idDetailSearch" placeholder="Char Name/ Char Value"  
+                        liveChange="onTableSearch" width="600px"/>
+					</content>
+				</Toolbar>		
+				</headerToolbar>
+                <columns>
+                    
+                    <Column hAlign="Left" vAlign="Middle">
+                        <Text text="{i18n>charname}"/>
+                    </Column>
+                    <Column hAlign="Left" vAlign="Middle">
+                        <Text text="{i18n>charval}"/>
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem>
+                        <cells>
+                        <Text text="{CHAR_NAME}"/>
+                        <Text text="{CHAR_VALUE}"/>
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </content>
+    </Page>
+
+</mvc:View>

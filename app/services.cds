@@ -50,3 +50,5 @@ using from './cpauthobjrole/annotations';
 using from './cpjobscheduler_logs/annotations';
 
 using from './cprestrictions/annotations';
+
+using from './cp_jobschlogs/annotations';

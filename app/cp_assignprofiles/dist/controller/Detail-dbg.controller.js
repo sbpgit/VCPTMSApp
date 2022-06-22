@@ -128,17 +128,31 @@ sap.ui.define(
               // Adding new fields
               oData.results.forEach(function (row) {
                 row.DESCRIPTION = row.PARA_DESC;
-                if (row.INTVAL !== null) {
-                  row.DATATYPE = "INTEGER";
-                  row.DEFAULTVAL = row.INTVAL;
-                } else if (row.DOUBLEVAL !== null) {
-                  row.DATATYPE = "DOUBLE";
-                  row.DEFAULTVAL = row.DOUBLEVAL;
-                } else if (row.STRVAL !== null) {
+                if (row.DOUBLEVAL !== null) {
+                    row.DATATYPE = "DOUBLE";
+                    row.DEFAULTVAL = row.DOUBLEVAL;
+                  } else if (row.INTVAL !== null) {
+                    row.DATATYPE = "INTEGER";
+                    row.DEFAULTVAL = row.INTVAL;
+                  } else if (row.STRVAL !== null) {
                   row.DATATYPE = "NVARCHAR";
                   row.DEFAULTVAL = row.STRVAL;
                 }
               }, that);
+
+            // oData.results.forEach(function (row) {
+            //     row.DESCRIPTION = row.PARA_DESC;
+            //     if (row.DATATYPE = "INTEGER") {
+                  
+            //       row.DEFAULTVAL = row.INTVAL;
+            //     } else if (row.DATATYPE = "DOUBLE") {
+                  
+            //       row.DEFAULTVAL = row.DOUBLEVAL;
+            //     } else if (row.DATATYPE = "NVARCHAR") {
+                  
+            //       row.DEFAULTVAL = row.STRVAL;
+            //     }
+            //   }, that);
   
               that.oAlgoListModel.setData({
                 results: oData.results,
@@ -186,7 +200,7 @@ sap.ui.define(
           that.byId("idSave").setEnabled(true);
           if (oEvent) {
             var sQuery = oEvent.getParameter("newValue"),
-              selId = oEvent.getParameter("id").split("-")[6];
+              selId = oEvent.getParameter("id").split("idTab-")[1];
           } else {
             var selId = that.typeChange;
             sQuery = that.byId("idTab").getItems()[selId].getCells()[4].getValue();
@@ -369,6 +383,7 @@ sap.ui.define(
               CREATED_BY,
               PARA_NAME,
               PARA_DESC,
+              DATATYPE,
               INTVAL = "",
               DOUBLEVAL = "",
               STRVAL = "";
@@ -379,6 +394,7 @@ sap.ui.define(
             PARA_DESC = oTable[i].getCells()[1].getText();
   
             if (oTable[i].getCells()[2].getSelectedKey() === "INTEGER") {
+                DATATYPE = "INTEGER";
               if (oTable[i].getCells()[4].getValue() === "") {
                 INTVAL = parseInt(oTable[i].getCells()[3].getText());
               } else {
@@ -390,19 +406,20 @@ sap.ui.define(
               }
   
               if(INTVAL.toString().includes("NaN")){
-                  INTVAL = "0";
-                  INTVAL = parseInt(INTVAL);
+                  INTVAL = null;
               }
               jsonProfilePara = {
                 PROFILE: PROFILE,
                 METHOD: METHOD,
                 PARA_NAME: PARA_NAME,
                 PARA_DESC: PARA_DESC,
+                DATATYPE: DATATYPE,
                 INTVAL: INTVAL,
-                DOUBLEVAL: "0.0",
-                STRVAL: "",
+                DOUBLEVAL: null,
+                STRVAL: null,
               };
             } else if (oTable[i].getCells()[2].getSelectedKey() === "DOUBLE") {
+                DATATYPE = "DOUBLE";
               if (oTable[i].getCells()[4].getValue() === "") {
                 DOUBLEVAL = parseFloat(oTable[i].getCells()[3].getText());
                 if(DOUBLEVAL === "0"){
@@ -416,34 +433,40 @@ sap.ui.define(
                 }
               }
               if(DOUBLEVAL.toString().includes("NaN")){
-                DOUBLEVAL = "0.0";
-                DOUBLEVAL = parseFloat(DOUBLEVAL);
+                DOUBLEVAL = null;
             }
               jsonProfilePara = {
                 PROFILE: PROFILE,
                 METHOD: METHOD,
                 PARA_NAME: PARA_NAME,
                 PARA_DESC: PARA_DESC,
-                INTVAL: "0",
+                DATATYPE: DATATYPE,
+                INTVAL: null,
                 DOUBLEVAL: DOUBLEVAL,
-                STRVAL: "",
+                STRVAL: null,
               };
             } else if (oTable[i].getCells()[2].getSelectedKey() === "NVARCHAR") {
+                DATATYPE = "NVARCHAR";
               if (oTable[i].getCells()[4].getValue() === "") {
                 STRVAL = oTable[i].getCells()[3].getText();
               } else {
-                STRVAL = oTable[i].getCells()[4].getValue();
+                if (oTable[i].getCells()[4].getValue() === "No default value") {
+                    STRVAL = "";
+                  } else {
+                    STRVAL = oTable[i].getCells()[4].getValue();
+                  }
               }
               if(STRVAL.includes("NaN")){
-                  STRVAL = "";
+                  STRVAL = null;
               }
               jsonProfilePara = {
                 PROFILE: PROFILE,
                 METHOD: METHOD,
                 PARA_NAME: PARA_NAME,
                 PARA_DESC: PARA_DESC,
-                INTVAL: "0",
-                DOUBLEVAL: "0.0",
+                DATATYPE: DATATYPE,
+                INTVAL: null,
+                DOUBLEVAL: null,
                 STRVAL: STRVAL,
               };
             }
@@ -460,6 +483,7 @@ sap.ui.define(
                 DOUBLEVAL: jsonProfilePara.DOUBLEVAL,
                 STRVAL: jsonProfilePara.STRVAL,
                 PARA_DESC: PARA_DESC,
+                // DATATYPE: jsonProfilePara.DATATYPE,
                 PARA_DEP: "",
                 CREATED_DATE: that.vDate,
                 CREATED_BY: "",

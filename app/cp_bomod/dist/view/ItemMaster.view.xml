@@ -1,0 +1,18 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m" controllerName="cp.appf.cpbomod.controller.ItemMaster"
+    xmlns:html="http://www.w3.org/1999/xhtml" class="ItemMaster">
+    <Page showHeader="false">
+        <content>
+            <SearchField id="headSearch" liveChange="onSearch" placeholder="Product/ Location"/>
+            <List id="bomList" headerText="Products/Location" items="{ path : '/results', sorter : { path : 'PRODUCT_ID'} }" mode="SingleSelectMaster" noDataText="No Data" selectionChange="onhandlePress">
+                <items>
+                    <ObjectListItem press="onhandlePress" title="{PRODUCT_ID}">
+                        <attributes>
+                            <ObjectAttribute text="{LOCATION_ID}"/>
+                        </attributes>
+                    </ObjectListItem>
+                </items>
+            </List>
+        </content>
+    </Page>
+</mvc:View>

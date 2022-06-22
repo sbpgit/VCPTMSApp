@@ -1,0 +1,720 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+    <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Capabilities.V1.xml">
+        <edmx:Include Alias="Capabilities" Namespace="Org.OData.Capabilities.V1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/Common.xml">
+        <edmx:Include Alias="Common" Namespace="com.sap.vocabularies.Common.v1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/UI.xml">
+        <edmx:Include Alias="UI" Namespace="com.sap.vocabularies.UI.v1"/>
+    </edmx:Reference>
+    <edmx:DataServices>
+        <Schema Namespace="JobsService" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+            <EntityContainer Name="EntityContainer">
+                <EntitySet Name="jobs" EntityType="JobsService.jobs"/>
+                <EntitySet Name="schedules" EntityType="JobsService.schedules"/>
+                <EntitySet Name="logs" EntityType="JobsService.logs"/>
+                <EntitySet Name="getJobStatus" EntityType="JobsService.getJobStatus"/>
+                <ActionImport Name="updateJobs" Action="JobsService.updateJobs"/>
+                <FunctionImport Name="fUpdateJobs" Function="JobsService.fUpdateJobs"/>
+                <FunctionImport Name="lreadJobs" Function="JobsService.lreadJobs"/>
+                <FunctionImport Name="lreadJobDetails" Function="JobsService.lreadJobDetails"/>
+                <FunctionImport Name="lreadJobSchedules" Function="JobsService.lreadJobSchedules"/>
+                <FunctionImport Name="lreadJobSchedule" Function="JobsService.lreadJobSchedule"/>
+                <FunctionImport Name="lreadJobActionLogs" Function="JobsService.lreadJobActionLogs"/>
+                <FunctionImport Name="lreadJobRunLogs" Function="JobsService.lreadJobRunLogs"/>
+                <FunctionImport Name="laddMLJob" Function="JobsService.laddMLJob"/>
+                <FunctionImport Name="laddIBPBTPJob" Function="JobsService.laddIBPBTPJob"/>
+                <FunctionImport Name="lupdateJob" Function="JobsService.lupdateJob"/>
+                <FunctionImport Name="ldeleteJob" Function="JobsService.ldeleteJob"/>
+                <FunctionImport Name="laddJobSchedule" Function="JobsService.laddJobSchedule"/>
+                <FunctionImport Name="ldeleteMLJobSchedule" Function="JobsService.ldeleteMLJobSchedule"/>
+                <FunctionImport Name="lupdateMLJobSchedule" Function="JobsService.lupdateMLJobSchedule"/>
+                <FunctionImport Name="readJobs" Function="JobsService.readJobs"/>
+                <FunctionImport Name="readJobDetails" Function="JobsService.readJobDetails"/>
+                <FunctionImport Name="readJobSchedules" Function="JobsService.readJobSchedules"/>
+                <FunctionImport Name="readJobSchedule" Function="JobsService.readJobSchedule"/>
+                <FunctionImport Name="readJobActionLogs" Function="JobsService.readJobActionLogs"/>
+                <FunctionImport Name="readJobRunLogs" Function="JobsService.readJobRunLogs"/>
+                <FunctionImport Name="addMLJob" Function="JobsService.addMLJob"/>
+                <FunctionImport Name="updateMLJob" Function="JobsService.updateMLJob"/>
+                <FunctionImport Name="deleteMLJob" Function="JobsService.deleteMLJob"/>
+                <FunctionImport Name="addJobSchedule" Function="JobsService.addJobSchedule"/>
+                <FunctionImport Name="deleteMLJobSchedule" Function="JobsService.deleteMLJobSchedule"/>
+                <FunctionImport Name="updateMLJobSchedule" Function="JobsService.updateMLJobSchedule"/>
+                <ActionImport Name="createJob" Action="JobsService.createJob"/>
+                <ActionImport Name="createMLJob" Action="JobsService.createMLJob"/>
+                <ActionImport Name="updateJob" Action="JobsService.updateJob"/>
+                <ActionImport Name="deleteJob" Action="JobsService.deleteJob"/>
+                <ActionImport Name="createJobSchedule" Action="JobsService.createJobSchedule"/>
+                <ActionImport Name="deleteJobSchedule" Action="JobsService.deleteJobSchedule"/>
+                <ActionImport Name="updateJobSchedule" Action="JobsService.updateJobSchedule"/>
+            </EntityContainer>
+            <EntityType Name="jobs">
+                <Key>
+                    <PropertyRef Name="JOB_ID"/>
+                    <PropertyRef Name="JOB_NAME"/>
+                    <PropertyRef Name="ACTION"/>
+                    <PropertyRef Name="ACTIVE"/>
+                    <PropertyRef Name="HTTP_METHOD"/>
+                    <PropertyRef Name="CREATAT"/>
+                    <PropertyRef Name="SCHEDULE_ID"/>
+                </Key>
+                <Property Name="JOB_ID" Type="Edm.Int32" Nullable="false"/>
+                <Property Name="JOB_NAME" Type="Edm.String" MaxLength="50" Nullable="false"/>
+                <Property Name="ACTION" Type="Edm.String" MaxLength="200" Nullable="false"/>
+                <Property Name="ACTIVE" Type="Edm.Boolean" Nullable="false"/>
+                <Property Name="HTTP_METHOD" Type="Edm.String" MaxLength="50" Nullable="false"/>
+                <Property Name="CREATAT" Type="Edm.String" MaxLength="50" Nullable="false"/>
+                <Property Name="JOB_DES" Type="Edm.String" MaxLength="100"/>
+                <Property Name="JOB_TYPE" Type="Edm.String" MaxLength="50"/>
+                <Property Name="START_TIME" Type="Edm.String" MaxLength="50"/>
+                <Property Name="END_TIME" Type="Edm.String" MaxLength="50"/>
+                <Property Name="ACTIVECOUNT" Type="Edm.Int32"/>
+                <Property Name="INACTIVECOUNT" Type="Edm.Int32"/>
+                <Property Name="SIGNATURE_VERSION" Type="Edm.Int32"/>
+                <Property Name="SUB_DOMAIN" Type="Edm.String"/>
+                <Property Name="USER" Type="Edm.String" MaxLength="50"/>
+                <Property Name="SCHEDULE_ID" Type="Edm.String" MaxLength="50" Nullable="false"/>
+            </EntityType>
+            <EntityType Name="schedules">
+                <Key>
+                    <PropertyRef Name="SCHEDULE_ID"/>
+                    <PropertyRef Name="RUN_ID"/>
+                </Key>
+                <Property Name="SCHEDULE_ID" Type="Edm.String" MaxLength="50" Nullable="false"/>
+                <Property Name="SCH_DESC" Type="Edm.String" MaxLength="100"/>
+                <Property Name="SCH_DATA" Type="Edm.String"/>
+                <Property Name="SCH_TYPE" Type="Edm.String" MaxLength="50"/>
+                <Property Name="SCH_ACTIVE" Type="Edm.Boolean"/>
+                <Property Name="SCH_STARTTIME" Type="Edm.String" MaxLength="50"/>
+                <Property Name="SCH_END_TIME" Type="Edm.String" MaxLength="50"/>
+                <Property Name="SCH_TIME" Type="Edm.String" MaxLength="50"/>
+                <Property Name="SCH_NEXTRUN" Type="Edm.String" MaxLength="50"/>
+                <Property Name="RUN_ID" Type="Edm.String" MaxLength="50" Nullable="false"/>
+            </EntityType>
+            <EntityType Name="logs">
+                <Key>
+                    <PropertyRef Name="RUN_ID"/>
+                </Key>
+                <Property Name="RUN_ID" Type="Edm.String" MaxLength="50" Nullable="false"/>
+                <Property Name="HTTP_STATUS" Type="Edm.Int32"/>
+                <Property Name="EXECUTION_TIMESTAMP" Type="Edm.String" MaxLength="50"/>
+                <Property Name="RUN_STATUS" Type="Edm.String" MaxLength="50"/>
+                <Property Name="RUN_STATE" Type="Edm.String" MaxLength="50"/>
+                <Property Name="STATUS_MESSAGE" Type="Edm.String"/>
+                <Property Name="SCHEDULED_TIMESTAMP" Type="Edm.String" MaxLength="50"/>
+                <Property Name="COMPLETED_TIMESTAMP" Type="Edm.String" MaxLength="50"/>
+                <Property Name="runtext" Type="Edm.String"/>
+            </EntityType>
+            <EntityType Name="getJobStatus">
+                <Key>
+                    <PropertyRef Name="JOB_ID"/>
+                    <PropertyRef Name="JOB_NAME"/>
+                    <PropertyRef Name="ACTION"/>
+                    <PropertyRef Name="JOB_DES"/>
+                    <PropertyRef Name="SCH_STARTTIME"/>
+                    <PropertyRef Name="SCH_END_TIME"/>
+                    <PropertyRef Name="SCH_TIME"/>
+                    <PropertyRef Name="SCH_NEXTRUN"/>
+                    <PropertyRef Name="RUN_ID"/>
+                    <PropertyRef Name="RUN_STATUS"/>
+                    <PropertyRef Name="RUN_STATE"/>
+                    <PropertyRef Name="STATUS_MESSAGE"/>
+                    <PropertyRef Name="SCHEDULED_TIMESTAMP"/>
+                    <PropertyRef Name="COMPLETED_TIMESTAMP"/>
+                    <PropertyRef Name="RUNTEXT"/>
+                </Key>
+                <Property Name="JOB_ID" Type="Edm.Int32" Nullable="false"/>
+                <Property Name="JOB_NAME" Type="Edm.String" MaxLength="50" Nullable="false"/>
+                <Property Name="ACTION" Type="Edm.String" MaxLength="200" Nullable="false"/>
+                <Property Name="JOB_DES" Type="Edm.String" MaxLength="100" Nullable="false"/>
+                <Property Name="SCH_STARTTIME" Type="Edm.String" MaxLength="50" Nullable="false"/>
+                <Property Name="SCH_END_TIME" Type="Edm.String" MaxLength="50" Nullable="false"/>
+                <Property Name="SCH_TIME" Type="Edm.String" MaxLength="50" Nullable="false"/>
+                <Property Name="SCH_NEXTRUN" Type="Edm.String" MaxLength="50" Nullable="false"/>
+                <Property Name="RUN_ID" Type="Edm.String" MaxLength="50" Nullable="false"/>
+                <Property Name="RUN_STATUS" Type="Edm.String" MaxLength="50" Nullable="false"/>
+                <Property Name="RUN_STATE" Type="Edm.String" MaxLength="50" Nullable="false"/>
+                <Property Name="STATUS_MESSAGE" Type="Edm.String" MaxLength="5000" Nullable="false"/>
+                <Property Name="SCHEDULED_TIMESTAMP" Type="Edm.String" MaxLength="50" Nullable="false"/>
+                <Property Name="COMPLETED_TIMESTAMP" Type="Edm.String" MaxLength="50" Nullable="false"/>
+                <Property Name="RUNTEXT" Type="Edm.String" Nullable="false"/>
+            </EntityType>
+            <ComplexType Name="js_Jobs">
+                <Property Name="name" Type="Edm.String"/>
+                <Property Name="description" Type="Edm.String"/>
+                <Property Name="action" Type="Edm.String"/>
+                <Property Name="active" Type="Edm.Boolean"/>
+                <Property Name="httpMethod" Type="Edm.String"/>
+                <Property Name="startTime" Type="Edm.String"/>
+                <Property Name="endTime" Type="Edm.String"/>
+                <Property Name="ACTIVECOUNT" Type="Edm.Int32"/>
+                <Property Name="createdAt" Type="Edm.String"/>
+                <Property Name="INACTIVECOUNT" Type="Edm.Int32"/>
+                <Property Name="jobId" Type="Edm.Int32"/>
+                <Property Name="jobType" Type="Edm.String"/>
+                <Property Name="signatureVersion" Type="Edm.Int32"/>
+                <Property Name="subDomain" Type="Edm.String"/>
+                <Property Name="user" Type="Edm.String"/>
+                <Property Name="_id" Type="Edm.Int32"/>
+            </ComplexType>
+            <ComplexType Name="js_Schedules">
+                <Property Name="data" Type="Edm.String"/>
+                <Property Name="description" Type="Edm.String"/>
+                <Property Name="active" Type="Edm.Boolean"/>
+                <Property Name="startTime" Type="Edm.String"/>
+                <Property Name="endTime" Type="Edm.String"/>
+                <Property Name="cron" Type="Edm.String"/>
+                <Property Name="time" Type="Edm.String"/>
+                <Property Name="repeatInterval" Type="Edm.String"/>
+                <Property Name="repeatAt" Type="Edm.String"/>
+                <Property Name="nextRunAt" Type="Edm.String"/>
+                <Property Name="scheduleId" Type="Edm.String"/>
+                <Property Name="type" Type="Edm.String"/>
+            </ComplexType>
+            <ComplexType Name="js_RunLogs">
+                <Property Name="runId" Type="Edm.String"/>
+                <Property Name="httpStatus" Type="Edm.Int32"/>
+                <Property Name="executionTimestamp" Type="Edm.String"/>
+                <Property Name="runStatus" Type="Edm.String"/>
+                <Property Name="runState" Type="Edm.String"/>
+                <Property Name="statusMessage" Type="Edm.String"/>
+                <Property Name="scheduleTimestamp" Type="Edm.String"/>
+                <Property Name="completionTimestamp" Type="Edm.String"/>
+                <Property Name="runText" Type="Edm.String"/>
+            </ComplexType>
+            <ComplexType Name="js_mlJobs">
+                <Property Name="name" Type="Edm.String"/>
+                <Property Name="description" Type="Edm.String"/>
+                <Property Name="action" Type="Edm.String"/>
+                <Property Name="active" Type="Edm.Boolean"/>
+                <Property Name="httpMethod" Type="Edm.String"/>
+                <Property Name="startTime" Type="Edm.String"/>
+                <Property Name="endTime" Type="Edm.String"/>
+                <Property Name="ACTIVECOUNT" Type="Edm.Int32"/>
+                <Property Name="createdAt" Type="Edm.String"/>
+                <Property Name="INACTIVECOUNT" Type="Edm.Int32"/>
+                <Property Name="jobId" Type="Edm.Int32"/>
+                <Property Name="jobType" Type="Edm.String"/>
+                <Property Name="signatureVersion" Type="Edm.Int32"/>
+                <Property Name="subDomain" Type="Edm.String"/>
+                <Property Name="user" Type="Edm.String"/>
+                <Property Name="_id" Type="Edm.Int32"/>
+                <Property Name="schedules" Type="Collection(JobsService.js_mlSchedules)" Nullable="false"/>
+            </ComplexType>
+            <ComplexType Name="js_mlSchedules">
+                <Property Name="data" Type="JobsService.js_mlSchedules_data"/>
+                <Property Name="description" Type="Edm.String"/>
+                <Property Name="active" Type="Edm.Boolean"/>
+                <Property Name="startTime" Type="Edm.String"/>
+                <Property Name="endTime" Type="Edm.String"/>
+                <Property Name="cron" Type="Edm.String"/>
+                <Property Name="time" Type="Edm.String"/>
+                <Property Name="repeatInterval" Type="Edm.String"/>
+                <Property Name="repeatAt" Type="Edm.String"/>
+            </ComplexType>
+            <ComplexType Name="js_mlSchedules_data">
+                <Property Name="vcRulesList" Type="Collection(JobsService.js_mlSchedules_data_vcRulesList)" Nullable="false"/>
+            </ComplexType>
+            <ComplexType Name="js_mlSchedules_data_vcRulesList">
+                <Property Name="profile" Type="Edm.String" MaxLength="50"/>
+                <Property Name="override" Type="Edm.Boolean"/>
+                <Property Name="version" Type="Edm.String" MaxLength="10"/>
+                <Property Name="scenario" Type="Edm.String" MaxLength="32"/>
+                <Property Name="Location" Type="Edm.String" MaxLength="4"/>
+                <Property Name="Product" Type="Edm.String" MaxLength="40"/>
+                <Property Name="GroupID" Type="Edm.String" MaxLength="20"/>
+                <Property Name="Type" Type="Edm.String" MaxLength="10"/>
+                <Property Name="modelVersion" Type="Edm.String" MaxLength="20"/>
+                <Property Name="dimensions" Type="Edm.Int32"/>
+            </ComplexType>
+            <Action Name="updateJobs" IsBound="false"/>
+            <Function Name="fUpdateJobs" IsBound="false" IsComposable="false">
+                <ReturnType Type="Edm.String"/>
+            </Function>
+            <Function Name="lreadJobs" IsBound="false" IsComposable="false">
+                <ReturnType Type="Edm.String"/>
+            </Function>
+            <Function Name="lreadJobDetails" IsBound="false" IsComposable="false">
+                <Parameter Name="jobId" Type="Edm.Int32"/>
+                <Parameter Name="displaySchedules" Type="Edm.Boolean"/>
+                <ReturnType Type="Edm.String"/>
+            </Function>
+            <Function Name="lreadJobSchedules" IsBound="false" IsComposable="false">
+                <Parameter Name="jobId" Type="Edm.Int32"/>
+                <ReturnType Type="Edm.String"/>
+            </Function>
+            <Function Name="lreadJobSchedule" IsBound="false" IsComposable="false">
+                <Parameter Name="jobId" Type="Edm.Int32"/>
+                <Parameter Name="scheduleId" Type="Edm.String"/>
+                <Parameter Name="displayLogs" Type="Edm.Boolean"/>
+                <ReturnType Type="Edm.String"/>
+            </Function>
+            <Function Name="lreadJobActionLogs" IsBound="false" IsComposable="false">
+                <Parameter Name="jobId" Type="Edm.Int32"/>
+                <ReturnType Type="Edm.String"/>
+            </Function>
+            <Function Name="lreadJobRunLogs" IsBound="false" IsComposable="false">
+                <Parameter Name="jobId" Type="Edm.Int32"/>
+                <Parameter Name="scheduleId" Type="Edm.String"/>
+                <Parameter Name="page_size" Type="Edm.Int32"/>
+                <Parameter Name="offset" Type="Edm.Int32"/>
+                <ReturnType Type="Edm.String"/>
+            </Function>
+            <Function Name="laddMLJob" IsBound="false" IsComposable="false">
+                <Parameter Name="jobDetails" Type="Edm.String"/>
+                <ReturnType Type="Edm.String"/>
+            </Function>
+            <Function Name="laddIBPBTPJob" IsBound="false" IsComposable="false">
+                <Parameter Name="jobDetails" Type="Edm.String"/>
+                <ReturnType Type="Edm.String"/>
+            </Function>
+            <Function Name="lupdateJob" IsBound="false" IsComposable="false">
+                <Parameter Name="jobDetails" Type="Edm.String"/>
+                <ReturnType Type="Edm.String"/>
+            </Function>
+            <Function Name="ldeleteJob" IsBound="false" IsComposable="false">
+                <Parameter Name="jobId" Type="Edm.Int32"/>
+                <ReturnType Type="Edm.String"/>
+            </Function>
+            <Function Name="laddJobSchedule" IsBound="false" IsComposable="false">
+                <Parameter Name="schedule" Type="Edm.String"/>
+                <ReturnType Type="Edm.String"/>
+            </Function>
+            <Function Name="ldeleteMLJobSchedule" IsBound="false" IsComposable="false">
+                <Parameter Name="scheduleDetails" Type="Edm.String"/>
+                <ReturnType Type="Edm.String"/>
+            </Function>
+            <Function Name="lupdateMLJobSchedule" IsBound="false" IsComposable="false">
+                <Parameter Name="schedule" Type="Edm.String"/>
+                <ReturnType Type="Edm.String"/>
+            </Function>
+            <Function Name="readJobs" IsBound="false" IsComposable="false">
+                <ReturnType Type="Collection(JobsService.js_Jobs)" Nullable="false"/>
+            </Function>
+            <Function Name="readJobDetails" IsBound="false" IsComposable="false">
+                <Parameter Name="jobId" Type="Edm.Int32"/>
+                <Parameter Name="displaySchedules" Type="Edm.Boolean"/>
+                <ReturnType Type="Edm.String"/>
+            </Function>
+            <Function Name="readJobSchedules" IsBound="false" IsComposable="false">
+                <Parameter Name="jobId" Type="Edm.Int32"/>
+                <ReturnType Type="Collection(JobsService.js_Schedules)" Nullable="false"/>
+            </Function>
+            <Function Name="readJobSchedule" IsBound="false" IsComposable="false">
+                <Parameter Name="jobId" Type="Edm.Int32"/>
+                <Parameter Name="scheduleId" Type="Edm.String"/>
+                <Parameter Name="displayLogs" Type="Edm.Boolean"/>
+                <ReturnType Type="Edm.String"/>
+            </Function>
+            <Function Name="readJobActionLogs" IsBound="false" IsComposable="false">
+                <Parameter Name="jobId" Type="Edm.Int32"/>
+                <ReturnType Type="Edm.String"/>
+            </Function>
+            <Function Name="readJobRunLogs" IsBound="false" IsComposable="false">
+                <Parameter Name="jobId" Type="Edm.Int32"/>
+                <Parameter Name="scheduleId" Type="Edm.String"/>
+                <Parameter Name="page_size" Type="Edm.Int32"/>
+                <Parameter Name="offset" Type="Edm.Int32"/>
+                <ReturnType Type="Collection(JobsService.js_RunLogs)" Nullable="false"/>
+            </Function>
+            <Function Name="addMLJob" IsBound="false" IsComposable="false">
+                <Parameter Name="jobDetails" Type="Edm.String"/>
+                <ReturnType Type="Edm.Int32"/>
+            </Function>
+            <Function Name="updateMLJob" IsBound="false" IsComposable="false">
+                <Parameter Name="jobDetails" Type="Edm.String"/>
+                <ReturnType Type="Edm.String"/>
+            </Function>
+            <Function Name="deleteMLJob" IsBound="false" IsComposable="false">
+                <Parameter Name="jobId" Type="Edm.Int32"/>
+                <ReturnType Type="Edm.String"/>
+            </Function>
+            <Function Name="addJobSchedule" IsBound="false" IsComposable="false">
+                <Parameter Name="schedule" Type="Edm.String"/>
+                <ReturnType Type="Edm.String"/>
+            </Function>
+            <Function Name="deleteMLJobSchedule" IsBound="false" IsComposable="false">
+                <Parameter Name="scheduleDetails" Type="Edm.String"/>
+                <ReturnType Type="Edm.String"/>
+            </Function>
+            <Function Name="updateMLJobSchedule" IsBound="false" IsComposable="false">
+                <Parameter Name="schedule" Type="Edm.String"/>
+                <ReturnType Type="Edm.String"/>
+            </Function>
+            <Action Name="createJob" IsBound="false">
+                <Parameter Name="url" Type="Edm.String"/>
+                <Parameter Name="cron" Type="Edm.String"/>
+                <ReturnType Type="Edm.Int32"/>
+            </Action>
+            <Action Name="createMLJob" IsBound="false">
+                <Parameter Name="jobDetails" Type="JobsService.js_mlJobs"/>
+                <ReturnType Type="Edm.Int32"/>
+            </Action>
+            <Action Name="updateJob" IsBound="false">
+                <Parameter Name="jobDetails" Type="JobsService.js_Jobs"/>
+                <ReturnType Type="Edm.String"/>
+            </Action>
+            <Action Name="deleteJob" IsBound="false">
+                <Parameter Name="jobId" Type="Edm.Int32"/>
+                <ReturnType Type="Edm.String"/>
+            </Action>
+            <Action Name="createJobSchedule" IsBound="false">
+                <Parameter Name="jobId" Type="Edm.Int32"/>
+                <Parameter Name="jobSchedule" Type="JobsService.js_mlSchedules"/>
+                <ReturnType Type="Edm.String"/>
+            </Action>
+            <Action Name="deleteJobSchedule" IsBound="false">
+                <Parameter Name="jobId" Type="Edm.Int32"/>
+                <Parameter Name="scheduleId" Type="Edm.String"/>
+                <ReturnType Type="Edm.String"/>
+            </Action>
+            <Action Name="updateJobSchedule" IsBound="false">
+                <Parameter Name="jobId" Type="Edm.Int32"/>
+                <Parameter Name="scheduleId" Type="Edm.String"/>
+                <Parameter Name="jobSchedule" Type="JobsService.js_mlSchedules"/>
+                <ReturnType Type="Edm.String"/>
+            </Action>
+            <Annotations Target="JobsService.EntityContainer/jobs">
+                <Annotation Term="Capabilities.DeleteRestrictions">
+                    <Record Type="Capabilities.DeleteRestrictionsType">
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="Capabilities.InsertRestrictions">
+                    <Record Type="Capabilities.InsertRestrictionsType">
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="Capabilities.UpdateRestrictions">
+                    <Record Type="Capabilities.UpdateRestrictionsType">
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="JobsService.jobs/JOB_ID">
+                <Annotation Term="Common.Label" String="Job ID"/>
+            </Annotations>
+            <Annotations Target="JobsService.jobs/JOB_NAME">
+                <Annotation Term="Common.Label" String="Job Name"/>
+            </Annotations>
+            <Annotations Target="JobsService.jobs/ACTION">
+                <Annotation Term="Common.Label" String="Action"/>
+            </Annotations>
+            <Annotations Target="JobsService.jobs/ACTIVE">
+                <Annotation Term="Common.Label" String="Active"/>
+            </Annotations>
+            <Annotations Target="JobsService.jobs/HTTP_METHOD">
+                <Annotation Term="Common.Label" String="Http Method"/>
+            </Annotations>
+            <Annotations Target="JobsService.jobs/CREATAT">
+                <Annotation Term="Common.Label" String="Created At"/>
+            </Annotations>
+            <Annotations Target="JobsService.jobs/JOB_DES">
+                <Annotation Term="Common.Label" String="Job Description"/>
+            </Annotations>
+            <Annotations Target="JobsService.jobs/START_TIME">
+                <Annotation Term="Common.Label" String="Start TIme"/>
+            </Annotations>
+            <Annotations Target="JobsService.jobs/END_TIME">
+                <Annotation Term="Common.Label" String="End Time"/>
+            </Annotations>
+            <Annotations Target="JobsService.jobs/ACTIVECOUNT">
+                <Annotation Term="Common.Label" String="Active Count"/>
+            </Annotations>
+            <Annotations Target="JobsService.jobs/INACTIVECOUNT">
+                <Annotation Term="Common.Label" String="InActive Count"/>
+            </Annotations>
+            <Annotations Target="JobsService.jobs/SIGNATURE_VERSION">
+                <Annotation Term="Common.Label" String="Signature Version"/>
+            </Annotations>
+            <Annotations Target="JobsService.jobs/SUB_DOMAIN">
+                <Annotation Term="Common.Label" String="Sub Domain"/>
+            </Annotations>
+            <Annotations Target="JobsService.jobs/USER">
+                <Annotation Term="Common.Label" String="User"/>
+            </Annotations>
+            <Annotations Target="JobsService.jobs/SCHEDULE_ID">
+                <Annotation Term="Common.Label" String="Schedule ID"/>
+            </Annotations>
+            <Annotations Target="JobsService.EntityContainer/schedules">
+                <Annotation Term="Capabilities.DeleteRestrictions">
+                    <Record Type="Capabilities.DeleteRestrictionsType">
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="Capabilities.InsertRestrictions">
+                    <Record Type="Capabilities.InsertRestrictionsType">
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="Capabilities.UpdateRestrictions">
+                    <Record Type="Capabilities.UpdateRestrictionsType">
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="JobsService.schedules/SCHEDULE_ID">
+                <Annotation Term="Common.Label" String="Schedule ID"/>
+            </Annotations>
+            <Annotations Target="JobsService.schedules/SCH_DESC">
+                <Annotation Term="Common.Label" String="Schedule Description"/>
+            </Annotations>
+            <Annotations Target="JobsService.schedules/SCH_DATA">
+                <Annotation Term="Common.Label" String="Schedule Data"/>
+            </Annotations>
+            <Annotations Target="JobsService.schedules/SCH_TYPE">
+                <Annotation Term="Common.Label" String="Cron/one-time"/>
+            </Annotations>
+            <Annotations Target="JobsService.schedules/SCH_ACTIVE">
+                <Annotation Term="Common.Label" String="Schedule Active"/>
+            </Annotations>
+            <Annotations Target="JobsService.schedules/SCH_STARTTIME">
+                <Annotation Term="Common.Label" String="Schedule Startime"/>
+            </Annotations>
+            <Annotations Target="JobsService.schedules/SCH_END_TIME">
+                <Annotation Term="Common.Label" String="Schedule Endtime"/>
+            </Annotations>
+            <Annotations Target="JobsService.schedules/SCH_TIME">
+                <Annotation Term="Common.Label" String="Schedule Time"/>
+            </Annotations>
+            <Annotations Target="JobsService.schedules/SCH_NEXTRUN">
+                <Annotation Term="Common.Label" String="Schedule Nextrun At"/>
+            </Annotations>
+            <Annotations Target="JobsService.schedules/RUN_ID">
+                <Annotation Term="Common.Label" String="Run ID"/>
+            </Annotations>
+            <Annotations Target="JobsService.EntityContainer/logs">
+                <Annotation Term="Capabilities.DeleteRestrictions">
+                    <Record Type="Capabilities.DeleteRestrictionsType">
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="Capabilities.InsertRestrictions">
+                    <Record Type="Capabilities.InsertRestrictionsType">
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="Capabilities.UpdateRestrictions">
+                    <Record Type="Capabilities.UpdateRestrictionsType">
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="JobsService.logs/RUN_ID">
+                <Annotation Term="Common.Label" String="Run ID"/>
+            </Annotations>
+            <Annotations Target="JobsService.logs/HTTP_STATUS">
+                <Annotation Term="Common.Label" String="HTTP Status code"/>
+            </Annotations>
+            <Annotations Target="JobsService.logs/EXECUTION_TIMESTAMP">
+                <Annotation Term="Common.Label" String="Execution TimeStamp"/>
+            </Annotations>
+            <Annotations Target="JobsService.logs/RUN_STATUS">
+                <Annotation Term="Common.Label" String="Run Status"/>
+            </Annotations>
+            <Annotations Target="JobsService.logs/RUN_STATE">
+                <Annotation Term="Common.Label" String="Run State"/>
+            </Annotations>
+            <Annotations Target="JobsService.logs/STATUS_MESSAGE">
+                <Annotation Term="Common.Label" String="Status Message"/>
+            </Annotations>
+            <Annotations Target="JobsService.logs/SCHEDULED_TIMESTAMP">
+                <Annotation Term="Common.Label" String="Scheduled Timestamp"/>
+            </Annotations>
+            <Annotations Target="JobsService.logs/COMPLETED_TIMESTAMP">
+                <Annotation Term="Common.Label" String="Completed Timestamp"/>
+            </Annotations>
+            <Annotations Target="JobsService.logs/runtext">
+                <Annotation Term="Common.Label" String="Run Text"/>
+            </Annotations>
+            <Annotations Target="JobsService.getJobStatus">
+                <Annotation Term="UI.SelectionFields">
+                    <Collection>
+                        <PropertyPath>JOB_ID</PropertyPath>
+                        <PropertyPath>RUN_STATUS</PropertyPath>
+                        <PropertyPath>RUN_STATE</PropertyPath>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="UI.LineItem">
+                    <Collection>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="JOB_ID"/>
+                            <Annotation Term="UI.Importance" EnumMember="UI.ImportanceType/High"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="JOB_NAME"/>
+                            <Annotation Term="UI.Importance" EnumMember="UI.ImportanceType/High"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="SCH_STARTTIME"/>
+                            <Annotation Term="UI.Importance" EnumMember="UI.ImportanceType/High"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="SCH_END_TIME"/>
+                            <Annotation Term="UI.Importance" EnumMember="UI.ImportanceType/High"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="SCH_NEXTRUN"/>
+                            <Annotation Term="UI.Importance" EnumMember="UI.ImportanceType/High"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="COMPLETED_TIMESTAMP"/>
+                            <Annotation Term="UI.Importance" EnumMember="UI.ImportanceType/High"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="RUN_STATUS"/>
+                            <Annotation Term="UI.Importance" EnumMember="UI.ImportanceType/High"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="RUN_STATE"/>
+                            <Annotation Term="UI.Importance" EnumMember="UI.ImportanceType/High"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="UI.HeaderInfo">
+                    <Record Type="UI.HeaderInfoType">
+                        <PropertyValue Property="Title">
+                            <Record Type="UI.DataField">
+                                <PropertyValue Property="Value" Path="JOB_ID"/>
+                            </Record>
+                        </PropertyValue>
+                        <PropertyValue Property="Description">
+                            <Record Type="UI.DataField">
+                                <PropertyValue Property="Value" Path="JOB_NAME"/>
+                            </Record>
+                        </PropertyValue>
+                        <PropertyValue Property="TypeName" String="Job Logs"/>
+                        <PropertyValue Property="TypeNamePlural" String="Job Logs"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="UI.HeaderFacets">
+                    <Collection>
+                        <Record Type="UI.ReferenceFacet">
+                            <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#Description"/>
+                            <Annotation Term="UI.Importance" EnumMember="UI.ImportanceType/Medium"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="UI.FieldGroup" Qualifier="Description">
+                    <Record Type="UI.FieldGroupType">
+                        <PropertyValue Property="Data">
+                            <Collection>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="RUN_STATE"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="UI.FieldGroup" Qualifier="Details">
+                    <Record Type="UI.FieldGroupType">
+                        <PropertyValue Property="Data">
+                            <Collection>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="JOB_DES"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="ACTION"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="SCH_STARTTIME"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="SCH_END_TIME"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="SCH_TIME"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="SCH_NEXTRUN"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="RUN_ID"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="RUN_STATUS"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="STATUS_MESSAGE"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="SCHEDULED_TIMESTAMP"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="COMPLETED_TIMESTAMP"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="RUNTEXT"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="UI.Facets">
+                    <Collection>
+                        <Record Type="UI.CollectionFacet">
+                            <PropertyValue Property="ID" String="Joblogs"/>
+                            <PropertyValue Property="Label" String="Job Scheduler Logs"/>
+                            <PropertyValue Property="Facets">
+                                <Collection>
+                                    <Record Type="UI.ReferenceFacet">
+                                        <PropertyValue Property="Label" String="Job Logs"/>
+                                        <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#Details"/>
+                                    </Record>
+                                </Collection>
+                            </PropertyValue>
+                        </Record>
+                    </Collection>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="JobsService.getJobStatus/JOB_ID">
+                <Annotation Term="Common.Label" String="JOB_ID"/>
+            </Annotations>
+            <Annotations Target="JobsService.getJobStatus/JOB_NAME">
+                <Annotation Term="Common.Label" String="JOB_NAME"/>
+            </Annotations>
+            <Annotations Target="JobsService.getJobStatus/ACTION">
+                <Annotation Term="Common.Label" String="ACTION"/>
+            </Annotations>
+            <Annotations Target="JobsService.getJobStatus/JOB_DES">
+                <Annotation Term="Common.Label" String="JOB_DES"/>
+            </Annotations>
+            <Annotations Target="JobsService.getJobStatus/SCH_STARTTIME">
+                <Annotation Term="Common.Label" String="SCH_STARTTIME"/>
+            </Annotations>
+            <Annotations Target="JobsService.getJobStatus/SCH_END_TIME">
+                <Annotation Term="Common.Label" String="SCH_END_TIME"/>
+            </Annotations>
+            <Annotations Target="JobsService.getJobStatus/SCH_TIME">
+                <Annotation Term="Common.Label" String="SCH_TIME"/>
+            </Annotations>
+            <Annotations Target="JobsService.getJobStatus/SCH_NEXTRUN">
+                <Annotation Term="Common.Label" String="SCH_NEXTRUN"/>
+            </Annotations>
+            <Annotations Target="JobsService.getJobStatus/RUN_ID">
+                <Annotation Term="Common.Label" String="RUN_ID"/>
+            </Annotations>
+            <Annotations Target="JobsService.getJobStatus/RUN_STATUS">
+                <Annotation Term="Common.Label" String="RUN_STATUS"/>
+            </Annotations>
+            <Annotations Target="JobsService.getJobStatus/RUN_STATE">
+                <Annotation Term="Common.Label" String="RUN_STATE"/>
+            </Annotations>
+            <Annotations Target="JobsService.getJobStatus/STATUS_MESSAGE">
+                <Annotation Term="Common.Label" String="STATUS_MESSAGE"/>
+            </Annotations>
+            <Annotations Target="JobsService.getJobStatus/SCHEDULED_TIMESTAMP">
+                <Annotation Term="Common.Label" String="SCHEDULED_TIMESTAMP"/>
+            </Annotations>
+            <Annotations Target="JobsService.getJobStatus/COMPLETED_TIMESTAMP">
+                <Annotation Term="Common.Label" String="COMPLETED_TIMESTAMP"/>
+            </Annotations>
+            <Annotations Target="JobsService.getJobStatus/RUNTEXT">
+                <Annotation Term="Common.Label" String="RUNTEXT"/>
+            </Annotations>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>

@@ -1,0 +1,7 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+	<SelectDialog id="StruSlctList" title="Structure Nodes" rememberSelections="false" search="handleSearch" liveChange="handleSearch"
+		confirm="handleSelection" cancel="handleClose"   contentWidth="320px" items="{/results}" 
+        selectionChange="handlestruChange" growing="false">
+		<StandardListItem title="{STRUC_NODE}" type="Active"/>
+	</SelectDialog>
+</core:FragmentDefinition>

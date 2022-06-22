@@ -6,7 +6,7 @@
 --                  B: CP_BOM_OBJDEPENDENCY - Table for BOM object Dep.
 -----------------------------------------------------------------------------------------
 VIEW "V_BOMODCOND"
-AS SELECT DISTINCT B.LOCATION_ID,
+AS SELECT distinct B.LOCATION_ID,
         B.PRODUCT_ID,
         B.ITEM_NUM,
         B.COMPONENT,

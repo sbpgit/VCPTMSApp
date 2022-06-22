@@ -1,0 +1,9 @@
+<mvc:View controllerName="cp.appf.cpbomod.controller.App"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns="sap.m">
+
+    <App id="app">
+        <pages></pages>
+    </App>
+
+</mvc:View>

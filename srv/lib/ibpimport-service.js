@@ -1,9 +1,6 @@
 const cds = require("@sap/cds");
 const GenF = require("./gen-functions");
-// const csrf = require("csrf");
 const hana = require("@sap/hana-client");
-const { createLogger, format, transports } = require("winston");
-const { combine, timestamp, label, prettyPrint } = format;
 const JobSchedulerClient = require("@sap/jobs-client");
 const xsenv = require("@sap/xsenv");
 

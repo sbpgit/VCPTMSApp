@@ -140,7 +140,7 @@ module.exports = (srv) => {
             vDateSeries = GenFunctions.addDays(vDateSeries, 7);
 
             lsDates.CAL_DATE = vDateSeries;//GenFunctions.getNextSundayCmp(vDateSeries);
-            // vDateSeries = lsDates.CAL_DATE;
+           // vDateSeries = lsDates.CAL_DATE;
 
             liDates.push(lsDates);
             lsDates = {};
@@ -265,8 +265,8 @@ module.exports = (srv) => {
         while (vDateSeries <= vDateTo) {
             vDateSeries = GenFunctions.addDays(vDateSeries, 7);
 
-            lsDates.CAL_DATE = vDateSeries;//GenFunctions.getNextSundayCmp(vDateSeries);
-            //  vDateSeries = lsDates.CAL_DATE;
+            lsDates.CAL_DATE = vDateSeries ;//GenFunctions.getNextSundayCmp(vDateSeries);
+          //  vDateSeries = lsDates.CAL_DATE;
 
             liDates.push(lsDates);
             lsDates = {};
@@ -373,35 +373,16 @@ module.exports = (srv) => {
             if (lsprofilesPara.PROFILE !== undefined) {
                 lsprofilesPara.METHOD = req.data.METHOD;
                 lsprofilesPara.PARA_NAME = req.data.PARA_NAME;
-                if (req.data.FLAG === "E") {
-                    await cds.delete("CP_PAL_PROFILEMETH_PARA", lsprofilesPara);
-                }
-                // lsprofilesPara.INTVAL = req.data.INTVAL;
-                // lsprofilesPara.DOUBLEVAL = req.data.DOUBLEVAL;
-                // lsprofilesPara.STRVAL = req.data.STRVAL;
-                if (req.data.INTVAL === NaN || req.data.INTVAL === 'NaN' || req.data.INTVAL === 'null' || req.data.INTVAL === null)  {
-                    lsprofilesPara.INTVAL = null;
-                }
-                else {
-                    lsprofilesPara.INTVAL = req.data.INTVAL;
-                }
-                if (req.data.STRVAL === NaN || req.data.STRVAL === 'NaN' || req.data.STRVAL === 'null' || req.data.STRVAL === null) {
-                    lsprofilesPara.STRVAL = null;
-                } 
-                else{
-                    lsprofilesPara.STRVAL = req.data.STRVAL;
-                }
-                
-                if (req.data.DOUBLEVAL === NaN || req.data.DOUBLEVAL === 'NaN' || req.data.DOUBLEVAL === 'null'|| req.data.DOUBLEVAL === null) {
-                    lsprofilesPara.DOUBLEVAL = null;
-                }
-                else {
-                    lsprofilesPara.DOUBLEVAL = req.data.DOUBLEVAL;
-                }
+                lsprofilesPara.INTVAL = req.data.INTVAL;
+                lsprofilesPara.DOUBLEVAL = req.data.DOUBLEVAL;
+                lsprofilesPara.STRVAL = req.data.STRVAL;
                 lsprofilesPara.PARA_DESC = req.data.PARA_DESC;
                 lsprofilesPara.PARA_DEP = null; //req.data.PARA_DEP;
                 lsprofilesPara.CREATED_DATE = curDate;
                 lsprofilesPara.CREATED_BY = ""; //req.data.CREATED_BY;
+                if (req.data.FLAG === "E") {
+                    await cds.delete("CP_PAL_PROFILEMETH_PARA", lsprofilesPara);
+                }
                 liProfilesPara.push(GenFunctions.parse(lsprofilesPara));
             }
             lsprofilesPara = {};
@@ -419,11 +400,10 @@ module.exports = (srv) => {
                 createResults.push(responseMessage);
             }
         } else if (req.data.FLAG === "D") {
-            // for (let i = 0; i < aProfilePara_req.length; i++) {
-            //     lsprofilesPara.PROFILE = req.data.PROFILE;
-            //     break;
-            // }
-            lsprofilesPara.PROFILE = req.data.PROFILE;
+            for (let i = 0; i < aProfilePara_req.length; i++) {
+                lsprofilesPara.PROFILE = req.data.PROFILE;
+                break;
+            }
             try {
                 if (lsprofilesPara.PROFILE !== undefined) {
                     await cds.delete("CP_PAL_PROFILEMETH_PARA", lsprofilesPara);
@@ -440,7 +420,7 @@ module.exports = (srv) => {
         //res.send({ value: createResults });
     });
     // Assign profile sot object dependency
-    srv.on("assignProfilesOD", async (req) => {
+    srv.on("asssignProfilesOD", async (req) => {
         let liProfilesOD = [];
         let liProfilesDel = [];
         let lsprofilesOD = {};
@@ -449,49 +429,40 @@ module.exports = (srv) => {
         let res;
         var responseMessage;
         var datetime = new Date();
+        var curDate = datetime.toISOString().slice(0, 10);
+
+        const aProfileOD_req = req.data.PROFILEOD;
         res = req._.req.res;
-        const li_bomod = await cds.run(
-            `SELECT *
-            FROM "V_BOMODCOND"
-            WHERE "LOCATION_ID" = '` +
-            req.data.LOCATION_ID +
-            `'
-            AND "PRODUCT_ID" = '` +
-            req.data.PRODUCT_ID +
-            `'
-            AND"COMPONENT" = '` +
-            req.data.COMPONENT +
-            `'`
-        );
-        for (let i = 0; i < li_bomod.length; i++) {
+        //  for (let i = 0; i < aProfileOD_req.length; i++) {
+        lsprofilesOD.PROFILE = req.data.PROFILE;
+        if (lsprofilesOD.PROFILE !== undefined || req.data.FLAG === "D") {
+            lsprofilesOD.LOCATION_ID = req.data.LOCATION_ID;
+            lsprofilesOD.PRODUCT_ID = req.data.PRODUCT_ID;
+            lsprofilesOD.COMPONENT = req.data.COMPONENT;
+            lsprofilesOD.OBJ_DEP = req.data.OBJ_DEP;
             lsprofilesOD.PROFILE = req.data.PROFILE;
-            if (lsprofilesOD.PROFILE !== undefined || req.data.FLAG === "D") {
-                lsprofilesOD.LOCATION_ID = req.data.LOCATION_ID;
-                lsprofilesOD.PRODUCT_ID = req.data.PRODUCT_ID;
-                lsprofilesOD.COMPONENT = req.data.COMPONENT;
-                lsprofilesOD.OBJ_DEP = li_bomod[i].OBJ_DEP;
-                lsprofilesOD.OBJ_TYPE = 'OD';
-                lsprofilesOD.PROFILE = req.data.PROFILE;
-                if (lsprofilesOD.STRUC_NODE !== undefined) {
-                    lsprofilesOD.STRUC_NODE = req.data.STRUC_NODE;
-                } else {
-                    lsprofilesOD.STRUC_NODE = "";
-                }
-                liProfilesOD.push(GenFunctions.parse(lsprofilesOD));
-                // Delete before insert to override
-                lsprofilesDel.LOCATION_ID = req.data.LOCATION_ID;
-                lsprofilesDel.PRODUCT_ID = req.data.PRODUCT_ID;
-                lsprofilesDel.COMPONENT = req.data.COMPONENT;
-                liProfilesDel.push(GenFunctions.parse(lsprofilesDel));
-                try {
-                    await cds.delete("CP_PAL_PROFILEOD", lsprofilesDel);
-                    responseMessage = " Deletion successfull ";
-                } catch (e) {
-                    responseMessage = " Deletion failed";
-                }
+            if (lsprofilesOD.STRUC_NODE !== undefined) {
+                lsprofilesOD.STRUC_NODE = req.data.STRUC_NODE;
+            } else {
+                lsprofilesOD.STRUC_NODE = "";
             }
-            lsprofilesOD = {};
+            liProfilesOD.push(GenFunctions.parse(lsprofilesOD));
+            // Delete before insert to override
+            lsprofilesDel.LOCATION_ID = req.data.LOCATION_ID;
+            lsprofilesDel.PRODUCT_ID = req.data.PRODUCT_ID;
+            lsprofilesDel.COMPONENT = req.data.COMPONENT;
+            lsprofilesDel.OBJ_DEP = req.data.OBJ_DEP;
+
+            liProfilesDel.push(GenFunctions.parse(lsprofilesDel));
+            try {
+                await cds.delete("CP_PAL_PROFILEOD", lsprofilesDel);
+                responseMessage = " Deletion successfull ";
+            } catch (e) {
+                responseMessage = " Deletion failed";
+            }
         }
+        lsprofilesOD = {};
+        //   }
 
         if (req.data.FLAG === "I") {
             try {
@@ -506,8 +477,9 @@ module.exports = (srv) => {
             }
         } else {
             createResults.push(responseMessage);
-        }    //  End of if (req.data.FLAG === "I")
+        }
         return responseMessage;
+        //res.send({ value: createResults });
     });
     // Assign product to access node
     srv.on("genProdAN", async (req) => {
@@ -689,197 +661,7 @@ module.exports = (srv) => {
         return lireturn;
         // res.send({ value: createResults });
     });
-    // Service for OD History
-    srv.on("genODHistory", async (req) => {
-        let { getODCharH } = srv.entities;
-        let liresults = [];
-        let lsresults = {};
-        let i, j, vObjdep, vObjcnt, vCaldate;
-        const db = srv.transaction(req);
-        const aodcharhdr = await cds.run(
-            `SELECT
-    "CAL_DATE",
-    "OBJ_DEP",
-    "OBJ_COUNTER",
-    "SUCCESS",
-    "ROW_ID",
-    "CHAR_SUCCESS"
-    FROM "V_TSODCHAR_H"
-    WHERE "OBJ_DEP" = '` +
-            req.data.OBJ_DEP +
-            `'
-    AND "OBJ_COUNTER" = '` +
-            req.data.OBJ_COUNTER +
-            `'
-    ORDER BY CAL_DATE DESC, ROW_ID ASC`
-        );
-        let vflag = "";
-        vCaldate = "";
-        for (i = 0; i < aodcharhdr.length; i++) {
-            if (
-                vCaldate != aodcharhdr[i].CAL_DATE &&
-                vCaldate !== ""
-                // vObjdep !== aodcharhdr[i].OBJ_DEP &&
-                // vObjcnt !== aodcharhdr[i].OBJ_COUNTER
-            ) {
-                vCaldate = aodcharhdr[i].CAL_DATE;
-                liresults.push(lsresults);
-                // vObjdep = aodcharhdr[i].OBJ_DEP;
-                // vObjcnt = aodcharhdr[i].OBJ_COUNTER;
-                lsresults = {};
-                lsresults.CAL_DATE = aodcharhdr[i].CAL_DATE;
-                lsresults.OBJ_DEP = aodcharhdr[i].OBJ_DEP;
-                lsresults.OBJ_COUNTER = aodcharhdr[i].OBJ_COUNTER;
-                lsresults.ODCOUNT = aodcharhdr[i].SUCCESS;
-                lsresults.ROW_ID1 = aodcharhdr[i].CHAR_SUCCESS;
-            } else {
-                vCaldate = aodcharhdr[i].CAL_DATE;
-                lsresults.CAL_DATE = aodcharhdr[i].CAL_DATE;
-                lsresults.OBJ_DEP = aodcharhdr[i].OBJ_DEP;
-                lsresults.OBJ_COUNTER = aodcharhdr[i].OBJ_COUNTER;
-                lsresults.ODCOUNT = aodcharhdr[i].SUCCESS;
-                let x = aodcharhdr[i].ROW_ID;
-                if (x === 1) {
-                    lsresults.ROW_ID1 = aodcharhdr[i].CHAR_SUCCESS;
-                }
-                if (x === 2) {
-                    lsresults.ROW_ID2 = aodcharhdr[i].CHAR_SUCCESS;
-                }
-                if (x === 3) {
-                    lsresults.ROW_ID3 = aodcharhdr[i].CHAR_SUCCESS;
-                }
-                if (x === 4) {
-                    lsresults.ROW_ID4 = aodcharhdr[i].CHAR_SUCCESS;
-                }
-                if (x === 5) {
-                    lsresults.ROW_ID5 = aodcharhdr[i].CHAR_SUCCESS;
-                }
-                if (x === 6) {
-                    lsresults.ROW_ID6 = aodcharhdr[i].CHAR_SUCCESS;
-                }
-                if (x === 7) {
-                    lsresults.ROW_ID7 = aodcharhdr[i].CHAR_SUCCESS;
-                }
-                if (x === 8) {
-                    lsresults.ROW_ID8 = aodcharhdr[i].CHAR_SUCCESS;
-                }
-                if (x === 9) {
-                    lsresults.ROW_ID9 = aodcharhdr[i].CHAR_SUCCESS;
-                }
-                if (x === 10) {
-                    lsresults.ROW_ID10 = aodcharhdr[i].CHAR_SUCCESS;
-                }
-                if (x === 11) {
-                    lsresults.ROW_ID11 = aodcharhdr[i].CHAR_SUCCESS;
-                }
-                if (x === 12) {
-                    lsresults.ROW_ID12 = aodcharhdr[i].CHAR_SUCCESS;
-                }
-            }
-        }
-
-        // liresults.push(lsresults);
-        return liresults;
-    });
-
-    // Service for OD Future
-    srv.on("genODFuture", async (req) => {
-        let { getODCharF } = srv.entities;
-        let liresults = [];
-        let lsresults = {};
-        let i, j, vObjdep, vObjcnt, vCaldate;
-        const db = srv.transaction(req);
-        const aodcharhdr = await cds.run(
-            `SELECT
-    "CAL_DATE",
-    "OBJ_DEP",
-    "OBJ_COUNTER",
-    "VERSION",
-    "SCENARIO",
-    "PREDICTED",
-    "ROW_ID",
-    "CHAR_SUCCESS"
-    FROM "V_TSODCHAR_F"
-    WHERE "OBJ_DEP" = '` +
-            req.data.OBJ_DEP +
-            `'
-    AND "OBJ_COUNTER" = '` +
-            req.data.OBJ_COUNTER +
-            `'
-    ORDER BY CAL_DATE DESC, ROW_ID ASC`
-        );
-        let vflag = "";
-        vCaldate = "";
-        for (i = 0; i < aodcharhdr.length; i++) {
-            if (
-                vCaldate != aodcharhdr[i].CAL_DATE &&
-                vCaldate !== ""
-                // vObjdep !== aodcharhdr[i].OBJ_DEP &&
-                // vObjcnt !== aodcharhdr[i].OBJ_COUNTER
-            ) {
-                vCaldate = aodcharhdr[i].CAL_DATE;
-                liresults.push(lsresults);
-                // vObjdep = aodcharhdr[i].OBJ_DEP;
-                // vObjcnt = aodcharhdr[i].OBJ_COUNTER;
-                lsresults = {};
-                lsresults.CAL_DATE = aodcharhdr[i].CAL_DATE;
-                lsresults.OBJ_DEP = aodcharhdr[i].OBJ_DEP;
-                lsresults.OBJ_COUNTER = aodcharhdr[i].OBJ_COUNTER;
-                lsresults.ODCOUNT = aodcharhdr[i].PREDICTED;
-                lsresults.VERSION = aodcharhdr[i].VERSION;
-                lsresults.SCENARIO = aodcharhdr[i].SCENARIO;
-                lsresults.ROW_ID1 = aodcharhdr[i].CHAR_SUCCESS;
-            } else {
-                vCaldate = aodcharhdr[i].CAL_DATE;
-                lsresults.CAL_DATE = aodcharhdr[i].CAL_DATE;
-                lsresults.OBJ_DEP = aodcharhdr[i].OBJ_DEP;
-                lsresults.OBJ_COUNTER = aodcharhdr[i].OBJ_COUNTER;
-                lsresults.ODCOUNT = aodcharhdr[i].PREDICTED;
-                lsresults.VERSION = aodcharhdr[i].VERSION;
-                lsresults.SCENARIO = aodcharhdr[i].SCENARIO;
-                let x = aodcharhdr[i].ROW_ID;
-                if (x === 1) {
-                    lsresults.ROW_ID1 = aodcharhdr[i].CHAR_SUCCESS;
-                }
-                if (x === 2) {
-                    lsresults.ROW_ID2 = aodcharhdr[i].CHAR_SUCCESS;
-                }
-                if (x === 3) {
-                    lsresults.ROW_ID3 = aodcharhdr[i].CHAR_SUCCESS;
-                }
-                if (x === 4) {
-                    lsresults.ROW_ID4 = aodcharhdr[i].CHAR_SUCCESS;
-                }
-                if (x === 5) {
-                    lsresults.ROW_ID5 = aodcharhdr[i].CHAR_SUCCESS;
-                }
-                if (x === 6) {
-                    lsresults.ROW_ID6 = aodcharhdr[i].CHAR_SUCCESS;
-                }
-                if (x === 7) {
-                    lsresults.ROW_ID7 = aodcharhdr[i].CHAR_SUCCESS;
-                }
-                if (x === 8) {
-                    lsresults.ROW_ID8 = aodcharhdr[i].CHAR_SUCCESS;
-                }
-                if (x === 9) {
-                    lsresults.ROW_ID9 = aodcharhdr[i].CHAR_SUCCESS;
-                }
-                if (x === 10) {
-                    lsresults.ROW_ID10 = aodcharhdr[i].CHAR_SUCCESS;
-                }
-                if (x === 11) {
-                    lsresults.ROW_ID11 = aodcharhdr[i].CHAR_SUCCESS;
-                }
-                if (x === 12) {
-                    lsresults.ROW_ID12 = aodcharhdr[i].CHAR_SUCCESS;
-                }
-            }
-        }
-
-        // liresults.push(lsresults);
-        return liresults;
-    });
+    
 
     // Get object dependency
     srv.on("get_objdep", async (req) => {
@@ -894,202 +676,7 @@ module.exports = (srv) => {
             );
         return results;
     });
-    // Maintain new product introsduction
-    srv.on("maintainNewProd", async (req) => {
-        let liresults = [];
-        let lsresults = {};
-        var responseMessage;
-
-        if (req.data.FLAG === "C" || req.data.FLAG === "E") {
-            lsresults.LOCATION_ID = req.data.LOCATION_ID;
-            lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
-            if (req.data.FLAG === "E") {
-                try {
-                    await cds.delete("CP_NEWPROD_INTRO", lsresults);
-                } catch (e) {
-                    //DONOTHING
-                }
-            }
-            lsresults.REF_PRODID = req.data.REF_PRODID;
-            liresults.push(lsresults);
-            try {
-                await cds.run(INSERT.into("CP_NEWPROD_INTRO").entries(liresults));
-                responseMessage = " Creation/Updation successful";
-            } catch (e) {
-                //DONOTHING
-                responseMessage = " Creation failed";
-                // createResults.push(responseMessage);
-            }
-            lsresults = {};
-        } else if (req.data.FLAG === "D") {
-            lsresults.LOCATION_ID = req.data.LOCATION_ID;
-            lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
-            try {
-                await cds.delete("CP_NEWPROD_INTRO", lsresults);
-                responseMessage = " Deletion successfull";
-            } catch (e) {
-                responseMessage = " Deletion failed";
-            }
-        }
-        lsresults = {};
-
-        return responseMessage;
-    });
-    // Maintain partial configurations for new product
-    srv.on("maintainNewProdChar", async (req) => {
-        let liresults = [];
-        let lsresults = {};
-        let liProdChar = {};
-        var responseMessage;
-        liProdChar = JSON.parse(req.data.PRODCHAR);
-        if (req.data.FLAG === "C" || req.data.FLAG === "E") {
-            for (var i = 0; i < liProdChar.length; i++) {
-                lsresults.PRODUCT_ID = liProdChar[i].PRODUCT_ID;
-                lsresults.LOCATION_ID = liProdChar[i].LOCATION_ID;
-                // lsresults.REF_PRODID = liProdChar[i].REF_PRODID;
-                if (req.data.FLAG === "E" && i === 0) {
-                    try {
-                        await cds.delete("CP_NEWPROD_CHAR", lsresults);
-                    } catch (e) {
-                        //DONOTHING
-                    }
-                }
-                lsresults.CLASS_NUM = liProdChar[i].CLASS_NUM;
-                lsresults.CHAR_NUM = liProdChar[i].CHAR_NUM;
-                lsresults.CHARVAL_NUM = liProdChar[i].CHARVAL_NUM;
-
-                lsresults.REF_CLASS_NUM = liProdChar[i].CLASS_NUM;
-                lsresults.REF_CHAR_NUM = liProdChar[i].CHAR_NUM;
-                lsresults.REF_CHARVAL_NUM = liProdChar[i].CHARVAL_NUM;
-                liresults.push(lsresults);
-                lsresults = {};
-            }
-            if (liresults.length > 0) {
-                try {
-                    await cds.run(INSERT.into("CP_NEWPROD_CHAR").entries(liresults));
-                    responseMessage = " Creation/Updation successful";
-                } catch (e) {
-                    //DONOTHING
-                    responseMessage = " Creation failed";
-                    // createResults.push(responseMessage);
-                }
-            }
-        }
-        else if (req.data.FLAG === "D") {
-            for (var i = 0; i < liProdChar.length; i++) {
-                lsresults.PRODUCT_ID = liProdChar[i].PRODUCT_ID;
-                lsresults.LOCATION_ID = liProdChar[i].LOCATION_ID;
-                //  lsresults.REF_PRODID = liProdChar[i].REF_PRODID;
-                if (req.data.FLAG === "E" && i === 0) {
-                    try {
-                        await cds.delete("CP_NEWPROD_CHAR", lsresults);
-                        break;
-                    } catch (e) {
-                        //DONOTHING
-                    }
-                }
-            }
-        }
-        lsresults = {};
-        return responseMessage;
-    });
-
-    // Maintain Parital product introsduction
-    srv.on("maintainPartialProd", async (req) => {
-        let liresults = [];
-        let lsresults = {};
-        var responseMessage;
-
-        if (req.data.FLAG === "C" || req.data.FLAG === "E") {
-            lsresults.LOCATION_ID = req.data.LOCATION_ID;
-            lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
-            if (req.data.FLAG === "E") {
-                try {
-                    await cds.delete("CP_PARTIALPROD_INTRO", lsresults);
-                } catch (e) {
-                    //DONOTHING
-                }
-            }
-            lsresults.REF_PRODID = req.data.REF_PRODID;
-            liresults.push(lsresults);
-            try {
-                await cds.run(INSERT.into("CP_PARTIALPROD_INTRO").entries(liresults));
-                responseMessage = " Creation/Updation successful";
-            } catch (e) {
-                //DONOTHING
-                responseMessage = " Creation failed";
-                // createResults.push(responseMessage);
-            }
-            lsresults = {};
-        } else if (req.data.FLAG === "D") {
-            lsresults.LOCATION_ID = req.data.LOCATION_ID;
-            lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
-            try {
-                await cds.delete("CP_PARTIALPROD_INTRO", lsresults);
-                responseMessage = " Deletion successfull";
-            } catch (e) {
-                responseMessage = " Deletion failed";
-            }
-        }
-        lsresults = {};
-
-        return responseMessage;
-    });
-    // Maintain partial configurations for product Characteristics
-    srv.on("maintainPartialProdChar", async (req) => {
-        let liresults = [];
-        let lsresults = {};
-        let liProdChar = {};
-        var responseMessage;
-        liProdChar = JSON.parse(req.data.PRODCHAR);
-        if (req.data.FLAG === "C" || req.data.FLAG === "E") {
-            for (var i = 0; i < liProdChar.length; i++) {
-                lsresults.PRODUCT_ID = liProdChar[i].PRODUCT_ID;
-                lsresults.LOCATION_ID = liProdChar[i].LOCATION_ID;
-                // lsresults.REF_PRODID = liProdChar[i].REF_PRODID;
-                if (req.data.FLAG === "E" && i === 0) {
-                    try {
-                        await cds.delete("CP_PARTIALPROD_CHAR", lsresults);
-                    } catch (e) {
-                        //DONOTHING
-                    }
-                }
-                lsresults.CLASS_NUM = liProdChar[i].CLASS_NUM;
-                lsresults.CHAR_NUM = liProdChar[i].CHAR_NUM;
-                lsresults.CHARVAL_NUM = liProdChar[i].CHARVAL_NUM;
-                liresults.push(lsresults);
-                lsresults = {};
-            }
-            if (liresults.length > 0) {
-                try {
-                    await cds.run(INSERT.into("CP_PARTIALPROD_CHAR").entries(liresults));
-                    responseMessage = " Creation/Updation successful";
-                } catch (e) {
-                    //DONOTHING
-                    responseMessage = " Creation failed";
-                    // createResults.push(responseMessage);
-                }
-            }
-        }
-        else if (req.data.FLAG === "D") {
-            for (var i = 0; i < liProdChar.length; i++) {
-                lsresults.PRODUCT_ID = liProdChar[i].PRODUCT_ID;
-                lsresults.LOCATION_ID = liProdChar[i].LOCATION_ID;
-                //  lsresults.REF_PRODID = liProdChar[i].REF_PRODID;
-                if (req.data.FLAG === "E" && i === 0) {
-                    try {
-                        await cds.delete("CP_PARTIALPROD_CHAR", lsresults);
-                        break;
-                    } catch (e) {
-                        //DONOTHING
-                    }
-                }
-            }
-        }
-        lsresults = {};
-        return responseMessage;
-    });
-
+    
     // Generate Timeseries using action call
     srv.on("generateTimeseries", async (req) => {
         const obgenTimeseries = new GenTimeseries();
@@ -1101,7 +688,7 @@ module.exports = (srv) => {
         await obgenTimeseries.genTimeseriesF(req.data);
         console.log("test");
     });
-    // Generate Timeseries
+    // Generate Timeseries fucntion calls
     srv.on("generate_timeseries", async (req) => {
         const obgenTimeseries = new GenTimeseries();
         await obgenTimeseries.genTimeseries(req.data);
