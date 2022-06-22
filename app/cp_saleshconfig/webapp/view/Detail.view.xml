@@ -2,11 +2,27 @@
     controllerName="cp.appf.cpsaleshconfig.controller.Detail"
      xmlns:l="sap.ui.layout"
     xmlns:core="sap.ui.core"
+    xmlns:ux="sap.uxap"
     xmlns:f="sap.ui.layout.form"
     xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
     xmlns="sap.m">
+    <Page title="{i18n>sodetails}" titleAlignment="Center" showNavButton="true" navButtonPress="onBack">
 
-    <Page id="page" title="{i18n>title}" titleAlignment="Center" showNavButton="true" navButtonPress="onBack">
+        <ux:ObjectPageLayout id="ObjectPageLayout">
+        <ux:headerTitle>
+            <ux:ObjectPageDynamicHeaderTitle>
+                <ux:expandedHeading>
+                    <Title text="{i18n>sotitle}" class="boldText" titleAlignment="Center" />
+                </ux:expandedHeading>
+                <ux:snappedHeading>
+					<FlexBox fitContainer="true" alignItems="Center" >
+						<Title text="{i18n>sotitle}" class="boldText" wrapping="true" />
+					</FlexBox>
+				</ux:snappedHeading>
+            </ux:ObjectPageDynamicHeaderTitle>
+        </ux:headerTitle>
+        <ux:headerContent>
+        <FlexBox wrap="Wrap" fitContainer="true">
         <VBox class="sapUiSmallMargin">
 		<f:SimpleForm id="SimpleFormDisplayColumn_threeGroups234"
 			editable="false"
@@ -16,7 +32,7 @@
 			columnsXL="2"
 			>
 			<f:content>
-				<core:Title text="SO Header" class="boldText"/>
+				<!-- <core:Title text="SO Header" class="boldText"/> -->
                 <Label text="{i18n>prodid} " />
 				<Text text="{oGModel>/sPrdid}" />
                 <Label text="{i18n>locid}" />
@@ -27,7 +43,7 @@
 				<Text text="{oGModel>/sSalOrdItem}" />                                
                 <Label text="{i18n>docdate}" />
 				<Text text="{oGModel>/date}"/>
-				<core:Title text="" />
+				<!-- <core:Title text="" /> -->
 				<Label text="{i18n>schLine}" />
 				<Text text="{oGModel>/sSchedNo}" />
 				<Label text="{i18n>reasonrej}" />
@@ -43,8 +59,14 @@
 			</f:content>
 		</f:SimpleForm>
 	</VBox>
+        </FlexBox>
+        </ux:headerContent>
+        <ux:sections>
+            <ux:ObjectPageSection >
+                <ux:subSections>
+                    <ux:ObjectPageSubSection>
+                        <ux:blocks>
             
-        <content>
             <Table id="idDetailTab" items="{path: '/results'}" growingScrollToLoad="true" sticky="ColumnHeaders" >
                 <headerToolbar>
 				<Toolbar>
@@ -73,7 +95,12 @@
                     </ColumnListItem>
                 </items>
             </Table>
-        </content>
-    </Page>
+            </ux:blocks>
+                    </ux:ObjectPageSubSection>
+                </ux:subSections>
+            </ux:ObjectPageSection>
+        </ux:sections>
+    </ux:ObjectPageLayout>
+  </Page>
 
 </mvc:View>

@@ -1,0 +1,156 @@
+<mvc:View controllerName="cp.execpred.cpexecprediction.controller.Home"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns:core="sap.ui.core"
+    xmlns="sap.m"
+    xmlns:l="sap.ui.layout"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:u="sap.ui.unified">
+    <Page title="Run Predictions">
+        <customHeader>
+            <OverflowToolbar>
+                <Text text="" width="30%"/>
+                <ToolbarSpacer/>
+                <Title text="Run Predictions" class="boldText"/>
+                <ToolbarSpacer/>
+                <Text text="" width="40%"/>
+            </OverflowToolbar>
+        </customHeader>
+        <content>
+            <Panel id="filterPanel" expandable="true" expanded="true">
+                <headerToolbar>
+                    <OverflowToolbar>
+                        <Title text="{i18n>filterPanel}"/>
+                    </OverflowToolbar>
+                </headerToolbar>
+                <f:Form editable="true">
+                    <f:layout>
+                        <f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2" singleContainerFullSize="false" />
+                    </f:layout>
+                    <f:formContainers>
+                        <f:FormContainer>
+                            <f:formElements>
+                                <f:FormElement>
+                                    <f:label>
+                                        <Label text="{i18n>loc}" required="true"/>
+                                    </f:label>
+                                    <f:fields>
+                                        <Input id="locInput" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                                    </f:fields>
+                                </f:FormElement>
+                                <f:FormElement>
+                                    <f:label>
+                                        <Label text="{i18n>prod}" required="true"/>
+                                    </f:label>
+                                    <f:fields>
+                                        <MultiInput id="prodInput" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
+                                    </f:fields>
+                                </f:FormElement>
+                                <f:FormElement>
+                                    <f:label>
+                                        <Label text="{i18n>objdep}" required="true"/>
+                                    </f:label>
+                                    <f:fields>
+                                        <MultiInput id="odInput" placeholder="{i18n>objdep}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
+                                        <SegmentedButton id="idType" selectionChange="onButtonChange" selectedKey="OD" class="sapUiSmallMarginBottom">
+                                            <items>
+                                                <SegmentedButtonItem text="Object Dep." key="OD"/>
+                                                <SegmentedButtonItem text="Restriction" key="RT" />
+                                            </items>
+                                        </SegmentedButton>
+                                    </f:fields>
+                                </f:FormElement>
+                                <f:FormElement>
+                                    <f:label>
+                                        <Label text="Model Version"/>
+                                    </f:label>
+                                    <f:fields>
+                                        <Select id="idModelVer" selectedKey="Active">
+                                            <core:ListItem key="Active" text="Active"/>
+                                            <core:ListItem key="Simulation" text="Simulation"/>
+                                        </Select>
+                                    </f:fields>
+                                </f:FormElement>
+                                <f:FormElement>
+                                    <f:label>
+                                        <Label text="IBP Version"/>
+                                    </f:label>
+                                    <f:fields>
+                                        <Input id="idver" value="" placeholder="Version" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                    </f:fields>
+                                </f:FormElement>
+                                <f:FormElement>
+                                    <f:label>
+                                        <Label text="IBP Scenario"/>
+                                    </f:label>
+                                    <f:fields>
+                                        <Input id="idscen" value="" placeholder="Scenario" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                    </f:fields>
+                                </f:FormElement>
+                                <f:FormElement>
+                                    <f:label>
+                                        <Label text="Override Assignment" />
+                                    </f:label>
+                                    <f:fields>
+                                        <CheckBox id="idCheck" select="onCheck"/>
+                                        <Button type="Emphasized" text="{i18n>Run}" press="onRun2" width="100%"/>
+                                    </f:fields>
+                                </f:FormElement>
+                            </f:formElements>
+                        </f:FormContainer>
+                    </f:formContainers>
+                </f:Form>
+
+            </Panel>
+            <Panel id="idPanel" visible="false">
+                <Table id="pmdlList" headerText="{i18n>predmodel}" items="{/results}" selectionChange="handlepredSelect">
+                    <headerToolbar>
+                        <OverflowToolbar>
+                            <Title text="{i18n>predmodel}"/>
+                            <ToolbarSpacer/>
+                        </OverflowToolbar>
+                    </headerToolbar>
+                    <columns>
+                        <Column>
+                            <Text text="{i18n>loc}"/>
+                        </Column>
+                        <Column>
+                            <Text text="{i18n>prod}"/>
+                        </Column>
+                        <Column>
+                            <Text text="{i18n>objdep}"/>
+                        </Column>
+                        <Column>
+                            <Text text="{i18n>profile}"/>
+                        </Column>
+                        <Column>
+                            <Text text="{i18n>override}"/>
+                        </Column>
+                        <Column>
+                            <Text text="{i18n>ver}"/>
+                        </Column>
+                        <Column>
+                            <Text text="{i18n>scenario}"/>
+                        </Column>
+                        <Column>
+                            <Text text="{i18n>dim}"/>
+                        </Column>
+                    </columns>
+                    <items>
+                        <ColumnListItem vAlign="Middle">
+                            <cells>
+                                <Text text="{Location}"/>
+                                <Text text="{Product}"/>
+                                <Text text="{GroupID}"/>
+                                <Text text="{profile}"/>
+                                <Text text="{override}"/>
+                                <Text text="{Version}"/>
+                                <Text text="{Scenario}"/>
+                                <ObjectStatus class="sapUiSmallMarginBottom" text="{dimensions}" icon="sap-icon://sys-enter-2" state="Success" />
+                            </cells>
+                        </ColumnListItem>
+                    </items>
+                </Table>
+            </Panel>
+        </content>
+    </Page>
+</mvc:View>

@@ -1,0 +1,38 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns:l="sap.ui.layout"
+	xmlns:f="sap.ui.layout.form">
+	<Dialog title="Schedule log Data" contentWidth="850px">
+        <Table id="idScheLogData"  items="{path: '/results'}" >
+				<columns>
+					<Column hAlign="Left" vAlign="Middle" >
+						<Text text="{i18n>ScheTime}" />
+					</Column>
+					<Column hAlign="Left" vAlign="Middle">
+						<Text text="{i18n>execTime}"/>
+					</Column>
+                    <Column hAlign="Left" vAlign="Middle">
+						<Text text="{i18n>compTime}"/>
+					</Column>
+                    <Column hAlign="Left" vAlign="Middle" >
+						<Text text="{i18n>status}"/>
+					</Column>
+                    <Column hAlign="Left" vAlign="Middle">
+						<Text text="{i18n>state}"/>
+					</Column>
+				</columns>
+				<items>
+					<ColumnListItem>
+						<cells>
+							<Text text="{scheduleTimestamp}" />
+                            <Text text="{executionTimestamp}"/>
+                            <Text text="{completionTimestamp}"/>
+                            <Text text="{runStatus}"/>
+                            <Text text="{runState}"/>
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+		<buttons>
+			<Button type='Reject' text="{i18n>close}" press="onScheLogClose"></Button>
+		</buttons>
+	</Dialog>
+</core:FragmentDefinition>

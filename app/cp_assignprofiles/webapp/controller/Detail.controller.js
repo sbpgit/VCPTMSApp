@@ -139,20 +139,6 @@ sap.ui.define(
                   row.DEFAULTVAL = row.STRVAL;
                 }
               }, that);
-
-            // oData.results.forEach(function (row) {
-            //     row.DESCRIPTION = row.PARA_DESC;
-            //     if (row.DATATYPE = "INTEGER") {
-                  
-            //       row.DEFAULTVAL = row.INTVAL;
-            //     } else if (row.DATATYPE = "DOUBLE") {
-                  
-            //       row.DEFAULTVAL = row.DOUBLEVAL;
-            //     } else if (row.DATATYPE = "NVARCHAR") {
-                  
-            //       row.DEFAULTVAL = row.STRVAL;
-            //     }
-            //   }, that);
   
               that.oAlgoListModel.setData({
                 results: oData.results,

@@ -2,11 +2,35 @@
     controllerName="cp.appf.cpsaleshconfig.controller.Detail"
      xmlns:l="sap.ui.layout"
     xmlns:core="sap.ui.core"
+<<<<<<< HEAD
     xmlns:f="sap.ui.layout.form"
     xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
     xmlns="sap.m">
 
     <Page id="page" title="{i18n>title}" titleAlignment="Center" showNavButton="true" navButtonPress="onBack">
+=======
+    xmlns:ux="sap.uxap"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns="sap.m">
+    <Page title="{i18n>sodetails}" titleAlignment="Center" showNavButton="true" navButtonPress="onBack">
+
+        <ux:ObjectPageLayout id="ObjectPageLayout">
+        <ux:headerTitle>
+            <ux:ObjectPageDynamicHeaderTitle>
+                <ux:expandedHeading>
+                    <Title text="{i18n>sotitle}" class="boldText" titleAlignment="Center" />
+                </ux:expandedHeading>
+                <ux:snappedHeading>
+					<FlexBox fitContainer="true" alignItems="Center" >
+						<Title text="{i18n>sotitle}" class="boldText" wrapping="true" />
+					</FlexBox>
+				</ux:snappedHeading>
+            </ux:ObjectPageDynamicHeaderTitle>
+        </ux:headerTitle>
+        <ux:headerContent>
+        <FlexBox wrap="Wrap" fitContainer="true">
+>>>>>>> 77de88f04f3036129a94bcc91ba9d4f0fd4fa11c
         <VBox class="sapUiSmallMargin">
 		<f:SimpleForm id="SimpleFormDisplayColumn_threeGroups234"
 			editable="false"
@@ -16,7 +40,11 @@
 			columnsXL="2"
 			>
 			<f:content>
+<<<<<<< HEAD
 				<core:Title text="SO Header" class="boldText"/>
+=======
+				<!-- <core:Title text="SO Header" class="boldText"/> -->
+>>>>>>> 77de88f04f3036129a94bcc91ba9d4f0fd4fa11c
                 <Label text="{i18n>prodid} " />
 				<Text text="{oGModel>/sPrdid}" />
                 <Label text="{i18n>locid}" />
@@ -27,7 +55,11 @@
 				<Text text="{oGModel>/sSalOrdItem}" />                                
                 <Label text="{i18n>docdate}" />
 				<Text text="{oGModel>/date}"/>
+<<<<<<< HEAD
 				<core:Title text="" />
+=======
+				<!-- <core:Title text="" /> -->
+>>>>>>> 77de88f04f3036129a94bcc91ba9d4f0fd4fa11c
 				<Label text="{i18n>schLine}" />
 				<Text text="{oGModel>/sSchedNo}" />
 				<Label text="{i18n>reasonrej}" />
@@ -43,8 +75,19 @@
 			</f:content>
 		</f:SimpleForm>
 	</VBox>
+<<<<<<< HEAD
             
         <content>
+=======
+        </FlexBox>
+        </ux:headerContent>
+        <ux:sections>
+            <ux:ObjectPageSection >
+                <ux:subSections>
+                    <ux:ObjectPageSubSection>
+                        <ux:blocks>
+            
+>>>>>>> 77de88f04f3036129a94bcc91ba9d4f0fd4fa11c
             <Table id="idDetailTab" items="{path: '/results'}" growingScrollToLoad="true" sticky="ColumnHeaders" >
                 <headerToolbar>
 				<Toolbar>
@@ -73,7 +116,17 @@
                     </ColumnListItem>
                 </items>
             </Table>
+<<<<<<< HEAD
         </content>
     </Page>
+=======
+            </ux:blocks>
+                    </ux:ObjectPageSubSection>
+                </ux:subSections>
+            </ux:ObjectPageSection>
+        </ux:sections>
+    </ux:ObjectPageLayout>
+  </Page>
+>>>>>>> 77de88f04f3036129a94bcc91ba9d4f0fd4fa11c
 
 </mvc:View>

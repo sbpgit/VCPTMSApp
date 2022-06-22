@@ -3,8 +3,8 @@
     xmlns:html="http://www.w3.org/1999/xhtml" class="ItemMaster">
     <Page showHeader="false">
         <content>
-            <SearchField id="headSearch" liveChange="onSearch" placeholder="Product/ Location"/>
-            <List id="bomList" headerText="Products/Location" items="{ path : '/results', sorter : { path : 'PRODUCT_ID'} }" mode="SingleSelectMaster" noDataText="No Data" selectionChange="onhandlePress">
+            <SearchField id="headSearch" liveChange="onSearch" placeholder="Product or Location"/>
+            <List id="bomList" headerText="Products / Location" items="{ path : '/results', sorter : { path : 'PRODUCT_ID'} }" mode="SingleSelectMaster" noDataText="No Data" selectionChange="onhandlePress">
                 <items>
                     <ObjectListItem press="onhandlePress" title="{PRODUCT_ID}">
                         <attributes>

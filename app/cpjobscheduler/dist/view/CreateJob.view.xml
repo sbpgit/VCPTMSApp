@@ -13,6 +13,10 @@
                         <core:ListItem key="M" text="{i18n>mdlgene}"/>
                         <core:ListItem key="P" text="{i18n>predi}"/>
                         <core:ListItem key="T" text="{i18n>timeseries}"/>
+<<<<<<< HEAD
+=======
+                        <core:ListItem key="F" text="{i18n>timeseriesF}"/>
+>>>>>>> 77de88f04f3036129a94bcc91ba9d4f0fd4fa11c
                         <core:ListItem key="I" text="{i18n>ibpI}"/>
                         <core:ListItem key="S" text="{i18n>sdi}"/>
                     </Select>
@@ -235,6 +239,51 @@
                 </f:Form>
             </Panel>
 
+<<<<<<< HEAD
+=======
+            <Panel id="timeSeriesFPanel" visible="false" expandable="true" expanded="true">
+                <headerToolbar>
+                    <OverflowToolbar>
+                        <Title text="{i18n>timeseriesFPanel}"/>
+                    </OverflowToolbar>
+                </headerToolbar>
+                <f:Form editable="true">
+                    <f:layout>
+                        <f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2" singleContainerFullSize="false" />
+                    </f:layout>
+                    <f:formContainers>
+                        <f:FormContainer>
+                            <f:formElements>
+                                <f:FormElement>
+                                    <f:label>
+                                        <Label text="{i18n>loc}" required="true"/>
+                                    </f:label>
+                                    <f:fields>
+                                        <Input id="TFlocInput" width="225px" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                                    </f:fields>
+                                </f:FormElement>
+                                <f:FormElement>
+                                    <f:label>
+                                        <Label text="{i18n>prod}" required="true"/>
+                                    </f:label>
+                                    <f:fields>
+                                        <MultiInput id="TFprodInput" width="225px" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
+                                    </f:fields>
+                                </f:FormElement>
+                                
+                                <f:FormElement>
+                                    <f:fields>
+                                        <Button type="Emphasized" text="{i18n>genTimeseriesF}" press="onTimeSeriesF" width="40%"/>
+                                    </f:fields>
+                                </f:FormElement>
+                            </f:formElements>
+                        </f:FormContainer>
+                    </f:formContainers>
+                </f:Form>
+            </Panel>
+
+
+>>>>>>> 77de88f04f3036129a94bcc91ba9d4f0fd4fa11c
             <Panel id="IbpPanel" visible="false" expandable="true" expanded="true">
                 <headerToolbar>
                     <OverflowToolbar>
@@ -259,7 +308,11 @@
                         <RadioButton id="idIBPSalesHis" text="Sales History" />
                         <RadioButton id="idIBPSalesHisConfig" text="Sales History Config" />
                         <RadioButton id="idIBPActCompDemd" text="Actual Components Demand" />
+<<<<<<< HEAD
                         <RadioButton id="idIBPCompReqQty" text="Components Requirement Quantity" />
+=======
+                        <RadioButton id="idIBPCompReqQty" text="Assembly Requirement Quantity" />
+>>>>>>> 77de88f04f3036129a94bcc91ba9d4f0fd4fa11c
                     </RadioButtonGroup>
 
                 <!-- </content> -->
@@ -288,7 +341,11 @@
                                             <MultiInput id="IprodInput" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
                                         </f:fields>
                                     </f:FormElement>
+<<<<<<< HEAD
                                     <f:FormElement>
+=======
+                                    <!-- <f:FormElement>
+>>>>>>> 77de88f04f3036129a94bcc91ba9d4f0fd4fa11c
                                         <f:label>
                                             <Label text="{i18n>ibpver}"/>
                                         </f:label>
@@ -303,7 +360,11 @@
                                         <f:fields>
                                             <Input id="Iidscen" value="" placeholder="{i18n>ibpscen}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                                         </f:fields>
+<<<<<<< HEAD
                                     </f:FormElement>
+=======
+                                    </f:FormElement> -->
+>>>>>>> 77de88f04f3036129a94bcc91ba9d4f0fd4fa11c
                                 </f:formElements>
                             </f:FormContainer>
                         </f:formContainers>
@@ -530,7 +591,11 @@
                                         </f:label>
                                         <f:fields>
                                             <Select id="idSdi" change="onSdiChange" selectedKey="LO" class="buttonDesktop " width="400px">
+<<<<<<< HEAD
                                                     <core:ListItem key="Lo" text="{i18n>loc}"/>
+=======
+                                                    <core:ListItem key="LO" text="{i18n>loc}"/>
+>>>>>>> 77de88f04f3036129a94bcc91ba9d4f0fd4fa11c
                                                     <core:ListItem key="CG" text="{i18n>custgrp}"/>
                                                     <core:ListItem key="PR" text="{i18n>prod}"/>
                                                     <core:ListItem key="LP" text="{i18n>locpprod}"/>
@@ -543,6 +608,10 @@
                                                     <core:ListItem key="CV" text="{i18n>charval}"/>
                                                     <core:ListItem key="SH" text="{i18n>saleshis}"/>
                                                     <core:ListItem key="SC" text="{i18n>salehisconfig}"/>
+<<<<<<< HEAD
+=======
+                                                    <core:ListItem key="AC" text="{i18n>asmbcomp}"/>
+>>>>>>> 77de88f04f3036129a94bcc91ba9d4f0fd4fa11c
                                             </Select>
                                         </f:fields>
                                     </f:FormElement>
@@ -550,6 +619,7 @@
                             </f:FormContainer>
                         </f:formContainers>
                     </f:Form>
+<<<<<<< HEAD
                 <!-- <Label text="{i18n>sdi} :"/>
 				<Select id="idSdi" change="onSdiChange" selectedKey="LO" class="buttonDesktop " width="400px">
 						<core:ListItem key="Lo" text="{i18n>loc}"/>
@@ -566,6 +636,8 @@
 						<core:ListItem key="SC" text="{i18n>salehisconfig}"/>
 				</Select>
                 </HBox> -->
+=======
+>>>>>>> 77de88f04f3036129a94bcc91ba9d4f0fd4fa11c
                 <Button id="idbtSdi" type="Emphasized" text="SDI Integration" press="onSdiIntegration" width="10%"/>
             </content>
             </Panel>

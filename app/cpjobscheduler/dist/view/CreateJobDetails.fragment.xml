@@ -62,6 +62,7 @@
                     </HBox>
                     <DateTimePicker id="idSchTime" width="400px" valueFormat= "yyyy-mm-dd HH:mm" class="sapUiSmallMarginBottom" visible="false"/>
                     </VBox>
+<<<<<<< HEAD
 
 
                     <!-- <Label text="{i18n>cron}"/>
@@ -76,6 +77,8 @@
 					</Select>  
 					<Input id="idcron" value="" width="200px"/>
                     </HBox> -->
+=======
+>>>>>>> 77de88f04f3036129a94bcc91ba9d4f0fd4fa11c
                     <Label text="{i18n>Schedstarttime}"/>
 					<DateTimePicker id="idSSTime" width="400px" valueFormat= "yyyy-mm-dd HH:mm" change="handleDateChange" class="sapUiSmallMarginBottom"/>
                     <Label text="{i18n>Schedendtime}"/>

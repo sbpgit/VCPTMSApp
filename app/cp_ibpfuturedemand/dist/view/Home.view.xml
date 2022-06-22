@@ -23,6 +23,7 @@
             <FlexBox wrap="Wrap" fitContainer="true">
                 <l:Grid defaultSpan="XL3 L3 M6 S12">
                     <VBox >
+<<<<<<< HEAD
                         <Text text=""/>
                         <SearchField id="headSearch" liveChange="onSearch" placeholder="Week Date(MM/DD/yyyy)/ Quantity/ Version/ Scenario"/>
                     </VBox>
@@ -32,24 +33,51 @@
                     </VBox>
                     <VBox >
                         <Text text="Product"/>
+=======
+                        <Label text=""/>
+                        <SearchField id="headSearch" liveChange="onSearch" placeholder="Week Date(MM/DD/yyyy)/ Quantity/ Version/ Scenario"/>
+                    </VBox>
+                    <VBox >
+                        <Label text="Location" required= "true"/>
+                        <Input id="idloc" value="" placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                    </VBox>
+                    <VBox >
+                        <Label text="Product" required= "true"/>
+>>>>>>> 77de88f04f3036129a94bcc91ba9d4f0fd4fa11c
                         <Input id="idprod" placeholder="Product" value="" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
 
                     </VBox>
                     <VBox >
+<<<<<<< HEAD
                         <Text text="IBP Version"/>
                         <Input id="idver" value="" placeholder="Version" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                     </VBox>
                     <VBox >
                         <Text text="IBP Scenario"/>
+=======
+                        <Label text="IBP Version"/>
+                        <Input id="idver" value="" placeholder="Version" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                    </VBox>
+                    <VBox >
+                        <Label text="IBP Scenario"/>
+>>>>>>> 77de88f04f3036129a94bcc91ba9d4f0fd4fa11c
                         <Input id="idscen" value="" placeholder="Scenario" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
 
                     </VBox>
                     <VBox >
+<<<<<<< HEAD
                         <Text text=""/>
                         <CheckBox id="idCheck1" select="onNonZero" text="Get Non-Zero" selected="true" />
                     </VBox>
                     <VBox>
                         <Text text=""/>
+=======
+                        <Label text=""/>
+                        <CheckBox id="idCheck1" select="onNonZero" text="Get Non-Zero" selected="true" />
+                    </VBox>
+                    <VBox>
+                        <Label text=""/>
+>>>>>>> 77de88f04f3036129a94bcc91ba9d4f0fd4fa11c
                         <HBox>
                             <Button text="Go" type="Emphasized" press="onGetData" tooltip="Get data based on filters" class="sapUiTinyMarginEnd"/>
                             <Button text="Reset" type="Transparent" press="onResetDate" tooltip="Reset Valid To Date"/>

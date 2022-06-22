@@ -132,6 +132,27 @@ sap.ui.define(
         that._valueHelpDialogComp.setTitleAlignment("Center");
         that._valueHelpDialogStru.setTitleAlignment("Center");
 
+<<<<<<< HEAD
+=======
+        var dDate = new Date();
+
+        var oDateL = dDate.toLocaleDateString().split("/");
+            oDateL = oDateL[2] + "-" + oDateL[0] + "-" + oDateL[1];
+
+        //Future 90 days selected date
+        var oDateH = new Date(
+            dDate.getFullYear(),
+            dDate.getMonth(),
+            dDate.getDate() + 90
+        );
+
+            oDateH = oDateH.toLocaleDateString().split("/");
+            oDateH = oDateH[2] + "-" + oDateH[0] + "-" + oDateH[1];
+
+        that.byId("fromDate").setValue(oDateL);
+        that.byId("toDate").setValue(oDateH);
+
+>>>>>>> 77de88f04f3036129a94bcc91ba9d4f0fd4fa11c
         this.oProdList = this._oCore.byId(
           this._valueHelpDialogProd.getId() + "-list"
         );
@@ -213,9 +234,12 @@ sap.ui.define(
         var vFromDate = this.byId("fromDate").getDateValue();
         var vToDate = this.byId("toDate").getDateValue();
 
+<<<<<<< HEAD
         // Calling function to convert date string
         vFromDate = that.getDateFn(vFromDate);
         vToDate = that.getDateFn(vToDate);
+=======
+>>>>>>> 77de88f04f3036129a94bcc91ba9d4f0fd4fa11c
 
         // checking if the inpus are not undefined
         if (
@@ -223,8 +247,20 @@ sap.ui.define(
           oProd !== undefined &&
           oVer !== undefined &&
           oScen !== undefined &&
+<<<<<<< HEAD
           oModelVersion !== undefined
         ) {
+=======
+          oModelVersion !== undefined &&
+          vFromDate !== undefined && 
+          vFromDate !== " " && 
+          vToDate !== undefined && 
+          vToDate !== " "
+        ) {
+            // Calling function to convert date string
+            vFromDate = that.getDateFn(vFromDate);
+            vToDate = that.getDateFn(vToDate);
+>>>>>>> 77de88f04f3036129a94bcc91ba9d4f0fd4fa11c
           if (oComp === undefined) {
             oComp = "";
           }
@@ -268,7 +304,11 @@ sap.ui.define(
         } else {
           sap.ui.core.BusyIndicator.hide();
           sap.m.MessageToast.show(
+<<<<<<< HEAD
             "Please select a Location/Product/Version/Scenario"
+=======
+            "Please select a Location/Product/Version/Scenario/Date Range"
+>>>>>>> 77de88f04f3036129a94bcc91ba9d4f0fd4fa11c
           );
         }
       },

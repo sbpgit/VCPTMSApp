@@ -203,8 +203,5 @@
     "app/cpjobscheduler_logs",
     "app/cprestrictions",
     "app/cp_jobschlogs"
-  ],
-  "devDependencies": {
-    "@sap/ux-specification": "^1.100.2"
-  }
+  ]
 }

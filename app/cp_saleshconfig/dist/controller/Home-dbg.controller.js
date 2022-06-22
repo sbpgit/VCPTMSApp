@@ -257,7 +257,11 @@ sap.ui.define(
 
         // Checking for Loc and Prod are not initial
         if (
+<<<<<<< HEAD
           that.oLoc.getValue() &&
+=======
+            that.byId("idloc").getValue() !== "" &&
+>>>>>>> 77de88f04f3036129a94bcc91ba9d4f0fd4fa11c
           that.oProdList.getSelectedItems().length !== 0
         ) {
           var aSelectedItem = that.oProdList.getSelectedItems();
@@ -324,7 +328,11 @@ sap.ui.define(
             },
           });
         } else {
+<<<<<<< HEAD
           essageToast.show("Please fill all required fields");
+=======
+          MessageToast.show("Please fill all required inputs");
+>>>>>>> 77de88f04f3036129a94bcc91ba9d4f0fd4fa11c
         }
       },
 

@@ -10,6 +10,11 @@
         "title": "{{appTitle}}",
         "description": "{{appDescription}}",
         "resources": "resources.json",
+        "sourceTemplate": {
+            "id": "@sap-ux/fiori-freestyle-writer:basic",
+            "version": "0.11.13",
+            "toolsId": "1a707e0c-244b-4010-962f-f8c675fef5fc"
+        },
         "dataSources": {
             "mainService": {
                 "uri": "/v2/catalog/",
@@ -42,6 +47,14 @@
                   "odataVersion": "2.0",
                   "localUri": "localService/metadata.xml"
                 }
+              },
+              "SDI": {
+                "uri": "/v2/sdi/",
+                "type": "OData",
+                "settings": {
+                  "odataVersion": "2.0",
+                  "localUri": "localService/metadata.xml"
+                }
               }
         },
         "crossNavigation": {
@@ -55,7 +68,7 @@
                     "action": "display",
                     "title": "{{flpTitle}}",
                     "subTitle": "{{flpSubtitle}}",
-                    "icon": ""
+                    "icon": "sap-icon://time-account"
                 }
             }
         }
@@ -85,7 +98,7 @@
             "id": "App"
         },
         "dependencies": {
-            "minUI5Version": "1.100.0",
+            "minUI5Version": "1.102.1",
             "libs": {
                 "sap.m": {},
                 "sap.ui.core": {},
@@ -140,6 +153,10 @@
               },
               "IModel": {
                 "dataSource": "IBP",
+                "preload": true
+              },
+              "SModel": {
+                "dataSource": "SDI",
                 "preload": true
               }
         },

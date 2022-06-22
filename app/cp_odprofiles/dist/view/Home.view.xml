@@ -24,6 +24,7 @@
             <FlexBox wrap="Wrap" fitContainer="true">
                 <l:Grid defaultSpan="XL3 L3 M6 S12">
                     <VBox>
+<<<<<<< HEAD
                         <Text text=""/>
                         <SearchField id="idSearch" placeholder="Search Component" liveChange="onTableSearch"/>
                     </VBox>
@@ -33,20 +34,43 @@
                     </VBox>
                     <VBox>
                         <Text text="Product :"/>
+=======
+                        <Label text=""/>
+                        <SearchField id="idSearch" placeholder="Search Component" liveChange="onTableSearch"/>
+                    </VBox>
+                    <VBox>
+                        <Label text="Location :" required= "true"/>
+                        <Input id="idloc" value="" placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                    </VBox>
+                    <VBox>
+                        <Label text="Product :" required= "true"/>
+>>>>>>> 77de88f04f3036129a94bcc91ba9d4f0fd4fa11c
                         <MultiInput id="prodInput" placeholder="Product" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
                     </VBox>
 
                     <VBox>
+<<<<<<< HEAD
                         <Text text="Component :"/>
+=======
+                        <Label text="Component :"/>
+>>>>>>> 77de88f04f3036129a94bcc91ba9d4f0fd4fa11c
                         <MultiInput id="compInput" placeholder="Component" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
                     </VBox>
 
                     <VBox>
+<<<<<<< HEAD
                         <Text text="Structure Node :" />
                         <Input id="struInput" placeholder="Structure Node" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
                     </VBox>
                     <VBox>
                         <Text text=""/>
+=======
+                        <Label text="Structure Node :" />
+                        <Input id="struInput" placeholder="Structure Node" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                    </VBox>
+                    <VBox>
+                        <Label text=""/>
+>>>>>>> 77de88f04f3036129a94bcc91ba9d4f0fd4fa11c
                         <Button text="Go" press="onGetData" type="Emphasized" tooltip="Get data based on filters"/>
                     </VBox>
                     <VBox>
