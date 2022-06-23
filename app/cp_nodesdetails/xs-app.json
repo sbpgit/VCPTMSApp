@@ -5,22 +5,14 @@
     {
       "source": "^/v2/pal/(.*)$",
       "target": "/v2/pal/$1",
-      "destination": "ConfigProdPrd",
+      "destination": "ConfigProd",
       "csrfProtection": true,
-      "authenticationType": "xsuaa",
-      "scope":{
-          "GET": ["$XSAPPNAME.Display"],
-          "PUT": ["$XSAPPNAME.Display"],
-          "PATCH": ["$XSAPPNAME.Display"],
-          "POST": ["$XSAPPNAME.Display"],
-          "DELETE": ["$XSAPPNAME.Display"],
-          "default": ["$XSAPPNAME.Display"]
-      }
+      "authenticationType": "xsuaa"
     },
     {
       "source": "^/v2/catalog/(.*)$",
       "target": "/v2/catalog/$1",
-      "destination": "ConfigProdPrd",
+      "destination": "ConfigProd",
       "authenticationType": "xsuaa",
       "csrfProtection": true
     },

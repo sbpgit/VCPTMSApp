@@ -7,7 +7,8 @@ using V_CLASSCHARVAL from '../db/data-model';
 using {
     V_PRODCLSCHAR,
     V_PRODCLSCHARVAL,
-    V_ODPROFILES
+    V_ODPROFILES,
+    V_PARTIALPRODCHAR
 } from '../db/data-model';
 // using V_ODPROFILES from '../db/data-model';
 using V_BOMODCOND from '../db/data-model';
@@ -132,10 +133,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
     entity getBomOdCond         as projection on V_BOMODCOND;
     // Get Object dependency rule characteristics
     entity getODcharval         as projection on V_ODCHARVAL;
-    // //Get timeseries for Object dep. characteristics - History
-    // entity getODCharH           as projection on V_TSODCHAR_H;
-    // //Get timeseries for Object dep. characteristics - Future
-    // entity getODCharF           as projection on V_TSODCHAR_F;
+
     //Get IBP version scenario
     entity getIbpVerScn         as projection on V_IBPVERSCENARIO;
     // Get Object dependency characteristics impact and prediction values
@@ -177,5 +175,14 @@ service CatalogService @(impl : './lib/cat-service.js') {
     action generateTimeseries(LOCATION_ID : String(4), PRODUCT_ID : String(40),PAST_DAYS : Integer);
     // Generate Timeseries
     action generateTimeseriesF(LOCATION_ID : String(4), PRODUCT_ID : String(40)) ;
+///
+    @readonly
+    entity genPartialProd           as projection on od.PARTIALPROD_INTRO;
+
+    entity getPartialChar           as projection on V_PARTIALPRODCHAR;
+
+    function maintainPartialProd(FLAG : String(1), LOCATION_ID : String(4), PRODUCT_ID : String(40), REF_PRODID : String(40))                                                                                                                                                        returns String;
+    
+    function maintainPartialProdChar(FLAG : String(1), PRODCHAR : String ) returns String;
        
 }

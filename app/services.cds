@@ -17,3 +17,5 @@ using from './cpcustgroup/annotations';
 using from './cpjobscheduler/annotations';
 
 using from './cpjoblog/annotations';
+
+using from './cppartialprod/annotations';

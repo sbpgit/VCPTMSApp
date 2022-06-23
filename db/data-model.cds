@@ -475,6 +475,22 @@ context cp {
             COMPONENT        : String(40) @title : 'Component';
             COMP_QTY         : Integer;
     }
+
+      // Partial product introduction
+    entity PARTIALPROD_INTRO {
+        key PRODUCT_ID  : String(40) @title : 'New Product';
+        key LOCATION_ID : String(4)  @title : 'Location';
+            REF_PRODID  : String(40) @title : ' Ref. Product';
+    }
+     // New product charactersitics
+    entity PARTIALPROD_CHAR {
+        key PRODUCT_ID  : String(40) @title : 'New Product';
+        key LOCATION_ID    : String(4)      @title : 'Location ';
+        key CLASS_NUM   : String(20) @title : 'Class Name';
+        key CHAR_NUM    : String(30) @title : 'Charateristic Name';
+        key CHARVAL_NUM : String(70) @title : 'Charateristic Value';
+            REF_PRODID  : String(40) @title : ' Ref. Product';
+    }
 }
 
 @cds.persistence.exists
@@ -702,5 +718,17 @@ key     ![CLASS_NAME]: String(20)  @title: 'CLASS_NAME' ;
 key     ![CHAR_NUM]: String(10)  @title: 'CHAR_NUM' ; 
 key     ![CHAR_NAME]: String(30)  @title: 'CHAR_NAME' ; 
 key     ![CHARVAL_NUM]: String(15)  @title: 'CHARVAL_NUM' ; 
+key     ![CHAR_VALUE]: String(70)  @title: 'CHAR_VALUE' ; 
+}
+@cds.persistence.exists 
+Entity ![V_PARTIALPRODCHAR] {
+key     ![PRODUCT_ID]: String(40)  @title: 'PRODUCT_ID' ; 
+key     ![LOCATION_ID]: String(4)  @title: 'LOCATION_ID' ; 
+key     ![REF_PRODID]: String(40)  @title: 'REF_PRODID' ; 
+key     ![CLASS_NUM]: String(20)  @title: 'CLASS_NUM' ; 
+key     ![CLASS_NAME]: String(20)  @title: 'CLASS_NAME' ; 
+key     ![CHAR_NUM]: String(30)  @title: 'CHAR_NUM' ; 
+key     ![CHAR_NAME]: String(30)  @title: 'CHAR_NAME' ; 
+key     ![CHARVAL_NUM]: String(70)  @title: 'CHARVAL_NUM' ; 
 key     ![CHAR_VALUE]: String(70)  @title: 'CHAR_VALUE' ; 
 }
