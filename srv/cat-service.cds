@@ -8,7 +8,8 @@ using {
     V_PRODCLSCHAR,
     V_PRODCLSCHARVAL,
     V_ODPROFILES,
-    V_PARTIALPRODCHAR
+    V_PARTIALPRODCHAR,
+    V_NEWPRODREFCHAR
 } from '../db/data-model';
 // using V_ODPROFILES from '../db/data-model';
 using V_BOMODCOND from '../db/data-model';
@@ -174,7 +175,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
     action generateTimeseries(LOCATION_ID : String(4), PRODUCT_ID : String(40),PAST_DAYS : Integer);
     // Generate Timeseries
     action generateTimeseriesF(LOCATION_ID : String(4), PRODUCT_ID : String(40)) ;
-///
+///Partial
     @readonly
     entity genPartialProd           as projection on od.PARTIALPROD_INTRO;
 
@@ -183,5 +184,14 @@ service CatalogService @(impl : './lib/cat-service.js') {
     function maintainPartialProd(FLAG : String(1), LOCATION_ID : String(4), PRODUCT_ID : String(40), REF_PRODID : String(40))                                                                                                                                                        returns String;
     
     function maintainPartialProdChar(FLAG : String(1), PRODCHAR : String ) returns String;
-       
+// New product intorduction
+    entity genNewProd           as projection on od.NEWPROD_INTRO;
+    // Get new product characteristics
+    entity getNewProdChar       as projection on V_NEWPRODREFCHAR;
+
+    function maintainNewProd(FLAG : String(1), LOCATION_ID : String(4), PRODUCT_ID : String(40), REF_PRODID : String(40))                                                                                                                                                        returns String;
+    function maintainNewProdChar(FLAG : String(1), 
+    PRODCHAR : String ) returns String;
+   
+
 }
