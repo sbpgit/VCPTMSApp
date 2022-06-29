@@ -233,6 +233,7 @@ module.exports = (srv) => {
     });
     srv.on("ImportECCBOM", async (req) => {
         var flag = '';
+<<<<<<< HEAD
         try {
             const dbClass = require("sap-hdb-promisfied")
             let dbConn = new dbClass(await dbClass.createConnectionFromEnv())
@@ -730,11 +731,76 @@ module.exports = (srv) => {
             const dbClass = require("sap-hdb-promisfied")
             let dbConn = new dbClass(await dbClass.createConnectionFromEnv())
             const sp = await dbConn.loadProcedurePromisified(null, '"FG_LOCPROD_SP"')
+=======
+        try {
+            const dbClass = require("sap-hdb-promisfied")
+            let dbConn = new dbClass(await dbClass.createConnectionFromEnv())
+            const sp = await dbConn.loadProcedurePromisified(null, '"FG_BOMHEADER_SP"')
+>>>>>>> 578e2fa3096b1f3903666b8919e7b3910a15d841
             const output = await dbConn.callProcedurePromisified(sp, [])
             console.log(output.results);
             flag = 'X';
         } catch (error) {
             console.error(error);
+<<<<<<< HEAD
+=======
+        }
+        if (flag === 'X') {
+            let dataObj = {};
+            dataObj["success"] = true;
+            dataObj["message"] = "Import of BOM Header is successfull at " + new Date();
+
+
+            if (req.headers['x-sap-job-id'] > 0) {
+                const scheduler = getJobscheduler(req);
+
+                var updateReq = {
+                    jobId: req.headers['x-sap-job-id'],
+                    scheduleId: req.headers['x-sap-job-schedule-id'],
+                    runId: req.headers['x-sap-job-run-id'],
+                    data: dataObj
+                };
+
+                console.log("BOM Header Imported, to update req", updateReq);
+
+                scheduler.updateJobRunLog(updateReq, function (err, result) {
+                    if (err) {
+                        return console.log('Error updating run log: %s', err);
+                    }
+                    //Run log updated successfully
+                    console.log("Import of BOM Header job update results", result);
+
+                });
+            }
+        }
+        else {
+            let dataObj = {};
+            dataObj["failed"] = false;
+            dataObj["message"] = "Import of BOM Header has failed at" + new Date();
+
+
+            if (req.headers['x-sap-job-id'] > 0) {
+                const scheduler = getJobscheduler(req);
+
+                var updateReq = {
+                    jobId: req.headers['x-sap-job-id'],
+                    scheduleId: req.headers['x-sap-job-schedule-id'],
+                    runId: req.headers['x-sap-job-run-id'],
+                    data: dataObj
+                };
+
+                console.log("Import of BOM Header job update req", updateReq);
+
+                scheduler.updateJobRunLog(updateReq, function (err, result) {
+                    if (err) {
+                        return console.log('Error updating run log: %s', err);
+                    }
+                    //Run log updated successfully
+                    console.log("Import of BOM Header job update results", result);
+
+                });
+            }
+>>>>>>> 578e2fa3096b1f3903666b8919e7b3910a15d841
         }
         if (flag === 'X') {
             let dataObj = {};
@@ -932,12 +998,20 @@ module.exports = (srv) => {
             }
         }
     });
+<<<<<<< HEAD
     srv.on("ImportECCAsmbcomp", async (req) => {
+=======
+    srv.on("ImportECCBomod", async (req) => {
+>>>>>>> 578e2fa3096b1f3903666b8919e7b3910a15d841
         var flag = '';
         try {
             const dbClass = require("sap-hdb-promisfied")
             let dbConn = new dbClass(await dbClass.createConnectionFromEnv())
+<<<<<<< HEAD
             const sp = await dbConn.loadProcedurePromisified(null, '"FG_ASMBCOMP_SP"')
+=======
+            const sp = await dbConn.loadProcedurePromisified(null, '"FG_BOMOBJDEP_SP"')
+>>>>>>> 578e2fa3096b1f3903666b8919e7b3910a15d841
             const output = await dbConn.callProcedurePromisified(sp, [])
             console.log(output.results);
             flag = 'X';
@@ -947,7 +1021,11 @@ module.exports = (srv) => {
         if (flag === 'X') {
             let dataObj = {};
             dataObj["success"] = true;
+<<<<<<< HEAD
             dataObj["message"] = "Import of Location is successfull at " + new Date();
+=======
+            dataObj["message"] = "Import of BOM Obj. Dependency is successfull at " + new Date();
+>>>>>>> 578e2fa3096b1f3903666b8919e7b3910a15d841
 
 
             if (req.headers['x-sap-job-id'] > 0) {
@@ -960,6 +1038,7 @@ module.exports = (srv) => {
                     data: dataObj
                 };
 
+<<<<<<< HEAD
                 console.log("Location Imported, to update req", updateReq);
 
                 scheduler.updateJobRunLog(updateReq, function (err, result) {
@@ -1002,4 +1081,540 @@ module.exports = (srv) => {
         }
 
     });
+=======
+                console.log("BOM Obj. Dependency Imported, to update req", updateReq);
+
+                scheduler.updateJobRunLog(updateReq, function (err, result) {
+                    if (err) {
+                        return console.log('Error updating run log: %s', err);
+                    }
+                    //Run log updated successfully
+                    console.log("Import of BOM Obj. Dependency job update results", result);
+
+                });
+            }
+        }
+        else {
+            let dataObj = {};
+            dataObj["failed"] = false;
+            dataObj["message"] = "Import of BOM Obj. Dependency has failed at" + new Date();
+
+
+            if (req.headers['x-sap-job-id'] > 0) {
+                const scheduler = getJobscheduler(req);
+
+                var updateReq = {
+                    jobId: req.headers['x-sap-job-id'],
+                    scheduleId: req.headers['x-sap-job-schedule-id'],
+                    runId: req.headers['x-sap-job-run-id'],
+                    data: dataObj
+                };
+
+                console.log("Import of BOM Obj. Dependency job update req", updateReq);
+
+                scheduler.updateJobRunLog(updateReq, function (err, result) {
+                    if (err) {
+                        return console.log('Error updating run log: %s', err);
+                    }
+                    //Run log updated successfully
+                    console.log("Import of BOM Obj. Dependency job update results", result);
+
+                });
+            }
+        }
+
+    });
+    srv.on("ImportECCODhdr", async (req) => {
+        var flag = '';
+        try {
+            const dbClass = require("sap-hdb-promisfied")
+            let dbConn = new dbClass(await dbClass.createConnectionFromEnv())
+            const sp = await dbConn.loadProcedurePromisified(null, '"FG_ODHEADER_SP"')
+            const output = await dbConn.callProcedurePromisified(sp, [])
+            console.log(output.results);
+            flag = 'X';
+        } catch (error) {
+            console.error(error);
+        }
+        if (flag === 'X') {
+            let dataObj = {};
+            dataObj["success"] = true;
+            dataObj["message"] = "Import of Obj. Dependency Header is successfull at " + new Date();
+
+
+            if (req.headers['x-sap-job-id'] > 0) {
+                const scheduler = getJobscheduler(req);
+
+                var updateReq = {
+                    jobId: req.headers['x-sap-job-id'],
+                    scheduleId: req.headers['x-sap-job-schedule-id'],
+                    runId: req.headers['x-sap-job-run-id'],
+                    data: dataObj
+                };
+
+                console.log("Obj. Dependency Header Imported, to update req", updateReq);
+
+                scheduler.updateJobRunLog(updateReq, function (err, result) {
+                    if (err) {
+                        return console.log('Error updating run log: %s', err);
+                    }
+                    //Run log updated successfully
+                    console.log("Import of Obj. Dependency Header job update results", result);
+
+                });
+            }
+        }
+        else {
+            let dataObj = {};
+            dataObj["failed"] = false;
+            dataObj["message"] = "Import of Obj. Dependency Header has failed at" + new Date();
+
+
+            if (req.headers['x-sap-job-id'] > 0) {
+                const scheduler = getJobscheduler(req);
+
+                var updateReq = {
+                    jobId: req.headers['x-sap-job-id'],
+                    scheduleId: req.headers['x-sap-job-schedule-id'],
+                    runId: req.headers['x-sap-job-run-id'],
+                    data: dataObj
+                };
+
+                console.log("Import of Obj. Dependency Header job update req", updateReq);
+
+                scheduler.updateJobRunLog(updateReq, function (err, result) {
+                    if (err) {
+                        return console.log('Error updating run log: %s', err);
+                    }
+                    //Run log updated successfully
+                    console.log("Import of Obj. Dependency Header job update results", result);
+
+                });
+            }
+        }
+
+    });
+    srv.on("ImportECCProdClass", async (req) => {
+        var flag = '';
+        try {
+            const dbClass = require("sap-hdb-promisfied")
+            let dbConn = new dbClass(await dbClass.createConnectionFromEnv())
+            const sp = await dbConn.loadProcedurePromisified(null, '"FG_PRODCLASS_SP"')
+            const output = await dbConn.callProcedurePromisified(sp, [])
+            console.log(output.results);
+            flag = 'X';
+        } catch (error) {
+            console.error(error);
+        }
+        if (flag === 'X') {
+            let dataObj = {};
+            dataObj["success"] = true;
+            dataObj["message"] = "Import of Product-class is successfull at " + new Date();
+
+
+            if (req.headers['x-sap-job-id'] > 0) {
+                const scheduler = getJobscheduler(req);
+
+                var updateReq = {
+                    jobId: req.headers['x-sap-job-id'],
+                    scheduleId: req.headers['x-sap-job-schedule-id'],
+                    runId: req.headers['x-sap-job-run-id'],
+                    data: dataObj
+                };
+
+                console.log("Product-class Imported, to update req", updateReq);
+
+                scheduler.updateJobRunLog(updateReq, function (err, result) {
+                    if (err) {
+                        return console.log('Error updating run log: %s', err);
+                    }
+                    //Run log updated successfully
+                    console.log("Import of Product-class job update results", result);
+
+                });
+            }
+        }
+        else {
+            let dataObj = {};
+            dataObj["failed"] = false;
+            dataObj["message"] = "Import of Product-class has failed at" + new Date();
+
+
+            if (req.headers['x-sap-job-id'] > 0) {
+                const scheduler = getJobscheduler(req);
+
+                var updateReq = {
+                    jobId: req.headers['x-sap-job-id'],
+                    scheduleId: req.headers['x-sap-job-schedule-id'],
+                    runId: req.headers['x-sap-job-run-id'],
+                    data: dataObj
+                };
+
+                console.log("Import of Product-class job update req", updateReq);
+
+                scheduler.updateJobRunLog(updateReq, function (err, result) {
+                    if (err) {
+                        return console.log('Error updating run log: %s', err);
+                    }
+                    //Run log updated successfully
+                    console.log("Import of Product-class job update results", result);
+
+                });
+            }
+        }
+
+    });
+    srv.on("ImportECCClass", async (req) => {
+        var flag = '';
+        try {
+            const dbClass = require("sap-hdb-promisfied")
+            let dbConn = new dbClass(await dbClass.createConnectionFromEnv())
+            const sp = await dbConn.loadProcedurePromisified(null, '"FG_CLASS_SP"')
+            const output = await dbConn.callProcedurePromisified(sp, [])
+            console.log(output.results);
+            flag = 'X';
+        } catch (error) {
+            console.error(error);
+        }
+        if (flag === 'X') {
+            let dataObj = {};
+            dataObj["success"] = true;
+            dataObj["message"] = "Import of Class is successfull at " + new Date();
+
+
+            if (req.headers['x-sap-job-id'] > 0) {
+                const scheduler = getJobscheduler(req);
+
+                var updateReq = {
+                    jobId: req.headers['x-sap-job-id'],
+                    scheduleId: req.headers['x-sap-job-schedule-id'],
+                    runId: req.headers['x-sap-job-run-id'],
+                    data: dataObj
+                };
+
+                console.log("Class Imported, to update req", updateReq);
+
+                scheduler.updateJobRunLog(updateReq, function (err, result) {
+                    if (err) {
+                        return console.log('Error updating run log: %s', err);
+                    }
+                    //Run log updated successfully
+                    console.log("Import of Class job update results", result);
+
+                });
+            }
+        }
+        else {
+            let dataObj = {};
+            dataObj["failed"] = false;
+            dataObj["message"] = "Import of Class has failed at" + new Date();
+
+
+            if (req.headers['x-sap-job-id'] > 0) {
+                const scheduler = getJobscheduler(req);
+
+                var updateReq = {
+                    jobId: req.headers['x-sap-job-id'],
+                    scheduleId: req.headers['x-sap-job-schedule-id'],
+                    runId: req.headers['x-sap-job-run-id'],
+                    data: dataObj
+                };
+
+                console.log("Import of Class job update req", updateReq);
+
+                scheduler.updateJobRunLog(updateReq, function (err, result) {
+                    if (err) {
+                        return console.log('Error updating run log: %s', err);
+                    }
+                    //Run log updated successfully
+                    console.log("Import of Class job update results", result);
+
+                });
+            }
+        }
+
+
+    });
+    srv.on("ImportECCChar", async (req) => {
+        var flag = '';
+        try {
+            const dbClass = require("sap-hdb-promisfied")
+            let dbConn = new dbClass(await dbClass.createConnectionFromEnv())
+            const sp = await dbConn.loadProcedurePromisified(null, '"FG_CHAR_SP"')
+            const output = await dbConn.callProcedurePromisified(sp, [])
+            console.log(output.results);
+            flag = 'X';
+        } catch (error) {
+            console.error(error);
+        }
+        if (flag === 'X') {
+            let dataObj = {};
+            dataObj["success"] = true;
+            dataObj["message"] = "Import of Characteristics is successfull at " + new Date();
+
+
+            if (req.headers['x-sap-job-id'] > 0) {
+                const scheduler = getJobscheduler(req);
+
+                var updateReq = {
+                    jobId: req.headers['x-sap-job-id'],
+                    scheduleId: req.headers['x-sap-job-schedule-id'],
+                    runId: req.headers['x-sap-job-run-id'],
+                    data: dataObj
+                };
+
+                console.log("Characteristics Imported, to update req", updateReq);
+
+                scheduler.updateJobRunLog(updateReq, function (err, result) {
+                    if (err) {
+                        return console.log('Error updating run log: %s', err);
+                    }
+                    //Run log updated successfully
+                    console.log("Import of Characteristics job update results", result);
+
+                });
+            }
+        }
+        else {
+            let dataObj = {};
+            dataObj["failed"] = false;
+            dataObj["message"] = "Import of Characteristics has failed at" + new Date();
+
+
+            if (req.headers['x-sap-job-id'] > 0) {
+                const scheduler = getJobscheduler(req);
+
+                var updateReq = {
+                    jobId: req.headers['x-sap-job-id'],
+                    scheduleId: req.headers['x-sap-job-schedule-id'],
+                    runId: req.headers['x-sap-job-run-id'],
+                    data: dataObj
+                };
+
+                console.log("Import of Characteristics job update req", updateReq);
+
+                scheduler.updateJobRunLog(updateReq, function (err, result) {
+                    if (err) {
+                        return console.log('Error updating run log: %s', err);
+                    }
+                    //Run log updated successfully
+                    console.log("Import of Characteristics job update results", result);
+
+                });
+            }
+        }
+
+
+    });
+
+    srv.on("ImportECCCharval", async (req) => {
+        var flag = '';
+        try {
+            const dbClass = require("sap-hdb-promisfied")
+            let dbConn = new dbClass(await dbClass.createConnectionFromEnv())
+            const sp = await dbConn.loadProcedurePromisified(null, '"FG_CHARVAL_SP"')
+            const output = await dbConn.callProcedurePromisified(sp, [])
+            console.log(output.results);
+            flag = 'X';
+        } catch (error) {
+            console.error(error);
+        }
+        if (flag === 'X') {
+            let dataObj = {};
+            dataObj["success"] = true;
+            dataObj["message"] = "Import of Characteristics Value is successfull at " + new Date();
+
+
+            if (req.headers['x-sap-job-id'] > 0) {
+                const scheduler = getJobscheduler(req);
+
+                var updateReq = {
+                    jobId: req.headers['x-sap-job-id'],
+                    scheduleId: req.headers['x-sap-job-schedule-id'],
+                    runId: req.headers['x-sap-job-run-id'],
+                    data: dataObj
+                };
+
+                console.log("Characteristics Value Imported, to update req", updateReq);
+
+                scheduler.updateJobRunLog(updateReq, function (err, result) {
+                    if (err) {
+                        return console.log('Error updating run log: %s', err);
+                    }
+                    //Run log updated successfully
+                    console.log("Import of Characteristics Value job update results", result);
+
+                });
+            }
+        }
+        else {
+            let dataObj = {};
+            dataObj["failed"] = false;
+            dataObj["message"] = "Import of Characteristics Value has failed at" + new Date();
+
+
+            if (req.headers['x-sap-job-id'] > 0) {
+                const scheduler = getJobscheduler(req);
+
+                var updateReq = {
+                    jobId: req.headers['x-sap-job-id'],
+                    scheduleId: req.headers['x-sap-job-schedule-id'],
+                    runId: req.headers['x-sap-job-run-id'],
+                    data: dataObj
+                };
+
+                console.log("Import of Characteristics Value job update req", updateReq);
+
+                scheduler.updateJobRunLog(updateReq, function (err, result) {
+                    if (err) {
+                        return console.log('Error updating run log: %s', err);
+                    }
+                    //Run log updated successfully
+                    console.log("Import of Characteristics Value job update results", result);
+
+                });
+            }
+        }
+
+    });
+    // srv.on("ImportECCSalesh", async (req) => {
+    //     var flag = '';
+    //     try {
+    //         const dbClass = require("sap-hdb-promisfied")
+    //         let dbConn = new dbClass(await dbClass.createConnectionFromEnv())
+    //         const sp = await dbConn.loadProcedurePromisified(null, '"FG_SALESH_SP"')
+    //         const output = await dbConn.callProcedurePromisified(sp, [])
+    //         console.log(output.results);
+    //         flag = 'X';
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
+    //     if (flag === 'X') {
+    //         let dataObj = {};
+    //         dataObj["success"] = true;
+    //         dataObj["message"] = "Import of Sales History is successfull at " + new Date();
+
+
+    //         if (req.headers['x-sap-job-id'] > 0) {
+    //             const scheduler = getJobscheduler(req);
+
+    //             var updateReq = {
+    //                 jobId: req.headers['x-sap-job-id'],
+    //                 scheduleId: req.headers['x-sap-job-schedule-id'],
+    //                 runId: req.headers['x-sap-job-run-id'],
+    //                 data: dataObj
+    //             };
+
+    //             console.log("Sales History Imported, to update req", updateReq);
+
+    //             scheduler.updateJobRunLog(updateReq, function (err, result) {
+    //                 if (err) {
+    //                     return console.log('Error updating run log: %s', err);
+    //                 }
+    //                 //Run log updated successfully
+    //                 console.log("Import of Sales History job update results", result);
+
+    //             });
+    //         }
+    //     }
+    //     else {
+    //         let dataObj = {};
+    //         dataObj["failed"] = false;
+    //         dataObj["message"] = "Import of Sales History has failed at" + new Date();
+
+
+    //         if (req.headers['x-sap-job-id'] > 0) {
+    //             const scheduler = getJobscheduler(req);
+
+    //             var updateReq = {
+    //                 jobId: req.headers['x-sap-job-id'],
+    //                 scheduleId: req.headers['x-sap-job-schedule-id'],
+    //                 runId: req.headers['x-sap-job-run-id'],
+    //                 data: dataObj
+    //             };
+
+    //             console.log("Import of Sales History job update req", updateReq);
+
+    //             scheduler.updateJobRunLog(updateReq, function (err, result) {
+    //                 if (err) {
+    //                     return console.log('Error updating run log: %s', err);
+    //                 }
+    //                 //Run log updated successfully
+    //                 console.log("Import of Sales History job update results", result);
+
+    //             });
+    //         }
+    //     }
+
+    // });
+    // srv.on("ImportECCSaleshCfg", async (req) => {
+    //     var flag = '';
+    //     try {
+    //         const dbClass = require("sap-hdb-promisfied")
+    //         let dbConn = new dbClass(await dbClass.createConnectionFromEnv())
+    //         const sp = await dbConn.loadProcedurePromisified(null, '"FG_SALESHCFG_SP"')
+    //         const output = await dbConn.callProcedurePromisified(sp, [])
+    //         console.log(output.results);
+    //         flag = 'X';
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
+    //     if (flag === 'X') {
+    //         let dataObj = {};
+    //         dataObj["success"] = true;
+    //         dataObj["message"] = "Import of Sales History Configuration is successfull at " + new Date();
+
+
+    //         if (req.headers['x-sap-job-id'] > 0) {
+    //             const scheduler = getJobscheduler(req);
+
+    //             var updateReq = {
+    //                 jobId: req.headers['x-sap-job-id'],
+    //                 scheduleId: req.headers['x-sap-job-schedule-id'],
+    //                 runId: req.headers['x-sap-job-run-id'],
+    //                 data: dataObj
+    //             };
+
+    //             console.log("Sales History Configuration Imported, to update req", updateReq);
+
+    //             scheduler.updateJobRunLog(updateReq, function (err, result) {
+    //                 if (err) {
+    //                     return console.log('Error updating run log: %s', err);
+    //                 }
+    //                 //Run log updated successfully
+    //                 console.log("Import of Sales History Configuration job update results", result);
+
+    //             });
+    //         }
+    //     }
+    //     else {
+    //         let dataObj = {};
+    //         dataObj["failed"] = false;
+    //         dataObj["message"] = "Import of Sales History Configurationhas failed at" + new Date();
+
+
+    //         if (req.headers['x-sap-job-id'] > 0) {
+    //             const scheduler = getJobscheduler(req);
+
+    //             var updateReq = {
+    //                 jobId: req.headers['x-sap-job-id'],
+    //                 scheduleId: req.headers['x-sap-job-schedule-id'],
+    //                 runId: req.headers['x-sap-job-run-id'],
+    //                 data: dataObj
+    //             };
+
+    //             console.log("Import of Sales History Configurationjob update req", updateReq);
+
+    //             scheduler.updateJobRunLog(updateReq, function (err, result) {
+    //                 if (err) {
+    //                     return console.log('Error updating run log: %s', err);
+    //                 }
+    //                 //Run log updated successfully
+    //                 console.log("Import of Sales History Configuration job update results", result);
+
+    //             });
+    //         }
+    //     }
+    // });
+>>>>>>> 578e2fa3096b1f3903666b8919e7b3910a15d841
 };

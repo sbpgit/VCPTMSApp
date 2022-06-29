@@ -161,5 +161,13 @@
     "sap.cloud": {
         "public": false,
         "service": "configprod_approuter"
+<<<<<<< HEAD
+=======
+    },
+    "sap.platform.cf": {
+        "oAuthScopes": [
+            "$XSAPPNAME.Display"
+        ]
+>>>>>>> 578e2fa3096b1f3903666b8919e7b3910a15d841
     }
 }

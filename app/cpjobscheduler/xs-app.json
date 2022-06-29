@@ -5,28 +5,41 @@
     {
         "source": "^/v2/pal/(.*)$",
         "target": "/v2/pal/$1",
+<<<<<<< HEAD
         "destination": "ConfigProd",
         "csrfProtection": true,
         "authenticationType": "xsuaa"
+=======
+        "destination": "ConfigProdPrd",
+        "authenticationType": "xsuaa",
+        "csrfProtection": true
+>>>>>>> 578e2fa3096b1f3903666b8919e7b3910a15d841
       },
       {
         "source": "^/v2/catalog/(.*)$",
         "target": "/v2/catalog/$1",
-        "destination": "ConfigProd",
+        "destination": "ConfigProdPrd",
         "authenticationType": "xsuaa",
         "csrfProtection": true
       },
       {
         "source": "^/v2/jobs/(.*)$",
         "target": "/v2/jobs/$1",
-        "destination": "ConfigProd",
+        "destination": "ConfigProdPrd",
         "authenticationType": "xsuaa",
         "csrfProtection": true
       },
       {
         "source": "^/v2/ibpimport-srv/(.*)$",
         "target": "/v2/ibpimport-srv/$1",
-        "destination": "ConfigProd",
+        "destination": "ConfigProdPrd",
+        "authenticationType": "xsuaa",
+        "csrfProtection": true
+      },
+      {
+        "source": "^/v2/sdi/(.*)$",
+        "target": "/v2/sdi/$1",
+        "destination": "ConfigProdPrd",
         "authenticationType": "xsuaa",
         "csrfProtection": true
       },

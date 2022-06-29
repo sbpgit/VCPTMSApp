@@ -638,6 +638,7 @@ sap.ui.define(
           var aItem = that.oGModel.getProperty("/selItem"),
             aData = {
               PROFILEOD: [],
+<<<<<<< HEAD
             },
             jsonProfileOD,
             // Getting the selected profile from dialog
@@ -684,6 +685,61 @@ sap.ui.define(
          * @param {object} oEvent -the event information.
          */
         onUnAssign: function () {
+=======
+            },
+            jsonProfileOD,
+            // Getting the selected profile from dialog
+            sProfile = sap.ui
+              .getCore()
+              .byId("idListTab")
+              .getSelectedItems()[0]
+              .getTitle();
+          var oSelected;
+          // Looping through the selected list to assign selected Profile
+          for (var i = 0; i < aItem.length; i++) {
+            oSelected = aItem[i].getBindingContext().getProperty();
+  
+            sap.ui.core.BusyIndicator.show();
+            // Calling service to assign profile
+            that.getModel("BModel").callFunction("/assignProfilesOD", {
+              method: "GET",
+              urlParameters: {
+                FLAG: "I",
+                LOCATION_ID: oSelected.LOCATION_ID,
+                PRODUCT_ID: oSelected.PRODUCT_ID,
+                COMPONENT: oSelected.COMPONENT,
+                STRUC_NODE: oSelected.STRUC_NODE,
+                PROFILE: sProfile,
+              },
+              success: function (oData) {
+                sap.ui.core.BusyIndicator.hide();
+                sap.m.MessageToast.show("Profile assigned successfully");
+                that.handleProfileClose();
+                that.onGetData();
+              },
+              error: function (error) {
+                sap.m.MessageToast.show("Error in assigning Profiles");
+                sap.ui.core.BusyIndicator.hide();
+                that.handleProfileClose();
+              },
+            });
+          }
+        },
+  
+        /**
+         * This function is called when click on UnAssign button.
+         * In this function removing the assigned profile to the selected table list.
+         * @param {object} oEvent -the event information.
+         */
+        onUnAssign: function () {
+<<<<<<< HEAD
+          var aData = {
+              PROFILEOD: [],
+            },
+            jsonProfileOD;
+=======
+>>>>>>> 77de88f04f3036129a94bcc91ba9d4f0fd4fa11c
+>>>>>>> 578e2fa3096b1f3903666b8919e7b3910a15d841
           var oSelected;
           // Getting the oSelected list of table which profiles need to delete
           var aItem = that.byId("idTab").getSelectedItems();

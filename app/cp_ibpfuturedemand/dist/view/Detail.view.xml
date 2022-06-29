@@ -9,7 +9,15 @@
     <l:Grid defaultSpan="XL3 L3 M6 S12">
             <VBox >
                 <Text text=""/>
+<<<<<<< HEAD
                 <SearchField id="DetailSearch" search="onDetailSearch" placeholder="Class Name/ Char Name/ Char Value"/>
+=======
+<<<<<<< HEAD
+                <SearchField id="DetailSearch" liveChange="onDetailSearch" placeholder="Class Name/ Char Name/ Char Value"/>
+=======
+                <SearchField id="DetailSearch" search="onDetailSearch" placeholder="Class Name/ Char Name/ Char Value"/>
+>>>>>>> 77de88f04f3036129a94bcc91ba9d4f0fd4fa11c
+>>>>>>> 578e2fa3096b1f3903666b8919e7b3910a15d841
             </VBox>
             <VBox >
                 <Text text="{i18n>loc} :"/>

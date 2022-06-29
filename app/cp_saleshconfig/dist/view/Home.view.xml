@@ -7,6 +7,13 @@
     displayBlock="true"
     xmlns="sap.m">
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+    <!-- <Page id="page" title="{i18n>title}" titleAlignment="Center"> -->
+=======
+>>>>>>> 77de88f04f3036129a94bcc91ba9d4f0fd4fa11c
+>>>>>>> 578e2fa3096b1f3903666b8919e7b3910a15d841
     <ux:ObjectPageLayout id="ObjectPageLayout">
         <ux:headerTitle>
             <ux:ObjectPageDynamicHeaderTitle>
@@ -28,6 +35,29 @@
             <SearchField id="idSearch" placeholder="Location/ Product/ Sales Doc" liveChange="onTableSearch" />
             </VBox>
             <VBox >
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+                <Label text="Location" />
+                <Input id="idloc" value=""  placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+            </VBox>
+            <VBox>
+                <Label text="Product"/>
+                <MultiInput id="prodInput"  placeholder="Product" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
+            </VBox>
+            <VBox>
+                <Label text="Doc Create Date"/>
+                <DatePicker id="idDate" displayFormat="yyyy-MM-dd" change="handleDateChange"/>
+            </VBox>
+            <VBox >
+                <Label text=""/>
+                <Button text="Go" type="Emphasized" press="onGetData" tooltip="Get data based on filters"/>
+            </VBox>
+            </l:Grid>
+        
+        <!-- <content> -->
+=======
+>>>>>>> 578e2fa3096b1f3903666b8919e7b3910a15d841
                 <Label text="Location" required="true"/>
                 <Input id="idloc" value=""  placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
             </VBox>
@@ -45,6 +75,10 @@
                 </HBox>
             </VBox>
             </l:Grid>
+<<<<<<< HEAD
+=======
+>>>>>>> 77de88f04f3036129a94bcc91ba9d4f0fd4fa11c
+>>>>>>> 578e2fa3096b1f3903666b8919e7b3910a15d841
         </FlexBox>
         </ux:headerContent>
         <ux:sections>
@@ -101,4 +135,12 @@
             </ux:ObjectPageSection>
         </ux:sections>
     </ux:ObjectPageLayout>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+        <!-- </content>
+    </Page> -->
+=======
+>>>>>>> 77de88f04f3036129a94bcc91ba9d4f0fd4fa11c
+>>>>>>> 578e2fa3096b1f3903666b8919e7b3910a15d841
 </mvc:View>

@@ -98,6 +98,12 @@ service CatalogService @(impl : './lib/cat-service.js') {
     @readonly
     entity getIBPFres           as projection on od.IBP_RESULTPLAN;
 
+<<<<<<< HEAD
+=======
+    // //Object dependency restrict
+    // @odata.draft.enabled
+    // entity getODHdrRstr         as projection on V_ODRESTRICT;
+>>>>>>> 578e2fa3096b1f3903666b8919e7b3910a15d841
 
     // Get sales history configuration and its characteristics
     @readonly
@@ -133,7 +139,14 @@ service CatalogService @(impl : './lib/cat-service.js') {
     entity getBomOdCond         as projection on V_BOMODCOND;
     // Get Object dependency rule characteristics
     entity getODcharval         as projection on V_ODCHARVAL;
+<<<<<<< HEAD
 
+=======
+    // //Get timeseries for Object dep. characteristics - History
+    // entity getODCharH           as projection on V_TSODCHAR_H;
+    // //Get timeseries for Object dep. characteristics - Future
+    // entity getODCharF           as projection on V_TSODCHAR_F;
+>>>>>>> 578e2fa3096b1f3903666b8919e7b3910a15d841
     //Get IBP version scenario
     entity getIbpVerScn         as projection on V_IBPVERSCENARIO;
     // Get Object dependency characteristics impact and prediction values
@@ -168,7 +181,11 @@ service CatalogService @(impl : './lib/cat-service.js') {
     // Create Profile parameters
     function createProfilePara(FLAG : String(1), PROFILE : String(50), METHOD : String(50), PARA_NAME : String(100), INTVAL : Integer, DOUBLEVAL : Double, STRVAL : String(20), PARA_DESC : String(1000), PARA_DEP : String(1000), CREATED_DATE : Date, CREATED_BY : String(12)) returns String;
     // Assign OD to a profile
+<<<<<<< HEAD
     function assignProfilesOD(FLAG : String(1), LOCATION_ID : String(4), PRODUCT_ID : String(40), COMPONENT : String(40), PROFILE : String(50), STRUC_NODE : String(50))                                                                                  returns String;
+=======
+    function asssignProfilesOD(FLAG : String(1), LOCATION_ID : String(4), PRODUCT_ID : String(40), COMPONENT : String(40), PROFILE : String(50), OBJ_DEP : String(30), STRUC_NODE : String(50))                                                                                  returns String;
+>>>>>>> 578e2fa3096b1f3903666b8919e7b3910a15d841
    
     function importIBPDemd() returns String;
 // Timeseries for job creation

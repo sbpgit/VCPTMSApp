@@ -5,9 +5,15 @@
     {
       "source": "^/catalog/(.*)$",
       "target": "/catalog/$1",
+<<<<<<< HEAD
       "destination": "ConfigProd",
       "csrfProtection": true,
       "authenticationType": "xsuaa"
+=======
+      "destination": "ConfigProdPrd",
+      "authenticationType": "xsuaa",
+      "csrfProtection": false
+>>>>>>> 578e2fa3096b1f3903666b8919e7b3910a15d841
     },
     {
       "source": "^/resources/(.*)$",

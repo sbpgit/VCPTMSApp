@@ -666,19 +666,32 @@ module.exports = (srv) => {
     srv.on("generateTimeseries", async (req) => {
         const obgenTimeseries = new GenTimeseries();
         await obgenTimeseries.genTimeseries(req.data);
+<<<<<<< HEAD
+=======
+        console.log("test");
+>>>>>>> 578e2fa3096b1f3903666b8919e7b3910a15d841
     });
     srv.on("generateTimeseriesF", async (req) => {
         const obgenTimeseries = new GenTimeseries();
         await obgenTimeseries.genTimeseriesF(req.data);
+<<<<<<< HEAD
+=======
+        console.log("test");
+>>>>>>> 578e2fa3096b1f3903666b8919e7b3910a15d841
     });
     // Generate Timeseries fucntion calls
     srv.on("generate_timeseries", async (req) => {
         const obgenTimeseries = new GenTimeseries();
         await obgenTimeseries.genTimeseries(req.data);
+<<<<<<< HEAD
+=======
+        console.log("test");
+>>>>>>> 578e2fa3096b1f3903666b8919e7b3910a15d841
     });
     srv.on("generate_timeseriesF", async (req) => {
         const obgenTimeseries = new GenTimeseries();
         await obgenTimeseries.genTimeseriesF(req.data);
+<<<<<<< HEAD
     });
      // Maintain Parital product introsduction
      srv.on("maintainPartialProd", async (req) => {
@@ -774,5 +787,8 @@ module.exports = (srv) => {
         }
         lsresults = {};
         return responseMessage;
+=======
+        console.log("test");
+>>>>>>> 578e2fa3096b1f3903666b8919e7b3910a15d841
     });
 };

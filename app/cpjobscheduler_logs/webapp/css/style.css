@@ -1,0 +1,23 @@
+/* Enter your custom styles here */
+
+
+.listGreen {
+    color: #1ce66d !important;
+}
+
+.listRed {
+    color: #f81c27 !important;
+}
+
+.listOrange {
+    color: #ffa011 !important;
+}
+
+.listGray {
+    color: #c5cee0 !important;
+}
+
+.sapMTB-Info-CTX.sapMTB {
+    background: #ffff;
+    color: #fff;
+}

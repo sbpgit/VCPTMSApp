@@ -1,7 +1,12 @@
 using cp as service from '../db/data-model';
 using cp as pal from '../db/pal-schema';
 using V_SALESHCFG_CHARVAL from '../db/data-model';
+<<<<<<< HEAD
 using V_JOBSTATUS from '../db/jobscheduler';
+=======
+//using V_TIMESERIES as tssrv from '../db/data-model';
+//using V_PRODUCT as prd from '../db/data-model';
+>>>>>>> 578e2fa3096b1f3903666b8919e7b3910a15d841
 
 
 // Product annotations
@@ -860,6 +865,18 @@ annotate V_SALESHCFG_CHARVAL with @(
                 $Type : 'UI.DataField', //Label : 'Description',
                 Value : SALESDOC_ITEM,
                 ![@UI.Importance]   : #High
+<<<<<<< HEAD
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Family',
+                Value : DOC_CREATEDDATE,
+                ![@UI.Importance]   : #High
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : SCHEDULELINE_NUM,
+                ![@UI.Importance]   : #High
+=======
             },
             {
                 $Type : 'UI.DataField', //Label : 'Product Family',
@@ -872,6 +889,74 @@ annotate V_SALESHCFG_CHARVAL with @(
                 ![@UI.Importance]   : #High
             },
             {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : PRODUCT_ID,
+                ![@UI.Importance]   : #High
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : CUSTOMER_GROUP,
+                ![@UI.Importance]   : #High
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : LOCATION_ID,
+                ![@UI.Importance]   : #High
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : ORD_QTY,
+                ![@UI.Importance]   : #High
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : NET_VALUE,
+                ![@UI.Importance]   : #High
+            },
+            {
+                $Type : 'UI.DataField', //Label : 'Product Series',
+                Value : MAT_AVAILDATE,
+                ![@UI.Importance]   : #High
+            }
+
+        ],
+        HeaderInfo              : {
+            Title          : {Value : SALES_DOC},
+            Description    : {Value : SALESDOC_ITEM},
+            TypeName       : 'Sales History',
+            TypeNamePlural : 'Sales History',
+        },
+        HeaderFacets            : [{
+            $Type             : 'UI.ReferenceFacet',
+            Target            : '@UI.FieldGroup#Description',
+            ![@UI.Importance] : #Medium
+        }],
+        FieldGroup #Description : {Data : [
+            {
+                $Type : 'UI.DataField',
+                Value : DOC_CREATEDDATE
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : PRODUCT_ID
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : LOCATION_ID
+            }
+        ]},
+        FieldGroup #Details     : {Data : [
+            {
+                $Type : 'UI.DataField',
+                Value : SCHEDULELINE_NUM
+>>>>>>> 578e2fa3096b1f3903666b8919e7b3910a15d841
+            },
+            // {
+            //     $Type : 'UI.DataField',
+            //     Value : REASON_REJ
+            // },
+            {
+<<<<<<< HEAD
                 $Type : 'UI.DataField', //Label : 'Product Series',
                 Value : PRODUCT_ID,
                 ![@UI.Importance]   : #High
@@ -965,6 +1050,35 @@ annotate V_SALESHCFG_CHARVAL with @(
                 $Type : 'UI.DataField',
                 Value : CHAR_VALUE
             }
+=======
+                $Type : 'UI.DataField',
+                Value : CONFIRMED_QTY
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : ORD_QTY
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : MAT_AVAILDATE
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : CUSTOMER_GROUP
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : NET_VALUE
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : CHAR_NAME
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : CHAR_VALUE
+            }
+>>>>>>> 578e2fa3096b1f3903666b8919e7b3910a15d841
         ]}
     },
     // Page Facets

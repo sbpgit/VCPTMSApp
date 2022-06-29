@@ -35,7 +35,15 @@
                     "action": "display",
                     "title": "{{flpTitle}}",
                     "subTitle": "{{flpSubtitle}}",
+<<<<<<< HEAD
                     "icon": "sap-icon://product"
+=======
+<<<<<<< HEAD
+                    "icon": ""
+=======
+                    "icon": "sap-icon://product"
+>>>>>>> 77de88f04f3036129a94bcc91ba9d4f0fd4fa11c
+>>>>>>> 578e2fa3096b1f3903666b8919e7b3910a15d841
                 }
             }
         }

@@ -17,6 +17,24 @@
         <Toolbar height="8%">
             <VBox>
                 <HBox>
+<<<<<<< HEAD
+                    <Text text="Access Node : " ></Text>
+=======
+<<<<<<< HEAD
+                    <Text text="Access Node : " class="boldText"></Text>
+>>>>>>> 578e2fa3096b1f3903666b8919e7b3910a15d841
+                    <Text text=" {oGModel>/SelectedAccessNode}"></Text>
+                </HBox>
+                
+            </VBox>
+            <ToolbarSpacer/>
+            <VBox>
+                <HBox>
+<<<<<<< HEAD
+                    <Text text="Description : " ></Text>
+=======
+                    <Text text="Description : " class="boldText"></Text>
+=======
                     <Text text="Access Node : " ></Text>
                     <Text text=" {oGModel>/SelectedAccessNode}"></Text>
                 </HBox>
@@ -26,6 +44,8 @@
             <VBox>
                 <HBox>
                     <Text text="Description : " ></Text>
+>>>>>>> 77de88f04f3036129a94bcc91ba9d4f0fd4fa11c
+>>>>>>> 578e2fa3096b1f3903666b8919e7b3910a15d841
                     <Text text=" {oGModel>/SelectedDesc}"></Text>
                 </HBox>
             </VBox>

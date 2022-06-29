@@ -132,6 +132,11 @@ sap.ui.define(
         that._valueHelpDialogComp.setTitleAlignment("Center");
         that._valueHelpDialogStru.setTitleAlignment("Center");
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 578e2fa3096b1f3903666b8919e7b3910a15d841
         var dDate = new Date();
 
         var oDateL = dDate.toLocaleDateString().split("/");
@@ -150,6 +155,10 @@ sap.ui.define(
         that.byId("fromDate").setValue(oDateL);
         that.byId("toDate").setValue(oDateH);
 
+<<<<<<< HEAD
+=======
+>>>>>>> 77de88f04f3036129a94bcc91ba9d4f0fd4fa11c
+>>>>>>> 578e2fa3096b1f3903666b8919e7b3910a15d841
         this.oProdList = this._oCore.byId(
           this._valueHelpDialogProd.getId() + "-list"
         );
@@ -231,6 +240,15 @@ sap.ui.define(
         var vFromDate = this.byId("fromDate").getDateValue();
         var vToDate = this.byId("toDate").getDateValue();
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+        // Calling function to convert date string
+        vFromDate = that.getDateFn(vFromDate);
+        vToDate = that.getDateFn(vToDate);
+=======
+>>>>>>> 77de88f04f3036129a94bcc91ba9d4f0fd4fa11c
+>>>>>>> 578e2fa3096b1f3903666b8919e7b3910a15d841
 
         // checking if the inpus are not undefined
         if (
@@ -238,6 +256,7 @@ sap.ui.define(
           oProd !== undefined &&
           oVer !== undefined &&
           oScen !== undefined &&
+<<<<<<< HEAD
           oModelVersion !== undefined &&
           vFromDate !== undefined && 
           vFromDate !== " " && 
@@ -247,6 +266,22 @@ sap.ui.define(
             // Calling function to convert date string
             vFromDate = that.getDateFn(vFromDate);
             vToDate = that.getDateFn(vToDate);
+=======
+<<<<<<< HEAD
+          oModelVersion !== undefined
+        ) {
+=======
+          oModelVersion !== undefined &&
+          vFromDate !== undefined && 
+          vFromDate !== " " && 
+          vToDate !== undefined && 
+          vToDate !== " "
+        ) {
+            // Calling function to convert date string
+            vFromDate = that.getDateFn(vFromDate);
+            vToDate = that.getDateFn(vToDate);
+>>>>>>> 77de88f04f3036129a94bcc91ba9d4f0fd4fa11c
+>>>>>>> 578e2fa3096b1f3903666b8919e7b3910a15d841
           if (oComp === undefined) {
             oComp = "";
           }
@@ -290,7 +325,15 @@ sap.ui.define(
         } else {
           sap.ui.core.BusyIndicator.hide();
           sap.m.MessageToast.show(
+<<<<<<< HEAD
             "Please select a Location/Product/Version/Scenario/Date Range"
+=======
+<<<<<<< HEAD
+            "Please select a Location/Product/Version/Scenario"
+=======
+            "Please select a Location/Product/Version/Scenario/Date Range"
+>>>>>>> 77de88f04f3036129a94bcc91ba9d4f0fd4fa11c
+>>>>>>> 578e2fa3096b1f3903666b8919e7b3910a15d841
           );
         }
       },

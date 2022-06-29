@@ -10,11 +10,20 @@
         "title": "{{appTitle}}",
         "description": "{{appDescription}}",
         "resources": "resources.json",
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 578e2fa3096b1f3903666b8919e7b3910a15d841
         "sourceTemplate": {
             "id": "@sap-ux/fiori-freestyle-writer:basic",
             "version": "0.11.13",
             "toolsId": "1a707e0c-244b-4010-962f-f8c675fef5fc"
         },
+<<<<<<< HEAD
+=======
+>>>>>>> 77de88f04f3036129a94bcc91ba9d4f0fd4fa11c
+>>>>>>> 578e2fa3096b1f3903666b8919e7b3910a15d841
         "dataSources": {
             "mainService": {
                 "uri": "v2/catalog/",
@@ -47,6 +56,11 @@
                     "odataVersion": "2.0",
                     "localUri": "localService/metadata.xml"
                 }
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 578e2fa3096b1f3903666b8919e7b3910a15d841
             },
             "SDI": {
                 "uri": "v2/sdi/",
@@ -55,6 +69,10 @@
                     "odataVersion": "2.0",
                     "localUri": "localService/metadata.xml"
                 }
+<<<<<<< HEAD
+=======
+>>>>>>> 77de88f04f3036129a94bcc91ba9d4f0fd4fa11c
+>>>>>>> 578e2fa3096b1f3903666b8919e7b3910a15d841
             }
         },
         "crossNavigation": {
@@ -68,7 +86,15 @@
                     "action": "display",
                     "title": "{{flpTitle}}",
                     "subTitle": "{{flpSubtitle}}",
+<<<<<<< HEAD
                     "icon": "sap-icon://time-account"
+=======
+<<<<<<< HEAD
+                    "icon": ""
+=======
+                    "icon": "sap-icon://time-account"
+>>>>>>> 77de88f04f3036129a94bcc91ba9d4f0fd4fa11c
+>>>>>>> 578e2fa3096b1f3903666b8919e7b3910a15d841
                 }
             }
         }
@@ -98,7 +124,15 @@
             "id": "App"
         },
         "dependencies": {
+<<<<<<< HEAD
             "minUI5Version": "1.102.1",
+=======
+<<<<<<< HEAD
+            "minUI5Version": "1.100.0",
+=======
+            "minUI5Version": "1.102.1",
+>>>>>>> 77de88f04f3036129a94bcc91ba9d4f0fd4fa11c
+>>>>>>> 578e2fa3096b1f3903666b8919e7b3910a15d841
             "libs": {
                 "sap.m": {},
                 "sap.ui.core": {},
@@ -154,10 +188,19 @@
             "IModel": {
                 "dataSource": "IBP",
                 "preload": true
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 578e2fa3096b1f3903666b8919e7b3910a15d841
             },
             "SModel": {
                 "dataSource": "SDI",
                 "preload": true
+<<<<<<< HEAD
+=======
+>>>>>>> 77de88f04f3036129a94bcc91ba9d4f0fd4fa11c
+>>>>>>> 578e2fa3096b1f3903666b8919e7b3910a15d841
             }
         },
         "resources": {

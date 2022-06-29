@@ -22,4 +22,11 @@ using from './cppartialprod/annotations';
 
 using from './cppartialprodnew/annotations';
 
+<<<<<<< HEAD
 using from './cpnewprodintro/annotations';
+=======
+using from './cprestrictions/annotations';
+
+using from './cp_jobschlogs/annotations';
+using from './cpjobscheduler_test/annotations';
+>>>>>>> 578e2fa3096b1f3903666b8919e7b3910a15d841

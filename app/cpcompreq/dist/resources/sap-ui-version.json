@@ -1,7 +1,15 @@
 {
 	"name": "cpapp.cpcompreq",
 	"version": "0.0.1",
+<<<<<<< HEAD
 	"buildTimestamp": "202206241908",
+=======
+<<<<<<< HEAD
+	"buildTimestamp": "202206211906",
+=======
+	"buildTimestamp": "202206201317",
+>>>>>>> 77de88f04f3036129a94bcc91ba9d4f0fd4fa11c
+>>>>>>> 578e2fa3096b1f3903666b8919e7b3910a15d841
 	"scmRevision": "",
 	"libraries": []
 }

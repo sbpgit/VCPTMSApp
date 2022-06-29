@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "view/Details.view.xml": 1655901760103,
   "manifest.json": 1656097697794,
   "utils/locate-reuse-libs.js": 1655901760103,
@@ -25,4 +26,61 @@
   "view/App.view.xml": 1655901760103,
   "css/style.css": 1655901760103,
   "index.html": 1655901760103
+=======
+<<<<<<< HEAD
+  "controller/ItemMaster-dbg.controller.js": 1649242316966,
+  "controller/App.controller.js": 1649242316966,
+  "utils/locate-reuse-libs.js": 1649242316966,
+  "model/models.js": 1649242316966,
+  "controller/ItemMaster.controller.js": 1649242316966,
+  "controller/ItemDetail.controller.js": 1653654332041,
+  "controller/Details.controller.js": 1649758051722,
+  "controller/BaseController.js": 1649242316966,
+  "manifest.json": 1655838272054,
+  "Component.js": 1649242316966,
+  "manifest-bundle.zip": 1655838272073,
+  "Component-preload.js": 1655838272466,
+  "utils/locate-reuse-libs-dbg.js": 1649242316966,
+  "model/models-dbg.js": 1649242316966,
+  "i18n/i18n.properties": 1652181815481,
+  "controller/ItemDetail-dbg.controller.js": 1653654332041,
+  "controller/Details-dbg.controller.js": 1649758051722,
+  "controller/BaseController-dbg.js": 1649242316966,
+  "controller/App-dbg.controller.js": 1649242316966,
+  "Component-dbg.js": 1649242316966,
+  "view/ItemMaster.view.xml": 1649758051722,
+  "view/ItemDetail.view.xml": 1649758051722,
+  "view/Details.view.xml": 1652182194709,
+  "view/App.view.xml": 1649758051722,
+  "css/style.css": 1653654332041,
+  "index.html": 1650284306168
+=======
+  "controller/Details.controller.js": 1654686738244,
+  "manifest.json": 1655731006185,
+  "utils/locate-reuse-libs.js": 1654686738244,
+  "model/models.js": 1654686738244,
+  "controller/ItemMaster.controller.js": 1654686738244,
+  "controller/ItemDetail.controller.js": 1654686738244,
+  "i18n/i18n.properties": 1654686738244,
+  "controller/BaseController.js": 1654686738240,
+  "controller/App.controller.js": 1654686738240,
+  "Component.js": 1654686738240,
+  "manifest-bundle.zip": 1655731006202,
+  "Component-preload.js": 1655731006708,
+  "model/models-dbg.js": 1654686738244,
+  "utils/locate-reuse-libs-dbg.js": 1654686738244,
+  "controller/ItemMaster-dbg.controller.js": 1654686738244,
+  "controller/ItemDetail-dbg.controller.js": 1654686738244,
+  "controller/Details-dbg.controller.js": 1654686738244,
+  "controller/BaseController-dbg.js": 1654686738240,
+  "controller/App-dbg.controller.js": 1654686738240,
+  "Component-dbg.js": 1654686738240,
+  "view/ItemMaster.view.xml": 1654870470330,
+  "view/ItemDetail.view.xml": 1654861403487,
+  "view/Details.view.xml": 1654861487120,
+  "view/App.view.xml": 1654686738244,
+  "css/style.css": 1654686738244,
+  "index.html": 1654686738244
+>>>>>>> 77de88f04f3036129a94bcc91ba9d4f0fd4fa11c
+>>>>>>> 578e2fa3096b1f3903666b8919e7b3910a15d841
 }
