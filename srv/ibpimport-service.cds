@@ -10,8 +10,8 @@ service IBPImportSrv @(impl : './lib/ibpimport-service.js') {
     // }where PLANNEDINDEPENDENTREQ  <> '0' or PLANNEDINDEPENDENTREQ  <> 0;
     // entity GetTransactionID as projection on externalPost.GetTransactionID;
     function getFDemandQty(LOCATION_ID : String(4), PRODUCT_ID : String(40)) returns String;
-    // function getFCharPlan() returns String;
-    function getFCharPlan(LOCATION_ID : String(4), PRODUCT_ID : String(40), FROMDATE : Date, TODATE : Date) returns String;
+    function getFCharPlan(LOCATION_ID : String(4), PRODUCT_ID : String(40)) returns String;
+    // function getFCharPlan(LOCATION_ID : String(4), PRODUCT_ID : String(40), FROMDATE : Date, TODATE : Date) returns String;
     function createIBPMasterProd(LOCATION_ID : String(4)) returns String;
     function createIBPLocation() returns String;
     function createIBPCustomer() returns String;

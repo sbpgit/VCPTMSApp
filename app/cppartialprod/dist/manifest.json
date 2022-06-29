@@ -20,7 +20,7 @@
                 "uri": "v2/catalog/",
                 "type": "OData",
                 "settings": {
-                    "localUri": "localService/CatalogService/metadata.xml",
+                    "localUri": "localService/metadata.xml",
                     "odataVersion": "2.0"
                 }
             }

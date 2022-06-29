@@ -151,6 +151,14 @@ modules:
       - cpappcppartialprod.zip
       name: cpappcppartialprod
       target-path: resources/
+    - artifacts:
+      - cpappcppartialprodnew.zip
+      name: cpappcppartialprodnew
+      target-path: resources/
+    - artifacts:
+      - cpappcpnewprodintro.zip
+      name: cpappcpnewprodintro
+      target-path: resources/
 - name: cpodpcpodprofiles
   type: html5
   path: app/cp_odprofiles
@@ -324,6 +332,26 @@ modules:
 - name: cpappcppartialprod
   type: html5
   path: app/cppartialprod
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappcppartialprodnew
+  type: html5
+  path: app/cppartialprodnew
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappcpnewprodintro
+  type: html5
+  path: app/cpnewprodintro
   build-parameters:
     build-result: dist
     builder: custom

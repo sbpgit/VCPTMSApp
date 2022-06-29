@@ -53,15 +53,21 @@ module.exports = cds.service.impl(async function () {
         for (var i in req) {
             var vWeekDate = dateJSONToEDM(req[i].PERIODID4_TSTAMP);
             var vScenario = 'BSL_SCENARIO';
-            // var vWeekDate = vTstamp.split('T');
-            //  if (req[i].LOCID === 'RX01') {
-            let modQuery = 'UPSERT "CP_IBP_FUTUREDEMAND" VALUES (' +
+            req[i].PERIODID4_TSTAMP = vWeekDate;
+            await cds.run(
+                    `DELETE FROM "CP_IBP_FUTUREDEMAND" WHERE "LOCATION_ID" = '`+ req[i].LOCID +`' 
+                                                      AND "PRODUCT_ID" = '`+ req[i].PRDID +`'
+                                                      AND "VERSION" = '` + req[i].VERSIONID + `'
+                                                      AND "SCENARIO" = '` + vScenario + `'
+                                                      AND "WEEK_DATE" = '` + vWeekDate +  `'`
+            );
+            let modQuery = 'INSERT INTO "CP_IBP_FUTUREDEMAND" VALUES (' +
                 "'" + req[i].LOCID + "'" + "," +
                 "'" + req[i].PRDID + "'" + "," +
                 "'" + req[i].VERSIONID + "'" + "," +
                 "'" + vScenario + "'" + "," +
                 "'" + vWeekDate + "'" + "," +
-                "'" + req[i].TOTALDEMANDOUTPUT + "'" + ')' + ' WITH PRIMARY KEY';
+                "'" + req[i].TOTALDEMANDOUTPUT + "'" + ')';// + ' WITH PRIMARY KEY';
             try {
                 await cds.run(modQuery);
                 flag = 'X';
@@ -89,9 +95,9 @@ module.exports = cds.service.impl(async function () {
             return string;
         };
 
-        var vFromDate = new Date(request.data.FROMDATE).toISOString().split('Z')[0];
-        var vToDate = new Date(request.data.TODATE).toISOString().split('Z')[0];
-        var vNextMonthDate = GenF.addMonths(request.data.FROMDATE, 1).toISOString().split('Z')[0];
+        var vFromDate = "2022-06-01T00:00:00";//new Date(request.data.FROMDATE).toISOString().split('Z')[0];
+        var vToDate = "2022-11-30T00:00:00";//new Date(request.data.TODATE).toISOString().split('Z')[0];
+        var vNextMonthDate = GenF.addMonths("2022-06-01", 1).toISOString().split('Z')[0];
         while (vLoop === 1) {
             if (vNextMonthDate <= vToDate) {
                 resUrl = "/SBPVCP?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and PERIODID4_TSTAMP gt datetime'" + vFromDate + "' and PERIODID4_TSTAMP lt datetime'" + vNextMonthDate + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
@@ -111,19 +117,30 @@ module.exports = cds.service.impl(async function () {
             flag = '';
             for (var i in req) {
                 var vWeekDate = dateJSONToEDM(req[i].PERIODID4_TSTAMP).split('T')[0];
-                // var vWeekDate = vTstamp.split('T');
-                //  if (req[i].LOCID === 'RX01') {
-                let modQuery = 'UPSERT "CP_IBP_FCHARPLAN" VALUES (' +
+                var vScenario = 'BSL_SCENARIO';
+                req[i].PERIODID4_TSTAMP = vWeekDate;
+                await cds.run(
+                        `DELETE FROM "CP_IBP_FCHARPLAN" WHERE "LOCATION_ID" = '`+ req[i].LOCID +`' 
+                                                          AND "PRODUCT_ID" = '`+ req[i].PRDID +`'
+                                                          AND "CLASS_NUM" = '` + req[i].VCCLASS +  `' 
+                                                          AND "CHAR_NUM" = '` + req[i].VCCHAR + `' 
+                                                          AND "CHARVAL_NUM" = '` + req[i].VCCHARVALUE + `' 
+                                                          AND "VERSION" = '` + req[i].VERSIONID + `'
+                                                          AND "SCENARIO" = '` + vScenario + `'
+                                                          AND "WEEK_DATE" = '` + vWeekDate +  `'`
+                );
+                
+                let modQuery = 'INSERT INTO "CP_IBP_FCHARPLAN" VALUES (' +
                     "'" + req[i].LOCID + "'" + "," +
                     "'" + req[i].PRDID + "'" + "," +
                     "'" + req[i].VCCLASS + "'" + "," +
                     "'" + req[i].VCCHAR + "'" + "," +
                     "'" + req[i].VCCHARVALUE + "'" + "," +
                     "'" + req[i].VERSIONID + "'" + "," +
-                    "'" + req[i].SCENARIOID + "'" + "," +
+                    "'" + vScenario + "'" + "," +
                     "'" + vWeekDate + "'" + "," +
                     "'" + req[i].OPTIONPERCENTAGE + "'" + "," +
-                    "'" + req[i].FINALDEMANDVC + "'" + ')' + ' WITH PRIMARY KEY';
+                    "'" + req[i].FINALDEMANDVC + "'" + ')';// + ' WITH PRIMARY KEY';
                 try {
                     await cds.run(modQuery);
                     flag = 'X';
@@ -1401,13 +1418,28 @@ module.exports = cds.service.impl(async function () {
         for (var i in req) {
             var vWeekDate = dateJSONToEDM(req[i].PERIODID4_TSTAMP);
             var vScenario = 'BSL_SCENARIO';
-            let modQuery = 'UPSERT "CP_IBP_FUTUREDEMAND" VALUES (' +
+            req[i].PERIODID4_TSTAMP = vWeekDate;
+            await cds.run(
+                    `DELETE FROM "CP_IBP_FUTUREDEMAND" WHERE "LOCATION_ID" = '`+ req[i].LOCID +`' 
+                                                      AND "PRODUCT_ID" = '`+ req[i].PRDID +`'
+                                                      AND "VERSION" = '` + req[i].VERSIONID + `'
+                                                      AND "SCENARIO" = '` + vScenario + `'
+                                                      AND "WEEK_DATE" = '` + vWeekDate +  `'`
+            );
+            let modQuery = 'INSERT INTO "CP_IBP_FUTUREDEMAND" VALUES (' +
                 "'" + req[i].LOCID + "'" + "," +
                 "'" + req[i].PRDID + "'" + "," +
                 "'" + req[i].VERSIONID + "'" + "," +
                 "'" + vScenario + "'" + "," +
                 "'" + vWeekDate + "'" + "," +
-                "'" + req[i].TOTALDEMANDOUTPUT + "'" + ')' + ' WITH PRIMARY KEY';
+                "'" + req[i].TOTALDEMANDOUTPUT + "'" + ')';// + ' WITH PRIMARY KEY';
+            // let modQuery = 'UPSERT "CP_IBP_FUTUREDEMAND" VALUES (' +
+            //     "'" + req[i].LOCID + "'" + "," +
+            //     "'" + req[i].PRDID + "'" + "," +
+            //     "'" + req[i].VERSIONID + "'" + "," +
+            //     "'" + vScenario + "'" + "," +
+            //     "'" + vWeekDate + "'" + "," +
+            //     "'" + req[i].TOTALDEMANDOUTPUT + "'" + ')' + ' WITH PRIMARY KEY';
             try {
                 await cds.run(modQuery);
                 flag = 'X';
@@ -1508,7 +1540,19 @@ module.exports = cds.service.impl(async function () {
             for (var i in req) {
                 var vWeekDate = dateJSONToEDM(req[i].PERIODID4_TSTAMP).split('T')[0];                
                 var vScenario = 'BSL_SCENARIO';
-                let modQuery = 'UPSERT "CP_IBP_FCHARPLAN" VALUES (' +
+                req[i].PERIODID4_TSTAMP = vWeekDate;
+                await cds.run(
+                        `DELETE FROM "CP_IBP_FCHARPLAN" WHERE "LOCATION_ID" = '`+ req[i].LOCID +`' 
+                                                          AND "PRODUCT_ID" = '`+ req[i].PRDID +`'
+                                                          AND "CLASS_NUM" = '` + req[i].VCCLASS +  `' 
+                                                          AND "CHAR_NUM" = '` + req[i].VCCHAR + `' 
+                                                          AND "CHARVAL_NUM" = '` + req[i].VCCHARVALUE + `' 
+                                                          AND "VERSION" = '` + req[i].VERSIONID + `'
+                                                          AND "SCENARIO" = '` + vScenario + `'
+                                                          AND "WEEK_DATE" = '` + vWeekDate +  `'`
+                );
+                
+                let modQuery = 'INSERT INTO "CP_IBP_FCHARPLAN" VALUES (' +
                     "'" + req[i].LOCID + "'" + "," +
                     "'" + req[i].PRDID + "'" + "," +
                     "'" + req[i].VCCLASS + "'" + "," +
@@ -1518,7 +1562,18 @@ module.exports = cds.service.impl(async function () {
                     "'" + vScenario + "'" + "," +
                     "'" + vWeekDate + "'" + "," +
                     "'" + req[i].OPTIONPERCENTAGE + "'" + "," +
-                    "'" + req[i].FINALDEMANDVC + "'" + ')' + ' WITH PRIMARY KEY';
+                    "'" + req[i].FINALDEMANDVC + "'" + ')';// + ' WITH PRIMARY KEY';
+                // let modQuery = 'UPSERT "CP_IBP_FCHARPLAN" VALUES (' +
+                //     "'" + req[i].LOCID + "'" + "," +
+                //     "'" + req[i].PRDID + "'" + "," +
+                //     "'" + req[i].VCCLASS + "'" + "," +
+                //     "'" + req[i].VCCHAR + "'" + "," +
+                //     "'" + req[i].VCCHARVALUE + "'" + "," +
+                //     "'" + req[i].VERSIONID + "'" + "," +
+                //     "'" + vScenario + "'" + "," +
+                //     "'" + vWeekDate + "'" + "," +
+                //     "'" + req[i].OPTIONPERCENTAGE + "'" + "," +
+                //     "'" + req[i].FINALDEMANDVC + "'" + ')' + ' WITH PRIMARY KEY';
                 try {
                     await cds.run(modQuery);
                     flag = 'X';

@@ -7,14 +7,7 @@
       "target": "/catalog/$1",
       "destination": "ConfigProd",
       "authenticationType": "xsuaa",
-      "csrfProtection": false
-    },
-    {
-        "source": "^/v2/ibpimport-srv/(.*)$",
-        "target": "/catalog/$1",
-        "destination": "ConfigProd",
-        "authenticationType": "xsuaa",
-        "csrfProtection": false
+      "csrfProtection": true
     },
     {
       "source": "^/resources/(.*)$",

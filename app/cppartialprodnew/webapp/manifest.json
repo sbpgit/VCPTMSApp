@@ -1,0 +1,159 @@
+{
+    "_version": "1.32.0",
+    "sap.app": {
+        "id": "cpapp.cppartialprodnew",
+        "type": "application",
+        "i18n": "i18n/i18n.properties",
+        "applicationVersion": {
+            "version": "0.0.1"
+        },
+        "title": "{{appTitle}}",
+        "description": "{{appDescription}}",
+        "resources": "resources.json",
+        "sourceTemplate": {
+            "id": "@sap-ux/fiori-freestyle-writer:basic",
+            "version": "0.11.15",
+            "toolsId": "fad606dd-e01a-4a16-b5c6-127202aded62"
+        },
+        "dataSources": {
+            "mainService": {
+                "uri": "/v2/catalog/",
+                "type": "OData",
+                "settings": {
+                  "localUri": "localService/CatalogService/metadata.xml",
+                  "odataVersion": "2.0"
+                }
+              }
+        },
+        "crossNavigation": {
+            "inbounds": {
+                "cpapp-cppartialprodnew-inbound": {
+                    "signature": {
+                        "parameters": {},
+                        "additionalParameters": "allowed"
+                    },
+                    "semanticObject": "cppartialprodnew",
+                    "action": "display",
+                    "title": "{{flpTitle}}",
+                    "subTitle": "{{flpSubtitle}}",
+                    "icon": ""
+                }
+            }
+        }
+    },
+    "sap.ui": {
+        "technology": "UI5",
+        "icons": {
+            "icon": "",
+            "favIcon": "",
+            "phone": "",
+            "phone@2": "",
+            "tablet": "",
+            "tablet@2": ""
+        },
+        "deviceTypes": {
+            "desktop": true,
+            "tablet": true,
+            "phone": true
+        }
+    },
+    "sap.ui5": {
+        "flexEnabled": true,
+        "rootView": {
+            "viewName": "cpapp.cppartialprodnew.view.App",
+            "type": "XML",
+            "async": true,
+            "id": "App"
+        },
+        "dependencies": {
+            "minUI5Version": "1.97.2",
+            "libs": {
+                "sap.ui.core": {}
+            }
+        },
+        "contentDensities": {
+            "compact": true,
+            "cozy": true
+        },
+        "models": {
+            "i18n": {
+                "type": "sap.ui.model.resource.ResourceModel",
+                "settings": {
+                    "bundleName": "cpapp.cppartialprodnew.i18n.i18n"
+                }
+            },
+            "oGModel": {
+                "type": "sap.ui.model.json.JSONModel",
+                "settings": {
+                    "defaultBindingMode": "TwoWay"
+                },
+                "preload": true
+            },
+            "BModel": {
+                "dataSource": "mainService",
+                "preload": true,
+                "settings": {
+                  "synchronizationMode": "None",
+                  "operationMode": "Server",
+                  "autoExpandSelect": true,
+                  "earlyRequests": true,
+                  "groupId": "$direct"
+                }
+              }
+        },
+        "resources": {
+            "css": [
+                {
+                    "uri": "css/style.css"
+                }
+            ]
+        },
+        "routing": {
+            "config": {
+                "routerClass": "sap.m.routing.Router",
+                "viewType": "XML",
+                "async": true,
+                "viewPath": "cpapp.cppartialprodnew.view",
+                "controlAggregation": "pages",
+                "controlId": "app",
+                "clearControlAggregation": false
+            },
+            "routes": [
+                {
+                    "name": "Home",
+                    "pattern": "",
+                    "target": [
+                        "Home"
+                    ]
+                },
+                {
+                    "name": "Detail",
+                    "pattern": "Detail",
+                    "target": [
+                        "Detail"
+                    ]
+                }
+            ],
+            "targets": {
+                "Home": {
+                    "viewType": "XML",
+                    "transition": "slide",
+                    "clearControlAggregation": true,
+                    "viewId": "Home",
+                    "viewName": "Home"
+                },
+                "Detail": {
+                    "viewType": "XML",
+                    "transition": "slide",
+                    "clearControlAggregation": true,
+                    "viewId": "Detail",
+                    "viewName": "Detail"
+                }
+            }
+        }
+    },
+    "sap.cloud": {
+        "public": true,
+        "service": "configprod_approuter"
+    }
+}

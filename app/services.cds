@@ -19,3 +19,7 @@ using from './cpjobscheduler/annotations';
 using from './cpjoblog/annotations';
 
 using from './cppartialprod/annotations';
+
+using from './cppartialprodnew/annotations';
+
+using from './cpnewprodintro/annotations';

@@ -491,6 +491,43 @@ context cp {
         key CHARVAL_NUM : String(70) @title : 'Charateristic Value';
             REF_PRODID  : String(40) @title : ' Ref. Product';
     }
+
+    entity VARCHAR_PS {
+        key PRODUCT_ID  : String(40) @title : 'New Product';
+        key LOCATION_ID    : String(4)      @title : 'Location ';
+        key CHAR_NUM    : String(30) @title : 'Charateristic Name';
+        CHAR_TYPE: String(2) @title:'Characteristic Type';
+        SEQUENCE : Integer @title:'Secondary Char. Position';
+    }
+
+    entity CUVTAB_IND {
+        key VTINT : String(10) @title : 'Internal number of variant table';
+        key INDID : String(4)  @title : 'Counter for value assignment alternative';
+        key ATINN : String(10) @title : 'Internal characteristic';
+    }
+
+    entity CUVTAB_VALC {
+        key VTINT : String(10) @title : 'Internal number of variant table';
+        key SLNID : String(5)  @title : 'Counter for value assignment alternative';
+        key ATINN : String(10) @title : 'Internal characteristic';
+        key VLCNT : String(3)  @title : 'Characteristic value counter';
+        VALC  : String(70) @title : 'Characteristic Value';
+    }
+    entity MATVARIANT_HEADER{
+        key MATVARID    : Integer;
+        LOCATION_ID : String(4)  @title : 'Location ';
+        PRODUCT_ID  : String(40) @title : 'New Product';
+        ORDER_COUNT     : Integer    @title : 'Order Count';
+        TOTAL_QTY       : Integer;
+        FIRSTORDDATE    : Date;
+        LASTORDDATE     : Date;
+        ACTIVE          : Boolean;
+    }
+    entity MATVARIANT_ITEM{
+        key MATVARID    : Integer;
+        key CHAR_NUM    : String(30) @title : 'Charateristic Name';
+        key CHARVAL_NUM : String(70) @title : 'Charateristic Value';
+    }
 }
 
 @cds.persistence.exists

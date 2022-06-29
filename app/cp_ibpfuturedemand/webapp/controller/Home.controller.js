@@ -232,9 +232,7 @@ sap.ui.define(
       onNonZero: function (oEvent) {
         that.oTable = that.byId("IBPfdemList");
         that.oGModel = that.getModel("oGModel");
-        var selected = that.byId("idCheck1").getSelected(),
-          name,
-          counter;
+        var selected = that.byId("idCheck1").getSelected();
           that.aData = that.oGModel.getProperty("/tableData");
         that.FinalData = [];
 

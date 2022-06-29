@@ -3482,6 +3482,95 @@
         }
       }
     },
+    "cp.VARCHAR_PS": {
+      "kind": "entity",
+      "elements": {
+        "PRODUCT_ID": {
+          "@title": "New Product",
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+        "LOCATION_ID": {
+          "@title": "Location ",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "CHAR_NUM": {
+          "@title": "Charateristic Name",
+          "key": true,
+          "type": "cds.String",
+          "length": 30
+        },
+        "CHAR_TYPE": {
+          "@title": "Characteristic Type",
+          "type": "cds.String",
+          "length": 2
+        },
+        "SEQUENCE": {
+          "@title": "Secondary Char. Position",
+          "type": "cds.Integer"
+        }
+      }
+    },
+    "cp.CUVTAB_IND": {
+      "kind": "entity",
+      "elements": {
+        "VTINT": {
+          "@title": "Internal number of variant table",
+          "key": true,
+          "type": "cds.String",
+          "length": 10
+        },
+        "INDID": {
+          "@title": "Counter for value assignment alternative",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "ATINN": {
+          "@title": "Internal characteristic",
+          "key": true,
+          "type": "cds.String",
+          "length": 10
+        }
+      }
+    },
+    "cp.CUVTAB_VALC": {
+      "kind": "entity",
+      "elements": {
+        "VTINT": {
+          "@title": "Internal number of variant table",
+          "key": true,
+          "type": "cds.String",
+          "length": 10
+        },
+        "SLNID": {
+          "@title": "Counter for value assignment alternative",
+          "key": true,
+          "type": "cds.String",
+          "length": 5
+        },
+        "ATINN": {
+          "@title": "Internal characteristic",
+          "key": true,
+          "type": "cds.String",
+          "length": 10
+        },
+        "VLCNT": {
+          "@title": "Characteristic value counter",
+          "key": true,
+          "type": "cds.String",
+          "length": 3
+        },
+        "VALC": {
+          "@title": "Characteristic Value",
+          "type": "cds.String",
+          "length": 70
+        }
+      }
+    },
     "V_OBDHDR": {
       "kind": "entity",
       "@cds.persistence.exists": true,
@@ -17233,12 +17322,6 @@
         "PRODUCT_ID": {
           "type": "cds.String",
           "length": 40
-        },
-        "FROMDATE": {
-          "type": "cds.Date"
-        },
-        "TODATE": {
-          "type": "cds.Date"
         }
       },
       "returns": {
