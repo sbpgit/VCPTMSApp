@@ -852,7 +852,7 @@ sap.ui.define(
             jobId: oJobid,
             name: name,
             description: oJobDesc,
-            action: action,
+            action: encodeURIComponent(action),
             httpMethod: "POST",
             active: bActive,
             startTime: dUPSdate,

@@ -144,14 +144,6 @@ modules:
       name: cpappcpjoblog
       target-path: resources/
     - artifacts:
-      - cpappcpnewpartialprod.zip
-      name: cpappcpnewpartialprod
-      target-path: resources/
-    - artifacts:
-      - cpappcppartialprod.zip
-      name: cpappcppartialprod
-      target-path: resources/
-    - artifacts:
       - cpappcppartialprodnew.zip
       name: cpappcppartialprodnew
       target-path: resources/
@@ -312,26 +304,6 @@ modules:
 - name: cpappcpjoblog
   type: html5
   path: app/cpjoblog
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    supported-platforms: []
-- name: cpappcpnewpartialprod
-  type: html5
-  path: app/cpnewpartialprod
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    supported-platforms: []
-- name: cpappcppartialprod
-  type: html5
-  path: app/cppartialprod
   build-parameters:
     build-result: dist
     builder: custom

@@ -2330,7 +2330,7 @@ sap.ui.define(
                 jobId: oJobUpdateData.jobId,
                 name: oJobUpdateData.name,
                 description: oJobUpdateData.description,
-                action: oJobUpdateData.action,
+                action: encodeURIComponent(oJobUpdateData.action),
                 httpMethod: "POST",
                 active: oJobUpdateData.active,
                 startTime: oJobUpdateData.startTime,
@@ -2653,7 +2653,7 @@ sap.ui.define(
               var finalList = {
                 name: JobName,
                 description: sap.ui.getCore().byId("idDesc").getValue(),
-                action: actionText,
+                action: encodeURIComponent(actionText),
                 active: true,
                 httpMethod: "POST",
                 startTime: djSdate,
@@ -2685,7 +2685,7 @@ sap.ui.define(
               var finalList = {
                 name: JobName,
                 description: sap.ui.getCore().byId("idDesc").getValue(),
-                action: actionText,
+                action: encodeURIComponent(actionText),
                 active: true,
                 httpMethod: "POST",
                 startTime: djSdate,
@@ -2707,7 +2707,7 @@ sap.ui.define(
               var finalList = {
                 name: JobName,
                 description: sap.ui.getCore().byId("idDesc").getValue(),
-                action: actionText,
+                action: encodeURIComponent(actionText),
                 active: true,
                 httpMethod: "POST",
                 startTime: djSdate,
@@ -2728,7 +2728,7 @@ sap.ui.define(
               var finalList = {
                 name: JobName,
                 description: sap.ui.getCore().byId("idDesc").getValue(),
-                action: actionText,
+                action: encodeURIComponent(actionText),
                 active: true,
                 active: true,
                 httpMethod: "POST",

@@ -1,0 +1,64 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:l="sap.ui.layout"
+    controllerName="cp.appf.cpprodconfig.controller.ItemDetail"
+    xmlns:html="http://www.w3.org/1999/xhtml" class="ItemMaster">
+    <Page id="idClassChar" title="Product Details" titleAlignment="Center">
+
+        
+        <l:Grid defaultSpan="XL3 L3 M6 S12" >
+        <VBox >
+            <Text text="Class Name :" />
+            <Text text="{oGModel>/className}" />
+        </VBox>
+        <VBox >
+            <Text text="{i18n>prdfamily} :" />
+            <Text text="{oGModel>/prodFam}" />
+        </VBox>
+        <VBox >
+            <Text text="{i18n>proddesc} :" />
+            <Text text="{oGModel>/prodDesc}" />
+        </VBox>
+        <VBox >
+            <Text text="{i18n>prdseries} :" />
+            <Text text="{oGModel>/prodSeries}" />
+        </VBox>
+
+        <VBox>
+            <Text text="{i18n>prdgroup} :" />
+            <Text text="{oGModel>/prodGroup}" />
+        </VBox>
+        <VBox >
+            <Text text="{i18n>prdmodelrange} :" />
+            <Text text="{oGModel>/prodModel}" />
+        </VBox>
+        <VBox>
+            <Text text="{i18n>prdmidrange} :" />
+            <Text text="{oGModel>/prodMidRng}" />
+        </VBox>
+        </l:Grid>
+
+            <content>
+            <SearchField id="DetailSearch" liveChange="onDetailSearch" placeholder="Char Name/ Char Value"/>
+            <Table id="charList" items="{path: '/classresults'}">
+                <columns>
+                    <Column hAlign="Left">
+                        <Text text="{i18n>charname}" />
+                    </Column>
+                    <Column hAlign="Left">
+                        <Text text="{i18n>charval}" />
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem>
+                        <cells>
+                            <Text text="{CHAR_NAME}" />
+                            <Text text="{CHAR_VALUE}" />
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </content>
+    </Page>
+</mvc:View>

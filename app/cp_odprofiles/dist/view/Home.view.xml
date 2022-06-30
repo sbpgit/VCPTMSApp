@@ -1,0 +1,113 @@
+<mvc:View controllerName="cp.odp.cpodprofiles.controller.Home"
+    xmlns:l="sap.ui.layout"
+    xmlns:core="sap.ui.core"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:ux="sap.uxap"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns="sap.m">
+
+
+    <ux:ObjectPageLayout id="ObjectPageLayout">
+        <ux:headerTitle>
+            <ux:ObjectPageDynamicHeaderTitle>
+                <ux:expandedHeading>
+                    <Title text="{i18n>title}" class="boldText" titleAlignment="Center" />
+                </ux:expandedHeading>
+                <ux:snappedHeading>
+                    <FlexBox fitContainer="true" alignItems="Center">
+                        <Title text="{i18n>title}" wrapping="true" />
+                    </FlexBox>
+                </ux:snappedHeading>
+            </ux:ObjectPageDynamicHeaderTitle>
+        </ux:headerTitle>
+        <ux:headerContent>
+            <FlexBox wrap="Wrap" fitContainer="true">
+                <l:Grid defaultSpan="XL3 L3 M6 S12">
+                    <VBox>
+                        <Label text=""/>
+                        <SearchField id="idSearch" placeholder="Search Component" liveChange="onTableSearch"/>
+                    </VBox>
+                    <VBox>
+                        <Label text="Location :" required= "true"/>
+                        <Input id="idloc" value="" placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                    </VBox>
+                    <VBox>
+                        <Label text="Product :" required= "true"/>
+                        <MultiInput id="prodInput" placeholder="Product" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
+                    </VBox>
+
+                    <VBox>
+                        <Label text="Component :"/>
+                        <MultiInput id="compInput" placeholder="Component" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
+                    </VBox>
+
+                    <VBox>
+                        <Label text="Structure Node :" />
+                        <Input id="struInput" placeholder="Structure Node" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                    </VBox>
+                    <VBox>
+                        <Label text=""/>
+                        <Button text="Go" press="onGetData" type="Emphasized" tooltip="Get data based on filters"/>
+                    </VBox>
+                    <VBox>
+                        <Label text="Object Dep :" visible="false"/>
+                        <MultiInput id="objDepInput" visible="false" placeholder="Object Dep" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
+                    </VBox>
+                </l:Grid>
+            </FlexBox>
+        </ux:headerContent>
+        <ux:sections>
+            <ux:ObjectPageSection >
+                <ux:subSections>
+                    <ux:ObjectPageSubSection>
+                        <ux:blocks>
+                            <Table id="idTab" items="{path: '/results'}" mode="MultiSelect" sticky="ColumnHeaders">
+                                <headerToolbar>
+                                    <Toolbar>
+                                        <content>
+                                            <!-- <SearchField id="idSearch" placeholder="Location/ Product/ Component" liveChange="onTableSearch" width="600px"/> -->
+                                            <ToolbarSpacer/>
+                                            <Button id="idAssign" type='Ghost' text="Assign" press="onAssign"></Button>
+                                            <Button id="idUnAssign" type='Ghost' text="UnAssign" press="onUnAssign"></Button>
+                                        </content>
+                                    </Toolbar>
+                                </headerToolbar>
+                                <columns>
+                                    <Column hAlign="Left" vAlign="Middle" visible="false">
+                                        <Text text="{i18n>locId}" />
+                                    </Column>
+                                    <Column hAlign="Left" vAlign="Middle">
+                                        <Text text="{i18n>prdId}" />
+                                    </Column>
+                                    <Column hAlign="Left" vAlign="Middle">
+                                        <Text text="Item No" />
+                                    </Column>
+                                    <Column hAlign="Left" vAlign="Middle">
+                                        <Text text="{i18n>comp}"/>
+                                    </Column>
+                                    <Column hAlign="Left" vAlign="Middle">
+                                        <Text text="{i18n>strucnode}"/>
+                                    </Column>
+                                    <Column hAlign="Left" vAlign="Middle">
+                                        <Text text="Profile"/>
+                                    </Column>
+                                </columns>
+                                <items>
+                                    <ColumnListItem>
+                                        <Text text="{LOCATION_ID}"/>
+                                        <Text text="{PRODUCT_ID}"/>
+                                        <Text text="{ITEM_NUM}"/>
+                                        <Text text="{COMPONENT}"/>
+                                        <Text text="{STRUC_NODE}"/>
+                                        <Text text="{PROFILE}"/>
+                                    </ColumnListItem>
+                                </items>
+                            </Table>
+                        </ux:blocks>
+                    </ux:ObjectPageSubSection>
+                </ux:subSections>
+            </ux:ObjectPageSection>
+        </ux:sections>
+    </ux:ObjectPageLayout>
+
+</mvc:View>

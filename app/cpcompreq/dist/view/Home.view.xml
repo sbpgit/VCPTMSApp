@@ -1,0 +1,97 @@
+<mvc:View controllerName="cpapp.cpcompreq.controller.Home"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core" displayBlock="true"
+    xmlns="sap.m"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:ux="sap.uxap"
+    xmlns:l="sap.ui.layout"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:t="sap.ui.table">
+<ux:ObjectPageLayout id="ObjectPageLayout">
+        <ux:headerTitle>
+            <ux:ObjectPageDynamicHeaderTitle>
+                <ux:expandedHeading>
+                    <Title text="{i18n>pageTitle}" class="boldText" titleAlignment="Center" />
+                </ux:expandedHeading>
+                <ux:snappedHeading>
+					<FlexBox fitContainer="true" alignItems="Center" >
+						<Title text="{i18n>pageTitle}" wrapping="true" />
+					</FlexBox>
+				</ux:snappedHeading>
+            </ux:ObjectPageDynamicHeaderTitle>
+        </ux:headerTitle>
+        <ux:headerContent>
+            <FlexBox wrap="Wrap" fitContainer="true">
+        <l:Grid defaultSpan="XL3 L3 M6 S12" >
+            <VBox >
+                <Label text=""/>
+                <SearchField id="headSearch" liveChange="onSearchCompReq" placeholder="Component, Structure Node" />
+            </VBox>
+            <VBox >
+                <Label text="Location" required="true"/>
+                <Input id="idloc" value=""  placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+            </VBox>
+            <VBox >
+                <Label text="Product" required="true"/>
+                <Input id="idprod"  placeholder="Product" value="" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+
+            </VBox>
+            <VBox >
+                <Label text="IBP Version" required="true"/>
+                <Input id="idver" value=""  placeholder="Version" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+            </VBox>
+            <VBox >
+                <Label text="IBP Scenario" required="true"/>
+                <Input id="idscen" value=""  placeholder="Scenario" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+
+            </VBox>
+            <VBox >
+                <Label text="Valid From" required="true"/>
+                <DatePicker id="fromDate"  value="" displayFormat="yyyy-MM-dd" valueFormat="yyyy-MM-dd" change="handleDateChange"/>
+
+            </VBox>
+            <VBox >
+                <Label text="Valid To" required="true"/>
+                <DatePicker id="toDate"  value="" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="handleDateChange"/>
+
+            </VBox>
+            <VBox >
+                <Label text="Model Version" />
+                <Select id="idModelVer" selectedKey="Active">
+                    <core:ListItem key="Active" text="Active"/>
+                    <core:ListItem key="Simulation" text="Simulation"/>
+                </Select>
+            </VBox>
+            <VBox >
+            <CheckBox id="idCheck1" select="onNonZero" text="Get Non-Zero" selected="true" />
+            </VBox>
+            <VBox>
+                <HBox>
+                    <Button text="Go" type="Emphasized" press="onGetData" tooltip="Get data based on filters" class="sapUiTinyMarginEnd"/>
+                    <Button text="Reset" type="Transparent" press="onResetDate" tooltip="Reset Valid To Date"/>
+                </HBox>
+            </VBox>
+            <Label text="Component" visible="false"/>
+            <Input id="idcomp"  value=""  placeholder="Component" visible="false" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+            <Label text="Structure Node" visible="false"/>
+            <Input id="idstru" value=""  placeholder="Structure Node" visible="false" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+        
+        </l:Grid>
+        </FlexBox>
+        </ux:headerContent>
+        <ux:sections>
+            <ux:ObjectPageSection >
+                <ux:subSections>
+                    <ux:ObjectPageSubSection>
+                        <ux:blocks>
+            <t:Table id="idCompReq" fixedColumnCount="3" selectionMode="Single" alternateRowColors="true" enableSelectAll="false" visibleRowCount="15">
+                <t:columns>
+                </t:columns>
+            </t:Table>
+        </ux:blocks>
+                    </ux:ObjectPageSubSection>
+                </ux:subSections>
+            </ux:ObjectPageSection>
+        </ux:sections>
+    </ux:ObjectPageLayout>
+</mvc:View>
