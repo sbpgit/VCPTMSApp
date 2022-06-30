@@ -13,15 +13,9 @@ const vcConfigTimePeriod = process.env.TimePeriod;
 const classicalSchema = process.env.classicalSchema; 
 
 exports._runMlrRegressions = async function(req) {
-  
 
-   //const regressionParameters = req.data.regressionParameters;
-   //console.log('predictionParameters: ', regressionParameters); 
    
    mlrFuncs._updateMlrGroupParams (req);
-    
-   //const regressionData = req.data.regressionData;
-   //console.log('predictionData: ', regressionData); 
   
    mlrFuncs._updateMlrGroupData(req);
 
@@ -39,13 +33,7 @@ exports._updateMlrGroupParams = function(req) {
     var conn = hana.createConnection();
 
     conn.connect(conn_params);
-/*
-    var sqlStr = 'SET SCHEMA ' + classicalSchema;  
-    // console.log('sqlStr: ', sqlStr);            
-    var stmt=conn.prepare(sqlStr);
-    stmt.exec();
-    stmt.drop();
-*/
+
 // ---------- BEGIN OF DELETE EXISTING PARAMETERS FOR PROVISIONED GROUPS
     let inGroups = [];
     let modelGroup = mlrGroupParams[0].groupId;
@@ -56,10 +44,7 @@ exports._updateMlrGroupParams = function(req) {
         {
             if( mlrGroupParams[i].groupId != mlrGroupParams[i-1].groupId)
             {
-                //inGroups.push(mlrGroupParams[i].GROUP_ID);
                 inGroups.push(mlrGroupParams[i].groupId);
-
-                //console.log('i :', i, 'groupId: ', mlrGroupParams[i].groupId, 'GROUP_ID: ', mlrGroupParams[i].GROUP_ID, );            
 
 
             }
@@ -67,7 +52,6 @@ exports._updateMlrGroupParams = function(req) {
     }
 
     sqlStr = 'SET SCHEMA ' + classicalSchema;  
-    // console.log('sqlStr: ', sqlStr);            
     stmt=conn.prepare(sqlStr);
     stmt.exec();
     stmt.drop();
@@ -76,7 +60,6 @@ exports._updateMlrGroupParams = function(req) {
     {
         sqlStr = 'DELETE FROM "PAL_MLR_PARAMETER_GRP_TAB" ' + 'WHERE GROUP_ID = ' + "'" + inGroups[i] + "'" ;
         stmt=conn.prepare(sqlStr);
-        //result=stmt.exec();
         stmt.exec();
         stmt.drop();
 
@@ -97,7 +80,6 @@ exports._updateMlrGroupParams = function(req) {
         tableObj.push(rowObj);
         
     }
-    //console.log(' tableObj ', tableObj);
 
     sqlStr = 'INSERT INTO "PAL_MLR_PARAMETER_GRP_TAB"' + '(GROUP_ID,PARAM_NAME, INT_VALUE, DOUBLE_VALUE, STRING_VALUE) VALUES(?, ?, ?, ?, ?)';
     stmt = conn.prepare(sqlStr);
@@ -111,8 +93,6 @@ exports._updateMlrGroupData  = function(req) {
     const mlrGroupData = req.data.regressionData;
     var modelVersion = req.data.modelVersion;
 
-    //console.log('_updateMlrGroupData: ', mlrGroupData);         
-
     var mlrType = req.data.mlrType;
 
 
@@ -121,7 +101,6 @@ exports._updateMlrGroupData  = function(req) {
     conn.connect(conn_params);
 
     var sqlStr = 'SET SCHEMA ' + classicalSchema;  
-    // console.log('sqlStr: ', sqlStr);            
     var stmt=conn.prepare(sqlStr);
     stmt.exec();
     stmt.drop();
@@ -158,10 +137,8 @@ exports._updateMlrGroupData  = function(req) {
     }
 
     stmt=conn.prepare(sqlStr);
-    // let results=stmt.exec();
     stmt.exec();
     stmt.drop();
-    //console.log(results);
 
 
     var tableObj = [];	
@@ -171,7 +148,6 @@ exports._updateMlrGroupData  = function(req) {
     {
         groupId = mlrGroupData[i].groupId ;
         ID = mlrGroupData[i].ID;
-        //console.log('_updateMlrGroupData ', ID);
 
         V1 = mlrGroupData[i].att1;
         if (mlrType > 1)
@@ -225,7 +201,6 @@ exports._updateMlrGroupData  = function(req) {
             rowObj.push(groupId,ID, Y, V1,V2,V3,V4,V5,V6,V7,V8,V9,V10,V11,V12);
         tableObj.push(rowObj);
     }
-    //console.log(' tableObj ', tableObj);
     if (mlrType == 1)
     {
         sqlStr = 'INSERT INTO "PAL_MLR_DATA_GRP_TAB_1T"' + '(GROUP_ID,ID,Y,V1) VALUES(?, ?, ?, ?)';
@@ -287,9 +262,7 @@ exports._updateMlrGroupData  = function(req) {
         stmt = conn.prepare(sqlStr);
     }
 
-    //console.log(' _updateMlrGroupData sqlStr ', sqlStr);
 
-    //result=stmt.execBatch(tableObj);
     stmt.execBatch(tableObj);
     stmt.drop();
     conn.disconnect();
@@ -300,7 +273,6 @@ exports._updateMlrGroupData  = function(req) {
 
 exports._runRegressionMlrGroup = async function(req) {
 
-    //console.log('Executing Multi Linear Regression at GROUP');
     var mlrType = req.data.mlrType;
     var mlrModelVersion = req.data.modelVersion;
     console.log('Executing MLR Regression at GROUP REQ MLR Model Version', mlrModelVersion);
@@ -332,17 +304,14 @@ exports._runRegressionMlrGroup = async function(req) {
     else if (mlrType == 12)
         mlrDataTable = "PAL_MLR_DATA_GRP_TAB_12T";
 
-    //var util = require('util');
     var conn = hana.createConnection();
  
     conn.connect(conn_params);
 
     var sqlStr = 'SET SCHEMA ' + classicalSchema;  
-    // console.log('sqlStr: ', sqlStr);            
     var stmt=conn.prepare(sqlStr);
     stmt.exec();
     stmt.drop();
-///////////////////////////////////
     const mlrGroupParams = req.data.regressionParameters;
 
     let inGroups = [];
@@ -354,11 +323,7 @@ exports._runRegressionMlrGroup = async function(req) {
         {
             if( mlrGroupParams[i].groupId != mlrGroupParams[i-1].groupId)
             {
-                //inGroups.push(mlrGroupParams[i].GROUP_ID);
                 inGroups.push(mlrGroupParams[i].groupId);
-
-                //console.log('i :', i, 'groupId: ', mlrGroupParams[i].groupId, 'GROUP_ID: ', mlrGroupParams[i].GROUP_ID, );            
-
 
             }
         }
@@ -367,7 +332,6 @@ exports._runRegressionMlrGroup = async function(req) {
     for (let i = 0; i < inGroups.length; i++)
     {
         sqlStr = 'DELETE FROM "PAL_MLR_COEFFICIENT_GRP_TAB" ' + 'WHERE GROUP_ID = ' + "'" + inGroups[i] + "'" ;
-        //sqlStr ='DELETE FROM PAL_MLR_COEFFICIENT_GRP_TAB WHERE GROUP_ID IN (SELECT GROUP_ID FROM PAL_MLR_DATA_GRP_TAB_3T)';
         stmt=conn.prepare(sqlStr);
         stmt.exec();
         stmt.drop();
@@ -383,7 +347,6 @@ exports._runRegressionMlrGroup = async function(req) {
         stmt.drop();
 
         sqlStr =  'DELETE FROM "PAL_MLR_STATISTICS_GRP_TAB" ' + 'WHERE GROUP_ID = ' + "'" + inGroups[i] + "'" ;
-    //    console.log('_runRegressionMlrGroup sqlStr', sqlStr);
         stmt=conn.prepare(sqlStr);
         stmt.exec();
         stmt.drop();
@@ -396,35 +359,6 @@ exports._runRegressionMlrGroup = async function(req) {
     }
 
 
-
-///////////////////////////////////
-    //var groupId = group;
-//     sqlStr = 'DELETE FROM "PAL_MLR_COEFFICIENT_GRP_TAB" WHERE GROUP_ID IN (SELECT GROUP_ID FROM ' + mlrDataTable + ')';
-//     //sqlStr ='DELETE FROM PAL_MLR_COEFFICIENT_GRP_TAB WHERE GROUP_ID IN (SELECT GROUP_ID FROM PAL_MLR_DATA_GRP_TAB_3T)';
-//     stmt=conn.prepare(sqlStr);
-//     stmt.exec();
-//     stmt.drop();
-
-//     sqlStr =  'DELETE FROM "PAL_MLR_PMML_GRP_TAB" WHERE GROUP_ID IN (SELECT GROUP_ID FROM ' + mlrDataTable + ')';
-//     stmt=conn.prepare(sqlStr);
-//     stmt.exec();
-//     stmt.drop();
-
-//     sqlStr =  'DELETE FROM "PAL_MLR_FITTED_GRP_TAB" WHERE GROUP_ID IN (SELECT GROUP_ID FROM ' + mlrDataTable + ')';
-//     stmt=conn.prepare(sqlStr);
-//     stmt.exec();
-//     stmt.drop();
-
-//     sqlStr =  'DELETE FROM "PAL_MLR_STATISTICS_GRP_TAB" WHERE GROUP_ID IN (SELECT GROUP_ID FROM ' + mlrDataTable + ')';
-// //    console.log('_runRegressionMlrGroup sqlStr', sqlStr);
-//     stmt=conn.prepare(sqlStr);
-//     stmt.exec();
-//     stmt.drop();
-
-//     sqlStr =  'DELETE FROM "PAL_MLR_OPTIMAL_PARAM_GRP_TAB" WHERE GROUP_ID IN (SELECT GROUP_ID FROM ' + mlrDataTable + ')';
-//     stmt=conn.prepare(sqlStr);
-//     stmt.exec();
-//     stmt.drop();
 
     if (mlrType == 1)
         sqlStr = 'call "MLR_MAIN_1T"(' + mlrDataTable + ', ?,?,?,?,?)';
@@ -450,16 +384,11 @@ exports._runRegressionMlrGroup = async function(req) {
         sqlStr = 'call "MLR_MAIN_11T"(' + mlrDataTable + ', ?,?,?,?,?)';
     else if (mlrType == 12)
         sqlStr = 'call "MLR_MAIN_12T"(' + mlrDataTable + ', ?,?,?,?,?)';
-//    console.log('_runRegressionMlrGroup sqlStr',sqlStr);
 
     stmt=conn.prepare(sqlStr);
     var coefficientResults=stmt.exec();
     stmt.drop();
-    
-
-    //console.log('Coefficient Table Results Length:', coefficientResults.length);
-            //console.log('Model Table Results: ', modelResults);
-    
+ 
     var coefficientsObj = [];
 
     for (var i=0; i< coefficientResults.length; i++)
@@ -543,32 +472,7 @@ exports._runRegressionMlrGroup = async function(req) {
 
     var createtAtObj = new Date();
     let idObj = uuidv1();
-    //let uuidObj = uuidv1();
-
-// commenting out from Memory usage Perspective
- 
-    // var cqnQuery = {INSERT:{ into: { ref: ['CP_PALMLRREGRESSIONS'] }, entries: [
-    //     //  {   ID: idObj, createdAt : createtAtObj, 
-    //     {   mlrID: idObj, createdAt : createtAtObj.toISOString(),
-    //         Location : req.data.Location,
-    //         Product : req.data.Product, 
-    //         regressionParameters:req.data.regressionParameters, 
-    //         mlrType : req.data.mlrType,
-    //         regressionData : req.data.regressionData, 
-    //         coefficientOp : coefficientsObj,
-    //         pmmlOp : pmmlObj,
-    //         fittedOp : fittedObj,
-    //         statisticsOp : statisticsObj,
-    //         optimalParamOp : paramSelectionObj}
-    //     ]}}
-
-    // cds.run(cqnQuery);
-//    console.log("PalMlrRegressions",cqnQuery);
-
-
     
-    //console.log('Regression  coefficientsObj', coefficientsObj);
-
     let returnObj = [];	
     let createdAt = createtAtObj;
  
@@ -589,7 +493,6 @@ exports._runRegressionMlrGroup = async function(req) {
 
     returnObj.push({mlrID, createdAt,regressionParameters,mlrType,regressionData,coefficientOp, pmmlOp,fittedOp,statisticsOp,optimalParamOp});
 
-/////
     inGroups = [];
     modelGroup = regressionParameters[0].groupId;
     inGroups.push(modelGroup);
@@ -604,20 +507,7 @@ exports._runRegressionMlrGroup = async function(req) {
         }
     }
 
-    //let mlrGroupParams = req.data.regressionParameters;
-//    console.log("inGroups ", inGroups, "Number of Groups",inGroups.length);
-
-    // var conn_container = hana.createConnection();
- 
-    // conn_container.connect(conn_params_container);
-
-    // sqlStr = 'SET SCHEMA ' + containerSchema; 
-    // // console.log('sqlStr: ', sqlStr);            
-    // stmt=conn_container.prepare(sqlStr);
-    // result=stmt.exec();
-    // stmt.drop();
-
-    var tableObj = [];	
+     var tableObj = [];	
 
     for (let grpIndex = 0; grpIndex < inGroups.length; grpIndex++)
     {
@@ -626,7 +516,6 @@ exports._runRegressionMlrGroup = async function(req) {
         let paramsGroupObj = [];
         let fittedGroupObj = [];	
         let paramSelectionGroupObj = [];
-//        console.log("GROUP_ID ", inGroups[grpIndex]);
 
         
         for (let i = 0; i < regressionParameters.length; i++)
@@ -680,19 +569,7 @@ exports._runRegressionMlrGroup = async function(req) {
                 coeffsGroupObj.push({variableName,coefficientValue,tValue,pValue});
             }
         }
- /*       
-        let cqnQuery = {INSERT:{ into: { ref: ['PalMlrByGroup'] }, entries: [
-        {   mlrGroupID: idObj, createdAt : createtAtObj, groupId : inGroups[grpIndex],
-            regressionParameters:paramsGroupObj, 
-            mlrType : req.data.mlrType,
-            coefficientOp : coeffsGroupObj,
-            fittedOp : fittedGroupObj,
-            statisticsOp : statsGroupObj,
-            optimalParamOp : paramSelectionGroupObj}
-        ]}}
 
-        cds.run(cqnQuery);
-*/   
         let grpStr=inGroups[grpIndex].split('#');
         let profileID = grpStr[0]; 
         let type = grpStr[1];
@@ -717,18 +594,13 @@ exports._runRegressionMlrGroup = async function(req) {
             statisticsOp : statsGroupObj,
             optimalParamOp : paramSelectionGroupObj};
         tableObj.push(rowObj);
-        
-        // let objStr=GroupId.split('_');
-        // let obj_dep = objStr[0];
-        // let obj_counter = objStr[1];
+
         let objStr = GroupId;
 
         let lastIndex = objStr.lastIndexOf('_');
         let obj_dep = objStr.slice(0, lastIndex);
-        // console.log(obj_dep);
 
         let obj_counter = objStr.slice(lastIndex + 1);
-        // console.log(obj_counter); 
 
         sqlStr = 'UPSERT "CP_OD_MODEL_VERSIONS" VALUES (' +
                     "'" + location + "'" + "," +
@@ -742,31 +614,21 @@ exports._runRegressionMlrGroup = async function(req) {
             
         console.log("CP_OD_MODEL_VERSIONS MLR sql update sqlStr", sqlStr);
 
-        // stmt=conn_container.prepare(sqlStr);
-        // stmt.exec();
-        // stmt.drop();
         await cds.run(sqlStr);
     }
-    // conn_container.disconnect();
 
 
     cqnQuery = {INSERT:{ into: { ref: ['CP_PALMLRBYGROUP'] }, entries:  tableObj }};
-//    console.log("_runRegressionMlrGroup cqnQuery",cqnQuery);
 
     cds.run(cqnQuery);
-/////
 
 
     var res = req._.req.res;
     
-    //res.statusCode = 200;
-    //res.setHeader('Content-Type', 'application/json');
+
 
     console.log('headersSent Before Send:', res.headersSent); // false
-    //res.send('OK');
-    //console.log(res.headersSent); // true
-    //res.json({"value":returnObj});
-    
+
     res.send({"value":returnObj});
     console.log('headersSent After Send:', res.headersSent); // false
 
@@ -782,10 +644,6 @@ exports._runRegressionMlrGroup = async function(req) {
 
 exports._runMlrPredictions = async function(req) {
   
-
-   //const predictionParameters = req.data.predictionParameters;
-   //console.log('predictionParameters: ', predictionParameters); 
-   //var groupId = req.data.groupId;
    var groupId = req.data.profile + '#' + req.data.Type + '#' +  req.data.groupId + '#' + req.data.Location + '#' + req.data.Product;
 
    var conn = hana.createConnection();
@@ -793,7 +651,6 @@ exports._runMlrPredictions = async function(req) {
    conn.connect(conn_params);
 
    var sqlStr = 'SET SCHEMA ' + classicalSchema;  
-   // console.log('sqlStr: ', sqlStr);            
    var stmt=conn.prepare(sqlStr);
    var results=stmt.exec();
    stmt.drop();
@@ -822,9 +679,6 @@ exports._runMlrPredictions = async function(req) {
    conn.disconnect(); 
 
    mlrFuncs._updateMlrPredictionParams (req);
-    
-   //const predictionData = req.data.predictionData;
-   //console.log('predictionData: ', predictionData); 
   
    mlrFuncs._updateMlrPredictionData(req);
 
@@ -836,14 +690,12 @@ exports._runMlrPredictions = async function(req) {
 exports._updateMlrPredictionParams = function(req) {
 
     const mlrPredictParams = req.data.predictionParameters;
-    //console.log('mlrPredictParams: ', mlrPredictParams);         
   
     var conn = hana.createConnection();
 
     conn.connect(conn_params);
 
     var sqlStr = 'SET SCHEMA ' + classicalSchema;  
-    // console.log('sqlStr: ', sqlStr);            
     var stmt=conn.prepare(sqlStr);
     stmt.exec();
     stmt.drop();
@@ -851,10 +703,8 @@ exports._updateMlrPredictionParams = function(req) {
     sqlStr = 'DELETE FROM "PAL_MLR_PREDICT_PARAMETER_GRP_TAB"';
 
     stmt=conn.prepare(sqlStr);
-    //results=stmt.exec();
     stmt.exec();
     stmt.drop();
-    //console.log(results);
 
     var tableObj = [];	
         
@@ -869,7 +719,6 @@ exports._updateMlrPredictionParams = function(req) {
         rowObj.push(groupId,paramName,intVal,doubleVal,strVal);
         tableObj.push(rowObj);
     }
-    //console.log(' tableObj ', tableObj);
 
 
     sqlStr = 'INSERT INTO "PAL_MLR_PREDICT_PARAMETER_GRP_TAB"(GROUP_ID,PARAM_NAME, INT_VALUE, DOUBLE_VALUE, STRING_VALUE) VALUES(?, ?, ?, ?, ?)';
@@ -882,10 +731,8 @@ exports._updateMlrPredictionParams = function(req) {
 }
 
 exports._updateMlrPredictionData = function(req) {
-    //console.log('_updateMlrGroupData req: ', req.data);         
 
     const mlrPredictData = req.data.predictionData;
-    //console.log('_updateMlrGroupData: ', mlrGroupData);         
 
     var mlrpType = req.data.mlrpType;
 
@@ -895,7 +742,6 @@ exports._updateMlrPredictionData = function(req) {
     conn.connect(conn_params);
 
     var sqlStr = 'SET SCHEMA ' + classicalSchema;  
-    // console.log('sqlStr: ', sqlStr);            
     var stmt=conn.prepare(sqlStr);
     stmt.exec();
     stmt.drop();
@@ -932,11 +778,8 @@ exports._updateMlrPredictionData = function(req) {
     }
 
     stmt=conn.prepare(sqlStr);
-//    results=stmt.exec();
     stmt.exec();
     stmt.drop();
-    //console.log(results);
-
 
     var tableObj = [];	
     
@@ -945,7 +788,6 @@ exports._updateMlrPredictionData = function(req) {
     {
         groupId = mlrPredictData[i].groupId ;
         ID = mlrPredictData[i].ID;
-        //console.log('_updateMlrGroupData groupId', groupId);
 
         V1 = mlrPredictData[i].att1;
         if (mlrpType > 1)
@@ -997,7 +839,6 @@ exports._updateMlrPredictionData = function(req) {
             rowObj.push(groupId,ID,V1,V2,V3,V4,V5,V6,V7,V8,V9,V10,V11,V12);
         tableObj.push(rowObj);
     }
-    //console.log(' tableObj ', tableObj);
     if (mlrpType == 1)
     {
         sqlStr = "INSERT INTO PAL_MLR_PRED_DATA_GRP_TAB_1T(GROUP_ID,ID,V1) VALUES(?, ?, ?)";
@@ -1073,7 +914,6 @@ exports._runPredictionMlrGroup = async function(req) {
     conn.connect(conn_params);
 
     var sqlStr = 'SET SCHEMA ' + classicalSchema;  
-    // console.log('sqlStr: ', sqlStr);            
     var stmt=conn.prepare(sqlStr);
     var results=stmt.exec();
     stmt.drop();
@@ -1126,18 +966,14 @@ exports._runPredictionMlrGroup = async function(req) {
     var predResults = [];			
     for (var index=0; index<distinctGroups; index++)
     {     
-        //var groupId = ruleIds[index];
         var groupId = results[index].GROUP_ID;
 
         console.log('PredictionMlr Group: ', groupId);
-        //predictionResults = predictionResults + _runHgbtPrediction(groupId);
         let predictionObj = await mlrFuncs._runMlrPrediction(mlrpType, groupId, version, scenario,modelVersion);
-        //value.push({predictionObj});
         predResults.push(predictionObj);
 
         if (index == (distinctGroups -1))
         {
-            //console.log('Prediction Results', predResults);
             let res = req._.req.res;
             res.send({"value":predResults});
             conn.disconnect();
@@ -1155,7 +991,6 @@ exports._runMlrPrediction = async function (mlrpType, group, version, scenario, 
     conn.connect(conn_params);
 
     var sqlStr = 'SET SCHEMA ' + classicalSchema;  
-    // console.log('sqlStr: ', sqlStr);            
     var stmt=conn.prepare(sqlStr);
     var result=stmt.exec();
     stmt.drop();
@@ -1174,7 +1009,6 @@ exports._runMlrPrediction = async function (mlrpType, group, version, scenario, 
     stmt=conn.prepare(sqlStr);
     result=stmt.exec();
     stmt.drop();
-    //console.log(result);
 
     var predDataObj = [];	
     if (mlrpType == 1)
@@ -1194,11 +1028,9 @@ exports._runMlrPrediction = async function (mlrpType, group, version, scenario, 
         result=stmt.exec();
         stmt.drop();
         var predData = result;
-        //console.log('predData :', predData);
 
         for (var i=0; i<predData.length; i++) 
         {
-            //let groupId =  groupId;
             let id =  predData[i].ID;
             let att1 =  predData[i].V1;
             predDataObj.push({GroupId,id,att1});
@@ -1228,11 +1060,9 @@ exports._runMlrPrediction = async function (mlrpType, group, version, scenario, 
         result=stmt.exec();
         stmt.drop();
         var predData = result;
-        //console.log('predData :', predData);
 
         for (var i=0; i<predData.length; i++) 
         {
-            //let groupId =  groupId;
             let id =  predData[i].ID;
             let att1 =  predData[i].V1;
             let att2 =  predData[i].V2;
@@ -1262,12 +1092,9 @@ exports._runMlrPrediction = async function (mlrpType, group, version, scenario, 
         stmt=conn.prepare(sqlStr);
         let predData =stmt.exec();
         stmt.drop();
-        //var predData = result;
-        //console.log('predData :', predData);
 
         for (let i=0; i<predData.length; i++) 
         {
-            //let groupId =  groupId;
             let id =  predData[i].ID;
             let att1 =  predData[i].V1;
             let att2 =  predData[i].V2;
@@ -1298,11 +1125,9 @@ exports._runMlrPrediction = async function (mlrpType, group, version, scenario, 
         result=stmt.exec();
         stmt.drop();
         let predData = result;
-        //console.log('predData :', predData);
 
         for (let i=0; i<predData.length; i++) 
         {
-            //let groupId =  groupId;
             let id =  predData[i].ID;
             let att1 =  predData[i].V1;
             let att2 =  predData[i].V2;
@@ -1314,7 +1139,6 @@ exports._runMlrPrediction = async function (mlrpType, group, version, scenario, 
         sqlStr = 'INSERT INTO ' + '"#PAL_FMLR_COEFICIENT_TBL_' + groupId  + '"' + ' SELECT "VARIABLE_NAME", "COEFFICIENT_VALUE" FROM "PAL_MLR_COEFFICIENT_GRP_TAB" WHERE GROUP_ID = ' 
                     + "'" + groupId + "'" + ' AND VARIABLE_NAME IN (' + "'__PAL_INTERCEPT__','V1','V2','V3','V4'" + ')';
         
-//        console.log('_runMlrPrediction - Coefficients sqlStr', sqlStr)
         stmt=conn.prepare(sqlStr);
         result=stmt.exec();
         stmt.drop();
@@ -1337,11 +1161,9 @@ exports._runMlrPrediction = async function (mlrpType, group, version, scenario, 
         result=stmt.exec();
         stmt.drop();
         let predData = result;
-        //console.log('predData :', predData);
 
         for (let i=0; i<predData.length; i++) 
         {
-            //let groupId =  groupId;
             let id =  predData[i].ID;
             let att1 =  predData[i].V1;
             let att2 =  predData[i].V2;
@@ -1353,7 +1175,6 @@ exports._runMlrPrediction = async function (mlrpType, group, version, scenario, 
 
         sqlStr = 'INSERT INTO ' + '"#PAL_FMLR_COEFICIENT_TBL_' + groupId  + '"' + ' SELECT "VARIABLE_NAME", "COEFFICIENT_VALUE" FROM "PAL_MLR_COEFFICIENT_GRP_TAB" WHERE GROUP_ID = ' 
                    + "'" + groupId + "'" + ' AND VARIABLE_NAME IN (' + "'__PAL_INTERCEPT__','V1','V2','V3','V4','V5'" + ')';
-//        console.log('_runMlrPrediction - Coefficients sqlStr', sqlStr)
 
         stmt=conn.prepare(sqlStr);
         result=stmt.exec();
@@ -1377,11 +1198,9 @@ exports._runMlrPrediction = async function (mlrpType, group, version, scenario, 
         result=stmt.exec();
         stmt.drop();
         let predData = result;
-        //console.log('predData :', predData);
 
         for (let i=0; i<predData.length; i++) 
         {
-            //let groupId =  groupId;
             let id =  predData[i].ID;
             let att1 =  predData[i].V1;
             let att2 =  predData[i].V2;
@@ -1395,7 +1214,6 @@ exports._runMlrPrediction = async function (mlrpType, group, version, scenario, 
 
         sqlStr = 'INSERT INTO ' + '"#PAL_FMLR_COEFICIENT_TBL_' + groupId  + '"' + ' SELECT "VARIABLE_NAME", "COEFFICIENT_VALUE" FROM PAL_MLR_COEFFICIENT_GRP_TAB WHERE GROUP_ID = ' 
                    + "'" + groupId + "'" + ' AND VARIABLE_NAME IN (' + "'__PAL_INTERCEPT__','V1','V2','V3','V4','V5','V6'" + ')';
-//        console.log('_runMlrPrediction - Coefficients sqlStr', sqlStr)
 
         stmt=conn.prepare(sqlStr);
         result=stmt.exec();
@@ -1419,11 +1237,9 @@ exports._runMlrPrediction = async function (mlrpType, group, version, scenario, 
         result=stmt.exec();
         stmt.drop();
         let predData = result;
-        //console.log('predData :', predData);
 
         for (let i=0; i<predData.length; i++) 
         {
-            //let groupId =  groupId;
             let id =  predData[i].ID;
             let att1 =  predData[i].V1;
             let att2 =  predData[i].V2;
@@ -1438,7 +1254,6 @@ exports._runMlrPrediction = async function (mlrpType, group, version, scenario, 
 
         sqlStr = 'INSERT INTO ' + '"#PAL_FMLR_COEFICIENT_TBL_' + groupId  + '"' +' SELECT "VARIABLE_NAME", "COEFFICIENT_VALUE" FROM "PAL_MLR_COEFFICIENT_GRP_TAB" WHERE GROUP_ID = ' 
                    + "'" + groupId + "'" + ' AND VARIABLE_NAME IN (' + "'__PAL_INTERCEPT__','V1','V2','V3','V4','V5','V6','V7'" + ')';
-//        console.log('_runMlrPrediction - Coefficients sqlStr', sqlStr)
 
         stmt=conn.prepare(sqlStr);
         result=stmt.exec();
@@ -1462,11 +1277,9 @@ exports._runMlrPrediction = async function (mlrpType, group, version, scenario, 
         result=stmt.exec();
         stmt.drop();
         let predData = result;
-        //console.log('predData :', predData);
 
         for (let i=0; i<predData.length; i++) 
         {
-            //let groupId =  groupId;
             let id =  predData[i].ID;
             let att1 =  predData[i].V1;
             let att2 =  predData[i].V2;
@@ -1504,11 +1317,9 @@ exports._runMlrPrediction = async function (mlrpType, group, version, scenario, 
         result=stmt.exec();
         stmt.drop();
         let predData = result;
-        //console.log('predData :', predData);
 
         for (let i=0; i<predData.length; i++) 
         {
-            //let groupId =  groupId;
             let id =  predData[i].ID;
             let att1 =  predData[i].V1;
             let att2 =  predData[i].V2;
@@ -1547,11 +1358,9 @@ exports._runMlrPrediction = async function (mlrpType, group, version, scenario, 
         result=stmt.exec();
         stmt.drop();
         let predData = result;
-        //console.log('predData :', predData);
 
         for (let i=0; i<predData.length; i++) 
         {
-            //let groupId =  groupId;
             let id =  predData[i].ID;
             let att1 =  predData[i].V1;
             let att2 =  predData[i].V2;
@@ -1591,11 +1400,9 @@ exports._runMlrPrediction = async function (mlrpType, group, version, scenario, 
         result=stmt.exec();
         stmt.drop();
         let predData = result;
-        //console.log('predData :', predData);
 
         for (let i=0; i<predData.length; i++) 
         {
-            //let groupId =  groupId;
             let id =  predData[i].ID;
             let att1 =  predData[i].V1;
             let att2 =  predData[i].V2;
@@ -1636,11 +1443,9 @@ exports._runMlrPrediction = async function (mlrpType, group, version, scenario, 
         result=stmt.exec();
         stmt.drop();
         let predData = result;
-        //console.log('predData :', predData);
 
         for (let i=0; i<predData.length; i++) 
         {
-            //let groupId =  groupId;
             let id =  predData[i].ID;
             let att1 =  predData[i].V1;
             let att2 =  predData[i].V2;
@@ -1670,15 +1475,12 @@ exports._runMlrPrediction = async function (mlrpType, group, version, scenario, 
         return;
     }
     
-    //console.log(result);
 
     sqlStr = 'create local temporary column table "#PAL_FMLR_PARAMETER_TAB_' + groupId +  '" ' +
                         "(\"PARAM_NAME\" varchar(256),\"INT_VALUE\" integer,\"double_VALUE\" double,\"STRING_VALUE\" varchar(1000))";
     stmt=conn.prepare(sqlStr);
     result=stmt.exec();
     stmt.drop();
-    //console.log(result);
-
 
     sqlStr = 'INSERT INTO ' + '"#PAL_FMLR_PARAMETER_TAB_' + groupId +  '" ' + ' SELECT "PARAM_NAME", "INT_VALUE", "DOUBLE_VALUE", "STRING_VALUE" FROM "PAL_MLR_PREDICT_PARAMETER_GRP_TAB" WHERE "PAL_MLR_PREDICT_PARAMETER_GRP_TAB".GROUP_ID =' + "'" +  groupId + "'";
 
@@ -1692,12 +1494,10 @@ exports._runMlrPrediction = async function (mlrpType, group, version, scenario, 
     result=stmt.exec();
     stmt.drop();
     var predParams = result;
-    //console.log('predParams :', predParams);
 
     var predParamsObj = [];	
     for (let i=0; i<predParams.length; i++) 
     {
-        //let groupId =  groupId;
         let paramName =  predParams[i].PARAM_NAME;
         let intVal =  predParams[i].INT_VALUE;
         let doubleVal =  predParams[i].DOUBLE_VALUE;
@@ -1712,7 +1512,6 @@ exports._runMlrPrediction = async function (mlrpType, group, version, scenario, 
     stmt=conn.prepare(sqlStr);
     let predictionResults=stmt.exec();
     stmt.drop();
-    //console.log('Prediction Results ', predictionResults);
 
     // --------------- BEGIN --------------------
 
@@ -1729,31 +1528,10 @@ exports._runMlrPrediction = async function (mlrpType, group, version, scenario, 
 
 
     var createtAtObj = new Date();
-    //let idObj = groupId;
     let idObj = uuidv1();
-     // commenting out from Memory usage Perspective
-   
-    // var cqnQuery = {INSERT:{ into: { ref: ['CP_PALMLRPREDICTIONS'] }, entries: [
-    //      {mlrpID: idObj, createdAt : createtAtObj.toISOString(), Location : location, 
-    //       Product : product, groupId : GroupId, Type: odType, modelVersion: modelVersion, 
-    //       profile: profileId, Version : version, Scenario : scenario,
-    //       predictionParameters:predParamsObj, mlrpType : mlrpType, 
-    //       predictionData : predDataObj, fittedResults : fittedObj}
-    //      ]}}
 
-    // cds.run(cqnQuery);
 
     conn.disconnect();
-
-    // var conn = hana.createConnection();
- 
-    // conn.connect(conn_params_container);
-
-    // sqlStr = 'SET SCHEMA ' + containerSchema; 
-    // // console.log('sqlStr: ', sqlStr);            
-    // stmt=conn.prepare(sqlStr);
-    // result=stmt.exec();
-    // stmt.drop();
 
     let tpGrpStr=groupId.split('#');
     tpGroupId = tpGrpStr[2] + '#' + tpGrpStr[3] + '#' + tpGrpStr[4];
@@ -1767,39 +1545,21 @@ exports._runMlrPrediction = async function (mlrpType, group, version, scenario, 
              ' ORDER BY ' + '"' + vcConfigTimePeriod + '"' + ' ASC';
 
     var distPeriods=await cds.run(sqlStr);
-    //console.log("Time Periods for Group :", tpGroupId, " Results: ", distPeriods,"periods#",distPeriods.length);
     var predictedTime = new Date().toISOString();
     var trimmedPeriod = vcConfigTimePeriod.replace(/^(["]*)/g, '');
-    //console.log('trimmedPeriod : ', trimmedPeriod, 'vcConfigTimePeriod :', vcConfigTimePeriod);
 
-    // for (let index=0; index<distPeriods.length; index++)
     for (let index=0; index<fittedObj.length; index++)
     {     
         let predictedVal = fittedObj[index].value;
         predictedVal = ( +predictedVal).toFixed(2);
         let periodId = distPeriods[index][trimmedPeriod];
-       // console.log('Inside for loop index: ', index, 'trimmedPeriod : ', trimmedPeriod, 'periodId :', periodId);
-
-        // sqlStr = 'UPDATE "V_FUTURE_DEP_TS" SET "Predicted" = ' + "'" + predictedVal + "'" + "," +
-        //          '"PredictedTime" = ' + "'" + predictedTime + "'" + "," +
-        //          '"PredictedStatus" = ' + "'" + 'SUCCESS' + "'"+ 
-        //          ' WHERE "GroupID" = ' + "'" + groupId + "'" + 
-        //          ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
-
-         //console.log("V_FUTURE_DEP_TS Predicted Value sql update sqlStr", sqlStr)
         sqlStr = 'SELECT DISTINCT "CAL_DATE", "Location", "Product", "Type", "OBJ_DEP", "OBJ_COUNTER", "VERSION", "SCENARIO" ' +
                 'FROM "V_FUTURE_DEP_TS" WHERE "GroupID" = ' + "'" + tpGroupId + "'" + 
                 ' AND "Type" = ' + "'" + odType + "'" +
                 ' AND "VERSION" = ' + "'" + version + "'" +
                 ' AND "SCENARIO" = ' + "'" + scenario + "'" +
                 ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
-        //console.log("V_FUTURE_DEP_TS MLR SELECT sqlStr ", sqlStr);
-
-        // stmt=conn.prepare(sqlStr);
-        // result=stmt.exec();
-        // stmt.drop();
         let result = await cds.run(sqlStr);
-        //console.log("V_FUTURE_DEP_TS MLR SELECT sqlStr result ", result);
         if (result.length > 0)
         {
 
@@ -1818,17 +1578,7 @@ exports._runMlrPrediction = async function (mlrpType, group, version, scenario, 
                         "'" + predictedTime + "'" + "," +
                         "'" + 'SUCCESS' + "'" + ')' + ' WITH PRIMARY KEY';
                 
-                //' WHERE "GroupID" = ' + "'" + groupId + "'" + 
-                //' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
-            //console.log("V_PREDICTIONS Predicted Value MLR sql update sqlStr", sqlStr);
 
-
-            //console.log("V_FUTURE_DEP_TS Predicted Value sql update sqlStr", sqlStr)
-
-            // stmt=conn.prepare(sqlStr);
-            // stmt.exec();
-            // stmt.drop();
-            // await cds.run(sqlStr);
             try {
                 await cds.run(sqlStr);
             }
@@ -1837,23 +1587,7 @@ exports._runMlrPrediction = async function (mlrpType, group, version, scenario, 
                 throw new Error(exception.toString());
             }
 
-            // let method = 'MLR';
-            // sqlStr = 'SELECT CP_PAL_PROFILEOD.PROFILE, METHOD FROM CP_PAL_PROFILEOD ' +
-            //         'INNER JOIN CP_PAL_PROFILEMETH ON '+
-            //         '"CP_PAL_PROFILEOD"."PROFILE" = "CP_PAL_PROFILEMETH"."PROFILE"' +
-            //         ' AND CP_PAL_PROFILEMETH.METHOD = ' + "'" + method + "'" +
-            //         ' AND LOCATION_ID = ' + "'" + result[0].Location + "'" +
-            //         ' AND PRODUCT_ID = ' + "'" + result[0].Product + "'" +
-            //         ' AND OBJ_DEP = ' + "'" + result[0].OBJ_DEP + '_' + result[0].OBJ_COUNTER + "'" +
-            //         ' AND OBJ_TYPE = ' + "'" + result[0].Type + "'";
-                    
-            // //console.log("V_PREDICTIONS IBP Result Plan Predicted Value MLR sql sqlStr", sqlStr);
-            // stmt=conn.prepare(sqlStr);
-            // results = stmt.exec();
-            // stmt.drop();
 
-            // if ( (results.length > 0) &&
-            //     (results[0].METHOD = 'MLR') &&
             if (modelVersion == 'Active')
             {
                 sqlStr = 'UPSERT "CP_IBP_RESULTPLAN_TS" VALUES (' + "'" + result[0].CAL_DATE + "'" + "," +
@@ -1871,12 +1605,6 @@ exports._runMlrPrediction = async function (mlrpType, group, version, scenario, 
                         "'" + 'SUCCESS' + "'" + ')' + ' WITH PRIMARY KEY';
                 
     
-                //console.log("CP_IBP_RESULTPLAN_TS Predicted Value MLR sql update sqlStr", sqlStr);
-
-                // stmt=conn.prepare(sqlStr);
-                // stmt.exec();
-                // stmt.drop();
-                // await cds.run(sqlStr);
                 try {
                     await cds.run(sqlStr);
                 }
@@ -1889,12 +1617,10 @@ exports._runMlrPrediction = async function (mlrpType, group, version, scenario, 
 
     }
 
-    // conn.disconnect();
 
     var conn = hana.createConnection();
     conn.connect(conn_params);
     var sqlStr = 'SET SCHEMA ' + classicalSchema;  
-    // console.log('sqlStr: ', sqlStr);            
     var stmt=conn.prepare(sqlStr);
     result=stmt.exec();
     stmt.drop();
@@ -1902,12 +1628,9 @@ exports._runMlrPrediction = async function (mlrpType, group, version, scenario, 
     // Extract Intercepts and Coefficients
     sqlStr = 'SELECT "GROUP_ID", "VARIABLE_NAME", "COEFFICIENT_VALUE" FROM PAL_MLR_COEFFICIENT_GRP_TAB' +
                  ' WHERE "GROUP_ID" = ' + "'" + groupId + "'";
-    //console.log('sqlStr: ', sqlStr);            
-
     var stmt=conn.prepare(sqlStr);
     result=stmt.exec();
     stmt.drop();
-    //console.log('sqlStr PAL_MLR_COEFFICIENT_GRP_TAB Result: ', result);            
 
     conn.disconnect();
 
@@ -1916,7 +1639,6 @@ exports._runMlrPrediction = async function (mlrpType, group, version, scenario, 
 
     for (let index=0; index<result.length; index++)
     {
-        //console.log('sqlStr PAL_MLR_COEFFICIENT_GRP_TAB index: ', index, 'VAR NAME = ', result[index].VARIABLE_NAME);            
    
         if (result[index].VARIABLE_NAME == '__PAL_INTERCEPT__')
             intercept = result[index].COEFFICIENT_VALUE;
@@ -1946,27 +1668,12 @@ exports._runMlrPrediction = async function (mlrpType, group, version, scenario, 
             c12 = result[index].COEFFICIENT_VALUE;
     }
 
-    //console.log("INTERCEPT = ". intercept);
 
-//    conn.disconnect();
-
-    // var conn = hana.createConnection();
- 
-    // conn.connect(conn_params_container);
-
-    // sqlStr = 'SET SCHEMA ' + containerSchema; 
-    // // console.log('sqlStr: ', sqlStr);            
-    // stmt=conn.prepare(sqlStr);
-    // result=stmt.exec();
-    // stmt.drop();
-
-    // for (let pIndex=0; pIndex<distPeriods.length; pIndex++)
     for (let pIndex=0; pIndex<fittedObj.length; pIndex++)
     {     
         let predictedVal = fittedObj[pIndex].value;
         predictedVal = ( +predictedVal).toFixed(2);
         let periodId = distPeriods[pIndex][trimmedPeriod];
-        //console.log('trimmedPeriod : ', trimmedPeriod, 'vcConfigTimePeriod :', vcConfigTimePeriod);
 
         sqlStr = 'SELECT DISTINCT "CAL_DATE", "Location", "Product", ' +
                  '"Type", "OBJ_DEP", "OBJ_COUNTER", "ROW_ID", "CharCount", "VERSION", "SCENARIO" ' +
@@ -1975,18 +1682,12 @@ exports._runMlrPrediction = async function (mlrpType, group, version, scenario, 
                 ' AND "VERSION" = ' + "'" + version + "'" +
                 ' AND "SCENARIO" = ' + "'" + scenario + "'" +
                 ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
-        //console.log("V_FUTURE_DEP_TS MLR SELECT sqlStr ", sqlStr);
 
         result = [];
 
 
-        // stmt=conn.prepare(sqlStr);
-        // result=stmt.exec();
-        // stmt.drop();
         result = await cds.run(sqlStr);
-        //console.log("V_FUTURE_DEP_TS MLR SELECT sqlStr result ", result, "length = ", result.length);
-
-    
+   
 
         for (let rIndex = 0; rIndex < result.length; rIndex++)
         {
@@ -2021,7 +1722,6 @@ exports._runMlrPrediction = async function (mlrpType, group, version, scenario, 
             else
                impact_percent = 100.0*impact_val/(predictedVal - intercept);
 
-            //console.log("rIndex = ",rIndex,"impact_percent = ", impact_percent,"predictedVal = ", predictedVal, "intercept =",intercept);
             let predicted = predictedVal;
             sqlStr = 'UPSERT "CP_TS_OBJDEP_CHAR_IMPACT_F" VALUES (' + "'" + result[rIndex].CAL_DATE + "'" + "," +
                 "'" + result[rIndex].Location + "'" + "," +
@@ -2041,11 +1741,6 @@ exports._runMlrPrediction = async function (mlrpType, group, version, scenario, 
                 "'" + predicted + "'" + "," +
                 "'" + predictedTime + "'" + ')' + ' WITH PRIMARY KEY';
             
-            //console.log("CP_TS_OBJDEP_CHAR_IMPACT_F MLR UPSERT sqlStr ", sqlStr); 
-  
-            // stmt=conn.prepare(sqlStr);
-            // stmt.exec();
-            // stmt.drop(); 
             try {
                 await cds.run(sqlStr);
             }
@@ -2057,8 +1752,6 @@ exports._runMlrPrediction = async function (mlrpType, group, version, scenario, 
   
 
     }
-    // conn.disconnect();
-
     let returnObj = [];	
     let createdAt = createtAtObj;
     let mlrpID = idObj; 
