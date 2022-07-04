@@ -5,14 +5,14 @@ sap.ui.define(
     "sap/ui/model/json/JSONModel",
     "sap/m/MessageToast",
     "sap/ui/model/Filter",
-    "sap/ui/model/FilterOperator",
+    "sap/ui/model/FilterOperator"
   ],
   function (BaseController, JSONModel, MessageToast, Filter, FilterOperator) {
     "use strict";
     var that, oGModel;
 
     return BaseController.extend(
-      "cpapp.cpjobscheduler.controller.Prediction",
+      "cpapp.cpjobscheduler.controller.Home",
       {
         /**
          * Called when a controller is instantiated and its View controls (if available) are already created.

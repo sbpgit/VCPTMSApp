@@ -12,7 +12,7 @@
     {
       "source": "^/v2/catalog/(.*)$",
       "target": "/v2/catalog/$1",
-      "destination": "ConfigProdPrd",
+      "destination": "ConfigProd",
       "authenticationType": "xsuaa",
       "csrfProtection": true
     },

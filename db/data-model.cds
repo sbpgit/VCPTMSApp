@@ -515,9 +515,11 @@ context cp {
     }
     entity MATVARIANT_HEADER{
         key MATVARID    : Integer;
-        LOCATION_ID : String(4)  @title : 'Location ';
-        PRODUCT_ID  : String(40) @title : 'New Product';
+        LOCATION_ID     : String(4)  @title : 'Location ';
+        PRODUCT_ID      : String(40) @title : 'New Product';
         ORDER_COUNT     : Integer    @title : 'Order Count';
+        MATVAR_TYPE     : String(1);
+        MATVARDESC      : String(50);
         TOTAL_QTY       : Integer;
         FIRSTORDDATE    : Date;
         LASTORDDATE     : Date;

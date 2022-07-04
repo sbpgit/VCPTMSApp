@@ -193,5 +193,8 @@ service CatalogService @(impl : './lib/cat-service.js') {
     function maintainNewProdChar(FLAG : String(1), 
     PRODCHAR : String ) returns String;
    
+// Material Variant
+    function genMatVariant(LOCATION_ID : String(4), PRODUCT_ID : String(40))                                                                                                                                                                                              returns String;
+    
 
 }

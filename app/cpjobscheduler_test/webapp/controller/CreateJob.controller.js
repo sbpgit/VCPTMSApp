@@ -1688,6 +1688,10 @@ sap.ui.define(
             sap.ui.getCore().byId("idSavebt").setText("Update Schedule");
           } else {
             sap.ui.getCore().byId("idSavebt").setText("Create Job");
+            // // 04/07/2022
+            // sap.ui.getCore().byId("idJobSchtype").setSelectedKey("Cr");
+            // // 04/07/2022
+
           }
           that.oGModel.setProperty("/runText", "Generate Model");
 
@@ -1774,6 +1778,10 @@ sap.ui.define(
             sap.ui.getCore().byId("idSavebt").setText("Add Schedule");
           } else if (that.oGModel.getProperty("/UpdateSch") === "X") {
             sap.ui.getCore().byId("idSavebt").setText("Update Schedule");
+          } else {
+            //   // 04/07/2022
+            // sap.ui.getCore().byId("idJobSchtype").setSelectedKey("Cr");
+            // // 04/07/2022
           }
           that.oGModel.setProperty("/runText", "Run Prediction");
 
@@ -1869,7 +1877,11 @@ sap.ui.define(
             sap.ui.getCore().byId("idSavebt").setText("Add Schedule");
           } else if (that.oGModel.getProperty("/UpdateSch") === "X") {
             sap.ui.getCore().byId("idSavebt").setText("Update Schedule");
-          }
+          } else {
+        //     // 04/07/2022
+        //   sap.ui.getCore().byId("idJobSchtype").setSelectedKey("Cr");
+        //   // 04/07/2022
+        }
           that.oGModel.setProperty("/runText", "Time Series History");
 
           if (this.oProd.getValue() && oPastDays) {
@@ -1915,7 +1927,11 @@ sap.ui.define(
             sap.ui.getCore().byId("idSavebt").setText("Add Schedule");
           } else if (that.oGModel.getProperty("/UpdateSch") === "X") {
             sap.ui.getCore().byId("idSavebt").setText("Update Schedule");
-          }
+          } else {
+        //     // 04/07/2022
+        //   sap.ui.getCore().byId("idJobSchtype").setSelectedKey("Cr");
+        //   // 04/07/2022
+        }
 
           if (this.oProd.getValue()) {
             vRuleslist = {
@@ -1965,7 +1981,11 @@ sap.ui.define(
             sap.ui.getCore().byId("idSavebt").setText("Add Schedule");
           } else if (that.oGModel.getProperty("/UpdateSch") === "X") {
             sap.ui.getCore().byId("idSavebt").setText("Update Schedule");
-          }
+          } else {
+        //     // 04/07/2022
+        //   sap.ui.getCore().byId("idJobSchtype").setSelectedKey("Cr");
+        //   // 04/07/2022
+        }
           oLocItem = that.oLoc.getValue();
           oProdItem = this.oProd.getValue();
         //   oSelVer = that.oVer.getValue();
@@ -2049,7 +2069,11 @@ sap.ui.define(
             sap.ui.getCore().byId("idSavebt").setText("Add Schedule");
           } else if (that.oGModel.getProperty("/UpdateSch") === "X") {
             sap.ui.getCore().byId("idSavebt").setText("Update Schedule");
-          }
+          } else {
+        //     // 04/07/2022
+        //   sap.ui.getCore().byId("idJobSchtype").setSelectedKey("Cr");
+        //   // 04/07/2022
+        }
 
           var rRadioBtn = that
             .byId("idRbtnExport")
@@ -2187,7 +2211,11 @@ sap.ui.define(
             sap.ui.getCore().byId("idSavebt").setText("Add Schedule");
           } else if (that.oGModel.getProperty("/UpdateSch") === "X") {
             sap.ui.getCore().byId("idSavebt").setText("Update Schedule");
-          }
+          } else {
+        //     // 04/07/2022
+        //   sap.ui.getCore().byId("idJobSchtype").setSelectedKey("Cr");
+        //   // 04/07/2022
+        }
           var oSelKey = that.byId("idSdi").getSelectedItem().getText();
           that.oGModel.setProperty("/runText", oSelKey);
           this.oGModel.setProperty(
@@ -2243,19 +2271,61 @@ sap.ui.define(
         },
 
         /**
-         * This function is called when chnaging the Recurring Schedule data.
+         * This function is called when changing the Recurring Schedule data.
          */
         onJobTypeChange: function () {
           var selKey = sap.ui.getCore().byId("idJobSchtype").getSelectedKey();
           if (selKey === "Im") {
-            sap.ui.getCore().byId("idSchTime").setVisible(true);
+              // 04-07-2022
+              var dDate = new Date();
+              var idSchTime =  dDate.setMinutes(dDate.getMinutes() + 2);
+              var idSETime =  dDate.setHours(dDate.getHours() + 2);
+              idSchTime = new Date(idSchTime);
+              idSETime = new Date(idSETime);
+
+            sap.ui.getCore().byId("idSchTime").setVisible(false);
             sap.ui.getCore().byId("idCronValues").setVisible(false);
-            sap.ui.getCore().byId("idSchTime").setDateValue();
+            
+            sap.ui.getCore().byId("idSSTime").setVisible(false);
+            sap.ui.getCore().byId("idSETime").setVisible(false);
+
+            sap.ui.getCore().byId("idSchTime").setDateValue(idSchTime);
+            sap.ui.getCore().byId("idSSTime").setDateValue(new Date());
+            sap.ui.getCore().byId("idSETime").setDateValue(idSETime);
+            // 04-07-2022
+
           } else if (selKey === "Cr") {
             sap.ui.getCore().byId("idSchTime").setVisible(false);
             sap.ui.getCore().byId("idCronValues").setVisible(true);
+
+            // 04-07-2022
+            sap.ui.getCore().byId("idSSTime").setVisible(true);
+            sap.ui.getCore().byId("idSETime").setVisible(true);
+
+            sap.ui.getCore().byId("idSchTime").setDateValue();
+            sap.ui.getCore().byId("idSSTime").setDateValue();
+            sap.ui.getCore().byId("idSETime").setDateValue();
+            // 04-07-2022
+
           }
         },
+        // 04-07-2022
+        /**
+         * This function is called after opening the Create Job Details fragment.
+         */
+        afterOpenJobDetails:function(){
+
+            if (that.oGModel.getProperty("/newSch") !== "X" && that.oGModel.getProperty("/UpdateSch") !== "X" ) {
+                sap.ui.getCore().byId("idJobSchtype").setSelectedKey("Cr");
+                sap.ui.getCore().byId("idSSTime").setVisible(true);
+                sap.ui.getCore().byId("idSETime").setVisible(true);
+              }
+
+            if(that.oGModel.getProperty("/UpdateSch") === "X" || that.oGModel.getProperty("/newSch") === "X" ){
+                that.onJobTypeChange();
+            }
+        },
+        // 04-07-2022
 
         /**
          * Called when 'Close/Cancel' button in any dialog is pressed.
@@ -2367,10 +2437,7 @@ sap.ui.define(
           var bButton = that.oGModel.getProperty("/runText"),
             sName = sap.ui.getCore().byId("idname").getValue(),
             lgTime = new Date().getTimezoneOffset();
-          if (
-            that.oGModel.getProperty("/newSch") !== "X" &&
-            that.oGModel.getProperty("/UpdateSch") !== "X"
-          ) {
+          if ( that.oGModel.getProperty("/newSch") !== "X" && that.oGModel.getProperty("/UpdateSch") !== "X") {
             this._oCore
               .byId("idSTime")
               .setDateValue(

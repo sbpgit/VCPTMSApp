@@ -135,9 +135,7 @@ sap.ui.define(
         that._valueHelpDialogStru.setTitleAlignment("Center");
 
         var dDate = new Date();
-
-        var oDateL = dDate.toLocaleDateString().split("/");
-            oDateL = oDateL[2] + "-" + oDateL[0] + "-" + oDateL[1];
+        var oDateL = that.getDateFn(dDate);
 
         //Future 90 days selected date
         var oDateH = new Date(
@@ -145,9 +143,7 @@ sap.ui.define(
             dDate.getMonth(),
             dDate.getDate() + 90
         );
-
-            oDateH = oDateH.toLocaleDateString().split("/");
-            oDateH = oDateH[2] + "-" + oDateH[0] + "-" + oDateH[1];
+        var oDateH = that.getDateFn(oDateH);
 
         that.byId("fromDate").setValue(oDateL);
         that.byId("toDate").setValue(oDateH);

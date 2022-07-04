@@ -1,5 +1,3 @@
-import { Server } from "https";
-
 /*global location*/
 sap.ui.define(
   [
@@ -14,7 +12,7 @@ sap.ui.define(
     var that, oGModel;
 
     return BaseController.extend(
-      "cpapp.cpjobscheduler.controller.Prediction",
+      "cpapp.cpjobscheduler.controller.Home",
       {
         /**
          * Called when a controller is instantiated and its View controls (if available) are already created.
@@ -92,12 +90,15 @@ sap.ui.define(
               }, that);
               oGModel.setProperty("/tableData", oData.results);
               var aData = [];
-              var dDate = that.byId("idDateRange").getValue().split("To");
-              var dLow = new Date(dDate[0]),
-                dHigh = new Date(dDate[1] + " " + "23:59:59");
+              var dDate = that.byId("idDateRange").getValue().split(" To ");
+            //   var dLow = new Date(dDate[0]),
+            //     dHigh = new Date(dDate[1] + " " + "23:59:59");
+            var dLow = dDate[0] + " " + "00:00:00" ,
+                dHigh = dDate[1] + " " + "23:59:59";
               // Filtering data based on selected dates
               for (var i = 0; i < oData.results.length; i++) {
-                var startDate = new Date(oData.results[i].startTime);
+                //var startDate = new Date(oData.results[i].startTime);
+                var startDate = oData.results[i].startTime;
                 if (dLow < startDate && dHigh > startDate) {
                   aData.push(oData.results[i]);
                 }
@@ -167,12 +168,13 @@ sap.ui.define(
         handleDateChange: function (oEvent) {
           var tabData = oGModel.getProperty("/tableData");
           var aData = [];
-          var dDate = that.byId("idDateRange").getValue().split("To");
-          var dLow = new Date(dDate[0]),
-            dHigh = new Date(dDate[1] + " " + "23:59:59");
+          var dDate = that.byId("idDateRange").getValue().split(" To ");
+          var dLow = dDate[0] + " " + "00:00:00",
+            dHigh = dDate[1] + " " + "23:59:59";
           // Filtering data based on selected dates
           for (var i = 0; i < tabData.length; i++) {
-            var startDate = new Date(tabData[i].startTime);
+            // var startDate = new Date(tabData[i].startTime);
+             var startDate = tabData[i].startTime;
             if (dLow < startDate && dHigh > startDate) {
               aData.push(tabData[i]);
             }
