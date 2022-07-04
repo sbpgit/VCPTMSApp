@@ -7,6 +7,7 @@ const { createLogger, format, transports } = require("winston");
 const { combine, timestamp, label, prettyPrint } = format;
 //const ComponentReq = require("./component-req");
 const GenTimeseries = require("./gen-timeseries");
+const SOFunctions = require("./so-function");
 const containerSchema = cds.env.requires.db.credentials.schema;
 // Create connection parameters to continer
 const conn_params_container = {
@@ -679,6 +680,11 @@ module.exports = (srv) => {
     srv.on("generate_timeseriesF", async (req) => {
         const obgenTimeseries = new GenTimeseries();
         await obgenTimeseries.genTimeseriesF(req.data);
+    });
+    // Generate Material Variants
+    srv.on("genMatVariant", async (req) => {
+        const obgenSOFunctions = new SOFunctions();
+        await obgenSOFunctions.genMatVariant(req.data);
     });
      // Maintain Parital product introsduction
      srv.on("maintainPartialProd", async (req) => {

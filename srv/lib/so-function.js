@@ -52,7 +52,10 @@ class SOFunctions{
               ON A.SALES_DOC = B.SALES_DOC
              AND A.SALESDOC_ITEM = B.SALESDOC_ITEM
            WHERE A.LOCATION_ID   = '` + adata.LOCATION_ID + `'
-             AND B.PRODUCT_ID    = '` + adata.PRODUCT_ID + `'`
+             AND B.PRODUCT_ID    = '` + adata.PRODUCT_ID + `'
+             ORDER BY A.SALES_DOC,
+                      A.SALESDOC_ITEM,
+                      B.CHAR_NUM`
         ); 
         
         let liMatVar = [];
@@ -61,8 +64,6 @@ class SOFunctions{
 
 
         for (let cntSO = 0; cntSO < liSales.length; cntSO++) {
-            const element = liSales[cntSO];
-
             if (cntSO === 0 ||
                 liSales[cntSO].SALES_DOC !== liSales[GenF.subOne(cntSO, liSales.length)].SALES_DOC ||
                 liSales[cntSO].SALESDOC_ITEM !== liSales[GenF.subOne(cntSO, liSales.length)].SALESDOC_ITEM) {
@@ -82,6 +83,29 @@ class SOFunctions{
                     liMatVar.push(lsMatVar);
             }       
         }
+
+        for (let cntMV = 0; cntMV < liMatVar.length; cntMV++) {
+            
+            for (let cntMVL = cntMV +  1; cntMVL < liMatVar.length; cntMVL++) {
+                if (liMatVar[cntMV]['CONFIG'] === liMatVar[cntMVL]['CONFIG']) {
+                    liMatVar[cntMV]['TOTAL_QTY'] = liMatVar[cntMV]['TOTAL_QTY'] + liMatVar[cntMVL]['TOTAL_QTY'];
+                    liMatVar[cntMVL]['CONFIG'] = [];
+                    liMatVar[cntMVL]['TOTAL_QTY'] = 0;
+                }
+            }
+        }
+
+        let lCnt = 0;
+        for (let cntMV = 0; cntMV < liMatVar.length; cntMV++) {
+            if(liMatVar[cntMV]['CONFIG'] !== []){
+                lCnt = lCnt + 1;
+            }
+        }
+
+        console.log(liMatVar);
+        console.log(liMatVar.length);        
+
+        console.log(lCnt);
     }
 }
 
