@@ -35,7 +35,6 @@ exports._updateVarmaGroupParams = function(req) {
     conn.connect(conn_params);
 
     var sqlStr = 'SET SCHEMA ' + classicalSchema;  
-    // console.log('sqlStr: ', sqlStr);            
     var stmt=conn.prepare(sqlStr);
     stmt.exec();
     stmt.drop();
@@ -50,7 +49,6 @@ exports._updateVarmaGroupParams = function(req) {
         {
             if( varmaControlParams[i].groupId != varmaControlParams[i-1].groupId)
             {
-               // inGroups.push(varmaControlParams[i].GROUP_ID);
                inGroups.push(varmaControlParams[i].groupId);
 
             }
@@ -61,7 +59,6 @@ exports._updateVarmaGroupParams = function(req) {
         sqlStr = "DELETE FROM PAL_VARMA_CTRL_GRP_TAB WHERE GROUP_ID = " + "'" + inGroups[i] + "'";
         console.log('_updateVarmaGroupParams sqlStr ', sqlStr);
         stmt=conn.prepare(sqlStr);
-        //result=stmt.exec();
         stmt.exec();
         stmt.drop();
 
@@ -82,7 +79,6 @@ exports._updateVarmaGroupParams = function(req) {
         tableObj.push(rowObj);
         
     }
-    //console.log(' tableObj ', tableObj);
 
     sqlStr = "INSERT INTO PAL_VARMA_CTRL_GRP_TAB(GROUP_ID,PARAM_NAME, INT_VALUE, DOUBLE_VALUE, STRING_VALUE) VALUES(?, ?, ?, ?, ?)";
     stmt = conn.prepare(sqlStr);
@@ -105,7 +101,6 @@ exports._updateVarmaGroupData = function(req) {
     conn.connect(conn_params);
 
     var sqlStr = 'SET SCHEMA ' + classicalSchema;  
-    // console.log('sqlStr: ', sqlStr);            
     var stmt=conn.prepare(sqlStr);
     stmt.exec();
     stmt.drop();
@@ -142,11 +137,8 @@ exports._updateVarmaGroupData = function(req) {
     }
 
     stmt=conn.prepare(sqlStr);
-    // let results=stmt.exec();
     stmt.exec();
     stmt.drop();
-    //console.log(results);
-
 
     var tableObj = [];	
 
@@ -155,11 +147,8 @@ exports._updateVarmaGroupData = function(req) {
     for (var i = 0; i < varmaGroupData.length; i++)
     {
         groupId = varmaGroupData[i].groupId ;
-        //timestamp = varmaGroupData[i].timestamp;
         timestamp = varmaGroupData[i].ID;
         target = varmaGroupData[i].target;
-        //console.log('_updateVarmaGroupData ', ID);
-
         att1 = varmaGroupData[i].att1;
         if (varmaType > 1)
             att2 =  varmaGroupData[i].att2;
@@ -317,7 +306,6 @@ exports._genVarmaModelsGroup = async function(req) {
     conn.connect(conn_params);
 
     var sqlStr = 'SET SCHEMA ' + classicalSchema;  
-    // console.log('sqlStr: ', sqlStr);            
     var stmt=conn.prepare(sqlStr);
     stmt.exec();
     stmt.drop();
@@ -332,7 +320,6 @@ exports._genVarmaModelsGroup = async function(req) {
         {
             if( varmaControlParams[i].groupId != varmaControlParams[i-1].groupId)
             {
-               // inGroups.push(varmaControlParams[i].GROUP_ID);
                inGroups.push(varmaControlParams[i].groupId);
 
             }
@@ -343,7 +330,6 @@ exports._genVarmaModelsGroup = async function(req) {
         sqlStr = "DELETE FROM PAL_VARMA_CTRL_GRP_TAB WHERE GROUP_ID = " + "'" + inGroups[i] + "'";
         console.log('_updateVarmaGroupParams sqlStr ', sqlStr);
         stmt=conn.prepare(sqlStr);
-        //result=stmt.exec();
         stmt.exec();
         stmt.drop();
 
@@ -363,23 +349,6 @@ exports._genVarmaModelsGroup = async function(req) {
         stmt.drop();
 
     }
-
-////////////////////////////////////////////////
-    // //var groupId = group;
-    // sqlStr = 'DELETE FROM PAL_VARMA_MODEL_GRP_TAB WHERE GROUP_ID IN (SELECT GROUP_ID FROM ' + varmaDataTable + ')';
-    // stmt=conn.prepare(sqlStr);
-    // stmt.exec();
-    // stmt.drop();
-
-    // sqlStr =  'DELETE FROM PAL_VARMA_FIT_GRP_TAB WHERE GROUP_ID IN (SELECT GROUP_ID FROM ' + varmaDataTable + ')';
-    // stmt=conn.prepare(sqlStr);
-    // stmt.exec();
-    // stmt.drop();
-
-    // sqlStr =  'DELETE FROM PAL_VARMA_IRF_GRP_TAB WHERE GROUP_ID IN (SELECT GROUP_ID FROM ' + varmaDataTable + ')';
-    // stmt=conn.prepare(sqlStr);
-    // stmt.exec();
-    // stmt.drop();
 
     if (varmaType == 1)
         sqlStr = 'call VARMA_MAIN_1T(' + varmaDataTable + ', ?,?,?)';
@@ -412,7 +381,6 @@ exports._genVarmaModelsGroup = async function(req) {
     
 
     console.log('_genVarmaModelsGroup Models Table Results Length:', modelResults.length);
-            //console.log('Model Table Results: ', modelResults);
     
     var models = [];
     modelGroup = modelResults[0].GROUP_ID;
@@ -482,26 +450,7 @@ exports._genVarmaModelsGroup = async function(req) {
 
     var createtAtObj = new Date();
     let idObj = uuidv1();
-    //let uuidObj = uuidv1();
 
-     // commenting out from Memory usage Perspective
-   
-    // let cqnQuery = {INSERT:{ into: { ref: ['CP_PALVARMAMODELS'] }, entries: [
-    //     {   varmaID: idObj, createdAt : createtAtObj.toISOString(), 
-    //         Location : req.data.Location,
-    //         Product : req.data.Product,
-    //         controlParameters:req.data.controlParameters, 
-    //         varmaData : req.data.varmaData, 
-    //         modelsOp : modelsObj,
-    //         fittedOp : fittedObj,
-    //         irfOp : irfObj }
-    //     ]}}
-
-    // await cds.run(cqnQuery);
-
-    // console.log('Varama Model Results', modelsObj);
-
-/////
     controlParameters = req.data.controlParameters;
     inGroups = [];
     inGroup = req.data.controlParameters[0].groupId;
@@ -518,16 +467,6 @@ exports._genVarmaModelsGroup = async function(req) {
     }
 
     console.log("inGroups ", inGroups, "Number of Groups",inGroups.length);
-
-    // var conn_container = hana.createConnection();
- 
-    // conn_container.connect(conn_params_container);
-
-    // sqlStr = 'SET SCHEMA ' + containerSchema; 
-    // // console.log('sqlStr: ', sqlStr);            
-    // stmt=conn_container.prepare(sqlStr);
-    // result=stmt.exec();
-    // stmt.drop();
 
     var tableObj = [];
     for (let grpIndex = 0; grpIndex < inGroups.length; grpIndex++)
@@ -575,17 +514,7 @@ exports._genVarmaModelsGroup = async function(req) {
             }
         }
     
-    /*    
-        let cqnQuery = {INSERT:{ into: { ref: ['PalVarmaByGroup'] }, entries: [
-        {   varmaGroupID: idObj, createdAt : createtAtObj, groupId : inGroups[grpIndex],
-            controlParameters:paramsGroupObj, 
-            varmaType : req.data.varmaType,
-            fittedOp : fittedGroupObj,
-            irfOp : irfGroupObj}
-        ]}}
 
-        cds.run(cqnQuery);
-    */    
         let grpStr=inGroups[grpIndex].split('#');
         let profileID = grpStr[0]; 
         let type = grpStr[1];
@@ -608,19 +537,12 @@ exports._genVarmaModelsGroup = async function(req) {
             irfOp : irfGroupObj};
         tableObj.push(rowObj);
 
-        
-        // let objStr=GroupId.split('_');
-        // let obj_dep = objStr[0];
-        // let obj_counter = objStr[1];
-
         let objStr = GroupId;
 
         let lastIndex = objStr.lastIndexOf('_');
         let obj_dep = objStr.slice(0, lastIndex);
-        // console.log(obj_dep);
 
         let obj_counter = objStr.slice(lastIndex + 1);
-        // console.log(obj_counter); 
 
         sqlStr = 'UPSERT "CP_OD_MODEL_VERSIONS" VALUES (' +
                     "'" + location + "'" + "," +
@@ -635,22 +557,17 @@ exports._genVarmaModelsGroup = async function(req) {
         console.log("CP_OD_MODEL_VERSIONS VARMA sql update sqlStr", sqlStr);
 
         await cds.run(sqlStr);
-        // stmt=conn_container.prepare(sqlStr);
-        // stmt.exec();
-        // stmt.drop();
+
     }
-    // conn_container.disconnect();
 
 
     cqnQuery = {INSERT:{ into: { ref: ['CP_PALVARMABYGROUP'] }, entries:  tableObj }};
 
     await cds.run(cqnQuery);
-/////
 
     let returnObj = [];	
     let createdAt = createtAtObj;
     let varmaID = idObj; //uuidObj;
-//    let controlParameters = req.data.controlParameters;
     let varmaData = req.data.varmaData;
     let modelsOp = modelsObj;
     let fittedOp = fittedObj;
@@ -670,7 +587,6 @@ exports._genVarmaModelsGroup = async function(req) {
 
 exports._runVarmaPredictions = async function(req) {
 
-  //  var groupId = req.data.groupId;
   var groupId = req.data.profile + '#' + req.data.Type + '#' + req.data.groupId + '#' + req.data.Location + '#' + req.data.Product;
 
    var conn = hana.createConnection();
@@ -678,7 +594,6 @@ exports._runVarmaPredictions = async function(req) {
    conn.connect(conn_params);
 
    var sqlStr = 'SET SCHEMA ' + classicalSchema;  
-   // console.log('sqlStr: ', sqlStr);            
    var stmt=conn.prepare(sqlStr);
    var results=stmt.exec();
    stmt.drop();
@@ -717,7 +632,6 @@ exports._runVarmaPredictions = async function(req) {
 exports._updateVarmaPredictionParams = function(req) {
 
     const varmaPredictionParams = req.data.predictionParameters;
-    //console.log('_updateVarmaPredictionParams: ', varmaPredictionParams);         
      if (varmaPredictionParams.length == 0)
         return;
 
@@ -726,7 +640,6 @@ exports._updateVarmaPredictionParams = function(req) {
     conn.connect(conn_params);
 
     var sqlStr = 'SET SCHEMA ' + classicalSchema;  
-    // console.log('sqlStr: ', sqlStr);            
     var stmt=conn.prepare(sqlStr);
     stmt.exec();
     stmt.drop(); 
@@ -734,11 +647,8 @@ exports._updateVarmaPredictionParams = function(req) {
     sqlStr = "DELETE FROM PAL_VARMA_PREDICT_CTRL_GRP_TAB";
 
     stmt=conn.prepare(sqlStr);
-    //results=stmt.exec();
     stmt.exec();
     stmt.drop();
-    //console.log(results);
-
  
     var tableObj = [];	
         
@@ -753,8 +663,6 @@ exports._updateVarmaPredictionParams = function(req) {
         rowObj.push(groupId,paramName,intVal,doubleVal,strVal);
         tableObj.push(rowObj);
     }
-    //console.log(' tableObj ', tableObj);
-
 
     sqlStr = "INSERT INTO PAL_VARMA_PREDICT_CTRL_GRP_TAB(GROUP_ID,PARAM_NAME, INT_VALUE, DOUBLE_VALUE, STRING_VALUE) VALUES(?, ?, ?, ?, ?)";
     stmt = conn.prepare(sqlStr);
@@ -771,17 +679,11 @@ exports._updateVarmaPredictionData = function(req) {
     const predictionData = req.data.predictionData;
     var varmaType = req.data.varmaType;
 
-    //console.log('_updateVarmaPredictionData: ', varmaPredictData);         
-
-
-
-
     var conn = hana.createConnection();
 
     conn.connect(conn_params);
 
     var sqlStr = 'SET SCHEMA ' + classicalSchema;  
-    // console.log('sqlStr: ', sqlStr);            
     var stmt=conn.prepare(sqlStr);
     stmt.exec();
     stmt.drop();
@@ -818,22 +720,15 @@ exports._updateVarmaPredictionData = function(req) {
     }
 
     stmt=conn.prepare(sqlStr);
-//    results=stmt.exec();
     stmt.exec();
     stmt.drop();
-    //console.log(results);
-
-
     var tableObj = [];	
     
     let att1, att2, att3, att4, att5, att6, att7, att8, att9, att10, att11, att12, timestampIdx, groupId;
     for (var i = 0; i < predictionData.length; i++)
     {
         groupId = predictionData[i].groupId ;
-//        timestampIdx = predictionData[i].timestampIdx;
         timestampIdx = predictionData[i].ID;
-
-        //console.log('_updateVarmaGroupData ', ID);
 
         att1 = predictionData[i].att1;
         if (varmaType > 1)
@@ -886,7 +781,6 @@ exports._updateVarmaPredictionData = function(req) {
             rowObj.push(groupId,timestampIdx,att1,att2,att3,att4,att5,att6,att7,att8,att9,att10,att11,att12);
         tableObj.push(rowObj);
     }
-    //console.log(' tableObj ', tableObj);
     if (varmaType == 1)
     {
         sqlStr = "INSERT INTO PAL_VARMA_PRED_DATA_GRP_TAB_1T(GROUP_ID,TIMESTAMP,ATT1) VALUES(?, ?, ?)";
@@ -970,7 +864,6 @@ exports._runPredictionVarmaGroup = async function(req) {
 
     console.log('_runPredictionVarmaGroup varmaType : ', varmaType);
     var sqlStr = 'SET SCHEMA ' + classicalSchema;  
-    // console.log('sqlStr: ', sqlStr);            
     var stmt=conn.prepare(sqlStr);
     var results=stmt.exec();
     stmt.drop();
@@ -1017,13 +910,10 @@ exports._runPredictionVarmaGroup = async function(req) {
     var predResults = [];			
     for (var index=0; index<distinctGroups; index++)
     {     
-        //var groupId = ruleIds[index];
         var groupId = results[index].GROUP_ID;
 
         console.log('PredictionVarma Group: ', groupId);
-        //predictionResults = predictionResults + _runHgbtPrediction(groupId);
         let predictionObj = await varmaFuncs._runVarmaPrediction(varmaType, groupId, version, scenario, modelVersion);
-        //value.push({predictionObj});
         predResults.push(predictionObj);
 
         if (index == (distinctGroups -1))
@@ -1047,7 +937,6 @@ exports._runVarmaPrediction = async function(varmaType, group, version, scenario
     conn.connect(conn_params);
 
     var sqlStr = 'SET SCHEMA ' + classicalSchema;  
-    // console.log('sqlStr: ', sqlStr);            
     var stmt=conn.prepare(sqlStr);
     stmt.exec();
     stmt.drop();
@@ -1067,8 +956,6 @@ exports._runVarmaPrediction = async function(varmaType, group, version, scenario
     stmt=conn.prepare(sqlStr);
     let result=stmt.exec();
     stmt.drop();
-    //console.log(result);
-
 
     sqlStr = 'INSERT INTO ' + '#PAL_VARMA_MODEL_TAB_'+ groupId + ' SELECT "CONTENT_INDEX", "CONTENT_VALUE" FROM PAL_VARMA_MODEL_GRP_TAB WHERE PAL_VARMA_MODEL_GRP_TAB.GROUP_ID =' + "'" + groupId + "'";
 
@@ -1094,11 +981,8 @@ exports._runVarmaPrediction = async function(varmaType, group, version, scenario
         stmt=conn.prepare(sqlStr);
         let predData=stmt.exec();
         stmt.drop();
-        //console.log('predData :', predData);
-
         for (let i=0; i<predData.length; i++) 
         {
-            //let groupId =  groupId;
             let timeStampIdx =  predData[i].TIMESTAMP;
             let att1 =  predData[i].ATT1;
             predDataObj.push({GroupId,timeStampIdx,att1});
@@ -1122,8 +1006,6 @@ exports._runVarmaPrediction = async function(varmaType, group, version, scenario
         stmt=conn.prepare(sqlStr);
         let predData=stmt.exec();
         stmt.drop();
-        //console.log('predData :', predData);
-
         for (let i=0; i<predData.length; i++) 
         {
             //let groupId =  groupId;
@@ -1154,7 +1036,6 @@ exports._runVarmaPrediction = async function(varmaType, group, version, scenario
 
         for (let i=0; i<predData.length; i++) 
         {
-            //let groupId =  groupId;
             let timeStampIdx =  predData[i].TIMESTAMP;
             let att1 =  predData[i].ATT1;
             let att2 =  predData[i].ATT2;
@@ -1180,7 +1061,6 @@ exports._runVarmaPrediction = async function(varmaType, group, version, scenario
         stmt=conn.prepare(sqlStr);
         let predData=stmt.exec();
         stmt.drop();
-        //console.log('predData :', predData);
 
         for (let i=0; i<predData.length; i++) 
         {
@@ -1210,7 +1090,6 @@ exports._runVarmaPrediction = async function(varmaType, group, version, scenario
         stmt=conn.prepare(sqlStr);
         let predData=stmt.exec();
         stmt.drop();
-        //console.log('predData :', predData);
 
         for (let i=0; i<predData.length; i++) 
         {
@@ -1241,11 +1120,9 @@ exports._runVarmaPrediction = async function(varmaType, group, version, scenario
         stmt=conn.prepare(sqlStr);
         let predData=stmt.exec();
         stmt.drop();
-        //console.log('predData :', predData);
 
         for (let i=0; i<predData.length; i++) 
         {
-            //let groupId =  groupId;
             let timeStampIdx =  predData[i].TIMESTAMP;
             let att1 =  predData[i].ATT1;
             let att2 =  predData[i].ATT2;
@@ -1273,11 +1150,9 @@ exports._runVarmaPrediction = async function(varmaType, group, version, scenario
         stmt=conn.prepare(sqlStr);
         let predData=stmt.exec();
         stmt.drop();
-        //console.log('predData :', predData);
 
         for (let i=0; i<predData.length; i++) 
         {
-            //let groupId =  groupId;
             let timeStampIdx =  predData[i].TIMESTAMP;
             let att1 =  predData[i].ATT1;
             let att2 =  predData[i].ATT2;
@@ -1306,11 +1181,9 @@ exports._runVarmaPrediction = async function(varmaType, group, version, scenario
         stmt=conn.prepare(sqlStr);
         let predData=stmt.exec();
         stmt.drop();
-        //console.log('predData :', predData);
 
         for (let i=0; i<predData.length; i++) 
         {
-            //let groupId =  groupId;
             let timeStampIdx =  predData[i].TIMESTAMP;
             let att1 =  predData[i].ATT1;
             let att2 =  predData[i].ATT2;
@@ -1340,11 +1213,9 @@ exports._runVarmaPrediction = async function(varmaType, group, version, scenario
         stmt=conn.prepare(sqlStr);
         let predData=stmt.exec();
         stmt.drop();
-        //console.log('predData :', predData);
 
         for (let i=0; i<predData.length; i++) 
         {
-            //let groupId =  groupId;
             let timeStampIdx =  predData[i].TIMESTAMP;
             let att1 =  predData[i].ATT1;
             let att2 =  predData[i].ATT2;
@@ -1375,11 +1246,9 @@ exports._runVarmaPrediction = async function(varmaType, group, version, scenario
         stmt=conn.prepare(sqlStr);
         let predData=stmt.exec();
         stmt.drop();
-        //console.log('predData :', predData);
 
         for (let i=0; i<predData.length; i++) 
         {
-            //let groupId =  groupId;
             let timeStampIdx =  predData[i].TIMESTAMP;
             let att1 =  predData[i].ATT1;
             let att2 =  predData[i].ATT2;
@@ -1411,11 +1280,9 @@ exports._runVarmaPrediction = async function(varmaType, group, version, scenario
         stmt=conn.prepare(sqlStr);
         let predData=stmt.exec();
         stmt.drop();
-        //console.log('predData :', predData);
 
         for (let i=0; i<predData.length; i++) 
         {
-            //let groupId =  groupId;
             let timeStampIdx =  predData[i].TIMESTAMP;
             let att1 =  predData[i].ATT1;
             let att2 =  predData[i].ATT2;
@@ -1448,11 +1315,9 @@ exports._runVarmaPrediction = async function(varmaType, group, version, scenario
         stmt=conn.prepare(sqlStr);
         let predData=stmt.exec();
         stmt.drop();
-        //console.log('predData :', predData);
 
         for (let i=0; i<predData.length; i++) 
         {
-            //let groupId =  groupId;
             let timeStampIdx =  predData[i].TIMESTAMP;
             let att1 =  predData[i].ATT1;
             let att2 =  predData[i].ATT2;
@@ -1476,14 +1341,12 @@ exports._runVarmaPrediction = async function(varmaType, group, version, scenario
         return;
     }
     
-    //console.log(result);
 
     sqlStr = "create local temporary column table #PAL_VARMA_PREDICT_CTRL_TAB_" + groupId + " " +
                         "(\"PARAM_NAME\" varchar(100),\"INT_VALUE\" integer,\"double_VALUE\" double,\"STRING_VALUE\" varchar(100))";
     stmt=conn.prepare(sqlStr);
     result=stmt.exec();
     stmt.drop();
-    //console.log(result);
 
 
     sqlStr = 'INSERT INTO ' + '#PAL_VARMA_PREDICT_CTRL_TAB_' + groupId + ' SELECT "PARAM_NAME", "INT_VALUE", "DOUBLE_VALUE", "STRING_VALUE" FROM PAL_VARMA_PREDICT_CTRL_GRP_TAB WHERE PAL_VARMA_PREDICT_CTRL_GRP_TAB.GROUP_ID =' + "'" +  groupId + "'";
@@ -1499,12 +1362,10 @@ exports._runVarmaPrediction = async function(varmaType, group, version, scenario
     result=stmt.exec();
     stmt.drop();
     var predParams = result;
-    //console.log('predParams :', predParams);
 
     var predParamsObj = [];	
     for (let i=0; i<predParams.length; i++) 
     {
-        //let groupId =  groupId;
         let paramName =  predParams[i].PARAM_NAME;
         let intVal =  predParams[i].INT_VALUE;
         let doubleVal =  predParams[i].DOUBLE_VALUE;
@@ -1519,7 +1380,6 @@ exports._runVarmaPrediction = async function(varmaType, group, version, scenario
     stmt=conn.prepare(sqlStr);
     let predictionResults=stmt.exec();
     stmt.drop();
-    //console.log('Prediction Results ', predictionResults);
 
     // --------------- BEGIN --------------------
 
@@ -1538,32 +1398,12 @@ exports._runVarmaPrediction = async function(varmaType, group, version, scenario
     }	
 
     var createtAtObj = new Date();
-    //let idObj = groupId;
     let idObj = uuidv1();
     
-    // commenting out from Memory usage Perspective
 
-    // var cqnQuery = {INSERT:{ into: { ref: ['CP_PALVARMAPREDICTIONS'] }, entries: [
-    //      {varmaID: idObj, createdAt : createtAtObj.toISOString(), Location : location, 
-    //       Product : product, groupId : GroupId, Type: odType, modelVersion: modelVersion, profile: profileId, 
-    //       Version : version, Scenario : scenario,
-    //       predictionParameters:predParamsObj, varmaType : varmaType, 
-    //       predictionData : predDataObj, predictedResults : resultsObj}
-    //      ]}}
-
-    // await cds.run(cqnQuery);
 
     conn.disconnect();
 
-    // conn = hana.createConnection();
- 
-    // conn.connect(conn_params_container);
-
-    // sqlStr = 'SET SCHEMA ' + containerSchema; 
-    // // console.log('sqlStr: ', sqlStr);            
-    // stmt=conn.prepare(sqlStr);
-    // result=stmt.exec();
-    // stmt.drop();
     
     let tpGrpStr=groupId.split('#');
     tpGroupId = tpGrpStr[2] + '#' + tpGrpStr[3] + '#' + tpGrpStr[4];
@@ -1580,7 +1420,6 @@ exports._runVarmaPrediction = async function(varmaType, group, version, scenario
     console.log("Time Periods for Group :", groupId, " Results: ", distPeriods);
     var predictedTime = new Date().toISOString();
     var trimmedPeriod = vcConfigTimePeriod.replace(/^(["]*)/g, '');
-    //console.log('trimmedPeriod : ', trimmedPeriod, 'vcConfigTimePeriod :', vcConfigTimePeriod);
     console.log('resultsObj.length : ', resultsObj.length, 'distPeriods.length :', distPeriods.length);
 
 // Update for only length of Results Object
@@ -1589,11 +1428,6 @@ exports._runVarmaPrediction = async function(varmaType, group, version, scenario
         let predictedVal = resultsObj[index].forecast;
         predictedVal = ( +predictedVal).toFixed(2);
         let periodId = distPeriods[index][trimmedPeriod];
-        // sqlStr = 'UPDATE V_FUTURE_DEP_TS SET "Predicted" = ' + "'" + predictedVal + "'" + "," +
-        //          '"PredictedTime" = ' + "'" + predictedTime + "'" + "," +
-        //          '"PredictedStatus" = ' + "'" + 'SUCCESS' + "'"+ 
-        //          ' WHERE "GroupID" = ' + "'" + groupId + "'" + ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
-        // console.log("V_FUTURE_DEP_TS Predicted Value sql update sqlStr", sqlStr)
 
         sqlStr = 'SELECT DISTINCT "CAL_DATE", "Location", "Product", "Type", "OBJ_DEP", "OBJ_COUNTER", "VERSION", "SCENARIO" ' +
                 'FROM "V_FUTURE_DEP_TS" WHERE "GroupID" = ' + "'" + tpGroupId + "'" + 
@@ -1621,15 +1455,9 @@ exports._runVarmaPrediction = async function(varmaType, group, version, scenario
                         "'" + predictedTime + "'" + "," +
                         "'" + 'SUCCESS' + "'" + ')' + ' WITH PRIMARY KEY';
                 
-                //' WHERE "GroupID" = ' + "'" + groupId + "'" + 
-                //' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
             console.log("V_PREDICTIONS Predicted Value sql update sqlStr", sqlStr);
 
-            // stmt=conn.prepare(sqlStr);
-            // stmt.exec();
-            // stmt.drop();
 
-            // await cds.run(sqlStr);
             try {
                 await cds.run(sqlStr);
             }
@@ -1637,23 +1465,7 @@ exports._runVarmaPrediction = async function(varmaType, group, version, scenario
                 console.log("sqlStr ", sqlStr, "index = ", index, "periodId : ",periodId, "predictedVal : ", predictedVal);
                 throw new Error(exception.toString());
             }
-            // let method = 'VARMA';
-            // sqlStr = 'SELECT CP_PAL_PROFILEOD.PROFILE, METHOD FROM CP_PAL_PROFILEOD ' +
-            //         'INNER JOIN CP_PAL_PROFILEMETH ON '+
-            //         '"CP_PAL_PROFILEOD"."PROFILE" = "CP_PAL_PROFILEMETH"."PROFILE"' +
-            //         ' AND CP_PAL_PROFILEMETH.METHOD = ' + "'" + method + "'" +
-            //         ' AND LOCATION_ID = ' + "'" + result[0].Location + "'" +
-            //         ' AND PRODUCT_ID = ' + "'" + result[0].Product + "'" +
-            //         ' AND OBJ_DEP = ' + "'" + result[0].OBJ_DEP + '_' + result[0].OBJ_COUNTER + "'" +
-            //         ' AND OBJ_TYPE = ' + "'" + result[0].Type + "'";
 
-            // console.log("V_PREDICTIONS IBP Result Plan Predicted Value VARMA sql sqlStr", sqlStr);
-            // stmt=conn.prepare(sqlStr);
-            // results = stmt.exec();
-            // stmt.drop();
-
-            // if ( (results.length > 0) &&
-            //     (results[0].METHOD = 'VARMA') &&
             if (modelVersion == 'Active')
             {
                 sqlStr = 'UPSERT "CP_IBP_RESULTPLAN_TS" VALUES (' + "'" + result[0].CAL_DATE + "'" + "," +
@@ -1673,10 +1485,6 @@ exports._runVarmaPrediction = async function(varmaType, group, version, scenario
 
                 console.log("CP_IBP_RESULTPLAN_TS Predicted Value VARMA sql update sqlStr", sqlStr);
 
-                // stmt=conn.prepare(sqlStr);
-                // stmt.exec();
-                // stmt.drop();
-                // await cds.run(sqlStr);
                 try {
                     await cds.run(sqlStr);
                 }
@@ -1689,35 +1497,6 @@ exports._runVarmaPrediction = async function(varmaType, group, version, scenario
 
     }
 
-
-/*
-    sqlStr = 'SELECT DISTINCT ' + '"' + vcConfigTimePeriod + '"' + ' from  V_FUTURE_DEP_TS WHERE  "GroupID" = ' + "'" + groupId + "'" + ' ORDER BY ' + '"' + vcConfigTimePeriod + '"' + ' ASC';
-    console.log("V_FUTURE_DEP_TS Distinct Periods sqlStr", sqlStr)
-    stmt=conn.prepare(sqlStr);
-    var distPeriods=stmt.exec();
-    stmt.drop();
-    console.log("Time Periods for Group :", groupId, " Results: ", distPeriods);
-    var predictedTime = new Date().toISOString();
-    var trimmedPeriod = vcConfigTimePeriod.replace(/^(["]*)/g, '');
-    console.log('trimmedPeriod : ', trimmedPeriod, 'vcConfigTimePeriod :', vcConfigTimePeriod);
-
-    for (var index=0; index<distPeriods.length; index++)
-    {     
-
-        let periodId = distPeriods[index][trimmedPeriod];
-        sqlStr = 'UPDATE V_CBP_FUTURE_DEP_TS SET "Predicted" = ' + "'" + resultsObj[index].FORECAST + "'" + "," +
-                 '"PredictedTime" = ' + "'" + predictedTime + "'" +
-                 ' WHERE "GroupID" = ' + "'" + groupId + "'" + ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
-        console.log("V_FUTURE_DEP_TS Predicted Value sql update sqlStr", sqlStr)
-
-        stmt=conn.prepare(sqlStr);
-        stmt.exec();
-        stmt.drop();
-    }
-    */
-    // conn.disconnect();
-
- 
     let returnObj = [];	
     let createdAt = createtAtObj;
     let varmaID = idObj; 

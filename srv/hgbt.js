@@ -28,15 +28,12 @@ exports._runHgbtRegressionsV1 = async function(req) {
 exports._updateHgbtGroupParamsV1 = function(req) {
     const hgbtGroupParams = req.data.regressionParameters;
 
-    // console.log('_updateHgbtGroupParamsV1: ', hgbtGroupParams);         
-
 
     var conn = hana.createConnection();
 
     conn.connect(conn_params);
 
     var sqlStr = 'SET SCHEMA ' + classicalSchema;  
-    // console.log('sqlStr: ', sqlStr);            
     var stmt=conn.prepare(sqlStr);
     stmt.exec();
     stmt.drop();
@@ -51,7 +48,6 @@ exports._updateHgbtGroupParamsV1 = function(req) {
         {
             if( hgbtGroupParams[i].groupId != hgbtGroupParams[i-1].groupId)
             {
-               // inGroups.push(hgbtGroupParams[i].GROUP_ID);
                 inGroups.push(hgbtGroupParams[i].groupId);
             }
         }
@@ -59,9 +55,7 @@ exports._updateHgbtGroupParamsV1 = function(req) {
     for (let i = 0; i < inGroups.length; i++)
     {
         sqlStr = "DELETE FROM PAL_HGBT_PARAMETER_GRP_TAB WHERE GROUP_ID = " + "'" + inGroups[i] + "'";
-        //console.log('_updateHgbtGroupParamsV1 sqlStr ', sqlStr);
         stmt=conn.prepare(sqlStr);
-        //result=stmt.exec();
         stmt.exec();
         stmt.drop();
 
@@ -82,7 +76,6 @@ exports._updateHgbtGroupParamsV1 = function(req) {
         tableObj.push(rowObj);
         
     }
-    //console.log(' tableObj ', tableObj);
 
     sqlStr = "INSERT INTO PAL_HGBT_PARAMETER_GRP_TAB(GROUP_ID,PARAM_NAME, INT_VALUE, DOUBLE_VALUE, STRING_VALUE) VALUES(?, ?, ?, ?, ?)";
     stmt = conn.prepare(sqlStr);
@@ -106,7 +99,6 @@ exports._updateHgbtGroupDataV1 = function(req) {
     conn.connect(conn_params);
 
     var sqlStr = 'SET SCHEMA ' + classicalSchema;  
-    // console.log('sqlStr: ', sqlStr);            
     var stmt=conn.prepare(sqlStr);
     stmt.exec();
     stmt.drop();
@@ -144,10 +136,8 @@ exports._updateHgbtGroupDataV1 = function(req) {
     }
 
     stmt=conn.prepare(sqlStr);
-    // let results=stmt.exec();
     stmt.exec();
     stmt.drop();
-    //console.log(results);
 
 
     var tableObj = [];	
@@ -158,7 +148,6 @@ exports._updateHgbtGroupDataV1 = function(req) {
     {
         groupId = hgbtGroupData[i].groupId ;
         target = hgbtGroupData[i].target;
-        //console.log('_updatehgbtGroupData ', ID);
 
         att1 = hgbtGroupData[i].att1;
         if (hgbtType > 1)
@@ -212,7 +201,6 @@ exports._updateHgbtGroupDataV1 = function(req) {
 
         tableObj.push(rowObj);
     }
-    //console.log(' tableObj ', tableObj);
     if (hgbtType == 1)
     {
         sqlStr = "INSERT INTO PAL_HGBT_DATA_GRP_TAB_1T(GROUP_ID,ATT1,TARGET) VALUES(?, ?, ?)";
@@ -273,7 +261,6 @@ exports._updateHgbtGroupDataV1 = function(req) {
         sqlStr = "INSERT INTO PAL_HGBT_DATA_GRP_TAB_12T(GROUP_ID,ATT1,ATT2,ATT3,ATT4,ATT5,ATT6,ATT7,ATT8,ATT9,ATT10,ATT11,ATT12,TARGET) VALUES(?, ?, ?, ?, ?,?,?,?,?,?,?,?,?,?)";
         stmt = conn.prepare(sqlStr);
     }
-    // console.log(' _updateHgbtGroupData sqlStr ', sqlStr);
 
     stmt.execBatch(tableObj);
     stmt.drop();
@@ -283,12 +270,10 @@ exports._updateHgbtGroupDataV1 = function(req) {
 }
 
 exports._runRegressionHgbtGroupV1 = async function(req) {
-    //console.log('Executing HGBT Regression at GROUP REQ', req.data);
 
     var hgbtType = req.data.hgbtType;
     var hgbtModelVersion = req.data.modelVersion;
 
-    // console.log('Executing HGBT Regression at GROUP REQ HGBT Model Version', hgbtModelVersion);
 
     var hgbtDataTable;
     if (hgbtType == 1)
@@ -338,7 +323,6 @@ exports._runRegressionHgbtGroupV1 = async function(req) {
         {
             if( hgbtGroupParams[i].groupId != hgbtGroupParams[i-1].groupId)
             {
-               // inGroups.push(hgbtGroupParams[i].GROUP_ID);
                 inGroups.push(hgbtGroupParams[i].groupId);
             }
         }
@@ -373,33 +357,6 @@ exports._runRegressionHgbtGroupV1 = async function(req) {
         stmt.drop();
 
     }
-////////////////////////////////////////////////////////////////
-    // //var groupId = group;
-    // sqlStr = 'DELETE FROM PAL_HGBT_MODEL_GRP_TAB WHERE GROUP_ID IN (SELECT GROUP_ID FROM ' + hgbtDataTable + ')';
-    // stmt=conn.prepare(sqlStr);
-    // stmt.exec();
-    // stmt.drop();
-
-    // sqlStr =  'DELETE FROM PAL_HGBT_IMP_GRP_TAB WHERE GROUP_ID IN (SELECT GROUP_ID FROM ' + hgbtDataTable + ')';
-    // stmt=conn.prepare(sqlStr);
-    // stmt.exec();
-    // stmt.drop();
-
-    // sqlStr =  'DELETE FROM PAL_HGBT_CONFUSION_GRP_TAB WHERE GROUP_ID IN (SELECT GROUP_ID FROM ' + hgbtDataTable + ')';
-    // stmt=conn.prepare(sqlStr);
-    // stmt.exec();
-    // stmt.drop();
-
-    // sqlStr =  'DELETE FROM PAL_HGBT_STATS_GRP_TAB WHERE GROUP_ID IN (SELECT GROUP_ID FROM ' + hgbtDataTable + ')';
-    // //console.log('_runRegressionHgbtGroup sqlStr', sqlStr);
-    // stmt=conn.prepare(sqlStr);
-    // stmt.exec();
-    // stmt.drop();
-
-    // sqlStr =  'DELETE FROM PAL_HGBT_PARAM_SELECTION_GRP_TAB WHERE GROUP_ID IN (SELECT GROUP_ID FROM ' + hgbtDataTable + ')';
-    // stmt=conn.prepare(sqlStr);
-    // stmt.exec();
-    // stmt.drop();
 
     if (hgbtType == 1)
         sqlStr = 'call HGBT_MAIN_1T(' + hgbtDataTable + ', ?,?,?,?,?)';
@@ -425,16 +382,12 @@ exports._runRegressionHgbtGroupV1 = async function(req) {
         sqlStr = 'call HGBT_MAIN_11T(' + hgbtDataTable + ', ?,?,?,?,?)';
     else if (hgbtType == 12)
         sqlStr = 'call HGBT_MAIN_12T(' + hgbtDataTable + ', ?,?,?,?,?)';
-    // console.log('_runRegressionHgbtGroup sqlStr',sqlStr);
 
     stmt=conn.prepare(sqlStr);
     var modelResults=stmt.exec();
     stmt.drop();
     
-
-//    console.log('Models Table Results Length:', modelResults.length);
-//    console.log('Model Table Results: ', modelResults);
-    
+  
     var models = [];
     var modelGroup = modelResults[0].GROUP_ID;
     models.push(modelGroup);
@@ -470,7 +423,6 @@ exports._runRegressionHgbtGroupV1 = async function(req) {
     let importanceResults = stmt.exec();
     stmt.drop();
 
-//    console.log('importanceResults : ', importanceResults);
     for (let i=0; i< importanceResults.length; i++)
     {     
         let groupId = importanceResults[i].GROUP_ID;
@@ -478,7 +430,6 @@ exports._runRegressionHgbtGroupV1 = async function(req) {
         let importance = importanceResults[i].IMPORTANCE;
         impObj.push({groupId,variableName,importance});
     }
-    //console.log('impObj : ', impObj);
 
     var statisticsObj = [];
 
@@ -520,11 +471,7 @@ exports._runRegressionHgbtGroupV1 = async function(req) {
     var createtAtObj = new Date();
     var idObj = uuidv1();
 
-    // console.log("_runRegressionHgbtGroupV1 location ", req.data.Location, " product ", req.data.Product);
-
-
     let cqnQuery = {INSERT:{ into: { ref: ['CP_PALHGBTREGRESSIONSV1'] }, entries: [
-        //  {   ID: idObj, createdAt : createtAtObj, 
         {   hgbtID: idObj, 
             createdAt : createtAtObj.toISOString(), //2021-12-14T12:00:35.940Z', //new Date(), 
             Location : req.data.Location,
@@ -539,13 +486,8 @@ exports._runRegressionHgbtGroupV1 = async function(req) {
         ]}}
         
     // commenting out from Memory usage Perspective
-    // console.log("CP_PALHGBTREGRESSIONSV1 cqnQuery Start " , new Date());
-
     // await cds.run(cqnQuery);
-    // console.log("CP_PALHGBTREGRESSIONSV1 cqnQuery Completed " , new Date());
 
-
-/////
     regressionParameters = req.data.regressionParameters;
 
     inGroups = [];
@@ -563,17 +505,6 @@ exports._runRegressionHgbtGroupV1 = async function(req) {
         }
     }
 
-    //let mlrGroupParams = req.data.regressionParameters;
-    // console.log("inGroups ", inGroups, "Number of Groups",inGroups.length);
-    // var conn_container = hana.createConnection();
- 
-    // conn_container.connect(conn_params_container);
-
-    // sqlStr = 'SET SCHEMA ' + containerSchema; 
-    // // console.log('sqlStr: ', sqlStr);            
-    // stmt=conn_container.prepare(sqlStr);
-    // result=stmt.exec();
-    // stmt.drop();
 
     var tableObj = [];
     for (let grpIndex = 0; grpIndex < inGroups.length; grpIndex++)
@@ -582,7 +513,6 @@ exports._runRegressionHgbtGroupV1 = async function(req) {
         let paramsGroupObj = [];
         let impGroupObj = [];
         let paramSelectionGroupObj = [];
-        // console.log("GROUP_ID ", inGroups[grpIndex]);
 
         
         for (let i = 0; i < regressionParameters.length; i++)
@@ -626,18 +556,7 @@ exports._runRegressionHgbtGroupV1 = async function(req) {
             }           
              
         }
-/*
-        let cqnQuery = {INSERT:{ into: { ref: ['PalHgbtByGroup'] }, entries: [
-        {   hgbtGroupID: idObj, createdAt : createtAtObj, groupId : inGroups[grpIndex],
-            regressionParameters:paramsGroupObj, 
-            hgbtType : req.data.hgbtType,
-            importanceOp : impGroupObj,
-            statisticsOp : statsGroupObj,
-            paramSelectionOp : paramSelectionGroupObj}
-        ]}}
-
-        cds.run(cqnQuery);
-*/        
+        
         let grpStr=inGroups[grpIndex].split('#');
         let profileID = grpStr[0]; 
         let type = grpStr[1];
@@ -645,10 +564,8 @@ exports._runRegressionHgbtGroupV1 = async function(req) {
         let location = grpStr[3];
         let product = grpStr[4];
 
-        // console.log("_runRegressionHgbtGroupV1  grpStr ", grpStr, "profileID ",profileID, "type ", type, "GroupId ",GroupId, " location ", location, " product ", product);
 
         var rowObj = {   hgbtGroupID: idObj, 
-            //createdAt : createtAtObj, 
             createdAt : createtAtObj.toISOString(),
             Location : location,
             Product : product,
@@ -663,18 +580,13 @@ exports._runRegressionHgbtGroupV1 = async function(req) {
             paramSelectionOp : paramSelectionGroupObj};
         tableObj.push(rowObj);
 
-        // let objStr=GroupId.split('_');
-        // let obj_dep = objStr[0];
-        // let obj_counter = objStr[1];
 
         let objStr = GroupId;
 
         let lastIndex = objStr.lastIndexOf('_');
         let obj_dep = objStr.slice(0, lastIndex);
-        // console.log(obj_dep);
 
         let obj_counter = objStr.slice(lastIndex + 1);
-        // console.log(obj_counter); 
 
         sqlStr = 'UPSERT "CP_OD_MODEL_VERSIONS" VALUES (' +
                     "'" + location + "'" + "," +
@@ -686,61 +598,22 @@ exports._runRegressionHgbtGroupV1 = async function(req) {
                     "'" + hgbtModelVersion + "'" + "," +
                     "'" + profileID  + "'" + ')' + ' WITH PRIMARY KEY';
             
-        // console.log("CP_OD_MODEL_VERSIONS HGBT sql update sqlStr", sqlStr);
 
         await cds.run(sqlStr);
-        // stmt=conn_container.prepare(sqlStr);
-        // stmt.exec();
-        // stmt.drop();
+
     }
 
-    // conn_container.disconnect();
 
-//    cqnQuery = {INSERT:{ into: { ref: ['PalHgbtByGroup'] }, entries:  tableObj }};
 
     cqnQuery = {INSERT:{ into: { ref: ['CP_PALHGBTBYGROUP'] }, entries:  tableObj }};
-//    console.log("CP_PALHGBTBYGROUP cQnQuery " , cqnQuery);
 
-    // console.log("CP_PALHGBTBYGROUP cqnQuery Start " , new Date());
     await cds.run(cqnQuery);
-    // console.log("CP_PALHGBTBYGROUP cqnQuery Completed " , new Date());
-/*cqn
-    cqnQuery = {UPDATE:{ entity: 'CP_PALHGBTBYGROUP'},
-        data: { createdAt : createtAtObj },
-        where: hgbtGroupID = idObj
-     };
-
-     cqnQuery = {UPDATE:{
-        entity: { ref : ['CP_PALHGBTBYGROUP'] },
-        data: { createdAt : createtAtObj },
-        where: hgbtGroupID = idObj
-     }};
-
-        console.log("CP_PALHGBTBYGROUP cqnQuery ", cqnQuery);
    
-    cds.run(cqnQuery);
-*/
-
-
-
-/////
-//    console.log('Regression modelsObj', modelsObj);
-/*
-    const sleep = require('await-sleep');
-    console.log('_runRegressionHgbtGroupV1 Sleep Start Time',new Date());
-    await sleep(1000);
-    console.log('_runRegressionHgbtGroupV1 Sleep Completed Time',new Date());
-*/
-
-
-
-
 
 
     let returnObj = [];	
     let createdAt = createtAtObj;
     let hgbtID = idObj; //uuidObj;
-//    let regressionParameters = req.data.regressionParameters;
     let regressionData = req.data.regressionData;
     let modelsOp = modelsObj;
     let importanceOp = impObj;
@@ -764,7 +637,6 @@ exports._runRegressionHgbtGroupV1 = async function(req) {
 
 
 exports._runHgbtPredictionsV1 = async function(req) {
-   //var groupId = req.data.groupId;
    var groupId = req.data.profile + '#' + req.data.Type + '#' + req.data.groupId + '#' + req.data.Location + '#' + req.data.Product;
 
    var conn = hana.createConnection();
@@ -772,7 +644,6 @@ exports._runHgbtPredictionsV1 = async function(req) {
    conn.connect(conn_params);
 
    var sqlStr = 'SET SCHEMA ' + classicalSchema;  
-   // console.log('sqlStr: ', sqlStr);            
    var stmt=conn.prepare(sqlStr);
    var results=stmt.exec();
    stmt.drop();
@@ -781,7 +652,6 @@ exports._runHgbtPredictionsV1 = async function(req) {
    stmt=conn.prepare(sqlStr);
    results = stmt.exec();
    stmt.drop();
-//    console.log('_runHgbtPredictions - sqlStr : ', sqlStr);            
 
    var modelExists = results[0].ModelExists;
    console.log('_runHgbtPredictions - modelExists: ', modelExists);            
@@ -812,14 +682,12 @@ exports._runHgbtPredictionsV1 = async function(req) {
 exports._updateHgbtPredictionParamsV1 = function(req) {
 
     const hgbtPredictParams = req.data.predictionParameters;
-    //console.log('mlrPredictParams: ', mlrPredictParams);         
   
     var conn = hana.createConnection();
 
     conn.connect(conn_params);
 
     var sqlStr = 'SET SCHEMA ' + classicalSchema;  
-    // console.log('sqlStr: ', sqlStr);            
     var stmt=conn.prepare(sqlStr);
     stmt.exec();
     stmt.drop();
@@ -827,10 +695,8 @@ exports._updateHgbtPredictionParamsV1 = function(req) {
     sqlStr = "DELETE FROM PAL_HGBT_PREDICT_PARAMETER_GRP_TAB";
 
     stmt=conn.prepare(sqlStr);
-    //results=stmt.exec();
     stmt.exec();
     stmt.drop();
-    //console.log(results);
 
     var tableObj = [];	
         
@@ -845,8 +711,6 @@ exports._updateHgbtPredictionParamsV1 = function(req) {
         rowObj.push(groupId,paramName,intVal,doubleVal,strVal);
         tableObj.push(rowObj);
     }
-    //console.log(' tableObj ', tableObj);
-
 
     sqlStr = "INSERT INTO PAL_HGBT_PREDICT_PARAMETER_GRP_TAB(GROUP_ID,PARAM_NAME, INT_VALUE, DOUBLE_VALUE, STRING_VALUE) VALUES(?, ?, ?, ?, ?)";
     stmt = conn.prepare(sqlStr);
@@ -861,15 +725,10 @@ exports._updateHgbtPredictionDataV1 = function(req) {
     const hgbtPredictData = req.data.predictionData;
     var hgbtType = req.data.hgbtType;
 
-    //console.log('_updateHgntGroupDataV1: ', hgbtPredictData);         
-
-
-
     var conn = hana.createConnection();
 
     conn.connect(conn_params);
     var sqlStr = 'SET SCHEMA ' + classicalSchema;  
-    // console.log('sqlStr: ', sqlStr);            
     var stmt=conn.prepare(sqlStr);
     stmt.exec();
     stmt.drop();
@@ -906,11 +765,8 @@ exports._updateHgbtPredictionDataV1 = function(req) {
     }
 
     stmt=conn.prepare(sqlStr);
-//    results=stmt.exec();
     stmt.exec();
     stmt.drop();
-    //console.log(results);
-
 
     var tableObj = [];	
     
@@ -918,8 +774,6 @@ exports._updateHgbtPredictionDataV1 = function(req) {
     for (var i = 0; i < hgbtPredictData.length; i++)
     {
         groupId = hgbtPredictData[i].groupId ;
-        //ID = hgbtPredictData[i].id;
-        //console.log('_updateMlrGroupData ', ID);
         ID = hgbtPredictData[i].ID;
         att1 = hgbtPredictData[i].att1;
         if (hgbtType > 1)
@@ -971,7 +825,6 @@ exports._updateHgbtPredictionDataV1 = function(req) {
             rowObj.push(groupId,ID,att1,att2,att3,att4,att5,att6,att7,att8,att9,att10,att11,att12);    
         tableObj.push(rowObj);
     }
-    //console.log(' tableObj ', tableObj);
     if (hgbtType == 1)
     {
         sqlStr = "INSERT INTO PAL_HGBT_PRED_DATA_GRP_TAB_1T(GROUP_ID,ID,ATT1) VALUES(?, ?, ?)";
@@ -1033,10 +886,6 @@ exports._updateHgbtPredictionDataV1 = function(req) {
         sqlStr = "INSERT INTO PAL_HGBT_PRED_DATA_GRP_TAB_12T(GROUP_ID,ID,ATT1,ATT2,ATT3,ATT4,ATT5,ATT6,ATT7,ATT8,ATT9,ATT10,ATT11,ATT12) VALUES(?, ?, ?, ?,?,?,?,?,?,?,?,?,?,?)";
         stmt = conn.prepare(sqlStr);
     }
-    //console.log(' _updateHgbtPredictionDataV1 sqlStr ', sqlStr);
-
-    //console.log(' _updateHgbtPredictionDataV1 tableObj ', tableObj);
-
 
     stmt.execBatch(tableObj);
     stmt.drop();
@@ -1050,7 +899,6 @@ exports._runPredictionHgbtGroupV1 = async function(req) {
  
     conn.connect(conn_params);
     var sqlStr = 'SET SCHEMA ' + classicalSchema;  
-    // console.log('sqlStr: ', sqlStr);            
     var stmt=conn.prepare(sqlStr);
     var results=stmt.exec();
     stmt.drop();
@@ -1059,9 +907,6 @@ exports._runPredictionHgbtGroupV1 = async function(req) {
     var version = req.data.Version;
     var scenario = req.data.Scenario;
     var modelVersion = req.data.modelVersion;
-
-    // console.log('_runPredictionHgbtGroupV1 hgbtType : ', hgbtType);
-
 
     if (hgbtType == 1)
         sqlStr = "SELECT DISTINCT GROUP_ID from  PAL_HGBT_PRED_DATA_GRP_TAB_1T";
@@ -1097,26 +942,19 @@ exports._runPredictionHgbtGroupV1 = async function(req) {
     stmt=conn.prepare(sqlStr);
     results=stmt.exec();
     stmt.drop();
-    // console.log(results);
 
     var distinctGroups = results.length;
-    // console.log('distinctGroups Count: ', distinctGroups);
     
     var predResults = [];			
     for (var index=0; index<distinctGroups; index++)
     {     
-        //var groupId = ruleIds[index];
         var groupId = results[index].GROUP_ID;
 
-        // console.log('PredictionHgbt Group: ', groupId);
-        //predictionResults = predictionResults + _runHgbtPrediction(groupId);
         let predictionObj = await hgbtFuncs._runHgbtPredictionV1(hgbtType, groupId, version, scenario,modelVersion);
-        //value.push({predictionObj});
         predResults.push(predictionObj);
 
         if (index == (distinctGroups -1))
         {
-            //console.log('Prediction Results', predResults);
             let res = req._.req.res;
             res.send({"value":predResults});
             conn.disconnect();
@@ -1126,7 +964,6 @@ exports._runPredictionHgbtGroupV1 = async function(req) {
 
 exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario, modelVersion) {
 
-    // console.log('_runHgbtPredictionV1 - group', group, 'Version ', version, 'Scenario ', scenario, 'Model Version', modelVersion);
 
     var conn = hana.createConnection();
  
@@ -1134,7 +971,6 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
 
     conn.connect(conn_params);
     var sqlStr = 'SET SCHEMA ' + classicalSchema;  
-    // console.log('sqlStr: ', sqlStr);            
     var stmt=conn.prepare(sqlStr);
     var result=stmt.exec();
     stmt.drop();
@@ -1155,8 +991,6 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
     stmt=conn.prepare(sqlStr);
     result=stmt.exec();
     stmt.drop();
-    //console.log(result);
-
 
     sqlStr = 'INSERT INTO ' + '#PAL_HGBT_MODEL_TAB_'+ groupId + ' SELECT "ROW_INDEX", "TREE_INDEX", "MODEL_CONTENT" FROM PAL_HGBT_MODEL_GRP_TAB WHERE PAL_HGBT_MODEL_GRP_TAB.GROUP_ID =' + "'" + groupId + "'";
 
@@ -1183,11 +1017,9 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
         result=stmt.exec();
         stmt.drop();
         var predData = result;
-        //console.log('predData :', predData);
 
         for (var i=0; i<predData.length; i++) 
         {
-            //let groupId =  groupId;
             let id =  predData[i].ID;
             let att1 =  predData[i].ATT1;
             predDataObj.push({GroupId,id,att1});
@@ -1212,11 +1044,9 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
         result=stmt.exec();
         stmt.drop();
         var predData = result;
-        //console.log('predData :', predData);
 
         for (var i=0; i<predData.length; i++) 
         {
-            //let groupId =  groupId;
             let id =  predData[i].ID;
             let att1 =  predData[i].ATT1;
             let att2 =  predData[i].ATT2;
@@ -1240,12 +1070,10 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
         stmt=conn.prepare(sqlStr);
         let predData =stmt.exec();
         stmt.drop();
-        //var predData = result;
-        //console.log('predData :', predData);
+
 
         for (let i=0; i<predData.length; i++) 
         {
-            //let groupId =  groupId;
             let id =  predData[i].ID;
             let att1 =  predData[i].ATT1;
             let att2 =  predData[i].ATT2;
@@ -1270,11 +1098,9 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
         result=stmt.exec();
         stmt.drop();
         let predData = result;
-        //console.log('predData :', predData);
 
         for (let i=0; i<predData.length; i++) 
         {
-            //let groupId =  groupId;
             let id =  predData[i].ID;
             let att1 =  predData[i].ATT1;
             let att2 =  predData[i].ATT2;
@@ -1300,7 +1126,6 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
         result=stmt.exec();
         stmt.drop();
         let predData = result;
-        //console.log('predData :', predData);
 
         for (let i=0; i<predData.length; i++) 
         {
@@ -1332,11 +1157,9 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
         result=stmt.exec();
         stmt.drop();
         let predData = result;
-        //console.log('predData :', predData);
 
         for (let i=0; i<predData.length; i++) 
         {
-            //let groupId =  groupId;
             let id =  predData[i].ID;
             let att1 =  predData[i].ATT1;
             let att2 =  predData[i].ATT2;
@@ -1366,11 +1189,9 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
         result=stmt.exec();
         stmt.drop();
         let predData = result;
-        //console.log('predData :', predData);
 
         for (let i=0; i<predData.length; i++) 
         {
-            //let groupId =  groupId;
             let id =  predData[i].ID;
             let att1 =  predData[i].ATT1;
             let att2 =  predData[i].ATT2;
@@ -1401,7 +1222,6 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
         result=stmt.exec();
         stmt.drop();
         let predData = result;
-        //console.log('predData :', predData);
 
         for (let i=0; i<predData.length; i++) 
         {
@@ -1437,11 +1257,9 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
         result=stmt.exec();
         stmt.drop();
         let predData = result;
-        //console.log('predData :', predData);
 
         for (let i=0; i<predData.length; i++) 
         {
-            //let groupId =  groupId;
             let id =  predData[i].ID;
             let att1 =  predData[i].ATT1;
             let att2 =  predData[i].ATT2;
@@ -1474,8 +1292,6 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
         result=stmt.exec();
         stmt.drop();
         let predData = result;
-        //console.log('predData :', predData);
-
         for (let i=0; i<predData.length; i++) 
         {
             //let groupId =  groupId;
@@ -1512,11 +1328,8 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
         result=stmt.exec();
         stmt.drop();
         let predData = result;
-        //console.log('predData :', predData);
-
         for (let i=0; i<predData.length; i++) 
         {
-            //let groupId =  groupId;
             let id =  predData[i].ID;
             let att1 =  predData[i].ATT1;
             let att2 =  predData[i].ATT2;
@@ -1551,11 +1364,9 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
         result=stmt.exec();
         stmt.drop();
         let predData = result;
-        //console.log('predData :', predData);
 
         for (let i=0; i<predData.length; i++) 
         {
-            //let groupId =  groupId;
             let id =  predData[i].ID;
             let att1 =  predData[i].ATT1;
             let att2 =  predData[i].ATT2;
@@ -1579,15 +1390,12 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
         return;
     }
     
-    //console.log(result);
 
     sqlStr = "create local temporary column table #PAL_HGBT_PARAMETER_TAB_" + groupId + " " +
                         "(\"PARAM_NAME\" varchar(100),\"INT_VALUE\" integer,\"double_VALUE\" double,\"STRING_VALUE\" varchar(100))";
     stmt=conn.prepare(sqlStr);
     result=stmt.exec();
     stmt.drop();
-    //console.log(result);
-
 
     sqlStr = 'INSERT INTO ' + '#PAL_HGBT_PARAMETER_TAB_' + groupId + ' SELECT "PARAM_NAME", "INT_VALUE", "DOUBLE_VALUE", "STRING_VALUE" FROM PAL_HGBT_PREDICT_PARAMETER_GRP_TAB WHERE PAL_HGBT_PREDICT_PARAMETER_GRP_TAB.GROUP_ID =' + "'" +  groupId + "'";
 
@@ -1601,12 +1409,10 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
     result=stmt.exec();
     stmt.drop();
     var predParams = result;
-    //console.log('predParams :', predParams);
 
     var predParamsObj = [];	
     for (let i=0; i<predParams.length; i++) 
     {
-        //let groupId =  groupId;
         let paramName =  predParams[i].PARAM_NAME;
         let intVal =  predParams[i].INT_VALUE;
         let doubleVal =  predParams[i].DOUBLE_VALUE;
@@ -1617,7 +1423,6 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
 
 
     sqlStr = "call _SYS_AFL.PAL_HGBT_PREDICT(" + "#PAL_HGBT_PREDICTDATA_TAB_" + groupId + "," + "#PAL_HGBT_MODEL_TAB_" + groupId + "," + "#PAL_HGBT_PARAMETER_TAB_" + groupId + "," + "?)";
-    // console.log('_runHgbtPredictionV1 hgbtType ', hgbtType);
 
     console.log('_runHgbtPredictionV1 sqlStr ', sqlStr);
 
@@ -1643,33 +1448,13 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
     //let idObj = groupId;
     let idObj = uuidv1();
     
-    // commenting out from Memory usage Perspective
-
-    // var cqnQuery = {INSERT:{ into: { ref: ['CP_PALHGBTPREDICTIONSV1'] }, entries: [
-    //      {hgbtID: idObj, createdAt : createtAtObj.toISOString(), Location : location, 
-    //       Product : product, groupId : GroupId, Type: odType, modelVersion: modelVersion, profile: profileId, 
-    //       Version : version, Scenario : scenario, 
-    //       predictionParameters:predParamsObj, hgbtType : hgbtType, 
-    //       predictionData : predDataObj, predictedResults : resultsObj}
-    //      ]}}
-
-    // await cds.run(cqnQuery);
 
     conn.disconnect();
 
-    // conn = hana.createConnection();
- 
-    // conn.connect(conn_params_container);
 
-    // sqlStr = 'SET SCHEMA ' + containerSchema; 
-    // // console.log('sqlStr: ', sqlStr);            
-    // stmt=conn.prepare(sqlStr);
-    // result=stmt.exec();
-    // stmt.drop();
 
     let tpGrpStr=groupId.split('#');
     tpGroupId = tpGrpStr[2] + '#' + tpGrpStr[3] + '#' + tpGrpStr[4];
-    // console.log('tpGroupId: ', tpGroupId);            
 
     sqlStr = 'SELECT DISTINCT ' + '"' + vcConfigTimePeriod + '"' + 
             ' from  V_FUTURE_DEP_TS WHERE  "GroupID" = ' + "'" + tpGroupId + "'" + 
@@ -1681,34 +1466,22 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
     console.log("Time Periods for Group :", tpGroupId, " Results: ", distPeriods, "periods#",distPeriods.length, "resultsObj Length ",resultsObj.length);
     var predictedTime = new Date().toISOString();
     var trimmedPeriod = vcConfigTimePeriod.replace(/^(["]*)/g, '');
-    // console.log('trimmedPeriod : ', trimmedPeriod, 'vcConfigTimePeriod :', vcConfigTimePeriod);
 
-    // for (var index=0; index<distPeriods.length && index <resultsObj.length; index++)
     for (var index=0; index <resultsObj.length; index++)
 
     {     
         let predictedVal = resultsObj[index].score;
         predictedVal =  (+predictedVal).toFixed(2);
         let periodId = distPeriods[index][trimmedPeriod];
-        // sqlStr = 'UPDATE V_FUTURE_DEP_TS SET "Predicted" = ' + "'" + predictedVal + "'" + "," +
-        //          '"PredictedTime" = ' + "'" + predictedTime + "'" + "," +
-        //          '"PredictedStatus" = ' + "'" + 'SUCCESS' + "'"+ 
-        //          ' WHERE "GroupID" = ' + "'" + groupId + "'" + ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
-        // console.log("V_FUTURE_DEP_TS Predicted Value sql update sqlStr", sqlStr)
-
+ 
         sqlStr = 'SELECT DISTINCT "CAL_DATE", "Location", "Product", "Type", "OBJ_DEP", "OBJ_COUNTER", "OrderQuantity", "VERSION", "SCENARIO" ' +
                     'FROM "V_FUTURE_DEP_TS" WHERE "GroupID" = ' + "'" + tpGroupId + "'" + 
                     ' AND "Type" = ' + "'" + odType + "'" +
                     ' AND "VERSION" = ' + "'" + version + "'" +
                     ' AND "SCENARIO" = ' + "'" + scenario + "'" +
                     ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
-        // console.log("V_FUTURE_DEP_TS HGBT SELECT sqlStr ", sqlStr);
 
-        // stmt=conn.prepare(sqlStr);
-        // result=stmt.exec();
-        // stmt.drop();
         let result = await cds.run(sqlStr);
-        // console.log("V_FUTURE_DEP_TS HGBT SELECT sqlStr result ", result);
 
         if (result.length > 0)
         {
@@ -1727,14 +1500,6 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
                         "'" + predictedTime + "'" + "," +
                         "'" + 'SUCCESS' + "'" + ')' + ' WITH PRIMARY KEY';
                 
-                //' WHERE "GroupID" = ' + "'" + groupId + "'" + 
-                //' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
-            // console.log("V_PREDICTIONS Predicted Value HGBT sql update sqlStr", sqlStr);
-
-            // stmt=conn.prepare(sqlStr);
-            // stmt.exec();
-            // stmt.drop();
-            // await cds.run(sqlStr);
 
             try {
                 await cds.run(sqlStr);
@@ -1744,23 +1509,7 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
                 throw new Error(exception.toString());
             }
 
-        // let method = 'HGBT';
-        // sqlStr = 'SELECT CP_PAL_PROFILEOD.PROFILE, METHOD FROM CP_PAL_PROFILEOD ' +
-        //         'INNER JOIN CP_PAL_PROFILEMETH ON '+
-        //         '"CP_PAL_PROFILEOD"."PROFILE" = "CP_PAL_PROFILEMETH"."PROFILE"' +
-        //         ' AND CP_PAL_PROFILEMETH.METHOD = ' + "'" + method + "'" +
-        //         ' AND LOCATION_ID = ' + "'" + result[0].Location + "'" +
-        //         ' AND PRODUCT_ID = ' + "'" + result[0].Product + "'" +
-        //         ' AND OBJ_DEP = ' + "'" + result[0].OBJ_DEP + '_' + result[0].OBJ_COUNTER + "'" +
-        //         ' AND OBJ_TYPE = ' + "'" + result[0].Type + "'";
-                
-        // console.log("V_PREDICTIONS IBP Result Plan Predicted Value HGBT sql sqlStr", sqlStr);
-        // stmt=conn.prepare(sqlStr);
-        // results = stmt.exec();
-        // stmt.drop();
 
-        // if ( (results.length > 0) &&
-        //      (results[0].METHOD = 'HGBT') &&
             if(modelVersion == 'Active')
             {
                 sqlStr = 'UPSERT "CP_IBP_RESULTPLAN_TS" VALUES (' + "'" + result[0].CAL_DATE + "'" + "," +
@@ -1778,12 +1527,7 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
                         "'" + 'SUCCESS' + "'" + ')' + ' WITH PRIMARY KEY';
                 
     
-                // console.log("CP_IBP_RESULTPLAN_TS Predicted Value HGBT sql update sqlStr", sqlStr);
 
-                // stmt=conn.prepare(sqlStr);
-                // stmt.exec();
-                // stmt.drop();
-                // await cds.run(sqlStr);
                 try {
                     await cds.run(sqlStr);
                 }
@@ -1796,12 +1540,10 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
         }
 
     }
-    // conn.disconnect();
 
     var conn = hana.createConnection();
     conn.connect(conn_params);
     var sqlStr = 'SET SCHEMA ' + classicalSchema;  
-    // console.log('sqlStr: ', sqlStr);            
     var stmt=conn.prepare(sqlStr);
     result=stmt.exec();
     stmt.drop();
@@ -1809,12 +1551,10 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
     // Extract Importance
     sqlStr = 'SELECT "GROUP_ID", "VARIABLE_NAME", "IMPORTANCE" FROM PAL_HGBT_IMP_GRP_TAB' +
                  ' WHERE "GROUP_ID" = ' + "'" + groupId + "'";
-    //console.log('sqlStr: ', sqlStr);            
 
     var stmt=conn.prepare(sqlStr);
     result=stmt.exec();
     stmt.drop();
-    //console.log('sqlStr PAL_MLR_COEFFICIENT_GRP_TAB Result: ', result);            
 
     conn.disconnect();
 
@@ -1823,7 +1563,6 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
 
     for (let index=0; index<result.length; index++)
     {
-        //console.log('sqlStr PAL_HGBT_IMP_GRP_TAB index: ', index, 'VAR NAME = ', result[index].VARIABLE_NAME);            
    
         if (result[index].VARIABLE_NAME == 'ATT1')
             w1 = result[index].IMPORTANCE;
@@ -1852,24 +1591,11 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
     }
 
 
-    // var conn = hana.createConnection();
- 
-    // conn.connect(conn_params_container);
-
-    // sqlStr = 'SET SCHEMA ' + containerSchema; 
-    // // console.log('sqlStr: ', sqlStr);            
-    // stmt=conn.prepare(sqlStr);
-    // result=stmt.exec();
-    // stmt.drop();
-
-    //console.log("resultsObj = ", resultsObj);
-    // for (let pIndex=0; pIndex<distPeriods.length; pIndex++)
     for (let pIndex=0; pIndex<resultsObj.length; pIndex++)
     {     
         let predictedVal = resultsObj[pIndex].score;
         predictedVal = ( +predictedVal).toFixed(2);
         let periodId = distPeriods[pIndex][trimmedPeriod];
-        //console.log('trimmedPeriod : ', trimmedPeriod, 'vcConfigTimePeriod :', vcConfigTimePeriod);
 
         sqlStr = 'SELECT DISTINCT "CAL_DATE", "Location", "Product", ' +
                  '"Type", "OBJ_DEP", "OBJ_COUNTER", "ROW_ID", "CharCount", "CharCountPercent", "VERSION", "SCENARIO" ' +
@@ -1878,19 +1604,12 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
                 ' AND "VERSION" = ' + "'" + version + "'" +
                 ' AND "SCENARIO" = ' + "'" + scenario + "'" +
                 ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
-        // console.log("V_FUTURE_DEP_TS HGBT SELECT sqlStr ", sqlStr);
 
         let sqlStrTemp = sqlStr;
         result = [];
 
 
-        // stmt=conn.prepare(sqlStr);
-        // result=stmt.exec();
-        // stmt.drop();
         result = await cds.run(sqlStr);
-        // console.log("V_FUTURE_DEP_TS HGBT SELECT sqlStr result ", result, "length = ", result.length);
-        // console.log("V_FUTURE_DEP_TS HGBT SELECT sqlStr result", result);
-
     
         var orderCount = 0;
         for (let rIndex = 0; rIndex < result.length; rIndex++)
@@ -1899,7 +1618,6 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
             
             if (result[rIndex].ROW_ID == 1)
             {
-                //impact_val = w1*predictedVal;//result[rIndex].CharCount;
                 impact_percent = w1*predictedVal;//result[rIndex].CharCount;
                 if(result[rIndex].CharCount != 0)
                 {
@@ -1909,7 +1627,6 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
             }
             else if (result[rIndex].ROW_ID == 2)
             {
-                //impact_val = w2*predictedVal;//result[rIndex].CharCount;
                 impact_percent = w2*predictedVal;//result[rIndex].CharCount;
                 if(result[rIndex].CharCount != 0)
                 {
@@ -1919,7 +1636,6 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
             }            
             else if (result[rIndex].ROW_ID == 3)
             {
-                //impact_val = w3*predictedVal;//result[rIndex].CharCount;
                 impact_percent = w3*predictedVal;//result[rIndex].CharCount;
                 if(result[rIndex].CharCount != 0)
                 {
@@ -1929,7 +1645,6 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
             }            
             else if (result[rIndex].ROW_ID == 4)
             {
-                //impact_val = w4*predictedVal;//result[rIndex].CharCount;
                 impact_percent = w4*predictedVal;//result[rIndex].CharCount;
                 if(result[rIndex].CharCount != 0)
                 {
@@ -1939,7 +1654,6 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
             }            
             else if (result[rIndex].ROW_ID == 5)
             {
-                //impact_val = w5*predictedVal;//result[rIndex].CharCount;
                 impact_percent = w5*predictedVal;//result[rIndex].CharCount;
                 if(result[rIndex].CharCount != 0)
                 {
@@ -1949,7 +1663,6 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
             }            
             else if (result[rIndex].ROW_ID == 6)
             {
-                //impact_val = w6*predictedVal;//result[rIndex].CharCount;
                 impact_percent = w6*predictedVal;//result[rIndex].CharCount;
                 if(result[rIndex].CharCount != 0)
                 {
@@ -1959,7 +1672,6 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
             }            
             else if (result[rIndex].ROW_ID == 7)
             {
-                //impact_val = w7*predictedVal;//result[rIndex].CharCount;
                 impact_percent = w7*predictedVal;//result[rIndex].CharCount;
                 if(result[rIndex].CharCount != 0)
                 {
@@ -1969,7 +1681,6 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
             }            
             else if (result[rIndex].ROW_ID == 8)
             {
-                //impact_val = w8*predictedVal;//result[rIndex].CharCount;
                 impact_percent = w8*predictedVal;//result[rIndex].CharCount;
                 if(result[rIndex].CharCount != 0)
                 {
@@ -1979,7 +1690,6 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
             }            
             else if (result[rIndex].ROW_ID == 9)
             {
-                //impact_val = w9*predictedVal;//result[rIndex].CharCount;
                 impact_percent = w9*predictedVal;//result[rIndex].CharCount;
                 if(result[rIndex].CharCount != 0)
                 {
@@ -1989,7 +1699,6 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
             }            
             else if (result[rIndex].ROW_ID == 10)
             {
-                //impact_val = w10*predictedVal;//result[rIndex].CharCount;
                 impact_percent = w10*predictedVal;//result[rIndex].CharCount;
                 if(result[rIndex].CharCount != 0)
                 {
@@ -1999,7 +1708,6 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
             }            
             else if (result[rIndex].ROW_ID == 11)
             {
-                //impact_val = w11*predictedVal;//result[rIndex].CharCount;
                 impact_percent = w11*predictedVal;//result[rIndex].CharCount;
                 if(result[rIndex].CharCount != 0)
                 {
@@ -2009,7 +1717,6 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
             }            
             else if (result[rIndex].ROW_ID == 12)
             {
-                //impact_val = w12*predictedVal;//result[rIndex].CharCount;
                 impact_percent = w12*predictedVal;//result[rIndex].CharCount;
                 if(result[rIndex].CharCount != 0)
                 {
@@ -2017,13 +1724,6 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
                     impact_val = impact_percent * orderCount;
                 }
             }
-            // if (predictedVal <= 0)
-            //    impact_percent = 0;
-            // else
-            //     impact_percent = 100*impact_val/impact_percent;
-            //impact_percent = 100.0*impact_val/(predictedVal);
-
-//            console.log("rIndex = ",rIndex,"impact_percent = ", impact_percent,"predictedVal = ", predictedVal, "intercept =",intercept);
             let predicted = predictedVal;
             let impactValPercent = 0;
             if( predicted*orderCount > 0 )
@@ -2055,11 +1755,7 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
                     "'" + impactValPercent + "'" + "," +
                     "'" + predicted*orderCount + "'" + "," +
                     "'" + predictedTime + "'" + ')' + ' WITH PRIMARY KEY';
-                
-    
-                // stmt=conn.prepare(sqlStr);
-                // stmt.exec();
-                // stmt.drop(); 
+
                 try {
                     await cds.run(sqlStr);
                 }
@@ -2073,7 +1769,6 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
   
 
     }
-    // conn.disconnect();
 
     let returnObj = [];	
     let createdAt = createtAtObj;

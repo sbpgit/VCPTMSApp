@@ -9,10 +9,9 @@ const conn_params = {
     uid         : process.env.uidClassicalSchema,
     pwd         : process.env.uidClassicalSchemaPassword,
     encrypt: 'TRUE'
-    // ssltruststore: cds.env.requires.hana.credentials.certificate
 };
 const vcConfigTimePeriod = process.env.TimePeriod; 
-const classicalSchema = process.env.classicalSchema; //cf environment variable"DB_CONFIG_PROD_CLIENT1";//
+const classicalSchema = process.env.classicalSchema; 
 
 exports._runRdtRegressions = async function(req) {
 
@@ -33,7 +32,6 @@ exports._updateRdtGroupParams = function(req) {
     conn.connect(conn_params);
 
     var sqlStr = 'SET SCHEMA ' + classicalSchema;  
-    // console.log('sqlStr: ', sqlStr);            
     var stmt=conn.prepare(sqlStr);
     stmt.exec();
     stmt.drop();
@@ -48,7 +46,6 @@ exports._updateRdtGroupParams = function(req) {
         {
             if( rdtGroupParams[i].groupId != rdtGroupParams[i-1].groupId)
             {
-               // inGroups.push(rdtGroupParams[i].GROUP_ID);
                 inGroups.push(rdtGroupParams[i].groupId);
             }
         }
@@ -56,9 +53,7 @@ exports._updateRdtGroupParams = function(req) {
     for (let i = 0; i < inGroups.length; i++)
     {
         sqlStr = "DELETE FROM PAL_RDT_PARAMETER_GRP_TAB WHERE GROUP_ID = " + "'" + inGroups[i] + "'";
-        //console.log('_updateRdtGroupParams sqlStr ', sqlStr);
         stmt=conn.prepare(sqlStr);
-        //result=stmt.exec();
         stmt.exec();
         stmt.drop();
 
@@ -79,7 +74,6 @@ exports._updateRdtGroupParams = function(req) {
         tableObj.push(rowObj);
         
     }
-    //console.log(' tableObj ', tableObj);
 
     sqlStr = "INSERT INTO PAL_RDT_PARAMETER_GRP_TAB(GROUP_ID,PARAM_NAME, INT_VALUE, DOUBLE_VALUE, STRING_VALUE) VALUES(?, ?, ?, ?, ?)";
     stmt = conn.prepare(sqlStr);
@@ -105,7 +99,6 @@ exports._updateRdtGroupData = function(req) {
     conn.connect(conn_params);
 
     var sqlStr = 'SET SCHEMA ' + classicalSchema;  
-    // console.log('sqlStr: ', sqlStr);            
     var stmt=conn.prepare(sqlStr);
     stmt.exec();
     stmt.drop();
@@ -143,11 +136,8 @@ exports._updateRdtGroupData = function(req) {
     }
 
     stmt=conn.prepare(sqlStr);
-    // let results=stmt.exec();
     stmt.exec();
     stmt.drop();
-    //console.log(results);
-
 
     var tableObj = [];	
 
@@ -157,7 +147,6 @@ exports._updateRdtGroupData = function(req) {
     {
         groupId = rdtGroupData[i].groupId ;
         target = rdtGroupData[i].target;
-        //console.log('_updaterdtGroupData ', ID);
 
         att1 = rdtGroupData[i].att1;
         if (rdtType > 1)
@@ -211,7 +200,6 @@ exports._updateRdtGroupData = function(req) {
 
         tableObj.push(rowObj);
     }
-    //console.log(' tableObj ', tableObj);
     if (rdtType == 1)
     {
         sqlStr = "INSERT INTO PAL_RDT_DATA_GRP_TAB_1T(GROUP_ID,ATT1,TARGET) VALUES(?, ?, ?)";
@@ -319,11 +307,10 @@ exports._runRegressionRdtGroup = async function(req) {
     conn.connect(conn_params);
 
     var sqlStr = 'SET SCHEMA ' + classicalSchema;  
-    // console.log('sqlStr: ', sqlStr);            
     var stmt=conn.prepare(sqlStr);
     stmt.exec();
     stmt.drop();
-//////////////////////////////
+
     const rdtGroupParams = req.data.regressionParameters;
     let inGroups = [];
     let modelGroup = rdtGroupParams[0].groupId;
@@ -334,7 +321,6 @@ exports._runRegressionRdtGroup = async function(req) {
         {
             if( rdtGroupParams[i].groupId != rdtGroupParams[i-1].groupId)
             {
-               // inGroups.push(rdtGroupParams[i].GROUP_ID);
                 inGroups.push(rdtGroupParams[i].groupId);
             }
         }
@@ -352,7 +338,6 @@ exports._runRegressionRdtGroup = async function(req) {
         stmt.drop();
     
         sqlStr =  "DELETE FROM PAL_RDT_OUT_OF_BAG_GRP_TAB WHERE GROUP_ID = " + "'" + inGroups[i] + "'";
-        //console.log('_runRegressionRdtGroup sqlStr', sqlStr);
         stmt=conn.prepare(sqlStr);
         stmt.exec();
         stmt.drop();
@@ -363,29 +348,6 @@ exports._runRegressionRdtGroup = async function(req) {
         stmt.drop();
 
     }
-
-////////////////////////////////
-    //var groupId = group;
-    // sqlStr = 'DELETE FROM PAL_RDT_MODEL_GRP_TAB WHERE GROUP_ID IN (SELECT GROUP_ID FROM ' + rdtDataTable + ')';
-    // stmt=conn.prepare(sqlStr);
-    // stmt.exec();
-    // stmt.drop();
-
-    // sqlStr =  'DELETE FROM PAL_RDT_IMP_GRP_TAB WHERE GROUP_ID IN (SELECT GROUP_ID FROM ' + rdtDataTable + ')';
-    // stmt=conn.prepare(sqlStr);
-    // stmt.exec();
-    // stmt.drop();
-
-    // sqlStr =  'DELETE FROM PAL_RDT_OUT_OF_BAG_GRP_TAB WHERE GROUP_ID IN (SELECT GROUP_ID FROM ' + rdtDataTable + ')';
-    // //console.log('_runRegressionRdtGroup sqlStr', sqlStr);
-    // stmt=conn.prepare(sqlStr);
-    // stmt.exec();
-    // stmt.drop();
-
-    // sqlStr =  'DELETE FROM PAL_RDT_CONFUSION_GRP_TAB WHERE GROUP_ID IN (SELECT GROUP_ID FROM ' + rdtDataTable + ')';
-    // stmt=conn.prepare(sqlStr);
-    // stmt.exec();
-    // stmt.drop();
 
     if (rdtType == 1)
         sqlStr = 'call RDT_MAIN_1T(' + rdtDataTable + ', ?,?,?,?)';
@@ -416,10 +378,7 @@ exports._runRegressionRdtGroup = async function(req) {
     var modelResults=stmt.exec();
     stmt.drop();
     
-
-//    console.log('Models Table Results Length:', modelResults.length);
-//    console.log('Model Table Results: ', modelResults);
-    
+  
     var models = [];
     modelGroup = modelResults[0].GROUP_ID;
     models.push(modelGroup);
@@ -455,7 +414,6 @@ exports._runRegressionRdtGroup = async function(req) {
     let importanceResults = stmt.exec();
     stmt.drop();
 
-//    console.log('importanceResults : ', importanceResults);
     for (let i=0; i< importanceResults.length; i++)
     {     
         let groupId = importanceResults[i].GROUP_ID;
@@ -463,7 +421,6 @@ exports._runRegressionRdtGroup = async function(req) {
         let importance = importanceResults[i].IMPORTANCE;
         impObj.push({groupId,variableName,importance});
     }
-    //console.log('impObj : ', impObj);
 
     var outOfBagObj = [];
 
@@ -486,31 +443,10 @@ exports._runRegressionRdtGroup = async function(req) {
     var idObj = uuidv1();
     console.log("_runRegressionRdtGroup location ", req.data.Location, " product ", req.data.Product);
 
-    // commenting out from Memory usage Perspective
-
-
-    // let cqnQuery = {INSERT:{ into: { ref: ['CP_PALRDTREGRESSIONS'] }, entries: [
-    //     //  {   ID: idObj, createdAt : createtAtObj, 
-    //     {   rdtID: idObj, 
-    //         createdAt : createtAtObj.toISOString(), //2021-12-14T12:00:35.940Z', //new Date(),
-    //         Location : req.data.Location,
-    //         Product : req.data.Product,
-    //         regressionParameters:req.data.regressionParameters, 
-    //         rdtType : req.data.rdtType,
-    //         regressionData : req.data.regressionData, 
-    //         modelsOp : modelsObj,
-    //         importanceOp : impObj,
-    //         outOfBagOp : outOfBagObj}
-    //     ]}}
-        
-        
-    // console.log("CP_PALRDTREGRESSIONS cqnQuery Start " , new Date());
-
-    // await cds.run(cqnQuery);
+ 
     console.log("CP_PALRDTREGRESSIONS cqnQuery Completed " , new Date());
 
 
-/////
     regressionParameters = req.data.regressionParameters;
 
     inGroups = [];
@@ -528,18 +464,7 @@ exports._runRegressionRdtGroup = async function(req) {
         }
     }
 
-    //let mlrGroupParams = req.data.regressionParameters;
     console.log("inGroups ", inGroups, "Number of Groups",inGroups.length);
-
-    // var conn_container = hana.createConnection();
- 
-    // conn_container.connect(conn_params_container);
-
-    // sqlStr = 'SET SCHEMA ' + containerSchema; 
-    // // console.log('sqlStr: ', sqlStr);            
-    // stmt=conn_container.prepare(sqlStr);
-    // result=stmt.exec();
-    // stmt.drop();
 
     var tableObj = [];
     for (let grpIndex = 0; grpIndex < inGroups.length; grpIndex++)
@@ -605,19 +530,14 @@ exports._runRegressionRdtGroup = async function(req) {
             outOfBagOp : outOfBagGroupObj};
         tableObj.push(rowObj);
 
-        
-        // let objStr=GroupId.split('_');
-        // let obj_dep = objStr[0];
-        // let obj_counter = objStr[1];
+
 
         let objStr = GroupId;
 
         let lastIndex = objStr.lastIndexOf('_');
         let obj_dep = objStr.slice(0, lastIndex);
-        // console.log(obj_dep);
 
         let obj_counter = objStr.slice(lastIndex + 1);
-        // console.log(obj_counter); 
 
         sqlStr = 'UPSERT "CP_OD_MODEL_VERSIONS" VALUES (' +
                     "'" + location + "'" + "," +
@@ -632,15 +552,11 @@ exports._runRegressionRdtGroup = async function(req) {
         console.log("CP_OD_MODEL_VERSIONS RDT sql update sqlStr", sqlStr);
 
         await cds.run(sqlStr);
-        // stmt=conn_container.prepare(sqlStr);
-        // stmt.exec();
-        // stmt.drop();
+
     }
 
-    // conn_container.disconnect();
 
     cqnQuery = {INSERT:{ into: { ref: ['CP_PALRDTBYGROUP'] }, entries:  tableObj }};
-//    console.log("CP_PALRDTBYGROUP cQnQuery " , cqnQuery);
 
     console.log("CP_PALRDTBYGROUP cqnQuery Start " , new Date());
     await cds.run(cqnQuery);
@@ -670,17 +586,14 @@ exports._runRegressionRdtGroup = async function(req) {
 
 exports._runRdtPredictions = async function(req) {
 
-  // var groupId = req.data.groupId;
 
    var groupId = req.data.profile + '#' + req.data.Type + '#' + req.data.groupId + '#' + req.data.Location + '#' + req.data.Product;
-   //var outputGroupId = req.data.groupId;
 
    var conn = hana.createConnection();
 
    conn.connect(conn_params);
 
    var sqlStr = 'SET SCHEMA ' + classicalSchema;  
-   // console.log('sqlStr: ', sqlStr);            
    var stmt=conn.prepare(sqlStr);
    var results=stmt.exec();
    stmt.drop();
@@ -721,14 +634,12 @@ exports._updateRdtPredictionParams = function(req) {
 
 
     const rdtPredictParams = req.data.predictionParameters;
-    //console.log('mlrPredictParams: ', mlrPredictParams);         
   
     var conn = hana.createConnection();
 
     conn.connect(conn_params);
 
     var sqlStr = 'SET SCHEMA ' + classicalSchema;  
-    // console.log('sqlStr: ', sqlStr);            
     var stmt=conn.prepare(sqlStr);
     stmt.exec();
     stmt.drop();
@@ -736,10 +647,8 @@ exports._updateRdtPredictionParams = function(req) {
     sqlStr = "DELETE FROM PAL_RDT_PREDICT_PARAMETER_GRP_TAB";
 
     stmt=conn.prepare(sqlStr);
-    //results=stmt.exec();
     stmt.exec();
     stmt.drop();
-    //console.log(results);
 
     var tableObj = [];	
         
@@ -754,8 +663,6 @@ exports._updateRdtPredictionParams = function(req) {
         rowObj.push(groupId,paramName,intVal,doubleVal,strVal);
         tableObj.push(rowObj);
     }
-    //console.log(' tableObj ', tableObj);
-
 
     sqlStr = "INSERT INTO PAL_RDT_PREDICT_PARAMETER_GRP_TAB(GROUP_ID,PARAM_NAME, INT_VALUE, DOUBLE_VALUE, STRING_VALUE) VALUES(?, ?, ?, ?, ?)";
     stmt = conn.prepare(sqlStr);
@@ -771,15 +678,10 @@ exports._updateRdtPredictionData = function(req) {
     const rdtPredictData = req.data.predictionData;
     var rdtType = req.data.rdtType;
 
-    //console.log('_updateHgntGroupData: ', rdtPredictData);         
-
-
-
     var conn = hana.createConnection();
 
     conn.connect(conn_params);
     var sqlStr = 'SET SCHEMA ' + classicalSchema;  
-    // console.log('sqlStr: ', sqlStr);            
     var stmt=conn.prepare(sqlStr);
     stmt.exec();
     stmt.drop();
@@ -816,10 +718,8 @@ exports._updateRdtPredictionData = function(req) {
     }
 
     stmt=conn.prepare(sqlStr);
-//    results=stmt.exec();
     stmt.exec();
     stmt.drop();
-    //console.log(results);
 
 
     var tableObj = [];	
@@ -828,8 +728,6 @@ exports._updateRdtPredictionData = function(req) {
     for (var i = 0; i < rdtPredictData.length; i++)
     {
         groupId = rdtPredictData[i].groupId ;
-        //ID = rdtPredictData[i].id;
-        //console.log('_updateMlrGroupData ', ID);
         ID = rdtPredictData[i].ID;
         att1 = rdtPredictData[i].att1;
         if (rdtType > 1)
@@ -881,7 +779,6 @@ exports._updateRdtPredictionData = function(req) {
             rowObj.push(groupId,ID,att1,att2,att3,att4,att5,att6,att7,att8,att9,att10,att11,att12);    
         tableObj.push(rowObj);
     }
-    //console.log(' tableObj ', tableObj);
     if (rdtType == 1)
     {
         sqlStr = "INSERT INTO PAL_RDT_PRED_DATA_GRP_TAB_1T(GROUP_ID,ID,ATT1) VALUES(?, ?, ?)";
@@ -954,7 +851,6 @@ exports._updateRdtPredictionData = function(req) {
     console.log(' _updateRdtPredictionData Completed ');
 }
 
-//function _runPredictionRdtGroup(req) {
 exports._runPredictionRdtGroup = async function(req) {
 
     var conn = hana.createConnection();
@@ -1016,18 +912,14 @@ exports._runPredictionRdtGroup = async function(req) {
     var predResults = [];			
     for (var index=0; index<distinctGroups; index++)
     {     
-        //var groupId = ruleIds[index];
         var groupId = results[index].GROUP_ID;
 
         console.log('PredictionRdt Group: ', groupId);
-        //predictionResults = predictionResults + _runRdtPrediction(groupId);
         let predictionObj = await rtdFuncs._runRdtPrediction(rdtType, groupId, version, scenario,modelVersion);
-        //value.push({predictionObj});
         predResults.push(predictionObj);
 
         if (index == (distinctGroups -1))
         {
-            //console.log('Prediction Results', predResults);
             let res = req._.req.res;
             res.send({"value":predResults});
             conn.disconnect();
@@ -1035,10 +927,7 @@ exports._runPredictionRdtGroup = async function(req) {
     }
 }
 
-// function _runRdtPrediction(rdtType, group, version, scenario) {
 exports._runRdtPrediction = async function(rdtType, group, version, scenario,modelVersion) {
-
-//    var groupId = req.data.groupId;
 
     console.log('_runRdtPrediction - group', group, 'Version ', version, 'Scenario ', scenario,'Model Version', modelVersion);
 
@@ -1046,7 +935,6 @@ exports._runRdtPrediction = async function(rdtType, group, version, scenario,mod
  
     conn.connect(conn_params);
     var sqlStr = 'SET SCHEMA ' + classicalSchema;  
-    // console.log('sqlStr: ', sqlStr);            
     var stmt=conn.prepare(sqlStr);
     var result=stmt.exec();
     stmt.drop();
@@ -1067,9 +955,6 @@ exports._runRdtPrediction = async function(rdtType, group, version, scenario,mod
     stmt=conn.prepare(sqlStr);
     result=stmt.exec();
     stmt.drop();
-    //console.log(result);
-
-
     sqlStr = 'INSERT INTO ' + '#PAL_RDT_MODEL_TAB_'+ groupId + ' SELECT "ROW_INDEX", "TREE_INDEX", "MODEL_CONTENT" FROM PAL_RDT_MODEL_GRP_TAB WHERE PAL_RDT_MODEL_GRP_TAB.GROUP_ID =' + "'" + groupId + "'";
 
     stmt=conn.prepare(sqlStr);
@@ -1095,11 +980,8 @@ exports._runRdtPrediction = async function(rdtType, group, version, scenario,mod
         result=stmt.exec();
         stmt.drop();
         var predData = result;
-        //console.log('predData :', predData);
-
         for (var i=0; i<predData.length; i++) 
         {
-            //let groupId =  groupId;
             let id =  predData[i].ID;
             let att1 =  predData[i].ATT1;
             predDataObj.push({GroupId,id,att1});
@@ -1124,11 +1006,9 @@ exports._runRdtPrediction = async function(rdtType, group, version, scenario,mod
         result=stmt.exec();
         stmt.drop();
         var predData = result;
-        //console.log('predData :', predData);
 
         for (var i=0; i<predData.length; i++) 
         {
-            //let groupId =  groupId;
             let id =  predData[i].ID;
             let att1 =  predData[i].ATT1;
             let att2 =  predData[i].ATT2;
@@ -1152,12 +1032,9 @@ exports._runRdtPrediction = async function(rdtType, group, version, scenario,mod
         stmt=conn.prepare(sqlStr);
         let predData =stmt.exec();
         stmt.drop();
-        //var predData = result;
-        //console.log('predData :', predData);
 
         for (let i=0; i<predData.length; i++) 
         {
-            //let groupId =  groupId;
             let id =  predData[i].ID;
             let att1 =  predData[i].ATT1;
             let att2 =  predData[i].ATT2;
@@ -1182,11 +1059,9 @@ exports._runRdtPrediction = async function(rdtType, group, version, scenario,mod
         result=stmt.exec();
         stmt.drop();
         let predData = result;
-        //console.log('predData :', predData);
 
         for (let i=0; i<predData.length; i++) 
         {
-            //let groupId =  groupId;
             let id =  predData[i].ID;
             let att1 =  predData[i].ATT1;
             let att2 =  predData[i].ATT2;
@@ -1212,11 +1087,9 @@ exports._runRdtPrediction = async function(rdtType, group, version, scenario,mod
         result=stmt.exec();
         stmt.drop();
         let predData = result;
-        //console.log('predData :', predData);
 
         for (let i=0; i<predData.length; i++) 
         {
-            //let groupId =  groupId;
             let id =  predData[i].ID;
             let att1 =  predData[i].ATT1;
             let att2 =  predData[i].ATT2;
@@ -1244,11 +1117,9 @@ exports._runRdtPrediction = async function(rdtType, group, version, scenario,mod
         result=stmt.exec();
         stmt.drop();
         let predData = result;
-        //console.log('predData :', predData);
 
         for (let i=0; i<predData.length; i++) 
         {
-            //let groupId =  groupId;
             let id =  predData[i].ID;
             let att1 =  predData[i].ATT1;
             let att2 =  predData[i].ATT2;
@@ -1278,11 +1149,9 @@ exports._runRdtPrediction = async function(rdtType, group, version, scenario,mod
         result=stmt.exec();
         stmt.drop();
         let predData = result;
-        //console.log('predData :', predData);
 
         for (let i=0; i<predData.length; i++) 
         {
-            //let groupId =  groupId;
             let id =  predData[i].ID;
             let att1 =  predData[i].ATT1;
             let att2 =  predData[i].ATT2;
@@ -1313,11 +1182,9 @@ exports._runRdtPrediction = async function(rdtType, group, version, scenario,mod
         result=stmt.exec();
         stmt.drop();
         let predData = result;
-        //console.log('predData :', predData);
 
         for (let i=0; i<predData.length; i++) 
         {
-            //let groupId =  groupId;
             let id =  predData[i].ID;
             let att1 =  predData[i].ATT1;
             let att2 =  predData[i].ATT2;
@@ -1349,11 +1216,9 @@ exports._runRdtPrediction = async function(rdtType, group, version, scenario,mod
         result=stmt.exec();
         stmt.drop();
         let predData = result;
-        //console.log('predData :', predData);
 
         for (let i=0; i<predData.length; i++) 
         {
-            //let groupId =  groupId;
             let id =  predData[i].ID;
             let att1 =  predData[i].ATT1;
             let att2 =  predData[i].ATT2;
@@ -1386,11 +1251,9 @@ exports._runRdtPrediction = async function(rdtType, group, version, scenario,mod
         result=stmt.exec();
         stmt.drop();
         let predData = result;
-        //console.log('predData :', predData);
 
         for (let i=0; i<predData.length; i++) 
         {
-            //let groupId =  groupId;
             let id =  predData[i].ID;
             let att1 =  predData[i].ATT1;
             let att2 =  predData[i].ATT2;
@@ -1424,11 +1287,9 @@ exports._runRdtPrediction = async function(rdtType, group, version, scenario,mod
         result=stmt.exec();
         stmt.drop();
         let predData = result;
-        //console.log('predData :', predData);
 
         for (let i=0; i<predData.length; i++) 
         {
-            //let groupId =  groupId;
             let id =  predData[i].ID;
             let att1 =  predData[i].ATT1;
             let att2 =  predData[i].ATT2;
@@ -1463,11 +1324,9 @@ exports._runRdtPrediction = async function(rdtType, group, version, scenario,mod
         result=stmt.exec();
         stmt.drop();
         let predData = result;
-        //console.log('predData :', predData);
 
         for (let i=0; i<predData.length; i++) 
         {
-            //let groupId =  groupId;
             let id =  predData[i].ID;
             let att1 =  predData[i].ATT1;
             let att2 =  predData[i].ATT2;
@@ -1491,15 +1350,12 @@ exports._runRdtPrediction = async function(rdtType, group, version, scenario,mod
         return;
     }
     
-    //console.log(result);
 
     sqlStr = "create local temporary column table #PAL_RDT_PARAMETER_TAB_" + groupId + " " +
                         "(\"PARAM_NAME\" varchar(100),\"INT_VALUE\" integer,\"double_VALUE\" double,\"STRING_VALUE\" varchar(100))";
     stmt=conn.prepare(sqlStr);
     result=stmt.exec();
     stmt.drop();
-    //console.log(result);
-
 
     sqlStr = 'INSERT INTO ' + '#PAL_RDT_PARAMETER_TAB_' + groupId + ' SELECT "PARAM_NAME", "INT_VALUE", "DOUBLE_VALUE", "STRING_VALUE" FROM PAL_RDT_PREDICT_PARAMETER_GRP_TAB WHERE PAL_RDT_PREDICT_PARAMETER_GRP_TAB.GROUP_ID =' + "'" +  groupId + "'";
 
@@ -1513,12 +1369,10 @@ exports._runRdtPrediction = async function(rdtType, group, version, scenario,mod
     result=stmt.exec();
     stmt.drop();
     var predParams = result;
-    //console.log('predParams :', predParams);
 
     var predParamsObj = [];	
     for (let i=0; i<predParams.length; i++) 
     {
-        //let groupId =  groupId;
         let paramName =  predParams[i].PARAM_NAME;
         let intVal =  predParams[i].INT_VALUE;
         let doubleVal =  predParams[i].DOUBLE_VALUE;
@@ -1536,7 +1390,6 @@ exports._runRdtPrediction = async function(rdtType, group, version, scenario,mod
     stmt=conn.prepare(sqlStr);
     let predictionResults=stmt.exec();
     stmt.drop();
-    //console.log('Prediction Results ', predictionResults);
 
     // --------------- BEGIN --------------------
 
@@ -1552,38 +1405,12 @@ exports._runRdtPrediction = async function(rdtType, group, version, scenario,mod
     }	
 
     var createtAtObj = new Date();
-    //let idObj = groupId;
     let idObj = uuidv1();
-    // let grpStr=groupId.split('#');
-    // let outputGroupId = grpStr[0];
-    // let location = grpStr[1];
-    // let product = grpStr[2];
-
-    // commenting out from Memory usage Perspective
-
-    // var cqnQuery = {INSERT:{ into: { ref: ['CP_PALRDTPREDICTIONS'] }, entries: [
-    //      {rdtID: idObj, createdAt : createtAtObj.toISOString(), Location : location, 
-    //       Product : product, groupId : GroupId, Type: odType, modelVersion: modelVersion, profile: profileId,
-    //       Version : version, Scenario : scenario,
-    //       predictionParameters:predParamsObj, rdtType : rdtType, 
-    //       predictionData : predDataObj, predictedResults : resultsObj}
-    //      ]}}
-
-    // await cds.run(cqnQuery);
+ 
 
     conn.disconnect();
 
-    // conn = hana.createConnection();
- 
-    // conn.connect(conn_params_container);
-
-    // sqlStr = 'SET SCHEMA ' + containerSchema; 
-    // // console.log('sqlStr: ', sqlStr);            
-    // stmt=conn.prepare(sqlStr);
-    // result=stmt.exec();
-    // stmt.drop();
-
-    let tpGrpStr=groupId.split('#');
+     let tpGrpStr=groupId.split('#');
     tpGroupId = tpGrpStr[2] + '#' + tpGrpStr[3] + '#' + tpGrpStr[4];
     console.log('tpGroupId: ', tpGroupId);
 
@@ -1603,12 +1430,7 @@ exports._runRdtPrediction = async function(rdtType, group, version, scenario,mod
         let predictedVal = resultsObj[index].score;
         predictedVal =  (+predictedVal).toFixed(2);
         let periodId = distPeriods[index][trimmedPeriod];
-        // sqlStr = 'UPDATE V_FUTURE_DEP_TS SET "Predicted" = ' + "'" + predictedVal + "'" + "," +
-        //          '"PredictedTime" = ' + "'" + predictedTime + "'" + "," +
-        //          '"PredictedStatus" = ' + "'" + 'SUCCESS' + "'"+ 
-        //          ' WHERE "GroupID" = ' + "'" + groupId + "'" + ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
-        // console.log("V_FUTURE_DEP_TS Predicted Value sql update sqlStr", sqlStr)
-
+  
         sqlStr = 'SELECT DISTINCT "CAL_DATE", "Location", "Product", "Type", "OBJ_DEP", "OBJ_COUNTER", "OrderQuantity", "VERSION", "SCENARIO" ' +
                 'FROM "V_FUTURE_DEP_TS" WHERE "GroupID" = ' + "'" + tpGroupId + "'" +
                 ' AND "Type" = ' + "'" + odType + "'" +
@@ -1616,9 +1438,6 @@ exports._runRdtPrediction = async function(rdtType, group, version, scenario,mod
                 ' AND "SCENARIO" = ' + "'" + scenario + "'" +   
                 ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
        
-        // stmt=conn.prepare(sqlStr);
-        // result=stmt.exec();
-        // stmt.drop();
         result = await cds.run(sqlStr);
         console.log("V_FUTURE_DEP_TS P SELECT sqlStr result ", result);
 
@@ -1636,34 +1455,11 @@ exports._runRdtPrediction = async function(rdtType, group, version, scenario,mod
                     "'" + predictedVal * result[0].OrderQuantity + "'" + "," +
                     "'" + predictedTime + "'" + "," +
                     "'" + 'SUCCESS' + "'" + ')' + ' WITH PRIMARY KEY';
-            
-            //' WHERE "GroupID" = ' + "'" + groupId + "'" + 
-            //' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
+
         console.log("V_PREDICTIONS Predicted Value sql update sqlStr", sqlStr);
 
-        // stmt=conn.prepare(sqlStr);
-        // stmt.exec();
-        // stmt.drop();
         await cds.run(sqlStr);
 
-        // let method = 'RDT';
-        // sqlStr = 'SELECT CP_PAL_PROFILEOD.PROFILE, METHOD FROM CP_PAL_PROFILEOD ' +
-        //         'INNER JOIN CP_PAL_PROFILEMETH ON '+
-        //         '"CP_PAL_PROFILEOD"."PROFILE" = "CP_PAL_PROFILEMETH"."PROFILE"' +
-        //         ' AND CP_PAL_PROFILEMETH.METHOD = ' + "'" + method + "'" +
-        //         ' AND LOCATION_ID = ' + "'" + result[0].Location + "'" +
-        //         ' AND PRODUCT_ID = ' + "'" + result[0].Product + "'" +
-        //         ' AND OBJ_DEP = ' + "'" + result[0].OBJ_DEP + '_' + result[0].OBJ_COUNTER + "'" +
-        //         ' AND OBJ_TYPE = ' + "'" + result[0].Type + "'";
-
-        // console.log("V_PREDICTIONS IBP Result Plan Predicted Value RDT sql sqlStr", sqlStr);
-        // stmt=conn.prepare(sqlStr);
-        // results = stmt.exec();
-        // stmt.drop();
-
-
-        // if ( (results.length > 0) &&
-        //      (results[0].METHOD = 'RDT') &&
         if (modelVersion == 'Active')
         {
             sqlStr = 'UPSERT "CP_IBP_RESULTPLAN_TS" VALUES (' + "'" + result[0].CAL_DATE + "'" + "," +
@@ -1683,14 +1479,11 @@ exports._runRdtPrediction = async function(rdtType, group, version, scenario,mod
  
             console.log("CP_IBP_RESULTPLAN_TS Predicted Value RDT sql update sqlStr", sqlStr);
 
-            // stmt=conn.prepare(sqlStr);
-            // stmt.exec();
-            // stmt.drop();
+
             await cds.run(sqlStr);
         }
 
     }
-    // conn.disconnect();
 
     var conn = hana.createConnection();
     conn.connect(conn_params);
@@ -1703,12 +1496,10 @@ exports._runRdtPrediction = async function(rdtType, group, version, scenario,mod
     // Extract Importance
     sqlStr = 'SELECT "GROUP_ID", "VARIABLE_NAME", "IMPORTANCE" FROM PAL_RDT_IMP_GRP_TAB' +
                  ' WHERE "GROUP_ID" = ' + "'" + groupId + "'";
-    //console.log('sqlStr: ', sqlStr);            
 
     var stmt=conn.prepare(sqlStr);
     result=stmt.exec();
     stmt.drop();
-    //console.log('sqlStr PAL_RDT_IMP_GRP_TAB Result: ', result);            
 
     conn.disconnect();
 
@@ -1717,7 +1508,6 @@ exports._runRdtPrediction = async function(rdtType, group, version, scenario,mod
 
     for (let index=0; index<result.length; index++)
     {
-        //console.log('sqlStr PAL_HGBT_IMP_GRP_TAB index: ', index, 'VAR NAME = ', result[index].VARIABLE_NAME);            
    
         if (result[index].VARIABLE_NAME == 'ATT1')
             w1 = result[index].IMPORTANCE;
@@ -1746,17 +1536,7 @@ exports._runRdtPrediction = async function(rdtType, group, version, scenario,mod
     }
 
 
-    // var conn = hana.createConnection();
- 
-    // conn.connect(conn_params_container);
 
-    // sqlStr = 'SET SCHEMA ' + containerSchema; 
-    // // console.log('sqlStr: ', sqlStr);            
-    // stmt=conn.prepare(sqlStr);
-    // result=stmt.exec();
-    // stmt.drop();
-
-   // console.log("resultsObj = ", resultsObj);
     for (let pIndex=0; pIndex<distPeriods.length; pIndex++)
     {     
         let predictedVal = resultsObj[pIndex].score;
@@ -1771,17 +1551,11 @@ exports._runRdtPrediction = async function(rdtType, group, version, scenario,mod
                 ' AND "VERSION" = ' + "'" + version + "'" +
                 ' AND "SCENARIO" = ' + "'" + scenario + "'" +
                 ' AND ' + '"' + vcConfigTimePeriod + '"' + ' = ' + "'" + periodId + "'";
-        //console.log("V_FUTURE_DEP_TS MLR SELECT sqlStr ", sqlStr);
 
         result = [];
 
 
-        // stmt=conn.prepare(sqlStr);
-        // result=stmt.exec();
-        // stmt.drop();
         result = await cds.run(sqlStr);
-        //console.log("V_FUTURE_DEP_TS MLR SELECT sqlStr result ", result, "length = ", result.length);
-
     
         var orderCount = 0;
         for (let rIndex = 0; rIndex < result.length; rIndex++)
@@ -1789,8 +1563,7 @@ exports._runRdtPrediction = async function(rdtType, group, version, scenario,mod
             let impact_val = impact_percent = 0;
             if (result[rIndex].ROW_ID == 1)
             {
-                //impact_val = w1*predictedVal;//result[rIndex].CharCount;
-                impact_percent = w1*predictedVal;//result[rIndex].CharCount;
+                impact_percent = w1*predictedVal;
                 if(result[rIndex].CharCount != 0)
                 {
                     orderCount = result[rIndex].CharCount / result[rIndex].CharCountPercent;
@@ -1799,8 +1572,7 @@ exports._runRdtPrediction = async function(rdtType, group, version, scenario,mod
             }
             else if (result[rIndex].ROW_ID == 2)
             {
-                //impact_val = w2*predictedVal;//result[rIndex].CharCount;
-                impact_percent = w2*predictedVal;//result[rIndex].CharCount;
+                impact_percent = w2*predictedVal;
                 if(result[rIndex].CharCount != 0)
                 {
                     orderCount = result[rIndex].CharCount / result[rIndex].CharCountPercent;
@@ -1809,8 +1581,7 @@ exports._runRdtPrediction = async function(rdtType, group, version, scenario,mod
             }            
             else if (result[rIndex].ROW_ID == 3)
             {
-                //impact_val = w3*predictedVal;//result[rIndex].CharCount;
-                impact_percent = w3*predictedVal;//result[rIndex].CharCount;
+                impact_percent = w3*predictedVal;
                 if(result[rIndex].CharCount != 0)
                 {
                     orderCount = result[rIndex].CharCount / result[rIndex].CharCountPercent;
@@ -1819,8 +1590,7 @@ exports._runRdtPrediction = async function(rdtType, group, version, scenario,mod
             }            
             else if (result[rIndex].ROW_ID == 4)
             {
-                //impact_val = w4*predictedVal;//result[rIndex].CharCount;
-                impact_percent = w4*predictedVal;//result[rIndex].CharCount;
+                impact_percent = w4*predictedVal;
                 if(result[rIndex].CharCount != 0)
                 {
                     orderCount = result[rIndex].CharCount / result[rIndex].CharCountPercent;
@@ -1829,8 +1599,7 @@ exports._runRdtPrediction = async function(rdtType, group, version, scenario,mod
             }            
             else if (result[rIndex].ROW_ID == 5)
             {
-                //impact_val = w5*predictedVal;//result[rIndex].CharCount;
-                impact_percent = w5*predictedVal;//result[rIndex].CharCount;
+                impact_percent = w5*predictedVal;
                 if(result[rIndex].CharCount != 0)
                 {
                     orderCount = result[rIndex].CharCount / result[rIndex].CharCountPercent;
@@ -1839,8 +1608,7 @@ exports._runRdtPrediction = async function(rdtType, group, version, scenario,mod
             }            
             else if (result[rIndex].ROW_ID == 6)
             {
-                //impact_val = w6*predictedVal;//result[rIndex].CharCount;
-                impact_percent = w6*predictedVal;//result[rIndex].CharCount;
+                impact_percent = w6*predictedVal;
                 if(result[rIndex].CharCount != 0)
                 {
                     orderCount = result[rIndex].CharCount / result[rIndex].CharCountPercent;
@@ -1849,8 +1617,7 @@ exports._runRdtPrediction = async function(rdtType, group, version, scenario,mod
             }            
             else if (result[rIndex].ROW_ID == 7)
             {
-                //impact_val = w7*predictedVal;//result[rIndex].CharCount;
-                impact_percent = w7*predictedVal;//result[rIndex].CharCount;
+                impact_percent = w7*predictedVal;
                 if(result[rIndex].CharCount != 0)
                 {
                     orderCount = result[rIndex].CharCount / result[rIndex].CharCountPercent;
@@ -1859,8 +1626,7 @@ exports._runRdtPrediction = async function(rdtType, group, version, scenario,mod
             }            
             else if (result[rIndex].ROW_ID == 8)
             {
-                //impact_val = w8*predictedVal;//result[rIndex].CharCount;
-                impact_percent = w8*predictedVal;//result[rIndex].CharCount;
+                impact_percent = w8*predictedVal;
                 if(result[rIndex].CharCount != 0)
                 {
                     orderCount = result[rIndex].CharCount / result[rIndex].CharCountPercent;
@@ -1869,8 +1635,7 @@ exports._runRdtPrediction = async function(rdtType, group, version, scenario,mod
             }            
             else if (result[rIndex].ROW_ID == 9)
             {
-                //impact_val = w9*predictedVal;//result[rIndex].CharCount;
-                impact_percent = w9*predictedVal;//result[rIndex].CharCount;
+                impact_percent = w9*predictedVal;
                 if(result[rIndex].CharCount != 0)
                 {
                     orderCount = result[rIndex].CharCount / result[rIndex].CharCountPercent;
@@ -1879,8 +1644,7 @@ exports._runRdtPrediction = async function(rdtType, group, version, scenario,mod
             }            
             else if (result[rIndex].ROW_ID == 10)
             {
-                //impact_val = w10*predictedVal;//result[rIndex].CharCount;
-                impact_percent = w10*predictedVal;//result[rIndex].CharCount;
+                impact_percent = w10*predictedVal;
                 if(result[rIndex].CharCount != 0)
                 {
                     orderCount = result[rIndex].CharCount / result[rIndex].CharCountPercent;
@@ -1889,8 +1653,7 @@ exports._runRdtPrediction = async function(rdtType, group, version, scenario,mod
             }            
             else if (result[rIndex].ROW_ID == 11)
             {
-                //impact_val = w11*predictedVal;//result[rIndex].CharCount;
-                impact_percent = w11*predictedVal;//result[rIndex].CharCount;
+                impact_percent = w11*predictedVal;
                 if(result[rIndex].CharCount != 0)
                 {
                     orderCount = result[rIndex].CharCount / result[rIndex].CharCountPercent;
@@ -1899,21 +1662,13 @@ exports._runRdtPrediction = async function(rdtType, group, version, scenario,mod
             }            
             else if (result[rIndex].ROW_ID == 12)
             {
-                //impact_val = w12*predictedVal;//result[rIndex].CharCount;
-                impact_percent = w12*predictedVal;//result[rIndex].CharCount;
+                impact_percent = w12*predictedVal;
                 if(result[rIndex].CharCount != 0)
                 {
                     orderCount = result[rIndex].CharCount / result[rIndex].CharCountPercent;
                     impact_val = impact_percent * orderCount;
                 }
             }
-            // if (predictedVal <= 0)
-            //    impact_percent = 0;
-            // else
-            //     impact_percent = 100*impact_val/impact_percent;
-            //impact_percent = 100.0*impact_val/(predictedVal);
-
-            //console.log("rIndex = ",rIndex,"impact_percent = ", impact_percent,"predictedVal = ", predictedVal, "intercept =",intercept);
             let predicted = predictedVal;
             let impactValPercent = 0;
             if( predicted*orderCount > 0 )
@@ -1941,11 +1696,7 @@ exports._runRdtPrediction = async function(rdtType, group, version, scenario,mod
                 "'" + impactValPercent + "'" + "," +
                 "'" + predicted*orderCount + "'" + "," +
                 "'" + predictedTime + "'" + ')' + ' WITH PRIMARY KEY';            
-            //console.log("CP_TS_OBJDEP_CHAR_IMPACT_F MLR UPSERT sqlStr ", sqlStr); 
-  
-            // stmt=conn.prepare(sqlStr);
-            // stmt.exec();
-            // stmt.drop(); 
+
             try {
                 await cds.run(sqlStr);
             }
@@ -1957,7 +1708,6 @@ exports._runRdtPrediction = async function(rdtType, group, version, scenario,mod
   
 
     }
-    // conn.disconnect();
 
     let returnObj = [];	
     let createdAt = createtAtObj;
