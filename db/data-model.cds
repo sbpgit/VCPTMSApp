@@ -515,8 +515,8 @@ context cp {
     }
     entity MATVARIANT_HEADER{
         key MATVARID    : Integer;
-        LOCATION_ID     : String(4)  @title : 'Location ';
-        PRODUCT_ID      : String(40) @title : 'New Product';
+        key LOCATION_ID     : String(4)  @title : 'Location ';
+        key PRODUCT_ID      : String(40) @title : 'New Product';
         ORDER_COUNT     : Integer    @title : 'Order Count';
         MATVAR_TYPE     : String(1);
         MATVARDESC      : String(50);
@@ -527,8 +527,10 @@ context cp {
     }
     entity MATVARIANT_ITEM{
         key MATVARID    : Integer;
+        key LOCATION_ID     : String(4)  @title : 'Location ';
+        key PRODUCT_ID      : String(40) @title : 'New Product';
         key CHAR_NUM    : String(30) @title : 'Charateristic Name';
-        key CHARVAL_NUM : String(70) @title : 'Charateristic Value';
+            CHARVAL_NUM : String(70) @title : 'Charateristic Value';
     }
     // New product introduction
     entity NEWPROD_INTRO {

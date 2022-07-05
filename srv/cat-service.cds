@@ -175,6 +175,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
     action generateTimeseries(LOCATION_ID : String(4), PRODUCT_ID : String(40),PAST_DAYS : Integer);
     // Generate Timeseries
     action generateTimeseriesF(LOCATION_ID : String(4), PRODUCT_ID : String(40)) ;
+
 ///Partial
     @readonly
     entity genPartialProd           as projection on od.PARTIALPROD_INTRO;
@@ -194,7 +195,8 @@ service CatalogService @(impl : './lib/cat-service.js') {
     PRODCHAR : String ) returns String;
    
 // Material Variant
-    function genMatVariant(LOCATION_ID : String(4), PRODUCT_ID : String(40))                                                                                                                                                                                              returns String;
-    
+    function genMatVariant(LOCATION_ID : String(4), PRODUCT_ID : String(40))      returns String;
+// Method 2
+    function changeToPrimary(LOCATION_ID : String(4), PRODUCT_ID : String(40),CHAR_NUM: String(10),FLAG: String(1)) returns String;
 
 }
