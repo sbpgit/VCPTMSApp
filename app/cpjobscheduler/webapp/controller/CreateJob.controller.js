@@ -1153,8 +1153,10 @@ sap.ui.define(
               that.byId("idbtExport").setVisible(false);
               that.oLoc.setValue(oScheData.LOCATION_ID);
               that.oProd.setValue(oScheData.PRODUCT_ID);
-              that.oVer.setValue(oScheData.VERSION);
-              that.oScen.setValue(oScheData.SCENARIO);
+              // 05-07-2022
+            //   that.oVer.setValue(oScheData.VERSION);
+            //   that.oScen.setValue(oScheData.SCENARIO);
+            // 05-07-2022
               if (sServiceText.includes("DemandQty")) {
                 that
                   .byId("idRbtnImport")
@@ -1358,10 +1360,8 @@ sap.ui.define(
             .getSelectedButton()
             .getText();
 
-          if (
-            that.byId("idJobType").getSelectedKey() === "I" &&
-            that.byId("idIBPselect").getSelectedKey() === "E"
-          ) {
+          if ( that.byId("idJobType").getSelectedKey() === "I" &&
+            that.byId("idIBPselect").getSelectedKey() === "E" ) {
             if (selRadioBt === "Location" || selRadioBt === "Customer Group") {
               that.byId("IBPimport").setVisible(false);
               that.byId("IBPProdExport").setVisible(false);

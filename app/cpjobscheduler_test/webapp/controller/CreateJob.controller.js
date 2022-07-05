@@ -1141,10 +1141,7 @@ sap.ui.define(
           that.byId("idIBPselect").setEnabled(false);
 
           if (that.oGModel.getProperty("/JobType") === "I") {
-            if (
-              sServiceText.includes("DemandQty") ||
-              sServiceText.includes("FCharPlan")
-            ) {
+            if ( sServiceText.includes("DemandQty") || sServiceText.includes("FCharPlan") ) {
               that.byId("idIBPselect").setSelectedKey("I");
               that.byId("idIBPselect").setEnabled(false);
               that.byId("idRbtnImport").setVisible(true);
@@ -1218,10 +1215,7 @@ sap.ui.define(
                 that.oProd.setValue(oScheData.PRODUCT_ID);
               }
             }
-            if (
-              sServiceText !== "generateFDemandQty" &&
-              sServiceText !== "generateFCharPlan"
-            ) {
+            if ( sServiceText !== "generateFDemandQty" && sServiceText !== "generateFCharPlan") {
               // Calling service when IBP Integration Export process is selected
               that.IBPjobUpdate();
             }
