@@ -25,6 +25,7 @@ sap.ui.define(
           this.JobLogsModel = new JSONModel();
           this.JobDataModel = new JSONModel();
           this.ScheLogModel = new JSONModel();
+          this.ScheRunLogModel = new JSONModel();
 
           this.listModel.setSizeLimit(2000);
           this.JobLogsModel.setSizeLimit(1000);
@@ -53,6 +54,14 @@ sap.ui.define(
               this
             );
             this.getView().addDependent(this._valueHelpDialogScheLog);
+          }
+
+          if (!this._valueHelpDialogScheRunLog) {
+            this._valueHelpDialogScheRunLog = sap.ui.xmlfragment(
+              "cpapp.cpjobscheduler.view.RunLogData",
+              this
+            );
+            this.getView().addDependent(this._valueHelpDialogScheRunLog);
           }
         },
 
@@ -948,6 +957,41 @@ sap.ui.define(
           oGModel.setProperty("/UpdateSch", "X");
           that.onCreateJob();
         },
+
+        onRunlogs:function(oEvent){
+            var oJobId = oGModel.getProperty("/Jobdata").jobId,
+            oScheId = oEvent.getSource().getParent().getBindingContext().getObject().scheduleId;
+
+            // Calling service to get the Job details
+          that.getModel("JModel").callFunction("/lreadJobRunLogs", {
+            method: "GET",
+            urlParameters: {
+                jobId: oJobId,
+                scheduleId: oScheId,
+                page_size: 50,
+                offset: 0,
+            },
+            success: function (oData) {
+                that.runLog = $.parseJSON(oData.lreadJobRunLogs.value[0].runText);
+                
+                that.ScheRunLogModel.setData({
+                    results: that.runLog,
+                  });
+                  sap.ui.getCore().byId("idScheRunLogData").setModel(that.ScheRunLogModel);
+                  that._valueHelpDialogScheRunLog.open();
+            },
+            error: function (error) {
+              sap.ui.core.BusyIndicator.hide();
+              MessageToast.show("Failed to get data");
+            },
+          });
+
+        },
+        onScheRunLogClose:function(){
+            that._valueHelpDialogScheRunLog.close();
+        }
+
+
       }
     );
   }

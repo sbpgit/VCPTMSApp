@@ -388,7 +388,7 @@ sap.ui.define(
             ) {
               if (
                 sServiceText === "generateFDemandQty" ||
-                sServiceText === "generateFDemandQty"
+                sServiceText === "generateFCharPlan"
               ) {
                 that.byId("idIBPselect").setSelectedKey("I");
               } else {
@@ -1153,8 +1153,10 @@ sap.ui.define(
               that.byId("idbtExport").setVisible(false);
               that.oLoc.setValue(oScheData.LOCATION_ID);
               that.oProd.setValue(oScheData.PRODUCT_ID);
-              that.oVer.setValue(oScheData.VERSION);
-              that.oScen.setValue(oScheData.SCENARIO);
+              // 05-07-2022
+            //   that.oVer.setValue(oScheData.VERSION);
+            //   that.oScen.setValue(oScheData.SCENARIO);
+            // 05-07-2022
               if (sServiceText.includes("DemandQty")) {
                 that
                   .byId("idRbtnImport")
@@ -1220,7 +1222,7 @@ sap.ui.define(
             }
             if (
               sServiceText !== "generateFDemandQty" &&
-              sServiceText !== "generateFDemandQty"
+              sServiceText !== "generateFCharPlan"
             ) {
               // Calling service when IBP Integration Export process is selected
               that.IBPjobUpdate();
@@ -1358,10 +1360,8 @@ sap.ui.define(
             .getSelectedButton()
             .getText();
 
-          if (
-            that.byId("idJobType").getSelectedKey() === "I" &&
-            that.byId("idIBPselect").getSelectedKey() === "E"
-          ) {
+          if ( that.byId("idJobType").getSelectedKey() === "I" &&
+            that.byId("idIBPselect").getSelectedKey() === "E" ) {
             if (selRadioBt === "Location" || selRadioBt === "Customer Group") {
               that.byId("IBPimport").setVisible(false);
               that.byId("IBPProdExport").setVisible(false);
@@ -1494,7 +1494,7 @@ sap.ui.define(
               that
                 .byId("idRbtnImport")
                 .setSelectedButton(that.byId("idIBPDemand"));
-            } else if (sServiceText === "generateFDemandQty") {
+            } else if (sServiceText === "generateFCharPlan") {
               that.byId("IBPimport").setVisible(true);
               that
                 .byId("idRbtnImport")
@@ -2246,16 +2246,57 @@ sap.ui.define(
          * This function is called when chnaging the Recurring Schedule data.
          */
         onJobTypeChange: function () {
-          var selKey = sap.ui.getCore().byId("idJobSchtype").getSelectedKey();
-          if (selKey === "Im") {
-            sap.ui.getCore().byId("idSchTime").setVisible(true);
-            sap.ui.getCore().byId("idCronValues").setVisible(false);
-            sap.ui.getCore().byId("idSchTime").setDateValue();
-          } else if (selKey === "Cr") {
-            sap.ui.getCore().byId("idSchTime").setVisible(false);
-            sap.ui.getCore().byId("idCronValues").setVisible(true);
-          }
-        },
+            var selKey = sap.ui.getCore().byId("idJobSchtype").getSelectedKey();
+            if (selKey === "Im") {
+                
+                var dDate = new Date();
+                var idSchTime =  dDate.setMinutes(dDate.getMinutes() + 2);
+                var idSETime =  dDate.setHours(dDate.getHours() + 2);
+                idSchTime = new Date(idSchTime);
+                idSETime = new Date(idSETime);
+  
+              sap.ui.getCore().byId("idSchTime").setVisible(false);
+              sap.ui.getCore().byId("idCronValues").setVisible(false);
+              
+              sap.ui.getCore().byId("idSSTime").setVisible(false);
+              sap.ui.getCore().byId("idSETime").setVisible(false);
+  
+              sap.ui.getCore().byId("idSchTime").setDateValue(idSchTime);
+              sap.ui.getCore().byId("idSSTime").setDateValue(new Date());
+              sap.ui.getCore().byId("idSETime").setDateValue(idSETime);
+              
+  
+            } else if (selKey === "Cr") {
+              sap.ui.getCore().byId("idSchTime").setVisible(false);
+              sap.ui.getCore().byId("idCronValues").setVisible(true);
+  
+              
+              sap.ui.getCore().byId("idSSTime").setVisible(true);
+              sap.ui.getCore().byId("idSETime").setVisible(true);
+  
+              sap.ui.getCore().byId("idSchTime").setDateValue();
+              sap.ui.getCore().byId("idSSTime").setDateValue();
+              sap.ui.getCore().byId("idSETime").setDateValue();
+             
+  
+            }
+          },
+          
+          /**
+           * This function is called after opening the Create Job Details fragment.
+           */
+          afterOpenJobDetails:function(){
+  
+              if (that.oGModel.getProperty("/newSch") !== "X" && that.oGModel.getProperty("/UpdateSch") !== "X" ) {
+                  sap.ui.getCore().byId("idJobSchtype").setSelectedKey("Cr");
+                  sap.ui.getCore().byId("idSSTime").setVisible(true);
+                  sap.ui.getCore().byId("idSETime").setVisible(true);
+                }
+  
+              if(that.oGModel.getProperty("/UpdateSch") === "X" || that.oGModel.getProperty("/newSch") === "X" ){
+                  that.onJobTypeChange();
+              }
+          },
 
         /**
          * Called when 'Close/Cancel' button in any dialog is pressed.
@@ -2487,63 +2528,64 @@ sap.ui.define(
           if (oSelJobType === "S") {
             var sSdiType = that.byId("idSdi").getSelectedKey();
             if (sSdiType === "LO") {
-              actionText = "%2Fsdi%2FImportECCLoc";
+              actionText = "/sdi/ImportECCLoc";
             } else if (sSdiType === "CG") {
-              actionText = "%2Fsdi%2FImportECCCustGrp";
+              actionText = "/sdi/ImportECCCustGrp";
             } else if (sSdiType === "PR") {
-              actionText = "%2Fsdi%2FImportECCProd";
+              actionText = "/sdi/ImportECCProd";
             } else if (sSdiType === "LP") {
-              actionText = "%2Fsdi%2FImportECCLocProd";
+              actionText = "/sdi/ImportECCLocProd";
             } else if (sSdiType === "PC") {
-              actionText = "%2Fsdi%2FImportECCProdClass";
+              actionText = "/sdi/ImportECCProdClass";
             } else if (sSdiType === "BH") {
-              actionText = "%2Fsdi%2FImportECCBOM";
+              actionText = "/sdi/ImportECCBOM";
             } else if (sSdiType === "BO") {
-              actionText = "%2Fsdi%2FImportECCBomod";
+              actionText = "/sdi/ImportECCBomod";
             } else if (sSdiType === "OH") {
-              actionText = "%2Fsdi%2FImportECCODhdr";
+              actionText = "/sdi/ImportECCODhdr";
             } else if (sSdiType === "CL") {
-              actionText = "%2Fsdi%2FImportECCClass";
+              actionText = "/sdi/ImportECCClass";
             } else if (sSdiType === "CH") {
-              actionText = "%2Fsdi%2FImportECCChar";
+              actionText = "/sdi/ImportECCChar";
             } else if (sSdiType === "CV") {
-              actionText = "%2Fsdi%2FImportECCCharval";
+              actionText = "/sdi/ImportECCCharval";
             } else if (sSdiType === "SH") {
-              actionText = "%2Fsdi%2FImportECCSalesh";
+              actionText = "/sdi/ImportECCSalesh";
             } else if (sSdiType === "SC") {
-              actionText = "%2Fsdi%2FImportECCSaleshCfg";
+              actionText = "/sdi/ImportECCSaleshCfg";
             }else if (sSdiType === "AC") {
-                actionText = "%2Fsdi%2FImportECCAsmbcomp";
+                actionText = "/sdi/ImportECCAsmbcomp";
               }
           } else {
             if (bButton.includes("Prediction")) {
-              actionText = "%2Fpal%2FgenPredictions";
+              actionText = "/pal/genPredictions";
             } else if (bButton.includes("Model")) {
-              actionText = "%2Fpal%2FgenerateModels";
+              actionText = "/pal/generateModels";
             } else if (bButton === "Time Series History") {
-              actionText = "%2Fcatalog%2FgenerateTimeseries";
+              actionText = "/catalog/generateTimeseries";
             } else if (bButton === "Time Series Future") {
-              actionText = "%2Fcatalog%2FgenerateTimeseriesF";
+              actionText = "/catalog/generateTimeseriesF";
             } else if (bButton === "IBP Demand") {
-              actionText = "%2Fibpimport-srv%2FgenerateFDemandQty";
+              actionText = "/ibpimport-srv/generateFDemandQty";
             } else if (bButton === "IBP Future Plan") {
-              actionText = "%2Fibpimport-srv%2FgenerateFCharPlan";
+              actionText = "/ibpimport-srv/generateFCharPlan";
             } else if (bButton.includes("Location")) {
-              actionText = "%2Fibpimport-srv%2FexportIBPLocation";
+              actionText = "/ibpimport-srv/exportIBPLocation";
             } else if (bButton.includes("Customer")) {
-              actionText = "%2Fibpimport-srv%2FexportIBPCustomer";
+              actionText = "/ibpimport-srv/exportIBPCustomer";
             } else if (bButton.includes("Product")) {
-              actionText = "%2Fibpimport-srv%2FexportIBPMasterProd";
+              actionText = "/ibpimport-srv/exportIBPMasterProd";
             } else if (bButton.includes("Class")) {
-              actionText = "%2Fibpimport-srv%2FexportIBPClass";
+              actionText = "/ibpimport-srv/exportIBPClass";
             } else if (bButton === "Sales History") {
-              actionText = "%2Fibpimport-srv%2FexportIBPSalesTrans";
+              actionText = "/ibpimport-srv/exportIBPSalesTrans";
             } else if (bButton.includes("Sales History Config")) {
-              actionText = "%2Fibpimport-srv%2FexportIBPSalesConfig";
+              actionText = "/ibpimport-srv/exportIBPSalesConfig";
             } else if (bButton.includes("Actual Components Demand")) {
-              actionText = "%2Fibpimport-srv%2FexportActCompDemand";
+              actionText = "/ibpimport-srv/exportActCompDemand";
             } else if (bButton.includes("Assembly Requirement")) {
-              actionText = "%2Fibpimport-srv%2FexportComponentReq";
+              
+                Text = "/ibpimport-srv/exportComponentReq";
             }
           }
 
