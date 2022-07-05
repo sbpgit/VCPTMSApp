@@ -57,6 +57,28 @@ class SOFunctions{
                       A.SALESDOC_ITEM,
                       B.CHAR_NUM`
         ); 
+
+        // Remove Existing Material Variants
+        try {
+            let sqlStr = await conn.prepare(
+                `DELETE FROM "CP_MATVARIANT_HEADER" WHERE LOCATION_ID = '` + adata.LOCATION_ID + `'
+                                                      AND PRODUCT_ID = '` + adata.PRODUCT_ID + `'`
+            )
+            await sqlStr.exec();
+            await sqlStr.drop();            
+        } catch (error) {
+            this.logger.error(error.message);
+        }  
+        try {
+            let sqlStr = await conn.prepare(
+                `DELETE FROM "CP_MATVARIANT_ITEM" WHERE LOCATION_ID = '` + adata.LOCATION_ID + `'
+                                                    AND PRODUCT_ID = '` + adata.PRODUCT_ID + `'`
+            )
+            await sqlStr.exec();
+            await sqlStr.drop();            
+        } catch (error) {
+            this.logger.error(error.message);
+        }                
         
         let liMatVar = [];
         let lsMatVar = {};
@@ -70,6 +92,9 @@ class SOFunctions{
                     lsMatVar = {};
                     lsMatVar['TOTAL_QTY'] = liSales[cntSO].ORD_QTY;
                     lsMatVar['FIRSTORDDATE'] = liSales[cntSO].MAT_AVAILDATE;
+                    lsMatVar['LASTORDDATE'] = liSales[cntSO].MAT_AVAILDATE;
+                    lsMatVar['MATVAR_TYPE'] = 'M';  // Material Variant
+                    lsMatVar['ORDER_COUNT'] = 0;
                     lsMatVar['CONFIG'] = [];
             }
             lsMatVarConfig = {};
@@ -85,27 +110,68 @@ class SOFunctions{
         }
 
         for (let cntMV = 0; cntMV < liMatVar.length; cntMV++) {
-            
-            for (let cntMVL = cntMV +  1; cntMVL < liMatVar.length; cntMVL++) {
-                if (liMatVar[cntMV]['CONFIG'] === liMatVar[cntMVL]['CONFIG']) {
-                    liMatVar[cntMV]['TOTAL_QTY'] = liMatVar[cntMV]['TOTAL_QTY'] + liMatVar[cntMVL]['TOTAL_QTY'];
-                    liMatVar[cntMVL]['CONFIG'] = [];
-                    liMatVar[cntMVL]['TOTAL_QTY'] = 0;
+            if(liMatVar[cntMV]['CONFIG'].length > 0){
+                for (let cntMVL = cntMV +  1; cntMVL < liMatVar.length; cntMVL++) {
+                    if (JSON.stringify(liMatVar[cntMV]['CONFIG']) === JSON.stringify(liMatVar[cntMVL]['CONFIG'])) {
+                        liMatVar[cntMV]['TOTAL_QTY'] = parseInt(liMatVar[cntMV]['TOTAL_QTY']) + parseInt(liMatVar[cntMVL]['TOTAL_QTY']);
+                        liMatVar[cntMVL]['CONFIG'] = [];
+                        liMatVar[cntMVL]['TOTAL_QTY'] = 0;
+
+                        liMatVar[cntMV]['ORDER_COUNT'] = parseInt(liMatVar[cntMV]['ORDER_COUNT']) + parseInt(1);
+
+                        if(liMatVar[cntMV]['FIRSTORDDATE'] > liMatVar[cntMVL]['FIRSTORDDATE']){
+                            liMatVar[cntMV]['FIRSTORDDATE'] = liMatVar[cntMVL]['FIRSTORDDATE'];
+                        }
+                        if(liMatVar[cntMV]['LASTORDDATE'] < liMatVar[cntMVL]['FIRSTORDDATE']){
+                            liMatVar[cntMV]['LASTORDDATE'] = liMatVar[cntMVL]['FIRSTORDDATE'];
+                        }                        
+                    }
                 }
             }
         }
 
-        let lCnt = 0;
+        let lCntVariantID = 0;
+
         for (let cntMV = 0; cntMV < liMatVar.length; cntMV++) {
-            if(liMatVar[cntMV]['CONFIG'] !== []){
-                lCnt = lCnt + 1;
+            if(liMatVar[cntMV]['CONFIG'].length > 0){
+                lCntVariantID = parseInt(lCntVariantID) +  parseInt(1);
+                liMatVar[cntMV]['MATVARID'] = lCntVariantID;
+                try {
+                    let sqlStr = conn.prepare(
+                        `INSERT INTO "CP_MATVARIANT_HEADER" VALUES(
+                            '` + liMatVar[cntMV].MATVARID + `',
+                            '` + adata.LOCATION_ID + `',
+                            '` + adata.PRODUCT_ID + `',
+                            '` + liMatVar[cntMV].ORDER_COUNT + `',
+                            '` + liMatVar[cntMV].MATVAR_TYPE + `',
+                            '',
+                            '` + liMatVar[cntMV].TOTAL_QTY + `',
+                            '` + liMatVar[cntMV].FIRSTORDDATE + `',
+                            '` + liMatVar[cntMV].LASTORDDATE + `',
+                            TRUE)`
+                    )
+
+                    sqlStr.exec();
+                    sqlStr.drop();            
+                } catch (error) {
+                    this.logger.error(error.message);
+                }
+                
+                for (let cntMVC = 0; cntMVC < liMatVar[cntMV]['CONFIG'].length; cntMVC++) {
+                    let sqlStr = conn.prepare(
+                        `INSERT INTO "CP_MATVARIANT_ITEM" VALUES(
+                            '` + liMatVar[cntMV].MATVARID + `',                            
+                            '` + adata.LOCATION_ID + `',
+                            '` + adata.PRODUCT_ID + `',
+                            '` + liMatVar[cntMV]['CONFIG'][cntMVC].CHAR_NUM + `',
+                            '` + liMatVar[cntMV]['CONFIG'][cntMVC].CHARVAL_NUM + `')`
+                    )
+                    sqlStr.exec();
+                    sqlStr.drop();                    
+                }
             }
         }
 
-        console.log(liMatVar);
-        console.log(liMatVar.length);        
-
-        console.log(lCnt);
     }
 }
 
