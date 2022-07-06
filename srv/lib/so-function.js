@@ -58,6 +58,24 @@ class SOFunctions{
                       B.CHAR_NUM`
         ); 
 
+        const liSalesPri = await cds.run(
+            `SELECT *
+            FROM CP_SALESH AS A
+           INNER JOIN CP_SALESH_CONFIG AS B
+              ON A.SALES_DOC = B.SALES_DOC
+             AND A.SALESDOC_ITEM = B.SALESDOC_ITEM
+           WHERE A.LOCATION_ID   = '` + adata.LOCATION_ID + `'
+             AND B.PRODUCT_ID    = '` + adata.PRODUCT_ID + `'
+             AND B.CHAR_NUM IN (SELECT "CHAR_NUM"
+                                    FROM "CP_VARCHAR_PS"
+                                WHERE "PRODUCT_ID" = '` + adata.PRODUCT_ID + `'
+                                    AND "LOCATION_ID" = '` + adata.LOCATION_ID + `'
+                                    AND "CHAR_TYPE" = 'P')
+             ORDER BY A.SALES_DOC,
+                      A.SALESDOC_ITEM,
+                      B.CHAR_NUM`
+        );         
+
         // Remove Existing Material Variants
         try {
             let sqlStr = await conn.prepare(
@@ -105,6 +123,30 @@ class SOFunctions{
             if (cntSO === GenF.addOne(cntSO, liSales.length) ||
                 liSales[cntSO].SALES_DOC !== liSales[GenF.addOne(cntSO, liSales.length)].SALES_DOC ||
                 liSales[cntSO].SALESDOC_ITEM !== liSales[GenF.addOne(cntSO, liSales.length)].SALESDOC_ITEM) {
+                    liMatVar.push(lsMatVar);
+            }       
+        }
+
+        for (let cntSO = 0; cntSO < liSalesPri.length; cntSO++) {
+            if (cntSO === 0 ||
+                liSalesPri[cntSO].SALES_DOC !== liSalesPri[GenF.subOne(cntSO, liSalesPri.length)].SALES_DOC ||
+                liSalesPri[cntSO].SALESDOC_ITEM !== liSalesPri[GenF.subOne(cntSO, liSalesPri.length)].SALESDOC_ITEM) {
+                    lsMatVar = {};
+                    lsMatVar['TOTAL_QTY'] = liSalesPri[cntSO].ORD_QTY;
+                    lsMatVar['FIRSTORDDATE'] = liSalesPri[cntSO].MAT_AVAILDATE;
+                    lsMatVar['LASTORDDATE'] = liSalesPri[cntSO].MAT_AVAILDATE;
+                    lsMatVar['MATVAR_TYPE'] = 'C';  // Configurable Products
+                    lsMatVar['ORDER_COUNT'] = 0;
+                    lsMatVar['CONFIG'] = [];
+            }
+            lsMatVarConfig = {};
+            lsMatVarConfig['CHAR_NUM'] = liSalesPri[cntSO].CHAR_NUM;
+            lsMatVarConfig['CHARVAL_NUM'] = liSalesPri[cntSO].CHARVAL_NUM;
+            lsMatVar['CONFIG'].push(lsMatVarConfig);
+
+            if (cntSO === GenF.addOne(cntSO, liSalesPri.length) ||
+                liSalesPri[cntSO].SALES_DOC !== liSalesPri[GenF.addOne(cntSO, liSalesPri.length)].SALES_DOC ||
+                liSalesPri[cntSO].SALESDOC_ITEM !== liSalesPri[GenF.addOne(cntSO, liSalesPri.length)].SALESDOC_ITEM) {
                     liMatVar.push(lsMatVar);
             }       
         }
