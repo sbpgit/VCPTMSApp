@@ -2584,8 +2584,7 @@ sap.ui.define(
             } else if (bButton.includes("Actual Components Demand")) {
               actionText = "/ibpimport-srv/exportActCompDemand";
             } else if (bButton.includes("Assembly Requirement")) {
-              
-                Text = "/ibpimport-srv/exportComponentReq";
+              actionText = "/ibpimport-srv/exportComponentReq";
             }
           }
 

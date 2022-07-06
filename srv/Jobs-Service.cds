@@ -1,5 +1,8 @@
 using js from '../db/jobscheduler';
-using V_JOBSTATUS from '../db/jobscheduler';
+using {V_JOBSTATUS,
+       V_JOBRUNSTATUS,
+       V_JOBRUNSTATE
+ } from '../db/jobscheduler';
 
 
 service JobsService @(impl : './lib/Jobs-Service.js') {
@@ -14,6 +17,8 @@ service JobsService @(impl : './lib/Jobs-Service.js') {
   entity logs as projection on js.LOGS;
 
   entity getJobStatus  as projection on V_JOBSTATUS;
+  entity getJobRunStatus as projection on V_JOBRUNSTATUS; 
+  entity getJobRunState as projection on V_JOBRUNSTATE; 
 
 
   action updateJobs();
