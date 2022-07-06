@@ -809,3 +809,12 @@ key     ![REF_CHARNAME]: String(30)  @title: 'REF_CHARNAME' ;
 key     ![REF_CHARVAL_NUM]: String(70)  @title: 'REF_CHARVAL_NUM' ; 
 key     ![REF_CHARVAL]: String(70)  @title: 'REF_CHARVAL' ; 
 }
+@cds.persistence.exists 
+Entity ![V_GETVARCHARPS] {
+key     ![PRODUCT_ID]: String(40)  @title: 'PRODUCT_ID' ; 
+key     ![LOCATION_ID]: String(4)  @title: 'LOCATION_ID' ; 
+key     ![CHAR_NUM]: String(30)  @title: 'CHAR_NUM' ; 
+key     ![CHAR_NAME]: String(30)  @title: 'CHAR_NAME' ; 
+key     ![CHAR_TYPE]: String(2)  @title: 'CHAR_TYPE' ; 
+key     ![SEQUENCE]: Integer  @title: 'SEQUENCE' ; 
+}
