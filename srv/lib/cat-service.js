@@ -880,4 +880,34 @@ module.exports = (srv) => {
         lsresults = {};
         return responseMessage;
     });
+    // Maintain partial configurations for new product
+    srv.on("changeToPrimary", async (req) => {
+        let liresults = [];
+        let lsresults = {};
+        let liProdChar = {};
+        var responseMessage;
+        if (req.data.FLAG === "C" ) {
+                lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
+                lsresults.LOCATION_ID = req.data.LOCATION_ID;
+                lsresults.CHAR_NUM = req.data.CHAR_NUM;
+                lsresults.CHAR_TYPE = '';
+                lsresults.SEQUENCE = 0;
+                liresults.push(lsresults);
+                lsresults = {};
+            }
+            if (liresults.length > 0) {
+                try {
+                    await cds.run(INSERT.into("CP_VARCHAR_PS").entries(liresults));
+                    responseMessage = " Creation/Updation successful";
+                } catch (e) {
+                    //DONOTHING
+                    responseMessage = " Creation failed";
+                    // createResults.push(responseMessage);
+                }
+            }
+        
+        
+        lsresults = {};
+        return responseMessage;
+    });
 };

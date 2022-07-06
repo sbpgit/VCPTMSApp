@@ -1283,7 +1283,9 @@ annotate V_JOBSTATUS with @(
     UI        : {
         SelectionFields         : [
             JOB_ID,
-            RUN_STATE
+            RUN_STATE,
+            RUN_STATUS,
+            CRITICALSTATUS
         ],
         LineItem                : [
             {
@@ -1293,25 +1295,30 @@ annotate V_JOBSTATUS with @(
             },
             {
                 $Type : 'UI.DataField',
-                Value : JOB_NAME
+                Value : JOB_NAME,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField',
-                Value : SCH_STARTTIME
+                Value : SCH_STARTTIME,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField',
-                Value : SCH_END_TIME
+                Value : SCH_END_TIME,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField',
                 Value : RUN_STATUS,
-                Criticality : CRITICALSTATUS
+                Criticality : CRITICALSTATUS,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField',
                 Value : RUN_STATE,
-                Criticality : CRITICALSTATE
+                Criticality : CRITICALSTATE,
+                ![@UI.Importance]   : #High
             }
         ],
         HeaderInfo              : {

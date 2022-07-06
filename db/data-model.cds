@@ -515,8 +515,8 @@ context cp {
     }
     entity MATVARIANT_HEADER{
         key MATVARID    : Integer;
-        LOCATION_ID     : String(4)  @title : 'Location ';
-        PRODUCT_ID      : String(40) @title : 'New Product';
+        key LOCATION_ID     : String(4)  @title : 'Location ';
+        key PRODUCT_ID      : String(40) @title : 'New Product';
         ORDER_COUNT     : Integer    @title : 'Order Count';
         MATVAR_TYPE     : String(1);
         MATVARDESC      : String(50);
@@ -527,8 +527,10 @@ context cp {
     }
     entity MATVARIANT_ITEM{
         key MATVARID    : Integer;
+        key LOCATION_ID     : String(4)  @title : 'Location ';
+        key PRODUCT_ID      : String(40) @title : 'New Product';
         key CHAR_NUM    : String(30) @title : 'Charateristic Name';
-        key CHARVAL_NUM : String(70) @title : 'Charateristic Value';
+            CHARVAL_NUM : String(70) @title : 'Charateristic Value';
     }
     // New product introduction
     entity NEWPROD_INTRO {
@@ -806,4 +808,13 @@ key     ![REF_CHAR_NUM]: String(30)  @title: 'REF_CHAR_NUM' ;
 key     ![REF_CHARNAME]: String(30)  @title: 'REF_CHARNAME' ;  
 key     ![REF_CHARVAL_NUM]: String(70)  @title: 'REF_CHARVAL_NUM' ; 
 key     ![REF_CHARVAL]: String(70)  @title: 'REF_CHARVAL' ; 
+}
+@cds.persistence.exists 
+Entity ![V_GETVARCHARPS] {
+key     ![PRODUCT_ID]: String(40)  @title: 'PRODUCT_ID' ; 
+key     ![LOCATION_ID]: String(4)  @title: 'LOCATION_ID' ; 
+key     ![CHAR_NUM]: String(30)  @title: 'CHAR_NUM' ; 
+key     ![CHAR_NAME]: String(30)  @title: 'CHAR_NAME' ; 
+key     ![CHAR_TYPE]: String(2)  @title: 'CHAR_TYPE' ; 
+key     ![SEQUENCE]: Integer  @title: 'SEQUENCE' ; 
 }

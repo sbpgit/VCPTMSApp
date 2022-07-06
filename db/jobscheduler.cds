@@ -216,3 +216,12 @@ key     ![SCHEDULED_TIMESTAMP]: String(50)  @title: 'Scheduled Timestamp' ;
 key     ![COMPLETED_TIMESTAMP]: String(50)  @title: 'Completed Timestamp' ; 
 key     ![RUNTEXT]: LargeString  @title: 'Run Text' ; 
 }
+
+@cds.persistence.exists 
+Entity ![V_JOBRUNSTATE] {
+key     ![RUN_STATE]: String(17)  @title: 'RUN_STATE' ; 
+}
+@cds.persistence.exists 
+Entity ![V_JOBRUNSTATUS] {
+key     ![RUN_STATUS]: String(9)  @title: 'RUN_STATUS' ; 
+}

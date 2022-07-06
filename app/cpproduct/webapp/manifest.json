@@ -116,7 +116,8 @@
                                         "route": "getProductsObjectPage"
                                     }
                                 }
-                            }
+                            },                           
+                            "initialLoad": true
                         }
                     }
                 },
