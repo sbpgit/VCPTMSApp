@@ -106,7 +106,7 @@ module.exports = (srv) => {
             vDateSeries = GenFunctions.addDays(vDateSeries, 7);
 
             lsDates.CAL_DATE = vDateSeries;//GenFunctions.getNextSundayCmp(vDateSeries);
-           // vDateSeries = lsDates.CAL_DATE;
+            // vDateSeries = lsDates.CAL_DATE;
 
             liDates.push(lsDates);
             lsDates = {};
@@ -143,7 +143,7 @@ module.exports = (srv) => {
             liCompWeekly.push(GenFunctions.parse(lsCompWeekly));
             lsCompWeekly = {};
         }
-        liCompWeekly.sort(GenFunctions.dynamicSortMultiple("STRUC_NODE","COMPONENT","ITEM_NUM"));
+        liCompWeekly.sort(GenFunctions.dynamicSortMultiple("STRUC_NODE", "COMPONENT", "ITEM_NUM"));
         return liCompWeekly;
     });
 
@@ -232,8 +232,8 @@ module.exports = (srv) => {
         while (vDateSeries <= vDateTo) {
             vDateSeries = GenFunctions.addDays(vDateSeries, 7);
 
-            lsDates.CAL_DATE = vDateSeries ;//GenFunctions.getNextSundayCmp(vDateSeries);
-          //  vDateSeries = lsDates.CAL_DATE;
+            lsDates.CAL_DATE = vDateSeries;//GenFunctions.getNextSundayCmp(vDateSeries);
+            //  vDateSeries = lsDates.CAL_DATE;
 
             liDates.push(lsDates);
             lsDates = {};
@@ -271,7 +271,7 @@ module.exports = (srv) => {
             liCompWeekly.push(GenFunctions.parse(lsCompWeekly));
             lsCompWeekly = {};
         }
-        liCompWeekly.sort(GenFunctions.dynamicSortMultiple("STRUC_NODE","COMPONENT","ITEM_NUM"));
+        liCompWeekly.sort(GenFunctions.dynamicSortMultiple("STRUC_NODE", "COMPONENT", "ITEM_NUM"));
         return liCompWeekly;
     });
     // Create profiles
@@ -342,7 +342,7 @@ module.exports = (srv) => {
                 if (req.data.FLAG === "E") {
                     await cds.delete("CP_PAL_PROFILEMETH_PARA", lsprofilesPara);
                 }
-                if (req.data.INTVAL === NaN || req.data.INTVAL === 'NaN' || req.data.INTVAL === 'null' || req.data.INTVAL === null)  {
+                if (req.data.INTVAL === NaN || req.data.INTVAL === 'NaN' || req.data.INTVAL === 'null' || req.data.INTVAL === null) {
                     lsprofilesPara.INTVAL = null;
                 }
                 else {
@@ -350,21 +350,21 @@ module.exports = (srv) => {
                 }
                 if (req.data.STRVAL === NaN || req.data.STRVAL === 'NaN' || req.data.STRVAL === 'null' || req.data.STRVAL === null) {
                     lsprofilesPara.STRVAL = null;
-                } 
-                else{
+                }
+                else {
                     lsprofilesPara.STRVAL = req.data.STRVAL;
                 }
-                
-                if (req.data.DOUBLEVAL === NaN || req.data.DOUBLEVAL === 'NaN' || req.data.DOUBLEVAL === 'null'|| req.data.DOUBLEVAL === null) {
+
+                if (req.data.DOUBLEVAL === NaN || req.data.DOUBLEVAL === 'NaN' || req.data.DOUBLEVAL === 'null' || req.data.DOUBLEVAL === null) {
                     lsprofilesPara.DOUBLEVAL = null;
                 }
                 else {
                     lsprofilesPara.DOUBLEVAL = req.data.DOUBLEVAL;
                 }
                 lsprofilesPara.PARA_DESC = req.data.PARA_DESC;
-                lsprofilesPara.PARA_DEP = null; 
+                lsprofilesPara.PARA_DEP = null;
                 lsprofilesPara.CREATED_DATE = curDate;
-                lsprofilesPara.CREATED_BY = ""; 
+                lsprofilesPara.CREATED_BY = "";
                 liProfilesPara.push(GenFunctions.parse(lsprofilesPara));
             }
             lsprofilesPara = {};
@@ -395,7 +395,7 @@ module.exports = (srv) => {
             }
         }
         res = req._.req.res;
-        return responseMessage;       
+        return responseMessage;
     });
     // Assign profile sot object dependency
     srv.on("assignProfilesOD", async (req) => {
@@ -647,7 +647,7 @@ module.exports = (srv) => {
         return lireturn;
         // res.send({ value: createResults });
     });
-    
+
 
     // Get object dependency
     srv.on("get_objdep", async (req) => {
@@ -662,7 +662,7 @@ module.exports = (srv) => {
             );
         return results;
     });
-    
+
     // Generate Timeseries using action call
     srv.on("generateTimeseries", async (req) => {
         const obgenTimeseries = new GenTimeseries();
@@ -686,8 +686,8 @@ module.exports = (srv) => {
         const obgenSOFunctions = new SOFunctions();
         await obgenSOFunctions.genMatVariant(req.data);
     });
-     // Maintain Parital product introsduction
-     srv.on("maintainPartialProd", async (req) => {
+    // Maintain Parital product introsduction
+    srv.on("maintainPartialProd", async (req) => {
         let liresults = [];
         let lsresults = {};
         var responseMessage;
@@ -882,18 +882,57 @@ module.exports = (srv) => {
     });
     // Maintain partial configurations for new product
     srv.on("changeToPrimary", async (req) => {
+        let { genvarcharps } = srv.entities;
         let liresults = [];
         let lsresults = {};
         let liProdChar = {};
         var responseMessage;
-        if (req.data.FLAG === "C" ) {
-                lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
-                lsresults.LOCATION_ID = req.data.LOCATION_ID;
-                lsresults.CHAR_NUM = req.data.CHAR_NUM;
-                lsresults.CHAR_TYPE = '';
-                lsresults.SEQUENCE = 0;
+        
+        const li_varcharps = await cds.run(
+            `SELECT *
+            FROM "CP_VARCHAR_PS"
+            WHERE "LOCATION_ID" = '` +
+            req.data.LOCATION_ID +
+            `'
+            AND "PRODUCT_ID" = '` +
+            req.data.PRODUCT_ID +
+            `'
+            AND "SEQUENCE" > `+
+            req.data.SEQUENCE + ``
+        );
+        if (req.data.FLAG === "C") {
+            lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
+            lsresults.LOCATION_ID = req.data.LOCATION_ID;
+            lsresults.CHAR_NUM = req.data.CHAR_NUM;
+            lsresults.CHAR_TYPE = req.data.CHAR_TYPE;
+
+            lsresults.SEQUENCE = 0;
+            liresults.push(lsresults);
+
+            if (liresults.length > 0) {
+                try {
+                    await cds.run(UPDATE(genvarcharps, { LOCATION_ID: lsresults.LOCATION_ID, PRODUCT_ID: lsresults.PRODUCT_ID, CHAR_NUM: lsresults.CHAR_NUM }).with({ CHAR_TYPE: lsresults.CHAR_TYPE, SEQUENCE: lsresults.SEQUENCE }))
+                    responseMessage = " Creation/Updation successful";
+                } catch (e) {
+                    responseMessage = " Creation failed";
+                }
+            }
+            // }
+            lsresults = {};
+            liresults = [];
+            for (let i = 0; i < li_varcharps.length; i++) {
+                lsresults.PRODUCT_ID = li_varcharps[i].PRODUCT_ID;
+                lsresults.LOCATION_ID = li_varcharps[i].LOCATION_ID;
+                lsresults.CHAR_NUM = li_varcharps[i].CHAR_NUM;
+                try {
+                    await cds.delete("CP_VARCHAR_PS", lsresults);
+                } catch (e) {
+                    //DONOTHING
+                }
+                lsresults.CHAR_TYPE = 'S';
+                lsresults.SEQUENCE = li_varcharps[i].SEQUENCE - 1;
                 liresults.push(lsresults);
-                lsresults = {};
+                lsresults={};
             }
             if (liresults.length > 0) {
                 try {
@@ -905,8 +944,29 @@ module.exports = (srv) => {
                     // createResults.push(responseMessage);
                 }
             }
-        
-        
+        }
+        else if (req.data.FLAG === "E") {
+
+            lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
+            lsresults.LOCATION_ID = req.data.LOCATION_ID;
+            lsresults.CHAR_NUM = req.data.CHAR_NUM;            
+            try {
+                await cds.delete("CP_VARCHAR_PS", lsresults);
+            } catch (e) {
+                //DONOTHING
+            }
+            lsresults.CHAR_TYPE = req.data.CHAR_TYPE;
+            lsresults.SEQUENCE = req.data.SEQUENCE;
+            liresults.push(lsresults);
+            if (liresults.length > 0) {
+                try {
+                    await cds.run(INSERT.into("CP_VARCHAR_PS").entries(liresults));
+                    responseMessage = " Creation/Updation successful";
+                } catch (e) {
+                    responseMessage = " Creation failed";
+                }
+            }
+        }
         lsresults = {};
         return responseMessage;
     });
