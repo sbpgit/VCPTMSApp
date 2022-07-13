@@ -514,15 +514,11 @@ context cp {
         VALC  : String(70) @title : 'Characteristic Value';
     }
     entity MATVARIANT_HEADER{
-        key MATVARID    : Integer;
+        key MATVARID    : Integer @title: 'Material Variant';
         key LOCATION_ID     : String(4)  @title : 'Location ';
         key PRODUCT_ID      : String(40) @title : 'New Product';
-        ORDER_COUNT     : Integer    @title : 'Order Count';
-        MATVAR_TYPE     : String(1);
-        MATVARDESC      : String(50);
-        TOTAL_QTY       : Integer;
-        FIRSTORDDATE    : Date;
-        LASTORDDATE     : Date;
+        MATVARDESC      : String(50) @title: 'Description';
+        MATVAR_TYPE     : String(1) @title: 'Material Variant Type';
         ACTIVE          : Boolean;
     }
     entity MATVARIANT_ITEM{
