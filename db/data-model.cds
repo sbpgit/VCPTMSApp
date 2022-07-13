@@ -514,15 +514,11 @@ context cp {
         VALC  : String(70) @title : 'Characteristic Value';
     }
     entity MATVARIANT_HEADER{
-        key MATVARID    : Integer;
+        key MATVARID    : Integer @title: 'Material Variant';
         key LOCATION_ID     : String(4)  @title : 'Location ';
         key PRODUCT_ID      : String(40) @title : 'New Product';
-        ORDER_COUNT     : Integer    @title : 'Order Count';
-        MATVAR_TYPE     : String(1);
-        MATVARDESC      : String(50);
-        TOTAL_QTY       : Integer;
-        FIRSTORDDATE    : Date;
-        LASTORDDATE     : Date;
+        MATVARDESC      : String(50) @title: 'Description';
+        MATVAR_TYPE     : String(1) @title: 'Material Variant Type';
         ACTIVE          : Boolean;
     }
     entity MATVARIANT_ITEM{
@@ -550,6 +546,39 @@ context cp {
             REF_CHARVAL_NUM : String(70) @title : 'Charateristic Value';
             REF_PRODID  : String(40) @title : ' Ref. Product';
     }
+    entity SALES_HM{
+        key SALES_DOC        : String(10)     @title : 'Sales Document';
+        key SALESDOC_ITEM    : String(6)      @title : 'Sales Document Item';
+            PRODUCT_ID       : String(40)     @title : 'Product Id';
+            LOCATION_ID      : String(4)      @title : 'Location ID';
+            MATVARID         : Integer;
+    }
+    // Authorization object master
+    entity USER_AUTHOBJ  {
+        key USER    : String(100) @title : 'User';
+        key AUTH_GROUP   : String(4) @title : 'Authorization Object';
+            DESCRIPTION : String(250) @title : 'Description';
+    }
+    
+    // Roles for a user
+    entity AUTH_EMP_ROLE : managed {
+        key USER    : String(100) @title : 'User';
+        key ROLE_ID : String(100) @title : 'Role ID';
+    }
+    // Roles master
+    entity AUTH_ROLE : managed {
+        key ROLE_ID     : String(100) @title : 'Role ID';
+            DESCRIPTION : String(250) @title : 'Description';
+    }
+
+    // Authorization object for roles and its parameters
+    entity AUTH_ROLE_OBJ : managed {
+        key ROLE_ID       : String(100) @title : 'Role ID';
+        key PARAMETER     : String(100) @title : 'Parameter';
+        key PARAMETER_VAL : String(250) @title : 'Parameter';
+        // ROLE : Association to many AUTH_EMP_ROLE on ROLE.ROLE_ID = ROLE_ID;
+    }
+
 }
 
 @cds.persistence.exists

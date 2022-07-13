@@ -202,4 +202,6 @@ service CatalogService @(impl : './lib/cat-service.js') {
     entity getPriSecChar as projection on V_GETVARCHARPS;
     function changeToPrimary(LOCATION_ID : String(4), PRODUCT_ID : String(40),CHAR_NUM: String(10),CHAR_TYPE: String(1),SEQUENCE:Integer,FLAG: String(1)) returns String;
 
+    @odata.draft.enabled
+    entity getARObj             as projection on od.AUTH_ROLE_OBJ;
 }
