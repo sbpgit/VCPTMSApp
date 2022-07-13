@@ -880,20 +880,84 @@ module.exports = (srv) => {
         lsresults = {};
         return responseMessage;
     });
+    
     // Maintain partial configurations for new product
     srv.on("changeToPrimary", async (req) => {
+        let { genvarcharps } = srv.entities;
         let liresults = [];
         let lsresults = {};
         let liProdChar = {};
         var responseMessage;
-        if (req.data.FLAG === "C" ) {
-                lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
-                lsresults.LOCATION_ID = req.data.LOCATION_ID;
-                lsresults.CHAR_NUM = req.data.CHAR_NUM;
-                lsresults.CHAR_TYPE = '';
-                lsresults.SEQUENCE = 0;
+        
+        const li_varcharps = await cds.run(
+            `SELECT *
+            FROM "CP_VARCHAR_PS"
+            WHERE "LOCATION_ID" = '` +
+            req.data.LOCATION_ID +
+            `'
+            AND "PRODUCT_ID" = '` +
+            req.data.PRODUCT_ID +
+            `'
+            AND "SEQUENCE" > `+
+            req.data.SEQUENCE + ``
+        );
+        if (req.data.FLAG === "C") {
+            lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
+            lsresults.LOCATION_ID = req.data.LOCATION_ID;
+            lsresults.CHAR_NUM = req.data.CHAR_NUM;
+            
+            try {
+
+                await cds.delete("CP_VARCHAR_PS", lsresults);
+
+            } catch (e) {
+
+                //DONOTHING
+
+            }
+            lsresults.CHAR_TYPE = req.data.CHAR_TYPE;
+            lsresults.SEQUENCE = req.data.SEQUENCE;
+            liresults.push(lsresults);
+
+            if (liresults.length > 0) {
+                try {
+                    // await cds.run(UPDATE(genvarcharps, { LOCATION_ID: lsresults.LOCATION_ID, PRODUCT_ID: lsresults.PRODUCT_ID, CHAR_NUM: lsresults.CHAR_NUM }).with({ CHAR_TYPE: lsresults.CHAR_TYPE, SEQUENCE: lsresults.SEQUENCE }))
+                    await cds.run(INSERT.into("CP_VARCHAR_PS").entries(liresults));
+                    responseMessage = " Creation/Updation successful";
+                } catch (e) {
+                    responseMessage = " Creation failed";
+                }
+            }
+            // }
+            if(lsresults.CHAR_TYPE !== "S"){
+                // const li_varcharps = await cds.run(
+                //     `SELECT *
+                //     FROM "CP_VARCHAR_PS"
+                //     WHERE "LOCATION_ID" = '` +
+                //     req.data.LOCATION_ID +
+                //     `'
+                //     AND "PRODUCT_ID" = '` +
+                //     req.data.PRODUCT_ID +
+                //     `'
+                //     AND "SEQUENCE" > `+
+                //     req.data.SEQUENCE + ``
+                // );
+            // }
+            lsresults = {};
+            liresults = [];
+            for (let i = 0; i < li_varcharps.length; i++) {
+                lsresults.PRODUCT_ID = li_varcharps[i].PRODUCT_ID;
+                lsresults.LOCATION_ID = li_varcharps[i].LOCATION_ID;
+                lsresults.CHAR_NUM = li_varcharps[i].CHAR_NUM;
+                try {
+                    await cds.delete("CP_VARCHAR_PS", lsresults);
+                } catch (e) {
+                    //DONOTHING
+                }
+                lsresults.CHAR_TYPE = 'S';
+                lsresults.SEQUENCE = li_varcharps[i].SEQUENCE - 1;
                 liresults.push(lsresults);
-                lsresults = {};
+                lsresults={};
             }
             if (liresults.length > 0) {
                 try {
@@ -905,8 +969,32 @@ module.exports = (srv) => {
                     // createResults.push(responseMessage);
                 }
             }
-        
-        
+        }
+    }
+        else if (req.data.FLAG === "E") {
+
+            lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
+            lsresults.LOCATION_ID = req.data.LOCATION_ID;
+            lsresults.CHAR_NUM = req.data.CHAR_NUM;
+            
+            try {
+                await cds.delete("CP_VARCHAR_PS", lsresults);
+            } catch (e) {
+                //DONOTHING
+            }
+            lsresults.CHAR_TYPE = req.data.CHAR_TYPE;
+            lsresults.SEQUENCE = req.data.SEQUENCE;
+            liresults.push(lsresults);
+
+            if (liresults.length > 0) {
+                try {
+                    await cds.run(INSERT.into("CP_VARCHAR_PS").entries(liresults));
+                    responseMessage = " Creation/Updation successful";
+                } catch (e) {
+                    responseMessage = " Creation failed";
+                }
+            }
+        }
         lsresults = {};
         return responseMessage;
     });

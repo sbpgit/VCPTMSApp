@@ -6,7 +6,7 @@
 --                  V_CLASSCHARVAL - View for class and its characteristics 
 -----------------------------------------------------------------------------------------
 VIEW "V_GETVARCHARPS"
-AS SELECT CP_VARCHAR_PS.PRODUCT_ID,
+AS SELECT DISTINCT CP_VARCHAR_PS.PRODUCT_ID,
           CP_VARCHAR_PS.LOCATION_ID,
           CP_VARCHAR_PS.CHAR_NUM,
           V_CLASSCHARVAL.CHAR_NAME,

@@ -11,7 +11,7 @@
         "@sap/cds": "^5.9.4",
         "@sap/cds-dk": "^4.9.2",
         "@sap/cds-mtx": "^2.5.1",
-        "@sap/cds-odata-v2-adapter-proxy": "^1.8.19",
+        "@sap/cds-odata-v2-adapter-proxy": "^1.9.0",
         "@sap/hana-client": "^2.12.22",
         "@sap/hdi-deploy": "^4.2.0",
         "@sap/jobs-client": "^1.6.3",
@@ -65,7 +65,8 @@
         "watch-cpjobscheduler_logs": "cds watch --open cpjobscheduler_logs/webapp/index.html?sap-ui-xx-viewCache=false#fe-lrop-v4",
         "watch-cprestrictions": "cds watch --open cprestrictions/webapp/index.html?sap-ui-xx-viewCache=false#fe-lrop-v4",
         "watch-cp_jobschlogs": "cds watch --open cp_jobschlogs/webapp/index.html?sap-ui-xx-viewCache=false",
-        "watch-cpjoblogs": "cds watch --open cpjoblogs/webapp/index.html?sap-ui-xx-viewCache=false"
+        "watch-cpjoblogs": "cds watch --open cpjoblogs/webapp/index.html?sap-ui-xx-viewCache=false",
+        "watch-cpprscchar": "cds watch --open cpprscchar/webapp/index.html?sap-ui-xx-viewCache=false"
     },
     "eslintConfig": {
         "extends": "eslint:recommended",
@@ -196,9 +197,13 @@
         "app/cprestrictions",
         "app/cp_jobschlogs",
         "app/cpjoblogs",
-        "app/cpjoblog"
+        "app/cpjoblog",
+        "app/cpprscchar",
+        "app/cpprscchar",
+        "app/cpprscchar",
+        "app/cpprscchar"
     ],
     "devDependencies": {
-        "@sap/ux-specification": "^1.100.4"
+        "@sap/ux-specification": "^1.102.1"
     }
 }
