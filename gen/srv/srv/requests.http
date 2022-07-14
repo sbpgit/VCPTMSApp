@@ -1,0 +1,100 @@
+### Get Products
+Send Request
+GET http://localhost:4004/sap/opu/odata/sap/catalog/$metadata HTTP/1.1
+
+
+### POST Regressions
+POST https://sbp-btp-sbpconsulting-dev-config-products-srv.cfapps.us10.hana.ondemand.com/pal/generateRegModels
+Content-Type: application/json
+
+{
+    "vcRulesList": [
+      {
+        "Location": "FR10",
+        "Product": "KM_M219VBVS_BVS",
+        "GroupID": "M219VV00105NN_1"
+      }
+    ]
+}
+
+### UPDATE JOBS LOCALLY
+GET http://localhost:4004/jobs/fUpdateJobs()
+
+### READ JOBS LOCALLY
+GET http://localhost:4004/jobs/lreadJobs()
+
+### READ JOB DETAILS LOCALLY
+GET http://localhost:4004/jobs/lreadJobDetails(jobId=530818,displaySchedules=true)
+
+### READ JOB SCHEDULES LOCALLY
+GET http://localhost:4004/jobs/lreadJobSchedules(jobId=530931)
+
+### READ JOB SCHEDULE LOCALLY
+GET http://localhost:4004/jobs/lreadJobSchedule(jobId=530818,scheduleId='fb51db58-73f9-4695-80ab-b30fa9825d94',displayLogs=true)
+
+
+### READ JOB ACTION LOGS LOCALLY
+GET http://localhost:4004/jobs/lreadJobActionLogs(jobId=484896)
+
+### READ JOB RUN LOGS LOCALLY
+GET http://localhost:4004/jobs/lreadJobRunLogs(jobId=484896,scheduleId='90a07299-d097-47dd-b293-5f06a869c18e',page_size=55,offset=0)
+
+### ADD ML JOB LOCALLY
+GET http://localhost:4004/jobs/laddMLJob(jobDetails='{"name": "generateModelsz","description" : "Generate Machine Learning Models","action" :"%2Fpal%2FgenerateModels","active" : true,"active" : true,"httpMethod" : "POST","startTime" : "2022-04-22 14:00 +0000","endTime" : "2022-05-22 14:00+0000","schedules" : [{"data" : {"vcRulesList":[{"profile" : "SBP_HGBT_0","override" : true,"Location":"RX01","Product":"8150RW","GroupID": "1973254_1","Type" : "OD","modelVersion" : "Simulation"}]},"cron": "* * * * * *%2F60 0","active": true,"startTime": "2022-04-22 14:00 +0000"}]}')
+
+### ADD ML JOB LOCALLY
+GET http://localhost:4004/jobs/laddMLJob(jobDetails='{"name": "generateJobActionLogs","description" : "Generate Job Action Logs","action" :"%2Fjobs%2FupdateJobs","active" : true,"active" : true,"httpMethod" : "POST","startTime" : "2022-06-06 14:00 +0000","endTime" : "2022-06-07 14:00+0000","schedules" : [{"data" : {},"cron": "* * * * * *%2F15 0","active": true,"startTime": "2022-06-06 14:00 +0000"}]}')
+
+### Add IBP locally
+GET http://localhost:4004/jobs/laddMLJob(jobDetails='{"name": "generateIBPsz1","description" : "Generate IBP","action" :"%2Fibpimport-srv%2FgenerateFDemandQty","active" : true,"active" : true,"httpMethod" : "POST","startTime" : "2022-05-11 14:00 +0000","endTime" : "2022-05-22 14:00+0000","schedules" : [{"data" : {"LOCATION_ID":"RX01","PRODUCT_ID":"8150RW","VERSION":"__BASELINE","SCENARIO":""},"cron": "","time":"2022-05-02 14:32 +0000",active": true,"startTime": "2022-05-02 14:00 +0000"}]}')
+
+### UPDATE JOB LOCALLY
+GET http://localhost:4004/jobs/lupdateJob(jobDetails='{"jobId" : 513493,"active": true,"startTime" : "2022-04-29 00:00 +0000","endTime" : "2022-06-22 00:00 +0000"}')
+
+### DELETE JOB LOCALLY
+GET http://localhost:4004/jobs/ldeleteJob(jobId=505387)
+
+
+### ADD  JOB SCHEDULE LOCALLY
+GET http://localhost:4004/jobs/laddJobSchedule(schedule='{"jobId":499941, "data" : {"vcRulesList":[{"profile" : "SBP_HGBT_0","override" : true,"Location":"RX01","Product":"8150RW","GroupID": "1973253_1","Type" : "OD","modelVersion" : "Simulation"}]},"description" : "Recurring Cron Generate Model for OD 1973253_1","active" : true,"cron": "* * * * * *%2F5 0","startTime": "2022-04-25 23:00 +0000","endTime" : "2022-04-26 15:00 +0000" }')
+
+
+### UPDATE JOB SCHEDULE LOCALLY
+GET http://localhost:4004/jobs/lupdateMLJobSchedule(schedule='{"jobId":499941, "scheduleId" : "633977c8-09d6-4a57-b03e-b12d03c3d9e8", "data" : {"vcRulesList":[{"profile" : "SBP_HGBT_0","override" : true,"Location":"RX01","Product":"8150RW","GroupID": "1973253_1","Type" : "OD","modelVersion" : "Simulation"}]},"description" : "Recurring Cron (Every Hour) Generate Model for OD 1973253_1","active" : true,"cron": "* * * * * *%2F60 0","startTime": "2022-04-25 23:00 +0000","endTime" : "2022-04-26 15:00 +0000" }')
+
+
+### DELETE  JOB SCHEDULE LOCALLY
+GET http://localhost:4004/jobs/ldeleteMLJobSchedule(scheduleDetails='{"jobId":499941,"scheduleId":"ba7035b2-d6d1-4525-b176-2066aa95f07a"}')
+
+### CREATE ML JOB
+POST http://localhost:4004/jobs/createMLJob
+Content-Type: application/json
+
+{
+    "jobDetails" : {
+    "name": "generateModels",
+    "description" : "Generate Machine Learning Models",
+    "action" : "https://sbpprovider-dev-config-products-srv.cfapps.us10.hana.ondemand.com/pal/generateRegModels",
+    "active" : true,
+    "httpMethod" : "POST",
+    "startTime" : "2022-03-31 09:00 +0000",
+    "endTime" : "2022-03-31 10:00 +0000",
+    "schedules" : [
+        {
+            "data" : {"vcRulesList":[
+                            {
+                                "profile" : "SBP_VARMA_0",
+                                "override" : true,
+                                "Location":"RX01",
+                                "Product":"8150RW",
+                                "GroupID": "1973254_1",
+                                "Type" : "OD",
+                                "modelVersion" : "Simulation"
+                            }
+                ]}
+        
+        }
+    ]
+    }
+}
+

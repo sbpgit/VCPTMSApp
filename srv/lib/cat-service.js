@@ -691,7 +691,8 @@ module.exports = (srv) => {
         let liresults = [];
         let lsresults = {};
         var responseMessage;
-
+        console.log(req.headers);
+        console.log(req);
         if (req.data.FLAG === "C" || req.data.FLAG === "E") {
             lsresults.LOCATION_ID = req.data.LOCATION_ID;
             lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
@@ -904,16 +905,11 @@ module.exports = (srv) => {
         if (req.data.FLAG === "C") {
             lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
             lsresults.LOCATION_ID = req.data.LOCATION_ID;
-            lsresults.CHAR_NUM = req.data.CHAR_NUM;
-            
+            lsresults.CHAR_NUM = req.data.CHAR_NUM;            
             try {
-
                 await cds.delete("CP_VARCHAR_PS", lsresults);
-
             } catch (e) {
-
                 //DONOTHING
-
             }
             lsresults.CHAR_TYPE = req.data.CHAR_TYPE;
             lsresults.SEQUENCE = req.data.SEQUENCE;
@@ -921,7 +917,8 @@ module.exports = (srv) => {
 
             if (liresults.length > 0) {
                 try {
-                    // await cds.run(UPDATE(genvarcharps, { LOCATION_ID: lsresults.LOCATION_ID, PRODUCT_ID: lsresults.PRODUCT_ID, CHAR_NUM: lsresults.CHAR_NUM }).with({ CHAR_TYPE: lsresults.CHAR_TYPE, SEQUENCE: lsresults.SEQUENCE }))
+                    //await cds.run(UPDATE(genvarcharps, { LOCATION_ID: lsresults.LOCATION_ID, PRODUCT_ID: lsresults.PRODUCT_ID, CHAR_NUM: lsresults.CHAR_NUM }).with({ CHAR_TYPE: lsresults.CHAR_TYPE, SEQUENCE: lsresults.SEQUENCE }))
+                    
                     await cds.run(INSERT.into("CP_VARCHAR_PS").entries(liresults));
                     responseMessage = " Creation/Updation successful";
                 } catch (e) {
