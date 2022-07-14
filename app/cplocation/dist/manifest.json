@@ -111,7 +111,8 @@
                                         "route": "getLocationObjectPage"
                                     }
                                 }
-                            }
+                            },
+                            "initialLoad": true
                         }
                     }
                 },
