@@ -200,21 +200,9 @@ service CatalogService @(impl : './lib/cat-service.js') {
     entity getMatVarItem   as projection on od.MATVARIANT_ITEM;
     function genMatVariant(LOCATION_ID : String(4), PRODUCT_ID : String(40))      returns String;
 // Method 2
-    entity genvarcharps as projection on od.VARCHAR_PS;
+  entity genvarcharps as projection on od.VARCHAR_PS;
     entity getPriSecChar as projection on V_GETVARCHARPS;
     function changeToPrimary(LOCATION_ID : String(4), PRODUCT_ID : String(40),CHAR_NUM: String(10),CHAR_TYPE: String(1),SEQUENCE:Integer,FLAG: String(1)) returns String;
-//
-    entity getSaleshm  as projection on od.SALES_HM;
-//
-    
-    @odata.draft.enabled
-    entity getUserAuthObj            as projection on od.USER_AUTHOBJ;
-
-    @odata.draft.enabled
-    entity getAEmpRole          as projection on od.AUTH_EMP_ROLE;
-
-    @odata.draft.enabled
-    entity getAuthRole          as projection on od.AUTH_ROLE;
 
     @odata.draft.enabled
     entity getARObj             as projection on od.AUTH_ROLE_OBJ;

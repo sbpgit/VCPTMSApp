@@ -151,6 +151,10 @@ modules:
       - cpappcpnewprodintro.zip
       name: cpappcpnewprodintro
       target-path: resources/
+    - artifacts:
+      - cpappcpprscchar.zip
+      name: cpappcpprscchar
+      target-path: resources/
 - name: cpodpcpodprofiles
   type: html5
   path: app/cp_odprofiles
@@ -324,6 +328,16 @@ modules:
 - name: cpappcpnewprodintro
   type: html5
   path: app/cpnewprodintro
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappcpprscchar
+  type: html5
+  path: app/cpprscchar
   build-parameters:
     build-result: dist
     builder: custom

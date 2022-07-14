@@ -881,6 +881,7 @@ module.exports = (srv) => {
         lsresults = {};
         return responseMessage;
     });
+    
     // Maintain partial configurations for new product
     srv.on("changeToPrimary", async (req) => {
         let { genvarcharps } = srv.entities;
@@ -904,14 +905,14 @@ module.exports = (srv) => {
         if (req.data.FLAG === "C") {
             lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
             lsresults.LOCATION_ID = req.data.LOCATION_ID;
-            lsresults.CHAR_NUM = req.data.CHAR_NUM;
+            lsresults.CHAR_NUM = req.data.CHAR_NUM;            
             try {
                 await cds.delete("CP_VARCHAR_PS", lsresults);
             } catch (e) {
                 //DONOTHING
             }
             lsresults.CHAR_TYPE = req.data.CHAR_TYPE;
-            lsresults.SEQUENCE = 0;
+            lsresults.SEQUENCE = req.data.SEQUENCE;
             liresults.push(lsresults);
 
             if (liresults.length > 0) {
@@ -924,6 +925,20 @@ module.exports = (srv) => {
                     responseMessage = " Creation failed";
                 }
             }
+            // }
+            if(lsresults.CHAR_TYPE !== "S"){
+                // const li_varcharps = await cds.run(
+                //     `SELECT *
+                //     FROM "CP_VARCHAR_PS"
+                //     WHERE "LOCATION_ID" = '` +
+                //     req.data.LOCATION_ID +
+                //     `'
+                //     AND "PRODUCT_ID" = '` +
+                //     req.data.PRODUCT_ID +
+                //     `'
+                //     AND "SEQUENCE" > `+
+                //     req.data.SEQUENCE + ``
+                // );
             // }
             lsresults = {};
             liresults = [];
@@ -952,11 +967,13 @@ module.exports = (srv) => {
                 }
             }
         }
+    }
         else if (req.data.FLAG === "E") {
 
             lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
             lsresults.LOCATION_ID = req.data.LOCATION_ID;
-            lsresults.CHAR_NUM = req.data.CHAR_NUM;            
+            lsresults.CHAR_NUM = req.data.CHAR_NUM;
+            
             try {
                 await cds.delete("CP_VARCHAR_PS", lsresults);
             } catch (e) {
