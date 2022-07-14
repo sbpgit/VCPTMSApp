@@ -31,3 +31,5 @@ using from './cpprscchar/annotations';
 using from './cpprscchar/annotations';
 
 using from './cpprscchar/annotations';
+
+using from './cpmatvariant/annotations';

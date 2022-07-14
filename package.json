@@ -66,7 +66,8 @@
         "watch-cprestrictions": "cds watch --open cprestrictions/webapp/index.html?sap-ui-xx-viewCache=false#fe-lrop-v4",
         "watch-cp_jobschlogs": "cds watch --open cp_jobschlogs/webapp/index.html?sap-ui-xx-viewCache=false",
         "watch-cpjoblogs": "cds watch --open cpjoblogs/webapp/index.html?sap-ui-xx-viewCache=false",
-        "watch-cpprscchar": "cds watch --open cpprscchar/webapp/index.html?sap-ui-xx-viewCache=false"
+        "watch-cpprscchar": "cds watch --open cpprscchar/webapp/index.html?sap-ui-xx-viewCache=false",
+        "watch-cpmatvariant": "cds watch --open cpmatvariant/webapp/index.html?sap-ui-xx-viewCache=false"
     },
     "eslintConfig": {
         "extends": "eslint:recommended",
@@ -201,7 +202,8 @@
         "app/cpprscchar",
         "app/cpprscchar",
         "app/cpprscchar",
-        "app/cpprscchar"
+        "app/cpprscchar",
+        "app/cpmatvariant"
     ],
     "devDependencies": {
         "@sap/ux-specification": "^1.102.1"

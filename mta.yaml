@@ -155,6 +155,10 @@ modules:
       - cpappcpprscchar.zip
       name: cpappcpprscchar
       target-path: resources/
+    - artifacts:
+      - cpappcpmatvariant.zip
+      name: cpappcpmatvariant
+      target-path: resources/
 - name: cpodpcpodprofiles
   type: html5
   path: app/cp_odprofiles
@@ -338,6 +342,16 @@ modules:
 - name: cpappcpprscchar
   type: html5
   path: app/cpprscchar
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappcpmatvariant
+  type: html5
+  path: app/cpmatvariant
   build-parameters:
     build-result: dist
     builder: custom

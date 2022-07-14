@@ -6,7 +6,7 @@
 		<ux:headerTitle>
 			<ux:ObjectPageDynamicHeaderTitle>
 				<ux:expandedHeading>
-					<Title text="{i18n>title}" class="boldText" titleAlignment="Center"/>
+					<Title text="{i18n>title}" class="boldText" titleAlignment="Center" />
 				</ux:expandedHeading>
 				<ux:snappedHeading>
 					<FlexBox fitContainer="true" alignItems="Center">
