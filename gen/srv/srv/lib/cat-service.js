@@ -682,9 +682,9 @@ module.exports = (srv) => {
         await obgenTimeseries.genTimeseriesF(req.data);
     });
     // Generate Material Variants
-    srv.on("genMatVariant", async (req) => {
+    srv.on("genUnique", async (req) => {
         const obgenSOFunctions = new SOFunctions();
-        await obgenSOFunctions.genMatVariant(req.data);
+        await obgenSOFunctions.genUnique(req.data);
     });
     // Maintain Parital product introsduction
     srv.on("maintainPartialProd", async (req) => {
@@ -995,22 +995,22 @@ module.exports = (srv) => {
         return responseMessage;
     });
     //Change Active status
-    srv.on("changeMatVar", async (req) => {
+    srv.on("changeUnique", async (req) => {
         let liresults = [];
         let lsresults = {};
         var responseMessage;
         lsresults.LOCATION_ID = req.data.LOCATION_ID;
         lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
-        lsresults.MATVARID = req.data.MATVARID;
+        lsresults.UNIQUE_ID = req.data.UNIQUE_ID;
         try {
-            await cds.delete("CP_MATVARIANT_HEADER", lsresults);
+            await cds.delete("CP_UNIQUE_ID_HEADER", lsresults);
         } catch (e) {
             //DONOTHING
         }
         lsresults.ACTIVE = req.data.ACTIVE;
         liresults.push(lsresults);
         try {
-            await cds.run(INSERT.into("CP_MATVARIANT_HEADER").entries(liresults));
+            await cds.run(INSERT.into("CP_UNIQUE_ID_HEADER").entries(liresults));
             responseMessage = " Creation/Updation successful";
         } catch (e) {
             //DONOTHING
