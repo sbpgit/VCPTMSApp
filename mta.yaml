@@ -151,14 +151,15 @@ modules:
       - cpappcpnewprodintro.zip
       name: cpappcpnewprodintro
       target-path: resources/
-    - artifacts:
-      - cpappcpprscchar.zip
-      name: cpappcpprscchar
-      target-path: resources/
+    # - artifacts:
+    #   - cpappcpprscchar.zip
+    #   name: cpappcpprscchar
+    #   target-path: resources/
 - name: cpodpcpodprofiles
   type: html5
   path: app/cp_odprofiles
   build-parameters:
+    ignore: ["node_modules/"]
     build-result: dist
     builder: custom
     commands:
@@ -169,6 +170,7 @@ modules:
   type: html5
   path: app/cp_assignprofiles
   build-parameters:
+    ignore: ["node_modules/"]
     build-result: dist
     builder: custom
     commands:
@@ -179,6 +181,7 @@ modules:
   type: html5
   path: app/cp_locprod
   build-parameters:
+    ignore: ["node_modules/"]
     build-result: dist
     builder: custom
     commands:
@@ -189,6 +192,7 @@ modules:
   type: html5
   path: app/cp_prodconfig
   build-parameters:
+    ignore: ["node_modules/"]
     build-result: dist
     builder: custom
     commands:
@@ -199,6 +203,7 @@ modules:
   type: html5
   path: app/cp_bomod
   build-parameters:
+    ignore: ["node_modules/"]
     build-result: dist
     builder: custom
     commands:
@@ -209,6 +214,7 @@ modules:
   type: html5
   path: app/cp_saleshconfig
   build-parameters:
+    ignore: ["node_modules/"]
     build-result: dist
     builder: custom
     commands:
@@ -219,6 +225,7 @@ modules:
   type: html5
   path: app/cp_nodesdetails
   build-parameters:
+    ignore: ["node_modules/"]
     build-result: dist
     builder: custom
     commands:
@@ -229,6 +236,7 @@ modules:
   type: html5
   path: app/cplocation
   build-parameters:
+    ignore: ["node_modules/"]
     build-result: dist
     builder: custom
     commands:
@@ -239,6 +247,7 @@ modules:
   type: html5
   path: app/cpbompvs
   build-parameters:
+    ignore: ["node_modules/"]
     build-result: dist
     builder: custom
     commands:
@@ -249,6 +258,7 @@ modules:
   type: html5
   path: app/cpcompreq
   build-parameters:
+    ignore: ["node_modules/"]
     build-result: dist
     builder: custom
     commands:
@@ -259,6 +269,7 @@ modules:
   type: html5
   path: app/cp_ibpfuturedemand
   build-parameters:
+    ignore: ["node_modules/"]
     build-result: dist
     builder: custom
     commands:
@@ -269,6 +280,7 @@ modules:
   type: html5
   path: app/cpasmbcompreq
   build-parameters:
+    ignore: ["node_modules/"]
     build-result: dist
     builder: custom
     commands:
@@ -279,6 +291,7 @@ modules:
   type: html5
   path: app/cpproduct
   build-parameters:
+    ignore: ["node_modules/"]
     build-result: dist
     builder: custom
     commands:
@@ -289,6 +302,7 @@ modules:
   type: html5
   path: app/cpcustgroup
   build-parameters:
+    ignore: ["node_modules/"]
     build-result: dist
     builder: custom
     commands:
@@ -299,6 +313,7 @@ modules:
   type: html5
   path: app/cpjobscheduler
   build-parameters:
+    ignore: ["node_modules/"]
     build-result: dist
     builder: custom
     commands:
@@ -309,6 +324,7 @@ modules:
   type: html5
   path: app/cpjoblog
   build-parameters:
+    ignore: ["node_modules/"]
     build-result: dist
     builder: custom
     commands:
@@ -319,6 +335,7 @@ modules:
   type: html5
   path: app/cppartialprodnew
   build-parameters:
+    ignore: ["node_modules/"]
     build-result: dist
     builder: custom
     commands:
@@ -329,22 +346,23 @@ modules:
   type: html5
   path: app/cpnewprodintro
   build-parameters:
+    ignore: ["node_modules/"]
     build-result: dist
     builder: custom
     commands:
     - npm install
     - npm run build:cf
     supported-platforms: []
-- name: cpappcpprscchar
-  type: html5
-  path: app/cpprscchar
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    supported-platforms: []
+# - name: cpappcpprscchar
+#   type: html5
+#   path: app/cpprscchar
+#   build-parameters:
+#     build-result: dist
+#     builder: custom
+#     commands:
+#     - npm install
+#     - npm run build:cf
+#     supported-platforms: []
 resources:
 - name: config_products-db
   type: com.sap.xs.hdi-container
@@ -361,6 +379,7 @@ resources:
   type: org.cloudfoundry.managed-service
   parameters:
     config:
+      # sizeLimit: 100
       HTML5Runtime_enabled: true
       init_data:
         instance:

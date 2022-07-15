@@ -847,3 +847,14 @@ key     ![CHAR_NAME]: String(30)  @title: 'CHAR_NAME' ;
 key     ![CHAR_TYPE]: String(2)  @title: 'CHAR_TYPE' ; 
 key     ![SEQUENCE]: Integer  @title: 'SEQUENCE' ; 
 }
+
+@cds.persistence.exists 
+Entity ![V_MATVARITEMCHAR] {
+key     ![MATVARID]: Integer  @title: 'MATVARID' ; 
+key     ![PRODUCT_ID]: String(40)  @title: 'PRODUCT_ID' ; 
+key     ![LOCATION_ID]: String(4)  @title: 'LOCATION_ID' ; 
+key     ![CHAR_NUM]: String(30)  @title: 'CHAR_NUM' ; 
+key     ![CHAR_NAME]: String(30)  @title: 'CHAR_NAME' ; 
+key     ![CHARVAL_NUM]: String(70)  @title: 'CHARVAL_NUM' ; 
+key     ![CHAR_VALUE]: String(70)  @title: 'CHAR_VALUE' ; 
+}
