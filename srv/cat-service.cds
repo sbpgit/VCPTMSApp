@@ -10,7 +10,8 @@ using {
     V_ODPROFILES,
     V_PARTIALPRODCHAR,
     V_NEWPRODREFCHAR,
-    V_GETVARCHARPS
+    V_GETVARCHARPS,
+    V_MATVARITEMCHAR
 } from '../db/data-model';
 // using V_ODPROFILES from '../db/data-model';
 using V_BOMODCOND from '../db/data-model';
@@ -199,6 +200,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
     entity getUniqueHeader as projection on od.UNIQUE_ID_HEADER;
     entity getUniqueItem   as projection on od.UNIQUE_ID_ITEM;
     function genMatVariant(LOCATION_ID : String(4), PRODUCT_ID : String(40))      returns String;
+    function changeMatVar(MATVARID : Integer, LOCATION_ID : String(4), PRODUCT_ID : String(40), ACTIVE:Boolean) returns String;
 // Method 2
   entity genvarcharps as projection on od.VARCHAR_PS;
     entity getPriSecChar as projection on V_GETVARCHARPS;
