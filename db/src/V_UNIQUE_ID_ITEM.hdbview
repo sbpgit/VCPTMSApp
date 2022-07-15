@@ -1,5 +1,5 @@
 ----------------------------------------------------------------------------------------
--- Name:            V_MATVARITEMCHAR
+-- Name:            V_UNIQUE_ID_ITEM
 -- Description:     Get Primary and secondary characteristics
 -- Join Details:    CP_PRODUCT_CLASS -  Master data for Product class
 --                  CP_UNIQUE_ID_ITEM - table for Material variant Item
