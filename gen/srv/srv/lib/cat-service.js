@@ -681,7 +681,7 @@ module.exports = (srv) => {
         const obgenTimeseries = new GenTimeseries();
         await obgenTimeseries.genTimeseriesF(req.data);
     });
-    // Generate Material Variants
+    // Generate Unique
     srv.on("genUnique", async (req) => {
         const obgenSOFunctions = new SOFunctions();
         await obgenSOFunctions.genUnique(req.data);
