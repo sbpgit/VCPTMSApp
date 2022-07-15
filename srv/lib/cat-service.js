@@ -681,10 +681,10 @@ module.exports = (srv) => {
         const obgenTimeseries = new GenTimeseries();
         await obgenTimeseries.genTimeseriesF(req.data);
     });
-    // Generate Material Variants
-    srv.on("genMatVariant", async (req) => {
+    // Generate Unique ID
+    srv.on("genUniqueID", async (req) => {
         const obgenSOFunctions = new SOFunctions();
-        await obgenSOFunctions.genMatVariant(req.data);
+        await obgenSOFunctions.genUniqueID(req.data);
     });
     // Maintain Parital product introsduction
     srv.on("maintainPartialProd", async (req) => {

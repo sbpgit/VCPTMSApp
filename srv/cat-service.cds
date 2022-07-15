@@ -196,8 +196,8 @@ service CatalogService @(impl : './lib/cat-service.js') {
     PRODCHAR : String ) returns String;
    
 // Material Variant
-    entity getMatVarHeader as projection on od.MATVARIANT_HEADER;
-    entity getMatVarItem   as projection on od.MATVARIANT_ITEM;
+    entity getUniqueHeader as projection on od.UNIQUE_ID_HEADER;
+    entity getUniqueItem   as projection on od.UNIQUE_ID_ITEM;
     function genMatVariant(LOCATION_ID : String(4), PRODUCT_ID : String(40))      returns String;
 // Method 2
   entity genvarcharps as projection on od.VARCHAR_PS;
