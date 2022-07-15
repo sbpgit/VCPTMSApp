@@ -113,6 +113,13 @@ class SOFunctions{
                         lsUnique['CONFIG'] = []
                     }
                 }
+
+                for (let cntU = 0; cntU < liUnique.length; cntU++) {
+                    if(JSON.stringify(lsUnique['CONFIG']) === JSON.stringify(liUnique[cntU].CONFIG) &&
+                        liUnique[cntU].UNIQUE_TYPE === 'P'){
+                        lsUnique['CONFIG'] = []
+                    }
+                }                
             }
 
             if (lsUnique['CONFIG'].length > 0) {
