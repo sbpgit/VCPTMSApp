@@ -517,8 +517,9 @@ context cp {
         key UNIQUE_ID    : Integer       @title : 'Unique ID';
         key LOCATION_ID     : String(4)  @title : 'Location ';
         key PRODUCT_ID      : String(40) @title : 'New Product';
-        UNIQUE_RDESC      : String(50) @title: 'Description';
-        UNIQUE_TYPE     : String(1) @title: 'Unique ID Type';
+        UNIQUE_RDESC      : String(50)   @title: 'Description';
+        UNIQUE_TYPE     : String(1)      @title: 'Unique ID Type';
+        P_UNIQUE_ID     : Integer        @title: 'Primary Unique ID';
         ACTIVE          : Boolean;
     }
     entity UNIQUE_ID_ITEM{

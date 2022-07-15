@@ -46,7 +46,7 @@ class SOFunctions{
     async genUniqueID(adata){
         
         const liSalesh = await this.getSalesHistory(adata.LOCATION_ID, adata.PRODUCT_ID, '');
-        const liSaleshPri = await this.getSalesHistory(adata.LOCATION_ID, adata.PRODUCT_ID, 'X');
+        const liSaleshPri = await this.getSalesHistory(lLocation,lProduct, 'X');
         const liUniqueData =  await this.getUnique(adata.LOCATION_ID, adata.PRODUCT_ID);
 
        
@@ -158,6 +158,7 @@ class SOFunctions{
                             '` + adata.PRODUCT_ID + `',
                             '',
                             '` + liUnique[cntU].UNIQUE_TYPE + `',
+                            '0',
                             TRUE)`
                     )
                     await sqlStr.exec();
@@ -368,6 +369,26 @@ class SOFunctions{
         }
         
         return liUniqueData;
+    }
+
+    async getPriUniqueID(lLocation, lProduct){
+
+        try{
+            let sqlStr = await conn.prepare(
+                `UPSERT "CP_SALES_HM" VALUES(
+                    '` + liSOHM[cntSO].SALES_DOC + `',                            
+                    '` + liSOHM[cntSO].SALESDOC_ITEM + `',
+                    '` + liSOHM[cntSO].PRODUCT_ID + `',
+                    '` + liSOHM[cntSO].LOCATION_ID + `',
+                    '` + liSOHM[cntSO].UNIQUE_ID + `') WITH PRIMARY KEY`
+            )
+            await sqlStr.exec();
+            await sqlStr.drop();    
+
+        } catch (error) {
+            this.logger.error(error.message);
+        }     
+
     }
 
 }
