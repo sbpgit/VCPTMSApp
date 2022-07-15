@@ -151,10 +151,6 @@ modules:
       - cpappcpnewprodintro.zip
       name: cpappcpnewprodintro
       target-path: resources/
-    # - artifacts:
-    #   - cpappcpprscchar.zip
-    #   name: cpappcpprscchar
-    #   target-path: resources/
 - name: cpodpcpodprofiles
   type: html5
   path: app/cp_odprofiles
