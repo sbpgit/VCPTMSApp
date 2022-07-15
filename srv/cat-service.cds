@@ -199,7 +199,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
 // Unique ID
     entity getUniqueHeader as projection on od.UNIQUE_ID_HEADER;
     entity getUniqueItem   as projection on od.UNIQUE_ID_ITEM;
-    function genUnique(LOCATION_ID : String(4), PRODUCT_ID : String(40))      returns String;
+    function genUniqueID(LOCATION_ID : String(4), PRODUCT_ID : String(40))      returns String;
     function changeUnique(UNIQUE_ID : Integer, LOCATION_ID : String(4), PRODUCT_ID : String(40), ACTIVE:Boolean) returns String;
 // Method 2
   entity genvarcharps as projection on od.VARCHAR_PS;
