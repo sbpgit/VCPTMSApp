@@ -196,11 +196,11 @@ service CatalogService @(impl : './lib/cat-service.js') {
     function maintainNewProdChar(FLAG : String(1), 
     PRODCHAR : String ) returns String;
    
-// Material Variant
+// Unique ID
     entity getUniqueHeader as projection on od.UNIQUE_ID_HEADER;
     entity getUniqueItem   as projection on od.UNIQUE_ID_ITEM;
-    function genMatVariant(LOCATION_ID : String(4), PRODUCT_ID : String(40))      returns String;
-    function changeMatVar(MATVARID : Integer, LOCATION_ID : String(4), PRODUCT_ID : String(40), ACTIVE:Boolean) returns String;
+    function genUnique(LOCATION_ID : String(4), PRODUCT_ID : String(40))      returns String;
+    function changeUnique(UNIQUE_ID : Integer, LOCATION_ID : String(4), PRODUCT_ID : String(40), ACTIVE:Boolean) returns String;
 // Method 2
   entity genvarcharps as projection on od.VARCHAR_PS;
     entity getPriSecChar as projection on V_GETVARCHARPS;
