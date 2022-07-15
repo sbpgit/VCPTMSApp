@@ -373,21 +373,26 @@ class SOFunctions{
 
     async getPriUniqueID(lLocation, lProduct){
 
-        try{
-            let sqlStr = await conn.prepare(
-                `UPSERT "CP_SALES_HM" VALUES(
-                    '` + liSOHM[cntSO].SALES_DOC + `',                            
-                    '` + liSOHM[cntSO].SALESDOC_ITEM + `',
-                    '` + liSOHM[cntSO].PRODUCT_ID + `',
-                    '` + liSOHM[cntSO].LOCATION_ID + `',
-                    '` + liSOHM[cntSO].UNIQUE_ID + `') WITH PRIMARY KEY`
-            )
-            await sqlStr.exec();
-            await sqlStr.drop();    
-
-        } catch (error) {
-            this.logger.error(error.message);
-        }     
+        let liUniqueData = await cds.run(            
+            `SELECT *
+               FROM V_UNIQUE_ID
+              WHERE LOCATION_ID   = '` + lLocation + `'
+                AND PRODUCT_ID    = '` + lProduct + `'
+                AND CHAR_NUM IN (SELECT "CHAR_NUM"
+                                     FROM "CP_VARCHAR_PS"
+                                    WHERE "PRODUCT_ID" = '` + lProduct + `'
+                                      AND "LOCATION_ID" = '` + lLocation + `'
+                                      AND "CHAR_TYPE" = 'P')
+            ORDER BY UNIQUE_ID,
+                     PRODUCT_ID,
+                     LOCATION_ID, 
+                     CHAR_NUM`
+        );   
+        
+        for (let cntU = 0; cntU < liUniqueData.length; cntU++) {
+            const element = liUniqueData[cntU];
+            
+        }
 
     }
 

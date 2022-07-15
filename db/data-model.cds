@@ -515,19 +515,19 @@ context cp {
     }
     entity UNIQUE_ID_HEADER{
         key UNIQUE_ID    : Integer       @title : 'Unique ID';
-        key LOCATION_ID     : String(4)  @title : 'Location ';
-        key PRODUCT_ID      : String(40) @title : 'New Product';
-        UNIQUE_RDESC      : String(50)   @title: 'Description';
-        UNIQUE_TYPE     : String(1)      @title: 'Unique ID Type';
-        P_UNIQUE_ID     : Integer        @title: 'Primary Unique ID';
-        ACTIVE          : Boolean;
+        key LOCATION_ID  : String(4)  @title : 'Location ';
+        key PRODUCT_ID   : String(40) @title : 'New Product';
+        UNIQUE_DESC      : String(50)   @title: 'Description';
+        UNIQUE_TYPE      : String(1)      @title: 'Unique ID Type';
+        P_UNIQUE_ID      : Integer        @title: 'Primary Unique ID';
+        ACTIVE           : Boolean;
     }
     entity UNIQUE_ID_ITEM{
-        key UNIQUE_ID    : Integer       @title : 'Unique ID';
-        key LOCATION_ID     : String(4)  @title : 'Location ';
-        key PRODUCT_ID      : String(40) @title : 'New Product';
-        key CHAR_NUM    : String(30) @title : 'Charateristic Name';
-            CHARVAL_NUM : String(70) @title : 'Charateristic Value';
+        key UNIQUE_ID   : Integer       @title : 'Unique ID';
+        key LOCATION_ID : String(4)     @title : 'Location ';
+        key PRODUCT_ID  : String(40)    @title : 'New Product';
+        key CHAR_NUM    : String(30)    @title : 'Charateristic Name';
+            CHARVAL_NUM : String(70)    @title : 'Charateristic Value';
     }
     // New product introduction
     entity NEWPROD_INTRO {
@@ -851,11 +851,24 @@ key     ![SEQUENCE]: Integer  @title: 'SEQUENCE' ;
 
 @cds.persistence.exists 
 Entity ![V_UNIQUE_ID_ITEM] {
-key     ![MATVARID]: Integer  @title: 'MATVARID' ; 
+key     ![UNIQUE_ID]: Integer  @title: 'MATVARID' ; 
 key     ![PRODUCT_ID]: String(40)  @title: 'PRODUCT_ID' ; 
 key     ![LOCATION_ID]: String(4)  @title: 'LOCATION_ID' ; 
 key     ![CHAR_NUM]: String(30)  @title: 'CHAR_NUM' ; 
 key     ![CHAR_NAME]: String(30)  @title: 'CHAR_NAME' ; 
 key     ![CHARVAL_NUM]: String(70)  @title: 'CHARVAL_NUM' ; 
 key     ![CHAR_VALUE]: String(70)  @title: 'CHAR_VALUE' ; 
+}
+
+@cds.persistence.exists 
+Entity ![V_UNIQUE_ID] {
+key     ![UNIQUE_ID]: Integer  @title: 'MATVARID' ; 
+key     ![PRODUCT_ID]: String(40)  @title: 'PRODUCT_ID' ; 
+key     ![LOCATION_ID]: String(4)  @title: 'LOCATION_ID' ; 
+key     ![UNIQUE_DESC]: String(50)  @title: 'CHAR_NUM' ; 
+key     ![UNIQUE_TYPE]: String(1)  @title: 'CHAR_NAME' ; 
+key     ![P_UNIQUE_ID]: Integer  @title: 'CHARVAL_NUM' ; 
+key     ![ACTIVE]: Boolean  @title: 'CHAR_VALUE' ; 
+key     ![CHAR_NUM]: String(30)  @title: 'CHAR_NUM' ;
+key     ![CHARVAL_NUM]: String(70)  @title: 'CHARVAL_NUM' ; 
 }
