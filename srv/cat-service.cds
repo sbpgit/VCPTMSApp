@@ -11,7 +11,7 @@ using {
     V_PARTIALPRODCHAR,
     V_NEWPRODREFCHAR,
     V_GETVARCHARPS,
-    V_MATVARITEMCHAR
+    V_UNIQUE_ID_ITEM
 } from '../db/data-model';
 // using V_ODPROFILES from '../db/data-model';
 using V_BOMODCOND from '../db/data-model';
