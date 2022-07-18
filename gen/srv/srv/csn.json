@@ -3575,6 +3575,7 @@
       "kind": "entity",
       "elements": {
         "MATVARID": {
+          "@title": "Material Variant",
           "key": true,
           "type": "cds.Integer"
         },
@@ -3590,26 +3591,15 @@
           "type": "cds.String",
           "length": 40
         },
-        "ORDER_COUNT": {
-          "@title": "Order Count",
-          "type": "cds.Integer"
-        },
-        "MATVAR_TYPE": {
-          "type": "cds.String",
-          "length": 1
-        },
         "MATVARDESC": {
+          "@title": "Description",
           "type": "cds.String",
           "length": 50
         },
-        "TOTAL_QTY": {
-          "type": "cds.Integer"
-        },
-        "FIRSTORDDATE": {
-          "type": "cds.Date"
-        },
-        "LASTORDDATE": {
-          "type": "cds.Date"
+        "MATVAR_TYPE": {
+          "@title": "Material Variant Type",
+          "type": "cds.String",
+          "length": 1
         },
         "ACTIVE": {
           "type": "cds.Boolean"
@@ -5614,6 +5604,53 @@
           "@title": "SEQUENCE",
           "key": true,
           "type": "cds.Integer"
+        }
+      }
+    },
+    "V_MATVARITEMCHAR": {
+      "kind": "entity",
+      "@cds.persistence.exists": true,
+      "elements": {
+        "MATVARID": {
+          "@title": "MATVARID",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "PRODUCT_ID": {
+          "@title": "PRODUCT_ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+        "LOCATION_ID": {
+          "@title": "LOCATION_ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "CHAR_NUM": {
+          "@title": "CHAR_NUM",
+          "key": true,
+          "type": "cds.String",
+          "length": 30
+        },
+        "CHAR_NAME": {
+          "@title": "CHAR_NAME",
+          "key": true,
+          "type": "cds.String",
+          "length": 30
+        },
+        "CHARVAL_NUM": {
+          "@title": "CHARVAL_NUM",
+          "key": true,
+          "type": "cds.String",
+          "length": 70
+        },
+        "CHAR_VALUE": {
+          "@title": "CHAR_VALUE",
+          "key": true,
+          "type": "cds.String",
+          "length": 70
         }
       }
     },
@@ -18253,6 +18290,7 @@
       },
       "elements": {
         "MATVARID": {
+          "@title": "Material Variant",
           "key": true,
           "type": "cds.Integer"
         },
@@ -18268,26 +18306,15 @@
           "type": "cds.String",
           "length": 40
         },
-        "ORDER_COUNT": {
-          "@title": "Order Count",
-          "type": "cds.Integer"
-        },
-        "MATVAR_TYPE": {
-          "type": "cds.String",
-          "length": 1
-        },
         "MATVARDESC": {
+          "@title": "Description",
           "type": "cds.String",
           "length": 50
         },
-        "TOTAL_QTY": {
-          "type": "cds.Integer"
-        },
-        "FIRSTORDDATE": {
-          "type": "cds.Date"
-        },
-        "LASTORDDATE": {
-          "type": "cds.Date"
+        "MATVAR_TYPE": {
+          "@title": "Material Variant Type",
+          "type": "cds.String",
+          "length": 1
         },
         "ACTIVE": {
           "type": "cds.Boolean"
@@ -18299,35 +18326,49 @@
       "projection": {
         "from": {
           "ref": [
-            "cp.MATVARIANT_ITEM"
+            "V_MATVARITEMCHAR"
           ]
         }
       },
       "elements": {
         "MATVARID": {
+          "@title": "MATVARID",
           "key": true,
           "type": "cds.Integer"
         },
-        "LOCATION_ID": {
-          "@title": "Location ",
-          "key": true,
-          "type": "cds.String",
-          "length": 4
-        },
         "PRODUCT_ID": {
-          "@title": "New Product",
+          "@title": "PRODUCT_ID",
           "key": true,
           "type": "cds.String",
           "length": 40
         },
+        "LOCATION_ID": {
+          "@title": "LOCATION_ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
         "CHAR_NUM": {
-          "@title": "Charateristic Name",
+          "@title": "CHAR_NUM",
+          "key": true,
+          "type": "cds.String",
+          "length": 30
+        },
+        "CHAR_NAME": {
+          "@title": "CHAR_NAME",
           "key": true,
           "type": "cds.String",
           "length": 30
         },
         "CHARVAL_NUM": {
-          "@title": "Charateristic Value",
+          "@title": "CHARVAL_NUM",
+          "key": true,
+          "type": "cds.String",
+          "length": 70
+        },
+        "CHAR_VALUE": {
+          "@title": "CHAR_VALUE",
+          "key": true,
           "type": "cds.String",
           "length": 70
         }
@@ -18343,6 +18384,28 @@
         "PRODUCT_ID": {
           "type": "cds.String",
           "length": 40
+        }
+      },
+      "returns": {
+        "type": "cds.String"
+      }
+    },
+    "CatalogService.changeMatVar": {
+      "kind": "function",
+      "params": {
+        "MATVARID": {
+          "type": "cds.Integer"
+        },
+        "LOCATION_ID": {
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "type": "cds.String",
+          "length": 40
+        },
+        "ACTIVE": {
+          "type": "cds.Boolean"
         }
       },
       "returns": {
@@ -18464,309 +18527,6 @@
       },
       "returns": {
         "type": "cds.String"
-      }
-    },
-    "CatalogService.getSaleshm": {
-      "kind": "entity",
-      "projection": {
-        "from": {
-          "ref": [
-            "cp.SALES_HM"
-          ]
-        }
-      },
-      "elements": {
-        "SALES_DOC": {
-          "@title": "Sales Document",
-          "key": true,
-          "type": "cds.String",
-          "length": 10
-        },
-        "SALESDOC_ITEM": {
-          "@title": "Sales Document Item",
-          "key": true,
-          "type": "cds.String",
-          "length": 6
-        },
-        "PRODUCT_ID": {
-          "@title": "Product Id",
-          "type": "cds.String",
-          "length": 40
-        },
-        "LOCATION_ID": {
-          "@title": "Location ID",
-          "type": "cds.String",
-          "length": 4
-        },
-        "MATVARID": {
-          "type": "cds.Integer"
-        }
-      }
-    },
-    "CatalogService.getUserAuthObj": {
-      "kind": "entity",
-      "@odata.draft.enabled": true,
-      "@UI.SelectionFields": [
-        {
-          "=": "USER"
-        },
-        {
-          "=": "AUTH_GROUP"
-        }
-      ],
-      "@UI.LineItem": [
-        {
-          "$Type": "UI.DataField",
-          "Value": {
-            "=": "USER"
-          },
-          "@UI.Importance": {
-            "#": "High"
-          }
-        },
-        {
-          "$Type": "UI.DataField",
-          "Value": {
-            "=": "AUTH_GROUP"
-          },
-          "@UI.Importance": {
-            "#": "High"
-          }
-        },
-        {
-          "$Type": "UI.DataField",
-          "Value": {
-            "=": "DESCRIPTION"
-          },
-          "@UI.Importance": {
-            "#": "High"
-          }
-        }
-      ],
-      "@UI.HeaderInfo.Title.Value": {
-        "=": "USER"
-      },
-      "@UI.HeaderInfo.Description.Value": {
-        "=": "AUTH_GROUP"
-      },
-      "@UI.HeaderInfo.TypeName": "Authorization",
-      "@UI.HeaderInfo.TypeNamePlural": "Authorizations",
-      "@UI.FieldGroup#Details.Data": [
-        {
-          "$Type": "UI.DataField",
-          "Value": {
-            "=": "DESCRIPTION"
-          }
-        }
-      ],
-      "@UI.Facets": [
-        {
-          "$Type": "UI.CollectionFacet",
-          "ID": "USERAUTH",
-          "Label": "User Authorization",
-          "Facets": [
-            {
-              "$Type": "UI.ReferenceFacet",
-              "Label": "User Authorization",
-              "Target": "@UI.FieldGroup#Details"
-            }
-          ]
-        }
-      ],
-      "projection": {
-        "from": {
-          "ref": [
-            "cp.USER_AUTHOBJ"
-          ]
-        }
-      },
-      "elements": {
-        "USER": {
-          "@title": "User",
-          "key": true,
-          "type": "cds.String",
-          "length": 100
-        },
-        "AUTH_GROUP": {
-          "@title": "Authorization Object",
-          "key": true,
-          "type": "cds.String",
-          "length": 4
-        },
-        "DESCRIPTION": {
-          "@title": "Description",
-          "type": "cds.String",
-          "length": 250
-        }
-      }
-    },
-    "CatalogService.getAEmpRole": {
-      "kind": "entity",
-      "@odata.draft.enabled": true,
-      "projection": {
-        "from": {
-          "ref": [
-            "cp.AUTH_EMP_ROLE"
-          ]
-        }
-      },
-      "elements": {
-        "createdAt": {
-          "@cds.on.insert": {
-            "=": "$now"
-          },
-          "@UI.HiddenFilter": true,
-          "@Core.Immutable": true,
-          "@title": "{i18n>CreatedAt}",
-          "@readonly": true,
-          "@odata.on.insert": {
-            "#": "now"
-          },
-          "type": "cds.Timestamp"
-        },
-        "createdBy": {
-          "@cds.on.insert": {
-            "=": "$user"
-          },
-          "@UI.HiddenFilter": true,
-          "@Core.Immutable": true,
-          "@title": "{i18n>CreatedBy}",
-          "@readonly": true,
-          "@odata.on.insert": {
-            "#": "user"
-          },
-          "@description": "{i18n>UserID.Description}",
-          "type": "User",
-          "length": 255
-        },
-        "modifiedAt": {
-          "@cds.on.insert": {
-            "=": "$now"
-          },
-          "@cds.on.update": {
-            "=": "$now"
-          },
-          "@UI.HiddenFilter": true,
-          "@title": "{i18n>ChangedAt}",
-          "@readonly": true,
-          "@odata.on.update": {
-            "#": "now"
-          },
-          "type": "cds.Timestamp"
-        },
-        "modifiedBy": {
-          "@cds.on.insert": {
-            "=": "$user"
-          },
-          "@cds.on.update": {
-            "=": "$user"
-          },
-          "@UI.HiddenFilter": true,
-          "@title": "{i18n>ChangedBy}",
-          "@readonly": true,
-          "@odata.on.update": {
-            "#": "user"
-          },
-          "@description": "{i18n>UserID.Description}",
-          "type": "User",
-          "length": 255
-        },
-        "USER": {
-          "@title": "User",
-          "key": true,
-          "type": "cds.String",
-          "length": 100
-        },
-        "ROLE_ID": {
-          "@title": "Role ID",
-          "key": true,
-          "type": "cds.String",
-          "length": 100
-        }
-      }
-    },
-    "CatalogService.getAuthRole": {
-      "kind": "entity",
-      "@odata.draft.enabled": true,
-      "projection": {
-        "from": {
-          "ref": [
-            "cp.AUTH_ROLE"
-          ]
-        }
-      },
-      "elements": {
-        "createdAt": {
-          "@cds.on.insert": {
-            "=": "$now"
-          },
-          "@UI.HiddenFilter": true,
-          "@Core.Immutable": true,
-          "@title": "{i18n>CreatedAt}",
-          "@readonly": true,
-          "@odata.on.insert": {
-            "#": "now"
-          },
-          "type": "cds.Timestamp"
-        },
-        "createdBy": {
-          "@cds.on.insert": {
-            "=": "$user"
-          },
-          "@UI.HiddenFilter": true,
-          "@Core.Immutable": true,
-          "@title": "{i18n>CreatedBy}",
-          "@readonly": true,
-          "@odata.on.insert": {
-            "#": "user"
-          },
-          "@description": "{i18n>UserID.Description}",
-          "type": "User",
-          "length": 255
-        },
-        "modifiedAt": {
-          "@cds.on.insert": {
-            "=": "$now"
-          },
-          "@cds.on.update": {
-            "=": "$now"
-          },
-          "@UI.HiddenFilter": true,
-          "@title": "{i18n>ChangedAt}",
-          "@readonly": true,
-          "@odata.on.update": {
-            "#": "now"
-          },
-          "type": "cds.Timestamp"
-        },
-        "modifiedBy": {
-          "@cds.on.insert": {
-            "=": "$user"
-          },
-          "@cds.on.update": {
-            "=": "$user"
-          },
-          "@UI.HiddenFilter": true,
-          "@title": "{i18n>ChangedBy}",
-          "@readonly": true,
-          "@odata.on.update": {
-            "#": "user"
-          },
-          "@description": "{i18n>UserID.Description}",
-          "type": "User",
-          "length": 255
-        },
-        "ROLE_ID": {
-          "@title": "Role ID",
-          "key": true,
-          "type": "cds.String",
-          "length": 100
-        },
-        "DESCRIPTION": {
-          "@title": "Description",
-          "type": "cds.String",
-          "length": 250
-        }
       }
     },
     "CatalogService.getARObj": {

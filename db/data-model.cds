@@ -513,16 +513,16 @@ context cp {
         key VLCNT : String(3)  @title : 'Characteristic value counter';
         VALC  : String(70) @title : 'Characteristic Value';
     }
-    entity MATVARIANT_HEADER{
-        key MATVARID    : Integer @title: 'Material Variant';
+    entity UNIQUE_ID_HEADER{
+        key UNIQUE_ID    : Integer       @title : 'Unique ID';
         key LOCATION_ID     : String(4)  @title : 'Location ';
         key PRODUCT_ID      : String(40) @title : 'New Product';
-        MATVARDESC      : String(50) @title: 'Description';
-        MATVAR_TYPE     : String(1) @title: 'Material Variant Type';
+        UNIQUE_RDESC      : String(50) @title: 'Description';
+        UNIQUE_TYPE     : String(1) @title: 'Unique ID Type';
         ACTIVE          : Boolean;
     }
-    entity MATVARIANT_ITEM{
-        key MATVARID    : Integer;
+    entity UNIQUE_ID_ITEM{
+        key UNIQUE_ID    : Integer       @title : 'Unique ID';
         key LOCATION_ID     : String(4)  @title : 'Location ';
         key PRODUCT_ID      : String(40) @title : 'New Product';
         key CHAR_NUM    : String(30) @title : 'Charateristic Name';
@@ -551,7 +551,7 @@ context cp {
         key SALESDOC_ITEM    : String(6)      @title : 'Sales Document Item';
             PRODUCT_ID       : String(40)     @title : 'Product Id';
             LOCATION_ID      : String(4)      @title : 'Location ID';
-            MATVARID         : Integer;
+            UNIQUE_ID        : Integer        @title : 'Unique ID';
     }
     // Authorization object master
     entity USER_AUTHOBJ  {
@@ -846,4 +846,15 @@ key     ![CHAR_NUM]: String(30)  @title: 'CHAR_NUM' ;
 key     ![CHAR_NAME]: String(30)  @title: 'CHAR_NAME' ; 
 key     ![CHAR_TYPE]: String(2)  @title: 'CHAR_TYPE' ; 
 key     ![SEQUENCE]: Integer  @title: 'SEQUENCE' ; 
+}
+
+@cds.persistence.exists 
+Entity ![V_MATVARITEMCHAR] {
+key     ![MATVARID]: Integer  @title: 'MATVARID' ; 
+key     ![PRODUCT_ID]: String(40)  @title: 'PRODUCT_ID' ; 
+key     ![LOCATION_ID]: String(4)  @title: 'LOCATION_ID' ; 
+key     ![CHAR_NUM]: String(30)  @title: 'CHAR_NUM' ; 
+key     ![CHAR_NAME]: String(30)  @title: 'CHAR_NAME' ; 
+key     ![CHARVAL_NUM]: String(70)  @title: 'CHARVAL_NUM' ; 
+key     ![CHAR_VALUE]: String(70)  @title: 'CHAR_VALUE' ; 
 }

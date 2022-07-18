@@ -1,5 +1,5 @@
 {
-  "css/style.css": 1656179069447,
+  "controller/Detail-dbg.controller.js": 1656509542839,
   "Component.js": 1656173755396,
   "utils/locate-reuse-libs.js": 1656173755400,
   "model/models.js": 1656173755400,
@@ -7,13 +7,13 @@
   "controller/Detail.controller.js": 1656509542839,
   "controller/BaseController.js": 1656179007739,
   "controller/App.controller.js": 1656179007739,
-  "manifest.json": 1657800234002,
-  "manifest-bundle.zip": 1657800234015,
-  "Component-preload.js": 1657800234561,
+  "manifest.json": 1657894454987,
+  "manifest-bundle.zip": 1657894455000,
+  "Component-preload.js": 1657894455540,
   "controller/Home-dbg.controller.js": 1656179007739,
   "model/models-dbg.js": 1656173755400,
   "utils/locate-reuse-libs-dbg.js": 1656173755400,
-  "controller/Detail-dbg.controller.js": 1656509542839,
+  "i18n/i18n.properties": 1656179099019,
   "controller/BaseController-dbg.js": 1656179007739,
   "controller/App-dbg.controller.js": 1656179007739,
   "Component-dbg.js": 1656173755396,
@@ -27,6 +27,6 @@
   "view/CreateProduct.fragment.xml": 1656179039055,
   "view/CharDetails.fragment.xml": 1656179039059,
   "view/App.view.xml": 1656179039059,
-  "i18n/i18n.properties": 1656179099019,
+  "css/style.css": 1656179069447,
   "index.html": 1656173755396
 }

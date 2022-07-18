@@ -43,396 +43,326 @@ class SOFunctions{
         }
     }
     
-    async genMatVariant(adata){
-        const liSales = await cds.run(
-            `SELECT *
-               FROM CP_SALESH AS A
-              INNER JOIN CP_SALESH_CONFIG AS B
-                 ON A.SALES_DOC = B.SALES_DOC
-                AND A.SALESDOC_ITEM = B.SALESDOC_ITEM
-              WHERE A.LOCATION_ID   = '` + adata.LOCATION_ID + `'
-                AND B.PRODUCT_ID    = '` + adata.PRODUCT_ID + `'
-              ORDER BY A.SALES_DOC,
-                       A.SALESDOC_ITEM,
-                       B.CHAR_NUM`
-        ); 
-
-        const liSalesPri = await cds.run(
-            `SELECT *
-            FROM CP_SALESH AS A
-           INNER JOIN CP_SALESH_CONFIG AS B
-              ON A.SALES_DOC = B.SALES_DOC
-             AND A.SALESDOC_ITEM = B.SALESDOC_ITEM
-           WHERE A.LOCATION_ID   = '` + adata.LOCATION_ID + `'
-             AND B.PRODUCT_ID    = '` + adata.PRODUCT_ID + `'
-             AND B.CHAR_NUM IN (SELECT "CHAR_NUM"
-                                    FROM "CP_VARCHAR_PS"
-                                WHERE "PRODUCT_ID" = '` + adata.PRODUCT_ID + `'
-                                    AND "LOCATION_ID" = '` + adata.LOCATION_ID + `'
-                                    AND "CHAR_TYPE" = 'P')
-             ORDER BY A.SALES_DOC,
-                      A.SALESDOC_ITEM,
-                      B.CHAR_NUM`
-        );  
+    async genUniqueID(adata){
         
-        const liMatVarData = await cds.run(
-            `SELECT H."MATVARID",
-                    H."LOCATION_ID",
-                    H."PRODUCT_ID",
-                    H."MATVAR_TYPE",
-                    I."CHAR_NUM",
-                    I."CHARVAL_NUM"
-               FROM "CP_MATVARIANT_ITEM" AS I
-              INNER JOIN CP_MATVARIANT_HEADER AS H
-                 ON H.MATVARID = I.MATVARID
-                AND H.LOCATION_ID = I.LOCATION_ID
-                AND H.PRODUCT_ID = I.PRODUCT_ID
-              WHERE H.LOCATION_ID = '` + adata.LOCATION_ID + `'
-                AND H.PRODUCT_ID  = '` + adata.PRODUCT_ID + `'
-              ORDER BY H.MATVARID,
-                       H.LOCATION_ID,
-                       H.PRODUCT_ID,
-                       I.CHAR_NUM`
-        );           
-/*
-        // Remove Existing Material Variants
-        try {
-            let sqlStr = await conn.prepare(
-                `DELETE FROM "CP_MATVARIANT_HEADER" WHERE LOCATION_ID = '` + adata.LOCATION_ID + `'
-                                                      AND PRODUCT_ID = '` + adata.PRODUCT_ID + `'`
-            )
-            await sqlStr.exec();
-            await sqlStr.drop();            
-        } catch (error) {
-            this.logger.error(error.message);
-        }  
-        try {
-            let sqlStr = await conn.prepare(
-                `DELETE FROM "CP_MATVARIANT_ITEM" WHERE LOCATION_ID = '` + adata.LOCATION_ID + `'
-                                                    AND PRODUCT_ID = '` + adata.PRODUCT_ID + `'`
-            )
-            await sqlStr.exec();
-            await sqlStr.drop();            
-        } catch (error) {
-            this.logger.error(error.message);
-        }                
-*/
+        const liSalesh = await this.getSalesHistory(adata.LOCATION_ID, adata.PRODUCT_ID, '');
+        const liSaleshPri = await this.getSalesHistory(adata.LOCATION_ID, adata.PRODUCT_ID, 'X');
+        const liUniqueData =  await this.getUnique(adata.LOCATION_ID, adata.PRODUCT_ID);
 
-        let liMatVar = [];
-        let lsMatVar = {};
+       
         let liSOHM = [];
         let lsSOHM = {};
+        let liUnique = [];
+        let lsUnique = {};
 
-        let lsMatVarConfig = {};
+        this.logger.info("Order Count: " + liSalesh.length);
 
+        // Determine Unique ID
+        for (let cntSO = 0; cntSO < liSalesh.length; cntSO++) {
 
+            lsSOHM = {};
+            lsSOHM['SALES_DOC']     = GenF.parse(liSalesh[cntSO].SALES_DOC);
+            lsSOHM['SALESDOC_ITEM'] = GenF.parse(liSalesh[cntSO].SALESDOC_ITEM);
+            lsSOHM['PRODUCT_ID']    = GenF.parse(adata.PRODUCT_ID);
+            lsSOHM['LOCATION_ID']   = GenF.parse(adata.LOCATION_ID);
+            lsSOHM['UNIQUE_ID']      = 0;
+            lsSOHM['CONFIG']        = GenF.parse(liSalesh[cntSO].CONFIG);
 
-        for (let cntSO = 0; cntSO < liSales.length; cntSO++) {
-            if (cntSO === 0 ||
-                liSales[cntSO].SALES_DOC !== liSales[GenF.subOne(cntSO, liSales.length)].SALES_DOC ||
-                liSales[cntSO].SALESDOC_ITEM !== liSales[GenF.subOne(cntSO, liSales.length)].SALESDOC_ITEM) {
-                    lsMatVar = {};
-                    lsMatVar['LOCATION_ID'] = liSales[cntSO].LOCATION_ID;
-                    lsMatVar['PRODUCT_ID']  = liSales[cntSO].PRODUCT_ID;
-                    lsMatVar['TOTAL_QTY'] = liSales[cntSO].ORD_QTY;
-                    lsMatVar['FIRSTORDDATE'] = liSales[cntSO].MAT_AVAILDATE;
-                    lsMatVar['LASTORDDATE'] = liSales[cntSO].MAT_AVAILDATE;
-                    lsMatVar['MATVAR_TYPE'] = 'M';  // Material Variant
-                    lsMatVar['ORDER_COUNT'] = 0;
-                    lsMatVar['CONFIG'] = [];
-                    
-                    lsSOHM = {};
-                    lsSOHM['SALES_DOC']     = liSales[cntSO].SALES_DOC;
-                    lsSOHM['SALESDOC_ITEM'] = liSales[cntSO].SALESDOC_ITEM;
-                    lsSOHM['PRODUCT_ID']    = liSales[cntSO].PRODUCT_ID;
-                    lsSOHM['LOCATION_ID']   = liSales[cntSO].LOCATION_ID;
-                    lsSOHM['MATVARID']      = 0;
-                    lsSOHM['CONFIG']        = [];                    
+            // Check if Unique ID already exists                    
+            for (let cntUID = 0; cntUID < liUniqueData.length; cntUID++) {
+                if (JSON.stringify(liSalesh[cntSO].CONFIG) === JSON.stringify(liUniqueData[cntUID]['CONFIG']) &&
+                    liUniqueData[cntUID].UNIQUE_TYPE === 'A') { 
+                    lsSOHM['UNIQUE_ID'] = GenF.parse(liUniqueData[cntUID].UNIQUE_ID);
+                }               
             }
-            lsMatVarConfig = {};
-            lsMatVarConfig['CHAR_NUM'] = liSales[cntSO].CHAR_NUM;
-            lsMatVarConfig['CHARVAL_NUM'] = liSales[cntSO].CHARVAL_NUM;
-            lsMatVar['CONFIG'].push(lsMatVarConfig);
+            
+            lsUnique = {};
+            lsUnique['CONFIG'] = [];  
 
-            if (cntSO === GenF.addOne(cntSO, liSales.length) ||
-                liSales[cntSO].SALES_DOC !== liSales[GenF.addOne(cntSO, liSales.length)].SALES_DOC ||
-                liSales[cntSO].SALESDOC_ITEM !== liSales[GenF.addOne(cntSO, liSales.length)].SALESDOC_ITEM) {
-                
-                    lsSOHM['CONFIG']   = lsMatVar['CONFIG'];
-                // Check if Material Variant already exists                    
-                for (let cntMVD = 0; cntMVD < liMatVarData.length; cntMVD++) {
-                    if (JSON.stringify(liMatVar[cntMV]['CONFIG']) === JSON.stringify(liMatVarData[cntMVLD]['CONFIG']) &&
-                        liMatVarData[cntMVLD].MATVAR_TYPE === 'M') { 
-                        lsSOHM['MATVARID'] = liMatVarData[cntMVLD].MATVARID;
-                        lsSOHM['CONFIG'] = [];
-                        lsMatVar['CONFIG'] = [];  
-                        
-                    }               
-                }   
-
-                if (lsMatVar['CONFIG'].length > 0) {
-                    liMatVar.push(lsMatVar);
-                }
-
-                liSOHM.push(lsSOHM);
-
-            }       
-        }
-
-
-
-        for (let cntSO = 0; cntSO < liSalesPri.length; cntSO++) {
-            if (cntSO === 0 ||
-                liSalesPri[cntSO].SALES_DOC !== liSalesPri[GenF.subOne(cntSO, liSalesPri.length)].SALES_DOC ||
-                liSalesPri[cntSO].SALESDOC_ITEM !== liSalesPri[GenF.subOne(cntSO, liSalesPri.length)].SALESDOC_ITEM) {
-                    lsMatVar = {};
-                    lsMatVar['TOTAL_QTY'] = liSalesPri[cntSO].ORD_QTY;
-                    lsMatVar['FIRSTORDDATE'] = liSalesPri[cntSO].MAT_AVAILDATE;
-                    lsMatVar['LASTORDDATE'] = liSalesPri[cntSO].MAT_AVAILDATE;
-                    lsMatVar['MATVAR_TYPE'] = 'P';  // Configurable Products
-                    lsMatVar['ORDER_COUNT'] = 0;
-                    lsMatVar['CONFIG'] = [];
-
-                    lsSOHM = {};
-                    lsSOHM['SALES_DOC']     = liSales[cntSO].SALES_DOC;
-                    lsSOHM['SALESDOC_ITEM'] = liSales[cntSO].SALESDOC_ITEM;
-                    lsSOHM['PRODUCT_ID']    = liSales[cntSO].PRODUCT_ID;
-                    lsSOHM['LOCATION_ID']   = liSales[cntSO].LOCATION_ID;
-                    lsSOHM['MATVARID']      = 0;
-                    lsSOHM['CONFIG']        = [];
-
-            }
-            lsMatVarConfig = {};
-            lsMatVarConfig['CHAR_NUM'] = liSalesPri[cntSO].CHAR_NUM;
-            lsMatVarConfig['CHARVAL_NUM'] = liSalesPri[cntSO].CHARVAL_NUM;
-            lsMatVar['CONFIG'].push(lsMatVarConfig);
-
-            if (cntSO === GenF.addOne(cntSO, liSalesPri.length) ||
-                liSalesPri[cntSO].SALES_DOC !== liSalesPri[GenF.addOne(cntSO, liSalesPri.length)].SALES_DOC ||
-                liSalesPri[cntSO].SALESDOC_ITEM !== liSalesPri[GenF.addOne(cntSO, liSalesPri.length)].SALESDOC_ITEM) {
-                    lsSOHM['CONFIG']   = lsMatVar['CONFIG'];
-// Check if Material Variant already exists                    
-                    for (let cntMVD = 0; cntMVD < liMatVarData.length; cntMVD++) {
-                        if (JSON.stringify(liMatVar[cntMV]['CONFIG']) === JSON.stringify(liMatVarData[cntMVLD]['CONFIG']) &&
-                            liMatVarData[cntMVLD].MATVAR_TYPE === 'P') {  
-                            lsSOHM['MATVARID'] = liMatVarData[cntMVLD].MATVARID;
-                            lsSOHM['CONFIG'] = [];
-                            lsMatVar['CONFIG'] = [];  
-                            
-                        }               
-                    }   
-                    
-                    if (lsMatVar['CONFIG'].length > 0) {
-                        liMatVar.push(lsMatVar);
-                    }
-                    liSOHM.push(lsSOHM);
-            }       
-        }
-
-        /*
-        for (let cntMV = 0; cntMV < liMatVar.length; cntMV++) {
-            if(liMatVar[cntMV]['CONFIG'].length > 0){
-// Check if material 
-                for (let cntMVD = 0; cntMVD < liMatVarData.length; cntMVD++) {
-                    if (JSON.stringify(liMatVar[cntMV]['CONFIG']) === JSON.stringify(liMatVarData[cntMVLD]['CONFIG'])) { 
-                        liMatVar[cntMV]['CONFIG'] = [];  
-                    }               
-                }                
-
-                for (let cntMVL = cntMV +  1; cntMVL < liMatVar.length; cntMVL++) {
-                    if (JSON.stringify(liMatVar[cntMV]['CONFIG']) === JSON.stringify(liMatVar[cntMVL]['CONFIG'])) {
-                        liMatVar[cntMV]['TOTAL_QTY'] = parseInt(liMatVar[cntMV]['TOTAL_QTY']) + parseInt(liMatVar[cntMVL]['TOTAL_QTY']);
-                        liMatVar[cntMVL]['CONFIG'] = [];
-                        liMatVar[cntMVL]['TOTAL_QTY'] = 0;
-
-                        liMatVar[cntMV]['ORDER_COUNT'] = parseInt(liMatVar[cntMV]['ORDER_COUNT']) + parseInt(1);
-
-                        if(liMatVar[cntMV]['FIRSTORDDATE'] > liMatVar[cntMVL]['FIRSTORDDATE']){
-                            liMatVar[cntMV]['FIRSTORDDATE'] = liMatVar[cntMVL]['FIRSTORDDATE'];
-                        }
-                        if(liMatVar[cntMV]['LASTORDDATE'] < liMatVar[cntMVL]['FIRSTORDDATE']){
-                            liMatVar[cntMV]['LASTORDDATE'] = liMatVar[cntMVL]['FIRSTORDDATE'];
-                        }                        
+            if( lsSOHM['UNIQUE_ID'] === 0){
+                lsUnique['UNIQUE_TYPE'] = 'A';
+                lsUnique['CONFIG'] = liSalesh[cntSO].CONFIG;
+                for (let cntU = 0; cntU < liUnique.length; cntU++) {
+                    if(JSON.stringify(lsUnique['CONFIG']) === JSON.stringify(liUnique[cntU].CONFIG) &&
+                        liUnique[cntU].UNIQUE_TYPE === 'A'){
+                        lsUnique['CONFIG'] = []
                     }
                 }
-
-
             }
+
+            if (lsUnique['CONFIG'].length > 0) {
+                liUnique.push(lsUnique);
+            }    
+            
+            liSOHM.push(lsSOHM);
+           
         }
-*/
+
+        // Unique ID only for Primary Characteristics
+        for (let cntSO = 0; cntSO < liSaleshPri.length; cntSO++) {
+
+            lsUnique = {};
+            lsUnique['CONFIG'] = [];  
+
+            if(liSaleshPri[cntSO].CONFIG.length > 0){
+                lsUnique['UNIQUE_TYPE'] = 'P';
+                lsUnique['CONFIG'] = liSaleshPri[cntSO].CONFIG;
+                for (let cntU = 0; cntU < liUniqueData.length; cntU++) {
+                    if(JSON.stringify(lsUnique['CONFIG']) === JSON.stringify(liUniqueData[cntU].CONFIG) &&
+                    liUniqueData[cntU].UNIQUE_TYPE === 'P'){
+                        lsUnique['CONFIG'] = []
+                    }
+                }
+            }
+
+            if (lsUnique['CONFIG'].length > 0) {
+                liUnique.push(lsUnique);
+            } 
+        }        
+
+
         let lCntVariantID = 0;
 
-        for (let cntMV = 0; cntMV < liMatVar.length; cntMV++) {
-            if(liMatVar[cntMV]['CONFIG'].length > 0){
-                const liMatVarInd = await cds.run(
-                    `SELECT MAX("MATVARID") + 1 as MATVARID
-                       FROM CP_MATVARIANT_HEADER`
+        for (let cntU = 0; cntU < liUnique.length; cntU++) {
+            if(liUnique[cntU]['CONFIG'].length > 0){
+
+                // Get the highest Unique ID
+                const liUniqueInd = await cds.run(
+                    `SELECT MAX("UNIQUE_ID") + 1 as UNIQUE_ID
+                       FROM CP_UNIQUE_ID_HEADER`
                 );     
                 
-                for (let cntIndex = 0; cntIndex < liMatVarInd.length; cntIndex++) {
-                    if(liMatVarInd[cntIndex].MATVARID === null){
+                for (let cntIndex = 0; cntIndex < liUniqueInd.length; cntIndex++) {
+                    if(liUniqueInd[cntIndex].UNIQUE_ID === null){
                         lCntVariantID = 1;
                     }else{
-                    lCntVariantID = parseInt( liMatVarInd[cntIndex].MATVARID );
+                        lCntVariantID = parseInt( liUniqueInd[cntIndex].UNIQUE_ID );
                     }
                 }
+                liUnique[cntU]['UNIQUE_ID'] = lCntVariantID;
 
-                liMatVar[cntMV]['MATVARID'] = lCntVariantID;
+                this.logger.info("Unique ID Index: " + lCntVariantID);
                 
                 try {
-                    let sqlStr = conn.prepare(
-                        `INSERT INTO "CP_MATVARIANT_HEADER" VALUES(
-                            '` + liMatVar[cntMV].MATVARID + `',
+                    let sqlStr = await conn.prepare(
+                        `INSERT INTO "CP_UNIQUE_ID_HEADER" VALUES(
+                            '` + liUnique[cntU].UNIQUE_ID + `',
                             '` + adata.LOCATION_ID + `',
                             '` + adata.PRODUCT_ID + `',
-                            '` + liMatVar[cntMV].ORDER_COUNT + `',
-                            '` + liMatVar[cntMV].MATVAR_TYPE + `',
                             '',
-                            '` + liMatVar[cntMV].TOTAL_QTY + `',
-                            '` + liMatVar[cntMV].FIRSTORDDATE + `',
-                            '` + liMatVar[cntMV].LASTORDDATE + `',
+                            '` + liUnique[cntU].UNIQUE_TYPE + `',
                             TRUE)`
                     )
+                    await sqlStr.exec();
+                    await sqlStr.drop();                      
 
-                    sqlStr.exec();
-                    sqlStr.drop();            
                 } catch (error) {
                     this.logger.error(error.message);
                 }
                 
-                for (let cntMVC = 0; cntMVC < liMatVar[cntMV]['CONFIG'].length; cntMVC++) {
-                    let sqlStr = conn.prepare(
-                        `INSERT INTO "CP_MATVARIANT_ITEM" VALUES(
-                            '` + liMatVar[cntMV].MATVARID + `',                            
+                if(liUnique[cntU].UNIQUE_TYPE === 'A'){
+                    for (let cntSO = 0; cntSO < liSOHM.length; cntSO++) {
+                        if(liSOHM[cntSO].UNIQUE_ID === 0 &&
+                            JSON.stringify(liSOHM[cntSO].CONFIG) === JSON.stringify(liUnique[cntU]['CONFIG'])){
+                                liSOHM[cntSO].UNIQUE_ID = liUnique[cntU].UNIQUE_ID;
+                        }
+                    }
+                }   
+                
+                for (let cntUC = 0; cntUC < liUnique[cntU]['CONFIG'].length; cntUC++) {
+                    let sqlStr = await conn.prepare(
+                        `INSERT INTO "CP_UNIQUE_ID_ITEM" VALUES(
+                            '` + liUnique[cntU].UNIQUE_ID + `',                            
                             '` + adata.LOCATION_ID + `',
                             '` + adata.PRODUCT_ID + `',
-                            '` + liMatVar[cntMV]['CONFIG'][cntMVC].CHAR_NUM + `',
-                            '` + liMatVar[cntMV]['CONFIG'][cntMVC].CHARVAL_NUM + `')`
+                            '` + liUnique[cntU]['CONFIG'][cntUC].CHAR_NUM + `',
+                            '` + liUnique[cntU]['CONFIG'][cntUC].CHARVAL_NUM + `')`
                     )
-                    sqlStr.exec();
-                    sqlStr.drop();                    
+                    await sqlStr.exec();
+                    await sqlStr.drop();                    
+                }
+               
+            }
+        }
+
+        this.logger.info("Sales Order Count: " + liSOHM.length);
+
+        const liPartialProd = await cds.run(
+            `SELECT *
+                FROM CP_PARTIALPROD_CHAR 
+                WHERE REF_PRODID    = '` + adata.PRODUCT_ID + `'
+                ORDER BY LOCATION_ID,
+                         PRODUCT_ID,
+                         CLASS_NUM,
+                         CHAR_NUM`
+        );     
+ 
+
+
+        for (let cntSO = 0; cntSO < liSOHM.length; cntSO++) {
+            let lFail = '';
+            for (let cntPC = 0; cntPC < liPartialProd.length; cntPC++) {
+                let lSuccess = '';
+                if(lFail === ''){
+                    for (let cntSOC = 0; cntSOC < liSOHM.CONFIG.length; cntSOC++) {
+                        if(liSOHM.CONFIG[cntSOC].CHAR_NUM === liPartialProd[cntPC].CHAR_NUM &&
+                        liSOHM.CONFIG[cntSOC].CHARVAL_NUM === liPartialProd[cntPC].CHARVAL_NUM){
+                            lSuccess = 'X';
+                        }
+                    }
+                    if(lSuccess === ''){
+                        lFail = 'X';
+                    }
+                }
+                if (cntPC === GenF.addOne(cntPC, liPartialProd.length) || 
+                    liPartialProd[cntPC].LOCATION_ID !== liPartialProd.length[GenF.addOne(cntPC, liPartialProd.length)].LOCATION_ID ||
+                    liPartialProd[cntPC].PRODUCT_ID !== liPartialProd.length[GenF.addOne(cntPC, liPartialProd.length)].PRODUCT_ID) {
+                    liSOHM[cntSO].PRODUCT_ID = GenF.parse(liPartialProd[cntPC].PRODUCT_ID);
+                    lFail = '';
                 }
             }
+            try{
+                let sqlStr = await conn.prepare(
+                    `UPSERT "CP_SALES_HM" VALUES(
+                        '` + liSOHM[cntSO].SALES_DOC + `',                            
+                        '` + liSOHM[cntSO].SALESDOC_ITEM + `',
+                        '` + liSOHM[cntSO].PRODUCT_ID + `',
+                        '` + liSOHM[cntSO].LOCATION_ID + `',
+                        '` + liSOHM[cntSO].UNIQUE_ID + `') WITH PRIMARY KEY`
+                )
+                await sqlStr.exec();
+                await sqlStr.drop();    
+
+            } catch (error) {
+                this.logger.error(error.message);
+            }                            
         }
 
     }
 
-    async processSO(iLocation){
-        
-        // Remove Existing Salesh History Modified
-        try {
-            let sqlStr = await conn.prepare(
-                `DELETE FROM "CP_SALES_HM" WHERE LOCATION_ID = '` + iLocation +  `'`
-            )
-            await sqlStr.exec();
-            await sqlStr.drop();            
-        } catch (error) {
-            this.logger.error(error.message);
-        }  
+    async getSalesHistory(lLocation, lProduct, lOnlyPrimary){
 
-        const liSales = await cds.run(
-            `SELECT *
-               FROM CP_SALESH AS A
-              INNER JOIN CP_SALESH_CONFIG AS B
-                 ON A.SALES_DOC = B.SALES_DOC
-                AND A.SALESDOC_ITEM = B.SALESDOC_ITEM
-              WHERE A.LOCATION_ID   = '` + iLocation + `'
-              ORDER BY A.SALES_DOC,
-                       A.SALESDOC_ITEM,
-                       B.CHAR_NUM`
-        );        
+        let liSalesData = [];
 
-        let liSOHM = [];
-        let lsSOHM = {};
-        let lsMatVarConfig = {};        
-
-        for (let cntSO = 0; cntSO < liSales.length; cntSO++) {
-            if (cntSO === 0 ||
-                liSales[cntSO].SALES_DOC !== liSales[GenF.subOne(cntSO, liSales.length)].SALES_DOC ||
-                liSales[cntSO].SALESDOC_ITEM !== liSales[GenF.subOne(cntSO, liSales.length)].SALESDOC_ITEM) {
-                    lsSOHM = {};
-                    lsSOHM['SALES_DOC']     = liSales[cntSO].SALES_DOC;
-                    lsSOHM['SALESDOC_ITEM'] = liSales[cntSO].SALESDOC_ITEM;
-                    lsSOHM['PRODUCT_ID']    = liSales[cntSO].PRODUCT_ID;
-                    lsSOHM['LOCATION_ID']   = liSales[cntSO].LOCATION_ID;
-                    lsSOHM['MATVARID']      = 0;
-                    lsSOHM['CONFIG'] = [];
-            }
-            lsMatVarConfig = {};
-            lsMatVarConfig['CHAR_NUM'] = liSales[cntSO].CHAR_NUM;
-            lsMatVarConfig['CHARVAL_NUM'] = liSales[cntSO].CHARVAL_NUM;
-            lsSOHM['CONFIG'].push(lsMatVarConfig);
-
-            if (cntSO === GenF.addOne(cntSO, liSales.length) ||
-                liSales[cntSO].SALES_DOC !== liSales[GenF.addOne(cntSO, liSales.length)].SALES_DOC ||
-                liSales[cntSO].SALESDOC_ITEM !== liSales[GenF.addOne(cntSO, liSales.length)].SALESDOC_ITEM) {
-                    liSOHM.push(lsMatVar);
-            }       
+        if(lOnlyPrimary === ''){
+            liSalesData = await cds.run(
+                `SELECT *
+                FROM CP_SALESH AS A
+                INNER JOIN CP_SALESH_CONFIG AS B
+                    ON A.SALES_DOC = B.SALES_DOC
+                    AND A.SALESDOC_ITEM = B.SALESDOC_ITEM
+                WHERE A.LOCATION_ID   = '` + lLocation + `'
+                    AND B.PRODUCT_ID    = '` + lProduct + `'
+                ORDER BY A.SALES_DOC,
+                        A.SALESDOC_ITEM,
+                        B.CHAR_NUM`
+            ); 
         }
-        
-        const liMatVar = await cds.run(
-            `SELECT *
-               FROM CP_MATVARIANT_ITEM
-              WHERE A.LOCATION_ID   = '` + iLocation + `'
-              ORDER BY MATVARID
-                       LOCATION_ID
-                       PRODUCT_ID
-                       CHAR_NUM`
-        );    
-
-        let lsMatVar = {};
-        let liMatVarData = [];
-
-        for (let cntMV = 0; cntMV < liMatVar.length; cntMV++) {
-            if (cntMV === 0 ||
-                liMatVar[cntMV].MATVARID    !== liMatVar[GenF.subOne(cntMV, liMatVar.length)].MATVARID ||
-                liMatVar[cntMV].LOCATION_ID !== liMatVar[GenF.subOne(cntMV, liMatVar.length)].LOCATION_ID ||
-                liMatVar[cntMV].PRODUCT_ID  !== liMatVar[GenF.subOne(cntMV, liMatVar.length)].PRODUCT_ID) {
-                    lsMatVar = {};
-                    lsMatVar['MATVARID']    = liSales[cntSO].MATVARID;
-                    lsMatVar['LOCATION_ID'] = liSales[cntSO].LOCATION_ID;
-                    lsMatVar['PRODUCT_ID']  = liSales[cntSO].PRODUCT_ID;
-                    lsMatVar['CONFIG'] = [];
-            }
-            lsMatVarConfig = {};
-            lsMatVarConfig['CHAR_NUM'] = liSales[cntSO].CHAR_NUM;
-            lsMatVarConfig['CHARVAL_NUM'] = liSales[cntSO].CHARVAL_NUM;
-            lsMatVar['CONFIG'].push(lsMatVarConfig);
-
-            if (cntSO === GenF.addOne(cntSO, lsMatVar.length) ||
-                liMatVar[cntMV].MATVARID    !== liMatVar[GenF.addOne(cntMV, liMatVar.length)].MATVARID ||
-                liMatVar[cntMV].LOCATION_ID !== liMatVar[GenF.addOne(cntMV, liMatVar.length)].LOCATION_ID ||
-                liMatVar[cntMV].PRODUCT_ID  !== liMatVar[GenF.addOne(cntMV, liMatVar.length)].PRODUCT_ID) {
-                    liMatVarData.push(lsMatVar);
-            }
+        else{
+            liSalesData = await cds.run(            
+                `SELECT *
+                   FROM CP_SALESH AS A
+                  INNER JOIN CP_SALESH_CONFIG AS B
+                     ON A.SALES_DOC = B.SALES_DOC
+                    AND A.SALESDOC_ITEM = B.SALESDOC_ITEM
+                  WHERE A.LOCATION_ID   = '` + lLocation + `'
+                    AND B.PRODUCT_ID    = '` + lProduct + `'
+                    AND B.CHAR_NUM IN (SELECT "CHAR_NUM"
+                                         FROM "CP_VARCHAR_PS"
+                                        WHERE "PRODUCT_ID" = '` + lProduct + `'
+                                          AND "LOCATION_ID" = '` + lLocation + `'
+                                          AND "CHAR_TYPE" = 'P')
+                ORDER BY A.SALES_DOC,
+                        A.SALESDOC_ITEM,
+                        B.CHAR_NUM`
+            );                       
         }
 
-        for (let cntSO = 0; cntSO < liSOHM.length; cntSO++) {
-            
-            for (let cntMV = 0; cntMV < liMatVarData.length; cntMV++) {
-                if (liSOHM[cntSO ].LOCATION_ID === liMatVarData[cntMV].LOCATION_ID &&
-                    liSOHM[cntSO ].PRODUCT_ID === liMatVarData[cntMV].PRODUCT_ID &&
-                    JSON.stringify(liSOHM[cntSO ]['CONFIG']) === JSON.stringify(liMatVarData[cntMV]['CONFIG'])) {
-                        liSOHM[cntSO].MATVARID = liMatVarData[cntMV].MATVARID;
+        let liSalesh = [];
+        let lsSalesh = {};
+        let lsSaleshConfig = {};
+
+        for (let cntSO = 0; cntSO < liSalesData.length; cntSO++) {
+            if (cntSO === 0 ||  
+                liSalesData[cntSO].SALES_DOC     !== liSalesData[GenF.subOne(cntSO, liSalesData.length)].SALES_DOC ||  
+                liSalesData[cntSO].SALESDOC_ITEM !== liSalesData[GenF.subOne(cntSO, liSalesData.length)].SALESDOC_ITEM) {
+                    lsSalesh = {};
+                    lsSalesh['SALES_DOC']     = GenF.parse(liSalesData[cntSO].SALES_DOC);
+                    lsSalesh['SALESDOC_ITEM'] = GenF.parse(liSalesData[cntSO].SALESDOC_ITEM);
+                    lsSalesh['CONFIG']        = [];
+                }         
+
+                lsSaleshConfig = {}   ;
+                lsSaleshConfig['CHAR_NUM'] = GenF.parse(liSalesData[cntSO].CHAR_NUM);
+                lsSaleshConfig['CHARVAL_NUM'] = GenF.parse(liSalesData[cntSO].CHARVAL_NUM);
+                lsSalesh['CONFIG'].push(lsSaleshConfig);
+
+            if (cntSO === GenF.addOne(cntSO, liSalesData.length) ||
+                liSalesData[cntSO].SALES_DOC     !== liSalesData[GenF.addOne(cntSO, liSalesData.length)].SALES_DOC ||
+                liSalesData[cntSO].SALESDOC_ITEM !== liSalesData[GenF.addOne(cntSO, liSalesData.length)].SALESDOC_ITEM) {
+                    liSalesh.push(lsSalesh);
                 }
-            }
-            
         }
 
-        for (let cntSO = 0; cntSO < liSOHM.length; cntSO++) {
-            let sqlStr = conn.prepare(
-                `INSERT INTO "CP_SALES_HM" VALUES(
-                    '` + liSOHM[cntSO].SALES_DOC + `',                            
-                    '` + liSOHM[cntSO].SALESDOC_ITEM + `',
-                    '` + liSOHM[cntSO].PRODUCT_ID + `',
-                    '` + liSOHM[cntSO].LOCATION_ID + `',
-                    '` + liSOHM[cntSO].MATVARID + `')`
-            )
-            sqlStr.exec();
-            sqlStr.drop();                    
-        }
-
+        return liSalesh;
     }
+
+    async getUnique(lLocation, lProduct){
+        const liUniqueGet = await cds.run(
+            `SELECT H."UNIQUE_ID",
+                    H."LOCATION_ID",
+                    H."PRODUCT_ID",
+                    H."UNIQUE_TYPE",
+                    I."CHAR_NUM",
+                    I."CHARVAL_NUM"
+               FROM "CP_UNIQUE_ID_ITEM" AS I
+              INNER JOIN CP_UNIQUE_ID_HEADER AS H
+                 ON H.UNIQUE_ID = I.UNIQUE_ID
+                AND H.LOCATION_ID = I.LOCATION_ID
+                AND H.PRODUCT_ID = I.PRODUCT_ID
+              WHERE H.LOCATION_ID = '` + lLocation + `'
+                AND H.PRODUCT_ID  = '` + lProduct + `'
+              ORDER BY H.UNIQUE_ID,
+                       H.LOCATION_ID,
+                       H.PRODUCT_ID,
+                       H.UNIQUE_TYPE,
+                       I.CHAR_NUM`
+        );           
+
+        let lsUniqueConfig = {};
+        let lsUnique = {};
+        let liUniqueData = [];
+
+        this.logger.info("Existing Unique ID: " + liUniqueGet.length);
+
+        for (let cntU = 0; cntU < liUniqueGet.length; cntU++) {
+            if (cntU === 0 ||
+                liUniqueGet[cntU].UNIQUE_ID    !== liUniqueGet[GenF.subOne(cntU, liUniqueGet.length)].UNIQUE_ID ||
+                liUniqueGet[cntU].LOCATION_ID !== liUniqueGet[GenF.subOne(cntU, liUniqueGet.length)].LOCATION_ID ||
+                liUniqueGet[cntU].PRODUCT_ID  !== liUniqueGet[GenF.subOne(cntU, liUniqueGet.length)].PRODUCT_ID) {
+                    lsUnique = {};
+                    lsUnique['UNIQUE_ID']    = GenF.parse(liUniqueGet[cntU].UNIQUE_ID);
+                    lsUnique['LOCATION_ID'] = GenF.parse(liUniqueGet[cntU].LOCATION_ID);
+                    lsUnique['PRODUCT_ID']  = GenF.parse(liUniqueGet[cntU].PRODUCT_ID);
+                    lsUnique['UNIQUE_TYPE']  = GenF.parse(liUniqueGet[cntU].UNIQUE_TYPE);
+                    lsUnique['CONFIG'] = [];
+            }
+            lsUniqueConfig = {};
+            lsUniqueConfig['CHAR_NUM']    = GenF.parse(liUniqueGet[cntU].CHAR_NUM);
+            lsUniqueConfig['CHARVAL_NUM'] = GenF.parse(liUniqueGet[cntU].CHARVAL_NUM);
+            lsUnique['CONFIG'].push(lsUniqueConfig);
+
+            if (cntU === GenF.addOne(cntU, liUniqueGet.length) ||
+                liUniqueGet[cntU].UNIQUE_ID    !== liUniqueGet[GenF.addOne(cntU, liUniqueGet.length)].UNIQUE_ID ||
+                liUniqueGet[cntU].LOCATION_ID !== liUniqueGet[GenF.addOne(cntU, liUniqueGet.length)].LOCATION_ID ||
+                liUniqueGet[cntU].PRODUCT_ID  !== liUniqueGet[GenF.addOne(cntU, liUniqueGet.length)].PRODUCT_ID) {
+                    liUniqueData.push(lsUnique);
+            }
+        }
+        
+        return liUniqueData;
+    }
+
 }
 
 module.exports = SOFunctions;
