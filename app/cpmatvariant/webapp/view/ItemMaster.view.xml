@@ -25,20 +25,20 @@
         <l:Grid  >
 
                 <VBox>
-                    <Label text ="Material Varient Search" />
+                    <Label text ="{i18n>matvarsearch}" />
                     <SearchField id="idMatSearch1" liveChange="onMatSearch" placeholder="Material Desc/ mat Varient Id"/>
                 </VBox>
                 <VBox >
-                    <Label text="Location" required="true"/>
-                    <Input id="idloc" value=""  placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                    <Label text="{i18n>loc}" required="true"/>
+                    <Input id="idloc" value=""  placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
                 </VBox>
                 <VBox>
-                    <Label text="Product" required="true"/>
-                    <MultiInput id="prodInput"  placeholder="Product" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
+                    <Label text="{i18n>prod}" required="true"/>
+                    <MultiInput id="prodInput"  placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
                 </VBox>
                 <VBox> 
                 <Label text ="" />                  
-                    <Button text="Go" type="Emphasized" press="onGetData" tooltip="Get data based on filters"/>
+                    <Button text="{i18n>go}" type="Emphasized" press="onGetData" tooltip="Get data based on filters"/>
                 </VBox>
                 </l:Grid>
             </FlexBox>
@@ -58,7 +58,7 @@
                             <Text text="{i18n>matdesc}" />
                         </Column>
                         <Column hAlign="Left" vAlign="Middle">
-                            <Text text="Active"/>
+                            <Text text="{i18n>active}"/>
                         </Column>
                     </columns>
                     <items>
