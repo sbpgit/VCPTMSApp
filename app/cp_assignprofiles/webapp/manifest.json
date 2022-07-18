@@ -11,22 +11,22 @@
         "description": "{{appDescription}}",
         "dataSources": {
             "mainService": {
-              "uri": "/v2/catalog/",
-              "type": "OData",
-              "settings": {
-                "localUri": "localService/CatalogService/metadata.xml",
-                "odataVersion": "2.0"
-              }
+                "uri": "/v2/catalog/",
+                "type": "OData",
+                "settings": {
+                    "localUri": "localService/CatalogService/metadata.xml",
+                    "odataVersion": "2.0"
+                }
             },
             "Pal": {
-              "uri": "/v2/pal/",
-              "type": "OData",
-              "settings": {
-                "odataVersion": "2.0",
-                "localUri": "localService/metadata.xml"
-              }
+                "uri": "/v2/pal/",
+                "type": "OData",
+                "settings": {
+                    "odataVersion": "2.0",
+                    "localUri": "localService/metadata.xml"
+                }
             }
-          },
+        },
         "crossNavigation": {
             "inbounds": {
                 "cp-appf-cpassignprofiles-inbound": {
@@ -83,7 +83,8 @@
                 "settings": {
                     "bundleName": "cp.appf.cpassignprofiles.i18n.i18n"
                 }
-            },"oGModel": {
+            },
+            "oGModel": {
                 "type": "sap.ui.model.json.JSONModel",
                 "settings": {
                     "defaultBindingMode": "TwoWay"
@@ -94,21 +95,21 @@
                 "dataSource": "mainService",
                 "preload": true,
                 "settings": {
-                  "synchronizationMode": "None",
-                  "operationMode": "Server",
-                  "autoExpandSelect": true,
-                  "earlyRequests": true,
-                  "groupId": "$direct"
+                    "synchronizationMode": "None",
+                    "operationMode": "Server",
+                    "autoExpandSelect": true,
+                    "earlyRequests": true,
+                    "groupId": "$direct"
                 }
-              },
-              "PModel": {
+            },
+            "PModel": {
                 "dataSource": "Pal",
                 "preload": true,
                 "settings": {
-                  "useBatch": true,
-                  "defaultBindingMode": "TwoWay"
+                    "useBatch": true,
+                    "defaultBindingMode": "TwoWay"
                 }
-              }
+            }
         },
         "resources": {
             "css": [
@@ -131,15 +132,13 @@
                 {
                     "name": "Home",
                     "pattern": "",
-                    "target": ["Home"]
-                  },
-                  {
-                      "name": "Detail",
-                      "pattern": "Detail",
-                      "target": [
-                          "Detail"
-                      ]
-                  }
+                    "target": "Home"
+                },
+                {
+                    "name": "Detail",
+                    "pattern": "Detail",
+                    "target": "Detail"
+                }
             ],
             "targets": {
                 "Home": {
@@ -148,14 +147,14 @@
                     "clearControlAggregation": true,
                     "viewId": "Home",
                     "viewName": "Home"
-                  },
-                  "Detail": {
-                      "viewType": "XML",
-                      "transition": "slide",
-                      "clearControlAggregation": true,
-                      "viewId": "Detail",
-                      "viewName": "Detail"
-                  }
+                },
+                "Detail": {
+                    "viewType": "XML",
+                    "transition": "slide",
+                    "clearControlAggregation": true,
+                    "viewId": "Detail",
+                    "viewName": "Detail"
+                }
             }
         }
     },

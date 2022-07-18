@@ -14,18 +14,18 @@
                 "uri": "v2/catalog/",
                 "type": "OData",
                 "settings": {
-                  "localUri": "localService/CatalogService/metadata.xml",
-                  "odataVersion": "2.0"
+                    "localUri": "localService/CatalogService/metadata.xml",
+                    "odataVersion": "2.0"
                 }
-              },
-              "Pal": {
+            },
+            "Pal": {
                 "uri": "v2/pal/",
                 "type": "OData",
                 "settings": {
-                  "odataVersion": "2.0",
-                  "localUri": "localService/metadata.xml"
+                    "odataVersion": "2.0",
+                    "localUri": "localService/metadata.xml"
                 }
-              }
+            }
         },
         "crossNavigation": {
             "inbounds": {
@@ -95,21 +95,21 @@
                 "dataSource": "mainService",
                 "preload": true,
                 "settings": {
-                  "synchronizationMode": "None",
-                  "operationMode": "Server",
-                  "autoExpandSelect": true,
-                  "earlyRequests": true,
-                  "groupId": "$direct"
+                    "synchronizationMode": "None",
+                    "operationMode": "Server",
+                    "autoExpandSelect": true,
+                    "earlyRequests": true,
+                    "groupId": "$direct"
                 }
-              },
-              "PModel": {
+            },
+            "PModel": {
                 "dataSource": "Pal",
                 "preload": true,
                 "settings": {
-                  "useBatch": true,
-                  "defaultBindingMode": "TwoWay"
+                    "useBatch": true,
+                    "defaultBindingMode": "TwoWay"
                 }
-              }
+            }
         },
         "resources": {
             "css": [
@@ -132,9 +132,7 @@
                 {
                     "name": "Home",
                     "pattern": "",
-                    "target": [
-                        "Home"
-                    ]
+                    "target": "Home"
                 }
             ],
             "targets": {
@@ -146,7 +144,6 @@
                     "viewName": "Home"
                 }
             }
-        
         }
     },
     "sap.cloud": {
