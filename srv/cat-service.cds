@@ -11,7 +11,7 @@ using {
     V_PARTIALPRODCHAR,
     V_NEWPRODREFCHAR,
     V_GETVARCHARPS,
-    V_MATVARITEMCHAR
+    V_UNIQUEIDCHAR
 } from '../db/data-model';
 // using V_ODPROFILES from '../db/data-model';
 using V_BOMODCOND from '../db/data-model';
@@ -198,7 +198,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
    
 // Unique ID
     entity getUniqueHeader as projection on od.UNIQUE_ID_HEADER;
-    entity getUniqueItem   as projection on od.UNIQUE_ID_ITEM;
+    entity getUniqueItem   as projection on V_UNIQUEIDCHAR;
     function genUniqueID(LOCATION_ID : String(4), PRODUCT_ID : String(40))      returns String;
     function changeUnique(UNIQUE_ID : Integer, LOCATION_ID : String(4), PRODUCT_ID : String(40), ACTIVE:Boolean) returns String;
 // Method 2

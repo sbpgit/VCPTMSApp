@@ -1,22 +1,22 @@
 ----------------------------------------------------------------------------------------
--- Name:            V_MATVARITEMCHAR
+-- Name:            V_UNIQUEIDCHAR
 -- Description:     Get Primary and secondary characteristics
 -- Join Details:    CP_PRODUCT_CLASS -  Master data for Product class
---                  CP_MATVARIANT_ITEM - table for Material variant Item
+--                  CP_UNIQUE_ID_ITEM - table for Material variant Item
 --                  V_CLASSCHARVAL - View for class and its characteristics 
 -----------------------------------------------------------------------------------------
-VIEW "V_MATVARITEMCHAR"
+VIEW "V_UNIQUEIDCHAR"
 AS SELECT DISTINCT 
-          CP_MATVARIANT_ITEM.MATVARID,
-          CP_MATVARIANT_ITEM.PRODUCT_ID,
-          CP_MATVARIANT_ITEM.LOCATION_ID,
-          CP_MATVARIANT_ITEM.CHAR_NUM,
+          CP_UNIQUE_ID_ITEM.UNIQUE_ID,
+          CP_UNIQUE_ID_ITEM.PRODUCT_ID,
+          CP_UNIQUE_ID_ITEM.LOCATION_ID,
+          CP_UNIQUE_ID_ITEM.CHAR_NUM,
           V_CLASSCHARVAL.CHAR_NAME,
-          CP_MATVARIANT_ITEM.CHARVAL_NUM,
+          CP_UNIQUE_ID_ITEM.CHARVAL_NUM,
           V_CLASSCHARVAL.CHAR_VALUE
-    FROM  CP_MATVARIANT_ITEM
+    FROM  CP_UNIQUE_ID_ITEM
     INNER JOIN CP_PRODUCT_CLASS
-    ON CP_MATVARIANT_ITEM.PRODUCT_ID = CP_PRODUCT_CLASS.PRODUCT_ID
+    ON CP_UNIQUE_ID_ITEM.PRODUCT_ID = CP_PRODUCT_CLASS.PRODUCT_ID
     INNER JOIN V_CLASSCHARVAL
     ON  CP_PRODUCT_CLASS.CLASS_NUM   = V_CLASSCHARVAL.CLASS_NUM
-    AND CP_MATVARIANT_ITEM.CHAR_NUM    = V_CLASSCHARVAL.CHAR_NUM
+    AND CP_UNIQUE_ID_ITEM.CHAR_NUM    = V_CLASSCHARVAL.CHAR_NUM

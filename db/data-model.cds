@@ -849,8 +849,8 @@ key     ![SEQUENCE]: Integer  @title: 'SEQUENCE' ;
 }
 
 @cds.persistence.exists 
-Entity ![V_MATVARITEMCHAR] {
-key     ![MATVARID]: Integer  @title: 'MATVARID' ; 
+Entity ![V_UNIQUEIDCHAR] {
+key     ![UNIQUE_ID]: Integer  @title: 'MATVARID' ; 
 key     ![PRODUCT_ID]: String(40)  @title: 'PRODUCT_ID' ; 
 key     ![LOCATION_ID]: String(4)  @title: 'LOCATION_ID' ; 
 key     ![CHAR_NUM]: String(30)  @title: 'CHAR_NUM' ; 
