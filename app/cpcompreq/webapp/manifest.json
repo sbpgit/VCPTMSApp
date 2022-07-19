@@ -100,21 +100,21 @@
                 "dataSource": "mainService",
                 "preload": true,
                 "settings": {
-                  "synchronizationMode": "None",
-                  "operationMode": "Server",
-                  "autoExpandSelect": true,
-                  "earlyRequests": true,
-                  "groupId": "$direct"
+                    "synchronizationMode": "None",
+                    "operationMode": "Server",
+                    "autoExpandSelect": true,
+                    "earlyRequests": true,
+                    "groupId": "$direct"
                 }
-              },
-              "PModel": {
-                  "dataSource": "palService",
-                  "preload": true,
-                  "settings": {
-                      "useBatch": true,
-                      "defaultBindingMode": "TwoWay"
-                  }
-              }
+            },
+            "PModel": {
+                "dataSource": "palService",
+                "preload": true,
+                "settings": {
+                    "useBatch": true,
+                    "defaultBindingMode": "TwoWay"
+                }
+            }
         },
         "resources": {
             "css": [
@@ -137,9 +137,7 @@
                 {
                     "name": "Home",
                     "pattern": "",
-                    "target": [
-                        "Home"
-                    ]
+                    "target": "Home"
                 }
             ],
             "targets": {

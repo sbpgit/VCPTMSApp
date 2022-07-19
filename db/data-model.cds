@@ -880,7 +880,6 @@ key     ![UNIQUE_ID]: Integer  @title: 'MATVARID' ;
 key     ![PRODUCT_ID]: String(40)  @title: 'PRODUCT_ID' ; 
 key     ![LOCATION_ID]: String(4)  @title: 'LOCATION_ID' ; 
 key     ![UNIQUE_DESC]: String(50)  @title: 'CHAR_NUM' ; 
-key     ![UNIQUE_TYPE]: String(1)  @title: 'CHAR_NAME' ; 
 key     ![P_UNIQUE_ID]: Integer  @title: 'CHARVAL_NUM' ; 
 key     ![ACTIVE]: Boolean  @title: 'CHAR_VALUE' ; 
 key     ![CHAR_NUM]: String(30)  @title: 'CHAR_NUM' ;

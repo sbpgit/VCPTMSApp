@@ -1,0 +1,38 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:l="sap.ui.layout"
+    xmlns:core="sap.ui.core" controllerName="cpapp.cpmatvariant.controller.ItemDetail"
+    xmlns:html="http://www.w3.org/1999/xhtml">
+    <Page id="page" showHeader="false">
+        <content>
+           
+                    <SearchField id="idCharSearch" liveChange="onCharSearch" placeholder="Char # / Char Value #"/>
+                    <Table id="idMatvarItem" items="{path: '/results'}" rememberSelections="false"  sticky="ColumnHeaders">
+                        <columns>
+                        <Column hAlign="Left" >
+                                <Text text="{i18n>charname}" />
+                            </Column>
+                            <Column hAlign="Left" >
+                                <Text text="{i18n>charno}" />
+                            </Column>
+                            <Column hAlign="Left" >
+                                <Text text="{i18n>charval}" />
+                            </Column>
+                            <Column hAlign="Left">
+                                <Text text="{i18n>charvalno}"/>
+                            </Column>
+                        </columns>
+                        <items>
+                            <ColumnListItem>
+                                <cells>
+                                    <Text text="{CHAR_NAME}" />
+                                    <Text text="{CHAR_NUM}" />
+                                    <Text text="{CHAR_VALUE}" />
+                                    <Text text="{CHARVAL_NUM}" />
+                                    </cells>
+                            </ColumnListItem>
+                        </items>
+                    </Table>
+                </content>
+    </Page>
+</mvc:View>

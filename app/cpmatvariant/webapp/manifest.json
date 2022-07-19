@@ -1,5 +1,5 @@
 {
-    "_version": "1.40.0",
+    "_version": "1.32.0",
     "sap.app": {
         "id": "cpapp.cpmatvariant",
         "type": "application",
@@ -17,14 +17,13 @@
         },
         "dataSources": {
             "mainService": {
-                "uri": "/catalog/",
+                "uri": "/v2/catalog/",
                 "type": "OData",
                 "settings": {
-                    "annotations": [],
-                    "localUri": "localService/metadata.xml",
-                    "odataVersion": "4.0"
+                  "localUri": "localService/CatalogService/metadata.xml",
+                  "odataVersion": "2.0"
                 }
-            }
+              }
         },
         "crossNavigation": {
             "inbounds": {
@@ -60,6 +59,12 @@
     },
     "sap.ui5": {
         "flexEnabled": true,
+        "rootView": {
+            "viewName": "cpapp.cpmatvariant.view.App",
+            "type": "XML",
+            "async": true,
+            "id": "App"
+        },
         "dependencies": {
             "minUI5Version": "1.102.1",
             "libs": {
@@ -84,16 +89,24 @@
                     "bundleName": "cpapp.cpmatvariant.i18n.i18n"
                 }
             },
-            "": {
+            "oGModel": {
+                "type": "sap.ui.model.json.JSONModel",
+                "settings": {
+                    "defaultBindingMode": "TwoWay"
+                },
+                "preload": true
+            },
+            "BModel": {
                 "dataSource": "mainService",
                 "preload": true,
                 "settings": {
-                    "synchronizationMode": "None",
-                    "operationMode": "Server",
-                    "autoExpandSelect": true,
-                    "earlyRequests": true
+                  "synchronizationMode": "None",
+                  "operationMode": "Server",
+                  "autoExpandSelect": true,
+                  "earlyRequests": true,
+                  "groupId": "$direct"
                 }
-            }
+              }
         },
         "resources": {
             "css": [
@@ -113,29 +126,33 @@
                 "clearControlAggregation": false
             },
             "routes": [
+               
                 {
-                    "name": "RouteDetail",
-                    "pattern": ":?query:",
+                    "name": "Details",
+                    "pattern": "",
                     "target": [
-                        "TargetDetail"
+                        "Details"
                     ]
                 }
             ],
             "targets": {
-                "TargetDetail": {
-                    "viewType": "XML",
-                    "transition": "slide",
-                    "clearControlAggregation": false,
-                    "viewId": "Detail",
-                    "viewName": "Detail"
-                }
+                
+                "Details": {
+					"viewType": "XML",
+					"viewName": "Details",
+					"viewLevel": 1
+				},
+				"ItemMaster": {
+					"viewType": "XML",
+					"viewName": "ItemMaster",
+					"viewLevel": 2
+				},
+				"ItemDetail": {
+					"viewType": "XML",
+					"viewName": "ItemDetail",
+					"viewLevel": 3
+				}
             }
-        },
-        "rootView": {
-            "viewName": "cpapp.cpmatvariant.view.App",
-            "type": "XML",
-            "async": true,
-            "id": "App"
         }
     },
     "sap.cloud": {
