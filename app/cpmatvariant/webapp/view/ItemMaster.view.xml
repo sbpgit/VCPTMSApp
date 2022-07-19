@@ -26,7 +26,7 @@
 
                 <VBox>
                     <Label text ="{i18n>matvarsearch}" />
-                    <SearchField id="idMatSearch1" liveChange="onMatSearch" placeholder="Material Desc/ mat Varient Id"/>
+                    <SearchField id="idMatSearch" liveChange="onMatSearch" placeholder="Material Desc/ mat Varient Id"/>
                 </VBox>
                 <VBox >
                     <Label text="{i18n>loc}" required="true"/>
@@ -49,7 +49,7 @@
                         <ux:ObjectPageSubSection>
                             <ux:blocks>
                             <VBox>
-                            <SearchField id="idMatSearch" liveChange="onMatSearch" placeholder="Material Desc/ mat Varient Id"/>
+                            <!-- <SearchField id="idMatSearch" liveChange="onMatSearch" placeholder="Material Desc/ mat Varient Id"/> -->
                 <Table id="idMatVHead" items="{path: '/results'}" growingScrollToLoad="true"  itemPress="onhandlePress" 
                         mode="SingleSelectMaster" selectionChange="onhandlePress" sticky="ColumnHeaders">
                     
@@ -64,7 +64,7 @@
                     <items>
                         <ColumnListItem>
                             <cells>
-                                <ObjectIdentifier title="{MATVARDESC}" text="{MATVARID}"/>
+                                <ObjectIdentifier title="{UNIQUE_RDESC}" text="{UNIQUE_ID}"/>
                                 <Switch type="AcceptReject" state="{= ${ACTIVE} === true ? true : false}" change="onChange" >
                                     <layoutData>
                                         <FlexItemData growFactor="1" />
