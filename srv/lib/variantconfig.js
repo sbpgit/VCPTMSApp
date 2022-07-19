@@ -34,10 +34,10 @@ class VarConfig {
         // Get internal number of variant table data
         const li_valc = await cds.run(
             `SELECT *
-     FROM CP_CUVTAB_VALC
-    WHERE 
-     AND ATINN = '` + adata.CHAR_NUM + `'
-     AND VALC = '` + adata.CHAR_NAME + `'`);
+               FROM CP_CUVTAB_VALC
+              WHERE 
+                     ATINN = '` + adata.CHAR_NUM + `'
+                AND VALC = '` + adata.CHAR_NAME + `'`);
         //  vtint IN li_vtint
         for (let i = 0; i < li_valc.length; i++) {
             this.get_ind(li_valc[i], it_valc);
@@ -49,15 +49,14 @@ class VarConfig {
     async get_ind(im_valc, it_valc) {
         let ls_valc1 = {};
         const ls_ind = await cds.run(` SELECT TOP 1 *
-        FROM CP_CUVTAB_IND
-        INTO LS_IND
-       WHERE VTINT = '` + im_valc.VTINT + `'
-        AND ATINN = '` + im_valc.ATINN + `'`);
+                                        FROM CP_CUVTAB_IND
+                                       WHERE VTINT = '` + im_valc.VTINT + `'
+                                         AND ATINN = '` + im_valc.ATINN + `'`);
         if (ls_ind[VTINT].length <= 0) {
             // * GET THE INFERRED PARAMETERS
             const li_ind = await cds.run(`SELECT *
-          FROM CUVTAB_IND
-         WHERE VTINT = '` + im_valc.VTINT + `'`);
+                                            FROM CP_CUVTAB_IND
+                                            WHERE VTINT = '` + im_valc.VTINT + `'`);
             if (li_ind.length > 0) {
                 for (let iInd = 0; li_ind.length > 0; iInd++) {
                     // * GET VALC DATA BASED ON SLNID AND ATINN
@@ -106,9 +105,9 @@ class VarConfig {
                             for (let iValc = 0; li_valc.length > 0; iValc++) {
                                 // * GET DATA FROM CUVTAB_IND BASED ON VTINT AND ATINN
                                 const li_ind_temp = await cds.run(`SELECT *
-                                                                    FROM CP_CUVTAB_IND
-                                                                   WHERE VTINT = '` + li_valc[iValc].VTINT + `'
-                                                                     AND ATINN = '` + li_valc[iValc].ATINN + `'`);
+                                                                     FROM CP_CUVTAB_IND
+                                                                    WHERE VTINT = '` + li_valc[iValc].VTINT + `'
+                                                                      AND ATINN = '` + li_valc[iValc].ATINN + `'`);
                                 // * IF DATA NOT FOUND
                                 if (li_ind_temp.length <= 0) {
                                     // * ENABLE FLAG
