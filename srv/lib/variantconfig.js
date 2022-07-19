@@ -2,7 +2,7 @@ const GenF = require("./gen-functions");
 const cds = require("@sap/cds");
 const hana = require("@sap/hana-client");
 const { createLogger, format, transports } = require("winston");
-const { combine, timestamp, label, prettyPrint } = format; VarConfig
+const { combine, timestamp, label, prettyPrint } = format;
 
 const containerSchema = cds.env.requires.db.credentials.schema;
 const conn_params_container = {
@@ -125,7 +125,7 @@ class VarConfig {
                                     it_valc.push(ls_valc1);
                                     ls_valc1 = {};
                                 }  //                                                  "LOOP FOR LI_VALC TABLE
-                            }//ENDIF.                                                          "IF L_NOT_FINAL = ' '
+                            }////ENDIF.                                                          "IF L_NOT_FINAL = ' '
                         } //ENDIF.                                                            "IF SY-SUBRC EQ 0
                     } //ENDIF.                                                              "IF SY-SUBRC EQ 0
                 }//ENDLOOP.                                                              "LOOP FOR LI_IND TABLE
@@ -135,9 +135,6 @@ class VarConfig {
 
     }
 
-    async sortArray(lpValc) {
-
-    }
 
 
 

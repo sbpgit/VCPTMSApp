@@ -687,6 +687,12 @@ module.exports = (srv) => {
         const obgenSOFunctions = new SOFunctions();
         await obgenSOFunctions.genUniqueID(req.data);
     });
+    
+    srv.on("genVariantStruc", async (req) => {
+        
+        const objVarConfig = new VarConfig();
+        await objVarConfig.genVarConfig(req.data);
+    });
     // Maintain Parital product introsduction
     srv.on("maintainPartialProd", async (req) => {
         let liresults = [];
@@ -1020,10 +1026,5 @@ module.exports = (srv) => {
         }
 
         return responseMessage;
-    });
-    srv.on("genVariantStruc", async (req) => {
-        
-        const objVarConfig = new VarConfig();
-        await objVarConfig.genVarConfig(req.data);
     });
 };
