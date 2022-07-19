@@ -208,4 +208,6 @@ service CatalogService @(impl : './lib/cat-service.js') {
 
     @odata.draft.enabled
     entity getARObj             as projection on od.AUTH_ROLE_OBJ;
+    function genVariantStruc(CHAR_NUM: String(10),CHAR_NAME    : String(30)) returns String;
+
 }

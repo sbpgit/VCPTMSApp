@@ -140,7 +140,7 @@
                 },
                 "[production]": {
                     "credentials": {
-                        "destination": "IBPCommon",
+                        "destination": "IBPExternal",
                         "path": "/sap/opu/odata/ibp/PLANNING_DATA_API_SRV"
                     }
                 }
@@ -158,7 +158,7 @@
                 },
                 "[production]": {
                     "credentials": {
-                        "destination": "IBPCommon",
+                        "destination": "IBPExternal",
                         "path": "/sap/opu/odata/IBP/MASTER_DATA_API_SRV"
                     }
                 }

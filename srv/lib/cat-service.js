@@ -8,6 +8,7 @@ const { combine, timestamp, label, prettyPrint } = format;
 //const ComponentReq = require("./component-req");
 const GenTimeseries = require("./gen-timeseries");
 const SOFunctions = require("./so-function");
+const VarConfig  = require("./variantconfig");
 const containerSchema = cds.env.requires.db.credentials.schema;
 // Create connection parameters to continer
 const conn_params_container = {
@@ -1019,5 +1020,10 @@ module.exports = (srv) => {
         }
 
         return responseMessage;
+    });
+    srv.on("genVariantStruc", async (req) => {
+        
+        const objVarConfig = new VarConfig();
+        await objVarConfig.genVarConfig(req.data);
     });
 };

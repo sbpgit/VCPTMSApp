@@ -130,6 +130,7 @@ class GenFunctions {
         var newDate = new Date(d.setMonth(d.getMonth()+months));
         return newDate;
     }
+    static removeDuplicates()
 }
 
 module.exports = GenFunctions;

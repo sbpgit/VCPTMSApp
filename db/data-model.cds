@@ -513,6 +513,13 @@ context cp {
         key VLCNT : String(3)  @title : 'Characteristic value counter';
         VALC  : String(70) @title : 'Characteristic Value';
     }
+    entity CUVTAB_VALC_TEMP {
+        key VTINT : String(10) @title : 'Internal number of variant table';
+        key SLNID : String(5)  @title : 'Counter for value assignment alternative';
+        key ATINN : String(10) @title : 'Internal characteristic';
+        key VLCNT : String(3)  @title : 'Characteristic value counter';
+        VALC  : String(70) @title : 'Characteristic Value';
+    }
     entity UNIQUE_ID_HEADER{
         key UNIQUE_ID    : Integer       @title : 'Unique ID';
         key LOCATION_ID     : String(4)  @title : 'Location ';
