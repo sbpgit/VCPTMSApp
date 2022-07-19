@@ -21772,3 +21772,195 @@
   label: [32m'Timeseries'[39m,
   timestamp: [32m'2022-07-15T15:36:31.264Z'[39m
 }
+{
+  message: [32m'Existing Unique ID: 0'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-07-19T09:25:33.494Z'[39m
+}
+{
+  message: [32m'Order Count: 1590'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-07-19T09:25:33.495Z'[39m
+}
+{
+  message: [32m'Unique ID Index: 1'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-07-19T09:25:34.375Z'[39m
+}
+{
+  message: [32m'Unique ID Index: 2'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-07-19T09:25:34.691Z'[39m
+}
+{
+  message: [32m'Unique ID Index: 3'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-07-19T09:25:35.002Z'[39m
+}
+{
+  message: [32m'Unique ID Index: 4'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-07-19T09:25:35.322Z'[39m
+}
+{
+  message: [32m'Unique ID Index: 5'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-07-19T09:25:35.635Z'[39m
+}
+{
+  message: [32m'Unique ID Index: 6'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-07-19T09:25:35.965Z'[39m
+}
+{
+  message: [32m'Unique ID Index: 7'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-07-19T09:25:36.304Z'[39m
+}
+{
+  message: [32m'Unique ID Index: 8'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-07-19T09:25:36.575Z'[39m
+}
+{
+  message: [32m'Unique ID Index: 9'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-07-19T09:25:36.876Z'[39m
+}
+{
+  message: [32m'Unique ID Index: 10'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-07-19T09:25:37.164Z'[39m
+}
+{
+  message: [32m'Unique ID Index: 11'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-07-19T09:25:37.450Z'[39m
+}
+{
+  message: [32m'Unique ID Index: 12'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-07-19T09:25:37.738Z'[39m
+}
+{
+  message: [32m'Unique ID Index: 13'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-07-19T09:25:38.034Z'[39m
+}
+{
+  message: [32m'Unique ID Index: 14'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-07-19T09:25:38.342Z'[39m
+}
+{
+  message: [32m'Unique ID Index: 15'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-07-19T09:25:38.646Z'[39m
+}
+{
+  message: [32m'Unique ID Index: 16'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-07-19T09:25:38.941Z'[39m
+}
+{
+  message: [32m'Unique ID Index: 17'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-07-19T09:25:39.219Z'[39m
+}
+{
+  message: [32m'Unique ID Index: 18'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-07-19T09:25:39.489Z'[39m
+}
+{
+  message: [32m'Unique ID Index: 19'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-07-19T09:25:39.771Z'[39m
+}
+{
+  message: [32m'Unique ID Index: 20'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-07-19T09:25:40.036Z'[39m
+}
+{
+  message: [32m'Unique ID Index: 21'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-07-19T09:25:40.303Z'[39m
+}
+{
+  message: [32m'Unique ID Index: 22'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-07-19T09:25:40.580Z'[39m
+}
+{
+  message: [32m'Unique ID Index: 23'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-07-19T09:25:40.851Z'[39m
+}
+{
+  message: [32m'Unique ID Index: 24'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-07-19T09:25:40.993Z'[39m
+}
+{
+  message: [32m'Unique ID Index: 25'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-07-19T09:25:41.116Z'[39m
+}
+{
+  message: [32m'Unique ID Index: 26'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-07-19T09:25:41.223Z'[39m
+}
+{
+  message: [32m'Unique ID Index: 27'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-07-19T09:25:41.326Z'[39m
+}
+{
+  message: [32m'Unique ID Index: 28'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-07-19T09:25:41.428Z'[39m
+}
+{
+  message: [32m'Unique ID Index: 29'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-07-19T09:25:41.547Z'[39m
+}
+{
+  message: [32m'Sales Order Count: 1590'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-07-19T09:25:41.665Z'[39m
+}

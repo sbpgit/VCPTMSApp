@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------------------------
 -- Name:            V_UNIQUE_ID
--- Description:     Get Primary and secondary characteristics
+-- Description:     Get Unique characteristics
 -- Join Details:    CP_UNIQUE_ID_HEADER - Unique ID Header
 --                  CP_UNIQUE_ID_ITEM   - Unique ID Item
 -----------------------------------------------------------------------------------------
@@ -9,7 +9,6 @@ AS SELECT CP_UNIQUE_ID_HEADER.UNIQUE_ID,
 CP_UNIQUE_ID_HEADER.PRODUCT_ID,
 CP_UNIQUE_ID_HEADER.LOCATION_ID,
 CP_UNIQUE_ID_HEADER.UNIQUE_DESC,
-CP_UNIQUE_ID_HEADER.UNIQUE_TYPE,
 CP_UNIQUE_ID_HEADER.P_UNIQUE_ID,
 CP_UNIQUE_ID_HEADER.ACTIVE,
 CP_UNIQUE_ID_ITEM.CHAR_NUM,
