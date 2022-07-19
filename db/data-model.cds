@@ -518,7 +518,6 @@ context cp {
         key LOCATION_ID  : String(4)  @title : 'Location ';
         key PRODUCT_ID   : String(40) @title : 'New Product';
         UNIQUE_DESC      : String(50)   @title: 'Description';
-        UNIQUE_TYPE      : String(1)      @title: 'Unique ID Type';
         P_UNIQUE_ID      : Integer        @title: 'Primary Unique ID';
         ACTIVE           : Boolean;
     }
@@ -529,6 +528,21 @@ context cp {
         key CHAR_NUM    : String(30)    @title : 'Charateristic Name';
             CHARVAL_NUM : String(70)    @title : 'Charateristic Value';
     }
+    entity UID_PRI_HEADER{
+        key UNIQUE_ID    : Integer       @title : 'Unique ID';
+        key LOCATION_ID  : String(4)  @title : 'Location ';
+        key PRODUCT_ID   : String(40) @title : 'New Product';
+        UNIQUE_DESC      : String(50)   @title: 'Description';
+        P_UNIQUE_ID      : Integer        @title: 'Primary Unique ID';
+        ACTIVE           : Boolean;
+    }
+    entity UID_PRI_ITEM{
+        key UNIQUE_ID   : Integer       @title : 'Unique ID';
+        key LOCATION_ID : String(4)     @title : 'Location ';
+        key PRODUCT_ID  : String(40)    @title : 'New Product';
+        key CHAR_NUM    : String(30)    @title : 'Charateristic Name';
+            CHARVAL_NUM : String(70)    @title : 'Charateristic Value';
+    }    
     // New product introduction
     entity NEWPROD_INTRO {
         key PRODUCT_ID  : String(40) @title : 'New Product';
