@@ -43,11 +43,13 @@ sap.ui.define(
         sap.ui.core.BusyIndicator.show();
         var sPrdId = oGModel.getProperty("/prdId");
         var sLocId = oGModel.getProperty("/locId");
+        var sUniqId = oGModel.getProperty("/uniqId");
 
-        this.getModel("BModel").read("/getMatVarItem", {
+        this.getModel("BModel").read("/getUniqueItem", {
           filters: [
             new Filter("LOCATION_ID", FilterOperator.EQ, sLocId),
             new Filter("PRODUCT_ID", FilterOperator.EQ, sPrdId),
+            new Filter("UNIQUE_ID", FilterOperator.EQ, sUniqId),
           ],
           success: function (oData) {
             sap.ui.core.BusyIndicator.hide();

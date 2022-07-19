@@ -1,11 +1,11 @@
 ----------------------------------------------------------------------------------------
--- Name:            V_UNIQUEIDCHAR
+-- Name:            V_UNIQUE_ID_ITEM
 -- Description:     Get Primary and secondary characteristics
 -- Join Details:    CP_PRODUCT_CLASS -  Master data for Product class
 --                  CP_UNIQUE_ID_ITEM - table for Material variant Item
 --                  V_CLASSCHARVAL - View for class and its characteristics 
 -----------------------------------------------------------------------------------------
-VIEW "V_UNIQUEIDCHAR"
+VIEW "V_UNIQUE_ID_ITEM"
 AS SELECT DISTINCT 
           CP_UNIQUE_ID_ITEM.UNIQUE_ID,
           CP_UNIQUE_ID_ITEM.PRODUCT_ID,

@@ -9,8 +9,14 @@
                     <SearchField id="idCharSearch" liveChange="onCharSearch" placeholder="Char # / Char Value #"/>
                     <Table id="idMatvarItem" items="{path: '/results'}" rememberSelections="false"  sticky="ColumnHeaders">
                         <columns>
+                        <Column hAlign="Left" >
+                                <Text text="{i18n>charname}" />
+                            </Column>
                             <Column hAlign="Left" >
                                 <Text text="{i18n>charno}" />
+                            </Column>
+                            <Column hAlign="Left" >
+                                <Text text="{i18n>charval}" />
                             </Column>
                             <Column hAlign="Left">
                                 <Text text="{i18n>charvalno}"/>
@@ -19,7 +25,9 @@
                         <items>
                             <ColumnListItem>
                                 <cells>
+                                    <Text text="{CHAR_NAME}" />
                                     <Text text="{CHAR_NUM}" />
+                                    <Text text="{CHAR_VALUE}" />
                                     <Text text="{CHARVAL_NUM}" />
                                     </cells>
                             </ColumnListItem>

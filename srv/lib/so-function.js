@@ -46,7 +46,7 @@ class SOFunctions{
     async genUniqueID(adata){
         
         const liSalesh = await this.getSalesHistory(adata.LOCATION_ID, adata.PRODUCT_ID, '');
-        const liSaleshPri = await this.getSalesHistory(adata.LOCATION_ID, adata.PRODUCT_ID, 'X');
+        const liSaleshPri = await this.getSalesHistory(adata.LOCATION_ID,adata.PRODUCT_ID, 'X');
         const liUniqueData =  await this.getUnique(adata.LOCATION_ID, adata.PRODUCT_ID);
 
        
@@ -70,8 +70,7 @@ class SOFunctions{
 
             // Check if Unique ID already exists                    
             for (let cntUID = 0; cntUID < liUniqueData.length; cntUID++) {
-                if (JSON.stringify(liSalesh[cntSO].CONFIG) === JSON.stringify(liUniqueData[cntUID]['CONFIG']) &&
-                    liUniqueData[cntUID].UNIQUE_TYPE === 'A') { 
+                if (JSON.stringify(liSalesh[cntSO].CONFIG) === JSON.stringify(liUniqueData[cntUID]['CONFIG'])) { 
                     lsSOHM['UNIQUE_ID'] = GenF.parse(liUniqueData[cntUID].UNIQUE_ID);
                 }               
             }
@@ -80,11 +79,9 @@ class SOFunctions{
             lsUnique['CONFIG'] = [];  
 
             if( lsSOHM['UNIQUE_ID'] === 0){
-                lsUnique['UNIQUE_TYPE'] = 'A';
                 lsUnique['CONFIG'] = liSalesh[cntSO].CONFIG;
                 for (let cntU = 0; cntU < liUnique.length; cntU++) {
-                    if(JSON.stringify(lsUnique['CONFIG']) === JSON.stringify(liUnique[cntU].CONFIG) &&
-                        liUnique[cntU].UNIQUE_TYPE === 'A'){
+                    if(JSON.stringify(lsUnique['CONFIG']) === JSON.stringify(liUnique[cntU].CONFIG)){
                         lsUnique['CONFIG'] = []
                     }
                 }
@@ -105,14 +102,18 @@ class SOFunctions{
             lsUnique['CONFIG'] = [];  
 
             if(liSaleshPri[cntSO].CONFIG.length > 0){
-                lsUnique['UNIQUE_TYPE'] = 'P';
                 lsUnique['CONFIG'] = liSaleshPri[cntSO].CONFIG;
                 for (let cntU = 0; cntU < liUniqueData.length; cntU++) {
-                    if(JSON.stringify(lsUnique['CONFIG']) === JSON.stringify(liUniqueData[cntU].CONFIG) &&
-                    liUniqueData[cntU].UNIQUE_TYPE === 'P'){
+                    if(JSON.stringify(lsUnique['CONFIG']) === JSON.stringify(liUniqueData[cntU].CONFIG)){
                         lsUnique['CONFIG'] = []
                     }
                 }
+
+                for (let cntU = 0; cntU < liUnique.length; cntU++) {
+                    if(JSON.stringify(lsUnique['CONFIG']) === JSON.stringify(liUnique[cntU].CONFIG)){
+                        lsUnique['CONFIG'] = []
+                    }
+                }                
             }
 
             if (lsUnique['CONFIG'].length > 0) {
@@ -150,7 +151,7 @@ class SOFunctions{
                             '` + adata.LOCATION_ID + `',
                             '` + adata.PRODUCT_ID + `',
                             '',
-                            '` + liUnique[cntU].UNIQUE_TYPE + `',
+                            '0',
                             TRUE)`
                     )
                     await sqlStr.exec();
@@ -160,14 +161,14 @@ class SOFunctions{
                     this.logger.error(error.message);
                 }
                 
-                if(liUnique[cntU].UNIQUE_TYPE === 'A'){
+
                     for (let cntSO = 0; cntSO < liSOHM.length; cntSO++) {
                         if(liSOHM[cntSO].UNIQUE_ID === 0 &&
                             JSON.stringify(liSOHM[cntSO].CONFIG) === JSON.stringify(liUnique[cntU]['CONFIG'])){
                                 liSOHM[cntSO].UNIQUE_ID = liUnique[cntU].UNIQUE_ID;
                         }
                     }
-                }   
+  
                 
                 for (let cntUC = 0; cntUC < liUnique[cntU]['CONFIG'].length; cntUC++) {
                     let sqlStr = await conn.prepare(
@@ -312,7 +313,6 @@ class SOFunctions{
             `SELECT H."UNIQUE_ID",
                     H."LOCATION_ID",
                     H."PRODUCT_ID",
-                    H."UNIQUE_TYPE",
                     I."CHAR_NUM",
                     I."CHARVAL_NUM"
                FROM "CP_UNIQUE_ID_ITEM" AS I
@@ -325,7 +325,6 @@ class SOFunctions{
               ORDER BY H.UNIQUE_ID,
                        H.LOCATION_ID,
                        H.PRODUCT_ID,
-                       H.UNIQUE_TYPE,
                        I.CHAR_NUM`
         );           
 
@@ -344,7 +343,6 @@ class SOFunctions{
                     lsUnique['UNIQUE_ID']    = GenF.parse(liUniqueGet[cntU].UNIQUE_ID);
                     lsUnique['LOCATION_ID'] = GenF.parse(liUniqueGet[cntU].LOCATION_ID);
                     lsUnique['PRODUCT_ID']  = GenF.parse(liUniqueGet[cntU].PRODUCT_ID);
-                    lsUnique['UNIQUE_TYPE']  = GenF.parse(liUniqueGet[cntU].UNIQUE_TYPE);
                     lsUnique['CONFIG'] = [];
             }
             lsUniqueConfig = {};
@@ -361,6 +359,54 @@ class SOFunctions{
         }
         
         return liUniqueData;
+    }
+
+    async getPriUniqueID(lLocation, lProduct){
+
+        let liUniqueData = await cds.run(            
+            `SELECT *
+               FROM V_UNIQUE_ID
+              WHERE LOCATION_ID   = '` + lLocation + `'
+                AND PRODUCT_ID    = '` + lProduct + `'
+                AND CHAR_NUM IN (SELECT "CHAR_NUM"
+                                     FROM "CP_VARCHAR_PS"
+                                    WHERE "PRODUCT_ID" = '` + lProduct + `'
+                                      AND "LOCATION_ID" = '` + lLocation + `'
+                                      AND "CHAR_TYPE" = 'P')
+            ORDER BY UNIQUE_ID,
+                     PRODUCT_ID,
+                     LOCATION_ID, 
+                     CHAR_NUM`
+        );   
+        
+        let liChar = [];
+        let lsChar = {};
+        let liCharFinal = [];
+        for (let cntU = 0; cntU < liUniqueData.length; cntU++) {
+            
+            lsChar = {};
+            lsChar['CHAR_NUM'] = liUniqueData.CHAR_NUM;
+            lsChar['CHARVAL_NUM'] = liUniqueData.CHARVAL_NUM;
+            liChar.push(lsChar);
+
+            if(liUniqueData[cntU].UNIQUE_ID === liUniqueData[GenF.addOne(cntU, liUniqueData[cntU].length)].UNIQUE_ID ||
+                cntU === GenF.addOne(cntU, liUniqueData[cntU].UNIQUE_ID)){
+                    for (let cntUID = 0; cntUID < liCharFinal.length; cntUID++) {
+                        if(liChar === liCharFinal[cntUID]){
+                            liChar = [];
+                        }
+                    }
+
+                    if(liChar.length > 0){
+                        liCharFinal.push(liChar);
+                    }
+
+                    liChar = [];
+
+            }
+            
+        }
+
     }
 
 }

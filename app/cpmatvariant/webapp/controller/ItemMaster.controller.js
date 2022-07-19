@@ -242,26 +242,33 @@ sap.ui.define(
             var oSloc = that.oLoc.getValue(),
                 oSprod = that.oProd.getValue();
 
-
-        this.getModel("BModel").read("/getMatVarHeader", {
+                sap.ui.core.BusyIndicator.show();
+        this.getModel("BModel").read("/getUniqueHeader", {
             filters: [
                 new Filter("LOCATION_ID", FilterOperator.EQ, oSloc),
                 new Filter("PRODUCT_ID", FilterOperator.EQ, oSprod),
               ],
           success: function (oData) {
+            sap.ui.core.BusyIndicator.hide();
+              if(oData.results.length){
             that.oModel.setData({
               results: oData.results,
             });
             that.byId("idMatVHead").setModel(that.oModel);
             oGModel.setProperty("/locId", oData.results[0].LOCATION_ID);
             oGModel.setProperty("/prdId", oData.results[0].PRODUCT_ID);
+            oGModel.setProperty("/uniqId", oData.results[0].UNIQUE_ID);
             // Setting the default selected item for table
             that.byId("idMatVHead").setSelectedItem(that.byId("idMatVHead").getItems()[0], true);
             // Calling function to navigate to Item detail page
             that.onhandlePress();
-            sap.ui.core.BusyIndicator.hide();
+        } else {
+            MessageToast.show("No data foe the selected Location Product");
+        }
+            
           },
           error: function () {
+            sap.ui.core.BusyIndicator.hide();
             MessageToast.show("Failed to get data");
           },
         });
@@ -278,6 +285,7 @@ sap.ui.define(
           // Set the selected values to get the details
           oGModel.setProperty("/prdId", sSelItem.PRODUCT_ID);
           oGModel.setProperty("/locId", sSelItem.LOCATION_ID);
+          oGModel.setProperty("/uniqId", sSelItem.UNIQUE_ID);
         }
         // Calling Item Detail page
         that.getOwnerComponent().runAsOwner(function () {
@@ -316,8 +324,8 @@ sap.ui.define(
           oFilters.push(
             new Filter({
               filters: [
-                new Filter("PRODUCT_ID", FilterOperator.Contains, sQuery),
-                new Filter("LOCATION_ID", FilterOperator.Contains, sQuery),
+                new Filter("UNIQUE_RDESC", FilterOperator.Contains, sQuery),
+                new Filter("UNIQUE_ID", FilterOperator.Contains, sQuery),
               ],
               and: false,
             })
@@ -329,7 +337,33 @@ sap.ui.define(
       onChange:function(oEvent){
 
         var oItem = oEvent.getSource().getBindingContext().getObject();
-        MessageToast.show("Changed");
+
+        var oActive;
+
+        if(oItem.ACTIVE === true){
+            oActive = false;
+        } else {
+            oActive = true;
+        }
+
+        that.getModel("BModel").callFunction("/changeUnique", {
+            method: "GET",
+            urlParameters: {
+                LOCATION_ID : oItem.LOCATION_ID,
+                PRODUCT_ID : oItem.PRODUCT_ID,
+                UNIQUE_ID: oItem.UNIQUE_ID,
+                ACTIVE:oActive
+            },
+            success: function (oData) {
+                sap.ui.core.BusyIndicator.hide();   
+                MessageToast.show(oData.changeUnique);             
+                that.onGetData();
+            },
+            error: function (oData) {
+                sap.ui.core.BusyIndicator.hide();
+                MessageToast.show("Failed to changes the status");
+            },
+        });
 
     },
 
