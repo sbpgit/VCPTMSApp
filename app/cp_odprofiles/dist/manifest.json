@@ -132,9 +132,7 @@
                 {
                     "name": "Home",
                     "pattern": "",
-                    "target": [
-                        "Home"
-                    ]
+                    "target": "Home"
                 }
             ],
             "targets": {

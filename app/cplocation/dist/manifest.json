@@ -105,13 +105,7 @@
                         "settings": {
                             "entitySet": "getLocation",
                             "variantManagement": "Page",
-                            "navigation": {
-                                "getLocation": {
-                                    "detail": {
-                                        "route": "getLocationObjectPage"
-                                    }
-                                }
-                            },
+                            "navigation": {},
                             "initialLoad": true
                         }
                     }

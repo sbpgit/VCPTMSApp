@@ -90,5 +90,17 @@
             "object": "VT_ASMBCOMP",
             "schema": "DB_CONFIG_PROD_CLIENT1"
         }
+    },
+    "CONFIG_PRODUCTS.db::SYN_CUVTAB_IND": {
+        "target": {
+            "object": "VT_CUVTAB_IND",
+            "schema": "DB_CONFIG_PROD_CLIENT1"
+        }
+    },
+    "CONFIG_PRODUCTS.db::SYN_CUVTAB_VALC": {
+        "target": {
+            "object": "VT_CUVTAB_VALC",
+            "schema": "DB_CONFIG_PROD_CLIENT1"
+        }
     }
 }

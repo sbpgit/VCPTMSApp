@@ -364,8 +364,6 @@ sap.ui.define([
                 },
                 success: function (oData) {
                     sap.ui.core.BusyIndicator.hide();
-
-                    
                     that.onGetData();
                 },
                 error: function (oData) {
@@ -386,7 +384,7 @@ sap.ui.define([
         }
 		},
 
-        onPriSearch:function(){
+        onPrimarySearch:function(){
             var sQuery = that.byId("idPrimarySearch").getValue(),
                 oFilters = [];
                 // Check if search filter is to be applied

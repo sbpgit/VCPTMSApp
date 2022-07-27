@@ -14,7 +14,7 @@
         "@sap/cds-mtx": "^2.5.1",
         "@sap/cds-odata-v2-adapter-proxy": "^1.9.0",
         "@sap/hana-client": "^2.12.22",
-        "@sap/hdi-deploy": "^4.2.0",
+        "@sap/hdi-deploy": "^4.4.1",
         "@sap/jobs-client": "^1.6.3",
         "@sap/xsenv": "^3.2.2",
         "@sap/xssec": "^3.2.13",
@@ -36,7 +36,7 @@
         "uuid": "^8.3.2"
     },
     "engines": {
-        "node": "^12 || ^14"
+        "node": "^14 || ^16"
     },
     "scripts": {
         "start": "NODE_ENV=production cds run",

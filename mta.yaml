@@ -148,7 +148,7 @@ modules:
       name: cpappcppartialprodnew
       target-path: resources/
     - artifacts:
-      - cpappcpnewprodintro.zipcpprscchar
+      - cpappcpnewprodintro.zip
       name: cpappcpnewprodintro
       target-path: resources/
     - artifacts:

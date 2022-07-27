@@ -1,0 +1,84 @@
+<mvc:View controllerName="cpapp.cpmatvariant.controller.ItemMaster"
+    xmlns:l="sap.ui.layout"
+    xmlns:core="sap.ui.core"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:ux="sap.uxap"
+    xmlns:mvc="sap.ui.core.mvc" 
+    displayBlock="true"
+    xmlns="sap.m">
+
+        <ux:ObjectPageLayout id="ObjectPageLayout">
+            <ux:headerTitle>
+                <ux:ObjectPageDynamicHeaderTitle>
+                    <ux:expandedHeading>
+                        <Title text="{i18n>headertitle}" class="boldText" titleAlignment="Center" />
+                    </ux:expandedHeading>
+                    <ux:snappedHeading>
+                        <FlexBox fitContainer="true" alignItems="Center" >
+                            <Title text="{i18n>headertitle}" wrapping="true" />
+                        </FlexBox>
+                    </ux:snappedHeading>
+                </ux:ObjectPageDynamicHeaderTitle>
+            </ux:headerTitle>
+            <ux:headerContent>
+                <FlexBox wrap="Wrap" fitContainer="true">
+        <l:Grid  >
+
+                <VBox>
+                    <Label text ="{i18n>matvarsearch}" />
+                    <SearchField id="idMatSearch" liveChange="onMatSearch" placeholder="Material Desc/ mat Varient Id"/>
+                </VBox>
+                <VBox >
+                    <Label text="{i18n>loc}" required="true"/>
+                    <Input id="idloc" value=""  placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                </VBox>
+                <VBox>
+                    <Label text="{i18n>prod}" required="true"/>
+                    <MultiInput id="prodInput"  placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
+                </VBox>
+                <VBox> 
+                <Label text ="" />                  
+                    <Button text="{i18n>go}" type="Emphasized" press="onGetData" tooltip="Get data based on filters"/>
+                </VBox>
+                </l:Grid>
+            </FlexBox>
+            </ux:headerContent>
+            <ux:sections>
+                <ux:ObjectPageSection >
+                    <ux:subSections>
+                        <ux:ObjectPageSubSection>
+                            <ux:blocks>
+                            <VBox>
+                            <!-- <SearchField id="idMatSearch" liveChange="onMatSearch" placeholder="Material Desc/ mat Varient Id"/> -->
+                <Table id="idMatVHead" items="{path: '/results'}" growingScrollToLoad="true"  itemPress="onhandlePress" 
+                        mode="SingleSelectMaster" selectionChange="onhandlePress" sticky="ColumnHeaders">
+                    
+                    <columns>
+                        <Column hAlign="Left" vAlign="Middle">
+                            <Text text="{i18n>matdesc}" />
+                        </Column>
+                        <Column hAlign="Left" vAlign="Middle">
+                            <Text text="{i18n>active}"/>
+                        </Column>
+                    </columns>
+                    <items>
+                        <ColumnListItem>
+                            <cells>
+                                <ObjectIdentifier title="{UNIQUE_RDESC}" text="{UNIQUE_ID}"/>
+                                <Switch type="AcceptReject" state="{= ${ACTIVE} === true ? true : false}" change="onChange" >
+                                    <layoutData>
+                                        <FlexItemData growFactor="1" />
+                                    </layoutData>
+                                </Switch>
+                            </cells>
+                        </ColumnListItem>
+                    </items>
+                </Table>
+                </VBox>
+                </ux:blocks>
+                        </ux:ObjectPageSubSection>
+                    </ux:subSections>
+                </ux:ObjectPageSection>
+            </ux:sections>
+        </ux:ObjectPageLayout>
+</mvc:View>

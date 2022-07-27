@@ -41,7 +41,7 @@ class VarConfig {
         //  vtint IN li_vtint
         for (let i = 0; i < li_valc.length; i++) {
             this.get_ind(li_valc[i], it_valc);
-            li_valcop.sort(GenFunctions.dynamicSortMultiple("ATINN", "VALC"));
+            it_valc.sort(GenF.dynamicSortMultiple("ATINN", "VALC"));
 
             // DELETE ADJACENT DUPLICATES FROM it_valc COMPARING atinn valc.
         }
@@ -52,7 +52,7 @@ class VarConfig {
                                         FROM CP_CUVTAB_IND
                                        WHERE VTINT = '` + im_valc.VTINT + `'
                                          AND ATINN = '` + im_valc.ATINN + `'`);
-        if (ls_ind[VTINT].length <= 0) {
+        if (ls_ind.length <= 0) {
             // * GET THE INFERRED PARAMETERS
             const li_ind = await cds.run(`SELECT *
                                             FROM CP_CUVTAB_IND
@@ -66,7 +66,7 @@ class VarConfig {
                                                             AND ATINN '` + li_ind[iInd].ATINN + `'`);
                     
                     if (li_valc_temp.length > 0) {
-                        li_valc_temp.sort(GenFunctions.dynamicSortMultiple("ATINN", "VALC"));
+                        li_valc_temp.sort(GenF.dynamicSortMultiple("ATINN", "VALC"));
                         for(let i = 0 ; i < li_valc_temp.length ; i++){
                             try {
                                 let sqlStr = await conn.prepare(
@@ -122,6 +122,18 @@ class VarConfig {
                                     ls_valc1.ATINN = li_valc[iValc2].ATINN;
                                     ls_valc1.VALC = li_valc[iValc2].VALC;
                                     it_valc.push(ls_valc1);
+                                    try {
+                                        let sqlStr = await conn.prepare(
+                                            `INSERT INTO "CP_CUVTAB_FINAL" VALUES(
+                                                '` + li_valc[iValc2].ATINN + `',
+                                                '` + li_valc[iValc2].VALC + `')`
+                                        )
+                                        await sqlStr.exec();
+                                        await sqlStr.drop();                      
+                    
+                                    } catch (error) {
+                                        console.log(error.message);
+                                    }
                                     ls_valc1 = {};
                                 }  //                                                  "LOOP FOR LI_VALC TABLE
                             }////ENDIF.                                                          "IF L_NOT_FINAL = ' '

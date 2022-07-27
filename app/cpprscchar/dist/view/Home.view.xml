@@ -45,7 +45,7 @@
 						<layoutData ><l:SplitterLayoutData resizable="false" size="50%"/></layoutData>
 						<content>
 							<Toolbar>
-								<SearchField liveChange="onPrimarySearch" width="100%" id="idPrimarySearch"/>
+								<SearchField liveChange="onPrimarySearch" placeholder="Characteristics Name"  width="100%" id="idPrimarySearch"/>
 							</Toolbar>
 							<Table id="Primarytable" mode="SingleSelectMaster" items="{ path: '/results'}">
 								<contextMenu>
@@ -54,12 +54,7 @@
 									</Menu>
 								</contextMenu>
 								<columns>
-									<Column hAlign="Center">
-										<Text text="{i18n>loc}"/>
-									</Column>
-									<Column hAlign="Center">
-										<Text text="{i18n>prod}"/>
-									</Column>
+									
 									<Column hAlign="Center">
 										<Text text="{i18n>charno}"/>
 									</Column>
@@ -75,8 +70,7 @@
 								<items>
 									<ColumnListItem>
 										<cells>
-											<Text text="{LOCATION_ID}"/>
-											<Text text="{PRODUCT_ID}"/>
+											
 											<Text text="{CHAR_NUM}"/>
 											<Text text="{CHAR_NAME}"/>
 										</cells>
@@ -88,7 +82,7 @@
 					<Page title="{i18n>sCharTitle}" titleAlignment="Center" showFooter="true">
 						<layoutData ><l:SplitterLayoutData resizable="false" size="50%"/></layoutData>
 						<Toolbar>
-							<SearchField id="searchField" width="50%" placeholder="Characteristics Name" enableSuggestions="true" search="onCharSearch"
+							<SearchField id="searchField" width="100%" placeholder="Characteristics Name" enableSuggestions="true" search="onCharSearch"
 								suggest="onSuggest" suggestionItems="{ path: '/results'}">
 								<SuggestionItem text="{CHAR_NAME}" key="{CHAR_NAME}"/>
 							</SearchField>
@@ -101,12 +95,7 @@
 								</Menu>
 							</contextMenu>
 							<columns>
-								<Column hAlign="Center">
-									<Text text="{i18n>loc}"/>
-								</Column>
-								<Column hAlign="Center">
-									<Text text="{i18n>prod}"/>
-								</Column>
+								
 								<Column hAlign="Center">
 									<Text text="{i18n>charno}"/>
 								</Column>
@@ -125,8 +114,6 @@
 							<items>
 								<ColumnListItem type="Active">
 									<cells>
-										<Text text="{LOCATION_ID}"/>
-										<Text text="{PRODUCT_ID}"/>
 										<Text text="{CHAR_NUM}"/>
 										<Text text="{CHAR_NAME}"/>
 										<Text text="{SEQUENCE}"/>

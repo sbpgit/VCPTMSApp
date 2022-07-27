@@ -520,6 +520,10 @@ context cp {
         key VLCNT : String(3)  @title : 'Characteristic value counter';
         VALC  : String(70) @title : 'Characteristic Value';
     }
+    entity CUVTAB_FINAL {
+        ATINN : String(10) @title : 'Internal characteristic';
+        VALC  : String(70) @title : 'Characteristic Value';
+    }
     entity UNIQUE_ID_HEADER{
         key UNIQUE_ID    : Integer       @title : 'Unique ID';
         key LOCATION_ID  : String(4)  @title : 'Location ';
