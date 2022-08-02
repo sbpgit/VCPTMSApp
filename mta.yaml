@@ -29,7 +29,7 @@ modules:
   - name: config_products-db
     properties:
       TARGET_CONTAINER: ~{hdi-service-name}
-  - name: cross-container-service-1
+  # - name: cross-container-service-1
   parameters:
     buildpack: nodejs_buildpack
   build-parameters:
@@ -421,10 +421,10 @@ resources:
     service: xsuaa
     service-name: config_products-xsuaa-service
     service-plan: application
-- name: cross-container-service-1
-  type: org.cloudfoundry.existing-service
-  parameters:
-    service-name: CCL1_ACCESS
+# - name: cross-container-service-1
+#   type: org.cloudfoundry.existing-service
+#   parameters:
+#     service-name: CCL1_ACCESS
 - name: jobscheduler_inst
   type: org.cloudfoundry.managed-service
   parameters:
