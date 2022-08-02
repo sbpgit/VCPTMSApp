@@ -69,3 +69,5 @@ node_modules
     
 # auto generated wildcard
 config_products/gen/db/.env
+# added by cds bind
+.cdsrc-private.json
