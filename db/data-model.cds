@@ -888,7 +888,7 @@ key     ![CHAR_VALUE]: String(70)  @title: 'CHAR_VALUE' ;
 @cds.persistence.exists 
 Entity ![V_UNIQUE_ID] {
 key     ![UNIQUE_ID]: Integer  @title: 'MATVARID' ; 
-key     ![PRODUCT_ID]: String(40)  @title: 'PRODUCT_ID' ; 
+key     ![PRODUCT_ID]: String(40)  @title: 'Product' ; 
 key     ![LOCATION_ID]: String(4)  @title: 'LOCATION_ID' ; 
 key     ![UNIQUE_DESC]: String(50)  @title: 'CHAR_NUM' ; 
 key     ![P_UNIQUE_ID]: Integer  @title: 'CHARVAL_NUM' ; 

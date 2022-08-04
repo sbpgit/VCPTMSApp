@@ -1,4 +1,0 @@
-#2.0#2022 07 18 09:54:18.755#Z#DEBUG#com.sap.cloud.lm.sl.xs2.88f60164-067f-11ed-9ebc-eeee0a8cc8d2.config_products-destination-content_config_products-mdestination-service.synchronousContentDeployTask#
-######org.cloudfoundry.multiapps.controller.persistence.services.ProcessLogger########flowable-async-job-executor-thread-12388###
-[SynchronousContentDeployStep] [config_products-destination-content] [INFO] Deploy finished successfully#
-

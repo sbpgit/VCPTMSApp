@@ -33,3 +33,5 @@ using from './cpjobscheduler_test/annotations';
 // using from './cpprscchar/annotations';
 
 using from './cpmatvariant/annotations';
+
+using from './cpunique/annotations';

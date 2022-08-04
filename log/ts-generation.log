@@ -17,7 +17,7 @@
   timestamp: [32m'2022-04-14T07:26:48.168Z'[39m
 }
 {
-  message: [32m"transaction rolled back by lock wait timeout: TrexColumnUpdate failed on table '22E31DBAE729415AB87E36A13434327D:CP_TS_OBJDEP_CHARHDR' with error: transaction rolled back by lock wait timeout: Lock-wait time out exceeded [OWNER=348864716802, TYPE=RECORD_LOCK, CURRENT_MODE=EXCLUSIVE, REQUESTED_MODE=EXCLUSIVE], rc=4628/undefined"[39m,
+  message: [32m"transaction rolled back by lock wait timeout: TrexColumnUpdate failed on table '4167A112608D48049ADB20CCE53B4F4F:CP_TS_OBJDEP_CHARHDR' with error: transaction rolled back by lock wait timeout: Lock-wait time out exceeded [OWNER=348864716802, TYPE=RECORD_LOCK, CURRENT_MODE=EXCLUSIVE, REQUESTED_MODE=EXCLUSIVE], rc=4628/undefined"[39m,
   level: [32m'error'[39m,
   label: [32m'Timeseries'[39m,
   timestamp: [32m'2022-04-14T07:56:48.408Z'[39m
@@ -59,7 +59,7 @@
   timestamp: '2022-04-14T09:15:23.349Z'
 }
 {
-  message: "transaction rolled back by lock wait timeout: TrexColumnUpdate failed on table '22E31DBAE729415AB87E36A13434327D:CP_TS_OBJDEP_CHARHDR' with error: transaction rolled back by lock wait timeout: Lock-wait time out exceeded [OWNER=349026193410, TYPE=RECORD_LOCK, CURRENT_MODE=EXCLUSIVE, REQUESTED_MODE=EXCLUSIVE], rc=4628/undefined",
+  message: "transaction rolled back by lock wait timeout: TrexColumnUpdate failed on table '4167A112608D48049ADB20CCE53B4F4F:CP_TS_OBJDEP_CHARHDR' with error: transaction rolled back by lock wait timeout: Lock-wait time out exceeded [OWNER=349026193410, TYPE=RECORD_LOCK, CURRENT_MODE=EXCLUSIVE, REQUESTED_MODE=EXCLUSIVE], rc=4628/undefined",
   level: 'error',
   label: 'Timeseries',
   timestamp: '2022-04-14T09:45:37.983Z'
@@ -21963,4 +21963,10 @@
   level: [32m'info'[39m,
   label: [32m'Timeseries'[39m,
   timestamp: [32m'2022-07-19T09:25:41.665Z'[39m
+}
+{
+  message: [32m'Started timeseries Service'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-08-03T12:44:12.512Z'[39m
 }

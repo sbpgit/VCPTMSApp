@@ -41,7 +41,7 @@
     "scripts": {
         "start": "NODE_ENV=production cds run",
         "watch-cfgprd_pvsroot": "cds watch --open cfgprd_pvsroot/webapp/index.html#fe-lrop-v4",
-        "undeploy": "cf undeploy config_products --delete-services --delete-service-keys",
+        "undeploy": "cf undeploy config_products --delete-services --delete-service-keys --delete-service-brokers",
         "watch-project1": "cds watch --open project1/webapp/index.html#fe-lrop-v4",
         "watch-cp_ibpfdem": "cds watch --open cp_ibpfdem/webapp/index.html#fe-lrop-v4",
         "watch-cp_ibpfplan": "cds watch --open cp_ibpfplan/webapp/index.html#fe-lrop-v4",
@@ -68,7 +68,10 @@
         "watch-cp_jobschlogs": "cds watch --open cp_jobschlogs/webapp/index.html?sap-ui-xx-viewCache=false",
         "watch-cpjoblogs": "cds watch --open cpjoblogs/webapp/index.html?sap-ui-xx-viewCache=false",
         "watch-cpprscchar": "cds watch --open cpprscchar/webapp/index.html?sap-ui-xx-viewCache=false",
-        "watch-cpmatvariant": "cds watch --open cpmatvariant/webapp/index.html?sap-ui-xx-viewCache=false"
+        "watch-cpmatvariant": "cds watch --open cpmatvariant/webapp/index.html?sap-ui-xx-viewCache=false",
+        "watch-cpunique": "cds watch --open cpunique/webapp/index.html?sap-ui-xx-viewCache=false",
+        "build": "rimraf resources mta_archives && mbt build --mtar archive",
+        "deploy": "cf deploy mta_archives/archive.mtar --retries 1"
     },
     "eslintConfig": {
         "extends": "eslint:recommended",
@@ -206,9 +209,11 @@
         "app/cpprscchar",
         "app/cpprscchar",
         "app/cpprscchar",
-        "app/cpmatvariant"
+        "app/cpmatvariant",
+        "app/cpunique"
     ],
     "devDependencies": {
-        "@sap/ux-specification": "1.102.2"
+        "@sap/ux-specification": "^1.102.2",
+        "rimraf": "^3.0.2"
     }
 }
