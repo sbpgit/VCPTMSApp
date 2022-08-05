@@ -324,8 +324,8 @@ sap.ui.define(
           oFilters.push(
             new Filter({
               filters: [
-                new Filter("UNIQUE_RDESC", FilterOperator.Contains, sQuery),
-                new Filter("UNIQUE_ID", FilterOperator.Contains, sQuery),
+                new Filter("UNIQUE_DESC", FilterOperator.Contains, sQuery),
+                new Filter("UNIQUE_ID", FilterOperator.EQ, parseInt(sQuery))
               ],
               and: false,
             })
@@ -341,9 +341,9 @@ sap.ui.define(
         var oActive;
 
         if(oItem.ACTIVE === true){
-            oActive = false;
+            oActive = 'X';//false;
         } else {
-            oActive = true;
+            oActive = '';//true;
         }
 
         that.getModel("BModel").callFunction("/changeUnique", {
@@ -352,6 +352,8 @@ sap.ui.define(
                 LOCATION_ID : oItem.LOCATION_ID,
                 PRODUCT_ID : oItem.PRODUCT_ID,
                 UNIQUE_ID: oItem.UNIQUE_ID,
+                UID_TYPE: oItem.UID_TYPE,
+                UNIQUE_DESC: oItem.UNIQUE_DESC,
                 ACTIVE:oActive
             },
             success: function (oData) {

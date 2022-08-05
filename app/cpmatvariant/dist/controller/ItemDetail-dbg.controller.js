@@ -80,8 +80,8 @@ sap.ui.define(
           oFilters.push(
             new Filter({
               filters: [
-                new Filter("CHAR_NUM", FilterOperator.Contains, sQuery),
-                new Filter("CHARVAL_NUM", FilterOperator.Contains, sQuery)
+                new Filter("CHAR_NAME", FilterOperator.Contains, sQuery),
+                new Filter("CHAR_VALUE", FilterOperator.Contains, sQuery)
               ],
               and: false,
             })

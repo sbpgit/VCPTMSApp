@@ -39,6 +39,8 @@ service CatalogService @(impl : './lib/cat-service.js') {
     // Get locations
     @readonly
     entity getLocation          as projection on od.LOCATION;
+    @readonly
+    entity getLocationtemp          as projection on od.LOCATION;
 
     // Get customer group
     @readonly
@@ -202,7 +204,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
     entity getUniqueItem   as projection on V_UNIQUE_ID_ITEM;
     entity getUniqueId as projection on V_UNIQUE_ID;
     function genUniqueID(LOCATION_ID : String(4), PRODUCT_ID : String(40))      returns String;
-    function changeUnique(UNIQUE_ID : Integer, LOCATION_ID : String(4), PRODUCT_ID : String(40), ACTIVE:Boolean) returns String;
+    function changeUnique(UNIQUE_ID : Integer, LOCATION_ID : String(4), PRODUCT_ID : String(40), UID_TYPE : String(1), UNIQUE_DESC : String(50), ACTIVE:String(1)) returns String;
 // Method 2
     entity genvarcharps as projection on od.VARCHAR_PS;
     entity getPriSecChar as projection on V_GETVARCHARPS;
@@ -210,6 +212,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
 
     @odata.draft.enabled
     entity getARObj             as projection on od.USER_AUTHOBJ;
+    entity getParameters      as projection on od.PARAMETER_AUTH;
     function genVariantStruc(CHAR_NUM: String(10),CHAR_NAME    : String(30)) returns String;
 
 }

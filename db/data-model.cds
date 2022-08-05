@@ -605,6 +605,10 @@ context cp {
         key PARAMETER_VAL : String(250) @title : 'Parameter';
         // ROLE : Association to many AUTH_EMP_ROLE on ROLE.ROLE_ID = ROLE_ID;
     }
+     entity PARAMETER_AUTH {
+        key PARAMETER     : String(100) @title : 'Parameter';
+            PARAMETER_VAL : String(250) @title : 'Parameter';
+    }
 
 }
 

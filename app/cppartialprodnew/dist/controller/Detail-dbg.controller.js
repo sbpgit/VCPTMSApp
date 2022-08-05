@@ -721,7 +721,7 @@ sap.ui.define(
                     vRuleslist = {
                         PRODUCT_ID: that.byId("idProd").getValue(),
                         LOCATION_ID: that.byId("idloc").getValue(),
-                        REF_PRODID: that.byId("idrefprod").getValue(),
+                        // REF_PRODID: that.byId("idrefprod").getValue(),
                         CLASS_NUM:aData[i].CLASS_NUM,            
                         CHAR_NUM:aData[i].CHAR_NUM,            
                         CHARVAL_NUM:aData[i].CHARVAL_NUM

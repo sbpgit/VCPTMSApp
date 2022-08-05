@@ -11,3 +11,7 @@
     width: 5rem;
     height: 1.625rem;
 }
+.sapUxAPObjectPageHeaderDetails .sapMLabel {
+    color: #666;
+    width: 300px;
+}

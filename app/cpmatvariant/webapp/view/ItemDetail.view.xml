@@ -6,19 +6,19 @@
     <Page id="page" showHeader="false">
         <content>
            
-                    <SearchField id="idCharSearch" liveChange="onCharSearch" placeholder="Char # / Char Value #"/>
+                    <SearchField id="idCharSearch" liveChange="onCharSearch" placeholder="Characteristic / Characteristic Value"/>
                     <Table id="idMatvarItem" items="{path: '/results'}" rememberSelections="false"  sticky="ColumnHeaders">
                         <columns>
                         <Column hAlign="Left" >
                                 <Text text="{i18n>charname}" />
                             </Column>
-                            <Column hAlign="Left" >
+                            <Column hAlign="Left" visible="false">
                                 <Text text="{i18n>charno}" />
                             </Column>
                             <Column hAlign="Left" >
                                 <Text text="{i18n>charval}" />
                             </Column>
-                            <Column hAlign="Left">
+                            <Column hAlign="Left" visible="false">
                                 <Text text="{i18n>charvalno}"/>
                             </Column>
                         </columns>
