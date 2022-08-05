@@ -12,7 +12,7 @@
         "@sap/cds": "^5.9.4",
         "@sap/cds-dk": "^4.9.2",
         "@sap/cds-mtx": "^2.5.1",
-        "@sap/cds-odata-v2-adapter-proxy": "^1.9.0",
+        "@sap/cds-odata-v2-adapter-proxy": "^1.9.4",
         "@sap/hana-client": "^2.12.22",
         "@sap/hdi-deploy": "^4.4.1",
         "@sap/jobs-client": "^1.6.3",
@@ -62,7 +62,6 @@
         "watch-cpprodlocline": "cds watch --open cpprodlocline/webapp/index.html#fe-lrop-v4",
         "watch-cprtrheader": "cds watch --open cprtrheader/webapp/index.html#fe-lrop-v4",
         "watch-cpasmbcompreq": "cds watch --open cpasmbcompreq/webapp/index.html#fe-lrop-v4",
-        "watch-cpauthobjrole": "cds watch --open cpauthobjrole/webapp/index.html?sap-ui-xx-viewCache=false#fe-lrop-v4",
         "watch-cpjobscheduler_logs": "cds watch --open cpjobscheduler_logs/webapp/index.html?sap-ui-xx-viewCache=false#fe-lrop-v4",
         "watch-cprestrictions": "cds watch --open cprestrictions/webapp/index.html?sap-ui-xx-viewCache=false#fe-lrop-v4",
         "watch-cp_jobschlogs": "cds watch --open cp_jobschlogs/webapp/index.html?sap-ui-xx-viewCache=false",
@@ -71,7 +70,8 @@
         "watch-cpmatvariant": "cds watch --open cpmatvariant/webapp/index.html?sap-ui-xx-viewCache=false",
         "watch-cpunique": "cds watch --open cpunique/webapp/index.html?sap-ui-xx-viewCache=false",
         "build": "rimraf resources mta_archives && mbt build --mtar archive",
-        "deploy": "cf deploy mta_archives/archive.mtar --retries 1"
+        "deploy": "cf deploy mta_archives/archive.mtar --retries 1",
+        "watch-cpauthorization": "cds watch --open cpauthorization/webapp/index.html?sap-ui-xx-viewCache=false"
     },
     "eslintConfig": {
         "extends": "eslint:recommended",
@@ -199,21 +199,17 @@
         "app/cpnewprod",
         "app/cpproduct",
         "app/cpcustgroup",
-        "app/cpauthobjrole",
         "app/cpjobscheduler_logs",
         "app/cprestrictions",
         "app/cp_jobschlogs",
         "app/cpjoblogs",
         "app/cpjoblog",
         "app/cpprscchar",
-        "app/cpprscchar",
-        "app/cpprscchar",
-        "app/cpprscchar",
         "app/cpmatvariant",
-        "app/cpunique"
+        "app/cpunique",
+        "app/cpauthorization"
     ],
     "devDependencies": {
-        "@sap/ux-specification": "^1.102.2",
-        "rimraf": "^3.0.2"
+        "@sap/ux-specification": "^1.102.2"
     }
 }

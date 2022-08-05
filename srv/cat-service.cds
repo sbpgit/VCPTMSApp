@@ -209,7 +209,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
     function changeToPrimary(LOCATION_ID : String(4), PRODUCT_ID : String(40),CHAR_NUM: String(10),CHAR_TYPE: String(1),SEQUENCE:Integer,FLAG: String(1)) returns String;
 
     @odata.draft.enabled
-    entity getARObj             as projection on od.AUTH_ROLE_OBJ;
+    entity getARObj             as projection on od.USER_AUTHOBJ;
     function genVariantStruc(CHAR_NUM: String(10),CHAR_NAME    : String(30)) returns String;
 
 }

@@ -919,7 +919,12 @@ module.exports = (srv) => {
                 //DONOTHING
             }
             lsresults.CHAR_TYPE = req.data.CHAR_TYPE;
-            lsresults.SEQUENCE = req.data.SEQUENCE;
+            if (req.data.CHAR_TYPE === "P") {
+                lsresults.SEQUENCE = 0;
+            }
+            else{
+                lsresults.SEQUENCE = req.data.SEQUENCE;
+            }
             liresults.push(lsresults);
 
             if (liresults.length > 0) {
@@ -1008,13 +1013,15 @@ module.exports = (srv) => {
         var responseMessage;
         lsresults.LOCATION_ID = req.data.LOCATION_ID;
         lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
-        lsresults.UNIQUE_ID = req.data.UNIQUE_ID;
+        lsresults.UNIQUE_ID = parseInt(req.data.UNIQUE_ID);
         try {
             await cds.delete("CP_UNIQUE_ID_HEADER", lsresults);
         } catch (e) {
             //DONOTHING
         }
-        lsresults.ACTIVE = req.data.ACTIVE;
+        // lsresults.UNIQUE_DESC = req.data.UNIQUE_DESC;
+        // lsresults.UID_TYPE = req.data.UID_TYPE;
+        lsresults.ACTIVE = Boolean(req.data.ACTIVE);
         liresults.push(lsresults);
         try {
             await cds.run(INSERT.into("CP_UNIQUE_ID_HEADER").entries(liresults));

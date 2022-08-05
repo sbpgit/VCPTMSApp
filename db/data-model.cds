@@ -489,7 +489,7 @@ context cp {
         key CLASS_NUM   : String(20) @title : 'Class Name';
         key CHAR_NUM    : String(30) @title : 'Charateristic Name';
         key CHARVAL_NUM : String(70) @title : 'Charateristic Value';
-            REF_PRODID  : String(40) @title : ' Ref. Product';
+            // REF_PRODID  : String(40) @title : ' Ref. Product';
     }
 
     entity VARCHAR_PS {
@@ -525,11 +525,11 @@ context cp {
         VALC  : String(70) @title : 'Characteristic Value';
     }
     entity UNIQUE_ID_HEADER{
-        key UNIQUE_ID    : Integer       @title : 'Unique ID';
-        key LOCATION_ID  : String(4)  @title : 'Location ';
-        key PRODUCT_ID   : String(40) @title : 'New Product';
+        key UNIQUE_ID    : Integer      @title : 'Unique ID';
+        key LOCATION_ID  : String(4)    @title : 'Location ';
+        key PRODUCT_ID   : String(40)   @title : 'New Product';
         UNIQUE_DESC      : String(50)   @title: 'Description';
-        P_UNIQUE_ID      : Integer        @title: 'Primary Unique ID';
+        UID_TYPE         : String(1)    @title: 'Primary Unique ID';
         ACTIVE           : Boolean;
     }
     entity UNIQUE_ID_ITEM{
@@ -544,7 +544,7 @@ context cp {
         key LOCATION_ID  : String(4)  @title : 'Location ';
         key PRODUCT_ID   : String(40) @title : 'New Product';
         UNIQUE_DESC      : String(50)   @title: 'Description';
-        P_UNIQUE_ID      : Integer        @title: 'Primary Unique ID';
+        UID_TYPE         : String(1)        @title: 'Primary Unique ID';
         ACTIVE           : Boolean;
     }
     entity UID_PRI_ITEM{
@@ -581,9 +581,10 @@ context cp {
     }
     // Authorization object master
     entity USER_AUTHOBJ  {
-        key USER    : String(100) @title : 'User';
+        key USER         : String(100) @title : 'User';
+        key PARAMETER    : String(100) @title : 'Parameter';
         key AUTH_GROUP   : String(4) @title : 'Authorization Object';
-            DESCRIPTION : String(250) @title : 'Description';
+            DESCRIPTION  : String(250) @title : 'Description';
     }
     
     // Roles for a user
@@ -891,7 +892,7 @@ key     ![UNIQUE_ID]: Integer  @title: 'MATVARID' ;
 key     ![PRODUCT_ID]: String(40)  @title: 'Product' ; 
 key     ![LOCATION_ID]: String(4)  @title: 'LOCATION_ID' ; 
 key     ![UNIQUE_DESC]: String(50)  @title: 'CHAR_NUM' ; 
-key     ![P_UNIQUE_ID]: Integer  @title: 'CHARVAL_NUM' ; 
+key     ![UID_TYPE]: String(1)  @title: 'CHARVAL_NUM' ; 
 key     ![ACTIVE]: Boolean  @title: 'CHAR_VALUE' ; 
 key     ![CHAR_NUM]: String(30)  @title: 'CHAR_NUM' ;
 key     ![CHARVAL_NUM]: String(70)  @title: 'CHARVAL_NUM' ; 

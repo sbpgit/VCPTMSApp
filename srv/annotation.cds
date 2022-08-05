@@ -1229,6 +1229,10 @@ annotate service.USER_AUTHOBJ with @(
                 $Type : 'UI.DataField', 
                 Value : USER,
                 ![@UI.Importance]   : #High
+            },{
+                $Type : 'UI.DataField', 
+                Value : PARAMETER,
+                ![@UI.Importance]   : #High
             },
             {
                 $Type : 'UI.DataField', 
@@ -1258,6 +1262,18 @@ annotate service.USER_AUTHOBJ with @(
         // }]}
         //,
         FieldGroup #Details            : {Data : [
+            {
+                $Type : 'UI.DataField',
+                Value : USER
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : PARAMETER
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : AUTH_GROUP
+            },
             {
                 $Type : 'UI.DataField',
                 Value : DESCRIPTION
