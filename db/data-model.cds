@@ -578,6 +578,7 @@ context cp {
             PRODUCT_ID       : String(40)     @title : 'Product Id';
             LOCATION_ID      : String(4)      @title : 'Location ID';
             UNIQUE_ID        : Integer        @title : 'Unique ID';
+            PRIMARY_ID       : Integer        @title : 'Primary ID';
     }
     // Authorization object master
     entity USER_AUTHOBJ  {
@@ -604,6 +605,10 @@ context cp {
         key PARAMETER     : String(100) @title : 'Parameter';
         key PARAMETER_VAL : String(250) @title : 'Parameter';
         // ROLE : Association to many AUTH_EMP_ROLE on ROLE.ROLE_ID = ROLE_ID;
+    }
+     entity PARAMETER_AUTH {
+        key PARAMETER     : String(100) @title : 'Parameter';
+            PARAMETER_VAL : String(250) @title : 'Parameter';
     }
 
 }

@@ -8,7 +8,7 @@ const { combine, timestamp, label, prettyPrint } = format;
 //const ComponentReq = require("./component-req");
 const GenTimeseries = require("./gen-timeseries");
 const SOFunctions = require("./so-function");
-const VarConfig  = require("./variantconfig");
+const VarConfig = require("./variantconfig");
 const containerSchema = cds.env.requires.db.credentials.schema;
 // Create connection parameters to continer
 const conn_params_container = {
@@ -23,6 +23,50 @@ const conn_params_container = {
 };
 
 module.exports = (srv) => {
+    srv.after('READ', 'getLocationtemp', async (data, req) => {
+        vUser = req.headers['x-username'];
+        // return {
+        //     id:         req.user.id,
+        //     firstName:  req.req.authInfo.getGivenName(),
+        //     lastName:   req.req.authInfo.getFamilyName(),
+        //     email:      req.req.authInfo.getEmail()
+        //   }
+        console.log(req.user.id);
+        console.log(req.req.authInfo.getGivenName());
+        console.log(req.req.authInfo.getFamilyName());
+        console.log(req.req.authInfo.getEmail());
+
+        console.log(req.headers);
+        // const li_roleparam = await cds.run(
+        //     `
+        //     SELECT * FROM "CP_USER_AUTHOBJ"
+        //     WHERE "USER" = '`+ vUser + `'`
+        //     // AND PARAMETER = 'LOCATION_ID'`
+        // );
+        // var cnRs = 0;
+        //     return data.map(async data => {
+        //         const li_roleparam = await cds.run(
+        //             `
+        //             SELECT * FROM "V_USERROLE"
+        //             WHERE "USER" = '`+vUser+`'
+        //             AND "PARAMETER_VAL" = '`+data.LOCATION_ID+`'
+        //             AND "PARAMETER" = 'LOCATION_ID'`
+        //         );
+        //         if(li_roleparam.length === 0){
+
+        //             req.results.splice(cnRs, 1);
+        //         }
+        //         cr++;
+        //       })
+
+        // for (var cnRs = req.results.length - 1; cnRs >= 0; cnRs--) {
+        //     for (var cnRL = 0; cnRL < li_roleparam.length; cnRL++) {
+        //         if (li_roleparam[cnRL].AUTH_GROUP !== req.results[cnRs].AUTH_GROUP) {
+        //             req.results.splice(cnRs, 1);
+        //         }
+        //     }
+        // }
+    });
     // Service for weekly component requirements- assembly
     srv.on("getCompReqFWeekly", async (req) => {
         let vDateFrom = req.data.FROMDATE; //"2022-03-04";
@@ -687,9 +731,9 @@ module.exports = (srv) => {
         const obgenSOFunctions = new SOFunctions();
         await obgenSOFunctions.genUniqueID(req.data);
     });
-    
+
     srv.on("genVariantStruc", async (req) => {
-        
+
         const objVarConfig = new VarConfig();
         await objVarConfig.genVarConfig(req.data);
     });
@@ -922,7 +966,7 @@ module.exports = (srv) => {
             if (req.data.CHAR_TYPE === "P") {
                 lsresults.SEQUENCE = 0;
             }
-            else{
+            else {
                 lsresults.SEQUENCE = req.data.SEQUENCE;
             }
             liresults.push(lsresults);
@@ -964,8 +1008,10 @@ module.exports = (srv) => {
                         //DONOTHING
                     }
                     lsresults.CHAR_TYPE = 'S';
-                    lsresults.SEQUENCE = li_varcharps[i].SEQUENCE - 1;
-                    liresults.push(lsresults);
+                    if (li_varcharps[i].SEQUENCE > 1) {
+                        lsresults.SEQUENCE = li_varcharps[i].SEQUENCE - 1;
+                        liresults.push(lsresults);
+                    }
                     lsresults = {};
                 }
                 if (liresults.length > 0) {
@@ -1011,24 +1057,42 @@ module.exports = (srv) => {
         let liresults = [];
         let lsresults = {};
         var responseMessage;
+
         lsresults.LOCATION_ID = req.data.LOCATION_ID;
         lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
         lsresults.UNIQUE_ID = parseInt(req.data.UNIQUE_ID);
+        // const li_unique = await cds.run(
+        //     `SELECT *
+        //     FROM "CP_UNIQUE_ID_HEADER"
+        //     WHERE "LOCATION_ID" = '` +
+        //     req.data.LOCATION_ID +
+        //     `'
+        //     AND "PRODUCT_ID" = '` +
+        //     req.data.PRODUCT_ID +
+        //     `'
+        //     AND "UNIQUE_ID" = `+
+        //     lsresults.UNIQUE_ID + ``
+        // );
         try {
             await cds.delete("CP_UNIQUE_ID_HEADER", lsresults);
         } catch (e) {
             //DONOTHING
         }
-        // lsresults.UNIQUE_DESC = req.data.UNIQUE_DESC;
-        // lsresults.UID_TYPE = req.data.UID_TYPE;
-        lsresults.ACTIVE = Boolean(req.data.ACTIVE);
+        lsresults.UNIQUE_DESC = req.data.UNIQUE_DESC;//li_unique[0].UNIQUE_DESC;
+        lsresults.UID_TYPE = req.data.UID_TYPE;//li_unique[0].UID_TYPE;
+        if (req.data.ACTIVE === 'X') {
+            lsresults.ACTIVE = Boolean(false);
+        }
+        else {
+            lsresults.ACTIVE = Boolean(true);
+        }
         liresults.push(lsresults);
         try {
             await cds.run(INSERT.into("CP_UNIQUE_ID_HEADER").entries(liresults));
             responseMessage = " Creation/Updation successful";
         } catch (e) {
             //DONOTHING
-            responseMessage = " Creation failed";
+            responseMessage = "Creation Failed"
             // createResults.push(responseMessage);
         }
 

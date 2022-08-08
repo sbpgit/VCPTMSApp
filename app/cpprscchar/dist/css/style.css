@@ -30,7 +30,10 @@ div#__vbox4 {
 /* section#__page1-cont {
     height: 80%;
 } */
-
+.sapUiSizeCompact .sapMInputBaseHasEndIcons .sapMInputBaseInner {
+    padding-right: 0.25rem;
+    width: 500px;
+}
 .sapUiLoSplitterH.sapUiLoSplitter .sapUiLoSplitterContent {
     white-space: normal;
     display: inline-block;

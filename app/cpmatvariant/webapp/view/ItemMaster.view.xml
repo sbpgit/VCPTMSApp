@@ -26,7 +26,7 @@
 
                 <VBox>
                     <Label text ="{i18n>matvarsearch}" />
-                    <SearchField id="idMatSearch" liveChange="onMatSearch" placeholder="Material Desc/ mat Varient Id"/>
+                    <SearchField id="idMatSearch" liveChange="onSearch" placeholder="Unique Desc/ Unique ID"/>
                 </VBox>
                 <VBox >
                     <Label text="{i18n>loc}" required="true"/>
@@ -63,7 +63,7 @@
                     
                     <columns>
                         <Column hAlign="Left" vAlign="Middle">
-                            <Text text="{i18n>matdesc}" />
+                            <Text text="{i18n>unidesc}" />
                         </Column>
                         <Column hAlign="Right" vAlign="Middle">
                             <Text text="{i18n>active}"/>

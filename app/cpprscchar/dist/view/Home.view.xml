@@ -28,12 +28,13 @@
 					</VBox>
 					<VBox >
 						<Label text=""/>
-						<Button id="idData" text="Get Data" type="Accept" press="onGetData"/>
+						<Button id="idData" text="Go" type="Accept" press="onGetData"/>
 					</VBox>
-					<VBox >
+                    
+					<!-- <VBox >
 						<Label text=""/>
 						<Button id="idSeq" text="{i18n>saveseq}" type="Accept" press="onSaveSeq"/>
-					</VBox>
+					</VBox> -->
 				</l:Grid>
 			</FlexBox>
 		</ux:headerContent>
@@ -55,7 +56,7 @@
 								</contextMenu>
 								<columns>
 									
-									<Column hAlign="Center">
+									<Column hAlign="Center" visible="false">
 										<Text text="{i18n>charno}"/>
 									</Column>
 									<Column hAlign="Center">
@@ -96,13 +97,13 @@
 							</contextMenu>
 							<columns>
 								
-								<Column hAlign="Center">
+								<Column hAlign="Center" visible="false">
 									<Text text="{i18n>charno}"/>
 								</Column>
 								<Column hAlign="Center">
 									<Text text="{i18n>charname}"/>
 								</Column>
-								<Column hAlign="Center">
+								<Column hAlign="Center" visible="false">
 									<Text text="{i18n>seq}"/>
 								</Column>
 							</columns>
