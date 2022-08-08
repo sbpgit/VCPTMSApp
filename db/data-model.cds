@@ -578,6 +578,7 @@ context cp {
             PRODUCT_ID       : String(40)     @title : 'Product Id';
             LOCATION_ID      : String(4)      @title : 'Location ID';
             UNIQUE_ID        : Integer        @title : 'Unique ID';
+            PRIMARY_ID       : Integer        @title : 'Primary ID';
     }
     // Authorization object master
     entity USER_AUTHOBJ  {

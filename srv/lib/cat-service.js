@@ -8,7 +8,7 @@ const { combine, timestamp, label, prettyPrint } = format;
 //const ComponentReq = require("./component-req");
 const GenTimeseries = require("./gen-timeseries");
 const SOFunctions = require("./so-function");
-const VarConfig  = require("./variantconfig");
+const VarConfig = require("./variantconfig");
 const containerSchema = cds.env.requires.db.credentials.schema;
 // Create connection parameters to continer
 const conn_params_container = {
@@ -25,7 +25,17 @@ const conn_params_container = {
 module.exports = (srv) => {
     srv.after('READ', 'getLocationtemp', async (data, req) => {
         vUser = req.headers['x-username'];
-        console.log(vUser);
+        // return {
+        //     id:         req.user.id,
+        //     firstName:  req.req.authInfo.getGivenName(),
+        //     lastName:   req.req.authInfo.getFamilyName(),
+        //     email:      req.req.authInfo.getEmail()
+        //   }
+        console.log(req.user.id);
+        console.log(req.req.authInfo.getGivenName());
+        console.log(req.req.authInfo.getFamilyName());
+        console.log(req.req.authInfo.getEmail());
+
         console.log(req.headers);
         // const li_roleparam = await cds.run(
         //     `
@@ -721,9 +731,9 @@ module.exports = (srv) => {
         const obgenSOFunctions = new SOFunctions();
         await obgenSOFunctions.genUniqueID(req.data);
     });
-    
+
     srv.on("genVariantStruc", async (req) => {
-        
+
         const objVarConfig = new VarConfig();
         await objVarConfig.genVarConfig(req.data);
     });
@@ -956,7 +966,7 @@ module.exports = (srv) => {
             if (req.data.CHAR_TYPE === "P") {
                 lsresults.SEQUENCE = 0;
             }
-            else{
+            else {
                 lsresults.SEQUENCE = req.data.SEQUENCE;
             }
             liresults.push(lsresults);
@@ -998,7 +1008,7 @@ module.exports = (srv) => {
                         //DONOTHING
                     }
                     lsresults.CHAR_TYPE = 'S';
-                    if(li_varcharps[i].SEQUENCE > 1){
+                    if (li_varcharps[i].SEQUENCE > 1) {
                         lsresults.SEQUENCE = li_varcharps[i].SEQUENCE - 1;
                         liresults.push(lsresults);
                     }
@@ -1047,7 +1057,7 @@ module.exports = (srv) => {
         let liresults = [];
         let lsresults = {};
         var responseMessage;
-        
+
         lsresults.LOCATION_ID = req.data.LOCATION_ID;
         lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
         lsresults.UNIQUE_ID = parseInt(req.data.UNIQUE_ID);
@@ -1070,10 +1080,10 @@ module.exports = (srv) => {
         }
         lsresults.UNIQUE_DESC = req.data.UNIQUE_DESC;//li_unique[0].UNIQUE_DESC;
         lsresults.UID_TYPE = req.data.UID_TYPE;//li_unique[0].UID_TYPE;
-        if(req.data.ACTIVE === 'X'){
-        lsresults.ACTIVE = Boolean(false);
+        if (req.data.ACTIVE === 'X') {
+            lsresults.ACTIVE = Boolean(false);
         }
-        else{
+        else {
             lsresults.ACTIVE = Boolean(true);
         }
         liresults.push(lsresults);
