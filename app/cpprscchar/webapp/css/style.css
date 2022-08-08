@@ -37,3 +37,8 @@ div#__vbox4 {
     vertical-align: top;
     height: 75% !important;
 }
+
+.sapUiSizeCompact .sapMInputBaseHasEndIcons .sapMInputBaseInner {
+    padding-right: 0.25rem;
+    width: 500px;
+}

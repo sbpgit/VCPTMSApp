@@ -344,11 +344,12 @@ sap.ui.define([
                 var oChar_Type;
                 var iSeq = 0;
                 if(oItem.CHAR_TYPE === "S"){
+                    iSeq = oItem.SEQUENCE;
                     oChar_Type = "P";
 
                 } else {
                     oChar_Type = "S"
-                    iSeq = oDropModelData.results.length + 1;
+                    iSeq = oDropModelData.results.length;
 
                 }
 
@@ -376,11 +377,12 @@ sap.ui.define([
             var aData = this.byId("Secondarytable").getItems();
 
             for(var i =0; i<aData.length; i++){
-                if(oItem.CHAR_NAME === aData[i].getCells()[3].getText()){
-                    aData[i].focus();
+                if(oItem.CHAR_NAME === aData[i].getCells()[1].getText()){
+                    aData[i + 1].focus();
                     aData[i].setSelected(true);
                 }
             }
+            that.onSaveSeq(iDropPosition);
         }
 		},
 
@@ -414,7 +416,7 @@ sap.ui.define([
                 
                 } else {
                     for(var i =0; i<aData.length; i++){
-                        if(sQuery === aData[i].getCells()[3].getText()){
+                        if(sQuery === aData[i].getCells()[1].getText()){
                             aData[i].focus();
                             aData[i].setSelected(true);
                         }
@@ -439,19 +441,22 @@ sap.ui.define([
 			this.byId("searchField").suggest();
 		},
 
-        onSaveSeq:function(oEvent){
+        onSaveSeq:function(index){
             var aData = this.byId("Secondarytable").getItems();
             that.count = aData.length;
+            // that.count = index + 2;
             var successCount = 0;
+            
 
             for(var i=0; i<aData.length; i++){
+                // for(var i=0; i<index; i++){
                 var oEntry = {};
 
-                oEntry.Location = aData[i].getCells()[0].getText();
-                oEntry.product = aData[i].getCells()[1].getText();
-                oEntry.CharNo = aData[i].getCells()[2].getText();
-                oEntry.charName = aData[i].getCells()[3].getText();
-                oEntry.SEQUENCE = i+1;
+                oEntry.Location = that.byId("idloc").getValue();
+                oEntry.product = that.byId("prodInput").getValue();
+                oEntry.CharNo = aData[i].getCells()[0].getText();
+                oEntry.charName = aData[i].getCells()[1].getText();
+                oEntry.SEQUENCE = i + 1;
                 oEntry.FLAG = "E";
                 oEntry.CHAR_TYPE = "S";
 
