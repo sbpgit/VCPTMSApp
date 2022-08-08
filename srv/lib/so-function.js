@@ -7,6 +7,7 @@ const { combine, timestamp, label, prettyPrint } = format;
 const containerSchema = cds.env.requires.db.credentials.schema;
 const conn_params_container = {
     serverNode:
+    //"629b57ef-09e1-43ec-bc8c-2b453b9a541c.hana.prod-us10.hanacloud.ondemand.com" +
         cds.env.requires.db.credentials.host +
         ":" +
         cds.env.requires.db.credentials.port,
@@ -46,7 +47,6 @@ class SOFunctions{
     async genUniqueID(adata){
         
         const liSalesh = await this.getSalesHistory(adata.LOCATION_ID, adata.PRODUCT_ID, '');
-        const liSaleshPri = await this.getSalesHistory(adata.LOCATION_ID,adata.PRODUCT_ID, 'X');
         const liUniqueData =  await this.getUnique(adata.LOCATION_ID, adata.PRODUCT_ID);
 
        
@@ -95,33 +95,6 @@ class SOFunctions{
            
         }
 
-        // Unique ID only for Primary Characteristics
-        for (let cntSO = 0; cntSO < liSaleshPri.length; cntSO++) {
-
-            lsUnique = {};
-            lsUnique['CONFIG'] = [];  
-
-            if(liSaleshPri[cntSO].CONFIG.length > 0){
-                lsUnique['CONFIG'] = liSaleshPri[cntSO].CONFIG;
-                for (let cntU = 0; cntU < liUniqueData.length; cntU++) {
-                    if(JSON.stringify(lsUnique['CONFIG']) === JSON.stringify(liUniqueData[cntU].CONFIG)){
-                        lsUnique['CONFIG'] = []
-                    }
-                }
-
-                for (let cntU = 0; cntU < liUnique.length; cntU++) {
-                    if(JSON.stringify(lsUnique['CONFIG']) === JSON.stringify(liUnique[cntU].CONFIG)){
-                        lsUnique['CONFIG'] = []
-                    }
-                }                
-            }
-
-            if (lsUnique['CONFIG'].length > 0) {
-                liUnique.push(lsUnique);
-            } 
-        }        
-
-
         let lCntVariantID = 0;
 
         for (let cntU = 0; cntU < liUnique.length; cntU++) {
@@ -151,7 +124,7 @@ class SOFunctions{
                             '` + adata.LOCATION_ID + `',
                             '` + adata.PRODUCT_ID + `',
                             '',
-                            '0',
+                            'U',
                             TRUE)`
                     )
                     await sqlStr.exec();
@@ -161,13 +134,13 @@ class SOFunctions{
                     this.logger.error(error.message);
                 }
                 
-
-                    for (let cntSO = 0; cntSO < liSOHM.length; cntSO++) {
-                        if(liSOHM[cntSO].UNIQUE_ID === 0 &&
-                            JSON.stringify(liSOHM[cntSO].CONFIG) === JSON.stringify(liUnique[cntU]['CONFIG'])){
-                                liSOHM[cntSO].UNIQUE_ID = liUnique[cntU].UNIQUE_ID;
-                        }
+// Update Sales Orders with Unique ID
+                for (let cntSO = 0; cntSO < liSOHM.length; cntSO++) {
+                    if(liSOHM[cntSO].UNIQUE_ID === 0 &&
+                        JSON.stringify(liSOHM[cntSO].CONFIG) === JSON.stringify(liUnique[cntU]['CONFIG'])){
+                            liSOHM[cntSO].UNIQUE_ID = liUnique[cntU].UNIQUE_ID;
                     }
+                }
   
                 
                 for (let cntUC = 0; cntUC < liUnique[cntU]['CONFIG'].length; cntUC++) {
@@ -188,9 +161,10 @@ class SOFunctions{
 
         this.logger.info("Sales Order Count: " + liSOHM.length);
 
+        
         const liPartialProd = await cds.run(
             `SELECT *
-                FROM CP_PARTIALPROD_CHAR 
+                FROM V_PARTIALPRODCHAR
                 WHERE REF_PRODID    = '` + adata.PRODUCT_ID + `'
                 ORDER BY LOCATION_ID,
                          PRODUCT_ID,
@@ -201,25 +175,23 @@ class SOFunctions{
 
 
         for (let cntSO = 0; cntSO < liSOHM.length; cntSO++) {
-            let lFail = '';
             for (let cntPC = 0; cntPC < liPartialProd.length; cntPC++) {
                 let lSuccess = '';
-                if(lFail === ''){
-                    for (let cntSOC = 0; cntSOC < liSOHM.CONFIG.length; cntSOC++) {
-                        if(liSOHM.CONFIG[cntSOC].CHAR_NUM === liPartialProd[cntPC].CHAR_NUM &&
-                        liSOHM.CONFIG[cntSOC].CHARVAL_NUM === liPartialProd[cntPC].CHARVAL_NUM){
-                            lSuccess = 'X';
-                        }
-                    }
-                    if(lSuccess === ''){
-                        lFail = 'X';
+                for (let cntSOC = 0; cntSOC < liSOHM[cntSO].CONFIG.length; cntSOC++) {
+                    if(liSOHM[cntSO].CONFIG[cntSOC].CHAR_NUM === liPartialProd[cntPC].CHAR_NUM &&
+                    liSOHM[cntSO].CONFIG[cntSOC].CHARVAL_NUM === liPartialProd[cntPC].CHARVAL_NUM){
+                        lSuccess = 'X';
+                        break;
                     }
                 }
+                if(lSuccess === ''){
+                    break;
+                }
+
                 if (cntPC === GenF.addOne(cntPC, liPartialProd.length) || 
                     liPartialProd[cntPC].LOCATION_ID !== liPartialProd.length[GenF.addOne(cntPC, liPartialProd.length)].LOCATION_ID ||
                     liPartialProd[cntPC].PRODUCT_ID !== liPartialProd.length[GenF.addOne(cntPC, liPartialProd.length)].PRODUCT_ID) {
                     liSOHM[cntSO].PRODUCT_ID = GenF.parse(liPartialProd[cntPC].PRODUCT_ID);
-                    lFail = '';
                 }
             }
             try{
@@ -239,45 +211,26 @@ class SOFunctions{
             }                            
         }
 
+        await this.getPriUniqueID(adata.LOCATION_ID, adata.PRODUCT_ID);;
+
     }
 
-    async getSalesHistory(lLocation, lProduct, lOnlyPrimary){
+    async getSalesHistory(lLocation, lProduct){
 
         let liSalesData = [];
 
-        if(lOnlyPrimary === ''){
-            liSalesData = await cds.run(
-                `SELECT *
-                FROM CP_SALESH AS A
-                INNER JOIN CP_SALESH_CONFIG AS B
-                    ON A.SALES_DOC = B.SALES_DOC
-                    AND A.SALESDOC_ITEM = B.SALESDOC_ITEM
-                WHERE A.LOCATION_ID   = '` + lLocation + `'
-                    AND B.PRODUCT_ID    = '` + lProduct + `'
-                ORDER BY A.SALES_DOC,
-                        A.SALESDOC_ITEM,
-                        B.CHAR_NUM`
-            ); 
-        }
-        else{
-            liSalesData = await cds.run(            
-                `SELECT *
-                   FROM CP_SALESH AS A
-                  INNER JOIN CP_SALESH_CONFIG AS B
-                     ON A.SALES_DOC = B.SALES_DOC
-                    AND A.SALESDOC_ITEM = B.SALESDOC_ITEM
-                  WHERE A.LOCATION_ID   = '` + lLocation + `'
-                    AND B.PRODUCT_ID    = '` + lProduct + `'
-                    AND B.CHAR_NUM IN (SELECT "CHAR_NUM"
-                                         FROM "CP_VARCHAR_PS"
-                                        WHERE "PRODUCT_ID" = '` + lProduct + `'
-                                          AND "LOCATION_ID" = '` + lLocation + `'
-                                          AND "CHAR_TYPE" = 'P')
-                ORDER BY A.SALES_DOC,
-                        A.SALESDOC_ITEM,
-                        B.CHAR_NUM`
-            );                       
-        }
+        liSalesData = await cds.run(
+            `SELECT *
+            FROM CP_SALESH AS A
+            INNER JOIN CP_SALESH_CONFIG AS B
+                ON A.SALES_DOC = B.SALES_DOC
+                AND A.SALESDOC_ITEM = B.SALESDOC_ITEM
+            WHERE A.LOCATION_ID   = '` + lLocation + `'
+                AND B.PRODUCT_ID    = '` + lProduct + `'
+            ORDER BY A.SALES_DOC,
+                    A.SALESDOC_ITEM,
+                    B.CHAR_NUM`
+        ); 
 
         let liSalesh = [];
         let lsSalesh = {};
@@ -362,12 +315,13 @@ class SOFunctions{
     }
 
     async getPriUniqueID(lLocation, lProduct){
-
-        let liUniqueData = await cds.run(            
+        let liUniqueData = [];
+        liUniqueData = await cds.run(            
             `SELECT *
                FROM V_UNIQUE_ID
               WHERE LOCATION_ID   = '` + lLocation + `'
                 AND PRODUCT_ID    = '` + lProduct + `'
+                AND UID_TYPE      = 'U'
                 AND CHAR_NUM IN (SELECT "CHAR_NUM"
                                      FROM "CP_VARCHAR_PS"
                                     WHERE "PRODUCT_ID" = '` + lProduct + `'
@@ -378,6 +332,36 @@ class SOFunctions{
                      LOCATION_ID, 
                      CHAR_NUM`
         );   
+        let liUniquePData = [];
+        liUniquePData = await cds.run(            
+            `SELECT *
+               FROM V_UNIQUE_ID
+              WHERE LOCATION_ID   = '` + lLocation + `'
+                AND PRODUCT_ID    = '` + lProduct + `'
+                AND UID_TYPE      = 'P'
+            ORDER BY UNIQUE_ID,
+                     PRODUCT_ID,
+                     LOCATION_ID, 
+                     CHAR_NUM`
+        );         
+
+        let liPriID = [];
+        let lsPriID = {};
+        let liUniPriID = [];
+        for (let cntUIDP = 0; cntUIDP < liUniquePData.length; cntUIDP++) {
+            
+            lsPriID = {};
+            lsPriID['CHAR_NUM'] = GenF.parse(liUniquePData[cntUIDP].CHAR_NUM);
+            lsPriID['CHARVAL_NUM'] = GenF.parse(liUniquePData[cntUIDP].CHARVAL_NUM);
+            liUniPriID.push(lsPriID);
+
+            if(liUniquePData[cntUIDP].UNIQUE_ID !== liUniquePData[GenF.addOne(cntUIDP, liUniquePData.length)].UNIQUE_ID ||
+            cntUIDP === GenF.addOne(cntUIDP, liUniquePData.length)){
+                liPriID.push(liUniPriID);
+                liUniPriID = [];
+            }
+
+        }
         
         let liChar = [];
         let lsChar = {};
@@ -385,15 +369,28 @@ class SOFunctions{
         for (let cntU = 0; cntU < liUniqueData.length; cntU++) {
             
             lsChar = {};
-            lsChar['CHAR_NUM'] = liUniqueData.CHAR_NUM;
-            lsChar['CHARVAL_NUM'] = liUniqueData.CHARVAL_NUM;
+            lsChar['CHAR_NUM'] = liUniqueData[cntU].CHAR_NUM;
+            lsChar['CHARVAL_NUM'] = liUniqueData[cntU].CHARVAL_NUM;
             liChar.push(lsChar);
 
-            if(liUniqueData[cntU].UNIQUE_ID === liUniqueData[GenF.addOne(cntU, liUniqueData[cntU].length)].UNIQUE_ID ||
-                cntU === GenF.addOne(cntU, liUniqueData[cntU].UNIQUE_ID)){
-                    for (let cntUID = 0; cntUID < liCharFinal.length; cntUID++) {
-                        if(liChar === liCharFinal[cntUID]){
+            if(liUniqueData[cntU].UNIQUE_ID !== liUniqueData[GenF.addOne(cntU, liUniqueData.length)].UNIQUE_ID ||
+                cntU === GenF.addOne(cntU, liUniqueData.length)){
+
+// Check if Primary ID is already created                    
+                    for (let cntPID = 0; cntPID < liPriID.length; cntPID++) {
+                        if(JSON.stringify(liChar) === JSON.stringify(liPriID[cntPID])){
                             liChar = [];
+                            break;
+                        }
+                    }
+
+                    if(liChar.length > 0){
+// Check if Primary ID is already planned for creation
+                        for (let cntUID = 0; cntUID < liCharFinal.length; cntUID++) {
+                            if(JSON.stringify(liChar) === JSON.stringify(liCharFinal[cntUID])){
+                                liChar = [];
+                                break;
+                            }
                         }
                     }
 
@@ -406,6 +403,61 @@ class SOFunctions{
             }
             
         }
+
+        for (let cntU = 0; cntU < liCharFinal.length; cntU++) {
+            if(liCharFinal[cntU].length > 0){
+
+                // Get the highest Unique ID
+                const liUniqueInd = await cds.run(
+                    `SELECT MAX("UNIQUE_ID") + 1 as UNIQUE_ID
+                       FROM CP_UNIQUE_ID_HEADER`
+                );     
+                
+                let lCntVariantID = 0;
+                for (let cntIndex = 0; cntIndex < liUniqueInd.length; cntIndex++) {
+                    if(liUniqueInd[cntIndex].UNIQUE_ID === null){
+                        lCntVariantID = 1;
+                    }else{
+                        lCntVariantID = parseInt( liUniqueInd[cntIndex].UNIQUE_ID );
+                    }
+                }
+
+                this.logger.info("Unique ID Index: " + lCntVariantID);
+                
+                try {
+                    let sqlStr = await conn.prepare(
+                        `INSERT INTO "CP_UNIQUE_ID_HEADER" VALUES(
+                            '` + lCntVariantID + `',
+                            '` + lLocation + `',
+                            '` + lProduct + `',
+                            '',
+                            'P',
+                            TRUE)`
+                    )
+                    await sqlStr.exec();
+                    await sqlStr.drop();                      
+
+                } catch (error) {
+                    this.logger.error(error.message);
+                }
+                
+                for (let cntUC = 0; cntUC < liCharFinal[cntU].length; cntUC++) {
+                    let sqlStr = await conn.prepare(
+                        `INSERT INTO "CP_UNIQUE_ID_ITEM" VALUES(
+                            '` + lCntVariantID + `',                            
+                            '` + lLocation + `',
+                            '` + lProduct + `',
+                            '` + liCharFinal[cntU][cntUC].CHAR_NUM + `',
+                            '` + liCharFinal[cntU][cntUC].CHARVAL_NUM + `')`
+                    )
+                    await sqlStr.exec();
+                    await sqlStr.drop();                    
+                }
+               
+            }
+        }
+        this.logger.info("Process Completed");
+
 
     }
 
