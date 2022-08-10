@@ -22,7 +22,7 @@
             </ux:headerTitle>
             <ux:headerContent>
                 <FlexBox wrap="Wrap" fitContainer="true">
-        <l:Grid  >
+        <l:Grid defaultSpan="XL3 L3 M6 S12" >
 
                 <VBox>
                     <Label text ="{i18n>matvarsearch}" />
@@ -35,6 +35,14 @@
                 <VBox>
                     <Label text="{i18n>prod}" required="true"/>
                     <MultiInput id="prodInput"  placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
+                </VBox>
+                <VBox>
+                    <Label text="{i18n>type}" />
+                        <Select id="idUnique" change="onUnqChange" selectedKey="A" class="buttonDesktop">
+							<core:ListItem key="A" text="All"/>
+							<core:ListItem key="U" text="Unique"/>
+							<core:ListItem key="P" text="Primary"/>
+						</Select>
                 </VBox>
                 <VBox> 
                 <Label text ="" />                  
@@ -57,8 +65,11 @@
                         <Column hAlign="Left" vAlign="Middle">
                             <Text text="{i18n>unidesc}" />
                         </Column>
-                        <Column hAlign="Left" vAlign="Middle">
+                        <Column hAlign="Right" vAlign="Middle">
                             <Text text="{i18n>active}"/>
+                        </Column>
+                        <Column hAlign="Right" >
+                            <Text text=""/>
                         </Column>
                     </columns>
                     <items>
@@ -70,6 +81,7 @@
                                         <FlexItemData growFactor="1" />
                                     </layoutData>
                                 </Switch>
+                                <Button icon="sap-icon://edit" type="Transparent" press="onEditDesc" ariaLabelledBy="editButtonLabel"/>
                             </cells>
                         </ColumnListItem>
                     </items>
