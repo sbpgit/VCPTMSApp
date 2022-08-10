@@ -610,6 +610,29 @@ context cp {
         key PARAMETER     : String(100) @title : 'Parameter';
             PARAMETER_VAL : String(250) @title : 'Parameter';
     }
+    entity USERDETAILS {
+        key username   : String(50);
+    }
+     entity RESTRICT_HEADER {
+        key LOCATION_ID : String(4)  @title : 'Location ';
+        key LINE_ID     : String(40) @title : 'Line';
+        key RESTRICTION : String(30) @title : 'Restriction';
+            RTR_DESC    : String(30) @title : 'Restriction Desc';
+            VALID_FROM  : Date       @title : 'Valid From';
+            VALID_TO    : Date       @title : 'Valid To';
+    }
+    // Restriction details
+
+    entity RESTRICT_DETAILS {
+        key RESTRICTION  : String(30) @title : 'Restriction';
+        key RTR_COUNTER  : Integer    @title : 'Restriction Counter';
+        key CLASS_NUM    : String(18) @title : 'Internal class number';
+        key CHAR_NUM     : String(10) @title : 'Internal Char. number';
+        key CHAR_COUNTER : Integer    @title : 'Characteristic counter';
+        key CHARVAL_NUM  : String(10) @title : 'Internal Char. number';
+            OD_CONDITION : String(2)  @title : 'Restriction condition ';
+            ROW_ID       : Integer    @title : 'Attribute Index ';
+    };
 
 }
 
@@ -901,4 +924,18 @@ key     ![UID_TYPE]: String(1)  @title: 'CHARVAL_NUM' ;
 key     ![ACTIVE]: Boolean  @title: 'CHAR_VALUE' ; 
 key     ![CHAR_NUM]: String(30)  @title: 'CHAR_NUM' ;
 key     ![CHARVAL_NUM]: String(70)  @title: 'CHARVAL_NUM' ; 
+}
+    @cds.persistence.exists
+entity![V_ODRESTRICT]{
+    key![RESTRICTION]  : String(30) @title : 'Restriction';
+    key![RTR_COUNTER]  : Integer    @title : 'Restriction Counter';
+    key![CLASS_NUM]    : String(18) @title : 'Internal No. Class ';
+    key![CLASS_NAME]   : String(20) @title : 'Class Name';
+    key![CHAR_NUM]     : String(10) @title : 'Internal No. Characteristic';
+    key![CHAR_NAME]    : String(30) @title : 'Characteristic Name';
+    key![CHARVAL_NUM]  : String(10) @title : 'Internal No. Characteristic value';
+    key![CHAR_VALUE]   : String(70) @title : 'Characteristic Value';
+    key![OD_CONDITION] : String(2)  @title : 'Object Dep. Condition';
+    key![CHAR_COUNTER] : Integer    @title : 'Characteristic Counter';
+    key![ROW_ID]       : Integer    @title : 'Row ID';
 }

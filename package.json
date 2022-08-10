@@ -71,7 +71,7 @@
         "watch-cpprscchar": "cds watch --open cpprscchar/webapp/index.html?sap-ui-xx-viewCache=false",
         "watch-cpmatvariant": "cds watch --open cpmatvariant/webapp/index.html?sap-ui-xx-viewCache=false",
         "watch-cpunique": "cds watch --open cpunique/webapp/index.html?sap-ui-xx-viewCache=false",
-        "build": "rimraf resources mta_archives && mbt build --mtar archive",
+        "build": "cds build/all --clean;cp gen/srv/srv/csn.json srv/gen/;cp -r gen/db/src/gen db/src",
         "deploy": "cf deploy mta_archives/archive.mtar --retries 1",
         "watch-cpauthorization": "cds watch --open cpauthorization/webapp/index.html?sap-ui-xx-viewCache=false"
     },

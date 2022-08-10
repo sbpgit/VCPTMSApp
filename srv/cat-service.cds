@@ -12,7 +12,8 @@ using {
     V_NEWPRODREFCHAR,
     V_GETVARCHARPS,
     V_UNIQUE_ID_ITEM,
-    V_UNIQUE_ID
+    V_UNIQUE_ID,
+    V_ODRESTRICT
 } from '../db/data-model';
 // using V_ODPROFILES from '../db/data-model';
 using V_BOMODCOND from '../db/data-model';
@@ -30,7 +31,7 @@ using {
 } from '../db/data-model';
 
 // using V_ASMCOMP_REQ from '../db/data-model';
-service CatalogService @(impl : './lib/cat-service.js') {
+service CatalogService @(impl : './lib/cat-service.js'){
     // Service on HDI entities
     // Get Products
     @readonly
@@ -209,10 +210,21 @@ service CatalogService @(impl : './lib/cat-service.js') {
     entity genvarcharps as projection on od.VARCHAR_PS;
     entity getPriSecChar as projection on V_GETVARCHARPS;
     function changeToPrimary(LOCATION_ID : String(4), PRODUCT_ID : String(40),CHAR_NUM: String(10),CHAR_TYPE: String(1),SEQUENCE:Integer,FLAG: String(1)) returns String;
-
+// Authorizations
     @odata.draft.enabled
     entity getARObj             as projection on od.USER_AUTHOBJ;
     entity getParameters      as projection on od.PARAMETER_AUTH;
+    entity getUsers             as projection on od.USERDETAILS;
     function genVariantStruc(CHAR_NUM: String(10),CHAR_NAME    : String(30)) returns String;
+    function userInfo() returns String; // using req.user approach (user attribute - of class cds.User - from the request object)
+    function userInfoUAA() returns String; // usi
 
+    // Restrictions
+    //Get Restriction header
+    @odata.draft.enabled
+    entity genRtrHeader         as projection on od.RESTRICT_HEADER;
+
+     //Object dependency restrict
+    @odata.draft.enabled
+    entity getODHdrRstr         as projection on V_ODRESTRICT;
 }

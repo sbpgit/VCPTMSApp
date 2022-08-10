@@ -1002,4 +1002,74 @@ module.exports = (srv) => {
         }
 
     });
+    srv.on("ImportCuvtabInd", async (req) => {
+        var flag = '';
+        try {
+            const dbClass = require("sap-hdb-promisfied")
+            let dbConn = new dbClass(await dbClass.createConnectionFromEnv())
+            const sp = await dbConn.loadProcedurePromisified(null, '"FG_CUVTAB_IND_SP"')
+            const output = await dbConn.callProcedurePromisified(sp, [])
+            console.log(output.results);
+            flag = 'X';
+        } catch (error) {
+            console.error(error);
+        }
+        if (flag === 'X') {
+            let dataObj = {};
+            dataObj["success"] = true;
+            dataObj["message"] = "Import of Value assignment alternatives for variant table is successfull at " + new Date();
+
+
+            if (req.headers['x-sap-job-id'] > 0) {
+                const scheduler = getJobscheduler(req);
+
+                var updateReq = {
+                    jobId: req.headers['x-sap-job-id'],
+                    scheduleId: req.headers['x-sap-job-schedule-id'],
+                    runId: req.headers['x-sap-job-run-id'],
+                    data: dataObj
+                };
+
+                console.log("Value assignment alternatives for variant table imported, to update req", updateReq);
+
+                scheduler.updateJobRunLog(updateReq, function (err, result) {
+                    if (err) {
+                        return console.log('Error updating run log: %s', err);
+                    }
+                    //Run log updated successfully
+                    console.log("Assembly components job update results", result);
+
+                });
+            }
+        }
+        else {
+            let dataObj = {};
+            dataObj["failed"] = false;
+            dataObj["message"] = "Assembly components has failed at" + new Date();
+
+
+            if (req.headers['x-sap-job-id'] > 0) {
+                const scheduler = getJobscheduler(req);
+
+                var updateReq = {
+                    jobId: req.headers['x-sap-job-id'],
+                    scheduleId: req.headers['x-sap-job-schedule-id'],
+                    runId: req.headers['x-sap-job-run-id'],
+                    data: dataObj
+                };
+
+                console.log("Assembly components job update req", updateReq);
+
+                scheduler.updateJobRunLog(updateReq, function (err, result) {
+                    if (err) {
+                        return console.log('Error updating run log: %s', err);
+                    }
+                    //Run log updated successfully
+                    console.log("Assembly components job update results", result);
+
+                });
+            }
+        }
+
+    });
 };
