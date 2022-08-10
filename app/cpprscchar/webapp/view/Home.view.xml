@@ -49,11 +49,11 @@
 								<SearchField liveChange="onPrimarySearch" placeholder="Characteristics Name"  width="100%" id="idPrimarySearch"/>
 							</Toolbar>
 							<Table id="Primarytable" mode="SingleSelectMaster" items="{ path: '/results'}">
-								<contextMenu>
+								<!-- <contextMenu>
 									<Menu>
 										<MenuItem text="Move to Selected Products" press="moveToSelectedProductsTable"/>
 									</Menu>
-								</contextMenu>
+								</contextMenu> -->
 								<columns>
 									
 									<Column hAlign="Center" visible="false">
@@ -90,11 +90,11 @@
 						</Toolbar>
 						<Table id="Secondarytable" mode="SingleSelectMaster" items="{ path: '/results'}"
 							itemPress="handleSelection">
-							<contextMenu>
+							<!-- <contextMenu>
 								<Menu>
 									<MenuItem text="Move to Selected Products" press="moveToSelectedProductsTable"/>
 								</Menu>
-							</contextMenu>
+							</contextMenu> -->
 							<columns>
 								
 								<Column hAlign="Center" visible="false">

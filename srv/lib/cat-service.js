@@ -897,9 +897,9 @@ module.exports = (srv) => {
                 lsresults.CHAR_NUM = liProdChar[i].CHAR_NUM;
                 lsresults.CHARVAL_NUM = liProdChar[i].CHARVAL_NUM;
 
-                lsresults.REF_CLASS_NUM = liProdChar[i].CLASS_NUM;
-                lsresults.REF_CHAR_NUM = liProdChar[i].CHAR_NUM;
-                lsresults.REF_CHARVAL_NUM = liProdChar[i].CHARVAL_NUM;
+                lsresults.REF_CLASS_NUM = liProdChar[i].REF_CLASS_NUM;
+                lsresults.REF_CHAR_NUM = liProdChar[i].REF_CHAR_NUM;
+                lsresults.REF_CHARVAL_NUM = liProdChar[i].REF_CHARVAL_NUM;
                 liresults.push(lsresults);
                 lsresults = {};
             }
@@ -915,19 +915,19 @@ module.exports = (srv) => {
             }
         }
         else if (req.data.FLAG === "D") {
-            for (var i = 0; i < liProdChar.length; i++) {
-                lsresults.PRODUCT_ID = liProdChar[i].PRODUCT_ID;
-                lsresults.LOCATION_ID = liProdChar[i].LOCATION_ID;
+            // for (var i = 0; i < liProdChar.length; i++) {
+                lsresults.PRODUCT_ID = liProdChar[0].PRODUCT_ID;
+                lsresults.LOCATION_ID = liProdChar[0].LOCATION_ID;
                 //  lsresults.REF_PRODID = liProdChar[i].REF_PRODID;
-                if (req.data.FLAG === "E" && i === 0) {
+                // if (req.data.FLAG === "E" && i === 0) {
                     try {
                         await cds.delete("CP_NEWPROD_CHAR", lsresults);
-                        break;
+                        // break;
                     } catch (e) {
                         //DONOTHING
                     }
-                }
-            }
+                // }
+            // }
         }
         lsresults = {};
         return responseMessage;
