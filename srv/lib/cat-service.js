@@ -22,7 +22,43 @@ const conn_params_container = {
     //  ssltruststore: cds.env.requires.hana.credentials.certificate,
 };
 
+// const readFunction = async (req) => {
+// 	return [
+//             {
+//                 username: req.user.id
+//             }
+//         ];
+// };
 module.exports = (srv) => {
+    // srv.on('READ', 'USERDETAILS',async (data, req) => {
+    //     console.log(req.authInfo);
+    // });
+    // API reference
+
+
+    // using req.user approach (user attribute - of class cds.User - from the request object)
+    srv.on('userInfo', async (req) => {
+
+        const DummyUser = new cds.User;
+        // req.user = new DummyUser('dummy')
+        //   next()
+        console.log(DummyUser);
+        return req.user;
+    });
+
+    // using the XSUAA API
+    srv.on('userInfoUAA', async () => {
+        // connect to the XSUAA host
+        // Get the XSUAA host URL from service binding
+
+        const xsuaa_bind = JSON.parse(process.env.VCAP_SERVICES).xsuaa[0];
+        //console.log(xsuaa_bind);
+        const api_def = cds.env.requires[api];
+        api_def.credentials.url = xsuaa_bind.credentials.url;
+        const xsuaa = await cds.connect.to(api_def);
+        // console.log(xsuaa);
+        return await xsuaa.get("/userinfo");
+    });
     srv.after('READ', 'getLocationtemp', async (data, req) => {
         vUser = req.headers['x-username'];
         // return {
@@ -32,11 +68,12 @@ module.exports = (srv) => {
         //     email:      req.req.authInfo.getEmail()
         //   }
         console.log(req.user.id);
-        console.log(req.req.authInfo.getGivenName());
-        console.log(req.req.authInfo.getFamilyName());
-        console.log(req.req.authInfo.getEmail());
 
-        console.log(req.headers);
+        // console.log(req.authInfo.getGivenName());
+        // console.log(req.authInfo.getFamilyName());
+        // console.log(req.authInfo.getEmail());
+
+        // console.log(req.headers);
         // const li_roleparam = await cds.run(
         //     `
         //     SELECT * FROM "CP_USER_AUTHOBJ"

@@ -4,6 +4,7 @@ const { v1: uuidv1} = require('uuid')
 
 
 const request = require('request');
+const rp = require('request-promise')
 const lbaseUrl = "https://sbpprovider-dev-config-products-srv.cfapps.us10.hana.ondemand.com"; 
 const vcap_app = process.env.VCAP_APPLICATION;
 
@@ -94,27 +95,52 @@ async function _updateJobs(req,isGet) {
         'headers' : {
             'Accept': 'application/json',
             'Accept-Charset': 'utf-8'
-        }   
+        },
+        'timeout': 1000   
     }
     
     let ret_response ="";
 
-    await request(options, async function (error, response) {
-   
-        console.log('statusCode:', response.statusCode); // Print the response status code if a response was received
-        if (error) 
-        {
+    
+    
+    console.log('Readjobs Request Time = ', Date.now());
+    await rp(options)
+        .then(function (response) {
+            console.log('Readjobs Response Time = ', Date.now());
+            // console.log('Response   = ', response);
+            ret_response = JSON.parse(response);
+        })
+        .catch(function (error) {
             console.log('readJobs - Error ', error);
-            ret_response = JSON.parse(error);
-        }
-        if (response.statusCode == 200)
-        {
-            ret_response = JSON.parse(response.body);
-        }
-    })
+            ret_response = JSON.parse(error);  
+        });
 
-    const sleep = require('await-sleep');
-    await sleep(1000);
+    // await request(options, async function (error, response) {
+   
+    //     console.log('Readjobs Response Time = ', Date.now());
+    //     console.log('statusCode:', response.statusCode); // Print the response status code if a response was received
+
+    //     if (error) 
+    //     {
+    //         console.log('readJobs - Error ', error);
+    //         ret_response = JSON.parse(error);
+    //     }
+    //     if (response.statusCode == 200)
+    //     {
+    //         ret_response = JSON.parse(response.body);
+    //     }
+    // })
+
+    console.log("ret_response = ", ret_response);
+
+    console.log('Time Before Sleep = ', Date.now());
+
+    // const sleep = require('await-sleep');
+    // await sleep(1000);
+    // console.log('Time After Sleep = ', Date.now());
+
+    // console.log('ret_response ', ret_response);
+
     console.log('ret_response.value ', ret_response.value);
     console.log('length of ret_response.value ', ret_response.value.length);
 
@@ -137,28 +163,42 @@ async function _updateJobs(req,isGet) {
             'headers' : {
                 'Accept': 'application/json',
                 'Accept-Charset': 'utf-8'
-            }   
+            },
+            'timeout': 1500   
+   
         }
         let ret_sched_response ="";
         let respAck = false;
 
-        await request(options, async function (error, response) {
-    
-            console.log('statusCode:', response.statusCode); // Print the response status code if a response was received
-            if (error) 
-            {
-                console.log('lreadJobSchedules - Error ', error);
-                ret_sched_response = JSON.parse(error);
-                respAck = true;
-            }
-            if (response.statusCode == 200)
-            {
-                ret_sched_response = JSON.parse(response.body);
-                respAck = true;
-            }
+        await rp(options)
+        .then(function (response) {
+            console.log('readJobSchedules Response Time = ', Date.now());
+            ret_sched_response = JSON.parse(response);
+            respAck = true;
         })
-        const sleep = require('await-sleep');
-        await sleep(1500);
+        .catch(function (error) {
+            console.log('readJobSchedules - Error ', error);
+            ret_sched_response = JSON.parse(error);  
+            respAck = true;
+        });
+        
+        // await request(options, async function (error, response) {
+    
+        //     console.log('statusCode:', response.statusCode); // Print the response status code if a response was received
+        //     if (error) 
+        //     {
+        //         console.log('lreadJobSchedules - Error ', error);
+        //         ret_sched_response = JSON.parse(error);
+        //         respAck = true;
+        //     }
+        //     if (response.statusCode == 200)
+        //     {
+        //         ret_sched_response = JSON.parse(response.body);
+        //         respAck = true;
+        //     }
+        // })
+        // const sleep = require('await-sleep');
+        // await sleep(1500);
         
         if (respAck)
         {
@@ -217,27 +257,41 @@ async function _updateJobs(req,isGet) {
             'headers' : {
                 'Accept': 'application/json',
                 'Accept-Charset': 'utf-8'
-            }   
+            },
+            'timeout': 1500      
         }
         let ret_schedlog_response ="";
         respAck = false;
-        await request(options, async function (error, response) {
-    
-            console.log('statusCode:', response.statusCode); // Print the response status code if a response was received
-            if (error) 
-            {
-                console.log('lreadJobSchedule - Error ', error);
-                ret_schedlog_response = JSON.parse(error);
-                respAck = true;
-            }
-            if (response.statusCode == 200)
-            {
-                ret_schedlog_response = JSON.parse(response.body);
-                respAck = true;
-            }
+        
+        await rp(options)
+        .then(function (response) {
+            console.log('readJobSchedule Response Time = ', Date.now());
+            ret_schedlog_response = JSON.parse(response);
+            respAck = true;
         })
-        const sleep = require('await-sleep');
-        await sleep(1500);
+        .catch(function (error) {
+            console.log('readJobSchedules - Error ', error);
+            ret_schedlog_response = JSON.parse(error);  
+            respAck = true;
+        });
+
+        // await request(options, async function (error, response) {
+    
+        //     console.log('statusCode:', response.statusCode); // Print the response status code if a response was received
+        //     if (error) 
+        //     {
+        //         console.log('lreadJobSchedule - Error ', error);
+        //         ret_schedlog_response = JSON.parse(error);
+        //         respAck = true;
+        //     }
+        //     if (response.statusCode == 200)
+        //     {
+        //         ret_schedlog_response = JSON.parse(response.body);
+        //         respAck = true;
+        //     }
+        // })
+        // const sleep = require('await-sleep');
+        // await sleep(1500);
 
         console.log("ret_schedlog_response respAck ", respAck);
         if (respAck)
@@ -299,29 +353,29 @@ async function _updateJobs(req,isGet) {
 
     console.log("jobScheduleLogs ", jobScheduleLogs);
 
-    let purgeSqlStr = 'SELECT DISTINCT SCHEDULE_ID,' +
-                      'DAYS_BETWEEN(TO_TIMESTAMP(SCH_STARTTIME,' + "'" + 'YYYY-MM-DD HH24:MI:SS' + "')," +
-                      'CURRENT_DATE) AS DAYS, RUN_ID FROM JS_SCHEDULES' +
-                      ' WHERE DAYS_BETWEEN(TO_TIMESTAMP(SCH_STARTTIME,' + "'" + 'YYYY-MM-DD HH24:MI:SS' + "')," +
-                      'CURRENT_DATE) > 30';
-    console.log("purgeSqlStr ",purgeSqlStr);
-    let purgeIds = await cds.run(purgeSqlStr);
-    for (purgeIdx = 0; purgeIdx < purgeIds.length; purgeIdx++)
-    {
-        let sqlStr = 'DELETE FROM JS_LOGS WHERE RUN_ID = ' + "'" + purgeIds[purgeIdx].RUN_ID + "'";
-        console.log("JS_LOGS DELETE sqlStr ", sqlStr);
-        await cds.run(sqlStr);
-        console.log("JS_LOGS DELETE sqlStr ", sqlStr);
+    // let purgeSqlStr = 'SELECT DISTINCT SCHEDULE_ID,' +
+    //                   'DAYS_BETWEEN(TO_TIMESTAMP(SCH_STARTTIME,' + "'" + 'YYYY-MM-DD HH24:MI:SS' + "')," +
+    //                   'CURRENT_DATE) AS DAYS, RUN_ID FROM JS_SCHEDULES' +
+    //                   ' WHERE DAYS_BETWEEN(TO_TIMESTAMP(SCH_STARTTIME,' + "'" + 'YYYY-MM-DD HH24:MI:SS' + "')," +
+    //                   'CURRENT_DATE) > 30';
+    // console.log("purgeSqlStr ",purgeSqlStr);
+    // let purgeIds = await cds.run(purgeSqlStr);
+    // for (purgeIdx = 0; purgeIdx < purgeIds.length; purgeIdx++)
+    // {
+    //     let sqlStr = 'DELETE FROM JS_LOGS WHERE RUN_ID = ' + "'" + purgeIds[purgeIdx].RUN_ID + "'";
+    //     console.log("JS_LOGS DELETE sqlStr ", sqlStr);
+    //     await cds.run(sqlStr);
+    //     console.log("JS_LOGS DELETE sqlStr ", sqlStr);
 
-        sqlStr = 'DELETE FROM JS_JOBS WHERE SCHEDULE_ID = ' + "'" + purgeIds[purgeIdx].SCHEDULE_ID + "'";
-        console.log("JS_SCHEDULES DELETE sqlStr ", sqlStr);
-        await cds.run(sqlStr);
+    //     sqlStr = 'DELETE FROM JS_JOBS WHERE SCHEDULE_ID = ' + "'" + purgeIds[purgeIdx].SCHEDULE_ID + "'";
+    //     console.log("JS_SCHEDULES DELETE sqlStr ", sqlStr);
+    //     await cds.run(sqlStr);
 
-        sqlStr = 'DELETE FROM JS_SCHEDULES WHERE SCHEDULE_ID = ' + "'" + purgeIds[purgeIdx].SCHEDULE_ID + "'" +
-                 ' AND RUN_ID = ' + "'" + purgeIds[purgeIdx].RUN_ID + "'";
-        console.log("JS_SCHEDULES DELETE sqlStr ", sqlStr);
-        await cds.run(sqlStr);
-    }
+    //     sqlStr = 'DELETE FROM JS_SCHEDULES WHERE SCHEDULE_ID = ' + "'" + purgeIds[purgeIdx].SCHEDULE_ID + "'" +
+    //              ' AND RUN_ID = ' + "'" + purgeIds[purgeIdx].RUN_ID + "'";
+    //     console.log("JS_SCHEDULES DELETE sqlStr ", sqlStr);
+    //     await cds.run(sqlStr);
+    // }
 
     let dataObj = {};
     dataObj["success"] = true;
@@ -378,7 +432,8 @@ async function _updateJobs(req,isGet) {
         'headers' : {
             'Accept': 'application/json',
             'Accept-Charset': 'utf-8'
-        }   
+        },
+        'timeout': 1000      
     }
     
     let ret_response ="";
@@ -420,7 +475,8 @@ async function _updateJobs(req,isGet) {
             'headers' : {
                 'Accept': 'application/json',
                 'Accept-Charset': 'utf-8'
-            }   
+            },
+            'timeout': 1500      
         }
         let ret_sched_response ="";
         let respAck = false;
@@ -500,7 +556,8 @@ async function _updateJobs(req,isGet) {
             'headers' : {
                 'Accept': 'application/json',
                 'Accept-Charset': 'utf-8'
-            }   
+            },
+            'timeout': 1500      
         }
         // var values = [];
         let ret_schedlog_response ="";
@@ -602,7 +659,8 @@ async function _updateJobs(req,isGet) {
         'headers' : {
             'Accept': 'application/json',
             'Accept-Charset': 'utf-8'
-        }   
+        },
+        'timeout': 1000      
     }
     var values = [];
     let ret_response ="";
@@ -654,7 +712,8 @@ async function _updateJobs(req,isGet) {
         'headers' : {
             'Accept': 'application/json',
             'Accept-Charset': 'utf-8'
-        }   
+        },
+        'timeout': 1000      
     }
     var values = [];
     let ret_response ="";
@@ -704,7 +763,8 @@ async function _updateJobs(req,isGet) {
         'headers' : {
             'Accept': 'application/json',
             'Accept-Charset': 'utf-8'
-        }   
+        },
+        'timeout': 1000      
     }
     var values = [];
     let ret_response ="";
@@ -759,7 +819,8 @@ async function _updateJobs(req,isGet) {
         'headers' : {
             'Accept': 'application/json',
             'Accept-Charset': 'utf-8'
-        }   
+        },
+        'timeout': 1000      
     }
     var values = [];
     let ret_response ="";
@@ -809,7 +870,8 @@ async function _updateJobs(req,isGet) {
         'headers' : {
             'Accept': 'application/json',
             'Accept-Charset': 'utf-8'
-        }   
+        },
+        'timeout': 1000      
     }
     var values = [];
     let ret_response ="";
@@ -865,7 +927,8 @@ async function _updateJobs(req,isGet) {
         'headers' : {
             'Accept': 'application/json',
             'Accept-Charset': 'utf-8'
-        }   
+        },
+        'timeout': 1000      
     }
     var values = [];
     let ret_response ="";
@@ -918,7 +981,8 @@ async function _updateJobs(req,isGet) {
         'headers' : {
             'Accept': 'application/json',
             'Accept-Charset': 'utf-8'
-        }   
+        },
+        'timeout': 1000      
     }
     var values = [];
     let ret_response ="";
@@ -971,7 +1035,8 @@ async function _updateJobs(req,isGet) {
         'headers' : {
             'Accept': 'application/json',
             'Accept-Charset': 'utf-8'
-        }   
+        },
+        'timeout': 1000      
     }
     let ret_response ="";
 
@@ -1026,7 +1091,8 @@ async function _updateJobs(req,isGet) {
         'headers' : {
             'Accept': 'application/json',
             'Accept-Charset': 'utf-8'
-        }   
+        },
+        'timeout': 1000      
     }
     let ret_response ="";
 
@@ -1084,7 +1150,8 @@ srv.on("laddJobSchedule", async req => {
         'headers' : {
             'Accept': 'application/json',
             'Accept-Charset': 'utf-8'
-        }   
+        },
+        'timeout': 1000      
     }
     let ret_response ="";
 
@@ -1139,7 +1206,8 @@ srv.on("laddJobSchedule", async req => {
         'headers' : {
             'Accept': 'application/json',
             'Accept-Charset': 'utf-8'
-        }   
+        },
+        'timeout': 1000      
     }
     let ret_response ="";
 
@@ -1194,7 +1262,8 @@ srv.on("laddJobSchedule", async req => {
         'headers' : {
             'Accept': 'application/json',
             'Accept-Charset': 'utf-8'
-        }   
+        },
+        'timeout': 1000      
     }
     let ret_response ="";
 
