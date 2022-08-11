@@ -1177,34 +1177,34 @@ async function _generateRegModels (req,isGet) {
        if ( (vcRulesListReq[0].Location != "ALL") &&
             (vcRulesListReq[0].Product == "ALL") )
        {
-           sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", "Type", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "CP_VC_HISTORY_TS"' + 
-                    'WHERE "Location" =' + "'" +   vcRulesListReq[0].Location + "'" +
-                    ' AND "Type" =' + "'" +   vcRulesListReq[0].Type + "'" +
-                    ' GROUP BY "Location", "Product", "GroupID", "Type" HAVING COUNT(DISTINCT "' + vcConfigTimePeriod + '") > 20';
+           sqlStr = 'SELECT DISTINCT "LOCATION_ID", "PRODUCT_ID", "GROUP_ID", "TYPE", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "CP_VC_HISTORY_TS"' + 
+                    ' WHERE "LOCATION_ID" =' + "'" +   vcRulesListReq[0].Location + "'" +
+                    ' AND "TYPE" =' + "'" +   vcRulesListReq[0].Type + "'" +
+                    ' GROUP BY "LOCATION_ID", "PRODUCT_ID", "GROUP_ID", "TYPE" HAVING COUNT(DISTINCT "' + vcConfigTimePeriod + '") > 20';
        }
        else if ( (vcRulesListReq[0].Product != "ALL") &&
                  (vcRulesListReq[0].Location == "ALL") )
        {
-           sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", "Type", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "CP_VC_HISTORY_TS"' + 
-                    'WHERE "Product" =' + "'" +   vcRulesListReq[0].Product + "'" +
-                    ' AND "Type" =' + "'" +   vcRulesListReq[0].Type + "'" +
-                    ' GROUP BY "Location", "Product", "GroupID", "Type" HAVING COUNT(DISTINCT "' + vcConfigTimePeriod + '") > 20';
+           sqlStr = 'SELECT DISTINCT "LOCATION_ID", "PRODUCT_ID", "GROUP_ID", "TYPE", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "CP_VC_HISTORY_TS"' + 
+                    ' WHERE "PRODUCT_ID" =' + "'" +   vcRulesListReq[0].Product + "'" +
+                    ' AND "TYPE" =' + "'" +   vcRulesListReq[0].Type + "'" +
+                    ' GROUP BY "LOCATION_ID", "PRODUCT_ID", "GROUP_ID", "TYPE" HAVING COUNT(DISTINCT "' + vcConfigTimePeriod + '") > 20';
        }
        else if ( (vcRulesListReq[0].Product != "ALL") &&
                  (vcRulesListReq[0].Location != "ALL") )
        {
-           sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", "Type", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "CP_VC_HISTORY_TS"' + 
-               'WHERE "Product" =' + "'" +   vcRulesListReq[0].Product + "'" +
-               ' AND "Location" =' + "'" +   vcRulesListReq[0].Location + "'" +
-               ' AND "Type" =' + "'" +   vcRulesListReq[0].Type + "'" +
-               ' GROUP BY "Location", "Product", "GroupID", "Type" HAVING COUNT(DISTINCT "' + vcConfigTimePeriod + '") > 20';
+           sqlStr = 'SELECT DISTINCT "LOCATION_ID", "PRODUCT_ID", "GROUP_ID", "TYPE", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "CP_VC_HISTORY_TS"' + 
+               ' WHERE "PRODUCT_ID" =' + "'" +   vcRulesListReq[0].Product + "'" +
+               ' AND "LOCATION_ID" =' + "'" +   vcRulesListReq[0].Location + "'" +
+               ' AND "TYPE" =' + "'" +   vcRulesListReq[0].Type + "'" +
+               ' GROUP BY "LOCATION_ID", "PRODUCT_ID", "GROUP_ID", "TYPE" HAVING COUNT(DISTINCT "' + vcConfigTimePeriod + '") > 20';
        }
        else
        {
-            sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", "Type", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "CP_VC_HISTORY_TS"' + 
+            sqlStr = 'SELECT DISTINCT "LOCATION_ID", "PRODUCT_ID", "GROUP_ID", "TYPE", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "CP_VC_HISTORY_TS"' + 
                    // vcRulesListReq[0].tableName + 
-                   'WHERE "Type" =' + "'" +   vcRulesListReq[0].Type + "'" +
-                    ' GROUP BY "Location", "Product", "GroupID", "Type"  HAVING COUNT(DISTINCT "' + vcConfigTimePeriod + '") > 20';  
+                   ' WHERE "TYPE" =' + "'" +   vcRulesListReq[0].Type + "'" +
+                    ' GROUP BY "LOCATION_ID", "PRODUCT_ID", "GROUP_ID", "TYPE"  HAVING COUNT(DISTINCT "' + vcConfigTimePeriod + '") > 20';  
        }
 
         results = await cds.run(sqlStr);
@@ -1228,12 +1228,12 @@ async function _generateRegModels (req,isGet) {
     {
         for (var i = 0; i < vcRulesListReq.length; i++)
         {
-            sqlStr = 'SELECT  "Location", "Product", "GroupID", "Type" FROM "CP_VC_HISTORY_TS" WHERE "Product" =' +
+            sqlStr = 'SELECT  "LOCATION_ID", "PRODUCT_ID", "GROUP_ID", "TYPE" FROM "CP_VC_HISTORY_TS" WHERE "PRODUCT_ID" =' +
                         "'" +  vcRulesListReq[i].Product + "'" +  
-                        ' AND "GroupID" =' + "'" +   vcRulesListReq[i].GroupID + "'" +
-                        ' AND "Location" =' + "'" +   vcRulesListReq[i].Location + "'" +
-                        ' AND "Type" =' + "'" +   vcRulesListReq[i].Type + "'" +
-                        ' GROUP BY "Location", "Product", "GroupID", "Type"' +
+                        ' AND "GROUP_ID" =' + "'" +   vcRulesListReq[i].GroupID + "'" +
+                        ' AND "LOCATION_ID" =' + "'" +   vcRulesListReq[i].Location + "'" +
+                        ' AND "TYPE" =' + "'" +   vcRulesListReq[i].Type + "'" +
+                        ' GROUP BY "LOCATION_ID", "PRODUCT_ID", "GROUP_ID", "TYPE"' +
                         ' HAVING COUNT(DISTINCT "' + vcConfigTimePeriod + '") > 20';// + 'ORDER BY "WeekOfYear"';   
             results = await cds.run(sqlStr);
 
@@ -1256,11 +1256,11 @@ async function _generateRegModels (req,isGet) {
     for (var i = 0; i < vcRulesList.length; i++)
     {
         
-        sqlStr = 'SELECT  COUNT(DISTINCT "Row") AS numChars FROM "CP_VC_HISTORY_TS" WHERE "Product" =' +
+        sqlStr = 'SELECT  COUNT(DISTINCT "ROW") AS numChars FROM "CP_VC_HISTORY_TS" WHERE "Product" =' +
                     "'" +  vcRulesList[i].Product + "'" +  
-                    ' AND "GroupID" =' + "'" +   vcRulesList[i].GroupID + "'" +
-                    ' AND "Type" =' + "'" +   vcRulesList[i].Type + "'" +
-                    ' AND "Location" =' + "'" +   vcRulesList[i].Location + "'";// + 'ORDER BY "WeekOfYear"';   
+                    ' AND "GROUP_ID" =' + "'" +   vcRulesList[i].GroupID + "'" +
+                    ' AND "TYPE" =' + "'" +   vcRulesList[i].Type + "'" +
+                    ' AND "LOCATION_ID" =' + "'" +   vcRulesList[i].Location + "'";// + 'ORDER BY "WeekOfYear"';   
 
         results = await cds.run(sqlStr);
 
@@ -1882,27 +1882,27 @@ async function _getDataObjForGenModels(vcRulesList, modelType, numChars) {
         if ( (modelType == 'HGBT') ||
              (modelType == 'RDT') )
         {
-            sqlStr = 'SELECT DISTINCT "Attribute", "' + vcConfigTimePeriod + 
-                    '", SUM("CharCountPercent") AS "CharCount", SUM("TargetPercent") AS "Target" FROM "CP_VC_HISTORY_TS" WHERE "Product" =' +
+            sqlStr = 'SELECT DISTINCT "ATTRIBUTE", "' + vcConfigTimePeriod + 
+                    '", SUM("CHAR_COUNT_RATE") AS "CharCount", SUM("GROUP_COUNT_RATE") AS "Target" FROM "CP_VC_HISTORY_TS" WHERE "PRODUCT_ID" =' +
 
                     "'" +  vcRulesList[i].Product + "'" +  
-                    ' AND "GroupID" =' + "'" +   vcRulesList[i].GroupID + "'" +
-                    ' AND "Type" = ' + "'" + vcRulesList[i].Type + "'" +
-                    ' AND "Location" =' + "'" +   vcRulesList[i].Location + "'" + 
-                    ' GROUP BY "Attribute", "' + vcConfigTimePeriod + '"' +
-                    ' ORDER BY "' + vcConfigTimePeriod + '", "Attribute"';
+                    ' AND "GROUP_ID" =' + "'" +   vcRulesList[i].GroupID + "'" +
+                    ' AND "TYPE" = ' + "'" + vcRulesList[i].Type + "'" +
+                    ' AND "LOCATION_ID" =' + "'" +   vcRulesList[i].Location + "'" + 
+                    ' GROUP BY "ATTRIBUTE", "' + vcConfigTimePeriod + '"' +
+                    ' ORDER BY "' + vcConfigTimePeriod + '", "ATTRIBUTE"';
         }
         else
         {
-            sqlStr = 'SELECT DISTINCT "Attribute", "' + vcConfigTimePeriod + 
-                    '", SUM("CharCount") AS "CharCount", SUM("Target") AS "Target" FROM "CP_VC_HISTORY_TS" WHERE "Product" =' +
+            sqlStr = 'SELECT DISTINCT "ATTRIBUTE", "' + vcConfigTimePeriod + 
+                    '", SUM("CHAR_COUNT") AS "CharCount", SUM("GROUP_COUNT") AS "Target" FROM "CP_VC_HISTORY_TS" WHERE "PRODUCT_ID" =' +
 
                     "'" +  vcRulesList[i].Product + "'" +  
-                    ' AND "GroupID" =' + "'" +   vcRulesList[i].GroupID + "'" +
-                    ' AND "Type" = ' + "'" + vcRulesList[i].Type + "'" +
-                    ' AND "Location" =' + "'" +   vcRulesList[i].Location + "'" + 
-                    ' GROUP BY "Attribute", "' + vcConfigTimePeriod + '"' +
-                    ' ORDER BY "' + vcConfigTimePeriod + '", "Attribute"';
+                    ' AND "GROUP_ID" =' + "'" +   vcRulesList[i].GroupID + "'" +
+                    ' AND "TYPE" = ' + "'" + vcRulesList[i].Type + "'" +
+                    ' AND "LOCATION_ID" =' + "'" +   vcRulesList[i].Location + "'" + 
+                    ' GROUP BY "ATTRIBUTE", "' + vcConfigTimePeriod + '"' +
+                    ' ORDER BY "' + vcConfigTimePeriod + '", "ATTRIBUTE"';
         }
 
         results = await cds.run(sqlStr);
