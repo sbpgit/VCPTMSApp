@@ -1207,15 +1207,20 @@ async function _generateRegModels (req,isGet) {
                     ' GROUP BY "LOCATION_ID", "PRODUCT_ID", "GROUP_ID", "TYPE"  HAVING COUNT(DISTINCT "' + vcConfigTimePeriod + '") > 20';  
        }
 
+
+
         results = await cds.run(sqlStr);
+        // console.log('_generateRegModels vcRulesList sqlStr ', sqlStr );
+        // console.log('_generateRegModels vcRulesList sqlStr results', results );
+
 
         for (let index=0; index<results.length; index++) 
         {
             
-            let Location = results[index].Location;
-            let Product = results[index].Product;
-            let GroupID = results[index].GroupID;
-            let Type = results[index].Type;
+            let Location = results[index].LOCATION_ID;
+            let Product = results[index].PRODUCT_ID;
+            let GroupID = results[index].GROUP_ID;
+            let Type = results[index].TYPE;
             let modelVersion = vcRulesListReq[0].modelVersion;
             let profile = vcRulesListReq[0].profile;
             let override = vcRulesListReq[0].override;
@@ -1236,13 +1241,15 @@ async function _generateRegModels (req,isGet) {
                         ' GROUP BY "LOCATION_ID", "PRODUCT_ID", "GROUP_ID", "TYPE"' +
                         ' HAVING COUNT(DISTINCT "' + vcConfigTimePeriod + '") > 20';// + 'ORDER BY "WeekOfYear"';   
             results = await cds.run(sqlStr);
-
+            // console.log('_generateRegModels vcRulesList ELSE sqlStr ', sqlStr, 'index = ', i );
+            // console.log('_generateRegModels vcRulesList ELSE sqlStr results', results );
+    
             if (results.length > 0)
             {    
-                let Location = results[0].Location;
-                let Product = results[0].Product;
-                let GroupID = results[0].GroupID;
-                let Type = results[0].Type;
+                let Location = results[0].LOCATION_ID;
+                let Product = results[0].PRODUCT_ID;
+                let GroupID = results[0].GROUP_ID;
+                let Type = results[0].TYPE;
                 let modelVersion = vcRulesListReq[0].modelVersion;
                 let profile = vcRulesListReq[i].profile;
                 let override = vcRulesListReq[i].override;
@@ -1256,13 +1263,16 @@ async function _generateRegModels (req,isGet) {
     for (var i = 0; i < vcRulesList.length; i++)
     {
         
-        sqlStr = 'SELECT  COUNT(DISTINCT "ROW") AS numChars FROM "CP_VC_HISTORY_TS" WHERE "Product" =' +
+        sqlStr = 'SELECT  COUNT(DISTINCT "ROW") AS numChars FROM "CP_VC_HISTORY_TS" WHERE "PRODUCT_ID" =' +
                     "'" +  vcRulesList[i].Product + "'" +  
                     ' AND "GROUP_ID" =' + "'" +   vcRulesList[i].GroupID + "'" +
                     ' AND "TYPE" =' + "'" +   vcRulesList[i].Type + "'" +
                     ' AND "LOCATION_ID" =' + "'" +   vcRulesList[i].Location + "'";// + 'ORDER BY "WeekOfYear"';   
+        // console.log('_generateRegModels sqlStr ', sqlStr );
 
         results = await cds.run(sqlStr);
+        // console.log('_generateRegModels results ', results );
+
 
         vcRulesList[i].dimensions = results[0].NUMCHARS;
         if (vcRulesList[i].dimensions == 1)
@@ -1289,9 +1299,15 @@ async function _generateRegModels (req,isGet) {
            hasCharCount11 = true; 
         if (vcRulesList[i].dimensions == 12)
            hasCharCount12 = true;
+        
+           console.log('_generateRegModels index i = ', i, ' vcRulesList[i].dimensions = ',vcRulesList[i].dimensions);
+
     }
     
  console.log('_generateRegModels Start Time',new Date());
+//  console.log('_generateRegModels vcRulesList ',vcRulesList);
+
+
 
 
 if (hasCharCount1 == true)
