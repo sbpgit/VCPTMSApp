@@ -112,24 +112,7 @@ module.exports = async function (srv) {
 
                 let char_charval = [];
                 let row_id = index + 1;
-                if(str[index].match(/=/g))
-                {
-                    chvalOp = '=';
-                    char_charval = str[index].split(/=/g)
-                    if(match != null)
-                    {
-                        if (index < str.length -1)
-                        {
-                            chOp = match[index];
-                        }
-                        console.log("ROW = ", index+1, "Char = ",char_charval[0],"charval = ",char_charval[1],"chvalOp is ",'EQ',"chOp = ",match[index]);
-                    }
-                    else
-                    {
-                        console.log("ROW = ", index+1, "Char = ",char_charval[0],"charval = ",char_charval[1],"chvalOp is ",'EQ');
-                    }
-                }
-                else if(str[index].match(/!=/g))
+                if(str[index].match(/!=/g))
                 {
                     chvalOp = '!=';
                     char_charval = str[index].split(/!=/g)
@@ -147,6 +130,24 @@ module.exports = async function (srv) {
                         console.log("ROW = ", index+1, "Char = ",char_charval[0],"charval = ",char_charval[1],"chvalOp is ",'EQ');
                     }
                 }
+                else if(str[index].match(/=/g))
+                {
+                    chvalOp = '=';
+                    char_charval = str[index].split(/=/g)
+                    if(match != null)
+                    {
+                        if (index < str.length -1)
+                        {
+                            chOp = match[index];
+                        }
+                        console.log("ROW = ", index+1, "Char = ",char_charval[0],"charval = ",char_charval[1],"chvalOp is ",'EQ',"chOp = ",match[index]);
+                    }
+                    else
+                    {
+                        console.log("ROW = ", index+1, "Char = ",char_charval[0],"charval = ",char_charval[1],"chvalOp is ",'EQ');
+                    }
+                }
+                
 
                 char_charval[0] = char_charval[0].replace(/[']/g, '');
                 char_charval[1] = char_charval[1].replace(/[']/g, '');
@@ -193,7 +194,25 @@ module.exports = async function (srv) {
 
             let char_charval = [];
             let row_id = index + 1;
-            if(str[index].match(/=/g))
+            if(str[index].match(/!=/g))
+            {
+                chvalOp = '!=';
+                char_charval = str[index].split(/!=/g)
+                if(match != null)
+                {
+                    if (index < str.length -1)
+                    {
+                        chOp = match[index];
+                    }
+                    console.log("ROW = ", index+1, "Char = ",char_charval[0],"charval = ",char_charval[1],"chvalOp is ",'NEQ',"chOp = ",match[index]);
+                }
+                else
+                {
+                    chOp = '';
+                    console.log("ROW = ", index+1, "Char = ",char_charval[0],"charval = ",char_charval[1],"chvalOp is ",'NEQ');
+                }
+            }
+            else if(str[index].match(/=/g))
             {
                 chvalOp = '=';
                 char_charval = str[index].split(/=/g)
@@ -210,24 +229,7 @@ module.exports = async function (srv) {
                     console.log("ROW = ", index+1, "Char = ",char_charval[0],"charval = ",char_charval[1],"chvalOp is ",'EQ');
                 }
             }
-            else if(str[index].match(/!=/g))
-            {
-                chvalOp = '!=';
-                char_charval = str[index].split(/!=/g)
-                if(match != null)
-                {
-                    if (index < str.length -1)
-                    {
-                        chOp = match[index];
-                    }
-                    console.log("ROW = ", index+1, "Char = ",char_charval[0],"charval = ",char_charval[1],"chvalOp is ",'EQ',"chOp = ",match[index]);
-                }
-                else
-                {
-                    chOp = '';
-                    console.log("ROW = ", index+1, "Char = ",char_charval[0],"charval = ",char_charval[1],"chvalOp is ",'EQ');
-                }
-            }
+            
 
             char_charval[0] = char_charval[0].replace(/[']/g, '');
             char_charval[1] = char_charval[1].replace(/[']/g, '');
