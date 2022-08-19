@@ -1,0 +1,23 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m" controllerName="cpapp.cprestrictions.controller.ItemMaster"
+    xmlns:html="http://www.w3.org/1999/xhtml" class="ItemMaster">
+    <Page showHeader="false">
+        <content>
+            <SearchField id="headSearch" liveChange="onSearch" placeholder="Restrictions/ Location/ Line ID"/>
+            <List id="resList"  items="{ path : '/results', sorter : { path : 'LOCATION_ID'} }" mode="SingleSelectMaster" noDataText="No Data" selectionChange="onhandlePress">
+                <items>
+                    <ObjectListItem press="onhandlePress" title="{LOCATION_ID}" number="{LINE_ID}">
+                    <firstStatus>
+                        <ObjectStatus text="{RTR_DESC}"  />
+                    </firstStatus>
+                        <attributes>
+                            <ObjectAttribute text="{RESTRICTION}"/>
+                            <ObjectAttribute text="{RTR_DESC}"/>
+
+                        </attributes>
+                    </ObjectListItem>
+                </items>
+            </List>
+        </content>
+    </Page>
+</mvc:View>

@@ -1,0 +1,61 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:l="sap.ui.layout"
+    xmlns:core="sap.ui.core" controllerName="cpapp.cprestrictions.controller.ItemDetail"
+    xmlns:html="http://www.w3.org/1999/xhtml">
+    <Page id="page" showHeader="false">
+       <l:Grid defaultSpan="XL3 L3 M6 S12" >
+        <VBox >
+            <Text text="Location :" />
+            <Text text="{oGModel>/locId}" />
+        </VBox>
+        <!-- <VBox >
+            <Text text="Restriction :" />
+            <Text text="{oGModel>/Restriction}" />
+        </VBox> -->
+        
+        </l:Grid>
+
+            <content>
+            <SearchField id="idSearch" search="onItemSearch" placeholder="Class Name/ Char Name"/>
+                    <Table id="idDetail" items="{path: '/results'}" sticky="ColumnHeaders">
+                        <columns>
+                            <Column hAlign="Left" >
+                                <Text text="{i18n>rescounterno}" />
+                            </Column>
+                            <Column hAlign="Left">
+                                <Text text="{i18n>classname}"/>
+                            </Column>
+                            <Column hAlign="Left">
+                                <Text text="{i18n>charname}" />
+                            </Column>
+                            <Column hAlign="Left">
+                                <Text text="{i18n>charval}"/>
+                            </Column>
+                            <Column hAlign="Left">
+                                <Text text="{i18n>objdepcond}" />
+                            </Column>
+                            <Column hAlign="Left">
+                                <Text text="{i18n>charcounter}"/>
+                            </Column>
+                            <Column hAlign="Left">
+                                <Text text="{i18n>rowid}"/>
+                            </Column>
+                        </columns>
+                        <items>
+                            <ColumnListItem>
+                                <cells>
+                                    <Text text="{RTR_COUNTER}" />
+                                    <Text text="{CLASS_NAME}" />
+                                    <Text text="{CHAR_NAME}" />
+                                    <Text text="{CHAR_VALUE}" />
+                                    <Text text="{OD_CONDITION}" />
+                                    <Text text="{CHAR_COUNTER}"/>
+                                    <Text text="{ROW_ID}"/>
+                                </cells>
+                            </ColumnListItem>
+                        </items>
+                    </Table>
+        </content>
+    </Page>
+</mvc:View>
