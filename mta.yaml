@@ -179,7 +179,10 @@ modules:
       - cpapprtrhdrcprtrheader.zip
       name: cpapprtrhdrcprtrheader
       target-path: resources/
-      
+    - artifacts:
+      - cpappcpprodrestr.zip
+      name: cpappcpprodrestr
+      target-path: resources/
 - name: cpodpcpodprofiles
   type: html5
   path: app/cp_odprofiles
@@ -477,6 +480,16 @@ modules:
     - npm run build:cf
     ignore:
     - node_modules/
+    supported-platforms: []
+- name: cpappcpprodrestr
+  type: html5
+  path: app/cpprodrestr
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
     supported-platforms: []
 resources:
 - name: config_products-db

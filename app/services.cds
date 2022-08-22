@@ -41,3 +41,5 @@ using from './cpauthorization/annotations';
 using from './cpauthentication/annotations';
 
 using from './cp_prodlocline/annotations';
+
+using from './cpprodrestr/annotations';

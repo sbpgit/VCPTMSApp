@@ -981,7 +981,7 @@ annotate V_SALESHCFG_CHARVAL with @(
 );
 
 /*******************************************/
-// IBP Future Character Plan
+// Product Accessnode
 /*******************************************/
 annotate service.PROD_ACCNODE with @(
     UI        : {
@@ -1463,6 +1463,84 @@ annotate service.PROD_LOC_LINE with @(
         Facets : [{
             $Type  : 'UI.ReferenceFacet',
             Label  : 'Location-Product-Line',
+            Target : '@UI.FieldGroup#Details'
+        }]
+    }]
+);
+
+//Product restrictions
+annotate service.PRODRESTRICT with @(
+    UI        : {
+        SelectionFields                : [
+            LOCATION_ID,
+            PRODUCT_ID,
+            RESTRICTION
+        ],
+        LineItem                       : [
+            {
+                $Type : 'UI.DataField', 
+                Value : LOCATION_ID,
+                ![@UI.Importance]   : #High
+            },
+            {
+                $Type : 'UI.DataField', 
+                Value : PRODUCT_ID,
+                ![@UI.Importance]   : #High
+            },{
+                $Type : 'UI.DataField', 
+                Value : RESTRICTION,
+                ![@UI.Importance]   : #High
+            },{
+                $Type : 'UI.DataField', 
+                Value : RTR_QTY,
+                ![@UI.Importance]   : #High
+            },{
+                $Type : 'UI.DataField', 
+                Value : VALID_FROM,
+                ![@UI.Importance]   : #High
+            },{
+                $Type : 'UI.DataField', 
+                Value : VALID_TO,
+                ![@UI.Importance]   : #High
+            }
+        ],
+        HeaderInfo                     : {
+            Title          : {Value : LOCATION_ID},
+            Description    : {Value : PRODUCT_ID},
+            TypeName       : 'Authorization',
+            TypeNamePlural : 'Authorizations'
+        },
+        FieldGroup #Details            : {Data : [
+            {
+                $Type : 'UI.DataField', 
+                Value : LOCATION_ID
+            },
+            {
+                $Type : 'UI.DataField', 
+                Value : PRODUCT_ID
+            },{
+                $Type : 'UI.DataField', 
+                Value : RESTRICTION
+            },{
+                $Type : 'UI.DataField', 
+                Value : RTR_QTY
+            },{
+                $Type : 'UI.DataField', 
+                Value : VALID_FROM
+            },{
+                $Type : 'UI.DataField', 
+                Value : VALID_TO
+            }
+        ]}
+    },
+    // Page Facets
+    UI.Facets : [{
+        $Type  : 'UI.CollectionFacet',
+        ID     : 'PRODRTR',
+        Label  : 'Product Restrictions',
+        Facets : [{
+            $Type  : 'UI.ReferenceFacet',
+            Label  : 'Product Restrictions',
             Target : '@UI.FieldGroup#Details'
         }]
     }]

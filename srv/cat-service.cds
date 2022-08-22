@@ -229,6 +229,9 @@ service CatalogService @(impl : './lib/cat-service.js'){
     entity getODHdrRstr         as projection on V_ODRESTRICT;
 
     @odata.draft.enabled
+    entity getProdRestr         as projection on od.PRODRESTRICT;
+
+    @odata.draft.enabled
     entity getProdlocline       as projection on od.PROD_LOC_LINE;
     
     function maintainRestrHdr(LOCATION_ID: String(4), LINE_ID: String(40), RESTRICTION : String(30), RTR_DESC    : String(30), VALID_FROM  : Date , VALID_TO : Date, Flag: String(1)) returns String;
