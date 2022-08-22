@@ -1172,7 +1172,7 @@ module.exports = (srv) => {
         if (req.data.FLAG === "C" || req.data.FLAG === "E") {
             for (var i = 0; i < liRtrChar.length; i++) {
                 lsresults.RESTRICTION = liRtrChar[i].RESTRICTION;
-                lsresults.RTR_COUNTER = liRtrChar[i].RTR_COUNTER;
+                // lsresults.RTR_COUNTER = liRtrChar[i].RTR_COUNTER;
                 lsresults.CLASS_NUM = liRtrChar[i].CLASS_NUM;
                 lsresults.CHAR_NUM = liRtrChar[i].CHAR_NUM;
                 lsresults.CHAR_COUNTER = liRtrChar[i].CHAR_COUNTER;
@@ -1203,7 +1203,7 @@ module.exports = (srv) => {
         else if (req.data.FLAG === "D") {
             for (var i = 0; i < liRtrChar.length; i++) {                
                 lsresults.RESTRICTION = liRtrChar[i].RESTRICTION;
-                lsresults.RTR_COUNTER = liRtrChar[i].RTR_COUNTER;
+                // lsresults.RTR_COUNTER = liRtrChar[i].RTR_COUNTER;
                 lsresults.CLASS_NUM = liRtrChar[i].CLASS_NUM;
                 lsresults.CHAR_NUM = liRtrChar[i].CHAR_NUM;
                 lsresults.CHAR_COUNTER = liRtrChar[i].CHAR_COUNTER;

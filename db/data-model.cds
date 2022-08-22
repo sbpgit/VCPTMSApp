@@ -246,19 +246,6 @@ context cp {
             SUCCESS_RATE : Double     @title : 'Sucess Rate';
     };
 
-    // Object dep. Timeseries future
-    entity TS_OBJDEPHDR_F {
-        key CAL_DATE         : Date       @title : 'Date';
-        key LOCATION_ID      : String(4)  @title : 'Location ID';
-        key PRODUCT_ID       : String(40) @title : 'Product ID';
-        key OBJ_TYPE         : String(2)  @title : 'Object Type';
-        key OBJ_DEP          : String(30) @title : 'Object Dependency';
-        key OBJ_COUNTER      : Integer    @title : 'Object Counter';
-            PREDICTED        : Double     @title : 'Predicted';
-            PREDICTED_TIME   : Timestamp  @title : 'Predicted Time';
-            PREDICTED_STATUS : String(8)  @title : 'Predicted Status';
-    };
-
     // Object dep. characteristics Timeseries- future
     entity TS_OBJDEP_CHARHDR_F {
         key CAL_DATE     : Date       @title : 'Date';
@@ -627,7 +614,7 @@ context cp {
 
     entity RESTRICT_DETAILS {
         key RESTRICTION  : String(30) @title : 'Restriction';
-        key RTR_COUNTER  : Integer    @title : 'Restriction Counter';
+        //key RTR_COUNTER  : Integer    @title : 'Restriction Counter';
         key CLASS_NUM    : String(18) @title : 'Internal class number';
         key CHAR_NUM     : String(10) @title : 'Internal Char. number';
         key CHAR_COUNTER : Integer    @title : 'Characteristic counter';
@@ -642,7 +629,27 @@ context cp {
         key LINE_ID     : String(40) @title : 'Line';
         key PRODUCT_ID  : String(40) @title : 'Product';
     };
+
+     // Product restrictions
+    entity PRODRESTRICT  {
+        key LOCATION_ID : String(4)      @title : 'Location '; //Association to ZLOCATION;//
+        key PRODUCT_ID  : String(40)     @title : 'Product';
+        key RESTRICTION : String(30)     @title : 'Restriction';
+            RTR_QTY     : Decimal(13, 3) @title : 'Component Quantity';
+            VALID_FROM  : Date           @title : 'Valid From';
+            VALID_TO    : Date           @title : 'Valid To';
+    };
+
+    
+    entity CIR_PLANNED {
+        key WEEK_DATE       : Date           @title: 'Week Date';
+        key CIR_ID          : Integer        @title : 'CIR ID';
+        key METHOD          : String(20)     @title : 'Method';
+        UNIQUE_ID           : Integer        @title : 'Unique ID';
+        CIR_QTY             : Decimal(13, 3) @title : 'Quantity';
+    }
 }
+
 
 @cds.persistence.exists
 entity![V_OBDHDR]{
@@ -936,7 +943,7 @@ key     ![CHARVAL_NUM]: String(70)  @title: 'CHARVAL_NUM' ;
     @cds.persistence.exists
 entity![V_ODRESTRICT]{
     key![RESTRICTION]  : String(30) @title : 'Restriction';
-    key![RTR_COUNTER]  : Integer    @title : 'Restriction Counter';
+    // key![RTR_COUNTER]  : Integer    @title : 'Restriction Counter';
     key![CLASS_NUM]    : String(18) @title : 'Internal No. Class ';
     key![CLASS_NAME]   : String(20) @title : 'Class Name';
     key![CHAR_NUM]     : String(10) @title : 'Internal No. Characteristic';
