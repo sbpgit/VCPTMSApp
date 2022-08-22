@@ -171,6 +171,15 @@ modules:
       - cpappcpprodlocline.zip
       name: cpappcpprodlocline
       target-path: resources/
+    - artifacts:
+      - cpapprestrictcpodrestrict.zip
+      name: cpapprestrictcpodrestrict
+      target-path: resources/
+    - artifacts:
+      - cpapprtrhdrcprtrheader.zip
+      name: cpapprtrhdrcprtrheader
+      target-path: resources/
+      
 - name: cpodpcpodprofiles
   type: html5
   path: app/cp_odprofiles
@@ -427,6 +436,16 @@ modules:
     - npm install
     - npm run build:cf
     supported-platforms: []
+- name: cpappcprestrictions
+  type: html5
+  path: app/cprestrictions
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
 - name: cpappcpprodlocline
   type: html5
   path: app/cp_prodlocline
@@ -436,6 +455,28 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    supported-platforms: []
+- name: cpapprestrictcpodrestrict
+  type: html5
+  path: app/cpodrestrict
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpapprtrhdrcprtrheader
+  type: html5
+  path: app/cprtrheader
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    ignore:
+    - node_modules/
     supported-platforms: []
 resources:
 - name: config_products-db

@@ -180,11 +180,7 @@ sap.ui.define(
          */
         onCharDetails: function (oEvent) {
           var sSelProd = oEvent.getSource().getParent().getCells()[1].getText();
-          var sSelrefProd = oEvent
-            .getSource()
-            .getParent()
-            .getCells()[2]
-            .getText();
+          var sSelLoc = oEvent.getSource().getParent().getCells()[0].getText();
   
           if (!that._onCharDetails) {
             that._onCharDetails = sap.ui.xmlfragment(
@@ -198,7 +194,7 @@ sap.ui.define(
   
           this.getModel("BModel").read("/getNewProdChar", {
             filters: [
-              new Filter("REF_PRODID", FilterOperator.EQ, sSelrefProd),
+              new Filter("LOCATION_ID", FilterOperator.EQ, sSelLoc),
               new Filter("PRODUCT_ID", FilterOperator.EQ, sSelProd),
             ],
             success: function (oData) {

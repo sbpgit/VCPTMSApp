@@ -26,7 +26,7 @@
                     <Column hAlign="Center">
                         <Text text="Ref. Product"/>
                     </Column>
-                    <Column hAlign="Right" width="15px">
+                    <Column hAlign="Right" >
                         <Text text="" />
                     </Column>
                     

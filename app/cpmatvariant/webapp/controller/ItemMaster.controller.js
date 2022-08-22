@@ -56,6 +56,14 @@ sap.ui.define(
                     );
                     this.getView().addDependent(this._valueHelpDialogProd);
                 }
+
+                if (!this._valueHelpDialogDescUpdate) {
+                    this._valueHelpDialogDescUpdate = sap.ui.xmlfragment(
+                        "cpapp.cpmatvariant.view.UniqueDescUpdate",
+                        this
+                    );
+                    this.getView().addDependent(this._valueHelpDialogDescUpdate);
+                }
             },
 
             /**
@@ -362,6 +370,49 @@ sap.ui.define(
             onEditDesc:function(oEvent){
                 var oSelected = oEvent.getSource().getParent().getBindingContext().getObject();
 
+                oGModel.setProperty("/SelectedData", oSelected);
+                oGModel.setProperty("/SelectedId", oSelected.UNIQUE_ID);
+                oGModel.setProperty("/SelectedDesc", oSelected.UNIQUE_DESC);
+                this._valueHelpDialogDescUpdate.open();
+            },
+
+            onCloseDesc:function(){
+                this._valueHelpDialogDescUpdate.close();
+            },
+
+            onUpdateUniqueDesc:function(){
+                var oItem = oGModel.getProperty("/SelectedData");
+                var oDesc = sap.ui.getCore().byId("idUniqDesc").getValue();
+
+                var oActive;
+        
+                if(oItem.ACTIVE === true){
+                    oActive = '';//true;
+                } else {
+                    oActive = 'X';//falsev;
+                }
+
+                that.getModel("BModel").callFunction("/changeUnique", {
+                    method: "GET",
+                    urlParameters: {
+                        LOCATION_ID: oItem.LOCATION_ID,
+                        PRODUCT_ID: oItem.PRODUCT_ID,
+                        UNIQUE_ID: oItem.UNIQUE_ID,
+                        UID_TYPE: oItem.UID_TYPE,
+                        UNIQUE_DESC: oDesc,
+                        ACTIVE: oActive
+                    },
+                    success: function (oData) {
+                        sap.ui.core.BusyIndicator.hide();
+                        MessageToast.show(oData.changeUnique);
+                        that.onCloseDesc();
+                        that.onGetData();
+                    },
+                    error: function (oData) {
+                        sap.ui.core.BusyIndicator.hide();
+                        MessageToast.show("Failed to changes the status");
+                    },
+                });
             },
 
             onChange: function (oEvent) {
@@ -369,11 +420,11 @@ sap.ui.define(
                 var oItem = oEvent.getSource().getBindingContext().getObject();
 
                 var oActive;
-
-                if (oItem.ACTIVE === true) {
-                    oActive = false;
+        
+                if(oItem.ACTIVE === true){
+                    oActive = 'X';//false;
                 } else {
-                    oActive = true;
+                    oActive = '';//true;
                 }
 
                 that.getModel("BModel").callFunction("/changeUnique", {
