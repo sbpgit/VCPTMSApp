@@ -278,122 +278,6 @@ sap.ui.define([
                     var aSelectedProd = oEvent.getParameter("selectedItems");
                     that.oProd.setValue(aSelectedProd[0].getTitle());
 
-<<<<<<< HEAD
-          /**
-         * This function is called when selection on dialogs list.
-         * Selections will be made based on sId.
-         * @param {object} oEvent -the event information.
-         */
-        handleSelection: function (oEvent) {
-            var sId = oEvent.getParameter("id"),
-              oItem = oEvent.getParameter("selectedItems"),
-              aSelectedItems,
-              aODdata = [];
-            //Location list
-            if (sId.includes("Loc")) {
-              this.oLoc = that.byId("idloc");
-              var aSelectedLoc = oEvent.getParameter("selectedItems");
-              that.oLoc.setValue(aSelectedLoc[0].getTitle());
-              
-              this._valueHelpDialogProd.getAggregation("_dialog").getContent()[1].removeSelections();
-             
-              // service to get the products based of location
-              this.getModel("BModel").read("/getLocProdDet", {
-                filters: [
-                  new Filter(
-                    "LOCATION_ID",
-                    FilterOperator.EQ,
-                    aSelectedLoc[0].getTitle()
-                  ),
-                ],
-                success: function (oData) {
-                  that.prodModel.setData(oData);
-                  that.oProdList.setModel(that.prodModel);
-                },
-                error: function (oData, error) {
-                  MessageToast.show("error");
-                },
-              });
-    
-              // Prod list
-            } else if (sId.includes("prod")) {
-              this.oProd = that.byId("prodInput");
-              var aSelectedProd = oEvent.getParameter("selectedItems");
-              that.oProd.setValue(aSelectedProd[0].getTitle());
-              
-              
-            }
-        },
-
-          attachDragDrop: function () {
-			var oListPrim = this.byId("Primarytable");
-			// adding drag and drop with first list
-			oListPrim.addDragDropConfig(new DragInfo({
-				sourceAggregation: "items"
-			}));
-
-			oListPrim.addDragDropConfig(new DropInfo({
-				targetAggregation: "items",
-				dropPosition: DropPosition.Between,
-				dropLayout: DropLayout.Vertical,
-				drop: this.onDrop.bind(this)
-			}));
-			// adding drag and drop with second list
-			var oListSec = this.byId("Secondarytable");
-			oListSec.addDragDropConfig(new DragInfo({
-				sourceAggregation: "items"
-			}));
-			oListSec.addDragDropConfig(new DropInfo({
-				targetAggregation: "items",
-				dropPosition: DropPosition.Between,
-				dropLayout: DropLayout.Vertical,
-				drop: that.onDrop.bind(that)
-			}));
-
-		},
-		// function drop list items
-		onDrop: function (oInfo) {
-			var oDragged = oInfo.getParameter("draggedControl"),
-				oDropped = oInfo.getParameter("droppedControl"),
-				sInsertPosition = oInfo.getParameter("dropPosition"),
-
-				oDragContainer = oDragged.getParent(),
-				oDropContainer = oInfo.getSource().getParent(),
-
-				oDragModel = oDragContainer.getModel(),
-				oDropModel = oDropContainer.getModel(),
-				oDragModelData = oDragModel.getData(),
-				oDropModelData = oDropModel.getData(),
-
-				iDragPosition = oDragContainer.indexOfItem(oDragged),
-				iDropPosition = oDropContainer.indexOfItem(oDropped);
-
-			// remove the item
-			var oItem = oDragModelData.results[iDragPosition];
-			oDragModelData.results.splice(iDragPosition, 1);
-
-			if (oDragModel === oDropModel && iDragPosition < iDropPosition) {
-				iDropPosition--;
-			}
-
-			if (sInsertPosition === "After") {
-				iDropPosition++;
-			}
-
-			// insert the control in target aggregation
-			oDropModelData.results.splice(iDropPosition, 0, oItem);
-
-            if(oDragModel !== oDropModel){
-                var oChar_Type;
-                var iSeq = 0;
-                if(oItem.CHAR_TYPE === "S"){
-                    iSeq = oItem.SEQUENCE;
-                    oChar_Type = "P";
-
-                } else {
-                    oChar_Type = "S"
-                    iSeq = oDropModelData.results.length;
-=======
 
                 }
             },
@@ -440,7 +324,6 @@ sap.ui.define([
 
                     iDragPosition = oDragContainer.indexOfItem(oDragged),
                     iDropPosition = oDropContainer.indexOfItem(oDropped);
->>>>>>> 005ec0729b5e0c0d3a280f6ba9352861a11a5cba
 
                 // remove the item
                 var oItem = oDragModelData.results[iDragPosition];
@@ -450,44 +333,9 @@ sap.ui.define([
                     iDropPosition--;
                 }
 
-<<<<<<< HEAD
-            that.getModel("BModel").callFunction("/changeToPrimary", {
-                method: "GET",
-                urlParameters: {
-                    LOCATION_ID : oItem.LOCATION_ID,
-                    PRODUCT_ID : oItem.PRODUCT_ID,
-                    CHAR_NUM: oItem.CHAR_NUM,
-                    SEQUENCE:iSeq,
-                    CHAR_TYPE:oChar_Type,
-                    FLAG: "C",
-                },
-                success: function (oData) {
-                    sap.ui.core.BusyIndicator.hide();
-                    that.onGetData();
-                },
-                error: function (oData) {
-                    sap.ui.core.BusyIndicator.hide();
-                    MessageToast.show("Failed to changes the char");
-                },
-            });
-        } else {
-            oDropModel.setData(oDropModelData);
-            var aData = this.byId("Secondarytable").getItems();
-
-            for(var i =0; i<aData.length; i++){
-                if(oItem.CHAR_NAME === aData[i].getCells()[1].getText()){
-                    aData[i + 1].focus();
-                    aData[i].setSelected(true);
-                }
-            }
-            that.onSaveSeq(iDropPosition);
-        }
-		},
-=======
                 if (sInsertPosition === "After") {
                     iDropPosition++;
                 }
->>>>>>> 005ec0729b5e0c0d3a280f6ba9352861a11a5cba
 
                 // insert the control in target aggregation
                 oDropModelData.results.splice(iDropPosition, 0, oItem);
@@ -567,100 +415,18 @@ sap.ui.define([
                     aData[0].setSelected(true);
 
                 } else {
-<<<<<<< HEAD
-                    for(var i =0; i<aData.length; i++){
-                        if(sQuery === aData[i].getCells()[1].getText()){
-=======
                     for (var i = 0; i < aData.length; i++) {
                         if (sQuery === aData[i].getCells()[1].getText()) {
->>>>>>> 005ec0729b5e0c0d3a280f6ba9352861a11a5cba
                             aData[i].focus();
                             aData[i].setSelected(true);
                         }
                     }
                 }
-<<<<<<< HEAD
         },
 
         onSuggest: function (event) {
 			var sValue = event.getParameter("suggestValue"),
-				aFilters = [];
-			if (sValue) {
-				aFilters = [
-					new Filter([
-						new Filter("CHAR_NAME", function (sText) {
-							return (sText || "").toUpperCase().indexOf(sValue.toUpperCase()) > -1;
-						})
-					], false)
-				];
-			}
-
-			this.byId("searchField").getBinding("suggestionItems").filter(aFilters);
-			this.byId("searchField").suggest();
-		},
-
-        onSaveSeq:function(index){
-            var aData = this.byId("Secondarytable").getItems();
-            that.count = aData.length;
-            // that.count = index + 2;
-            var successCount = 0;
-            
-
-            for(var i=0; i<aData.length; i++){
-                // for(var i=0; i<index; i++){
-                var oEntry = {};
-
-                oEntry.Location = that.byId("idloc").getValue();
-                oEntry.product = that.byId("prodInput").getValue();
-                oEntry.CharNo = aData[i].getCells()[0].getText();
-                oEntry.charName = aData[i].getCells()[1].getText();
-                oEntry.SEQUENCE = i + 1;
-                oEntry.FLAG = "E";
-                oEntry.CHAR_TYPE = "S";
-
-                that.getModel("BModel").callFunction("/changeToPrimary", {
-                method: "GET",
-                urlParameters: {
-                    LOCATION_ID : oEntry.Location,
-                    PRODUCT_ID : oEntry.product,
-                    CHAR_NUM: oEntry.CharNo,
-                    SEQUENCE: oEntry.SEQUENCE,
-                    CHAR_TYPE:oEntry.CHAR_TYPE,
-                    FLAG: oEntry.FLAG,
-                },
-                success: function (oData) {
-                    sap.ui.core.BusyIndicator.hide();
-                    if(oData.changeToPrimary.includes("successful")){
-                    successCount = successCount + 1;
-                    }
-                    
-                    if(successCount === that.count){
-                        MessageToast.show(oData.changeToPrimary);
-                        that.onGetData();
-                    }
-                },
-                error: function (oData) {
-                    sap.ui.core.BusyIndicator.hide();
-                    MessageToast.show("Failed to changes the char");
-                },
-            });
-
-            }
-            
-
-        }
-
-
-
-
-=======
-            },
->>>>>>> 005ec0729b5e0c0d3a280f6ba9352861a11a5cba
-
-            onSuggest: function (event) {
-                var sValue = event.getParameter("suggestValue"),
                     aFilters = [];
-                if (sValue) {
                     aFilters = [
                         new Filter([
                             new Filter("CHAR_NAME", function (sText) {
@@ -668,7 +434,6 @@ sap.ui.define([
                             })
                         ], false)
                     ];
-                }
 
                 this.byId("searchField").getBinding("suggestionItems").filter(aFilters);
                 this.byId("searchField").suggest();

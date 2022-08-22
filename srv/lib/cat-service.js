@@ -1020,19 +1020,7 @@ module.exports = (srv) => {
             }
             // }
             if (lsresults.CHAR_TYPE !== "S") {
-                // const li_varcharps = await cds.run(
-                //     `SELECT *
-                //     FROM "CP_VARCHAR_PS"
-                //     WHERE "LOCATION_ID" = '` +
-                //     req.data.LOCATION_ID +
-                //     `'
-                //     AND "PRODUCT_ID" = '` +
-                //     req.data.PRODUCT_ID +
-                //     `'
-                //     AND "SEQUENCE" > `+
-                //     req.data.SEQUENCE + ``
-                // );
-                // }
+                
                 lsresults = {};
                 liresults = [];
                 for (let i = 0; i < li_varcharps.length; i++) {
@@ -1098,18 +1086,7 @@ module.exports = (srv) => {
         lsresults.LOCATION_ID = req.data.LOCATION_ID;
         lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
         lsresults.UNIQUE_ID = parseInt(req.data.UNIQUE_ID);
-        // const li_unique = await cds.run(
-        //     `SELECT *
-        //     FROM "CP_UNIQUE_ID_HEADER"
-        //     WHERE "LOCATION_ID" = '` +
-        //     req.data.LOCATION_ID +
-        //     `'
-        //     AND "PRODUCT_ID" = '` +
-        //     req.data.PRODUCT_ID +
-        //     `'
-        //     AND "UNIQUE_ID" = `+
-        //     lsresults.UNIQUE_ID + ``
-        // );
+        
         try {
             await cds.delete("CP_UNIQUE_ID_HEADER", lsresults);
         } catch (e) {
@@ -1133,6 +1110,115 @@ module.exports = (srv) => {
             // createResults.push(responseMessage);
         }
 
+        return responseMessage;
+    });
+    // Maintain partial configurations for new product
+    srv.on("maintainRestrHdr", async (req) => {
+        let liresults = [];
+        let lsresults = {};
+        let liProdChar = {};
+        var responseMessage;
+        if (req.data.FLAG === "C" || req.data.FLAG === "E") {
+                lsresults.LINE_ID     = req.data.PRODUCT_ID;
+                lsresults.LOCATION_ID = req.data.LOCATION_ID;
+                lsresults.RESTRICTION = req.data.RESTRICTION;
+                if (req.data.FLAG === "E") {
+                    try {
+                        await cds.delete("CP_RESTRICT_HEADER", lsresults);
+                    } catch (e) {
+                        //DONOTHING
+                    }
+                }
+                
+                lsresults.RTR_DESC    = req.data.RTR_DESC;
+                lsresults.VALID_FROM  = req.data.VALID_FROM;
+                lsresults.VALID_TO    = req.data.VALID_TO;
+                liresults.push(lsresults);
+                lsresults = {};
+            if (liresults.length > 0) {
+                try {
+                    await cds.run(INSERT.into("CP_RESTRICT_HEADER").entries(liresults));
+                    responseMessage = " Creation/Updation successful";
+                } catch (e) {
+                    //DONOTHING
+                    responseMessage = " Creation failed";
+                    // createResults.push(responseMessage);
+                }
+            }
+        }
+        else if (req.data.FLAG === "D") {
+                lsresults.LINE_ID     = req.data.PRODUCT_ID;
+                lsresults.LOCATION_ID = req.data.LOCATION_ID;
+                lsresults.RESTRICTION = req.data.RESTRICTION;
+                if (req.data.FLAG === "E" && i === 0) {
+                    try {
+                        await cds.delete("CP_RESTRICT_HEADER", lsresults);
+                    } catch (e) {
+                        //DONOTHING
+                    }
+                }
+        }
+        lsresults = {};
+        return responseMessage;
+    });
+    // Retriction rule
+    // Maintain partial configurations for new product
+    srv.on("maintainRestrDet", async (req) => {
+        let liresults = [];
+        let lsresults = {};
+        let liRtrChar = {};
+        var responseMessage;
+        liRtrChar = JSON.parse(req.data.RTRCHAR);
+        if (req.data.FLAG === "C" || req.data.FLAG === "E") {
+            for (var i = 0; i < liRtrChar.length; i++) {
+                lsresults.RESTRICTION = liRtrChar[i].RESTRICTION;
+                lsresults.RTR_COUNTER = liRtrChar[i].RTR_COUNTER;
+                lsresults.CLASS_NUM = liRtrChar[i].CLASS_NUM;
+                lsresults.CHAR_NUM = liRtrChar[i].CHAR_NUM;
+                lsresults.CHAR_COUNTER = liRtrChar[i].CHAR_COUNTER;
+                lsresults.CHARVAL_NUM = liRtrChar[i].CHARVAL_NUM;
+                if (req.data.FLAG === "E" && i === 0) {
+                    try {
+                        await cds.delete("CP_NEWPROD_CHAR", lsresults);
+                    } catch (e) {
+                        //DONOTHING
+                    }
+                }
+                lsresults.OD_CONDITION = liRtrChar[i].OD_CONDITION;
+                lsresults.ROW_ID = liRtrChar[i].ROW_ID;
+                liresults.push(lsresults);
+                lsresults = {};
+            }
+            if (liresults.length > 0) {
+                try {
+                    await cds.run(INSERT.into("CP_RESTRICT_DETAILS").entries(liresults));
+                    responseMessage = " Creation/Updation successful";
+                } catch (e) {
+                    //DONOTHING
+                    responseMessage = " Creation failed";
+                    // createResults.push(responseMessage);
+                }
+            }
+        }
+        else if (req.data.FLAG === "D") {
+            for (var i = 0; i < liRtrChar.length; i++) {                
+                lsresults.RESTRICTION = liRtrChar[i].RESTRICTION;
+                lsresults.RTR_COUNTER = liRtrChar[i].RTR_COUNTER;
+                lsresults.CLASS_NUM = liRtrChar[i].CLASS_NUM;
+                lsresults.CHAR_NUM = liRtrChar[i].CHAR_NUM;
+                lsresults.CHAR_COUNTER = liRtrChar[i].CHAR_COUNTER;
+                lsresults.CHARVAL_NUM = liRtrChar[i].CHARVAL_NUM;
+                if (req.data.FLAG === "E" && i === 0) {
+                    try {
+                        await cds.delete("CP_RESTRICT_DETAILS", lsresults);
+                        break;
+                    } catch (e) {
+                        //DONOTHING
+                    }
+                }
+            }
+        }
+        lsresults = {};
         return responseMessage;
     });
 };

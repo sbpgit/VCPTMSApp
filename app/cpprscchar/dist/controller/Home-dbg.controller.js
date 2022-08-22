@@ -422,12 +422,11 @@ sap.ui.define([
                         }
                     }
                 }
-            },
+        },
 
-            onSuggest: function (event) {
-                var sValue = event.getParameter("suggestValue"),
+        onSuggest: function (event) {
+			var sValue = event.getParameter("suggestValue"),
                     aFilters = [];
-                if (sValue) {
                     aFilters = [
                         new Filter([
                             new Filter("CHAR_NAME", function (sText) {
@@ -435,7 +434,6 @@ sap.ui.define([
                             })
                         ], false)
                     ];
-                }
 
                 this.byId("searchField").getBinding("suggestionItems").filter(aFilters);
                 this.byId("searchField").suggest();

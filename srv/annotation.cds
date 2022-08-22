@@ -1411,3 +1411,59 @@ annotate V_JOBSTATUS with @(
         }]
     }]
 );
+//Location Product Line
+annotate service.PROD_LOC_LINE with @(
+    UI        : {
+        SelectionFields                : [
+            LOCATION_ID,
+            PRODUCT_ID
+        ],
+        LineItem                       : [
+            {
+                $Type : 'UI.DataField', 
+                Value : LOCATION_ID,
+                ![@UI.Importance]   : #High
+            },{
+                $Type : 'UI.DataField', 
+                Value : LINE_ID,
+                ![@UI.Importance]   : #High
+            },
+            {
+                $Type : 'UI.DataField', 
+                Value : PRODUCT_ID,
+                ![@UI.Importance]   : #High
+            }
+        ],
+        HeaderInfo                     : {
+            Title          : {Value : LOCATION_ID},
+            Description    : {Value : PRODUCT_ID},
+            TypeName       : 'Authorization',
+            TypeNamePlural : 'Authorizations'
+        },
+        FieldGroup #Details            : {Data : [
+            {
+                $Type : 'UI.DataField',
+                Value : LOCATION_ID
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : LINE_ID
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : PRODUCT_ID
+            }
+        ]}
+    },
+    // Page Facets
+    UI.Facets : [{
+        $Type  : 'UI.CollectionFacet',
+        ID     : 'PRODLINE',
+        Label  : 'Location-Product-Line',
+        Facets : [{
+            $Type  : 'UI.ReferenceFacet',
+            Label  : 'Location-Product-Line',
+            Target : '@UI.FieldGroup#Details'
+        }]
+    }]
+);

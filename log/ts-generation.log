@@ -22246,3 +22246,147 @@
   label: [32m'Timeseries'[39m,
   timestamp: [32m'2022-08-09T11:07:12.713Z'[39m
 }
+{
+  message: [32m'Started timeseries Service'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-08-18T11:51:53.816Z'[39m
+}
+{
+  message: [32m'Date: 2022-06-20'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-08-18T11:51:54.707Z'[39m
+}
+{
+  message: [32m'Date: 2022-06-27'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-08-18T11:52:02.741Z'[39m
+}
+{
+  message: [32m'Date: 2022-07-04'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-08-18T11:52:11.154Z'[39m
+}
+{
+  message: [32m'Date: 2022-07-11'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-08-18T11:52:19.055Z'[39m
+}
+{
+  message: [32m'Date: 2022-07-18'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-08-18T11:52:27.189Z'[39m
+}
+{
+  message: [32m'Date: 2022-07-25'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-08-18T11:52:35.170Z'[39m
+}
+{
+  message: [32m'Date: 2022-08-01'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-08-18T11:52:43.385Z'[39m
+}
+{
+  message: [32m'Date: 2022-08-08'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-08-18T11:52:51.526Z'[39m
+}
+{
+  message: [32m'Date: 2022-08-15'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-08-18T11:52:59.574Z'[39m
+}
+{
+  message: [32m'Date: 2022-08-22'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-08-18T11:53:07.577Z'[39m
+}
+{
+  message: [32m'Date: 2022-08-29'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-08-18T11:53:15.619Z'[39m
+}
+{
+  message: [32m'Date: 2022-09-05'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-08-18T11:53:24.026Z'[39m
+}
+{
+  message: [32m'Date: 2022-09-12'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-08-18T11:53:31.834Z'[39m
+}
+{
+  message: [32m'Date: 2022-09-19'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-08-18T11:53:40.233Z'[39m
+}
+{
+  message: [32m'Date: 2022-10-03'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-08-18T11:53:48.371Z'[39m
+}
+{
+  message: [32m'Date: 2022-10-10'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-08-18T11:53:56.515Z'[39m
+}
+{
+  message: [32m'Date: 2022-10-17'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-08-18T11:54:04.564Z'[39m
+}
+{
+  message: [32m'Date: 2022-10-24'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-08-18T11:54:12.692Z'[39m
+}
+{
+  message: [32m'Date: 2022-11-07'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-08-18T11:54:20.864Z'[39m
+}
+{
+  message: [32m'Date: 2022-11-14'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-08-18T11:54:29.167Z'[39m
+}
+{
+  message: [32m'Date: 2022-11-21'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-08-18T11:54:37.312Z'[39m
+}
+{
+  message: [32m'Completed timeseries Service'[39m,
+  level: [32m'info'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-08-18T11:54:45.592Z'[39m
+}
+{
+  level: [32m'info'[39m,
+  message: [32m'Processing time : 2 Minutes'[39m,
+  label: [32m'Timeseries'[39m,
+  timestamp: [32m'2022-08-18T11:54:45.593Z'[39m
+}

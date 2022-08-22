@@ -54,13 +54,25 @@ module.exports = cds.service.impl(async function () {
             var vWeekDate = dateJSONToEDM(req[i].PERIODID4_TSTAMP);
             var vScenario = 'BSL_SCENARIO';
             req[i].PERIODID4_TSTAMP = vWeekDate;
-            await cds.run(
-                    `DELETE FROM "CP_IBP_FUTUREDEMAND" WHERE "LOCATION_ID" = '`+ req[i].LOCID +`' 
-                                                      AND "PRODUCT_ID" = '`+ req[i].PRDID +`'
-                                                      AND "VERSION" = '` + req[i].VERSIONID + `'
-                                                      AND "SCENARIO" = '` + vScenario + `'
-                                                      AND "WEEK_DATE" = '` + vWeekDate +  `'`
-            );
+            // try {
+                await DELETE.from('CP_IBP_FUTUREDEMAND')
+                    .where(`LOCATION_ID = '${req[i].LOCID}' 
+                        AND PRODUCT_ID = '${req[i].PRDID}'
+                        AND VERSION = '${req[i].VERSIONID}'
+                        AND SCENARIO = '${vScenario}'
+                        AND WEEK_DATE       = '${vWeekDate}'`)
+            // await cds.run(
+            //         `DELETE FROM "CP_IBP_FUTUREDEMAND" WHERE "LOCATION_ID" = '`+ req[i].LOCID +`' 
+            //                                           AND "PRODUCT_ID" = '`+ req[i].PRDID +`'
+            //                                           AND "VERSION" = '` + req[i].VERSIONID + `'
+            //                                           AND "SCENARIO" = '` + vScenario + `'
+            //                                           AND "WEEK_DATE" = '` + vWeekDate +  `'`
+            // );
+            // }
+            // catch(e)
+            // {
+            //     console.log(e);
+            // }
             let modQuery = 'INSERT INTO "CP_IBP_FUTUREDEMAND" VALUES (' +
                 "'" + req[i].LOCID + "'" + "," +
                 "'" + req[i].PRDID + "'" + "," +

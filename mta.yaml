@@ -163,6 +163,14 @@ modules:
       - cpappcpauthorization.zip
       name: cpappcpauthorization
       target-path: resources/
+    - artifacts:
+      - cpappcpauthentication.zip
+      name: cpappcpauthentication
+      target-path: resources/
+    - artifacts:
+      - cpappcpprodlocline.zip
+      name: cpappcpprodlocline
+      target-path: resources/
 - name: cpodpcpodprofiles
   type: html5
   path: app/cp_odprofiles
@@ -402,6 +410,26 @@ modules:
 - name: cpappcpauthorization
   type: html5
   path: app/cpauthorization
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappcpauthentication
+  type: html5
+  path: app/cpauthentication
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappcpprodlocline
+  type: html5
+  path: app/cp_prodlocline
   build-parameters:
     build-result: dist
     builder: custom

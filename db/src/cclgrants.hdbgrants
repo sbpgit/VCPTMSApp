@@ -1,6 +1,7 @@
 {
     "CCL1_ACCESS": {
-        "object_owner": {
+        "object_owner": {            
+            "roles" : ["CL1ROLE" ],
             "global_object_privileges": [
                 {
                     "name": "VCPS4HSource",
@@ -15,6 +16,7 @@
             ]
         },
         "application_user": {
+            "roles" : ["CL1ROLE" ],
             "global_object_privileges": [
                 {
                     "name": "VCPS4HSource",
@@ -30,3 +32,15 @@
         }
     }
 }
+// "object_owner": { 
+//     "roles": [
+//         "DB_CONFIG_PROD_CLIENT1::external_access_g"
+//     ]
+// },
+// "application_user": {
+//     "roles": [
+//         "DB_CONFIG_PROD_CLIENT1::external_access"
+//     ]
+// }
+// }
+// }

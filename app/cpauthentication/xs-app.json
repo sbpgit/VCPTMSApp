@@ -1,0 +1,54 @@
+{
+    "welcomeFile": "/index.html",
+    "authenticationMethod": "route",
+    "logout": {
+        "logoutEndpoint": "/app-logout",
+        "logoutPage": "/"
+    },
+    "routes": [
+        {
+            "source": "^/catalog/(.*)$",
+            "target": "/catalog/$1",
+            "destination": "ConfigProd",
+            "authenticationType": "xsuaa",
+            "csrfProtection": false
+        },
+        {
+            "source": "^/resources/(.*)$",
+            "target": "/resources/$1",
+            "authenticationType": "none",
+            "destination": "ui5"
+        },
+        {
+            "source": "^/userapi(.*)$",
+            "target": "$1",
+            "service": "sap-approuter-userapi"
+        },
+        {
+            "source": "^/USERAPI/(.*)$",
+            "target": "/USERAPI/$1",
+            "destination": "USERAPI",
+            "authenticationType": "xsuaa",
+            "csrfProtection": false
+        },
+        {
+            "source": "^/test-resources/(.*)$",
+            "target": "/test-resources/$1",
+            "authenticationType": "none",
+            "destination": "ui5"
+        },
+        {
+            "source": "^(.*)$",
+            "target": "$1",
+            "service": "html5-apps-repo-rt",
+            "authenticationType": "xsuaa"
+        },
+        {
+            "source": "^/(.*)$",
+            "target": "$1",
+            "destination": "srv-api",
+            "csrfProtection": true,
+            "authenticationType": "xsuaa"
+        }
+    ]
+}

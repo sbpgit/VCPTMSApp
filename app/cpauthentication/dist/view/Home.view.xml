@@ -1,0 +1,14 @@
+<mvc:View controllerName="cpapp.cpauthentication.controller.Home"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns="sap.m">
+    <Page id="page" title="{i18n>title}">
+        <content>
+        <VBox>
+        <Label text = "Display Name : {userModel>/decodedJWTToken/givenName} {userModel>/decodedJWTToken/family_name}"/>
+        <Label text = "Email : {userModel>/decodedJWTToken/email} "/>
+        <Link text="/user-api/attributes" href="/user-api/attributes" />
+       
+        </VBox>
+    </content>
+    </Page>
+</mvc:View>

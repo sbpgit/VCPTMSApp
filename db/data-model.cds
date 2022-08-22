@@ -530,6 +530,7 @@ context cp {
         key PRODUCT_ID   : String(40)   @title : 'New Product';
         UNIQUE_DESC      : String(50)   @title: 'Description';
         UID_TYPE         : String(1)    @title: 'Primary Unique ID';
+        UID_RATE         : Decimal(13,2);
         ACTIVE           : Boolean;
     }
     entity UNIQUE_ID_ITEM{
@@ -538,6 +539,7 @@ context cp {
         key PRODUCT_ID  : String(40)    @title : 'New Product';
         key CHAR_NUM    : String(30)    @title : 'Charateristic Name';
             CHARVAL_NUM : String(70)    @title : 'Charateristic Value';
+            UID_CHAR_RATE         : Decimal(13,2);
     }
     entity UID_PRI_HEADER{
         key UNIQUE_ID    : Integer       @title : 'Unique ID';
@@ -633,7 +635,13 @@ context cp {
             OD_CONDITION : String(2)  @title : 'Restriction condition ';
             ROW_ID       : Integer    @title : 'Attribute Index ';
     };
-
+    
+    // location-Product-Line
+    entity PROD_LOC_LINE {
+        key LOCATION_ID : String(4)  @title : 'Location ';
+        key LINE_ID     : String(40) @title : 'Line';
+        key PRODUCT_ID  : String(40) @title : 'Product';
+    };
 }
 
 @cds.persistence.exists
