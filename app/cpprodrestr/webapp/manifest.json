@@ -136,8 +136,8 @@
                                         "route": "getProdRestrObjectPage"
                                     }
                                 }
-                            },
-                            "initialLoad": "true"
+                            },                           
+                            "initialLoad": true
                         }
                     }
                 },
