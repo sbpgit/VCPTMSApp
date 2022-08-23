@@ -140,8 +140,8 @@
                 "credentials": {
                     "apiurl": "https://api.authentication.us10.hana.ondemand.com",
                     "clientid": "sb-config_products!t94427",
-                    "clientsecret": "Glsb6fGSOB0p8glsKQMp2xT+huI=",
-                    "credential-type": "instance-secret",
+                    "clientsecret": "6cbcc755-dfb1-46b5-894a-d0f3445615ac$jBj_K0E5cKsbOBaZJm6XeaF2kgO2HKYtxHKBFKadMe0=",
+                    "credential-type": "binding-secret",
                     "identityzone": "vcpprovider-sc0jeojq",
                     "identityzoneid": "9d12f6fd-bdfd-4b20-98a6-5993fba38534",
                     "sburl": "https://internal-xsuaa.authentication.us10.hana.ondemand.com",

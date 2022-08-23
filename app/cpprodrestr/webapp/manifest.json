@@ -1,7 +1,7 @@
 {
     "_version": "1.40.0",
     "sap.app": {
-        "id": "cpapp.cpprodlocline",
+        "id": "cpapp.cpprodrestr",
         "type": "application",
         "i18n": "i18n/i18n.properties",
         "applicationVersion": {
@@ -13,7 +13,7 @@
         "sourceTemplate": {
             "id": "@sap/generator-fiori:lrop",
             "version": "1.7.1",
-            "toolsId": "149a66ad-f767-490e-abc1-a58431121de4"
+            "toolsId": "e01f7d29-0301-457b-8c1d-96bfc89d3ac3"
         },
         "dataSources": {
             "mainService": {
@@ -37,12 +37,12 @@
         },
         "crossNavigation": {
             "inbounds": {
-                "cpapp-cpprodlocline-inbound": {
+                "cpapp-cpprodrestr-inbound": {
                     "signature": {
                         "parameters": {},
                         "additionalParameters": "allowed"
                     },
-                    "semanticObject": "prodloc",
+                    "semanticObject": "prodrestr",
                     "action": "Display",
                     "title": "{{flpTitle}}",
                     "subTitle": "{{flpSubtitle}}",
@@ -86,7 +86,7 @@
             "i18n": {
                 "type": "sap.ui.model.resource.ResourceModel",
                 "settings": {
-                    "bundleName": "cpapp.cpprodlocline.i18n.i18n"
+                    "bundleName": "cpapp.cpprodrestr.i18n.i18n"
                 }
             },
             "": {
@@ -112,43 +112,43 @@
             "routes": [
                 {
                     "pattern": ":?query:",
-                    "name": "getProdloclineList",
-                    "target": "getProdloclineList"
+                    "name": "getProdRestrList",
+                    "target": "getProdRestrList"
                 },
                 {
-                    "pattern": "getProdlocline({key}):?query:",
-                    "name": "getProdloclineObjectPage",
-                    "target": "getProdloclineObjectPage"
+                    "pattern": "getProdRestr({key}):?query:",
+                    "name": "getProdRestrObjectPage",
+                    "target": "getProdRestrObjectPage"
                 }
             ],
             "targets": {
-                "getProdloclineList": {
+                "getProdRestrList": {
                     "type": "Component",
-                    "id": "getProdloclineList",
+                    "id": "getProdRestrList",
                     "name": "sap.fe.templates.ListReport",
                     "options": {
                         "settings": {
-                            "entitySet": "getProdlocline",
+                            "entitySet": "getProdRestr",
                             "variantManagement": "Page",
                             "navigation": {
-                                "getProdlocline": {
+                                "getProdRestr": {
                                     "detail": {
-                                        "route": "getProdloclineObjectPage"
+                                        "route": "getProdRestrObjectPage"
                                     }
                                 }
-                            },                           
-                            "initialLoad": true
+                            },
+                            "initialLoad": "true"
                         }
                     }
                 },
-                "getProdloclineObjectPage": {
+                "getProdRestrObjectPage": {
                     "type": "Component",
-                    "id": "getProdloclineObjectPage",
+                    "id": "getProdRestrObjectPage",
                     "name": "sap.fe.templates.ObjectPage",
                     "options": {
                         "settings": {
                             "editableHeaderContent": false,
-                            "entitySet": "getProdlocline"
+                            "entitySet": "getProdRestr"
                         }
                     }
                 }

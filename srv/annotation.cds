@@ -269,86 +269,86 @@ annotate service.CUSTOMERGROUP with @(
     }]
 );
 
-// Product attributes
-annotate service.PROD_ATTRIBUTES with @(
-    UI        : {
-        SelectionFields     : [
-            PRODUCT_ID,
-            PROD_FAMILY
-        ],
-        LineItem            : [
-            {
-                $Type : 'UI.DataField', 
-                Value : PRODUCT_ID,
-                ![@UI.Importance]   : #High
-            },
-            {
-                $Type : 'UI.DataField', 
-                Value : PROD_GROUP,
-                ![@UI.Importance]   : #High
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : PROD_FAMILY,
-                ![@UI.Importance]   : #High
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : PROD_SERIES,
-                ![@UI.Importance]   : #High
-            },
-            {
-                $Type : 'UI.DataField', 
-                Value : PROD_MODEL,
-                ![@UI.Importance]   : #High
-            },
-            {
-                $Type : 'UI.DataField', 
-                Value : PROD_MDLRANGE,
-                ![@UI.Importance]   : #High
-            }
-        ],
-        HeaderInfo          : {
-            Title          : {Value : LOCATION_ID},
-            Description    : {Value : PRODUCT_ID},
-            TypeName       : 'Product',
-            TypeNamePlural : 'Products',
-        },
-        FieldGroup #Details : {Data : [
-            {
-                $Type : 'UI.DataField',
-                Value : PROD_FAMILY
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : PROD_GROUP
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : PROD_SERIES
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : PROD_MODEL
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : PROD_MDLRANGE
-            }
-        ]}
-    },
-    // Page Facets
-    UI.Facets : [{
-        $Type  : 'UI.CollectionFacet',
-        ID     : 'ProdaTR',
-        Label  : 'Product Attributes',
-        Facets : [{
-            $Type  : 'UI.ReferenceFacet',
-            Label  : 'Product Attributes',
-            Target : '@UI.FieldGroup#Details'
-        }]
-    }]
-);
+// // Product attributes
+// annotate service.PROD_ATTRIBUTES with @(
+//     UI        : {
+//         SelectionFields     : [
+//             PRODUCT_ID,
+//             PROD_FAMILY
+//         ],
+//         LineItem            : [
+//             {
+//                 $Type : 'UI.DataField', 
+//                 Value : PRODUCT_ID,
+//                 ![@UI.Importance]   : #High
+//             },
+//             {
+//                 $Type : 'UI.DataField', 
+//                 Value : PROD_GROUP,
+//                 ![@UI.Importance]   : #High
+//             },
+//             {
+//                 $Type : 'UI.DataField',
+//                 Value : PROD_FAMILY,
+//                 ![@UI.Importance]   : #High
+//             },
+//             {
+//                 $Type : 'UI.DataField',
+//                 Value : PROD_SERIES,
+//                 ![@UI.Importance]   : #High
+//             },
+//             {
+//                 $Type : 'UI.DataField', 
+//                 Value : PROD_MODEL,
+//                 ![@UI.Importance]   : #High
+//             },
+//             {
+//                 $Type : 'UI.DataField', 
+//                 Value : PROD_MDLRANGE,
+//                 ![@UI.Importance]   : #High
+//             }
+//         ],
+//         HeaderInfo          : {
+//             Title          : {Value : LOCATION_ID},
+//             Description    : {Value : PRODUCT_ID},
+//             TypeName       : 'Product',
+//             TypeNamePlural : 'Products',
+//         },
+//         FieldGroup #Details : {Data : [
+//             {
+//                 $Type : 'UI.DataField',
+//                 Value : PROD_FAMILY
+//             },
+//             {
+//                 $Type : 'UI.DataField',
+//                 Value : PROD_GROUP
+//             },
+//             {
+//                 $Type : 'UI.DataField',
+//                 Value : PROD_SERIES
+//             },
+//             {
+//                 $Type : 'UI.DataField',
+//                 Value : PROD_MODEL
+//             },
+//             {
+//                 $Type : 'UI.DataField',
+//                 Value : PROD_MDLRANGE
+//             }
+//         ]}
+//     },
+//     // Page Facets
+//     UI.Facets : [{
+//         $Type  : 'UI.CollectionFacet',
+//         ID     : 'ProdaTR',
+//         Label  : 'Product Attributes',
+//         Facets : [{
+//             $Type  : 'UI.ReferenceFacet',
+//             Label  : 'Product Attributes',
+//             Target : '@UI.FieldGroup#Details'
+//         }]
+//     }]
+// );
 
 // Product Configuration
 
@@ -461,106 +461,106 @@ annotate service.SALESH_CFG_SMRY with @(
 );
 
 //PIR
-annotate service.PIR_CH with @(
-    UI        : {
-        SelectionFields         : [
-            PRODUCT_ID,
-            PLANT
-        ],
-        LineItem                : [
-            {
-                $Type : 'UI.DataField', 
-                Value : PRODUCT_ID
-            },
-            {
-                $Type : 'UI.DataField', 
-                Value : PLANT
-            },
-            {
-                $Type : 'UI.DataField', 
-                Value : CHAR_NAME
-            },
-            {
-                $Type : 'UI.DataField', 
-                Value : CHAR_VALUE
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : CH_QTY
-            }
+// annotate service.PIR_CH with @(
+//     UI        : {
+//         SelectionFields         : [
+//             PRODUCT_ID,
+//             PLANT
+//         ],
+//         LineItem                : [
+//             {
+//                 $Type : 'UI.DataField', 
+//                 Value : PRODUCT_ID
+//             },
+//             {
+//                 $Type : 'UI.DataField', 
+//                 Value : PLANT
+//             },
+//             {
+//                 $Type : 'UI.DataField', 
+//                 Value : CHAR_NAME
+//             },
+//             {
+//                 $Type : 'UI.DataField', 
+//                 Value : CHAR_VALUE
+//             },
+//             {
+//                 $Type : 'UI.DataField',
+//                 Value : CH_QTY
+//             }
 
-        ],
-        HeaderInfo              : {
-            Title          : {Value : PRODUCT_ID},
-            Description    : {Value : PLANT},
-            TypeName       : 'PIR Char',
-            TypeNamePlural : 'PIR Chars',
-        },
-        HeaderFacets            : [{
-            $Type             : 'UI.ReferenceFacet',
-            Target            : '@UI.FieldGroup#Description',
-            ![@UI.Importance] : #Medium
-        }],
-        FieldGroup #Description : {Data : [{
-            $Type : 'UI.DataField',
-            Value : PLANT
-        }]},
-        FieldGroup #Details     : {Data : [
-            {
-                $Type : 'UI.DataField',
-                Value : REQ_DATE
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : PT_NUMBER
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : PT_LINE
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : SESSION_ID
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : CHAR_NAME
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : CHAR_VALUE
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : FLAG_USAGE
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : PROCESS_FLAG
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : CH_QTY
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : PLANT
-            }
-        ]},
+//         ],
+//         HeaderInfo              : {
+//             Title          : {Value : PRODUCT_ID},
+//             Description    : {Value : PLANT},
+//             TypeName       : 'PIR Char',
+//             TypeNamePlural : 'PIR Chars',
+//         },
+//         HeaderFacets            : [{
+//             $Type             : 'UI.ReferenceFacet',
+//             Target            : '@UI.FieldGroup#Description',
+//             ![@UI.Importance] : #Medium
+//         }],
+//         FieldGroup #Description : {Data : [{
+//             $Type : 'UI.DataField',
+//             Value : PLANT
+//         }]},
+//         FieldGroup #Details     : {Data : [
+//             {
+//                 $Type : 'UI.DataField',
+//                 Value : REQ_DATE
+//             },
+//             {
+//                 $Type : 'UI.DataField',
+//                 Value : PT_NUMBER
+//             },
+//             {
+//                 $Type : 'UI.DataField',
+//                 Value : PT_LINE
+//             },
+//             {
+//                 $Type : 'UI.DataField',
+//                 Value : SESSION_ID
+//             },
+//             {
+//                 $Type : 'UI.DataField',
+//                 Value : CHAR_NAME
+//             },
+//             {
+//                 $Type : 'UI.DataField',
+//                 Value : CHAR_VALUE
+//             },
+//             {
+//                 $Type : 'UI.DataField',
+//                 Value : FLAG_USAGE
+//             },
+//             {
+//                 $Type : 'UI.DataField',
+//                 Value : PROCESS_FLAG
+//             },
+//             {
+//                 $Type : 'UI.DataField',
+//                 Value : CH_QTY
+//             },
+//             {
+//                 $Type : 'UI.DataField',
+//                 Value : PLANT
+//             }
+//         ]},
 
-    },
-    // Page Facets
-    UI.Facets : [{
-        $Type  : 'UI.CollectionFacet',
-        ID     : 'PIRDetails',
-        Label  : 'PIR Config Details',
-        Facets : [{
-            $Type  : 'UI.ReferenceFacet',
-            Label  : 'PIR Config Details',
-            Target : '@UI.FieldGroup#Details'
-        }]
-    }]
-);
+//     },
+//     // Page Facets
+//     UI.Facets : [{
+//         $Type  : 'UI.CollectionFacet',
+//         ID     : 'PIRDetails',
+//         Label  : 'PIR Config Details',
+//         Facets : [{
+//             $Type  : 'UI.ReferenceFacet',
+//             Label  : 'PIR Config Details',
+//             Target : '@UI.FieldGroup#Details'
+//         }]
+//     }]
+// );
 
 //TS_OBJHEADER
 annotate service.TS_OBJDEPHDR with @(
@@ -981,7 +981,7 @@ annotate V_SALESHCFG_CHARVAL with @(
 );
 
 /*******************************************/
-// IBP Future Character Plan
+// Product Accessnode
 /*******************************************/
 annotate service.PROD_ACCNODE with @(
     UI        : {
@@ -1463,6 +1463,84 @@ annotate service.PROD_LOC_LINE with @(
         Facets : [{
             $Type  : 'UI.ReferenceFacet',
             Label  : 'Location-Product-Line',
+            Target : '@UI.FieldGroup#Details'
+        }]
+    }]
+);
+
+//Product restrictions
+annotate service.PRODRESTRICT with @(
+    UI        : {
+        SelectionFields                : [
+            LOCATION_ID,
+            PRODUCT_ID,
+            RESTRICTION
+        ],
+        LineItem                       : [
+            {
+                $Type : 'UI.DataField', 
+                Value : LOCATION_ID,
+                ![@UI.Importance]   : #High
+            },
+            {
+                $Type : 'UI.DataField', 
+                Value : PRODUCT_ID,
+                ![@UI.Importance]   : #High
+            },{
+                $Type : 'UI.DataField', 
+                Value : RESTRICTION,
+                ![@UI.Importance]   : #High
+            },{
+                $Type : 'UI.DataField', 
+                Value : RTR_QTY,
+                ![@UI.Importance]   : #High
+            },{
+                $Type : 'UI.DataField', 
+                Value : VALID_FROM,
+                ![@UI.Importance]   : #High
+            },{
+                $Type : 'UI.DataField', 
+                Value : VALID_TO,
+                ![@UI.Importance]   : #High
+            }
+        ],
+        HeaderInfo                     : {
+            Title          : {Value : LOCATION_ID},
+            Description    : {Value : PRODUCT_ID},
+            TypeName       : 'Authorization',
+            TypeNamePlural : 'Authorizations'
+        },
+        FieldGroup #Details            : {Data : [
+            {
+                $Type : 'UI.DataField', 
+                Value : LOCATION_ID
+            },
+            {
+                $Type : 'UI.DataField', 
+                Value : PRODUCT_ID
+            },{
+                $Type : 'UI.DataField', 
+                Value : RESTRICTION
+            },{
+                $Type : 'UI.DataField', 
+                Value : RTR_QTY
+            },{
+                $Type : 'UI.DataField', 
+                Value : VALID_FROM
+            },{
+                $Type : 'UI.DataField', 
+                Value : VALID_TO
+            }
+        ]}
+    },
+    // Page Facets
+    UI.Facets : [{
+        $Type  : 'UI.CollectionFacet',
+        ID     : 'PRODRTR',
+        Label  : 'Product Restrictions',
+        Facets : [{
+            $Type  : 'UI.ReferenceFacet',
+            Label  : 'Product Restrictions',
             Target : '@UI.FieldGroup#Details'
         }]
     }]

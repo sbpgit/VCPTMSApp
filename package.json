@@ -75,7 +75,8 @@
         "deploy": "cf deploy mta_archives/archive.mtar --retries 1",
         "watch-cpauthorization": "cds watch --open cpauthorization/webapp/index.html?sap-ui-xx-viewCache=false",
         "watch-cpauthentication": "cds watch --open cpauthentication/webapp/index.html?sap-ui-xx-viewCache=false",
-        "watch-cp_prodlocline": "cds watch --open cp_prodlocline/webapp/index.html?sap-ui-xx-viewCache=false"
+        "watch-cp_prodlocline": "cds watch --open cp_prodlocline/webapp/index.html?sap-ui-xx-viewCache=false",
+        "watch-cpprodrestr": "cds watch --open cpprodrestr/webapp/index.html?sap-ui-xx-viewCache=false"
     },
     "eslintConfig": {
         "extends": "eslint:recommended",
@@ -223,7 +224,8 @@
         "app/cpunique",
         "app/cpauthorization",
         "app/cpauthentication",
-        "app/cp_prodlocline"
+        "app/cp_prodlocline",
+        "app/cpprodrestr"
     ],
     "devDependencies": {
         "@sap/ux-specification": "^1.102.4",

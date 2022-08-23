@@ -13,7 +13,8 @@ using {
     V_GETVARCHARPS,
     V_UNIQUE_ID_ITEM,
     V_UNIQUE_ID,
-    V_ODRESTRICT
+    V_ODRESTRICT,
+    V_LOCPRODLINERTR
 } from '../db/data-model';
 // using V_ODPROFILES from '../db/data-model';
 using V_BOMODCOND from '../db/data-model';
@@ -71,12 +72,12 @@ service CatalogService @(impl : './lib/cat-service.js'){
     entity getBomOD             as projection on od.BOM_OBJDEPENDENCY;
 
     // Get PIR characteristics
-    @readonly
-    entity getPirch             as projection on od.PIR_CH;
+    // @readonly
+    // entity getPirch             as projection on od.PIR_CH;
 
     //Get Product Attributes
-    @readonly
-    entity getProdAttr          as projection on od.PROD_ATTRIBUTES;
+    // @readonly
+    // entity getProdAttr          as projection on od.PROD_ATTRIBUTES;
 
     //History timeseries for Object dependency
    
@@ -101,9 +102,9 @@ service CatalogService @(impl : './lib/cat-service.js'){
     @readonly
     entity getIBPFplan          as projection on V_FCHARPLAN;
 
-    // IBP timeseries result plan
-    @readonly
-    entity getIBPFres           as projection on od.IBP_RESULTPLAN;
+    // // IBP timeseries result plan
+    // @readonly
+    // entity getIBPFres           as projection on od.IBP_RESULTPLAN;
 
 
     // Get sales history configuration and its characteristics
@@ -127,9 +128,9 @@ service CatalogService @(impl : './lib/cat-service.js'){
     // Fetch OD profiles
     entity getODProfiles        as projection on V_ODPROFILES;
     // service to hold input parameters for profile parameters
-    entity genProfileParam      as projection on od.IP_PROFILEMETH_PARA;
+    // entity genProfileParam      as projection on od.IP_PROFILEMETH_PARA;
     // Service for OD profiles input
-    entity genProfileOD         as projection on od.IP_PROFILEOD;
+    // entity genProfileOD         as projection on od.IP_PROFILEOD;
     // Get products, location and class  details
     entity getProdClass         as projection on V_PRODCLSCHAR;
     // Get products, location and class  details
@@ -229,7 +230,12 @@ service CatalogService @(impl : './lib/cat-service.js'){
     entity getODHdrRstr         as projection on V_ODRESTRICT;
 
     @odata.draft.enabled
+    entity getProdRestr         as projection on od.PRODRESTRICT;
+
+    @odata.draft.enabled
     entity getProdlocline       as projection on od.PROD_LOC_LINE;
+
+    entity getProdLocRtrLine    as projection on V_LOCPRODLINERTR;
     
     function maintainRestrHdr(LOCATION_ID: String(4), LINE_ID: String(40), RESTRICTION : String(30), RTR_DESC    : String(30), VALID_FROM  : Date , VALID_TO : Date, Flag: String(1)) returns String;
     
