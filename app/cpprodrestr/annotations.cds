@@ -19,7 +19,7 @@ annotate service.getProdRestr with {
         ValueList       : {
             $Type          : 'Common.ValueListType',
             Label          : 'Products',
-            CollectionPath : 'getProducts',
+            CollectionPath : 'getLocProd',
             Parameters     : [
             {
                 $Type             : 'Common.ValueListParameterOut',
@@ -29,7 +29,7 @@ annotate service.getProdRestr with {
             {
                 $Type             : 'Common.ValueListParameterIn',
                 LocalDataProperty : LOCATION_ID,
-                ValueListProperty : 'PRODUCT_ID'
+                ValueListProperty : 'LOCATION_ID'
             }
          ]
         }   
@@ -37,18 +37,23 @@ annotate service.getProdRestr with {
     RESTRICTION @Common : {
         ValueList       : {
             $Type          : 'Common.ValueListType',
-            Label          : 'Products',
-            CollectionPath : 'getProducts',
+            Label          : 'Restrictions',
+            CollectionPath : 'getProdLocRtrLine',
             Parameters     : [
             {
                 $Type             : 'Common.ValueListParameterOut',
-                LocalDataProperty : PRODUCT_ID,
+                LocalDataProperty :  RESTRICTION,
+                ValueListProperty : 'RESTRICTION'
+            },
+            {
+                $Type             : 'Common.ValueListParameterIn',
+                LocalDataProperty :  PRODUCT_ID,
                 ValueListProperty : 'PRODUCT_ID'
             },
             {
                 $Type             : 'Common.ValueListParameterIn',
                 LocalDataProperty : LOCATION_ID,
-                ValueListProperty : 'PRODUCT_ID'
+                ValueListProperty : 'LOCATION_ID'
             }
          ]
         }   

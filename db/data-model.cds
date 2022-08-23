@@ -95,25 +95,25 @@ context cp {
     };
 
     // PIR Characteristitcs
-    entity PIR_CH {
-        key PRODUCT_ID   : String(40) @title : 'Product';
-        key PLANT        : String(4)  @title : 'Plant';
-        key REQ_DATE     : Date       @title : 'Req Date';
-        key PT_NUMBER    : String(10) @title : 'PT Number';
-        key PT_LINE      : String(5)  @title : 'PT Line';
-        key SESSION_ID   : String(32) @title : 'Session ID';
-            CHAR_NAME    : String(30) @title : 'Characteristic ';
-            CHAR_VALUE   : String(70) @title : 'Characteristic Value';
-            FLAG_USAGE   : String(1)  @title : 'Flag Usage';
-            CH_QTY       : Double     @title : 'Change Qty';
-            PROCESS_FLAG : String(1)  @title : 'Process Flag';
-            CHANGED_DATE : Date       @title : 'Changed Date';
-            CHANGED_BY   : String(12) @title : 'Changed By';
-            CREATED_DATE : Date       @title : 'Created Date';
-            CREATED_BY   : String(12) @title : 'Created By';
-            CHANGED_TIME : Time       @title : 'Changed Time';
-            CREATED_TIME : Time       @title : 'Created Time';
-    };
+    // entity PIR_CH {
+    //     key PRODUCT_ID   : String(40) @title : 'Product';
+    //     key PLANT        : String(4)  @title : 'Plant';
+    //     key REQ_DATE     : Date       @title : 'Req Date';
+    //     key PT_NUMBER    : String(10) @title : 'PT Number';
+    //     key PT_LINE      : String(5)  @title : 'PT Line';
+    //     key SESSION_ID   : String(32) @title : 'Session ID';
+    //         CHAR_NAME    : String(30) @title : 'Characteristic ';
+    //         CHAR_VALUE   : String(70) @title : 'Characteristic Value';
+    //         FLAG_USAGE   : String(1)  @title : 'Flag Usage';
+    //         CH_QTY       : Double     @title : 'Change Qty';
+    //         PROCESS_FLAG : String(1)  @title : 'Process Flag';
+    //         CHANGED_DATE : Date       @title : 'Changed Date';
+    //         CHANGED_BY   : String(12) @title : 'Changed By';
+    //         CREATED_DATE : Date       @title : 'Created Date';
+    //         CREATED_BY   : String(12) @title : 'Created By';
+    //         CHANGED_TIME : Time       @title : 'Changed Time';
+    //         CREATED_TIME : Time       @title : 'Created Time';
+    // };
 
     // Product class
     entity PRODUCT_CLASS {
@@ -127,16 +127,16 @@ context cp {
             CREATED_TIME : Time       @title : 'Created Time';
     };
 
-    // Product attributes
-    entity PROD_ATTRIBUTES {
-        key LOCATION_ID   : String(4)  @title : 'Location ID';
-        key PRODUCT_ID    : String(40) @title : 'Product Id';
-            PROD_FAMILY   : String(30) @title : 'Product Family';
-            PROD_GROUP    : String(30) @title : 'Product group';
-            PROD_MODEL    : String(30) @title : 'Product Model';
-            PROD_MDLRANGE : String(30) @title : 'Product Model Range';
-            PROD_SERIES   : String(30) @title : 'Product Series';
-    };
+    // // Product attributes
+    // entity PROD_ATTRIBUTES {
+    //     key LOCATION_ID   : String(4)  @title : 'Location ID';
+    //     key PRODUCT_ID    : String(40) @title : 'Product Id';
+    //         PROD_FAMILY   : String(30) @title : 'Product Family';
+    //         PROD_GROUP    : String(30) @title : 'Product group';
+    //         PROD_MODEL    : String(30) @title : 'Product Model';
+    //         PROD_MDLRANGE : String(30) @title : 'Product Model Range';
+    //         PROD_SERIES   : String(30) @title : 'Product Series';
+    // };
 
     // Sales history
     entity SALESH {
@@ -349,18 +349,18 @@ context cp {
             OPT_QTY     : Decimal(13, 3) @title : 'Option Quantity';
     }
 
-    // IBP result plan table
-    entity IBP_RESULTPLAN {
-        key LOCATION_ID      : String(4)  @title : 'Location ID';
-        key PRODUCT_ID       : String(40) @title : 'Product ID';
-        key OBJ_DEP          : String(30) @title : 'Object Dependency';
-        key VERSION          : String(10) @title : 'Version';
-        key SCENARIO         : String(32) @title : 'Scenario';
-        key WEEK_Date        : Date       @title : 'Weekly Date';
-            PREDICTED        : Double     @title : 'Predicted';
-            PREDICTED_TIME   : Timestamp  @title : 'Predicted Time';
-            PREDICTED_STATUS : String(8)  @title : 'Predicted Status';
-    }
+    // // IBP result plan table
+    // entity IBP_RESULTPLAN {
+    //     key LOCATION_ID      : String(4)  @title : 'Location ID';
+    //     key PRODUCT_ID       : String(40) @title : 'Product ID';
+    //     key OBJ_DEP          : String(30) @title : 'Object Dependency';
+    //     key VERSION          : String(10) @title : 'Version';
+    //     key SCENARIO         : String(32) @title : 'Scenario';
+    //     key WEEK_Date        : Date       @title : 'Weekly Date';
+    //         PREDICTED        : Double     @title : 'Predicted';
+    //         PREDICTED_TIME   : Timestamp  @title : 'Predicted Time';
+    //         PREDICTED_STATUS : String(8)  @title : 'Predicted Status';
+    // }
 
     // PAL profiles
     entity PAL_PROFILEMETH {
@@ -396,35 +396,35 @@ context cp {
             STRUC_NODE  : String(50);
     }
 
-    entity IP_PROFILEOD {
-        key CREATED_DATE    : Date;
-            FLAG            : String(1);
-            PROFILEOD       : array of {
-                LOCATION_ID : String(4);
-                PRODUCT_ID  : String(40);
-                COMPONENT   : String(40);
-                PROFILE     : String(50);
-                OBJ_DEP     : String(30);
-                STRUC_NODE  : String(50);
-            };
-    }
+    // entity IP_PROFILEOD {
+    //     key CREATED_DATE    : Date;
+    //         FLAG            : String(1);
+    //         PROFILEOD       : array of {
+    //             LOCATION_ID : String(4);
+    //             PRODUCT_ID  : String(40);
+    //             COMPONENT   : String(40);
+    //             PROFILE     : String(50);
+    //             OBJ_DEP     : String(30);
+    //             STRUC_NODE  : String(50);
+    //         };
+    // }
 
-    entity IP_PROFILEMETH_PARA {
-        key CREATED_DATE     : Date;
-            FLAG             : String(1);
-            PROFILEPARA      : array of {
-                PROFILE      : String(50);
-                METHOD       : String(50);
-                PARA_NAME    : String(100);
-                INTVAL       : Integer;
-                DOUBLEVAL    : Double;
-                STRVAL       : String(20);
-                PARA_DESC    : String(1000);
-                PARA_DEP     : String(1000);
-                CREATED_DATE : Date;
-                CREATED_BY   : String(12);
-            };
-    }
+    // entity IP_PROFILEMETH_PARA {
+    //     key CREATED_DATE     : Date;
+    //         FLAG             : String(1);
+    //         PROFILEPARA      : array of {
+    //             PROFILE      : String(50);
+    //             METHOD       : String(50);
+    //             PARA_NAME    : String(100);
+    //             INTVAL       : Integer;
+    //             DOUBLEVAL    : Double;
+    //             STRVAL       : String(20);
+    //             PARA_DESC    : String(1000);
+    //             PARA_DEP     : String(1000);
+    //             CREATED_DATE : Date;
+    //             CREATED_BY   : String(12);
+    //         };
+    // }
 
     // Component Quantity
     entity COMPQTYDETERMINE {
@@ -644,6 +644,9 @@ context cp {
     entity CIR_PLANNED {
         key WEEK_DATE       : Date           @title: 'Week Date';
         key CIR_ID          : Integer        @title : 'CIR ID';
+        key MODEL_VERSION   : String(20)     @title : 'MODEL_VERSION';
+        key VERSION         : String(10)     @title : 'Version';
+        key SCENARIO        : String(32)     @title : 'Scenario';
         key METHOD          : String(20)     @title : 'Method';
         UNIQUE_ID           : Integer        @title : 'Unique ID';
         CIR_QTY             : Decimal(13, 3) @title : 'Quantity';
@@ -953,4 +956,13 @@ entity![V_ODRESTRICT]{
     key![OD_CONDITION] : String(2)  @title : 'Object Dep. Condition';
     key![CHAR_COUNTER] : Integer    @title : 'Characteristic Counter';
     key![ROW_ID]       : Integer    @title : 'Row ID';
+}
+
+@cds.persistence.exists
+entity![V_LOCPRODLINERTR]{
+    key![PRODUCT_ID]  : String(40) @title : 'PRODUCT_ID';
+    key![LOCATION_ID] : String(4)  @title : 'LOCATION_ID';
+    key![LINE_ID]     : String(40) @title : 'Line';
+    key![RESTRICTION] : String(30) @title : 'Restriction';
+    key![RTR_DESC]    : String(30) @title : 'Restriction Description';
 }
