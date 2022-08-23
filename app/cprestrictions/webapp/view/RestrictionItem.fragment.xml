@@ -1,0 +1,81 @@
+<core:FragmentDefinition xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns:l="sap.ui.layout"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:u="sap.ui.unified">
+    <Dialog id="test" title="" contentWidth="450px" titleAlignment="Center">
+        <VBox class="sapUiSmallMargin">
+            <f:SimpleForm id="uyt" editable="true" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="4" labelSpanM="4" labelSpanS="4" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1" singleContainerFullSize="false">
+                <f:content>
+                    <Label text="{i18n>loc}"/>
+                    <!-- <Input id="idloc" value="" placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/> -->
+                    <Label text="{i18n>lineid}"/>
+                    <!-- <Input id="idLine" value="" placeholder="Line ID" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                    <Label text="{i18n>restriction}"/>
+                    <Input id="idRest" value="" />
+                    <Label text="{i18n>restdesc}"/>
+                    <Input id="idRestDesc" value="" />
+                    <Label text="{i18n>fromtodates}"/>
+                    <DateRangeSelection id="idDateRange" delimiter="To" dateValue="" secondDateValue="" valueFormat="MM-dd-yyyy"
+							displayFormat="MM-dd-yyyy" change="handleDateChange" maxDate=""/> -->
+
+                </f:content>
+            </f:SimpleForm>
+
+        </VBox>
+        <buttons>
+            <Button type='Ghost' text="{i18n>save}" press="onSaveRest"></Button>
+            <Button type='Reject' text="{i18n>close}" press="onCloseRest"></Button>
+        </buttons>
+    </Dialog>
+</core:FragmentDefinition>
+
+
+<!-- <core:FragmentDefinition xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns:l="sap.ui.layout"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:u="sap.ui.unified">
+    <Dialog id="idRestItem" title="" contentWidth="450px" titleAlignment="Center">
+            <OverflowToolbar id="idOvrFlwTb">
+                    <ToolbarSpacer/>
+                    <Button id="idAdd" text="Add" press="onAdd" type="Emphasized"/>
+                </OverflowToolbar>
+                
+        <VBox class="sapUiSmallMargin">
+            <f:SimpleForm id="SimpleFormToolbaritem" editable="true" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="4" labelSpanM="4" labelSpanS="4" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1" singleContainerFullSize="false">
+                <f:content>
+                    <Label text="{i18n>restriction}"/>
+                    <Input id="idIrest" value=""/>
+
+                    <Label text="Class"/>
+                    <Input id="idClassname" value="" width="225px" placeholder="Class Name" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                    <Input id="idClassno" value="" visible="false"/>
+                    <Label text="Characteristic"/>
+                    <Input id="idCharname" value="" width="225px" placeholder="Char Name" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                    <Input id="idCharno" value="" visible="false"/>
+                    <Label text="Characteristic Value"/>
+                    <Input id="idCharval" value="" width="225px" placeholder="Char Value" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                    <Input id="idCharvalno" value="" visible="false"/>
+
+                    <Label text="{i18n>charcounter}"/>
+                    <Input id="idcharcounter" value="" placeholder="{i18n>charcounter}"/>
+                    <Label text="{i18n>odcond}"/>
+                    <Input id="idODcond" value="" placeholder="{i18n>odcond}" />
+                    <Label text="{i18n>rowid}"/>
+                    <Input id="idrowid" value="" placeholder="{i18n>rowid}"/>
+                    
+                    
+
+                </f:content>
+            </f:SimpleForm>
+
+        </VBox>
+        <buttons>
+            <Button type='Ghost' text="{i18n>save}" press="onSaveRest"></Button>
+            <Button type='Reject' text="{i18n>close}" press="onCloseRestItem"></Button>
+        </buttons>
+    </Dialog>
+</core:FragmentDefinition> -->

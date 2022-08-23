@@ -1118,11 +1118,11 @@ module.exports = (srv) => {
         let lsresults = {};
         let liProdChar = {};
         var responseMessage;
-        if (req.data.FLAG === "C" || req.data.FLAG === "E") {
-                lsresults.LINE_ID     = req.data.PRODUCT_ID;
+        if (req.data.Flag === "C" || req.data.Flag === "E") {
+                lsresults.LINE_ID     = req.data.LINE_ID;
                 lsresults.LOCATION_ID = req.data.LOCATION_ID;
                 lsresults.RESTRICTION = req.data.RESTRICTION;
-                if (req.data.FLAG === "E") {
+                if (req.data.Flag === "E") {
                     try {
                         await cds.delete("CP_RESTRICT_HEADER", lsresults);
                     } catch (e) {
@@ -1146,17 +1146,19 @@ module.exports = (srv) => {
                 }
             }
         }
-        else if (req.data.FLAG === "D") {
-                lsresults.LINE_ID     = req.data.PRODUCT_ID;
+        else if (req.data.Flag === "D") {
+                lsresults.LINE_ID     = req.data.LINE_ID;
                 lsresults.LOCATION_ID = req.data.LOCATION_ID;
                 lsresults.RESTRICTION = req.data.RESTRICTION;
-                if (req.data.FLAG === "E" && i === 0) {
+                // if (req.data.Flag === "E" && i === 0) {
                     try {
                         await cds.delete("CP_RESTRICT_HEADER", lsresults);
+                        responseMessage = "Restriction deleted";
                     } catch (e) {
                         //DONOTHING
+                        responseMessage = "Failed to delete Restriction";
                     }
-                }
+                // }
         }
         lsresults = {};
         return responseMessage;
@@ -1177,9 +1179,10 @@ module.exports = (srv) => {
                 lsresults.CHAR_NUM = liRtrChar[i].CHAR_NUM;
                 lsresults.CHAR_COUNTER = liRtrChar[i].CHAR_COUNTER;
                 lsresults.CHARVAL_NUM = liRtrChar[i].CHARVAL_NUM;
-                if (req.data.FLAG === "E" && i === 0) {
+                // if (req.data.FLAG === "E" && i === 0) {
+                    if (req.data.FLAG === "E") {
                     try {
-                        await cds.delete("CP_NEWPROD_CHAR", lsresults);
+                        await cds.delete("CP_RESTRICT_DETAILS", lsresults);
                     } catch (e) {
                         //DONOTHING
                     }
@@ -1208,14 +1211,14 @@ module.exports = (srv) => {
                 lsresults.CHAR_NUM = liRtrChar[i].CHAR_NUM;
                 lsresults.CHAR_COUNTER = liRtrChar[i].CHAR_COUNTER;
                 lsresults.CHARVAL_NUM = liRtrChar[i].CHARVAL_NUM;
-                if (req.data.FLAG === "E" && i === 0) {
+                // if (req.data.FLAG === "E" && i === 0) {
                     try {
                         await cds.delete("CP_RESTRICT_DETAILS", lsresults);
                         break;
                     } catch (e) {
                         //DONOTHING
                     }
-                }
+                // }
             }
         }
         lsresults = {};

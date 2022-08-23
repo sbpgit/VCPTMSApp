@@ -3,8 +3,17 @@
     xmlns:html="http://www.w3.org/1999/xhtml" class="ItemMaster">
     <Page showHeader="false">
         <content>
+        <Toolbar height="5%">
             <SearchField id="headSearch" liveChange="onSearch" placeholder="Restrictions/ Location/ Line ID"/>
-            <List id="resList"  items="{ path : '/results', sorter : { path : 'LOCATION_ID'} }" mode="SingleSelectMaster" noDataText="No Data" selectionChange="onhandlePress">
+            <ToolbarSpacer/>
+            <Button icon = "sap-icon://add" press="onCreateRest"  iconDensityAware="false" type="Transparent"/>                      
+        </Toolbar>
+        <!-- <HBox>
+            <SearchField id="headSearch" liveChange="onSearch" placeholder="Restrictions/ Location/ Line ID"/>
+            <ToolbarSpacer/>
+            <Button icon = "sap-icon://add" press="onPress" iconDensityAware="false" type="Transparent"/>
+            </HBox> -->
+            <!-- <List id="resList"  items="{ path : '/results', sorter : { path : 'LOCATION_ID'} }" mode="SingleSelectMaster" noDataText="No Data" selectionChange="onhandlePress">
                 <items>
                     <ObjectListItem press="onhandlePress" title="{LOCATION_ID}" number="{LINE_ID}">
                     <firstStatus>
@@ -17,7 +26,45 @@
                         </attributes>
                     </ObjectListItem>
                 </items>
-            </List>
+            </List> -->
+            <Table id="resList" items="{path: '/results'}" sticky="ColumnHeaders" mode="SingleSelectMaster" selectionChange="onhandlePress">
+                        <columns>
+                            <Column hAlign="Left" >
+                                <Text text="{i18n>locline}" />
+                            </Column>
+                            <!-- <Column hAlign="Left">
+                                <Text text="{i18n>lineid}"/>
+                            </Column> -->
+                            <Column hAlign="Left">
+                                <Text text="{i18n>restriction}" />
+                            </Column>
+                            <Column hAlign="Left" >
+                                <Text text="{i18n>validdate}" />
+                            </Column>
+
+                            <Column hAlign="Left" >
+                                <Text text=""/>
+                            </Column>
+                            
+                        </columns>
+                        <items>
+                            <ColumnListItem>
+                                <cells>
+                                    <!-- <Text text="{LOCATION_ID}" />
+                                    <Text text="{LINE_ID}" /> -->
+                                    <ObjectIdentifier title="{LOCATION_ID}" text="{LINE_ID}" />
+                                    <ObjectIdentifier title="{RESTRICTION}" text="{RTR_DESC}" />
+                                    <ObjectIdentifier title="{path: 'VALID_FROM', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'MM/dd/yyyy' }}" 
+                                                      text="{path: 'VALID_TO', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'MM/dd/yyyy' }}" />
+                                    <HBox>
+                                        
+                                        <Button icon = "sap-icon://edit" press="onCreateRest" iconDensityAware="false" type="Transparent"/>
+                                        <Button icon = "sap-icon://decline" press="onDeleteRest" iconDensityAware="false" type="Transparent" />
+                                    </HBox>
+                                </cells>
+                            </ColumnListItem>
+                        </items>
+                    </Table>
         </content>
     </Page>
 </mvc:View>
