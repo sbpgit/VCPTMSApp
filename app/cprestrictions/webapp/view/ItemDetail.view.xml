@@ -3,26 +3,32 @@
     xmlns:l="sap.ui.layout"
     xmlns:core="sap.ui.core" controllerName="cpapp.cprestrictions.controller.ItemDetail"
     xmlns:html="http://www.w3.org/1999/xhtml">
-    <Page id="page" showHeader="false">
-       <l:Grid defaultSpan="XL3 L3 M6 S12" >
+    <Page id="page" showHeader="false" showFooter="true">
+       <!-- <l:Grid defaultSpan="XL3 L3 M6 S12" >
         <VBox >
             <Text text="Location :" />
             <Text text="{oGModel>/locId}" />
         </VBox>
-        <!-- <VBox >
-            <Text text="Restriction :" />
-            <Text text="{oGModel>/Restriction}" />
-        </VBox> -->
+        <VBox >
+        <HBox>
+            <Button icon = "sap-icon://add" press="onPress" iconDensityAware="false" type="Transparent"/>
+            <Button icon = "sap-icon://edit" press="onPress" iconDensityAware="false" type="Transparent"/>
+            <Button icon = "sap-icon://decline" press="onPress" iconDensityAware="false" type="Transparent" />
+        </HBox>
+        </VBox>
         
-        </l:Grid>
+        </l:Grid> -->
 
             <content>
+            <Toolbar height="8%">
+            <ToolbarSpacer/>
+                    <Button icon = "sap-icon://add" press="onCreateItem" iconDensityAware="false" type="Transparent"/>
+                    <Button icon = "sap-icon://edit" press="onEditItem" iconDensityAware="false" type="Transparent"/>
+                                          
+                    </Toolbar>
             <SearchField id="idSearch" search="onItemSearch" placeholder="Class Name/ Char Name"/>
                     <Table id="idDetail" items="{path: '/results'}" sticky="ColumnHeaders">
                         <columns>
-                            <Column hAlign="Left" >
-                                <Text text="{i18n>rescounterno}" />
-                            </Column>
                             <Column hAlign="Left">
                                 <Text text="{i18n>classname}"/>
                             </Column>
@@ -33,29 +39,39 @@
                                 <Text text="{i18n>charval}"/>
                             </Column>
                             <Column hAlign="Left">
-                                <Text text="{i18n>objdepcond}" />
-                            </Column>
-                            <Column hAlign="Left">
                                 <Text text="{i18n>charcounter}"/>
                             </Column>
                             <Column hAlign="Left">
+                                <Text text="{i18n>odcond}" />
+                            </Column>
+                            <Column hAlign="Left">
                                 <Text text="{i18n>rowid}"/>
+                            </Column>
+                            <Column hAlign="Left">
+                                <Text text=""/>
                             </Column>
                         </columns>
                         <items>
                             <ColumnListItem>
                                 <cells>
-                                    <Text text="{RTR_COUNTER}" />
                                     <Text text="{CLASS_NAME}" />
                                     <Text text="{CHAR_NAME}" />
                                     <Text text="{CHAR_VALUE}" />
-                                    <Text text="{OD_CONDITION}" />
                                     <Text text="{CHAR_COUNTER}"/>
-                                    <Text text="{ROW_ID}"/>
+                                    <Input id="idOdCond" value="{OD_CONDITION}" editable="false" />
+                                    <Input id="idRowId" value="{ROW_ID}" editable="false" liveChange="onRowIdChange" />
+                                    <Button icon = "sap-icon://decline" press="onDeleteItem" iconDensityAware="false" type="Transparent" /> 
                                 </cells>
                             </ColumnListItem>
                         </items>
                     </Table>
         </content>
+        <footer>
+					<OverflowToolbar>
+						<ToolbarSpacer/>
+						<Button id="idUpdateSave" text="Save" press="onUpdateItem" type="Emphasized" textDirection="LTR" visible="false"/>
+                        <Button id="idUpdateCancel" text="Cancel" press="onCancelUpdate" type="Emphasized" textDirection="LTR" visible="false"/>
+					</OverflowToolbar>
+				</footer>
     </Page>
 </mvc:View>
