@@ -641,7 +641,9 @@ context cp {
     };
 
     
-    entity CIR_PLANNED {
+    entity CIR_GENERATED {
+        key LOCATION_ID     : String(4)      @title : 'Location '; 
+        key PRODUCT_ID      : String(40)     @title : 'Product';
         key WEEK_DATE       : Date           @title: 'Week Date';
         key CIR_ID          : Integer        @title : 'CIR ID';
         key MODEL_VERSION   : String(20)     @title : 'MODEL_VERSION';
@@ -649,7 +651,22 @@ context cp {
         key SCENARIO        : String(32)     @title : 'Scenario';
         key METHOD          : String(20)     @title : 'Method';
         UNIQUE_ID           : Integer        @title : 'Unique ID';
-        CIR_QTY             : Decimal(13, 3) @title : 'Quantity';
+        CIR_QTY             : Integer        @title : 'Quantity';
+    }
+
+    entity CIR_CHAR_RATE {
+        key LOCATION_ID     : String(4)      @title : 'Location ';
+        key PRODUCT_ID      : String(40)     @title : 'Product';
+        key WEEK_DATE       : Date           @title: 'Week Date';
+        key MODEL_VERSION   : String(20)     @title : 'MODEL_VERSION';
+        key VERSION         : String(10)     @title : 'Version';
+        key SCENARIO        : String(32)     @title : 'Scenario';
+        key CHAR_NUM        : String(10)     @title : 'Internal Char. number';
+        key CHARVAL_NUM     : String(10)     @title : 'Internal Char. number';
+        SEQUENCE            : Integer        @title : 'Sequence';
+        GEN_QTY             : Decimal(13,3)  @title : 'Generated Quantity';
+        PLAN_QTY            : Decimal(13,3)  @title : 'Planned Quantity';
+        DEVIATION           : Decimal(13,3)  @title : 'Deviation';
     }
 }
 

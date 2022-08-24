@@ -1507,8 +1507,8 @@ annotate service.PRODRESTRICT with @(
         HeaderInfo                     : {
             Title          : {Value : LOCATION_ID},
             Description    : {Value : PRODUCT_ID},
-            TypeName       : 'Authorization',
-            TypeNamePlural : 'Authorizations'
+            TypeName       : 'Prod. Restriction',
+            TypeNamePlural : 'Prod. Restrictions'
         },
         FieldGroup #Details            : {Data : [
             {

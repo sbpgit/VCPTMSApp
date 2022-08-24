@@ -62,13 +62,13 @@
                         mode="SingleSelectMaster" selectionChange="onhandlePress" sticky="ColumnHeaders">
                     
                     <columns>
-                        <Column hAlign="Left" vAlign="Middle">
+                        <Column hAlign="Left" vAlign="Middle" width="300px">
                             <Text text="{i18n>unidesc}" />
                         </Column>
-                        <Column hAlign="Right" vAlign="Middle">
+                        <Column hAlign="Left" vAlign="Middle" width="100px">
                             <Text text="{i18n>active}"/>
                         </Column>
-                        <Column hAlign="Right" >
+                        <Column hAlign="Right" width="50px">
                             <Text text=""/>
                         </Column>
                     </columns>

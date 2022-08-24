@@ -172,14 +172,6 @@ modules:
       name: cpappcpprodlocline
       target-path: resources/
     - artifacts:
-      - cpapprestrictcpodrestrict.zip
-      name: cpapprestrictcpodrestrict
-      target-path: resources/
-    - artifacts:
-      - cpapprtrhdrcprtrheader.zip
-      name: cpapprtrhdrcprtrheader
-      target-path: resources/
-    - artifacts:
       - cpappcpprodrestr.zip
       name: cpappcpprodrestr
       target-path: resources/
@@ -458,28 +450,6 @@ modules:
     commands:
     - npm install
     - npm run build:cf
-    supported-platforms: []
-- name: cpapprestrictcpodrestrict
-  type: html5
-  path: app/cpodrestrict
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    supported-platforms: []
-- name: cpapprtrhdrcprtrheader
-  type: html5
-  path: app/cprtrheader
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    ignore:
-    - node_modules/
     supported-platforms: []
 - name: cpappcpprodrestr
   type: html5
