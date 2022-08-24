@@ -126,34 +126,28 @@
             },
             "routes": [
                 {
-                    "name": "Home",
+                    "name": "Details",
                     "pattern": "",
                     "target": [
-                        "Home"
-                    ]
-                },
-                {
-                    "name": "Detail",
-                    "pattern": "Detail",
-                    "target": [
-                        "Detail"
+                        "Details"
                     ]
                 }
             ],
             "targets": {
-                "Home": {
+                "Details": {
                     "viewType": "XML",
-                    "transition": "slide",
-                    "clearControlAggregation": false,
-                    "viewId": "Home",
-                    "viewName": "Home"
+                    "viewName": "Details",
+                    "viewLevel": 1
                 },
-                "Detail": {
+                "ItemMaster": {
                     "viewType": "XML",
-                    "transition": "slide",
-                    "clearControlAggregation": true,
-                    "viewId": "Detail",
-                    "viewName": "Detail"
+                    "viewName": "ItemMaster",
+                    "viewLevel": 2
+                },
+                "ItemDetail": {
+                    "viewType": "XML",
+                    "viewName": "ItemDetail",
+                    "viewLevel": 3
                 }
             }
         }

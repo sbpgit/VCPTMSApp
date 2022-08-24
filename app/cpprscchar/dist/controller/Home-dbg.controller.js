@@ -365,6 +365,10 @@ sap.ui.define([
                         },
                         success: function (oData) {
                             sap.ui.core.BusyIndicator.hide();
+                            that.byId("idPrimarySearch").setValue("");
+                            that.onPrimarySearch();
+                            that.byId("searchField").setValue("");
+                            that.onCharSearch();
                             that.onGetData();
                         },
                         error: function (oData) {
@@ -422,10 +426,10 @@ sap.ui.define([
                         }
                     }
                 }
-        },
+            },
 
-        onSuggest: function (event) {
-			var sValue = event.getParameter("suggestValue"),
+            onSuggest: function (event) {
+                var sValue = event.getParameter("suggestValue"),
                     aFilters = [];
                     aFilters = [
                         new Filter([
@@ -441,13 +445,13 @@ sap.ui.define([
 
             onSaveSeq: function (index) {
                 var aData = this.byId("Secondarytable").getItems();
-                that.count = aData.length;
-                // that.count = index + 2;
+                // that.count = aData.length;
+                that.count = index + 2;
                 var successCount = 0;
 
 
-                for (var i = 0; i < aData.length; i++) {
-                    // for(var i=0; i<index; i++){
+                // for (var i = 0; i < aData.length; i++) {
+                    for(var i=0; i<that.count; i++){
                     var oEntry = {};
 
                     oEntry.Location = that.byId("idloc").getValue();
@@ -475,7 +479,10 @@ sap.ui.define([
                             }
 
                             if (successCount === that.count) {
-                                MessageToast.show(oData.changeToPrimary);
+                                // MessageToast.show(oData.changeToPrimary);
+                                MessageToast.show("Successfully changed the sequence");
+                                that.byId("searchField").setValue("");
+                                that.onCharSearch();
                                 that.onGetData();
                             }
                         },
