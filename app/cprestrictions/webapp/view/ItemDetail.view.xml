@@ -20,13 +20,16 @@
         </l:Grid> -->
 
             <content>
-            <Toolbar height="8%">
+            <Toolbar height="5%">
+            <ToolbarSpacer/>
+            <Text text="Restriction Item Details" />
+            <ToolbarSpacer/>
             <ToolbarSpacer/>
                     <Button icon = "sap-icon://add" press="onCreateItem" iconDensityAware="false" type="Transparent"/>
                     <Button icon = "sap-icon://edit" press="onEditItem" iconDensityAware="false" type="Transparent"/>
                                           
                     </Toolbar>
-            <SearchField id="idSearch" search="onItemSearch" placeholder="Class Name/ Char Name"/>
+            <SearchField id="idSearch" liveChange="onItemSearch" placeholder="Class Name/ Char Name/ Char Value"/>
                     <Table id="idDetail" items="{path: '/results'}" sticky="ColumnHeaders">
                         <columns>
                             <Column hAlign="Left">
@@ -58,7 +61,11 @@
                                     <Text text="{CHAR_NAME}" />
                                     <Text text="{CHAR_VALUE}" />
                                     <Text text="{CHAR_COUNTER}"/>
-                                    <Input id="idOdCond" value="{OD_CONDITION}" editable="false" />
+                                    <!-- <Input id="idOdCond" value="{OD_CONDITION}" editable="false" /> -->
+                                    <Select id="idOdCond"  selectedKey="{OD_CONDITION}" class="buttonDesktop" editable="false" >
+                                        <core:ListItem key="EQ" text="EQ"/>
+                                        <core:ListItem key="NE" text="NE"/>
+                                    </Select>
                                     <Input id="idRowId" value="{ROW_ID}" editable="false" liveChange="onRowIdChange" />
                                     <Button icon = "sap-icon://decline" press="onDeleteItem" iconDensityAware="false" type="Transparent" /> 
                                 </cells>

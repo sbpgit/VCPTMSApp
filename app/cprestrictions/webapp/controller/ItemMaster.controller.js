@@ -152,27 +152,26 @@ sap.ui.define(
                     oGModel.setProperty("/Restriction", sSelItem.RESTRICTION);
                     oGModel.setProperty("/locId", sSelItem.LOCATION_ID);
                 }
-                // Calling Item Detail page
                 that.getOwnerComponent().runAsOwner(function () {
                     if (!that.oDetailView) {
-                        try {
-                            that.oDetailView = sap.ui.view({
-                                viewName: "cpapp.cprestrictions.view.ItemDetail",
-                                type: "XML",
-                            });
-                            that.bus.publish("flexible", "addDetailPage", that.oDetailView);
-                            that.bus.publish("nav", "toDetailPage", {
-                                viewName: that.oDetailView.getViewName(),
-                            });
-                        } catch (e) {
-                            that.oDetailView.onAfterRendering();
-                        }
-                    } else {
-                        that.bus.publish("nav", "toDetailPage", {
-                            viewName: that.oDetailView.getViewName(),
+                      try {
+                        that.oDetailView = sap.ui.view({
+                          viewName: "cpapp.cprestrictions.view.ItemDetail",
+                          type: "XML",
                         });
+                        that.bus.publish("flexible", "addDetailPage", that.oDetailView);
+                        that.bus.publish("nav", "toDetailPage", {
+                          viewName: that.oDetailView.getViewName(),
+                        });
+                      } catch (e) {
+                        // that.oDetailView.onAfterRendering();
+                      }
+                    } else {
+                      that.bus.publish("nav", "toDetailPage", {
+                        viewName: that.oDetailView.getViewName(),
+                      });
                     }
-                });
+                  });
             },
 
             /**

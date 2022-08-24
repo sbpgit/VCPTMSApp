@@ -93,9 +93,9 @@ sap.ui.define(
         },
 
         /** 
-* Called after the view has been rendered.
-* Calls the getCharData[function] to get Data of Product Characteristics.
-*/
+            * Called after the view has been rendered.
+            * Calls the getCharData[function] to get Data of Product Characteristics.
+        */
         onAfterRendering:function(){
 
             this.oResourceBundle = this.getView()

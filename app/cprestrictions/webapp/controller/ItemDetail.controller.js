@@ -34,6 +34,7 @@ sap.ui.define(
                 that.classnameModel = new JSONModel();
                 that.charnameModel = new JSONModel();
                 that.charvalueModel = new JSONModel();
+                that.ListModel = new JSONModel();
 
                 this.oModel.setSizeLimit(1000);
                 that.classnameModel.setSizeLimit(1000);
@@ -106,7 +107,9 @@ sap.ui.define(
                 //   this.oCharvalueList = this._oCore.byId(
                 //     this._valueHelpDialogcharValue.getId() + "-list"
                 //   );
+                if(sRestriction !== ""){
 
+                
                 this.getModel("BModel").read("/getODHdrRstr", {
                     filters: [
                         new Filter("RESTRICTION", FilterOperator.EQ, sRestriction),
@@ -114,12 +117,12 @@ sap.ui.define(
 
                     success: function (oData) {
                         sap.ui.core.BusyIndicator.hide();
-                        if (oData.results.length) {
+                        // if (oData.results.length) {
                             that.oModel.setData({
                                 results: oData.results,
                             });
                             that.byId("idDetail").setModel(that.oModel);
-                        }
+                        // }
                         that.byId("idSearch").setValue("");
 
                     },
@@ -128,6 +131,23 @@ sap.ui.define(
                         MessageToast.show("Failed to get data");
                     },
                 });
+
+                this.getModel("BModel").read("/getClass", {
+                    
+
+                    success: function (oData) {
+                        sap.ui.core.BusyIndicator.hide();
+                        that.classNameData = oData.results;
+                         
+                    },
+                    error: function () {
+                        sap.ui.core.BusyIndicator.hide();
+                        MessageToast.show("Failed to get class name data");
+                    },
+                });
+
+
+            }
             },
 
             /**
@@ -159,11 +179,373 @@ sap.ui.define(
 
 
             onCreateItem: function () {
+
+                if (!this._valueHelpDialogRestItem) {
+                    this._valueHelpDialogRestItem = sap.ui.xmlfragment(
+                      "cpapp.cprestrictions.view.RestrictionItem",
+                      this
+                    );
+                    this.getView().addDependent(this._valueHelpDialogRestItem);
+                  }
+
+                if (!this._valueHelpDialogclassName) {
+                    this._valueHelpDialogclassName = sap.ui.xmlfragment(
+                      "cpapp.cprestrictions.view.className",
+                      this
+                    );
+                    this.getView().addDependent(this._valueHelpDialogclassName);
+                  }
+
+                  if (!this._valueHelpDialogcharName) {
+                    this._valueHelpDialogcharName = sap.ui.xmlfragment(
+                      "cpapp.cprestrictions.view.charName",
+                      this
+                    );
+                    this.getView().addDependent(this._valueHelpDialogcharName);
+                  }
+
+                  if (!this._valueHelpDialogcharValue) {
+                    this._valueHelpDialogcharValue = sap.ui.xmlfragment(
+                      "cpapp.cprestrictions.view.charValue",
+                      this
+                    );
+                    this.getView().addDependent(this._valueHelpDialogcharValue);
+                  }
+
+                  this.oClassName = this._oCore.byId("idClassname");
+                  this.oCharName = this._oCore.byId("idCharname");
+                  this.oCharValue = this._oCore.byId("idCharval");
+
+                  that._valueHelpDialogclassName.setTitleAlignment("Center");
+                  that._valueHelpDialogcharName.setTitleAlignment("Center");
+                  that._valueHelpDialogcharValue.setTitleAlignment("Center");
+
+                  this.oClassnameList = this._oCore.byId(
+                    this._valueHelpDialogclassName.getId() + "-list"
+                  );
+
+                  this.oCharnameList = this._oCore.byId(
+                    this._valueHelpDialogcharName.getId() + "-list"
+                  );
+
+                  this.oCharvalueList = this._oCore.byId(
+                    this._valueHelpDialogcharValue.getId() + "-list"
+                  );
+
+                  that.classnameModel.setData({
+                    results: that.classNameData,
+                });
+                sap.ui.getCore().byId("classNameList").setModel(that.classnameModel);
+
                 that._valueHelpDialogRestItem.open();
 
             },
             onCloseRestItem: function () {
                 that._valueHelpDialogRestItem.close();
+            },
+
+
+            /**
+         * This function is called when click on Value Help of Inputs.
+         * In this function dialogs will open based on sId.
+         * @param {object} oEvent -the event information.
+         */
+        handleValueHelp: function (oEvent) {
+            var sId = oEvent.getParameter("id");
+            oGModel.setProperty("/OpenProdInut", "");
+             if (sId.includes("Classname")) {
+                  that._valueHelpDialogclassName.open();                
+              } else if (sId.includes("Charname")) {
+                that._valueHelpDialogcharName.open();                
+              } else if (sId.includes("Charval")) {
+                that._valueHelpDialogcharValue.open();                
+            }
+          },
+
+          /**
+           * Called when 'Close/Cancel' button in any dialog is pressed.
+           */
+          handleClose: function (oEvent) {
+            var sId = oEvent.getParameter("id");
+            if (sId.includes("className")) {
+                that._oCore.byId(this._valueHelpDialogclassName.getId() + "-searchField")
+                  .setValue("");
+                if (that.oClassnameList.getBinding("items")) {
+                  that.oClassnameList.getBinding("items").filter([]);
+                }
+            } else if (sId.includes("charName")) {
+                that._oCore
+                  .byId(this._valueHelpDialogcharName.getId() + "-searchField")
+                  .setValue("");
+                if (that.oCharnameList.getBinding("items")) {
+                  that.oCharnameList.getBinding("items").filter([]);
+                }
+              } else if (sId.includes("charVal")) {
+                that._oCore
+                  .byId(this._valueHelpDialogcharValue.getId() + "-searchField")
+                  .setValue("");
+                if (that.oCharvalueList.getBinding("items")) {
+                  that.oCharvalueList.getBinding("items").filter([]);
+                }
+              } 
+          },
+
+
+          /**
+           * Called when something is entered into the search field.
+           * @param {object} oEvent -the event information.
+           */
+          handleSearch: function (oEvent) {
+            var sQuery =
+                oEvent.getParameter("value") || oEvent.getParameter("newValue"),
+              sId = oEvent.getParameter("id"),
+              oFilters = [];
+            // Check if search filter is to be applied
+            sQuery = sQuery ? sQuery.trim() : "";
+                // Class Name
+             if (sId.includes("className")) {
+                if (sQuery !== "") {
+                  oFilters.push(
+                    new Filter({
+                      filters: [
+                        new Filter("CLASS_NAME", FilterOperator.Contains, sQuery),
+                        new Filter("CLASS_NUM", FilterOperator.Contains, sQuery),
+                      ],
+                      and: false,
+                    })
+                  );
+                }
+                that.oClassnameList.getBinding("items").filter(oFilters);
+                // Char Name
+              } else if (sId.includes("charName")) {
+                if (sQuery !== "") {
+                  oFilters.push(
+                    new Filter({
+                      filters: [
+                        new Filter("CHAR_NAME", FilterOperator.Contains, sQuery),
+                        new Filter("CHAR_NUM", FilterOperator.Contains, sQuery),
+                      ],
+                      and: false,
+                    })
+                  );
+                }
+                that.oCharnameList.getBinding("items").filter(oFilters);
+                // Char Value
+              } else if (sId.includes("charVal")) {
+                if (sQuery !== "") {
+                  oFilters.push(
+                    new Filter({
+                      filters: [
+                        new Filter("CHAR_VALUE", FilterOperator.Contains, sQuery),
+                        new Filter("CHARVAL_NUM", FilterOperator.Contains, sQuery),
+                      ],
+                      and: false,
+                    })
+                  );
+                }
+                that.oCharvalueList.getBinding("items").filter(oFilters);
+              } 
+          },
+
+
+          /**
+         * This function is called when selecting an item in dialogs .
+         * @param {object} oEvent -the event information.
+         */
+        handleSelection: function (oEvent) {
+            that.oGModel = that.getModel("oGModel");
+            var sId = oEvent.getParameter("id"),
+              oItem = oEvent.getParameter("selectedItems"),
+              aSelectedItems,
+              aODdata = [];
+             if (sId.includes("className")) {
+                
+                    that.oClassName = sap.ui.getCore().byId("idClassname");
+                    aSelectedItems = oEvent.getParameter("selectedItems");
+                    that.oClassName.setValue(aSelectedItems[0].getTitle());
+                    sap.ui.getCore().byId("idClassno").setValue(aSelectedItems[0].getDescription());
+
+                    sap.ui.getCore().byId("idCharname").setValue("");
+                    sap.ui.getCore().byId("idCharno").setValue("");
+                    sap.ui.getCore().byId("idCharval").setValue("");
+                    sap.ui.getCore().byId("idCharvalno").setValue("");
+                    
+                    this.getModel("BModel").read("/getClassChar", {
+                        filters: [
+                        new Filter(
+                            "CLASS_NAME",
+                            FilterOperator.EQ,
+                            sap.ui.getCore().byId("idClassname").getValue()
+                        ),
+                        ],
+                        success: function (oData) {
+                        sap.ui.core.BusyIndicator.hide();
+                        //  var aData;
+                        // for(var i=0; i<oData.results; i++){
+                        //     a
+                        // }
+        
+                        function removeDuplicate(array, key) {
+                            var check = new Set();
+                            return array.filter(obj => !check.has(obj[key]) && check.add(obj[key]));
+                        }
+                        that.charnameModel.setData({
+                            results: removeDuplicate(oData.results, 'CHAR_NAME')
+                        });
+                        
+                        that.oCharnameList.setModel(that.charnameModel);
+                        },
+                        error: function (oData, error) {
+                        sap.ui.core.BusyIndicator.hide();
+                        MessageToast.show("error");
+                        },
+                    });
+             } else if (sId.includes("charName")) {
+                
+                that.oCharName = sap.ui.getCore().byId("idCharname");
+                aSelectedItems = oEvent.getParameter("selectedItems");
+                that.oCharName.setValue(aSelectedItems[0].getTitle());
+
+                sap.ui.getCore().byId("idCharno").setValue(aSelectedItems[0].getDescription());
+
+                sap.ui.getCore().byId("idCharval").setValue("");
+                sap.ui.getCore().byId("idCharvalno").setValue("");
+                
+                this.getModel("BModel").read("/getClassChar", {
+                    filters: [
+                    new Filter(
+                        "CLASS_NAME",
+                        FilterOperator.EQ,
+                        sap.ui.getCore().byId("idClassname").getValue()
+                    ),
+                    new Filter(
+                        "CHAR_NAME",
+                        FilterOperator.EQ,
+                        sap.ui.getCore().byId("idCharname").getValue()
+                    ),
+                    ],
+                    success: function (oData) {
+                    sap.ui.core.BusyIndicator.hide();
+    
+                    function removeDuplicate(array, key) {
+                        var check = new Set();
+                        return array.filter(obj => !check.has(obj[key]) && check.add(obj[key]));
+                    }
+                    that.charvalueModel.setData({
+                        results: removeDuplicate(oData.results, 'CHAR_VALUE')
+                    });
+                    
+                    that.oCharvalueList.setModel(that.charvalueModel);
+                    },
+                    error: function (oData, error) {
+                    sap.ui.core.BusyIndicator.hide();
+                    MessageToast.show("error");
+                    },
+                });
+             } else if (sId.includes("charVal")) {
+                
+                that.oCharValue = sap.ui.getCore().byId("idCharval");
+                aSelectedItems = oEvent.getParameter("selectedItems");
+                that.oCharValue.setValue(aSelectedItems[0].getTitle());
+                sap.ui.getCore().byId("idCharvalno").setValue(aSelectedItems[0].getDescription());
+                
+             }
+            that.handleClose(oEvent);
+          },
+
+          onAdd:function(oEvent){
+            var oClassName = sap.ui.getCore().byId("idClassname").getValue(),
+            oCharName = sap.ui.getCore().byId("idCharname").getValue(),
+            oCharVel = sap.ui.getCore().byId("idCharval").getValue();
+            that.aData=[];
+
+      if(oClassName !== "" && oCharName !== "" && oCharVel !== "" ){
+          
+          this.oData = {
+              "RESTRICTION": sap.ui.getCore().byId("idrest").getValue(),
+              "CLASS_NAME": oClassName,
+              "CLASS_NUM": sap.ui.getCore().byId("idClassno").getValue(),
+              "CHAR_NAME": oCharName,
+              "CHAR_NUM": sap.ui.getCore().byId("idCharno").getValue(),
+              "CHAR_COUNTER": sap.ui.getCore().byId("idcharcounter").getValue(),
+              "CHAR_VALUE": oCharVel,
+              "CHARVAL_NUM": sap.ui.getCore().byId("idCharvalno").getValue(),
+              "OD_CONDITION": sap.ui.getCore().byId("idODcond").getSelectedKey(),
+              "ROW_ID": sap.ui.getCore().byId("idrowid").getValue(),
+                };
+                // Add entry to the table model
+                that.aData.push(that.oData);
+
+                that.ListModel.setData({
+                    results: that.aData
+                });
+                sap.ui.getCore().byId("idItemList").setModel(that.ListModel);
+
+                // sap.ui.getCore().byId("idrest").setValue("");
+                sap.ui.getCore().byId("idClassname").setValue("");
+                sap.ui.getCore().byId("idClassno").setValue("");
+                sap.ui.getCore().byId("idCharname").setValue("");
+                sap.ui.getCore().byId("idCharno").setValue("");
+                sap.ui.getCore().byId("idcharcounter").setValue("");
+                sap.ui.getCore().byId("idCharval").setValue("");
+                sap.ui.getCore().byId("idCharvalno").setValue("");
+                sap.ui.getCore().byId("idODcond").setValue("");
+                sap.ui.getCore().byId("idrowid").setValue("");
+
+                } else {
+                    MessageToast.show("Please select all inputs");
+                }
+
+            },
+
+            onSaveRest: function (oEvent) {
+                var oTable = sap.ui.getCore().byId("idItemList").getItems();
+                var oEntry = {
+                    RTRCHAR: [],
+                  },
+                  vRuleslist;
+                  var oFlag = "C";
+                  for(var i=0; i<oTable.length; i++){
+    
+                        vRuleslist = {
+                            RESTRICTION: oTable[i].getCells()[0].getText(),
+                            CLASS_NUM: oTable[i].getCells()[2].getText(),           
+                            CHAR_NUM:oTable[i].getCells()[4].getText(),            
+                            CHAR_COUNTER:oTable[i].getCells()[5].getText(),
+                            CHARVAL_NUM: oTable[i].getCells()[7].getText(),
+                            OD_CONDITION: oTable[i].getCells()[8].getText(),
+                            ROW_ID : parseInt(oTable[i].getCells()[9].getText()),
+                        };
+                        oEntry.RTRCHAR.push(vRuleslist);
+                    }
+        
+                that.getModel("BModel").callFunction("/maintainRestrDet", {
+                    method: "GET",
+                    urlParameters: {
+                        FLAG : oFlag,
+                        RTRCHAR: JSON.stringify(oEntry.RTRCHAR)
+                    },
+                    success: function (oData) {
+                      sap.ui.core.BusyIndicator.hide();
+                      sap.m.MessageToast.show("success");
+                      that.onAfterRendering();
+                      that.onCloseRestItem();
+                     
+                    },
+                    error: function (error) {
+                      sap.ui.core.BusyIndicator.hide();
+                      sap.m.MessageToast.show("Error");
+                    },
+                  });            
+              },
+
+            onCharDel:function(oEvent){
+            var oSelItem = oEvent.getParameters("listItem").id.split("CharList-")[1];
+            var aData = that.ListModel.getData().results;
+            aData.splice(oSelItem,1); //removing 1 record from i th index.
+            that.ListModel.refresh();
+
+
             },
 
             onEditItem: function (oEvent) {
@@ -208,8 +590,8 @@ sap.ui.define(
                             CHAR_NUM:aData.CHAR_NUM,            
                             CHARVAL_NUM:aData.CHARVAL_NUM,
                             CHAR_COUNTER: aData.CHAR_COUNTER,
-                            OD_CONDITION: aData.OD_CONDITION,
-                            ROW_ID : aData.ROW_ID,
+                            OD_CONDITION: oTable[i].getCells()[4].getSelectedKey(),
+                            ROW_ID : oTable[i].getCells()[5].getValue(),
                         };
                         oEntry.RTRCHAR.push(vRuleslist);
                     }
@@ -242,11 +624,6 @@ sap.ui.define(
                   vRuleslist;
                   var oFlag = "D";
                 var selItem = oEvent.getSource().getParent().getBindingContext().getObject();
-                    // var oRest = selItem.RESTRICTION,
-                    //     oClassnum = selItem.CLASS_NUM,
-                    //     oCharNum = selItem.CHAR_NUM,
-                    //     oCharCounter = selItem.CHAR_COUNTER,
-                    //     oCharValNo = selItem.CHARVAL_NUM;
 
                         vRuleslist = {
                             RESTRICTION: selItem.RESTRICTION,
