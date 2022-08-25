@@ -4,25 +4,10 @@
     xmlns:core="sap.ui.core" controllerName="cpapp.cprestrictions.controller.ItemDetail"
     xmlns:html="http://www.w3.org/1999/xhtml">
     <Page id="page" showHeader="false" showFooter="true">
-       <!-- <l:Grid defaultSpan="XL3 L3 M6 S12" >
-        <VBox >
-            <Text text="Location :" />
-            <Text text="{oGModel>/locId}" />
-        </VBox>
-        <VBox >
-        <HBox>
-            <Button icon = "sap-icon://add" press="onPress" iconDensityAware="false" type="Transparent"/>
-            <Button icon = "sap-icon://edit" press="onPress" iconDensityAware="false" type="Transparent"/>
-            <Button icon = "sap-icon://decline" press="onPress" iconDensityAware="false" type="Transparent" />
-        </HBox>
-        </VBox>
-        
-        </l:Grid> -->
-
-            <content>
+        <content>
             <Toolbar height="5%">
             <ToolbarSpacer/>
-            <Text text="Restriction Item Details" />
+            <Text text="Restriction Rule" />
             <ToolbarSpacer/>
             <ToolbarSpacer/>
                     <Button icon = "sap-icon://add" press="onCreateItem" iconDensityAware="false" type="Transparent"/>

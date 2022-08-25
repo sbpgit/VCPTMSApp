@@ -241,7 +241,25 @@ sap.ui.define(
 
             },
             onCloseRestItem: function () {
+                that.aData = [];
+                that.ListModel.setData({
+                    results: that.aData
+                });
+                sap.ui.getCore().byId("idItemList").setModel(that.ListModel);
+                
+                sap.ui.getCore().byId("idClassname").setValue("");
+                sap.ui.getCore().byId("idCharname").setValue("");
+                sap.ui.getCore().byId("idCharval").setValue("");
+                sap.ui.getCore().byId("idcharcounter").setValue("");
+                sap.ui.getCore().byId("idrowid").setValue("");
+                sap.ui.getCore().byId("idClassno").setValue("");
+                sap.ui.getCore().byId("idCharno").setValue("");
+                sap.ui.getCore().byId("idCharvalno").setValue("");
+
+
+
                 that._valueHelpDialogRestItem.close();
+
             },
 
 
@@ -252,13 +270,23 @@ sap.ui.define(
          */
         handleValueHelp: function (oEvent) {
             var sId = oEvent.getParameter("id");
-            oGModel.setProperty("/OpenProdInut", "");
+
              if (sId.includes("Classname")) {
                   that._valueHelpDialogclassName.open();                
               } else if (sId.includes("Charname")) {
-                that._valueHelpDialogcharName.open();                
+                if (sap.ui.getCore().byId("idClassname").getValue()) {
+                    that._valueHelpDialogcharName.open(); 
+                } else {
+                    MessageToast.show("Select Class Name");
+                }
+                               
               } else if (sId.includes("Charval")) {
-                that._valueHelpDialogcharValue.open();                
+                if (sap.ui.getCore().byId("idCharname").getValue()) {
+                    that._valueHelpDialogcharValue.open(); 
+                } else {
+                    MessageToast.show("Select Class Name and Characteristic Name");
+                }
+                                
             }
           },
 
@@ -456,10 +484,12 @@ sap.ui.define(
           onAdd:function(oEvent){
             var oClassName = sap.ui.getCore().byId("idClassname").getValue(),
             oCharName = sap.ui.getCore().byId("idCharname").getValue(),
-            oCharVel = sap.ui.getCore().byId("idCharval").getValue();
+            oCharVel = sap.ui.getCore().byId("idCharval").getValue(),
+            ocharCounter = sap.ui.getCore().byId("idcharcounter").getValue(),
+            oRowid = sap.ui.getCore().byId("idrowid").getValue();
             that.aData=[];
 
-      if(oClassName !== "" && oCharName !== "" && oCharVel !== "" ){
+      if(oClassName !== "" && oCharName !== "" && oCharVel !== "" && ocharCounter !== "" && oRowid !== ""){
           
           this.oData = {
               "RESTRICTION": sap.ui.getCore().byId("idrest").getValue(),
@@ -493,7 +523,7 @@ sap.ui.define(
                 sap.ui.getCore().byId("idrowid").setValue("");
 
                 } else {
-                    MessageToast.show("Please select all inputs");
+                    MessageToast.show("Please fill all inputs");
                 }
 
             },
