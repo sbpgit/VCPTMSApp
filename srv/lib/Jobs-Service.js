@@ -5,7 +5,7 @@ const { v1: uuidv1} = require('uuid')
 
 const request = require('request');
 const rp = require('request-promise')
-const lbaseUrl = "https://sbpprovider-dev-config-products-srv.cfapps.us10.hana.ondemand.com"; 
+const lbaseUrl = "https://sbpbtp-vcpprovider-sc0jeojq-dev-config-products-srv.cfapps.us10.hana.ondemand.com"; 
 const vcap_app = process.env.VCAP_APPLICATION;
 
 function getBaseUrl()
