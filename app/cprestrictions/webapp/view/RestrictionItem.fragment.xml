@@ -4,7 +4,7 @@
     xmlns:l="sap.ui.layout"
     xmlns:f="sap.ui.layout.form"
     xmlns:u="sap.ui.unified">
-    <Dialog id="idRestItem" title="Create Restriction" contentWidth="850px" titleAlignment="Center">
+    <Dialog id="idRestItem" title="Create Restriction Rule" contentWidth="850px" titleAlignment="Center">
             <!-- <OverflowToolbar id="idOvrFlwTb">
                     <ToolbarSpacer/>
                     <Button id="idAdd" text="Add" press="onAdd" type="Emphasized"/>
@@ -18,25 +18,21 @@
 
                     <Label text="Class Name"/>
                     <Input id="idClassname" value=""  placeholder="Class Name" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
-                    
-                    <Label text="Char Name"/>
-                    <Input id="idCharname" value=""  placeholder="Char Name" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
-                    
-                    <Label text="Char Value"/>
-                    <Input id="idCharval" value=""  placeholder="Char Value" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
-                    
-
+                    <Label text="Characteristic Name"/>
+                    <Input id="idCharname" value=""  placeholder="Characteristic Name" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                    <Label text="Characteristic Value"/>
+                    <Input id="idCharval" value=""  placeholder="Characteristic Value" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
                     <Label text="{i18n>charcounter}"/>
-                    <Input id="idcharcounter" value="" placeholder="{i18n>charcounter}"/>
+                    <Input id="idcharcounter" value="" placeholder="{i18n>charcounter}" type="Number"/>
+                    
                     <Label text="{i18n>odcond}"/>
-                    <!-- <Input id="idODcond" value="" placeholder="{i18n>odcond}" /> -->
                     <Select id="idODcond"  selectedKey="EQ" class="buttonDesktop">
 							<core:ListItem key="EQ" text="EQ"/>
 							<core:ListItem key="NE" text="NE"/>
 						</Select>
 
                     <Label text="{i18n>rowid}"/>
-                    <Input id="idrowid" value="" placeholder="{i18n>rowid}"/>
+                    <Input id="idrowid" value="" placeholder="{i18n>rowid}" type="Number"/>
                     
                     <Label />
                     <Input id="idClassno" value="" visible="false"/>
@@ -75,9 +71,9 @@
                         <Text text="{i18n>charcounter}"/>
                     </Column>
                     <Column hAlign="Center">
-                        <Text text="{i18n>charvalue}"/>
+                        <Text text="{i18n>charval}"/>
                     </Column>
-                    <Column hAlign="Center" >
+                    <Column hAlign="Center" visible="false">
                         <Text text="{i18n>charvalno}"/>
                     </Column>
                     <Column hAlign="Center" >
