@@ -568,6 +568,10 @@ context cp {
             LOCATION_ID      : String(4)      @title : 'Location ID';
             UNIQUE_ID        : Integer        @title : 'Unique ID';
             PRIMARY_ID       : Integer        @title : 'Primary ID';
+            SO_TYPE          : String(4)      @title : 'Seed Order Type';
+            ORD_QTY          : Decimal(13, 3) @title : 'Order Quantity';
+            MAT_AVAILDATE    : Date           @title : 'Material Availability Date';
+            
     }
     // Authorization object master
     entity USER_AUTHOBJ  {
@@ -982,4 +986,20 @@ entity![V_LOCPRODLINERTR]{
     key![LINE_ID]     : String(40) @title : 'Line';
     key![RESTRICTION] : String(30) @title : 'Restriction';
     key![RTR_DESC]    : String(30) @title : 'Restriction Description';
+}
+
+@cds.persistence.exists 
+Entity ![V_CIR_CHAR_RATE] {
+key     ![LOCATION_ID]: String(4)  @title: 'LOCATION_ID' ; 
+key     ![PRODUCT_ID]: String(40)  @title: 'PRODUCT_ID' ; 
+key     ![WEEK_DATE]: Date  @title: 'WEEK_DATE' ; 
+key     ![MODEL_VERSION]: String(20)  @title: 'MODEL_VERSION' ; 
+key     ![VERSION]: String(10)  @title: 'VERSION' ; 
+key     ![SCENARIO]: String(32)  @title: 'SCENARIO' ; 
+key     ![CHAR_NUM]: String(30)  @title: 'CHAR_NUM' ; 
+key     ![CHARVAL_NUM]: String(70)  @title: 'CHARVAL_NUM' ; 
+key     ![SEQUENCE]: Integer  @title: 'SEQUENCE' ; 
+key     ![PLAN_QTY]: Decimal(13, 3)  @title: 'PLAN_QTY' ; 
+key     ![GEN_QTY]: Integer  @title: 'GEN_QTY' ; 
+key     ![DEVIATION]: Decimal(31, 14)  @title: 'DEVIATION' ; 
 }
