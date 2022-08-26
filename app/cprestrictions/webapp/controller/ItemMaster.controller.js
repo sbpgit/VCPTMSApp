@@ -151,6 +151,8 @@ sap.ui.define(
                     // Set the selected values to get the details
                     oGModel.setProperty("/Restriction", sSelItem.RESTRICTION);
                     oGModel.setProperty("/locId", sSelItem.LOCATION_ID);
+                    //This value is to refresh the data in Item detail page when we click on cancel update bubtton
+                    oGModel.setProperty("/readClass", "X");
                 }
                 that.getOwnerComponent().runAsOwner(function () {
                     if (!that.oDetailView) {
