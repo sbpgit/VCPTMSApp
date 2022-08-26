@@ -5,6 +5,7 @@ const destination = SapCfAxios('USERAPI');
 module.exports = (srv) => {
     srv.on('userInfo', async (req) => {
         console.log(req.user);
+        return req.user;
         // let response = await destination({
         //     method: 'GET',
         //     url: "/service/user",

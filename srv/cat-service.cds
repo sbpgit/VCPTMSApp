@@ -14,7 +14,8 @@ using {
     V_UNIQUE_ID_ITEM,
     V_UNIQUE_ID,
     V_ODRESTRICT,
-    V_LOCPRODLINERTR
+    V_LOCPRODLINERTR,
+    V_CIR_CHAR_RATE
 } from '../db/data-model';
 // using V_ODPROFILES from '../db/data-model';
 using V_BOMODCOND from '../db/data-model';
@@ -240,4 +241,6 @@ service CatalogService @(impl : './lib/cat-service.js'){
     function maintainRestrHdr(LOCATION_ID: String(4), LINE_ID: String(40), RESTRICTION : String(30), RTR_DESC    : String(30), VALID_FROM  : Date , VALID_TO : Date, Flag: String(1)) returns String;
     
     function maintainRestrDet (FLAG : String(1), RTRCHAR : String ) returns String;
+    // CIR char rate
+    entity getCIRCharRate       as projection on V_CIR_CHAR_RATE;
 }

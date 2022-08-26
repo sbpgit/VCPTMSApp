@@ -1253,6 +1253,26 @@ sap.ui.define(
                       text: oScheData[i].Product,
                     })
                   );
+                //   25-08-2022
+                  if (oJobType === "M") {
+                    if(oScheData[i].modelVersion === "Active"){
+                        that.byId("Midmdlver").setSelectedKey("act");
+                    } else if(oScheData[i].modelVersion === "Simulation") {
+                        that.byId("Midmdlver").setSelectedKey("sim");
+                    }
+                    that.byId("MidType").setSelectedKey(oScheData[i].Type);            
+                    }
+
+                    if (oJobType === "P") {
+                        if(oScheData[i].modelVersion === "Active"){
+                            that.byId("PidModelVer").setSelectedKey("Active");
+                        } else if(oScheData[i].modelVersion === "Simulation") {
+                            that.byId("PidModelVer").setSelectedKey("Simulation");
+                        }
+                        that.byId("PidType").setSelectedKey(oScheData[i].Type);            
+                        }
+
+                        // 25-08-2022
 
                   if (oScheData[i].override === true) {
                     if (oJobType === "M") {
@@ -1697,6 +1717,9 @@ sap.ui.define(
             vRuleslist,
             oRuleList = [];
           var oMdlVer = that.byId("Midmdlver").getSelectedKey(),
+          //   25-08-2022
+              oMType = that.byId("MidType").getSelectedKey(),
+        //   25-08-2022
             vMdlVer;
           oLocItem = that.oLoc.getValue();
           (oProdItems = that.oProd.getTokens()),
@@ -1719,7 +1742,9 @@ sap.ui.define(
                 Location: oLocItem,
                 Product: oProdItems[i].getText(),
                 GroupID: "ALL",
-                Type: "OD",
+                //   25-08-2022
+                Type: oMType,
+                //   25-08-2022
                 modelVersion: vMdlVer,
               };
               oRuleList.push(vRuleslist);
@@ -1786,6 +1811,9 @@ sap.ui.define(
             oSelVer,
             oLocItem,
             oSelScen,
+            //   25-08-2022
+            oSelType,
+            //   25-08-2022
             i;
           var oEntry = {
               vcRulesList: [],
@@ -1797,6 +1825,9 @@ sap.ui.define(
           oProdItems = that.oProd.getTokens();
           cSelected = that.byId("PidCheck").getSelected();
           oSelModelVer = this.byId("PidModelVer").getSelectedKey();
+          //   25-08-2022
+          oSelType = this.byId("PidType").getSelectedKey();
+          //   25-08-2022
           oSelVer = this.oVer.getValue();
           oSelScen = this.oScen.getValue();
 
@@ -1811,7 +1842,9 @@ sap.ui.define(
                 Location: oLocItem,
                 Product: oProdItems[i].getText(),
                 GroupID: "ALL",
-                Type: "OD",
+                //   25-08-2022
+                Type: oSelType,
+                //   25-08-2022
                 modelVersion: oSelModelVer,
                 version: oSelVer,
                 scenario: oSelScen,

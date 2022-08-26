@@ -85,12 +85,27 @@
 
                                     </f:fields>
                                 </f:FormElement>
+                                <!-- 25-08-2022 -->
+                                 <f:FormElement>
+                                    <f:label>
+                                        <Label text="{i18n>type}" />
+                                    </f:label>
+                                    <f:fields>
+                                        <Select id="MidType"  selectedKey="OD" class="buttonDesktop">
+                                            <core:ListItem key="OD" text="Object Dependency"/>
+                                            <core:ListItem key="RT" text="Restrictions"/>
+                                            <core:ListItem key="PI" text="Primary"/>
+                                        </Select>
+                                    </f:fields>
+                                </f:FormElement>
+                                <!-- 25-08-2022 -->
                                 <f:FormElement>
                                     <f:label>
                                         <Label text="{i18n>override}" />
                                     </f:label>
                                     <f:fields>
                                         <CheckBox id="MidCheck" select="onCheck"/>
+                                        
                                         <Button type="Emphasized" text="{i18n>mdlgene}" press="onModelGen" width="100%"/>
                                         <!-- <Button type="Emphasized" text="{i18n>mdlgene}" press="onModelGen" width="100%"/> -->
                                     </f:fields>
@@ -171,6 +186,20 @@
                                         <Input id="Pidscen" value="" placeholder="{i18n>ibpscen}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                                     </f:fields>
                                 </f:FormElement>
+                                <!-- 25-08-2022 -->
+                                 <f:FormElement>
+                                    <f:label>
+                                        <Label text="{i18n>type}" />
+                                    </f:label>
+                                    <f:fields>
+                                        <Select id="PidType"  selectedKey="OD" class="buttonDesktop">
+                                            <core:ListItem key="OD" text="Object Dependency"/>
+                                            <core:ListItem key="RT" text="Restrictions"/>
+                                            <core:ListItem key="PI" text="Primary"/>
+                                        </Select>
+                                    </f:fields>
+                                </f:FormElement>
+                                <!-- 25-08-2022 -->
                                 <f:FormElement>
                                     <f:label>
                                         <Label text="{i18n>override}" />
