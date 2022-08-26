@@ -181,16 +181,7 @@ module.exports = async function (srv) {
         }
 
 
-        // SALES HISTORY
 
-        // sqlStr = 'select * FROM PLSTR_DATA';
-        // results = await cds.run(sqlStr);
-        // for(let shIndex = 0; shIndex < results.length; shIndex++)
-        // {
-        //     console.log("results [",shIndex,"]"," = ", results[shIndex]);
-        //     if (shIndex = 50)
-        //         break;
-        // }
 
 
 
@@ -204,6 +195,78 @@ module.exports = async function (srv) {
 
     }
 
+    // SALES HISTORY
+
+    sqlStr = 'select * FROM PLSTR_DATA';
+    plstrData = await cds.run(sqlStr);
+
+    console.log("PLSTR_DATA rows", plstrData.length);
+
+    // var plstrJson = JSON.stringify(plstrData);
+    var salesDocId = 900000;
+    const salesDocItem = 50;
+    const sheduledLineNum = 10;
+    const uom = 'EA';
+
+    
+    for(let shIndex = 0; shIndex < plstrData.length; shIndex++)
+    {
+        salesDocId++;
+
+        // console.log("SALES_DOC ", salesDocId, "SALESDOC_ITEM ",salesDocItem,
+        //             "SCHEDULELINE_NUM", sheduledLineNum,
+        //             "DOC_CREATEDDATE ", plstrData[shIndex].START_DATE,
+        //             "PRODUCT_ID ", plstrData[shIndex].PRODUCT_ID,
+        //             "UOM ", uom,
+        //             "CONFIRMED_QTY ",plstrData[shIndex].HANDOVERS_COUNT,
+        //             "ORD_QTY ",plstrData[shIndex].HANDOVERS_COUNT,
+        //             "MAT_AVAILDATE ",plstrData[shIndex].START_DATE,
+        //             "CUSTOMER_GROUP ",plstrData[shIndex].COUNTRY + '_'+plstrData[shIndex].SALES_TYPE,
+        //             "LOCATION_ID ",'PL20',
+        //             "CREATED_BY ",'SBP',
+        //             "CREATED_DATE ",plstrData[shIndex].START_DATE
+
+        //             );
+
+        sqlStr = 'UPSERT PLSTR_SALESH VALUES (' +
+                    "'" + salesDocId + "'" + "," +
+                    "'" + salesDocItem + "'" + "," +
+                    "'" + plstrData[shIndex].START_DATE + "'" + "," +
+                    "'" + sheduledLineNum + "'" + "," +
+                    "'" + plstrData[shIndex].PRODUCT_ID + "'" + "," +
+                    "''" + "," +
+                    "'" + uom + "'" + "," +
+                    "'" + plstrData[shIndex].HANDOVERS_COUNT + "'" + "," +
+                    "'" + plstrData[shIndex].HANDOVERS_COUNT + "'" + "," +
+                    "'" + plstrData[shIndex].START_DATE + "'" + "," +
+                    "'" + 9999999 + "'" + "," +
+                    "'" + plstrData[shIndex].COUNTRY + "'" + "," +
+                    "'PL20'" + "," +
+                    "'" + plstrData[shIndex].START_DATE + "'" + "," +
+                    "''" + "," +
+                    "'" + plstrData[shIndex].START_DATE + "'" + "," +
+                    "'SBP'" + "," +
+                    "''" + "," +
+                    "''" +')' + ' WITH PRIMARY KEY';
+
+        // console.log("PLSTR_SALESH VALUES sqlStr", sqlStr);
+
+        let saleshResults = await cds.run(sqlStr);
+        // console.log("PLSTR_SALESH  ", saleshResults);
+        console.log("PLSTR_SALESH salesDoc ", salesDocId);
+
+        // if (shIndex == 50)
+        //     break;
+    }
+
+    // sqlStr = 'UPSERT PLSTR_SALESH (SALES_DOC, SCHEDULELINE_NUM, DOC_CREATEDDATE, PRODUCT_ID, ' +
+    //            'UOM, CONFIRMED_QTY,ORD_QTY, MAT_AVAILDATE,CUSTOMER_GROUP,LOCATION_ID,CREATED_BY,CREATED_DATE)' +
+	// 			' SELECT DISTINCT ' + "'" + salesDocId + "'" 
+    //                                 + "'" + salesDocItem + "'" +
+    //                                 + "'" + sheduledLineNum + "'" +
+    //                                 + "'" + sheduledLineNum + "'" +
+
+    //             ' \'PL20\', PRODUCT_ID FROM PLSTR_PRODUCT';
     // for (let index = 0; index < results.length; index ++)
     // {
        
