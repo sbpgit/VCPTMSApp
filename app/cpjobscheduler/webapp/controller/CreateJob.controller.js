@@ -1262,6 +1262,27 @@ sap.ui.define(
                     })
                   );
 
+                  //   25-08-2022
+                  if (oJobType === "M") {
+                    if(oScheData[i].modelVersion === "Active"){
+                        that.byId("Midmdlver").setSelectedKey("act");
+                    } else if(oScheData[i].modelVersion === "Simulation") {
+                        that.byId("Midmdlver").setSelectedKey("sim");
+                    }
+                    that.byId("MidType").setSelectedKey(oScheData[i].Type);            
+                    }
+
+                    if (oJobType === "P") {
+                        if(oScheData[i].modelVersion === "Active"){
+                            that.byId("PidModelVer").setSelectedKey("Active");
+                        } else if(oScheData[i].modelVersion === "Simulation") {
+                            that.byId("PidModelVer").setSelectedKey("Simulation");
+                        }
+                        that.byId("PidType").setSelectedKey(oScheData[i].Type);            
+                        }
+
+                        // 25-08-2022
+
                   if (oScheData[i].override === true) {
                     if (oJobType === "M") {
                       that.byId("MidCheck").setSelected(true);

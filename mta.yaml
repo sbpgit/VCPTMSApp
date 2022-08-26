@@ -175,6 +175,10 @@ modules:
       - cpappcpprodrestr.zip
       name: cpappcpprodrestr
       target-path: resources/
+    - artifacts:
+      - cpappcpcharqtygraph.zip
+      name: cpappcpcharqtygraph
+      target-path: resources/
 - name: cpodpcpodprofiles
   type: html5
   path: app/cp_odprofiles
@@ -454,6 +458,16 @@ modules:
 - name: cpappcpprodrestr
   type: html5
   path: app/cpprodrestr
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappcpcharqtygraph
+  type: html5
+  path: app/cpcharqtygraph
   build-parameters:
     build-result: dist
     builder: custom
