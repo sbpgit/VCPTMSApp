@@ -1,7 +1,197 @@
 <mvc:View controllerName="cpapp.cpcharqtygraph.controller.Home"
-    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
-    xmlns="sap.m">
-    <Page id="page" title="{i18n>title}">
-        <content />
-    </Page>
+     xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core" displayBlock="true"
+    xmlns="sap.m"
+    xmlns:l="sap.ui.layout"
+    xmlns:ux="sap.uxap"
+    xmlns:layout="sap.ui.layout"
+    xmlns:commons="sap.suite.ui.commons"
+    xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
+     xmlns:viz.data="sap.viz.ui5.data"
+     xmlns:viz="sap.viz.ui5.controls"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:html="http://www.w3.org/1999/xhtml">
+    <ux:ObjectPageLayout id="ObjectPageLayout">
+        <ux:headerTitle>
+            <ux:ObjectPageDynamicHeaderTitle>
+                <ux:expandedHeading>
+                    <Title text="{i18n>pageTitle}" class="boldText" titleAlignment="Center" />
+                </ux:expandedHeading>
+                <ux:snappedHeading>
+					<FlexBox fitContainer="true" alignItems="Center" >
+						<Title text="{i18n>pageTitle}" wrapping="true" />
+					</FlexBox>
+				</ux:snappedHeading>
+            </ux:ObjectPageDynamicHeaderTitle>
+        </ux:headerTitle>
+        <ux:headerContent>
+            <FlexBox wrap="Wrap" fitContainer="true">
+                <l:Grid defaultSpan="XL3 L3 M6 S12">
+                    
+                    <VBox >
+                        <Label text="Location" required= "true"/>
+                        <Input id="idloc" value="" placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                    </VBox>
+                    <VBox >
+                        <Label text="Product" required= "true"/>
+                        <Input id="idprod" placeholder="Product" value="" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+
+                    </VBox>
+                    <VBox >
+                        <Label text="IBP Version" required= "true"/>
+                        <Input id="idver" value="" placeholder="Version" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                    </VBox>
+                    <VBox >
+                <Label text="IBP Model-Version" required="true" />            
+                <ComboBox id="idComboBox" width="auto" placeholder="Select" change="onSelect" class="CombBox"
+									showButton="true">
+									<core:Item key="Active" text="Active"/>
+									<core:Item key="Simulation" text="Simulation"/>
+									
+								</ComboBox>
+            </VBox>
+                    <VBox >
+                        <Label text="IBP Scenario"/>
+                        <Input id="idscen" value="" placeholder="Scenario" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+
+                    </VBox>
+                    <VBox >
+                        <Label text="Week Date"  />
+                <DateRangeSelection id="fromDate"  value="" displayFormat="yyyy-MM-dd" valueFormat="EEE MMM dd y" change="handleDateChange"/>
+                    </VBox>
+
+                    <VBox>
+                        <Label text=""/>
+                        <HBox>
+                            <Button text="Go" type="Emphasized" press="onGetData" tooltip="Get data based on filters" class="sapUiTinyMarginEnd"/>
+                            <Button text="Reset" type="Transparent" press="onResetDate" tooltip="Reset Valid To Date"/>
+                        </HBox>
+                    </VBox>
+
+                </l:Grid>
+            </FlexBox>
+        </ux:headerContent>
+        <ux:sections>
+            <ux:ObjectPageSection id="idOBPageSec" >
+                <ux:subSections id="idSubSec">
+                    <ux:ObjectPageSubSection id="idObjectPageSub">
+                        <ux:blocks id="idblocks">
+                        <layout:Splitter id="idSplitter" height="auto" width="100%" class="sapUiNoContentPadding" visible="false">                 
+                        <layout:FixFlex id='chartFixFlex' minFlexSize="500" class="fixFlex" > 
+
+<layout:flexContent class="fixFlex">
+<commons:ChartContainer id="idInvChartContainer" showFullScreen="true" showPersonalization="false" showZoom="false" autoAdjustHeight="true" 
+									showLegend="true">
+
+                                    <commons:content>
+										<commons:ChartContainerContent>
+											<commons:content>
+                        <!-- <Panel id="idPanel" headerText="{}" expandable="true" expanded="false" expand="onExpand"> -->
+                            <!-- <content> -->
+                            <viz:Popover id="idPopOver"></viz:Popover>
+                                <viz:VizFrame xmlns="sap.viz" id="idVizFrame" vizType="line" vizProperties="{title: { text: 'Total Qty Chart' }}">
+                                    <viz:dataset>
+                                        <viz.data:FlattenedDataset data="{/results1}">
+                                            <viz.data:dimensions>
+                            <viz.data:DimensionDefinition name="CHAR_NUM"
+                                value="{CHAR_NUM}" />
+                                <viz.data:DimensionDefinition name="CHARVAL_NUM"
+                                value="{CHARVAL_NUM}" />
+                        </viz.data:dimensions>
+                        <viz.data:measures>
+                            <viz.data:MeasureDefinition name="GEN_QTY"
+                                value="{GEN_QTY}" />
+                            <viz.data:MeasureDefinition name="PLAN_QTY"
+                                value="{PLAN_QTY}" />
+                        </viz.data:measures>
+                                        </viz.data:FlattenedDataset>
+                                    </viz:dataset>
+                                    <viz:feeds>
+                                        <viz.feeds:FeedItem id='valueAxisFeed' uid="valueAxis" type="Measure"
+                        values="PLAN_QTY" />
+                         <viz.feeds:FeedItem id='valueAxisFeed1' uid="valueAxis" type="Measure"
+                        values="GEN_QTY" />
+                    <viz.feeds:FeedItem id='categoryAxisFeed' uid="categoryAxis" type="Dimension"
+                        values="CHAR_NUM" />
+                        <viz.feeds:FeedItem id='categoryAxisFeed1' uid="categoryAxis" type="Dimension"
+                        values="CHARVAL_NUM" />
+                                    </viz:feeds>
+                                </viz:VizFrame>
+                            <!-- </content> -->
+                        <!-- </Panel> -->
+                   </commons:content>
+										</commons:ChartContainerContent>
+                                        </commons:content>
+								</commons:ChartContainer>
+                                </layout:flexContent>
+        
+        </layout:FixFlex>
+        </layout:Splitter>
+
+<List id="grid1" growingScrollToLoad="true" items="{path :'/results'}" visible="false">
+                <items>
+                    <CustomListItem>
+                        <Panel id="idPanel" headerText="{WEEK_DATE}" expandable="true" expanded="false" expand="onExpand">
+                            <content>
+                            <commons:ChartContainer id="idInvChartContainer1" showFullScreen="true" showPersonalization="false" showZoom="false" autoAdjustHeight="true" 
+									showLegend="true">
+
+                                    <commons:content>
+										<commons:ChartContainerContent >
+											<commons:content>
+                            <viz:Popover id="idPopOver1"></viz:Popover>
+                                <viz:VizFrame xmlns="sap.viz" id="idLineChart" height='250px' width="50%" vizType="line" vizProperties="{ title: { text: '' }}">
+                                    <viz:dataset>
+                                        <viz.data:FlattenedDataset data="{/items1}">
+                                            <viz.data:dimensions>
+                            <viz.data:DimensionDefinition name="CHAR_NUM"
+                                value="{CHAR_NUM}" />
+                                <viz.data:DimensionDefinition name="CHARVAL_NUM"
+                                value="{CHARVAL_NUM}" />
+                        </viz.data:dimensions>
+                        <viz.data:measures>
+                            <viz.data:MeasureDefinition name="GEN_QTY"
+                                value="{GEN_QTY}" />
+                            <viz.data:MeasureDefinition name="PLAN_QTY"
+                                value="{PLAN_QTY}" />
+                        </viz.data:measures>
+                                        </viz.data:FlattenedDataset>
+                                    </viz:dataset>
+                                    <viz:feeds>
+                                        <viz.feeds:FeedItem id='valueAxisFeedPan' uid="valueAxis" type="Measure"
+                        values="PLAN_QTY" />
+                         <viz.feeds:FeedItem id='valueAxisFeed1Pan' uid="valueAxis" type="Measure"
+                        values="GEN_QTY" />
+                    <viz.feeds:FeedItem id='categoryAxisFeedPan' uid="categoryAxis" type="Dimension"
+                        values="CHAR_NUM" />
+                        <viz.feeds:FeedItem id='categoryAxisFeed1Pan' uid="categoryAxis" type="Dimension"
+                        values="CHARVAL_NUM" />
+                                    </viz:feeds>
+                                </viz:VizFrame>
+                                </commons:content>
+										</commons:ChartContainerContent>
+                                        </commons:content>
+								</commons:ChartContainer>
+                            </content>
+                        </Panel>
+                    </CustomListItem>
+                </items>
+            </List>
+
+
+
+
+
+
+
+
+
+
+                        </ux:blocks>
+                    </ux:ObjectPageSubSection>
+                </ux:subSections>
+            </ux:ObjectPageSection>
+        </ux:sections>
+    </ux:ObjectPageLayout>
+
 </mvc:View>
