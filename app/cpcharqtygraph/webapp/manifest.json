@@ -66,6 +66,7 @@
                 "sap.m": {},
                 "sap.ui.core": {},
                 "sap.f": {},
+                "sap.viz": {},
                 "sap.suite.ui.generic.template": {},
                 "sap.ui.comp": {},
                 "sap.ui.generic.app": {},

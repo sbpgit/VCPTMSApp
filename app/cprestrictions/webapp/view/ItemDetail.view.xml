@@ -11,7 +11,7 @@
             <ToolbarSpacer/>
             <ToolbarSpacer/>
                     <Button icon = "sap-icon://add" press="onCreateItem" iconDensityAware="false" type="Transparent"/>
-                    <Button icon = "sap-icon://edit" press="onEditItem" iconDensityAware="false" type="Transparent"/>
+                    <!-- <Button icon = "sap-icon://edit" press="onEditItem" iconDensityAware="false" type="Transparent"/> -->
                                           
                     </Toolbar>
             <SearchField id="idSearch" liveChange="onItemSearch" placeholder="Class Name/ Char Name/ Char Value"/>
@@ -24,16 +24,21 @@
                                 <Text text="{i18n>charname}" />
                             </Column>
                             <Column hAlign="Left">
-                                <Text text="{i18n>charval}"/>
-                            </Column>
-                            <Column hAlign="Left">
-                                <Text text="{i18n>charcounter}"/>
-                            </Column>
-                            <Column hAlign="Left">
                                 <Text text="{i18n>odcond}" />
                             </Column>
                             <Column hAlign="Left">
+                                <Text text="{i18n>charval}"/>
+                            </Column>
+
+                            <!-- <Column hAlign="Left">
+                                <Text text="{i18n>charcounter}"/>
+                            </Column>
+                            
+                            <Column hAlign="Left">
                                 <Text text="{i18n>rowid}"/>
+                            </Column> -->
+                            <Column hAlign="Left" visible="false">
+                                <Text text=""/>
                             </Column>
                             <Column hAlign="Left">
                                 <Text text=""/>
@@ -44,14 +49,15 @@
                                 <cells>
                                     <Text text="{CLASS_NAME}" />
                                     <Text text="{CHAR_NAME}" />
+                                    <Text text="{OD_CONDITION}" />
                                     <Text text="{CHAR_VALUE}" />
-                                    <Text text="{CHAR_COUNTER}"/>
-                                    <!-- <Input id="idOdCond" value="{OD_CONDITION}" editable="false" /> -->
+                                    <!-- <Text text="{CHAR_COUNTER}"/>
                                     <Select id="idOdCond"  selectedKey="{OD_CONDITION}" class="buttonDesktop" editable="false" >
                                         <core:ListItem key="EQ" text="EQ"/>
                                         <core:ListItem key="NE" text="NE"/>
                                     </Select>
-                                    <Input id="idRowId" value="{ROW_ID}" editable="false" liveChange="onRowIdChange" />
+                                    <Input id="idRowId" value="{ROW_ID}" editable="false" liveChange="onRowIdChange" /> -->
+                                    <Text text="{OFLAG}" />
                                     <Button icon = "sap-icon://decline" press="onDeleteItem" iconDensityAware="false" type="Transparent" /> 
                                 </cells>
                             </ColumnListItem>
@@ -62,7 +68,7 @@
 					<OverflowToolbar>
 						<ToolbarSpacer/>
 						<Button id="idUpdateSave" text="Save" press="onUpdateItem" type="Emphasized" textDirection="LTR" visible="false"/>
-                        <Button id="idUpdateCancel" text="Cancel" press="onCancelUpdate" type="Emphasized" textDirection="LTR" visible="false"/>
+                        <!-- <Button id="idUpdateCancel" text="Cancel" press="onCancelUpdate" type="Emphasized" textDirection="LTR" visible="false"/> -->
 					</OverflowToolbar>
 				</footer>
     </Page>

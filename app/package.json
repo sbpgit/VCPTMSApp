@@ -9,6 +9,7 @@
     "jwt-decode": "^3.1.2"
   },
   "scripts": {
+    "startorig": "node userInfo.js",
     "start": "node node_modules/@sap/approuter/approuter.js"
   }
 }

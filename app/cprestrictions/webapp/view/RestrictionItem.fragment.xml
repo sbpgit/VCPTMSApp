@@ -20,19 +20,22 @@
                     <Input id="idClassname" value=""  placeholder="Class Name" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
                     <Label text="Characteristic Name"/>
                     <Input id="idCharname" value=""  placeholder="Characteristic Name" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
-                    <Label text="Characteristic Value"/>
-                    <Input id="idCharval" value=""  placeholder="Characteristic Value" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
-                    <Label text="{i18n>charcounter}"/>
-                    <Input id="idcharcounter" value="" placeholder="{i18n>charcounter}" type="Number"/>
-                    
                     <Label text="{i18n>odcond}"/>
                     <Select id="idODcond"  selectedKey="EQ" class="buttonDesktop">
 							<core:ListItem key="EQ" text="EQ"/>
 							<core:ListItem key="NE" text="NE"/>
 						</Select>
+                    
+                    <Label text="Characteristic Value"/>
+                    <Input id="idCharval" value=""  placeholder="Characteristic Value" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                    
+                    <!-- <Label text="{i18n>charcounter}"/>
+                    <Input id="idcharcounter" value="" placeholder="{i18n>charcounter}" type="Number"/>
+                    
+                    
 
                     <Label text="{i18n>rowid}"/>
-                    <Input id="idrowid" value="" placeholder="{i18n>rowid}" type="Number"/>
+                    <Input id="idrowid" value="" placeholder="{i18n>rowid}" type="Number"/> -->
                     
                     <Label />
                     <Input id="idClassno" value="" visible="false"/>
@@ -45,12 +48,12 @@
             </f:SimpleForm>
 
         </VBox>
-        <HBox alignItems="Center" justifyContent="End" width="570px">
+        <!-- <HBox alignItems="Center" justifyContent="End" width="570px">
                     
                     <Button id="idAdd" text="Add" press="onAdd" type="Emphasized"/>
-                    </HBox>
+                    </HBox> -->
 
-        <Table id="idItemList" items="{/results}">
+        <!-- <Table id="idItemList" items="{/results}">
                 <columns> 
                 <Column hAlign="Center">
                         <Text text="{i18n>restriction}" />
@@ -103,9 +106,10 @@
                         </cells>
                     </ColumnListItem>
                 </items>
-            </Table>
+            </Table> -->
         <buttons>
-            <Button type='Ghost' text="{i18n>save}" press="onSaveRest"></Button>
+            <!-- <Button type='Ghost' text="{i18n>save}" press="onSaveRest"></Button> -->
+            <Button id="idAdd" text="Add" press="onAdd" type="Emphasized"/>
             <Button type='Reject' text="{i18n>close}" press="onCloseRestItem"></Button>
         </buttons>
     </Dialog>

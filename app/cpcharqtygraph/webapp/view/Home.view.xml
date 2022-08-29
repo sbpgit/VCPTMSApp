@@ -41,15 +41,7 @@
                         <Label text="IBP Version" required= "true"/>
                         <Input id="idver" value="" placeholder="Version" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                     </VBox>
-                    <VBox >
-                <Label text="IBP Model-Version" required="true" />            
-                <ComboBox id="idComboBox" width="auto" placeholder="Select" change="onSelect" class="CombBox"
-									showButton="true">
-									<core:Item key="Active" text="Active"/>
-									<core:Item key="Simulation" text="Simulation"/>
-									
-								</ComboBox>
-            </VBox>
+                    
                     <VBox >
                         <Label text="IBP Scenario"/>
                         <Input id="idscen" value="" placeholder="Scenario" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
@@ -59,7 +51,15 @@
                         <Label text="Week Date"  />
                 <DateRangeSelection id="fromDate"  value="" displayFormat="yyyy-MM-dd" valueFormat="EEE MMM dd y" change="handleDateChange"/>
                     </VBox>
-
+<VBox >
+                <Label text="IBP Model-Version" required="true" />            
+                <ComboBox id="idComboBox" width="auto" placeholder="Select" change="onSelect" class="CombBox" selectedKey="Active"
+									showButton="true">
+									<core:Item key="Active" text="Active"/>
+									<core:Item key="Simulation" text="Simulation"/>
+									
+								</ComboBox>
+            </VBox>
                     <VBox>
                         <Label text=""/>
                         <HBox>
@@ -76,7 +76,7 @@
                 <ux:subSections id="idSubSec">
                     <ux:ObjectPageSubSection id="idObjectPageSub">
                         <ux:blocks id="idblocks">
-                        <layout:Splitter id="idSplitter" height="auto" width="100%" class="sapUiNoContentPadding" visible="false">                 
+                        <!-- <layout:Splitter id="idSplitter" height="auto" width="100%" class="sapUiNoContentPadding" visible="false">                 
                         <layout:FixFlex id='chartFixFlex' minFlexSize="500" class="fixFlex" > 
 
 <layout:flexContent class="fixFlex">
@@ -86,8 +86,7 @@
                                     <commons:content>
 										<commons:ChartContainerContent>
 											<commons:content>
-                        <!-- <Panel id="idPanel" headerText="{}" expandable="true" expanded="false" expand="onExpand"> -->
-                            <!-- <content> -->
+                        
                             <viz:Popover id="idPopOver"></viz:Popover>
                                 <viz:VizFrame xmlns="sap.viz" id="idVizFrame" vizType="line" vizProperties="{title: { text: 'Total Qty Chart' }}">
                                     <viz:dataset>
@@ -117,8 +116,7 @@
                         values="CHARVAL_NUM" />
                                     </viz:feeds>
                                 </viz:VizFrame>
-                            <!-- </content> -->
-                        <!-- </Panel> -->
+                           
                    </commons:content>
 										</commons:ChartContainerContent>
                                         </commons:content>
@@ -126,23 +124,27 @@
                                 </layout:flexContent>
         
         </layout:FixFlex>
-        </layout:Splitter>
+        </layout:Splitter> -->
 
-<List id="grid1" growingScrollToLoad="true" items="{path :'/results'}" visible="false">
+<List id="grid1" growingScrollToLoad="true" items="{path :'/results2'}" visible="false">
                 <items>
                     <CustomListItem>
-                        <Panel id="idPanel" headerText="{WEEK_DATE}" expandable="true" expanded="false" expand="onExpand">
-                            <content>
-                            <commons:ChartContainer id="idInvChartContainer1" showFullScreen="true" showPersonalization="false" showZoom="false" autoAdjustHeight="true" 
-									showLegend="true">
+                        <!-- <Panel id="idPanel" headerText="{WEEK_DATE}" expandable="true" expanded="false" expand="onExpand" height="100%" width="100%"> -->
+                            <!-- <content> -->
+                            <layout:Splitter id="idSplitter1" height="auto" width="100%" class="sapUiNoContentPadding" visible="false">
+                            <layout:FixFlex id='chartFixFlex1' minFlexSize="500" class="fixFlex" > 
+
+<layout:flexContent class="fixFlex">
+                        <commons:ChartContainer id="idInvChartContainer1" showFullScreen="true" showPersonalization="false" showZoom="false" autoAdjustHeight="true" 
+									showLegend="true" title="{WEEK_DATE}">
 
                                     <commons:content>
 										<commons:ChartContainerContent >
 											<commons:content>
-                            <viz:Popover id="idPopOver1"></viz:Popover>
-                                <viz:VizFrame xmlns="sap.viz" id="idLineChart" height='250px' width="50%" vizType="line" vizProperties="{ title: { text: '' }}">
+                             <!-- <viz:Popover id="idPopOver1"></viz:Popover>  -->
+                                <viz:VizFrame xmlns="sap.viz" id="idLineChart" height='500px' width="100%" vizType="line" vizProperties="{ title: { text: '' }}">
                                     <viz:dataset>
-                                        <viz.data:FlattenedDataset data="{/items1}">
+                                        <viz.data:FlattenedDataset data="{/results}">
                                             <viz.data:dimensions>
                             <viz.data:DimensionDefinition name="CHAR_NUM"
                                 value="{CHAR_NUM}" />
@@ -172,8 +174,12 @@
 										</commons:ChartContainerContent>
                                         </commons:content>
 								</commons:ChartContainer>
-                            </content>
-                        </Panel>
+                                 </layout:flexContent>
+        
+        </layout:FixFlex>
+        </layout:Splitter>
+                            <!-- </content> -->
+                        <!-- </Panel> -->
                     </CustomListItem>
                 </items>
             </List>
