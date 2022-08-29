@@ -20,13 +20,8 @@
             "destination": "ui5"
         },
         {
-            "source": "^/userapi(.*)$",
+            "source": "^/service/(.*)$",
             "target": "$1",
-            "service": "sap-approuter-userapi"
-        },
-        {
-            "source": "^/USERAPI/(.*)$",
-            "target": "/USERAPI/$1",
             "destination": "USERAPI",
             "authenticationType": "xsuaa",
             "csrfProtection": false
@@ -41,13 +36,6 @@
             "source": "^(.*)$",
             "target": "$1",
             "service": "html5-apps-repo-rt",
-            "authenticationType": "xsuaa"
-        },
-        {
-            "source": "^/(.*)$",
-            "target": "$1",
-            "destination": "srv-api",
-            "csrfProtection": true,
             "authenticationType": "xsuaa"
         }
     ]
