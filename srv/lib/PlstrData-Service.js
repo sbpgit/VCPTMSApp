@@ -617,34 +617,34 @@ module.exports = async function (srv) {
            await cds.run('COMMIT');
     }
 
-    sqlStr = 'UPSERT PLSTR_SALESH (SALES_DOC, SCHEDULELINE_NUM, DOC_CREATEDDATE, PRODUCT_ID, ' +
-               'UOM, CONFIRMED_QTY,ORD_QTY, MAT_AVAILDATE,CUSTOMER_GROUP,LOCATION_ID,CREATED_BY,CREATED_DATE)' +
-				' SELECT DISTINCT ' + "'" + salesDocId + "'" 
-                                    + "'" + salesDocItem + "'" +
-                                    + "'" + sheduledLineNum + "'" +
-                                    + "'" + sheduledLineNum + "'" +
+    // sqlStr = 'UPSERT PLSTR_SALESH (SALES_DOC, SCHEDULELINE_NUM, DOC_CREATEDDATE, PRODUCT_ID, ' +
+    //            'UOM, CONFIRMED_QTY,ORD_QTY, MAT_AVAILDATE,CUSTOMER_GROUP,LOCATION_ID,CREATED_BY,CREATED_DATE)' +
+	// 			' SELECT DISTINCT ' + "'" + salesDocId + "'" 
+    //                                 + "'" + salesDocItem + "'" +
+    //                                 + "'" + sheduledLineNum + "'" +
+    //                                 + "'" + sheduledLineNum + "'" +
 
-                ' \'PL20\', PRODUCT_ID FROM PLSTR_PRODUCT';
-    for (let index = 0; index < results.length; index ++)
-    {
+    //             ' \'PL20\', PRODUCT_ID FROM PLSTR_PRODUCT';
+    // for (let index = 0; index < results.length; index ++)
+    // {
        
-        sqlStr = 'UPSERT "PLSTR_PRODUCT" VALUES (' +
-                            "'" + results[index].PRODUCT_ID + "'" + "," +
-                            "'" + results[index].PROD_DESC + "'," +
-                            "'" + results[index].PROD_FAMILY + "'," +
-                            "'" + results[index].PROD_GROUP + "'," +
-                            "'" + results[index].PROD_MODEL + "'," +
-                            null  + "," +
-                            null  + "," +
-                            null  + "," +
-                            null  + "," +
-                            null  + "," +
-                            null  + "," +
-                            null  + "," +
-                            null  + ')' + ' WITH PRIMARY KEY';        
+    //     sqlStr = 'UPSERT "PLSTR_PRODUCT" VALUES (' +
+    //                         "'" + results[index].PRODUCT_ID + "'" + "," +
+    //                         "'" + results[index].PROD_DESC + "'," +
+    //                         "'" + results[index].PROD_FAMILY + "'," +
+    //                         "'" + results[index].PROD_GROUP + "'," +
+    //                         "'" + results[index].PROD_MODEL + "'," +
+    //                         null  + "," +
+    //                         null  + "," +
+    //                         null  + "," +
+    //                         null  + "," +
+    //                         null  + "," +
+    //                         null  + "," +
+    //                         null  + "," +
+    //                         null  + ')' + ' WITH PRIMARY KEY';        
 
-        await cds.run(sqlStr);
-    }
+    //     await cds.run(sqlStr);
+    // }
 
 
 
