@@ -19,6 +19,7 @@ context cp {
             RESERVE_FIELD5 : String(20)     @title : 'Reserve Field5';
             AUTH_GROUP     : String(4)      @title : 'Authorization Group';
     };
+
     // Customer group
     entity CUSTOMERGROUP {
         key CUSTOMER_GROUP : String(2)  @title : 'Customer Group';
@@ -47,6 +48,7 @@ context cp {
             RESERVE_FIELD5 : String(20) @title : 'Reserve Field5';
             AUTH_GROUP     : String(4)  @title : 'Authorization Group';
     };
+
     // Product and LOcation table
     entity LOCATION_PRODUCT {
         key LOCATION_ID       : String(4)  @title : 'Location ';
@@ -335,6 +337,7 @@ context cp {
         key WEEK_DATE   : Date           @title : 'Weekly Date';
             QUANTITY    : Decimal(13, 3) @title : 'Demand Quantity';
     }
+
     // IBp Future characteristic plan
     entity IBP_FCHARPLAN {
         key LOCATION_ID : String(4)      @title : 'Location ID';
@@ -463,28 +466,29 @@ context cp {
             COMP_QTY         : Integer;
     }
 
-      // Partial product introduction
+    // Partial product introduction
     entity PARTIALPROD_INTRO {
         key PRODUCT_ID  : String(40) @title : 'New Product';
         key LOCATION_ID : String(4)  @title : 'Location';
             REF_PRODID  : String(40) @title : ' Ref. Product';
     }
-     // New product charactersitics
+
+    // New product charactersitics
     entity PARTIALPROD_CHAR {
         key PRODUCT_ID  : String(40) @title : 'New Product';
-        key LOCATION_ID    : String(4)      @title : 'Location ';
+        key LOCATION_ID : String(4)  @title : 'Location ';
         key CLASS_NUM   : String(20) @title : 'Class Name';
         key CHAR_NUM    : String(30) @title : 'Charateristic Name';
         key CHARVAL_NUM : String(70) @title : 'Charateristic Value';
-            // REF_PRODID  : String(40) @title : ' Ref. Product';
+    // REF_PRODID  : String(40) @title : ' Ref. Product';
     }
 
     entity VARCHAR_PS {
         key PRODUCT_ID  : String(40) @title : 'New Product';
-        key LOCATION_ID    : String(4)      @title : 'Location ';
+        key LOCATION_ID : String(4)  @title : 'Location ';
         key CHAR_NUM    : String(30) @title : 'Charateristic Name';
-        CHAR_TYPE: String(2) @title:'Characteristic Type';
-        SEQUENCE : Integer @title:'Secondary Char. Position';
+            CHAR_TYPE   : String(2)  @title : 'Characteristic Type';
+            SEQUENCE    : Integer    @title : 'Secondary Char. Position';
     }
 
     entity CUVTAB_IND {
@@ -498,94 +502,105 @@ context cp {
         key SLNID : String(5)  @title : 'Counter for value assignment alternative';
         key ATINN : String(10) @title : 'Internal characteristic';
         key VLCNT : String(3)  @title : 'Characteristic value counter';
-        VALC  : String(70) @title : 'Characteristic Value';
+            VALC  : String(70) @title : 'Characteristic Value';
     }
+
     entity CUVTAB_VALC_TEMP {
         key VTINT : String(10) @title : 'Internal number of variant table';
         key SLNID : String(5)  @title : 'Counter for value assignment alternative';
         key ATINN : String(10) @title : 'Internal characteristic';
         key VLCNT : String(3)  @title : 'Characteristic value counter';
-        VALC  : String(70) @title : 'Characteristic Value';
+            VALC  : String(70) @title : 'Characteristic Value';
     }
+
     entity CUVTAB_FINAL {
         ATINN : String(10) @title : 'Internal characteristic';
         VALC  : String(70) @title : 'Characteristic Value';
     }
-    entity UNIQUE_ID_HEADER{
-        key UNIQUE_ID    : Integer      @title : 'Unique ID';
-        key LOCATION_ID  : String(4)    @title : 'Location ';
-        key PRODUCT_ID   : String(40)   @title : 'New Product';
-        UNIQUE_DESC      : String(50)   @title: 'Description';
-        UID_TYPE         : String(1)    @title: 'Primary Unique ID';
-        UID_RATE         : Decimal(13,2);
-        ACTIVE           : Boolean;
+
+    entity UNIQUE_ID_HEADER {
+        key UNIQUE_ID   : Integer    @title : 'Unique ID';
+        key LOCATION_ID : String(4)  @title : 'Location ';
+        key PRODUCT_ID  : String(40) @title : 'New Product';
+            UNIQUE_DESC : String(50) @title : 'Description';
+            UID_TYPE    : String(1)  @title : 'Primary Unique ID';
+            UID_RATE    : Decimal(13, 2);
+            ACTIVE      : Boolean;
     }
-    entity UNIQUE_ID_ITEM{
-        key UNIQUE_ID   : Integer       @title : 'Unique ID';
-        key LOCATION_ID : String(4)     @title : 'Location ';
-        key PRODUCT_ID  : String(40)    @title : 'New Product';
-        key CHAR_NUM    : String(30)    @title : 'Charateristic Name';
-            CHARVAL_NUM : String(70)    @title : 'Charateristic Value';
-            UID_CHAR_RATE         : Decimal(13,2);
+
+    entity UNIQUE_ID_ITEM {
+        key UNIQUE_ID     : Integer    @title : 'Unique ID';
+        key LOCATION_ID   : String(4)  @title : 'Location ';
+        key PRODUCT_ID    : String(40) @title : 'New Product';
+        key CHAR_NUM      : String(30) @title : 'Charateristic Name';
+            CHARVAL_NUM   : String(70) @title : 'Charateristic Value';
+            UID_CHAR_RATE : Decimal(13, 2);
     }
-    entity UID_PRI_HEADER{
-        key UNIQUE_ID    : Integer       @title : 'Unique ID';
-        key LOCATION_ID  : String(4)  @title : 'Location ';
-        key PRODUCT_ID   : String(40) @title : 'New Product';
-        UNIQUE_DESC      : String(50)   @title: 'Description';
-        UID_TYPE         : String(1)        @title: 'Primary Unique ID';
-        ACTIVE           : Boolean;
+
+    entity UID_PRI_HEADER {
+        key UNIQUE_ID   : Integer    @title : 'Unique ID';
+        key LOCATION_ID : String(4)  @title : 'Location ';
+        key PRODUCT_ID  : String(40) @title : 'New Product';
+            UNIQUE_DESC : String(50) @title : 'Description';
+            UID_TYPE    : String(1)  @title : 'Primary Unique ID';
+            ACTIVE      : Boolean;
     }
-    entity UID_PRI_ITEM{
-        key UNIQUE_ID   : Integer       @title : 'Unique ID';
-        key LOCATION_ID : String(4)     @title : 'Location ';
-        key PRODUCT_ID  : String(40)    @title : 'New Product';
-        key CHAR_NUM    : String(30)    @title : 'Charateristic Name';
-            CHARVAL_NUM : String(70)    @title : 'Charateristic Value';
-    }    
+
+    entity UID_PRI_ITEM {
+        key UNIQUE_ID   : Integer    @title : 'Unique ID';
+        key LOCATION_ID : String(4)  @title : 'Location ';
+        key PRODUCT_ID  : String(40) @title : 'New Product';
+        key CHAR_NUM    : String(30) @title : 'Charateristic Name';
+            CHARVAL_NUM : String(70) @title : 'Charateristic Value';
+    }
+
     // New product introduction
     entity NEWPROD_INTRO {
         key PRODUCT_ID  : String(40) @title : 'New Product';
         key LOCATION_ID : String(4)  @title : 'Location';
             REF_PRODID  : String(40) @title : ' Ref. Product';
     }
+
     // New product charactersitics
     entity NEWPROD_CHAR {
-        key PRODUCT_ID  : String(40) @title : 'New Product';
-        key LOCATION_ID    : String(4)      @title : 'Location ';
-        key CLASS_NUM   : String(20) @title : 'Class Name';
-        key CHAR_NUM    : String(30) @title : 'Charateristic Name';
-        key CHARVAL_NUM : String(70) @title : 'Charateristic Value';
+        key PRODUCT_ID      : String(40) @title : 'New Product';
+        key LOCATION_ID     : String(4)  @title : 'Location ';
+        key CLASS_NUM       : String(20) @title : 'Class Name';
+        key CHAR_NUM        : String(30) @title : 'Charateristic Name';
+        key CHARVAL_NUM     : String(70) @title : 'Charateristic Value';
             REF_CLASS_NUM   : String(20) @title : 'Class Name';
             REF_CHAR_NUM    : String(30) @title : 'Charateristic Name';
             REF_CHARVAL_NUM : String(70) @title : 'Charateristic Value';
-            REF_PRODID  : String(40) @title : ' Ref. Product';
+            REF_PRODID      : String(40) @title : ' Ref. Product';
     }
-    entity SALES_HM{
-        key SALES_DOC        : String(10)     @title : 'Sales Document';
-        key SALESDOC_ITEM    : String(6)      @title : 'Sales Document Item';
-            PRODUCT_ID       : String(40)     @title : 'Product Id';
-            LOCATION_ID      : String(4)      @title : 'Location ID';
-            UNIQUE_ID        : Integer        @title : 'Unique ID';
-            PRIMARY_ID       : Integer        @title : 'Primary ID';
-            SO_TYPE          : String(4)      @title : 'Seed Order Type';
-            ORD_QTY          : Decimal(13, 3) @title : 'Order Quantity';
-            MAT_AVAILDATE    : Date           @title : 'Material Availability Date';
-            
+
+    entity SALES_HM {
+        key SALES_DOC     : String(10)     @title : 'Sales Document';
+        key SALESDOC_ITEM : String(6)      @title : 'Sales Document Item';
+            PRODUCT_ID    : String(40)     @title : 'Product Id';
+            LOCATION_ID   : String(4)      @title : 'Location ID';
+            UNIQUE_ID     : Integer        @title : 'Unique ID';
+            PRIMARY_ID    : Integer        @title : 'Primary ID';
+            SO_TYPE       : String(4)      @title : 'Seed Order Type';
+            ORD_QTY       : Decimal(13, 3) @title : 'Order Quantity';
+            MAT_AVAILDATE : Date           @title : 'Material Availability Date';
+
     }
+
     // Authorization object master
-    entity USER_AUTHOBJ  {
-        key USER         : String(100) @title : 'User';
-        key PARAMETER    : String(100) @title : 'Parameter';
-        key AUTH_GROUP   : String(4) @title : 'Authorization Object';
-            DESCRIPTION  : String(250) @title : 'Description';
+    entity USER_AUTHOBJ {
+        key USER        : String(100) @title : 'User';
+        key PARAMETER   : String(100) @title : 'Parameter';
+        key AUTH_GROUP  : String(4)   @title : 'Authorization Object';
+            DESCRIPTION : String(250) @title : 'Description';
     }
-    
+
     // Roles for a user
     entity AUTH_EMP_ROLE : managed {
         key USER    : String(100) @title : 'User';
         key ROLE_ID : String(100) @title : 'Role ID';
     }
+
     // Roles master
     entity AUTH_ROLE : managed {
         key ROLE_ID     : String(100) @title : 'Role ID';
@@ -597,16 +612,19 @@ context cp {
         key ROLE_ID       : String(100) @title : 'Role ID';
         key PARAMETER     : String(100) @title : 'Parameter';
         key PARAMETER_VAL : String(250) @title : 'Parameter';
-        // ROLE : Association to many AUTH_EMP_ROLE on ROLE.ROLE_ID = ROLE_ID;
+    // ROLE : Association to many AUTH_EMP_ROLE on ROLE.ROLE_ID = ROLE_ID;
     }
-     entity PARAMETER_AUTH {
+
+    entity PARAMETER_AUTH {
         key PARAMETER     : String(100) @title : 'Parameter';
             PARAMETER_VAL : String(250) @title : 'Parameter';
     }
+
     entity USERDETAILS {
-        key username   : String(50);
+        key username : String(50);
     }
-     entity RESTRICT_HEADER {
+
+    entity RESTRICT_HEADER {
         key LOCATION_ID : String(4)  @title : 'Location ';
         key LINE_ID     : String(40) @title : 'Line';
         key RESTRICTION : String(30) @title : 'Restriction';
@@ -618,7 +636,7 @@ context cp {
 
     entity RESTRICT_DETAILS {
         key RESTRICTION  : String(30) @title : 'Restriction';
-        //key RTR_COUNTER  : Integer    @title : 'Restriction Counter';
+            //key RTR_COUNTER  : Integer    @title : 'Restriction Counter';
         key CLASS_NUM    : String(18) @title : 'Internal class number';
         key CHAR_NUM     : String(10) @title : 'Internal Char. number';
         key CHAR_COUNTER : Integer    @title : 'Characteristic counter';
@@ -626,7 +644,7 @@ context cp {
             OD_CONDITION : String(2)  @title : 'Restriction condition ';
             ROW_ID       : Integer    @title : 'Attribute Index ';
     };
-    
+
     // location-Product-Line
     entity PROD_LOC_LINE {
         key LOCATION_ID : String(4)  @title : 'Location ';
@@ -634,8 +652,8 @@ context cp {
         key PRODUCT_ID  : String(40) @title : 'Product';
     };
 
-     // Product restrictions
-    entity PRODRESTRICT  {
+    // Product restrictions
+    entity PRODRESTRICT {
         key LOCATION_ID : String(4)      @title : 'Location '; //Association to ZLOCATION;//
         key PRODUCT_ID  : String(40)     @title : 'Product';
         key RESTRICTION : String(30)     @title : 'Restriction';
@@ -644,39 +662,40 @@ context cp {
             VALID_TO    : Date           @title : 'Valid To';
     };
 
-    
+
     entity CIR_GENERATED {
-        key LOCATION_ID     : String(4)      @title : 'Location '; 
-        key PRODUCT_ID      : String(40)     @title : 'Product';
-        key WEEK_DATE       : Date           @title: 'Week Date';
-        key CIR_ID          : Integer        @title : 'CIR ID';
-        key MODEL_VERSION   : String(20)     @title : 'MODEL_VERSION';
-        key VERSION         : String(10)     @title : 'Version';
-        key SCENARIO        : String(32)     @title : 'Scenario';
-        key METHOD          : String(20)     @title : 'Method';
-        UNIQUE_ID           : Integer        @title : 'Unique ID';
-        CIR_QTY             : Integer        @title : 'Quantity';
+        key LOCATION_ID   : String(4)  @title : 'Location ';
+        key PRODUCT_ID    : String(40) @title : 'Product';
+        key WEEK_DATE     : Date       @title : 'Week Date';
+        key CIR_ID        : Integer    @title : 'CIR ID';
+        key MODEL_VERSION : String(20) @title : 'MODEL_VERSION';
+        key VERSION       : String(10) @title : 'Version';
+        key SCENARIO      : String(32) @title : 'Scenario';
+        key METHOD        : String(20) @title : 'Method';
+            UNIQUE_ID     : Integer    @title : 'Unique ID';
+            CIR_QTY       : Integer    @title : 'Quantity';
     }
 
     entity CIR_CHAR_RATE {
-        key LOCATION_ID     : String(4)      @title : 'Location ';
-        key PRODUCT_ID      : String(40)     @title : 'Product';
-        key WEEK_DATE       : Date           @title: 'Week Date';
-        key MODEL_VERSION   : String(20)     @title : 'MODEL_VERSION';
-        key VERSION         : String(10)     @title : 'Version';
-        key SCENARIO        : String(32)     @title : 'Scenario';
-        key CHAR_NUM        : String(10)     @title : 'Internal Char. number';
-        key CHARVAL_NUM     : String(10)     @title : 'Internal Char. number';
-        SEQUENCE            : Integer        @title : 'Sequence';
-        GEN_QTY             : Decimal(13,3)  @title : 'Generated Quantity';
-        PLAN_QTY            : Decimal(13,3)  @title : 'Planned Quantity';
-        DEVIATION           : Decimal(13,3)  @title : 'Deviation';
+        key LOCATION_ID   : String(4)      @title : 'Location ';
+        key PRODUCT_ID    : String(40)     @title : 'Product';
+        key WEEK_DATE     : Date           @title : 'Week Date';
+        key MODEL_VERSION : String(20)     @title : 'MODEL_VERSION';
+        key VERSION       : String(10)     @title : 'Version';
+        key SCENARIO      : String(32)     @title : 'Scenario';
+        key CHAR_NUM      : String(10)     @title : 'Internal Char. number';
+        key CHARVAL_NUM   : String(10)     @title : 'Internal Char. number';
+            SEQUENCE      : Integer        @title : 'Sequence';
+            GEN_QTY       : Decimal(13, 3) @title : 'Generated Quantity';
+            PLAN_QTY      : Decimal(13, 3) @title : 'Planned Quantity';
+            DEVIATION     : Decimal(13, 3) @title : 'Deviation';
     }
+
     // Sample table
-    entity MARKETAUTH_WEEK{
-        key LOCATION_ID     : String(4)      @title : 'Location ';
-        key PRODUCT_ID      : String(40)     @title : 'Product';
-        key WEEK_DATE       : Date           @title: 'Week Date';
+    entity MARKETAUTH_WEEK {
+        key LOCATION_ID : String(4)  @title : 'Location ';
+        key PRODUCT_ID  : String(40) @title : 'Product';
+        key WEEK_DATE   : Date       @title : 'Week Date';
     }
 }
 
@@ -740,9 +759,9 @@ entity![V_BOMODCOND]{
 entity![V_ODPROFILES]{
     key![LOCATION_ID] : String(4)  @title : 'LOCATION_ID';
     key![PRODUCT_ID]  : String(40) @title : 'PRODUCT_ID';
-    key![ITEM_NUM]    : String(5)      @title : 'ITEM_NUM';
+    key![ITEM_NUM]    : String(5)  @title : 'ITEM_NUM';
     key![COMPONENT]   : String(40) @title : 'COMPONENT';
-    key![STRUC_NODE]  : String(50)     @title : 'STRUC_NODE';
+    key![STRUC_NODE]  : String(50) @title : 'STRUC_NODE';
     key![PROFILE]     : String(50) @title : 'PROFILE';
 }
 
@@ -898,82 +917,87 @@ entity![V_ASMCOMP_REQ]{
     key![SCENARIO]      : String(32) @title : 'SCENARIO';
     key![MODEL_VERSION] : String(20) @title : 'MODEL_VERSION';
 }
-@cds.persistence.exists 
-Entity ![V_PRODCLSCHARVAL] {
-key     ![PRODUCT_ID]: String(40)  @title: 'Product' ;  
-key     ![CLASS_NUM]: String(18)  @title: 'CLASS_NUM' ; 
-key     ![CLASS_NAME]: String(20)  @title: 'CLASS_NAME' ; 
-key     ![CHAR_NUM]: String(10)  @title: 'CHAR_NUM' ; 
-key     ![CHAR_NAME]: String(30)  @title: 'CHAR_NAME' ; 
-key     ![CHARVAL_NUM]: String(15)  @title: 'CHARVAL_NUM' ; 
-key     ![CHAR_VALUE]: String(70)  @title: 'CHAR_VALUE' ; 
-}
-@cds.persistence.exists 
-Entity ![V_PARTIALPRODCHAR] {
-key     ![PRODUCT_ID]: String(40)  @title: 'PRODUCT_ID' ; 
-key     ![LOCATION_ID]: String(4)  @title: 'LOCATION_ID' ; 
-key     ![REF_PRODID]: String(40)  @title: 'REF_PRODID' ; 
-key     ![CLASS_NUM]: String(20)  @title: 'CLASS_NUM' ; 
-key     ![CLASS_NAME]: String(20)  @title: 'CLASS_NAME' ; 
-key     ![CHAR_NUM]: String(30)  @title: 'CHAR_NUM' ; 
-key     ![CHAR_NAME]: String(30)  @title: 'CHAR_NAME' ; 
-key     ![CHARVAL_NUM]: String(70)  @title: 'CHARVAL_NUM' ; 
-key     ![CHAR_VALUE]: String(70)  @title: 'CHAR_VALUE' ; 
-}
-@cds.persistence.exists 
-Entity ![V_NEWPRODREFCHAR] {
-key     ![PRODUCT_ID]: String(40)  @title: 'PRODUCT_ID' ; 
-key     ![LOCATION_ID]: String(4)  @title: 'LOCATION_ID' ; 
-key     ![REF_PRODID]: String(40)  @title: 'REF_PRODID' ; 
-key     ![CLASS_NUM]: String(20)  @title: 'CLASS_NUM' ; 
-key     ![CLASS_NAME]: String(20)  @title: 'CLASS_NAME' ; 
-key     ![CHAR_NUM]: String(30)  @title: 'CHAR_NUM' ; 
-key     ![CHAR_NAME]: String(30)  @title: 'CHAR_NAME' ; 
-key     ![CHARVAL_NUM]: String(70)  @title: 'CHARVAL_NUM' ; 
-key     ![CHAR_VALUE]: String(70)  @title: 'CHAR_VALUE' ; 
-key     ![REF_CLASS_NUM]: String(20)  @title: 'REF_CLASS_NUM' ; 
-key     ![REF_CLASSNAME]: String(20)  @title: 'REF_CLASSNAME' ; 
-key     ![REF_CHAR_NUM]: String(30)  @title: 'REF_CHAR_NUM' ; 
-key     ![REF_CHARNAME]: String(30)  @title: 'REF_CHARNAME' ;  
-key     ![REF_CHARVAL_NUM]: String(70)  @title: 'REF_CHARVAL_NUM' ; 
-key     ![REF_CHARVAL]: String(70)  @title: 'REF_CHARVAL' ; 
-}
-@cds.persistence.exists 
-Entity ![V_GETVARCHARPS] {
-key     ![PRODUCT_ID]: String(40)  @title: 'PRODUCT_ID' ; 
-key     ![LOCATION_ID]: String(4)  @title: 'LOCATION_ID' ; 
-key     ![CHAR_NUM]: String(30)  @title: 'CHAR_NUM' ; 
-key     ![CHAR_NAME]: String(30)  @title: 'CHAR_NAME' ; 
-key     ![CHAR_TYPE]: String(2)  @title: 'CHAR_TYPE' ; 
-key     ![SEQUENCE]: Integer  @title: 'SEQUENCE' ; 
+
+@cds.persistence.exists
+entity![V_PRODCLSCHARVAL]{
+    key![PRODUCT_ID]  : String(40) @title : 'Product';
+    key![CLASS_NUM]   : String(18) @title : 'CLASS_NUM';
+    key![CLASS_NAME]  : String(20) @title : 'CLASS_NAME';
+    key![CHAR_NUM]    : String(10) @title : 'CHAR_NUM';
+    key![CHAR_NAME]   : String(30) @title : 'CHAR_NAME';
+    key![CHARVAL_NUM] : String(15) @title : 'CHARVAL_NUM';
+    key![CHAR_VALUE]  : String(70) @title : 'CHAR_VALUE';
 }
 
-@cds.persistence.exists 
-Entity ![V_UNIQUE_ID_ITEM] {
-key     ![UNIQUE_ID]: Integer  @title: 'MATVARID' ; 
-key     ![PRODUCT_ID]: String(40)  @title: 'PRODUCT_ID' ; 
-key     ![LOCATION_ID]: String(4)  @title: 'LOCATION_ID' ; 
-key     ![CHAR_NUM]: String(30)  @title: 'CHAR_NUM' ; 
-key     ![CHAR_NAME]: String(30)  @title: 'CHAR_NAME' ; 
-key     ![CHARVAL_NUM]: String(70)  @title: 'CHARVAL_NUM' ; 
-key     ![CHAR_VALUE]: String(70)  @title: 'CHAR_VALUE' ; 
+@cds.persistence.exists
+entity![V_PARTIALPRODCHAR]{
+    key![PRODUCT_ID]  : String(40) @title : 'PRODUCT_ID';
+    key![LOCATION_ID] : String(4)  @title : 'LOCATION_ID';
+    key![REF_PRODID]  : String(40) @title : 'REF_PRODID';
+    key![CLASS_NUM]   : String(20) @title : 'CLASS_NUM';
+    key![CLASS_NAME]  : String(20) @title : 'CLASS_NAME';
+    key![CHAR_NUM]    : String(30) @title : 'CHAR_NUM';
+    key![CHAR_NAME]   : String(30) @title : 'CHAR_NAME';
+    key![CHARVAL_NUM] : String(70) @title : 'CHARVAL_NUM';
+    key![CHAR_VALUE]  : String(70) @title : 'CHAR_VALUE';
 }
 
-@cds.persistence.exists 
-Entity ![V_UNIQUE_ID] {
-key     ![UNIQUE_ID]: Integer  @title: 'MATVARID' ; 
-key     ![PRODUCT_ID]: String(40)  @title: 'Product' ; 
-key     ![LOCATION_ID]: String(4)  @title: 'LOCATION_ID' ; 
-key     ![UNIQUE_DESC]: String(50)  @title: 'CHAR_NUM' ; 
-key     ![UID_TYPE]: String(1)  @title: 'CHARVAL_NUM' ; 
-key     ![ACTIVE]: Boolean  @title: 'CHAR_VALUE' ; 
-key     ![CHAR_NUM]: String(30)  @title: 'CHAR_NUM' ;
-key     ![CHARVAL_NUM]: String(70)  @title: 'CHARVAL_NUM' ; 
+@cds.persistence.exists
+entity![V_NEWPRODREFCHAR]{
+    key![PRODUCT_ID]      : String(40) @title : 'PRODUCT_ID';
+    key![LOCATION_ID]     : String(4)  @title : 'LOCATION_ID';
+    key![REF_PRODID]      : String(40) @title : 'REF_PRODID';
+    key![CLASS_NUM]       : String(20) @title : 'CLASS_NUM';
+    key![CLASS_NAME]      : String(20) @title : 'CLASS_NAME';
+    key![CHAR_NUM]        : String(30) @title : 'CHAR_NUM';
+    key![CHAR_NAME]       : String(30) @title : 'CHAR_NAME';
+    key![CHARVAL_NUM]     : String(70) @title : 'CHARVAL_NUM';
+    key![CHAR_VALUE]      : String(70) @title : 'CHAR_VALUE';
+    key![REF_CLASS_NUM]   : String(20) @title : 'REF_CLASS_NUM';
+    key![REF_CLASSNAME]   : String(20) @title : 'REF_CLASSNAME';
+    key![REF_CHAR_NUM]    : String(30) @title : 'REF_CHAR_NUM';
+    key![REF_CHARNAME]    : String(30) @title : 'REF_CHARNAME';
+    key![REF_CHARVAL_NUM] : String(70) @title : 'REF_CHARVAL_NUM';
+    key![REF_CHARVAL]     : String(70) @title : 'REF_CHARVAL';
 }
-    @cds.persistence.exists
+
+@cds.persistence.exists
+entity![V_GETVARCHARPS]{
+    key![PRODUCT_ID]  : String(40) @title : 'PRODUCT_ID';
+    key![LOCATION_ID] : String(4)  @title : 'LOCATION_ID';
+    key![CHAR_NUM]    : String(30) @title : 'CHAR_NUM';
+    key![CHAR_NAME]   : String(30) @title : 'CHAR_NAME';
+    key![CHAR_TYPE]   : String(2)  @title : 'CHAR_TYPE';
+    key![SEQUENCE]    : Integer    @title : 'SEQUENCE';
+}
+
+@cds.persistence.exists
+entity![V_UNIQUE_ID_ITEM]{
+    key![UNIQUE_ID]   : Integer    @title : 'MATVARID';
+    key![PRODUCT_ID]  : String(40) @title : 'PRODUCT_ID';
+    key![LOCATION_ID] : String(4)  @title : 'LOCATION_ID';
+    key![CHAR_NUM]    : String(30) @title : 'CHAR_NUM';
+    key![CHAR_NAME]   : String(30) @title : 'CHAR_NAME';
+    key![CHARVAL_NUM] : String(70) @title : 'CHARVAL_NUM';
+    key![CHAR_VALUE]  : String(70) @title : 'CHAR_VALUE';
+}
+
+@cds.persistence.exists
+entity![V_UNIQUE_ID]{
+    key![UNIQUE_ID]   : Integer    @title : 'MATVARID';
+    key![PRODUCT_ID]  : String(40) @title : 'Product';
+    key![LOCATION_ID] : String(4)  @title : 'LOCATION_ID';
+    key![UNIQUE_DESC] : String(50) @title : 'CHAR_NUM';
+    key![UID_TYPE]    : String(1)  @title : 'CHARVAL_NUM';
+    key![ACTIVE]      : Boolean    @title : 'CHAR_VALUE';
+    key![CHAR_NUM]    : String(30) @title : 'CHAR_NUM';
+    key![CHARVAL_NUM] : String(70) @title : 'CHARVAL_NUM';
+}
+
+@cds.persistence.exists
 entity![V_ODRESTRICT]{
     key![RESTRICTION]  : String(30) @title : 'Restriction';
-    // key![RTR_COUNTER]  : Integer    @title : 'Restriction Counter';
+       // key![RTR_COUNTER]  : Integer    @title : 'Restriction Counter';
     key![CLASS_NUM]    : String(18) @title : 'Internal No. Class ';
     key![CLASS_NAME]   : String(20) @title : 'Class Name';
     key![CHAR_NUM]     : String(10) @title : 'Internal No. Characteristic';
@@ -994,18 +1018,20 @@ entity![V_LOCPRODLINERTR]{
     key![RTR_DESC]    : String(30) @title : 'Restriction Description';
 }
 
-@cds.persistence.exists 
-Entity ![V_CIR_CHAR_RATE] {
-key     ![LOCATION_ID]: String(4)  @title: 'LOCATION_ID' ; 
-key     ![PRODUCT_ID]: String(40)  @title: 'PRODUCT_ID' ; 
-key     ![WEEK_DATE]: Date  @title: 'WEEK_DATE' ; 
-key     ![MODEL_VERSION]: String(20)  @title: 'MODEL_VERSION' ; 
-key     ![VERSION]: String(10)  @title: 'VERSION' ; 
-key     ![SCENARIO]: String(32)  @title: 'SCENARIO' ; 
-key     ![CHAR_NUM]: String(30)  @title: 'CHAR_NUM' ; 
-key     ![CHARVAL_NUM]: String(70)  @title: 'CHARVAL_NUM' ; 
-key     ![SEQUENCE]: Integer  @title: 'SEQUENCE' ; 
-key     ![PLAN_QTY]: Decimal(13, 3)  @title: 'PLAN_QTY' ; 
-key     ![GEN_QTY]: Integer  @title: 'GEN_QTY' ; 
-key     ![DEVIATION]: Decimal(31, 14)  @title: 'DEVIATION' ; 
+@cds.persistence.exists
+entity![V_CIR_CHAR_RATE]{
+    key![LOCATION_ID]   : String(4)       @title : 'LOCATION_ID';
+    key![PRODUCT_ID]    : String(40)      @title : 'PRODUCT_ID';
+    key![WEEK_DATE]     : Date            @title : 'WEEK_DATE';
+    key![MODEL_VERSION] : String(20)      @title : 'MODEL_VERSION';
+    key![VERSION]       : String(10)      @title : 'VERSION';
+    key![SCENARIO]      : String(32)      @title : 'SCENARIO';
+    key![CHAR_NUM]      : String(30)      @title : 'CHAR_NUM';
+    key![CHAR_NAME]     : String(30)      @title : 'Characteristic Name';
+    key![CHARVAL_NUM]   : String(70)      @title : 'CHARVAL_NUM';
+    key![CHAR_VALUE]    : String(70)      @title : 'Characteristic Value';
+    key![SEQUENCE]      : Integer         @title : 'SEQUENCE';
+    key![PLAN_QTY]      : Decimal(13, 3)  @title : 'PLAN_QTY';
+    key![GEN_QTY]       : Integer         @title : 'GEN_QTY';
+    key![DEVIATION]     : Decimal(31, 14) @title : 'DEVIATION';
 }
