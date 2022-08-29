@@ -749,19 +749,31 @@ module.exports = (srv) => {
     srv.on("generateTimeseries", async (req) => {
         const obgenTimeseries = new GenTimeseries();
         await obgenTimeseries.genTimeseries(req.data);
+
+        const obgenTimeseriesM2 = new GenTimeseriesM2();
+        await obgenTimeseriesM2.genTimeseries(req.data);
     });
     srv.on("generateTimeseriesF", async (req) => {
         const obgenTimeseries = new GenTimeseries();
         await obgenTimeseries.genTimeseriesF(req.data);
+
+        const obgenTimeseriesM2 = new GenTimeseriesM2();
+        await obgenTimeseriesM2.genTimeseriesF(req.data);
     });
     // Generate Timeseries fucntion calls
     srv.on("generate_timeseries", async (req) => {
         const obgenTimeseries = new GenTimeseries();
         await obgenTimeseries.genTimeseries(req.data);
+
+        const obgenTimeseriesM2 = new GenTimeseriesM2();
+        await obgenTimeseriesM2.genTimeseries(req.data);
     });
     srv.on("generate_timeseriesF", async (req) => {
         const obgenTimeseries = new GenTimeseries();
         await obgenTimeseries.genTimeseriesF(req.data);
+
+        const obgenTimeseriesM2 = new GenTimeseriesM2();
+        await obgenTimeseriesM2.genTimeseriesF(req.data);
     });
     // Generate Unique ID
     srv.on("genUniqueID", async (req) => {
@@ -953,17 +965,17 @@ module.exports = (srv) => {
         }
         else if (req.data.FLAG === "D") {
             // for (var i = 0; i < liProdChar.length; i++) {
-                lsresults.PRODUCT_ID = liProdChar[0].PRODUCT_ID;
-                lsresults.LOCATION_ID = liProdChar[0].LOCATION_ID;
-                //  lsresults.REF_PRODID = liProdChar[i].REF_PRODID;
-                // if (req.data.FLAG === "E" && i === 0) {
-                    try {
-                        await cds.delete("CP_NEWPROD_CHAR", lsresults);
-                        // break;
-                    } catch (e) {
-                        //DONOTHING
-                    }
-                // }
+            lsresults.PRODUCT_ID = liProdChar[0].PRODUCT_ID;
+            lsresults.LOCATION_ID = liProdChar[0].LOCATION_ID;
+            //  lsresults.REF_PRODID = liProdChar[i].REF_PRODID;
+            // if (req.data.FLAG === "E" && i === 0) {
+            try {
+                await cds.delete("CP_NEWPROD_CHAR", lsresults);
+                // break;
+            } catch (e) {
+                //DONOTHING
+            }
+            // }
             // }
         }
         lsresults = {};
@@ -1020,7 +1032,7 @@ module.exports = (srv) => {
             }
             // }
             if (lsresults.CHAR_TYPE !== "S") {
-                
+
                 lsresults = {};
                 liresults = [];
                 for (let i = 0; i < li_varcharps.length; i++) {
@@ -1082,32 +1094,134 @@ module.exports = (srv) => {
         let liresults = [];
         let lsresults = {};
         var responseMessage;
+        // let liuniquechar = JSON.parse(req.data.UNIQUECHAR);
+        // let vFlag = liuniquechar[0].FLAG;
+        if (req.data.FLAG === 'E') {// Active status change
+            lsresults.LOCATION_ID = req.data.LOCATION_ID;
+            lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
+            lsresults.UNIQUE_ID = parseInt(req.data.UNIQUE_ID);
+            try {
+                await cds.delete("CP_UNIQUE_ID_HEADER", lsresults);
+            } catch (e) {
+                //DONOTHING
+            }
+            lsresults.UNIQUE_DESC = req.data.UNIQUE_DESC;//li_unique[0].UNIQUE_DESC;
+            lsresults.UID_TYPE = req.data.UID_TYPE;//li_unique[0].UID_TYPE;
+            if (req.data.ACTIVE === 'X') {
+                lsresults.ACTIVE = Boolean(false);
+            }
+            else {
+                lsresults.ACTIVE = Boolean(true);
+            }
+            liresults.push(lsresults);
+        }
+        else if (req.data.FLAG === 'C') {
 
-        lsresults.LOCATION_ID = req.data.LOCATION_ID;
-        lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
-        lsresults.UNIQUE_ID = parseInt(req.data.UNIQUE_ID);
-        
-        try {
-            await cds.delete("CP_UNIQUE_ID_HEADER", lsresults);
-        } catch (e) {
-            //DONOTHING
+            lsresults.LOCATION_ID = req.data.LOCATION_ID;
+            lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
+            lsresults.UNIQUE_ID = parseInt(req.data.UNIQUE_ID);
+            lsresults.UNIQUE_DESC = req.data.UNIQUE_DESC;
+            lsresults.UID_TYPE = req.data.UID_TYPE;
+            lsresults.UID_RATE = req.data.UID_RATE;
+            if (req.data.ACTIVE === 'X') {
+                lsresults.ACTIVE = Boolean(false);
+            }
+            else {
+                lsresults.ACTIVE = Boolean(true);
+            }
+            liresults.push(lsresults);
+
         }
-        lsresults.UNIQUE_DESC = req.data.UNIQUE_DESC;//li_unique[0].UNIQUE_DESC;
-        lsresults.UID_TYPE = req.data.UID_TYPE;//li_unique[0].UID_TYPE;
-        if (req.data.ACTIVE === 'X') {
-            lsresults.ACTIVE = Boolean(false);
+        if (liresults.length > 0) {
+            try {
+                await cds.run(INSERT.into("CP_UNIQUE_ID_HEADER").entries(liresults));
+                responseMessage = " Creation/Updation successful";
+            } catch (e) {
+                //DONOTHING
+                responseMessage = "Creation Failed"
+                // createResults.push(responseMessage);
+            }
         }
-        else {
-            lsresults.ACTIVE = Boolean(true);
+        return responseMessage;
+    });
+    // maintainUniqueChar
+    srv.on("maintainUniqueChar", async (req) => {
+        let liresults = [];
+        let lsresults = {};
+        var responseMessage;
+        let liuniquechar = JSON.parse(req.data.UNIQUECHAR);
+        // let vFlag = liuniquechar[0].FLAG;
+        if (req.data.FLAG === 'N') {
+            for (let i = 0; i < liuniquechar.length; i++) {
+                lsresults.LOCATION_ID = liuniquechar[i].LOCATION_ID;
+                lsresults.PRODUCT_ID = liuniquechar[i].PRODUCT_ID;
+                lsresults.UNIQUE_ID = parseInt(liuniquechar[i].UNIQUE_ID);
+                lsresults.UID_CHAR_RATE = liuniquechar[i].UID_RATE;
+                lsresults.CHAR_NUM = liuniquechar[i].CHAR_NUM;
+                lsresults.CHARVAL_NUM = liuniquechar[i].CHARVAL_NUM;
+                liresults.push(lsresults);
+
+            }
+            if (liresults.length > 0) {
+                try {
+                    await cds.run(INSERT.into("CP_UNIQUE_ID_ITEM").entries(liresults));
+                    responseMessage = " Creation/Updation successful";
+                } catch (e) {
+                    //DONOTHING
+                    responseMessage = "Creation Failed"
+                    // createResults.push(responseMessage);
+                }
+            }
         }
-        liresults.push(lsresults);
-        try {
-            await cds.run(INSERT.into("CP_UNIQUE_ID_HEADER").entries(liresults));
-            responseMessage = " Creation/Updation successful";
-        } catch (e) {
-            //DONOTHING
-            responseMessage = "Creation Failed"
-            // createResults.push(responseMessage);
+        else if (req.data.FLAG === 'D') {
+            for (let i = 0; i < liuniquechar.length; i++) {
+                lsresults.LOCATION_ID = liuniquechar[i].LOCATION_ID;
+                lsresults.PRODUCT_ID = liuniquechar[i].PRODUCT_ID;
+                lsresults.UNIQUE_ID = parseInt(liuniquechar[i].UNIQUE_ID);
+                lsresults.CHAR_NUM = liuniquechar[i].CHAR_NUM;
+                if (lsresults.LOCATION_ID !== '' && i === 0) {
+                    try {
+                        await cds.delete("CP_UNIQUE_ID_ITEM", lsresults);
+                        responseMessage = "Deletion successful";
+                        break;
+                    } catch (e) {
+                        responseMessage = "Deletion failed";
+                        //DONOTHING
+                    }
+                }
+
+            }
+        }
+        else if (req.data.FLAG === 'C') {//Copy
+            lsresults.LOCATION_ID = liuniquechar[0].LOCATION_ID;
+            lsresults.PRODUCT_ID = liuniquechar[0].PRODUCT_ID;
+            lsresults.UNIQUE_ID = parseInt(liuniquechar[0].UNIQUE_ID);
+            const li_chardata = await cds.run(
+                `SELECT *
+                FROM "CP_UNIQUE_ID_ITEM"
+                WHERE "LOCATION_ID" = '` +
+                lsresults.LOCATION_ID +
+                `'
+                AND "PRODUCT_ID" = '` +
+                lsresults.PRODUCT_ID +
+                `'
+                AND"UNIQUE_ID" = '` +
+                lsresults.UNIQUE_ID +
+                `'`
+            );
+            for (let i = 0; i < liuniquechar.length; i++) {
+                li_chardata[i].UNIQUE_ID = parseInt(liuniquechar[i].UNIQUE_ID);
+            }
+            if (li_chardata.length > 0) {
+                try {
+                    await cds.run(INSERT.into("CP_UNIQUE_ID_ITEM").entries(li_chardata));
+                    responseMessage = " Creation/Updation successful";
+                } catch (e) {
+                    //DONOTHING
+                    responseMessage = "Creation Failed"
+                    // createResults.push(responseMessage);
+                }
+            }
         }
 
         return responseMessage;
@@ -1119,22 +1233,22 @@ module.exports = (srv) => {
         let liProdChar = {};
         var responseMessage;
         if (req.data.Flag === "C" || req.data.Flag === "E") {
-                lsresults.LINE_ID     = req.data.LINE_ID;
-                lsresults.LOCATION_ID = req.data.LOCATION_ID;
-                lsresults.RESTRICTION = req.data.RESTRICTION;
-                if (req.data.Flag === "E") {
-                    try {
-                        await cds.delete("CP_RESTRICT_HEADER", lsresults);
-                    } catch (e) {
-                        //DONOTHING
-                    }
+            lsresults.LINE_ID = req.data.LINE_ID;
+            lsresults.LOCATION_ID = req.data.LOCATION_ID;
+            lsresults.RESTRICTION = req.data.RESTRICTION;
+            if (req.data.Flag === "E") {
+                try {
+                    await cds.delete("CP_RESTRICT_HEADER", lsresults);
+                } catch (e) {
+                    //DONOTHING
                 }
-                
-                lsresults.RTR_DESC    = req.data.RTR_DESC;
-                lsresults.VALID_FROM  = req.data.VALID_FROM;
-                lsresults.VALID_TO    = req.data.VALID_TO;
-                liresults.push(lsresults);
-                lsresults = {};
+            }
+
+            lsresults.RTR_DESC = req.data.RTR_DESC;
+            lsresults.VALID_FROM = req.data.VALID_FROM;
+            lsresults.VALID_TO = req.data.VALID_TO;
+            liresults.push(lsresults);
+            lsresults = {};
             if (liresults.length > 0) {
                 try {
                     await cds.run(INSERT.into("CP_RESTRICT_HEADER").entries(liresults));
@@ -1147,18 +1261,18 @@ module.exports = (srv) => {
             }
         }
         else if (req.data.Flag === "D") {
-                lsresults.LINE_ID     = req.data.LINE_ID;
-                lsresults.LOCATION_ID = req.data.LOCATION_ID;
-                lsresults.RESTRICTION = req.data.RESTRICTION;
-                // if (req.data.Flag === "E" && i === 0) {
-                    try {
-                        await cds.delete("CP_RESTRICT_HEADER", lsresults);
-                        responseMessage = "Restriction deleted";
-                    } catch (e) {
-                        //DONOTHING
-                        responseMessage = "Failed to delete Restriction";
-                    }
-                // }
+            lsresults.LINE_ID = req.data.LINE_ID;
+            lsresults.LOCATION_ID = req.data.LOCATION_ID;
+            lsresults.RESTRICTION = req.data.RESTRICTION;
+            // if (req.data.Flag === "E" && i === 0) {
+            try {
+                await cds.delete("CP_RESTRICT_HEADER", lsresults);
+                responseMessage = "Restriction deleted";
+            } catch (e) {
+                //DONOTHING
+                responseMessage = "Failed to delete Restriction";
+            }
+            // }
         }
         lsresults = {};
         return responseMessage;
@@ -1180,7 +1294,7 @@ module.exports = (srv) => {
                 lsresults.CHAR_COUNTER = liRtrChar[i].CHAR_COUNTER;
                 lsresults.CHARVAL_NUM = liRtrChar[i].CHARVAL_NUM;
                 // if (req.data.FLAG === "E" && i === 0) {
-                    if (req.data.FLAG === "E") {
+                if (req.data.FLAG === "E") {
                     try {
                         await cds.delete("CP_RESTRICT_DETAILS", lsresults);
                     } catch (e) {
@@ -1204,7 +1318,7 @@ module.exports = (srv) => {
             }
         }
         else if (req.data.FLAG === "D") {
-            for (var i = 0; i < liRtrChar.length; i++) {                
+            for (var i = 0; i < liRtrChar.length; i++) {
                 lsresults.RESTRICTION = liRtrChar[i].RESTRICTION;
                 // lsresults.RTR_COUNTER = liRtrChar[i].RTR_COUNTER;
                 lsresults.CLASS_NUM = liRtrChar[i].CLASS_NUM;
@@ -1212,16 +1326,36 @@ module.exports = (srv) => {
                 lsresults.CHAR_COUNTER = liRtrChar[i].CHAR_COUNTER;
                 lsresults.CHARVAL_NUM = liRtrChar[i].CHARVAL_NUM;
                 // if (req.data.FLAG === "E" && i === 0) {
-                    try {
-                        await cds.delete("CP_RESTRICT_DETAILS", lsresults);
-                        break;
-                    } catch (e) {
-                        //DONOTHING
-                    }
+                try {
+                    await cds.delete("CP_RESTRICT_DETAILS", lsresults);
+                    break;
+                } catch (e) {
+                    //DONOTHING
+                }
                 // }
             }
         }
         lsresults = {};
         return responseMessage;
+    });
+
+    srv.on("trigrMAWeek", async (req) => {
+        let liresults = [];
+        let lsresults = {};
+        lsresults.LOCATION_ID = req.data.LOCATION_ID;
+        lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
+        lsresults.WEEK_DATE = req.data.WEEK_DATE;
+        liresults.push(lsresults);
+        lsresults = {};
+        if (liresults.length > 0) {
+            try {
+                await cds.run(INSERT.into("CP_MARKETAUTH_WEEK").entries(liresults));
+                responseMessage = " Creation/Updation successful";
+            } catch (e) {
+                //DONOTHING
+                responseMessage = " Creation failed";
+                // createResults.push(responseMessage);
+            }
+        }
     });
 };
