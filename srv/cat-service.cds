@@ -207,8 +207,11 @@ service CatalogService @(impl : './lib/cat-service.js'){
     entity getUniqueItem   as projection on V_UNIQUE_ID_ITEM;
     entity getUniqueId as projection on V_UNIQUE_ID;
     function genUniqueID(LOCATION_ID : String(4), PRODUCT_ID : String(40))      returns String;
-    function changeUnique(UNIQUE_ID : Integer, LOCATION_ID : String(4), PRODUCT_ID : String(40), UID_TYPE : String(1), UNIQUE_DESC : String(50), ACTIVE:String(1)) returns String;
+    function changeUnique(UNIQUE_ID : Integer, LOCATION_ID : String(4), PRODUCT_ID : String(40), UID_TYPE : String(1), UID_RATE : Decimal(13,2),UNIQUE_DESC : String(50), ACTIVE:String(1),FLAG: String) returns String;
+    function maintainUniqueChar(FLAG: String(1), UNIQUECHAR: String) returns String;
+
 // Method 2
+
     entity genvarcharps as projection on od.VARCHAR_PS;
     entity getPriSecChar as projection on V_GETVARCHARPS;
     function changeToPrimary(LOCATION_ID : String(4), PRODUCT_ID : String(40),CHAR_NUM: String(10),CHAR_TYPE: String(1),SEQUENCE:Integer,FLAG: String(1)) returns String;
@@ -244,5 +247,5 @@ service CatalogService @(impl : './lib/cat-service.js'){
     // CIR char rate
     entity getCIRCharRate       as projection on V_CIR_CHAR_RATE;
 /// Market Authorizations
-    action trigrMAWeek(LOCATION_ID : String(4), PRODUCT_ID : String(40), WEEK_DATE: String(10));
+    action trigrMAWeek(LOCATION_ID : String(4), PRODUCT_ID : String(40), WEEK_DATE: Date);
 }

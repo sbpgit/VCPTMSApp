@@ -1,1 +1,14 @@
 /* Enter your custom styles here */
+
+div#__hbox1 {
+    width: 820px !important;
+    margin-top: -25px;
+}
+
+div#__title0 {
+    font-weight: bold;
+}
+
+div#__toolbar5 {
+    font-weight: bold;
+}

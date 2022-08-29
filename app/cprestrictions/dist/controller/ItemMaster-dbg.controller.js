@@ -151,28 +151,29 @@ sap.ui.define(
                     // Set the selected values to get the details
                     oGModel.setProperty("/Restriction", sSelItem.RESTRICTION);
                     oGModel.setProperty("/locId", sSelItem.LOCATION_ID);
+                    //This value is to refresh the data in Item detail page when we click on cancel update bubtton
+                    oGModel.setProperty("/readClass", "X");
                 }
-                // Calling Item Detail page
                 that.getOwnerComponent().runAsOwner(function () {
                     if (!that.oDetailView) {
-                        try {
-                            that.oDetailView = sap.ui.view({
-                                viewName: "cpapp.cprestrictions.view.ItemDetail",
-                                type: "XML",
-                            });
-                            that.bus.publish("flexible", "addDetailPage", that.oDetailView);
-                            that.bus.publish("nav", "toDetailPage", {
-                                viewName: that.oDetailView.getViewName(),
-                            });
-                        } catch (e) {
-                            that.oDetailView.onAfterRendering();
-                        }
-                    } else {
-                        that.bus.publish("nav", "toDetailPage", {
-                            viewName: that.oDetailView.getViewName(),
+                      try {
+                        that.oDetailView = sap.ui.view({
+                          viewName: "cpapp.cprestrictions.view.ItemDetail",
+                          type: "XML",
                         });
+                        that.bus.publish("flexible", "addDetailPage", that.oDetailView);
+                        that.bus.publish("nav", "toDetailPage", {
+                          viewName: that.oDetailView.getViewName(),
+                        });
+                      } catch (e) {
+                        // that.oDetailView.onAfterRendering();
+                      }
+                    } else {
+                      that.bus.publish("nav", "toDetailPage", {
+                        viewName: that.oDetailView.getViewName(),
+                      });
                     }
-                });
+                  });
             },
 
             /**
@@ -348,6 +349,13 @@ sap.ui.define(
                     sap.ui.getCore().byId("idRestDesc").setValue();
                     sap.ui.getCore().byId("idDateRange").setValue();
 
+                    sap.ui.getCore().byId("idloc").setEditable(true);
+                    sap.ui.getCore().byId("idLine").setEditable(true);
+                    sap.ui.getCore().byId("idRest").setEditable(true);
+
+                    sap.ui.getCore().byId("idloc").setShowValueHelp(true);
+                    sap.ui.getCore().byId("idLine").setShowValueHelp(true);
+
                 } else {
                     sap.ui.getCore().byId("idRestriction").setTitle("Update Restriction");
                     oGModel.setProperty("/RestFlag", "E");
@@ -366,6 +374,13 @@ sap.ui.define(
                     }).format(disS);
                     var dateRange = (dateL + " " + "To" + " " + dateH);
                     sap.ui.getCore().byId("idDateRange").setValue(dateRange);
+
+                    sap.ui.getCore().byId("idloc").setEditable(false);
+                    sap.ui.getCore().byId("idLine").setEditable(false);
+                    sap.ui.getCore().byId("idRest").setEditable(false);
+
+                    sap.ui.getCore().byId("idloc").setShowValueHelp(false);
+                    sap.ui.getCore().byId("idLine").setShowValueHelp(false);
 
 
                 }
