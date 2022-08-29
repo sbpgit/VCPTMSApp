@@ -243,4 +243,6 @@ service CatalogService @(impl : './lib/cat-service.js'){
     function maintainRestrDet (FLAG : String(1), RTRCHAR : String ) returns String;
     // CIR char rate
     entity getCIRCharRate       as projection on V_CIR_CHAR_RATE;
+/// Market Authorizations
+    action trigrMAWeek(LOCATION_ID : String(4), PRODUCT_ID : String(40), WEEK_DATE: String(10));
 }

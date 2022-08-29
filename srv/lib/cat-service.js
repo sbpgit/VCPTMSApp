@@ -749,19 +749,31 @@ module.exports = (srv) => {
     srv.on("generateTimeseries", async (req) => {
         const obgenTimeseries = new GenTimeseries();
         await obgenTimeseries.genTimeseries(req.data);
+
+        const obgenTimeseriesM2 = new GenTimeseriesM2();
+        await obgenTimeseriesM2.genTimeseries(req.data);
     });
     srv.on("generateTimeseriesF", async (req) => {
         const obgenTimeseries = new GenTimeseries();
         await obgenTimeseries.genTimeseriesF(req.data);
+
+        const obgenTimeseriesM2 = new GenTimeseriesM2();
+        await obgenTimeseriesM2.genTimeseriesF(req.data); 
     });
     // Generate Timeseries fucntion calls
     srv.on("generate_timeseries", async (req) => {
         const obgenTimeseries = new GenTimeseries();
         await obgenTimeseries.genTimeseries(req.data);
+
+        const obgenTimeseriesM2 = new GenTimeseriesM2();
+        await obgenTimeseriesM2.genTimeseries(req.data);
     });
     srv.on("generate_timeseriesF", async (req) => {
         const obgenTimeseries = new GenTimeseries();
         await obgenTimeseries.genTimeseriesF(req.data);
+
+        const obgenTimeseriesM2 = new GenTimeseriesM2();
+        await obgenTimeseriesM2.genTimeseriesF(req.data); 
     });
     // Generate Unique ID
     srv.on("genUniqueID", async (req) => {
@@ -1223,5 +1235,25 @@ module.exports = (srv) => {
         }
         lsresults = {};
         return responseMessage;
+    });
+
+    srv.on("trigrMAWeek", async(req) => {
+        let liresults = [];
+        let lsresults = {};
+        lsresults.LOCATION_ID = req.data.LOCATION_ID;
+        lsresults.PRODUCT_ID  = req.data.PRODUCT_ID;
+        lsresults.WEEK_DATE   = req.data.WEEK_DATE;
+        liresults.push(lsresults);
+        lsresults = {};
+        if (liresults.length > 0) {
+            try {
+                await cds.run(INSERT.into("CP_MARKETAUTH_WEEK").entries(liresults));
+                responseMessage = " Creation/Updation successful";
+            } catch (e) {
+                //DONOTHING
+                responseMessage = " Creation failed";
+                // createResults.push(responseMessage);
+            }
+        }
     });
 };

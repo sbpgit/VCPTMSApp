@@ -672,6 +672,12 @@ context cp {
         PLAN_QTY            : Decimal(13,3)  @title : 'Planned Quantity';
         DEVIATION           : Decimal(13,3)  @title : 'Deviation';
     }
+    // Sample table
+    entity MARKETAUTH_WEEK{
+        key LOCATION_ID     : String(4)      @title : 'Location ';
+        key PRODUCT_ID      : String(40)     @title : 'Product';
+        key WEEK_DATE       : Date           @title: 'Week Date';
+    }
 }
 
 
