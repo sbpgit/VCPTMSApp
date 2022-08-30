@@ -1,6 +1,6 @@
 using CatalogService as service from '../../srv/cat-service';
 
-annotate service.getProdlocline with {
+annotate service.maintainSeedOrder with {
   LOCATION_ID @Common : {
         // Text            : LOCATION_ID_LOCATION_ID,
         // TextArrangement : #TextOnly,

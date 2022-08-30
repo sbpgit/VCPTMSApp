@@ -248,4 +248,7 @@ service CatalogService @(impl : './lib/cat-service.js'){
     entity getCIRCharRate       as projection on V_CIR_CHAR_RATE;
 /// Market Authorizations
     action trigrMAWeek(LOCATION_ID : String(4), PRODUCT_ID : String(40), WEEK_DATE: Date);
+// Seed Order Creation
+    @odata.draft.enabled
+    entity maintainSeedOrder    as projection on od.SEEDORDER_HEADER;
 }

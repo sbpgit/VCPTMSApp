@@ -575,15 +575,15 @@ context cp {
     }
 
     entity SALES_HM {
-        key SALES_DOC     : String(10)     @title : 'Sales Document';
-        key SALESDOC_ITEM : String(6)      @title : 'Sales Document Item';
-            PRODUCT_ID    : String(40)     @title : 'Product Id';
-            LOCATION_ID   : String(4)      @title : 'Location ID';
-            UNIQUE_ID     : Integer        @title : 'Unique ID';
-            PRIMARY_ID    : Integer        @title : 'Primary ID';
-            SO_TYPE       : String(4)      @title : 'Seed Order Type';
-            ORD_QTY       : Decimal(13, 3) @title : 'Order Quantity';
-            MAT_AVAILDATE : Date           @title : 'Material Availability Date';
+        key SALES_DOC     : String(10) @title : 'Sales Document';
+        key SALESDOC_ITEM : String(6)  @title : 'Sales Document Item';
+            PRODUCT_ID    : String(40) @title : 'Product Id';
+            LOCATION_ID   : String(4)  @title : 'Location ID';
+            UNIQUE_ID     : Integer    @title : 'Unique ID';
+            PRIMARY_ID    : Integer    @title : 'Primary ID';
+    // SO_TYPE       : String(4)      @title : 'Seed Order Type';
+    // ORD_QTY       : Decimal(13, 3) @title : 'Order Quantity';
+    // MAT_AVAILDATE : Date           @title : 'Material Availability Date';
 
     }
 
@@ -696,6 +696,15 @@ context cp {
         key LOCATION_ID : String(4)  @title : 'Location ';
         key PRODUCT_ID  : String(40) @title : 'Product';
         key WEEK_DATE   : Date       @title : 'Week Date';
+    }
+
+    entity SEEDORDER_HEADER {
+        key SEED_ORDER    : String(10)     @title : 'Sales Document';
+            LOCATION_ID   : String(4)      @title : 'Location ';
+            PRODUCT_ID    : String(40)     @title : 'Product';
+            UNIQUE_ID     : Integer        @title : 'Unique ID';
+            ORD_QTY       : Decimal(13, 3) @title : 'Ordered Qty';
+            MAT_AVAILDATE : Date           @title : 'Material Avail. Date';
     }
 }
 
