@@ -1359,4 +1359,49 @@ module.exports = (srv) => {
             }
         }
     });
+    srv.on("maintainSeedOrder", async (req) => {
+        let liresults = [];
+        let lsresults = {};
+        let liSeeddata = {};
+        var responseMessage;
+        liSeeddata = JSON.parse(req.data.SEEDDATA);
+        if (req.data.FLAG === "C") {
+            lsresults.LOCATION_ID = liSeeddata[0].LOCATION_ID;
+            lsresults.PRODUCT_ID = liSeeddata[0].PRODUCT_ID;
+            lsresults.UNIQUE_ID = liSeeddata[0].UNIQUE_ID;
+            lsresults.ORD_QTY = parseFloat(liSeeddata[0].ORD_QTY);
+            lsresults.MAT_AVAILDATE = liSeeddata[0].MAT_AVAILDATE;
+            liresults.push(lsresults);
+            lsresults = {};
+            if (liresults.length > 0) {
+                try {
+                    await cds.run(INSERT.into("CP_SEEDORDER_HEADER").entries(liresults));
+                    responseMessage = " Creation/Updation successful";
+                } catch (e) {
+                    //DONOTHING
+                    responseMessage = " Creation failed";
+                    // createResults.push(responseMessage);
+                }
+            }
+        }
+        else if (req.data.FLAG === "E") {
+            // for (var i = 0; i < liRtrChar.length; i++) {
+            lsresults.SEED_ORDER = liSeeddata[0].SEED_ORDER;
+            lsresults.ORD_QTY = parseFloat(liSeeddata[0].ORD_QTY);
+            lsresults.MAT_AVAILDATE = liSeeddata[0].MAT_AVAILDATE;
+            try {
+                await UPDATE`CP_SEEDORDER_HEADER`
+                    .with({
+                        ORD_QTY: lsresults.ORD_QTY,
+                        MAT_AVAILDATE: lsresults.MAT_AVAILDATE
+                    })
+                    .where(`SEED_ORDER = '${lsresults.SEED_ORDER}'`)
+            } catch (e) {
+                //DONOTHING
+            }
+            // }
+        }
+        lsresults = {};
+        return responseMessage;
+    });
 };

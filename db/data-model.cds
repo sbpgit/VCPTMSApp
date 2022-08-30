@@ -699,7 +699,7 @@ context cp {
     }
 
     entity SEEDORDER_HEADER {
-        key SEED_ORDER    : String(10)     @title : 'Sales Document';
+        key SEED_ORDER    : String(10)     @title : 'Seed Order';
             LOCATION_ID   : String(4)      @title : 'Location ';
             PRODUCT_ID    : String(40)     @title : 'Product';
             UNIQUE_ID     : Integer        @title : 'Unique ID';

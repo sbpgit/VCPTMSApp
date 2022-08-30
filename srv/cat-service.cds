@@ -249,6 +249,8 @@ service CatalogService @(impl : './lib/cat-service.js'){
 /// Market Authorizations
     action trigrMAWeek(LOCATION_ID : String(4), PRODUCT_ID : String(40), WEEK_DATE: Date);
 // Seed Order Creation
-    @odata.draft.enabled
-    entity maintainSeedOrder    as projection on od.SEEDORDER_HEADER;
+    // @odata.draft.enabled
+    entity getSeedOrder    as projection on od.SEEDORDER_HEADER;
+
+    function maintainSeedOrder(FLAG: String(1), SEEDDATA: String) returns String;
 }
