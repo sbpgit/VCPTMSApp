@@ -64,6 +64,22 @@ sap.ui.define(
                     );
                     this.getView().addDependent(this._valueHelpDialogDescUpdate);
                 }
+
+                if (!this._createCharacterstics) {
+                    this._createCharacterstics = sap.ui.xmlfragment(
+                        "cpapp.cpmatvariant.view.CreateChar",
+                        this
+                    );
+                    this.getView().addDependent(this._createCharacterstics);
+                }
+
+                if (!this._copyCharacterstics) {
+                    this._copyCharacterstics = sap.ui.xmlfragment(
+                        "cpapp.cpmatvariant.view.CopyChar",
+                        this
+                    );
+                    this.getView().addDependent(this._copyCharacterstics);
+                }
             },
 
             /**
@@ -250,6 +266,8 @@ sap.ui.define(
                 var oSloc = that.oLoc.getValue(),
                     oSprod = that.oProd.getValue(),
                     oSUniq = that.byId("idUnique").getSelectedKey();
+                    this.byId("idCreateBtn").setVisible(true);
+                  this.byId("idCopyBtn").setVisible(true);
                 var oFilters = [];
                 // getting the filters
                 oFilters.push(
@@ -449,6 +467,19 @@ sap.ui.define(
                 });
 
             },
+            onCreateBtn:function(){
+                that._createCharacterstics.open();
+            },
+            onCopyBtn:function(){
+                that._copyCharacterstics.open();
+            },
+            onCloseCreate:function(){
+                this._createCharacterstics.close();
+
+            },
+            onCloseCopy:function(){
+                this._copyCharacterstics.close();
+            }
 
 
         });

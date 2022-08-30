@@ -237,6 +237,7 @@ sap.ui.define(
         onGetData: function (oEvent) {
               var oSloc = that.oLoc.getValue(),
                   oSprod = that.oProd.getValue();
+                  
   
   
           this.getModel("BModel").read("/getMatVarHeader", {
