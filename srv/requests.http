@@ -17,6 +17,16 @@ Content-Type: application/json
     ]
 }
 
+### generate Master Data
+GET http://localhost:4004/plstr-data/fgenMasterData()
+
+
+
+### generate Partial Products Data
+GET http://localhost:4004/plstr-data/fgenPartialProducts()
+
+
+
 ### UPDATE JOBS LOCALLY
 GET http://localhost:4004/jobs/fUpdateJobs()
 

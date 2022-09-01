@@ -3,7 +3,7 @@
 		<customHeader>
 			<Bar>
 				<contentMiddle>
-					<Title text="{i18n>title}" class="boldText"></Title>
+					<Title text="{i18n>title}" class="boldText" ></Title>
 				</contentMiddle>
 			</Bar>
 		</customHeader>

@@ -1,0 +1,12 @@
+/* Enter your custom styles here */
+.headerFont {
+    font-size: 1.5rem;
+}
+.btnSize {
+    width: auto;
+    height: auto;
+    font-weight: bold;
+}
+.titleAlign {
+ padding-left: 45%;
+}
