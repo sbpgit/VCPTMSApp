@@ -77,7 +77,8 @@
         "watch-cpauthentication": "cds watch --open cpauthentication/webapp/index.html?sap-ui-xx-viewCache=false",
         "watch-cp_prodlocline": "cds watch --open cp_prodlocline/webapp/index.html?sap-ui-xx-viewCache=false",
         "watch-cpprodrestr": "cds watch --open cpprodrestr/webapp/index.html?sap-ui-xx-viewCache=false",
-        "watch-cpcharqtygraph": "cds watch --open cpcharqtygraph/webapp/index.html?sap-ui-xx-viewCache=false"
+        "watch-cpcharqtygraph": "cds watch --open cpcharqtygraph/webapp/index.html?sap-ui-xx-viewCache=false",
+        "watch-cpseedordercreation": "cds watch --open cpseedordercreation/webapp/index.html?sap-ui-xx-viewCache=false"
     },
     "eslintConfig": {
         "extends": "eslint:recommended",
@@ -218,7 +219,8 @@
         "app/cp_prodlocline",
         "app/cpprodrestr",
         "app/cpcharqtygraph",
-        "app/cpcharqtygraph"
+        "app/cpcharqtygraph",
+        "app/cpseedordercreation"
     ],
     "devDependencies": {
         "@sap/ux-specification": "^1.102.4",

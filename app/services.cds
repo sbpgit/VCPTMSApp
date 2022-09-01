@@ -42,3 +42,5 @@ using from './cp_prodlocline/annotations';
 using from './cpprodrestr/annotations';
 
 using from './cpcharqtygraph/annotations';
+
+using from './cpseedordercreation/annotations';
