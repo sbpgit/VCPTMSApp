@@ -731,7 +731,7 @@ module.exports = async function (srv) {
                                      "'PL20'" + "," +
                                      "'" + 55555 + "'" + "," +
                                      ' charval.CHAR_NUM ' + "," +
-                                     ' charval.CHAR_VALUE ' +
+                                     ' charval.CHARVAL_NUM ' +
                                      ' FROM PLSTR_CHARACTERISTICS AS charc' +
                                      ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
                                      ' charc.CHAR_NUM = charval.CHAR_NUM' + 
@@ -752,7 +752,7 @@ module.exports = async function (srv) {
                                      "'PL20'" + "," +
                                      "'" + 55555 + "'" + "," +
                                      ' charval.CHAR_NUM ' + "," +
-                                     ' charval.CHAR_VALUE ' +
+                                     ' charval.CHARVAL_NUM ' +
                                      ' FROM PLSTR_CHARACTERISTICS AS charc' +
                                      ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
                                      ' charc.CHAR_NUM = charval.CHAR_NUM' + 
@@ -773,7 +773,7 @@ module.exports = async function (srv) {
                                      "'PL20'" + "," +
                                      "'" + 55555 + "'" + "," +
                                      ' charval.CHAR_NUM ' + "," +
-                                     ' charval.CHAR_VALUE ' +
+                                     ' charval.CHARVAL_NUM ' +
                                      ' FROM PLSTR_CHARACTERISTICS AS charc' +
                                      ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
                                      ' charc.CHAR_NUM = charval.CHAR_NUM' + 
@@ -795,7 +795,7 @@ module.exports = async function (srv) {
                                      "'PL20'" + "," +
                                      "'" + 55555 + "'" + "," +
                                      ' charval.CHAR_NUM ' + "," +
-                                     ' charval.CHAR_VALUE ' +
+                                     ' charval.CHARVAL_NUM ' +
                                      ' FROM PLSTR_CHARACTERISTICS AS charc' +
                                      ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
                                      ' charc.CHAR_NUM = charval.CHAR_NUM' + 
@@ -815,7 +815,7 @@ module.exports = async function (srv) {
                                      "'PL20'" + "," +
                                      "'" + 55555 + "'" + "," +
                                      ' charval.CHAR_NUM ' + "," +
-                                     ' charval.CHAR_VALUE ' +
+                                     ' charval.CHARVAL_NUM ' +
                                      ' FROM PLSTR_CHARACTERISTICS AS charc' +
                                      ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
                                      ' charc.CHAR_NUM = charval.CHAR_NUM' + 
@@ -836,7 +836,7 @@ module.exports = async function (srv) {
                                      "'PL20'" + "," +
                                      "'" + 55555 + "'" + "," +
                                      ' charval.CHAR_NUM ' + "," +
-                                     ' charval.CHAR_VALUE ' +
+                                     ' charval.CHARVAL_NUM ' +
                                      ' FROM PLSTR_CHARACTERISTICS AS charc' +
                                      ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
                                      ' charc.CHAR_NUM = charval.CHAR_NUM' + 
@@ -857,7 +857,7 @@ module.exports = async function (srv) {
                                      "'PL20'" + "," +
                                      "'" + 55555 + "'" + "," +
                                      ' charval.CHAR_NUM ' + "," +
-                                     ' charval.CHAR_VALUE ' +
+                                     ' charval.CHARVAL_NUM ' +
                                      ' FROM PLSTR_CHARACTERISTICS AS charc' +
                                      ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
                                      ' charc.CHAR_NUM = charval.CHAR_NUM' + 
@@ -878,7 +878,7 @@ module.exports = async function (srv) {
                                      "'PL20'" + "," +
                                      "'" + 55555 + "'" + "," +
                                      ' charval.CHAR_NUM ' + "," +
-                                     ' charval.CHAR_VALUE ' +
+                                     ' charval.CHARVAL_NUM ' +
                                      ' FROM PLSTR_CHARACTERISTICS AS charc' +
                                      ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
                                      ' charc.CHAR_NUM = charval.CHAR_NUM' + 
@@ -899,7 +899,7 @@ module.exports = async function (srv) {
                                      "'PL20'" + "," +
                                      "'" + 55555 + "'" + "," +
                                      ' charval.CHAR_NUM ' + "," +
-                                     ' charval.CHAR_VALUE ' +
+                                     ' charval.CHARVAL_NUM ' +
                                      ' FROM PLSTR_CHARACTERISTICS AS charc' +
                                      ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
                                      ' charc.CHAR_NUM = charval.CHAR_NUM' + 
@@ -921,7 +921,7 @@ module.exports = async function (srv) {
                                      "'PL20'" + "," +
                                      "'" + 55555 + "'" + "," +
                                      ' charval.CHAR_NUM ' + "," +
-                                     ' charval.CHAR_VALUE ' +
+                                     ' charval.CHARVAL_NUM ' +
                                      ' FROM PLSTR_CHARACTERISTICS AS charc' +
                                      ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
                                      ' charc.CHAR_NUM = charval.CHAR_NUM' + 
@@ -943,7 +943,7 @@ module.exports = async function (srv) {
                                      "'PL20'" + "," +
                                      "'" + 55555 + "'" + "," +
                                      ' charval.CHAR_NUM ' + "," +
-                                     ' charval.CHAR_VALUE ' +
+                                     ' charval.CHARVAL_NUM ' +
                                      ' FROM PLSTR_CHARACTERISTICS AS charc' +
                                      ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
                                      ' charc.CHAR_NUM = charval.CHAR_NUM' + 
@@ -964,7 +964,7 @@ module.exports = async function (srv) {
                                      "'PL20'" + "," +
                                      "'" + 55555 + "'" + "," +
                                      ' charval.CHAR_NUM ' + "," +
-                                     ' charval.CHAR_VALUE ' +
+                                     ' charval.CHARVAL_NUM ' +
                                      ' FROM PLSTR_CHARACTERISTICS AS charc' +
                                      ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
                                      ' charc.CHAR_NUM = charval.CHAR_NUM' + 
@@ -986,7 +986,7 @@ module.exports = async function (srv) {
                                      "'PL20'" + "," +
                                      "'" + 55555 + "'" + "," +
                                      ' charval.CHAR_NUM ' + "," +
-                                     ' charval.CHAR_VALUE ' +
+                                     ' charval.CHARVAL_NUM ' +
                                      ' FROM PLSTR_CHARACTERISTICS AS charc' +
                                      ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
                                      ' charc.CHAR_NUM = charval.CHAR_NUM' + 
@@ -1007,7 +1007,7 @@ module.exports = async function (srv) {
                                      "'PL20'" + "," +
                                      "'" + 55555 + "'" + "," +
                                      ' charval.CHAR_NUM ' + "," +
-                                     ' charval.CHAR_VALUE ' +
+                                     ' charval.CHARVAL_NUM ' +
                                      ' FROM PLSTR_CHARACTERISTICS AS charc' +
                                      ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
                                      ' charc.CHAR_NUM = charval.CHAR_NUM' + 
@@ -1028,7 +1028,7 @@ module.exports = async function (srv) {
                                      "'PL20'" + "," +
                                      "'" + 55555 + "'" + "," +
                                      ' charval.CHAR_NUM ' + "," +
-                                     ' charval.CHAR_VALUE ' +
+                                     ' charval.CHARVAL_NUM ' +
                                      ' FROM PLSTR_CHARACTERISTICS AS charc' +
                                      ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
                                      ' charc.CHAR_NUM = charval.CHAR_NUM' + 
@@ -1049,7 +1049,7 @@ module.exports = async function (srv) {
                                      "'PL20'" + "," +
                                      "'" + 55555 + "'" + "," +
                                      ' charval.CHAR_NUM ' + "," +
-                                     ' charval.CHAR_VALUE ' +
+                                     ' charval.CHARVAL_NUM ' +
                                      ' FROM PLSTR_CHARACTERISTICS AS charc' +
                                      ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
                                      ' charc.CHAR_NUM = charval.CHAR_NUM' + 
