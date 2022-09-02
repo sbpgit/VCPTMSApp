@@ -251,7 +251,8 @@ module.exports = async function (srv) {
              (countryCode == 'DE') ||
              (countryCode == 'DK') ||
              (countryCode == 'FI') ||
-             (countryCode == 'NO') )
+             (countryCode == 'NO') ||
+             (countryCode == 'LU') )
         {
             custGroup = 'EU';
         }
@@ -271,8 +272,7 @@ module.exports = async function (srv) {
         {
             custGroup = 'SE';
         }       
-        else if ((countryCode == 'KW') ||
-                (countryCode == 'LU') )
+        else if ((countryCode == 'KW'))
         {
             custGroup = 'OT';
         }
