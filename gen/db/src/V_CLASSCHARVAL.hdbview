@@ -9,6 +9,7 @@ SELECT  A.CLASS_NUM,
         A.CLASS_NAME,
         B.CHAR_NUM,
         B.CHAR_NAME,
+        B.CHAR_GROUP,
         B.CHAR_VALUE,
         B.CHARVAL_NUM
         FROM CP_CLASS AS A

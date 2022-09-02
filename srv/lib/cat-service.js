@@ -1507,4 +1507,41 @@ module.exports = (srv) => {
         lsresults = {};
         return responseMessage;
     });
+
+    // Planning Configuration
+    // BOI - Deepa
+    srv.on("postParameterValues", async (req) => {
+        let aParamVals = [];
+        let oParamVals = {};
+        let oParamValues = {};
+        let bFlag = false;
+        var responseMessage;
+        oParamValues = JSON.parse(req.data.PARAMVALS);
+        if (req.data.FLAG === "C" || req.data.FLAG === "U") {
+            try {
+                await cds.run(DELETE.from('CP_PARAMETER_VALUES'));
+            } catch {
+                bFlag = true;
+            }
+
+            for (var i = 0; i < oParamValues.length; i++) {
+                oParamVals.PARAMETER_ID = parseInt(oParamValues[i].PARAMETER_ID);
+                oParamVals.VALUE = oParamValues[i].VALUE;
+                aParamVals.push(oParamVals);
+                oParamVals = {};
+            }
+            if (aParamVals.length > 0 && bFlag === false) {
+                try {
+                    await cds.run(INSERT.into('CP_PARAMETER_VALUES').entries(aParamVals));
+                    responseMessage = " Creation/Updation successful";
+                } catch (e) {
+                    responseMessage = " Creation failed";
+                }
+            }
+        }
+        lsresults = {};
+        return responseMessage;
+    });
+
+    // EOI - Deepa
 };

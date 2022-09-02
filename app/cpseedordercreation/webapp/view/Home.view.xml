@@ -1,0 +1,100 @@
+<mvc:View controllerName="cpapp.cpseedordercreation.controller.Home"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core" displayBlock="true"
+    xmlns="sap.m"
+    xmlns:l="sap.ui.layout"
+    xmlns:ux="sap.uxap"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:html="http://www.w3.org/1999/xhtml">
+    
+    <ux:ObjectPageLayout id="ObjectPageLayout">
+        <ux:headerTitle>
+            <ux:ObjectPageDynamicHeaderTitle>
+                <ux:expandedHeading>
+                    <Title text="{i18n>title}" class="boldText" titleAlignment="Center" />
+                </ux:expandedHeading>
+                <ux:snappedHeading>
+					<FlexBox fitContainer="true" alignItems="Center" >
+						<Title text="{i18n>title}" wrapping="true" />
+					</FlexBox>
+				</ux:snappedHeading>
+            </ux:ObjectPageDynamicHeaderTitle>
+        </ux:headerTitle>
+        <ux:headerContent>
+            <FlexBox wrap="Wrap" fitContainer="true">
+                <l:Grid defaultSpan="XL3 L3 M6 S12">
+                    <VBox >
+                        <Label text=""/>
+                        <SearchField id="headSearch" liveChange="onSearch" placeholder="Unique No"/>
+                    </VBox>
+                    <VBox >
+                        <Label text="Location" required= "true"/>
+                        <Input id="idloc" value="" placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                    </VBox>
+                    <VBox >
+                        <Label text="Product" required= "true"/>
+                        <Input id="idprod" placeholder="Product" value="" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+
+                    </VBox>
+                    <VBox>
+                        <Label text=""/>
+                        <HBox>
+                            <Button text="Go" type="Emphasized" press="onGetData" tooltip="Get data based on filters" class="sapUiTinyMarginEnd"/>
+                            <Button text="Reset" type="Transparent" press="onResetDate" tooltip="Reset Valid To Date"/>
+                        </HBox>
+                    </VBox>
+                </l:Grid>
+            </FlexBox>
+        </ux:headerContent>
+        <ux:sections>
+            <ux:ObjectPageSection >
+                <ux:subSections>
+                    <ux:ObjectPageSubSection>
+                        <ux:blocks>
+                            <Table id="orderList" items="{path: '/results'}" itemPress="onhandlePress" growingScrollToLoad="true" mode="SingleSelectMaster" selectionChange="onhandlePress" rememberSelections="false">
+                                <headerToolbar>
+                                    <Toolbar>
+                                        <content>
+                                            <ToolbarSpacer/>
+                                            <Button id="idCreate" type='Ghost' text="Create Order" press="onOrderCr"></Button>
+                                        </content>
+                                    </Toolbar>
+                                </headerToolbar>
+                                <columns>
+                                    <Column hAlign="Left" vAlign="Middle" >
+                                        <Text text="{i18n>loc}" />
+                                    </Column>
+                                    <Column hAlign="Left" vAlign="Middle" >
+                                        <Text text="{i18n>prod}"/>
+                                    </Column>
+                                    <Column hAlign="Left" vAlign="Middle">
+                                        <Text text="{i18n>uniqid}"/>
+                                    </Column>
+                                    <Column hAlign="Left" vAlign="Middle">
+                                        <Text text="{i18n>quan}"/>
+                                    </Column>
+                                    <Column hAlign="Left" vAlign="Middle">
+                                        <Text text="{i18n>date}"/>
+                                    </Column>
+                                </columns>
+                                <items>
+                                    <ColumnListItem>
+                                        <cells>
+                                            <Text text="{LOCATION_ID}" />
+                                            <Text text="{PRODUCT_ID}"/>
+                                            <Text text="{VERSION}"/>
+                                            <Text text="{SCENARIO}"/>
+                                            <DatePicker valueFormat="MM/dd/yyyy" displayFormat="MM/dd/yyyy" value="{WEEK_DATE}" editable="false" />
+                                            <Text text="{QUANTITY}"/>
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
+                            </Table>
+                        </ux:blocks>
+                    </ux:ObjectPageSubSection>
+                </ux:subSections>
+            </ux:ObjectPageSection>
+        </ux:sections>
+    </ux:ObjectPageLayout>
+
+</mvc:View>

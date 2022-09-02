@@ -31,6 +31,8 @@ using {
     V_FCHARPLAN,
     V_ASMCOMP_REQ
 } from '../db/data-model';
+using V_PLANNEDCONFIG from '../db/data-model';
+
 
 // using V_ASMCOMP_REQ from '../db/data-model';
 service CatalogService @(impl : './lib/cat-service.js'){
@@ -254,4 +256,12 @@ service CatalogService @(impl : './lib/cat-service.js'){
     entity getSeedOrder    as projection on od.SEEDORDER_HEADER;
 
     function maintainSeedOrder(FLAG: String(1), SEEDDATA: String) returns String;
+
+    // Planning Configuration
+    // BOI - Deepa
+    @readonly
+    entity Method_Types       as projection on od.METHOD_TYPES;
+    entity V_Parameters      as projection on V_PLANNEDCONFIG;
+    function postParameterValues(FLAG : String(1), PARAMVALS : String) returns String;
+    // EOI - Deepa
 }
