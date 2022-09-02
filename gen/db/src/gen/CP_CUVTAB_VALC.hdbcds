@@ -1,0 +1,7 @@
+entity CP_CUVTAB_VALC {
+  key VTINT : String(10);
+  key SLNID : String(5);
+  key ATINN : String(10);
+  key VLCNT : String(3);
+  VALC : String(70);
+};

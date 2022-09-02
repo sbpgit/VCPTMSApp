@@ -1,0 +1,21 @@
+entity CP_SALESH {
+  key SALES_DOC : String(10);
+  key SALESDOC_ITEM : String(6);
+  DOC_CREATEDDATE : LocalDate;
+  SCHEDULELINE_NUM : String(4);
+  PRODUCT_ID : String(40);
+  REASON_REJ : String(2);
+  UOM : String(3);
+  CONFIRMED_QTY : Decimal(13, 3);
+  ORD_QTY : Decimal(13, 3);
+  MAT_AVAILDATE : LocalDate;
+  NET_VALUE : Decimal(15, 2);
+  CUSTOMER_GROUP : String(2);
+  LOCATION_ID : String(4);
+  CHANGED_DATE : LocalDate;
+  CHANGED_BY : String(12);
+  CREATED_DATE : LocalDate;
+  CREATED_BY : String(12);
+  CHANGED_TIME : LocalTime;
+  CREATED_TIME : LocalTime;
+};

@@ -1,0 +1,13 @@
+entity CP_LOCATION {
+  key LOCATION_ID : String(4);
+  LOCATION_DESC : String(30);
+  LOCATION_TYPE : String(1);
+  LATITUDE : Decimal(10, 8);
+  LONGITUTE : Decimal(10, 8);
+  RESERVE_FIELD1 : String(20);
+  RESERVE_FIELD2 : String(20);
+  RESERVE_FIELD3 : String(20);
+  RESERVE_FIELD4 : String(20);
+  RESERVE_FIELD5 : String(20);
+  AUTH_GROUP : String(4);
+};

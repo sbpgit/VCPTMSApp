@@ -1,0 +1,18 @@
+entity JS_JOBS {
+  key JOB_ID : Integer;
+  key JOB_NAME : String(50);
+  key ACTION : String(200);
+  key ACTIVE : Boolean;
+  key HTTP_METHOD : String(50);
+  key CREATAT : String(50);
+  JOB_DES : String(100);
+  JOB_TYPE : String(50);
+  START_TIME : String(50);
+  END_TIME : String(50);
+  ACTIVECOUNT : Integer;
+  INACTIVECOUNT : Integer;
+  SIGNATURE_VERSION : Integer;
+  SUB_DOMAIN : String(5000);
+  USER : String(50);
+  key SCHEDULE_ID : String(50);
+};

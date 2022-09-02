@@ -1,0 +1,8 @@
+entity MKT_CONSTRAINTS {
+  key ID : String(15);
+  key TYPE : String(20);
+  key SUBJECT : String(5000);
+  APPLICABILITY : String(1000);
+  LEVEL : Integer;
+  SEQUENCE : Integer;
+};
