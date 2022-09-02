@@ -239,6 +239,44 @@ module.exports = async function (srv) {
 
         //             );
 
+        let countryCode = plstrData[shIndex].COUNTRY ;
+        let custGroup = '';
+        if ( (countryCode == 'GB') ||
+             (countryCode == 'AT') ||
+             (countryCode == 'IS') ||
+             (countryCode == 'NL') ||
+             (countryCode == 'SE') ||
+             (countryCode == 'BE') ||
+             (countryCode == 'CH') ||
+             (countryCode == 'DE') ||
+             (countryCode == 'DK') ||
+             (countryCode == 'FI') ||
+             (countryCode == 'NO') )
+        {
+            custGroup = 'EU';
+        }
+        else if ((countryCode == 'US') ||
+                 (countryCode == 'CA') )
+        {
+            custGroup = 'NA';
+        }
+        else if ((countryCode == 'NZ') ||
+                 (countryCode == 'AU') ||
+                 (countryCode == 'CN') )
+        {
+            custGroup = 'OS';
+        }
+        else if ((countryCode == 'SG') ||
+                 (countryCode == 'KR') )
+        {
+            custGroup = 'SE';
+        }       
+        else if ((countryCode == 'KW') ||
+                (countryCode == 'LU') )
+        {
+            custGroup = 'OT';
+        }
+
         sqlStr = 'UPSERT PLSTR_SALESH VALUES (' +
                     "'" + salesDocId + "'" + "," +
                     "'" + salesDocItem + "'" + "," +
@@ -251,7 +289,7 @@ module.exports = async function (srv) {
                     "'" + plstrData[shIndex].HANDOVERS_COUNT + "'" + "," +
                     "'" + plstrData[shIndex].START_DATE + "'" + "," +
                     "'" + 9999999 + "'" + "," +
-                    "'" + plstrData[shIndex].COUNTRY + "'" + "," +
+                    "'" + custGroup + "'" + "," +
                     "'PL20'" + "," +
                     "'" + plstrData[shIndex].START_DATE + "'" + "," +
                     "''" + "," +
@@ -626,7 +664,13 @@ module.exports = async function (srv) {
     }
 
 
-
+    let custGrpSql  = 'UPSERT PLSTR_CUSTOMERGROUP ("CUSTOMER_GROUP", "CUSTOMER_DESC")' +
+                        ' SELECT DISTINCT "CUSTOMER_GROUP" ,' +
+                        ' CONCAT("CUSTOMER_GROUP", ' + '\' Customer \'' + ')' + 
+                        ' FROM "PLSTR_SALESH" WHERE LOCATION_ID = ' + '\'PL20\'';
+    console.log("custGrpSql = ", custGrpSql);
+    let custGrpSqlResults = await cds.run(custGrpSql);
+    console.log("custGrpSqlResults = ", custGrpSqlResults);
 
 
     let dataObj = {};
