@@ -1,0 +1,11 @@
+entity CP_PVS_BOM {
+  CREATEDAT : UTCTimestamp;
+  CREATEDBY : String(255);
+  MODIFIEDAT : UTCTimestamp;
+  MODIFIEDBY : String(255);
+  key LOCATION_ID : String(4);
+  key PRODUCT_ID : String(40);
+  key ITEM_NUM : String(5);
+  key COMPONENT : String(40);
+  STRUC_NODE : String(50);
+};

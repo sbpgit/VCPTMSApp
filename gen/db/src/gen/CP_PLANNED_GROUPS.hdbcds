@@ -1,0 +1,5 @@
+entity CP_PLANNED_GROUPS {
+  key GROUP_ID : Integer;
+  GROUP_DESCRIPTION : String(100);
+  UNIT : String(5);
+};

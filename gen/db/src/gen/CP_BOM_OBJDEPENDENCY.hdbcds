@@ -1,0 +1,11 @@
+entity CP_BOM_OBJDEPENDENCY {
+  key LOCATION_ID : String(4);
+  key PRODUCT_ID : String(40);
+  key ITEM_NUM : String(5);
+  key COMPONENT : String(40);
+  key OBJ_DEP : String(30);
+  OBJDEP_DESC : String(30);
+  COMP_QTY : Decimal(13, 3);
+  VALID_FROM : LocalDate;
+  VALID_TO : LocalDate;
+};

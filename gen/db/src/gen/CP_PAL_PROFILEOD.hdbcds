@@ -1,0 +1,13 @@
+entity CP_PAL_PROFILEOD {
+  CREATEDAT : UTCTimestamp;
+  CREATEDBY : String(255);
+  MODIFIEDAT : UTCTimestamp;
+  MODIFIEDBY : String(255);
+  key LOCATION_ID : String(4);
+  key PRODUCT_ID : String(40);
+  key COMPONENT : String(40);
+  key PROFILE : String(50);
+  key OBJ_DEP : String(30);
+  key OBJ_TYPE : String(2) default 'OD';
+  STRUC_NODE : String(50);
+};

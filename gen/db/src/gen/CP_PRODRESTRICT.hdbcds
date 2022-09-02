@@ -1,0 +1,8 @@
+entity CP_PRODRESTRICT {
+  key LOCATION_ID : String(4);
+  key PRODUCT_ID : String(40);
+  key RESTRICTION : String(30);
+  RTR_QTY : Decimal(13, 3);
+  VALID_FROM : LocalDate;
+  VALID_TO : LocalDate;
+};
