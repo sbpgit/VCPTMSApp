@@ -97,13 +97,13 @@
 							</contextMenu> -->
 							<columns>
 								
-								<Column hAlign="Center" visible="false">
+								<Column hAlign="Center" visible="true">
 									<Text text="{i18n>charno}"/>
 								</Column>
 								<Column hAlign="Center">
 									<Text text="{i18n>charname}"/>
 								</Column>
-								<Column hAlign="Center" visible="false">
+								<Column hAlign="Center" visible="true">
 									<Text text="{i18n>seq}"/>
 								</Column>
 							</columns>
