@@ -28,7 +28,12 @@
 					</VBox>
 					<VBox >
 						<Label text=""/>
+                        <HBox>
 						<Button id="idData" text="Go" type="Accept" press="onGetData"/>
+                        
+                        <Text text="" width = "100px"/>
+						<Button id="idReset" text="Reset" type="Accept" press="onReset"/>
+                        </HBox>
 					</VBox>
                     
 					<!-- <VBox >

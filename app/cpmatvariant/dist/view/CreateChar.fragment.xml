@@ -1,0 +1,46 @@
+<core:FragmentDefinition xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns:l="sap.ui.layout"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:u="sap.ui.unified">
+    <Dialog title="Create Unique Description" contentWidth="450px" titleAlignment="Center">
+        <VBox class="sapUiSmallMargin">
+            <f:SimpleForm id="SimpleFormToolbar1" editable="true" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="4" labelSpanM="4" labelSpanS="4" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1" singleContainerFullSize="false">
+                <f:content>
+                    <Label text="{i18n>unqid}"/>
+                    <Input id="uniqId1" value="" editable="true" width="100%"/>
+
+                    <Label text="{i18n>locid}"/>
+                    <Input id="locId1" value="" editable="true" width="100%"/>
+
+                    <Label text="{i18n>prodid}"/>
+                    <Input id="prodId1" value="" editable="true" width="100%"/>
+
+                    <Label text="{i18n>unidesc}"/>
+                    <TextArea id="idUniqDesc1" value="" width="100%" maxLength="50"/>
+
+                    <Label text="{i18n>UidTid}"/>
+                    <Input id="uidTId1" value="" editable="true" width="100%"/>
+
+                    <Label text="{i18n>UidRid}"/>
+                    <Input id="uidRId1" value="" editable="true" width="100%"/>
+
+                    <Label text="{i18n>activid}"/>
+                    <ComboBox id="idComboBox" width="auto" placeholder="Select" change="onSelect" class="CombBox" selectedKey="true"
+									showButton="true">
+									<core:Item key="true" text="True"/>
+									<core:Item key="false" text="False"/>
+									
+								</ComboBox>
+
+
+                </f:content>
+            </f:SimpleForm>
+        </VBox>
+        <buttons>
+            <Button type='Ghost' text="{i18n>save}" press="onUpdateUniqueDesc"></Button>
+            <Button type='Reject' text="{i18n>close}" press="onCloseCreate"></Button>
+        </buttons>
+    </Dialog>
+</core:FragmentDefinition>

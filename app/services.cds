@@ -44,5 +44,5 @@ using from './cpprodrestr/annotations';
 using from './cpcharqtygraph/annotations';
 
 using from './cpseedordercreation/annotations';
-using from './cpseedorder/annotations';
+// using from './cpseedorder/annotations';
 using from './cp_planconfig/annotations';

@@ -766,6 +766,7 @@ entity![V_CLASSCHARVAL]{
     key![CLASS_NAME]  : String(20) @title : 'CLASS_NAME';
     key![CHAR_NUM]    : String(10) @title : 'CHAR_NUM';
     key![CHAR_NAME]   : String(30) @title : 'CHAR_NAME';
+    key![CHAR_GROUP]   : String(10) @title : 'CHAR_NAME';
     key![CHAR_VALUE]  : String(70) @title : 'CHAR_VALUE';
     key![CHARVAL_NUM] : String(10) @title : 'CHARVAL_NUM';
 }

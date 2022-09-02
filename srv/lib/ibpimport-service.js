@@ -591,6 +591,15 @@ module.exports = cds.service.impl(async function () {
            ON A.PRODUCT_ID = B.PRODUCT_ID 
            WHERE B.LOCATION_ID = '`+ req.data.LOCATION_ID + `'`);
 
+    const lipartialprod = await cds.run(
+            `
+         SELECT PRODUCT_ID,
+                LOCATION_ID,
+                REF_PRODID
+           FROM "CP_PARTIALPROD_INTRO"
+           WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
+           ORDER BY REF_PRODID`);
+
         //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
         for (i = 0; i < limasterprod.length; i++) {
             vmasterProd = {
@@ -603,6 +612,21 @@ module.exports = cds.service.impl(async function () {
                 "PRDSERIES": limasterprod[i].PROD_SERIES
             };
             oReq.masterProd.push(vmasterProd);
+            for (iPartial = 0; iPartial < lipartialprod.length; iPartial++) {
+                if (lipartialprod[iPartial].REF_PRODID === limasterprod[i].PRODUCT_ID) {
+                    vmasterProd = {
+                        "VCMODELRANGE": limasterprod[i].PROD_MDLRANGE,
+                        "PRDFAMILY": limasterprod[i].PROD_FAMILY,
+                        "PRDID": lipartialprod[iPartial].PRODUCT_ID,
+                        "PRDGROUP": limasterprod[i].PROD_GROUP,
+                        "VCMODEL": limasterprod[i].PROD_MODEL,
+                        "PRDDESCR": limasterprod[i].PROD_DESC,
+                        "PRDSERIES": limasterprod[i].PROD_SERIES
+                        // "VCSTRUCTURENODE": limasterprod[i].RESERVE_FIELD3
+                    };
+                    oReq.masterProd.push(vmasterProd);
+                }
+            }
 
         }
         var vTransID = new Date().getTime().toString();
