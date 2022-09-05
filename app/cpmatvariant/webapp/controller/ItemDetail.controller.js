@@ -67,6 +67,9 @@ sap.ui.define(
                         else{
                             oAddButton.setProperty("visible",false);
                         }
+
+                        oGModel.setProperty("/CharData", oData.results);
+
                         that.oCharModel.setData({
                             results: oData.results,
                         });
@@ -439,7 +442,7 @@ sap.ui.define(
 
                     for (var i = 0; i < oItemTable.length; i++) {
                         if (oItemTable[i].getCells()[1].getText() === charNum &&
-                            oItemTable[i].getCells()[1].getText() === charVal_Num) {
+                            oItemTable[i].getCells()[3].getText() === charVal_Num) {
                             count = count + 1;
                         }
                     }
