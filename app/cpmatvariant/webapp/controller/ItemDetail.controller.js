@@ -49,7 +49,7 @@ sap.ui.define(
         var sPrdId = oGModel.getProperty("/prdId");
         var sLocId = oGModel.getProperty("/locId");
         var sUniqId = oGModel.getProperty("/uniqId");
-
+        var oAddButton = that.byId("idadd");
         this.getModel("BModel").read("/getUniqueItem", {
           filters: [
             new Filter("LOCATION_ID", FilterOperator.EQ, sLocId),
@@ -58,10 +58,18 @@ sap.ui.define(
           ],
           success: function (oData) {
             sap.ui.core.BusyIndicator.hide();
+            if(oData.results.length === 0){
+                oAddButton.setProperty("visible",true);
+            }
+            else{
+                oAddButton.setProperty("visible",false);
+            }
               that.oCharModel.setData({
                 results: oData.results,
               });
+            
               that.byId("idMatvarItem").setModel(that.oCharModel);
+            
           },
           error: function () {
             MessageToast.show("Failed to get data");

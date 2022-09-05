@@ -10,7 +10,7 @@
            
                     <SearchField id="idCharSearch" liveChange="onCharSearch" placeholder="Characteristic / Characteristic Value" width="950px"/>
                     <!-- <ToolbarSpacer/> -->
-<Button id="idadd" icon="sap-icon://add" press="onAddPress"/>
+<Button id="idadd" icon="sap-icon://add" press="onAddPress" visible="false"/>
                     
                     </OverflowToolbar>
                     </HBox>

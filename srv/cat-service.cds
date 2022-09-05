@@ -209,7 +209,7 @@ service CatalogService @(impl : './lib/cat-service.js'){
     entity getUniqueItem   as projection on V_UNIQUE_ID_ITEM;
     entity getUniqueId as projection on V_UNIQUE_ID;
     function genUniqueID(LOCATION_ID : String(4), PRODUCT_ID : String(40))      returns String;
-    function changeUnique(UNIQUE_ID : Integer, LOCATION_ID : String(4), PRODUCT_ID : String(40), UID_TYPE : String(1), UID_RATE : Decimal(13,2),UNIQUE_DESC : String(50), ACTIVE:String(1),FLAG: String) returns String;
+    function changeUnique(UNIQUE_ID : Integer, LOCATION_ID : String(4), PRODUCT_ID : String(40), UID_TYPE : String(1),UNIQUE_DESC : String(50), ACTIVE:String(1),FLAG: String) returns String;
     function maintainUniqueChar(FLAG: String(1), UNIQUECHAR: String) returns String;
 
 // Method 2
