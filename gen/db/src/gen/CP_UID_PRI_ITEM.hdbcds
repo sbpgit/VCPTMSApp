@@ -1,7 +1,0 @@
-entity CP_UID_PRI_ITEM {
-  key UNIQUE_ID : Integer;
-  key LOCATION_ID : String(4);
-  key PRODUCT_ID : String(40);
-  key CHAR_NUM : String(30);
-  CHARVAL_NUM : String(70);
-};

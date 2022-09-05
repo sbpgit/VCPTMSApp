@@ -1,8 +1,0 @@
-entity CP_AUTH_ROLE {
-  CREATEDAT : UTCTimestamp;
-  CREATEDBY : String(255);
-  MODIFIEDAT : UTCTimestamp;
-  MODIFIEDBY : String(255);
-  key ROLE_ID : String(100);
-  DESCRIPTION : String(250);
-};

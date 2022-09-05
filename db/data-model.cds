@@ -41,6 +41,7 @@ context cp {
             PROD_MODEL     : String(30) @title : 'Product Model';
             PROD_MDLRANGE  : String(30) @title : 'Product Range';
             PROD_SERIES    : String(30) @title : 'Product Series';
+            PROD_TYPE      : String(4)  @title : 'Product Type';
             RESERVE_FIELD1 : String(20) @title : 'Reserve Field1';
             RESERVE_FIELD2 : String(20) @title : 'Reserve Field2';
             RESERVE_FIELD3 : String(20) @title : 'Reserve Field3';
