@@ -363,6 +363,7 @@ sap.ui.define(
                     oGModel.setProperty("/locId", sSelItem.LOCATION_ID);
                     oGModel.setProperty("/uniqId", sSelItem.UNIQUE_ID);
                     oGModel.setProperty("/uid_rate",sSelItem.UID_RATE);
+                    oGModel.setProperty("/uid_active",sSelItem.ACTIVE);
                 }
                 // Calling Item Detail page
                 that.getOwnerComponent().runAsOwner(function () {
