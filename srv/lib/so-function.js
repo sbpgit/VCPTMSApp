@@ -445,43 +445,7 @@ class SOFunctions{
             if(liCharFinal[cntU].length > 0){
 
                 await  createPrimaryID(lLocation, lProduct, liCharFinal[cntU]);
-/*
-                const lsUniqueInd = await SELECT.one.columns("MAX(UNIQUE_ID) + 1 AS MAX_ID")
-                                            .from('CP_UNIQUE_ID_HEADER');
-                if(lsUniqueInd.MAX_ID === null){
-                    lCntVariantID = 1;
-                }else{                    
-                    lCntVariantID = parseInt(lsUniqueInd.MAX_ID);
-                }         
-
-                this.logger.info("Unique ID Index: " + lCntVariantID);
-
-                await cds.run({INSERT:
-                    {
-                        into:{ ref: ['CP_UNIQUE_ID_HEADER'] },
-                        values: [ lCntVariantID, lLocation, lProduct, '', 'P', 0, true]
-                    }
-                })
-
-                let liChar = [];
-                let lsChar = {};
-                for (let cntUC = 0; cntUC < liCharFinal[cntU].length; cntUC++) {
-                    lsChar =  {};
-                    lsChar['UNIQUE_ID'] = GenF.parse(lCntVariantID);
-                    lsChar['LOCATION_ID'] = GenF.parse(lLocation);
-                    lsChar['PRODUCT_ID'] = GenF.parse(lProduct);
-                    lsChar['CHAR_NUM'] = GenF.parse(liCharFinal[cntU][cntUC].CHAR_NUM);
-                    lsChar['CHARVAL_NUM'] = GenF.parse(liCharFinal[cntU][cntUC].CHARVAL_NUM);
-                    liChar.push(lsChar);
-                }
-                
-                cds.run({INSERT:
-                    {
-                        into:{ ref: ['CP_UNIQUE_ID_ITEM'] },
-                        entries: liChar
-                    }
-                })                
-*/               
+               
             }
         }
 
@@ -587,11 +551,7 @@ class SOFunctions{
 
         const lSOItem = '10';
 // Get Main Product        
-        const lsSales = await SELECT.one
-                                   .columns('REF_PRODID')
-                                   .from('CP_PARTIALPROD_INTRO')
-                                   .where(`LOCATION_ID = '${lLocation}'
-                                       AND PRODUCT_ID = '${lProduct}'`);
+        const lMainProd = await getMainProduct(lLocation, lProduct);
 
         await INSERT.into('CP_SALESH').columns('SALES_DOC', 
                                                'SALESDOC_ITEM', 
@@ -602,28 +562,61 @@ class SOFunctions{
                                                'LOCATION_ID')
                                     .values( lSO,
                                               lSOItem,
-                                            lsSales.REF_PRODID,
-                                            lQty,
-                                            lQty,
-                                            lDate,
-                                            lLocation);    
+                                              lMainProd,
+                                                lQty,
+                                                lQty,
+                                                lDate,
+                                                lLocation);   
+                                            
+        const lSPrimary = await processPrimaryID(lLocation, lMainProd, lUnique);                                        
+       
+    
+        await INSERT.into('CP_SALES_HM')
+                    .values( lSO, lSOItem, lProduct, lLocation, lUnique, lSPrimary);
+
+    }
+
+/**
+ * 
+ * @param {Location} lLocation 
+ * @param {Product} lProduct 
+ */
+    async getMainProduct(lLocation, lProduct){
+// Get Main Product        
+        const lsSales = await SELECT.one
+        .columns('REF_PRODID')
+        .from('CP_PARTIALPROD_INTRO')
+        .where(`LOCATION_ID = '${lLocation}'
+            AND PRODUCT_ID = '${lProduct}'`);    
+            
+        return lsSales.REF_PRODID;
+    }
+
+/**
+ * 
+ * @param {Location} lLocation 
+ * @param {Product} lProduct 
+ * @param {Unique ID} lUnique 
+ */    
+    async processPrimaryID(lLocation, lProduct, lUnique){
+
                                             
         const liUnique = await SELECT.columns('CHAR_NUM', 'CHARVAL_NUM')
                                      .from('CP_UNIQUE_ID_ITEM')
                                      .where(`UNIQUE_ID = '${lUnique}' 
                                          AND LOCATION_ID = '${lLocation}
-                                         AND PRODUCT_ID = '${lsSales.REF_PRODID}'
+                                         AND PRODUCT_ID = '${lProduct}'
                                          AND CHAR_NUM IN (SELECT "CHAR_NUM"
                                                             FROM "CP_VARCHAR_PS"
-                                                           WHERE "PRODUCT_ID" = '` + lProduct + `'
-                                                             AND "LOCATION_ID" = '` + lsSales.REF_PRODID + `'
+                                                            WHERE "PRODUCT_ID" = '${lProduct}'
+                                                            AND "LOCATION_ID" = '${lLocation}'
                                                              AND "CHAR_TYPE" = 'P')`)
                                          .orderBy('CHAR_NUM', 'CHARVAL_NUM');
 
         const liPrimary = await SELECT.columns('UNIQUE_ID', 'CHAR_NUM', 'CHARVAL_NUM')
                                         .from('V_UNIQUE_ID')
                                         .where(`LOCATION_ID = '${lLocation}
-                                            AND PRODUCT_ID  = '${lsSales.REF_PRODID}'
+                                            AND PRODUCT_ID  = '${lProduct}'
                                             AND UID_TYPE    = 'P'`);
 
         let lUICount = 0;
@@ -651,13 +644,18 @@ class SOFunctions{
 
         if(lSPrimary === 0){
             lSPrimary = await  createPrimaryID(lLocation, lsSales.REF_PRODID, liUnique);
-        }
-    
-        await INSERT.into('CP_SALES_HM')
-                    .values( lSO, lSOItem, lProduct, lLocation, lUnique, lSPrimary);
+        } 
+        
+        return lSPrimary;
 
     }
 
+/**
+ * 
+ * @param {Location} lLocation 
+ * @param {Product} lProduct 
+ * @param {Char Array} liCharVal 
+ */    
     async createPrimaryID(lLocation, lProduct, liCharVal){
 
 
