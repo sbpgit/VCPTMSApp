@@ -32,8 +32,8 @@ sap.ui.define(
                 // Declaring JSON Models and size limit
                 that.oModel = new JSONModel();
                 that.classnameModel = new JSONModel();
-                that.charnameModel = new JSONModel();
-                that.charvalueModel = new JSONModel();
+                 = new JSONModel();
+                that.charvalueModel = that.charnameModelnew JSONModel();
                 that.ListModel = new JSONModel();
 
                 this.oModel.setSizeLimit(1000);
@@ -530,24 +530,24 @@ sap.ui.define(
             //         oEntry.RTRCHAR.push(vRuleslist);
             //     }
 
-            //     that.getModel("BModel").callFunction("/maintainRestrDet", {
-            //         method: "GET",
-            //         urlParameters: {
-            //             FLAG: oFlag,
-            //             RTRCHAR: JSON.stringify(oEntry.RTRCHAR)
-            //         },
-            //         success: function (oData) {
-            //             sap.ui.core.BusyIndicator.hide();
-            //             sap.m.MessageToast.show("success");
-            //             that.onAfterRendering();
-            //             that.onCloseRestItem();
+                // that.getModel("BModel").callFunction("/maintainRestrDet", {
+                //     method: "GET",
+                //     urlParameters: {
+                //         FLAG: oFlag,
+                //         RTRCHAR: JSON.stringify(oEntry.RTRCHAR)
+                //     },
+                //     success: function (oData) {
+                //         sap.ui.core.BusyIndicator.hide();
+                //         sap.m.MessageToast.show("success");
+                //         that.onAfterRendering();
+                //         that.onCloseRestItem();
 
-            //         },
-            //         error: function (error) {
-            //             sap.ui.core.BusyIndicator.hide();
-            //             sap.m.MessageToast.show("Error");
-            //         },
-            //     });
+                //     },
+                //     error: function (error) {
+                //         sap.ui.core.BusyIndicator.hide();
+                //         sap.m.MessageToast.show("Error");
+                //     },
+                // });
             // },
 
             // onCharDel: function (oEvent) {

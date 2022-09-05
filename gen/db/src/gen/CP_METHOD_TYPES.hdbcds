@@ -1,4 +1,0 @@
-entity CP_METHOD_TYPES {
-  key METHOD_TYP : String(2);
-  DESCRIPTION : String(20);
-};

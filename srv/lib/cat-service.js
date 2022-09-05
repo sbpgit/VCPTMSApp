@@ -1202,7 +1202,7 @@ module.exports = (srv) => {
         if (req.data.FLAG === 'E') {// Active status change
             lsresults.LOCATION_ID = req.data.LOCATION_ID;
             lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
-            lsresults.UNIQUE_ID = parseInt(req.data.UNIQUE_ID);
+            // lsresults.UNIQUE_ID = parseInt(req.data.UNIQUE_ID);
             try {
                 await cds.delete("CP_UNIQUE_ID_HEADER", lsresults);
             } catch (e) {
@@ -1466,6 +1466,8 @@ module.exports = (srv) => {
         let liresults = [];
         let lsresults = {};
         let liSeeddata = {};
+        let vValue = 0;
+        let vPrefix = 'SE';
         var responseMessage;
         liSeeddata = JSON.parse(req.data.SEEDDATA);
         if (req.data.FLAG === "C") {
@@ -1474,6 +1476,12 @@ module.exports = (srv) => {
             lsresults.UNIQUE_ID = liSeeddata[0].UNIQUE_ID;
             lsresults.ORD_QTY = parseFloat(liSeeddata[0].ORD_QTY);
             lsresults.MAT_AVAILDATE = liSeeddata[0].MAT_AVAILDATE;
+            const li_paravalues = await cds.run(
+                `SELECT VALUE
+                FROM "CP_PARAMETER_VALUES"
+                WHERE "PARAMETER_ID" = 6 `);
+            vValaue = parseInt(li_paravalues[0].VALUE) + 1;
+            lsresults.SEED_ORDER = vPrefix.concat(vValue.toString());
             liresults.push(lsresults);
             lsresults = {};
             if (liresults.length > 0) {

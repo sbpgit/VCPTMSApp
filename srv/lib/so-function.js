@@ -155,7 +155,8 @@ class SOFunctions{
         const liPartialProd = await cds.run(
             `SELECT *
                 FROM V_PARTIALPRODCHAR
-                WHERE REF_PRODID    = '` + adata.PRODUCT_ID + `'
+                WHERE REF_PRODID    = '${adata.PRODUCT_ID}'
+                  AND LOCATION_ID   = '${adata.LOCATION_ID}'
                 ORDER BY LOCATION_ID,
                          PRODUCT_ID,
                          CLASS_NUM,
@@ -166,6 +167,7 @@ class SOFunctions{
         let lsSalesUpdate = {};
 
         for (let cntSO = 0; cntSO < liSOHM.length; cntSO++) {
+            let lIgnoreProduct = '';
             for (let cntPC = 0; cntPC < liPartialProd.length; cntPC++) {
                 let lSuccess = '';
                 for (let cntSOC = 0; cntSOC < liSOHM[cntSO].CONFIG.length; cntSOC++) {
@@ -176,13 +178,17 @@ class SOFunctions{
                     }
                 }
                 if(lSuccess === ''){
-                    break;
+                    lIgnoreProduct = GenF.parse(liPartialProd[cntPC].PRODUCT_ID);
                 }
+                if (liPartialProd[cntPC].PRODUCT_ID !== lIgnoreProduct) {
+                    if (cntPC === GenF.addOne(cntPC, liPartialProd.length) ||
+                        liPartialProd[cntPC].LOCATION_ID !== liPartialProd[GenF.addOne(cntPC, liPartialProd.length)].LOCATION_ID ||
+                        liPartialProd[cntPC].PRODUCT_ID !== liPartialProd[GenF.addOne(cntPC, liPartialProd.length)].PRODUCT_ID) {
 
-                if (cntPC === GenF.addOne(cntPC, liPartialProd.length) || 
-                    liPartialProd[cntPC].LOCATION_ID !== liPartialProd.length[GenF.addOne(cntPC, liPartialProd.length)].LOCATION_ID ||
-                    liPartialProd[cntPC].PRODUCT_ID !== liPartialProd.length[GenF.addOne(cntPC, liPartialProd.length)].PRODUCT_ID) {
-                    liSOHM[cntSO].PRODUCT_ID = GenF.parse(liPartialProd[cntPC].PRODUCT_ID);
+                        liSOHM[cntSO].PRODUCT_ID = GenF.parse(liPartialProd[cntPC].PRODUCT_ID);
+                        break;
+
+                    }
                 }
             }
 
@@ -203,7 +209,9 @@ class SOFunctions{
                                     
         }
 
-        await INSERT (liSalesUpdate) .into('CP_SALES_HM');
+        if(liSalesUpdate.length > 0){
+            await INSERT (liSalesUpdate) .into('CP_SALES_HM');
+        }
         console.log("Process Completed");
 
         await this.updateUniqueRate(adata.LOCATION_ID, adata.PRODUCT_ID);

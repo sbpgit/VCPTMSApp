@@ -1,0 +1,6 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+	<SelectDialog id="classNameList" title="{i18n>classname}" search="handleSearch" liveChange="handleSearch" rememberSelections="false"
+		confirm="handleSelection" cancel="handleClose" items="{/results}">
+		<StandardListItem title="{CLASS_NAME}"  type="Active"/>
+	</SelectDialog>
+</core:FragmentDefinition>

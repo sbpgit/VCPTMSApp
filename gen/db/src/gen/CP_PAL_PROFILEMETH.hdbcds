@@ -1,7 +1,0 @@
-entity CP_PAL_PROFILEMETH {
-  key PROFILE : String(50);
-  METHOD : String(50);
-  PRF_DESC : String(200);
-  CREATED_DATE : LocalDate;
-  CREATED_BY : String(12);
-};

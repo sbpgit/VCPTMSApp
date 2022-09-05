@@ -329,6 +329,7 @@ module.exports = cds.service.impl(async function () {
                     CLASS_NAME,
                     CHAR_NUM,
                     CHAR_NAME,
+                    CHAR_GROUP,
                     CHAR_VALUE,
                     CHARVAL_NUM
                     FROM V_CLASSCHARVAL 
@@ -341,6 +342,7 @@ module.exports = cds.service.impl(async function () {
                 "VCCHARVALUE": liclass[i].CHARVAL_NUM,
                 "VCCLASS": liclass[i].CLASS_NUM,
                 "VCCHARNAME": liclass[i].CHAR_NAME,
+                "VCCHARGROUP":liclass[i].CHAR_GROUP,
                 "VCCHARVALUENAME": liclass[i].CHAR_VALUE,
                 "VCCLASSNAME": liclass[i].CLASS_NAME
             };
@@ -351,7 +353,7 @@ module.exports = cds.service.impl(async function () {
         var oEntry =
         {
             "TransactionID": vTransID,
-            "RequestedAttributes": "VCCHAR,VCCHARVALUE,VCCLASS,VCCHARNAME,VCCHARVALUENAME,VCCLASSNAME",
+            "RequestedAttributes": "VCCHAR,VCCHARVALUE,VCCLASS,VCCHARNAME,VCCHARGROUP,VCCHARVALUENAME,VCCLASSNAME",
             "DoCommit": true,
             "NavVCPCLASS": oReq.class
         }
@@ -379,9 +381,9 @@ module.exports = cds.service.impl(async function () {
                     "ACTUALCOMPONENTDEMAND",
                     "COMPONENT"
                     FROM V_IBP_LOCPRODCOMP_ACTDEMD
-                    WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
-                       AND PRODUCT_ID = '`+ req.data.PRODUCT_ID +
-            `' AND WEEK_DATE >= '2020-08-01' AND WEEK_DATE <= '2021-11-30'`);
+                    WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'`);
+            //            AND PRODUCT_ID = '`+ req.data.PRODUCT_ID +
+            // `' AND WEEK_DATE >= '2020-08-01' AND WEEK_DATE <= '2021-11-30'`);
 
         //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
         for (i = 0; i < liactcomp.length; i++) {
@@ -428,9 +430,10 @@ module.exports = cds.service.impl(async function () {
                     "CUSTOMER_GROUP"
                     FROM V_IBP_SALESH_ACTDEMD
                     WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
-                       AND PRODUCT_ID = '`+ req.data.PRODUCT_ID +
-            `' AND CUSTOMER_GROUP = '` + req.data.CUSTOMER_GROUP +
-            `'`);
+            `);
+            
+            //            AND PRODUCT_ID = '`+ req.data.PRODUCT_ID +
+            // `' AND CUSTOMER_GROUP = '` + req.data.CUSTOMER_GROUP +`'
 
         //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
         for (i = 0; i < lisales.length; i++) {
@@ -480,9 +483,9 @@ module.exports = cds.service.impl(async function () {
                     "CHARVAL_NUM"
                     FROM V_IBP_SALESHCONFIG_VC
                     WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
-                       AND PRODUCT_ID = '`+ req.data.PRODUCT_ID +
-            `' AND CUSTOMER_GROUP = '` + req.data.CUSTOMER_GROUP +
-            `'`);
+                    `);
+            //            AND PRODUCT_ID = '`+ req.data.PRODUCT_ID +
+            // `' AND CUSTOMER_GROUP = '` + req.data.CUSTOMER_GROUP +
 
         for (i = 0; i < lisales.length; i++) {
             var vWeekDate = new Date(lisales[i].WEEK_DATE).toISOString().split('Z');
@@ -564,6 +567,50 @@ module.exports = cds.service.impl(async function () {
         return res[0].Value;
 
     });
+    // Create Locations in IBP
+    this.on("createIBPLocProd", async (req) => {
+        var oReq = {
+            newLocProd: [],
+        },
+            vNewLocProd;
+
+        const lilocprod = await cds.run(
+            ` SELECT
+                "LOCATION_ID",
+                "PRODUCT_ID",
+                "LOTSIZE_KEY",
+                "LOT_SIZE",
+                "PROCUREMENT_TYPE",
+                "PLANNING_STRATEGY"
+              FROM CP_LOCATION_PRODUCT
+              WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'`);
+
+        //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
+        for (i = 0; i < lilocprod.length; i++) {
+            vNewLocProd = {
+                "LOCID": lilocprod[i].LOCATION_ID,
+                "PRDID": lilocprod[i].PRODUCT_ID,
+                "PLANNINGSTRGY": lilocprod[i].PLANNING_STRATEGY,
+                "PLUNITID": "TEST",
+                "PROCUREMENTTYPE": lilocprod[i].PROCUREMENT_TYPE,
+                "VCLOTSIZE": lilocprod[i].LOT_SIZE.toString()
+            };
+            oReq.newLocProd.push(vNewLocProd);
+
+        }
+        var vTransID = new Date().getTime().toString();
+        var oEntry =
+        {
+            "TransactionID": vTransID,
+            "RequestedAttributes": "LOCID,PRDID,PLANNINGSTRGY,PLUNITID,PROCUREMENTTYPE,VCLOTSIZE",
+            "DoCommit": true,
+            "NavVCPLOCATIONPRODUCT": oReq.newLocProd
+        }
+        await servicePost.tx(req).post("/VCPLOCATIONPRODUCTTrans", oEntry);
+        var resUrl = "/GetExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
+        return await servicePost.tx(req).get(resUrl)
+        // GetExportResult
+    });
     //Component Requirement Qty 
     /***************************************************************************/
     //////////////////////// Services for CF/////////////////////////////////////
@@ -591,7 +638,7 @@ module.exports = cds.service.impl(async function () {
            ON A.PRODUCT_ID = B.PRODUCT_ID 
            WHERE B.LOCATION_ID = '`+ req.data.LOCATION_ID + `'`);
 
-    const lipartialprod = await cds.run(
+        const lipartialprod = await cds.run(
             `
          SELECT PRODUCT_ID,
                 LOCATION_ID,
@@ -807,6 +854,112 @@ module.exports = cds.service.impl(async function () {
         }
         // GetExportResult
     });
+    // Create Locations in IBP
+    this.on("exportIBPLocProd", async (req) => {
+        var oReq = {
+            newLocProd: [],
+        },
+            vNewLocProd, flag = '';
+        const lilocprod = await cds.run(
+            ` SELECT
+                    "LOCATION_ID",
+                    "PRODUCT_ID",
+                    "LOTSIZE_KEY",
+                    "LOT_SIZE",
+                    "PROCUREMENT_TYPE",
+                    "PLANNING_STRATEGY"
+                  FROM CP_LOCATION_PRODUCT
+                  WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'`);
+
+        //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
+        for (i = 0; i < lilocprod.length; i++) {
+            vNewLocProd = {
+                "LOCID": lilocprod[i].LOCATION_ID,
+                "PRDID": lilocprod[i].PRODUCT_ID,
+                "PLANNINGSTRGY": lilocprod[i].PLANNING_STRATEGY,
+                "PLUNITID": "TEST",
+                "PROCUREMENTTYPE": lilocprod[i].PROCUREMENT_TYPE,
+                "VCLOTSIZE": lilocprod[i].LOT_SIZE.toString()
+            };
+            oReq.newLocProd.push(vNewLocProd);
+
+        }
+        var vTransID = new Date().getTime().toString();
+        var oEntry =
+        {
+            "TransactionID": vTransID,
+            "RequestedAttributes": "LOCID,PRDID,PLANNINGSTRGY,PLUNITID,PROCUREMENTTYPE,VCLOTSIZE",
+            "DoCommit": true,
+            "NavVCPLOCATIONPRODUCT": oReq.newLocProd
+        }
+        req.headers['Application-Interface-Key'] = vAIRKey;
+        await servicePost.tx(req).post("/VCPLOCATIONPRODUCTTrans", oEntry);
+        var resUrl = "/GetExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
+        try {
+            var vResponse = await servicePost.tx(req).get(resUrl);
+            flag = 'X';
+        }
+        catch (error) {
+
+        }
+        if (flag === 'X') {
+            let dataObj = {};
+            dataObj["success"] = true;
+            dataObj["message"] = "Export of Location - Product is successful at " + new Date();
+
+
+            if (req.headers['x-sap-job-id'] > 0) {
+                const scheduler = getJobscheduler(req);
+
+                var updateReq = {
+                    jobId: req.headers['x-sap-job-id'],
+                    scheduleId: req.headers['x-sap-job-schedule-id'],
+                    runId: req.headers['x-sap-job-run-id'],
+                    data: dataObj
+                };
+
+                console.log("Location - Product exported, to update req", updateReq);
+
+                scheduler.updateJobRunLog(updateReq, function (err, result) {
+                    if (err) {
+                        return console.log('Error updating run log: %s', err);
+                    }
+                    //Run log updated successfully
+                    console.log("Export of Location - Product job update results", result);
+
+                });
+            }
+        }
+        else {
+            let dataObj = {};
+            dataObj["failed"] = false;
+            dataObj["message"] = "Export of Location - Product has failed at" + new Date();
+
+
+            if (req.headers['x-sap-job-id'] > 0) {
+                const scheduler = getJobscheduler(req);
+
+                var updateReq = {
+                    jobId: req.headers['x-sap-job-id'],
+                    scheduleId: req.headers['x-sap-job-schedule-id'],
+                    runId: req.headers['x-sap-job-run-id'],
+                    data: dataObj
+                };
+
+                console.log("Export of Location - Product job update req", updateReq);
+
+                scheduler.updateJobRunLog(updateReq, function (err, result) {
+                    if (err) {
+                        return console.log('Error updating run log: %s', err);
+                    }
+                    //Run log updated successfully
+                    console.log("Export of Location - Product job update results", result);
+
+                });
+            }
+        }
+        // GetExportResult
+    });
     // Create customer group in IBP
     this.on("exportIBPCustomer", async (req) => {
         var oReq = {
@@ -918,6 +1071,7 @@ module.exports = cds.service.impl(async function () {
                 CLASS_NAME,
                 CHAR_NUM,
                 CHAR_NAME,
+                CHAR_GROUP,
                 CHAR_VALUE,
                 CHARVAL_NUM
                 FROM V_CLASSCHARVAL 
@@ -930,6 +1084,7 @@ module.exports = cds.service.impl(async function () {
                 "VCCHARVALUE": liclass[i].CHARVAL_NUM,
                 "VCCLASS": liclass[i].CLASS_NUM,
                 "VCCHARNAME": liclass[i].CHAR_NAME,
+                "VCCHARGROUP": liclass[i].CHAR_GROUP,
                 "VCCHARVALUENAME": liclass[i].CHAR_VALUE,
                 "VCCLASSNAME": liclass[i].CLASS_NAME
             };
@@ -940,7 +1095,7 @@ module.exports = cds.service.impl(async function () {
         var oEntry =
         {
             "TransactionID": vTransID,
-            "RequestedAttributes": "VCCHAR,VCCHARVALUE,VCCLASS,VCCHARNAME,VCCHARVALUENAME,VCCLASSNAME",
+            "RequestedAttributes": "VCCHAR,VCCHARVALUE,VCCLASS,VCCHARNAME,VCCHARGROUP,VCCHARVALUENAME,VCCLASSNAME",
             "DoCommit": true,
             "NavVCPCLASS": oReq.class
         }
@@ -1637,17 +1792,6 @@ module.exports = cds.service.impl(async function () {
                     "'" + vWeekDate + "'" + "," +
                     "'" + req[i].OPTIONPERCENTAGE + "'" + "," +
                     "'" + req[i].FINALDEMANDVC + "'" + ')';// + ' WITH PRIMARY KEY';
-                // let modQuery = 'UPSERT "CP_IBP_FCHARPLAN" VALUES (' +
-                //     "'" + req[i].LOCID + "'" + "," +
-                //     "'" + req[i].PRDID + "'" + "," +
-                //     "'" + req[i].VCCLASS + "'" + "," +
-                //     "'" + req[i].VCCHAR + "'" + "," +
-                //     "'" + req[i].VCCHARVALUE + "'" + "," +
-                //     "'" + req[i].VERSIONID + "'" + "," +
-                //     "'" + vScenario + "'" + "," +
-                //     "'" + vWeekDate + "'" + "," +
-                //     "'" + req[i].OPTIONPERCENTAGE + "'" + "," +
-                //     "'" + req[i].FINALDEMANDVC + "'" + ')' + ' WITH PRIMARY KEY';
                 try {
                     await cds.run(modQuery);
                     flag = 'X';
