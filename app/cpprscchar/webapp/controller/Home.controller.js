@@ -513,14 +513,14 @@ sap.ui.define([
                 var successCount = 0;
 
 
-                // for (var i = 0; i < aData.length; i++) {
-                    for(var i=0; i<that.count; i++){
+                for (var i = 0; i < aData.length; i++) {
+                    // for(var i=0; i<that.count; i++){
                     var oEntry = {};
 
                     oEntry.Location = that.byId("idloc").getValue();
                     oEntry.product = that.byId("prodInput").getValue();
                     oEntry.CharNo = aData[i].getCells()[0].getText();
-                    oEntry.charName = aData[i].getCells()[1].getText();
+                    // oEntry.charName = aData[i].getCells()[1].getText();
                     oEntry.SEQUENCE = i + 1;
                     oEntry.FLAG = "E";
                     oEntry.CHAR_TYPE = "S";
