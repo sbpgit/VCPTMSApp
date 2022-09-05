@@ -1105,6 +1105,7 @@ module.exports = (srv) => {
             } catch (e) {
                 //DONOTHING
             }
+            lsresults.UID_RATE = parseFloat(req.data.UID_RATE);
             lsresults.UNIQUE_DESC = req.data.UNIQUE_DESC;//li_unique[0].UNIQUE_DESC;
             lsresults.UID_TYPE = req.data.UID_TYPE;//li_unique[0].UID_TYPE;
             if (req.data.ACTIVE === 'X') {

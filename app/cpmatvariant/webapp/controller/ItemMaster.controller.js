@@ -130,7 +130,9 @@ sap.ui.define(
              * @param {object} oEvent -the event information.
              */
             handleValueHelp: function (oEvent) {
+                // oGModel = this.getModel("oGModel");
                 var sId = oEvent.getParameter("id");
+                oGModel.setProperty("/mainSID", sId);
                 // Loc Dialog
                 if (sId.includes("loc")) {
                     that._valueHelpDialogLoc.open();
@@ -217,7 +219,9 @@ sap.ui.define(
              * @param {object} oEvent -the event information.
              */
             handleSelection: function (oEvent) {
+                // oGModel = this.getModel("oGModel");
                 var sId = oEvent.getParameter("id"),
+                    mainSID = oGModel.getProperty("/mainSID"),
                     oItem = oEvent.getParameter("selectedItems"),
                     aSelectedItems,
                     aODdata = [];
@@ -225,7 +229,15 @@ sap.ui.define(
                 if (sId.includes("Loc")) {
                     this.oLoc = that.byId("idloc");
                     aSelectedItems = oEvent.getParameter("selectedItems");
+                    if(mainSID === "__xmlview1--idloc"){
                     that.oLoc.setValue(aSelectedItems[0].getTitle());
+                    }
+                    else if (mainSID === "locId1"){
+                        sap.ui.getCore().byId("locId1").setValue(aSelectedItems[0].getTitle());
+                    }
+                    else if (mainSID === "locIdCC"){
+                        sap.ui.getCore().byId("locIdCC").setValue(aSelectedItems[0].getTitle());
+                    }
                     that.oProd.removeAllTokens();
                     this._valueHelpDialogProd
                         .getAggregation("_dialog")
@@ -241,7 +253,9 @@ sap.ui.define(
                         ],
                         success: function (oData) {
                             that.prodModel.setData(oData);
+                            
                             that.oProdList.setModel(that.prodModel);
+                           
                         },
                         error: function (oData, error) {
                             MessageToast.show("error");
@@ -252,7 +266,15 @@ sap.ui.define(
                 } else if (sId.includes("prod")) {
                     this.oProd = that.byId("prodInput");
                     aSelectedItems = oEvent.getParameter("selectedItems");
+                    if(mainSID === "__xmlview1--prodInput"){
                     that.oProd.setValue(aSelectedItems[0].getTitle());
+                    }
+                    else if (mainSID === "prodId1"){
+                        sap.ui.getCore().byId("prodId1").setValue(aSelectedItems[0].getTitle());
+                    }
+                    else if (mainSID === "prodIdCC"){
+                        sap.ui.getCore().byId("prodIdCC").setValue(aSelectedItems[0].getTitle());
+                    } 
 
                 }
                 that.handleClose(oEvent);
@@ -266,8 +288,7 @@ sap.ui.define(
                 var oSloc = that.oLoc.getValue(),
                     oSprod = that.oProd.getValue(),
                     oSUniq = that.byId("idUnique").getSelectedKey();
-                    this.byId("idCreateBtn").setVisible(true);
-                  this.byId("idCopyBtn").setVisible(true);
+
                 var oFilters = [];
                 // getting the filters
                 oFilters.push(
@@ -300,20 +321,25 @@ sap.ui.define(
                     //   ],
                     success: function (oData) {
                         sap.ui.core.BusyIndicator.hide();
+
                         if (oData.results.length) {
                             that.oModel.setData({
                                 results: oData.results,
                             });
+                            oGModel.setProperty("/uniqueData", oData.results);
                             that.byId("idMatVHead").setModel(that.oModel);
                             oGModel.setProperty("/locId", oData.results[0].LOCATION_ID);
                             oGModel.setProperty("/prdId", oData.results[0].PRODUCT_ID);
                             oGModel.setProperty("/uniqId", oData.results[0].UNIQUE_ID);
+                            oGModel.setProperty("/uid_rate",oData.results[0].UID_RATE);
                             // Setting the default selected item for table
                             that.byId("idMatVHead").setSelectedItem(that.byId("idMatVHead").getItems()[0], true);
+                            that.byId("idCreateBtn").setVisible(true);
+                            that.byId("idCopyBtn").setVisible(true);
                             // Calling function to navigate to Item detail page
                             that.onhandlePress();
                         } else {
-                            MessageToast.show("No data foe the selected Location Product");
+                            MessageToast.show("No data for the selected Location Product");
                         }
 
                     },
@@ -336,6 +362,7 @@ sap.ui.define(
                     oGModel.setProperty("/prdId", sSelItem.PRODUCT_ID);
                     oGModel.setProperty("/locId", sSelItem.LOCATION_ID);
                     oGModel.setProperty("/uniqId", sSelItem.UNIQUE_ID);
+                    oGModel.setProperty("/uid_rate",sSelItem.UID_RATE);
                 }
                 // Calling Item Detail page
                 that.getOwnerComponent().runAsOwner(function () {
@@ -385,26 +412,28 @@ sap.ui.define(
             },
 
 
-            onEditDesc:function(oEvent){
+            onEditDesc: function (oEvent) {
                 var oSelected = oEvent.getSource().getParent().getBindingContext().getObject();
 
                 oGModel.setProperty("/SelectedData", oSelected);
                 oGModel.setProperty("/SelectedId", oSelected.UNIQUE_ID);
                 oGModel.setProperty("/SelectedDesc", oSelected.UNIQUE_DESC);
+                oGModel.setProperty("/SelectedURate", oSelected.UID_RATE);
                 this._valueHelpDialogDescUpdate.open();
             },
 
-            onCloseDesc:function(){
+            onCloseDesc: function () {
                 this._valueHelpDialogDescUpdate.close();
             },
 
-            onUpdateUniqueDesc:function(){
+            onUpdateUniqueDesc: function () {
                 var oItem = oGModel.getProperty("/SelectedData");
                 var oDesc = sap.ui.getCore().byId("idUniqDesc").getValue();
+                var oUniqRate = sap.ui.getCore().byId("idUniqRate").getValue();
 
                 var oActive;
-        
-                if(oItem.ACTIVE === true){
+
+                if (oItem.ACTIVE === true) {
                     oActive = '';//true;
                 } else {
                     oActive = 'X';//falsev;
@@ -417,8 +446,10 @@ sap.ui.define(
                         PRODUCT_ID: oItem.PRODUCT_ID,
                         UNIQUE_ID: oItem.UNIQUE_ID,
                         UID_TYPE: oItem.UID_TYPE,
+                        UID_RATE: oUniqRate,
                         UNIQUE_DESC: oDesc,
-                        ACTIVE: oActive
+                        ACTIVE: oActive,
+                        FLAG: "E"
                     },
                     success: function (oData) {
                         sap.ui.core.BusyIndicator.hide();
@@ -438,8 +469,8 @@ sap.ui.define(
                 var oItem = oEvent.getSource().getBindingContext().getObject();
 
                 var oActive;
-        
-                if(oItem.ACTIVE === true){
+
+                if (oItem.ACTIVE === true) {
                     oActive = 'X';//false;
                 } else {
                     oActive = '';//true;
@@ -452,6 +483,7 @@ sap.ui.define(
                         PRODUCT_ID: oItem.PRODUCT_ID,
                         UNIQUE_ID: oItem.UNIQUE_ID,
                         UID_TYPE: oItem.UID_TYPE,
+
                         UNIQUE_DESC: oItem.UNIQUE_DESC,
                         ACTIVE: oActive
                     },
@@ -467,21 +499,164 @@ sap.ui.define(
                 });
 
             },
-            onCreateBtn:function(){
+            onCreateBtn: function () {
                 that._createCharacterstics.open();
+                var oLoctid = this.byId("idloc").getValue(),
+                    oProdid = this.byId("prodInput").getValue(),
+                    ouidType = this.byId("idUnique").getSelectedKey();
+                sap.ui.getCore().byId("locId1").setValue(oLoctid);
+                sap.ui.getCore().byId("prodId1").setValue(oProdid);
+                sap.ui.getCore().byId("idComboBox1").setSelectedKey(ouidType);
+
             },
-            onCopyBtn:function(){
+            onCopyBtn: function (oEvent) {
                 that._copyCharacterstics.open();
+                var selected = that.byId("idMatVHead").getSelectedItem();
+                sap.ui.getCore().byId("locIdCC").setValue(selected.getBindingContext().getProperty().LOCATION_ID);
+                sap.ui.getCore().byId("prodIdCC").setValue(selected.getBindingContext().getProperty().PRODUCT_ID);
+                sap.ui.getCore().byId("uniqIdCC").setValue("");
+                sap.ui.getCore().byId("idUniqDescCC").setValue(selected.getBindingContext().getProperty().UNIQUE_DESC);
+                sap.ui.getCore().byId("idComboBoxCC").setSelectedKey(selected.getBindingContext().getProperty().UID_TYPE);
+                sap.ui.getCore().byId("uidRIdCC").setValue(selected.getBindingContext().getProperty().UID_RATE);
+                sap.ui.getCore().byId("idComboBoxAC").setSelectedKey(selected.getBindingContext().getProperty().ACTIVE);
+
             },
-            onCloseCreate:function(){
+            onCloseCreate: function () {
                 this._createCharacterstics.close();
 
+
             },
-            onCloseCopy:function(){
+            onCloseCopy: function () {
                 this._copyCharacterstics.close();
+            },
+            onSaveUniqueDesc: function () {
+                var uniqueData = oGModel.getProperty("/uniqueData");
+                var olocID = sap.ui.getCore().byId("locId1").getValue(),
+                    oprodID = sap.ui.getCore().byId("prodId1").getValue(),
+                    ouniqID = 1,
+                    ouniqDesc = sap.ui.getCore().byId("idUniqDesc1").getValue(),
+                    ouniqTID = sap.ui.getCore().byId("idComboBox1").getSelectedKey(),
+                    ouniqRID = sap.ui.getCore().byId("uidRId1").getValue(),
+                    oactID = sap.ui.getCore().byId("idComboBox").getValue(),
+                    flag = 'C',
+                    count = 0;
+                if (oactID === "True") {
+                    oactID = '';
+                }
+                else {
+                    oactID = 'X';
+                }
+                // for (var s = 0; s < uniqueData.length; s++) {
+                //     if (parseInt(ouniqID) !== uniqueData[s].UNIQUE_ID) {
+                //         count++;
+                //     }
+                //     else {
+                //         continue;
+                //     }
+                // }
+                if(olocID ==="" || oprodID ==="" || ouniqRID ==="" ){
+                    sap.m.MessageToast.show("Please select Location/Product/UID Rate")
+                }
+                else{
+                // if (count === uniqueData.length) {
+
+                    sap.ui.core.BusyIndicator.show();
+                    var bModel = that.getView().getModel("BModel");
+                    bModel.callFunction("/changeUnique", {
+                        method: "GET",
+                        urlParameters: {
+                            UNIQUE_ID: ouniqID,
+                            LOCATION_ID: olocID,
+                            PRODUCT_ID: oprodID,
+                            UID_TYPE: ouniqTID,
+                            UID_RATE: ouniqRID,
+                            UNIQUE_DESC: ouniqDesc,
+                            ACTIVE: oactID,
+                            FLAG: "C"
+                        },
+                        success: function (oData) {
+                            sap.m.MessageToast.show(oData.changeUnique);
+                            that.onAfterRendering();
+                            that._createCharacterstics.close();
+                            that.onGetData();
+                            sap.ui.core.BusyIndicator.hide();
+                        },
+                        error(e) {
+                            sap.m.MessageToast.show("Failed to Create");
+                            sap.ui.core.BusyIndicator.hide();
+                        }
+                    });
+                // }
+                // else {
+                //     sap.m.MessageToast.show("Unique ID already exists");
+                // }
             }
+            },
+            onCopyUniqueDesc: function () {
+                var uniqueData = oGModel.getProperty("/uniqueData");
+                var olocID = sap.ui.getCore().byId("locIdCC").getValue(),
+                    oprodID = sap.ui.getCore().byId("prodIdCC").getValue(),
+                    ouniqID = 1,
+                    ouniqDesc = sap.ui.getCore().byId("idUniqDescCC").getValue(),
+                    ouniqTID = sap.ui.getCore().byId("idComboBoxCC").getSelectedKey(),
+                    ouniqRID = sap.ui.getCore().byId("uidRIdCC").getValue(),
+                    oactID = sap.ui.getCore().byId("idComboBoxAC").getValue(),
+                    flag = 'C',
+                    count = 0;
+                    if (oactID === "True") {
+                        oactID = '';
+                    }
+                    else {
+                        oactID = 'X';
+                    }
+                // for (var s = 0; s < uniqueData.length; s++) {
+                //     if (parseInt(ouniqID) !== uniqueData[s].UNIQUE_ID) {
+                //         count++;
+                //     }
+                //     else {
+                //         continue;
+                //     }
+                // }
+                if(olocID ==="" || oprodID ==="" || ouniqRID ==="" ){
+                    sap.m.MessageToast.show("Please select Location/Product/Unique Rate")
+                }
+                else {
+                // if (count === uniqueData.length) {
 
+                    sap.ui.core.BusyIndicator.show();
+                    var bModel = that.getView().getModel("BModel");
+                    bModel.callFunction("/changeUnique", {
+                        method: "GET",
+                        urlParameters: {
+                            UNIQUE_ID: ouniqID,
+                            LOCATION_ID: olocID,
+                            PRODUCT_ID: oprodID,
+                            UID_TYPE: ouniqTID,
+                            UID_RATE: ouniqRID,
+                            UNIQUE_DESC: ouniqDesc,
+                            ACTIVE: oactID,
+                            FLAG: "C"
+                        },
+                        success: function (oData) {
+                            sap.m.MessageToast.show(oData.changeUnique);
+                            that.onAfterRendering();
+                            that._copyCharacterstics.close();
+                            that.onGetData();
+                            sap.ui.core.BusyIndicator.hide();
+                        },
+                        error(e) {
+                            sap.m.MessageToast.show("Failed to Create");
+                            sap.ui.core.BusyIndicator.hide();
+                        }
+                    });
+                // }
+                // else {
+                //     sap.m.MessageToast.show("Unique ID already exists");
+                // }
 
-        });
-    }
-);
+            }
+        }
+
+        })
+    })
+

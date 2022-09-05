@@ -4,19 +4,46 @@
     xmlns:l="sap.ui.layout"
     xmlns:f="sap.ui.layout.form"
     xmlns:u="sap.ui.unified">
-    <Dialog title="Update Unique Description" contentWidth="450px" titleAlignment="Center">
+    <Dialog title="Create Unique Description" contentWidth="450px" titleAlignment="Center">
         <VBox class="sapUiSmallMargin">
             <f:SimpleForm id="SimpleFormToolbar2" editable="true" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="4" labelSpanM="4" labelSpanS="4" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1" singleContainerFullSize="false">
                 <f:content>
-                    <Label text="{i18n>unqid}"/>
-                    <Input id="uniqId2" value="{oGModel>/SelectedId}" editable="false" width="100%"/>
+                    <Label text="{i18n>locid}" />
+                    <Input id="locIdCC" value="" editable="true" width="100%" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+
+                    <Label text="{i18n>prodid}" />
+                    <Input id="prodIdCC" value="" editable="true" width="100%" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+
+                    <Label text="{i18n>unqid}" />
+                    <Input id="uniqIdCC" value="" editable="true" width="100%" visible="false"/>
+
                     <Label text="{i18n>unidesc}"/>
-                    <TextArea id="idUniqDesc2" value="{oGModel>/SelectedDesc}" width="100%" maxLength="50"/>
+                    <TextArea id="idUniqDescCC" value="" width="100%" maxLength="50"/>
+
+                    <Label text="{i18n>UidTid}"/>
+                    <ComboBox id="idComboBoxCC" width="auto" placeholder="Select" change="onSelect" class="CombBox" 
+									showButton="true">
+									<core:Item key="A" text="All"/>
+                                    <core:Item key="U" text="Unique"/>
+									<core:Item key="P" text="Primary"/>
+									
+								</ComboBox>
+
+                    <Label text="{i18n>UidRid}" />
+                    <Input id="uidRIdCC" value="" editable="true" width="100%" type="Number"/>
+
+                    <Label text="{i18n>activid}"/>
+                    <ComboBox id="idComboBoxAC" width="auto" placeholder="Select" change="onSelect" class="CombBox" selectedKey="true"
+									showButton="true">
+									<core:Item key="true" text="True"/>
+									<core:Item key="false" text="False"/>
+									
+								</ComboBox>
                 </f:content>
             </f:SimpleForm>
         </VBox>
         <buttons>
-            <Button type='Ghost' text="{i18n>save}" press="onUpdateUniqueDesc"></Button>
+            <Button type='Ghost' text="{i18n>save}" press="onCopyUniqueDesc"></Button>
             <Button type='Reject' text="{i18n>close}" press="onCloseCopy"></Button>
         </buttons>
     </Dialog>
