@@ -1,0 +1,10 @@
+entity CP_OBJDEP_HEADER {
+  key OBJ_DEP : String(30);
+  key OBJ_COUNTER : Integer;
+  key CLASS_NUM : String(18);
+  key CHAR_NUM : String(10);
+  key CHAR_COUNTER : Integer;
+  key CHARVAL_NUM : String(10);
+  OD_CONDITION : String(2);
+  ROW_ID : Integer;
+};

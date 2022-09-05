@@ -1,0 +1,13 @@
+entity CP_PALRDTREGRESSIONS {
+  key RDTID : String(50);
+  CREATEDAT : UTCTimestamp;
+  LOCATION : String(4);
+  PRODUCT : String(40);
+  REGRESSIONPARAMETERS : LargeString;
+  RDTTYPE : Integer;
+  MODELVERSION : String(5000) default 'Active';
+  REGRESSIONDATA : LargeString;
+  MODELSOP : LargeString;
+  IMPORTANCEOP : LargeString;
+  OUTOFBAGOP : LargeString;
+};

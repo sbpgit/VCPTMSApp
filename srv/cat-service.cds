@@ -31,6 +31,8 @@ using {
     V_FCHARPLAN,
     V_ASMCOMP_REQ
 } from '../db/data-model';
+using V_PLANNEDCONFIG from '../db/data-model';
+
 
 // using V_ASMCOMP_REQ from '../db/data-model';
 service CatalogService @(impl : './lib/cat-service.js'){
@@ -214,6 +216,7 @@ service CatalogService @(impl : './lib/cat-service.js'){
 
     entity genvarcharps as projection on od.VARCHAR_PS;
     entity getPriSecChar as projection on V_GETVARCHARPS;
+    function getSecondaryChar(FLAG : String(1),LOCATION_ID : String(4), PRODUCT_ID : String(40)) returns array of getPriSecChar;
     function changeToPrimary(LOCATION_ID : String(4), PRODUCT_ID : String(40),CHAR_NUM: String(10),CHAR_TYPE: String(1),SEQUENCE:Integer,FLAG: String(1)) returns String;
 // Authorizations
     @odata.draft.enabled
@@ -248,4 +251,17 @@ service CatalogService @(impl : './lib/cat-service.js'){
     entity getCIRCharRate       as projection on V_CIR_CHAR_RATE;
 /// Market Authorizations
     action trigrMAWeek(LOCATION_ID : String(4), PRODUCT_ID : String(40), WEEK_DATE: Date);
+// Seed Order Creation
+    // @odata.draft.enabled
+    entity getSeedOrder    as projection on od.SEEDORDER_HEADER;
+
+    function maintainSeedOrder(FLAG: String(1), SEEDDATA: String) returns String;
+
+    // Planning Configuration
+    // BOI - Deepa
+    @readonly
+    entity Method_Types       as projection on od.METHOD_TYPES;
+    entity V_Parameters      as projection on V_PLANNEDCONFIG;
+    function postParameterValues(FLAG : String(1), PARAMVALS : String) returns String;
+    // EOI - Deepa
 }

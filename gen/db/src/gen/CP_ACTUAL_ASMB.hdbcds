@@ -1,0 +1,11 @@
+entity CP_ACTUAL_ASMB {
+  key SALES_DOC : String(10);
+  key SALESDOC_ITEM : String(6);
+  SCHEDULELINE_NUM : String(4);
+  LOCATION_ID : String(4);
+  PRODUCT_ID : String(40);
+  MAT_AVAILDATE : LocalDate;
+  PROD_ORDER : String(12);
+  COMPONENT : String(40);
+  COMP_QTY : Integer;
+};

@@ -1,0 +1,11 @@
+entity CP_TS_OBJDEP_CHARHDR {
+  key CAL_DATE : LocalDate;
+  key LOCATION_ID : String(4);
+  key PRODUCT_ID : String(40);
+  key OBJ_TYPE : String(2);
+  key OBJ_DEP : String(30);
+  key OBJ_COUNTER : Integer;
+  key ROW_ID : Integer;
+  SUCCESS : Integer;
+  SUCCESS_RATE : Double;
+};

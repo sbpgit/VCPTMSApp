@@ -1545,3 +1545,83 @@ annotate service.PRODRESTRICT with @(
         }]
     }]
 );
+
+//seed order
+annotate service.SEEDORDER_HEADER with @(
+    UI        : {
+        SelectionFields                : [
+            LOCATION_ID,
+            PRODUCT_ID,
+            SEED_ORDER
+        ],
+        LineItem                       : [
+            {
+                $Type : 'UI.DataField', 
+                Value : SEED_ORDER,
+                ![@UI.Importance]   : #High
+            },
+            {
+                $Type : 'UI.DataField', 
+                Value : LOCATION_ID,
+                ![@UI.Importance]   : #High
+            },
+            {
+                $Type : 'UI.DataField', 
+                Value : PRODUCT_ID,
+                ![@UI.Importance]   : #High
+            },{
+                $Type : 'UI.DataField', 
+                Value : UNIQUE_ID,
+                ![@UI.Importance]   : #High
+            },{
+                $Type : 'UI.DataField', 
+                Value : ORD_QTY,
+                ![@UI.Importance]   : #High
+            },{
+                $Type : 'UI.DataField', 
+                Value : MAT_AVAILDATE,
+                ![@UI.Importance]   : #High
+            }
+        ],
+        HeaderInfo                     : {
+            Title          : {Value : LOCATION_ID},
+            Description    : {Value : PRODUCT_ID},
+            TypeName       : 'Seed Order Creation',
+            TypeNamePlural : 'Seed Order Creation'
+        },
+        FieldGroup #Details            : {Data : [
+           {
+                $Type : 'UI.DataField', 
+                Value : SEED_ORDER
+            },
+            {
+                $Type : 'UI.DataField', 
+                Value : LOCATION_ID
+            },
+            {
+                $Type : 'UI.DataField', 
+                Value : PRODUCT_ID
+            },{
+                $Type : 'UI.DataField', 
+                Value : UNIQUE_ID
+            },{
+                $Type : 'UI.DataField', 
+                Value : ORD_QTY
+            },{
+                $Type : 'UI.DataField', 
+                Value : MAT_AVAILDATE
+            }
+        ]}
+    },
+    // Page Facets
+    UI.Facets : [{
+        $Type  : 'UI.CollectionFacet',
+        ID     : 'SEEDORD',
+        Label  : 'Seed Order Creation',
+        Facets : [{
+            $Type  : 'UI.ReferenceFacet',
+            Label  : 'Seed Order Creation',
+            Target : '@UI.FieldGroup#Details'
+        }]
+    }]
+);

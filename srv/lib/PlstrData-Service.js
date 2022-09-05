@@ -31,6 +31,14 @@ module.exports = async function (srv) {
     return (await _genMasterData(req,true));
   })
 
+  srv.on ('genPartialProducts',    async req => {
+    return (await _genPartialProducts(req,false));
+ })
+
+ srv.on ('fgenPartialProducts',    async req => {
+   return (await _genPartialProducts(req,true));
+ })
+
 
   async function _genMasterData(req,isGet) {
 
@@ -231,6 +239,44 @@ module.exports = async function (srv) {
 
         //             );
 
+        let countryCode = plstrData[shIndex].COUNTRY ;
+        let custGroup = '';
+        if ( (countryCode == 'GB') ||
+             (countryCode == 'AT') ||
+             (countryCode == 'IS') ||
+             (countryCode == 'NL') ||
+             (countryCode == 'SE') ||
+             (countryCode == 'BE') ||
+             (countryCode == 'CH') ||
+             (countryCode == 'DE') ||
+             (countryCode == 'DK') ||
+             (countryCode == 'FI') ||
+             (countryCode == 'NO') ||
+             (countryCode == 'LU') )
+        {
+            custGroup = 'EU';
+        }
+        else if ((countryCode == 'US') ||
+                 (countryCode == 'CA') )
+        {
+            custGroup = 'NA';
+        }
+        else if ((countryCode == 'NZ') ||
+                 (countryCode == 'AU') ||
+                 (countryCode == 'CN') )
+        {
+            custGroup = 'OS';
+        }
+        else if ((countryCode == 'SG') ||
+                 (countryCode == 'KR') )
+        {
+            custGroup = 'SE';
+        }       
+        else if ((countryCode == 'KW'))
+        {
+            custGroup = 'OT';
+        }
+
         sqlStr = 'UPSERT PLSTR_SALESH VALUES (' +
                     "'" + salesDocId + "'" + "," +
                     "'" + salesDocItem + "'" + "," +
@@ -243,7 +289,7 @@ module.exports = async function (srv) {
                     "'" + plstrData[shIndex].HANDOVERS_COUNT + "'" + "," +
                     "'" + plstrData[shIndex].START_DATE + "'" + "," +
                     "'" + 9999999 + "'" + "," +
-                    "'" + plstrData[shIndex].COUNTRY + "'" + "," +
+                    "'" + custGroup + "'" + "," +
                     "'PL20'" + "," +
                     "'" + plstrData[shIndex].START_DATE + "'" + "," +
                     "''" + "," +
@@ -617,36 +663,14 @@ module.exports = async function (srv) {
            await cds.run('COMMIT');
     }
 
-    sqlStr = 'UPSERT PLSTR_SALESH (SALES_DOC, SCHEDULELINE_NUM, DOC_CREATEDDATE, PRODUCT_ID, ' +
-               'UOM, CONFIRMED_QTY,ORD_QTY, MAT_AVAILDATE,CUSTOMER_GROUP,LOCATION_ID,CREATED_BY,CREATED_DATE)' +
-				' SELECT DISTINCT ' + "'" + salesDocId + "'" 
-                                    + "'" + salesDocItem + "'" +
-                                    + "'" + sheduledLineNum + "'" +
-                                    + "'" + sheduledLineNum + "'" +
 
-                ' \'PL20\', PRODUCT_ID FROM PLSTR_PRODUCT';
-    for (let index = 0; index < results.length; index ++)
-    {
-       
-        sqlStr = 'UPSERT "PLSTR_PRODUCT" VALUES (' +
-                            "'" + results[index].PRODUCT_ID + "'" + "," +
-                            "'" + results[index].PROD_DESC + "'," +
-                            "'" + results[index].PROD_FAMILY + "'," +
-                            "'" + results[index].PROD_GROUP + "'," +
-                            "'" + results[index].PROD_MODEL + "'," +
-                            null  + "," +
-                            null  + "," +
-                            null  + "," +
-                            null  + "," +
-                            null  + "," +
-                            null  + "," +
-                            null  + "," +
-                            null  + ')' + ' WITH PRIMARY KEY';        
-
-        await cds.run(sqlStr);
-    }
-
-
+    let custGrpSql  = 'UPSERT PLSTR_CUSTOMERGROUP ("CUSTOMER_GROUP", "CUSTOMER_DESC")' +
+                        ' SELECT DISTINCT "CUSTOMER_GROUP" ,' +
+                        ' CONCAT("CUSTOMER_GROUP", ' + '\' Customer \'' + ')' + 
+                        ' FROM "PLSTR_SALESH" WHERE LOCATION_ID = ' + '\'PL20\'';
+    console.log("custGrpSql = ", custGrpSql);
+    let custGrpSqlResults = await cds.run(custGrpSql);
+    console.log("custGrpSqlResults = ", custGrpSqlResults);
 
 
     let dataObj = {};
@@ -674,5 +698,445 @@ module.exports = async function (srv) {
     // }
 
   }
+
+
+  async function _genPartialProducts(req,isGet) {
+
+    var reqData = "Request for Partial Products Data Generation Queued Sucessfully";
+
+    console.log("_genPartialProducts reqData : ", reqData);
+    let createtAt = new Date();
+    let id = uuidv1();
+    let values = [];	
+  
+    values.push({id, createtAt, reqData});    
+
+    if (isGet == true)
+    {
+        req.reply({values});
+    }
+    else
+    {
+        let res = req._.req.res;
+        res.statusCode = 202;
+        res.send({values});
+    }
+
+   
+
+    let sqlStr = 'select * FROM PLSTR_DATA';
+    plstrData = await cds.run(sqlStr);
+
+    console.log("PLSTR_DATA rows", plstrData.length);
+
+    // var plstrJson = JSON.stringify(plstrData);
+    const salesDocBaseID = 900000;
+    const salesDocItem = 50;
+    const sheduledLineNum = 10;
+    const uom = 'EA';
+
+    let sqlPartialProdIntro = 'UPSERT CP_PARTIALPROD_INTRO (PRODUCT_ID, LOCATION_ID, REF_PRODID)' +
+                            ' SELECT DISTINCT PLD."PNO12_PRODUCT", CLP."LOCATION_ID",CLP."PRODUCT_ID" FROM "CP_LOCATION_PRODUCT" AS CLP ' +
+                            ' INNER JOIN CP_SALESH AS CPSH ON ' +
+                            ' CLP.LOCATION_ID = CPSH.LOCATION_ID AND ' +
+                            ' CLP.PRODUCT_ID = CPSH.PRODUCT_ID ' +
+                            ' INNER JOIN PLSTR_DATA PLD ON ' +
+                            ' CLP.PRODUCT_ID = PLD.PRODUCT_ID ' +
+                            ' WHERE CLP.LOCATION_ID =' + '\'PL20\'';
+    // console.log("sqlPartialProdIntro ", sqlPartialProdIntro);
+
+    let sqlPartialProdIntroResults = await cds.run(sqlPartialProdIntro);
+
+                    
+    for(let shIndex = 0; shIndex < plstrData.length; shIndex++)
+    {
+        let salesDocId = salesDocBaseID + plstrData[shIndex].UNIQUE_ID;
+        console.log(" Partial Products Gen for salesDocId", salesDocId, " shIndex ", shIndex, " Partial Product ", plstrData[shIndex].PNO12_PRODUCT);
+
+        let sqlSaleConfig = 'SELECT DISTINCT MODEL, MOTOR_CODE, DENOMINATION, SALES_VERSION_ID, BODY_VERSION, TRANSMISSION, STEERING, ' +
+                            ' MARKET_CODE, EXTERIOR_ID, INTERIOR, OPT_WHEELS,  OPT_PERFORM, OPT_PLUS, OPT_PILOT, OPT_PILOT_LITE, OPT_TOWBAR' +
+                            ' FROM PLSTR_DATA WHERE ' +  
+                            ' UNIQUE_ID = ' + "'" + plstrData[shIndex].UNIQUE_ID + "'";
+        
+        // console.log(" sqlSaleConfig ", sqlSaleConfig);
+
+        let salesConfigResults = await cds.run(sqlSaleConfig);
+        // console.log(" salesConfigResults ", salesConfigResults);
+
+        let sqlSalesCfgCharCharval = '';
+        // console.log(" plstrData MODEL ", plstrData[shIndex].MODEL);
+
+        if( plstrData[shIndex].MODEL != 'NULL')
+        {
+            sqlSalesCfgCharCharval = 'UPSERT CP_PARTIALPROD_CHAR ("PRODUCT_ID", "LOCATION_ID", ' + 
+                                     '"CLASS_NUM", "CHAR_NUM","CHARVAL_NUM" '+')' +
+                                     ' SELECT ' + 
+                                     "'" + plstrData[shIndex].PNO12_PRODUCT + "'" + "," +
+                                     "'PL20'" + "," +
+                                     "'" + 55555 + "'" + "," +
+                                     ' charval.CHAR_NUM ' + "," +
+                                     ' charval.CHARVAL_NUM ' +
+                                     ' FROM PLSTR_CHARACTERISTICS AS charc' +
+                                     ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
+                                     ' charc.CHAR_NUM = charval.CHAR_NUM' + 
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].MODEL + "'" + ' AND ' +
+                                     ' charc."CHAR_GROUP" = ' + '\'PARTIAL\'';        
+            let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
+   
+        }
+
+        // console.log(" plstrData MOTOR_CODE ", plstrData[shIndex].MOTOR_CODE);
+
+        if( plstrData[shIndex].MOTOR_CODE != 'NULL')
+        {
+            sqlSalesCfgCharCharval = 'UPSERT CP_PARTIALPROD_CHAR ("PRODUCT_ID", "LOCATION_ID", ' + 
+                                     '"CLASS_NUM", "CHAR_NUM","CHARVAL_NUM" '+')' +
+                                     ' SELECT ' + 
+                                     "'" + plstrData[shIndex].PNO12_PRODUCT + "'" + "," +
+                                     "'PL20'" + "," +
+                                     "'" + 55555 + "'" + "," +
+                                     ' charval.CHAR_NUM ' + "," +
+                                     ' charval.CHARVAL_NUM ' +
+                                     ' FROM PLSTR_CHARACTERISTICS AS charc' +
+                                     ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
+                                     ' charc.CHAR_NUM = charval.CHAR_NUM' + 
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].MOTOR_CODE + "'" + ' AND ' +
+                                     'charc.CHAR_GROUP = ' + '\'PARTIAL\'';           
+            let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
+   
+        }
+
+        // console.log(" plstrData DENOMINATION ", plstrData[shIndex].DENOMINATION);
+
+        if( plstrData[shIndex].DENOMINATION != 'NULL')
+        {
+            sqlSalesCfgCharCharval = 'UPSERT CP_PARTIALPROD_CHAR ("PRODUCT_ID", "LOCATION_ID", ' + 
+                                     '"CLASS_NUM", "CHAR_NUM","CHARVAL_NUM" '+')' +
+                                     ' SELECT ' + 
+                                     "'" + plstrData[shIndex].PNO12_PRODUCT + "'" + "," +
+                                     "'PL20'" + "," +
+                                     "'" + 55555 + "'" + "," +
+                                     ' charval.CHAR_NUM ' + "," +
+                                     ' charval.CHARVAL_NUM ' +
+                                     ' FROM PLSTR_CHARACTERISTICS AS charc' +
+                                     ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
+                                     ' charc.CHAR_NUM = charval.CHAR_NUM' + 
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].DENOMINATION + "'" + ' AND ' +
+                                     'charc.CHAR_GROUP = ' + '\'PARTIAL\'';           
+            let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
+   
+        }
+        // console.log(" sqlSalesCfgCharCharval ", sqlSalesCfgCharCharval);
+
+        // console.log(" plstrData SALES_VERSION_ID ", plstrData[shIndex].SALES_VERSION_ID);
+
+        if( plstrData[shIndex].SALES_VERSION_ID != 'NULL')
+        {
+            sqlSalesCfgCharCharval = 'UPSERT CP_PARTIALPROD_CHAR ("PRODUCT_ID", "LOCATION_ID", ' + 
+                                     '"CLASS_NUM", "CHAR_NUM","CHARVAL_NUM" '+')' +
+                                     ' SELECT ' + 
+                                     "'" + plstrData[shIndex].PNO12_PRODUCT + "'" + "," +
+                                     "'PL20'" + "," +
+                                     "'" + 55555 + "'" + "," +
+                                     ' charval.CHAR_NUM ' + "," +
+                                     ' charval.CHARVAL_NUM ' +
+                                     ' FROM PLSTR_CHARACTERISTICS AS charc' +
+                                     ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
+                                     ' charc.CHAR_NUM = charval.CHAR_NUM' + 
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].SALES_VERSION_ID + "'" + ' AND ' +
+                                     'charc.CHAR_GROUP = ' + '\'PARTIAL\'';           
+            let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
+        }
+
+        // console.log(" plstrData BODY_VERSION ", plstrData[shIndex].BODY_VERSION);
+
+        if( plstrData[shIndex].BODY_VERSION != 'NULL')
+        {
+            sqlSalesCfgCharCharval = 'UPSERT CP_PARTIALPROD_CHAR ("PRODUCT_ID", "LOCATION_ID", ' + 
+                                     '"CLASS_NUM", "CHAR_NUM","CHARVAL_NUM" '+')' +
+                                     ' SELECT ' + 
+                                     "'" + plstrData[shIndex].PNO12_PRODUCT + "'" + "," +
+                                     "'PL20'" + "," +
+                                     "'" + 55555 + "'" + "," +
+                                     ' charval.CHAR_NUM ' + "," +
+                                     ' charval.CHARVAL_NUM ' +
+                                     ' FROM PLSTR_CHARACTERISTICS AS charc' +
+                                     ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
+                                     ' charc.CHAR_NUM = charval.CHAR_NUM' + 
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].BODY_VERSION + "'" + ' AND ' +
+                                     'charc.CHAR_GROUP = ' + '\'PARTIAL\'';           
+            let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
+
+        }
+
+        // console.log(" plstrData TRANSMISSION ", plstrData[shIndex].TRANSMISSION);
+
+        if( plstrData[shIndex].TRANSMISSION != 'NULL')
+        {
+            sqlSalesCfgCharCharval = 'UPSERT CP_PARTIALPROD_CHAR ("PRODUCT_ID", "LOCATION_ID", ' + 
+                                     '"CLASS_NUM", "CHAR_NUM","CHARVAL_NUM" '+')' +
+                                     ' SELECT ' + 
+                                     "'" + plstrData[shIndex].PNO12_PRODUCT + "'" + "," +
+                                     "'PL20'" + "," +
+                                     "'" + 55555 + "'" + "," +
+                                     ' charval.CHAR_NUM ' + "," +
+                                     ' charval.CHARVAL_NUM ' +
+                                     ' FROM PLSTR_CHARACTERISTICS AS charc' +
+                                     ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
+                                     ' charc.CHAR_NUM = charval.CHAR_NUM' + 
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].TRANSMISSION + "'" + ' AND ' +
+                                     'charc.CHAR_GROUP = ' + '\'PARTIAL\'';           
+            let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
+
+        }
+
+        // console.log(" plstrData STEERING ", plstrData[shIndex].STEERING);
+
+        if( plstrData[shIndex].STEERING != 'NULL')
+        {
+            sqlSalesCfgCharCharval = 'UPSERT CP_PARTIALPROD_CHAR ("PRODUCT_ID", "LOCATION_ID", ' + 
+                                     '"CLASS_NUM", "CHAR_NUM","CHARVAL_NUM" '+')' +
+                                     ' SELECT ' + 
+                                     "'" + plstrData[shIndex].PNO12_PRODUCT + "'" + "," +
+                                     "'PL20'" + "," +
+                                     "'" + 55555 + "'" + "," +
+                                     ' charval.CHAR_NUM ' + "," +
+                                     ' charval.CHARVAL_NUM ' +
+                                     ' FROM PLSTR_CHARACTERISTICS AS charc' +
+                                     ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
+                                     ' charc.CHAR_NUM = charval.CHAR_NUM' + 
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].STEERING + "'" + ' AND ' +
+                                     'charc.CHAR_GROUP = ' + '\'PARTIAL\'';            
+            let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
+
+        }
+
+        // console.log(" plstrData MARKET_CODE ", plstrData[shIndex].MARKET_CODE);
+
+        if( plstrData[shIndex].MARKET_CODE != 'NULL')
+        {
+            sqlSalesCfgCharCharval = 'UPSERT CP_PARTIALPROD_CHAR ("PRODUCT_ID", "LOCATION_ID", ' + 
+                                     '"CLASS_NUM", "CHAR_NUM","CHARVAL_NUM" '+')' +
+                                     ' SELECT ' + 
+                                     "'" + plstrData[shIndex].PNO12_PRODUCT + "'" + "," +
+                                     "'PL20'" + "," +
+                                     "'" + 55555 + "'" + "," +
+                                     ' charval.CHAR_NUM ' + "," +
+                                     ' charval.CHARVAL_NUM ' +
+                                     ' FROM PLSTR_CHARACTERISTICS AS charc' +
+                                     ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
+                                     ' charc.CHAR_NUM = charval.CHAR_NUM' + 
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].MARKET_CODE + "'" + ' AND ' +
+                                     'charc.CHAR_GROUP = ' + '\'PARTIAL\'';           
+            let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
+
+        }
+
+        // console.log(" plstrData EXTERIOR_ID ", plstrData[shIndex].EXTERIOR_ID);
+
+        if( plstrData[shIndex].EXTERIOR_ID != 'NULL')
+        {
+            sqlSalesCfgCharCharval = 'UPSERT CP_PARTIALPROD_CHAR ("PRODUCT_ID", "LOCATION_ID", ' + 
+                                     '"CLASS_NUM", "CHAR_NUM","CHARVAL_NUM" '+')' +
+                                     ' SELECT ' + 
+                                     "'" + plstrData[shIndex].PNO12_PRODUCT + "'" + "," +
+                                     "'PL20'" + "," +
+                                     "'" + 55555 + "'" + "," +
+                                     ' charval.CHAR_NUM ' + "," +
+                                     ' charval.CHARVAL_NUM ' +
+                                     ' FROM PLSTR_CHARACTERISTICS AS charc' +
+                                     ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
+                                     ' charc.CHAR_NUM = charval.CHAR_NUM' + 
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].EXTERIOR_ID + "'" + ' AND ' +
+                                     'charc.CHAR_GROUP = ' + '\'PARTIAL\'';           
+            let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
+
+        }
+
+
+        // console.log(" plstrData INTERIOR ", plstrData[shIndex].INTERIOR);
+
+        if( plstrData[shIndex].INTERIOR != 'NULL')
+        {
+            sqlSalesCfgCharCharval = 'UPSERT CP_PARTIALPROD_CHAR ("PRODUCT_ID", "LOCATION_ID", ' + 
+                                     '"CLASS_NUM", "CHAR_NUM","CHARVAL_NUM" '+')' +
+                                     ' SELECT ' + 
+                                     "'" + plstrData[shIndex].PNO12_PRODUCT + "'" + "," +
+                                     "'PL20'" + "," +
+                                     "'" + 55555 + "'" + "," +
+                                     ' charval.CHAR_NUM ' + "," +
+                                     ' charval.CHARVAL_NUM ' +
+                                     ' FROM PLSTR_CHARACTERISTICS AS charc' +
+                                     ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
+                                     ' charc.CHAR_NUM = charval.CHAR_NUM' + 
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].INTERIOR + "'" + ' AND ' +
+                                     'charc.CHAR_GROUP = ' + '\'PARTIAL\'';           
+            let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
+
+        }
+
+
+        // console.log(" plstrData OPT_WHEELS ", plstrData[shIndex].OPT_WHEELS);
+
+        if( plstrData[shIndex].OPT_WHEELS != 'NULL')
+        {
+            sqlSalesCfgCharCharval = 'UPSERT CP_PARTIALPROD_CHAR ("PRODUCT_ID", "LOCATION_ID", ' + 
+                                     '"CLASS_NUM", "CHAR_NUM","CHARVAL_NUM" '+')' +
+                                     ' SELECT ' + 
+                                     "'" + plstrData[shIndex].PNO12_PRODUCT + "'" + "," +
+                                     "'PL20'" + "," +
+                                     "'" + 55555 + "'" + "," +
+                                     ' charval.CHAR_NUM ' + "," +
+                                     ' charval.CHARVAL_NUM ' +
+                                     ' FROM PLSTR_CHARACTERISTICS AS charc' +
+                                     ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
+                                     ' charc.CHAR_NUM = charval.CHAR_NUM' + 
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].OPT_WHEELS + "'" + ' AND ' +
+                                     'charc.CHAR_GROUP = ' + '\'PARTIAL\'';           
+            let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
+
+        }
+
+        // console.log(" plstrData OPT_PERFORM ", plstrData[shIndex].OPT_PERFORM);
+
+        if( plstrData[shIndex].OPT_PERFORM != 'NULL')
+        {
+            sqlSalesCfgCharCharval = 'UPSERT CP_PARTIALPROD_CHAR ("PRODUCT_ID", "LOCATION_ID", ' + 
+                                     '"CLASS_NUM", "CHAR_NUM","CHARVAL_NUM" '+')' +
+                                     ' SELECT ' + 
+                                     "'" + plstrData[shIndex].PNO12_PRODUCT + "'" + "," +
+                                     "'PL20'" + "," +
+                                     "'" + 55555 + "'" + "," +
+                                     ' charval.CHAR_NUM ' + "," +
+                                     ' charval.CHARVAL_NUM ' +
+                                     ' FROM PLSTR_CHARACTERISTICS AS charc' +
+                                     ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
+                                     ' charc.CHAR_NUM = charval.CHAR_NUM' + 
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].OPT_PERFORM + "'" + ' AND ' +
+                                     'charc.CHAR_GROUP = ' + '\'PARTIAL\'';           
+            let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
+
+        }
+
+
+        // console.log(" plstrData OPT_PLUS ", plstrData[shIndex].OPT_PLUS);
+
+        if( plstrData[shIndex].OPT_PLUS != 'NULL')
+        {
+            sqlSalesCfgCharCharval = 'UPSERT CP_PARTIALPROD_CHAR ("PRODUCT_ID", "LOCATION_ID", ' + 
+                                     '"CLASS_NUM", "CHAR_NUM","CHARVAL_NUM" '+')' +
+                                     ' SELECT ' + 
+                                     "'" + plstrData[shIndex].PNO12_PRODUCT + "'" + "," +
+                                     "'PL20'" + "," +
+                                     "'" + 55555 + "'" + "," +
+                                     ' charval.CHAR_NUM ' + "," +
+                                     ' charval.CHARVAL_NUM ' +
+                                     ' FROM PLSTR_CHARACTERISTICS AS charc' +
+                                     ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
+                                     ' charc.CHAR_NUM = charval.CHAR_NUM' + 
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].OPT_PLUS + "'" + ' AND ' +
+                                     'charc.CHAR_GROUP = ' + '\'PARTIAL\'';          
+            let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
+
+        }
+
+        // console.log(" plstrData OPT_PILOT ", plstrData[shIndex].OPT_PILOT);
+
+        if( plstrData[shIndex].OPT_PILOT != 'NULL')
+        {
+            sqlSalesCfgCharCharval = 'UPSERT CP_PARTIALPROD_CHAR ("PRODUCT_ID", "LOCATION_ID", ' + 
+                                     '"CLASS_NUM", "CHAR_NUM","CHARVAL_NUM" '+')' +
+                                     ' SELECT ' + 
+                                     "'" + plstrData[shIndex].PNO12_PRODUCT + "'" + "," +
+                                     "'PL20'" + "," +
+                                     "'" + 55555 + "'" + "," +
+                                     ' charval.CHAR_NUM ' + "," +
+                                     ' charval.CHARVAL_NUM ' +
+                                     ' FROM PLSTR_CHARACTERISTICS AS charc' +
+                                     ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
+                                     ' charc.CHAR_NUM = charval.CHAR_NUM' + 
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].OPT_PILOT + "'" + ' AND ' +
+                                     'charc.CHAR_GROUP = ' + '\'PARTIAL\'';           
+            let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
+
+        }
+
+        // console.log(" plstrData OPT_PILOT_LITE ", plstrData[shIndex].OPT_PILOT_LITE);
+
+        if( plstrData[shIndex].OPT_PILOT_LITE != 'NULL')
+        {
+            sqlSalesCfgCharCharval = 'UPSERT CP_PARTIALPROD_CHAR ("PRODUCT_ID", "LOCATION_ID", ' + 
+                                     '"CLASS_NUM", "CHAR_NUM","CHARVAL_NUM" '+')' +
+                                     ' SELECT ' + 
+                                     "'" + plstrData[shIndex].PNO12_PRODUCT + "'" + "," +
+                                     "'PL20'" + "," +
+                                     "'" + 55555 + "'" + "," +
+                                     ' charval.CHAR_NUM ' + "," +
+                                     ' charval.CHARVAL_NUM ' +
+                                     ' FROM PLSTR_CHARACTERISTICS AS charc' +
+                                     ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
+                                     ' charc.CHAR_NUM = charval.CHAR_NUM' + 
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].OPT_PILOT_LITE + "'" + ' AND ' +
+                                     'charc.CHAR_GROUP = ' + '\'PARTIAL\'';           
+            let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
+
+        }
+
+        // console.log(" plstrData OPT_TOWBAR ", plstrData[shIndex].OPT_TOWBAR);
+
+        if( plstrData[shIndex].OPT_TOWBAR != 'NULL')
+        {
+            sqlSalesCfgCharCharval = 'UPSERT CP_PARTIALPROD_CHAR ("PRODUCT_ID", "LOCATION_ID", ' + 
+                                     '"CLASS_NUM", "CHAR_NUM","CHARVAL_NUM" '+')' +
+                                     ' SELECT ' + 
+                                     "'" + plstrData[shIndex].PNO12_PRODUCT + "'" + "," +
+                                     "'PL20'" + "," +
+                                     "'" + 55555 + "'" + "," +
+                                     ' charval.CHAR_NUM ' + "," +
+                                     ' charval.CHARVAL_NUM ' +
+                                     ' FROM PLSTR_CHARACTERISTICS AS charc' +
+                                     ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
+                                     ' charc.CHAR_NUM = charval.CHAR_NUM' + 
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].OPT_TOWBAR + "'" + ' AND ' +
+                                     'charc.CHAR_GROUP = ' + '\'PARTIAL\'';           
+            let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
+
+        }
+        // console.log(" sqlSalesCfgCharCharval ", sqlSalesCfgCharCharval);
+        // console.log(" salesConfigResults ", sqlSalesCfgCharCharvalResults);
+        // if (shIndex == 0)
+        //      break;
+        if( shIndex % 1000 == 0)
+           await cds.run('COMMIT');
+    }
+
+
+
+    let dataObj = {};
+    dataObj["success"] = true;
+    dataObj["message"] = "update Partial Products Data Completed Successfully at " +  new Date();
+
+
+    // if (req.headers['x-sap-job-id'] > 0)
+    // {
+    //     const scheduler = getJobscheduler(req);
+
+    //     var updateReq = {
+    //         jobId: req.headers['x-sap-job-id'],
+    //         scheduleId: req.headers['x-sap-job-schedule-id'],
+    //         runId: req.headers['x-sap-job-run-id'],
+    //         data : dataObj
+    //         };
+
+    //         scheduler.updateJobRunLog(updateReq, function(err, result) {
+    //         if (err) {
+    //             return console.log('Error updating run log: %s', err);
+    //         }
+
+    //         });
+    // }
+
+  }
+
 
 };

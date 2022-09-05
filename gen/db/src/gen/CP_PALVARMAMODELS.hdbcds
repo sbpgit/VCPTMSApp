@@ -1,0 +1,13 @@
+entity CP_PALVARMAMODELS {
+  key VARMAID : String(50);
+  CREATEDAT : UTCTimestamp;
+  LOCATION : String(4);
+  PRODUCT : String(40);
+  CONTROLPARAMETERS : LargeString;
+  VARMATYPE : Integer;
+  MODELVERSION : String(5000) default 'Active';
+  VARMADATA : LargeString;
+  MODELSOP : LargeString;
+  FITTEDOP : LargeString;
+  IRFOP : LargeString;
+};

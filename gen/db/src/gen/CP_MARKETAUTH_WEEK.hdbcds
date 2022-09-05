@@ -1,0 +1,5 @@
+entity CP_MARKETAUTH_WEEK {
+  key LOCATION_ID : String(4);
+  key PRODUCT_ID : String(40);
+  key WEEK_DATE : LocalDate;
+};

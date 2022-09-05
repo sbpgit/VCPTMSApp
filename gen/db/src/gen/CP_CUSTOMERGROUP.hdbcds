@@ -1,0 +1,10 @@
+entity CP_CUSTOMERGROUP {
+  key CUSTOMER_GROUP : String(2);
+  CUSTOMER_DESC : String(20);
+  RESERVE_FIELD1 : String(20);
+  RESERVE_FIELD2 : String(20);
+  RESERVE_FIELD3 : String(20);
+  RESERVE_FIELD4 : String(20);
+  RESERVE_FIELD5 : String(20);
+  AUTH_GROUP : String(4);
+};

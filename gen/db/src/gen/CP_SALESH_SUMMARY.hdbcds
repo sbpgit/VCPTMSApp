@@ -1,0 +1,19 @@
+entity CP_SALESH_SUMMARY {
+  key WEEK_DATE : LocalDate;
+  key PRODUCT_ID : String(40);
+  key LOCATION_ID : String(4);
+  key CUSTOMER_GROUP : String(2);
+  DEMAND_PROD : String(10);
+  SALEHIST_PROD : Decimal(13, 3);
+  RESERVE_FIELD1 : String(20);
+  RESERVE_FIELD2 : String(20);
+  RESERVE_FIELD3 : String(20);
+  RESERVE_FIELD4 : String(20);
+  RESERVE_FIELD5 : String(20);
+  CHANGED_DATE : LocalDate;
+  CHANGED_BY : String(12);
+  CREATED_DATE : LocalDate;
+  CREATED_BY : String(12);
+  CHANGED_TIME : LocalTime;
+  CREATED_TIME : LocalTime;
+};

@@ -179,6 +179,10 @@ modules:
       - cpappcpcharqtygraph.zip
       name: cpappcpcharqtygraph
       target-path: resources/
+    - artifacts:
+      - cpappcpseedordercreation.zip
+      name: cpappcpseedordercreation
+      target-path: resources/
 - name: cpodpcpodprofiles
   type: html5
   path: app/cp_odprofiles
@@ -468,6 +472,16 @@ modules:
 - name: cpappcpcharqtygraph
   type: html5
   path: app/cpcharqtygraph
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappcpseedordercreation
+  type: html5
+  path: app/cpseedordercreation
   build-parameters:
     build-result: dist
     builder: custom

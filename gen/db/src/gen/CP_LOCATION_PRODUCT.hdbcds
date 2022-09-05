@@ -1,0 +1,8 @@
+entity CP_LOCATION_PRODUCT {
+  key LOCATION_ID : String(4);
+  key PRODUCT_ID : String(40);
+  LOTSIZE_KEY : String(2);
+  LOT_SIZE : Integer;
+  PROCUREMENT_TYPE : String(1);
+  PLANNING_STRATEGY : String(2);
+};

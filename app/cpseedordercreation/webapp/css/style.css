@@ -1,0 +1,10 @@
+/* Enter your custom styles here */
+
+
+.sapUxAPObjectPageContainerNoBar>.sapUxAPObjectPageSection:first-child:not(.sapUxAPObjectPageSectionNoTitle) {
+    margin-top: 0.1rem !important;
+}
+
+.sapUiSizeCompact .sapUxAPObjectPageSectionHeader, .sapUxAPObjectPageSectionHeader {
+    height: 0.1rem !important;
+}
