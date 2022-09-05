@@ -12,12 +12,15 @@ service IBPImportSrv @(impl : './lib/ibpimport-service.js') {
     function createIBPLocation() returns String;
     function createIBPCustomer() returns String;
     function createIBPClass(CLASS_NUM: String(18)) returns String;    
-    function createIBPSalesTrans(LOCATION_ID : String(4),PRODUCT_ID : String(40),CUSTOMER_GROUP : String(2)) returns String;
+    function createIBPSalesTrans(LOCATION_ID : String(4)) returns String;
+    // ,PRODUCT_ID : String(40),CUSTOMER_GROUP : String(2)) returns String;
     
-    function createIBPSalesConfig(LOCATION_ID : String(4),PRODUCT_ID : String(40),CUSTOMER_GROUP : String(2)) returns String;
+    function createIBPSalesConfig(LOCATION_ID : String(4)) returns String;
+    // ,PRODUCT_ID : String(40),CUSTOMER_GROUP : String(2)) returns String;
     function createComponentReq(LOCATION_ID : String(4),PRODUCT_ID : String(40)) returns String;
-    function createActCompDemand(LOCATION_ID : String(4),PRODUCT_ID : String(40)) returns String;
-
+    function createActCompDemand(LOCATION_ID : String(4)) returns String;
+    // ,PRODUCT_ID : String(40)) returns String;
+    function createIBPLocProd(LOCATION_ID : String(4)) returns String;
     // Inbound to IBP
     action exportIBPMasterProd(LOCATION_ID : String(4));
     action exportIBPLocation();
@@ -27,7 +30,7 @@ service IBPImportSrv @(impl : './lib/ibpimport-service.js') {
     action exportIBPSalesConfig(LOCATION_ID : String(4),PRODUCT_ID : String(40),CUSTOMER_GROUP : String(2));
     action exportComponentReq(LOCATION_ID : String(4),PRODUCT_ID : String(40),FROMDATE: Date, TODATE: Date);
     action exportActCompDemand(LOCATION_ID : String(4),PRODUCT_ID : String(40),FROMDATE: Date, TODATE: Date);
-
+    action exportIBPLocProd(LOCATION_ID : String(4));
     //Inbound to BTP
     action generateFDemandQty(LOCATION_ID : String(4), PRODUCT_ID : String(40));
     action generateFCharPlan(LOCATION_ID : String(4), PRODUCT_ID : String(40), FROMDATE : Date, TODATE : Date);
