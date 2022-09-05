@@ -446,7 +446,7 @@ sap.ui.define(
                         PRODUCT_ID: oItem.PRODUCT_ID,
                         UNIQUE_ID: oItem.UNIQUE_ID,
                         UID_TYPE: oItem.UID_TYPE,
-                        UID_RATE: oUniqRate,
+                        // UID_RATE: oUniqRate,
                         UNIQUE_DESC: oDesc,
                         ACTIVE: oActive,
                         FLAG: "E"
@@ -506,7 +506,7 @@ sap.ui.define(
                     ouidType = this.byId("idUnique").getSelectedKey();
                 sap.ui.getCore().byId("locId1").setValue(oLoctid);
                 sap.ui.getCore().byId("prodId1").setValue(oProdid);
-                sap.ui.getCore().byId("idComboBox1").setSelectedKey(ouidType);
+                // sap.ui.getCore().byId("idComboBox1").setSelectedKey(ouidType);
 
             },
             onCopyBtn: function (oEvent) {
@@ -516,9 +516,9 @@ sap.ui.define(
                 sap.ui.getCore().byId("prodIdCC").setValue(selected.getBindingContext().getProperty().PRODUCT_ID);
                 sap.ui.getCore().byId("uniqIdCC").setValue("");
                 sap.ui.getCore().byId("idUniqDescCC").setValue(selected.getBindingContext().getProperty().UNIQUE_DESC);
-                sap.ui.getCore().byId("idComboBoxCC").setSelectedKey(selected.getBindingContext().getProperty().UID_TYPE);
+                // sap.ui.getCore().byId("idComboBoxCC").setSelectedKey(selected.getBindingContext().getProperty().UID_TYPE);
                 sap.ui.getCore().byId("uidRIdCC").setValue(selected.getBindingContext().getProperty().UID_RATE);
-                sap.ui.getCore().byId("idComboBoxAC").setSelectedKey(selected.getBindingContext().getProperty().ACTIVE);
+                // sap.ui.getCore().byId("idComboBoxAC").setSelectedKey(selected.getBindingContext().getProperty().ACTIVE);
 
             },
             onCloseCreate: function () {
@@ -535,7 +535,7 @@ sap.ui.define(
                     oprodID = sap.ui.getCore().byId("prodId1").getValue(),
                     ouniqID = 1,
                     ouniqDesc = sap.ui.getCore().byId("idUniqDesc1").getValue(),
-                    ouniqTID = sap.ui.getCore().byId("idComboBox1").getSelectedKey(),
+                    ouniqTID = sap.ui.getCore().byId("idComboBox1").getValue(),
                     ouniqRID = sap.ui.getCore().byId("uidRId1").getValue(),
                     oactID = sap.ui.getCore().byId("idComboBox").getValue(),
                     flag = 'C',
@@ -569,7 +569,7 @@ sap.ui.define(
                             LOCATION_ID: olocID,
                             PRODUCT_ID: oprodID,
                             UID_TYPE: ouniqTID,
-                            UID_RATE: ouniqRID,
+                            // UID_RATE: ouniqRID,
                             UNIQUE_DESC: ouniqDesc,
                             ACTIVE: oactID,
                             FLAG: "C"
@@ -632,7 +632,7 @@ sap.ui.define(
                             LOCATION_ID: olocID,
                             PRODUCT_ID: oprodID,
                             UID_TYPE: ouniqTID,
-                            UID_RATE: ouniqRID,
+                            // UID_RATE: ouniqRID,
                             UNIQUE_DESC: ouniqDesc,
                             ACTIVE: oactID,
                             FLAG: "C"
