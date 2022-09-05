@@ -5,9 +5,16 @@
     xmlns:html="http://www.w3.org/1999/xhtml">
     <Page id="page" showHeader="false">
         <content>
+        <HBox>
+        <OverflowToolbar>
            
-                    <SearchField id="idCharSearch" liveChange="onCharSearch" placeholder="Characteristic / Characteristic Value"/>
-                    <Table id="idMatvarItem" items="{path: '/results'}" rememberSelections="false"  sticky="ColumnHeaders">
+                    <SearchField id="idCharSearch" liveChange="onCharSearch" placeholder="Characteristic / Characteristic Value" width="950px"/>
+                    <!-- <ToolbarSpacer/> -->
+<Button id="idadd" icon="sap-icon://add" press="onAddPress"/>
+                    
+                    </OverflowToolbar>
+                    </HBox>
+                    <Table id="idMatvarItem" items="{path: '/results'}" rememberSelections="false"  sticky="ColumnHeaders" >
                         <columns>
                         <Column hAlign="Left" >
                                 <Text text="{i18n>charname}" />
