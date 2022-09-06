@@ -1177,12 +1177,6 @@ module.exports = async function (srv) {
     let sqlPrimaryResults = await cds.run(sqlStr);
     console.log("sqlPrimaryResults ", sqlPrimaryResults);
 
-
-    // let jsonStr = JSON.stringify(sqlPrimaryResults);
-    // let obj = JSON.parse(jsonStr);
-    // let arrayVals = Object.values(obj);
-
-    // console.log("arrayVals ", arrayVals);
     for (let priIndex = 0; priIndex < sqlPrimaryResults.length; priIndex++)
     {
         let str = JSON.stringify(sqlPrimaryResults[priIndex]);
@@ -1211,6 +1205,51 @@ module.exports = async function (srv) {
     }
 
 
+
+    sqlStr = 'SELECT DISTINCT WEEKDATE, PRODUCT_ID, LOCATION_ID, PRIMARY_ID, ORDER_QTY, PRIMARY_ID_CHARVALS FROM V_PLSTR_PRIMARY_CHARS_CHARVALS_TS';
+                //  ' WHERE WEEKDATE = ' + '\'2020-06-29\'';
+    // console.log("sqlPrimary ", sqlStr )
+    sqlPrimaryResults = await cds.run(sqlStr);
+    console.log("sqlPrimaryResults length ", sqlPrimaryResults.length);
+
+
+    for (let priIndex = 0; priIndex < sqlPrimaryResults.length; priIndex++)
+    {
+        let str = JSON.stringify(sqlPrimaryResults[priIndex]);
+        let obj = JSON.parse(str);
+        let arrayKeys = Object.keys(obj)
+        let arrayVals = Object.values(obj);
+        console.log("PRIMARY_ID_CHARVALS INDEX ", priIndex+1);
+
+        // console.log("arrayKeys ", arrayKeys, "arrayVals", arrayVals);
+        for (let arrayIndex = 0; arrayIndex < arrayKeys.length; arrayIndex++)
+        {
+
+            // console.log("arrayKey ", arrayKeys[arrayIndex], "arrayVal ", arrayVals[arrayIndex]);
+            if (arrayKeys[arrayIndex] == 'PRIMARY_ID_CHARVALS')
+            {
+                let charVals = arrayVals[arrayIndex].split(',');
+                for (let charIndex = 0; charIndex < charVals.length; charIndex++)
+                {
+                    // console.log(" charIndex ", charIndex, "charVals ", charVals[charIndex]);
+
+                    sqlStr = 'UPSERT PLSTR_PRIMARY_TIMESERIES VALUES (' +
+                    "'" + arrayVals[0] + "'" + "," +
+                    "'" + arrayVals[1] + "'" + "," +
+                    "'" + arrayVals[2] + "'" + "," +
+                    "'" + arrayVals[3] + "'" + "," +
+                    "'" + charVals[charIndex] + "'" + "," +
+                    "'" + arrayVals[4] + "'" +')' + ' WITH PRIMARY KEY';
+
+                    // console.log("PLSTR_PRIMARY_TIMESERIES sqlStr", sqlStr);
+
+                    let primaryTsResults = await cds.run(sqlStr);
+                    // console.log("PLSTR_PRIMARY_TIMESERIES  ", primaryTsResults);
+                }
+
+            }
+        }
+    }
 
     let dataObj = {};
     dataObj["success"] = true;
