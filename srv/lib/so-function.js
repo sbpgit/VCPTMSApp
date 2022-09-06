@@ -569,13 +569,30 @@ class SOFunctions {
                 lQty,
                 lDate,
                 lLocation);
+        const liUnique = await SELECT.columns("CHAR_NUM",
+            "CHARVAL_NUM")
+            .from('V_UNIQUE_ID')
+            .where(`UNIQUE_ID = '${lUnique}'`)
+
+        for (let cntUI = 0; cntUI < liUnique.length; cntUI++) {
+            await INSERT.into('CP_SALESH_CONFIG').columns('SALES_DOC',
+                'SALESDOC_ITEM',
+                'CHAR_NUM',
+                'CHARVAL_NUM',
+                'PRODUCT_ID')
+                .values(lSO,
+                    lSOItem,
+                    liUnique[cntUI].CHAR_NUM,
+                    liUnique[cntUI].CHARVAL_NUM,
+                    lProduct);
+        }
 
         const lSPrimary = await this.processPrimaryID(lLocation, lMainProd, lUnique);
 
 
         // await INSERT.into('CP_SALES_HM')
         //     .values(lSO, lSOItem, lProduct, lLocation, lUnique, lSPrimary);
-            await INSERT.into('CP_SALES_HM').columns('SALES_DOC',
+        await INSERT.into('CP_SALES_HM').columns('SALES_DOC',
             'SALESDOC_ITEM',
             'PRODUCT_ID',
             'LOCATION_ID',
