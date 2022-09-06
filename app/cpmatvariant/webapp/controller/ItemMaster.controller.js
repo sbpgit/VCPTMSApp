@@ -942,18 +942,6 @@ sap.ui.define(
                 else {
                     oactID = 'X';
                 }
-<<<<<<< HEAD
-                // for (var s = 0; s < uniqueData.length; s++) {
-                //     if (parseInt(ouniqID) !== uniqueData[s].UNIQUE_ID) {
-                //         count++;
-                //     }
-                //     else {
-                //         continue;
-                //     }
-                // }
-                if(olocID ==="" || oprodID ==="" ){
-                    sap.m.MessageToast.show("Please select Location/Product")
-=======
 
                     // sap.ui.core.BusyIndicator.show();
                     // var bModel = that.getView().getModel("BModel");
@@ -998,7 +986,6 @@ sap.ui.define(
                         CHARVAL_NUM: aData.CHARVAL_NUM
                     }
                     oEntry.RTRCHAR.push(Charlist);
->>>>>>> f806efe5f3be16e72caffe5b3038af570dca5972
                 }
 
                 sap.ui.core.BusyIndicator.show();
