@@ -8,9 +8,9 @@
         <HBox>
         <OverflowToolbar>
            
-                    <SearchField id="idCharSearch" liveChange="onCharSearch" placeholder="Characteristic / Characteristic Value" width="950px"/>
+                    <SearchField id="idCharSearch" liveChange="onCharSearch" placeholder="Characteristic / Characteristic Value" width="Auto"/>
                     <!-- <ToolbarSpacer/> -->
-<Button id="idadd" icon="sap-icon://add" press="onAddPress" visible="false"/>
+<!-- <Button id="idadd" icon="sap-icon://add" press="onAddPress" visible="false"/> -->
                     
                     </OverflowToolbar>
                     </HBox>
@@ -45,12 +45,11 @@
                         </items>
                     </Table>
                 </content>
-                <footer>
+                <!-- <footer>
 					<OverflowToolbar>
 						<ToolbarSpacer/>
 						<Button id="idUpdateSave" text="Save" press="onUpdateItem" type="Emphasized" textDirection="LTR" visible="false"/>
-                        <!-- <Button id="idUpdateCancel" text="Cancel" press="onCancelUpdate" type="Emphasized" textDirection="LTR" visible="false"/> -->
 					</OverflowToolbar>
-				</footer>
+				</footer> -->
     </Page>
 </mvc:View>
