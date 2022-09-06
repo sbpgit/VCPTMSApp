@@ -37,6 +37,8 @@ sap.ui.define(
                 this.oCharModel.setSizeLimit(1000);
                 that.charnameModel = new JSONModel();
                 that.charvalueModel = new JSONModel();
+                that.oTableData = [];
+                that.ListModel = new JSONModel();
 
 
 
@@ -367,6 +369,8 @@ sap.ui.define(
                 that._addCharacteristic.close();
 
             },
+
+
             onUpdateItem: function () {
                 var Flag = "N",
                     oLocId = oGModel.getProperty("/locId"),
@@ -434,22 +438,55 @@ sap.ui.define(
 
                     for (var i = 0; i < oItemTable.length; i++) {
                         if (oItemTable[i].getCells()[1].getText() === charNum &&
-                            oItemTable[i].getCells()[1].getText() === charVal_Num) {
+                            oItemTable[i].getCells()[3].getText() === charVal_Num) {
                             count = count + 1;
                         }
                     }
 
                     if (count === 0) {
-                        that.oTableData = [];
+                        
                         // Add entry to the table model
-                        that.oTableData.push(that.oData);
-                        that.ListModel = new JSONModel();
+                        // that.oTableData.push(that.oData);
+                        // that.ListModel = new JSONModel();
 
-                        that.ListModel.setData({
-                            results: that.oTableData
+                        // that.ListModel.setData({
+                        //     results: that.oTableData
+                        // });
+                        // that.byId("idMatvarItem").setModel(that.ListModel);
+
+                        var itemTable = that.byId("idMatvarItem");
+
+                        var columns = new sap.m.ColumnListItem({
+                            cells: [
+                                    new sap.m.Text({
+                                        text: charName
+                                    }),
+                                    new sap.m.Text({
+                                        text: charNum
+                                    }),
+                                    new sap.m.Text({
+                                        text: charVal_Name
+                                    }),
+                                    new sap.m.Text({
+                                        text: charVal_Num
+                                    }),
+                                    new sap.m.Button({
+                                        icon:"sap-icon://decline",
+                                        press: function(oEvt){
+                                            that.onTabDel(oEvt);
+                                        }
+                                    })
+                                ]
+                                // type: "Navigation"
                         });
-                        that.byId("idMatvarItem").setModel(that.ListModel);
-                        that._addCharacteristic.close();
+                        that.byId("idMatvarItem").getColumns()[4].setVisible(true)
+    
+                        itemTable.addItem(columns);
+
+
+
+
+                        that.onCloseRestItem();
                         that.byId("idUpdateSave").setVisible(true);
 
                     } else {
@@ -504,6 +541,21 @@ sap.ui.define(
                         sap.m.MessageToast.show("Error");
                     },
                 });
+            },
+            onTabDel:function(oEvent){
+                // var oTable = this.getView().byId("idMatvarItem");
+                // oTable.removeItem(oEvent.getSource().getBindingContext().getObject());
+                // var deleteRecord = oEvent.getSource();
+                var tableLength = this.byId("idMatvarItem").getItems();
+		for(var i=0;i<tableLength.length;i++){
+			if(tableLength[i].getCells()[2].getText() === oEvent.getSource().getParent().getCells()[2].getText() && tableLength[i].getCells()[0].getText() === oEvent.getSource().getParent().getCells()[0].getText() )
+					{
+					//	pop this._data.Products[i] 
+                    tableLength.splice(i,1); //removing 1 record from i th index.
+						
+						break;//quit the loop
+					}
+		}
             }
 
         });

@@ -555,8 +555,8 @@ sap.ui.define(
                 //         continue;
                 //     }
                 // }
-                if(olocID ==="" || oprodID ==="" || ouniqRID ==="" ){
-                    sap.m.MessageToast.show("Please select Location/Product/UID Rate")
+                if(olocID ==="" || oprodID ==="" ){
+                    sap.m.MessageToast.show("Please select Location/Product")
                 }
                 else{
                 // if (count === uniqueData.length) {
@@ -618,8 +618,8 @@ sap.ui.define(
                 //         continue;
                 //     }
                 // }
-                if(olocID ==="" || oprodID ==="" || ouniqRID ==="" ){
-                    sap.m.MessageToast.show("Please select Location/Product/Unique Rate")
+                if(olocID ==="" || oprodID ==="" ){
+                    sap.m.MessageToast.show("Please select Location/Product")
                 }
                 else {
                 // if (count === uniqueData.length) {
