@@ -112,9 +112,14 @@ sap.ui.define([
 
                 // service to get the products based of location
                 this.getModel("BModel").read("/getLocProdDet", {
+                    // that.getModel("BModel").callFunction("/maintainSeedOrder", {
+                    //     method: "GET",
+                    //     urlParameters: {
+                    //         LOCATION_ID: oFlag,
+                    //     },
                     success: function (oData) {
-                        that.prodModel.setData(oData);
-                        that.oProdList.setModel(that.prodModel);
+                        // that.prodModel.setData(oData);
+                        // that.oProdList.setModel(that.prodModel);
                     },
                     error: function (oData, error) {
                         MessageToast.show("error");
@@ -310,14 +315,19 @@ sap.ui.define([
 
 
                     // service to get the products based of location
-                    this.getModel("BModel").read("/getLocProdDet", {
-                        filters: [
-                            new Filter(
-                                "LOCATION_ID",
-                                FilterOperator.EQ,
-                                aSelectedLoc[0].getTitle()
-                            ),
-                        ],
+                    // this.getModel("BModel").read("/getLocProdDet", {
+                    //     filters: [
+                    //         new Filter(
+                    //             "LOCATION_ID",
+                    //             FilterOperator.EQ,
+                    //             aSelectedLoc[0].getTitle()
+                    //         ),
+                    //     ],
+                    that.getModel("BModel").callFunction("/getAllProd", {
+                        method: "GET",
+                        urlParameters: {
+                            LOCATION_ID: aSelectedLoc[0].getTitle()
+                        },
                         success: function (oData) {
                             that.prodModel.setData(oData);
                             that.oProdList.setModel(that.prodModel);
@@ -546,14 +556,14 @@ sap.ui.define([
                         },
                         success: function (oData) {
                             sap.ui.core.BusyIndicator.hide();
-                            sap.m.MessageToast.show("success");
+                            sap.m.MessageToast.show("Seed Order created successfully");
                             that.onCancelOrder();
                             that.onAfterRendering();
 
                         },
                         error: function (error) {
                             sap.ui.core.BusyIndicator.hide();
-                            sap.m.MessageToast.show("Error");
+                            sap.m.MessageToast.show("Error creating a Seed Order");
                         },
                     });
                 } else {
