@@ -1290,23 +1290,59 @@ module.exports = (srv) => {
         let liresultsH = [];
         let lsresultsH = {};
         var responseMessage;
-        let vFlag, vID;
+        let vFlag, vID, vUID, vCharCount = 0, vCount = 0, vIndex = 0;
         let liuniquechar = JSON.parse(req.data.UNIQUECHAR);
         const objCatFn = new Catservicefn();
+
+        const li_uniquedata = await cds.run(
+            `SELECT *
+        FROM "CP_UNIQUE_ID_HEADER"
+        WHERE "LOCATION_ID" = '` +
+            liuniquechar[0].LOCATION_ID +
+            `'
+        AND "PRODUCT_ID" = '` +
+            liuniquechar[0].PRODUCT_ID +
+            `' ORDER BY UNIQUE_ID DESC`
+        );
+        vCharCount = liuniquechar.length;
+        vUID = li_uniquedata[0].UNIQUE_ID;
+        // Check if there is any unique ID with same char.
+        for (let uIndex = 0; uIndex < li_uniquedata.length; uIndex++) {
+            if (vUID === li_uniquedata[uIndex].UNIQUE_ID) {
+                vIndex = vIndex + 1;
+            }
+            else {                
+                if (vIndex === vCount && vIndex === vCharCount) {                    
+                    return "Entry already exists";
+                }
+                else{   
+                    vIndex = 1;
+                    vCount = 0;
+                    vUID =li_uniquedata[uIndex].UNIQUE_ID;
+                }
+            }
+            for (let cIndex = 0; cIndex < liuniquechar.length; cIndex++) {
+                if (li_uniquedata[uIndex].CHAR_NUM === liuniquechar[cIndex].CHAR_NUM &&
+                    li_uniquedata[uIndex].CHARVAL_NUM === liuniquechar[cIndex].CHARVAL_NUM) {
+                    vCount = vCount + 1;
+                }
+            }
+        }
         // let vFlag = liuniquechar[0].FLAG;
         if (req.data.FLAG === 'N') {
-            for (let i = 0; i < liuniquechar.length; i++) {
-                lsresults.LOCATION_ID = liuniquechar[i].LOCATION_ID;
-                lsresults.PRODUCT_ID = liuniquechar[i].PRODUCT_ID;
-                lsresults.UNIQUE_ID = parseInt(liuniquechar[i].UNIQUE_ID);
-                lsresults.CHAR_NUM = liuniquechar[i].CHAR_NUM;
-                lsresults.CHARVAL_NUM = liuniquechar[i].CHARVAL_NUM;
-                liresults.push(lsresults);
+            vID = await objCatFn.maintainUniqueHeader(req.data.FLAG, liuniquechar[0]);
+            if (vID !== '') {
 
-            }
-            if (liresults.length > 0) {
-                vFlag = await objCatFn.maintainUniqueHeader(req.data);
-                if (vFlag = 'X') {
+                for (let i = 0; i < liuniquechar.length; i++) {
+                    lsresults.LOCATION_ID = liuniquechar[i].LOCATION_ID;
+                    lsresults.PRODUCT_ID = liuniquechar[i].PRODUCT_ID;
+                    // lsresults.UNIQUE_ID = parseInt(liuniquechar[i].UNIQUE_ID);
+                    lsresults.CHAR_NUM = liuniquechar[i].CHAR_NUM;
+                    lsresults.CHARVAL_NUM = liuniquechar[i].CHARVAL_NUM;
+                    liresults.push(lsresults);
+
+                }
+                if (liresults.length > 0) {
                     try {
                         await cds.run(INSERT.into("CP_UNIQUE_ID_ITEM").entries(liresults));
                         responseMessage = " Creation/Updation successful";
@@ -1316,14 +1352,14 @@ module.exports = (srv) => {
                         // createResults.push(responseMessage);
                     }
                 }
-                else {
-                    responseMessage = "Creation Failed"
-                }
 
             }
+            else {
+                responseMessage = "Creation Failed"
+            }
         }
-        else if (req.data.FLAG === 'E') { 
-            vFlag = await objCatFn.maintainUniqueHeader(req.data);
+        else if (req.data.FLAG === 'E') {
+            vFlag = await objCatFn.maintainUniqueHeader(req.data.FLAG, liuniquechar[0]);
             if (vFlag = 'X') {
                 try {
                     responseMessage = "Update successful";
@@ -1336,37 +1372,39 @@ module.exports = (srv) => {
             }
         }
         else if (req.data.FLAG === 'C') {//Copy
-            lsresults.LOCATION_ID = liuniquechar[0].LOCATION_ID;
-            lsresults.PRODUCT_ID = liuniquechar[0].PRODUCT_ID;
-            // lsresults.UNIQUE_ID = parseInt(liuniquechar[0].UNIQUE_ID);
-            const li_chardata = await cds.run(
-                `SELECT *
+            vID = await objCatFn.maintainUniqueHeader(req.data.FLAG, liuniquechar[0]);
+            if (vID !== ' ') {
+                try {
+                    await cds.run(INSERT.into("CP_UNIQUE_ID_ITEM").entries(li_chardata));
+                    responseMessage = " Creation/Updation successful";
+                } catch (e) {
+                    //DONOTHING
+                    responseMessage = "Creation Failed"
+                    // createResults.push(responseMessage);
+                }
+                lsresults.LOCATION_ID = liuniquechar[0].LOCATION_ID;
+                lsresults.PRODUCT_ID = liuniquechar[0].PRODUCT_ID;
+                // lsresults.UNIQUE_ID = parseInt(liuniquechar[0].UNIQUE_ID);
+                const li_chardata = await cds.run(
+                    `SELECT *
                 FROM "CP_UNIQUE_ID_ITEM"
                 WHERE "LOCATION_ID" = '` +
-                lsresults.LOCATION_ID +
-                `'
+                    lsresults.LOCATION_ID +
+                    `'
                 AND "PRODUCT_ID" = '` +
-                lsresults.PRODUCT_ID +
-                `'
+                    lsresults.PRODUCT_ID +
+                    `'
                 AND"UNIQUE_ID" = '` +
-                lsresults.UNIQUE_ID +
-                `'`
-            );
-            if (li_chardata.length > 0) {
-                vID = await objCatFn.maintainUniqueHeader(req.data);
-                
-                for (let i = 0; i < liuniquechar.length; i++) {
-                    li_chardata[i].UNIQUE_ID = parseInt(vID);
-                }
-                if (vID !== ' ') {
-                    try {
-                        await cds.run(INSERT.into("CP_UNIQUE_ID_ITEM").entries(li_chardata));
-                        responseMessage = " Creation/Updation successful";
-                    } catch (e) {
-                        //DONOTHING
-                        responseMessage = "Creation Failed"
-                        // createResults.push(responseMessage);
+                    lsresults.UNIQUE_ID +
+                    `'`
+                );
+                if (li_chardata.length > 0) {
+                    vID = await objCatFn.maintainUniqueHeader(req.data);
+
+                    for (let i = 0; i < liuniquechar.length; i++) {
+                        li_chardata[i].UNIQUE_ID = parseInt(vID);
                     }
+
                 }
                 else {
                     responseMessage = "Creation Failed"
@@ -1512,27 +1550,34 @@ module.exports = (srv) => {
         let liresults = [];
         let lsresults = {};
         let liSeeddata = {};
-        let vValue = 0;
-        let vPrefix = 'SE';
+        let vValue = 0, vTemp;
+        let vPrefix = 'SE00000';
         var responseMessage;
+
+        liSeeddata = JSON.parse(req.data.SEEDDATA);
         const li_sodata = await cds.run(
             `SELECT *
             FROM "CP_SEEDORDER_HEADER"
             WHERE "LOCATION_ID" = '` +
-            req.data.LOCATION_ID +
+            liSeeddata[0].LOCATION_ID +
             `'
             AND "PRODUCT_ID" = '` +
-            req.data.PRODUCT_ID +
+            liSeeddata[0].PRODUCT_ID +
             `' ORDER BY SEED_ORDER DESC`
         );
-        liSeeddata = JSON.parse(req.data.SEEDDATA);
+        const obgenSOFunctions = new SOFunctions();
         if (req.data.FLAG === "C") {
             lsresults.LOCATION_ID = liSeeddata[0].LOCATION_ID;
             lsresults.PRODUCT_ID = liSeeddata[0].PRODUCT_ID;
             lsresults.UNIQUE_ID = liSeeddata[0].UNIQUE_ID;
             lsresults.ORD_QTY = parseFloat(liSeeddata[0].ORD_QTY);
             lsresults.MAT_AVAILDATE = liSeeddata[0].MAT_AVAILDATE;
-            lsresults.SEED_ORDER = parseInt(li_sodata[0].SEED_ORDER.split("SE")) + 1
+            vTemp = li_sodata[0].SEED_ORDER;
+            console.log(vTemp);
+            vTemp = vTemp.slice(2);
+            console.log(vTemp);
+            vTemp = parseInt(vTemp) + 1;
+            lsresults.SEED_ORDER = vPrefix.concat(vTemp.toString());
             // const li_paravalues = await cds.run(
             //     `SELECT VALUE
             //     FROM "CP_PARAMETER_VALUES"
@@ -1540,11 +1585,14 @@ module.exports = (srv) => {
             // vValaue = parseInt(li_paravalues[0].VALUE) + 1;
             // lsresults.SEED_ORDER = vPrefix.concat(vValue.toString());
             liresults.push(lsresults);
-            lsresults = {};
+            // lsresults = {};
             if (liresults.length > 0) {
+                console.log(lsresults);
                 try {
+
                     await cds.run(INSERT.into("CP_SEEDORDER_HEADER").entries(liresults));
                     responseMessage = " Creation/Updation successful";
+                    //await obgenSOFunctions.createSO(lsresults.LOCATION_ID, lsresults.PRODUCT_ID, lSO, lsresults.MAT_AVAILDATE, lsresults.ORD_QTY, lsresults.UNIQUE_ID);
                 } catch (e) {
                     //DONOTHING
                     responseMessage = " Creation failed";

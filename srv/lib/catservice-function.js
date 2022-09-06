@@ -3,10 +3,11 @@ class Catservicefn{
     
 /**
  * Generate Unique ID
- * @param {Data} adata 
+ * @param {Data} adata
+ * @param {Flag} lFlag 
  */   
     //Change Active status
-async maintainUniqueHeader(adata) {
+async maintainUniqueHeader(lFlag,adata) {
     let liresults = [];
     let lsresults = {};
     var responseMessage;
@@ -21,7 +22,7 @@ async maintainUniqueHeader(adata) {
         adata.PRODUCT_ID +
         `' ORDER BY UNIQUE_ID DESC`
     );
-    if (adata.FLAG === 'E') {// Active status change
+    if (lFlag === 'E') {// Active status change
         lsresults.LOCATION_ID = adata.LOCATION_ID;
         lsresults.PRODUCT_ID = adata.PRODUCT_ID;
         lsresults.UNIQUE_ID = parseInt(adata.UNIQUE_ID);
@@ -48,7 +49,7 @@ async maintainUniqueHeader(adata) {
             //DONOTHING
         }
     }
-    else if (adata.FLAG === 'C' || adata.FLAG === 'N') {
+    else if (lFlag === 'C' || lFlag === 'N') {
         console.log(adata);
         lsresults.LOCATION_ID = adata.LOCATION_ID;
         lsresults.PRODUCT_ID = adata.PRODUCT_ID;
@@ -59,13 +60,8 @@ async maintainUniqueHeader(adata) {
             lsresults.UNIQUE_ID = parseInt("01");
         }
         lsresults.UNIQUE_DESC = adata.UNIQUE_DESC;
-        lsresults.UID_TYPE = adata.UID_TYPE;
-        if (adata.ACTIVE === 'X') {
-            lsresults.ACTIVE = Boolean(false);
-        }
-        else {
-            lsresults.ACTIVE = Boolean(true);
-        }
+        lsresults.UID_TYPE = 'U';
+        lsresults.ACTIVE = Boolean(true);
         liresults.push(lsresults);
         
         console.log(lsresults);
@@ -79,6 +75,7 @@ async maintainUniqueHeader(adata) {
         }
     }
 }
-    return responseMessage;
+    return vFlag;
 }
 }
+module.exports = Catservicefn;
