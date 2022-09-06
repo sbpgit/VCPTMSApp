@@ -1,0 +1,9 @@
+---
+applications:
+  - name: config_products-srv
+    path: .
+    memory: 256M
+    buildpacks:
+      - nodejs_buildpack
+    services:
+      - config_products-db

@@ -72,7 +72,7 @@
                         <Column hAlign="Left" vAlign="Middle" width="200px">
                             <Text text="{i18n>unidesc}" />
                         </Column>
-                        <Column hAlign="Left" vAlign="Middle" width="100px">
+                        <Column hAlign="Left" vAlign="Middle" width="100px" visible="false">
                             <Text text="{i18n>uniRate}"/>
                         </Column>
 

@@ -141,15 +141,15 @@
                                     <commons:content>
 										<commons:ChartContainerContent >
 											<commons:content>
-                             <!-- <viz:Popover id="idPopOver1"></viz:Popover>  -->
-                                <viz:VizFrame xmlns="sap.viz" id="idLineChart" height='500px' width="100%" vizType="line" vizProperties="{ title: { text: '' }}">
+                             <viz:Popover id="idPopOver1"></viz:Popover> 
+                                <viz:VizFrame uiConfig="{applicationSet:'fiori'}" vizProperties="{ plotArea:{dataLabel:{visible: true}}, title : {text:''}}" xmlns="sap.viz" id="idLineChart" height='500px' width="100%" vizType="line" >
                                     <viz:dataset>
                                         <viz.data:FlattenedDataset data="{/results}">
                                             <viz.data:dimensions>
-                            <viz.data:DimensionDefinition name="CHAR_NUM"
-                                value="{CHAR_NUM}" />
-                                <viz.data:DimensionDefinition name="CHARVAL_NUM"
-                                value="{CHARVAL_NUM}" />
+                            <viz.data:DimensionDefinition name="CHAR_NAME"
+                                value="{CHAR_NAME}" />
+                                <viz.data:DimensionDefinition name="CHAR_VALUE"
+                                value="{CHAR_VALUE}" />
                         </viz.data:dimensions>
                         <viz.data:measures>
                             <viz.data:MeasureDefinition name="GEN_QTY"
@@ -165,9 +165,9 @@
                          <viz.feeds:FeedItem id='valueAxisFeed1Pan' uid="valueAxis" type="Measure"
                         values="GEN_QTY" />
                     <viz.feeds:FeedItem id='categoryAxisFeedPan' uid="categoryAxis" type="Dimension"
-                        values="CHAR_NUM" />
+                        values="CHAR_NAME" />
                         <viz.feeds:FeedItem id='categoryAxisFeed1Pan' uid="categoryAxis" type="Dimension"
-                        values="CHARVAL_NUM" />
+                        values="CHAR_VALUE" />
                                     </viz:feeds>
                                 </viz:VizFrame>
                                 </commons:content>
