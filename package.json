@@ -12,7 +12,7 @@
         "@sap/cds": "^5.9.4",
         "@sap/cds-dk": "^4.9.2",
         "@sap/cds-mtx": "^2.5.1",
-        "@sap/cds-odata-v2-adapter-proxy": "^1.9.4",
+        "@sap/cds-odata-v2-adapter-proxy": "^1.9.5",
         "@sap/hana-client": "^2.12.22",
         "@sap/hdi-deploy": "^4.4.1",
         "@sap/jobs-client": "^1.6.3",
