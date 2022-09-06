@@ -51,13 +51,13 @@
 
         <Table id="idCharItem" items="{path: '/results'}">
             <columns>
-                <Column hAlign="Left">
+                <Column hAlign="Left" width="250px">
                     <Text text="{i18n>charname}" />
                 </Column>
                 <Column hAlign="Left" visible="false">
                     <Text text="{i18n>charno}" />
                 </Column>
-                <Column hAlign="Left">
+                <Column hAlign="Left" width="120px">
                     <Text text="{i18n>charval}" />
                 </Column>
                 <Column hAlign="Left" visible="false">
