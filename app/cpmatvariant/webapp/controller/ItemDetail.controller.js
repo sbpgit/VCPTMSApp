@@ -40,8 +40,6 @@ sap.ui.define(
                 that.oTableData = [];
                 that.ListModel = new JSONModel();
 
-
-
             },
 
             /**
@@ -55,6 +53,7 @@ sap.ui.define(
                 var sLocId = oGModel.getProperty("/locId");
                 var sUniqId = oGModel.getProperty("/uniqId");
                 var active = oGModel.getProperty("/uid_active");
+                var oAddButton = that.byId("idadd");
 
                 this.getModel("BModel").read("/getUniqueItem", {
                     filters: [
@@ -64,13 +63,22 @@ sap.ui.define(
                     ],
                     success: function (oData) {
                         sap.ui.core.BusyIndicator.hide();
+                        if(oData.results.length === 0){
+                            oAddButton.setProperty("visible",true);
+                        }
+                        else{
+                            oAddButton.setProperty("visible",false);
+                        }
+
+                        oGModel.setProperty("/CharData", oData.results);
+
                         that.oCharModel.setData({
                             results: oData.results,
                         });
                         that.byId("idMatvarItem").setModel(that.oCharModel);
-                        if (active === false) {
-                            that.byId("idadd").setVisible(true);
-                        }
+                            // if (active === false) {
+                            //     that.byId("idadd").setVisible(true);
+                            // }
                     },
                     error: function () {
                         MessageToast.show("Failed to get data");
@@ -543,7 +551,7 @@ sap.ui.define(
                 });
             },
             onTabDel:function(oEvent){
-                // var oTable = this.getView().byId("idMatvarItem");
+                var oTable = this.getView().byId("idMatvarItem");
                 // oTable.removeItem(oEvent.getSource().getBindingContext().getObject());
                 // var deleteRecord = oEvent.getSource();
                 var tableLength = this.byId("idMatvarItem").getItems();

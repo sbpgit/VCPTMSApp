@@ -10,13 +10,13 @@
         <VBox class="sapUiSmallMargin">
             <f:SimpleForm id="SimpleFormToolbaritem2" editable="true" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="4" labelSpanM="4" labelSpanS="4" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1" singleContainerFullSize="false">
                 <f:content>
-                    <Label text="Unique Id"/>
-                    <Input id="iduinq2" value="" editable="false"/>
+                    <!-- <Label text="Unique Id"/>
+                    <Input id="iduinq2" value="" editable="false"/> -->
 
                     <Label text="Class Name"/>
-                    <Input id="idClassname2" value=""  placeholder="Class Name" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                    <Input id="idClassname2" value=""  placeholder="Class Name" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleCharValueHelp"/>
                     <Label text="Characteristic Name"/>
-                    <Input id="idCharname2" value=""  placeholder="Characteristic Name" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                    <Input id="idCharname2" value=""  placeholder="Characteristic Name" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleCharValueHelp"/>
                     <!-- <Label text="{i18n>odcond}"/>
                     <Select id="idODcond2"  selectedKey="EQ" class="buttonDesktop">
 							<core:ListItem key="EQ" text="EQ"/>
@@ -24,7 +24,7 @@
 						</Select> -->
                     
                     <Label text="Characteristic Value"/>
-                    <Input id="idCharval2" value=""  placeholder="Characteristic Value" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                    <Input id="idCharval2" value=""  placeholder="Characteristic Value" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleCharValueHelp"/>
                     
                                   
                     

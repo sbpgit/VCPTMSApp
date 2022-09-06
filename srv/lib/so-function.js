@@ -342,7 +342,11 @@ class SOFunctions{
         return liUniqueData;
     }
 
-    
+/**
+ * 
+ * @param {Location} lLocation 
+ * @param {Product} lProduct 
+ */
     async getPriUniqueID(lLocation, lProduct){
 
 // Get Unique ID        
@@ -440,41 +444,7 @@ class SOFunctions{
         for (let cntU = 0; cntU < liCharFinal.length; cntU++) {
             if(liCharFinal[cntU].length > 0){
 
-                const lsUniqueInd = await SELECT.one.columns("MAX(UNIQUE_ID) + 1 AS MAX_ID")
-                                            .from('CP_UNIQUE_ID_HEADER');
-                if(lsUniqueInd.MAX_ID === null){
-                    lCntVariantID = 1;
-                }else{                    
-                    lCntVariantID = parseInt(lsUniqueInd.MAX_ID);
-                }         
-
-                this.logger.info("Unique ID Index: " + lCntVariantID);
-
-                await cds.run({INSERT:
-                    {
-                        into:{ ref: ['CP_UNIQUE_ID_HEADER'] },
-                        values: [ lCntVariantID, lLocation, lProduct, '', 'P', 0, true]
-                    }
-                })
-
-                let liChar = [];
-                let lsChar = {};
-                for (let cntUC = 0; cntUC < liCharFinal[cntU].length; cntUC++) {
-                    lsChar =  {};
-                    lsChar['UNIQUE_ID'] = GenF.parse(lCntVariantID);
-                    lsChar['LOCATION_ID'] = GenF.parse(lLocation);
-                    lsChar['PRODUCT_ID'] = GenF.parse(lProduct);
-                    lsChar['CHAR_NUM'] = GenF.parse(liCharFinal[cntU][cntUC].CHAR_NUM);
-                    lsChar['CHARVAL_NUM'] = GenF.parse(liCharFinal[cntU][cntUC].CHARVAL_NUM);
-                    liChar.push(lsChar);
-                }
-                
-                cds.run({INSERT:
-                    {
-                        into:{ ref: ['CP_UNIQUE_ID_ITEM'] },
-                        entries: liChar
-                    }
-                })                
+                await  createPrimaryID(lLocation, lProduct, liCharFinal[cntU]);
                
             }
         }
@@ -483,6 +453,11 @@ class SOFunctions{
 
     }
 
+/**
+ * 
+ * @param {Location} lLocation 
+ * @param {Product} lProduct 
+ */    
     async updateUniqueRate(lLocation, lProduct){
 
         const liSalesProd = await SELECT.columns(`LOCATION_ID`,
@@ -560,6 +535,170 @@ class SOFunctions{
             }
         }
 
+
+    }
+
+/**
+ * 
+ * @param {Location} lLocation 
+ * @param {Product} lProduct 
+ * @param {Sales ORder} lSO
+ * @param {Date} lDate 
+ * @param {Quantity} lQty 
+ * @param {Unique ID} liUnique 
+ */
+    async createSO(lLocation, lProduct, lSO, lDate, lQty, lUnique){
+
+        const lSOItem = '10';
+// Get Main Product        
+        const lMainProd = await getMainProduct(lLocation, lProduct);
+
+        await INSERT.into('CP_SALESH').columns('SALES_DOC', 
+                                               'SALESDOC_ITEM', 
+                                               'PRODUCT_ID', 
+                                               'CONFIRMED_QTY', 
+                                               'ORD_QTY', 
+                                               'MAT_AVAILDATE', 
+                                               'LOCATION_ID')
+                                    .values( lSO,
+                                              lSOItem,
+                                              lMainProd,
+                                                lQty,
+                                                lQty,
+                                                lDate,
+                                                lLocation);   
+                                            
+        const lSPrimary = await processPrimaryID(lLocation, lMainProd, lUnique);                                        
+       
+    
+        await INSERT.into('CP_SALES_HM')
+                    .values( lSO, lSOItem, lProduct, lLocation, lUnique, lSPrimary);
+
+    }
+
+/**
+ * 
+ * @param {Location} lLocation 
+ * @param {Product} lProduct 
+ */
+    async getMainProduct(lLocation, lProduct){
+// Get Main Product        
+        const lsSales = await SELECT.one
+        .columns('REF_PRODID')
+        .from('CP_PARTIALPROD_INTRO')
+        .where(`LOCATION_ID = '${lLocation}'
+            AND PRODUCT_ID = '${lProduct}'`);    
+            
+        return lsSales.REF_PRODID;
+    }
+
+/**
+ * 
+ * @param {Location} lLocation 
+ * @param {Product} lProduct 
+ * @param {Unique ID} lUnique 
+ */    
+    async processPrimaryID(lLocation, lProduct, lUnique){
+
+                                            
+        const liUnique = await SELECT.columns('CHAR_NUM', 'CHARVAL_NUM')
+                                     .from('CP_UNIQUE_ID_ITEM')
+                                     .where(`UNIQUE_ID = '${lUnique}' 
+                                         AND LOCATION_ID = '${lLocation}
+                                         AND PRODUCT_ID = '${lProduct}'
+                                         AND CHAR_NUM IN (SELECT "CHAR_NUM"
+                                                            FROM "CP_VARCHAR_PS"
+                                                            WHERE "PRODUCT_ID" = '${lProduct}'
+                                                            AND "LOCATION_ID" = '${lLocation}'
+                                                             AND "CHAR_TYPE" = 'P')`)
+                                         .orderBy('CHAR_NUM', 'CHARVAL_NUM');
+
+        const liPrimary = await SELECT.columns('UNIQUE_ID', 'CHAR_NUM', 'CHARVAL_NUM')
+                                        .from('V_UNIQUE_ID')
+                                        .where(`LOCATION_ID = '${lLocation}
+                                            AND PRODUCT_ID  = '${lProduct}'
+                                            AND UID_TYPE    = 'P'`);
+
+        let lUICount = 0;
+        let lFailPrimary = 0;
+        let lSPrimary = 0;
+        for (let cntPID = 0; cntPID < liPrimary.length; cntPID++) {
+            if(cntPID === 0 ||
+               liPrimary[cntPID].UNIQUE_ID !== liPrimary[GenF.subOne(cntPID,liPrimary.length)].UNIQUE_ID){
+                lUICount = 0;
+            }
+
+            if(liPrimary[cntPID].CHAR_NUM !== liUnique[lUICount].CHAR_NUM ||
+               liPrimary[cntPID].CHARVAL_NUM !== liUnique[lUICount].CHARVAL_NUM ){
+                   lFailPrimary = GenF.parse(liPrimary[cntPID].UNIQUE_ID);
+               }
+
+            if(cntPID === GenF.addOne(cntPID, liPrimary.length) ||
+                liPrimary[cntPID].UNIQUE_ID !== liPrimary[GenF.addOne(cntPID,liPrimary.length)].UNIQUE_ID){
+                    if(lFailPrimary === 0){
+                        lSPrimary = GenF.parse(liPrimary[cntPID].UNIQUE_ID);
+                        break;
+                    }
+            }
+        }
+
+        if(lSPrimary === 0){
+            lSPrimary = await  createPrimaryID(lLocation, lsSales.REF_PRODID, liUnique);
+        } 
+        
+        return lSPrimary;
+
+    }
+
+/**
+ * 
+ * @param {Location} lLocation 
+ * @param {Product} lProduct 
+ * @param {Char Array} liCharVal 
+ */    
+    async createPrimaryID(lLocation, lProduct, liCharVal){
+
+
+            const lsUniqueInd = await SELECT.one.columns("MAX(UNIQUE_ID) + 1 AS MAX_ID")
+                .from('CP_UNIQUE_ID_HEADER');
+
+            if (lsUniqueInd.MAX_ID === null) {
+                lCntVariantID = 1;
+            } else {
+                lCntVariantID = parseInt(lsUniqueInd.MAX_ID);
+            }
+
+            this.logger.info("Unique ID Index: " + lCntVariantID);
+
+            await cds.run({
+                INSERT:
+                {
+                    into: { ref: ['CP_UNIQUE_ID_HEADER'] },
+                    values: [lCntVariantID, lLocation, lProduct, '', 'P', 0, true]
+                }
+            })
+
+            let liChar = [];
+            let lsChar = {};
+            for (let cntUC = 0; cntUC < liCharVal.length; cntUC++) {
+                lsChar = {};
+                lsChar['UNIQUE_ID'] = GenF.parse(lCntVariantID);
+                lsChar['LOCATION_ID'] = GenF.parse(lLocation);
+                lsChar['PRODUCT_ID'] = GenF.parse(lProduct);
+                lsChar['CHAR_NUM'] = GenF.parse(liCharVal[cntUC].CHAR_NUM);
+                lsChar['CHARVAL_NUM'] = GenF.parse(liCharVal[cntUC].CHARVAL_NUM);
+                liChar.push(lsChar);
+            }
+
+            cds.run({
+                INSERT:
+                {
+                    into: { ref: ['CP_UNIQUE_ID_ITEM'] },
+                    entries: liChar
+                }
+            }) 
+            
+            return lCntVariantID;
 
     }
 

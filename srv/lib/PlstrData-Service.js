@@ -39,6 +39,14 @@ module.exports = async function (srv) {
    return (await _genPartialProducts(req,true));
  })
 
+ srv.on ('genTimeSeries',    async req => {
+    return (await _genTimeSeries(req,false));
+ })
+
+ srv.on ('fgenTimeSeries',    async req => {
+   return (await _genTimeSeries(req,true));
+ })
+
 
   async function _genMasterData(req,isGet) {
 
@@ -1138,5 +1146,96 @@ module.exports = async function (srv) {
 
   }
 
+
+  async function _genTimeSeries(req,isGet) {
+
+    var reqData = "Request for TImeseries Generation got Primary IDs Queued Sucessfully";
+
+    console.log("_genTimeSeries reqData : ", reqData);
+    let createtAt = new Date();
+    let id = uuidv1();
+    let values = [];	
+  
+    values.push({id, createtAt, reqData});    
+
+    if (isGet == true)
+    {
+        req.reply({values});
+    }
+    else
+    {
+        let res = req._.req.res;
+        res.statusCode = 202;
+        res.send({values});
+    }
+
+   
+
+    let sqlStr = 'SELECT DISTINCT PRODUCT_ID, LOCATION_ID, PRIMARY_CHARS_STR, PRIMARY_CHARVALS_STR  FROM V_PLSTR_PRIMARY_TS' +
+                 ' ORDER BY PRODUCT_ID';
+    console.log("sqlPrimary ", sqlStr )
+    let sqlPrimaryResults = await cds.run(sqlStr);
+    console.log("sqlPrimaryResults ", sqlPrimaryResults);
+
+
+    // let jsonStr = JSON.stringify(sqlPrimaryResults);
+    // let obj = JSON.parse(jsonStr);
+    // let arrayVals = Object.values(obj);
+
+    // console.log("arrayVals ", arrayVals);
+    for (let priIndex = 0; priIndex < sqlPrimaryResults.length; priIndex++)
+    {
+        let str = JSON.stringify(sqlPrimaryResults[priIndex]);
+        let obj = JSON.parse(str);
+        let arrayVals = Object.values(obj);
+        // console.log("arrayVals ", arrayVals);
+        let primary_id = arrayVals[0] + '_' + 'P' + priIndex;
+        console.log ("priIndex ", priIndex, "PrimaryId ", primary_id, 
+                     "primary_chars_str ",arrayVals[2],
+                     "primary_charvals_str ",arrayVals[3]);
+
+
+
+        sqlStr = 'UPSERT PLSTR_PRIMARY_IDS VALUES (' +
+        "'" + arrayVals[0] + "'" + "," +
+        "'" + arrayVals[1] + "'" + "," +
+        "'" + primary_id + "'" + "," +
+        "'" + arrayVals[2] + "'" + "," +
+        "'" + arrayVals[3] + "'" +')' + ' WITH PRIMARY KEY';
+
+        console.log("PLSTR_PRIMARY_IDS sqlStr", sqlStr);
+
+        let plstrPrimaryIdResults = await cds.run(sqlStr);
+        console.log("PLSTR_PRIMARY_IDS  plstrPrimaryIdResults", plstrPrimaryIdResults);
+
+    }
+
+
+
+    let dataObj = {};
+    dataObj["success"] = true;
+    dataObj["message"] = "update Partial Products Data Completed Successfully at " +  new Date();
+
+
+    // if (req.headers['x-sap-job-id'] > 0)
+    // {
+    //     const scheduler = getJobscheduler(req);
+
+    //     var updateReq = {
+    //         jobId: req.headers['x-sap-job-id'],
+    //         scheduleId: req.headers['x-sap-job-schedule-id'],
+    //         runId: req.headers['x-sap-job-run-id'],
+    //         data : dataObj
+    //         };
+
+    //         scheduler.updateJobRunLog(updateReq, function(err, result) {
+    //         if (err) {
+    //             return console.log('Error updating run log: %s', err);
+    //         }
+
+    //         });
+    // }
+
+    }
 
 };

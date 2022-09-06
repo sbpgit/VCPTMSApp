@@ -32,6 +32,11 @@ sap.ui.define(
                 this.locModel = new JSONModel();
                 this.prodModel = new JSONModel();
 
+                // Declaring JSON Models and size limit
+                that.oCharModel = new JSONModel();
+                that.charnameModel = new JSONModel();
+                that.charvalueModel = new JSONModel();
+
                 that.locModel.setSizeLimit(1000);
                 that.prodModel.setSizeLimit(1000);
                 this.oModel.setSizeLimit(1000);
@@ -63,6 +68,14 @@ sap.ui.define(
                         this
                     );
                     this.getView().addDependent(this._valueHelpDialogDescUpdate);
+                }
+
+                if (!this._addCharacteristic) {
+                    this._addCharacteristic = sap.ui.xmlfragment(
+                        "cpapp.cpmatvariant.view.AddCharacterstics",
+                        this
+                    );
+                    this.getView().addDependent(this._addCharacteristic);
                 }
 
                 if (!this._createCharacterstics) {
@@ -99,6 +112,9 @@ sap.ui.define(
                 that._valueHelpDialogLoc.setTitleAlignment("Center");
                 that._valueHelpDialogProd.setTitleAlignment("Center");
 
+                that.oTableData = [];
+                
+
                 this.oProdList = this._oCore.byId(
                     this._valueHelpDialogProd.getId() + "-list"
                 );
@@ -106,6 +122,7 @@ sap.ui.define(
                     this._valueHelpDialogLoc.getId() + "-list"
                 );
                 oGModel = this.getModel("oGModel");
+                oGModel.setProperty("/New", "");
                 sap.ui.core.BusyIndicator.show();
 
                 this.getModel("BModel").read("/getLocation", {
@@ -486,7 +503,8 @@ sap.ui.define(
                         UID_TYPE: oItem.UID_TYPE,
 
                         UNIQUE_DESC: oItem.UNIQUE_DESC,
-                        ACTIVE: oActive
+                        ACTIVE: oActive,
+                        // FLAG:"E"
                     },
                     success: function (oData) {
                         sap.ui.core.BusyIndicator.hide();
@@ -507,19 +525,61 @@ sap.ui.define(
                     ouidType = this.byId("idUnique").getSelectedKey();
                 sap.ui.getCore().byId("locId1").setValue(oLoctid);
                 sap.ui.getCore().byId("prodId1").setValue(oProdid);
+
+                oGModel.setProperty("/New", "N");
                 // sap.ui.getCore().byId("idComboBox1").setSelectedKey(ouidType);
 
             },
             onCopyBtn: function (oEvent) {
-                that._copyCharacterstics.open();
-                var selected = that.byId("idMatVHead").getSelectedItem();
-                sap.ui.getCore().byId("locIdCC").setValue(selected.getBindingContext().getProperty().LOCATION_ID);
-                sap.ui.getCore().byId("prodIdCC").setValue(selected.getBindingContext().getProperty().PRODUCT_ID);
-                sap.ui.getCore().byId("uniqIdCC").setValue("");
-                sap.ui.getCore().byId("idUniqDescCC").setValue(selected.getBindingContext().getProperty().UNIQUE_DESC);
-                // sap.ui.getCore().byId("idComboBoxCC").setSelectedKey(selected.getBindingContext().getProperty().UID_TYPE);
-                sap.ui.getCore().byId("uidRIdCC").setValue(selected.getBindingContext().getProperty().UID_RATE);
-                // sap.ui.getCore().byId("idComboBoxAC").setSelectedKey(selected.getBindingContext().getProperty().ACTIVE);
+                // // that._copyCharacterstics.open();
+                // var selected = that.byId("idMatVHead").getSelectedItem();
+                // sap.ui.getCore().byId("locIdCC").setValue(selected.getBindingContext().getProperty().LOCATION_ID);
+                // sap.ui.getCore().byId("prodIdCC").setValue(selected.getBindingContext().getProperty().PRODUCT_ID);
+                // sap.ui.getCore().byId("uniqIdCC").setValue("");
+                // sap.ui.getCore().byId("idUniqDescCC").setValue(selected.getBindingContext().getProperty().UNIQUE_DESC);
+                // // sap.ui.getCore().byId("idComboBoxCC").setSelectedKey(selected.getBindingContext().getProperty().UID_TYPE);
+                // sap.ui.getCore().byId("uidRIdCC").setValue(selected.getBindingContext().getProperty().UID_RATE);
+                // // sap.ui.getCore().byId("idComboBoxAC").setSelectedKey(selected.getBindingContext().getProperty().ACTIVE);
+
+
+                var selUniq = that.byId("idMatVHead").getSelectedItem().getBindingContext().getProperty();
+                var text = "Please Confirm to copy characteristics of Uniq Id" + " - " + selUniq.UNIQUE_ID;
+			sap.m.MessageBox.show(
+				text, {
+
+					title: "Conformation",
+					actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
+					onClose: function (oAction) {
+						if (oAction === sap.m.MessageBox.Action.YES) {
+                            
+                            sap.ui.getCore().byId("locId1").setValue(selUniq.LOCATION_ID);
+                            sap.ui.getCore().byId("prodId1").setValue(selUniq.PRODUCT_ID);
+                            // sap.ui.getCore().byId("idComboBox").setValue(selUniq.ACTIVE);
+                            sap.ui.getCore().byId("idUniqDesc1").setValue(selUniq.UNIQUE_DESC);
+
+                            oGModel.setProperty("/New", "C");
+
+                            that.oTableData = oGModel.getProperty("/CharData");
+                        that.ListModel = new JSONModel();
+
+                        that.ListModel.setData({
+                            results: that.oTableData
+                        });
+                        sap.ui.getCore().byId("idCharItem").setModel(that.ListModel);
+
+                        that._createCharacterstics.open();
+
+						}
+					}
+				}
+			);
+
+                // that._createCharacterstics.open();
+                // var oLoctid = this.byId("idloc").getValue(),
+                //     oProdid = this.byId("prodInput").getValue(),
+                //     ouidType = this.byId("idUnique").getSelectedKey();
+                // sap.ui.getCore().byId("locId1").setValue(oLoctid);
+                // sap.ui.getCore().byId("prodId1").setValue(oProdid);
 
             },
             onCloseCreate: function () {
@@ -530,8 +590,343 @@ sap.ui.define(
             onCloseCopy: function () {
                 this._copyCharacterstics.close();
             },
-            onSaveUniqueDesc: function () {
-                var uniqueData = oGModel.getProperty("/uniqueData");
+
+
+            onAddChar:function(){
+                sap.ui.getCore().byId("idClassname2").setValue("");
+                sap.ui.getCore().byId("idCharname2").setValue("");
+                sap.ui.getCore().byId("idCharval2").setValue("");
+                that._addCharacteristic.open();
+
+            },
+
+            handleCharValueHelp:function(oEvent){
+
+                if (!this._valueHelpDialogcharName) {
+                    this._valueHelpDialogcharName = sap.ui.xmlfragment(
+                        "cpapp.cpmatvariant.view.charName",
+                        this
+                    );
+                    this.getView().addDependent(this._valueHelpDialogcharName);
+                }
+
+                if (!this._valueHelpDialogcharValue) {
+                    this._valueHelpDialogcharValue = sap.ui.xmlfragment(
+                        "cpapp.cpmatvariant.view.charValue",
+                        this
+                    );
+                    this.getView().addDependent(this._valueHelpDialogcharValue);
+                }
+
+                if (!this._valueHelpDialogclassName) {
+                    this._valueHelpDialogclassName = sap.ui.xmlfragment(
+                        "cpapp.cpmatvariant.view.className",
+                        this
+                    );
+                    this.getView().addDependent(this._valueHelpDialogclassName);
+                }
+
+                var sId = oEvent.getParameter("id");
+                var sPrdId = oGModel.getProperty("/prdId");
+                var sLocId = oGModel.getProperty("/locId");
+
+                if (sId.includes("Classname")) {
+                    that.getModel("BModel").read("/getProdClass", {
+                        filters: [
+                            new Filter("PRODUCT_ID", FilterOperator.Contains, sPrdId),
+                            new Filter("LOCATION_ID", FilterOperator.Contains, sLocId)
+
+                        ],
+
+                        success: function (oData) {
+                            sap.ui.core.BusyIndicator.hide();
+                            that.classNameData = oData.results;
+                            var newClassModel = new JSONModel();
+                            newClassModel.setData({ results: that.classNameData });
+                            sap.ui.getCore().byId("classNameList").setModel(newClassModel);
+                            that._valueHelpDialogclassName.open();
+                        },
+                        error: function () {
+                            sap.ui.core.BusyIndicator.hide();
+                            MessageToast.show("Failed to get class name data");
+                        },
+                    });
+
+                } else if (sId.includes("Charname")) {
+                    if (sap.ui.getCore().byId("idClassname2").getValue()) {
+                        that._valueHelpDialogcharName.open();
+                    } else {
+                        MessageToast.show("Select Class Name");
+                    }
+
+                } else if (sId.includes("Charval")) {
+                    if (sap.ui.getCore().byId("idCharname2").getValue()) {
+                        that._valueHelpDialogcharValue.open();
+                    } else {
+                        MessageToast.show("Select Class Name and Characteristic Name");
+                    }
+
+                }
+
+
+            },
+
+            handleCharSelection: function (oEvent) {
+                that.oGModel = that.getModel("oGModel");
+                var sId = oEvent.getParameter("id"),
+                    oItem = oEvent.getParameter("selectedItems"),
+                    aSelectedItems,
+                    aODdata = [];
+                if (sId.includes("className")) {
+
+                    that.oClassName = sap.ui.getCore().byId("idClassname2");
+                    aSelectedItems = oEvent.getParameter("selectedItems");
+                    that.oClassName.setValue(aSelectedItems[0].getTitle());
+                    oGModel.setProperty("/UID_Rate", aSelectedItems[0].getBindingContext().getProperty().CLASS_NUM);
+
+                    sap.ui.getCore().byId("idCharname2").setValue("");
+
+                    sap.ui.getCore().byId("idCharval2").setValue("");
+
+                    this.getModel("BModel").read("/getClassChar", {
+                        filters: [
+                            new Filter(
+                                "CLASS_NUM",
+                                FilterOperator.EQ,
+                                aSelectedItems[0].getBindingContext().getProperty().CLASS_NUM
+                            ),
+                            // new Filter(
+                            //     "PRODUCT_ID",
+                            //     FilterOperator.EQ,
+                            //     oGModel.getProperty("/prdId")
+                            // ),
+                        ],
+                        success: function (oData) {
+                            sap.ui.core.BusyIndicator.hide();
+
+                            function removeDuplicate(array, key) {
+                                var check = new Set();
+                                return array.filter(obj => !check.has(obj[key]) && check.add(obj[key]));
+                            }
+                            that.charnameModel.setData({
+                                results: removeDuplicate(oData.results, 'CHAR_NAME')
+                            });
+
+                            sap.ui.getCore().byId("charNameList").setModel(that.charnameModel);
+                        },
+                        error: function (oData, error) {
+                            sap.ui.core.BusyIndicator.hide();
+                            MessageToast.show("error");
+                        },
+                    });
+                } else if (sId.includes("charName")) {
+
+                    that.oCharName = sap.ui.getCore().byId("idCharname2");
+                    aSelectedItems = oEvent.getParameter("selectedItems");
+                    that.oCharName.setValue(aSelectedItems[0].getTitle());
+                    oGModel.setProperty("/Char_Num", aSelectedItems[0].getDescription());
+
+
+                    sap.ui.getCore().byId("idCharval2").setValue("");
+
+                    this.getModel("BModel").read("/getClassChar", {
+                        filters: [
+                            new Filter(
+                                "CLASS_NUM",
+                                FilterOperator.EQ,
+                                aSelectedItems[0].getBindingContext().getProperty().CLASS_NUM
+                            ),
+                            new Filter(
+                                "CHAR_NAME",
+                                FilterOperator.EQ,
+                                sap.ui.getCore().byId("idCharname2").getValue()
+                            ),
+                        ],
+                        success: function (oData) {
+                            sap.ui.core.BusyIndicator.hide();
+
+                            function removeDuplicate(array, key) {
+                                var check = new Set();
+                                return array.filter(obj => !check.has(obj[key]) && check.add(obj[key]));
+                            }
+                            that.charvalueModel.setData({
+                                results: removeDuplicate(oData.results, 'CHAR_VALUE')
+                            });
+
+                            sap.ui.getCore().byId("charValList").setModel(that.charvalueModel);
+                        },
+                        error: function (oData, error) {
+                            sap.ui.core.BusyIndicator.hide();
+                            MessageToast.show("error");
+                        },
+                    });
+                } else if (sId.includes("charVal")) {
+                    that.oCharVal = sap.ui.getCore().byId("idCharval2");
+                    aSelectedItems = oEvent.getParameter("selectedItems");
+                    that.oCharVal.setValue(aSelectedItems[0].getTitle());
+                    oGModel.setProperty("/CharVal_Num", aSelectedItems[0].getDescription());
+                }
+            },
+
+            handleCharSearch: function (oEvent) {
+                var sQuery =
+                    oEvent.getParameter("value") || oEvent.getParameter("newValue"),
+                    sId = oEvent.getParameter("id"),
+                    oFilters = [];
+                // Check if search filter is to be applied
+                sQuery = sQuery ? sQuery.trim() : "";
+                // Class Name
+                if (sId.includes("className")) {
+                    if (sQuery !== "") {
+                        oFilters.push(
+                            new Filter({
+                                filters: [
+                                    new Filter("CLASS_NAME", FilterOperator.Contains, sQuery),
+                                    // new Filter("CLASS_NUM", FilterOperator.Contains, sQuery),
+                                ],
+                                and: false,
+                            })
+                        );
+                    }
+                    that.oClassnameList = sap.ui.getCore().byId("classNameList");
+                    that.oClassnameList.getBinding("items").filter(oFilters);
+                    // Char Name
+                } else if (sId.includes("charName")) {
+                    if (sQuery !== "") {
+                        oFilters.push(
+                            new Filter({
+                                filters: [
+                                    new Filter("CHAR_NAME", FilterOperator.Contains, sQuery),
+                                    // new Filter("CHAR_NUM", FilterOperator.Contains, sQuery),
+                                ],
+                                and: false,
+                            })
+                        );
+                    }
+                    that.oCharnameList = sap.ui.getCore().byId("charNameList");
+                    that.oCharnameList.getBinding("items").filter(oFilters);
+                    // Char Value
+                } else if (sId.includes("charVal")) {
+                    if (sQuery !== "") {
+                        oFilters.push(
+                            new Filter({
+                                filters: [
+                                    new Filter("CHAR_VALUE", FilterOperator.Contains, sQuery),
+                                    // new Filter("CHARVAL_NUM", FilterOperator.Contains, sQuery),
+                                ],
+                                and: false,
+                            })
+                        );
+                    }
+                    that.oCharvalueList = sap.ui.getCore().byId("charValList");
+                    that.oCharvalueList.getBinding("items").filter(oFilters);
+                }
+            },
+            handleCharClose: function (oEvent) {
+                var sId = oEvent.getParameter("id");
+                if (sId.includes("className")) {
+                    that._oCore.byId(this._valueHelpDialogclassName.getId() + "-searchField")
+                        .setValue("");
+                    if (that.oClassnameList.getBinding("items")) {
+                        that.oClassnameList.getBinding("items").filter([]);
+                    }
+                } else if (sId.includes("charName")) {
+                    that._oCore
+                        .byId(this._valueHelpDialogcharName.getId() + "-searchField")
+                        .setValue("");
+                    if (that.oCharnameList.getBinding("items")) {
+                        that.oCharnameList.getBinding("items").filter([]);
+                    }
+                } else if (sId.includes("charVal")) {
+                    that._oCore
+                        .byId(this._valueHelpDialogcharValue.getId() + "-searchField")
+                        .setValue("");
+                    if (that.oCharvalueList.getBinding("items")) {
+                        that.oCharvalueList.getBinding("items").filter([]);
+                    }
+                }
+            },
+
+            onCloseRestItem: function () {
+
+                sap.ui.getCore().byId("idClassname2").setValue("");
+                sap.ui.getCore().byId("idCharname2").setValue("");
+                sap.ui.getCore().byId("idCharval2").setValue("");
+
+                that._addCharacteristic.close();
+
+            },
+
+
+            onAdd: function () {
+                var charName = sap.ui.getCore().byId("idCharname2").getValue(),
+                    charNum = oGModel.getProperty("/Char_Num"),
+                    charVal_Name = sap.ui.getCore().byId("idCharval2").getValue(),
+                    charVal_Num = oGModel.getProperty("/CharVal_Num"),
+                    className = sap.ui.getCore().byId("idClassname2").getValue();
+
+                if (charName !== "" && charVal_Name !== "" && className !== "") {
+
+                    this.oData = {
+
+                        "CLASS_NAME": className,
+                        "CHAR_NAME": charName,
+                        "CHAR_NUM": charNum,
+                        "CHAR_VALUE": charVal_Name,
+                        "CHARVAL_NUM": charVal_Num,
+                        "OFLAG": "X",
+                    };
+                    var oItemTable = sap.ui.getCore().byId("idCharItem").getItems();
+                    var count = 0;
+
+                    for (var i = 0; i < oItemTable.length; i++) {
+                        if (oItemTable[i].getCells()[1].getText() === charNum &&
+                            oItemTable[i].getCells()[3].getText() === charVal_Num) {
+                            count = count + 1;
+                        }
+                    }
+
+                    if (count === 0) {
+                        // that.oTableData = [];
+                        // Add entry to the table model
+                        that.oTableData.push(that.oData);
+                        that.ListModel = new JSONModel();
+
+                        that.ListModel.setData({
+                            results: that.oTableData
+                        });
+                        sap.ui.getCore().byId("idCharItem").setModel(that.ListModel);
+                        that._addCharacteristic.close();
+                        // that.byId("idUpdateSave").setVisible(true);
+
+                    } else {
+                        sap.m.MessageToast.show("Characterstic is already maintained");
+                    }
+
+                } else {
+                    MessageToast.show("Please fill all inputs");
+                }
+
+
+            },
+
+            onTabDel:function(oEvent){
+                var selItem = oEvent.getSource().getParent().getBindingContext().getObject();
+
+
+                   var oItemtoDelete =  oEvent.getParameters("listItem").id.split("idCharItem-")[1];
+                   var aData = that.ListModel.getData().results;
+                   aData.splice(oItemtoDelete, 1); //removing 1 record from i th index.
+                   that.ListModel.refresh();
+            },
+
+
+
+            onCreateUniq: function () {
+
+                var Charlist;
+                var oEntry = { RTRCHAR: [] };
+                
                 var olocID = sap.ui.getCore().byId("locId1").getValue(),
                     oprodID = sap.ui.getCore().byId("prodId1").getValue(),
                     ouniqID = 1,
@@ -547,6 +942,7 @@ sap.ui.define(
                 else {
                     oactID = 'X';
                 }
+<<<<<<< HEAD
                 // for (var s = 0; s < uniqueData.length; s++) {
                 //     if (parseInt(ouniqID) !== uniqueData[s].UNIQUE_ID) {
                 //         count++;
@@ -557,41 +953,78 @@ sap.ui.define(
                 // }
                 if(olocID ==="" || oprodID ==="" ){
                     sap.m.MessageToast.show("Please select Location/Product")
-                }
-                else{
-                // if (count === uniqueData.length) {
+=======
 
-                    sap.ui.core.BusyIndicator.show();
-                    var bModel = that.getView().getModel("BModel");
-                    bModel.callFunction("/changeUnique", {
-                        method: "GET",
-                        urlParameters: {
-                            UNIQUE_ID: ouniqID,
-                            LOCATION_ID: olocID,
-                            PRODUCT_ID: oprodID,
-                            UID_TYPE: ouniqTID,
-                            // UID_RATE: ouniqRID,
-                            UNIQUE_DESC: ouniqDesc,
-                            ACTIVE: oactID,
-                            FLAG: "C"
-                        },
-                        success: function (oData) {
-                            sap.m.MessageToast.show(oData.changeUnique);
-                            that.onAfterRendering();
-                            that._createCharacterstics.close();
-                            that.onGetData();
-                            sap.ui.core.BusyIndicator.hide();
-                        },
-                        error(e) {
-                            sap.m.MessageToast.show("Failed to Create");
-                            sap.ui.core.BusyIndicator.hide();
-                        }
-                    });
-                // }
-                // else {
-                //     sap.m.MessageToast.show("Unique ID already exists");
-                // }
-            }
+                    // sap.ui.core.BusyIndicator.show();
+                    // var bModel = that.getView().getModel("BModel");
+                    // bModel.callFunction("/changeUnique", {
+                    //     method: "GET",
+                    //     urlParameters: {
+                    //         UNIQUE_ID: ouniqID,
+                    //         LOCATION_ID: olocID,
+                    //         PRODUCT_ID: oprodID,
+                    //         UID_TYPE: ouniqTID,
+                    //         // UID_RATE: ouniqRID,
+                    //         UNIQUE_DESC: ouniqDesc,
+                    //         ACTIVE: oactID,
+                    //         FLAG: "C"
+                    //     },
+                    //     success: function (oData) {
+                    //         sap.m.MessageToast.show(oData.changeUnique);
+                    //         that.onAfterRendering();
+                    //         that._createCharacterstics.close();
+                    //         that.onGetData();
+                    //         sap.ui.core.BusyIndicator.hide();
+                    //     },
+                    //     error(e) {
+                    //         sap.m.MessageToast.show("Failed to Create");
+                    //         sap.ui.core.BusyIndicator.hide();
+                    //     }
+                    // });
+                
+
+
+                var aTabledata = sap.ui.getCore().byId("idCharItem").getItems();
+                var Flag = oGModel.getProperty("/New");
+                for(var i=0; i<aTabledata.length; i++){
+                    var aData = aTabledata[i].getBindingContext().getObject();
+
+                    Charlist = {
+                        LOCATION_ID: olocID,
+                        PRODUCT_ID: oprodID,
+                        UNIQUE_ID: ouniqID,
+                        UNIQUE_DESC: ouniqDesc,
+                        CHAR_NUM: aData.CHAR_NUM,
+                        CHARVAL_NUM: aData.CHARVAL_NUM
+                    }
+                    oEntry.RTRCHAR.push(Charlist);
+>>>>>>> f806efe5f3be16e72caffe5b3038af570dca5972
+                }
+
+                sap.ui.core.BusyIndicator.show();
+
+                that.getModel("BModel").callFunction("/maintainUniqueChar", {
+                    method: "GET",
+                    urlParameters: {
+                        FLAG: Flag,
+                        UNIQUECHAR: JSON.stringify(oEntry.RTRCHAR)
+                    },
+                    success: function (oData) {
+                        sap.ui.core.BusyIndicator.hide();
+                        sap.m.MessageToast.show(oData.maintainUniqueChar);
+                        that.onAfterRendering();
+                        that.onCloseCreate();
+
+                    },
+                    error: function (error) {
+                        sap.ui.core.BusyIndicator.hide();
+                        sap.m.MessageToast.show("Error");
+                    },
+                });
+
+
+
+
             },
             onCopyUniqueDesc: function () {
                 var uniqueData = oGModel.getProperty("/uniqueData");

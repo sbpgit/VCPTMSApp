@@ -32,8 +32,8 @@ sap.ui.define(
                 // Declaring JSON Models and size limit
                 that.oModel = new JSONModel();
                 that.classnameModel = new JSONModel();
-                 = new JSONModel();
-                that.charvalueModel = that.charnameModelnew JSONModel();
+                that.charnameModel = new JSONModel();
+                that.charvalueModel = new JSONModel();
                 that.ListModel = new JSONModel();
 
                 this.oModel.setSizeLimit(1000);
