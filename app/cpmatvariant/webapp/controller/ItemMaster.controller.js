@@ -542,6 +542,17 @@ sap.ui.define(
                 sap.ui.getCore().byId("prodId1").setValue(oProdid);
 
                 oGModel.setProperty("/New", "N");
+
+                sap.ui.getCore().byId("idUniqDesc1").setValue("");
+
+                           
+                            that.oTableData = [];
+                        that.ListModel = new JSONModel();
+
+                        that.ListModel.setData({
+                            results: that.oTableData
+                        });
+                        sap.ui.getCore().byId("idCharItem").setModel(that.ListModel);
                 // sap.ui.getCore().byId("idComboBox1").setSelectedKey(ouidType);
 
             },
@@ -1053,8 +1064,8 @@ sap.ui.define(
                 //         continue;
                 //     }
                 // }
-                if(olocID ==="" || oprodID ==="" || ouniqRID ==="" ){
-                    sap.m.MessageToast.show("Please select Location/Product/Unique Rate")
+                if(olocID ==="" || oprodID ==="" ){
+                    sap.m.MessageToast.show("Please select Location/Product")
                 }
                 else {
                 // if (count === uniqueData.length) {
