@@ -113,8 +113,14 @@ sap.ui.define(
                 that._valueHelpDialogProd.setTitleAlignment("Center");
 
                 that.oTableData = [];
-                
+                sap.ui.getCore().byId("idUniqDesc1").setValue("");
+                // var oCharTable = sap.ui.getCore().byId("idCharItem");
+                that.ListModel = new JSONModel();
 
+                that.ListModel.setData({
+                    results: that.oTableData
+                });
+                sap.ui.getCore().byId("idCharItem").setModel(that.ListModel);
                 this.oProdList = this._oCore.byId(
                     this._valueHelpDialogProd.getId() + "-list"
                 );
@@ -463,7 +469,7 @@ sap.ui.define(
             onUpdateUniqueDesc: function () {
                 var oItem = oGModel.getProperty("/SelectedData");
                 var oDesc = sap.ui.getCore().byId("idUniqDesc").getValue();
-                var oUniqRate = sap.ui.getCore().byId("idUniqRate").getValue();
+                // var oUniqRate = sap.ui.getCore().byId("idUniqRate").getValue();
 
                 var oActive;
 
@@ -520,7 +526,7 @@ sap.ui.define(
 
                         UNIQUE_DESC: oItem.UNIQUE_DESC,
                         ACTIVE: oActive,
-                        // FLAG:"E"
+                        FLAG:"E"
                     },
                     success: function (oData) {
                         sap.ui.core.BusyIndicator.hide();
@@ -535,6 +541,15 @@ sap.ui.define(
 
             },
             onCreateBtn: function () {
+                that.oTableData = [];
+                sap.ui.getCore().byId("idUniqDesc1").setValue("");
+                // var oCharTable = sap.ui.getCore().byId("idCharItem");
+                that.ListModel = new JSONModel();
+
+                that.ListModel.setData({
+                    results: that.oTableData
+                });
+                sap.ui.getCore().byId("idCharItem").setModel(that.ListModel);
                 that._createCharacterstics.open();
                 var oLoctid = this.byId("idloc").getValue(),
                     oProdid = this.byId("prodInput").getValue(),
@@ -570,7 +585,7 @@ sap.ui.define(
 
 
                 var selUniq = that.byId("idMatVHead").getSelectedItem().getBindingContext().getProperty();
-                var text = "Please Confirm to copy characteristics of Uniq Id" + " - " + selUniq.UNIQUE_ID;
+                var text = "Please Confirm to copy characteristics of Unique ID" + " - " + selUniq.UNIQUE_ID;
 			sap.m.MessageBox.show(
 				text, {
 
@@ -1115,9 +1130,9 @@ sap.ui.define(
                     bModel.callFunction("/changeUnique", {
                         method: "GET",
                         urlParameters: {
-                            UNIQUE_ID: ouniqID,
                             LOCATION_ID: olocID,
                             PRODUCT_ID: oprodID,
+                            UNIQUE_ID: ouniqID,
                             UID_TYPE: ouniqTID,
                             // UID_RATE: ouniqRID,
                             UNIQUE_DESC: ouniqDesc,

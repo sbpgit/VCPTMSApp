@@ -468,8 +468,8 @@ sap.ui.define([
                                 //         "MODEL_VERSION": oData.results[i].MODEL_VERSION,
                                 //         "SCENARIO": oData.results[i].SCENARIO,
                                 //         "VERSION": oData.results[i].VERSION,
-                                //         "CHARVAL_NUM": oData.results[i].CHARVAL_NUM,
-                                //         "CHAR_NUM": oData.results[i].CHAR_NUM,
+                                //         "CHAR_VALUE": oData.results[i].CHAR_VALUE,
+                                //         "CHAR_NAME": oData.results[i].CHAR_NAME,
                                 //         "GEN_QTY": oData.results[i].GEN_QTY,
                                 //         "PLAN_QTY": oData.results[i].PLAN_QTY
                                 //     };
@@ -611,8 +611,8 @@ sap.ui.define([
                                         "MODEL_VERSION": oData.results[i].MODEL_VERSION,
                                         "SCENARIO": oData.results[i].SCENARIO,
                                         "VERSION": oData.results[i].VERSION,
-                                        "CHARVAL_NUM": oData.results[i].CHARVAL_NUM,
-                                        "CHAR_NUM": oData.results[i].CHAR_NUM,
+                                        "CHAR_VALUE": oData.results[i].CHAR_VALUE,
+                                        "CHAR_NAME": oData.results[i].CHAR_NAME,
                                         "GEN_QTY": oData.results[i].GEN_QTY,
                                         "PLAN_QTY": oData.results[i].PLAN_QTY,
                                         "WEEK_DATE": oData.results[i].WEEK_DATE
@@ -670,8 +670,8 @@ sap.ui.define([
             //                 //             "MODEL_VERSION":reqData[i].MODEL_VERSION,
             //                 //             "SCENARIO" : reqData[i].SCENARIO,
             //                 //             "VERSION":reqData[i].VERSION,
-            //                 "CHARVAL_NUM": reqData[i].CHARVAL_NUM,
-            //                 "CHAR_NUM": reqData[i].CHAR_NUM,
+            //                 "CHAR_VALUE": reqData[i].CHAR_VALUE,
+            //                 "CHAR_NAME": reqData[i].CHAR_NAME,
             //                 "GEN_QTY": reqData[i].GEN_QTY,
             //                 "PLAN_QTY": reqData[i].PLAN_QTY,
             //                 "WEEK_DATE": reqData[i].WEEK_DATE

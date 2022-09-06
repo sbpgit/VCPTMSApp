@@ -195,6 +195,8 @@ service CatalogService @(impl : './lib/cat-service.js'){
     function maintainPartialProd(FLAG : String(1), LOCATION_ID : String(4), PRODUCT_ID : String(40), REF_PRODID : String(40))                                                                                                                                                        returns String;
     
     function maintainPartialProdChar(FLAG : String(1), PRODCHAR : String ) returns String;
+    function getAllProd(LOCATION_ID : String(4)) returns array of ds.locProd;
+
 // New product intorduction
     entity genNewProd           as projection on od.NEWPROD_INTRO;
     // Get new product characteristics
