@@ -1016,8 +1016,6 @@ sap.ui.define(
 
             onTabDel:function(oEvent){
                 var selItem = oEvent.getSource().getParent().getBindingContext().getObject();
-
-
                    var oItemtoDelete =  oEvent.getParameters("listItem").id.split("idCharItem-")[1];
                    var aData = that.ListModel.getData().results;
                    aData.splice(oItemtoDelete, 1); //removing 1 record from i th index.
