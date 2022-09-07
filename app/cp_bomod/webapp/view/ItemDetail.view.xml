@@ -13,20 +13,20 @@
                         <Text text="Location : {oGModel>/locId}" ></Text>                        
                     </Toolbar>
                     <SearchField id="bomSearch" search="onbomSearch" placeholder="Component / Object Dependency"/>
-                    <Table id="idBom" items="{path: '/results', sorter : { path : 'ITEM_NUM'} }"  rememberSelections="false" mode="SingleSelectMaster"  sticky="ColumnHeaders">
+                    <Table id="idBom" items="{path: '/results', sorter : { path : 'ITEM_NUM'} }"  itemPress="onItemPress" selectionChange="onItemPress" rememberSelections="false" mode="SingleSelectMaster"  sticky="ColumnHeaders">
                         <columns>
                             <Column hAlign="Centre" width="80px">
                                 <Text text="{i18n>itemno}" />
                             </Column>
-                            <Column hAlign="Centre">
+                            <Column hAlign="Left">
                                 <Text text="{i18n>comp}"/>
                             </Column>
-                            <!-- <Column hAlign="Left">
-                                <Text text="{i18n>objdep}" />itemPress="onItemPress" selectionChange="onItemPress"
+                            <Column hAlign="Left">
+                                <Text text="{i18n>objdep}" />
                             </Column>
                             <Column hAlign="Left">
                                 <Text text="{i18n>objdepdes}"/>
-                            </Column> -->
+                            </Column>
                             <Column hAlign="Center">
                                 <Text text="{i18n>compqty}" width="120px"/>
                             </Column>
@@ -42,8 +42,8 @@
                                 <cells>
                                     <Text text="{ITEM_NUM}" />
                                     <Text text="{COMPONENT}" />
-                                    <!-- <Text text="{OBJ_DEP}" />
-                                    <Text text="{OBJDEP_DESC}" /> -->
+                                    <Text text="{OBJ_DEP}" />
+                                    <Text text="{OBJDEP_DESC}" />
                                     <Text text="{COMP_QTY}" />
                                     <Text text="{path: 'VALID_FROM', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'MM/dd/yyyy' }}"/>
                                     <Text text="{path: 'VALID_TO', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'MM/dd/yyyy' }}"/>
@@ -63,12 +63,12 @@
                             <Column hAlign="Left">
                                 <Text text="{i18n>comp}"/>
                             </Column>
-                            <!-- <Column hAlign="Left">
+                            <Column hAlign="Left">
                                 <Text text="{i18n>objdep}" />
                             </Column>
                             <Column hAlign="Left">
                                 <Text text="{i18n>objdepdes}"/>
-                            </Column> -->
+                            </Column>
                             <Column hAlign="Center">
                                 <Text text="{i18n>compqty}" width="90px"/>
                             </Column>

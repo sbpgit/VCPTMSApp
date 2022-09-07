@@ -48,7 +48,7 @@ sap.ui.define(
         var sPrdId = oGModel.getProperty("/prdId");
         var sLocId = oGModel.getProperty("/locId");
 
-        this.getModel("BModel").read("/gBomHeaderet", {
+        this.getModel("BModel").read("/getBomOdCond", {
           filters: [
             new Filter("LOCATION_ID", FilterOperator.EQ, sLocId),
             new Filter("PRODUCT_ID", FilterOperator.EQ, sPrdId),
