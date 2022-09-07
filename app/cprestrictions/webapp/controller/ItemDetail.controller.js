@@ -530,24 +530,24 @@ sap.ui.define(
             //         oEntry.RTRCHAR.push(vRuleslist);
             //     }
 
-            //     that.getModel("BModel").callFunction("/maintainRestrDet", {
-            //         method: "GET",
-            //         urlParameters: {
-            //             FLAG: oFlag,
-            //             RTRCHAR: JSON.stringify(oEntry.RTRCHAR)
-            //         },
-            //         success: function (oData) {
-            //             sap.ui.core.BusyIndicator.hide();
-            //             sap.m.MessageToast.show("success");
-            //             that.onAfterRendering();
-            //             that.onCloseRestItem();
+                // that.getModel("BModel").callFunction("/maintainRestrDet", {
+                //     method: "GET",
+                //     urlParameters: {
+                //         FLAG: oFlag,
+                //         RTRCHAR: JSON.stringify(oEntry.RTRCHAR)
+                //     },
+                //     success: function (oData) {
+                //         sap.ui.core.BusyIndicator.hide();
+                //         sap.m.MessageToast.show("success");
+                //         that.onAfterRendering();
+                //         that.onCloseRestItem();
 
-            //         },
-            //         error: function (error) {
-            //             sap.ui.core.BusyIndicator.hide();
-            //             sap.m.MessageToast.show("Error");
-            //         },
-            //     });
+                //     },
+                //     error: function (error) {
+                //         sap.ui.core.BusyIndicator.hide();
+                //         sap.m.MessageToast.show("Error");
+                //     },
+                // });
             // },
 
             // onCharDel: function (oEvent) {

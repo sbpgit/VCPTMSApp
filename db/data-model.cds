@@ -41,6 +41,7 @@ context cp {
             PROD_MODEL     : String(30) @title : 'Product Model';
             PROD_MDLRANGE  : String(30) @title : 'Product Range';
             PROD_SERIES    : String(30) @title : 'Product Series';
+            PROD_TYPE      : String(4)  @title : 'Product Type';
             RESERVE_FIELD1 : String(20) @title : 'Reserve Field1';
             RESERVE_FIELD2 : String(20) @title : 'Reserve Field2';
             RESERVE_FIELD3 : String(20) @title : 'Reserve Field3';
@@ -699,13 +700,48 @@ context cp {
     }
 
     entity SEEDORDER_HEADER {
-        key SEED_ORDER    : String(10)     @title : 'Sales Document';
+        key SEED_ORDER    : String(10)     @title : 'Seed Order';
             LOCATION_ID   : String(4)      @title : 'Location ';
             PRODUCT_ID    : String(40)     @title : 'Product';
             UNIQUE_ID     : Integer        @title : 'Unique ID';
             ORD_QTY       : Decimal(13, 3) @title : 'Ordered Qty';
             MAT_AVAILDATE : Date           @title : 'Material Avail. Date';
     }
+
+    // Begin Of Insert - Deepa
+    // Groups
+    entity PLANNED_GROUPS {
+        key GROUP_ID          : Integer;
+            GROUP_DESCRIPTION : String(100);
+            UNIT              : String(5);
+    }
+
+    // Parameters
+    entity PLANNED_PARAMETERS {
+            GROUP          : Association to PLANNED_GROUPS
+                                 on GROUP.GROUP_ID = GROUP_ID;
+        key PARAMETER_ID   : Integer;
+        key GROUP_ID       : Integer;
+            DESCRIPTION    : String(100);
+            MIN_VALUE      : Integer;
+            MAX_VALUE      : Integer;
+            VALUE_HELP     : Boolean;
+            VALUE_HELP_TAB : String(20);
+    }
+
+    // Execution Method
+    entity METHOD_TYPES {
+        key METHOD_TYP  : String(2);
+            DESCRIPTION : String(20);
+    }
+
+    // Parameters Values
+    entity PARAMETER_VALUES {
+        key PARAMETER_ID : Integer;
+            VALUE        : String(500);
+    }
+
+// End Of Insert - Deepa
 }
 
 
@@ -731,6 +767,7 @@ entity![V_CLASSCHARVAL]{
     key![CLASS_NAME]  : String(20) @title : 'CLASS_NAME';
     key![CHAR_NUM]    : String(10) @title : 'CHAR_NUM';
     key![CHAR_NAME]   : String(30) @title : 'CHAR_NAME';
+    key![CHAR_GROUP]   : String(10) @title : 'CHAR_NAME';
     key![CHAR_VALUE]  : String(70) @title : 'CHAR_VALUE';
     key![CHARVAL_NUM] : String(10) @title : 'CHARVAL_NUM';
 }
@@ -1043,4 +1080,18 @@ entity![V_CIR_CHAR_RATE]{
     key![PLAN_QTY]      : Decimal(13, 3)  @title : 'PLAN_QTY';
     key![GEN_QTY]       : Integer         @title : 'GEN_QTY';
     key![DEVIATION]     : Decimal(31, 14) @title : 'DEVIATION';
+}
+
+@cds.persistence.exists
+entity![V_PLANNEDCONFIG]{
+    key![PARAMETER_ID]      : Integer     @title : 'PARAMETER_ID';
+    key![GROUP_ID]          : Integer     @title : 'GROUP_ID';
+    key![DESCRIPTION]       : String(100) @title : 'DESCRIPTION';
+    key![MIN_VALUE]         : Integer     @title : 'MIN_VALUE';
+    key![MAX_VALUE]         : Integer     @title : 'MAX_VALUE';
+    key![VALUE_HELP]        : Boolean     @title : 'VALUE_HELP';
+    key![VALUE_HELP_TAB]    : String(20)  @title : 'VALUE_HELP_TAB';
+    key![GROUP_DESCRIPTION] : String(100) @title : 'GROUP_DESCRIPTION';
+    key![UNIT]              : String(5)   @title : 'UNIT';
+    key![VALUE]             : String(500) @title : 'VALUE';
 }
