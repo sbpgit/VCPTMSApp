@@ -18,5 +18,9 @@ service PlstrDataService @(impl : './lib/PlstrData-Service.js') {
   // KLUDGE function API for Alternate to POST updateJobs()
   function fgenTimeSeries() returns String;
 
+  action genTsForPrimary();
+  // KLUDGE function API for Alternate to POST updateJobs()
+  function fgenTsForPrimary() returns String;
+
   
 }

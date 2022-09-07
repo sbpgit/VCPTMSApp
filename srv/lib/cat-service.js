@@ -1236,7 +1236,7 @@ module.exports = (srv) => {
             }
             liresults.push(lsresults);
             try {
-                await UPDATE`CP_UNIQUE_ID_HEADER`
+                await UPDATE `CP_UNIQUE_ID_HEADER`
                     .with({
                         UNIQUE_DESC: lsresults.UNIQUE_DESC
                     })
@@ -1296,7 +1296,7 @@ module.exports = (srv) => {
 
         const li_uniquedata = await cds.run(
             `SELECT *
-        FROM "CP_UNIQUE_ID_HEADER"
+        FROM "CP_UNIQUE_ID_ITEM"
         WHERE "LOCATION_ID" = '` +
             liuniquechar[0].LOCATION_ID +
             `'
@@ -1336,7 +1336,7 @@ module.exports = (srv) => {
                 for (let i = 0; i < liuniquechar.length; i++) {
                     lsresults.LOCATION_ID = liuniquechar[i].LOCATION_ID;
                     lsresults.PRODUCT_ID = liuniquechar[i].PRODUCT_ID;
-                    // lsresults.UNIQUE_ID = parseInt(liuniquechar[i].UNIQUE_ID);
+                    lsresults.UNIQUE_ID = vID;//parseInt(liuniquechar[i].UNIQUE_ID);
                     lsresults.CHAR_NUM = liuniquechar[i].CHAR_NUM;
                     lsresults.CHARVAL_NUM = liuniquechar[i].CHARVAL_NUM;
                     liresults.push(lsresults);
@@ -1384,7 +1384,7 @@ module.exports = (srv) => {
                 }
                 lsresults.LOCATION_ID = liuniquechar[0].LOCATION_ID;
                 lsresults.PRODUCT_ID = liuniquechar[0].PRODUCT_ID;
-                // lsresults.UNIQUE_ID = parseInt(liuniquechar[0].UNIQUE_ID);
+                lsresults.UNIQUE_ID = vID;//parseInt(liuniquechar[0].UNIQUE_ID);
                 const li_chardata = await cds.run(
                     `SELECT *
                 FROM "CP_UNIQUE_ID_ITEM"
@@ -1551,7 +1551,7 @@ module.exports = (srv) => {
         let lsresults = {};
         let liSeeddata = {};
         let vValue = 0, vTemp;
-        let vPrefix = 'SE00000';
+        let vPrefix = 'SE000';
         var responseMessage;
 
         liSeeddata = JSON.parse(req.data.SEEDDATA);
@@ -1592,7 +1592,7 @@ module.exports = (srv) => {
 
                     await cds.run(INSERT.into("CP_SEEDORDER_HEADER").entries(liresults));
                     responseMessage = " Creation/Updation successful";
-                    //await obgenSOFunctions.createSO(lsresults.LOCATION_ID, lsresults.PRODUCT_ID, lSO, lsresults.MAT_AVAILDATE, lsresults.ORD_QTY, lsresults.UNIQUE_ID);
+                    await obgenSOFunctions.createSO(lsresults.LOCATION_ID, lsresults.PRODUCT_ID, lsresults.SEED_ORDER, lsresults.MAT_AVAILDATE, lsresults.ORD_QTY, lsresults.UNIQUE_ID);
                 } catch (e) {
                     //DONOTHING
                     responseMessage = " Creation failed";
@@ -1620,7 +1620,49 @@ module.exports = (srv) => {
         lsresults = {};
         return responseMessage;
     });
+    srv.on("getAllProd", async (req) => {
+        let lsprod = {};
+        let liprod = [];
+        let vDesc;
+        const limasterprod = await cds.run(
+            `
+         SELECT DISTINCT PRODUCT_ID,
+                LOCATION_ID,
+                PROD_DESC
+           FROM "V_LOCPROD"
+           WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'`);
 
+        const lipartialprod = await cds.run(
+            `
+         SELECT PRODUCT_ID,
+                LOCATION_ID,
+                REF_PRODID
+           FROM "CP_PARTIALPROD_INTRO"
+           WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
+           ORDER BY REF_PRODID`);
+
+
+        //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
+        for (i = 0; i < limasterprod.length; i++) {
+           lsprod = {};
+           lsprod.LOCATION_ID = limasterprod[i].LOCATION_ID;
+           lsprod.PRODUCT_ID = limasterprod[i].PRODUCT_ID;
+           lsprod.PROD_DESC = limasterprod[i].PROD_DESC;
+           vDesc = limasterprod[i].PROD_DESC;
+           liprod.push(lsprod);
+           lsprod = {};
+            for (iPartial = 0; iPartial < lipartialprod.length; iPartial++) {
+                if (lipartialprod[iPartial].REF_PRODID === limasterprod[i].PRODUCT_ID) {                    
+                    lsprod.LOCATION_ID = lipartialprod[iPartial].LOCATION_ID;
+                    lsprod.PRODUCT_ID = lipartialprod[iPartial].PRODUCT_ID;
+                    lsprod.PROD_DESC = vDesc;//lsprod.PROD_DESC;
+                    liprod.push(lsprod);                    
+                    lsprod = {};
+                }
+            }
+        }
+        return liprod;
+    });
     // Planning Configuration
     // BOI - Deepa
     srv.on("postParameterValues", async (req) => {
@@ -1656,5 +1698,7 @@ module.exports = (srv) => {
         return responseMessage;
     });
 
+
     // EOI - Deepa
+    
 };

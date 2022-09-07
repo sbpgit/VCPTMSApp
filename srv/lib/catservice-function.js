@@ -27,7 +27,7 @@ async maintainUniqueHeader(lFlag,adata) {
         lsresults.PRODUCT_ID = adata.PRODUCT_ID;
         lsresults.UNIQUE_ID = parseInt(adata.UNIQUE_ID);
         lsresults.UNIQUE_DESC = adata.UNIQUE_DESC;//li_unique[0].UNIQUE_DESC;
-        lsresults.UID_TYPE = adata.UID_TYPE;//li_unique[0].UID_TYPE;
+        lsresults.UID_TYPE = 'U';//li_unique[0].UID_TYPE;
         if (adata.ACTIVE === 'X') {
             lsresults.ACTIVE = Boolean(false);
         }

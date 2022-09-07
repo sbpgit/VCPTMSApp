@@ -165,7 +165,8 @@ service CatalogService @(impl : './lib/cat-service.js'){
     function generate_timeseriesF(LOCATION_ID : String(4), PRODUCT_ID : String(40))                                                                                                                                                                                              returns String;
     // Get Object dependency
     function get_objdep() returns array of ds.objectDep; //objectDep;
-
+    
+    function getAllProd(LOCATION_ID : String(4)) returns array of ds.locProd;
     function getCompReqFWeekly(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), COMPONENT : String(40), STRUCNODE : String(50), FROMDATE : Date, TODATE : Date, MODEL_VERSION : String(20))                                        returns array of ds.compreq;
     // Assembly Component weekly
     function getAsmbCompReqFWeekly(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), FROMDATE : Date, TODATE : Date, MODEL_VERSION : String(20))                                                                                    returns array of ds.compreq;
@@ -195,6 +196,7 @@ service CatalogService @(impl : './lib/cat-service.js'){
     function maintainPartialProd(FLAG : String(1), LOCATION_ID : String(4), PRODUCT_ID : String(40), REF_PRODID : String(40))                                                                                                                                                        returns String;
     
     function maintainPartialProdChar(FLAG : String(1), PRODCHAR : String ) returns String;
+
 // New product intorduction
     entity genNewProd           as projection on od.NEWPROD_INTRO;
     // Get new product characteristics
@@ -264,4 +266,5 @@ service CatalogService @(impl : './lib/cat-service.js'){
     entity V_Parameters      as projection on V_PLANNEDCONFIG;
     function postParameterValues(FLAG : String(1), PARAMVALS : String) returns String;
     // EOI - Deepa
+    
 }

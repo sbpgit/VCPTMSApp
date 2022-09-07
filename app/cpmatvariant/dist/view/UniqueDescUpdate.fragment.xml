@@ -12,6 +12,8 @@
                     <Input id="uniqId" value="{oGModel>/SelectedId}" editable="false" width="100%"/>
                     <Label text="{i18n>unidesc}"/>
                     <TextArea id="idUniqDesc" value="{oGModel>/SelectedDesc}" width="100%" maxLength="50"/>
+                    <!-- <Label text="{i18n>uniRate}"/>
+                    <Input id="idUniqRate" value="{oGModel>/SelectedURate}" width="100%"/> -->
                 </f:content>
             </f:SimpleForm>
         </VBox>

@@ -6,7 +6,7 @@
     xmlns:f="sap.ui.layout.form"
     xmlns:u="sap.ui.unified">
     <Page id="idClassChar" title="New Product" titleAlignment="Center" showNavButton="true" navButtonPress="onBack" showFooter="true">
-        <Panel id="idprodPanel" expandable="true" expanded="true" headerText="Product Details" width="auto" class="boldText">
+        <Panel id="idprodPanel" expandable="true" expanded="true" expand="onProdPanel" headerText="Product Details" width="auto" class="boldText">
             <content>
                 <VBox class="sapUiSmallMargin" width="1200px">
                     <f:SimpleForm id="idSimpleFormToolbar" editable="true" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="4" labelSpanM="4" labelSpanS="4" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1" singleContainerFullSize="false">
@@ -37,11 +37,18 @@
                             <Label text="Class"/>
                             <Input id="idClassname" value="" width="225px" placeholder="Class Name" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
                             <Input id="idClassno" value="" visible="false"/>
-                            <Label text="Characteristic"/>
+                            <!-- <Label text="Characteristic"/>
                             <Input id="idCharname" value="" width="225px" placeholder="Char Name" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
                             <Input id="idCharno" value="" visible="false"/>
                             <Label text="Characteristic Value"/>
                             <Input id="idCharval" value="" width="225px" placeholder="Char Value" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                            <Input id="idCharvalno" value="" visible="false"/> -->
+
+                            <Label text="Characteristic"/>
+                            <Input id="idCharname" value="" width="225px" placeholder="Char Name" editable="false"/>
+                            <Input id="idCharno" value="" visible="false"/>
+                            <Label text="Characteristic Value"/>
+                            <Input id="idCharval" value="" width="225px" placeholder="Char Value" editable="false"/>
                             <Input id="idCharvalno" value="" visible="false"/>
 
                         </f:content>
