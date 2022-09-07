@@ -16,8 +16,19 @@ class SOFunctions {
      */
     async genUniqueID(adata) {
 
-        const liSalesh = await this.getSalesHistory(adata.LOCATION_ID, adata.PRODUCT_ID);
-        const liUniqueData = await this.getUnique(adata.LOCATION_ID, adata.PRODUCT_ID);
+        await this.processUniqueID(adata.LOCATION_ID, adata.PRODUCT_ID, '');
+
+    }
+
+/**
+ * 
+ * @param {Location} lLocation 
+ * @param {Product} lProduct 
+ */
+    async processUniqueID(lLocation, lProduct, lSO){
+
+        const liSalesh = await this.getSalesHistory(lLocation, lProduct, lSO);
+        const liUniqueData = await this.getUnique(lLocation, lProduct);
 
 
         let liSOHM = [];
@@ -33,8 +44,8 @@ class SOFunctions {
             lsSOHM = {};
             lsSOHM['SALES_DOC'] = GenF.parse(liSalesh[cntSO].SALES_DOC);
             lsSOHM['SALESDOC_ITEM'] = GenF.parse(liSalesh[cntSO].SALESDOC_ITEM);
-            lsSOHM['PRODUCT_ID'] = GenF.parse(adata.PRODUCT_ID);
-            lsSOHM['LOCATION_ID'] = GenF.parse(adata.LOCATION_ID);
+            lsSOHM['PRODUCT_ID'] = GenF.parse(lProduct);
+            lsSOHM['LOCATION_ID'] = GenF.parse(lLocation);
             lsSOHM['UNIQUE_ID'] = 0;
             lsSOHM['PRIMARY_ID'] = 0;
             lsSOHM['CONFIG'] = GenF.parse(liSalesh[cntSO].CONFIG);
@@ -110,7 +121,7 @@ class SOFunctions {
                     INSERT:
                     {
                         into: { ref: ['CP_UNIQUE_ID_HEADER'] },
-                        values: [liUnique[cntU].UNIQUE_ID, adata.LOCATION_ID, adata.PRODUCT_ID, '', liUnique[cntU].UID_TYPE, 0, true]
+                        values: [liUnique[cntU].UNIQUE_ID, lLocation, lProduct, '', liUnique[cntU].UID_TYPE, 0, true]
                     }
                 })
 
@@ -132,8 +143,8 @@ class SOFunctions {
                 for (let cntUC = 0; cntUC < liUnique[cntU]['CONFIG'].length; cntUC++) {
                     lsChar = {};
                     lsChar['UNIQUE_ID'] = GenF.parse(liUnique[cntU].UNIQUE_ID);
-                    lsChar['LOCATION_ID'] = GenF.parse(adata.LOCATION_ID);
-                    lsChar['PRODUCT_ID'] = GenF.parse(adata.PRODUCT_ID);
+                    lsChar['LOCATION_ID'] = GenF.parse(lLocation);
+                    lsChar['PRODUCT_ID'] = GenF.parse(lProduct);
                     lsChar['CHAR_NUM'] = GenF.parse(liUnique[cntU]['CONFIG'][cntUC].CHAR_NUM);
                     lsChar['CHARVAL_NUM'] = GenF.parse(liUnique[cntU]['CONFIG'][cntUC].CHARVAL_NUM);
                     lsChar['UID_CHAR_RATE'] = 0
@@ -157,8 +168,8 @@ class SOFunctions {
         const liPartialProd = await cds.run(
             `SELECT *
                 FROM V_PARTIALPRODCHAR
-                WHERE REF_PRODID    = '${adata.PRODUCT_ID}'
-                  AND LOCATION_ID   = '${adata.LOCATION_ID}'
+                WHERE REF_PRODID    = '${lProduct}'
+                  AND LOCATION_ID   = '${lLocation}'
                 ORDER BY LOCATION_ID,
                          PRODUCT_ID,
                          CLASS_NUM,
@@ -221,27 +232,40 @@ class SOFunctions {
         console.log("UID Rate Updated");
 
     }
-
     /**
      * Get Sales History
      * @param {Location} lLocation 
      * @param {Product} lProduct 
      */
-    async getSalesHistory(lLocation, lProduct) {
+    async getSalesHistory(lLocation, lProduct, lSO) {
 
         let liSalesData = [];
-        liSalesData = await cds.run(
-            `SELECT *
-                FROM CP_SALESH AS A
-                INNER JOIN CP_SALESH_CONFIG AS B
-                    ON A.SALES_DOC = B.SALES_DOC
-                    AND A.SALESDOC_ITEM = B.SALESDOC_ITEM
-                WHERE A.LOCATION_ID = '` + lLocation + `'
-                    AND B.PRODUCT_ID  = '` + lProduct + `'
-                ORDER BY A.SALES_DOC,
-                        A.SALESDOC_ITEM,
-                        B.CHAR_NUM`
-        );
+        if(lSO === ''){
+            liSalesData = await cds.run(
+                `SELECT *
+                    FROM CP_SALESH AS A
+                    INNER JOIN CP_SALESH_CONFIG AS B
+                        ON A.SALES_DOC = B.SALES_DOC
+                        AND A.SALESDOC_ITEM = B.SALESDOC_ITEM
+                      WHERE A.LOCATION_ID   = '${lLocation}'
+                        AND B.PRODUCT_ID    = '${lProduct}'
+                    ORDER BY A.SALES_DOC,
+                            A.SALESDOC_ITEM,
+                            B.CHAR_NUM`);
+        }else{
+            liSalesData = await cds.run(
+                `SELECT *
+                    FROM CP_SALESH AS A
+                    INNER JOIN CP_SALESH_CONFIG AS B
+                        ON A.SALES_DOC = B.SALES_DOC
+                        AND A.SALESDOC_ITEM = B.SALESDOC_ITEM
+                      WHERE A.LOCATION_ID = '${lLocation}'
+                        AND B.PRODUCT_ID  = '${lProduct}'
+                        AND A.SALES_DOC   = '${lSO}'
+                    ORDER BY A.SALES_DOC,
+                            A.SALESDOC_ITEM,
+                            B.CHAR_NUM`);
+        }
 
 
         let liPriChar = [];
@@ -555,58 +579,65 @@ class SOFunctions {
         // Get Main Product        
         const lMainProd = await this.getMainProduct(lLocation, lProduct);
 
-        await INSERT.into('CP_SALESH').columns('SALES_DOC',
-            'SALESDOC_ITEM',
-            'PRODUCT_ID',
-            'CONFIRMED_QTY',
-            'ORD_QTY',
-            'MAT_AVAILDATE',
-            'LOCATION_ID')
-            .values(lSO,
-                lSOItem,
-                lMainProd,
-                lQty,
-                lQty,
-                lDate,
-                lLocation);
+        await INSERT.into('CP_SALESH')
+                    .columns( 'SALES_DOC',
+                            'SALESDOC_ITEM',
+                            'PRODUCT_ID',
+                            'CONFIRMED_QTY',
+                            'ORD_QTY',
+                            'MAT_AVAILDATE',
+                            'LOCATION_ID')
+                    .values(lSO,
+                            lSOItem,
+                            lMainProd,
+                            lQty,
+                            lQty,
+                            lDate,
+                            lLocation);
 
-        const liUnique = await SELECT.columns(	"CHAR_NUM",
+        const liUnique = await SELECT.columns("CHAR_NUM",
                                                 "CHARVAL_NUM")
-                                        .from('V_UNIQUE_ID')
-                                        .where(`UNIQUE_ID = '${lUnique}'`)
+                                    .from('V_UNIQUE_ID')
+                                    .where(`UNIQUE_ID = '${lUnique}'`)
 
         for (let cntUI = 0; cntUI < liUnique.length; cntUI++) {
-            await INSERT.into('CP_SALESH_CONFIG').columns('SALES_DOC',
-                                                            'SALESDOC_ITEM',
-                                                            'CHAR_NUM',
-                                                            'CHARVAL_NUM',
-                                                            'PRODUCT_ID')
-                                                            .values(lSO,
-                                                                lSOItem,
-                                                                lMainProd,
-                                                                liUnique[cntUI].CHAR_NUM,
-                                                                liUnique[cntUI].CHARVAL_NUM,
-                                                                lProduct);
+            await INSERT.into('CP_SALESH_CONFIG')
+                        .columns(   'SALES_DOC',
+                                    'SALESDOC_ITEM',
+                                    'CHAR_NUM',
+                                    'CHARVAL_NUM',
+                                    'PRODUCT_ID')
+                        .values(    lSO,
+                                    lSOItem,
+                                    liUnique[cntUI].CHAR_NUM,
+                                    liUnique[cntUI].CHARVAL_NUM,
+                                    lProduct);
         }
 
+        await this.processUniqueID(lLocation, lMainProd, lSO);
 
-        const lSPrimary = await this.processPrimaryID(lLocation, lMainProd, lUnique);
+        // const lSPrimary = await this.processPrimaryID(lLocation, lMainProd, lUnique);
 
 
         // await INSERT.into('CP_SALES_HM')
         //     .values(lSO, lSOItem, lProduct, lLocation, lUnique, lSPrimary);
-            await INSERT.into('CP_SALES_HM').columns('SALES_DOC',
-            'SALESDOC_ITEM',
-            'PRODUCT_ID',
-            'LOCATION_ID',
-            'UNIQUE_ID',
-            'PRIMARY_ID')
-            .values(lSO,
-                lSOItem,
-                lProduct,
-                lLocation,
-                lUnique,
-                lSPrimary);
+        // try {
+        //     await INSERT.into('CP_SALES_HM').columns('SALES_DOC',
+        //         'SALESDOC_ITEM',
+        //         'PRODUCT_ID',
+        //         'LOCATION_ID',
+        //         'UNIQUE_ID',
+        //         'PRIMARY_ID')
+        //         .values(lSO,
+        //             lSOItem,
+        //             lProduct,
+        //             lLocation,
+        //             lUnique,
+        //             lSPrimary);
+        // }
+        // catch (e) {
+        //     console.log(e.message);
+        // }
     }
 
     /**

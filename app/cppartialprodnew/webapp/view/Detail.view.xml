@@ -45,10 +45,10 @@
                             <Input id="idCharvalno" value="" visible="false"/> -->
 
                             <Label text="Characteristic"/>
-                            <Input id="idCharname" value="" width="225px" placeholder="Char Name" />
+                            <Input id="idCharname" value="" width="225px" placeholder="Char Name" editable="false"/>
                             <Input id="idCharno" value="" visible="false"/>
                             <Label text="Characteristic Value"/>
-                            <Input id="idCharval" value="" width="225px" placeholder="Char Value" />
+                            <Input id="idCharval" value="" width="225px" placeholder="Char Value" editable="false"/>
                             <Input id="idCharvalno" value="" visible="false"/>
 
                         </f:content>

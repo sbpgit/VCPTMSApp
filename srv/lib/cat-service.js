@@ -1236,7 +1236,7 @@ module.exports = (srv) => {
             }
             liresults.push(lsresults);
             try {
-                await UPDATE `CP_UNIQUE_ID_HEADER`
+                await UPDATE`CP_UNIQUE_ID_HEADER`
                     .with({
                         UNIQUE_DESC: lsresults.UNIQUE_DESC
                     })
@@ -1300,25 +1300,30 @@ module.exports = (srv) => {
         WHERE "LOCATION_ID" = '` +
             liuniquechar[0].LOCATION_ID +
             `'
-        AND "PRODUCT_ID" = '` +
-            liuniquechar[0].PRODUCT_ID +
-            `' ORDER BY UNIQUE_ID DESC`
+             ORDER BY UNIQUE_ID DESC`
         );
         vCharCount = liuniquechar.length;
-        vUID = li_uniquedata[0].UNIQUE_ID;
+        const lsUniqueInd = await SELECT.one.columns("MAX(UNIQUE_ID) AS MAX_ID")
+            .from('CP_UNIQUE_ID_HEADER');
+        if (lsUniqueInd.MAX_ID === null) {
+            vUID = 1;
+        } else {
+            vUID = parseInt(lsUniqueInd.MAX_ID);
+        }
+        // vUID = li_uniquedata[0].UNIQUE_ID;
         // Check if there is any unique ID with same char.
         for (let uIndex = 0; uIndex < li_uniquedata.length; uIndex++) {
             if (vUID === li_uniquedata[uIndex].UNIQUE_ID) {
                 vIndex = vIndex + 1;
             }
-            else {                
-                if (vIndex === vCount && vIndex === vCharCount) {                    
+            else {
+                if (vIndex === vCount && vIndex === vCharCount) {
                     return "Entry already exists";
                 }
-                else{   
+                else {
                     vIndex = 1;
                     vCount = 0;
-                    vUID =li_uniquedata[uIndex].UNIQUE_ID;
+                    vUID = li_uniquedata[uIndex].UNIQUE_ID;
                 }
             }
             for (let cIndex = 0; cIndex < liuniquechar.length; cIndex++) {
@@ -1340,7 +1345,7 @@ module.exports = (srv) => {
                     lsresults.CHAR_NUM = liuniquechar[i].CHAR_NUM;
                     lsresults.CHARVAL_NUM = liuniquechar[i].CHARVAL_NUM;
                     liresults.push(lsresults);
-
+                    lsresults = {};
                 }
                 if (liresults.length > 0) {
                     try {
@@ -1551,19 +1556,24 @@ module.exports = (srv) => {
         let lsresults = {};
         let liSeeddata = {};
         let vValue = 0, vTemp;
-        let vPrefix = 'SE00000';
+        let vPrefix = 'SE000';
         var responseMessage;
 
         liSeeddata = JSON.parse(req.data.SEEDDATA);
+        // const li_sodata = await cds.run(
+        //     `SELECT *
+        //     FROM "CP_SEEDORDER_HEADER"
+        //     WHERE "LOCATION_ID" = '` +
+        //     liSeeddata[0].LOCATION_ID +
+        //     `'
+        //     AND "PRODUCT_ID" = '` +
+        //     liSeeddata[0].PRODUCT_ID +
+        //     `' ORDER BY SEED_ORDER DESC`
+        // );
         const li_sodata = await cds.run(
             `SELECT *
             FROM "CP_SEEDORDER_HEADER"
-            WHERE "LOCATION_ID" = '` +
-            liSeeddata[0].LOCATION_ID +
-            `'
-            AND "PRODUCT_ID" = '` +
-            liSeeddata[0].PRODUCT_ID +
-            `' ORDER BY SEED_ORDER DESC`
+             ORDER BY SEED_ORDER DESC`
         );
         const obgenSOFunctions = new SOFunctions();
         if (req.data.FLAG === "C") {
@@ -1572,10 +1582,15 @@ module.exports = (srv) => {
             lsresults.UNIQUE_ID = liSeeddata[0].UNIQUE_ID;
             lsresults.ORD_QTY = parseFloat(liSeeddata[0].ORD_QTY);
             lsresults.MAT_AVAILDATE = liSeeddata[0].MAT_AVAILDATE;
-            vTemp = li_sodata[0].SEED_ORDER;
-            console.log(vTemp);
-            vTemp = vTemp.slice(2);
-            console.log(vTemp);
+            if (!li_sodata[0].SEED_ORDER) {
+                vTemp = 0;
+            }
+            else {
+                vTemp = li_sodata[0].SEED_ORDER;
+                console.log(vTemp);
+                vTemp = vTemp.slice(2);
+                console.log(vTemp);
+            }
             vTemp = parseInt(vTemp) + 1;
             lsresults.SEED_ORDER = vPrefix.concat(vTemp.toString());
             // const li_paravalues = await cds.run(
@@ -1620,7 +1635,49 @@ module.exports = (srv) => {
         lsresults = {};
         return responseMessage;
     });
+    srv.on("getAllProd", async (req) => {
+        let lsprod = {};
+        let liprod = [];
+        let vDesc;
+        const limasterprod = await cds.run(
+            `
+         SELECT DISTINCT PRODUCT_ID,
+                LOCATION_ID,
+                PROD_DESC
+           FROM "V_LOCPROD"
+           WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'`);
 
+        const lipartialprod = await cds.run(
+            `
+         SELECT PRODUCT_ID,
+                LOCATION_ID,
+                REF_PRODID
+           FROM "CP_PARTIALPROD_INTRO"
+           WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
+           ORDER BY REF_PRODID`);
+
+
+        //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
+        for (i = 0; i < limasterprod.length; i++) {
+            lsprod = {};
+            lsprod.LOCATION_ID = limasterprod[i].LOCATION_ID;
+            lsprod.PRODUCT_ID = limasterprod[i].PRODUCT_ID;
+            lsprod.PROD_DESC = limasterprod[i].PROD_DESC;
+            vDesc = limasterprod[i].PROD_DESC;
+            liprod.push(lsprod);
+            lsprod = {};
+            for (iPartial = 0; iPartial < lipartialprod.length; iPartial++) {
+                if (lipartialprod[iPartial].REF_PRODID === limasterprod[i].PRODUCT_ID) {
+                    lsprod.LOCATION_ID = lipartialprod[iPartial].LOCATION_ID;
+                    lsprod.PRODUCT_ID = lipartialprod[iPartial].PRODUCT_ID;
+                    lsprod.PROD_DESC = vDesc;//lsprod.PROD_DESC;
+                    liprod.push(lsprod);
+                    lsprod = {};
+                }
+            }
+        }
+        return liprod;
+    });
     // Planning Configuration
     // BOI - Deepa
     srv.on("postParameterValues", async (req) => {
@@ -1658,49 +1715,5 @@ module.exports = (srv) => {
 
 
     // EOI - Deepa
-    srv.on("getAllProd", async(req) =>{
-        var oReq = {
-            masterProd: [],
-        },
-            vmasterProd;
-        lsprod = {};
-        liprod = [];
-        const limasterprod = await cds.run(
-            `
-         SELECT A.PRODUCT_ID,
-         B.LOCATION_ID,
-         A.PROD_DESC
-           FROM "CP_PRODUCT" AS A
-           INNER JOIN "CP_LOCATION_PRODUCT" AS B
-           ON A.PRODUCT_ID = B.PRODUCT_ID 
-           WHERE B.LOCATION_ID = '`+ req.data.LOCATION_ID + `'`);
 
-        const lipartialprod = await cds.run(
-            `
-         SELECT PRODUCT_ID,
-                LOCATION_ID,
-                REF_PRODID
-           FROM "CP_PARTIALPROD_INTRO"
-           WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
-           ORDER BY REF_PRODID`);
-
-
-        //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
-        for (i = 0; i < limasterprod.length; i++) {
-           lsprod = {};
-           lsprod.LOCATION_ID = limasterprod[i].LOCATION_ID;
-           lsprod.PRODUCT_ID = limasterprod[i].PRODUCT_ID;
-           lsprod.PROD_DESC = limasterprod[i].PROD_DESC;
-           liprod.push(lsprod);
-            for (iPartial = 0; iPartial < lipartialprod.length; iPartial++) {
-                if (lipartialprod[iPartial].REF_PRODID === limasterprod[i].PRODUCT_ID) {                    
-                    lsprod.LOCATION_ID = lipartialprod[iPartial].LOCATION_ID;
-                    lsprod.PRODUCT_ID = lipartialprod[iPartial].PRODUCT_ID;
-                    lsprod.PROD_DESC = lsprod.PROD_DESC;
-                    liprod.push(lsprod);
-                }
-            }
-        }
-        return liprod;
-    });
 };
