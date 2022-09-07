@@ -38,7 +38,7 @@
                 </VBox>
                 <VBox>
                     <Label text="{i18n>type}" />
-                        <Select id="idUnique" change="onUnqChange" selectedKey="A" class="buttonDesktop">
+                        <Select id="idUnique" change="onUnqChange" selectedKey="U" class="buttonDesktop">
 							<core:ListItem key="A" text="All"/>
 							<core:ListItem key="U" text="Unique"/>
 							<core:ListItem key="P" text="Primary"/>
