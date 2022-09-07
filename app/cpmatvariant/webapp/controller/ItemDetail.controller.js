@@ -121,17 +121,16 @@ sap.ui.define(
                 that.byId("idMatvarItem").getBinding("items").filter(oFilters);
             },
 
-            // onAddPress: function () {
-            //     if (!this._addCharacteristic) {
-            //         this._addCharacteristic = sap.ui.xmlfragment(
-            //             "cpapp.cpmatvariant.view.AddCharacterstics",
-            //             this
-            //         );
-            //         this.getView().addDependent(this._addCharacteristic);
-            //     }
-            //     this._addCharacteristic.open();
-            //     sap.ui.getCore().byId("iduinq2").setValue(oGModel.getProperty("/uniqId"));
-            // },
+            onAddPress: function () {
+                if (!this._addCharacteristic) {
+                    this._addCharacteristic = sap.ui.xmlfragment(
+                        "cpapp.cpmatvariant.view.AddCharacterstics",
+                        this
+                    );
+                    this.getView().addDependent(this._addCharacteristic);
+                }
+            
+            },
             // handleValueHelp: function (oEvent) {
 
             //     if (!this._valueHelpDialogcharName) {

@@ -93,6 +93,14 @@ sap.ui.define(
                     );
                     this.getView().addDependent(this._copyCharacterstics);
                 }
+
+                if (!this._valueHelpDialogclassName) {
+                    this._valueHelpDialogclassName = sap.ui.xmlfragment(
+                        "cpapp.cpmatvariant.view.className",
+                        this
+                    );
+                    this.getView().addDependent(this._valueHelpDialogclassName);
+                }
             },
 
             /**
@@ -571,6 +579,8 @@ sap.ui.define(
                         sap.ui.getCore().byId("idCharItem").setModel(that.ListModel);
                 // sap.ui.getCore().byId("idComboBox1").setSelectedKey(ouidType);
 
+                that.CharData();
+
             },
             onCopyBtn: function (oEvent) {
                 // // that._copyCharacterstics.open();
@@ -610,6 +620,7 @@ sap.ui.define(
                         sap.ui.getCore().byId("idCharItem").setModel(that.ListModel);
 
                         that._createCharacterstics.open();
+                        that.CharData();
 
 						}
 					}
@@ -623,6 +634,38 @@ sap.ui.define(
                 // sap.ui.getCore().byId("locId1").setValue(oLoctid);
                 // sap.ui.getCore().byId("prodId1").setValue(oProdid);
 
+            },
+
+            CharData:function(){
+
+                
+
+                var sPrdId = this.byId("prodInput").getValue();
+
+                if(sPrdId){
+
+                this.getModel("BModel").read("/getProdClsChar", {
+                    filters: [
+                        new Filter( "PRODUCT_ID", FilterOperator.EQ, sPrdId ), 
+                        ],
+                    success: function (oData) {
+                        sap.ui.core.BusyIndicator.hide();
+                        that.classNameData = oData.results;
+                        var newClassModel = new JSONModel();
+                        newClassModel.setData({ 
+                            results: that.classNameData 
+                            });
+                        sap.ui.getCore().byId("classNameList").setModel(newClassModel);
+                        // that._valueHelpDialogclassName.open();
+                    },
+                    error: function (oData, error) {
+                        sap.ui.core.BusyIndicator.hide();
+                        MessageToast.show("error");
+                    },
+                });
+            } else {
+                MessageToast.show("Please select product");
+            }
             },
             onCloseCreate: function () {
                 this._createCharacterstics.close();
@@ -646,29 +689,6 @@ sap.ui.define(
 
             handleCharValueHelp:function(oEvent){
 
-                if (!this._valueHelpDialogcharName) {
-                    this._valueHelpDialogcharName = sap.ui.xmlfragment(
-                        "cpapp.cpmatvariant.view.charName",
-                        this
-                    );
-                    this.getView().addDependent(this._valueHelpDialogcharName);
-                }
-
-                if (!this._valueHelpDialogcharValue) {
-                    this._valueHelpDialogcharValue = sap.ui.xmlfragment(
-                        "cpapp.cpmatvariant.view.charValue",
-                        this
-                    );
-                    this.getView().addDependent(this._valueHelpDialogcharValue);
-                }
-
-                if (!this._valueHelpDialogclassName) {
-                    this._valueHelpDialogclassName = sap.ui.xmlfragment(
-                        "cpapp.cpmatvariant.view.className",
-                        this
-                    );
-                    this.getView().addDependent(this._valueHelpDialogclassName);
-                }
 
                 var sId = oEvent.getParameter("id");
                 // var sPrdId = oGModel.getProperty("/prdId");
@@ -676,6 +696,7 @@ sap.ui.define(
                 var sLocId = oGModel.getProperty("/locId");
 
                 if (sId.includes("Classname")) {
+                    that._valueHelpDialogclassName.open();
                     // that.getModel("BModel").read("/getProdClass", {
                     //     filters: [
                     //         new Filter("PRODUCT_ID", FilterOperator.Contains, sPrdId),
@@ -697,25 +718,25 @@ sap.ui.define(
                     //     },
                     // });
 
-                    this.getModel("BModel").read("/getProdClsChar", {
-                        filters: [
-                            new Filter( "PRODUCT_ID", FilterOperator.EQ, sPrdId ), 
-                            ],
-                        success: function (oData) {
-                            sap.ui.core.BusyIndicator.hide();
-                            that.classNameData = oData.results;
-                            var newClassModel = new JSONModel();
-                            newClassModel.setData({ 
-                                results: that.classNameData 
-                                });
-                            sap.ui.getCore().byId("classNameList").setModel(newClassModel);
-                            that._valueHelpDialogclassName.open();
-                        },
-                        error: function (oData, error) {
-                            sap.ui.core.BusyIndicator.hide();
-                            MessageToast.show("error");
-                        },
-                    });
+                    // this.getModel("BModel").read("/getProdClsChar", {
+                    //     filters: [
+                    //         new Filter( "PRODUCT_ID", FilterOperator.EQ, sPrdId ), 
+                    //         ],
+                    //     success: function (oData) {
+                    //         sap.ui.core.BusyIndicator.hide();
+                    //         that.classNameData = oData.results;
+                    //         var newClassModel = new JSONModel();
+                    //         newClassModel.setData({ 
+                    //             results: that.classNameData 
+                    //             });
+                    //         sap.ui.getCore().byId("classNameList").setModel(newClassModel);
+                    //         that._valueHelpDialogclassName.open();
+                    //     },
+                    //     error: function (oData, error) {
+                    //         sap.ui.core.BusyIndicator.hide();
+                    //         MessageToast.show("error");
+                    //     },
+                    // });
 
                 } 
                 // else if (sId.includes("Charname")) {
@@ -1082,7 +1103,7 @@ sap.ui.define(
                     success: function (oData) {
                         sap.ui.core.BusyIndicator.hide();
                         sap.m.MessageToast.show(oData.maintainUniqueChar);
-                        that.onAfterRendering();
+                        that.onGetData();
                         that.onCloseCreate();
 
                     },
