@@ -9,6 +9,9 @@
 					<Column hAlign="Left" vAlign="Middle">
 						<Text text="{i18n>charn}"/>
 					</Column>
+					<!-- <Column hAlign="Left" vAlign="Middle">
+						<Text text="{i18n>charDesc}"/>
+					</Column> -->
                     <Column hAlign="Left" vAlign="Middle" >
 						<Text text="{i18n>charv}"/>
 					</Column>
@@ -17,8 +20,16 @@
 					<ColumnListItem>
 						<cells>
 							<Text text="{CLASS_NAME}" />
-                            <Text text="{CHAR_NAME}"/>
-                            <Text text="{CHAR_VALUE}"/>
+                            <!-- <Text text="{CHAR_NAME}"/> -->
+                            <ObjectIdentifier
+						title="{CHAR_NAME}"
+						text="{CHAR_DESC}" />
+                            <!-- <Text text="{CHAR_DESC}"/> -->
+                            <!-- <Text text="{CHAR_VALUE}"/> -->
+                            
+                            <ObjectIdentifier
+						title="{CHAR_VALUE}"
+						text="{CHARVAL_DESC}" />
 						</cells>
 					</ColumnListItem>
 				</items>

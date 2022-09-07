@@ -671,7 +671,8 @@ sap.ui.define(
                 }
 
                 var sId = oEvent.getParameter("id");
-                var sPrdId = oGModel.getProperty("/prdId");
+                // var sPrdId = oGModel.getProperty("/prdId");
+                var sPrdId = this.byId("prodInput").getValue();
                 var sLocId = oGModel.getProperty("/locId");
 
                 if (sId.includes("Classname")) {
@@ -861,7 +862,8 @@ sap.ui.define(
                                     new Filter("CLASS_NAME", FilterOperator.Contains, sQuery),
                                     new Filter("CHAR_NAME", FilterOperator.Contains, sQuery),
                                     new Filter("CHAR_VALUE", FilterOperator.Contains, sQuery),
-                                    // new Filter("CLASS_NUM", FilterOperator.Contains, sQuery),
+                                    new Filter("CHAR_NUM", FilterOperator.Contains, sQuery),
+                                    new Filter("CHARVAL_NUM", FilterOperator.Contains, sQuery)
                                 ],
                                 and: false,
                             })
@@ -1080,7 +1082,8 @@ sap.ui.define(
                     success: function (oData) {
                         sap.ui.core.BusyIndicator.hide();
                         sap.m.MessageToast.show(oData.maintainUniqueChar);
-                        that.onAfterRendering();
+                        that.onGetData();
+                        // that.onAfterRendering();
                         that.onCloseCreate();
 
                     },
