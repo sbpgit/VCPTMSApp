@@ -262,6 +262,7 @@ sap.ui.define(
                     aSelectedItems = oEvent.getParameter("selectedItems");
                     if(mainSID === "__xmlview1--idloc"){
                     that.oLoc.setValue(aSelectedItems[0].getTitle());
+                    
                     }
                     else if (mainSID === "locId1"){
                         sap.ui.getCore().byId("locId1").setValue(aSelectedItems[0].getTitle());
@@ -269,6 +270,7 @@ sap.ui.define(
                     else if (mainSID === "locIdCC"){
                         sap.ui.getCore().byId("locIdCC").setValue(aSelectedItems[0].getTitle());
                     }
+                    that.oProd.setValue();
                     that.oProd.removeAllTokens();
                     this._valueHelpDialogProd
                         .getAggregation("_dialog")
