@@ -1551,7 +1551,7 @@ module.exports = (srv) => {
         let lsresults = {};
         let liSeeddata = {};
         let vValue = 0, vTemp;
-        let vPrefix = 'SE00000';
+        let vPrefix = 'SE000';
         var responseMessage;
 
         liSeeddata = JSON.parse(req.data.SEEDDATA);
@@ -1620,7 +1620,49 @@ module.exports = (srv) => {
         lsresults = {};
         return responseMessage;
     });
+    srv.on("getAllProd", async (req) => {
+        let lsprod = {};
+        let liprod = [];
+        let vDesc;
+        const limasterprod = await cds.run(
+            `
+         SELECT DISTINCT PRODUCT_ID,
+                LOCATION_ID,
+                PROD_DESC
+           FROM "V_LOCPROD"
+           WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'`);
 
+        const lipartialprod = await cds.run(
+            `
+         SELECT PRODUCT_ID,
+                LOCATION_ID,
+                REF_PRODID
+           FROM "CP_PARTIALPROD_INTRO"
+           WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
+           ORDER BY REF_PRODID`);
+
+
+        //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
+        for (i = 0; i < limasterprod.length; i++) {
+           lsprod = {};
+           lsprod.LOCATION_ID = limasterprod[i].LOCATION_ID;
+           lsprod.PRODUCT_ID = limasterprod[i].PRODUCT_ID;
+           lsprod.PROD_DESC = limasterprod[i].PROD_DESC;
+           vDesc = limasterprod[i].PROD_DESC;
+           liprod.push(lsprod);
+           lsprod = {};
+            for (iPartial = 0; iPartial < lipartialprod.length; iPartial++) {
+                if (lipartialprod[iPartial].REF_PRODID === limasterprod[i].PRODUCT_ID) {                    
+                    lsprod.LOCATION_ID = lipartialprod[iPartial].LOCATION_ID;
+                    lsprod.PRODUCT_ID = lipartialprod[iPartial].PRODUCT_ID;
+                    lsprod.PROD_DESC = vDesc;//lsprod.PROD_DESC;
+                    liprod.push(lsprod);                    
+                    lsprod = {};
+                }
+            }
+        }
+        return liprod;
+    });
     // Planning Configuration
     // BOI - Deepa
     srv.on("postParameterValues", async (req) => {
@@ -1658,49 +1700,5 @@ module.exports = (srv) => {
 
 
     // EOI - Deepa
-    srv.on("getAllProd", async(req) =>{
-        var oReq = {
-            masterProd: [],
-        },
-            vmasterProd;
-        lsprod = {};
-        liprod = [];
-        const limasterprod = await cds.run(
-            `
-         SELECT A.PRODUCT_ID,
-         B.LOCATION_ID,
-         A.PROD_DESC
-           FROM "CP_PRODUCT" AS A
-           INNER JOIN "CP_LOCATION_PRODUCT" AS B
-           ON A.PRODUCT_ID = B.PRODUCT_ID 
-           WHERE B.LOCATION_ID = '`+ req.data.LOCATION_ID + `'`);
-
-        const lipartialprod = await cds.run(
-            `
-         SELECT PRODUCT_ID,
-                LOCATION_ID,
-                REF_PRODID
-           FROM "CP_PARTIALPROD_INTRO"
-           WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
-           ORDER BY REF_PRODID`);
-
-
-        //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
-        for (i = 0; i < limasterprod.length; i++) {
-           lsprod = {};
-           lsprod.LOCATION_ID = limasterprod[i].LOCATION_ID;
-           lsprod.PRODUCT_ID = limasterprod[i].PRODUCT_ID;
-           lsprod.PROD_DESC = limasterprod[i].PROD_DESC;
-           liprod.push(lsprod);
-            for (iPartial = 0; iPartial < lipartialprod.length; iPartial++) {
-                if (lipartialprod[iPartial].REF_PRODID === limasterprod[i].PRODUCT_ID) {                    
-                    lsprod.LOCATION_ID = lipartialprod[iPartial].LOCATION_ID;
-                    lsprod.PRODUCT_ID = lipartialprod[iPartial].PRODUCT_ID;
-                    lsprod.PROD_DESC = lsprod.PROD_DESC;
-                    liprod.push(lsprod);
-                }
-            }
-        }
-        return liprod;
-    });
+    
 };

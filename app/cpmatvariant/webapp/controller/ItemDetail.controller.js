@@ -55,6 +55,13 @@ sap.ui.define(
                 var active = oGModel.getProperty("/uid_active");
                 // var oAddButton = that.byId("idadd");
 
+                oGModel.setProperty("/CharData", "");
+
+                that.oCharModel.setData({
+                    results: [],
+                });
+                that.byId("idMatvarItem").setModel(that.oCharModel);
+
                 this.getModel("BModel").read("/getUniqueItem", {
                     filters: [
                         new Filter("LOCATION_ID", FilterOperator.EQ, sLocId),
@@ -69,19 +76,21 @@ sap.ui.define(
                         // else{
                         //     oAddButton.setProperty("visible",false);
                         // }
-
+                        // if(oData.results.length !== 0){
                         oGModel.setProperty("/CharData", oData.results);
 
                         that.oCharModel.setData({
                             results: oData.results,
                         });
                         that.byId("idMatvarItem").setModel(that.oCharModel);
+                    // } 
                             // if (active === false) {
                             //     that.byId("idadd").setVisible(true);
                             // }
                     },
                     error: function () {
-                        MessageToast.show("Failed to get data");
+                        sap.ui.core.BusyIndicator.hide();
+                        MessageToast.show("No data");
                     },
                 });
             },
