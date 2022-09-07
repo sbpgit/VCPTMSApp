@@ -9,13 +9,18 @@
             <f:SimpleForm id="FormToolbar" editable="true" layout="ResponsiveGridLayout" labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="3" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1" singleContainerFullSize="false" ariaLabelledBy="Title1">
                 <f:content>
                     <Label text="{i18n>jobtype}" />
-                    <Select id="idJobType" change="onJobSelect" selectedKey="M" width="200px">
+                    <Select id="idJobType" change="onJobSelect" selectedKey="M" width="300px">
                         <core:ListItem key="M" text="{i18n>mdlgene}"/>
                         <core:ListItem key="P" text="{i18n>predi}"/>
                         <core:ListItem key="T" text="{i18n>timeseries}"/>
                         <core:ListItem key="F" text="{i18n>timeseriesF}"/>
                         <core:ListItem key="I" text="{i18n>ibpI}"/>
                         <core:ListItem key="S" text="{i18n>sdi}"/>
+                        <!-- 07-09-2022 -->
+                        <core:ListItem key="D" text="{i18n>genfulcondemand}"/>
+                        <core:ListItem key="A" text="{i18n>genasmbrequirments}"/>
+                        <core:ListItem key="O" text="{i18n>procsalesord}"/>
+                        <!-- 07-09-2022 -->
                     </Select>
                 </f:content>
             </f:SimpleForm>
@@ -105,11 +110,19 @@
                                     </f:label>
                                     <f:fields>
                                         <CheckBox id="MidCheck" select="onCheck"/>
-                                        
-                                        <Button type="Emphasized" text="{i18n>mdlgene}" press="onModelGen" width="100%"/>
+                                        <!-- 07-09-2022 -->
+                                        <!-- <Button type="Emphasized" text="{i18n>mdlgene}" press="onModelGen" width="100%"/> -->
+                                        <!-- 07-09-2022 -->
                                         <!-- <Button type="Emphasized" text="{i18n>mdlgene}" press="onModelGen" width="100%"/> -->
                                     </f:fields>
                                 </f:FormElement>
+                                <!-- 07-09-2022 -->
+                                <f:FormElement>
+                                    <f:fields>
+                                        <Button type="Emphasized" text="{i18n>mdlgene}" press="onModelGen" width="30%"/>
+                                    </f:fields>
+                                </f:FormElement>
+                                <!-- 07-09-2022 -->
                             </f:formElements>
                         </f:FormContainer>
                     </f:formContainers>
@@ -207,9 +220,18 @@
                                     <f:fields>
                                         <CheckBox id="PidCheck" select="onCheck"/>
                                         <!-- <Button type="Emphasized" text="{i18n>predi}" press="onPrediction" width="100%"/> -->
-                                        <Button type="Emphasized" text="{i18n>predi}" press="onPrediction" width="100%"/>
+                                        <!-- 07-09-2022 -->
+                                        <!-- <Button type="Emphasized" text="{i18n>predi}" press="onPrediction" width="100%"/> -->
+                                        <!-- 07-09-2022 -->
                                     </f:fields>
                                 </f:FormElement>
+                                <!-- 07-09-2022 -->
+                                <f:FormElement>
+                                    <f:fields>
+                                        <Button type="Emphasized" text="{i18n>predi}" press="onPrediction" width="30%"/>
+                                    </f:fields>
+                                </f:FormElement>
+                                <!-- 07-09-2022 -->
                             </f:formElements>
                         </f:FormContainer>
                     </f:formContainers>
@@ -582,7 +604,7 @@
 
             <Panel id="sdiPanel" visible="false" expandable="true" expanded="true">
             
-            <headerToolbar>
+                <headerToolbar>
                     <OverflowToolbar>
                         <Title text="{i18n>sdi}" class="boldText" />
                     </OverflowToolbar>
@@ -626,6 +648,137 @@
                 <Button id="idbtSdi" type="Emphasized" text="SDI Integration" press="onSdiIntegration" width="10%"/>
             </content>
             </Panel>
+<!-- 07-09-2022 -->
+            <Panel id="FullDemandPanel" visible="false" expandable="true" expanded="true">
+                <headerToolbar>
+                    <OverflowToolbar>
+                        <Title text="{i18n>genfulcondemand}"/>
+                    </OverflowToolbar>
+                </headerToolbar>
+                <f:Form editable="true">
+                    <f:layout>
+                        <f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2" singleContainerFullSize="false" />
+                    </f:layout>
+                    <f:formContainers>
+                        <f:FormContainer>
+                            <f:formElements>
+                                <f:FormElement>
+                                    <f:label>
+                                        <Label text="{i18n>loc}" required="true"/>
+                                    </f:label>
+                                    <f:fields>
+                                        <Input id="DlocInput" width="225px" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                                    </f:fields>
+                                </f:FormElement>
+                                <f:FormElement>
+                                    <f:label>
+                                        <Label text="{i18n>prod}" required="true"/>
+                                    </f:label>
+                                    <f:fields>
+                                        <MultiInput id="DprodInput" width="225px" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
+                                    </f:fields>
+                                </f:FormElement>
+                                
+                                <f:FormElement>
+                                    <f:fields>
+                                        <Button type="Emphasized" text="{i18n>genFullDemand}" press="onFullyDemand" width="35%"/>
+                                    </f:fields>
+                                </f:FormElement>
+                            </f:formElements>
+                        </f:FormContainer>
+                    </f:formContainers>
+                </f:Form>
+            </Panel>
+
+
+            <Panel id="AsmblyReqPanel" visible="false" expandable="true" expanded="true">
+                <headerToolbar>
+                    <OverflowToolbar>
+                        <Title text="{i18n>genasmbrequirments}"/>
+                    </OverflowToolbar>
+                </headerToolbar>
+                <f:Form editable="true">
+                    <f:layout>
+                        <f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2" singleContainerFullSize="false" />
+                    </f:layout>
+                    <f:formContainers>
+                        <f:FormContainer>
+                            <f:formElements>
+                                <f:FormElement>
+                                    <f:label>
+                                        <Label text="{i18n>loc}" required="true"/>
+                                    </f:label>
+                                    <f:fields>
+                                        <Input id="AlocInput" width="225px" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                                    </f:fields>
+                                </f:FormElement>
+                                <f:FormElement>
+                                    <f:label>
+                                        <Label text="{i18n>prod}" required="true"/>
+                                    </f:label>
+                                    <f:fields>
+                                        <MultiInput id="AprodInput" width="225px" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
+                                    </f:fields>
+                                </f:FormElement>
+                                
+                                <f:FormElement>
+                                    <f:fields>
+                                        <Button type="Emphasized" text="{i18n>genasmbReq}" press="onAsmbReq" width="35%"/>
+                                    </f:fields>
+                                </f:FormElement>
+                            </f:formElements>
+                        </f:FormContainer>
+                    </f:formContainers>
+                </f:Form>
+            </Panel>
+
+
+             <Panel id="salesOrdPanel" visible="false" expandable="true" expanded="true">
+                <headerToolbar>
+                    <OverflowToolbar>
+                        <Title text="{i18n>procsalesord}"/>
+                    </OverflowToolbar>
+                </headerToolbar>
+                <f:Form editable="true">
+                    <f:layout>
+                        <f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2" singleContainerFullSize="false" />
+                    </f:layout>
+                    <f:formContainers>
+                        <f:FormContainer>
+                            <f:formElements>
+                                <f:FormElement>
+                                    <f:label>
+                                        <Label text="{i18n>loc}" required="true"/>
+                                    </f:label>
+                                    <f:fields>
+                                        <Input id="OlocInput" width="225px" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                                    </f:fields>
+                                </f:FormElement>
+                                <f:FormElement>
+                                    <f:label>
+                                        <Label text="{i18n>prod}" required="true"/>
+                                    </f:label>
+                                    <f:fields>
+                                        <MultiInput id="OprodInput" width="225px" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
+                                    </f:fields>
+                                </f:FormElement>
+                                
+                                <f:FormElement>
+                                    <f:fields>
+                                        <Button type="Emphasized" text="{i18n>gensalesord}" press="onProcSalesOrd" width="40%"/>
+                                    </f:fields>
+                                </f:FormElement>
+                            </f:formElements>
+                        </f:FormContainer>
+                    </f:formContainers>
+                </f:Form>
+            </Panel>
+
+
+
+
+<!-- 07-09-2022 -->
+
         </content>
 
 
