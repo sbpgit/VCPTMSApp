@@ -62,7 +62,6 @@
             <Input id="idcomp"  value=""  placeholder="Component" visible="false" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
             <Label text="Structure Node" visible="false"/>
             <Input id="idstru" value=""  placeholder="Structure Node" visible="false" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" /> -->
-        
                 </l:Grid>
             </FlexBox>
         </ux:headerContent>
@@ -71,9 +70,15 @@
                 <ux:subSections>
                     <ux:ObjectPageSubSection>
                         <ux:blocks>
+                           <VBox>
+                            <Toolbar>
+                                <ToolbarSpacer/>
+                                <Button text="Publish" />
+                            </Toolbar>
                             <t:Table id="idCompReq" clas="table" fixedColumnCount="1" selectionMode="None" alternateRowColors="true" enableSelectAll="false" visibleRowCount="10">
                                 <t:columns />
                             </t:Table>
+                            </VBox>
                         </ux:blocks>
                     </ux:ObjectPageSubSection>
                 </ux:subSections>
