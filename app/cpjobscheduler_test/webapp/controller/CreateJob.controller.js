@@ -1293,8 +1293,10 @@ sap.ui.define(
                             // 07-09-2022-1
 							that.oLoc.setValue(oScheData.LOCATION_ID);
 							that.oProd.setValue(oScheData.PRODUCT_ID);
-							that.oVer.setValue(oScheData.VERSION);
-							that.oScen.setValue(oScheData.SCENARIO);
+                            // 05-07-2022
+							// that.oVer.setValue(oScheData.VERSION);
+							// that.oScen.setValue(oScheData.SCENARIO);
+                            // 05-07-2022
 							if (sServiceText.includes("DemandQty")) {
 								that
 									.byId("idRbtnImport")
@@ -1691,7 +1693,7 @@ sap.ui.define(
 						) {
                             // 07-09-2022-1
 							// that.byId("idbtImport").setVisible(true);
-                            // 
+                            // 07-09-2022-1
 							that.byId("idIBPselect").setSelectedKey("I");
 							that.byId("idRbtnImport").setVisible(true);
 						} else {
@@ -3075,7 +3077,11 @@ sap.ui.define(
 							actionText = "%2Fibpimport-srv%2FexportActCompDemand";
 						} else if (bButton.includes("Assembly Requirement")) {
 							actionText = "%2Fibpimport-srv%2FexportComponentReq";
-						}
+                             // 07-09-2022-1
+						} else if (bButton.includes("sales orders")) {
+                            actionText = "%2Fcatalog%2FgenUniqueID";
+                        }
+                         // 07-09-2022-1 
 					}
 
 					var vcRuleList = this.oGModel.getProperty("/vcrulesData");
@@ -3230,7 +3236,9 @@ sap.ui.define(
 								}, ],
 							};
 							// Getting data for Timeseries
-						} else if (bButton.includes("Time")) {
+                            // 07-09-2022-1
+						} else if (bButton.includes("Time") || bButton.includes("sales orders")) {
+                             // 07-09-2022-1
 							var finalList = {
 								name: JobName,
 								description: sap.ui.getCore().byId("idDesc").getValue(),
