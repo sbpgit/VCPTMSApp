@@ -2,6 +2,8 @@
 
 class GenFunctions {
     constructor() {
+
+        
     }
 
     static getCurrentDate() {
@@ -93,7 +95,7 @@ class GenFunctions {
       //  return lNextWeekDay.toISOString().split('T')[0];
       
       } 
-      static removeDays(imDate, imDays) {
+    static removeDays(imDate, imDays) {
         const lDate = new Date(imDate);
         const lNextWeekDay = new Date(lDate.getFullYear(), lDate.getMonth(), lDate.getDate() - imDays);
 
@@ -103,7 +105,7 @@ class GenFunctions {
         // result.setDate(result.getDate() + days);
         // return result;
       } 
-      static getNextMondayCmp(imDate) {
+    static getNextMondayCmp(imDate) {
         var vDate,vMonth,vYear;
         const lDate = new Date(imDate);
         let lDay = lDate.getDay();
@@ -131,6 +133,14 @@ class GenFunctions {
         return newDate;
     }
     // static removeDuplicates()
+
+    static log(lMessage){
+        console.log(lMessage)
+
+
+
+    }
+
 }
 
 module.exports = GenFunctions;

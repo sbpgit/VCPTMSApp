@@ -38,7 +38,7 @@
                 </VBox>
                 <VBox>
                     <Label text="{i18n>type}" />
-                        <Select id="idUnique" change="onUnqChange" selectedKey="A" class="buttonDesktop">
+                        <Select id="idUnique" change="onUnqChange" selectedKey="U" class="buttonDesktop">
 							<core:ListItem key="A" text="All"/>
 							<core:ListItem key="U" text="Unique"/>
 							<core:ListItem key="P" text="Primary"/>
@@ -49,9 +49,9 @@
                 <HBox>                 
                     <Button text="{i18n>go}" type="Emphasized" press="onGetData" tooltip="Get data based on filters"/>
                    
-                    <Button text="{i18n>create}" type="Emphasized" press="onCreateBtn" tooltip="" visible="false" id="idCreateBtn" class="BtnClass"/>
+                    <Button text="{i18n>create}" type="Emphasized" press="onCreateBtn" tooltip="" id="idCreateBtn" class="BtnClass"/>
                     
-                    <Button text="{i18n>copy}" type="Emphasized" press="onCopyBtn" tooltip="" visible="false" id="idCopyBtn" class="BtnClass1"/>
+                    <Button text="{i18n>copy}" type="Emphasized" press="onCopyBtn" tooltip="" id="idCopyBtn" class="BtnClass1"/>
                     </HBox>
                 </VBox>
                 </l:Grid>

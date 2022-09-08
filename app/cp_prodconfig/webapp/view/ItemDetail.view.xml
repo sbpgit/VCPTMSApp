@@ -53,8 +53,12 @@
                 <items>
                     <ColumnListItem>
                         <cells>
-                            <Text text="{CHAR_NAME}" />
-                            <Text text="{CHAR_VALUE}" />
+                            <ObjectIdentifier
+						title="{CHAR_NAME}"
+						text="{CHAR_DESC}" />
+                             <ObjectIdentifier
+						title="{CHAR_VALUE}"
+						text="{CHARVAL_DESC}" />
                         </cells>
                     </ColumnListItem>
                 </items>

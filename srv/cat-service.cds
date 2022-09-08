@@ -262,9 +262,17 @@ service CatalogService @(impl : './lib/cat-service.js'){
     // Planning Configuration
     // BOI - Deepa
     @readonly
-    entity Method_Types       as projection on od.METHOD_TYPES;
+    entity Method_Types      as projection on od.METHOD_TYPES;
     entity V_Parameters      as projection on V_PLANNEDCONFIG;
     function postParameterValues(FLAG : String(1), PARAMVALS : String) returns String;
+
+    entity getCIRGenerated as projection on od.CIR_GENERATED;
+    // CIR weekly
+    function getCIRWeekly(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), FROMDATE : Date, TODATE : Date, MODEL_VERSION : String(20))   returns array of ds.cirWkly;
+    
+    // function getCIRWeekly(FROMDATE : Date, TODATE : Date)  returns array of ds.cirWkly;
+    function getUniqueIdItems(UNIQUE_ID : Integer) returns array of ds.uniqueCharItems;
+    
     // EOI - Deepa
     
 }

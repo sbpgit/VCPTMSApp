@@ -32,11 +32,16 @@ sap.ui.define([
             getRouter: function () {
                 return sap.ui.core.UIComponent.getRouterFor(this);
             },
+            grouper: function(oGroup) {
+                return {
+                    key: oGroup.oModel.oData.Steps[oGroup.sPath.split("/")[2]].GROUP_DESCRIPTION
+                };
+            },
             /*
             *
             */
             getGroupHeader: function (oGroup) {
-                var sGroup = oGroup.key;
+                var sGroup = oGroup.key.slice(1);
                 return new GroupHeaderListItem({
                     title: sGroup,
                     upperCase: false
@@ -57,7 +62,7 @@ sap.ui.define([
                 for (var i = 0; i < aItems.length; i++) {
                     var oObj = aItems[i];
                     if (oObj._bGroupHeader === false) {
-                        if (oObj.getCells()[2].getValue() !== "") {
+                        if (oObj.getCells()[2].getValue() !== "" && oObj.getCells()[2].getValueState() === "None") {
                             oParamVals = {
                                 PARAMETER_ID: oObj.getCells()[0].getText(),
                                 VALUE: oObj.getCells()[2].getValue()
@@ -88,7 +93,7 @@ sap.ui.define([
             *
             */
             getParameters: function (oModel) {
-                oModel.read('V_Parameters', {
+                oModel.read('/V_Parameters', {
                     success: function (oData) {
                         // MessageToast.show("Success");
                         that.oParameterModel.setData({
