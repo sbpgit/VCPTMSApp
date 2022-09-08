@@ -560,7 +560,7 @@ sap.ui.define(
                     results: that.oTableData
                 });
                 sap.ui.getCore().byId("idCharItem").setModel(that.ListModel);
-                that._createCharacterstics.open();
+                
                 var oLoctid = this.byId("idloc").getValue(),
                     oProdid = this.byId("prodInput").getValue(),
                     ouidType = this.byId("idUnique").getSelectedKey();
@@ -580,8 +580,12 @@ sap.ui.define(
                         });
                         sap.ui.getCore().byId("idCharItem").setModel(that.ListModel);
                 // sap.ui.getCore().byId("idComboBox1").setSelectedKey(ouidType);
-
-                that.CharData();
+                        if(oProdid){
+                            that._createCharacterstics.open();
+                            that.CharData();
+                        } else {
+                            MessageToast.show("Please select product");
+                        }
 
             },
             onCopyBtn: function (oEvent) {
@@ -685,80 +689,86 @@ sap.ui.define(
                 sap.ui.getCore().byId("idCharval2").setValue("");
                 sap.ui.getCore().byId("idCharno2").setValue("");
                 sap.ui.getCore().byId("idCharvalno2").setValue("");
-                that._addCharacteristic.open();
+                
+                that._valueHelpDialogclassName.open();
+
+                jQuery.sap.delayedCall(300, null, function() {
+                    sap.ui.getCore().byId("classNameList-searchField").focus();
+                })
+                
 
             },
 
-            handleCharValueHelp:function(oEvent){
+            // handleCharValueHelp:function(oEvent){
 
 
-                var sId = oEvent.getParameter("id");
-                // var sPrdId = oGModel.getProperty("/prdId");
-                var sPrdId = this.byId("prodInput").getValue();
-                var sLocId = oGModel.getProperty("/locId");
+            //     var sId = oEvent.getParameter("id");
+            //     // var sPrdId = oGModel.getProperty("/prdId");
+            //     var sPrdId = this.byId("prodInput").getValue();
+            //     var sLocId = oGModel.getProperty("/locId");
 
-                if (sId.includes("Classname")) {
-                    that._valueHelpDialogclassName.open();
-                    // that.getModel("BModel").read("/getProdClass", {
-                    //     filters: [
-                    //         new Filter("PRODUCT_ID", FilterOperator.Contains, sPrdId),
-                    //         new Filter("LOCATION_ID", FilterOperator.Contains, sLocId)
+            //     if (sId.includes("Classname")) {
+            //         that._valueHelpDialogclassName.open();
+            //         // that.getModel("BModel").read("/getProdClass", {
+            //         //     filters: [
+            //         //         new Filter("PRODUCT_ID", FilterOperator.Contains, sPrdId),
+            //         //         new Filter("LOCATION_ID", FilterOperator.Contains, sLocId)
 
-                    //     ],
+            //         //     ],
 
-                    //     success: function (oData) {
-                    //         sap.ui.core.BusyIndicator.hide();
-                    //         that.classNameData = oData.results;
-                    //         var newClassModel = new JSONModel();
-                    //         newClassModel.setData({ results: that.classNameData });
-                    //         sap.ui.getCore().byId("classNameList").setModel(newClassModel);
-                    //         that._valueHelpDialogclassName.open();
-                    //     },
-                    //     error: function () {
-                    //         sap.ui.core.BusyIndicator.hide();
-                    //         MessageToast.show("Failed to get class name data");
-                    //     },
-                    // });
+            //         //     success: function (oData) {
+            //         //         sap.ui.core.BusyIndicator.hide();
+            //         //         that.classNameData = oData.results;
+            //         //         var newClassModel = new JSONModel();
+            //         //         newClassModel.setData({ results: that.classNameData });
+            //         //         sap.ui.getCore().byId("classNameList").setModel(newClassModel);
+            //         //         that._valueHelpDialogclassName.open();
+            //         //     },
+            //         //     error: function () {
+            //         //         sap.ui.core.BusyIndicator.hide();
+            //         //         MessageToast.show("Failed to get class name data");
+            //         //     },
+            //         // });
 
-                    // this.getModel("BModel").read("/getProdClsChar", {
-                    //     filters: [
-                    //         new Filter( "PRODUCT_ID", FilterOperator.EQ, sPrdId ), 
-                    //         ],
-                    //     success: function (oData) {
-                    //         sap.ui.core.BusyIndicator.hide();
-                    //         that.classNameData = oData.results;
-                    //         var newClassModel = new JSONModel();
-                    //         newClassModel.setData({ 
-                    //             results: that.classNameData 
-                    //             });
-                    //         sap.ui.getCore().byId("classNameList").setModel(newClassModel);
-                    //         that._valueHelpDialogclassName.open();
-                    //     },
-                    //     error: function (oData, error) {
-                    //         sap.ui.core.BusyIndicator.hide();
-                    //         MessageToast.show("error");
-                    //     },
-                    // });
+            //         // this.getModel("BModel").read("/getProdClsChar", {
+            //         //     filters: [
+            //         //         new Filter( "PRODUCT_ID", FilterOperator.EQ, sPrdId ), 
+            //         //         ],
+            //         //     success: function (oData) {
+            //         //         sap.ui.core.BusyIndicator.hide();
+            //         //         that.classNameData = oData.results;
+            //         //         var newClassModel = new JSONModel();
+            //         //         newClassModel.setData({ 
+            //         //             results: that.classNameData 
+            //         //             });
+            //         //         sap.ui.getCore().byId("classNameList").setModel(newClassModel);
+            //         //         that._valueHelpDialogclassName.open();
+            //         //     },
+            //         //     error: function (oData, error) {
+            //         //         sap.ui.core.BusyIndicator.hide();
+            //         //         MessageToast.show("error");
+            //         //     },
+            //         // });
 
-                } 
-                // else if (sId.includes("Charname")) {
-                //     if (sap.ui.getCore().byId("idClassname2").getValue()) {
-                //         that._valueHelpDialogcharName.open();
-                //     } else {
-                //         MessageToast.show("Select Class Name");
-                //     }
+            //     } 
+            //     // else if (sId.includes("Charname")) {
+            //     //     if (sap.ui.getCore().byId("idClassname2").getValue()) {
+            //     //         that._valueHelpDialogcharName.open();
+            //     //     } else {
+            //     //         MessageToast.show("Select Class Name");
+            //     //     }
 
-                // } else if (sId.includes("Charval")) {
-                //     if (sap.ui.getCore().byId("idCharname2").getValue()) {
-                //         that._valueHelpDialogcharValue.open();
-                //     } else {
-                //         MessageToast.show("Select Class Name and Characteristic Name");
-                //     }
+            //     // } else if (sId.includes("Charval")) {
+            //     //     if (sap.ui.getCore().byId("idCharname2").getValue()) {
+            //     //         that._valueHelpDialogcharValue.open();
+            //     //     } else {
+            //     //         MessageToast.show("Select Class Name and Characteristic Name");
+            //     //     }
 
-                // }
+            //     // }
 
 
-            },
+            // },
 
             handleCharSelection: function (oEvent) {
                 that.oGModel = that.getModel("oGModel");
@@ -766,60 +776,122 @@ sap.ui.define(
                     oItem = oEvent.getParameter("selectedItems"),
                     aSelectedItems,
                     aODdata = [];
-                if (sId.includes("className")) {
 
-                    that.oClassName = sap.ui.getCore().byId("idClassname2");
-                    // aSelectedItems = oEvent.getParameter("selectedItems");
                     aSelectedItems = oEvent.getParameter("selectedItems")[0].getBindingContext().getProperty();
 
-                    that.oClassName.setValue(aSelectedItems.CLASS_NAME);
+                    var charName = aSelectedItems.CHAR_NAME,
+                    charNum = aSelectedItems.CHAR_NUM,
+                    charVal_Name = aSelectedItems.CHAR_VALUE,
+                    charVal_Num = aSelectedItems.CHARVAL_NUM,
+                    className = aSelectedItems.CLASS_NAME;
 
-                    sap.ui.getCore().byId("idCharname2").setValue(aSelectedItems.CHAR_NAME);
-                    sap.ui.getCore().byId("idCharno2").setValue(aSelectedItems.CHAR_NUM);
-                    sap.ui.getCore().byId("idCharval2").setValue(aSelectedItems.CHAR_VALUE);
-                    sap.ui.getCore().byId("idCharvalno2").setValue(aSelectedItems.CHARVAL_NUM);
+                if (charName !== "" && charVal_Name !== "" && className !== "") {
 
-                    // that.oClassName = sap.ui.getCore().byId("idClassname2");
-                    // aSelectedItems = oEvent.getParameter("selectedItems");
-                    // that.oClassName.setValue(aSelectedItems[0].getTitle());
-                    // oGModel.setProperty("/UID_Rate", aSelectedItems[0].getBindingContext().getProperty().CLASS_NUM);
+                    this.oData = {
 
-                    // sap.ui.getCore().byId("idCharname2").setValue("");
+                        "CLASS_NAME": className,
+                        "CHAR_NAME": charName,
+                        "CHAR_NUM": charNum,
+                        "CHAR_VALUE": charVal_Name,
+                        "CHARVAL_NUM": charVal_Num,
+                        "OFLAG": "X",
+                    };
+                    var oItemTable = sap.ui.getCore().byId("idCharItem").getItems();
+                    var count = 0;
 
-                    // sap.ui.getCore().byId("idCharval2").setValue("");
+                    for (var i = 0; i < oItemTable.length; i++) {
+                        if (oItemTable[i].getCells()[1].getText() === charNum &&
+                            oItemTable[i].getCells()[3].getText() === charVal_Num) {
+                            count = count + 1;
+                        }
+                    }
 
-                    // this.getModel("BModel").read("/getClassChar", {
-                    //     filters: [
-                    //         new Filter(
-                    //             "CLASS_NUM",
-                    //             FilterOperator.EQ,
-                    //             aSelectedItems[0].getBindingContext().getProperty().CLASS_NUM
-                    //         ),
-                    //         // new Filter(
-                    //         //     "PRODUCT_ID",
-                    //         //     FilterOperator.EQ,
-                    //         //     oGModel.getProperty("/prdId")
-                    //         // ),
-                    //     ],
-                    //     success: function (oData) {
-                    //         sap.ui.core.BusyIndicator.hide();
+                    if (count === 0) {
+                        
+                        // Add entry to the table model
+                        that.oTableData.push(that.oData);
+                        that.ListModel = new JSONModel();
 
-                    //         function removeDuplicate(array, key) {
-                    //             var check = new Set();
-                    //             return array.filter(obj => !check.has(obj[key]) && check.add(obj[key]));
-                    //         }
-                    //         that.charnameModel.setData({
-                    //             results: removeDuplicate(oData.results, 'CHAR_NAME')
-                    //         });
+                        that.ListModel.setData({
+                            results: that.oTableData
+                        });
+                        sap.ui.getCore().byId("idCharItem").setModel(that.ListModel);
+                        that._addCharacteristic.close();
 
-                    //         sap.ui.getCore().byId("charNameList").setModel(that.charnameModel);
-                    //     },
-                    //     error: function (oData, error) {
-                    //         sap.ui.core.BusyIndicator.hide();
-                    //         MessageToast.show("error");
-                    //     },
-                    // });
-                } 
+                    } else {
+                        sap.m.MessageToast.show("Characterstic is already maintained");
+                    }
+
+                } else {
+                    MessageToast.show("Please fill all inputs");
+                }
+
+
+
+
+
+
+
+
+
+
+
+
+
+                // if (sId.includes("className")) {
+
+                //     that.oClassName = sap.ui.getCore().byId("idClassname2");
+                //     // aSelectedItems = oEvent.getParameter("selectedItems");
+                //     aSelectedItems = oEvent.getParameter("selectedItems")[0].getBindingContext().getProperty();
+
+                //     that.oClassName.setValue(aSelectedItems.CLASS_NAME);
+
+                //     sap.ui.getCore().byId("idCharname2").setValue(aSelectedItems.CHAR_NAME);
+                //     sap.ui.getCore().byId("idCharno2").setValue(aSelectedItems.CHAR_NUM);
+                //     sap.ui.getCore().byId("idCharval2").setValue(aSelectedItems.CHAR_VALUE);
+                //     sap.ui.getCore().byId("idCharvalno2").setValue(aSelectedItems.CHARVAL_NUM);
+
+                //     // that.oClassName = sap.ui.getCore().byId("idClassname2");
+                //     // aSelectedItems = oEvent.getParameter("selectedItems");
+                //     // that.oClassName.setValue(aSelectedItems[0].getTitle());
+                //     // oGModel.setProperty("/UID_Rate", aSelectedItems[0].getBindingContext().getProperty().CLASS_NUM);
+
+                //     // sap.ui.getCore().byId("idCharname2").setValue("");
+
+                //     // sap.ui.getCore().byId("idCharval2").setValue("");
+
+                //     // this.getModel("BModel").read("/getClassChar", {
+                //     //     filters: [
+                //     //         new Filter(
+                //     //             "CLASS_NUM",
+                //     //             FilterOperator.EQ,
+                //     //             aSelectedItems[0].getBindingContext().getProperty().CLASS_NUM
+                //     //         ),
+                //     //         // new Filter(
+                //     //         //     "PRODUCT_ID",
+                //     //         //     FilterOperator.EQ,
+                //     //         //     oGModel.getProperty("/prdId")
+                //     //         // ),
+                //     //     ],
+                //     //     success: function (oData) {
+                //     //         sap.ui.core.BusyIndicator.hide();
+
+                //     //         function removeDuplicate(array, key) {
+                //     //             var check = new Set();
+                //     //             return array.filter(obj => !check.has(obj[key]) && check.add(obj[key]));
+                //     //         }
+                //     //         that.charnameModel.setData({
+                //     //             results: removeDuplicate(oData.results, 'CHAR_NAME')
+                //     //         });
+
+                //     //         sap.ui.getCore().byId("charNameList").setModel(that.charnameModel);
+                //     //     },
+                //     //     error: function (oData, error) {
+                //     //         sap.ui.core.BusyIndicator.hide();
+                //     //         MessageToast.show("error");
+                //     //     },
+                //     // });
+                // } 
                 // else if (sId.includes("charName")) {
 
                 //     that.oCharName = sap.ui.getCore().byId("idCharname2");

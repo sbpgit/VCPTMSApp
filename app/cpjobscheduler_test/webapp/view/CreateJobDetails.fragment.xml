@@ -17,10 +17,10 @@
                             columnsM="1"
 				singleContainerFullSize="false" ariaLabelledBy="Title1">
 				<f:content>
-                    <core:Title text="Job Header:" class ="boldunderlineText"/>
+                    <core:Title text="Job Header:" class ="boldunderlineText" />
 
 					<Label text="{i18n>name}"/>
-					<Input id="idname" value="" width="400px"/>
+					<Input id="idname" value="{oGModel>/JobDdesc}" width="400px" />
 					<Label text="{i18n>desc}"/>
 					<Input id="idDesc" value="{oGModel>/JobDdesc}" width="400px"/>  
                     <Label text="{i18n>active}"/>
