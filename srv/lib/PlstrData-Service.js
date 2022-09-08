@@ -1446,7 +1446,8 @@ module.exports = async function (srv) {
                 locationId = arrayVals[2];
                 charVal = arrayVals[3];
                 let success = arrayVals[4];
-                let successRate = (100.0*success)/ordQtyPrimary;
+                // let successRate = (100.0*success)/ordQtyPrimary;
+                let successRate = (100.0*success)/ordQtyProduct;
                 // let objType = 'PI';
                 // let objId = primaryId.split('_');
                 // let objDep = objId[0];
@@ -1456,6 +1457,9 @@ module.exports = async function (srv) {
                 // console.log("CAL_DATE ", weekdate, "LOCATION_ID ", locationId, "PRODUCT_ID ", productId, 
                 //             "OBJ_TYPE ", objType, "OBJ_DEP", objDep, "OBJ_COUNTER ", objCounter,
                 //             "ROW_ID ", rowId, "SUCCESS ", success, "SUCCESS_RATE ", successRate);
+
+                if( priIndex % 100 == 0)
+                    await cds.run('COMMIT');
 
                 let sqlStrObjdepCharHdr = 'UPSERT CP_TS_OBJDEP_CHARHDR VALUES (' +
                         "'" + weekdate + "'" + "," +
