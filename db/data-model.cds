@@ -471,6 +471,7 @@ context cp {
     entity PARTIALPROD_INTRO {
         key PRODUCT_ID  : String(40) @title : 'New Product';
         key LOCATION_ID : String(4)  @title : 'Location';
+            PROD_DESC   : String(40) @title : 'Product Description';
             REF_PRODID  : String(40) @title : ' Ref. Product';
     }
 
@@ -739,6 +740,19 @@ context cp {
     entity PARAMETER_VALUES {
         key PARAMETER_ID : Integer;
             VALUE        : String(500);
+    }
+
+    entity IBP_STOCK {
+        key SALES_DOC : String(10) @title : 'Sales Document';
+        STATUS        : String(10);
+        ORDER_NUMBER  : String(10); 
+        PURCHASE_REQ  : String(12);
+        CHANGED_DATE  : Date;
+        CHANGED_TIME  : Time;
+        CHANGED_BY    : String(12);
+        CREATED_DATE  : Date;
+        CREATED_TIME  : Time;
+        CREATED_BY    : String(12);
     }
 
 // End Of Insert - Deepa
