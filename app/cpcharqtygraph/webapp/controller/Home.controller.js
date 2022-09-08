@@ -28,7 +28,8 @@ sap.ui.define([
                 that.verModel = new JSONModel();
                 that.scenModel = new JSONModel();
                 that.dateJSON = new JSONModel();
-                this.PanelContent = that.byId("idLineChart");
+                that.oNewModel = new JSONModel();
+                this.PanelContent = that.byId("idVizFrame");
                 that.TableModel.setSizeLimit(1000);
                 that.locModel.setSizeLimit(1000);
                 that.prodModel.setSizeLimit(1000);
@@ -74,11 +75,8 @@ sap.ui.define([
                 this.oScen = this.byId("idscen");
                 this.oModVer = this.byId("idComboBox")
                 this.oDate = this.byId("fromDate");
-                var currDate = new Date(),
-                minDate = new Date(currDate.getFullYear(), currDate.getMonth(), currDate.getDate());
-                minDate.setDate(minDate.getDate() + 28);
-                this.oDate.setDateValue(currDate);
-                this.oDate.setSecondDateValue(minDate);
+                that.aOrder =[];
+                that.aSelOrder=[];
 
                 that._valueHelpDialogProd.setTitleAlignment("Center");
                 that._valueHelpDialogLoc.setTitleAlignment("Center");
@@ -102,14 +100,52 @@ sap.ui.define([
                 sap.ui.core.BusyIndicator.show();
                 this.getView().getModel("oModel").read("/getLocation", {
                     success: function (oData) {
+
                         that.locModel.setData(oData);
+
                         that.oLocList.setModel(that.locModel);
+
                         sap.ui.core.BusyIndicator.hide();
                     },
                     error: function (oData, error) {
+                        sap.ui.core.BusyIndicator.hide();
                         MessageToast.show("error");
                     },
                 });
+
+                this.getView().getModel("oModel").read("/getCIRCharRate", {
+                    success: function (oData) {
+                        oData.results.forEach(function (row) {
+                            // Calling function to handle the date format
+                            row.WEEK_DATE = that.getInMMddyyyyFormat(row.WEEK_DATE);
+                        }, that);
+
+                        for (var i = 0; i < oData.results.length; i++) {
+
+							if (that.aOrder.indexOf(oData.results[i].WEEK_DATE) === -1) {
+								that.aOrder.push(oData.results[i].WEEK_DATE);
+								if (oData.results[i].WEEK_DATE !== "") {
+									that.oOrdData = {
+										"WEEK_DATE": oData.results[i].WEEK_DATE
+									};
+									that.aSelOrder.push(that.oOrdData);
+								}
+							}
+                        }
+                        that.oDateModel = new JSONModel();
+                        that.oDateModel.setData({resultsCombos:that.aSelOrder});
+                        that.byId("fromDate").setModel(that.oDateModel);
+
+                        
+                    },
+                    error: function (oData, error) {
+                        sap.ui.core.BusyIndicator.hide();
+                        MessageToast.show("error");
+                    },
+                });
+
+
+
             },
             onResetDate: function () {
                 that.oLoc.setValue("");
@@ -117,15 +153,11 @@ sap.ui.define([
                 that.oVer.setValue("");
                 that.oScen.setValue("");
                 this.oModVer.setSelectedKey("Active");
-                that.byId("grid1").setVisible(false);
-                that.byId("idSplitter1").setVisible(false);
+               
+                that.byId("idSplitter").setVisible(false);
                 that.byId("idObjectPageSub").setVisible(false);
-                // this.oDate = this.byId("fromDate");
-                // var currDate = new Date(),
-                // minDate = new Date(currDate.getFullYear(), currDate.getMonth(), currDate.getDate());
-                // minDate.setDate(minDate.getDate() + 28);
-                // this.oDate.setDateValue(currDate);
-                // this.oDate.setSecondDateValue(minDate);
+                this.oDate = this.byId("fromDate");
+                this.oDate.setSelectedKey("");
                 that.onAfterRendering();
             },
             handleValueHelp: function (oEvent) {
@@ -408,7 +440,7 @@ sap.ui.define([
                 if (oDate === "") {
 
                     // Checking if Location and Product selected
-                    if (oLoc !== "" && oProd !== "") {
+                    if (oLoc !== "" && oProd !== "" && oVer !=="" && oScen !=="") {
                         var sFilter = new sap.ui.model.Filter({
                             path: "LOCATION_ID",
                             operator: sap.ui.model.FilterOperator.EQ,
@@ -475,13 +507,22 @@ sap.ui.define([
                                 //     };
                                 //     that.fullData.push(that.dataOrder);
                                 // }
-                                filterJSON.setData({ results1: oData.results });
+                                filterJSON.setData({ results: oData.results });
                                 var oVizFrame = that.byId("idVizFrame");
                                 oVizFrame.setModel(filterJSON);
-                                // var oPopOver = that.byId("idPopOver");
-                                // oPopOver.connect(oVizFrame.getVizUid());
+                                oVizFrame.setVizProperties({
+                                    plotArea:{dataLabel:{visible: false}},
+                                    title: {
+                                        text:'',
+                                        visible: true
+                                        }
+                                });
+                                
+                                var oPopOver = that.byId("idPopOver");
+                        oPopOver.connect(oVizFrame.getVizUid());
+                                
                                 that.byId("idSplitter").setVisible(true);
-                                that.byId("idPanel").setVisible(false);
+                                
 
                                 sap.ui.core.BusyIndicator.hide();
                                 that.oGModel.setProperty("/tableData", oData.results)
@@ -492,7 +533,7 @@ sap.ui.define([
                             },
                         });
                     } else {
-                        sap.m.MessageToast.show("Please select a Location/Product");
+                        sap.m.MessageToast.show("Please select a Location/Product/Version/Scenario");
                     }
                 }
                 else {
@@ -517,25 +558,22 @@ sap.ui.define([
             },
 
             dynamicCharts: function () {
-                
+
                 var oLoc = that.byId("idloc").getValue(),
                     oProd = that.byId("idprod").getValue(),
                     oVer = that.byId("idver").getValue(),
                     oModVer = that.byId("idComboBox").getSelectedKey(),
                     oDate = that.byId("fromDate").getValue(),
                     oScen = that.byId("idscen").getValue();
-                var fromDate = oDate.slice(0, 10);
-                var toDate = oDate.slice(13);
-                var FromDate = moment(fromDate, 'YYYY-MM-DD').format('ddd MMM DD Y') + " 05:30:00 GMT+0530 (India Standard Time)";
-                var ToDate = moment(toDate, 'YYYY-MM-DD').format('ddd MMM DD Y') + " 05:30:00 GMT+0530 (India Standard Time)";
+               
 
 
                 that.oGModel = that.getOwnerComponent().getModel("oGModel");
                 var oFilters = [];
-                if (oLoc !== "" && oProd !== "" && oVer !=="" && oScen !=="") {
-                    that.byId("grid1").setVisible(true);
-                that.byId("idSplitter1").setVisible(true);
-                that.byId("idObjectPageSub").setVisible(true);
+                if (oLoc !== "" && oProd !== "" && oVer !== "" && oScen !== "") {
+                    
+                    that.byId("idSplitter").setVisible(true);
+                    that.byId("idObjectPageSub").setVisible(true);
                     var sFilter = new sap.ui.model.Filter({
                         path: "LOCATION_ID",
                         operator: sap.ui.model.FilterOperator.EQ,
@@ -577,18 +615,10 @@ sap.ui.define([
                     if (oDate) {
                         var sFilter = new sap.ui.model.Filter({
                             path: "WEEK_DATE",
-                            operator: sap.ui.model.FilterOperator.GE,
-                            value1: FromDate,
+                            operator: sap.ui.model.FilterOperator.EQ,
+                            value1: oDate,
                         });
                         oFilters.push(sFilter);
-
-                        var sFilter = new sap.ui.model.Filter({
-                            path: "WEEK_DATE",
-                            operator: sap.ui.model.FilterOperator.LE,
-                            value1: ToDate,
-                        });
-                        oFilters.push(sFilter);
-
                     }
 
                     sap.ui.core.BusyIndicator.show();
@@ -601,50 +631,26 @@ sap.ui.define([
                                 // Calling function to handle the date format
                                 row.WEEK_DATE = that.getInMMddyyyyFormat(row.WEEK_DATE);
                             }, that);
-                            that.filteredData = [];
-
-                            for (var i = 0; i < oData.results.length; i++) {
-                                if (oData.results[i].WEEK_DATE >= fromDate && oData.results[i].WEEK_DATE <= toDate) {
-                                    that.dataOrder = {
-                                        "LOCATION_ID": oData.results[i].LOCATION_ID,
-                                        "PRODCUT_ID": oData.results[i].PRODUCT_ID,
-                                        "MODEL_VERSION": oData.results[i].MODEL_VERSION,
-                                        "SCENARIO": oData.results[i].SCENARIO,
-                                        "VERSION": oData.results[i].VERSION,
-                                        "CHAR_VALUE": oData.results[i].CHAR_VALUE,
-                                        "CHAR_NAME": oData.results[i].CHAR_NAME,
-                                        "GEN_QTY": oData.results[i].GEN_QTY,
-                                        "PLAN_QTY": oData.results[i].PLAN_QTY,
-                                        "WEEK_DATE": oData.results[i].WEEK_DATE
-                                    };
-                                    that.filteredData.push(that.dataOrder);
-                                }
-                            }
-                            that.oGModel.setProperty("/filteredData", that.filteredData);
-
-                            var locationJsonS = new JSONModel();
-                            that.aOrder = [];
-                            that.newDate = [];
-
-                            for (var i = 0; i < that.filteredData.length; i++) {
-                                if (that.aOrder.indexOf(that.filteredData[i].WEEK_DATE) === -1) {
-                                    that.aOrder.push(that.filteredData[i].WEEK_DATE);
-                                    if (that.filteredData[i].WEEK_DATE !== "") {
-                                        that.oOrdData = {
-                                            "WEEK_DATE": that.filteredData[i].WEEK_DATE
-                                        };
-                                        that.newDate.push(that.oOrdData);
-                                        
-                                    }
-                                }
-                            }
-
-                            locationJsonS.setData({ results2: that.newDate });
-                            var newJsonMo = new JSONModel();
-                            newJsonMo.setData({results:that.filteredData});
                             
-                            that.byId("idLineChart").setModel(newJsonMo);
-                            that.byId("grid1").setModel(locationJsonS);
+
+        
+                           
+                            var newJsonMo = new JSONModel();
+                            newJsonMo.setData({ results: oData.results });
+
+                            that.byId("idVizFrame").setModel(newJsonMo);
+                            var oPopOver = that.byId("idPopOver");
+                            var oVizFrame =that.byId("idVizFrame");
+                        oPopOver.connect(that.PanelContent.getVizUid());
+                        
+                        oVizFrame.setVizProperties({
+                            plotArea:{dataLabel:{visible: false}},
+                            title: {
+                                text:oData.results[1].WEEK_DATE,
+                                visible: true
+                                }
+                        });
+                            
                         },
                         error: function (data) {
                             sap.ui.core.BusyIndicator.hide();
@@ -656,40 +662,11 @@ sap.ui.define([
                 }
 
             },
-            // onExpand: function (oEvent) {
-
-            //     var selectDate = oEvent.getSource().getHeaderText();
-            //     var reqData = that.oGModel.getProperty("/filteredData");
-            //     that.aFilterData = [];
-            //     var dateJSON = new JSONModel();
-            //     for (var i = 0; i < reqData.length; i++) {
-            //         if (selectDate === reqData[i].WEEK_DATE) {
-            //             that.dateData = {
-            //                 // "LOCATION_ID" : reqData[i].LOCATION_ID,
-            //                 //             "PRODCUT_ID":reqData[i].PRODUCT_ID,
-            //                 //             "MODEL_VERSION":reqData[i].MODEL_VERSION,
-            //                 //             "SCENARIO" : reqData[i].SCENARIO,
-            //                 //             "VERSION":reqData[i].VERSION,
-            //                 "CHAR_VALUE": reqData[i].CHAR_VALUE,
-            //                 "CHAR_NAME": reqData[i].CHAR_NAME,
-            //                 "GEN_QTY": reqData[i].GEN_QTY,
-            //                 "PLAN_QTY": reqData[i].PLAN_QTY,
-            //                 "WEEK_DATE": reqData[i].WEEK_DATE
-            //             };
-            //             that.aFilterData.push(that.dateData);
-
-            //         }
-            //     }
-            //     dateJSON.setData({ items: that.aFilterData });
-            //     var oVizFrame1 = that.byId("idLineChart");
-            //     that.byId("idLineChart").setModel(dateJSON);
-            //     // var oPopOver = that.byId("idPopOver1");
-            //     // oPopOver.connect(oVizFrame1.getVizUid());
-            // }
-onExpand:function(oEvent){
-    
-    var selectDate = oEvent.getSource().getHeaderText();
-    var oLoc = that.byId("idloc").getValue(),
+            
+            onExpand: function (oEvent) {
+                sap.ui.core.BusyIndicator.show();
+                var selectDate = oEvent.getSource().getHeaderText();
+                var oLoc = that.byId("idloc").getValue(),
                     oProd = that.byId("idprod").getValue(),
                     oVer = that.byId("idver").getValue(),
                     oModVer = that.byId("idComboBox").getSelectedKey(),
@@ -699,7 +676,7 @@ onExpand:function(oEvent){
                 that.dateJSON.setData([]);
                 that.PanelContent.setModel(that.dateJSON);
 
-                var oFilters=[];
+                var oFilters = [];
                 var sFilter = new sap.ui.model.Filter({
                     path: "LOCATION_ID",
                     operator: sap.ui.model.FilterOperator.EQ,
@@ -746,22 +723,23 @@ onExpand:function(oEvent){
                     });
                     oFilters.push(sFilter);
                 }
-                sap.ui.core.BusyIndicator.show();
-                    // Calling service to get the data based of filters
-                    this.getView().getModel("oModel").read("/getCIRCharRate", {
-                        filters: oFilters,
-                        success: function (oData) {
-                            sap.ui.core.BusyIndicator.hide();
-                           
-                            that.dateJSON.setData(oData);
-                            that.PanelContent.setModel(that.dateJSON);
 
-                        },
-                        error(e){
-                            sap.ui.core.BusyIndicator.hide();
-                        }
-                    });
-                }
+                // Calling service to get the data based of filters
+                this.getView().getModel("oModel").read("/getCIRCharRate", {
+                    filters: oFilters,
+                    success: function (oData) {
+                        sap.ui.core.BusyIndicator.hide();
+                        that.dateJSON.setData(oData);
+                        that.PanelContent.setModel(that.dateJSON);
+                        var oPopOver = that.byId("idPopOver1");
+                        oPopOver.connect(that.PanelContent.getVizUid());
+
+                    },
+                    error(e) {
+                        sap.ui.core.BusyIndicator.hide();
+                    }
+                });
+            }
 
         });
     });
