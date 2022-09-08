@@ -1440,5 +1440,201 @@ module.exports = (srv) => {
         return responseMessage;
     });
 
+    // Service for weekly component requirements- assembly component
+    srv.on("getCIRWeekly", async (req) => {
+        let { genAsmbComp } = srv.entities;
+        let vDateFrom = req.data.FROMDATE; //"2022-03-04";
+        let vDateTo = req.data.TODATE; //"2023-01-03";
+        let liCompWeekly = [];
+        let lsCompWeekly = {};
+        let liDates = [],
+            vWeekIndex,
+            vCompIndex,
+            vDateIndex,
+            vComp,
+            lsDates = {};
+        let columnname = "WEEK";
+
+        const liCIRGen = await cds.run(`SELECT * from "CP_CIR_GENERATED" WHERE "LOCATION_ID" = '` +
+            req.data.LOCATION_ID +
+            `'`);
+
+        const liCIRQty = await cds.run(
+            `
+            SELECT * FROM "CP_CIR_GENERATED"
+            WHERE "LOCATION_ID" = '` +
+            req.data.LOCATION_ID +
+            `'
+                 AND "PRODUCT_ID" = '` +
+            req.data.PRODUCT_ID +
+            `' AND "VERSION" = '` +
+            req.data.VERSION +
+            `' AND "SCENARIO" = '` +
+            req.data.SCENARIO +
+            `' AND ( "WEEK_DATE" <= '` +
+            vDateTo +
+            `' AND "WEEK_DATE" >= '` +
+            vDateFrom +
+            `') AND "MODEL_VERSION" = '` +
+            req.data.MODEL_VERSION +
+            `'
+                 ORDER BY 
+                      "LOCATION_ID" ASC, 
+                      "PRODUCT_ID" ASC,
+                      "VERSION" ASC,
+                      "SCENARIO" ASC,
+                      "WEEK_DATE" ASC`
+        );
+
+        // const liCIRQty = await cds.run(
+        //     `
+        //     SELECT * FROM "CP_CIR_GENERATED"
+        //     WHERE "WEEK_DATE" <= '` + vDateTo + `'
+        //       AND "WEEK_DATE" >= '` + vDateFrom + `' 
+        //  ORDER BY    "LOCATION_ID" ASC, 
+        //               "PRODUCT_ID" ASC,
+        //               "VERSION" ASC,
+        //               "SCENARIO" ASC,
+        //               "WEEK_DATE" ASC`
+        // );
+
+        // const liUniqueId = await cds.run(
+        //     `
+        //     SELECT DISTINCT "UNIQUE_ID"
+        //       FROM "CP_CIR_GENERATED"
+        //     WHERE "WEEK_DATE" <= '` + vDateTo + `'
+        //       AND "WEEK_DATE" >= '` + vDateFrom + `' 
+        //  ORDER BY    "UNIQUE_ID" ASC`
+        //             //   "PRODUCT_ID" ASC,
+        //             //   "VERSION" ASC,
+        //             //   "SCENARIO" ASC,
+        //             //   "WEEK_DATE" ASC`
+        // );
+
+        const liUniqueId = await cds.run(
+            `
+          SELECT DISTINCT "LOCATION_ID",
+                          "PRODUCT_ID",
+                          "VERSION",
+                          "SCENARIO",
+                          "UNIQUE_ID"
+          FROM "CP_CIR_GENERATED"
+          WHERE "LOCATION_ID" = '` +
+            req.data.LOCATION_ID +
+            `' AND "PRODUCT_ID" = '` +
+            req.data.PRODUCT_ID +
+            `' AND "VERSION" = '` +
+            req.data.VERSION +
+            `' AND "SCENARIO" = '` +
+            req.data.SCENARIO +
+            `' AND ( "WEEK_DATE" <= '` +
+            vDateTo +
+            `'
+                AND "WEEK_DATE" >= '` +
+            vDateFrom +
+            `') AND "MODEL_VERSION" = '` +
+            req.data.MODEL_VERSION +
+            `'
+               ORDER BY 
+                    "LOCATION_ID" ASC, 
+                    "PRODUCT_ID" ASC,
+                    "VERSION" ASC,
+                    "SCENARIO" ASC,
+                    "UNIQUE_ID" ASC`
+        );
+        var vDateSeries = vDateFrom;
+        lsDates.WEEK_DATE = GenFunctions.getNextMondayCmp(vDateSeries);
+        vDateSeries = lsDates.WEEK_DATE;
+        liDates.push(lsDates);
+        lsDates = {};
+        while (vDateSeries <= vDateTo) {
+            vDateSeries = GenFunctions.addDays(vDateSeries, 7);
+
+            lsDates.WEEK_DATE = vDateSeries;//GenFunctions.getNextSundayCmp(vDateSeries);
+            //  vDateSeries = lsDates.CAL_DATE;
+
+            liDates.push(lsDates);
+            lsDates = {};
+        }
+        vComp = 0;
+
+        for (let j = 0; j < liUniqueId.length; j++) {
+            // Initially set vWeekIndex to j to geneate Week columns
+            // vCompIndex is to get Componnent quantity for all dates
+            vWeekIndex = 0; //j
+            //lsCompWeekly.LOCATION_ID = liComp[j].LOCATION_ID;
+            //lsCompWeekly.PRODUCT_ID = liComp[j].PRODUCT_ID;
+            lsCompWeekly.ITEM_NUM = '';
+            //   lsCompWeekly.ASSEMBLY = liComp[j].COMPONENT;
+            //lsCompWeekly.COMPONENT = liComp[j].COMPONENT;
+            //lsCompWeekly.VERSION = liComp[j].VERSION;
+           // lsCompWeekly.SCENARIO = liComp[j].SCENARIO;
+            lsCompWeekly.UNIQUE_ID = liUniqueId[j].UNIQUE_ID;
+            //lsCompWeekly.QTYTYPE = "Normalized";
+
+            for (let i = 0; i < liDates.length; i++) {
+                vWeekIndex = vWeekIndex + 1;
+                for (vCompIndex = 0; vCompIndex < liCIRQty.length; vCompIndex++) {
+                    lsCompWeekly[columnname + vWeekIndex] = 0;
+                    if (
+                        liCIRQty[vCompIndex].UNIQUE_ID === lsCompWeekly.UNIQUE_ID &&
+                        liCIRQty[vCompIndex].WEEK_DATE === liDates[i].WEEK_DATE
+                    ) {
+                        //   lsCompWeekly.STRUC_NODE = liCompQty[vCompIndex].STRUC_NODE;
+                        lsCompWeekly[columnname + vWeekIndex] =
+                            liCIRQty[vCompIndex].CIR_QTY;
+                        break;
+                    }
+                }
+            }
+            liCompWeekly.push(GenFunctions.parse(lsCompWeekly));
+            lsCompWeekly = {};
+        }
+        liCompWeekly.sort(GenFunctions.dynamicSortMultiple("STRUC_NODE", "UNIQUE_ID", "ITEM_NUM"));
+        return liCompWeekly;
+    });
+
+    // Service for Unique Characteristic Items
+    srv.on("getUniqueIdItems", async (req) => {
+        let { genAsmbComp } = srv.entities;
+        // let vDateFrom = req.data.FROMDATE; //"2022-03-04";
+        // let vDateTo = req.data.TODATE; //"2023-01-03";
+        let liUniqueItems = [];
+        let lsUniqueItems= {};
+        let vUniqueId = req.data.UNIQUE_ID;
+        // let liDates = [],
+        //     vWeekIndex,
+        //     vCompIndex,
+        //     vDateIndex,
+        //     vComp,
+        //     lsDates = {};
+        // let columnname = "WEEK";
+
+    
+
+        const ltUniqueItems = await cds.run(
+            `
+            SELECT * FROM "CP_UNIQUE_ID_ITEM"
+            WHERE "UNIQUE_ID" = '` + vUniqueId + `'`
+        );
+
+        for (let j = 0; j < ltUniqueItems.length; j++) {
+            // Initially set vWeekIndex to j to geneate Week columns
+            // vCompIndex is to get Componnent quantity for all dates
+            // vWeekIndex = 0; //j
+            lsUniqueItems.UNIQUE_ID = ltUniqueItems[j].UNIQUE_ID;
+            lsUniqueItems.LOCATION_ID = ltUniqueItems[j].LOCATION_ID;
+            lsUniqueItems.PRODUCT_ID = ltUniqueItems[j].PRODUCT_ID;
+            lsUniqueItems.CHAR_NUM= ltUniqueItems[j].CHAR_NUM;
+            lsUniqueItems.CHARVAL_NUM = ltUniqueItems[j].CHARVAL_NUM;           
+            lsUniqueItems.UID_CHAR_RATE = ltUniqueItems[j].UID_CHAR_RATE;
+
+            liUniqueItems.push(GenFunctions.parse(lsUniqueItems));
+            lsUniqueItems = {};
+        }
+        // liCompWeekly.sort(GenFunctions.dynamicSortMultiple("STRUC_NODE", "UNIQUE_ID", "ITEM_NUM"));
+        return liUniqueItems;
+    })
+
     // EOI - Deepa
 };

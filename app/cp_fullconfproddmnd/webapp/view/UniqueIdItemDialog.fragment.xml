@@ -1,0 +1,37 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form">
+    <Dialog title="Unique Id Characteristics" contentWidth="800px">
+        <Table id="idUniqueIdItems" items="{path: '/items'}">
+            <columns>
+                <Column hAlign="Left" vAlign="Middle">
+                    <Text text="Location Id" />
+                </Column>
+                <Column hAlign="Left" vAlign="Middle">
+                    <Text text="Product Id" />
+                </Column>
+                <Column hAlign="Left" vAlign="Middle">
+                    <Text text="Characteristic Number" />
+                </Column>
+                <Column hAlign="Left" vAlign="Middle">
+                    <Text text="Characteristic Value" />
+                </Column>
+                <Column hAlign="Left" vAlign="Middle">
+                    <Text text="Characteristic Rate" />
+                </Column>
+            </columns>
+            <items>
+                <ColumnListItem>
+                    <cells>
+                        <Text text="{LOCATION_ID}" />
+                        <Text text="{PRODUCT_ID}" />
+                        <Text text="{CHAR_NUM}" />
+                        <Text text="{CHARVAL_NUM}" />
+                        <Text text="{UID_CHAR_RATE}" />
+                    </cells>
+                </ColumnListItem>
+            </items>
+        </Table>
+        <buttons>
+            <Button type='Reject' text="{i18n>close}" press="onUniqueIdItemClose" />
+        </buttons>
+    </Dialog>
+</core:FragmentDefinition>
