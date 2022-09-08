@@ -17,9 +17,6 @@ async maintainUniqueHeader(lFlag,adata) {
         FROM "CP_UNIQUE_ID_HEADER"
         WHERE "LOCATION_ID" = '` +
         adata.LOCATION_ID +
-        `'
-        AND "PRODUCT_ID" = '` +
-        adata.PRODUCT_ID +
         `' ORDER BY UNIQUE_ID DESC`
     );
     if (lFlag === 'E') {// Active status change

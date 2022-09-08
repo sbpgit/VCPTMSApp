@@ -162,7 +162,9 @@ service CatalogService @(impl : './lib/cat-service.js'){
     // Generate Timeseries
     function generate_timeseries(LOCATION_ID : String(4), PRODUCT_ID : String(40),PAST_DAYS : Integer)                                                                                                                                                                                               returns String;
     // Generate Timeseries
-    function generate_timeseriesF(LOCATION_ID : String(4), PRODUCT_ID : String(40))                                                                                                                                                                                              returns String;
+    function generate_timeseriesF(LOCATION_ID : String(4), PRODUCT_ID : String(40))     returns String;
+    // Gen Full Configured Demand
+    function gen_FullConfigDemand(LOCATION_ID : String(4), PRODUCT_ID : String(40)) returns String;
     // Get Object dependency
     function get_objdep() returns array of ds.objectDep; //objectDep;
     
@@ -186,6 +188,10 @@ service CatalogService @(impl : './lib/cat-service.js'){
     action generateTimeseries(LOCATION_ID : String(4), PRODUCT_ID : String(40),PAST_DAYS : Integer);
     // Generate Timeseries
     action generateTimeseriesF(LOCATION_ID : String(4), PRODUCT_ID : String(40)) ;
+    // Generate Unique
+    action genUniqueID(LOCATION_ID : String(4), PRODUCT_ID : String(40)) ;
+    // Generate Fully Configured Demand
+    action genFullConfigDemand(LOCATION_ID : String(4), PRODUCT_ID : String(40)) ;        
 
 ///Partial
     @readonly
@@ -210,7 +216,7 @@ service CatalogService @(impl : './lib/cat-service.js'){
     entity getUniqueHeader as projection on od.UNIQUE_ID_HEADER;
     entity getUniqueItem   as projection on V_UNIQUE_ID_ITEM;
     entity getUniqueId as projection on V_UNIQUE_ID;
-    function genUniqueID(LOCATION_ID : String(4), PRODUCT_ID : String(40))      returns String;
+    function gen_UniqueID(LOCATION_ID : String(4), PRODUCT_ID : String(40))      returns String;
     function changeUnique(UNIQUE_ID : Integer, LOCATION_ID : String(4), PRODUCT_ID : String(40), UID_TYPE : String(1),UNIQUE_DESC : String(50), ACTIVE:String(1),FLAG: String) returns String;
     function maintainUniqueChar(FLAG: String(1), UNIQUECHAR: String) returns String;
 
@@ -262,9 +268,17 @@ service CatalogService @(impl : './lib/cat-service.js'){
     // Planning Configuration
     // BOI - Deepa
     @readonly
-    entity Method_Types       as projection on od.METHOD_TYPES;
+    entity Method_Types      as projection on od.METHOD_TYPES;
     entity V_Parameters      as projection on V_PLANNEDCONFIG;
     function postParameterValues(FLAG : String(1), PARAMVALS : String) returns String;
+
+    entity getCIRGenerated as projection on od.CIR_GENERATED;
+    // CIR weekly
+    function getCIRWeekly(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), FROMDATE : Date, TODATE : Date, MODEL_VERSION : String(20))   returns array of ds.cirWkly;
+    
+    // function getCIRWeekly(FROMDATE : Date, TODATE : Date)  returns array of ds.cirWkly;
+    function getUniqueIdItems(UNIQUE_ID : Integer) returns array of ds.uniqueCharItems;
+    
     // EOI - Deepa
     
 }

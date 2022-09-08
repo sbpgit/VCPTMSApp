@@ -13,9 +13,9 @@
                         <Text text="Location : {oGModel>/locId}" ></Text>                        
                     </Toolbar>
                     <SearchField id="bomSearch" search="onbomSearch" placeholder="Component / Object Dependency"/>
-                    <Table id="idBom" items="{path: '/results', sorter : { path : 'ITEM_NUM'} }" itemPress="onItemPress" rememberSelections="false" mode="SingleSelectMaster" selectionChange="onItemPress" sticky="ColumnHeaders">
+                    <Table id="idBom" items="{path: '/results', sorter : { path : 'ITEM_NUM'} }"  itemPress="onItemPress" selectionChange="onItemPress" rememberSelections="false" mode="SingleSelectMaster"  sticky="ColumnHeaders">
                         <columns>
-                            <Column hAlign="Left" width="80px">
+                            <Column hAlign="Centre" width="80px">
                                 <Text text="{i18n>itemno}" />
                             </Column>
                             <Column hAlign="Left">
@@ -30,10 +30,10 @@
                             <Column hAlign="Center">
                                 <Text text="{i18n>compqty}" width="120px"/>
                             </Column>
-                            <Column hAlign="Left" width="100px">
+                            <Column hAlign="Center" width="90px">
                                 <Text text="{i18n>validfm}"/>
                             </Column>
-                            <Column hAlign="Left" width="100px">
+                            <Column hAlign="Center" width="90px">
                                 <Text text="{i18n>validto}"/>
                             </Column>
                         </columns>
@@ -70,12 +70,12 @@
                                 <Text text="{i18n>objdepdes}"/>
                             </Column>
                             <Column hAlign="Center">
-                                <Text text="{i18n>compqty}" width="120px"/>
+                                <Text text="{i18n>compqty}" width="90px"/>
                             </Column>
-                            <Column hAlign="Left" width="100px">
+                            <Column hAlign="Left" width="90px">
                                 <Text text="{i18n>validfm}"/>
                             </Column>
-                            <Column hAlign="Left" width="100px">
+                            <Column hAlign="Left" width="90px">
                                 <Text text="{i18n>validto}"/>
                             </Column>
                         </columns>

@@ -16,6 +16,11 @@ Content-Type: application/json
       }
     ]
 }
+### generate Primary ID Timeseries Data
+GET http://localhost:4004/plstr-data/fgenTsForPrimary()
+
+### generate Timeseries Data
+GET http://localhost:4004/plstr-data/fgenTimeSeries()
 
 ### generate Master Data
 GET http://localhost:4004/plstr-data/fgenMasterData()

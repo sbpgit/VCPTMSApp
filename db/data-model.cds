@@ -22,7 +22,7 @@ context cp {
 
     // Customer group
     entity CUSTOMERGROUP {
-        key CUSTOMER_GROUP : String(2)  @title : 'Customer Group';
+        key CUSTOMER_GROUP : String(20)  @title : 'Customer Group';
             CUSTOMER_DESC  : String(20) @title : 'Customer Description';
             RESERVE_FIELD1 : String(20) @title : 'Reserve Field1';
             RESERVE_FIELD2 : String(20) @title : 'Reserve Field2';
@@ -154,7 +154,7 @@ context cp {
             ORD_QTY          : Decimal(13, 3) @title : 'Order Quantity';
             MAT_AVAILDATE    : Date           @title : 'Material Availability Date';
             NET_VALUE        : Decimal(15, 2) @title : 'Net Value';
-            CUSTOMER_GROUP   : String(2)      @title : 'Customer Group';
+            CUSTOMER_GROUP   : String(20)      @title : 'Customer Group';
             LOCATION_ID      : String(4)      @title : 'Location ID';
             CHANGED_DATE     : Date           @title : 'Changed Date';
             CHANGED_BY       : String(12)     @title : 'Changed By';
@@ -187,7 +187,7 @@ context cp {
         key CHARVAL_NUM    : String(10)     @title : 'Internal number Char. Value ';
         key CLASS_NUM      : String(18)     @title : 'Internal number class';
         key PRODUCT_ID     : String(40)     @title : 'Product ID';
-        key CUSTOMER_GROUP : String(2)      @title : 'Customer Group';
+        key CUSTOMER_GROUP : String(20)      @title : 'Customer Group';
             LOCATION_ID    : String(4)      @title : 'Location ID';
             SALEHIST_PROD  : Decimal(13, 3) @title : 'Confirmed Quantity';
             RESERVE_FIELD1 : String(20)     @title : 'Reserve Field1';
@@ -208,7 +208,7 @@ context cp {
         key WEEK_DATE      : Date           @title : 'Week Date';
         key PRODUCT_ID     : String(40)     @title : 'Product ID';
         key LOCATION_ID    : String(4)      @title : 'Location ID';
-        key CUSTOMER_GROUP : String(2)      @title : 'Customer Group';
+        key CUSTOMER_GROUP : String(20)      @title : 'Customer Group';
             DEMAND_PROD    : String(10)     @title : 'Demand';
             SALEHIST_PROD  : Decimal(13, 3) @title : 'Confirmed Quantity';
             RESERVE_FIELD1 : String(20)     @title : 'Reserve Field1';
@@ -471,6 +471,7 @@ context cp {
     entity PARTIALPROD_INTRO {
         key PRODUCT_ID  : String(40) @title : 'New Product';
         key LOCATION_ID : String(4)  @title : 'Location';
+            PROD_DESC   : String(40) @title : 'Product Description';
             REF_PRODID  : String(40) @title : ' Ref. Product';
     }
 
@@ -741,6 +742,19 @@ context cp {
             VALUE        : String(500);
     }
 
+    entity IBP_STOCK {
+        key SALES_DOC : String(10) @title : 'Sales Document';
+        STATUS        : String(10);
+        ORDER_NUMBER  : String(10); 
+        PURCHASE_REQ  : String(12);
+        CHANGED_DATE  : Date;
+        CHANGED_TIME  : Time;
+        CHANGED_BY    : String(12);
+        CREATED_DATE  : Date;
+        CREATED_TIME  : Time;
+        CREATED_BY    : String(12);
+    }
+
 // End Of Insert - Deepa
 }
 
@@ -767,9 +781,11 @@ entity![V_CLASSCHARVAL]{
     key![CLASS_NAME]  : String(20) @title : 'CLASS_NAME';
     key![CHAR_NUM]    : String(10) @title : 'CHAR_NUM';
     key![CHAR_NAME]   : String(30) @title : 'CHAR_NAME';
+    key![CHAR_DESC]   : String(150) @title : 'CHAR_NAME';
     key![CHAR_GROUP]   : String(10) @title : 'CHAR_NAME';
     key![CHAR_VALUE]  : String(70) @title : 'CHAR_VALUE';
     key![CHARVAL_NUM] : String(10) @title : 'CHARVAL_NUM';
+    key![CHARVAL_DESC]    : String(150) @title : 'CHAR_DESC';
 }
 
 @cds.persistence.exists
@@ -823,7 +839,7 @@ entity![V_SALESHCFG_CHARVAL]{
     key![ORD_QTY]          : Decimal(13, 3) @title : 'Ordered Qty';
     key![MAT_AVAILDATE]    : Date           @title : 'Material Avail. Date';
     key![NET_VALUE]        : Decimal(15, 2) @title : 'Net Value';
-    key![CUSTOMER_GROUP]   : String(2)      @title : 'Customer Group';
+    key![CUSTOMER_GROUP]   : String(20)      @title : 'Customer Group';
     key![LOCATION_ID]      : String(4)      @title : 'Location ID';
     key![CHAR_NAME]        : String(30)     @title : 'Characteristic';
     key![CHAR_VALUE]       : String(70)     @title : 'Characteristic Value';
@@ -984,8 +1000,10 @@ entity![V_PARTIALPRODCHAR]{
     key![CLASS_NAME]  : String(20) @title : 'CLASS_NAME';
     key![CHAR_NUM]    : String(30) @title : 'CHAR_NUM';
     key![CHAR_NAME]   : String(30) @title : 'CHAR_NAME';
+    key![CHAR_DESC]    : String(150) @title : 'CHAR_DESC';
     key![CHARVAL_NUM] : String(70) @title : 'CHARVAL_NUM';
     key![CHAR_VALUE]  : String(70) @title : 'CHAR_VALUE';
+    key![CHARVAL_DESC]    : String(150) @title : 'CHAR_DESC';
 }
 
 @cds.persistence.exists
@@ -1019,13 +1037,14 @@ entity![V_GETVARCHARPS]{
 
 @cds.persistence.exists
 entity![V_UNIQUE_ID_ITEM]{
-    key![UNIQUE_ID]   : Integer    @title : 'MATVARID';
-    key![PRODUCT_ID]  : String(40) @title : 'PRODUCT_ID';
-    key![LOCATION_ID] : String(4)  @title : 'LOCATION_ID';
-    key![CHAR_NUM]    : String(30) @title : 'CHAR_NUM';
-    key![CHAR_NAME]   : String(30) @title : 'CHAR_NAME';
-    key![CHARVAL_NUM] : String(70) @title : 'CHARVAL_NUM';
-    key![CHAR_VALUE]  : String(70) @title : 'CHAR_VALUE';
+    key![UNIQUE_ID]     : Integer        @title : 'MATVARID';
+    key![PRODUCT_ID]    : String(40)     @title : 'PRODUCT_ID';
+    key![LOCATION_ID]   : String(4)      @title : 'LOCATION_ID';
+    key![CHAR_NUM]      : String(30)     @title : 'CHAR_NUM';
+    key![CHAR_NAME]     : String(30)     @title : 'CHAR_NAME';
+    key![CHARVAL_NUM]   : String(70)     @title : 'CHARVAL_NUM';
+    key![CHAR_VALUE]    : String(70)     @title : 'CHAR_VALUE';
+    // key![UID_CHAR_RATE] : Decimal(13, 2) @title : 'UID_CHAR_RATE';
 }
 
 @cds.persistence.exists

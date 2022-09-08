@@ -787,6 +787,21 @@ module.exports = (srv) => {
         const obgenSOFunctions = new SOFunctions();
         await obgenSOFunctions.genUniqueID(req.data);
     });
+    // Generate Unique ID
+    srv.on("gen_UniqueID", async (req) => {
+        const obgenSOFunctions = new SOFunctions();
+        await obgenSOFunctions.genUniqueID(req.data);
+    });    
+    // Generate Fully Configured Demand
+    srv.on("genFullConfigDemand", async (req) => {
+        const obgenTimeseriesM2 = new GenTimeseriesM2();
+        await obgenTimeseriesM2.genPrediction(req.data);
+    });    
+    // Generate Fully Configured Demand
+    srv.on("gen_FullConfigDemand", async (req) => {
+        const obgenTimeseriesM2 = new GenTimeseriesM2();
+        await obgenTimeseriesM2.genPrediction(req.data);
+    });       
 
     srv.on("genVariantStruc", async (req) => {
 
@@ -1236,7 +1251,7 @@ module.exports = (srv) => {
             }
             liresults.push(lsresults);
             try {
-                await UPDATE `CP_UNIQUE_ID_HEADER`
+                await UPDATE`CP_UNIQUE_ID_HEADER`
                     .with({
                         UNIQUE_DESC: lsresults.UNIQUE_DESC
                     })
@@ -1300,25 +1315,30 @@ module.exports = (srv) => {
         WHERE "LOCATION_ID" = '` +
             liuniquechar[0].LOCATION_ID +
             `'
-        AND "PRODUCT_ID" = '` +
-            liuniquechar[0].PRODUCT_ID +
-            `' ORDER BY UNIQUE_ID DESC`
+             ORDER BY UNIQUE_ID DESC`
         );
         vCharCount = liuniquechar.length;
-        vUID = li_uniquedata[0].UNIQUE_ID;
+        const lsUniqueInd = await SELECT.one.columns("MAX(UNIQUE_ID) AS MAX_ID")
+            .from('CP_UNIQUE_ID_HEADER');
+        if (lsUniqueInd.MAX_ID === null) {
+            vUID = 1;
+        } else {
+            vUID = parseInt(lsUniqueInd.MAX_ID);
+        }
+        // vUID = li_uniquedata[0].UNIQUE_ID;
         // Check if there is any unique ID with same char.
         for (let uIndex = 0; uIndex < li_uniquedata.length; uIndex++) {
             if (vUID === li_uniquedata[uIndex].UNIQUE_ID) {
                 vIndex = vIndex + 1;
             }
-            else {                
-                if (vIndex === vCount && vIndex === vCharCount) {                    
+            else {
+                if (vIndex === vCount && vIndex === vCharCount) {
                     return "Entry already exists";
                 }
-                else{   
+                else {
                     vIndex = 1;
                     vCount = 0;
-                    vUID =li_uniquedata[uIndex].UNIQUE_ID;
+                    vUID = li_uniquedata[uIndex].UNIQUE_ID;
                 }
             }
             for (let cIndex = 0; cIndex < liuniquechar.length; cIndex++) {
@@ -1340,7 +1360,7 @@ module.exports = (srv) => {
                     lsresults.CHAR_NUM = liuniquechar[i].CHAR_NUM;
                     lsresults.CHARVAL_NUM = liuniquechar[i].CHARVAL_NUM;
                     liresults.push(lsresults);
-
+                    lsresults = {};
                 }
                 if (liresults.length > 0) {
                     try {
@@ -1555,15 +1575,20 @@ module.exports = (srv) => {
         var responseMessage;
 
         liSeeddata = JSON.parse(req.data.SEEDDATA);
+        // const li_sodata = await cds.run(
+        //     `SELECT *
+        //     FROM "CP_SEEDORDER_HEADER"
+        //     WHERE "LOCATION_ID" = '` +
+        //     liSeeddata[0].LOCATION_ID +
+        //     `'
+        //     AND "PRODUCT_ID" = '` +
+        //     liSeeddata[0].PRODUCT_ID +
+        //     `' ORDER BY SEED_ORDER DESC`
+        // );
         const li_sodata = await cds.run(
             `SELECT *
             FROM "CP_SEEDORDER_HEADER"
-            WHERE "LOCATION_ID" = '` +
-            liSeeddata[0].LOCATION_ID +
-            `'
-            AND "PRODUCT_ID" = '` +
-            liSeeddata[0].PRODUCT_ID +
-            `' ORDER BY SEED_ORDER DESC`
+             ORDER BY SEED_ORDER DESC`
         );
         const obgenSOFunctions = new SOFunctions();
         if (req.data.FLAG === "C") {
@@ -1572,10 +1597,15 @@ module.exports = (srv) => {
             lsresults.UNIQUE_ID = liSeeddata[0].UNIQUE_ID;
             lsresults.ORD_QTY = parseFloat(liSeeddata[0].ORD_QTY);
             lsresults.MAT_AVAILDATE = liSeeddata[0].MAT_AVAILDATE;
-            vTemp = li_sodata[0].SEED_ORDER;
-            console.log(vTemp);
-            vTemp = vTemp.slice(2);
-            console.log(vTemp);
+            if (!li_sodata[0].SEED_ORDER) {
+                vTemp = 0;
+            }
+            else {
+                vTemp = li_sodata[0].SEED_ORDER;
+                console.log(vTemp);
+                vTemp = vTemp.slice(2);
+                console.log(vTemp);
+            }
             vTemp = parseInt(vTemp) + 1;
             lsresults.SEED_ORDER = vPrefix.concat(vTemp.toString());
             // const li_paravalues = await cds.run(
@@ -1644,19 +1674,19 @@ module.exports = (srv) => {
 
         //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
         for (i = 0; i < limasterprod.length; i++) {
-           lsprod = {};
-           lsprod.LOCATION_ID = limasterprod[i].LOCATION_ID;
-           lsprod.PRODUCT_ID = limasterprod[i].PRODUCT_ID;
-           lsprod.PROD_DESC = limasterprod[i].PROD_DESC;
-           vDesc = limasterprod[i].PROD_DESC;
-           liprod.push(lsprod);
-           lsprod = {};
+            lsprod = {};
+            lsprod.LOCATION_ID = limasterprod[i].LOCATION_ID;
+            lsprod.PRODUCT_ID = limasterprod[i].PRODUCT_ID;
+            lsprod.PROD_DESC = limasterprod[i].PROD_DESC;
+            vDesc = limasterprod[i].PROD_DESC;
+            liprod.push(lsprod);
+            lsprod = {};
             for (iPartial = 0; iPartial < lipartialprod.length; iPartial++) {
-                if (lipartialprod[iPartial].REF_PRODID === limasterprod[i].PRODUCT_ID) {                    
+                if (lipartialprod[iPartial].REF_PRODID === limasterprod[i].PRODUCT_ID) {
                     lsprod.LOCATION_ID = lipartialprod[iPartial].LOCATION_ID;
                     lsprod.PRODUCT_ID = lipartialprod[iPartial].PRODUCT_ID;
                     lsprod.PROD_DESC = vDesc;//lsprod.PROD_DESC;
-                    liprod.push(lsprod);                    
+                    liprod.push(lsprod);
                     lsprod = {};
                 }
             }
@@ -1698,7 +1728,202 @@ module.exports = (srv) => {
         return responseMessage;
     });
 
+    // Service for weekly component requirements- assembly component
+    srv.on("getCIRWeekly", async (req) => {
+        let { genAsmbComp } = srv.entities;
+        let vDateFrom = req.data.FROMDATE; //"2022-03-04";
+        let vDateTo = req.data.TODATE; //"2023-01-03";
+        let liCompWeekly = [];
+        let lsCompWeekly = {};
+        let liDates = [],
+            vWeekIndex,
+            vCompIndex,
+            vDateIndex,
+            vComp,
+            lsDates = {};
+        let columnname = "WEEK";
+
+        const liCIRGen = await cds.run(`SELECT * from "CP_CIR_GENERATED" WHERE "LOCATION_ID" = '` +
+            req.data.LOCATION_ID +
+            `'`);
+
+        const liCIRQty = await cds.run(
+            `
+            SELECT * FROM "CP_CIR_GENERATED"
+            WHERE "LOCATION_ID" = '` +
+            req.data.LOCATION_ID +
+            `'
+                 AND "PRODUCT_ID" = '` +
+            req.data.PRODUCT_ID +
+            `' AND "VERSION" = '` +
+            req.data.VERSION +
+            `' AND "SCENARIO" = '` +
+            req.data.SCENARIO +
+            `' AND ( "WEEK_DATE" <= '` +
+            vDateTo +
+            `' AND "WEEK_DATE" >= '` +
+            vDateFrom +
+            `') AND "MODEL_VERSION" = '` +
+            req.data.MODEL_VERSION +
+            `'
+                 ORDER BY 
+                      "LOCATION_ID" ASC, 
+                      "PRODUCT_ID" ASC,
+                      "VERSION" ASC,
+                      "SCENARIO" ASC,
+                      "WEEK_DATE" ASC`
+        );
+
+        // const liCIRQty = await cds.run(
+        //     `
+        //     SELECT * FROM "CP_CIR_GENERATED"
+        //     WHERE "WEEK_DATE" <= '` + vDateTo + `'
+        //       AND "WEEK_DATE" >= '` + vDateFrom + `' 
+        //  ORDER BY    "LOCATION_ID" ASC, 
+        //               "PRODUCT_ID" ASC,
+        //               "VERSION" ASC,
+        //               "SCENARIO" ASC,
+        //               "WEEK_DATE" ASC`
+        // );
+
+        // const liUniqueId = await cds.run(
+        //     `
+        //     SELECT DISTINCT "UNIQUE_ID"
+        //       FROM "CP_CIR_GENERATED"
+        //     WHERE "WEEK_DATE" <= '` + vDateTo + `'
+        //       AND "WEEK_DATE" >= '` + vDateFrom + `' 
+        //  ORDER BY    "UNIQUE_ID" ASC`
+        //             //   "PRODUCT_ID" ASC,
+        //             //   "VERSION" ASC,
+        //             //   "SCENARIO" ASC,
+        //             //   "WEEK_DATE" ASC`
+        // );
+
+        const liUniqueId = await cds.run(
+            `
+          SELECT DISTINCT "LOCATION_ID",
+                          "PRODUCT_ID",
+                          "VERSION",
+                          "SCENARIO",
+                          "UNIQUE_ID"
+          FROM "CP_CIR_GENERATED"
+          WHERE "LOCATION_ID" = '` +
+            req.data.LOCATION_ID +
+            `' AND "PRODUCT_ID" = '` +
+            req.data.PRODUCT_ID +
+            `' AND "VERSION" = '` +
+            req.data.VERSION +
+            `' AND "SCENARIO" = '` +
+            req.data.SCENARIO +
+            `' AND ( "WEEK_DATE" <= '` +
+            vDateTo +
+            `'
+                AND "WEEK_DATE" >= '` +
+            vDateFrom +
+            `') AND "MODEL_VERSION" = '` +
+            req.data.MODEL_VERSION +
+            `'
+               ORDER BY 
+                    "LOCATION_ID" ASC, 
+                    "PRODUCT_ID" ASC,
+                    "VERSION" ASC,
+                    "SCENARIO" ASC,
+                    "UNIQUE_ID" ASC`
+        );
+        var vDateSeries = vDateFrom;
+        lsDates.WEEK_DATE = GenFunctions.getNextMondayCmp(vDateSeries);
+        vDateSeries = lsDates.WEEK_DATE;
+        liDates.push(lsDates);
+        lsDates = {};
+        while (vDateSeries <= vDateTo) {
+            vDateSeries = GenFunctions.addDays(vDateSeries, 7);
+
+            lsDates.WEEK_DATE = vDateSeries;//GenFunctions.getNextSundayCmp(vDateSeries);
+            //  vDateSeries = lsDates.CAL_DATE;
+
+            liDates.push(lsDates);
+            lsDates = {};
+        }
+        vComp = 0;
+
+        for (let j = 0; j < liUniqueId.length; j++) {
+            // Initially set vWeekIndex to j to geneate Week columns
+            // vCompIndex is to get Componnent quantity for all dates
+            vWeekIndex = 0; //j
+            //lsCompWeekly.LOCATION_ID = liComp[j].LOCATION_ID;
+            //lsCompWeekly.PRODUCT_ID = liComp[j].PRODUCT_ID;
+            lsCompWeekly.ITEM_NUM = '';
+            //   lsCompWeekly.ASSEMBLY = liComp[j].COMPONENT;
+            //lsCompWeekly.COMPONENT = liComp[j].COMPONENT;
+            //lsCompWeekly.VERSION = liComp[j].VERSION;
+           // lsCompWeekly.SCENARIO = liComp[j].SCENARIO;
+            lsCompWeekly.UNIQUE_ID = liUniqueId[j].UNIQUE_ID;
+            //lsCompWeekly.QTYTYPE = "Normalized";
+
+            for (let i = 0; i < liDates.length; i++) {
+                vWeekIndex = vWeekIndex + 1;
+                for (vCompIndex = 0; vCompIndex < liCIRQty.length; vCompIndex++) {
+                    lsCompWeekly[columnname + vWeekIndex] = 0;
+                    if (
+                        liCIRQty[vCompIndex].UNIQUE_ID === lsCompWeekly.UNIQUE_ID &&
+                        liCIRQty[vCompIndex].WEEK_DATE === liDates[i].WEEK_DATE
+                    ) {
+                        //   lsCompWeekly.STRUC_NODE = liCompQty[vCompIndex].STRUC_NODE;
+                        lsCompWeekly[columnname + vWeekIndex] =
+                            liCIRQty[vCompIndex].CIR_QTY;
+                        break;
+                    }
+                }
+            }
+            liCompWeekly.push(GenFunctions.parse(lsCompWeekly));
+            lsCompWeekly = {};
+        }
+        liCompWeekly.sort(GenFunctions.dynamicSortMultiple("STRUC_NODE", "UNIQUE_ID", "ITEM_NUM"));
+        return liCompWeekly;
+    });
+
+    // Service for Unique Characteristic Items
+    srv.on("getUniqueIdItems", async (req) => {
+        let { genAsmbComp } = srv.entities;
+        // let vDateFrom = req.data.FROMDATE; //"2022-03-04";
+        // let vDateTo = req.data.TODATE; //"2023-01-03";
+        let liUniqueItems = [];
+        let lsUniqueItems= {};
+        let vUniqueId = req.data.UNIQUE_ID;
+        // let liDates = [],
+        //     vWeekIndex,
+        //     vCompIndex,
+        //     vDateIndex,
+        //     vComp,
+        //     lsDates = {};
+        // let columnname = "WEEK";
+
+    
+
+        const ltUniqueItems = await cds.run(
+            `
+            SELECT * FROM "CP_UNIQUE_ID_ITEM"
+            WHERE "UNIQUE_ID" = '` + vUniqueId + `'`
+        );
+
+        for (let j = 0; j < ltUniqueItems.length; j++) {
+            // Initially set vWeekIndex to j to geneate Week columns
+            // vCompIndex is to get Componnent quantity for all dates
+            // vWeekIndex = 0; //j
+            lsUniqueItems.UNIQUE_ID = ltUniqueItems[j].UNIQUE_ID;
+            lsUniqueItems.LOCATION_ID = ltUniqueItems[j].LOCATION_ID;
+            lsUniqueItems.PRODUCT_ID = ltUniqueItems[j].PRODUCT_ID;
+            lsUniqueItems.CHAR_NUM= ltUniqueItems[j].CHAR_NUM;
+            lsUniqueItems.CHARVAL_NUM = ltUniqueItems[j].CHARVAL_NUM;           
+            lsUniqueItems.UID_CHAR_RATE = ltUniqueItems[j].UID_CHAR_RATE;
+
+            liUniqueItems.push(GenFunctions.parse(lsUniqueItems));
+            lsUniqueItems = {};
+        }
+        // liCompWeekly.sort(GenFunctions.dynamicSortMultiple("STRUC_NODE", "UNIQUE_ID", "ITEM_NUM"));
+        return liUniqueItems;
+    })
 
     // EOI - Deepa
-    
+
 };
