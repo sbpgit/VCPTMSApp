@@ -39,6 +39,22 @@ module.exports = async function (srv) {
    return (await _genPartialProducts(req,true));
  })
 
+ srv.on ('genTimeSeries',    async req => {
+    return (await _genTimeSeries(req,false));
+ })
+
+ srv.on ('fgenTimeSeries',    async req => {
+   return (await _genTimeSeries(req,true));
+ })
+
+ srv.on ('genTsForPrimary',    async req => {
+    return (await _genTsForPrimary(req,false));
+ })
+
+ srv.on ('fgenTsForPrimary',    async req => {
+   return (await _genTsForPrimary(req,true));
+ })
+
 
   async function _genMasterData(req,isGet) {
 
@@ -239,6 +255,44 @@ module.exports = async function (srv) {
 
         //             );
 
+        let countryCode = plstrData[shIndex].COUNTRY ;
+        let custGroup = '';
+        if ( (countryCode == 'GB') ||
+             (countryCode == 'AT') ||
+             (countryCode == 'IS') ||
+             (countryCode == 'NL') ||
+             (countryCode == 'SE') ||
+             (countryCode == 'BE') ||
+             (countryCode == 'CH') ||
+             (countryCode == 'DE') ||
+             (countryCode == 'DK') ||
+             (countryCode == 'FI') ||
+             (countryCode == 'NO') ||
+             (countryCode == 'LU') )
+        {
+            custGroup = 'EU';
+        }
+        else if ((countryCode == 'US') ||
+                 (countryCode == 'CA') )
+        {
+            custGroup = 'NA';
+        }
+        else if ((countryCode == 'NZ') ||
+                 (countryCode == 'AU') ||
+                 (countryCode == 'CN') )
+        {
+            custGroup = 'OS';
+        }
+        else if ((countryCode == 'SG') ||
+                 (countryCode == 'KR') )
+        {
+            custGroup = 'SE';
+        }       
+        else if ((countryCode == 'KW'))
+        {
+            custGroup = 'OT';
+        }
+
         sqlStr = 'UPSERT PLSTR_SALESH VALUES (' +
                     "'" + salesDocId + "'" + "," +
                     "'" + salesDocItem + "'" + "," +
@@ -251,7 +305,7 @@ module.exports = async function (srv) {
                     "'" + plstrData[shIndex].HANDOVERS_COUNT + "'" + "," +
                     "'" + plstrData[shIndex].START_DATE + "'" + "," +
                     "'" + 9999999 + "'" + "," +
-                    "'" + plstrData[shIndex].COUNTRY + "'" + "," +
+                    "'" + custGroup + "'" + "," +
                     "'PL20'" + "," +
                     "'" + plstrData[shIndex].START_DATE + "'" + "," +
                     "''" + "," +
@@ -626,7 +680,13 @@ module.exports = async function (srv) {
     }
 
 
-
+    let custGrpSql  = 'UPSERT PLSTR_CUSTOMERGROUP ("CUSTOMER_GROUP", "CUSTOMER_DESC")' +
+                        ' SELECT DISTINCT "CUSTOMER_GROUP" ,' +
+                        ' CONCAT("CUSTOMER_GROUP", ' + '\' Customer \'' + ')' + 
+                        ' FROM "PLSTR_SALESH" WHERE LOCATION_ID = ' + '\'PL20\'';
+    console.log("custGrpSql = ", custGrpSql);
+    let custGrpSqlResults = await cds.run(custGrpSql);
+    console.log("custGrpSqlResults = ", custGrpSqlResults);
 
 
     let dataObj = {};
@@ -1094,5 +1154,358 @@ module.exports = async function (srv) {
 
   }
 
+
+  async function _genTimeSeries(req,isGet) {
+
+    var reqData = "Request for Timeseries Generation Queued Sucessfully";
+
+    console.log("_genTimeSeries reqData : ", reqData);
+    let createtAt = new Date();
+    let id = uuidv1();
+    let values = [];	
+  
+    values.push({id, createtAt, reqData});    
+
+    if (isGet == true)
+    {
+        req.reply({values});
+    }
+    else
+    {
+        let res = req._.req.res;
+        res.statusCode = 202;
+        res.send({values});
+    }
+
+   
+
+    let sqlStr = 'SELECT DISTINCT PRODUCT_ID, LOCATION_ID, PRIMARY_CHARS_STR, PRIMARY_CHARVALS_STR  FROM V_PLSTR_PRIMARY_TS' +
+                 ' ORDER BY PRODUCT_ID';
+    console.log("sqlPrimary ", sqlStr )
+    let sqlPrimaryResults = await cds.run(sqlStr);
+    console.log("sqlPrimaryResults ", sqlPrimaryResults);
+
+    for (let priIndex = 0; priIndex < sqlPrimaryResults.length; priIndex++)
+    {
+        let str = JSON.stringify(sqlPrimaryResults[priIndex]);
+        let obj = JSON.parse(str);
+        let arrayVals = Object.values(obj);
+        // console.log("arrayVals ", arrayVals);
+        // let primary_id = arrayVals[0] + '_' + 'P' + priIndex;
+        let primary_id = arrayVals[0] + '_' + priIndex + 1;
+
+        console.log ("priIndex ", priIndex, "PrimaryId ", primary_id, 
+                     "primary_chars_str ",arrayVals[2],
+                     "primary_charvals_str ",arrayVals[3]);
+
+
+
+        sqlStr = 'UPSERT PLSTR_PRIMARY_IDS VALUES (' +
+        "'" + arrayVals[0] + "'" + "," +
+        "'" + arrayVals[1] + "'" + "," +
+        "'" + primary_id + "'" + "," +
+        "'" + arrayVals[2] + "'" + "," +
+        "'" + arrayVals[3] + "'" +')' + ' WITH PRIMARY KEY';
+
+        console.log("PLSTR_PRIMARY_IDS sqlStr", sqlStr);
+
+        let plstrPrimaryIdResults = await cds.run(sqlStr);
+        console.log("PLSTR_PRIMARY_IDS  plstrPrimaryIdResults", plstrPrimaryIdResults);
+
+    }
+
+
+
+    sqlStr = 'SELECT DISTINCT WEEKDATE, PRODUCT_ID, LOCATION_ID, PRIMARY_ID, ORDER_QTY, PRIMARY_ID_CHARVALS FROM V_PLSTR_PRIMARY_CHARS_CHARVALS_TS';
+                //  ' WHERE WEEKDATE = ' + '\'2020-06-29\'';
+    // console.log("sqlPrimary ", sqlStr )
+    sqlPrimaryResults = await cds.run(sqlStr);
+    console.log("sqlPrimaryResults length ", sqlPrimaryResults.length);
+
+
+    for (let priIndex = 0; priIndex < sqlPrimaryResults.length; priIndex++)
+    {
+        let str = JSON.stringify(sqlPrimaryResults[priIndex]);
+        let obj = JSON.parse(str);
+        let arrayKeys = Object.keys(obj)
+        let arrayVals = Object.values(obj);
+        console.log("PRIMARY_ID_CHARVALS INDEX ", priIndex+1);
+
+        // console.log("arrayKeys ", arrayKeys, "arrayVals", arrayVals);
+        for (let arrayIndex = 0; arrayIndex < arrayKeys.length; arrayIndex++)
+        {
+
+            // console.log("arrayKey ", arrayKeys[arrayIndex], "arrayVal ", arrayVals[arrayIndex]);
+            if (arrayKeys[arrayIndex] == 'PRIMARY_ID_CHARVALS')
+            {
+                let charVals = arrayVals[arrayIndex].split(',');
+                for (let charIndex = 0; charIndex < charVals.length; charIndex++)
+                {
+                    // console.log(" charIndex ", charIndex, "charVals ", charVals[charIndex]);
+
+                    sqlStr = 'UPSERT PLSTR_PRIMARY_TIMESERIES VALUES (' +
+                    "'" + arrayVals[0] + "'" + "," +
+                    "'" + arrayVals[1] + "'" + "," +
+                    "'" + arrayVals[2] + "'" + "," +
+                    "'" + arrayVals[3] + "'" + "," +
+                    "'" + charVals[charIndex] + "'" + "," +
+                    "'" + arrayVals[4] + "'" +')' + ' WITH PRIMARY KEY';
+
+                    // console.log("PLSTR_PRIMARY_TIMESERIES sqlStr", sqlStr);
+
+                    let primaryTsResults = await cds.run(sqlStr);
+                    // console.log("PLSTR_PRIMARY_TIMESERIES  ", primaryTsResults);
+                }
+
+            }
+        }
+    }
+
+    let dataObj = {};
+    dataObj["success"] = true;
+    dataObj["message"] = "update Partial Products Data Completed Successfully at " +  new Date();
+
+
+    // if (req.headers['x-sap-job-id'] > 0)
+    // {
+    //     const scheduler = getJobscheduler(req);
+
+    //     var updateReq = {
+    //         jobId: req.headers['x-sap-job-id'],
+    //         scheduleId: req.headers['x-sap-job-schedule-id'],
+    //         runId: req.headers['x-sap-job-run-id'],
+    //         data : dataObj
+    //         };
+
+    //         scheduler.updateJobRunLog(updateReq, function(err, result) {
+    //         if (err) {
+    //             return console.log('Error updating run log: %s', err);
+    //         }
+
+    //         });
+    // }
+
+    }
+
+
+
+
+
+
+    async function _genTsForPrimary(req,isGet) {
+
+        var reqData = "Request for TImeseries Generation for Primary IDs Queued Sucessfully";
+    
+        console.log("_genTsForPrimary reqData : ", reqData);
+        let createtAt = new Date();
+        let id = uuidv1();
+        let values = [];	
+      
+        values.push({id, createtAt, reqData});    
+    
+        if (isGet == true)
+        {
+            req.reply({values});
+        }
+        else
+        {
+            let res = req._.req.res;
+            res.statusCode = 202;
+            res.send({values});
+        }
+    
+       
+    
+        let sqlStr = 'SELECT DISTINCT WEEKDATE, PRODUCT_ID, LOCATION_ID, PRIMARY_ID ' +
+                      ' FROM PLSTR_PRIMARY_TIMESERIES ' +
+                      ' ORDER BY WEEKDATE, PRODUCT_ID, LOCATION_ID, PRIMARY_ID';
+        console.log("sqlPrimary ", sqlStr )
+        let sqlPrimaryResults = await cds.run(sqlStr);
+        console.log("sqlPrimaryResults ", sqlPrimaryResults);
+    
+        for (let priIndex = 0; priIndex < sqlPrimaryResults.length; priIndex++)
+        {
+            let str = JSON.stringify(sqlPrimaryResults[priIndex]);
+            let obj = JSON.parse(str);
+            let arrayVals = Object.values(obj);
+            // console.log("arrayVals ", arrayVals);
+            let weekdate = arrayVals[0];
+            let productId = arrayVals[1];
+            let locationId = arrayVals[2];
+            let primaryId = arrayVals[3];
+
+
+    
+            let sqlStrCharval = ' SELECT DISTINCT WEEKDATE, PRODUCT_ID, LOCATION_ID, PRIMARY_ID, CHAR_VALUE ' +
+                     ' FROM PLSTR_PRIMARY_TIMESERIES ' +
+                     ' WHERE ' +
+                     ' WEEKDATE = ' + "'"  + weekdate + "'" + ' AND ' + 
+                     ' PRODUCT_ID = ' + "'"  + productId + "'" + ' AND ' + 
+                     ' LOCATION_ID = ' + "'"  + locationId + "'" + ' AND ' + 
+                     ' PRIMARY_ID = ' + "'"  + primaryId + "'" + 
+                     ' ORDER BY WEEKDATE, PRODUCT_ID, LOCATION_ID, PRIMARY_ID, CHAR_VALUE';
+            
+            // console.log ("sqlStrCharval PLSTR_PRIMARY_TIMESERIES ", sqlStrCharval);
+    
+            let sqlStrCharvalResults = await cds.run(sqlStrCharval);
+            // console.log("PLSTR_PRIMARY_TIMESERIES  sqlStrCharvalResults", sqlStrCharvalResults);
+
+            let sqlPrimOrdQtyProduct = 'SELECT DISTINCT WEEKDATE, PRODUCT_ID, LOCATION_ID, SUM(ORDER_QTY) AS SUCCESS ' +
+                                    ' FROM V_PLSTR_PRIMARYID_TS ' +
+                                    ' WHERE ' +
+                                    ' WEEKDATE = ' + "'"  + weekdate + "'" + ' AND ' + 
+                                    ' PRODUCT_ID = ' + "'"  + productId + "'" + ' AND ' + 
+                                    ' LOCATION_ID = ' + "'"  + locationId + "'" + ' AND ' +
+                                    ' PRIMARY_ID = ' + "'"  + primaryId + "'" + 
+                                    ' GROUP BY WEEKDATE, PRODUCT_ID, LOCATION_ID ' +
+                                    ' ORDER BY WEEKDATE, PRODUCT_ID, LOCATION_ID';
+            // console.log ("sqlPrimOrdQtyProduct V_PLSTR_PRIMARYID_TS ", sqlPrimOrdQtyProduct);
+
+            let sqlPrimOrdQtyProductResults = await cds.run(sqlPrimOrdQtyProduct);
+            // console.log("V_PLSTR_PRIMARYID_TS  sqlPrimOrdQtyProductResults", sqlPrimOrdQtyProductResults);
+            
+            str = JSON.stringify(sqlPrimOrdQtyProductResults[0]);
+            obj = JSON.parse(str);
+            arrayVals = Object.values(obj);
+
+            let ordQtyPrimary = arrayVals[3];
+
+            
+            let sqOrdQtyProduct = 'SELECT DISTINCT WEEKDATE, PRODUCT_ID, LOCATION_ID, SUM(ORDER_QTY) AS SUCCESS ' +
+                                    ' FROM V_PLSTR_PRIMARYID_TS ' +
+                                    ' WHERE ' +
+                                    ' WEEKDATE = ' + "'"  + weekdate + "'" + ' AND ' + 
+                                    ' PRODUCT_ID = ' + "'"  + productId + "'" + ' AND ' + 
+                                    ' LOCATION_ID = ' + "'"  + locationId + "'" +
+                                    ' GROUP BY WEEKDATE, PRODUCT_ID, LOCATION_ID ' +
+                                    ' ORDER BY WEEKDATE, PRODUCT_ID, LOCATION_ID';
+            // console.log ("sqOrdQtyProduct V_PLSTR_PRIMARYID_TS ", sqOrdQtyProduct);
+
+            let sqlOrdQtyProductResults = await cds.run(sqOrdQtyProduct);
+            // console.log("V_PLSTR_PRIMARYID_TS  sqlOrdQtyProductResults", sqlOrdQtyProductResults);
+            
+            str = JSON.stringify(sqlOrdQtyProductResults[0]);
+            obj = JSON.parse(str);
+            arrayVals = Object.values(obj);
+            // weekdate = arrayVals[0];
+            // productId = arrayVals[1];
+            // locationId = arrayVals[2];
+            let ordQtyProduct = arrayVals[3];
+
+            let objType = 'PI';
+            let objId = primaryId.split('_');
+            let objDep = objId[0];
+            let objCounter = objId[1];
+
+            let sqlStrObjdepHdr = 'UPSERT CP_TS_OBJDEPHDR VALUES (' +
+                        "'" + weekdate + "'" + "," +
+                        "'" + locationId + "'" + "," +
+                        "'" + productId + "'" + "," +
+                        "'" + objType + "'" + "," +
+                        "'" + objDep + "'" + "," +
+                        "'" + parseInt(objCounter) + "'" + "," +
+                        "'" + parseFloat(ordQtyPrimary) + "'" + "," +
+                        "'" + 100*parseFloat(ordQtyPrimary)/parseFloat(ordQtyProduct) + "'" +')' + ' WITH PRIMARY KEY';
+
+            console.log("CP_TS_OBJDEPHDR sqlStr", sqlStrObjdepHdr);
+
+            let sqlStrObjdepHdrResults = await cds.run(sqlStrObjdepHdr);
+            console.log("CP_TS_OBJDEPHDR  ", sqlStrObjdepHdrResults);
+
+            for (let charIndex = 0; charIndex < sqlStrCharvalResults.length; charIndex++)
+            {
+                let rowId = charIndex + 1;
+                str = JSON.stringify(sqlStrCharvalResults[charIndex]);
+                obj = JSON.parse(str);
+                arrayVals = Object.values(obj);
+                weekdate = arrayVals[0];
+                productId = arrayVals[1];
+                locationId = arrayVals[2];
+                let charVal = arrayVals[4];
+                let sqlStrCharvalCount = 
+                    'SELECT WEEKDATE, PRODUCT_ID, LOCATION_ID, CHAR_VALUE, SUM(ORD_QTY) AS SUCCESS ' +
+                    ' FROM PLSTR_PRIMARY_TIMESERIES ' +
+                    ' WHERE ' +
+                    ' WEEKDATE = ' + "'"  + weekdate + "'" + ' AND ' + 
+                    ' PRODUCT_ID = ' + "'"  + productId + "'" + ' AND ' + 
+                    ' LOCATION_ID = ' + "'"  + locationId + "'" + ' AND ' +
+                    ' CHAR_VALUE = ' + "'"  + charVal + "'" +
+                    ' GROUP BY WEEKDATE, PRODUCT_ID, LOCATION_ID, CHAR_VALUE ' +
+                    ' ORDER BY WEEKDATE, PRODUCT_ID, LOCATION_ID, CHAR_VALUE';
+                
+                // console.log ("sqlStrCharvalCount PLSTR_PRIMARY_TIMESERIES ", sqlStrCharvalCount);
+
+                let sqlStrCharvalCountResults = await cds.run(sqlStrCharvalCount);
+                // console.log("PLSTR_PRIMARY_TIMESERIES  sqlStrCharvalCountResults", sqlStrCharvalCountResults);
+        
+                str = JSON.stringify(sqlStrCharvalCountResults[0]);
+                obj = JSON.parse(str);
+                arrayVals = Object.values(obj);
+                weekdate = arrayVals[0];
+                productId = arrayVals[1];
+                locationId = arrayVals[2];
+                charVal = arrayVals[3];
+                let success = arrayVals[4];
+                // let successRate = (100.0*success)/ordQtyPrimary;
+                let successRate = (100.0*success)/ordQtyProduct;
+                // let objType = 'PI';
+                // let objId = primaryId.split('_');
+                // let objDep = objId[0];
+                // let objCounter = objId[1];
+                
+                console.log("PR_INDEX ",priIndex, "Primary ID Counts ", sqlPrimaryResults.length);
+                // console.log("CAL_DATE ", weekdate, "LOCATION_ID ", locationId, "PRODUCT_ID ", productId, 
+                //             "OBJ_TYPE ", objType, "OBJ_DEP", objDep, "OBJ_COUNTER ", objCounter,
+                //             "ROW_ID ", rowId, "SUCCESS ", success, "SUCCESS_RATE ", successRate);
+
+                if( priIndex % 100 == 0)
+                    await cds.run('COMMIT');
+
+                let sqlStrObjdepCharHdr = 'UPSERT CP_TS_OBJDEP_CHARHDR VALUES (' +
+                        "'" + weekdate + "'" + "," +
+                        "'" + locationId + "'" + "," +
+                        "'" + productId + "'" + "," +
+                        "'" + objType + "'" + "," +
+                        "'" + objDep + "'" + "," +
+                        "'" + parseInt(objCounter) + "'" + "," +
+                        "'" + rowId + "'" + "," +
+                        "'" + parseFloat(success) + "'" + "," +
+                        "'" + parseFloat(successRate) + "'" +')' + ' WITH PRIMARY KEY';
+
+                console.log("CP_TS_OBJDEP_CHARHDR sqlStr", sqlStrObjdepCharHdr);
+
+                let sqlStrObjdepCharHdrResults = await cds.run(sqlStrObjdepCharHdr);
+                console.log("CP_TS_OBJDEP_CHARHDR  ", sqlStrObjdepCharHdrResults);
+            }
+
+    
+        }
+    
+    
+        let dataObj = {};
+        dataObj["success"] = true;
+        dataObj["message"] = "update Partial Products Data Completed Successfully at " +  new Date();
+    
+    
+        // if (req.headers['x-sap-job-id'] > 0)
+        // {
+        //     const scheduler = getJobscheduler(req);
+    
+        //     var updateReq = {
+        //         jobId: req.headers['x-sap-job-id'],
+        //         scheduleId: req.headers['x-sap-job-schedule-id'],
+        //         runId: req.headers['x-sap-job-run-id'],
+        //         data : dataObj
+        //         };
+    
+        //         scheduler.updateJobRunLog(updateReq, function(err, result) {
+        //         if (err) {
+        //             return console.log('Error updating run log: %s', err);
+        //         }
+    
+        //         });
+        // }
+    
+        }
 
 };

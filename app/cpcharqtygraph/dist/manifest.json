@@ -17,12 +17,12 @@
         },
         "dataSources": {
             "mainService": {
-                "uri": "catalog/",
+                "uri": "v2/catalog/",
                 "type": "OData",
                 "settings": {
                     "annotations": [],
                     "localUri": "localService/metadata.xml",
-                    "odataVersion": "4.0"
+                    "odataVersion": "2.0"
                 }
             }
         },
@@ -66,6 +66,7 @@
                 "sap.m": {},
                 "sap.ui.core": {},
                 "sap.f": {},
+                "sap.viz": {},
                 "sap.suite.ui.generic.template": {},
                 "sap.ui.comp": {},
                 "sap.ui.generic.app": {},
@@ -84,7 +85,7 @@
                     "bundleName": "cpapp.cpcharqtygraph.i18n.i18n"
                 }
             },
-            "": {
+            "oModel": {
                 "dataSource": "mainService",
                 "preload": true,
                 "settings": {
@@ -93,6 +94,9 @@
                     "autoExpandSelect": true,
                     "earlyRequests": true
                 }
+            },
+            "oGModel": {
+                "type": "sap.ui.model.json.JSONModel"
             }
         },
         "resources": {

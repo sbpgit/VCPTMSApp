@@ -103,10 +103,6 @@
       "CQL": true,
       "CXL": true,
       "cds": true
-    },
-    "rules": {
-      "no-console": "off",
-      "require-atomic-updates": "off"
     }
   },
   "cds": {
@@ -177,6 +173,54 @@
           }
         }
       }
+    },
+    "sapux": [
+      "app/cfgprd_pvsroot",
+      "app/project1",
+      "app/cp_ibpfdem",
+      "app/cp_ibpfplan",
+      "app/cp_ibpfres",
+      "app/cp_execprediction",
+      "app/cp_exeregressionmdls",
+      "app/cp_modelprofiles",
+      "app/cp_assignppf",
+      "app/cp_odprofiles",
+      "app/cp_assignprofiles",
+      "app/cp_locprod",
+      "app/cp_saleshcfg",
+      "app/cpodrestriction",
+      "app/cpibpresultplan",
+      "app/cpodrestrict",
+      "app/cpprodaccnode",
+      "app/cpcompsnode",
+      "app/cplocation",
+      "app/cpassignnode",
+      "app/cpcompreq",
+      "app/cpprodlocline",
+      "app/cprtrheader",
+      "app/cpasmbcompreq",
+      "app/cpnewprod",
+      "app/cpproduct",
+      "app/cpcustgroup",
+      "app/cpjobscheduler_logs",
+      "app/cprestrictions",
+      "app/cp_jobschlogs",
+      "app/cpjoblogs",
+      "app/cpjoblog",
+      "app/cpprscchar",
+      "app/cpmatvariant",
+      "app/cpunique",
+      "app/cpauthorization",
+      "app/cpauthentication",
+      "app/cp_prodlocline",
+      "app/cpprodrestr",
+      "app/cpcharqtygraph",
+      "app/cpcharqtygraph",
+      "app/cpseedordercreation"
+    ],
+    "devDependencies": {
+      "@sap/ux-specification": "^1.102.4",
+      "rimraf": "^3.0.2"
     },
     "hana": {
       "deploy-format": "hdbtable"

@@ -3,9 +3,13 @@ context cp_ds {
         LOCATION_ID : String(4);
         PRODUCT_ID  : String(40);
         OBJ_DEP     : String(30);
-        OBJ_COUNTER : Integer
+        OBJ_COUNTER : Integer;
     }
-
+    type locProd {
+        LOCATION_ID : String(4);
+        PRODUCT_ID  : String(40);
+        PROD_DESC   : String(40);
+    }
     type odprofiles {
         LOCATION_ID : String(4);
         PRODUCT_ID  : String(40);

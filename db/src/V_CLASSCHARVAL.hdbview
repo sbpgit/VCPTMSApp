@@ -9,8 +9,11 @@ SELECT  A.CLASS_NUM,
         A.CLASS_NAME,
         B.CHAR_NUM,
         B.CHAR_NAME,
+        B.CHAR_DESC,
+        B.CHAR_GROUP,
         B.CHAR_VALUE,
-        B.CHARVAL_NUM
+        B.CHARVAL_NUM,
+        B.CHARVAL_DESC
         FROM CP_CLASS AS A
         INNER JOIN "V_CHARVAL" AS B
         ON A.CLASS_NUM = B.CLASS_NUM;
