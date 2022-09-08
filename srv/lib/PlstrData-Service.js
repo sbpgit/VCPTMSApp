@@ -56,6 +56,15 @@ module.exports = async function (srv) {
  })
 
 
+ srv.on ('genFutureTsForPrimary',    async req => {
+    return (await _genFutureTsForPrimary(req,false));
+ })
+
+ srv.on ('fgenFutureTsForPrimary',    async req => {
+    return (await _genFutureTsForPrimary(req,true));
+  })
+
+
   async function _genMasterData(req,isGet) {
 
     var reqData = "Request for Master Data Generation Queued Sucessfully";
@@ -1507,5 +1516,146 @@ module.exports = async function (srv) {
         // }
     
         }
+
+
+    async function _genFutureTsForPrimary(req,isGet) {
+
+        var reqData = "Request for Future Timeseries Generation for Primary IDs Queued Sucessfully";
+    
+        console.log("_genFutureTsForPrimary reqData : ", reqData);
+        let createtAt = new Date();
+        let id = uuidv1();
+        let values = [];	
+        
+        values.push({id, createtAt, reqData});    
+    
+        if (isGet == true)
+        {
+            req.reply({values});
+        }
+        else
+        {
+            let res = req._.req.res;
+            res.statusCode = 202;
+            res.send({values});
+        }
+
+        let sqlFuturePrimarIds = 'SELECT DISTINCT WEEK_DATE, LOCATION_ID, REF_PRODID, PARTIAL_ID, PRIMARY_ID, CLASS_NUM,' +
+                                ' VERSION, SCENARIO FROM V_PLSTR_IBP_FUTURE_TS ' +
+                                'ORDER BY  WEEK_DATE, LOCATION_ID, REF_PRODID, PARTIAL_ID, PRIMARY_ID, CLASS_NUM, VERSION, SCENARIO';
+
+
+        // console.log("sqlStrsqlStrIbpFuture ", sqlFuturePrimarIds )
+        let sqlFuturePrimarIdsResults = await cds.run(sqlFuturePrimarIds);
+        // console.log("sqlFuturePrimarIdsResults ", sqlFuturePrimarIdsResults);
+
+        for (let primaryIdx = 0; primaryIdx < sqlFuturePrimarIdsResults.length; primaryIdx++)
+        {
+
+            let str = JSON.stringify(sqlFuturePrimarIdsResults[primaryIdx]);
+            let obj = JSON.parse(str);
+            let arrayVals = Object.values(obj);
+            let weekdate = arrayVals[0];
+            let locationId = arrayVals[1];
+            let productId = arrayVals[2];
+            let partialId = arrayVals[3];
+            let primaryId = arrayVals[4];
+            let objdep_counter = primaryId.split('_');
+            let objDep = objdep_counter[0];
+            let objCounter = objdep_counter[0];
+            let classNum = arrayVals[5];
+            let version = arrayVals[6];
+            let scenario = arrayVals[7];
+            let objType = 'PI';
+
+            let sqlPrimaryIdCharvals = 'SELECT DISTINCT WEEK_DATE, LOCATION_ID, REF_PRODID, PARTIAL_ID, PRIMARY_ID, CLASS_NUM,' +
+                                ' VERSION, SCENARIO, CHARVAL_NUM, OPT_PERCENT, OPT_QTY FROM V_PLSTR_IBP_FUTURE_TS ' +
+                                ' WHERE ' +
+                                ' WEEK_DATE = ' + "'"  + weekdate + "'" + ' AND ' + 
+                                ' LOCATION_ID = ' + "'"  + locationId + "'" + ' AND ' + 
+                                ' REF_PRODID = ' + "'"  + productId + "'" + ' AND ' + 
+                                ' PARTIAL_ID = ' + "'"  + partialId + "'" + ' AND ' + 
+                                ' PRIMARY_ID = ' + "'"  + primaryId + "'" + ' AND ' + 
+                                ' CLASS_NUM = ' + "'"  + classNum + "'" + ' AND ' + 
+                                ' VERSION = ' + "'"  + version + "'" + ' AND ' + 
+                                ' SCENARIO = ' + "'"  + scenario + "'" + 
+                                ' ORDER BY WEEK_DATE, LOCATION_ID, REF_PRODID, PARTIAL_ID, PRIMARY_ID, CLASS_NUM, ' +
+                                ' VERSION, SCENARIO, CHARVAL_NUM';
+            
+            // console.log("sqlPrimaryIdCharvals ", sqlPrimaryIdCharvals )
+            let sqlPrimaryIdCharvalsResults = await cds.run(sqlPrimaryIdCharvals);
+            // console.log("sqlPrimaryIdCharvals ", sqlPrimaryIdCharvalsResults);
+
+            for (let charIndex = 0; charIndex < sqlPrimaryIdCharvalsResults.length; charIndex++)
+            {
+                let rowId = charIndex + 1;
+                str = JSON.stringify(sqlPrimaryIdCharvalsResults[charIndex]);
+                obj = JSON.parse(str);
+                let arrayVals = Object.values(obj);
+                // console.log("arrayVals ", arrayVals);
+                let successRate = arrayVals[9];
+                let success = arrayVals[10];
+
+                // console.log("success =",success);
+
+                let sqlStrObjdepCharHdrF = 'UPSERT CP_TS_OBJDEP_CHARHDR_F VALUES (' +
+                                        "'" + weekdate + "'" + "," +
+                                        "'" + locationId + "'" + "," +
+                                        "'" + productId + "'" + "," +
+                                        "'" + objType + "'" + "," +
+                                        "'" + objDep + "'" + "," +
+                                        "'" + parseInt(objCounter) + "'" + "," +
+                                        "'" + rowId + "'" + "," +
+                                        "'" + version + "'" + "," +
+                                        "'" + scenario + "'" + "," +
+                                        "'" + parseInt(success) + "'" + "," +
+                                        "'" + parseFloat(successRate) + "'" +')' + ' WITH PRIMARY KEY';
+
+                console.log("sqlStrObjdepCharHdrF ", sqlStrObjdepCharHdrF, "primaryIdx ", primaryIdx )
+                let sqlStrObjdepCharHdrFResults = await cds.run(sqlStrObjdepCharHdrF);
+                // console.log("sqlStrObjdepCharHdrFResults ", sqlStrObjdepCharHdrFResults, "rowId ", rowId);
+                
+
+            }
+
+            if( primaryIdx % 100 == 0)
+            {
+                await cds.run('COMMIT');
+                console.log("PR_INDEX ",primaryIdx, "Primary ID Counts ", sqlFuturePrimarIdsResults.length);
+
+            }
+
+
+        }
+
+        
+
+
+        let dataObj = {};
+        dataObj["success"] = true;
+        dataObj["message"] = "update Partial Products Data Completed Successfully at " +  new Date();
+    
+    
+        // if (req.headers['x-sap-job-id'] > 0)
+        // {
+        //     const scheduler = getJobscheduler(req);
+    
+        //     var updateReq = {
+        //         jobId: req.headers['x-sap-job-id'],
+        //         scheduleId: req.headers['x-sap-job-schedule-id'],
+        //         runId: req.headers['x-sap-job-run-id'],
+        //         data : dataObj
+        //         };
+    
+        //         scheduler.updateJobRunLog(updateReq, function(err, result) {
+        //         if (err) {
+        //             return console.log('Error updating run log: %s', err);
+        //         }
+    
+        //         });
+        // }
+    
+        }
+        
 
 };
