@@ -93,11 +93,18 @@ sap.ui.define([
 
                 if (sLoc !== "" && sProd !== "") {
                     // Calling service to get the product data
-                    this.getModel("BModel").read("/getPriSecChar", {
-                        filters: [
-                            new Filter("LOCATION_ID", FilterOperator.EQ, sLoc),
-                            new Filter("PRODUCT_ID", FilterOperator.EQ, sProd),
-                        ],
+                    // this.getModel("BModel").read("/getPriSecChar", {
+                    //     filters: [
+                    //         new Filter("LOCATION_ID", FilterOperator.EQ, sLoc),
+                    //         new Filter("PRODUCT_ID", FilterOperator.EQ, sProd),
+                    //     ],method: "GET",
+                    this.getModel("BModel").callFunction("/getSecondaryChar", {
+                        method: "GET",
+                        urlParameters: {
+                            FLAG: "G",
+                            LOCATION_ID: sLoc,
+                            PRODUCT_ID: sProd
+                        },
                         success: function (oData) {
                             sap.ui.core.BusyIndicator.hide();
                             that.oPList = that.byId("Primarytable"),
@@ -148,7 +155,63 @@ sap.ui.define([
                     MessageToast.show("Please select Location and Product");
                 }
             },
+            onReset: function(){
+                var sLoc = that.byId("idloc").getValue(),
+                    sProd = that.byId("prodInput").getValue();
+                this.getModel("BModel").callFunction("/getSecondaryChar", {
+                    method: "GET",
+                    urlParameters: {
+                        FLAG: "R",
+                        LOCATION_ID: sLoc,
+                        PRODUCT_ID: sProd
+                    },
+                    success: function (oData) {
+                        sap.ui.core.BusyIndicator.hide();
+                        that.oPList = that.byId("Primarytable"),
+                            that.oSList = that.byId("Secondarytable");
 
+                        that.primaryData = [],
+                            that.secData = [];
+
+                        for (var i = 0; i < oData.results.length; i++) {
+                            if (oData.results[i].CHAR_TYPE === "P") {
+                                that.primaryData.push(oData.results[i]);
+                            } else {
+                                that.secData.push(oData.results[i]);
+                            }
+                        }
+
+                        that.finalSecData = [];
+                        for (var j = 0; j <= that.secData.length; j++) {
+                            for (var k = 0; k < that.secData.length; k++) {
+                                if (j === that.secData[k].SEQUENCE) {
+                                    that.finalSecData.push(that.secData[k]);
+                                    break;
+                                }
+                            }
+
+                        }
+
+
+                        that.PrimarylistModel.setData({
+                            results: that.primaryData,
+                        });
+                        that.oPList.setModel(that.PrimarylistModel);
+
+                        that.SeclistModel.setData({
+                            results: that.finalSecData,
+                        });
+                        that.oSList.setModel(that.SeclistModel);
+
+                        that.byId("searchField").setModel(that.SeclistModel);
+
+                    },
+                    error: function (oData, error) {
+                        sap.ui.core.BusyIndicator.hide();
+                        MessageToast.show("error");
+                    },
+                });
+            },
             /**
            * This function is called when click on Value help on Input box.
            * In this function based in sId will open the dialogs.
@@ -450,14 +513,14 @@ sap.ui.define([
                 var successCount = 0;
 
 
-                // for (var i = 0; i < aData.length; i++) {
-                    for(var i=0; i<that.count; i++){
+                for (var i = 0; i < aData.length; i++) {
+                    // for(var i=0; i<that.count; i++){
                     var oEntry = {};
 
                     oEntry.Location = that.byId("idloc").getValue();
                     oEntry.product = that.byId("prodInput").getValue();
                     oEntry.CharNo = aData[i].getCells()[0].getText();
-                    oEntry.charName = aData[i].getCells()[1].getText();
+                    // oEntry.charName = aData[i].getCells()[1].getText();
                     oEntry.SEQUENCE = i + 1;
                     oEntry.FLAG = "E";
                     oEntry.CHAR_TYPE = "S";

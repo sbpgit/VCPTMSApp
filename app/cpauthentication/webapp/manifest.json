@@ -17,13 +17,15 @@
         },
         "dataSources": {
             "mainService": {
-                "uri": "/catalog/",
+                "uri": "/v2/catalog/",
                 "type": "OData",
                 "settings": {
-                    "annotations": [],
                     "localUri": "localService/metadata.xml",
-                    "odataVersion": "4.0"
+                    "odataVersion": "2.0"
                 }
+            },
+            "userapi": {
+                "uri": "/service/users"
             }
         },
         "crossNavigation": {
@@ -37,7 +39,7 @@
                     "action": "display",
                     "title": "{{flpTitle}}",
                     "subTitle": "{{flpSubtitle}}",
-                    "icon": ""
+                    "icon": "sap-icon://BusinessSuiteInAppSymbols/icon-fma-validation"
                 }
             }
         }
@@ -94,8 +96,13 @@
                     "earlyRequests": true
                 }
             },
-            "userModel": {
-                "type": "sap.ui.model.json.JSONModel"
+            "userapi": {
+                "dataSource": "userapi",
+                "type": "sap.ui.model.json.JSONModel",
+                "preload": true,
+                "settings": {
+                    "defaultBindingMode": "OneWay"
+                }
             }
         },
         "resources": {
@@ -117,15 +124,15 @@
             },
             "routes": [
                 {
-                    "name": "RouteHome",
+                    "name": "Home",
                     "pattern": ":?query:",
                     "target": [
-                        "TargetHome"
+                        "Home"
                     ]
                 }
             ],
             "targets": {
-                "TargetHome": {
+                "Home": {
                     "viewType": "XML",
                     "transition": "slide",
                     "clearControlAggregation": false,

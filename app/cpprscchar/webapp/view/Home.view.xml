@@ -28,7 +28,12 @@
 					</VBox>
 					<VBox >
 						<Label text=""/>
+                        <HBox>
 						<Button id="idData" text="Go" type="Accept" press="onGetData"/>
+                        
+                        <Text text="" width = "100px"/>
+						<Button id="idReset" text="Reset" type="Accept" press="onReset"/>
+                        </HBox>
 					</VBox>
                     
 					<!-- <VBox >
@@ -97,13 +102,13 @@
 							</contextMenu> -->
 							<columns>
 								
-								<Column hAlign="Center" visible="false">
+								<Column hAlign="Center" visible="true">
 									<Text text="{i18n>charno}"/>
 								</Column>
 								<Column hAlign="Center">
 									<Text text="{i18n>charname}"/>
 								</Column>
-								<Column hAlign="Center" visible="false">
+								<Column hAlign="Center" visible="true">
 									<Text text="{i18n>seq}"/>
 								</Column>
 							</columns>

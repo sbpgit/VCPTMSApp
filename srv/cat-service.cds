@@ -31,6 +31,8 @@ using {
     V_FCHARPLAN,
     V_ASMCOMP_REQ
 } from '../db/data-model';
+using V_PLANNEDCONFIG from '../db/data-model';
+
 
 // using V_ASMCOMP_REQ from '../db/data-model';
 service CatalogService @(impl : './lib/cat-service.js'){
@@ -163,7 +165,8 @@ service CatalogService @(impl : './lib/cat-service.js'){
     function generate_timeseriesF(LOCATION_ID : String(4), PRODUCT_ID : String(40))                                                                                                                                                                                              returns String;
     // Get Object dependency
     function get_objdep() returns array of ds.objectDep; //objectDep;
-
+    
+    function getAllProd(LOCATION_ID : String(4)) returns array of ds.locProd;
     function getCompReqFWeekly(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), COMPONENT : String(40), STRUCNODE : String(50), FROMDATE : Date, TODATE : Date, MODEL_VERSION : String(20))                                        returns array of ds.compreq;
     // Assembly Component weekly
     function getAsmbCompReqFWeekly(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), FROMDATE : Date, TODATE : Date, MODEL_VERSION : String(20))                                                                                    returns array of ds.compreq;
@@ -193,6 +196,7 @@ service CatalogService @(impl : './lib/cat-service.js'){
     function maintainPartialProd(FLAG : String(1), LOCATION_ID : String(4), PRODUCT_ID : String(40), REF_PRODID : String(40))                                                                                                                                                        returns String;
     
     function maintainPartialProdChar(FLAG : String(1), PRODCHAR : String ) returns String;
+
 // New product intorduction
     entity genNewProd           as projection on od.NEWPROD_INTRO;
     // Get new product characteristics
@@ -207,10 +211,14 @@ service CatalogService @(impl : './lib/cat-service.js'){
     entity getUniqueItem   as projection on V_UNIQUE_ID_ITEM;
     entity getUniqueId as projection on V_UNIQUE_ID;
     function genUniqueID(LOCATION_ID : String(4), PRODUCT_ID : String(40))      returns String;
-    function changeUnique(UNIQUE_ID : Integer, LOCATION_ID : String(4), PRODUCT_ID : String(40), UID_TYPE : String(1), UNIQUE_DESC : String(50), ACTIVE:String(1)) returns String;
+    function changeUnique(UNIQUE_ID : Integer, LOCATION_ID : String(4), PRODUCT_ID : String(40), UID_TYPE : String(1),UNIQUE_DESC : String(50), ACTIVE:String(1),FLAG: String) returns String;
+    function maintainUniqueChar(FLAG: String(1), UNIQUECHAR: String) returns String;
+
 // Method 2
+
     entity genvarcharps as projection on od.VARCHAR_PS;
     entity getPriSecChar as projection on V_GETVARCHARPS;
+    function getSecondaryChar(FLAG : String(1),LOCATION_ID : String(4), PRODUCT_ID : String(40)) returns array of getPriSecChar;
     function changeToPrimary(LOCATION_ID : String(4), PRODUCT_ID : String(40),CHAR_NUM: String(10),CHAR_TYPE: String(1),SEQUENCE:Integer,FLAG: String(1)) returns String;
 // Authorizations
     @odata.draft.enabled
@@ -243,4 +251,28 @@ service CatalogService @(impl : './lib/cat-service.js'){
     function maintainRestrDet (FLAG : String(1), RTRCHAR : String ) returns String;
     // CIR char rate
     entity getCIRCharRate       as projection on V_CIR_CHAR_RATE;
+/// Market Authorizations
+    action trigrMAWeek(LOCATION_ID : String(4), PRODUCT_ID : String(40), WEEK_DATE: Date);
+// Seed Order Creation
+    // @odata.draft.enabled
+    entity getSeedOrder    as projection on od.SEEDORDER_HEADER;
+
+    function maintainSeedOrder(FLAG: String(1), SEEDDATA: String) returns String;
+
+    // Planning Configuration
+    // BOI - Deepa
+    @readonly
+    entity Method_Types      as projection on od.METHOD_TYPES;
+    entity V_Parameters      as projection on V_PLANNEDCONFIG;
+    function postParameterValues(FLAG : String(1), PARAMVALS : String) returns String;
+
+    entity getCIRGenerated as projection on od.CIR_GENERATED;
+    // CIR weekly
+    function getCIRWeekly(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), FROMDATE : Date, TODATE : Date, MODEL_VERSION : String(20))   returns array of ds.cirWkly;
+    
+    // function getCIRWeekly(FROMDATE : Date, TODATE : Date)  returns array of ds.cirWkly;
+    function getUniqueIdItems(UNIQUE_ID : Integer) returns array of ds.uniqueCharItems;
+    
+    // EOI - Deepa
+    
 }

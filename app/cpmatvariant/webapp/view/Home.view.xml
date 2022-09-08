@@ -28,6 +28,8 @@
                 <VBox>    
                 <Label text=""/>               
                     <Button text="Go" type="Emphasized" press="onGetData" tooltip="Get data based on filters"/>
+                    
+
                 </VBox>
 				</l:Grid>
 			</FlexBox>
