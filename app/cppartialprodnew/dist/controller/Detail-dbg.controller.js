@@ -686,6 +686,7 @@ sap.ui.define(
             onProdSave: function (oEvent) {
                 var oLoc = this.byId("idloc").getValue(),
                     oRefProd = this.byId("idrefprod").getValue(),
+                    oProdDesc = this.byId("idProdDesc").getValue(),
                     oProd = this.byId("idProd").getValue(),
                     oFlag = oGModel.getProperty("/sFlag");
 
@@ -699,6 +700,7 @@ sap.ui.define(
                         urlParameters: {
                             LOCATION_ID: oLoc,
                             PRODUCT_ID: oProd,
+                            PROD_DESC: oProdDesc,
                             REF_PRODID: oRefProd,
                             FLAG: oFlag,
                         },
@@ -778,35 +780,35 @@ sap.ui.define(
                 });
 
 
-                that.getModel("IBPModel").callFunction("/createIBPSalesTrans", {
-                    method: "GET",
-                    urlParameters: {
-                        LOCATION_ID: that.byId("idloc").getValue(),
-                    },
-                    success: function (oData) {
-                        sap.ui.core.BusyIndicator.hide();
-                    },
-                    error: function (error) {
-                        sap.ui.core.BusyIndicator.hide();
-                        that.onBack();
-                    }
-                });
+                // that.getModel("IBPModel").callFunction("/createIBPSalesTrans", {
+                //     method: "GET",
+                //     urlParameters: {
+                //         LOCATION_ID: that.byId("idloc").getValue(),
+                //     },
+                //     success: function (oData) {
+                //         sap.ui.core.BusyIndicator.hide();
+                //     },
+                //     error: function (error) {
+                //         sap.ui.core.BusyIndicator.hide();
+                //         that.onBack();
+                //     }
+                // });
 
 
-                that.getModel("IBPModel").callFunction("/createIBPSalesConfig", {
-                    method: "GET",
-                    urlParameters: {
-                        LOCATION_ID: that.byId("idloc").getValue(),
-                    },
-                    success: function (oData) {
-                        sap.ui.core.BusyIndicator.hide();
-                        that.onBack();
-                    },
-                    error: function (error) {
-                        sap.ui.core.BusyIndicator.hide();
-                        that.onBack();
-                    }
-                });
+                // that.getModel("IBPModel").callFunction("/createIBPSalesConfig", {
+                //     method: "GET",
+                //     urlParameters: {
+                //         LOCATION_ID: that.byId("idloc").getValue(),
+                //     },
+                //     success: function (oData) {
+                //         sap.ui.core.BusyIndicator.hide();
+                //         that.onBack();
+                //     },
+                //     error: function (error) {
+                //         sap.ui.core.BusyIndicator.hide();
+                //         that.onBack();
+                //     }
+                // });
 
 
 

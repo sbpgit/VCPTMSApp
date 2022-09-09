@@ -193,7 +193,7 @@ service CatalogService @(impl : './lib/cat-service.js'){
 
     entity getPartialChar           as projection on V_PARTIALPRODCHAR;
 
-    function maintainPartialProd(FLAG : String(1), LOCATION_ID : String(4), PRODUCT_ID : String(40), REF_PRODID : String(40))                                                                                                                                                        returns String;
+    function maintainPartialProd(FLAG : String(1), LOCATION_ID : String(4), PRODUCT_ID : String(40), PROD_DESC: String(40), REF_PRODID : String(40))                                                                                                                                                        returns String;
     
     function maintainPartialProdChar(FLAG : String(1), PRODCHAR : String ) returns String;
 

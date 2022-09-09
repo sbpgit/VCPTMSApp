@@ -183,6 +183,14 @@ modules:
       - cpappcpseedordercreation.zip
       name: cpappcpseedordercreation
       target-path: resources/
+    - artifacts:
+      - cpappcpfullconfproddmnd.zip
+      name: cpappcpfullconfproddmnd
+      target-path: resources/
+    - artifacts:
+      - cpappcpplanconfig.zip
+      name: cpappcpplanconfig
+      target-path: resources/
 - name: cpodpcpodprofiles
   type: html5
   path: app/cp_odprofiles
@@ -482,6 +490,26 @@ modules:
 - name: cpappcpseedordercreation
   type: html5
   path: app/cpseedordercreation
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappcpfullconfproddmnd
+  type: html5
+  path: app/cp_fullconfproddmnd
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappcpplanconfig
+  type: html5
+  path: app/cp_planconfig
   build-parameters:
     build-result: dist
     builder: custom
