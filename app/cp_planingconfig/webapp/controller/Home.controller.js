@@ -10,7 +10,7 @@ sap.ui.define([
     function (Controller, GroupHeaderListItem, MessageToast, JSONModel) {
         "use strict";
         var that = this;
-        return Controller.extend("cpapp.cpplanconfig.controller.Home", {
+        return Controller.extend("cpapp.cpplaningconfig.controller.Home", {
             onInit: function () {
                 var oRoute;
                 that = this;
@@ -19,7 +19,7 @@ sap.ui.define([
                 that.oMethodModel = new JSONModel();
 
                 if (!that.oMethodDialog) {
-                    that.oMethodDialog = sap.ui.xmlfragment("cpapp.cpplanconfig.view.MethodTyp", that);
+                    that.oMethodDialog = sap.ui.xmlfragment("cpapp.cpplaningconfig.view.MethodTyp", that);
                     that.getView().addDependent(that.oMethodDialog);
                 }
 

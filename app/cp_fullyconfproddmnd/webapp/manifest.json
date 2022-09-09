@@ -1,7 +1,7 @@
 {
     "_version": "1.40.0",
     "sap.app": {
-        "id": "cpapp.cpfullconfproddmnd",
+        "id": "cpapp.cpfullyconfproddmnd",
         "type": "application",
         "i18n": "i18n/i18n.properties",
         "applicationVersion": {
@@ -12,8 +12,8 @@
         "resources": "resources.json",
         "sourceTemplate": {
             "id": "@sap/generator-fiori:basic",
-            "version": "1.7.1",
-            "toolsId": "e8d5d41d-4286-4124-88d8-b4e6718f2531"
+            "version": "1.7.3",
+            "toolsId": "8fc69177-a52f-41cf-8b34-b33b76e7170c"
         },
         "dataSources": {
             "mainService": {
@@ -23,6 +23,21 @@
                     "annotations": [],
                     "localUri": "localService/metadata.xml",
                     "odataVersion": "2.0"
+                }
+            }
+        },
+        "crossNavigation": {
+            "inbounds": {
+                "cpapp-cpfullyconfproddmnd-inbound": {
+                    "signature": {
+                        "parameters": {},
+                        "additionalParameters": "allowed"
+                    },
+                    "semanticObject": "cpfullyconfproddmnd",
+                    "action": "display",
+                    "title": "{{flpTitle}}",
+                    "subTitle": "{{flpSubtitle}}",
+                    "icon": ""
                 }
             }
         }
@@ -66,7 +81,7 @@
             "i18n": {
                 "type": "sap.ui.model.resource.ResourceModel",
                 "settings": {
-                    "bundleName": "cpapp.cpfullconfproddmnd.i18n.i18n"
+                    "bundleName": "cpapp.cpfullyconfproddmnd.i18n.i18n"
                 }
             },
             "oGModel": {
@@ -99,7 +114,7 @@
                 "routerClass": "sap.m.routing.Router",
                 "viewType": "XML",
                 "async": true,
-                "viewPath": "cpapp.cpfullconfproddmnd.view",
+                "viewPath": "cpapp.cpfullyconfproddmnd.view",
                 "controlAggregation": "pages",
                 "controlId": "app",
                 "clearControlAggregation": false
@@ -124,10 +139,14 @@
             }
         },
         "rootView": {
-            "viewName": "cpapp.cpfullconfproddmnd.view.App",
+            "viewName": "cpapp.cpfullyconfproddmnd.view.App",
             "type": "XML",
             "async": true,
             "id": "App"
         }
+    },
+    "sap.cloud": {
+        "public": true,
+        "service": "configprod_approuter"
     }
 }

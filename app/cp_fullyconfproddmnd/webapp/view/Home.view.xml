@@ -1,4 +1,4 @@
-<mvc:View controllerName="cpapp.cpfullconfproddmnd.controller.Home" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core" displayBlock="true" xmlns="sap.m" xmlns:f="sap.ui.layout.form" xmlns:t="sap.ui.table" xmlns:ux="sap.uxap" xmlns:l="sap.ui.layout" xmlns:html="http://www.w3.org/1999/xhtml">
+<mvc:View controllerName="cpapp.cpfullyconfproddmnd.controller.Home" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core" displayBlock="true" xmlns="sap.m" xmlns:f="sap.ui.layout.form" xmlns:t="sap.ui.table" xmlns:ux="sap.uxap" xmlns:l="sap.ui.layout" xmlns:html="http://www.w3.org/1999/xhtml">
     <ux:ObjectPageLayout id="ObjectPageLayout" headerContentPinned="true">
         <ux:headerTitle>
             <ux:ObjectPageDynamicHeaderTitle>
@@ -14,11 +14,7 @@
         </ux:headerTitle>
         <ux:headerContent>
             <FlexBox wrap="Wrap" fitContainer="true">
-                <l:Grid defaultSpan="XL3 L3 M6 S12">
-                    <!-- <VBox>
-                        <Label text="" />
-                        <SearchField id="headSearch" placeholder="Component, Structure Node" />
-                    </VBox> -->
+                <l:Grid defaultSpan="XL3 L3 M6 S12"> 
                     <VBox>
                         <Label text="Location" required="true" />
                         <Input id="idloc" value="" placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
@@ -57,11 +53,7 @@
                             <Button text="Go" type="Emphasized" press="onGetData" tooltip="Get data based on filters" class="sapUiTinyMarginEnd" />
                             <Button text="Reset" type="Transparent" press="onResetDate" tooltip="Reset Valid To Date" />
                         </HBox>
-                    </VBox>
-                    <!-- <Label text="Component" visible="false"/>
-            <Input id="idcomp"  value=""  placeholder="Component" visible="false" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
-            <Label text="Structure Node" visible="false"/>
-            <Input id="idstru" value=""  placeholder="Structure Node" visible="false" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" /> -->
+                    </VBox>                    
                 </l:Grid>
             </FlexBox>
         </ux:headerContent>
@@ -70,15 +62,15 @@
                 <ux:subSections>
                     <ux:ObjectPageSubSection>
                         <ux:blocks>
-                           <VBox>
+                           <!-- <VBox>
                             <Toolbar>
                                 <ToolbarSpacer/>
                                 <Button text="Publish" press="onPressPublish"/>
-                            </Toolbar>
-                            <t:Table id="idCompReq" clas="table" fixedColumnCount="1" selectionMode="None" alternateRowColors="true" enableSelectAll="false" visibleRowCount="10">
+                            </Toolbar> -->
+                            <t:Table id="idCIReq" clas="table" fixedColumnCount="1" selectionMode="SingleSelectMaster" alternateRowColors="true" enableSelectAll="false" visibleRowCount="10">
                                 <t:columns />
                             </t:Table>
-                            </VBox>
+                            <!-- </VBox> -->
                         </ux:blocks>
                     </ux:ObjectPageSubSection>
                 </ux:subSections>

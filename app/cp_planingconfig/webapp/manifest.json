@@ -1,7 +1,7 @@
 {
     "_version": "1.40.0",
     "sap.app": {
-        "id": "cpapp.cpfullconfproddmnd",
+        "id": "cpapp.cpplaningconfig",
         "type": "application",
         "i18n": "i18n/i18n.properties",
         "applicationVersion": {
@@ -12,8 +12,8 @@
         "resources": "resources.json",
         "sourceTemplate": {
             "id": "@sap/generator-fiori:basic",
-            "version": "1.7.1",
-            "toolsId": "e8d5d41d-4286-4124-88d8-b4e6718f2531"
+            "version": "1.7.3",
+            "toolsId": "3d450b1d-dc23-4292-93de-f0b8944f70c3"
         },
         "dataSources": {
             "mainService": {
@@ -23,6 +23,21 @@
                     "annotations": [],
                     "localUri": "localService/metadata.xml",
                     "odataVersion": "2.0"
+                }
+            }
+        },
+        "crossNavigation": {
+            "inbounds": {
+                "cpapp-cpplaningconfig-inbound": {
+                    "signature": {
+                        "parameters": {},
+                        "additionalParameters": "allowed"
+                    },
+                    "semanticObject": "cpplanningconfig",
+                    "action": "display",
+                    "title": "{{flpTitle}}",
+                    "subTitle": "{{flpSubtitle}}",
+                    "icon": ""
                 }
             }
         }
@@ -66,17 +81,10 @@
             "i18n": {
                 "type": "sap.ui.model.resource.ResourceModel",
                 "settings": {
-                    "bundleName": "cpapp.cpfullconfproddmnd.i18n.i18n"
+                    "bundleName": "cpapp.cpplaningconfig.i18n.i18n"
                 }
             },
-            "oGModel": {
-                "type": "sap.ui.model.json.JSONModel",
-                "settings": {
-                    "defaultBindingMode": "TwoWay"
-                },
-                "preload": true
-            },
-            "CIRModel": {
+            "PCModel": {
                 "dataSource": "mainService",
                 "preload": true,
                 "settings": {
@@ -99,7 +107,7 @@
                 "routerClass": "sap.m.routing.Router",
                 "viewType": "XML",
                 "async": true,
-                "viewPath": "cpapp.cpfullconfproddmnd.view",
+                "viewPath": "cpapp.cpplaningconfig.view",
                 "controlAggregation": "pages",
                 "controlId": "app",
                 "clearControlAggregation": false
@@ -124,10 +132,14 @@
             }
         },
         "rootView": {
-            "viewName": "cpapp.cpfullconfproddmnd.view.App",
+            "viewName": "cpapp.cpplaningconfig.view.App",
             "type": "XML",
             "async": true,
             "id": "App"
         }
+    },
+    "sap.cloud": {
+        "public": true,
+        "service": "configprod_approuter"
     }
 }

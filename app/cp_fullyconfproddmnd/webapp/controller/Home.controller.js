@@ -1,7 +1,7 @@
 sap.ui.define(
     [
         "sap/ui/core/mvc/Controller",
-        "cpapp/cpfullconfproddmnd/controller/BaseController",
+        "cpapp/cpfullyconfproddmnd/controller/BaseController",
         "sap/ui/model/json/JSONModel",
         "sap/ui/model/Filter",
         "sap/ui/model/FilterOperator",
@@ -22,7 +22,7 @@ sap.ui.define(
     ) {
         "use strict";
         var oGModel, that;
-        return BaseController.extend("cpapp.cpfullconfproddmnd.controller.Home", {
+        return BaseController.extend("cpapp.cpfullyconfproddmnd.controller.Home", {
             /**
              * Called when a controller is instantiated and its View controls (if available) are already created.
              * Can be used to modify the View before it is displayed, to bind event handlers and do other one-time initialization.
@@ -35,21 +35,12 @@ sap.ui.define(
                 that.prodModel = new JSONModel();
                 that.verModel = new JSONModel();
                 that.scenModel = new JSONModel();
-                that.compModel = new JSONModel();
-                that.struModel = new JSONModel();
                 that.charModel = new JSONModel();
-                that.graphModel = new JSONModel();
-                that.graphtModel = new JSONModel();
-                that.AsmbCompModel = new JSONModel();
-                that.uniqueIDItemModel = new JSONModel();
+
                 that.locModel.setSizeLimit(1000);
                 that.prodModel.setSizeLimit(1000);
                 that.verModel.setSizeLimit(1000);
                 that.scenModel.setSizeLimit(1000);
-                that.compModel.setSizeLimit(1000);
-                that.struModel.setSizeLimit(1000);
-
-                that.charModel = new JSONModel();
                 that.charModel.setSizeLimit(1000);
 
                 // Declaring Dialogs
@@ -57,68 +48,33 @@ sap.ui.define(
 
                 if (!this._valueHelpDialogLoc) {
                   this._valueHelpDialogLoc = sap.ui.xmlfragment(
-                    "cpapp.cpfullconfproddmnd.view.LocDialog",
+                    "cpapp.cpfullyconfproddmnd.view.LocDialog",
                     this
                   );
                   this.getView().addDependent(this._valueHelpDialogLoc);
                 }
                 if (!this._valueHelpDialogProd) {
                   this._valueHelpDialogProd = sap.ui.xmlfragment(
-                    "cpapp.cpfullconfproddmnd.view.ProdDialog",
+                    "cpapp.cpfullyconfproddmnd.view.ProdDialog",
                     this
                   );
                   this.getView().addDependent(this._valueHelpDialogProd);
                 }
                 if (!this._valueHelpDialogVer) {
                   this._valueHelpDialogVer = sap.ui.xmlfragment(
-                    "cpapp.cpfullconfproddmnd.view.VersionDialog",
+                    "cpapp.cpfullyconfproddmnd.view.VersionDialog",
                     this
                   );
                   this.getView().addDependent(this._valueHelpDialogVer);
                 }
                 if (!this._valueHelpDialogScen) {
                   this._valueHelpDialogScen = sap.ui.xmlfragment(
-                    "cpapp.cpfullconfproddmnd.view.ScenarioDialog",
+                    "cpapp.cpfullyconfproddmnd.view.ScenarioDialog",
                     this
                   );
                   this.getView().addDependent(this._valueHelpDialogScen);
-                }
-                // if (!this._valueHelpDialogComp) {
-                //   this._valueHelpDialogComp = sap.ui.xmlfragment(
-                //     "cpapp.cpfullconfproddmnd.view.ComponentDialog",
-                //     this
-                //   );
-                //   this.getView().addDependent(this._valueHelpDialogComp);
-                // }
-                // if (!this._valueHelpDialogStru) {
-                //   this._valueHelpDialogStru = sap.ui.xmlfragment(
-                //     "cpapp.cpasmbcompreq.view.StructureNodeDialog",
-                //     this
-                //   );
-                //   this.getView().addDependent(this._valueHelpDialogStru);
-                // }
-                // if (!this._odGraphDialog) {
-                //   this._odGraphDialog = sap.ui.xmlfragment(
-                //     "cpapp.cpasmbcompreq.view.CompODBreakdown",
-                //     this
-                //   );
-                //   this.getView().addDependent(this._odGraphDialog);
-                // }
-                // if (!this._AsmbCompDialog) {
-                //   this._AsmbCompDialog = sap.ui.xmlfragment(
-                //     "cpapp.cpasmbcompreq.view.AsmbCompDialog",
-                //     this
-                //   );
-                //   this.getView().addDependent(this._AsmbCompDialog);
-                // }
-
-                if (!this._UniqueIdItemDialog) {
-                    this._UniqueIdItemDialog = sap.ui.xmlfragment(
-                        "cpapp.cpfullconfproddmnd.view.UniqueIdItemDialog",
-                        this
-                    );
-                    this.getView().addDependent(this._UniqueIdItemDialog);
-                }
+                }        
+              
             },
 
             /**
@@ -136,16 +92,12 @@ sap.ui.define(
                 this.oProd = this.byId("idprodList");
                 this.oVer = this.byId("idver");
                 this.oScen = this.byId("idscen");
-                //   this.oComp = this.byId("idcomp");
-                //   this.oStru = this.byId("idstru");
-                //   this.oPanel = this.byId("idPanel");
+
                 // Setting title allignment for dialogs
                 that._valueHelpDialogProd.setTitleAlignment("Center");
                 that._valueHelpDialogLoc.setTitleAlignment("Center");
                 that._valueHelpDialogVer.setTitleAlignment("Center");
                 that._valueHelpDialogScen.setTitleAlignment("Center");
-                //that._valueHelpDialogComp.setTitleAlignment("Center");
-               // that._valueHelpDialogStru.setTitleAlignment("Center"); 
 
                 var dDate = new Date();
                 var oDateL = that.getDateFn(dDate);
@@ -173,18 +125,6 @@ sap.ui.define(
                 this.oScenList = this._oCore.byId(
                   this._valueHelpDialogScen.getId() + "-list"
                 );
-               /* this.oCompList = this._oCore.byId(
-                  this._valueHelpDialogComp.getId() + "-list"
-                );
-                this.oStruList = this._oCore.byId(
-                  this._valueHelpDialogStru.getId() + "-list"
-                );
-                this.oGridList = this._oCore.byId(
-                  sap.ui.getCore().byId("charOdDialog").getContent()[0].getId()
-                );
-                this.oGraphchart = this._oCore.byId(
-                  sap.ui.getCore().byId("idPanel").getContent()[0].getId()
-                ); */
 
                 sap.ui.core.BusyIndicator.show();
                 //Location data
@@ -212,8 +152,6 @@ sap.ui.define(
                 that.oProd.setValue("");
                 that.oVer.setValue("");
                 that.oScen.setValue("");
-                //that.oComp.setValue("");
-                //that.oStru.setValue("");
                 that.onAfterRendering();
             },
 
@@ -223,15 +161,13 @@ sap.ui.define(
              */
             onGetData: function (oEvent) {
                 sap.ui.core.BusyIndicator.show();
-                that.oTable = that.byId("idCompReq");
+                that.oTable = that.byId("idCIReq");
                 that.oGModel = that.getModel("oGModel");
                 // getting the input values
                 var Loc = that.oGModel.getProperty("/SelectedLoc"),
                   Prod = that.oGModel.getProperty("/SelectedProd"),
                   ver = that.oGModel.getProperty("/SelectedVer"),
                   scen = that.oGModel.getProperty("/SelectedScen"),
-                 // comp = that.oGModel.getProperty("/SelectedComp"),
-                 // stru = that.oGModel.getProperty("/SelectedStru"),
                   modelVersion = that.byId("idModelVer").getSelectedKey();
         
                 that.oGModel.setProperty(
@@ -271,12 +207,7 @@ sap.ui.define(
 
                             that.oGModel.setProperty("/TData", data.results);
                             // Calling function to generate UI table dynamically based on data
-                            that.TableGenerate();
-                            /*var selected = that.byId("idCheck1").getSelected();
-                            // Calling function to filter data if checkbox is selected
-                            if (selected) {
-                              that.onNonZero();
-                            }*/
+                            that.TableGenerate();                            
                         },
                         error: function (data) {
                             sap.ui.core.BusyIndicator.hide();
@@ -289,41 +220,7 @@ sap.ui.define(
                         "Please select a Location/Product/Version/Scenario/Date Range"
                     );
                 }
-            },
-
-            /**
-             * Called when something is entered into the search field.
-             * @param {object} oEvent -the event information.
-             */
-            onSearchCompReq: function (oEvent) {
-                that.oTable = that.byId("idCompReq");
-                that.oGModel = that.getModel("oGModel");
-
-                var sQuery =
-                    oEvent.getParameter("value") || oEvent.getParameter("newValue");
-                // Checking if serch value is empty
-                if (sQuery === "") {
-                    that.onNonZero();
-                } else {
-                    that.oGModel = that.getModel("oGModel");
-                    that.Data = that.oGModel.getProperty("/TData");
-                    that.searchData = [];
-
-                    for (var i = 0; i < that.Data.length; i++) {
-                        if (
-                            that.Data[i].COMPONENT.includes(sQuery) ||
-                            that.Data[i].STRUC_NODE.includes(sQuery) ||
-                            that.Data[i].QTYTYPE.includes(sQuery)
-                        ) {
-                            that.searchData.push(that.Data[i]);
-                        }
-                    }
-
-                    that.oGModel.setProperty("/TData", that.searchData);
-                    // Calling function to generate UI table dynamically based on search data
-                    that.TableGenerate();
-                }
-            },
+            },            
 
             /**
              * This function is called to generate UI table dynamically based on data.
@@ -387,230 +284,7 @@ sap.ui.define(
                 });
 
                 that.oTable.bindRows("/rows");
-            },
-
-            /**
-             * This function is called when checkbox Get Non-Zero is checked or unchecked.
-             * In this function removing the rows which have all row values as "0".
-             * @param {object} oEvent -the event information.
-             */
-            onNonZero: function (oEvent) {
-                that.oTable = that.byId("idCompReq");
-                that.oGModel = that.getModel("oGModel");
-                var selected = that.byId("idCheck1").getSelected(),
-                    name,
-                    counter;
-                that.searchData = that.rowData;
-                that.FinalData = [];
-
-                var columns = that.oTable.getColumns().length - 3,
-                    data = that.tableData;
-                if (selected) {
-                    // Filtering data which has row values, removing the rows which has all values as "0" or "null"
-                    for (var i = 0; i < that.searchData.length; i++) {
-                        counter = 0;
-                        for (var j = 1; j < columns; j++) {
-                            if (
-                                that.searchData[i]["WEEK" + j] !== 0 &&
-                                that.searchData[i]["WEEK" + j] !== null
-                            ) {
-                                counter = counter + 1;
-                                break;
-                            }
-                        }
-                        if (counter !== 0) {
-                            that.FinalData.push(that.searchData[i]);
-                        }
-                    }
-                } else {
-                    that.FinalData = that.searchData;
-                }
-                that.oGModel.setProperty("/TData", that.FinalData);
-                // Calling function to generate UI table based on filter data
-                that.TableGenerate();
-            },
-
-            /**
-             * This function is called when a click on any row item.
-             * In this function we will fetch the data which need to display
-             * @param {object} oEvent -the event information.
-             */
-            asmbcompLinkpress: function (oEvent) {
-                var selColumnId = oEvent.getSource().getAriaLabelledBy()[0];
-                var tableColumns = that.byId("idCompReq").getColumns(),
-                    selColumnDate,
-                    selColumnValue = oEvent.getSource().getText(),
-                    ObindingData = oEvent.getSource().getBindingContext().getObject(),
-                    selComponent = ObindingData.Component;
-                that.colComp = selComponent;
-                // Getting the selected row date value
-                for (var i = 0; i < tableColumns.length; i++) {
-                    if (selColumnId === tableColumns[i].sId) {
-                        selColumnDate = that
-                            .byId("idCompReq")
-                            .getColumns()
-                        [i].getLabel()
-                            .getText();
-                    }
-                }
-
-                that.colDate = selColumnDate;
-                that.oGModel.setProperty("/SelectedDate", selColumnDate);
-                // Calling function if selected item is not empty
-                if (selColumnValue > 0) {
-                    this.getModel("CIRModel").read("/getAsmbCompReq", {
-                        filters: [
-                            new Filter(
-                                "LOCATION_ID",
-                                FilterOperator.EQ,
-                                that.oGModel.getProperty("/SelectedLoc")
-                            ),
-                            new Filter(
-                                "PRODUCT_ID",
-                                FilterOperator.EQ,
-                                that.oGModel.getProperty("/SelectedProd")
-                            ),
-                            new Filter(
-                                "VERSION",
-                                FilterOperator.EQ,
-                                that.oGModel.getProperty("/SelectedVer")
-                            ),
-                            new Filter(
-                                "SCENARIO",
-                                FilterOperator.EQ,
-                                that.oGModel.getProperty("/SelectedScen")
-                            ),
-                            new Filter("COMPONENT", FilterOperator.EQ, selComponent),
-                            new Filter("CAL_DATE", FilterOperator.EQ, selColumnDate),
-                            new Filter(
-                                "MODEL_VERSION",
-                                FilterOperator.EQ,
-                                that.oGModel.getProperty("/SelectedMV")
-                            ),
-                        ],
-                        success: function (oData) {
-                            that.AsmbCompModel.setData(oData);
-                            that.oAsmbCompList = sap.ui.getCore().byId("idAsmbComp");
-                            that.oAsmbCompList.setModel(that.AsmbCompModel);
-
-                            that._AsmbCompDialog.open();
-                        },
-                        error: function (oData, error) {
-                            MessageToast.show("error");
-                        },
-                    });
-                }
-            },
-
-
-
-
-
-
-
-
-
-
-            /**
-             * Called when 'Close/Cancel' button in any dialog is pressed.
-             */
-            onUniqueIdItemClose: function () {
-                that._UniqueIdItemDialog.close();
-            },
-
-            /**
-             * This function is called when a click on any row item in dialog.
-             * In this function we will fetch the data which need to display chart
-             * @param {object} oEvent -the event information.
-             */
-            OnAsmbPress: function (oEvent) {
-                that.charModel.setData([]);
-                that.oGridList.setModel(that.charModel);
-                that.graphModel.setData([]);
-
-                that.oGraphchart.setModel(that.graphModel);
-                var oLoc = that.oGModel.getProperty("/SelectedLoc"),
-                    oProd = that.oGModel.getProperty("/SelectedProd"),
-                    oVer = that.oGModel.getProperty("/SelectedVer"),
-                    oScen = that.oGModel.getProperty("/SelectedScen"),
-                    oMOdelVer = that.oGModel.getProperty("/SelectedMV"),
-                    oCalDate = that.oGModel.getProperty("/SelectedDate"),
-                    oAsmbly = oEvent.getSource().getText();
-
-                this.getModel("CIRModel").read("/getBOMPred", {
-                    filters: [
-                        new Filter("LOCATION_ID", FilterOperator.EQ, oLoc),
-                        new Filter("PRODUCT_ID", FilterOperator.EQ, oProd),
-                        new Filter("VERSION", FilterOperator.EQ, oVer),
-                        new Filter("SCENARIO", FilterOperator.EQ, oScen),
-                        new Filter("COMPONENT", FilterOperator.EQ, oAsmbly),
-                        new Filter("CAL_DATE", FilterOperator.EQ, oCalDate),
-                        new Filter("MODEL_VERSION", FilterOperator.EQ, oMOdelVer),
-                    ],
-                    success: function (oData) {
-                        that.charModel.setData(oData);
-                        that.oGridList.setModel(that.charModel);
-                        that._odGraphDialog.open();
-                    },
-                    error: function (oData, error) {
-                        MessageToast.show("error");
-                    },
-                });
-            },
-
-            /**
-             * This function is called when click on Expand Panel.
-             * In this function we will get the data based of panel which opens and creating charts
-             * @param {object} oEvent -the event information.
-             */
-            onExpand: function (oEvent) {
-                var oHdr = oEvent.getSource().getHeaderText();
-                var objDep = oHdr.split(":");
-
-                that.getModel("CIRModel").read("/getOdCharImpact", {
-                    filters: [
-                        new Filter(
-                            "LOCATION_ID",
-                            FilterOperator.EQ,
-                            that.oGModel.getProperty("/SelectedLoc")
-                        ),
-                        new Filter(
-                            "PRODUCT_ID",
-                            FilterOperator.EQ,
-                            that.oGModel.getProperty("/SelectedProd")
-                        ),
-                        new Filter(
-                            "VERSION",
-                            FilterOperator.EQ,
-                            that.oGModel.getProperty("/SelectedVer")
-                        ),
-                        new Filter(
-                            "SCENARIO",
-                            FilterOperator.EQ,
-                            that.oGModel.getProperty("/SelectedScen")
-                        ),
-                        new Filter("CAL_DATE", FilterOperator.EQ, that.colDate),
-                        new Filter("OBJ_DEP", FilterOperator.EQ, objDep[0].split("_")[0]),
-                        new Filter(
-                            "OBJ_COUNTER",
-                            FilterOperator.EQ,
-                            objDep[0].split("_")[1]
-                        ),
-                        new Filter(
-                            "MODEL_VERSION",
-                            FilterOperator.EQ,
-                            that.oGModel.getProperty("/SelectedMV")
-                        ),
-                    ],
-                    success: function (oData) {
-                        that.graphModel.setData(oData);
-                        that.oGraphchart.setModel(that.graphModel);
-                    },
-                    error: function (oData, error) {
-                        MessageToast.show("error");
-                    },
-                });
-            },
+            },  
 
             /**
              * Called when 'Close/Cancel' button in any dialog is pressed.
@@ -942,8 +616,6 @@ sap.ui.define(
                     that.oProd.setValue("");
                     that.oVer.setValue("");
                     that.oScen.setValue("");
-                    //that.oComp.setValue("");
-                    //that.oStru.setValue("");
                     that.oGModel.setProperty("/SelectedProd", "");
 
                     // Calling service to get the Product data
@@ -976,8 +648,6 @@ sap.ui.define(
                     // Removing the input box values when Product changed
                     that.oVer.setValue("");
                     that.oScen.setValue("");
-                    // that.oComp.setValue("");
-                    // that.oStru.setValue("");
 
                     // Calling service to get the IBP Varsion data
                     this.getModel("CIRModel").read("/getIbpVerScn", {
@@ -1001,32 +671,9 @@ sap.ui.define(
                         error: function (oData, error) {
                             MessageToast.show("error");
                         },
-                    });
+                    });                   
 
-                    // Calling service to get the Component List data
-                    // this.getModel("CIRModel").read("/gBomHeaderet", {
-                    //     filters: [
-                    //         new Filter(
-                    //             "LOCATION_ID",
-                    //             FilterOperator.EQ,
-                    //             that.oGModel.getProperty("/SelectedLoc")
-                    //         ),
-                    //         new Filter(
-                    //             "PRODUCT_ID",
-                    //             FilterOperator.EQ,
-                    //             aSelectedItems[0].getTitle()
-                    //         ),
-                    //     ],
-                    //     success: function (oData) {
-                    //         that.compModel.setData(oData);
-                    //         //that.oCompList.setModel(that.compModel);
-                    //     },
-                    //     error: function (oData, error) {
-                    //         MessageToast.show("error");
-                    //     },
-                    // });
-
-                    // IBP Vaerion list
+                    // IBP Version list
                 } else if (sId.includes("Ver")) {
                     this.oVer = that.byId("idver");
                     aSelectedItems = oEvent.getParameter("selectedItems");
@@ -1086,41 +733,7 @@ sap.ui.define(
                         "/SelectedCompItem",
                         aSelectedItems[0].getDescription()
                     );
-
-                    //that.oStru.setValue("");
-
-                    // Calling service to get the Structure Node data
-                    // this.getModel("CIRModel").read("/genCompStrcNode", {
-                    //     filters: [
-                    //         new Filter(
-                    //             "LOCATION_ID",
-                    //             FilterOperator.EQ,
-                    //             that.oGModel.getProperty("/SelectedLoc")
-                    //         ),
-                    //         new Filter(
-                    //             "PRODUCT_ID",
-                    //             FilterOperator.EQ,
-                    //             that.oGModel.getProperty("/SelectedProd")
-                    //         ),
-                    //         new Filter(
-                    //             "COMPONENT",
-                    //             FilterOperator.EQ,
-                    //             that.oGModel.getProperty("/SelectedComp")
-                    //         ),
-                    //         new Filter(
-                    //             "ITEM_NUM",
-                    //             FilterOperator.EQ,
-                    //             that.oGModel.getProperty("/SelectedCompItem")
-                    //         ),
-                    //     ],
-                    //     success: function (oData) {
-                    //         that.struModel.setData(oData);
-                    //      //   that.oStruList.setModel(that.struModel);
-                    //     },
-                    //     error: function (oData, error) {
-                    //         MessageToast.show("error");
-                    //     },
-                    // });
+                    
                     // Structure Node List
                 } else if (sId.includes("Stru")) {
                     this.oStru = that.byId("idstru");
@@ -1164,7 +777,7 @@ sap.ui.define(
 
             uniqueIdLinkpress: function (oEvent) {
                 var selColumnId = oEvent.getSource().getAriaLabelledBy()[0];
-                var tableColumns = that.byId("idCompReq").getColumns(),
+                var tableColumns = that.byId("idCIReq").getColumns(),
                     selColumnDate,
                     selColumnValue = oEvent.getSource().getText(),
                     ObindingData = oEvent.getSource().getBindingContext().getObject(),
@@ -1177,7 +790,7 @@ sap.ui.define(
                 if (selColumnValue > 0) {
                     if (!that._onCharDetails) {
                         that._onCharDetails = sap.ui.xmlfragment(
-                            "cpapp.cpfullconfproddmnd.view.CharDetails",
+                            "cpapp.cpfullyconfproddmnd.view.CharDetails",
                             that
                         );
                         that.getView().addDependent(that._onCharDetails);
@@ -1199,69 +812,7 @@ sap.ui.define(
                         error: function () {
                             MessageToast.show("Failed to get data");
                         },
-                    });
-
-
-                    // calling service based on filters
-                    // that.getModel("CIRModel").callFunction("/getUniqueIdItems", {
-                    //     method: "GET",
-                    //     urlParameters: {
-                    //         UNIQUE_ID: selUniqueId
-                    //     },
-                    //     success: function (data) {
-                    //         that.uniqueIDItemModel.setData({ items: data });
-                    //         that.oUniqueIdItemList = sap.ui.getCore().byId("idUniqueIdItems");
-                    //         that.oUniqueIdItemList.setModel(that.uniqueIDItemModel);
-
-                    //         that._UniqueIdItemDialog.open();
-                    //     },
-                    //     error: function (data) {
-                    //         sap.m.MessageToast.show("Error While fetching data");
-                    //     },
-                    // });
-
-                    //   that.getModel("CIRModel").read("/getUniqueIdItems", {
-                    //     filters: [
-                    //       new Filter(
-                    //         "UNIQUE_ID",
-                    //         FilterOperator.EQ,
-                    //         selUniqueId
-                    //         // that.oGModel.getProperty("/SelectedLoc")
-                    //       )
-                    //     //   new Filter(
-                    //     //     "PRODUCT_ID",
-                    //     //     FilterOperator.EQ,
-                    //     //     that.oGModel.getProperty("/SelectedProd")
-                    //     //   ),
-                    //     //   new Filter(
-                    //     //     "VERSION",
-                    //     //     FilterOperator.EQ,
-                    //     //     that.oGModel.getProperty("/SelectedVer")
-                    //     //   ),
-                    //     //   new Filter(
-                    //     //     "SCENARIO",
-                    //     //     FilterOperator.EQ,
-                    //     //     that.oGModel.getProperty("/SelectedScen")
-                    //     //   ),
-                    //     //   new Filter("COMPONENT", FilterOperator.EQ, selComponent),
-                    //     //   new Filter("CAL_DATE", FilterOperator.EQ, selColumnDate),
-                    //     //   new Filter(
-                    //     //     "MODEL_VERSION",
-                    //     //     FilterOperator.EQ,
-                    //     //     that.oGModel.getProperty("/SelectedMV")
-                    //     //   ),
-                    //     ],
-                    //     success: function (oData) {
-                    //       that.uniqueIDItemModel.setData({items: oData.results});
-                    //       that.oUniqueIdItemList = sap.ui.getCore().byId("idUniqueIdItems");
-                    //       that.oUniqueIdItemList.setModel(that.uniqueIDItemModel);
-
-                    //       that._UniqueIdItemDialog.open();
-                    //     },
-                    //     error: function (oData, error) {
-                    //       MessageToast.show("error");
-                    //     },
-                    //   });
+                    });                    
                 }
             },
             onPressPublish: function(oEvent) {
