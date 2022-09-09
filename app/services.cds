@@ -50,3 +50,7 @@ using from './cp_fullconfproddmnd/annotations';
 using from './cpseedordercreation/annotations';
 // using from './cpseedorder/annotations';
 using from './cp_planconfig/annotations';
+
+using from './cp_fullyconfproddmnd/annotations';
+
+using from './cp_planingconfig/annotations';

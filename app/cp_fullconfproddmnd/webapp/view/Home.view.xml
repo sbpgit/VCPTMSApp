@@ -73,7 +73,7 @@
                            <VBox>
                             <Toolbar>
                                 <ToolbarSpacer/>
-                                <Button text="Publish" />
+                                <Button text="Publish" press="onPressPublish"/>
                             </Toolbar>
                             <t:Table id="idCompReq" clas="table" fixedColumnCount="1" selectionMode="None" alternateRowColors="true" enableSelectAll="false" visibleRowCount="10">
                                 <t:columns />

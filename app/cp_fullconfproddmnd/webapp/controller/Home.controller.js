@@ -1220,11 +1220,6 @@ sap.ui.define(
                     //     },
                     // });
 
-
-
-
-
-
                     //   that.getModel("CIRModel").read("/getUniqueIdItems", {
                     //     filters: [
                     //       new Filter(
@@ -1269,6 +1264,9 @@ sap.ui.define(
                     //   });
                 }
             },
+            onPressPublish: function(oEvent) {
+                
+            }
 
         });
     }
