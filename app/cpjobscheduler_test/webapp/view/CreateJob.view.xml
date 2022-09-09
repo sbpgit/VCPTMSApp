@@ -1,25 +1,38 @@
-<mvc:View controllerName="cpapp.cpjobscheduler.controller.CreateJob"
-    xmlns="sap.m"
-    xmlns:core="sap.ui.core"
-    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
-    xmlns:l="sap.ui.layout"
-    xmlns:f="sap.ui.layout.form">
+<mvc:View controllerName="cpapp.cpjobscheduler.controller.CreateJob" xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form">
     <Page id="idCreateJob" title="Create Job" titleAlignment="Center" showNavButton="true" navButtonPress="onBack" showFooter="true">
         <VBox class="sapUiSmallMargin">
-            <f:SimpleForm id="FormToolbar" editable="true" layout="ResponsiveGridLayout" labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="3" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1" singleContainerFullSize="false" ariaLabelledBy="Title1">
+            <f:SimpleForm
+                id="FormToolbar"
+                editable="true"
+                layout="ResponsiveGridLayout"
+                labelSpanXL="3"
+                labelSpanL="3"
+                labelSpanM="3"
+                labelSpanS="3"
+                adjustLabelSpan="false"
+                emptySpanXL="0"
+                emptySpanL="0"
+                emptySpanM="0"
+                emptySpanS="0"
+                columnsXL="2"
+                columnsL="1"
+                columnsM="1"
+                singleContainerFullSize="false"
+                ariaLabelledBy="Title1"
+            >
                 <f:content>
                     <Label text="{i18n>jobtype}" />
                     <Select id="idJobType" change="onJobSelect" selectedKey="M" width="300px">
-                        <core:ListItem key="M" text="{i18n>mdlgene}"/>
-                        <core:ListItem key="P" text="{i18n>predi}"/>
-                        <core:ListItem key="T" text="{i18n>timeseries}"/>
-                        <core:ListItem key="F" text="{i18n>timeseriesF}"/>
-                        <core:ListItem key="I" text="{i18n>ibpI}"/>
-                        <core:ListItem key="S" text="{i18n>sdi}"/>
+                        <core:ListItem key="M" text="{i18n>mdlgene}" />
+                        <core:ListItem key="P" text="{i18n>predi}" />
+                        <core:ListItem key="T" text="{i18n>timeseries}" />
+                        <core:ListItem key="F" text="{i18n>timeseriesF}" />
+                        <core:ListItem key="I" text="{i18n>ibpI}" />
+                        <core:ListItem key="S" text="{i18n>sdi}" />
                         <!-- 07-09-2022 -->
-                        <core:ListItem key="D" text="{i18n>genfulcondemand}"/>
-                        <core:ListItem key="A" text="{i18n>genasmbrequirments}"/>
-                        <core:ListItem key="O" text="{i18n>procsalesord}"/>
+                        <core:ListItem key="D" text="{i18n>genfulcondemand}" />
+                        <core:ListItem key="A" text="{i18n>genasmbrequirments}" />
+                        <core:ListItem key="O" text="{i18n>procsalesord}" />
                         <!-- 07-09-2022 -->
                     </Select>
                 </f:content>
@@ -29,7 +42,7 @@
             <Panel id="modelGenPanel" expandable="true" expanded="true" visible="false">
                 <headerToolbar>
                     <OverflowToolbar>
-                        <Title text="{i18n>modelGenPanel}"/>
+                        <Title text="{i18n>modelGenPanel}" />
                     </OverflowToolbar>
                 </headerToolbar>
                 <f:Form editable="true">
@@ -41,18 +54,18 @@
                             <f:formElements>
                                 <f:FormElement>
                                     <f:label>
-                                        <Label text="{i18n>loc}" required="true"/>
+                                        <Label text="{i18n>loc}" required="true" />
                                     </f:label>
                                     <f:fields>
-                                        <Input id="MlocInput" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                                        <Input id="MlocInput" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                                     </f:fields>
                                 </f:FormElement>
                                 <f:FormElement>
                                     <f:label>
-                                        <Label text="{i18n>prod}" required="true"/>
+                                        <Label text="{i18n>prod}" required="true" />
                                     </f:label>
                                     <f:fields>
-                                        <MultiInput id="MprodInput" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
+                                        <MultiInput id="MprodInput" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
                                     </f:fields>
                                 </f:FormElement>
                                 <!-- <f:FormElement>
@@ -72,12 +85,12 @@
                                 </f:FormElement> -->
                                 <f:FormElement>
                                     <f:label>
-                                        <Label text="{i18n>modelver}"/>
+                                        <Label text="{i18n>modelver}" />
                                     </f:label>
                                     <f:fields>
                                         <ComboBox id="Midmdlver" selectedKey="act" selectionChange="onSelectionChange">
-                                            <core:Item key="act" text="Active"/>
-                                            <core:Item key="sim" text="Simulation"/>
+                                            <core:Item key="act" text="Active" />
+                                            <core:Item key="sim" text="Simulation" />
                                         </ComboBox>
                                     </f:fields>
                                 </f:FormElement>
@@ -86,20 +99,19 @@
                                         <Label text="{i18n>predpf}" />
                                     </f:label>
                                     <f:fields>
-                                        <Input id="MpmInput" placeholder="{i18n>predpf}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
-
+                                        <Input id="MpmInput" placeholder="{i18n>predpf}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                                     </f:fields>
                                 </f:FormElement>
                                 <!-- 25-08-2022 -->
-                                 <f:FormElement>
+                                <f:FormElement>
                                     <f:label>
                                         <Label text="{i18n>type}" />
                                     </f:label>
                                     <f:fields>
-                                        <Select id="MidType"  selectedKey="OD" class="buttonDesktop">
-                                            <core:ListItem key="OD" text="Object Dependency"/>
-                                            <core:ListItem key="RT" text="Restrictions"/>
-                                            <core:ListItem key="PI" text="Primary"/>
+                                        <Select id="MidType" selectedKey="OD" class="buttonDesktop">
+                                            <core:ListItem key="OD" text="Object Dependency" />
+                                            <core:ListItem key="RT" text="Restrictions" />
+                                            <core:ListItem key="PI" text="Primary" />
                                         </Select>
                                     </f:fields>
                                 </f:FormElement>
@@ -109,20 +121,20 @@
                                         <Label text="{i18n>override}" />
                                     </f:label>
                                     <f:fields>
-                                        <CheckBox id="MidCheck" select="onCheck"/>
+                                        <CheckBox id="MidCheck" select="onCheck" />
                                         <!-- 07-09-2022 -->
                                         <!-- <Button type="Emphasized" text="{i18n>mdlgene}" press="onModelGen" width="100%"/> -->
                                         <!-- 07-09-2022 -->
                                         <!-- <Button type="Emphasized" text="{i18n>mdlgene}" press="onModelGen" width="100%"/> -->
                                     </f:fields>
                                 </f:FormElement>
-                                <!-- 07-09-2022 -->
+                                <!-- 07-09-2022-1 -->
                                 <f:FormElement>
                                     <f:fields>
-                                        <Button type="Emphasized" text="{i18n>mdlgene}" press="onModelGen" width="30%"/>
+                                        <Button visible="false" type="Emphasized" text="{i18n>mdlgene}" press="onModelGen" width="30%" />
                                     </f:fields>
                                 </f:FormElement>
-                                <!-- 07-09-2022 -->
+                                <!-- 07-09-2022-1 -->
                             </f:formElements>
                         </f:FormContainer>
                     </f:formContainers>
@@ -132,7 +144,7 @@
             <Panel id="PredPanel" visible="false" expandable="true" expanded="true">
                 <headerToolbar>
                     <OverflowToolbar>
-                        <Title text="{i18n>predPanel}"/>
+                        <Title text="{i18n>predPanel}" />
                     </OverflowToolbar>
                 </headerToolbar>
                 <f:Form editable="true" id="formIdPred">
@@ -144,18 +156,18 @@
                             <f:formElements>
                                 <f:FormElement>
                                     <f:label>
-                                        <Label text="{i18n>loc}" required="true"/>
+                                        <Label text="{i18n>loc}" required="true" />
                                     </f:label>
                                     <f:fields>
-                                        <Input id="PlocInput" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                                        <Input id="PlocInput" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                                     </f:fields>
                                 </f:FormElement>
                                 <f:FormElement>
                                     <f:label>
-                                        <Label text="{i18n>prod}" required="true"/>
+                                        <Label text="{i18n>prod}" required="true" />
                                     </f:label>
                                     <f:fields>
-                                        <MultiInput id="PprodInput" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
+                                        <MultiInput id="PprodInput" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
                                     </f:fields>
                                 </f:FormElement>
                                 <!-- <f:FormElement>
@@ -174,18 +186,18 @@
                                 </f:FormElement> -->
                                 <f:FormElement>
                                     <f:label>
-                                        <Label text="{i18n>modelver}"/>
+                                        <Label text="{i18n>modelver}" />
                                     </f:label>
                                     <f:fields>
                                         <Select id="PidModelVer" selectedKey="Active">
-                                            <core:ListItem key="Active" text="Active"/>
-                                            <core:ListItem key="Simulation" text="Simulation"/>
+                                            <core:ListItem key="Active" text="Active" />
+                                            <core:ListItem key="Simulation" text="Simulation" />
                                         </Select>
                                     </f:fields>
                                 </f:FormElement>
                                 <f:FormElement>
                                     <f:label>
-                                        <Label text="{i18n>ibpver}"/>
+                                        <Label text="{i18n>ibpver}" />
                                     </f:label>
                                     <f:fields>
                                         <Input id="Pidver" value="" placeholder="{i18n>ibpver}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
@@ -193,22 +205,22 @@
                                 </f:FormElement>
                                 <f:FormElement>
                                     <f:label>
-                                        <Label text="{i18n>ibpscen}"/>
+                                        <Label text="{i18n>ibpscen}" />
                                     </f:label>
                                     <f:fields>
                                         <Input id="Pidscen" value="" placeholder="{i18n>ibpscen}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                                     </f:fields>
                                 </f:FormElement>
                                 <!-- 25-08-2022 -->
-                                 <f:FormElement>
+                                <f:FormElement>
                                     <f:label>
                                         <Label text="{i18n>type}" />
                                     </f:label>
                                     <f:fields>
-                                        <Select id="PidType"  selectedKey="OD" class="buttonDesktop">
-                                            <core:ListItem key="OD" text="Object Dependency"/>
-                                            <core:ListItem key="RT" text="Restrictions"/>
-                                            <core:ListItem key="PI" text="Primary"/>
+                                        <Select id="PidType" selectedKey="OD" class="buttonDesktop">
+                                            <core:ListItem key="OD" text="Object Dependency" />
+                                            <core:ListItem key="RT" text="Restrictions" />
+                                            <core:ListItem key="PI" text="Primary" />
                                         </Select>
                                     </f:fields>
                                 </f:FormElement>
@@ -218,20 +230,20 @@
                                         <Label text="{i18n>override}" />
                                     </f:label>
                                     <f:fields>
-                                        <CheckBox id="PidCheck" select="onCheck"/>
+                                        <CheckBox id="PidCheck" select="onCheck" />
                                         <!-- <Button type="Emphasized" text="{i18n>predi}" press="onPrediction" width="100%"/> -->
                                         <!-- 07-09-2022 -->
                                         <!-- <Button type="Emphasized" text="{i18n>predi}" press="onPrediction" width="100%"/> -->
                                         <!-- 07-09-2022 -->
                                     </f:fields>
                                 </f:FormElement>
-                                <!-- 07-09-2022 -->
+                                <!-- 07-09-2022-1 -->
                                 <f:FormElement>
                                     <f:fields>
-                                        <Button type="Emphasized" text="{i18n>predi}" press="onPrediction" width="30%"/>
+                                        <Button visible="false" type="Emphasized" text="{i18n>predi}" press="onPrediction" width="30%" />
                                     </f:fields>
                                 </f:FormElement>
-                                <!-- 07-09-2022 -->
+                                <!-- 07-09-2022-1 -->
                             </f:formElements>
                         </f:FormContainer>
                     </f:formContainers>
@@ -241,7 +253,7 @@
             <Panel id="timeSeriesPanel" visible="false" expandable="true" expanded="true">
                 <headerToolbar>
                     <OverflowToolbar>
-                        <Title text="{i18n>timeseriesPanel}"/>
+                        <Title text="{i18n>timeseriesPanel}" />
                     </OverflowToolbar>
                 </headerToolbar>
                 <f:Form editable="true">
@@ -253,24 +265,24 @@
                             <f:formElements>
                                 <f:FormElement>
                                     <f:label>
-                                        <Label text="{i18n>loc}" required="true"/>
+                                        <Label text="{i18n>loc}" required="true" />
                                     </f:label>
                                     <f:fields>
-                                        <Input id="TlocInput" width="225px" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                                        <Input id="TlocInput" width="225px" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                                     </f:fields>
                                 </f:FormElement>
                                 <f:FormElement>
                                     <f:label>
-                                        <Label text="{i18n>prod}" required="true"/>
+                                        <Label text="{i18n>prod}" required="true" />
                                     </f:label>
                                     <f:fields>
                                         <!-- <Input id="TprodInput" width="225px" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/> -->
-                                        <MultiInput id="TprodInput" width="225px" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
+                                        <MultiInput id="TprodInput" width="225px" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
                                     </f:fields>
                                 </f:FormElement>
                                 <f:FormElement>
                                     <f:label>
-                                        <Label text="{i18n>pastdays}" required="true"/>
+                                        <Label text="{i18n>pastdays}" required="true" />
                                     </f:label>
                                     <f:fields>
                                         <Input id="TpastdaysInput" width="225px" placeholder="{i18n>pastdays}" />
@@ -278,7 +290,9 @@
                                 </f:FormElement>
                                 <f:FormElement>
                                     <f:fields>
-                                        <Button type="Emphasized" text="{i18n>genTimeseries}" press="onTimeSeries" width="30%"/>
+                                        <!-- 07-09-2022-1 -->
+                                        <Button visible="false" type="Emphasized" text="{i18n>genTimeseries}" press="onTimeSeries" width="30%" />
+                                        <!-- 07-09-2022-1 -->
                                     </f:fields>
                                 </f:FormElement>
                             </f:formElements>
@@ -290,7 +304,7 @@
             <Panel id="timeSeriesFPanel" visible="false" expandable="true" expanded="true">
                 <headerToolbar>
                     <OverflowToolbar>
-                        <Title text="{i18n>timeseriesFPanel}"/>
+                        <Title text="{i18n>timeseriesFPanel}" />
                     </OverflowToolbar>
                 </headerToolbar>
                 <f:Form editable="true">
@@ -302,24 +316,26 @@
                             <f:formElements>
                                 <f:FormElement>
                                     <f:label>
-                                        <Label text="{i18n>loc}" required="true"/>
+                                        <Label text="{i18n>loc}" required="true" />
                                     </f:label>
                                     <f:fields>
-                                        <Input id="TFlocInput" width="225px" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                                        <Input id="TFlocInput" width="225px" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                                     </f:fields>
                                 </f:FormElement>
                                 <f:FormElement>
                                     <f:label>
-                                        <Label text="{i18n>prod}" required="true"/>
+                                        <Label text="{i18n>prod}" required="true" />
                                     </f:label>
                                     <f:fields>
-                                        <MultiInput id="TFprodInput" width="225px" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
+                                        <MultiInput id="TFprodInput" width="225px" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
                                     </f:fields>
                                 </f:FormElement>
-                                
+
                                 <f:FormElement>
                                     <f:fields>
-                                        <Button type="Emphasized" text="{i18n>genTimeseriesF}" press="onTimeSeriesF" width="40%"/>
+                                        <!-- 07-09-2022-1 -->
+                                        <Button visible="false" type="Emphasized" text="{i18n>genTimeseriesF}" press="onTimeSeriesF" width="40%" />
+                                        <!-- 07-09-2022-1 -->
                                     </f:fields>
                                 </f:FormElement>
                             </f:formElements>
@@ -328,14 +344,13 @@
                 </f:Form>
             </Panel>
 
-
             <Panel id="IbpPanel" visible="false" expandable="true" expanded="true">
                 <headerToolbar>
                     <OverflowToolbar>
-                        <Title text="{i18n>ibpPanel}"/>
+                        <Title text="{i18n>ibpPanel}" />
                         <Select id="idIBPselect" change="onIBPSelect" selectedKey="I" width="200px">
-                            <core:ListItem key="I" text="{i18n>import}"/>
-                            <core:ListItem key="E" text="{i18n>export}"/>
+                            <core:ListItem key="I" text="{i18n>import}" />
+                            <core:ListItem key="E" text="{i18n>export}" />
                         </Select>
                     </OverflowToolbar>
                 </headerToolbar>
@@ -356,33 +371,33 @@
                         <RadioButton id="idIBPCompReqQty" text="Assembly Requirement Quantity" />
                     </RadioButtonGroup>
 
-                <!-- </content> -->
+                    <!-- </content> -->
 
-                <VBox class="sapUiSmallMargin">
-                    <f:Form editable="true" id="IBPimport">
-                        <f:layout>
-                            <f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2" singleContainerFullSize="false" />
-                        </f:layout>
-                        <f:formContainers>
-                            <f:FormContainer>
-                                <f:formElements>
-                                    <f:FormElement>
-                                        <f:label>
-                                            <Label text="{i18n>loc}" required="true"/>
-                                        </f:label>
-                                        <f:fields>
-                                            <Input id="IlocInput" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
-                                        </f:fields>
-                                    </f:FormElement>
-                                    <f:FormElement>
-                                        <f:label>
-                                            <Label text="{i18n>prod}" required="true"/>
-                                        </f:label>
-                                        <f:fields>
-                                            <MultiInput id="IprodInput" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
-                                        </f:fields>
-                                    </f:FormElement>
-                                    <!-- <f:FormElement>
+                    <VBox class="sapUiSmallMargin">
+                        <f:Form editable="true" id="IBPimport">
+                            <f:layout>
+                                <f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2" singleContainerFullSize="false" />
+                            </f:layout>
+                            <f:formContainers>
+                                <f:FormContainer>
+                                    <f:formElements>
+                                        <f:FormElement>
+                                            <f:label>
+                                                <Label text="{i18n>loc}" required="true" />
+                                            </f:label>
+                                            <f:fields>
+                                                <Input id="IlocInput" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                            </f:fields>
+                                        </f:FormElement>
+                                        <f:FormElement>
+                                            <f:label>
+                                                <Label text="{i18n>prod}" required="true" />
+                                            </f:label>
+                                            <f:fields>
+                                                <MultiInput id="IprodInput" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
+                                            </f:fields>
+                                        </f:FormElement>
+                                        <!-- <f:FormElement>
                                         <f:label>
                                             <Label text="{i18n>ibpver}"/>
                                         </f:label>
@@ -398,220 +413,217 @@
                                             <Input id="Iidscen" value="" placeholder="{i18n>ibpscen}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                                         </f:fields>
                                     </f:FormElement> -->
-                                </f:formElements>
-                            </f:FormContainer>
-                        </f:formContainers>
-                    </f:Form>
-                <!-- </VBox>
+                                    </f:formElements>
+                                </f:FormContainer>
+                            </f:formContainers>
+                        </f:Form>
+                        <!-- </VBox>
 
                 <VBox class="sapUiSmallMargin"> -->
-                    <f:Form editable="true" id="IBPProdExport" visible="false">
-                        <f:layout>
-                            <f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2" singleContainerFullSize="false" />
-                        </f:layout>
-                        <f:formContainers>
-                            <f:FormContainer>
-                                <f:formElements>
-                                    <f:FormElement>
-                                        <f:label>
-                                            <Label text="{i18n>loc}" required="true"/>
-                                        </f:label>
-                                        <f:fields>
-                                            <Input id="EPlocInput" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
-                                        </f:fields>
-                                    </f:FormElement>
-                                </f:formElements>
-                            </f:FormContainer>
-                        </f:formContainers>
-                    </f:Form>
-                <!-- </VBox>
+                        <f:Form editable="true" id="IBPProdExport" visible="false">
+                            <f:layout>
+                                <f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2" singleContainerFullSize="false" />
+                            </f:layout>
+                            <f:formContainers>
+                                <f:FormContainer>
+                                    <f:formElements>
+                                        <f:FormElement>
+                                            <f:label>
+                                                <Label text="{i18n>loc}" required="true" />
+                                            </f:label>
+                                            <f:fields>
+                                                <Input id="EPlocInput" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                            </f:fields>
+                                        </f:FormElement>
+                                    </f:formElements>
+                                </f:FormContainer>
+                            </f:formContainers>
+                        </f:Form>
+                        <!-- </VBox>
 
                 <VBox class="sapUiSmallMargin"> -->
-                    <f:Form editable="true" id="IBPClassExport" visible="false">
-                        <f:layout>
-                            <f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2" singleContainerFullSize="false" />
-                        </f:layout>
-                        <f:formContainers>
-                            <f:FormContainer>
-                                <f:formElements>
-                                    <f:FormElement>
-                                        <f:label>
-                                            <Label text="{i18n>class}" required="true"/>
-                                        </f:label>
-                                        <f:fields>
-                                            <Input id="IBPclassInput" placeholder="{i18n>class}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
-                                        </f:fields>
-                                    </f:FormElement>
-                                </f:formElements>
-                            </f:FormContainer>
-                        </f:formContainers>
-                    </f:Form>
-                <!-- </VBox>
+                        <f:Form editable="true" id="IBPClassExport" visible="false">
+                            <f:layout>
+                                <f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2" singleContainerFullSize="false" />
+                            </f:layout>
+                            <f:formContainers>
+                                <f:FormContainer>
+                                    <f:formElements>
+                                        <f:FormElement>
+                                            <f:label>
+                                                <Label text="{i18n>class}" required="true" />
+                                            </f:label>
+                                            <f:fields>
+                                                <Input id="IBPclassInput" placeholder="{i18n>class}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                            </f:fields>
+                                        </f:FormElement>
+                                    </f:formElements>
+                                </f:FormContainer>
+                            </f:formContainers>
+                        </f:Form>
+                        <!-- </VBox>
 
                 <VBox class="sapUiSmallMargin"> -->
-                    <f:Form editable="true" id="IBPSalesHisExport" visible="false">
-                        <f:layout>
-                            <f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2" singleContainerFullSize="false" />
-                        </f:layout>
-                        <f:formContainers>
-                            <f:FormContainer>
-                                <f:formElements>
-                                    <f:FormElement>
-                                        <f:label>
-                                            <Label text="{i18n>loc}" required="true"/>
-                                        </f:label>
-                                        <f:fields>
-                                            <Input id="ESHlocInput" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
-                                        </f:fields>
-                                    </f:FormElement>
-                                    <f:FormElement>
-                                        <f:label>
-                                            <Label text="{i18n>prod}" required="true"/>
-                                        </f:label>
-                                        <f:fields>
-                                            <MultiInput id="ESHprodInput" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
-                                        </f:fields>
-                                    </f:FormElement>
-                                    <f:FormElement>
-                                        <f:label>
-                                            <Label text="{i18n>cust}"/>
-                                        </f:label>
-                                        <f:fields>
-                                            <Input id="ECust" value="" placeholder="{i18n>cust}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
-                                        </f:fields>
-                                    </f:FormElement>
-                                </f:formElements>
-                            </f:FormContainer>
-                        </f:formContainers>
-                    </f:Form>
+                        <f:Form editable="true" id="IBPSalesHisExport" visible="false">
+                            <f:layout>
+                                <f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2" singleContainerFullSize="false" />
+                            </f:layout>
+                            <f:formContainers>
+                                <f:FormContainer>
+                                    <f:formElements>
+                                        <f:FormElement>
+                                            <f:label>
+                                                <Label text="{i18n>loc}" required="true" />
+                                            </f:label>
+                                            <f:fields>
+                                                <Input id="ESHlocInput" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                            </f:fields>
+                                        </f:FormElement>
+                                        <f:FormElement>
+                                            <f:label>
+                                                <Label text="{i18n>prod}" required="true" />
+                                            </f:label>
+                                            <f:fields>
+                                                <MultiInput id="ESHprodInput" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
+                                            </f:fields>
+                                        </f:FormElement>
+                                        <f:FormElement>
+                                            <f:label>
+                                                <Label text="{i18n>cust}" />
+                                            </f:label>
+                                            <f:fields>
+                                                <Input id="ECust" value="" placeholder="{i18n>cust}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                            </f:fields>
+                                        </f:FormElement>
+                                    </f:formElements>
+                                </f:FormContainer>
+                            </f:formContainers>
+                        </f:Form>
 
-                    <f:Form editable="true" id="IBPSalesHisConfigExport" visible="false">
-                        <f:layout>
-                            <f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2" singleContainerFullSize="false" />
-                        </f:layout>
-                        <f:formContainers>
-                            <f:FormContainer>
-                                <f:formElements>
-                                    <f:FormElement>
-                                        <f:label>
-                                            <Label text="{i18n>loc}" required="true"/>
-                                        </f:label>
-                                        <f:fields>
-                                            <Input id="ESHConfiglocInput" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
-                                        </f:fields>
-                                    </f:FormElement>
-                                    <f:FormElement>
-                                        <f:label>
-                                            <Label text="{i18n>prod}" required="true"/>
-                                        </f:label>
-                                        <f:fields>
-                                            <MultiInput id="ESHConfigprodInput" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
-                                        </f:fields>
-                                    </f:FormElement>
-                                    <f:FormElement>
-                                        <f:label>
-                                            <Label text="{i18n>cust}"/>
-                                        </f:label>
-                                        <f:fields>
-                                            <Input id="ESHConfigCust" value="" placeholder="{i18n>cust}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
-                                        </f:fields>
-                                    </f:FormElement>
-                                </f:formElements>
-                            </f:FormContainer>
-                        </f:formContainers>
-                    </f:Form>
+                        <f:Form editable="true" id="IBPSalesHisConfigExport" visible="false">
+                            <f:layout>
+                                <f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2" singleContainerFullSize="false" />
+                            </f:layout>
+                            <f:formContainers>
+                                <f:FormContainer>
+                                    <f:formElements>
+                                        <f:FormElement>
+                                            <f:label>
+                                                <Label text="{i18n>loc}" required="true" />
+                                            </f:label>
+                                            <f:fields>
+                                                <Input id="ESHConfiglocInput" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                            </f:fields>
+                                        </f:FormElement>
+                                        <f:FormElement>
+                                            <f:label>
+                                                <Label text="{i18n>prod}" required="true" />
+                                            </f:label>
+                                            <f:fields>
+                                                <MultiInput id="ESHConfigprodInput" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
+                                            </f:fields>
+                                        </f:FormElement>
+                                        <f:FormElement>
+                                            <f:label>
+                                                <Label text="{i18n>cust}" />
+                                            </f:label>
+                                            <f:fields>
+                                                <Input id="ESHConfigCust" value="" placeholder="{i18n>cust}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                            </f:fields>
+                                        </f:FormElement>
+                                    </f:formElements>
+                                </f:FormContainer>
+                            </f:formContainers>
+                        </f:Form>
 
-                    <f:Form editable="true" id="IBPActCompDemandExport" visible="false">
-                        <f:layout>
-                            <f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2" singleContainerFullSize="false" />
-                        </f:layout>
-                        <f:formContainers>
-                            <f:FormContainer>
-                                <f:formElements>
-                                    <f:FormElement>
-                                        <f:label>
-                                            <Label text="{i18n>loc}" required="true"/>
-                                        </f:label>
-                                        <f:fields>
-                                            <Input id="EACDemandlocInput" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
-                                        </f:fields>
-                                    </f:FormElement>
-                                    <f:FormElement>
-                                        <f:label>
-                                            <Label text="{i18n>prod}" required="true"/>
-                                        </f:label>
-                                        <f:fields>
-                                            <MultiInput id="EACDemandprodInput" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
-                                        </f:fields>
-                                    </f:FormElement>
-                                    <f:FormElement>
-                                        <f:label>
-                                            <Label text="{i18n>daterange}"/>
-                                        </f:label>
-                                        <f:fields>
-                                            <DateRangeSelection id="EACDemandDate" delimiter="To" dateValue="" secondDateValue="" valueFormat="yyyy-MM-dd"
-							                    displayFormat="yyyy-MM-dd" change="handleEACDemandDateChange" maxDate=""/>
-                                        </f:fields>
-                                    </f:FormElement>
-                                </f:formElements>
-                            </f:FormContainer>
-                        </f:formContainers>
-                    </f:Form>
+                        <f:Form editable="true" id="IBPActCompDemandExport" visible="false">
+                            <f:layout>
+                                <f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2" singleContainerFullSize="false" />
+                            </f:layout>
+                            <f:formContainers>
+                                <f:FormContainer>
+                                    <f:formElements>
+                                        <f:FormElement>
+                                            <f:label>
+                                                <Label text="{i18n>loc}" required="true" />
+                                            </f:label>
+                                            <f:fields>
+                                                <Input id="EACDemandlocInput" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                            </f:fields>
+                                        </f:FormElement>
+                                        <f:FormElement>
+                                            <f:label>
+                                                <Label text="{i18n>prod}" required="true" />
+                                            </f:label>
+                                            <f:fields>
+                                                <MultiInput id="EACDemandprodInput" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
+                                            </f:fields>
+                                        </f:FormElement>
+                                        <f:FormElement>
+                                            <f:label>
+                                                <Label text="{i18n>daterange}" />
+                                            </f:label>
+                                            <f:fields>
+                                                <DateRangeSelection id="EACDemandDate" delimiter="To" dateValue="" secondDateValue="" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="handleEACDemandDateChange" maxDate="" />
+                                            </f:fields>
+                                        </f:FormElement>
+                                    </f:formElements>
+                                </f:FormContainer>
+                            </f:formContainers>
+                        </f:Form>
 
-                    <f:Form editable="true" id="IBPCompReqQtyExport" visible="false">
-                        <f:layout>
-                            <f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2" singleContainerFullSize="false" />
-                        </f:layout>
-                        <f:formContainers>
-                            <f:FormContainer>
-                                <f:formElements>
-                                    <f:FormElement>
-                                        <f:label>
-                                            <Label text="{i18n>loc}" required="true"/>
-                                        </f:label>
-                                        <f:fields>
-                                            <Input id="ECRQtylocInput" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
-                                        </f:fields>
-                                    </f:FormElement>
-                                    <f:FormElement>
-                                        <f:label>
-                                            <Label text="{i18n>prod}" required="true"/>
-                                        </f:label>
-                                        <f:fields>
-                                            <MultiInput id="ECRQtyprodInput" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
-                                        </f:fields>
-                                    </f:FormElement>
-                                    <f:FormElement>
-                                        <f:label>
-                                            <Label text="{i18n>daterange}"/>
-                                        </f:label>
-                                        <f:fields>
-                                            <DateRangeSelection id="ECRQtyDate" delimiter="To" dateValue="" secondDateValue="" valueFormat="yyyy-MM-dd"
-							                    displayFormat="yyyy-MM-dd" change="handleECRQtyDateChange" maxDate=""/>
-                                        </f:fields>
-                                    </f:FormElement>
-                                </f:formElements>
-                            </f:FormContainer>
-                        </f:formContainers>
-                    </f:Form>
-
-
-                </VBox>
-                <Button id="idbtImport" type="Emphasized" text="Import From IBP" press="onIbpJobImport" width="10%"/>
-                <Button id="idbtExport" type="Emphasized" text="Export To IBP" press="onIbpJobExport" width="10%" visible="false"/>
+                        <f:Form editable="true" id="IBPCompReqQtyExport" visible="false">
+                            <f:layout>
+                                <f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2" singleContainerFullSize="false" />
+                            </f:layout>
+                            <f:formContainers>
+                                <f:FormContainer>
+                                    <f:formElements>
+                                        <f:FormElement>
+                                            <f:label>
+                                                <Label text="{i18n>loc}" required="true" />
+                                            </f:label>
+                                            <f:fields>
+                                                <Input id="ECRQtylocInput" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                            </f:fields>
+                                        </f:FormElement>
+                                        <f:FormElement>
+                                            <f:label>
+                                                <Label text="{i18n>prod}" required="true" />
+                                            </f:label>
+                                            <f:fields>
+                                                <MultiInput id="ECRQtyprodInput" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
+                                            </f:fields>
+                                        </f:FormElement>
+                                        <f:FormElement>
+                                            <f:label>
+                                                <Label text="{i18n>daterange}" />
+                                            </f:label>
+                                            <f:fields>
+                                                <DateRangeSelection id="ECRQtyDate" delimiter="To" dateValue="" secondDateValue="" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="handleECRQtyDateChange" maxDate="" />
+                                            </f:fields>
+                                        </f:FormElement>
+                                    </f:formElements>
+                                </f:FormContainer>
+                            </f:formContainers>
+                        </f:Form>
+                    </VBox>
+                    <!-- 07-09-2022-1 -->
+                    <Button visible="false" id="idbtImport" type="Emphasized" text="Import From IBP" press="onIbpJobImport" width="10%" />
+                    <!-- 07-09-2022-1 -->
+                    <Button id="idbtExport" type="Emphasized" text="Export To IBP" press="onIbpJobExport" width="10%" visible="false" />
                 </content>
             </Panel>
 
             <Panel id="sdiPanel" visible="false" expandable="true" expanded="true">
-            
                 <headerToolbar>
                     <OverflowToolbar>
                         <Title text="{i18n>sdi}" class="boldText" />
                     </OverflowToolbar>
                 </headerToolbar>
                 <content>
-                <!-- <HBox> -->
-                <f:Form editable="true" id="idSdiform" >
+                    <!-- <HBox> -->
+                    <f:Form editable="true" id="idSdiform">
                         <f:layout>
                             <f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2" singleContainerFullSize="false" />
                         </f:layout>
@@ -620,24 +632,24 @@
                                 <f:formElements>
                                     <f:FormElement>
                                         <f:label>
-                                            <Label text="{i18n>sdi}" required="true"/>
+                                            <Label text="{i18n>sdi}" required="true" />
                                         </f:label>
                                         <f:fields>
                                             <Select id="idSdi" change="onSdiChange" selectedKey="LO" class="buttonDesktop " width="400px">
-                                                    <core:ListItem key="LO" text="{i18n>loc}"/>
-                                                    <core:ListItem key="CG" text="{i18n>custgrp}"/>
-                                                    <core:ListItem key="PR" text="{i18n>prod}"/>
-                                                    <core:ListItem key="LP" text="{i18n>locpprod}"/>
-                                                    <core:ListItem key="PC" text="{i18n>prodclas}"/>
-                                                    <core:ListItem key="BH" text="{i18n>bomheader}"/>
-                                                    <core:ListItem key="BO" text="{i18n>bomobjdep}"/>
-                                                    <core:ListItem key="OH" text="{i18n>objdephdr}"/>
-                                                    <core:ListItem key="CL" text="{i18n>class}"/>
-                                                    <core:ListItem key="CH" text="{i18n>char}"/>
-                                                    <core:ListItem key="CV" text="{i18n>charval}"/>
-                                                    <core:ListItem key="SH" text="{i18n>saleshis}"/>
-                                                    <core:ListItem key="SC" text="{i18n>salehisconfig}"/>
-                                                    <core:ListItem key="AC" text="{i18n>asmbcomp}"/>
+                                                <core:ListItem key="LO" text="{i18n>loc}" />
+                                                <core:ListItem key="CG" text="{i18n>custgrp}" />
+                                                <core:ListItem key="PR" text="{i18n>prod}" />
+                                                <core:ListItem key="LP" text="{i18n>locpprod}" />
+                                                <core:ListItem key="PC" text="{i18n>prodclas}" />
+                                                <core:ListItem key="BH" text="{i18n>bomheader}" />
+                                                <core:ListItem key="BO" text="{i18n>bomobjdep}" />
+                                                <core:ListItem key="OH" text="{i18n>objdephdr}" />
+                                                <core:ListItem key="CL" text="{i18n>class}" />
+                                                <core:ListItem key="CH" text="{i18n>char}" />
+                                                <core:ListItem key="CV" text="{i18n>charval}" />
+                                                <core:ListItem key="SH" text="{i18n>saleshis}" />
+                                                <core:ListItem key="SC" text="{i18n>salehisconfig}" />
+                                                <core:ListItem key="AC" text="{i18n>asmbcomp}" />
                                             </Select>
                                         </f:fields>
                                     </f:FormElement>
@@ -645,14 +657,16 @@
                             </f:FormContainer>
                         </f:formContainers>
                     </f:Form>
-                <Button id="idbtSdi" type="Emphasized" text="SDI Integration" press="onSdiIntegration" width="10%"/>
-            </content>
+                    <!-- 07-09-2022-1 -->
+                    <Button visible="false" id="idbtSdi" type="Emphasized" text="SDI Integration" press="onSdiIntegration" width="10%" />
+                    <!-- 07-09-2022-1 -->
+                </content>
             </Panel>
-<!-- 07-09-2022 -->
+            <!-- 07-09-2022 -->
             <Panel id="FullDemandPanel" visible="false" expandable="true" expanded="true">
                 <headerToolbar>
                     <OverflowToolbar>
-                        <Title text="{i18n>genfulcondemand}"/>
+                        <Title text="{i18n>genfulcondemand}" />
                     </OverflowToolbar>
                 </headerToolbar>
                 <f:Form editable="true">
@@ -664,24 +678,26 @@
                             <f:formElements>
                                 <f:FormElement>
                                     <f:label>
-                                        <Label text="{i18n>loc}" required="true"/>
+                                        <Label text="{i18n>loc}" required="true" />
                                     </f:label>
                                     <f:fields>
-                                        <Input id="DlocInput" width="225px" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                                        <Input id="DlocInput" width="225px" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                                     </f:fields>
                                 </f:FormElement>
                                 <f:FormElement>
                                     <f:label>
-                                        <Label text="{i18n>prod}" required="true"/>
+                                        <Label text="{i18n>prod}" required="true" />
                                     </f:label>
                                     <f:fields>
-                                        <MultiInput id="DprodInput" width="225px" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
+                                        <MultiInput id="DprodInput" width="225px" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
                                     </f:fields>
                                 </f:FormElement>
-                                
+
                                 <f:FormElement>
                                     <f:fields>
-                                        <Button type="Emphasized" text="{i18n>genFullDemand}" press="onFullyDemand" width="35%"/>
+                                        <!-- 07-09-2022-1 -->
+                                        <Button visible="false" type="Emphasized" text="{i18n>genFullDemand}" press="onFullyDemand" width="35%" />
+                                        <!-- 07-09-2022-1 -->
                                     </f:fields>
                                 </f:FormElement>
                             </f:formElements>
@@ -689,12 +705,11 @@
                     </f:formContainers>
                 </f:Form>
             </Panel>
-
 
             <Panel id="AsmblyReqPanel" visible="false" expandable="true" expanded="true">
                 <headerToolbar>
                     <OverflowToolbar>
-                        <Title text="{i18n>genasmbrequirments}"/>
+                        <Title text="{i18n>genasmbrequirments}" />
                     </OverflowToolbar>
                 </headerToolbar>
                 <f:Form editable="true">
@@ -706,24 +721,26 @@
                             <f:formElements>
                                 <f:FormElement>
                                     <f:label>
-                                        <Label text="{i18n>loc}" required="true"/>
+                                        <Label text="{i18n>loc}" required="true" />
                                     </f:label>
                                     <f:fields>
-                                        <Input id="AlocInput" width="225px" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                                        <Input id="AlocInput" width="225px" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                                     </f:fields>
                                 </f:FormElement>
                                 <f:FormElement>
                                     <f:label>
-                                        <Label text="{i18n>prod}" required="true"/>
+                                        <Label text="{i18n>prod}" required="true" />
                                     </f:label>
                                     <f:fields>
-                                        <MultiInput id="AprodInput" width="225px" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
+                                        <MultiInput id="AprodInput" width="225px" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
                                     </f:fields>
                                 </f:FormElement>
-                                
+
                                 <f:FormElement>
                                     <f:fields>
-                                        <Button type="Emphasized" text="{i18n>genasmbReq}" press="onAsmbReq" width="35%"/>
+                                        <!-- 07-09-2022-1 -->
+                                        <Button visible="false" type="Emphasized" text="{i18n>genasmbReq}" press="onAsmbReq" width="35%" />
+                                        <!-- 07-09-2022-1 -->
                                     </f:fields>
                                 </f:FormElement>
                             </f:formElements>
@@ -732,11 +749,10 @@
                 </f:Form>
             </Panel>
 
-
-             <Panel id="salesOrdPanel" visible="false" expandable="true" expanded="true">
+            <Panel id="salesOrdPanel" visible="false" expandable="true" expanded="true">
                 <headerToolbar>
                     <OverflowToolbar>
-                        <Title text="{i18n>procsalesord}"/>
+                        <Title text="{i18n>procsalesord}" />
                     </OverflowToolbar>
                 </headerToolbar>
                 <f:Form editable="true">
@@ -748,24 +764,26 @@
                             <f:formElements>
                                 <f:FormElement>
                                     <f:label>
-                                        <Label text="{i18n>loc}" required="true"/>
+                                        <Label text="{i18n>loc}" required="true" />
                                     </f:label>
                                     <f:fields>
-                                        <Input id="OlocInput" width="225px" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                                        <Input id="OlocInput" width="225px" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                                     </f:fields>
                                 </f:FormElement>
                                 <f:FormElement>
                                     <f:label>
-                                        <Label text="{i18n>prod}" required="true"/>
+                                        <Label text="{i18n>prod}" required="true" />
                                     </f:label>
                                     <f:fields>
-                                        <MultiInput id="OprodInput" width="225px" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
+                                        <MultiInput id="OprodInput" width="225px" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
                                     </f:fields>
                                 </f:FormElement>
-                                
+
                                 <f:FormElement>
                                     <f:fields>
-                                        <Button type="Emphasized" text="{i18n>gensalesord}" press="onProcSalesOrd" width="40%"/>
+                                        <!-- 07-09-2022-1 -->
+                                        <Button visible="false" type="Emphasized" text="{i18n>gensalesord}" press="onProcSalesOrd" width="40%" />
+                                        <!-- 07-09-2022-1 -->
                                     </f:fields>
                                 </f:FormElement>
                             </f:formElements>
@@ -773,14 +791,23 @@
                     </f:formContainers>
                 </f:Form>
             </Panel>
+            <!-- 07-09-2022 -->
+            <!-- 07-09-2022-1 -->
+            <!-- <Button type="Emphasized" text="Schedule Job" press="onExecute" width="7%" class="sapUiLargeMarginBeginEnd" />
+            <Button type="Emphasized" text="Execute" press="onExecute" width="6%" /> -->
 
-
-
-
-<!-- 07-09-2022 -->
-
+            <!-- 07-09-2022-1 -->
         </content>
 
+        <footer>
+            <OverflowToolbar>
+                <ToolbarSpacer />
+                <!-- 07-09-2022-1 -->
+                <Button type="Emphasized" text="Schedule Job" press="onExecute" width="7%"  />
+                <Button type="Emphasized" text="Execute" press="onExecute" width="6%" class="sapUiTinyMarginBeginEnd"/>
 
+                <!-- 07-09-2022-1 -->
+            </OverflowToolbar>
+        </footer>
     </Page>
 </mvc:View>
