@@ -162,7 +162,9 @@ service CatalogService @(impl : './lib/cat-service.js'){
     // Generate Timeseries
     function generate_timeseries(LOCATION_ID : String(4), PRODUCT_ID : String(40),PAST_DAYS : Integer)                                                                                                                                                                                               returns String;
     // Generate Timeseries
-    function generate_timeseriesF(LOCATION_ID : String(4), PRODUCT_ID : String(40))                                                                                                                                                                                              returns String;
+    function generate_timeseriesF(LOCATION_ID : String(4), PRODUCT_ID : String(40))     returns String;
+    // Gen Full Configured Demand
+    function gen_FullConfigDemand(LOCATION_ID : String(4), PRODUCT_ID : String(40)) returns String;
     // Get Object dependency
     function get_objdep() returns array of ds.objectDep; //objectDep;
     
@@ -186,6 +188,10 @@ service CatalogService @(impl : './lib/cat-service.js'){
     action generateTimeseries(LOCATION_ID : String(4), PRODUCT_ID : String(40),PAST_DAYS : Integer);
     // Generate Timeseries
     action generateTimeseriesF(LOCATION_ID : String(4), PRODUCT_ID : String(40)) ;
+    // Generate Unique
+    action genUniqueID(LOCATION_ID : String(4), PRODUCT_ID : String(40)) ;
+    // Generate Fully Configured Demand
+    action genFullConfigDemand(LOCATION_ID : String(4), PRODUCT_ID : String(40)) ;        
 
 ///Partial
     @readonly
@@ -193,7 +199,7 @@ service CatalogService @(impl : './lib/cat-service.js'){
 
     entity getPartialChar           as projection on V_PARTIALPRODCHAR;
 
-    function maintainPartialProd(FLAG : String(1), LOCATION_ID : String(4), PRODUCT_ID : String(40), REF_PRODID : String(40))                                                                                                                                                        returns String;
+    function maintainPartialProd(FLAG : String(1), LOCATION_ID : String(4), PRODUCT_ID : String(40), PROD_DESC: String(40), REF_PRODID : String(40))                                                                                                                                                        returns String;
     
     function maintainPartialProdChar(FLAG : String(1), PRODCHAR : String ) returns String;
 
@@ -210,7 +216,7 @@ service CatalogService @(impl : './lib/cat-service.js'){
     entity getUniqueHeader as projection on od.UNIQUE_ID_HEADER;
     entity getUniqueItem   as projection on V_UNIQUE_ID_ITEM;
     entity getUniqueId as projection on V_UNIQUE_ID;
-    function genUniqueID(LOCATION_ID : String(4), PRODUCT_ID : String(40))      returns String;
+    function gen_UniqueID(LOCATION_ID : String(4), PRODUCT_ID : String(40))      returns String;
     function changeUnique(UNIQUE_ID : Integer, LOCATION_ID : String(4), PRODUCT_ID : String(40), UID_TYPE : String(1),UNIQUE_DESC : String(50), ACTIVE:String(1),FLAG: String) returns String;
     function maintainUniqueChar(FLAG: String(1), UNIQUECHAR: String) returns String;
 

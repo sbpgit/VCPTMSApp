@@ -689,11 +689,17 @@ sap.ui.define(
                 sap.ui.getCore().byId("idCharval2").setValue("");
                 sap.ui.getCore().byId("idCharno2").setValue("");
                 sap.ui.getCore().byId("idCharvalno2").setValue("");
-                
+
+
+                that.oClassnameList = sap.ui.getCore().byId("classNameList");
+                sap.ui.getCore().byId("idCharSearch").setValue("");
+                    that.oClassnameList.getBinding("items").filter([]);
+
+
                 that._valueHelpDialogclassName.open();
 
                 jQuery.sap.delayedCall(300, null, function() {
-                    sap.ui.getCore().byId("classNameList-searchField").focus();
+                    sap.ui.getCore().byId("idCharSearch").focus();
                 })
                 
 
@@ -772,18 +778,20 @@ sap.ui.define(
 
             handleCharSelection: function (oEvent) {
                 that.oGModel = that.getModel("oGModel");
-                var sId = oEvent.getParameter("id"),
-                    oItem = oEvent.getParameter("selectedItems"),
-                    aSelectedItems,
-                    aODdata = [];
+                // var sId = oEvent.getParameter("id"),
+                    // oItem = oEvent.getParameter("selectedItems"),
+                    // aSelectedItems,
+                    // aODdata = [];
 
-                    aSelectedItems = oEvent.getParameter("selectedItems")[0].getBindingContext().getProperty();
+                    // aSelectedItems = oEvent.getParameter("selectedItems")[0].getBindingContext().getProperty();
 
-                    var charName = aSelectedItems.CHAR_NAME,
+                var aSelectedItems = oEvent.getSource().getSelectedItems()[0].getBindingContext().getProperty();
+
+                var className = aSelectedItems.CLASS_NAME,
+                    charName = aSelectedItems.CHAR_NAME,
                     charNum = aSelectedItems.CHAR_NUM,
                     charVal_Name = aSelectedItems.CHAR_VALUE,
-                    charVal_Num = aSelectedItems.CHARVAL_NUM,
-                    className = aSelectedItems.CLASS_NAME;
+                    charVal_Num = aSelectedItems.CHARVAL_NUM;
 
                 if (charName !== "" && charVal_Name !== "" && className !== "") {
 
@@ -816,7 +824,7 @@ sap.ui.define(
                             results: that.oTableData
                         });
                         sap.ui.getCore().byId("idCharItem").setModel(that.ListModel);
-                        that._addCharacteristic.close();
+                        this._valueHelpDialogclassName.close();
 
                     } else {
                         sap.m.MessageToast.show("Characterstic is already maintained");
@@ -941,15 +949,19 @@ sap.ui.define(
                 // }
             },
 
+            onClassClose:function(){
+                this._valueHelpDialogclassName.close();
+            },
+
             handleCharSearch: function (oEvent) {
                 var sQuery =
                     oEvent.getParameter("value") || oEvent.getParameter("newValue"),
-                    sId = oEvent.getParameter("id"),
+                    // sId = oEvent.getParameter("id"),
                     oFilters = [];
                 // Check if search filter is to be applied
                 sQuery = sQuery ? sQuery.trim() : "";
                 // Class Name
-                if (sId.includes("className")) {
+                // if (sId.includes("className")) {
                     if (sQuery !== "") {
                         oFilters.push(
                             new Filter({
@@ -966,8 +978,7 @@ sap.ui.define(
                     }
                     that.oClassnameList = sap.ui.getCore().byId("classNameList");
                     that.oClassnameList.getBinding("items").filter(oFilters);
-                    // Char Name
-                } 
+                // } 
                 // else if (sId.includes("charName")) {
                 //     if (sQuery !== "") {
                 //         oFilters.push(

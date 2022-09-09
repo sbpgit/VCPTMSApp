@@ -787,6 +787,21 @@ module.exports = (srv) => {
         const obgenSOFunctions = new SOFunctions();
         await obgenSOFunctions.genUniqueID(req.data);
     });
+    // Generate Unique ID
+    srv.on("gen_UniqueID", async (req) => {
+        const obgenSOFunctions = new SOFunctions();
+        await obgenSOFunctions.genUniqueID(req.data);
+    });    
+    // Generate Fully Configured Demand
+    srv.on("genFullConfigDemand", async (req) => {
+        const obgenTimeseriesM2 = new GenTimeseriesM2();
+        await obgenTimeseriesM2.genPrediction(req.data);
+    });    
+    // Generate Fully Configured Demand
+    srv.on("gen_FullConfigDemand", async (req) => {
+        const obgenTimeseriesM2 = new GenTimeseriesM2();
+        await obgenTimeseriesM2.genPrediction(req.data);
+    });       
 
     srv.on("genVariantStruc", async (req) => {
 
@@ -810,6 +825,7 @@ module.exports = (srv) => {
                     //DONOTHING
                 }
             }
+            lsresults.PROD_DESC = req.data.PROD_DESC;
             lsresults.REF_PRODID = req.data.REF_PRODID;
             liresults.push(lsresults);
             try {
@@ -1638,7 +1654,7 @@ module.exports = (srv) => {
     srv.on("getAllProd", async (req) => {
         let lsprod = {};
         let liprod = [];
-        let vDesc;
+        // let vDesc;
         const limasterprod = await cds.run(
             `
          SELECT DISTINCT PRODUCT_ID,
@@ -1651,6 +1667,7 @@ module.exports = (srv) => {
             `
          SELECT PRODUCT_ID,
                 LOCATION_ID,
+                PROD_DESC,
                 REF_PRODID
            FROM "CP_PARTIALPROD_INTRO"
            WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
@@ -1663,14 +1680,14 @@ module.exports = (srv) => {
             lsprod.LOCATION_ID = limasterprod[i].LOCATION_ID;
             lsprod.PRODUCT_ID = limasterprod[i].PRODUCT_ID;
             lsprod.PROD_DESC = limasterprod[i].PROD_DESC;
-            vDesc = limasterprod[i].PROD_DESC;
+            // vDesc = limasterprod[i].PROD_DESC;
             liprod.push(lsprod);
             lsprod = {};
             for (iPartial = 0; iPartial < lipartialprod.length; iPartial++) {
                 if (lipartialprod[iPartial].REF_PRODID === limasterprod[i].PRODUCT_ID) {
                     lsprod.LOCATION_ID = lipartialprod[iPartial].LOCATION_ID;
                     lsprod.PRODUCT_ID = lipartialprod[iPartial].PRODUCT_ID;
-                    lsprod.PROD_DESC = vDesc;//lsprod.PROD_DESC;
+                    lsprod.PROD_DESC = lipartialprod[iPartial].PROD_DESC;
                     liprod.push(lsprod);
                     lsprod = {};
                 }
