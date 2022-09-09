@@ -4,8 +4,8 @@
   "routes": [
     {
       "source": "/v2/catalog/(.*)$",
-      "target": "/catalog/$1",
-      "destination": "config_products-srv-api",
+      "target": "/v2/catalog/$1",
+      "destination": "ConfigProd",
       "authenticationType": "xsuaa",
       "csrfProtection": false
     },

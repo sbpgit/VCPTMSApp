@@ -116,13 +116,13 @@
                                         <!-- <Button type="Emphasized" text="{i18n>mdlgene}" press="onModelGen" width="100%"/> -->
                                     </f:fields>
                                 </f:FormElement>
-                                <!-- 07-09-2022 -->
+                                <!-- 07-09-2022-1 -->
                                 <f:FormElement>
                                     <f:fields>
-                                        <Button type="Emphasized" text="{i18n>mdlgene}" press="onModelGen" width="30%"/>
+                                        <Button visible="false" type="Emphasized" text="{i18n>mdlgene}" press="onModelGen" width="30%" />
                                     </f:fields>
                                 </f:FormElement>
-                                <!-- 07-09-2022 -->
+                                <!-- 07-09-2022-1 -->
                             </f:formElements>
                         </f:FormContainer>
                     </f:formContainers>
@@ -225,13 +225,13 @@
                                         <!-- 07-09-2022 -->
                                     </f:fields>
                                 </f:FormElement>
-                                <!-- 07-09-2022 -->
+                                <!-- 07-09-2022-1 -->
                                 <f:FormElement>
                                     <f:fields>
-                                        <Button type="Emphasized" text="{i18n>predi}" press="onPrediction" width="30%"/>
-                                    </f:fields>
+                                        <Button  type="Emphasized" text="{i18n>predi}" press="onPrediction" width="30%" />
+                                    </f:fields>visible="false"
                                 </f:FormElement>
-                                <!-- 07-09-2022 -->
+                                <!-- 07-09-2022-1 -->
                             </f:formElements>
                         </f:FormContainer>
                     </f:formContainers>
@@ -278,7 +278,9 @@
                                 </f:FormElement>
                                 <f:FormElement>
                                     <f:fields>
-                                        <Button type="Emphasized" text="{i18n>genTimeseries}" press="onTimeSeries" width="30%"/>
+                                        <!-- 07-09-2022-1 -->
+                                        <Button visible="false" type="Emphasized" text="{i18n>genTimeseries}" press="onTimeSeries" width="30%" />
+                                        <!-- 07-09-2022-1 -->                                    
                                     </f:fields>
                                 </f:FormElement>
                             </f:formElements>
@@ -319,7 +321,9 @@
                                 
                                 <f:FormElement>
                                     <f:fields>
-                                        <Button type="Emphasized" text="{i18n>genTimeseriesF}" press="onTimeSeriesF" width="40%"/>
+                                        <!-- 07-09-2022-1 -->
+                                        <Button visible="false" type="Emphasized" text="{i18n>genTimeseriesF}" press="onTimeSeriesF" width="40%" />
+                                        <!-- 07-09-2022-1 -->
                                     </f:fields>
                                 </f:FormElement>
                             </f:formElements>
@@ -597,7 +601,9 @@
 
 
                 </VBox>
-                <Button id="idbtImport" type="Emphasized" text="Import From IBP" press="onIbpJobImport" width="10%"/>
+                <!-- 07-09-2022-1 -->
+                    <Button visible="false" id="idbtImport" type="Emphasized" text="Import From IBP" press="onIbpJobImport" width="10%" />
+                    <!-- 07-09-2022-1 -->
                 <Button id="idbtExport" type="Emphasized" text="Export To IBP" press="onIbpJobExport" width="10%" visible="false"/>
                 </content>
             </Panel>
@@ -645,7 +651,9 @@
                             </f:FormContainer>
                         </f:formContainers>
                     </f:Form>
-                <Button id="idbtSdi" type="Emphasized" text="SDI Integration" press="onSdiIntegration" width="10%"/>
+                <!-- 07-09-2022-1 -->
+                    <Button visible="false" id="idbtSdi" type="Emphasized" text="SDI Integration" press="onSdiIntegration" width="10%" />
+                    <!-- 07-09-2022-1 -->
             </content>
             </Panel>
             <!-- 07-09-2022 -->
@@ -681,7 +689,9 @@
                                 
                                 <f:FormElement>
                                     <f:fields>
-                                        <Button type="Emphasized" text="{i18n>genFullDemand}" press="onFullyDemand" width="35%"/>
+                                        <!-- 07-09-2022-1 -->
+                                        <Button visible="false" type="Emphasized" text="{i18n>genFullDemand}" press="onFullyDemand" width="35%" />
+                                        <!-- 07-09-2022-1 -->
                                     </f:fields>
                                 </f:FormElement>
                             </f:formElements>
@@ -723,7 +733,9 @@
                                 
                                 <f:FormElement>
                                     <f:fields>
-                                        <Button type="Emphasized" text="{i18n>genasmbReq}" press="onAsmbReq" width="35%"/>
+                                        <!-- 07-09-2022-1 -->
+                                        <Button visible="false" type="Emphasized" text="{i18n>genasmbReq}" press="onAsmbReq" width="35%" />
+                                        <!-- 07-09-2022-1 -->
                                     </f:fields>
                                 </f:FormElement>
                             </f:formElements>
@@ -765,7 +777,9 @@
                                 
                                 <f:FormElement>
                                     <f:fields>
-                                        <Button type="Emphasized" text="{i18n>gensalesord}" press="onProcSalesOrd" width="40%"/>
+                                        <!-- 07-09-2022-1 -->
+                                        <Button visible="false" type="Emphasized" text="{i18n>gensalesord}" press="onProcSalesOrd" width="40%" />
+                                        <!-- 07-09-2022-1 -->
                                     </f:fields>
                                 </f:FormElement>
                             </f:formElements>
@@ -776,6 +790,18 @@
 
 <!-- 07-09-2022 -->
         </content>
+        <!-- 07-09-2022-1 -->
+        <footer>
+            <OverflowToolbar>
+                <ToolbarSpacer />
+                
+                <Button type="Emphasized" text="Schedule Job" press="onExecute" width="7%"  />
+                <Button type="Emphasized" text="Execute" press="onExecute" width="6%" class="sapUiTinyMarginBeginEnd"/>
+
+                
+            </OverflowToolbar>
+        </footer>
+        <!-- 07-09-2022-1 -->
 
 
     </Page>
