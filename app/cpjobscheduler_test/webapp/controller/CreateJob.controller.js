@@ -2767,7 +2767,10 @@ sap.ui.define(
 					if (selKey === "Im") {
 						// 04-07-2022
 						var dDate = new Date();
-						var idSchTime = dDate.setMinutes(dDate.getMinutes() + 2);
+                        // 07-09-2022-1
+                        // var idSchTime = dDate.setMinutes(dDate.getMinutes() + 2);
+						var idSchTime = dDate.setSeconds(dDate.getSeconds() + 20);
+                        // 07-09-2022-1
 						var idSETime = dDate.setHours(dDate.getHours() + 2);
 						idSchTime = new Date(idSchTime);
 						idSETime = new Date(idSETime);
