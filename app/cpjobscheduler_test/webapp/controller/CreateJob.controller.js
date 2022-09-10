@@ -1835,6 +1835,19 @@ sap.ui.define(
                     var keySel = that.byId("idJobType").getSelectedKey();
                     var IBPinteg = that.byId("idIBPselect").getSelectedKey();
 
+                    if(keySel === "I"){
+                        if(that.byId("idIBPselect").getSelectedKey() === "I"){
+                            var exeJobName = this.byId("idJobType").getSelectedItem().getText() + " " + that.byId("idRbtnImport").getSelectedButton().getText();
+                        } else {
+
+                            var exeJobName = this.byId("idJobType").getSelectedItem().getText() + " " + that.byId("idRbtnExport").getSelectedButton().getText();
+                        }
+                            that.oGModel.setProperty("/Jobname", exeJobName);
+                    } else {
+                        that.oGModel.setProperty("/Jobname", this.byId("idJobType").getSelectedItem().getText());
+                    }
+                   
+
 
                     if(buttonSel === "Schedule Job"){
                         that.oGModel.setProperty("/EcecuteType", "S");
