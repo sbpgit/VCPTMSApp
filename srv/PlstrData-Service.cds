@@ -27,5 +27,9 @@ service PlstrDataService @(impl : './lib/PlstrData-Service.js') {
   action genFutureTsForPrimary();
   // KLUDGE function API for Alternate to POST genFutureTsForPrimary()
   function fgenFutureTsForPrimary() returns String;
+
+  action genPrimeAndUqiue();
+  // KLUDGE function API for Alternate to POST genPrimeAndUqiue()
+  function fgenPrimeAndUqiue() returns String;  
   
 }
