@@ -1,279 +1,283 @@
 {
-  "name": "config_products",
-  "version": "1.0.0",
-  "description": "A simple CAP project.",
-  "repository": "<Add your repository here>",
-  "license": "UNLICENSED",
-  "private": true,
-  "dependencies": {
-    "@sap-cloud-sdk/core": "^1.54.0",
-    "@sap/approuter": "^11.3.2",
-    "@sap/audit-logging": "^5.3.0",
-    "@sap/cds": "^5.9.4",
-    "@sap/cds-dk": "^4.9.2",
-    "@sap/cds-mtx": "^2.5.1",
-    "@sap/cds-odata-v2-adapter-proxy": "^1.9.6",
-    "@sap/hana-client": "^2.12.22",
-    "@sap/hdi-deploy": "^4.4.1",
-    "@sap/jobs-client": "^1.6.3",
-    "@sap/xsenv": "^3.2.2",
-    "@sap/xssec": "^3.2.13",
-    "await-sleep": "^0.0.1",
-    "axios": "^0.21.1",
-    "body-parser": "^1.19.0",
-    "cdse": "^1.1.12",
-    "cfenv": "^1.2.4",
-    "debug": "^4.3.2",
-    "express": "^4.17.3",
-    "hana-cli": "^3.202203.3",
-    "hdb": "^0.19.0",
-    "https": "^1.0.0",
-    "passport": "^0.6.0",
-    "path": "^0.12.7",
-    "qs": "^6",
-    "request": "^2.88.2",
-    "request-promise": "^4.2.6",
-    "sap-cf-axios": "^0.3.6",
-    "sap-cf-mailer": "0.0.5",
-    "sap-hdb-promisfied": "^2.202205.1",
-    "sync": "^0.2.5",
-    "uuid": "^8.3.2"
-  },
-  "engines": {
-    "node": "^12 || ^14"
-  },
-  "scripts": {
-    "start": "NODE_ENV=production cds run",
-    "watch-cfgprd_pvsroot": "cds watch --open cfgprd_pvsroot/webapp/index.html#fe-lrop-v4",
-    "undeploy": "cf undeploy config_products --delete-services --delete-service-keys --delete-service-brokers",
-    "watch-project1": "cds watch --open project1/webapp/index.html#fe-lrop-v4",
-    "watch-cp_ibpfdem": "cds watch --open cp_ibpfdem/webapp/index.html#fe-lrop-v4",
-    "watch-cp_ibpfplan": "cds watch --open cp_ibpfplan/webapp/index.html#fe-lrop-v4",
-    "watch-cp_ibpfres": "cds watch --open cp_ibpfres/webapp/index.html#fe-lrop-v4",
-    "watch-cp_execprediction": "cds watch --open cp_execprediction/webapp/index.html#fe-lrop-v4",
-    "watch-cp_exeregressionmdls": "cds watch --open cp_exeregressionmdls/webapp/index.html#fe-lrop-v4",
-    "watch-cp_modelprofiles": "cds watch --open cp_modelprofiles/webapp/index.html#fe-lrop-v4",
-    "watch-cp_locprod": "cds watch --open cp_locprod/webapp/index.html#fe-lrop-v4",
-    "watch-cp_saleshcfg": "cds watch --open cp_saleshcfg/webapp/index.html#fe-lrop-v4",
-    "watch-cpodrestriction": "cds watch --open cpodrestriction/webapp/index.html#fe-lrop-v4",
-    "watch-cpibpresultplan": "cds watch --open cpibpresultplan/webapp/index.html#fe-lrop-v4",
-    "watch-cpodrestrict": "cds watch --open cpodrestrict/webapp/index.html#fe-lrop-v4",
-    "watch-cpprodaccnode": "cds watch --open cpprodaccnode/webapp/index.html#fe-lrop-v4",
-    "watch-cpcompsnode": "cds watch --open cpcompsnode/webapp/index.html#fe-lrop-v4",
-    "watch-cplocation": "cds watch --open cplocation/webapp/index.html#fe-lrop-v4",
-    "watch-cpassignnode": "cds watch --open cpassignnode/webapp/index.html#fe-lrop-v4",
-    "watch-cpcompreq": "cds watch --open cpcompreq/webapp/index.html#fe-lrop-v4",
-    "watch-cpprodlocline": "cds watch --open cpprodlocline/webapp/index.html#fe-lrop-v4",
-    "watch-cprtrheader": "cds watch --open cprtrheader/webapp/index.html#fe-lrop-v4",
-    "watch-cpasmbcompreq": "cds watch --open cpasmbcompreq/webapp/index.html#fe-lrop-v4",
-    "watch-cpjobscheduler_logs": "cds watch --open cpjobscheduler_logs/webapp/index.html?sap-ui-xx-viewCache=false#fe-lrop-v4",
-    "watch-cprestrictions": "cds watch --open cprestrictions/webapp/index.html?sap-ui-xx-viewCache=false#fe-lrop-v4",
-    "watch-cp_jobschlogs": "cds watch --open cp_jobschlogs/webapp/index.html?sap-ui-xx-viewCache=false",
-    "watch-cpjoblogs": "cds watch --open cpjoblogs/webapp/index.html?sap-ui-xx-viewCache=false",
-    "watch-cpprscchar": "cds watch --open cpprscchar/webapp/index.html?sap-ui-xx-viewCache=false",
-    "watch-cpmatvariant": "cds watch --open cpmatvariant/webapp/index.html?sap-ui-xx-viewCache=false",
-    "watch-cpunique": "cds watch --open cpunique/webapp/index.html?sap-ui-xx-viewCache=false",
-    "build": "rimraf resources mta_archives && mbt build --mtar archive",
-    "deploy": "cf deploy mta_archives/archive.mtar --retries 1",
-    "watch-cpauthorization": "cds watch --open cpauthorization/webapp/index.html?sap-ui-xx-viewCache=false",
-    "watch-cpauthentication": "cds watch --open cpauthentication/webapp/index.html?sap-ui-xx-viewCache=false",
-    "watch-cp_prodlocline": "cds watch --open cp_prodlocline/webapp/index.html?sap-ui-xx-viewCache=false",
-    "watch-cpprodrestr": "cds watch --open cpprodrestr/webapp/index.html?sap-ui-xx-viewCache=false",
-    "watch-cpcharqtygraph": "cds watch --open cpcharqtygraph/webapp/index.html?sap-ui-xx-viewCache=false",
-    "watch-cpseedorder": "cds watch --open cpseedorder/webapp/index.html?sap-ui-xx-viewCache=false",
-    "watch-cp_planconfig": "cds watch --open cp_planconfig/webapp/index.html?sap-ui-xx-viewCache=false",
-    "watch-cp_fullconfproddmnd": "cds watch --open cp_fullconfproddmnd/webapp/index.html?sap-ui-xx-viewCache=false"
-  },
-  "eslintConfig": {
-    "extends": "eslint:recommended",
-    "env": {
-      "es2020": true,
-      "node": true,
-      "jest": true,
-      "mocha": true
+    "name": "config_products",
+    "version": "1.0.0",
+    "description": "A simple CAP project.",
+    "repository": "<Add your repository here>",
+    "license": "UNLICENSED",
+    "private": true,
+    "dependencies": {
+        "@sap-cloud-sdk/core": "^1.54.0",
+        "@sap/approuter": "^11.3.2",
+        "@sap/audit-logging": "^5.3.0",
+        "@sap/cds": "^5.9.4",
+        "@sap/cds-dk": "^4.9.2",
+        "@sap/cds-mtx": "^2.5.1",
+        "@sap/cds-odata-v2-adapter-proxy": "^1.9.6",
+        "@sap/hana-client": "^2.12.22",
+        "@sap/hdi-deploy": "^4.4.1",
+        "@sap/jobs-client": "^1.6.3",
+        "@sap/xsenv": "^3.2.2",
+        "@sap/xssec": "^3.2.13",
+        "await-sleep": "^0.0.1",
+        "axios": "^0.21.1",
+        "body-parser": "^1.19.0",
+        "cdse": "^1.1.12",
+        "cfenv": "^1.2.4",
+        "debug": "^4.3.2",
+        "express": "^4.17.3",
+        "hana-cli": "^3.202203.3",
+        "hdb": "^0.19.0",
+        "https": "^1.0.0",
+        "passport": "^0.6.0",
+        "path": "^0.12.7",
+        "qs": "^6",
+        "request": "^2.88.2",
+        "request-promise": "^4.2.6",
+        "sap-cf-axios": "^0.3.6",
+        "sap-cf-mailer": "0.0.5",
+        "sap-hdb-promisfied": "^2.202205.1",
+        "sync": "^0.2.5",
+        "uuid": "^8.3.2"
     },
-    "globals": {
-      "SELECT": true,
-      "INSERT": true,
-      "UPDATE": true,
-      "DELETE": true,
-      "CREATE": true,
-      "DROP": true,
-      "CDL": true,
-      "CQL": true,
-      "CXL": true,
-      "cds": true
-    }
-  },
-  "cds": {
-    "features": {
-      "fetch_csrf": true
+    "engines": {
+        "node": "^12 || ^14"
     },
-    "requires": {
-      "build": {
-        "tasks": [
-          {
-            "for": "hana",
-            "dest": "../db"
-          },
-          {
-            "for": "node-cf"
-          }
-        ]
-      },
-      "db": {
-        "kind": "hana",
-        "pool": {
-          "acquireTimeoutMillis": 120000,
-          "evictionRunIntervalMillis": 120000,
-          "min": 50,
-          "max": 500,
-          "numTestsPerEvictionRun": 60,
-          "softIdleTimeoutMillis": 30000,
-          "idleTimeoutMillis": 30000,
-          "testOnBorrow": true
-        }
-      },
-      "uaa": {
-        "kind": "xsuaa"
-      },
-      "IBPDemandsrv": {
-        "kind": "odata-v2",
-        "model": "srv/external/IBPDemandsrv",
-        "[development]": {
-          "credentials": {
-            "url": "https://my400323-api.scmibp.ondemand.com/sap/opu/odata/ibp/PLANNING_DATA_API_SRV",
-            "authentication": "BasicAuthentication",
-            "username": "BTPUSER",
-            "password": "Sbp@btpproductdevelopment01"
-          }
+    "scripts": {
+        "start": "NODE_ENV=production cds watch --profile hybrid",
+        "watch-cfgprd_pvsroot": "cds watch --open cfgprd_pvsroot/webapp/index.html#fe-lrop-v4",
+        "undeploy": "cf undeploy config_products --delete-services --delete-service-keys --delete-service-brokers",
+        "watch-project1": "cds watch --open project1/webapp/index.html#fe-lrop-v4",
+        "watch-cp_ibpfdem": "cds watch --open cp_ibpfdem/webapp/index.html#fe-lrop-v4",
+        "watch-cp_ibpfplan": "cds watch --open cp_ibpfplan/webapp/index.html#fe-lrop-v4",
+        "watch-cp_ibpfres": "cds watch --open cp_ibpfres/webapp/index.html#fe-lrop-v4",
+        "watch-cp_execprediction": "cds watch --open cp_execprediction/webapp/index.html#fe-lrop-v4",
+        "watch-cp_exeregressionmdls": "cds watch --open cp_exeregressionmdls/webapp/index.html#fe-lrop-v4",
+        "watch-cp_modelprofiles": "cds watch --open cp_modelprofiles/webapp/index.html#fe-lrop-v4",
+        "watch-cp_locprod": "cds watch --open cp_locprod/webapp/index.html#fe-lrop-v4",
+        "watch-cp_saleshcfg": "cds watch --open cp_saleshcfg/webapp/index.html#fe-lrop-v4",
+        "watch-cpodrestriction": "cds watch --open cpodrestriction/webapp/index.html#fe-lrop-v4",
+        "watch-cpibpresultplan": "cds watch --open cpibpresultplan/webapp/index.html#fe-lrop-v4",
+        "watch-cpodrestrict": "cds watch --open cpodrestrict/webapp/index.html#fe-lrop-v4",
+        "watch-cpprodaccnode": "cds watch --open cpprodaccnode/webapp/index.html#fe-lrop-v4",
+        "watch-cpcompsnode": "cds watch --open cpcompsnode/webapp/index.html#fe-lrop-v4",
+        "watch-cplocation": "cds watch --open cplocation/webapp/index.html#fe-lrop-v4",
+        "watch-cpassignnode": "cds watch --open cpassignnode/webapp/index.html#fe-lrop-v4",
+        "watch-cpcompreq": "cds watch --open cpcompreq/webapp/index.html#fe-lrop-v4",
+        "watch-cpprodlocline": "cds watch --open cpprodlocline/webapp/index.html#fe-lrop-v4",
+        "watch-cprtrheader": "cds watch --open cprtrheader/webapp/index.html#fe-lrop-v4",
+        "watch-cpasmbcompreq": "cds watch --open cpasmbcompreq/webapp/index.html#fe-lrop-v4",
+        "watch-cpjobscheduler_logs": "cds watch --open cpjobscheduler_logs/webapp/index.html?sap-ui-xx-viewCache=false#fe-lrop-v4",
+        "watch-cprestrictions": "cds watch --open cprestrictions/webapp/index.html?sap-ui-xx-viewCache=false#fe-lrop-v4",
+        "watch-cp_jobschlogs": "cds watch --open cp_jobschlogs/webapp/index.html?sap-ui-xx-viewCache=false",
+        "watch-cpjoblogs": "cds watch --open cpjoblogs/webapp/index.html?sap-ui-xx-viewCache=false",
+        "watch-cpprscchar": "cds watch --open cpprscchar/webapp/index.html?sap-ui-xx-viewCache=false",
+        "watch-cpmatvariant": "cds watch --open cpmatvariant/webapp/index.html?sap-ui-xx-viewCache=false",
+        "watch-cpunique": "cds watch --open cpunique/webapp/index.html?sap-ui-xx-viewCache=false",
+        "build": "rimraf resources mta_archives && mbt build --mtar archive",
+        "deploy": "cf deploy mta_archives/archive.mtar --retries 1",
+        "watch-cpauthorization": "cds watch --open cpauthorization/webapp/index.html?sap-ui-xx-viewCache=false",
+        "watch-cpauthentication": "cds watch --open cpauthentication/webapp/index.html?sap-ui-xx-viewCache=false",
+        "watch-cp_prodlocline": "cds watch --open cp_prodlocline/webapp/index.html?sap-ui-xx-viewCache=false",
+        "watch-cpprodrestr": "cds watch --open cpprodrestr/webapp/index.html?sap-ui-xx-viewCache=false",
+        "watch-cpcharqtygraph": "cds watch --open cpcharqtygraph/webapp/index.html?sap-ui-xx-viewCache=false",
+        "watch-cpseedorder": "cds watch --open cpseedorder/webapp/index.html?sap-ui-xx-viewCache=false",
+        "watch-cp_planconfig": "cds watch --open cp_planconfig/webapp/index.html?sap-ui-xx-viewCache=false",
+        "watch-cp_fullconfproddmnd": "cds watch --open cp_fullconfproddmnd/webapp/index.html?sap-ui-xx-viewCache=false",
+        "watch-cp_fullyconfproddmnd": "cds watch --open cp_fullyconfproddmnd/webapp/index.html?sap-ui-xx-viewCache=false",
+        "watch-cp_planingconfig": "cds watch --open cp_planingconfig/webapp/index.html?sap-ui-xx-viewCache=false"
+    },
+    "eslintConfig": {
+        "extends": "eslint:recommended",
+        "env": {
+            "es2020": true,
+            "node": true,
+            "jest": true,
+            "mocha": true
         },
-        "[production]": {
-          "credentials": {
-            "destination": "IBPExternal",
-            "path": "/sap/opu/odata/ibp/PLANNING_DATA_API_SRV"
-          }
+        "globals": {
+            "SELECT": true,
+            "INSERT": true,
+            "UPDATE": true,
+            "DELETE": true,
+            "CREATE": true,
+            "DROP": true,
+            "CDL": true,
+            "CQL": true,
+            "CXL": true,
+            "cds": true
         }
-      },
-      "IBPMasterDataAPI": {
-        "kind": "odata-v2",
-        "model": "srv/external/IBPMasterDataAPI",
-        "[development]": {
-          "credentials": {
-            "url": "https://my400323-api.scmibp.ondemand.com/sap/opu/odata/IBP/MASTER_DATA_API_SRV",
-            "authentication": "BasicAuthentication",
-            "username": "BTPUSER",
-            "password": "Sbp@btpproductdevelopment01"
-          }
+    },
+    "cds": {
+        "features": {
+            "fetch_csrf": true
         },
-        "[production]": {
-          "credentials": {
-            "destination": "IBPExternal",
-            "path": "/sap/opu/odata/IBP/MASTER_DATA_API_SRV"
-          }
+        "requires": {
+            "build": {
+                "tasks": [
+                    {
+                        "for": "hana",
+                        "dest": "../db"
+                    },
+                    {
+                        "for": "node-cf"
+                    }
+                ]
+            },
+            "db": {
+                "kind": "hana",
+                "pool": {
+                    "acquireTimeoutMillis": 120000,
+                    "evictionRunIntervalMillis": 120000,
+                    "min": 50,
+                    "max": 500,
+                    "numTestsPerEvictionRun": 60,
+                    "softIdleTimeoutMillis": 30000,
+                    "idleTimeoutMillis": 30000,
+                    "testOnBorrow": true
+                }
+            },
+            "uaa": {
+                "kind": "xsuaa"
+            },
+            "IBPDemandsrv": {
+                "kind": "odata-v2",
+                "model": "srv/external/IBPDemandsrv",
+                "[development]": {
+                    "credentials": {
+                        "url": "https://my400323-api.scmibp.ondemand.com/sap/opu/odata/ibp/PLANNING_DATA_API_SRV",
+                        "authentication": "BasicAuthentication",
+                        "username": "BTPUSER",
+                        "password": "Sbp@btpproductdevelopment01"
+                    }
+                },
+                "[production]": {
+                    "credentials": {
+                        "destination": "IBPExternal",
+                        "path": "/sap/opu/odata/ibp/PLANNING_DATA_API_SRV"
+                    }
+                }
+            },
+            "IBPMasterDataAPI": {
+                "kind": "odata-v2",
+                "model": "srv/external/IBPMasterDataAPI",
+                "[development]": {
+                    "credentials": {
+                        "url": "https://my400323-api.scmibp.ondemand.com/sap/opu/odata/IBP/MASTER_DATA_API_SRV",
+                        "authentication": "BasicAuthentication",
+                        "username": "BTPUSER",
+                        "password": "Sbp@btpproductdevelopment01"
+                    }
+                },
+                "[production]": {
+                    "credentials": {
+                        "destination": "IBPExternal",
+                        "path": "/sap/opu/odata/IBP/MASTER_DATA_API_SRV"
+                    }
+                }
+            }
+        },
+        "sapux": [
+            "app/cfgprd_pvsroot",
+            "app/project1",
+            "app/cp_ibpfdem",
+            "app/cp_ibpfplan",
+            "app/cp_ibpfres",
+            "app/cp_execprediction",
+            "app/cp_exeregressionmdls",
+            "app/cp_modelprofiles",
+            "app/cp_assignppf",
+            "app/cp_odprofiles",
+            "app/cp_assignprofiles",
+            "app/cp_locprod",
+            "app/cp_saleshcfg",
+            "app/cpodrestriction",
+            "app/cpibpresultplan",
+            "app/cpodrestrict",
+            "app/cpprodaccnode",
+            "app/cpcompsnode",
+            "app/cplocation",
+            "app/cpassignnode",
+            "app/cpcompreq",
+            "app/cpprodlocline",
+            "app/cprtrheader",
+            "app/cpasmbcompreq",
+            "app/cpnewprod",
+            "app/cpproduct",
+            "app/cpcustgroup",
+            "app/cpjobscheduler_logs",
+            "app/cprestrictions",
+            "app/cp_jobschlogs",
+            "app/cpjoblogs",
+            "app/cpjoblog",
+            "app/cpprscchar",
+            "app/cpmatvariant",
+            "app/cpunique",
+            "app/cpauthorization",
+            "app/cpauthentication",
+            "app/cp_prodlocline",
+            "app/cpprodrestr",
+            "app/cpcharqtygraph",
+            "app/cpcharqtygraph",
+            "app/cpseedordercreation"
+        ],
+        "devDependencies": {
+            "@sap/ux-specification": "^1.102.4",
+            "rimraf": "^3.0.2"
+        },
+        "hana": {
+            "deploy-format": "hdbtable"
         }
-      }
     },
     "sapux": [
-      "app/cfgprd_pvsroot",
-      "app/project1",
-      "app/cp_ibpfdem",
-      "app/cp_ibpfplan",
-      "app/cp_ibpfres",
-      "app/cp_execprediction",
-      "app/cp_exeregressionmdls",
-      "app/cp_modelprofiles",
-      "app/cp_assignppf",
-      "app/cp_odprofiles",
-      "app/cp_assignprofiles",
-      "app/cp_locprod",
-      "app/cp_saleshcfg",
-      "app/cpodrestriction",
-      "app/cpibpresultplan",
-      "app/cpodrestrict",
-      "app/cpprodaccnode",
-      "app/cpcompsnode",
-      "app/cplocation",
-      "app/cpassignnode",
-      "app/cpcompreq",
-      "app/cpprodlocline",
-      "app/cprtrheader",
-      "app/cpasmbcompreq",
-      "app/cpnewprod",
-      "app/cpproduct",
-      "app/cpcustgroup",
-      "app/cpjobscheduler_logs",
-      "app/cprestrictions",
-      "app/cp_jobschlogs",
-      "app/cpjoblogs",
-      "app/cpjoblog",
-      "app/cpprscchar",
-      "app/cpmatvariant",
-      "app/cpunique",
-      "app/cpauthorization",
-      "app/cpauthentication",
-      "app/cp_prodlocline",
-      "app/cpprodrestr",
-      "app/cpcharqtygraph",
-      "app/cpcharqtygraph",
-      "app/cpseedordercreation"
+        "app/cfgprd_pvsroot",
+        "app/project1",
+        "app/cp_ibpfdem",
+        "app/cp_ibpfplan",
+        "app/cp_ibpfres",
+        "app/cp_execprediction",
+        "app/cp_exeregressionmdls",
+        "app/cp_modelprofiles",
+        "app/cp_assignppf",
+        "app/cp_odprofiles",
+        "app/cp_assignprofiles",
+        "app/cp_locprod",
+        "app/cp_saleshcfg",
+        "app/cpodrestriction",
+        "app/cpibpresultplan",
+        "app/cpodrestrict",
+        "app/cpprodaccnode",
+        "app/cpcompsnode",
+        "app/cplocation",
+        "app/cpassignnode",
+        "app/cpcompreq",
+        "app/cpprodlocline",
+        "app/cprtrheader",
+        "app/cpasmbcompreq",
+        "app/cpnewprod",
+        "app/cpproduct",
+        "app/cpcustgroup",
+        "app/cpjobscheduler_logs",
+        "app/cprestrictions",
+        "app/cp_jobschlogs",
+        "app/cpjoblogs",
+        "app/cpjoblog",
+        "app/cpprscchar",
+        "app/cpmatvariant",
+        "app/cpunique",
+        "app/cpauthorization",
+        "app/cpauthentication",
+        "app/cp_prodlocline",
+        "app/cpprodrestr",
+        "app/cpcharqtygraph",
+        "app/cpcharqtygraph",
+        "app/cpseedorder",
+        "app/cp_planconfig",
+        "app/cp_fullconfproddmnd",
+        "app/cp_fullyconfproddmnd",
+        "app/cp_planingconfig"
     ],
     "devDependencies": {
-      "@sap/ux-specification": "^1.102.4",
-      "rimraf": "^3.0.2"
-    },
-    "hana": {
-      "deploy-format": "hdbtable"
+        "@sap/ux-specification": "^1.102.5",
+        "rimraf": "^3.0.2"
     }
-  },
-  "sapux": [
-    "app/cfgprd_pvsroot",
-    "app/project1",
-    "app/cp_ibpfdem",
-    "app/cp_ibpfplan",
-    "app/cp_ibpfres",
-    "app/cp_execprediction",
-    "app/cp_exeregressionmdls",
-    "app/cp_modelprofiles",
-    "app/cp_assignppf",
-    "app/cp_odprofiles",
-    "app/cp_assignprofiles",
-    "app/cp_locprod",
-    "app/cp_saleshcfg",
-    "app/cpodrestriction",
-    "app/cpibpresultplan",
-    "app/cpodrestrict",
-    "app/cpprodaccnode",
-    "app/cpcompsnode",
-    "app/cplocation",
-    "app/cpassignnode",
-    "app/cpcompreq",
-    "app/cpprodlocline",
-    "app/cprtrheader",
-    "app/cpasmbcompreq",
-    "app/cpnewprod",
-    "app/cpproduct",
-    "app/cpcustgroup",
-    "app/cpjobscheduler_logs",
-    "app/cprestrictions",
-    "app/cp_jobschlogs",
-    "app/cpjoblogs",
-    "app/cpjoblog",
-    "app/cpprscchar",
-    "app/cpmatvariant",
-    "app/cpunique",
-    "app/cpauthorization",
-    "app/cpauthentication",
-    "app/cp_prodlocline",
-    "app/cpprodrestr",
-    "app/cpcharqtygraph",
-    "app/cpcharqtygraph",
-    "app/cpseedorder",
-    "app/cp_planconfig",
-    "app/cp_fullconfproddmnd"
-  ],
-  "devDependencies": {
-    "@sap/ux-specification": "^1.102.4",
-    "rimraf": "^3.0.2"
-  }
 }

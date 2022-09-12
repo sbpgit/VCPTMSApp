@@ -183,6 +183,22 @@ modules:
       - cpappcpseedordercreation.zip
       name: cpappcpseedordercreation
       target-path: resources/
+    - artifacts:
+      - cpappcpfullyconfproddmnd.zip
+      name: cpappcpfullyconfproddmnd
+      target-path: resources/
+    - artifacts:
+      - cpappcpplaningconfig.zip
+      name: cpappcpplaningconfig
+      target-path: resources/
+    # - artifacts:
+    #   - cpappcpfullconfproddmnd.zip
+    #   name: cpappcpfullconfproddmnd
+    #   target-path: resources/
+    # - artifacts:
+    #   - cpappcpplanconfig.zip
+    #   name: cpappcpplanconfig
+    #   target-path: resources/
 - name: cpodpcpodprofiles
   type: html5
   path: app/cp_odprofiles
@@ -489,6 +505,46 @@ modules:
     - npm install
     - npm run build:cf
     supported-platforms: []
+- name: cpappcpfullyconfproddmnd
+  type: html5
+  path: app/cp_fullyconfproddmnd
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappcpplaningconfig
+  type: html5
+  path: app/cp_planingconfig
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+# - name: cpappcpfullconfproddmnd
+#   type: html5
+#   path: app/cp_fullconfproddmnd
+#   build-parameters:
+#     build-result: dist
+#     builder: custom
+#     commands:
+#     - npm install
+#     - npm run build:cf
+#     supported-platforms: []
+# - name: cpappcpplanconfig
+#   type: html5
+#   path: app/cp_planconfig
+#   build-parameters:
+#     build-result: dist
+#     builder: custom
+#     commands:
+#     - npm install
+#     - npm run build:cf
+#     supported-platforms: []
 resources:
 - name: config_products-db
   type: com.sap.xs.hdi-container
@@ -514,11 +570,20 @@ resources:
             ProxyType: Internet
             Type: HTTP
             URL: https://ui5.sap.com
+          - Authentication: NoAuthentication
+            HTML5.DynamicDestination: true
+            HTML5.ForwardAuthToken: true
+            Name: config_products-srv-api
+            ProxyType: Internet
+            Type: HTTP
+            URL: ~{srv-api/srv-url}
           existing_destinations_policy: update
       version: 1.0.0
     service: destination
     service-name: config_products-mdestination-service
     service-plan: lite
+  requires:
+  - name: srv-api
 - name: config_products_html_repo_host
   type: org.cloudfoundry.managed-service
   parameters:

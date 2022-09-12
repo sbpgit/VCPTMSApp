@@ -24,6 +24,9 @@
                         <Text text="Product"/>
                     </Column>
                     <Column hAlign="Center">
+                        <Text text="Product Desc."/>
+                    </Column>
+                    <Column hAlign="Center">
                         <Text text="Ref. Product"/>
                     </Column>
                     <Column hAlign="Right" >
@@ -39,6 +42,7 @@
                         <cells>
                             <Text text="{LOCATION_ID}" />
                             <Text text="{PRODUCT_ID}" />
+                            <Text text="{PROD_DESC}" />
                             <Text text="{REF_PRODID}" />
                             <Button id="idDisplay" icon="sap-icon://display" tooltip="Product Characteristics" press="onCharDetails" iconDensityAware="false" type="Transparent"/>
                             <Button id="idProd" icon="sap-icon://decline" tooltip="Delete" press="onProdeDel" iconDensityAware="false" type="Transparent"/>

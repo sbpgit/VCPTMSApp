@@ -99,7 +99,7 @@ sap.ui.define([
                         that.oParameterModel.setData({
                             parameters: oData.results
                         });
-
+                        
                         that.byId("idParameterTable").setModel(that.oParameterModel);
 
                     }, error: function (oReponse) {

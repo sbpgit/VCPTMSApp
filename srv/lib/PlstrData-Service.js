@@ -64,6 +64,14 @@ module.exports = async function (srv) {
     return (await _genFutureTsForPrimary(req,true));
   })
 
+ srv.on ('genPrimeAndUqiue',    async req => {
+    return (await _genPrimeAndUqiue(req,false));
+ })
+
+ srv.on ('fgenPrimeAndUqiue',    async req => {
+    return (await _genPrimeAndUqiue(req,true));
+  })
+
 
   async function _genMasterData(req,isGet) {
 
@@ -1188,9 +1196,20 @@ module.exports = async function (srv) {
 
    
 
-    let sqlStr = 'SELECT DISTINCT PRODUCT_ID, LOCATION_ID, PRIMARY_CHARS_STR, PRIMARY_CHARVALS_STR  FROM V_PLSTR_PRIMARY_TS' +
-                 ' ORDER BY PRODUCT_ID';
-    console.log("sqlPrimary ", sqlStr )
+    // let sqlStr = 'SELECT DISTINCT PRODUCT_ID, LOCATION_ID, PRIMARY_CHARS_STR, PRIMARY_CHARVALS_STR  FROM V_PLSTR_PRIMARY_TS' +
+    //              ' ORDER BY PRODUCT_ID';
+    // console.log("sqlPrimary ", sqlStr ) ;
+
+    // let sqlStr = 'SELECT DISTINCT LOCATION_ID, PRODUCT_ID, PARTIAL_ID, PRIMARY_ID_CHARS, PRIMARY_ID_CHARVALS ' +
+    //              ' FROM V_PLSTR_PARTIAL_PRIMARY_BY_SALESDOC' +
+    //              ' ORDER BY LOCATION_ID, PRODUCT_ID, PARTIAL_ID';
+
+    let sqlStr =    ' SELECT DISTINCT LOCATION_ID, PRODUCT_ID, PARTIAL_ID, PRIMARY_ID_CHARS, PRIMARY_ID_CHARVALS,' +
+                    ' PARTIAL_ID_CHARS, PARTIAL_ID_CHARVALS ' +
+                    ' FROM V_PLSTR_SALESH_W_PARTIALPRODID ' +
+                    ' ORDER BY LOCATION_ID, PRODUCT_ID, PARTIAL_ID';
+    console.log("sqlPrimary ", sqlStr ); 
+    
     let sqlPrimaryResults = await cds.run(sqlStr);
     console.log("sqlPrimaryResults ", sqlPrimaryResults);
 
@@ -1201,20 +1220,44 @@ module.exports = async function (srv) {
         let arrayVals = Object.values(obj);
         // console.log("arrayVals ", arrayVals);
         // let primary_id = arrayVals[0] + '_' + 'P' + priIndex;
-        let primary_id = arrayVals[0] + '_' + priIndex + 1;
+        let locationId = arrayVals[0];
+        let productId = arrayVals[1];
+        let partialId = arrayVals[2];
+        let primaryIdChars = arrayVals[3];
+        let primaryIdCharVals = arrayVals[4];
+        let partialIdChars = arrayVals[5];
+        let partialIdCharVals = arrayVals[6];
+
+
+        // let primary_id = arrayVals[0] + '_' + priIndex + 1;
+        let primary_id = partialId + '_' + priIndex + 1;
+
+        // console.log ("priIndex ", priIndex, "PrimaryId ", primary_id, 
+        //              "primary_chars_str ",arrayVals[2],
+        //              "primary_charvals_str ",arrayVals[3]);
 
         console.log ("priIndex ", priIndex, "PrimaryId ", primary_id, 
-                     "primary_chars_str ",arrayVals[2],
-                     "primary_charvals_str ",arrayVals[3]);
+                        "primary_chars ",primaryIdChars,
+                        "primaryIdCharVals ",primaryIdCharVals);
 
 
+
+
+        // sqlStr = 'UPSERT PLSTR_PRIMARY_IDS VALUES (' +
+        // "'" + arrayVals[0] + "'" + "," +
+        // "'" + arrayVals[1] + "'" + "," +
+        // "'" + primary_id + "'" + "," +
+        // "'" + arrayVals[2] + "'" + "," +
+        // "'" + arrayVals[3] + "'" +')' + ' WITH PRIMARY KEY';
 
         sqlStr = 'UPSERT PLSTR_PRIMARY_IDS VALUES (' +
-        "'" + arrayVals[0] + "'" + "," +
-        "'" + arrayVals[1] + "'" + "," +
-        "'" + primary_id + "'" + "," +
-        "'" + arrayVals[2] + "'" + "," +
-        "'" + arrayVals[3] + "'" +')' + ' WITH PRIMARY KEY';
+                    "'" + productId + "'" + "," +
+                    "'" + locationId + "'" + "," +
+                    "'" + primary_id + "'" + "," +
+                    "'" + partialIdChars + "'" + "," +
+                    "'" + partialIdCharVals + "'" + "," +
+                    "'" + primaryIdChars + "'" + "," +
+                    "'" + primaryIdCharVals + "'" +')' + ' WITH PRIMARY KEY';
 
         console.log("PLSTR_PRIMARY_IDS sqlStr", sqlStr);
 
@@ -1223,10 +1266,23 @@ module.exports = async function (srv) {
 
     }
 
+    // sqlStr =  'SELECT DISTINCT CHARVALS FROM PLSTR_SALESH_BY_CHARS_CHAVALS ORDER BY CHARVALS ASC';
+    // console.log("PLSTR_SALESH_BY_CHARS_CHAVALS sqlStr", sqlStr);
+    // let sqlStrResults = await cds.run(sqlStr);
+    // console.log("PLSTR_SALESH_BY_CHARS_CHAVALS  sqlStrResults", sqlStrResults);
+
+    // for (let uniqueIndex = 0; uniqueIndex < sqlStrResults.length; uniqueIndex++)
+    // {
 
 
-    sqlStr = 'SELECT DISTINCT WEEKDATE, PRODUCT_ID, LOCATION_ID, PRIMARY_ID, ORDER_QTY, PRIMARY_ID_CHARVALS FROM V_PLSTR_PRIMARY_CHARS_CHARVALS_TS';
-                //  ' WHERE WEEKDATE = ' + '\'2020-06-29\'';
+    // }
+    // // sqlStr = 'SELECT DISTINCT WEEKDATE, PRODUCT_ID, LOCATION_ID, PRIMARY_ID, ORDER_QTY, PRIMARY_ID_CHARVALS FROM V_PLSTR_PRIMARY_CHARS_CHARVALS_TS';
+    //             //  ' WHERE WEEKDATE = ' + '\'2020-06-29\'';
+    
+    // sqlStr = 'SELECT DISTINCT WEEKDATE, PRODUCT_ID, LOCATION_ID, PRIMARY_ID, ORDER_QTY, PRIMARY_ID_CHARVALS FROM V_PLSTR_PRIMARY_CHARS_CHARVALS_TS';
+    sqlStr = 'SELECT DISTINCT WEEKDATE, PRODUCT_ID, LOCATION_ID, PRIMARY_ID, ORDER_QTY, PRIMARY_ID_CHARVALS FROM V_PLSTR_PRIMARY_TIMESERIES';
+
+    
     // console.log("sqlPrimary ", sqlStr )
     sqlPrimaryResults = await cds.run(sqlStr);
     console.log("sqlPrimaryResults length ", sqlPrimaryResults.length);
@@ -1236,10 +1292,11 @@ module.exports = async function (srv) {
     {
         let str = JSON.stringify(sqlPrimaryResults[priIndex]);
         let obj = JSON.parse(str);
-        let arrayKeys = Object.keys(obj)
+        let arrayKeys = Object.keys(obj);
         let arrayVals = Object.values(obj);
-        console.log("PRIMARY_ID_CHARVALS INDEX ", priIndex+1);
-
+        console.log("PRIMARY_ID_CHARVALS INDEX ", priIndex+1, "TOTAL PRIMARY_ID_CHARVALS ", sqlPrimaryResults.length);
+        if( priIndex % 1000 == 0)
+            await cds.run('COMMIT');
         // console.log("arrayKeys ", arrayKeys, "arrayVals", arrayVals);
         for (let arrayIndex = 0; arrayIndex < arrayKeys.length; arrayIndex++)
         {
@@ -1297,8 +1354,46 @@ module.exports = async function (srv) {
     }
 
 
+    async function _genPrimeAndUqiue(req,isGet) {
+
+        var reqData = "Request for PRimary And Unique IDs generation Queued Sucessfully";
+    
+        console.log("_genPrimeAndUqiue reqData : ", reqData);
+        let createtAt = new Date();
+        let id = uuidv1();
+        let values = [];	
+      
+        values.push({id, createtAt, reqData});    
+    
+        if (isGet == true)
+        {
+            req.reply({values});
+        }
+        else
+        {
+            let res = req._.req.res;
+            res.statusCode = 202;
+            res.send({values});
+        }
+    
+       
+    
+        let sqlStr ='UPSERT PLSTR_PRODUCT_ID_CHARVALS ("REF_PRODUCT", "LOCATION_ID", "TYPE", "PRODUCT_ID", "CLASS_NUM", "CHARVAL_NUM")' +
+        ' SELECT DISTINCT PRODUCT_ID,LOCATION_ID, \'PRIMARY\',PRIMARY_ID, CLASS_NUM , CHARVAL_NUM FROM "V_PLSTR_PROD_PARTIAL_CHARVALS"';
+        console.log("PLSTR_PRODUCT_ID_CHARVALS sqlStr ", sqlStr);
+
+        let results = await cds.run(sqlStr);
+        console.log("PLSTR_PRODUCT_ID_CHARVALS results ", results);
+
+        sqlStr ='UPSERT PLSTR_PRODUCT_ID_CHARVALS ("REF_PRODUCT", "LOCATION_ID", "TYPE", "PRODUCT_ID", "CLASS_NUM", "CHARVAL_NUM")' +
+        ' SELECT DISTINCT PRODUCT_ID,LOCATION_ID,  \'PRIMARY\',PRIMARY_ID, CLASS_NUM , CHARVAL_NUM FROM "V_PLSTR_PROD_PRIMARY_CHARVALS"';
+        console.log("PLSTR_PRODUCT_ID_CHARVALS sqlStr ", sqlStr);
+
+        results = await cds.run(sqlStr);
+        console.log("PLSTR_PRODUCT_ID_CHARVALS results ", results);
 
 
+    }
 
 
     async function _genTsForPrimary(req,isGet) {
@@ -1359,132 +1454,145 @@ module.exports = async function (srv) {
             let sqlStrCharvalResults = await cds.run(sqlStrCharval);
             // console.log("PLSTR_PRIMARY_TIMESERIES  sqlStrCharvalResults", sqlStrCharvalResults);
 
+            // let sqlPrimOrdQtyProduct = 'SELECT DISTINCT WEEKDATE, PRODUCT_ID, LOCATION_ID, SUM(ORDER_QTY) AS SUCCESS ' +
+            //                         ' FROM V_PLSTR_PRIMARYID_TS ' +
+            //                         ' WHERE ' +
+            //                         ' WEEKDATE = ' + "'"  + weekdate + "'" + ' AND ' + 
+            //                         ' PRODUCT_ID = ' + "'"  + productId + "'" + ' AND ' + 
+            //                         ' LOCATION_ID = ' + "'"  + locationId + "'" + ' AND ' +
+            //                         ' PRIMARY_ID = ' + "'"  + primaryId + "'" + 
+            //                         ' GROUP BY WEEKDATE, PRODUCT_ID, LOCATION_ID ' +
+            //                         ' ORDER BY WEEKDATE, PRODUCT_ID, LOCATION_ID';
             let sqlPrimOrdQtyProduct = 'SELECT DISTINCT WEEKDATE, PRODUCT_ID, LOCATION_ID, SUM(ORDER_QTY) AS SUCCESS ' +
-                                    ' FROM V_PLSTR_PRIMARYID_TS ' +
-                                    ' WHERE ' +
-                                    ' WEEKDATE = ' + "'"  + weekdate + "'" + ' AND ' + 
-                                    ' PRODUCT_ID = ' + "'"  + productId + "'" + ' AND ' + 
-                                    ' LOCATION_ID = ' + "'"  + locationId + "'" + ' AND ' +
-                                    ' PRIMARY_ID = ' + "'"  + primaryId + "'" + 
-                                    ' GROUP BY WEEKDATE, PRODUCT_ID, LOCATION_ID ' +
-                                    ' ORDER BY WEEKDATE, PRODUCT_ID, LOCATION_ID';
-            // console.log ("sqlPrimOrdQtyProduct V_PLSTR_PRIMARYID_TS ", sqlPrimOrdQtyProduct);
+                                        ' FROM V_PLSTR_PRIMARY_TIMESERIES ' +
+                                        ' WHERE ' +
+                                        ' WEEKDATE = ' + "'"  + weekdate + "'" + ' AND ' + 
+                                        ' PRODUCT_ID = ' + "'"  + productId + "'" + ' AND ' + 
+                                        ' LOCATION_ID = ' + "'"  + locationId + "'" + ' AND ' +
+                                        ' PRIMARY_ID = ' + "'"  + primaryId + "'" + 
+                                        ' GROUP BY WEEKDATE, PRODUCT_ID, LOCATION_ID ' +
+                                        ' ORDER BY WEEKDATE, PRODUCT_ID, LOCATION_ID';
+            // console.log ("sqlPrimOrdQtyProduct V_PLSTR_PRIMARY_TIMESERIES ", sqlPrimOrdQtyProduct);
 
             let sqlPrimOrdQtyProductResults = await cds.run(sqlPrimOrdQtyProduct);
-            // console.log("V_PLSTR_PRIMARYID_TS  sqlPrimOrdQtyProductResults", sqlPrimOrdQtyProductResults);
+            // console.log("V_PLSTR_PRIMARY_TIMESERIES  sqlPrimOrdQtyProductResults", sqlPrimOrdQtyProductResults);
             
-            str = JSON.stringify(sqlPrimOrdQtyProductResults[0]);
-            obj = JSON.parse(str);
-            arrayVals = Object.values(obj);
-
-            let ordQtyPrimary = arrayVals[3];
-
-            
-            let sqOrdQtyProduct = 'SELECT DISTINCT WEEKDATE, PRODUCT_ID, LOCATION_ID, SUM(ORDER_QTY) AS SUCCESS ' +
-                                    ' FROM V_PLSTR_PRIMARYID_TS ' +
-                                    ' WHERE ' +
-                                    ' WEEKDATE = ' + "'"  + weekdate + "'" + ' AND ' + 
-                                    ' PRODUCT_ID = ' + "'"  + productId + "'" + ' AND ' + 
-                                    ' LOCATION_ID = ' + "'"  + locationId + "'" +
-                                    ' GROUP BY WEEKDATE, PRODUCT_ID, LOCATION_ID ' +
-                                    ' ORDER BY WEEKDATE, PRODUCT_ID, LOCATION_ID';
-            // console.log ("sqOrdQtyProduct V_PLSTR_PRIMARYID_TS ", sqOrdQtyProduct);
-
-            let sqlOrdQtyProductResults = await cds.run(sqOrdQtyProduct);
-            // console.log("V_PLSTR_PRIMARYID_TS  sqlOrdQtyProductResults", sqlOrdQtyProductResults);
-            
-            str = JSON.stringify(sqlOrdQtyProductResults[0]);
-            obj = JSON.parse(str);
-            arrayVals = Object.values(obj);
-            // weekdate = arrayVals[0];
-            // productId = arrayVals[1];
-            // locationId = arrayVals[2];
-            let ordQtyProduct = arrayVals[3];
-
-            let objType = 'PI';
-            let objId = primaryId.split('_');
-            let objDep = objId[0];
-            let objCounter = objId[1];
-
-            let sqlStrObjdepHdr = 'UPSERT CP_TS_OBJDEPHDR VALUES (' +
-                        "'" + weekdate + "'" + "," +
-                        "'" + locationId + "'" + "," +
-                        "'" + productId + "'" + "," +
-                        "'" + objType + "'" + "," +
-                        "'" + objDep + "'" + "," +
-                        "'" + parseInt(objCounter) + "'" + "," +
-                        "'" + parseFloat(ordQtyPrimary) + "'" + "," +
-                        "'" + 100*parseFloat(ordQtyPrimary)/parseFloat(ordQtyProduct) + "'" +')' + ' WITH PRIMARY KEY';
-
-            console.log("CP_TS_OBJDEPHDR sqlStr", sqlStrObjdepHdr);
-
-            let sqlStrObjdepHdrResults = await cds.run(sqlStrObjdepHdr);
-            console.log("CP_TS_OBJDEPHDR  ", sqlStrObjdepHdrResults);
-
-            for (let charIndex = 0; charIndex < sqlStrCharvalResults.length; charIndex++)
+            if (sqlPrimOrdQtyProductResults.length > 0)
             {
-                let rowId = charIndex + 1;
-                str = JSON.stringify(sqlStrCharvalResults[charIndex]);
+                str = JSON.stringify(sqlPrimOrdQtyProductResults[0]);
                 obj = JSON.parse(str);
                 arrayVals = Object.values(obj);
-                weekdate = arrayVals[0];
-                productId = arrayVals[1];
-                locationId = arrayVals[2];
-                let charVal = arrayVals[4];
-                let sqlStrCharvalCount = 
-                    'SELECT WEEKDATE, PRODUCT_ID, LOCATION_ID, CHAR_VALUE, SUM(ORD_QTY) AS SUCCESS ' +
-                    ' FROM PLSTR_PRIMARY_TIMESERIES ' +
-                    ' WHERE ' +
-                    ' WEEKDATE = ' + "'"  + weekdate + "'" + ' AND ' + 
-                    ' PRODUCT_ID = ' + "'"  + productId + "'" + ' AND ' + 
-                    ' LOCATION_ID = ' + "'"  + locationId + "'" + ' AND ' +
-                    ' CHAR_VALUE = ' + "'"  + charVal + "'" +
-                    ' GROUP BY WEEKDATE, PRODUCT_ID, LOCATION_ID, CHAR_VALUE ' +
-                    ' ORDER BY WEEKDATE, PRODUCT_ID, LOCATION_ID, CHAR_VALUE';
-                
-                // console.log ("sqlStrCharvalCount PLSTR_PRIMARY_TIMESERIES ", sqlStrCharvalCount);
 
-                let sqlStrCharvalCountResults = await cds.run(sqlStrCharvalCount);
-                // console.log("PLSTR_PRIMARY_TIMESERIES  sqlStrCharvalCountResults", sqlStrCharvalCountResults);
-        
-                str = JSON.stringify(sqlStrCharvalCountResults[0]);
+                let ordQtyPrimary = arrayVals[3];
+
+
+                let sqOrdQtyProduct = 'SELECT DISTINCT WEEKDATE, PRODUCT_ID, LOCATION_ID, SUM(ORDER_QTY) AS SUCCESS ' +
+                                        ' FROM V_PLSTR_PRIMARY_TIMESERIES ' +
+                                        ' WHERE ' +
+                                        ' WEEKDATE = ' + "'"  + weekdate + "'" + ' AND ' + 
+                                        ' PRODUCT_ID = ' + "'"  + productId + "'" + ' AND ' + 
+                                        ' LOCATION_ID = ' + "'"  + locationId + "'" +
+                                        ' GROUP BY WEEKDATE, PRODUCT_ID, LOCATION_ID ' +
+                                        ' ORDER BY WEEKDATE, PRODUCT_ID, LOCATION_ID';
+                // console.log ("sqOrdQtyProduct V_PLSTR_PRIMARY_TIMESERIES ", sqOrdQtyProduct);
+
+                let sqlOrdQtyProductResults = await cds.run(sqOrdQtyProduct);
+                // console.log("V_PLSTR_PRIMARYID_TS  sqlOrdQtyProductResults", sqlOrdQtyProductResults);
+                
+                str = JSON.stringify(sqlOrdQtyProductResults[0]);
                 obj = JSON.parse(str);
                 arrayVals = Object.values(obj);
-                weekdate = arrayVals[0];
-                productId = arrayVals[1];
-                locationId = arrayVals[2];
-                charVal = arrayVals[3];
-                let success = arrayVals[4];
-                // let successRate = (100.0*success)/ordQtyPrimary;
-                let successRate = (100.0*success)/ordQtyProduct;
-                // let objType = 'PI';
-                // let objId = primaryId.split('_');
-                // let objDep = objId[0];
-                // let objCounter = objId[1];
-                
-                console.log("PR_INDEX ",priIndex, "Primary ID Counts ", sqlPrimaryResults.length);
-                // console.log("CAL_DATE ", weekdate, "LOCATION_ID ", locationId, "PRODUCT_ID ", productId, 
-                //             "OBJ_TYPE ", objType, "OBJ_DEP", objDep, "OBJ_COUNTER ", objCounter,
-                //             "ROW_ID ", rowId, "SUCCESS ", success, "SUCCESS_RATE ", successRate);
+                // weekdate = arrayVals[0];
+                // productId = arrayVals[1];
+                // locationId = arrayVals[2];
+                let ordQtyProduct = arrayVals[3];
 
-                if( priIndex % 100 == 0)
-                    await cds.run('COMMIT');
+                let objType = 'PI';
+                let objId = primaryId.split('_');
+                let objDep = objId[0];
+                let objCounter = objId[1];
 
-                let sqlStrObjdepCharHdr = 'UPSERT CP_TS_OBJDEP_CHARHDR VALUES (' +
-                        "'" + weekdate + "'" + "," +
-                        "'" + locationId + "'" + "," +
-                        "'" + productId + "'" + "," +
-                        "'" + objType + "'" + "," +
-                        "'" + objDep + "'" + "," +
-                        "'" + parseInt(objCounter) + "'" + "," +
-                        "'" + rowId + "'" + "," +
-                        "'" + parseFloat(success) + "'" + "," +
-                        "'" + parseFloat(successRate) + "'" +')' + ' WITH PRIMARY KEY';
+                let sqlStrObjdepHdr = 'UPSERT CP_TS_OBJDEPHDR VALUES (' +
+                            "'" + weekdate + "'" + "," +
+                            "'" + locationId + "'" + "," +
+                            "'" + productId + "'" + "," +
+                            "'" + objType + "'" + "," +
+                            "'" + objDep + "'" + "," +
+                            "'" + parseInt(objCounter) + "'" + "," +
+                            "'" + parseFloat(ordQtyPrimary) + "'" + "," +
+                            "'" + 100*parseFloat(ordQtyPrimary)/parseFloat(ordQtyProduct) + "'" +')' + ' WITH PRIMARY KEY';
 
-                console.log("CP_TS_OBJDEP_CHARHDR sqlStr", sqlStrObjdepCharHdr);
+                console.log("CP_TS_OBJDEPHDR sqlStr", sqlStrObjdepHdr);
 
-                let sqlStrObjdepCharHdrResults = await cds.run(sqlStrObjdepCharHdr);
-                console.log("CP_TS_OBJDEP_CHARHDR  ", sqlStrObjdepCharHdrResults);
+                let sqlStrObjdepHdrResults = await cds.run(sqlStrObjdepHdr);
+                console.log("CP_TS_OBJDEPHDR  ", sqlStrObjdepHdrResults);
+
+                for (let charIndex = 0; charIndex < sqlStrCharvalResults.length; charIndex++)
+                {
+                    let rowId = charIndex + 1;
+                    str = JSON.stringify(sqlStrCharvalResults[charIndex]);
+                    obj = JSON.parse(str);
+                    arrayVals = Object.values(obj);
+                    weekdate = arrayVals[0];
+                    productId = arrayVals[1];
+                    locationId = arrayVals[2];
+                    let charVal = arrayVals[4];
+                    let sqlStrCharvalCount = 
+                        'SELECT WEEKDATE, PRODUCT_ID, LOCATION_ID, CHAR_VALUE, SUM(ORD_QTY) AS SUCCESS ' +
+                        ' FROM PLSTR_PRIMARY_TIMESERIES ' +
+                        ' WHERE ' +
+                        ' WEEKDATE = ' + "'"  + weekdate + "'" + ' AND ' + 
+                        ' PRODUCT_ID = ' + "'"  + productId + "'" + ' AND ' + 
+                        ' LOCATION_ID = ' + "'"  + locationId + "'" + ' AND ' +
+                        ' CHAR_VALUE = ' + "'"  + charVal + "'" +
+                        ' GROUP BY WEEKDATE, PRODUCT_ID, LOCATION_ID, CHAR_VALUE ' +
+                        ' ORDER BY WEEKDATE, PRODUCT_ID, LOCATION_ID, CHAR_VALUE';
+                    
+                    // console.log ("sqlStrCharvalCount PLSTR_PRIMARY_TIMESERIES ", sqlStrCharvalCount);
+
+                    let sqlStrCharvalCountResults = await cds.run(sqlStrCharvalCount);
+                    // console.log("PLSTR_PRIMARY_TIMESERIES  sqlStrCharvalCountResults", sqlStrCharvalCountResults);
+            
+                    str = JSON.stringify(sqlStrCharvalCountResults[0]);
+                    obj = JSON.parse(str);
+                    arrayVals = Object.values(obj);
+                    weekdate = arrayVals[0];
+                    productId = arrayVals[1];
+                    locationId = arrayVals[2];
+                    charVal = arrayVals[3];
+                    let success = arrayVals[4];
+                    // let successRate = (100.0*success)/ordQtyPrimary;
+                    let successRate = (100.0*success)/ordQtyProduct;
+                    // let objType = 'PI';
+                    // let objId = primaryId.split('_');
+                    // let objDep = objId[0];
+                    // let objCounter = objId[1];
+                    
+                    console.log("PR_INDEX ",priIndex, "Primary ID Counts ", sqlPrimaryResults.length);
+                    // console.log("CAL_DATE ", weekdate, "LOCATION_ID ", locationId, "PRODUCT_ID ", productId, 
+                    //             "OBJ_TYPE ", objType, "OBJ_DEP", objDep, "OBJ_COUNTER ", objCounter,
+                    //             "ROW_ID ", rowId, "SUCCESS ", success, "SUCCESS_RATE ", successRate);
+
+                    if( priIndex % 100 == 0)
+                        await cds.run('COMMIT');
+
+                    let sqlStrObjdepCharHdr = 'UPSERT CP_TS_OBJDEP_CHARHDR VALUES (' +
+                            "'" + weekdate + "'" + "," +
+                            "'" + locationId + "'" + "," +
+                            "'" + productId + "'" + "," +
+                            "'" + objType + "'" + "," +
+                            "'" + objDep + "'" + "," +
+                            "'" + parseInt(objCounter) + "'" + "," +
+                            "'" + rowId + "'" + "," +
+                            "'" + parseFloat(success) + "'" + "," +
+                            "'" + parseFloat(successRate) + "'" +')' + ' WITH PRIMARY KEY';
+
+                    console.log("CP_TS_OBJDEP_CHARHDR sqlStr", sqlStrObjdepCharHdr);
+
+                    let sqlStrObjdepCharHdrResults = await cds.run(sqlStrObjdepCharHdr);
+                    console.log("CP_TS_OBJDEP_CHARHDR  ", sqlStrObjdepCharHdrResults);
+                }
+
             }
 
     
@@ -1540,12 +1648,14 @@ module.exports = async function (srv) {
             res.send({values});
         }
 
-        let sqlFuturePrimarIds = 'SELECT DISTINCT WEEK_DATE, LOCATION_ID, REF_PRODID, PARTIAL_ID, PRIMARY_ID, CLASS_NUM,' +
-                                ' VERSION, SCENARIO FROM V_PLSTR_IBP_FUTURE_TS ' +
-                                'ORDER BY  WEEK_DATE, LOCATION_ID, REF_PRODID, PARTIAL_ID, PRIMARY_ID, CLASS_NUM, VERSION, SCENARIO';
+        // let sqlFuturePrimarIds = 'SELECT DISTINCT WEEK_DATE, LOCATION_ID, REF_PRODID, PARTIAL_ID, PRIMARY_ID, CLASS_NUM,' +
+        //                         ' VERSION, SCENARIO FROM V_PLSTR_IBP_FUTURE_TS ' +
+        //                         'ORDER BY  WEEK_DATE, LOCATION_ID, REF_PRODID, PARTIAL_ID, PRIMARY_ID, CLASS_NUM, VERSION, SCENARIO ASC';
 
-
-        // console.log("sqlStrsqlStrIbpFuture ", sqlFuturePrimarIds )
+        let sqlFuturePrimarIds = 'SELECT DISTINCT WEEK_DATE, LOCATION_ID, REF_PRODUCT, PRODUCT_ID, PRIMARY_ID, CLASS_NUM,' +
+                                ' VERSION, SCENARIO FROM V_PLSTR_IBP_FCHAR_BY_PRIMARY ' +
+                                'ORDER BY  WEEK_DATE, LOCATION_ID, REF_PRODUCT, PRODUCT_ID, PRIMARY_ID, CLASS_NUM, VERSION, SCENARIO ASC';
+        console.log("sqlStrsqlStrIbpFuture ", sqlFuturePrimarIds )
         let sqlFuturePrimarIdsResults = await cds.run(sqlFuturePrimarIds);
         // console.log("sqlFuturePrimarIdsResults ", sqlFuturePrimarIdsResults);
 
@@ -1557,34 +1667,38 @@ module.exports = async function (srv) {
             let arrayVals = Object.values(obj);
             let weekdate = arrayVals[0];
             let locationId = arrayVals[1];
-            let productId = arrayVals[2];
-            let partialId = arrayVals[3];
+            let refProduct = arrayVals[2];
+            let productId = arrayVals[3];
             let primaryId = arrayVals[4];
             let objdep_counter = primaryId.split('_');
             let objDep = objdep_counter[0];
-            let objCounter = objdep_counter[0];
+            let objCounter = objdep_counter[1];
             let classNum = arrayVals[5];
             let version = arrayVals[6];
             let scenario = arrayVals[7];
             let objType = 'PI';
 
-            let sqlPrimaryIdCharvals = 'SELECT DISTINCT WEEK_DATE, LOCATION_ID, REF_PRODID, PARTIAL_ID, PRIMARY_ID, CLASS_NUM,' +
-                                ' VERSION, SCENARIO, CHARVAL_NUM, OPT_PERCENT, OPT_QTY FROM V_PLSTR_IBP_FUTURE_TS ' +
+            // let sqlPrimaryIdCharvals = 'SELECT DISTINCT WEEK_DATE, LOCATION_ID, REF_PRODID, PARTIAL_ID, PRIMARY_ID, CLASS_NUM,' +
+            //                     ' VERSION, SCENARIO, CHARVAL_NUM, OPT_PERCENT, OPT_QTY FROM V_PLSTR_IBP_FUTURE_TS ' +
+            
+            let sqlPrimaryIdCharvals =  'SELECT DISTINCT WEEK_DATE, LOCATION_ID, REF_PRODUCT, PRODUCT_ID, PRIMARY_ID, CLASS_NUM,' +
+                                ' VERSION, SCENARIO, CHARVAL_NUM, OPT_PERCENT, OPT_QTY FROM V_PLSTR_IBP_FCHAR_BY_PRIMARY ' +
                                 ' WHERE ' +
                                 ' WEEK_DATE = ' + "'"  + weekdate + "'" + ' AND ' + 
                                 ' LOCATION_ID = ' + "'"  + locationId + "'" + ' AND ' + 
-                                ' REF_PRODID = ' + "'"  + productId + "'" + ' AND ' + 
-                                ' PARTIAL_ID = ' + "'"  + partialId + "'" + ' AND ' + 
+                                ' REF_PRODUCT = ' + "'"  + refProduct + "'" + ' AND ' + 
+                                ' PRODUCT_ID = ' + "'"  + productId + "'" + ' AND ' + 
                                 ' PRIMARY_ID = ' + "'"  + primaryId + "'" + ' AND ' + 
                                 ' CLASS_NUM = ' + "'"  + classNum + "'" + ' AND ' + 
                                 ' VERSION = ' + "'"  + version + "'" + ' AND ' + 
                                 ' SCENARIO = ' + "'"  + scenario + "'" + 
-                                ' ORDER BY WEEK_DATE, LOCATION_ID, REF_PRODID, PARTIAL_ID, PRIMARY_ID, CLASS_NUM, ' +
+                                ' ORDER BY WEEK_DATE, LOCATION_ID, REF_PRODUCT, PRODUCT_ID, PRIMARY_ID, CLASS_NUM, ' +
                                 ' VERSION, SCENARIO, CHARVAL_NUM';
             
             // console.log("sqlPrimaryIdCharvals ", sqlPrimaryIdCharvals )
             let sqlPrimaryIdCharvalsResults = await cds.run(sqlPrimaryIdCharvals);
             // console.log("sqlPrimaryIdCharvals ", sqlPrimaryIdCharvalsResults);
+            // console.log("sqlPrimaryIdCharvals results length", sqlPrimaryIdCharvalsResults.length);
 
             for (let charIndex = 0; charIndex < sqlPrimaryIdCharvalsResults.length; charIndex++)
             {
@@ -1598,10 +1712,10 @@ module.exports = async function (srv) {
 
                 // console.log("success =",success);
 
-                let sqlStrObjdepCharHdrF = 'UPSERT CP_TS_OBJDEP_CHARHDR_F VALUES (' +
+                let sqlStrObjdepCharHdrF = await 'UPSERT CP_TS_OBJDEP_CHARHDR_F VALUES (' +
                                         "'" + weekdate + "'" + "," +
                                         "'" + locationId + "'" + "," +
-                                        "'" + productId + "'" + "," +
+                                        "'" + refProduct + "'" + "," +
                                         "'" + objType + "'" + "," +
                                         "'" + objDep + "'" + "," +
                                         "'" + parseInt(objCounter) + "'" + "," +
@@ -1611,7 +1725,7 @@ module.exports = async function (srv) {
                                         "'" + parseInt(success) + "'" + "," +
                                         "'" + parseFloat(successRate) + "'" +')' + ' WITH PRIMARY KEY';
 
-                console.log("sqlStrObjdepCharHdrF ", sqlStrObjdepCharHdrF, "primaryIdx ", primaryIdx )
+                // console.log("sqlStrObjdepCharHdrF ", sqlStrObjdepCharHdrF, "primaryIdx ", primaryIdx )
                 let sqlStrObjdepCharHdrFResults = await cds.run(sqlStrObjdepCharHdrF);
                 // console.log("sqlStrObjdepCharHdrFResults ", sqlStrObjdepCharHdrFResults, "rowId ", rowId);
                 
@@ -1624,7 +1738,8 @@ module.exports = async function (srv) {
                 console.log("PR_INDEX ",primaryIdx, "Primary ID Counts ", sqlFuturePrimarIdsResults.length);
 
             }
-
+            // if (primaryIdx == 1000)
+            //     break;
 
         }
 

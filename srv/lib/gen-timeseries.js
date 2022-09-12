@@ -11,21 +11,12 @@ class GenTimeseries {
     async genTimeseries(adata) {
         console.log("Started timeseries Service");
         
-        const lDate = new Date();
-        const lStartDate = new Date(
-            lDate.getFullYear(),
-            lDate.getMonth(),
-            lDate.getDate() - adata.PAST_DAYS
-        );
-
         // Get Sales Count Information
         const liSalesCount = await cds.run(
             `SELECT *
                FROM V_ORD_COUNT
-              WHERE "LOCATION_ID" = '` + adata.LOCATION_ID + `'
-                AND "PRODUCT_ID"  = '` + adata.PRODUCT_ID + `'
-                AND "WEEK_DATE"   >= '` + lStartDate.toISOString().split("T")[0] + `'
-                AND "WEEK_DATE"   <= '` + GenF.getCurrentDate() + `'
+              WHERE "LOCATION_ID" = '${adata.LOCATION_ID}'
+                AND "PRODUCT_ID"  = '${adata.PRODUCT_ID}'
                 ORDER BY "LOCATION_ID" ASC, 
                          "PRODUCT_ID" ASC,
                          "WEEK_DATE" ASC`

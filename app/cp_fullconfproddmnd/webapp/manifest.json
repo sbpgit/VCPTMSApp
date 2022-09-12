@@ -25,21 +25,6 @@
                     "odataVersion": "2.0"
                 }
             }
-        },
-        "crossNavigation": {
-            "inbounds": {
-                "cpapp-cpfullconfproddmnd-inbound": {
-                    "signature": {
-                        "parameters": {},
-                        "additionalParameters": "allowed"
-                    },
-                    "semanticObject": "CIRDisplay",
-                    "action": "display",
-                    "title": "{{flpTitle}}",
-                    "subTitle": "{{flpSubtitle}}",
-                    "icon": ""
-                }
-            }
         }
     },
     "sap.ui": {

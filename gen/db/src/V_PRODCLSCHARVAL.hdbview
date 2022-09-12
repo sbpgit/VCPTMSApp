@@ -10,8 +10,10 @@ AS SELECT distinct A.PRODUCT_ID,
           B.CLASS_NAME,
           B.CHAR_NUM,
           B.CHAR_NAME,
+          B.CHAR_DESC,
           B.CHARVAL_NUM,
-          B.CHAR_VALUE
+          B.CHAR_VALUE,
+          B.CHARVAL_DESC
     FROM  CP_PRODUCT_CLASS AS A
     INNER JOIN "V_CLASSCHARVAL" AS B
     ON A.CLASS_NUM = B.CLASS_NUM;
