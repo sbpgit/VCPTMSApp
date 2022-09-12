@@ -18990,6 +18990,22 @@
         "type": "cds.String"
       }
     },
+    "CatalogService.gen_FullConfigDemand": {
+      "kind": "function",
+      "params": {
+        "LOCATION_ID": {
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "type": "cds.String",
+          "length": 40
+        }
+      },
+      "returns": {
+        "type": "cds.String"
+      }
+    },
     "CatalogService.get_objdep": {
       "kind": "function",
       "returns": {
@@ -19275,6 +19291,32 @@
       }
     },
     "CatalogService.generateTimeseriesF": {
+      "kind": "action",
+      "params": {
+        "LOCATION_ID": {
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "type": "cds.String",
+          "length": 40
+        }
+      }
+    },
+    "CatalogService.genUniqueID": {
+      "kind": "action",
+      "params": {
+        "LOCATION_ID": {
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "type": "cds.String",
+          "length": 40
+        }
+      }
+    },
+    "CatalogService.genFullConfigDemand": {
       "kind": "action",
       "params": {
         "LOCATION_ID": {
@@ -19782,7 +19824,7 @@
         }
       }
     },
-    "CatalogService.genUniqueID": {
+    "CatalogService.gen_UniqueID": {
       "kind": "function",
       "params": {
         "LOCATION_ID": {
@@ -21464,7 +21506,7 @@
         },
         "CUSTOMER_GROUP": {
           "type": "cds.String",
-          "length": 2
+          "length": 20
         },
         "DOC_DATE": {
           "type": "cds.Date"
@@ -21484,7 +21526,7 @@
         },
         "CUSTOMER_GROUP": {
           "type": "cds.String",
-          "length": 2
+          "length": 20
         }
       }
     },

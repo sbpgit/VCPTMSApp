@@ -1859,7 +1859,18 @@ sap.ui.define(
                     var buttonSel = oEvent.getSource().getText();
                     var keySel = that.byId("idJobType").getSelectedKey();
                     var IBPinteg = that.byId("idIBPselect").getSelectedKey();
+                   
+                    if(keySel === "I"){
+                        if(that.byId("idIBPselect").getSelectedKey() === "I"){
+                            var exeJobName = this.byId("idJobType").getSelectedItem().getText() + " " + that.byId("idRbtnImport").getSelectedButton().getText();
+                        } else {
 
+                            var exeJobName = this.byId("idJobType").getSelectedItem().getText() + " " + that.byId("idRbtnExport").getSelectedButton().getText();
+                        }
+                            that.oGModel.setProperty("/Jobname", exeJobName);
+                    } else {
+                        that.oGModel.setProperty("/Jobname", this.byId("idJobType").getSelectedItem().getText());
+                    }
 
                     if(buttonSel === "Schedule Job"){
                         that.oGModel.setProperty("/EcecuteType", "S");
@@ -2755,7 +2766,10 @@ sap.ui.define(
 					if (selKey === "Im") {
 
 						var dDate = new Date();
-						var idSchTime = dDate.setMinutes(dDate.getMinutes() + 2);
+                        // 07-09-2022-1
+						// var idSchTime = dDate.setMinutes(dDate.getMinutes() + 2);
+						var idSchTime = dDate.setSeconds(dDate.getSeconds() + 20);
+                        // 07-09-2022-1
 						var idSETime = dDate.setHours(dDate.getHours() + 2);
 						idSchTime = new Date(idSchTime);
 						idSETime = new Date(idSETime);

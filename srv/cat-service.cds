@@ -160,7 +160,7 @@ service CatalogService @(impl : './lib/cat-service.js'){
     // Create PVS node structure
     function genpvs(NODE_TYPE : String(2), CHILD_NODE : String(50), PARENT_NODE : String(50), ACCESS_NODES : String(50), NODE_DESC : String(200), UPPERLIMIT : Integer, LOWERLIMIT : Integer, FLAG : String(1))                                                                  returns array of getPVSNodes;
     // Generate Timeseries
-    function generate_timeseries(LOCATION_ID : String(4), PRODUCT_ID : String(40),PAST_DAYS : Integer)                                                                                                                                                                                               returns String;
+    function generate_timeseries(LOCATION_ID : String(4), PRODUCT_ID : String(40))                                                                                                                                                                                               returns String;
     // Generate Timeseries
     function generate_timeseriesF(LOCATION_ID : String(4), PRODUCT_ID : String(40))     returns String;
     // Gen Full Configured Demand
@@ -185,7 +185,7 @@ service CatalogService @(impl : './lib/cat-service.js'){
    
     function importIBPDemd() returns String;
 // Timeseries for job creation
-    action generateTimeseries(LOCATION_ID : String(4), PRODUCT_ID : String(40),PAST_DAYS : Integer);
+    action generateTimeseries(LOCATION_ID : String(4), PRODUCT_ID : String(40));
     // Generate Timeseries
     action generateTimeseriesF(LOCATION_ID : String(4), PRODUCT_ID : String(40)) ;
     // Generate Unique

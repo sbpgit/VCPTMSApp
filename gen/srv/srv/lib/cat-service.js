@@ -787,6 +787,21 @@ module.exports = (srv) => {
         const obgenSOFunctions = new SOFunctions();
         await obgenSOFunctions.genUniqueID(req.data);
     });
+    // Generate Unique ID
+    srv.on("gen_UniqueID", async (req) => {
+        const obgenSOFunctions = new SOFunctions();
+        await obgenSOFunctions.genUniqueID(req.data);
+    });    
+    // Generate Fully Configured Demand
+    srv.on("genFullConfigDemand", async (req) => {
+        const obgenTimeseriesM2 = new GenTimeseriesM2();
+        await obgenTimeseriesM2.genPrediction(req.data);
+    });    
+    // Generate Fully Configured Demand
+    srv.on("gen_FullConfigDemand", async (req) => {
+        const obgenTimeseriesM2 = new GenTimeseriesM2();
+        await obgenTimeseriesM2.genPrediction(req.data);
+    });       
 
     srv.on("genVariantStruc", async (req) => {
 

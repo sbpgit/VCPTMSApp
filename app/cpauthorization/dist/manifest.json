@@ -46,7 +46,7 @@
                     "action": "Display",
                     "title": "{{flpTitle}}",
                     "subTitle": "{{flpSubtitle}}",
-                    "icon": "sap-icon://BusinessSuiteInAppSymbols/icon-fma-validation"
+                    "icon": "sap-icon://key"
                 }
             }
         }
