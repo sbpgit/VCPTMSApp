@@ -216,14 +216,11 @@ sap.ui.define([
                     that.oGModel.setProperty("/SelectedProd", "");
 
                     // Calling service to get Product list
-                    this.getView().getModel("oModel").read("/getAllProd", {
-                        filters: [
-                            new Filter(
-                                "LOCATION_ID",
-                                FilterOperator.EQ,
-                                aSelectedItems[0].getTitle()
-                            ),
-                        ],
+                    this.getView().getModel("oModel").callFunction("/getAllProd", {
+                        method: "GET",
+                        urlParameters: {
+                            LOCATION_ID : that.oLoc.getValue()
+                        },
                         success: function (oData) {
                             that.prodModel.setData(oData);
                             that.oProdList.setModel(that.prodModel);
