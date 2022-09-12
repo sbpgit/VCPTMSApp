@@ -76,14 +76,14 @@
         <ux:sections>
             <ux:ObjectPageSection id="idOBPageSec" >
                 <ux:subSections id="idSubSec">
-                    <ux:ObjectPageSubSection id="idObjectPageSub">
+                    <ux:ObjectPageSubSection id="idObjectPageSub" height="600px">
                         <ux:blocks id="idblocks">
                         <layout:Splitter id="idSplitter" height="auto" width="100%" class="sapUiNoContentPadding" visible="false">                 
                         <layout:FixFlex id='chartFixFlex' minFlexSize="500" class="fixFlex" > 
 
 <layout:flexContent class="fixFlex">
 <commons:ChartContainer id="idInvChartContainer" showFullScreen="true" showPersonalization="false" showZoom="false" autoAdjustHeight="true" 
-									showLegend="true">
+									showLegend="true" showSelectionDetails="false" >
 
                                     <commons:content>
 										<commons:ChartContainerContent>
@@ -100,18 +100,18 @@
                                 value="{CHAR_VALUE}" />
                         </viz.data:dimensions>
                         <viz.data:measures>
-                            <viz.data:MeasureDefinition name="GEN_QTY"
+                            <viz.data:MeasureDefinition name="Generated Qty"
                                 value="{GEN_QTY}" />
-                            <viz.data:MeasureDefinition name="PLAN_QTY"
+                            <viz.data:MeasureDefinition name="Planned Qty"
                                 value="{PLAN_QTY}" />
                         </viz.data:measures>
                                         </viz.data:FlattenedDataset>
                                     </viz:dataset>
                                     <viz:feeds>
                                         <viz.feeds:FeedItem id='valueAxisFeed' uid="valueAxis" type="Measure"
-                        values="PLAN_QTY" />
+                        values="Planned Qty" />
                          <viz.feeds:FeedItem id='valueAxisFeed1' uid="valueAxis" type="Measure"
-                        values="GEN_QTY" />
+                        values="Generated Qty" />
                     <viz.feeds:FeedItem id='categoryAxisFeed' uid="categoryAxis" type="Dimension"
                         values="Char.Name" />
                         <viz.feeds:FeedItem id='categoryAxisFeed1' uid="categoryAxis" type="Dimension"
