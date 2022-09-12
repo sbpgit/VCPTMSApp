@@ -191,8 +191,7 @@ service CatalogService @(impl : './lib/cat-service.js'){
     // Generate Unique
     action genUniqueID(LOCATION_ID : String(4), PRODUCT_ID : String(40)) ;
     // Generate Fully Configured Demand
-    action genFullConfigDemand(LOCATION_ID : String(4), PRODUCT_ID : String(40)) ;        
-
+    action genFullConfigDemand(LOCATION_ID : String(4), PRODUCT_ID : String(40)) ;  
 ///Partial
     @readonly
     entity genPartialProd           as projection on od.PARTIALPROD_INTRO;

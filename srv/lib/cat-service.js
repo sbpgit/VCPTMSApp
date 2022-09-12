@@ -770,15 +770,15 @@ module.exports = (srv) => {
     });
     // Generate Timeseries fucntion calls
     srv.on("generate_timeseries", async (req) => {
-        const obgenTimeseries = new GenTimeseries();
-        await obgenTimeseries.genTimeseries(req.data);
+        // const obgenTimeseries = new GenTimeseries();
+        // await obgenTimeseries.genTimeseries(req.data);
 
         const obgenTimeseriesM2 = new GenTimeseriesM2();
         await obgenTimeseriesM2.genTimeseries(req.data);
     });
     srv.on("generate_timeseriesF", async (req) => {
-        const obgenTimeseries = new GenTimeseries();
-        await obgenTimeseries.genTimeseriesF(req.data);
+        // const obgenTimeseries = new GenTimeseries();
+        // await obgenTimeseries.genTimeseriesF(req.data);
 
         const obgenTimeseriesM2 = new GenTimeseriesM2();
         await obgenTimeseriesM2.genTimeseriesF(req.data);

@@ -196,7 +196,7 @@ class GenTimeseriesM2 {
 
         console.log("Completed Method 2 Timeseries");
 
-        await this.genPrediction(adata);
+        // await this.genPrediction(adata);
     }
 
     async genTimeseriesF(adata) {
@@ -212,7 +212,8 @@ class GenTimeseriesM2 {
                     SCENARIO,
                     WEEK_DATE`
         );
-
+        console.log("Test: "+ liFutureCharPlan.length);
+        // console.log();
         await DELETE.from('CP_TS_OBJDEP_CHARHDR_F')
             .where(`LOCATION_ID = '${adata.LOCATION_ID}' 
                             AND PRODUCT_ID = '${adata.PRODUCT_ID}'
@@ -229,7 +230,7 @@ class GenTimeseriesM2 {
         else {
             lMainProduct = lsMainProduct.REF_PRODID;
         }
-
+        console.log("main prod:"+ lMainProduct);
         // Get Sales Count Information
         const liPrimaryID = await SELECT.from('V_UNIQUE_ID')
             .columns(["UNIQUE_ID",
@@ -251,7 +252,7 @@ class GenTimeseriesM2 {
 
             ).
             orderBy("UNIQUE_ID", "CHAR_NUM");
-
+        console.log("Primary ID:"+ liPrimaryID.length);
         let liObjdepF = [];
         let lsFutureDemand = {};
         for (let cntFC = 0; cntFC < liFutureCharPlan.length; cntFC++) {
@@ -296,7 +297,11 @@ class GenTimeseriesM2 {
                     lsObjdepF.OBJ_COUNTER = 1;
                     lsObjdepF.ROW_ID = GenF.parse(lRowID);
                     lsObjdepF.SUCCESS = parseInt(liFutureCharPlan[cntFC].OPT_QTY);
+                    
+                    lsObjdepF.SUCCESS_RATE = 0
+                    if(lsFutureDemand.QUANTITY > 0){
                     lsObjdepF.SUCCESS_RATE = (parseInt(liFutureCharPlan[cntFC].OPT_QTY) * 100 / parseInt(lsFutureDemand.QUANTITY)).toFixed(2);
+                    }
                     liObjdepF.push(GenF.parse(lsObjdepF));
                 }
             }
@@ -308,7 +313,13 @@ class GenTimeseriesM2 {
                 liFutureCharPlan[cntFC].WEEK_DATE !== liFutureCharPlan[GenF.addOne(cntFC, liFutureCharPlan.length)].WEEK_DATE ||
                 cntFC === GenF.addOne(cntFC, liFutureCharPlan.length)) {
                 if (liObjdepF.length > 0) {
+                    console.log("CP_TS_OBJDEP_CHARHDR_F: "+ liObjdepF.length);
+                    try{
                     await INSERT(liObjdepF).into('CP_TS_OBJDEP_CHARHDR_F');
+                    }
+                    catch(e){
+                        console.log("error");
+                    }
                 }
             }
         }
