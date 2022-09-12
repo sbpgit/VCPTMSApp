@@ -1292,10 +1292,11 @@ module.exports = async function (srv) {
     {
         let str = JSON.stringify(sqlPrimaryResults[priIndex]);
         let obj = JSON.parse(str);
-        let arrayKeys = Object.keys(obj)
+        let arrayKeys = Object.keys(obj);
         let arrayVals = Object.values(obj);
-        console.log("PRIMARY_ID_CHARVALS INDEX ", priIndex+1);
-
+        console.log("PRIMARY_ID_CHARVALS INDEX ", priIndex+1, "TOTAL PRIMARY_ID_CHARVALS ", sqlPrimaryResults.length);
+        if( priIndex % 1000 == 0)
+            await cds.run('COMMIT');
         // console.log("arrayKeys ", arrayKeys, "arrayVals", arrayVals);
         for (let arrayIndex = 0; arrayIndex < arrayKeys.length; arrayIndex++)
         {
