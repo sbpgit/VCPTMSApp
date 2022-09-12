@@ -1392,7 +1392,7 @@ sap.ui.define(
                         that.getModel("BModel").callFunction("/getAllProd", {
                             method: "GET",
                             urlParameters: {
-                                oScheData[0].Location
+                                LOCATION_ID: oScheData[0].Location
                             },
 							success: function (oData) {
 								if (oJobType === "M" || oJobType === "P") {

@@ -1119,3 +1119,12 @@ entity![V_PLANNEDCONFIG]{
     key![UNIT]              : String(5)   @title : 'UNIT';
     key![VALUE]             : String(500) @title : 'VALUE';
 }
+
+@cds.persistence.exists 
+Entity ![V_CIRVERSCEN] {
+key     ![LOCATION_ID]: String(4)  @title: 'LOCATION_ID' ; 
+key     ![PRODUCT_ID]: String(40)  @title: 'PRODUCT_ID' ; 
+key     ![REF_PRODID]: String(40)  @title: 'REF_PRODID' ; 
+key     ![VERSION]: String(10)  @title: 'VERSION' ; 
+key     ![SCENARIO]: String(32)  @title: 'SCENARIO' ; 
+}
