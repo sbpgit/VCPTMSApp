@@ -216,7 +216,7 @@ sap.ui.define([
                     that.oGModel.setProperty("/SelectedProd", "");
 
                     // Calling service to get Product list
-                    this.getView().getModel("oModel").read("/getLocProdDet", {
+                    this.getView().getModel("oModel").read("/getAllProd", {
                         filters: [
                             new Filter(
                                 "LOCATION_ID",
