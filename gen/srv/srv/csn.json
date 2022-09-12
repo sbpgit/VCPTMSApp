@@ -21506,7 +21506,7 @@
         },
         "CUSTOMER_GROUP": {
           "type": "cds.String",
-          "length": 2
+          "length": 20
         },
         "DOC_DATE": {
           "type": "cds.Date"
@@ -21526,7 +21526,7 @@
         },
         "CUSTOMER_GROUP": {
           "type": "cds.String",
-          "length": 2
+          "length": 20
         }
       }
     },
