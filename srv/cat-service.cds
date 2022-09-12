@@ -15,7 +15,8 @@ using {
     V_UNIQUE_ID,
     V_ODRESTRICT,
     V_LOCPRODLINERTR,
-    V_CIR_CHAR_RATE
+    V_CIR_CHAR_RATE,
+    V_CIRVERSCEN
 } from '../db/data-model';
 // using V_ODPROFILES from '../db/data-model';
 using V_BOMODCOND from '../db/data-model';
@@ -191,8 +192,7 @@ service CatalogService @(impl : './lib/cat-service.js'){
     // Generate Unique
     action genUniqueID(LOCATION_ID : String(4), PRODUCT_ID : String(40)) ;
     // Generate Fully Configured Demand
-    action genFullConfigDemand(LOCATION_ID : String(4), PRODUCT_ID : String(40)) ;        
-
+    action genFullConfigDemand(LOCATION_ID : String(4), PRODUCT_ID : String(40)) ;  
 ///Partial
     @readonly
     entity genPartialProd           as projection on od.PARTIALPROD_INTRO;
@@ -257,6 +257,7 @@ service CatalogService @(impl : './lib/cat-service.js'){
     function maintainRestrDet (FLAG : String(1), RTRCHAR : String ) returns String;
     // CIR char rate
     entity getCIRCharRate       as projection on V_CIR_CHAR_RATE;
+    entity getCIRVerScen        as projection on V_CIRVERSCEN;
 /// Market Authorizations
     action trigrMAWeek(LOCATION_ID : String(4), PRODUCT_ID : String(40), WEEK_DATE: Date);
 // Seed Order Creation
@@ -280,5 +281,5 @@ service CatalogService @(impl : './lib/cat-service.js'){
     function getUniqueIdItems(UNIQUE_ID : Integer) returns array of ds.uniqueCharItems;
     
     // EOI - Deepa
-    
+    entity getSalesStock as projection on od.SALES_S;
 }

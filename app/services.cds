@@ -54,3 +54,5 @@ using from './cp_planconfig/annotations';
 using from './cp_fullyconfproddmnd/annotations';
 
 using from './cp_planingconfig/annotations';
+
+using from './cpsalesstock/annotations';

@@ -191,14 +191,10 @@ modules:
       - cpappcpplaningconfig.zip
       name: cpappcpplaningconfig
       target-path: resources/
-    # - artifacts:
-    #   - cpappcpfullconfproddmnd.zip
-    #   name: cpappcpfullconfproddmnd
-    #   target-path: resources/
-    # - artifacts:
-    #   - cpappcpplanconfig.zip
-    #   name: cpappcpplanconfig
-    #   target-path: resources/
+    - artifacts:
+      - cpappcpsalesstock.zip
+      name: cpappcpsalesstock
+      target-path: resources/
 - name: cpodpcpodprofiles
   type: html5
   path: app/cp_odprofiles
@@ -525,26 +521,16 @@ modules:
     - npm install
     - npm run build:cf
     supported-platforms: []
-# - name: cpappcpfullconfproddmnd
-#   type: html5
-#   path: app/cp_fullconfproddmnd
-#   build-parameters:
-#     build-result: dist
-#     builder: custom
-#     commands:
-#     - npm install
-#     - npm run build:cf
-#     supported-platforms: []
-# - name: cpappcpplanconfig
-#   type: html5
-#   path: app/cp_planconfig
-#   build-parameters:
-#     build-result: dist
-#     builder: custom
-#     commands:
-#     - npm install
-#     - npm run build:cf
-#     supported-platforms: []
+- name: cpappcpsalesstock
+  type: html5
+  path: app/cpsalesstock
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
 resources:
 - name: config_products-db
   type: com.sap.xs.hdi-container

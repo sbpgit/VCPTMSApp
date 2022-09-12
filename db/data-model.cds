@@ -746,16 +746,16 @@ context cp {
         key SALES_DOC    : String(10) @title : 'Sales Document';
             PRODUCT_ID   : String(40) @title : 'Product';
             LOCATION_ID  : String(4)  @title : 'Location ';
-            QUANTITY     : Decimal(13, 3);
-            STATUS       : String(10);
-            ORDER_NUMBER : String(10);
-            PURCHASE_REQ : String(12);
-            CHANGED_DATE : Date;
-            CHANGED_TIME : Time;
-            CHANGED_BY   : String(12);
-            CREATED_DATE : Date;
-            CREATED_TIME : Time;
-            CREATED_BY   : String(12);
+            QUANTITY     : Decimal(13, 3) @title : 'Quantity';
+            STATUS       : String(10) @title : 'Status';
+            ORDER_NUMBER : String(10) @title : 'Order Number ';
+            PURCHASE_REQ : String(12) @title : 'Purchase Requisition ';
+            CHANGED_DATE : Date @title : 'Change Date';
+            CHANGED_TIME : Time @title : 'Change Time';
+            CHANGED_BY   : String(12) @title : 'Changed By';
+            CREATED_DATE : Date @title : 'Created Date';
+            CREATED_TIME : Time @title : 'Created Time';
+            CREATED_BY   : String(12) @title : 'Created By';
     }
 
 // End Of Insert - Deepa
@@ -1118,4 +1118,13 @@ entity![V_PLANNEDCONFIG]{
     key![GROUP_DESCRIPTION] : String(100) @title : 'GROUP_DESCRIPTION';
     key![UNIT]              : String(5)   @title : 'UNIT';
     key![VALUE]             : String(500) @title : 'VALUE';
+}
+
+@cds.persistence.exists 
+Entity ![V_CIRVERSCEN] {
+key     ![LOCATION_ID]: String(4)  @title: 'LOCATION_ID' ; 
+key     ![PRODUCT_ID]: String(40)  @title: 'PRODUCT_ID' ; 
+key     ![REF_PRODID]: String(40)  @title: 'REF_PRODID' ; 
+key     ![VERSION]: String(10)  @title: 'VERSION' ; 
+key     ![SCENARIO]: String(32)  @title: 'SCENARIO' ; 
 }
