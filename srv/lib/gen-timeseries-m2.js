@@ -11,13 +11,6 @@ class GenTimeseriesM2 {
     async genTimeseries(adata) {
         console.log("Method 2 timeseries Service started");
 
-        const lDate = new Date();
-        const lStartDate = new Date(
-            lDate.getFullYear(),
-            lDate.getMonth(),
-            lDate.getDate() - adata.PAST_DAYS
-        );
-
         // Get Sales Count Information
         const liPrimaryID = await SELECT.from('V_UNIQUE_ID')
                                         .columns([	"UNIQUE_ID",
@@ -62,8 +55,6 @@ class GenTimeseriesM2 {
             AND A.PRODUCT_ID  = B.PRODUCT_ID
             WHERE A.LOCATION_ID = '` + adata.LOCATION_ID + `'
               AND A.PRODUCT_ID = '` + adata.PRODUCT_ID + `'
-              AND B.WEEK_DATE >= '` + lStartDate.toISOString().split("T")[0] + `'
-              AND B.WEEK_DATE <= '` + GenF.getCurrentDate() + `'
             GROUP BY 
                 A.LOCATION_ID,
                 A.PRODUCT_ID,

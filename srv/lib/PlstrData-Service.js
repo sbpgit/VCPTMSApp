@@ -64,6 +64,14 @@ module.exports = async function (srv) {
     return (await _genFutureTsForPrimary(req,true));
   })
 
+ srv.on ('genPrimeAndUqiue',    async req => {
+    return (await _genPrimeAndUqiue(req,false));
+ })
+
+ srv.on ('fgenPrimeAndUqiue',    async req => {
+    return (await _genPrimeAndUqiue(req,true));
+  })
+
 
   async function _genMasterData(req,isGet) {
 
@@ -1284,10 +1292,11 @@ module.exports = async function (srv) {
     {
         let str = JSON.stringify(sqlPrimaryResults[priIndex]);
         let obj = JSON.parse(str);
-        let arrayKeys = Object.keys(obj)
+        let arrayKeys = Object.keys(obj);
         let arrayVals = Object.values(obj);
-        console.log("PRIMARY_ID_CHARVALS INDEX ", priIndex+1);
-
+        console.log("PRIMARY_ID_CHARVALS INDEX ", priIndex+1, "TOTAL PRIMARY_ID_CHARVALS ", sqlPrimaryResults.length);
+        if( priIndex % 1000 == 0)
+            await cds.run('COMMIT');
         // console.log("arrayKeys ", arrayKeys, "arrayVals", arrayVals);
         for (let arrayIndex = 0; arrayIndex < arrayKeys.length; arrayIndex++)
         {
@@ -1345,8 +1354,46 @@ module.exports = async function (srv) {
     }
 
 
+    async function _genPrimeAndUqiue(req,isGet) {
+
+        var reqData = "Request for PRimary And Unique IDs generation Queued Sucessfully";
+    
+        console.log("_genPrimeAndUqiue reqData : ", reqData);
+        let createtAt = new Date();
+        let id = uuidv1();
+        let values = [];	
+      
+        values.push({id, createtAt, reqData});    
+    
+        if (isGet == true)
+        {
+            req.reply({values});
+        }
+        else
+        {
+            let res = req._.req.res;
+            res.statusCode = 202;
+            res.send({values});
+        }
+    
+       
+    
+        let sqlStr ='UPSERT PLSTR_PRODUCT_ID_CHARVALS ("REF_PRODUCT", "LOCATION_ID", "TYPE", "PRODUCT_ID", "CLASS_NUM", "CHARVAL_NUM")' +
+        ' SELECT DISTINCT PRODUCT_ID,LOCATION_ID, \'PRIMARY\',PRIMARY_ID, CLASS_NUM , CHARVAL_NUM FROM "V_PLSTR_PROD_PARTIAL_CHARVALS"';
+        console.log("PLSTR_PRODUCT_ID_CHARVALS sqlStr ", sqlStr);
+
+        let results = await cds.run(sqlStr);
+        console.log("PLSTR_PRODUCT_ID_CHARVALS results ", results);
+
+        sqlStr ='UPSERT PLSTR_PRODUCT_ID_CHARVALS ("REF_PRODUCT", "LOCATION_ID", "TYPE", "PRODUCT_ID", "CLASS_NUM", "CHARVAL_NUM")' +
+        ' SELECT DISTINCT PRODUCT_ID,LOCATION_ID,  \'PRIMARY\',PRIMARY_ID, CLASS_NUM , CHARVAL_NUM FROM "V_PLSTR_PROD_PRIMARY_CHARVALS"';
+        console.log("PLSTR_PRODUCT_ID_CHARVALS sqlStr ", sqlStr);
+
+        results = await cds.run(sqlStr);
+        console.log("PLSTR_PRODUCT_ID_CHARVALS results ", results);
 
 
+    }
 
 
     async function _genTsForPrimary(req,isGet) {
@@ -1601,11 +1648,13 @@ module.exports = async function (srv) {
             res.send({values});
         }
 
-        let sqlFuturePrimarIds = 'SELECT DISTINCT WEEK_DATE, LOCATION_ID, REF_PRODID, PARTIAL_ID, PRIMARY_ID, CLASS_NUM,' +
-                                ' VERSION, SCENARIO FROM V_PLSTR_IBP_FUTURE_TS ' +
-                                'ORDER BY  WEEK_DATE, LOCATION_ID, REF_PRODID, PARTIAL_ID, PRIMARY_ID, CLASS_NUM, VERSION, SCENARIO ASC';
+        // let sqlFuturePrimarIds = 'SELECT DISTINCT WEEK_DATE, LOCATION_ID, REF_PRODID, PARTIAL_ID, PRIMARY_ID, CLASS_NUM,' +
+        //                         ' VERSION, SCENARIO FROM V_PLSTR_IBP_FUTURE_TS ' +
+        //                         'ORDER BY  WEEK_DATE, LOCATION_ID, REF_PRODID, PARTIAL_ID, PRIMARY_ID, CLASS_NUM, VERSION, SCENARIO ASC';
 
-
+        let sqlFuturePrimarIds = 'SELECT DISTINCT WEEK_DATE, LOCATION_ID, REF_PRODUCT, PRODUCT_ID, PRIMARY_ID, CLASS_NUM,' +
+                                ' VERSION, SCENARIO FROM V_PLSTR_IBP_FCHAR_BY_PRIMARY ' +
+                                'ORDER BY  WEEK_DATE, LOCATION_ID, REF_PRODUCT, PRODUCT_ID, PRIMARY_ID, CLASS_NUM, VERSION, SCENARIO ASC';
         console.log("sqlStrsqlStrIbpFuture ", sqlFuturePrimarIds )
         let sqlFuturePrimarIdsResults = await cds.run(sqlFuturePrimarIds);
         // console.log("sqlFuturePrimarIdsResults ", sqlFuturePrimarIdsResults);
@@ -1618,8 +1667,8 @@ module.exports = async function (srv) {
             let arrayVals = Object.values(obj);
             let weekdate = arrayVals[0];
             let locationId = arrayVals[1];
-            let productId = arrayVals[2];
-            let partialId = arrayVals[3];
+            let refProduct = arrayVals[2];
+            let productId = arrayVals[3];
             let primaryId = arrayVals[4];
             let objdep_counter = primaryId.split('_');
             let objDep = objdep_counter[0];
@@ -1629,23 +1678,27 @@ module.exports = async function (srv) {
             let scenario = arrayVals[7];
             let objType = 'PI';
 
-            let sqlPrimaryIdCharvals = 'SELECT DISTINCT WEEK_DATE, LOCATION_ID, REF_PRODID, PARTIAL_ID, PRIMARY_ID, CLASS_NUM,' +
-                                ' VERSION, SCENARIO, CHARVAL_NUM, OPT_PERCENT, OPT_QTY FROM V_PLSTR_IBP_FUTURE_TS ' +
+            // let sqlPrimaryIdCharvals = 'SELECT DISTINCT WEEK_DATE, LOCATION_ID, REF_PRODID, PARTIAL_ID, PRIMARY_ID, CLASS_NUM,' +
+            //                     ' VERSION, SCENARIO, CHARVAL_NUM, OPT_PERCENT, OPT_QTY FROM V_PLSTR_IBP_FUTURE_TS ' +
+            
+            let sqlPrimaryIdCharvals =  'SELECT DISTINCT WEEK_DATE, LOCATION_ID, REF_PRODUCT, PRODUCT_ID, PRIMARY_ID, CLASS_NUM,' +
+                                ' VERSION, SCENARIO, CHARVAL_NUM, OPT_PERCENT, OPT_QTY FROM V_PLSTR_IBP_FCHAR_BY_PRIMARY ' +
                                 ' WHERE ' +
                                 ' WEEK_DATE = ' + "'"  + weekdate + "'" + ' AND ' + 
                                 ' LOCATION_ID = ' + "'"  + locationId + "'" + ' AND ' + 
-                                ' REF_PRODID = ' + "'"  + productId + "'" + ' AND ' + 
-                                ' PARTIAL_ID = ' + "'"  + partialId + "'" + ' AND ' + 
+                                ' REF_PRODUCT = ' + "'"  + refProduct + "'" + ' AND ' + 
+                                ' PRODUCT_ID = ' + "'"  + productId + "'" + ' AND ' + 
                                 ' PRIMARY_ID = ' + "'"  + primaryId + "'" + ' AND ' + 
                                 ' CLASS_NUM = ' + "'"  + classNum + "'" + ' AND ' + 
                                 ' VERSION = ' + "'"  + version + "'" + ' AND ' + 
                                 ' SCENARIO = ' + "'"  + scenario + "'" + 
-                                ' ORDER BY WEEK_DATE, LOCATION_ID, REF_PRODID, PARTIAL_ID, PRIMARY_ID, CLASS_NUM, ' +
+                                ' ORDER BY WEEK_DATE, LOCATION_ID, REF_PRODUCT, PRODUCT_ID, PRIMARY_ID, CLASS_NUM, ' +
                                 ' VERSION, SCENARIO, CHARVAL_NUM';
             
             // console.log("sqlPrimaryIdCharvals ", sqlPrimaryIdCharvals )
             let sqlPrimaryIdCharvalsResults = await cds.run(sqlPrimaryIdCharvals);
             // console.log("sqlPrimaryIdCharvals ", sqlPrimaryIdCharvalsResults);
+            // console.log("sqlPrimaryIdCharvals results length", sqlPrimaryIdCharvalsResults.length);
 
             for (let charIndex = 0; charIndex < sqlPrimaryIdCharvalsResults.length; charIndex++)
             {
@@ -1662,7 +1715,7 @@ module.exports = async function (srv) {
                 let sqlStrObjdepCharHdrF = await 'UPSERT CP_TS_OBJDEP_CHARHDR_F VALUES (' +
                                         "'" + weekdate + "'" + "," +
                                         "'" + locationId + "'" + "," +
-                                        "'" + productId + "'" + "," +
+                                        "'" + refProduct + "'" + "," +
                                         "'" + objType + "'" + "," +
                                         "'" + objDep + "'" + "," +
                                         "'" + parseInt(objCounter) + "'" + "," +

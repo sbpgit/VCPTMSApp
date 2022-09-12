@@ -43,7 +43,7 @@
         "node": "^12 || ^14"
     },
     "scripts": {
-        "start": "NODE_ENV=production cds run",
+        "start": "NODE_ENV=production cds watch --profile hybrid",
         "watch-cfgprd_pvsroot": "cds watch --open cfgprd_pvsroot/webapp/index.html#fe-lrop-v4",
         "undeploy": "cf undeploy config_products --delete-services --delete-service-keys --delete-service-brokers",
         "watch-project1": "cds watch --open project1/webapp/index.html#fe-lrop-v4",
