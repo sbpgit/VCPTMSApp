@@ -7,6 +7,7 @@ const { createLogger, format, transports } = require("winston");
 const { combine, timestamp, label, prettyPrint } = format;
 //const ComponentReq = require("./component-req");
 const GenTimeseries = require("./gen-timeseries");
+const GenTimeseriesM2 = require("./gen-timeseries-m2");
 const SOFunctions = require("./so-function");
 const Catservicefn = require("./catservice-function");
 const VarConfig = require("./variantconfig");
@@ -754,8 +755,8 @@ module.exports = (srv) => {
 
     // Generate Timeseries using action call
     srv.on("generateTimeseries", async (req) => {
-        const obgenTimeseries = new GenTimeseries();
-        await obgenTimeseries.genTimeseries(req.data);
+        // const obgenTimeseries = new GenTimeseries();
+        // await obgenTimeseries.genTimeseries(req.data);
 
         const obgenTimeseriesM2 = new GenTimeseriesM2();
         await obgenTimeseriesM2.genTimeseries(req.data);

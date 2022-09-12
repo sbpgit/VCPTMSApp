@@ -4437,6 +4437,148 @@
     },
     "cp.SALES_S": {
       "kind": "entity",
+      "@UI.SelectionFields": [
+        {
+          "=": "LOCATION_ID"
+        },
+        {
+          "=": "PRODUCT_ID"
+        },
+        {
+          "=": "SALES_DOC"
+        }
+      ],
+      "@UI.LineItem": [
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "SALES_DOC"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "LOCATION_ID"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "PRODUCT_ID"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "QUANTITY"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "STATUS"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "ORDER_NUMBER"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "PURCHASE_REQ"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          }
+        }
+      ],
+      "@UI.HeaderInfo.Title.Value": {
+        "=": "LOCATION_ID"
+      },
+      "@UI.HeaderInfo.Description.Value": {
+        "=": "PRODUCT_ID"
+      },
+      "@UI.HeaderInfo.TypeName": "Sales Stock",
+      "@UI.HeaderInfo.TypeNamePlural": "Sales Stock",
+      "@UI.FieldGroup#Details.Data": [
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "SALES_DOC"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "LOCATION_ID"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "PRODUCT_ID"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "QUANTITY"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "STATUS"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "ORDER_NUMBER"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "PURCHASE_REQ"
+          }
+        }
+      ],
+      "@UI.Facets": [
+        {
+          "$Type": "UI.CollectionFacet",
+          "ID": "SALESS",
+          "Label": "Sales Stock",
+          "Facets": [
+            {
+              "$Type": "UI.ReferenceFacet",
+              "Label": "Sales Stock",
+              "Target": "@UI.FieldGroup#Details"
+            }
+          ]
+        }
+      ],
       "elements": {
         "SALES_DOC": {
           "@title": "Sales Document",
@@ -15209,6 +15351,15 @@
         "type": "cds.String"
       }
     },
+    "PlstrDataService.genPrimeAndUqiue": {
+      "kind": "action"
+    },
+    "PlstrDataService.fgenPrimeAndUqiue": {
+      "kind": "function",
+      "returns": {
+        "type": "cds.String"
+      }
+    },
     "CatalogService": {
       "@source": "srv/cat-service.cds",
       "kind": "service",
@@ -18965,9 +19116,6 @@
         "PRODUCT_ID": {
           "type": "cds.String",
           "length": 40
-        },
-        "PAST_DAYS": {
-          "type": "cds.Integer"
         }
       },
       "returns": {
@@ -19284,9 +19432,6 @@
         "PRODUCT_ID": {
           "type": "cds.String",
           "length": 40
-        },
-        "PAST_DAYS": {
-          "type": "cds.Integer"
         }
       }
     },
@@ -21329,6 +21474,213 @@
       "returns": {
         "items": {
           "type": "cp_ds.uniqueCharItems"
+        }
+      }
+    },
+    "CatalogService.getSalesStock": {
+      "kind": "entity",
+      "@UI.SelectionFields": [
+        {
+          "=": "LOCATION_ID"
+        },
+        {
+          "=": "PRODUCT_ID"
+        },
+        {
+          "=": "SALES_DOC"
+        }
+      ],
+      "@UI.LineItem": [
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "SALES_DOC"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "LOCATION_ID"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "PRODUCT_ID"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "QUANTITY"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "STATUS"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "ORDER_NUMBER"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "PURCHASE_REQ"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          }
+        }
+      ],
+      "@UI.HeaderInfo.Title.Value": {
+        "=": "LOCATION_ID"
+      },
+      "@UI.HeaderInfo.Description.Value": {
+        "=": "PRODUCT_ID"
+      },
+      "@UI.HeaderInfo.TypeName": "Sales Stock",
+      "@UI.HeaderInfo.TypeNamePlural": "Sales Stock",
+      "@UI.FieldGroup#Details.Data": [
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "SALES_DOC"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "LOCATION_ID"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "PRODUCT_ID"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "QUANTITY"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "STATUS"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "ORDER_NUMBER"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "PURCHASE_REQ"
+          }
+        }
+      ],
+      "@UI.Facets": [
+        {
+          "$Type": "UI.CollectionFacet",
+          "ID": "SALESS",
+          "Label": "Sales Stock",
+          "Facets": [
+            {
+              "$Type": "UI.ReferenceFacet",
+              "Label": "Sales Stock",
+              "Target": "@UI.FieldGroup#Details"
+            }
+          ]
+        }
+      ],
+      "projection": {
+        "from": {
+          "ref": [
+            "cp.SALES_S"
+          ]
+        }
+      },
+      "elements": {
+        "SALES_DOC": {
+          "@title": "Sales Document",
+          "key": true,
+          "type": "cds.String",
+          "length": 10
+        },
+        "PRODUCT_ID": {
+          "@title": "Product",
+          "type": "cds.String",
+          "length": 40
+        },
+        "LOCATION_ID": {
+          "@title": "Location ",
+          "type": "cds.String",
+          "length": 4
+        },
+        "QUANTITY": {
+          "type": "cds.Decimal",
+          "precision": 13,
+          "scale": 3
+        },
+        "STATUS": {
+          "type": "cds.String",
+          "length": 10
+        },
+        "ORDER_NUMBER": {
+          "type": "cds.String",
+          "length": 10
+        },
+        "PURCHASE_REQ": {
+          "type": "cds.String",
+          "length": 12
+        },
+        "CHANGED_DATE": {
+          "type": "cds.Date"
+        },
+        "CHANGED_TIME": {
+          "type": "cds.Time"
+        },
+        "CHANGED_BY": {
+          "type": "cds.String",
+          "length": 12
+        },
+        "CREATED_DATE": {
+          "type": "cds.Date"
+        },
+        "CREATED_TIME": {
+          "type": "cds.Time"
+        },
+        "CREATED_BY": {
+          "type": "cds.String",
+          "length": 12
         }
       }
     },

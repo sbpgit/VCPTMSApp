@@ -280,5 +280,5 @@ service CatalogService @(impl : './lib/cat-service.js'){
     function getUniqueIdItems(UNIQUE_ID : Integer) returns array of ds.uniqueCharItems;
     
     // EOI - Deepa
-    
+    entity getSalesStock as projection on od.SALES_S;
 }

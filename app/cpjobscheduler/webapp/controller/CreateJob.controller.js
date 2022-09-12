@@ -2141,7 +2141,7 @@ sap.ui.define(
 						vRuleslist = {
 							LOCATION_ID: oLocItem,
 							PRODUCT_ID: oProdItem,
-							PAST_DAYS: parseInt(oPastDays),
+							// PAST_DAYS: parseInt(oPastDays),
 						};
 
 						this.oGModel.setProperty("/vcrulesData", vRuleslist);
