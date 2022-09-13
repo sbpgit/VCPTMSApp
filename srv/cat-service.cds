@@ -278,6 +278,9 @@ service CatalogService @(impl : './lib/cat-service.js'){
     
     // function getCIRWeekly(FROMDATE : Date, TODATE : Date)  returns array of ds.cirWkly;
     function getUniqueIdItems(UNIQUE_ID : Integer) returns array of ds.uniqueCharItems;
+
+    // Publish CIR data to ECC
+    function postCIRQuantities(UNIQUE_DATA : ds.uniqueIDQtyChars) returns String;
     
     // EOI - Deepa
     

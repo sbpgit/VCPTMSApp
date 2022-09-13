@@ -1884,47 +1884,28 @@ module.exports = (srv) => {
         return liCompWeekly;
     });
 
-    // Service for Unique Characteristic Items
-    srv.on("getUniqueIdItems", async (req) => {
-        let { genAsmbComp } = srv.entities;
-        // let vDateFrom = req.data.FROMDATE; //"2022-03-04";
-        // let vDateTo = req.data.TODATE; //"2023-01-03";
-        let liUniqueItems = [];
-        let lsUniqueItems= {};
-        let vUniqueId = req.data.UNIQUE_ID;
-        // let liDates = [],
-        //     vWeekIndex,
-        //     vCompIndex,
-        //     vDateIndex,
-        //     vComp,
-        //     lsDates = {};
-        // let columnname = "WEEK";
+    // POST Service for Unique Characteristic Items and Weekly Quantities
+    srv.on("postCIRQuantities", async (req) => {
+        let liUniqueItems = req.data; 
+        res.message = "postData";       
 
-    
-
-        const ltUniqueItems = await cds.run(
-            `
-            SELECT * FROM "CP_UNIQUE_ID_ITEM"
-            WHERE "UNIQUE_ID" = '` + vUniqueId + `'`
-        );
-
-        for (let j = 0; j < ltUniqueItems.length; j++) {
+        for (let j = 0; j < liUniqueItems.length; j++) {
             // Initially set vWeekIndex to j to geneate Week columns
             // vCompIndex is to get Componnent quantity for all dates
             // vWeekIndex = 0; //j
-            lsUniqueItems.UNIQUE_ID = ltUniqueItems[j].UNIQUE_ID;
-            lsUniqueItems.LOCATION_ID = ltUniqueItems[j].LOCATION_ID;
-            lsUniqueItems.PRODUCT_ID = ltUniqueItems[j].PRODUCT_ID;
-            lsUniqueItems.CHAR_NUM= ltUniqueItems[j].CHAR_NUM;
-            lsUniqueItems.CHARVAL_NUM = ltUniqueItems[j].CHARVAL_NUM;           
-            lsUniqueItems.UID_CHAR_RATE = ltUniqueItems[j].UID_CHAR_RATE;
+            // lsUniqueItems.UNIQUE_ID = ltUniqueItems[j].UNIQUE_ID;
+            // lsUniqueItems.LOCATION_ID = ltUniqueItems[j].LOCATION_ID;
+            // lsUniqueItems.PRODUCT_ID = ltUniqueItems[j].PRODUCT_ID;
+            // lsUniqueItems.CHAR_NUM= ltUniqueItems[j].CHAR_NUM;
+            // lsUniqueItems.CHARVAL_NUM = ltUniqueItems[j].CHARVAL_NUM;           
+            // lsUniqueItems.UID_CHAR_RATE = ltUniqueItems[j].UID_CHAR_RATE;
 
-            liUniqueItems.push(GenFunctions.parse(lsUniqueItems));
-            lsUniqueItems = {};
+            // liUniqueItems.push(GenFunctions.parse(lsUniqueItems));
+            // lsUniqueItems = {};
         }
-        // liCompWeekly.sort(GenFunctions.dynamicSortMultiple("STRUC_NODE", "UNIQUE_ID", "ITEM_NUM"));
-        return liUniqueItems;
-    })
+        return res.message;
+    });
+
 
     // EOI - Deepa
 
