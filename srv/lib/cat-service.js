@@ -7,6 +7,7 @@ const { createLogger, format, transports } = require("winston");
 const { combine, timestamp, label, prettyPrint } = format;
 //const ComponentReq = require("./component-req");
 const GenTimeseries = require("./gen-timeseries");
+const GenTimeseriesM2 = require("./gen-timeseries-m2");
 const SOFunctions = require("./so-function");
 const Catservicefn = require("./catservice-function");
 const VarConfig = require("./variantconfig");
@@ -754,8 +755,8 @@ module.exports = (srv) => {
 
     // Generate Timeseries using action call
     srv.on("generateTimeseries", async (req) => {
-        const obgenTimeseries = new GenTimeseries();
-        await obgenTimeseries.genTimeseries(req.data);
+        // const obgenTimeseries = new GenTimeseries();
+        // await obgenTimeseries.genTimeseries(req.data);
 
         const obgenTimeseriesM2 = new GenTimeseriesM2();
         await obgenTimeseriesM2.genTimeseries(req.data);
@@ -769,15 +770,15 @@ module.exports = (srv) => {
     });
     // Generate Timeseries fucntion calls
     srv.on("generate_timeseries", async (req) => {
-        const obgenTimeseries = new GenTimeseries();
-        await obgenTimeseries.genTimeseries(req.data);
+        // const obgenTimeseries = new GenTimeseries();
+        // await obgenTimeseries.genTimeseries(req.data);
 
         const obgenTimeseriesM2 = new GenTimeseriesM2();
         await obgenTimeseriesM2.genTimeseries(req.data);
     });
     srv.on("generate_timeseriesF", async (req) => {
-        const obgenTimeseries = new GenTimeseries();
-        await obgenTimeseries.genTimeseriesF(req.data);
+        // const obgenTimeseries = new GenTimeseries();
+        // await obgenTimeseries.genTimeseriesF(req.data);
 
         const obgenTimeseriesM2 = new GenTimeseriesM2();
         await obgenTimeseriesM2.genTimeseriesF(req.data);
@@ -791,17 +792,17 @@ module.exports = (srv) => {
     srv.on("gen_UniqueID", async (req) => {
         const obgenSOFunctions = new SOFunctions();
         await obgenSOFunctions.genUniqueID(req.data);
-    });    
+    });
     // Generate Fully Configured Demand
     srv.on("genFullConfigDemand", async (req) => {
         const obgenTimeseriesM2 = new GenTimeseriesM2();
         await obgenTimeseriesM2.genPrediction(req.data);
-    });    
+    });
     // Generate Fully Configured Demand
     srv.on("gen_FullConfigDemand", async (req) => {
         const obgenTimeseriesM2 = new GenTimeseriesM2();
         await obgenTimeseriesM2.genPrediction(req.data);
-    });       
+    });
 
     srv.on("genVariantStruc", async (req) => {
 
@@ -1751,29 +1752,33 @@ module.exports = (srv) => {
 
         const liCIRQty = await cds.run(
             `
-            SELECT * FROM "CP_CIR_GENERATED"
-            WHERE "LOCATION_ID" = '` +
+            SELECT * 
+            FROM "CP_CIR_GENERATED" 
+            inner join "CP_PARTIALPROD_INTRO"
+            ON "CP_CIR_GENERATED"."PRODUCT_ID" = "CP_PARTIALPROD_INTRO"."PRODUCT_ID"
+            AND "CP_CIR_GENERATED"."LOCATION_ID" = "CP_PARTIALPROD_INTRO"."LOCATION_ID"
+            WHERE  "CP_CIR_GENERATED"."LOCATION_ID" = '` +
             req.data.LOCATION_ID +
             `'
-                 AND "PRODUCT_ID" = '` +
+                 AND  "CP_PARTIALPROD_INTRO"."REF_PRODID" = '` +
             req.data.PRODUCT_ID +
-            `' AND "VERSION" = '` +
+            `' AND  "CP_CIR_GENERATED"."VERSION" = '` +
             req.data.VERSION +
-            `' AND "SCENARIO" = '` +
+            `' AND  "CP_CIR_GENERATED"."SCENARIO" = '` +
             req.data.SCENARIO +
-            `' AND ( "WEEK_DATE" <= '` +
+            `' AND (  "CP_CIR_GENERATED"."WEEK_DATE" <= '` +
             vDateTo +
-            `' AND "WEEK_DATE" >= '` +
+            `' AND  "CP_CIR_GENERATED"."WEEK_DATE" >= '` +
             vDateFrom +
-            `') AND "MODEL_VERSION" = '` +
+            `') AND  "CP_CIR_GENERATED"."MODEL_VERSION" = '` +
             req.data.MODEL_VERSION +
             `'
                  ORDER BY 
-                      "LOCATION_ID" ASC, 
-                      "PRODUCT_ID" ASC,
-                      "VERSION" ASC,
-                      "SCENARIO" ASC,
-                      "WEEK_DATE" ASC`
+                 "CP_CIR_GENERATED"."LOCATION_ID" ASC, 
+                 "CP_CIR_GENERATED"."PRODUCT_ID" ASC,
+                 "CP_CIR_GENERATED"."VERSION" ASC,
+                 "CP_CIR_GENERATED"."SCENARIO" ASC,
+                 "CP_CIR_GENERATED"."WEEK_DATE" ASC`
         );
 
         // const liCIRQty = await cds.run(
@@ -1801,36 +1806,69 @@ module.exports = (srv) => {
         //             //   "WEEK_DATE" ASC`
         // );
 
+        // const liUniqueId = await cds.run(
+        //     `
+        //   SELECT DISTINCT "LOCATION_ID",
+        //                   "PRODUCT_ID",
+        //                   "VERSION",
+        //                   "SCENARIO",
+        //                   "UNIQUE_ID"
+        //   FROM "CP_CIR_GENERATED"
+        //   WHERE "LOCATION_ID" = '` +
+        //     req.data.LOCATION_ID +
+        //     `' AND "PRODUCT_ID" = '` +
+        //     req.data.PRODUCT_ID +
+        //     `' AND "VERSION" = '` +
+        //     req.data.VERSION +
+        //     `' AND "SCENARIO" = '` +
+        //     req.data.SCENARIO +
+        //     `' AND ( "WEEK_DATE" <= '` +
+        //     vDateTo +
+        //     `'
+        //         AND "WEEK_DATE" >= '` +
+        //     vDateFrom +
+        //     `') AND "MODEL_VERSION" = '` +
+        //     req.data.MODEL_VERSION +
+        //     `'
+        //        ORDER BY 
+        //             "LOCATION_ID" ASC, 
+        //             "PRODUCT_ID" ASC,
+        //             "VERSION" ASC,
+        //             "SCENARIO" ASC,
+        //             "UNIQUE_ID" ASC`
+        // );
         const liUniqueId = await cds.run(
             `
-          SELECT DISTINCT "LOCATION_ID",
-                          "PRODUCT_ID",
-                          "VERSION",
-                          "SCENARIO",
-                          "UNIQUE_ID"
-          FROM "CP_CIR_GENERATED"
-          WHERE "LOCATION_ID" = '` +
+          SELECT DISTINCT "CP_CIR_GENERATED"."LOCATION_ID", 
+          "CP_CIR_GENERATED"."PRODUCT_ID",
+          "CP_CIR_GENERATED"."VERSION",
+          "CP_CIR_GENERATED"."SCENARIO",
+          "CP_CIR_GENERATED"."UNIQUE_ID"
+                          FROM "CP_CIR_GENERATED" 
+                          inner join "CP_PARTIALPROD_INTRO"
+                          ON "CP_CIR_GENERATED"."PRODUCT_ID" = "CP_PARTIALPROD_INTRO"."PRODUCT_ID"
+                          AND "CP_CIR_GENERATED"."LOCATION_ID" = "CP_PARTIALPROD_INTRO"."LOCATION_ID"
+                          WHERE  "CP_CIR_GENERATED"."LOCATION_ID" = '` +
             req.data.LOCATION_ID +
-            `' AND "PRODUCT_ID" = '` +
+            `' AND  "CP_PARTIALPROD_INTRO"."REF_PRODID" = '` +
             req.data.PRODUCT_ID +
-            `' AND "VERSION" = '` +
+            `' AND  "CP_CIR_GENERATED"."VERSION" = '` +
             req.data.VERSION +
-            `' AND "SCENARIO" = '` +
+            `' AND  "CP_CIR_GENERATED"."SCENARIO" = '` +
             req.data.SCENARIO +
-            `' AND ( "WEEK_DATE" <= '` +
+            `' AND (  "CP_CIR_GENERATED"."WEEK_DATE" <= '` +
             vDateTo +
-            `'
-                AND "WEEK_DATE" >= '` +
+            `' AND  "CP_CIR_GENERATED"."WEEK_DATE" >= '` +
             vDateFrom +
-            `') AND "MODEL_VERSION" = '` +
+            `') AND  "CP_CIR_GENERATED"."MODEL_VERSION" = '` +
             req.data.MODEL_VERSION +
             `'
-               ORDER BY 
-                    "LOCATION_ID" ASC, 
-                    "PRODUCT_ID" ASC,
-                    "VERSION" ASC,
-                    "SCENARIO" ASC,
-                    "UNIQUE_ID" ASC`
+                               ORDER BY 
+                               "CP_CIR_GENERATED"."LOCATION_ID" ASC, 
+                               "CP_CIR_GENERATED"."PRODUCT_ID" ASC,
+                               "CP_CIR_GENERATED"."VERSION" ASC,
+                               "CP_CIR_GENERATED"."SCENARIO" ASC,
+                               "CP_CIR_GENERATED"."UNIQUE_ID" ASC`
         );
         var vDateSeries = vDateFrom;
         lsDates.WEEK_DATE = GenFunctions.getNextMondayCmp(vDateSeries);
@@ -1858,7 +1896,7 @@ module.exports = (srv) => {
             //   lsCompWeekly.ASSEMBLY = liComp[j].COMPONENT;
             //lsCompWeekly.COMPONENT = liComp[j].COMPONENT;
             //lsCompWeekly.VERSION = liComp[j].VERSION;
-           // lsCompWeekly.SCENARIO = liComp[j].SCENARIO;
+            // lsCompWeekly.SCENARIO = liComp[j].SCENARIO;
             lsCompWeekly.UNIQUE_ID = liUniqueId[j].UNIQUE_ID;
             //lsCompWeekly.QTYTYPE = "Normalized";
 
@@ -1885,25 +1923,57 @@ module.exports = (srv) => {
     });
 
     // POST Service for Unique Characteristic Items and Weekly Quantities
-    srv.on("postCIRQuantities", async (req) => {
-        let liUniqueItems = req.data; 
-        res.message = "postData";       
+    // srv.on("postCIRQuantities", async (req) => {
+    //     let liUniqueItems = req.data; 
+    //     res.message = "postData";       
+    // Service for Unique Characteristic Items
+    srv.on("getUniqueIdItems", async (req) => {
+        let { genAsmbComp } = srv.entities;
+        // let vDateFrom = req.data.FROMDATE; //"2022-03-04";
+        // let vDateTo = req.data.TODATE; //"2023-01-03";
+        let liUniqueItems = [];
+        let lsUniqueItems = {};
+        let vUniqueId = req.data.UNIQUE_ID;
+        // let liDates = [],
+        //     vWeekIndex,
+        //     vCompIndex,
+        //     vDateIndex,
+        //     vComp,
+        //     lsDates = {};
+        // let columnname = "WEEK";
 
-        for (let j = 0; j < liUniqueItems.length; j++) {
-            // Initially set vWeekIndex to j to geneate Week columns
-            // vCompIndex is to get Componnent quantity for all dates
-            // vWeekIndex = 0; //j
-            // lsUniqueItems.UNIQUE_ID = ltUniqueItems[j].UNIQUE_ID;
-            // lsUniqueItems.LOCATION_ID = ltUniqueItems[j].LOCATION_ID;
-            // lsUniqueItems.PRODUCT_ID = ltUniqueItems[j].PRODUCT_ID;
-            // lsUniqueItems.CHAR_NUM= ltUniqueItems[j].CHAR_NUM;
-            // lsUniqueItems.CHARVAL_NUM = ltUniqueItems[j].CHARVAL_NUM;           
-            // lsUniqueItems.UID_CHAR_RATE = ltUniqueItems[j].UID_CHAR_RATE;
 
-            // liUniqueItems.push(GenFunctions.parse(lsUniqueItems));
-            // lsUniqueItems = {};
-        }
-        return res.message;
+
+        const ltUniqueItems = await cds.run(
+            `
+            SELECT * FROM "CP_UNIQUE_ID_ITEM"
+            WHERE "UNIQUE_ID" = '` + vUniqueId + `'`
+        );
+
+        // for (let j = 0; j < liUniqueItems.length; j++) {
+        //     // Initially set vWeekIndex to j to geneate Week columns
+        //     // vCompIndex is to get Componnent quantity for all dates
+        //     // vWeekIndex = 0; //j
+        //     // lsUniqueItems.UNIQUE_ID = ltUniqueItems[j].UNIQUE_ID;
+        //     // lsUniqueItems.LOCATION_ID = ltUniqueItems[j].LOCATION_ID;
+        //     // lsUniqueItems.PRODUCT_ID = ltUniqueItems[j].PRODUCT_ID;
+        //     // lsUniqueItems.CHAR_NUM= ltUniqueItems[j].CHAR_NUM;
+        //     // lsUniqueItems.CHARVAL_NUM = ltUniqueItems[j].CHARVAL_NUM;           
+        //     // lsUniqueItems.UID_CHAR_RATE = ltUniqueItems[j].UID_CHAR_RATE;
+
+        //     // liUniqueItems.push(GenFunctions.parse(lsUniqueItems));
+        //     // lsUniqueItems = {};
+        //     lsUniqueItems.UNIQUE_ID = ltUniqueItems[j].UNIQUE_ID;
+        //     lsUniqueItems.LOCATION_ID = ltUniqueItems[j].LOCATION_ID;
+        //     lsUniqueItems.PRODUCT_ID = ltUniqueItems[j].PRODUCT_ID;
+        //     lsUniqueItems.CHAR_NUM = ltUniqueItems[j].CHAR_NUM;
+        //     lsUniqueItems.CHARVAL_NUM = ltUniqueItems[j].CHARVAL_NUM;
+        //     lsUniqueItems.UID_CHAR_RATE = ltUniqueItems[j].UID_CHAR_RATE;
+
+        //     liUniqueItems.push(GenFunctions.parse(lsUniqueItems));
+        //     lsUniqueItems = {};
+        // }
+        // return res.message;
     });
 
 

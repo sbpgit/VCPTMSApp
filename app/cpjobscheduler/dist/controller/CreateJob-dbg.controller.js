@@ -1074,14 +1074,19 @@ sap.ui.define(
 					var oJobType = that.byId("idJobType").getSelectedKey();
 
 					// Calling sercive to get the Product list
-					this.getModel("BModel").read("/getLocProdDet", {
-						filters: [
-							new Filter(
-								"LOCATION_ID",
-								FilterOperator.EQ,
-								that.oLoc.getValue()
-							),
-						],
+					// this.getModel("BModel").read("/getLocProdDet", {
+						// filters: [
+						// 	new Filter(
+						// 		"LOCATION_ID",
+						// 		FilterOperator.EQ,
+						// 		that.oLoc.getValue()
+						// 	),
+						// ],
+                        that.getModel("BModel").callFunction("/getAllProd", {
+                            method: "GET",
+                            urlParameters: {
+                                LOCATION_ID: that.oLoc.getValue()
+                            },
 						success: function (oData) {
 							if (oJobType === "M" || oJobType === "P") {
 								sap.ui.getCore().byId("prodSlctList").setMultiSelect(true);
@@ -1376,14 +1381,19 @@ sap.ui.define(
 					) {
 						oScheData = oScheData.vcRulesList;
 						// Calling sercive to get the Product list
-						this.getModel("BModel").read("/getLocProdDet", {
-							filters: [
-								new Filter(
-									"LOCATION_ID",
-									FilterOperator.EQ,
-									oScheData[0].Location
-								),
-							],
+						// this.getModel("BModel").read("/getLocProdDet", {
+						// 	filters: [
+						// 		new Filter(
+						// 			"LOCATION_ID",
+						// 			FilterOperator.EQ,
+						// 			oScheData[0].Location
+						// 		),
+						// 	],
+                        that.getModel("BModel").callFunction("/getAllProd", {
+                            method: "GET",
+                            urlParameters: {
+                                LOCATION_ID: oScheData[0].Location
+                            },
 							success: function (oData) {
 								if (oJobType === "M" || oJobType === "P") {
 									if (oData.results.length > 0) {
@@ -2141,7 +2151,7 @@ sap.ui.define(
 						vRuleslist = {
 							LOCATION_ID: oLocItem,
 							PRODUCT_ID: oProdItem,
-							PAST_DAYS: parseInt(oPastDays),
+							// PAST_DAYS: parseInt(oPastDays),
 						};
 
 						this.oGModel.setProperty("/vcrulesData", vRuleslist);

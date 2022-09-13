@@ -1074,14 +1074,19 @@ sap.ui.define(
 					var oJobType = that.byId("idJobType").getSelectedKey();
 
 					// Calling sercive to get the Product list
-					this.getModel("BModel").read("/getLocProdDet", {
-						filters: [
-							new Filter(
-								"LOCATION_ID",
-								FilterOperator.EQ,
-								that.oLoc.getValue()
-							),
-						],
+					// this.getModel("BModel").read("/getLocProdDet", {
+						// filters: [
+						// 	new Filter(
+						// 		"LOCATION_ID",
+						// 		FilterOperator.EQ,
+						// 		that.oLoc.getValue()
+						// 	),
+						// ],
+                        that.getModel("BModel").callFunction("/getAllProd", {
+                            method: "GET",
+                            urlParameters: {
+                                LOCATION_ID: that.oLoc.getValue()
+                            },
 						success: function (oData) {
 							if (oJobType === "M" || oJobType === "P") {
 								sap.ui.getCore().byId("prodSlctList").setMultiSelect(true);
@@ -1376,14 +1381,19 @@ sap.ui.define(
 					) {
 						oScheData = oScheData.vcRulesList;
 						// Calling sercive to get the Product list
-						this.getModel("BModel").read("/getLocProdDet", {
-							filters: [
-								new Filter(
-									"LOCATION_ID",
-									FilterOperator.EQ,
-									oScheData[0].Location
-								),
-							],
+						// this.getModel("BModel").read("/getLocProdDet", {
+						// 	filters: [
+						// 		new Filter(
+						// 			"LOCATION_ID",
+						// 			FilterOperator.EQ,
+						// 			oScheData[0].Location
+						// 		),
+						// 	],
+                        that.getModel("BModel").callFunction("/getAllProd", {
+                            method: "GET",
+                            urlParameters: {
+                                LOCATION_ID: oScheData[0].Location
+                            },
 							success: function (oData) {
 								if (oJobType === "M" || oJobType === "P") {
 									if (oData.results.length > 0) {
@@ -2141,7 +2151,7 @@ sap.ui.define(
 						vRuleslist = {
 							LOCATION_ID: oLocItem,
 							PRODUCT_ID: oProdItem,
-							PAST_DAYS: parseInt(oPastDays),
+							// PAST_DAYS: parseInt(oPastDays),
 						};
 
 						this.oGModel.setProperty("/vcrulesData", vRuleslist);
@@ -3104,6 +3114,8 @@ sap.ui.define(
 						 // 07-09-2022-1
 						} else if (bButton.includes("sales orders")) {
                             actionText = "%2Fcatalog%2FgenUniqueID";
+                        } else if (bButton === "Generate Fully configured Demand") {
+                            actionText = "%2Fcatalog%2FgenFullConfigDemand";                            
                         }
                          // 07-09-2022-1 
 					}
@@ -3210,7 +3222,7 @@ sap.ui.define(
 						});
 					} else {
 						// filling data to create new job and schedule based on inputs provided
-						if (bButton.includes("Demand") || bButton.includes("Future")) {
+						if (bButton === "IBP Demand"  || bButton.includes("Future")) {
 							var finalList = {
 								name: JobName,
 								description: sap.ui.getCore().byId("idDesc").getValue(),
@@ -3261,7 +3273,7 @@ sap.ui.define(
 							};
 							// Getting data for Timeseries
 						// 07-09-2022-1
-                    } else if (bButton.includes("Time") || bButton.includes("sales orders")) {
+                    } else if (bButton.includes("Time") || bButton.includes("sales orders")  || bButton === "Generate Fully configured Demand") {
                         // 07-09-2022-1
 							var finalList = {
 								name: JobName,

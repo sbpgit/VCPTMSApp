@@ -2,7 +2,7 @@ PARAMETER_ID;GROUP_ID;DESCRIPTION;MIN_VALUE;MAX_VALUE;VALUE_HELP;VALUE_HELP_TAB
 1;1;Frozen Horizon;0;90;false;NA
 2;1;Customer Independent Requirements Horizon;0;180;false;NA
 3;1;Component Requirements Horizon;0;365;false;NA
-4;1;History Consideration;0;1000;false;NA
+4;1;History Considerations;0;1000;false;NA
 5;2;Execution;0;0;true;Method_Types
 6;3;Seed Order Series;1;9999;false;NA
 7;3;Seed Order Prefix;0;0;false;NA
