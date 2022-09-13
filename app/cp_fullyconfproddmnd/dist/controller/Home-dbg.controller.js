@@ -650,7 +650,7 @@ sap.ui.define(
                     that.oScen.setValue("");
 
                     // Calling service to get the IBP Varsion data
-                    this.getModel("CIRModel").read("/getIbpVerScn", {
+                    this.getModel("CIRModel").read("/getCIRVerScen", {
                         filters: [
                             new Filter(
                                 "LOCATION_ID",
@@ -658,7 +658,7 @@ sap.ui.define(
                                 that.oGModel.getProperty("/SelectedLoc")
                             ),
                             new Filter(
-                                "PRODUCT_ID",
+                                "REF_PRODID",
                                 FilterOperator.EQ,
                                 that.oGModel.getProperty("/SelectedProd")
                                 // aSelectedItems[0].getTitle()
@@ -685,7 +685,7 @@ sap.ui.define(
                         aSelectedItems[0].getTitle()
                     );
                     // Calling service to get the Scenario data
-                    this.getModel("CIRModel").read("/getIbpVerScn", {
+                    this.getModel("CIRModel").read("/getCIRVerScen", {
                         filters: [
                             new Filter(
                                 "LOCATION_ID",
@@ -693,7 +693,7 @@ sap.ui.define(
                                 that.oGModel.getProperty("/SelectedLoc")
                             ),
                             new Filter(
-                                "PRODUCT_ID",
+                                "REF_PRODID",
                                 FilterOperator.EQ,
                                 that.oGModel.getProperty("/SelectedProd")
                             ),

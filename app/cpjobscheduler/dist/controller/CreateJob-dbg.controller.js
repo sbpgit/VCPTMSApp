@@ -3114,6 +3114,8 @@ sap.ui.define(
 						 // 07-09-2022-1
 						} else if (bButton.includes("sales orders")) {
                             actionText = "%2Fcatalog%2FgenUniqueID";
+                        } else if (bButton === "Generate Fully configured Demand") {
+                            actionText = "%2Fcatalog%2FgenFullConfigDemand";                            
                         }
                          // 07-09-2022-1 
 					}
@@ -3220,7 +3222,7 @@ sap.ui.define(
 						});
 					} else {
 						// filling data to create new job and schedule based on inputs provided
-						if (bButton.includes("Demand") || bButton.includes("Future")) {
+						if (bButton === "IBP Demand"  || bButton.includes("Future")) {
 							var finalList = {
 								name: JobName,
 								description: sap.ui.getCore().byId("idDesc").getValue(),
@@ -3271,7 +3273,7 @@ sap.ui.define(
 							};
 							// Getting data for Timeseries
 						// 07-09-2022-1
-                    } else if (bButton.includes("Time") || bButton.includes("sales orders")) {
+                    } else if (bButton.includes("Time") || bButton.includes("sales orders")  || bButton === "Generate Fully configured Demand") {
                         // 07-09-2022-1
 							var finalList = {
 								name: JobName,
