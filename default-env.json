@@ -2,11 +2,11 @@
     "VCAP_SERVICES": {
         "destination": [
             {
-                "binding_guid": "357b7322-995a-4c0e-b342-2058adae6505",
+                "binding_guid": "52bcee62-0e1d-40fc-9580-7d738b58d076",
                 "binding_name": null,
                 "credentials": {
                     "clientid": "sb-clone2495476ab85c424d84cc1b00f61e59e5!b94427|destination-xsappname!b62",
-                    "clientsecret": "357b7322-995a-4c0e-b342-2058adae6505$xBNG-H4pe6BRYih86gyNsz_WRxDFecMDNyaj6jp1c5s=",
+                    "clientsecret": "52bcee62-0e1d-40fc-9580-7d738b58d076$XA9Qp-tFck4Zl-NlU3D1_Jkf__EHbCJr7wFl8tm4Y1k=",
                     "credential-type": "binding-secret",
                     "identityzone": "vcpprovider-sc0jeojq",
                     "instanceid": "2495476a-b85c-424d-84cc-1b00f61e59e5",
@@ -33,11 +33,11 @@
                 "volume_mounts": []
             },
             {
-                "binding_guid": "614f0a56-dafc-4b18-89a1-ce808b732c2c",
+                "binding_guid": "0739bd01-e52a-459e-b08a-2ecff24706e2",
                 "binding_name": null,
                 "credentials": {
                     "clientid": "sb-cloned611274a76d44bbb9219ac2dc002940b!b94427|destination-xsappname!b62",
-                    "clientsecret": "614f0a56-dafc-4b18-89a1-ce808b732c2c$0j9RPJ0Vstd1CR4xi2B4afgyyldqoJofVkpWBv-hPFQ=",
+                    "clientsecret": "0739bd01-e52a-459e-b08a-2ecff24706e2$iquR2jIg-o5fEyuIPBKVduJjTupHl-sI6KXYF5idZyo=",
                     "credential-type": "binding-secret",
                     "identityzone": "vcpprovider-sc0jeojq",
                     "instanceid": "d611274a-76d4-4bbb-9219-ac2dc002940b",
@@ -66,20 +66,20 @@
         ],
         "hana": [
             {
-                "binding_guid": "cbb255e9-ca45-4a41-b026-3a9450036c51",
+                "binding_guid": "67b2744d-aa81-4c50-b170-7b228129dfb8",
                 "binding_name": null,
                 "credentials": {
                     "certificate": "-----BEGIN CERTIFICATE-----\nMIIDrzCCApegAwIBAgIQCDvgVpBCRrGhdWrJWZHHSjANBgkqhkiG9w0BAQUFADBh\nMQswCQYDVQQGEwJVUzEVMBMGA1UEChMMRGlnaUNlcnQgSW5jMRkwFwYDVQQLExB3\nd3cuZGlnaWNlcnQuY29tMSAwHgYDVQQDExdEaWdpQ2VydCBHbG9iYWwgUm9vdCBD\nQTAeFw0wNjExMTAwMDAwMDBaFw0zMTExMTAwMDAwMDBaMGExCzAJBgNVBAYTAlVT\nMRUwEwYDVQQKEwxEaWdpQ2VydCBJbmMxGTAXBgNVBAsTEHd3dy5kaWdpY2VydC5j\nb20xIDAeBgNVBAMTF0RpZ2lDZXJ0IEdsb2JhbCBSb290IENBMIIBIjANBgkqhkiG\n9w0BAQEFAAOCAQ8AMIIBCgKCAQEA4jvhEXLeqKTTo1eqUKKPC3eQyaKl7hLOllsB\nCSDMAZOnTjC3U/dDxGkAV53ijSLdhwZAAIEJzs4bg7/fzTtxRuLWZscFs3YnFo97\nnh6Vfe63SKMI2tavegw5BmV/Sl0fvBf4q77uKNd0f3p4mVmFaG5cIzJLv07A6Fpt\n43C/dxC//AH2hdmoRBBYMql1GNXRor5H4idq9Joz+EkIYIvUX7Q6hL+hqkpMfT7P\nT19sdl6gSzeRntwi5m3OFBqOasv+zbMUZBfHWymeMr/y7vrTC0LUq7dBMtoM1O/4\ngdW7jVg/tRvoSSiicNoxBN33shbyTApOB6jtSj1etX+jkMOvJwIDAQABo2MwYTAO\nBgNVHQ8BAf8EBAMCAYYwDwYDVR0TAQH/BAUwAwEB/zAdBgNVHQ4EFgQUA95QNVbR\nTLtm8KPiGxvDl7I90VUwHwYDVR0jBBgwFoAUA95QNVbRTLtm8KPiGxvDl7I90VUw\nDQYJKoZIhvcNAQEFBQADggEBAMucN6pIExIK+t1EnE9SsPTfrgT1eXkIoyQY/Esr\nhMAtudXH/vTBH1jLuG2cenTnmCmrEbXjcKChzUyImZOMkXDiqw8cvpOp/2PV5Adg\n06O/nVsJ8dWO41P0jmP6P6fbtGbfYmbW0W5BjfIttep3Sp+dWOIrWcBAI+0tKIJF\nPnlUkiaY4IBIqDfv8NZ5YBberOgOzW6sRBc4L0na4UU+Krk2U886UAb3LujEV0ls\nYSEY1QSteDwsOoBrp+uvFRTp2InBuThs4pFsiv9kuXclVzDAGySj4dzp30d8tbQk\nCAUw7C29C79Fv1C5qfPrmAESrciIxpg0X40KPMbp1ZWVbd4=\n-----END CERTIFICATE-----",
                     "database_id": "629b57ef-09e1-43ec-bc8c-2b453b9a541c",
                     "driver": "com.sap.db.jdbc.Driver",
-                    "hdi_password": "Oi7dukGzeC7ebgvlStBxuegde31O5r5OvdM0XNA92RF5zKDAJ3BdS.WBaOOWlZGVIYt1PvPV_dvfgT7vt6P8IJg3aAzc583EI6tZupQ5wmozEANldyA9jW_zUeE-5Lsj",
-                    "hdi_user": "4167A112608D48049ADB20CCE53B4F4F_EV5GZ68Y4PAN4T8IG6EDH3AEO_DT",
+                    "hdi_password": "Na1Pfi0A-Y_gwxdF3BV2jINXCM25FfnxBA.r44gym.6JKnmJeEGQmAjLk.woWO59wglwbPno4MGwcE4vNBz_hhYW1Fw4yOHnAVuC-656lZ34WbhnuzpHRA-D-G4OvnOC",
+                    "hdi_user": "4167A112608D48049ADB20CCE53B4F4F_CYFLI7F4VSZ5PWXTVK3Q48DQP_DT",
                     "host": "629b57ef-09e1-43ec-bc8c-2b453b9a541c.hana.prod-us10.hanacloud.ondemand.com",
-                    "password": "Za07IIyenPp-UWuUTHDecG8v0nmbN5qSPtMGbGRBGgS57cfcNDqvHAP-eejJYSSRGoDXdqR8q-zO7Z14uBf9RFsASv-v7666zQ5MDXnoLuqG8HS1vrVyb1t7fN93nqc5",
+                    "password": "Sh7iBMo.hybWjl.aFkAFECOtsh9YuoIUVoF6TSTfh1CyJhl0HmAwWr6pSXw8.XMiS6c_ZH1n_EgClF4tDDh.LDk-FkCG1hdDEPHIdjSFqcFcr3Qi4nSjBHYH2g3T3dBj",
                     "port": "443",
                     "schema": "4167A112608D48049ADB20CCE53B4F4F",
                     "url": "jdbc:sap://629b57ef-09e1-43ec-bc8c-2b453b9a541c.hana.prod-us10.hanacloud.ondemand.com:443?encrypt=true\u0026validateCertificate=true\u0026currentschema=4167A112608D48049ADB20CCE53B4F4F",
-                    "user": "4167A112608D48049ADB20CCE53B4F4F_EV5GZ68Y4PAN4T8IG6EDH3AEO_RT"
+                    "user": "4167A112608D48049ADB20CCE53B4F4F_CYFLI7F4VSZ5PWXTVK3Q48DQP_RT"
                 },
                 "instance_guid": "6ac1a63d-069a-4bf4-b202-0c07f7d21503",
                 "instance_name": "config_products-db",
@@ -98,13 +98,13 @@
         ],
         "jobscheduler": [
             {
-                "binding_guid": "eabae268-3e06-46d4-a740-173bac74c36e",
+                "binding_guid": "9ba5770c-daaf-4279-bf91-37db5ebf5cc2",
                 "binding_name": null,
                 "credentials": {
                     "uaa": {
                         "apiurl": "https://api.authentication.us10.hana.ondemand.com",
                         "clientid": "sb-3d86de26-47ef-45a7-907e-057818017075!b94427|sap-jobscheduler!b1",
-                        "clientsecret": "eabae268-3e06-46d4-a740-173bac74c36e$oRdP1k9hD2chTLlgPytFwsEwO3rGHdN9jTA3GePoz-Q=",
+                        "clientsecret": "9ba5770c-daaf-4279-bf91-37db5ebf5cc2$_2fQ37x08HzI2uQeL7VqR28GNOI-euD-DderqpR3jDo=",
                         "credential-type": "binding-secret",
                         "identityzone": "vcpprovider-sc0jeojq",
                         "identityzoneid": "9d12f6fd-bdfd-4b20-98a6-5993fba38534",
@@ -135,7 +135,7 @@
         ],
         "xsuaa": [
             {
-                "binding_guid": "3519128d-c18e-459e-8603-c0daff9b97bb",
+                "binding_guid": "c20eab71-6045-4360-b597-93a75133efb7",
                 "binding_name": null,
                 "credentials": {
                     "apiurl": "https://api.authentication.us10.hana.ondemand.com",
@@ -168,7 +168,8 @@
             }
         ]
     },
-    "VCAP_APPLICATION": {
+
+"VCAP_APPLICATION": {
         "application_id": "0da042a3-eb0c-4851-ae0c-d789ed8d41fc",
         "application_name": "config_products-srv",
         "application_uris": [

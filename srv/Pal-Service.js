@@ -11,6 +11,7 @@ const conn_params = {
 
 const vcConfigTimePeriod = process.env.TimePeriod; 
 const classicalSchema = process.env.classicalSchema; 
+const minBuckets = 10;
 
 // Begin of HGBT Functions
 const hgbtMethods = require('./hgbt.js');
@@ -1180,7 +1181,7 @@ async function _generateRegModels (req,isGet) {
            sqlStr = 'SELECT DISTINCT "LOCATION_ID", "PRODUCT_ID", "GROUP_ID", "TYPE", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "CP_VC_HISTORY_TS"' + 
                     ' WHERE "LOCATION_ID" =' + "'" +   vcRulesListReq[0].Location + "'" +
                     ' AND "TYPE" =' + "'" +   vcRulesListReq[0].Type + "'" +
-                    ' GROUP BY "LOCATION_ID", "PRODUCT_ID", "GROUP_ID", "TYPE" HAVING COUNT(DISTINCT "' + vcConfigTimePeriod + '") > 20';
+                    ' GROUP BY "LOCATION_ID", "PRODUCT_ID", "GROUP_ID", "TYPE" HAVING COUNT(DISTINCT "' + vcConfigTimePeriod + '") > ' + "'" + minBuckets + "'";
        }
        else if ( (vcRulesListReq[0].Product != "ALL") &&
                  (vcRulesListReq[0].Location == "ALL") )
@@ -1188,7 +1189,7 @@ async function _generateRegModels (req,isGet) {
            sqlStr = 'SELECT DISTINCT "LOCATION_ID", "PRODUCT_ID", "GROUP_ID", "TYPE", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "CP_VC_HISTORY_TS"' + 
                     ' WHERE "PRODUCT_ID" =' + "'" +   vcRulesListReq[0].Product + "'" +
                     ' AND "TYPE" =' + "'" +   vcRulesListReq[0].Type + "'" +
-                    ' GROUP BY "LOCATION_ID", "PRODUCT_ID", "GROUP_ID", "TYPE" HAVING COUNT(DISTINCT "' + vcConfigTimePeriod + '") > 20';
+                    ' GROUP BY "LOCATION_ID", "PRODUCT_ID", "GROUP_ID", "TYPE" HAVING COUNT(DISTINCT "' + vcConfigTimePeriod + '") > ' + "'" + minBuckets + "'";
        }
        else if ( (vcRulesListReq[0].Product != "ALL") &&
                  (vcRulesListReq[0].Location != "ALL") )
@@ -1197,14 +1198,14 @@ async function _generateRegModels (req,isGet) {
                ' WHERE "PRODUCT_ID" =' + "'" +   vcRulesListReq[0].Product + "'" +
                ' AND "LOCATION_ID" =' + "'" +   vcRulesListReq[0].Location + "'" +
                ' AND "TYPE" =' + "'" +   vcRulesListReq[0].Type + "'" +
-               ' GROUP BY "LOCATION_ID", "PRODUCT_ID", "GROUP_ID", "TYPE" HAVING COUNT(DISTINCT "' + vcConfigTimePeriod + '") > 20';
+               ' GROUP BY "LOCATION_ID", "PRODUCT_ID", "GROUP_ID", "TYPE" HAVING COUNT(DISTINCT "' + vcConfigTimePeriod + '") > ' + "'" + minBuckets + "'";
        }
        else
        {
             sqlStr = 'SELECT DISTINCT "LOCATION_ID", "PRODUCT_ID", "GROUP_ID", "TYPE", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "CP_VC_HISTORY_TS"' + 
                    // vcRulesListReq[0].tableName + 
                    ' WHERE "TYPE" =' + "'" +   vcRulesListReq[0].Type + "'" +
-                    ' GROUP BY "LOCATION_ID", "PRODUCT_ID", "GROUP_ID", "TYPE"  HAVING COUNT(DISTINCT "' + vcConfigTimePeriod + '") > 20';  
+                    ' GROUP BY "LOCATION_ID", "PRODUCT_ID", "GROUP_ID", "TYPE"  HAVING COUNT(DISTINCT "' + vcConfigTimePeriod + '") > ' + "'" + minBuckets + "'";  
        }
 
 
@@ -1239,7 +1240,7 @@ async function _generateRegModels (req,isGet) {
                         ' AND "LOCATION_ID" =' + "'" +   vcRulesListReq[i].Location + "'" +
                         ' AND "TYPE" =' + "'" +   vcRulesListReq[i].Type + "'" +
                         ' GROUP BY "LOCATION_ID", "PRODUCT_ID", "GROUP_ID", "TYPE"' +
-                        ' HAVING COUNT(DISTINCT "' + vcConfigTimePeriod + '") > 20';// + 'ORDER BY "WeekOfYear"';   
+                        ' HAVING COUNT(DISTINCT "' + vcConfigTimePeriod + '") > ' + "'" + minBuckets + "'";// + 'ORDER BY "WeekOfYear"';   
             results = await cds.run(sqlStr);
             // console.log('_generateRegModels vcRulesList ELSE sqlStr ', sqlStr, 'index = ', i );
             // console.log('_generateRegModels vcRulesList ELSE sqlStr results', results );

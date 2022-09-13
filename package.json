@@ -9,7 +9,7 @@
         "@sap-cloud-sdk/core": "^1.54.0",
         "@sap/approuter": "^11.3.2",
         "@sap/audit-logging": "^5.3.0",
-        "@sap/cds": "^5.9.4",
+        "@sap/cds": "^5.9.8",
         "@sap/cds-dk": "^4.9.2",
         "@sap/cds-mtx": "^2.5.1",
         "@sap/cds-odata-v2-adapter-proxy": "^1.9.6",
@@ -43,7 +43,7 @@
         "node": "^12 || ^14"
     },
     "scripts": {
-        "start": "NODE_ENV=production cds run",
+        "start": "NODE_ENV=production cds watch --profile hybrid",
         "watch-cfgprd_pvsroot": "cds watch --open cfgprd_pvsroot/webapp/index.html#fe-lrop-v4",
         "undeploy": "cf undeploy config_products --delete-services --delete-service-keys --delete-service-brokers",
         "watch-project1": "cds watch --open project1/webapp/index.html#fe-lrop-v4",
@@ -84,7 +84,8 @@
         "watch-cp_planconfig": "cds watch --open cp_planconfig/webapp/index.html?sap-ui-xx-viewCache=false",
         "watch-cp_fullconfproddmnd": "cds watch --open cp_fullconfproddmnd/webapp/index.html?sap-ui-xx-viewCache=false",
         "watch-cp_fullyconfproddmnd": "cds watch --open cp_fullyconfproddmnd/webapp/index.html?sap-ui-xx-viewCache=false",
-        "watch-cp_planingconfig": "cds watch --open cp_planingconfig/webapp/index.html?sap-ui-xx-viewCache=false"
+        "watch-cp_planingconfig": "cds watch --open cp_planingconfig/webapp/index.html?sap-ui-xx-viewCache=false",
+        "watch-cpsalesstock": "cds watch --open cpsalesstock/webapp/index.html?sap-ui-xx-viewCache=false"
     },
     "eslintConfig": {
         "extends": "eslint:recommended",
@@ -274,7 +275,8 @@
         "app/cp_planconfig",
         "app/cp_fullconfproddmnd",
         "app/cp_fullyconfproddmnd",
-        "app/cp_planingconfig"
+        "app/cp_planingconfig",
+        "app/cpsalesstock"
     ],
     "devDependencies": {
         "@sap/ux-specification": "^1.102.5",

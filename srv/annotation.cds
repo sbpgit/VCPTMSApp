@@ -1625,3 +1625,91 @@ annotate service.SEEDORDER_HEADER with @(
         }]
     }]
 );
+
+
+//Sales Stock
+annotate service.SALES_S with @(
+    UI        : {
+        SelectionFields                : [
+            LOCATION_ID,
+            PRODUCT_ID,
+            SALES_DOC
+        ],
+        LineItem                       : [
+            {
+                $Type : 'UI.DataField', 
+                Value : SALES_DOC,
+                ![@UI.Importance]   : #High
+            },
+            {
+                $Type : 'UI.DataField', 
+                Value : LOCATION_ID,
+                ![@UI.Importance]   : #High
+            },
+            {
+                $Type : 'UI.DataField', 
+                Value : PRODUCT_ID,
+                ![@UI.Importance]   : #High
+            },{
+                $Type : 'UI.DataField', 
+                Value : QUANTITY,
+                ![@UI.Importance]   : #High
+            },{
+                $Type : 'UI.DataField', 
+                Value : STATUS,
+                ![@UI.Importance]   : #High
+            },{
+                $Type : 'UI.DataField', 
+                Value : ORDER_NUMBER,
+                ![@UI.Importance]   : #High
+            },{
+                $Type : 'UI.DataField', 
+                Value : PURCHASE_REQ,
+                ![@UI.Importance]   : #High
+            }
+        ],
+        HeaderInfo                     : {
+            Title          : {Value : LOCATION_ID},
+            Description    : {Value : PRODUCT_ID},
+            TypeName       : 'Sales Stock',
+            TypeNamePlural : 'Sales Stock'
+        },
+        FieldGroup #Details            : {Data : [
+            {
+                $Type : 'UI.DataField', 
+                Value : SALES_DOC
+            },
+            {
+                $Type : 'UI.DataField', 
+                Value : LOCATION_ID
+            },
+            {
+                $Type : 'UI.DataField', 
+                Value : PRODUCT_ID
+            },{
+                $Type : 'UI.DataField', 
+                Value : QUANTITY
+            },{
+                $Type : 'UI.DataField', 
+                Value : STATUS
+            },{
+                $Type : 'UI.DataField', 
+                Value : ORDER_NUMBER
+            },{
+                $Type : 'UI.DataField', 
+                Value : PURCHASE_REQ
+            }
+        ]}
+    },
+    // Page Facets
+    UI.Facets : [{
+        $Type  : 'UI.CollectionFacet',
+        ID     : 'SALESS',
+        Label  : 'Sales Stock',
+        Facets : [{
+            $Type  : 'UI.ReferenceFacet',
+            Label  : 'Sales Stock',
+            Target : '@UI.FieldGroup#Details'
+        }]
+    }]
+);
