@@ -1250,8 +1250,18 @@ module.exports = async function (srv) {
         // "'" + arrayVals[2] + "'" + "," +
         // "'" + arrayVals[3] + "'" +')' + ' WITH PRIMARY KEY';
 
+        // sqlStr = 'UPSERT PLSTR_PRIMARY_IDS VALUES (' +
+        //             "'" + productId + "'" + "," +
+        //             "'" + locationId + "'" + "," +
+        //             "'" + primary_id + "'" + "," +
+        //             "'" + partialIdChars + "'" + "," +
+        //             "'" + partialIdCharVals + "'" + "," +
+        //             "'" + primaryIdChars + "'" + "," +
+        //             "'" + primaryIdCharVals + "'" +')' + ' WITH PRIMARY KEY';
+
+        
         sqlStr = 'UPSERT PLSTR_PRIMARY_IDS VALUES (' +
-                    "'" + productId + "'" + "," +
+                    "'" + partialId + "'" + "," +
                     "'" + locationId + "'" + "," +
                     "'" + primary_id + "'" + "," +
                     "'" + partialIdChars + "'" + "," +
@@ -1280,7 +1290,8 @@ module.exports = async function (srv) {
     //             //  ' WHERE WEEKDATE = ' + '\'2020-06-29\'';
     
     // sqlStr = 'SELECT DISTINCT WEEKDATE, PRODUCT_ID, LOCATION_ID, PRIMARY_ID, ORDER_QTY, PRIMARY_ID_CHARVALS FROM V_PLSTR_PRIMARY_CHARS_CHARVALS_TS';
-    sqlStr = 'SELECT DISTINCT WEEKDATE, PRODUCT_ID, LOCATION_ID, PRIMARY_ID, ORDER_QTY, PRIMARY_ID_CHARVALS FROM V_PLSTR_PRIMARY_TIMESERIES';
+    // sqlStr = 'SELECT DISTINCT WEEKDATE, PRODUCT_ID, LOCATION_ID, PRIMARY_ID, ORDER_QTY, PRIMARY_ID_CHARVALS FROM V_PLSTR_PRIMARY_TIMESERIES';
+    sqlStr = 'SELECT DISTINCT WEEKDATE, PARTIAL_ID, LOCATION_ID, PRIMARY_ID, ORDER_QTY, PRIMARY_ID_CHARVALS FROM V_PLSTR_PRIMARY_TIMESERIES';
 
     
     // console.log("sqlPrimary ", sqlStr )
@@ -1463,15 +1474,15 @@ module.exports = async function (srv) {
             //                         ' PRIMARY_ID = ' + "'"  + primaryId + "'" + 
             //                         ' GROUP BY WEEKDATE, PRODUCT_ID, LOCATION_ID ' +
             //                         ' ORDER BY WEEKDATE, PRODUCT_ID, LOCATION_ID';
-            let sqlPrimOrdQtyProduct = 'SELECT DISTINCT WEEKDATE, PRODUCT_ID, LOCATION_ID, SUM(ORDER_QTY) AS SUCCESS ' +
+            let sqlPrimOrdQtyProduct = 'SELECT DISTINCT WEEKDATE, PARTIAL_ID, LOCATION_ID, SUM(ORDER_QTY) AS SUCCESS ' +
                                         ' FROM V_PLSTR_PRIMARY_TIMESERIES ' +
                                         ' WHERE ' +
                                         ' WEEKDATE = ' + "'"  + weekdate + "'" + ' AND ' + 
-                                        ' PRODUCT_ID = ' + "'"  + productId + "'" + ' AND ' + 
+                                        ' PARTIAL_ID = ' + "'"  + productId + "'" + ' AND ' + 
                                         ' LOCATION_ID = ' + "'"  + locationId + "'" + ' AND ' +
                                         ' PRIMARY_ID = ' + "'"  + primaryId + "'" + 
-                                        ' GROUP BY WEEKDATE, PRODUCT_ID, LOCATION_ID ' +
-                                        ' ORDER BY WEEKDATE, PRODUCT_ID, LOCATION_ID';
+                                        ' GROUP BY WEEKDATE, PARTIAL_ID, LOCATION_ID ' +
+                                        ' ORDER BY WEEKDATE, PARTIAL_ID, LOCATION_ID';
             // console.log ("sqlPrimOrdQtyProduct V_PLSTR_PRIMARY_TIMESERIES ", sqlPrimOrdQtyProduct);
 
             let sqlPrimOrdQtyProductResults = await cds.run(sqlPrimOrdQtyProduct);
@@ -1486,14 +1497,14 @@ module.exports = async function (srv) {
                 let ordQtyPrimary = arrayVals[3];
 
 
-                let sqOrdQtyProduct = 'SELECT DISTINCT WEEKDATE, PRODUCT_ID, LOCATION_ID, SUM(ORDER_QTY) AS SUCCESS ' +
+                let sqOrdQtyProduct = 'SELECT DISTINCT WEEKDATE, PARTIAL_ID, LOCATION_ID, SUM(ORDER_QTY) AS SUCCESS ' +
                                         ' FROM V_PLSTR_PRIMARY_TIMESERIES ' +
                                         ' WHERE ' +
                                         ' WEEKDATE = ' + "'"  + weekdate + "'" + ' AND ' + 
-                                        ' PRODUCT_ID = ' + "'"  + productId + "'" + ' AND ' + 
+                                        ' PARTIAL_ID = ' + "'"  + productId + "'" + ' AND ' + 
                                         ' LOCATION_ID = ' + "'"  + locationId + "'" +
-                                        ' GROUP BY WEEKDATE, PRODUCT_ID, LOCATION_ID ' +
-                                        ' ORDER BY WEEKDATE, PRODUCT_ID, LOCATION_ID';
+                                        ' GROUP BY WEEKDATE, PARTIAL_ID, LOCATION_ID ' +
+                                        ' ORDER BY WEEKDATE, PARTIAL_ID, LOCATION_ID';
                 // console.log ("sqOrdQtyProduct V_PLSTR_PRIMARY_TIMESERIES ", sqOrdQtyProduct);
 
                 let sqlOrdQtyProductResults = await cds.run(sqOrdQtyProduct);
@@ -1587,10 +1598,10 @@ module.exports = async function (srv) {
                             "'" + parseFloat(success) + "'" + "," +
                             "'" + parseFloat(successRate) + "'" +')' + ' WITH PRIMARY KEY';
 
-                    console.log("CP_TS_OBJDEP_CHARHDR sqlStr", sqlStrObjdepCharHdr);
+                    // console.log("CP_TS_OBJDEP_CHARHDR sqlStr", sqlStrObjdepCharHdr);
 
                     let sqlStrObjdepCharHdrResults = await cds.run(sqlStrObjdepCharHdr);
-                    console.log("CP_TS_OBJDEP_CHARHDR  ", sqlStrObjdepCharHdrResults);
+                    // console.log("CP_TS_OBJDEP_CHARHDR  ", sqlStrObjdepCharHdrResults);
                 }
 
             }
