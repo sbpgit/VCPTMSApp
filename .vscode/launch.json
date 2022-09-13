@@ -14,16 +14,12 @@
       ]
     },
     {
-      "name": "Run config_products-5",
+      "name": "Run config_products-25",
       "request": "launch",
-      "type": "node",
+      "type": "pwa-node",
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "npx",
-      "runtimeArgs": [
-        "-n"
-      ],
       "args": [
-        "--",
         "cds",
         "run",
         "--in-memory?"
@@ -33,7 +29,7 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "envFile": "${workspaceFolder}/.env5",
+      "envFile": "${workspaceFolder}/.env25",
       "env": {
         "NODE_ENV": "development",
         "run.config": "{\"handlerId\":\"cap_run_config_handler_id\",\"runnableId\":\"{\\\"projectPath\\\":\\\"/home/user/projects/config_products\\\",\\\"profileName\\\":\\\"development\\\"}\"}"

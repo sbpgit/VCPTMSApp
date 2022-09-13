@@ -9,7 +9,7 @@
         </ux:headerTitle>
 
         <ux:sections>
-            <ux:ObjectPageSection class="sapUiNoMarginTop">
+            <ux:ObjectPageSection showTitle="false">
                 <ux:subSections>
                     <ux:ObjectPageSubSection>
                         <ux:blocks>
@@ -19,6 +19,7 @@
                                 showSeparators="None"
                                 alternateRowColors="false"
                                 width="auto"
+                                class="sapUiNoMarginTop"
                                 items="{
 			                path: '/parameters',
                             sorter: 
@@ -33,7 +34,7 @@
                                         <content>
                                             <Label text="Parameters" LabelDesign="Bold" class="headerFont" />
                                             <ToolbarSpacer />
-                                            <Button icon="sap-icon://save" text="Save" class="btnSize" press="onPressSave" />
+                                            <Button icon="sap-icon://save" type="Emphasized" text="Save" class="btnSize" press="onPressSave" />
                                         </content>
                                     </OverflowToolbar>
                                 </headerToolbar>
