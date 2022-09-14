@@ -142,7 +142,7 @@ class GenFunctions {
         console.log(lMessage);
     }
 
-    static getParameterValue(lParameter){
+    static async getParameterValue(lParameter){
         const lsValue = await SELECT.from("PARAMETER_ID")
                                     .columns("VALUE")
                                     .where(`PARAMETER_ID = ${parseInt(lParameter)}`)
