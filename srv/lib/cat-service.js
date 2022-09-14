@@ -11,6 +11,7 @@ const GenTimeseriesM2 = require("./gen-timeseries-m2");
 const SOFunctions = require("./so-function");
 const Catservicefn = require("./catservice-function");
 const VarConfig = require("./variantconfig");
+const CIRService = require("./cirdata-functions");          // 
 const containerSchema = cds.env.requires.db.credentials.schema;
 // Create connection parameters to continer
 const conn_params_container = {
@@ -1735,9 +1736,12 @@ module.exports = (srv) => {
         return responseMessage;
     });
 
-    // Service for weekly component requirements- assembly component
+    // Service for Weekly Customer Independent Requirement Quantities
     srv.on("getCIRWeekly", async (req) => {
-        let { genAsmbComp } = srv.entities;
+        const objCIR = new CIRService();
+        let oCIRData = {};
+        oCIRData = await objCIR.getCIRData(req);
+
         let vDateFrom = req.data.FROMDATE; //"2022-03-04";
         let vDateTo = req.data.TODATE; //"2023-01-03";
         let liCompWeekly = [];
@@ -1750,130 +1754,79 @@ module.exports = (srv) => {
             lsDates = {};
         let columnname = "WEEK";
 
-        const liCIRGen = await cds.run(`SELECT * from "CP_CIR_GENERATED" WHERE "LOCATION_ID" = '` +
-            req.data.LOCATION_ID +
-            `'`);
-
-        const liCIRQty = await cds.run(
-            `
-            SELECT * 
-            FROM "CP_CIR_GENERATED" 
-            inner join "CP_PARTIALPROD_INTRO"
-            ON "CP_CIR_GENERATED"."PRODUCT_ID" = "CP_PARTIALPROD_INTRO"."PRODUCT_ID"
-            AND "CP_CIR_GENERATED"."LOCATION_ID" = "CP_PARTIALPROD_INTRO"."LOCATION_ID"
-            WHERE  "CP_CIR_GENERATED"."LOCATION_ID" = '` +
-            req.data.LOCATION_ID +
-            `'
-                 AND  "CP_PARTIALPROD_INTRO"."REF_PRODID" = '` +
-            req.data.PRODUCT_ID +
-            `' AND  "CP_CIR_GENERATED"."VERSION" = '` +
-            req.data.VERSION +
-            `' AND  "CP_CIR_GENERATED"."SCENARIO" = '` +
-            req.data.SCENARIO +
-            `' AND (  "CP_CIR_GENERATED"."WEEK_DATE" <= '` +
-            vDateTo +
-            `' AND  "CP_CIR_GENERATED"."WEEK_DATE" >= '` +
-            vDateFrom +
-            `') AND  "CP_CIR_GENERATED"."MODEL_VERSION" = '` +
-            req.data.MODEL_VERSION +
-            `'
-                 ORDER BY 
-                 "CP_CIR_GENERATED"."LOCATION_ID" ASC, 
-                 "CP_CIR_GENERATED"."PRODUCT_ID" ASC,
-                 "CP_CIR_GENERATED"."VERSION" ASC,
-                 "CP_CIR_GENERATED"."SCENARIO" ASC,
-                 "CP_CIR_GENERATED"."WEEK_DATE" ASC`
-        );
+        // const liCIRGen = await cds.run(`SELECT * from "CP_CIR_GENERATED" WHERE "LOCATION_ID" = '` +
+        //     req.data.LOCATION_ID +
+        //     `'`);
 
         // const liCIRQty = await cds.run(
         //     `
-        //     SELECT * FROM "CP_CIR_GENERATED"
-        //     WHERE "WEEK_DATE" <= '` + vDateTo + `'
-        //       AND "WEEK_DATE" >= '` + vDateFrom + `' 
-        //  ORDER BY    "LOCATION_ID" ASC, 
-        //               "PRODUCT_ID" ASC,
-        //               "VERSION" ASC,
-        //               "SCENARIO" ASC,
-        //               "WEEK_DATE" ASC`
-        // );
-
-        // const liUniqueId = await cds.run(
-        //     `
-        //     SELECT DISTINCT "UNIQUE_ID"
-        //       FROM "CP_CIR_GENERATED"
-        //     WHERE "WEEK_DATE" <= '` + vDateTo + `'
-        //       AND "WEEK_DATE" >= '` + vDateFrom + `' 
-        //  ORDER BY    "UNIQUE_ID" ASC`
-        //             //   "PRODUCT_ID" ASC,
-        //             //   "VERSION" ASC,
-        //             //   "SCENARIO" ASC,
-        //             //   "WEEK_DATE" ASC`
-        // );
-
-        // const liUniqueId = await cds.run(
-        //     `
-        //   SELECT DISTINCT "LOCATION_ID",
-        //                   "PRODUCT_ID",
-        //                   "VERSION",
-        //                   "SCENARIO",
-        //                   "UNIQUE_ID"
-        //   FROM "CP_CIR_GENERATED"
-        //   WHERE "LOCATION_ID" = '` +
+        //     SELECT * 
+        //     FROM "CP_CIR_GENERATED" 
+        //     inner join "CP_PARTIALPROD_INTRO"
+        //     ON "CP_CIR_GENERATED"."PRODUCT_ID" = "CP_PARTIALPROD_INTRO"."PRODUCT_ID"
+        //     AND "CP_CIR_GENERATED"."LOCATION_ID" = "CP_PARTIALPROD_INTRO"."LOCATION_ID"
+        //     WHERE  "CP_CIR_GENERATED"."LOCATION_ID" = '` +
         //     req.data.LOCATION_ID +
-        //     `' AND "PRODUCT_ID" = '` +
-        //     req.data.PRODUCT_ID +
-        //     `' AND "VERSION" = '` +
-        //     req.data.VERSION +
-        //     `' AND "SCENARIO" = '` +
-        //     req.data.SCENARIO +
-        //     `' AND ( "WEEK_DATE" <= '` +
-        //     vDateTo +
         //     `'
-        //         AND "WEEK_DATE" >= '` +
+        //          AND  "CP_PARTIALPROD_INTRO"."REF_PRODID" = '` +
+        //     req.data.PRODUCT_ID +
+        //     `' AND  "CP_CIR_GENERATED"."VERSION" = '` +
+        //     req.data.VERSION +
+        //     `' AND  "CP_CIR_GENERATED"."SCENARIO" = '` +
+        //     req.data.SCENARIO +
+        //     `' AND (  "CP_CIR_GENERATED"."WEEK_DATE" <= '` +
+        //     vDateTo +
+        //     `' AND  "CP_CIR_GENERATED"."WEEK_DATE" >= '` +
         //     vDateFrom +
-        //     `') AND "MODEL_VERSION" = '` +
+        //     `') AND  "CP_CIR_GENERATED"."MODEL_VERSION" = '` +
         //     req.data.MODEL_VERSION +
         //     `'
-        //        ORDER BY 
-        //             "LOCATION_ID" ASC, 
-        //             "PRODUCT_ID" ASC,
-        //             "VERSION" ASC,
-        //             "SCENARIO" ASC,
-        //             "UNIQUE_ID" ASC`
+        //          ORDER BY 
+        //          "CP_CIR_GENERATED"."LOCATION_ID" ASC, 
+        //          "CP_CIR_GENERATED"."PRODUCT_ID" ASC,
+        //          "CP_CIR_GENERATED"."VERSION" ASC,
+        //          "CP_CIR_GENERATED"."SCENARIO" ASC,
+        //          "CP_CIR_GENERATED"."WEEK_DATE" ASC`
         // );
-        const liUniqueId = await cds.run(
-            `
-          SELECT DISTINCT "CP_CIR_GENERATED"."LOCATION_ID", 
-          "CP_CIR_GENERATED"."PRODUCT_ID",
-          "CP_CIR_GENERATED"."VERSION",
-          "CP_CIR_GENERATED"."SCENARIO",
-          "CP_CIR_GENERATED"."UNIQUE_ID"
-                          FROM "CP_CIR_GENERATED" 
-                          inner join "CP_PARTIALPROD_INTRO"
-                          ON "CP_CIR_GENERATED"."PRODUCT_ID" = "CP_PARTIALPROD_INTRO"."PRODUCT_ID"
-                          AND "CP_CIR_GENERATED"."LOCATION_ID" = "CP_PARTIALPROD_INTRO"."LOCATION_ID"
-                          WHERE  "CP_CIR_GENERATED"."LOCATION_ID" = '` +
-            req.data.LOCATION_ID +
-            `' AND  "CP_PARTIALPROD_INTRO"."REF_PRODID" = '` +
-            req.data.PRODUCT_ID +
-            `' AND  "CP_CIR_GENERATED"."VERSION" = '` +
-            req.data.VERSION +
-            `' AND  "CP_CIR_GENERATED"."SCENARIO" = '` +
-            req.data.SCENARIO +
-            `' AND (  "CP_CIR_GENERATED"."WEEK_DATE" <= '` +
-            vDateTo +
-            `' AND  "CP_CIR_GENERATED"."WEEK_DATE" >= '` +
-            vDateFrom +
-            `') AND  "CP_CIR_GENERATED"."MODEL_VERSION" = '` +
-            req.data.MODEL_VERSION +
-            `'
-                               ORDER BY 
-                               "CP_CIR_GENERATED"."LOCATION_ID" ASC, 
-                               "CP_CIR_GENERATED"."PRODUCT_ID" ASC,
-                               "CP_CIR_GENERATED"."VERSION" ASC,
-                               "CP_CIR_GENERATED"."SCENARIO" ASC,
-                               "CP_CIR_GENERATED"."UNIQUE_ID" ASC`
-        );
+
+
+        // const liUniqueId = await cds.run(
+        //     `
+        //   SELECT DISTINCT "CP_CIR_GENERATED"."LOCATION_ID", 
+        //   "CP_CIR_GENERATED"."PRODUCT_ID",
+        //   "CP_CIR_GENERATED"."VERSION",
+        //   "CP_CIR_GENERATED"."SCENARIO",
+        //   "CP_CIR_GENERATED"."UNIQUE_ID"
+        //                   FROM "CP_CIR_GENERATED" 
+        //                   inner join "CP_PARTIALPROD_INTRO"
+        //                   ON "CP_CIR_GENERATED"."PRODUCT_ID" = "CP_PARTIALPROD_INTRO"."PRODUCT_ID"
+        //                   AND "CP_CIR_GENERATED"."LOCATION_ID" = "CP_PARTIALPROD_INTRO"."LOCATION_ID"
+        //                   WHERE  "CP_CIR_GENERATED"."LOCATION_ID" = '` +
+        //     req.data.LOCATION_ID +
+        //     `' AND  "CP_PARTIALPROD_INTRO"."REF_PRODID" = '` +
+        //     req.data.PRODUCT_ID +
+        //     `' AND  "CP_CIR_GENERATED"."VERSION" = '` +
+        //     req.data.VERSION +
+        //     `' AND  "CP_CIR_GENERATED"."SCENARIO" = '` +
+        //     req.data.SCENARIO +
+        //     `' AND (  "CP_CIR_GENERATED"."WEEK_DATE" <= '` +
+        //     vDateTo +
+        //     `' AND  "CP_CIR_GENERATED"."WEEK_DATE" >= '` +
+        //     vDateFrom +
+        //     `') AND  "CP_CIR_GENERATED"."MODEL_VERSION" = '` +
+        //     req.data.MODEL_VERSION +
+        //     `'
+        //                        ORDER BY 
+        //                        "CP_CIR_GENERATED"."LOCATION_ID" ASC, 
+        //                        "CP_CIR_GENERATED"."PRODUCT_ID" ASC,
+        //                        "CP_CIR_GENERATED"."VERSION" ASC,
+        //                        "CP_CIR_GENERATED"."SCENARIO" ASC,
+        //                        "CP_CIR_GENERATED"."UNIQUE_ID" ASC`
+        // );
+
+        const liCIRQty = oCIRData.liCIRQty;
+        const liUniqueId = oCIRData.liUniqueId;
+
         var vDateSeries = vDateFrom;
         lsDates.WEEK_DATE = GenFunctions.getNextMondayCmp(vDateSeries);
         vDateSeries = lsDates.WEEK_DATE;
@@ -1883,7 +1836,6 @@ module.exports = (srv) => {
             vDateSeries = GenFunctions.addDays(vDateSeries, 7);
 
             lsDates.WEEK_DATE = vDateSeries;//GenFunctions.getNextSundayCmp(vDateSeries);
-            //  vDateSeries = lsDates.CAL_DATE;
 
             liDates.push(lsDates);
             lsDates = {};
@@ -1894,15 +1846,8 @@ module.exports = (srv) => {
             // Initially set vWeekIndex to j to geneate Week columns
             // vCompIndex is to get Componnent quantity for all dates
             vWeekIndex = 0; //j
-            //lsCompWeekly.LOCATION_ID = liComp[j].LOCATION_ID;
-            //lsCompWeekly.PRODUCT_ID = liComp[j].PRODUCT_ID;
-            lsCompWeekly.ITEM_NUM = '';
-            //   lsCompWeekly.ASSEMBLY = liComp[j].COMPONENT;
-            //lsCompWeekly.COMPONENT = liComp[j].COMPONENT;
-            //lsCompWeekly.VERSION = liComp[j].VERSION;
-            // lsCompWeekly.SCENARIO = liComp[j].SCENARIO;
             lsCompWeekly.UNIQUE_ID = liUniqueId[j].UNIQUE_ID;
-            //lsCompWeekly.QTYTYPE = "Normalized";
+            // lsCompWeekly.UNIQUE_DESC = liUniqueId[j].UNIQUE_DESC;
 
             for (let i = 0; i < liDates.length; i++) {
                 vWeekIndex = vWeekIndex + 1;
@@ -1912,7 +1857,6 @@ module.exports = (srv) => {
                         liCIRQty[vCompIndex].UNIQUE_ID === lsCompWeekly.UNIQUE_ID &&
                         liCIRQty[vCompIndex].WEEK_DATE === liDates[i].WEEK_DATE
                     ) {
-                        //   lsCompWeekly.STRUC_NODE = liCompQty[vCompIndex].STRUC_NODE;
                         lsCompWeekly[columnname + vWeekIndex] =
                             liCIRQty[vCompIndex].CIR_QTY;
                         break;
@@ -1922,15 +1866,11 @@ module.exports = (srv) => {
             liCompWeekly.push(GenFunctions.parse(lsCompWeekly));
             lsCompWeekly = {};
         }
-        liCompWeekly.sort(GenFunctions.dynamicSortMultiple("STRUC_NODE", "UNIQUE_ID", "ITEM_NUM"));
+        // liCompWeekly.sort(GenFunctions.dynamicSortMultiple("STRUC_NODE", "UNIQUE_ID", "ITEM_NUM"));
         return liCompWeekly;
     });
 
-    // POST Service for Unique Characteristic Items and Weekly Quantities
-    // srv.on("postCIRQuantities", async (req) => {
-    //     let liUniqueItems = req.data; 
-    //     res.message = "postData";       
-    // Service for Unique Characteristic Items
+
     srv.on("getUniqueIdItems", async (req) => {
         let { genAsmbComp } = srv.entities;
         // let vDateFrom = req.data.FROMDATE; //"2022-03-04";
@@ -1954,30 +1894,120 @@ module.exports = (srv) => {
             WHERE "UNIQUE_ID" = '` + vUniqueId + `'`
         );
 
-        // for (let j = 0; j < liUniqueItems.length; j++) {
-        //     // Initially set vWeekIndex to j to geneate Week columns
-        //     // vCompIndex is to get Componnent quantity for all dates
-        //     // vWeekIndex = 0; //j
-        //     // lsUniqueItems.UNIQUE_ID = ltUniqueItems[j].UNIQUE_ID;
-        //     // lsUniqueItems.LOCATION_ID = ltUniqueItems[j].LOCATION_ID;
-        //     // lsUniqueItems.PRODUCT_ID = ltUniqueItems[j].PRODUCT_ID;
-        //     // lsUniqueItems.CHAR_NUM= ltUniqueItems[j].CHAR_NUM;
-        //     // lsUniqueItems.CHARVAL_NUM = ltUniqueItems[j].CHARVAL_NUM;           
-        //     // lsUniqueItems.UID_CHAR_RATE = ltUniqueItems[j].UID_CHAR_RATE;
+    });
+    // POST Service for Unique Characteristic Items and Weekly Quantities
+    srv.on("postCIRQuantities", async (req) => {
+        const objCIR = new CIRService();
+        const oModel = await cds.connect.to('S4ODataService');
+        let oCIRData = {};
+        oCIRData = await objCIR.getCIRData(req);
+        const liCIRQty = oCIRData.liCIRQty;
+        const liUniqueId = oCIRData.liUniqueId;
+        const aUniqueIdChar = await objCIR.getUniqueIdCharacteristics(req);
+        let aFilteredChar = [], aFilteredCIR = [];
+        let sUniqueId = "";
+        let oUniqueIdChars = {};
+        let aUniqueIdChars = [];
+        let oEntry = {};
+        for (let i = 0; i < liUniqueId.length; i++) {
+            // Unique Id Characteristics
+            aUniqueIdChars = [];
+            aFilteredChar = [];
+            sUniqueId = liUniqueId[i].UNIQUE_ID;
+            aFilteredChar = aUniqueIdChar.filter(function (aUniqueId) {
+                return aUniqueId.UNIQUE_ID == sUniqueId;
+            });
 
-        //     // liUniqueItems.push(GenFunctions.parse(lsUniqueItems));
-        //     // lsUniqueItems = {};
-        //     lsUniqueItems.UNIQUE_ID = ltUniqueItems[j].UNIQUE_ID;
-        //     lsUniqueItems.LOCATION_ID = ltUniqueItems[j].LOCATION_ID;
-        //     lsUniqueItems.PRODUCT_ID = ltUniqueItems[j].PRODUCT_ID;
-        //     lsUniqueItems.CHAR_NUM = ltUniqueItems[j].CHAR_NUM;
-        //     lsUniqueItems.CHARVAL_NUM = ltUniqueItems[j].CHARVAL_NUM;
-        //     lsUniqueItems.UID_CHAR_RATE = ltUniqueItems[j].UID_CHAR_RATE;
+            for (let k = 0; k < aFilteredChar.length; k++) {
+                oUniqueIdChars = {};
+                oUniqueIdChars.UniqId = (aFilteredChar[k].UNIQUE_ID).toString();
+                oUniqueIdChars.Charc = aFilteredChar[k].CHAR_NUM;
+                oUniqueIdChars.Value = aFilteredChar[k].CHAR_VALUE;
 
-        //     liUniqueItems.push(GenFunctions.parse(lsUniqueItems));
-        //     lsUniqueItems = {};
-        // }
-        // return res.message;
+                aUniqueIdChars.push(oUniqueIdChars);
+            }
+
+            // CIR Weekly Quantity 
+            aFilteredCIR = [];
+            aFilteredCIR = liCIRQty.filter(function (aCIRQty) {
+                return aCIRQty.UNIQUE_ID == sUniqueId;
+            });
+
+            for (let j = 0; j < aFilteredCIR.length; j++) {
+                oEntry = {}
+                oEntry.Werks = aFilteredCIR[j].LOCATION_ID;
+                oEntry.Mantnr = aFilteredCIR[j].REF_PRODID;
+                oEntry.Quantity = (aFilteredCIR[j].CIR_QTY).toString();
+                oEntry.UniqId = (aFilteredCIR[j].UNIQUE_ID).toString();
+                oEntry.Datum = aFilteredCIR[j].WEEK_DATE + "T10:00:00";
+                oEntry.HeaderConfig = aUniqueIdChars; 
+                try{
+                    await oModel.tx(req).post("/headerSet", oEntry);
+                    }
+                    catch(e) {
+                      console.log(e);
+                    }
+            }
+        }
+
+    });
+
+    srv.on("postCIRQuantitiesToS4", async (req) => {
+        const oModel = await cds.connect.to('S4ODataService');
+        const objCIR = new CIRService();
+        let oCIRData = {};
+        oCIRData = await objCIR.getCIRData(req);
+        const liCIRQty = oCIRData.liCIRQty;
+        const liUniqueId = oCIRData.liUniqueId;
+        const aUniqueIdChar = await objCIR.getUniqueIdCharacteristics(req);
+        let aFilteredChar = [], aFilteredCIR = [];
+        let sUniqueId = "";
+        let oUniqueIdChars = {};
+        let aUniqueIdChars = [];
+        let oEntry = {};
+        for (let i = 0; i < liUniqueId.length; i++) {
+            // Unique Id Characteristics
+            aUniqueIdChars = [];
+            aFilteredChar = [];
+            sUniqueId = liUniqueId[i].UNIQUE_ID;
+            aFilteredChar = aUniqueIdChar.filter(function (aUniqueId) {
+                return aUniqueId.UNIQUE_ID == sUniqueId;
+            });
+
+            for (let k = 0; k < aFilteredChar.length; k++) {
+                oUniqueIdChars = {};
+                oUniqueIdChars.UniqId = (aFilteredChar[k].UNIQUE_ID).toString();
+                oUniqueIdChars.Charc = aFilteredChar[k].CHAR_NUM;
+                oUniqueIdChars.Value = aFilteredChar[k].CHAR_VALUE;
+
+                aUniqueIdChars.push(oUniqueIdChars);
+            }
+
+            // CIR Weekly Quantity 
+            aFilteredCIR = [];
+            aFilteredCIR = liCIRQty.filter(function (aCIRQty) {
+                return aCIRQty.UNIQUE_ID == sUniqueId;
+            });
+
+            for (let j = 0; j < aFilteredCIR.length; j++) {
+                oEntry = {}
+                oEntry.Werks = aFilteredCIR[j].LOCATION_ID;
+                oEntry.Mantnr = aFilteredCIR[j].PRODUCT_ID;
+                oEntry.Quantity = (aFilteredCIR[j].CIR_QTY).toString();
+                oEntry.UniqId = (aFilteredCIR[j].UNIQUE_ID).toString();
+                oEntry.Datum = aFilteredCIR[j].WEEK_DATE + "T10:00:00";
+                oEntry.HeaderConfig = aUniqueIdChars;
+                try{
+                await oModel.tx(req).post("/headerSet", oEntry);
+                }
+                catch(e) {
+                  console.log(e);
+                }
+
+            }
+
+        }
+       
     });
 
 

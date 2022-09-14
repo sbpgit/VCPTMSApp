@@ -21,8 +21,9 @@
       "runtimeExecutable": "npx",
       "args": [
         "cds",
-        "run",
-        "--in-memory?"
+        "watch",
+        "--profile",
+        "hybrid"
       ],
       "console": "internalConsole",
       "internalConsoleOptions": "openOnSessionStart",
