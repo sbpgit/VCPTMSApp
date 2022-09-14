@@ -691,7 +691,7 @@ module.exports = cds.service.impl(async function () {
             "DoCommit": true,
             "NavVCPPRODUCT": oReq.masterProd
         }
-        req.headers['Application-Interface-Key'] = vAIRKey;
+        // req.headers['Application-Interface-Key'] = vAIRKey;
         await servicePost.tx(req).post("/VCPPRODUCTTrans", oEntry);
         var resUrl = "/GetExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
         //return await servicePost.tx(req).get(resUrl);
@@ -791,7 +791,7 @@ module.exports = cds.service.impl(async function () {
             "NavVCPLOCATION": oReq.newLoc
         }
 
-        req.headers['Application-Interface-Key'] = vAIRKey;
+        // req.headers['Application-Interface-Key'] = vAIRKey;
         await servicePost.tx(req).post("/VCPLOCATIONTrans", oEntry);
         console.log(req);
         console.log(req.headers);
@@ -899,7 +899,7 @@ module.exports = cds.service.impl(async function () {
             "DoCommit": true,
             "NavVCPLOCATIONPRODUCT": oReq.newLocProd
         }
-        req.headers['Application-Interface-Key'] = vAIRKey;
+        // req.headers['Application-Interface-Key'] = vAIRKey;
         await servicePost.tx(req).post("/VCPLOCATIONPRODUCTTrans", oEntry);
         var resUrl = "/GetExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
         try {
@@ -997,7 +997,7 @@ module.exports = cds.service.impl(async function () {
             "DoCommit": true,
             "NavVCPCUSTOMER": oReq.cust
         }
-        req.headers['Application-Interface-Key'] = vAIRKey;
+        // req.headers['Application-Interface-Key'] = vAIRKey;
         await servicePost.tx(req).post("/VCPCUSTOMERTrans", oEntry);
         var resUrl = "/GetExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
         // return await servicePost.tx(req).get(resUrl)
@@ -1106,7 +1106,7 @@ module.exports = cds.service.impl(async function () {
             "DoCommit": true,
             "NavVCPCLASS": oReq.class
         }
-        req.headers['Application-Interface-Key'] = vAIRKey;
+        // req.headers['Application-Interface-Key'] = vAIRKey;
         await servicePost.tx(req).post("/VCPCLASSTrans", oEntry);
         var resUrl = "/GetExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
         try {
@@ -1217,7 +1217,7 @@ module.exports = cds.service.impl(async function () {
             "ScenarioID": "",
             "NavSBPVCP": oReq.sales
         }
-        req.headers['Application-Interface-Key'] = vAIRKey;
+        // req.headers['Application-Interface-Key'] = vAIRKey;
         await service.tx(req).post("/SBPVCPTrans", oEntry);
 
         // var resUrl = "/SBPVCPMessage?$select=Transactionid,ExceptionId,MsgText&$filter=Transactionid eq '" + vTransID + "'";
@@ -1331,7 +1331,7 @@ module.exports = cds.service.impl(async function () {
             "ScenarioID": "",
             "NavSBPVCP": oReq.actcomp
         }
-        req.headers['Application-Interface-Key'] = vAIRKey;
+        // req.headers['Application-Interface-Key'] = vAIRKey;
         await service.tx(req).post("/SBPVCPTrans", oEntry);
 
         var resUrl = "/getExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
@@ -1449,7 +1449,7 @@ module.exports = cds.service.impl(async function () {
             "ScenarioID": "",
             "NavSBPVCP": oReq.sales
         }
-        req.headers['Application-Interface-Key'] = vAIRKey;
+        // req.headers['Application-Interface-Key'] = vAIRKey;
         await service.tx(req).post("/SBPVCPTrans", oEntry);
 
         var resUrl = "/getExportResult?P_TransactionID='" + vTransID + "'";
@@ -1562,7 +1562,7 @@ module.exports = cds.service.impl(async function () {
             "ScenarioID": "",
             "NavSBPVCP": oReq.actcompreq
         }
-        req.headers['Application-Interface-Key'] = vAIRKey;
+        // req.headers['Application-Interface-Key'] = vAIRKey;
         await service.tx(req).post("/SBPVCPTrans", oEntry);
 
         var resUrl = "/getExportResult?P_TransactionID='" + vTransID + "'";
@@ -1640,7 +1640,7 @@ module.exports = cds.service.impl(async function () {
         var flag;
         var resUrl = "/SBPVCP?$select=PRDID,LOCID,PERIODID4_TSTAMP,TOTALDEMANDOUTPUT,UOMTOID,VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "'and UOMTOID eq 'EA'";
 
-        req.headers['Application-Interface-Key'] = vAIRKey;
+        // req.headers['Application-Interface-Key'] = vAIRKey;
         var req = await service.tx(req).get(resUrl);
         const dateJSONToEDM = jsonDate => {
             const content = /\d+/.exec(String(jsonDate));
@@ -1770,7 +1770,7 @@ module.exports = cds.service.impl(async function () {
                 vLoop = 0;
                 break;
             }
-            req.headers['Application-Interface-Key'] = vAIRKey;
+            // req.headers['Application-Interface-Key'] = vAIRKey;
             var req = await service.tx(req).get(resUrl);
             flag = '';
             for (var i in req) {

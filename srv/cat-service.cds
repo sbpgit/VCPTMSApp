@@ -33,7 +33,7 @@ using {
     V_ASMCOMP_REQ
 } from '../db/data-model';
 using V_PLANNEDCONFIG from '../db/data-model';
-
+using { S4ODataService as external } from './external/S4ODataService';
 
 // using V_ASMCOMP_REQ from '../db/data-model';
 service CatalogService @(impl : './lib/cat-service.js'){
@@ -281,7 +281,8 @@ service CatalogService @(impl : './lib/cat-service.js'){
     function getUniqueIdItems(UNIQUE_ID : Integer) returns array of ds.uniqueCharItems;
 
     // Publish CIR data to ECC
-    function postCIRQuantities(UNIQUE_DATA : ds.uniqueIDQtyChars) returns String;
+    function postCIRQuantities(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), FROMDATE : Date, TODATE : Date, MODEL_VERSION : String(20)) returns String;
+    action postCIRQuantitiesToS4(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), FROMDATE : Date, TODATE : Date, MODEL_VERSION : String(20));
     
     // EOI - Deepa
     entity getSalesStock as projection on od.SALES_S;

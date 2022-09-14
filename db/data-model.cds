@@ -1045,6 +1045,7 @@ entity![V_UNIQUE_ID_ITEM]{
     key![UNIQUE_ID]   : Integer    @title : 'MATVARID';
     key![PRODUCT_ID]  : String(40) @title : 'PRODUCT_ID';
     key![LOCATION_ID] : String(4)  @title : 'LOCATION_ID';
+    key![UNIQUE_DESC] : String(50) @title : 'UNIQUE DESC';
     key![CHAR_NUM]    : String(30) @title : 'CHAR_NUM';
     key![CHAR_NAME]   : String(30) @title : 'CHAR_NAME';
     key![CHARVAL_NUM] : String(70) @title : 'CHARVAL_NUM';
@@ -1057,7 +1058,7 @@ entity![V_UNIQUE_ID]{
     key![UNIQUE_ID]   : Integer    @title : 'MATVARID';
     key![PRODUCT_ID]  : String(40) @title : 'Product';
     key![LOCATION_ID] : String(4)  @title : 'LOCATION_ID';
-    key![UNIQUE_DESC] : String(50) @title : 'CHAR_NUM';
+    key![UNIQUE_DESC] : String(50) @title : 'UNIQUE DESC';
     key![UID_TYPE]    : String(1)  @title : 'CHARVAL_NUM';
     key![ACTIVE]      : Boolean    @title : 'CHAR_VALUE';
     key![CHAR_NUM]    : String(30) @title : 'CHAR_NUM';
