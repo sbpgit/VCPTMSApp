@@ -136,9 +136,18 @@ class GenFunctions {
 
     static log(lMessage){
         console.log(lMessage)
+    }
 
+    static logMessage(lMessage){
+        console.log(lMessage);
+    }
 
+    static getParameterValue(lParameter){
+        const lsValue = await SELECT.from("PARAMETER_ID")
+                                    .columns("VALUE")
+                                    .where(`PARAMETER_ID = ${parseInt(lParameter)}`)
 
+        return lsValue.VALUE;
     }
 
 }

@@ -327,8 +327,18 @@ class GenTimeseriesM2 {
 
     async genPrediction(adata) {
 
+        const lDate = new Date();
+        const lStartDate = new Date(
+            lDate.getFullYear(),
+            lDate.getMonth(),
+            lDate.getDate() - 14
+        );        
+
         const liPrediction = await SELECT.from('CP_TS_PREDICTIONS')
-            .where(`LOCATION_ID = '${adata.LOCATION_ID}' AND PRODUCT_ID = '${adata.PRODUCT_ID}' AND OBJ_TYPE = 'PI'`);
+                                         .where(`CAL_DATE    > '${lStartDate}'
+                                             AND LOCATION_ID = '${adata.LOCATION_ID}' 
+                                             AND PRODUCT_ID  = '${adata.PRODUCT_ID}' 
+                                             AND OBJ_TYPE    = 'PI'`);
 
         let liPriQty = [];
         liPriQty = await cds.run(
