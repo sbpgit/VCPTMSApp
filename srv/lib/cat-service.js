@@ -1253,14 +1253,17 @@ module.exports = (srv) => {
             }
             liresults.push(lsresults);
             try {
-                await UPDATE`CP_UNIQUE_ID_HEADER`
+                await UPDATE `CP_UNIQUE_ID_HEADER`
                     .with({
+                        ACTIVE : lsresults.ACTIVE,
                         UNIQUE_DESC: lsresults.UNIQUE_DESC
                     })
                     .where(`LOCATION_ID = '${lsresults.LOCATION_ID}'
-                            AND PRODUCT_ID = '${lsresults.LOCATION_ID}'
-                            AND UNIQUE_ID = '${lsresults.UNIQUE_ID}'`)
-            } catch (e) {
+                            AND PRODUCT_ID = '${lsresults.PRODUCT_ID}'
+                            AND UNIQUE_ID = '${lsresults.UNIQUE_ID}'`);
+            responseMessage = "Update successfull";
+            } catch (e) {                
+            responseMessage = "Update failed";
                 //DONOTHING
             }
         }
@@ -1285,7 +1288,7 @@ module.exports = (srv) => {
             liresults.push(lsresults);
 
             console.log(lsresults);
-        }
+        
         if (liresults.length > 0) {
             try {
                 await cds.run(INSERT.into("CP_UNIQUE_ID_HEADER").entries(liresults));
@@ -1296,6 +1299,7 @@ module.exports = (srv) => {
                 responseMessage = "Creation Failed"
                 // createResults.push(responseMessage);
             }
+        }
         }
         return responseMessage;
     });

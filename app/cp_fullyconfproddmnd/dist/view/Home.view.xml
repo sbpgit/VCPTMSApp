@@ -58,16 +58,16 @@
             </FlexBox>
         </ux:headerContent>
         <ux:sections>
-            <ux:ObjectPageSection class="sapUiNoMargin" width="auto">
+            <ux:ObjectPageSection class="sapUiNoMargin" width="auto" showTitle="false">
                 <ux:subSections>
-                    <ux:ObjectPageSubSection>
+                    <ux:ObjectPageSubSection class="sapUiNoMargin">
                         <ux:blocks>
-                           <!-- <VBox>
+                           <!-- <VBox class="sapUiNoMargin">
                             <Toolbar>
                                 <ToolbarSpacer/>
-                                <Button text="Publish" press="onPressPublish"/>
+                                <Button text="Publish" press="onPressPublish" type="Emphasized"/>
                             </Toolbar> -->
-                            <t:Table id="idCIReq" clas="table" fixedColumnCount="1" selectionMode="None" alternateRowColors="true" enableSelectAll="false" visibleRowCount="10">
+                            <t:Table id="idCIReq" clas="table" fixedColumnCount="1" selectionMode="None" alternateRowColors="true" enableSelectAll="false" visibleRowCount="11">
                                 <t:columns />
                             </t:Table>
                             <!-- </VBox> -->

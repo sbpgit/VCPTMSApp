@@ -7703,6 +7703,51 @@
         }
       }
     },
+    "cp_ds.uniqueIDChars": {
+      "kind": "type",
+      "elements": {
+        "UniqId": {
+          "type": "cds.Integer"
+        },
+        "Charc": {
+          "type": "cds.String",
+          "length": 30
+        },
+        "Value": {
+          "type": "cds.String",
+          "length": 70
+        }
+      }
+    },
+    "cp_ds.uniqueIDQtyChars": {
+      "kind": "type",
+      "elements": {
+        "Werks": {
+          "type": "cds.String",
+          "length": 4
+        },
+        "Mantnr": {
+          "type": "cds.String",
+          "length": 40
+        },
+        "UniqId": {
+          "type": "cds.Integer"
+        },
+        "Datum": {
+          "type": "cds.DateTime"
+        },
+        "Quantity": {
+          "type": "cds.Decimal",
+          "precision": 13,
+          "scale": 3
+        },
+        "HeaderConfig": {
+          "items": {
+            "type": "cp_ds.uniqueIDChars"
+          }
+        }
+      }
+    },
     "js": {
       "kind": "context"
     },
@@ -21563,6 +21608,17 @@
         "items": {
           "type": "cp_ds.uniqueCharItems"
         }
+      }
+    },
+    "CatalogService.postCIRQuantities": {
+      "kind": "function",
+      "params": {
+        "UNIQUE_DATA": {
+          "type": "cp_ds.uniqueIDQtyChars"
+        }
+      },
+      "returns": {
+        "type": "cds.String"
       }
     },
     "CatalogService.getSalesStock": {
