@@ -1049,6 +1049,7 @@ entity![V_UNIQUE_ID_ITEM]{
     key![CHAR_NAME]   : String(30) @title : 'CHAR_NAME';
     key![CHARVAL_NUM] : String(70) @title : 'CHARVAL_NUM';
     key![CHAR_VALUE]  : String(70) @title : 'CHAR_VALUE';
+    key![UNIQUE_DESC]  : String(50) @title : 'UNIQUE DESC';
 // key![UID_CHAR_RATE] : Decimal(13, 2) @title : 'UID_CHAR_RATE';
 }
 
