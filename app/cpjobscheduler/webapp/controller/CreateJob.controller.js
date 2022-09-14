@@ -3113,9 +3113,9 @@ sap.ui.define(
 							actionText = "/ibpimport-srv/exportComponentReq";
 						 // 07-09-2022-1
 						} else if (bButton.includes("sales orders")) {
-                            actionText = "%2Fcatalog%2FgenUniqueID";
+                            actionText = "/catalog/genUniqueID";
                         } else if (bButton === "Generate Fully configured Demand") {
-                            actionText = "%2Fcatalog%2FgenFullConfigDemand";                            
+                            actionText = "/catalog/genFullConfigDemand";                            
                         }
                          // 07-09-2022-1 
 					}
