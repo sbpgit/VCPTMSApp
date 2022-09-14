@@ -62,15 +62,15 @@
                 <ux:subSections>
                     <ux:ObjectPageSubSection class="sapUiNoMargin">
                         <ux:blocks>
-                           <!-- <VBox class="sapUiNoMargin">
+                           <VBox class="sapUiNoMargin">
                             <Toolbar>
                                 <ToolbarSpacer/>
                                 <Button text="Publish" press="onPressPublish" type="Emphasized"/>
-                            </Toolbar> -->
+                            </Toolbar>
                             <t:Table id="idCIReq" clas="table" fixedColumnCount="1" selectionMode="None" alternateRowColors="true" enableSelectAll="false" visibleRowCount="11">
                                 <t:columns />
                             </t:Table>
-                            <!-- </VBox> -->
+                            </VBox>
                         </ux:blocks>
                     </ux:ObjectPageSubSection>
                 </ux:subSections>
