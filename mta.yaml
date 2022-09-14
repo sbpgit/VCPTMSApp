@@ -204,6 +204,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     ignore:
     - node_modules/
     supported-platforms: []
@@ -216,6 +217,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     ignore:
     - node_modules/
     supported-platforms: []
@@ -228,6 +230,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     ignore:
     - node_modules/
     supported-platforms: []
@@ -240,6 +243,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     ignore:
     - node_modules/
     supported-platforms: []
@@ -252,6 +256,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     ignore:
     - node_modules/
     supported-platforms: []
@@ -264,6 +269,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     ignore:
     - node_modules/
     supported-platforms: []
@@ -276,6 +282,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     ignore:
     - node_modules/
     supported-platforms: []
@@ -288,6 +295,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     ignore:
     - node_modules/
     supported-platforms: []
@@ -300,6 +308,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     ignore:
     - node_modules/
     supported-platforms: []
@@ -312,6 +321,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     ignore:
     - node_modules/
     supported-platforms: []
@@ -324,6 +334,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     ignore:
     - node_modules/
     supported-platforms: []
@@ -336,6 +347,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     ignore:
     - node_modules/
     supported-platforms: []
@@ -348,6 +360,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     ignore:
     - node_modules/
     supported-platforms: []
@@ -360,6 +373,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     ignore:
     - node_modules/
     supported-platforms: []
@@ -372,6 +386,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     ignore:
     - node_modules/
     supported-platforms: []
@@ -384,6 +399,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     ignore:
     - node_modules/
     supported-platforms: []
@@ -396,6 +412,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     ignore:
     - node_modules/
     supported-platforms: []
@@ -408,6 +425,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     ignore:
     - node_modules/
     supported-platforms: []
@@ -420,6 +438,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     supported-platforms: []
 - name: cpappcpmatvariant
   type: html5
@@ -430,6 +449,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     supported-platforms: []
 - name: cpappcpauthorization
   type: html5
@@ -440,6 +460,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     supported-platforms: []
 - name: cpappcpauthentication
   type: html5
@@ -450,6 +471,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     supported-platforms: []
 - name: cpappcprestrictions
   type: html5
@@ -460,6 +482,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     supported-platforms: []
 - name: cpappcpprodlocline
   type: html5
@@ -470,6 +493,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     supported-platforms: []
 - name: cpappcpprodrestr
   type: html5
@@ -480,6 +504,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     supported-platforms: []
 - name: cpappcpcharqtygraph
   type: html5
@@ -490,6 +515,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     supported-platforms: []
 - name: cpappcpseedordercreation
   type: html5
@@ -500,6 +526,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     supported-platforms: []
 - name: cpappcpfullyconfproddmnd
   type: html5
@@ -510,6 +537,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     supported-platforms: []
 - name: cpappcpplaningconfig
   type: html5
@@ -520,6 +548,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     supported-platforms: []
 - name: cpappcpsalesstock
   type: html5
@@ -530,6 +559,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
+    - rm -rf node_modules
     supported-platforms: []
 resources:
 - name: config_products-db
