@@ -47,34 +47,34 @@ sap.ui.define(
                 this._oCore = sap.ui.getCore();
 
                 if (!this._valueHelpDialogLoc) {
-                  this._valueHelpDialogLoc = sap.ui.xmlfragment(
-                    "cpapp.cpfullyconfproddmnd.view.LocDialog",
-                    this
-                  );
-                  this.getView().addDependent(this._valueHelpDialogLoc);
+                    this._valueHelpDialogLoc = sap.ui.xmlfragment(
+                        "cpapp.cpfullyconfproddmnd.view.LocDialog",
+                        this
+                    );
+                    this.getView().addDependent(this._valueHelpDialogLoc);
                 }
                 if (!this._valueHelpDialogProd) {
-                  this._valueHelpDialogProd = sap.ui.xmlfragment(
-                    "cpapp.cpfullyconfproddmnd.view.ProdDialog",
-                    this
-                  );
-                  this.getView().addDependent(this._valueHelpDialogProd);
+                    this._valueHelpDialogProd = sap.ui.xmlfragment(
+                        "cpapp.cpfullyconfproddmnd.view.ProdDialog",
+                        this
+                    );
+                    this.getView().addDependent(this._valueHelpDialogProd);
                 }
                 if (!this._valueHelpDialogVer) {
-                  this._valueHelpDialogVer = sap.ui.xmlfragment(
-                    "cpapp.cpfullyconfproddmnd.view.VersionDialog",
-                    this
-                  );
-                  this.getView().addDependent(this._valueHelpDialogVer);
+                    this._valueHelpDialogVer = sap.ui.xmlfragment(
+                        "cpapp.cpfullyconfproddmnd.view.VersionDialog",
+                        this
+                    );
+                    this.getView().addDependent(this._valueHelpDialogVer);
                 }
                 if (!this._valueHelpDialogScen) {
-                  this._valueHelpDialogScen = sap.ui.xmlfragment(
-                    "cpapp.cpfullyconfproddmnd.view.ScenarioDialog",
-                    this
-                  );
-                  this.getView().addDependent(this._valueHelpDialogScen);
-                }        
-              
+                    this._valueHelpDialogScen = sap.ui.xmlfragment(
+                        "cpapp.cpfullyconfproddmnd.view.ScenarioDialog",
+                        this
+                    );
+                    this.getView().addDependent(this._valueHelpDialogScen);
+                }
+
             },
 
             /**
@@ -114,30 +114,30 @@ sap.ui.define(
                 that.byId("toDate").setValue(oDateH);
 
                 this.oProdList = this._oCore.byId(
-                  this._valueHelpDialogProd.getId() + "-list"
+                    this._valueHelpDialogProd.getId() + "-list"
                 );
                 this.oLocList = this._oCore.byId(
-                  this._valueHelpDialogLoc.getId() + "-list"
+                    this._valueHelpDialogLoc.getId() + "-list"
                 );
                 this.oVerList = this._oCore.byId(
-                  this._valueHelpDialogVer.getId() + "-list"
+                    this._valueHelpDialogVer.getId() + "-list"
                 );
                 this.oScenList = this._oCore.byId(
-                  this._valueHelpDialogScen.getId() + "-list"
+                    this._valueHelpDialogScen.getId() + "-list"
                 );
 
                 sap.ui.core.BusyIndicator.show();
                 //Location data
-                  this.getModel("CIRModel").read("/getLocation", {
+                this.getModel("CIRModel").read("/getLocation", {
                     success: function (oData) {
-                      that.locModel.setData(oData);
-                      that.oLocList.setModel(that.locModel);
-                      sap.ui.core.BusyIndicator.hide();
+                        that.locModel.setData(oData);
+                        that.oLocList.setModel(that.locModel);
+                        sap.ui.core.BusyIndicator.hide();
                     },
                     error: function (oData, error) {
-                      MessageToast.show("error");
+                        MessageToast.show("error");
                     },
-                  });
+                });
             },
 
             /**
@@ -165,15 +165,15 @@ sap.ui.define(
                 that.oGModel = that.getModel("oGModel");
                 // getting the input values
                 var Loc = that.oGModel.getProperty("/SelectedLoc"),
-                  Prod = that.oGModel.getProperty("/SelectedProd"),
-                  ver = that.oGModel.getProperty("/SelectedVer"),
-                  scen = that.oGModel.getProperty("/SelectedScen"),
-                  modelVersion = that.byId("idModelVer").getSelectedKey();
-        
+                    Prod = that.oGModel.getProperty("/SelectedProd"),
+                    ver = that.oGModel.getProperty("/SelectedVer"),
+                    scen = that.oGModel.getProperty("/SelectedScen"),
+                    modelVersion = that.byId("idModelVer").getSelectedKey();
+
                 that.oGModel.setProperty(
-                  "/SelectedMV",
-                  that.byId("idModelVer").getSelectedKey()
-                ); 
+                    "/SelectedMV",
+                    that.byId("idModelVer").getSelectedKey()
+                );
                 var vFromDate = this.byId("fromDate").getDateValue();
                 var vToDate = this.byId("toDate").getDateValue();
                 if (
@@ -207,7 +207,7 @@ sap.ui.define(
 
                             that.oGModel.setProperty("/TData", data.results);
                             // Calling function to generate UI table dynamically based on data
-                            that.TableGenerate();                            
+                            that.TableGenerate();
                         },
                         error: function (data) {
                             sap.ui.core.BusyIndicator.hide();
@@ -220,7 +220,7 @@ sap.ui.define(
                         "Please select a Location/Product/Version/Scenario/Date Range"
                     );
                 }
-            },            
+            },
 
             /**
              * This function is called to generate UI table dynamically based on data.
@@ -243,7 +243,7 @@ sap.ui.define(
                 var liDates = that.generateDateseries(fromDate, toDate);
                 // Looping through the data to generate columns
                 for (var i = 0; i < that.tableData.length; i++) {
-                    sRowData.UniqueId = that.tableData[i].UNIQUE_ID;
+                    sRowData['Unique ID'] = that.tableData[i].UNIQUE_ID;
                     weekIndex = 1;
                     for (let index = 1; index < liDates.length; index++) {
                         sRowData[liDates[index].WEEK_DATE] =
@@ -263,9 +263,9 @@ sap.ui.define(
                 // Checking column names and applying sap.m.Link to column values
                 that.oTable.bindColumns("/columns", function (sId, oContext) {
                     var columnName = oContext.getObject().WEEK_DATE;
-                    if (columnName === "UniqueId") {
+                    if (columnName === "Unique ID") {
                         return new sap.ui.table.Column({
-                            width: "8rem",
+                            width: "10rem",
                             label: columnName,
                             // template: columnName,
                             template: new sap.m.Link({
@@ -284,7 +284,7 @@ sap.ui.define(
                 });
 
                 that.oTable.bindRows("/rows");
-            },  
+            },
 
             /**
              * Called when 'Close/Cancel' button in any dialog is pressed.
@@ -303,7 +303,7 @@ sap.ui.define(
                     liDates = [];
                 var vDateSeries = imFromDate;
 
-                lsDates.WEEK_DATE = "UniqueId";
+                lsDates.WEEK_DATE = "Unique ID";
                 liDates.push(lsDates);
                 lsDates = {};
                 // Calling function to get the next Sunday date of From date
@@ -671,7 +671,7 @@ sap.ui.define(
                         error: function (oData, error) {
                             MessageToast.show("error");
                         },
-                    });                   
+                    });
 
                     // IBP Version list
                 } else if (sId.includes("Ver")) {
@@ -733,7 +733,7 @@ sap.ui.define(
                         "/SelectedCompItem",
                         aSelectedItems[0].getDescription()
                     );
-                    
+
                     // Structure Node List
                 } else if (sId.includes("Stru")) {
                     this.oStru = that.byId("idstru");
@@ -781,10 +781,9 @@ sap.ui.define(
                     selColumnDate,
                     selColumnValue = oEvent.getSource().getText(),
                     ObindingData = oEvent.getSource().getBindingContext().getObject(),
-                    selUniqueId = ObindingData.UniqueId;
-                    // that.colCIR = selUniqueId;
-                
-                
+                    selUniqueId = ObindingData['Unique ID'];  //ObindingData.Unique_ID;
+                // that.colCIR = selUniqueId;                
+
                 // Calling function if selected item is not empty
 
                 if (selColumnValue > 0) {
@@ -800,7 +799,17 @@ sap.ui.define(
 
                     this.getModel("CIRModel").read("/getUniqueItem", {
                         filters: [
-                            new Filter("UNIQUE_ID", FilterOperator.EQ, selUniqueId)                            
+                            new Filter("UNIQUE_ID", FilterOperator.EQ, selUniqueId),
+                            new Filter(
+                                "PRODUCT_ID",
+                                FilterOperator.EQ,
+                                that.oGModel.getProperty("/SelectedProd")
+                            ),
+                            new Filter(
+                                "LOCATION_ID",
+                                FilterOperator.EQ,
+                                that.oGModel.getProperty("/SelectedLoc")
+                            )
                         ],
                         success: function (oData) {
                             that.charModel.setData({
@@ -812,13 +821,120 @@ sap.ui.define(
                         error: function () {
                             MessageToast.show("Failed to get data");
                         },
-                    });                    
+                    });
                 }
             },
-            onPressPublish: function(oEvent) {
-                
-            }
+            onPressPublish: function (oEvent) {
+                // MessageToast.show("Test");
+                var oTable = that.getView().byId("idCIReq");
+                var oData = oTable.getModel().getData();
+                var oRows = oData.rows;
+                var oColumns = oData.columns;
+                var oCharacteristics = [];
+                var oCirData = {};
+                var aPublishData = [];
+                that.publishData = [];
 
+                for (var i = 0; i < oRows.length; i++) {
+                    oCirData = {};
+                    //    oCharacteristics = that.getUniqueIdCharacteristics(oRows[i]['Unique ID']);
+
+                    oCirData.UniqId = oRows[i]['Unique ID'];
+                    oCirData.Werks = that.oGModel.getProperty("/SelectedLoc");
+                    oCirData.Mantnr = that.oGModel.getProperty("/SelectedProd");
+                    oCirData.HeaderConfig = oCharacteristics;
+
+                    for (var j = 1; j < oColumns.length; j++) {
+                        oCirData.Datum = oColumns[j].WEEK_DATE;
+                        oCirData.Quantity = oRows[i][oCirData.Datum];
+
+                        aPublishData.push(JSON.stringify(oCirData));
+                    }
+
+                }
+
+                that.publishData = aPublishData;
+                that.getUniqueIdCharacteristics();
+            },
+            getUniqueIdCharacteristics: function () {
+                var oUniqueCharItem = {};
+                var aUniqueChar = [];
+                //var i = oRows.length - 1;
+
+                that.getModel("CIRModel").read("/getUniqueItem", {
+                    filters: [
+                        new Filter(
+                            "LOCATION_ID",
+                            FilterOperator.EQ,
+                            that.oGModel.getProperty("/SelectedLoc")
+                        ),
+                        new Filter(
+                            "PRODUCT_ID",
+                            FilterOperator.EQ,
+                            that.oGModel.getProperty("/SelectedProd")
+                        )
+                    ],
+                    success: function (oData) {
+                        aUniqueChar = oData.results;
+                        that.buildData(aUniqueChar);                       
+                    },
+                    error: function () {
+                        MessageToast.show("Failed to get Characteristics data");
+                    },
+                });
+
+
+            },
+            buildData: function (aUniqueChar) {
+                var aPublishData = [];
+                var aFilteredChar = [];
+                var oCharData = {};
+                var sUniqueId = "";
+                var oUniqueIdChars = {};
+                var aUniqueIdChars = [];
+                for (var j = 0; j < that.publishData.length; j++) {
+                    oCharData = JSON.parse(that.publishData[j]);
+                    if (sUniqueId !== oCharData.UniqId) {
+                        aUniqueIdChars = []
+                        sUniqueId = oCharData.UniqId;
+                        aFilteredChar = [];
+                        aFilteredChar = aUniqueChar.filter(function (aUniqueId) {
+                            return aUniqueId.UNIQUE_ID == oCharData.UniqId;
+                        });
+
+                      for(var k = 0; k < aFilteredChar.length; k++) {
+                          oUniqueIdChars = {};
+                          oUniqueIdChars.UniqId = aFilteredChar[k].UNIQUE_ID;
+                          oUniqueIdChars.Charc = aFilteredChar[k].CHAR_NUM;
+                          oUniqueIdChars.Value = aFilteredChar[k].CHAR_VALUE;
+
+                          aUniqueIdChars.push(oUniqueIdChars);
+                      }
+
+                    }
+                    oCharData.HeaderConfig = aUniqueIdChars;
+                    aPublishData.push(oCharData);                   
+
+                }
+                that.handlePublish(aPublishData);
+            },
+
+            handlePublish: function(aPublishData) {
+                var oModel = that.getOwnerComponent().getModel('CIRModel');  
+
+                oModel.callFunction("/postCIRQuantities", {
+                    method: "GET",
+                    urlParameters: {                        
+                        UNIQUE_DATA: aPublishData
+                    },
+                    success: function (oData, oResponse) {
+                        sap.m.MessageToast.show(that.i18n.getText("postSuccess"));
+                    },
+                    error: function (oResponse) {
+                        sap.m.MessageToast.show("Error");
+                    },
+                });
+            }
         });
     }
 );
