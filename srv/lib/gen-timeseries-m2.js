@@ -331,7 +331,7 @@ class GenTimeseriesM2 {
         const lStartDate = new Date(
             lDate.getFullYear(),
             lDate.getMonth(),
-            lDate.getDate() - 14
+            lDate.getDate() - parseInt(GenF.getParameterValue(1))
         );        
 
         const liPrediction = await SELECT.from('CP_TS_PREDICTIONS')
