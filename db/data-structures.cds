@@ -367,5 +367,18 @@ context cp_ds {
         CHARVAL_NUM : String(70);
         UID_CHAR_RATE : Decimal(13, 2);
     }
+    type uniqueIDChars {
+        UniqId : Integer;
+        Charc  : String(30);
+        Value  : String(70);
+    }
+    type uniqueIDQtyChars {
+        Werks : String(4);
+        Mantnr : String(40);
+        UniqId : Integer;
+        Datum : DateTime;
+        Quantity : Decimal(13,3);
+        HeaderConfig : array of uniqueIDChars;
+    }
 
 }
