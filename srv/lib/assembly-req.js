@@ -27,6 +27,8 @@ class AssemblyReq {
                                   FROM CP_PARTIALPROD_INTRO 
                                   WHERE REF_PRODID    = '${adata.PRODUCT_ID}'
                                   AND LOCATION_ID   = '${adata.LOCATION_ID}' )
+                OR
+                PRODUCT_ID = '${adata.PRODUCT_ID}'
         `);
 
         const liODChar = await cds.run(
@@ -91,6 +93,7 @@ class AssemblyReq {
         }        
 
         for( let iCir = 0 ; iCir < liCIR.length ; iCir++){
+            let liODTemp = GenF.parse(liOD);
 
         }
     }
