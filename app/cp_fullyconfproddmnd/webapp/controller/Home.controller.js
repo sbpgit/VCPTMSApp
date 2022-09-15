@@ -244,8 +244,10 @@ sap.ui.define(
                 // Looping through the data to generate columns
                 for (var i = 0; i < that.tableData.length; i++) {
                     sRowData['Unique ID'] = that.tableData[i].UNIQUE_ID;
+                    sRowData.UNIQUE_DESC = that.tableData[i].UNIQUE_DESC;
+                    sRowData['Product'] = that.tableData[i].PRODUCT_ID;
                     weekIndex = 1;
-                    for (let index = 1; index < liDates.length; index++) {
+                    for (let index = 2; index < liDates.length; index++) {
                         sRowData[liDates[index].WEEK_DATE] =
                             that.tableData[i]["WEEK" + weekIndex];
                         weekIndex++;
@@ -265,19 +267,28 @@ sap.ui.define(
                     var columnName = oContext.getObject().WEEK_DATE;
                     if (columnName === "Unique ID") {
                         return new sap.ui.table.Column({
-                            width: "10rem",
+                            width: "12rem",                            
                             label: columnName,
                             // template: columnName,
-                            template: new sap.m.Link({
-                                text: "{" + columnName + "}",
-                                press: that.uniqueIdLinkpress,
-                            }),
+                            template: new sap.m.VBox({
+                                items: [
+                                    new sap.m.Link({
+                                        text: "{" + columnName + "}",
+                                        press: that.uniqueIdLinkpress,
+                                    }),
+                                    new sap.m.ObjectIdentifier({
+                                        title: "{UNIQUE_DESC}",
+                                    }),                                    
+                                    ]
+                            })
                         });
                     } else {
                         return new sap.ui.table.Column({
                             width: "8rem",
                             label: columnName,
-                            template: columnName,
+                            template: new sap.m.Text({
+                                text: "{" + columnName + "}",
+                            }),
                         });
                     }
                     // }
@@ -308,10 +319,10 @@ sap.ui.define(
                 liDates.push(lsDates);
                 lsDates = {};
 
-                // // Product Id
-                // lsDates.WEEK_DATE = "Product";
-                // liDates.push(lsDates);
-                // lsDates = {};
+                // Product Id
+                lsDates.WEEK_DATE = "Product";
+                liDates.push(lsDates);
+                lsDates = {};
 
                 // Calling function to get the next Sunday date of From date
                 lsDates.WEEK_DATE = that.getNextMonday(vDateSeries);
@@ -825,7 +836,7 @@ sap.ui.define(
                             that.CharDetailList.setModel(that.charModel);
                             that._onCharDetails.open();
                         },
-                        error: function () {
+                        error: function (oData, OResponse) {
                             MessageToast.show("Failed to get data");
                         },
                     });
@@ -999,14 +1010,14 @@ sap.ui.define(
                         endTime: dsEDate,
                     }]
                 };
-                that.getModel("JModel").callFunction("/laddMLJob", {
+                that.getModel("JModel").callFunction("/addMLJob", {
                     method: "GET",
                     urlParameters: {
                         jobDetails: JSON.stringify(finalList),
                     },
                     success: function (oData) {
                         sap.ui.core.BusyIndicator.hide();
-                        sap.m.MessageToast.show(oData.laddMLJob + ": Job Created");
+                        sap.m.MessageToast.show(oData.laddMLJob.value + ": Job Created");
 
                     },
                     error: function (error) {
@@ -1048,7 +1059,7 @@ sap.ui.define(
                     oEntry.FROMDATE = vFromDate;
                     oEntry.TODATE = vToDate;
 
-                    that.handlePublish(oEntry);
+                     that.handlePublish(oEntry);
 
                     // calling service based on filters
                     // that.getModel("CIRModel").callFunction("/postCIRQuantities", {
