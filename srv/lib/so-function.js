@@ -784,6 +784,19 @@ class SOFunctions {
 
     }
 
+    async getTopLocation(lLocation, lProduct){
+        const lsLocation = await SELECT.columns('LOCATION_ID', 'PRODUCT_ID')
+                                       .from('LOCATION')
+                                       .where(`SALE_LOCATION = '${lLocation}'
+                                       AND SALE_PRODUCT = '${lProduct}'`)
+        if(lsLocation){
+            return this.getTopLocation(lsLocation.LOCATION_ID, lsLocation.PRODUCT_ID)
+        }
+        else{
+            return lLocation;
+        }
+    }
+
 }
 
 module.exports = SOFunctions;
