@@ -1966,6 +1966,9 @@ sap.ui.define(
                     oRuleList = [];
                 var oMdlVer = that.byId("Midmdlver").getSelectedKey(),
                     vMdlVer;
+                    //   25-08-2022
+                    var oMType = that.byId("MidType").getSelectedKey(),
+                        //   25-08-2022
                 oLocItem = that.oLoc.getValue();
                 (oProdItems = that.oProd.getTokens()),
                     (oPredProfile = that.oPredProfile.getValue()),
@@ -1987,7 +1990,10 @@ sap.ui.define(
                             Location: oLocItem,
                             Product: oProdItems[i].getText(),
                             GroupID: "ALL",
-                            Type: "OD",
+                            // Type: "OD",
+                            //   25-08-2022
+                            Type: oMType,
+                            //   25-08-2022
                             modelVersion: vMdlVer,
                         };
                         oRuleList.push(vRuleslist);
@@ -2079,7 +2085,9 @@ sap.ui.define(
                 oSelModelVer = this.byId("PidModelVer").getSelectedKey();
                 oSelVer = this.oVer.getValue();
                 oSelScen = this.oScen.getValue();
-
+                //   25-08-2022
+                var oSelType = this.byId("PidType").getSelectedKey();
+                //   25-08-2022
                 if (
                     this.oProd.getTokens().length > 0 &&
                     this.oVer.getValue() &&
@@ -2091,7 +2099,10 @@ sap.ui.define(
                             Location: oLocItem,
                             Product: oProdItems[i].getText(),
                             GroupID: "ALL",
-                            Type: "OD",
+                            // Type: "OD",
+                            //   25-08-2022
+                                Type: oSelType,
+                                //   25-08-2022
                             modelVersion: oSelModelVer,
                             version: oSelVer,
                             scenario: oSelScen,

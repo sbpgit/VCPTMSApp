@@ -195,6 +195,10 @@ modules:
       - cpappcpsalesstock.zip
       name: cpappcpsalesstock
       target-path: resources/
+    - artifacts:
+      - cpappcpjobschedulernew.zip
+      name: cpappcpjobschedulernew
+      target-path: resources/
 - name: cpodpcpodprofiles
   type: html5
   path: app/cp_odprofiles
@@ -560,6 +564,16 @@ modules:
     - npm install
     - npm run build:cf
     - rm -rf node_modules
+    supported-platforms: []
+- name: cpappcpjobschedulernew
+  type: html5
+  path: app/cpjobscheduler_new
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
     supported-platforms: []
 resources:
 - name: config_products-db

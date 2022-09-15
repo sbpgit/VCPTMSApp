@@ -1,7 +1,7 @@
 /*global location*/
 sap.ui.define(
 	[
-		"cpapp/cpjobscheduler/controller/BaseController",
+		"cpapp/cpjobschedulernew/controller/BaseController",
 		"sap/ui/model/json/JSONModel",
 		"sap/m/MessageToast",
 		"sap/m/MessageBox",
@@ -20,7 +20,7 @@ sap.ui.define(
 		var that;
 
 		return BaseController.extend(
-			"cpapp.cpjobscheduler.controller.CreateJob", {
+			"cpapp.cpjobschedulernew.controller.CreateJob", {
 				/**
 				 * Called when the worklist controller is instantiated.
 				 * @public
@@ -51,63 +51,63 @@ sap.ui.define(
 					this._oCore = sap.ui.getCore();
 					if (!this._valueHelpDialogLoc) {
 						this._valueHelpDialogLoc = sap.ui.xmlfragment(
-							"cpapp.cpjobscheduler.view.LocDialog",
+							"cpapp.cpjobschedulernew.view.LocDialog",
 							this
 						);
 						this.getView().addDependent(this._valueHelpDialogLoc);
 					}
 					if (!this._valueHelpDialogProd) {
 						this._valueHelpDialogProd = sap.ui.xmlfragment(
-							"cpapp.cpjobscheduler.view.ProdDialog",
+							"cpapp.cpjobschedulernew.view.ProdDialog",
 							this
 						);
 						this.getView().addDependent(this._valueHelpDialogProd);
 					}
 					if (!this._valueHelpDialogOD) {
 						this._valueHelpDialogOD = sap.ui.xmlfragment(
-							"cpapp.cpjobscheduler.view.ObjDepDialog",
+							"cpapp.cpjobschedulernew.view.ObjDepDialog",
 							this
 						);
 						this.getView().addDependent(this._valueHelpDialogOD);
 					}
 					if (!this._valueHelpDialogPPF) {
 						this._valueHelpDialogPPF = sap.ui.xmlfragment(
-							"cpapp.cpjobscheduler.view.PredDialog",
+							"cpapp.cpjobschedulernew.view.PredDialog",
 							this
 						);
 						this.getView().addDependent(this._valueHelpDialogPPF);
 					}
 					if (!this._valueHelpDialogVer) {
 						this._valueHelpDialogVer = sap.ui.xmlfragment(
-							"cpapp.cpjobscheduler.view.VersionDialog",
+							"cpapp.cpjobschedulernew.view.VersionDialog",
 							this
 						);
 						this.getView().addDependent(this._valueHelpDialogVer);
 					}
 					if (!this._valueHelpDialogScen) {
 						this._valueHelpDialogScen = sap.ui.xmlfragment(
-							"cpapp.cpjobscheduler.view.ScenarioDialog",
+							"cpapp.cpjobschedulernew.view.ScenarioDialog",
 							this
 						);
 						this.getView().addDependent(this._valueHelpDialogScen);
 					}
 					if (!this._valueHelpDialogJobDetail) {
 						this._valueHelpDialogJobDetail = sap.ui.xmlfragment(
-							"cpapp.cpjobscheduler.view.CreateJobDetails",
+							"cpapp.cpjobschedulernew.view.CreateJobDetails",
 							this
 						);
 						this.getView().addDependent(this._valueHelpDialogJobDetail);
 					}
 					if (!this._valueHelpDialogCustDetails) {
 						this._valueHelpDialogCustDetails = sap.ui.xmlfragment(
-							"cpapp.cpjobscheduler.view.CustomerDialog",
+							"cpapp.cpjobschedulernew.view.CustomerDialog",
 							this
 						);
 						this.getView().addDependent(this._valueHelpDialogCustDetails);
 					}
 					if (!this._valueHelpDialogClassDetails) {
 						this._valueHelpDialogClassDetails = sap.ui.xmlfragment(
-							"cpapp.cpjobscheduler.view.ClassDialog",
+							"cpapp.cpjobschedulernew.view.ClassDialog",
 							this
 						);
 						this.getView().addDependent(this._valueHelpDialogClassDetails);
@@ -544,17 +544,11 @@ sap.ui.define(
 						that.byId("MlocInput").setValue("");
 						that.byId("MprodInput").removeAllTokens();
 						that.byId("MpmInput").setValue("");
-                        // 15-09-2022
-                        that.byId("MidType").setSelectedKey("OD");
-                        // 15-09-2022
 
 						that.byId("PlocInput").setValue("");
 						that.byId("PprodInput").removeAllTokens();
 						that.byId("Pidver").setValue("");
 						that.byId("Pidscen").setValue("");
-                        // 15-09-2022
-                        that.byId("PidType").setSelectedKey("OD");
-                        // 15-09-2022
 
 						that.byId("TprodInput").setValue("");
 						that.byId("TlocInput").setValue("");
@@ -1165,14 +1159,7 @@ sap.ui.define(
 					this.getModel("BModel").read("/getIbpVerScn", {
 						filters: oFilters,
 						success: function (oData) {
-                            function removeDuplicate(array, key) {
-                                var check = new Set();
-                                return array.filter(obj => !check.has(obj[key]) && check.add(obj[key]));
-                            }
-                            that.verModel.setData({
-                                results: removeDuplicate(oData.results, 'VERSION')
-                            });
-							// that.verModel.setData(oData);
+							that.verModel.setData(oData);
 							that.oVerList.setModel(that.verModel);
 						},
 						error: function (oData, error) {
@@ -1218,14 +1205,7 @@ sap.ui.define(
 					this.getModel("BModel").read("/getIbpVerScn", {
 						filters: oFilters,
 						success: function (oData) {
-                            function removeDuplicate(array, key) {
-                                var check = new Set();
-                                return array.filter(obj => !check.has(obj[key]) && check.add(obj[key]));
-                            }
-                            that.scenModel.setData({
-                                results: removeDuplicate(oData.results, 'SCENARIO')
-                            });
-							// that.scenModel.setData(oData);
+							that.scenModel.setData(oData);
 							that.oScenList.setModel(that.scenModel);
 						},
 						error: function (oData, error) {
