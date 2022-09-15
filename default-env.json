@@ -1,5 +1,4 @@
-{
-"VCAP_SERVICES": {
+{"VCAP_SERVICES": {
  "destination": [
   {
    "binding_guid": "88ac3cf9-354a-41be-ba10-f494d4808403",
@@ -188,10 +187,4 @@
   "sbpbtp-vcpprovider-sc0jeojq-dev-config-products-srv.cfapps.us10.hana.ondemand.com"
  ],
  "users": null
-}
-<<<<<<< HEAD
-}
-=======
-
-  }
->>>>>>> 00f590ec2d6de74193c588c08f4b66edeb3979f8
+}}
