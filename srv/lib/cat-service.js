@@ -1847,7 +1847,9 @@ module.exports = (srv) => {
             // vCompIndex is to get Componnent quantity for all dates
             vWeekIndex = 0; //j
             lsCompWeekly.UNIQUE_ID = liUniqueId[j].UNIQUE_ID;
-            // lsCompWeekly.UNIQUE_DESC = liUniqueId[j].UNIQUE_DESC;
+            lsCompWeekly.UNIQUE_DESC = liUniqueId[j].UNIQUE_DESC;
+            lsCompWeekly.LOCATION_ID = liUniqueId[j].LOCATION_ID;
+            lsCompWeekly.PRODUCT_ID = liUniqueId[j].PRODUCT_ID;
 
             for (let i = 0; i < liDates.length; i++) {
                 vWeekIndex = vWeekIndex + 1;
@@ -1920,7 +1922,7 @@ module.exports = (srv) => {
 
             for (let k = 0; k < aFilteredChar.length; k++) {
                 oUniqueIdChars = {};
-                oUniqueIdChars.UniqId = (aFilteredChar[k].UNIQUE_ID).toString();
+                oUniqueIdChars.UniqueId = (aFilteredChar[k].UNIQUE_ID).toString();
                 oUniqueIdChars.Charc = aFilteredChar[k].CHAR_NUM;
                 oUniqueIdChars.Value = aFilteredChar[k].CHAR_VALUE;
 
@@ -1936,13 +1938,14 @@ module.exports = (srv) => {
             for (let j = 0; j < aFilteredCIR.length; j++) {
                 oEntry = {}
                 oEntry.Werks = aFilteredCIR[j].LOCATION_ID;
-                oEntry.Mantnr = aFilteredCIR[j].REF_PRODID;
+                oEntry.Matnr = aFilteredCIR[j].REF_PRODID;
                 oEntry.Quantity = (aFilteredCIR[j].CIR_QTY).toString();
-                oEntry.UniqId = (aFilteredCIR[j].UNIQUE_ID).toString();
+                oEntry.UniqueId = (aFilteredCIR[j].UNIQUE_ID).toString();
                 oEntry.Datum = aFilteredCIR[j].WEEK_DATE + "T10:00:00";
                 oEntry.HeaderConfig = aUniqueIdChars; 
                 try{
-                    await oModel.tx(req).post("/headerSet", oEntry);
+                    let sReturn = await oModel.tx(req).post("/headerSet", oEntry);
+                    console.log(sReturn);
                     }
                     catch(e) {
                       console.log(e);
@@ -1976,7 +1979,7 @@ module.exports = (srv) => {
 
             for (let k = 0; k < aFilteredChar.length; k++) {
                 oUniqueIdChars = {};
-                oUniqueIdChars.UniqId = (aFilteredChar[k].UNIQUE_ID).toString();
+                oUniqueIdChars.UniqueId = (aFilteredChar[k].UNIQUE_ID).toString();
                 oUniqueIdChars.Charc = aFilteredChar[k].CHAR_NUM;
                 oUniqueIdChars.Value = aFilteredChar[k].CHAR_VALUE;
 
@@ -1992,13 +1995,14 @@ module.exports = (srv) => {
             for (let j = 0; j < aFilteredCIR.length; j++) {
                 oEntry = {}
                 oEntry.Werks = aFilteredCIR[j].LOCATION_ID;
-                oEntry.Mantnr = aFilteredCIR[j].PRODUCT_ID;
+                oEntry.Matnr = aFilteredCIR[j].PRODUCT_ID;
                 oEntry.Quantity = (aFilteredCIR[j].CIR_QTY).toString();
                 oEntry.UniqId = (aFilteredCIR[j].UNIQUE_ID).toString();
                 oEntry.Datum = aFilteredCIR[j].WEEK_DATE + "T10:00:00";
                 oEntry.HeaderConfig = aUniqueIdChars;
                 try{
-                await oModel.tx(req).post("/headerSet", oEntry);
+                let sReturn = await oModel.tx(req).post("/headerSet", oEntry);
+                console.log(sReturn);
                 }
                 catch(e) {
                   console.log(e);

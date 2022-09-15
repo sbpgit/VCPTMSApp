@@ -13,7 +13,7 @@ class CIRData {
         let vDateFrom = req.data.FROMDATE; //"2022-03-04";
         let vDateTo = req.data.TODATE; //"2023-01-03";
         let oEntry = {};
-
+        //const liUniqueId = [];
         const liCIRQty = await cds.run(
             `
             SELECT * 
@@ -45,16 +45,19 @@ class CIRData {
                  "CP_CIR_GENERATED"."WEEK_DATE" ASC`
         );
 
-
+       try {
         const liUniqueId = await cds.run(
-            `
+          `
           SELECT DISTINCT 
           "CP_CIR_GENERATED"."LOCATION_ID", 
           "CP_CIR_GENERATED"."PRODUCT_ID",
           "CP_CIR_GENERATED"."VERSION",
           "CP_CIR_GENERATED"."SCENARIO",
-          "CP_CIR_GENERATED"."UNIQUE_ID"
+          "CP_CIR_GENERATED"."UNIQUE_ID",
+          "CP_UNIQUE_ID_HEADER"."UNIQUE_DESC"
                           FROM "CP_CIR_GENERATED" 
+                          inner join "CP_UNIQUE_ID_HEADER"
+                          ON "CP_CIR_GENERATED"."UNIQUE_ID" = "CP_UNIQUE_ID_HEADER"."UNIQUE_ID"
                           inner join "CP_PARTIALPROD_INTRO"
                           ON "CP_CIR_GENERATED"."PRODUCT_ID" = "CP_PARTIALPROD_INTRO"."PRODUCT_ID"
                           AND "CP_CIR_GENERATED"."LOCATION_ID" = "CP_PARTIALPROD_INTRO"."LOCATION_ID"
@@ -80,9 +83,12 @@ class CIRData {
                                "CP_CIR_GENERATED"."SCENARIO" ASC,
                                "CP_CIR_GENERATED"."UNIQUE_ID" ASC`
         );
-
-        oEntry.liCIRQty = liCIRQty;
         oEntry.liUniqueId = liUniqueId;
+       }
+       catch(e) {
+           console.log(e);
+       }
+        oEntry.liCIRQty = liCIRQty;        
 
         return oEntry;
     }
