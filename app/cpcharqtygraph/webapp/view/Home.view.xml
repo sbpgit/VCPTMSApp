@@ -49,7 +49,7 @@
                     </VBox>
                     <VBox >
                         <Label text="Week Date"  />
-                <ComboBox id="fromDate" placeholder="Select Date"  items="{path:'/resultsCombos'}" change="handleDateChange" width="350px">
+                <ComboBox id="fromDate" placeholder="Select Date"  items="{path:'/resultsCombos'}" change="handleDateChange" width="350px" editable="false">
                 <core:Item key="{WEEK_DATE}" text="{WEEK_DATE}"/>
                 </ComboBox>
                     </VBox>

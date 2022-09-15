@@ -24,6 +24,14 @@
                     "localUri": "localService/metadata.xml",
                     "odataVersion": "2.0"
                 }
+            },
+            "Jobs": {
+                "uri": "v2/jobs/",
+                "type": "OData",
+                "settings": {
+                    "odataVersion": "2.0",
+                    "localUri": "localService/metadata.xml"
+                }
             }
         },
         "crossNavigation": {
@@ -37,7 +45,7 @@
                     "action": "display",
                     "title": "{{flpTitle}}",
                     "subTitle": "{{flpSubtitle}}",
-                    "icon": ""
+                    "icon": "sap-icon://dimension"
                 }
             }
         }
@@ -100,6 +108,10 @@
                     "autoExpandSelect": true,
                     "earlyRequests": true
                 }
+            },
+            "JModel": {
+                "dataSource": "Jobs",
+                "preload": true
             }
         },
         "resources": {
