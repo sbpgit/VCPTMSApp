@@ -61,6 +61,7 @@
 									<core:Item key="Simulation" text="Simulation"/>
 									
 								</ComboBox>
+                        
             </VBox>
                     <VBox>
                         <Label text=""/>
