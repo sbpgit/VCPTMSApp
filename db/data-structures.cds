@@ -5,11 +5,13 @@ context cp_ds {
         OBJ_DEP     : String(30);
         OBJ_COUNTER : Integer;
     }
+
     type locProd {
         LOCATION_ID : String(4);
         PRODUCT_ID  : String(40);
         PROD_DESC   : String(40);
     }
+
     type odprofiles {
         LOCATION_ID : String(4);
         PRODUCT_ID  : String(40);
@@ -30,7 +32,7 @@ context cp_ds {
         VERSION     : String(10);
         SCENARIO    : String(32);
         STRUC_NODE  : String(50);
-        QTYTYPE    : String(50);
+        QTYTYPE     : String(50);
         WEEK1       : Integer;
         WEEK2       : Integer;
         WEEK3       : Integer;
@@ -190,12 +192,14 @@ context cp_ds {
 
 
     }
+
     type cirWkly {
         // CAL_DATE    : Date;
         LOCATION_ID : String(4);
         PRODUCT_ID  : String(40);
         // ASSEMBLY    : String(40);
         UNIQUE_ID   : Integer;
+        UNIQUE_DESC : String(50);
         VERSION     : String(10);
         SCENARIO    : String(32);
         // STRUC_NODE  : String(50);
@@ -358,25 +362,28 @@ context cp_ds {
         WEEK156     : Integer;
 
     }
+
     type uniqueCharItems {
-        UNIQUE_ID : Integer;
-        LOCATION_ID : String(4);
-        PRODUCT_ID : String(40);
-        CHAR_NUM : String(30);
-        CHARVAL_NUM : String(70);
+        UNIQUE_ID     : Integer;
+        LOCATION_ID   : String(4);
+        PRODUCT_ID    : String(40);
+        CHAR_NUM      : String(30);
+        CHARVAL_NUM   : String(70);
         UID_CHAR_RATE : Decimal(13, 2);
     }
+
     type uniqueIDChars {
         UniqId : Integer;
         Charc  : String(30);
         Value  : String(70);
     }
+
     type uniqueIDQtyChars {
-        Werks : String(4);
-        Mantnr : String(40);
-        UniqId : Integer;
-        Datum : DateTime;
-        Quantity : Decimal(13,3);
+        Werks        : String(4);
+        Mantnr       : String(40);
+        UniqId       : Integer;
+        Datum        : DateTime;
+        Quantity     : Decimal(13, 3);
         HeaderConfig : array of uniqueIDChars;
     }
 
