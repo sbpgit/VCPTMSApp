@@ -227,7 +227,7 @@ class SOFunctions {
         }
         console.log("Process Completed");
 
-        await this.updateUniqueRate(lLocation, lProduct);
+        await this.updateUniqueRate(adata.LOCATION_ID, adata.PRODUCT_ID);
 
         console.log("UID Rate Updated");
 
