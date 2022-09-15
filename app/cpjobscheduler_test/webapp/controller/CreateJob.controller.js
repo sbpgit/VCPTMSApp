@@ -1159,7 +1159,14 @@ sap.ui.define(
 					this.getModel("BModel").read("/getIbpVerScn", {
 						filters: oFilters,
 						success: function (oData) {
-							that.verModel.setData(oData);
+                            function removeDuplicate(array, key) {
+                                var check = new Set();
+                                return array.filter(obj => !check.has(obj[key]) && check.add(obj[key]));
+                            }
+                            that.verModel.setData({
+                                results: removeDuplicate(oData.results, 'VERSION')
+                            });
+							// that.verModel.setData(oData);
 							that.oVerList.setModel(that.verModel);
 						},
 						error: function (oData, error) {
@@ -1205,7 +1212,14 @@ sap.ui.define(
 					this.getModel("BModel").read("/getIbpVerScn", {
 						filters: oFilters,
 						success: function (oData) {
-							that.scenModel.setData(oData);
+                            function removeDuplicate(array, key) {
+                                var check = new Set();
+                                return array.filter(obj => !check.has(obj[key]) && check.add(obj[key]));
+                            }
+                            that.scenModel.setData({
+                                results: removeDuplicate(oData.results, 'SCENARIO')
+                            });
+							// that.scenModel.setData(oData);
 							that.oScenList.setModel(that.scenModel);
 						},
 						error: function (oData, error) {
