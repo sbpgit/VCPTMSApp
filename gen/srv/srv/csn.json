@@ -6231,6 +6231,12 @@
           "type": "cds.String",
           "length": 30
         },
+        "CHAR_DESC": {
+          "@title": "CHAR_DESC",
+          "key": true,
+          "type": "cds.String",
+          "length": 150
+        },
         "CHAR_TYPE": {
           "@title": "CHAR_TYPE",
           "key": true,
@@ -20238,6 +20244,12 @@
           "key": true,
           "type": "cds.String",
           "length": 30
+        },
+        "CHAR_DESC": {
+          "@title": "CHAR_DESC",
+          "key": true,
+          "type": "cds.String",
+          "length": 150
         },
         "CHAR_TYPE": {
           "@title": "CHAR_TYPE",

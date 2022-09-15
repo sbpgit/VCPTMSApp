@@ -25,6 +25,7 @@ sap.ui.define([
                 // Declaration of JSON models and size limits
                 this.PrimarylistModel = new JSONModel();
                 this.SeclistModel = new JSONModel();
+                this.SearchModel = new JSONModel();
                 that.locModel = new JSONModel();
                 that.prodModel = new JSONModel();
 
@@ -143,7 +144,17 @@ sap.ui.define([
                             });
                             that.oSList.setModel(that.SeclistModel);
 
-                            that.byId("searchField").setModel(that.SeclistModel);
+                            that.searchlist = that.finalSecData;
+
+
+                        that.searchlist.forEach(function (row) {
+                            row.Char = row.CHAR_NAME + " - " + row.CHAR_DESC;                        
+					    }, that);
+
+                        that.SearchModel.setData({
+                            results: that.searchlist,
+                        });
+                            that.byId("searchField").setModel(that.SearchModel);
 
                         },
                         error: function (oData, error) {
@@ -202,6 +213,16 @@ sap.ui.define([
                             results: that.finalSecData,
                         });
                         that.oSList.setModel(that.SeclistModel);
+
+                        that.searchlist = that.SeclistModel;
+
+
+                        that.searchlist.forEach(function (row) {
+
+                            row.CHAR_NAME = row.CHAR_NAME + " - " + row.CHAR_DESC;
+                        
+					}, that);
+
 
                         that.byId("searchField").setModel(that.SeclistModel);
 
@@ -482,6 +503,10 @@ sap.ui.define([
                     aData[0].setSelected(true);
 
                 } else {
+
+                    sQuery = sQuery.split("-")[0].trim();
+                    // sQuery = sQuery ? sQuery.trim() : "";
+
                     for (var i = 0; i < aData.length; i++) {
                         if (sQuery === aData[i].getCells()[1].getText()) {
                             aData[i].focus();
@@ -496,9 +521,12 @@ sap.ui.define([
                     aFilters = [];
                     aFilters = [
                         new Filter([
-                            new Filter("CHAR_NAME", function (sText) {
+                            new Filter("Char", function (sText) {
                                 return (sText || "").toUpperCase().indexOf(sValue.toUpperCase()) > -1;
-                            })
+                            }),
+                            // new Filter("CHAR_DESC", function (sText) {
+                            //     return (sText || "").toUpperCase().indexOf(sValue.toUpperCase()) > -1;
+                            // })
                         ], false)
                     ];
 
