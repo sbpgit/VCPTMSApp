@@ -39,7 +39,7 @@ class GenTimeseriesM2 {
                 {
                     xpr: [
                         { ref: ["LOCATION_ID"] }, '=', { val: adata.LOCATION_ID }, 'and',
-                        { ref: ["PRODUCT_ID"] }, '=', { val: lMainProduct.REF_PRODID }, 'and',
+                        { ref: ["PRODUCT_ID"] }, '=', { val: lMainProduct }, 'and',
                         { ref: ["UID_TYPE"] }, '=', { val: 'P' }
                     ]
                 }
