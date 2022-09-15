@@ -743,21 +743,27 @@ context cp {
     }
 
     entity SALES_S {
-        key SALES_DOC    : String(10) @title : 'Sales Document';
-            PRODUCT_ID   : String(40) @title : 'Product';
-            LOCATION_ID  : String(4)  @title : 'Location ';
+        key SALES_DOC    : String(10)     @title : 'Sales Document';
+            PRODUCT_ID   : String(40)     @title : 'Product';
+            LOCATION_ID  : String(4)      @title : 'Location ';
             QUANTITY     : Decimal(13, 3) @title : 'Quantity';
-            STATUS       : String(10) @title : 'Status';
-            ORDER_NUMBER : String(10) @title : 'Order Number ';
-            PURCHASE_REQ : String(12) @title : 'Purchase Requisition ';
-            CHANGED_DATE : Date @title : 'Change Date';
-            CHANGED_TIME : Time @title : 'Change Time';
-            CHANGED_BY   : String(12) @title : 'Changed By';
-            CREATED_DATE : Date @title : 'Created Date';
-            CREATED_TIME : Time @title : 'Created Time';
-            CREATED_BY   : String(12) @title : 'Created By';
+            STATUS       : String(10)     @title : 'Status';
+            ORDER_NUMBER : String(10)     @title : 'Order Number ';
+            PURCHASE_REQ : String(12)     @title : 'Purchase Requisition ';
+            CHANGED_DATE : Date           @title : 'Change Date';
+            CHANGED_TIME : Time           @title : 'Change Time';
+            CHANGED_BY   : String(12)     @title : 'Changed By';
+            CREATED_DATE : Date           @title : 'Created Date';
+            CREATED_TIME : Time           @title : 'Created Time';
+            CREATED_BY   : String(12)     @title : 'Created By';
     }
 
+    entity FACTORY_SALESLOC {
+        key LOCATION_ID   : String(4)  @title : 'Location ';
+        key PRODUCT_ID    : String(40) @title : 'Product';
+        key SALES_LOC     : String(4)  @title : 'Sales Location ';
+        key SALES_PRODUCT : String(40) @title : 'Sales Product';
+    }
 // End Of Insert - Deepa
 }
 
@@ -1044,8 +1050,8 @@ entity![V_GETVARCHARPS]{
 entity![V_UNIQUE_ID_ITEM]{
     key![UNIQUE_ID]   : Integer    @title : 'MATVARID';
     key![PRODUCT_ID]  : String(40) @title : 'PRODUCT_ID';
-    key![LOCATION_ID] : String(4)  @title : 'LOCATION_ID';    
-    key![UNIQUE_DESC]  : String(50) @title : 'UNIQUE_DESC';
+    key![LOCATION_ID] : String(4)  @title : 'LOCATION_ID';
+    key![UNIQUE_DESC] : String(50) @title : 'UNIQUE DESC';
     key![CHAR_NUM]    : String(30) @title : 'CHAR_NUM';
     key![CHAR_NAME]   : String(30) @title : 'CHAR_NAME';
     key![CHARVAL_NUM] : String(70) @title : 'CHARVAL_NUM';
@@ -1058,7 +1064,7 @@ entity![V_UNIQUE_ID]{
     key![UNIQUE_ID]   : Integer    @title : 'MATVARID';
     key![PRODUCT_ID]  : String(40) @title : 'Product';
     key![LOCATION_ID] : String(4)  @title : 'LOCATION_ID';
-    key![UNIQUE_DESC] : String(50) @title : 'CHAR_NUM';
+    key![UNIQUE_DESC] : String(50) @title : 'UNIQUE DESC';
     key![UID_TYPE]    : String(1)  @title : 'CHARVAL_NUM';
     key![ACTIVE]      : Boolean    @title : 'CHAR_VALUE';
     key![CHAR_NUM]    : String(30) @title : 'CHAR_NUM';
@@ -1121,11 +1127,11 @@ entity![V_PLANNEDCONFIG]{
     key![VALUE]             : String(500) @title : 'VALUE';
 }
 
-@cds.persistence.exists 
-Entity ![V_CIRVERSCEN] {
-key     ![LOCATION_ID]: String(4)  @title: 'LOCATION_ID' ; 
-key     ![PRODUCT_ID]: String(40)  @title: 'PRODUCT_ID' ; 
-key     ![REF_PRODID]: String(40)  @title: 'REF_PRODID' ; 
-key     ![VERSION]: String(10)  @title: 'VERSION' ; 
-key     ![SCENARIO]: String(32)  @title: 'SCENARIO' ; 
+@cds.persistence.exists
+entity![V_CIRVERSCEN]{
+    key![LOCATION_ID] : String(4)  @title : 'LOCATION_ID';
+    key![PRODUCT_ID]  : String(40) @title : 'PRODUCT_ID';
+    key![REF_PRODID]  : String(40) @title : 'REF_PRODID';
+    key![VERSION]     : String(10) @title : 'VERSION';
+    key![SCENARIO]    : String(32) @title : 'SCENARIO';
 }
