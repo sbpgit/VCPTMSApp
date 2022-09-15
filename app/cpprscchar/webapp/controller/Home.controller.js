@@ -498,6 +498,9 @@ sap.ui.define([
                         new Filter([
                             new Filter("CHAR_NAME", function (sText) {
                                 return (sText || "").toUpperCase().indexOf(sValue.toUpperCase()) > -1;
+                            }),
+                            new Filter("CHAR_DESC", function (sText) {
+                                return (sText || "").toUpperCase().indexOf(sValue.toUpperCase()) > -1;
                             })
                         ], false)
                     ];
