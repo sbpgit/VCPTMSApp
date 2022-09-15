@@ -212,7 +212,7 @@ class GenTimeseriesM2 {
                     SCENARIO,
                     WEEK_DATE`
         );
-        console.log("Test: "+ liFutureCharPlan.length);
+        
         // console.log();
         await DELETE.from('CP_TS_OBJDEP_CHARHDR_F')
             .where(`LOCATION_ID = '${adata.LOCATION_ID}' 
@@ -230,7 +230,7 @@ class GenTimeseriesM2 {
         else {
             lMainProduct = lsMainProduct.REF_PRODID;
         }
-        console.log("main prod:"+ lMainProduct);
+        console.log("Main prod:"+ lMainProduct);
         // Get Sales Count Information
         const liPrimaryID = await SELECT.from('V_UNIQUE_ID')
             .columns(["UNIQUE_ID",

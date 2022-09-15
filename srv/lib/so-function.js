@@ -786,7 +786,7 @@ class SOFunctions {
 
     async getTopLocation(lLocation, lProduct){
         const lsLocation = await SELECT.columns('LOCATION_ID', 'PRODUCT_ID')
-                                       .from('FACTORY_SALESLOC')
+                                       .from('CP_FACTORY_SALESLOC')
                                        .where(`SALE_LOCATION = '${lLocation}'
                                        AND SALE_PRODUCT = '${lProduct}'`)
         if(lsLocation){
