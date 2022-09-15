@@ -212,7 +212,7 @@ class GenTimeseriesM2 {
                     SCENARIO,
                     WEEK_DATE`
         );
-        console.log("Test: "+ liFutureCharPlan.length);
+        
         // console.log();
         await DELETE.from('CP_TS_OBJDEP_CHARHDR_F')
             .where(`LOCATION_ID = '${adata.LOCATION_ID}' 
@@ -230,7 +230,7 @@ class GenTimeseriesM2 {
         else {
             lMainProduct = lsMainProduct.REF_PRODID;
         }
-        console.log("main prod:"+ lMainProduct);
+        console.log("Main prod:"+ lMainProduct);
         // Get Sales Count Information
         const liPrimaryID = await SELECT.from('V_UNIQUE_ID')
             .columns(["UNIQUE_ID",
@@ -327,8 +327,18 @@ class GenTimeseriesM2 {
 
     async genPrediction(adata) {
 
+        const lDate = new Date();
+        const lStartDate = new Date(
+            lDate.getFullYear(),
+            lDate.getMonth(),
+            lDate.getDate() - parseInt(GenF.getParameterValue(1))
+        );        
+
         const liPrediction = await SELECT.from('CP_TS_PREDICTIONS')
-            .where(`LOCATION_ID = '${adata.LOCATION_ID}' AND PRODUCT_ID = '${adata.PRODUCT_ID}' AND OBJ_TYPE = 'PI'`);
+                                         .where(`CAL_DATE    > '${lStartDate}'
+                                             AND LOCATION_ID = '${adata.LOCATION_ID}' 
+                                             AND PRODUCT_ID  = '${adata.PRODUCT_ID}' 
+                                             AND OBJ_TYPE    = 'PI'`);
 
         let liPriQty = [];
         liPriQty = await cds.run(

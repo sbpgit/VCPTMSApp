@@ -21,13 +21,16 @@ class GenTimeseries {
                          "PRODUCT_ID" ASC,
                          "WEEK_DATE" ASC`
         );
-
-        let lMainProduct = await SELECT .one
+        let lMainProduct = '';
+        let lsMainProduct = await SELECT .one
                                   .from('CP_PARTIALPROD_INTRO')
                                   .columns('REF_PRODID')
                                   .where(`PRODUCT_ID = '${adata.LOCATION_ID}' AND LOCATION_ID = '${adata.PRODUCT_ID}'`);
-        if (lMainProduct === null) {
+        if (lsMainProduct === null) {
             lMainProduct = GenF.parse(adata.PRODUCT_ID);
+        }
+        else {
+            lMainProduct = lsMainProduct.REF_PRODID;
         }
        
         const liODChar = await cds.run(

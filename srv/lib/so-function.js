@@ -227,7 +227,7 @@ class SOFunctions {
         }
         console.log("Process Completed");
 
-        await this.updateUniqueRate(adata.LOCATION_ID, adata.PRODUCT_ID);
+        await this.updateUniqueRate(lLocation, lProduct);
 
         console.log("UID Rate Updated");
 
@@ -782,6 +782,19 @@ class SOFunctions {
 
         return lCntVariantID;
 
+    }
+
+    async getTopLocation(lLocation, lProduct){
+        const lsLocation = await SELECT.columns('LOCATION_ID', 'PRODUCT_ID')
+                                       .from('CP_FACTORY_SALESLOC')
+                                       .where(`SALE_LOCATION = '${lLocation}'
+                                       AND SALE_PRODUCT = '${lProduct}'`)
+        if(lsLocation){
+            return this.getTopLocation(lsLocation.LOCATION_ID, lsLocation.PRODUCT_ID)
+        }
+        else{
+            return lLocation;
+        }
     }
 
 }

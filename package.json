@@ -10,7 +10,7 @@
         "@sap/approuter": "^11.3.2",
         "@sap/audit-logging": "^5.3.0",
         "@sap/cds": "^5.9.8",
-        "@sap/cds-dk": "^4.9.2",
+        "@sap/cds-dk": "^4.9.7",
         "@sap/cds-mtx": "^2.5.1",
         "@sap/cds-odata-v2-adapter-proxy": "^1.9.6",
         "@sap/hana-client": "^2.12.22",
@@ -174,6 +174,24 @@
                     "credentials": {
                         "destination": "IBPExternal",
                         "path": "/sap/opu/odata/IBP/MASTER_DATA_API_SRV"
+                    }
+                }
+            },
+            "S4ODataService": {
+                "kind": "odata-v2",
+                "model": "srv/external/S4ODataService",
+                "[development]": {
+                    "credentials": {
+                        "url": "http://sbps4d.sbpcorp.com:50000/sap/opu/odata//SBPC/IBP_CIR_SRV",
+                        "authentication": "BasicAuthentication",
+                        "username": "SBPTECHTEAM",
+                        "password": "sbpdev01"
+                    }
+                },
+                "[production]": {
+                    "credentials": {
+                        "destination": "S4D_HTTP",
+                        "path": "/sap/opu/odata//SBPC/IBP_CIR_SRV"
                     }
                 }
             }

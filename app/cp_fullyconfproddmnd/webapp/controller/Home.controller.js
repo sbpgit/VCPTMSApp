@@ -244,8 +244,10 @@ sap.ui.define(
                 // Looping through the data to generate columns
                 for (var i = 0; i < that.tableData.length; i++) {
                     sRowData['Unique ID'] = that.tableData[i].UNIQUE_ID;
+                    sRowData.UNIQUE_DESC = that.tableData[i].UNIQUE_DESC;
+                    sRowData['Product'] = that.tableData[i].PRODUCT_ID;
                     weekIndex = 1;
-                    for (let index = 1; index < liDates.length; index++) {
+                    for (let index = 2; index < liDates.length; index++) {
                         sRowData[liDates[index].WEEK_DATE] =
                             that.tableData[i]["WEEK" + weekIndex];
                         weekIndex++;
@@ -265,19 +267,28 @@ sap.ui.define(
                     var columnName = oContext.getObject().WEEK_DATE;
                     if (columnName === "Unique ID") {
                         return new sap.ui.table.Column({
-                            width: "10rem",
+                            width: "12rem",                            
                             label: columnName,
                             // template: columnName,
-                            template: new sap.m.Link({
-                                text: "{" + columnName + "}",
-                                press: that.uniqueIdLinkpress,
-                            }),
+                            template: new sap.m.VBox({
+                                items: [
+                                    new sap.m.Link({
+                                        text: "{" + columnName + "}",
+                                        press: that.uniqueIdLinkpress,
+                                    }),
+                                    new sap.m.ObjectIdentifier({
+                                        title: "{UNIQUE_DESC}",
+                                    }),                                    
+                                    ]
+                            })
                         });
                     } else {
                         return new sap.ui.table.Column({
                             width: "8rem",
                             label: columnName,
-                            template: columnName,
+                            template: new sap.m.Text({
+                                text: "{" + columnName + "}",
+                            }),
                         });
                     }
                     // }
@@ -303,9 +314,16 @@ sap.ui.define(
                     liDates = [];
                 var vDateSeries = imFromDate;
 
+                // Unique Id
                 lsDates.WEEK_DATE = "Unique ID";
                 liDates.push(lsDates);
                 lsDates = {};
+
+                // Product Id
+                lsDates.WEEK_DATE = "Product";
+                liDates.push(lsDates);
+                lsDates = {};
+
                 // Calling function to get the next Sunday date of From date
                 lsDates.WEEK_DATE = that.getNextMonday(vDateSeries);
                 vDateSeries = lsDates.WEEK_DATE;
@@ -818,122 +836,258 @@ sap.ui.define(
                             that.CharDetailList.setModel(that.charModel);
                             that._onCharDetails.open();
                         },
-                        error: function () {
+                        error: function (oData, OResponse) {
                             MessageToast.show("Failed to get data");
                         },
                     });
                 }
             },
-            onPressPublish: function (oEvent) {
-                // MessageToast.show("Test");
-                var oTable = that.getView().byId("idCIReq");
-                var oData = oTable.getModel().getData();
-                var oRows = oData.rows;
-                var oColumns = oData.columns;
-                var oCharacteristics = [];
-                var oCirData = {};
-                var aPublishData = [];
-                that.publishData = [];
+            // onPressPublish: function (oEvent) {
+            //     // MessageToast.show("Test");
+            //     var oTable = that.getView().byId("idCIReq");
+            //     var oData = oTable.getModel().getData();
+            //     var oRows = oData.rows;
+            //     var oColumns = oData.columns;
+            //     var oCharacteristics = [];
+            //     var oCirData = {};
+            //     var aPublishData = [];
+            //     that.publishData = [];
 
-                for (var i = 0; i < oRows.length; i++) {
-                    oCirData = {};
-                    //    oCharacteristics = that.getUniqueIdCharacteristics(oRows[i]['Unique ID']);
+            //     for (var i = 0; i < oRows.length; i++) {
+            //         oCirData = {};
+            //         //    oCharacteristics = that.getUniqueIdCharacteristics(oRows[i]['Unique ID']);
 
-                    oCirData.UniqId = oRows[i]['Unique ID'];
-                    oCirData.Werks = that.oGModel.getProperty("/SelectedLoc");
-                    oCirData.Mantnr = that.oGModel.getProperty("/SelectedProd");
-                    oCirData.HeaderConfig = oCharacteristics;
+            //         oCirData.UniqId = oRows[i]['Unique ID'];
+            //         oCirData.Werks = that.oGModel.getProperty("/SelectedLoc");
+            //         oCirData.Mantnr = that.oGModel.getProperty("/SelectedProd");
+            //         oCirData.HeaderConfig = oCharacteristics;
 
-                    for (var j = 1; j < oColumns.length; j++) {
-                        oCirData.Datum = oColumns[j].WEEK_DATE;
-                        oCirData.Quantity = oRows[i][oCirData.Datum];
+            //         for (var j = 1; j < oColumns.length; j++) {
+            //             oCirData.Datum = oColumns[j].WEEK_DATE;
+            //             oCirData.Quantity = oRows[i][oCirData.Datum];
 
-                        aPublishData.push(JSON.stringify(oCirData));
-                    }
+            //             aPublishData.push(JSON.stringify(oCirData));
+            //         }
 
-                }
+            //     }
 
-                that.publishData = aPublishData;
-                that.getUniqueIdCharacteristics();
-            },
-            getUniqueIdCharacteristics: function () {
-                var oUniqueCharItem = {};
-                var aUniqueChar = [];
-                //var i = oRows.length - 1;
+            //     that.publishData = aPublishData;
+            //     that.getUniqueIdCharacteristics();
+            // },
+            // getUniqueIdCharacteristics: function () {
+            //     var oUniqueCharItem = {};
+            //     var aUniqueChar = [];
+            //     //var i = oRows.length - 1;
 
-                that.getModel("CIRModel").read("/getUniqueItem", {
-                    filters: [
-                        new Filter(
-                            "LOCATION_ID",
-                            FilterOperator.EQ,
-                            that.oGModel.getProperty("/SelectedLoc")
-                        ),
-                        new Filter(
-                            "PRODUCT_ID",
-                            FilterOperator.EQ,
-                            that.oGModel.getProperty("/SelectedProd")
-                        )
-                    ],
-                    success: function (oData) {
-                        aUniqueChar = oData.results;
-                        that.buildData(aUniqueChar);                       
-                    },
-                    error: function () {
-                        MessageToast.show("Failed to get Characteristics data");
-                    },
-                });
+            //     that.getModel("CIRModel").read("/getUniqueItem", {
+            //         filters: [
+            //             new Filter(
+            //                 "LOCATION_ID",
+            //                 FilterOperator.EQ,
+            //                 that.oGModel.getProperty("/SelectedLoc")
+            //             ),
+            //             new Filter(
+            //                 "PRODUCT_ID",
+            //                 FilterOperator.EQ,
+            //                 that.oGModel.getProperty("/SelectedProd")
+            //             )
+            //         ],
+            //         success: function (oData) {
+            //             aUniqueChar = oData.results;
+            //             that.buildData(aUniqueChar);
+            //         },
+            //         error: function () {
+            //             MessageToast.show("Failed to get Characteristics data");
+            //         },
+            //     });
 
 
-            },
-            buildData: function (aUniqueChar) {
-                var aPublishData = [];
-                var aFilteredChar = [];
-                var oCharData = {};
-                var sUniqueId = "";
-                var oUniqueIdChars = {};
-                var aUniqueIdChars = [];
-                for (var j = 0; j < that.publishData.length; j++) {
-                    oCharData = JSON.parse(that.publishData[j]);
-                    if (sUniqueId !== oCharData.UniqId) {
-                        aUniqueIdChars = []
-                        sUniqueId = oCharData.UniqId;
-                        aFilteredChar = [];
-                        aFilteredChar = aUniqueChar.filter(function (aUniqueId) {
-                            return aUniqueId.UNIQUE_ID == oCharData.UniqId;
-                        });
+            // },
+            // buildData: function (aUniqueChar) {
+            //     var aPublishData = [];
+            //     var aFilteredChar = [];
+            //     var oCharData = {};
+            //     var sUniqueId = "";
+            //     var oUniqueIdChars = {};
+            //     var aUniqueIdChars = [];
+            //     for (var j = 0; j < that.publishData.length; j++) {
+            //         oCharData = JSON.parse(that.publishData[j]);
+            //         if (sUniqueId !== oCharData.UniqId) {
+            //             aUniqueIdChars = []
+            //             sUniqueId = oCharData.UniqId;
+            //             aFilteredChar = [];
+            //             aFilteredChar = aUniqueChar.filter(function (aUniqueId) {
+            //                 return aUniqueId.UNIQUE_ID == oCharData.UniqId;
+            //             });
 
-                      for(var k = 0; k < aFilteredChar.length; k++) {
-                          oUniqueIdChars = {};
-                          oUniqueIdChars.UniqId = aFilteredChar[k].UNIQUE_ID;
-                          oUniqueIdChars.Charc = aFilteredChar[k].CHAR_NUM;
-                          oUniqueIdChars.Value = aFilteredChar[k].CHAR_VALUE;
+            //             for (var k = 0; k < aFilteredChar.length; k++) {
+            //                 oUniqueIdChars = {};
+            //                 oUniqueIdChars.UniqId = aFilteredChar[k].UNIQUE_ID;
+            //                 oUniqueIdChars.Charc = aFilteredChar[k].CHAR_NUM;
+            //                 oUniqueIdChars.Value = aFilteredChar[k].CHAR_VALUE;
 
-                          aUniqueIdChars.push(oUniqueIdChars);
-                      }
+            //                 aUniqueIdChars.push(oUniqueIdChars);
+            //             }
 
-                    }
-                    oCharData.HeaderConfig = aUniqueIdChars;
-                    aPublishData.push(oCharData);                   
+            //         }
+            //         oCharData.HeaderConfig = aUniqueIdChars;
+            //         aPublishData.push(oCharData);
 
-                }
-                that.handlePublish(aPublishData);
-            },
+            //     }
+            //     that.handlePublish(aPublishData);
+            // },
 
-            handlePublish: function(aPublishData) {
-                var oModel = that.getOwnerComponent().getModel('CIRModel');  
+            handlePublish: function (oEntry) {
+                var oModel = that.getOwnerComponent().getModel('CIRModel');
+                var dDate = new Date();
+                // 07-09-2022-1
+                // var idSchTime = dDate.setMinutes(dDate.getMinutes() + 2);
+                var idSchTime = dDate.setSeconds(dDate.getSeconds() + 20);
+                // 07-09-2022-1
+                var idSETime = dDate.setHours(dDate.getHours() + 2);
+                idSchTime = new Date(idSchTime);
+                idSETime = new Date(idSETime);
+                var onetime = idSchTime;
+                var djSdate = new Date(),
+                    djEdate = idSETime,
+                    dsSDate = new Date(), //this._oCore.byId("idSSTime").getDateValue(),
+                    dsEDate = idSETime, //this._oCore.byId("idSETime").getDateValue(),
+                    tjStime,
+                    tjEtime,
+                    tsStime,
+                    tsEtime;
 
-                oModel.callFunction("/postCIRQuantities", {
+                djSdate = djSdate.toISOString().split("T");
+                tjStime = djSdate[1].split(":");
+                djEdate = djEdate.toISOString().split("T");
+                tjEtime = djEdate[1].split(":");
+                dsSDate = dsSDate.toISOString().split("T");
+                tsStime = dsSDate[1].split(":");
+                dsEDate = dsEDate.toISOString().split("T");
+                tsEtime = dsEDate[1].split(":");
+
+                var dDate = new Date().toLocaleString().split(" "),
+                    djSdate =
+                        djSdate[0] + " " + tjStime[0] + ":" + tjStime[1] + " " + "+0000";
+                djEdate =
+                    djEdate[0] + " " + tjEtime[0] + ":" + tjEtime[1] + " " + "+0000";
+                dsSDate =
+                    dsSDate[0] + " " + tsStime[0] + ":" + tsStime[1] + " " + "+0000";
+                dsEDate =
+                    dsEDate[0] + " " + tsEtime[0] + ":" + tsEtime[1] + " " + "+0000";
+
+                var vRuleslist = {
+                    LOCATION_ID: oEntry.LOCATION_ID,
+                    PRODUCT_ID: oEntry.PRODUCT_ID,
+                    VERSION: oEntry.VERSION,
+                    SCENARIO: oEntry.SCENARIO,
+                    FROMDATE: oEntry.FROMDATE,
+                    TODATE: oEntry.TODATE,
+                    MODEL_VERSION: oEntry.MODEL_VERSION,
+                };
+                that.oGModel.setProperty("/vcrulesData", vRuleslist);
+                var vcRuleList = that.oGModel.getProperty("/vcrulesData");
+                var dCurrDateTime = new Date().getTime();
+                // var vcRuleList = vRuleslist
+                var actionText = "/catalog/postCIRQuantitiesToS4";
+                var JobName = "CIRQtys" + dCurrDateTime;
+                sap.ui.core.BusyIndicator.show();
+                var finalList = {
+                    name: JobName,
+                    description: "Weekly CIR Quantity",
+                    action: encodeURIComponent(actionText),
+                    active: true,
+                    httpMethod: "POST",
+                    startTime: djSdate,
+                    endTime: djEdate,
+                    createdAt: djSdate,
+                    schedules: [{
+                        data: vcRuleList,
+                        cron: "",
+                        time: onetime,
+                        active: true,
+                        startTime: dsSDate,
+                        endTime: dsEDate,
+                    }]
+                };
+                that.getModel("JModel").callFunction("/addMLJob", {
                     method: "GET",
-                    urlParameters: {                        
-                        UNIQUE_DATA: aPublishData
+                    urlParameters: {
+                        jobDetails: JSON.stringify(finalList),
                     },
-                    success: function (oData, oResponse) {
-                        sap.m.MessageToast.show(that.i18n.getText("postSuccess"));
+                    success: function (oData) {
+                        sap.ui.core.BusyIndicator.hide();
+                        sap.m.MessageToast.show(oData.laddMLJob.value + ": Job Created");
+
                     },
-                    error: function (oResponse) {
-                        sap.m.MessageToast.show("Error");
+                    error: function (error) {
+                        sap.ui.core.BusyIndicator.hide();
+                        sap.m.MessageToast.show("Error POsting Data");
                     },
                 });
+
+
+            },
+            onPressPublish: function (oEvent) {
+                sap.ui.core.BusyIndicator.show();
+                that.oGModel = that.getModel("oGModel");
+                // getting the input values
+                var oEntry = {};
+                var vFromDate = that.byId("fromDate").getDateValue();
+                var vToDate = that.byId("toDate").getDateValue();
+                oEntry.LOCATION_ID = that.oGModel.getProperty("/SelectedLoc");
+                oEntry.PRODUCT_ID = that.oGModel.getProperty("/SelectedProd");
+                oEntry.VERSION = that.oGModel.getProperty("/SelectedVer");
+                oEntry.SCENARIO = that.oGModel.getProperty("/SelectedScen");
+                oEntry.MODEL_VERSION = that.byId("idModelVer").getSelectedKey();
+
+
+                if (
+                    oEntry.LOCATION_ID !== undefined &&
+                    oEntry.PRODUCT_ID !== undefined &&
+                    oEntry.VERSION !== undefined &&
+                    oEntry.SCENARIO !== undefined &&
+                    oEntry.MODEL_VERSION !== undefined &&
+                    vFromDate !== undefined &&
+                    vFromDate !== " " &&
+                    vToDate !== undefined &&
+                    vToDate !== " "
+                ) {
+                    vFromDate = that.getDateFn(vFromDate);
+                    vToDate = that.getDateFn(vToDate);
+
+                    oEntry.FROMDATE = vFromDate;
+                    oEntry.TODATE = vToDate;
+
+                     that.handlePublish(oEntry);
+
+                    // calling service based on filters
+                    // that.getModel("CIRModel").callFunction("/postCIRQuantities", {
+                    //     method: "GET",
+                    //     urlParameters: {
+                    //         LOCATION_ID: oEntry.LOCATION_ID,
+                    //         PRODUCT_ID: oEntry.PRODUCT_ID,
+                    //         VERSION: oEntry.VERSION,
+                    //         SCENARIO: oEntry.SCENARIO,
+                    //         FROMDATE: vFromDate,
+                    //         TODATE: vToDate,
+                    //         MODEL_VERSION: oEntry.MODEL_VERSION,
+                    //     },
+                    //     success: function (data) {
+                    //         sap.ui.core.BusyIndicator.hide();
+                    //         MessageToast.show(data.message);
+                    //     },
+                    //     error: function (data) {
+                    //         sap.ui.core.BusyIndicator.hide();
+                    //         sap.m.MessageToast.show("Error While fetching data");
+                    //     },
+                    // });
+                } else {
+                    sap.ui.core.BusyIndicator.hide();
+                    sap.m.MessageToast.show(
+                        "Please select a Location/Product/Version/Scenario/Date Range"
+                    );
+                }
             }
         });
     }

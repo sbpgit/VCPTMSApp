@@ -2147,7 +2147,7 @@ sap.ui.define(
 					}
 					that.oGModel.setProperty("/runText", "Time Series History");
 
-					if (this.oProd.getValue() && oPastDays) {
+					if (this.oProd.getValue()){// && oPastDays) {
 						vRuleslist = {
 							LOCATION_ID: oLocItem,
 							PRODUCT_ID: oProdItem,
