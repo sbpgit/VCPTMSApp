@@ -544,11 +544,17 @@ sap.ui.define(
 						that.byId("MlocInput").setValue("");
 						that.byId("MprodInput").removeAllTokens();
 						that.byId("MpmInput").setValue("");
+                        // 15-09-2022
+                        that.byId("MidType").setSelectedKey("OD");
+                        // 15-09-2022
 
 						that.byId("PlocInput").setValue("");
 						that.byId("PprodInput").removeAllTokens();
 						that.byId("Pidver").setValue("");
 						that.byId("Pidscen").setValue("");
+                        // 15-09-2022
+                        that.byId("PidType").setSelectedKey("OD");
+                        // 15-09-2022
 
 						that.byId("TprodInput").setValue("");
 						that.byId("TlocInput").setValue("");
