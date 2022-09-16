@@ -1,0 +1,44 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns:l="sap.ui.layout"
+	xmlns:f="sap.ui.layout.form" xmlns:u="sap.ui.unified">
+	<Dialog title="Update Job" contentWidth= "450px" >
+		<VBox class="sapUiSmallMargin">
+			<f:SimpleForm id="updateSimpleFormToolbar"
+			editable="true"
+			layout="ResponsiveGridLayout"
+			labelSpanXL="3"
+			labelSpanL="3"
+			labelSpanM="3"
+			labelSpanS="3"
+			adjustLabelSpan="false"
+			emptySpanXL="0"
+			emptySpanL="0"
+			emptySpanM="0"
+			emptySpanS="0"
+			columnsXL="2"
+			columnsL="1"
+			columnsM="1"
+			singleContainerFullSize="false" >
+			<f:content>
+					<Label text="{i18n>jobid}"/>
+					<Input id="idUJob" value="{oGModel>/updatejob}" editable="false" width="100%"/>
+					<Label text="{i18n>desc}"/>
+					<Input id="idUJDesc" value="{oGModel>/updatejobDesc}" placeholder="Enter description" width="100%"/>
+					<Label text="{i18n>active}"/>
+					<Select id="idUJActive" change="onUJActiveChange" selectedKey="T" class="buttonDesktop" width="100%">
+							<core:ListItem key="T" text="{i18n>true}"/>
+							<core:ListItem key="F" text="{i18n>false}"/>
+					</Select>  
+					<Label text="{i18n>startTime}"/>
+					<DateTimePicker id="idUJSTime" width="100%" valueFormat= "yyyy-mm-dd HH:mm" change="handleChange" class="sapUiSmallMarginBottom"/>
+					<Label text="{i18n>endTime}"/>
+					<DateTimePicker id="idUJETime" width="100%" valueFormat= "yyyy-mm-dd HH:mm" change="handleChange" class="sapUiSmallMarginBottom"/>
+				</f:content>
+			</f:SimpleForm>
+			
+		</VBox>
+		<buttons>
+			<Button type='Ghost' text="{i18n>updatejob}" press="onJobUpdateSave"></Button>
+			<Button type='Reject' text="{i18n>close}" press="onUpdateJobClose"></Button>
+		</buttons>
+	</Dialog>
+</core:FragmentDefinition>
