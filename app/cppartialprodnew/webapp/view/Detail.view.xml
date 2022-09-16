@@ -28,7 +28,7 @@
             </content>
         </Panel>
 
-        <Panel id="idCharPanel" expandable="true" headerText="Product Characteristics" width="auto" class="boldText" expand="onCharPanel">
+        <!-- <Panel id="idCharPanel" expandable="true" headerText="Product Characteristics" width="auto" class="boldText" expand="onCharPanel">
             <content>
                 <OverflowToolbar id="idOvrFlwTb">
                     <ToolbarSpacer/>
@@ -40,12 +40,7 @@
                             <Label text="Class"/>
                             <Input id="idClassname" value="" width="225px" placeholder="Class Name" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
                             <Input id="idClassno" value="" visible="false"/>
-                            <!-- <Label text="Characteristic"/>
-                            <Input id="idCharname" value="" width="225px" placeholder="Char Name" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
-                            <Input id="idCharno" value="" visible="false"/>
-                            <Label text="Characteristic Value"/>
-                            <Input id="idCharval" value="" width="225px" placeholder="Char Value" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
-                            <Input id="idCharvalno" value="" visible="false"/> -->
+                            
 
                             <Label text="Characteristic"/>
                             <Input id="idCharname" value="" width="225px" placeholder="Char Name" editable="false"/>
@@ -58,10 +53,21 @@
                     </f:SimpleForm>
                 </VBox>
             </content>
-        </Panel>
+        </Panel> -->
 
         <content>
             <Table id="idCharList" items="{/results}">
+            <!-- <OverflowToolbar id="idOvrFlwTb"> -->
+            <headerToolbar>
+            <Toolbar>
+                    <ToolbarSpacer/>
+                    <Text text="Product Configurations" class="boldText" />
+                    <ToolbarSpacer/>
+                    <ToolbarSpacer/>
+                    <Button id="idAdd" text="Add Product Characteristics" press="handleValueHelp" type="Emphasized"/>
+                    </Toolbar>
+                    </headerToolbar>
+                <!-- </OverflowToolbar> -->
                 <columns>
                     <Column hAlign="Center">
                         <Text text="Class" />

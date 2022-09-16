@@ -151,10 +151,20 @@ sap.ui.define(
 				 */
 				onPanelExpand: function () {
 					var panel = that.byId("JobPanel").getExpanded();
+                    
 
-					if (panel === true) {
-						that.byId("jobList").removeSelections(true);
-					}
+                    var oTableData = that.byId("jobList").getItems();
+
+                    for(var i=0; i < oTableData.length; i++){
+                        if(that.oJobId === oTableData[i].getCells()[0].getTitle()){
+                            oTableData[i].focus();
+                        }
+
+                    }
+
+					// if (panel === true) {
+					// 	that.byId("jobList").removeSelections(true);
+					// }
 				},
 
 				/**
@@ -200,6 +210,7 @@ sap.ui.define(
 				onhandlePress: function (oEvent) {
 					oGModel = this.getModel("oGModel");
 					var oJobId = oEvent.getParameter("listItem").getCells()[0].getTitle();
+                    that.oJobId = oJobId;
 					// Setting data to global models
 					oGModel.setProperty("/newSch", "");
 					oGModel.setProperty("/UpdateSch", "");
