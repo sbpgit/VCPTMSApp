@@ -86,7 +86,7 @@ sap.ui.define(
 
                         oGModel.setProperty("/Loc", oTableItem[0].getText());
                         oGModel.setProperty("/Prod", oTableItem[1].getText());
-                        oGModel.setProperty("/refProd", oTableItem[2].getText());
+                        oGModel.setProperty("/refProd", oTableItem[3].getText());
                         oGModel.setProperty("/sFlag", "E");
 
                         var oRouter = sap.ui.core.UIComponent.getRouterFor(that);
@@ -135,7 +135,7 @@ sap.ui.define(
                 var oItem = oEvent.getSource().getParent().getCells();
                 var oLoc = oItem[0].getText(),
                     oProd = oItem[1].getText(),
-                    oRefProd = oItem[2].getText();
+                    oRefProd = oItem[3].getText();
                 // Getting the conformation popup before deleting
                 var sText =
                     "Do you want to delete the selected product" +
@@ -183,7 +183,7 @@ sap.ui.define(
                 var sSelrefProd = oEvent
                     .getSource()
                     .getParent()
-                    .getCells()[2]
+                    .getCells()[3]
                     .getText();
 
                 if (!that._onCharDetails) {

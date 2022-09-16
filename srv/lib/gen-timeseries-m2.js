@@ -39,7 +39,7 @@ class GenTimeseriesM2 {
                 {
                     xpr: [
                         { ref: ["LOCATION_ID"] }, '=', { val: adata.LOCATION_ID }, 'and',
-                        { ref: ["PRODUCT_ID"] }, '=', { val: lMainProduct.REF_PRODID }, 'and',
+                        { ref: ["PRODUCT_ID"] }, '=', { val: lMainProduct }, 'and',
                         { ref: ["UID_TYPE"] }, '=', { val: 'P' }
                     ]
                 }
@@ -212,7 +212,7 @@ class GenTimeseriesM2 {
                     SCENARIO,
                     WEEK_DATE`
         );
-        console.log("Test: "+ liFutureCharPlan.length);
+        
         // console.log();
         await DELETE.from('CP_TS_OBJDEP_CHARHDR_F')
             .where(`LOCATION_ID = '${adata.LOCATION_ID}' 
@@ -230,7 +230,7 @@ class GenTimeseriesM2 {
         else {
             lMainProduct = lsMainProduct.REF_PRODID;
         }
-        console.log("main prod:"+ lMainProduct);
+        console.log("Main prod:"+ lMainProduct);
         // Get Sales Count Information
         const liPrimaryID = await SELECT.from('V_UNIQUE_ID')
             .columns(["UNIQUE_ID",
@@ -331,11 +331,11 @@ class GenTimeseriesM2 {
         const lStartDate = new Date(
             lDate.getFullYear(),
             lDate.getMonth(),
-            lDate.getDate() - parseInt(GenF.getParameterValue(1))
+            lDate.getDate() + parseInt(await GenF.getParameterValue(1))
         );        
 
         const liPrediction = await SELECT.from('CP_TS_PREDICTIONS')
-                                         .where(`CAL_DATE    > '${lStartDate}'
+                                         .where(`CAL_DATE    > '${lStartDate.toISOString().split("T")[0]}'
                                              AND LOCATION_ID = '${adata.LOCATION_ID}' 
                                              AND PRODUCT_ID  = '${adata.PRODUCT_ID}' 
                                              AND OBJ_TYPE    = 'PI'`);

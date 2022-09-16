@@ -85,7 +85,8 @@
         "watch-cp_fullconfproddmnd": "cds watch --open cp_fullconfproddmnd/webapp/index.html?sap-ui-xx-viewCache=false",
         "watch-cp_fullyconfproddmnd": "cds watch --open cp_fullyconfproddmnd/webapp/index.html?sap-ui-xx-viewCache=false",
         "watch-cp_planingconfig": "cds watch --open cp_planingconfig/webapp/index.html?sap-ui-xx-viewCache=false",
-        "watch-cpsalesstock": "cds watch --open cpsalesstock/webapp/index.html?sap-ui-xx-viewCache=false"
+        "watch-cpsalesstock": "cds watch --open cpsalesstock/webapp/index.html?sap-ui-xx-viewCache=false",
+        "watch-cpjobscheduler_new": "cds watch --open cpjobscheduler_new/webapp/index.html?sap-ui-xx-viewCache=false"
     },
     "eslintConfig": {
         "extends": "eslint:recommended",
@@ -294,7 +295,8 @@
         "app/cp_fullconfproddmnd",
         "app/cp_fullyconfproddmnd",
         "app/cp_planingconfig",
-        "app/cpsalesstock"
+        "app/cpsalesstock",
+        "app/cpjobscheduler_new"
     ],
     "devDependencies": {
         "@sap/ux-specification": "^1.102.5",
