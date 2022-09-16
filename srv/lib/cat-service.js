@@ -1356,7 +1356,7 @@ module.exports = (srv) => {
             }
         }
         // let vFlag = liuniquechar[0].FLAG;
-        if (req.data.FLAG === 'N') {
+        if (req.data.FLAG === 'N' || req.data.FLAG === 'C') {
             vID = await objCatFn.maintainUniqueHeader(req.data.FLAG, liuniquechar[0]);
             if (vID !== '') {
 
@@ -1398,46 +1398,48 @@ module.exports = (srv) => {
                 responseMessage = "Update Failed"
             }
         }
-        else if (req.data.FLAG === 'C') {//Copy
-            vID = await objCatFn.maintainUniqueHeader(req.data.FLAG, liuniquechar[0]);
-            if (vID !== ' ') {
-                try {
-                    await cds.run(INSERT.into("CP_UNIQUE_ID_ITEM").entries(li_chardata));
-                    responseMessage = " Creation/Updation successful";
-                } catch (e) {
-                    //DONOTHING
-                    responseMessage = "Creation Failed"
-                    // createResults.push(responseMessage);
-                }
-                lsresults.LOCATION_ID = liuniquechar[0].LOCATION_ID;
-                lsresults.PRODUCT_ID = liuniquechar[0].PRODUCT_ID;
-                lsresults.UNIQUE_ID = vID;//parseInt(liuniquechar[0].UNIQUE_ID);
-                const li_chardata = await cds.run(
-                    `SELECT *
-                FROM "CP_UNIQUE_ID_ITEM"
-                WHERE "LOCATION_ID" = '` +
-                    lsresults.LOCATION_ID +
-                    `'
-                AND "PRODUCT_ID" = '` +
-                    lsresults.PRODUCT_ID +
-                    `'
-                AND"UNIQUE_ID" = '` +
-                    lsresults.UNIQUE_ID +
-                    `'`
-                );
-                if (li_chardata.length > 0) {
-                    vID = await objCatFn.maintainUniqueHeader(req.data);
+        // else if (req.data.FLAG === 'C') {//Copy
+        //     vID = await objCatFn.maintainUniqueHeader(req.data.FLAG, liuniquechar[0]);
+        //     if (vID !== ' ') {
+        //         lsresults.LOCATION_ID = liuniquechar[0].LOCATION_ID;
+        //         lsresults.PRODUCT_ID = liuniquechar[0].PRODUCT_ID;
+        //         lsresults.UNIQUE_ID = vID;//parseInt(liuniquechar[0].UNIQUE_ID);
+        //         const li_chardata = await cds.run(
+        //             `SELECT *
+        //         FROM "CP_UNIQUE_ID_ITEM"
+        //         WHERE "LOCATION_ID" = '` +
+        //             lsresults.LOCATION_ID +
+        //             `'
+        //         AND "PRODUCT_ID" = '` +
+        //             lsresults.PRODUCT_ID +
+        //             `'
+        //         AND"UNIQUE_ID" = '` +
+        //             lsresults.UNIQUE_ID +
+        //             `'`
+        //         );
+        //         if (li_chardata.length > 0) {
+        //             // vID = await objCatFn.maintainUniqueHeader(req.data);
 
-                    for (let i = 0; i < liuniquechar.length; i++) {
-                        li_chardata[i].UNIQUE_ID = parseInt(vID);
-                    }
-
-                }
-                else {
-                    responseMessage = "Creation Failed"
-                }
-            }
-        }
+        //             for (let i = 0; i < liuniquechar.length; i++) {
+        //                 li_chardata[i].UNIQUE_ID = parseInt(vID);
+        //             }                    
+        //             try {
+        //                 await cds.run(INSERT.into("CP_UNIQUE_ID_ITEM").entries(li_chardata));
+        //                 responseMessage = " Creation/Updation successful";
+        //             } catch (e) {
+        //                 //DONOTHING
+        //                 responseMessage = "Creation Failed"
+        //                 // createResults.push(responseMessage);
+        //             }
+        //         }
+        //         else {
+        //             responseMessage = "Creation Failed"
+        //         }
+        //     }
+        //     else {
+        //         responseMessage = "Unable to copy Unique ID"
+        //     }
+        // }
 
         return responseMessage;
     });
