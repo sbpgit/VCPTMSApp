@@ -113,6 +113,25 @@ sap.ui.define([
                         MessageToast.show("error");
                     },
                 });
+
+                this.getView().getModel("oModel").read("/getCIRCharRate?$skiptoken=1200", {
+                   
+                    success: function (oData) {
+                        
+
+                            sap.m.MessageToast.show("No data available for");
+                            
+                           
+                    },
+                    error: function (data) {
+                        sap.ui.core.BusyIndicator.hide();
+                        sap.m.MessageToast.show("Error While fetching data");
+                    },
+                });
+
+
+
+
             },
             onResetDate: function () {
                 that.oLoc.setValue("");
