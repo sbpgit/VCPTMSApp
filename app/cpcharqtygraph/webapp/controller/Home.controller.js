@@ -113,25 +113,6 @@ sap.ui.define([
                         MessageToast.show("error");
                     },
                 });
-
-                this.getView().getModel("oModel").read("/getCIRCharRate?$skiptoken=1200", {
-                   
-                    success: function (oData) {
-                        
-
-                            sap.m.MessageToast.show("No data available for");
-                            
-                           
-                    },
-                    error: function (data) {
-                        sap.ui.core.BusyIndicator.hide();
-                        sap.m.MessageToast.show("Error While fetching data");
-                    },
-                });
-
-
-
-
             },
             onResetDate: function () {
                 that.oLoc.setValue("");
@@ -237,7 +218,7 @@ sap.ui.define([
                     that.oScen.setValue("");
 
                     // Calling service to get IBP Versions
-                    sap.ui.core.BusyIndicator.show();
+                    // sap.ui.core.BusyIndicator.show();
                     this.getView().getModel("oModel").read("/getIbpVerScn", {
                         filters: [
                             new Filter(
@@ -257,72 +238,12 @@ sap.ui.define([
                                 that.verModel.setData([]);
                                 that.oVerList.setModel(that.verModel);
                                 that.byId("fromDate").setEditable(false);
-                                sap.ui.core.BusyIndicator.hide();
+                                // sap.ui.core.BusyIndicator.hide();
                             }
                             else {
                                 that.verModel.setData(oData);
                                 that.oVerList.setModel(that.verModel);
-
-                                //setting dates in date field
-                                
-                                that.getView().getModel("oModel").read("/getCIRCharRate", {
-                                    filters: [
-                                        new Filter(
-                                            "LOCATION_ID",
-                                            FilterOperator.EQ,
-                                            that.oGModel.getProperty("/SelectedLoc")
-                                        ),
-                                        new Filter(
-                                            "PRODUCT_ID",
-                                            FilterOperator.EQ,
-                                            aSelectedItems[0].getTitle()
-                                        ),
-                                    ],
-                                    success: function (oData1) {
-
-                                        if (oData1.results.length === 0) {
-                                            that.oDateModel = new JSONModel();
-                                            that.oDateModel.setData([]);
-                                            that.byId("fromDate").setModel(that.oDateModel);
-                                            sap.ui.core.BusyIndicator.hide();
-                                            sap.m.MessageToast.show("No dates available for the selected criteria.");
-                                            that.byId("fromDate").setEditable(false);
-                                        }
-                                        else {
-                                            sap.ui.core.BusyIndicator.hide();
-                                            oData1.results.forEach(function (row) {
-                                                // Calling function to handle the date format
-                                                row.WEEK_DATE = that.getInMMddyyyyFormat(row.WEEK_DATE);
-                                            }, that);
-
-                                            for (var i = 0; i < oData1.results.length; i++) {
-
-                                                if (that.aOrder.indexOf(oData1.results[i].WEEK_DATE) === -1) {
-                                                    that.aOrder.push(oData1.results[i].WEEK_DATE);
-                                                    if (oData1.results[i].WEEK_DATE !== "") {
-                                                        that.oOrdData = {
-                                                            "WEEK_DATE": oData1.results[i].WEEK_DATE
-                                                        };
-                                                        that.aSelOrder.push(that.oOrdData);
-                                                    }
-                                                }
-                                            }
-                                            that.oDateModel = new JSONModel();
-                                            that.oDateModel.setData({ resultsCombos: that.aSelOrder });
-                                            that.byId("fromDate").setModel(that.oDateModel);
-                                            that.byId("fromDate").setEditable(true);
-                                            
-                                        }
-
-                                    },
-                                    error: function (oData, error) {
-                                        sap.ui.core.BusyIndicator.hide();
-                                        MessageToast.show("error");
-                                    },
-                                });
-
-
-
+                                // sap.ui.core.BusyIndicator.hide();
                             }
                         },
                         error: function (oData, error) {
@@ -378,6 +299,74 @@ sap.ui.define([
                         "/SelectedScen",
                         aSelectedItems[0].getTitle()
                     );
+
+                    //setting dates in date field
+
+                    that.getView().getModel("oModel").read("/getCIRCharRate", {
+                        filters: [
+                            new Filter(
+                                "LOCATION_ID",
+                                FilterOperator.EQ,
+                                that.oGModel.getProperty("/SelectedLoc")
+                            ),
+                            new Filter(
+                                "PRODUCT_ID",
+                                FilterOperator.EQ,
+                                that.oGModel.getProperty("/SelectedProd")
+                            ),
+                            new Filter(
+                                "VERSION",
+                                FilterOperator.EQ,
+                                that.oGModel.getProperty("/SelectedVer")
+                            ),
+                            new Filter(
+                                "SCENARIO",
+                                FilterOperator.EQ,
+                                that.oGModel.getProperty("/SelectedScen")
+                            ),
+                        ],
+                        success: function (oData1) {
+
+                            if (oData1.results.length === 0) {
+                                that.oDateModel = new JSONModel();
+                                that.oDateModel.setData([]);
+                                that.byId("fromDate").setModel(that.oDateModel);
+                                sap.ui.core.BusyIndicator.hide();
+                                sap.m.MessageToast.show("No dates available for the selected criteria.");
+                                that.byId("fromDate").setEditable(false);
+                            }
+                            else {
+                                sap.ui.core.BusyIndicator.hide();
+                                oData1.results.forEach(function (row) {
+                                    // Calling function to handle the date format
+                                    row.WEEK_DATE = that.getInMMddyyyyFormat(row.WEEK_DATE);
+                                }, that);
+
+                                for (var i = 0; i < oData1.results.length; i++) {
+
+                                    if (that.aOrder.indexOf(oData1.results[i].WEEK_DATE) === -1) {
+                                        that.aOrder.push(oData1.results[i].WEEK_DATE);
+                                        if (oData1.results[i].WEEK_DATE !== "") {
+                                            that.oOrdData = {
+                                                "WEEK_DATE": oData1.results[i].WEEK_DATE
+                                            };
+                                            that.aSelOrder.push(that.oOrdData);
+                                        }
+                                    }
+                                }
+                                that.oDateModel = new JSONModel();
+                                that.oDateModel.setData({ resultsCombos: that.aSelOrder });
+                                that.byId("fromDate").setModel(that.oDateModel);
+                                that.byId("fromDate").setEditable(true);
+
+                            }
+
+                        },
+                        error: function (oData, error) {
+                            sap.ui.core.BusyIndicator.hide();
+                            MessageToast.show("error");
+                        },
+                    });
                 }
                 that.handleClose(oEvent);
             },
