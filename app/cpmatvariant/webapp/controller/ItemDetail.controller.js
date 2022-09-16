@@ -142,7 +142,9 @@ sap.ui.define(
                 this._CreateSO.close();  
                 sap.ui.getCore().byId("idCustGrpSO").setValue();
             },
-
+            /**
+             * Creating new Seed Order for respective Location, Product
+             **/
             onCreateSO:function(){
                 var sLoc = sap.ui.getCore().byId("idlocIdSO").getValue(),
                     sProd = sap.ui.getCore().byId("idprodIdSO").getValue(),
@@ -162,6 +164,7 @@ sap.ui.define(
                     UNIQUE_ID: sUniq,
                     ORD_QTY: squan,
                     MAT_AVAILDATE: sDate,
+                    CUSTOMER_GROUP:sCustGrp
                 };
                 oEntry.SEEDDATA.push(vRuleslist);
 
@@ -190,7 +193,9 @@ sap.ui.define(
                 }
 
             },
-
+            /**
+             * on press of Valuehelprequest for opening Customer group fragment
+             **/
             handleValueHelp:function(){
                 this.getModel("BModel").read("/getCustgroup", {
                     success: function (oData) {
@@ -199,22 +204,21 @@ sap.ui.define(
                         that.oLocList = that._oCore.byId(
                             that._custGrp.getId() + "-list"
                         );
-                        // that.byId("CustGrp").setModel(that.custGrpnameModel);
-                        that.oLocList.setModel(that.custGrpnameModel);
-                    
+                        that.oLocList.setModel(that.custGrpnameModel);                 
                     },
                     error: function () {
                         MessageToast.show("No data");
                     },
-                });
-                
+                });  
                 this._custGrp.open();
             },
 
             handleSelection:function(oEvent){
                 sap.ui.getCore().byId("idCustGrpSO").setValue(oEvent.getParameters().selectedItem.getTitle());
             },
-
+            /**
+             * Search function for valuehelp request
+             **/
             handleSearch: function (oEvent) {
                 var sQuery =
                     oEvent.getParameter("value") || oEvent.getParameter("newValue"),
