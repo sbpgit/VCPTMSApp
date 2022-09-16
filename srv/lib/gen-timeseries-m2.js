@@ -331,11 +331,11 @@ class GenTimeseriesM2 {
         const lStartDate = new Date(
             lDate.getFullYear(),
             lDate.getMonth(),
-            lDate.getDate() - parseInt(GenF.getParameterValue(1))
+            lDate.getDate() + parseInt(await GenF.getParameterValue(1))
         );        
 
         const liPrediction = await SELECT.from('CP_TS_PREDICTIONS')
-                                         .where(`CAL_DATE    > '${lStartDate}'
+                                         .where(`CAL_DATE    > '${lStartDate.toISOString().split("T")[0]}'
                                              AND LOCATION_ID = '${adata.LOCATION_ID}' 
                                              AND PRODUCT_ID  = '${adata.PRODUCT_ID}' 
                                              AND OBJ_TYPE    = 'PI'`);
