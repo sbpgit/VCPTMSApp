@@ -334,11 +334,56 @@ class GenTimeseriesM2 {
             lDate.getDate() + parseInt(await GenF.getParameterValue(1))
         );        
 
-        const liPrediction = await SELECT.from('CP_TS_PREDICTIONS')
+        let liPrediction = [];
+        liPrediction = await SELECT.from('CP_TS_PREDICTIONS')
                                          .where(`CAL_DATE    > '${lStartDate.toISOString().split("T")[0]}'
                                              AND LOCATION_ID = '${adata.LOCATION_ID}' 
                                              AND PRODUCT_ID  = '${adata.PRODUCT_ID}' 
                                              AND OBJ_TYPE    = 'PI'`);
+
+        const liNormalize = await cds.run(`SELECT   A."VERSION",
+                                                    A."SCENARIO",
+                                                    A."WEEK_DATE",
+                                                    B.MODEL_VERSION,
+                                                    CASE
+                                                    WHEN SUM(B.PREDICTED) > 0 THEN
+                                                    A.QUANTITY/SUM(B.PREDICTED)
+                                                    ELSE
+                                                    1
+                                                    END AS FACTOR
+                                                FROM 
+                                                    "CP_IBP_FUTUREDEMAND" AS A
+                                                    INNER JOIN
+                                                    CP_TS_PREDICTIONS AS B
+                                                    ON A.LOCATION_ID = B.LOCATION_ID
+                                                        AND A.PRODUCT_ID = B.PRODUCT_ID
+                                                        AND A.VERSION = B.VERSION
+                                                        AND A.SCENARIO = B.SCENARIO
+                                                        AND a.WEEK_DATE = B.CAL_DATE
+                                                WHERE A.LOCATION_ID = '${adata.LOCATION_ID}'
+                                                    AND A.PRODUCT_ID = '${adata.PRODUCT_ID}'
+                                                GROUP BY 
+                                                    A."VERSION",
+                                                    A."SCENARIO",
+                                                    A."WEEK_DATE",
+                                                    A."QUANTITY",
+                                                    B.MODEL_VERSION
+                                                ORDER BY WEEK_DATE ASC;`);
+        
+        for (let cntPre = 0; cntPre < liPrediction.length; cntPre++) {
+            for (let cntNor = 0; cntNor < liNormalize.length; cntNor++) {
+                if(liPrediction[cntPre].VERSION === liNormalize[cntNor].VERSION &&
+                    liPrediction[cntPre].SCENARIO === liNormalize[cntNor].SCENARIO &&
+                    liPrediction[cntPre].CAL_DATE === liNormalize[cntNor].WEEK_DATE &&
+                    liPrediction[cntPre].MODEL_VERSION === liNormalize[cntNor].MODEL_VERSION ) 
+                    {
+                        let lConverted = liPrediction[cntPre].PREDICTED * liNormalize[cntNor].FACTOR;
+                        liPrediction[cntPre].PREDICTED = GenF.parse(lConverted);
+                        break;
+                    }
+            }
+        }
+        
 
         let liPriQty = [];
         liPriQty = await cds.run(
@@ -406,7 +451,7 @@ class GenTimeseriesM2 {
         }
 
 
-
+        console.log("CIR generation Completed");
 
     }
 

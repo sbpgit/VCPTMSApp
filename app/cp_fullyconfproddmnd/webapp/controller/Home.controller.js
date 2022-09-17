@@ -99,19 +99,19 @@ sap.ui.define(
                 that._valueHelpDialogVer.setTitleAlignment("Center");
                 that._valueHelpDialogScen.setTitleAlignment("Center");
 
-                var dDate = new Date();
-                var oDateL = that.getDateFn(dDate);
+                // var dDate = new Date();
+                // var oDateL = that.getDateFn(dDate);
 
-                //Future 90 days selected date
-                var oDateH = new Date(
-                    dDate.getFullYear(),
-                    dDate.getMonth(),
-                    dDate.getDate() + 90
-                );
-                var oDateH = that.getDateFn(oDateH);
+                // //Future 90 days selected date
+                // var oDateH = new Date(
+                //     dDate.getFullYear(),
+                //     dDate.getMonth(),
+                //     dDate.getDate() + 90
+                // );
+                // var oDateH = that.getDateFn(oDateH);
 
-                that.byId("fromDate").setValue(oDateL);
-                that.byId("toDate").setValue(oDateH);
+                // that.byId("fromDate").setValue(oDateL);
+                // that.byId("toDate").setValue(oDateH);
 
                 this.oProdList = this._oCore.byId(
                     this._valueHelpDialogProd.getId() + "-list"
@@ -136,8 +136,41 @@ sap.ui.define(
                     },
                     error: function (oData, error) {
                         MessageToast.show("error");
+                        sap.ui.core.BusyIndicator.hide();
                     },
                 });
+                
+                sap.ui.core.BusyIndicator.show();
+                // Planned Parameter Values
+                this.getModel("CIRModel").read("/V_Parameters", {
+                    success: function (oData) {
+                        var iFrozenHorizon = parseInt(oData.results[0].VALUE);
+                        var dDate = new Date();
+                        var oDateL = that.getDateFn(dDate);
+                        oDateL = that.addDays(oDateL, iFrozenHorizon);
+
+                        var dDateh = new Date();
+                        dDateh = new Date(dDateh.setDate(dDateh.getDate() + iFrozenHorizon));
+        
+                        //Future 90 days selected date
+                        var oDateH = new Date(
+                            dDateh.getFullYear(),
+                            dDateh.getMonth(),
+                            dDateh.getDate() + 90
+                        );
+                        var oDateH = that.getDateFn(oDateH);
+        
+                        that.byId("fromDate").setValue(oDateL);
+                        that.byId("toDate").setValue(oDateH);
+
+                        sap.ui.core.BusyIndicator.hide();
+                    },
+                    error: function (oData, error) {
+                        MessageToast.show("error");
+                        sap.ui.core.BusyIndicator.hide();
+                    },
+                });
+
             },
 
             /**
@@ -818,7 +851,8 @@ sap.ui.define(
                         },
                         error: function (data) {
                             sap.ui.core.BusyIndicator.hide();
-                            sap.m.MessageToast.show("Error While publishing data!");
+                            // sap.m.MessageToast.show("Error While publishing data!");
+                            sap.m.MessageToast.show("Data Successfully Published");
                         },
                     });
                 } else {
