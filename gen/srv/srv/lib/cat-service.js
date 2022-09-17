@@ -2003,8 +2003,7 @@ module.exports = (srv) => {
                 oEntry.Datum = aFilteredCIR[j].WEEK_DATE + "T10:00:00";
                 oEntry.HeaderConfig = aUniqueIdChars;
                 try{
-                let sReturn = await oModel.tx(req).post("/headerSet", oEntry);
-                console.log(sReturn);
+                 await oModel.tx(req).post("/headerSet", oEntry);                
                 }
                 catch(e) {
                   console.log(e);
