@@ -36,10 +36,12 @@ sap.ui.define(
                 that.oCharModel = new JSONModel();
                 this.oCharModel.setSizeLimit(1000);
                 that.charnameModel = new JSONModel();
+                that.custGrpnameModel = new JSONModel();
                 that.charvalueModel = new JSONModel();
                 that.oTableData = [];
                 that.ListModel = new JSONModel();
-
+                that._oCore = sap.ui.getCore();
+                
             },
 
             /**
@@ -108,6 +110,135 @@ sap.ui.define(
                 }
                 that.byId("idMatvarItem").getBinding("items").filter(oFilters);
             },
+            /**
+             * Open Create Seed Order fragment and setting up default values
+             **/
+            onOrderCreate:function(){   
+                
+                if (!this._CreateSO) {
+                    this._CreateSO = sap.ui.xmlfragment(
+                        "cpapp.cpmatvariant.view.CreateSeedOrder",
+                        this
+                    );
+                    this.getView().addDependent(this._CreateSO);
+                }
+                if (!this._custGrp) {
+                    this._custGrp = sap.ui.xmlfragment(
+                        "cpapp.cpmatvariant.view.CustomerGroup",
+                        this
+                    );
+                    this.getView().addDependent(this._custGrp);
+                }  
+                
+                this._CreateSO.open();
+                sap.ui.getCore().byId("idlocIdSO").setValue(oGModel.getProperty("/locId"));
+                sap.ui.getCore().byId("idprodIdSO").setValue(oGModel.getProperty("/prdId"));
+                sap.ui.getCore().byId("idUniqSO").setValue(oGModel.getProperty("/uniqId"));
+            },
+            /**
+             * Close Create Seed Order fragment
+             **/
+            onCloseSO:function(){
+                this._CreateSO.close();  
+                sap.ui.getCore().byId("idCustGrpSO").setValue();
+            },
+            /**
+             * Creating new Seed Order for respective Location, Product
+             **/
+            onCreateSO:function(){
+                var sLoc = sap.ui.getCore().byId("idlocIdSO").getValue(),
+                    sProd = sap.ui.getCore().byId("idprodIdSO").getValue(),
+                    sUniq = parseInt(sap.ui.getCore().byId("idUniqSO").getValue()),
+                    squan = sap.ui.getCore().byId("idOrdQtySO").getValue(),
+                    sCustGrp = sap.ui.getCore().byId("idCustGrpSO").getValue(),
+                    sDate = sap.ui.getCore().byId("DP1SO").getValue();
 
+                var oEntry = {
+                    SEEDDATA: [],
+                },
+                    vRuleslist,
+                    oFlag = "C";
+                vRuleslist = {
+                    LOCATION_ID: sLoc,
+                    PRODUCT_ID: sProd,
+                    UNIQUE_ID: sUniq,
+                    ORD_QTY: squan,
+                    MAT_AVAILDATE: sDate,
+                    CUSTOMER_GROUP:sCustGrp
+                };
+                oEntry.SEEDDATA.push(vRuleslist);
+
+                if (squan !== "" && sDate !== "" && sLoc !== "" && sProd !== "" && sUniq !== "") {
+
+                    that.getModel("BModel").callFunction("/maintainSeedOrder", {
+                        method: "GET",
+                        urlParameters: {
+                            FLAG: oFlag,
+                            SEEDDATA: JSON.stringify(oEntry.SEEDDATA)
+                        },
+                        success: function (oData) {
+                            sap.ui.core.BusyIndicator.hide();
+                            sap.m.MessageToast.show("Seed Order created successfully");
+                            that.onCloseSO();
+                            that.onAfterRendering();
+
+                        },
+                        error: function (error) {
+                            sap.ui.core.BusyIndicator.hide();
+                            sap.m.MessageToast.show("Error creating a Seed Order");
+                        },
+                    });
+                } else {
+                    sap.m.MessageToast.show("Please fill all fields");
+                }
+
+            },
+            /**
+             * on press of Valuehelprequest for opening Customer group fragment
+             **/
+            handleValueHelp:function(){
+                this.getModel("BModel").read("/getCustgroup", {
+                    success: function (oData) {
+                        
+                        that.custGrpnameModel.setData({item:oData.results});
+                        that.oLocList = that._oCore.byId(
+                            that._custGrp.getId() + "-list"
+                        );
+                        that.oLocList.setModel(that.custGrpnameModel);                 
+                    },
+                    error: function () {
+                        MessageToast.show("No data");
+                    },
+                });  
+                this._custGrp.open();
+            },
+
+            handleSelection:function(oEvent){
+                sap.ui.getCore().byId("idCustGrpSO").setValue(oEvent.getParameters().selectedItem.getTitle());
+            },
+            /**
+             * Search function for valuehelp request
+             **/
+            handleSearch: function (oEvent) {
+                var sQuery =
+                    oEvent.getParameter("value") || oEvent.getParameter("newValue"),
+                    sId = oEvent.getParameter("id"),
+                    oFilters = [];
+                // Check if search filter is to be applied
+                sQuery = sQuery ? sQuery.trim() : "";
+               
+                    if (sQuery !== "") {
+                        oFilters.push(
+                            new Filter({
+                                filters: [
+                                    new Filter("CUSTOMER_GROUP", FilterOperator.Contains, sQuery),
+                                    new Filter("CUSTOMER_DESC", FilterOperator.Contains, sQuery),
+                                ],
+                                and: false,
+                            })
+                        );
+                    }
+                    that.oLocList.getBinding("items").filter(oFilters);
+            }
         });
     });

@@ -68,6 +68,9 @@
                                         <Text text="{i18n>prod}"/>
                                     </Column>
                                     <Column hAlign="Left" vAlign="Middle" >
+                                        <Text text="{i18n>cust}" visible="false" />
+                                    </Column>
+                                    <Column hAlign="Left" vAlign="Middle" >
                                         <Text text="{i18n>seedorder}"/>
                                     </Column>
                                     <Column hAlign="Left" vAlign="Middle">
@@ -88,6 +91,7 @@
                                         <cells>
                                             <Text text="{LOCATION_ID}" />
                                             <Text text="{PRODUCT_ID}"/>
+                                            <Text text="{CUSTOMER_GROUP}"/>
                                             <Text text="{SEED_ORDER}" />
                                             <Text text="{UNIQUE_ID}"/>
                                             <Text text="{ORD_QTY}"/>
