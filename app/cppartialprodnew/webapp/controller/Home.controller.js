@@ -165,7 +165,7 @@ sap.ui.define(
                                     // Refreshing data after successfull deletion
                                     that.onAfterRendering();
                                 },
-                                error: function () {
+                                error: function (oData) {
                                     sap.ui.core.BusyIndicator.hide();
                                     MessageToast.show("Failed to delete product");
                                 },

@@ -23,11 +23,13 @@ sap.ui.define([
                 that.locModel = new JSONModel();
                 that.prodModel = new JSONModel();
                 that.uniqModel = new JSONModel();
+                that.custModel = new JSONModel();
 
                 this.oModel.setSizeLimit(1000);
                 that.locModel.setSizeLimit(1000);
                 that.prodModel.setSizeLimit(1000);
                 that.uniqModel.setSizeLimit(1000);
+                that.custModel.setSizeLimit(1000);
 
                 // Declaring Value Help Dialogs
                 this._oCore = sap.ui.getCore();
@@ -60,6 +62,14 @@ sap.ui.define([
                         this
                     );
                     this.getView().addDependent(this._valueHelpDialogOrderCreate);
+                }
+
+                if (!this._valueHelpDialogCustomerGroup) {
+                    this._valueHelpDialogCustomerGroup = sap.ui.xmlfragment(
+                        "cpapp.cpseedordercreation.view.CustomerGroup",
+                        this
+                    );
+                    this.getView().addDependent(this._valueHelpDialogCustomerGroup);
                 }
 
             },
@@ -95,6 +105,10 @@ sap.ui.define([
                     this._valueHelpDialogUniq.getId() + "-list"
                 );
 
+                this.oCustList = this._oCore.byId(
+                    this._valueHelpDialogCustomerGroup.getId() + "-list"
+                );
+
 
                 sap.ui.core.BusyIndicator.show();
                 // Calling service to get Location data
@@ -126,20 +140,21 @@ sap.ui.define([
                     },
                 });
 
-                this.getModel("BModel").read("/getSeedOrder", {
-                    success: function (oData) {
-                        sap.ui.core.BusyIndicator.hide();
-                        that.TabData = oData.results;
-                        that.oModel.setData({
-                            results: oData.results,
-                        });
-                        that.oList.setModel(that.oModel);
-                    },
-                    error: function () {
-                        sap.ui.core.BusyIndicator.hide();
-                        MessageToast.show("Failed to get profiles");
-                    },
-                });
+
+                // this.getModel("BModel").read("/getSeedOrder", {
+                //     success: function (oData) {
+                //         sap.ui.core.BusyIndicator.hide();
+                //         that.TabData = oData.results;
+                //         that.oModel.setData({
+                //             results: oData.results,
+                //         });
+                //         that.oList.setModel(that.oModel);
+                //     },
+                //     error: function () {
+                //         sap.ui.core.BusyIndicator.hide();
+                //         MessageToast.show("Failed to get profiles");
+                //     },
+                // });
             },
 
 
@@ -176,10 +191,64 @@ sap.ui.define([
                     if (sap.ui.getCore().byId("idLocation").getValue() &&
                         sap.ui.getCore().byId("idProduct").getValue()) {
                         that._valueHelpDialogUniq.open();
+
+                        this.getModel("BModel").read("/getUniqueHeader", {
+                            filters: [
+                                new Filter(
+                                    "LOCATION_ID",
+                                    FilterOperator.EQ,
+                                    sap.ui.getCore().byId("idLocation").getValue()
+                                ),
+                                new Filter(
+                                    "PRODUCT_ID",
+                                    FilterOperator.EQ,
+                                    sap.ui.getCore().byId("idProduct").getValue()
+                                ),
+                            ],
+                            success: function (oData) {
+                                sap.ui.core.BusyIndicator.hide();
+    
+                                oData.results.forEach(function (row) {
+                                    row.UNIQUE_ID = row.UNIQUE_ID.toString();
+    
+                                }, that);
+       
+    
+                                that.uniqModel.setData(oData);
+                                that.oUniqList.setModel(that.uniqModel);
+                            },
+                            error: function (oData, error) {
+                                sap.ui.core.BusyIndicator.hide();
+                                MessageToast.show("error");
+                            },
+                        });
+
+
+
                     } else {
                         MessageToast.show("Select Location and Product");
                     }
                 }
+                else if(sId.includes("Cust") ){
+                    if(sap.ui.getCore().byId("idLocation").getValue() &&
+                    sap.ui.getCore().byId("idProduct").getValue()){
+                    that._valueHelpDialogCustomerGroup.open();
+                    this.getModel("BModel").read("/getCustgroup", {
+                        success: function (oData) {
+                            // sap.ui.core.BusyIndicator.hide();
+                            that.custModel.setData({item:oData.results});
+                            that.oCustList.setModel(that.custModel);
+                        },
+                        error: function (oData, error) {
+                            // sap.ui.core.BusyIndicator.hide();
+                            MessageToast.show("error");
+                        },
+                    });
+                }
+            else{
+                MessageToast.show("Select Location and Product");
+            }
+        }
             },
 
             /**
@@ -283,6 +352,21 @@ sap.ui.define([
                         );
                     }
                     that.oList.getBinding("items").filter(oFilters);
+                }
+                else if(sId.includes("Cust")){
+                    if (sQuery !== "") {
+                        oFilters.push(
+                            new Filter({
+                                filters: [
+                                    new Filter("CUSTOMER_GROUP", FilterOperator.Contains, sQuery),
+                                    new Filter("CUSTOMER_DESC", FilterOperator.Contains, sQuery),
+                                    
+                                ],
+                                and: false,
+                            })
+                        );
+                    }
+                    that.oCustList.getBinding("items").filter(oFilters);
                 }
 
             },
@@ -395,6 +479,10 @@ sap.ui.define([
                     that.oUniq.setValue(aSelectedProd[0].getTitle());
 
                 }
+                else if(sId.includes("Cust")){
+                    var aSelectedProd = oEvent.getParameters().selectedItem.getTitle();
+                    sap.ui.getCore().byId("idCustGrpSO").setValue(aSelectedProd);
+                }
                 that.handleClose(oEvent);
             },
 
@@ -403,6 +491,8 @@ sap.ui.define([
 
                 var loc = that.byId("idloc").getValue(),
                     Prod = that.byId("prodInput").getValue();
+                    that.oGModel.setProperty("/locationID",loc);
+                    that.oGModel.setProperty("/productID",Prod);
 
                 var oFilters = [];
                 // getting the filters
@@ -465,6 +555,9 @@ sap.ui.define([
                 that.oGModel.setProperty("/selFlag", "X");
                 that.oGModel.setProperty("/OrderFlag", "C");
                 that._valueHelpDialogOrderCreate.setTitle("Create Order");
+                sap.ui.getCore().byId("idLocation").setValue(that.oGModel.getProperty("/locationID"));
+                sap.ui.getCore().byId("idProduct").setValue(that.oGModel.getProperty("/productID"));
+                
 
             },
 
@@ -521,6 +614,7 @@ sap.ui.define([
                     sUniq = parseInt(sap.ui.getCore().byId("idUniq").getValue()),
                     squan = sap.ui.getCore().byId("idQuantity").getValue(),
                     sDate = sap.ui.getCore().byId("idDate").getValue(),
+                    sCustGrp = sap.ui.getCore().byId("idCustGrpSO").getValue(),
                     sSeedOrder = sap.ui.getCore().byId("idseedord").getValue();
 
                 var oEntry = {
@@ -543,6 +637,7 @@ sap.ui.define([
                     UNIQUE_ID: sUniq,
                     ORD_QTY: squan,
                     MAT_AVAILDATE: sDate,
+                    CUSTOMER_GROUP : sCustGrp
                 };
                 oEntry.SEEDDATA.push(vRuleslist);
 
@@ -558,7 +653,7 @@ sap.ui.define([
                             sap.ui.core.BusyIndicator.hide();
                             sap.m.MessageToast.show("Seed Order created successfully");
                             that.onCancelOrder();
-                            that.onAfterRendering();
+                            that.onGetData();
 
                         },
                         error: function (error) {
