@@ -23,6 +23,22 @@
                     "localUri": "localService/CatalogService/metadata.xml",
                     "odataVersion": "2.0"
                 }
+            },
+            "Jobs": {
+                "uri": "v2/jobs/",
+                "type": "OData",
+                "settings": {
+                    "odataVersion": "2.0",
+                    "localUri": "localService/metadata.xml"
+                }
+            },
+            "IBP": {
+                "uri": "v2/ibpimport-srv/",
+                "type": "OData",
+                "settings": {
+                    "odataVersion": "2.0",
+                    "localUri": "localService/metadata.xml"
+                }
             }
         },
         "crossNavigation": {
@@ -99,6 +115,14 @@
                     "earlyRequests": true,
                     "groupId": "$direct"
                 }
+            },
+            "JModel": {
+                "dataSource": "Jobs",
+                "preload": true
+            },
+            "IModel": {
+                "dataSource": "IBP",
+                "preload": true
             }
         },
         "resources": {

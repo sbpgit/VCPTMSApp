@@ -156,9 +156,18 @@ sap.ui.define(
         onPanelExpand: function () {
           var panel = that.byId("JobPanel").getExpanded();
 
-          if (panel === true) {
-            that.byId("jobList").removeSelections(true);
-          }
+          var oTableData = that.byId("jobList").getItems();
+
+                    for(var i=0; i < oTableData.length; i++){
+                        if(that.oJobId === oTableData[i].getCells()[0].getTitle()){
+                            oTableData[i].focus();
+                        }
+
+                    }
+
+        //   if (panel === true) {
+        //     that.byId("jobList").removeSelections(true);
+        //   }
         },
 
         /**
