@@ -135,7 +135,11 @@
  ],
  "xsuaa": [
   {
+<<<<<<< HEAD
    "binding_guid": "c2a9a296-aee7-4303-a7c6-93ab59728152",
+=======
+   "binding_guid": "b645348a-ab21-420a-9389-67a305f612b3",
+>>>>>>> b6af1c29d2d1085575f786de70675a1e0f31c325
    "binding_name": null,
    "credentials": {
     "apiurl": "https://api.authentication.us10.hana.ondemand.com",
@@ -168,7 +172,10 @@
   }
  ]
 },
+<<<<<<< HEAD
 
+=======
+>>>>>>> b6af1c29d2d1085575f786de70675a1e0f31c325
 "VCAP_APPLICATION": {
  "application_id": "0da042a3-eb0c-4851-ae0c-d789ed8d41fc",
  "application_name": "config_products-srv",
@@ -189,4 +196,9 @@
  ],
  "users": null
 }
+<<<<<<< HEAD
 }
+=======
+  }
+
+>>>>>>> b6af1c29d2d1085575f786de70675a1e0f31c325

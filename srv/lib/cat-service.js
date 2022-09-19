@@ -1941,6 +1941,7 @@ module.exports = (srv) => {
                 oEntry = {}
                 oEntry.Werks = aFilteredCIR[j].LOCATION_ID;
                 oEntry.Matnr = aFilteredCIR[j].REF_PRODID;
+                oEntry.CustMaterial = aFilteredCIR[j].PRODUCT_ID;
                 oEntry.Quantity = (aFilteredCIR[j].CIR_QTY).toString();
                 oEntry.UniqueId = (aFilteredCIR[j].UNIQUE_ID).toString();
                 oEntry.Datum = aFilteredCIR[j].WEEK_DATE + "T10:00:00";
@@ -1997,7 +1998,8 @@ module.exports = (srv) => {
             for (let j = 0; j < aFilteredCIR.length; j++) {
                 oEntry = {}
                 oEntry.Werks = aFilteredCIR[j].LOCATION_ID;
-                oEntry.Matnr = aFilteredCIR[j].PRODUCT_ID;
+                oEntry.Matnr = aFilteredCIR[j].REF_PRODID;
+                oEntry.CustMaterial = aFilteredCIR[j].PRODUCT_ID;
                 oEntry.Quantity = (aFilteredCIR[j].CIR_QTY).toString();
                 oEntry.UniqId = (aFilteredCIR[j].UNIQUE_ID).toString();
                 oEntry.Datum = aFilteredCIR[j].WEEK_DATE + "T10:00:00";

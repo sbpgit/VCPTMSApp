@@ -335,6 +335,7 @@ sap.ui.define([
                     this.oLoc = that.byId("idloc");
                     var aSelectedLoc = oEvent.getParameter("selectedItems");
                     that.oLoc.setValue(aSelectedLoc[0].getTitle());
+                    that.byId("prodInput").setValue("");
 
                     this._valueHelpDialogProd.getAggregation("_dialog").getContent()[1].removeSelections();
 
