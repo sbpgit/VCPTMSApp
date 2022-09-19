@@ -315,19 +315,19 @@ sap.ui.define([
 
 
                     // service to get the products based of location
-                    // this.getModel("BModel").read("/getLocProdDet", {
-                    //     filters: [
-                    //         new Filter(
-                    //             "LOCATION_ID",
-                    //             FilterOperator.EQ,
-                    //             aSelectedLoc[0].getTitle()
-                    //         ),
-                    //     ],
-                    that.getModel("BModel").callFunction("/getAllProd", {
-                        method: "GET",
-                        urlParameters: {
-                            LOCATION_ID: aSelectedLoc[0].getTitle()
-                        },
+                    this.getModel("BModel").read("/getLocProdDet", {
+                        filters: [
+                            new Filter(
+                                "LOCATION_ID",
+                                FilterOperator.EQ,
+                                aSelectedLoc[0].getTitle()
+                            ),
+                        ],
+                    // that.getModel("BModel").callFunction("/getAllProd", {
+                    //     method: "GET",
+                    //     urlParameters: {
+                    //         LOCATION_ID: aSelectedLoc[0].getTitle()
+                    //     },
                         success: function (oData) {
                             that.prodModel.setData(oData);
                             that.oProdList.setModel(that.prodModel);

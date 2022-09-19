@@ -763,8 +763,8 @@ module.exports = (srv) => {
         await obgenTimeseriesM2.genTimeseries(req.data);
     });
     srv.on("generateTimeseriesF", async (req) => {
-        const obgenTimeseries = new GenTimeseries();
-        await obgenTimeseries.genTimeseriesF(req.data);
+        // const obgenTimeseries = new GenTimeseries();
+        // await obgenTimeseries.genTimeseriesF(req.data);
 
         const obgenTimeseriesM2 = new GenTimeseriesM2();
         await obgenTimeseriesM2.genTimeseriesF(req.data);
@@ -1630,7 +1630,7 @@ module.exports = (srv) => {
                 try {
 
                     await cds.run(INSERT.into("CP_SEEDORDER_HEADER").entries(liresults));
-                    responseMessage = " Creation/Updation successful";
+                    responseMessage = lsresults.SEED_ORDER +" Created successfully" ;
                     await obgenSOFunctions.createSO(lsresults.LOCATION_ID, lsresults.PRODUCT_ID, lsresults.SEED_ORDER, lsresults.MAT_AVAILDATE, lsresults.ORD_QTY, lsresults.UNIQUE_ID);
                 } catch (e) {
                     //DONOTHING
@@ -1651,7 +1651,11 @@ module.exports = (srv) => {
                         MAT_AVAILDATE: lsresults.MAT_AVAILDATE
                     })
                     .where(`SEED_ORDER = '${lsresults.SEED_ORDER}'`)
+                responseMessage = lsresults.SEED_ORDER +" Update is successfull" ;
+                   
             } catch (e) {
+                responseMessage = "Update Failed" ;
+                   
                 //DONOTHING
             }
             // }
@@ -1662,43 +1666,62 @@ module.exports = (srv) => {
     srv.on("getAllProd", async (req) => {
         let lsprod = {};
         let liprod = [];
+        
+        const objCatFn = new Catservicefn();
+        liprod = await objCatFn.getAllProducts(req.data);
+        return liprod;
+    });
+    srv.on("getAllVerScen", async (req) => {
+        let lsprod = {};
+        let liprod = [];
         // let vDesc;
-        const limasterprod = await cds.run(
+        const liverscen= await cds.run(
             `
          SELECT DISTINCT PRODUCT_ID,
                 LOCATION_ID,
-                PROD_DESC
-           FROM "V_LOCPROD"
+                VERSION,
+                SCENARIO
+           FROM "V_IBPVERSCENARIO"
            WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'`);
-
-        const lipartialprod = await cds.run(
-            `
-         SELECT PRODUCT_ID,
-                LOCATION_ID,
-                PROD_DESC,
-                REF_PRODID
-           FROM "CP_PARTIALPROD_INTRO"
-           WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
-           ORDER BY REF_PRODID`);
+        
+           const objCatFn = new Catservicefn();
+           lipartialprod = await objCatFn.getAllProducts(req.data);
+        // const lipartialprod = await cds.run(
+        //     `
+        //  SELECT PRODUCT_ID,
+        //         LOCATION_ID,
+        //         PROD_DESC,
+        //         REF_PRODID
+        //    FROM "CP_PARTIALPROD_INTRO"
+        //    WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
+        //    ORDER BY REF_PRODID`);
 
 
         //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
-        for (i = 0; i < limasterprod.length; i++) {
-            lsprod = {};
-            lsprod.LOCATION_ID = limasterprod[i].LOCATION_ID;
-            lsprod.PRODUCT_ID = limasterprod[i].PRODUCT_ID;
-            lsprod.PROD_DESC = limasterprod[i].PROD_DESC;
+        // for (i = 0; i < liverscen.length; i++) {
+        //     lsprod = {};
+        //     lsprod.LOCATION_ID = liverscen[i].LOCATION_ID;
+        //     lsprod.PRODUCT_ID = liverscen[i].PRODUCT_ID;
+        //     lsprod.VERSION = liverscen[i].VERSION;
+        //     lsprod.SCENARIO = liverscen[i].SCENARIO;
             // vDesc = limasterprod[i].PROD_DESC;
-            liprod.push(lsprod);
-            lsprod = {};
+            // liprod.push(lsprod);
+            // lsprod = {};
             for (iPartial = 0; iPartial < lipartialprod.length; iPartial++) {
-                if (lipartialprod[iPartial].REF_PRODID === limasterprod[i].PRODUCT_ID) {
-                    lsprod.LOCATION_ID = lipartialprod[iPartial].LOCATION_ID;
-                    lsprod.PRODUCT_ID = lipartialprod[iPartial].PRODUCT_ID;
-                    lsprod.PROD_DESC = lipartialprod[iPartial].PROD_DESC;
-                    liprod.push(lsprod);
-                    lsprod = {};
-                }
+            
+                for (i = 0; i < liverscen.length; i++) {
+                    if(lipartialprod[iPartial].PRODUCT_ID === liverscen[i].PRODUCT_ID){
+
+                        lsprod.LOCATION_ID = liverscen[i].LOCATION_ID;
+                        lsprod.PRODUCT_ID = liverscen[i].PRODUCT_ID;
+                        lsprod.VERSION = liverscen[i].VERSION;
+                        lsprod.SCENARIO = liverscen[i].SCENARIO;
+                        liprod.push(lsprod);
+                        lsprod = {};
+                    }
+                    else if (lipartialprod[iPartial].REF_PRODID === liverscen[i].PRODUCT_ID) {
+
+                    }
             }
         }
         return liprod;

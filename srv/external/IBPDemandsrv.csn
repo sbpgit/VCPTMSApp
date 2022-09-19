@@ -2122,11 +2122,11 @@
         }
       }
     },
-    "IBPDemandsrv.VCPTEST": {
+    "IBPDemandsrv.SBPVCP": {
       "kind": "entity",
       "@cds.persistence.skip": true,
       "@sap.content.version": "1",
-      "@sap.label": "Planning Area VCPTEST",
+      "@sap.label": "Planning Area SBPVCP",
       "@sap.semantics": "aggregate",
       "elements": {
         "ID": {
@@ -3310,7 +3310,7 @@
         "NavVCPTEST": {
           "@cds.ambiguous": "missing on condition?",
           "type": "cds.Association",
-          "target": "IBPDemandsrv.VCPTEST",
+          "target": "IBPDemandsrv.SBPVCP",
           "cardinality": {
             "max": "*"
           },
@@ -3385,7 +3385,7 @@
         "NavVCPTESTMessage": {
           "@cds.ambiguous": "missing on condition?",
           "type": "cds.Association",
-          "target": "IBPDemandsrv.VCPTEST",
+          "target": "IBPDemandsrv.SBPVCP",
           "on": [
             {
               "ref": [
