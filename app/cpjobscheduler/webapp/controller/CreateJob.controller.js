@@ -2214,7 +2214,7 @@ sap.ui.define(
 
                 oLocItem = that.oLoc.getValue();
                 oProdItem = this.oProd.getValue();
-                oPastDays = that.byId("TpastdaysInput").getValue();
+                // oPastDays = that.byId("TpastdaysInput").getValue();
 
                 if (that.oGModel.getProperty("/newSch") === "X") {
                     sap.ui.getCore().byId("idSavebt").setText("Add Schedule");
@@ -2654,7 +2654,7 @@ sap.ui.define(
              * @param {object} oEvent -the event information.
              */
             onFullyDemand: function () {
-                var oProdItem, oLocItem, oPastDays, i;
+                var oProdItem, oLocItem, i;
                 var vRuleslist;
 
                 oLocItem = that.oLoc.getValue();
@@ -2707,7 +2707,7 @@ sap.ui.define(
              * @param {object} oEvent -the event information.
              */
             onAsmbReq: function () {
-                var oProdItem, oLocItem, oPastDays, i;
+                var oProdItem, oLocItem,  i;
                 var vRuleslist;
 
                 oLocItem = that.oLoc.getValue();
@@ -2760,7 +2760,7 @@ sap.ui.define(
              * @param {object} oEvent -the event information.
              */
             onProcSalesOrd: function () {
-                var oProdItem, oLocItem, oPastDays, i;
+                var oProdItem, oLocItem, i;
                 var vRuleslist;
 
                 oLocItem = that.oLoc.getValue();
@@ -2914,7 +2914,7 @@ sap.ui.define(
 
                 that.oGModel.setProperty("/runText", "");
                 sap.ui.getCore().byId("idSTime").setEnabled(true);
-                if (oEvent) {
+                // if (oEvent) {
                     sap.ui.getCore().byId("idJobSchtype").setSelectedKey("Cr");
                     sap.ui.getCore().byId("idCronValues").setVisible(true);
                     sap.ui.getCore().byId("idmnth").setValue();
@@ -2924,7 +2924,7 @@ sap.ui.define(
                     sap.ui.getCore().byId("idmin").setValue();
                     sap.ui.getCore().byId("idSchTime").setVisible(false);
                     sap.ui.getCore().byId("idSchTime").setDateValue();
-                }
+                // }
                 that.byId("idIBPselect").setEnabled(true);
 
                 that._valueHelpDialogJobDetail.close();
