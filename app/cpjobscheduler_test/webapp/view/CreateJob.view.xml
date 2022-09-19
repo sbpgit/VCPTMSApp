@@ -280,14 +280,14 @@
                                         <MultiInput id="TprodInput" width="225px" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
                                     </f:fields>
                                 </f:FormElement>
-                                <f:FormElement>
+                                <!-- <f:FormElement>
                                     <f:label>
                                         <Label text="{i18n>pastdays}" required="true" />
                                     </f:label>
                                     <f:fields>
                                         <Input id="TpastdaysInput" width="225px" placeholder="{i18n>pastdays}" />
                                     </f:fields>
-                                </f:FormElement>
+                                </f:FormElement> -->
                                 <f:FormElement>
                                     <f:fields>
                                         <!-- 07-09-2022-1 -->

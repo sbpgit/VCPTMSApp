@@ -156,6 +156,7 @@ sap.ui.define(
                                     LOCATION_ID: oLoc,
                                     REF_PRODID: oRefProd,
                                     PRODUCT_ID: oProd,
+                                    PROD_DESC:"",
                                     FLAG: "D",
                                 },
                                 success: function (oData) {
