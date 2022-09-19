@@ -1702,10 +1702,12 @@ module.exports = (srv) => {
         //    WHERE "CP_PARTIALPROD_INTRO".LOCATION_ID = '`+ req.data.LOCATION_ID + `'
         //    ORDER BY "CP_PARTIALPROD_INTRO".REF_PRODID`);
 
-        // const objCatFn = new Catservicefn();
-        // lipartialprod = await objCatFn.getAllProducts(req.data);
-        const liprod = await cds.transaction(req).run(SELECT.from(getProducts));
+        const objCatFn = new Catservicefn();
+        liprod = await objCatFn.getAllProducts(req.data);
+
+        // const liprod = await cds.transaction(req).run(SELECT.from(getProducts));
         for (iProd = 0; iProd < liprod.length; iProd++) {
+            vFlag = ' ';
             for (i = 0; i < liverscen.length; i++) {
                 if (liprod[iProd].PRODUCT_ID === liverscen[i].PRODUCT_ID) {
 
@@ -1728,12 +1730,13 @@ module.exports = (srv) => {
                         lsprod.SCENARIO = lipartialprod[iPartial].SCENARIO;
                         liprodver.push(lsprod);
                         lsprod = {};
-                        vFlag = 'X';
+                        vFlag = ' ';
                     }
                 }
             }
         }
-        return liprodver;
+        const keys = ['PRODUCT_ID', 'VERSION', 'SCENARIO'];
+        return GenFunctions.removeDuplicate(liprodver,keys);
     });
     // Planning Configuration
     // BOI - Deepa
