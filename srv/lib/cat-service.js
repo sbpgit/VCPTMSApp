@@ -2036,7 +2036,7 @@ module.exports = (srv) => {
                 oEntry.Matnr = aFilteredCIR[j].REF_PRODID;
                 oEntry.CustMaterial = aFilteredCIR[j].PRODUCT_ID;
                 oEntry.Quantity = (aFilteredCIR[j].CIR_QTY).toString();
-                oEntry.UniqId = (aFilteredCIR[j].UNIQUE_ID).toString();
+                oEntry.UniqueId = (aFilteredCIR[j].UNIQUE_ID).toString();
                 oEntry.Datum = aFilteredCIR[j].WEEK_DATE + "T10:00:00";
                 oEntry.HeaderConfig = aUniqueIdChars;
                 try {
