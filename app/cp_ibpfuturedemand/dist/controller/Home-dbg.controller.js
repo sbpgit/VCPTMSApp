@@ -130,7 +130,14 @@ sap.ui.define(
         that.oProd.setValue("");
         that.oVer.setValue("");
         that.oScen.setValue("");
-        that.onAfterRendering();
+        // that.onAfterRendering();
+        that.data = [];
+        that.TableModel.setData({
+            results: that.data,
+          });
+          that.byId("IBPfdemList").setModel(that.TableModel);
+
+
       },
 
       /**
@@ -421,14 +428,19 @@ sap.ui.define(
           that.oGModel.setProperty("/SelectedProd", "");
 
           // Calling service to get Product list
-          this.getModel("BModel").read("/getLocProdDet", {
-            filters: [
-              new Filter(
-                "LOCATION_ID",
-                FilterOperator.EQ,
-                aSelectedItems[0].getTitle()
-              ),
-            ],
+        //   this.getModel("BModel").read("/getLocProdDet", {
+        //     filters: [
+        //       new Filter(
+        //         "LOCATION_ID",
+        //         FilterOperator.EQ,
+        //         aSelectedItems[0].getTitle()
+        //       ),
+        //     ],
+        that.getModel("BModel").callFunction("/getAllProd", {
+            method: "GET",
+            urlParameters: {
+                LOCATION_ID: that.oLoc.getValue()
+            },
             success: function (oData) {
               that.prodModel.setData(oData);
               that.oProdList.setModel(that.prodModel);

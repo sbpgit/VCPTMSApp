@@ -71,12 +71,10 @@ sap.ui.define(
                     success: function (oData) {
                         sap.ui.core.BusyIndicator.hide();
                         oGModel.setProperty("/CharData", oData.results);
-
                         that.oCharModel.setData({
                             results: oData.results,
                         });
                         that.byId("idMatvarItem").setModel(that.oCharModel);
-                    
                     },
                     error: function () {
                         sap.ui.core.BusyIndicator.hide();
@@ -96,7 +94,6 @@ sap.ui.define(
                     sQuery =
                         oEvent.getParameter("value") || oEvent.getParameter("newValue");
                 }
-
                 if (sQuery !== "") {
                     oFilters.push(
                         new Filter({
@@ -122,13 +119,6 @@ sap.ui.define(
                     );
                     this.getView().addDependent(this._CreateSO);
                 }
-                if (!this._custGrp) {
-                    this._custGrp = sap.ui.xmlfragment(
-                        "cpapp.cpmatvariant.view.CustomerGroup",
-                        this
-                    );
-                    this.getView().addDependent(this._custGrp);
-                }  
                 
                 this._CreateSO.open();
                 sap.ui.getCore().byId("idlocIdSO").setValue(oGModel.getProperty("/locId"));
@@ -140,7 +130,6 @@ sap.ui.define(
              **/
             onCloseSO:function(){
                 this._CreateSO.close();  
-                sap.ui.getCore().byId("idCustGrpSO").setValue();
             },
             /**
              * Creating new Seed Order for respective Location, Product
@@ -150,7 +139,6 @@ sap.ui.define(
                     sProd = sap.ui.getCore().byId("idprodIdSO").getValue(),
                     sUniq = parseInt(sap.ui.getCore().byId("idUniqSO").getValue()),
                     squan = sap.ui.getCore().byId("idOrdQtySO").getValue(),
-                    sCustGrp = sap.ui.getCore().byId("idCustGrpSO").getValue(),
                     sDate = sap.ui.getCore().byId("DP1SO").getValue();
 
                 var oEntry = {
@@ -163,13 +151,11 @@ sap.ui.define(
                     PRODUCT_ID: sProd,
                     UNIQUE_ID: sUniq,
                     ORD_QTY: squan,
-                    MAT_AVAILDATE: sDate,
-                    CUSTOMER_GROUP:sCustGrp
+                    MAT_AVAILDATE: sDate                 
                 };
                 oEntry.SEEDDATA.push(vRuleslist);
 
                 if (squan !== "" && sDate !== "" && sLoc !== "" && sProd !== "" && sUniq !== "") {
-
                     that.getModel("BModel").callFunction("/maintainSeedOrder", {
                         method: "GET",
                         urlParameters: {
@@ -181,7 +167,6 @@ sap.ui.define(
                             sap.m.MessageToast.show("Seed Order created successfully");
                             that.onCloseSO();
                             that.onAfterRendering();
-
                         },
                         error: function (error) {
                             sap.ui.core.BusyIndicator.hide();
@@ -191,54 +176,6 @@ sap.ui.define(
                 } else {
                     sap.m.MessageToast.show("Please fill all fields");
                 }
-
             },
-            /**
-             * on press of Valuehelprequest for opening Customer group fragment
-             **/
-            handleValueHelp:function(){
-                this.getModel("BModel").read("/getCustgroup", {
-                    success: function (oData) {
-                        
-                        that.custGrpnameModel.setData({item:oData.results});
-                        that.oLocList = that._oCore.byId(
-                            that._custGrp.getId() + "-list"
-                        );
-                        that.oLocList.setModel(that.custGrpnameModel);                 
-                    },
-                    error: function () {
-                        MessageToast.show("No data");
-                    },
-                });  
-                this._custGrp.open();
-            },
-
-            handleSelection:function(oEvent){
-                sap.ui.getCore().byId("idCustGrpSO").setValue(oEvent.getParameters().selectedItem.getTitle());
-            },
-            /**
-             * Search function for valuehelp request
-             **/
-            handleSearch: function (oEvent) {
-                var sQuery =
-                    oEvent.getParameter("value") || oEvent.getParameter("newValue"),
-                    sId = oEvent.getParameter("id"),
-                    oFilters = [];
-                // Check if search filter is to be applied
-                sQuery = sQuery ? sQuery.trim() : "";
-               
-                    if (sQuery !== "") {
-                        oFilters.push(
-                            new Filter({
-                                filters: [
-                                    new Filter("CUSTOMER_GROUP", FilterOperator.Contains, sQuery),
-                                    new Filter("CUSTOMER_DESC", FilterOperator.Contains, sQuery),
-                                ],
-                                and: false,
-                            })
-                        );
-                    }
-                    that.oLocList.getBinding("items").filter(oFilters);
-            }
         });
     });

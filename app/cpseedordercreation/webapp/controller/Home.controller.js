@@ -321,11 +321,22 @@ sap.ui.define([
 
                     that.oLoc.setValue(aSelectedLoc[0].getTitle());
                     that.oProd.setValue("");
-                    that.getModel("BModel").callFunction("/getAllProd", {
-                        method: "GET",
-                        urlParameters: {
-                            LOCATION_ID: aSelectedLoc[0].getTitle()
-                        },
+
+
+                    // service to get the products based of location
+                    this.getModel("BModel").read("/getLocProdDet", {
+                        filters: [
+                            new Filter(
+                                "LOCATION_ID",
+                                FilterOperator.EQ,
+                                aSelectedLoc[0].getTitle()
+                            ),
+                        ],
+                    // that.getModel("BModel").callFunction("/getAllProd", {
+                    //     method: "GET",
+                    //     urlParameters: {
+                    //         LOCATION_ID: aSelectedLoc[0].getTitle()
+                    //     },
                         success: function (oData) {
                             that.prodModel.setData(oData);
                             that.oProdList.setModel(that.prodModel);
@@ -552,9 +563,9 @@ sap.ui.define([
                         },
                         error: function (error) {
                             sap.ui.core.BusyIndicator.hide();
-                            sap.m.MessageToast.show("Error creating a Seed Order");
+                            sap.m.MessageToast.show("Error creating a Seed Order ");
                         },
-                    });
+                    }); 
                 } else {
                     sap.m.MessageToast.show("Please fill all fields");
                 }

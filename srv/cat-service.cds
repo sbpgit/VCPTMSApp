@@ -171,6 +171,7 @@ service CatalogService @(impl : './lib/cat-service.js'){
     function get_objdep() returns array of ds.objectDep; //objectDep;
     
     function getAllProd(LOCATION_ID : String(4)) returns array of ds.locProd;
+    function getAllVerScen() returns array of ds.prodVerScen;
     function getCompReqFWeekly(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), COMPONENT : String(40), STRUCNODE : String(50), FROMDATE : Date, TODATE : Date, MODEL_VERSION : String(20))                                        returns array of ds.compreq;
     // Assembly Component weekly
     function getAsmbCompReqFWeekly(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), FROMDATE : Date, TODATE : Date, MODEL_VERSION : String(20))                                                                                    returns array of ds.compreq;
