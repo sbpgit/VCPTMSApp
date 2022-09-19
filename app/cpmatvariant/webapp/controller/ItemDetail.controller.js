@@ -71,12 +71,10 @@ sap.ui.define(
                     success: function (oData) {
                         sap.ui.core.BusyIndicator.hide();
                         oGModel.setProperty("/CharData", oData.results);
-
                         that.oCharModel.setData({
                             results: oData.results,
                         });
                         that.byId("idMatvarItem").setModel(that.oCharModel);
-                    
                     },
                     error: function () {
                         sap.ui.core.BusyIndicator.hide();
@@ -96,7 +94,6 @@ sap.ui.define(
                     sQuery =
                         oEvent.getParameter("value") || oEvent.getParameter("newValue");
                 }
-
                 if (sQuery !== "") {
                     oFilters.push(
                         new Filter({
@@ -159,7 +156,6 @@ sap.ui.define(
                 oEntry.SEEDDATA.push(vRuleslist);
 
                 if (squan !== "" && sDate !== "" && sLoc !== "" && sProd !== "" && sUniq !== "") {
-
                     that.getModel("BModel").callFunction("/maintainSeedOrder", {
                         method: "GET",
                         urlParameters: {
@@ -171,7 +167,6 @@ sap.ui.define(
                             sap.m.MessageToast.show("Seed Order created successfully");
                             that.onCloseSO();
                             that.onAfterRendering();
-
                         },
                         error: function (error) {
                             sap.ui.core.BusyIndicator.hide();
@@ -181,7 +176,6 @@ sap.ui.define(
                 } else {
                     sap.m.MessageToast.show("Please fill all fields");
                 }
-
             },
         });
     });

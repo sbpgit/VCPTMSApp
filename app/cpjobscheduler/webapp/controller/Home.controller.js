@@ -260,13 +260,9 @@ sap.ui.define(
                 oGModel.setProperty("/JobType", "M");
               } else if (oData.readJobDetails.action.includes("Predictions")) {
                 oGModel.setProperty("/JobType", "P");
-              } else if (
-                oData.readJobDetails.action === "generateTimeseries"
-              ) {
+              } else if(oData.readJobDetails.action.includes("/catalog/") && oData.readJobDetails.action.split("catalog/")[1] === "generateTimeseries") {
                 oGModel.setProperty("/JobType", "T");
-              } else if (
-                oData.readJobDetails.action === "generateTimeseriesF"
-              ) {
+              } else if(oData.readJobDetails.action.includes("/catalog/") && oData.readJobDetails.action.split("catalog/")[1] === "generateTimeseriesF") {
                 oGModel.setProperty("/JobType", "F");
               } else if (oData.readJobDetails.action.includes("sdi")) {
                 oGModel.setProperty("/JobType", "S");

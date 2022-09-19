@@ -156,10 +156,10 @@ module.exports = async function (srv) {
      })
   }
 //  module.exports = cds.service.impl(async function() {
-//          const { VCPTEST } = this.entities;
+//          const { SBPVCP } = this.entities;
 //         //  const service = await cdse.connect.to('IBPDemandsrv');
 //          const service = await cds.connect.to('IBPDemandsrv');
-//          this.on('READ', VCPTEST, request => {
+//          this.on('READ', SBPVCP, request => {
 //              try{
 //              return service.tx(request).run(request.query);
 //              }

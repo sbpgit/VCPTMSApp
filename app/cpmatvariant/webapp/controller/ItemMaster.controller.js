@@ -557,12 +557,14 @@ sap.ui.define(
                     that._createCharacterstics.open();
                     that.CharData();
                 } else {
-                    MessageToast.show("Please select product");
+                    MessageToast.show("Please select Location/ Product");
                 }
             },
 
             onCopyBtn: function (oEvent) {
-                var selUniq = that.byId("idMatVHead").getSelectedItem().getBindingContext().getProperty();
+                var oData = that.byId("idMatVHead").getSelectedItem();
+                if(oData){
+                var selUniq = oData.getBindingContext().getProperty();
                 sap.ui.getCore().byId("locId1").setValue(selUniq.LOCATION_ID);
                 sap.ui.getCore().byId("prodId1").setValue(selUniq.PRODUCT_ID);
                 sap.ui.getCore().byId("idUniqDesc1").setValue(selUniq.UNIQUE_DESC);
@@ -575,6 +577,9 @@ sap.ui.define(
                 sap.ui.getCore().byId("idCharItem").setModel(that.ListModel);
                 that._createCharacterstics.open();
                 that.CharData();
+            } else {
+                MessageToast.show("Please select a record to copy");
+            }
             },
 
             CharData: function () {
