@@ -831,30 +831,30 @@ sap.ui.define(
                     oEntry.FROMDATE = vFromDate;
                     oEntry.TODATE = vToDate;
 
-                    // that.handlePublish(oEntry);
+                    that.handlePublish(oEntry);
 
-                    // calling service based on filters
-                    that.getModel("CIRModel").callFunction("/postCIRQuantities", {
-                        method: "GET",
-                        urlParameters: {
-                            LOCATION_ID: oEntry.LOCATION_ID,
-                            PRODUCT_ID: oEntry.PRODUCT_ID,
-                            VERSION: oEntry.VERSION,
-                            SCENARIO: oEntry.SCENARIO,
-                            FROMDATE: vFromDate,
-                            TODATE: vToDate,
-                            MODEL_VERSION: oEntry.MODEL_VERSION,
-                        },
-                        success: function (data) {
-                            sap.ui.core.BusyIndicator.hide();
-                            MessageToast.show("Data Successfully Published");
-                        },
-                        error: function (data) {
-                            sap.ui.core.BusyIndicator.hide();
-                            // sap.m.MessageToast.show("Error While publishing data!");
-                            sap.m.MessageToast.show("Data Successfully Published");
-                        },
-                    });
+                    // // calling service based on filters
+                    // that.getModel("CIRModel").callFunction("/postCIRQuantities", {
+                    //     method: "GET",
+                    //     urlParameters: {
+                    //         LOCATION_ID: oEntry.LOCATION_ID,
+                    //         PRODUCT_ID: oEntry.PRODUCT_ID,
+                    //         VERSION: oEntry.VERSION,
+                    //         SCENARIO: oEntry.SCENARIO,
+                    //         FROMDATE: vFromDate,
+                    //         TODATE: vToDate,
+                    //         MODEL_VERSION: oEntry.MODEL_VERSION,
+                    //     },
+                    //     success: function (data) {
+                    //         sap.ui.core.BusyIndicator.hide();
+                    //         MessageToast.show("Data Successfully Published");
+                    //     },
+                    //     error: function (data) {
+                    //         sap.ui.core.BusyIndicator.hide();
+                    //         // sap.m.MessageToast.show("Error While publishing data!");
+                    //         sap.m.MessageToast.show("Data Successfully Published");
+                    //     },
+                    // });
                 } else {
                     sap.ui.core.BusyIndicator.hide();
                     sap.m.MessageToast.show(
@@ -938,19 +938,19 @@ sap.ui.define(
                         endTime: dsEDate,
                     }]
                 };
-                that.getModel("JModel").callFunction("/laddMLJob", {
+                that.getModel("JModel").callFunction("/addMLJob", {
                     method: "GET",
                     urlParameters: {
                         jobDetails: JSON.stringify(finalList),
                     },
                     success: function (oData) {
                         sap.ui.core.BusyIndicator.hide();
-                        sap.m.MessageToast.show(oData.laddMLJob + ": Job Created");
+                        sap.m.MessageToast.show(oData.addMLJob + ": Job Created");
 
                     },
                     error: function (error) {
                         sap.ui.core.BusyIndicator.hide();
-                        sap.m.MessageToast.show("Error POsting Data");
+                        sap.m.MessageToast.show("Error While publishing data!");
                     },
                 });
 
