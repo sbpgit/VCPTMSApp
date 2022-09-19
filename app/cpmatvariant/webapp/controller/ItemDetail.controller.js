@@ -183,30 +183,5 @@ sap.ui.define(
                 }
 
             },
-    
-            /**
-             * Search function for valuehelp request
-             **/
-            handleSearch: function (oEvent) {
-                var sQuery =
-                    oEvent.getParameter("value") || oEvent.getParameter("newValue"),
-                    sId = oEvent.getParameter("id"),
-                    oFilters = [];
-                // Check if search filter is to be applied
-                sQuery = sQuery ? sQuery.trim() : "";
-               
-                    if (sQuery !== "") {
-                        oFilters.push(
-                            new Filter({
-                                filters: [
-                                    new Filter("CUSTOMER_GROUP", FilterOperator.Contains, sQuery),
-                                    new Filter("CUSTOMER_DESC", FilterOperator.Contains, sQuery),
-                                ],
-                                and: false,
-                            })
-                        );
-                    }
-                    that.oLocList.getBinding("items").filter(oFilters);
-            }
         });
     });
