@@ -76,7 +76,7 @@ async maintainUniqueHeader(lFlag,adata) {
 }
 async getAllProducts(adata){
     let  lsprod = {};
-    let liProd = [];
+    let liprod = [];
     const limasterprod = await cds.run(
         `
      SELECT DISTINCT PRODUCT_ID,
@@ -105,7 +105,7 @@ async getAllProducts(adata){
         // vDesc = limasterprod[i].PROD_DESC;
         liprod.push(lsprod);
         lsprod = {};
-        for (iPartial = 0; iPartial < lipartialprod.length; iPartial++) {
+        for (let iPartial = 0; iPartial < lipartialprod.length; iPartial++) {
             if (lipartialprod[iPartial].REF_PRODID === limasterprod[i].PRODUCT_ID) {
                 lsprod.LOCATION_ID = lipartialprod[iPartial].LOCATION_ID;
                 lsprod.PRODUCT_ID = lipartialprod[iPartial].PRODUCT_ID;
