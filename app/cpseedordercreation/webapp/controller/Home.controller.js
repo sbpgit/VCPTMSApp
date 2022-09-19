@@ -419,11 +419,18 @@ sap.ui.define([
                     // filters: [ new Filter( "LOCATION_ID",  FilterOperator.EQ,  loc ),
                     //            new Filter( "PRODUCT_ID", FilterOperator.EQ, Prod ), ],
                     success: function (oData) {
+                        if(oData.results.length === 0){
+                            that.oModel.setData([]);
+                            that.oList.setModel(that.oModel);
+                            sap.m.MessageToast.show("No Data available to show.")
+                        }
+                        else{
                         sap.ui.core.BusyIndicator.hide();
                         that.oModel.setData({
                             results: oData.results,
                         });
                         that.oList.setModel(that.oModel);
+                    }
                     },
                     error: function () {
                         sap.ui.core.BusyIndicator.hide();
