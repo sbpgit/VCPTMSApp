@@ -122,13 +122,6 @@ sap.ui.define(
                     );
                     this.getView().addDependent(this._CreateSO);
                 }
-                if (!this._custGrp) {
-                    this._custGrp = sap.ui.xmlfragment(
-                        "cpapp.cpmatvariant.view.CustomerGroup",
-                        this
-                    );
-                    this.getView().addDependent(this._custGrp);
-                }  
                 
                 this._CreateSO.open();
                 sap.ui.getCore().byId("idlocIdSO").setValue(oGModel.getProperty("/locId"));
@@ -140,7 +133,6 @@ sap.ui.define(
              **/
             onCloseSO:function(){
                 this._CreateSO.close();  
-                sap.ui.getCore().byId("idCustGrpSO").setValue();
             },
             /**
              * Creating new Seed Order for respective Location, Product
@@ -150,7 +142,6 @@ sap.ui.define(
                     sProd = sap.ui.getCore().byId("idprodIdSO").getValue(),
                     sUniq = parseInt(sap.ui.getCore().byId("idUniqSO").getValue()),
                     squan = sap.ui.getCore().byId("idOrdQtySO").getValue(),
-                    sCustGrp = sap.ui.getCore().byId("idCustGrpSO").getValue(),
                     sDate = sap.ui.getCore().byId("DP1SO").getValue();
 
                 var oEntry = {
@@ -163,8 +154,7 @@ sap.ui.define(
                     PRODUCT_ID: sProd,
                     UNIQUE_ID: sUniq,
                     ORD_QTY: squan,
-                    MAT_AVAILDATE: sDate,
-                    CUSTOMER_GROUP:sCustGrp
+                    MAT_AVAILDATE: sDate                 
                 };
                 oEntry.SEEDDATA.push(vRuleslist);
 
@@ -193,29 +183,7 @@ sap.ui.define(
                 }
 
             },
-            /**
-             * on press of Valuehelprequest for opening Customer group fragment
-             **/
-            handleValueHelp:function(){
-                this.getModel("BModel").read("/getCustgroup", {
-                    success: function (oData) {
-                        
-                        that.custGrpnameModel.setData({item:oData.results});
-                        that.oLocList = that._oCore.byId(
-                            that._custGrp.getId() + "-list"
-                        );
-                        that.oLocList.setModel(that.custGrpnameModel);                 
-                    },
-                    error: function () {
-                        MessageToast.show("No data");
-                    },
-                });  
-                this._custGrp.open();
-            },
-
-            handleSelection:function(oEvent){
-                sap.ui.getCore().byId("idCustGrpSO").setValue(oEvent.getParameters().selectedItem.getTitle());
-            },
+    
             /**
              * Search function for valuehelp request
              **/
