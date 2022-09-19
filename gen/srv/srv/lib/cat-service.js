@@ -1925,7 +1925,7 @@ module.exports = (srv) => {
             for (let k = 0; k < aFilteredChar.length; k++) {
                 oUniqueIdChars = {};
                 oUniqueIdChars.UniqueId = (aFilteredChar[k].UNIQUE_ID).toString();
-                oUniqueIdChars.Charc = aFilteredChar[k].CHAR_NUM;
+                oUniqueIdChars.Charc = aFilteredChar[k].CHAR_NAME;
                 oUniqueIdChars.Value = aFilteredChar[k].CHAR_VALUE;
 
                 aUniqueIdChars.push(oUniqueIdChars);
@@ -1982,7 +1982,7 @@ module.exports = (srv) => {
             for (let k = 0; k < aFilteredChar.length; k++) {
                 oUniqueIdChars = {};
                 oUniqueIdChars.UniqueId = (aFilteredChar[k].UNIQUE_ID).toString();
-                oUniqueIdChars.Charc = aFilteredChar[k].CHAR_NUM;
+                oUniqueIdChars.Charc = aFilteredChar[k].CHAR_NAME;
                 oUniqueIdChars.Value = aFilteredChar[k].CHAR_VALUE;
 
                 aUniqueIdChars.push(oUniqueIdChars);
@@ -2003,8 +2003,7 @@ module.exports = (srv) => {
                 oEntry.Datum = aFilteredCIR[j].WEEK_DATE + "T10:00:00";
                 oEntry.HeaderConfig = aUniqueIdChars;
                 try{
-                let sReturn = await oModel.tx(req).post("/headerSet", oEntry);
-                console.log(sReturn);
+                 await oModel.tx(req).post("/headerSet", oEntry);                
                 }
                 catch(e) {
                   console.log(e);

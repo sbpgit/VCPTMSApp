@@ -35,6 +35,7 @@ using {
 using V_PLANNEDCONFIG from '../db/data-model';
 using { S4ODataService as external } from './external/S4ODataService';
 
+
 // using V_ASMCOMP_REQ from '../db/data-model';
 service CatalogService @(impl : './lib/cat-service.js'){
     // Service on HDI entities

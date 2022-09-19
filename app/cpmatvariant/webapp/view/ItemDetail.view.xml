@@ -8,9 +8,9 @@
         <HBox>
         <OverflowToolbar>
            
-                    <SearchField id="idCharSearch" liveChange="onCharSearch" placeholder="Characteristic / Characteristic Value" width="1000px" />
-                    <!-- <ToolbarSpacer/> -->
-<!-- <Button id="idadd" icon="sap-icon://add" press="onAddPress" visible="false"/> -->
+                    <SearchField id="idCharSearch" liveChange="onCharSearch" placeholder="Characteristic / Characteristic Value" width="880px" />
+                    <ToolbarSpacer/>
+                    <Button id="idadd" text="Create Order" press="onOrderCreate" visible="true"/>
                     
                     </OverflowToolbar>
                     </HBox>

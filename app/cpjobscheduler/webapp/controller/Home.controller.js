@@ -156,9 +156,18 @@ sap.ui.define(
         onPanelExpand: function () {
           var panel = that.byId("JobPanel").getExpanded();
 
-          if (panel === true) {
-            that.byId("jobList").removeSelections(true);
-          }
+          var oTableData = that.byId("jobList").getItems();
+
+                    for(var i=0; i < oTableData.length; i++){
+                        if(that.oJobId === oTableData[i].getCells()[0].getTitle()){
+                            oTableData[i].focus();
+                        }
+
+                    }
+
+        //   if (panel === true) {
+        //     that.byId("jobList").removeSelections(true);
+        //   }
         },
 
         /**
@@ -252,11 +261,11 @@ sap.ui.define(
               } else if (oData.readJobDetails.action.includes("Predictions")) {
                 oGModel.setProperty("/JobType", "P");
               } else if (
-                oData.readJobDetails.action === "generateTimeseries"
+                oData.lreadJobDetails.value.action.split("catalog/")[1] === "generateTimeseries"
               ) {
                 oGModel.setProperty("/JobType", "T");
               } else if (
-                oData.readJobDetails.action === "generateTimeseriesF"
+                oData.lreadJobDetails.value.action.split("catalog/")[1] === "generateTimeseriesF"
               ) {
                 oGModel.setProperty("/JobType", "F");
               } else if (oData.readJobDetails.action.includes("sdi")) {

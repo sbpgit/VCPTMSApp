@@ -36,10 +36,12 @@ sap.ui.define(
                 that.oCharModel = new JSONModel();
                 this.oCharModel.setSizeLimit(1000);
                 that.charnameModel = new JSONModel();
+                that.custGrpnameModel = new JSONModel();
                 that.charvalueModel = new JSONModel();
                 that.oTableData = [];
                 that.ListModel = new JSONModel();
-
+                that._oCore = sap.ui.getCore();
+                
             },
 
             /**
@@ -69,12 +71,10 @@ sap.ui.define(
                     success: function (oData) {
                         sap.ui.core.BusyIndicator.hide();
                         oGModel.setProperty("/CharData", oData.results);
-
                         that.oCharModel.setData({
                             results: oData.results,
                         });
                         that.byId("idMatvarItem").setModel(that.oCharModel);
-                    
                     },
                     error: function () {
                         sap.ui.core.BusyIndicator.hide();
@@ -94,7 +94,6 @@ sap.ui.define(
                     sQuery =
                         oEvent.getParameter("value") || oEvent.getParameter("newValue");
                 }
-
                 if (sQuery !== "") {
                     oFilters.push(
                         new Filter({
@@ -108,6 +107,75 @@ sap.ui.define(
                 }
                 that.byId("idMatvarItem").getBinding("items").filter(oFilters);
             },
+            /**
+             * Open Create Seed Order fragment and setting up default values
+             **/
+            onOrderCreate:function(){   
+                
+                if (!this._CreateSO) {
+                    this._CreateSO = sap.ui.xmlfragment(
+                        "cpapp.cpmatvariant.view.CreateSeedOrder",
+                        this
+                    );
+                    this.getView().addDependent(this._CreateSO);
+                }
+                
+                this._CreateSO.open();
+                sap.ui.getCore().byId("idlocIdSO").setValue(oGModel.getProperty("/locId"));
+                sap.ui.getCore().byId("idprodIdSO").setValue(oGModel.getProperty("/prdId"));
+                sap.ui.getCore().byId("idUniqSO").setValue(oGModel.getProperty("/uniqId"));
+            },
+            /**
+             * Close Create Seed Order fragment
+             **/
+            onCloseSO:function(){
+                this._CreateSO.close();  
+            },
+            /**
+             * Creating new Seed Order for respective Location, Product
+             **/
+            onCreateSO:function(){
+                var sLoc = sap.ui.getCore().byId("idlocIdSO").getValue(),
+                    sProd = sap.ui.getCore().byId("idprodIdSO").getValue(),
+                    sUniq = parseInt(sap.ui.getCore().byId("idUniqSO").getValue()),
+                    squan = sap.ui.getCore().byId("idOrdQtySO").getValue(),
+                    sDate = sap.ui.getCore().byId("DP1SO").getValue();
 
+                var oEntry = {
+                    SEEDDATA: [],
+                },
+                    vRuleslist,
+                    oFlag = "C";
+                vRuleslist = {
+                    LOCATION_ID: sLoc,
+                    PRODUCT_ID: sProd,
+                    UNIQUE_ID: sUniq,
+                    ORD_QTY: squan,
+                    MAT_AVAILDATE: sDate                 
+                };
+                oEntry.SEEDDATA.push(vRuleslist);
+
+                if (squan !== "" && sDate !== "" && sLoc !== "" && sProd !== "" && sUniq !== "") {
+                    that.getModel("BModel").callFunction("/maintainSeedOrder", {
+                        method: "GET",
+                        urlParameters: {
+                            FLAG: oFlag,
+                            SEEDDATA: JSON.stringify(oEntry.SEEDDATA)
+                        },
+                        success: function (oData) {
+                            sap.ui.core.BusyIndicator.hide();
+                            sap.m.MessageToast.show("Seed Order created successfully");
+                            that.onCloseSO();
+                            that.onAfterRendering();
+                        },
+                        error: function (error) {
+                            sap.ui.core.BusyIndicator.hide();
+                            sap.m.MessageToast.show("Error creating a Seed Order");
+                        },
+                    });
+                } else {
+                    sap.m.MessageToast.show("Please fill all fields");
+                }
+            },
         });
     });

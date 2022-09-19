@@ -67,6 +67,7 @@
                                     <Column hAlign="Left" vAlign="Middle" >
                                         <Text text="{i18n>prod}"/>
                                     </Column>
+                                    
                                     <Column hAlign="Left" vAlign="Middle" >
                                         <Text text="{i18n>seedorder}"/>
                                     </Column>
@@ -88,6 +89,7 @@
                                         <cells>
                                             <Text text="{LOCATION_ID}" />
                                             <Text text="{PRODUCT_ID}"/>
+                                            
                                             <Text text="{SEED_ORDER}" />
                                             <Text text="{UNIQUE_ID}"/>
                                             <Text text="{ORD_QTY}"/>

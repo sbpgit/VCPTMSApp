@@ -9,14 +9,19 @@ xmlns:l="sap.ui.layout"
 				<f:content>
                     <Label id="idLabelSeed" text="{i18n>seedorder}" visible="false"/>
 					<Input id="idseedord" value="" visible="false"/>
+
                     <Label text="{i18n>loc}"/>
-					<Input id="idLocation" value="" width="90%" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+					<Input id="idLocation" value="" width="90%" editable="false" />
+
 					<Label text="{i18n>prod}"/>
-					<Input id="idProduct" value="" width="90%" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+					<Input id="idProduct" value="" width="90%" editable="false" />
+
 					<Label text="{i18n>uniqid}"/>
 					<Input id="idUniq" value="" width="90%" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+
 					<Label text="{i18n>quan}"/>
 					<Input id="idQuantity" value="" width="90%" type="Number"/>
+
                     <Label text="{i18n>date}"/>
 					<DatePicker id="idDate"  value="" width="90%" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="handleDateChange"/>
 				</f:content>

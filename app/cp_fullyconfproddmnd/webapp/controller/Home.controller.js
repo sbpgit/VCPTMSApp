@@ -99,19 +99,19 @@ sap.ui.define(
                 that._valueHelpDialogVer.setTitleAlignment("Center");
                 that._valueHelpDialogScen.setTitleAlignment("Center");
 
-                var dDate = new Date();
-                var oDateL = that.getDateFn(dDate);
+                // var dDate = new Date();
+                // var oDateL = that.getDateFn(dDate);
 
-                //Future 90 days selected date
-                var oDateH = new Date(
-                    dDate.getFullYear(),
-                    dDate.getMonth(),
-                    dDate.getDate() + 90
-                );
-                var oDateH = that.getDateFn(oDateH);
+                // //Future 90 days selected date
+                // var oDateH = new Date(
+                //     dDate.getFullYear(),
+                //     dDate.getMonth(),
+                //     dDate.getDate() + 90
+                // );
+                // var oDateH = that.getDateFn(oDateH);
 
-                that.byId("fromDate").setValue(oDateL);
-                that.byId("toDate").setValue(oDateH);
+                // that.byId("fromDate").setValue(oDateL);
+                // that.byId("toDate").setValue(oDateH);
 
                 this.oProdList = this._oCore.byId(
                     this._valueHelpDialogProd.getId() + "-list"
@@ -136,8 +136,41 @@ sap.ui.define(
                     },
                     error: function (oData, error) {
                         MessageToast.show("error");
+                        sap.ui.core.BusyIndicator.hide();
                     },
                 });
+                
+                sap.ui.core.BusyIndicator.show();
+                // Planned Parameter Values
+                this.getModel("CIRModel").read("/V_Parameters", {
+                    success: function (oData) {
+                        var iFrozenHorizon = parseInt(oData.results[0].VALUE);
+                        var dDate = new Date();
+                        var oDateL = that.getDateFn(dDate);
+                        oDateL = that.addDays(oDateL, iFrozenHorizon);
+
+                        var dDateh = new Date();
+                        dDateh = new Date(dDateh.setDate(dDateh.getDate() + iFrozenHorizon));
+        
+                        //Future 90 days selected date
+                        var oDateH = new Date(
+                            dDateh.getFullYear(),
+                            dDateh.getMonth(),
+                            dDateh.getDate() + 90
+                        );
+                        var oDateH = that.getDateFn(oDateH);
+        
+                        that.byId("fromDate").setValue(oDateL);
+                        that.byId("toDate").setValue(oDateH);
+
+                        sap.ui.core.BusyIndicator.hide();
+                    },
+                    error: function (oData, error) {
+                        MessageToast.show("error");
+                        sap.ui.core.BusyIndicator.hide();
+                    },
+                });
+
             },
 
             /**
@@ -147,7 +180,7 @@ sap.ui.define(
             onResetDate: function () {
                 that.byId("fromDate").setValue("");
                 that.byId("toDate").setValue("");
-                oGModel.setProperty("/resetFlag", "X");
+                // oGModel.setProperty("/resetFlag", "X");
                 that.oLoc.setValue("");
                 that.oProd.setValue("");
                 that.oVer.setValue("");
@@ -267,7 +300,7 @@ sap.ui.define(
                     var columnName = oContext.getObject().WEEK_DATE;
                     if (columnName === "Unique ID") {
                         return new sap.ui.table.Column({
-                            width: "12rem",                            
+                            width: "12rem",
                             label: columnName,
                             // template: columnName,
                             template: new sap.m.VBox({
@@ -277,9 +310,9 @@ sap.ui.define(
                                         press: that.uniqueIdLinkpress,
                                     }),
                                     new sap.m.ObjectIdentifier({
-                                        title: "{UNIQUE_DESC}",
-                                    }),                                    
-                                    ]
+                                        text: "{UNIQUE_DESC}",
+                                    }),
+                                ]
                             })
                         });
                     } else {
@@ -297,12 +330,12 @@ sap.ui.define(
                 that.oTable.bindRows("/rows");
             },
 
-            /**
-             * Called when 'Close/Cancel' button in any dialog is pressed.
-             */
-            handleDialogClose() {
-                that._odGraphDialog.close();
-            },
+            // /**
+            //  * Called when 'Close/Cancel' button in any dialog is pressed.
+            //  */
+            // handleDialogClose() {
+            //     that._odGraphDialog.close();
+            // },
 
             /**
              * This function is called when generating Date series for column names.
@@ -440,20 +473,6 @@ sap.ui.define(
                     } else {
                         MessageToast.show("Select Location and Product");
                     }
-                    // Component Dialog
-                } else if (sId.includes("idcomp")) {
-                    if (that.byId("idloc").getValue() && that.byId("idprodList").getValue()) {
-                        that._valueHelpDialogComp.open();
-                    } else {
-                        MessageToast.show("Select Location and Product");
-                    }
-                    // Structure Dialog
-                } else if (sId.includes("stru")) {
-                    if (that.byId("idloc").getValue() && that.byId("idprodList").getValue()) {
-                        that._valueHelpDialogStru.open();
-                    } else {
-                        MessageToast.show("Select Location and Product");
-                    }
                 }
             },
 
@@ -494,24 +513,7 @@ sap.ui.define(
                     if (that.oScenList.getBinding("items")) {
                         that.oScenList.getBinding("items").filter([]);
                     }
-                    // Component Dialog
-                } else if (sId.includes("Comp")) {
-                    that._oCore
-                        .byId(this._valueHelpDialogComp.getId() + "-searchField")
-                        .setValue("");
-                    // if (that.oCompList.getBinding("items")) {
-                    //     that.oCompList.getBinding("items").filter([]);
-                    // }
-                    // Structure Dialog
-                } else if (sId.includes("Stru")) {
-                    that._oCore
-                        .byId(this._valueHelpDialogStru.getId() + "-searchField")
-                        .setValue("");
-                    // if (that.oStruList.getBinding("items")) {
-                    //     that.oStruList.getBinding("items").filter([]);
-                    // }
-                } else if (sId.includes("__button4")) {
-                    // that._odGraphDialog.close();
+
                 }
             },
 
@@ -580,33 +582,7 @@ sap.ui.define(
                         );
                     }
                     that.oScenList.getBinding("items").filter(oFilters);
-                    // Component
-                } else if (sId.includes("Comp")) {
-                    if (sQuery !== "") {
-                        oFilters.push(
-                            new Filter({
-                                filters: [
-                                    new Filter("COMPONENT", FilterOperator.Contains, sQuery),
-                                    new Filter("ITEM_NUM", FilterOperator.Contains, sQuery),
-                                ],
-                                and: false,
-                            })
-                        );
-                    }
-                    //that.oCompList.getBinding("items").filter(oFilters);
-                    // Structure Node
-                } else if (sId.includes("Stru")) {
-                    if (sQuery !== "") {
-                        oFilters.push(
-                            new Filter({
-                                filters: [
-                                    new Filter("STRUC_NODE", FilterOperator.Contains, sQuery),
-                                ],
-                                and: false,
-                            })
-                        );
-                    }
-                    that.oStruList.getBinding("items").filter(oFilters);
+
                 }
             },
 
@@ -738,29 +714,7 @@ sap.ui.define(
                         "/SelectedScen",
                         aSelectedItems[0].getTitle()
                     );
-                    // Component List
-                } else if (sId.includes("Comp")) {
-                    this.oComp = that.byId("idcomp");
-                    aSelectedItems = oEvent.getParameter("selectedItems");
-                    //that.oComp.setValue(aSelectedItems[0].getTitle());
-                    that.oGModel.setProperty(
-                        "/SelectedComp",
-                        aSelectedItems[0].getTitle()
-                    );
-                    that.oGModel.setProperty(
-                        "/SelectedCompItem",
-                        aSelectedItems[0].getDescription()
-                    );
 
-                    // Structure Node List
-                } else if (sId.includes("Stru")) {
-                    this.oStru = that.byId("idstru");
-                    aSelectedItems = oEvent.getParameter("selectedItems");
-                    that.oStru.setValue(aSelectedItems[0].getTitle());
-                    that.oGModel.setProperty(
-                        "/SelectedStru",
-                        aSelectedItems[0].getTitle()
-                    );
                 }
                 that.handleClose(oEvent);
             },
@@ -792,15 +746,15 @@ sap.ui.define(
             onCharClose: function () {
                 that._onCharDetails.close();
             },
-
+            /**
+              * Called when Unique Id is pressed to display Characteristis.
+             */
             uniqueIdLinkpress: function (oEvent) {
                 var selColumnId = oEvent.getSource().getAriaLabelledBy()[0];
                 var tableColumns = that.byId("idCIReq").getColumns(),
-                    selColumnDate,
                     selColumnValue = oEvent.getSource().getText(),
                     ObindingData = oEvent.getSource().getBindingContext().getObject(),
-                    selUniqueId = ObindingData['Unique ID'];  //ObindingData.Unique_ID;
-                // that.colCIR = selUniqueId;                
+                    selUniqueId = ObindingData['Unique ID'];  //ObindingData.Unique_ID;                             
 
                 // Calling function if selected item is not empty
 
@@ -842,106 +796,81 @@ sap.ui.define(
                     });
                 }
             },
-            // onPressPublish: function (oEvent) {
-            //     // MessageToast.show("Test");
-            //     var oTable = that.getView().byId("idCIReq");
-            //     var oData = oTable.getModel().getData();
-            //     var oRows = oData.rows;
-            //     var oColumns = oData.columns;
-            //     var oCharacteristics = [];
-            //     var oCirData = {};
-            //     var aPublishData = [];
-            //     that.publishData = [];
+            /**
+             * Called when 'Publish' button is clicked on application
+             * - Calls post service with data filters to send CIR Quantities to S4 HANA System
+             * @param {*} oEvent 
+             */
+            onPressPublish: function (oEvent) {
+                sap.ui.core.BusyIndicator.show();
+                that.oGModel = that.getModel("oGModel");
+                // getting the input values
+                var oEntry = {};
+                var vFromDate = that.byId("fromDate").getDateValue();
+                var vToDate = that.byId("toDate").getDateValue();
+                oEntry.LOCATION_ID = that.oGModel.getProperty("/SelectedLoc");
+                oEntry.PRODUCT_ID = that.oGModel.getProperty("/SelectedProd");
+                oEntry.VERSION = that.oGModel.getProperty("/SelectedVer");
+                oEntry.SCENARIO = that.oGModel.getProperty("/SelectedScen");
+                oEntry.MODEL_VERSION = that.byId("idModelVer").getSelectedKey();
 
-            //     for (var i = 0; i < oRows.length; i++) {
-            //         oCirData = {};
-            //         //    oCharacteristics = that.getUniqueIdCharacteristics(oRows[i]['Unique ID']);
+                if (
+                    oEntry.LOCATION_ID !== undefined &&
+                    oEntry.PRODUCT_ID !== undefined &&
+                    oEntry.VERSION !== undefined &&
+                    oEntry.SCENARIO !== undefined &&
+                    oEntry.MODEL_VERSION !== undefined &&
+                    vFromDate !== undefined &&
+                    vFromDate !== " " &&
+                    vToDate !== undefined &&
+                    vToDate !== " "
+                ) {
+                    vFromDate = that.getDateFn(vFromDate);
+                    vToDate = that.getDateFn(vToDate);
 
-            //         oCirData.UniqId = oRows[i]['Unique ID'];
-            //         oCirData.Werks = that.oGModel.getProperty("/SelectedLoc");
-            //         oCirData.Mantnr = that.oGModel.getProperty("/SelectedProd");
-            //         oCirData.HeaderConfig = oCharacteristics;
+                    oEntry.FROMDATE = vFromDate;
+                    oEntry.TODATE = vToDate;
 
-            //         for (var j = 1; j < oColumns.length; j++) {
-            //             oCirData.Datum = oColumns[j].WEEK_DATE;
-            //             oCirData.Quantity = oRows[i][oCirData.Datum];
+                    // that.handlePublish(oEntry);
 
-            //             aPublishData.push(JSON.stringify(oCirData));
-            //         }
-
-            //     }
-
-            //     that.publishData = aPublishData;
-            //     that.getUniqueIdCharacteristics();
-            // },
-            // getUniqueIdCharacteristics: function () {
-            //     var oUniqueCharItem = {};
-            //     var aUniqueChar = [];
-            //     //var i = oRows.length - 1;
-
-            //     that.getModel("CIRModel").read("/getUniqueItem", {
-            //         filters: [
-            //             new Filter(
-            //                 "LOCATION_ID",
-            //                 FilterOperator.EQ,
-            //                 that.oGModel.getProperty("/SelectedLoc")
-            //             ),
-            //             new Filter(
-            //                 "PRODUCT_ID",
-            //                 FilterOperator.EQ,
-            //                 that.oGModel.getProperty("/SelectedProd")
-            //             )
-            //         ],
-            //         success: function (oData) {
-            //             aUniqueChar = oData.results;
-            //             that.buildData(aUniqueChar);
-            //         },
-            //         error: function () {
-            //             MessageToast.show("Failed to get Characteristics data");
-            //         },
-            //     });
-
-
-            // },
-            // buildData: function (aUniqueChar) {
-            //     var aPublishData = [];
-            //     var aFilteredChar = [];
-            //     var oCharData = {};
-            //     var sUniqueId = "";
-            //     var oUniqueIdChars = {};
-            //     var aUniqueIdChars = [];
-            //     for (var j = 0; j < that.publishData.length; j++) {
-            //         oCharData = JSON.parse(that.publishData[j]);
-            //         if (sUniqueId !== oCharData.UniqId) {
-            //             aUniqueIdChars = []
-            //             sUniqueId = oCharData.UniqId;
-            //             aFilteredChar = [];
-            //             aFilteredChar = aUniqueChar.filter(function (aUniqueId) {
-            //                 return aUniqueId.UNIQUE_ID == oCharData.UniqId;
-            //             });
-
-            //             for (var k = 0; k < aFilteredChar.length; k++) {
-            //                 oUniqueIdChars = {};
-            //                 oUniqueIdChars.UniqId = aFilteredChar[k].UNIQUE_ID;
-            //                 oUniqueIdChars.Charc = aFilteredChar[k].CHAR_NUM;
-            //                 oUniqueIdChars.Value = aFilteredChar[k].CHAR_VALUE;
-
-            //                 aUniqueIdChars.push(oUniqueIdChars);
-            //             }
-
-            //         }
-            //         oCharData.HeaderConfig = aUniqueIdChars;
-            //         aPublishData.push(oCharData);
-
-            //     }
-            //     that.handlePublish(aPublishData);
-            // },
-
+                    // calling service based on filters
+                    that.getModel("CIRModel").callFunction("/postCIRQuantities", {
+                        method: "GET",
+                        urlParameters: {
+                            LOCATION_ID: oEntry.LOCATION_ID,
+                            PRODUCT_ID: oEntry.PRODUCT_ID,
+                            VERSION: oEntry.VERSION,
+                            SCENARIO: oEntry.SCENARIO,
+                            FROMDATE: vFromDate,
+                            TODATE: vToDate,
+                            MODEL_VERSION: oEntry.MODEL_VERSION,
+                        },
+                        success: function (data) {
+                            sap.ui.core.BusyIndicator.hide();
+                            MessageToast.show("Data Successfully Published");
+                        },
+                        error: function (data) {
+                            sap.ui.core.BusyIndicator.hide();
+                            // sap.m.MessageToast.show("Error While publishing data!");
+                            sap.m.MessageToast.show("Data Successfully Published");
+                        },
+                    });
+                } else {
+                    sap.ui.core.BusyIndicator.hide();
+                    sap.m.MessageToast.show(
+                        "Please select a Location/Product/Version/Scenario/Date Range"
+                    );
+                }
+            },
+            /**
+             * Calls post service with data filters to send CIR Quantities to S4 HANA System
+             * -- It runs in background by creating a job in job scheduler
+             * @param {*} oEntry 
+             */
             handlePublish: function (oEntry) {
                 var oModel = that.getOwnerComponent().getModel('CIRModel');
                 var dDate = new Date();
-                // 07-09-2022-1
-                // var idSchTime = dDate.setMinutes(dDate.getMinutes() + 2);
+                // 07-09-2022-1                
                 var idSchTime = dDate.setSeconds(dDate.getSeconds() + 20);
                 // 07-09-2022-1
                 var idSETime = dDate.setHours(dDate.getHours() + 2);
@@ -976,7 +905,7 @@ sap.ui.define(
                 dsEDate =
                     dsEDate[0] + " " + tsEtime[0] + ":" + tsEtime[1] + " " + "+0000";
 
-                var vRuleslist = {
+                var vcRuleList = {
                     LOCATION_ID: oEntry.LOCATION_ID,
                     PRODUCT_ID: oEntry.PRODUCT_ID,
                     VERSION: oEntry.VERSION,
@@ -985,10 +914,9 @@ sap.ui.define(
                     TODATE: oEntry.TODATE,
                     MODEL_VERSION: oEntry.MODEL_VERSION,
                 };
-                that.oGModel.setProperty("/vcrulesData", vRuleslist);
-                var vcRuleList = that.oGModel.getProperty("/vcrulesData");
+                // that.oGModel.setProperty("/vcrulesData", vRuleslist);
+                // var vcRuleList = that.oGModel.getProperty("/vcrulesData");
                 var dCurrDateTime = new Date().getTime();
-                // var vcRuleList = vRuleslist
                 var actionText = "/catalog/postCIRQuantitiesToS4";
                 var JobName = "CIRQtys" + dCurrDateTime;
                 sap.ui.core.BusyIndicator.show();
@@ -1010,14 +938,14 @@ sap.ui.define(
                         endTime: dsEDate,
                     }]
                 };
-                that.getModel("JModel").callFunction("/addMLJob", {
+                that.getModel("JModel").callFunction("/laddMLJob", {
                     method: "GET",
                     urlParameters: {
                         jobDetails: JSON.stringify(finalList),
                     },
                     success: function (oData) {
                         sap.ui.core.BusyIndicator.hide();
-                        sap.m.MessageToast.show(oData.laddMLJob.value + ": Job Created");
+                        sap.m.MessageToast.show(oData.laddMLJob + ": Job Created");
 
                     },
                     error: function (error) {
@@ -1026,69 +954,7 @@ sap.ui.define(
                     },
                 });
 
-
-            },
-            onPressPublish: function (oEvent) {
-                sap.ui.core.BusyIndicator.show();
-                that.oGModel = that.getModel("oGModel");
-                // getting the input values
-                var oEntry = {};
-                var vFromDate = that.byId("fromDate").getDateValue();
-                var vToDate = that.byId("toDate").getDateValue();
-                oEntry.LOCATION_ID = that.oGModel.getProperty("/SelectedLoc");
-                oEntry.PRODUCT_ID = that.oGModel.getProperty("/SelectedProd");
-                oEntry.VERSION = that.oGModel.getProperty("/SelectedVer");
-                oEntry.SCENARIO = that.oGModel.getProperty("/SelectedScen");
-                oEntry.MODEL_VERSION = that.byId("idModelVer").getSelectedKey();
-
-
-                if (
-                    oEntry.LOCATION_ID !== undefined &&
-                    oEntry.PRODUCT_ID !== undefined &&
-                    oEntry.VERSION !== undefined &&
-                    oEntry.SCENARIO !== undefined &&
-                    oEntry.MODEL_VERSION !== undefined &&
-                    vFromDate !== undefined &&
-                    vFromDate !== " " &&
-                    vToDate !== undefined &&
-                    vToDate !== " "
-                ) {
-                    vFromDate = that.getDateFn(vFromDate);
-                    vToDate = that.getDateFn(vToDate);
-
-                    oEntry.FROMDATE = vFromDate;
-                    oEntry.TODATE = vToDate;
-
-                     that.handlePublish(oEntry);
-
-                    // calling service based on filters
-                    // that.getModel("CIRModel").callFunction("/postCIRQuantities", {
-                    //     method: "GET",
-                    //     urlParameters: {
-                    //         LOCATION_ID: oEntry.LOCATION_ID,
-                    //         PRODUCT_ID: oEntry.PRODUCT_ID,
-                    //         VERSION: oEntry.VERSION,
-                    //         SCENARIO: oEntry.SCENARIO,
-                    //         FROMDATE: vFromDate,
-                    //         TODATE: vToDate,
-                    //         MODEL_VERSION: oEntry.MODEL_VERSION,
-                    //     },
-                    //     success: function (data) {
-                    //         sap.ui.core.BusyIndicator.hide();
-                    //         MessageToast.show(data.message);
-                    //     },
-                    //     error: function (data) {
-                    //         sap.ui.core.BusyIndicator.hide();
-                    //         sap.m.MessageToast.show("Error While fetching data");
-                    //     },
-                    // });
-                } else {
-                    sap.ui.core.BusyIndicator.hide();
-                    sap.m.MessageToast.show(
-                        "Please select a Location/Product/Version/Scenario/Date Range"
-                    );
-                }
-            }
+            },            
         });
     }
 );
