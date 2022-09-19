@@ -261,11 +261,11 @@ sap.ui.define(
               } else if (oData.readJobDetails.action.includes("Predictions")) {
                 oGModel.setProperty("/JobType", "P");
               } else if (
-                oData.readJobDetails.action === "generateTimeseries"
+                oData.lreadJobDetails.value.action.split("catalog/")[1] === "generateTimeseries"
               ) {
                 oGModel.setProperty("/JobType", "T");
               } else if (
-                oData.readJobDetails.action === "generateTimeseriesF"
+                oData.lreadJobDetails.value.action.split("catalog/")[1] === "generateTimeseriesF"
               ) {
                 oGModel.setProperty("/JobType", "F");
               } else if (oData.readJobDetails.action.includes("sdi")) {

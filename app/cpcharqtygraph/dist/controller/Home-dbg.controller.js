@@ -219,19 +219,25 @@ sap.ui.define([
 
                     // Calling service to get IBP Versions
                     // sap.ui.core.BusyIndicator.show();
-                    this.getView().getModel("oModel").read("/getIbpVerScn", {
-                        filters: [
-                            new Filter(
-                                "LOCATION_ID",
-                                FilterOperator.EQ,
-                                that.oGModel.getProperty("/SelectedLoc")
-                            ),
-                            new Filter(
-                                "PRODUCT_ID",
-                                FilterOperator.EQ,
-                                aSelectedItems[0].getTitle()
-                            ),
-                        ],
+                    // this.getView().getModel("oModel").read("/getAllVerScen", {
+                    //     filters: [
+                    //         new Filter(
+                    //             "LOCATION_ID",
+                    //             FilterOperator.EQ,
+                    //             that.oGModel.getProperty("/SelectedLoc")
+                    //         ),
+                    //         new Filter(
+                    //             "PRODUCT_ID",
+                    //             FilterOperator.EQ,
+                    //             aSelectedItems[0].getTitle()
+                    //         ),
+                    //     ],
+                    this.getModel("oModel").callFunction("/getAllVerScen", {
+                        method: "GET",            
+                        urlParameters: {            
+                            LOCATION_ID: that.oGModel.getProperty("/SelectedLoc"),
+                            PRODUCT_ID: aSelectedItems[0].getTitle()     
+                        },
                         success: function (oData) {
                             if (oData.results.length === 0) {
                                 sap.m.MessageToast.show("No versions available for choosen Location/Product. Please choose another.");
@@ -241,7 +247,14 @@ sap.ui.define([
                                 // sap.ui.core.BusyIndicator.hide();
                             }
                             else {
-                                that.verModel.setData(oData);
+                                function removeDuplicate(array, key) {
+                                    var check = new Set();        
+                                    return array.filter(obj => !check.has(obj[key]) && check.add(obj[key]));        
+                                }        
+                                that.verModel.setData({  
+                                     results: removeDuplicate(oData.results, 'VERSION')
+                                });
+                                // that.verModel.setData(oData);
                                 that.oVerList.setModel(that.verModel);
                                 // sap.ui.core.BusyIndicator.hide();
                             }
@@ -264,32 +277,55 @@ sap.ui.define([
                         aSelectedItems[0].getTitle()
                     );
                     // Calling service to get IBP Scenario
-                    this.getView().getModel("oModel").read("/getIbpVerScn", {
-                        filters: [
-                            new Filter(
-                                "LOCATION_ID",
-                                FilterOperator.EQ,
-                                that.oGModel.getProperty("/SelectedLoc")
-                            ),
-                            new Filter(
-                                "PRODUCT_ID",
-                                FilterOperator.EQ,
-                                that.oGModel.getProperty("/SelectedProd")
-                            ),
-                            new Filter(
-                                "VERSION",
-                                FilterOperator.EQ,
-                                aSelectedItems[0].getTitle()
-                            ),
-                        ],
+                    // this.getView().getModel("oModel").read("/getIbpVerScn", {
+                    //     filters: [
+                    //         new Filter(
+                    //             "LOCATION_ID",
+                    //             FilterOperator.EQ,
+                    //             that.oGModel.getProperty("/SelectedLoc")
+                    //         ),
+                    //         new Filter(
+                    //             "PRODUCT_ID",
+                    //             FilterOperator.EQ,
+                    //             that.oGModel.getProperty("/SelectedProd")
+                    //         ),
+                    //         new Filter(
+                    //             "VERSION",
+                    //             FilterOperator.EQ,
+                    //             aSelectedItems[0].getTitle()
+                    //         ),
+                    //     ],
+                    //     success: function (oData) {
+                    //         that.scenModel.setData(oData);
+                    //         that.oScenList.setModel(that.scenModel);
+                    //     },
+                    //     error: function (oData, error) {
+                    //         MessageToast.show("error");
+                    //     },
+                    // });
+                    this.getModel("oModel").callFunction("/getAllVerScen", {
+                        method: "GET",            
+                        urlParameters: {            
+                            LOCATION_ID: that.oGModel.getProperty("/SelectedLoc"),
+                            PRODUCT_ID: aSelectedItems[0].getTitle(),
+                            VERSION:  aSelectedItems[0].getTitle()
+                        },
                         success: function (oData) {
-                            that.scenModel.setData(oData);
-                            that.oScenList.setModel(that.scenModel);
+                                function removeDuplicate(array, key) {
+                                    var check = new Set();        
+                                    return array.filter(obj => !check.has(obj[key]) && check.add(obj[key]));        
+                                }        
+                                that.scenModel.setData({  
+                                     results: removeDuplicate(oData.results, 'SCENARIO')
+                                });
+                                // that.scenModel.setData(oData);
+                                that.oScenList.setModel(that.scenModel);                            
                         },
                         error: function (oData, error) {
                             MessageToast.show("error");
                         },
                     });
+
                     // Scenario List
                 } else if (sId.includes("scen")) {
                     this.oScen = that.byId("idscen");
