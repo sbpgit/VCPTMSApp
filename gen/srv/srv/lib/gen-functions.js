@@ -3,6 +3,7 @@
 class GenFunctions {
     constructor() {
 
+
     }
 
     static getCurrentDate() {
@@ -15,7 +16,11 @@ class GenFunctions {
 
         return lLastWeek.toISOString().split('T')[0];
     }
+
     static getNextSunday(imDate) {
+        const lDate = new Date(imDate);
+        let lDay = lDate.getDay();
+        if (lDay !== 0) lDay = 7 - lDay;
         const lNextSun = new Date(lDate.getFullYear(), lDate.getMonth(), lDate.getDate() + lDay);
 
         return lNextSun.toISOString().split('T')[0];
@@ -95,31 +100,31 @@ class GenFunctions {
         const lNextWeekDay = new Date(lDate.getFullYear(), lDate.getMonth(), lDate.getDate() - imDays);
 
         return lNextWeekDay.toISOString().split('T')[0];
-      
+
         // var result = new Date(date);
         // result.setDate(result.getDate() + days);
         // return result;
-      } 
+    }
     static getNextMondayCmp(imDate) {
-        var vDate,vMonth,vYear;
+        var vDate, vMonth, vYear;
         const lDate = new Date(imDate);
         let lDay = lDate.getDay();
         if (lDay !== 0) lDay = 7 - lDay;
         lDay = lDay + 1;
         const lNextSun = new Date(
-          lDate.getFullYear(),
-          lDate.getMonth(),
-          lDate.getDate() + lDay
+            lDate.getFullYear(),
+            lDate.getMonth(),
+            lDate.getDate() + lDay
         );
 
-       return lNextSun.toISOString().split('T')[0];
+        return lNextSun.toISOString().split('T')[0];
     }
     static getDateIfDate(d) {
         var m = d.match(/\/Date\((\d+)\)\//);
-        return m ? (new Date(+m[1])).toLocaleDateString('en-US', {month: '2-digit', day: '2-digit', year: 'numeric'}) : d;
+        return m ? (new Date(+m[1])).toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' }) : d;
     }
-    static addMonths(imDate, months){
-         var d = new Date(imDate);//.getDate();
+    static addMonths(imDate, months) {
+        var d = new Date(imDate);//.getDate();
         // imDate.setMonth(imDate.getMonth() + +months);
         // if (imDate.getDate() != d) {
         //     imDate.setDate(0);

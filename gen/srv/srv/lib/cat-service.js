@@ -1864,8 +1864,14 @@ module.exports = (srv) => {
         const liCIRQty = oCIRData.liCIRQty;
         const liUniqueId = oCIRData.liUniqueId;
 
-        var vDateSeries = vDateFrom;
+        let vDateSeries = vDateFrom;
+        let dDate = new Date(vDateSeries);
+        let dDay = dDate.getDay();
+        if(dDay === 0 || dDay === 1) {
+         lsDates.WEEK_DATE = vDateFrom;
+        } else {
         lsDates.WEEK_DATE = GenFunctions.getNextMondayCmp(vDateSeries);
+        }
         vDateSeries = lsDates.WEEK_DATE;
         liDates.push(lsDates);
         lsDates = {};
