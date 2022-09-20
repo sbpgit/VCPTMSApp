@@ -2343,7 +2343,7 @@ sap.ui.define(
                 toDate = new Date(
                     nowH.getFullYear(),
                     nowH.getMonth(),
-                    nowH.getDate() + 90
+                    nowH.getDate() + 180
                 );
                 toDate = toDate.toISOString().split("T")[0];
 

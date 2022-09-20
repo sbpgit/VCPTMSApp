@@ -33,7 +33,7 @@ using {
     V_ASMCOMP_REQ
 } from '../db/data-model';
 using V_PLANNEDCONFIG from '../db/data-model';
-using S4ODataService from './external/S4ODataService';
+using { S4ODataService as external } from './external/S4ODataService';
 
 
 // using V_ASMCOMP_REQ from '../db/data-model';
