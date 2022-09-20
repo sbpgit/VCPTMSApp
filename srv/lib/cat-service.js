@@ -1702,10 +1702,12 @@ module.exports = (srv) => {
         //    WHERE "CP_PARTIALPROD_INTRO".LOCATION_ID = '`+ req.data.LOCATION_ID + `'
         //    ORDER BY "CP_PARTIALPROD_INTRO".REF_PRODID`);
 
-        // const objCatFn = new Catservicefn();
-        // lipartialprod = await objCatFn.getAllProducts(req.data);
-        const liprod = await cds.transaction(req).run(SELECT.from(getProducts));
+        const objCatFn = new Catservicefn();
+        liprod = await objCatFn.getAllProducts(req.data);
+
+        // const liprod = await cds.transaction(req).run(SELECT.from(getProducts));
         for (iProd = 0; iProd < liprod.length; iProd++) {
+            vFlag = ' ';
             for (i = 0; i < liverscen.length; i++) {
                 if (liprod[iProd].PRODUCT_ID === liverscen[i].PRODUCT_ID) {
 
@@ -1728,12 +1730,13 @@ module.exports = (srv) => {
                         lsprod.SCENARIO = lipartialprod[iPartial].SCENARIO;
                         liprodver.push(lsprod);
                         lsprod = {};
-                        vFlag = 'X';
+                        vFlag = ' ';
                     }
                 }
             }
         }
-        return liprodver;
+        const keys = ['PRODUCT_ID', 'VERSION', 'SCENARIO'];
+        return GenFunctions.removeDuplicate(liprodver,keys);
     });
     // Planning Configuration
     // BOI - Deepa
@@ -1861,8 +1864,14 @@ module.exports = (srv) => {
         const liCIRQty = oCIRData.liCIRQty;
         const liUniqueId = oCIRData.liUniqueId;
 
-        var vDateSeries = vDateFrom;
+        let vDateSeries = vDateFrom;
+        let dDate = new Date(vDateSeries);
+        let dDay = dDate.getDay();
+        if(dDay === 0 || dDay === 1) {
+         lsDates.WEEK_DATE = vDateFrom;
+        } else {
         lsDates.WEEK_DATE = GenFunctions.getNextMondayCmp(vDateSeries);
+        }
         vDateSeries = lsDates.WEEK_DATE;
         liDates.push(lsDates);
         lsDates = {};
@@ -2033,7 +2042,7 @@ module.exports = (srv) => {
                 oEntry.Matnr = aFilteredCIR[j].REF_PRODID;
                 oEntry.CustMaterial = aFilteredCIR[j].PRODUCT_ID;
                 oEntry.Quantity = (aFilteredCIR[j].CIR_QTY).toString();
-                oEntry.UniqId = (aFilteredCIR[j].UNIQUE_ID).toString();
+                oEntry.UniqueId = (aFilteredCIR[j].UNIQUE_ID).toString();
                 oEntry.Datum = aFilteredCIR[j].WEEK_DATE + "T10:00:00";
                 oEntry.HeaderConfig = aUniqueIdChars;
                 try {
