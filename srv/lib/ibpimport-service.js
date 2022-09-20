@@ -1751,22 +1751,24 @@ module.exports = cds.service.impl(async function () {
         var vFromDate = new Date(request.data.FROMDATE).toISOString().split('Z')[0];
         var vToDate = new Date(request.data.TODATE).toISOString().split('Z')[0];
         var vNextMonthDate = GenF.addMonths(request.data.FROMDATE, 1).toISOString().split('Z')[0];
-        while (vLoop === 1) {
-            if (vNextMonthDate <= vToDate) {
-                resUrl = "/SBPVCP?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and PERIODID4_TSTAMP gt datetime'" + vFromDate + "' and PERIODID4_TSTAMP lt datetime'" + vNextMonthDate + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
-                vFromDate = vNextMonthDate;
-                vNextMonthDate = GenF.addMonths(vFromDate, 1).toISOString().split('Z')[0];
-            }
-            else if (vNextMonthDate > vToDate) {
-                vNextMonthDate = vToDate;
-                vLoop = 0;
-                resUrl = "/SBPVCP?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and PERIODID4_TSTAMP gt datetime'" + vFromDate + "' and PERIODID4_TSTAMP lt datetime'" + vNextMonthDate + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
-            }
-            else {
-                vLoop = 0;
-                break;
-            }
+        // while (vLoop === 1) {
+            // if (vNextMonthDate <= vToDate) {
+            //     resUrl = "/SBPVCP?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and PERIODID4_TSTAMP gt datetime'" + vFromDate + "' and PERIODID4_TSTAMP lt datetime'" + vNextMonthDate + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
+            //     vFromDate = vNextMonthDate;
+            //     vNextMonthDate = GenF.addMonths(vFromDate, 1).toISOString().split('Z')[0];
+            // }
+            // else if (vNextMonthDate > vToDate) {
+            //     vNextMonthDate = vToDate;
+            //     vLoop = 0;
+            //     resUrl = "/SBPVCP?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and PERIODID4_TSTAMP gt datetime'" + vFromDate + "' and PERIODID4_TSTAMP lt datetime'" + vNextMonthDate + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
+            // }
+            // else {
+            //     vLoop = 0;
+            //     break;
+            // }
             // req.headers['Application-Interface-Key'] = vAIRKey;
+            resUrl = "/SBPVCP?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
+                
             var req = await service.tx(request).get(resUrl);
             flag = '';
             for (var i in req) {
@@ -1804,7 +1806,7 @@ module.exports = cds.service.impl(async function () {
                 }
                 //  }
             }
-        }
+        // }
         if (flag === 'X') {
             let dataObj = {};
             dataObj["success"] = true;

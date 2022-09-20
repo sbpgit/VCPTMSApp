@@ -7,12 +7,12 @@ service SDIService @(impl : './lib/sdi-service.js') {
     action ImportECCLocProd(); 
     action ImportECCODhdr(); 
     // action ImportECCProdClass(); 
-    // action ImportECCClass(); 
-    // action ImportECCChar(); 
-    // action ImportECCCharval(); 
+    action ImportECCClass(); 
+    action ImportECCChar(); 
+    action ImportECCCharval(); 
     action ImportECCSalesh(); 
     action ImportECCSaleshCfg();
     // action ImportECCAsmbcomp();
     action ImportCuvtabInd(); 
-    action ImportCuvtabValc();
+    // action ImportCuvtabValc();
 }
