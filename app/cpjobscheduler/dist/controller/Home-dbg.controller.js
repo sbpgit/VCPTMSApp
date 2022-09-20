@@ -603,7 +603,8 @@ sap.ui.define(
             } else if (
               oActionType === "exportIBPLocation" ||
               oActionType === "exportIBPCustomer" ||
-              oActionType.includes("ImportECC")
+              oActionType.includes("ImportECC")   ||
+              oActionType.includes("ImportCuvtabInd")
             ) {
               MessageToast.show(
                 "There is no schedule data to display for the selected job type"
