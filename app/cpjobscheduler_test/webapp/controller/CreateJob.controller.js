@@ -532,6 +532,8 @@ sap.ui.define(
 								that.byId("idSdi").setSelectedKey("SC");
 							} else if (sServiceText === "ImportECCAsmbcomp") {
 								that.byId("idSdi").setSelectedKey("AC");
+							} else if (sServiceText === "ImportCuvtabInd") {
+								that.byId("idSdi").setSelectedKey("VT");
 							}
 						}
 					}
@@ -1578,7 +1580,9 @@ sap.ui.define(
 							that.byId("idSdi").setSelectedKey("SC");
 						} else if (sServiceText === "ImportECCAsmbcomp") {
 							that.byId("idSdi").setSelectedKey("AC");
-						}
+						} else if (sServiceText === "ImportCuvtabInd") {
+                            that.byId("idSdi").setSelectedKey("VT");
+                        }
 					}
 				},
 
@@ -3133,6 +3137,8 @@ sap.ui.define(
 							actionText = "%2Fsdi%2FImportECCSaleshCfg";
 						} else if (sSdiType === "AC") {
 							actionText = "%2Fsdi%2FImportECCAsmbcomp";
+						} else if (sSdiType === "VT") {
+							actionText = "%2Fsdi%2FImportCuvtabInd";
 						}
 					} else {
 						if (bButton.includes("Prediction")) {
