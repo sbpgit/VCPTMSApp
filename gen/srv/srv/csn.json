@@ -19331,6 +19331,12 @@
     },
     "CatalogService.getAllVerScen": {
       "kind": "function",
+      "params": {
+        "LOCATION_ID": {
+          "type": "cds.String",
+          "length": 4
+        }
+      },
       "returns": {
         "items": {
           "type": "cp_ds.prodVerScen"

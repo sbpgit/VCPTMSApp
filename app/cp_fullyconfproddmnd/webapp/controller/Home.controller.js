@@ -139,27 +139,35 @@ sap.ui.define(
                         sap.ui.core.BusyIndicator.hide();
                     },
                 });
-                
+
                 sap.ui.core.BusyIndicator.show();
                 // Planned Parameter Values
                 this.getModel("CIRModel").read("/V_Parameters", {
                     success: function (oData) {
                         var iFrozenHorizon = parseInt(oData.results[0].VALUE);
                         var dDate = new Date();
+                        // var oDateL = that.getDateFn(dDate);
+                        // oDateL = that.addDays(oDateL, iFrozenHorizon);
+                        dDate = new Date(dDate.setDate(dDate.getDate() + iFrozenHorizon));
                         var oDateL = that.getDateFn(dDate);
-                        oDateL = that.addDays(oDateL, iFrozenHorizon);
 
-                        var dDateh = new Date();
-                        dDateh = new Date(dDateh.setDate(dDateh.getDate() + iFrozenHorizon));
-        
+                        // var dDateh = new Date();
+                        // dDateh = new Date(dDateh.setDate(dDateh.getDate() + iFrozenHorizon));
+
                         //Future 90 days selected date
+                        // var oDateH = new Date(
+                        //     dDateh.getFullYear(),
+                        //     dDateh.getMonth(),
+                        //     dDateh.getDate() + 90
+                        // );
                         var oDateH = new Date(
-                            dDateh.getFullYear(),
-                            dDateh.getMonth(),
-                            dDateh.getDate() + 90
+                            dDate.getFullYear(),
+                            dDate.getMonth(),
+                            dDate.getDate() + 90
                         );
+
                         var oDateH = that.getDateFn(oDateH);
-        
+
                         that.byId("fromDate").setValue(oDateL);
                         that.byId("toDate").setValue(oDateH);
 
@@ -369,6 +377,9 @@ sap.ui.define(
                     lsDates.WEEK_DATE = vDateSeries;//that.getNextMonday(vDateSeries);
                     liDates.push(lsDates);
                     lsDates = {};
+                    if (vDateSeries === imToDate) {
+                        break;
+                    }
                 }
                 // remove duplicates
                 var lireturn = liDates.filter((obj, pos, arr) => {
@@ -386,6 +397,9 @@ sap.ui.define(
             getNextMonday: function (imDate) {
                 var vDate, vMonth, vYear;
                 const lDate = new Date(imDate);
+                var timeOffsetInMS = lDate.getTimezoneOffset() * 60000;
+                lDate.setTime(lDate.getTime() + timeOffsetInMS);
+                // lDate.setMinutes(lDate.getMinutes() + lDate.getTimezoneOffset());
                 let lDay = lDate.getDay();
                 if (lDay !== 0) lDay = 7 - lDay;
                 lDay = lDay + 1;
@@ -412,6 +426,8 @@ sap.ui.define(
             addDays: function (imDate, imDays) {
                 var vDate, vMonth, vYear;
                 const lDate = new Date(imDate);
+                var timeOffsetInMS = lDate.getTimezoneOffset() * 60000;
+                lDate.setTime(lDate.getTime() + timeOffsetInMS);
                 const lNextWeekDay = new Date(
                     lDate.getFullYear(),
                     lDate.getMonth(),
@@ -954,7 +970,7 @@ sap.ui.define(
                     },
                 });
 
-            },            
+            },
         });
     }
 );
