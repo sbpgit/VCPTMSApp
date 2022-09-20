@@ -1867,7 +1867,7 @@ module.exports = (srv) => {
         let vDateSeries = vDateFrom;
         let dDate = new Date(vDateSeries);
         let dDay = dDate.getDay();
-        if(dDay === 0 || dDay === 1) {
+        if(dDay === 1) {
          lsDates.WEEK_DATE = vDateFrom;
         } else {
         lsDates.WEEK_DATE = GenFunctions.getNextMondayCmp(vDateSeries);

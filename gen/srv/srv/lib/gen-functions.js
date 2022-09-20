@@ -3,10 +3,7 @@
 class GenFunctions {
     constructor() {
 
-<<<<<<< HEAD
 
-=======
->>>>>>> e86f446378e63626d648df6b18f528a932646d80
     }
 
     static getCurrentDate() {
@@ -19,11 +16,11 @@ class GenFunctions {
 
         return lLastWeek.toISOString().split('T')[0];
     }
-<<<<<<< HEAD
 
-=======
->>>>>>> e86f446378e63626d648df6b18f528a932646d80
     static getNextSunday(imDate) {
+        const lDate = new Date(imDate);
+        let lDay = lDate.getDay();
+        if (lDay !== 0) lDay = 7 - lDay;
         const lNextSun = new Date(lDate.getFullYear(), lDate.getMonth(), lDate.getDate() + lDay);
 
         return lNextSun.toISOString().split('T')[0];
