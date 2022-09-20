@@ -964,7 +964,9 @@ sap.ui.define(
                 }
 
                 // 07-09-2022-1
-                that.oProd.removeAllTokens();
+               if(oJobKey === "M" || oJobKey === "P"){
+                        that.oProd.removeAllTokens();
+                    }
                 // 07-09-2022-1
                 // 07-09-2022
             },
