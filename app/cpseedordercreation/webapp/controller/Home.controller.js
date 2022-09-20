@@ -321,11 +321,22 @@ sap.ui.define([
 
                     that.oLoc.setValue(aSelectedLoc[0].getTitle());
                     that.oProd.setValue("");
-                    that.getModel("BModel").callFunction("/getAllProd", {
-                        method: "GET",
-                        urlParameters: {
-                            LOCATION_ID: aSelectedLoc[0].getTitle()
-                        },
+
+
+                    // service to get the products based of location
+                    this.getModel("BModel").read("/getLocProdDet", {
+                        filters: [
+                            new Filter(
+                                "LOCATION_ID",
+                                FilterOperator.EQ,
+                                aSelectedLoc[0].getTitle()
+                            ),
+                        ],
+                    // that.getModel("BModel").callFunction("/getAllProd", {
+                    //     method: "GET",
+                    //     urlParameters: {
+                    //         LOCATION_ID: aSelectedLoc[0].getTitle()
+                    //     },
                         success: function (oData) {
                             that.prodModel.setData(oData);
                             that.oProdList.setModel(that.prodModel);
@@ -414,6 +425,7 @@ sap.ui.define([
                         })
                     );
                 }
+                if(loc !== "" && Prod !== ""){
                 this.getModel("BModel").read("/getSeedOrder", {
                     filters: [oFilters],
                     // filters: [ new Filter( "LOCATION_ID",  FilterOperator.EQ,  loc ),
@@ -437,6 +449,9 @@ sap.ui.define([
                         MessageToast.show("Failed to get profiles");
                     },
                 });
+            } else {
+                MessageToast.show("Please select Location and Product");
+            }
             },
 
             onResetDate: function () {
@@ -452,12 +467,21 @@ sap.ui.define([
             },
 
             onOrderCreate: function () {
+
+                var oLoc = that.byId("idloc").getValue() ,
+                    oProd = that.byId("prodInput").getValue();
+
+
+                if(oLoc !== "" && oProd !== ""){
                 that._valueHelpDialogOrderCreate.open();
                 that.oGModel.setProperty("/selFlag", "X");
                 that.oGModel.setProperty("/OrderFlag", "C");
                 that._valueHelpDialogOrderCreate.setTitle("Create Order");
-                sap.ui.getCore().byId("idLocation").setValue(that.oGModel.getProperty("/locationID"));
-                sap.ui.getCore().byId("idProduct").setValue(that.oGModel.getProperty("/productID"));
+                sap.ui.getCore().byId("idLocation").setValue(oLoc);
+                sap.ui.getCore().byId("idProduct").setValue(oProd);
+                } else {
+                    MessageToast.show("Please select Location and Product");
+                }
             },
 
             onEdit: function (oEvent) {
@@ -539,9 +563,9 @@ sap.ui.define([
                         },
                         error: function (error) {
                             sap.ui.core.BusyIndicator.hide();
-                            sap.m.MessageToast.show("Error creating a Seed Order");
+                            sap.m.MessageToast.show("Error creating a Seed Order ");
                         },
-                    });
+                    }); 
                 } else {
                     sap.m.MessageToast.show("Please fill all fields");
                 }

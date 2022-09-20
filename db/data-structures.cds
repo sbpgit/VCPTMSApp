@@ -11,6 +11,12 @@ context cp_ds {
         PRODUCT_ID  : String(40);
         PROD_DESC   : String(40);
     }
+    type prodVerScen {
+        LOCATION_ID : String(4);
+        PRODUCT_ID  : String(40);
+        VERSION     : String(10);
+        SCENARIO    : String(32);
+    }
 
     type odprofiles {
         LOCATION_ID : String(4);

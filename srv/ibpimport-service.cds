@@ -13,7 +13,7 @@ service IBPImportSrv @(impl : './lib/ibpimport-service.js') {
     function createIBPCustomer() returns String;
     function createIBPClass(CLASS_NUM: String(18)) returns String;    
     function createIBPSalesTrans(LOCATION_ID : String(4)) returns String;
-    // ,PRODUCT_ID : String(40),CUSTOMER_GROUP : String(20)) returns String;
+    // PRODUCT_ID : String(40),CUSTOMER_GROUP : String(20)) returns String;
     
     function createIBPSalesConfig(LOCATION_ID : String(4)) returns String;
     // ,PRODUCT_ID : String(40),CUSTOMER_GROUP : String(20)) returns String;

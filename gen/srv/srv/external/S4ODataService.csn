@@ -20,7 +20,7 @@
       "@sap.addressable": "false",
       "@sap.content.version": "1",
       "elements": {
-        "UniqId": {
+        "UniqueId": {
           "key": true,
           "type": "cds.String",
           "length": 6,
@@ -41,6 +41,16 @@
           "@sap.sortable": "false",
           "@sap.filterable": "false"
         },
+        "CustMaterial": {
+          "type": "cds.String",
+          "length": 35,
+          "@sap.unicode": "false",
+          "@sap.label": "Customer Mat.",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false",
+          "@sap.sortable": "false",
+          "@sap.filterable": "false"
+        },
         "Werks": {
           "type": "cds.String",
           "length": 4,
@@ -51,7 +61,7 @@
           "@sap.sortable": "false",
           "@sap.filterable": "false"
         },
-        "Mantnr": {
+        "Matnr": {
           "type": "cds.String",
           "length": 40,
           "@sap.unicode": "false",
@@ -94,13 +104,13 @@
             {
               "ref": [
                 "HeaderConfig",
-                "UniqId"
+                "UniqueId"
               ]
             },
             "=",
             {
               "ref": [
-                "UniqId"
+                "UniqueId"
               ]
             }
           ]
@@ -117,7 +127,7 @@
       "@sap.addressable": "false",
       "@sap.content.version": "1",
       "elements": {
-        "UniqId": {
+        "UniqueId": {
           "key": true,
           "type": "cds.String",
           "length": 6,

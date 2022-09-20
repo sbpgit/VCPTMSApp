@@ -219,19 +219,25 @@ sap.ui.define([
 
                     // Calling service to get IBP Versions
                     // sap.ui.core.BusyIndicator.show();
-                    this.getView().getModel("oModel").read("/getIbpVerScn", {
-                        filters: [
-                            new Filter(
-                                "LOCATION_ID",
-                                FilterOperator.EQ,
-                                that.oGModel.getProperty("/SelectedLoc")
-                            ),
-                            new Filter(
-                                "PRODUCT_ID",
-                                FilterOperator.EQ,
-                                aSelectedItems[0].getTitle()
-                            ),
-                        ],
+                    // this.getView().getModel("oModel").read("/getAllVerScen", {
+                    //     filters: [
+                    //         new Filter(
+                    //             "LOCATION_ID",
+                    //             FilterOperator.EQ,
+                    //             that.oGModel.getProperty("/SelectedLoc")
+                    //         ),
+                    //         new Filter(
+                    //             "PRODUCT_ID",
+                    //             FilterOperator.EQ,
+                    //             aSelectedItems[0].getTitle()
+                    //         ),
+                    //     ],
+                    this.getView().getModel("oModel").callFunction("/getAllVerScen", {
+                        method: "GET",
+                        urlParameters: {
+                            LOCATION_ID: that.oGModel.getProperty("/SelectedLoc")
+                            // PRODUCT_ID: aSelectedItems[0].getTitle()     
+                        },
                         success: function (oData) {
                             if (oData.results.length === 0) {
                                 sap.m.MessageToast.show("No versions available for choosen Location/Product. Please choose another.");
@@ -241,8 +247,27 @@ sap.ui.define([
                                 // sap.ui.core.BusyIndicator.hide();
                             }
                             else {
-                                that.verModel.setData(oData);
-                                that.oVerList.setModel(that.verModel);
+                                // function removeDuplicate(array, key) {
+                                //     var check = new Set();        
+                                //     return array.filter(obj => !check.has(obj[key]) && check.add(obj[key]));        
+                                // }        
+                                // that.verModel.setData({  
+                                //      results: removeDuplicate(oData.results, 'VERSION')
+                                // });
+                                var adata = [];
+                                for (var i = 0; i < oData.results.length; i++) {
+                                    if (oData.results[i].PRODUCT_ID === aSelectedItems[0].getTitle()) {
+                                        adata.push({
+                                            "VERSION": oData.results[i].VERSION
+                                        });
+                                    }
+                                }
+                                if (adata.length > 0) {
+                                    that.verModel.setData({  
+                                             results: adata
+                                        });
+                                    that.oVerList.setModel(that.verModel);
+                                }
                                 // sap.ui.core.BusyIndicator.hide();
                             }
                         },
@@ -263,33 +288,70 @@ sap.ui.define([
                         "/SelectedVer",
                         aSelectedItems[0].getTitle()
                     );
+                    var vProd = that.oGModel.getProperty("/SelectedProd");
                     // Calling service to get IBP Scenario
-                    this.getView().getModel("oModel").read("/getIbpVerScn", {
-                        filters: [
-                            new Filter(
-                                "LOCATION_ID",
-                                FilterOperator.EQ,
-                                that.oGModel.getProperty("/SelectedLoc")
-                            ),
-                            new Filter(
-                                "PRODUCT_ID",
-                                FilterOperator.EQ,
-                                that.oGModel.getProperty("/SelectedProd")
-                            ),
-                            new Filter(
-                                "VERSION",
-                                FilterOperator.EQ,
-                                aSelectedItems[0].getTitle()
-                            ),
-                        ],
+                    // this.getView().getModel("oModel").read("/getIbpVerScn", {
+                    //     filters: [
+                    //         new Filter(
+                    //             "LOCATION_ID",
+                    //             FilterOperator.EQ,
+                    //             that.oGModel.getProperty("/SelectedLoc")
+                    //         ),
+                    //         new Filter(
+                    //             "PRODUCT_ID",
+                    //             FilterOperator.EQ,
+                    //             that.oGModel.getProperty("/SelectedProd")
+                    //         ),
+                    //         new Filter(
+                    //             "VERSION",
+                    //             FilterOperator.EQ,
+                    //             aSelectedItems[0].getTitle()
+                    //         ),
+                    //     ],
+                    //     success: function (oData) {
+                    //         that.scenModel.setData(oData);
+                    //         that.oScenList.setModel(that.scenModel);
+                    //     },
+                    //     error: function (oData, error) {
+                    //         MessageToast.show("error");
+                    //     },
+                    // });
+                    this.getView().getModel("oModel").callFunction("/getAllVerScen", {
+                        method: "GET",
+                        urlParameters: {
+                            LOCATION_ID: that.oGModel.getProperty("/SelectedLoc")
+                            // PRODUCT_ID: aSelectedItems[0].getTitle()
+                            // VERSION:  aSelectedItems[0].getTitle()
+                        },
                         success: function (oData) {
-                            that.scenModel.setData(oData);
-                            that.oScenList.setModel(that.scenModel);
+                            // function removeDuplicate(array, key) {
+                            //     var check = new Set();        
+                            //     return array.filter(obj => !check.has(obj[key]) && check.add(obj[key]));        
+                            // }        
+                            // that.scenModel.setData({  
+                            //      results: removeDuplicate(oData.results, 'SCENARIO')
+                            // });
+                            var adata = [];
+                            for (var i = 0; i < oData.results.length; i++) {
+                                if (oData.results[i].PRODUCT_ID === that.byId("idprod").getValue()
+                                && oData.results[i].VERSION === aSelectedItems[0].getTitle()) {
+                                    adata.push({
+                                        "SCENARIO": oData.results[i].SCENARIO
+                                    });
+                                }
+                            }
+                            if (adata.length > 0) {
+                                that.scenModel.setData({  
+                                    results: adata
+                               });
+                                that.oScenList.setModel(that.scenModel);
+                            }
                         },
                         error: function (oData, error) {
                             MessageToast.show("error");
                         },
                     });
+
                     // Scenario List
                 } else if (sId.includes("scen")) {
                     this.oScen = that.byId("idscen");

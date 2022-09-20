@@ -763,8 +763,8 @@ module.exports = (srv) => {
         await obgenTimeseriesM2.genTimeseries(req.data);
     });
     srv.on("generateTimeseriesF", async (req) => {
-        const obgenTimeseries = new GenTimeseries();
-        await obgenTimeseries.genTimeseriesF(req.data);
+        // const obgenTimeseries = new GenTimeseries();
+        // await obgenTimeseries.genTimeseriesF(req.data);
 
         const obgenTimeseriesM2 = new GenTimeseriesM2();
         await obgenTimeseriesM2.genTimeseriesF(req.data);
@@ -1254,17 +1254,17 @@ module.exports = (srv) => {
             }
             liresults.push(lsresults);
             try {
-                await UPDATE `CP_UNIQUE_ID_HEADER`
+                await UPDATE`CP_UNIQUE_ID_HEADER`
                     .with({
-                        ACTIVE : lsresults.ACTIVE,
+                        ACTIVE: lsresults.ACTIVE,
                         UNIQUE_DESC: lsresults.UNIQUE_DESC
                     })
                     .where(`LOCATION_ID = '${lsresults.LOCATION_ID}'
                             AND PRODUCT_ID = '${lsresults.PRODUCT_ID}'
                             AND UNIQUE_ID = '${lsresults.UNIQUE_ID}'`);
-            responseMessage = "Update successfull";
-            } catch (e) {                
-            responseMessage = "Update failed";
+                responseMessage = "Update successfull";
+            } catch (e) {
+                responseMessage = "Update failed";
                 //DONOTHING
             }
         }
@@ -1289,18 +1289,18 @@ module.exports = (srv) => {
             liresults.push(lsresults);
 
             console.log(lsresults);
-        
-        if (liresults.length > 0) {
-            try {
-                await cds.run(INSERT.into("CP_UNIQUE_ID_HEADER").entries(liresults));
-                responseMessage = " Creation/Updation successful";
-            } catch (e) {
-                console.log(e.message);
-                //DONOTHING
-                responseMessage = "Creation Failed"
-                // createResults.push(responseMessage);
+
+            if (liresults.length > 0) {
+                try {
+                    await cds.run(INSERT.into("CP_UNIQUE_ID_HEADER").entries(liresults));
+                    responseMessage = " Creation/Updation successful";
+                } catch (e) {
+                    console.log(e.message);
+                    //DONOTHING
+                    responseMessage = "Creation Failed"
+                    // createResults.push(responseMessage);
+                }
             }
-        }
         }
         return responseMessage;
     });
@@ -1630,7 +1630,7 @@ module.exports = (srv) => {
                 try {
 
                     await cds.run(INSERT.into("CP_SEEDORDER_HEADER").entries(liresults));
-                    responseMessage = " Creation/Updation successful";
+                    responseMessage = lsresults.SEED_ORDER + " Created successfully";
                     await obgenSOFunctions.createSO(lsresults.LOCATION_ID, lsresults.PRODUCT_ID, lsresults.SEED_ORDER, lsresults.MAT_AVAILDATE, lsresults.ORD_QTY, lsresults.UNIQUE_ID);
                 } catch (e) {
                     //DONOTHING
@@ -1651,7 +1651,11 @@ module.exports = (srv) => {
                         MAT_AVAILDATE: lsresults.MAT_AVAILDATE
                     })
                     .where(`SEED_ORDER = '${lsresults.SEED_ORDER}'`)
+                responseMessage = lsresults.SEED_ORDER + " Update is successfull";
+
             } catch (e) {
+                responseMessage = "Update Failed";
+
                 //DONOTHING
             }
             // }
@@ -1662,46 +1666,77 @@ module.exports = (srv) => {
     srv.on("getAllProd", async (req) => {
         let lsprod = {};
         let liprod = [];
-        // let vDesc;
-        const limasterprod = await cds.run(
+
+        const objCatFn = new Catservicefn();
+        liprod = await objCatFn.getAllProducts(req.data);
+        return liprod;
+    });
+    srv.on("getAllVerScen", async (req) => {
+
+        let { getProducts } = srv.entities;
+        let lsprod = {};
+        let liprodver = [];
+        let vFlag = '';
+        const liverscen = await cds.run(
             `
          SELECT DISTINCT PRODUCT_ID,
                 LOCATION_ID,
-                PROD_DESC
-           FROM "V_LOCPROD"
-           WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'`);
+                VERSION,
+                SCENARIO
+           FROM "V_IBPVERSCENARIO" `);
+        //    WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'`);
 
         const lipartialprod = await cds.run(
             `
-         SELECT PRODUCT_ID,
-                LOCATION_ID,
-                PROD_DESC,
-                REF_PRODID
+         SELECT "CP_PARTIALPROD_INTRO".PRODUCT_ID,
+                "CP_PARTIALPROD_INTRO".LOCATION_ID,
+                "CP_PARTIALPROD_INTRO".PROD_DESC,
+                "CP_PARTIALPROD_INTRO".REF_PRODID,
+                "V_IBPVERSCENARIO". VERSION,
+                "V_IBPVERSCENARIO".SCENARIO
            FROM "CP_PARTIALPROD_INTRO"
-           WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
-           ORDER BY REF_PRODID`);
+           INNER JOIN "V_IBPVERSCENARIO"
+           ON   "CP_PARTIALPROD_INTRO".PRODUCT_ID = "V_IBPVERSCENARIO".PRODUCT_ID
+           AND  "CP_PARTIALPROD_INTRO".LOCATION_ID = "V_IBPVERSCENARIO".LOCATION_ID           
+           ORDER BY "CP_PARTIALPROD_INTRO".REF_PRODID`);
+        //    WHERE "CP_PARTIALPROD_INTRO".LOCATION_ID = '`+ req.data.LOCATION_ID + `'
+        //    ORDER BY "CP_PARTIALPROD_INTRO".REF_PRODID`);
 
+        const objCatFn = new Catservicefn();
+        liprod = await objCatFn.getAllProducts(req.data);
 
-        //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
-        for (i = 0; i < limasterprod.length; i++) {
-            lsprod = {};
-            lsprod.LOCATION_ID = limasterprod[i].LOCATION_ID;
-            lsprod.PRODUCT_ID = limasterprod[i].PRODUCT_ID;
-            lsprod.PROD_DESC = limasterprod[i].PROD_DESC;
-            // vDesc = limasterprod[i].PROD_DESC;
-            liprod.push(lsprod);
-            lsprod = {};
-            for (iPartial = 0; iPartial < lipartialprod.length; iPartial++) {
-                if (lipartialprod[iPartial].REF_PRODID === limasterprod[i].PRODUCT_ID) {
-                    lsprod.LOCATION_ID = lipartialprod[iPartial].LOCATION_ID;
-                    lsprod.PRODUCT_ID = lipartialprod[iPartial].PRODUCT_ID;
-                    lsprod.PROD_DESC = lipartialprod[iPartial].PROD_DESC;
-                    liprod.push(lsprod);
+        // const liprod = await cds.transaction(req).run(SELECT.from(getProducts));
+        for (iProd = 0; iProd < liprod.length; iProd++) {
+            vFlag = ' ';
+            for (i = 0; i < liverscen.length; i++) {
+                if (liprod[iProd].PRODUCT_ID === liverscen[i].PRODUCT_ID) {
+
+                    lsprod.LOCATION_ID = liverscen[i].LOCATION_ID;
+                    lsprod.PRODUCT_ID = liverscen[i].PRODUCT_ID;
+                    lsprod.VERSION = liverscen[i].VERSION;
+                    lsprod.SCENARIO = liverscen[i].SCENARIO;
+                    liprodver.push(lsprod);
                     lsprod = {};
+                    vFlag = 'X';
+                    break;
+                }
+            }
+            if (vFlag !== 'X') {
+                for (iPartial = 0; iPartial < lipartialprod.length; iPartial++) {
+                    if (lipartialprod[iPartial].REF_PRODID === liprod[iProd].PRODUCT_ID) {
+                        lsprod.LOCATION_ID = lipartialprod[iPartial].LOCATION_ID;
+                        lsprod.PRODUCT_ID = lipartialprod[iPartial].REF_PRODID;
+                        lsprod.VERSION = lipartialprod[iPartial].VERSION;
+                        lsprod.SCENARIO = lipartialprod[iPartial].SCENARIO;
+                        liprodver.push(lsprod);
+                        lsprod = {};
+                        vFlag = ' ';
+                    }
                 }
             }
         }
-        return liprod;
+        const keys = ['PRODUCT_ID', 'VERSION', 'SCENARIO'];
+        return GenFunctions.removeDuplicate(liprodver,keys);
     });
     // Planning Configuration
     // BOI - Deepa
@@ -1829,8 +1864,14 @@ module.exports = (srv) => {
         const liCIRQty = oCIRData.liCIRQty;
         const liUniqueId = oCIRData.liUniqueId;
 
-        var vDateSeries = vDateFrom;
+        let vDateSeries = vDateFrom;
+        let dDate = new Date(vDateSeries);
+        let dDay = dDate.getDay();
+        if(dDay === 0 || dDay === 1) {
+         lsDates.WEEK_DATE = vDateFrom;
+        } else {
         lsDates.WEEK_DATE = GenFunctions.getNextMondayCmp(vDateSeries);
+        }
         vDateSeries = lsDates.WEEK_DATE;
         liDates.push(lsDates);
         lsDates = {};
@@ -1945,14 +1986,14 @@ module.exports = (srv) => {
                 oEntry.Quantity = (aFilteredCIR[j].CIR_QTY).toString();
                 oEntry.UniqueId = (aFilteredCIR[j].UNIQUE_ID).toString();
                 oEntry.Datum = aFilteredCIR[j].WEEK_DATE + "T10:00:00";
-                oEntry.HeaderConfig = aUniqueIdChars; 
-                try{
+                oEntry.HeaderConfig = aUniqueIdChars;
+                try {
                     let sReturn = await oModel.tx(req).post("/headerSet", oEntry);
                     console.log(sReturn);
-                    }
-                    catch(e) {
-                      console.log(e);
-                    }
+                }
+                catch (e) {
+                    console.log(e);
+                }
             }
         }
 
@@ -2001,20 +2042,20 @@ module.exports = (srv) => {
                 oEntry.Matnr = aFilteredCIR[j].REF_PRODID;
                 oEntry.CustMaterial = aFilteredCIR[j].PRODUCT_ID;
                 oEntry.Quantity = (aFilteredCIR[j].CIR_QTY).toString();
-                oEntry.UniqId = (aFilteredCIR[j].UNIQUE_ID).toString();
+                oEntry.UniqueId = (aFilteredCIR[j].UNIQUE_ID).toString();
                 oEntry.Datum = aFilteredCIR[j].WEEK_DATE + "T10:00:00";
                 oEntry.HeaderConfig = aUniqueIdChars;
-                try{
-                 await oModel.tx(req).post("/headerSet", oEntry);                
+                try {
+                    await oModel.tx(req).post("/headerSet", oEntry);
                 }
-                catch(e) {
-                  console.log(e);
+                catch (e) {
+                    console.log(e);
                 }
 
             }
 
         }
-       
+
     });
 
 

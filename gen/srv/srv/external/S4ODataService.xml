@@ -4,22 +4,23 @@
         <Schema Namespace="SBPC.IBP_CIR_SRV" xml:lang="en" sap:schema-version="1" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
             <EntityType Name="header" sap:content-version="1">
                 <Key>
-                    <PropertyRef Name="UniqId" />
+                    <PropertyRef Name="UniqueId" />
                 </Key>
                 <Property Name="Message" Type="Edm.String" Nullable="false" MaxLength="50" sap:unicode="false" sap:label="c" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+                <Property Name="CustMaterial" Type="Edm.String" Nullable="false" MaxLength="35" sap:unicode="false" sap:label="Customer Mat." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
                 <Property Name="Werks" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Plant" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
-                <Property Name="Mantnr" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Material" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+                <Property Name="Matnr" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Material" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
                 <Property Name="Datum" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Date" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
                 <Property Name="Quantity" Type="Edm.Decimal" Nullable="false" Precision="13" Scale="3" sap:unicode="false" sap:label="Target Quantity" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
-                <Property Name="UniqId" Type="Edm.String" Nullable="false" MaxLength="6" sap:unicode="false" sap:label="Configuration ID" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+                <Property Name="UniqueId" Type="Edm.String" Nullable="false" MaxLength="6" sap:unicode="false" sap:label="Configuration ID" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
                 <NavigationProperty Name="HeaderConfig" Relationship="SBPC.IBP_CIR_SRV.HeaderConfig" FromRole="FromRole_HeaderConfig" ToRole="ToRole_HeaderConfig" />
             </EntityType>
             <EntityType Name="config" sap:content-version="1">
                 <Key>
-                    <PropertyRef Name="UniqId" />
+                    <PropertyRef Name="UniqueId" />
                 </Key>
                 <Property Name="Charc" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Characteristic" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
-                <Property Name="UniqId" Type="Edm.String" Nullable="false" MaxLength="6" sap:unicode="false" sap:label="Configuration ID" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+                <Property Name="UniqueId" Type="Edm.String" Nullable="false" MaxLength="6" sap:unicode="false" sap:label="Configuration ID" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
                 <Property Name="Value" Type="Edm.String" Nullable="false" MaxLength="70" sap:unicode="false" sap:label="Char. Value" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
             </EntityType>
             <Association Name="HeaderConfig" sap:content-version="1">
@@ -27,10 +28,10 @@
                 <End Type="SBPC.IBP_CIR_SRV.config" Multiplicity="*" Role="ToRole_HeaderConfig" />
                 <ReferentialConstraint>
                     <Principal Role="FromRole_HeaderConfig">
-                        <PropertyRef Name="UniqId" />
+                        <PropertyRef Name="UniqueId" />
                     </Principal>
                     <Dependent Role="ToRole_HeaderConfig">
-                        <PropertyRef Name="UniqId" />
+                        <PropertyRef Name="UniqueId" />
                     </Dependent>
                 </ReferentialConstraint>
             </Association>

@@ -41,8 +41,8 @@ module.exports = cds.service.impl(async function () {
     this.on("getFDemandQty", async (request) => {
         var flag;
         
-        var resUrl = "/SBPVCP?$select=PRDID,LOCID,PERIODID4_TSTAMP,TOTALDEMANDOUTPUT,UOMTOID,VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and UOMTOID eq 'EA'";
-        // var resUrl = "/SBPVCP?$select=PRDID,LOCID,PERIODID4_TSTAMP,TOTALDEMANDOUTPUT,UOMTOID,VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "'and UOMTOID eq 'EA'";
+        // var resUrl = "/SBPVCP?$select=PRDID,LOCID,PERIODID4_TSTAMP,TOTALDEMANDOUTPUT,UOMTOID,VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and UOMTOID eq 'EA'";
+        var resUrl = "/SBPVCP?$select=PRDID,LOCID,PERIODID4_TSTAMP,TOTALDEMANDOUTPUT,UOMTOID,VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "'and UOMTOID eq 'EA'";
         var req = await service.tx(req).get(resUrl);
         const dateJSONToEDM = jsonDate => {
             const content = /\d+/.exec(String(jsonDate));
@@ -109,23 +109,19 @@ module.exports = cds.service.impl(async function () {
             return string;
         };
 
-        var vFromDate = "2022-06-01T00:00:00";//new Date(request.data.FROMDATE).toISOString().split('Z')[0];
-        var vToDate = "2022-12-30T00:00:00";//new Date(request.data.TODATE).toISOString().split('Z')[0];
-        var vNextMonthDate = GenF.addMonths("2022-06-01", 1).toISOString().split('Z')[0];
+        var vFromDate = "2022-10-01T00:00:00";//new Date(request.data.FROMDATE).toISOString().split('Z')[0];
+        var vToDate = "2022-10-31T00:00:00";//new Date(request.data.TODATE).toISOString().split('Z')[0];
+        var vNextMonthDate = GenF.addMonths("2022-10-01", 1).toISOString().split('Z')[0];
         while (vLoop === 1) {
             if (vNextMonthDate <= vToDate) {
-                // resUrl = "/SBPVCP?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and PERIODID4_TSTAMP gt datetime'" + vFromDate + "' and PERIODID4_TSTAMP lt datetime'" + vNextMonthDate + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
-                // resUrl = "/SBPVCP?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and PERIODID4_TSTAMP gt datetime'" + vFromDate + "' and PERIODID4_TSTAMP lt datetime'" + vNextMonthDate + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
-                resUrl = "/SBPVCP?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "'  and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
+                resUrl = "/SBPVCP?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and PERIODID4_TSTAMP gt datetime'" + vFromDate + "' and PERIODID4_TSTAMP lt datetime'" + vNextMonthDate + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
                 vFromDate = vNextMonthDate;
                 vNextMonthDate = GenF.addMonths(vFromDate, 1).toISOString().split('Z')[0];
             }
             else if (vNextMonthDate > vToDate) {
                 vNextMonthDate = vToDate;
                 vLoop = 0;
-                // resUrl = "/SBPVCP?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and PERIODID4_TSTAMP gt datetime'" + vFromDate + "' and PERIODID4_TSTAMP lt datetime'" + vNextMonthDate + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
-                resUrl = "/SBPVCP?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
-                // resUrl = "/SBPVCP?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PERIODID4_TSTAMP gt datetime'" + vFromDate + "' and PERIODID4_TSTAMP lt datetime'" + vNextMonthDate + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
+                resUrl = "/SBPVCP?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and PERIODID4_TSTAMP gt datetime'" + vFromDate + "' and PERIODID4_TSTAMP lt datetime'" + vNextMonthDate + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
             }
             else {
                 vLoop = 0;
@@ -302,14 +298,14 @@ module.exports = cds.service.impl(async function () {
                    FROM "CP_CUSTOMERGROUP" `);
 
         //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
-        for (i = 0; i < licust.length; i++) {
+        // for (i = 0; i < licust.length; i++) {
             vcust = {
-                "CUSTID": licust[i].CUSTOMER_GROUP,
-                "CUSTDESCR": licust[i].CUSTOMER_DESC,
+                "CUSTID": "NULL",//licust[i].CUSTOMER_GROUP,
+                "CUSTDESCR": ""//licust[i].CUSTOMER_DESC,
             };
-            oReq.cust.push(vcust);
+            // oReq.cust.push(vcust);
 
-        }
+        // }
         var vTransID = new Date().getTime().toString();
         var oEntry =
         {
@@ -449,7 +445,7 @@ module.exports = cds.service.impl(async function () {
             vsales = {
                 "LOCID": lisales[i].LOCATION_ID,
                 "PRDID": lisales[i].PRODUCT_ID,
-                "CUSTID": lisales[i].CUSTOMER_GROUP,
+                "CUSTID": "NULL",//lisales[i].CUSTOMER_GROUP,
                 "ACTUALDEMAND": vDemd[0],
                 "PERIODID0_TSTAMP": vWeekDate[0]
             };
@@ -504,7 +500,7 @@ module.exports = cds.service.impl(async function () {
                 "VCCHARVALUE": lisales[i].CHARVAL_NUM,
                 "VCCLASS": lisales[i].CLASS_NUM,
                 "ACTUALDEMANDVC": vDemd[0],
-                "CUSTID": lisales[i].CUSTOMER_GROUP,
+                "CUSTID": "NULL",//lisales[i].CUSTOMER_GROUP,
                 "PERIODID0_TSTAMP": vWeekDate[0]
             };
             oReq.sales.push(vsales);
@@ -981,14 +977,14 @@ module.exports = cds.service.impl(async function () {
                FROM "CP_CUSTOMERGROUP" `);
 
         //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
-        for (i = 0; i < licust.length; i++) {
+        // for (i = 0; i < licust.length; i++) {
             vcust = {
                 "CUSTID": licust[i].CUSTOMER_GROUP,
                 "CUSTDESCR": licust[i].CUSTOMER_DESC,
             };
             oReq.cust.push(vcust);
 
-        }
+        // }
         var vTransID = new Date().getTime().toString();
         var oEntry =
         {
@@ -1771,7 +1767,7 @@ module.exports = cds.service.impl(async function () {
                 break;
             }
             // req.headers['Application-Interface-Key'] = vAIRKey;
-            var req = await service.tx(req).get(resUrl);
+            var req = await service.tx(request).get(resUrl);
             flag = '';
             for (var i in req) {
                 var vWeekDate = dateJSONToEDM(req[i].PERIODID4_TSTAMP).split('T')[0];
