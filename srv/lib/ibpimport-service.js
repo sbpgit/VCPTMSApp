@@ -330,11 +330,14 @@ module.exports = cds.service.impl(async function () {
             `
             SELECT CLASS_NUM,
                     CLASS_NAME,
+                    CLASS_DESC,
                     CHAR_NUM,
                     CHAR_NAME,
+                    CHAR_DESC,
                     CHAR_GROUP,
                     CHAR_VALUE,
-                    CHARVAL_NUM
+                    CHARVAL_NUM,
+                    CHARVAL_DESC
                     FROM V_CLASSCHARVAL 
                 WHERE CLASS_NUM = '`+ req.data.CLASS_NUM + `'`);
 
@@ -345,9 +348,12 @@ module.exports = cds.service.impl(async function () {
                 "VCCHARVALUE": liclass[i].CHARVAL_NUM,
                 "VCCLASS": liclass[i].CLASS_NUM,
                 "VCCHARNAME": liclass[i].CHAR_NAME,
-                "VCCHARGROUP":liclass[i].CHAR_GROUP,
+                "VCCHARGROUP": liclass[i].CHAR_GROUP,
                 "VCCHARVALUENAME": liclass[i].CHAR_VALUE,
-                "VCCLASSNAME": liclass[i].CLASS_NAME
+                "VCCLASSNAME": liclass[i].CLASS_NAME,                
+                "VCCHARDESC":liclass[i].CHAR_DESC,
+                "VCCHARVALUEDESC": liclass[i].CHARVAL_DESC,
+                "VCCLASSDESC": liclass[i].CLASS_DESC
             };
             oReq.class.push(vclass);
 
@@ -356,7 +362,7 @@ module.exports = cds.service.impl(async function () {
         var oEntry =
         {
             "TransactionID": vTransID,
-            "RequestedAttributes": "VCCHAR,VCCHARVALUE,VCCLASS,VCCHARNAME,VCCHARGROUP,VCCHARVALUENAME,VCCLASSNAME",
+            "RequestedAttributes": "VCCHAR,VCCHARGROUP,VCCHARNAME,VCCHARVALUE,VCCHARVALUENAME,VCCLASS,VCCLASSNAME,VCCHARDESC,VCCHARVALUEDESC,VCCLASSDESC",
             "DoCommit": true,
             "NavVCPCLASS": oReq.class
         }
@@ -1072,11 +1078,14 @@ module.exports = cds.service.impl(async function () {
             `
         SELECT CLASS_NUM,
                 CLASS_NAME,
+                CLASS_DESC,
                 CHAR_NUM,
                 CHAR_NAME,
+                CHAR_DESC,
                 CHAR_GROUP,
                 CHAR_VALUE,
-                CHARVAL_NUM
+                CHARVAL_NUM,
+                CHARVAL_DESC
                 FROM V_CLASSCHARVAL 
             WHERE CLASS_NUM = '`+ req.data.CLASS_NUM + `'`);
 
@@ -1089,7 +1098,10 @@ module.exports = cds.service.impl(async function () {
                 "VCCHARNAME": liclass[i].CHAR_NAME,
                 "VCCHARGROUP": liclass[i].CHAR_GROUP,
                 "VCCHARVALUENAME": liclass[i].CHAR_VALUE,
-                "VCCLASSNAME": liclass[i].CLASS_NAME
+                "VCCLASSNAME": liclass[i].CLASS_NAME,                
+                "VCCHARDESC":liclass[i].CHAR_DESC,
+                "VCCHARVALUEDESC": liclass[i].CHARVAL_DESC,
+                "VCCLASSDESC": liclass[i].CLASS_DESC
             };
             oReq.class.push(vclass);
 
@@ -1098,7 +1110,7 @@ module.exports = cds.service.impl(async function () {
         var oEntry =
         {
             "TransactionID": vTransID,
-            "RequestedAttributes": "VCCHAR,VCCHARVALUE,VCCLASS,VCCHARNAME,VCCHARGROUP,VCCHARVALUENAME,VCCLASSNAME",
+            "RequestedAttributes": "VCCHAR,VCCHARGROUP,VCCHARNAME,VCCHARVALUE,VCCHARVALUENAME,VCCLASS,VCCLASSNAME,VCCHARDESC,VCCHARVALUEDESC,VCCLASSDESC",
             "DoCommit": true,
             "NavVCPCLASS": oReq.class
         }

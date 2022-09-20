@@ -25,7 +25,7 @@
                 <l:Grid defaultSpan="XL3 L3 M6 S12">
                     <VBox >
                         <Label text=""/>
-                        <SearchField id="headSearch" liveChange="handleSearch" placeholder="Unique No"/>
+                        <SearchField id="headSearch" liveChange="handleSearch" placeholder="Unique ID"/>
                     </VBox>
                     <VBox >
                         <Label text="Location" required= "true"/>
