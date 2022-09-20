@@ -1,5 +1,8 @@
 {
 <<<<<<< HEAD
+  "manifest-bundle.zip": 1663665055537,
+=======
+<<<<<<< HEAD
   "controller/BaseController.js": 1661869074963,
   "i18n/i18n.properties": 1661869074963,
 =======
@@ -8,11 +11,15 @@
   "controller/Home.controller.js": 1659447417330,
   "model/models.js": 1659447417330,
   "manifest.json": 1663598014277,
+>>>>>>> bb848c07bfe5dc7d03385065cf10c20e2c2ed0bb
   "controller/BaseController.js": 1659447417330,
+  "model/models.js": 1659447417330,
+  "controller/Home.controller.js": 1659447417330,
+  "manifest.json": 1663665055523,
   "controller/App.controller.js": 1659447417330,
   "Component.js": 1659447417330,
-  "manifest-bundle.zip": 1663598014298,
-  "Component-preload.js": 1663598015101,
+  "i18n/i18n.properties": 1659447417330,
+  "Component-preload.js": 1663665056008,
   "controller/Home-dbg.controller.js": 1659447417330,
   "model/models-dbg.js": 1659447417330,
   "controller/BaseController-dbg.js": 1659447417330,
@@ -25,11 +32,13 @@
   "view/LocDialog.fragment.xml": 1659447417334,
   "view/Home.view.xml": 1659447417334,
   "view/ComponentDialog.fragment.xml": 1659447417334,
-  "i18n/i18n.properties": 1659447417330,
+  "view/CompODBreakdown.fragment.xml": 1659447417334,
   "view/AsmbCompDialog.fragment.xml": 1659447417334,
   "view/App.view.xml": 1659447417334,
   "css/style.css": 1659447417330,
   "index.html": 1659447417330
+<<<<<<< HEAD
+=======
 =======
   "index.html": 1661869074963,
   "controller/App.controller.js": 1661869074963,
@@ -63,4 +72,5 @@
   "i18n/i18n.properties": 1661869074963
 >>>>>>> c561e6a775806befe7743cfaec4b318ebf9b1260
 >>>>>>> e86f446378e63626d648df6b18f528a932646d80
+>>>>>>> bb848c07bfe5dc7d03385065cf10c20e2c2ed0bb
 }

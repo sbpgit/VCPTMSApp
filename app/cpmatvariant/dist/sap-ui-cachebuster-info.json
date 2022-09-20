@@ -2,20 +2,26 @@
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
   "controller/App.controller.js": 1659447417374,
   "controller/ItemDetail.controller.js": 1663578246689,
   "utils/locate-reuse-libs.js": 1659447417374,
+>>>>>>> bb848c07bfe5dc7d03385065cf10c20e2c2ed0bb
   "model/models.js": 1659447417374,
+  "Component.js": 1659447417374,
+  "utils/locate-reuse-libs.js": 1659447417374,
+  "i18n/i18n.properties": 1662378852381,
   "model/formatter.js": 1662378852381,
   "controller/ItemMaster.controller.js": 1663596369252,
-  "manifest.json": 1663598103555,
+  "controller/ItemDetail.controller.js": 1663578246689,
   "controller/Home.controller.js": 1661865456733,
   "controller/Details.controller.js": 1659447417374,
   "controller/BaseController.js": 1659447417374,
-  "i18n/i18n.properties": 1662378852381,
-  "Component.js": 1659447417374,
-  "manifest-bundle.zip": 1663598103571,
-  "Component-preload.js": 1663598104142,
+  "controller/App.controller.js": 1659447417374,
+  "manifest.json": 1663665116211,
+  "manifest-bundle.zip": 1663665116222,
+  "Component-preload.js": 1663665116762,
   "model/models-dbg.js": 1659447417374,
   "utils/locate-reuse-libs-dbg.js": 1659447417374,
   "model/formatter-dbg.js": 1662378852381,
@@ -44,6 +50,8 @@
   "view/AddCharacterstics.fragment.xml": 1662476244223,
   "css/style.css": 1661865456737,
   "index.html": 1659713663115
+<<<<<<< HEAD
+=======
 =======
   "manifest.json": 1663590322720,
   "controller/BaseController.js": 1661869075007,
@@ -92,4 +100,5 @@
   "css/style.css": 1661869075007,
   "index.html": 1661869075007
 >>>>>>> c561e6a775806befe7743cfaec4b318ebf9b1260
+>>>>>>> bb848c07bfe5dc7d03385065cf10c20e2c2ed0bb
 }

@@ -2,6 +2,9 @@
 	"name": "cpapp.cpcharqtygraph",
 	"version": "0.0.1",
 <<<<<<< HEAD
+	"buildTimestamp": "202209200913",
+=======
+<<<<<<< HEAD
 	"buildTimestamp": "202209191954",
 =======
 <<<<<<< HEAD
@@ -10,6 +13,7 @@
 	"buildTimestamp": "202209191226",
 >>>>>>> c561e6a775806befe7743cfaec4b318ebf9b1260
 >>>>>>> e86f446378e63626d648df6b18f528a932646d80
+>>>>>>> bb848c07bfe5dc7d03385065cf10c20e2c2ed0bb
 	"scmRevision": "",
 	"libraries": []
 }
