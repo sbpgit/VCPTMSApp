@@ -11,6 +11,7 @@ modules:
   - name: uaa_config_products
   - name: jobscheduler_inst
   - name: config_products-destination-service
+  - name: ext_odata
   - name: config_products-mdestination-service
   provides:
   - name: srv-api
@@ -40,6 +41,9 @@ modules:
   type: com.sap.application.content
   requires:
   - name: config_products-destination-service
+    parameters:
+      content-target: true
+  - name: ext_odata
     parameters:
       content-target: true
   - name: config_products-mdestination-service
@@ -584,6 +588,10 @@ resources:
   properties:
     hdi-service-name: ${service-name}
 - name: config_products-destination-service
+  type: org.cloudfoundry.existing-service
+  parameters:
+    service-name: config_products-destination-service
+- name: ext_odata
   type: org.cloudfoundry.existing-service
   parameters:
     service-name: config_products-destination-service

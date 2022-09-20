@@ -168,24 +168,25 @@
             }
         ]
     },
+    
     "VCAP_APPLICATION": {
-        "application_id": "0da042a3-eb0c-4851-ae0c-d789ed8d41fc",
-        "application_name": "config_products-srv",
-        "application_uris": [
-            "sbpbtp-vcpprovider-sc0jeojq-dev-config-products-srv.cfapps.us10.hana.ondemand.com"
-        ],
-        "cf_api": "https://api.cf.us10.hana.ondemand.com",
-        "limits": {
-            "fds": 32768
-        },
-        "name": "config_products-srv",
-        "organization_id": "302e0ac6-4dec-46c6-bd95-e7bf89d448dd",
-        "organization_name": "SBPBTP_vcpprovider-sc0jeojq",
-        "space_id": "84f9e5af-fa97-4f68-9568-050fb14080f9",
-        "space_name": "dev",
-        "uris": [
-            "sbpbtp-vcpprovider-sc0jeojq-dev-config-products-srv.cfapps.us10.hana.ondemand.com"
-        ],
-        "users": null
+     "application_id": "0da042a3-eb0c-4851-ae0c-d789ed8d41fc",
+     "application_name": "config_products-srv",
+     "application_uris": [
+      "sbpbtp-vcpprovider-sc0jeojq-dev-config-products-srv.cfapps.us10.hana.ondemand.com"
+     ],
+     "cf_api": "https://api.cf.us10.hana.ondemand.com",
+     "limits": {
+      "fds": 32768
+     },
+     "name": "config_products-srv",
+     "organization_id": "302e0ac6-4dec-46c6-bd95-e7bf89d448dd",
+     "organization_name": "SBPBTP_vcpprovider-sc0jeojq",
+     "space_id": "84f9e5af-fa97-4f68-9568-050fb14080f9",
+     "space_name": "dev",
+     "uris": [
+      "sbpbtp-vcpprovider-sc0jeojq-dev-config-products-srv.cfapps.us10.hana.ondemand.com"
+     ],
+     "users": null
     }
 }

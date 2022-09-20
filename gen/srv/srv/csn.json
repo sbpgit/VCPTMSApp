@@ -19331,12 +19331,15 @@
     },
     "CatalogService.getAllVerScen": {
       "kind": "function",
+<<<<<<< HEAD
       "params": {
         "LOCATION_ID": {
           "type": "cds.String",
           "length": 4
         }
       },
+=======
+>>>>>>> c561e6a775806befe7743cfaec4b318ebf9b1260
       "returns": {
         "items": {
           "type": "cp_ds.prodVerScen"
@@ -20075,6 +20078,20 @@
     },
     "CatalogService.getUniqueId": {
       "kind": "entity",
+<<<<<<< HEAD
+=======
+      "@UI.SelectionFields": [
+        {
+          "=": "CHARVAL_NUM"
+        },
+        {
+          "=": "LOCATION_ID"
+        },
+        {
+          "=": "PRODUCT_ID"
+        }
+      ],
+>>>>>>> c561e6a775806befe7743cfaec4b318ebf9b1260
       "projection": {
         "from": {
           "ref": [
