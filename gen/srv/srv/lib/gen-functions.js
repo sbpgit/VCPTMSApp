@@ -2,6 +2,8 @@
 
 class GenFunctions {
     constructor() {
+
+
     }
 
     static getCurrentDate() {
@@ -14,6 +16,7 @@ class GenFunctions {
 
         return lLastWeek.toISOString().split('T')[0];
     }
+
     static getNextSunday(imDate) {
         const lDate = new Date(imDate);
         let lDay = lDate.getDay();

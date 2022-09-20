@@ -847,30 +847,30 @@ sap.ui.define(
                     oEntry.FROMDATE = vFromDate;
                     oEntry.TODATE = vToDate;
 
-                    that.handlePublish(oEntry);
+                    //that.handlePublish(oEntry);
 
-                    // // calling service based on filters
-                    // that.getModel("CIRModel").callFunction("/postCIRQuantities", {
-                    //     method: "GET",
-                    //     urlParameters: {
-                    //         LOCATION_ID: oEntry.LOCATION_ID,
-                    //         PRODUCT_ID: oEntry.PRODUCT_ID,
-                    //         VERSION: oEntry.VERSION,
-                    //         SCENARIO: oEntry.SCENARIO,
-                    //         FROMDATE: vFromDate,
-                    //         TODATE: vToDate,
-                    //         MODEL_VERSION: oEntry.MODEL_VERSION,
-                    //     },
-                    //     success: function (data) {
-                    //         sap.ui.core.BusyIndicator.hide();
-                    //         MessageToast.show("Data Successfully Published");
-                    //     },
-                    //     error: function (data) {
-                    //         sap.ui.core.BusyIndicator.hide();
-                    //         // sap.m.MessageToast.show("Error While publishing data!");
-                    //         sap.m.MessageToast.show("Data Successfully Published");
-                    //     },
-                    // });
+                    // calling service based on filters
+                    that.getModel("CIRModel").callFunction("/postCIRQuantities", {
+                        method: "GET",
+                        urlParameters: {
+                            LOCATION_ID: oEntry.LOCATION_ID,
+                            PRODUCT_ID: oEntry.PRODUCT_ID,
+                            VERSION: oEntry.VERSION,
+                            SCENARIO: oEntry.SCENARIO,
+                            FROMDATE: vFromDate,
+                            TODATE: vToDate,
+                            MODEL_VERSION: oEntry.MODEL_VERSION,
+                        },
+                        success: function (data) {
+                            sap.ui.core.BusyIndicator.hide();
+                            MessageToast.show("Data Successfully Published");
+                        },
+                        error: function (data) {
+                            sap.ui.core.BusyIndicator.hide();
+                            // sap.m.MessageToast.show("Error While publishing data!");
+                            sap.m.MessageToast.show("Data Successfully Published");
+                        },
+                    });
                 } else {
                     sap.ui.core.BusyIndicator.hide();
                     sap.m.MessageToast.show(

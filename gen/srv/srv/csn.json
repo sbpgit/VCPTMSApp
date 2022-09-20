@@ -19331,33 +19331,12 @@
     },
     "CatalogService.getAllVerScen": {
       "kind": "function",
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> e86f446378e63626d648df6b18f528a932646d80
->>>>>>> bb848c07bfe5dc7d03385065cf10c20e2c2ed0bb
->>>>>>> 233f1467f7de1cdce93765788af14274db07493e
       "params": {
         "LOCATION_ID": {
           "type": "cds.String",
           "length": 4
         }
       },
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-=======
->>>>>>> c561e6a775806befe7743cfaec4b318ebf9b1260
->>>>>>> e86f446378e63626d648df6b18f528a932646d80
->>>>>>> bb848c07bfe5dc7d03385065cf10c20e2c2ed0bb
->>>>>>> 233f1467f7de1cdce93765788af14274db07493e
       "returns": {
         "items": {
           "type": "cp_ds.prodVerScen"
