@@ -422,7 +422,7 @@ sap.ui.define([
                         if(oData.results.length === 0){
                             that.oModel.setData([]);
                             that.oList.setModel(that.oModel);
-                            sap.m.MessageToast.show("No Data available to show.")
+                            sap.m.MessageToast.show("No Data available to show.");
                         }
                         else{
                         sap.ui.core.BusyIndicator.hide();
