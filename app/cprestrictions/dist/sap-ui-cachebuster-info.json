@@ -1,6 +1,15 @@
 {
+<<<<<<< HEAD
   "index.html": 1661337950523,
   "manifest.json": 1663665146533,
+=======
+<<<<<<< HEAD
+  "Component.js": 1661869075027,
+=======
+<<<<<<< HEAD
+  "view/RestrictionItem.fragment.xml": 1661517422855,
+  "manifest.json": 1663598148067,
+>>>>>>> bb848c07bfe5dc7d03385065cf10c20e2c2ed0bb
   "utils/locate-reuse-libs.js": 1661153490912,
   "model/models.js": 1661153490912,
   "controller/ItemMaster.controller.js": 1661517422855,
@@ -31,5 +40,45 @@
   "view/Details.view.xml": 1661337950527,
   "view/App.view.xml": 1661153490916,
   "css/style.css": 1661435834882,
+<<<<<<< HEAD
   "i18n/i18n.properties": 1661435834886
+=======
+  "index.html": 1661337950523
+=======
+  "view/LineDialog.fragment.xml": 1661869075027,
+>>>>>>> e86f446378e63626d648df6b18f528a932646d80
+  "model/models.js": 1661869075027,
+  "utils/locate-reuse-libs.js": 1661869075027,
+  "manifest.json": 1663617203097,
+  "controller/ItemMaster.controller.js": 1661869075027,
+  "controller/ItemDetail.controller.js": 1662628674148,
+  "controller/Details.controller.js": 1661869075027,
+  "controller/BaseController.js": 1661869075027,
+  "controller/App.controller.js": 1661869075027,
+  "i18n/i18n.properties": 1661869075027,
+  "manifest-bundle.zip": 1663617203109,
+  "Component-preload.js": 1663617203655,
+  "controller/App-dbg.controller.js": 1661869075027,
+  "model/models-dbg.js": 1661869075027,
+  "controller/ItemMaster-dbg.controller.js": 1661869075027,
+  "controller/ItemDetail-dbg.controller.js": 1662628674148,
+  "controller/Details-dbg.controller.js": 1661869075027,
+  "controller/BaseController-dbg.js": 1661869075027,
+  "utils/locate-reuse-libs-dbg.js": 1661869075027,
+  "Component-dbg.js": 1661869075027,
+  "view/className.fragment.xml": 1661869075027,
+  "view/charValue.fragment.xml": 1661869075027,
+  "view/charName.fragment.xml": 1661869075027,
+  "view/RestrictionItem.fragment.xml": 1661869075027,
+  "view/Restriction.fragment.xml": 1661869075027,
+  "view/LocDialog.fragment.xml": 1661869075027,
+  "view/LineDialog.fragment.xml": 1661869075027,
+  "view/ItemMaster.view.xml": 1661869075027,
+  "view/ItemDetail.view.xml": 1661869075027,
+  "view/Details.view.xml": 1661869075027,
+  "view/App.view.xml": 1661869075027,
+  "css/style.css": 1661869075027,
+  "index.html": 1661869075027
+>>>>>>> c561e6a775806befe7743cfaec4b318ebf9b1260
+>>>>>>> bb848c07bfe5dc7d03385065cf10c20e2c2ed0bb
 }

@@ -1,6 +1,15 @@
 {
+<<<<<<< HEAD
   "view/Details.view.xml": 1659447417294,
   "controller/Details.controller.js": 1659447417290,
+=======
+<<<<<<< HEAD
+  "controller/Details-dbg.controller.js": 1661869074911,
+=======
+<<<<<<< HEAD
+  "controller/ItemDetail-dbg.controller.js": 1662549505875,
+  "controller/App.controller.js": 1659447417290,
+>>>>>>> bb848c07bfe5dc7d03385065cf10c20e2c2ed0bb
   "utils/locate-reuse-libs.js": 1659447417294,
   "model/models.js": 1659447417294,
   "controller/ItemMaster.controller.js": 1659447417290,
@@ -25,4 +34,38 @@
   "view/App.view.xml": 1659447417294,
   "css/style.css": 1659447417290,
   "index.html": 1659447417290
+<<<<<<< HEAD
+=======
+=======
+  "Component-dbg.js": 1661869074911,
+  "utils/locate-reuse-libs.js": 1661869074911,
+  "manifest.json": 1663590095038,
+>>>>>>> e86f446378e63626d648df6b18f528a932646d80
+  "model/models.js": 1661869074911,
+  "utils/locate-reuse-libs.js": 1661869074911,
+  "manifest.json": 1663616960477,
+  "controller/ItemMaster.controller.js": 1661869074911,
+  "controller/ItemDetail.controller.js": 1661869074911,
+  "controller/Details.controller.js": 1661869074911,
+  "controller/BaseController.js": 1661869074911,
+  "controller/App.controller.js": 1661869074911,
+  "Component.js": 1661869074911,
+  "manifest-bundle.zip": 1663616960497,
+  "Component-preload.js": 1663616960900,
+  "i18n/i18n.properties": 1661869074911,
+  "model/models-dbg.js": 1661869074911,
+  "controller/ItemMaster-dbg.controller.js": 1661869074911,
+  "controller/ItemDetail-dbg.controller.js": 1661869074911,
+  "utils/locate-reuse-libs-dbg.js": 1661869074911,
+  "controller/BaseController-dbg.js": 1661869074911,
+  "controller/App-dbg.controller.js": 1661869074911,
+  "Component-dbg.js": 1661869074911,
+  "view/ItemMaster.view.xml": 1661869074911,
+  "view/ItemDetail.view.xml": 1662628674108,
+  "view/Details.view.xml": 1661869074911,
+  "view/App.view.xml": 1661869074911,
+  "css/style.css": 1661869074911,
+  "index.html": 1661869074911
+>>>>>>> c561e6a775806befe7743cfaec4b318ebf9b1260
+>>>>>>> bb848c07bfe5dc7d03385065cf10c20e2c2ed0bb
 }
