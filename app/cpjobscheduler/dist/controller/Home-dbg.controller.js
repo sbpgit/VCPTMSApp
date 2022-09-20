@@ -270,7 +270,15 @@ sap.ui.define(
                 var length = service.length - 1;
                 service = service[length];
                 oGModel.setProperty("/IBPService", service);
-              } else {
+              // 20-09-2022
+            } else if(oData.lreadJobDetails.value.action.includes("genFullConfigDemand") ){
+                oGModel.setProperty("/JobType", "D");
+            } else if(oData.lreadJobDetails.value.action.includes("AssmbReq") ){
+                oGModel.setProperty("/JobType", "A");
+            } else if(oData.lreadJobDetails.value.action.includes("genUniqueID") ){
+                oGModel.setProperty("/JobType", "O");
+            } else if(oData.lreadJobDetails.value.action.includes("ibpimport-srv")) {
+                // 20-09-2022
                 oGModel.setProperty("/JobType", "I");
                 var service = oGModel.getProperty("/Jobdata").action.split("/");
                 var length = service.length - 1;
@@ -603,7 +611,8 @@ sap.ui.define(
             } else if (
               oActionType === "exportIBPLocation" ||
               oActionType === "exportIBPCustomer" ||
-              oActionType.includes("ImportECC")
+              oActionType.includes("ImportECC")   ||
+              oActionType.includes("ImportCuvtabInd")
             ) {
               MessageToast.show(
                 "There is no schedule data to display for the selected job type"

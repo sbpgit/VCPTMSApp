@@ -65,6 +65,7 @@ GROUP BY
     SCENARIO ASC,
     D.SEQUENCE ASC,
     CHAR_NUM ASC
+    
 -- SELECT
 --     A.LOCATION_ID,
 --     A.PRODUCT_ID,
