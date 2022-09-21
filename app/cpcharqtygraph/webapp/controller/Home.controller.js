@@ -65,8 +65,9 @@ sap.ui.define([
                     );
                     this.getView().addDependent(this._valueHelpDialogScen);
                 }
-
+               
             },
+            
             onAfterRendering: function () {
                 that.oList = this.byId("idTab");
                 this.oLoc = this.byId("idloc");
@@ -107,6 +108,16 @@ sap.ui.define([
                         that.oLocList.setModel(that.locModel);
 
                         sap.ui.core.BusyIndicator.hide();
+                    },
+                    error: function (oData, error) {
+                        sap.ui.core.BusyIndicator.hide();
+                        MessageToast.show("error");
+                    },
+                });
+
+                that.getView().getModel("oModel").read("/getCIRCharRate?$skiptoken=1000", {
+                    success: function (oData1) {
+                        
                     },
                     error: function (oData, error) {
                         sap.ui.core.BusyIndicator.hide();
@@ -162,9 +173,9 @@ sap.ui.define([
                 }
             },
             /**
-     * This function is called when selecting an item in dialogs.
-     * @param {object} oEvent -the event information.
-     */
+                 * This function is called when selecting an item in dialogs.
+                 * @param {object} oEvent -the event information.
+             */
             handleSelection: function (oEvent) {
                 that.oGModel = that.getOwnerComponent().getModel("oGModel");
                 var sId = oEvent.getParameter("id"),
@@ -236,9 +247,9 @@ sap.ui.define([
                                     }
                                 }
                                 if (adata.length > 0) {
-                                    that.verModel.setData({  
-                                             results: adata
-                                        });
+                                    that.verModel.setData({
+                                        results: adata
+                                    });
                                     that.oVerList.setModel(that.verModel);
                                 }
                                 // sap.ui.core.BusyIndicator.hide();
@@ -270,16 +281,16 @@ sap.ui.define([
                             var adata = [];
                             for (var i = 0; i < oData.results.length; i++) {
                                 if (oData.results[i].PRODUCT_ID === that.byId("idprod").getValue()
-                                && oData.results[i].VERSION === aSelectedItems[0].getTitle()) {
+                                    && oData.results[i].VERSION === aSelectedItems[0].getTitle()) {
                                     adata.push({
                                         "SCENARIO": oData.results[i].SCENARIO
                                     });
                                 }
                             }
                             if (adata.length > 0) {
-                                that.scenModel.setData({  
+                                that.scenModel.setData({
                                     results: adata
-                               });
+                                });
                                 that.oScenList.setModel(that.scenModel);
                             }
                         },
