@@ -341,6 +341,8 @@ class GenTimeseriesM2 {
                                              AND PRODUCT_ID  = '${adata.PRODUCT_ID}' 
                                              AND OBJ_TYPE    = 'PI'`);
 
+
+        // Normalize prediction
         const liNormalize = await cds.run(`SELECT   A."VERSION",
                                                     A."SCENARIO",
                                                     A."WEEK_DATE",
