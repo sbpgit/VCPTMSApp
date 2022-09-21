@@ -1111,7 +1111,7 @@ module.exports = cds.service.impl(async function () {
         {
             "TransactionID": vTransID,
             "RequestedAttributes": "VCCHAR,VCCHARGROUP,VCCHARNAME,VCCHARVALUE,VCCHARVALUENAME,VCCLASS,VCCLASSNAME,VCCHARDESC,VCCHARVALUEDESC,VCCLASSDESC",
-            "DoCommit": true,
+             "DoCommit": true,
             "NavVCPCLASS": oReq.class
         }
         // req.headers['Application-Interface-Key'] = vAIRKey;
@@ -1198,8 +1198,9 @@ module.exports = cds.service.impl(async function () {
                         FROM V_IBP_SALESH_ACTDEMD
                         WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
                            AND PRODUCT_ID = '`+ req.data.PRODUCT_ID +
-            `' AND CUSTOMER_GROUP = '` + req.data.CUSTOMER_GROUP +
-            `'`);
+                           `'`);
+            // `' AND CUSTOMER_GROUP = '` + req.data.CUSTOMER_GROUP +
+            // `'`);
 
         //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
         for (i = 0; i < lisales.length; i++) {
@@ -1208,7 +1209,7 @@ module.exports = cds.service.impl(async function () {
             vsales = {
                 "LOCID": lisales[i].LOCATION_ID,
                 "PRDID": lisales[i].PRODUCT_ID,
-                "CUSTID": lisales[i].CUSTOMER_GROUP,
+                "CUSTID": "NULL",//lisales[i].CUSTOMER_GROUP,
                 "ACTUALDEMAND": vDemd[0],
                 "PERIODID0_TSTAMP": vWeekDate[0]
             };
@@ -1428,8 +1429,8 @@ module.exports = cds.service.impl(async function () {
                         FROM V_IBP_SALESHCONFIG_VC
                         WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
                            AND PRODUCT_ID = '`+ req.data.PRODUCT_ID +
-            `' AND CUSTOMER_GROUP = '` + req.data.CUSTOMER_GROUP +
-            `'`);
+                           `'`);
+            // `' AND CUSTOMER_GROUP = '` + req.data.CUSTOMER_GROUP +e
 
         for (i = 0; i < lisales.length; i++) {
             var vWeekDate = new Date(lisales[i].WEEK_DATE).toISOString().split('Z');
@@ -1441,7 +1442,7 @@ module.exports = cds.service.impl(async function () {
                 "VCCHARVALUE": lisales[i].CHARVAL_NUM,
                 "VCCLASS": lisales[i].CLASS_NUM,
                 "ACTUALDEMANDVC": vDemd[0],
-                "CUSTID": lisales[i].CUSTOMER_GROUP,
+                "CUSTID": "NULL",//lisales[i].CUSTOMER_GROUP,
                 "PERIODID0_TSTAMP": vWeekDate[0]
             };
             oReq.sales.push(vsales);

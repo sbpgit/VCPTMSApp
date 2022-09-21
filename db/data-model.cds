@@ -788,7 +788,7 @@ entity![V_OBDHDR]{
 entity![V_CLASSCHARVAL]{
     key![CLASS_NUM]    : String(18)  @title : 'CLASS_NUM';
     key![CLASS_NAME]   : String(20)  @title : 'CLASS_NAME';
-    key![CLASS_DESC]    : String(150)  @title : 'CHAR_NAME';
+    key![CLASS_DESC]   : String(150) @title : 'CHAR_NAME';
     key![CHAR_NUM]     : String(10)  @title : 'CHAR_NUM';
     key![CHAR_NAME]    : String(30)  @title : 'CHAR_NAME';
     key![CHAR_DESC]    : String(150) @title : 'CHAR_NAME';
@@ -1039,25 +1039,27 @@ entity![V_NEWPRODREFCHAR]{
 
 @cds.persistence.exists
 entity![V_GETVARCHARPS]{
-    key![PRODUCT_ID]  : String(40) @title : 'PRODUCT_ID';
-    key![LOCATION_ID] : String(4)  @title : 'LOCATION_ID';
-    key![CHAR_NUM]    : String(30) @title : 'CHAR_NUM';
-    key![CHAR_NAME]   : String(30) @title : 'CHAR_NAME';
+    key![PRODUCT_ID]  : String(40)  @title : 'PRODUCT_ID';
+    key![LOCATION_ID] : String(4)   @title : 'LOCATION_ID';
+    key![CHAR_NUM]    : String(30)  @title : 'CHAR_NUM';
+    key![CHAR_NAME]   : String(30)  @title : 'CHAR_NAME';
     key![CHAR_DESC]   : String(150) @title : 'CHAR_DESC';
-    key![CHAR_TYPE]   : String(2)  @title : 'CHAR_TYPE';
-    key![SEQUENCE]    : Integer    @title : 'SEQUENCE';
+    key![CHAR_TYPE]   : String(2)   @title : 'CHAR_TYPE';
+    key![SEQUENCE]    : Integer     @title : 'SEQUENCE';
 }
 
 @cds.persistence.exists
 entity![V_UNIQUE_ID_ITEM]{
-    key![UNIQUE_ID]   : Integer    @title : 'MATVARID';
-    key![PRODUCT_ID]  : String(40) @title : 'PRODUCT_ID';
-    key![LOCATION_ID] : String(4)  @title : 'LOCATION_ID';
-    key![UNIQUE_DESC] : String(50) @title : 'UNIQUE DESC';
-    key![CHAR_NUM]    : String(30) @title : 'CHAR_NUM';
-    key![CHAR_NAME]   : String(30) @title : 'CHAR_NAME';
-    key![CHARVAL_NUM] : String(70) @title : 'CHARVAL_NUM';
-    key![CHAR_VALUE]  : String(70) @title : 'CHAR_VALUE';
+    key![UNIQUE_ID]    : Integer     @title : 'MATVARID';
+    key![PRODUCT_ID]   : String(40)  @title : 'PRODUCT_ID';
+    key![LOCATION_ID]  : String(4)   @title : 'LOCATION_ID';
+    key![UNIQUE_DESC]  : String(50)  @title : 'UNIQUE DESC';
+    key![CHAR_NUM]     : String(30)  @title : 'CHAR_NUM';
+    key![CHAR_NAME]    : String(30)  @title : 'CHAR_NAME';
+    key![CHAR_DESC]    : String(150) @title : 'CHAR_DESC';
+    key![CHARVAL_NUM]  : String(70)  @title : 'CHARVAL_NUM';
+    key![CHAR_VALUE]   : String(70)  @title : 'CHAR_VALUE';
+    key![CHARVAL_DESC] : String(150) @title : 'CHARVAL_DESC';
 // key![UID_CHAR_RATE] : Decimal(13, 2) @title : 'UID_CHAR_RATE';
 }
 
