@@ -20,7 +20,7 @@ xmlns:l="sap.ui.layout"
 					<Input id="idUniq" value="" width="90%" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
 
 					<Label text="{i18n>quan}"/>
-					<Input id="idQuantity" value="" width="90%" type="Number"/>
+					<Input id="idQuantity" value="" liveChange="onNumChange" width="90%" type="Number"/>
 
                     <Label text="{i18n>date}"/>
 					<DatePicker id="idDate"  value="" width="90%" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="handleDateChange"/>

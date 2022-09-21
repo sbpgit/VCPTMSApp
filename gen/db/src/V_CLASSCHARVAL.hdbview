@@ -7,6 +7,7 @@
 VIEW "V_CLASSCHARVAL" AS
 SELECT  A.CLASS_NUM,
         A.CLASS_NAME,
+        A.CLASS_DESC,
         B.CHAR_NUM,
         B.CHAR_NAME,
         B.CHAR_DESC,

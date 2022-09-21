@@ -1578,6 +1578,7 @@ module.exports = (srv) => {
     srv.on("maintainSeedOrder", async (req) => {
         let liresults = [];
         let lsresults = {};
+        let lspara = {};
         let liSeeddata = {};
         let vValue = 0, vTemp;
         let vPrefix = 'SE';
@@ -1599,6 +1600,16 @@ module.exports = (srv) => {
             FROM "CP_SEEDORDER_HEADER"
              ORDER BY SEED_ORDER DESC`
         );
+        const li_paravalues = await cds.run(
+            `SELECT VALUE
+                FROM "CP_PARAMETER_VALUES"
+                WHERE "PARAMETER_ID" = 6
+                  OR "PARAMETER_ID" = 7
+                ORDER BY "PARAMETER_ID" `);
+
+        vValue = parseInt(li_paravalues[0].VALUE) + 1;
+
+        vPrefix = li_paravalues[1].VALUE;
         const obgenSOFunctions = new SOFunctions();
         if (req.data.FLAG === "C") {
             lsresults.LOCATION_ID = liSeeddata[0].LOCATION_ID;
@@ -1606,31 +1617,33 @@ module.exports = (srv) => {
             lsresults.UNIQUE_ID = liSeeddata[0].UNIQUE_ID;
             lsresults.ORD_QTY = parseFloat(liSeeddata[0].ORD_QTY);
             lsresults.MAT_AVAILDATE = liSeeddata[0].MAT_AVAILDATE;
-            if (!li_sodata[0].SEED_ORDER) {
-                vTemp = 0;
-            }
-            else {
-                vTemp = li_sodata[0].SEED_ORDER;
-                console.log(vTemp);
-                vTemp = vTemp.slice(2);
-                console.log(vTemp);
-            }
-            vTemp = parseInt(vTemp) + 1;
-            vTemp = GenFunctions.addleadzeros(vTemp , 8);  
+            // if (!li_sodata[0].SEED_ORDER) {
+            //     vTemp = 0;
+            // }
+            // else {
+            //     vTemp = li_sodata[0].SEED_ORDER;
+            //     console.log(vTemp);
+            //     vTemp = vTemp.slice(2);
+            //     console.log(vTemp);
+            // }
+            vTemp = parseInt(vValue);
+            // vTemp = parseInt(vTemp) + 1;
+            vTemp = GenFunctions.addleadzeros(vTemp, 8);
             lsresults.SEED_ORDER = vPrefix.concat(vTemp.toString());
-            // const li_paravalues = await cds.run(
-            //     `SELECT VALUE
-            //     FROM "CP_PARAMETER_VALUES"
-            //     WHERE "PARAMETER_ID" = 6 `);
-            // vValaue = parseInt(li_paravalues[0].VALUE) + 1;
-            // lsresults.SEED_ORDER = vPrefix.concat(vValue.toString());
             liresults.push(lsresults);
+            lspara.PARAMETER_ID = 6;
+            lspara.VALUE = vTemp.toString();
             // lsresults = {};
             if (liresults.length > 0) {
                 console.log(lsresults);
                 try {
 
                     await cds.run(INSERT.into("CP_SEEDORDER_HEADER").entries(liresults));
+                    await UPDATE`CP_PARAMETER_VALUES`
+                        .with({
+                            VALUE: lspara.VALUE
+                        })
+                        .where(`PARAMETER_ID = '${lspara.PARAMETER_ID}'`)
                     responseMessage = lsresults.SEED_ORDER + " Created successfully";
                     await obgenSOFunctions.createSO(lsresults.LOCATION_ID, lsresults.PRODUCT_ID, lsresults.SEED_ORDER, lsresults.MAT_AVAILDATE, lsresults.ORD_QTY, lsresults.UNIQUE_ID);
                 } catch (e) {
@@ -1737,7 +1750,7 @@ module.exports = (srv) => {
             }
         }
         const keys = ['PRODUCT_ID', 'VERSION', 'SCENARIO'];
-        return GenFunctions.removeDuplicate(liprodver,keys);
+        return GenFunctions.removeDuplicate(liprodver, keys);
     });
     // Planning Configuration
     // BOI - Deepa
@@ -1868,10 +1881,10 @@ module.exports = (srv) => {
         let vDateSeries = vDateFrom;
         let dDate = new Date(vDateSeries);
         let dDay = dDate.getDay();
-        if(dDay === 1) {
-         lsDates.WEEK_DATE = vDateFrom;
+        if (dDay === 1) {
+            lsDates.WEEK_DATE = vDateFrom;
         } else {
-        lsDates.WEEK_DATE = GenFunctions.getNextMondayCmp(vDateSeries);
+            lsDates.WEEK_DATE = GenFunctions.getNextMondayCmp(vDateSeries);
         }
         vDateSeries = lsDates.WEEK_DATE;
         liDates.push(lsDates);

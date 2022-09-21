@@ -1580,7 +1580,7 @@ module.exports = (srv) => {
         let lsresults = {};
         let liSeeddata = {};
         let vValue = 0, vTemp;
-        let vPrefix = 'SE000';
+        let vPrefix = 'SE';
         var responseMessage;
 
         liSeeddata = JSON.parse(req.data.SEEDDATA);
@@ -1616,6 +1616,7 @@ module.exports = (srv) => {
                 console.log(vTemp);
             }
             vTemp = parseInt(vTemp) + 1;
+            vTemp = GenFunctions.addleadzeros(vTemp , 8);  
             lsresults.SEED_ORDER = vPrefix.concat(vTemp.toString());
             // const li_paravalues = await cds.run(
             //     `SELECT VALUE
