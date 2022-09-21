@@ -65,8 +65,9 @@ sap.ui.define([
                     );
                     this.getView().addDependent(this._valueHelpDialogScen);
                 }
-
+               
             },
+            
             onAfterRendering: function () {
                 that.oList = this.byId("idTab");
                 this.oLoc = this.byId("idloc");
@@ -113,6 +114,16 @@ sap.ui.define([
                         MessageToast.show("error");
                     },
                 });
+
+                that.getView().getModel("oModel").read("/getCIRCharRate?$skiptoken=1000", {
+                    success: function (oData1) {
+                        
+                    },
+                    error: function (oData, error) {
+                        sap.ui.core.BusyIndicator.hide();
+                        MessageToast.show("error");
+                    },
+                });
             },
             onResetDate: function () {
                 that.oLoc.setValue("");
@@ -120,10 +131,6 @@ sap.ui.define([
                 that.oVer.setValue("");
                 that.oScen.setValue("");
                 this.oModVer.setSelectedKey("Active");
-
-                // that.byId("idSplitter").setVisible(false);
-                // that.byId("idObjectPageSub").setMode("Collapsed");
-
                 that.byId("idObjectPageSub").setVisible(false);
                 this.oDate = this.byId("fromDate");
                 this.oDate.setSelectedKey("");
@@ -166,9 +173,9 @@ sap.ui.define([
                 }
             },
             /**
-     * This function is called when selecting an item in dialogs.
-     * @param {object} oEvent -the event information.
-     */
+                 * This function is called when selecting an item in dialogs.
+                 * @param {object} oEvent -the event information.
+             */
             handleSelection: function (oEvent) {
                 that.oGModel = that.getOwnerComponent().getModel("oGModel");
                 var sId = oEvent.getParameter("id"),
@@ -216,22 +223,6 @@ sap.ui.define([
                     );
                     that.oVer.setValue("");
                     that.oScen.setValue("");
-
-                    // Calling service to get IBP Versions
-                    // sap.ui.core.BusyIndicator.show();
-                    // this.getView().getModel("oModel").read("/getAllVerScen", {
-                    //     filters: [
-                    //         new Filter(
-                    //             "LOCATION_ID",
-                    //             FilterOperator.EQ,
-                    //             that.oGModel.getProperty("/SelectedLoc")
-                    //         ),
-                    //         new Filter(
-                    //             "PRODUCT_ID",
-                    //             FilterOperator.EQ,
-                    //             aSelectedItems[0].getTitle()
-                    //         ),
-                    //     ],
                     this.getView().getModel("oModel").callFunction("/getAllVerScen", {
                         method: "GET",
                         urlParameters: {
@@ -247,13 +238,6 @@ sap.ui.define([
                                 // sap.ui.core.BusyIndicator.hide();
                             }
                             else {
-                                // function removeDuplicate(array, key) {
-                                //     var check = new Set();        
-                                //     return array.filter(obj => !check.has(obj[key]) && check.add(obj[key]));        
-                                // }        
-                                // that.verModel.setData({  
-                                //      results: removeDuplicate(oData.results, 'VERSION')
-                                // });
                                 var adata = [];
                                 for (var i = 0; i < oData.results.length; i++) {
                                     if (oData.results[i].PRODUCT_ID === aSelectedItems[0].getTitle()) {
@@ -263,9 +247,9 @@ sap.ui.define([
                                     }
                                 }
                                 if (adata.length > 0) {
-                                    that.verModel.setData({  
-                                             results: adata
-                                        });
+                                    that.verModel.setData({
+                                        results: adata
+                                    });
                                     that.oVerList.setModel(that.verModel);
                                 }
                                 // sap.ui.core.BusyIndicator.hide();
@@ -275,9 +259,6 @@ sap.ui.define([
                             MessageToast.show("error");
                         },
                     });
-
-
-
                     // Version list
                 } else if (sId.includes("Ver")) {
                     this.oVer = that.byId("idver");
@@ -289,33 +270,6 @@ sap.ui.define([
                         aSelectedItems[0].getTitle()
                     );
                     var vProd = that.oGModel.getProperty("/SelectedProd");
-                    // Calling service to get IBP Scenario
-                    // this.getView().getModel("oModel").read("/getIbpVerScn", {
-                    //     filters: [
-                    //         new Filter(
-                    //             "LOCATION_ID",
-                    //             FilterOperator.EQ,
-                    //             that.oGModel.getProperty("/SelectedLoc")
-                    //         ),
-                    //         new Filter(
-                    //             "PRODUCT_ID",
-                    //             FilterOperator.EQ,
-                    //             that.oGModel.getProperty("/SelectedProd")
-                    //         ),
-                    //         new Filter(
-                    //             "VERSION",
-                    //             FilterOperator.EQ,
-                    //             aSelectedItems[0].getTitle()
-                    //         ),
-                    //     ],
-                    //     success: function (oData) {
-                    //         that.scenModel.setData(oData);
-                    //         that.oScenList.setModel(that.scenModel);
-                    //     },
-                    //     error: function (oData, error) {
-                    //         MessageToast.show("error");
-                    //     },
-                    // });
                     this.getView().getModel("oModel").callFunction("/getAllVerScen", {
                         method: "GET",
                         urlParameters: {
@@ -324,26 +278,19 @@ sap.ui.define([
                             // VERSION:  aSelectedItems[0].getTitle()
                         },
                         success: function (oData) {
-                            // function removeDuplicate(array, key) {
-                            //     var check = new Set();        
-                            //     return array.filter(obj => !check.has(obj[key]) && check.add(obj[key]));        
-                            // }        
-                            // that.scenModel.setData({  
-                            //      results: removeDuplicate(oData.results, 'SCENARIO')
-                            // });
                             var adata = [];
                             for (var i = 0; i < oData.results.length; i++) {
                                 if (oData.results[i].PRODUCT_ID === that.byId("idprod").getValue()
-                                && oData.results[i].VERSION === aSelectedItems[0].getTitle()) {
+                                    && oData.results[i].VERSION === aSelectedItems[0].getTitle()) {
                                     adata.push({
                                         "SCENARIO": oData.results[i].SCENARIO
                                     });
                                 }
                             }
                             if (adata.length > 0) {
-                                that.scenModel.setData({  
+                                that.scenModel.setData({
                                     results: adata
-                               });
+                                });
                                 that.oScenList.setModel(that.scenModel);
                             }
                         },
