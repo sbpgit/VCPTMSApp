@@ -319,6 +319,55 @@ module.exports = cds.service.impl(async function () {
         return await servicePost.tx(req).get(resUrl)
         // GetExportResult
     });
+     // Create customer group in IBP
+     this.on("createIBPCIR", async (req) => {
+        var oReq = {
+            cir: [],
+        },
+            vCIR;
+
+        const licir = await cds.run(
+            `
+            SELECT *
+               FROM "V_CIRTOIBP" 
+               WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
+                          AND PRODUCT_ID = '`+ req.data.PRODUCT_ID + `'`);
+
+        //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
+        for (i = 0; i < licir.length; i++) {
+            
+            var vWeekDate = new Date(licir[i].WEEK_DATE).toISOString().split('Z')[0];
+            vCIR = {
+                "LOCID": licir[i].LOCATION_ID,
+                "PRDID": licir[i].PRODUCT_ID,        
+                "VCCLASS": licir[i].CLASS_NUM,        
+                "VCCHAR": licir[i].CHAR_NUM,        
+                "VCCHARVALUE": licir[i].CHARVAL_NUM,        
+                "CUSTID": "NULL",        
+                "CIRQTY": licir[i].CIRQTY.toString(),        
+                "PERIODID4_TSTAMP": vWeekDate
+            };
+            oReq.cir.push(vCIR);
+        }
+        var vTransID = new Date().getTime().toString();
+        var oEntry =
+        {
+            "Transactionid": vTransID,
+            "AggregationLevelFieldsString": "LOCID,PRDID,VCCLASS,VCCHAR,VCCHARVALUE,CUSTID,CIRQTY,PERIODID4_TSTAMP",
+            "DoCommit": true,
+            "NavSBPVCP": oReq.cir
+        }
+        try{
+        await service.tx(req).post("/SBPVCPTrans", oEntry);
+        response = "Success";
+        }
+        catch(e){
+
+        }
+        // var resUrl = "/GetExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
+        return await service.tx(req).get(resUrl)
+        // GetExportResult
+    });
     // Create class in IBP
     this.on("createIBPClass", async (req) => {
         var oReq = {

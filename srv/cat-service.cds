@@ -288,4 +288,6 @@ service CatalogService @(impl : './lib/cat-service.js'){
     
     // EOI - Deepa
     entity getSalesStock as projection on od.SALES_S;
+    // Assembly Requirements
+    function genAssemblyreq(LOCATION_ID : String(4), PRODUCT_ID : String(40)) returns String;
 }

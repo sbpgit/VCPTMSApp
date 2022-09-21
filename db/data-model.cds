@@ -1110,8 +1110,10 @@ entity![V_CIR_CHAR_RATE]{
     key![SCENARIO]      : String(32)      @title : 'SCENARIO';
     key![CHAR_NUM]      : String(30)      @title : 'CHAR_NUM';
     key![CHAR_NAME]     : String(30)      @title : 'Characteristic Name';
+    key![CHAR_DESC]     : String(150);
     key![CHARVAL_NUM]   : String(70)      @title : 'CHARVAL_NUM';
     key![CHAR_VALUE]    : String(70)      @title : 'Characteristic Value';
+    key![CHARVAL_DESC]     : String(150);
     key![SEQUENCE]      : Integer         @title : 'SEQUENCE';
     key![PLAN_QTY]      : Decimal(13, 3)  @title : 'PLAN_QTY';
     key![GEN_QTY]       : Integer         @title : 'GEN_QTY';
