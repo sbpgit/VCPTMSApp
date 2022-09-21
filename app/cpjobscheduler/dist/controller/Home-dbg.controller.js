@@ -271,13 +271,13 @@ sap.ui.define(
                 service = service[length];
                 oGModel.setProperty("/IBPService", service);
               // 20-09-2022
-            } else if(oData.lreadJobDetails.value.action.includes("genFullConfigDemand") ){
+            } else if(oData.readJobDetails.action.includes("genFullConfigDemand") ){
                 oGModel.setProperty("/JobType", "D");
-            } else if(oData.lreadJobDetails.value.action.includes("AssmbReq") ){
+            } else if(oData.readJobDetails.action.includes("AssmbReq") ){
                 oGModel.setProperty("/JobType", "A");
-            } else if(oData.lreadJobDetails.value.action.includes("genUniqueID") ){
+            } else if(oData.readJobDetails.action.includes("genUniqueID") ){
                 oGModel.setProperty("/JobType", "O");
-            } else if(oData.lreadJobDetails.value.action.includes("ibpimport-srv")) {
+            } else if(oData.readJobDetails.action.includes("ibpimport-srv")) {
                 // 20-09-2022
                 oGModel.setProperty("/JobType", "I");
                 var service = oGModel.getProperty("/Jobdata").action.split("/");
