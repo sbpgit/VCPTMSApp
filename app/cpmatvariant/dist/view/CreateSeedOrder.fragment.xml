@@ -28,7 +28,7 @@
                     <Input id="idUniqSO" value="" editable="false" width="100%" enabled="false" type="Text" />
 
                     <Label text="Order Quantity" />
-                    <Input id="idOrdQtySO" value="" editable="true" width="100%" enabled="true" type="Number" />
+                    <Input id="idOrdQtySO" value="" liveChange="onNumChange"  width="100%" type="Number" />
 
                     <Label text="Material Availability Date" />
                     <DatePicker id="DP1SO" placeholder="Enter Date" change="handleChange" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" class="sapUiSmallMarginBottom" />

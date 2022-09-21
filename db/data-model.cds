@@ -1054,6 +1054,7 @@ entity![V_UNIQUE_ID_ITEM]{
     key![PRODUCT_ID]   : String(40)  @title : 'PRODUCT_ID';
     key![LOCATION_ID]  : String(4)   @title : 'LOCATION_ID';
     key![UNIQUE_DESC]  : String(50)  @title : 'UNIQUE DESC';
+    key![CLASS_NUM]    : String(18)  @title : 'CLASS_NUM';
     key![CHAR_NUM]     : String(30)  @title : 'CHAR_NUM';
     key![CHAR_NAME]    : String(30)  @title : 'CHAR_NAME';
     key![CHAR_DESC]    : String(150) @title : 'CHAR_DESC';
