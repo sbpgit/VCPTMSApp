@@ -35,9 +35,9 @@
                         <items>
                             <ColumnListItem>
                                 <cells>
-                                    <Text text="{CHAR_NAME}" />
+                                    <ObjectIdentifier title="{CHAR_NAME}" text="{CHAR_DESC}"/>
                                     <Text text="{CHAR_NUM}" />
-                                    <Text text="{CHAR_VALUE}" />
+                                    <ObjectIdentifier title="{CHAR_VALUE}" text="{CHARVAL_DESC}" />
                                     <Text text="{CHARVAL_NUM}" />
                                     <!-- <Button text="{path:'OFLAG', formatter: '.formatter.getStatus'}" icon="sap-icon://decline" press="onTabDel"/> -->
                                     </cells>
