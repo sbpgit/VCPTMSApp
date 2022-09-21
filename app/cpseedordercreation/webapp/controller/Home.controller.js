@@ -6,11 +6,12 @@ sap.ui.define([
     "sap/ui/model/FilterOperator",
     "sap/ui/core/library",
     "sap/ui/model/Sorter",
+    "jquery.sap.global"
 ],
     /**
      * @param {typeof sap.ui.core.mvc.Controller} Controller
      */
-    function (BaseController, JSONModel, MessageToast, Filter, FilterOperator, library, Sorter) {
+    function (BaseController, JSONModel, MessageToast, Filter, FilterOperator, library, Sorter, jquery) {
         "use strict";
         var that, oGModel;
 
@@ -76,9 +77,9 @@ sap.ui.define([
                 that.oGModel.setProperty("/OrderFlag", "");
                 that.oList = this.byId("orderList");
                 this.byId("headSearch").setValue("");
-                if (that.oList.getBinding("items")) {
-                    that.oList.getBinding("items").filter([]);
-                }
+                // if (that.oList.getBinding("items")) {
+                //     that.oList.getBinding("items").filter([]);
+                // }
 
                 this.oLoc = this.byId("idloc");
                 this.oProd = this.byId("prodInput");
@@ -97,7 +98,7 @@ sap.ui.define([
                     this._valueHelpDialogUniq.getId() + "-list"
                 );
 
-              sap.ui.core.BusyIndicator.show();
+                sap.ui.core.BusyIndicator.show();
                 // Calling service to get Location data
                 this.getModel("BModel").read("/getLocation", {
                     success: function (oData) {
@@ -190,7 +191,7 @@ sap.ui.define([
                         MessageToast.show("Select Location and Product");
                     }
                 }
-        },
+            },
 
             /**
              * Called when 'Close/Cancel' button in any dialog is pressed.
@@ -334,11 +335,11 @@ sap.ui.define([
                                 aSelectedLoc[0].getTitle()
                             ),
                         ],
-                    // that.getModel("BModel").callFunction("/getAllProd", {
-                    //     method: "GET",
-                    //     urlParameters: {
-                    //         LOCATION_ID: aSelectedLoc[0].getTitle()
-                    //     },
+                        // that.getModel("BModel").callFunction("/getAllProd", {
+                        //     method: "GET",
+                        //     urlParameters: {
+                        //         LOCATION_ID: aSelectedLoc[0].getTitle()
+                        //     },
                         success: function (oData) {
                             that.prodModel.setData(oData);
                             that.oProdList.setModel(that.prodModel);
@@ -427,38 +428,45 @@ sap.ui.define([
                         })
                     );
                 }
-                if(loc !== "" && Prod !== ""){
-                this.getModel("BModel").read("/getSeedOrder", {
-                    filters: [oFilters],
-                    // filters: [ new Filter( "LOCATION_ID",  FilterOperator.EQ,  loc ),
-                    //            new Filter( "PRODUCT_ID", FilterOperator.EQ, Prod ), ],
-                    success: function (oData) {
-                        if(oData.results.length === 0){
-                            that.oModel.setData([]);
-                            that.oList.setModel(that.oModel);
-                            sap.m.MessageToast.show("No Data available to show.")
-                        }
-                        else{
-                        sap.ui.core.BusyIndicator.hide();
-                        that.oModel.setData({
-                            results: oData.results,
-                        });
-                        that.oList.setModel(that.oModel);
-                    }
-                    },
-                    error: function () {
-                        sap.ui.core.BusyIndicator.hide();
-                        MessageToast.show("Failed to get profiles");
-                    },
-                });
-            } else {
-                MessageToast.show("Please select Location and Product");
-            }
+                if (loc !== "" && Prod !== "") {
+                    this.getModel("BModel").read("/getSeedOrder", {
+                        filters: [oFilters],
+                        // filters: [ new Filter( "LOCATION_ID",  FilterOperator.EQ,  loc ),
+                        //            new Filter( "PRODUCT_ID", FilterOperator.EQ, Prod ), ],
+                        success: function (oData) {
+                            if (oData.results.length === 0) {
+                                that.byId("idSort").setVisible(false);
+                                that.oModel.setData([]);
+                                that.oList.setModel(that.oModel);
+                                sap.m.MessageToast.show("No Data available to show.");
+                            }
+                            else {
+                                for (var i = 0; i < oData.results.length; i++) {
+                                    var oOrdQty = parseFloat(oData.results[i].ORD_QTY);
+                                    oData.results[i].ORD_QTY = oOrdQty;
+                                }
+                                that.byId("idSort").setVisible(true);
+                                sap.ui.core.BusyIndicator.hide();
+                                that.oModel.setData({
+                                    data: oData.results,
+                                });
+                                that.oList.setModel(that.oModel);
+                            }
+                        },
+                        error: function () {
+                            sap.ui.core.BusyIndicator.hide();
+                            MessageToast.show("Failed to get profiles");
+                        },
+                    });
+                } else {
+                    MessageToast.show("Please select Location and Product");
+                }
             },
 
             onResetDate: function () {
                 that.byId("idloc").setValue("");
                 that.byId("prodInput").setValue("");
+                that.byId("idSort").setVisible(false);
 
                 that.oModel.setData({
                     results: that.TabData,
@@ -470,17 +478,17 @@ sap.ui.define([
 
             onOrderCreate: function () {
 
-                var oLoc = that.byId("idloc").getValue() ,
+                var oLoc = that.byId("idloc").getValue(),
                     oProd = that.byId("prodInput").getValue();
 
 
-                if(oLoc !== "" && oProd !== ""){
-                that._valueHelpDialogOrderCreate.open();
-                that.oGModel.setProperty("/selFlag", "X");
-                that.oGModel.setProperty("/OrderFlag", "C");
-                that._valueHelpDialogOrderCreate.setTitle("Create Order");
-                sap.ui.getCore().byId("idLocation").setValue(oLoc);
-                sap.ui.getCore().byId("idProduct").setValue(oProd);
+                if (oLoc !== "" && oProd !== "") {
+                    that._valueHelpDialogOrderCreate.open();
+                    that.oGModel.setProperty("/selFlag", "X");
+                    that.oGModel.setProperty("/OrderFlag", "C");
+                    that._valueHelpDialogOrderCreate.setTitle("Create Order");
+                    sap.ui.getCore().byId("idLocation").setValue(oLoc);
+                    sap.ui.getCore().byId("idProduct").setValue(oProd);
                 } else {
                     MessageToast.show("Please select Location and Product");
                 }
@@ -575,10 +583,37 @@ sap.ui.define([
                             sap.ui.core.BusyIndicator.hide();
                             sap.m.MessageToast.show("Error creating a Seed Order ");
                         },
-                    }); 
+                    });
                 } else {
                     sap.m.MessageToast.show("Please fill all fields");
                 }
+            },
+
+            /*Open sort Dialog*/
+            handleSortButtonPressed: function () {
+                that = this;
+                if (!that._pDialog) {
+                    that._pDialog = sap.ui.xmlfragment("cpapp.cpseedordercreation.view.SortDialog", that);
+                    that.getView().addDependent(that._pDialog);
+                }
+                that._pDialog.open();
+            },
+
+            /*Sorting Operation*/
+            handleSortDialogConfirm: function (oEvent) {
+                var oTable = this.byId("orderList"),
+                    mParams = oEvent.getParameters(),
+                    oBinding = oTable.getBinding("items"),
+                    sPath,
+                    bDescending,
+                    aSorters = [];
+
+                sPath = mParams.sortItem.getKey();
+                bDescending = mParams.sortDescending;
+                aSorters.push(new Sorter(sPath, bDescending));
+
+                // apply the selected sort and group settings
+                oBinding.sort(aSorters);
             },
         });
     });

@@ -51,12 +51,13 @@
                 <ux:subSections>
                     <ux:ObjectPageSubSection>
                         <ux:blocks>
-                            <Table id="orderList" items="{path: '/results'}" itemPress="onhandlePress" growingScrollToLoad="true" mode="SingleSelectMaster" selectionChange="onhandlePress" rememberSelections="false">
+                            <Table id="orderList" items="{path: '/data'}" itemPress="onhandlePress" growingScrollToLoad="true" mode="SingleSelectMaster" selectionChange="onhandlePress" rememberSelections="false">
                                 <headerToolbar>
                                     <Toolbar>
                                         <content>
                                             <ToolbarSpacer/>
                                             <Button id="idCreate" type='Ghost' text="Create Order" press="onOrderCreate"></Button>
+                                            <Button tooltip="Sort" icon="sap-icon://sort" press="handleSortButtonPressed" id="idSort" visible="false" type="Emphasized"/>
                                         </content>
                                     </Toolbar>
                                 </headerToolbar>
