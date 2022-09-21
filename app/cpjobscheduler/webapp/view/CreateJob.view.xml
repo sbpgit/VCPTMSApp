@@ -481,7 +481,7 @@
                                             <Label text="{i18n>cust}"/>
                                         </f:label>
                                         <f:fields>
-                                            <Input id="ECust" value="" placeholder="{i18n>cust}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                            <Input id="ECust" visible="false" value="" placeholder="{i18n>cust}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                                         </f:fields>
                                     </f:FormElement>
                                 </f:formElements>
@@ -517,7 +517,7 @@
                                             <Label text="{i18n>cust}"/>
                                         </f:label>
                                         <f:fields>
-                                            <Input id="ESHConfigCust" value="" placeholder="{i18n>cust}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                            <Input id="ESHConfigCust" visible="false" value="" placeholder="{i18n>cust}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                                         </f:fields>
                                     </f:FormElement>
                                 </f:formElements>
