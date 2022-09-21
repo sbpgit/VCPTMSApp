@@ -1054,6 +1054,7 @@ entity![V_UNIQUE_ID_ITEM]{
     key![PRODUCT_ID]   : String(40)  @title : 'PRODUCT_ID';
     key![LOCATION_ID]  : String(4)   @title : 'LOCATION_ID';
     key![UNIQUE_DESC]  : String(50)  @title : 'UNIQUE DESC';
+    key![CLASS_NUM]    : String(18)  @title : 'CLASS_NUM';
     key![CHAR_NUM]     : String(30)  @title : 'CHAR_NUM';
     key![CHAR_NAME]    : String(30)  @title : 'CHAR_NAME';
     key![CHAR_DESC]    : String(150) @title : 'CHAR_DESC';
@@ -1109,8 +1110,10 @@ entity![V_CIR_CHAR_RATE]{
     key![SCENARIO]      : String(32)      @title : 'SCENARIO';
     key![CHAR_NUM]      : String(30)      @title : 'CHAR_NUM';
     key![CHAR_NAME]     : String(30)      @title : 'Characteristic Name';
+    key![CHAR_DESC]     : String(150);
     key![CHARVAL_NUM]   : String(70)      @title : 'CHARVAL_NUM';
     key![CHAR_VALUE]    : String(70)      @title : 'Characteristic Value';
+    key![CHARVAL_DESC]     : String(150);
     key![SEQUENCE]      : Integer         @title : 'SEQUENCE';
     key![PLAN_QTY]      : Decimal(13, 3)  @title : 'PLAN_QTY';
     key![GEN_QTY]       : Integer         @title : 'GEN_QTY';

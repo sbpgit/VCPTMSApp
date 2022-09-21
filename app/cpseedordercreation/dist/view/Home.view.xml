@@ -25,7 +25,7 @@
                 <l:Grid defaultSpan="XL3 L3 M6 S12">
                     <VBox >
                         <Label text=""/>
-                        <SearchField id="headSearch" liveChange="handleSearch" placeholder="Unique No"/>
+                        <SearchField id="headSearch" liveChange="handleSearch" placeholder="Seed Order/ Unique ID"/>
                     </VBox>
                     <VBox >
                         <Label text="Location" required= "true"/>
@@ -51,20 +51,21 @@
                 <ux:subSections>
                     <ux:ObjectPageSubSection>
                         <ux:blocks>
-                            <Table id="orderList" items="{path: '/results'}" itemPress="onhandlePress" growingScrollToLoad="true" mode="SingleSelectMaster" selectionChange="onhandlePress" rememberSelections="false">
+                            <Table id="orderList" items="{path: '/data'}" itemPress="onhandlePress" growingScrollToLoad="true" mode="SingleSelectMaster" selectionChange="onhandlePress" rememberSelections="false">
                                 <headerToolbar>
                                     <Toolbar>
                                         <content>
                                             <ToolbarSpacer/>
                                             <Button id="idCreate" type='Ghost' text="Create Order" press="onOrderCreate"></Button>
+                                            <Button tooltip="Sort" icon="sap-icon://sort" press="handleSortButtonPressed" id="idSort" visible="false" type="Emphasized"/>
                                         </content>
                                     </Toolbar>
                                 </headerToolbar>
                                 <columns>
-                                    <Column hAlign="Left" vAlign="Middle" >
+                                    <Column hAlign="Left" vAlign="Middle" visible="false">
                                         <Text text="{i18n>loc}" />
                                     </Column>
-                                    <Column hAlign="Left" vAlign="Middle" >
+                                    <Column hAlign="Left" vAlign="Middle" visible="false">
                                         <Text text="{i18n>prod}"/>
                                     </Column>
                                     

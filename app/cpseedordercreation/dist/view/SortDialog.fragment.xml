@@ -1,0 +1,13 @@
+<core:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core">
+	<ViewSettingsDialog
+		confirm="handleSortDialogConfirm">
+		<sortItems>
+			<ViewSettingsItem text="Seed Order" key="SEED_ORDER" selected="true"/>
+			<ViewSettingsItem text="Unique Id" key="UNIQUE_ID" />
+			<ViewSettingsItem text="Order Quantity" key="ORD_QTY" />
+			<ViewSettingsItem text="Material Avail. Date" key="MAT_AVAILDATE" />
+		</sortItems>
+	</ViewSettingsDialog>
+</core:FragmentDefinition>
