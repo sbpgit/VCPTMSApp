@@ -281,7 +281,6 @@ sap.ui.define([
                         );
                     }
                     that.oUniqList.getBinding("items").filter(oFilters);
-
                 } else if (sId.includes("head")) {
                     if (sQuery !== "") {
                     
