@@ -243,6 +243,7 @@ sap.ui.define([
                             new Filter({
                                 filters: [
                                     new Filter("LOCATION_ID", FilterOperator.Contains, sQuery),
+                                    new Filter("UNIQUE_ID", FilterOperator.EQ, sQuery),
                                     new Filter("LOCATION_DESC", FilterOperator.Contains, sQuery),
                                 ],
                                 and: false,
@@ -257,6 +258,7 @@ sap.ui.define([
                             new Filter({
                                 filters: [
                                     new Filter("PRODUCT_ID", FilterOperator.Contains, sQuery),
+                                    new Filter("UNIQUE_ID", FilterOperator.EQ, sQuery),
                                     new Filter("PROD_DESC", FilterOperator.Contains, sQuery),
                                 ],
                                 and: false,

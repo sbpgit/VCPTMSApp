@@ -255,7 +255,7 @@ sap.ui.define(
                         that.byId("FullDemandPanel").setVisible(false);
                         that.byId("AsmblyReqPanel").setVisible(false);
                         that.byId("salesOrdPanel").setVisible(false);
-                    } else if (oSelJob === "D") {
+                    } else if (key === "D") {
                         that.byId("modelGenPanel").setVisible(false);
                         that.byId("PredPanel").setVisible(false);
                         that.byId("timeSeriesPanel").setVisible(false);
@@ -265,7 +265,7 @@ sap.ui.define(
                         that.byId("FullDemandPanel").setVisible(true);
                         that.byId("AsmblyReqPanel").setVisible(false);
                         that.byId("salesOrdPanel").setVisible(false);
-                    } else if (oSelJob === "A") {
+                    } else if (key === "A") {
                         that.byId("modelGenPanel").setVisible(false);
                         that.byId("PredPanel").setVisible(false);
                         that.byId("timeSeriesPanel").setVisible(false);
@@ -275,7 +275,7 @@ sap.ui.define(
                         that.byId("FullDemandPanel").setVisible(false);
                         that.byId("AsmblyReqPanel").setVisible(true);
                         that.byId("salesOrdPanel").setVisible(false);
-                    } else if (oSelJob === "O") {
+                    } else if (key === "O") {
                         that.byId("modelGenPanel").setVisible(false);
                         that.byId("PredPanel").setVisible(false);
                         that.byId("timeSeriesPanel").setVisible(false);
@@ -964,7 +964,9 @@ sap.ui.define(
                 }
 
                 // 07-09-2022-1
-                that.oProd.removeAllTokens();
+               if(oJobKey === "M" || oJobKey === "P"){
+                        that.oProd.removeAllTokens();
+                    }
                 // 07-09-2022-1
                 // 07-09-2022
             },
