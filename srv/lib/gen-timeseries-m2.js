@@ -452,8 +452,93 @@ class GenTimeseriesM2 {
             liCir = [];
         }
 
+//Rounding the output
+        let liRound = await cds.run(`SELECT 
+                                    C."LOCATION_ID",
+                                    C."PRODUCT_ID",
+                                    C."WEEK_DATE",
+                                    C."MODEL_VERSION",
+                                    C."VERSION",
+                                    C."SCENARIO",
+                                    C."METHOD",
+                                    SUM(C."CIR_QTY") AS CIR_QTY,
+                                    I.QUANTITY,
+                                    (I.QUANTITY - SUM(C."CIR_QTY")) AS DIFF
+                               FROM CP_IBP_FUTUREDEMAND AS I
+                         INNER JOIN CP_CIR_GENERATED AS C
+                                 ON C.LOCATION_ID = I.LOCATION_ID
+                                AND C.PRODUCT_ID = I.PRODUCT_ID
+                                AND C.WEEK_DATE = I.WEEK_DATE
+                                AND C.VERSION = I.VERSION
+                                AND C.SCENARIO = I.SCENARIO
+                              WHERE C.LOCATION_ID = '${adata.LOCATION_ID}'
+                                AND C.PRODUCT_ID = '${adata.PRODUCT_ID}'
+                           GROUP BY C."LOCATION_ID",
+                                    C."PRODUCT_ID",
+                                    C."WEEK_DATE",
+                                    C."MODEL_VERSION",
+                                    C."VERSION",
+                                    C."SCENARIO",
+                                    C."METHOD",
+                                    I.QUANTITY	
+                           ORDER BY "LOCATION_ID" ASC, 
+                                    "PRODUCT_ID" ASC, 
+                                    "WEEK_DATE" ASC, 
+                                    "MODEL_VERSION" ASC, 
+                                    "VERSION" ASC, 
+                                    "SCENARIO" ASC, 
+                                    "METHOD" ASC;`);
 
-        console.log("CIR generation Completed");
+        const liCIRRound = await cds.run(`SELECT "LOCATION_ID",
+                                                  "PRODUCT_ID",
+                                                  "WEEK_DATE",
+                                                  "CIR_ID",
+                                                  "MODEL_VERSION",
+                                                  "VERSION",
+                                                  "SCENARIO",
+                                                  "METHOD",
+                                                  "UNIQUE_ID",
+                                                  "CIR_QTY"
+                                            FROM "CP_CIR_GENERATED"
+                                            WHERE LOCATION_ID = '${adata.LOCATION_ID}'
+                                                AND PRODUCT_ID = '${adata.PRODUCT_ID}'
+                                            ORDER BY 
+                                                "LOCATION_ID" ASC, 
+                                                "PRODUCT_ID" ASC, 
+                                                "WEEK_DATE" ASC, 
+                                                "MODEL_VERSION" ASC, 
+                                                "VERSION" ASC, 
+                                                "SCENARIO" ASC, 
+                                                "METHOD" ASC, 
+                                                "CIR_QTY" DESC;`);
+
+
+
+    for (let cntCR = 0; cntCR < liCIRRound.length; cntCR++) {
+        for (let cntR = 0; cntR < liRound.length; cntR++) {
+            if(liRound[cntR].LOCATION_ID === liCIRRound[cntCR].LOCATION_ID &&
+                liRound[cntR].PRODUCT_ID === liCIRRound[cntCR].PRODUCT_ID &&
+                liRound[cntR].WEEK_DATE === liCIRRound[cntCR].WEEK_DATE &&
+                liRound[cntR].MODEL_VERSION === liCIRRound[cntCR].MODEL_VERSION &&
+                liRound[cntR].VERSION === liCIRRound[cntCR].VERSION &&
+                liRound[cntR].SCENARIO === liCIRRound[cntCR].SCENARIO &&
+                liRound[cntR].METHOD === liCIRRound[cntCR].METHOD &&
+                liRound[cntR].DIFF > 0){  
+                    await cds.run(`UPDATE CP_CIR_GENERATED SET CIR_QTY = CIR_QTY + ${parseInt(liRound[cntR].DIFF)}
+                              WHERE LOCATION_ID = '${liCIRRound[cntCR].LOCATION_ID}'
+                              AND PRODUCT_ID = '${liCIRRound[cntCR].PRODUCT_ID}'
+                              AND WEEK_DATE = '${liCIRRound[cntCR].WEEK_DATE}'
+                              AND CIR_ID = '${liCIRRound[cntCR].CIR_ID}'
+                              AND MODEL_VERSION = '${liCIRRound[cntCR].MODEL_VERSION}'
+                              AND VERSION = '${liCIRRound[cntCR].VERSION}'
+                              AND SCENARIO = '${liCIRRound[cntCR].SCENARIO}'
+                              AND METHOD = '${liCIRRound[cntCR].METHOD}'`);
+                    liRound[cntR].DIFF = GenF.parse(0);
+            }
+        }
+    }
+
+    console.log("CIR generation Completed");
 
     }
 
