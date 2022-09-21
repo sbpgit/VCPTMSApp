@@ -244,6 +244,7 @@ sap.ui.define([
                             new Filter({
                                 filters: [
                                     new Filter("LOCATION_ID", FilterOperator.Contains, sQuery),
+                                    new Filter("UNIQUE_ID", FilterOperator.EQ, sQuery),
                                     new Filter("LOCATION_DESC", FilterOperator.Contains, sQuery),
                                 ],
                                 and: false,
@@ -258,6 +259,7 @@ sap.ui.define([
                             new Filter({
                                 filters: [
                                     new Filter("PRODUCT_ID", FilterOperator.Contains, sQuery),
+                                    new Filter("UNIQUE_ID", FilterOperator.EQ, sQuery),
                                     new Filter("PROD_DESC", FilterOperator.Contains, sQuery),
                                 ],
                                 and: false,
@@ -282,11 +284,11 @@ sap.ui.define([
 
                 } else if (sId.includes("head")) {
                     if (sQuery !== "") {
+                    
                         oFilters.push(
                             new Filter({
                                 filters: [
-                                    new Filter("PRODUCT_ID", FilterOperator.Contains, sQuery),
-                                    new Filter("PROD_DESC", FilterOperator.Contains, sQuery),
+                                    new Filter("UNIQUE_ID", FilterOperator.EQ, sQuery),
                                     new Filter("SEED_ORDER", FilterOperator.Contains, sQuery),
                                 ],
                                 and: false,
@@ -522,10 +524,18 @@ sap.ui.define([
                 that.oGModel.setProperty("/OrderFlag", "");
                 sap.ui.getCore().byId("idLabelSeed").setVisible(false);
                 sap.ui.getCore().byId("idseedord").setVisible(false);
-                sap.ui.getCore().byId("idLocation").setEditable(true);
-                sap.ui.getCore().byId("idProduct").setEditable(true);
+                // sap.ui.getCore().byId("idLocation").setEditable(true);
+                // sap.ui.getCore().byId("idProduct").setEditable(true);
                 sap.ui.getCore().byId("idUniq").setEditable(true);
                 that._valueHelpDialogOrderCreate.close();
+            },
+
+            onNumChange:function(){
+                var squan = sap.ui.getCore().byId("idQuantity").getValue();
+
+                if(squan < 0){
+                    sap.ui.getCore().byId("idQuantity").setValue("0");
+                }
             },
 
             onSaveOrder: function () {

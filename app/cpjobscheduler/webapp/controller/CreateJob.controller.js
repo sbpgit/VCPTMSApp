@@ -255,7 +255,7 @@ sap.ui.define(
                         that.byId("FullDemandPanel").setVisible(false);
                         that.byId("AsmblyReqPanel").setVisible(false);
                         that.byId("salesOrdPanel").setVisible(false);
-                    } else if (oSelJob === "D") {
+                    } else if (key === "D") {
                         that.byId("modelGenPanel").setVisible(false);
                         that.byId("PredPanel").setVisible(false);
                         that.byId("timeSeriesPanel").setVisible(false);
@@ -265,7 +265,7 @@ sap.ui.define(
                         that.byId("FullDemandPanel").setVisible(true);
                         that.byId("AsmblyReqPanel").setVisible(false);
                         that.byId("salesOrdPanel").setVisible(false);
-                    } else if (oSelJob === "A") {
+                    } else if (key === "A") {
                         that.byId("modelGenPanel").setVisible(false);
                         that.byId("PredPanel").setVisible(false);
                         that.byId("timeSeriesPanel").setVisible(false);
@@ -275,7 +275,7 @@ sap.ui.define(
                         that.byId("FullDemandPanel").setVisible(false);
                         that.byId("AsmblyReqPanel").setVisible(true);
                         that.byId("salesOrdPanel").setVisible(false);
-                    } else if (oSelJob === "O") {
+                    } else if (key === "O") {
                         that.byId("modelGenPanel").setVisible(false);
                         that.byId("PredPanel").setVisible(false);
                         that.byId("timeSeriesPanel").setVisible(false);
@@ -530,6 +530,8 @@ sap.ui.define(
                             that.byId("idSdi").setSelectedKey("SC");
                         } else if (sServiceText === "ImportECCAsmbcomp") {
                             that.byId("idSdi").setSelectedKey("AC");
+                        } else if (sServiceText === "ImportCuvtabInd") {
+                            that.byId("idSdi").setSelectedKey("VT");
                         }
                     }
                 }
@@ -962,7 +964,9 @@ sap.ui.define(
                 }
 
                 // 07-09-2022-1
-                that.oProd.removeAllTokens();
+               if(oJobKey === "M" || oJobKey === "P"){
+                        that.oProd.removeAllTokens();
+                    }
                 // 07-09-2022-1
                 // 07-09-2022
             },
@@ -1589,6 +1593,8 @@ sap.ui.define(
                         that.byId("idSdi").setSelectedKey("SC");
                     } else if (sServiceText === "ImportECCAsmbcomp") {
                         that.byId("idSdi").setSelectedKey("AC");
+                    } else if (sServiceText === "ImportCuvtabInd") {
+                        that.byId("idSdi").setSelectedKey("VT");
                     }
                 }
             },
@@ -2509,7 +2515,7 @@ sap.ui.define(
                         vRuleslist = {
                             LOCATION_ID: oLocItem,
                             PRODUCT_ID: oProdItem,
-                            CUSTOMER_GROUP: oCustGrpItem,
+                            CUSTOMER_GROUP: "Test",//oCustGrpItem,
                             DOC_DATE: dDate,
                         };
                         this.oGModel.setProperty("/vcrulesData", vRuleslist);
@@ -2534,7 +2540,7 @@ sap.ui.define(
                         vRuleslist = {
                             LOCATION_ID: oLocItem,
                             PRODUCT_ID: oProdItem,
-                            CUSTOMER_GROUP: oCustGrpItem,
+                            CUSTOMER_GROUP: "Test"//oCustGrpItem,
                         };
                         this.oGModel.setProperty("/vcrulesData", vRuleslist);
 
@@ -3157,6 +3163,8 @@ sap.ui.define(
                         actionText = "/sdi/ImportECCSaleshCfg";
                     } else if (sSdiType === "AC") {
                         actionText = "/sdi/ImportECCAsmbcomp";
+                    } else if (sSdiType === "VT") {
+                        actionText = "/sdi/ImportCuvtabInd";
                     }
                 } else {
                     if (bButton.includes("Prediction")) {

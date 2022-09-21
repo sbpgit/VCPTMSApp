@@ -812,12 +812,30 @@ sap.ui.define(
                     });
                 }
             },
+            onPressPublish: function(oEvent) {
+                var objEvent = oEvent;
+                MessageBox.confirm(
+                    "Would you like to publish?", {
+                        icon: MessageBox.Icon.Conf,
+                        title: "Confirmation",
+                        actions: [MessageBox.Action.YES, MessageBox.Action.NO],
+                        emphasizedAction: MessageBox.Action.YES,
+                        onClose: function (oAction) { 
+                           if(oAction === "YES") {
+                               that.onPressPublishConfirm(objEvent);
+                           } else {
+                             // Close Message Box
+                           }
+                        }
+                    }
+                );
+            },
             /**
              * Called when 'Publish' button is clicked on application
              * - Calls post service with data filters to send CIR Quantities to S4 HANA System
              * @param {*} oEvent 
              */
-            onPressPublish: function (oEvent) {
+            onPressPublishConfirm: function (oEvent) {
                 sap.ui.core.BusyIndicator.show();
                 that.oGModel = that.getModel("oGModel");
                 // getting the input values

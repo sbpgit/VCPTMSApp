@@ -330,11 +330,14 @@ module.exports = cds.service.impl(async function () {
             `
             SELECT CLASS_NUM,
                     CLASS_NAME,
+                    CLASS_DESC,
                     CHAR_NUM,
                     CHAR_NAME,
+                    CHAR_DESC,
                     CHAR_GROUP,
                     CHAR_VALUE,
-                    CHARVAL_NUM
+                    CHARVAL_NUM,
+                    CHARVAL_DESC
                     FROM V_CLASSCHARVAL 
                 WHERE CLASS_NUM = '`+ req.data.CLASS_NUM + `'`);
 
@@ -345,9 +348,12 @@ module.exports = cds.service.impl(async function () {
                 "VCCHARVALUE": liclass[i].CHARVAL_NUM,
                 "VCCLASS": liclass[i].CLASS_NUM,
                 "VCCHARNAME": liclass[i].CHAR_NAME,
-                "VCCHARGROUP":liclass[i].CHAR_GROUP,
+                "VCCHARGROUP": liclass[i].CHAR_GROUP,
                 "VCCHARVALUENAME": liclass[i].CHAR_VALUE,
-                "VCCLASSNAME": liclass[i].CLASS_NAME
+                "VCCLASSNAME": liclass[i].CLASS_NAME,                
+                "VCCHARDESC":liclass[i].CHAR_DESC,
+                "VCCHARVALUEDESC": liclass[i].CHARVAL_DESC,
+                "VCCLASSDESC": liclass[i].CLASS_DESC
             };
             oReq.class.push(vclass);
 
@@ -356,7 +362,7 @@ module.exports = cds.service.impl(async function () {
         var oEntry =
         {
             "TransactionID": vTransID,
-            "RequestedAttributes": "VCCHAR,VCCHARVALUE,VCCLASS,VCCHARNAME,VCCHARGROUP,VCCHARVALUENAME,VCCLASSNAME",
+            "RequestedAttributes": "VCCHAR,VCCHARGROUP,VCCHARNAME,VCCHARVALUE,VCCHARVALUENAME,VCCLASS,VCCLASSNAME,VCCHARDESC,VCCHARVALUEDESC,VCCLASSDESC",
             "DoCommit": true,
             "NavVCPCLASS": oReq.class
         }
@@ -1072,11 +1078,14 @@ module.exports = cds.service.impl(async function () {
             `
         SELECT CLASS_NUM,
                 CLASS_NAME,
+                CLASS_DESC,
                 CHAR_NUM,
                 CHAR_NAME,
+                CHAR_DESC,
                 CHAR_GROUP,
                 CHAR_VALUE,
-                CHARVAL_NUM
+                CHARVAL_NUM,
+                CHARVAL_DESC
                 FROM V_CLASSCHARVAL 
             WHERE CLASS_NUM = '`+ req.data.CLASS_NUM + `'`);
 
@@ -1089,7 +1098,10 @@ module.exports = cds.service.impl(async function () {
                 "VCCHARNAME": liclass[i].CHAR_NAME,
                 "VCCHARGROUP": liclass[i].CHAR_GROUP,
                 "VCCHARVALUENAME": liclass[i].CHAR_VALUE,
-                "VCCLASSNAME": liclass[i].CLASS_NAME
+                "VCCLASSNAME": liclass[i].CLASS_NAME,                
+                "VCCHARDESC":liclass[i].CHAR_DESC,
+                "VCCHARVALUEDESC": liclass[i].CHARVAL_DESC,
+                "VCCLASSDESC": liclass[i].CLASS_DESC
             };
             oReq.class.push(vclass);
 
@@ -1098,8 +1110,8 @@ module.exports = cds.service.impl(async function () {
         var oEntry =
         {
             "TransactionID": vTransID,
-            "RequestedAttributes": "VCCHAR,VCCHARVALUE,VCCLASS,VCCHARNAME,VCCHARGROUP,VCCHARVALUENAME,VCCLASSNAME",
-            "DoCommit": true,
+            "RequestedAttributes": "VCCHAR,VCCHARGROUP,VCCHARNAME,VCCHARVALUE,VCCHARVALUENAME,VCCLASS,VCCLASSNAME,VCCHARDESC,VCCHARVALUEDESC,VCCLASSDESC",
+             "DoCommit": true,
             "NavVCPCLASS": oReq.class
         }
         // req.headers['Application-Interface-Key'] = vAIRKey;
@@ -1186,8 +1198,9 @@ module.exports = cds.service.impl(async function () {
                         FROM V_IBP_SALESH_ACTDEMD
                         WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
                            AND PRODUCT_ID = '`+ req.data.PRODUCT_ID +
-            `' AND CUSTOMER_GROUP = '` + req.data.CUSTOMER_GROUP +
-            `'`);
+                           `'`);
+            // `' AND CUSTOMER_GROUP = '` + req.data.CUSTOMER_GROUP +
+            // `'`);
 
         //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
         for (i = 0; i < lisales.length; i++) {
@@ -1196,7 +1209,7 @@ module.exports = cds.service.impl(async function () {
             vsales = {
                 "LOCID": lisales[i].LOCATION_ID,
                 "PRDID": lisales[i].PRODUCT_ID,
-                "CUSTID": lisales[i].CUSTOMER_GROUP,
+                "CUSTID": "NULL",//lisales[i].CUSTOMER_GROUP,
                 "ACTUALDEMAND": vDemd[0],
                 "PERIODID0_TSTAMP": vWeekDate[0]
             };
@@ -1416,8 +1429,8 @@ module.exports = cds.service.impl(async function () {
                         FROM V_IBP_SALESHCONFIG_VC
                         WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
                            AND PRODUCT_ID = '`+ req.data.PRODUCT_ID +
-            `' AND CUSTOMER_GROUP = '` + req.data.CUSTOMER_GROUP +
-            `'`);
+                           `'`);
+            // `' AND CUSTOMER_GROUP = '` + req.data.CUSTOMER_GROUP +e
 
         for (i = 0; i < lisales.length; i++) {
             var vWeekDate = new Date(lisales[i].WEEK_DATE).toISOString().split('Z');
@@ -1429,7 +1442,7 @@ module.exports = cds.service.impl(async function () {
                 "VCCHARVALUE": lisales[i].CHARVAL_NUM,
                 "VCCLASS": lisales[i].CLASS_NUM,
                 "ACTUALDEMANDVC": vDemd[0],
-                "CUSTID": lisales[i].CUSTOMER_GROUP,
+                "CUSTID": "NULL",//lisales[i].CUSTOMER_GROUP,
                 "PERIODID0_TSTAMP": vWeekDate[0]
             };
             oReq.sales.push(vsales);

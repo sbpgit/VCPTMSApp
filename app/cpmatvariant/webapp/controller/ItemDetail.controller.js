@@ -130,6 +130,18 @@ sap.ui.define(
              **/
             onCloseSO:function(){
                 this._CreateSO.close();  
+
+                sap.ui.getCore().byId("idOrdQtySO").setValue("");
+                sap.ui.getCore().byId("DP1SO").setValue("");
+
+            },
+
+            onNumChange:function(){
+                var squan = sap.ui.getCore().byId("idOrdQtySO").getValue();
+
+                if(squan < 0){
+                    sap.ui.getCore().byId("idOrdQtySO").setValue("0");
+                }
             },
             /**
              * Creating new Seed Order for respective Location, Product

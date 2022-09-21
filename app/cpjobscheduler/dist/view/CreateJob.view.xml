@@ -644,6 +644,7 @@
                                                     <core:ListItem key="SH" text="{i18n>saleshis}"/>
                                                     <core:ListItem key="SC" text="{i18n>salehisconfig}"/>
                                                     <core:ListItem key="AC" text="{i18n>asmbcomp}"/>
+                                                    <core:ListItem key="VT" text="{i18n>vartable}" />
                                             </Select>
                                         </f:fields>
                                     </f:FormElement>
