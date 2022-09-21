@@ -812,12 +812,30 @@ sap.ui.define(
                     });
                 }
             },
+            onPressPublish: function(oEvent) {
+                var objEvent = oEvent;
+                MessageBox.confirm(
+                    "Would you like to publish?", {
+                        icon: MessageBox.Icon.Conf,
+                        title: "Confirmation",
+                        actions: [MessageBox.Action.YES, MessageBox.Action.NO],
+                        emphasizedAction: MessageBox.Action.YES,
+                        onClose: function (oAction) { 
+                           if(oAction === "YES") {
+                               that.onPressPublishConfirm(objEvent);
+                           } else {
+                             // Close Message Box
+                           }
+                        }
+                    }
+                );
+            },
             /**
              * Called when 'Publish' button is clicked on application
              * - Calls post service with data filters to send CIR Quantities to S4 HANA System
              * @param {*} oEvent 
              */
-            onPressPublish: function (oEvent) {
+            onPressPublishConfirm: function (oEvent) {
                 sap.ui.core.BusyIndicator.show();
                 that.oGModel = that.getModel("oGModel");
                 // getting the input values
@@ -847,30 +865,30 @@ sap.ui.define(
                     oEntry.FROMDATE = vFromDate;
                     oEntry.TODATE = vToDate;
 
-                    //that.handlePublish(oEntry);
+                    that.handlePublish(oEntry);
 
-                    // calling service based on filters
-                    that.getModel("CIRModel").callFunction("/postCIRQuantities", {
-                        method: "GET",
-                        urlParameters: {
-                            LOCATION_ID: oEntry.LOCATION_ID,
-                            PRODUCT_ID: oEntry.PRODUCT_ID,
-                            VERSION: oEntry.VERSION,
-                            SCENARIO: oEntry.SCENARIO,
-                            FROMDATE: vFromDate,
-                            TODATE: vToDate,
-                            MODEL_VERSION: oEntry.MODEL_VERSION,
-                        },
-                        success: function (data) {
-                            sap.ui.core.BusyIndicator.hide();
-                            MessageToast.show("Data Successfully Published");
-                        },
-                        error: function (data) {
-                            sap.ui.core.BusyIndicator.hide();
-                            // sap.m.MessageToast.show("Error While publishing data!");
-                            sap.m.MessageToast.show("Data Successfully Published");
-                        },
-                    });
+                    // // calling service based on filters
+                    // that.getModel("CIRModel").callFunction("/postCIRQuantities", {
+                    //     method: "GET",
+                    //     urlParameters: {
+                    //         LOCATION_ID: oEntry.LOCATION_ID,
+                    //         PRODUCT_ID: oEntry.PRODUCT_ID,
+                    //         VERSION: oEntry.VERSION,
+                    //         SCENARIO: oEntry.SCENARIO,
+                    //         FROMDATE: vFromDate,
+                    //         TODATE: vToDate,
+                    //         MODEL_VERSION: oEntry.MODEL_VERSION,
+                    //     },
+                    //     success: function (data) {
+                    //         sap.ui.core.BusyIndicator.hide();
+                    //         MessageToast.show("Data Successfully Published");
+                    //     },
+                    //     error: function (data) {
+                    //         sap.ui.core.BusyIndicator.hide();
+                    //         // sap.m.MessageToast.show("Error While publishing data!");
+                    //         sap.m.MessageToast.show("Data Successfully Published");
+                    //     },
+                    // });
                 } else {
                     sap.ui.core.BusyIndicator.hide();
                     sap.m.MessageToast.show(
