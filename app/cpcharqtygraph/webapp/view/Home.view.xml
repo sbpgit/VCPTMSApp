@@ -77,7 +77,7 @@
         <ux:sections>
             <ux:ObjectPageSection id="idOBPageSec" >
                 <ux:subSections id="idSubSec">
-                    <ux:ObjectPageSubSection id="idObjectPageSub" height="600px">
+                    <ux:ObjectPageSubSection id="idObjectPageSub">
                         <ux:blocks id="idblocks">
                         <layout:Splitter id="idSplitter" height="auto" width="100%" class="sapUiNoContentPadding" visible="false">                 
                         <layout:FixFlex id='chartFixFlex' minFlexSize="500" class="fixFlex" > 
@@ -95,10 +95,10 @@
                                     <viz:dataset>
                                         <viz.data:FlattenedDataset data="{/results}">
                                             <viz.data:dimensions>
-                            <viz.data:DimensionDefinition name="Char.Name"
-                                value="{CHAR_NAME}" />
-                                <viz.data:DimensionDefinition name="Char.Value"
-                                value="{CHAR_VALUE}" />
+                            <viz.data:DimensionDefinition name="Char.Desc"
+                                value="{CHAR_DESC}" />
+                                <viz.data:DimensionDefinition name="Char.Value Desc"
+                                value="{CHARVAL_DESC}" />
                         </viz.data:dimensions>
                         <viz.data:measures>
                             <viz.data:MeasureDefinition name="Generated Qty"
@@ -114,9 +114,9 @@
                          <viz.feeds:FeedItem id='valueAxisFeed1' uid="valueAxis" type="Measure"
                         values="Generated Qty" />
                     <viz.feeds:FeedItem id='categoryAxisFeed' uid="categoryAxis" type="Dimension"
-                        values="Char.Name" />
+                        values="Char.Desc" />
                         <viz.feeds:FeedItem id='categoryAxisFeed1' uid="categoryAxis" type="Dimension"
-                        values="Char.Value" />
+                        values="Char.Value Desc" />
                                     </viz:feeds>
                                 </viz:VizFrame>
                            
