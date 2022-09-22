@@ -143,10 +143,12 @@ sap.ui.define(
                     // squan =parseInt(squan);
                     sap.ui.getCore().byId("idOrdQtySO").setValueState("None");
 
-                if(squan < 0){
-                    
-                    sap.ui.getCore().byId("idOrdQtySO").setValue("0");
-                }
+                    if(squan < 1){
+        
+                        sap.ui.getCore().byId("idOrdQtySO").setValue("");
+                        sap.ui.getCore().byId("idOrdQtySO").setValueState("Error");
+                        sap.ui.getCore().byId("idOrdQtySO").setValueStateText("Can not be add 0 quantity");
+                    }
                 //  else {
                 //     sap.ui.getCore().byId("idOrdQtySO").setValue(squan);
                 // }

@@ -173,10 +173,10 @@ sap.ui.define([
                             success: function (oData) {
                                 sap.ui.core.BusyIndicator.hide();
 
-                                oData.results.forEach(function (row) {
-                                    row.UNIQUE_ID = row.UNIQUE_ID.toString();
+                                // oData.results.forEach(function (row) {
+                                //     row.UNIQUE_ID = row.UNIQUE_ID.toString();
 
-                                }, that);
+                                // }, that);
 
 
                                 that.uniqModel.setData(oData);
@@ -287,7 +287,7 @@ sap.ui.define([
                         oFilters.push(
                             new Filter({
                                 filters: [
-                                    new Filter("UNIQUE_ID", FilterOperator.Contains, sQuery),
+                                    new Filter("UNIQUE_ID", FilterOperator.EQ, sQuery),
                                     new Filter("SEED_ORDER", FilterOperator.Contains, sQuery),
                                 ],
                                 and: false,
@@ -447,7 +447,7 @@ sap.ui.define([
 
                                 oData.results.forEach(function (row) {
                                     // Calling function to handle the date format
-                                    row.UNIQUE_ID = row.UNIQUE_ID.toString();
+                                    // row.UNIQUE_ID = row.UNIQUE_ID.toString();
                                     row.ORD_QTY = parseFloat(row.ORD_QTY);
                                   }, that);
 
@@ -543,9 +543,11 @@ sap.ui.define([
                 var squan = sap.ui.getCore().byId("idQuantity").getValue();
                 sap.ui.getCore().byId("idQuantity").setValueState("None");
 
-                    if(squan < 0){
+                    if(squan < 1){
         
-                        sap.ui.getCore().byId("idQuantity").setValue("0");
+                        sap.ui.getCore().byId("idQuantity").setValue("");
+                        sap.ui.getCore().byId("idQuantity").setValueState("Error");
+                        sap.ui.getCore().byId("idQuantity").setValueStateText("Can not be add 0 quantity");
                     }
 
                     if(squan.includes(".")){
