@@ -583,7 +583,7 @@ sap.ui.define([
                 };
                 oEntry.SEEDDATA.push(vRuleslist);
                 if (squan !== "" && sDate !== "" && sUniq !== "") {
-                    if(sap.ui.getCore().byId("idOrdQtySO").getValueState() !== "Error"){
+                    if(sap.ui.getCore().byId("idQuantity").getValueState() !== "Error"){
                     that.getModel("BModel").callFunction("/maintainSeedOrder", {
                         method: "GET",
                         urlParameters: {
