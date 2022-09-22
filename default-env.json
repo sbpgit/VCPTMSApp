@@ -62,6 +62,37 @@
     "connsvc"
    ],
    "volume_mounts": []
+  },
+  {
+   "binding_guid": "dbecbf07-0320-4cad-9beb-5f4aca1239fe",
+   "binding_name": null,
+   "credentials": {
+    "clientid": "sb-cloneffe25536eaf5477c987260fb10376fcd!b94427|destination-xsappname!b62",
+    "clientsecret": "dbecbf07-0320-4cad-9beb-5f4aca1239fe$iwkaAz3MCct0M4q5nhPreFEn8fm0dUqZwO-p0ohORCk=",
+    "credential-type": "binding-secret",
+    "identityzone": "vcpprovider-sc0jeojq",
+    "instanceid": "ffe25536-eaf5-477c-9872-60fb10376fcd",
+    "tenantid": "9d12f6fd-bdfd-4b20-98a6-5993fba38534",
+    "tenantmode": "dedicated",
+    "uaadomain": "authentication.us10.hana.ondemand.com",
+    "uri": "https://destination-configuration.cfapps.us10.hana.ondemand.com",
+    "url": "https://vcpprovider-sc0jeojq.authentication.us10.hana.ondemand.com",
+    "verificationkey": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnQ7Fk3wBbYrfeETWi+mE\n8X4uhGCr/i5pRnzLB0jOTtBOdZ4EWStI3+ZB06MlX+2ieBuTKn68s/4A+9gUdfDP\nP6OVqu4+V5XpF8EPSfZEf4tPFEv3HrDJsSLa91XD4Ur9g+JEnlTL0G0gDozRG84j\nuoN8e5skiSQI+Rrc8aK+p08S0mQGSPvJm/b2famnj/uyZobOkM2gEaT99pfmsnEP\ngsNHTxnQCmJ+m2+dvXrDOK1Hl7+m2t66t39qDmhOQzIv092Q2dkpn2wjtFMVv4G7\nNCSpmG0BRZvYkiLviXj+UxMZbe0Lx4BtSy/SSHvxC5an9yfYS0b/+TJUofSMkCKN\nnwIDAQAB\n-----END PUBLIC KEY-----",
+    "xsappname": "cloneffe25536eaf5477c987260fb10376fcd!b94427|destination-xsappname!b62"
+   },
+   "instance_guid": "ffe25536-eaf5-477c-9872-60fb10376fcd",
+   "instance_name": "ext_odata",
+   "label": "destination",
+   "name": "ext_odata",
+   "plan": "lite",
+   "provider": null,
+   "syslog_drain_url": null,
+   "tags": [
+    "destination",
+    "conn",
+    "connsvc"
+   ],
+   "volume_mounts": []
   }
  ],
  "hana": [
@@ -190,5 +221,4 @@
  "users": null
 }
   }
-
 

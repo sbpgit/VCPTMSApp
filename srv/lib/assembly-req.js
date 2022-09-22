@@ -162,6 +162,9 @@ class AssemblyReq {
             
         }
 
+        
+        let lFail = '';
+
         for (let cntC = 0; cntC < liComponent.length; cntC++) {
             const lsComponent = liComponent[cntC];
 
@@ -175,26 +178,50 @@ class AssemblyReq {
 
                     for (let cntODC = 0; cntODC < lsOD.COUNTER.length; cntODC++) {
                         const lsCounter = lsOD.COUNTER[cntODC];
-
+                        lFail = '';
 
                         for (let cntCh = 0; cntCh < lsCounter.CHAR.length; cntCh++) {
-                            const lsChar = lsCounter.CHAR[cntCh];
-
+                            const lsODChar = lsCounter.CHAR[cntCh];
+                            lFail = '';
+                            let lCharCounter = 0;
                             for (let cntCh = 0; cntCh < liCIR[cntCIR].CHAR.length; cntCh++) {
-                                const element = liCIR[cntCIR].CHAR[cntCh];
-                                
-                                
+                                const lsCIRChar = liCIR[cntCIR].CHAR[cntCh];
+                                if (lsCIRChar.CHAR_NUM === lsODChar.CHAR_NUM) {
+                                    if((lsCIRChar.OD_CONDITION === 'EQ' &&
+                                        lsCIRChar.CHARVAL_NUM === lsODChar.CHARVAL_NUM) || 
+                                       (lsCIRChar.OD_CONDITION === 'NE' &&
+                                        lsCIRChar.CHARVAL_NUM !== lsODChar.CHARVAL_NUM)){
+                                            //Success Counter
+                                            lCharCounter = lsCounter.CHAR[cntCh].CHAR_COUNTER;
+                                        }
+                                        else{
+                                            //Check if there was a success for this counter
+                                            if(lsCounter.CHAR[cntCh].CHAR_COUNTER !== lsCounter.CHAR[cntCh].CHAR_COUNTER){ 
+                                                //Check if there are any other conditions for this counter
+                                            if(cntCh === GenF.addOne(cntCh,lsCounter.CHAR.length) ||
+                                              lsCounter.CHAR[cntCh].CHAR_COUNTER !== lsCounter.CHAR[GenF.addOne(cntCh,lsCounter.CHAR.length)].CHAR_COUNTER){
+                                                  lFail = 'X';
+                                              }
+                                            }
+                                        }
+                                }
                             }
-
-                            
+                            if(lFail === 'X'){
+                                break;
+                            }
                         }
-
-                        
+                        if(lFail === 'X' &&
+                        cntODC === GenF.addOne(cntODC, lsOD.COUNTER.length)){
+                            break;
+                        } 
                     }
+                    if(lFail === 'X' &&
+                    cntOD === GenF.addOne(cntOD, lsComponent.OD.length)){
+                        break;
+                    } 
+                }
 
-
-
-
+                if(lFail === ''){
 
                 }
                 
