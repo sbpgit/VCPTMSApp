@@ -8,3 +8,24 @@
 .sapUiSizeCompact .sapUxAPObjectPageSectionHeader, .sapUxAPObjectPageSectionHeader {
     height: 0.1rem !important;
 }
+
+/*PopOver*/
+.sapMIBar-CTX .sapMTitle {
+    color: brown;
+    text-shadow: none;
+    font-weight: bold;
+    font-family: 'SAP-icons';
+    padding: 5px;
+}
+.pop {
+    color: black;
+    font-size: 16px;
+    font-family: 'SAP-icons';
+    font-weight: normal;
+    display: inline-block;
+    white-space: normal;
+    cursor: text;
+    overflow: hidden;
+    box-sizing: border-box;
+    padding: 5px;
+}

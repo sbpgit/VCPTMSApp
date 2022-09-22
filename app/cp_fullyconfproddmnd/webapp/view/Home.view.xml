@@ -67,7 +67,7 @@
                                 <ToolbarSpacer/>
                                 <Button text="Publish" press="onPressPublish" type="Emphasized"/>
                             </Toolbar>
-                            <t:Table id="idCIReq" clas="table" fixedColumnCount="1" selectionMode="None" alternateRowColors="true" enableSelectAll="false" visibleRowCount="11">
+                            <t:Table id="idCIReq" clas="table" fixedColumnCount="2" selectionMode="None" alternateRowColors="true" enableSelectAll="false" visibleRowCount="11">
                                 <t:columns />
                             </t:Table>
                             </VBox>

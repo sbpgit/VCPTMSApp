@@ -2515,7 +2515,7 @@ sap.ui.define(
                         vRuleslist = {
                             LOCATION_ID: oLocItem,
                             PRODUCT_ID: oProdItem,
-                            CUSTOMER_GROUP: oCustGrpItem,
+                            CUSTOMER_GROUP: "Test",//oCustGrpItem,
                             DOC_DATE: dDate,
                         };
                         this.oGModel.setProperty("/vcrulesData", vRuleslist);
@@ -2540,7 +2540,7 @@ sap.ui.define(
                         vRuleslist = {
                             LOCATION_ID: oLocItem,
                             PRODUCT_ID: oProdItem,
-                            CUSTOMER_GROUP: oCustGrpItem,
+                            CUSTOMER_GROUP: "Test"//oCustGrpItem,
                         };
                         this.oGModel.setProperty("/vcrulesData", vRuleslist);
 
