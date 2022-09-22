@@ -448,7 +448,7 @@ sap.ui.define(
                     oFilters.push(
                         new Filter({
                             filters: [
-                                new Filter("UNIQUE_RDESC", FilterOperator.Contains, sQuery),
+                                new Filter("UNIQUE_DESC", FilterOperator.Contains, sQuery),
                                 new Filter("UNIQUE_ID", FilterOperator.Contains, sQuery),
                             ],
                             and: false,
