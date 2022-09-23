@@ -405,6 +405,8 @@ sap.ui.define([
                 that.oGModel.setProperty("/productID", Prod);
 
                 var oFilters = [];
+                this.byId("headSearch").setValue("");
+                that.oList.getBinding("items").filter(oFilters);
                 // getting the filters
 
                 if (loc !== "") {

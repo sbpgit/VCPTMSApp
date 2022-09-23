@@ -324,6 +324,8 @@ sap.ui.define(
                 oGModel.setProperty("/uniqId", "");
 
                 var oFilters = [];
+                this.byId("idMatSearch").setValue("");
+                that.byId("idMatSearch").getBinding("items").filter(oFilters);
                 // getting the filters
                 oFilters.push(
                     new Filter({
