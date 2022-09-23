@@ -131,6 +131,8 @@ sap.ui.define(
             onCloseSO:function(){
                 this._CreateSO.close();  
 
+                sap.ui.getCore().byId("idQuantity").setValueState("None");
+
                 sap.ui.getCore().byId("idOrdQtySO").setValue("");
                 sap.ui.getCore().byId("DP1SO").setValue("");
 
@@ -138,10 +140,25 @@ sap.ui.define(
 
             onNumChange:function(){
                 var squan = sap.ui.getCore().byId("idOrdQtySO").getValue();
+                    // squan =parseInt(squan);
+                    sap.ui.getCore().byId("idOrdQtySO").setValueState("None");
 
-                if(squan < 0){
-                    sap.ui.getCore().byId("idOrdQtySO").setValue("0");
+                    if(squan < 1){
+        
+                        sap.ui.getCore().byId("idOrdQtySO").setValue("");
+                        sap.ui.getCore().byId("idOrdQtySO").setValueState("Error");
+                        sap.ui.getCore().byId("idOrdQtySO").setValueStateText("Can not be add 0 quantity");
+                    }
+                //  else {
+                //     sap.ui.getCore().byId("idOrdQtySO").setValue(squan);
+                // }
+
+                if(squan.includes(".")){
+                    sap.ui.getCore().byId("idOrdQtySO").setValueState("Error");
+                    sap.ui.getCore().byId("idOrdQtySO").setValueStateText("Decimals are not allowed");
                 }
+
+
             },
             /**
              * Creating new Seed Order for respective Location, Product
@@ -166,8 +183,9 @@ sap.ui.define(
                     MAT_AVAILDATE: sDate                 
                 };
                 oEntry.SEEDDATA.push(vRuleslist);
-
-                if (squan !== "" && sDate !== "" && sLoc !== "" && sProd !== "" && sUniq !== "") {
+                
+                if (squan  === NaN && sDate !== "" && sUniq  === NaN) {
+                    if(sap.ui.getCore().byId("idOrdQtySO").getValueState() !== "Error"){
                     that.getModel("BModel").callFunction("/maintainSeedOrder", {
                         method: "GET",
                         urlParameters: {
@@ -185,6 +203,9 @@ sap.ui.define(
                             sap.m.MessageToast.show("Error creating a Seed Order");
                         },
                     });
+                } else {
+                    sap.m.MessageToast.show("Decimals are not allowed");
+                }
                 } else {
                     sap.m.MessageToast.show("Please fill all fields");
                 }
