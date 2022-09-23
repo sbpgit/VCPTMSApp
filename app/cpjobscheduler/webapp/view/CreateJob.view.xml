@@ -358,6 +358,7 @@
                         <RadioButton id="idIBPSalesHisConfig" text="Sales History Config" />
                         <RadioButton id="idIBPActCompDemd" text="Actual Components Demand" />
                         <RadioButton id="idIBPCompReqQty" text="Assembly Requirement Quantity" />
+                        <RadioButton id="idIBPExCIR" text="Export CIR" />
                     </RadioButtonGroup>
 
                 <!-- </content> -->
