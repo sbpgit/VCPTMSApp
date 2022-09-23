@@ -1939,8 +1939,8 @@ module.exports = cds.service.impl(async function () {
             `
             SELECT *
                FROM "V_CIRTOIBP" 
-               WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
-                          AND PRODUCT_ID = '`+ req.data.PRODUCT_ID + `'`);
+               WHERE LOCATION_ID = '`+ request.data.LOCATION_ID + `'
+                          AND PRODUCT_ID = '`+ request.data.PRODUCT_ID + `'`);
 
         //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
         for (i = 0; i < licir.length; i++) {
@@ -1968,7 +1968,7 @@ module.exports = cds.service.impl(async function () {
         }
 
         try {
-            await service.tx(req).post("/SBPVCPTrans", oEntry);
+            await service.tx(request).post("/SBPVCPTrans", oEntry);
             flag = 'X';
         }
         catch (err) {

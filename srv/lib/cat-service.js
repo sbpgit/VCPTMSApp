@@ -128,7 +128,7 @@ module.exports = (srv) => {
 
         const liCompQty = await cds.run(
             `
-            SELECT * FROM "V_COMP_REQ"
+            SELECT * FROM "CP_ASSEMBLY_REQ"
             WHERE "LOCATION_ID" = '` +
             req.data.LOCATION_ID +
             `'
@@ -138,9 +138,9 @@ module.exports = (srv) => {
             req.data.VERSION +
             `' AND "SCENARIO" = '` +
             req.data.SCENARIO +
-            `' AND ( "CAL_DATE" <= '` +
+            `' AND ( "WEEK_DATE" <= '` +
             vDateTo +
-            `' AND "CAL_DATE" >= '` +
+            `' AND "WEEK_DATE" >= '` +
             vDateFrom +
             `') AND "MODEL_VERSION" = '` +
             req.data.MODEL_VERSION +
@@ -150,10 +150,8 @@ module.exports = (srv) => {
                       "PRODUCT_ID" ASC,
                       "VERSION" ASC,
                       "SCENARIO" ASC,
-                      "ITEM_NUM" ASC,
                       "COMPONENT" ASC,
-                      "CAL_DATE" ASC,
-                      "STRUC_NODE" ASC`
+                      "WEEK_DATE" ASC`
         );
         const liComp = await cds.run(
             `
@@ -161,10 +159,8 @@ module.exports = (srv) => {
                           "PRODUCT_ID",
                           "VERSION",
                           "SCENARIO",
-                          "ITEM_NUM",
-                          "COMPONENT",
-                          "STRUC_NODE"
-          FROM "V_COMP_REQ"
+                          "COMPONENT"
+          FROM "CP_ASSEMBLY_REQ"
           WHERE "LOCATION_ID" = '` +
             req.data.LOCATION_ID +
             `' AND "PRODUCT_ID" = '` +
@@ -173,10 +169,10 @@ module.exports = (srv) => {
             req.data.VERSION +
             `' AND "SCENARIO" = '` +
             req.data.SCENARIO +
-            `' AND ( "CAL_DATE" <= '` +
+            `' AND ( "WEEK_DATE" <= '` +
             vDateTo +
             `'
-                AND "CAL_DATE" >= '` +
+                AND "WEEK_DATE" >= '` +
             vDateFrom +
             `') AND "MODEL_VERSION" = '` +
             req.data.MODEL_VERSION +
@@ -186,7 +182,6 @@ module.exports = (srv) => {
                     "PRODUCT_ID" ASC,
                     "VERSION" ASC,
                     "SCENARIO" ASC,
-                    "ITEM_NUM" ASC,
                     "COMPONENT" ASC`
         );
         var vDateSeries = vDateFrom;
@@ -210,7 +205,7 @@ module.exports = (srv) => {
             vWeekIndex = 0; //j
             lsCompWeekly.LOCATION_ID = liComp[j].LOCATION_ID;
             lsCompWeekly.PRODUCT_ID = liComp[j].PRODUCT_ID;
-            lsCompWeekly.ITEM_NUM = liComp[j].ITEM_NUM;
+            lsCompWeekly.ITEM_NUM = '';//liComp[j].ITEM_NUM;
             //   lsCompWeekly.ASSEMBLY = liComp[j].COMPONENT;
             lsCompWeekly.COMPONENT = liComp[j].COMPONENT;
             lsCompWeekly.VERSION = liComp[j].VERSION;
@@ -223,11 +218,11 @@ module.exports = (srv) => {
                     lsCompWeekly[columnname + vWeekIndex] = 0;
                     if (
                         liCompQty[vCompIndex].COMPONENT === lsCompWeekly.COMPONENT &&
-                        liCompQty[vCompIndex].CAL_DATE === liDates[i].CAL_DATE
+                        liCompQty[vCompIndex].WEEK_DATE === liDates[i].CAL_DATE
                     ) {
-                        lsCompWeekly.STRUC_NODE = liCompQty[vCompIndex].STRUC_NODE;
+                        lsCompWeekly.STRUC_NODE = '';//liCompQty[vCompIndex].STRUC_NODE;
                         lsCompWeekly[columnname + vWeekIndex] =
-                            liCompQty[vCompIndex].COMP_QTY;
+                            liCompQty[vCompIndex].COMPCIR_QTY;
                         break;
                     }
                 }
@@ -260,7 +255,7 @@ module.exports = (srv) => {
 
         const liCompQty = await cds.run(
             `
-            SELECT * FROM "V_ASMCOMPQTY_CONSD"
+            SELECT * FROM "V_ASMCOMPQTY_CONSD"  
             WHERE "LOCATION_ID" = '` +
             req.data.LOCATION_ID +
             `'
@@ -286,6 +281,7 @@ module.exports = (srv) => {
                       "CAL_DATE" ASC`
         );
         const liComp = await cds.run(
+            //"
             `
           SELECT DISTINCT "LOCATION_ID",
                           "PRODUCT_ID",
@@ -361,6 +357,8 @@ module.exports = (srv) => {
                 }
             }
             liCompWeekly.push(GenFunctions.parse(lsCompWeekly));
+           // lsCompWeekly = {};
+            // }
             lsCompWeekly = {};
         }
         liCompWeekly.sort(GenFunctions.dynamicSortMultiple("STRUC_NODE", "COMPONENT", "ITEM_NUM"));
