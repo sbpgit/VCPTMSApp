@@ -353,10 +353,10 @@ sap.ui.define(
                             sap.ui.core.BusyIndicator.hide();
                             if (oData.results.length) {
 
-                                oData.results.forEach(function (row) {
-                                    // Calling function to handle the date format
-                                    row.UNIQUE_ID = row.UNIQUE_ID.toString();
-                                  }, that);
+                                // oData.results.forEach(function (row) {
+                                //     // Calling function to handle the date format
+                                //     row.UNIQUE_ID = row.UNIQUE_ID.toString();
+                                //   }, that);
                     
 
                                 that.oModel.setData({
@@ -449,7 +449,7 @@ sap.ui.define(
                         new Filter({
                             filters: [
                                 new Filter("UNIQUE_DESC", FilterOperator.Contains, sQuery),
-                                new Filter("UNIQUE_ID", FilterOperator.Contains, sQuery),
+                                new Filter("UNIQUE_ID", FilterOperator.EQ, sQuery),
                             ],
                             and: false,
                         })
