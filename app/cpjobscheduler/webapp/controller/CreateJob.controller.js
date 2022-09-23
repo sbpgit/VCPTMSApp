@@ -3263,7 +3263,7 @@ sap.ui.define(
                     }
                     // 07-09-2022-1 
                     //  22-09-2022
-                    else if (bButton === "Generate Assembly Requirements") {
+                    else if (bButton === "Generate assembly requirements") {
                         actionText = "/ibpimport-srv/exportIBPAsmreq";   
                      }
                      //  22-09-2022
@@ -3423,7 +3423,7 @@ sap.ui.define(
                         // Getting data for Timeseries
                         // 07-09-2022-1
                     } else if (bButton.includes("Time") || bButton.includes("sales orders") || bButton === "Generate Fully configured Demand"
-                                || bButton === "Generate Assembly Requirements") {
+                                || bButton === "Generate assembly requirements") {
                         // 07-09-2022-1
                         var finalList = {
                             name: JobName,
