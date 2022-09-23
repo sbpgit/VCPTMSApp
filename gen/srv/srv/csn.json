@@ -6530,6 +6530,11 @@
           "type": "cds.String",
           "length": 30
         },
+        "CHAR_DESC": {
+          "key": true,
+          "type": "cds.String",
+          "length": 150
+        },
         "CHARVAL_NUM": {
           "@title": "CHARVAL_NUM",
           "key": true,
@@ -6541,6 +6546,11 @@
           "key": true,
           "type": "cds.String",
           "length": 70
+        },
+        "CHARVAL_DESC": {
+          "key": true,
+          "type": "cds.String",
+          "length": 150
         },
         "SEQUENCE": {
           "@title": "SEQUENCE",
@@ -21236,6 +21246,11 @@
           "type": "cds.String",
           "length": 30
         },
+        "CHAR_DESC": {
+          "key": true,
+          "type": "cds.String",
+          "length": 150
+        },
         "CHARVAL_NUM": {
           "@title": "CHARVAL_NUM",
           "key": true,
@@ -21247,6 +21262,11 @@
           "key": true,
           "type": "cds.String",
           "length": 70
+        },
+        "CHARVAL_DESC": {
+          "key": true,
+          "type": "cds.String",
+          "length": 150
         },
         "SEQUENCE": {
           "@title": "SEQUENCE",
@@ -22048,6 +22068,22 @@
         }
       }
     },
+    "CatalogService.genAssemblyreq": {
+      "kind": "function",
+      "params": {
+        "LOCATION_ID": {
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "type": "cds.String",
+          "length": 40
+        }
+      },
+      "returns": {
+        "type": "cds.String"
+      }
+    },
     "IBPImportSrv": {
       "@source": "srv/ibpimport-service.cds",
       "kind": "service",
@@ -22179,6 +22215,22 @@
         "LOCATION_ID": {
           "type": "cds.String",
           "length": 4
+        }
+      },
+      "returns": {
+        "type": "cds.String"
+      }
+    },
+    "IBPImportSrv.createIBPCIR": {
+      "kind": "function",
+      "params": {
+        "LOCATION_ID": {
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "type": "cds.String",
+          "length": 40
         }
       },
       "returns": {

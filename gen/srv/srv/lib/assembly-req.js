@@ -2,6 +2,7 @@ const cds = require("@sap/cds");
 const hana = require("@sap/hana-client");
 const { createLogger, format, transports } = require("winston");
 const { combine, timestamp, label, prettyPrint } = format;
+const GenF = require("./gen-functions");
 
 class AssemblyReq {
     /**
@@ -105,7 +106,7 @@ class AssemblyReq {
         for (let cntOD = 0; cntOD < liODChar.length; cntOD++) {
             if(cntOD === 0 || 
                 liODChar[cntOD].COMPONENT !== liODChar[GenF.subOne(cntOD)].COMPONENT){
-                    lsComponent.COMPONENT = GemF.parse(GenF.parse(liODChar[cntOD].COMPONENT));
+                    lsComponent.COMPONENT = GenF.parse(GenF.parse(liODChar[cntOD].COMPONENT));
                     lsComponent.OD = [];
                 }
 
@@ -113,25 +114,28 @@ class AssemblyReq {
                     liODChar[cntOD].COMPONENT !== liODChar[GenF.subOne(cntOD)].COMPONENT ||
                     liODChar[cntOD].OBJ_DEP !== liODChar[GenF.subOne(cntOD)].OBJ_DEP){
                         let lsOD = {};
-                        lsOD.OBJ_DEP = GemF.parse(liODChar[cntOD].OBJ_DEP);
+                        lsOD.OBJ_DEP = GenF.parse(liODChar[cntOD].OBJ_DEP);
                         lsOD.COUNTER = [];
                     }   
+                    
                     
                     if(cntOD === 0 || 
                         liODChar[cntOD].COMPONENT !== liODChar[GenF.subOne(cntOD)].COMPONENT ||
                         liODChar[cntOD].OBJ_DEP !== liODChar[GenF.subOne(cntOD)].OBJ_DEP ||
                         liODChar[cntOD].OBJ_COUNTER !== liODChar[GenF.subOne(cntOD)].OBJ_COUNTER ){
                             let lsODCount = {};
-                            lsODCount.OBJ_COUNTER = GemF.parse(liODChar[cntOD].OBJ_COUNTER);
+                            lsODCount.OBJ_COUNTER = GenF.parse(liODChar[cntOD].OBJ_COUNTER);
                             lsODCount.CHAR = [];
                         }                       
                             let lsChar = {};
-                            lsChar.CHAR_NUM     = GemF.parse(liODChar[cntOD].CHAR_NUM);
-                            lsChar.CHARVAL_NUM  = GemF.parse(liODChar[cntOD].CHARVAL_NUM);
-                            lsChar.OD_CONDITION = GemF.parse(liODChar[cntOD].OD_CONDITION);
-                            lsChar.CHAR_COUNTER = GemF.parse(liODChar[cntOD].CHAR_COUNTER);
+                            let lsODCount = {};
+                            lsODCount.CHAR = [];
+                            lsChar.CHAR_NUM     = GenF.parse(liODChar[cntOD].CHAR_NUM);
+                            lsChar.CHARVAL_NUM  = GenF.parse(liODChar[cntOD].CHARVAL_NUM);
+                            lsChar.OD_CONDITION = GenF.parse(liODChar[cntOD].OD_CONDITION);
+                            lsChar.CHAR_COUNTER = GenF.parse(liODChar[cntOD].CHAR_COUNTER);
                             lsODCount.CHAR.push(lsChar);
-
+                    let lsOD = {};
                     if(cntOD === GenF.addOne(cntOD, liODChar.length) || 
                         liODChar[cntOD].COMPONENT !== liODChar[GenF.addOne(cntOD, liODChar.length)].COMPONENT ||
                         liODChar[cntOD].OBJ_DEP !== liODChar[GenF.addOne(cntOD)].OBJ_DEP ||
@@ -251,3 +255,4 @@ class AssemblyReq {
     }
 
 }
+module.exports = AssemblyReq;

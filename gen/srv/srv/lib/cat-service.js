@@ -11,6 +11,7 @@ const GenTimeseriesM2 = require("./gen-timeseries-m2");
 const SOFunctions = require("./so-function");
 const Catservicefn = require("./catservice-function");
 const VarConfig = require("./variantconfig");
+const AssemblyReq =  require("./assembly-req");
 const CIRService = require("./cirdata-functions");          // 
 const containerSchema = cds.env.requires.db.credentials.schema;
 // Create connection parameters to continer
@@ -809,6 +810,11 @@ module.exports = (srv) => {
 
         const objVarConfig = new VarConfig();
         await objVarConfig.genVarConfig(req.data);
+    });
+
+    srv.on("genAssemblyreq", async (req) => {
+        const objAsmreq = new AssemblyReq();
+        await objAsmreq.genAsmreq(req.data);
     });
     // Maintain Parital product introsduction
     srv.on("maintainPartialProd", async (req) => {
