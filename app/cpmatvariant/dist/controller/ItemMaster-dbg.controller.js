@@ -352,6 +352,13 @@ sap.ui.define(
                         success: function (oData) {
                             sap.ui.core.BusyIndicator.hide();
                             if (oData.results.length) {
+
+                                // oData.results.forEach(function (row) {
+                                //     // Calling function to handle the date format
+                                //     row.UNIQUE_ID = row.UNIQUE_ID.toString();
+                                //   }, that);
+                    
+
                                 that.oModel.setData({
                                     results: oData.results,
                                 });
@@ -441,7 +448,7 @@ sap.ui.define(
                     oFilters.push(
                         new Filter({
                             filters: [
-                                new Filter("UNIQUE_RDESC", FilterOperator.Contains, sQuery),
+                                new Filter("UNIQUE_DESC", FilterOperator.Contains, sQuery),
                                 new Filter("UNIQUE_ID", FilterOperator.EQ, sQuery),
                             ],
                             and: false,
@@ -482,7 +489,7 @@ sap.ui.define(
                     urlParameters: {
                         LOCATION_ID: oItem.LOCATION_ID,
                         PRODUCT_ID: oItem.PRODUCT_ID,
-                        UNIQUE_ID: oItem.UNIQUE_ID,
+                        UNIQUE_ID: parseInt(oItem.UNIQUE_ID),
                         UID_TYPE: oItem.UID_TYPE,
                         // UID_RATE: oUniqRate,
                         UNIQUE_DESC: oDesc,
@@ -515,7 +522,7 @@ sap.ui.define(
                     urlParameters: {
                         LOCATION_ID: oItem.LOCATION_ID,
                         PRODUCT_ID: oItem.PRODUCT_ID,
-                        UNIQUE_ID: oItem.UNIQUE_ID,
+                        UNIQUE_ID: parseInt(oItem.UNIQUE_ID),
                         UID_TYPE: oItem.UID_TYPE,
                         UNIQUE_DESC: oItem.UNIQUE_DESC,
                         ACTIVE: oActive,
