@@ -4645,6 +4645,7 @@
         }
       }
     },
+<<<<<<< HEAD
     "cp.ASSEMBLY_REQ": {
       "kind": "entity",
       "elements": {
@@ -4697,6 +4698,8 @@
         }
       }
     },
+=======
+>>>>>>> ff127454315a98d83c2cf808583e2286689df54f
     "cp.FACTORY_SALESLOC": {
       "kind": "entity",
       "elements": {
@@ -4748,6 +4751,7 @@
           "type": "cds.String",
           "length": 40
         },
+<<<<<<< HEAD
         "COMP_QTY": {
           "@title": "COMP_QTY",
           "key": true,
@@ -4755,6 +4759,8 @@
           "precision": 13,
           "scale": 3
         },
+=======
+>>>>>>> ff127454315a98d83c2cf808583e2286689df54f
         "OBJ_DEP": {
           "@title": "Object Dependency",
           "key": true,
@@ -18432,6 +18438,7 @@
           "type": "cds.String",
           "length": 40
         },
+<<<<<<< HEAD
         "COMP_QTY": {
           "@title": "COMP_QTY",
           "key": true,
@@ -18439,6 +18446,8 @@
           "precision": 13,
           "scale": 3
         },
+=======
+>>>>>>> ff127454315a98d83c2cf808583e2286689df54f
         "OBJ_DEP": {
           "@title": "Object Dependency",
           "key": true,
@@ -22443,6 +22452,7 @@
         }
       }
     },
+<<<<<<< HEAD
     "IBPImportSrv.exportIBPCIR": {
       "kind": "action",
       "params": {
@@ -22456,6 +22466,8 @@
         }
       }
     },
+=======
+>>>>>>> ff127454315a98d83c2cf808583e2286689df54f
     "IbpImportRest": {
       "@source": "srv/ibpimport-service.cds",
       "kind": "service",

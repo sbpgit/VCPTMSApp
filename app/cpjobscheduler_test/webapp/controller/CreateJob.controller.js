@@ -3248,7 +3248,7 @@ sap.ui.define(
                         }
                          // 07-09-2022-1 
                         //  22-09-2022
-                         else if (bButton === "Generate Assembly Requirements") {
+                         else if (bButton === "Generate assembly requirements") {
                             actionText = "%2Fibpimport-srv%2FexportIBPAsmreq";   
                          }
                          //  22-09-2022
@@ -3385,6 +3385,7 @@ sap.ui.define(
 							bButton.includes("Sales History Config") ||
 							bButton.includes("Actual Components") ||
 							bButton.includes("Assembly Requirement") ||
+                            bButton === "Export CIR"  ||
 							oSelJobType === "S"
 						) {
 							var finalList = {
@@ -3408,7 +3409,7 @@ sap.ui.define(
 							// Getting data for Timeseries
                             // 07-09-2022-1
 						} else if (bButton.includes("Time") || bButton.includes("sales orders") || bButton === "Generate Fully configured Demand"
-                                    || bButton === "Generate Assembly Requirements") {
+                                    || bButton === "Generate assembly requirements") {
                              // 07-09-2022-1
 							var finalList = {
 								name: JobName,

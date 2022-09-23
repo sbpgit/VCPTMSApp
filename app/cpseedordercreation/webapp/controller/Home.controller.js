@@ -405,6 +405,8 @@ sap.ui.define([
                 that.oGModel.setProperty("/productID", Prod);
 
                 var oFilters = [];
+                this.byId("headSearch").setValue("");
+                that.oList.getBinding("items").filter(oFilters);
                 // getting the filters
 
                 if (loc !== "") {
@@ -584,7 +586,7 @@ sap.ui.define([
                     MAT_AVAILDATE: sDate,
                 };
                 oEntry.SEEDDATA.push(vRuleslist);
-                if (squan !== "" && sDate !== "" && sUniq !== "") {
+                if (squan === NaN && sDate !== "" && sUniq === NaN) {
                     if(sap.ui.getCore().byId("idQuantity").getValueState() !== "Error"){
                     that.getModel("BModel").callFunction("/maintainSeedOrder", {
                         method: "GET",
