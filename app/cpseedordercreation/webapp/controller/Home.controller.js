@@ -433,6 +433,7 @@ sap.ui.define([
                     if(that.oList.getItems().length){
                         that.oList.getBinding("items").filter(oFilters);
                     }
+                    
                     this.getModel("BModel").read("/getSeedOrder", {
                         filters: [oFilters],
                         // filters: [ new Filter( "LOCATION_ID",  FilterOperator.EQ,  loc ),
