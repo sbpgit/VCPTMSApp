@@ -128,7 +128,7 @@ module.exports = (srv) => {
 
         const liCompQty = await cds.run(
             `
-            SELECT * FROM "CP_ASSEMBLY_REQ"
+            SELECT * FROM "V_ASMREQ_PRODCONSD"
             WHERE "LOCATION_ID" = '` +
             req.data.LOCATION_ID +
             `'
@@ -159,8 +159,9 @@ module.exports = (srv) => {
                           "PRODUCT_ID",
                           "VERSION",
                           "SCENARIO",
+                          "ITEM_NUM",
                           "COMPONENT"
-          FROM "CP_ASSEMBLY_REQ"
+          FROM "V_ASMREQ_PRODCONSD"
           WHERE "LOCATION_ID" = '` +
             req.data.LOCATION_ID +
             `' AND "PRODUCT_ID" = '` +
@@ -182,6 +183,7 @@ module.exports = (srv) => {
                     "PRODUCT_ID" ASC,
                     "VERSION" ASC,
                     "SCENARIO" ASC,
+                    "ITEM_NUM" ASC,
                     "COMPONENT" ASC`
         );
         var vDateSeries = vDateFrom;
@@ -211,8 +213,8 @@ module.exports = (srv) => {
             // vCompIndex is to get Componnent quantity for all dates
             vWeekIndex = 0; //j
             lsCompWeekly.LOCATION_ID = liComp[j].LOCATION_ID;
-            lsCompWeekly.PRODUCT_ID = liComp[j].PRODUCT_ID;
-            lsCompWeekly.ITEM_NUM = '';//liComp[j].ITEM_NUM;
+            lsCompWeekly.PRODUCT_ID = liComp[j].REF_PRODID;
+            lsCompWeekly.ITEM_NUM = liComp[j].ITEM_NUM;
             //   lsCompWeekly.ASSEMBLY = liComp[j].COMPONENT;
             lsCompWeekly.COMPONENT = liComp[j].COMPONENT;
             lsCompWeekly.VERSION = liComp[j].VERSION;
@@ -818,6 +820,10 @@ module.exports = (srv) => {
     });
 
     srv.on("genAssemblyreq", async (req) => {
+        const objAsmreq = new AssemblyReq();
+        await objAsmreq.genAsmreq(req.data);
+    });
+    srv.on("generateAssemblyReq", async (req) => {
         const objAsmreq = new AssemblyReq();
         await objAsmreq.genAsmreq(req.data);
     });

@@ -1017,7 +1017,7 @@ sap.ui.define(
                     // Product list
                 } else if (sId.includes("prod")) {
                     var aSelectedProd;
-                    that.oProdList.getBinding("items").filter([]);
+                    // that.oProdList.getBinding("items").filter([]);
                     aSelectedProd = oEvent.getParameter("selectedItems");
                     that.oGModel.setProperty("/Flag", "X");
                     if (aSelectedProd && aSelectedProd.length > 0) {
@@ -3264,7 +3264,7 @@ sap.ui.define(
                     // 07-09-2022-1 
                     //  22-09-2022
                     else if (bButton === "Generate assembly requirements") {
-                        actionText = "/ibpimport-srv/exportIBPAsmreq";   
+                        actionText = "/catalog/generateAssemblyReq";   
                      }
                      //  22-09-2022
                 }

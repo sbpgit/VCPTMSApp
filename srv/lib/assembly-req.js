@@ -77,6 +77,7 @@ class AssemblyReq {
                 lsCIR.SCENARIO = GenF.parse(liCIRData[cntCIR].SCENARIO);
                 lsCIR.METHOD = GenF.parse(liCIRData[cntCIR].METHOD);
                 lsCIR.UNIQUE_ID = GenF.parse(liCIRData[cntCIR].UNIQUE_ID);
+                lsCIR.REF_PRODID = GenF.parse(liCIRData[cntCIR].REF_PRODID);
                 lsCIR.CIR_QTY = GenF.parse(liCIRData[cntCIR].CIR_QTY);
                 lsCIR.CHAR = GenF.parse(liChar);
                 liCIR.push(lsCIR);
@@ -87,7 +88,8 @@ class AssemblyReq {
         }
 
         const liODChar = await cds.run(
-            `SELECT DISTINCT COMPONENT,
+            `SELECT DISTINCT ITEM_NUM, 
+                            COMPONENT,
                             COMP_QTY,   
                             OBJ_DEP,
                             OBJ_COUNTER,
@@ -111,6 +113,7 @@ class AssemblyReq {
             if (cntOD === 0 ||
                 liODChar[cntOD].COMPONENT !== liODChar[GenF.subOne(cntOD)].COMPONENT) {
                 lsComponent.COMPONENT = GenF.parse(GenF.parse(liODChar[cntOD].COMPONENT));
+                lsComponent.ITEM_NUM = GenF.parse(GenF.parse(liODChar[cntOD].ITEM_NUM));
                 lsComponent.COMP_QTY = GenF.parse(GenF.parse(liODChar[cntOD].COMP_QTY));
                 lsComponent.OD = [];
             }
@@ -229,30 +232,35 @@ class AssemblyReq {
 
                 if (lFail === '') {
                     vCIRQTY = parseInt(liCIR[cntCIR].CIR_QTY) + vCIRQTY;
-                    if (cntCIR === GenF.addOne(cntCIR, liCIR.length) ||
-                        liCIR[cntCIR].LOCATION_ID !== liCIR[GenF.addOne(cntCIR, liCIR.length)].LOCATION_ID ||
-                        liCIR[cntCIR].PRODUCT_ID !== liCIR[GenF.addOne(cntCIR, liCIR.length)].PRODUCT_ID ||
-                        liCIR[cntCIR].WEEK_DATE !== liCIR[GenF.addOne(cntCIR, liCIR.length)].WEEK_DATE ||
-                        liCIR[cntCIR].MODEL_VERSION !== liCIR[GenF.addOne(cntCIR, liCIR.length)].MODEL_VERSION ||
-                        liCIR[cntCIR].VERSION !== liCIR[GenF.addOne(cntCIR, liCIR.length)].VERSION ||
-                        liCIR[cntCIR].SCENARIO !== liCIR[GenF.addOne(cntCIR, liCIR.length)].SCENARIO) {
-                            // vCIRQTY = GenF.parse(liCIR[cntCIR].CIR_QTY) + vCIRQTY;
-                            lsAsmReq.LOCATION_ID = GenF.parse(liCIR[cntCIR].LOCATION_ID);
-                            lsAsmReq.PRODUCT_ID = GenF.parse(liCIR[cntCIR].PRODUCT_ID);
-                            lsAsmReq.WEEK_DATE = GenF.parse(liCIR[cntCIR].WEEK_DATE);
-                            lsAsmReq.MODEL_VERSION = GenF.parse(liCIR[cntCIR].MODEL_VERSION);
-                            lsAsmReq.VERSION = GenF.parse(liCIR[cntCIR].VERSION);
-                            lsAsmReq.SCENARIO = GenF.parse(liCIR[cntCIR].SCENARIO);     
-                            lsAsmReq.COMPONENT = GenF.parse(liComponent[cntC].COMPONENT);  
-                            
-                            await cds.delete("CP_ASSEMBLY_REQ", lsAsmReq);                       
-                            lsAsmReq.COMPCIR_QTY = parseInt(vCIRQTY) * parseInt(liComponent[cntC].COMP_QTY);
-                            liAsmReq.push(GenF.parse(lsAsmReq));
-                            vCIRQTY = 0;
-                            lsAsmReq = {};
-                    }
-
                 }
+                if (cntCIR === GenF.addOne(cntCIR, liCIR.length) ||
+                    liCIR[cntCIR].LOCATION_ID !== liCIR[GenF.addOne(cntCIR, liCIR.length)].LOCATION_ID ||
+                    liCIR[cntCIR].PRODUCT_ID !== liCIR[GenF.addOne(cntCIR, liCIR.length)].PRODUCT_ID ||
+                    liCIR[cntCIR].WEEK_DATE !== liCIR[GenF.addOne(cntCIR, liCIR.length)].WEEK_DATE ||
+                    liCIR[cntCIR].MODEL_VERSION !== liCIR[GenF.addOne(cntCIR, liCIR.length)].MODEL_VERSION ||
+                    liCIR[cntCIR].VERSION !== liCIR[GenF.addOne(cntCIR, liCIR.length)].VERSION ||
+                    liCIR[cntCIR].SCENARIO !== liCIR[GenF.addOne(cntCIR, liCIR.length)].SCENARIO) {
+                    // vCIRQTY = GenF.parse(liCIR[cntCIR].CIR_QTY) + vCIRQTY;
+                    lsAsmReq.LOCATION_ID = GenF.parse(liCIR[cntCIR].LOCATION_ID);
+                    lsAsmReq.PRODUCT_ID = GenF.parse(liCIR[cntCIR].PRODUCT_ID);
+                    lsAsmReq.WEEK_DATE = GenF.parse(liCIR[cntCIR].WEEK_DATE);
+                    lsAsmReq.MODEL_VERSION = GenF.parse(liCIR[cntCIR].MODEL_VERSION);
+                    lsAsmReq.VERSION = GenF.parse(liCIR[cntCIR].VERSION);
+                    lsAsmReq.SCENARIO = GenF.parse(liCIR[cntCIR].SCENARIO);
+                    lsAsmReq.ITEM_NUM = GenF.parse(liComponent[cntC].ITEM_NUM);
+                    lsAsmReq.COMPONENT = GenF.parse(liComponent[cntC].COMPONENT);
+
+                    await cds.delete("CP_ASSEMBLY_REQ", lsAsmReq);
+                    lsAsmReq.REF_PRODID = GenF.parse(liCIR[cntCIR].REF_PRODID);
+                    lsAsmReq.COMPCIR_QTY = parseInt(vCIRQTY) * parseInt(liComponent[cntC].COMP_QTY);
+                    if (vCIRQTY > 0) {
+                        liAsmReq.push(GenF.parse(lsAsmReq));
+                    }
+                    vCIRQTY = 0;
+                    lsAsmReq = {};
+                }
+
+                // }
 
             }
             if (liAsmReq.length > 0) {
