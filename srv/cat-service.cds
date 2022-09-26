@@ -257,6 +257,9 @@ service CatalogService @(impl : './lib/cat-service.js'){
     function maintainRestrHdr(LOCATION_ID: String(4), LINE_ID: String(40), RESTRICTION : String(30), RTR_DESC    : String(30), VALID_FROM  : Date , VALID_TO : Date, Flag: String(1)) returns String;
     
     function maintainRestrDet (FLAG : String(1), RTRCHAR : String ) returns String;
+    
+    function maintainRestrDetail (FLAG : String(1), RTRCHAR : String ) returns String;
+
     // CIR char rate
     entity getCIRCharRate       as projection on V_CIR_CHAR_RATE;
     entity getCIRVerScen        as projection on V_CIRVERSCEN;

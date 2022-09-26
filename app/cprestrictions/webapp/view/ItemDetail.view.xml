@@ -57,7 +57,8 @@
                                         <core:ListItem key="NE" text="NE"/>
                                     </Select>
                                     <Input id="idRowId" value="{ROW_ID}" editable="false" liveChange="onRowIdChange" /> -->
-                                    <Text text="{OFLAG}" />
+                                    <!-- <Text text="{OFLAG}" /> -->
+                                    <Text text="{bFLAG}" />
                                     <Button icon = "sap-icon://decline" press="onDeleteItem" iconDensityAware="false" type="Transparent" /> 
                                 </cells>
                             </ColumnListItem>

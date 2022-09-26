@@ -11,7 +11,7 @@ const GenTimeseriesM2 = require("./gen-timeseries-m2");
 const SOFunctions = require("./so-function");
 const Catservicefn = require("./catservice-function");
 const VarConfig = require("./variantconfig");
-const AssemblyReq =  require("./assembly-req");
+const AssemblyReq = require("./assembly-req");
 const CIRService = require("./cirdata-functions");          // 
 const containerSchema = cds.env.requires.db.credentials.schema;
 // Create connection parameters to continer
@@ -1971,6 +1971,117 @@ module.exports = (srv) => {
         );
 
     });
+
+    // Retriction rule
+    // Maintain partial configurations for new product
+    srv.on("maintainRestrDetail", async (req) => {
+        let liresults = [];
+        let lsresults = {};
+        let liRtrChar = {};
+        var responseMessage;
+        liRtrChar = JSON.parse(req.data.RTRCHAR);
+        let sRTR = liRtrChar[0].RESTRICTION;
+        let aFilteredChars = [];
+        let aFilteredResults = [];
+        let aCharCounters = [];
+        let oCharCounter = {};
+        let index = 0;
+
+        const liRtrDetails = await cds.run(
+            `SELECT *
+            FROM "CP_RESTRICT_DETAILS"
+            WHERE "RESTRICTION" = '` + sRTR + `'
+            ORDER BY  "CHAR_NUM", "CHAR_COUNTER" DESC`
+        );
+
+        let iCounter = liRtrDetails[0].CHAR_COUNTER;
+
+        if (req.data.FLAG === "C" || req.data.FLAG === "E") {
+            for (var i = 0; i < liRtrChar.length; i++) {
+                oCharCounter = {};               
+                    if (aCharCounters.length > 0) {
+                        aFilteredChars = aCharCounters.filter(function (aCharCounter) {
+                            return aCharCounter.CHAR_NUM === liRtrChar[i].CHAR_NUM;
+                        });
+                    } else {
+
+                        aFilteredChars = liRtrDetails.filter(function (aRtrChars) {
+                            return aRtrChars.CHAR_NUM === liRtrChar[i].CHAR_NUM;
+                        });
+                    }
+
+                    if (aFilteredChars.length > 0) {
+                        iCounter = aFilteredChars[0].CHAR_COUNTER;
+
+                        oCharCounter.CHAR_NUM = liRtrChar[i].CHAR_NUM;
+                        oCharCounter.CHAR_COUNTER = iCounter;                        
+
+                        index = aCharCounters.findIndex((obj) => obj.CHAR_NUM === liRtrChar[i].CHAR_NUM); // find index
+                        if(index === -1) {
+                            index = aCharCounters.length;
+                        }
+                        aCharCounters[index] = oCharCounter; // replace with new object ... working :)
+
+                    } else {
+                        iCounter = iCounter + 1;
+                        oCharCounter.CHAR_NUM = liRtrChar[i].CHAR_NUM;
+                        oCharCounter.CHAR_COUNTER = iCounter;
+                        aCharCounters.push(oCharCounter);
+                    }
+
+                    lsresults.RESTRICTION = liRtrChar[i].RESTRICTION;
+                    // lsresults.RTR_COUNTER = liRtrChar[i].RTR_COUNTER;
+                    lsresults.CLASS_NUM = liRtrChar[i].CLASS_NUM;
+                    lsresults.CHAR_NUM = liRtrChar[i].CHAR_NUM;
+                    lsresults.CHAR_COUNTER = iCounter; //liRtrChar[i].CHAR_COUNTER;
+                    lsresults.CHARVAL_NUM = liRtrChar[i].CHARVAL_NUM;
+                    // if (req.data.FLAG === "E") {
+                    //     try {
+                    //         // await cds.delete("CP_RESTRICT_DETAILS", lsresults);
+                    //     } catch (e) {
+                    //         //DONOTHING
+                    //     }
+                    // }
+                    lsresults.OD_CONDITION = liRtrChar[i].OD_CONDITION;
+                    lsresults.ROW_ID = iCounter; //liRtrChar[i].ROW_ID;
+                    liresults.push(lsresults);
+                    lsresults = {};
+                
+            }
+            if (liresults.length > 0) {
+                try {
+                    await cds.run(INSERT.into("CP_RESTRICT_DETAILS").entries(liresults));
+                    responseMessage = " Creation/Updation successful";
+                } catch (e) {
+                    //DONOTHING
+                    responseMessage = " Creation failed";
+                    // createResults.push(responseMessage);
+                }
+            }
+        }
+        else if (req.data.FLAG === "D") {
+            for (var i = 0; i < liRtrChar.length; i++) {
+                lsresults.RESTRICTION = liRtrChar[i].RESTRICTION;
+                // lsresults.RTR_COUNTER = liRtrChar[i].RTR_COUNTER;
+                lsresults.CLASS_NUM = liRtrChar[i].CLASS_NUM;
+                lsresults.CHAR_NUM = liRtrChar[i].CHAR_NUM;
+                lsresults.CHAR_COUNTER = liRtrChar[i].CHAR_COUNTER;
+                lsresults.CHARVAL_NUM = liRtrChar[i].CHARVAL_NUM;
+                // if (req.data.FLAG === "E" && i === 0) {
+                try {
+                    await cds.delete("CP_RESTRICT_DETAILS", lsresults);
+                    break;
+                } catch (e) {
+                    //DONOTHING
+                }
+                // }
+            }
+        }
+        lsresults = {};
+        return responseMessage;
+    });
+
+
     // POST Service for Unique Characteristic Items and Weekly Quantities
     srv.on("postCIRQuantities", async (req) => {
         const objCIR = new CIRService();

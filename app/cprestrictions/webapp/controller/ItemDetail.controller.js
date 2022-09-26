@@ -69,6 +69,12 @@ sap.ui.define(
                             sap.ui.core.BusyIndicator.hide();
                             that.oTableData = oData.results;
                             // if (oData.results.length) {
+                            // I_26th_Sept    
+                            oData.results.map(function (entry) {   
+                                entry.bFlag = false;
+                                return entry;
+                            });
+                            // I_26th_Sept
                             that.oModel.setData({
                                 results: oData.results,
                             });
@@ -86,19 +92,19 @@ sap.ui.define(
                     // if (oGModel.getProperty("/readClass") === "X") {
 
 
-                        this.getModel("BModel").read("/getClass", {
+                    this.getModel("BModel").read("/getClass", {
 
 
-                            success: function (oData) {
-                                sap.ui.core.BusyIndicator.hide();
-                                that.classNameData = oData.results;
+                        success: function (oData) {
+                            sap.ui.core.BusyIndicator.hide();
+                            that.classNameData = oData.results;
 
-                            },
-                            error: function () {
-                                sap.ui.core.BusyIndicator.hide();
-                                MessageToast.show("Failed to get class name data");
-                            },
-                        });
+                        },
+                        error: function () {
+                            sap.ui.core.BusyIndicator.hide();
+                            MessageToast.show("Failed to get class name data");
+                        },
+                    });
                     // }
 
 
@@ -437,53 +443,58 @@ sap.ui.define(
             },
 
             onAdd: function (oEvent) {
+                var oEntry = {
+                    RTRCHAR: [],
+                };
+                var oFlag = "C";
                 var oClassName = sap.ui.getCore().byId("idClassname").getValue(),
                     oCharName = sap.ui.getCore().byId("idCharname").getValue(),
-                    oCharVel = sap.ui.getCore().byId("idCharval").getValue();
-                    // ocharCounter = sap.ui.getCore().byId("idcharcounter").getValue(),
-                    // oRowid = sap.ui.getCore().byId("idrowid").getValue();
+                    oCharVal = sap.ui.getCore().byId("idCharval").getValue();
+                // ocharCounter = sap.ui.getCore().byId("idcharcounter").getValue(),
+                // oRowid = sap.ui.getCore().byId("idrowid").getValue();
                 that.aData = [];
 
-                if (oClassName !== "" && oCharName !== "" && oCharVel !== "" ) {
+                if (oClassName !== "" && oCharName !== "" && oCharVal !== "") {
 
-                    this.oData = {
+                    that.oData = {
                         "RESTRICTION": sap.ui.getCore().byId("idrest").getValue(),
                         "CLASS_NAME": oClassName,
                         "CLASS_NUM": sap.ui.getCore().byId("idClassno").getValue(),
                         "CHAR_NAME": oCharName,
                         "CHAR_NUM": sap.ui.getCore().byId("idCharno").getValue(),
                         // "CHAR_COUNTER": sap.ui.getCore().byId("idcharcounter").getValue(),
-                        "CHAR_VALUE": oCharVel,
+                        "CHAR_VALUE": oCharVal,
                         "CHARVAL_NUM": sap.ui.getCore().byId("idCharvalno").getValue(),
                         "OD_CONDITION": sap.ui.getCore().byId("idODcond").getSelectedKey(),
-                        "OFLAG":"X",
+                        // "OFLAG": "X",
+                        "bFLAG": true,
                         // "ROW_ID": sap.ui.getCore().byId("idrowid").getValue(),
                     };
-                        var oItemTable = this.byId("idDetail").getItems();
-                        var count = 0;
+                    var oItemTable = this.byId("idDetail").getItems();
+                    var count = 0;
 
-                        for (var i = 0; i < oItemTable.length; i++) {
-                            if (oItemTable[i].getCells()[0].getText() === oClassName &&
-                                oItemTable[i].getCells()[1].getText() === oCharName &&
-                                oItemTable[i].getCells()[3].getText() === oCharVel) {
-                                    count = count + 1;
-                            }
+                    for (var i = 0; i < oItemTable.length; i++) {
+                        if (oItemTable[i].getCells()[0].getText() === oClassName &&
+                            oItemTable[i].getCells()[1].getText() === oCharName &&
+                            oItemTable[i].getCells()[3].getText() === oCharVal) {
+                            count = count + 1;
                         }
+                    }
 
-                        if(count === 0){
-                            // Add entry to the table model
+                    if (count === 0) {
+                        // Add entry to the table model
                         that.oTableData.push(that.oData);
 
                         that.ListModel.setData({
-                        results: that.oTableData
+                            results: that.oTableData
                         });
                         that.byId("idDetail").setModel(that.ListModel);
                         that.onCloseRestItem();
                         that.byId("idUpdateSave").setVisible(true);
 
-                        } else {
-                            sap.m.MessageToast.show("Restriction rule is already maintained");
-                        }
+                    } else {
+                        sap.m.MessageToast.show("Restriction rule is already maintained");
+                    }
                     // // Add entry to the table model
                     // that.oTableData.push(that.oData);
 
@@ -530,24 +541,24 @@ sap.ui.define(
             //         oEntry.RTRCHAR.push(vRuleslist);
             //     }
 
-                // that.getModel("BModel").callFunction("/maintainRestrDet", {
-                //     method: "GET",
-                //     urlParameters: {
-                //         FLAG: oFlag,
-                //         RTRCHAR: JSON.stringify(oEntry.RTRCHAR)
-                //     },
-                //     success: function (oData) {
-                //         sap.ui.core.BusyIndicator.hide();
-                //         sap.m.MessageToast.show("success");
-                //         that.onAfterRendering();
-                //         that.onCloseRestItem();
+            // that.getModel("BModel").callFunction("/maintainRestrDet", {
+            //     method: "GET",
+            //     urlParameters: {
+            //         FLAG: oFlag,
+            //         RTRCHAR: JSON.stringify(oEntry.RTRCHAR)
+            //     },
+            //     success: function (oData) {
+            //         sap.ui.core.BusyIndicator.hide();
+            //         sap.m.MessageToast.show("success");
+            //         that.onAfterRendering();
+            //         that.onCloseRestItem();
 
-                //     },
-                //     error: function (error) {
-                //         sap.ui.core.BusyIndicator.hide();
-                //         sap.m.MessageToast.show("Error");
-                //     },
-                // });
+            //     },
+            //     error: function (error) {
+            //         sap.ui.core.BusyIndicator.hide();
+            //         sap.m.MessageToast.show("Error");
+            //     },
+            // });
             // },
 
             // onCharDel: function (oEvent) {
@@ -609,30 +620,35 @@ sap.ui.define(
                 },
                     vRuleslist;
                 var sNoRow = "";
-                var oFlag = "E";
+                //var oFlag = "E";
+                var oFlag = "C";
+                var aData = {};
                 for (var i = 0; i < oTable.length; i++) {
-                    var aData = oTable[i].getBindingContext().getObject()
+                    aData = oTable[i].getBindingContext().getObject()
 
                     // if (oTable[i].getCells()[5].getValue() === "") {
                     //     sNoRow = "X"
                     // }
-                    vRuleslist = {
-                        RESTRICTION: aData.RESTRICTION,
-                        CLASS_NUM: aData.CLASS_NUM,
-                        CHAR_NUM: aData.CHAR_NUM,
-                        CHARVAL_NUM: aData.CHARVAL_NUM,
-                        OD_CONDITION: oTable[i].getCells()[2].getText(),
+                    if (aData.bFLAG === true) {
+                        vRuleslist = {
+                            RESTRICTION: aData.RESTRICTION,
+                            CLASS_NUM: aData.CLASS_NUM,
+                            CHAR_NUM: aData.CHAR_NUM,
+                            CHARVAL_NUM: aData.CHARVAL_NUM,
+                            OD_CONDITION: oTable[i].getCells()[2].getText(),
+                            FLAG: oTable[i].getCells()[4].getText(),          // I_26th_Sept
 
-                        // CHAR_COUNTER: aData.CHAR_COUNTER,
-                        // OD_CONDITION: oTable[i].getCells()[4].getSelectedKey(),
-                        // ROW_ID: oTable[i].getCells()[5].getValue(),
-                    };
-                    oEntry.RTRCHAR.push(vRuleslist);
+                            // CHAR_COUNTER: aData.CHAR_COUNTER,
+                            // OD_CONDITION: oTable[i].getCells()[4].getSelectedKey(),
+                            // ROW_ID: oTable[i].getCells()[5].getValue(),
+                        };
+                        oEntry.RTRCHAR.push(vRuleslist);
+                    }
                 }
                 // if (sNoRow !== "X") {
 
-
-                    that.getModel("BModel").callFunction("/maintainRestrDet", {
+                if (oEntry.RTRCHAR.length > 0) {
+                    that.getModel("BModel").callFunction("/maintainRestrDetail", {
                         method: "GET",
                         urlParameters: {
                             FLAG: oFlag,
@@ -651,6 +667,7 @@ sap.ui.define(
                             sap.m.MessageToast.show("Error");
                         },
                     });
+                }
                 // } else {
                 //     sap.m.MessageToast.show("Maintain all unique row id's");
                 // }
@@ -662,48 +679,48 @@ sap.ui.define(
                 var selItem = oEvent.getSource().getParent().getBindingContext().getObject();
 
 
-                if(selItem.OFLAG === "X"){
-                   var oItemtoDelete =  oEvent.getParameters("listItem").id.split("idDetail-")[1];
-                   var aData = that.ListModel.getData().results;
-                   aData.splice(oItemtoDelete, 1); //removing 1 record from i th index.
-                   that.ListModel.refresh();
+                if (selItem.OFLAG === "X") {
+                    var oItemtoDelete = oEvent.getParameters("listItem").id.split("idDetail-")[1];
+                    var aData = that.ListModel.getData().results;
+                    aData.splice(oItemtoDelete, 1); //removing 1 record from i th index.
+                    that.ListModel.refresh();
                 } else {
 
 
-                var oEntry = {
-                    RTRCHAR: [],
-                },
-                    vRuleslist;
-                var oFlag = "D";
-                
-
-                vRuleslist = {
-                    RESTRICTION: selItem.RESTRICTION,
-                    CLASS_NUM: selItem.CLASS_NUM,
-                    CHAR_NUM: selItem.CHAR_NUM,
-                    CHARVAL_NUM: selItem.CHARVAL_NUM,
-                    CHAR_COUNTER: selItem.CHAR_COUNTER,
-                };
-                oEntry.RTRCHAR.push(vRuleslist);
-
-                that.getModel("BModel").callFunction("/maintainRestrDet", {
-                    method: "GET",
-                    urlParameters: {
-                        FLAG: oFlag,
-                        RTRCHAR: JSON.stringify(oEntry.RTRCHAR)
+                    var oEntry = {
+                        RTRCHAR: [],
                     },
-                    success: function (oData) {
-                        sap.ui.core.BusyIndicator.hide();
-                        sap.m.MessageToast.show("success");
-                        that.onAfterRendering();
+                        vRuleslist;
+                    var oFlag = "D";
 
-                    },
-                    error: function (error) {
-                        sap.ui.core.BusyIndicator.hide();
-                        sap.m.MessageToast.show("Error");
-                    },
-                });
-            }
+
+                    vRuleslist = {
+                        RESTRICTION: selItem.RESTRICTION,
+                        CLASS_NUM: selItem.CLASS_NUM,
+                        CHAR_NUM: selItem.CHAR_NUM,
+                        CHARVAL_NUM: selItem.CHARVAL_NUM,
+                        CHAR_COUNTER: selItem.CHAR_COUNTER,
+                    };
+                    oEntry.RTRCHAR.push(vRuleslist);
+
+                    that.getModel("BModel").callFunction("/maintainRestrDet", {
+                        method: "GET",
+                        urlParameters: {
+                            FLAG: oFlag,
+                            RTRCHAR: JSON.stringify(oEntry.RTRCHAR)
+                        },
+                        success: function (oData) {
+                            sap.ui.core.BusyIndicator.hide();
+                            sap.m.MessageToast.show("success");
+                            that.onAfterRendering();
+
+                        },
+                        error: function (error) {
+                            sap.ui.core.BusyIndicator.hide();
+                            sap.m.MessageToast.show("Error");
+                        },
+                    });
+                }
             },
 
 
