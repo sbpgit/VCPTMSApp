@@ -173,10 +173,10 @@ sap.ui.define([
                             success: function (oData) {
                                 sap.ui.core.BusyIndicator.hide();
 
-                                oData.results.forEach(function (row) {
-                                    row.UNIQUE_ID = row.UNIQUE_ID.toString();
+                                // oData.results.forEach(function (row) {
+                                //     row.UNIQUE_ID = row.UNIQUE_ID.toString();
 
-                                }, that);
+                                // }, that);
 
 
                                 that.uniqModel.setData(oData);
@@ -440,10 +440,18 @@ sap.ui.define([
                                 sap.m.MessageToast.show("No Data available to show.");
                             }
                             else {
-                                for (var i = 0; i < oData.results.length; i++) {
-                                    var oOrdQty = parseFloat(oData.results[i].ORD_QTY);
-                                    oData.results[i].ORD_QTY = oOrdQty;
-                                }
+                                // for (var i = 0; i < oData.results.length; i++) {
+                                //     var oOrdQty = parseFloat(oData.results[i].ORD_QTY);
+                                //     oData.results[i].ORD_QTY = oOrdQty;
+                                // }
+
+                                oData.results.forEach(function (row) {
+                                    // Calling function to handle the date format
+                                    // row.UNIQUE_ID = row.UNIQUE_ID.toString();
+                                    row.ORD_QTY = parseFloat(row.ORD_QTY);
+                                  }, that);
+
+
                                 that.byId("idSort").setVisible(true);
                                 sap.ui.core.BusyIndicator.hide();
                                 that.oModel.setData({
@@ -526,22 +534,33 @@ sap.ui.define([
                 // sap.ui.getCore().byId("idLocation").setEditable(true);
                 // sap.ui.getCore().byId("idProduct").setEditable(true);
                 sap.ui.getCore().byId("idUniq").setEditable(true);
+                sap.ui.getCore().byId("idQuantity").setValueState("None");
                 that._valueHelpDialogOrderCreate.close();
             },
 
             onNumChange:function(){
+               
                 var squan = sap.ui.getCore().byId("idQuantity").getValue();
+                sap.ui.getCore().byId("idQuantity").setValueState("None");
 
-                if(squan < 0){
-                    sap.ui.getCore().byId("idQuantity").setValue("0");
-                }
+                    if(squan < 1){
+        
+                        sap.ui.getCore().byId("idQuantity").setValue("");
+                        sap.ui.getCore().byId("idQuantity").setValueState("Error");
+                        sap.ui.getCore().byId("idQuantity").setValueStateText("Can not be add 0 quantity");
+                    }
+
+                    if(squan.includes(".")){
+                        sap.ui.getCore().byId("idQuantity").setValueState("Error");
+                        sap.ui.getCore().byId("idQuantity").setValueStateText("Decimals not allowed");
+                    }
             },
 
             onSaveOrder: function () {
                 var sLoc = sap.ui.getCore().byId("idLocation").getValue(),
                     sProd = sap.ui.getCore().byId("idProduct").getValue(),
                     sUniq = parseInt(sap.ui.getCore().byId("idUniq").getValue()),
-                    squan = sap.ui.getCore().byId("idQuantity").getValue(),
+                    squan = parseInt(sap.ui.getCore().byId("idQuantity").getValue()),
                     sDate = sap.ui.getCore().byId("idDate").getValue(),
                     sSeedOrder = sap.ui.getCore().byId("idseedord").getValue();
                 var oEntry = {
@@ -565,7 +584,8 @@ sap.ui.define([
                     MAT_AVAILDATE: sDate,
                 };
                 oEntry.SEEDDATA.push(vRuleslist);
-                if (squan !== "" && sDate !== "" && sLoc !== "" && sProd !== "" && sUniq !== "") {
+                if (squan === NaN && sDate !== "" && sUniq === NaN) {
+                    if(sap.ui.getCore().byId("idQuantity").getValueState() !== "Error"){
                     that.getModel("BModel").callFunction("/maintainSeedOrder", {
                         method: "GET",
                         urlParameters: {
@@ -574,7 +594,7 @@ sap.ui.define([
                         },
                         success: function (oData) {
                             sap.ui.core.BusyIndicator.hide();
-                            sap.m.MessageToast.show("Seed Order created successfully");
+                            sap.m.MessageToast.show("Seed Order created/ updated successfully");
                             that.onCancelOrder();
                             that.onGetData();
                         },
@@ -583,6 +603,9 @@ sap.ui.define([
                             sap.m.MessageToast.show("Error creating a Seed Order ");
                         },
                     });
+                } else {
+                    sap.m.MessageToast.show("Decimals are not allowed");
+                }
                 } else {
                     sap.m.MessageToast.show("Please fill all fields");
                 }

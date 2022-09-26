@@ -4645,6 +4645,58 @@
         }
       }
     },
+    "cp.ASSEMBLY_REQ": {
+      "kind": "entity",
+      "elements": {
+        "LOCATION_ID": {
+          "@title": "Location ",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "@title": "Product",
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+        "COMPONENT": {
+          "@title": "COMPONENT",
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+        "WEEK_DATE": {
+          "@title": "Week Date",
+          "key": true,
+          "type": "cds.Date"
+        },
+        "MODEL_VERSION": {
+          "@title": "MODEL_VERSION",
+          "key": true,
+          "type": "cds.String",
+          "length": 20
+        },
+        "VERSION": {
+          "@title": "Version",
+          "key": true,
+          "type": "cds.String",
+          "length": 10
+        },
+        "SCENARIO": {
+          "@title": "Scenario",
+          "key": true,
+          "type": "cds.String",
+          "length": 32
+        },
+        "COMPCIR_QTY": {
+          "@title": "CIR Compoonent QTY",
+          "type": "cds.Decimal",
+          "precision": 13,
+          "scale": 3
+        }
+      }
+    },
     "cp.FACTORY_SALESLOC": {
       "kind": "entity",
       "elements": {
@@ -4695,6 +4747,13 @@
           "key": true,
           "type": "cds.String",
           "length": 40
+        },
+        "COMP_QTY": {
+          "@title": "COMP_QTY",
+          "key": true,
+          "type": "cds.Decimal",
+          "precision": 13,
+          "scale": 3
         },
         "OBJ_DEP": {
           "@title": "Object Dependency",
@@ -18373,6 +18432,13 @@
           "type": "cds.String",
           "length": 40
         },
+        "COMP_QTY": {
+          "@title": "COMP_QTY",
+          "key": true,
+          "type": "cds.Decimal",
+          "precision": 13,
+          "scale": 3
+        },
         "OBJ_DEP": {
           "@title": "Object Dependency",
           "key": true,
@@ -22374,6 +22440,19 @@
         },
         "TODATE": {
           "type": "cds.Date"
+        }
+      }
+    },
+    "IBPImportSrv.exportIBPCIR": {
+      "kind": "action",
+      "params": {
+        "LOCATION_ID": {
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "type": "cds.String",
+          "length": 40
         }
       }
     },
