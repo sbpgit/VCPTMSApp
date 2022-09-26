@@ -185,7 +185,14 @@ module.exports = (srv) => {
                     "COMPONENT" ASC`
         );
         var vDateSeries = vDateFrom;
-        lsDates.CAL_DATE = GenFunctions.getNextMondayCmp(vDateSeries);
+        let dDate = new Date(vDateSeries);
+        let dDay = dDate.getDay();
+        if (dDay === 1) {
+            lsDates.CAL_DATE = vDateFrom;
+        } else {
+            lsDates.CAL_DATE = GenFunctions.getNextMondayCmp(vDateSeries);
+        }
+        // lsDates.CAL_DATE = GenFunctions.getNextMondayCmp(vDateSeries);
         vDateSeries = lsDates.CAL_DATE;
         liDates.push(lsDates);
         lsDates = {};

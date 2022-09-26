@@ -406,7 +406,7 @@ sap.ui.define([
 
                 var oFilters = [];
                 this.byId("headSearch").setValue("");
-                that.oList.getBinding("items").filter(oFilters);
+                // that.oList.getBinding("items").filter(oFilters);
                 // getting the filters
 
                 if (loc !== "") {
