@@ -273,7 +273,7 @@ sap.ui.define(
               // 20-09-2022
             } else if(oData.readJobDetails.action.includes("genFullConfigDemand") ){
                 oGModel.setProperty("/JobType", "D");
-            } else if(oData.readJobDetails.action.includes("AssmbReq") ){
+            } else if(oData.readJobDetails.action.includes("exportIBPAsmreq") ){
                 oGModel.setProperty("/JobType", "A");
             } else if(oData.readJobDetails.action.includes("genUniqueID") ){
                 oGModel.setProperty("/JobType", "O");

@@ -3400,6 +3400,7 @@ sap.ui.define(
                         bButton.includes("Sales History Config") ||
                         bButton.includes("Actual Components") ||
                         bButton.includes("Assembly Requirement") ||
+                        bButton === "Export CIR"  ||
                         oSelJobType === "S"
                     ) {
                         var finalList = {

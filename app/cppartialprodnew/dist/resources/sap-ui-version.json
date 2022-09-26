@@ -1,7 +1,11 @@
 {
 	"name": "cpapp.cppartialprodnew",
 	"version": "0.0.1",
+<<<<<<< HEAD
 	"buildTimestamp": "202209230816",
+=======
+	"buildTimestamp": "202209231239",
+>>>>>>> 849481498819c785dd6c580adbe8abfb4fca96c8
 	"scmRevision": "",
 	"libraries": []
 }
