@@ -324,8 +324,7 @@ sap.ui.define(
                 oGModel.setProperty("/uniqId", "");
 
                 var oFilters = [];
-                this.byId("idMatSearch").setValue("");
-                // that.byId("idMatSearch").getBinding("items").filter(oFilters);
+                that.byId("idMatSearch").getBinding("items").filter(oFilters);
                 // getting the filters
                 oFilters.push(
                     new Filter({
@@ -348,6 +347,10 @@ sap.ui.define(
                     );
                 }
                 if (oSloc !== "" && oSprod !== "") {
+                        this.byId("idMatSearch").setValue("");
+                    if(that.byId("idMatVHead").getItems().length){
+                        that.byId("idMatVHead").getBinding("items").filter(oFilters);
+                    }
                     sap.ui.core.BusyIndicator.show();
                     this.getModel("BModel").read("/getUniqueHeader", {
                         filters: [oFilters],                   
