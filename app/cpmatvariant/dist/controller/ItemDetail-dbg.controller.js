@@ -184,7 +184,7 @@ sap.ui.define(
                 };
                 oEntry.SEEDDATA.push(vRuleslist);
                 
-                if (squan !== "" && sDate !== "" && sUniq !== "") {
+                if (squan  === NaN && sDate !== "" && sUniq  === NaN) {
                     if(sap.ui.getCore().byId("idOrdQtySO").getValueState() !== "Error"){
                     that.getModel("BModel").callFunction("/maintainSeedOrder", {
                         method: "GET",
