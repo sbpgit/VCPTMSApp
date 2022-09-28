@@ -189,7 +189,7 @@ sap.ui.define(
                 var oModel = new sap.ui.model.json.JSONModel();
                 var iRowData = [],
                     iColumnData = [];
-               
+
                 that.oGModel = that.getModel("oGModel");
                 that.byId("fromDate").setValue("");
                 that.byId("toDate").setValue("");
@@ -629,30 +629,30 @@ sap.ui.define(
                 var sQuery =
                     oEvent.getParameter("value") || oEvent.getParameter("newValue");
                 // Checking if serch value is empty
-                // if (sQuery === "") {
-                    
-                // } else {                    
-                //     that.Data = that.oGModel.getProperty("/TData");
-                //     that.searchData = [];
+                if (sQuery === "") {
 
-                //     for (var i = 0; i < that.Data.length; i++) {
-                //         sUniqueId = that.Data[i].UNIQUE_ID;
-                //         sUniqueId = sUniqueId.toString();
-                //         if (
-                //             sUniqueId.includes(sQuery) ||
-                //             that.Data[i].UNIQUE_DESC.includes(sQuery) ||
-                //             that.Data[i].PRODUCT_ID.includes(sQuery)
-                //         ) {
-                //             that.searchData.push(that.Data[i]);
-                //         }
-                //     }
+                } else {
+                    that.Data = that.oGModel.getProperty("/TData");
+                    that.searchData = [];
 
-                //     that.oGModel.setProperty("/TData", that.searchData);
-                //     // Calling function to generate UI table dynamically based on search data
-                //     that.TableGenerate();
-                // }
+                    for (var i = 0; i < that.Data.length; i++) {
+                        sUniqueId = that.Data[i].UNIQUE_ID;
+                        sUniqueId = sUniqueId.toString();
+                        if (
+                            sUniqueId.includes(sQuery) ||
+                            that.Data[i].UNIQUE_DESC.includes(sQuery) ||
+                            that.Data[i].PRODUCT_ID.includes(sQuery)
+                        ) {
+                            that.searchData.push(that.Data[i]);
+                        }
+                    }
+
+                    that.oGModel.setProperty("/TData", that.searchData);
+                    // Calling function to generate UI table dynamically based on search data
+                    that.TableGenerate();
+                }
             },
-            
+
 
             /**
              * This function is called when selecting an item in dialogs .
@@ -755,7 +755,7 @@ sap.ui.define(
                                 });
 
                                 that.oVerList.setModel(that.verModel);
-                            }                          
+                            }
 
                         },
                         error: function (oData, error) {
