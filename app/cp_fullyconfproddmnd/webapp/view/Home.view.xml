@@ -51,13 +51,13 @@
                         </Select>
                     </VBox>
 
-                    <VBox>
-                        <Label text="" />
-                        <HBox>
+                    <!-- <VBox> -->
+                        <!-- <Label text="" /> -->
+                        <HBox class="hdrBtnMargin">
                             <Button text="Go" type="Emphasized" press="onGetData" tooltip="Get data based on filters"/>
-                            <Button text="Reset" type="Transparent" press="onResetDate" tooltip="Reset Valid To Date"/>
+                            <Button text="Reset" type="Transparent" press="onResetData" tooltip="Reset filters and Data"/>
                         </HBox>
-                    </VBox>
+                    <!-- </VBox> -->
                 </l:Grid>
             </FlexBox>
         </ux:headerContent>
