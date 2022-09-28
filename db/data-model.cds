@@ -642,7 +642,7 @@ context cp {
         key CLASS_NUM    : String(18) @title : 'Internal class number';
         key CHAR_NUM     : String(10) @title : 'Internal Char. number';
         key CHAR_COUNTER : Integer    @title : 'Characteristic counter';
-        key CHARVAL_NUM  : String(10) @title : 'Internal Char. number';
+        key CHARVAL_NUM  : String(15) @title : 'Internal Char. number';
             OD_CONDITION : String(2)  @title : 'Restriction condition ';
             ROW_ID       : Integer    @title : 'Attribute Index ';
     };
