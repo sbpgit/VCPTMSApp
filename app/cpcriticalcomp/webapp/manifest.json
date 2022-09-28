@@ -1,7 +1,7 @@
 {
-    "_version": "1.32.0",
+    "_version": "1.37.0",
     "sap.app": {
-        "id": "cpapp.cpseedordercreation",
+        "id": "cpapp.cpcriticalcomp",
         "type": "application",
         "i18n": "i18n/i18n.properties",
         "applicationVersion": {
@@ -12,18 +12,34 @@
         "resources": "resources.json",
         "sourceTemplate": {
             "id": "@sap/generator-fiori:basic",
-            "version": "1.7.1",
-            "toolsId": "85278903-cd39-4ae9-89c2-451516baec68"
+            "version": "1.7.4",
+            "toolsId": "ab57a7d3-cc68-4150-8b85-77b74879b4b4"
         },
         "dataSources": {
             "mainService": {
-                "uri": "/v2/catalog/",
+                "uri": "/catalog/",
                 "type": "OData",
                 "settings": {
-                  "localUri": "localService/CatalogService/metadata.xml",
-                  "odataVersion": "2.0"
+                    "annotations": [],
+                    "localUri": "localService/metadata.xml",
+                    "odataVersion": "4.0"
                 }
-              }
+            }
+        },
+        "crossNavigation": {
+            "inbounds": {
+                "cpapp-cpcriticalcomp-inbound": {
+                    "signature": {
+                        "parameters": {},
+                        "additionalParameters": "allowed"
+                    },
+                    "semanticObject": "cpcriticalcomp",
+                    "action": "display",
+                    "title": "{{flpTitle}}",
+                    "subTitle": "{{flpSubtitle}}",
+                    "icon": ""
+                }
+            }
         }
     },
     "sap.ui": {
@@ -44,14 +60,8 @@
     },
     "sap.ui5": {
         "flexEnabled": true,
-        "rootView": {
-            "viewName": "cpapp.cpseedordercreation.view.App",
-            "type": "XML",
-            "async": true,
-            "id": "App"
-        },
         "dependencies": {
-            "minUI5Version": "1.60.1",
+            "minUI5Version": "1.96.0",
             "libs": {
                 "sap.m": {},
                 "sap.ui.core": {},
@@ -71,27 +81,19 @@
             "i18n": {
                 "type": "sap.ui.model.resource.ResourceModel",
                 "settings": {
-                    "bundleName": "cpapp.cpseedordercreation.i18n.i18n"
+                    "bundleName": "cpapp.cpcriticalcomp.i18n.i18n"
                 }
             },
-            "oGModel": {
-                "type": "sap.ui.model.json.JSONModel",
-                "settings": {
-                    "defaultBindingMode": "TwoWay"
-                },
-                "preload": true
-            },
-            "BModel": {
+            "": {
                 "dataSource": "mainService",
                 "preload": true,
                 "settings": {
-                  "synchronizationMode": "None",
-                  "operationMode": "Server",
-                  "autoExpandSelect": true,
-                  "earlyRequests": true,
-                  "groupId": "$direct"
+                    "synchronizationMode": "None",
+                    "operationMode": "Server",
+                    "autoExpandSelect": true,
+                    "earlyRequests": true
                 }
-              }
+            }
         },
         "resources": {
             "css": [
@@ -105,22 +107,22 @@
                 "routerClass": "sap.m.routing.Router",
                 "viewType": "XML",
                 "async": true,
-                "viewPath": "cpapp.cpseedordercreation.view",
+                "viewPath": "cpapp.cpcriticalcomp.view",
                 "controlAggregation": "pages",
                 "controlId": "app",
                 "clearControlAggregation": false
             },
             "routes": [
                 {
-                    "name": "Home",
-                    "pattern": "",
+                    "name": "RouteHome",
+                    "pattern": ":?query:",
                     "target": [
-                        "Home"
+                        "TargetHome"
                     ]
                 }
             ],
             "targets": {
-                "Home": {
+                "TargetHome": {
                     "viewType": "XML",
                     "transition": "slide",
                     "clearControlAggregation": false,
@@ -128,6 +130,12 @@
                     "viewName": "Home"
                 }
             }
+        },
+        "rootView": {
+            "viewName": "cpapp.cpcriticalcomp.view.App",
+            "type": "XML",
+            "async": true,
+            "id": "App"
         }
     },
     "sap.cloud": {
