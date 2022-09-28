@@ -231,6 +231,7 @@ sap.ui.define([
              * @param {object} oEvent -the event information.
              */
             onGetData: function (oEvent) {
+                sap.ui.core.BusyIndicator.show();
                 var oSloc = that.oLoc.getValue(),
                     oSprod = that.oProd.getValue();
 
@@ -256,6 +257,7 @@ sap.ui.define([
                         filters: [oFilters],                   
                         success: function (oData) {
                             sap.ui.core.BusyIndicator.hide();
+                            that.oModel = new JSONModel();
                             if (oData.results.length) {
                                 that.oModel.setData({
                                     results: oData.results,
@@ -305,6 +307,7 @@ sap.ui.define([
             },
 
             onChange: function (oEvent) {
+                sap.ui.core.BusyIndicator.show();
                 var oItem = oEvent.getSource().getBindingContext().getObject();
                 var oCRITICALKEY;
 

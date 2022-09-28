@@ -52,7 +52,7 @@
                         <ux:ObjectPageSubSection>
                             <ux:blocks>
                             <VBox>
-                <Table id="idCriticalComp" items="{path: '/results'}" growingScrollToLoad="true"  sticky="ColumnHeaders">
+                <Table id="idCriticalComp" items="{path: '/results', sorter: {path: 'ITEM_NUM'}}" growingScrollToLoad="true"  sticky="ColumnHeaders">
                     
                     <columns>
 

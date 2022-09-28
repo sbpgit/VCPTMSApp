@@ -1786,7 +1786,14 @@ module.exports = (srv) => {
         liresults.push(lsresults);
         if (liresults.length > 0) {
             try {
-                await cds.run(INSERT.into("CP_CRITICAL_COMP").entries(liresults));
+                await UPDATE `CP_CRITICAL_COMP`
+                        .with({
+                            CRITICALKEY: lsresults.CRITICALKEY
+                            })
+                            .where(`LOCATION_ID = '${lsresults.LOCATION_ID}'
+                                AND PRODUCT_ID = '${lsresults.PRODUCT_ID}'
+                                AND ITEM_NUM = '${lsresults.ITEM_NUM}'
+                                AND COMPONENT = '${lsresults.COMPONENT}'`);
                 responseMessage = "Critical Component udpated";
             } catch (e) {
                 responseMessage = "Critical Component udpate failed";
