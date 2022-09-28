@@ -1163,3 +1163,13 @@ entity![V_CIRVERSCEN]{
     key![VERSION]     : String(10) @title : 'VERSION';
     key![SCENARIO]    : String(32) @title : 'SCENARIO';
 }
+@cds.persistence.exists 
+Entity ![V_BOMCRITICALCOMP] {
+        ![LOCATION_ID]: String(4) not null  @title: 'LOCATION_ID' ; 
+        ![PRODUCT_ID]: String(40) not null  @title: 'PRODUCT_ID' ; 
+        ![ITEM_NUM]: String(5) not null  @title: 'ITEM_NUM' ; 
+        ![COMPONENT]: String(40) not null  @title: 'COMPONENT' ; 
+        ![VALID_FROM]: Date  @title: 'VALID_FROM' ; 
+        ![VALID_TO]: Date  @title: 'VALID_TO' ; 
+        ![CRITICALKEY]: String(1)  @title: 'CRITICALKEY' ; 
+}
