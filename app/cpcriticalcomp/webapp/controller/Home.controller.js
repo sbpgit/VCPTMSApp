@@ -17,8 +17,9 @@ sap.ui.define([
         Device
     ) {
         "use strict";
+        var that, oGModel;
 
-        return Controller.extend("cpapp.cpcriticalcomp.controller.Home", {
+        return BaseController.extend("cpapp.cpcriticalcomp.controller.Home", {
            /**
              * Called when a controller is instantiated and its View controls (if available) are already created.
              * Can be used to modify the View before it is displayed, to bind event handlers and do other one-time initialization.
@@ -63,9 +64,6 @@ sap.ui.define([
                 this.oProd = this.byId("prodInput");
                 that._valueHelpDialogLoc.setTitleAlignment("Center");
                 that._valueHelpDialogProd.setTitleAlignment("Center");
-
-                that.oTableData = [];
-                sap.ui.getCore().byId("idUniqDesc1").setValue("");
                 
                 this.oProdList = this._oCore.byId(
                     this._valueHelpDialogProd.getId() + "-list"
@@ -309,20 +307,34 @@ sap.ui.define([
             onChange: function (oEvent) {
                 var oItem = oEvent.getSource().getBindingContext().getObject();
                 var oCRITICALKEY;
-                if (oItem.CRITICALKEY === true) {
-                    oCRITICALKEY = 'X';//false;
-                } else {
-                    oCRITICALKEY = '';//true;
-                }
+
+                var oEntry = {
+                    criticalComp: [],
+                },
+                    vRuleslist;
+                
+                    if (oItem.CRITICALKEY === "X") {
+                        oCRITICALKEY = '';//false;
+                    } else {
+                        oCRITICALKEY = 'X';//true;
+                    }
+
+                vRuleslist = {
+                    LOCATION_ID: oItem.LOCATION_ID,
+                    PRODUCT_ID: oItem.PRODUCT_ID,
+                    ITEM_NUM: oItem.ITEM_NUM,
+                    COMPONENT: oItem.COMPONENT,
+                    CRITICALKEY: oCRITICALKEY,
+                };
+                oEntry.criticalComp.push(vRuleslist);
+
+
+               
+                
                 that.getModel("BModel").callFunction("/changeToCritical", {
                     method: "GET",
                     urlParameters: {
-                        LOCATION_ID: oItem.LOCATION_ID,
-                        PRODUCT_ID: oItem.PRODUCT_ID,
-                        ITEM_NUM  : oItem.ITEM_NUM,
-                        COMPONENT: oItem.COMPONENT,
-                        CRITICALKEY  : oCRITICALKEY,
-                        FLAG: "E"
+                        criticalComp: JSON.stringify(oEntry.criticalComp)
                     },
                     success: function (oData) {
                         sap.ui.core.BusyIndicator.hide();

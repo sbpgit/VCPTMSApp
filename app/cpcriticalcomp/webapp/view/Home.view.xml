@@ -11,11 +11,11 @@
             <ux:headerTitle>
                 <ux:ObjectPageDynamicHeaderTitle>
                     <ux:expandedHeading>
-                        <Title text="{i18n>headertitle}" class="boldText" titleAlignment="Center" />
+                        <Title text="{i18n>title}" class="boldText" titleAlignment="Center" />
                     </ux:expandedHeading>
                     <ux:snappedHeading>
                         <FlexBox fitContainer="true" alignItems="Center" >
-                            <Title text="{i18n>headertitle}" wrapping="true" />
+                            <Title text="{i18n>title}" wrapping="true" />
                         </FlexBox>
                     </ux:snappedHeading>
                 </ux:ObjectPageDynamicHeaderTitle>
@@ -39,7 +39,8 @@
                 <VBox> 
                 <Label text ="" /> 
                 <HBox>                 
-                    <Button text="{i18n>go}" type="Emphasized" press="onGetData" tooltip="Get data based on filters"/>
+                    <Button text="Go" type="Emphasized" press="onGetData" tooltip="Get data based on filters" class="sapUiTinyMarginEnd"/>
+                            <Button text="Reset" type="Transparent" press="onResetDate" tooltip="Reset data"/>
                     </HBox>
                 </VBox>
                 </l:Grid>
@@ -61,8 +62,8 @@
                         <Column hAlign="Left" vAlign="Middle" >
                             <Text text="{i18n>componemt}" />
                         </Column>
-                        <Column hAlign="Right" width="50px">
-                            <Text text=""/>
+                        <Column hAlign="Left" vAlign="Middle">
+                            <Text text="{i18n>criticalkey}"/>
                         </Column>
                     </columns>
                     <items>
@@ -70,7 +71,7 @@
                             <cells>
                                 <ObjectIdentifier title="{ITEM_NUM}"/>
                                 <Text text="{COMPONENT}"/>
-                                <Switch type="AcceptReject" state="{= ${CRITICALKEY} === true ? true : false}" change="onChange" >
+                                <Switch type="AcceptReject" state="{= ${CRITICALKEY} === 'X' ? true : false}" change="onChange" >
                                     <layoutData>
                                         <FlexItemData growFactor="1" />
                                     </layoutData>
