@@ -584,25 +584,25 @@ module.exports = cds.service.impl(async function () {
             actcompreq: [],
         },
             vactcompreq;
-        const liactcompreq = await cds.run(
+        const liactcompreq = await cds.run(  //V_COMP_REQ
             `
-            SELECT DISTINCT "CAL_DATE",
+            SELECT DISTINCT "WEEK_DATE",
                     "LOCATION_ID",
                     "PRODUCT_ID",
                     "COMPONENT",
-                    "COMP_QTY"
-                    FROM V_COMP_REQ
+                    "COMPCIR_QTY"
+                    FROM CP_ASSEMBLY_REQ
                     WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
-                       AND PRODUCT_ID = '`+ req.data.PRODUCT_ID + `' AND CAL_DATE >= '2022-06-01' AND CAL_DATE <= '2022-09-30' AND COMP_QTY >= 0`);
+                       AND REF_PRODID = '`+ req.data.PRODUCT_ID + `' AND WEEK_DATE >= '2022-10-17' AND WEEK_DATE <= '2023-09-04' AND COMPCIR_QTY >= 0`);
 
         for (i = 0; i < liactcompreq.length; i++) {
-            var vWeekDate = new Date(liactcompreq[i].CAL_DATE).toISOString().split('Z');
-            var vDemd = liactcompreq[i].COMP_QTY.toFixed(2);
+            var vWeekDate = new Date(liactcompreq[i].WEEK_DATE).toISOString().split('Z');
+            var vDemd = parseFloat(liactcompreq[i].COMPCIR_QTY).toFixed(2);
             vactcompreq = {
                 "LOCID": liactcompreq[i].LOCATION_ID,
                 "PRDID": liactcompreq[i].PRODUCT_ID,
                 "PRDFR": liactcompreq[i].COMPONENT,
-                "COMPONENTREQUIREMENTQTY": vDemd,
+                "COMPONENTREQUIREMENTQTY": vDemd.toString(),
                 "PERIODID0_TSTAMP": vWeekDate[0]
             };
             oReq.actcompreq.push(vactcompreq);
@@ -1585,26 +1585,26 @@ module.exports = cds.service.impl(async function () {
             vactcompreq;
         const liactcompreq = await cds.run(
             `
-            SELECT DISTINCT "CAL_DATE",
+            SELECT DISTINCT "WEEK_DATE",
                     "LOCATION_ID",
                     "PRODUCT_ID",
                     "COMPONENT",
-                    "COMP_QTY"
-                    FROM V_COMP_REQ
+                    "COMPCIR_QTY"
+                    FROM CP_ASSEMBLY_REQ
                     WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
-                       AND PRODUCT_ID = '`+ req.data.PRODUCT_ID +
-            `' AND CAL_DATE >= '` + req.data.FROMDATE +
-            `' AND CAL_DATE <= '` + req.data.TODATE + `'
-                       AND COMP_QTY >= 0`);
+                       AND REF_PRODID = '`+ req.data.PRODUCT_ID +
+            `' AND WEEK_DATE >= '` + req.data.FROMDATE +
+            `' AND WEEK_DATE <= '` + req.data.TODATE + `'
+                       AND COMPCIR_QTY >= 0`);
 
         for (i = 0; i < liactcompreq.length; i++) {
-            var vWeekDate = new Date(liactcompreq[i].CAL_DATE).toISOString().split('Z');
-            var vDemd = liactcompreq[i].COMP_QTY.toFixed(2);
+            var vWeekDate = new Date(liactcompreq[i].WEEK_DATE).toISOString().split('Z');
+            var vDemd = parseFloat(liactcompreq[i].COMPCIR_QTY).toFixed(2);
             vactcompreq = {
                 "LOCID": liactcompreq[i].LOCATION_ID,
                 "PRDID": liactcompreq[i].PRODUCT_ID,
                 "PRDFR": liactcompreq[i].COMPONENT,
-                "COMPONENTREQUIREMENTQTY": vDemd,
+                "COMPONENTREQUIREMENTQTY": vDemd.toString(),
                 "PERIODID0_TSTAMP": vWeekDate[0]
             };
             oReq.actcompreq.push(vactcompreq);

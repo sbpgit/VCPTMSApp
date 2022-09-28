@@ -405,6 +405,7 @@ sap.ui.define([
                 that.oGModel.setProperty("/productID", Prod);
 
                 var oFilters = [];
+                
                 // getting the filters
 
                 if (loc !== "") {
@@ -428,6 +429,11 @@ sap.ui.define([
                     );
                 }
                 if (loc !== "" && Prod !== "") {
+                    this.byId("headSearch").setValue("");
+                    if(that.oList.getItems().length){
+                        that.oList.getBinding("items").filter(oFilters);
+                    }
+                    
                     this.getModel("BModel").read("/getSeedOrder", {
                         filters: [oFilters],
                         // filters: [ new Filter( "LOCATION_ID",  FilterOperator.EQ,  loc ),
@@ -584,7 +590,7 @@ sap.ui.define([
                     MAT_AVAILDATE: sDate,
                 };
                 oEntry.SEEDDATA.push(vRuleslist);
-                if (squan !== "" && sDate !== "" && sUniq !== "") {
+                if (squan === NaN && sDate !== "" && sUniq === NaN) {
                     if(sap.ui.getCore().byId("idQuantity").getValueState() !== "Error"){
                     that.getModel("BModel").callFunction("/maintainSeedOrder", {
                         method: "GET",

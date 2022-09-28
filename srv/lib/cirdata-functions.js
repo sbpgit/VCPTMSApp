@@ -109,6 +109,23 @@ class CIRData {
 
         return li_uniqueIdItem;
     }
+    /**
+     * Get Restriction Items Details
+     */
+    async getRestrictDetails(req) {
+        const li_uniqueIdItem = await cds.run(
+            `SELECT *
+            FROM "CP_RESTRICT_DETAILS"
+            WHERE "LOCATION_ID" = '` +
+            req.data.LOCATION_ID +
+            `'
+            AND "PRODUCT_ID" = '` +
+            req.data.PRODUCT_ID +
+            `'`
+        );
+
+        return li_uniqueIdItem;
+    }
 
 }
 

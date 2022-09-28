@@ -144,7 +144,8 @@ sap.ui.define(
                 // Planned Parameter Values
                 this.getModel("CIRModel").read("/V_Parameters", {
                     success: function (oData) {
-                        var iFrozenHorizon = parseInt(oData.results[0].VALUE);
+                        // if Frozen Horizon is 14 Days, we need to consider from 15th day
+                        var iFrozenHorizon = parseInt(oData.results[0].VALUE) + 1;
                         var dDate = new Date();
                         // var oDateL = that.getDateFn(dDate);
                         // oDateL = that.addDays(oDateL, iFrozenHorizon);
@@ -178,7 +179,6 @@ sap.ui.define(
                         sap.ui.core.BusyIndicator.hide();
                     },
                 });
-
             },
 
             /**
@@ -186,6 +186,11 @@ sap.ui.define(
              * This will clear all the selections of inputs.
              */
             onResetDate: function () {
+                var oModel = new sap.ui.model.json.JSONModel();
+                var iRowData = [],
+                    iColumnData = [];
+               
+                that.oGModel = that.getModel("oGModel");
                 that.byId("fromDate").setValue("");
                 that.byId("toDate").setValue("");
                 // oGModel.setProperty("/resetFlag", "X");
@@ -193,6 +198,16 @@ sap.ui.define(
                 that.oProd.setValue("");
                 that.oVer.setValue("");
                 that.oScen.setValue("");
+                that.oGModel.setProperty("/SelectedLoc", undefined);
+                that.oGModel.setProperty("/SelectedProd", undefined);
+                that.oGModel.setProperty("/SelectedVer", undefined);
+                that.oGModel.setProperty("/SelectedScen", undefined);
+                oModel.setData({
+                    rows: iRowData,
+                    columns: iColumnData,
+                });
+                that.oTable.setModel(oModel);
+
                 that.onAfterRendering();
             },
 
@@ -601,6 +616,43 @@ sap.ui.define(
 
                 }
             },
+            /**
+             * Called when something is entered into the search field.
+             * @param {object} oEvent -the event information.
+             */
+            onSearchUniqueId: function (oEvent) {
+                var sUniqueId = "";
+                that.oTable = that.byId("idCIReq");
+                that.oGModel = that.getModel("oGModel");
+                that.tData = that.oGModel.getProperty("/TData");
+
+                var sQuery =
+                    oEvent.getParameter("value") || oEvent.getParameter("newValue");
+                // Checking if serch value is empty
+                // if (sQuery === "") {
+                    
+                // } else {                    
+                //     that.Data = that.oGModel.getProperty("/TData");
+                //     that.searchData = [];
+
+                //     for (var i = 0; i < that.Data.length; i++) {
+                //         sUniqueId = that.Data[i].UNIQUE_ID;
+                //         sUniqueId = sUniqueId.toString();
+                //         if (
+                //             sUniqueId.includes(sQuery) ||
+                //             that.Data[i].UNIQUE_DESC.includes(sQuery) ||
+                //             that.Data[i].PRODUCT_ID.includes(sQuery)
+                //         ) {
+                //             that.searchData.push(that.Data[i]);
+                //         }
+                //     }
+
+                //     that.oGModel.setProperty("/TData", that.searchData);
+                //     // Calling function to generate UI table dynamically based on search data
+                //     that.TableGenerate();
+                // }
+            },
+            
 
             /**
              * This function is called when selecting an item in dialogs .
@@ -660,23 +712,51 @@ sap.ui.define(
                     that.oScen.setValue("");
 
                     // Calling service to get the IBP Varsion data
-                    this.getModel("CIRModel").read("/getCIRVerScen", {
-                        filters: [
-                            new Filter(
-                                "LOCATION_ID",
-                                FilterOperator.EQ,
-                                that.oGModel.getProperty("/SelectedLoc")
-                            ),
-                            new Filter(
-                                "REF_PRODID",
-                                FilterOperator.EQ,
-                                that.oGModel.getProperty("/SelectedProd")
-                                // aSelectedItems[0].getTitle()
-                            ),
-                        ],
+                    // this.getModel("CIRModel").read("/getCIRVerScen", {
+                    //     filters: [
+                    //         new Filter(
+                    //             "LOCATION_ID",
+                    //             FilterOperator.EQ,
+                    //             that.oGModel.getProperty("/SelectedLoc")
+                    //         ),
+                    //         new Filter(
+                    //             "REF_PRODID",
+                    //             FilterOperator.EQ,
+                    //             that.oGModel.getProperty("/SelectedProd")
+                    //             // aSelectedItems[0].getTitle()
+                    //         ),
+                    //     ],
+                    //     success: function (oData) {
+                    //         that.verModel.setData(oData);
+                    //         that.oVerList.setModel(that.verModel);
+                    //     },
+                    //     error: function (oData, error) {
+                    //         MessageToast.show("error");
+                    //     },
+                    // });
+
+                    that.getModel("CIRModel").callFunction("/getAllVerScen", {
+                        method: "GET",
+                        urlParameters: {
+                            LOCATION_ID: that.oGModel.getProperty("/SelectedLoc")
+                        },
                         success: function (oData) {
-                            that.verModel.setData(oData);
-                            that.oVerList.setModel(that.verModel);
+                            var adata = [];
+                            for (var i = 0; i < oData.results.length; i++) {
+                                if (oData.results[i].PRODUCT_ID === that.oGModel.getProperty("/SelectedProd")) {
+                                    adata.push({
+                                        "VERSION": oData.results[i].VERSION
+                                    });
+                                }
+                            }
+                            if (adata.length > 0) {
+                                that.verModel.setData({
+                                    results: adata
+                                });
+
+                                that.oVerList.setModel(that.verModel);
+                            }                          
+
                         },
                         error: function (oData, error) {
                             MessageToast.show("error");
@@ -695,30 +775,61 @@ sap.ui.define(
                         aSelectedItems[0].getTitle()
                     );
                     // Calling service to get the Scenario data
-                    this.getModel("CIRModel").read("/getCIRVerScen", {
-                        filters: [
-                            new Filter(
-                                "LOCATION_ID",
-                                FilterOperator.EQ,
-                                that.oGModel.getProperty("/SelectedLoc")
-                            ),
-                            new Filter(
-                                "REF_PRODID",
-                                FilterOperator.EQ,
-                                that.oGModel.getProperty("/SelectedProd")
-                            ),
-                            new Filter(
-                                "VERSION",
-                                FilterOperator.EQ,
-                                aSelectedItems[0].getTitle()
-                            ),
-                        ],
-                        success: function (oData) {
-                            that.scenModel.setData(oData);
-                            that.oScenList.setModel(that.scenModel);
+                    // this.getModel("CIRModel").read("/getCIRVerScen", {
+                    //     filters: [
+                    //         new Filter(
+                    //             "LOCATION_ID",
+                    //             FilterOperator.EQ,
+                    //             that.oGModel.getProperty("/SelectedLoc")
+                    //         ),
+                    //         new Filter(
+                    //             "REF_PRODID",
+                    //             FilterOperator.EQ,
+                    //             that.oGModel.getProperty("/SelectedProd")
+                    //         ),
+                    //         new Filter(
+                    //             "VERSION",
+                    //             FilterOperator.EQ,
+                    //             aSelectedItems[0].getTitle()
+                    //         ),
+                    //     ],
+                    //     success: function (oData) {
+                    //         that.scenModel.setData(oData);
+                    //         that.oScenList.setModel(that.scenModel);
+                    //     },
+                    //     error: function (oData, error) {
+                    //         MessageToast.show("error");
+                    //     },
+                    // });
+                    that.getModel("CIRModel").callFunction("/getAllVerScen", {
+                        method: "GET",
+                        urlParameters: {
+                            LOCATION_ID: that.oGModel.getProperty("/SelectedLoc")
                         },
+                        success: function (oData) {
+                            var adata = [];
+                            for (var i = 0; i < oData.results.length; i++) {
+                                if (oData.results[i].PRODUCT_ID === that.oGModel.getProperty("/SelectedProd")
+
+                                    && oData.results[i].VERSION === aSelectedItems[0].getTitle()) {
+                                    adata.push({
+                                        "SCENARIO": oData.results[i].SCENARIO
+                                    });
+                                }
+                            }
+
+                            if (adata.length > 0) {
+                                that.scenModel.setData({
+                                    results: adata
+                                });
+                                that.oScenList.setModel(that.scenModel);
+                            }
+                        },
+
                         error: function (oData, error) {
+
                             MessageToast.show("error");
+
                         },
                     });
                     // Scenario List
@@ -812,22 +923,27 @@ sap.ui.define(
                     });
                 }
             },
-            onPressPublish: function(oEvent) {
+            /**
+            * Called when 'Publish' button is clicked on application
+            * - Displays confirmation pop-up to publish data to S4 System
+            * @param {*} oEvent 
+            */
+            onPressPublish: function (oEvent) {
                 var objEvent = oEvent;
                 MessageBox.confirm(
                     "Would you like to publish?", {
-                        icon: MessageBox.Icon.Conf,
-                        title: "Confirmation",
-                        actions: [MessageBox.Action.YES, MessageBox.Action.NO],
-                        emphasizedAction: MessageBox.Action.YES,
-                        onClose: function (oAction) { 
-                           if(oAction === "YES") {
-                               that.onPressPublishConfirm(objEvent);
-                           } else {
-                             // Close Message Box
-                           }
+                    icon: MessageBox.Icon.Conf,
+                    title: "Confirmation",
+                    actions: [MessageBox.Action.YES, MessageBox.Action.NO],
+                    emphasizedAction: MessageBox.Action.YES,
+                    onClose: function (oAction) {
+                        if (oAction === "YES") {
+                            that.onPressPublishConfirm(objEvent);
+                        } else {
+                            // Close Message Box
                         }
                     }
+                }
                 );
             },
             /**

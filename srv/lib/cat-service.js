@@ -11,7 +11,7 @@ const GenTimeseriesM2 = require("./gen-timeseries-m2");
 const SOFunctions = require("./so-function");
 const Catservicefn = require("./catservice-function");
 const VarConfig = require("./variantconfig");
-const AssemblyReq =  require("./assembly-req");
+const AssemblyReq = require("./assembly-req");
 const CIRService = require("./cirdata-functions");          // 
 const containerSchema = cds.env.requires.db.credentials.schema;
 // Create connection parameters to continer
@@ -128,7 +128,7 @@ module.exports = (srv) => {
 
         const liCompQty = await cds.run(
             `
-            SELECT * FROM "CP_ASSEMBLY_REQ"
+            SELECT * FROM "V_ASMREQ_PRODCONSD"
             WHERE "LOCATION_ID" = '` +
             req.data.LOCATION_ID +
             `'
@@ -159,8 +159,9 @@ module.exports = (srv) => {
                           "PRODUCT_ID",
                           "VERSION",
                           "SCENARIO",
+                          "ITEM_NUM",
                           "COMPONENT"
-          FROM "CP_ASSEMBLY_REQ"
+          FROM "V_ASMREQ_PRODCONSD"
           WHERE "LOCATION_ID" = '` +
             req.data.LOCATION_ID +
             `' AND "PRODUCT_ID" = '` +
@@ -182,10 +183,18 @@ module.exports = (srv) => {
                     "PRODUCT_ID" ASC,
                     "VERSION" ASC,
                     "SCENARIO" ASC,
+                    "ITEM_NUM" ASC,
                     "COMPONENT" ASC`
         );
         var vDateSeries = vDateFrom;
-        lsDates.CAL_DATE = GenFunctions.getNextMondayCmp(vDateSeries);
+        let dDate = new Date(vDateSeries);
+        let dDay = dDate.getDay();
+        if (dDay === 1) {
+            lsDates.CAL_DATE = vDateFrom;
+        } else {
+            lsDates.CAL_DATE = GenFunctions.getNextMondayCmp(vDateSeries);
+        }
+        // lsDates.CAL_DATE = GenFunctions.getNextMondayCmp(vDateSeries);
         vDateSeries = lsDates.CAL_DATE;
         liDates.push(lsDates);
         lsDates = {};
@@ -204,8 +213,8 @@ module.exports = (srv) => {
             // vCompIndex is to get Componnent quantity for all dates
             vWeekIndex = 0; //j
             lsCompWeekly.LOCATION_ID = liComp[j].LOCATION_ID;
-            lsCompWeekly.PRODUCT_ID = liComp[j].PRODUCT_ID;
-            lsCompWeekly.ITEM_NUM = '';//liComp[j].ITEM_NUM;
+            lsCompWeekly.PRODUCT_ID = liComp[j].REF_PRODID;
+            lsCompWeekly.ITEM_NUM = liComp[j].ITEM_NUM;
             //   lsCompWeekly.ASSEMBLY = liComp[j].COMPONENT;
             lsCompWeekly.COMPONENT = liComp[j].COMPONENT;
             lsCompWeekly.VERSION = liComp[j].VERSION;
@@ -357,7 +366,7 @@ module.exports = (srv) => {
                 }
             }
             liCompWeekly.push(GenFunctions.parse(lsCompWeekly));
-           // lsCompWeekly = {};
+            // lsCompWeekly = {};
             // }
             lsCompWeekly = {};
         }
@@ -811,6 +820,10 @@ module.exports = (srv) => {
     });
 
     srv.on("genAssemblyreq", async (req) => {
+        const objAsmreq = new AssemblyReq();
+        await objAsmreq.genAsmreq(req.data);
+    });
+    srv.on("generateAssemblyReq", async (req) => {
         const objAsmreq = new AssemblyReq();
         await objAsmreq.genAsmreq(req.data);
     });
@@ -1756,6 +1769,31 @@ module.exports = (srv) => {
         const keys = ['PRODUCT_ID', 'VERSION', 'SCENARIO'];
         return GenFunctions.removeDuplicate(liprodver, keys);
     });
+
+    // Maintain partial configurations for new product
+    srv.on("changeToCritical", async (req) => {
+        let liresults = [];
+        let lsresults = {};
+        let responseMessage = '';
+        let li_crtcomp = {};
+
+        li_crtcomp = JSON.parse(req.data.criticalComp);
+        lsresults.LOCATION_ID = li_crtcomp[0].LOCATION_ID;
+        lsresults.PRODUCT_ID = li_crtcomp[0].PRODUCT_ID;
+        lsresults.COMPONENT = li_crtcomp[0].COMPONENT;
+        lsresults.ITEM_NUM = li_crtcomp[0].ITEM_NUM;
+        lsresults.CRITICALKEY = li_crtcomp[0].CRITICALKEY;
+        liresults.push(lsresults);
+        if (liresults.length > 0) {
+            try {
+                await cds.run(INSERT.into("CP_CRITICAL_COMP").entries(liresults));
+                responseMessage = "Critical Component udpated";
+            } catch (e) {
+                responseMessage = "Critical Component udpate failed";
+            }
+        }
+        return responseMessage;
+    });
     // Planning Configuration
     // BOI - Deepa
     srv.on("postParameterValues", async (req) => {
@@ -1958,6 +1996,162 @@ module.exports = (srv) => {
         );
 
     });
+
+    // Retriction rule
+    // Maintain partial configurations for new product
+    srv.on("maintainRestrDetail", async (req) => {
+        let aRtrDetailsIns = [];
+        let oRtrDetailsIns = {};
+        let aRtrChar = {};
+        let responseMessage;
+        let aFilteredChars = [];
+        let aFilteredResults = [];
+        let aCharCounters = [];
+        let oCharCounter = {};
+        let index = 0, iCounter = 0, imaxCounter = 0;
+        aRtrChar = JSON.parse(req.data.RTRCHAR);
+        let sRTR = aRtrChar[0].RESTRICTION;
+
+        const aRtrDetails = await cds.run(
+            `SELECT *
+            FROM "CP_RESTRICT_DETAILS" 
+            WHERE "RESTRICTION" = '` + sRTR + `'
+            ORDER BY  "CHAR_NUM", "CHAR_COUNTER"`
+        );
+
+        if (req.data.FLAG === "C" || req.data.FLAG === "E") {
+
+            // Get Max Char Counter of Characteristics
+            imaxCounter = await cds.run(
+                `SELECT MAX("CHAR_COUNTER") as COUNTER
+                FROM "CP_RESTRICT_DETAILS"
+                WHERE "RESTRICTION" = '` + sRTR + `'`
+            );
+            if (imaxCounter) {
+                imaxCounter = imaxCounter[0].COUNTER;
+            }
+            for (var i = 0; i < aRtrChar.length; i++) {
+                oCharCounter = {};
+                aFilteredChars = [];
+                iCounter = 0;
+                if (aCharCounters.length > 0) {
+                    aFilteredChars = aCharCounters.filter(function (aCharCounter) {
+                        return aCharCounter.CHAR_NUM === aRtrChar[i].CHAR_NUM;
+                    });
+                }
+                if (aFilteredChars.length === 0) {
+                    aFilteredChars = aRtrDetails.filter(function (aRtrChars) {
+                        return aRtrChars.CHAR_NUM === aRtrChar[i].CHAR_NUM;
+                    });
+                }
+
+                if (aFilteredChars.length > 0) {
+                    iCounter = aFilteredChars[0].CHAR_COUNTER;
+
+                    oCharCounter.CHAR_NUM = aRtrChar[i].CHAR_NUM;
+                    oCharCounter.CHAR_COUNTER = iCounter;
+
+                    index = aCharCounters.findIndex((obj) => obj.CHAR_NUM === aRtrChar[i].CHAR_NUM); // find index
+                    if (index === -1) {
+                        index = aCharCounters.length;
+                    }
+                    aCharCounters[index] = oCharCounter; // replace with new object 
+
+                } else {
+                    imaxCounter = imaxCounter + 1;
+                    iCounter = imaxCounter;
+                    oCharCounter.CHAR_NUM = aRtrChar[i].CHAR_NUM;
+                    oCharCounter.CHAR_COUNTER = iCounter;
+                    aCharCounters.push(oCharCounter);
+                }
+
+                oRtrDetailsIns.RESTRICTION = aRtrChar[i].RESTRICTION;
+                oRtrDetailsIns.CLASS_NUM = aRtrChar[i].CLASS_NUM;
+                oRtrDetailsIns.CHAR_NUM = aRtrChar[i].CHAR_NUM;
+                oRtrDetailsIns.CHAR_COUNTER = iCounter;
+                oRtrDetailsIns.CHARVAL_NUM = aRtrChar[i].CHARVAL_NUM;
+                oRtrDetailsIns.OD_CONDITION = aRtrChar[i].OD_CONDITION;
+                oRtrDetailsIns.ROW_ID = iCounter;
+                aRtrDetailsIns.push(oRtrDetailsIns);
+                oRtrDetailsIns = {};
+
+            }
+            if (aRtrDetailsIns.length > 0) {
+                try {
+                    await cds.run(INSERT.into("CP_RESTRICT_DETAILS").entries(aRtrDetailsIns));
+                    responseMessage = " Restriction Rule Created Successfully";
+                } catch (errRes) {
+                    //DONOTHING
+                    // responseMessage = " Creation failed";
+                    responseMessage = errRes.message;
+                }
+            }
+        }
+        else if (req.data.FLAG === "D") {
+            for (var i = 0; i < aRtrChar.length; i++) {
+                oRtrDetailsIns.RESTRICTION = aRtrChar[i].RESTRICTION;
+                oRtrDetailsIns.CLASS_NUM = aRtrChar[i].CLASS_NUM;
+                oRtrDetailsIns.CHAR_NUM = aRtrChar[i].CHAR_NUM;
+                oRtrDetailsIns.CHAR_COUNTER = aRtrChar[i].CHAR_COUNTER;
+                oRtrDetailsIns.CHARVAL_NUM = aRtrChar[i].CHARVAL_NUM;
+                try {
+                    await cds.delete("CP_RESTRICT_DETAILS", oRtrDetailsIns);
+                    responseMessage = "Restriction Rule Deleted Successfully";
+                    iCounter = aRtrChar[i].CHAR_COUNTER;
+                    break;
+                } catch (errRes) {
+                    //DONOTHING
+                    responseMessage = errRes.message;;
+                }
+
+            }
+
+            if (iCounter > 0) { //  if deletion is successfull
+                aRtrDetailsIns = [];
+                oRtrDetailsIns = {};
+                aFilteredChars = [];
+
+                // To check the count of char counter being deleted 
+                aFilteredChars = aRtrDetails.filter(function (aRtrChars) {
+                    return aRtrChars.CHAR_COUNTER === iCounter;
+                });
+                if (aFilteredChars.length === 1) {
+                    // Below logic is to decrease the existing char counters above deleted counter by 1 and insert
+                    // This is to maintain the sequence of counters 
+                    for (let j = 0; j < aRtrDetails.length; j++) {
+                        if (aRtrDetails[j].CHAR_COUNTER > iCounter) {
+                            try {
+                                await cds.delete("CP_RESTRICT_DETAILS", aRtrDetails[j]);
+                                oRtrDetailsIns.RESTRICTION = aRtrDetails[j].RESTRICTION;
+                                oRtrDetailsIns.CLASS_NUM = aRtrDetails[j].CLASS_NUM;
+                                oRtrDetailsIns.CHAR_NUM = aRtrDetails[j].CHAR_NUM;
+                                oRtrDetailsIns.CHAR_COUNTER = aRtrDetails[j].CHAR_COUNTER - 1;
+                                oRtrDetailsIns.CHARVAL_NUM = aRtrDetails[j].CHARVAL_NUM;
+                                oRtrDetailsIns.OD_CONDITION = aRtrDetails[j].OD_CONDITION;
+                                oRtrDetailsIns.ROW_ID = aRtrDetails[j].CHAR_COUNTER - 1;
+                                aRtrDetailsIns.push(oRtrDetailsIns);
+                                oRtrDetailsIns = {};
+                            } catch (e) {
+                                console.log(e);
+                            }
+                        }
+                    }
+
+                    if (aRtrDetailsIns.length > 0) {
+                        try {
+                            await cds.run(INSERT.into("CP_RESTRICT_DETAILS").entries(aRtrDetailsIns));
+                        } catch (e) {
+                            //DONOTHING
+                        }
+                    }
+                }
+            }
+        }
+        oRtrDetailsIns = {};
+        return responseMessage;
+    });
+
+
     // POST Service for Unique Characteristic Items and Weekly Quantities
     srv.on("postCIRQuantities", async (req) => {
         const objCIR = new CIRService();

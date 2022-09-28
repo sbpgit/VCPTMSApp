@@ -25,6 +25,21 @@
                     "odataVersion": "4.0"
                 }
             }
+        },
+        "crossNavigation": {
+            "inbounds": {
+                "cpapp-cpcriticalcomp-inbound": {
+                    "signature": {
+                        "parameters": {},
+                        "additionalParameters": "allowed"
+                    },
+                    "semanticObject": "cpcriticalcomp",
+                    "action": "display",
+                    "title": "{{flpTitle}}",
+                    "subTitle": "{{flpSubtitle}}",
+                    "icon": ""
+                }
+            }
         }
     },
     "sap.ui": {

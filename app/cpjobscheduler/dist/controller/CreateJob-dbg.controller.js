@@ -1017,7 +1017,7 @@ sap.ui.define(
                     // Product list
                 } else if (sId.includes("prod")) {
                     var aSelectedProd;
-                    that.oProdList.getBinding("items").filter([]);
+                    // that.oProdList.getBinding("items").filter([]);
                     aSelectedProd = oEvent.getParameter("selectedItems");
                     that.oGModel.setProperty("/Flag", "X");
                     if (aSelectedProd && aSelectedProd.length > 0) {
@@ -3263,8 +3263,8 @@ sap.ui.define(
                     }
                     // 07-09-2022-1 
                     //  22-09-2022
-                    else if (bButton === "Generate Assembly Requirements") {
-                        actionText = "/ibpimport-srv/exportIBPAsmreq";   
+                    else if (bButton === "Generate assembly requirements") {
+                        actionText = "/catalog/generateAssemblyReq";   
                      }
                      //  22-09-2022
                 }
@@ -3400,6 +3400,7 @@ sap.ui.define(
                         bButton.includes("Sales History Config") ||
                         bButton.includes("Actual Components") ||
                         bButton.includes("Assembly Requirement") ||
+                        bButton === "Export CIR"  ||
                         oSelJobType === "S"
                     ) {
                         var finalList = {
@@ -3423,7 +3424,7 @@ sap.ui.define(
                         // Getting data for Timeseries
                         // 07-09-2022-1
                     } else if (bButton.includes("Time") || bButton.includes("sales orders") || bButton === "Generate Fully configured Demand"
-                                || bButton === "Generate Assembly Requirements") {
+                                || bButton === "Generate assembly requirements") {
                         // 07-09-2022-1
                         var finalList = {
                             name: JobName,

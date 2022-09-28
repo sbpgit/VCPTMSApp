@@ -185,6 +185,34 @@ sap.ui.define(
                         MessageToast.show("error");
                     },
                 });
+                sap.ui.core.BusyIndicator.show();
+
+                // Planned Parameter Values
+
+                this.getModel("BModel").read("/V_Parameters", {
+                    success: function (oData) {
+                        // if Frozen Horizon is 14 Days, we need to consider from 15th day
+                        var iFrozenHorizon = parseInt(oData.results[0].VALUE) + 1;
+                        var dDate = new Date();
+                        // var oDateL = that.getDateFn(dDate);
+                        // oDateL = that.addDays(oDateL, iFrozenHorizon);
+                        dDate = new Date(dDate.setDate(dDate.getDate() + iFrozenHorizon));
+                        var oDateL = that.getDateFn(dDate);
+                        var oDateH = new Date(
+                            dDate.getFullYear(),
+                            dDate.getMonth(),
+                            dDate.getDate() + 90
+                        );
+                        var oDateH = that.getDateFn(oDateH);
+                        that.byId("fromDate").setValue(oDateL);
+                        that.byId("toDate").setValue(oDateH);
+                        sap.ui.core.BusyIndicator.hide();
+                    },
+                    error: function (oData, error) {
+                        MessageToast.show("error");
+                        sap.ui.core.BusyIndicator.hide();
+                    },
+                });
             },
 
             /**
@@ -194,7 +222,7 @@ sap.ui.define(
             onResetDate: function () {
                 that.byId("fromDate").setValue("");
                 that.byId("toDate").setValue("");
-                oGModel.setProperty("/resetFlag", "X");
+                // oGModel.setProperty("/resetFlag", "X");
                 that.oLoc.setValue("");
                 that.oProd.setValue("");
                 that.oVer.setValue("");
@@ -634,6 +662,8 @@ sap.ui.define(
             getNextMonday: function (imDate) {
                 var vDate, vMonth, vYear;
                 const lDate = new Date(imDate);
+                var timeOffsetInMS = lDate.getTimezoneOffset() * 60000;
+                lDate.setTime(lDate.getTime() + timeOffsetInMS);
                 let lDay = lDate.getDay();
                 if (lDay !== 0) lDay = 7 - lDay;
                 lDay = lDay + 1;
@@ -660,6 +690,8 @@ sap.ui.define(
             addDays: function (imDate, imDays) {
                 var vDate, vMonth, vYear;
                 const lDate = new Date(imDate);
+                var timeOffsetInMS = lDate.getTimezoneOffset() * 60000;
+                lDate.setTime(lDate.getTime() + timeOffsetInMS);
                 const lNextWeekDay = new Date(
                     lDate.getFullYear(),
                     lDate.getMonth(),
@@ -921,19 +953,19 @@ sap.ui.define(
                     that.oGModel.setProperty("/SelectedProd", "");
 
                     // Calling service to get the Product data
-                    //   this.getModel("BModel").read("/getLocProdDet", {
-                    //     filters: [
-                    //       new Filter(
-                    //         "LOCATION_ID",
-                    //         FilterOperator.EQ,
-                    //         aSelectedItems[0].getTitle()
-                    //       ),
-                    //     ],
-                    this.getModel("BModel").callFunction("/getAllProd", {
-                        method: "GET",
-                        urlParameters: {
-                            LOCATION_ID: aSelectedItems[0].getTitle()
-                        },
+                      this.getModel("BModel").read("/getLocProdDet", {
+                        filters: [
+                          new Filter(
+                            "LOCATION_ID",
+                            FilterOperator.EQ,
+                            aSelectedItems[0].getTitle()
+                          ),
+                        ],
+                    // this.getModel("BModel").callFunction("/getAllProd", {
+                    //     method: "GET",
+                    //     urlParameters: {
+                    //         LOCATION_ID: aSelectedItems[0].getTitle()
+                    //     },
                         success: function (oData) {
                             that.prodModel.setData(oData);
                             that.oProdList.setModel(that.prodModel);

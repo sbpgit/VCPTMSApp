@@ -642,7 +642,7 @@ context cp {
         key CLASS_NUM    : String(18) @title : 'Internal class number';
         key CHAR_NUM     : String(10) @title : 'Internal Char. number';
         key CHAR_COUNTER : Integer    @title : 'Characteristic counter';
-        key CHARVAL_NUM  : String(10) @title : 'Internal Char. number';
+        key CHARVAL_NUM  : String(15) @title : 'Internal Char. number';
             OD_CONDITION : String(2)  @title : 'Restriction condition ';
             ROW_ID       : Integer    @title : 'Attribute Index ';
     };
@@ -760,11 +760,13 @@ context cp {
     entity ASSEMBLY_REQ{
         key LOCATION_ID   : String(4)      @title : 'Location ';
         key PRODUCT_ID    : String(40)     @title : 'Product';
+        key ITEM_NUM      : String(5)      @title : 'ITEM_NUM';
         key COMPONENT     : String(40)     @title : 'COMPONENT';
         key WEEK_DATE     : Date           @title : 'Week Date';
         key MODEL_VERSION : String(20)     @title : 'MODEL_VERSION';
         key VERSION       : String(10)     @title : 'Version';
         key SCENARIO      : String(32)     @title : 'Scenario';
+        REF_PRODID        : String(40)     @title : ' Ref. Product'; 
         COMPCIR_QTY       : Decimal(13, 3) @title : 'CIR Compoonent QTY';
     }
 
@@ -774,6 +776,13 @@ context cp {
         key SALES_LOC     : String(4)  @title : 'Sales Location ';
         key SALES_PRODUCT : String(40) @title : 'Sales Product';
     }
+    entity CRITICAL_COMP {
+        key LOCATION_ID   : String(4)  @title : 'Location ';
+        key PRODUCT_ID    : String(40) @title : 'Product';
+        key ITEM_NUM      : String(5)  @title : 'ITEM_NUM';
+        key COMPONENT     : String(40) @title : 'COMPONENT';
+        CRITICALKEY       : String(1);
+    }
 // End Of Insert - Deepa
 }
 
@@ -782,6 +791,7 @@ context cp {
 entity![V_OBDHDR]{
     key![LOCATION_ID]  : String(4)  @title : 'Location';
     key![PRODUCT_ID]   : String(40) @title : 'Product';
+    key![ITEM_NUM]     : String(5)  @title : 'ITEM_NUM';
     key![COMPONENT]    : String(40) @title : 'COMPONENT';
     key![COMP_QTY]     : Decimal(13, 3) @title : 'COMP_QTY';
     key![OBJ_DEP]      : String(30) @title : 'Object Dependency';
