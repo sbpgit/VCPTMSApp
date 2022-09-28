@@ -1017,7 +1017,6 @@ sap.ui.define(
                     // Product list
                 } else if (sId.includes("prod")) {
                     var aSelectedProd;
-                    that.oProdList.getBinding("items").filter([]);
                     aSelectedProd = oEvent.getParameter("selectedItems");
                     that.oGModel.setProperty("/Flag", "X");
                     if (aSelectedProd && aSelectedProd.length > 0) {
