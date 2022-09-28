@@ -760,11 +760,13 @@ context cp {
     entity ASSEMBLY_REQ{
         key LOCATION_ID   : String(4)      @title : 'Location ';
         key PRODUCT_ID    : String(40)     @title : 'Product';
+        key ITEM_NUM      : String(5)      @title : 'ITEM_NUM';
         key COMPONENT     : String(40)     @title : 'COMPONENT';
         key WEEK_DATE     : Date           @title : 'Week Date';
         key MODEL_VERSION : String(20)     @title : 'MODEL_VERSION';
         key VERSION       : String(10)     @title : 'Version';
         key SCENARIO      : String(32)     @title : 'Scenario';
+        REF_PRODID        : String(40)     @title : ' Ref. Product'; 
         COMPCIR_QTY       : Decimal(13, 3) @title : 'CIR Compoonent QTY';
     }
 
@@ -782,6 +784,7 @@ context cp {
 entity![V_OBDHDR]{
     key![LOCATION_ID]  : String(4)  @title : 'Location';
     key![PRODUCT_ID]   : String(40) @title : 'Product';
+    key![ITEM_NUM]     : String(5)  @title : 'ITEM_NUM';
     key![COMPONENT]    : String(40) @title : 'COMPONENT';
     key![COMP_QTY]     : Decimal(13, 3) @title : 'COMP_QTY';
     key![OBJ_DEP]      : String(30) @title : 'Object Dependency';

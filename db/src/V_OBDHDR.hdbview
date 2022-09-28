@@ -7,6 +7,7 @@
 VIEW "V_OBDHDR"
 AS SELECT B.LOCATION_ID,
         B.PRODUCT_ID,
+        B.ITEM_NUM,
         B.COMPONENT,
         B.COMP_QTY,
         A.OBJ_DEP,
