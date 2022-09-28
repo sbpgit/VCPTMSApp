@@ -1,7 +1,90 @@
-<mvc:View controllerName="cpapp.cpcriticalcomp.controller.Home"
-    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+<mvc:View controllerName="cpapp.cpcriticalcomp.controller.Home" 
+    xmlns:l="sap.ui.layout"
+    xmlns:core="sap.ui.core"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:ux="sap.uxap"
+    xmlns:mvc="sap.ui.core.mvc" 
+    displayBlock="true"
     xmlns="sap.m">
-    <Page id="page" title="{i18n>title}">
-        <content />
-    </Page>
+
+        <ux:ObjectPageLayout id="ObjectPageLayout">
+            <ux:headerTitle>
+                <ux:ObjectPageDynamicHeaderTitle>
+                    <ux:expandedHeading>
+                        <Title text="{i18n>title}" class="boldText" titleAlignment="Center" />
+                    </ux:expandedHeading>
+                    <ux:snappedHeading>
+                        <FlexBox fitContainer="true" alignItems="Center" >
+                            <Title text="{i18n>title}" wrapping="true" />
+                        </FlexBox>
+                    </ux:snappedHeading>
+                </ux:ObjectPageDynamicHeaderTitle>
+            </ux:headerTitle>
+            <ux:headerContent>
+                <FlexBox wrap="Wrap" fitContainer="true">
+        <l:Grid defaultSpan="XL3 L3 M6 S12" >
+
+                <VBox>
+                    <Label text ="{i18n>compsearch}" />
+                    <SearchField id="idCompSearch" liveChange="onSearch" placeholder="Item no/ Component"/>
+                </VBox>
+                <VBox >
+                    <Label text="{i18n>loc}" required="true"/>
+                    <Input id="idloc" value=""  placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                </VBox>
+                <VBox>
+                    <Label text="{i18n>prod}" required="true"/>
+                    <MultiInput id="prodInput"  placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
+                </VBox>
+                <VBox> 
+                <Label text ="" /> 
+                <HBox>                 
+                    <Button text="Go" type="Emphasized" press="onGetData" tooltip="Get data based on filters" class="sapUiTinyMarginEnd"/>
+                            <Button text="Reset" type="Transparent" press="onResetDate" tooltip="Reset data"/>
+                    </HBox>
+                </VBox>
+                </l:Grid>
+            </FlexBox>
+            </ux:headerContent>
+            <ux:sections>
+                <ux:ObjectPageSection >
+                    <ux:subSections>
+                        <ux:ObjectPageSubSection>
+                            <ux:blocks>
+                            <VBox>
+                <Table id="idCriticalComp" items="{path: '/results'}" growingScrollToLoad="true"  sticky="ColumnHeaders">
+                    
+                    <columns>
+
+                        <Column hAlign="Left" vAlign="Middle" >
+                            <Text text="{i18n>itemno}" />
+                        </Column>
+                        <Column hAlign="Left" vAlign="Middle" >
+                            <Text text="{i18n>componemt}" />
+                        </Column>
+                        <Column hAlign="Left" vAlign="Middle">
+                            <Text text="{i18n>criticalkey}"/>
+                        </Column>
+                    </columns>
+                    <items>
+                        <ColumnListItem>
+                            <cells>
+                                <ObjectIdentifier title="{ITEM_NUM}"/>
+                                <Text text="{COMPONENT}"/>
+                                <Switch type="AcceptReject" state="{= ${CRITICALKEY} === 'X' ? true : false}" change="onChange" >
+                                    <layoutData>
+                                        <FlexItemData growFactor="1" />
+                                    </layoutData>
+                                </Switch>
+                            </cells>
+                        </ColumnListItem>
+                    </items>
+                </Table>
+                </VBox>
+                </ux:blocks>
+                        </ux:ObjectPageSubSection>
+                    </ux:subSections>
+                </ux:ObjectPageSection>
+            </ux:sections>
+        </ux:ObjectPageLayout>
 </mvc:View>
