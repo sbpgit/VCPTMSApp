@@ -71,7 +71,7 @@
                             <cells>
                                 <ObjectIdentifier title="{ITEM_NUM}"/>
                                 <Text text="{COMPONENT}"/>
-                                <Switch type="AcceptReject" state="{= ${CRITICALKEY} === 'X' ? true : false}" change="onChange" >
+                                <Switch type="AcceptReject" state="{= ${CRITICALKEY} === 'X' ? true : false}" customTextOn="Critical" customTextOff="Non-Critical" change="onChange" >
                                     <layoutData>
                                         <FlexItemData growFactor="1" />
                                     </layoutData>
