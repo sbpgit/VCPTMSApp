@@ -1,26 +1,11 @@
 {
-<<<<<<< HEAD
-  "Component-preload.js": 1664188852774,
-  "manifest.json": 1664188852417,
-=======
-<<<<<<< HEAD
-  "utils/locate-reuse-libs-dbg.js": 1661869075003,
-  "Component.js": 1661869075003,
-  "utils/locate-reuse-libs.js": 1661869075003,
-  "manifest.json": 1663920842362,
-  "manifest-bundle.zip": 1663920842381,
-  "Component-preload.js": 1663920842771,
-  "i18n/i18n.properties": 1661869075003,
-  "Component-dbg.js": 1661869075003,
-  "index.html": 1661869075003
-=======
->>>>>>> e9ff4eebe57f2fee2bde68c61ecf30211fc7cb28
+  "Component-preload.js": 1664204068999,
   "utils/locate-reuse-libs.js": 1659447417370,
+  "manifest.json": 1664204068561,
   "Component.js": 1659447417370,
-  "manifest-bundle.zip": 1664188852434,
+  "manifest-bundle.zip": 1664204068576,
   "i18n/i18n.properties": 1659447417370,
   "utils/locate-reuse-libs-dbg.js": 1659447417370,
   "Component-dbg.js": 1659447417370,
   "index.html": 1659447417370
->>>>>>> 849481498819c785dd6c580adbe8abfb4fca96c8
 }

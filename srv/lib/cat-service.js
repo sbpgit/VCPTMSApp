@@ -1769,6 +1769,31 @@ module.exports = (srv) => {
         const keys = ['PRODUCT_ID', 'VERSION', 'SCENARIO'];
         return GenFunctions.removeDuplicate(liprodver, keys);
     });
+
+    // Maintain partial configurations for new product
+    srv.on("changeToCritical", async (req) => {
+        let liresults = [];
+        let lsresults = {};
+        let responseMessage = '';
+        let li_crtcomp = {};
+
+        li_crtcomp = JSON.parse(req.data.criticalComp);
+        lsresults.LOCATION_ID = li_crtcomp[0].LOCATION_ID;
+        lsresults.PRODUCT_ID = li_crtcomp[0].PRODUCT_ID;
+        lsresults.COMPONENT = li_crtcomp[0].COMPONENT;
+        lsresults.ITEM_NUM = li_crtcomp[0].ITEM_NUM;
+        lsresults.CRITICALKEY = li_crtcomp[0].CRITICALKEY;
+        liresults.push(lsresults);
+        if (liresults.length > 0) {
+            try {
+                await cds.run(INSERT.into("CP_CRITICAL_COMP").entries(liresults));
+                responseMessage = "Critical Component udpated";
+            } catch (e) {
+                responseMessage = "Critical Component udpate failed";
+            }
+        }
+        return responseMessage;
+    });
     // Planning Configuration
     // BOI - Deepa
     srv.on("postParameterValues", async (req) => {
