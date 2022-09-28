@@ -764,33 +764,61 @@ module.exports = (srv) => {
 
     // Generate Timeseries using action call
     srv.on("generateTimeseries", async (req) => {
-        // const obgenTimeseries = new GenTimeseries();
-        // await obgenTimeseries.genTimeseries(req.data);
-
-        const obgenTimeseriesM2 = new GenTimeseriesM2();
-        await obgenTimeseriesM2.genTimeseries(req.data);
+        const li_paravalues = await cds.run(
+            `SELECT VALUE
+                FROM "CP_PARAMETER_VALUES"
+                WHERE "PARAMETER_ID" = 5 `);
+        if (li_paravalues[0].VALUE === 'Components') {
+            const obgenTimeseries = new GenTimeseries();
+            await obgenTimeseries.genTimeseries(req.data);
+        }
+        else if (li_paravalues[0].VALUE === 'Fully Configured ') {
+            const obgenTimeseriesM2 = new GenTimeseriesM2();
+            await obgenTimeseriesM2.genTimeseries(req.data);
+        }
     });
     srv.on("generateTimeseriesF", async (req) => {
-        // const obgenTimeseries = new GenTimeseries();
-        // await obgenTimeseries.genTimeseriesF(req.data);
-
-        const obgenTimeseriesM2 = new GenTimeseriesM2();
-        await obgenTimeseriesM2.genTimeseriesF(req.data);
+        const li_paravalues = await cds.run(
+            `SELECT VALUE
+                FROM "CP_PARAMETER_VALUES"
+                WHERE "PARAMETER_ID" = 5 `);
+        if (li_paravalues[0].VALUE === 'Components') {
+            const obgenTimeseries = new GenTimeseries();
+            await obgenTimeseries.genTimeseriesF(req.data);
+        }
+        else if (li_paravalues[0].VALUE === 'Fully Configured ') {
+            const obgenTimeseriesM2 = new GenTimeseriesM2();
+            await obgenTimeseriesM2.genTimeseriesF(req.data);
+        }
     });
     // Generate Timeseries fucntion calls
     srv.on("generate_timeseries", async (req) => {
-        // const obgenTimeseries = new GenTimeseries();
-        // await obgenTimeseries.genTimeseries(req.data);
-
-        const obgenTimeseriesM2 = new GenTimeseriesM2();
-        await obgenTimeseriesM2.genTimeseries(req.data);
+        const li_paravalues = await cds.run(
+            `SELECT VALUE
+                FROM "CP_PARAMETER_VALUES"
+                WHERE "PARAMETER_ID" = 5 `);
+        if (li_paravalues[0].VALUE === 'Components') {
+            const obgenTimeseries = new GenTimeseries();
+            await obgenTimeseries.genTimeseries(req.data);
+        }
+        else if (li_paravalues[0].VALUE === 'Fully Configured ') {
+            const obgenTimeseriesM2 = new GenTimeseriesM2();
+            await obgenTimeseriesM2.genTimeseries(req.data);
+        }
     });
     srv.on("generate_timeseriesF", async (req) => {
-        // const obgenTimeseries = new GenTimeseries();
-        // await obgenTimeseries.genTimeseriesF(req.data);
-
-        const obgenTimeseriesM2 = new GenTimeseriesM2();
-        await obgenTimeseriesM2.genTimeseriesF(req.data);
+        const li_paravalues = await cds.run(
+            `SELECT VALUE
+                FROM "CP_PARAMETER_VALUES"
+                WHERE "PARAMETER_ID" = 5 `);
+        if (li_paravalues[0].VALUE === 'Components') {
+            const obgenTimeseries = new GenTimeseries();
+            await obgenTimeseries.genTimeseriesF(req.data);
+        }
+        else if (li_paravalues[0].VALUE === 'Fully Configured ') {
+            const obgenTimeseriesM2 = new GenTimeseriesM2();
+            await obgenTimeseriesM2.genTimeseriesF(req.data);
+        }
     });
     // Generate Unique ID
     srv.on("genUniqueID", async (req) => {
@@ -1786,7 +1814,15 @@ module.exports = (srv) => {
         liresults.push(lsresults);
         if (liresults.length > 0) {
             try {
-                await cds.run(INSERT.into("CP_CRITICAL_COMP").entries(liresults));
+                await UPDATE`CP_CRITICAL_COMP`
+                    .with({
+                        CRITICALKEY: lsresults.CRITICALKEY
+                    })
+                    .where(`LOCATION_ID = '${lsresults.LOCATION_ID}'
+                                          AND PRODUCT_ID = '${lsresults.PRODUCT_ID}'
+                                          AND ITEM_NUM = '${lsresults.ITEM_NUM}'
+                                          AND COMPONENT = '${lsresults.COMPONENT}'`);
+                // await cds.run(INSERT.into("CP_CRITICAL_COMP").entries(liresults));
                 responseMessage = "Critical Component udpated";
             } catch (e) {
                 responseMessage = "Critical Component udpate failed";
