@@ -16,7 +16,8 @@ using {
     V_ODRESTRICT,
     V_LOCPRODLINERTR,
     V_CIR_CHAR_RATE,
-    V_CIRVERSCEN
+    V_CIRVERSCEN,
+    V_BOMCRITICALCOMP
 } from '../db/data-model';
 // using V_ODPROFILES from '../db/data-model';
 using V_BOMODCOND from '../db/data-model';
@@ -276,6 +277,6 @@ service CatalogService @(impl : './lib/cat-service.js'){
     function genAssemblyreq(LOCATION_ID : String(4), PRODUCT_ID : String(40)) returns String;
     action generateAssemblyReq(LOCATION_ID : String(4), PRODUCT_ID : String(40));
 //*****/ Critical Comp /*****/
-    entity getCriticalComp as projection on od.CRITICAL_COMP;
+    entity getCriticalComp as projection on V_BOMCRITICALCOMP;//od.CRITICAL_COMP;
     function changeToCritical(criticalComp: String ) returns String;
 }
