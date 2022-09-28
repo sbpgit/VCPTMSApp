@@ -366,7 +366,7 @@ module.exports = (srv) => {
                 }
             }
             liCompWeekly.push(GenFunctions.parse(lsCompWeekly));
-           // lsCompWeekly = {};
+            // lsCompWeekly = {};
             // }
             lsCompWeekly = {};
         }
@@ -1769,6 +1769,31 @@ module.exports = (srv) => {
         const keys = ['PRODUCT_ID', 'VERSION', 'SCENARIO'];
         return GenFunctions.removeDuplicate(liprodver, keys);
     });
+
+    // Maintain partial configurations for new product
+    srv.on("changeToCritical", async (req) => {
+        let liresults = [];
+        let lsresults = {};
+        let responseMessage = '';
+        let li_crtcomp = {};
+
+        li_crtcomp = JSON.parse(req.data.criticalComp);
+        lsresults.LOCATION_ID = li_crtcomp[0].LOCATION_ID;
+        lsresults.PRODUCT_ID = li_crtcomp[0].PRODUCT_ID;
+        lsresults.COMPONENT = li_crtcomp[0].COMPONENT;
+        lsresults.ITEM_NUM = li_crtcomp[0].ITEM_NUM;
+        lsresults.CRITICALKEY = li_crtcomp[0].CRITICALKEY;
+        liresults.push(lsresults);
+        if (liresults.length > 0) {
+            try {
+                await cds.run(INSERT.into("CP_CRITICAL_COMP").entries(liresults));
+                responseMessage = "Critical Component udpated";
+            } catch (e) {
+                responseMessage = "Critical Component udpate failed";
+            }
+        }
+        return responseMessage;
+    });
     // Planning Configuration
     // BOI - Deepa
     srv.on("postParameterValues", async (req) => {
@@ -1998,55 +2023,55 @@ module.exports = (srv) => {
 
         if (req.data.FLAG === "C" || req.data.FLAG === "E") {
             for (var i = 0; i < liRtrChar.length; i++) {
-                oCharCounter = {};               
-                    if (aCharCounters.length > 0) {
-                        aFilteredChars = aCharCounters.filter(function (aCharCounter) {
-                            return aCharCounter.CHAR_NUM === liRtrChar[i].CHAR_NUM;
-                        });
-                    } else {
+                oCharCounter = {};
+                if (aCharCounters.length > 0) {
+                    aFilteredChars = aCharCounters.filter(function (aCharCounter) {
+                        return aCharCounter.CHAR_NUM === liRtrChar[i].CHAR_NUM;
+                    });
+                } else {
 
-                        aFilteredChars = liRtrDetails.filter(function (aRtrChars) {
-                            return aRtrChars.CHAR_NUM === liRtrChar[i].CHAR_NUM;
-                        });
+                    aFilteredChars = liRtrDetails.filter(function (aRtrChars) {
+                        return aRtrChars.CHAR_NUM === liRtrChar[i].CHAR_NUM;
+                    });
+                }
+
+                if (aFilteredChars.length > 0) {
+                    iCounter = aFilteredChars[0].CHAR_COUNTER;
+
+                    oCharCounter.CHAR_NUM = liRtrChar[i].CHAR_NUM;
+                    oCharCounter.CHAR_COUNTER = iCounter;
+
+                    index = aCharCounters.findIndex((obj) => obj.CHAR_NUM === liRtrChar[i].CHAR_NUM); // find index
+                    if (index === -1) {
+                        index = aCharCounters.length;
                     }
+                    aCharCounters[index] = oCharCounter; // replace with new object ... working :)
 
-                    if (aFilteredChars.length > 0) {
-                        iCounter = aFilteredChars[0].CHAR_COUNTER;
+                } else {
+                    iCounter = iCounter + 1;
+                    oCharCounter.CHAR_NUM = liRtrChar[i].CHAR_NUM;
+                    oCharCounter.CHAR_COUNTER = iCounter;
+                    aCharCounters.push(oCharCounter);
+                }
 
-                        oCharCounter.CHAR_NUM = liRtrChar[i].CHAR_NUM;
-                        oCharCounter.CHAR_COUNTER = iCounter;                        
+                lsresults.RESTRICTION = liRtrChar[i].RESTRICTION;
+                // lsresults.RTR_COUNTER = liRtrChar[i].RTR_COUNTER;
+                lsresults.CLASS_NUM = liRtrChar[i].CLASS_NUM;
+                lsresults.CHAR_NUM = liRtrChar[i].CHAR_NUM;
+                lsresults.CHAR_COUNTER = iCounter; //liRtrChar[i].CHAR_COUNTER;
+                lsresults.CHARVAL_NUM = liRtrChar[i].CHARVAL_NUM;
+                // if (req.data.FLAG === "E") {
+                //     try {
+                //         // await cds.delete("CP_RESTRICT_DETAILS", lsresults);
+                //     } catch (e) {
+                //         //DONOTHING
+                //     }
+                // }
+                lsresults.OD_CONDITION = liRtrChar[i].OD_CONDITION;
+                lsresults.ROW_ID = iCounter; //liRtrChar[i].ROW_ID;
+                liresults.push(lsresults);
+                lsresults = {};
 
-                        index = aCharCounters.findIndex((obj) => obj.CHAR_NUM === liRtrChar[i].CHAR_NUM); // find index
-                        if(index === -1) {
-                            index = aCharCounters.length;
-                        }
-                        aCharCounters[index] = oCharCounter; // replace with new object ... working :)
-
-                    } else {
-                        iCounter = iCounter + 1;
-                        oCharCounter.CHAR_NUM = liRtrChar[i].CHAR_NUM;
-                        oCharCounter.CHAR_COUNTER = iCounter;
-                        aCharCounters.push(oCharCounter);
-                    }
-
-                    lsresults.RESTRICTION = liRtrChar[i].RESTRICTION;
-                    // lsresults.RTR_COUNTER = liRtrChar[i].RTR_COUNTER;
-                    lsresults.CLASS_NUM = liRtrChar[i].CLASS_NUM;
-                    lsresults.CHAR_NUM = liRtrChar[i].CHAR_NUM;
-                    lsresults.CHAR_COUNTER = iCounter; //liRtrChar[i].CHAR_COUNTER;
-                    lsresults.CHARVAL_NUM = liRtrChar[i].CHARVAL_NUM;
-                    // if (req.data.FLAG === "E") {
-                    //     try {
-                    //         // await cds.delete("CP_RESTRICT_DETAILS", lsresults);
-                    //     } catch (e) {
-                    //         //DONOTHING
-                    //     }
-                    // }
-                    lsresults.OD_CONDITION = liRtrChar[i].OD_CONDITION;
-                    lsresults.ROW_ID = iCounter; //liRtrChar[i].ROW_ID;
-                    liresults.push(lsresults);
-                    lsresults = {};
-                
             }
             if (liresults.length > 0) {
                 try {

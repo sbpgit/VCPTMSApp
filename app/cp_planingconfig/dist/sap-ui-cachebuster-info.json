@@ -1,40 +1,13 @@
 {
-<<<<<<< HEAD
-  "view/App.view.xml": 1662738661026,
-=======
-<<<<<<< HEAD
-  "index.html": 1662729670268,
-  "controller/Home.controller.js": 1662729805850,
-  "utils/locate-reuse-libs.js": 1662729348588,
-  "model/models.js": 1662729348592,
-  "manifest.json": 1663921186168,
-  "controller/App.controller.js": 1662729348596,
-  "Component.js": 1662729348584,
-  "manifest-bundle.zip": 1663921186185,
-  "Component-preload.js": 1663921186888,
-  "Component-dbg.js": 1662729348584,
-  "model/models-dbg.js": 1662729348592,
-  "controller/Home-dbg.controller.js": 1662729805850,
-  "controller/App-dbg.controller.js": 1662729348596,
-  "utils/locate-reuse-libs-dbg.js": 1662729348588,
-  "view/MethodTyp.fragment.xml": 1662729633348,
-  "view/Home.view.xml": 1662972116490,
-  "view/App.view.xml": 1662729608640,
-  "css/style.css": 1662729348596,
-  "i18n/i18n.properties": 1662729545995
-=======
-  "Component-dbg.js": 1662738661022,
-  "utils/locate-reuse-libs.js": 1662738661022,
-  "manifest.json": 1663936962230,
->>>>>>> e9ff4eebe57f2fee2bde68c61ecf30211fc7cb28
-  "model/models.js": 1662738661022,
-  "utils/locate-reuse-libs.js": 1662738661022,
-  "manifest.json": 1664189141072,
-  "controller/Home.controller.js": 1662738661022,
   "controller/App.controller.js": 1662738661022,
+  "utils/locate-reuse-libs.js": 1662738661022,
+  "manifest.json": 1664204374159,
+  "model/models.js": 1662738661022,
+  "controller/Home.controller.js": 1662738661022,
+  "i18n/i18n.properties": 1662738661022,
   "Component.js": 1662738661022,
-  "manifest-bundle.zip": 1664189141084,
-  "Component-preload.js": 1664189141320,
+  "manifest-bundle.zip": 1664204374170,
+  "Component-preload.js": 1664204374479,
   "model/models-dbg.js": 1662738661022,
   "utils/locate-reuse-libs-dbg.js": 1662738661022,
   "controller/Home-dbg.controller.js": 1662738661022,
@@ -42,8 +15,7 @@
   "Component-dbg.js": 1662738661022,
   "view/MethodTyp.fragment.xml": 1662738661026,
   "view/Home.view.xml": 1663062425256,
-  "i18n/i18n.properties": 1662738661022,
+  "view/App.view.xml": 1662738661026,
   "css/style.css": 1662738661022,
   "index.html": 1662738661022
->>>>>>> 849481498819c785dd6c580adbe8abfb4fca96c8
 }

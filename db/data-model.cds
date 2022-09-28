@@ -776,6 +776,13 @@ context cp {
         key SALES_LOC     : String(4)  @title : 'Sales Location ';
         key SALES_PRODUCT : String(40) @title : 'Sales Product';
     }
+    entity CRITICAL_COMP {
+        key LOCATION_ID   : String(4)  @title : 'Location ';
+        key PRODUCT_ID    : String(40) @title : 'Product';
+        key ITEM_NUM      : String(5)  @title : 'ITEM_NUM';
+        key COMPONENT     : String(40) @title : 'COMPONENT';
+        CRITICALKEY       : String(1);
+    }
 // End Of Insert - Deepa
 }
 
