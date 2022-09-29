@@ -185,7 +185,20 @@ sap.ui.define(
              * This function is called when a click on reset button.
              * This will clear all the selections of inputs.
              */
+<<<<<<< HEAD
+            onResetData: function () {
+                var oModel = new sap.ui.model.json.JSONModel();
+                var iRowData = [],
+                    iColumnData = [];
+
+=======
             onResetDate: function () {
+                var oModel = new sap.ui.model.json.JSONModel();
+                var iRowData = [],
+                    iColumnData = [];
+               
+>>>>>>> c2c85b6d5ec07f95e283f281f6edd7ef71616523
+                that.oGModel = that.getModel("oGModel");
                 that.byId("fromDate").setValue("");
                 that.byId("toDate").setValue("");
                 // oGModel.setProperty("/resetFlag", "X");
@@ -193,6 +206,20 @@ sap.ui.define(
                 that.oProd.setValue("");
                 that.oVer.setValue("");
                 that.oScen.setValue("");
+<<<<<<< HEAD
+                that.byId("idSearch").setValue("");
+=======
+>>>>>>> c2c85b6d5ec07f95e283f281f6edd7ef71616523
+                that.oGModel.setProperty("/SelectedLoc", undefined);
+                that.oGModel.setProperty("/SelectedProd", undefined);
+                that.oGModel.setProperty("/SelectedVer", undefined);
+                that.oGModel.setProperty("/SelectedScen", undefined);
+                oModel.setData({
+                    rows: iRowData,
+                    columns: iColumnData,
+                });
+                that.oTable.setModel(oModel);
+
                 that.onAfterRendering();
             },
 
@@ -284,7 +311,7 @@ sap.ui.define(
                 var liDates = that.generateDateseries(fromDate, toDate);
                 // Looping through the data to generate columns
                 for (var i = 0; i < that.tableData.length; i++) {
-                    sRowData['Unique ID'] = that.tableData[i].UNIQUE_ID;
+                    sRowData['Unique ID'] = (that.tableData[i].UNIQUE_ID).toString();
                     sRowData.UNIQUE_DESC = that.tableData[i].UNIQUE_DESC;
                     sRowData['Product'] = that.tableData[i].PRODUCT_ID;
                     weekIndex = 1;
@@ -601,6 +628,64 @@ sap.ui.define(
 
                 }
             },
+            /**
+             * Called when something is entered into the search field.
+             * @param {object} oEvent -the event information.
+             */
+<<<<<<< HEAD
+            onSearchUniqueId: function (oEvent) {                
+                var oFilter;
+                that.oTable = that.byId("idCIReq");                            
+=======
+            onSearchUniqueId: function (oEvent) {
+                var sUniqueId = "";
+                that.oTable = that.byId("idCIReq");
+                that.oGModel = that.getModel("oGModel");
+                that.tData = that.oGModel.getProperty("/TData");
+>>>>>>> c2c85b6d5ec07f95e283f281f6edd7ef71616523
+
+                var sQuery =
+                    oEvent.getParameter("value") || oEvent.getParameter("newValue");
+                // Checking if serch value is empty
+<<<<<<< HEAD
+                if (sQuery) {
+                    oFilter = new Filter([
+                        new Filter("Unique ID", FilterOperator.Contains, sQuery),
+                        new Filter("UNIQUE_DESC", FilterOperator.Contains, sQuery),
+                        new Filter("Product", FilterOperator.Contains, sQuery)
+                    ], false);
+
+                    that.oTable.getBinding().filter(oFilter);
+                }
+                
+            },
+
+=======
+                // if (sQuery === "") {
+                    
+                // } else {                    
+                //     that.Data = that.oGModel.getProperty("/TData");
+                //     that.searchData = [];
+
+                //     for (var i = 0; i < that.Data.length; i++) {
+                //         sUniqueId = that.Data[i].UNIQUE_ID;
+                //         sUniqueId = sUniqueId.toString();
+                //         if (
+                //             sUniqueId.includes(sQuery) ||
+                //             that.Data[i].UNIQUE_DESC.includes(sQuery) ||
+                //             that.Data[i].PRODUCT_ID.includes(sQuery)
+                //         ) {
+                //             that.searchData.push(that.Data[i]);
+                //         }
+                //     }
+
+                //     that.oGModel.setProperty("/TData", that.searchData);
+                //     // Calling function to generate UI table dynamically based on search data
+                //     that.TableGenerate();
+                // }
+            },
+            
+>>>>>>> c2c85b6d5ec07f95e283f281f6edd7ef71616523
 
             /**
              * This function is called when selecting an item in dialogs .
@@ -703,7 +788,7 @@ sap.ui.define(
                                 });
 
                                 that.oVerList.setModel(that.verModel);
-                            }                          
+                            }
 
                         },
                         error: function (oData, error) {
@@ -871,6 +956,11 @@ sap.ui.define(
                     });
                 }
             },
+            /**
+            * Called when 'Publish' button is clicked on application
+            * - Displays confirmation pop-up to publish data to S4 System
+            * @param {*} oEvent 
+            */
             onPressPublish: function (oEvent) {
                 var objEvent = oEvent;
                 MessageBox.confirm(

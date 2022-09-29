@@ -773,8 +773,9 @@ context cp {
     entity FACTORY_SALESLOC {
         key LOCATION_ID   : String(4)  @title : 'Location ';
         key PRODUCT_ID    : String(40) @title : 'Product';
-        key SALES_LOC     : String(4)  @title : 'Sales Location ';
-        key SALES_PRODUCT : String(40) @title : 'Sales Product';
+        key PLAN_LOC      : String(4)  @title : 'Planning Location ';
+        key FACTORY_LOC   : String(4)  @title : 'Factory Location ';
+        // key SALES_PRODUCT : String(40) @title : 'Sales Product';
     }
     entity CRITICAL_COMP {
         key LOCATION_ID   : String(4)  @title : 'Location ';

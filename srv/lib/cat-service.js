@@ -772,7 +772,7 @@ module.exports = (srv) => {
             const obgenTimeseries = new GenTimeseries();
             await obgenTimeseries.genTimeseries(req.data);
         }
-        else if (li_paravalues[0].VALUE === 'Fully Configured ') {
+        else if (li_paravalues[0].VALUE === 'Fully Configured') {
             const obgenTimeseriesM2 = new GenTimeseriesM2();
             await obgenTimeseriesM2.genTimeseries(req.data);
         }
@@ -786,7 +786,7 @@ module.exports = (srv) => {
             const obgenTimeseries = new GenTimeseries();
             await obgenTimeseries.genTimeseriesF(req.data);
         }
-        else if (li_paravalues[0].VALUE === 'Fully Configured ') {
+        else if (li_paravalues[0].VALUE === 'Fully Configured') {
             const obgenTimeseriesM2 = new GenTimeseriesM2();
             await obgenTimeseriesM2.genTimeseriesF(req.data);
         }
@@ -801,7 +801,7 @@ module.exports = (srv) => {
             const obgenTimeseries = new GenTimeseries();
             await obgenTimeseries.genTimeseries(req.data);
         }
-        else if (li_paravalues[0].VALUE === 'Fully Configured ') {
+        else if (li_paravalues[0].VALUE === 'Fully Configured') {
             const obgenTimeseriesM2 = new GenTimeseriesM2();
             await obgenTimeseriesM2.genTimeseries(req.data);
         }
@@ -815,7 +815,7 @@ module.exports = (srv) => {
             const obgenTimeseries = new GenTimeseries();
             await obgenTimeseries.genTimeseriesF(req.data);
         }
-        else if (li_paravalues[0].VALUE === 'Fully Configured ') {
+        else if (li_paravalues[0].VALUE === 'Fully Configured') {
             const obgenTimeseriesM2 = new GenTimeseriesM2();
             await obgenTimeseriesM2.genTimeseriesF(req.data);
         }

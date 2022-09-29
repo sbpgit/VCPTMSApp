@@ -1,10 +1,21 @@
 {
-  "manifest-bundle.zip": 1664204233191,
-  "Component.js": 1659699951007,
-  "manifest.json": 1664204233181,
+<<<<<<< HEAD
+  "annotations/annotation.xml": 1661869074971,
+  "manifest.json": 1664375349962,
+  "Component.js": 1661869074971,
+  "manifest-bundle.zip": 1664375349978,
+  "Component-preload.js": 1664375350202,
+  "Component-dbg.js": 1661869074971,
+  "i18n/i18n.properties": 1661869074971,
+  "index.html": 1661869074971
+=======
   "i18n/i18n.properties": 1659700024024,
-  "Component-preload.js": 1664204233344,
+  "manifest.json": 1664373618105,
+  "Component.js": 1659699951007,
+  "manifest-bundle.zip": 1664373618117,
+  "Component-preload.js": 1664373618294,
   "Component-dbg.js": 1659699951007,
   "annotations/annotation.xml": 1659699951019,
   "index.html": 1659699951007
+>>>>>>> c2c85b6d5ec07f95e283f281f6edd7ef71616523
 }

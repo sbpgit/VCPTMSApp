@@ -14,7 +14,11 @@
         </ux:headerTitle>
         <ux:headerContent>
             <FlexBox wrap="Wrap" fitContainer="true">
-                <l:Grid defaultSpan="XL3 L3 M6 S12"> 
+                <l:Grid defaultSpan="XL3 L3 M6 S12">
+                    <VBox>
+                        <Label text="" />
+                        <SearchField id="idSearch" liveChange="onSearchUniqueId" placeholder="Unique Id, Product" />
+                    </VBox>
                     <VBox>
                         <Label text="Location" required="true" />
                         <Input id="idloc" value="" placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
@@ -47,13 +51,23 @@
                         </Select>
                     </VBox>
 
+<<<<<<< HEAD
+                    <!-- <VBox> -->
+                        <!-- <Label text="" /> -->
+                        <HBox class="hdrBtnMargin">
+                            <Button text="Go" type="Emphasized" press="onGetData" tooltip="Get data based on filters"/>
+                            <Button text="Reset" type="Transparent" press="onResetData" tooltip="Reset filters and Data"/>
+                        </HBox>
+                    <!-- </VBox> -->
+=======
                     <VBox>
                         <Label text="" />
                         <HBox>
-                            <Button text="Go" type="Emphasized" press="onGetData" tooltip="Get data based on filters" class="sapUiTinyMarginEnd" />
-                            <Button text="Reset" type="Transparent" press="onResetDate" tooltip="Reset Valid To Date" />
+                            <Button text="Go" type="Emphasized" press="onGetData" tooltip="Get data based on filters"/>
+                            <Button text="Reset" type="Transparent" press="onResetDate" tooltip="Reset Valid To Date"/>
                         </HBox>
-                    </VBox>                    
+                    </VBox>
+>>>>>>> c2c85b6d5ec07f95e283f281f6edd7ef71616523
                 </l:Grid>
             </FlexBox>
         </ux:headerContent>
@@ -62,14 +76,14 @@
                 <ux:subSections>
                     <ux:ObjectPageSubSection class="sapUiNoMargin">
                         <ux:blocks>
-                           <VBox class="sapUiNoMargin">
-                            <Toolbar>
-                                <ToolbarSpacer/>
-                                <Button text="Publish" press="onPressPublish" type="Emphasized"/>
-                            </Toolbar>
-                            <t:Table id="idCIReq" clas="table" fixedColumnCount="2" selectionMode="None" alternateRowColors="true" enableSelectAll="false" visibleRowCount="11">
-                                <t:columns />
-                            </t:Table>
+                            <VBox class="sapUiNoMargin">
+                                <Toolbar>
+                                    <ToolbarSpacer />
+                                    <Button text="Publish" press="onPressPublish" type="Emphasized" />
+                                </Toolbar>
+                                <t:Table id="idCIReq" clas="table" fixedColumnCount="2" selectionMode="None" alternateRowColors="true" enableSelectAll="false" visibleRowCount="11">
+                                    <t:columns />
+                                </t:Table>
                             </VBox>
                         </ux:blocks>
                     </ux:ObjectPageSubSection>
