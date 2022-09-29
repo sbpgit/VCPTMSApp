@@ -622,12 +622,12 @@ sap.ui.define(
              * @param {object} oEvent -the event information.
              */
             onSearchUniqueId: function (oEvent) {                
-                var oFilter;
+                var oFilter = [];
                 that.oTable = that.byId("idCIReq");                            
 
                 var sQuery =
                     oEvent.getParameter("value") || oEvent.getParameter("newValue");
-                // Checking if serch value is empty
+                // Checking if search value is empty
                 if (sQuery) {
                     oFilter = new Filter([
                         new Filter("Unique ID", FilterOperator.Contains, sQuery),
@@ -635,6 +635,8 @@ sap.ui.define(
                         new Filter("Product", FilterOperator.Contains, sQuery)
                     ], false);
 
+                    that.oTable.getBinding().filter(oFilter);
+                } else {
                     that.oTable.getBinding().filter(oFilter);
                 }
                 

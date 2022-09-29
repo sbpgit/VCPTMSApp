@@ -622,7 +622,7 @@ resources:
 - name: ext_odata
   type: org.cloudfoundry.existing-service
   parameters:
-    service-name: config_products-destination-service
+    service-name: ext_odata
 - name: config_products-mdestination-service
   type: org.cloudfoundry.managed-service
   parameters:

@@ -51,6 +51,12 @@
                         </Select>
                     </VBox>
 
+<<<<<<< HEAD
+                    <!-- <VBox> -->
+                        <!-- <Label text="" /> -->
+                        <HBox class="hdrBtnMargin">
+=======
+<<<<<<< HEAD
                     <!-- <VBox> -->
                         <!-- <Label text="" /> -->
                         <HBox class="hdrBtnMargin">
@@ -58,6 +64,20 @@
                             <Button text="Reset" type="Transparent" press="onResetData" tooltip="Reset filters and Data"/>
                         </HBox>
                     <!-- </VBox> -->
+=======
+                    <VBox>
+                        <Label text="" />
+                        <HBox>
+>>>>>>> e1af622543d513223480bb553ec1e33b0de7d1e5
+                            <Button text="Go" type="Emphasized" press="onGetData" tooltip="Get data based on filters"/>
+                            <Button text="Reset" type="Transparent" press="onResetData" tooltip="Reset filters and Data"/>
+                        </HBox>
+<<<<<<< HEAD
+                    <!-- </VBox> -->
+=======
+                    </VBox>
+>>>>>>> c2c85b6d5ec07f95e283f281f6edd7ef71616523
+>>>>>>> e1af622543d513223480bb553ec1e33b0de7d1e5
                 </l:Grid>
             </FlexBox>
         </ux:headerContent>
