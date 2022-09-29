@@ -185,11 +185,11 @@ sap.ui.define(
              * This function is called when a click on reset button.
              * This will clear all the selections of inputs.
              */
-            onResetDate: function () {
+            onResetData: function () {
                 var oModel = new sap.ui.model.json.JSONModel();
                 var iRowData = [],
                     iColumnData = [];
-               
+
                 that.oGModel = that.getModel("oGModel");
                 that.byId("fromDate").setValue("");
                 that.byId("toDate").setValue("");
@@ -198,6 +198,7 @@ sap.ui.define(
                 that.oProd.setValue("");
                 that.oVer.setValue("");
                 that.oScen.setValue("");
+                that.byId("idSearch").setValue("");
                 that.oGModel.setProperty("/SelectedLoc", undefined);
                 that.oGModel.setProperty("/SelectedProd", undefined);
                 that.oGModel.setProperty("/SelectedVer", undefined);
@@ -299,7 +300,7 @@ sap.ui.define(
                 var liDates = that.generateDateseries(fromDate, toDate);
                 // Looping through the data to generate columns
                 for (var i = 0; i < that.tableData.length; i++) {
-                    sRowData['Unique ID'] = that.tableData[i].UNIQUE_ID;
+                    sRowData['Unique ID'] = (that.tableData[i].UNIQUE_ID).toString();
                     sRowData.UNIQUE_DESC = that.tableData[i].UNIQUE_DESC;
                     sRowData['Product'] = that.tableData[i].PRODUCT_ID;
                     weekIndex = 1;
@@ -620,39 +621,25 @@ sap.ui.define(
              * Called when something is entered into the search field.
              * @param {object} oEvent -the event information.
              */
-            onSearchUniqueId: function (oEvent) {
-                var sUniqueId = "";
-                that.oTable = that.byId("idCIReq");
-                that.oGModel = that.getModel("oGModel");
-                that.tData = that.oGModel.getProperty("/TData");
+            onSearchUniqueId: function (oEvent) {                
+                var oFilter;
+                that.oTable = that.byId("idCIReq");                            
 
                 var sQuery =
                     oEvent.getParameter("value") || oEvent.getParameter("newValue");
                 // Checking if serch value is empty
-                // if (sQuery === "") {
-                    
-                // } else {                    
-                //     that.Data = that.oGModel.getProperty("/TData");
-                //     that.searchData = [];
+                if (sQuery) {
+                    oFilter = new Filter([
+                        new Filter("Unique ID", FilterOperator.Contains, sQuery),
+                        new Filter("UNIQUE_DESC", FilterOperator.Contains, sQuery),
+                        new Filter("Product", FilterOperator.Contains, sQuery)
+                    ], false);
 
-                //     for (var i = 0; i < that.Data.length; i++) {
-                //         sUniqueId = that.Data[i].UNIQUE_ID;
-                //         sUniqueId = sUniqueId.toString();
-                //         if (
-                //             sUniqueId.includes(sQuery) ||
-                //             that.Data[i].UNIQUE_DESC.includes(sQuery) ||
-                //             that.Data[i].PRODUCT_ID.includes(sQuery)
-                //         ) {
-                //             that.searchData.push(that.Data[i]);
-                //         }
-                //     }
-
-                //     that.oGModel.setProperty("/TData", that.searchData);
-                //     // Calling function to generate UI table dynamically based on search data
-                //     that.TableGenerate();
-                // }
+                    that.oTable.getBinding().filter(oFilter);
+                }
+                
             },
-            
+
 
             /**
              * This function is called when selecting an item in dialogs .
@@ -755,7 +742,7 @@ sap.ui.define(
                                 });
 
                                 that.oVerList.setModel(that.verModel);
-                            }                          
+                            }
 
                         },
                         error: function (oData, error) {

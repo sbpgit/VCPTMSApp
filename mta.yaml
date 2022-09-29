@@ -207,6 +207,10 @@ modules:
       - cpappcpcriticalcomp.zip
       name: cpappcpcriticalcomp
       target-path: resources/
+    - artifacts:
+      - cpappcpfactoryloc.zip
+      name: cpappcpfactoryloc
+      target-path: resources/
 - name: cpodpcpodprofiles
   type: html5
   path: app/cp_odprofiles
@@ -586,6 +590,16 @@ modules:
 - name: cpappcpcriticalcomp
   type: html5
   path: app/cpcriticalcomp
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappcpfactoryloc
+  type: html5
+  path: app/cpfactoryloc
   build-parameters:
     build-result: dist
     builder: custom
