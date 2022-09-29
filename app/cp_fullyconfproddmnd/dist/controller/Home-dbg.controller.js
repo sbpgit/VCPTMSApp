@@ -185,11 +185,19 @@ sap.ui.define(
              * This function is called when a click on reset button.
              * This will clear all the selections of inputs.
              */
+<<<<<<< HEAD
             onResetData: function () {
                 var oModel = new sap.ui.model.json.JSONModel();
                 var iRowData = [],
                     iColumnData = [];
 
+=======
+            onResetDate: function () {
+                var oModel = new sap.ui.model.json.JSONModel();
+                var iRowData = [],
+                    iColumnData = [];
+               
+>>>>>>> c2c85b6d5ec07f95e283f281f6edd7ef71616523
                 that.oGModel = that.getModel("oGModel");
                 that.byId("fromDate").setValue("");
                 that.byId("toDate").setValue("");
@@ -198,7 +206,10 @@ sap.ui.define(
                 that.oProd.setValue("");
                 that.oVer.setValue("");
                 that.oScen.setValue("");
+<<<<<<< HEAD
                 that.byId("idSearch").setValue("");
+=======
+>>>>>>> c2c85b6d5ec07f95e283f281f6edd7ef71616523
                 that.oGModel.setProperty("/SelectedLoc", undefined);
                 that.oGModel.setProperty("/SelectedProd", undefined);
                 that.oGModel.setProperty("/SelectedVer", undefined);
@@ -621,13 +632,22 @@ sap.ui.define(
              * Called when something is entered into the search field.
              * @param {object} oEvent -the event information.
              */
+<<<<<<< HEAD
             onSearchUniqueId: function (oEvent) {                
                 var oFilter;
                 that.oTable = that.byId("idCIReq");                            
+=======
+            onSearchUniqueId: function (oEvent) {
+                var sUniqueId = "";
+                that.oTable = that.byId("idCIReq");
+                that.oGModel = that.getModel("oGModel");
+                that.tData = that.oGModel.getProperty("/TData");
+>>>>>>> c2c85b6d5ec07f95e283f281f6edd7ef71616523
 
                 var sQuery =
                     oEvent.getParameter("value") || oEvent.getParameter("newValue");
                 // Checking if serch value is empty
+<<<<<<< HEAD
                 if (sQuery) {
                     oFilter = new Filter([
                         new Filter("Unique ID", FilterOperator.Contains, sQuery),
@@ -640,6 +660,32 @@ sap.ui.define(
                 
             },
 
+=======
+                // if (sQuery === "") {
+                    
+                // } else {                    
+                //     that.Data = that.oGModel.getProperty("/TData");
+                //     that.searchData = [];
+
+                //     for (var i = 0; i < that.Data.length; i++) {
+                //         sUniqueId = that.Data[i].UNIQUE_ID;
+                //         sUniqueId = sUniqueId.toString();
+                //         if (
+                //             sUniqueId.includes(sQuery) ||
+                //             that.Data[i].UNIQUE_DESC.includes(sQuery) ||
+                //             that.Data[i].PRODUCT_ID.includes(sQuery)
+                //         ) {
+                //             that.searchData.push(that.Data[i]);
+                //         }
+                //     }
+
+                //     that.oGModel.setProperty("/TData", that.searchData);
+                //     // Calling function to generate UI table dynamically based on search data
+                //     that.TableGenerate();
+                // }
+            },
+            
+>>>>>>> c2c85b6d5ec07f95e283f281f6edd7ef71616523
 
             /**
              * This function is called when selecting an item in dialogs .

@@ -69,7 +69,7 @@
                     <items>
                         <ColumnListItem>
                             <cells>
-                                <ObjectIdentifier title="{ITEM_NUM}"/>
+                                <ObjectIdentifier title="{= parseInt(${ITEM_NUM}) }"/>
                                 <Text text="{COMPONENT}"/>
                                 <Switch type="AcceptReject" state="{= ${CRITICALKEY} === 'X' ? true : false}" customTextOn="Critical" customTextOff="Non-Critical" change="onChange" >
                                     <layoutData>

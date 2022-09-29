@@ -12,7 +12,7 @@
 	<Dialog type="Standard" title="{i18n>loc}" contentWidth="400px" id="idloc">
 		<content>
 			<Table id="LocSlctList" mode="SingleSelectMaster" growing="true" growingDirection="Downwards" growingScrollToLoad="true"
-                     items="{path: '/results'}" selectionChange="handleSelection">
+                     items="{path: '/results'}" selectionChange="handleSelection" sticky="ColumnHeaders" >
 				<headerToolbar>
 					<Toolbar>
 						<ToolbarSpacer/>
@@ -20,7 +20,7 @@
 					</Toolbar>
 				</headerToolbar>
 				<columns>
-					<Column>
+					<Column hAlign="Begin" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" >
 						<Text text="{i18n>loc}"/>
 					</Column>
 				</columns>
