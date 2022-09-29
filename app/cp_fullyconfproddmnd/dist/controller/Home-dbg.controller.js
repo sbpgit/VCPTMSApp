@@ -186,6 +186,11 @@ sap.ui.define(
              * This will clear all the selections of inputs.
              */
             onResetDate: function () {
+                var oModel = new sap.ui.model.json.JSONModel();
+                var iRowData = [],
+                    iColumnData = [];
+               
+                that.oGModel = that.getModel("oGModel");
                 that.byId("fromDate").setValue("");
                 that.byId("toDate").setValue("");
                 // oGModel.setProperty("/resetFlag", "X");
@@ -193,6 +198,16 @@ sap.ui.define(
                 that.oProd.setValue("");
                 that.oVer.setValue("");
                 that.oScen.setValue("");
+                that.oGModel.setProperty("/SelectedLoc", undefined);
+                that.oGModel.setProperty("/SelectedProd", undefined);
+                that.oGModel.setProperty("/SelectedVer", undefined);
+                that.oGModel.setProperty("/SelectedScen", undefined);
+                oModel.setData({
+                    rows: iRowData,
+                    columns: iColumnData,
+                });
+                that.oTable.setModel(oModel);
+
                 that.onAfterRendering();
             },
 
@@ -601,6 +616,43 @@ sap.ui.define(
 
                 }
             },
+            /**
+             * Called when something is entered into the search field.
+             * @param {object} oEvent -the event information.
+             */
+            onSearchUniqueId: function (oEvent) {
+                var sUniqueId = "";
+                that.oTable = that.byId("idCIReq");
+                that.oGModel = that.getModel("oGModel");
+                that.tData = that.oGModel.getProperty("/TData");
+
+                var sQuery =
+                    oEvent.getParameter("value") || oEvent.getParameter("newValue");
+                // Checking if serch value is empty
+                // if (sQuery === "") {
+                    
+                // } else {                    
+                //     that.Data = that.oGModel.getProperty("/TData");
+                //     that.searchData = [];
+
+                //     for (var i = 0; i < that.Data.length; i++) {
+                //         sUniqueId = that.Data[i].UNIQUE_ID;
+                //         sUniqueId = sUniqueId.toString();
+                //         if (
+                //             sUniqueId.includes(sQuery) ||
+                //             that.Data[i].UNIQUE_DESC.includes(sQuery) ||
+                //             that.Data[i].PRODUCT_ID.includes(sQuery)
+                //         ) {
+                //             that.searchData.push(that.Data[i]);
+                //         }
+                //     }
+
+                //     that.oGModel.setProperty("/TData", that.searchData);
+                //     // Calling function to generate UI table dynamically based on search data
+                //     that.TableGenerate();
+                // }
+            },
+            
 
             /**
              * This function is called when selecting an item in dialogs .
@@ -871,6 +923,11 @@ sap.ui.define(
                     });
                 }
             },
+            /**
+            * Called when 'Publish' button is clicked on application
+            * - Displays confirmation pop-up to publish data to S4 System
+            * @param {*} oEvent 
+            */
             onPressPublish: function (oEvent) {
                 var objEvent = oEvent;
                 MessageBox.confirm(
