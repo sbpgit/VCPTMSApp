@@ -65,12 +65,19 @@ sap.ui.define([
                 that._valueHelpDialogLoc.setTitleAlignment("Center");
                 that._valueHelpDialogProd.setTitleAlignment("Center");
                 
-                this.oProdList = this._oCore.byId(
-                    this._valueHelpDialogProd.getId() + "-list"
-                );
-                this.oLocList = this._oCore.byId(
-                    this._valueHelpDialogLoc.getId() + "-list"
-                );
+                // this.oProdList = this._oCore.byId(
+                //     this._valueHelpDialogProd.getId() + "-list"
+                // );
+                // this.oLocList = this._oCore.byId(
+                //     this._valueHelpDialogLoc.getId() + "-list"
+                // );
+
+                this.oProdList = sap.ui.getCore().byId("prodSlctList");
+                this.oLocList = sap.ui.getCore().byId("LocSlctList");
+
+                this.oLoc = this.byId("idloc");
+                this.oProd = this.byId("prodInput");
+
                 oGModel = this.getModel("oGModel");
                 sap.ui.core.BusyIndicator.show();
 
@@ -114,23 +121,26 @@ sap.ui.define([
              * Dialogs will be closed based on sId
              */
             handleClose: function (oEvent) {
-                var sId = oEvent.getParameter("id");
+                // var sId = oEvent.getParameter("id");
+                var sId = oEvent.getSource().getParent().mAssociations.initialFocus.split("-")[0];
                 // Loc Dialog
-                if (sId.includes("loc")) {
-                    that._oCore
-                        .byId(this._valueHelpDialogLoc.getId() + "-searchField")
-                        .setValue("");
+                if (sId.includes("Loc")) {
+                    sap.ui.getCore().byId("LocSearch").setValue("");
+                    // that._oCore.byId(this._valueHelpDialogLoc.getId() + "-searchField").setValue("");
                     if (that.oLocList.getBinding("items")) {
                         that.oLocList.getBinding("items").filter([]);
                     }
+                    sap.ui.getCore().byId("LocSlctList").removeSelections();
+                    that._valueHelpDialogLoc.close();
                     // Prod Dialog
-                } else if (sId.includes("prod")) {
-                    that._oCore
-                        .byId(this._valueHelpDialogProd.getId() + "-searchField")
-                        .setValue("");
+                } else if (sId.includes("Prod")) {
+                    sap.ui.getCore().byId("ProdSearch").setValue("");
+                    // that._oCore.byId(this._valueHelpDialogProd.getId() + "-searchField").setValue("");
                     if (that.oProdList.getBinding("items")) {
                         that.oProdList.getBinding("items").filter([]);
                     }
+                    sap.ui.getCore().byId("prodSlctList").removeSelections();
+                    that._valueHelpDialogProd.close();
                 }
             },
 
@@ -146,7 +156,7 @@ sap.ui.define([
                 // Check if search filter is to be applied
                 sQuery = sQuery ? sQuery.trim() : "";
                 // Location
-                if (sId.includes("loc")) {
+                if (sId.includes("Loc")) {
                     if (sQuery !== "") {
                         oFilters.push(
                             new Filter({
@@ -160,7 +170,7 @@ sap.ui.define([
                     }
                     that.oLocList.getBinding("items").filter(oFilters);
                     // Product
-                } else if (sId.includes("prod")) {
+                } else if (sId.includes("Prod")) {
                     if (sQuery !== "") {
                         oFilters.push(
                             new Filter({
@@ -193,24 +203,27 @@ sap.ui.define([
                     // this.oProd = that.byId("prodInput");
                     aSelectedItems = oEvent.getParameter("selectedItems");
                     
-                        that.oLoc.setValue(aSelectedItems[0].getTitle());
+                        that.oLoc.setValue(oEvent.getParameters().listItem.getCells()[0].getTitle());
 
                     that.oProd.setValue();
+                    sap.ui.core.BusyIndicator.show();
                     this.getModel("BModel").read("/getLocProdDet", {
                         filters: [
                             new Filter(
                                 "LOCATION_ID",
                                 FilterOperator.EQ,
-                                aSelectedItems[0].getTitle()
+                                oEvent.getParameters().listItem.getCells()[0].getTitle()
                             ),
                         ],
                         success: function (oData) {
+                            sap.ui.core.BusyIndicator.hide();
                             that.prodModel.setData(oData);
 
                             that.oProdList.setModel(that.prodModel);
 
                         },
                         error: function (oData, error) {
+                            sap.ui.core.BusyIndicator.hide();
                             MessageToast.show("error");
                         },
                     });
@@ -220,7 +233,7 @@ sap.ui.define([
                     // this.oProd = that.byId("prodInput");
                     aSelectedItems = oEvent.getParameter("selectedItems");
                     
-                        that.oProd.setValue(aSelectedItems[0].getTitle());
+                        that.oProd.setValue(oEvent.getParameters().listItem.getCells()[0].getTitle());
                     
                 }
                 that.handleClose(oEvent);
@@ -231,7 +244,7 @@ sap.ui.define([
              * @param {object} oEvent -the event information.
              */
             onGetData: function (oEvent) {
-                sap.ui.core.BusyIndicator.show();
+                // sap.ui.core.BusyIndicator.show();
                 var oSloc = that.oLoc.getValue(),
                     oSprod = that.oProd.getValue();
 

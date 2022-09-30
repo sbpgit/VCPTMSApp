@@ -118,15 +118,15 @@ sap.ui.define([
                 });
 
                 // service to get the products based of location
-                this.getModel("BModel").read("/getLocProdDet", {
-                    success: function (oData) {
-                        // that.prodModel.setData(oData);
-                        // that.oProdList.setModel(that.prodModel);
-                    },
-                    error: function (oData, error) {
-                        MessageToast.show("error");
-                    },
-                });
+                // this.getModel("BModel").read("/getLocProdDet", {
+                //     success: function (oData) {
+                //         // that.prodModel.setData(oData);
+                //         // that.oProdList.setModel(that.prodModel);
+                //     },
+                //     error: function (oData, error) {
+                //         MessageToast.show("error");
+                //     },
+                // });
             },
             /**
                * This function is called when click on Value help on Input box.
@@ -140,21 +140,21 @@ sap.ui.define([
                     that._valueHelpDialogLoc.open();
                     // Prod Dialog
                 } else if (sId.includes("prod")) {
-                    that._valueHelpDialogProd.open();
-                    //   if (that.byId("idloc").getValue()) {
                     // that._valueHelpDialogProd.open();
-                    //   } else {
-                    //     MessageToast.show("Select Location");
-                    //   }
-                } else if (sId.includes("Location")) {
-                    that._valueHelpDialogLoc.open();
-                    // Prod Dialog
-                } else if (sId.includes("Product")) {
-                    if (sap.ui.getCore().byId("idLocation").getValue()) {
-                        that._valueHelpDialogProd.open();
-                    } else {
+                      if (that.byId("idloc").getValue()) {
+                    that._valueHelpDialogProd.open();
+                      } else {
                         MessageToast.show("Select Location");
-                    }
+                      }
+                // } else if (sId.includes("Location")) {
+                //     that._valueHelpDialogLoc.open();
+                //     // Prod Dialog
+                // } else if (sId.includes("Product")) {
+                //     if (sap.ui.getCore().byId("idLocation").getValue()) {
+                //         that._valueHelpDialogProd.open();
+                //     } else {
+                //         MessageToast.show("Select Location");
+                //     }
 
                     // Uniq ID Dialog
                 } else if (sId.includes("Uniq")) {

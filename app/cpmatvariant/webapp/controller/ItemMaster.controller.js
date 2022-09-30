@@ -184,7 +184,8 @@ sap.ui.define(
              * Dialogs will be closed based on sId
              */
             handleClose: function (oEvent) {
-                var sId = oEvent.getParameter("id");
+                // var sId = oEvent.getParameter("id");
+                var sId = oEvent.getSource().getParent().mAssociations.initialFocus.split("-")[0];
                 // Loc Dialog
                 if (sId.includes("Loc")) {
                     sap.ui.getCore().byId("LocSearch").setValue("");
@@ -195,7 +196,7 @@ sap.ui.define(
                     sap.ui.getCore().byId("LocSlctList").removeSelections();
                     that._valueHelpDialogLoc.close();
                     // Prod Dialog
-                } else if (sId.includes("prod")) {
+                } else if (sId.includes("Prod")) {
                     sap.ui.getCore().byId("ProdSearch").setValue("");
                     // that._oCore.byId(this._valueHelpDialogProd.getId() + "-searchField").setValue("");
                     if (that.oProdList.getBinding("items")) {
