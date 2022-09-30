@@ -193,10 +193,8 @@
                 },
                 "[production]": {
                     "credentials": {
-                        "url": "http://sbps4d.sbpcorp.com:50000/sap/opu/odata//SBPC/IBP_CIR_SRV",
-                        "authentication": "BasicAuthentication",
-                        "username": "SBPTECHTEAM",
-                        "password": "sbpdev01"
+                        "destination": "S4D_HTTP",
+                        "path": "/sap/opu/odata//SBPC/IBP_CIR_SRV"
                     }
                 }
             }

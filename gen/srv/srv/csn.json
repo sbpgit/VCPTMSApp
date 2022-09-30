@@ -4723,17 +4723,17 @@
           "type": "cds.String",
           "length": 40
         },
-        "SALES_LOC": {
-          "@title": "Sales Location ",
+        "PLAN_LOC": {
+          "@title": "Planning Location ",
           "key": true,
           "type": "cds.String",
           "length": 4
         },
-        "SALES_PRODUCT": {
-          "@title": "Sales Product",
+        "FACTORY_LOC": {
+          "@title": "Factory Location ",
           "key": true,
           "type": "cds.String",
-          "length": 40
+          "length": 4
         }
       }
     },
