@@ -1,5 +1,9 @@
 {
 <<<<<<< HEAD
+  "manifest.json": 1664440887980,
+  "i18n/i18n.properties": 1662738661022,
+=======
+<<<<<<< HEAD
   "Component.js": 1662729348584,
   "controller/App.controller.js": 1662729348596,
   "utils/locate-reuse-libs.js": 1662729348588,
@@ -22,21 +26,22 @@
 =======
   "view/App.view.xml": 1662738661026,
   "Component.js": 1662738661022,
+>>>>>>> e1af622543d513223480bb553ec1e33b0de7d1e5
   "utils/locate-reuse-libs.js": 1662738661022,
   "model/models.js": 1662738661022,
   "controller/Home.controller.js": 1662738661022,
   "controller/App.controller.js": 1662738661022,
-  "manifest.json": 1664373763947,
-  "manifest-bundle.zip": 1664373763959,
-  "Component-preload.js": 1664373764254,
-  "utils/locate-reuse-libs-dbg.js": 1662738661022,
-  "model/models-dbg.js": 1662738661022,
+  "Component.js": 1662738661022,
+  "manifest-bundle.zip": 1664440887993,
+  "Component-preload.js": 1664440888321,
   "controller/Home-dbg.controller.js": 1662738661022,
+  "model/models-dbg.js": 1662738661022,
+  "utils/locate-reuse-libs-dbg.js": 1662738661022,
   "controller/App-dbg.controller.js": 1662738661022,
   "Component-dbg.js": 1662738661022,
   "view/MethodTyp.fragment.xml": 1662738661026,
   "view/Home.view.xml": 1663062425256,
-  "i18n/i18n.properties": 1662738661022,
+  "view/App.view.xml": 1662738661026,
   "css/style.css": 1662738661022,
   "index.html": 1662738661022
 >>>>>>> c2c85b6d5ec07f95e283f281f6edd7ef71616523
