@@ -1,28 +1,33 @@
 {
 <<<<<<< HEAD
+  "controller/ItemMaster-dbg.controller.js": 1661869074975,
+  "controller/Details.controller.js": 1661869074975,
+=======
+<<<<<<< HEAD
   "Component-preload.js": 1664440593871,
   "controller/App.controller.js": 1659447417334,
 =======
 <<<<<<< HEAD
   "controller/App-dbg.controller.js": 1661869074975,
   "controller/ItemDetail.controller.js": 1661869074975,
+>>>>>>> 86dea44b4cc673b86497953507752d52cf3e06b6
   "utils/locate-reuse-libs.js": 1661869074975,
   "model/models.js": 1661869074975,
   "controller/ItemMaster.controller.js": 1661869074975,
-  "manifest.json": 1664375176582,
-  "controller/Details.controller.js": 1661869074975,
+  "controller/ItemDetail.controller.js": 1661869074975,
+  "manifest.json": 1664456152895,
   "controller/BaseController.js": 1661869074975,
   "controller/App.controller.js": 1661869074975,
   "Component.js": 1661869074975,
-  "manifest-bundle.zip": 1664375176599,
-  "Component-preload.js": 1664375177301,
-  "controller/BaseController-dbg.js": 1661869074975,
+  "manifest-bundle.zip": 1664456152907,
+  "Component-preload.js": 1664456153385,
+  "utils/locate-reuse-libs-dbg.js": 1661869074975,
   "model/models-dbg.js": 1661869074975,
-  "controller/ItemMaster-dbg.controller.js": 1661869074975,
+  "i18n/i18n.properties": 1661869074975,
   "controller/ItemDetail-dbg.controller.js": 1661869074975,
   "controller/Details-dbg.controller.js": 1661869074975,
-  "utils/locate-reuse-libs-dbg.js": 1661869074975,
-  "i18n/i18n.properties": 1661869074975,
+  "controller/BaseController-dbg.js": 1661869074975,
+  "controller/App-dbg.controller.js": 1661869074975,
   "Component-dbg.js": 1661869074975,
   "view/ViewNodes.fragment.xml": 1661869074979,
   "view/StructureNodes.fragment.xml": 1661869074979,
@@ -36,6 +41,8 @@
   "view/AccesNodes.fragment.xml": 1661869074975,
   "css/style.css": 1661869074975,
   "index.html": 1661869074975
+<<<<<<< HEAD
+=======
 =======
   "Component.js": 1659447417334,
   "i18n/i18n.properties": 1659447417334,
@@ -71,4 +78,5 @@
   "css/style.css": 1659447417334,
   "index.html": 1659447417334
 >>>>>>> c2c85b6d5ec07f95e283f281f6edd7ef71616523
+>>>>>>> 86dea44b4cc673b86497953507752d52cf3e06b6
 }

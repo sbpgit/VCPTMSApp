@@ -1,5 +1,8 @@
 {
 <<<<<<< HEAD
+  "css/style.css": 1661869075011,
+=======
+<<<<<<< HEAD
   "model/models-dbg.js": 1659447417382,
   "controller/BaseController.js": 1659447417378,
 =======
@@ -8,19 +11,23 @@
   "model/models.js": 1661869075015,
   "utils/locate-reuse-libs.js": 1661869075015,
   "manifest.json": 1664375318523,
+>>>>>>> 86dea44b4cc673b86497953507752d52cf3e06b6
   "controller/Home.controller.js": 1661869075011,
+  "utils/locate-reuse-libs.js": 1661869075015,
+  "model/models.js": 1661869075015,
+  "manifest.json": 1664456305186,
   "controller/Detail.controller.js": 1661869075011,
   "controller/BaseController.js": 1661869075011,
   "controller/App.controller.js": 1661869075011,
   "Component.js": 1661869075011,
-  "manifest-bundle.zip": 1664375318536,
-  "Component-preload.js": 1664375319031,
-  "utils/locate-reuse-libs-dbg.js": 1661869075015,
+  "manifest-bundle.zip": 1664456305198,
+  "Component-preload.js": 1664456305784,
+  "controller/App-dbg.controller.js": 1661869075011,
   "model/models-dbg.js": 1661869075015,
   "controller/Home-dbg.controller.js": 1661869075011,
   "controller/Detail-dbg.controller.js": 1661869075011,
-  "i18n/i18n.properties": 1661869075011,
-  "controller/App-dbg.controller.js": 1661869075011,
+  "controller/BaseController-dbg.js": 1661869075011,
+  "utils/locate-reuse-libs-dbg.js": 1661869075015,
   "Component-dbg.js": 1661869075011,
   "view/className.fragment.xml": 1661869075015,
   "view/charValue.fragment.xml": 1661869075015,
@@ -32,8 +39,10 @@
   "view/CreateProduct.fragment.xml": 1661869075015,
   "view/CharDetails.fragment.xml": 1661869075015,
   "view/App.view.xml": 1661869075015,
-  "css/style.css": 1661869075011,
+  "i18n/i18n.properties": 1661869075011,
   "index.html": 1661869075011
+<<<<<<< HEAD
+=======
 =======
   "controller/Home-dbg.controller.js": 1661153490824,
   "Component.js": 1659447417378,
@@ -67,4 +76,5 @@
   "css/style.css": 1659447417382,
   "index.html": 1659447417382
 >>>>>>> c2c85b6d5ec07f95e283f281f6edd7ef71616523
+>>>>>>> 86dea44b4cc673b86497953507752d52cf3e06b6
 }

@@ -26,11 +26,7 @@
                     <VBox>
                         <Label text="Product" required="true" />
                         <Input id="idprodList" placeholder="Product" value="" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
-                    </VBox>
-                    <VBox>
-                        <Label text="Factory" required="true" />
-                        <Input id="idFactoryLoc" placeholder="Factory Location" value="" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
-                    </VBox>
+                    </VBox>                    
                     <VBox>
                         <Label text="IBP Version" required="true" />
                         <Input id="idver" value="" placeholder="Version" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
@@ -55,13 +51,13 @@
                         </Select>
                     </VBox>
 
-                    <VBox>
-                        <Label text="" />
-                        <HBox>
+                    <!-- <VBox>
+                        <Label text="" /> -->
+                        <HBox class="hdrBtnMargin">
                             <Button text="Go" type="Emphasized" press="onGetData" tooltip="Get data based on filters"/>
                             <Button text="Reset" type="Transparent" press="onResetData" tooltip="Reset filters and Data"/>
                         </HBox>
-                    </VBox>
+                    <!-- </VBox> -->
                 </l:Grid>
             </FlexBox>
         </ux:headerContent>
