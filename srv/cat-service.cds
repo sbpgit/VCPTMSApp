@@ -279,4 +279,8 @@ service CatalogService @(impl : './lib/cat-service.js'){
 //*****/ Critical Comp /*****/
     entity getCriticalComp as projection on V_BOMCRITICALCOMP;//od.CRITICAL_COMP;
     function changeToCritical(criticalComp: String ) returns String;
+
+//*****/ Factory Location/*****/
+    @odata.draft.enabled 
+    entity getFactoryLoc as projection on od.FACTORY_SALESLOC;
 }
