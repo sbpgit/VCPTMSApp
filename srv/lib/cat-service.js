@@ -1206,7 +1206,7 @@ module.exports = (srv) => {
                     lsresults.LOCATION_ID = li_varcharps[i].LOCATION_ID;
                     lsresults.CHAR_NUM = li_varcharps[i].CHAR_NUM;
                     lsresults.CHAR_TYPE = 'S';
-                    if (li_varcharps[i].SEQUENCE > 1) {
+                    if (li_varcharps[i].SEQUENCE > req.data.SEQUENCE) {
                         lsresults.SEQUENCE = li_varcharps[i].SEQUENCE - 1;
                         await UPDATE`CP_VARCHAR_PS`
                             .with({
