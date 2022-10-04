@@ -823,12 +823,12 @@ module.exports = (srv) => {
     // Generate Unique ID
     srv.on("genUniqueID", async (req) => {
         const obgenSOFunctions = new SOFunctions();
-        await obgenSOFunctions.genUniqueID(req.data);
+        await obgenSOFunctions.genUniqueID(req.data,req);
     });
     // Generate Unique ID
     srv.on("gen_UniqueID", async (req) => {
         const obgenSOFunctions = new SOFunctions();
-        await obgenSOFunctions.genUniqueID(req.data);
+        await obgenSOFunctions.genUniqueID(req.data,req);
     });
     // Generate Fully Configured Demand
     srv.on("genFullConfigDemand", async (req) => {

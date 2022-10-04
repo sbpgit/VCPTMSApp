@@ -118,15 +118,15 @@ sap.ui.define([
                 });
 
                 // service to get the products based of location
-                this.getModel("BModel").read("/getLocProdDet", {
-                    success: function (oData) {
-                        // that.prodModel.setData(oData);
-                        // that.oProdList.setModel(that.prodModel);
-                    },
-                    error: function (oData, error) {
-                        MessageToast.show("error");
-                    },
-                });
+                // this.getModel("BModel").read("/getLocProdDet", {
+                //     success: function (oData) {
+                //         // that.prodModel.setData(oData);
+                //         // that.oProdList.setModel(that.prodModel);
+                //     },
+                //     error: function (oData, error) {
+                //         MessageToast.show("error");
+                //     },
+                // });
             },
             /**
                * This function is called when click on Value help on Input box.
@@ -140,21 +140,21 @@ sap.ui.define([
                     that._valueHelpDialogLoc.open();
                     // Prod Dialog
                 } else if (sId.includes("prod")) {
-                    that._valueHelpDialogProd.open();
-                    //   if (that.byId("idloc").getValue()) {
                     // that._valueHelpDialogProd.open();
-                    //   } else {
-                    //     MessageToast.show("Select Location");
-                    //   }
-                } else if (sId.includes("Location")) {
-                    that._valueHelpDialogLoc.open();
-                    // Prod Dialog
-                } else if (sId.includes("Product")) {
-                    if (sap.ui.getCore().byId("idLocation").getValue()) {
-                        that._valueHelpDialogProd.open();
-                    } else {
+                      if (that.byId("idloc").getValue()) {
+                    that._valueHelpDialogProd.open();
+                      } else {
                         MessageToast.show("Select Location");
-                    }
+                      }
+                // } else if (sId.includes("Location")) {
+                //     that._valueHelpDialogLoc.open();
+                //     // Prod Dialog
+                // } else if (sId.includes("Product")) {
+                //     if (sap.ui.getCore().byId("idLocation").getValue()) {
+                //         that._valueHelpDialogProd.open();
+                //     } else {
+                //         MessageToast.show("Select Location");
+                //     }
 
                     // Uniq ID Dialog
                 } else if (sId.includes("Uniq")) {
@@ -215,6 +215,7 @@ sap.ui.define([
                     if (that.oLocList.getBinding("items")) {
                         that.oLocList.getBinding("items").filter([]);
                     }
+                    sap.ui.getCore().byId("LocSlctList").removeSelections();
                     that._valueHelpDialogLoc.close();
                     // Prod Dialog
                 } else if (sId.includes("Prod")) {
@@ -225,6 +226,7 @@ sap.ui.define([
                     if (that.oProdList.getBinding("items")) {
                         that.oProdList.getBinding("items").filter([]);
                     }
+                    sap.ui.getCore().byId("prodSlctList").removeSelections();
                     that._valueHelpDialogProd.close();
                     // Uniq ID
                 } else if (sId.includes("Uniq")) {
@@ -235,6 +237,7 @@ sap.ui.define([
                     if (that.oUniqList.getBinding("items")) {
                         that.oUniqList.getBinding("items").filter([]);
                     }
+                    sap.ui.getCore().byId("UniqSlctList").removeSelections()
                     that._valueHelpDialogUniq.close();
                 }
             },
@@ -372,41 +375,41 @@ sap.ui.define([
                     }
                     // that.oProd.setValue(aSelectedProd[0].getTitle());
                     that.oProd.setValue(oEvent.getParameters().listItem.getCells()[0].getTitle());
-                    sap.ui.core.BusyIndicator.show();
-                    // service to get the Uniq ID's based of location and products
-                    this.getModel("BModel").read("/getUniqueHeader", {
-                        filters: [
-                            new Filter(
-                                "LOCATION_ID",
-                                FilterOperator.EQ,
-                                sap.ui.getCore().byId("idLocation").getValue()
-                            ),
-                            new Filter(
-                                "PRODUCT_ID",
-                                FilterOperator.EQ,
-                                sap.ui.getCore().byId("idProduct").getValue()
-                            ),
-                        ],
-                        success: function (oData) {
-                            sap.ui.core.BusyIndicator.hide();
+                    // sap.ui.core.BusyIndicator.show();
+                    // // service to get the Uniq ID's based of location and products
+                    // this.getModel("BModel").read("/getUniqueHeader", {
+                    //     filters: [
+                    //         new Filter(
+                    //             "LOCATION_ID",
+                    //             FilterOperator.EQ,
+                    //             sap.ui.getCore().byId("idLocation").getValue()
+                    //         ),
+                    //         new Filter(
+                    //             "PRODUCT_ID",
+                    //             FilterOperator.EQ,
+                    //             sap.ui.getCore().byId("idProduct").getValue()
+                    //         ),
+                    //     ],
+                    //     success: function (oData) {
+                    //         sap.ui.core.BusyIndicator.hide();
 
-                            oData.results.forEach(function (row) {
-                                row.UNIQUE_ID = row.UNIQUE_ID.toString();
+                    //         oData.results.forEach(function (row) {
+                    //             row.UNIQUE_ID = row.UNIQUE_ID.toString();
 
-                            }, that);
-                            that.uniqModel.setData(oData);
-                            that.oUniqList.setModel(that.uniqModel);
-                        },
-                        error: function (oData, error) {
-                            sap.ui.core.BusyIndicator.hide();
-                            MessageToast.show("error");
-                        },
-                    });
+                    //         }, that);
+                    //         that.uniqModel.setData(oData);
+                    //         that.oUniqList.setModel(that.uniqModel);
+                    //     },
+                    //     error: function (oData, error) {
+                    //         sap.ui.core.BusyIndicator.hide();
+                    //         MessageToast.show("error");
+                    //     },
+                    // });
                     // Uniq ID list
                 } else if (sId.includes("Uniq")) {
                     var aSelectedProd = oEvent.getParameter("selectedItems");
                     this.oUniq = sap.ui.getCore().byId("idUniq");
-                    that.oUniq.setValue(aSelectedProd[0].getTitle());
+                    that.oUniq.setValue(oEvent.getParameters().listItem.getCells()[0].getTitle());
                 }
                 that.handleClose(oEvent);
             },
@@ -561,7 +564,7 @@ sap.ui.define([
         
                         sap.ui.getCore().byId("idQuantity").setValue("");
                         sap.ui.getCore().byId("idQuantity").setValueState("Error");
-                        sap.ui.getCore().byId("idQuantity").setValueStateText("Can not be add 0 quantity");
+                        sap.ui.getCore().byId("idQuantity").setValueStateText("Quantity can not be empty or 0");
                     }
 
                     if(squan.includes(".")){
@@ -598,7 +601,7 @@ sap.ui.define([
                     MAT_AVAILDATE: sDate,
                 };
                 oEntry.SEEDDATA.push(vRuleslist);
-                if (squan === NaN && sDate !== "" && sUniq === NaN) {
+                if (squan && sDate !== "" && sUniq) {
                     if(sap.ui.getCore().byId("idQuantity").getValueState() !== "Error"){
                     that.getModel("BModel").callFunction("/maintainSeedOrder", {
                         method: "GET",

@@ -151,5 +151,9 @@
 				}
             }      
         }
+    },
+    "sap.cloud": {
+        "public": true,
+        "service": "configprod_approuter"
     }
 }

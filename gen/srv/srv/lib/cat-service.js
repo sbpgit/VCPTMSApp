@@ -823,12 +823,12 @@ module.exports = (srv) => {
     // Generate Unique ID
     srv.on("genUniqueID", async (req) => {
         const obgenSOFunctions = new SOFunctions();
-        await obgenSOFunctions.genUniqueID(req.data);
+        await obgenSOFunctions.genUniqueID(req.data,req);
     });
     // Generate Unique ID
     srv.on("gen_UniqueID", async (req) => {
         const obgenSOFunctions = new SOFunctions();
-        await obgenSOFunctions.genUniqueID(req.data);
+        await obgenSOFunctions.genUniqueID(req.data,req);
     });
     // Generate Fully Configured Demand
     srv.on("genFullConfigDemand", async (req) => {
@@ -1206,7 +1206,7 @@ module.exports = (srv) => {
                     lsresults.LOCATION_ID = li_varcharps[i].LOCATION_ID;
                     lsresults.CHAR_NUM = li_varcharps[i].CHAR_NUM;
                     lsresults.CHAR_TYPE = 'S';
-                    if (li_varcharps[i].SEQUENCE > 1) {
+                    if (li_varcharps[i].SEQUENCE > req.data.SEQUENCE) {
                         lsresults.SEQUENCE = li_varcharps[i].SEQUENCE - 1;
                         await UPDATE`CP_VARCHAR_PS`
                             .with({
