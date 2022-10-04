@@ -210,8 +210,8 @@ class AssemblyReq {
                                 break;
                             }
                         }
-                        if(lFail === 'X' &&
-                        cntODC === GenF.addOne(cntODC, lsOD.COUNTER.length)){
+                        if(lFail === '' || (lFail === 'X' &&
+                        cntODC === GenF.addOne(cntODC, lsOD.COUNTER.length))){
                             break;
                         } 
                     }

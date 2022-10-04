@@ -761,7 +761,7 @@ module.exports = (srv) => {
         // await obgenTimeseries.genTimeseries(req.data);
 
         const obgenTimeseriesM2 = new GenTimeseriesM2();
-        await obgenTimeseriesM2.genTimeseries(req.data);
+        await obgenTimeseriesM2.genTimeseries(req.data, req);
     });
     srv.on("generateTimeseriesF", async (req) => {
         // const obgenTimeseries = new GenTimeseries();

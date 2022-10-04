@@ -150,8 +150,31 @@ class GenFunctions {
         console.log(lMessage)
     }
 
-    static logMessage(lMessage) {
-        console.log(lMessage);
+    static logMessage(req, lMessage) {
+        
+        let errorObj = {};
+        errorObj["success"] = false;
+        errorObj["message"] = lMessage;
+
+        if (req.headers['x-sap-job-id'] > 0)
+        {
+            const scheduler = getJobscheduler(req);
+
+            let updateReq = {
+                jobId: req.headers['x-sap-job-id'],
+                scheduleId: req.headers['x-sap-job-schedule-id'],
+                runId: req.headers['x-sap-job-run-id'],
+                data : errorObj
+                };
+
+
+            scheduler.updateJobRunLog(updateReq, function(err, result) {
+                if (err) {
+                    return console.log('Error updating run log: %s', err);
+                }
+            });
+        }
+
     }
 
     static async getParameterValue(lParameter) {

@@ -14,8 +14,8 @@ class SOFunctions {
      * Generate Unique ID
      * @param {Data} adata 
      */
-    async genUniqueID(adata) {
-
+    async genUniqueID(adata, req) {
+        GenF.logMessage(req, `Started Processing Uniqe ID`);
         await this.processUniqueID(adata.LOCATION_ID, adata.PRODUCT_ID, '');
 
     }
