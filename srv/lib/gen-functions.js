@@ -150,11 +150,26 @@ class GenFunctions {
     static log(lMessage) {
         console.log(lMessage)
     }
+    static getJobscheduler(req) {
+
+        xsenv.loadEnv();
+        const services = xsenv.getServices({
+            jobscheduler: { tags: "jobscheduler" },
+        });
+        if (services.jobscheduler) {
+            const options = {
+                baseURL: services.jobscheduler.url,
+                user: services.jobscheduler.user,
+                password: services.jobscheduler.password,
+            };
+            return new JobSchedulerClient.Scheduler(options);
         } else {
             req.error("no jobscheduler service instance found");
         }
     }
     static logMessage(req, lMessage) {
+        console.log(lMessage);
+
         let errorObj = {};
         errorObj["success"] = true;
         errorObj["message"] = lMessage; 
@@ -166,6 +181,7 @@ class GenFunctions {
                 runId: req.headers['x-sap-job-run-id'],
                 data: errorObj
             };
+            scheduler.updateJobRunLog(updateReq, function (err, result) {
                 if (err) {
                     return console.log('Error updating run log: %s', err);
                 }

@@ -9,7 +9,9 @@ class AssemblyReq {
      * Constructor
      */
     constructor() { }
-    async genAsmreq(adata) {
+    async genAsmreq(adata, req) {
+
+        GenF.logMessage(req, `Started Assembly Requirement Calculation`);  
 
         const liPartialProd = await cds.run(
             `SELECT *
@@ -219,13 +221,8 @@ class AssemblyReq {
                                 break;
                             }
                         }
-<<<<<<< HEAD
-                        if(lFail === '' || (lFail === 'X' &&
-                        cntODC === GenF.addOne(cntODC, lsOD.COUNTER.length))){
-=======
                         if (lFail === '' || (lFail === 'X' &&
                             cntODC === GenF.addOne(cntODC, lsOD.COUNTER.length))) {
->>>>>>> 5a76a6fc7867072396390a51f24d0235cd17e15c
                             break;
                         }
                     }
@@ -326,6 +323,7 @@ class AssemblyReq {
         // }
 
 
+        GenF.logMessage(req, `Completed Assembly Requirement Calculation`);  
     }
 
 }

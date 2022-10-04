@@ -15,15 +15,11 @@ class SOFunctions {
      * @param {Data} adata 
      */
     async genUniqueID(adata, req) {
-<<<<<<< HEAD
-        GenF.logMessage(req, `Started Processing Uniqe ID`);
-=======
-        GenF.logMessage(req, 'Started Processing Unique ID');
+        GenF.logMessage(req, 'Started Sales Orders Processing');
         
-        GenF.logMessage(req, 'MESSAGE 2');
-        console.log("Execution started");
->>>>>>> 5a76a6fc7867072396390a51f24d0235cd17e15c
         await this.processUniqueID(adata.LOCATION_ID, adata.PRODUCT_ID, '');
+
+        GenF.logMessage(req, 'Completed Sales Orders Processing');
 
     }
 
