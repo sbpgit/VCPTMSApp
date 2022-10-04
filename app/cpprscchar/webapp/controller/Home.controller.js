@@ -72,7 +72,7 @@ sap.ui.define([
                 this.oLocList = this._oCore.byId(
                     this._valueHelpDialogLoc.getId() + "-list"
                 );
-
+                that.oSelectedItem = "";
                 // Calling service to get Location data
                 this.getModel("BModel").read("/getLocation", {
                     success: function (oData) {
@@ -127,6 +127,15 @@ sap.ui.define([
                                 }
 
                             }
+                            var aData = that.finalSecData;
+                            if(that.oSelectedItem){
+                            for (var i = 0; i < aData.length; i++) {
+                                if (that.oSelectedItem === aData[i].getCells()[1].getText()) {
+                                    aData[i + 1].focus();
+                                    aData[i].setSelected(true);
+                                }
+                            }
+                        }
 
 
                             that.PrimarylistModel.setData({
@@ -164,6 +173,7 @@ sap.ui.define([
             onReset: function(){
                 var sLoc = that.byId("idloc").getValue(),
                     sProd = that.byId("prodInput").getValue();
+                    that.oSelectedItem = "";
                 this.getModel("BModel").callFunction("/getSecondaryChar", {
                     method: "GET",
                     urlParameters: {
@@ -466,6 +476,7 @@ sap.ui.define([
                             aData[i].setSelected(true);
                         }
                     }
+                    that.oSelectedItem = oItem.CHAR_NAME
                     that.onSaveSeq(iDropPosition);
                 }
             },
