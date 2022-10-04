@@ -1,61 +1,22 @@
 {
-<<<<<<< HEAD
-  "controller/Details-dbg.controller.js": 1661869074947,
-  "controller/BaseController.js": 1661869074947,
-=======
-<<<<<<< HEAD
-  "controller/BaseController-dbg.js": 1659447417322,
-  "Component.js": 1659447417322,
-=======
-<<<<<<< HEAD
-  "controller/Details.controller.js": 1661869074947,
->>>>>>> 86dea44b4cc673b86497953507752d52cf3e06b6
-  "utils/locate-reuse-libs.js": 1661869074947,
-  "model/models.js": 1661869074947,
-  "controller/ItemMaster.controller.js": 1661869074947,
-  "controller/ItemDetail.controller.js": 1661869074947,
-  "controller/Details.controller.js": 1661869074947,
-  "manifest.json": 1664456084494,
-  "controller/App.controller.js": 1661869074947,
-  "Component.js": 1661869074947,
-  "manifest-bundle.zip": 1664456084506,
-  "Component-preload.js": 1664456084857,
-  "Component-dbg.js": 1661869074947,
-  "model/models-dbg.js": 1661869074947,
-  "controller/ItemMaster-dbg.controller.js": 1661869074947,
-  "controller/ItemDetail-dbg.controller.js": 1661869074947,
-  "i18n/i18n.properties": 1661869074947,
-  "controller/BaseController-dbg.js": 1661869074947,
-  "controller/App-dbg.controller.js": 1661869074947,
-  "utils/locate-reuse-libs-dbg.js": 1661869074947,
-  "view/ItemMaster.view.xml": 1661869074947,
-  "view/ItemDetail.view.xml": 1662628674116,
-  "view/Details.view.xml": 1661869074947,
-  "view/App.view.xml": 1661869074947,
-  "css/style.css": 1661869074947,
-  "index.html": 1661869074947
-<<<<<<< HEAD
-=======
-=======
-  "controller/ItemDetail.controller.js": 1659447417322,
-  "manifest.json": 1664373349559,
->>>>>>> e1af622543d513223480bb553ec1e33b0de7d1e5
+  "controller/App.controller.js": 1659447417322,
   "utils/locate-reuse-libs.js": 1659447417322,
+  "manifest.json": 1664546140894,
   "model/models.js": 1659447417322,
   "controller/ItemMaster.controller.js": 1659447417322,
   "controller/ItemDetail.controller.js": 1659447417322,
   "controller/Details.controller.js": 1659447417322,
   "controller/BaseController.js": 1659447417322,
-  "controller/App.controller.js": 1659447417322,
-  "manifest.json": 1664440523264,
-  "manifest-bundle.zip": 1664440523276,
-  "Component-preload.js": 1664440523620,
-  "controller/ItemDetail-dbg.controller.js": 1659447417322,
+  "i18n/i18n.properties": 1659447417322,
+  "Component.js": 1659447417322,
+  "manifest-bundle.zip": 1664546140905,
+  "Component-preload.js": 1664546141246,
+  "utils/locate-reuse-libs-dbg.js": 1659447417322,
   "model/models-dbg.js": 1659447417322,
   "controller/ItemMaster-dbg.controller.js": 1659447417322,
-  "utils/locate-reuse-libs-dbg.js": 1659447417322,
+  "controller/ItemDetail-dbg.controller.js": 1659447417322,
   "controller/Details-dbg.controller.js": 1659447417322,
-  "i18n/i18n.properties": 1659447417322,
+  "controller/BaseController-dbg.js": 1659447417322,
   "controller/App-dbg.controller.js": 1659447417322,
   "Component-dbg.js": 1659447417322,
   "view/ItemMaster.view.xml": 1659447417322,
@@ -64,6 +25,4 @@
   "view/App.view.xml": 1659447417322,
   "css/style.css": 1659447417322,
   "index.html": 1659447417322
->>>>>>> c2c85b6d5ec07f95e283f281f6edd7ef71616523
->>>>>>> 86dea44b4cc673b86497953507752d52cf3e06b6
 }

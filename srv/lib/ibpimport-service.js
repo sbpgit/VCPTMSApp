@@ -44,6 +44,19 @@ module.exports = cds.service.impl(async function () {
         // var resUrl = "/SBPVCP?$select=PRDID,LOCID,PERIODID4_TSTAMP,TOTALDEMANDOUTPUT,UOMTOID,VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and UOMTOID eq 'EA'";
         var resUrl = "/SBPVCP?$select=PRDID,LOCID,PERIODID4_TSTAMP,TOTALDEMANDOUTPUT,UOMTOID,VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "'and UOMTOID eq 'EA'";
         var req = await service.tx(req).get(resUrl);
+        // if(req.length > 0){
+        const vDelDate = new Date();
+        const vDateDel = vDelDate.toISOString().split('T')[0];
+        try {
+            await DELETE.from('CP_IBP_FUTUREDEMAND')
+                .where(`LOCATION_ID = '${request.data.LOCATION_ID}' 
+                        AND PRODUCT_ID = '${request.data.PRODUCT_ID}'
+                        AND WEEK_DATE   < '${vDateDel}'`);
+        }
+        catch (e) {
+            //Do nothing
+        }
+        // }
         const dateJSONToEDM = jsonDate => {
             const content = /\d+/.exec(String(jsonDate));
             const timestamp = content ? Number(content[0]) : 0;
@@ -108,6 +121,17 @@ module.exports = cds.service.impl(async function () {
             const string = date.toISOString();
             return string;
         };
+        const vDelDate = new Date();
+        const vDateDel = vDelDate.toISOString().split('T')[0];
+        try {
+            await DELETE.from('CP_IBP_FCHARPLAN')
+                .where(`LOCATION_ID = '${request.data.LOCATION_ID}' 
+                            AND PRODUCT_ID = '${request.data.PRODUCT_ID}'
+                            AND WEEK_DATE       = '${vDateDel}'`);
+        }
+        catch (e) {
+            //Do nothing
+        }
 
         var vFromDate = "2022-10-01T00:00:00";//new Date(request.data.FROMDATE).toISOString().split('Z')[0];
         var vToDate = "2022-10-31T00:00:00";//new Date(request.data.TODATE).toISOString().split('Z')[0];
@@ -129,6 +153,7 @@ module.exports = cds.service.impl(async function () {
             }
             var req = await service.tx(req).get(resUrl);
             flag = '';
+
             for (var i in req) {
                 var vWeekDate = dateJSONToEDM(req[i].PERIODID4_TSTAMP).split('T')[0];
                 var vScenario = 'BSL_SCENARIO';
@@ -1700,6 +1725,19 @@ module.exports = cds.service.impl(async function () {
 
         // req.headers['Application-Interface-Key'] = vAIRKey;
         var req = await service.tx(req).get(resUrl);
+        // if(req.length > 0){
+        const vDelDate = new Date();
+        const vDateDel = vDelDate.toISOString().split('T')[0];
+        try {
+            await DELETE.from('CP_IBP_FUTUREDEMAND')
+                .where(`LOCATION_ID = '${request.data.LOCATION_ID}' 
+                        AND PRODUCT_ID = '${request.data.PRODUCT_ID}'
+                        AND WEEK_DATE  < '${vDateDel}'`);
+        }
+        catch (e) {
+            //Do nothing
+        }
+        // }
         const dateJSONToEDM = jsonDate => {
             const content = /\d+/.exec(String(jsonDate));
             const timestamp = content ? Number(content[0]) : 0;
@@ -1832,6 +1870,19 @@ module.exports = cds.service.impl(async function () {
         resUrl = "/SBPVCP?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
 
         var req = await service.tx(request).get(resUrl);
+        // if(req.length > 0){
+        const vDelDate = new Date();
+        const vDateDel = vDelDate.toISOString().split('T')[0];
+        try {
+            await DELETE.from('CP_IBP_FCHARPLAN')
+                .where(`LOCATION_ID = '${request.data.LOCATION_ID}' 
+                        AND PRODUCT_ID = '${request.data.PRODUCT_ID}'
+                        AND WEEK_DATE    < '${vDateDel}'`);
+        }
+        catch (e) {
+            //Do nothing
+        }
+        // }
         flag = '';
         for (var i in req) {
             var vWeekDate = dateJSONToEDM(req[i].PERIODID4_TSTAMP).split('T')[0];
