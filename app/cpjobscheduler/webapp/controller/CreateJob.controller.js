@@ -314,18 +314,18 @@ sap.ui.define(
                     sap.ui.getCore().byId("idActive").setEditable(true);
                     sap.ui.getCore().byId("idSTime").setEnabled(true);
                     sap.ui.getCore().byId("idETime").setEnabled(true);
-                    that.byId("modelGenPanel").setVisible(true);
+                    that.byId("modelGenPanel").setVisible(false);
                     that.byId("PredPanel").setVisible(false);
                     that.byId("timeSeriesPanel").setVisible(false);
                     that.byId("timeSeriesFPanel").setVisible(false);
                     that.byId("IbpPanel").setVisible(false);
-                    that.byId("sdiPanel").setVisible(false);
+                    that.byId("sdiPanel").setVisible(true);
                     // 07-09-2022
                     that.byId("FullDemandPanel").setVisible(false);
                     that.byId("AsmblyReqPanel").setVisible(false);
                     that.byId("salesOrdPanel").setVisible(false);
                     // 07-09-2022
-                    that.byId("idJobType").setSelectedKey("M");
+                    that.byId("idJobType").setSelectedKey("S");
                     sap.ui.getCore().byId("idJobSchtype").setEnabled(true);
                 }
             },
@@ -475,7 +475,8 @@ sap.ui.define(
 
                     this.oGModel.setProperty(
                         "/JobDdesc",
-                        that.byId("idJobType").getSelectedItem().getText()
+                        "Test"
+                      //  that.byId("idJobType").getSelectedItem().getText()
                     );
                 }
                 // When we update or creating schdule it will select the values

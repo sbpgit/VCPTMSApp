@@ -1,56 +1,37 @@
 <mvc:View controllerName="cpapp.cpjobscheduler.controller.CreateJob" xmlns="sap.m" xmlns:core="sap.ui.core" 
-          xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form">
+          xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form">
+
+
           <Page id="idCreateJob" title="Create Job" titleAlignment="Center" showNavButton="true" navButtonPress="onBack" showFooter="true">
-    <SplitApp id="SplitAppDemo" initialMaster="master" orientationChange="onOrientationChange">
-    <masterPages>
-    <Page showHeader="false">
-    <Label text="{i18n>jobtype}" class="sapUiTinyMarginBeginEnd boldunderlineText" />
-        <!-- <VBox class="sapUiSmallMargin"> -->
-            <f:SimpleForm
-                id="FormToolbar"
-                editable="true"
-                layout="ResponsiveGridLayout"
-                labelSpanXL="3"
-                labelSpanL="3"
-                labelSpanM="3"
-                labelSpanS="3"
-                adjustLabelSpan="false"
-                emptySpanXL="0"
-                emptySpanL="0"
-                emptySpanM="0"
-                emptySpanS="0"
-                columnsXL="2"
-                columnsL="1"
-                columnsM="1"
-                singleContainerFullSize="false"
-                ariaLabelledBy="Title1"
-            >
-                <f:content>
-                    <!-- <Label text="{i18n>jobtype}" /> -->
-                    
-                    <SelectList id="idJobType" selectionChange="onJobSelect" selectedKey="M" width="300px" >
-					<core:Item key="M" text="{i18n>mdlgene}" />
-                    <core:Item key="P" text="{i18n>predi}" />
-                    <core:Item key="T" text="{i18n>timeseries}" />
-                    <core:Item key="F" text="{i18n>timeseriesF}" />
-                    <core:Item key="I" text="{i18n>ibpI}" />
-                    <core:Item key="S" text="{i18n>sdi}" />
-                    <core:Item key="D" text="{i18n>genfulcondemand}" />
-                    <core:Item key="A" text="{i18n>genasmbrequirments}" />
-                    <core:Item key="O" text="{i18n>procsalesord}" />
-				</SelectList>
-                </f:content>
-            </f:SimpleForm>
-        <!-- </VBox> -->
-        </Page>
-		</masterPages>
-        <detailPages>
-			<Page id="detail" showHeader="false">
-        <content>
-            <Panel id="modelGenPanel" expandable="true" expanded="true" visible="false">
+        
+    
+		
+<tnt:ToolPage id="toolPage">		
+<tnt:sideContent>
+        <tnt:SideNavigation id="idJobType" itemSelect="onJobSelect" selectedKey="S" width = '100%'>
+                <tnt:NavigationList>
+                    <tnt:NavigationListItem id="S" key="S" text="{i18n>sdi}"/>
+                    <tnt:NavigationListItem id="O" key="O" text="{i18n>procsalesord}" />
+                    <tnt:NavigationListItem id="T" key="T" text="{i18n>timeseries}"/>
+                    <tnt:NavigationListItem id="M" key="M" text="{i18n>mdlgene}"/>
+                    <tnt:NavigationListItem id="I" key="I" text="{i18n>ibpI}">
+                        <tnt:NavigationListItem id="II" key="II" text="Import" />
+                        <tnt:NavigationListItem id="IE" key="IE" text="Export" />
+                    </tnt:NavigationListItem>
+                    <tnt:NavigationListItem id="F" key="F" text="{i18n>timeseriesF}" />
+                    <tnt:NavigationListItem id="P" key="P" text="{i18n>predi}" />
+                    <tnt:NavigationListItem id="D" key="D" text="{i18n>genfulcondemand}" />
+                    <tnt:NavigationListItem id="A" key="A" text="{i18n>genasmbrequirments}" />
+                </tnt:NavigationList>
+        </tnt:SideNavigation>   
+		</tnt:sideContent>
+		<tnt:mainContents>
+
+
+            <Panel id="modelGenPanel" visible="false">
                 <headerToolbar>
                     <OverflowToolbar>
-                        <Title text="{i18n>modelGenPanel}" />
+                        <Title text="{i18n>modelGenPanel}"  class="boldText" />
                     </OverflowToolbar>
                 </headerToolbar>
                 <f:Form editable="true">
@@ -149,10 +130,10 @@
                 </f:Form>
             </Panel>
 
-            <Panel id="PredPanel" visible="false" expandable="true" expanded="true">
+            <Panel id="PredPanel" visible="false" >
                 <headerToolbar>
                     <OverflowToolbar>
-                        <Title text="{i18n>predPanel}" />
+                        <Title text="{i18n>predPanel}"  class="boldText" />
                     </OverflowToolbar>
                 </headerToolbar>
                 <f:Form editable="true" id="formIdPred">
@@ -258,10 +239,10 @@
                 </f:Form>
             </Panel>
 
-            <Panel id="timeSeriesPanel" visible="false" expandable="true" expanded="true">
+            <Panel id="timeSeriesPanel" visible="false">
                 <headerToolbar>
                     <OverflowToolbar>
-                        <Title text="{i18n>timeseriesPanel}" />
+                        <Title text="{i18n>timeseriesPanel}"  class="boldText" />
                     </OverflowToolbar>
                 </headerToolbar>
                 <f:Form editable="true">
@@ -309,10 +290,10 @@
                 </f:Form>
             </Panel>
 
-            <Panel id="timeSeriesFPanel" visible="false" expandable="true" expanded="true">
+            <Panel id="timeSeriesFPanel" visible="false">
                 <headerToolbar>
                     <OverflowToolbar>
-                        <Title text="{i18n>timeseriesFPanel}" />
+                        <Title text="{i18n>timeseriesFPanel}"  class="boldText" />
                     </OverflowToolbar>
                 </headerToolbar>
                 <f:Form editable="true">
@@ -352,10 +333,10 @@
                 </f:Form>
             </Panel>
 
-            <Panel id="IbpPanel" visible="false" expandable="true" expanded="true">
+            <Panel id="IbpPanel" visible="false">
                 <headerToolbar>
                     <OverflowToolbar>
-                        <Title text="{i18n>ibpPanel}" />
+                        <Title text="{i18n>ibpPanel}" class="boldText" />
                         <Select id="idIBPselect" change="onIBPSelect" selectedKey="I" width="200px">
                             <core:ListItem key="I" text="{i18n>import}" />
                             <core:ListItem key="E" text="{i18n>export}" />
@@ -652,7 +633,7 @@
                 </content>
             </Panel>
 
-            <Panel id="sdiPanel" visible="false" expandable="true" expanded="true">
+            <Panel id="sdiPanel" visible="false">
                 <headerToolbar>
                     <OverflowToolbar>
                         <Title text="{i18n>sdi}" class="boldText" />
@@ -701,10 +682,10 @@
                 </content>
             </Panel>
             <!-- 07-09-2022 -->
-            <Panel id="FullDemandPanel" visible="false" expandable="true" expanded="true">
+            <Panel id="FullDemandPanel" visible="false">
                 <headerToolbar>
                     <OverflowToolbar>
-                        <Title text="{i18n>genfulcondemand}" />
+                        <Title text="{i18n>genfulcondemand}"  class="boldText" />
                     </OverflowToolbar>
                 </headerToolbar>
                 <f:Form editable="true">
@@ -744,10 +725,10 @@
                 </f:Form>
             </Panel>
 
-            <Panel id="AsmblyReqPanel" visible="false" expandable="true" expanded="true">
+            <Panel id="AsmblyReqPanel" visible="false">
                 <headerToolbar>
                     <OverflowToolbar>
-                        <Title text="{i18n>genasmbrequirments}" />
+                        <Title text="{i18n>genasmbrequirments}"  class="boldText" />
                     </OverflowToolbar>
                 </headerToolbar>
                 <f:Form editable="true">
@@ -787,10 +768,10 @@
                 </f:Form>
             </Panel>
 
-            <Panel id="salesOrdPanel" visible="false" expandable="true" expanded="true">
+            <Panel id="salesOrdPanel" visible="false">
                 <headerToolbar>
                     <OverflowToolbar>
-                        <Title text="{i18n>procsalesord}" />
+                        <Title text="{i18n>procsalesord}"  class="boldText" />
                     </OverflowToolbar>
                 </headerToolbar>
                 <f:Form editable="true">
@@ -829,18 +810,9 @@
                     </f:formContainers>
                 </f:Form>
             </Panel>
-            <!-- 07-09-2022 -->
-            <!-- 07-09-2022-1 -->
-            <!-- <Button type="Emphasized" text="Schedule Job" press="onExecute" width="7%" class="sapUiLargeMarginBeginEnd" />
-            <Button type="Emphasized" text="Execute" press="onExecute" width="6%" /> -->
-
-            <!-- 07-09-2022-1 -->
-        </content>
-
         
-    </Page>
-    </detailPages>
-    </SplitApp>
+        </tnt:mainContents>        
+   </tnt:ToolPage>
     <footer>
             <OverflowToolbar>
                 <ToolbarSpacer />

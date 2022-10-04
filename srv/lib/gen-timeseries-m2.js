@@ -550,10 +550,6 @@ class GenTimeseriesM2 {
 
     }
 
-    async createAssemblyReq(adata) {
-
-    }
-
 }
 
 module.exports = GenTimeseriesM2;
