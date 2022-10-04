@@ -8,7 +8,7 @@
         <HBox>
         <OverflowToolbar>
            
-                    <SearchField id="idCharSearch" liveChange="onCharSearch" placeholder="Characteristic / Characteristic Value" width="880px" />
+                    <SearchField id="idCharSearch" liveChange="onCharSearch" placeholder="Characteristic / Characteristic Value" width="800px"/>
                     <ToolbarSpacer/>
                     <Button id="idadd" text="Create Order" press="onOrderCreate" visible="true"/>
                     
@@ -35,9 +35,9 @@
                         <items>
                             <ColumnListItem>
                                 <cells>
-                                    <Text text="{CHAR_NAME}" />
+                                    <ObjectIdentifier title="{CHAR_NAME}" text="{CHAR_DESC}"/>
                                     <Text text="{CHAR_NUM}" />
-                                    <Text text="{CHAR_VALUE}" />
+                                    <ObjectIdentifier title="{CHAR_VALUE}" text="{CHARVAL_DESC}" />
                                     <Text text="{CHARVAL_NUM}" />
                                     <!-- <Button text="{path:'OFLAG', formatter: '.formatter.getStatus'}" icon="sap-icon://decline" press="onTabDel"/> -->
                                     </cells>

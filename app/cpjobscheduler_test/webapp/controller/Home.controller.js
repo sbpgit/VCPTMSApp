@@ -274,7 +274,7 @@ sap.ui.define(
                             // 20-09-2022
                         } else if(oData.lreadJobDetails.value.action.includes("genFullConfigDemand") ){
                             oGModel.setProperty("/JobType", "D");
-                        } else if(oData.lreadJobDetails.value.action.includes("AssmbReq") ){
+                        } else if(oData.lreadJobDetails.value.action.includes("exportIBPAsmreq") ){
                             oGModel.setProperty("/JobType", "A");
                         } else if(oData.lreadJobDetails.value.action.includes("genUniqueID") ){
                             oGModel.setProperty("/JobType", "O");
@@ -310,6 +310,9 @@ sap.ui.define(
                     .getParent()
                     .getBindingContext()
                     .getObject().scheduleId;
+                    // 04-10-2022
+                    var jobType = oGModel.getProperty("/JobType");
+                    // 04-10-2022
                 // Looping through the data to get the data for IBP Integration and SDI Integration
                 for (var i = 0; i < aData.length; i++) {
                     if (scheduleId === aData[i].scheduleId) {
@@ -328,6 +331,15 @@ sap.ui.define(
                                 CUSTOMER_GROUP: data.CUSTOMER_GROUP,
                             };
                             ScheData.push(aIData);
+                            // 04-10-2022
+                        } if(jobType === "D" || jobType === "A" || jobType === "O" ){
+                            var data = $.parseJSON(aData[i].data);
+                            var aIData = {
+                                Location: data.LOCATION_ID,
+                                Product: data.PRODUCT_ID,
+                            };
+                            ScheData.push(aIData);
+                        // 04-10-2022
                         } else {
                             ScheData = aData[i].data;
                             ScheData = $.parseJSON(ScheData);
@@ -340,6 +352,9 @@ sap.ui.define(
                     results: ScheData,
                 });
                 sap.ui.getCore().byId("idJobData").setModel(that.JobDataModel);
+                // 22-09-2022
+                var jobType = oGModel.getProperty("/JobType");
+                // 22-09-2022
                 // Based on Job type changing the visibility the columns
                 if (oGModel.getProperty("/JobType") === "M") {
                     sap.ui.getCore().byId("idJobData").getColumns()[2].setVisible(true);
@@ -398,8 +413,22 @@ sap.ui.define(
                     sap.ui.getCore().byId("idJobData").getColumns()[9].setVisible(false);
                     sap.ui.getCore().byId("idJobData").getColumns()[10].setVisible(false);
                     sap.ui.getCore().byId("idJobData").getColumns()[11].setVisible(false);
+                // 22-09-2022
+                } else if (jobType === "D" || jobType === "A" || jobType === "O") {
+                    sap.ui.getCore().byId("idJobData").getColumns()[0].setVisible(true);
+                    sap.ui.getCore().byId("idJobData").getColumns()[1].setVisible(true);
+                    sap.ui.getCore().byId("idJobData").getColumns()[2].setVisible(false);
+                    sap.ui.getCore().byId("idJobData").getColumns()[3].setVisible(false);
+                    sap.ui.getCore().byId("idJobData").getColumns()[4].setVisible(false);
+                    sap.ui.getCore().byId("idJobData").getColumns()[5].setVisible(false);
+                    sap.ui.getCore().byId("idJobData").getColumns()[6].setVisible(false);
+                    sap.ui.getCore().byId("idJobData").getColumns()[7].setVisible(false);
+                    sap.ui.getCore().byId("idJobData").getColumns()[8].setVisible(false);
+                    sap.ui.getCore().byId("idJobData").getColumns()[9].setVisible(false);
+                    sap.ui.getCore().byId("idJobData").getColumns()[10].setVisible(false);
+                    sap.ui.getCore().byId("idJobData").getColumns()[11].setVisible(false);
                 }
-
+                // 22-09-2022
                 if (
                     oGModel.getProperty("/JobType") !== "I" &&
                     oGModel.getProperty("/JobType") !== "S"
@@ -449,7 +478,12 @@ sap.ui.define(
                         sap.ui.getCore().byId("idJobData").getColumns()[1].setVisible(true);
                         sap.ui.getCore().byId("idJobData").getColumns()[9].setVisible(true);
                         sap.ui.getCore().byId("idJobData").getColumns()[10].setVisible(true);
+                    // 22-09-2022
+                    } else if (oActionType === "exportIBPCIR") {
+                        sap.ui.getCore().byId("idJobData").getColumns()[0].setVisible(true);
+                        sap.ui.getCore().byId("idJobData").getColumns()[1].setVisible(true);
                     }
+                    // 22-09-2022
                     if (iCount === 0) {
                         that._valueHelpDialogJobData.open();
                     }

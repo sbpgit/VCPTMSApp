@@ -3747,7 +3747,7 @@
           "@title": "Internal Char. number",
           "key": true,
           "type": "cds.String",
-          "length": 10
+          "length": 15
         },
         "OD_CONDITION": {
           "@title": "Restriction condition ",
@@ -4645,7 +4645,7 @@
         }
       }
     },
-    "cp.FACTORY_SALESLOC": {
+    "cp.ASSEMBLY_REQ": {
       "kind": "entity",
       "elements": {
         "LOCATION_ID": {
@@ -4660,17 +4660,207 @@
           "type": "cds.String",
           "length": 40
         },
-        "SALES_LOC": {
-          "@title": "Sales Location ",
+        "ITEM_NUM": {
+          "@title": "ITEM_NUM",
+          "key": true,
+          "type": "cds.String",
+          "length": 5
+        },
+        "COMPONENT": {
+          "@title": "COMPONENT",
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+        "WEEK_DATE": {
+          "@title": "Week Date",
+          "key": true,
+          "type": "cds.Date"
+        },
+        "MODEL_VERSION": {
+          "@title": "MODEL_VERSION",
+          "key": true,
+          "type": "cds.String",
+          "length": 20
+        },
+        "VERSION": {
+          "@title": "Version",
+          "key": true,
+          "type": "cds.String",
+          "length": 10
+        },
+        "SCENARIO": {
+          "@title": "Scenario",
+          "key": true,
+          "type": "cds.String",
+          "length": 32
+        },
+        "REF_PRODID": {
+          "@title": " Ref. Product",
+          "type": "cds.String",
+          "length": 40
+        },
+        "COMPCIR_QTY": {
+          "@title": "CIR Compoonent QTY",
+          "type": "cds.Decimal",
+          "precision": 13,
+          "scale": 3
+        }
+      }
+    },
+    "cp.FACTORY_SALESLOC": {
+      "kind": "entity",
+      "@UI.SelectionFields": [
+        {
+          "=": "LOCATION_ID"
+        },
+        {
+          "=": "PRODUCT_ID"
+        }
+      ],
+      "@UI.LineItem": [
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "LOCATION_ID"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          },
+          "@HTML5.CssDefaults": {
+            "width": "15rem"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "PRODUCT_ID"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          },
+          "@HTML5.CssDefaults": {
+            "width": "15rem"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "PLAN_LOC"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          },
+          "@HTML5.CssDefaults": {
+            "width": "15rem"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "FACTORY_LOC"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          },
+          "@HTML5.CssDefaults": {
+            "width": "15rem"
+          }
+        }
+      ],
+      "@UI.HeaderInfo.Title.Value": {
+        "=": "LOCATION_ID"
+      },
+      "@UI.HeaderInfo.Description.Value": {
+        "=": "PRODUCT_ID"
+      },
+      "@UI.HeaderInfo.TypeName": "Demand - Plan - Factory Location",
+      "@UI.HeaderInfo.TypeNamePlural": "Demand - Plan - Factory Location-Product",
+      "@UI.FieldGroup#Details.Data": [
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "PLAN_LOC"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "FACTORY_LOC"
+          }
+        }
+      ],
+      "@UI.Facets": [
+        {
+          "$Type": "UI.CollectionFacet",
+          "ID": "FactoryLocation",
+          "Label": "Demand - Plan - Factory Location",
+          "Facets": [
+            {
+              "$Type": "UI.ReferenceFacet",
+              "Label": "Demand - Plan - Factory Location",
+              "Target": "@UI.FieldGroup#Details"
+            }
+          ]
+        }
+      ],
+      "elements": {
+        "LOCATION_ID": {
+          "@title": "Demand Location ",
           "key": true,
           "type": "cds.String",
           "length": 4
         },
-        "SALES_PRODUCT": {
-          "@title": "Sales Product",
+        "PRODUCT_ID": {
+          "@title": "Product",
           "key": true,
           "type": "cds.String",
           "length": 40
+        },
+        "PLAN_LOC": {
+          "@title": "Planning Location ",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "FACTORY_LOC": {
+          "@title": "Factory Location ",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        }
+      }
+    },
+    "cp.CRITICAL_COMP": {
+      "kind": "entity",
+      "elements": {
+        "LOCATION_ID": {
+          "@title": "Location ",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "@title": "Product",
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+        "ITEM_NUM": {
+          "@title": "ITEM_NUM",
+          "key": true,
+          "type": "cds.String",
+          "length": 5
+        },
+        "COMPONENT": {
+          "@title": "COMPONENT",
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+        "CRITICALKEY": {
+          "type": "cds.String",
+          "length": 1
         }
       }
     },
@@ -4690,11 +4880,24 @@
           "type": "cds.String",
           "length": 40
         },
+        "ITEM_NUM": {
+          "@title": "ITEM_NUM",
+          "key": true,
+          "type": "cds.String",
+          "length": 5
+        },
         "COMPONENT": {
           "@title": "COMPONENT",
           "key": true,
           "type": "cds.String",
           "length": 40
+        },
+        "COMP_QTY": {
+          "@title": "COMP_QTY",
+          "key": true,
+          "type": "cds.Decimal",
+          "precision": 13,
+          "scale": 3
         },
         "OBJ_DEP": {
           "@title": "Object Dependency",
@@ -6530,6 +6733,11 @@
           "type": "cds.String",
           "length": 30
         },
+        "CHAR_DESC": {
+          "key": true,
+          "type": "cds.String",
+          "length": 150
+        },
         "CHARVAL_NUM": {
           "@title": "CHARVAL_NUM",
           "key": true,
@@ -6541,6 +6749,11 @@
           "key": true,
           "type": "cds.String",
           "length": 70
+        },
+        "CHARVAL_DESC": {
+          "key": true,
+          "type": "cds.String",
+          "length": 150
         },
         "SEQUENCE": {
           "@title": "SEQUENCE",
@@ -6662,6 +6875,49 @@
           "key": true,
           "type": "cds.String",
           "length": 32
+        }
+      }
+    },
+    "V_BOMCRITICALCOMP": {
+      "kind": "entity",
+      "@cds.persistence.exists": true,
+      "elements": {
+        "LOCATION_ID": {
+          "@title": "LOCATION_ID",
+          "type": "cds.String",
+          "length": 4,
+          "notNull": true
+        },
+        "PRODUCT_ID": {
+          "@title": "PRODUCT_ID",
+          "type": "cds.String",
+          "length": 40,
+          "notNull": true
+        },
+        "ITEM_NUM": {
+          "@title": "ITEM_NUM",
+          "type": "cds.String",
+          "length": 5,
+          "notNull": true
+        },
+        "COMPONENT": {
+          "@title": "COMPONENT",
+          "type": "cds.String",
+          "length": 40,
+          "notNull": true
+        },
+        "VALID_FROM": {
+          "@title": "VALID_FROM",
+          "type": "cds.Date"
+        },
+        "VALID_TO": {
+          "@title": "VALID_TO",
+          "type": "cds.Date"
+        },
+        "CRITICALKEY": {
+          "@title": "CRITICALKEY",
+          "type": "cds.String",
+          "length": 1
         }
       }
     },
@@ -16751,6 +17007,308 @@
         }
       }
     },
+    "CatalogService.getSaleshCfg": {
+      "kind": "entity",
+      "@readonly": true,
+      "@UI.SelectionFields": [
+        {
+          "=": "SALES_DOC"
+        },
+        {
+          "=": "DOC_CREATEDDATE"
+        },
+        {
+          "=": "PRODUCT_ID"
+        }
+      ],
+      "@UI.LineItem": [
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "SALES_DOC"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "SALESDOC_ITEM"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "DOC_CREATEDDATE"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "SCHEDULELINE_NUM"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "PRODUCT_ID"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "CUSTOMER_GROUP"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "LOCATION_ID"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "ORD_QTY"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "NET_VALUE"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "MAT_AVAILDATE"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          }
+        }
+      ],
+      "@UI.HeaderInfo.Title.Value": {
+        "=": "SALES_DOC"
+      },
+      "@UI.HeaderInfo.Description.Value": {
+        "=": "SALESDOC_ITEM"
+      },
+      "@UI.HeaderInfo.TypeName": "Sales History",
+      "@UI.HeaderInfo.TypeNamePlural": "Sales History",
+      "@UI.HeaderFacets": [
+        {
+          "$Type": "UI.ReferenceFacet",
+          "Target": "@UI.FieldGroup#Description",
+          "@UI.Importance": {
+            "#": "Medium"
+          }
+        }
+      ],
+      "@UI.FieldGroup#Description.Data": [
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "DOC_CREATEDDATE"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "PRODUCT_ID"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "LOCATION_ID"
+          }
+        }
+      ],
+      "@UI.FieldGroup#Details.Data": [
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "SCHEDULELINE_NUM"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "CONFIRMED_QTY"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "ORD_QTY"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "MAT_AVAILDATE"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "CUSTOMER_GROUP"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "NET_VALUE"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "CHAR_NAME"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "CHAR_VALUE"
+          }
+        }
+      ],
+      "@UI.Facets": [
+        {
+          "$Type": "UI.CollectionFacet",
+          "ID": "saleshisC",
+          "Label": "Sales History Configuration",
+          "Facets": [
+            {
+              "$Type": "UI.ReferenceFacet",
+              "Label": "Sales History Configuration",
+              "Target": "@UI.FieldGroup#Details"
+            }
+          ]
+        }
+      ],
+      "projection": {
+        "from": {
+          "ref": [
+            "V_SALESHCFG_CHARVAL"
+          ]
+        }
+      },
+      "elements": {
+        "SALES_DOC": {
+          "@title": "Sales Document",
+          "key": true,
+          "type": "cds.String",
+          "length": 10
+        },
+        "SALESDOC_ITEM": {
+          "@title": "Sales Doc. Item",
+          "key": true,
+          "type": "cds.String",
+          "length": 6
+        },
+        "DOC_CREATEDDATE": {
+          "@title": "Doc. Created Date",
+          "key": true,
+          "type": "cds.Date"
+        },
+        "SCHEDULELINE_NUM": {
+          "@title": "Schedule Line No.",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "@title": "Product ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+        "UOM": {
+          "@title": "UOM",
+          "key": true,
+          "type": "cds.String",
+          "length": 3
+        },
+        "CONFIRMED_QTY": {
+          "@title": "Confirmed Qty",
+          "key": true,
+          "type": "cds.Decimal",
+          "precision": 13,
+          "scale": 3
+        },
+        "ORD_QTY": {
+          "@title": "Ordered Qty",
+          "key": true,
+          "type": "cds.Decimal",
+          "precision": 13,
+          "scale": 3
+        },
+        "MAT_AVAILDATE": {
+          "@title": "Material Avail. Date",
+          "key": true,
+          "type": "cds.Date"
+        },
+        "NET_VALUE": {
+          "@title": "Net Value",
+          "key": true,
+          "type": "cds.Decimal",
+          "precision": 15,
+          "scale": 2
+        },
+        "CUSTOMER_GROUP": {
+          "@title": "Customer Group",
+          "key": true,
+          "type": "cds.String",
+          "length": 20
+        },
+        "LOCATION_ID": {
+          "@title": "Location ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "CHAR_NAME": {
+          "@title": "Characteristic",
+          "key": true,
+          "type": "cds.String",
+          "length": 30
+        },
+        "CHAR_VALUE": {
+          "@title": "Characteristic Value",
+          "key": true,
+          "type": "cds.String",
+          "length": 70
+        }
+      }
+    },
     "CatalogService.gBomHeaderet": {
       "kind": "entity",
       "@readonly": true,
@@ -17276,110 +17834,6 @@
         }
       }
     },
-    "CatalogService.getPVSNodes": {
-      "kind": "entity",
-      "projection": {
-        "from": {
-          "ref": [
-            "cp.PVS_NODES"
-          ]
-        }
-      },
-      "elements": {
-        "createdAt": {
-          "@cds.on.insert": {
-            "=": "$now"
-          },
-          "@UI.HiddenFilter": true,
-          "@Core.Immutable": true,
-          "@title": "{i18n>CreatedAt}",
-          "@readonly": true,
-          "@odata.on.insert": {
-            "#": "now"
-          },
-          "type": "cds.Timestamp"
-        },
-        "createdBy": {
-          "@cds.on.insert": {
-            "=": "$user"
-          },
-          "@UI.HiddenFilter": true,
-          "@Core.Immutable": true,
-          "@title": "{i18n>CreatedBy}",
-          "@readonly": true,
-          "@odata.on.insert": {
-            "#": "user"
-          },
-          "@description": "{i18n>UserID.Description}",
-          "type": "User",
-          "length": 255
-        },
-        "modifiedAt": {
-          "@cds.on.insert": {
-            "=": "$now"
-          },
-          "@cds.on.update": {
-            "=": "$now"
-          },
-          "@UI.HiddenFilter": true,
-          "@title": "{i18n>ChangedAt}",
-          "@readonly": true,
-          "@odata.on.update": {
-            "#": "now"
-          },
-          "type": "cds.Timestamp"
-        },
-        "modifiedBy": {
-          "@cds.on.insert": {
-            "=": "$user"
-          },
-          "@cds.on.update": {
-            "=": "$user"
-          },
-          "@UI.HiddenFilter": true,
-          "@title": "{i18n>ChangedBy}",
-          "@readonly": true,
-          "@odata.on.update": {
-            "#": "user"
-          },
-          "@description": "{i18n>UserID.Description}",
-          "type": "User",
-          "length": 255
-        },
-        "CHILD_NODE": {
-          "key": true,
-          "type": "cds.String",
-          "length": 50
-        },
-        "PARENT_NODE": {
-          "key": true,
-          "type": "cds.String",
-          "length": 50
-        },
-        "ACCESS_NODES": {
-          "type": "cds.String",
-          "length": 50
-        },
-        "NODE_TYPE": {
-          "type": "cds.String",
-          "length": 2
-        },
-        "NODE_DESC": {
-          "type": "cds.String",
-          "length": 200
-        },
-        "AUTH_GROUP": {
-          "type": "cds.String",
-          "length": 4
-        },
-        "UPPERLIMIT": {
-          "type": "cds.Integer"
-        },
-        "LOWERLIMIT": {
-          "type": "cds.Integer"
-        }
-      }
-    },
     "CatalogService.getClass": {
       "kind": "entity",
       "projection": {
@@ -17658,305 +18112,107 @@
         }
       }
     },
-    "CatalogService.getSaleshCfg": {
+    "CatalogService.getPVSNodes": {
       "kind": "entity",
-      "@readonly": true,
-      "@UI.SelectionFields": [
-        {
-          "=": "SALES_DOC"
-        },
-        {
-          "=": "DOC_CREATEDDATE"
-        },
-        {
-          "=": "PRODUCT_ID"
-        }
-      ],
-      "@UI.LineItem": [
-        {
-          "$Type": "UI.DataField",
-          "Value": {
-            "=": "SALES_DOC"
-          },
-          "@UI.Importance": {
-            "#": "High"
-          }
-        },
-        {
-          "$Type": "UI.DataField",
-          "Value": {
-            "=": "SALESDOC_ITEM"
-          },
-          "@UI.Importance": {
-            "#": "High"
-          }
-        },
-        {
-          "$Type": "UI.DataField",
-          "Value": {
-            "=": "DOC_CREATEDDATE"
-          },
-          "@UI.Importance": {
-            "#": "High"
-          }
-        },
-        {
-          "$Type": "UI.DataField",
-          "Value": {
-            "=": "SCHEDULELINE_NUM"
-          },
-          "@UI.Importance": {
-            "#": "High"
-          }
-        },
-        {
-          "$Type": "UI.DataField",
-          "Value": {
-            "=": "PRODUCT_ID"
-          },
-          "@UI.Importance": {
-            "#": "High"
-          }
-        },
-        {
-          "$Type": "UI.DataField",
-          "Value": {
-            "=": "CUSTOMER_GROUP"
-          },
-          "@UI.Importance": {
-            "#": "High"
-          }
-        },
-        {
-          "$Type": "UI.DataField",
-          "Value": {
-            "=": "LOCATION_ID"
-          },
-          "@UI.Importance": {
-            "#": "High"
-          }
-        },
-        {
-          "$Type": "UI.DataField",
-          "Value": {
-            "=": "ORD_QTY"
-          },
-          "@UI.Importance": {
-            "#": "High"
-          }
-        },
-        {
-          "$Type": "UI.DataField",
-          "Value": {
-            "=": "NET_VALUE"
-          },
-          "@UI.Importance": {
-            "#": "High"
-          }
-        },
-        {
-          "$Type": "UI.DataField",
-          "Value": {
-            "=": "MAT_AVAILDATE"
-          },
-          "@UI.Importance": {
-            "#": "High"
-          }
-        }
-      ],
-      "@UI.HeaderInfo.Title.Value": {
-        "=": "SALES_DOC"
-      },
-      "@UI.HeaderInfo.Description.Value": {
-        "=": "SALESDOC_ITEM"
-      },
-      "@UI.HeaderInfo.TypeName": "Sales History",
-      "@UI.HeaderInfo.TypeNamePlural": "Sales History",
-      "@UI.HeaderFacets": [
-        {
-          "$Type": "UI.ReferenceFacet",
-          "Target": "@UI.FieldGroup#Description",
-          "@UI.Importance": {
-            "#": "Medium"
-          }
-        }
-      ],
-      "@UI.FieldGroup#Description.Data": [
-        {
-          "$Type": "UI.DataField",
-          "Value": {
-            "=": "DOC_CREATEDDATE"
-          }
-        },
-        {
-          "$Type": "UI.DataField",
-          "Value": {
-            "=": "PRODUCT_ID"
-          }
-        },
-        {
-          "$Type": "UI.DataField",
-          "Value": {
-            "=": "LOCATION_ID"
-          }
-        }
-      ],
-      "@UI.FieldGroup#Details.Data": [
-        {
-          "$Type": "UI.DataField",
-          "Value": {
-            "=": "SCHEDULELINE_NUM"
-          }
-        },
-        {
-          "$Type": "UI.DataField",
-          "Value": {
-            "=": "CONFIRMED_QTY"
-          }
-        },
-        {
-          "$Type": "UI.DataField",
-          "Value": {
-            "=": "ORD_QTY"
-          }
-        },
-        {
-          "$Type": "UI.DataField",
-          "Value": {
-            "=": "MAT_AVAILDATE"
-          }
-        },
-        {
-          "$Type": "UI.DataField",
-          "Value": {
-            "=": "CUSTOMER_GROUP"
-          }
-        },
-        {
-          "$Type": "UI.DataField",
-          "Value": {
-            "=": "NET_VALUE"
-          }
-        },
-        {
-          "$Type": "UI.DataField",
-          "Value": {
-            "=": "CHAR_NAME"
-          }
-        },
-        {
-          "$Type": "UI.DataField",
-          "Value": {
-            "=": "CHAR_VALUE"
-          }
-        }
-      ],
-      "@UI.Facets": [
-        {
-          "$Type": "UI.CollectionFacet",
-          "ID": "saleshisC",
-          "Label": "Sales History Configuration",
-          "Facets": [
-            {
-              "$Type": "UI.ReferenceFacet",
-              "Label": "Sales History Configuration",
-              "Target": "@UI.FieldGroup#Details"
-            }
-          ]
-        }
-      ],
       "projection": {
         "from": {
           "ref": [
-            "V_SALESHCFG_CHARVAL"
+            "cp.PVS_NODES"
           ]
         }
       },
       "elements": {
-        "SALES_DOC": {
-          "@title": "Sales Document",
+        "createdAt": {
+          "@cds.on.insert": {
+            "=": "$now"
+          },
+          "@UI.HiddenFilter": true,
+          "@Core.Immutable": true,
+          "@title": "{i18n>CreatedAt}",
+          "@readonly": true,
+          "@odata.on.insert": {
+            "#": "now"
+          },
+          "type": "cds.Timestamp"
+        },
+        "createdBy": {
+          "@cds.on.insert": {
+            "=": "$user"
+          },
+          "@UI.HiddenFilter": true,
+          "@Core.Immutable": true,
+          "@title": "{i18n>CreatedBy}",
+          "@readonly": true,
+          "@odata.on.insert": {
+            "#": "user"
+          },
+          "@description": "{i18n>UserID.Description}",
+          "type": "User",
+          "length": 255
+        },
+        "modifiedAt": {
+          "@cds.on.insert": {
+            "=": "$now"
+          },
+          "@cds.on.update": {
+            "=": "$now"
+          },
+          "@UI.HiddenFilter": true,
+          "@title": "{i18n>ChangedAt}",
+          "@readonly": true,
+          "@odata.on.update": {
+            "#": "now"
+          },
+          "type": "cds.Timestamp"
+        },
+        "modifiedBy": {
+          "@cds.on.insert": {
+            "=": "$user"
+          },
+          "@cds.on.update": {
+            "=": "$user"
+          },
+          "@UI.HiddenFilter": true,
+          "@title": "{i18n>ChangedBy}",
+          "@readonly": true,
+          "@odata.on.update": {
+            "#": "user"
+          },
+          "@description": "{i18n>UserID.Description}",
+          "type": "User",
+          "length": 255
+        },
+        "CHILD_NODE": {
           "key": true,
           "type": "cds.String",
-          "length": 10
+          "length": 50
         },
-        "SALESDOC_ITEM": {
-          "@title": "Sales Doc. Item",
+        "PARENT_NODE": {
           "key": true,
           "type": "cds.String",
-          "length": 6
+          "length": 50
         },
-        "DOC_CREATEDDATE": {
-          "@title": "Doc. Created Date",
-          "key": true,
-          "type": "cds.Date"
+        "ACCESS_NODES": {
+          "type": "cds.String",
+          "length": 50
         },
-        "SCHEDULELINE_NUM": {
-          "@title": "Schedule Line No.",
-          "key": true,
+        "NODE_TYPE": {
+          "type": "cds.String",
+          "length": 2
+        },
+        "NODE_DESC": {
+          "type": "cds.String",
+          "length": 200
+        },
+        "AUTH_GROUP": {
           "type": "cds.String",
           "length": 4
         },
-        "PRODUCT_ID": {
-          "@title": "Product ID",
-          "key": true,
-          "type": "cds.String",
-          "length": 40
+        "UPPERLIMIT": {
+          "type": "cds.Integer"
         },
-        "UOM": {
-          "@title": "UOM",
-          "key": true,
-          "type": "cds.String",
-          "length": 3
-        },
-        "CONFIRMED_QTY": {
-          "@title": "Confirmed Qty",
-          "key": true,
-          "type": "cds.Decimal",
-          "precision": 13,
-          "scale": 3
-        },
-        "ORD_QTY": {
-          "@title": "Ordered Qty",
-          "key": true,
-          "type": "cds.Decimal",
-          "precision": 13,
-          "scale": 3
-        },
-        "MAT_AVAILDATE": {
-          "@title": "Material Avail. Date",
-          "key": true,
-          "type": "cds.Date"
-        },
-        "NET_VALUE": {
-          "@title": "Net Value",
-          "key": true,
-          "type": "cds.Decimal",
-          "precision": 15,
-          "scale": 2
-        },
-        "CUSTOMER_GROUP": {
-          "@title": "Customer Group",
-          "key": true,
-          "type": "cds.String",
-          "length": 20
-        },
-        "LOCATION_ID": {
-          "@title": "Location ID",
-          "key": true,
-          "type": "cds.String",
-          "length": 4
-        },
-        "CHAR_NAME": {
-          "@title": "Characteristic",
-          "key": true,
-          "type": "cds.String",
-          "length": 30
-        },
-        "CHAR_VALUE": {
-          "@title": "Characteristic Value",
-          "key": true,
-          "type": "cds.String",
-          "length": 70
+        "LOWERLIMIT": {
+          "type": "cds.Integer"
         }
       }
     },
@@ -18357,11 +18613,24 @@
           "type": "cds.String",
           "length": 40
         },
+        "ITEM_NUM": {
+          "@title": "ITEM_NUM",
+          "key": true,
+          "type": "cds.String",
+          "length": 5
+        },
         "COMPONENT": {
           "@title": "COMPONENT",
           "key": true,
           "type": "cds.String",
           "length": 40
+        },
+        "COMP_QTY": {
+          "@title": "COMP_QTY",
+          "key": true,
+          "type": "cds.Decimal",
+          "precision": 13,
+          "scale": 3
         },
         "OBJ_DEP": {
           "@title": "Object Dependency",
@@ -18572,6 +18841,166 @@
           "type": "cds.String",
           "length": 50
         }
+      }
+    },
+    "CatalogService.genProdAN": {
+      "kind": "function",
+      "params": {
+        "LOCATION_ID": {
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "type": "cds.String",
+          "length": 40
+        },
+        "ACCESS_NODE": {
+          "type": "cds.String",
+          "length": 50
+        }
+      },
+      "returns": {
+        "items": {
+          "type": "CatalogService.genProdAccessNode"
+        }
+      }
+    },
+    "CatalogService.genCompSN": {
+      "kind": "function",
+      "params": {
+        "LOCATION_ID": {
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "type": "cds.String",
+          "length": 40
+        },
+        "ITEM_NUM": {
+          "type": "cds.String",
+          "length": 5
+        },
+        "COMPONENT": {
+          "type": "cds.String",
+          "length": 40
+        },
+        "STRUC_NODE": {
+          "type": "cds.String",
+          "length": 50
+        }
+      },
+      "returns": {
+        "items": {
+          "type": "CatalogService.genCompStrcNode"
+        }
+      }
+    },
+    "CatalogService.createProfiles": {
+      "kind": "function",
+      "params": {
+        "PROFILE": {
+          "type": "cds.String",
+          "length": 50
+        },
+        "METHOD": {
+          "type": "cds.String",
+          "length": 50
+        },
+        "PRF_DESC": {
+          "type": "cds.String",
+          "length": 200
+        },
+        "CREATED_DATE": {
+          "type": "cds.Date"
+        },
+        "CREATED_BY": {
+          "type": "cds.String",
+          "length": 12
+        }
+      },
+      "returns": {
+        "type": "cds.String"
+      }
+    },
+    "CatalogService.createProfilePara": {
+      "kind": "function",
+      "params": {
+        "FLAG": {
+          "type": "cds.String",
+          "length": 1
+        },
+        "PROFILE": {
+          "type": "cds.String",
+          "length": 50
+        },
+        "METHOD": {
+          "type": "cds.String",
+          "length": 50
+        },
+        "PARA_NAME": {
+          "type": "cds.String",
+          "length": 100
+        },
+        "INTVAL": {
+          "type": "cds.Integer"
+        },
+        "DOUBLEVAL": {
+          "type": "cds.Double"
+        },
+        "STRVAL": {
+          "type": "cds.String",
+          "length": 20
+        },
+        "PARA_DESC": {
+          "type": "cds.String",
+          "length": 1000
+        },
+        "PARA_DEP": {
+          "type": "cds.String",
+          "length": 1000
+        },
+        "CREATED_DATE": {
+          "type": "cds.Date"
+        },
+        "CREATED_BY": {
+          "type": "cds.String",
+          "length": 12
+        }
+      },
+      "returns": {
+        "type": "cds.String"
+      }
+    },
+    "CatalogService.assignProfilesOD": {
+      "kind": "function",
+      "params": {
+        "FLAG": {
+          "type": "cds.String",
+          "length": 1
+        },
+        "LOCATION_ID": {
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "type": "cds.String",
+          "length": 40
+        },
+        "COMPONENT": {
+          "type": "cds.String",
+          "length": 40
+        },
+        "PROFILE": {
+          "type": "cds.String",
+          "length": 50
+        },
+        "STRUC_NODE": {
+          "type": "cds.String",
+          "length": 50
+        }
+      },
+      "returns": {
+        "type": "cds.String"
       }
     },
     "CatalogService.getProdClass": {
@@ -18955,168 +19384,39 @@
         }
       }
     },
-    "CatalogService.getOdCharImpact": {
-      "kind": "entity",
-      "projection": {
-        "from": {
-          "ref": [
-            "V_ODCHARIMPACT_VALUE"
-          ]
-        }
-      },
-      "elements": {
-        "LOCATION_ID": {
-          "@title": "LOCATION_ID",
-          "key": true,
-          "type": "cds.String",
-          "length": 4
-        },
-        "PRODUCT_ID": {
-          "@title": "PRODUCT_ID",
-          "key": true,
-          "type": "cds.String",
-          "length": 40
-        },
-        "OBJ_DEP": {
-          "@title": "OBJ_DEP",
-          "key": true,
-          "type": "cds.String",
-          "length": 30
-        },
-        "OBJ_COUNTER": {
-          "@title": "OBJ_COUNTER",
-          "key": true,
-          "type": "cds.Integer"
-        },
-        "CHAR_NUM": {
-          "@title": "CHAR_NUM",
-          "key": true,
-          "type": "cds.String",
-          "length": 10
-        },
-        "CHAR_NAME": {
-          "@title": "CHAR_NAME",
-          "key": true,
-          "type": "cds.String",
-          "length": 30
-        },
-        "ROW_ID": {
-          "@title": "ROW_ID",
-          "key": true,
-          "type": "cds.Integer"
-        },
-        "MODEL_VERSION": {
-          "@title": "MODEL_VERSION",
-          "key": true,
-          "type": "cds.String",
-          "length": 20
-        },
-        "VERSION": {
-          "@title": "VERSION",
-          "key": true,
-          "type": "cds.String",
-          "length": 10
-        },
-        "SCENARIO": {
-          "@title": "SCENARIO",
-          "key": true,
-          "type": "cds.String",
-          "length": 32
-        },
-        "CAL_DATE": {
-          "@title": "CAL_DATE",
-          "key": true,
-          "type": "cds.Date"
-        },
-        "CHAR_IMPACT_VAL": {
-          "@title": "CHAR_IMPACT_VAL",
-          "key": true,
-          "type": "cds.Double"
-        },
-        "PREDICTED_VAL": {
-          "@title": "PREDICTED_VAL",
-          "key": true,
-          "type": "cds.Double"
-        },
-        "OPT_PERCENT": {
-          "@title": "Option Percnetage",
-          "key": true,
-          "type": "cds.Double"
+    "CatalogService.get_objdep": {
+      "kind": "function",
+      "returns": {
+        "items": {
+          "type": "cp_ds.objectDep"
         }
       }
     },
-    "CatalogService.getBOMPred": {
-      "kind": "entity",
-      "projection": {
-        "from": {
-          "ref": [
-            "V_COMPOD_TSPRED"
-          ]
-        }
-      },
-      "elements": {
+    "CatalogService.getAllProd": {
+      "kind": "function",
+      "params": {
         "LOCATION_ID": {
-          "@title": "LOCATION_ID",
-          "key": true,
           "type": "cds.String",
           "length": 4
-        },
-        "PRODUCT_ID": {
-          "@title": "PRODUCT_ID",
-          "key": true,
+        }
+      },
+      "returns": {
+        "items": {
+          "type": "cp_ds.locProd"
+        }
+      }
+    },
+    "CatalogService.getAllVerScen": {
+      "kind": "function",
+      "params": {
+        "LOCATION_ID": {
           "type": "cds.String",
-          "length": 40
-        },
-        "ITEM_NUM": {
-          "@title": "ITEM_NUM",
-          "key": true,
-          "type": "cds.String",
-          "length": 5
-        },
-        "COMPONENT": {
-          "@title": "COMPONENT",
-          "key": true,
-          "type": "cds.String",
-          "length": 40
-        },
-        "OBJ_DEP": {
-          "@title": "OBJ_DEP",
-          "key": true,
-          "type": "cds.String",
-          "length": 30
-        },
-        "OBJ_COUNTER": {
-          "@title": "OBJ_COUNTER",
-          "key": true,
-          "type": "cds.Integer"
-        },
-        "MODEL_VERSION": {
-          "@title": "MODEL_VERSION",
-          "key": true,
-          "type": "cds.String",
-          "length": 20
-        },
-        "VERSION": {
-          "@title": "VERSION",
-          "key": true,
-          "type": "cds.String",
-          "length": 10
-        },
-        "SCENARIO": {
-          "@title": "SCENARIO",
-          "key": true,
-          "type": "cds.String",
-          "length": 32
-        },
-        "CAL_DATE": {
-          "@title": "CAL_DATE",
-          "key": true,
-          "type": "cds.Date"
-        },
-        "PREDICTED": {
-          "@title": "PREDICTED",
-          "key": true,
-          "type": "cds.Double"
+          "length": 4
+        }
+      },
+      "returns": {
+        "items": {
+          "type": "cp_ds.prodVerScen"
         }
       }
     },
@@ -19289,38 +19589,6 @@
         }
       }
     },
-    "CatalogService.generate_timeseries": {
-      "kind": "function",
-      "params": {
-        "LOCATION_ID": {
-          "type": "cds.String",
-          "length": 4
-        },
-        "PRODUCT_ID": {
-          "type": "cds.String",
-          "length": 40
-        }
-      },
-      "returns": {
-        "type": "cds.String"
-      }
-    },
-    "CatalogService.generate_timeseriesF": {
-      "kind": "function",
-      "params": {
-        "LOCATION_ID": {
-          "type": "cds.String",
-          "length": 4
-        },
-        "PRODUCT_ID": {
-          "type": "cds.String",
-          "length": 40
-        }
-      },
-      "returns": {
-        "type": "cds.String"
-      }
-    },
     "CatalogService.gen_FullConfigDemand": {
       "kind": "function",
       "params": {
@@ -19335,42 +19603,6 @@
       },
       "returns": {
         "type": "cds.String"
-      }
-    },
-    "CatalogService.get_objdep": {
-      "kind": "function",
-      "returns": {
-        "items": {
-          "type": "cp_ds.objectDep"
-        }
-      }
-    },
-    "CatalogService.getAllProd": {
-      "kind": "function",
-      "params": {
-        "LOCATION_ID": {
-          "type": "cds.String",
-          "length": 4
-        }
-      },
-      "returns": {
-        "items": {
-          "type": "cp_ds.locProd"
-        }
-      }
-    },
-    "CatalogService.getAllVerScen": {
-      "kind": "function",
-      "params": {
-        "LOCATION_ID": {
-          "type": "cds.String",
-          "length": 4
-        }
-      },
-      "returns": {
-        "items": {
-          "type": "cp_ds.prodVerScen"
-        }
       }
     },
     "CatalogService.getCompReqFWeekly": {
@@ -19453,141 +19685,174 @@
         }
       }
     },
-    "CatalogService.genProdAN": {
-      "kind": "function",
-      "params": {
+    "CatalogService.getOdCharImpact": {
+      "kind": "entity",
+      "projection": {
+        "from": {
+          "ref": [
+            "V_ODCHARIMPACT_VALUE"
+          ]
+        }
+      },
+      "elements": {
         "LOCATION_ID": {
+          "@title": "LOCATION_ID",
+          "key": true,
           "type": "cds.String",
           "length": 4
         },
         "PRODUCT_ID": {
+          "@title": "PRODUCT_ID",
+          "key": true,
           "type": "cds.String",
           "length": 40
         },
-        "ACCESS_NODE": {
+        "OBJ_DEP": {
+          "@title": "OBJ_DEP",
+          "key": true,
           "type": "cds.String",
-          "length": 50
-        }
-      },
-      "returns": {
-        "items": {
-          "type": "CatalogService.genProdAccessNode"
+          "length": 30
+        },
+        "OBJ_COUNTER": {
+          "@title": "OBJ_COUNTER",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "CHAR_NUM": {
+          "@title": "CHAR_NUM",
+          "key": true,
+          "type": "cds.String",
+          "length": 10
+        },
+        "CHAR_NAME": {
+          "@title": "CHAR_NAME",
+          "key": true,
+          "type": "cds.String",
+          "length": 30
+        },
+        "ROW_ID": {
+          "@title": "ROW_ID",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "MODEL_VERSION": {
+          "@title": "MODEL_VERSION",
+          "key": true,
+          "type": "cds.String",
+          "length": 20
+        },
+        "VERSION": {
+          "@title": "VERSION",
+          "key": true,
+          "type": "cds.String",
+          "length": 10
+        },
+        "SCENARIO": {
+          "@title": "SCENARIO",
+          "key": true,
+          "type": "cds.String",
+          "length": 32
+        },
+        "CAL_DATE": {
+          "@title": "CAL_DATE",
+          "key": true,
+          "type": "cds.Date"
+        },
+        "CHAR_IMPACT_VAL": {
+          "@title": "CHAR_IMPACT_VAL",
+          "key": true,
+          "type": "cds.Double"
+        },
+        "PREDICTED_VAL": {
+          "@title": "PREDICTED_VAL",
+          "key": true,
+          "type": "cds.Double"
+        },
+        "OPT_PERCENT": {
+          "@title": "Option Percnetage",
+          "key": true,
+          "type": "cds.Double"
         }
       }
     },
-    "CatalogService.genCompSN": {
-      "kind": "function",
-      "params": {
+    "CatalogService.getBOMPred": {
+      "kind": "entity",
+      "projection": {
+        "from": {
+          "ref": [
+            "V_COMPOD_TSPRED"
+          ]
+        }
+      },
+      "elements": {
         "LOCATION_ID": {
+          "@title": "LOCATION_ID",
+          "key": true,
           "type": "cds.String",
           "length": 4
         },
         "PRODUCT_ID": {
+          "@title": "PRODUCT_ID",
+          "key": true,
           "type": "cds.String",
           "length": 40
         },
         "ITEM_NUM": {
+          "@title": "ITEM_NUM",
+          "key": true,
           "type": "cds.String",
           "length": 5
         },
         "COMPONENT": {
+          "@title": "COMPONENT",
+          "key": true,
           "type": "cds.String",
           "length": 40
         },
-        "STRUC_NODE": {
+        "OBJ_DEP": {
+          "@title": "OBJ_DEP",
+          "key": true,
           "type": "cds.String",
-          "length": 50
-        }
-      },
-      "returns": {
-        "items": {
-          "type": "CatalogService.genCompStrcNode"
-        }
-      }
-    },
-    "CatalogService.createProfiles": {
-      "kind": "function",
-      "params": {
-        "PROFILE": {
-          "type": "cds.String",
-          "length": 50
+          "length": 30
         },
-        "METHOD": {
-          "type": "cds.String",
-          "length": 50
-        },
-        "PRF_DESC": {
-          "type": "cds.String",
-          "length": 200
-        },
-        "CREATED_DATE": {
-          "type": "cds.Date"
-        },
-        "CREATED_BY": {
-          "type": "cds.String",
-          "length": 12
-        }
-      },
-      "returns": {
-        "type": "cds.String"
-      }
-    },
-    "CatalogService.createProfilePara": {
-      "kind": "function",
-      "params": {
-        "FLAG": {
-          "type": "cds.String",
-          "length": 1
-        },
-        "PROFILE": {
-          "type": "cds.String",
-          "length": 50
-        },
-        "METHOD": {
-          "type": "cds.String",
-          "length": 50
-        },
-        "PARA_NAME": {
-          "type": "cds.String",
-          "length": 100
-        },
-        "INTVAL": {
+        "OBJ_COUNTER": {
+          "@title": "OBJ_COUNTER",
+          "key": true,
           "type": "cds.Integer"
         },
-        "DOUBLEVAL": {
-          "type": "cds.Double"
-        },
-        "STRVAL": {
+        "MODEL_VERSION": {
+          "@title": "MODEL_VERSION",
+          "key": true,
           "type": "cds.String",
           "length": 20
         },
-        "PARA_DESC": {
+        "VERSION": {
+          "@title": "VERSION",
+          "key": true,
           "type": "cds.String",
-          "length": 1000
+          "length": 10
         },
-        "PARA_DEP": {
+        "SCENARIO": {
+          "@title": "SCENARIO",
+          "key": true,
           "type": "cds.String",
-          "length": 1000
+          "length": 32
         },
-        "CREATED_DATE": {
+        "CAL_DATE": {
+          "@title": "CAL_DATE",
+          "key": true,
           "type": "cds.Date"
         },
-        "CREATED_BY": {
-          "type": "cds.String",
-          "length": 12
+        "PREDICTED": {
+          "@title": "PREDICTED",
+          "key": true,
+          "type": "cds.Double"
         }
-      },
-      "returns": {
-        "type": "cds.String"
       }
     },
-    "CatalogService.assignProfilesOD": {
+    "CatalogService.generate_timeseries": {
       "kind": "function",
       "params": {
-        "FLAG": {
-          "type": "cds.String",
-          "length": 1
-        },
         "LOCATION_ID": {
           "type": "cds.String",
           "length": 4
@@ -19595,26 +19860,24 @@
         "PRODUCT_ID": {
           "type": "cds.String",
           "length": 40
-        },
-        "COMPONENT": {
-          "type": "cds.String",
-          "length": 40
-        },
-        "PROFILE": {
-          "type": "cds.String",
-          "length": 50
-        },
-        "STRUC_NODE": {
-          "type": "cds.String",
-          "length": 50
         }
       },
       "returns": {
         "type": "cds.String"
       }
     },
-    "CatalogService.importIBPDemd": {
+    "CatalogService.generate_timeseriesF": {
       "kind": "function",
+      "params": {
+        "LOCATION_ID": {
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "type": "cds.String",
+          "length": 40
+        }
+      },
       "returns": {
         "type": "cds.String"
       }
@@ -21179,6 +21442,21 @@
         "type": "cds.String"
       }
     },
+    "CatalogService.maintainRestrDetail": {
+      "kind": "function",
+      "params": {
+        "FLAG": {
+          "type": "cds.String",
+          "length": 1
+        },
+        "RTRCHAR": {
+          "type": "cds.String"
+        }
+      },
+      "returns": {
+        "type": "cds.String"
+      }
+    },
     "CatalogService.getCIRCharRate": {
       "kind": "entity",
       "projection": {
@@ -21236,6 +21514,11 @@
           "type": "cds.String",
           "length": 30
         },
+        "CHAR_DESC": {
+          "key": true,
+          "type": "cds.String",
+          "length": 150
+        },
         "CHARVAL_NUM": {
           "@title": "CHARVAL_NUM",
           "key": true,
@@ -21247,6 +21530,11 @@
           "key": true,
           "type": "cds.String",
           "length": 70
+        },
+        "CHARVAL_DESC": {
+          "key": true,
+          "type": "cds.String",
+          "length": 150
         },
         "SEQUENCE": {
           "@title": "SEQUENCE",
@@ -22048,6 +22336,281 @@
         }
       }
     },
+    "CatalogService.genAssemblyreq": {
+      "kind": "function",
+      "params": {
+        "LOCATION_ID": {
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "type": "cds.String",
+          "length": 40
+        }
+      },
+      "returns": {
+        "type": "cds.String"
+      }
+    },
+    "CatalogService.generateAssemblyReq": {
+      "kind": "action",
+      "params": {
+        "LOCATION_ID": {
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "type": "cds.String",
+          "length": 40
+        }
+      }
+    },
+    "CatalogService.getCriticalComp": {
+      "kind": "entity",
+      "projection": {
+        "from": {
+          "ref": [
+            "V_BOMCRITICALCOMP"
+          ]
+        }
+      },
+      "elements": {
+        "LOCATION_ID": {
+          "@title": "LOCATION_ID",
+          "type": "cds.String",
+          "length": 4,
+          "notNull": true
+        },
+        "PRODUCT_ID": {
+          "@title": "PRODUCT_ID",
+          "type": "cds.String",
+          "length": 40,
+          "notNull": true
+        },
+        "ITEM_NUM": {
+          "@title": "ITEM_NUM",
+          "type": "cds.String",
+          "length": 5,
+          "notNull": true
+        },
+        "COMPONENT": {
+          "@title": "COMPONENT",
+          "type": "cds.String",
+          "length": 40,
+          "notNull": true
+        },
+        "VALID_FROM": {
+          "@title": "VALID_FROM",
+          "type": "cds.Date"
+        },
+        "VALID_TO": {
+          "@title": "VALID_TO",
+          "type": "cds.Date"
+        },
+        "CRITICALKEY": {
+          "@title": "CRITICALKEY",
+          "type": "cds.String",
+          "length": 1
+        }
+      }
+    },
+    "CatalogService.changeToCritical": {
+      "kind": "function",
+      "params": {
+        "criticalComp": {
+          "type": "cds.String"
+        }
+      },
+      "returns": {
+        "type": "cds.String"
+      }
+    },
+    "CatalogService.getFactoryLoc": {
+      "kind": "entity",
+      "@odata.draft.enabled": true,
+      "@UI.SelectionFields": [
+        {
+          "=": "LOCATION_ID"
+        },
+        {
+          "=": "PRODUCT_ID"
+        }
+      ],
+      "@UI.LineItem": [
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "LOCATION_ID"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          },
+          "@HTML5.CssDefaults": {
+            "width": "15rem"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "PRODUCT_ID"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          },
+          "@HTML5.CssDefaults": {
+            "width": "15rem"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "PLAN_LOC"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          },
+          "@HTML5.CssDefaults": {
+            "width": "15rem"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "FACTORY_LOC"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          },
+          "@HTML5.CssDefaults": {
+            "width": "15rem"
+          }
+        }
+      ],
+      "@UI.HeaderInfo.Title.Value": {
+        "=": "LOCATION_ID"
+      },
+      "@UI.HeaderInfo.Description.Value": {
+        "=": "PRODUCT_ID"
+      },
+      "@UI.HeaderInfo.TypeName": "Demand - Plan - Factory Location",
+      "@UI.HeaderInfo.TypeNamePlural": "Demand - Plan - Factory Location-Product",
+      "@UI.FieldGroup#Details.Data": [
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "PLAN_LOC"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "FACTORY_LOC"
+          }
+        }
+      ],
+      "@UI.Facets": [
+        {
+          "$Type": "UI.CollectionFacet",
+          "ID": "FactoryLocation",
+          "Label": "Demand - Plan - Factory Location",
+          "Facets": [
+            {
+              "$Type": "UI.ReferenceFacet",
+              "Label": "Demand - Plan - Factory Location",
+              "Target": "@UI.FieldGroup#Details"
+            }
+          ]
+        }
+      ],
+      "projection": {
+        "from": {
+          "ref": [
+            "cp.FACTORY_SALESLOC"
+          ]
+        }
+      },
+      "elements": {
+        "LOCATION_ID": {
+          "@Common.ValueList.$Type": "Common.ValueListType",
+          "@Common.ValueList.Label": "Location",
+          "@Common.ValueList.CollectionPath": "getLocation",
+          "@Common.ValueList.Parameters": [
+            {
+              "$Type": "Common.ValueListParameterOut",
+              "LocalDataProperty": {
+                "=": "LOCATION_ID"
+              },
+              "ValueListProperty": "LOCATION_ID"
+            }
+          ],
+          "@title": "Demand Location ",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "@Common.ValueList.$Type": "Common.ValueListType",
+          "@Common.ValueList.Label": "Products",
+          "@Common.ValueList.CollectionPath": "getLocProd",
+          "@Common.ValueList.Parameters": [
+            {
+              "$Type": "Common.ValueListParameterInOut",
+              "LocalDataProperty": {
+                "=": "PRODUCT_ID"
+              },
+              "ValueListProperty": "PRODUCT_ID"
+            },
+            {
+              "$Type": "Common.ValueListParameterIn",
+              "LocalDataProperty": {
+                "=": "LOCATION_ID"
+              },
+              "ValueListProperty": "LOCATION_ID"
+            }
+          ],
+          "@title": "Product",
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+        "PLAN_LOC": {
+          "@Common.ValueList.$Type": "Common.ValueListType",
+          "@Common.ValueList.Label": "Location",
+          "@Common.ValueList.CollectionPath": "getLocation",
+          "@Common.ValueList.Parameters": [
+            {
+              "$Type": "Common.ValueListParameterOut",
+              "LocalDataProperty": {
+                "=": "PLAN_LOC"
+              },
+              "ValueListProperty": "LOCATION_ID"
+            }
+          ],
+          "@title": "Planning Location ",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "FACTORY_LOC": {
+          "@Common.ValueList.$Type": "Common.ValueListType",
+          "@Common.ValueList.Label": "Location",
+          "@Common.ValueList.CollectionPath": "getLocation",
+          "@Common.ValueList.Parameters": [
+            {
+              "$Type": "Common.ValueListParameterOut",
+              "LocalDataProperty": {
+                "=": "FACTORY_LOC"
+              },
+              "ValueListProperty": "LOCATION_ID"
+            }
+          ],
+          "@title": "Factory Location ",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        }
+      }
+    },
     "IBPImportSrv": {
       "@source": "srv/ibpimport-service.cds",
       "kind": "service",
@@ -22179,6 +22742,22 @@
         "LOCATION_ID": {
           "type": "cds.String",
           "length": 4
+        }
+      },
+      "returns": {
+        "type": "cds.String"
+      }
+    },
+    "IBPImportSrv.createIBPCIR": {
+      "kind": "function",
+      "params": {
+        "LOCATION_ID": {
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "type": "cds.String",
+          "length": 40
         }
       },
       "returns": {
@@ -22322,6 +22901,19 @@
         },
         "TODATE": {
           "type": "cds.Date"
+        }
+      }
+    },
+    "IBPImportSrv.exportIBPCIR": {
+      "kind": "action",
+      "params": {
+        "LOCATION_ID": {
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "type": "cds.String",
+          "length": 40
         }
       }
     },

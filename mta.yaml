@@ -203,6 +203,14 @@ modules:
       - cpappcpjobschedulernew.zip
       name: cpappcpjobschedulernew
       target-path: resources/
+    - artifacts:
+      - cpappcpcriticalcomp.zip
+      name: cpappcpcriticalcomp
+      target-path: resources/
+    - artifacts:
+      - cpappcpfactoryloc.zip
+      name: cpappcpfactoryloc
+      target-path: resources/
 - name: cpodpcpodprofiles
   type: html5
   path: app/cp_odprofiles
@@ -579,6 +587,26 @@ modules:
     - npm install
     - npm run build:cf
     supported-platforms: []
+- name: cpappcpcriticalcomp
+  type: html5
+  path: app/cpcriticalcomp
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappcpfactoryloc
+  type: html5
+  path: app/cpfactoryloc
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
 resources:
 - name: config_products-db
   type: com.sap.xs.hdi-container
@@ -594,7 +622,7 @@ resources:
 - name: ext_odata
   type: org.cloudfoundry.existing-service
   parameters:
-    service-name: config_products-destination-service
+    service-name: ext_odata
 - name: config_products-mdestination-service
   type: org.cloudfoundry.managed-service
   parameters:

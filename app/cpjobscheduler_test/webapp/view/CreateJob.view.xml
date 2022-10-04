@@ -369,6 +369,7 @@
                         <RadioButton id="idIBPSalesHisConfig" text="Sales History Config" />
                         <RadioButton id="idIBPActCompDemd" text="Actual Components Demand" />
                         <RadioButton id="idIBPCompReqQty" text="Assembly Requirement Quantity" />
+                        <RadioButton id="idIBPExCIR" text="Export CIR" />
                     </RadioButtonGroup>
 
                     <!-- </content> -->
@@ -487,12 +488,12 @@
                                                 <MultiInput id="ESHprodInput" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
                                             </f:fields>
                                         </f:FormElement>
-                                        <f:FormElement>
+                                        <f:FormElement >
                                             <f:label>
-                                                <Label text="{i18n>cust}" />
+                                                <Label text="{i18n>cust}" visible="false"/>
                                             </f:label>
                                             <f:fields>
-                                                <Input id="ECust" value="" placeholder="{i18n>cust}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                                <Input id="ECust" visible="false" value="" placeholder="{i18n>cust}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                                             </f:fields>
                                         </f:FormElement>
                                     </f:formElements>
@@ -525,10 +526,10 @@
                                         </f:FormElement>
                                         <f:FormElement>
                                             <f:label>
-                                                <Label text="{i18n>cust}" />
+                                                <Label text="{i18n>cust}" visible="false"/>
                                             </f:label>
                                             <f:fields>
-                                                <Input id="ESHConfigCust" value="" placeholder="{i18n>cust}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                                <Input id="ESHConfigCust" visible="false" value="" placeholder="{i18n>cust}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                                             </f:fields>
                                         </f:FormElement>
                                     </f:formElements>
@@ -601,6 +602,34 @@
                                             </f:label>
                                             <f:fields>
                                                 <DateRangeSelection id="ECRQtyDate" delimiter="To" dateValue="" secondDateValue="" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="handleECRQtyDateChange" maxDate="" />
+                                            </f:fields>
+                                        </f:FormElement>
+                                    </f:formElements>
+                                </f:FormContainer>
+                            </f:formContainers>
+                        </f:Form>
+
+                        <f:Form editable="true" id="IBPCIRExport" visible="false">
+                            <f:layout>
+                                <f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2" singleContainerFullSize="false" />
+                            </f:layout>
+                            <f:formContainers>
+                                <f:FormContainer>
+                                    <f:formElements>
+                                        <f:FormElement>
+                                            <f:label>
+                                                <Label text="{i18n>loc}" required="true" />
+                                            </f:label>
+                                            <f:fields>
+                                                <Input id="ECIRlocInput" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                            </f:fields>
+                                        </f:FormElement>
+                                        <f:FormElement>
+                                            <f:label>
+                                                <Label text="{i18n>prod}" required="true" />
+                                            </f:label>
+                                            <f:fields>
+                                                <MultiInput id="ECIRprodInput" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
                                             </f:fields>
                                         </f:FormElement>
                                     </f:formElements>

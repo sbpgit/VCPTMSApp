@@ -273,7 +273,7 @@ sap.ui.define(
               // 20-09-2022
             } else if(oData.readJobDetails.action.includes("genFullConfigDemand") ){
                 oGModel.setProperty("/JobType", "D");
-            } else if(oData.readJobDetails.action.includes("AssmbReq") ){
+            } else if(oData.readJobDetails.action.includes("exportIBPAsmreq") ){
                 oGModel.setProperty("/JobType", "A");
             } else if(oData.readJobDetails.action.includes("genUniqueID") ){
                 oGModel.setProperty("/JobType", "O");
@@ -305,10 +305,13 @@ sap.ui.define(
             ScheData = [];
           // Getting the schedule Id for the selected Job
           var scheduleId = oEvent
-            .getSource()
-            .getParent()
-            .getBindingContext()
-            .getObject().scheduleId;
+          .getSource()
+          .getParent()
+          .getBindingContext()
+          .getObject().scheduleId;
+          // 04-10-2022
+          var jobType = oGModel.getProperty("/JobType");
+          // 04-10-2022
           // Looping through the data to get the data for IBP Integration and SDI Integration
           for (var i = 0; i < aData.length; i++) {
             if (scheduleId === aData[i].scheduleId) {
@@ -327,6 +330,15 @@ sap.ui.define(
                   CUSTOMER_GROUP: data.CUSTOMER_GROUP,
                 };
                 ScheData.push(aIData);
+                 // 04-10-2022
+                } if(jobType === "D" || jobType === "A" || jobType === "O" ){
+                    var data = $.parseJSON(aData[i].data);
+                    var aIData = {
+                        Location: data.LOCATION_ID,
+                        Product: data.PRODUCT_ID,
+                    };
+                    ScheData.push(aIData);
+                // 04-10-2022
               } else {
                 ScheData = aData[i].data;
                 ScheData = $.parseJSON(ScheData);
@@ -339,241 +351,83 @@ sap.ui.define(
             results: ScheData,
           });
           sap.ui.getCore().byId("idJobData").setModel(that.JobDataModel);
+            // 22-09-2022
+                var jobType = oGModel.getProperty("/JobType");
+                // 22-09-2022
           // Based on Job type changing the visibility the columns
           if (oGModel.getProperty("/JobType") === "M") {
             sap.ui.getCore().byId("idJobData").getColumns()[2].setVisible(true);
             sap.ui.getCore().byId("idJobData").getColumns()[3].setVisible(true);
             sap.ui.getCore().byId("idJobData").getColumns()[4].setVisible(true);
-            sap.ui
-              .getCore()
-              .byId("idJobData")
-              .getColumns()[5]
-              .setVisible(false);
-            sap.ui
-              .getCore()
-              .byId("idJobData")
-              .getColumns()[6]
-              .setVisible(false);
-            sap.ui
-              .getCore()
-              .byId("idJobData")
-              .getColumns()[7]
-              .setVisible(false);
-            sap.ui
-              .getCore()
-              .byId("idJobData")
-              .getColumns()[8]
-              .setVisible(false);
-            sap.ui
-              .getCore()
-              .byId("idJobData")
-              .getColumns()[9]
-              .setVisible(false);
-            sap.ui
-              .getCore()
-              .byId("idJobData")
-              .getColumns()[10]
-              .setVisible(false);
-            sap.ui
-              .getCore()
-              .byId("idJobData")
-              .getColumns()[11]
-              .setVisible(false);
+            sap.ui.getCore().byId("idJobData").getColumns()[5].setVisible(false);
+            sap.ui.getCore().byId("idJobData").getColumns()[6].setVisible(false);
+            sap.ui.getCore().byId("idJobData").getColumns()[7].setVisible(false);
+            sap.ui.getCore().byId("idJobData").getColumns()[8].setVisible(false);
+            sap.ui.getCore().byId("idJobData").getColumns()[9].setVisible(false);
+            sap.ui.getCore().byId("idJobData").getColumns()[10].setVisible(false);
+            sap.ui.getCore().byId("idJobData").getColumns()[11].setVisible(false);
           } else if (oGModel.getProperty("/JobType") === "P") {
             sap.ui.getCore().byId("idJobData").getColumns()[2].setVisible(true);
             sap.ui.getCore().byId("idJobData").getColumns()[3].setVisible(true);
             sap.ui.getCore().byId("idJobData").getColumns()[4].setVisible(true);
             sap.ui.getCore().byId("idJobData").getColumns()[5].setVisible(true);
             sap.ui.getCore().byId("idJobData").getColumns()[6].setVisible(true);
-            sap.ui
-              .getCore()
-              .byId("idJobData")
-              .getColumns()[7]
-              .setVisible(false);
-            sap.ui
-              .getCore()
-              .byId("idJobData")
-              .getColumns()[8]
-              .setVisible(false);
-            sap.ui
-              .getCore()
-              .byId("idJobData")
-              .getColumns()[9]
-              .setVisible(false);
-            sap.ui
-              .getCore()
-              .byId("idJobData")
-              .getColumns()[10]
-              .setVisible(false);
-            sap.ui
-              .getCore()
-              .byId("idJobData")
-              .getColumns()[11]
-              .setVisible(false);
+            sap.ui.getCore().byId("idJobData").getColumns()[7].setVisible(false);
+            sap.ui.getCore().byId("idJobData").getColumns()[8].setVisible(false);
+            sap.ui.getCore().byId("idJobData").getColumns()[9].setVisible(false);
+            sap.ui.getCore().byId("idJobData").getColumns()[10].setVisible(false);
+            sap.ui.getCore().byId("idJobData").getColumns()[11].setVisible(false);
           } else if (oGModel.getProperty("/JobType") === "T") {
-            sap.ui
-              .getCore()
-              .byId("idJobData")
-              .getColumns()[2]
-              .setVisible(false);
-            sap.ui
-              .getCore()
-              .byId("idJobData")
-              .getColumns()[3]
-              .setVisible(false);
-            sap.ui
-              .getCore()
-              .byId("idJobData")
-              .getColumns()[4]
-              .setVisible(false);
-            sap.ui
-              .getCore()
-              .byId("idJobData")
-              .getColumns()[5]
-              .setVisible(false);
-            sap.ui
-              .getCore()
-              .byId("idJobData")
-              .getColumns()[6]
-              .setVisible(false);
-            sap.ui
-              .getCore()
-              .byId("idJobData")
-              .getColumns()[7]
-              .setVisible(false);
-            sap.ui
-              .getCore()
-              .byId("idJobData")
-              .getColumns()[8]
-              .setVisible(false);
-            sap.ui
-              .getCore()
-              .byId("idJobData")
-              .getColumns()[9]
-              .setVisible(false);
-            sap.ui
-              .getCore()
-              .byId("idJobData")
-              .getColumns()[10]
-              .setVisible(false);
-            sap.ui
-              .getCore()
-              .byId("idJobData")
-              .getColumns()[11]
-              .setVisible(true);
+            sap.ui.getCore().byId("idJobData").getColumns()[2].setVisible(false);
+            sap.ui.getCore().byId("idJobData").getColumns()[3].setVisible(false);
+            sap.ui.getCore().byId("idJobData").getColumns()[4].setVisible(false);
+            sap.ui.getCore().byId("idJobData").getColumns()[5].setVisible(false);
+            sap.ui.getCore().byId("idJobData").getColumns()[6].setVisible(false);
+            sap.ui.getCore().byId("idJobData").getColumns()[7].setVisible(false);
+            sap.ui.getCore().byId("idJobData").getColumns()[8].setVisible(false);
+            sap.ui.getCore().byId("idJobData").getColumns()[9].setVisible(false);
+            sap.ui.getCore().byId("idJobData").getColumns()[10].setVisible(false);
+            sap.ui.getCore().byId("idJobData").getColumns()[11].setVisible(true);
           } else if (oGModel.getProperty("/JobType") === "F") {
-            sap.ui
-              .getCore()
-              .byId("idJobData")
-              .getColumns()[2]
-              .setVisible(false);
-            sap.ui
-              .getCore()
-              .byId("idJobData")
-              .getColumns()[3]
-              .setVisible(false);
-            sap.ui
-              .getCore()
-              .byId("idJobData")
-              .getColumns()[4]
-              .setVisible(false);
-            sap.ui
-              .getCore()
-              .byId("idJobData")
-              .getColumns()[5]
-              .setVisible(false);
-            sap.ui
-              .getCore()
-              .byId("idJobData")
-              .getColumns()[6]
-              .setVisible(false);
-            sap.ui
-              .getCore()
-              .byId("idJobData")
-              .getColumns()[7]
-              .setVisible(false);
-            sap.ui
-              .getCore()
-              .byId("idJobData")
-              .getColumns()[8]
-              .setVisible(false);
-            sap.ui
-              .getCore()
-              .byId("idJobData")
-              .getColumns()[9]
-              .setVisible(false);
-            sap.ui
-              .getCore()
-              .byId("idJobData")
-              .getColumns()[10]
-              .setVisible(false);
-            sap.ui
-              .getCore()
-              .byId("idJobData")
-              .getColumns()[11]
-              .setVisible(false);
+            sap.ui.getCore().byId("idJobData").getColumns()[2].setVisible(false);
+            sap.ui.getCore().byId("idJobData").getColumns()[3].setVisible(false);
+            sap.ui.getCore().byId("idJobData").getColumns()[4].setVisible(false);
+            sap.ui.getCore().byId("idJobData").getColumns()[5].setVisible(false);
+            sap.ui.getCore().byId("idJobData").getColumns()[6].setVisible(false);
+            sap.ui.getCore().byId("idJobData").getColumns()[7].setVisible(false);
+            sap.ui.getCore().byId("idJobData").getColumns()[8].setVisible(false);
+            sap.ui.getCore().byId("idJobData").getColumns()[9].setVisible(false);
+            sap.ui.getCore().byId("idJobData").getColumns()[10].setVisible(false);
+            sap.ui.getCore().byId("idJobData").getColumns()[11].setVisible(false);
           } else if (oGModel.getProperty("/JobType") === "I") {
-            sap.ui
-              .getCore()
-              .byId("idJobData")
-              .getColumns()[0]
-              .setVisible(false);
-            sap.ui
-              .getCore()
-              .byId("idJobData")
-              .getColumns()[1]
-              .setVisible(false);
-            sap.ui
-              .getCore()
-              .byId("idJobData")
-              .getColumns()[2]
-              .setVisible(false);
-            sap.ui
-              .getCore()
-              .byId("idJobData")
-              .getColumns()[3]
-              .setVisible(false);
-            sap.ui
-              .getCore()
-              .byId("idJobData")
-              .getColumns()[4]
-              .setVisible(false);
-            sap.ui
-              .getCore()
-              .byId("idJobData")
-              .getColumns()[5]
-              .setVisible(false);
-            sap.ui
-              .getCore()
-              .byId("idJobData")
-              .getColumns()[6]
-              .setVisible(false);
-            sap.ui
-              .getCore()
-              .byId("idJobData")
-              .getColumns()[7]
-              .setVisible(false);
-            sap.ui
-              .getCore()
-              .byId("idJobData")
-              .getColumns()[8]
-              .setVisible(false);
-            sap.ui
-              .getCore()
-              .byId("idJobData")
-              .getColumns()[9]
-              .setVisible(false);
-            sap.ui
-              .getCore()
-              .byId("idJobData")
-              .getColumns()[10]
-              .setVisible(false);
-            sap.ui
-              .getCore()
-              .byId("idJobData")
-              .getColumns()[11]
-              .setVisible(false);
-          }
+            sap.ui.getCore().byId("idJobData").getColumns()[0].setVisible(false);
+            sap.ui.getCore().byId("idJobData").getColumns()[1].setVisible(false);
+            sap.ui.getCore().byId("idJobData").getColumns()[2].setVisible(false);
+            sap.ui.getCore().byId("idJobData").getColumns()[3].setVisible(false);
+            sap.ui.getCore().byId("idJobData").getColumns()[4].setVisible(false);
+            sap.ui.getCore().byId("idJobData").getColumns()[5].setVisible(false);
+            sap.ui.getCore().byId("idJobData").getColumns()[6].setVisible(false);
+            sap.ui.getCore().byId("idJobData").getColumns()[7].setVisible(false);
+            sap.ui.getCore().byId("idJobData").getColumns()[8].setVisible(false);
+            sap.ui.getCore().byId("idJobData").getColumns()[9].setVisible(false);
+            sap.ui.getCore().byId("idJobData").getColumns()[10].setVisible(false);
+            sap.ui.getCore().byId("idJobData").getColumns()[11].setVisible(false);
+          // 22-09-2022
+        } else if (jobType === "D" || jobType === "A" || jobType === "O") {
+            sap.ui.getCore().byId("idJobData").getColumns()[0].setVisible(true);
+            sap.ui.getCore().byId("idJobData").getColumns()[1].setVisible(true);
+            sap.ui.getCore().byId("idJobData").getColumns()[2].setVisible(false);
+            sap.ui.getCore().byId("idJobData").getColumns()[3].setVisible(false);
+            sap.ui.getCore().byId("idJobData").getColumns()[4].setVisible(false);
+            sap.ui.getCore().byId("idJobData").getColumns()[5].setVisible(false);
+            sap.ui.getCore().byId("idJobData").getColumns()[6].setVisible(false);
+            sap.ui.getCore().byId("idJobData").getColumns()[7].setVisible(false);
+            sap.ui.getCore().byId("idJobData").getColumns()[8].setVisible(false);
+            sap.ui.getCore().byId("idJobData").getColumns()[9].setVisible(false);
+            sap.ui.getCore().byId("idJobData").getColumns()[10].setVisible(false);
+            sap.ui.getCore().byId("idJobData").getColumns()[11].setVisible(false);
+        }
+        // 22-09-2022
 
           if (
             oGModel.getProperty("/JobType") !== "I" &&
@@ -588,26 +442,10 @@ sap.ui.define(
               oActionType === "generateFDemandQty" ||
               oActionType === "generateFCharPlan"
             ) {
-              sap.ui
-                .getCore()
-                .byId("idJobData")
-                .getColumns()[0]
-                .setVisible(true);
-              sap.ui
-                .getCore()
-                .byId("idJobData")
-                .getColumns()[1]
-                .setVisible(true);
-              sap.ui
-                .getCore()
-                .byId("idJobData")
-                .getColumns()[5]
-                .setVisible(false);
-            //   sap.ui
-            //     .getCore()
-            //     .byId("idJobData")
-            //     .getColumns()[6]
-            //     .setVisible(true);
+              sap.ui.getCore().byId("idJobData").getColumns()[0].setVisible(true);
+              sap.ui.getCore().byId("idJobData").getColumns()[1].setVisible(true);
+              sap.ui.getCore().byId("idJobData").getColumns()[5].setVisible(false);
+            //   sap.ui.getCore().byId("idJobData").getColumns()[6].setVisible(true);
             } else if (
               oActionType === "exportIBPLocation" ||
               oActionType === "exportIBPCustomer" ||
@@ -619,92 +457,34 @@ sap.ui.define(
               );
               iCount = 1;
             } else if (oActionType === "exportIBPMasterProd") {
-              sap.ui
-                .getCore()
-                .byId("idJobData")
-                .getColumns()[0]
-                .setVisible(true);
+              sap.ui.getCore().byId("idJobData").getColumns()[0].setVisible(true);
             } else if (oActionType === "exportIBPClass") {
-              sap.ui
-                .getCore()
-                .byId("idJobData")
-                .getColumns()[7]
-                .setVisible(true);
+              sap.ui.getCore().byId("idJobData").getColumns()[7].setVisible(true);
             } else if (oActionType === "exportIBPSalesTrans") {
-              sap.ui
-                .getCore()
-                .byId("idJobData")
-                .getColumns()[0]
-                .setVisible(true);
-              sap.ui
-                .getCore()
-                .byId("idJobData")
-                .getColumns()[1]
-                .setVisible(true);
-              sap.ui
-                .getCore()
-                .byId("idJobData")
-                .getColumns()[8]
-                .setVisible(true);
+              sap.ui.getCore().byId("idJobData").getColumns()[0].setVisible(true);
+              sap.ui.getCore().byId("idJobData").getColumns()[1].setVisible(true);
+              sap.ui.getCore().byId("idJobData").getColumns()[8].setVisible(true);
             } else if (oActionType === "exportIBPSalesConfig") {
-              sap.ui
-                .getCore()
-                .byId("idJobData")
-                .getColumns()[0]
-                .setVisible(true);
-              sap.ui
-                .getCore()
-                .byId("idJobData")
-                .getColumns()[1]
-                .setVisible(true);
-              sap.ui
-                .getCore()
-                .byId("idJobData")
-                .getColumns()[8]
-                .setVisible(true);
+              sap.ui.getCore().byId("idJobData").getColumns()[0].setVisible(true);
+              sap.ui.getCore().byId("idJobData").getColumns()[1].setVisible(true);
+              sap.ui.getCore().byId("idJobData").getColumns()[8].setVisible(true);
             } else if (oActionType === "exportComponentReq") {
-              sap.ui
-                .getCore()
-                .byId("idJobData")
-                .getColumns()[0]
-                .setVisible(true);
-              sap.ui
-                .getCore()
-                .byId("idJobData")
-                .getColumns()[1]
-                .setVisible(true);
-              sap.ui
-                .getCore()
-                .byId("idJobData")
-                .getColumns()[9]
-                .setVisible(true);
-              sap.ui
-                .getCore()
-                .byId("idJobData")
-                .getColumns()[10]
-                .setVisible(true);
+              sap.ui.getCore().byId("idJobData").getColumns()[0].setVisible(true);
+              sap.ui.getCore().byId("idJobData").getColumns()[1].setVisible(true);
+              sap.ui.getCore().byId("idJobData").getColumns()[9].setVisible(true);
+              sap.ui.getCore().byId("idJobData").getColumns()[10].setVisible(true);
             } else if (oActionType === "exportActCompDemand") {
-              sap.ui
-                .getCore()
-                .byId("idJobData")
-                .getColumns()[0]
-                .setVisible(true);
-              sap.ui
-                .getCore()
-                .byId("idJobData")
-                .getColumns()[1]
-                .setVisible(true);
-              sap.ui
-                .getCore()
-                .byId("idJobData")
-                .getColumns()[9]
-                .setVisible(true);
-              sap.ui
-                .getCore()
-                .byId("idJobData")
-                .getColumns()[10]
-                .setVisible(true);
-            }
+              sap.ui.getCore().byId("idJobData").getColumns()[0].setVisible(true);
+              sap.ui.getCore().byId("idJobData").getColumns()[1].setVisible(true);
+              sap.ui.getCore().byId("idJobData").getColumns()[9].setVisible(true);
+              sap.ui.getCore().byId("idJobData").getColumns()[10].setVisible(true);
+            
+            // 22-09-2022
+        } else if (oActionType === "exportIBPCIR") {
+            sap.ui.getCore().byId("idJobData").getColumns()[0].setVisible(true);
+            sap.ui.getCore().byId("idJobData").getColumns()[1].setVisible(true);
+        }
+        // 22-09-2022
             if (iCount === 0) {
               that._valueHelpDialogJobData.open();
             }
@@ -717,11 +497,7 @@ sap.ui.define(
          */
         onSchestatus: function (oEvent) {
           var oJobId = oGModel.getProperty("/Jobdata").jobId,
-            oScheId = oEvent
-              .getSource()
-              .getParent()
-              .getBindingContext()
-              .getObject().scheduleId;
+            oScheId = oEvent.getSource().getParent().getBindingContext().getObject().scheduleId;
 
           sap.ui.core.BusyIndicator.show();
           that.getModel("JModel").callFunction("/readJobRunLogs", {
@@ -737,10 +513,7 @@ sap.ui.define(
               that.ScheLogModel.setData({
                 results: oData.results,
               });
-              sap.ui
-                .getCore()
-                .byId("idScheLogData")
-                .setModel(that.ScheLogModel);
+              sap.ui.getCore().byId("idScheLogData").setModel(that.ScheLogModel);
               that._valueHelpDialogScheLog.open();
             },
             error: function (error) {
@@ -776,11 +549,7 @@ sap.ui.define(
          * This function is called when click on delete button to delete the schedule.
          */
         onJobDelete: function (oEvent) {
-          var oJobId = oEvent
-            .getSource()
-            .getParent()
-            .getBindingContext()
-            .getObject().jobId;
+          var oJobId = oEvent.getSource().getParent().getBindingContext().getObject().jobId;
 
           oGModel.setProperty("/DeleteJob", oJobId);
 
@@ -812,10 +581,10 @@ sap.ui.define(
          */
         onUpdateJob: function (oEvent) {
           var oJobId = oEvent
-              .getSource()
-              .getParent()
-              .getBindingContext()
-              .getObject(),
+.getSource()
+.getParent()
+.getBindingContext()
+.getObject(),
             bActive,
             dStartTime,
             dEndTime;
@@ -918,10 +687,10 @@ sap.ui.define(
         onScheDelete: function (oEvent) {
           var oJobId = oGModel.getProperty("/Jobdata").jobId,
             oScheId = oEvent
-              .getSource()
-              .getParent()
-              .getBindingContext()
-              .getObject().scheduleId;
+.getSource()
+.getParent()
+.getBindingContext()
+.getObject().scheduleId;
 
           oGModel.setProperty("/DeleteSchJob", oJobId);
           oGModel.setProperty("/DeleteSch", oScheId);
@@ -960,10 +729,10 @@ sap.ui.define(
         onScheUpdate: function (oEvent) {
           var oJobId = oGModel.getProperty("/Jobdata").jobId,
             oScheId = oEvent
-              .getSource()
-              .getParent()
-              .getBindingContext()
-              .getObject().scheduleId,
+.getSource()
+.getParent()
+.getBindingContext()
+.getObject().scheduleId,
             aData = oGModel.getProperty("/aJobDetails");
 
           for (var i = 0; i < aData.length; i++) {

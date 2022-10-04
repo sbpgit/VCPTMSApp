@@ -129,12 +129,16 @@ sap.ui.define(
                     results: that.oTableData
                 });
                 sap.ui.getCore().byId("idCharItem").setModel(that.ListModel);
-                this.oProdList = this._oCore.byId(
-                    this._valueHelpDialogProd.getId() + "-list"
-                );
-                this.oLocList = this._oCore.byId(
-                    this._valueHelpDialogLoc.getId() + "-list"
-                );
+                // this.oProdList = this._oCore.byId(
+                //     this._valueHelpDialogProd.getId() + "-list"
+                // );
+                // this.oLocList = this._oCore.byId(
+                //     this._valueHelpDialogLoc.getId() + "-list"
+                // );
+
+                this.oProdList = sap.ui.getCore().byId("prodSlctList");
+                this.oLocList = sap.ui.getCore().byId("LocSlctList");
+
                 oGModel = this.getModel("oGModel");
                 oGModel.setProperty("/New", "");
                 sap.ui.core.BusyIndicator.show();
@@ -180,23 +184,26 @@ sap.ui.define(
              * Dialogs will be closed based on sId
              */
             handleClose: function (oEvent) {
-                var sId = oEvent.getParameter("id");
+                // var sId = oEvent.getParameter("id");
+                var sId = oEvent.getSource().getParent().mAssociations.initialFocus.split("-")[0];
                 // Loc Dialog
-                if (sId.includes("loc")) {
-                    that._oCore
-                        .byId(this._valueHelpDialogLoc.getId() + "-searchField")
-                        .setValue("");
+                if (sId.includes("Loc")) {
+                    sap.ui.getCore().byId("LocSearch").setValue("");
+                    // that._oCore.byId(this._valueHelpDialogLoc.getId() + "-searchField").setValue("");
                     if (that.oLocList.getBinding("items")) {
                         that.oLocList.getBinding("items").filter([]);
                     }
+                    sap.ui.getCore().byId("LocSlctList").removeSelections();
+                    that._valueHelpDialogLoc.close();
                     // Prod Dialog
-                } else if (sId.includes("prod")) {
-                    that._oCore
-                        .byId(this._valueHelpDialogProd.getId() + "-searchField")
-                        .setValue("");
+                } else if (sId.includes("Prod")) {
+                    sap.ui.getCore().byId("ProdSearch").setValue("");
+                    // that._oCore.byId(this._valueHelpDialogProd.getId() + "-searchField").setValue("");
                     if (that.oProdList.getBinding("items")) {
                         that.oProdList.getBinding("items").filter([]);
                     }
+                    sap.ui.getCore().byId("prodSlctList").removeSelections();
+                    that._valueHelpDialogProd.close();
                 }
             },
 
@@ -212,7 +219,7 @@ sap.ui.define(
                 // Check if search filter is to be applied
                 sQuery = sQuery ? sQuery.trim() : "";
                 // Location
-                if (sId.includes("loc")) {
+                if (sId.includes("Loc")) {
                     if (sQuery !== "") {
                         oFilters.push(
                             new Filter({
@@ -226,7 +233,7 @@ sap.ui.define(
                     }
                     that.oLocList.getBinding("items").filter(oFilters);
                     // Product
-                } else if (sId.includes("prod")) {
+                } else if (sId.includes("Prod")) {
                     if (sQuery !== "") {
                         oFilters.push(
                             new Filter({
@@ -254,32 +261,36 @@ sap.ui.define(
                     oItem = oEvent.getParameter("selectedItems"),
                     aSelectedItems,
                     aODdata = [];
+                    this.oLoc = that.byId("idloc");
+                    this.oProd = that.byId("prodInput");
                 //Location list
                 if (sId.includes("Loc")) {
-                    this.oLoc = that.byId("idloc");
+                    
                     aSelectedItems = oEvent.getParameter("selectedItems");
-                    if (mainSID === "__xmlview1--idloc") {
-                        that.oLoc.setValue(aSelectedItems[0].getTitle());
 
-                    }
-                    else if (mainSID === "locId1") {
-                        sap.ui.getCore().byId("locId1").setValue(aSelectedItems[0].getTitle());
-                    }
-                    else if (mainSID === "locIdCC") {
-                        sap.ui.getCore().byId("locIdCC").setValue(aSelectedItems[0].getTitle());
-                    }
-                    that.oProd.setValue();
-                    that.oProd.removeAllTokens();
-                    this._valueHelpDialogProd
-                        .getAggregation("_dialog")
-                        .getContent()[1]
-                        .removeSelections();
+                    that.oLoc.setValue(oEvent.getParameters().listItem.getCells()[0].getTitle());
+                    that.oProd.setValue("");
+
+                    // if (mainSID === "__xmlview1--idloc") {
+                    //     that.oLoc.setValue(aSelectedItems[0].getTitle());
+
+                    // }
+                    // else if (mainSID === "locId1") {
+                    //     sap.ui.getCore().byId("locId1").setValue(aSelectedItems[0].getTitle());
+                    // }
+                    // else if (mainSID === "locIdCC") {
+                    //     sap.ui.getCore().byId("locIdCC").setValue(aSelectedItems[0].getTitle());
+                    // }
+                    // that.oProd.setValue();
+                    // that.oProd.removeAllTokens();
+                    // this._valueHelpDialogProd.getAggregation("_dialog").getContent()[1].removeSelections();
+
                     this.getModel("BModel").read("/getLocProdDet", {
                         filters: [
                             new Filter(
                                 "LOCATION_ID",
                                 FilterOperator.EQ,
-                                aSelectedItems[0].getTitle()
+                                oEvent.getParameters().listItem.getCells()[0].getTitle()
                             ),
                         ],
                         success: function (oData) {
@@ -295,17 +306,18 @@ sap.ui.define(
 
                     // Prod list
                 } else if (sId.includes("prod")) {
-                    this.oProd = that.byId("prodInput");
+                    // this.oProd = that.byId("prodInput");
                     aSelectedItems = oEvent.getParameter("selectedItems");
-                    if (mainSID === "__xmlview1--prodInput") {
-                        that.oProd.setValue(aSelectedItems[0].getTitle());
-                    }
-                    else if (mainSID === "prodId1") {
-                        sap.ui.getCore().byId("prodId1").setValue(aSelectedItems[0].getTitle());
-                    }
-                    else if (mainSID === "prodIdCC") {
-                        sap.ui.getCore().byId("prodIdCC").setValue(aSelectedItems[0].getTitle());
-                    }
+                    that.oProd.setValue(oEvent.getParameters().listItem.getCells()[0].getTitle());
+                    // if (mainSID === "__xmlview1--prodInput") {
+                    //     that.oProd.setValue(aSelectedItems[0].getTitle());
+                    // }
+                    // else if (mainSID === "prodId1") {
+                    //     sap.ui.getCore().byId("prodId1").setValue(aSelectedItems[0].getTitle());
+                    // }
+                    // else if (mainSID === "prodIdCC") {
+                    //     sap.ui.getCore().byId("prodIdCC").setValue(aSelectedItems[0].getTitle());
+                    // }
                 }
                 that.handleClose(oEvent);
             },
@@ -324,6 +336,7 @@ sap.ui.define(
                 oGModel.setProperty("/uniqId", "");
 
                 var oFilters = [];
+                // that.byId("idMatSearch").getBinding("items").filter(oFilters);
                 // getting the filters
                 oFilters.push(
                     new Filter({
@@ -346,6 +359,10 @@ sap.ui.define(
                     );
                 }
                 if (oSloc !== "" && oSprod !== "") {
+                        this.byId("idMatSearch").setValue("");
+                    if(that.byId("idMatVHead").getItems().length){
+                        that.byId("idMatVHead").getBinding("items").filter(oFilters);
+                    }
                     sap.ui.core.BusyIndicator.show();
                     this.getModel("BModel").read("/getUniqueHeader", {
                         filters: [oFilters],                   
@@ -353,10 +370,10 @@ sap.ui.define(
                             sap.ui.core.BusyIndicator.hide();
                             if (oData.results.length) {
 
-                                oData.results.forEach(function (row) {
-                                    // Calling function to handle the date format
-                                    row.UNIQUE_ID = row.UNIQUE_ID.toString();
-                                  }, that);
+                                // oData.results.forEach(function (row) {
+                                //     // Calling function to handle the date format
+                                //     row.UNIQUE_ID = row.UNIQUE_ID.toString();
+                                //   }, that);
                     
 
                                 that.oModel.setData({
@@ -448,8 +465,8 @@ sap.ui.define(
                     oFilters.push(
                         new Filter({
                             filters: [
-                                new Filter("UNIQUE_RDESC", FilterOperator.Contains, sQuery),
-                                new Filter("UNIQUE_ID", FilterOperator.Contains, sQuery),
+                                new Filter("UNIQUE_DESC", FilterOperator.Contains, sQuery),
+                                new Filter("UNIQUE_ID", FilterOperator.EQ, sQuery),
                             ],
                             and: false,
                         })
@@ -585,7 +602,7 @@ sap.ui.define(
                 that._createCharacterstics.open();
                 that.CharData();
             } else {
-                MessageToast.show("Please select a record to copy");
+                MessageToast.show("Please select a uniq id to copy");
             }
             },
 
@@ -670,7 +687,9 @@ sap.ui.define(
                             results: that.oTableData
                         });
                         sap.ui.getCore().byId("idCharItem").setModel(that.ListModel);
+                        sap.ui.getCore().byId("classNameList").removeSelections();
                         this._valueHelpDialogclassName.close();
+
                     } else {
                         sap.m.MessageToast.show("Characterstic is already maintained");
                     }

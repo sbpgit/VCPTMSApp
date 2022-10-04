@@ -1,5 +1,6 @@
 //Class for Generic Functions
-
+const xsenv = require("@sap/xsenv");
+const JobSchedulerClient = require("@sap/jobs-client");
 class GenFunctions {
     constructor() {
 
@@ -149,32 +150,27 @@ class GenFunctions {
     static log(lMessage) {
         console.log(lMessage)
     }
-
+        } else {
+            req.error("no jobscheduler service instance found");
+        }
+    }
     static logMessage(req, lMessage) {
-        
         let errorObj = {};
-        errorObj["success"] = false;
-        errorObj["message"] = lMessage;
-
-        if (req.headers['x-sap-job-id'] > 0)
-        {
-            const scheduler = getJobscheduler(req);
-
+        errorObj["success"] = true;
+        errorObj["message"] = lMessage; 
+        if (req.headers['x-sap-job-id'] > 0) {
+            const scheduler = this.getJobscheduler(req);
             let updateReq = {
                 jobId: req.headers['x-sap-job-id'],
                 scheduleId: req.headers['x-sap-job-schedule-id'],
                 runId: req.headers['x-sap-job-run-id'],
-                data : errorObj
-                };
-
-
-            scheduler.updateJobRunLog(updateReq, function(err, result) {
+                data: errorObj
+            };
                 if (err) {
                     return console.log('Error updating run log: %s', err);
                 }
             });
         }
-
     }
 
     static async getParameterValue(lParameter) {
