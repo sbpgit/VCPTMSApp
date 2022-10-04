@@ -1,5 +1,6 @@
 //Class for Generic Functions
-
+const xsenv = require("@sap/xsenv");
+const JobSchedulerClient = require("@sap/jobs-client");
 class GenFunctions {
     constructor() {
 
@@ -149,9 +150,41 @@ class GenFunctions {
     static log(lMessage) {
         console.log(lMessage)
     }
+    static getJobscheduler(req) {
 
-    static logMessage(lMessage) {
-        console.log(lMessage);
+        xsenv.loadEnv();
+        const services = xsenv.getServices({
+            jobscheduler: { tags: "jobscheduler" },
+        });
+        if (services.jobscheduler) {
+            const options = {
+                baseURL: services.jobscheduler.url,
+                user: services.jobscheduler.user,
+                password: services.jobscheduler.password,
+            };
+            return new JobSchedulerClient.Scheduler(options);
+        } else {
+            req.error("no jobscheduler service instance found");
+        }
+    }
+    static logMessage(req, lMessage) {
+        let errorObj = {};
+        errorObj["success"] = true;
+        errorObj["message"] = lMessage; 
+        if (req.headers['x-sap-job-id'] > 0) {
+            const scheduler = this.getJobscheduler(req);
+            let updateReq = {
+                jobId: req.headers['x-sap-job-id'],
+                scheduleId: req.headers['x-sap-job-schedule-id'],
+                runId: req.headers['x-sap-job-run-id'],
+                data: errorObj
+            };
+            scheduler.updateJobRunLog(updateReq, function (err, result) {
+                if (err) {
+                    return console.log('Error updating run log: %s', err);
+                }
+            });
+        }
     }
 
     static async getParameterValue(lParameter) {
