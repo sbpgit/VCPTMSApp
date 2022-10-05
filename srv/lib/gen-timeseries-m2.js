@@ -8,8 +8,10 @@ class GenTimeseriesM2 {
     /**
      * Generate Timeseries
      */
-    async genTimeseries(adata) {
-        console.log("Method2 Timeseries started");
+    async genTimeseries(adata, req) {
+        
+        GenF.logMessage(req, `Started history timeseries`);  
+
         let lMainProduct = '';
         let lsMainProduct = await SELECT.one
             .from('CP_PARTIALPROD_INTRO')
@@ -194,12 +196,14 @@ class GenTimeseriesM2 {
 
         }
 
-        console.log("Completed Method 2 Timeseries");
-
+        GenF.logMessage(req, `Completed history timeseries`);  
         // await this.genPrediction(adata);
     }
 
-    async genTimeseriesF(adata) {
+    async genTimeseriesF(adata, req) {
+
+        GenF.logMessage(req, `Started future timeseries`);  
+
         /** Get Future Plan */
         const liFutureCharPlan = await cds.run(
             `SELECT *
@@ -323,9 +327,13 @@ class GenTimeseriesM2 {
                 }
             }
         }
+
+        GenF.logMessage(req, `Completed future timeseries`);          
     }
 
-    async genPrediction(adata) {
+    async genPrediction(adata, req) {
+
+        GenF.logMessage(req, `Started Fully Configured Requirement Generation`);  
 
         const lDate = new Date();
         const lStartDate = new Date(
@@ -538,11 +546,7 @@ class GenTimeseriesM2 {
         }
     }
 
-    console.log("CIR generation Completed");
-
-    }
-
-    async createAssemblyReq(adata) {
+    GenF.logMessage(req, `Completed Fully Configured Requirement Generation`);  
 
     }
 

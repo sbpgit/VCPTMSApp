@@ -168,6 +168,8 @@ class GenFunctions {
         }
     }
     static logMessage(req, lMessage) {
+        console.log(lMessage);
+
         let errorObj = {};
         errorObj["success"] = true;
         errorObj["message"] = lMessage; 
