@@ -376,107 +376,84 @@ sap.ui.define(
                     that.byId("idRbtnImport").setEnabled(true);
                     that.byId("idRbtnExport").setEnabled(true);
                     oSelJob = that.byId("idJobType").getSelectedKey();
-                    // 07-09-2022 
-                    if (oSelJob === "M") {
-                        that.byId("modelGenPanel").setVisible(true);
-                        that.byId("PredPanel").setVisible(false);
-                        that.byId("timeSeriesPanel").setVisible(false);
-                        that.byId("timeSeriesFPanel").setVisible(false);
-                        that.byId("IbpPanel").setVisible(false);
-                        that.byId("sdiPanel").setVisible(false);
-                        that.byId("FullDemandPanel").setVisible(false);
-                        that.byId("AsmblyReqPanel").setVisible(false);
-                        that.byId("salesOrdPanel").setVisible(false);
-                    } else if (oSelJob === "P") {
-                        that.byId("modelGenPanel").setVisible(false);
-                        that.byId("PredPanel").setVisible(true);
-                        that.byId("timeSeriesPanel").setVisible(false);
-                        that.byId("timeSeriesFPanel").setVisible(false);
-                        that.byId("IbpPanel").setVisible(false);
-                        that.byId("sdiPanel").setVisible(false);
-                        that.byId("FullDemandPanel").setVisible(false);
-                        that.byId("AsmblyReqPanel").setVisible(false);
-                        that.byId("salesOrdPanel").setVisible(false);
-                    } else if (oSelJob === "T") {
-                        that.byId("modelGenPanel").setVisible(false);
-                        that.byId("PredPanel").setVisible(false);
-                        that.byId("timeSeriesPanel").setVisible(true);
-                        that.byId("timeSeriesFPanel").setVisible(false);
-                        that.byId("IbpPanel").setVisible(false);
-                        that.byId("sdiPanel").setVisible(false);
-                        that.byId("FullDemandPanel").setVisible(false);
-                        that.byId("AsmblyReqPanel").setVisible(false);
-                        that.byId("salesOrdPanel").setVisible(false);
-                    } else if (oSelJob === "F") {
-                        that.byId("modelGenPanel").setVisible(false);
-                        that.byId("PredPanel").setVisible(false);
-                        that.byId("timeSeriesPanel").setVisible(false);
-                        that.byId("timeSeriesFPanel").setVisible(true);
-                        that.byId("IbpPanel").setVisible(false);
-                        that.byId("sdiPanel").setVisible(false);
-                        that.byId("FullDemandPanel").setVisible(false);
-                        that.byId("AsmblyReqPanel").setVisible(false);
-                        that.byId("salesOrdPanel").setVisible(false);
-                    } else if (oSelJob === "I") {
-                        that.byId("modelGenPanel").setVisible(false);
-                        that.byId("PredPanel").setVisible(false);
-                        that.byId("timeSeriesPanel").setVisible(false);
-                        that.byId("timeSeriesFPanel").setVisible(false);
-                        that.byId("IbpPanel").setVisible(true);
-                        that.byId("sdiPanel").setVisible(false);
-                        that.byId("FullDemandPanel").setVisible(false);
-                        that.byId("AsmblyReqPanel").setVisible(false);
-                        that.byId("salesOrdPanel").setVisible(false);
-                        that.byId("idIBPselect").setSelectedKey("I");
-                        that.byId("idRbtnImport").setSelectedButton(that.byId("idIBPDemand"));
-                    } else if (oSelJob === "S") {
-                        that.byId("modelGenPanel").setVisible(false);
-                        that.byId("PredPanel").setVisible(false);
-                        that.byId("timeSeriesPanel").setVisible(false);
-                        that.byId("timeSeriesFPanel").setVisible(false);
-                        that.byId("IbpPanel").setVisible(false);
-                        that.byId("sdiPanel").setVisible(true);
-                        that.byId("FullDemandPanel").setVisible(false);
-                        that.byId("AsmblyReqPanel").setVisible(false);
-                        that.byId("salesOrdPanel").setVisible(false);
-                    } else if (oSelJob === "D") {
-                        that.byId("modelGenPanel").setVisible(false);
-                        that.byId("PredPanel").setVisible(false);
-                        that.byId("timeSeriesPanel").setVisible(false);
-                        that.byId("timeSeriesFPanel").setVisible(false);
-                        that.byId("IbpPanel").setVisible(false);
-                        that.byId("sdiPanel").setVisible(false);
-                        that.byId("FullDemandPanel").setVisible(true);
-                        that.byId("AsmblyReqPanel").setVisible(false);
-                        that.byId("salesOrdPanel").setVisible(false);
-                    } else if (oSelJob === "A") {
-                        that.byId("modelGenPanel").setVisible(false);
-                        that.byId("PredPanel").setVisible(false);
-                        that.byId("timeSeriesPanel").setVisible(false);
-                        that.byId("timeSeriesFPanel").setVisible(false);
-                        that.byId("IbpPanel").setVisible(false);
-                        that.byId("sdiPanel").setVisible(false);
-                        that.byId("FullDemandPanel").setVisible(false);
-                        that.byId("AsmblyReqPanel").setVisible(true);
-                        that.byId("salesOrdPanel").setVisible(false);
-                    } else if (oSelJob === "O") {
-                        that.byId("modelGenPanel").setVisible(false);
-                        that.byId("PredPanel").setVisible(false);
-                        that.byId("timeSeriesPanel").setVisible(false);
-                        that.byId("timeSeriesFPanel").setVisible(false);
-                        that.byId("IbpPanel").setVisible(false);
-                        that.byId("sdiPanel").setVisible(false);
-                        that.byId("FullDemandPanel").setVisible(false);
-                        that.byId("AsmblyReqPanel").setVisible(false);
-                        that.byId("salesOrdPanel").setVisible(true);
-                    }
 
-                    // 07-09-2022
+                    that.byId("modelGenPanel").setVisible(false);
+                    that.byId("PredPanel").setVisible(false);
+                    that.byId("timeSeriesPanel").setVisible(false);
+                    that.byId("timeSeriesFPanel").setVisible(false);
+                    that.byId("IbpPanel").setVisible(false);
+                    that.byId("sdiPanel").setVisible(false);
+                    that.byId("FullDemandPanel").setVisible(false);
+                    that.byId("AsmblyReqPanel").setVisible(false);
+                    that.byId("salesOrdPanel").setVisible(false);
+
+                    switch (oSelJob) {
+                        case "M":
+                            that.byId("modelGenPanel").setVisible(true);
+                            break;
+                        case "P":
+                            that.byId("PredPanel").setVisible(true);
+                            break;
+                        case "T":
+                            that.byId("timeSeriesPanel").setVisible(true);
+                            break;
+                        case "F":
+                            that.byId("timeSeriesFPanel").setVisible(true);
+                            break;
+                        case "I":
+                            that.byId("IbpPanel").setVisible(true);
+                            break;
+/*                            
+                        case "II":
+                            that.byId("IbpPanel").setVisible(true);
+
+                            that.byId("idRbtnImport").setVisible(true);
+                            that.byId("idRbtnExport").setVisible(false);
+                            that.byId("IBPimport").setVisible(true);
+                            that.byId("idRbtnImport").setSelectedButton(that.byId("idIBPDemand"));
+                            that.byId("IBPProdExport").setVisible(false);
+                            that.byId("IBPClassExport").setVisible(false);
+                            that.byId("IBPSalesHisExport").setVisible(false);
+                            that.byId("IBPSalesHisConfigExport").setVisible(false);
+                            that.byId("IBPActCompDemandExport").setVisible(false);
+                            that.byId("IBPCompReqQtyExport").setVisible(false);
+                            that.byId("IBPCIRExport").setVisible(false);
+                            break;
+                        case "IE":
+                            that.byId("IbpPanel").setVisible(true);
+
+                            that
+                                .byId("idRbtnExport")
+                                .setSelectedButton(that.byId("idIBPLoc"));
+                            that.byId("idRbtnImport").setVisible(false);
+                            that.byId("idRbtnExport").setVisible(true);
+                            that.byId("IBPimport").setVisible(false);
+                            that.byId("IBPimport").setVisible(false);
+                            that.byId("IBPProdExport").setVisible(false);
+                            that.byId("IBPClassExport").setVisible(false);
+                            that.byId("IBPSalesHisExport").setVisible(false);
+                            that.byId("IBPCIRExport").setVisible(false);                            
+                            break;   
+*/                                                     
+                        case "S":
+                            that.byId("sdiPanel").setVisible(true);
+                            break;
+                        case "D":
+                            that.byId("FullDemandPanel").setVisible(true);
+                            break;
+                        case "A":
+                            that.byId("AsmblyReqPanel").setVisible(true);
+                            break;
+                        case "O":
+                            that.byId("salesOrdPanel").setVisible(true);
+                            break;                                                                                                                                                                                                                                                                                        
+                        default:
+                            break;
+                    }
 
                     this.oGModel.setProperty(
                         "/JobDdesc",
-                        "Test"
-                      //  that.byId("idJobType").getSelectedItem().getText()
+                        that.byId("idJobType").getItem().getSelectedItem().getText()
                     );
                 }
                 // When we update or creating schdule it will select the values
@@ -499,6 +476,7 @@ sap.ui.define(
                             that.byId("idIBPselect").setSelectedKey("E");
                         }
                     }
+
                     // If selected job type is SDI Integration
                     if (oSelJob === "S") {
                         var sServiceText = that.oGModel.getProperty("/IBPService");
@@ -1980,9 +1958,9 @@ sap.ui.define(
                     }
                     that.oGModel.setProperty("/Jobname", exeJobName);
                 } else {
-                    that.oGModel.setProperty("/Jobname", this.byId("idJobType").getSelectedItem().getText());
+                    that.oGModel.setProperty("/Jobname", that.byId("idJobType").getItem().getSelectedItem().getText());
                 }
-                this.oGModel.setProperty("/JobDdesc",that.byId("idJobType").getSelectedItem().getText());
+                this.oGModel.setProperty("/JobDdesc",that.byId("idJobType").getItem().getSelectedItem().getText());
 
                 if (buttonSel === "Schedule Job") {
                     that.oGModel.setProperty("/EcecuteType", "S");
@@ -2388,7 +2366,7 @@ sap.ui.define(
 
                 this.oGModel.setProperty(
                     "/JobDdesc",
-                    that.byId("idJobType").getSelectedItem().getText() +
+                    that.byId("idJobType").getItem().getSelectedItem().getText() +
                     " " +
                     "-" +
                     " " +
@@ -2470,7 +2448,7 @@ sap.ui.define(
                 that.oGModel.setProperty("/runText", rRadioBtn);
                 this.oGModel.setProperty(
                     "/JobDdesc",
-                    that.byId("idJobType").getSelectedItem().getText() +
+                    that.byId("idJobType").getItem().getSelectedItem().getText() +
                     " " +
                     "-" +
                     " " +
@@ -2687,7 +2665,7 @@ sap.ui.define(
                 that.oGModel.setProperty("/runText", oSelKey);
                 this.oGModel.setProperty(
                     "/JobDdesc",
-                    that.byId("idJobType").getSelectedItem().getText() + " " + oSelKey
+                    that.byId("idJobType").getItem().getSelectedItem().getText() + " " + oSelKey
                 );
 
                 if (
