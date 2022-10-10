@@ -4,7 +4,7 @@
         <List id="idMethodList" mode="SingleSelectMaster" itemPress="onListItemPress" items="{
 			path: '/methods'}">
             <items>
-                <StandardListItem type="Active" title="{DESCRIPTION}" />
+                <StandardListItem type="Active" title="{DESCRIPTION}" info="{METHOD_TYP}" />
             </items>
         </List>
         <beginButton>
