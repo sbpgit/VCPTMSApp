@@ -55,6 +55,7 @@ sap.ui.define(
         this.bus.publish("nav", "toBeginPage", {
           viewName: this.getView().getProperty("viewName"),
         });
+        this.bus.subscribe("data", "dateRange", this.handleDateChange, this);
       },
 
       /**
@@ -74,16 +75,16 @@ sap.ui.define(
 
           that.getView().byId("headSearch").setValue();
 
-          var nowH = new Date();
-          //past 15 days selected date
-          var oDateL = new Date(
-            nowH.getFullYear(),
-            nowH.getMonth(),
-            nowH.getDate() - 15
-          );
-          // Setting the date values to filter the data
-          this.byId("idDateRange").setDateValue(oDateL);
-          this.byId("idDateRange").setSecondDateValue(nowH);
+        //   var nowH = new Date();
+        //   //past 15 days selected date
+        //   var oDateL = new Date(
+        //     nowH.getFullYear(),
+        //     nowH.getMonth(),
+        //     nowH.getDate() - 15
+        //   );
+        //   // Setting the date values to filter the data
+        //   this.byId("idDateRange").setDateValue(oDateL);
+        //   this.byId("idDateRange").setSecondDateValue(nowH);
 
         //   that.byId("JobPanel").setExpanded(true);
         //   that.byId("jobDetailsPanel").setExpanded(false);
@@ -155,7 +156,8 @@ sap.ui.define(
         handleDateChange: function (oEvent) {
             var tabData = oGModel.getProperty("/tableData");
             var aData = [];
-            var dDate = that.byId("idDateRange").getValue().split(" To ");
+            // var dDate = that.byId("idDateRange").getValue().split(" To ");
+            var dDate = oGModel.getProperty("/DateRange").split(" To ");
             var dLow = dDate[0] + " " + "00:00:00",
               dHigh = dDate[1] + " " + "23:59:59";
             // Filtering data based on selected dates
@@ -350,7 +352,7 @@ sap.ui.define(
             });
           },
 
-          
+
           /**
          * Called when it routes to create job page.
          * @param {object} oEvent -the event information.

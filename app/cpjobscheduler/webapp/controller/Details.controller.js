@@ -75,6 +75,13 @@ sap.ui.define(
             NotificationObj.newMidColumnWidth = 0;
           });
         }
+
+        var nowH = new Date();
+          //past 15 days selected date
+          var oDateL = new Date( nowH.getFullYear(), nowH.getMonth(), nowH.getDate() - 15 );
+          // Setting the date values to filter the data
+          this.byId("idDateRange").setDateValue(oDateL);
+          this.byId("idDateRange").setSecondDateValue(nowH);
       },
       /**
        * This function is called when come back.
@@ -243,6 +250,26 @@ sap.ui.define(
           this.getModel("appView").setProperty("/expanded", true);
         }
       },
+
+      /**
+         * Called when it routes to create job page.
+         * @param {object} oEvent -the event information.
+         */
+        onCreateJob: function (oEvent) {
+            var oRouter = sap.ui.core.UIComponent.getRouterFor(that);
+            oRouter.navTo("CreateJob", {}, true);
+          },
+
+          handleDateChange:function(){
+            var dDate = that.byId("idDateRange").getValue();
+            oGModel = this.getModel("oGModel");
+            oGModel.setProperty("/DateRange", dDate);
+            that.bus.publish("data", "dateRange");
+          },
+
+
+
+
     });
   }
 );

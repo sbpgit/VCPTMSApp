@@ -12,15 +12,15 @@
             </Toolbar>
         </customHeader> -->
         <content>
-            <Toolbar>
+            <!-- <Toolbar>
                 <Label text="{i18n>daterange}" />
                 <DateRangeSelection id="idDateRange" delimiter="To" dateValue="" secondDateValue="" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="handleDateChange" maxDate="" />
-                <!-- <Button id="idCreate" text="{i18n>createjob}" type="Emphasized" press="onCreateJob" tooltip="Create Job" /> -->
-            </Toolbar>
-            <HBox>
+                <Button id="idCreate" text="{i18n>createjob}" type="Emphasized" press="onCreateJob" tooltip="Create Job" />
+            </Toolbar> -->
+            <!-- <HBox> -->
             <SearchField id="headSearch" liveChange="onSearch" placeholder="Job Id/ Name" />
-            <Button id="idCreate" text="{i18n>createjob}" type="Emphasized" press="onCreateJob" tooltip="Create Job" class="sapUiTinyMarginBegin"/>
-            </HBox>
+            <!-- <Button id="idCreate" text="{i18n>createjob}" type="Emphasized" press="onCreateJob" tooltip="Create Job" class="sapUiTinyMarginBegin"/> -->
+            <!-- </HBox> -->
             <Table id="jobList" items="{path: '/results'}" growingScrollToLoad="true" rememberSelections="true" 
             itemPress="onhandlePress" mode="SingleSelectMaster" selectionChange="onhandlePress" sticky="ColumnHeaders">
                 <columns>
