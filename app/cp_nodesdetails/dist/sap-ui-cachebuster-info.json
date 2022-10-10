@@ -1,5 +1,13 @@
 {
+<<<<<<< HEAD
   "controller/Details.controller.js": 1661869074939,
+=======
+<<<<<<< HEAD
+  "i18n/i18n.properties": 1659447417314,
+=======
+<<<<<<< HEAD
+  "model/models-dbg.js": 1661869074939,
+>>>>>>> 563e91a14bac4b8f2098650e30e4bda1ccb41943
   "controller/App.controller.js": 1661869074939,
   "utils/locate-reuse-libs.js": 1661869074939,
   "model/models.js": 1661869074939,
@@ -29,4 +37,40 @@
   "view/AccesNodes.fragment.xml": 1661869074939,
   "css/style.css": 1661869074939,
   "index.html": 1661869074939
+<<<<<<< HEAD
+=======
+=======
+  "controller/ItemDetail.controller.js": 1659447417314,
+>>>>>>> afa35db689df46fd31db33107ed39f3b070a978a
+  "controller/BaseController.js": 1659447417314,
+  "utils/locate-reuse-libs.js": 1659447417314,
+  "model/models.js": 1659447417314,
+  "controller/ItemMaster.controller.js": 1659447417314,
+  "controller/ItemDetail.controller.js": 1659447417314,
+  "controller/Details.controller.js": 1659447417314,
+  "manifest.json": 1665401091062,
+  "controller/App.controller.js": 1659447417314,
+  "Component.js": 1659447417314,
+  "manifest-bundle.zip": 1665401091095,
+  "Component-preload.js": 1665401091849,
+  "controller/BaseController-dbg.js": 1659447417314,
+  "model/models-dbg.js": 1659447417314,
+  "controller/ItemMaster-dbg.controller.js": 1659447417314,
+  "controller/ItemDetail-dbg.controller.js": 1659447417314,
+  "controller/Details-dbg.controller.js": 1659447417314,
+  "utils/locate-reuse-libs-dbg.js": 1659447417314,
+  "controller/App-dbg.controller.js": 1659447417314,
+  "Component-dbg.js": 1659447417314,
+  "view/ViewNodesCreation.fragment.xml": 1659447417314,
+  "view/ViewNodes.fragment.xml": 1659447417314,
+  "view/StructureNodes.fragment.xml": 1659447417314,
+  "view/ItemMaster.view.xml": 1659447417314,
+  "view/ItemDetail.view.xml": 1659447417314,
+  "view/Details.view.xml": 1659447417314,
+  "view/App.view.xml": 1659447417314,
+  "view/AccesNodes.fragment.xml": 1659447417314,
+  "css/style.css": 1659447417314,
+  "index.html": 1659447417314
+>>>>>>> 09d08e11b458224b21b5a4d68078d8f976c31ca2
+>>>>>>> 563e91a14bac4b8f2098650e30e4bda1ccb41943
 }

@@ -8,12 +8,12 @@
                         <tnt:NavigationListItem id="O" key="O" text="{i18n>procsalesord}" />
                         <tnt:NavigationListItem id="T" key="T" text="{i18n>timeseries}" />
                         <tnt:NavigationListItem id="M" key="M" text="{i18n>mdlgene}" />
-                        <tnt:NavigationListItem id="I" key="I" text="{i18n>ibpI}">
-                        <!--
-                            <tnt:NavigationListItem id="II" key="II" text="Import" />
-                            <tnt:NavigationListItem id="IE" key="IE" text="Export" />
-                        -->
+                        
+                        <tnt:NavigationListItem id="idIBPselect" key="I" text="{i18n>ibpI}" expanded="true" itemSelect="onIBPSelect">                        
+                            <tnt:NavigationListItem id="II" key="I" text="Import" />
+                            <tnt:NavigationListItem id="IE" key="E" text="Export" />                       
                         </tnt:NavigationListItem>
+                        
                         <tnt:NavigationListItem id="F" key="F" text="{i18n>timeseriesF}" />
                         <tnt:NavigationListItem id="P" key="P" text="{i18n>predi}" />
                         <tnt:NavigationListItem id="D" key="D" text="{i18n>genfulcondemand}" />
@@ -331,16 +331,16 @@
                     <headerToolbar>
                         <OverflowToolbar>
                             <Title text="{i18n>ibpPanel}" class="boldText" />
-                            <Select id="idIBPselect" change="onIBPSelect" selectedKey="I" width="200px">
+                            <!-- <Select id="idIBPselect" change="onIBPSelect" selectedKey="I" width="200px">
                                 <core:ListItem key="I" text="{i18n>import}" />
                                 <core:ListItem key="E" text="{i18n>export}" />
-                            </Select>
+                            </Select> -->
                         </OverflowToolbar>
                     </headerToolbar>
                     <content>
                         <RadioButtonGroup id="idRbtnImport" columns="1" select="ImportRadioChange">
-                            <RadioButton id="idIBPDemand" text="IBP Demand" />
-                            <RadioButton id="idIBPFutPlan" text="IBP Future Plan" />
+                            <RadioButton id="idIBPDemand" text="IBP Demand" visible="false" />
+                            <!-- <RadioButton id="idIBPFutPlan" text="IBP Future Plan" /> -->
                         </RadioButtonGroup>
 
                         <RadioButtonGroup id="idRbtnExport" columns="1" select="ExportRadioChange" visible="false">
@@ -350,10 +350,10 @@
                             <RadioButton id="idIBPProd" text="Product" />
                             <RadioButton id="idIBPClass" text="Class" />
                             <RadioButton id="idIBPSalesHis" text="Sales History" />
-                            <RadioButton id="idIBPSalesHisConfig" text="Sales History Config" />
+                            <!-- <RadioButton id="idIBPSalesHisConfig" text="Sales History Config" /> -->
                             <RadioButton id="idIBPActCompDemd" text="Actual Components Demand" />
                             <RadioButton id="idIBPCompReqQty" text="Assembly Requirement Quantity" />
-                            <RadioButton id="idIBPExCIR" text="Export CIR" />
+                            <RadioButton id="idIBPExCIR" text="Fully Configured Demand" />
                             
                         </RadioButtonGroup>
                         
@@ -465,7 +465,7 @@
                                 </f:formContainers>
                             </f:Form>
 
-                            <f:Form editable="true" id="IBPSalesHisConfigExport" visible="false">
+                            <!-- <f:Form editable="true" id="IBPSalesHisConfigExport" visible="false">
                                 <f:layout>
                                     <f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2" singleContainerFullSize="false" />
                                 </f:layout>
@@ -499,7 +499,7 @@
                                         </f:formElements>
                                     </f:FormContainer>
                                 </f:formContainers>
-                            </f:Form>
+                            </f:Form> -->
 
                             <f:Form editable="true" id="IBPActCompDemandExport" visible="false">
                                 <f:layout>
@@ -524,14 +524,14 @@
                                                     <MultiInput id="EACDemandprodInput" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
                                                 </f:fields>
                                             </f:FormElement>
-                                            <f:FormElement>
+                                            <!-- <f:FormElement>
                                                 <f:label>
                                                     <Label text="{i18n>daterange}" />
                                                 </f:label>
                                                 <f:fields>
                                                     <DateRangeSelection id="EACDemandDate" delimiter="To" dateValue="" secondDateValue="" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="handleEACDemandDateChange" maxDate="" />
                                                 </f:fields>
-                                            </f:FormElement>
+                                            </f:FormElement> -->
                                         </f:formElements>
                                     </f:FormContainer>
                                 </f:formContainers>
@@ -625,7 +625,7 @@
                                     <f:formElements>
                                         <f:FormElement>
                                             <f:label>
-                                                <Label text="{i18n>sdi}" required="true" />
+                                                <Label text="Import Using SDI" required="true" />
                                             </f:label>
                                             <f:fields>
                                                 <Select id="idSdi" change="onSdiChange" selectedKey="LO" class="buttonDesktop " width="400px">
@@ -641,7 +641,7 @@
                                                     <core:ListItem key="CH" text="{i18n>char}" />
                                                     <core:ListItem key="CV" text="{i18n>charval}" />
                                                     <core:ListItem key="SH" text="{i18n>saleshis}" />
-                                                    <core:ListItem key="SC" text="{i18n>salehisconfig}" />
+                                                    <!-- <core:ListItem key="SC" text="{i18n>salehisconfig}" /> -->
                                                     <core:ListItem key="AC" text="{i18n>asmbcomp}" />
                                                     <core:ListItem key="VT" text="{i18n>vartable}" />
                                                 </Select>
