@@ -1,0 +1,24 @@
+-------------------------------------------------------------------------------------------
+-- Name:            V_ODRESTRICT
+-- Description:     Get Object dependency profiles and structure node for products
+-- Join Details:    CP_RESTRICT_DETAILS -  Master table for restriction
+--                  CP_PRODRESTRICT - table for Location, Product and Restriction
+--                  CP_RESTRICT_HEADER - Restriction header table
+-------------------------------------------------------------------------------------------
+VIEW "V_LOCPRODRT_DET" AS
+SELECT distinct CP_PRODRESTRICT.LOCATION_ID,
+  CP_PRODRESTRICT.PRODUCT_ID,
+  CP_PRODRESTRICT.RESTRICTION,
+  CP_RESTRICT_HEADER.LINE_ID,
+  CP_RESTRICT_DETAILS.CLASS_NUM,
+  CP_RESTRICT_DETAILS.CHAR_NUM,
+  CP_RESTRICT_DETAILS.CHARVAL_NUM,
+  CP_RESTRICT_DETAILS.OD_CONDITION,
+  CP_RESTRICT_DETAILS.CHAR_COUNTER,
+  CP_RESTRICT_DETAILS.ROW_ID
+FROM "CP_PRODRESTRICT"
+  INNER JOIN "CP_RESTRICT_HEADER"
+ ON CP_PRODRESTRICT.LOCATION_ID = CP_RESTRICT_HEADER.LOCATION_ID
+  AND CP_PRODRESTRICT.RESTRICTION = CP_RESTRICT_HEADER.RESTRICTION
+  INNER JOIN "CP_RESTRICT_DETAILS"
+ ON CP_RESTRICT_HEADER.RESTRICTION = CP_RESTRICT_DETAILS.RESTRICTION;

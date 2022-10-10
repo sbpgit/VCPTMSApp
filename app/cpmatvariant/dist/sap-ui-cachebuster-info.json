@@ -1,5 +1,18 @@
 {
+<<<<<<< HEAD
   "controller/ItemDetail.controller.js": 1663920355391,
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+  "view/ProdDialog.fragment.xml": 1664541304259,
+=======
+<<<<<<< HEAD
+  "controller/App.controller.js": 1659447417374,
+  "i18n/i18n.properties": 1662378852381,
+=======
+<<<<<<< HEAD
+>>>>>>> 49bc0d19031ebd0f26d3b2d72b8e022a555157b4
   "controller/ItemMaster.controller.js": 1664783004692,
   "utils/locate-reuse-libs.js": 1661869075007,
   "model/models.js": 1661869075007,
@@ -38,4 +51,55 @@
   "view/AddCharacterstics.fragment.xml": 1662628674140,
   "css/style.css": 1661869075007,
   "index.html": 1664541304259
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 820694d3be112cf646763aec289fc618da7806c1
+  "view/LocDialog.fragment.xml": 1664545914681,
+  "controller/BaseController.js": 1659447417374,
+  "utils/locate-reuse-libs.js": 1659447417374,
+  "model/models.js": 1659447417374,
+  "model/formatter.js": 1662378852381,
+  "controller/ItemMaster.controller.js": 1664545914681,
+  "controller/ItemDetail.controller.js": 1663928384652,
+  "controller/Details.controller.js": 1659447417374,
+  "manifest.json": 1665410644866,
+  "controller/App.controller.js": 1659447417374,
+  "Component.js": 1659447417374,
+  "manifest-bundle.zip": 1665410644878,
+  "Component-preload.js": 1665410645403,
+  "controller/ItemMaster-dbg.controller.js": 1664545914681,
+  "model/models-dbg.js": 1659447417374,
+  "model/formatter-dbg.js": 1662378852381,
+  "utils/locate-reuse-libs-dbg.js": 1659447417374,
+  "controller/ItemDetail-dbg.controller.js": 1663928384652,
+  "controller/Details-dbg.controller.js": 1659447417374,
+  "controller/BaseController-dbg.js": 1659447417374,
+  "controller/App-dbg.controller.js": 1659447417374,
+  "Component-dbg.js": 1659447417374,
+  "view/className.fragment.xml": 1664545914681,
+  "view/charValue.fragment.xml": 1662417816107,
+  "view/charName.fragment.xml": 1662417816107,
+  "view/UniqueDescUpdate.fragment.xml": 1662378852381,
+  "view/ProdDialog.fragment.xml": 1664545914681,
+  "i18n/i18n.properties": 1662378852381,
+  "view/ItemMaster.view.xml": 1662548201042,
+  "view/ItemDetail.view.xml": 1664545914681,
+  "view/Details.view.xml": 1659447417374,
+  "view/CustomerGroup.fragment.xml": 1663578246689,
+  "view/CreateSeedOrder.fragment.xml": 1663748825709,
+  "view/CreateChar.fragment.xml": 1662470325806,
+  "view/CopyChar.fragment.xml": 1662378852381,
+  "view/App.view.xml": 1659447417374,
+  "view/AddCharacterstics.fragment.xml": 1662476244223,
+  "css/style.css": 1661865456737,
+  "index.html": 1664545914681
+<<<<<<< HEAD
+=======
+>>>>>>> 09d08e11b458224b21b5a4d68078d8f976c31ca2
+>>>>>>> 563e91a14bac4b8f2098650e30e4bda1ccb41943
+>>>>>>> 820694d3be112cf646763aec289fc618da7806c1
+>>>>>>> 49bc0d19031ebd0f26d3b2d72b8e022a555157b4
 }

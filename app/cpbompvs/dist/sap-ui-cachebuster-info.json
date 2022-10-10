@@ -1,6 +1,24 @@
 {
+<<<<<<< HEAD
   "css/style.css": 1661869074975,
   "controller/ItemDetail.controller.js": 1661869074975,
+=======
+<<<<<<< HEAD
+  "view/StructureNodes.fragment.xml": 1659447417338,
+  "controller/ItemMaster.controller.js": 1659447417334,
+=======
+<<<<<<< HEAD
+  "Component.js": 1661869074975,
+  "controller/ItemMaster.controller.js": 1661869074975,
+=======
+<<<<<<< HEAD
+  "manifest.json": 1665401153641,
+=======
+<<<<<<< HEAD
+  "controller/ItemMaster-dbg.controller.js": 1661869074975,
+  "manifest.json": 1664783615682,
+>>>>>>> 563e91a14bac4b8f2098650e30e4bda1ccb41943
+>>>>>>> 49bc0d19031ebd0f26d3b2d72b8e022a555157b4
   "utils/locate-reuse-libs.js": 1661869074975,
   "model/models.js": 1661869074975,
   "controller/ItemMaster.controller.js": 1661869074975,
@@ -31,4 +49,49 @@
   "view/AccesNodes.fragment.xml": 1661869074975,
   "i18n/i18n.properties": 1661869074975,
   "index.html": 1661869074975
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+=======
+  "view/AccessNodesList.fragment.xml": 1659447417338,
+>>>>>>> afa35db689df46fd31db33107ed39f3b070a978a
+  "controller/App.controller.js": 1659447417334,
+>>>>>>> 820694d3be112cf646763aec289fc618da7806c1
+  "utils/locate-reuse-libs.js": 1659447417338,
+  "model/models.js": 1659447417338,
+  "manifest.json": 1665410430676,
+  "controller/ItemDetail.controller.js": 1659447417334,
+  "controller/Details.controller.js": 1659447417334,
+  "controller/BaseController.js": 1659447417334,
+  "controller/App.controller.js": 1659447417334,
+  "Component.js": 1659447417334,
+  "manifest-bundle.zip": 1665410430688,
+  "Component-preload.js": 1665410431239,
+  "model/models-dbg.js": 1659447417338,
+  "utils/locate-reuse-libs-dbg.js": 1659447417338,
+  "controller/ItemMaster-dbg.controller.js": 1659447417334,
+  "controller/ItemDetail-dbg.controller.js": 1659447417334,
+  "controller/Details-dbg.controller.js": 1659447417334,
+  "controller/BaseController-dbg.js": 1659447417334,
+  "controller/App-dbg.controller.js": 1659447417334,
+  "Component-dbg.js": 1659447417334,
+  "view/ViewNodes.fragment.xml": 1659447417338,
+  "i18n/i18n.properties": 1659447417334,
+  "view/ProdDialog.fragment.xml": 1659447417338,
+  "view/LocDialog.fragment.xml": 1659447417338,
+  "view/ItemMaster.view.xml": 1659447417338,
+  "view/ItemDetail.view.xml": 1659447417338,
+  "view/Details.view.xml": 1659447417338,
+  "view/App.view.xml": 1659447417338,
+  "view/AccessNodesList.fragment.xml": 1659447417338,
+  "view/AccesNodes.fragment.xml": 1659447417338,
+  "css/style.css": 1659447417334,
+  "index.html": 1659447417334
+<<<<<<< HEAD
+=======
+>>>>>>> 09d08e11b458224b21b5a4d68078d8f976c31ca2
+>>>>>>> 563e91a14bac4b8f2098650e30e4bda1ccb41943
+>>>>>>> 820694d3be112cf646763aec289fc618da7806c1
+>>>>>>> 49bc0d19031ebd0f26d3b2d72b8e022a555157b4
 }

@@ -1,5 +1,14 @@
 {
+<<<<<<< HEAD
   "controller/BaseController.js": 1661869074963,
+=======
+<<<<<<< HEAD
+  "manifest-bundle.zip": 1665410576788,
+  "controller/BaseController.js": 1659447417330,
+=======
+<<<<<<< HEAD
+  "controller/App-dbg.controller.js": 1661869074963,
+>>>>>>> 49bc0d19031ebd0f26d3b2d72b8e022a555157b4
   "Component.js": 1661869074963,
   "model/models.js": 1661869074963,
   "controller/Home.controller.js": 1664198174536,
@@ -25,4 +34,43 @@
   "view/App.view.xml": 1661869074967,
   "css/style.css": 1661869074963,
   "index.html": 1661869074963
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+=======
+  "view/CompODBreakdown.fragment.xml": 1659447417334,
+  "Component.js": 1659447417330,
+>>>>>>> afa35db689df46fd31db33107ed39f3b070a978a
+>>>>>>> 820694d3be112cf646763aec289fc618da7806c1
+  "model/models.js": 1659447417330,
+  "controller/Home.controller.js": 1663923312937,
+  "manifest.json": 1665410576767,
+  "controller/App.controller.js": 1659447417330,
+  "Component.js": 1659447417330,
+  "i18n/i18n.properties": 1659447417330,
+  "Component-preload.js": 1665410577397,
+  "controller/BaseController-dbg.js": 1659447417330,
+  "controller/Home-dbg.controller.js": 1663923312937,
+  "model/models-dbg.js": 1659447417330,
+  "controller/App-dbg.controller.js": 1659447417330,
+  "Component-dbg.js": 1659447417330,
+  "view/VersionDialog.fragment.xml": 1659447417334,
+  "view/StructureNodeDialog.fragment.xml": 1659447417334,
+  "view/ScenarioDialog.fragment.xml": 1659447417334,
+  "view/ProdDialog.fragment.xml": 1659447417334,
+  "view/LocDialog.fragment.xml": 1659447417334,
+  "view/Home.view.xml": 1659447417334,
+  "view/ComponentDialog.fragment.xml": 1659447417334,
+  "view/CompODBreakdown.fragment.xml": 1659447417334,
+  "view/AsmbCompDialog.fragment.xml": 1659447417334,
+  "view/App.view.xml": 1659447417334,
+  "css/style.css": 1659447417330,
+  "index.html": 1659447417330
+<<<<<<< HEAD
+=======
+>>>>>>> 09d08e11b458224b21b5a4d68078d8f976c31ca2
+>>>>>>> 563e91a14bac4b8f2098650e30e4bda1ccb41943
+>>>>>>> 820694d3be112cf646763aec289fc618da7806c1
+>>>>>>> 49bc0d19031ebd0f26d3b2d72b8e022a555157b4
 }

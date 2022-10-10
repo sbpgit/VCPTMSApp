@@ -34,17 +34,16 @@ class GenTimeseries {
         }
        
         const liODChar = await cds.run(
-            `SELECT DISTINCT OBJ_DEP,
-                            OBJ_COUNTER,
+            `SELECT DISTINCT RESTRICTION,
+                            CLASS_NUM,
                             CHAR_NUM,
                             CHARVAL_NUM,
                             OD_CONDITION,
                             CHAR_COUNTER
-            FROM "V_OBDHDR"
+            FROM "V_LOCPRODRT_DET"
             WHERE LOCATION_ID = '` + adata.LOCATION_ID + `'
                 AND PRODUCT_ID  = '` + lMainProduct + `'
-                ORDER BY OBJ_DEP,
-                         OBJ_COUNTER,
+                ORDER BY RESTRICTION,
                          CHAR_COUNTER`
         );     
 
@@ -54,11 +53,13 @@ class GenTimeseries {
         
         for (let cntODC = 0; cntODC < liODChar.length; cntODC++) {
             if (cntODC === 0 ||
-                liODChar[cntODC].OBJ_DEP !== liODChar[GenF.subOne(cntODC)].OBJ_DEP ||
-                liODChar[cntODC].OBJ_COUNTER !== liODChar[GenF.subOne(cntODC)].OBJ_COUNTER) {
+                liODChar[cntODC].RESTRICTION !== liODChar[GenF.subOne(cntODC)].RESTRICTION
+                //  ||
+                // liODChar[cntODC].OBJ_COUNTER !== liODChar[GenF.subOne(cntODC)].OBJ_COUNTER
+                ) {
                     lsOD = {};
-                    lsOD['OBJ_DEP'] = GenF.parse(liODChar[cntODC].OBJ_DEP);
-                    lsOD['OBJ_COUNTER'] = GenF.parse(liODChar[cntODC].OBJ_COUNTER);
+                    lsOD['RESTRICTION'] = GenF.parse(liODChar[cntODC].RESTRICTION);
+                    lsOD['OBJ_COUNTER'] = GenF.parse(1);
                     lsOD['CHAR'] = [];
                     lRowID = 0;
             }
@@ -87,8 +88,10 @@ class GenTimeseries {
             lsOD['CHAR'].push(lsODC);
 
             if(cntODC == GenF.addOne(cntODC, liODChar.length) ||
-                liODChar[cntODC].OBJ_DEP !== liODChar[GenF.addOne(cntODC, liODChar.length)].OBJ_DEP ||
-                liODChar[cntODC].OBJ_COUNTER !== liODChar[GenF.addOne(cntODC, liODChar.length)].OBJ_COUNTER) {
+                liODChar[cntODC].RESTRICTION !== liODChar[GenF.addOne(cntODC, liODChar.length)].RESTRICTION
+                //  ||
+                // liODChar[cntODC].OBJ_COUNTER !== liODChar[GenF.addOne(cntODC, liODChar.length)].OBJ_COUNTER
+                ) {
                     liOD.push(lsOD);
             }
         }        
@@ -216,8 +219,8 @@ class GenTimeseries {
                     lsVCHistory['PERIOD_NUM']       = GenF.parse(liSalesCount[i].WEEK_NO);
                     lsVCHistory['LOCATION_ID']      = GenF.parse(liSalesCount[i].LOCATION_ID);
                     lsVCHistory['PRODUCT_ID']       = GenF.parse(liSalesCount[i].PRODUCT_ID);
-                    lsVCHistory['TYPE']             = 'OD';
-                    lsVCHistory['GROUP_ID']         = GenF.parse(liODTemp[cntODT].OBJ_DEP + '_' + liODTemp[cntODT].OBJ_COUNTER);
+                    lsVCHistory['TYPE']             = 'RT';
+                    lsVCHistory['GROUP_ID']         = GenF.parse(liODTemp[cntODT].RESTRICTION + '_' + 1);
                     lsVCHistory['GROUP_COUNT']      = GenF.parse(liODTemp[cntODT].OD_QTY);
                     lsVCHistory['GROUP_COUNT_RATE'] = parseInt(liODTemp[cntODT].OD_QTY) / parseInt(liSalesCount[i].ORD_QTY);
                     for (let cntODTC = 0; cntODTC < liODTemp[cntODT]['CHAR'].length; cntODTC++) {
@@ -305,19 +308,18 @@ class GenTimeseries {
             await DELETE.from('CP_TS_OBJDEP_CHARHDR_F')
             .where(`LOCATION_ID = '${adata.LOCATION_ID}'
                     AND PRODUCT_ID = '${adata.PRODUCT_ID}'
-                    AND OBJ_TYPE = 'OD'`);
+                    AND OBJ_TYPE = 'RT'`);
 
         liObdhdr = await cds.run(
             `SELECT *
-           FROM "V_OBDHDR"
+           FROM "V_LOCPRODRT_DET"
           WHERE LOCATION_ID = '` + adata.LOCATION_ID + `'
             AND PRODUCT_ID = '` + adata.PRODUCT_ID + `'`
         );
         let liObdhdrDist = await cds.run(
-            `SELECT DISTINCT OBJ_DEP,
-                        OBJ_COUNTER,
+            `SELECT DISTINCT RESTRICTION,
                         ROW_ID
-           FROM "V_OBDHDR"
+           FROM "V_LOCPRODRT_DET"
           WHERE LOCATION_ID = '` + adata.LOCATION_ID + `'
             AND PRODUCT_ID = '` + adata.PRODUCT_ID + `'`
         );
@@ -348,17 +350,17 @@ class GenTimeseries {
                 lsObjdepF.PRODUCT_ID = liFutureCharPlan[lFutInd].PRODUCT_ID;
                 lsObjdepF.VERSION = liFutureCharPlan[lFutInd].VERSION;
                 lsObjdepF.SCENARIO = liFutureCharPlan[lFutInd].SCENARIO;
-                lsObjdepF.OBJ_TYPE = "OD";
-                lsObjdepF.OBJ_DEP = liObdhdrDist[lObdDis].OBJ_DEP;
-                lsObjdepF.OBJ_COUNTER = liObdhdrDist[lObdDis].OBJ_COUNTER;
+                lsObjdepF.OBJ_TYPE = "RT";
+                lsObjdepF.OBJ_DEP = liObdhdrDist[lObdDis].RESTRICTION;
+                lsObjdepF.OBJ_COUNTER = 1 ;//liObdhdrDist[lObdDis].OBJ_COUNTER;
                 lsObjdepF.ROW_ID = liObdhdrDist[lObdDis].ROW_ID;
                 lsObjdepF.SUCCESS = 0;
 
                 for (let lObjInd = 0; lObjInd < liObdhdr.length; lObjInd++) {
                     if (
-                        liObdhdrDist[lObdDis].OBJ_DEP === liObdhdr[lObjInd].OBJ_DEP &&
-                        liObdhdrDist[lObdDis].OBJ_COUNTER ===
-                        liObdhdr[lObjInd].OBJ_COUNTER &&
+                        liObdhdrDist[lObdDis].RESTRICTION === liObdhdr[lObjInd].RESTRICTION &&
+                        // liObdhdrDist[lObdDis].OBJ_COUNTER ===
+                        // liObdhdr[lObjInd].OBJ_COUNTER &&
                         liObdhdrDist[lObdDis].ROW_ID === liObdhdr[lObjInd].ROW_ID
                     ) {
                         for (
