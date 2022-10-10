@@ -279,7 +279,12 @@ sap.ui.define(
                 oGModel.setProperty("/JobType", "O");
             } else if(oData.readJobDetails.action.includes("ibpimport-srv")) {
                 // 20-09-2022
-                oGModel.setProperty("/JobType", "I");
+                if(oData.readJobDetails.action.includes("generateFDemandQty")){ 
+                    oGModel.setProperty("/JobType", "I");
+                } else {
+                    oGModel.setProperty("/JobType", "E");
+                }
+                
                 var service = oGModel.getProperty("/Jobdata").action.split("/");
                 var length = service.length - 1;
                 service = service[length];
@@ -399,9 +404,7 @@ sap.ui.define(
             sap.ui.getCore().byId("idJobData").getColumns()[9].setVisible(false);
             sap.ui.getCore().byId("idJobData").getColumns()[10].setVisible(false);
             sap.ui.getCore().byId("idJobData").getColumns()[11].setVisible(false);
-          } else if (oGModel.getProperty("/JobType") === "I") {
-            sap.ui.getCore().byId("idJobData").getColumns()[0].setVisible(false);
-            sap.ui.getCore().byId("idJobData").getColumns()[1].setVisible(false);
+          } else if (oGModel.getProperty("/JobType") === "I" || oGModel.getProperty("/JobType") === "E") {
             sap.ui.getCore().byId("idJobData").getColumns()[2].setVisible(false);
             sap.ui.getCore().byId("idJobData").getColumns()[3].setVisible(false);
             sap.ui.getCore().byId("idJobData").getColumns()[4].setVisible(false);
@@ -414,8 +417,6 @@ sap.ui.define(
             sap.ui.getCore().byId("idJobData").getColumns()[11].setVisible(false);
           // 22-09-2022
         } else if (jobType === "D" || jobType === "A" || jobType === "O") {
-            sap.ui.getCore().byId("idJobData").getColumns()[0].setVisible(true);
-            sap.ui.getCore().byId("idJobData").getColumns()[1].setVisible(true);
             sap.ui.getCore().byId("idJobData").getColumns()[2].setVisible(false);
             sap.ui.getCore().byId("idJobData").getColumns()[3].setVisible(false);
             sap.ui.getCore().byId("idJobData").getColumns()[4].setVisible(false);
