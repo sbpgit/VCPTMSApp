@@ -172,6 +172,10 @@ modules:
       name: cpappcpauthentication
       target-path: resources/
     - artifacts:
+      - cpappcprestrictions.zip
+      name: cpappcprestrictions
+      target-path: resources/
+    - artifacts:
       - cpappcpprodlocline.zip
       name: cpappcpprodlocline
       target-path: resources/

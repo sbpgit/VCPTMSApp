@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "view/ItemDetail.view.xml": 1664191694967,
   "model/models.js": 1661869075027,
   "utils/locate-reuse-libs.js": 1661869075027,
@@ -32,4 +33,39 @@
   "view/App.view.xml": 1661869075027,
   "css/style.css": 1661869075027,
   "index.html": 1661869075027
+=======
+  "view/charValue.fragment.xml": 1661435834890,
+  "controller/App.controller.js": 1661153490912,
+  "utils/locate-reuse-libs.js": 1661153490912,
+  "model/models.js": 1661153490912,
+  "controller/ItemMaster.controller.js": 1661517422855,
+  "controller/ItemDetail.controller.js": 1664356757359,
+  "controller/Details.controller.js": 1661337950523,
+  "controller/BaseController.js": 1661153490912,
+  "manifest.json": 1665394330722,
+  "Component.js": 1661153490912,
+  "manifest-bundle.zip": 1665394330733,
+  "Component-preload.js": 1665394331337,
+  "controller/BaseController-dbg.js": 1661153490912,
+  "model/models-dbg.js": 1661153490912,
+  "controller/ItemMaster-dbg.controller.js": 1661517422855,
+  "controller/ItemDetail-dbg.controller.js": 1664356757359,
+  "controller/Details-dbg.controller.js": 1661337950523,
+  "utils/locate-reuse-libs-dbg.js": 1661153490912,
+  "controller/App-dbg.controller.js": 1661153490912,
+  "Component-dbg.js": 1661153490912,
+  "view/className.fragment.xml": 1661435834890,
+  "i18n/i18n.properties": 1661435834886,
+  "view/charName.fragment.xml": 1661435834886,
+  "view/RestrictionItem.fragment.xml": 1661517422855,
+  "view/Restriction.fragment.xml": 1661262299842,
+  "view/LocDialog.fragment.xml": 1661262299842,
+  "view/LineDialog.fragment.xml": 1661262299838,
+  "view/ItemMaster.view.xml": 1661262299838,
+  "view/ItemDetail.view.xml": 1664203464148,
+  "view/Details.view.xml": 1661337950527,
+  "view/App.view.xml": 1661153490916,
+  "css/style.css": 1661435834882,
+  "index.html": 1661337950523
+>>>>>>> 09d08e11b458224b21b5a4d68078d8f976c31ca2
 }

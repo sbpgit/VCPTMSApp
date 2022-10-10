@@ -310,6 +310,9 @@ sap.ui.define(
                     .getParent()
                     .getBindingContext()
                     .getObject().scheduleId;
+                    // 04-10-2022
+                    var jobType = oGModel.getProperty("/JobType");
+                    // 04-10-2022
                 // Looping through the data to get the data for IBP Integration and SDI Integration
                 for (var i = 0; i < aData.length; i++) {
                     if (scheduleId === aData[i].scheduleId) {
@@ -328,6 +331,15 @@ sap.ui.define(
                                 CUSTOMER_GROUP: data.CUSTOMER_GROUP,
                             };
                             ScheData.push(aIData);
+                            // 04-10-2022
+                        } if(jobType === "D" || jobType === "A" || jobType === "O" ){
+                            var data = $.parseJSON(aData[i].data);
+                            var aIData = {
+                                Location: data.LOCATION_ID,
+                                Product: data.PRODUCT_ID,
+                            };
+                            ScheData.push(aIData);
+                        // 04-10-2022
                         } else {
                             ScheData = aData[i].data;
                             ScheData = $.parseJSON(ScheData);

@@ -1,9 +1,18 @@
 const cds = require("@sap/cds");
 const GenF = require("./gen-functions");
+<<<<<<< HEAD
 const hana = require("@sap/hana-client");
 const JobSchedulerClient = require("@sap/jobs-client");
 const xsenv = require("@sap/xsenv");
 const vAIRKey = process.env.AIR;
+=======
+const IBPFunc = require("./ibp-functions");
+const hana = require("@sap/hana-client");
+const xsenv = require("@sap/xsenv");
+const JobSchedulerClient = require("@sap/jobs-client");
+const vAIRKey = process.env.AIR;
+const obibpfucntions = new IBPFunc();
+>>>>>>> 09d08e11b458224b21b5a4d68078d8f976c31ca2
 
 function getJobscheduler(req) {
 
@@ -44,6 +53,22 @@ module.exports = cds.service.impl(async function () {
         // var resUrl = "/SBPVCP?$select=PRDID,LOCID,PERIODID4_TSTAMP,TOTALDEMANDOUTPUT,UOMTOID,VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and UOMTOID eq 'EA'";
         var resUrl = "/SBPVCP?$select=PRDID,LOCID,PERIODID4_TSTAMP,TOTALDEMANDOUTPUT,UOMTOID,VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "'and UOMTOID eq 'EA'";
         var req = await service.tx(req).get(resUrl);
+<<<<<<< HEAD
+=======
+        // if(req.length > 0){
+        const vDelDate = new Date();
+        const vDateDel = vDelDate.toISOString().split('T')[0];
+        try {
+            await DELETE.from('CP_IBP_FUTUREDEMAND')
+                .where(`LOCATION_ID = '${request.data.LOCATION_ID}' 
+                        AND PRODUCT_ID = '${request.data.PRODUCT_ID}'
+                        AND WEEK_DATE   < '${vDateDel}'`);
+        }
+        catch (e) {
+            //Do nothing
+        }
+        // }
+>>>>>>> 09d08e11b458224b21b5a4d68078d8f976c31ca2
         const dateJSONToEDM = jsonDate => {
             const content = /\d+/.exec(String(jsonDate));
             const timestamp = content ? Number(content[0]) : 0;
@@ -108,6 +133,20 @@ module.exports = cds.service.impl(async function () {
             const string = date.toISOString();
             return string;
         };
+<<<<<<< HEAD
+=======
+        const vDelDate = new Date();
+        const vDateDel = vDelDate.toISOString().split('T')[0];
+        try {
+            await DELETE.from('CP_IBP_FCHARPLAN')
+                .where(`LOCATION_ID = '${request.data.LOCATION_ID}' 
+                            AND PRODUCT_ID = '${request.data.PRODUCT_ID}'
+                            AND WEEK_DATE       = '${vDateDel}'`);
+        }
+        catch (e) {
+            //Do nothing
+        }
+>>>>>>> 09d08e11b458224b21b5a4d68078d8f976c31ca2
 
         var vFromDate = "2022-10-01T00:00:00";//new Date(request.data.FROMDATE).toISOString().split('Z')[0];
         var vToDate = "2022-10-31T00:00:00";//new Date(request.data.TODATE).toISOString().split('Z')[0];
@@ -129,6 +168,10 @@ module.exports = cds.service.impl(async function () {
             }
             var req = await service.tx(req).get(resUrl);
             flag = '';
+<<<<<<< HEAD
+=======
+
+>>>>>>> 09d08e11b458224b21b5a4d68078d8f976c31ca2
             for (var i in req) {
                 var vWeekDate = dateJSONToEDM(req[i].PERIODID4_TSTAMP).split('T')[0];
                 var vScenario = 'BSL_SCENARIO';
@@ -1237,6 +1280,10 @@ module.exports = cds.service.impl(async function () {
         },
             vsales, flag = '';
 
+<<<<<<< HEAD
+=======
+        GenF.logMessage(req, `Started exporting Sales History and Configurations`);
+>>>>>>> 09d08e11b458224b21b5a4d68078d8f976c31ca2
         const lisales = await cds.run(
             `
                 SELECT  "WEEK_DATE",
@@ -1282,11 +1329,43 @@ module.exports = cds.service.impl(async function () {
         var resUrl = "/getExportResult?P_TransactionID='" + vTransID + "'";
         try {
             return await service.tx(req).get(resUrl);
+<<<<<<< HEAD
             flag = 'X';
+=======
+            flag = 'S';
+>>>>>>> 09d08e11b458224b21b5a4d68078d8f976c31ca2
         }
         catch{
 
         }
+<<<<<<< HEAD
+=======
+        // Once Sales History is successfull , send sales Config
+        if (flag === 'S') {
+            let oReq = obibpfucntions.exportSalesCfg(req);
+            var vTransID = new Date().getTime().toString();
+            var oEntryCfg =
+            {
+                "Transactionid": vTransID,
+                "AggregationLevelFieldsString": "LOCID,PRDID,VCCHAR,VCCHARVALUE,VCCLASS,ACTUALDEMANDVC,CUSTID,PERIODID0_TSTAMP",
+                "VersionID": "",
+                "DoCommit": true,
+                "ScenarioID": "",
+                "NavSBPVCP": oReq.sales
+            }
+            // req.headers['Application-Interface-Key'] = vAIRKey;
+            await service.tx(req).post("/SBPVCPTrans", oEntryCfg);
+
+            var resUrl = "/getExportResult?P_TransactionID='" + vTransID + "'";
+            try {
+                return await service.tx(req).get(resUrl);
+                flag = 'X';
+            }
+            catch{
+
+            }
+        }
+>>>>>>> 09d08e11b458224b21b5a4d68078d8f976c31ca2
         if (flag === 'X') {
             let dataObj = {};
             dataObj["success"] = true;
@@ -1303,7 +1382,11 @@ module.exports = cds.service.impl(async function () {
                     data: dataObj
                 };
 
+<<<<<<< HEAD
                 console.log("Sales History has exported to update req", updateReq);
+=======
+                console.log("Sales History and Confifuration has exported to update req", updateReq);
+>>>>>>> 09d08e11b458224b21b5a4d68078d8f976c31ca2
 
                 scheduler.updateJobRunLog(updateReq, function (err, result) {
                     if (err) {
@@ -1352,6 +1435,18 @@ module.exports = cds.service.impl(async function () {
             actcomp: [],
         },
             vactcomp;
+<<<<<<< HEAD
+=======
+        // Fetch History period from Configuration table
+        const lsSales = await SELECT.one
+            .columns('VALUE')
+            .from('CP_PARAMETER_VALUES')
+            .where(`VALUE = 4 `);
+        let vFromDate = new Date();
+        let vToDate = new Date().toISOString().split('Z')[0].split('T')[0];
+        vFromDate.setDate(vFromDate.getDate() - parseInt(lsSales.VALUE));
+        vFromDate = vFromDate.toISOString().split('Z')[0].split('T')[0];
+>>>>>>> 09d08e11b458224b21b5a4d68078d8f976c31ca2
         const liactcomp = await cds.run(
             `
             SELECT  "WEEK_DATE",
@@ -1362,10 +1457,19 @@ module.exports = cds.service.impl(async function () {
                     FROM V_IBP_LOCPRODCOMP_ACTDEMD
                     WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
                        AND PRODUCT_ID = '`+ req.data.PRODUCT_ID +
+<<<<<<< HEAD
             `' AND WEEK_DATE >= '` + req.data.FROMDATE +
             `' AND WEEK_DATE <= '` + req.data.TODATE + `'`);
 
         //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
+=======
+            `' AND WEEK_DATE >= '` + vFromDate +
+            `' AND WEEK_DATE <= '` + vToDate + `'`);
+
+        // `' AND WEEK_DATE >= '` + req.data.FROMDATE +
+        // `' AND WEEK_DATE <= '` + req.data.TODATE + `'`);
+
+>>>>>>> 09d08e11b458224b21b5a4d68078d8f976c31ca2
         for (i = 0; i < liactcomp.length; i++) {
             var vWeekDate = new Date(liactcomp[i].WEEK_DATE).toISOString().split('Z');
             var vDemd = liactcomp[i].ACTUALCOMPONENTDEMAND.split('.');
@@ -1461,6 +1565,7 @@ module.exports = cds.service.impl(async function () {
 
     // Actual Demand at VC
     this.on("exportIBPSalesConfig", async (req) => {
+<<<<<<< HEAD
         var oReq = {
             sales: [],
         },
@@ -1497,6 +1602,45 @@ module.exports = cds.service.impl(async function () {
             oReq.sales.push(vsales);
 
         }
+=======
+        // var oReq = {
+        //     sales: [],
+        // },
+        //     vsales;
+        // const lisales = await cds.run(
+        //     `
+        //         SELECT  "WEEK_DATE",
+        //                 "LOCATION_ID",
+        //                 "PRODUCT_ID",
+        //                 "ORD_QTY",
+        //                 "CUSTOMER_GROUP",
+        //                 "CLASS_NUM",
+        //                 "CHAR_NUM",
+        //                 "CHARVAL_NUM"
+        //                 FROM V_IBP_SALESHCONFIG_VC
+        //                 WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
+        //                    AND PRODUCT_ID = '`+ req.data.PRODUCT_ID +
+        //     `'`);
+        // // `' AND CUSTOMER_GROUP = '` + req.data.CUSTOMER_GROUP +e
+
+        // for (i = 0; i < lisales.length; i++) {
+        //     var vWeekDate = new Date(lisales[i].WEEK_DATE).toISOString().split('Z');
+        //     var vDemd = lisales[i].ORD_QTY.split('.');
+        //     vsales = {
+        //         "LOCID": lisales[i].LOCATION_ID,
+        //         "PRDID": lisales[i].PRODUCT_ID,
+        //         "VCCHAR": lisales[i].CHAR_NUM,
+        //         "VCCHARVALUE": lisales[i].CHARVAL_NUM,
+        //         "VCCLASS": lisales[i].CLASS_NUM,
+        //         "ACTUALDEMANDVC": vDemd[0],
+        //         "CUSTID": "NULL",//lisales[i].CUSTOMER_GROUP,
+        //         "PERIODID0_TSTAMP": vWeekDate[0]
+        //     };
+        //     oReq.sales.push(vsales);
+
+        // }
+        let oReq = obibpfucntions.exportSalesCfg(req);
+>>>>>>> 09d08e11b458224b21b5a4d68078d8f976c31ca2
         var vTransID = new Date().getTime().toString();
         var oEntry =
         {
@@ -1696,10 +1840,31 @@ module.exports = cds.service.impl(async function () {
 
     this.on("generateFDemandQty", async (request) => {
         var flag;
+<<<<<<< HEAD
+=======
+
+        GenF.logMessage(req, `Started importing Future Demand`);
+>>>>>>> 09d08e11b458224b21b5a4d68078d8f976c31ca2
         var resUrl = "/SBPVCP?$select=PRDID,LOCID,PERIODID4_TSTAMP,TOTALDEMANDOUTPUT,UOMTOID,VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "'and UOMTOID eq 'EA'";
 
         // req.headers['Application-Interface-Key'] = vAIRKey;
         var req = await service.tx(req).get(resUrl);
+<<<<<<< HEAD
+=======
+        // if(req.length > 0){
+        const vDelDate = new Date();
+        const vDateDel = vDelDate.toISOString().split('T')[0];
+        try {
+            await DELETE.from('CP_IBP_FUTUREDEMAND')
+                .where(`LOCATION_ID = '${request.data.LOCATION_ID}' 
+                        AND PRODUCT_ID = '${request.data.PRODUCT_ID}'
+                        AND WEEK_DATE  < '${vDateDel}'`);
+        }
+        catch (e) {
+            //Do nothing
+        }
+        // }
+>>>>>>> 09d08e11b458224b21b5a4d68078d8f976c31ca2
         const dateJSONToEDM = jsonDate => {
             const content = /\d+/.exec(String(jsonDate));
             const timestamp = content ? Number(content[0]) : 0;
@@ -1735,13 +1900,83 @@ module.exports = cds.service.impl(async function () {
             //     "'" + req[i].TOTALDEMANDOUTPUT + "'" + ')' + ' WITH PRIMARY KEY';
             try {
                 await cds.run(modQuery);
+<<<<<<< HEAD
                 flag = 'X';
+=======
+                flag = 'D';
+>>>>>>> 09d08e11b458224b21b5a4d68078d8f976c31ca2
             }
             catch (err) {
                 console.log(err);
             }
         }
+<<<<<<< HEAD
         if (flag === 'X') {
+=======
+        if (flag === 'D') {
+            //////////////////////////////////////////
+            flag = '';
+            var resUrlFplan;
+            const dateJSONToEDM = jsonDate => {
+                const content = /\d+/.exec(String(jsonDate));
+                const timestamp = content ? Number(content[0]) : 0;
+                const date = new Date(timestamp);
+                const string = date.toISOString();
+                return string;
+            };
+
+            resUrlFplan = "/SBPVCP?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
+
+            var req = await service.tx(request).get(resUrlFplan);
+            const vDelDate = new Date();
+            const vDateDel = vDelDate.toISOString().split('T')[0];
+            try {
+                await DELETE.from('CP_IBP_FCHARPLAN')
+                    .where(`LOCATION_ID = '${request.data.LOCATION_ID}' 
+                        AND PRODUCT_ID = '${request.data.PRODUCT_ID}'
+                        AND WEEK_DATE    < '${vDateDel}'`);
+            }
+            catch (e) {
+                //Do nothing
+            }
+            for (var i in req) {
+                var vWeekDate = dateJSONToEDM(req[i].PERIODID4_TSTAMP).split('T')[0];
+                var vScenario = 'BSL_SCENARIO';
+                req[i].PERIODID4_TSTAMP = vWeekDate;
+                await cds.run(
+                    `DELETE FROM "CP_IBP_FCHARPLAN" WHERE "LOCATION_ID" = '` + req[i].LOCID + `' 
+                                                          AND "PRODUCT_ID" = '`+ req[i].PRDID + `'
+                                                          AND "CLASS_NUM" = '` + req[i].VCCLASS + `' 
+                                                          AND "CHAR_NUM" = '` + req[i].VCCHAR + `' 
+                                                          AND "CHARVAL_NUM" = '` + req[i].VCCHARVALUE + `' 
+                                                          AND "VERSION" = '` + req[i].VERSIONID + `'
+                                                          AND "SCENARIO" = '` + vScenario + `'
+                                                          AND "WEEK_DATE" = '` + vWeekDate + `'`
+                );
+
+                let modQuery = 'INSERT INTO "CP_IBP_FCHARPLAN" VALUES (' +
+                    "'" + req[i].LOCID + "'" + "," +
+                    "'" + req[i].PRDID + "'" + "," +
+                    "'" + req[i].VCCLASS + "'" + "," +
+                    "'" + req[i].VCCHAR + "'" + "," +
+                    "'" + req[i].VCCHARVALUE + "'" + "," +
+                    "'" + req[i].VERSIONID + "'" + "," +
+                    "'" + vScenario + "'" + "," +
+                    "'" + vWeekDate + "'" + "," +
+                    "'" + req[i].OPTIONPERCENTAGE + "'" + "," +
+                    "'" + req[i].FINALDEMANDVC + "'" + ')';// + ' WITH PRIMARY KEY';
+                try {
+                    await cds.run(modQuery);
+                    flag = 'S';
+                }
+                catch (err) {
+                    console.log(err);
+                }
+            }
+        }
+        if (flag === 'D') {
+
+>>>>>>> 09d08e11b458224b21b5a4d68078d8f976c31ca2
             let dataObj = {};
             dataObj["success"] = true;
             dataObj["message"] = "Import of IBP Demand data is successfull at " + new Date();
@@ -1796,6 +2031,65 @@ module.exports = cds.service.impl(async function () {
                 });
             }
         }
+<<<<<<< HEAD
+=======
+        if (flag === 'S') {
+            let dataObj = {};
+            dataObj["success"] = true;
+            dataObj["message"] = "Import of IBP Demand and Future char.plan data is successfull at " + new Date();
+
+
+            if (request.headers['x-sap-job-id'] > 0) {
+                const scheduler = getJobscheduler(request);
+
+                var updateReq = {
+                    jobId: request.headers['x-sap-job-id'],
+                    scheduleId: request.headers['x-sap-job-schedule-id'],
+                    runId: request.headers['x-sap-job-run-id'],
+                    data: dataObj
+                };
+
+                console.log("IBP Demand and Future char.plan import update req", updateReq);
+
+                scheduler.updateJobRunLog(updateReq, function (err, result) {
+                    if (err) {
+                        return console.log('Error updating run log: %s', err);
+                    }
+                    //Run log updated successfully
+                    console.log("IBP Demand and Future char.plan import job update results", result);
+
+                });
+            }
+            //return "Successfully imported IBP Future char.plan";
+        } else {
+            let dataObj = {};
+            dataObj["failed"] = false;
+            dataObj["message"] = "Import of Demand and IBP Future char.plan has failed at" + new Date();
+
+
+            if (request.headers['x-sap-job-id'] > 0) {
+                const scheduler = getJobscheduler(request);
+
+                var updateReq = {
+                    jobId: request.headers['x-sap-job-id'],
+                    scheduleId: request.headers['x-sap-job-schedule-id'],
+                    runId: request.headers['x-sap-job-run-id'],
+                    data: dataObj
+                };
+
+                console.log("IBP Demand and Future char.plan job update req", updateReq);
+
+                scheduler.updateJobRunLog(updateReq, function (err, result) {
+                    if (err) {
+                        return console.log('Error updating run log: %s', err);
+                    }
+                    //Run log updated successfully
+                    console.log("IBP  Demand and Future char.plan job update results", result);
+
+                });
+            }
+        }
+>>>>>>> 09d08e11b458224b21b5a4d68078d8f976c31ca2
     });
 
     // Generate char plan
@@ -1832,6 +2126,22 @@ module.exports = cds.service.impl(async function () {
         resUrl = "/SBPVCP?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
 
         var req = await service.tx(request).get(resUrl);
+<<<<<<< HEAD
+=======
+        // if(req.length > 0){
+        const vDelDate = new Date();
+        const vDateDel = vDelDate.toISOString().split('T')[0];
+        try {
+            await DELETE.from('CP_IBP_FCHARPLAN')
+                .where(`LOCATION_ID = '${request.data.LOCATION_ID}' 
+                        AND PRODUCT_ID = '${request.data.PRODUCT_ID}'
+                        AND WEEK_DATE    < '${vDateDel}'`);
+        }
+        catch (e) {
+            //Do nothing
+        }
+        // }
+>>>>>>> 09d08e11b458224b21b5a4d68078d8f976c31ca2
         flag = '';
         for (var i in req) {
             var vWeekDate = dateJSONToEDM(req[i].PERIODID4_TSTAMP).split('T')[0];

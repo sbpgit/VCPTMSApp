@@ -807,81 +807,132 @@ module.exports = (srv) => {
 
     // Generate Timeseries using action call
     srv.on("generateTimeseries", async (req) => {
+        /*
         const li_paravalues = await cds.run(
             `SELECT VALUE
                 FROM "CP_PARAMETER_VALUES"
                 WHERE "PARAMETER_ID" = 5 `);
         if (li_paravalues[0].VALUE === 'Components') {
-            const obgenTimeseries = new GenTimeseries();
-            await obgenTimeseries.genTimeseries(req.data);
         }
         else if (li_paravalues[0].VALUE === 'Fully Configured') {
             const obgenTimeseriesM2 = new GenTimeseriesM2();
-            await obgenTimeseriesM2.genTimeseries(req.data);
+            await obgenTimeseriesM2.genTimeseries(req.data, req);
+        }
+        */
+        switch(GenFunctions.getParameterValue('5')){
+            case 'Components':
+                const obgenTimeseries = new GenTimeseries();
+                await obgenTimeseries.genTimeseries(req.data, req);               
+                break;
+            case 'Fully Configured':
+                const obgenTimeseriesM2 = new GenTimeseriesM2();
+                await obgenTimeseriesM2.genTimeseries(req.data, req);                
+                break;
         }
     });
     srv.on("generateTimeseriesF", async (req) => {
+        /*
         const li_paravalues = await cds.run(
             `SELECT VALUE
                 FROM "CP_PARAMETER_VALUES"
                 WHERE "PARAMETER_ID" = 5 `);
         if (li_paravalues[0].VALUE === 'Components') {
             const obgenTimeseries = new GenTimeseries();
-            await obgenTimeseries.genTimeseriesF(req.data);
+            await obgenTimeseries.genTimeseriesF(req.data, req);
         }
         else if (li_paravalues[0].VALUE === 'Fully Configured') {
             const obgenTimeseriesM2 = new GenTimeseriesM2();
-            await obgenTimeseriesM2.genTimeseriesF(req.data);
+            await obgenTimeseriesM2.genTimeseriesF(req.data, req);
+        }*/
+
+        switch(GenFunctions.getParameterValue('5')){
+            case 'Components':
+                const obgenTimeseries = new GenTimeseries();
+                await obgenTimeseries.genTimeseriesF(req.data, req);             
+                break;
+            case 'Fully Configured':
+                const obgenTimeseriesM2 = new GenTimeseriesM2();
+                await obgenTimeseriesM2.genTimeseriesF(req.data, req);              
+                break;
         }
+
+
     });
     // Generate Timeseries fucntion calls
     srv.on("generate_timeseries", async (req) => {
+        /*
         const li_paravalues = await cds.run(
             `SELECT VALUE
                 FROM "CP_PARAMETER_VALUES"
                 WHERE "PARAMETER_ID" = 5 `);
         if (li_paravalues[0].VALUE === 'Components') {
             const obgenTimeseries = new GenTimeseries();
-            await obgenTimeseries.genTimeseries(req.data);
+            await obgenTimeseries.genTimeseries(req.data, req);
         }
         else if (li_paravalues[0].VALUE === 'Fully Configured') {
             const obgenTimeseriesM2 = new GenTimeseriesM2();
-            await obgenTimeseriesM2.genTimeseries(req.data);
+            await obgenTimeseriesM2.genTimeseries(req.data, req);
         }
+        */
+
+        switch(GenFunctions.getParameterValue('5')){
+            case 'Components':
+                const obgenTimeseries = new GenTimeseries();
+                await obgenTimeseries.genTimeseries(req.data, req);               
+                break;
+            case 'Fully Configured':
+                const obgenTimeseriesM2 = new GenTimeseriesM2();
+                await obgenTimeseriesM2.genTimeseries(req.data, req);                
+                break;
+        }
+
     });
     srv.on("generate_timeseriesF", async (req) => {
+/*        
         const li_paravalues = await cds.run(
             `SELECT VALUE
                 FROM "CP_PARAMETER_VALUES"
                 WHERE "PARAMETER_ID" = 5 `);
         if (li_paravalues[0].VALUE === 'Components') {
             const obgenTimeseries = new GenTimeseries();
-            await obgenTimeseries.genTimeseriesF(req.data);
+            await obgenTimeseries.genTimeseriesF(req.data, req);
         }
         else if (li_paravalues[0].VALUE === 'Fully Configured') {
             const obgenTimeseriesM2 = new GenTimeseriesM2();
-            await obgenTimeseriesM2.genTimeseriesF(req.data);
+            await obgenTimeseriesM2.genTimeseriesF(req.data, req);
         }
+*/
+
+        switch(GenFunctions.getParameterValue('5')){
+            case 'Components':
+                const obgenTimeseries = new GenTimeseries();
+                await obgenTimeseries.genTimeseriesF(req.data, req);             
+                break;
+            case 'Fully Configured':
+                const obgenTimeseriesM2 = new GenTimeseriesM2();
+                await obgenTimeseriesM2.genTimeseriesF(req.data, req);              
+                break;
+        }        
     });
     // Generate Unique ID
     srv.on("genUniqueID", async (req) => {
         const obgenSOFunctions = new SOFunctions();
-        await obgenSOFunctions.genUniqueID(req.data);
+        await obgenSOFunctions.genUniqueID(req.data,req);
     });
     // Generate Unique ID
     srv.on("gen_UniqueID", async (req) => {
         const obgenSOFunctions = new SOFunctions();
-        await obgenSOFunctions.genUniqueID(req.data);
+        await obgenSOFunctions.genUniqueID(req.data,req);
     });
     // Generate Fully Configured Demand
     srv.on("genFullConfigDemand", async (req) => {
         const obgenTimeseriesM2 = new GenTimeseriesM2();
-        await obgenTimeseriesM2.genPrediction(req.data);
+        await obgenTimeseriesM2.genPrediction(req.data, req);
     });
     // Generate Fully Configured Demand
     srv.on("gen_FullConfigDemand", async (req) => {
         const obgenTimeseriesM2 = new GenTimeseriesM2();
-        await obgenTimeseriesM2.genPrediction(req.data);
+        await obgenTimeseriesM2.genPrediction(req.data,req);
     });
 
     srv.on("genVariantStruc", async (req) => {
@@ -892,11 +943,11 @@ module.exports = (srv) => {
 
     srv.on("genAssemblyreq", async (req) => {
         const objAsmreq = new AssemblyReq();
-        await objAsmreq.genAsmreq(req.data);
+        await objAsmreq.genAsmreq(req.data, req);
     });
     srv.on("generateAssemblyReq", async (req) => {
         const objAsmreq = new AssemblyReq();
-        await objAsmreq.genAsmreq(req.data);
+        await objAsmreq.genAsmreq(req.data, req);
     });
     // Maintain Parital product introsduction
     srv.on("maintainPartialProd", async (req) => {

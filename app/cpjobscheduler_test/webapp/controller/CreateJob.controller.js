@@ -641,10 +641,7 @@ sap.ui.define(
                                     // 07-09-2022-1
 								) {
 									sap.ui.getCore().byId("prodSlctList").setMultiSelect(false);
-									sap.ui
-										.getCore()
-										.byId("prodSlctList")
-										.setRememberSelections(false);
+									sap.ui.getCore().byId("prodSlctList").setRememberSelections(false);
 								}
 								this._valueHelpDialogProd.open();
 							}
