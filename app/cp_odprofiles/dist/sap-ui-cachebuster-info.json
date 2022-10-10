@@ -1,6 +1,51 @@
 {
+<<<<<<< HEAD
   "css/style.css": 1659447417318,
   "controller/App.controller.js": 1659447417318,
+=======
+<<<<<<< HEAD
+  "utils/locate-reuse-libs-dbg.js": 1661869074943,
+  "Component.js": 1661869074943,
+=======
+<<<<<<< HEAD
+  "manifest-bundle.zip": 1665400974397,
+  "controller/App.controller.js": 1659447417318,
+=======
+<<<<<<< HEAD
+  "i18n/i18n.properties": 1661869074943,
+  "controller/BaseController.js": 1661869074943,
+>>>>>>> 563e91a14bac4b8f2098650e30e4bda1ccb41943
+  "utils/locate-reuse-libs.js": 1661869074943,
+  "model/models.js": 1661869074943,
+  "controller/Home.controller.js": 1661869074943,
+  "controller/BaseController.js": 1661869074943,
+  "controller/App.controller.js": 1661869074943,
+  "manifest.json": 1665414259120,
+  "manifest-bundle.zip": 1665414259145,
+  "Component-preload.js": 1665414259644,
+  "controller/App-dbg.controller.js": 1661869074943,
+  "model/models-dbg.js": 1661869074943,
+  "controller/Home-dbg.controller.js": 1661869074943,
+  "controller/BaseController-dbg.js": 1661869074943,
+  "i18n/i18n.properties": 1661869074943,
+  "Component-dbg.js": 1661869074943,
+  "view/StructureNodes.fragment.xml": 1661869074943,
+  "view/Profiles.fragment.xml": 1661869074943,
+  "view/ProdDialog.fragment.xml": 1661869074943,
+  "view/ObjDepDialog.fragment.xml": 1661869074943,
+  "view/LocDialog.fragment.xml": 1661869074943,
+  "view/Home.view.xml": 1661869074943,
+  "view/ComponentDialog.fragment.xml": 1661869074943,
+  "view/App.view.xml": 1661869074943,
+  "css/style.css": 1661869074943,
+  "index.html": 1661869074943
+<<<<<<< HEAD
+=======
+=======
+  "controller/Home-dbg.controller.js": 1659447417318,
+  "controller/BaseController.js": 1659447417318,
+>>>>>>> afa35db689df46fd31db33107ed39f3b070a978a
+>>>>>>> 820694d3be112cf646763aec289fc618da7806c1
   "utils/locate-reuse-libs.js": 1659447417318,
   "model/models.js": 1659447417318,
   "controller/Home.controller.js": 1659447417318,
@@ -25,4 +70,9 @@
   "view/App.view.xml": 1659447417318,
   "i18n/i18n.properties": 1659447417318,
   "index.html": 1659447417318
+<<<<<<< HEAD
+=======
+>>>>>>> 09d08e11b458224b21b5a4d68078d8f976c31ca2
+>>>>>>> 563e91a14bac4b8f2098650e30e4bda1ccb41943
+>>>>>>> 820694d3be112cf646763aec289fc618da7806c1
 }

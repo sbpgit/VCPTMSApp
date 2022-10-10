@@ -1,4 +1,56 @@
 {
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+  "controller/ItemDetail-dbg.controller.js": 1664354918076,
+  "Component.js": 1661869075027,
+=======
+<<<<<<< HEAD
+  "controller/BaseController.js": 1661153490912,
+=======
+<<<<<<< HEAD
+  "view/ItemDetail.view.xml": 1664191694967,
+  "model/models.js": 1661869075027,
+>>>>>>> 563e91a14bac4b8f2098650e30e4bda1ccb41943
+  "utils/locate-reuse-libs.js": 1661869075027,
+  "model/models.js": 1661869075027,
+  "controller/ItemMaster.controller.js": 1661869075027,
+  "controller/ItemDetail.controller.js": 1664354918076,
+  "controller/Details.controller.js": 1661869075027,
+  "controller/BaseController.js": 1661869075027,
+  "controller/App.controller.js": 1661869075027,
+  "manifest.json": 1665414577199,
+  "manifest-bundle.zip": 1665414577215,
+  "Component-preload.js": 1665414577843,
+  "Component-dbg.js": 1661869075027,
+  "model/models-dbg.js": 1661869075027,
+  "controller/ItemMaster-dbg.controller.js": 1661869075027,
+  "i18n/i18n.properties": 1661869075027,
+  "controller/Details-dbg.controller.js": 1661869075027,
+  "controller/BaseController-dbg.js": 1661869075027,
+  "controller/App-dbg.controller.js": 1661869075027,
+  "utils/locate-reuse-libs-dbg.js": 1661869075027,
+  "view/className.fragment.xml": 1661869075027,
+  "view/charValue.fragment.xml": 1661869075027,
+  "view/charName.fragment.xml": 1661869075027,
+  "view/RestrictionItem.fragment.xml": 1661869075027,
+  "view/Restriction.fragment.xml": 1661869075027,
+  "view/LocDialog.fragment.xml": 1661869075027,
+  "view/LineDialog.fragment.xml": 1661869075027,
+  "view/ItemMaster.view.xml": 1661869075027,
+  "view/ItemDetail.view.xml": 1664191694967,
+  "view/Details.view.xml": 1661869075027,
+  "view/App.view.xml": 1661869075027,
+  "css/style.css": 1661869075027,
+  "index.html": 1661869075027
+<<<<<<< HEAD
+=======
+=======
+  "view/charValue.fragment.xml": 1661435834890,
+>>>>>>> afa35db689df46fd31db33107ed39f3b070a978a
+  "controller/App.controller.js": 1661153490912,
+  "utils/locate-reuse-libs.js": 1661153490912,
+>>>>>>> 820694d3be112cf646763aec289fc618da7806c1
   "model/models.js": 1661153490912,
   "i18n/i18n.properties": 1661435834886,
   "utils/locate-reuse-libs.js": 1661153490912,
@@ -32,4 +84,9 @@
   "view/App.view.xml": 1661153490916,
   "css/style.css": 1661435834882,
   "index.html": 1661337950523
+<<<<<<< HEAD
+=======
+>>>>>>> 09d08e11b458224b21b5a4d68078d8f976c31ca2
+>>>>>>> 563e91a14bac4b8f2098650e30e4bda1ccb41943
+>>>>>>> 820694d3be112cf646763aec289fc618da7806c1
 }

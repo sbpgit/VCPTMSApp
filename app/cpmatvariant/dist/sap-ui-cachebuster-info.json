@@ -1,4 +1,59 @@
 {
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+  "view/ProdDialog.fragment.xml": 1664541304259,
+=======
+<<<<<<< HEAD
+  "controller/App.controller.js": 1659447417374,
+  "i18n/i18n.properties": 1662378852381,
+=======
+<<<<<<< HEAD
+  "controller/ItemMaster.controller.js": 1664783004692,
+  "controller/Details.controller.js": 1661869075007,
+>>>>>>> 563e91a14bac4b8f2098650e30e4bda1ccb41943
+  "utils/locate-reuse-libs.js": 1661869075007,
+  "manifest.json": 1665414540524,
+  "model/models.js": 1661869075007,
+  "model/formatter.js": 1662628674140,
+  "controller/ItemMaster.controller.js": 1664783004692,
+  "controller/ItemDetail.controller.js": 1663920355391,
+  "controller/Details.controller.js": 1661869075007,
+  "controller/BaseController.js": 1661869075007,
+  "controller/App.controller.js": 1661869075007,
+  "Component.js": 1661869075007,
+  "manifest-bundle.zip": 1665414540536,
+  "Component-preload.js": 1665414541121,
+  "controller/Details-dbg.controller.js": 1661869075007,
+  "model/models-dbg.js": 1661869075007,
+  "model/formatter-dbg.js": 1662628674140,
+  "controller/ItemMaster-dbg.controller.js": 1664783004692,
+  "controller/ItemDetail-dbg.controller.js": 1663920355391,
+  "utils/locate-reuse-libs-dbg.js": 1661869075007,
+  "controller/BaseController-dbg.js": 1661869075007,
+  "controller/App-dbg.controller.js": 1661869075007,
+  "Component-dbg.js": 1661869075007,
+  "view/className.fragment.xml": 1664541304259,
+  "view/charValue.fragment.xml": 1662628674140,
+  "view/charName.fragment.xml": 1662628674140,
+  "view/UniqueDescUpdate.fragment.xml": 1662628674140,
+  "i18n/i18n.properties": 1662628674140,
+  "view/LocDialog.fragment.xml": 1664541304259,
+  "view/ItemMaster.view.xml": 1662628674140,
+  "view/ItemDetail.view.xml": 1664783004692,
+  "view/Details.view.xml": 1661869075007,
+  "view/CustomerGroup.fragment.xml": 1663389922726,
+  "view/CreateSeedOrder.fragment.xml": 1663745533157,
+  "view/CreateChar.fragment.xml": 1662628674140,
+  "view/CopyChar.fragment.xml": 1662628674140,
+  "view/App.view.xml": 1661869075007,
+  "view/AddCharacterstics.fragment.xml": 1662628674140,
+  "css/style.css": 1661869075007,
+  "index.html": 1664541304259
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 820694d3be112cf646763aec289fc618da7806c1
   "view/LocDialog.fragment.xml": 1664545914681,
   "controller/BaseController.js": 1659447417374,
   "utils/locate-reuse-libs.js": 1659447417374,
@@ -38,4 +93,9 @@
   "view/AddCharacterstics.fragment.xml": 1662476244223,
   "css/style.css": 1661865456737,
   "index.html": 1664545914681
+<<<<<<< HEAD
+=======
+>>>>>>> 09d08e11b458224b21b5a4d68078d8f976c31ca2
+>>>>>>> 563e91a14bac4b8f2098650e30e4bda1ccb41943
+>>>>>>> 820694d3be112cf646763aec289fc618da7806c1
 }
