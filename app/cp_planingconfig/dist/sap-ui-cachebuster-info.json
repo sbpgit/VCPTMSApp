@@ -1,22 +1,13 @@
 {
-<<<<<<< HEAD
-  "Component.js": 1662729348584,
-=======
-<<<<<<< HEAD
-  "controller/App-dbg.controller.js": 1662738661022,
-  "manifest.json": 1665401527892,
-=======
-<<<<<<< HEAD
-  "controller/Home-dbg.controller.js": 1662729805850,
->>>>>>> 563e91a14bac4b8f2098650e30e4bda1ccb41943
-  "model/models.js": 1662729348592,
-  "utils/locate-reuse-libs.js": 1662729348588,
-  "manifest.json": 1665414705886,
   "controller/Home.controller.js": 1665402071081,
   "controller/App.controller.js": 1662729348596,
+  "utils/locate-reuse-libs.js": 1662729348588,
+  "model/models.js": 1662729348592,
   "i18n/i18n.properties": 1662729545995,
-  "manifest-bundle.zip": 1665414705908,
-  "Component-preload.js": 1665414706323,
+  "manifest.json": 1665415777301,
+  "Component.js": 1662729348584,
+  "manifest-bundle.zip": 1665415777314,
+  "Component-preload.js": 1665415777618,
   "Component-dbg.js": 1662729348584,
   "model/models-dbg.js": 1662729348592,
   "controller/Home-dbg.controller.js": 1665402071081,
@@ -27,27 +18,4 @@
   "view/App.view.xml": 1662729608640,
   "css/style.css": 1662729348596,
   "index.html": 1662729670268
-<<<<<<< HEAD
-=======
-=======
->>>>>>> afa35db689df46fd31db33107ed39f3b070a978a
-  "utils/locate-reuse-libs.js": 1662738661022,
-  "model/models.js": 1662738661022,
-  "controller/Home.controller.js": 1662738661022,
-  "controller/App.controller.js": 1662738661022,
-  "Component.js": 1662738661022,
-  "manifest-bundle.zip": 1665401527913,
-  "Component-preload.js": 1665401528339,
-  "model/models-dbg.js": 1662738661022,
-  "utils/locate-reuse-libs-dbg.js": 1662738661022,
-  "controller/Home-dbg.controller.js": 1662738661022,
-  "i18n/i18n.properties": 1662738661022,
-  "Component-dbg.js": 1662738661022,
-  "view/MethodTyp.fragment.xml": 1662738661026,
-  "view/Home.view.xml": 1663062425256,
-  "view/App.view.xml": 1662738661026,
-  "css/style.css": 1662738661022,
-  "index.html": 1662738661022
->>>>>>> 09d08e11b458224b21b5a4d68078d8f976c31ca2
->>>>>>> 563e91a14bac4b8f2098650e30e4bda1ccb41943
 }

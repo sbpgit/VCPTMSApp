@@ -56,9 +56,7 @@ class GenTimeseriesM2 {
         FROM "V_PARTIALPRODCHAR"
         WHERE "LOCATION_ID" = '` + adata.LOCATION_ID + `'
         AND ( "PRODUCT_ID" = '` + lMainProduct + `'
-        OR "REF_PRODID" = '` + lMainProduct + `' )
-        ORDER BY LOCATION_ID, 
-                PRODUCT_ID`
+        OR "REF_PRODID" = '` + lMainProduct + `' )`
         );
 
         for (let i = 0; i < liPrimaryIDMain.length; i++) {
