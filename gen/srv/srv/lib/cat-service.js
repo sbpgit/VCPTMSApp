@@ -776,7 +776,7 @@ module.exports = (srv) => {
             await obgenTimeseriesM2.genTimeseries(req.data, req);
         }
         */
-        switch(GenFunctions.getParameterValue('5')){
+        switch(await GenFunctions.getParameterValue('5')){
             case 'Components':
                 const obgenTimeseries = new GenTimeseries();
                 await obgenTimeseries.genTimeseries(req.data, req);               
@@ -802,7 +802,7 @@ module.exports = (srv) => {
             await obgenTimeseriesM2.genTimeseriesF(req.data, req);
         }*/
 
-        switch(GenFunctions.getParameterValue('5')){
+        switch(await GenFunctions.getParameterValue('5')){
             case 'Components':
                 const obgenTimeseries = new GenTimeseries();
                 await obgenTimeseries.genTimeseriesF(req.data, req);             
@@ -832,7 +832,7 @@ module.exports = (srv) => {
         }
         */
 
-        switch(GenFunctions.getParameterValue('5')){
+        switch(await GenFunctions.getParameterValue('5')){
             case 'Components':
                 const obgenTimeseries = new GenTimeseries();
                 await obgenTimeseries.genTimeseries(req.data, req);               
@@ -859,8 +859,9 @@ module.exports = (srv) => {
             await obgenTimeseriesM2.genTimeseriesF(req.data, req);
         }
 */
-
-        switch(GenFunctions.getParameterValue('5')){
+        let value = await GenFunctions.getParameterValue('5');
+        console.log(value);
+        switch(await GenFunctions.getParameterValue('5')){
             case 'Components':
                 const obgenTimeseries = new GenTimeseries();
                 await obgenTimeseries.genTimeseriesF(req.data, req);             

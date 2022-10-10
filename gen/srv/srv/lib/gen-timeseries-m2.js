@@ -58,10 +58,7 @@ class GenTimeseriesM2 {
         AND ( "PRODUCT_ID" = '` + lMainProduct + `'
         OR "REF_PRODID" = '` + lMainProduct + `' )
         ORDER BY LOCATION_ID, 
-                PRODUCT_ID, 
-                VERSION,
-                SCENARIO,
-                WEEK_DATE`
+                PRODUCT_ID`
         );
 
         for (let i = 0; i < liPrimaryIDMain.length; i++) {
