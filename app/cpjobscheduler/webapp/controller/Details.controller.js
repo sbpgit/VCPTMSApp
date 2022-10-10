@@ -82,6 +82,7 @@ sap.ui.define(
           // Setting the date values to filter the data
           this.byId("idDateRange").setDateValue(oDateL);
           this.byId("idDateRange").setSecondDateValue(nowH);
+          
       },
       /**
        * This function is called when come back.
@@ -109,6 +110,10 @@ sap.ui.define(
        */
       onAfterRendering: function () {
         that = this;
+
+        var dDate = that.byId("idDateRange").getValue();
+          oGModel = this.getModel("oGModel");
+            oGModel.setProperty("/DateRange", dDate);
 
         var oViewModel = this.getModel("appView");
         /**  Removing the arrow button inbetween pages(ItemMaster and ItemDetail)*/

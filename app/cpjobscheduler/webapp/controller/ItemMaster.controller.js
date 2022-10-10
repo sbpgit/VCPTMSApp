@@ -98,7 +98,7 @@ sap.ui.define(
               }, that);
               oGModel.setProperty("/tableData", oData.results);
               var aData = [];
-              var dDate = that.byId("idDateRange").getValue().split(" To ");
+              var dDate = oGModel.getProperty("/DateRange").split(" To ");
             //   var dLow = new Date(dDate[0]),
             //     dHigh = new Date(dDate[1] + " " + "23:59:59");
             var dLow = dDate[0] + " " + "00:00:00" ,
