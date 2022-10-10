@@ -8,13 +8,8 @@ class GenTimeseries {
     /**
      * Generate Timeseries
      */
-<<<<<<< HEAD
-    async genTimeseries(adata) {
-        console.log("Started timeseries Service");
-=======
     async genTimeseries(adata, req) {
         GenF.logMessage(req, `Started history timeseries ${adata}`);
->>>>>>> 09d08e11b458224b21b5a4d68078d8f976c31ca2
         
         // Get Sales Count Information
         const liSalesCount = await cds.run(
@@ -247,12 +242,6 @@ class GenTimeseries {
 
         }
 
-<<<<<<< HEAD
-
-    }
-
-    async genTimeseriesF(adata) {
-=======
         GenF.logMessage(req, `Completed history timeseries`);
 
     }
@@ -261,7 +250,6 @@ class GenTimeseries {
 
         GenF.logMessage(req, `Started future timeseries ${adata}`);        
 
->>>>>>> 09d08e11b458224b21b5a4d68078d8f976c31ca2
         var conn = hana.createConnection(),
             stmt;
 
@@ -530,15 +518,11 @@ class GenTimeseries {
         console.log(
             "Processing time : " + lProcessTime + " Minutes"
         );
-<<<<<<< HEAD
-    }
-=======
 
         GenF.logMessage(req, `Completed future timeseries`);          
     }
 
       
->>>>>>> 09d08e11b458224b21b5a4d68078d8f976c31ca2
 }
 
 module.exports = GenTimeseries;

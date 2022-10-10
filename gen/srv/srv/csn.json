@@ -19641,6 +19641,10 @@
         "MODEL_VERSION": {
           "type": "cds.String",
           "length": 20
+        },
+        "CRITICALKEY": {
+          "type": "cds.String",
+          "length": 1
         }
       },
       "returns": {
@@ -30639,7 +30643,7 @@
     }
   },
   "meta": {
-    "creator": "CDS Compiler v2.15.4",
+    "creator": "CDS Compiler v2.15.8",
     "flavor": "inferred"
   },
   "$version": "2.0"
