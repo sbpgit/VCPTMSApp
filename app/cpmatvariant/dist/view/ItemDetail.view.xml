@@ -8,7 +8,7 @@
         <HBox>
         <OverflowToolbar>
            
-                    <SearchField id="idCharSearch" liveChange="onCharSearch" placeholder="Characteristic / Characteristic Value" width="880px" />
+                    <SearchField id="idCharSearch" liveChange="onCharSearch" placeholder="Characteristic / Characteristic Value" width="800px"/>
                     <ToolbarSpacer/>
                     <Button id="idadd" text="Create Order" press="onOrderCreate" visible="true"/>
                     

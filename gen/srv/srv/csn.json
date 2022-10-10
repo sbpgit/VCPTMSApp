@@ -4710,9 +4710,103 @@
     },
     "cp.FACTORY_SALESLOC": {
       "kind": "entity",
+      "@UI.SelectionFields": [
+        {
+          "=": "LOCATION_ID"
+        },
+        {
+          "=": "PRODUCT_ID"
+        }
+      ],
+      "@UI.LineItem": [
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "LOCATION_ID"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          },
+          "@HTML5.CssDefaults": {
+            "width": "15rem"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "PRODUCT_ID"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          },
+          "@HTML5.CssDefaults": {
+            "width": "15rem"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "PLAN_LOC"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          },
+          "@HTML5.CssDefaults": {
+            "width": "15rem"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "FACTORY_LOC"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          },
+          "@HTML5.CssDefaults": {
+            "width": "15rem"
+          }
+        }
+      ],
+      "@UI.HeaderInfo.Title.Value": {
+        "=": "LOCATION_ID"
+      },
+      "@UI.HeaderInfo.Description.Value": {
+        "=": "PRODUCT_ID"
+      },
+      "@UI.HeaderInfo.TypeName": "Demand - Plan - Factory Location",
+      "@UI.HeaderInfo.TypeNamePlural": "Demand - Plan - Factory Location-Product",
+      "@UI.FieldGroup#Details.Data": [
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "PLAN_LOC"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "FACTORY_LOC"
+          }
+        }
+      ],
+      "@UI.Facets": [
+        {
+          "$Type": "UI.CollectionFacet",
+          "ID": "FactoryLocation",
+          "Label": "Demand - Plan - Factory Location",
+          "Facets": [
+            {
+              "$Type": "UI.ReferenceFacet",
+              "Label": "Demand - Plan - Factory Location",
+              "Target": "@UI.FieldGroup#Details"
+            }
+          ]
+        }
+      ],
       "elements": {
         "LOCATION_ID": {
-          "@title": "Location ",
+          "@title": "Demand Location ",
           "key": true,
           "type": "cds.String",
           "length": 4
@@ -22329,6 +22423,192 @@
       },
       "returns": {
         "type": "cds.String"
+      }
+    },
+    "CatalogService.getFactoryLoc": {
+      "kind": "entity",
+      "@odata.draft.enabled": true,
+      "@UI.SelectionFields": [
+        {
+          "=": "LOCATION_ID"
+        },
+        {
+          "=": "PRODUCT_ID"
+        }
+      ],
+      "@UI.LineItem": [
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "LOCATION_ID"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          },
+          "@HTML5.CssDefaults": {
+            "width": "15rem"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "PRODUCT_ID"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          },
+          "@HTML5.CssDefaults": {
+            "width": "15rem"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "PLAN_LOC"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          },
+          "@HTML5.CssDefaults": {
+            "width": "15rem"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "FACTORY_LOC"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          },
+          "@HTML5.CssDefaults": {
+            "width": "15rem"
+          }
+        }
+      ],
+      "@UI.HeaderInfo.Title.Value": {
+        "=": "LOCATION_ID"
+      },
+      "@UI.HeaderInfo.Description.Value": {
+        "=": "PRODUCT_ID"
+      },
+      "@UI.HeaderInfo.TypeName": "Demand - Plan - Factory Location",
+      "@UI.HeaderInfo.TypeNamePlural": "Demand - Plan - Factory Location-Product",
+      "@UI.FieldGroup#Details.Data": [
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "PLAN_LOC"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "FACTORY_LOC"
+          }
+        }
+      ],
+      "@UI.Facets": [
+        {
+          "$Type": "UI.CollectionFacet",
+          "ID": "FactoryLocation",
+          "Label": "Demand - Plan - Factory Location",
+          "Facets": [
+            {
+              "$Type": "UI.ReferenceFacet",
+              "Label": "Demand - Plan - Factory Location",
+              "Target": "@UI.FieldGroup#Details"
+            }
+          ]
+        }
+      ],
+      "projection": {
+        "from": {
+          "ref": [
+            "cp.FACTORY_SALESLOC"
+          ]
+        }
+      },
+      "elements": {
+        "LOCATION_ID": {
+          "@Common.ValueList.$Type": "Common.ValueListType",
+          "@Common.ValueList.Label": "Location",
+          "@Common.ValueList.CollectionPath": "getLocation",
+          "@Common.ValueList.Parameters": [
+            {
+              "$Type": "Common.ValueListParameterOut",
+              "LocalDataProperty": {
+                "=": "LOCATION_ID"
+              },
+              "ValueListProperty": "LOCATION_ID"
+            }
+          ],
+          "@title": "Demand Location ",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "@Common.ValueList.$Type": "Common.ValueListType",
+          "@Common.ValueList.Label": "Products",
+          "@Common.ValueList.CollectionPath": "getLocProd",
+          "@Common.ValueList.Parameters": [
+            {
+              "$Type": "Common.ValueListParameterInOut",
+              "LocalDataProperty": {
+                "=": "PRODUCT_ID"
+              },
+              "ValueListProperty": "PRODUCT_ID"
+            },
+            {
+              "$Type": "Common.ValueListParameterIn",
+              "LocalDataProperty": {
+                "=": "LOCATION_ID"
+              },
+              "ValueListProperty": "LOCATION_ID"
+            }
+          ],
+          "@title": "Product",
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+        "PLAN_LOC": {
+          "@Common.ValueList.$Type": "Common.ValueListType",
+          "@Common.ValueList.Label": "Location",
+          "@Common.ValueList.CollectionPath": "getLocation",
+          "@Common.ValueList.Parameters": [
+            {
+              "$Type": "Common.ValueListParameterOut",
+              "LocalDataProperty": {
+                "=": "PLAN_LOC"
+              },
+              "ValueListProperty": "LOCATION_ID"
+            }
+          ],
+          "@title": "Planning Location ",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "FACTORY_LOC": {
+          "@Common.ValueList.$Type": "Common.ValueListType",
+          "@Common.ValueList.Label": "Location",
+          "@Common.ValueList.CollectionPath": "getLocation",
+          "@Common.ValueList.Parameters": [
+            {
+              "$Type": "Common.ValueListParameterOut",
+              "LocalDataProperty": {
+                "=": "FACTORY_LOC"
+              },
+              "ValueListProperty": "LOCATION_ID"
+            }
+          ],
+          "@title": "Factory Location ",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        }
       }
     },
     "IBPImportSrv": {

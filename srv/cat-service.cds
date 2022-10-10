@@ -154,7 +154,7 @@ service CatalogService @(impl : './lib/cat-service.js'){
     function genpvs(NODE_TYPE : String(2), CHILD_NODE : String(50), PARENT_NODE : String(50), ACCESS_NODES : String(50), NODE_DESC : String(200), UPPERLIMIT : Integer, LOWERLIMIT : Integer, FLAG : String(1))                                                                  returns array of getPVSNodes;
        // Gen Full Configured Demand
     function gen_FullConfigDemand(LOCATION_ID : String(4), PRODUCT_ID : String(40)) returns String;
-    function getCompReqFWeekly(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), COMPONENT : String(40), STRUCNODE : String(50), FROMDATE : Date, TODATE : Date, MODEL_VERSION : String(20))                                        returns array of ds.compreq;
+    function getCompReqFWeekly(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), COMPONENT : String(40), STRUCNODE : String(50), FROMDATE : Date, TODATE : Date, MODEL_VERSION : String(20), CRITICALKEY: String(1))                                        returns array of ds.compreq;
     // Assembly Component weekly
     function getAsmbCompReqFWeekly(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), FROMDATE : Date, TODATE : Date, MODEL_VERSION : String(20))                                                                                    returns array of ds.compreq;
    
