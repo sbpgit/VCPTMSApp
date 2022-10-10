@@ -795,11 +795,40 @@ module.exports = (srv) => {
     });
     srv.on("ImportECCSalesh", async (req) => {
         var flag = '';
+<<<<<<< HEAD
+=======
+        // remove history data from Sales tables
+
+        const lsSales = await SELECT.one
+            .columns('VALUE')
+            .from('CP_PARAMETER_VALUES')
+            .where(`VALUE = 4 `);
+        let vFromDate = new Date();
+        vFromDate.setDate(vFromDate.getDate() - parseInt(lsSales.VALUE));
+        vFromDate = vFromDate.toISOString().split('Z')[0].split('T')[0];
+
+        try {
+            await DELETE.from('CP_SALESH')
+                .where(`MAT_AVAILDATE  < '${vFromDate}'`);
+            await cds.run(
+                `DELETE FROM "CP_SALESH_CONFIG" WHERE SALES_DOC IN ( SELECT SALES_DOC
+                    FROM "CP_SALESH"
+                    WHERE MAT_AVAILDATE  < '`+ vFromDate + `')`);
+        }
+        catch (e) {
+
+        }
+>>>>>>> 09d08e11b458224b21b5a4d68078d8f976c31ca2
         try {
             const dbClass = require("sap-hdb-promisfied")
             let dbConn = new dbClass(await dbClass.createConnectionFromEnv())
             const sp = await dbConn.loadProcedurePromisified(null, '"FG_SALESH_SP"')
             const output = await dbConn.callProcedurePromisified(sp, [])
+<<<<<<< HEAD
+=======
+            const spcfg = await dbConn.loadProcedurePromisified(null, '"FG_SALESHCFG_SP"')
+            const outputcfg = await dbConn.callProcedurePromisified(spcfg, [])
+>>>>>>> 09d08e11b458224b21b5a4d68078d8f976c31ca2
             console.log(output.results);
             flag = 'X';
         } catch (error) {

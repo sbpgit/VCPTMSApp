@@ -1,6 +1,10 @@
 //Class for Generic Functions
+<<<<<<< HEAD
+
+=======
 const xsenv = require("@sap/xsenv");
 const JobSchedulerClient = require("@sap/jobs-client");
+>>>>>>> 09d08e11b458224b21b5a4d68078d8f976c31ca2
 class GenFunctions {
     constructor() {
 
@@ -150,6 +154,11 @@ class GenFunctions {
     static log(lMessage) {
         console.log(lMessage)
     }
+<<<<<<< HEAD
+
+    static logMessage(lMessage) {
+        console.log(lMessage);
+=======
     static getJobscheduler(req) {
 
         xsenv.loadEnv();
@@ -167,7 +176,9 @@ class GenFunctions {
             req.error("no jobscheduler service instance found");
         }
     }
-    static logMessage(req, lMessage) {
+    static async logMessage(req, lMessage) {
+        console.log(lMessage);
+
         let errorObj = {};
         errorObj["success"] = true;
         errorObj["message"] = lMessage; 
@@ -185,6 +196,7 @@ class GenFunctions {
                 }
             });
         }
+>>>>>>> 09d08e11b458224b21b5a4d68078d8f976c31ca2
     }
 
     static async getParameterValue(lParameter) {

@@ -14,13 +14,20 @@ class SOFunctions {
      * Generate Unique ID
      * @param {Data} adata 
      */
-    async genUniqueID(adata, req) {
-        GenF.logMessage(req, 'Started Processing Unique ID');
-        
-        GenF.logMessage(req, 'MESSAGE 2');
-        console.log("Execution started");
+<<<<<<< HEAD
+    async genUniqueID(adata) {
+
         await this.processUniqueID(adata.LOCATION_ID, adata.PRODUCT_ID, '');
 
+=======
+    async genUniqueID(adata, req) {
+        GenF.logMessage(req, 'Started Sales Orders Processing');
+        
+        await this.processUniqueID(adata.LOCATION_ID, adata.PRODUCT_ID, '');
+
+        GenF.logMessage(req, 'Completed Sales Orders Processing');
+
+>>>>>>> 09d08e11b458224b21b5a4d68078d8f976c31ca2
     }
 
 /**

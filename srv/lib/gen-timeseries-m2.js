@@ -9,10 +9,14 @@ class GenTimeseriesM2 {
      * Generate Timeseries
      */
     async genTimeseries(adata, req) {
-        
-        GenF.logMessage(req, `Started history timeseries`);  
+
+        await GenF.logMessage(req, `Started history timeseries: ${adata}`);
 
         let lMainProduct = '';
+        let lFlag = '';
+
+        let liPrimaryID = [];
+        let lsPrimaryID = {};
         let lsMainProduct = await SELECT.one
             .from('CP_PARTIALPROD_INTRO')
             .columns('REF_PRODID')
@@ -27,8 +31,7 @@ class GenTimeseriesM2 {
             lMainProduct = lsMainProduct.REF_PRODID;
         }
         // Get Sales Count Information
-
-        const liPrimaryID = await SELECT.from('V_UNIQUE_ID')
+        const liPrimaryIDMain = await SELECT.from('V_UNIQUE_ID')
             .columns(["UNIQUE_ID",
                 "PRODUCT_ID",
                 "LOCATION_ID",
@@ -47,6 +50,39 @@ class GenTimeseriesM2 {
                 }
 
             );
+
+        const lipartialchar = await cds.run(
+            `SELECT *
+        FROM "V_PARTIALPRODCHAR"
+        WHERE "LOCATION_ID" = '` + adata.LOCATION_ID + `'
+        AND ( "PRODUCT_ID" = '` + lMainProduct + `'
+        OR "REF_PRODID" = '` + lMainProduct + `' )`
+        );
+
+        for (let i = 0; i < liPrimaryIDMain.length; i++) {
+            lFlag = '';
+            for (let j = 0; j < lipartialchar.length; j++) {
+                if (lipartialchar[j].CHAR_NUM === liPrimaryIDMain[i].CHAR_NUM &&
+                    lipartialchar[j].CHARVAL_NUM === liPrimaryIDMain[i].CHARVAL_NUM) {
+                    lFlag = 'X';
+                    break;
+                }
+            }
+            if (lFlag !== 'X') {
+                lsPrimaryID.UNIQUE_ID = GenF.parse(liPrimaryIDMain[i].UNIQUE_ID);
+                lsPrimaryID.PRODUCT_ID = GenF.parse(liPrimaryIDMain[i].PRODUCT_ID);
+                lsPrimaryID.LOCATION_ID = GenF.parse(liPrimaryIDMain[i].LOCATION_ID);
+                lsPrimaryID.UNIQUE_DESC = GenF.parse(liPrimaryIDMain[i].UNIQUE_DESC);
+                lsPrimaryID.UID_TYPE = GenF.parse(liPrimaryIDMain[i].UID_TYPE);
+                lsPrimaryID.ACTIVE = GenF.parse(liPrimaryIDMain[i].ACTIVE);
+                lsPrimaryID.CHAR_NUM = GenF.parse(liPrimaryIDMain[i].CHAR_NUM);
+                lsPrimaryID.CHARVAL_NUM = GenF.parse(liPrimaryIDMain[i].CHARVAL_NUM);
+                liPrimaryID.push(GenF.parse(lsPrimaryID));
+                lsPrimaryID = {};                
+            }
+        }
+
+
         // const liPrimaryID = await cds.run(`SELECT UNIQUE_ID,
         //                                 PRODUCT_ID,
         //                                 LOCATION_ID,
@@ -196,13 +232,12 @@ class GenTimeseriesM2 {
 
         }
 
-        GenF.logMessage(req, `Completed history timeseries`);  
-        // await this.genPrediction(adata);
+        await GenF.logMessage(req, `Completed history timeseries`);
     }
 
     async genTimeseriesF(adata, req) {
 
-        GenF.logMessage(req, `Started future timeseries`);  
+        await GenF.logMessage(req, `Started future timeseries: ${adata}`);
 
         /** Get Future Plan */
         const liFutureCharPlan = await cds.run(
@@ -216,7 +251,7 @@ class GenTimeseriesM2 {
                     SCENARIO,
                     WEEK_DATE`
         );
-        
+
         // console.log();
         await DELETE.from('CP_TS_OBJDEP_CHARHDR_F')
             .where(`LOCATION_ID = '${adata.LOCATION_ID}' 
@@ -234,7 +269,7 @@ class GenTimeseriesM2 {
         else {
             lMainProduct = lsMainProduct.REF_PRODID;
         }
-        console.log("Main prod:"+ lMainProduct);
+        console.log("Main prod:" + lMainProduct);
         // Get Sales Count Information
         const liPrimaryID = await SELECT.from('V_UNIQUE_ID')
             .columns(["UNIQUE_ID",
@@ -256,7 +291,7 @@ class GenTimeseriesM2 {
 
             ).
             orderBy("UNIQUE_ID", "CHAR_NUM");
-        console.log("Primary ID:"+ liPrimaryID.length);
+        console.log("Primary ID:" + liPrimaryID.length);
         let liObjdepF = [];
         let lsFutureDemand = {};
         for (let cntFC = 0; cntFC < liFutureCharPlan.length; cntFC++) {
@@ -301,10 +336,10 @@ class GenTimeseriesM2 {
                     lsObjdepF.OBJ_COUNTER = 1;
                     lsObjdepF.ROW_ID = GenF.parse(lRowID);
                     lsObjdepF.SUCCESS = parseInt(liFutureCharPlan[cntFC].OPT_QTY);
-                    
+
                     lsObjdepF.SUCCESS_RATE = 0
-                    if(lsFutureDemand.QUANTITY > 0){
-                    lsObjdepF.SUCCESS_RATE = (parseInt(liFutureCharPlan[cntFC].OPT_QTY) * 100 / parseInt(lsFutureDemand.QUANTITY)).toFixed(2);
+                    if (lsFutureDemand.QUANTITY > 0) {
+                        lsObjdepF.SUCCESS_RATE = (parseInt(liFutureCharPlan[cntFC].OPT_QTY) * 100 / parseInt(lsFutureDemand.QUANTITY)).toFixed(2);
                     }
                     liObjdepF.push(GenF.parse(lsObjdepF));
                 }
@@ -317,34 +352,34 @@ class GenTimeseriesM2 {
                 liFutureCharPlan[cntFC].WEEK_DATE !== liFutureCharPlan[GenF.addOne(cntFC, liFutureCharPlan.length)].WEEK_DATE ||
                 cntFC === GenF.addOne(cntFC, liFutureCharPlan.length)) {
                 if (liObjdepF.length > 0) {
-                    console.log("CP_TS_OBJDEP_CHARHDR_F: "+ liObjdepF.length);
-                    try{
-                    await INSERT(liObjdepF).into('CP_TS_OBJDEP_CHARHDR_F');
+                    console.log("CP_TS_OBJDEP_CHARHDR_F: " + liObjdepF.length);
+                    try {
+                        await INSERT(liObjdepF).into('CP_TS_OBJDEP_CHARHDR_F');
                     }
-                    catch(e){
+                    catch (e) {
                         console.log("error");
                     }
                 }
             }
         }
 
-        GenF.logMessage(req, `Completed future timeseries`);          
+        await GenF.logMessage(req, `Completed future timeseries`);
     }
 
     async genPrediction(adata, req) {
 
-        GenF.logMessage(req, `Started Fully Configured Requirement Generation`);  
+        await GenF.logMessage(req, `Started Fully Configured Requirement Generation: ${adata}`);
 
         const lDate = new Date();
         const lStartDate = new Date(
             lDate.getFullYear(),
             lDate.getMonth(),
             lDate.getDate() + parseInt(await GenF.getParameterValue(1))
-        );        
+        );
 
         let liPrediction = [];
         liPrediction = await SELECT.from('CP_TS_PREDICTIONS')
-                                         .where(`CAL_DATE    > '${lStartDate.toISOString().split("T")[0]}'
+            .where(`CAL_DATE    > '${lStartDate.toISOString().split("T")[0]}'
                                              AND LOCATION_ID = '${adata.LOCATION_ID}' 
                                              AND PRODUCT_ID  = '${adata.PRODUCT_ID}' 
                                              AND OBJ_TYPE    = 'PI'`);
@@ -379,21 +414,20 @@ class GenTimeseriesM2 {
                                                     A."QUANTITY",
                                                     B.MODEL_VERSION
                                                 ORDER BY WEEK_DATE ASC;`);
-        
+
         for (let cntPre = 0; cntPre < liPrediction.length; cntPre++) {
             for (let cntNor = 0; cntNor < liNormalize.length; cntNor++) {
-                if(liPrediction[cntPre].VERSION === liNormalize[cntNor].VERSION &&
+                if (liPrediction[cntPre].VERSION === liNormalize[cntNor].VERSION &&
                     liPrediction[cntPre].SCENARIO === liNormalize[cntNor].SCENARIO &&
                     liPrediction[cntPre].CAL_DATE === liNormalize[cntNor].WEEK_DATE &&
-                    liPrediction[cntPre].MODEL_VERSION === liNormalize[cntNor].MODEL_VERSION ) 
-                    {
-                        let lConverted = liPrediction[cntPre].PREDICTED * liNormalize[cntNor].FACTOR;
-                        liPrediction[cntPre].PREDICTED = GenF.parse(lConverted);
-                        break;
-                    }
+                    liPrediction[cntPre].MODEL_VERSION === liNormalize[cntNor].MODEL_VERSION) {
+                    let lConverted = liPrediction[cntPre].PREDICTED * liNormalize[cntNor].FACTOR;
+                    liPrediction[cntPre].PREDICTED = GenF.parse(lConverted);
+                    break;
+                }
             }
         }
-        
+
 
         let liPriQty = [];
         liPriQty = await cds.run(
@@ -460,7 +494,7 @@ class GenTimeseriesM2 {
             liCir = [];
         }
 
-//Rounding the output
+        //Rounding the output
         let liRound = await cds.run(`SELECT 
                                     C."LOCATION_ID",
                                     C."PRODUCT_ID",
@@ -522,31 +556,31 @@ class GenTimeseriesM2 {
 
 
 
-    for (let cntCR = 0; cntCR < liCIRRound.length; cntCR++) {
-        for (let cntR = 0; cntR < liRound.length; cntR++) {
-            if(liRound[cntR].LOCATION_ID === liCIRRound[cntCR].LOCATION_ID &&
-                liRound[cntR].PRODUCT_ID === liCIRRound[cntCR].PRODUCT_ID &&
-                liRound[cntR].WEEK_DATE === liCIRRound[cntCR].WEEK_DATE &&
-                liRound[cntR].MODEL_VERSION === liCIRRound[cntCR].MODEL_VERSION &&
-                liRound[cntR].VERSION === liCIRRound[cntCR].VERSION &&
-                liRound[cntR].SCENARIO === liCIRRound[cntCR].SCENARIO &&
-                liRound[cntR].METHOD === liCIRRound[cntCR].METHOD &&
-                liRound[cntR].DIFF > 0){  
-                    await cds.run(`UPDATE CP_CIR_GENERATED SET CIR_QTY = CIR_QTY + ${parseInt(liRound[cntR].DIFF)}
-                              WHERE LOCATION_ID = '${liCIRRound[cntCR].LOCATION_ID}'
-                              AND PRODUCT_ID = '${liCIRRound[cntCR].PRODUCT_ID}'
-                              AND WEEK_DATE = '${liCIRRound[cntCR].WEEK_DATE}'
-                              AND CIR_ID = '${liCIRRound[cntCR].CIR_ID}'
-                              AND MODEL_VERSION = '${liCIRRound[cntCR].MODEL_VERSION}'
-                              AND VERSION = '${liCIRRound[cntCR].VERSION}'
-                              AND SCENARIO = '${liCIRRound[cntCR].SCENARIO}'
-                              AND METHOD = '${liCIRRound[cntCR].METHOD}'`);
+        for (let cntCR = 0; cntCR < liCIRRound.length; cntCR++) {
+            for (let cntR = 0; cntR < liRound.length; cntR++) {
+                if (liRound[cntR].LOCATION_ID === liCIRRound[cntCR].LOCATION_ID &&
+                    liRound[cntR].PRODUCT_ID === liCIRRound[cntCR].PRODUCT_ID &&
+                    liRound[cntR].WEEK_DATE === liCIRRound[cntCR].WEEK_DATE &&
+                    liRound[cntR].MODEL_VERSION === liCIRRound[cntCR].MODEL_VERSION &&
+                    liRound[cntR].VERSION === liCIRRound[cntCR].VERSION &&
+                    liRound[cntR].SCENARIO === liCIRRound[cntCR].SCENARIO &&
+                    liRound[cntR].METHOD === liCIRRound[cntCR].METHOD &&
+                    liRound[cntR].DIFF > 0) {
+                    // await cds.run(`UPDATE CP_CIR_GENERATED SET CIR_QTY = CIR_QTY + ${parseInt(liRound[cntR].DIFF)}
+                    //           WHERE LOCATION_ID = '${liCIRRound[cntCR].LOCATION_ID}'
+                    //           AND PRODUCT_ID = '${liCIRRound[cntCR].PRODUCT_ID}'
+                    //           AND WEEK_DATE = '${liCIRRound[cntCR].WEEK_DATE}'
+                    //           AND CIR_ID = '${liCIRRound[cntCR].CIR_ID}'
+                    //           AND MODEL_VERSION = '${liCIRRound[cntCR].MODEL_VERSION}'
+                    //           AND VERSION = '${liCIRRound[cntCR].VERSION}'
+                    //           AND SCENARIO = '${liCIRRound[cntCR].SCENARIO}'
+                    //           AND METHOD = '${liCIRRound[cntCR].METHOD}'`);
                     liRound[cntR].DIFF = GenF.parse(0);
+                }
             }
         }
-    }
 
-    GenF.logMessage(req, `Completed Fully Configured Requirement Generation`);  
+        await GenF.logMessage(req, `Completed Fully Configured Requirement Generation`);
 
     }
 

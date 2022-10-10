@@ -166,7 +166,7 @@
   ],
   "xsuaa": [
     {
-      "binding_guid": "b1028d5c-412b-4283-9107-21a932832b29",
+      "binding_guid": "98ca75f9-9a8c-40cd-8470-0f32947e447c",
       "binding_name": null,
       "credentials": {
         "apiurl": "https://api.authentication.us10.hana.ondemand.com",
@@ -221,4 +221,4 @@
   ],
   "users": null
 }
-}
+    }
