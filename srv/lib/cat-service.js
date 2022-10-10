@@ -125,6 +125,7 @@ module.exports = (srv) => {
             vCompIndex,
             lsDates = {};
         let columnname = "WEEK";
+        let liComp = [];
 
         const liCompQty = await cds.run(
             `
@@ -153,7 +154,48 @@ module.exports = (srv) => {
                       "COMPONENT" ASC,
                       "WEEK_DATE" ASC`
         );
-        const liComp = await cds.run(
+        if(req.data.CRITICALKEY === 'X') {
+            liComp = await cds.run(
+                `
+              SELECT DISTINCT "V_ASMREQ_PRODCONSD"."LOCATION_ID",
+                               "V_ASMREQ_PRODCONSD"."PRODUCT_ID",
+                               "V_ASMREQ_PRODCONSD"."VERSION",
+                               "V_ASMREQ_PRODCONSD"."SCENARIO",
+                               "V_ASMREQ_PRODCONSD"."ITEM_NUM",
+                               "V_ASMREQ_PRODCONSD"."COMPONENT"
+              FROM "V_ASMREQ_PRODCONSD"
+             INNER JOIN "CP_CRITICAL_COMP"
+                ON "V_ASMREQ_PRODCONSD"."LOCATION_ID" = "CP_CRITICAL_COMP"."LOCATION_ID"
+               AND "V_ASMREQ_PRODCONSD"."PRODUCT_ID"  = "CP_CRITICAL_COMP"."PRODUCT_ID"
+               AND "V_ASMREQ_PRODCONSD"."ITEM_NUM"    = "CP_CRITICAL_COMP"."ITEM_NUM"
+             WHERE "V_ASMREQ_PRODCONSD"."LOCATION_ID" = '` +
+                req.data.LOCATION_ID +
+                `' AND "V_ASMREQ_PRODCONSD"."PRODUCT_ID" = '` +
+                req.data.PRODUCT_ID +
+                `' AND "V_ASMREQ_PRODCONSD"."VERSION" = '` +
+                req.data.VERSION +
+                `' AND "V_ASMREQ_PRODCONSD"."SCENARIO" = '` +
+                req.data.SCENARIO +
+                `' AND ( "V_ASMREQ_PRODCONSD"."WEEK_DATE" <= '` +
+                vDateTo +
+                `'
+                    AND "V_ASMREQ_PRODCONSD"."WEEK_DATE" >= '` +
+                vDateFrom +
+                `') AND "V_ASMREQ_PRODCONSD"."MODEL_VERSION" = '` +
+                req.data.MODEL_VERSION +
+                `'  AND "CP_CRITICAL_COMP"."CRITICALKEY" = '` +
+                 req.data.CRITICALKEY + `'
+                   ORDER BY 
+                        "LOCATION_ID" ASC, 
+                        "PRODUCT_ID" ASC,
+                        "VERSION" ASC,
+                        "SCENARIO" ASC,
+                        "ITEM_NUM" ASC,
+                        "COMPONENT" ASC`
+            );
+        } else {
+        // const liComp = await cds.run(
+           liComp = await cds.run(
             `
           SELECT DISTINCT "LOCATION_ID",
                           "PRODUCT_ID",
@@ -186,6 +228,7 @@ module.exports = (srv) => {
                     "ITEM_NUM" ASC,
                     "COMPONENT" ASC`
         );
+        }
         var vDateSeries = vDateFrom;
         let dDate = new Date(vDateSeries);
         let dDay = dDate.getDay();

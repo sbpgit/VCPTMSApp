@@ -795,6 +795,8 @@ module.exports = (srv) => {
     });
     srv.on("ImportECCSalesh", async (req) => {
         var flag = '';
+<<<<<<< HEAD
+=======
         // remove history data from Sales tables
 
         const lsSales = await SELECT.one
@@ -816,13 +818,17 @@ module.exports = (srv) => {
         catch (e) {
 
         }
+>>>>>>> 09d08e11b458224b21b5a4d68078d8f976c31ca2
         try {
             const dbClass = require("sap-hdb-promisfied")
             let dbConn = new dbClass(await dbClass.createConnectionFromEnv())
             const sp = await dbConn.loadProcedurePromisified(null, '"FG_SALESH_SP"')
             const output = await dbConn.callProcedurePromisified(sp, [])
+<<<<<<< HEAD
+=======
             const spcfg = await dbConn.loadProcedurePromisified(null, '"FG_SALESHCFG_SP"')
             const outputcfg = await dbConn.callProcedurePromisified(spcfg, [])
+>>>>>>> 09d08e11b458224b21b5a4d68078d8f976c31ca2
             console.log(output.results);
             flag = 'X';
         } catch (error) {
