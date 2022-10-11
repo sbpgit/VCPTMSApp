@@ -820,11 +820,11 @@ module.exports = (srv) => {
         }
         */
         switch(await GenFunctions.getParameterValue('5')){
-            case 'Components':
+            case 'M1':
                 const obgenTimeseries = new GenTimeseries();
                 await obgenTimeseries.genTimeseries(req.data, req);               
                 break;
-            case 'Fully Configured':
+            case 'M2':
                 const obgenTimeseriesM2 = new GenTimeseriesM2();
                 await obgenTimeseriesM2.genTimeseries(req.data, req);                
                 break;
@@ -846,11 +846,11 @@ module.exports = (srv) => {
         }*/
 
         switch(await GenFunctions.getParameterValue('5')){
-            case 'Components':
+            case 'M1':
                 const obgenTimeseries = new GenTimeseries();
                 await obgenTimeseries.genTimeseriesF(req.data, req);             
                 break;
-            case 'Fully Configured':
+            case 'M2':
                 const obgenTimeseriesM2 = new GenTimeseriesM2();
                 await obgenTimeseriesM2.genTimeseriesF(req.data, req);              
                 break;
@@ -876,11 +876,11 @@ module.exports = (srv) => {
         */
 
         switch(await GenFunctions.getParameterValue('5')){
-            case 'Components':
+            case 'M1':
                 const obgenTimeseries = new GenTimeseries();
                 await obgenTimeseries.genTimeseries(req.data, req);               
                 break;
-            case 'Fully Configured':
+            case 'M2':
                 const obgenTimeseriesM2 = new GenTimeseriesM2();
                 await obgenTimeseriesM2.genTimeseries(req.data, req);                
                 break;
@@ -905,11 +905,11 @@ module.exports = (srv) => {
         let value = await GenFunctions.getParameterValue('5');
         console.log(value);
         switch(await GenFunctions.getParameterValue('5')){
-            case 'Components':
+            case 'M1':
                 const obgenTimeseries = new GenTimeseries();
                 await obgenTimeseries.genTimeseriesF(req.data, req);             
                 break;
-            case 'Fully Configured':
+            case 'M2':
                 const obgenTimeseriesM2 = new GenTimeseriesM2();
                 await obgenTimeseriesM2.genTimeseriesF(req.data, req);              
                 break;

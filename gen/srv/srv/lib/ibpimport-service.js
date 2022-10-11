@@ -1264,7 +1264,7 @@ module.exports = cds.service.impl(async function () {
         },
             vsales, flag = '';
 
-        GenF.logMessage(req, `Started exporting Sales History and Configurations`);
+        await GenF.logMessage(req, `Started exporting Sales History and Configurations`);
         const lisales = await cds.run(
             `
                 SELECT  "WEEK_DATE",
@@ -1762,7 +1762,7 @@ module.exports = cds.service.impl(async function () {
     this.on("generateFDemandQty", async (request) => {
         var flag;
 
-        GenF.logMessage(req, `Started importing Future Demand`);
+        await GenF.logMessage(req, `Started importing Future Demand`);
         var resUrl = "/SBPVCP?$select=PRDID,LOCID,PERIODID4_TSTAMP,TOTALDEMANDOUTPUT,UOMTOID,VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "'and UOMTOID eq 'EA'";
 
         // req.headers['Application-Interface-Key'] = vAIRKey;
