@@ -1,81 +1,19 @@
 {
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-  "utils/locate-reuse-libs-dbg.js": 1663252453908,
-=======
-<<<<<<< HEAD
-  "index.html": 1663325350070,
-=======
-<<<<<<< HEAD
+  "model/models-dbg.js": 1663252453908,
   "controller/Home.controller.js": 1664884912548,
-  "manifest.json": 1665401557921,
-=======
-<<<<<<< HEAD
-  "model/models-dbg.js": 1663325350070,
->>>>>>> 49bc0d19031ebd0f26d3b2d72b8e022a555157b4
-  "Component.js": 1663325350066,
-  "i18n/i18n.properties": 1665415123035,
-  "utils/locate-reuse-libs.js": 1663325350070,
-  "model/models.js": 1663325350070,
-  "controller/Home.controller.js": 1665402576327,
-  "controller/CreateJob.controller.js": 1665415123031,
-  "controller/BaseController.js": 1663325350066,
-  "controller/App.controller.js": 1663325350066,
-  "manifest.json": 1665415798284,
-  "manifest-bundle.zip": 1665415798301,
-  "Component-preload.js": 1665415799228,
-  "controller/CreateJob-dbg.controller.js": 1665415123031,
-  "model/models-dbg.js": 1663325350070,
-  "controller/Home-dbg.controller.js": 1665402576327,
-  "utils/locate-reuse-libs-dbg.js": 1663325350070,
-  "controller/BaseController-dbg.js": 1663325350066,
-  "controller/App-dbg.controller.js": 1663325350066,
-  "Component-dbg.js": 1663325350066,
-  "view/VersionDialog.fragment.xml": 1663325350070,
-  "view/UpdateJobDialog.fragment.xml": 1663325350070,
-  "view/ScheLog.fragment.xml": 1663325350070,
-  "view/ScenarioDialog.fragment.xml": 1663325350070,
-  "view/RunLogData.fragment.xml": 1663325350070,
-  "view/ProdDialog.fragment.xml": 1663325350070,
-  "view/PredDialog.fragment.xml": 1663325350070,
-  "view/ObjDepDialog.fragment.xml": 1663325350070,
-  "view/LocDialog.fragment.xml": 1663325350070,
-  "view/JobData.fragment.xml": 1663325350070,
-  "view/Home.view.xml": 1663325350070,
-  "view/CustomerDialog.fragment.xml": 1663325350070,
-  "view/CreateJobDetails.fragment.xml": 1663325350070,
-  "view/CreateJob.view.xml": 1665415123035,
-  "view/ClassDialog.fragment.xml": 1663325350070,
-  "view/App.view.xml": 1663325350070,
-<<<<<<< HEAD
-  "css/style.css": 1665415123031,
-  "index.html": 1665415123035
-=======
-  "css/style.css": 1663325350066,
-<<<<<<< HEAD
-  "i18n/i18n.properties": 1663325350070
-=======
-  "index.html": 1663325350070
-=======
-  "view/CustomerDialog.fragment.xml": 1663252453908,
-  "controller/CreateJob.controller.js": 1664884912548,
->>>>>>> afa35db689df46fd31db33107ed39f3b070a978a
->>>>>>> 820694d3be112cf646763aec289fc618da7806c1
   "utils/locate-reuse-libs.js": 1663252453908,
-  "manifest.json": 1665410775237,
   "model/models.js": 1663252453908,
-  "controller/Home.controller.js": 1664884912548,
-  "controller/CreateJob.controller.js": 1664884912548,
+  "manifest.json": 1665477735559,
+  "controller/CreateJob.controller.js": 1665415436859,
   "controller/BaseController.js": 1663252453904,
   "controller/App.controller.js": 1663252453904,
   "Component.js": 1663252453904,
-  "manifest-bundle.zip": 1665410775256,
-  "Component-preload.js": 1665410776194,
-  "controller/CreateJob-dbg.controller.js": 1664884912548,
-  "model/models-dbg.js": 1663252453908,
+  "manifest-bundle.zip": 1665477735577,
+  "Component-preload.js": 1665477736624,
+  "controller/CreateJob-dbg.controller.js": 1665415436859,
+  "i18n/i18n.properties": 1665415436859,
   "controller/Home-dbg.controller.js": 1664884912548,
-  "i18n/i18n.properties": 1663252453904,
+  "utils/locate-reuse-libs-dbg.js": 1663252453908,
   "controller/BaseController-dbg.js": 1663252453904,
   "controller/App-dbg.controller.js": 1663252453904,
   "Component-dbg.js": 1663252453904,
@@ -92,15 +30,9 @@
   "view/Home.view.xml": 1663252453908,
   "view/CustomerDialog.fragment.xml": 1663252453908,
   "view/CreateJobDetails.fragment.xml": 1663252453908,
-  "view/CreateJob.view.xml": 1664887570950,
+  "view/CreateJob.view.xml": 1665415436859,
   "view/ClassDialog.fragment.xml": 1663252453908,
   "view/App.view.xml": 1663252453908,
-  "css/style.css": 1663252453904,
-  "index.html": 1663252453904
-<<<<<<< HEAD
-=======
->>>>>>> 09d08e11b458224b21b5a4d68078d8f976c31ca2
->>>>>>> 563e91a14bac4b8f2098650e30e4bda1ccb41943
->>>>>>> 820694d3be112cf646763aec289fc618da7806c1
->>>>>>> 49bc0d19031ebd0f26d3b2d72b8e022a555157b4
+  "css/style.css": 1665415436859,
+  "index.html": 1665415436859
 }

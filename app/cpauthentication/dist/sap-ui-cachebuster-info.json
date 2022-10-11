@@ -1,75 +1,22 @@
 {
-<<<<<<< HEAD
-  "Component.js": 1661869074967,
-  "controller/Home.controller.js": 1661869074967,
-=======
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-  "view/App.view.xml": 1661869074967,
-=======
-<<<<<<< HEAD
-  "i18n/i18n.properties": 1660899931684,
-  "manifest.json": 1665401372868,
-=======
-<<<<<<< HEAD
-  "controller/Home-dbg.controller.js": 1661869074967,
->>>>>>> 49bc0d19031ebd0f26d3b2d72b8e022a555157b4
-  "utils/locate-reuse-libs.js": 1661869074967,
-  "model/models.js": 1661869074967,
-  "manifest.json": 1665415662723,
-  "controller/BaseController.js": 1661869074967,
-  "controller/App.controller.js": 1661869074967,
-  "i18n/i18n.properties": 1661869074967,
-  "manifest-bundle.zip": 1665415662745,
-  "Component-preload.js": 1665415663189,
-  "controller/App-dbg.controller.js": 1661869074967,
-  "model/models-dbg.js": 1661869074967,
-  "controller/Home-dbg.controller.js": 1661869074967,
-  "controller/BaseController-dbg.js": 1661869074967,
-  "utils/locate-reuse-libs-dbg.js": 1661869074967,
-  "Component-dbg.js": 1661869074967,
-  "view/Home.view.xml": 1661869074967,
-  "view/App.view.xml": 1661869074967,
-  "css/style.css": 1661869074967,
-  "index.html": 1661869074967
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-=======
-  "index.html": 1660899873844,
-  "controller/BaseController.js": 1660900696526,
->>>>>>> afa35db689df46fd31db33107ed39f3b070a978a
-  "utils/locate-reuse-libs.js": 1660899873852,
->>>>>>> 820694d3be112cf646763aec289fc618da7806c1
-  "model/models.js": 1660899873852,
-  "controller/App.controller.js": 1660902081255,
-  "utils/locate-reuse-libs.js": 1660899873852,
-  "i18n/i18n.properties": 1660899931684,
-  "controller/Home.controller.js": 1661767125672,
-  "controller/BaseController.js": 1660900696526,
-  "manifest.json": 1665410664210,
-  "Component.js": 1660899873844,
-  "manifest-bundle.zip": 1665410664226,
-  "Component-preload.js": 1665410664591,
   "Component-dbg.js": 1660899873844,
+  "controller/BaseController.js": 1660900696526,
+  "utils/locate-reuse-libs.js": 1660899873852,
+  "model/models.js": 1660899873852,
+  "controller/Home.controller.js": 1661767125672,
+  "manifest.json": 1665477639450,
+  "controller/App.controller.js": 1660902081255,
+  "Component.js": 1660899873844,
+  "manifest-bundle.zip": 1665477639461,
+  "Component-preload.js": 1665477639644,
+  "controller/App-dbg.controller.js": 1660902081255,
   "model/models-dbg.js": 1660899873852,
   "controller/Home-dbg.controller.js": 1661767125672,
   "controller/BaseController-dbg.js": 1660900696526,
-  "controller/App-dbg.controller.js": 1660902081255,
   "utils/locate-reuse-libs-dbg.js": 1660899873852,
+  "i18n/i18n.properties": 1660899931684,
   "view/Home.view.xml": 1660911313350,
   "view/App.view.xml": 1660899873856,
   "css/style.css": 1660899873852,
   "index.html": 1660899873844
-<<<<<<< HEAD
-=======
-=======
-  "i18n/i18n.properties": 1660899931684
->>>>>>> 09d08e11b458224b21b5a4d68078d8f976c31ca2
->>>>>>> afa35db689df46fd31db33107ed39f3b070a978a
->>>>>>> 563e91a14bac4b8f2098650e30e4bda1ccb41943
->>>>>>> 820694d3be112cf646763aec289fc618da7806c1
->>>>>>> 49bc0d19031ebd0f26d3b2d72b8e022a555157b4
 }
