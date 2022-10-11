@@ -1,5 +1,9 @@
 {
 <<<<<<< HEAD
+  "view/charValue.fragment.xml": 1662628674144,
+  "controller/App.controller.js": 1661869075015,
+=======
+<<<<<<< HEAD
   "controller/Home.controller.js": 1663578246697,
 =======
 <<<<<<< HEAD
@@ -12,27 +16,25 @@
 <<<<<<< HEAD
   "view/ProdDialog.fragment.xml": 1661869075019,
   "controller/Detail.controller.js": 1663389922726,
+>>>>>>> 49bc0d19031ebd0f26d3b2d72b8e022a555157b4
   "utils/locate-reuse-libs.js": 1661869075019,
->>>>>>> 563e91a14bac4b8f2098650e30e4bda1ccb41943
   "model/models.js": 1661869075015,
-  "utils/locate-reuse-libs.js": 1661869075019,
-  "manifest.json": 1665414514429,
   "controller/Home.controller.js": 1663589449438,
   "controller/Detail.controller.js": 1663389922726,
   "controller/BaseController.js": 1661869075015,
-  "controller/App.controller.js": 1661869075015,
+  "manifest.json": 1665415600332,
   "Component.js": 1661869075015,
-  "manifest-bundle.zip": 1665414514444,
-  "Component-preload.js": 1665414514998,
-  "i18n/i18n.properties": 1662628674144,
+  "manifest-bundle.zip": 1665415600345,
+  "Component-preload.js": 1665415600826,
+  "utils/locate-reuse-libs-dbg.js": 1661869075019,
   "model/models-dbg.js": 1661869075015,
   "controller/Home-dbg.controller.js": 1663589449438,
   "controller/Detail-dbg.controller.js": 1663389922726,
   "controller/BaseController-dbg.js": 1661869075015,
   "controller/App-dbg.controller.js": 1661869075015,
-  "utils/locate-reuse-libs-dbg.js": 1661869075019,
+  "Component-dbg.js": 1661869075015,
   "view/className.fragment.xml": 1662628674144,
-  "view/charValue.fragment.xml": 1662628674144,
+  "i18n/i18n.properties": 1662628674144,
   "view/charName.fragment.xml": 1661869075019,
   "view/ProdDialog.fragment.xml": 1661869075019,
   "view/LocDialog.fragment.xml": 1661869075019,
@@ -42,6 +44,8 @@
   "view/App.view.xml": 1661869075019,
   "css/style.css": 1661869075015,
   "index.html": 1661869075015
+<<<<<<< HEAD
+=======
 <<<<<<< HEAD
 =======
 =======
@@ -82,4 +86,5 @@
 >>>>>>> 09d08e11b458224b21b5a4d68078d8f976c31ca2
 >>>>>>> 563e91a14bac4b8f2098650e30e4bda1ccb41943
 >>>>>>> 820694d3be112cf646763aec289fc618da7806c1
+>>>>>>> 49bc0d19031ebd0f26d3b2d72b8e022a555157b4
 }

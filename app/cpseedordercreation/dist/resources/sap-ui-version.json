@@ -2,6 +2,9 @@
 	"name": "cpapp.cpseedordercreation",
 	"version": "0.0.1",
 <<<<<<< HEAD
+	"buildTimestamp": "202210101529",
+=======
+<<<<<<< HEAD
 	"buildTimestamp": "202210101405",
 =======
 <<<<<<< HEAD
@@ -18,6 +21,7 @@
 >>>>>>> afa35db689df46fd31db33107ed39f3b070a978a
 >>>>>>> 563e91a14bac4b8f2098650e30e4bda1ccb41943
 >>>>>>> 820694d3be112cf646763aec289fc618da7806c1
+>>>>>>> 49bc0d19031ebd0f26d3b2d72b8e022a555157b4
 	"scmRevision": "",
 	"libraries": []
 }

@@ -1,37 +1,31 @@
 {
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
   "manifest.json": 1665410517242,
   "Component.js": 1659447417298,
   "utils/locate-reuse-libs.js": 1659447417302,
   "model/models.js": 1659447417302,
 =======
 <<<<<<< HEAD
+>>>>>>> 49bc0d19031ebd0f26d3b2d72b8e022a555157b4
   "view/VersionDialog.fragment.xml": 1661869074919,
-  "controller/BaseController.js": 1661869074915,
-=======
-<<<<<<< HEAD
-  "view/VersionDialog.fragment.xml": 1659447417302,
-  "model/models.js": 1659447417302,
-=======
-<<<<<<< HEAD
-  "i18n/i18n.properties": 1661869074915,
-  "controller/Detail.controller.js": 1661869074915,
->>>>>>> 563e91a14bac4b8f2098650e30e4bda1ccb41943
-  "utils/locate-reuse-libs.js": 1661869074919,
   "model/models.js": 1661869074919,
+  "utils/locate-reuse-libs.js": 1661869074919,
+  "manifest.json": 1665415487585,
   "controller/Home.controller.js": 1663589449378,
   "controller/Detail.controller.js": 1661869074915,
-  "manifest.json": 1665414426577,
+  "controller/BaseController.js": 1661869074915,
   "controller/App.controller.js": 1661869074915,
   "Component.js": 1661869074915,
-  "manifest-bundle.zip": 1665414426592,
-  "Component-preload.js": 1665414427078,
-  "controller/Home-dbg.controller.js": 1663589449378,
+  "manifest-bundle.zip": 1665415487597,
+  "Component-preload.js": 1665415488084,
+  "controller/App-dbg.controller.js": 1661869074915,
   "model/models-dbg.js": 1661869074919,
-  "utils/locate-reuse-libs-dbg.js": 1661869074919,
+  "controller/Home-dbg.controller.js": 1663589449378,
   "controller/Detail-dbg.controller.js": 1661869074915,
   "controller/BaseController-dbg.js": 1661869074915,
-  "controller/App-dbg.controller.js": 1661869074915,
+  "utils/locate-reuse-libs-dbg.js": 1661869074919,
   "Component-dbg.js": 1661869074915,
   "i18n/i18n.properties": 1661869074915,
   "view/ScenarioDialog.fragment.xml": 1661869074919,
@@ -42,6 +36,8 @@
   "view/App.view.xml": 1661869074919,
   "css/style.css": 1661869074915,
   "index.html": 1661869074915
+<<<<<<< HEAD
+=======
 <<<<<<< HEAD
 =======
 =======
@@ -75,4 +71,5 @@
 >>>>>>> 09d08e11b458224b21b5a4d68078d8f976c31ca2
 >>>>>>> 563e91a14bac4b8f2098650e30e4bda1ccb41943
 >>>>>>> 820694d3be112cf646763aec289fc618da7806c1
+>>>>>>> 49bc0d19031ebd0f26d3b2d72b8e022a555157b4
 }

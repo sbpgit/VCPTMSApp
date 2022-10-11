@@ -149,11 +149,14 @@
                                 <Column hAlign="Left" vAlign="Middle" width="400px">
                                     <Text text="{i18n>message}" />
                                 </Column>
-                                <Column hAlign="Left" vAlign="Right">
+                                <!-- <Column hAlign="Left" vAlign="Right">
                                     <Text text="{i18n>state}" />
                                 </Column>
                                 <Column hAlign="Left" vAlign="Middle">
                                     <Text text="{i18n>code}" />
+                                </Column> -->
+                                <Column hAlign="Left" vAlign="Right">
+                                    <Text text="State/ Code" />
                                 </Column>
                             </columns>
                             <items>
@@ -161,8 +164,9 @@
                                     <cells>
                                         <Text text="{time}" />
                                         <Text text="{text}" />
-                                        <Text text="{type}" />
-                                        <Text text="{code}" />
+                                        <ObjectIdentifier title="{type}" text="{code}" />
+                                        <!-- <Text text="{type}" />
+                                        <Text text="{code}" /> -->
                                     </cells>
                                 </ColumnListItem>
                             </items>

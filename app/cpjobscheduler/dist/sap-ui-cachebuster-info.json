@@ -1,26 +1,38 @@
 {
 <<<<<<< HEAD
+  "utils/locate-reuse-libs-dbg.js": 1661869074995,
+=======
+<<<<<<< HEAD
   "view/App.view.xml": 1659447417358,
   "controller/CreateJob.controller.js": 1665034690297,
 =======
   "view/CustomerDialog.fragment.xml": 1661869074995,
   "utils/locate-reuse-libs.js": 1661869074995,
   "manifest.json": 1665414496952,
+>>>>>>> 49bc0d19031ebd0f26d3b2d72b8e022a555157b4
   "model/models.js": 1661869074995,
-  "controller/Home.controller.js": 1665402576315,
-  "controller/CreateJob.controller.js": 1665402576315,
-  "controller/BaseController.js": 1661869074991,
-  "controller/App.controller.js": 1661869074991,
+  "utils/locate-reuse-libs.js": 1661869074995,
+  "manifest.json": 1665415582517,
+  "controller/ItemMaster.controller.js": 1665415123031,
+  "controller/ItemDetail.controller.js": 1665415123031,
+  "controller/Home.controller.js": 1665415123031,
+  "controller/Details.controller.js": 1665415123031,
+  "controller/CreateJob.controller.js": 1665415123031,
+  "controller/BaseController.js": 1665415123027,
+  "controller/App.controller.js": 1665415123027,
   "Component.js": 1661869074991,
-  "manifest-bundle.zip": 1665414496963,
-  "Component-preload.js": 1665414497835,
-  "controller/App-dbg.controller.js": 1661869074991,
-  "model/models-dbg.js": 1661869074995,
-  "controller/Home-dbg.controller.js": 1665402576315,
-  "controller/CreateJob-dbg.controller.js": 1665402576315,
-  "controller/BaseController-dbg.js": 1661869074991,
-  "utils/locate-reuse-libs-dbg.js": 1661869074995,
+  "manifest-bundle.zip": 1665415582529,
+  "Component-preload.js": 1665415583625,
   "Component-dbg.js": 1661869074991,
+  "model/models-dbg.js": 1661869074995,
+  "controller/ItemMaster-dbg.controller.js": 1665415123031,
+  "controller/ItemDetail-dbg.controller.js": 1665415123031,
+  "controller/Home-dbg.controller.js": 1665415123031,
+  "controller/Details-dbg.controller.js": 1665415123031,
+  "controller/CreateJob-dbg.controller.js": 1665415123031,
+  "controller/BaseController-dbg.js": 1665415123027,
+  "controller/App-dbg.controller.js": 1665415123027,
+  "i18n/i18n.properties": 1665402576315,
   "view/VersionDialog.fragment.xml": 1661869074995,
   "view/UpdateJobDialog.fragment.xml": 1661869074995,
   "view/ScheLog.fragment.xml": 1661869074995,
@@ -31,15 +43,19 @@
   "view/ObjDepDialog.fragment.xml": 1661869074995,
   "view/LocDialog.fragment.xml": 1661869074995,
   "view/JobData.fragment.xml": 1661869074995,
+  "view/ItemMaster.view.xml": 1665415123031,
+  "view/ItemDetail.view.xml": 1665415123031,
   "view/Home.view.xml": 1662969900283,
-  "i18n/i18n.properties": 1665402576315,
+  "view/Details.view.xml": 1665415123031,
+  "view/CustomerDialog.fragment.xml": 1661869074995,
   "view/CreateJobDetails.fragment.xml": 1662969900283,
-  "view/CreateJob.view.xml": 1665402576315,
+  "view/CreateJob.view.xml": 1665415123031,
   "view/ClassDialog.fragment.xml": 1661869074995,
-  "view/App.view.xml": 1661869074995,
-  "css/style.css": 1661869074991,
-<<<<<<< HEAD
+  "view/App.view.xml": 1665415123031,
+  "css/style.css": 1665415123031,
   "index.html": 1665402576315
+<<<<<<< HEAD
+=======
 =======
   "index.html": 1661869074991
 =======
@@ -85,4 +101,5 @@
 >>>>>>> 09d08e11b458224b21b5a4d68078d8f976c31ca2
 >>>>>>> 563e91a14bac4b8f2098650e30e4bda1ccb41943
 >>>>>>> 820694d3be112cf646763aec289fc618da7806c1
+>>>>>>> 49bc0d19031ebd0f26d3b2d72b8e022a555157b4
 }
