@@ -1,16 +1,26 @@
 /* Enter your custom styles here */
 
+.side-navigation-demo {
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+
+	-webkit-box-direction: normal;
+	-webkit-box-orient: vertical;
+	-webkit-flex-direction: column;
+	-ms-flex-direction: column;
+	flex-direction: column;
+
+	max-width: 15rem;
+}
+
 .boldText {
     font-weight: bold !important;
 }
 .boldunderlineText {
     font-weight: bold !important;
     text-decoration: underline !important;
-}
-
-span#__label0-text {
-    margin-left: 100px;
-    margin-top: 10px;
 }
 
 div#container-cpapp\.cpjobscheduler---CreateJob--idRbtn {

@@ -9,13 +9,9 @@ class AssemblyReq {
      * Constructor
      */
     constructor() { }
-<<<<<<< HEAD
-    async genAsmreq(adata) {
-=======
     async genAsmreq(adata, req) {
 
         GenF.logMessage(req, `Started Assembly Requirement Calculation`);  
->>>>>>> 09d08e11b458224b21b5a4d68078d8f976c31ca2
 
         const liPartialProd = await cds.run(
             `SELECT *
@@ -327,10 +323,7 @@ class AssemblyReq {
         // }
 
 
-<<<<<<< HEAD
-=======
         GenF.logMessage(req, `Completed Assembly Requirement Calculation`);  
->>>>>>> 09d08e11b458224b21b5a4d68078d8f976c31ca2
     }
 
 }

@@ -9,7 +9,7 @@ class GenTimeseries {
      * Generate Timeseries
      */
     async genTimeseries(adata, req) {
-        GenF.logMessage(req, `Started history timeseries ${adata}`);
+        await GenF.logMessage(req, `Started history timeseries ${adata}`);
         
         // Get Sales Count Information
         const liSalesCount = await cds.run(
@@ -242,13 +242,13 @@ class GenTimeseries {
 
         }
 
-        GenF.logMessage(req, `Completed history timeseries`);
+        await GenF.logMessage(req, `Completed history timeseries`);
 
     }
 
     async genTimeseriesF(adata, req) {
 
-        GenF.logMessage(req, `Started future timeseries ${adata}`);        
+        await GenF.logMessage(req, `Started future timeseries ${adata}`);        
 
         var conn = hana.createConnection(),
             stmt;
@@ -519,7 +519,7 @@ class GenTimeseries {
             "Processing time : " + lProcessTime + " Minutes"
         );
 
-        GenF.logMessage(req, `Completed future timeseries`);          
+        await GenF.logMessage(req, `Completed future timeseries`);          
     }
 
       

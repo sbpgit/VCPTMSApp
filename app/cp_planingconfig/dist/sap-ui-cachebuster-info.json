@@ -1,46 +1,71 @@
 {
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
+  "view/Home.view.xml": 1663062425256,
+  "Component.js": 1662738661022,
+=======
+<<<<<<< HEAD
+  "Component.js": 1662729348584,
+=======
+<<<<<<< HEAD
   "controller/App-dbg.controller.js": 1662738661022,
   "manifest.json": 1665401527892,
 =======
 <<<<<<< HEAD
   "controller/Home-dbg.controller.js": 1662729805850,
+>>>>>>> 563e91a14bac4b8f2098650e30e4bda1ccb41943
   "model/models.js": 1662729348592,
   "utils/locate-reuse-libs.js": 1662729348588,
-  "manifest.json": 1664783826925,
-  "controller/Home.controller.js": 1662729805850,
+  "manifest.json": 1665414705886,
+>>>>>>> 49bc0d19031ebd0f26d3b2d72b8e022a555157b4
+  "controller/Home.controller.js": 1665402071081,
   "controller/App.controller.js": 1662729348596,
+  "utils/locate-reuse-libs.js": 1662729348588,
+  "model/models.js": 1662729348592,
+  "i18n/i18n.properties": 1662729545995,
+  "manifest.json": 1665415777301,
   "Component.js": 1662729348584,
-  "manifest-bundle.zip": 1664783826934,
-  "Component-preload.js": 1664783827167,
+  "manifest-bundle.zip": 1665415777314,
+  "Component-preload.js": 1665415777618,
   "Component-dbg.js": 1662729348584,
   "model/models-dbg.js": 1662729348592,
-  "i18n/i18n.properties": 1662729545995,
+  "controller/Home-dbg.controller.js": 1665402071081,
   "controller/App-dbg.controller.js": 1662729348596,
   "utils/locate-reuse-libs-dbg.js": 1662729348588,
-  "view/MethodTyp.fragment.xml": 1662729633348,
+  "view/MethodTyp.fragment.xml": 1665400627083,
   "view/Home.view.xml": 1662972116490,
   "view/App.view.xml": 1662729608640,
   "css/style.css": 1662729348596,
   "index.html": 1662729670268
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
 =======
 >>>>>>> afa35db689df46fd31db33107ed39f3b070a978a
+>>>>>>> 820694d3be112cf646763aec289fc618da7806c1
   "utils/locate-reuse-libs.js": 1662738661022,
   "model/models.js": 1662738661022,
-  "controller/Home.controller.js": 1662738661022,
+  "controller/Home.controller.js": 1665404138198,
   "controller/App.controller.js": 1662738661022,
-  "Component.js": 1662738661022,
-  "manifest-bundle.zip": 1665401527913,
-  "Component-preload.js": 1665401528339,
+  "manifest.json": 1665410757541,
+  "manifest-bundle.zip": 1665410757559,
+  "Component-preload.js": 1665410757901,
   "model/models-dbg.js": 1662738661022,
   "utils/locate-reuse-libs-dbg.js": 1662738661022,
-  "controller/Home-dbg.controller.js": 1662738661022,
-  "i18n/i18n.properties": 1662738661022,
+  "controller/Home-dbg.controller.js": 1665404138198,
+  "controller/App-dbg.controller.js": 1662738661022,
   "Component-dbg.js": 1662738661022,
-  "view/MethodTyp.fragment.xml": 1662738661026,
-  "view/Home.view.xml": 1663062425256,
+  "view/MethodTyp.fragment.xml": 1665404138202,
+  "i18n/i18n.properties": 1662738661022,
   "view/App.view.xml": 1662738661026,
   "css/style.css": 1662738661022,
   "index.html": 1662738661022
+<<<<<<< HEAD
+=======
 >>>>>>> 09d08e11b458224b21b5a4d68078d8f976c31ca2
+>>>>>>> 563e91a14bac4b8f2098650e30e4bda1ccb41943
+>>>>>>> 820694d3be112cf646763aec289fc618da7806c1
+>>>>>>> 49bc0d19031ebd0f26d3b2d72b8e022a555157b4
 }

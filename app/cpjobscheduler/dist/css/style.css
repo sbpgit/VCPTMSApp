@@ -1,7 +1,85 @@
-/* Enter your custom styles here */
+Enter your custom styles here
+
+
+div#container-cpapp\.cpjobscheduler---Details--fcl-beginColumn{
+    width: 50px !important;
+}
+div#container-cpapp\.cpjobscheduler---Details--fcl-midColumn{
+    width: 1550px !important;
+    /* margin-left: -250px !important; */
+} 
+
+section#__splitter4-content-0 {
+    height: 270px !important;
+}
+
+section#__splitter3-content-0 {
+    width: 500px !important;
+}
+
+section#__splitter3-content-1 {
+    width: 700px !important;
+}
+
+section#__splitter4-content-1 {
+    height: 450px !important;
+}
+
+.sapUiLoSplitter.sapUiLoSplitterV>.sapUiLoSplitterBar, .sapUiLoSplitter.sapUiLoSplitterV>.sapUiLoSplitterOverlay .sapUiLoSplitterOverlayBar {
+    cursor: row-resize;
+    height: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-top: none;
+    border-bottom: none;
+}
+
+.sapUiLoSplitter.sapUiLoSplitterH>.sapUiLoSplitterBar, .sapUiLoSplitter.sapUiLoSplitterH>.sapUiLoSplitterOverlay .sapUiLoSplitterOverlayBar {
+    cursor: col-resize;
+    width: 0.5rem;
+    height: 100%;
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-left: none;
+    border-right: none;
+    vertical-align: top;
+}
+
+.sapUiTableHeaderDataCell .sapMText, .sapMColumnHeader .sapMText {
+    font-weight: bold;
+    font-size: .875rem;
+}
+
+/* div#__title2 {
+    margin-left: 240px;
+} */
+
+/* div#container-cpapp\.cpjobscheduler---Details--fcl-midColumn{
+    width: 1180px !important;
+} */
+
+/* div#__xmlview0 {
+    width: 300px !important;
+} */
+
+
+table#__xmlview2--idJobLogs-listUl {
+    width: 1150px;
+}
+
+div#__xmlview0--idDateRange {
+    width: 60% !important;
+}
 
 .boldText {
     font-weight: bold !important;
+}
+.headerText {
+    font-weight: bold !important;
+    font-size: larger;
 }
 .boldunderlineText {
     font-weight: bold !important;

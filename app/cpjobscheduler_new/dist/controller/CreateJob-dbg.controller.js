@@ -478,7 +478,7 @@ sap.ui.define(
 
                         // 07-09-2022
 
-						this.oGModel.setProperty("/JobDdesc",that.byId("idJobType").getSelectedItem().getText() );
+						// this.oGModel.setProperty("/JobDdesc",that.byId("idJobType").getSelectedItem().getText() );
 					}
 					// When we update or creating schdule it will select the values
 					if (that.oGModel.getProperty("/newSch") === "X" || that.oGModel.getProperty("/UpdateSch") === "X" ) {
