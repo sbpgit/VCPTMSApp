@@ -195,100 +195,146 @@ sap.ui.define(
                     var key = that.oGModel.getProperty("/JobType");
                     that.byId("idJobType").setSelectedKey(key);
                     // 07-09-2022
-                    if (key === "M") {
-                        that.byId("modelGenPanel").setVisible(true);
-                        that.byId("PredPanel").setVisible(false);
-                        that.byId("timeSeriesPanel").setVisible(false);
-                        that.byId("timeSeriesFPanel").setVisible(false);
-                        that.byId("IbpPanel").setVisible(false);
-                        that.byId("sdiPanel").setVisible(false);
-                        that.byId("FullDemandPanel").setVisible(false);
-                        that.byId("AsmblyReqPanel").setVisible(false);
-                        that.byId("salesOrdPanel").setVisible(false);
-                    } else if (key === "P") {
-                        that.byId("modelGenPanel").setVisible(false);
-                        that.byId("PredPanel").setVisible(true);
-                        that.byId("timeSeriesPanel").setVisible(false);
-                        that.byId("timeSeriesFPanel").setVisible(false);
-                        that.byId("IbpPanel").setVisible(false);
-                        that.byId("sdiPanel").setVisible(false);
-                        that.byId("FullDemandPanel").setVisible(false);
-                        that.byId("AsmblyReqPanel").setVisible(false);
-                        that.byId("salesOrdPanel").setVisible(false);
-                    } else if (key === "T") {
-                        that.byId("modelGenPanel").setVisible(false);
-                        that.byId("PredPanel").setVisible(false);
-                        that.byId("timeSeriesPanel").setVisible(true);
-                        that.byId("timeSeriesFPanel").setVisible(false);
-                        that.byId("IbpPanel").setVisible(false);
-                        that.byId("sdiPanel").setVisible(false);
-                        that.byId("FullDemandPanel").setVisible(false);
-                        that.byId("AsmblyReqPanel").setVisible(false);
-                        that.byId("salesOrdPanel").setVisible(false);
-                    } else if (key === "F") {
-                        that.byId("modelGenPanel").setVisible(false);
-                        that.byId("PredPanel").setVisible(false);
-                        that.byId("timeSeriesPanel").setVisible(false);
-                        that.byId("timeSeriesFPanel").setVisible(true);
-                        that.byId("IbpPanel").setVisible(false);
-                        that.byId("sdiPanel").setVisible(false);
-                        that.byId("FullDemandPanel").setVisible(false);
-                        that.byId("AsmblyReqPanel").setVisible(false);
-                        that.byId("salesOrdPanel").setVisible(false);
-                    } else if (key === "I" || key === "E") {
-                        if(key === "I"){
 
+                        that.byId("modelGenPanel").setVisible(false);
+                        that.byId("PredPanel").setVisible(false);
+                        that.byId("timeSeriesPanel").setVisible(false);
+                        that.byId("timeSeriesFPanel").setVisible(false);
+                        that.byId("IbpPanel").setVisible(false);
+                        that.byId("sdiPanel").setVisible(false);
+                        that.byId("FullDemandPanel").setVisible(false);
+                        that.byId("AsmblyReqPanel").setVisible(false);
+                        that.byId("salesOrdPanel").setVisible(false);
+
+                    switch (key) {
+                        case "M":
+                            that.byId("modelGenPanel").setVisible(true);
+                            break;
+                        case "P":
+                            that.byId("PredPanel").setVisible(true);
+                            break;
+                        case "T":
+                            that.byId("timeSeriesPanel").setVisible(true);
+                            break;
+                        case "F":
+                            that.byId("timeSeriesFPanel").setVisible(true);
+                                break;
+                        case "I":
+                            that.byId("IbpPanel").setVisible(true);
+                            that.byId("IbpPanel").getHeaderToolbar().getContent()[0].setText("IBP Integration - Import Demand & Future Plan");
+                            break;
+                        case "E":
+                            that.byId("IbpPanel").setVisible(true);
+                            that.byId("IbpPanel").getHeaderToolbar().getContent()[0].setText("IBP Integration - Export");
+                            break;              
+                        case "S":
+                               that.byId("sdiPanel").setVisible(true);
+                            break;
+                        case "D":
+                            that.byId("FullDemandPanel").setVisible(true);
+                             break;
+                        case "A":
+                            that.byId("AsmblyReqPanel").setVisible(true);
+                            break;
+                        case "O":
+                            that.byId("salesOrdPanel").setVisible(true);
+                            break;                                                                                                                                                                                                                                                                                        
+                        default:
+                             break;
                         }
-                        that.byId("modelGenPanel").setVisible(false);
-                        that.byId("PredPanel").setVisible(false);
-                        that.byId("timeSeriesPanel").setVisible(false);
-                        that.byId("timeSeriesFPanel").setVisible(false);
-                        that.byId("IbpPanel").setVisible(true);
-                        that.byId("sdiPanel").setVisible(false);
-                        that.byId("FullDemandPanel").setVisible(false);
-                        that.byId("AsmblyReqPanel").setVisible(false);
-                        that.byId("salesOrdPanel").setVisible(false);
-                    } else if (key === "S") {
-                        that.byId("modelGenPanel").setVisible(false);
-                        that.byId("PredPanel").setVisible(false);
-                        that.byId("timeSeriesPanel").setVisible(false);
-                        that.byId("timeSeriesFPanel").setVisible(false);
-                        that.byId("IbpPanel").setVisible(false);
-                        that.byId("sdiPanel").setVisible(true);
-                        that.byId("FullDemandPanel").setVisible(false);
-                        that.byId("AsmblyReqPanel").setVisible(false);
-                        that.byId("salesOrdPanel").setVisible(false);
-                    } else if (key === "D") {
-                        that.byId("modelGenPanel").setVisible(false);
-                        that.byId("PredPanel").setVisible(false);
-                        that.byId("timeSeriesPanel").setVisible(false);
-                        that.byId("timeSeriesFPanel").setVisible(false);
-                        that.byId("IbpPanel").setVisible(false);
-                        that.byId("sdiPanel").setVisible(false);
-                        that.byId("FullDemandPanel").setVisible(true);
-                        that.byId("AsmblyReqPanel").setVisible(false);
-                        that.byId("salesOrdPanel").setVisible(false);
-                    } else if (key === "A") {
-                        that.byId("modelGenPanel").setVisible(false);
-                        that.byId("PredPanel").setVisible(false);
-                        that.byId("timeSeriesPanel").setVisible(false);
-                        that.byId("timeSeriesFPanel").setVisible(false);
-                        that.byId("IbpPanel").setVisible(false);
-                        that.byId("sdiPanel").setVisible(false);
-                        that.byId("FullDemandPanel").setVisible(false);
-                        that.byId("AsmblyReqPanel").setVisible(true);
-                        that.byId("salesOrdPanel").setVisible(false);
-                    } else if (key === "O") {
-                        that.byId("modelGenPanel").setVisible(false);
-                        that.byId("PredPanel").setVisible(false);
-                        that.byId("timeSeriesPanel").setVisible(false);
-                        that.byId("timeSeriesFPanel").setVisible(false);
-                        that.byId("IbpPanel").setVisible(false);
-                        that.byId("sdiPanel").setVisible(false);
-                        that.byId("FullDemandPanel").setVisible(false);
-                        that.byId("AsmblyReqPanel").setVisible(false);
-                        that.byId("salesOrdPanel").setVisible(true);
-                    }
+
+
+                    // if (key === "M") {
+                    //     that.byId("modelGenPanel").setVisible(true);
+                    //     that.byId("PredPanel").setVisible(false);
+                    //     that.byId("timeSeriesPanel").setVisible(false);
+                    //     that.byId("timeSeriesFPanel").setVisible(false);
+                    //     that.byId("IbpPanel").setVisible(false);
+                    //     that.byId("sdiPanel").setVisible(false);
+                    //     that.byId("FullDemandPanel").setVisible(false);
+                    //     that.byId("AsmblyReqPanel").setVisible(false);
+                    //     that.byId("salesOrdPanel").setVisible(false);
+                    // } else if (key === "P") {
+                    //     that.byId("modelGenPanel").setVisible(false);
+                    //     that.byId("PredPanel").setVisible(true);
+                    //     that.byId("timeSeriesPanel").setVisible(false);
+                    //     that.byId("timeSeriesFPanel").setVisible(false);
+                    //     that.byId("IbpPanel").setVisible(false);
+                    //     that.byId("sdiPanel").setVisible(false);
+                    //     that.byId("FullDemandPanel").setVisible(false);
+                    //     that.byId("AsmblyReqPanel").setVisible(false);
+                    //     that.byId("salesOrdPanel").setVisible(false);
+                    // } else if (key === "T") {
+                    //     that.byId("modelGenPanel").setVisible(false);
+                    //     that.byId("PredPanel").setVisible(false);
+                    //     that.byId("timeSeriesPanel").setVisible(true);
+                    //     that.byId("timeSeriesFPanel").setVisible(false);
+                    //     that.byId("IbpPanel").setVisible(false);
+                    //     that.byId("sdiPanel").setVisible(false);
+                    //     that.byId("FullDemandPanel").setVisible(false);
+                    //     that.byId("AsmblyReqPanel").setVisible(false);
+                    //     that.byId("salesOrdPanel").setVisible(false);
+                    // } else if (key === "F") {
+                    //     that.byId("modelGenPanel").setVisible(false);
+                    //     that.byId("PredPanel").setVisible(false);
+                    //     that.byId("timeSeriesPanel").setVisible(false);
+                    //     that.byId("timeSeriesFPanel").setVisible(true);
+                    //     that.byId("IbpPanel").setVisible(false);
+                    //     that.byId("sdiPanel").setVisible(false);
+                    //     that.byId("FullDemandPanel").setVisible(false);
+                    //     that.byId("AsmblyReqPanel").setVisible(false);
+                    //     that.byId("salesOrdPanel").setVisible(false);
+                    // } else if (key === "I" || key === "E") {
+                    //     that.byId("modelGenPanel").setVisible(false);
+                    //     that.byId("PredPanel").setVisible(false);
+                    //     that.byId("timeSeriesPanel").setVisible(false);
+                    //     that.byId("timeSeriesFPanel").setVisible(false);
+                    //     that.byId("IbpPanel").setVisible(true);
+                    //     that.byId("sdiPanel").setVisible(false);
+                    //     that.byId("FullDemandPanel").setVisible(false);
+                    //     that.byId("AsmblyReqPanel").setVisible(false);
+                    //     that.byId("salesOrdPanel").setVisible(false);
+                    // } else if (key === "S") {
+                    //     that.byId("modelGenPanel").setVisible(false);
+                    //     that.byId("PredPanel").setVisible(false);
+                    //     that.byId("timeSeriesPanel").setVisible(false);
+                    //     that.byId("timeSeriesFPanel").setVisible(false);
+                    //     that.byId("IbpPanel").setVisible(false);
+                    //     that.byId("sdiPanel").setVisible(true);
+                    //     that.byId("FullDemandPanel").setVisible(false);
+                    //     that.byId("AsmblyReqPanel").setVisible(false);
+                    //     that.byId("salesOrdPanel").setVisible(false);
+                    // } else if (key === "D") {
+                    //     that.byId("modelGenPanel").setVisible(false);
+                    //     that.byId("PredPanel").setVisible(false);
+                    //     that.byId("timeSeriesPanel").setVisible(false);
+                    //     that.byId("timeSeriesFPanel").setVisible(false);
+                    //     that.byId("IbpPanel").setVisible(false);
+                    //     that.byId("sdiPanel").setVisible(false);
+                    //     that.byId("FullDemandPanel").setVisible(true);
+                    //     that.byId("AsmblyReqPanel").setVisible(false);
+                    //     that.byId("salesOrdPanel").setVisible(false);
+                    // } else if (key === "A") {
+                    //     that.byId("modelGenPanel").setVisible(false);
+                    //     that.byId("PredPanel").setVisible(false);
+                    //     that.byId("timeSeriesPanel").setVisible(false);
+                    //     that.byId("timeSeriesFPanel").setVisible(false);
+                    //     that.byId("IbpPanel").setVisible(false);
+                    //     that.byId("sdiPanel").setVisible(false);
+                    //     that.byId("FullDemandPanel").setVisible(false);
+                    //     that.byId("AsmblyReqPanel").setVisible(true);
+                    //     that.byId("salesOrdPanel").setVisible(false);
+                    // } else if (key === "O") {
+                    //     that.byId("modelGenPanel").setVisible(false);
+                    //     that.byId("PredPanel").setVisible(false);
+                    //     that.byId("timeSeriesPanel").setVisible(false);
+                    //     that.byId("timeSeriesFPanel").setVisible(false);
+                    //     that.byId("IbpPanel").setVisible(false);
+                    //     that.byId("sdiPanel").setVisible(false);
+                    //     that.byId("FullDemandPanel").setVisible(false);
+                    //     that.byId("AsmblyReqPanel").setVisible(false);
+                    //     that.byId("salesOrdPanel").setVisible(true);
+                    // }
 
                     // 07-09-2022
 
@@ -1620,94 +1666,31 @@ sap.ui.define(
                         that.byId("IBPCompReqQtyExport").setVisible(false);
                         that.byId("IBPCIRExport").setVisible(false);
                 if (that.byId("idJobType").getSelectedKey() === "E" ){
-                //that.byId("idIBPselect").getSelectedKey() === "E") {
-                    if (selRadioBt === "Location" || selRadioBt === "Customer Group") {
-                        // that.byId("IBPimport").setVisible(false);
-                        // that.byId("IBPProdExport").setVisible(false);
-                        // that.byId("IBPClassExport").setVisible(false);
-                        // that.byId("IBPSalesHisExport").setVisible(false);
-                        // that.byId("IBPSalesHisConfigExport").setVisible(false);
-                        // that.byId("IBPActCompDemandExport").setVisible(false);
-                        // that.byId("IBPCompReqQtyExport").setVisible(false);
-                        // that.byId("IBPCIRExport").setVisible(false);
-                    } else if (selRadioBt === "Product") {
+                    // if (selRadioBt === "Location" || selRadioBt === "Customer Group") {
+                    // } else 
+                    if (selRadioBt === "Product") {
                         that.oLoc = that.byId("EPlocInput");
-                        // that.byId("IBPimport").setVisible(false);
                         that.byId("IBPProdExport").setVisible(true);
-                        // that.byId("IBPClassExport").setVisible(false);
-                        // that.byId("IBPSalesHisExport").setVisible(false);
-                        // that.byId("IBPSalesHisConfigExport").setVisible(false);
-                        // that.byId("IBPActCompDemandExport").setVisible(false);
-                        // that.byId("IBPCompReqQtyExport").setVisible(false);
-                        // that.byId("IBPCIRExport").setVisible(false);
                     } else if (selRadioBt === "Class") {
                         that.oClass = this.byId("IBPclassInput");
-                        // that.byId("IBPimport").setVisible(false);
-                        // that.byId("IBPProdExport").setVisible(false);
                         that.byId("IBPClassExport").setVisible(true);
-                        // that.byId("IBPSalesHisExport").setVisible(false);
-                        // that.byId("IBPSalesHisConfigExport").setVisible(false);
-                        // that.byId("IBPActCompDemandExport").setVisible(false);
-                        // that.byId("IBPCompReqQtyExport").setVisible(false);
-                        // that.byId("IBPCIRExport").setVisible(false);
                     } else if (selRadioBt === "Sales History") {
                         that.oLoc = this.byId("ESHlocInput");
                         that.oProd = this.byId("ESHprodInput");
                         that.oCust = this.byId("ECust");
-                        // that.byId("IBPimport").setVisible(false);
-                        // that.byId("IBPProdExport").setVisible(false);
-                        // that.byId("IBPClassExport").setVisible(false);
                         that.byId("IBPSalesHisExport").setVisible(true);
-                        // that.byId("IBPSalesHisConfigExport").setVisible(false);
-                        // that.byId("IBPActCompDemandExport").setVisible(false);
-                        // that.byId("IBPCompReqQtyExport").setVisible(false);
-                        // that.byId("IBPCIRExport").setVisible(false);
-                    // } else if (selRadioBt === "Sales History Config") {
-                    //     that.oLoc = this.byId("ESHConfiglocInput");
-                    //     that.oProd = this.byId("ESHConfigprodInput");
-                    //     that.oCust = this.byId("ESHConfigCust");
-                    //     // that.byId("IBPimport").setVisible(false);
-                    //     // that.byId("IBPProdExport").setVisible(false);
-                    //     // that.byId("IBPClassExport").setVisible(false);
-                    //     // that.byId("IBPSalesHisExport").setVisible(false);
-                    //     that.byId("IBPSalesHisConfigExport").setVisible(true);
-                    //     // that.byId("IBPActCompDemandExport").setVisible(false);
-                    //     // that.byId("IBPCompReqQtyExport").setVisible(false);
-                    //     // that.byId("IBPCIRExport").setVisible(false);
                     } else if (selRadioBt === "Actual Components Demand") {
                         that.oLoc = this.byId("EACDemandlocInput");
                         that.oProd = this.byId("EACDemandprodInput");
-                        // that.oDateRange = this.byId("EACDemandDate");
-                        // that.byId("IBPimport").setVisible(false);
-                        // that.byId("IBPProdExport").setVisible(false);
-                        // that.byId("IBPClassExport").setVisible(false);
-                        // that.byId("IBPSalesHisExport").setVisible(false);
-                        // that.byId("IBPSalesHisConfigExport").setVisible(false);
                         that.byId("IBPActCompDemandExport").setVisible(true);
-                        // that.byId("IBPCompReqQtyExport").setVisible(false);
-                        // that.byId("IBPCIRExport").setVisible(false);
                     } else if (selRadioBt === "Assembly Requirement Quantity") {
                         that.oLoc = this.byId("ECRQtylocInput");
                         that.oProd = this.byId("ECRQtyprodInput");
                         that.oDateRange = this.byId("ECRQtyDate");
-                        // that.byId("IBPimport").setVisible(false);
-                        // that.byId("IBPProdExport").setVisible(false);
-                        // that.byId("IBPClassExport").setVisible(false);
-                        // that.byId("IBPSalesHisExport").setVisible(false);
-                        // that.byId("IBPSalesHisConfigExport").setVisible(false);
-                        // that.byId("IBPActCompDemandExport").setVisible(false);
                         that.byId("IBPCompReqQtyExport").setVisible(true);
-                        // that.byId("IBPCIRExport").setVisible(false);
                     } else if (selRadioBt === "Fully Configured Demand") {
                         that.oLoc = this.byId("ECIRlocInput");
                         that.oProd = this.byId("ECIRprodInput");
-                        // that.byId("IBPimport").setVisible(false);
-                        // that.byId("IBPProdExport").setVisible(false);
-                        // that.byId("IBPClassExport").setVisible(false);
-                        // that.byId("IBPSalesHisExport").setVisible(false);
-                        // that.byId("IBPSalesHisConfigExport").setVisible(false);
-                        // that.byId("IBPActCompDemandExport").setVisible(false);
-                        // that.byId("IBPCompReqQtyExport").setVisible(false);
                         that.byId("IBPCIRExport").setVisible(true);
                     }
                     // 22-09-2022

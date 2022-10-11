@@ -1762,7 +1762,7 @@ module.exports = cds.service.impl(async function () {
     this.on("generateFDemandQty", async (request) => {
         var flag;
 
-        await GenF.logMessage(req, `Started importing Future Demand`);
+        await GenF.logMessage(request, `Started importing Future Demand`);
         var resUrl = "/SBPVCP?$select=PRDID,LOCID,PERIODID4_TSTAMP,TOTALDEMANDOUTPUT,UOMTOID,VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "'and UOMTOID eq 'EA'";
 
         // req.headers['Application-Interface-Key'] = vAIRKey;
@@ -1939,6 +1939,9 @@ module.exports = cds.service.impl(async function () {
             }
         }
         if (flag === 'S') {
+            
+
+            await GenF.logMessage(request, `Completed importing Future Demand`);
             let dataObj = {};
             dataObj["success"] = true;
             dataObj["message"] = "Import of IBP Demand and Future char.plan data is successfull at " + new Date();
