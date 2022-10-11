@@ -385,8 +385,9 @@ class GenTimeseriesM2 {
                     lsObjdepF.SUCCESS_RATE = 0
                     if (lsFutureDemand.QUANTITY > 0) {
                         lsObjdepF.SUCCESS_RATE = (parseInt(liFutureCharPlan[cntFC].OPT_QTY) * 100 / parseInt(lsFutureDemand.QUANTITY)).toFixed(2);
+                         liObjdepF.push(GenF.parse(lsObjdepF));
                     }
-                    liObjdepF.push(GenF.parse(lsObjdepF));
+                    // liObjdepF.push(GenF.parse(lsObjdepF));
                 }
             }
 

@@ -8,6 +8,7 @@ const { combine, timestamp, label, prettyPrint } = format;
 //const ComponentReq = require("./component-req");
 const GenTimeseries = require("./gen-timeseries");
 const GenTimeseriesM2 = require("./gen-timeseries-m2");
+const GenTimeseriesRT = require("./gen-timeseries-rt");
 const SOFunctions = require("./so-function");
 const Catservicefn = require("./catservice-function");
 const VarConfig = require("./variantconfig");
@@ -807,18 +808,6 @@ module.exports = (srv) => {
 
     // Generate Timeseries using action call
     srv.on("generateTimeseries", async (req) => {
-        /*
-        const li_paravalues = await cds.run(
-            `SELECT VALUE
-                FROM "CP_PARAMETER_VALUES"
-                WHERE "PARAMETER_ID" = 5 `);
-        if (li_paravalues[0].VALUE === 'Components') {
-        }
-        else if (li_paravalues[0].VALUE === 'Fully Configured') {
-            const obgenTimeseriesM2 = new GenTimeseriesM2();
-            await obgenTimeseriesM2.genTimeseries(req.data, req);
-        }
-        */
         switch(await GenFunctions.getParameterValue('5')){
             case 'M1':
                 const obgenTimeseries = new GenTimeseries();
@@ -831,20 +820,6 @@ module.exports = (srv) => {
         }
     });
     srv.on("generateTimeseriesF", async (req) => {
-        /*
-        const li_paravalues = await cds.run(
-            `SELECT VALUE
-                FROM "CP_PARAMETER_VALUES"
-                WHERE "PARAMETER_ID" = 5 `);
-        if (li_paravalues[0].VALUE === 'Components') {
-            const obgenTimeseries = new GenTimeseries();
-            await obgenTimeseries.genTimeseriesF(req.data, req);
-        }
-        else if (li_paravalues[0].VALUE === 'Fully Configured') {
-            const obgenTimeseriesM2 = new GenTimeseriesM2();
-            await obgenTimeseriesM2.genTimeseriesF(req.data, req);
-        }*/
-
         switch(await GenFunctions.getParameterValue('5')){
             case 'M1':
                 const obgenTimeseries = new GenTimeseries();
@@ -860,21 +835,6 @@ module.exports = (srv) => {
     });
     // Generate Timeseries fucntion calls
     srv.on("generate_timeseries", async (req) => {
-        /*
-        const li_paravalues = await cds.run(
-            `SELECT VALUE
-                FROM "CP_PARAMETER_VALUES"
-                WHERE "PARAMETER_ID" = 5 `);
-        if (li_paravalues[0].VALUE === 'Components') {
-            const obgenTimeseries = new GenTimeseries();
-            await obgenTimeseries.genTimeseries(req.data, req);
-        }
-        else if (li_paravalues[0].VALUE === 'Fully Configured') {
-            const obgenTimeseriesM2 = new GenTimeseriesM2();
-            await obgenTimeseriesM2.genTimeseries(req.data, req);
-        }
-        */
-
         switch(await GenFunctions.getParameterValue('5')){
             case 'M1':
                 const obgenTimeseries = new GenTimeseries();
@@ -888,20 +848,6 @@ module.exports = (srv) => {
 
     });
     srv.on("generate_timeseriesF", async (req) => {
-/*        
-        const li_paravalues = await cds.run(
-            `SELECT VALUE
-                FROM "CP_PARAMETER_VALUES"
-                WHERE "PARAMETER_ID" = 5 `);
-        if (li_paravalues[0].VALUE === 'Components') {
-            const obgenTimeseries = new GenTimeseries();
-            await obgenTimeseries.genTimeseriesF(req.data, req);
-        }
-        else if (li_paravalues[0].VALUE === 'Fully Configured') {
-            const obgenTimeseriesM2 = new GenTimeseriesM2();
-            await obgenTimeseriesM2.genTimeseriesF(req.data, req);
-        }
-*/
         let value = await GenFunctions.getParameterValue('5');
         console.log(value);
         switch(await GenFunctions.getParameterValue('5')){
@@ -914,6 +860,18 @@ module.exports = (srv) => {
                 await obgenTimeseriesM2.genTimeseriesF(req.data, req);              
                 break;
         }        
+    });
+    
+    // Generate Timeseries fucntion calls
+    srv.on("generate_timeseries_rt", async (req) => {
+        const obgenTimeseries_rt = new GenTimeseriesRT();
+        await obgenTimeseries_rt.genTimeseries_rt(req.data, req);
+
+    });
+    srv.on("generate_timeseriesF_rt", async (req) => {
+        const obgenTimeseries_rt = new GenTimeseriesRT();
+        await obgenTimeseries_rt.genTimeseriesF_rt(req.data, req);
+
     });
     // Generate Unique ID
     srv.on("genUniqueID", async (req) => {
