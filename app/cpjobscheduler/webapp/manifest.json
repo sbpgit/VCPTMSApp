@@ -178,11 +178,14 @@
                 "clearControlAggregation": false
             },
             "routes": [
+                
                 {
-                    "name": "Home",
-                    "pattern": "",
-                    "target": ["Home"]
-                  },
+					"pattern": "",
+					"name": "Details",
+					"target": [
+						"Details"
+					]
+				},
                   {
                       "name": "CreateJob",
                       "pattern": "CreateJob",
@@ -192,19 +195,31 @@
                   }
             ],
             "targets": {
-                "Home": {
-                    "viewType": "XML",
-                    "transition": "slide",
-                    "clearControlAggregation": true,
-                    "viewId": "Home",
-                    "viewName": "Home"
-                  },
+                "Details": {
+					"viewType": "XML",
+					"viewName": "Details",
+                    "viewId": "Details",
+					"viewLevel": 1
+				},
+				"ItemMaster": {
+					"viewType": "XML",
+					"viewName": "ItemMaster",
+                    "viewId": "ItemMaster",
+					"viewLevel": 2
+				},
+				"ItemDetail": {
+					"viewType": "XML",
+					"viewName": "ItemDetail",
+                    "viewId": "ItemDetail",
+					"viewLevel": 3
+				},
                   "CreateJob": {
                       "viewType": "XML",
                       "transition": "slide",
                       "clearControlAggregation": true,
                       "viewId": "CreateJob",
-                      "viewName": "CreateJob"
+                      "viewName": "CreateJob",
+                      "viewLevel": 4
                   }
             }
         }

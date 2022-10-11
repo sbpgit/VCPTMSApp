@@ -167,7 +167,9 @@ class GenFunctions {
             req.error("no jobscheduler service instance found");
         }
     }
-    static logMessage(req, lMessage) {
+    static async logMessage(req, lMessage) {
+        console.log(lMessage);
+
         let errorObj = {};
         errorObj["success"] = true;
         errorObj["message"] = lMessage; 

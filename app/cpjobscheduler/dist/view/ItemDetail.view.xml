@@ -1,0 +1,181 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:core="sap.ui.core" controllerName="cpapp.cpjobscheduler.controller.ItemDetail" xmlns:html="http://www.w3.org/1999/xhtml">
+    <l:ResponsiveSplitter defaultPane="default">
+        <l:PaneContainer orientation="Vertical">
+            <l:SplitPane id="default" height="300px">
+                <l:layoutData>
+                    <l:SplitterLayoutData size="{sizes>/pane1}" />
+                </l:layoutData>
+                <!-- <Panel  height="100%"> -->
+                <Page showHeader="false" height="100px">
+                    <Toolbar>
+                    <ToolbarSpacer/>
+                    <Title  text="Job Details" class="boldText"></Title>
+                    <ToolbarSpacer/>
+                    <ToolbarSpacer/>
+                        <Button id="btnRefresh" text="Refresh" press="onScheduleClick" type="Emphasized" />
+                        <Button id="btnaddSche" text="{i18n>addsch}" press="onAddSchedule" type="Emphasized" />
+                    </Toolbar>
+                    <l:Grid defaultSpan="XL2 L2 M3 S6">
+                        <VBox>
+                            <Text text="{i18n>desc} :" class="boldText"/>
+                            <Text text="{oGModel>/description}" />
+                        </VBox>
+                        <VBox>
+                            <Text text="{i18n>startTime} :" class="boldText"/>
+                            <Text text="{oGModel>/startTime}" />
+                        </VBox>
+                        <VBox>
+                            <Text text="{i18n>endTime} :" class="boldText"/>
+                            <Text text="{oGModel>/endTime}" />
+                        </VBox>
+                        <VBox>
+                            <Text text="{i18n>createdat} :" class="boldText"/>
+                            <Text text="{oGModel>/createdAt}" />
+                        </VBox>
+                        <!-- <VBox>
+            <HBox>
+                <Button id="idCreate" text="{i18n>createjob}" type="Emphasized" press="onCreateJob" tooltip="Create Job" class="sapUiSmallMarginEnd" />
+                <Button id="btnaddSche" text="{i18n>addsch}" press="onAddSchedule" type="Emphasized" />
+                 </HBox>
+            </VBox> -->
+                    </l:Grid>
+
+                    <!-- <content> -->
+                    <!-- <OverflowToolbar id="idOvrFlwTb">
+                <ToolbarSpacer />
+                <Button id="idCreate" text="{i18n>createjob}" type="Emphasized" press="onCreateJob" tooltip="Create Job" />
+                <Button id="btnaddSche" text="{i18n>addsch}" press="onAddSchedule" type="Emphasized" />
+            </OverflowToolbar> -->
+
+                    <Table id="idJobLogs" items="{path: '/results'}" rememberSelections="true" mode="SingleSelectMaster" selectionChange="onScheduleClick">
+                        <columns class="boldText">
+                            <Column hAlign="Left" vAlign="Middle" width="100px" class="boldText">
+                                <Text text="{i18n>type}" />
+                            </Column>
+                            <Column hAlign="Left" vAlign="Middle" visible="{= ${oGModel>/flagcron} === 'X' ? true : false }">
+                                <Text text="{i18n>cron}" />
+                            </Column>
+                            <Column hAlign="Left" vAlign="Middle" visible="false">
+                                <Text text="{i18n>onetime}" />
+                            </Column>
+                            <Column hAlign="Left" vAlign="Middle">
+                                <Text text="{i18n>nextRunAt}" />
+                            </Column>
+                            <Column hAlign="Left" vAlign="Middle">
+                                <Text text="{i18n>startTime}" />
+                            </Column>
+                            <Column hAlign="Left" vAlign="Middle">
+                                <Text text="{i18n>endTime}" />
+                            </Column>
+                            <Column hAlign="Left" vAlign="Middle">
+                                <Text text="" />
+                            </Column>
+                        </columns>
+                        <items>
+                            <ColumnListItem>
+                                <cells>
+                                    <Text text="{type}" />
+                                    <Text text="{cron}" />
+                                    <Text text="{time}" />
+                                    <Text text="{nextRunAt}" />
+                                    <Text text="{startTime}" />
+                                    <Text text="{endTime}" />
+                                    <HBox>
+                                        <!-- <Button id="idStatus" text="Status" tooltip="Schedule status" press="onSchestatus" iconDensityAware="false" type="Emphasized" />
+                                <Button id="idRunlogData"  icon="sap-icon://display" tooltip="Run logs" press="onRunlogs" iconDensityAware="false" type="Transparent"/> -->
+                                        <Button id="idscheData" icon="sap-icon://form" tooltip="Schedule Data" press="onScheData" iconDensityAware="false" type="Transparent" />
+                                        <Button id="idScheUpdate" icon="sap-icon://edit" press="onScheUpdate" tooltip="Update Schedule" iconDensityAware="false" type="Transparent" />
+                                        <Button id="idScheDele" icon="sap-icon://decline" press="onScheDelete" tooltip="Delete Schedule" />
+                                    </HBox>
+                                </cells>
+                            </ColumnListItem>
+                        </items>
+                    </Table>
+                </Page>
+
+                <!-- </Panel> -->
+            </l:SplitPane>
+            <l:PaneContainer resize=".onInnerContainerResize">
+                <l:SplitPane requiredParentWidth="600">
+                    <l:layoutData>
+                        <l:SplitterLayoutData size="{sizes>/pane2}" />
+                    </l:layoutData>
+                    <Panel>
+                        <!-- <Page> -->
+                        <Table id="idScheLogData" items="{path: '/statusresults'}" rememberSelections="true" mode="SingleSelectMaster" selectionChange="onRunlogs">
+                            <columns>
+                                <Column hAlign="Left" vAlign="Middle">
+                                    <Text text="{i18n>ScheTime}" />
+                                </Column>
+                                <Column hAlign="Left" vAlign="Middle">
+                                    <Text text="{i18n>execTime}" />
+                                </Column>
+                                <!-- <Column hAlign="Left" vAlign="Middle">
+                        <Text text="{i18n>compTime}" />
+                    </Column> -->
+                                <Column hAlign="Left" vAlign="Middle">
+                                    <Text text="{i18n>status}" />
+                                </Column>
+                                <!-- <Column hAlign="Left" vAlign="Middle">
+                        <Text text="{i18n>state}" />
+                    </Column> -->
+                            </columns>
+                            <items>
+                                <ColumnListItem>
+                                    <cells>
+                                        <Text text="{scheduleTimestamp}" />
+                                        <ObjectIdentifier title="{executionTimestamp}" text="{completionTimestamp}" />
+                                        <ObjectIdentifier title="{runStatus}" text="{runState}" />
+                                        <!-- <Text text="{executionTimestamp}" /> -->
+                                        <!-- <Text text="{completionTimestamp}" /> -->
+                                        <!-- <Text text="{runStatus}" />
+                            <Text text="{runState}" /> -->
+                                    </cells>
+                                </ColumnListItem>
+                            </items>
+                        </Table>
+                        <!-- </Page> -->
+                    </Panel>
+                </l:SplitPane>
+                <l:SplitPane requiredParentWidth="800">
+                    <l:layoutData>
+                        <l:SplitterLayoutData size="{sizes>/pane3}" />
+                    </l:layoutData>
+                    <Page title="Run Logs">
+                        <Table id="idScheRunLogData" items="{path: '/results'}">
+                            <columns>
+                                <!-- <Column hAlign="Left" vAlign="Middle">
+                                    <Text text="{i18n>time}" />
+                                </Column> -->
+                                <Column hAlign="Left" vAlign="Middle" width="400px">
+                                    <Text text="{i18n>message}" />
+                                </Column>
+                                <!-- <Column hAlign="Left" vAlign="Right">
+                                    <Text text="{i18n>state}" />
+                                </Column>
+                                <Column hAlign="Left" vAlign="Middle">
+                                    <Text text="{i18n>code}" />
+                                </Column> -->
+                                <Column hAlign="Left" vAlign="Right">
+                                    <Text text="State/ Code" />
+                                </Column>
+                            </columns>
+                            <items>
+                                <ColumnListItem>
+                                    <cells>
+                                        <!-- <Text text="{time}" />
+                                        <Text text="{text}" /> -->
+                                        <ObjectIdentifier title="{text}" text="{time}" />
+                                        <ObjectIdentifier title="{type}" text="{code}" />
+                                        <!-- <Text text="{type}" />
+                                        <Text text="{code}" /> -->
+                                    </cells>
+                                </ColumnListItem>
+                            </items>
+                        </Table>
+                    </Page>
+                </l:SplitPane>
+            </l:PaneContainer>
+        </l:PaneContainer>
+    </l:ResponsiveSplitter>
+</mvc:View>

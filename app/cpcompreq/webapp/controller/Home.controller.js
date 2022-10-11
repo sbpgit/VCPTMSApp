@@ -248,7 +248,14 @@ sap.ui.define(
                     oScen = that.oGModel.getProperty("/SelectedScen"),
                     oComp = that.oGModel.getProperty("/SelectedComp"),
                     oStru = that.oGModel.getProperty("/SelectedStru"),
-                    oModelVersion = that.byId("idModelVer").getSelectedKey();
+                    oModelVersion = that.byId("idModelVer").getSelectedKey(),
+                    bCriticalKey = '';
+
+                if(that.byId("idChkCritComp").getSelected() === true) {
+                    bCriticalKey = 'X';
+                } else {
+                    bCriticalKey = ' ';
+                }
 
                 that.oGModel.setProperty(
                     "/SelectedMV",
@@ -293,6 +300,7 @@ sap.ui.define(
                             FROMDATE: vFromDate,
                             TODATE: vToDate,
                             MODEL_VERSION: oModelVersion,
+                            CRITICALKEY : bCriticalKey,
                         },
                         success: function (data) {
                             sap.ui.core.BusyIndicator.hide();
@@ -373,8 +381,12 @@ sap.ui.define(
                 var rowData;
                 var fromDate = new Date(that.byId("fromDate").getDateValue()),
                     toDate = new Date(that.byId("toDate").getDateValue());
-                fromDate = fromDate.toISOString().split("T")[0];
-                toDate = toDate.toISOString().split("T")[0];
+
+                    fromDate = that.onConvertDateToString(fromDate);
+                    toDate = that.onConvertDateToString(toDate);
+
+                // fromDate = fromDate.toISOString().split("T")[0];
+                // toDate = toDate.toISOString().split("T")[0];
                 // Calling function to generate column names based on dates
                 var liDates = that.generateDateseries(fromDate, toDate);
 
@@ -640,6 +652,9 @@ sap.ui.define(
                 while (vDateSeries <= imToDate) {
                     // Calling function to add Days
                     vDateSeries = that.addDays(vDateSeries, 7);
+                    if (vDateSeries > imToDate) {
+                        break;
+                    }
                     // Calling function to get the next Sunday date of From date
                     lsDates.CAL_DATE = vDateSeries;//that.getNextMonday(vDateSeries);
                     //vDateSeries = lsDates.CAL_DATE;
@@ -1207,6 +1222,30 @@ sap.ui.define(
                 }
                 return (imDate = imDate.getFullYear() + "-" + vMonth + "-" + vDate);
             },
+            /**
+             * 
+             */
+            onCriticalComponentCheck: function(oEvent) {
+                // var selected = that.byId("idCheck1").getSelected(),
+            },
+            /**
+             * Converts Date to Local Date String with delimiter "-"
+             * 
+             */
+            onConvertDateToString: function(dDate) {
+                var dtConvertDate = dDate;
+                var aDate = [];
+                dtConvertDate = dtConvertDate.toLocaleDateString();
+                aDate = dtConvertDate.split("/");
+                if(aDate[0].length === 1) {
+                  aDate[0] = "0" + aDate[0];
+                }
+                if(aDate[1].length === 1) {
+                    aDate[1] = "0" + aDate[1];
+                }
+                dtConvertDate = aDate[2] + "-" + aDate[0] + "-" + aDate[1];
+                return dtConvertDate;
+            }
         });
     }
 );

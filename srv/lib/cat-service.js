@@ -8,6 +8,7 @@ const { combine, timestamp, label, prettyPrint } = format;
 //const ComponentReq = require("./component-req");
 const GenTimeseries = require("./gen-timeseries");
 const GenTimeseriesM2 = require("./gen-timeseries-m2");
+const GenTimeseriesRT = require("./gen-timeseries-rt");
 const SOFunctions = require("./so-function");
 const Catservicefn = require("./catservice-function");
 const VarConfig = require("./variantconfig");
@@ -125,6 +126,7 @@ module.exports = (srv) => {
             vCompIndex,
             lsDates = {};
         let columnname = "WEEK";
+        let liComp = [];
 
         const liCompQty = await cds.run(
             `
@@ -153,7 +155,48 @@ module.exports = (srv) => {
                       "COMPONENT" ASC,
                       "WEEK_DATE" ASC`
         );
-        const liComp = await cds.run(
+        if(req.data.CRITICALKEY === 'X') {
+            liComp = await cds.run(
+                `
+              SELECT DISTINCT "V_ASMREQ_PRODCONSD"."LOCATION_ID",
+                               "V_ASMREQ_PRODCONSD"."PRODUCT_ID",
+                               "V_ASMREQ_PRODCONSD"."VERSION",
+                               "V_ASMREQ_PRODCONSD"."SCENARIO",
+                               "V_ASMREQ_PRODCONSD"."ITEM_NUM",
+                               "V_ASMREQ_PRODCONSD"."COMPONENT"
+              FROM "V_ASMREQ_PRODCONSD"
+             INNER JOIN "CP_CRITICAL_COMP"
+                ON "V_ASMREQ_PRODCONSD"."LOCATION_ID" = "CP_CRITICAL_COMP"."LOCATION_ID"
+               AND "V_ASMREQ_PRODCONSD"."PRODUCT_ID"  = "CP_CRITICAL_COMP"."PRODUCT_ID"
+               AND "V_ASMREQ_PRODCONSD"."ITEM_NUM"    = "CP_CRITICAL_COMP"."ITEM_NUM"
+             WHERE "V_ASMREQ_PRODCONSD"."LOCATION_ID" = '` +
+                req.data.LOCATION_ID +
+                `' AND "V_ASMREQ_PRODCONSD"."PRODUCT_ID" = '` +
+                req.data.PRODUCT_ID +
+                `' AND "V_ASMREQ_PRODCONSD"."VERSION" = '` +
+                req.data.VERSION +
+                `' AND "V_ASMREQ_PRODCONSD"."SCENARIO" = '` +
+                req.data.SCENARIO +
+                `' AND ( "V_ASMREQ_PRODCONSD"."WEEK_DATE" <= '` +
+                vDateTo +
+                `'
+                    AND "V_ASMREQ_PRODCONSD"."WEEK_DATE" >= '` +
+                vDateFrom +
+                `') AND "V_ASMREQ_PRODCONSD"."MODEL_VERSION" = '` +
+                req.data.MODEL_VERSION +
+                `'  AND "CP_CRITICAL_COMP"."CRITICALKEY" = '` +
+                 req.data.CRITICALKEY + `'
+                   ORDER BY 
+                        "LOCATION_ID" ASC, 
+                        "PRODUCT_ID" ASC,
+                        "VERSION" ASC,
+                        "SCENARIO" ASC,
+                        "ITEM_NUM" ASC,
+                        "COMPONENT" ASC`
+            );
+        } else {
+        // const liComp = await cds.run(
+           liComp = await cds.run(
             `
           SELECT DISTINCT "LOCATION_ID",
                           "PRODUCT_ID",
@@ -186,6 +229,7 @@ module.exports = (srv) => {
                     "ITEM_NUM" ASC,
                     "COMPONENT" ASC`
         );
+        }
         var vDateSeries = vDateFrom;
         let dDate = new Date(vDateSeries);
         let dDay = dDate.getDay();
@@ -764,50 +808,24 @@ module.exports = (srv) => {
 
     // Generate Timeseries using action call
     srv.on("generateTimeseries", async (req) => {
-        /*
-        const li_paravalues = await cds.run(
-            `SELECT VALUE
-                FROM "CP_PARAMETER_VALUES"
-                WHERE "PARAMETER_ID" = 5 `);
-        if (li_paravalues[0].VALUE === 'Components') {
-        }
-        else if (li_paravalues[0].VALUE === 'Fully Configured') {
-            const obgenTimeseriesM2 = new GenTimeseriesM2();
-            await obgenTimeseriesM2.genTimeseries(req.data, req);
-        }
-        */
-        switch(GenFunctions.getParameterValue('5')){
-            case 'Components':
+        switch(await GenFunctions.getParameterValue('5')){
+            case 'M1':
                 const obgenTimeseries = new GenTimeseries();
                 await obgenTimeseries.genTimeseries(req.data, req);               
                 break;
-            case 'Fully Configured':
+            case 'M2':
                 const obgenTimeseriesM2 = new GenTimeseriesM2();
                 await obgenTimeseriesM2.genTimeseries(req.data, req);                
                 break;
         }
     });
     srv.on("generateTimeseriesF", async (req) => {
-        /*
-        const li_paravalues = await cds.run(
-            `SELECT VALUE
-                FROM "CP_PARAMETER_VALUES"
-                WHERE "PARAMETER_ID" = 5 `);
-        if (li_paravalues[0].VALUE === 'Components') {
-            const obgenTimeseries = new GenTimeseries();
-            await obgenTimeseries.genTimeseriesF(req.data, req);
-        }
-        else if (li_paravalues[0].VALUE === 'Fully Configured') {
-            const obgenTimeseriesM2 = new GenTimeseriesM2();
-            await obgenTimeseriesM2.genTimeseriesF(req.data, req);
-        }*/
-
-        switch(GenFunctions.getParameterValue('5')){
-            case 'Components':
+        switch(await GenFunctions.getParameterValue('5')){
+            case 'M1':
                 const obgenTimeseries = new GenTimeseries();
                 await obgenTimeseries.genTimeseriesF(req.data, req);             
                 break;
-            case 'Fully Configured':
+            case 'M2':
                 const obgenTimeseriesM2 = new GenTimeseriesM2();
                 await obgenTimeseriesM2.genTimeseriesF(req.data, req);              
                 break;
@@ -817,27 +835,12 @@ module.exports = (srv) => {
     });
     // Generate Timeseries fucntion calls
     srv.on("generate_timeseries", async (req) => {
-        /*
-        const li_paravalues = await cds.run(
-            `SELECT VALUE
-                FROM "CP_PARAMETER_VALUES"
-                WHERE "PARAMETER_ID" = 5 `);
-        if (li_paravalues[0].VALUE === 'Components') {
-            const obgenTimeseries = new GenTimeseries();
-            await obgenTimeseries.genTimeseries(req.data, req);
-        }
-        else if (li_paravalues[0].VALUE === 'Fully Configured') {
-            const obgenTimeseriesM2 = new GenTimeseriesM2();
-            await obgenTimeseriesM2.genTimeseries(req.data, req);
-        }
-        */
-
-        switch(GenFunctions.getParameterValue('5')){
-            case 'Components':
+        switch(await GenFunctions.getParameterValue('5')){
+            case 'M1':
                 const obgenTimeseries = new GenTimeseries();
                 await obgenTimeseries.genTimeseries(req.data, req);               
                 break;
-            case 'Fully Configured':
+            case 'M2':
                 const obgenTimeseriesM2 = new GenTimeseriesM2();
                 await obgenTimeseriesM2.genTimeseries(req.data, req);                
                 break;
@@ -845,31 +848,30 @@ module.exports = (srv) => {
 
     });
     srv.on("generate_timeseriesF", async (req) => {
-/*        
-        const li_paravalues = await cds.run(
-            `SELECT VALUE
-                FROM "CP_PARAMETER_VALUES"
-                WHERE "PARAMETER_ID" = 5 `);
-        if (li_paravalues[0].VALUE === 'Components') {
-            const obgenTimeseries = new GenTimeseries();
-            await obgenTimeseries.genTimeseriesF(req.data, req);
-        }
-        else if (li_paravalues[0].VALUE === 'Fully Configured') {
-            const obgenTimeseriesM2 = new GenTimeseriesM2();
-            await obgenTimeseriesM2.genTimeseriesF(req.data, req);
-        }
-*/
-
-        switch(GenFunctions.getParameterValue('5')){
-            case 'Components':
+        let value = await GenFunctions.getParameterValue('5');
+        console.log(value);
+        switch(await GenFunctions.getParameterValue('5')){
+            case 'M1':
                 const obgenTimeseries = new GenTimeseries();
                 await obgenTimeseries.genTimeseriesF(req.data, req);             
                 break;
-            case 'Fully Configured':
+            case 'M2':
                 const obgenTimeseriesM2 = new GenTimeseriesM2();
                 await obgenTimeseriesM2.genTimeseriesF(req.data, req);              
                 break;
         }        
+    });
+    
+    // Generate Timeseries fucntion calls
+    srv.on("generate_timeseries_rt", async (req) => {
+        const obgenTimeseries_rt = new GenTimeseriesRT();
+        await obgenTimeseries_rt.genTimeseries_rt(req.data, req);
+
+    });
+    srv.on("generate_timeseriesF_rt", async (req) => {
+        const obgenTimeseries_rt = new GenTimeseriesRT();
+        await obgenTimeseries_rt.genTimeseriesF_rt(req.data, req);
+
     });
     // Generate Unique ID
     srv.on("genUniqueID", async (req) => {

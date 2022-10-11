@@ -56,6 +56,7 @@ sap.ui.define([
                     PARAMVALS: [],
                     },
                     oParamVals;
+                var sParamVal = "";
 
                 var aItems = that.getView().byId("idParameterTable").getItems();
 
@@ -63,9 +64,15 @@ sap.ui.define([
                     var oObj = aItems[i];
                     if (oObj._bGroupHeader === false) {
                         if (oObj.getCells()[2].getValue() !== "" && oObj.getCells()[2].getValueState() === "None") {
+                            if(oObj.getCells()[2].getName() !== "" && oObj.getCells()[2].getName() !== undefined) {
+                                sParamVal = oObj.getCells()[2].getName();
+                            } else {
+                                sParamVal = oObj.getCells()[2].getValue();
+                            }
                             oParamVals = {
                                 PARAMETER_ID: oObj.getCells()[0].getText(),
-                                VALUE: oObj.getCells()[2].getValue()
+                                VALUE: sParamVal
+                                // VALUE: oObj.getCells()[2].getValue()
                             };
                             oEntry.PARAMVALS.push(oParamVals);
                         } else {
@@ -149,8 +156,11 @@ sap.ui.define([
              *              */
             onListItemPress: function (oEvent) {
                 var oSelectedItem = oEvent.getParameter("listItem").getTitle();
+                that.sSelMethodTyp = oEvent.getParameter("listItem").getInfo();
+                
                 if (that.oSelectedInputExe) {
-                    that.oSelectedInputExe.setValue(oSelectedItem);
+                    that.oSelectedInputExe.setValue(oSelectedItem);  
+                    that.oSelectedInputExe.setName(that.sSelMethodTyp);                  
                 }
                 that.oMethodDialog.close();
 
