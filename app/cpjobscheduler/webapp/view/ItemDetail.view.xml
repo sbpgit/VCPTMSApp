@@ -12,7 +12,7 @@
                     <Title  text="Job Details" class="boldText"></Title>
                     <ToolbarSpacer/>
                     <ToolbarSpacer/>
-                        <Button id="btnRefresh" text="Refresh" press="onScheduleClick" type="Emphasized" />
+                        <Button id="btnRefresh" icon="sap-icon://refresh" text="Refresh" press="onScheduleClick" type="Emphasized" />
                         <Button id="btnaddSche" text="{i18n>addsch}" press="onAddSchedule" type="Emphasized" />
                     </Toolbar>
                     <l:Grid defaultSpan="XL2 L2 M3 S6">
