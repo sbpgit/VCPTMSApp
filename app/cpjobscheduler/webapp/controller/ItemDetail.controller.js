@@ -307,32 +307,20 @@ sap.ui.define(
           }
           // 22-09-2022
   
-            if (
-              oGModel.getProperty("/JobType") !== "I" &&
-              oGModel.getProperty("/JobType") !== "S"
-            ) {
+            if (oGModel.getProperty("/JobType") !== "I" && oGModel.getProperty("/JobType") !== "S" ) {
               that._valueHelpDialogJobData.open();
             } else {
               var oActionType = oGModel.getProperty("/IBPService");
               var iCount = 0;
   
-              if (
-                oActionType === "generateFDemandQty" ||
-                oActionType === "generateFCharPlan"
-              ) {
+              if (oActionType === "generateFDemandQty" || oActionType === "generateFCharPlan" ) {
                 sap.ui.getCore().byId("idJobData").getColumns()[0].setVisible(true);
                 sap.ui.getCore().byId("idJobData").getColumns()[1].setVisible(true);
                 sap.ui.getCore().byId("idJobData").getColumns()[5].setVisible(false);
               //   sap.ui.getCore().byId("idJobData").getColumns()[6].setVisible(true);
-              } else if (
-                oActionType === "exportIBPLocation" ||
-                oActionType === "exportIBPCustomer" ||
-                oActionType.includes("ImportECC")   ||
-                oActionType.includes("ImportCuvtabInd")
-              ) {
-                MessageToast.show(
-                  "There is no schedule data to display for the selected job type"
-                );
+              } else if (oActionType === "exportIBPLocation" || oActionType === "exportIBPCustomer" ||
+                         oActionType.includes("ImportECC")   || oActionType.includes("ImportCuvtabInd") ) {
+                MessageToast.show( "There is no schedule data to display for the selected job type" );
                 iCount = 1;
               } else if (oActionType === "exportIBPMasterProd") {
                 sap.ui.getCore().byId("idJobData").getColumns()[0].setVisible(true);
