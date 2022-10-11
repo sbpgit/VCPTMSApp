@@ -22858,12 +22858,6 @@
         "PRODUCT_ID": {
           "type": "cds.String",
           "length": 40
-        },
-        "FROMDATE": {
-          "type": "cds.Date"
-        },
-        "TODATE": {
-          "type": "cds.Date"
         }
       }
     },

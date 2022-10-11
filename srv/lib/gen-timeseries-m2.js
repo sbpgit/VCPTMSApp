@@ -10,7 +10,7 @@ class GenTimeseriesM2 {
      */
     async genTimeseries(adata, req) {
 
-        await GenF.logMessage(req, `Started history timeseries: ${adata}`);
+        await GenF.logMessage(req, `Started history timeseries`);
 
         let lMainProduct = '';
         let lFlag = '';
@@ -237,7 +237,7 @@ class GenTimeseriesM2 {
 
     async genTimeseriesF(adata, req) {
 
-        await GenF.logMessage(req, `Started future timeseries: ${adata}`);
+        await GenF.logMessage(req, `Started future timeseries`);
 
         /** Get Future Plan */
         const liFutureCharPlan = await cds.run(
@@ -368,7 +368,7 @@ class GenTimeseriesM2 {
 
     async genPrediction(adata, req) {
 
-        await GenF.logMessage(req, `Started Fully Configured Requirement Generation: ${adata}`);
+        await GenF.logMessage(req, `Started Fully Configured Requirement Generation`);
 
         const lDate = new Date();
         const lStartDate = new Date(
