@@ -144,9 +144,9 @@
                     <Page title="Run Logs">
                         <Table id="idScheRunLogData" items="{path: '/results'}">
                             <columns>
-                                <Column hAlign="Left" vAlign="Middle">
+                                <!-- <Column hAlign="Left" vAlign="Middle">
                                     <Text text="{i18n>time}" />
-                                </Column>
+                                </Column> -->
                                 <Column hAlign="Left" vAlign="Middle" width="400px">
                                     <Text text="{i18n>message}" />
                                 </Column>
@@ -163,8 +163,9 @@
                             <items>
                                 <ColumnListItem>
                                     <cells>
-                                        <Text text="{time}" />
-                                        <Text text="{text}" />
+                                        <!-- <Text text="{time}" />
+                                        <Text text="{text}" /> -->
+                                        <ObjectIdentifier title="{text}" text="{time}" />
                                         <ObjectIdentifier title="{type}" text="{code}" />
                                         <!-- <Text text="{type}" />
                                         <Text text="{code}" /> -->
