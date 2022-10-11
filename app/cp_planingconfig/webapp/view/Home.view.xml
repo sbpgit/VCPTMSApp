@@ -29,6 +29,7 @@
                             groupHeaderFactory: '.getGroupHeader'
                             }"
                             >
+<!--                            
                                 <headerToolbar>
                                     <OverflowToolbar>
                                         <content>
@@ -38,7 +39,7 @@
                                         </content>
                                     </OverflowToolbar>
                                 </headerToolbar>
-
+-->
                                 <columns>
                                     <Column visible="false">
                                         <!-- <Text text="GROUP_ID" /> -->
@@ -69,5 +70,12 @@
                 </ux:subSections>
             </ux:ObjectPageSection>
         </ux:sections>
+
+		<footer>
+			<OverflowToolbar>
+				<ToolbarSpacer/>
+				<Button icon="sap-icon://save" type="Emphasized" text="Save" class="btnSize" press="onPressSave" />
+			</OverflowToolbar>
+		</footer>        
     </ux:ObjectPageLayout>
 </mvc:View>
