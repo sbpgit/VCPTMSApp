@@ -1,18 +1,48 @@
 {
+<<<<<<< HEAD
+  "Component-dbg.js": 1665479929581,
+=======
+<<<<<<< HEAD
+  "controller/App.controller.js": 1661869074979,
+  "utils/locate-reuse-libs.js": 1661869074979,
+  "manifest.json": 1665490748092,
+  "model/models.js": 1661869074979,
+  "controller/Home.controller.js": 1663770914226,
+  "i18n/i18n.properties": 1662969900279,
+  "Component.js": 1661869074979,
+  "manifest-bundle.zip": 1665490748107,
+  "Component-preload.js": 1665490748568,
+  "model/models-dbg.js": 1661869074979,
+  "utils/locate-reuse-libs-dbg.js": 1661869074979,
+  "controller/Home-dbg.controller.js": 1663770914226,
+  "controller/App-dbg.controller.js": 1661869074979,
+  "Component-dbg.js": 1661869074979,
+  "view/VersionDialog.fragment.xml": 1661869074979,
+  "view/ScenarioDialog.fragment.xml": 1661869074979,
+  "view/ProdDialog.fragment.xml": 1663061997146,
+  "view/LocDialog.fragment.xml": 1663061997146,
+  "view/Home.view.xml": 1663920355387,
+  "view/App.view.xml": 1661869074979,
+  "css/style.css": 1661869074979,
+  "index.html": 1661869074979
+=======
   "Component.js": 1665479929581,
   "controller/App.controller.js": 1665479929581,
   "utils/locate-reuse-libs.js": 1665479929585,
+>>>>>>> c6a185989c1158673ddaabf3ff644f0fac96d2f1
   "model/models.js": 1665479929585,
+  "manifest.json": 1665498964990,
+  "utils/locate-reuse-libs.js": 1665479929585,
   "controller/Home.controller.js": 1665479929581,
-  "manifest.json": 1665493875611,
-  "i18n/i18n.properties": 1665479929581,
-  "manifest-bundle.zip": 1665493875636,
-  "Component-preload.js": 1665493876172,
-  "Component-dbg.js": 1665479929581,
+  "controller/App.controller.js": 1665479929581,
+  "Component.js": 1665479929581,
+  "manifest-bundle.zip": 1665498965005,
+  "Component-preload.js": 1665498965466,
+  "controller/App-dbg.controller.js": 1665479929581,
   "model/models-dbg.js": 1665479929585,
   "controller/Home-dbg.controller.js": 1665479929581,
-  "controller/App-dbg.controller.js": 1665479929581,
   "utils/locate-reuse-libs-dbg.js": 1665479929585,
+  "i18n/i18n.properties": 1665479929581,
   "view/VersionDialog.fragment.xml": 1665479929585,
   "view/ScenarioDialog.fragment.xml": 1665479929585,
   "view/ProdDialog.fragment.xml": 1665479929585,
@@ -21,4 +51,5 @@
   "view/App.view.xml": 1665479929585,
   "css/style.css": 1665479929581,
   "index.html": 1665479929581
+>>>>>>> d08332b4a0ff827f18e67a6f73e7b0eaa575ae82
 }

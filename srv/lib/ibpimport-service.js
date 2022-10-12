@@ -1793,7 +1793,7 @@ module.exports = cds.service.impl(async function () {
             var vScenario = 'BSL_SCENARIO';
             req[i].PERIODID4_TSTAMP = vWeekDate;
 
-            if (vWeekDate >= vDateDel) {
+            if (vWeekDate >= vDateDeld) {
                 await cds.run(
                     `DELETE FROM "CP_IBP_FUTUREDEMAND" WHERE "LOCATION_ID" = '` + req[i].LOCID + `' 
                                                       AND "PRODUCT_ID" = '`+ req[i].PRDID + `'

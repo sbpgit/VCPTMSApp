@@ -791,8 +791,8 @@
             <OverflowToolbar>
                 <ToolbarSpacer />
                 
-                <Button type="Emphasized" text="Schedule Job" press="onExecute" />
-                <Button type="Emphasized" text="Execute" press="onExecute" class="sapUiTinyMarginBeginEnd" />
+                <Button type="Emphasized" icon="sap-icon://create-entry-time" text="Schedule Job" press="onExecute" />
+                <Button type="Emphasized" icon="sap-icon://begin" text="Execute" press="onExecute" class="sapUiTinyMarginBeginEnd" />
 
             </OverflowToolbar>
         </footer>
