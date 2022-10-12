@@ -1,50 +1,18 @@
 {
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-  "model/models.js": 1661869074943,
-  "i18n/i18n.properties": 1661869074943,
-  "utils/locate-reuse-libs.js": 1661869074943,
-  "manifest.json": 1665490346932,
-  "controller/Home.controller.js": 1661869074943,
-  "controller/BaseController.js": 1661869074943,
-  "controller/App.controller.js": 1661869074943,
-  "Component.js": 1661869074943,
-  "manifest-bundle.zip": 1665490346981,
-  "Component-preload.js": 1665490347517,
-  "Component-dbg.js": 1661869074943,
-  "model/models-dbg.js": 1661869074943,
-  "controller/Home-dbg.controller.js": 1661869074943,
-  "controller/BaseController-dbg.js": 1661869074943,
-  "controller/App-dbg.controller.js": 1661869074943,
-  "utils/locate-reuse-libs-dbg.js": 1661869074943,
-  "view/StructureNodes.fragment.xml": 1661869074943,
-  "view/Profiles.fragment.xml": 1661869074943,
-  "view/ProdDialog.fragment.xml": 1661869074943,
-  "view/ObjDepDialog.fragment.xml": 1661869074943,
-  "view/LocDialog.fragment.xml": 1661869074943,
-  "view/Home.view.xml": 1661869074943,
-  "view/ComponentDialog.fragment.xml": 1661869074943,
-  "view/App.view.xml": 1661869074943,
-  "css/style.css": 1661869074943,
-  "index.html": 1661869074943
-=======
-  "model/models-dbg.js": 1665479929533,
->>>>>>> c6a185989c1158673ddaabf3ff644f0fac96d2f1
+  "controller/BaseController-dbg.js": 1665479929529,
+  "Component.js": 1665479929529,
   "utils/locate-reuse-libs.js": 1665479929533,
-  "manifest.json": 1665498642031,
-  "i18n/i18n.properties": 1665479929529,
   "model/models.js": 1665479929533,
   "controller/Home.controller.js": 1665479929529,
   "controller/BaseController.js": 1665479929529,
   "controller/App.controller.js": 1665479929529,
-  "Component.js": 1665479929529,
-  "manifest-bundle.zip": 1665498642050,
-  "Component-preload.js": 1665498642615,
-  "model/models-dbg.js": 1665479929533,
+  "manifest.json": 1665559575085,
+  "manifest-bundle.zip": 1665559575110,
+  "Component-preload.js": 1665559575716,
   "utils/locate-reuse-libs-dbg.js": 1665479929533,
+  "model/models-dbg.js": 1665479929533,
   "controller/Home-dbg.controller.js": 1665479929529,
-  "controller/BaseController-dbg.js": 1665479929529,
+  "i18n/i18n.properties": 1665479929529,
   "controller/App-dbg.controller.js": 1665479929529,
   "Component-dbg.js": 1665479929529,
   "view/StructureNodes.fragment.xml": 1665479929533,
@@ -57,5 +25,4 @@
   "view/App.view.xml": 1665479929533,
   "css/style.css": 1665479929529,
   "index.html": 1665479929529
->>>>>>> d08332b4a0ff827f18e67a6f73e7b0eaa575ae82
 }

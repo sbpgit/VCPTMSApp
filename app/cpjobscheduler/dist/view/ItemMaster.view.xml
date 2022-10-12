@@ -37,9 +37,11 @@
                         <cells>
                             <!-- <ObjectIdentifier title="{jobId}" text="{name}" /> -->
                             <VBox>
-                            <Link text="{jobId}" />
-                            <Text text="{name}"/>
+                            <Link text="{jobId}" press="handleLinkPress" />
+                            <Text text="{name}" />
+
                             </VBox>
+
                             <HBox>
                                 <Button id="idJobUpdate" icon="sap-icon://edit" press="onUpdateJob" tooltip="Update Job" iconDensityAware="false" type="Transparent" />
                                 <Button id="idJobDele" icon="sap-icon://decline" tooltip="Delete Job" press="onJobDelete" iconDensityAware="false" type="Transparent" />

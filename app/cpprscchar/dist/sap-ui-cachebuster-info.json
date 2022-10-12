@@ -1,48 +1,16 @@
 {
-<<<<<<< HEAD
-  "Component-dbg.js": 1665479929709,
-=======
-<<<<<<< HEAD
-  "model/models-dbg.js": 1661869075023,
-  "Utils.js": 1661869075023,
-  "utils/locate-reuse-libs.js": 1661869075023,
-  "model/models.js": 1661869075023,
-  "controller/Home.controller.js": 1665402576327,
-  "controller/BaseController.js": 1661869075023,
-  "controller/App.controller.js": 1661869075023,
-  "manifest.json": 1665490638642,
-  "Component.js": 1661869075023,
-  "manifest-bundle.zip": 1665490638656,
-  "Component-preload.js": 1665490639031,
-  "i18n/i18n.properties": 1663325350082,
-  "utils/locate-reuse-libs-dbg.js": 1661869075023,
-  "controller/Home-dbg.controller.js": 1665402576327,
-  "controller/BaseController-dbg.js": 1661869075023,
-  "controller/App-dbg.controller.js": 1661869075023,
-  "Utils-dbg.js": 1661869075023,
-  "Component-dbg.js": 1661869075023,
-  "view/ProdDialog.fragment.xml": 1661869075023,
-  "view/LocDialog.fragment.xml": 1661869075023,
-  "view/Home.view.xml": 1663325350082,
-  "view/App.view.xml": 1661869075023,
-  "css/style.css": 1661869075023,
-  "index.html": 1661869075023
-=======
-  "css/style.css": 1665479929709,
-  "manifest.json": 1665493781224,
+  "manifest.json": 1665559784856,
+  "Component.js": 1665479929709,
   "utils/locate-reuse-libs.js": 1665479929709,
->>>>>>> c6a185989c1158673ddaabf3ff644f0fac96d2f1
   "model/models.js": 1665479929709,
-  "utils/locate-reuse-libs.js": 1665479929709,
-  "manifest.json": 1665498874445,
   "controller/Home.controller.js": 1665479929709,
   "controller/BaseController.js": 1665479929709,
   "controller/App.controller.js": 1665479929709,
   "Utils.js": 1665479929709,
-  "Component.js": 1665479929709,
-  "manifest-bundle.zip": 1665498874458,
-  "Component-preload.js": 1665498874850,
   "i18n/i18n.properties": 1665479929709,
+  "manifest-bundle.zip": 1665559784866,
+  "Component-preload.js": 1665559785225,
+  "Component-dbg.js": 1665479929709,
   "model/models-dbg.js": 1665479929709,
   "controller/Home-dbg.controller.js": 1665479929709,
   "controller/BaseController-dbg.js": 1665479929709,
@@ -55,5 +23,4 @@
   "view/App.view.xml": 1665479929709,
   "css/style.css": 1665479929709,
   "index.html": 1665479929709
->>>>>>> d08332b4a0ff827f18e67a6f73e7b0eaa575ae82
 }

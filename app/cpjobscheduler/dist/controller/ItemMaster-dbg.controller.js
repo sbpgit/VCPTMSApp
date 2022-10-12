@@ -7,6 +7,7 @@ sap.ui.define(
     "sap/ui/model/FilterOperator",
     "sap/m/MessageBox",
     "sap/ui/Device",
+    "sap/ui/core/Fragment"
   ],
   function (
     BaseController,
@@ -15,7 +16,8 @@ sap.ui.define(
     Filter,
     FilterOperator,
     MessageBox,
-    Device
+    Device,
+    Fragment
   ) {
     "use strict";
     var that, oGModel;
@@ -174,6 +176,39 @@ sap.ui.define(
             });
             that.oList.setModel(that.listModel);
             that.onSearch();
+          },
+
+
+          handleLinkPress: function(oEvent){
+            // Getting the selected Item from list
+            oGModel = this.getModel("oGModel");
+            var oButton = oEvent.getSource(),
+            oView = this.getView();
+          var oSelItem = oEvent.getSource().getParent().getBindingContext().getObject();
+
+        //   Setting the selected values
+          oGModel.setProperty("/jobId", oSelItem.jobId);
+          oGModel.setProperty("/description", oSelItem.description);
+          oGModel.setProperty("/startTime", oSelItem.startTime);
+          oGModel.setProperty("/endTime", oSelItem.endTime);
+          oGModel.setProperty("/createdAt", oSelItem.createdAt);
+
+          	// create popover
+			if (!that._pPopover) {
+				that._pPopover = Fragment.load({
+					id: oView.getId(),
+					name: "cpapp.cpjobscheduler.view.JobLink",
+					controller: this
+				}).then(function (oPopover) {
+					oView.addDependent(oPopover);
+					return oPopover;
+				});
+			}
+			that._pPopover.then(function (oPopover) {
+				oPopover.openBy(oButton);
+			});
+
+
           },
 
       /**
