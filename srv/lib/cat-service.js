@@ -845,6 +845,8 @@ module.exports = (srv) => {
                 await obgenTimeseriesM2.genTimeseries(req.data, req);                
                 break;
         }
+        const obgenTimeseries_rt = new GenTimeseriesRT();
+        await obgenTimeseries_rt.genTimeseries_rt(req.data, req);
 
     });
     srv.on("generate_timeseriesF", async (req) => {
@@ -859,20 +861,11 @@ module.exports = (srv) => {
                 const obgenTimeseriesM2 = new GenTimeseriesM2();
                 await obgenTimeseriesM2.genTimeseriesF(req.data, req);              
                 break;
-        }        
+        }    
+        const obgenTimeseries_rt = new GenTimeseriesRT();
+        await obgenTimeseries_rt.genTimeseriesF_rt(req.data, req);    
     });
     
-    // Generate Timeseries fucntion calls
-    srv.on("generate_timeseries_rt", async (req) => {
-        const obgenTimeseries_rt = new GenTimeseriesRT();
-        await obgenTimeseries_rt.genTimeseries_rt(req.data, req);
-
-    });
-    srv.on("generate_timeseriesF_rt", async (req) => {
-        const obgenTimeseries_rt = new GenTimeseriesRT();
-        await obgenTimeseries_rt.genTimeseriesF_rt(req.data, req);
-
-    });
     // Generate Unique ID
     srv.on("genUniqueID", async (req) => {
         const obgenSOFunctions = new SOFunctions();

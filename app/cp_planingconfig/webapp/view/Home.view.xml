@@ -1,4 +1,4 @@
-<mvc:View controllerName="cpapp.cpplaningconfig.controller.Home" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:ux="sap.uxap">
+<mvc:View height="100%" controllerName="cpapp.cpplaningconfig.controller.Home" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:ux="sap.uxap">
     <ux:ObjectPageLayout id="ObjectPageLayout" showHeaderContent="false" showFooter="true">
         <ux:headerTitle>
             <ux:ObjectPageDynamicHeaderTitle class="titleAlign">
@@ -72,10 +72,10 @@
         </ux:sections>
        
 		<ux:footer>        
-			<OverflowToolbar>
+			<Toolbar>
 				<ToolbarSpacer/>
 				<Button icon="sap-icon://save" type="Emphasized" text="Save" class="btnSize" press="onPressSave" />
-			</OverflowToolbar>
+			</Toolbar>
 		</ux:footer> 
     </ux:ObjectPageLayout>
 </mvc:View>

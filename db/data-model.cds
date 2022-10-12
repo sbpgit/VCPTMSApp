@@ -631,6 +631,8 @@ context cp {
         key LINE_ID     : String(40) @title : 'Line';
         key RESTRICTION : String(30) @title : 'Restriction';
             RTR_DESC    : String(30) @title : 'Restriction Desc';
+            RTR_TYPE    : String(10) @title : 'Restriction Type';
+            RTR_QTY     : Decimal(13, 3) @title : 'Component Quantity';
             VALID_FROM  : Date       @title : 'Valid From';
             VALID_TO    : Date       @title : 'Valid To';
     }
@@ -655,14 +657,14 @@ context cp {
     };
 
     // Product restrictions
-    entity PRODRESTRICT {
-        key LOCATION_ID : String(4)      @title : 'Location '; //Association to ZLOCATION;//
-        key PRODUCT_ID  : String(40)     @title : 'Product';
-        key RESTRICTION : String(30)     @title : 'Restriction';
-            RTR_QTY     : Decimal(13, 3) @title : 'Component Quantity';
-            VALID_FROM  : Date           @title : 'Valid From';
-            VALID_TO    : Date           @title : 'Valid To';
-    };
+    // entity PRODRESTRICT {
+    //     key LOCATION_ID : String(4)      @title : 'Location '; //Association to ZLOCATION;//
+    //     key PRODUCT_ID  : String(40)     @title : 'Product';
+    //     key RESTRICTION : String(30)     @title : 'Restriction';
+    //         RTR_QTY     : Decimal(13, 3) @title : 'Component Quantity';
+    //         VALID_FROM  : Date           @title : 'Valid From';
+    //         VALID_TO    : Date           @title : 'Valid To';
+    // };
 
 
     entity CIR_GENERATED {
