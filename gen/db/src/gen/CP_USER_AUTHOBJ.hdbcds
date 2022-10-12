@@ -1,0 +1,6 @@
+entity CP_USER_AUTHOBJ {
+  key USER : String(100);
+  key PARAMETER : String(100);
+  key AUTH_GROUP : String(4);
+  DESCRIPTION : String(250);
+};

@@ -1,0 +1,8 @@
+entity CP_SEEDORDER_HEADER {
+  key SEED_ORDER : String(10);
+  LOCATION_ID : String(4);
+  PRODUCT_ID : String(40);
+  UNIQUE_ID : Integer;
+  ORD_QTY : Decimal(13, 3);
+  MAT_AVAILDATE : LocalDate;
+};

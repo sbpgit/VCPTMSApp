@@ -1,0 +1,8 @@
+entity CP_ASSEMBLY_COMP {
+  key LOCATION_ID : String(4);
+  key ASSEMBLY : String(40);
+  key COMPONENT : String(40);
+  COMP_QTY : Integer;
+  VALID_FROM : LocalDate;
+  VALID_TO : LocalDate;
+};

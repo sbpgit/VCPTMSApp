@@ -1,0 +1,11 @@
+entity JS_LOGS {
+  key RUN_ID : String(50);
+  HTTP_STATUS : Integer;
+  EXECUTION_TIMESTAMP : String(50);
+  RUN_STATUS : String(50);
+  RUN_STATE : String(50);
+  STATUS_MESSAGE : String(5000);
+  SCHEDULED_TIMESTAMP : String(50);
+  COMPLETED_TIMESTAMP : String(50);
+  RUNTEXT : String(5000);
+};

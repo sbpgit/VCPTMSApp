@@ -696,6 +696,38 @@ module.exports = cds.service.impl(async function () {
         return await servicePost.tx(req).get(resUrl)
         // GetExportResult
     });
+    // Create Locations in IBP
+    this.on("exportRestrDetails_fn", async (req) => {
+        let vFlag = '';
+        let oReq = await obibpfucntions.exportRtrHdrDet(req);
+        var vTransID = new Date().getTime().toString();
+        var vTransID2 = new Date().getTime().toString();
+        var oEntry =
+        {
+            "TransactionID": vTransID,
+            "RequestedAttributes": "VCRESTRICTIONID,VCRESTRICTIONDESC,VCRESTRICTIONTYPE",
+            "DoCommit": true,
+            "NavVCPRESTRICTION": oReq.rtrhdr
+        }
+        var oEntry2 =
+        {
+            "TransactionID": vTransID2,
+            "RequestedAttributes": "LOCID,VCRESTRICTIONID,VCPLACEHOLDER",
+            "DoCommit": true,
+            "NavVCPRESTRICTION": oReq.locrtr
+        }
+        try {
+            await servicePost.tx(req).post("/VCPRESTRICTIONTrans", oEntry);
+            await servicePost.tx(req).post("/VCPLOCRESTRICTIONTrans", oEntry2);
+            vFlag = 'S';
+        }
+        catch (e) {
+            vFlag = '';
+        }        
+        var resUrl = "/GetExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID2 + "'";
+        return await servicePost.tx(req).get(resUrl)
+        // GetExportResult
+    });
     //Component Requirement Qty 
     /***************************************************************************/
     //////////////////////// Services for CF/////////////////////////////////////
@@ -1317,7 +1349,7 @@ module.exports = cds.service.impl(async function () {
         }
         // Once Sales History is successfull , send sales Config
         if (flag === 'S') {
-            let oReq = obibpfucntions.exportSalesCfg(req);
+            let oReq = await obibpfucntions.exportSalesCfg(req);
             var vTransID = new Date().getTime().toString();
             var oEntryCfg =
             {
@@ -1561,7 +1593,7 @@ module.exports = cds.service.impl(async function () {
         //     oReq.sales.push(vsales);
 
         // }
-        let oReq = obibpfucntions.exportSalesCfg(req);
+        let oReq = await obibpfucntions.exportSalesCfg(req);
         var vTransID = new Date().getTime().toString();
         var oEntry =
         {
@@ -2246,6 +2278,98 @@ module.exports = cds.service.impl(async function () {
                     }
                     //Run log updated successfully
                     console.log("Export of CIR to IBP, job update results", result);
+
+                });
+            }
+            // return "Failed to import IBP Future char.plan";
+        }
+    });
+    // Create Locations in IBP
+    this.on("exportRestrDetails", async (req) => {
+        let vFlag = '';
+        
+        await GenF.logMessage(req, `Started exporting Restriction header`);
+        let oReq = await obibpfucntions.exportRtrHdrDet(req);
+        var vTransID = new Date().getTime().toString();
+        var vTransID2 = new Date().getTime().toString();
+        var oEntry =
+        {
+            "TransactionID": vTransID,
+            "RequestedAttributes": "VCRESTRICTIONID,VCRESTRICTIONDESC,VCRESTRICTIONTYPE",
+            "DoCommit": true,
+            "NavVCPRESTRICTION": oReq.rtrhdr
+        }
+        var oEntry2 =
+        {
+            "TransactionID": vTransID2,
+            "RequestedAttributes": "LOCID,VCRESTRICTIONID,VCPLACEHOLDER",
+            "DoCommit": true,
+            "NavVCPRESTRICTION": oReq.locrtr
+        }
+        try {
+            await servicePost.tx(req).post("/VCPRESTRICTIONTrans", oEntry);
+            await servicePost.tx(req).post("/VCPLOCRESTRICTIONTrans", oEntry2);
+            vFlag = 'S';
+        }
+        catch (e) {
+            vFlag = '';
+        }        
+        if (vFlag === 'S') {
+            
+            await GenF.logMessage(req, `Export of Restriction header is successfull`);
+            let dataObj = {};
+            dataObj["success"] = true;
+            dataObj["message"] = "Export Restriction header details is successfull at " + new Date();
+
+
+            if (request.headers['x-sap-job-id'] > 0) {
+                const scheduler = getJobscheduler(request);
+
+                var updateReq = {
+                    jobId: request.headers['x-sap-job-id'],
+                    scheduleId: request.headers['x-sap-job-schedule-id'],
+                    runId: request.headers['x-sap-job-run-id'],
+                    data: dataObj
+                };
+
+                console.log("Export of Restriction header details, update req", updateReq);
+
+                scheduler.updateJobRunLog(updateReq, function (err, result) {
+                    if (err) {
+                        return console.log('Error updating run log: %s', err);
+                    }
+                    //Run log updated successfully
+                    console.log("Export of Restriction header details, job update results", result);
+
+                });
+            }
+            //return "Successfully imported IBP Future char.plan";
+        } else {
+            
+            await GenF.logMessage(req, `Export of Restriction header failed`);
+            let dataObj = {};
+            dataObj["failed"] = false;
+            dataObj["message"] = "Export of Restriction header details has failed at" + new Date();
+
+
+            if (request.headers['x-sap-job-id'] > 0) {
+                const scheduler = getJobscheduler(request);
+
+                var updateReq = {
+                    jobId: request.headers['x-sap-job-id'],
+                    scheduleId: request.headers['x-sap-job-schedule-id'],
+                    runId: request.headers['x-sap-job-run-id'],
+                    data: dataObj
+                };
+
+                console.log("Export of Restriction header details, job update req", updateReq);
+
+                scheduler.updateJobRunLog(updateReq, function (err, result) {
+                    if (err) {
+                        return console.log('Error updating run log: %s', err);
+                    }
+                    //Run log updated successfully
+                    console.log("Export of Restriction header details, job update results", result);
 
                 });
             }

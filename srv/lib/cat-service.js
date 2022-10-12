@@ -845,6 +845,8 @@ module.exports = (srv) => {
                 await obgenTimeseriesM2.genTimeseries(req.data, req);                
                 break;
         }
+        const obgenTimeseries_rt = new GenTimeseriesRT();
+        await obgenTimeseries_rt.genTimeseries_rt(req.data, req);
 
     });
     srv.on("generate_timeseriesF", async (req) => {
@@ -859,20 +861,11 @@ module.exports = (srv) => {
                 const obgenTimeseriesM2 = new GenTimeseriesM2();
                 await obgenTimeseriesM2.genTimeseriesF(req.data, req);              
                 break;
-        }        
+        }    
+        const obgenTimeseries_rt = new GenTimeseriesRT();
+        await obgenTimeseries_rt.genTimeseriesF_rt(req.data, req);    
     });
     
-    // Generate Timeseries fucntion calls
-    srv.on("generate_timeseries_rt", async (req) => {
-        const obgenTimeseries_rt = new GenTimeseriesRT();
-        await obgenTimeseries_rt.genTimeseries_rt(req.data, req);
-
-    });
-    srv.on("generate_timeseriesF_rt", async (req) => {
-        const obgenTimeseries_rt = new GenTimeseriesRT();
-        await obgenTimeseries_rt.genTimeseriesF_rt(req.data, req);
-
-    });
     // Generate Unique ID
     srv.on("genUniqueID", async (req) => {
         const obgenSOFunctions = new SOFunctions();
@@ -2130,10 +2123,9 @@ module.exports = (srv) => {
                 }
 
                     responseMessage = errRes.message;
-                }
-            }
-        }
-        else if (req.data.FLAG === "D") {
+                // }
+            
+        } else if (req.data.FLAG === "D") {
             for (var i = 0; i < aRtrChar.length; i++) {
                 oRtrDetailsIns.RESTRICTION = aRtrChar[i].RESTRICTION;
                 oRtrDetailsIns.CLASS_NUM = aRtrChar[i].CLASS_NUM;
@@ -2150,6 +2142,7 @@ module.exports = (srv) => {
                 }
 
             }
+        
 
             if (iCounter > 0) { //  if deletion is successfull
                 aRtrDetailsIns = [];

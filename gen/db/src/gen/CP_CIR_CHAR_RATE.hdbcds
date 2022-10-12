@@ -1,0 +1,14 @@
+entity CP_CIR_CHAR_RATE {
+  key LOCATION_ID : String(4);
+  key PRODUCT_ID : String(40);
+  key WEEK_DATE : LocalDate;
+  key MODEL_VERSION : String(20);
+  key VERSION : String(10);
+  key SCENARIO : String(32);
+  key CHAR_NUM : String(10);
+  key CHARVAL_NUM : String(10);
+  SEQUENCE : Integer;
+  GEN_QTY : Decimal(13, 3);
+  PLAN_QTY : Decimal(13, 3);
+  DEVIATION : Decimal(13, 3);
+};

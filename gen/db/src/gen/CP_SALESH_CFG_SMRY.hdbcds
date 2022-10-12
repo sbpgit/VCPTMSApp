@@ -1,0 +1,21 @@
+entity CP_SALESH_CFG_SMRY {
+  key WEEK_DATE : LocalDate;
+  key CHAR_NUM : String(10);
+  key CHARVAL_NUM : String(10);
+  key CLASS_NUM : String(18);
+  key PRODUCT_ID : String(40);
+  key CUSTOMER_GROUP : String(20);
+  LOCATION_ID : String(4);
+  SALEHIST_PROD : Decimal(13, 3);
+  RESERVE_FIELD1 : String(20);
+  RESERVE_FIELD2 : String(20);
+  RESERVE_FIELD3 : String(20);
+  RESERVE_FIELD4 : String(20);
+  RESERVE_FIELD5 : String(20);
+  CHANGED_DATE : LocalDate;
+  CHANGED_BY : String(12);
+  CREATED_DATE : LocalDate;
+  CREATED_BY : String(12);
+  CHANGED_TIME : LocalTime;
+  CREATED_TIME : LocalTime;
+};
