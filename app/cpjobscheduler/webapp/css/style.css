@@ -1,7 +1,7 @@
 Enter your custom styles here
 
 
-/* div#container-cpapp\.cpjobscheduler---Details--fcl-beginColumn{
+div#container-cpapp\.cpjobscheduler---Details--fcl-beginColumn{
     width: 50px !important;
 }
 
@@ -10,15 +10,15 @@ div#application-cpjobscheduler-display-component---Details--fcl-beginColumn {
 }
 
 div#container-cpapp\.cpjobscheduler---Details--fcl-midColumn{
-    width: 110% !important;
+    /* width: 110% !important; */
     width: 1550px !important;
-    margin-left: -250px !important;
+    /* margin-left: -250px !important; */
 } 
 div#application-cpjobscheduler-display-component---Details--fcl-midColumn{
-    width: 110% !important;
+    /* width: 110% !important; */
     width: 1550px !important;
-    margin-left: -250px !important;
-}  */
+    /* margin-left: -250px !important; */
+} 
 
 section#__splitter4-content-0 {
     height: 45% !important;
