@@ -45,11 +45,21 @@ class GenTimeseriesM2 {
                     xpr: [
                         { ref: ["LOCATION_ID"] }, '=', { val: adata.LOCATION_ID }, 'and',
                         { ref: ["PRODUCT_ID"] }, '=', { val: lMainProduct }, 'and',
-                        { ref: ["UID_TYPE"] }, '=', { val: 'P' }
+                        { ref: ["UID_TYPE"] }, '=', { val: 'P' }, 'and',
+                        { ref: ["ACTIVE"] }, '=', { val: 'true' }
                     ]
                 }
 
-            );
+            )
+            .orderBy("UNIQUE_ID",
+            "PRODUCT_ID",
+            "LOCATION_ID",
+            "UNIQUE_DESC",
+            "UID_TYPE",
+            "ACTIVE",
+            "CHAR_NUM",
+            "CHARVAL_NUM");
+            
         // Remove Partial Characteristics
         const lipartialchar = await cds.run(
             `SELECT *
