@@ -6,4 +6,5 @@ PARAMETER_ID;GROUP_ID;DESCRIPTION;MIN_VALUE;MAX_VALUE;VALUE_HELP;VALUE_HELP_TAB
 5;2;Execution;0;0;true;Method_Types
 6;3;Seed Order Series;1;9999;false;NA
 7;3;Seed Order Prefix;0;0;false;NA
-8;4;IBP Planning Area;0;0;false;NA    
+8;4;IBP Planning Area;0;0;false;NA   
+9;1;Firm Horizon;0;0;false;NA 

@@ -18,7 +18,7 @@ service IBPImportSrv @(impl : './lib/ibpimport-service.js') {
     function createActCompDemand(LOCATION_ID : String(4)) returns String;// ,PRODUCT_ID : String(40)) returns String;
     function createIBPLocProd(LOCATION_ID : String(4)) returns String;
     function createIBPCIR(LOCATION_ID : String(4),PRODUCT_ID : String(40)) returns String;  // Partial Product
-
+    // function exportRestrictions_fn(LOCATIOn)
 
     // actions for testing from CF/ jobscheduler 
 

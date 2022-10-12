@@ -349,6 +349,7 @@
                             <RadioButton id="idIBPCustGrp" text="Customer Group" />
                             <RadioButton id="idIBPProd" text="Product" />
                             <RadioButton id="idIBPClass" text="Class" />
+                            
                             <RadioButton id="idIBPSalesHis" text="Sales History" />
                             <!-- <RadioButton id="idIBPSalesHisConfig" text="Sales History Config" /> -->
                             <RadioButton id="idIBPActCompDemd" text="Actual Components Demand" />
