@@ -257,6 +257,9 @@ service CatalogService @(impl : './lib/cat-service.js'){
     function maintainRestrHdr(LOCATION_ID: String(4), LINE_ID: String(40), RESTRICTION : String(30), RTR_DESC    : String(30), VALID_FROM  : Date , VALID_TO : Date, Flag: String(1)) returns String;
     
     function maintainRestrDet (FLAG : String(1), RTRCHAR : String ) returns String;
+    
+    function maintainRestrDetail (FLAG : String(1), RTRCHAR : String ) returns String;
+
     // CIR char rate
     entity getCIRCharRate       as projection on V_CIR_CHAR_RATE;
     entity getCIRVerScen        as projection on V_CIRVERSCEN;
@@ -290,4 +293,15 @@ service CatalogService @(impl : './lib/cat-service.js'){
     entity getSalesStock as projection on od.SALES_S;
     // Assembly Requirements
     function genAssemblyreq(LOCATION_ID : String(4), PRODUCT_ID : String(40)) returns String;
+    action generateAssemblyReq(LOCATION_ID : String(4), PRODUCT_ID : String(40));
+
+    //VC Planner Documentation Maintenance- Pradeep
+    function addPAGEHEADER(Flag1:String, PAGEID: Integer, DESCRIPTION:String, PARENTNODEID:Integer,HEIRARCHYLEVEL:Integer ) returns String;
+   function addPAGEPARAGRAPH(Flag1:String, PAGEID: Integer, DESCRIPTION:String,  CONTENT:String ) returns String;
+   function deletePAGEHEADER(Flag1:String,PAGEID:Integer) returns String;
+   function deletePAGEPARAGRAPH(Flag1:String, PAGEID:Integer) returns String;
+   function addJson(PAGEID: Integer, DESCRIPTION:String,  CONTENT:String) returns String;
+   function editJSONHeader(PAGEID: Integer, DESCRIPTION:String, PARENTNODEID:Integer,HEIRARCHYLEVEL:Integer ) returns String;
+   //End of VC Planner Documentation Maintenance- Pradeep
+
 }

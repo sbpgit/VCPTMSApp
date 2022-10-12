@@ -194,7 +194,7 @@ sap.ui.define(
             onResetDate: function () {
                 that.byId("fromDate").setValue("");
                 that.byId("toDate").setValue("");
-                oGModel.setProperty("/resetFlag", "X");
+                // oGModel.setProperty("/resetFlag", "X");
                 that.oLoc.setValue("");
                 that.oProd.setValue("");
                 that.oVer.setValue("");
@@ -634,6 +634,8 @@ sap.ui.define(
             getNextMonday: function (imDate) {
                 var vDate, vMonth, vYear;
                 const lDate = new Date(imDate);
+                var timeOffsetInMS = lDate.getTimezoneOffset() * 60000;
+                lDate.setTime(lDate.getTime() + timeOffsetInMS);
                 let lDay = lDate.getDay();
                 if (lDay !== 0) lDay = 7 - lDay;
                 lDay = lDay + 1;
@@ -660,6 +662,8 @@ sap.ui.define(
             addDays: function (imDate, imDays) {
                 var vDate, vMonth, vYear;
                 const lDate = new Date(imDate);
+                var timeOffsetInMS = lDate.getTimezoneOffset() * 60000;
+                lDate.setTime(lDate.getTime() + timeOffsetInMS);
                 const lNextWeekDay = new Date(
                     lDate.getFullYear(),
                     lDate.getMonth(),

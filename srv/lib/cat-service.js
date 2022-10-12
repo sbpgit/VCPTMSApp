@@ -11,7 +11,7 @@ const GenTimeseriesM2 = require("./gen-timeseries-m2");
 const SOFunctions = require("./so-function");
 const Catservicefn = require("./catservice-function");
 const VarConfig = require("./variantconfig");
-const AssemblyReq =  require("./assembly-req");
+const AssemblyReq = require("./assembly-req");
 const CIRService = require("./cirdata-functions");          // 
 const containerSchema = cds.env.requires.db.credentials.schema;
 // Create connection parameters to continer
@@ -128,7 +128,7 @@ module.exports = (srv) => {
 
         const liCompQty = await cds.run(
             `
-            SELECT * FROM "CP_ASSEMBLY_REQ"
+            SELECT * FROM "V_ASMREQ_PRODCONSD"
             WHERE "LOCATION_ID" = '` +
             req.data.LOCATION_ID +
             `'
@@ -159,8 +159,9 @@ module.exports = (srv) => {
                           "PRODUCT_ID",
                           "VERSION",
                           "SCENARIO",
+                          "ITEM_NUM",
                           "COMPONENT"
-          FROM "CP_ASSEMBLY_REQ"
+          FROM "V_ASMREQ_PRODCONSD"
           WHERE "LOCATION_ID" = '` +
             req.data.LOCATION_ID +
             `' AND "PRODUCT_ID" = '` +
@@ -182,6 +183,7 @@ module.exports = (srv) => {
                     "PRODUCT_ID" ASC,
                     "VERSION" ASC,
                     "SCENARIO" ASC,
+                    "ITEM_NUM" ASC,
                     "COMPONENT" ASC`
         );
         var vDateSeries = vDateFrom;
@@ -211,8 +213,8 @@ module.exports = (srv) => {
             // vCompIndex is to get Componnent quantity for all dates
             vWeekIndex = 0; //j
             lsCompWeekly.LOCATION_ID = liComp[j].LOCATION_ID;
-            lsCompWeekly.PRODUCT_ID = liComp[j].PRODUCT_ID;
-            lsCompWeekly.ITEM_NUM = '';//liComp[j].ITEM_NUM;
+            lsCompWeekly.PRODUCT_ID = liComp[j].REF_PRODID;
+            lsCompWeekly.ITEM_NUM = liComp[j].ITEM_NUM;
             //   lsCompWeekly.ASSEMBLY = liComp[j].COMPONENT;
             lsCompWeekly.COMPONENT = liComp[j].COMPONENT;
             lsCompWeekly.VERSION = liComp[j].VERSION;
@@ -364,7 +366,7 @@ module.exports = (srv) => {
                 }
             }
             liCompWeekly.push(GenFunctions.parse(lsCompWeekly));
-           // lsCompWeekly = {};
+            // lsCompWeekly = {};
             // }
             lsCompWeekly = {};
         }
@@ -818,6 +820,10 @@ module.exports = (srv) => {
     });
 
     srv.on("genAssemblyreq", async (req) => {
+        const objAsmreq = new AssemblyReq();
+        await objAsmreq.genAsmreq(req.data);
+    });
+    srv.on("generateAssemblyReq", async (req) => {
         const objAsmreq = new AssemblyReq();
         await objAsmreq.genAsmreq(req.data);
     });
@@ -1965,6 +1971,117 @@ module.exports = (srv) => {
         );
 
     });
+
+    // Retriction rule
+    // Maintain partial configurations for new product
+    srv.on("maintainRestrDetail", async (req) => {
+        let liresults = [];
+        let lsresults = {};
+        let liRtrChar = {};
+        var responseMessage;
+        liRtrChar = JSON.parse(req.data.RTRCHAR);
+        let sRTR = liRtrChar[0].RESTRICTION;
+        let aFilteredChars = [];
+        let aFilteredResults = [];
+        let aCharCounters = [];
+        let oCharCounter = {};
+        let index = 0;
+
+        const liRtrDetails = await cds.run(
+            `SELECT *
+            FROM "CP_RESTRICT_DETAILS"
+            WHERE "RESTRICTION" = '` + sRTR + `'
+            ORDER BY  "CHAR_NUM", "CHAR_COUNTER" DESC`
+        );
+
+        let iCounter = liRtrDetails[0].CHAR_COUNTER;
+
+        if (req.data.FLAG === "C" || req.data.FLAG === "E") {
+            for (var i = 0; i < liRtrChar.length; i++) {
+                oCharCounter = {};
+                if (aCharCounters.length > 0) {
+                    aFilteredChars = aCharCounters.filter(function (aCharCounter) {
+                        return aCharCounter.CHAR_NUM === liRtrChar[i].CHAR_NUM;
+                    });
+                } else {
+
+                    aFilteredChars = liRtrDetails.filter(function (aRtrChars) {
+                        return aRtrChars.CHAR_NUM === liRtrChar[i].CHAR_NUM;
+                    });
+                }
+
+                if (aFilteredChars.length > 0) {
+                    iCounter = aFilteredChars[0].CHAR_COUNTER;
+
+                    oCharCounter.CHAR_NUM = liRtrChar[i].CHAR_NUM;
+                    oCharCounter.CHAR_COUNTER = iCounter;
+
+                    index = aCharCounters.findIndex((obj) => obj.CHAR_NUM === liRtrChar[i].CHAR_NUM); // find index
+                    if (index === -1) {
+                        index = aCharCounters.length;
+                    }
+                    aCharCounters[index] = oCharCounter; // replace with new object ... working :)
+
+                } else {
+                    iCounter = iCounter + 1;
+                    oCharCounter.CHAR_NUM = liRtrChar[i].CHAR_NUM;
+                    oCharCounter.CHAR_COUNTER = iCounter;
+                    aCharCounters.push(oCharCounter);
+                }
+
+                lsresults.RESTRICTION = liRtrChar[i].RESTRICTION;
+                // lsresults.RTR_COUNTER = liRtrChar[i].RTR_COUNTER;
+                lsresults.CLASS_NUM = liRtrChar[i].CLASS_NUM;
+                lsresults.CHAR_NUM = liRtrChar[i].CHAR_NUM;
+                lsresults.CHAR_COUNTER = iCounter; //liRtrChar[i].CHAR_COUNTER;
+                lsresults.CHARVAL_NUM = liRtrChar[i].CHARVAL_NUM;
+                // if (req.data.FLAG === "E") {
+                //     try {
+                //         // await cds.delete("CP_RESTRICT_DETAILS", lsresults);
+                //     } catch (e) {
+                //         //DONOTHING
+                //     }
+                // }
+                lsresults.OD_CONDITION = liRtrChar[i].OD_CONDITION;
+                lsresults.ROW_ID = iCounter; //liRtrChar[i].ROW_ID;
+                liresults.push(lsresults);
+                lsresults = {};
+
+            }
+            if (liresults.length > 0) {
+                try {
+                    await cds.run(INSERT.into("CP_RESTRICT_DETAILS").entries(liresults));
+                    responseMessage = " Creation/Updation successful";
+                } catch (e) {
+                    //DONOTHING
+                    responseMessage = " Creation failed";
+                    // createResults.push(responseMessage);
+                }
+            }
+        }
+        else if (req.data.FLAG === "D") {
+            for (var i = 0; i < liRtrChar.length; i++) {
+                lsresults.RESTRICTION = liRtrChar[i].RESTRICTION;
+                // lsresults.RTR_COUNTER = liRtrChar[i].RTR_COUNTER;
+                lsresults.CLASS_NUM = liRtrChar[i].CLASS_NUM;
+                lsresults.CHAR_NUM = liRtrChar[i].CHAR_NUM;
+                lsresults.CHAR_COUNTER = liRtrChar[i].CHAR_COUNTER;
+                lsresults.CHARVAL_NUM = liRtrChar[i].CHARVAL_NUM;
+                // if (req.data.FLAG === "E" && i === 0) {
+                try {
+                    await cds.delete("CP_RESTRICT_DETAILS", lsresults);
+                    break;
+                } catch (e) {
+                    //DONOTHING
+                }
+                // }
+            }
+        }
+        lsresults = {};
+        return responseMessage;
+    });
+
+
     // POST Service for Unique Characteristic Items and Weekly Quantities
     srv.on("postCIRQuantities", async (req) => {
         const objCIR = new CIRService();
@@ -2086,4 +2203,160 @@ module.exports = (srv) => {
 
     // EOI - Deepa
 
+    //VC Planner Document Maintenance- Pradeep
+    srv.on("addPAGEHEADER", async req => {
+        let masterData = {};
+        var responseMessage1;
+        var Flag1 = req.data.Flag1;
+        if (Flag1 === 'n') {
+            masterData.PAGEID = req.data.PAGEID;
+            masterData.DESCRIPTION = req.data.DESCRIPTION;
+            masterData.PARENTNODEID = req.data.PARENTNODEID;
+            masterData.HEIRARCHYLEVEL = req.data.HEIRARCHYLEVEL;
+            var fs = require("fs");
+            var json = fs.readFileSync("app/cpmaintenancevcplanner/webapp/model/header.json", 'utf8');
+            var words = JSON.parse(json);
+            const file = words;
+            var i = words.length;
+            file[i] = masterData;
+            fs.writeFile("app/cpmaintenancevcplanner/webapp/model/header.json", JSON.stringify(file), (err) => {
+                if (err) { console.error(err); return; };
+                console.log("File has been updated in Maintenance header.json");
+            });
+            fs.writeFile("app/cpvcplannerdocumentation/webapp/model/headerContent.json", JSON.stringify(file), (err) => {
+                if (err) { console.error(err); return; };
+                console.log("File has been updated in Project headerContent.json");
+            });
+        }
+        return responseMessage1;
+    });
+    srv.on("addPAGEPARAGRAPH", async req => {
+        let detailData = {};
+        var responseMessage1;
+        var Flag1 = req.data.Flag1;
+        if (Flag1 === 'n') {
+            detailData.PAGEID = req.data.PAGEID;
+            detailData.DESCRIPTION = req.data.DESCRIPTION;
+            detailData.CONTENT = req.data.CONTENT;
+            var fs = require("fs");
+            var json = fs.readFileSync("app/cpmaintenancevcplanner/webapp/model/data.json", 'utf8');
+            var words = JSON.parse(json);
+            const file = words;
+            var i = words.length;
+            file[i] = detailData;
+            fs.writeFile("app/cpmaintenancevcplanner/webapp/model/data.json", JSON.stringify(file), (err) => {
+                if (err) { console.error(err); return; };
+                console.log("File has been updated");
+            });
+            fs.writeFile("app/cpvcplannerdocumentation/webapp/model/contentdata.json", JSON.stringify(file), (err) => {
+                if (err) { console.error(err); return; };
+                console.log("File has been updated in Project contentdata.json");
+            });
+        }
+        return responseMessage1;
+    });
+    srv.on("deletePAGEHEADER", async req => {
+        let deleteNode = {};
+        var responseMessage1;
+        var Flag = req.data.Flag1;
+        deleteNode.PAGEID = req.data.PAGEID;
+        if (Flag === "d") {
+            var fs = require("fs");
+            var json = fs.readFileSync("app/cpmaintenancevcplanner/webapp/model/header.json", 'utf8');
+            var words = JSON.parse(json);
+            for (i = 0; i < words.length; i++) {
+                if (deleteNode.PAGEID === words[i].PAGEID) {
+                    let file = words;
+                    delete file[i];
+                    file = file.filter(function (obj) { if (obj != null) return obj })
+                    fs.writeFile("app/cpmaintenancevcplanner/webapp/model/header.json", JSON.stringify(file), (err) => {
+                        if (err) { console.error(err); return; };
+                        console.log("File has been updated in Maintenance header.json");
+                    });
+                    fs.writeFile("app/cpvcplannerdocumentation/webapp/model/headerContent.json", JSON.stringify(file), (err) => {
+                        if (err) { console.error(err); return; };
+                        console.log("File has been updated in Project headerContent.json");
+                    });
+                }
+            }
+
+        }
+        return responseMessage1;
+    });
+
+    srv.on("deletePAGEPARAGRAPH", async req => {
+        let deleteNode = {};
+        var deleteResults = [];
+        var responseMessage1;
+        var Flag = req.data.Flag1;
+        deleteNode.PAGEID = req.data.PAGEID;
+        if (Flag === "d") {
+            var fs = require("fs");
+            var json = fs.readFileSync("app/cpmaintenancevcplanner/webapp/model/data.json", 'utf8');
+            var words = JSON.parse(json);
+            for (i = 0; i < words.length; i++) {
+                if (deleteNode.PAGEID === words[i].PAGEID) {
+                    let file = words;
+                    delete file[i];
+                    file = file.filter(function (obj) { if (obj != null) return obj })
+                    fs.writeFile("app/cpmaintenancevcplanner/webapp/model/data.json", JSON.stringify(file), (err) => {
+                        if (err) { console.error(err); return; };
+                        console.log("File has been updated in Maintenance data.json");
+                    });
+                    fs.writeFile("app/cpvcplannerdocumentation/webapp/model/contentdata.json", JSON.stringify(file), (err) => {
+                        if (err) { console.error(err); return; };
+                        console.log("File has been updated in Project contentdata.json");
+                    });
+                }
+            }
+        }
+        return responseMessage1;
+    });
+    srv.on("addJson", async req => {
+        let deleteNode = {};
+        deleteNode.PAGEID = req.data.PAGEID;
+        deleteNode.DESCRIPTION = req.data.DESCRIPTION;
+        deleteNode.CONTENT = req.data.CONTENT;
+        var fs = require("fs");
+        var json = fs.readFileSync("app/cpmaintenancevcplanner/webapp/model/data.json", 'utf8');
+        var words = JSON.parse(json);
+        for (i = 0; i < words.length; i++) {
+            if (deleteNode.PAGEID === words[i].PAGEID) {
+                const file = words;
+                file[i].CONTENT = deleteNode.CONTENT;
+                fs.writeFile("app/cpmaintenancevcplanner/webapp/model/data.json", JSON.stringify(file), (err) => {
+                    if (err) { console.error(err); return; };
+                    console.log("File has been updated in Maintenance Data.json");
+                });
+                fs.writeFile("app/cpvcplannerdocumentation/webapp/model/contentdata.json", JSON.stringify(file), (err) => {
+                    if (err) { console.error(err); return; };
+                    console.log("File has been updated in Project contentdata.json");
+                });
+            }
+        }
+    });
+    srv.on("editJSONHeader", async req => {
+        let editNode = {};
+        editNode.PAGEID = req.data.PAGEID;
+        editNode.DESCRIPTION = req.data.DESCRIPTION;
+        editNode.CONTENT = req.data.CONTENT;
+        var fs = require("fs");
+        var json = fs.readFileSync("app/cpmaintenancevcplanner/webapp/model/header.json", 'utf8');
+        var words = JSON.parse(json);
+        for (i = 0; i < words.length; i++) {
+            if (editNode.PAGEID === words[i].PAGEID) {
+                const file = words;
+                file[i].DESCRIPTION = editNode.DESCRIPTION;
+                fs.writeFile("app/cpmaintenancevcplanner/webapp/model/header.json", JSON.stringify(file), (err) => {
+                    if (err) { console.error(err); return; };
+                    console.log("File has been updated in Maintenance header.json");
+                });
+                fs.writeFile("app/cpvcplannerdocumentation/webapp/model/headerContent.json", JSON.stringify(file), (err) => {
+                    if (err) { console.error(err); return; };
+                    console.log("File has been updated in Project headerContent.json");
+                });
+            }
+        }
+    });
+    //End of VC Planner Document Maintenance- Pradeep
 };

@@ -57,3 +57,7 @@ using from './cp_planingconfig/annotations';
 using from './cpsalesstock/annotations';
 
 using from './cpjobscheduler_new/annotations';
+
+using from './cpvcplannerdocumentation/annotations';
+
+using from './cpmaintenancevcplanner/annotations';

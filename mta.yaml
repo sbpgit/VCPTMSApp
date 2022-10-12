@@ -203,6 +203,14 @@ modules:
       - cpappcpjobschedulernew.zip
       name: cpappcpjobschedulernew
       target-path: resources/
+    - artifacts:
+      - cpappcpvcplannerdocumentation.zip
+      name: cpappcpvcplannerdocumentation
+      target-path: resources/
+    - artifacts:
+      - cpappcpmaintenancevcplanner.zip
+      name: cpappcpmaintenancevcplanner
+      target-path: resources/
 - name: cpodpcpodprofiles
   type: html5
   path: app/cp_odprofiles
@@ -572,6 +580,26 @@ modules:
 - name: cpappcpjobschedulernew
   type: html5
   path: app/cpjobscheduler_new
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappcpvcplannerdocumentation
+  type: html5
+  path: app/cpvcplannerdocumentation
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappcpmaintenancevcplanner
+  type: html5
+  path: app/cpmaintenancevcplanner
   build-parameters:
     build-result: dist
     builder: custom

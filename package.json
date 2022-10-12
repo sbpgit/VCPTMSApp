@@ -88,7 +88,10 @@
         "watch-cp_fullyconfproddmnd": "cds watch --open cp_fullyconfproddmnd/webapp/index.html?sap-ui-xx-viewCache=false",
         "watch-cp_planingconfig": "cds watch --open cp_planingconfig/webapp/index.html?sap-ui-xx-viewCache=false",
         "watch-cpsalesstock": "cds watch --open cpsalesstock/webapp/index.html?sap-ui-xx-viewCache=false",
-        "watch-cpjobscheduler_new": "cds watch --open cpjobscheduler_new/webapp/index.html?sap-ui-xx-viewCache=false"
+        "watch-cpjobscheduler_new": "cds watch --open cpjobscheduler_new/webapp/index.html?sap-ui-xx-viewCache=false",
+        "watch-cpmaintenancevcplandoc": "cds watch --open cpmaintenancevcplandoc/webapp/index.html?sap-ui-xx-viewCache=false",
+        "watch-cpvcplannerdocumentation": "cds watch --open cpvcplannerdocumentation/webapp/index.html?sap-ui-xx-viewCache=false",
+        "watch-cpmaintenancevcplanner": "cds watch --open cpmaintenancevcplanner/webapp/index.html?sap-ui-xx-viewCache=false"
     },
     "eslintConfig": {
         "extends": "eslint:recommended",
@@ -300,10 +303,13 @@
         "app/cp_fullyconfproddmnd",
         "app/cp_planingconfig",
         "app/cpsalesstock",
-        "app/cpjobscheduler_new"
+        "app/cpjobscheduler_new",
+        "app/cpmaintenancevcplandoc",
+        "app/cpvcplannerdocumentation",
+        "app/cpmaintenancevcplanner"
     ],
     "devDependencies": {
-        "@sap/ux-specification": "^1.102.5",
+        "@sap/ux-specification": "^1.102.9",
         "rimraf": "^3.0.2"
     }
 }
