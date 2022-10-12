@@ -1,0 +1,16 @@
+entity CP_PALMLRPREDICTIONS {
+  key MLRPID : String(50);
+  CREATEDAT : UTCTimestamp;
+  LOCATION : String(4);
+  PRODUCT : String(40);
+  GROUPID : String(20);
+  TYPE : String(5000) default 'OD';
+  MODELVERSION : String(5000) default 'Active';
+  VERSION : String(10);
+  PROFILE : String(50);
+  SCENARIO : String(32);
+  PREDICTIONPARAMETERS : LargeString;
+  MLRPTYPE : Integer;
+  PREDICTIONDATA : LargeString;
+  FITTEDRESULTS : LargeString;
+};

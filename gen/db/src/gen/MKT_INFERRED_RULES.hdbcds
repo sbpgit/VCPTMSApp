@@ -1,0 +1,11 @@
+entity MKT_INFERRED_RULES {
+  key ID : String(15);
+  key TYPE : String(20);
+  key CHAR_NAME : String(70);
+  key CHAR_VALUE : String(70);
+  key CHARVAL_OPERATOR : String(20);
+  CHAR_OPERATOR : String(20);
+  ROW_ID : Integer;
+  LEVEL : Integer;
+  SEQUENCE : Integer;
+};

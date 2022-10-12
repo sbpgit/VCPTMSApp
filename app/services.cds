@@ -58,6 +58,10 @@ using from './cpsalesstock/annotations';
 
 using from './cpjobscheduler_new/annotations';
 
+using from './cpvcplannerdocumentation/annotations';
+
+using from './cpmaintenancevcplanner/annotations';
+
 using from './cpcriticalcomp/annotations';
 
 using from './cpfactoryloc/annotations';

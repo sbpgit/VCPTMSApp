@@ -1,0 +1,12 @@
+entity CP_COMPQTYDETERMINE {
+  key LOCATION_ID : String(4);
+  key PRODUCT_ID : String(40);
+  key VERSION : String(10);
+  key SCENARIO : String(32);
+  key ITEM_NUM : String(5);
+  key COMPONENT : String(40);
+  key CAL_DATE : LocalDate;
+  STRUC_NODE : String(50);
+  CAL_COMP_QTY : Integer;
+  COMP_QTY : Integer;
+};

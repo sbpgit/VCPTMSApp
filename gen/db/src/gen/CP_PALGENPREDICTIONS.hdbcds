@@ -1,0 +1,6 @@
+entity CP_PALGENPREDICTIONS {
+  key PREDICTIONSID : String(50);
+  CREATEDAT : UTCTimestamp;
+  MODELTYPE : String(10);
+  VCRULESLIST : LargeString;
+};

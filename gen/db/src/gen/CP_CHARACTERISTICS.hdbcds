@@ -1,0 +1,10 @@
+entity CP_CHARACTERISTICS {
+  key CLASS_NUM : String(18);
+  key CHAR_NUM : String(10);
+  CHAR_NAME : String(30);
+  CHAR_DESC : String(150);
+  CHAR_GROUP : String(10);
+  CHAR_TYPE : String(4);
+  ENTRY_REQ : String(1);
+  CHAR_CATGRY : String(40);
+};

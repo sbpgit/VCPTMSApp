@@ -1,0 +1,12 @@
+entity JS_SCHEDULES {
+  key SCHEDULE_ID : String(50);
+  SCH_DESC : String(100);
+  SCH_DATA : String(5000);
+  SCH_TYPE : String(50);
+  SCH_ACTIVE : Boolean;
+  SCH_STARTTIME : String(50);
+  SCH_END_TIME : String(50);
+  SCH_TIME : String(50);
+  SCH_NEXTRUN : String(50);
+  key RUN_ID : String(50);
+};

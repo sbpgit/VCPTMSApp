@@ -1,0 +1,8 @@
+entity CP_SALES_HM {
+  key SALES_DOC : String(10);
+  key SALESDOC_ITEM : String(6);
+  PRODUCT_ID : String(40);
+  LOCATION_ID : String(4);
+  UNIQUE_ID : Integer;
+  PRIMARY_ID : Integer;
+};

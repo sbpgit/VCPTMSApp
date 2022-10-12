@@ -1,0 +1,12 @@
+entity CP_PAL_PROFILEMETH_PARA {
+  key PROFILE : String(50);
+  key METHOD : String(50);
+  key PARA_NAME : String(100);
+  INTVAL : Integer;
+  DOUBLEVAL : Double;
+  STRVAL : String(20);
+  PARA_DESC : String(1000);
+  PARA_DEP : String(1000);
+  CREATED_DATE : LocalDate;
+  CREATED_BY : String(12);
+};

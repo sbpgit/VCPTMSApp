@@ -723,8 +723,9 @@ context cp {
     entity PLANNED_PARAMETERS {
             GROUP          : Association to PLANNED_GROUPS
                                  on GROUP.GROUP_ID = GROUP_ID;
-        key PARAMETER_ID   : Integer;
+        key PARAMETER_ID   : Integer;        
         key GROUP_ID       : Integer;
+        key SEQUENCE       : Integer;
             DESCRIPTION    : String(100);
             MIN_VALUE      : Integer;
             MAX_VALUE      : Integer;
@@ -1148,6 +1149,7 @@ entity![V_CIR_CHAR_RATE]{
 entity![V_PLANNEDCONFIG]{
     key![PARAMETER_ID]      : Integer     @title : 'PARAMETER_ID';
     key![GROUP_ID]          : Integer     @title : 'GROUP_ID';
+    key![SEQUENCE]          : Integer     @title : 'SEQUENCE';
     key![DESCRIPTION]       : String(100) @title : 'DESCRIPTION';
     key![MIN_VALUE]         : Integer     @title : 'MIN_VALUE';
     key![MAX_VALUE]         : Integer     @title : 'MAX_VALUE';
