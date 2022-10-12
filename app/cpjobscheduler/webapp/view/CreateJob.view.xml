@@ -344,7 +344,7 @@
                         </RadioButtonGroup>
 
                         <RadioButtonGroup id="idRbtnExport" columns="1" select="ExportRadioChange" visible="false">
-                        
+                            <!-- <RadioButton text="Master Data" /> -->
                             <RadioButton id="idIBPLoc" text="Location" />
                             <RadioButton id="idIBPCustGrp" text="Customer Group" />
                             <RadioButton id="idIBPProd" text="Product" />

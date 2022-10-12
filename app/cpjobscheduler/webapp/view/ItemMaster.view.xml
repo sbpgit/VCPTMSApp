@@ -1,28 +1,8 @@
 <mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="cpapp.cpjobscheduler.controller.ItemMaster" xmlns:html="http://www.w3.org/1999/xhtml" class="ItemMaster">
     <Page showHeader="false" width="200px">
-        <!-- <customHeader>
-            <Toolbar >
-                <Title id="idTitle" text="{i18n>title}" class="boldText"></Title>
-                <ToolbarSpacer/>
-                <Button id="idCreate" text="{i18n>createjob}" type="Emphasized" press="onCreateJob" tooltip = "Create Job"/> 
-                <ToolbarSpacer/>
-                <Label text="{i18n>daterange}"/>
-					<DateRangeSelection id="idDateRange" width="20%" delimiter="To" dateValue="" secondDateValue="" valueFormat="yyyy-MM-dd"
-							displayFormat="yyyy-MM-dd" change="handleDateChange" maxDate=""/>
-            </Toolbar>
-        </customHeader> -->
         <content>
-            <!-- <Toolbar>
-                <Label text="{i18n>daterange}" />
-                <DateRangeSelection id="idDateRange" delimiter="To" dateValue="" secondDateValue="" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="handleDateChange" maxDate="" />
-                <Button id="idCreate" text="{i18n>createjob}" type="Emphasized" press="onCreateJob" tooltip="Create Job" />
-            </Toolbar> -->
-            <!-- <HBox> -->
             <SearchField id="headSearch" liveChange="onSearch" placeholder="Job Id/ Name" />
-            <!-- <Button id="idCreate" text="{i18n>createjob}" type="Emphasized" press="onCreateJob" tooltip="Create Job" class="sapUiTinyMarginBegin"/> -->
-            <!-- </HBox> -->
-            <Table id="jobList" items="{path: '/results'}" growingScrollToLoad="true" rememberSelections="true" 
-            itemPress="onhandlePress" mode="SingleSelectMaster" selectionChange="onhandlePress" sticky="ColumnHeaders">
+            <Table id="jobList" items="{path: '/results'}" growingScrollToLoad="true" rememberSelections="true" itemPress="onhandlePress" mode="SingleSelectMaster" selectionChange="onhandlePress" sticky="ColumnHeaders">
                 <columns>
                     <Column hAlign="Left" vAlign="Middle">
                         <Text text="{i18n>jobid}" />
@@ -35,13 +15,28 @@
                 <items>
                     <ColumnListItem>
                         <cells>
-                            <!-- <ObjectIdentifier title="{jobId}" text="{name}" /> -->
                             <VBox>
-                            <Link text="{jobId}" press="handleLinkPress" />
-                            <Text text="{name}" />
-
+                                <Link id="target" text="{jobId}" press="handleLinkPress">
+                                    <dependents>
+                                        <ResponsivePopover id="popover" showHeader="false">
+                                            <content>
+                                                <List id="idData" items="{path: '/resultsData'}">
+                                                    <items>
+                                                        <ObjectListItem title="Description :" number="{description}">
+                                                            <attributes>
+                                                                <ObjectAttribute title="Start Time" text="{startTime}" />
+                                                                <ObjectAttribute title="End Time" text="{endTime}" />
+                                                                <ObjectAttribute title="Created At" text="{createdAt}" />
+                                                            </attributes>
+                                                        </ObjectListItem>
+                                                    </items>
+                                                </List>
+                                            </content>
+                                        </ResponsivePopover>
+                                    </dependents>
+                                </Link>
+                                <Text text="{name}" />
                             </VBox>
-
                             <HBox>
                                 <Button id="idJobUpdate" icon="sap-icon://edit" press="onUpdateJob" tooltip="Update Job" iconDensityAware="false" type="Transparent" />
                                 <Button id="idJobDele" icon="sap-icon://decline" tooltip="Delete Job" press="onJobDelete" iconDensityAware="false" type="Transparent" />
