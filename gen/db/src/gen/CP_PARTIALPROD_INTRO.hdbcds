@@ -1,6 +1,0 @@
-entity CP_PARTIALPROD_INTRO {
-  key PRODUCT_ID : String(40);
-  key LOCATION_ID : String(4);
-  PROD_DESC : String(40);
-  REF_PRODID : String(40);
-};

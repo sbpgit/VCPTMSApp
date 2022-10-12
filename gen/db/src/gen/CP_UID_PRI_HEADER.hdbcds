@@ -1,8 +1,0 @@
-entity CP_UID_PRI_HEADER {
-  key UNIQUE_ID : Integer;
-  key LOCATION_ID : String(4);
-  key PRODUCT_ID : String(40);
-  UNIQUE_DESC : String(50);
-  UID_TYPE : String(1);
-  ACTIVE : Boolean;
-};

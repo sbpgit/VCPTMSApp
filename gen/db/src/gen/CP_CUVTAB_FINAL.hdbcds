@@ -1,4 +1,0 @@
-entity CP_CUVTAB_FINAL {
-  ATINN : String(10);
-  VALC : String(70);
-};

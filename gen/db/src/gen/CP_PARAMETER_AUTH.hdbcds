@@ -1,4 +1,0 @@
-entity CP_PARAMETER_AUTH {
-  key PARAMETER : String(100);
-  PARAMETER_VAL : String(250);
-};

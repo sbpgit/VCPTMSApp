@@ -1,5 +1,0 @@
-entity CP_CUVTAB_IND {
-  key VTINT : String(10);
-  key INDID : String(4);
-  key ATINN : String(10);
-};
