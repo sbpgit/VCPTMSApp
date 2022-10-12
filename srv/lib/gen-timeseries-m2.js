@@ -10,7 +10,7 @@ class GenTimeseriesM2 {
      */
     async genTimeseries(adata, req) {
 
-        await GenF.logMessage(req, `Started history timeseries: ${adata}`);
+        await GenF.logMessage(req, `Started history timeseries`);
 
         let lMainProduct = '';
         let lFlag = '';
@@ -50,7 +50,7 @@ class GenTimeseriesM2 {
                 }
 
             );
-
+        // Remove Partial Characteristics
         const lipartialchar = await cds.run(
             `SELECT *
         FROM "V_PARTIALPRODCHAR"
@@ -78,7 +78,7 @@ class GenTimeseriesM2 {
                 lsPrimaryID.CHAR_NUM = GenF.parse(liPrimaryIDMain[i].CHAR_NUM);
                 lsPrimaryID.CHARVAL_NUM = GenF.parse(liPrimaryIDMain[i].CHARVAL_NUM);
                 liPrimaryID.push(GenF.parse(lsPrimaryID));
-                lsPrimaryID = {};                
+                lsPrimaryID = {};
             }
         }
 
@@ -237,7 +237,11 @@ class GenTimeseriesM2 {
 
     async genTimeseriesF(adata, req) {
 
-        await GenF.logMessage(req, `Started future timeseries: ${adata}`);
+        let lFlag = '';
+
+        let liPrimaryID = [];
+        let lsPrimaryID = {};
+        await GenF.logMessage(req, `Started future timeseries`);
 
         /** Get Future Plan */
         const liFutureCharPlan = await cds.run(
@@ -251,6 +255,13 @@ class GenTimeseriesM2 {
                     SCENARIO,
                     WEEK_DATE`
         );
+
+        // Delete previous data less than current Date
+        var vDate = new Date().toISOString().split('T')[0];
+        await DELETE.from('CP_TS_OBJDEP_CHARHDR_F')
+            .where(`LOCATION_ID = '${adata.LOCATION_ID}' 
+                            AND PRODUCT_ID = '${adata.PRODUCT_ID}'
+                            AND CAL_DATE < '${vDate}'`);
 
         // console.log();
         await DELETE.from('CP_TS_OBJDEP_CHARHDR_F')
@@ -271,7 +282,7 @@ class GenTimeseriesM2 {
         }
         console.log("Main prod:" + lMainProduct);
         // Get Sales Count Information
-        const liPrimaryID = await SELECT.from('V_UNIQUE_ID')
+        const liPrimaryIDMain = await SELECT.from('V_UNIQUE_ID')
             .columns(["UNIQUE_ID",
                 "PRODUCT_ID",
                 "LOCATION_ID",
@@ -291,6 +302,40 @@ class GenTimeseriesM2 {
 
             ).
             orderBy("UNIQUE_ID", "CHAR_NUM");
+
+
+        // Remove Partial Characteristics
+        const lipartialchar = await cds.run(
+            `SELECT *
+                    FROM "V_PARTIALPRODCHAR"
+                    WHERE "LOCATION_ID" = '` + adata.LOCATION_ID + `'
+                    AND ( "PRODUCT_ID" = '` + lMainProduct + `'
+                    OR "REF_PRODID" = '` + lMainProduct + `' )`
+        );
+
+        for (let i = 0; i < liPrimaryIDMain.length; i++) {
+            lFlag = '';
+            for (let j = 0; j < lipartialchar.length; j++) {
+                if (lipartialchar[j].CHAR_NUM === liPrimaryIDMain[i].CHAR_NUM &&
+                    lipartialchar[j].CHARVAL_NUM === liPrimaryIDMain[i].CHARVAL_NUM) {
+                    lFlag = 'X';
+                    break;
+                }
+            }
+            if (lFlag !== 'X') {
+                lsPrimaryID.UNIQUE_ID = GenF.parse(liPrimaryIDMain[i].UNIQUE_ID);
+                lsPrimaryID.PRODUCT_ID = GenF.parse(liPrimaryIDMain[i].PRODUCT_ID);
+                lsPrimaryID.LOCATION_ID = GenF.parse(liPrimaryIDMain[i].LOCATION_ID);
+                lsPrimaryID.UNIQUE_DESC = GenF.parse(liPrimaryIDMain[i].UNIQUE_DESC);
+                lsPrimaryID.UID_TYPE = GenF.parse(liPrimaryIDMain[i].UID_TYPE);
+                lsPrimaryID.ACTIVE = GenF.parse(liPrimaryIDMain[i].ACTIVE);
+                lsPrimaryID.CHAR_NUM = GenF.parse(liPrimaryIDMain[i].CHAR_NUM);
+                lsPrimaryID.CHARVAL_NUM = GenF.parse(liPrimaryIDMain[i].CHARVAL_NUM);
+                liPrimaryID.push(GenF.parse(lsPrimaryID));
+                lsPrimaryID = {};
+            }
+        }
+
         console.log("Primary ID:" + liPrimaryID.length);
         let liObjdepF = [];
         let lsFutureDemand = {};
@@ -340,8 +385,9 @@ class GenTimeseriesM2 {
                     lsObjdepF.SUCCESS_RATE = 0
                     if (lsFutureDemand.QUANTITY > 0) {
                         lsObjdepF.SUCCESS_RATE = (parseInt(liFutureCharPlan[cntFC].OPT_QTY) * 100 / parseInt(lsFutureDemand.QUANTITY)).toFixed(2);
+                         liObjdepF.push(GenF.parse(lsObjdepF));
                     }
-                    liObjdepF.push(GenF.parse(lsObjdepF));
+                    // liObjdepF.push(GenF.parse(lsObjdepF));
                 }
             }
 
@@ -357,7 +403,7 @@ class GenTimeseriesM2 {
                         await INSERT(liObjdepF).into('CP_TS_OBJDEP_CHARHDR_F');
                     }
                     catch (e) {
-                        console.log("error");
+                        console.log("error", e.meesage);
                     }
                 }
             }
@@ -368,7 +414,7 @@ class GenTimeseriesM2 {
 
     async genPrediction(adata, req) {
 
-        await GenF.logMessage(req, `Started Fully Configured Requirement Generation: ${adata}`);
+        await GenF.logMessage(req, `Started Fully Configured Requirement Generation`);
 
         const lDate = new Date();
         const lStartDate = new Date(

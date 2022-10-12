@@ -12,9 +12,10 @@
                     <Title  text="Job Details" class="boldText"></Title>
                     <ToolbarSpacer/>
                     <ToolbarSpacer/>
-                        <Button id="btnaddSche" text="{i18n>addsch}" press="onAddSchedule" type="Emphasized" />
+                        <Button id="btnRefresh" tooltip="Refresh" icon="sap-icon://refresh"  press="onScheduleClick"  />
+                        <Button id="btnaddSche" tooltip="{i18n>addsch}" icon="sap-icon://create-entry-time" press="onAddSchedule"  />
                     </Toolbar>
-                    <l:Grid defaultSpan="XL2 L2 M3 S6">
+                    <!-- <l:Grid defaultSpan="XL2 L2 M3 S6">
                         <VBox>
                             <Text text="{i18n>desc} :" class="boldText"/>
                             <Text text="{oGModel>/description}" />
@@ -30,14 +31,14 @@
                         <VBox>
                             <Text text="{i18n>createdat} :" class="boldText"/>
                             <Text text="{oGModel>/createdAt}" />
-                        </VBox>
+                        </VBox> -->
                         <!-- <VBox>
             <HBox>
                 <Button id="idCreate" text="{i18n>createjob}" type="Emphasized" press="onCreateJob" tooltip="Create Job" class="sapUiSmallMarginEnd" />
                 <Button id="btnaddSche" text="{i18n>addsch}" press="onAddSchedule" type="Emphasized" />
                  </HBox>
             </VBox> -->
-                    </l:Grid>
+                    <!-- </l:Grid> -->
 
                     <!-- <content> -->
                     <!-- <OverflowToolbar id="idOvrFlwTb">
@@ -54,7 +55,7 @@
                             <Column hAlign="Left" vAlign="Middle" visible="{= ${oGModel>/flagcron} === 'X' ? true : false }">
                                 <Text text="{i18n>cron}" />
                             </Column>
-                            <Column hAlign="Left" vAlign="Middle" visible="{= ${oGModel>/flagonetime} === 'X' ? true : false }">
+                            <Column hAlign="Left" vAlign="Middle" visible="false">
                                 <Text text="{i18n>onetime}" />
                             </Column>
                             <Column hAlign="Left" vAlign="Middle">
@@ -99,8 +100,8 @@
                     <l:layoutData>
                         <l:SplitterLayoutData size="{sizes>/pane2}" />
                     </l:layoutData>
-                    <Panel>
-                        <!-- <Page> -->
+                    <!-- <Panel> -->
+                        <Page title="Schedule Logs">
                         <Table id="idScheLogData" items="{path: '/statusresults'}" rememberSelections="true" mode="SingleSelectMaster" selectionChange="onRunlogs">
                             <columns>
                                 <Column hAlign="Left" vAlign="Middle">
@@ -133,8 +134,8 @@
                                 </ColumnListItem>
                             </items>
                         </Table>
-                        <!-- </Page> -->
-                    </Panel>
+                        </Page>
+                    <!-- </Panel> -->
                 </l:SplitPane>
                 <l:SplitPane requiredParentWidth="800">
                     <l:layoutData>
@@ -143,26 +144,31 @@
                     <Page title="Run Logs">
                         <Table id="idScheRunLogData" items="{path: '/results'}">
                             <columns>
-                                <Column hAlign="Left" vAlign="Middle">
+                                <!-- <Column hAlign="Left" vAlign="Middle">
                                     <Text text="{i18n>time}" />
-                                </Column>
+                                </Column> -->
                                 <Column hAlign="Left" vAlign="Middle" width="400px">
                                     <Text text="{i18n>message}" />
                                 </Column>
-                                <Column hAlign="Left" vAlign="Right">
+                                <!-- <Column hAlign="Left" vAlign="Right">
                                     <Text text="{i18n>state}" />
                                 </Column>
                                 <Column hAlign="Left" vAlign="Middle">
                                     <Text text="{i18n>code}" />
+                                </Column> -->
+                                <Column hAlign="Left" vAlign="Right">
+                                    <Text text="State/ Code" />
                                 </Column>
                             </columns>
                             <items>
                                 <ColumnListItem>
                                     <cells>
-                                        <Text text="{time}" />
-                                        <Text text="{text}" />
-                                        <Text text="{type}" />
-                                        <Text text="{code}" />
+                                        <!-- <Text text="{time}" />
+                                        <Text text="{text}" /> -->
+                                        <ObjectIdentifier title="{text}" text="{time}" />
+                                        <ObjectIdentifier title="{type}" text="{code}" />
+                                        <!-- <Text text="{type}" />
+                                        <Text text="{code}" /> -->
                                     </cells>
                                 </ColumnListItem>
                             </items>

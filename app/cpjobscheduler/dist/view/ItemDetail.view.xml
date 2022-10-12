@@ -12,6 +12,7 @@
                     <Title  text="Job Details" class="boldText"></Title>
                     <ToolbarSpacer/>
                     <ToolbarSpacer/>
+                        <Button id="btnRefresh" text="Refresh" press="onScheduleClick" type="Emphasized" />
                         <Button id="btnaddSche" text="{i18n>addsch}" press="onAddSchedule" type="Emphasized" />
                     </Toolbar>
                     <l:Grid defaultSpan="XL2 L2 M3 S6">
@@ -54,7 +55,7 @@
                             <Column hAlign="Left" vAlign="Middle" visible="{= ${oGModel>/flagcron} === 'X' ? true : false }">
                                 <Text text="{i18n>cron}" />
                             </Column>
-                            <Column hAlign="Left" vAlign="Middle" visible="{= ${oGModel>/flagonetime} === 'X' ? true : false }">
+                            <Column hAlign="Left" vAlign="Middle" visible="false">
                                 <Text text="{i18n>onetime}" />
                             </Column>
                             <Column hAlign="Left" vAlign="Middle">
@@ -143,26 +144,31 @@
                     <Page title="Run Logs">
                         <Table id="idScheRunLogData" items="{path: '/results'}">
                             <columns>
-                                <Column hAlign="Left" vAlign="Middle">
+                                <!-- <Column hAlign="Left" vAlign="Middle">
                                     <Text text="{i18n>time}" />
-                                </Column>
+                                </Column> -->
                                 <Column hAlign="Left" vAlign="Middle" width="400px">
                                     <Text text="{i18n>message}" />
                                 </Column>
-                                <Column hAlign="Left" vAlign="Right">
+                                <!-- <Column hAlign="Left" vAlign="Right">
                                     <Text text="{i18n>state}" />
                                 </Column>
                                 <Column hAlign="Left" vAlign="Middle">
                                     <Text text="{i18n>code}" />
+                                </Column> -->
+                                <Column hAlign="Left" vAlign="Right">
+                                    <Text text="State/ Code" />
                                 </Column>
                             </columns>
                             <items>
                                 <ColumnListItem>
                                     <cells>
-                                        <Text text="{time}" />
-                                        <Text text="{text}" />
-                                        <Text text="{type}" />
-                                        <Text text="{code}" />
+                                        <!-- <Text text="{time}" />
+                                        <Text text="{text}" /> -->
+                                        <ObjectIdentifier title="{text}" text="{time}" />
+                                        <ObjectIdentifier title="{type}" text="{code}" />
+                                        <!-- <Text text="{type}" />
+                                        <Text text="{code}" /> -->
                                     </cells>
                                 </ColumnListItem>
                             </items>

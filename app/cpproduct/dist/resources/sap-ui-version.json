@@ -1,7 +1,11 @@
 {
 	"name": "cpapp.cpproduct",
 	"version": "0.0.1",
+<<<<<<< HEAD
 	"buildTimestamp": "202210111216",
+=======
+	"buildTimestamp": "202210111308",
+>>>>>>> d08332b4a0ff827f18e67a6f73e7b0eaa575ae82
 	"scmRevision": "",
 	"libraries": []
 }

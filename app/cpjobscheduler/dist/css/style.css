@@ -1,33 +1,27 @@
 Enter your custom styles here
 
 
-div#container-cpapp\.cpjobscheduler---Details--fcl-beginColumn{
-    width: 50px !important;
-}
-div#container-cpapp\.cpjobscheduler---Details--fcl-midColumn{
-    width: 1550px !important;
-    /* margin-left: -250px !important; */
-} 
+/*  */
 
 section#__splitter4-content-0 {
-    height: 270px !important;
+    height: 45% !important;
 }
 
 section#__splitter3-content-0 {
-    width: 500px !important;
+    width: 43% !important;
 }
 
 section#__splitter3-content-1 {
-    width: 700px !important;
+    width: 55%!important;
 }
 
 section#__splitter4-content-1 {
-    height: 450px !important;
+    height: 53% !important;
 }
 
 .sapUiLoSplitter.sapUiLoSplitterV>.sapUiLoSplitterBar, .sapUiLoSplitter.sapUiLoSplitterV>.sapUiLoSplitterOverlay .sapUiLoSplitterOverlayBar {
     cursor: row-resize;
-    height: 0.5rem;
+    height: 0.3rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -37,7 +31,7 @@ section#__splitter4-content-1 {
 
 .sapUiLoSplitter.sapUiLoSplitterH>.sapUiLoSplitterBar, .sapUiLoSplitter.sapUiLoSplitterH>.sapUiLoSplitterOverlay .sapUiLoSplitterOverlayBar {
     cursor: col-resize;
-    width: 0.5rem;
+    width: 0.3rem;
     height: 100%;
     display: inline-flex;
     flex-direction: column;
@@ -66,9 +60,9 @@ section#__splitter4-content-1 {
 } */
 
 
-table#__xmlview2--idJobLogs-listUl {
+/* table#__xmlview2--idJobLogs-listUl {
     width: 1150px;
-}
+} */
 
 div#__xmlview0--idDateRange {
     width: 60% !important;
