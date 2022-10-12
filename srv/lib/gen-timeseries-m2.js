@@ -51,13 +51,7 @@ class GenTimeseriesM2 {
                 }
 
             )
-            .orderBy("UNIQUE_ID",
-            "PRODUCT_ID",
-            "LOCATION_ID",
-            "UNIQUE_DESC",
-            "UID_TYPE",
-            "CHAR_NUM",
-            "CHARVAL_NUM");
+            .orderBy("UNIQUE_ID", "CHAR_NUM");
 
         // Remove Partial Characteristics
         const lipartialchar = await cds.run(
