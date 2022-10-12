@@ -29,7 +29,7 @@
                             groupHeaderFactory: '.getGroupHeader'
                             }"
                             >
-<!--                            
+                                <!--                            
                                 <headerToolbar>
                                     <OverflowToolbar>
                                         <content>
@@ -70,12 +70,12 @@
                 </ux:subSections>
             </ux:ObjectPageSection>
         </ux:sections>
-       
-		<ux:footer>        
-			<OverflowToolbar>
-				<ToolbarSpacer/>
-				<Button icon="sap-icon://save" type="Emphasized" text="Save" class="btnSize" press="onPressSave" />
-			</OverflowToolbar>
-		</ux:footer> 
+
+        <ux:footer>
+            <OverflowToolbar>
+                <ToolbarSpacer />
+                <Button icon="sap-icon://save" type="Emphasized" text="Save" class="btnSize" press="onPressSave" />
+            </OverflowToolbar>
+        </ux:footer>
     </ux:ObjectPageLayout>
 </mvc:View>

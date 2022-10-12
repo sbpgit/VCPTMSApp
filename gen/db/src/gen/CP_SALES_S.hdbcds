@@ -1,0 +1,15 @@
+entity CP_SALES_S {
+  key SALES_DOC : String(10);
+  PRODUCT_ID : String(40);
+  LOCATION_ID : String(4);
+  QUANTITY : Decimal(13, 3);
+  STATUS : String(10);
+  ORDER_NUMBER : String(10);
+  PURCHASE_REQ : String(12);
+  CHANGED_DATE : LocalDate;
+  CHANGED_TIME : LocalTime;
+  CHANGED_BY : String(12);
+  CREATED_DATE : LocalDate;
+  CREATED_TIME : LocalTime;
+  CREATED_BY : String(12);
+};

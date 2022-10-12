@@ -1,0 +1,7 @@
+entity CP_VARCHAR_PS {
+  key PRODUCT_ID : String(40);
+  key LOCATION_ID : String(4);
+  key CHAR_NUM : String(30);
+  CHAR_TYPE : String(2);
+  SEQUENCE : Integer;
+};

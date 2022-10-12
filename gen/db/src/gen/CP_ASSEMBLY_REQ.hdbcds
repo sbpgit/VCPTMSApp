@@ -1,0 +1,12 @@
+entity CP_ASSEMBLY_REQ {
+  key LOCATION_ID : String(4);
+  key PRODUCT_ID : String(40);
+  key ITEM_NUM : String(5);
+  key COMPONENT : String(40);
+  key WEEK_DATE : LocalDate;
+  key MODEL_VERSION : String(20);
+  key VERSION : String(10);
+  key SCENARIO : String(32);
+  REF_PRODID : String(40);
+  COMPCIR_QTY : Decimal(13, 3);
+};

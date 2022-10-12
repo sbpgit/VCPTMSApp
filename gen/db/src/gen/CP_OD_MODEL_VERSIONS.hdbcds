@@ -1,0 +1,10 @@
+entity CP_OD_MODEL_VERSIONS {
+  key LOCATION_ID : String(4);
+  key PRODUCT_ID : String(40);
+  key OBJ_DEP : String(30);
+  key OBJ_COUNTER : Integer;
+  key OBJ_TYPE : String(2);
+  MODEL_TYPE : String(10);
+  key MODEL_VERSION : String(5000);
+  MODEL_PROFILE : String(50);
+};

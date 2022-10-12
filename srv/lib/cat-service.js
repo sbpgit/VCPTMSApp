@@ -2130,10 +2130,9 @@ module.exports = (srv) => {
                 }
 
                     responseMessage = errRes.message;
-                }
-            }
-        }
-        else if (req.data.FLAG === "D") {
+                // }
+            
+        } else if (req.data.FLAG === "D") {
             for (var i = 0; i < aRtrChar.length; i++) {
                 oRtrDetailsIns.RESTRICTION = aRtrChar[i].RESTRICTION;
                 oRtrDetailsIns.CLASS_NUM = aRtrChar[i].CLASS_NUM;
@@ -2150,6 +2149,7 @@ module.exports = (srv) => {
                 }
 
             }
+        
 
             if (iCounter > 0) { //  if deletion is successfull
                 aRtrDetailsIns = [];

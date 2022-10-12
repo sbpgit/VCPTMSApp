@@ -1,0 +1,3 @@
+entity CP_USERDETAILS {
+  key USERNAME : String(50);
+};

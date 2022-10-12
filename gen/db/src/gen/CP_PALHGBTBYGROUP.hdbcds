@@ -1,0 +1,15 @@
+entity CP_PALHGBTBYGROUP {
+  HGBTGROUPID : String(50);
+  CREATEDAT : UTCTimestamp;
+  LOCATION : String(4);
+  PRODUCT : String(40);
+  GROUPID : String(100);
+  TYPE : String(5000) default 'OD';
+  MODELVERSION : String(5000) default 'Active';
+  PROFILE : String(50);
+  REGRESSIONPARAMETERS : LargeString;
+  HGBTTYPE : Integer;
+  IMPORTANCEOP : LargeString;
+  STATISTICSOP : LargeString;
+  PARAMSELECTIONOP : LargeString;
+};
