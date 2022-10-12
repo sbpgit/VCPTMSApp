@@ -1,5 +1,5 @@
 <core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
-	<Popover id="myPopover" showHeader="false" placement="Auto">
+	<Popover id="myPopover" showHeader="false" placement="Down">
 		<content>
 			<List id="idData" >
 				<items>

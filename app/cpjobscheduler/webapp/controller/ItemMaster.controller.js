@@ -7,6 +7,7 @@ sap.ui.define(
     "sap/ui/model/FilterOperator",
     "sap/m/MessageBox",
     "sap/ui/Device",
+    "sap/ui/core/Fragment"
   ],
   function (
     BaseController,
@@ -15,7 +16,8 @@ sap.ui.define(
     Filter,
     FilterOperator,
     MessageBox,
-    Device
+    Device,
+    Fragment
   ) {
     "use strict";
     var that, oGModel;
@@ -179,10 +181,12 @@ sap.ui.define(
 
           handleLinkPress: function(oEvent){
             // Getting the selected Item from list
-          var oSelItem = oEvent.getSource().getSelectedItem().getBindingContext().getObject();
+            oGModel = this.getModel("oGModel");
+            var oButton = oEvent.getSource(),
+            oView = this.getView();
+          var oSelItem = oEvent.getSource().getParent().getBindingContext().getObject();
 
-          // Setting the selected values
-          oGModel.setProperty("/Jobdata", oEvent.getParameter("listItem").getBindingContext().getObject());
+        //   Setting the selected values
           oGModel.setProperty("/jobId", oSelItem.jobId);
           oGModel.setProperty("/description", oSelItem.description);
           oGModel.setProperty("/startTime", oSelItem.startTime);
@@ -201,9 +205,9 @@ sap.ui.define(
 				});
 			}
 			that._pPopover.then(function (oPopover) {
-				// that.byId("idData").setModel(that.dataModel);
 				oPopover.openBy(oButton);
 			});
+
 
           },
 
