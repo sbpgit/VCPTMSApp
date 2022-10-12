@@ -1,0 +1,7 @@
+entity CP_CHAR_VALUES {
+  key CHAR_NUM : String(10);
+  key CHARVAL_NUM : String(15);
+  CHAR_VALUE : String(70);
+  CHARVAL_DESC : String(150);
+  CATCH_ALL : String(1);
+};

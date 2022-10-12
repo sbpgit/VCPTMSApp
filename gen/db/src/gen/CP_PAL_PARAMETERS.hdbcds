@@ -1,0 +1,11 @@
+entity CP_PAL_PARAMETERS {
+  key METHOD : String(20);
+  key PARA_NAME : String(30);
+  DATATYPE : String(30);
+  DEFAULTVAL : String(100);
+  INTVAL : Integer;
+  DOUBLEVAL : Double;
+  STRVAL : String(50);
+  DESCRIPTION : String(1000);
+  DEPENDENCY : String(1000);
+};

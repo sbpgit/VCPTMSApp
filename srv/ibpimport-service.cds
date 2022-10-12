@@ -18,20 +18,24 @@ service IBPImportSrv @(impl : './lib/ibpimport-service.js') {
     function createActCompDemand(LOCATION_ID : String(4)) returns String;// ,PRODUCT_ID : String(40)) returns String;
     function createIBPLocProd(LOCATION_ID : String(4)) returns String;
     function createIBPCIR(LOCATION_ID : String(4),PRODUCT_ID : String(40)) returns String;  // Partial Product
-
+    function exportIBPLocProd_fn(LOCATION_ID : String(4)) returns String;
+    function exportRestrDetails_fn(LOCATION_ID : String(4)) returns String;
+    // function exportRestrictions_fn(LOCATIOn)
 
     // actions for testing from CF/ jobscheduler 
 
-    // Inbound to IBP
+    // Outbound to IBP
     action exportIBPMasterProd(LOCATION_ID : String(4));
     action exportIBPLocation();
     action exportIBPCustomer();
-    action exportIBPClass(CLASS_NUM: String(18));    
+    action exportIBPClass(CLASS_NUM: String(18));  
     action exportIBPSalesTrans(LOCATION_ID : String(4),PRODUCT_ID : String(40),CUSTOMER_GROUP : String(20),DOC_DATE:Date);
     action exportIBPSalesConfig(LOCATION_ID : String(4),PRODUCT_ID : String(40),CUSTOMER_GROUP : String(20));
     action exportComponentReq(LOCATION_ID : String(4),PRODUCT_ID : String(40),FROMDATE: Date, TODATE: Date);
     action exportActCompDemand(LOCATION_ID : String(4),PRODUCT_ID : String(40));//,FROMDATE: Date, TODATE: Date);
     action exportIBPLocProd(LOCATION_ID : String(4));
+    action exportRestrDetails(LOCATION_ID: String(4)); 
+    action exportRestrReq(LOCATION_ID : String(4),PRODUCT_ID : String(40));
     //Inbound to BTP
     action generateFDemandQty(LOCATION_ID : String(4), PRODUCT_ID : String(40));
     action generateFCharPlan(LOCATION_ID : String(4), PRODUCT_ID : String(40), FROMDATE : Date, TODATE : Date);

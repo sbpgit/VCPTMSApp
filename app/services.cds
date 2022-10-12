@@ -39,7 +39,7 @@ using from './cpauthentication/annotations';
 
 using from './cp_prodlocline/annotations';
 
-using from './cpprodrestr/annotations';
+// using from './cpprodrestr/annotations';
 
 using from './cpcharqtygraph/annotations';
 
@@ -57,6 +57,10 @@ using from './cp_planingconfig/annotations';
 using from './cpsalesstock/annotations';
 
 using from './cpjobscheduler_new/annotations';
+
+using from './cpvcplannerdocumentation/annotations';
+
+using from './cpmaintenancevcplanner/annotations';
 
 using from './cpcriticalcomp/annotations';
 

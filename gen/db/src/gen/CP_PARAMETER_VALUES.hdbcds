@@ -1,0 +1,4 @@
+entity CP_PARAMETER_VALUES {
+  key PARAMETER_ID : Integer;
+  VALUE : String(500);
+};

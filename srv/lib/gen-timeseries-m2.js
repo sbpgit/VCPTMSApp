@@ -56,10 +56,9 @@ class GenTimeseriesM2 {
             "LOCATION_ID",
             "UNIQUE_DESC",
             "UID_TYPE",
-            "ACTIVE",
             "CHAR_NUM",
             "CHARVAL_NUM");
-            
+
         // Remove Partial Characteristics
         const lipartialchar = await cds.run(
             `SELECT *

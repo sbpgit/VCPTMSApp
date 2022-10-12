@@ -1,0 +1,9 @@
+entity CP_TS_ORDERRATE {
+  CREATEDAT : UTCTimestamp;
+  CREATEDBY : String(255);
+  MODIFIEDAT : UTCTimestamp;
+  MODIFIEDBY : String(255);
+  key WEEK_DATE : LocalDate;
+  key LOCATION_ID : String(4);
+  ORDER_COUNT : Integer;
+};

@@ -1,0 +1,7 @@
+entity CP_CLASS {
+  key CLASS_NUM : String(18);
+  CLASS_NAME : String(20);
+  CLASS_TYPE : String(3);
+  CLASS_DESC : String(150);
+  AUTHGROUP : String(4);
+};
