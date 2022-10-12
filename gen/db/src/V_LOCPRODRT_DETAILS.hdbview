@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------------------
--- Name:            V_ODRESTRICT
+-- Name:            V_LOCPRODRT_DET
 -- Description:     Get Object dependency profiles and structure node for products
 -- Join Details:    CP_RESTRICT_DETAILS -  Master table for restriction
 --                  CP_PRODRESTRICT - table for Location, Product and Restriction
