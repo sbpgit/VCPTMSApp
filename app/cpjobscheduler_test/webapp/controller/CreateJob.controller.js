@@ -133,12 +133,15 @@ sap.ui.define(
 					this.oProdList = this._oCore.byId(
 						this._valueHelpDialogProd.getId() + "-list"
 					);
+
 					this.oLocList = this._oCore.byId(
 						this._valueHelpDialogLoc.getId() + "-list"
 					);
+                    
 					this.oODList = this._oCore.byId(
 						this._valueHelpDialogOD.getId() + "-list"
 					);
+                    
 					this.oPPFList = this._oCore.byId(
 						this._valueHelpDialogPPF.getId() + "-list"
 					);
@@ -638,10 +641,7 @@ sap.ui.define(
                                     // 07-09-2022-1
 								) {
 									sap.ui.getCore().byId("prodSlctList").setMultiSelect(false);
-									sap.ui
-										.getCore()
-										.byId("prodSlctList")
-										.setRememberSelections(false);
+									sap.ui.getCore().byId("prodSlctList").setRememberSelections(false);
 								}
 								this._valueHelpDialogProd.open();
 							}
@@ -1008,7 +1008,6 @@ sap.ui.define(
 						// Product list
 					} else if (sId.includes("prod")) {
 						var aSelectedProd;
-						that.oProdList.getBinding("items").filter([]);
 						aSelectedProd = oEvent.getParameter("selectedItems");
 						that.oGModel.setProperty("/Flag", "X");
 						if (aSelectedProd && aSelectedProd.length > 0) {
@@ -1282,50 +1281,29 @@ sap.ui.define(
 				handleProdChange: function (oEvent) {
 					var oSelected = oEvent.getParameter("listItem").getTitle();
 					var aItems = sap.ui.getCore().byId("prodSlctList").getItems();
-					var oSelItems = this._valueHelpDialogProd
-						.getAggregation("_dialog")
-						.getContent()[1]
-						.getSelectedItems();
+					var oSelItems = this._valueHelpDialogProd.getAggregation("_dialog").getContent()[1].getSelectedItems();
 					if (
 						oSelected === "All" &&
 						oEvent.getParameter("selected") &&
 						aItems.length !== 1
 					) {
-						this._valueHelpDialogProd
-							.getAggregation("_dialog")
-							.getContent()[1]
-							.selectAll();
+						this._valueHelpDialogProd.getAggregation("_dialog").getContent()[1].selectAll();
 					} else if (oSelected === "All" && !oEvent.getParameter("selected")) {
-						this._valueHelpDialogProd
-							.getAggregation("_dialog")
-							.getContent()[1]
-							.removeSelections();
+						this._valueHelpDialogProd.getAggregation("_dialog").getContent()[1].removeSelections();
 					} else if (oSelected === "All" && aItems.length === 1) {
-						sap.ui
-							.getCore()
-							.byId("prodSlctList")
-							.getItems()[0]
-							.setSelected(false);
+						sap.ui.getCore().byId("prodSlctList").getItems()[0].setSelected(false);
 					} else if (
 						oSelected !== "All" &&
 						!oEvent.getParameter("selected") &&
 						aItems.length - 1 === oSelItems.length
 					) {
-						sap.ui
-							.getCore()
-							.byId("prodSlctList")
-							.getItems()[0]
-							.setSelected(false);
+						sap.ui.getCore().byId("prodSlctList").getItems()[0].setSelected(false);
 					} else if (
 						oSelected !== "All" &&
 						oEvent.getParameter("selected") &&
 						aItems.length - 1 === oSelItems.length
 					) {
-						sap.ui
-							.getCore()
-							.byId("prodSlctList")
-							.getItems()[0]
-							.setSelected(true);
+						sap.ui.getCore().byId("prodSlctList").getItems()[0].setSelected(true);
 					}
 				},
 

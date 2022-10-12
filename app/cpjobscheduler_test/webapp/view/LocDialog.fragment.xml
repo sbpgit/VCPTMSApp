@@ -4,3 +4,37 @@
 		<StandardListItem title="{LOCATION_ID}" description="{LOCATION_DESC}" type="Active"/>
 	</SelectDialog>
 </core:FragmentDefinition>
+
+<!-- <core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+	<Dialog type="Standard" title="{i18n>loc}" contentWidth="400px">
+		<content>
+			<Table id="LocSlctList" mode="SingleSelectMaster" growing="true" growingDirection="Downwards" growingScrollToLoad="true"
+                     items="{path: '/results'}" selectionChange="handleSelection">
+				<headerToolbar>
+					<Toolbar>
+						<ToolbarSpacer/>
+						<SearchField id="LocSearch"  liveChange="handleSearch"  placeholder="{i18n>loc}"/>
+					</Toolbar>
+				</headerToolbar>
+				<columns>
+					<Column>
+						<Text text="{i18n>loc}"/>
+					</Column>
+				</columns>
+				<items>
+					<ColumnListItem>
+						<cells>
+							<ObjectIdentifier title="{LOCATION_ID}" text="{LOCATION_DESC}"/>
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+		</content>
+		<beginButton>
+			<Button type='Accept' text="{i18n>submit}" press="handleSelection"></Button>
+		</beginButton>
+		<endButton>
+			<Button type='Reject' text="{i18n>close}" press="handleClose"></Button>
+		</endButton>
+	</Dialog>
+</core:FragmentDefinition> -->

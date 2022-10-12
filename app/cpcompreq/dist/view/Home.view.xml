@@ -65,6 +65,9 @@
             <VBox >
             <CheckBox id="idCheck1" select="onNonZero" text="Get Non-Zero" selected="true" />
             </VBox>
+            <VBox >
+            <CheckBox id="idChkCritComp" select="onCriticalComponentCheck" text="Get Critical Components" selected="false" />
+            </VBox>
             <VBox>
                 <HBox>
                     <Button text="Go" type="Emphasized" press="onGetData" tooltip="Get data based on filters" class="sapUiTinyMarginEnd"/>

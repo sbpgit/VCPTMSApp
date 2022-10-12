@@ -70,7 +70,7 @@ sap.ui.define(
                             that.oTableData = oData.results;
                             // if (oData.results.length) {
                             // I_26th_Sept    
-                            oData.results.map(function (entry) {   
+                            oData.results.map(function (entry) {
                                 entry.bFlag = false;
                                 return entry;
                             });
@@ -369,11 +369,7 @@ sap.ui.define(
                         ],
                         success: function (oData) {
                             sap.ui.core.BusyIndicator.hide();
-                            //  var aData;
-                            // for(var i=0; i<oData.results; i++){
-                            //     a
-                            // }
-
+                            
                             function removeDuplicate(array, key) {
                                 var check = new Set();
                                 return array.filter(obj => !check.has(obj[key]) && check.add(obj[key]));
@@ -656,7 +652,7 @@ sap.ui.define(
                         },
                         success: function (oData) {
                             sap.ui.core.BusyIndicator.hide();
-                            sap.m.MessageToast.show("success");
+                            sap.m.MessageToast.show(oData.maintainRestrDetail);
                             that.onAfterRendering();
                             that.byId("idUpdateSave").setVisible(false);
                             // that.onCancelUpdate();
@@ -664,7 +660,7 @@ sap.ui.define(
                         },
                         error: function (error) {
                             sap.ui.core.BusyIndicator.hide();
-                            sap.m.MessageToast.show("Error");
+                            sap.m.MessageToast.show("Failed to create restriction rule, please try later!");
                         },
                     });
                 }
@@ -678,21 +674,18 @@ sap.ui.define(
 
                 var selItem = oEvent.getSource().getParent().getBindingContext().getObject();
 
-
                 if (selItem.OFLAG === "X") {
                     var oItemtoDelete = oEvent.getParameters("listItem").id.split("idDetail-")[1];
                     var aData = that.ListModel.getData().results;
-                    aData.splice(oItemtoDelete, 1); //removing 1 record from i th index.
+                    aData.splice(oItemtoDelete, 1); //removing 1 record from ith index.
                     that.ListModel.refresh();
                 } else {
-
 
                     var oEntry = {
                         RTRCHAR: [],
                     },
                         vRuleslist;
                     var oFlag = "D";
-
 
                     vRuleslist = {
                         RESTRICTION: selItem.RESTRICTION,
@@ -703,7 +696,7 @@ sap.ui.define(
                     };
                     oEntry.RTRCHAR.push(vRuleslist);
 
-                    that.getModel("BModel").callFunction("/maintainRestrDet", {
+                    that.getModel("BModel").callFunction("/maintainRestrDetail", {
                         method: "GET",
                         urlParameters: {
                             FLAG: oFlag,
@@ -711,13 +704,13 @@ sap.ui.define(
                         },
                         success: function (oData) {
                             sap.ui.core.BusyIndicator.hide();
-                            sap.m.MessageToast.show("success");
+                            // sap.m.MessageToast.show("success");
+                            sap.m.MessageToast.show(oData.maintainRestrDetail.message);
                             that.onAfterRendering();
-
                         },
                         error: function (error) {
                             sap.ui.core.BusyIndicator.hide();
-                            sap.m.MessageToast.show("Error");
+                            sap.m.MessageToast.show("Failed to delete restriction rule, please try later!");
                         },
                     });
                 }

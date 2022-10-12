@@ -1,5 +1,5 @@
 <core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
-	<Dialog id="idChar" contentWidth="450px" title="Characteristics" >
+	<Dialog id="idChar" contentWidth="650px" title="Characteristics" >
 		<content id="idContent">
 			<Table id="classNameList" mode="SingleSelectMaster" selectionChange="handleCharSelection" growing="true" growingThreshold="1000"
 				items="{path: '/results'}" sticky="ColumnHeaders">
@@ -9,13 +9,13 @@
 					</Toolbar>
 				</headerToolbar>
 				<columns>
-					<Column hAlign="Begin" vAlign="Middle">
+					<Column hAlign="Begin" vAlign="Middle" width="150px">
 						<Text text="Class Name"/>
 					</Column>
 					<Column hAlign="Begin" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline">
 						<Text text="Char Name"/>
 					</Column>
-					<Column hAlign="Begin" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline">
+					<Column hAlign="Begin" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" width="150px">
 						<Text text="Char Value"/>
 					</Column>					
 				</columns>

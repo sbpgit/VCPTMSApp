@@ -1,0 +1,30 @@
+<mvc:View controllerName="cpapp.cpjobscheduler.controller.Details" xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:f="sap.f">
+	<Page id="pageId">
+
+        <customHeader>
+            <Toolbar >
+            <ToolbarSpacer/>
+                <Title  text="{i18n>title}" class="boldText"></Title>
+                <ToolbarSpacer/>
+                <Button id="idCreate" text="{i18n>createjob}" type="Emphasized" press="onCreateJob" tooltip = "Create Job"/> 
+                
+                <Label text="{i18n>daterange}"/>
+					<DateRangeSelection id="idDateRange" width="20%" delimiter="To" dateValue="" secondDateValue="" valueFormat="yyyy-MM-dd"
+							displayFormat="yyyy-MM-dd" change="handleDateChange" maxDate=""/>
+            </Toolbar>
+        </customHeader>
+
+		<!-- <customHeader>
+			<Bar>
+				<contentMiddle>
+					<Title text="{i18n>title}" class="boldText"></Title>
+                    <ToolbarSpacer/>
+                <Button id="idCreate" text="{i18n>createjob}" type="Emphasized" press="onCreateJob" tooltip = "Create Job"/>
+				</contentMiddle>
+			</Bar>
+		</customHeader> -->
+		<content>
+			<f:FlexibleColumnLayout id="fcl"></f:FlexibleColumnLayout>
+		</content>
+	</Page>
+</mvc:View>

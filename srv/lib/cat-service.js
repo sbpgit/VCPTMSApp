@@ -8,6 +8,7 @@ const { combine, timestamp, label, prettyPrint } = format;
 //const ComponentReq = require("./component-req");
 const GenTimeseries = require("./gen-timeseries");
 const GenTimeseriesM2 = require("./gen-timeseries-m2");
+const GenTimeseriesRT = require("./gen-timeseries-rt");
 const SOFunctions = require("./so-function");
 const Catservicefn = require("./catservice-function");
 const VarConfig = require("./variantconfig");
@@ -125,6 +126,7 @@ module.exports = (srv) => {
             vCompIndex,
             lsDates = {};
         let columnname = "WEEK";
+        let liComp = [];
 
         const liCompQty = await cds.run(
             `
@@ -153,7 +155,48 @@ module.exports = (srv) => {
                       "COMPONENT" ASC,
                       "WEEK_DATE" ASC`
         );
-        const liComp = await cds.run(
+        if(req.data.CRITICALKEY === 'X') {
+            liComp = await cds.run(
+                `
+              SELECT DISTINCT "V_ASMREQ_PRODCONSD"."LOCATION_ID",
+                               "V_ASMREQ_PRODCONSD"."PRODUCT_ID",
+                               "V_ASMREQ_PRODCONSD"."VERSION",
+                               "V_ASMREQ_PRODCONSD"."SCENARIO",
+                               "V_ASMREQ_PRODCONSD"."ITEM_NUM",
+                               "V_ASMREQ_PRODCONSD"."COMPONENT"
+              FROM "V_ASMREQ_PRODCONSD"
+             INNER JOIN "CP_CRITICAL_COMP"
+                ON "V_ASMREQ_PRODCONSD"."LOCATION_ID" = "CP_CRITICAL_COMP"."LOCATION_ID"
+               AND "V_ASMREQ_PRODCONSD"."PRODUCT_ID"  = "CP_CRITICAL_COMP"."PRODUCT_ID"
+               AND "V_ASMREQ_PRODCONSD"."ITEM_NUM"    = "CP_CRITICAL_COMP"."ITEM_NUM"
+             WHERE "V_ASMREQ_PRODCONSD"."LOCATION_ID" = '` +
+                req.data.LOCATION_ID +
+                `' AND "V_ASMREQ_PRODCONSD"."PRODUCT_ID" = '` +
+                req.data.PRODUCT_ID +
+                `' AND "V_ASMREQ_PRODCONSD"."VERSION" = '` +
+                req.data.VERSION +
+                `' AND "V_ASMREQ_PRODCONSD"."SCENARIO" = '` +
+                req.data.SCENARIO +
+                `' AND ( "V_ASMREQ_PRODCONSD"."WEEK_DATE" <= '` +
+                vDateTo +
+                `'
+                    AND "V_ASMREQ_PRODCONSD"."WEEK_DATE" >= '` +
+                vDateFrom +
+                `') AND "V_ASMREQ_PRODCONSD"."MODEL_VERSION" = '` +
+                req.data.MODEL_VERSION +
+                `'  AND "CP_CRITICAL_COMP"."CRITICALKEY" = '` +
+                 req.data.CRITICALKEY + `'
+                   ORDER BY 
+                        "LOCATION_ID" ASC, 
+                        "PRODUCT_ID" ASC,
+                        "VERSION" ASC,
+                        "SCENARIO" ASC,
+                        "ITEM_NUM" ASC,
+                        "COMPONENT" ASC`
+            );
+        } else {
+        // const liComp = await cds.run(
+           liComp = await cds.run(
             `
           SELECT DISTINCT "LOCATION_ID",
                           "PRODUCT_ID",
@@ -186,6 +229,7 @@ module.exports = (srv) => {
                     "ITEM_NUM" ASC,
                     "COMPONENT" ASC`
         );
+        }
         var vDateSeries = vDateFrom;
         let dDate = new Date(vDateSeries);
         let dDay = dDate.getDay();
@@ -764,53 +808,90 @@ module.exports = (srv) => {
 
     // Generate Timeseries using action call
     srv.on("generateTimeseries", async (req) => {
-        // const obgenTimeseries = new GenTimeseries();
-        // await obgenTimeseries.genTimeseries(req.data);
-
-        const obgenTimeseriesM2 = new GenTimeseriesM2();
-        await obgenTimeseriesM2.genTimeseries(req.data);
+        switch(await GenFunctions.getParameterValue('5')){
+            case 'M1':
+                const obgenTimeseries = new GenTimeseries();
+                await obgenTimeseries.genTimeseries(req.data, req);               
+                break;
+            case 'M2':
+                const obgenTimeseriesM2 = new GenTimeseriesM2();
+                await obgenTimeseriesM2.genTimeseries(req.data, req);                
+                break;
+        }
     });
     srv.on("generateTimeseriesF", async (req) => {
-        // const obgenTimeseries = new GenTimeseries();
-        // await obgenTimeseries.genTimeseriesF(req.data);
+        switch(await GenFunctions.getParameterValue('5')){
+            case 'M1':
+                const obgenTimeseries = new GenTimeseries();
+                await obgenTimeseries.genTimeseriesF(req.data, req);             
+                break;
+            case 'M2':
+                const obgenTimeseriesM2 = new GenTimeseriesM2();
+                await obgenTimeseriesM2.genTimeseriesF(req.data, req);              
+                break;
+        }
 
-        const obgenTimeseriesM2 = new GenTimeseriesM2();
-        await obgenTimeseriesM2.genTimeseriesF(req.data);
+
     });
     // Generate Timeseries fucntion calls
     srv.on("generate_timeseries", async (req) => {
-        // const obgenTimeseries = new GenTimeseries();
-        // await obgenTimeseries.genTimeseries(req.data);
+        switch(await GenFunctions.getParameterValue('5')){
+            case 'M1':
+                const obgenTimeseries = new GenTimeseries();
+                await obgenTimeseries.genTimeseries(req.data, req);               
+                break;
+            case 'M2':
+                const obgenTimeseriesM2 = new GenTimeseriesM2();
+                await obgenTimeseriesM2.genTimeseries(req.data, req);                
+                break;
+        }
 
-        const obgenTimeseriesM2 = new GenTimeseriesM2();
-        await obgenTimeseriesM2.genTimeseries(req.data);
     });
     srv.on("generate_timeseriesF", async (req) => {
-        // const obgenTimeseries = new GenTimeseries();
-        // await obgenTimeseries.genTimeseriesF(req.data);
+        let value = await GenFunctions.getParameterValue('5');
+        console.log(value);
+        switch(await GenFunctions.getParameterValue('5')){
+            case 'M1':
+                const obgenTimeseries = new GenTimeseries();
+                await obgenTimeseries.genTimeseriesF(req.data, req);             
+                break;
+            case 'M2':
+                const obgenTimeseriesM2 = new GenTimeseriesM2();
+                await obgenTimeseriesM2.genTimeseriesF(req.data, req);              
+                break;
+        }        
+    });
+    
+    // Generate Timeseries fucntion calls
+    srv.on("generate_timeseries_rt", async (req) => {
+        const obgenTimeseries_rt = new GenTimeseriesRT();
+        await obgenTimeseries_rt.genTimeseries_rt(req.data, req);
 
-        const obgenTimeseriesM2 = new GenTimeseriesM2();
-        await obgenTimeseriesM2.genTimeseriesF(req.data);
+    });
+    srv.on("generate_timeseriesF_rt", async (req) => {
+        const obgenTimeseries_rt = new GenTimeseriesRT();
+        await obgenTimeseries_rt.genTimeseriesF_rt(req.data, req);
+
     });
     // Generate Unique ID
     srv.on("genUniqueID", async (req) => {
         const obgenSOFunctions = new SOFunctions();
-        await obgenSOFunctions.genUniqueID(req.data);
+        await obgenSOFunctions.genUniqueID(req.data,req);
     });
     // Generate Unique ID
     srv.on("gen_UniqueID", async (req) => {
         const obgenSOFunctions = new SOFunctions();
-        await obgenSOFunctions.genUniqueID(req.data);
+        await obgenSOFunctions.genUniqueID(req.data,req);
     });
     // Generate Fully Configured Demand
     srv.on("genFullConfigDemand", async (req) => {
         const obgenTimeseriesM2 = new GenTimeseriesM2();
-        await obgenTimeseriesM2.genPrediction(req.data);
+        await obgenTimeseriesM2.genPrediction(req.data, req);
     });
     // Generate Fully Configured Demand
     srv.on("gen_FullConfigDemand", async (req) => {
         const obgenTimeseriesM2 = new GenTimeseriesM2();
-        await obgenTimeseriesM2.genPrediction(req.data);
+        await obgenTimeseriesM2.genPrediction(req.data,req);
     });
 
     srv.on("genVariantStruc", async (req) => {
@@ -821,11 +902,11 @@ module.exports = (srv) => {
 
     srv.on("genAssemblyreq", async (req) => {
         const objAsmreq = new AssemblyReq();
-        await objAsmreq.genAsmreq(req.data);
+        await objAsmreq.genAsmreq(req.data, req);
     });
     srv.on("generateAssemblyReq", async (req) => {
         const objAsmreq = new AssemblyReq();
-        await objAsmreq.genAsmreq(req.data);
+        await objAsmreq.genAsmreq(req.data, req);
     });
     // Maintain Parital product introsduction
     srv.on("maintainPartialProd", async (req) => {
@@ -1178,7 +1259,7 @@ module.exports = (srv) => {
                     lsresults.LOCATION_ID = li_varcharps[i].LOCATION_ID;
                     lsresults.CHAR_NUM = li_varcharps[i].CHAR_NUM;
                     lsresults.CHAR_TYPE = 'S';
-                    if (li_varcharps[i].SEQUENCE > 1) {
+                    if (li_varcharps[i].SEQUENCE > req.data.SEQUENCE) {
                         lsresults.SEQUENCE = li_varcharps[i].SEQUENCE - 1;
                         await UPDATE`CP_VARCHAR_PS`
                             .with({
@@ -1769,6 +1850,39 @@ module.exports = (srv) => {
         const keys = ['PRODUCT_ID', 'VERSION', 'SCENARIO'];
         return GenFunctions.removeDuplicate(liprodver, keys);
     });
+
+    // Maintain partial configurations for new product
+    srv.on("changeToCritical", async (req) => {
+        let liresults = [];
+        let lsresults = {};
+        let responseMessage = '';
+        let li_crtcomp = {};
+
+        li_crtcomp = JSON.parse(req.data.criticalComp);
+        lsresults.LOCATION_ID = li_crtcomp[0].LOCATION_ID;
+        lsresults.PRODUCT_ID = li_crtcomp[0].PRODUCT_ID;
+        lsresults.COMPONENT = li_crtcomp[0].COMPONENT;
+        lsresults.ITEM_NUM = li_crtcomp[0].ITEM_NUM;
+        lsresults.CRITICALKEY = li_crtcomp[0].CRITICALKEY;
+        liresults.push(lsresults);
+        if (liresults.length > 0) {
+            try {
+                await UPDATE`CP_CRITICAL_COMP`
+                    .with({
+                        CRITICALKEY: lsresults.CRITICALKEY
+                    })
+                    .where(`LOCATION_ID = '${lsresults.LOCATION_ID}'
+                                          AND PRODUCT_ID = '${lsresults.PRODUCT_ID}'
+                                          AND ITEM_NUM = '${lsresults.ITEM_NUM}'
+                                          AND COMPONENT = '${lsresults.COMPONENT}'`);
+                // await cds.run(INSERT.into("CP_CRITICAL_COMP").entries(liresults));
+                responseMessage = "Critical Component udpated";
+            } catch (e) {
+                responseMessage = "Critical Component udpate failed";
+            }
+        }
+        return responseMessage;
+    });
     // Planning Configuration
     // BOI - Deepa
     srv.on("postParameterValues", async (req) => {
@@ -1975,109 +2089,110 @@ module.exports = (srv) => {
     // Retriction rule
     // Maintain partial configurations for new product
     srv.on("maintainRestrDetail", async (req) => {
-        let liresults = [];
-        let lsresults = {};
-        let liRtrChar = {};
-        var responseMessage;
-        liRtrChar = JSON.parse(req.data.RTRCHAR);
-        let sRTR = liRtrChar[0].RESTRICTION;
+        let aRtrDetailsIns = [];
+        let oRtrDetailsIns = {};
+        let aRtrChar = {};
+        let responseMessage;
         let aFilteredChars = [];
         let aFilteredResults = [];
         let aCharCounters = [];
         let oCharCounter = {};
-        let index = 0;
+        let index = 0, iCounter = 0, imaxCounter = 0;
+        aRtrChar = JSON.parse(req.data.RTRCHAR);
+        let sRTR = aRtrChar[0].RESTRICTION;
 
-        const liRtrDetails = await cds.run(
+        const aRtrDetails = await cds.run(
             `SELECT *
-            FROM "CP_RESTRICT_DETAILS"
+            FROM "CP_RESTRICT_DETAILS" 
             WHERE "RESTRICTION" = '` + sRTR + `'
-            ORDER BY  "CHAR_NUM", "CHAR_COUNTER" DESC`
+            ORDER BY  "CHAR_NUM", "CHAR_COUNTER"`
         );
 
-        let iCounter = liRtrDetails[0].CHAR_COUNTER;
-
         if (req.data.FLAG === "C" || req.data.FLAG === "E") {
-            for (var i = 0; i < liRtrChar.length; i++) {
-                oCharCounter = {};
+                aFilteredChars = [];
+                iCounter = 0;
                 if (aCharCounters.length > 0) {
                     aFilteredChars = aCharCounters.filter(function (aCharCounter) {
-                        return aCharCounter.CHAR_NUM === liRtrChar[i].CHAR_NUM;
+                        return aCharCounter.CHAR_NUM === aRtrChar[i].CHAR_NUM;
                     });
-                } else {
-
-                    aFilteredChars = liRtrDetails.filter(function (aRtrChars) {
-                        return aRtrChars.CHAR_NUM === liRtrChar[i].CHAR_NUM;
+                }
+                if (aFilteredChars.length === 0) {
+                    aFilteredChars = aRtrDetails.filter(function (aRtrChars) {
+                        return aRtrChars.CHAR_NUM === aRtrChar[i].CHAR_NUM;
                     });
                 }
 
                 if (aFilteredChars.length > 0) {
                     iCounter = aFilteredChars[0].CHAR_COUNTER;
 
-                    oCharCounter.CHAR_NUM = liRtrChar[i].CHAR_NUM;
-                    oCharCounter.CHAR_COUNTER = iCounter;
-
-                    index = aCharCounters.findIndex((obj) => obj.CHAR_NUM === liRtrChar[i].CHAR_NUM); // find index
-                    if (index === -1) {
-                        index = aCharCounters.length;
-                    }
-                    aCharCounters[index] = oCharCounter; // replace with new object ... working :)
-
-                } else {
-                    iCounter = iCounter + 1;
-                    oCharCounter.CHAR_NUM = liRtrChar[i].CHAR_NUM;
                     oCharCounter.CHAR_COUNTER = iCounter;
                     aCharCounters.push(oCharCounter);
                 }
 
-                lsresults.RESTRICTION = liRtrChar[i].RESTRICTION;
-                // lsresults.RTR_COUNTER = liRtrChar[i].RTR_COUNTER;
-                lsresults.CLASS_NUM = liRtrChar[i].CLASS_NUM;
-                lsresults.CHAR_NUM = liRtrChar[i].CHAR_NUM;
-                lsresults.CHAR_COUNTER = iCounter; //liRtrChar[i].CHAR_COUNTER;
-                lsresults.CHARVAL_NUM = liRtrChar[i].CHARVAL_NUM;
-                // if (req.data.FLAG === "E") {
-                //     try {
-                //         // await cds.delete("CP_RESTRICT_DETAILS", lsresults);
-                //     } catch (e) {
-                //         //DONOTHING
-                //     }
-                // }
-                lsresults.OD_CONDITION = liRtrChar[i].OD_CONDITION;
-                lsresults.ROW_ID = iCounter; //liRtrChar[i].ROW_ID;
-                liresults.push(lsresults);
-                lsresults = {};
-
-            }
-            if (liresults.length > 0) {
-                try {
-                    await cds.run(INSERT.into("CP_RESTRICT_DETAILS").entries(liresults));
-                    responseMessage = " Creation/Updation successful";
-                } catch (e) {
-                    //DONOTHING
-                    responseMessage = " Creation failed";
-                    // createResults.push(responseMessage);
+                    responseMessage = errRes.message;
                 }
             }
         }
         else if (req.data.FLAG === "D") {
-            for (var i = 0; i < liRtrChar.length; i++) {
-                lsresults.RESTRICTION = liRtrChar[i].RESTRICTION;
-                // lsresults.RTR_COUNTER = liRtrChar[i].RTR_COUNTER;
-                lsresults.CLASS_NUM = liRtrChar[i].CLASS_NUM;
-                lsresults.CHAR_NUM = liRtrChar[i].CHAR_NUM;
-                lsresults.CHAR_COUNTER = liRtrChar[i].CHAR_COUNTER;
-                lsresults.CHARVAL_NUM = liRtrChar[i].CHARVAL_NUM;
-                // if (req.data.FLAG === "E" && i === 0) {
+            for (var i = 0; i < aRtrChar.length; i++) {
+                oRtrDetailsIns.RESTRICTION = aRtrChar[i].RESTRICTION;
+                oRtrDetailsIns.CLASS_NUM = aRtrChar[i].CLASS_NUM;
+                oRtrDetailsIns.CHAR_NUM = aRtrChar[i].CHAR_NUM;
+                oRtrDetailsIns.CHARVAL_NUM = aRtrChar[i].CHARVAL_NUM;
                 try {
-                    await cds.delete("CP_RESTRICT_DETAILS", lsresults);
+                    await cds.delete("CP_RESTRICT_DETAILS", oRtrDetailsIns);
+                    responseMessage = "Restriction Rule Deleted Successfully";
+                    iCounter = aRtrChar[i].CHAR_COUNTER;
                     break;
-                } catch (e) {
+                } catch (errRes) {
                     //DONOTHING
+                    responseMessage = errRes.message;;
                 }
-                // }
+
+            }
+
+            if (iCounter > 0) { //  if deletion is successfull
+                aRtrDetailsIns = [];
+                oRtrDetailsIns = {};
+                aFilteredChars = [];
+
+                // To check the count of char counter being deleted 
+                aFilteredChars = aRtrDetails.filter(function (aRtrChars) {
+                    return aRtrChars.CHAR_COUNTER === iCounter;
+                });
+                if (aFilteredChars.length === 1) {
+                    // Below logic is to decrease the existing char counters above deleted counter by 1 and insert
+                    // This is to maintain the sequence of counters 
+                    for (let j = 0; j < aRtrDetails.length; j++) {
+                        if (aRtrDetails[j].CHAR_COUNTER > iCounter) {
+                            try {
+                                await cds.delete("CP_RESTRICT_DETAILS", aRtrDetails[j]);
+                                oRtrDetailsIns.RESTRICTION = aRtrDetails[j].RESTRICTION;
+                                oRtrDetailsIns.CLASS_NUM = aRtrDetails[j].CLASS_NUM;
+                                oRtrDetailsIns.CHAR_NUM = aRtrDetails[j].CHAR_NUM;
+                                oRtrDetailsIns.CHAR_COUNTER = aRtrDetails[j].CHAR_COUNTER - 1;
+                                oRtrDetailsIns.CHARVAL_NUM = aRtrDetails[j].CHARVAL_NUM;
+                                oRtrDetailsIns.OD_CONDITION = aRtrDetails[j].OD_CONDITION;
+                                oRtrDetailsIns.ROW_ID = aRtrDetails[j].CHAR_COUNTER - 1;
+                                aRtrDetailsIns.push(oRtrDetailsIns);
+                                oRtrDetailsIns = {};
+                            } catch (e) {
+                                console.log(e);
+                            }
+                        }
+                    }
+
+                    if (aRtrDetailsIns.length > 0) {
+                        try {
+                            await cds.run(INSERT.into("CP_RESTRICT_DETAILS").entries(aRtrDetailsIns));
+                        } catch (e) {
+                            //DONOTHING
+                        }
+                    }
+                }
             }
         }
-        lsresults = {};
+        oRtrDetailsIns = {};
         return responseMessage;
     });
 

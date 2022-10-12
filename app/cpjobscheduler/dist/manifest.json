@@ -179,10 +179,10 @@
             },
             "routes": [
                 {
-                    "name": "Home",
                     "pattern": "",
+                    "name": "Details",
                     "target": [
-                        "Home"
+                        "Details"
                     ]
                 },
                 {
@@ -194,19 +194,31 @@
                 }
             ],
             "targets": {
-                "Home": {
+                "Details": {
                     "viewType": "XML",
-                    "transition": "slide",
-                    "clearControlAggregation": true,
-                    "viewId": "Home",
-                    "viewName": "Home"
+                    "viewName": "Details",
+                    "viewId": "Details",
+                    "viewLevel": 1
+                },
+                "ItemMaster": {
+                    "viewType": "XML",
+                    "viewName": "ItemMaster",
+                    "viewId": "ItemMaster",
+                    "viewLevel": 2
+                },
+                "ItemDetail": {
+                    "viewType": "XML",
+                    "viewName": "ItemDetail",
+                    "viewId": "ItemDetail",
+                    "viewLevel": 3
                 },
                 "CreateJob": {
                     "viewType": "XML",
                     "transition": "slide",
                     "clearControlAggregation": true,
                     "viewId": "CreateJob",
-                    "viewName": "CreateJob"
+                    "viewName": "CreateJob",
+                    "viewLevel": 4
                 }
             }
         }

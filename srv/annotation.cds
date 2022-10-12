@@ -1713,3 +1713,75 @@ annotate service.SALES_S with @(
         }]
     }]
 );
+
+annotate service.FACTORY_SALESLOC with @(
+    UI        : {
+        SelectionFields         : [
+            LOCATION_ID,
+            PRODUCT_ID
+        ],
+        LineItem                : [
+            {
+                $Type : 'UI.DataField',
+                Value : LOCATION_ID,
+                ![@UI.Importance]   : #High,
+                ![@HTML5.CssDefaults] : {width : '15rem'}
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : PRODUCT_ID,
+                ![@UI.Importance]   : #High,
+                ![@HTML5.CssDefaults] : {width : '15rem'}
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : PLAN_LOC,
+                ![@UI.Importance]   : #High,
+                ![@HTML5.CssDefaults] : {width : '15rem'}
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : FACTORY_LOC,
+                ![@UI.Importance]   : #High,
+                ![@HTML5.CssDefaults] : {width : '15rem'}
+            }
+        ],
+        HeaderInfo              : {
+            Title          : {Value : LOCATION_ID},
+            Description    : {Value : PRODUCT_ID},
+            TypeName       : 'Demand - Plan - Factory Location',
+            TypeNamePlural : 'Demand - Plan - Factory Location-Product',
+        },
+        // HeaderFacets            : [{
+        //     $Type             : 'UI.ReferenceFacet',
+        //     Target            : '@UI.FieldGroup#Description',
+        //     ![@UI.Importance] : #Medium
+        // }],
+        // FieldGroup #Description : {Data : [{
+        //     $Type : 'UI.DataField',
+        //     Value : LOTSIZE_KEY
+        // }]},
+        FieldGroup #Details     : {Data : [
+            {
+                $Type : 'UI.DataField',
+                Value : PLAN_LOC
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : FACTORY_LOC
+            }
+        ]}
+    },
+
+    // Page Facets
+    UI.Facets : [{
+        $Type  : 'UI.CollectionFacet',
+        ID     : 'FactoryLocation',
+        Label  : 'Demand - Plan - Factory Location',
+        Facets : [{
+            $Type  : 'UI.ReferenceFacet',
+            Label  : 'Demand - Plan - Factory Location',
+            Target : '@UI.FieldGroup#Details'
+        }]
+    }]
+);

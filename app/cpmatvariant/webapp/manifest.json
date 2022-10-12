@@ -140,16 +140,19 @@
                 "Details": {
 					"viewType": "XML",
 					"viewName": "Details",
+                    "viewId": "Details",
 					"viewLevel": 1
 				},
 				"ItemMaster": {
 					"viewType": "XML",
 					"viewName": "ItemMaster",
+                    "viewId": "ItemMaster",
 					"viewLevel": 2
 				},
 				"ItemDetail": {
 					"viewType": "XML",
 					"viewName": "ItemDetail",
+                    "viewId": "ItemDetail",
 					"viewLevel": 3
 				}
             }

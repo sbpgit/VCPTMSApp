@@ -72,7 +72,7 @@ sap.ui.define([
                 this.oLocList = this._oCore.byId(
                     this._valueHelpDialogLoc.getId() + "-list"
                 );
-
+                that.oSelectedItem = "";
                 // Calling service to get Location data
                 this.getModel("BModel").read("/getLocation", {
                     success: function (oData) {
@@ -93,12 +93,7 @@ sap.ui.define([
                     sProd = that.byId("prodInput").getValue();
 
                 if (sLoc !== "" && sProd !== "") {
-                    // Calling service to get the product data
-                    // this.getModel("BModel").read("/getPriSecChar", {
-                    //     filters: [
-                    //         new Filter("LOCATION_ID", FilterOperator.EQ, sLoc),
-                    //         new Filter("PRODUCT_ID", FilterOperator.EQ, sProd),
-                    //     ],method: "GET",
+                    sap.ui.core.BusyIndicator.show();
                     this.getModel("BModel").callFunction("/getSecondaryChar", {
                         method: "GET",
                         urlParameters: {
@@ -132,6 +127,15 @@ sap.ui.define([
                                 }
 
                             }
+                            var aData = that.finalSecData;
+                            if(that.oSelectedItem){
+                            for (var i = 0; i < aData.length; i++) {
+                                if (that.oSelectedItem === aData[i].getCells()[1].getText()) {
+                                    aData[i + 1].focus();
+                                    aData[i].setSelected(true);
+                                }
+                            }
+                        }
 
 
                             that.PrimarylistModel.setData({
@@ -169,6 +173,7 @@ sap.ui.define([
             onReset: function(){
                 var sLoc = that.byId("idloc").getValue(),
                     sProd = that.byId("prodInput").getValue();
+                    that.oSelectedItem = "";
                 this.getModel("BModel").callFunction("/getSecondaryChar", {
                     method: "GET",
                     urlParameters: {
@@ -471,7 +476,60 @@ sap.ui.define([
                             aData[i].setSelected(true);
                         }
                     }
+                    that.oSelectedItem = oItem.CHAR_NAME
                     that.onSaveSeq(iDropPosition);
+                }
+            },
+
+            onSaveSeq: function (index) {
+                var aData = this.byId("Secondarytable").getItems();
+                // that.count = aData.length;
+                that.count = index + 2;
+                var successCount = 0;
+
+
+                for (var i = 0; i < aData.length; i++) {
+                    // for(var i=0; i<that.count; i++){
+                    var oEntry = {};
+
+                    oEntry.Location = that.byId("idloc").getValue();
+                    oEntry.product = that.byId("prodInput").getValue();
+                    oEntry.CharNo = aData[i].getCells()[0].getText();
+                    // oEntry.charName = aData[i].getCells()[1].getText();
+                    oEntry.SEQUENCE = i + 1;
+                    oEntry.FLAG = "E";
+                    oEntry.CHAR_TYPE = "S";
+
+                    that.getModel("BModel").callFunction("/changeToPrimary", {
+                        method: "GET",
+                        urlParameters: {
+                            LOCATION_ID: oEntry.Location,
+                            PRODUCT_ID: oEntry.product,
+                            CHAR_NUM: oEntry.CharNo,
+                            SEQUENCE: oEntry.SEQUENCE,
+                            CHAR_TYPE: oEntry.CHAR_TYPE,
+                            FLAG: oEntry.FLAG,
+                        },
+                        success: function (oData) {
+                            sap.ui.core.BusyIndicator.hide();
+                            if (oData.changeToPrimary.includes("successful")) {
+                                successCount = successCount + 1;
+                            }
+
+                            if (successCount === that.count) {
+                                // MessageToast.show(oData.changeToPrimary);
+                                MessageToast.show("Successfully changed the sequence");
+                                that.byId("searchField").setValue("");
+                                that.onCharSearch();
+                                that.onGetData();
+                            }
+                        },
+                        error: function (oData) {
+                            sap.ui.core.BusyIndicator.hide();
+                            MessageToast.show("Failed to changes the char");
+                        },
+                    });
+
                 }
             },
 
@@ -535,56 +593,6 @@ sap.ui.define([
                 this.byId("searchField").suggest();
             },
 
-            onSaveSeq: function (index) {
-                var aData = this.byId("Secondarytable").getItems();
-                // that.count = aData.length;
-                that.count = index + 2;
-                var successCount = 0;
-
-
-                for (var i = 0; i < aData.length; i++) {
-                    // for(var i=0; i<that.count; i++){
-                    var oEntry = {};
-
-                    oEntry.Location = that.byId("idloc").getValue();
-                    oEntry.product = that.byId("prodInput").getValue();
-                    oEntry.CharNo = aData[i].getCells()[0].getText();
-                    // oEntry.charName = aData[i].getCells()[1].getText();
-                    oEntry.SEQUENCE = i + 1;
-                    oEntry.FLAG = "E";
-                    oEntry.CHAR_TYPE = "S";
-
-                    that.getModel("BModel").callFunction("/changeToPrimary", {
-                        method: "GET",
-                        urlParameters: {
-                            LOCATION_ID: oEntry.Location,
-                            PRODUCT_ID: oEntry.product,
-                            CHAR_NUM: oEntry.CharNo,
-                            SEQUENCE: oEntry.SEQUENCE,
-                            CHAR_TYPE: oEntry.CHAR_TYPE,
-                            FLAG: oEntry.FLAG,
-                        },
-                        success: function (oData) {
-                            sap.ui.core.BusyIndicator.hide();
-                            if (oData.changeToPrimary.includes("successful")) {
-                                successCount = successCount + 1;
-                            }
-
-                            if (successCount === that.count) {
-                                // MessageToast.show(oData.changeToPrimary);
-                                MessageToast.show("Successfully changed the sequence");
-                                that.byId("searchField").setValue("");
-                                that.onCharSearch();
-                                that.onGetData();
-                            }
-                        },
-                        error: function (oData) {
-                            sap.ui.core.BusyIndicator.hide();
-                            MessageToast.show("Failed to changes the char");
-                        },
-                    });
-
-                }
-            }
+            
         });
     });

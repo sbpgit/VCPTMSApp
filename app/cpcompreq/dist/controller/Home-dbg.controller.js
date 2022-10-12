@@ -185,6 +185,34 @@ sap.ui.define(
                         MessageToast.show("error");
                     },
                 });
+                sap.ui.core.BusyIndicator.show();
+
+                // Planned Parameter Values
+
+                this.getModel("BModel").read("/V_Parameters", {
+                    success: function (oData) {
+                        // if Frozen Horizon is 14 Days, we need to consider from 15th day
+                        var iFrozenHorizon = parseInt(oData.results[0].VALUE) + 1;
+                        var dDate = new Date();
+                        // var oDateL = that.getDateFn(dDate);
+                        // oDateL = that.addDays(oDateL, iFrozenHorizon);
+                        dDate = new Date(dDate.setDate(dDate.getDate() + iFrozenHorizon));
+                        var oDateL = that.getDateFn(dDate);
+                        var oDateH = new Date(
+                            dDate.getFullYear(),
+                            dDate.getMonth(),
+                            dDate.getDate() + 90
+                        );
+                        var oDateH = that.getDateFn(oDateH);
+                        that.byId("fromDate").setValue(oDateL);
+                        that.byId("toDate").setValue(oDateH);
+                        sap.ui.core.BusyIndicator.hide();
+                    },
+                    error: function (oData, error) {
+                        MessageToast.show("error");
+                        sap.ui.core.BusyIndicator.hide();
+                    },
+                });
             },
 
             /**
@@ -220,7 +248,14 @@ sap.ui.define(
                     oScen = that.oGModel.getProperty("/SelectedScen"),
                     oComp = that.oGModel.getProperty("/SelectedComp"),
                     oStru = that.oGModel.getProperty("/SelectedStru"),
-                    oModelVersion = that.byId("idModelVer").getSelectedKey();
+                    oModelVersion = that.byId("idModelVer").getSelectedKey(),
+                    bCriticalKey = '';
+
+                if(that.byId("idChkCritComp").getSelected() === true) {
+                    bCriticalKey = 'X';
+                } else {
+                    bCriticalKey = ' ';
+                }
 
                 that.oGModel.setProperty(
                     "/SelectedMV",
@@ -265,6 +300,7 @@ sap.ui.define(
                             FROMDATE: vFromDate,
                             TODATE: vToDate,
                             MODEL_VERSION: oModelVersion,
+                            CRITICALKEY : bCriticalKey,
                         },
                         success: function (data) {
                             sap.ui.core.BusyIndicator.hide();
@@ -345,8 +381,12 @@ sap.ui.define(
                 var rowData;
                 var fromDate = new Date(that.byId("fromDate").getDateValue()),
                     toDate = new Date(that.byId("toDate").getDateValue());
-                fromDate = fromDate.toISOString().split("T")[0];
-                toDate = toDate.toISOString().split("T")[0];
+
+                    fromDate = that.onConvertDateToString(fromDate);
+                    toDate = that.onConvertDateToString(toDate);
+
+                // fromDate = fromDate.toISOString().split("T")[0];
+                // toDate = toDate.toISOString().split("T")[0];
                 // Calling function to generate column names based on dates
                 var liDates = that.generateDateseries(fromDate, toDate);
 
@@ -612,6 +652,9 @@ sap.ui.define(
                 while (vDateSeries <= imToDate) {
                     // Calling function to add Days
                     vDateSeries = that.addDays(vDateSeries, 7);
+                    if (vDateSeries > imToDate) {
+                        break;
+                    }
                     // Calling function to get the next Sunday date of From date
                     lsDates.CAL_DATE = vDateSeries;//that.getNextMonday(vDateSeries);
                     //vDateSeries = lsDates.CAL_DATE;
@@ -925,19 +968,19 @@ sap.ui.define(
                     that.oGModel.setProperty("/SelectedProd", "");
 
                     // Calling service to get the Product data
-                    //   this.getModel("BModel").read("/getLocProdDet", {
-                    //     filters: [
-                    //       new Filter(
-                    //         "LOCATION_ID",
-                    //         FilterOperator.EQ,
-                    //         aSelectedItems[0].getTitle()
-                    //       ),
-                    //     ],
-                    this.getModel("BModel").callFunction("/getAllProd", {
-                        method: "GET",
-                        urlParameters: {
-                            LOCATION_ID: aSelectedItems[0].getTitle()
-                        },
+                      this.getModel("BModel").read("/getLocProdDet", {
+                        filters: [
+                          new Filter(
+                            "LOCATION_ID",
+                            FilterOperator.EQ,
+                            aSelectedItems[0].getTitle()
+                          ),
+                        ],
+                    // this.getModel("BModel").callFunction("/getAllProd", {
+                    //     method: "GET",
+                    //     urlParameters: {
+                    //         LOCATION_ID: aSelectedItems[0].getTitle()
+                    //     },
                         success: function (oData) {
                             that.prodModel.setData(oData);
                             that.oProdList.setModel(that.prodModel);
@@ -1179,6 +1222,30 @@ sap.ui.define(
                 }
                 return (imDate = imDate.getFullYear() + "-" + vMonth + "-" + vDate);
             },
+            /**
+             * 
+             */
+            onCriticalComponentCheck: function(oEvent) {
+                // var selected = that.byId("idCheck1").getSelected(),
+            },
+            /**
+             * Converts Date to Local Date String with delimiter "-"
+             * 
+             */
+            onConvertDateToString: function(dDate) {
+                var dtConvertDate = dDate;
+                var aDate = [];
+                dtConvertDate = dtConvertDate.toLocaleDateString();
+                aDate = dtConvertDate.split("/");
+                if(aDate[0].length === 1) {
+                  aDate[0] = "0" + aDate[0];
+                }
+                if(aDate[1].length === 1) {
+                    aDate[1] = "0" + aDate[1];
+                }
+                dtConvertDate = aDate[2] + "-" + aDate[0] + "-" + aDate[1];
+                return dtConvertDate;
+            }
         });
     }
 );
