@@ -58,12 +58,9 @@ using from './cpsalesstock/annotations';
 
 using from './cpjobscheduler_new/annotations';
 
-<<<<<<< HEAD
 using from './cpvcplannerdocumentation/annotations';
 
 using from './cpmaintenancevcplanner/annotations';
-=======
 using from './cpcriticalcomp/annotations';
 
 using from './cpfactoryloc/annotations';
->>>>>>> 2963867b6535f765b6ae590a386a44a5df6ef01f
