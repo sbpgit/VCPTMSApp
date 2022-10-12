@@ -176,6 +176,37 @@ sap.ui.define(
             that.onSearch();
           },
 
+
+          handleLinkPress: function(oEvent){
+            // Getting the selected Item from list
+          var oSelItem = oEvent.getSource().getSelectedItem().getBindingContext().getObject();
+
+          // Setting the selected values
+          oGModel.setProperty("/Jobdata", oEvent.getParameter("listItem").getBindingContext().getObject());
+          oGModel.setProperty("/jobId", oSelItem.jobId);
+          oGModel.setProperty("/description", oSelItem.description);
+          oGModel.setProperty("/startTime", oSelItem.startTime);
+          oGModel.setProperty("/endTime", oSelItem.endTime);
+          oGModel.setProperty("/createdAt", oSelItem.createdAt);
+
+          	// create popover
+			if (!that._pPopover) {
+				that._pPopover = Fragment.load({
+					id: oView.getId(),
+					name: "cpapp.cpjobscheduler.view.JobLink",
+					controller: this
+				}).then(function (oPopover) {
+					oView.addDependent(oPopover);
+					return oPopover;
+				});
+			}
+			that._pPopover.then(function (oPopover) {
+				// that.byId("idData").setModel(that.dataModel);
+				oPopover.openBy(oButton);
+			});
+
+          },
+
       /**
        * Called when it routes to a page containing the item details.
        */
