@@ -46,7 +46,7 @@ class GenTimeseriesM2 {
                         { ref: ["LOCATION_ID"] }, '=', { val: adata.LOCATION_ID }, 'and',
                         { ref: ["PRODUCT_ID"] }, '=', { val: lMainProduct }, 'and',
                         { ref: ["UID_TYPE"] }, '=', { val: 'P' }, 'and',
-                        { ref: ["ACTIVE"] }, '=', { val: 'true' }
+                        { ref: ["ACTIVE"] }, '=', { val: true }
                     ]
                 }
 

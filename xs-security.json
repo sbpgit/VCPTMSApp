@@ -6,7 +6,8 @@
         {
             "name": "uaa.user",
             "description": "UAA"
-        }{
+        },
+        {
             "name": "$XSAPPNAME.User",
             "description": "UAA Display"
         },
