@@ -179,10 +179,10 @@ modules:
       - cpappcpprodlocline.zip
       name: cpappcpprodlocline
       target-path: resources/
-    - artifacts:
-      - cpappcpprodrestr.zip
-      name: cpappcpprodrestr
-      target-path: resources/
+    # - artifacts:
+    #   - cpappcpprodrestr.zip
+    #   name: cpappcpprodrestr
+    #   target-path: resources/
     - artifacts:
       - cpappcpcharqtygraph.zip
       name: cpappcpcharqtygraph
@@ -208,21 +208,12 @@ modules:
       name: cpappcpjobschedulernew
       target-path: resources/
     - artifacts:
-<<<<<<< HEAD
-      - cpappcpvcplannerdocumentation.zip
-      name: cpappcpvcplannerdocumentation
-      target-path: resources/
-    - artifacts:
-      - cpappcpmaintenancevcplanner.zip
-      name: cpappcpmaintenancevcplanner
-=======
       - cpappcpcriticalcomp.zip
       name: cpappcpcriticalcomp
       target-path: resources/
     - artifacts:
       - cpappcpfactoryloc.zip
       name: cpappcpfactoryloc
->>>>>>> 2963867b6535f765b6ae590a386a44a5df6ef01f
       target-path: resources/
 - name: cpodpcpodprofiles
   type: html5
@@ -524,17 +515,17 @@ modules:
     - npm run build:cf
     - rm -rf node_modules
     supported-platforms: []
-- name: cpappcpprodrestr
-  type: html5
-  path: app/cpprodrestr
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    - rm -rf node_modules
-    supported-platforms: []
+# - name: cpappcpprodrestr
+#   type: html5
+#   path: app/cpprodrestr
+#   build-parameters:
+#     build-result: dist
+#     builder: custom
+#     commands:
+#     - npm install
+#     - npm run build:cf
+#     - rm -rf node_modules
+#     supported-platforms: []
 - name: cpappcpcharqtygraph
   type: html5
   path: app/cpcharqtygraph
@@ -600,15 +591,9 @@ modules:
     - npm install
     - npm run build:cf
     supported-platforms: []
-<<<<<<< HEAD
-- name: cpappcpvcplannerdocumentation
-  type: html5
-  path: app/cpvcplannerdocumentation
-=======
 - name: cpappcpcriticalcomp
   type: html5
   path: app/cpcriticalcomp
->>>>>>> 2963867b6535f765b6ae590a386a44a5df6ef01f
   build-parameters:
     build-result: dist
     builder: custom
@@ -616,15 +601,9 @@ modules:
     - npm install
     - npm run build:cf
     supported-platforms: []
-<<<<<<< HEAD
-- name: cpappcpmaintenancevcplanner
-  type: html5
-  path: app/cpmaintenancevcplanner
-=======
 - name: cpappcpfactoryloc
   type: html5
   path: app/cpfactoryloc
->>>>>>> 2963867b6535f765b6ae590a386a44a5df6ef01f
   build-parameters:
     build-result: dist
     builder: custom

@@ -631,6 +631,8 @@ context cp {
         key LINE_ID     : String(40) @title : 'Line';
         key RESTRICTION : String(30) @title : 'Restriction';
             RTR_DESC    : String(30) @title : 'Restriction Desc';
+            RTR_TYPE    : String(10) @title : 'Restriction Type';
+            RTR_QTY     : Decimal(13, 3) @title : 'Component Quantity';
             VALID_FROM  : Date       @title : 'Valid From';
             VALID_TO    : Date       @title : 'Valid To';
     }
@@ -655,14 +657,14 @@ context cp {
     };
 
     // Product restrictions
-    entity PRODRESTRICT {
-        key LOCATION_ID : String(4)      @title : 'Location '; //Association to ZLOCATION;//
-        key PRODUCT_ID  : String(40)     @title : 'Product';
-        key RESTRICTION : String(30)     @title : 'Restriction';
-            RTR_QTY     : Decimal(13, 3) @title : 'Component Quantity';
-            VALID_FROM  : Date           @title : 'Valid From';
-            VALID_TO    : Date           @title : 'Valid To';
-    };
+    // entity PRODRESTRICT {
+    //     key LOCATION_ID : String(4)      @title : 'Location '; //Association to ZLOCATION;//
+    //     key PRODUCT_ID  : String(40)     @title : 'Product';
+    //     key RESTRICTION : String(30)     @title : 'Restriction';
+    //         RTR_QTY     : Decimal(13, 3) @title : 'Component Quantity';
+    //         VALID_FROM  : Date           @title : 'Valid From';
+    //         VALID_TO    : Date           @title : 'Valid To';
+    // };
 
 
     entity CIR_GENERATED {
@@ -721,8 +723,9 @@ context cp {
     entity PLANNED_PARAMETERS {
             GROUP          : Association to PLANNED_GROUPS
                                  on GROUP.GROUP_ID = GROUP_ID;
-        key PARAMETER_ID   : Integer;
+        key PARAMETER_ID   : Integer;        
         key GROUP_ID       : Integer;
+        key SEQUENCE       : Integer;
             DESCRIPTION    : String(100);
             MIN_VALUE      : Integer;
             MAX_VALUE      : Integer;
@@ -1146,6 +1149,7 @@ entity![V_CIR_CHAR_RATE]{
 entity![V_PLANNEDCONFIG]{
     key![PARAMETER_ID]      : Integer     @title : 'PARAMETER_ID';
     key![GROUP_ID]          : Integer     @title : 'GROUP_ID';
+    key![SEQUENCE]          : Integer     @title : 'SEQUENCE';
     key![DESCRIPTION]       : String(100) @title : 'DESCRIPTION';
     key![MIN_VALUE]         : Integer     @title : 'MIN_VALUE';
     key![MAX_VALUE]         : Integer     @title : 'MAX_VALUE';

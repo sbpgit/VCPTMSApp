@@ -4,7 +4,7 @@ const hana = require("@sap/hana-client");
 
 class IBPFunctions {
     constructor() { }
-    async exportSalesCfg(req){
+    async exportSalesCfg(req) {
         var oReq = {
             sales: [],
         },
@@ -39,6 +39,43 @@ class IBPFunctions {
                 "PERIODID0_TSTAMP": vWeekDate[0]
             };
             oReq.sales.push(vsales);
+
+        }
+        return oReq;
+    }
+    async exportRtrHdrDet(req) {
+        var oReq = {
+            rtrhdr: [],
+            locrtr: []
+        },
+            vRtrhdr,
+            vLocRtr;
+        const lirtrhdrdet = await cds.run(
+            `
+                SELECT 
+                "LOCATION_ID",
+                "LINE_ID",
+                "RESTRICTION",
+                "RTR_DESC",
+                "RTR_TYPE",
+                "VALID_FROM",
+                "VALID_TO"
+            FROM "CP_RESTRICT_HEADER"
+            WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'`);
+
+        for (let i = 0; i < lirtrhdrdet.length; i++) {
+            vRtrhdr = {
+                "VCRESTRICTIONID": lirtrhdrdet[i].RESTRICTION,
+                "VCRESTRICTIONDESC": lirtrhdrdet[i].RTR_DESC,
+                "VCRESTRICTIONTYPE": ''
+            };
+            vLocRtr = {
+                "LOCID": lirtrhdrdet[i].LOCATION_ID,
+                "VCRESTRICTIONID": lirtrhdrdet[i].RESTRICTION,
+                "VCPLACEHOLDER": ''
+            };
+            oReq.rtrhdr.push(vRtrhdr);
+            oReq.locrtr.push(vLocRtr);
 
         }
         return oReq;

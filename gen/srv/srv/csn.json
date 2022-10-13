@@ -3707,6 +3707,17 @@
           "type": "cds.String",
           "length": 30
         },
+        "RTR_TYPE": {
+          "@title": "Restriction Type",
+          "type": "cds.String",
+          "length": 10
+        },
+        "RTR_QTY": {
+          "@title": "Component Quantity",
+          "type": "cds.Decimal",
+          "precision": 13,
+          "scale": 3
+        },
         "VALID_FROM": {
           "@title": "Valid From",
           "type": "cds.Date"
@@ -3859,170 +3870,6 @@
           "key": true,
           "type": "cds.String",
           "length": 40
-        }
-      }
-    },
-    "cp.PRODRESTRICT": {
-      "kind": "entity",
-      "@UI.SelectionFields": [
-        {
-          "=": "LOCATION_ID"
-        },
-        {
-          "=": "PRODUCT_ID"
-        },
-        {
-          "=": "RESTRICTION"
-        }
-      ],
-      "@UI.LineItem": [
-        {
-          "$Type": "UI.DataField",
-          "Value": {
-            "=": "LOCATION_ID"
-          },
-          "@UI.Importance": {
-            "#": "High"
-          }
-        },
-        {
-          "$Type": "UI.DataField",
-          "Value": {
-            "=": "PRODUCT_ID"
-          },
-          "@UI.Importance": {
-            "#": "High"
-          }
-        },
-        {
-          "$Type": "UI.DataField",
-          "Value": {
-            "=": "RESTRICTION"
-          },
-          "@UI.Importance": {
-            "#": "High"
-          }
-        },
-        {
-          "$Type": "UI.DataField",
-          "Value": {
-            "=": "RTR_QTY"
-          },
-          "@UI.Importance": {
-            "#": "High"
-          }
-        },
-        {
-          "$Type": "UI.DataField",
-          "Value": {
-            "=": "VALID_FROM"
-          },
-          "@UI.Importance": {
-            "#": "High"
-          }
-        },
-        {
-          "$Type": "UI.DataField",
-          "Value": {
-            "=": "VALID_TO"
-          },
-          "@UI.Importance": {
-            "#": "High"
-          }
-        }
-      ],
-      "@UI.HeaderInfo.Title.Value": {
-        "=": "LOCATION_ID"
-      },
-      "@UI.HeaderInfo.Description.Value": {
-        "=": "PRODUCT_ID"
-      },
-      "@UI.HeaderInfo.TypeName": "Prod. Restriction",
-      "@UI.HeaderInfo.TypeNamePlural": "Prod. Restrictions",
-      "@UI.FieldGroup#Details.Data": [
-        {
-          "$Type": "UI.DataField",
-          "Value": {
-            "=": "LOCATION_ID"
-          }
-        },
-        {
-          "$Type": "UI.DataField",
-          "Value": {
-            "=": "PRODUCT_ID"
-          }
-        },
-        {
-          "$Type": "UI.DataField",
-          "Value": {
-            "=": "RESTRICTION"
-          }
-        },
-        {
-          "$Type": "UI.DataField",
-          "Value": {
-            "=": "RTR_QTY"
-          }
-        },
-        {
-          "$Type": "UI.DataField",
-          "Value": {
-            "=": "VALID_FROM"
-          }
-        },
-        {
-          "$Type": "UI.DataField",
-          "Value": {
-            "=": "VALID_TO"
-          }
-        }
-      ],
-      "@UI.Facets": [
-        {
-          "$Type": "UI.CollectionFacet",
-          "ID": "PRODRTR",
-          "Label": "Product Restrictions",
-          "Facets": [
-            {
-              "$Type": "UI.ReferenceFacet",
-              "Label": "Product Restrictions",
-              "Target": "@UI.FieldGroup#Details"
-            }
-          ]
-        }
-      ],
-      "elements": {
-        "LOCATION_ID": {
-          "@title": "Location ",
-          "key": true,
-          "type": "cds.String",
-          "length": 4
-        },
-        "PRODUCT_ID": {
-          "@title": "Product",
-          "key": true,
-          "type": "cds.String",
-          "length": 40
-        },
-        "RESTRICTION": {
-          "@title": "Restriction",
-          "key": true,
-          "type": "cds.String",
-          "length": 30
-        },
-        "RTR_QTY": {
-          "@title": "Component Quantity",
-          "type": "cds.Decimal",
-          "precision": 13,
-          "scale": 3
-        },
-        "VALID_FROM": {
-          "@title": "Valid From",
-          "type": "cds.Date"
-        },
-        "VALID_TO": {
-          "@title": "Valid To",
-          "type": "cds.Date"
         }
       }
     },
@@ -4386,6 +4233,10 @@
           "type": "cds.Integer"
         },
         "GROUP_ID": {
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "SEQUENCE": {
           "key": true,
           "type": "cds.Integer"
         },
@@ -6792,6 +6643,11 @@
         },
         "GROUP_ID": {
           "@title": "GROUP_ID",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "SEQUENCE": {
+          "@title": "SEQUENCE",
           "key": true,
           "type": "cds.Integer"
         },
@@ -20904,6 +20760,17 @@
           "type": "cds.String",
           "length": 30
         },
+        "RTR_TYPE": {
+          "@title": "Restriction Type",
+          "type": "cds.String",
+          "length": 10
+        },
+        "RTR_QTY": {
+          "@title": "Component Quantity",
+          "type": "cds.Decimal",
+          "precision": 13,
+          "scale": 3
+        },
         "VALID_FROM": {
           "@title": "Valid From",
           "type": "cds.Date"
@@ -20982,235 +20849,6 @@
           "@title": "Row ID",
           "key": true,
           "type": "cds.Integer"
-        }
-      }
-    },
-    "CatalogService.getProdRestr": {
-      "kind": "entity",
-      "@odata.draft.enabled": true,
-      "@UI.SelectionFields": [
-        {
-          "=": "LOCATION_ID"
-        },
-        {
-          "=": "PRODUCT_ID"
-        },
-        {
-          "=": "RESTRICTION"
-        }
-      ],
-      "@UI.LineItem": [
-        {
-          "$Type": "UI.DataField",
-          "Value": {
-            "=": "LOCATION_ID"
-          },
-          "@UI.Importance": {
-            "#": "High"
-          }
-        },
-        {
-          "$Type": "UI.DataField",
-          "Value": {
-            "=": "PRODUCT_ID"
-          },
-          "@UI.Importance": {
-            "#": "High"
-          }
-        },
-        {
-          "$Type": "UI.DataField",
-          "Value": {
-            "=": "RESTRICTION"
-          },
-          "@UI.Importance": {
-            "#": "High"
-          }
-        },
-        {
-          "$Type": "UI.DataField",
-          "Value": {
-            "=": "RTR_QTY"
-          },
-          "@UI.Importance": {
-            "#": "High"
-          }
-        },
-        {
-          "$Type": "UI.DataField",
-          "Value": {
-            "=": "VALID_FROM"
-          },
-          "@UI.Importance": {
-            "#": "High"
-          }
-        },
-        {
-          "$Type": "UI.DataField",
-          "Value": {
-            "=": "VALID_TO"
-          },
-          "@UI.Importance": {
-            "#": "High"
-          }
-        }
-      ],
-      "@UI.HeaderInfo.Title.Value": {
-        "=": "LOCATION_ID"
-      },
-      "@UI.HeaderInfo.Description.Value": {
-        "=": "PRODUCT_ID"
-      },
-      "@UI.HeaderInfo.TypeName": "Prod. Restriction",
-      "@UI.HeaderInfo.TypeNamePlural": "Prod. Restrictions",
-      "@UI.FieldGroup#Details.Data": [
-        {
-          "$Type": "UI.DataField",
-          "Value": {
-            "=": "LOCATION_ID"
-          }
-        },
-        {
-          "$Type": "UI.DataField",
-          "Value": {
-            "=": "PRODUCT_ID"
-          }
-        },
-        {
-          "$Type": "UI.DataField",
-          "Value": {
-            "=": "RESTRICTION"
-          }
-        },
-        {
-          "$Type": "UI.DataField",
-          "Value": {
-            "=": "RTR_QTY"
-          }
-        },
-        {
-          "$Type": "UI.DataField",
-          "Value": {
-            "=": "VALID_FROM"
-          }
-        },
-        {
-          "$Type": "UI.DataField",
-          "Value": {
-            "=": "VALID_TO"
-          }
-        }
-      ],
-      "@UI.Facets": [
-        {
-          "$Type": "UI.CollectionFacet",
-          "ID": "PRODRTR",
-          "Label": "Product Restrictions",
-          "Facets": [
-            {
-              "$Type": "UI.ReferenceFacet",
-              "Label": "Product Restrictions",
-              "Target": "@UI.FieldGroup#Details"
-            }
-          ]
-        }
-      ],
-      "projection": {
-        "from": {
-          "ref": [
-            "cp.PRODRESTRICT"
-          ]
-        }
-      },
-      "elements": {
-        "LOCATION_ID": {
-          "@Common.ValueList.$Type": "Common.ValueListType",
-          "@Common.ValueList.Label": "Location",
-          "@Common.ValueList.CollectionPath": "getLocation",
-          "@Common.ValueList.Parameters": [
-            {
-              "$Type": "Common.ValueListParameterOut",
-              "LocalDataProperty": {
-                "=": "LOCATION_ID"
-              },
-              "ValueListProperty": "LOCATION_ID"
-            }
-          ],
-          "@title": "Location ",
-          "key": true,
-          "type": "cds.String",
-          "length": 4
-        },
-        "PRODUCT_ID": {
-          "@Common.ValueList.$Type": "Common.ValueListType",
-          "@Common.ValueList.Label": "Products",
-          "@Common.ValueList.CollectionPath": "getLocProd",
-          "@Common.ValueList.Parameters": [
-            {
-              "$Type": "Common.ValueListParameterOut",
-              "LocalDataProperty": {
-                "=": "PRODUCT_ID"
-              },
-              "ValueListProperty": "PRODUCT_ID"
-            },
-            {
-              "$Type": "Common.ValueListParameterIn",
-              "LocalDataProperty": {
-                "=": "LOCATION_ID"
-              },
-              "ValueListProperty": "LOCATION_ID"
-            }
-          ],
-          "@title": "Product",
-          "key": true,
-          "type": "cds.String",
-          "length": 40
-        },
-        "RESTRICTION": {
-          "@Common.ValueList.$Type": "Common.ValueListType",
-          "@Common.ValueList.Label": "Restrictions",
-          "@Common.ValueList.CollectionPath": "getProdLocRtrLine",
-          "@Common.ValueList.Parameters": [
-            {
-              "$Type": "Common.ValueListParameterOut",
-              "LocalDataProperty": {
-                "=": "RESTRICTION"
-              },
-              "ValueListProperty": "RESTRICTION"
-            },
-            {
-              "$Type": "Common.ValueListParameterIn",
-              "LocalDataProperty": {
-                "=": "PRODUCT_ID"
-              },
-              "ValueListProperty": "PRODUCT_ID"
-            },
-            {
-              "$Type": "Common.ValueListParameterIn",
-              "LocalDataProperty": {
-                "=": "LOCATION_ID"
-              },
-              "ValueListProperty": "LOCATION_ID"
-            }
-          ],
-          "@title": "Restriction",
-          "key": true,
-          "type": "cds.String",
-          "length": 30
-        },
-        "RTR_QTY": {
-          "@title": "Component Quantity",
-          "type": "cds.Decimal",
-          "precision": 13,
-          "scale": 3
-        },
-        "VALID_FROM": {
-          "@title": "Valid From",
-          "type": "cds.Date"
-        },
-        "VALID_TO": {
-          "@title": "Valid To",
-          "type": "cds.Date"
         }
       }
     },
@@ -21455,38 +21093,6 @@
         },
         "RTRCHAR": {
           "type": "cds.String"
-        }
-      },
-      "returns": {
-        "type": "cds.String"
-      }
-    },
-    "CatalogService.generate_timeseries_rt": {
-      "kind": "function",
-      "params": {
-        "LOCATION_ID": {
-          "type": "cds.String",
-          "length": 4
-        },
-        "PRODUCT_ID": {
-          "type": "cds.String",
-          "length": 40
-        }
-      },
-      "returns": {
-        "type": "cds.String"
-      }
-    },
-    "CatalogService.generate_timeseriesF_rt": {
-      "kind": "function",
-      "params": {
-        "LOCATION_ID": {
-          "type": "cds.String",
-          "length": 4
-        },
-        "PRODUCT_ID": {
-          "type": "cds.String",
-          "length": 40
         }
       },
       "returns": {
@@ -21879,6 +21485,11 @@
         },
         "GROUP_ID": {
           "@title": "GROUP_ID",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "SEQUENCE": {
+          "@title": "SEQUENCE",
           "key": true,
           "type": "cds.Integer"
         },
@@ -22800,6 +22411,30 @@
         "type": "cds.String"
       }
     },
+    "IBPImportSrv.exportIBPLocProd_fn": {
+      "kind": "function",
+      "params": {
+        "LOCATION_ID": {
+          "type": "cds.String",
+          "length": 4
+        }
+      },
+      "returns": {
+        "type": "cds.String"
+      }
+    },
+    "IBPImportSrv.exportRestrDetails_fn": {
+      "kind": "function",
+      "params": {
+        "LOCATION_ID": {
+          "type": "cds.String",
+          "length": 4
+        }
+      },
+      "returns": {
+        "type": "cds.String"
+      }
+    },
     "IBPImportSrv.exportIBPMasterProd": {
       "kind": "action",
       "params": {
@@ -22899,6 +22534,28 @@
         "LOCATION_ID": {
           "type": "cds.String",
           "length": 4
+        }
+      }
+    },
+    "IBPImportSrv.exportRestrDetails": {
+      "kind": "action",
+      "params": {
+        "LOCATION_ID": {
+          "type": "cds.String",
+          "length": 4
+        }
+      }
+    },
+    "IBPImportSrv.exportRestrReq": {
+      "kind": "action",
+      "params": {
+        "LOCATION_ID": {
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "type": "cds.String",
+          "length": 40
         }
       }
     },
@@ -30668,6 +30325,138 @@
       }
     }
   },
+  "extensions": [
+    {
+      "annotate": "cp.PRODRESTRICT",
+      "@UI.SelectionFields": [
+        {
+          "=": "LOCATION_ID"
+        },
+        {
+          "=": "PRODUCT_ID"
+        },
+        {
+          "=": "RESTRICTION"
+        }
+      ],
+      "@UI.LineItem": [
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "LOCATION_ID"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "PRODUCT_ID"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "RESTRICTION"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "RTR_QTY"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "VALID_FROM"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "VALID_TO"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          }
+        }
+      ],
+      "@UI.HeaderInfo.Title.Value": {
+        "=": "LOCATION_ID"
+      },
+      "@UI.HeaderInfo.Description.Value": {
+        "=": "PRODUCT_ID"
+      },
+      "@UI.HeaderInfo.TypeName": "Prod. Restriction",
+      "@UI.HeaderInfo.TypeNamePlural": "Prod. Restrictions",
+      "@UI.FieldGroup#Details.Data": [
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "LOCATION_ID"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "PRODUCT_ID"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "RESTRICTION"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "RTR_QTY"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "VALID_FROM"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "VALID_TO"
+          }
+        }
+      ],
+      "@UI.Facets": [
+        {
+          "$Type": "UI.CollectionFacet",
+          "ID": "PRODRTR",
+          "Label": "Product Restrictions",
+          "Facets": [
+            {
+              "$Type": "UI.ReferenceFacet",
+              "Label": "Product Restrictions",
+              "Target": "@UI.FieldGroup#Details"
+            }
+          ]
+        }
+      ]
+    }
+  ],
   "meta": {
     "creator": "CDS Compiler v2.15.8",
     "flavor": "inferred"
