@@ -6,6 +6,13 @@
         {
             "name": "uaa.user",
             "description": "UAA"
+        }{
+            "name": "$XSAPPNAME.User",
+            "description": "UAA Display"
+        },
+        {
+            "name": "$XSAPPNAME.Developer",
+            "description": "UAA Display"
         }
     ],
     "role-templates": [
@@ -14,6 +21,20 @@
             "description": "UAA",
             "scope-references": [
                 "uaa.user"
+            ]
+        },
+        {
+            "name": "VCPDeveloperRole",
+            "description": "UAA VCPDeveloperRole",
+            "scope-references": [
+                "$XSAPPNAME.Developer"
+            ]
+        },
+        {
+            "name": "VCPUserRole",
+            "description": "UAA VCPUserRole",
+            "scope-references": [
+                "$XSAPPNAME.User"
             ]
         }
     ],
