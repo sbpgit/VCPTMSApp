@@ -9,12 +9,12 @@
         "authenticationType": "none",
         "csrfProtection": true,
         "scope":{
-            "GET": ["$XSAPPNAME.User"],
-            "PUT": ["$XSAPPNAME.User"],
-            "PATCH": ["$XSAPPNAME.User"],
-            "POST": ["$XSAPPNAME.User"],
-            "DELETE": ["$XSAPPNAME.User"],
-            "default": ["$XSAPPNAME.User"]
+            "GET": ["$XSAPPNAME.User","$XSAPPNAME.Developer"],
+            "PUT": ["$XSAPPNAME.User","$XSAPPNAME.Developer"],
+            "PATCH": ["$XSAPPNAME.User","$XSAPPNAME.Developer"],
+            "POST": ["$XSAPPNAME.User","$XSAPPNAME.Developer"],
+            "DELETE": ["$XSAPPNAME.User","$XSAPPNAME.Developer"],
+            "default": ["$XSAPPNAME.User","$XSAPPNAME.Developer"]
         }
       },
       {
@@ -24,12 +24,12 @@
         "authenticationType": "xsuaa",
         "csrfProtection": true,
       "scope":{
-        "GET": ["$XSAPPNAME.User"],
-        "PUT": ["$XSAPPNAME.User"],
-        "PATCH": ["$XSAPPNAME.User"],
-        "POST": ["$XSAPPNAME.User"],
-        "DELETE": ["$XSAPPNAME.User"],
-        "default": ["$XSAPPNAME.User"]
+        "GET": ["$XSAPPNAME.User","$XSAPPNAME.Developer"],
+        "PUT": ["$XSAPPNAME.User","$XSAPPNAME.Developer"],
+        "PATCH": ["$XSAPPNAME.User","$XSAPPNAME.Developer"],
+        "POST": ["$XSAPPNAME.User","$XSAPPNAME.Developer"],
+        "DELETE": ["$XSAPPNAME.User","$XSAPPNAME.Developer"],
+        "default": ["$XSAPPNAME.User","$XSAPPNAME.Developer"]
     }
       },
     {
