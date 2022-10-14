@@ -8,7 +8,7 @@ SELECT
     A."MODEL_VERSION",
     A."VERSION", 
     A."SCENARIO", 
-    A."METHOD",
+    -- A."METHOD",
     A."UNIQUE_ID", 
     A."CIR_QTY", 
     B."CHAR_NUM",

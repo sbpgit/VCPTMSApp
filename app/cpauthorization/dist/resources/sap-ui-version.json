@@ -1,7 +1,11 @@
 {
 	"name": "cpapp.cpauthorization",
 	"version": "0.0.1",
-	"buildTimestamp": "202210131112",
+<<<<<<< HEAD
+	"buildTimestamp": "202210121806",
+=======
+	"buildTimestamp": "202210131346",
+>>>>>>> 7accf735fd892278ff5887fab52a3fa915b6d5ea
 	"scmRevision": "",
 	"libraries": []
 }
