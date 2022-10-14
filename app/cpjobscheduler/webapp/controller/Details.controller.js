@@ -1,3 +1,5 @@
+
+var thisDetail;
 sap.ui.define(
   [
     "cpapp/cpjobscheduler/controller/BaseController",
@@ -27,6 +29,7 @@ sap.ui.define(
        */
       onInit: function () {
         that = this;
+        thisDetail= this;
         this.bus = sap.ui.getCore().getEventBus();
         this.bus.subscribe(
           "cpapp.cpjobscheduler",
@@ -114,6 +117,9 @@ sap.ui.define(
         var dDate = that.byId("idDateRange").getValue();
           oGModel = this.getModel("oGModel");
             oGModel.setProperty("/DateRange", dDate);
+
+
+            that.byId("idCreate").setBusy(false);
 
         var oViewModel = this.getModel("appView");
         /**  Removing the arrow button inbetween pages(ItemMaster and ItemDetail)*/

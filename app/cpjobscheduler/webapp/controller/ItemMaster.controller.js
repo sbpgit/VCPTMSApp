@@ -149,11 +149,13 @@ sap.ui.define(
 
         //   that.byId("JobPanel").setExpanded(true);
         //   that.byId("jobDetailsPanel").setExpanded(false);
-          sap.ui.core.BusyIndicator.show();
+        //   sap.ui.core.BusyIndicator.show();
+        that.oList.setBusy(true);
           that.getModel("JModel").callFunction("/readJobs", {
             method: "GET",
             success: function (oData) {
-              sap.ui.core.BusyIndicator.hide();
+                // that.oList.setBusy(false);
+            //   sap.ui.core.BusyIndicator.hide();
               oData.results.forEach(function (row) {
                 row.jobId = row.jobId.toString();
               }, that);
@@ -180,7 +182,8 @@ sap.ui.define(
               that.onSearch();
             },
             error: function (error) {
-              sap.ui.core.BusyIndicator.hide();
+                // that.oList.setBusy(false);
+            //   sap.ui.core.BusyIndicator.hide();
               MessageToast.show("Failed to get data");
             },
           });

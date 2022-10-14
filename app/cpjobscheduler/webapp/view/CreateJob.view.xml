@@ -342,19 +342,23 @@
                             <RadioButton id="idIBPDemand" text="IBP Demand" visible="false" />
                             <!-- <RadioButton id="idIBPFutPlan" text="IBP Future Plan" /> -->
                         </RadioButtonGroup>
-
+                        
                         <RadioButtonGroup id="idRbtnExport" columns="1" select="ExportRadioChange" visible="false">
-                            <!-- <RadioButton text="Master Data" /> -->
-                            <RadioButton id="idIBPLoc" text="Location" />
-                            <RadioButton id="idIBPCustGrp" text="Customer Group" />
-                            <RadioButton id="idIBPProd" text="Product" />
-                            <RadioButton id="idIBPClass" text="Class" />
+                            
+                            <!-- <RadioButton id="idMaster" groupName="master" text="Master Data"/> -->
+                            <RadioButton id="idIBPLoc" groupName="master" text="Location" />
+                            <RadioButton id="idIBPCustGrp" groupName="master" text="Customer Group" />
+                            <RadioButton id="idIBPProd" groupName="master" text="Product" />
+                            <RadioButton id="idIBPClass" groupName="master" text="Class" />
+                            <RadioButton id="idRestri" groupName="master" text="Restrictions" />
                             
                             <RadioButton id="idIBPSalesHis" text="Sales History" />
                             <!-- <RadioButton id="idIBPSalesHisConfig" text="Sales History Config" /> -->
                             <RadioButton id="idIBPActCompDemd" text="Actual Components Demand" />
                             <RadioButton id="idIBPCompReqQty" text="Assembly Requirement Quantity" />
                             <RadioButton id="idIBPExCIR" text="Fully Configured Demand" />
+                            <RadioButton id="idResLikhood" text="Restriction Likelihood" />
+
                             
                         </RadioButtonGroup>
                         
@@ -601,6 +605,55 @@
                                     </f:FormContainer>
                                 </f:formContainers>
                             </f:Form>
+
+                            <f:Form editable="true" id="IBPRestriExport" visible="false">
+                                <f:layout>
+                                    <f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2" singleContainerFullSize="false" />
+                                </f:layout>
+                                <f:formContainers>
+                                    <f:FormContainer>
+                                        <f:formElements>
+                                            <f:FormElement>
+                                                <f:label>
+                                                    <Label text="{i18n>loc}" required="true" />
+                                                </f:label>
+                                                <f:fields>
+                                                    <Input id="ERestlocInput" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                                </f:fields>
+                                            </f:FormElement>                                            
+                                        </f:formElements>
+                                    </f:FormContainer>
+                                </f:formContainers>
+                            </f:Form>
+
+                             <f:Form editable="true" id="IBPResLikhoodExport" visible="false">
+                                <f:layout>
+                                    <f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2" singleContainerFullSize="false" />
+                                </f:layout>
+                                <f:formContainers>
+                                    <f:FormContainer>
+                                        <f:formElements>
+                                            <f:FormElement>
+                                                <f:label>
+                                                    <Label text="{i18n>loc}" required="true" />
+                                                </f:label>
+                                                <f:fields>
+                                                    <Input id="EReLiHlocInput" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                                </f:fields>
+                                            </f:FormElement>
+                                            <f:FormElement>
+                                                <f:label>
+                                                    <Label text="{i18n>prod}" required="true" />
+                                                </f:label>
+                                                <f:fields>
+                                                    <MultiInput id="EReLiHprodInput" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
+                                                </f:fields>
+                                            </f:FormElement>
+                                        </f:formElements>
+                                    </f:FormContainer>
+                                </f:formContainers>
+                            </f:Form>
+
                         </VBox>
 
                         <Button visible="false" id="idbtImport" type="Emphasized" text="Import From IBP" press="onIbpJobImport" width="10%" />
