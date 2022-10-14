@@ -506,6 +506,8 @@ class GenTimeseriesM2 {
                          AND PRODUCT_ID    = '${adata.PRODUCT_ID}'`);
 
         let liCir = [];
+        let liCirDiff = [];
+        
         let lCir = 0;
         let lPIQty = 0;
         for (let cntUID = 0; cntUID < liUniQty.length; cntUID++) {
@@ -521,6 +523,7 @@ class GenTimeseriesM2 {
             for (let cntP = 0; cntP < liPrediction.length; cntP++) {
                 if (parseInt(liPrediction[cntP].OBJ_DEP) === liUniQty[cntUID].PRIMARY_ID) {
                     let lsCir = {};
+                    let lsCirDiff = {};
                     lCir = parseInt(lCir) + 1;
                     lsCir['LOCATION_ID'] = GenF.parse(adata.LOCATION_ID);
                     lsCir['PRODUCT_ID'] = GenF.parse(adata.PRODUCT_ID);
@@ -533,6 +536,17 @@ class GenTimeseriesM2 {
                     lsCir['UNIQUE_ID'] = GenF.parse(liUniQty[cntUID].UNIQUE_ID);
                     if (lPIQty > 0) {
                         lsCir['CIR_QTY'] = GenF.parse(parseInt(liUniQty[cntUID].ORD_QTY * liPrediction[cntP].PREDICTED / lPIQty));
+
+                        lsCirDiff = GenF.parse(lsCir);
+
+                        lsCirDiff['CIR_QTY_DEC'] = GenF.parse(liUniQty[cntUID].ORD_QTY * liPrediction[cntP].PREDICTED / lPIQty);
+
+                        if(lsCirDiff['CIR_QTY'] > lsCirDiff['CIR_QTY_DEC']){
+                            lsCirDiff['CIR_QTY_DIFF']  = lsCirDiff['CIR_QTY'] - lsCirDiff['CIR_QTY_DEC'];
+                        } else {
+                            lsCirDiff['CIR_QTY_DIFF']  = lsCirDiff['CIR_QTY_DEC'] - lsCirDiff['CIR_QTY'];
+                        }
+                        liCirDiff.push(lsCirDiff);
                     }
                     liCir.push(lsCir);
                 }
@@ -579,6 +593,70 @@ class GenTimeseriesM2 {
                                     "VERSION" ASC, 
                                     "SCENARIO" ASC, 
                                     "METHOD" ASC;`);
+
+        for (let cntR = 0; cntR < liRound.length; cntR++) {
+            if(liRound[cntR].DIFF > 0){            
+                let liCirTemp = await cds.run(`SELECT "LOCATION_ID",
+                                                    "PRODUCT_ID",
+                                                    "WEEK_DATE",
+                                                    "CIR_ID",
+                                                    "MODEL_VERSION",
+                                                    "VERSION",
+                                                    "SCENARIO",
+                                                    "UNIQUE_ID",
+                                                    "CIR_QTY"
+                                                FROM CP_CIR_GENERATED"
+                                                WHERE "LOCATION_ID" = '${adata.LOCATION_ID}'
+                                                AND "PRODUCT_ID" = '${adata.PRODUCT_ID}'
+                                                AND "WEEK_DATE" = '${liRound.WEEK_DATE}'
+                                                AND "MODEL_VERSION" = '${liRound.MODEL_VERSION}'
+                                                AND "VERSION" = '${liRound.VERSION}'
+                                                AND "SCENARIO" = '${liRound.SCENARIO}'
+                                                ORDER BY CIR_QTY`);
+                let lsCirLeast = {};    
+                lsCirLeast['DIFF'] = 0;
+                for (let cntCt = 0; cntCt < liCirTemp.length; cntCt++) {
+                    await cds.run(`UPDATE CP_CIR_GENERATED SET CIR_QTY = CIR_QTY + 1
+                                    WHERE LOCATION_ID = '${liCirTemp[cntCt].LOCATION_ID}'
+                                    AND PRODUCT_ID = '${liCirTemp[cntCt].PRODUCT_ID}'
+                                    AND WEEK_DATE = '${liCirTemp[cntCt].WEEK_DATE}'
+                                    AND CIR_ID = '${liCirTemp[cntCt].CIR_ID}'
+                                    AND MODEL_VERSION = '${liCirTemp[cntCt].MODEL_VERSION}'
+                                    AND VERSION = '${liCirTemp[cntCt].VERSION}'
+                                    AND SCENARIO = '${liCirTemp[cntCt].SCENARIO}'
+                                    AND METHOD = '${liCirTemp[cntCt].METHOD}'`);
+
+                                    
+                     let lDiff = await cds.run(`SELECT SUM("DIFF_QTY")
+                                    FROM "V_CIR_QTY_VAR"
+                                   WHERE LOCATION_ID = '${adata.LOCATION_ID}'
+                                     AND PRODUCT_ID = '${adata.PRODUCT_ID}'
+                                     AND WEEK_DATE = '${liRound.WEEK_DATE}'
+                                     AND MODEL_VERSION = '${liRound.MODEL_VERSION}'
+                                     AND VERSION = '${liRound.VERSION}'
+                                     AND SCENARIO = '${liRound.SCENARIO}';`);
+                                     
+                    if(lsCirLeast['DIFF'] === 0 || lsCirLeast['DIFF'] > lDiff){
+                        lsCirLeast = GenF.parse(liCirTemp[cntCt]);
+                        lsCirLeast['DIFF'] = lDiff;
+                    }
+                    lsCirLeast = GenF.parse(liCirTemp[cntCt]);
+
+                    await cds.run(`UPDATE CP_CIR_GENERATED SET CIR_QTY = CIR_QTY - 1
+                                    WHERE LOCATION_ID = '${liCirTemp[cntCt].LOCATION_ID}'
+                                    AND PRODUCT_ID = '${liCirTemp[cntCt].PRODUCT_ID}'
+                                    AND WEEK_DATE = '${liCirTemp[cntCt].WEEK_DATE}'
+                                    AND CIR_ID = '${liCirTemp[cntCt].CIR_ID}'
+                                    AND MODEL_VERSION = '${liCirTemp[cntCt].MODEL_VERSION}'
+                                    AND VERSION = '${liCirTemp[cntCt].VERSION}'
+                                    AND SCENARIO = '${liCirTemp[cntCt].SCENARIO}'
+                                    AND METHOD = '${liCirTemp[cntCt].METHOD}'`);   
+                }
+
+
+            }
+        }
+
 
         const liCIRRound = await cds.run(`SELECT "LOCATION_ID",
                                                   "PRODUCT_ID",
