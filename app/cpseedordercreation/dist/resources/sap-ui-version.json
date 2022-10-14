@@ -1,7 +1,11 @@
 {
 	"name": "cpapp.cpseedordercreation",
 	"version": "0.0.1",
-	"buildTimestamp": "202210120932",
+<<<<<<< HEAD
+	"buildTimestamp": "202210121808",
+=======
+	"buildTimestamp": "202210131347",
+>>>>>>> 7accf735fd892278ff5887fab52a3fa915b6d5ea
 	"scmRevision": "",
 	"libraries": []
 }

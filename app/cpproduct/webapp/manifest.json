@@ -158,7 +158,8 @@
     },
     "sap.platform.cf": {
         "oAuthScopes": [
-            "$XSAPPNAME.Display"
+            "$XSAPPNAME.Display",
+            "$XSAPPNAME.User"
         ]
     }
 }

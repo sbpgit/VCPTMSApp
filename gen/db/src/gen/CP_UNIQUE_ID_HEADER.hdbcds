@@ -1,9 +1,0 @@
-entity CP_UNIQUE_ID_HEADER {
-  key UNIQUE_ID : Integer;
-  key LOCATION_ID : String(4);
-  key PRODUCT_ID : String(40);
-  UNIQUE_DESC : String(50);
-  UID_TYPE : String(1);
-  UID_RATE : Decimal(13, 2);
-  ACTIVE : Boolean;
-};

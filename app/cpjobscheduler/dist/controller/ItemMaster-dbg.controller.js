@@ -58,6 +58,65 @@ sap.ui.define(
           viewName: this.getView().getProperty("viewName"),
         });
         this.bus.subscribe("data", "dateRange", this.handleDateChange, this);
+
+        this.byId("target").addEventDelegate({
+            onmouseover: this._showPopover,
+            onmouseout: this._clearPopover,
+          }, this);
+      },
+
+      _showPopover: function (oEvent) {
+       var id1 = oEvent.target.id.split("jobList-")[1].split("-")[0],
+            id2 = oEvent.target.id.split("jobList-")[0],
+        id = id2 + "jobList-" + id1;
+
+        var oSelItem = this.byId("jobList").getItems()[id1].getBindingContext().getObject();
+
+        // this.byId("idDesc").setText(" " + "Description" + " - " + oSelItem.description + " ");
+        // this.byId("idSt").setText("Start Time" + " - " + oSelItem.startTime);
+        // this.byId("idET").setText("End Time" + " - " + oSelItem.endTime);
+        // this.byId("idCA").setText("Created At" + " - " + oSelItem.createdAt);
+
+        var oData, aFinalData = [];
+
+			oData = {
+				"description": oSelItem.description,
+				"startTime": oSelItem.startTime,
+				"endTime": oSelItem.endTime,
+				"createdAt": oSelItem.createdAt,
+			};
+			aFinalData.push(oData);
+
+			// Model set
+			that.dataModel = new JSONModel();
+			that.dataModel.setData({
+				resultsData: aFinalData
+			});
+			that.byId("idData").setModel(that.dataModel);
+
+
+
+    //     // Getting the selected Item from list
+    //     oGModel = this.getModel("oGModel");
+
+    // //   Setting the selected values
+    //   oGModel.setProperty("/jobId", oSelItem.jobId);
+    //   oGModel.setProperty("/description", oSelItem.description);
+    //   oGModel.setProperty("/startTime", oSelItem.startTime);
+    //   oGModel.setProperty("/endTime", oSelItem.endTime);
+    //   oGModel.setProperty("/createdAt", oSelItem.createdAt);
+
+
+
+
+        this._timeId = setTimeout(() => {
+          this.byId("popover").openBy(this.byId(id));
+        }, 500);
+      },
+  
+      _clearPopover: function () {
+        clearTimeout(this._timeId);
+        this.byId("popover").close();
       },
 
       /**

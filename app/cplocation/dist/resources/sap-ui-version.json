@@ -1,7 +1,11 @@
 {
 	"name": "cpapp.cplocation",
 	"version": "0.0.1",
-	"buildTimestamp": "202210120927",
+<<<<<<< HEAD
+	"buildTimestamp": "202210121803",
+=======
+	"buildTimestamp": "202210131343",
+>>>>>>> 7accf735fd892278ff5887fab52a3fa915b6d5ea
 	"scmRevision": "",
 	"libraries": []
 }

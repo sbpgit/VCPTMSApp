@@ -7,7 +7,15 @@
       "target": "/v2/catalog/$1",
       "destination": "ConfigProd",
       "authenticationType": "xsuaa",
-      "csrfProtection": false
+      "csrfProtection": true,
+      "scope":{
+        "GET": ["$XSAPPNAME.User"],
+        "PUT": ["$XSAPPNAME.User"],
+        "PATCH": ["$XSAPPNAME.User"],
+        "POST": ["$XSAPPNAME.User"],
+        "DELETE": ["$XSAPPNAME.User"],
+        "default": ["$XSAPPNAME.User"]
+    }
     },
     {
       "source": "^/resources/(.*)$",
