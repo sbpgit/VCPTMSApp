@@ -1,4 +1,5 @@
 service SDIService @(impl : './lib/sdi-service.js') {    
+    function ImportECCLocProdfn() returns String; 
     action ImportECCLoc();     
     action ImportECCProd();     
     action ImportECCCustGrp(); 

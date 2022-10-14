@@ -16,6 +16,7 @@ using {
     V_ODRESTRICT,
     V_LOCPRODLINERTR,
     V_CIR_CHAR_RATE,
+    V_CIR_QTY_VARDESC,
     V_CIRVERSCEN,
     V_BOMCRITICALCOMP
 } from '../db/data-model';
@@ -242,7 +243,7 @@ service CatalogService @(impl : './lib/cat-service.js'){
     function maintainRestrDetail (FLAG : String(1), RTRCHAR : String ) returns String;
     
 ///*****/ CIR char rate /*****/
-    entity getCIRCharRate       as projection on V_CIR_CHAR_RATE;
+    entity getCIRCharRate       as projection on V_CIR_QTY_VARDESC;//V_CIR_CHAR_RATE;
     entity getCIRVerScen        as projection on V_CIRVERSCEN;
 
 /// /*****/ Market Authorizations /*****/
@@ -276,6 +277,16 @@ service CatalogService @(impl : './lib/cat-service.js'){
 ///*****/ Assembly Requirements /*****/
     function genAssemblyreq(LOCATION_ID : String(4), PRODUCT_ID : String(40)) returns String;
     action generateAssemblyReq(LOCATION_ID : String(4), PRODUCT_ID : String(40));
+
+    //VC Planner Documentation Maintenance- Pradeep
+    function addPAGEHEADER(Flag1:String, PAGEID: Integer, DESCRIPTION:String, PARENTNODEID:Integer,HEIRARCHYLEVEL:Integer ) returns String;
+   function addPAGEPARAGRAPH(Flag1:String, PAGEID: Integer, DESCRIPTION:String,  CONTENT:String ) returns String;
+   function deletePAGEHEADER(Flag1:String,PAGEID:Integer) returns String;
+   function deletePAGEPARAGRAPH(Flag1:String, PAGEID:Integer) returns String;
+   function addJson(PAGEID: Integer, DESCRIPTION:String,  CONTENT:String) returns String;
+   function editJSONHeader(PAGEID: Integer, DESCRIPTION:String, PARENTNODEID:Integer,HEIRARCHYLEVEL:Integer ) returns String;
+   //End of VC Planner Documentation Maintenance- Pradeep
+
 //*****/ Critical Comp /*****/
     entity getCriticalComp as projection on V_BOMCRITICALCOMP;//od.CRITICAL_COMP;
     function changeToCritical(criticalComp: String ) returns String;

@@ -8,7 +8,7 @@ class GenTimeseries {
     /**
      * Generate Timeseries
      */
-    async genTimeseries(adata, req) {
+    async genTimeseries_rt(adata, req) {
         await GenF.logMessage(req, `Started restrictions history timeseries`);
         
         // Get Sales Count Information
@@ -249,7 +249,7 @@ class GenTimeseries {
 
     }
 
-    async genTimeseriesF(adata, req) {
+    async genTimeseriesF_rt(adata, req) {
 
         await GenF.logMessage(req, `Started restrictions future timeseries`);        
 
