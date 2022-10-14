@@ -6,8 +6,16 @@
       "source": "^/jobs/(.*)$",
       "target": "/jobs/$1",
       "destination": "ConfigProd",
+      "authenticationType": "xsuaa",
       "csrfProtection": true,
-      "authenticationType": "xsuaa"
+      "scope":{
+        "GET": ["$XSAPPNAME.User", "$XSAPPNAME.Developer"],
+        "PUT": ["$XSAPPNAME.User", "$XSAPPNAME.Developer"],
+        "PATCH": ["$XSAPPNAME.User", "$XSAPPNAME.Developer"],
+        "POST": ["$XSAPPNAME.User", "$XSAPPNAME.Developer"],
+        "DELETE": ["$XSAPPNAME.User", "$XSAPPNAME.Developer"],
+        "default": ["$XSAPPNAME.User", "$XSAPPNAME.Developer"]
+    }
     },
     {
       "source": "^/resources/(.*)$",

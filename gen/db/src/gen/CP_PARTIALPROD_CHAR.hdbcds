@@ -1,7 +1,0 @@
-entity CP_PARTIALPROD_CHAR {
-  key PRODUCT_ID : String(40);
-  key LOCATION_ID : String(4);
-  key CLASS_NUM : String(20);
-  key CHAR_NUM : String(30);
-  key CHARVAL_NUM : String(70);
-};

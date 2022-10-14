@@ -1,5 +1,0 @@
-entity CP_PROD_LOC_LINE {
-  key LOCATION_ID : String(4);
-  key LINE_ID : String(40);
-  key PRODUCT_ID : String(40);
-};
