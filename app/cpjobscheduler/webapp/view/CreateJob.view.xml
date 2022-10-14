@@ -343,14 +343,14 @@
                             <!-- <RadioButton id="idIBPFutPlan" text="IBP Future Plan" /> -->
                         </RadioButtonGroup>
                         
-                        <RadioButtonGroup id="idRbtnExport" columns="1" select="ExportRadioChange" visible="false">
+                        <RadioButtonGroup id="idRbtnExport" fieldGroupIds="master" columns="1" select="ExportRadioChange" visible="false">
                             
                             <!-- <RadioButton id="idMaster" groupName="master" text="Master Data"/> -->
-                            <RadioButton id="idIBPLoc" groupName="master" text="Location" />
-                            <RadioButton id="idIBPCustGrp" groupName="master" text="Customer Group" />
-                            <RadioButton id="idIBPProd" groupName="master" text="Product" />
-                            <RadioButton id="idIBPClass" groupName="master" text="Class" />
-                            <RadioButton id="idRestri" groupName="master" text="Restrictions" />
+                            <RadioButton id="idIBPLoc" fieldGroupIds="master" text="Location" tooltip="Master"/>
+                            <RadioButton id="idIBPCustGrp" fieldGroupIds="master" text="Customer Group" />
+                            <RadioButton id="idIBPProd" fieldGroupIds="master" text="Product" />
+                            <RadioButton id="idIBPClass" fieldGroupIds="master" text="Class" />
+                            <RadioButton id="idRestri" fieldGroupIds="master" text="Restrictions" />
                             
                             <RadioButton id="idIBPSalesHis" text="Sales History" />
                             <!-- <RadioButton id="idIBPSalesHisConfig" text="Sales History Config" /> -->

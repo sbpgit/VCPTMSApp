@@ -154,7 +154,7 @@ sap.ui.define(
           that.getModel("JModel").callFunction("/readJobs", {
             method: "GET",
             success: function (oData) {
-                // that.oList.setBusy(false);
+                that.oList.setBusy(false);
             //   sap.ui.core.BusyIndicator.hide();
               oData.results.forEach(function (row) {
                 row.jobId = row.jobId.toString();
@@ -182,7 +182,7 @@ sap.ui.define(
               that.onSearch();
             },
             error: function (error) {
-                // that.oList.setBusy(false);
+                that.oList.setBusy(false);
             //   sap.ui.core.BusyIndicator.hide();
               MessageToast.show("Failed to get data");
             },
