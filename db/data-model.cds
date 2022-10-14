@@ -1178,3 +1178,21 @@ Entity ![V_BOMCRITICALCOMP] {
         ![VALID_TO]: Date  @title: 'VALID_TO' ; 
         ![CRITICALKEY]: String(1)  @title: 'CRITICALKEY' ; 
 }
+
+@cds.persistence.exists 
+Entity ![V_CIR_QTY_VARDESC] {
+        ![LOCATION_ID]: String(4) not null  @title: 'LOCATION_ID' ; 
+        ![PRODUCT_ID]: String(40) not null  @title: 'PRODUCT_ID' ; 
+        ![WEEK_DATE]: Date not null  @title: 'WEEK_DATE' ; 
+        ![MODEL_VERSION]: String(20) not null  @title: 'MODEL_VERSION' ; 
+        ![VERSION]: String(10) not null  @title: 'VERSION' ; 
+        ![SCENARIO]: String(32) not null  @title: 'SCENARIO' ; 
+        ![CHAR_NUM]: String(10) not null  @title: 'CHAR_NUM' ; 
+        ![CHARVAL_NUM]: String(15) not null  @title: 'CHARVAL_NUM' ; 
+        ![CHAR_DESC]: String(150)  @title: 'CHAR_DESC' ; 
+        ![CHARVAL_DESC]: String(150)  @title: 'CHARVAL_DESC' ; 
+        ![SEQUENCE]: Integer  @title: 'SEQUENCE' ; 
+        ![OPT_QTY]: Decimal(13, 3)  @title: 'OPT_QTY' ; 
+        ![CIR_QTY]: Integer  @title: 'CIR_QTY' ; 
+        ![DIFF_QTY]: Decimal(14, 3)  @title: 'DIFF_QTY' ; 
+}

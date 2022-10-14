@@ -793,6 +793,22 @@ module.exports = (srv) => {
             }
         }
     });
+    srv.on("ImportECCLocProdfn", async (req) => {
+        var flag = '';
+        try {
+            const dbClass = require("sap-hdb-promisfied")
+            let dbConn = new dbClass(await dbClass.createConnectionFromEnv())
+            const sp = await dbConn.loadProcedurePromisified(null, '"FG_LOCPROD_SP"')
+            const output = await dbConn.callProcedurePromisified(sp, [])
+            console.log(output.results);
+            flag = 'X';
+        } catch (error) {
+            console.error(error);
+        }
+        if (flag === 'X') {
+        }
+
+});
     srv.on("ImportECCSalesh", async (req) => {
         var flag = '';
         // remove history data from Sales tables
