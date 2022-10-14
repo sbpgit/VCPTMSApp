@@ -154,8 +154,7 @@
     },
     "sap.platform.cf": {
         "oAuthScopes": [
-            "$XSAPPNAME.User",
-            "$XSAPPNAME.Developer"
+            "$XSAPPNAME.User"
         ]
     }
 }

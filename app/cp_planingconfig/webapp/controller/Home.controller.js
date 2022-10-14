@@ -100,11 +100,15 @@ sap.ui.define([
             *
             */
             getParameters: function (oModel) {
+                var aParameters = [];
                 oModel.read('/V_Parameters', {
                     success: function (oData) {
                         // MessageToast.show("Success");
+                       aParameters = oData.results;
+                       aParameters = aParameters.sort((a,b) => a.SEQUENCE-b.SEQUENCE);                       
+
                         that.oParameterModel.setData({
-                            parameters: oData.results
+                            parameters: aParameters  //oData.results
                         });
                         
                         that.byId("idParameterTable").setModel(that.oParameterModel);
@@ -187,6 +191,10 @@ sap.ui.define([
                 var sMinValue = oParamModel.getProperty("MIN_VALUE", oBindingContext);
                 var sMaxValue = oParamModel.getProperty("MAX_VALUE", oBindingContext);
                 var sNewValue = oEvent.getParameter("newValue");
+                if(oBindingContext.getObject().PARAMETER_ID === 9) {
+                    var oParamData = oParamModel.getData().parameters[0];
+                    sMinValue = oParamData.VALUE;
+                 }
                 if (parseInt(sMaxValue) > 0) {
                     if (parseInt(sNewValue) < parseInt(sMinValue) || parseInt(sNewValue) > parseInt(sMaxValue)) {
                         that.oSelectedInput.setValueState("Error");

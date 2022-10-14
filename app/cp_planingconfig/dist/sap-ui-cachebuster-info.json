@@ -1,4 +1,25 @@
 {
+<<<<<<< HEAD
+  "controller/Home.controller.js": 1665402071081,
+  "utils/locate-reuse-libs.js": 1662729348588,
+  "manifest.json": 1665598139385,
+  "model/models.js": 1662729348592,
+  "i18n/i18n.properties": 1662729545995,
+  "controller/App.controller.js": 1662729348596,
+  "Component.js": 1662729348584,
+  "manifest-bundle.zip": 1665598139401,
+  "Component-preload.js": 1665598139790,
+  "utils/locate-reuse-libs-dbg.js": 1662729348588,
+  "model/models-dbg.js": 1662729348592,
+  "controller/Home-dbg.controller.js": 1665402071081,
+  "controller/App-dbg.controller.js": 1662729348596,
+  "Component-dbg.js": 1662729348584,
+  "view/MethodTyp.fragment.xml": 1665400627083,
+  "view/Home.view.xml": 1665583049265,
+  "view/App.view.xml": 1662729608640,
+  "css/style.css": 1662729348596,
+  "index.html": 1662729670268
+=======
   "index.html": 1665479929537,
   "manifest.json": 1665668905865,
   "utils/locate-reuse-libs.js": 1665479929537,
@@ -18,4 +39,5 @@
   "view/App.view.xml": 1665479929537,
   "css/style.css": 1665479929537,
   "i18n/i18n.properties": 1665479929537
+>>>>>>> 7accf735fd892278ff5887fab52a3fa915b6d5ea
 }
