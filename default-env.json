@@ -1,6 +1,4 @@
-Getting env variables for app config_products-srv in org SBPBTP_vcpprovider-sc0jeojq / space dev as prudvin@sbpcorp.in...
-System-Provided:
-VCAP_SERVICES: {
+{"VCAP_SERVICES": {
   "destination": [
     {
       "binding_guid": "4a7ef582-8881-4d17-bb95-5e16673f27ff",
@@ -199,10 +197,8 @@ VCAP_SERVICES: {
       "volume_mounts": []
     }
   ]
-}
-
-
-VCAP_APPLICATION: {
+},
+"VCAP_APPLICATION": {
   "application_id": "0da042a3-eb0c-4851-ae0c-d789ed8d41fc",
   "application_name": "config_products-srv",
   "application_uris": [
@@ -223,23 +219,4 @@ VCAP_APPLICATION: {
   "users": null
 }
 
-
-User-Provided:
-AIR: 3p1k43r8
-DEPLOY_ATTRIBUTES: {
-  "app-content-digest" : "A167CFAC2BBF78EBBB430146DD9E138E"
 }
-TimePeriod: PERIOD_NUM
-classicalSchema: DB_CONFIG_PROD_CLIENT1
-classicalSchemaNodePort: 629b57ef-09e1-43ec-bc8c-2b453b9a541c.hana.prod-us10.hanacloud.ondemand.com:443
-ibpPwd: Sbp@btpproductdevelopment01
-ibpUid: BTPUSER
-uidClassicalSchema: SBPTECHTEAM
-uidClassicalSchemaPassword: Sbpcorp@22
-
-Running Environment Variable Groups:
-LOG4J_FORMAT_MSG_NO_LOOKUPS: true
-
-Staging Environment Variable Groups:
-LOG4J_FORMAT_MSG_NO_LOOKUPS: true
-

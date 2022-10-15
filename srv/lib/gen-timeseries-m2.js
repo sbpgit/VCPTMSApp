@@ -46,7 +46,7 @@ class GenTimeseriesM2 {
                         { ref: ["LOCATION_ID"] }, '=', { val: adata.LOCATION_ID }, 'and',
                         { ref: ["PRODUCT_ID"] }, '=', { val: lMainProduct }, 'and',
                         { ref: ["UID_TYPE"] }, '=', { val: 'P' }, 'and',
-                        { ref: ["ACTIVE"] }, '=', { val: true }
+                        { ref: ["ACTIVE"] }, '=', { val: 'true' }
                     ]
                 }
 
@@ -529,7 +529,6 @@ class GenTimeseriesM2 {
                     lsCir['PRODUCT_ID'] = GenF.parse(adata.PRODUCT_ID);
                     lsCir['WEEK_DATE'] = GenF.parse(liPrediction[cntP]['CAL_DATE']);
                     lsCir['CIR_ID'] = GenF.parse(lCir);
-                    lsCir['METHOD'] = '1';
                     lsCir['MODEL_VERSION'] = GenF.parse(liPrediction[cntP]['MODEL_VERSION']);
                     lsCir['VERSION'] = GenF.parse(liPrediction[cntP]['VERSION']);
                     lsCir['SCENARIO'] = GenF.parse(liPrediction[cntP]['SCENARIO']);
@@ -565,7 +564,6 @@ class GenTimeseriesM2 {
                                     C."MODEL_VERSION",
                                     C."VERSION",
                                     C."SCENARIO",
-                                    C."METHOD",
                                     SUM(C."CIR_QTY") AS CIR_QTY,
                                     I.QUANTITY,
                                     (I.QUANTITY - SUM(C."CIR_QTY")) AS DIFF
@@ -584,17 +582,16 @@ class GenTimeseriesM2 {
                                     C."MODEL_VERSION",
                                     C."VERSION",
                                     C."SCENARIO",
-                                    C."METHOD",
                                     I.QUANTITY	
                            ORDER BY "LOCATION_ID" ASC, 
                                     "PRODUCT_ID" ASC, 
                                     "WEEK_DATE" ASC, 
                                     "MODEL_VERSION" ASC, 
                                     "VERSION" ASC, 
-                                    "SCENARIO" ASC, 
-                                    "METHOD" ASC;`);
+                                    "SCENARIO" ASC;`);
 
         for (let cntR = 0; cntR < liRound.length; cntR++) {
+            console.log(`Week ${liRound[cntR].WEEK_DATE} Demand ${liRound[cntR].DIFF}`)
             if(liRound[cntR].DIFF > 0){            
                 let liCirTemp = await cds.run(`SELECT "LOCATION_ID",
                                                     "PRODUCT_ID",
@@ -605,53 +602,62 @@ class GenTimeseriesM2 {
                                                     "SCENARIO",
                                                     "UNIQUE_ID",
                                                     "CIR_QTY"
-                                                FROM CP_CIR_GENERATED"
+                                                FROM CP_CIR_GENERATED
                                                 WHERE "LOCATION_ID" = '${adata.LOCATION_ID}'
                                                 AND "PRODUCT_ID" = '${adata.PRODUCT_ID}'
-                                                AND "WEEK_DATE" = '${liRound.WEEK_DATE}'
-                                                AND "MODEL_VERSION" = '${liRound.MODEL_VERSION}'
-                                                AND "VERSION" = '${liRound.VERSION}'
-                                                AND "SCENARIO" = '${liRound.SCENARIO}'
-                                                ORDER BY CIR_QTY`);
-                let lsCirLeast = {};    
-                lsCirLeast['DIFF'] = 0;
-                for (let cntCt = 0; cntCt < liCirTemp.length; cntCt++) {
-                    await cds.run(`UPDATE CP_CIR_GENERATED SET CIR_QTY = CIR_QTY + 1
-                                    WHERE LOCATION_ID = '${liCirTemp[cntCt].LOCATION_ID}'
-                                    AND PRODUCT_ID = '${liCirTemp[cntCt].PRODUCT_ID}'
-                                    AND WEEK_DATE = '${liCirTemp[cntCt].WEEK_DATE}'
-                                    AND CIR_ID = '${liCirTemp[cntCt].CIR_ID}'
-                                    AND MODEL_VERSION = '${liCirTemp[cntCt].MODEL_VERSION}'
-                                    AND VERSION = '${liCirTemp[cntCt].VERSION}'
-                                    AND SCENARIO = '${liCirTemp[cntCt].SCENARIO}'
-                                    AND METHOD = '${liCirTemp[cntCt].METHOD}'`);
+                                                    AND "WEEK_DATE" = '${liRound[cntR].WEEK_DATE}'
+                                                AND "MODEL_VERSION" = '${liRound[cntR].MODEL_VERSION}'
+                                                AND "VERSION" = '${liRound[cntR].VERSION}'
+                                                AND "SCENARIO" = '${liRound[cntR].SCENARIO}'
+                                                ORDER BY CIR_QTY DESC`);
+                while (liRound[cntR].DIFF > 0) {                                                
+                    let lsCirLeast = {};    
+                    lsCirLeast['DIFF'] = 0;
+                    for (let cntCt = 0; cntCt < liCirTemp.length; cntCt++) {
+                        await cds.run(`UPDATE CP_CIR_GENERATED SET CIR_QTY = CIR_QTY + 1
+                                        WHERE LOCATION_ID = '${liCirTemp[cntCt].LOCATION_ID}'
+                                        AND PRODUCT_ID = '${liCirTemp[cntCt].PRODUCT_ID}'
+                                        AND WEEK_DATE = '${liCirTemp[cntCt].WEEK_DATE}'
+                                        AND CIR_ID = '${liCirTemp[cntCt].CIR_ID}'
+                                        AND MODEL_VERSION = '${liCirTemp[cntCt].MODEL_VERSION}'
+                                        AND VERSION = '${liCirTemp[cntCt].VERSION}'
+                                        AND SCENARIO = '${liCirTemp[cntCt].SCENARIO}'`);
+                                        
+                        let lDiff = await cds.run(`SELECT SUM("DIFF_QTY") as DIFF
+                                        FROM "V_CIR_QTY_VAR"
+                                    WHERE LOCATION_ID = '${adata.LOCATION_ID}'
+                                        AND PRODUCT_ID = '${adata.PRODUCT_ID}'
+                                        AND WEEK_DATE = '${liRound[cntR].WEEK_DATE}'
+                                        AND MODEL_VERSION = '${liRound[cntR].MODEL_VERSION}'
+                                        AND VERSION = '${liRound[cntR].VERSION}'
+                                        AND SCENARIO = '${liRound[cntR].SCENARIO}';`);
+                                        
+                        if(lsCirLeast['DIFF'] === 0 || lsCirLeast['DIFF'] > lDiff[0].DIFF){
+                            lsCirLeast = GenF.parse(liCirTemp[cntCt]);
+                            lsCirLeast['DIFF'] = lDiff[0].DIFF;
+                        }
 
-                                    
-                     let lDiff = await cds.run(`SELECT SUM("DIFF_QTY")
-                                    FROM "V_CIR_QTY_VAR"
-                                   WHERE LOCATION_ID = '${adata.LOCATION_ID}'
-                                     AND PRODUCT_ID = '${adata.PRODUCT_ID}'
-                                     AND WEEK_DATE = '${liRound.WEEK_DATE}'
-                                     AND MODEL_VERSION = '${liRound.MODEL_VERSION}'
-                                     AND VERSION = '${liRound.VERSION}'
-                                     AND SCENARIO = '${liRound.SCENARIO}';`);
-                                     
-                    if(lsCirLeast['DIFF'] === 0 || lsCirLeast['DIFF'] > lDiff){
-                        lsCirLeast = GenF.parse(liCirTemp[cntCt]);
-                        lsCirLeast['DIFF'] = lDiff;
+                        await cds.run(`UPDATE CP_CIR_GENERATED SET CIR_QTY = CIR_QTY - 1
+                                        WHERE LOCATION_ID = '${liCirTemp[cntCt].LOCATION_ID}'
+                                        AND PRODUCT_ID = '${liCirTemp[cntCt].PRODUCT_ID}'
+                                        AND WEEK_DATE = '${liCirTemp[cntCt].WEEK_DATE}'
+                                        AND CIR_ID = '${liCirTemp[cntCt].CIR_ID}'
+                                        AND MODEL_VERSION = '${liCirTemp[cntCt].MODEL_VERSION}'
+                                        AND VERSION = '${liCirTemp[cntCt].VERSION}'
+                                        AND SCENARIO = '${liCirTemp[cntCt].SCENARIO}'`);   
                     }
-                    lsCirLeast = GenF.parse(liCirTemp[cntCt]);
 
-                    await cds.run(`UPDATE CP_CIR_GENERATED SET CIR_QTY = CIR_QTY - 1
-                                    WHERE LOCATION_ID = '${liCirTemp[cntCt].LOCATION_ID}'
-                                    AND PRODUCT_ID = '${liCirTemp[cntCt].PRODUCT_ID}'
-                                    AND WEEK_DATE = '${liCirTemp[cntCt].WEEK_DATE}'
-                                    AND CIR_ID = '${liCirTemp[cntCt].CIR_ID}'
-                                    AND MODEL_VERSION = '${liCirTemp[cntCt].MODEL_VERSION}'
-                                    AND VERSION = '${liCirTemp[cntCt].VERSION}'
-                                    AND SCENARIO = '${liCirTemp[cntCt].SCENARIO}'
-                                    AND METHOD = '${liCirTemp[cntCt].METHOD}'`);   
-                }
+
+                    await cds.run(`UPDATE CP_CIR_GENERATED SET CIR_QTY = CIR_QTY + 1
+                                    WHERE LOCATION_ID = '${lsCirLeast.LOCATION_ID}'
+                                    AND PRODUCT_ID = '${lsCirLeast.PRODUCT_ID}'
+                                    AND WEEK_DATE = '${lsCirLeast.WEEK_DATE}'
+                                    AND CIR_ID = '${lsCirLeast.CIR_ID}'
+                                    AND MODEL_VERSION = '${lsCirLeast.MODEL_VERSION}'
+                                    AND VERSION = '${lsCirLeast.VERSION}'
+                                    AND SCENARIO = '${lsCirLeast.SCENARIO}'`);
+                    liRound[cntR].DIFF = liRound[cntR].DIFF - 1;      
+            }          
 
 
             }
@@ -665,7 +671,6 @@ class GenTimeseriesM2 {
                                                   "MODEL_VERSION",
                                                   "VERSION",
                                                   "SCENARIO",
-                                                  "METHOD",
                                                   "UNIQUE_ID",
                                                   "CIR_QTY"
                                             FROM "CP_CIR_GENERATED"
@@ -678,7 +683,6 @@ class GenTimeseriesM2 {
                                                 "MODEL_VERSION" ASC, 
                                                 "VERSION" ASC, 
                                                 "SCENARIO" ASC, 
-                                                "METHOD" ASC, 
                                                 "CIR_QTY" DESC;`);
 
 
@@ -691,7 +695,6 @@ class GenTimeseriesM2 {
                     liRound[cntR].MODEL_VERSION === liCIRRound[cntCR].MODEL_VERSION &&
                     liRound[cntR].VERSION === liCIRRound[cntCR].VERSION &&
                     liRound[cntR].SCENARIO === liCIRRound[cntCR].SCENARIO &&
-                    liRound[cntR].METHOD === liCIRRound[cntCR].METHOD &&
                     liRound[cntR].DIFF > 0) {
                     // await cds.run(`UPDATE CP_CIR_GENERATED SET CIR_QTY = CIR_QTY + ${parseInt(liRound[cntR].DIFF)}
                     //           WHERE LOCATION_ID = '${liCIRRound[cntCR].LOCATION_ID}'
@@ -700,8 +703,7 @@ class GenTimeseriesM2 {
                     //           AND CIR_ID = '${liCIRRound[cntCR].CIR_ID}'
                     //           AND MODEL_VERSION = '${liCIRRound[cntCR].MODEL_VERSION}'
                     //           AND VERSION = '${liCIRRound[cntCR].VERSION}'
-                    //           AND SCENARIO = '${liCIRRound[cntCR].SCENARIO}'
-                    //           AND METHOD = '${liCIRRound[cntCR].METHOD}'`);
+                    //           AND SCENARIO = '${liCIRRound[cntCR].SCENARIO}'`);
                     liRound[cntR].DIFF = GenF.parse(0);
                 }
             }
