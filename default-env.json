@@ -198,6 +198,7 @@
     }
   ]
 },
+
 "VCAP_APPLICATION": {
   "application_id": "0da042a3-eb0c-4851-ae0c-d789ed8d41fc",
   "application_name": "config_products-srv",
@@ -219,4 +220,4 @@
   "users": null
 }
 
-}
+    }

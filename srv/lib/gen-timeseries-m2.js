@@ -420,18 +420,21 @@ class GenTimeseriesM2 {
         await GenF.logMessage(req, `Started Fully Configured Requirement Generation`);
 
         const lDate = new Date();
+
+// Get Start date considering Firm Horizon        
         const lStartDate = new Date(
             lDate.getFullYear(),
             lDate.getMonth(),
-            lDate.getDate() + parseInt(await GenF.getParameterValue(1))
+            lDate.getDate() + parseInt(await GenF.getParameterValue(9))
         );
 
+// Get Predictions        
         let liPrediction = [];
         liPrediction = await SELECT.from('CP_TS_PREDICTIONS')
             .where(`CAL_DATE    > '${lStartDate.toISOString().split("T")[0]}'
-                                             AND LOCATION_ID = '${adata.LOCATION_ID}' 
-                                             AND PRODUCT_ID  = '${adata.PRODUCT_ID}' 
-                                             AND OBJ_TYPE    = 'PI'`);
+                AND LOCATION_ID = '${adata.LOCATION_ID}' 
+                AND PRODUCT_ID  = '${adata.PRODUCT_ID}' 
+                AND OBJ_TYPE    = 'PI'`);
 
 
         // Normalize prediction
