@@ -486,7 +486,7 @@ class GenTimeseriesM2 {
             `SELECT PRIMARY_ID,
                     SUM(ORD_QTY) AS ORD_QTY
                 FROM "V_SALES_H"
-                WHERE LOCATION_ID   = '${adata.LOCATION_ID}'
+                WHERE LOCATION_ID = '${adata.LOCATION_ID}'
                 AND PRODUCT_ID    = '${adata.PRODUCT_ID}'                
                 group by PRIMARY_ID
                 order by PRIMARY_ID`
@@ -504,9 +504,12 @@ class GenTimeseriesM2 {
                 order by PRIMARY_ID, UNIQUE_ID`
         );
 
+        // Remove records that are before current date and afer firm horizon.
         await DELETE.from('CP_CIR_GENERATED')
-            .where(`LOCATION_ID   = '${adata.LOCATION_ID}'
-                         AND PRODUCT_ID    = '${adata.PRODUCT_ID}'`);
+            .where(`LOCATION_ID         = '${adata.LOCATION_ID}'
+                         AND PRODUCT_ID = '${adata.PRODUCT_ID}'
+                         AND ( WEEK_DATE  < '${lDate.toISOString().split("T")[0]}'
+                         OR    WEEK_DATE  > '${lStartDate.toISOString().split("T")[0]}'`);
 
         let liCir = [];
         let liCirDiff = [];
@@ -539,15 +542,9 @@ class GenTimeseriesM2 {
                     if (lPIQty > 0) {
                         lsCir['CIR_QTY'] = GenF.parse(parseInt(liUniQty[cntUID].ORD_QTY * liPrediction[cntP].PREDICTED / lPIQty));
 
+                        // Store the fractions in quantity
                         lsCirDiff = GenF.parse(lsCir);
-
-                        lsCirDiff['CIR_QTY_DEC'] = GenF.parse(liUniQty[cntUID].ORD_QTY * liPrediction[cntP].PREDICTED / lPIQty);
-
-                        if(lsCirDiff['CIR_QTY'] > lsCirDiff['CIR_QTY_DEC']){
-                            lsCirDiff['CIR_QTY_DIFF']  = lsCirDiff['CIR_QTY'] - lsCirDiff['CIR_QTY_DEC'];
-                        } else {
-                            lsCirDiff['CIR_QTY_DIFF']  = lsCirDiff['CIR_QTY_DEC'] - lsCirDiff['CIR_QTY'];
-                        }
+                        lsCirDiff['CIR_QTY_DIFF'] = lsCir['CIR_QTY'] - GenF.parse(liUniQty[cntUID].ORD_QTY * liPrediction[cntP].PREDICTED / lPIQty);
                         liCirDiff.push(lsCirDiff);
                     }
                     liCir.push(lsCir);
@@ -594,8 +591,18 @@ class GenTimeseriesM2 {
                                     "SCENARIO" ASC;`);
 
         for (let cntR = 0; cntR < liRound.length; cntR++) {
+
             console.log(`Week ${liRound[cntR].WEEK_DATE} Demand ${liRound[cntR].DIFF}`)
             if(liRound[cntR].DIFF > 0){            
+                liCirDiff.sort(dynamicSortMultiple("LOCATION_ID", "PRODUCT_ID", "WEEK_DATE DESC"));
+                for (let cntD = 0; cntD < liCirDiff.length; cntD++) {
+                    const element = array[cntD];
+                    
+                }
+
+/*
+
+
                 let liCirTemp = await cds.run(`SELECT "LOCATION_ID",
                                                     "PRODUCT_ID",
                                                     "WEEK_DATE",
@@ -664,9 +671,10 @@ class GenTimeseriesM2 {
 
 
             }
+            */
         }
 
-
+// Add the difference to most highest CIR in the week
         const liCIRRound = await cds.run(`SELECT "LOCATION_ID",
                                                   "PRODUCT_ID",
                                                   "WEEK_DATE",
