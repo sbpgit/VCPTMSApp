@@ -155,7 +155,7 @@ module.exports = (srv) => {
                       "COMPONENT" ASC,
                       "WEEK_DATE" ASC`
         );
-        if(req.data.CRITICALKEY === 'X') {
+        if (req.data.CRITICALKEY === 'X') {
             liComp = await cds.run(
                 `
               SELECT DISTINCT "V_ASMREQ_PRODCONSD"."LOCATION_ID",
@@ -185,7 +185,7 @@ module.exports = (srv) => {
                 `') AND "V_ASMREQ_PRODCONSD"."MODEL_VERSION" = '` +
                 req.data.MODEL_VERSION +
                 `'  AND "CP_CRITICAL_COMP"."CRITICALKEY" = '` +
-                 req.data.CRITICALKEY + `'
+                req.data.CRITICALKEY + `'
                    ORDER BY 
                         "LOCATION_ID" ASC, 
                         "PRODUCT_ID" ASC,
@@ -195,9 +195,9 @@ module.exports = (srv) => {
                         "COMPONENT" ASC`
             );
         } else {
-        // const liComp = await cds.run(
-           liComp = await cds.run(
-            `
+            // const liComp = await cds.run(
+            liComp = await cds.run(
+                `
           SELECT DISTINCT "LOCATION_ID",
                           "PRODUCT_ID",
                           "VERSION",
@@ -206,21 +206,21 @@ module.exports = (srv) => {
                           "COMPONENT"
           FROM "V_ASMREQ_PRODCONSD"
           WHERE "LOCATION_ID" = '` +
-            req.data.LOCATION_ID +
-            `' AND "PRODUCT_ID" = '` +
-            req.data.PRODUCT_ID +
-            `' AND "VERSION" = '` +
-            req.data.VERSION +
-            `' AND "SCENARIO" = '` +
-            req.data.SCENARIO +
-            `' AND ( "WEEK_DATE" <= '` +
-            vDateTo +
-            `'
+                req.data.LOCATION_ID +
+                `' AND "PRODUCT_ID" = '` +
+                req.data.PRODUCT_ID +
+                `' AND "VERSION" = '` +
+                req.data.VERSION +
+                `' AND "SCENARIO" = '` +
+                req.data.SCENARIO +
+                `' AND ( "WEEK_DATE" <= '` +
+                vDateTo +
+                `'
                 AND "WEEK_DATE" >= '` +
-            vDateFrom +
-            `') AND "MODEL_VERSION" = '` +
-            req.data.MODEL_VERSION +
-            `'
+                vDateFrom +
+                `') AND "MODEL_VERSION" = '` +
+                req.data.MODEL_VERSION +
+                `'
                ORDER BY 
                     "LOCATION_ID" ASC, 
                     "PRODUCT_ID" ASC,
@@ -228,7 +228,7 @@ module.exports = (srv) => {
                     "SCENARIO" ASC,
                     "ITEM_NUM" ASC,
                     "COMPONENT" ASC`
-        );
+            );
         }
         var vDateSeries = vDateFrom;
         let dDate = new Date(vDateSeries);
@@ -808,26 +808,26 @@ module.exports = (srv) => {
 
     // Generate Timeseries using action call
     srv.on("generateTimeseries", async (req) => {
-        switch(await GenFunctions.getParameterValue('5')){
+        switch (await GenFunctions.getParameterValue('5')) {
             case 'M1':
                 const obgenTimeseries = new GenTimeseries();
-                await obgenTimeseries.genTimeseries(req.data, req);               
+                await obgenTimeseries.genTimeseries(req.data, req);
                 break;
             case 'M2':
                 const obgenTimeseriesM2 = new GenTimeseriesM2();
-                await obgenTimeseriesM2.genTimeseries(req.data, req);                
+                await obgenTimeseriesM2.genTimeseries(req.data, req);
                 break;
         }
     });
     srv.on("generateTimeseriesF", async (req) => {
-        switch(await GenFunctions.getParameterValue('5')){
+        switch (await GenFunctions.getParameterValue('5')) {
             case 'M1':
                 const obgenTimeseries = new GenTimeseries();
-                await obgenTimeseries.genTimeseriesF(req.data, req);             
+                await obgenTimeseries.genTimeseriesF(req.data, req);
                 break;
             case 'M2':
                 const obgenTimeseriesM2 = new GenTimeseriesM2();
-                await obgenTimeseriesM2.genTimeseriesF(req.data, req);              
+                await obgenTimeseriesM2.genTimeseriesF(req.data, req);
                 break;
         }
 
@@ -852,29 +852,29 @@ module.exports = (srv) => {
     srv.on("generate_timeseriesF", async (req) => {
         let value = await GenFunctions.getParameterValue('5');
         console.log(value);
-        switch(await GenFunctions.getParameterValue('5')){
+        switch (await GenFunctions.getParameterValue('5')) {
             case 'M1':
                 const obgenTimeseries = new GenTimeseries();
-                await obgenTimeseries.genTimeseriesF(req.data, req);             
+                await obgenTimeseries.genTimeseriesF(req.data, req);
                 break;
             case 'M2':
                 const obgenTimeseriesM2 = new GenTimeseriesM2();
-                await obgenTimeseriesM2.genTimeseriesF(req.data, req);              
+                await obgenTimeseriesM2.genTimeseriesF(req.data, req);
                 break;
-        }    
+        }
         const obgenTimeseries_rt = new GenTimeseriesRT();
-        await obgenTimeseries_rt.genTimeseriesF_rt(req.data, req);    
+        await obgenTimeseries_rt.genTimeseriesF_rt(req.data, req);
     });
-    
+
     // Generate Unique ID
     srv.on("genUniqueID", async (req) => {
         const obgenSOFunctions = new SOFunctions();
-        await obgenSOFunctions.genUniqueID(req.data,req);
+        await obgenSOFunctions.genUniqueID(req.data, req);
     });
     // Generate Unique ID
     srv.on("gen_UniqueID", async (req) => {
         const obgenSOFunctions = new SOFunctions();
-        await obgenSOFunctions.genUniqueID(req.data,req);
+        await obgenSOFunctions.genUniqueID(req.data, req);
     });
     // Generate Fully Configured Demand
     srv.on("genFullConfigDemand", async (req) => {
@@ -884,7 +884,7 @@ module.exports = (srv) => {
     // Generate Fully Configured Demand
     srv.on("gen_FullConfigDemand", async (req) => {
         const obgenTimeseriesM2 = new GenTimeseriesM2();
-        await obgenTimeseriesM2.genPrediction(req.data,req);
+        await obgenTimeseriesM2.genPrediction(req.data, req);
     });
 
     srv.on("genVariantStruc", async (req) => {
@@ -1177,6 +1177,51 @@ module.exports = (srv) => {
             );
             return li_varcharps;
             // }
+        }
+        // Remove Primary char from Unique char
+        else if (req.data.FLAG === 'U') {
+            vFlag = '';
+            let vId;
+            const li_locprodunique = await cds.run(
+                `SELECT *
+                FROM "CP_UNIQUE_ID_HEADER"
+                WHERE "LOCATION_ID" = '` +
+                req.data.LOCATION_ID +
+                `'
+                AND "PRODUCT_ID" = '` +
+                req.data.PRODUCT_ID +
+                `' AND "UID_TYPE" = 'P'`
+            );
+            lsresults.LOCATION_ID = req.data.LOCATION_ID;
+            lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
+            lsresults.UID_TYPE = 'P';
+            try {
+                await cds.delete("CP_UNIQUE_ID_HEADER", lsresults);
+                vFlag = 'X';
+            } catch (e) {
+                //DONOTHING
+            }
+            if (vFlag === 'X') {
+                for (let i = 0; i < li_locprodunique.length; i++) {
+                    vId = parseInt(li_locprodunique[i].UNIQUE_ID);
+                    try {
+                        await cds.run(
+                            `DELETE FROM "CP_UNIQUE_ID_ITEM" WHERE "LOCATION_ID" = '` + li_locprodunique[i].LOCATION_ID + `' 
+                                                              AND "PRODUCT_ID" = '`+ li_locprodunique[i].PRODUCT_ID + `'
+                                                              AND "UNIQUE_ID" = `+ vId + ``
+                        );
+                        vFlag = 'S';
+                    }
+                    catch (e) {
+
+                    }
+                }
+            }
+            if (vFlag === 'S') {
+
+                return li_varcharps;
+            }
+
         }
 
     });
@@ -2102,29 +2147,29 @@ module.exports = (srv) => {
         );
 
         if (req.data.FLAG === "C" || req.data.FLAG === "E") {
-                aFilteredChars = [];
-                iCounter = 0;
-                if (aCharCounters.length > 0) {
-                    aFilteredChars = aCharCounters.filter(function (aCharCounter) {
-                        return aCharCounter.CHAR_NUM === aRtrChar[i].CHAR_NUM;
-                    });
-                }
-                if (aFilteredChars.length === 0) {
-                    aFilteredChars = aRtrDetails.filter(function (aRtrChars) {
-                        return aRtrChars.CHAR_NUM === aRtrChar[i].CHAR_NUM;
-                    });
-                }
+            aFilteredChars = [];
+            iCounter = 0;
+            if (aCharCounters.length > 0) {
+                aFilteredChars = aCharCounters.filter(function (aCharCounter) {
+                    return aCharCounter.CHAR_NUM === aRtrChar[i].CHAR_NUM;
+                });
+            }
+            if (aFilteredChars.length === 0) {
+                aFilteredChars = aRtrDetails.filter(function (aRtrChars) {
+                    return aRtrChars.CHAR_NUM === aRtrChar[i].CHAR_NUM;
+                });
+            }
 
-                if (aFilteredChars.length > 0) {
-                    iCounter = aFilteredChars[0].CHAR_COUNTER;
+            if (aFilteredChars.length > 0) {
+                iCounter = aFilteredChars[0].CHAR_COUNTER;
 
-                    oCharCounter.CHAR_COUNTER = iCounter;
-                    aCharCounters.push(oCharCounter);
-                }
+                oCharCounter.CHAR_COUNTER = iCounter;
+                aCharCounters.push(oCharCounter);
+            }
 
-                    responseMessage = errRes.message;
-                // }
-            
+            responseMessage = errRes.message;
+            // }
+
         } else if (req.data.FLAG === "D") {
             for (var i = 0; i < aRtrChar.length; i++) {
                 oRtrDetailsIns.RESTRICTION = aRtrChar[i].RESTRICTION;
@@ -2142,7 +2187,7 @@ module.exports = (srv) => {
                 }
 
             }
-        
+
 
             if (iCounter > 0) { //  if deletion is successfull
                 aRtrDetailsIns = [];

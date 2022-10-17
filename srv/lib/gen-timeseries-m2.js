@@ -46,7 +46,7 @@ class GenTimeseriesM2 {
                         { ref: ["LOCATION_ID"] }, '=', { val: adata.LOCATION_ID }, 'and',
                         { ref: ["PRODUCT_ID"] }, '=', { val: lMainProduct }, 'and',
                         { ref: ["UID_TYPE"] }, '=', { val: 'P' }, 'and',
-                        { ref: ["ACTIVE"] }, '=', { val: 'true' }
+                        { ref: ["ACTIVE"] }, '=', { val: true }
                     ]
                 }
 
@@ -85,7 +85,10 @@ class GenTimeseriesM2 {
             }
         }
 
-
+        if(liPrimaryID.length === 0){
+            await GenF.logMessage(req, `Please check characteristics Priority , unable to generate timeseries`);
+            return;
+        }
         // const liPrimaryID = await cds.run(`SELECT UNIQUE_ID,
         //                                 PRODUCT_ID,
         //                                 LOCATION_ID,
