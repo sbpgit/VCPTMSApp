@@ -73,7 +73,7 @@ sap.ui.define([
                 this.oLocList = this._oCore.byId(
                     this._valueHelpDialogLoc.getId() + "-list"
                 );
-                
+
                 // Calling service to get Location data
                 this.getModel("BModel").read("/getLocation", {
                     success: function (oData) {
@@ -129,14 +129,14 @@ sap.ui.define([
 
                             }
                             // var aData = that.finalSecData;
-                        //     if(that.oSelectedItem){
-                        //     for (var i = 0; i < aData.length; i++) {
-                        //         if (that.oSelectedItem === aData[i].getCells()[1].getText()) {
-                        //             aData[i].focus();
-                        //             aData[i].setSelected(true);
-                        //         }
-                        //     }
-                        // }
+                            //     if(that.oSelectedItem){
+                            //     for (var i = 0; i < aData.length; i++) {
+                            //         if (that.oSelectedItem === aData[i].getCells()[1].getText()) {
+                            //             aData[i].focus();
+                            //             aData[i].setSelected(true);
+                            //         }
+                            //     }
+                            // }
 
 
                             that.PrimarylistModel.setData({
@@ -152,17 +152,17 @@ sap.ui.define([
                             that.searchlist = that.finalSecData;
 
 
-                        that.searchlist.forEach(function (row) {
-                            row.Char = row.CHAR_NAME + " - " + row.CHAR_DESC;                        
-					    }, that);
+                            that.searchlist.forEach(function (row) {
+                                row.Char = row.CHAR_NAME + " - " + row.CHAR_DESC;
+                            }, that);
 
-                        that.SearchModel.setData({
-                            results: that.searchlist,
-                        });
+                            that.SearchModel.setData({
+                                results: that.searchlist,
+                            });
                             that.byId("searchField").setModel(that.SearchModel);
 
-                        var aData = that.oSList.getItems();
-                            if(that.oSelectedItem){
+                            var aData = that.oSList.getItems();
+                            if (that.oSelectedItem) {
                                 for (var i = 0; i < aData.length; i++) {
                                     if (that.oSelectedItem === aData[i].getCells()[1].getText()) {
                                         aData[i].focus();
@@ -181,10 +181,10 @@ sap.ui.define([
                     MessageToast.show("Please select Location and Product");
                 }
             },
-            onReset: function(){
+            onReset: function () {
                 var sLoc = that.byId("idloc").getValue(),
                     sProd = that.byId("prodInput").getValue();
-                    that.oSelectedItem = "";
+                that.oSelectedItem = "";
                 this.getModel("BModel").callFunction("/getSecondaryChar", {
                     method: "GET",
                     urlParameters: {
@@ -236,8 +236,8 @@ sap.ui.define([
                         that.searchlist.forEach(function (row) {
 
                             row.CHAR_NAME = row.CHAR_NAME + " - " + row.CHAR_DESC;
-                        
-					}, that);
+
+                        }, that);
 
 
                         that.byId("searchField").setModel(that.SeclistModel);
@@ -589,21 +589,110 @@ sap.ui.define([
             onSuggest: function (event) {
                 var sValue = event.getParameter("suggestValue"),
                     aFilters = [];
-                    aFilters = [
-                        new Filter([
-                            new Filter("Char", function (sText) {
-                                return (sText || "").toUpperCase().indexOf(sValue.toUpperCase()) > -1;
-                            }),
-                            // new Filter("CHAR_DESC", function (sText) {
-                            //     return (sText || "").toUpperCase().indexOf(sValue.toUpperCase()) > -1;
-                            // })
-                        ], false)
-                    ];
+                aFilters = [
+                    new Filter([
+                        new Filter("Char", function (sText) {
+                            return (sText || "").toUpperCase().indexOf(sValue.toUpperCase()) > -1;
+                        }),
+                        // new Filter("CHAR_DESC", function (sText) {
+                        //     return (sText || "").toUpperCase().indexOf(sValue.toUpperCase()) > -1;
+                        // })
+                    ], false)
+                ];
 
                 this.byId("searchField").getBinding("suggestionItems").filter(aFilters);
                 this.byId("searchField").suggest();
             },
+            /**
+             * 
+             */
+            onPressUpdate: function (oEvent) {
+                //var oEntry = {};
+                var sLoc = that.byId("idloc").getValue(),
+                    sProd = that.byId("prodInput").getValue();
 
-            
+                if (sLoc !== "" && sProd !== "") {
+                    sap.ui.core.BusyIndicator.show();
+                    this.getModel("BModel").callFunction("/getSecondaryChar", {
+                        method: "GET",
+                        urlParameters: {
+                            FLAG: "U",
+                            LOCATION_ID: sLoc,
+                            PRODUCT_ID: sProd
+                        },
+                        success: function (oData) {
+                            sap.ui.core.BusyIndicator.hide();
+                            that.oPList = that.byId("Primarytable"),
+                            that.oSList = that.byId("Secondarytable");
+
+                            that.primaryData = [],
+                                that.secData = [];
+
+                            for (var i = 0; i < oData.results.length; i++) {
+                                if (oData.results[i].CHAR_TYPE === "P") {
+                                    that.primaryData.push(oData.results[i]);
+                                } else {
+                                    that.secData.push(oData.results[i]);
+                                }
+                            }
+
+                            that.finalSecData = [];
+                            for (var j = 0; j <= that.secData.length; j++) {
+                                for (var k = 0; k < that.secData.length; k++) {
+                                    if (j === that.secData[k].SEQUENCE) {
+                                        that.finalSecData.push(that.secData[k]);
+                                        break;
+                                    }
+                                }
+
+                            }
+                            
+
+                            that.PrimarylistModel.setData({
+                                results: that.primaryData,
+                            });
+                            that.oPList.setModel(that.PrimarylistModel);
+
+                            that.SeclistModel.setData({
+                                results: that.finalSecData,
+                            });
+                            that.oSList.setModel(that.SeclistModel);
+
+                            that.searchlist = that.finalSecData;
+
+
+                            that.searchlist.forEach(function (row) {
+                                row.Char = row.CHAR_NAME + " - " + row.CHAR_DESC;
+                            }, that);
+
+                            that.SearchModel.setData({
+                                results: that.searchlist,
+                            });
+                            that.byId("searchField").setModel(that.SearchModel);
+
+                            var aData = that.oSList.getItems();
+                            if (that.oSelectedItem) {
+                                for (var i = 0; i < aData.length; i++) {
+                                    if (that.oSelectedItem === aData[i].getCells()[1].getText()) {
+                                        aData[i].focus();
+                                        aData[i].setSelected(true);
+                                    }
+                                }
+                            }
+
+                        },
+                        error: function (oData, error) {
+                            sap.ui.core.BusyIndicator.hide();
+                            MessageToast.show("error");
+                        },
+                    });
+                } else {
+                    MessageToast.show("Please select Location and Product");
+                }
+
+
+            }
+
+
         });
     });
