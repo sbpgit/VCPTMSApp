@@ -1,26 +1,28 @@
-<mvc:View height="100%" controllerName="cpapp.cpplaningconfig.controller.Home" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:ux="sap.uxap">
-    <ux:ObjectPageLayout id="ObjectPageLayout" showHeaderContent="false" showFooter="true">
-        <ux:headerTitle>
-            <ux:ObjectPageDynamicHeaderTitle class="titleAlign">
-                <ux:expandedHeading>
-                    <Title text="{i18n>appTitle}" />
-                </ux:expandedHeading>
-            </ux:ObjectPageDynamicHeaderTitle>
-        </ux:headerTitle>
+<mvc:View height="100%" class="sapUiSizeCompact" controllerName="cpapp.cpplaningconfig.controller.Home" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:ux="sap.uxap">
+    <Page showHeader="false" showFooter="true"> 
+         <content>
+            <ux:ObjectPageLayout id="ObjectPageLayout" useIconTabBar="true" showHeaderContent="false" showFooter="false">
+                <ux:headerTitle>
+                    <ux:ObjectPageDynamicHeaderTitle class="titleAlign">
+                        <ux:expandedHeading>
+                            <Title text="{i18n>appTitle}" />
+                        </ux:expandedHeading>
+                    </ux:ObjectPageDynamicHeaderTitle>
+                </ux:headerTitle>
 
-        <ux:sections>
-            <ux:ObjectPageSection showTitle="false">
-                <ux:subSections>
-                    <ux:ObjectPageSubSection>
-                        <ux:blocks>
-                            <Table
-                                id="idParameterTable"
-                                backgroundDesign="Solid"
-                                showSeparators="None"
-                                alternateRowColors="false"
-                                width="auto"
-                                class="sapUiNoMarginTop"
-                                items="{
+                <ux:sections>
+                    <ux:ObjectPageSection showTitle="false">
+                        <ux:subSections>
+                            <ux:ObjectPageSubSection>
+                                <ux:blocks>
+                                    <Table
+                                        id="idParameterTable"
+                                        backgroundDesign="Solid"
+                                        showSeparators="None"
+                                        alternateRowColors="false"
+                                        width="auto"
+                                        class="sapUiNoMarginTop"
+                                        items="{
 			                path: '/parameters',
                             sorter: 
                                 { path: 'GROUP_DESCRIPTION',
@@ -28,8 +30,8 @@
                                 group: true },                              
                             groupHeaderFactory: '.getGroupHeader'
                             }"
-                            >
-                                <!--                            
+                                    >
+                                        <!--                            
                                 <headerToolbar>
                                     <OverflowToolbar>
                                         <content>
@@ -40,42 +42,50 @@
                                     </OverflowToolbar>
                                 </headerToolbar>
 -->
-                                <columns>
-                                    <Column visible="false">
-                                        <!-- <Text text="GROUP_ID" /> -->
-                                    </Column>
-                                    <Column minScreenWidth="Desktop" demandPopin="true" width="30em" hAlign="End">
-                                        <!-- <Text text="Description" /> -->
-                                    </Column>
-                                    <Column minScreenWidth="Desktop" demandPopin="true" width="30em" hAlign="End">
-                                        <!-- <Text text="Value" /> -->
-                                    </Column>
-                                    <Column minScreenWidth="Desktop" demandPopin="true" width="10em" hAlign="Begin">
-                                        <!-- <Text text="Value" /> -->
-                                    </Column>
-                                </columns>
-                                <items>
-                                    <ColumnListItem vAlign="Middle">
-                                        <cells>
-                                            <Text text="{PARAMETER_ID}" />
-                                            <Label text="{DESCRIPTION}" required="true" />
-                                            <Input value="{VALUE}" showValueHelp="{VALUE_HELP}" valueHelpOnly="true" type="{= ${UNIT} === 'Days' ? 'Number' : 'Text'}" liveChange="onParamValueChange" valueHelpRequest="handleValueHelpRequest" />
-                                            <Text text="{UNIT}" />
-                                        </cells>
-                                    </ColumnListItem>
-                                </items>
-                            </Table>
-                        </ux:blocks>
-                    </ux:ObjectPageSubSection>
-                </ux:subSections>
-            </ux:ObjectPageSection>
-        </ux:sections>
-
-        <ux:footer>
-            <OverflowToolbar>
+                                        <columns>
+                                            <Column visible="false">
+                                                <!-- <Text text="GROUP_ID" /> -->
+                                            </Column>
+                                            <Column minScreenWidth="Desktop" demandPopin="true" width="30em" hAlign="End">
+                                                <!-- <Text text="Description" /> -->
+                                            </Column>
+                                            <Column minScreenWidth="Desktop" demandPopin="true" width="30em" hAlign="End">
+                                                <!-- <Text text="Value" /> -->
+                                            </Column>
+                                            <Column minScreenWidth="Desktop" demandPopin="true" width="10em" hAlign="Begin">
+                                                <!-- <Text text="Value" /> -->
+                                            </Column>
+                                        </columns>
+                                        <items>
+                                            <ColumnListItem vAlign="Middle">
+                                                <cells>
+                                                    <Text text="{PARAMETER_ID}" />
+                                                    <Label text="{DESCRIPTION}" required="true" />
+                                                    <Input value="{VALUE}" showValueHelp="{VALUE_HELP}" valueHelpOnly="true" type="{= ${UNIT} === 'Days' ? 'Number' : 'Text'}" liveChange="onParamValueChange" valueHelpRequest="handleValueHelpRequest" />
+                                                    <Text text="{UNIT}" />
+                                                </cells>
+                                            </ColumnListItem>
+                                        </items>
+                                    </Table>
+                                </ux:blocks>
+                            </ux:ObjectPageSubSection>
+                        </ux:subSections>
+                    </ux:ObjectPageSection>
+                </ux:sections>
+<!-- 
+                <ux:footer>
+            <OverflowToolbar width="100%" design="Solid">
                 <ToolbarSpacer />
                 <Button icon="sap-icon://save" type="Emphasized" text="Save" class="btnSize" press="onPressSave" />
             </OverflowToolbar>
-        </ux:footer>
-    </ux:ObjectPageLayout>
+        </ux:footer> -->
+            </ux:ObjectPageLayout>
+        </content>
+        <footer>
+            <OverflowToolbar width="100%">
+                <ToolbarSpacer />
+                <Button icon="sap-icon://save" type="Emphasized" text="Save" class="btnSize" press="onPressSave" />
+            </OverflowToolbar>
+        </footer>
+    </Page>
 </mvc:View>
