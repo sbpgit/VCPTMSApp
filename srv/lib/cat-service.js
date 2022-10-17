@@ -835,16 +835,16 @@ module.exports = (srv) => {
     });
     // Generate Timeseries fucntion calls
     srv.on("generate_timeseries", async (req) => {
-        switch (await GenFunctions.getParameterValue('5')) {
-            case 'M1':
-                const obgenTimeseries = new GenTimeseries();
-                await obgenTimeseries.genTimeseries(req.data, req);
-                break;
-            case 'M2':
-                const obgenTimeseriesM2 = new GenTimeseriesM2();
-                await obgenTimeseriesM2.genTimeseries(req.data, req);
-                break;
-        }
+        // switch(await GenFunctions.getParameterValue('5')){
+        //     case 'M1':
+        //         const obgenTimeseries = new GenTimeseries();
+        //         await obgenTimeseries.genTimeseries(req.data, req);               
+        //         break;
+        //     case 'M2':
+        //         const obgenTimeseriesM2 = new GenTimeseriesM2();
+        //         await obgenTimeseriesM2.genTimeseries(req.data, req);                
+        //         break;
+        // }
         const obgenTimeseries_rt = new GenTimeseriesRT();
         await obgenTimeseries_rt.genTimeseries_rt(req.data, req);
 
@@ -1177,6 +1177,51 @@ module.exports = (srv) => {
             );
             return li_varcharps;
             // }
+        }
+        // Remove Primary char from Unique char
+        else if (req.data.FLAG === 'U') {
+            vFlag = '';
+            let vId;
+            const li_locprodunique = await cds.run(
+                `SELECT *
+                FROM "CP_UNIQUE_ID_HEADER"
+                WHERE "LOCATION_ID" = '` +
+                req.data.LOCATION_ID +
+                `'
+                AND "PRODUCT_ID" = '` +
+                req.data.PRODUCT_ID +
+                `' AND "UID_TYPE" = 'P'`
+            );
+            lsresults.LOCATION_ID = req.data.LOCATION_ID;
+            lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
+            lsresults.UID_TYPE = 'P';
+            try {
+                await cds.delete("CP_UNIQUE_ID_HEADER", lsresults);
+                vFlag = 'X';
+            } catch (e) {
+                //DONOTHING
+            }
+            if (vFlag === 'X') {
+                for (let i = 0; i < li_locprodunique.length; i++) {
+                    vId = parseInt(li_locprodunique[i].UNIQUE_ID);
+                    try {
+                        await cds.run(
+                            `DELETE FROM "CP_UNIQUE_ID_ITEM" WHERE "LOCATION_ID" = '` + li_locprodunique[i].LOCATION_ID + `' 
+                                                              AND "PRODUCT_ID" = '`+ li_locprodunique[i].PRODUCT_ID + `'
+                                                              AND "UNIQUE_ID" = `+ vId + ``
+                        );
+                        vFlag = 'S';
+                    }
+                    catch (e) {
+
+                    }
+                }
+            }
+            if (vFlag === 'S') {
+
+                return li_varcharps;
+            }
+
         }
 
     });

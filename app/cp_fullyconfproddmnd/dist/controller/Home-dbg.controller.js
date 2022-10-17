@@ -144,23 +144,13 @@ sap.ui.define(
                 // Planned Parameter Values
                 this.getModel("CIRModel").read("/V_Parameters", {
                     success: function (oData) {
+                        var aParams = oData.results;
+                        var oParam = {};
                         // if Frozen Horizon is 14 Days, we need to consider from 15th day
                         var iFrozenHorizon = parseInt(oData.results[0].VALUE) + 1;
                         var dDate = new Date();
-                        // var oDateL = that.getDateFn(dDate);
-                        // oDateL = that.addDays(oDateL, iFrozenHorizon);
                         dDate = new Date(dDate.setDate(dDate.getDate() + iFrozenHorizon));
-                        var oDateL = that.getDateFn(dDate);
-
-                        // var dDateh = new Date();
-                        // dDateh = new Date(dDateh.setDate(dDateh.getDate() + iFrozenHorizon));
-
-                        //Future 90 days selected date
-                        // var oDateH = new Date(
-                        //     dDateh.getFullYear(),
-                        //     dDateh.getMonth(),
-                        //     dDateh.getDate() + 90
-                        // );
+                        var oDateL = that.getDateFn(dDate);                        
                         var oDateH = new Date(
                             dDate.getFullYear(),
                             dDate.getMonth(),
@@ -171,6 +161,13 @@ sap.ui.define(
 
                         that.byId("fromDate").setValue(oDateL);
                         that.byId("toDate").setValue(oDateH);
+                        
+                        // 
+                        // oParam = aParams.find(obj => obj.PARAMETER_ID === 9) 
+                        // var iFirmHorizon = parseInt(oParam.VALUE) + 1;
+                        // var dDateFHL = new Date();
+                        // dDateFHL = new Date(dDateL.setDate(dDateL.getDate() + iFirmHorizon));
+                        // that.dFirmHorizonDate = dDateFHL;
 
                         sap.ui.core.BusyIndicator.hide();
                     },
@@ -292,10 +289,12 @@ sap.ui.define(
 
                 var rowData;
                 var fromDate = new Date(that.byId("fromDate").getDateValue()),
-                    toDate = new Date(that.byId("toDate").getDateValue());
+                    toDate = new Date(that.byId("toDate").getDateValue());                
 
                 fromDate = that.onConvertDateToString(fromDate);
                 toDate = that.onConvertDateToString(toDate);
+                // var dFHLDate = that.onConvertDateToString(that.dFirmHorizonDate);
+
                 // fromDate = fromDate.toISOString().split("T")[0];
                 // toDate = toDate.toISOString().split("T")[0];
                 // Calling function to generate column names based on dates
@@ -341,14 +340,14 @@ sap.ui.define(
                                 ]
                             })
                         });
-                    } else {
+                    } else {                         
                         return new sap.ui.table.Column({
                             width: "8rem",
                             label: columnName,
                             template: new sap.m.Text({
                                 text: "{" + columnName + "}",
                             }),
-                        });
+                        });                      
                     }
                     // }
                 });

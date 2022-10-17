@@ -102,9 +102,9 @@
                         </viz.data:dimensions>
                         <viz.data:measures>
                             <viz.data:MeasureDefinition name="Generated Qty"
-                                value="{GEN_QTY}" />
+                                value="{CIR_QTY}" />
                             <viz.data:MeasureDefinition name="Planned Qty"
-                                value="{PLAN_QTY}" />
+                                value="{OPT_QTY}" />
                         </viz.data:measures>
                                         </viz.data:FlattenedDataset>
                                     </viz:dataset>

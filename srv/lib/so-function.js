@@ -323,7 +323,7 @@ class SOFunctions {
      * @param {Product} lProduct 
      */
     async getUnique(lLocation, lProduct) {
-
+        
         const liUniqueGet = await cds.run(
             `SELECT "UNIQUE_ID",
                     "LOCATION_ID",
@@ -339,7 +339,7 @@ class SOFunctions {
                      CHAR_NUM,
                      CHARVAL_NUM`
         );
-
+        
         let lsUniqueConfig = {};
         let lsUnique = {};
         let liUniqueData = [];

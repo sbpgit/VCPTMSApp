@@ -310,6 +310,7 @@ sap.ui.define([
                     );
 
                     //setting dates in date field
+                    sap.ui.core.BusyIndicator.show();
 
                     that.getView().getModel("oModel").read("/getCIRCharRate", {
                         filters: [

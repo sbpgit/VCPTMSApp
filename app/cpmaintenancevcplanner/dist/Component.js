@@ -1,0 +1,1 @@
+sap.ui.define(["sap/ui/core/UIComponent","sap/ui/Device","cpapp/cpmaintenancevcplanner/model/models"],function(e,n,t){"use strict";return e.extend("cpapp.cpmaintenancevcplanner.Component",{metadata:{manifest:"json"},init:function(){e.prototype.init.apply(this,arguments);this.getRouter().initialize();this.setModel(t.createDeviceModel(),"device")}})});

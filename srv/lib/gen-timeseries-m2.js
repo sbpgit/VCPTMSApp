@@ -85,7 +85,10 @@ class GenTimeseriesM2 {
             }
         }
 
-
+        if(liPrimaryID.length === 0){
+            await GenF.logMessage(req, `Please check characteristics Priority , unable to generate timeseries`);
+            return;
+        }
         // const liPrimaryID = await cds.run(`SELECT UNIQUE_ID,
         //                                 PRODUCT_ID,
         //                                 LOCATION_ID,
@@ -420,18 +423,21 @@ class GenTimeseriesM2 {
         await GenF.logMessage(req, `Started Fully Configured Requirement Generation`);
 
         const lDate = new Date();
+
+// Get Start date considering Firm Horizon        
         const lStartDate = new Date(
             lDate.getFullYear(),
             lDate.getMonth(),
-            lDate.getDate() + parseInt(await GenF.getParameterValue(1))
+            lDate.getDate() + parseInt(await GenF.getParameterValue(9))
         );
 
+// Get Predictions        
         let liPrediction = [];
         liPrediction = await SELECT.from('CP_TS_PREDICTIONS')
             .where(`CAL_DATE    > '${lStartDate.toISOString().split("T")[0]}'
-                                             AND LOCATION_ID = '${adata.LOCATION_ID}' 
-                                             AND PRODUCT_ID  = '${adata.PRODUCT_ID}' 
-                                             AND OBJ_TYPE    = 'PI'`);
+                AND LOCATION_ID = '${adata.LOCATION_ID}' 
+                AND PRODUCT_ID  = '${adata.PRODUCT_ID}' 
+                AND OBJ_TYPE    = 'PI'`);
 
 
         // Normalize prediction
@@ -483,7 +489,7 @@ class GenTimeseriesM2 {
             `SELECT PRIMARY_ID,
                     SUM(ORD_QTY) AS ORD_QTY
                 FROM "V_SALES_H"
-                WHERE LOCATION_ID   = '${adata.LOCATION_ID}'
+                WHERE LOCATION_ID = '${adata.LOCATION_ID}'
                 AND PRODUCT_ID    = '${adata.PRODUCT_ID}'                
                 group by PRIMARY_ID
                 order by PRIMARY_ID`
@@ -501,11 +507,16 @@ class GenTimeseriesM2 {
                 order by PRIMARY_ID, UNIQUE_ID`
         );
 
+        // Remove records that are before current date and afer firm horizon.
         await DELETE.from('CP_CIR_GENERATED')
-            .where(`LOCATION_ID   = '${adata.LOCATION_ID}'
-                         AND PRODUCT_ID    = '${adata.PRODUCT_ID}'`);
+            .where(`LOCATION_ID         = '${adata.LOCATION_ID}'
+                         AND PRODUCT_ID = '${adata.PRODUCT_ID}'
+                         AND ( WEEK_DATE  < '${lDate.toISOString().split("T")[0]}'
+                         OR    WEEK_DATE  > '${lStartDate.toISOString().split("T")[0]}' )`);
 
         let liCir = [];
+        let liCirDiff = [];
+        
         let lCir = 0;
         let lPIQty = 0;
         for (let cntUID = 0; cntUID < liUniQty.length; cntUID++) {
@@ -521,18 +532,23 @@ class GenTimeseriesM2 {
             for (let cntP = 0; cntP < liPrediction.length; cntP++) {
                 if (parseInt(liPrediction[cntP].OBJ_DEP) === liUniQty[cntUID].PRIMARY_ID) {
                     let lsCir = {};
+                    let lsCirDiff = {};
                     lCir = parseInt(lCir) + 1;
                     lsCir['LOCATION_ID'] = GenF.parse(adata.LOCATION_ID);
                     lsCir['PRODUCT_ID'] = GenF.parse(adata.PRODUCT_ID);
                     lsCir['WEEK_DATE'] = GenF.parse(liPrediction[cntP]['CAL_DATE']);
                     lsCir['CIR_ID'] = GenF.parse(lCir);
-                    lsCir['METHOD'] = '1';
                     lsCir['MODEL_VERSION'] = GenF.parse(liPrediction[cntP]['MODEL_VERSION']);
                     lsCir['VERSION'] = GenF.parse(liPrediction[cntP]['VERSION']);
                     lsCir['SCENARIO'] = GenF.parse(liPrediction[cntP]['SCENARIO']);
                     lsCir['UNIQUE_ID'] = GenF.parse(liUniQty[cntUID].UNIQUE_ID);
                     if (lPIQty > 0) {
                         lsCir['CIR_QTY'] = GenF.parse(parseInt(liUniQty[cntUID].ORD_QTY * liPrediction[cntP].PREDICTED / lPIQty));
+
+                        // Store the fractions in quantity
+                        lsCirDiff = GenF.parse(lsCir);
+                        lsCirDiff['CIR_QTY_DIFF'] = GenF.parse(liUniQty[cntUID].ORD_QTY * liPrediction[cntP].PREDICTED / lPIQty) - lsCir['CIR_QTY'];
+                        liCirDiff.push(lsCirDiff);
                     }
                     liCir.push(lsCir);
                 }
@@ -551,7 +567,6 @@ class GenTimeseriesM2 {
                                     C."MODEL_VERSION",
                                     C."VERSION",
                                     C."SCENARIO",
-                                    C."METHOD",
                                     SUM(C."CIR_QTY") AS CIR_QTY,
                                     I.QUANTITY,
                                     (I.QUANTITY - SUM(C."CIR_QTY")) AS DIFF
@@ -570,16 +585,148 @@ class GenTimeseriesM2 {
                                     C."MODEL_VERSION",
                                     C."VERSION",
                                     C."SCENARIO",
-                                    C."METHOD",
                                     I.QUANTITY	
                            ORDER BY "LOCATION_ID" ASC, 
                                     "PRODUCT_ID" ASC, 
                                     "WEEK_DATE" ASC, 
                                     "MODEL_VERSION" ASC, 
                                     "VERSION" ASC, 
-                                    "SCENARIO" ASC, 
-                                    "METHOD" ASC;`);
+                                    "SCENARIO" ASC;`);
 
+        for (let cntR = 0; cntR < liRound.length; cntR++) {
+
+            console.log(`Week ${liRound[cntR].WEEK_DATE} Demand ${liRound[cntR].DIFF}`)
+            if (liRound[cntR].DIFF > 0) {
+                liCirDiff.sort(GenF.dynamicSortMultiple("LOCATION_ID", "PRODUCT_ID", "WEEK_DATE", "CIR_QTY_DIFF DESC"));
+                for (let cntD = 0; cntD < liCirDiff.length; cntD++) {
+                    if (
+                        liRound[cntR].LOCATION_ID === liCirDiff[cntD].LOCATION_ID &&
+                        liRound[cntR].PRODUCT_ID === liCirDiff[cntD].PRODUCT_ID &&
+                        liRound[cntR].WEEK_DATE === liCirDiff[cntD].WEEK_DATE &&
+                        liRound[cntR].MODEL_VERSION === liCirDiff[cntD].MODEL_VERSION &&
+                        liRound[cntR].VERSION === liCirDiff[cntD].VERSION &&
+                        liRound[cntR].SCENARIO === liCirDiff[cntD].SCENARIO
+                    ) {
+
+
+                        let lNextMonday = GenF.getNextMondayCmp(liCirDiff[cntD].WEEK_DATE);
+                        for (let cntDN = 0; cntDN < liCirDiff.length; cntDN++) {
+                            if (
+                                liCirDiff[cntDN].LOCATION_ID === liCirDiff[cntD].LOCATION_ID &&
+                                liCirDiff[cntDN].PRODUCT_ID === liCirDiff[cntD].PRODUCT_ID &&
+                                liCirDiff[cntDN].WEEK_DATE === lNextMonday &&
+                                liCirDiff[cntDN].MODEL_VERSION === liCirDiff[cntD].MODEL_VERSION &&
+                                liCirDiff[cntDN].VERSION === liCirDiff[cntD].VERSION &&
+                                liCirDiff[cntDN].SCENARIO === liCirDiff[cntD].SCENARIO &&
+                                liCirDiff[cntDN].UNIQUE_ID === liCirDiff[cntD].UNIQUE_ID
+                            ) {
+                                let lDiffTot = liCirDiff[cntD].CIR_QTY_DIFF + liCirDiff[cntDN].CIR_QTY_DIFF
+                                if (liRound[cntR].DIFF > 0) {
+
+                                    if (lDiffTot >= 1) {
+                                        liCirDiff[cntDN].CIR_QTY_DIFF = GenF.parse(lDiffTot - 1);
+                                        liRound[cntR].DIFF = liRound[cntR].DIFF - 1;
+
+                                        await cds.run(`UPDATE CP_CIR_GENERATED SET CIR_QTY = CIR_QTY + 1
+                                                            WHERE LOCATION_ID = '${liCirDiff[cntD].LOCATION_ID}'
+                                                            AND PRODUCT_ID = '${liCirDiff[cntD].PRODUCT_ID}'
+                                                            AND WEEK_DATE = '${liCirDiff[cntD].WEEK_DATE}'
+                                                            AND CIR_ID = '${liCirDiff[cntD].CIR_ID}'
+                                                            AND MODEL_VERSION = '${liCirDiff[cntD].MODEL_VERSION}'
+                                                            AND VERSION = '${liCirDiff[cntD].VERSION}'
+                                                            AND SCENARIO = '${liCirDiff[cntD].SCENARIO}'`);
+                                    } else {
+                                        liCirDiff[cntDN].CIR_QTY_DIFF = GenF.parse(lDiffTot);
+                                    }
+                                    liCirDiff[cntD].CIR_QTY_DIFF = GenF.parse(0);
+                                } else {
+                                    liCirDiff[cntDN].CIR_QTY_DIFF = lDiffTot;
+                                }
+                                break;
+
+                            }
+                        }
+                    } else {
+                        if (liCirDiff[cntD].WEEK_DATE > liRound[cntR].WEEK_DATE) {
+                            break;
+                        }
+                    }
+                }
+
+
+                let liCirTemp = await cds.run(`SELECT "LOCATION_ID",
+                                                    "PRODUCT_ID",
+                                                    "WEEK_DATE",
+                                                    "CIR_ID",
+                                                    "MODEL_VERSION",
+                                                    "VERSION",
+                                                    "SCENARIO",
+                                                    "UNIQUE_ID",
+                                                    "CIR_QTY"
+                                                FROM CP_CIR_GENERATED
+                                                WHERE "LOCATION_ID" = '${adata.LOCATION_ID}'
+                                                AND "PRODUCT_ID" = '${adata.PRODUCT_ID}'
+                                                    AND "WEEK_DATE" = '${liRound[cntR].WEEK_DATE}'
+                                                AND "MODEL_VERSION" = '${liRound[cntR].MODEL_VERSION}'
+                                                AND "VERSION" = '${liRound[cntR].VERSION}'
+                                                AND "SCENARIO" = '${liRound[cntR].SCENARIO}'
+                                                ORDER BY CIR_QTY DESC`);
+                while (liRound[cntR].DIFF > 0) {
+                    let lsCirLeast = {};
+                    lsCirLeast['DIFF'] = 0;
+                    for (let cntCt = 0; cntCt < liCirTemp.length; cntCt++) {
+                        await cds.run(`UPDATE CP_CIR_GENERATED SET CIR_QTY = CIR_QTY + 1
+                                        WHERE LOCATION_ID = '${liCirTemp[cntCt].LOCATION_ID}'
+                                        AND PRODUCT_ID = '${liCirTemp[cntCt].PRODUCT_ID}'
+                                        AND WEEK_DATE = '${liCirTemp[cntCt].WEEK_DATE}'
+                                        AND CIR_ID = '${liCirTemp[cntCt].CIR_ID}'
+                                        AND MODEL_VERSION = '${liCirTemp[cntCt].MODEL_VERSION}'
+                                        AND VERSION = '${liCirTemp[cntCt].VERSION}'
+                                        AND SCENARIO = '${liCirTemp[cntCt].SCENARIO}'`);
+
+                        let lDiff = await cds.run(`SELECT SUM("DIFF_QTY") as DIFF
+                                        FROM "V_CIR_QTY_VAR"
+                                    WHERE LOCATION_ID = '${adata.LOCATION_ID}'
+                                        AND PRODUCT_ID = '${adata.PRODUCT_ID}'
+                                        AND WEEK_DATE = '${liRound[cntR].WEEK_DATE}'
+                                        AND MODEL_VERSION = '${liRound[cntR].MODEL_VERSION}'
+                                        AND VERSION = '${liRound[cntR].VERSION}'
+                                        AND SCENARIO = '${liRound[cntR].SCENARIO}';`);
+
+                        if (lsCirLeast['DIFF'] === 0 || lsCirLeast['DIFF'] > lDiff[0].DIFF) {
+                            lsCirLeast = GenF.parse(liCirTemp[cntCt]);
+                            lsCirLeast['DIFF'] = lDiff[0].DIFF;
+                        }
+
+                        await cds.run(`UPDATE CP_CIR_GENERATED SET CIR_QTY = CIR_QTY - 1
+                                        WHERE LOCATION_ID = '${liCirTemp[cntCt].LOCATION_ID}'
+                                        AND PRODUCT_ID = '${liCirTemp[cntCt].PRODUCT_ID}'
+                                        AND WEEK_DATE = '${liCirTemp[cntCt].WEEK_DATE}'
+                                        AND CIR_ID = '${liCirTemp[cntCt].CIR_ID}'
+                                        AND MODEL_VERSION = '${liCirTemp[cntCt].MODEL_VERSION}'
+                                        AND VERSION = '${liCirTemp[cntCt].VERSION}'
+                                        AND SCENARIO = '${liCirTemp[cntCt].SCENARIO}'`);
+                    }
+
+
+                    await cds.run(`UPDATE CP_CIR_GENERATED SET CIR_QTY = CIR_QTY + 1
+                                    WHERE LOCATION_ID = '${lsCirLeast.LOCATION_ID}'
+                                    AND PRODUCT_ID = '${lsCirLeast.PRODUCT_ID}'
+                                    AND WEEK_DATE = '${lsCirLeast.WEEK_DATE}'
+                                    AND CIR_ID = '${lsCirLeast.CIR_ID}'
+                                    AND MODEL_VERSION = '${lsCirLeast.MODEL_VERSION}'
+                                    AND VERSION = '${lsCirLeast.VERSION}'
+                                    AND SCENARIO = '${lsCirLeast.SCENARIO}'`);
+                    liRound[cntR].DIFF = liRound[cntR].DIFF - 1;
+                }
+
+
+            }
+
+        }
+
+        /*
+// Add the difference to most highest CIR in the week
         const liCIRRound = await cds.run(`SELECT "LOCATION_ID",
                                                   "PRODUCT_ID",
                                                   "WEEK_DATE",
@@ -587,7 +734,6 @@ class GenTimeseriesM2 {
                                                   "MODEL_VERSION",
                                                   "VERSION",
                                                   "SCENARIO",
-                                                  "METHOD",
                                                   "UNIQUE_ID",
                                                   "CIR_QTY"
                                             FROM "CP_CIR_GENERATED"
@@ -600,7 +746,6 @@ class GenTimeseriesM2 {
                                                 "MODEL_VERSION" ASC, 
                                                 "VERSION" ASC, 
                                                 "SCENARIO" ASC, 
-                                                "METHOD" ASC, 
                                                 "CIR_QTY" DESC;`);
 
 
@@ -613,7 +758,6 @@ class GenTimeseriesM2 {
                     liRound[cntR].MODEL_VERSION === liCIRRound[cntCR].MODEL_VERSION &&
                     liRound[cntR].VERSION === liCIRRound[cntCR].VERSION &&
                     liRound[cntR].SCENARIO === liCIRRound[cntCR].SCENARIO &&
-                    liRound[cntR].METHOD === liCIRRound[cntCR].METHOD &&
                     liRound[cntR].DIFF > 0) {
                     // await cds.run(`UPDATE CP_CIR_GENERATED SET CIR_QTY = CIR_QTY + ${parseInt(liRound[cntR].DIFF)}
                     //           WHERE LOCATION_ID = '${liCIRRound[cntCR].LOCATION_ID}'
@@ -622,13 +766,12 @@ class GenTimeseriesM2 {
                     //           AND CIR_ID = '${liCIRRound[cntCR].CIR_ID}'
                     //           AND MODEL_VERSION = '${liCIRRound[cntCR].MODEL_VERSION}'
                     //           AND VERSION = '${liCIRRound[cntCR].VERSION}'
-                    //           AND SCENARIO = '${liCIRRound[cntCR].SCENARIO}'
-                    //           AND METHOD = '${liCIRRound[cntCR].METHOD}'`);
+                    //           AND SCENARIO = '${liCIRRound[cntCR].SCENARIO}'`);
                     liRound[cntR].DIFF = GenF.parse(0);
                 }
             }
         }
-
+*/
         await GenF.logMessage(req, `Completed Fully Configured Requirement Generation`);
 
     }
