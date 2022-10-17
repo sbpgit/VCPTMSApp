@@ -215,6 +215,10 @@ modules:
       - cpappcpfactoryloc.zip
       name: cpappcpfactoryloc
       target-path: resources/
+      - artifacts:
+      - cpappcpfactoryloc.zip
+      name: cpappcpfactoryloc
+      target-path: resources/
 - name: cpodpcpodprofiles
   type: html5
   path: app/cp_odprofiles
