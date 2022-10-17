@@ -1,0 +1,30 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:f="sap.ui.layout.form" xmlns:semantic="sap.m.semantic" xmlns:l="sap.ui.layout">
+    <Dialog id="helloDialog" title="Create Form" afterClose="onAfterClose">
+        <f:SimpleForm id="createEmpDetails" visible="true" editable="true" layout="ResponsiveGridLayout" adjustLabelSpan="false" emptySpanL="6" columnsL="1">
+            <f:content>
+                <Label text="Page Id" design="Bold" visible="true" />
+                <Input required="true" id="Pageid" visible="true" enabled="false" />
+
+                <Label text="Description" required="true" design="Bold" />
+                <Input id="Desc" value="" placeholder="Enter Description" />
+
+                <Label text="Parent Node Description" required="true" design="Bold" />
+                <Input id="idCreate" value="" visible="false" enabled="false" />
+                
+                <Input id="idNodeID" value="" visible="false" />
+
+                <Label text="Hierarchy Level" required="true" design="Bold" />
+                <Input placeholder="Enter Heirarchy Level" id="idHL" enabled="false" />
+
+                <Label text="Content" class="phid" required="true" design="Bold" />
+                <Input id="idContent" placeholder="Enter Content" />
+            </f:content>
+        </f:SimpleForm>
+        <beginButton>
+            <Button text="Create" press="onCreate" type="Emphasized" />
+        </beginButton>
+        <endButton>
+            <Button text="Close" press="onClose" type="Emphasized" />
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>

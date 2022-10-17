@@ -1,18 +1,12 @@
-
-    {
-        "name": "deploy",
-        "dependencies": {
-          "@sap/hdi-deploy": "^4.4.1"
-        },
-        "engines": {
-<<<<<<< HEAD
-           "node": "^12.18.0 || ^14.0.0"
-=======
-           "node": "^12.18.0 || ^14.0.0 || ^16.0.0"
->>>>>>> 7accf735fd892278ff5887fab52a3fa915b6d5ea
-        },
-        "scripts": {
-          "start": "node node_modules/@sap/hdi-deploy/deploy.js  --auto-undeploy"
-        }
-      }   
-    
+{
+  "name": "deploy",
+  "dependencies": {
+    "@sap/hdi-deploy": "^4.4.1"
+  },
+  "engines": {
+    "node": "^12.18.0 || ^14.0.0 || ^16.0.0"
+  },
+  "scripts": {
+    "start": "node node_modules/@sap/hdi-deploy/deploy.js  --auto-undeploy"
+  }
+}

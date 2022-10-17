@@ -49,6 +49,7 @@ sap.ui.define([
                     this.getView().addDependent(this._valueHelpDialogProd);
                 }
 
+                that.oSelectedItem = "";
                 // //setting the Page Splitter Orientation to Vertical
                 // this.getView().byId("mySplitContainer").setOrientation("Vertical"); 
 
@@ -72,7 +73,7 @@ sap.ui.define([
                 this.oLocList = this._oCore.byId(
                     this._valueHelpDialogLoc.getId() + "-list"
                 );
-                that.oSelectedItem = "";
+                
                 // Calling service to get Location data
                 this.getModel("BModel").read("/getLocation", {
                     success: function (oData) {
@@ -127,15 +128,15 @@ sap.ui.define([
                                 }
 
                             }
-                            var aData = that.finalSecData;
-                            if(that.oSelectedItem){
-                            for (var i = 0; i < aData.length; i++) {
-                                if (that.oSelectedItem === aData[i].getCells()[1].getText()) {
-                                    aData[i + 1].focus();
-                                    aData[i].setSelected(true);
-                                }
-                            }
-                        }
+                            // var aData = that.finalSecData;
+                        //     if(that.oSelectedItem){
+                        //     for (var i = 0; i < aData.length; i++) {
+                        //         if (that.oSelectedItem === aData[i].getCells()[1].getText()) {
+                        //             aData[i].focus();
+                        //             aData[i].setSelected(true);
+                        //         }
+                        //     }
+                        // }
 
 
                             that.PrimarylistModel.setData({
@@ -159,6 +160,16 @@ sap.ui.define([
                             results: that.searchlist,
                         });
                             that.byId("searchField").setModel(that.SearchModel);
+
+                        var aData = that.oSList.getItems();
+                            if(that.oSelectedItem){
+                                for (var i = 0; i < aData.length; i++) {
+                                    if (that.oSelectedItem === aData[i].getCells()[1].getText()) {
+                                        aData[i].focus();
+                                        aData[i].setSelected(true);
+                                    }
+                                }
+                            }
 
                         },
                         error: function (oData, error) {
@@ -470,12 +481,12 @@ sap.ui.define([
                     oDropModel.setData(oDropModelData);
                     var aData = this.byId("Secondarytable").getItems();
 
-                    for (var i = 0; i < aData.length; i++) {
-                        if (oItem.CHAR_NAME === aData[i].getCells()[1].getText()) {
-                            aData[i + 1].focus();
-                            aData[i].setSelected(true);
-                        }
-                    }
+                    // for (var i = 0; i < aData.length; i++) {
+                    //     if (oItem.CHAR_NAME === aData[i].getCells()[1].getText()) {
+                    //         aData[i].focus();
+                    //         aData[i].setSelected(true);
+                    //     }
+                    // }
                     that.oSelectedItem = oItem.CHAR_NAME
                     that.onSaveSeq(iDropPosition);
                 }
@@ -516,7 +527,7 @@ sap.ui.define([
                                 successCount = successCount + 1;
                             }
 
-                            if (successCount === that.count) {
+                            if (successCount + 1 === that.count) {
                                 // MessageToast.show(oData.changeToPrimary);
                                 MessageToast.show("Successfully changed the sequence");
                                 that.byId("searchField").setValue("");

@@ -215,9 +215,13 @@ modules:
       - cpappcpfactoryloc.zip
       name: cpappcpfactoryloc
       target-path: resources/
-      - artifacts:
-      - cpappcpfactoryloc.zip
-      name: cpappcpfactoryloc
+    - artifacts:
+      - cpappcpvcplannerdocumentation.zip
+      name: cpappcpvcplannerdocumentation
+      target-path: resources/
+    - artifacts:
+      - cpappcpmaintenancevcplanner.zip
+      name: cpappcpmaintenancevcplanner
       target-path: resources/
 - name: cpodpcpodprofiles
   type: html5
@@ -608,6 +612,26 @@ modules:
 - name: cpappcpfactoryloc
   type: html5
   path: app/cpfactoryloc
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappcpvcplannerdocumentation
+  type: html5
+  path: app/cpvcplannerdocumentation
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappcpmaintenancevcplanner
+  type: html5
+  path: app/cpmaintenancevcplanner
   build-parameters:
     build-result: dist
     builder: custom

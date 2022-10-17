@@ -2,7 +2,9 @@
     <Page showHeader="false" width="200px">
         <content>
             <SearchField id="headSearch" liveChange="onSearch" placeholder="Job Id/ Name" />
-            <Table id="jobList" items="{path: '/results'}" growingScrollToLoad="true" rememberSelections="true" itemPress="onhandlePress" mode="SingleSelectMaster" selectionChange="onhandlePress" sticky="ColumnHeaders">
+            <Table id="jobList" items="{path: '/results'}" growingScrollToLoad="true" rememberSelections="true" 
+            itemPress="onhandlePress" mode="SingleSelectMaster" selectionChange="onhandlePress" sticky="ColumnHeaders"
+            busy="true" >
                 <columns>
                     <Column hAlign="Left" vAlign="Middle">
                         <Text text="{i18n>jobid}" />
