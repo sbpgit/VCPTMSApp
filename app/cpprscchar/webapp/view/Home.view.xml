@@ -1,144 +1,168 @@
-<mvc:View controllerName="cpapp.cpprscchar.controller.Home" xmlns:dnd="sap.ui.core.dnd" xmlns:ux="sap.uxap"
-	xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns:l="sap.ui.layout"
-	xmlns:unified="sap.ui.unified" xmlns:f="sap.ui.layout.form" xmlns:core="sap.ui.core" xmlns="sap.m">
-    <Page id="page2" showHeader="false" enableScrolling="false">
-	<ux:ObjectPageLayout id="ObjectPageLayout" showAnchorBar="false" height="165px">
-		<ux:headerTitle>
-			<ux:ObjectPageDynamicHeaderTitle>
-				<ux:expandedHeading>
-					<Title text="{i18n>title}" class="boldText" titleAlignment="Center"/>
-				</ux:expandedHeading>
-				<ux:snappedHeading>
-					<FlexBox fitContainer="true" alignItems="Center">
-						<Title text="{i18n>title}" wrapping="true"/>
-					</FlexBox>
-				</ux:snappedHeading>
-			</ux:ObjectPageDynamicHeaderTitle>
-		</ux:headerTitle>
-		<ux:headerContent>
-			<FlexBox wrap="NoWrap" fitContainer="true">
-				<l:Grid defaultSpan="XL3 L3 M6 S12">
-					<VBox >
-						<Label text="Location" required="true"/>
-						<Input id="idloc" value="" placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
-					</VBox>
-					<VBox >
-						<Label text="Product" required="true"/>
-						<Input id="prodInput" value="" placeholder="Product" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
-					</VBox>
-					<VBox >
-						<Label text=""/>
-                        <HBox>
-						<Button id="idData" text="Go" type="Accept" press="onGetData"/>
-                        
-                        <Text text="" width = "100px"/>
-						<Button id="idReset" text="Reset" type="Accept" press="onReset"/>
-                        </HBox>
-					</VBox>
-                    
-					<!-- <VBox >
+<mvc:View
+    controllerName="cpapp.cpprscchar.controller.Home"
+    xmlns:dnd="sap.ui.core.dnd"
+    xmlns:ux="sap.uxap"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:mvc="sap.ui.core.mvc"
+    displayBlock="true"
+    xmlns:l="sap.ui.layout"
+    xmlns:unified="sap.ui.unified"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:core="sap.ui.core"
+    xmlns="sap.m"
+>
+    <Page id="page2" showHeader="false" showFooter="true" enableScrolling="false">
+        <content>
+            <ux:ObjectPageLayout id="ObjectPageLayout" showAnchorBar="false" height="165px">
+                <ux:headerTitle>
+                    <ux:ObjectPageDynamicHeaderTitle>
+                        <ux:expandedHeading>
+                            <Title text="{i18n>title}" class="boldText" titleAlignment="Center" />
+                        </ux:expandedHeading>
+                        <ux:snappedHeading>
+                            <FlexBox fitContainer="true" alignItems="Center">
+                                <Title text="{i18n>title}" wrapping="true" />
+                            </FlexBox>
+                        </ux:snappedHeading>
+                    </ux:ObjectPageDynamicHeaderTitle>
+                </ux:headerTitle>
+                <ux:headerContent>
+                    <FlexBox wrap="NoWrap" fitContainer="true">
+                        <l:Grid defaultSpan="XL3 L3 M6 S12">
+                            <VBox>
+                                <Label text="Location" required="true" />
+                                <Input id="idloc" value="" placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                            </VBox>
+                            <VBox>
+                                <Label text="Product" required="true" />
+                                <Input id="prodInput" value="" placeholder="Product" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                            </VBox>
+                            <!-- <VBox >
+						<Label text="" required=""/>
+						<Button id="idUpdate" text="Update" type="Accept" press="onPressUpdate"/>
+					</VBox> -->
+                            <VBox>
+                                <Label text="" />
+                                <HBox>
+                                    <Button id="idData" text="Go" type="Emphasized" press="onGetData" />
+
+                                    <!-- <Label text="" width="50px" />
+                                    <Button id="idUpdate" text="Update" type="Accept" press="onPressUpdate" />
+
+                                    <Text text="" width="50px" />
+                                    <Button id="idReset" text="Reset" type="Accept" press="onReset" /> -->
+                                </HBox>
+                            </VBox>
+
+                            <!-- <VBox >
 						<Label text=""/>
 						<Button id="idSeq" text="{i18n>saveseq}" type="Accept" press="onSaveSeq"/>
 					</VBox> -->
-				</l:Grid>
-			</FlexBox>
-		</ux:headerContent>
-	</ux:ObjectPageLayout>
-		<unified:SplitContainer id="mySplitContainer" showSecondaryContent="false">
-			<unified:content>
-				<l:Splitter id="homeScrSplitter">
-					<Page title="{i18n>pcharTitle}" titleAlignment="Center">
-						<layoutData ><l:SplitterLayoutData resizable="false" size="50%"/></layoutData>
-						<content>
-							<Toolbar>
-								<SearchField liveChange="onPrimarySearch" placeholder="Characteristics Name"  width="100%" id="idPrimarySearch"/>
-							</Toolbar>
-							<Table id="Primarytable" mode="SingleSelectMaster" items="{ path: '/results'}">
-								<!-- <contextMenu>
+                        </l:Grid>
+                    </FlexBox>
+                </ux:headerContent>
+            </ux:ObjectPageLayout>
+            <unified:SplitContainer id="mySplitContainer" showSecondaryContent="false">
+                <unified:content>
+                    <l:Splitter id="homeScrSplitter">
+                        <Page title="{i18n>pcharTitle}" titleAlignment="Center">
+                            <layoutData>
+                                <l:SplitterLayoutData resizable="false" size="50%" />
+                            </layoutData>
+                            <content>
+                                <Toolbar>
+                                    <SearchField liveChange="onPrimarySearch" placeholder="Characteristics Name" width="100%" id="idPrimarySearch" />
+                                </Toolbar>
+                                <Table id="Primarytable" mode="SingleSelectMaster" items="{ path: '/results'}">
+                                    <!-- <contextMenu>
 									<Menu>
 										<MenuItem text="Move to Selected Products" press="moveToSelectedProductsTable"/>
 									</Menu>
 								</contextMenu> -->
-								<columns>
-									
-									<Column hAlign="Center" visible="false">
-										<Text text="{i18n>charno}"/>
-									</Column>
-									<Column hAlign="Center">
-										<Text text="{i18n>charname}"/>
-									</Column>
-                                    <Column hAlign="Center">
-										<Text text="{i18n>chardesc}"/>
-									</Column>
-								</columns>
-								<dragDropConfig>
-									<dnd:DragInfo groupName="selected2available" sourceAggregation="items"/>
-									<dnd:DropInfo groupName="available2selected" targetAggregation="items" dropPosition="Between" drop="onDropSelectedProductsTable"/>
-									<dnd:DragDropInfo sourceAggregation="items" targetAggregation="items" dropPosition="Between" drop="onDropSelectedProductsTable"/>
-								</dragDropConfig>
-								<items>
-									<ColumnListItem>
-										<cells>
-											
-											<Text text="{CHAR_NUM}"/>
-											<Text text="{CHAR_NAME}"/>
-                                            <Text text="{CHAR_DESC}"/>
-										</cells>
-									</ColumnListItem>
-								</items>
-							</Table>
-						</content>
-					</Page>
-					<Page title="{i18n>sCharTitle}" titleAlignment="Center" showFooter="true">
-						<layoutData ><l:SplitterLayoutData resizable="false" size="50%"/></layoutData>
-						<Toolbar>
-							<SearchField id="searchField" width="100%" placeholder="Characteristics Name" enableSuggestions="true" search="onCharSearch"
-								suggest="onSuggest" suggestionItems="{ path: '/results'}">
-								<SuggestionItem text="{Char}"  key="{Char}"/>
-							</SearchField>
-						</Toolbar>
-						<Table id="Secondarytable" mode="SingleSelectMaster" items="{ path: '/results'}"
-							itemPress="handleSelection">
-							<!-- <contextMenu>
+                                    <columns>
+                                        <Column hAlign="Center" visible="false">
+                                            <Text text="{i18n>charno}" />
+                                        </Column>
+                                        <Column hAlign="Center">
+                                            <Text text="{i18n>charname}" />
+                                        </Column>
+                                        <Column hAlign="Center">
+                                            <Text text="{i18n>chardesc}" />
+                                        </Column>
+                                    </columns>
+                                    <dragDropConfig>
+                                        <dnd:DragInfo groupName="selected2available" sourceAggregation="items" />
+                                        <dnd:DropInfo groupName="available2selected" targetAggregation="items" dropPosition="Between" drop="onDropSelectedProductsTable" />
+                                        <dnd:DragDropInfo sourceAggregation="items" targetAggregation="items" dropPosition="Between" drop="onDropSelectedProductsTable" />
+                                    </dragDropConfig>
+                                    <items>
+                                        <ColumnListItem>
+                                            <cells>
+                                                <Text text="{CHAR_NUM}" />
+                                                <Text text="{CHAR_NAME}" />
+                                                <Text text="{CHAR_DESC}" />
+                                            </cells>
+                                        </ColumnListItem>
+                                    </items>
+                                </Table>
+                            </content>
+                        </Page>
+                        <Page title="{i18n>sCharTitle}" titleAlignment="Center" showFooter="true">
+                            <layoutData>
+                                <l:SplitterLayoutData resizable="false" size="50%" />
+                            </layoutData>
+                            <Toolbar>
+                                <SearchField id="searchField" width="100%" placeholder="Characteristics Name" enableSuggestions="true" search="onCharSearch" suggest="onSuggest" suggestionItems="{ path: '/results'}">
+                                    <SuggestionItem text="{Char}" key="{Char}" />
+                                </SearchField>
+                            </Toolbar>
+                            <Table id="Secondarytable" mode="SingleSelectMaster" items="{ path: '/results'}" itemPress="handleSelection">
+                                <!-- <contextMenu>
 								<Menu>
 									<MenuItem text="Move to Selected Products" press="moveToSelectedProductsTable"/>
 								</Menu>
 							</contextMenu> -->
-							<columns>
-								
-								<Column hAlign="Center" visible="false">
-									<Text text="{i18n>charno}"/>
-								</Column>
-								<Column hAlign="Center">
-									<Text text="{i18n>charname}"/>
-								</Column>
-								<Column hAlign="Center" visible="false">
-									<Text text="{i18n>seq}"/>
-								</Column>
-                                <Column hAlign="Center" >
-									<Text text="{i18n>chardesc}"/>
-								</Column>
-							</columns>
-							<dragDropConfig>
-								<dnd:DragInfo groupName="selected2available" sourceAggregation="items"/>
-								<dnd:DropInfo groupName="available2selected" targetAggregation="items" dropPosition="Between" drop="onDropSelectedProductsTable"/>
-								<dnd:DragDropInfo sourceAggregation="items" targetAggregation="items" dropPosition="Between" drop="onDropSelectedProductsTable"/>
-							</dragDropConfig>
-							<items>
-								<ColumnListItem type="Active">
-									<cells>
-										<Text text="{CHAR_NUM}"/>
-										<Text text="{CHAR_NAME}"/>
-										<Text text="{SEQUENCE}"/>
-                                        <Text text="{CHAR_DESC}"/>
-									</cells>
-								</ColumnListItem>
-							</items>
-						</Table>
-					</Page>
-				</l:Splitter>
-			</unified:content>
-		</unified:SplitContainer>
-		<footer></footer>
-	</Page>
+                                <columns>
+                                    <Column hAlign="Center" visible="false">
+                                        <Text text="{i18n>charno}" />
+                                    </Column>
+                                    <Column hAlign="Center">
+                                        <Text text="{i18n>charname}" />
+                                    </Column>
+                                    <Column hAlign="Center" visible="false">
+                                        <Text text="{i18n>seq}" />
+                                    </Column>
+                                    <Column hAlign="Center">
+                                        <Text text="{i18n>chardesc}" />
+                                    </Column>
+                                </columns>
+                                <dragDropConfig>
+                                    <dnd:DragInfo groupName="selected2available" sourceAggregation="items" />
+                                    <dnd:DropInfo groupName="available2selected" targetAggregation="items" dropPosition="Between" drop="onDropSelectedProductsTable" />
+                                    <dnd:DragDropInfo sourceAggregation="items" targetAggregation="items" dropPosition="Between" drop="onDropSelectedProductsTable" />
+                                </dragDropConfig>
+                                <items>
+                                    <ColumnListItem type="Active">
+                                        <cells>
+                                            <Text text="{CHAR_NUM}" />
+                                            <Text text="{CHAR_NAME}" />
+                                            <Text text="{SEQUENCE}" />
+                                            <Text text="{CHAR_DESC}" />
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
+                            </Table>
+                        </Page>
+                    </l:Splitter>
+                </unified:content>
+            </unified:SplitContainer>
+        </content>
+        <footer>
+            <OverflowToolbar>
+                <ToolbarSpacer/>
+                <Button id="idUpdate" icon="sap-icon://cancel-maintenance" text="Update" type="Emphasized" press="onPressUpdate" />
+                <Button id="idReset" icon="sap-icon://repost" text="Reset" type="Emphasized" press="onReset" />
+            </OverflowToolbar>
+        </footer>
+    </Page>
 </mvc:View>
