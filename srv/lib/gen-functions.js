@@ -188,72 +188,17 @@ class GenFunctions {
             });
         }
     }
-    static async jobSchMessage(lFlag, lMessage, req){
-        if (lFlag === 'X') {
-            let dataObj = {};
-            dataObj["success"] = true;
-            dataObj["message"] = "Export of "+ lMessage + new Date();
 
-
-            if (req.headers['x-sap-job-id'] > 0) {
-                const scheduler = getJobscheduler(req);
-
-                var updateReq = {
-                    jobId: req.headers['x-sap-job-id'],
-                    scheduleId: req.headers['x-sap-job-schedule-id'],
-                    runId: req.headers['x-sap-job-run-id'],
-                    data: dataObj
-                };
-                const vMessaage = lMessage + "and exported, to update req";
-                console.log(vMessaage, updateReq);
-
-                scheduler.updateJobRunLog(updateReq, function (err, result) {
-                    if (err) {
-                        return console.log('Error updating run log: %s', err);
-                    }
-                    //Run log updated successfully
-                    const vMessaage2 = lMessage + " and job update results are ";
-                    console.log(vMessaage2, result);
-
-                });
-            }
-        }
-        else {
-            let dataObj = {};
-            dataObj["failed"] = false;
-            dataObj["message"] = "Export of"+ lMessage + new Date();
-
-
-            if (req.headers['x-sap-job-id'] > 0) {
-                const scheduler = getJobscheduler(req);
-
-                var updateReq = {
-                    jobId: req.headers['x-sap-job-id'],
-                    scheduleId: req.headers['x-sap-job-schedule-id'],
-                    runId: req.headers['x-sap-job-run-id'],
-                    data: dataObj
-                };
-
-                const vMessaage = lMessage + "and exported, to update req";
-                console.log(vMessaage, updateReq);
-
-                scheduler.updateJobRunLog(updateReq, function (err, result) {
-                    if (err) {
-                        return console.log('Error updating run log: %s', err);
-                    }
-                    //Run log updated successfully
-                    const vMessaage2 = lMessage + " and job update results are ";
-                    console.log(vMessaage2, result);
-
-                });
-            }
-        }
-    }
-    static async getParameterValue(lParameter) {
+/**
+ * Get VCP Configuration Parameters
+ * @param {Location} lLocation 
+ * @param {Parameter} lParameter 
+ */    
+    static async getParameterValue(lLocation, lParameter) {
         const lsValue = await SELECT.one
                                 .from("CP_PARAMETER_VALUES")
                                 .columns("VALUE")
-                                .where(`PARAMETER_ID = ${parseInt(lParameter)}`)
+                                .where(`LOCATION_ID = '${lLocation}' AND PARAMETER_ID = ${parseInt(lParameter)}`)
 
         return lsValue.VALUE;
     }

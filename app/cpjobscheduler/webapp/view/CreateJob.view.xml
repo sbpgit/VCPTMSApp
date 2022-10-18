@@ -251,7 +251,7 @@
                                             <Label text="{i18n>loc}" required="true" />
                                         </f:label>
                                         <f:fields>
-                                            <Input id="TlocInput" width="225px" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                            <Input id="TlocInput" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                                         </f:fields>
                                     </f:FormElement>
                                     <f:FormElement>
@@ -260,7 +260,7 @@
                                         </f:label>
                                         <f:fields>
                                             <!-- <Input id="TprodInput" width="225px" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/> -->
-                                            <MultiInput id="TprodInput" width="225px" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
+                                            <MultiInput id="TprodInput"  placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
                                         </f:fields>
                                     </f:FormElement>
                                     <!-- <f:FormElement>
@@ -302,7 +302,7 @@
                                             <Label text="{i18n>loc}" required="true" />
                                         </f:label>
                                         <f:fields>
-                                            <Input id="TFlocInput" width="225px" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                            <Input id="TFlocInput" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                                         </f:fields>
                                     </f:FormElement>
                                     <f:FormElement>
@@ -310,7 +310,7 @@
                                             <Label text="{i18n>prod}" required="true" />
                                         </f:label>
                                         <f:fields>
-                                            <MultiInput id="TFprodInput" width="225px" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
+                                            <MultiInput id="TFprodInput"  placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
                                         </f:fields>
                                     </f:FormElement>
 
@@ -529,6 +529,15 @@
                                                     <MultiInput id="EACDemandprodInput" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
                                                 </f:fields>
                                             </f:FormElement>
+                                            <f:FormElement>
+                                                <f:label>
+                                                    <Label text="Critical Component" />
+                                                </f:label>
+                                                <f:fields>
+                                                    <CheckBox id="EACDemandidCheck" select="onEACDemandCheck" />
+                                                </f:fields>
+                                            </f:FormElement>
+                                            
                                             <!-- <f:FormElement>
                                                 <f:label>
                                                     <Label text="{i18n>daterange}" />
@@ -571,6 +580,14 @@
                                                 </f:label>
                                                 <f:fields>
                                                     <DateRangeSelection id="ECRQtyDate" delimiter="To" dateValue="" secondDateValue="" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="handleECRQtyDateChange" maxDate="" />
+                                                </f:fields>
+                                            </f:FormElement>
+                                            <f:FormElement>
+                                                <f:label>
+                                                    <Label text="Critical Component" />
+                                                </f:label>
+                                                <f:fields>
+                                                    <CheckBox id="ECRQtyidCheck" select="onECRQtyCheck" />
                                                 </f:fields>
                                             </f:FormElement>
                                         </f:formElements>
@@ -729,7 +746,7 @@
                                             <Label text="{i18n>loc}" required="true" />
                                         </f:label>
                                         <f:fields>
-                                            <Input id="DlocInput" width="225px" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                            <Input id="DlocInput" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                                         </f:fields>
                                     </f:FormElement>
                                     <f:FormElement>
@@ -737,7 +754,7 @@
                                             <Label text="{i18n>prod}" required="true" />
                                         </f:label>
                                         <f:fields>
-                                            <MultiInput id="DprodInput" width="225px" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
+                                            <MultiInput id="DprodInput" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
                                         </f:fields>
                                     </f:FormElement>
 

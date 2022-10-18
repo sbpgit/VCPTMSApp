@@ -431,7 +431,7 @@ class GenTimeseriesM2 {
         const lStartDate = new Date(
             lDate.getFullYear(),
             lDate.getMonth(),
-            lDate.getDate() + parseInt(await GenF.getParameterValue(9))
+            lDate.getDate() + parseInt(await GenF.getParameterValue(adata.LOCATION_ID, 9))
         );
 
 // Get Predictions        
