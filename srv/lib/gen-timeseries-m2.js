@@ -509,7 +509,7 @@ class GenTimeseriesM2 {
             .where(`LOCATION_ID         = '${adata.LOCATION_ID}'
                          AND PRODUCT_ID = '${adata.PRODUCT_ID}'
                          AND ( WEEK_DATE  < '${lDate.toISOString().split("T")[0]}'
-                         OR    WEEK_DATE  > '${lStartDate.toISOString().split("T")[0]}'`);
+                         OR    WEEK_DATE  > '${lStartDate.toISOString().split("T")[0]}' )`);
 
         let liCir = [];
         let liCirDiff = [];
@@ -544,7 +544,7 @@ class GenTimeseriesM2 {
 
                         // Store the fractions in quantity
                         lsCirDiff = GenF.parse(lsCir);
-                        lsCirDiff['CIR_QTY_DIFF'] = lsCir['CIR_QTY'] - GenF.parse(liUniQty[cntUID].ORD_QTY * liPrediction[cntP].PREDICTED / lPIQty);
+                        lsCirDiff['CIR_QTY_DIFF'] = GenF.parse(liUniQty[cntUID].ORD_QTY * liPrediction[cntP].PREDICTED / lPIQty) - lsCir['CIR_QTY'];
                         liCirDiff.push(lsCirDiff);
                     }
                     liCir.push(lsCir);
@@ -593,14 +593,62 @@ class GenTimeseriesM2 {
         for (let cntR = 0; cntR < liRound.length; cntR++) {
 
             console.log(`Week ${liRound[cntR].WEEK_DATE} Demand ${liRound[cntR].DIFF}`)
-            if(liRound[cntR].DIFF > 0){            
-                liCirDiff.sort(dynamicSortMultiple("LOCATION_ID", "PRODUCT_ID", "WEEK_DATE DESC"));
+            if (liRound[cntR].DIFF > 0) {
+                liCirDiff.sort(GenF.dynamicSortMultiple("LOCATION_ID", "PRODUCT_ID", "WEEK_DATE", "CIR_QTY_DIFF DESC"));
                 for (let cntD = 0; cntD < liCirDiff.length; cntD++) {
-                    const element = array[cntD];
-                    
-                }
+                    if (
+                        liRound[cntR].LOCATION_ID === liCirDiff[cntD].LOCATION_ID &&
+                        liRound[cntR].PRODUCT_ID === liCirDiff[cntD].PRODUCT_ID &&
+                        liRound[cntR].WEEK_DATE === liCirDiff[cntD].WEEK_DATE &&
+                        liRound[cntR].MODEL_VERSION === liCirDiff[cntD].MODEL_VERSION &&
+                        liRound[cntR].VERSION === liCirDiff[cntD].VERSION &&
+                        liRound[cntR].SCENARIO === liCirDiff[cntD].SCENARIO
+                    ) {
 
-/*
+
+                        let lNextMonday = GenF.getNextMondayCmp(liCirDiff[cntD].WEEK_DATE);
+                        for (let cntDN = 0; cntDN < liCirDiff.length; cntDN++) {
+                            if (
+                                liCirDiff[cntDN].LOCATION_ID === liCirDiff[cntD].LOCATION_ID &&
+                                liCirDiff[cntDN].PRODUCT_ID === liCirDiff[cntD].PRODUCT_ID &&
+                                liCirDiff[cntDN].WEEK_DATE === lNextMonday &&
+                                liCirDiff[cntDN].MODEL_VERSION === liCirDiff[cntD].MODEL_VERSION &&
+                                liCirDiff[cntDN].VERSION === liCirDiff[cntD].VERSION &&
+                                liCirDiff[cntDN].SCENARIO === liCirDiff[cntD].SCENARIO &&
+                                liCirDiff[cntDN].UNIQUE_ID === liCirDiff[cntD].UNIQUE_ID
+                            ) {
+                                let lDiffTot = liCirDiff[cntD].CIR_QTY_DIFF + liCirDiff[cntDN].CIR_QTY_DIFF
+                                if (liRound[cntR].DIFF > 0) {
+
+                                    if (lDiffTot >= 1) {
+                                        liCirDiff[cntDN].CIR_QTY_DIFF = GenF.parse(lDiffTot - 1);
+                                        liRound[cntR].DIFF = liRound[cntR].DIFF - 1;
+
+                                        await cds.run(`UPDATE CP_CIR_GENERATED SET CIR_QTY = CIR_QTY + 1
+                                                            WHERE LOCATION_ID = '${liCirDiff[cntD].LOCATION_ID}'
+                                                            AND PRODUCT_ID = '${liCirDiff[cntD].PRODUCT_ID}'
+                                                            AND WEEK_DATE = '${liCirDiff[cntD].WEEK_DATE}'
+                                                            AND CIR_ID = '${liCirDiff[cntD].CIR_ID}'
+                                                            AND MODEL_VERSION = '${liCirDiff[cntD].MODEL_VERSION}'
+                                                            AND VERSION = '${liCirDiff[cntD].VERSION}'
+                                                            AND SCENARIO = '${liCirDiff[cntD].SCENARIO}'`);
+                                    } else {
+                                        liCirDiff[cntDN].CIR_QTY_DIFF = GenF.parse(lDiffTot);
+                                    }
+                                    liCirDiff[cntD].CIR_QTY_DIFF = GenF.parse(0);
+                                } else {
+                                    liCirDiff[cntDN].CIR_QTY_DIFF = lDiffTot;
+                                }
+                                break;
+
+                            }
+                        }
+                    } else {
+                        if (liCirDiff[cntD].WEEK_DATE > liRound[cntR].WEEK_DATE) {
+                            break;
+                        }
+                    }
+                }
 
 
                 let liCirTemp = await cds.run(`SELECT "LOCATION_ID",
@@ -620,8 +668,8 @@ class GenTimeseriesM2 {
                                                 AND "VERSION" = '${liRound[cntR].VERSION}'
                                                 AND "SCENARIO" = '${liRound[cntR].SCENARIO}'
                                                 ORDER BY CIR_QTY DESC`);
-                while (liRound[cntR].DIFF > 0) {                                                
-                    let lsCirLeast = {};    
+                while (liRound[cntR].DIFF > 0) {
+                    let lsCirLeast = {};
                     lsCirLeast['DIFF'] = 0;
                     for (let cntCt = 0; cntCt < liCirTemp.length; cntCt++) {
                         await cds.run(`UPDATE CP_CIR_GENERATED SET CIR_QTY = CIR_QTY + 1
@@ -632,7 +680,7 @@ class GenTimeseriesM2 {
                                         AND MODEL_VERSION = '${liCirTemp[cntCt].MODEL_VERSION}'
                                         AND VERSION = '${liCirTemp[cntCt].VERSION}'
                                         AND SCENARIO = '${liCirTemp[cntCt].SCENARIO}'`);
-                                        
+
                         let lDiff = await cds.run(`SELECT SUM("DIFF_QTY") as DIFF
                                         FROM "V_CIR_QTY_VAR"
                                     WHERE LOCATION_ID = '${adata.LOCATION_ID}'
@@ -641,8 +689,8 @@ class GenTimeseriesM2 {
                                         AND MODEL_VERSION = '${liRound[cntR].MODEL_VERSION}'
                                         AND VERSION = '${liRound[cntR].VERSION}'
                                         AND SCENARIO = '${liRound[cntR].SCENARIO}';`);
-                                        
-                        if(lsCirLeast['DIFF'] === 0 || lsCirLeast['DIFF'] > lDiff[0].DIFF){
+
+                        if (lsCirLeast['DIFF'] === 0 || lsCirLeast['DIFF'] > lDiff[0].DIFF) {
                             lsCirLeast = GenF.parse(liCirTemp[cntCt]);
                             lsCirLeast['DIFF'] = lDiff[0].DIFF;
                         }
@@ -654,7 +702,7 @@ class GenTimeseriesM2 {
                                         AND CIR_ID = '${liCirTemp[cntCt].CIR_ID}'
                                         AND MODEL_VERSION = '${liCirTemp[cntCt].MODEL_VERSION}'
                                         AND VERSION = '${liCirTemp[cntCt].VERSION}'
-                                        AND SCENARIO = '${liCirTemp[cntCt].SCENARIO}'`);   
+                                        AND SCENARIO = '${liCirTemp[cntCt].SCENARIO}'`);
                     }
 
 
@@ -666,14 +714,15 @@ class GenTimeseriesM2 {
                                     AND MODEL_VERSION = '${lsCirLeast.MODEL_VERSION}'
                                     AND VERSION = '${lsCirLeast.VERSION}'
                                     AND SCENARIO = '${lsCirLeast.SCENARIO}'`);
-                    liRound[cntR].DIFF = liRound[cntR].DIFF - 1;      
-            }          
+                    liRound[cntR].DIFF = liRound[cntR].DIFF - 1;
+                }
 
 
             }
-            */
+
         }
 
+        /*
 // Add the difference to most highest CIR in the week
         const liCIRRound = await cds.run(`SELECT "LOCATION_ID",
                                                   "PRODUCT_ID",
@@ -719,7 +768,7 @@ class GenTimeseriesM2 {
                 }
             }
         }
-
+*/
         await GenF.logMessage(req, `Completed Fully Configured Requirement Generation`);
 
     }
