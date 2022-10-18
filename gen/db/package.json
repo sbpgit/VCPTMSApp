@@ -1,4 +1,7 @@
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 66baf86816eee9fb2c30170ee9e4460c92448f56
 
     {
         "name": "deploy",
@@ -12,6 +15,9 @@
           "start": "node node_modules/@sap/hdi-deploy/deploy.js  --auto-undeploy"
         }
       }   
+<<<<<<< HEAD
+    
+=======
     
 =======
 {
@@ -27,3 +33,4 @@
   }
 }
 >>>>>>> 7fb64cbd4f9a8f67701e7cc6ce0db43cd60da49c
+>>>>>>> 66baf86816eee9fb2c30170ee9e4460c92448f56
