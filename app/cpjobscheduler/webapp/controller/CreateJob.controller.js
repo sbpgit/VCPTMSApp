@@ -1127,7 +1127,7 @@ sap.ui.define(
 				getProducts: function (oEvent) {
 					var oJobType = that.byId("idJobType").getSelectedKey();
 
-                    if(oJobType === "O" || oJobType === "A"){
+                    if(oJobType === "O" ){
 
 					// Calling sercive to get the Product list
 					this.getModel("BModel").read("/getLocProdDet", {
