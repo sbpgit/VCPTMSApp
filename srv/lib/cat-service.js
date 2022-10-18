@@ -808,58 +808,114 @@ module.exports = (srv) => {
 
     // Generate Timeseries using action call
     srv.on("generateTimeseries", async (req) => {
+
+        let lilocProd = {};
+        let lsData = {};
+        let Flag = '';
+        lilocProd = JSON.parse(req.data.LocProdData);
         switch (await GenFunctions.getParameterValue('5')) {
             case 'M1':
                 const obgenTimeseries = new GenTimeseries();
-                await obgenTimeseries.genTimeseries(req.data, req);
+                await obgenTimeseries.genTimeseries(req.data, req, Flag);
                 break;
             case 'M2':
                 const obgenTimeseriesM2 = new GenTimeseriesM2();
-                await obgenTimeseriesM2.genTimeseries(req.data, req);
+                await obgenTimeseriesM2.genTimeseries(req.data, req,Flag);
                 break;
+        }
+        if(Flag === 'X'){
+            console.log("Success");
+            GenFunctions.jobSchMessage(Flag, "Timeseries History generation is complete", req);
+        }
+        else{
+            GenFunctions.jobSchMessage(Flag, "Timeseries History generation failed", req);
         }
     });
     srv.on("generateTimeseriesF", async (req) => {
+
+        let lilocProd = {};
+        let lsData = {}, Flag = '';
+        lilocProd = JSON.parse(req.data.LocProdData);
         switch (await GenFunctions.getParameterValue('5')) {
             case 'M1':
-                const obgenTimeseries = new GenTimeseries();
-                await obgenTimeseries.genTimeseriesF(req.data, req);
+                for (let i = 0; i < lilocProd.length; i++) {
+                    lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
+                    lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
+                    const obgenTimeseries = new GenTimeseries();
+                    await obgenTimeseries.genTimeseriesF(lsData, req, Flag);
+                }
                 break;
             case 'M2':
-                const obgenTimeseriesM2 = new GenTimeseriesM2();
-                await obgenTimeseriesM2.genTimeseriesF(req.data, req);
+                for (let i = 0; i < lilocProd.length; i++) {
+                    lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
+                    lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
+                    const obgenTimeseriesM2 = new GenTimeseriesM2();
+                    await obgenTimeseriesM2.genTimeseriesF(lsData, req, Flag);
+                }
                 break;
+        }
+        if(Flag === 'X'){
+            console.log("Success");
+            GenFunctions.jobSchMessage(Flag, "Timeseries Future generation is complete", req);
+        }
+        else{
+            GenFunctions.jobSchMessage(Flag, "Timeseries Future generation failed", req);
         }
 
 
     });
     // Generate Timeseries fucntion calls
     srv.on("generate_timeseries", async (req) => {
-        // switch(await GenFunctions.getParameterValue('5')){
-        //     case 'M1':
-        //         const obgenTimeseries = new GenTimeseries();
-        //         await obgenTimeseries.genTimeseries(req.data, req);               
-        //         break;
-        //     case 'M2':
-        //         const obgenTimeseriesM2 = new GenTimeseriesM2();
-        //         await obgenTimeseriesM2.genTimeseries(req.data, req);                
-        //         break;
-        // }
-        const obgenTimeseries_rt = new GenTimeseriesRT();
-        await obgenTimeseries_rt.genTimeseries_rt(req.data, req);
+
+        let lilocProd = {};
+        let lsData = {};
+        let Flag = '';
+        lilocProd = JSON.parse(req.data.LocProdData);
+
+        switch (await GenFunctions.getParameterValue('5')) {
+            case 'M1':
+                for (let i = 0; i < lilocProd.length; i++) {
+                    lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
+                    lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
+                    const obgenTimeseries = new GenTimeseries();
+                    await obgenTimeseries.genTimeseries(lsData, req, Flag);
+                }
+                break;
+            case 'M2':
+                for (let i = 0; i < lilocProd.length; i++) {
+                    lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
+                    lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
+                    const obgenTimeseriesM2 = new GenTimeseriesM2();
+                    await obgenTimeseriesM2.genTimeseries(lsData, req, Flag);
+                }
+                break;
+        }
+        // const obgenTimeseries_rt = new GenTimeseriesRT();
+        // await obgenTimeseries_rt.genTimeseries_rt(req.data, req);
 
     });
     srv.on("generate_timeseriesF", async (req) => {
-        let value = await GenFunctions.getParameterValue('5');
-        console.log(value);
+
+        let lilocProd = {};
+        let lsData = {}, Flag = '';
+        lilocProd = JSON.parse(req.data.LocProdData);
+
         switch (await GenFunctions.getParameterValue('5')) {
             case 'M1':
-                const obgenTimeseries = new GenTimeseries();
-                await obgenTimeseries.genTimeseriesF(req.data, req);
+                for (let i = 0; i < lilocProd.length; i++) {
+                    lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
+                    lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
+                    const obgenTimeseries = new GenTimeseries();
+                    await obgenTimeseries.genTimeseriesF(lsData, req, Flag);
+                }
                 break;
             case 'M2':
-                const obgenTimeseriesM2 = new GenTimeseriesM2();
-                await obgenTimeseriesM2.genTimeseriesF(req.data, req);
+                for (let i = 0; i < lilocProd.length; i++) {
+                    lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
+                    lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
+                    const obgenTimeseriesM2 = new GenTimeseriesM2();
+                    await obgenTimeseriesM2.genTimeseriesF(lsData, req, Flag);
+                }
                 break;
         }
         const obgenTimeseries_rt = new GenTimeseriesRT();
@@ -878,13 +934,37 @@ module.exports = (srv) => {
     });
     // Generate Fully Configured Demand
     srv.on("genFullConfigDemand", async (req) => {
-        const obgenTimeseriesM2 = new GenTimeseriesM2();
-        await obgenTimeseriesM2.genPrediction(req.data, req);
+
+        let lilocProd = {};
+        let lsData = {};
+        let Flag = '';
+        lilocProd = JSON.parse(req.data.LocProdData);
+        for (let i = 0; i < lilocProd.length; i++) {
+            lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
+            lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
+            const obgenTimeseriesM2 = new GenTimeseriesM2();
+            await obgenTimeseriesM2.genPrediction(lsData, req, Flag);
+        }
+        if(Flag === 'X'){
+            console.log("Success");
+            GenFunctions.jobSchMessage(Flag, " Fully Configured Requirement Generation is complete", req);
+        }
+        else{
+            GenFunctions.jobSchMessage(Flag, "Fully Configured Requirement Generation is failed", req);
+        }
     });
     // Generate Fully Configured Demand
     srv.on("gen_FullConfigDemand", async (req) => {
-        const obgenTimeseriesM2 = new GenTimeseriesM2();
-        await obgenTimeseriesM2.genPrediction(req.data, req);
+
+        let lilocProd = {};
+        let lsData = {};
+        lilocProd = JSON.parse(req.data.LocProdData);
+        for (let i = 0; i < lilocProd.length; i++) {
+            lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
+            lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
+            const obgenTimeseriesM2 = new GenTimeseriesM2();
+            await obgenTimeseriesM2.genPrediction(lsData, req, Flag);
+        }
     });
 
     srv.on("genVariantStruc", async (req) => {
@@ -1218,8 +1298,14 @@ module.exports = (srv) => {
                 }
             }
             if (vFlag === 'S') {
-
+                lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
+                lsresults.LOCATION_ID = req.data.LOCATION_ID;
+                lsresults.CHAR_NUM = 'SUCCESS';
+                lsresults.CHAR_TYPE = 'S';
+                lsresults.SEQUENCE = vCount;
+                li_varcharps.push(GenFunctions.parse(lsresults));
                 return li_varcharps;
+                lsresults = {};
             }
 
         }
