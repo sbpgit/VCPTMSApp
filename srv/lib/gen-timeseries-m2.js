@@ -46,7 +46,7 @@ class GenTimeseriesM2 {
                         { ref: ["LOCATION_ID"] }, '=', { val: adata.LOCATION_ID }, 'and',
                         { ref: ["PRODUCT_ID"] }, '=', { val: lMainProduct }, 'and',
                         { ref: ["UID_TYPE"] }, '=', { val: 'P' }, 'and',
-                        { ref: ["ACTIVE"] }, '=', { val: true }
+                        { ref: ["ACTIVE"] }, '=', { val: 'true' }
                     ]
                 }
 
@@ -700,6 +700,7 @@ class GenTimeseriesM2 {
                             lsCirLeast = GenF.parse(liCirTemp[cntCt]);
                             lsCirLeast['DIFF'] = lDiff[0].DIFF;
                         }
+<<<<<<< HEAD
 
                         await cds.run(`UPDATE CP_CIR_GENERATED SET CIR_QTY = CIR_QTY - 1
                                         WHERE LOCATION_ID = '${liCirTemp[cntCt].LOCATION_ID}'
@@ -723,6 +724,31 @@ class GenTimeseriesM2 {
                     liRound[cntR].DIFF = liRound[cntR].DIFF - 1;
                 }
 
+=======
+
+                        await cds.run(`UPDATE CP_CIR_GENERATED SET CIR_QTY = CIR_QTY - 1
+                                        WHERE LOCATION_ID = '${liCirTemp[cntCt].LOCATION_ID}'
+                                        AND PRODUCT_ID = '${liCirTemp[cntCt].PRODUCT_ID}'
+                                        AND WEEK_DATE = '${liCirTemp[cntCt].WEEK_DATE}'
+                                        AND CIR_ID = '${liCirTemp[cntCt].CIR_ID}'
+                                        AND MODEL_VERSION = '${liCirTemp[cntCt].MODEL_VERSION}'
+                                        AND VERSION = '${liCirTemp[cntCt].VERSION}'
+                                        AND SCENARIO = '${liCirTemp[cntCt].SCENARIO}'`);
+                    }
+
+
+                    await cds.run(`UPDATE CP_CIR_GENERATED SET CIR_QTY = CIR_QTY + 1
+                                    WHERE LOCATION_ID = '${lsCirLeast.LOCATION_ID}'
+                                    AND PRODUCT_ID = '${lsCirLeast.PRODUCT_ID}'
+                                    AND WEEK_DATE = '${lsCirLeast.WEEK_DATE}'
+                                    AND CIR_ID = '${lsCirLeast.CIR_ID}'
+                                    AND MODEL_VERSION = '${lsCirLeast.MODEL_VERSION}'
+                                    AND VERSION = '${lsCirLeast.VERSION}'
+                                    AND SCENARIO = '${lsCirLeast.SCENARIO}'`);
+                    liRound[cntR].DIFF = liRound[cntR].DIFF - 1;
+                }
+
+>>>>>>> 7fb64cbd4f9a8f67701e7cc6ce0db43cd60da49c
 
             }
 

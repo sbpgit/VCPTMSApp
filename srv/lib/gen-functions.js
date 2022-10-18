@@ -251,9 +251,9 @@ class GenFunctions {
     }
     static async getParameterValue(lParameter) {
         const lsValue = await SELECT.one
-            .from("CP_PARAMETER_VALUES")
-            .columns("VALUE")
-            .where(`PARAMETER_ID = ${parseInt(lParameter)}`)
+                                .from("CP_PARAMETER_VALUES")
+                                .columns("VALUE")
+                                .where(`PARAMETER_ID = ${parseInt(lParameter)}`)
 
         return lsValue.VALUE;
     }

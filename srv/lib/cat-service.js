@@ -2050,15 +2050,16 @@ module.exports = (srv) => {
 
         let vDateFrom = req.data.FROMDATE; //"2022-03-04";
         let vDateTo = req.data.TODATE; //"2023-01-03";
-        let liCompWeekly = [];
-        let lsCompWeekly = {};
+        let liCIRWeekly = [];
+        let lsCIRWeekly = {};
         let liDates = [],
             vWeekIndex,
-            vCompIndex,
+            vCIRIndex,
             vDateIndex,
             vComp,
             lsDates = {};
         let columnname = "WEEK";
+        let aCIR_ID = [];
 
         // const liCIRGen = await cds.run(`SELECT * from "CP_CIR_GENERATED" WHERE "LOCATION_ID" = '` +
         //     req.data.LOCATION_ID +
@@ -2158,30 +2159,38 @@ module.exports = (srv) => {
             // Initially set vWeekIndex to j to geneate Week columns
             // vCompIndex is to get Componnent quantity for all dates
             vWeekIndex = 0; //j
-            lsCompWeekly.UNIQUE_ID = liUniqueId[j].UNIQUE_ID;
-            lsCompWeekly.UNIQUE_DESC = liUniqueId[j].UNIQUE_DESC;
-            lsCompWeekly.LOCATION_ID = liUniqueId[j].LOCATION_ID;
-            lsCompWeekly.PRODUCT_ID = liUniqueId[j].PRODUCT_ID;
+            lsCIRWeekly.UNIQUE_ID = liUniqueId[j].UNIQUE_ID;
+            lsCIRWeekly.UNIQUE_DESC = liUniqueId[j].UNIQUE_DESC;
+            lsCIRWeekly.LOCATION_ID = liUniqueId[j].LOCATION_ID;
+            lsCIRWeekly.PRODUCT_ID = liUniqueId[j].PRODUCT_ID;
+            lsCIRWeekly.MODEL_VERSION = req.data.MODEL_VERSION;
+            lsCIRWeekly.VERSION = req.data.VERSION;
+            lsCIRWeekly.SCENARIO = req.data.SCENARIO;
+            aCIR_ID = [];
 
             for (let i = 0; i < liDates.length; i++) {
                 vWeekIndex = vWeekIndex + 1;
-                for (vCompIndex = 0; vCompIndex < liCIRQty.length; vCompIndex++) {
-                    lsCompWeekly[columnname + vWeekIndex] = 0;
+                for (vCIRIndex = 0; vCIRIndex < liCIRQty.length; vCIRIndex++) {
+                    lsCIRWeekly[columnname + vWeekIndex] = 0;
                     if (
-                        liCIRQty[vCompIndex].UNIQUE_ID === lsCompWeekly.UNIQUE_ID &&
-                        liCIRQty[vCompIndex].WEEK_DATE === liDates[i].WEEK_DATE
+                        liCIRQty[vCIRIndex].UNIQUE_ID === lsCIRWeekly.UNIQUE_ID &&
+                        liCIRQty[vCIRIndex].WEEK_DATE === liDates[i].WEEK_DATE
                     ) {
-                        lsCompWeekly[columnname + vWeekIndex] =
-                            liCIRQty[vCompIndex].CIR_QTY;
+                        lsCIRWeekly[columnname + vWeekIndex] =
+                            liCIRQty[vCIRIndex].CIR_QTY;
+
+                        aCIR_ID.push(liCIRQty[vCIRIndex].CIR_ID);
+
                         break;
                     }
                 }
             }
-            liCompWeekly.push(GenFunctions.parse(lsCompWeekly));
-            lsCompWeekly = {};
+            lsCIRWeekly.CIR_ID = aCIR_ID;
+            liCIRWeekly.push(GenFunctions.parse(lsCIRWeekly));
+            lsCIRWeekly = {};
         }
         // liCompWeekly.sort(GenFunctions.dynamicSortMultiple("STRUC_NODE", "UNIQUE_ID", "ITEM_NUM"));
-        return liCompWeekly;
+        return liCIRWeekly;
     });
 
 
@@ -2438,7 +2447,61 @@ module.exports = (srv) => {
         }
 
     });
+    // Save CIR FIRM Quantities
+    srv.on("modifyCIRFirmQuantities", async (req) => {
+        let aCIRQuantities = [];
+        let oCIRQtys = {};
+        let oCIRQuantities = {};
+        let bFlag = false;
+        var responseMessage;
+        oCIRQuantities = JSON.parse(req.data.CIR_QUANTITIES);
+        if (req.data.FLAG === "U") {
 
+            for (var i = 0; i < oCIRQuantities.length; i++) {
+                oCIRQtys.LOCATION_ID = oCIRQuantities[i].LOCATION_ID;
+                oCIRQtys.PRODUCT_ID = oCIRQuantities[i].PRODUCT_ID;
+                oCIRQtys.WEEK_DATE = oCIRQuantities[i].WEEK_DATE;
+                oCIRQtys.CIR_ID = oCIRQuantities[i].CIR_ID;
+                oCIRQtys.MODEL_VERSION = oCIRQuantities[i].MODEL_VERSION;
+                oCIRQtys.VERSION = oCIRQuantities[i].VERSION;
+                oCIRQtys.SCENARIO = oCIRQuantities[i].SCENARIO;
+                oCIRQtys.UNIQUE_ID = oCIRQuantities[i].UNIQUE_ID;
+                oCIRQtys.CIR_QTY = oCIRQuantities[i].CIR_QTY;
+
+                try {
+                    await UPDATE`CP_CIR_GENERATED`
+                        .with({
+                            CIR_QTY: oCIRQtys.CIR_QTY
+                        })
+                        .where(`LOCATION_ID = '${oCIRQtys.LOCATION_ID}'
+                                      AND PRODUCT_ID = '${oCIRQtys.PRODUCT_ID}'                                      
+                                      AND WEEK_DATE = '${oCIRQtys.WEEK_DATE}'
+                                      AND CIR_ID = '${oCIRQtys.CIR_ID}'
+                                      AND MODEL_VERSION = '${oCIRQtys.MODEL_VERSION}'
+                                      AND VERSION = '${oCIRQtys.VERSION}'
+                                      AND SCENARIO = '${oCIRQtys.SCENARIO}'
+                                      AND UNIQUE_ID = '${oCIRQtys.UNIQUE_ID}'                                      
+                                      `);
+                    responseMessage = " CIR Quantities Updated successfully";
+                } catch (e) {
+                    console.log(e);
+                }
+
+                // aCIRQuantities.push(oCIRQtys);
+                oCIRQtys = {};
+            }
+            // if (aCIRQuantities.length > 0 && bFlag === false) {
+            //     try {
+            //         // await cds.run(INSERT.into('CP_CIR_GENERATED').entries(aCIRQuantities));
+            //         responseMessage = " Creation/Updation successful";
+            //     } catch (e) {
+            //         responseMessage = " Creation failed";
+            //     }
+            // }
+        }
+        oCIRQtys = {};
+        return responseMessage;
+    });
 
     // EOI - Deepa
 
