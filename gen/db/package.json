@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
     {
         "name": "deploy",
@@ -12,3 +13,17 @@
         }
       }   
     
+=======
+{
+  "name": "deploy",
+  "dependencies": {
+    "@sap/hdi-deploy": "^4.4.1"
+  },
+  "engines": {
+    "node": "^12.18.0 || ^14.0.0 || ^16.0.0"
+  },
+  "scripts": {
+    "start": "node node_modules/@sap/hdi-deploy/deploy.js  --auto-undeploy"
+  }
+}
+>>>>>>> 7fb64cbd4f9a8f67701e7cc6ce0db43cd60da49c

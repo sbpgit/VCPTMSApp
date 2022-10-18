@@ -1,0 +1,60 @@
+<mvc:View
+    controllerName="cpapp.cpmaintenancevcplanner.controller.Home"
+    xmlns:mvc="sap.ui.core.mvc"
+    displayBlock="true"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:m="sap.m"
+    xmlns:ui="sap.ui.table"
+    xmlns:l="sap.ui.layout"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:custom="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+    xmlns:demo="control"
+    height="100%">
+    <SplitApp id="SplitAppDemo" initialDetail="detail" initialMaster="master">
+        <masterPages>
+            <Page id="master" backgroundDesign="Solid" enableScrolling="true" class="Heading1">
+                <customHeader>
+                    <Toolbar height="2.56em" class="classHead">
+                        <Title id="masterTitle" text="Contents" class="ClassHead" />
+                        <ToolbarSpacer />
+                        <Button id="collapseButton" press="onCollapsePress" tooltip="Add node" icon="sap-icon://add" class="button" />
+                        <Button id="btnedit" press="onEdit" tooltip="Rename node" icon="sap-icon://edit" class="button" />
+                        <Button id="btndelete" press="onDelete" tooltip="Delete node" icon="sap-icon://delete" class="button" />
+                    </Toolbar>
+                </customHeader>
+                <Tree id="nodes" items="{path: '/items',
+				    parameters : {
+                        arrayNames: ['children'],
+		                countMode: 'Inline',
+                        numberOfExpandedLevels: 3
+		            },
+                    events: {change: '.onTreeChange'}}" mode="MultiSelect">
+                    <StandardTreeItem title="{Description}" type="Active" press="onSelectionChange" class="text" />
+                </Tree>
+            </Page>
+        </masterPages>
+        <detailPages>
+            <Page id="detail" backgroundDesign="Solid" class="Heading1">
+                <customHeader>
+                    <Toolbar height="2.56em" class="classHead">
+                        <Title id="detailTitle" text="{Description}" class="ClassHead" />
+                        <ToolbarSpacer />
+                    </Toolbar>
+                </customHeader>
+                <FormattedText htmlText="" id="content" />
+                <Image id="image" class="image" />
+                <Text id="textContent" text="" />
+                <l:VerticalLayout id="videoPanel" class="sapUiContentPadding" width="100%" />
+                <HBox>
+                    <Button text="" press="onShown" id="btnShow" icon="sap-icon://show" tooltip="Show html content and length " />
+                    <ToolbarSpacer />
+                    <Text text="" id="textLength" />
+                </HBox>
+                <TextArea width="100%" height="200px" value="" id="htmlText" />
+                <Button press="onSaved" id="btnSave" icon="sap-icon://save" tooltip="Save" />
+                <core:HTML id="idHTML" content="" visible="false" />
+            </Page>
+        </detailPages>
+    </SplitApp>
+</mvc:View>

@@ -85,7 +85,10 @@ class GenTimeseriesM2 {
             }
         }
 
-
+        if(liPrimaryID.length === 0){
+            await GenF.logMessage(req, `Please check characteristics Priority , unable to generate timeseries`);
+            return;
+        }
         // const liPrimaryID = await cds.run(`SELECT UNIQUE_ID,
         //                                 PRODUCT_ID,
         //                                 LOCATION_ID,
@@ -694,6 +697,7 @@ class GenTimeseriesM2 {
                             lsCirLeast = GenF.parse(liCirTemp[cntCt]);
                             lsCirLeast['DIFF'] = lDiff[0].DIFF;
                         }
+<<<<<<< HEAD
 
                         await cds.run(`UPDATE CP_CIR_GENERATED SET CIR_QTY = CIR_QTY - 1
                                         WHERE LOCATION_ID = '${liCirTemp[cntCt].LOCATION_ID}'
@@ -717,6 +721,31 @@ class GenTimeseriesM2 {
                     liRound[cntR].DIFF = liRound[cntR].DIFF - 1;
                 }
 
+=======
+
+                        await cds.run(`UPDATE CP_CIR_GENERATED SET CIR_QTY = CIR_QTY - 1
+                                        WHERE LOCATION_ID = '${liCirTemp[cntCt].LOCATION_ID}'
+                                        AND PRODUCT_ID = '${liCirTemp[cntCt].PRODUCT_ID}'
+                                        AND WEEK_DATE = '${liCirTemp[cntCt].WEEK_DATE}'
+                                        AND CIR_ID = '${liCirTemp[cntCt].CIR_ID}'
+                                        AND MODEL_VERSION = '${liCirTemp[cntCt].MODEL_VERSION}'
+                                        AND VERSION = '${liCirTemp[cntCt].VERSION}'
+                                        AND SCENARIO = '${liCirTemp[cntCt].SCENARIO}'`);
+                    }
+
+
+                    await cds.run(`UPDATE CP_CIR_GENERATED SET CIR_QTY = CIR_QTY + 1
+                                    WHERE LOCATION_ID = '${lsCirLeast.LOCATION_ID}'
+                                    AND PRODUCT_ID = '${lsCirLeast.PRODUCT_ID}'
+                                    AND WEEK_DATE = '${lsCirLeast.WEEK_DATE}'
+                                    AND CIR_ID = '${lsCirLeast.CIR_ID}'
+                                    AND MODEL_VERSION = '${lsCirLeast.MODEL_VERSION}'
+                                    AND VERSION = '${lsCirLeast.VERSION}'
+                                    AND SCENARIO = '${lsCirLeast.SCENARIO}'`);
+                    liRound[cntR].DIFF = liRound[cntR].DIFF - 1;
+                }
+
+>>>>>>> 7fb64cbd4f9a8f67701e7cc6ce0db43cd60da49c
 
             }
 
