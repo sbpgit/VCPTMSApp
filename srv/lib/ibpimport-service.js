@@ -1441,7 +1441,7 @@ module.exports = cds.service.impl(async function () {
         const lsSales = await SELECT.one
             .columns('VALUE')
             .from('CP_PARAMETER_VALUES')
-            .where(`VALUE = 4 `);
+            .where(`LOCATION_ID = '${req.data.LOCATION_ID}' AND VALUE = 4 `);
         let vFromDate = new Date();
         let vToDate = new Date().toISOString().split('Z')[0].split('T')[0];
         vFromDate.setDate(vFromDate.getDate() - parseInt(lsSales.VALUE));
