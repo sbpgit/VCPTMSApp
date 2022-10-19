@@ -1371,17 +1371,17 @@ sap.ui.define(
                 // var aCIRData = that.oGModel.getProperty("/TData");
                 // var oCIRTable = that.getView().byId("idCIReq"); 
                 // var aRows = oCIRTable.getBinding("rows").oList;
-                var oCIRChangedQty = {};
+                // var oCIRChangedQty = {};
 
-                var oCIRData = oEvent.getSource().getBindingContext().getObject();
-                var inewValue = parseInt(oEvent.getParameter("newValue"));
-                var iValue = parseInt(oEvent.getSource().getProperty("placeholder"));
-                var sWeekDate = oEvent.getSource().mBindingInfos.placeholder.binding.sPath
+                // var oCIRData = oEvent.getSource().getBindingContext().getObject();
+                // var inewValue = parseInt(oEvent.getParameter("newValue"));
+                // var iValue = parseInt(oEvent.getSource().getProperty("placeholder"));
+                // var sWeekDate = oEvent.getSource().mBindingInfos.placeholder.binding.sPath
 
-                if(inewValue !== iValue) {
-                   oCIRChangedQty.UNIQUE_ID = oCIRData.UNIQUE_ID;
-                //    oCIRChangedQty.WEEK_DATE = oCIRData.WEE
-                }
+                // if(inewValue !== iValue) {
+                //    oCIRChangedQty.UNIQUE_ID = oCIRData.UNIQUE_ID;
+                // //    oCIRChangedQty.WEEK_DATE = oCIRData.WEE
+                // }
 
 
 
