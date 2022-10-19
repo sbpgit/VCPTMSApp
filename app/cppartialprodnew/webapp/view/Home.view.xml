@@ -8,8 +8,8 @@
             <Toolbar >
                 <Title id="Title" text="Partial Configuration" class="boldText"></Title>
                 <ToolbarSpacer/>
-                <Button id="idAdd" text="Create" icon="sap-icon://add" press="onCreate" tooltip = "Create new product"/>
-                <Button id="idUpdate" text="Update" icon="sap-icon://edit" press="onCreate" tooltip = "Update product"/>
+                <Button id="idAdd" text="Create" icon="sap-icon://add" press="onCreate" tooltip = "Create partial product"/>
+                <Button id="idUpdate" text="Update" icon="sap-icon://edit" press="onCreate" tooltip = "Update partial product"/>
             </Toolbar>
         </customHeader>
 
@@ -27,7 +27,7 @@
                         <Text text="Product Desc."/>
                     </Column>
                     <Column hAlign="Center">
-                        <Text text="Ref. Product"/>
+                        <Text text="Configurable Product"/>
                     </Column>
                     <Column hAlign="Right" >
                         <Text text="" />

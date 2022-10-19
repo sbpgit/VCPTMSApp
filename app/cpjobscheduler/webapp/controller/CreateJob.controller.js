@@ -1670,7 +1670,7 @@ sap.ui.define(
                         that.oProd = this.byId("ECRQtyprodInput");
                         that.oDateRange = this.byId("ECRQtyDate");
                         that.byId("IBPCompReqQtyExport").setVisible(true);
-                    } else if (selRadioBt === "Fully Configured Demand") {
+                    } else if (selRadioBt === "Forcast Demand") {
                         that.oLoc = this.byId("ECIRlocInput");
                         that.oProd = this.byId("ECIRprodInput");
                         that.byId("IBPCIRExport").setVisible(true);
@@ -1855,7 +1855,7 @@ sap.ui.define(
                     that.oProd = this.byId("ECRQtyprodInput");
                     that.oDate = this.byId("ECRQtyDate");
                     that.byId("IBPCompReqQtyExport").setVisible(true);
-                } else if (selRadioBt === "Fully Configured Demand") {
+                } else if (selRadioBt === "Forecast Demand") {
                     that.oLoc = this.byId("ECIRlocInput");
                     that.oProd = this.byId("ECIRprodInput");
                     that.byId("IBPCIRExport").setVisible(true);
@@ -2689,7 +2689,7 @@ sap.ui.define(
 
             // 07-09-2022
             /**
-             * This function is called when click on Generate Fully configured Demand button.
+             * This function is called when click on Generate Forecast Demand button.
              * @param {object} oEvent -the event information.
              */
             onFullyDemand: function () {
@@ -2708,7 +2708,7 @@ sap.ui.define(
                 } else if (that.oGModel.getProperty("/UpdateSch") === "X") {
                     sap.ui.getCore().byId("idSavebt").setText("Update Schedule");
                 }
-                that.oGModel.setProperty("/runText", "Generate Fully configured Demand");
+                that.oGModel.setProperty("/runText", "Generate Forecast Demand");
 
                 if (this.oProd.getTokens().length > 0 ) {
                     // vRuleslist = {
@@ -3244,7 +3244,7 @@ sap.ui.define(
                     } else if (bButton.includes("Assembly Requirement")) {
                         actionText = "/ibpimport-srv/exportComponentReq";
                         // 22-09-2022
-                    } else if (bButton === "Fully Configured Demand") {
+                    } else if (bButton === "Forecast Demand") {
                         actionText = "/ibpimport-srv/exportIBPCIR";
                          // 22-09-2022
                         // 07-09-2022-1
@@ -3252,7 +3252,7 @@ sap.ui.define(
                         actionText = "/ibpimport-srv/exportRestrDetails";   
                     } else if (bButton.includes("sales orders")) {
                         actionText = "/catalog/genUniqueID";
-                    } else if (bButton === "Generate Fully configured Demand") {
+                    } else if (bButton === "Generate Forecast Demand") {
                         actionText = "/catalog/genFullConfigDemand";
                     }
                     // 07-09-2022-1 
@@ -3465,7 +3465,7 @@ sap.ui.define(
                                 endTime: dsEDate,
                             },],
                         };
-                    } else if (bButton.includes("Time Series") || bButton === "Generate Fully configured Demand") {
+                    } else if (bButton.includes("Time Series") || bButton === "Generate Forecast Demand") {
                         // 07-09-2022-1
                         // var LocProdData = vcRuleList;
                         var finalList = {
