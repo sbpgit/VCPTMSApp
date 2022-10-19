@@ -1650,7 +1650,7 @@ sap.ui.define(
                 if (that.byId("idJobType").getSelectedKey() === "E" ){
                     // if (selRadioBt === "Location" || selRadioBt === "Customer Group") {
                     // } else 
-                    if (selRadioBt === "Product") {
+                    if (selRadioBt === "Configurable Product") {
                         that.oLoc = that.byId("EPlocInput");
                         that.byId("IBPProdExport").setVisible(true);
                     } else if (selRadioBt === "Class") {
@@ -1835,7 +1835,7 @@ sap.ui.define(
                 // 22-09-2022
                 // if (selRadioBt === "Location" || selRadioBt === "Customer Group") {
                 // } else 
-                if (selRadioBt === "Product") {
+                if (selRadioBt === "Configurale Product") {
                     that.oLoc = that.byId("EPlocInput");
                     that.byId("IBPProdExport").setVisible(true);
                 } else if (selRadioBt === "Class") {
@@ -2479,7 +2479,7 @@ sap.ui.define(
                         that.onJobCreate();
                     }
                     // 07-09-2022-1
-                } else if (rRadioBtn === "Product" || rRadioBtn === "Restrictions") {
+                } else if (rRadioBtn === "Configurable Product" || rRadioBtn === "Restrictions") {
                     oLocItem = that.oLoc.getValue();
                     if (oLocItem) {
                         vRuleslist = {
@@ -3301,7 +3301,7 @@ sap.ui.define(
                             //     LocProdData: vcRuleList,
                             // },
                              data: {
-                                LocProdData: vcRuleList.LocProdData,
+                                LocProdData: JSON.stringify(vcRuleList.LocProdData),
                             },
                             cron: Cron,
                             time: onetime,
@@ -3360,7 +3360,7 @@ sap.ui.define(
                         var finalList = {
                             jobId: that.oGModel.getProperty("/Jobdata").jobId,
                             data: {
-                                LocProdData: vcRuleList.LocProdData,
+                                LocProdData: JSON.stringify(vcRuleList.LocProdData),
                             },
                             cron: Cron,
                             time: onetime,
@@ -3492,7 +3492,7 @@ sap.ui.define(
                             createdAt: djSdate,
                             schedules: [{
                                 data: {
-                                    LocProdData: vcRuleList.LocProdData,
+                                    LocProdData: JSON.stringify(vcRuleList.LocProdData),
                                 },
                                 cron: Cron,
                                 time: onetime,

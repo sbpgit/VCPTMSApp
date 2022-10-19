@@ -924,13 +924,22 @@ module.exports = (srv) => {
 
     // Generate Unique ID
     srv.on("genUniqueID", async (req) => {
+        let Flag = '';
         const obgenSOFunctions = new SOFunctions();
-        await obgenSOFunctions.genUniqueID(req.data, req);
+        await obgenSOFunctions.genUniqueID(req.data, req,Flag);
+        if(Flag === 'X'){
+            console.log("Success");
+            GenFunctions.jobSchMessage(Flag, "Process Sales Order is complete", req);
+        }
+        else{
+            GenFunctions.jobSchMessage(Flag, "Process Sales Order failed", req);
+        }
     });
     // Generate Unique ID
     srv.on("gen_UniqueID", async (req) => {
+        let Flag = '';
         const obgenSOFunctions = new SOFunctions();
-        await obgenSOFunctions.genUniqueID(req.data, req);
+        await obgenSOFunctions.genUniqueID(req.data, req, Flag);
     });
     // Generate Fully Configured Demand
     srv.on("genFullConfigDemand", async (req) => {
