@@ -39,7 +39,6 @@ class AssemblyReq {
                          MODEL_VERSION,
                          VERSION, 
                          SCENARIO, 
-                         METHOD,
                          UNIQUE_ID, 
                          CIR_QTY
         `);
@@ -67,7 +66,7 @@ class AssemblyReq {
                 liCIRData[cntCIR].MODEL_VERSION !== liCIRData[GenF.addOne(cntCIR, liCIRData.length)].MODEL_VERSION ||
                 liCIRData[cntCIR].VERSION !== liCIRData[GenF.addOne(cntCIR, liCIRData.length)].VERSION ||
                 liCIRData[cntCIR].SCENARIO !== liCIRData[GenF.addOne(cntCIR, liCIRData.length)].SCENARIO ||
-                liCIRData[cntCIR].METHOD !== liCIRData[GenF.addOne(cntCIR, liCIRData.length)].METHOD ||
+                // liCIRData[cntCIR].METHOD !== liCIRData[GenF.addOne(cntCIR, liCIRData.length)].METHOD ||
                 liCIRData[cntCIR].UNIQUE_ID !== liCIRData[GenF.addOne(cntCIR, liCIRData.length)].UNIQUE_ID) {
                 lsCIR = {};
                 lsCIR.LOCATION_ID = GenF.parse(liCIRData[cntCIR].LOCATION_ID);
@@ -77,7 +76,7 @@ class AssemblyReq {
                 lsCIR.MODEL_VERSION = GenF.parse(liCIRData[cntCIR].MODEL_VERSION);
                 lsCIR.VERSION = GenF.parse(liCIRData[cntCIR].VERSION);
                 lsCIR.SCENARIO = GenF.parse(liCIRData[cntCIR].SCENARIO);
-                lsCIR.METHOD = GenF.parse(liCIRData[cntCIR].METHOD);
+                // lsCIR.METHOD = GenF.parse(liCIRData[cntCIR].METHOD);
                 lsCIR.UNIQUE_ID = GenF.parse(liCIRData[cntCIR].UNIQUE_ID);
                 lsCIR.REF_PRODID = GenF.parse(liCIRData[cntCIR].REF_PRODID);
                 lsCIR.CIR_QTY = GenF.parse(liCIRData[cntCIR].CIR_QTY);

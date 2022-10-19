@@ -50,7 +50,7 @@ class CIRData {
           `
           SELECT DISTINCT 
           "CP_CIR_GENERATED"."LOCATION_ID", 
-          "CP_CIR_GENERATED"."PRODUCT_ID",
+          "CP_CIR_GENERATED"."PRODUCT_ID",                                             
           "CP_CIR_GENERATED"."VERSION",
           "CP_CIR_GENERATED"."SCENARIO",
           "CP_CIR_GENERATED"."UNIQUE_ID",

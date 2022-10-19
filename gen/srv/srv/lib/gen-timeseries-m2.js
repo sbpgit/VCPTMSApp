@@ -85,7 +85,10 @@ class GenTimeseriesM2 {
             }
         }
 
-
+        if(liPrimaryID.length === 0){
+            await GenF.logMessage(req, `Please check characteristics Priority , unable to generate timeseries`);
+            return;
+        }
         // const liPrimaryID = await cds.run(`SELECT UNIQUE_ID,
         //                                 PRODUCT_ID,
         //                                 LOCATION_ID,

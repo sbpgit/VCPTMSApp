@@ -7390,6 +7390,15 @@
           "type": "cds.String",
           "length": 40
         },
+        "CIR_ID": {
+          "items": {
+            "type": "cds.Integer"
+          }
+        },
+        "MODEL_VERSION": {
+          "type": "cds.String",
+          "length": 20
+        },
         "UNIQUE_ID": {
           "type": "cds.Integer"
         },
@@ -21714,6 +21723,21 @@
           "type": "cds.String",
           "length": 20
         }
+      }
+    },
+    "CatalogService.modifyCIRFirmQuantities": {
+      "kind": "function",
+      "params": {
+        "FLAG": {
+          "type": "cds.String",
+          "length": 1
+        },
+        "CIR_QUANTITIES": {
+          "type": "cds.String"
+        }
+      },
+      "returns": {
+        "type": "cds.String"
       }
     },
     "CatalogService.getSalesStock": {

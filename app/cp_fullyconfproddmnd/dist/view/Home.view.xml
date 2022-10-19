@@ -1,7 +1,7 @@
 <mvc:View controllerName="cpapp.cpfullyconfproddmnd.controller.Home" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core" displayBlock="true" xmlns="sap.m" xmlns:f="sap.ui.layout.form" xmlns:t="sap.ui.table" xmlns:ux="sap.uxap" xmlns:l="sap.ui.layout" xmlns:html="http://www.w3.org/1999/xhtml">
     <Page showHeader="false" showFooter="true">
         <content>
-            <ux:ObjectPageLayout id="ObjectPageLayout" headerContentPinned="true">
+            <ux:ObjectPageLayout id="ObjectPageLayout" headerContentPinned="true" preserveHeaderStateOnScroll="true">
                 <ux:headerTitle>
                     <ux:ObjectPageDynamicHeaderTitle>
                         <ux:expandedHeading>
@@ -73,7 +73,7 @@
                                             <ToolbarSpacer />
                                             <Button text="Publish" press="onPressPublish" type="Emphasized" />
                                         </Toolbar> -->
-                                        <t:Table id="idCIReq" clas="table" fixedColumnCount="2" selectionMode="None" alternateRowColors="true" enableSelectAll="false" visibleRowCount="10">
+                                        <t:Table id="idCIReq" clas="table" fixedColumnCount="2"  selectionMode="None" alternateRowColors="true" enableSelectAll="false" visibleRowCount="auto">
                                             <t:columns />
                                         </t:Table>
                                     </VBox>
@@ -87,6 +87,8 @@
         <footer>
             <OverflowToolbar width="100%">
                 <ToolbarSpacer />
+                 <Button icon="sap-icon://it-host" text="Assembly Requirements" press="onPressAssemblyRequirements" type="Emphasized" />
+                 <Button icon="sap-icon://save" text="Save" press="onPressSave" type="Emphasized" />
                  <Button icon="sap-icon://paper-plane" text="Publish" press="onPressPublish" type="Emphasized" />
             </OverflowToolbar>
         </footer>
