@@ -19725,13 +19725,8 @@
     "CatalogService.generate_timeseries": {
       "kind": "function",
       "params": {
-        "LOCATION_ID": {
-          "type": "cds.String",
-          "length": 4
-        },
-        "PRODUCT_ID": {
-          "type": "cds.String",
-          "length": 40
+        "LocProdData": {
+          "type": "cds.String"
         }
       },
       "returns": {
@@ -19741,13 +19736,8 @@
     "CatalogService.generate_timeseriesF": {
       "kind": "function",
       "params": {
-        "LOCATION_ID": {
-          "type": "cds.String",
-          "length": 4
-        },
-        "PRODUCT_ID": {
-          "type": "cds.String",
-          "length": 40
+        "LocProdData": {
+          "type": "cds.String"
         }
       },
       "returns": {

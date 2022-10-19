@@ -808,6 +808,7 @@ module.exports = (srv) => {
 
     // Generate Timeseries using action call
     srv.on("generateTimeseries", async (req) => {
+<<<<<<< HEAD
         switch (await GenFunctions.getParameterValue('5')) {
             case 'M1':
                 const obgenTimeseries = new GenTimeseries();
@@ -816,10 +817,33 @@ module.exports = (srv) => {
             case 'M2':
                 const obgenTimeseriesM2 = new GenTimeseriesM2();
                 await obgenTimeseriesM2.genTimeseries(req.data, req);
+=======
+
+        let lilocProd = {};
+        let lsData = {};
+        let Flag = '';
+        lilocProd = JSON.parse(req.data.LocProdData);
+        switch (await GenFunctions.getParameterValue('5')) {
+            case 'M1':
+                const obgenTimeseries = new GenTimeseries();
+                await obgenTimeseries.genTimeseries(req.data, req, Flag);
                 break;
+            case 'M2':
+                const obgenTimeseriesM2 = new GenTimeseriesM2();
+                await obgenTimeseriesM2.genTimeseries(req.data, req,Flag);
+>>>>>>> 84c86566222a54f9bd4bf83d58f55711bcf3134f
+                break;
+        }
+        if(Flag === 'X'){
+            console.log("Success");
+            GenFunctions.jobSchMessage(Flag, "Timeseries History generation is complete", req);
+        }
+        else{
+            GenFunctions.jobSchMessage(Flag, "Timeseries History generation failed", req);
         }
     });
     srv.on("generateTimeseriesF", async (req) => {
+<<<<<<< HEAD
         switch (await GenFunctions.getParameterValue('5')) {
             case 'M1':
                 const obgenTimeseries = new GenTimeseries();
@@ -828,28 +852,72 @@ module.exports = (srv) => {
             case 'M2':
                 const obgenTimeseriesM2 = new GenTimeseriesM2();
                 await obgenTimeseriesM2.genTimeseriesF(req.data, req);
+=======
+
+        let lilocProd = {};
+        let lsData = {}, Flag = '';
+        lilocProd = JSON.parse(req.data.LocProdData);
+        switch (await GenFunctions.getParameterValue('5')) {
+            case 'M1':
+                for (let i = 0; i < lilocProd.length; i++) {
+                    lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
+                    lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
+                    const obgenTimeseries = new GenTimeseries();
+                    await obgenTimeseries.genTimeseriesF(lsData, req, Flag);
+                }
                 break;
+            case 'M2':
+                for (let i = 0; i < lilocProd.length; i++) {
+                    lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
+                    lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
+                    const obgenTimeseriesM2 = new GenTimeseriesM2();
+                    await obgenTimeseriesM2.genTimeseriesF(lsData, req, Flag);
+                }
+>>>>>>> 84c86566222a54f9bd4bf83d58f55711bcf3134f
+                break;
+        }
+        if(Flag === 'X'){
+            console.log("Success");
+            GenFunctions.jobSchMessage(Flag, "Timeseries Future generation is complete", req);
+        }
+        else{
+            GenFunctions.jobSchMessage(Flag, "Timeseries Future generation failed", req);
         }
 
 
     });
     // Generate Timeseries fucntion calls
     srv.on("generate_timeseries", async (req) => {
-        // switch(await GenFunctions.getParameterValue('5')){
-        //     case 'M1':
-        //         const obgenTimeseries = new GenTimeseries();
-        //         await obgenTimeseries.genTimeseries(req.data, req);               
-        //         break;
-        //     case 'M2':
-        //         const obgenTimeseriesM2 = new GenTimeseriesM2();
-        //         await obgenTimeseriesM2.genTimeseries(req.data, req);                
-        //         break;
-        // }
-        const obgenTimeseries_rt = new GenTimeseriesRT();
-        await obgenTimeseries_rt.genTimeseries_rt(req.data, req);
+
+        let lilocProd = {};
+        let lsData = {};
+        let Flag = '';
+        lilocProd = JSON.parse(req.data.LocProdData);
+
+        switch (await GenFunctions.getParameterValue('5')) {
+            case 'M1':
+                for (let i = 0; i < lilocProd.length; i++) {
+                    lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
+                    lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
+                    const obgenTimeseries = new GenTimeseries();
+                    await obgenTimeseries.genTimeseries(lsData, req, Flag);
+                }
+                break;
+            case 'M2':
+                for (let i = 0; i < lilocProd.length; i++) {
+                    lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
+                    lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
+                    const obgenTimeseriesM2 = new GenTimeseriesM2();
+                    await obgenTimeseriesM2.genTimeseries(lsData, req, Flag);
+                }
+                break;
+        }
+        // const obgenTimeseries_rt = new GenTimeseriesRT();
+        // await obgenTimeseries_rt.genTimeseries_rt(req.data, req);
 
     });
     srv.on("generate_timeseriesF", async (req) => {
+<<<<<<< HEAD
         let value = await GenFunctions.getParameterValue('5');
         console.log(value);
         switch (await GenFunctions.getParameterValue('5')) {
@@ -860,6 +928,29 @@ module.exports = (srv) => {
             case 'M2':
                 const obgenTimeseriesM2 = new GenTimeseriesM2();
                 await obgenTimeseriesM2.genTimeseriesF(req.data, req);
+=======
+
+        let lilocProd = {};
+        let lsData = {}, Flag = '';
+        lilocProd = JSON.parse(req.data.LocProdData);
+
+        switch (await GenFunctions.getParameterValue('5')) {
+            case 'M1':
+                for (let i = 0; i < lilocProd.length; i++) {
+                    lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
+                    lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
+                    const obgenTimeseries = new GenTimeseries();
+                    await obgenTimeseries.genTimeseriesF(lsData, req, Flag);
+                }
+                break;
+            case 'M2':
+                for (let i = 0; i < lilocProd.length; i++) {
+                    lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
+                    lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
+                    const obgenTimeseriesM2 = new GenTimeseriesM2();
+                    await obgenTimeseriesM2.genTimeseriesF(lsData, req, Flag);
+                }
+>>>>>>> 84c86566222a54f9bd4bf83d58f55711bcf3134f
                 break;
         }
         const obgenTimeseries_rt = new GenTimeseriesRT();
@@ -878,13 +969,42 @@ module.exports = (srv) => {
     });
     // Generate Fully Configured Demand
     srv.on("genFullConfigDemand", async (req) => {
-        const obgenTimeseriesM2 = new GenTimeseriesM2();
-        await obgenTimeseriesM2.genPrediction(req.data, req);
+
+        let lilocProd = {};
+        let lsData = {};
+        let Flag = '';
+        lilocProd = JSON.parse(req.data.LocProdData);
+        for (let i = 0; i < lilocProd.length; i++) {
+            lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
+            lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
+            const obgenTimeseriesM2 = new GenTimeseriesM2();
+            await obgenTimeseriesM2.genPrediction(lsData, req, Flag);
+        }
+        if(Flag === 'X'){
+            console.log("Success");
+            GenFunctions.jobSchMessage(Flag, " Fully Configured Requirement Generation is complete", req);
+        }
+        else{
+            GenFunctions.jobSchMessage(Flag, "Fully Configured Requirement Generation is failed", req);
+        }
     });
     // Generate Fully Configured Demand
     srv.on("gen_FullConfigDemand", async (req) => {
+<<<<<<< HEAD
         const obgenTimeseriesM2 = new GenTimeseriesM2();
         await obgenTimeseriesM2.genPrediction(req.data, req);
+=======
+
+        let lilocProd = {};
+        let lsData = {};
+        lilocProd = JSON.parse(req.data.LocProdData);
+        for (let i = 0; i < lilocProd.length; i++) {
+            lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
+            lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
+            const obgenTimeseriesM2 = new GenTimeseriesM2();
+            await obgenTimeseriesM2.genPrediction(lsData, req, Flag);
+        }
+>>>>>>> 84c86566222a54f9bd4bf83d58f55711bcf3134f
     });
 
     srv.on("genVariantStruc", async (req) => {
@@ -1218,8 +1338,19 @@ module.exports = (srv) => {
                 }
             }
             if (vFlag === 'S') {
+<<<<<<< HEAD
 
                 return li_varcharps;
+=======
+                lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
+                lsresults.LOCATION_ID = req.data.LOCATION_ID;
+                lsresults.CHAR_NUM = 'SUCCESS';
+                lsresults.CHAR_TYPE = 'S';
+                lsresults.SEQUENCE = vCount;
+                li_varcharps.push(GenFunctions.parse(lsresults));
+                return li_varcharps;
+                lsresults = {};
+>>>>>>> 84c86566222a54f9bd4bf83d58f55711bcf3134f
             }
 
         }
@@ -2381,6 +2512,7 @@ module.exports = (srv) => {
                 oCIRQtys.SCENARIO = oCIRQuantities[i].SCENARIO;
                 oCIRQtys.UNIQUE_ID = oCIRQuantities[i].UNIQUE_ID;
                 oCIRQtys.CIR_QTY = oCIRQuantities[i].CIR_QTY;
+<<<<<<< HEAD
 
                 try {
                     await UPDATE`CP_CIR_GENERATED`
@@ -2401,6 +2533,28 @@ module.exports = (srv) => {
                     console.log(e);
                 }
 
+=======
+
+                try {
+                    await UPDATE`CP_CIR_GENERATED`
+                        .with({
+                            CIR_QTY: oCIRQtys.CIR_QTY
+                        })
+                        .where(`LOCATION_ID = '${oCIRQtys.LOCATION_ID}'
+                                      AND PRODUCT_ID = '${oCIRQtys.PRODUCT_ID}'                                      
+                                      AND WEEK_DATE = '${oCIRQtys.WEEK_DATE}'
+                                      AND CIR_ID = '${oCIRQtys.CIR_ID}'
+                                      AND MODEL_VERSION = '${oCIRQtys.MODEL_VERSION}'
+                                      AND VERSION = '${oCIRQtys.VERSION}'
+                                      AND SCENARIO = '${oCIRQtys.SCENARIO}'
+                                      AND UNIQUE_ID = '${oCIRQtys.UNIQUE_ID}'                                      
+                                      `);
+                    responseMessage = " CIR Quantities Updated successfully";
+                } catch (e) {
+                    console.log(e);
+                }
+
+>>>>>>> 84c86566222a54f9bd4bf83d58f55711bcf3134f
                 // aCIRQuantities.push(oCIRQtys);
                 oCIRQtys = {};
             }

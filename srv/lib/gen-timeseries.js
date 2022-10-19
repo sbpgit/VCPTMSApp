@@ -8,7 +8,8 @@ class GenTimeseries {
     /**
      * Generate Timeseries
      */
-    async genTimeseries(adata, req) {
+    async genTimeseries(adata, req, Flag) {
+        let VFlag = '';
         await GenF.logMessage(req, `Started history timeseries ${adata}`);
         
         // Get Sales Count Information
@@ -238,15 +239,17 @@ class GenTimeseries {
 
             if(liVCHistory.length > 0){
                 await INSERT(liVCHistory) .into('CP_VC_HISTORY_TS');
+
             }
 
         }
 
         await GenF.logMessage(req, `Completed history timeseries`);
+        Flag = 'X';
 
     }
 
-    async genTimeseriesF(adata, req) {
+    async genTimeseriesF(adata, req, Flag) {
 
         await GenF.logMessage(req, `Started future timeseries ${adata}`);        
 

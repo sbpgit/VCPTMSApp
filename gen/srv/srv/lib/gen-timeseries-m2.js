@@ -8,7 +8,7 @@ class GenTimeseriesM2 {
     /**
      * Generate Timeseries
      */
-    async genTimeseries(adata, req) {
+    async genTimeseries(adata, req, Flag) {
 
         await GenF.logMessage(req, `Started history timeseries`);
 
@@ -46,7 +46,7 @@ class GenTimeseriesM2 {
                         { ref: ["LOCATION_ID"] }, '=', { val: adata.LOCATION_ID }, 'and',
                         { ref: ["PRODUCT_ID"] }, '=', { val: lMainProduct }, 'and',
                         { ref: ["UID_TYPE"] }, '=', { val: 'P' }, 'and',
-                        { ref: ["ACTIVE"] }, '=', { val: true }
+                        { ref: ["ACTIVE"] }, '=', { val: 'true' }
                     ]
                 }
 
@@ -239,9 +239,11 @@ class GenTimeseriesM2 {
         }
 
         await GenF.logMessage(req, `Completed history timeseries`);
+        
+        Flag = 'X';
     }
 
-    async genTimeseriesF(adata, req) {
+    async genTimeseriesF(adata, req, Flag) {
 
         let lFlag = '';
 
@@ -416,9 +418,10 @@ class GenTimeseriesM2 {
         }
 
         await GenF.logMessage(req, `Completed future timeseries`);
+        Flag = 'X';
     }
 
-    async genPrediction(adata, req) {
+    async genPrediction(adata, req, Flag) {
 
         await GenF.logMessage(req, `Started Fully Configured Requirement Generation`);
 
@@ -773,6 +776,7 @@ class GenTimeseriesM2 {
         }
 */
         await GenF.logMessage(req, `Completed Fully Configured Requirement Generation`);
+        Flag = 'X';
 
     }
 

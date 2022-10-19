@@ -354,7 +354,10 @@ sap.ui.define(
                                 width: "8rem",
                                 label: columnName,
                                 template: new sap.m.Input({
+<<<<<<< HEAD
                                     type: "Number",
+=======
+>>>>>>> 84c86566222a54f9bd4bf83d58f55711bcf3134f
                                     value: "{" + columnName + "}",
                                 }),
                             });
@@ -1257,7 +1260,10 @@ sap.ui.define(
                     success: function (oData, oResponse) {
                         sap.ui.core.BusyIndicator.hide();
                         sap.m.MessageToast.show(oResponse.data.modifyCIRFirmQuantities);
+<<<<<<< HEAD
                         that.onGetData;
+=======
+>>>>>>> 84c86566222a54f9bd4bf83d58f55711bcf3134f
                         // sap.m.MessageToast.show(that.i18n.getText("postSuccess"));
                     },
                     error: function (oResponse) {
@@ -1361,6 +1367,7 @@ sap.ui.define(
                         },
                     });
                 } 
+<<<<<<< HEAD
             },
             /**
              * 
@@ -1384,6 +1391,9 @@ sap.ui.define(
 
 
             // }
+=======
+            }
+>>>>>>> 84c86566222a54f9bd4bf83d58f55711bcf3134f
 
         });
     }
