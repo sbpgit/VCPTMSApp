@@ -813,14 +813,24 @@ module.exports = (srv) => {
         let lsData = {};
         let Flag = '';
         lilocProd = JSON.parse(req.data.LocProdData);
-        switch (await GenFunctions.getParameterValue('5')) {
+        switch (await GenFunctions.getParameterValue(lilocProd[0].LOCATION_ID,'5')) {
             case 'M1':
+                
+                for (let i = 0; i < lilocProd.length; i++) {
+                    lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
+                    lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
                 const obgenTimeseries = new GenTimeseries();
                 await obgenTimeseries.genTimeseries(req.data, req, Flag);
+            }
                 break;
             case 'M2':
+                
+                for (let i = 0; i < lilocProd.length; i++) {
+                    lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
+                    lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
                 const obgenTimeseriesM2 = new GenTimeseriesM2();
                 await obgenTimeseriesM2.genTimeseries(req.data, req,Flag);
+                }
                 break;
         }
         if(Flag === 'X'){
@@ -836,7 +846,7 @@ module.exports = (srv) => {
         let lilocProd = {};
         let lsData = {}, Flag = '';
         lilocProd = JSON.parse(req.data.LocProdData);
-        switch (await GenFunctions.getParameterValue('5')) {
+        switch (await GenFunctions.getParameterValue(lilocProd[0].LOCATION_ID,'5')) {
             case 'M1':
                 for (let i = 0; i < lilocProd.length; i++) {
                     lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
@@ -872,7 +882,7 @@ module.exports = (srv) => {
         let Flag = '';
         lilocProd = JSON.parse(req.data.LocProdData);
 
-        switch (await GenFunctions.getParameterValue('5')) {
+        switch (await GenFunctions.getParameterValue(lilocProd[0].LOCATION_ID,'5')) {
             case 'M1':
                 for (let i = 0; i < lilocProd.length; i++) {
                     lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
@@ -900,7 +910,7 @@ module.exports = (srv) => {
         let lsData = {}, Flag = '';
         lilocProd = JSON.parse(req.data.LocProdData);
 
-        switch (await GenFunctions.getParameterValue('5')) {
+        switch (await GenFunctions.getParameterValue(lilocProd[0].LOCATION_ID,'5')) {
             case 'M1':
                 for (let i = 0; i < lilocProd.length; i++) {
                     lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;

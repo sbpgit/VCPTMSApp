@@ -26,8 +26,8 @@
                                 <Input id="idloc" value="" placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                             </VBox>
                             <VBox>
-                                <Label text="Product" required="true" />
-                                <Input id="idprodList" placeholder="Product" value="" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                <Label text="Configurable Product" required="true" />
+                                <Input id="idprodList" placeholder="Configurable Product" value="" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                             </VBox>
                             <VBox>
                                 <Label text="IBP Version" required="true" />
