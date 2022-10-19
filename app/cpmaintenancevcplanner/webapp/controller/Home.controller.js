@@ -349,25 +349,54 @@ sap.ui.define([
                 var content = sap.ui.getCore().byId("idContentedit").getValue();
                 var oModel = this.getView().getModel("oModel");
                 //*Editing in local Header JSON file*//
-                oModel.callFunction("/editJSONHeader", {
-                    method: "GET",
-                    urlParameters: {
-                        PAGEID: pageID,
-                        DESCRIPTION: descriptioN,
-                        PARENTNODEID: parentNodeID,
-                        HEIRARCHYLEVEL: heirarchyLevel,
-                    },
-                    success: function (oData, response) {
+                // oModel.callFunction("/editJSONHeader", {
+                //     method: "GET",
+                //     urlParameters: {
+                //         PAGEID: pageID,
+                //         DESCRIPTION: descriptioN,
+                //         PARENTNODEID: parentNodeID,
+                //         HEIRARCHYLEVEL: heirarchyLevel,
+                //     },
+                //     success: function (oData, response) {
+                //         that.onClose1();
+                //         that.onAfterRendering();
+                //         that.byId("idHTML").setContent();                       
+                //         sap.ui.core.BusyIndicator.hide();
+                //         sap.m.MessageToast.show("Updated successfully");
+                //     },
+                //     error: function (e) {
+                //         sap.m.MessageToast.show("Failed to Update in PAGEHEADER");
+                //     }
+                // });
+                var urlParameters = {
+                    PAGEID: pageID,
+                    DESCRIPTION: descriptioN,
+                    PARENTNODEID: parentNodeID,
+                    HEIRARCHYLEVEL: heirarchyLevel,
+                };
+
+                $.ajax({
+                    type: "POST",
+                    contentType: "application/json;charset=UTF-8",
+                    url: "model/header.json",
+                    dataType: "json",
+                    data : JSON.stringify(urlParameters),
+                    // async: false,
+                    processData :false,
+                    success: function (data, textStatus, jqXHR) {
                         that.onClose1();
                         that.onAfterRendering();
                         that.byId("idHTML").setContent();                       
                         sap.ui.core.BusyIndicator.hide();
                         sap.m.MessageToast.show("Updated successfully");
+                        
                     },
                     error: function (e) {
-                        sap.m.MessageToast.show("Failed to Update in PAGEHEADER");
+                        sap.ui.core.BusyIndicator.hide();
+                        sap.m.MessageToast.show("json not found");
                     }
                 });
+
             },
             onClose1: function () {
                 if (this._cDialog) {
