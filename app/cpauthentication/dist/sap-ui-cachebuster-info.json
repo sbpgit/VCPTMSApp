@@ -1,5 +1,33 @@
 {
+<<<<<<< HEAD
   "Component-dbg.js": 1665479929561,
+=======
+<<<<<<< HEAD
+  "i18n/i18n.properties": 1661869074967,
+  "controller/Home.controller.js": 1661869074967,
+  "utils/locate-reuse-libs.js": 1661869074967,
+  "model/models.js": 1661869074967,
+  "manifest.json": 1666089298156,
+  "controller/BaseController.js": 1661869074967,
+  "controller/App.controller.js": 1661869074967,
+  "Component.js": 1661869074967,
+  "manifest-bundle.zip": 1666089298180,
+  "Component-preload.js": 1666089298526,
+  "utils/locate-reuse-libs-dbg.js": 1661869074967,
+  "model/models-dbg.js": 1661869074967,
+  "controller/Home-dbg.controller.js": 1661869074967,
+  "controller/BaseController-dbg.js": 1661869074967,
+  "controller/App-dbg.controller.js": 1661869074967,
+  "Component-dbg.js": 1661869074967,
+  "view/Home.view.xml": 1661869074967,
+  "view/App.view.xml": 1661869074967,
+  "css/style.css": 1661869074967,
+  "index.html": 1661869074967
+=======
+  "css/style.css": 1665479929561,
+  "controller/Home.controller.js": 1665479929561,
+  "utils/locate-reuse-libs.js": 1665479929561,
+>>>>>>> 4caef2bbb7c7b4effff83ed5fa69f2447b2e4b8a
   "model/models.js": 1665479929561,
   "utils/locate-reuse-libs.js": 1665479929561,
   "manifest.json": 1666118228624,
@@ -19,4 +47,5 @@
   "view/App.view.xml": 1665479929561,
   "css/style.css": 1665479929561,
   "index.html": 1665479929561
+>>>>>>> 84c86566222a54f9bd4bf83d58f55711bcf3134f
 }

@@ -43,6 +43,9 @@ sap.ui.define(
                 that.scenModel.setSizeLimit(1000);
                 that.charModel.setSizeLimit(1000);
 
+                // To Store changed CIR Quantities
+                that.aCIRQty = [];
+
                 // Declaring Dialogs
                 this._oCore = sap.ui.getCore();
 
@@ -87,6 +90,8 @@ sap.ui.define(
                     .getResourceBundle();
                 that.col = "";
                 that.colDate = "";
+                // To Store changed CIR Quantities
+                that.aCIRQty = [];
                 that.oList = this.byId("idTab");
                 this.oLoc = this.byId("idloc");
                 this.oProd = this.byId("idprodList");
@@ -349,6 +354,10 @@ sap.ui.define(
                                 width: "8rem",
                                 label: columnName,
                                 template: new sap.m.Input({
+<<<<<<< HEAD
+                                    type: "Number",
+=======
+>>>>>>> 84c86566222a54f9bd4bf83d58f55711bcf3134f
                                     value: "{" + columnName + "}",
                                 }),
                             });
@@ -1251,6 +1260,10 @@ sap.ui.define(
                     success: function (oData, oResponse) {
                         sap.ui.core.BusyIndicator.hide();
                         sap.m.MessageToast.show(oResponse.data.modifyCIRFirmQuantities);
+<<<<<<< HEAD
+                        that.onGetData;
+=======
+>>>>>>> 84c86566222a54f9bd4bf83d58f55711bcf3134f
                         // sap.m.MessageToast.show(that.i18n.getText("postSuccess"));
                     },
                     error: function (oResponse) {
@@ -1354,7 +1367,33 @@ sap.ui.define(
                         },
                     });
                 } 
+<<<<<<< HEAD
+            },
+            /**
+             * 
+             */
+            // onChangeCIRQty: function(oEvent) {
+            //     // var aCIRData = that.oGModel.getProperty("/TData");
+            //     // var oCIRTable = that.getView().byId("idCIReq"); 
+            //     // var aRows = oCIRTable.getBinding("rows").oList;
+            //     var oCIRChangedQty = {};
+
+            //     var oCIRData = oEvent.getSource().getBindingContext().getObject();
+            //     var inewValue = parseInt(oEvent.getParameter("newValue"));
+            //     var iValue = parseInt(oEvent.getSource().getProperty("placeholder"));
+
+            //     if(inewValue !== iValue) {
+            //        oCIRChangedQty.UNIQUE_ID = oCIRData.UNIQUE_ID;
+            //        oCIRChangedQty.WEEK_DATE = oCIRData.WEE
+            //     }
+
+
+
+
+            // }
+=======
             }
+>>>>>>> 84c86566222a54f9bd4bf83d58f55711bcf3134f
 
         });
     }

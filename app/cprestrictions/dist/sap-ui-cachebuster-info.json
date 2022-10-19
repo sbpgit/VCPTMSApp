@@ -1,6 +1,46 @@
 {
+<<<<<<< HEAD
   "controller/BaseController-dbg.js": 1665479929713,
   "controller/Details.controller.js": 1665479929713,
+=======
+<<<<<<< HEAD
+  "view/LocDialog.fragment.xml": 1661869075027,
+  "Component.js": 1661869075027,
+  "utils/locate-reuse-libs.js": 1661869075027,
+  "model/models.js": 1661869075027,
+  "controller/ItemMaster.controller.js": 1661869075027,
+  "controller/ItemDetail.controller.js": 1664354918076,
+  "controller/Details.controller.js": 1661869075027,
+  "controller/BaseController.js": 1661869075027,
+  "controller/App.controller.js": 1661869075027,
+  "manifest.json": 1666089306802,
+  "manifest-bundle.zip": 1666089306816,
+  "Component-preload.js": 1666089307311,
+  "controller/BaseController-dbg.js": 1661869075027,
+  "model/models-dbg.js": 1661869075027,
+  "controller/ItemMaster-dbg.controller.js": 1661869075027,
+  "controller/ItemDetail-dbg.controller.js": 1664354918076,
+  "controller/Details-dbg.controller.js": 1661869075027,
+  "utils/locate-reuse-libs-dbg.js": 1661869075027,
+  "controller/App-dbg.controller.js": 1661869075027,
+  "Component-dbg.js": 1661869075027,
+  "view/className.fragment.xml": 1661869075027,
+  "view/charValue.fragment.xml": 1661869075027,
+  "view/charName.fragment.xml": 1661869075027,
+  "view/RestrictionItem.fragment.xml": 1661869075027,
+  "view/Restriction.fragment.xml": 1661869075027,
+  "i18n/i18n.properties": 1661869075027,
+  "view/LineDialog.fragment.xml": 1661869075027,
+  "view/ItemMaster.view.xml": 1661869075027,
+  "view/ItemDetail.view.xml": 1664191694967,
+  "view/Details.view.xml": 1661869075027,
+  "view/App.view.xml": 1661869075027,
+  "css/style.css": 1661869075027,
+  "index.html": 1661869075027
+=======
+  "controller/ItemDetail-dbg.controller.js": 1665479929713,
+  "controller/App.controller.js": 1665479929713,
+>>>>>>> 4caef2bbb7c7b4effff83ed5fa69f2447b2e4b8a
   "utils/locate-reuse-libs.js": 1665479929717,
   "model/models.js": 1665479929717,
   "controller/ItemMaster.controller.js": 1665479929717,
@@ -32,4 +72,5 @@
   "view/App.view.xml": 1665479929717,
   "css/style.css": 1665479929717,
   "index.html": 1665479929717
+>>>>>>> 84c86566222a54f9bd4bf83d58f55711bcf3134f
 }
