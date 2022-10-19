@@ -169,13 +169,13 @@ service CatalogService @(impl : './lib/cat-service.js'){
     //LOCATION_ID : String(4), PRODUCT_ID : String(40))
     // Generate Timeseries
     function generate_timeseriesF(LocProdData: String)     returns String;
-    action generateTimeseries(LOCATION_ID : String(4), PRODUCT_ID : String(40));
+    action generateTimeseries(LocProdData: String);
     // Generate Timeseries
-    action generateTimeseriesF(LOCATION_ID : String(4), PRODUCT_ID : String(40)) ;
+    action generateTimeseriesF(LocProdData: String);
     // Generate Unique
     action genUniqueID(LOCATION_ID : String(4), PRODUCT_ID : String(40)) ;
     // Generate Fully Configured Demand
-    action genFullConfigDemand(LOCATION_ID : String(4), PRODUCT_ID : String(40)) ;  
+    action genFullConfigDemand(LocProdData: String);// (LOCATION_ID : String(4), PRODUCT_ID : String(40)) ;  
 
 ////*****/ Partial /*****/
     @readonly
@@ -234,6 +234,9 @@ service CatalogService @(impl : './lib/cat-service.js'){
 
     @odata.draft.enabled
     entity getProdlocline       as projection on od.PROD_LOC_LINE;
+
+    @odata.draft.enabled
+    entity getLine              as projection on od.LINEMASTER;
 
     entity getProdLocRtrLine    as projection on V_LOCPRODLINERTR;
     

@@ -924,13 +924,22 @@ module.exports = (srv) => {
 
     // Generate Unique ID
     srv.on("genUniqueID", async (req) => {
+        let Flag = '';
         const obgenSOFunctions = new SOFunctions();
-        await obgenSOFunctions.genUniqueID(req.data, req);
+        await obgenSOFunctions.genUniqueID(req.data, req,Flag);
+        if(Flag === 'X'){
+            console.log("Success");
+            GenFunctions.jobSchMessage(Flag, "Process Sales Order is complete", req);
+        }
+        else{
+            GenFunctions.jobSchMessage(Flag, "Process Sales Order failed", req);
+        }
     });
     // Generate Unique ID
     srv.on("gen_UniqueID", async (req) => {
+        let Flag = '';
         const obgenSOFunctions = new SOFunctions();
-        await obgenSOFunctions.genUniqueID(req.data, req);
+        await obgenSOFunctions.genUniqueID(req.data, req, Flag);
     });
     // Generate Fully Configured Demand
     srv.on("genFullConfigDemand", async (req) => {
@@ -1825,8 +1834,9 @@ module.exports = (srv) => {
         const li_paravalues = await cds.run(
             `SELECT VALUE
                 FROM "CP_PARAMETER_VALUES"
-                WHERE "PARAMETER_ID" = 6
-                  OR "PARAMETER_ID" = 7
+                WHERE "LOCATION_ID" = '` + liSeeddata[0].LOCATION_ID + `'
+                AND ( "PARAMETER_ID" = 6
+                  OR "PARAMETER_ID" = 7 )
                 ORDER BY "PARAMETER_ID" `);
 
         vValue = parseInt(li_paravalues[0].VALUE) + 1;
@@ -1865,7 +1875,8 @@ module.exports = (srv) => {
                         .with({
                             VALUE: lspara.VALUE
                         })
-                        .where(`PARAMETER_ID = '${lspara.PARAMETER_ID}'`)
+                        .where(`LOCATION_ID = '${lsresults.LOCATION_ID}'
+                        AND PARAMETER_ID = '${lspara.PARAMETER_ID}'`)
                     responseMessage = lsresults.SEED_ORDER + " Created successfully";
                     await obgenSOFunctions.createSO(lsresults.LOCATION_ID, lsresults.PRODUCT_ID, lsresults.SEED_ORDER, lsresults.MAT_AVAILDATE, lsresults.ORD_QTY, lsresults.UNIQUE_ID);
                 } catch (e) {

@@ -622,11 +622,7 @@ sap.ui.define([
                         },
                         success: function (oData) {
                             sap.ui.core.BusyIndicator.hide();
-<<<<<<< HEAD
                             MessageToast.show("Updated Successfully");
-=======
-                            MessageToast.show("Successfully deleted primary characteristics");
->>>>>>> 84c86566222a54f9bd4bf83d58f55711bcf3134f
                             that.oPList = that.byId("Primarytable"),
                             that.oSList = that.byId("Secondarytable");
 

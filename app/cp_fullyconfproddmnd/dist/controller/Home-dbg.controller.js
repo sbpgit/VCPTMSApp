@@ -354,11 +354,10 @@ sap.ui.define(
                                 width: "8rem",
                                 label: columnName,
                                 template: new sap.m.Input({
-<<<<<<< HEAD
                                     type: "Number",
-=======
->>>>>>> 84c86566222a54f9bd4bf83d58f55711bcf3134f
+                                    placeholder: "{" + columnName + "}",
                                     value: "{" + columnName + "}",
+                                    change: that.onChangeCIRQty,
                                 }),
                             });
                         } else {
@@ -1260,10 +1259,7 @@ sap.ui.define(
                     success: function (oData, oResponse) {
                         sap.ui.core.BusyIndicator.hide();
                         sap.m.MessageToast.show(oResponse.data.modifyCIRFirmQuantities);
-<<<<<<< HEAD
                         that.onGetData;
-=======
->>>>>>> 84c86566222a54f9bd4bf83d58f55711bcf3134f
                         // sap.m.MessageToast.show(that.i18n.getText("postSuccess"));
                     },
                     error: function (oResponse) {
@@ -1299,7 +1295,7 @@ sap.ui.define(
                         }
                     }
                     );
-                } else {                    
+                } else {
                     sap.m.MessageToast.show(
                         "Please select a Location & Product!"
                     );
@@ -1366,34 +1362,31 @@ sap.ui.define(
                             sap.m.MessageToast.show("Service Connectivity Issue!");
                         },
                     });
-                } 
-<<<<<<< HEAD
+                }
             },
             /**
              * 
              */
-            // onChangeCIRQty: function(oEvent) {
-            //     // var aCIRData = that.oGModel.getProperty("/TData");
-            //     // var oCIRTable = that.getView().byId("idCIReq"); 
-            //     // var aRows = oCIRTable.getBinding("rows").oList;
-            //     var oCIRChangedQty = {};
+            onChangeCIRQty: function(oEvent) {
+                // var aCIRData = that.oGModel.getProperty("/TData");
+                // var oCIRTable = that.getView().byId("idCIReq"); 
+                // var aRows = oCIRTable.getBinding("rows").oList;
+                // var oCIRChangedQty = {};
 
-            //     var oCIRData = oEvent.getSource().getBindingContext().getObject();
-            //     var inewValue = parseInt(oEvent.getParameter("newValue"));
-            //     var iValue = parseInt(oEvent.getSource().getProperty("placeholder"));
+                // var oCIRData = oEvent.getSource().getBindingContext().getObject();
+                // var inewValue = parseInt(oEvent.getParameter("newValue"));
+                // var iValue = parseInt(oEvent.getSource().getProperty("placeholder"));
+                // var sWeekDate = oEvent.getSource().mBindingInfos.placeholder.binding.sPath
 
-            //     if(inewValue !== iValue) {
-            //        oCIRChangedQty.UNIQUE_ID = oCIRData.UNIQUE_ID;
-            //        oCIRChangedQty.WEEK_DATE = oCIRData.WEE
-            //     }
+                // if(inewValue !== iValue) {
+                //    oCIRChangedQty.UNIQUE_ID = oCIRData.UNIQUE_ID;
+                // //    oCIRChangedQty.WEEK_DATE = oCIRData.WEE
+                // }
 
 
 
 
-            // }
-=======
-            }
->>>>>>> 84c86566222a54f9bd4bf83d58f55711bcf3134f
+             }
 
         });
     }

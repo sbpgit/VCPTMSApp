@@ -531,7 +531,7 @@
                                             </f:FormElement>
                                             <f:FormElement>
                                                 <f:label>
-                                                    <Label text="Critical Component" />
+                                                    <Label text="Critical Assembly" />
                                                 </f:label>
                                                 <f:fields>
                                                     <CheckBox id="EACDemandidCheck" select="onEACDemandCheck" />
@@ -584,7 +584,7 @@
                                             </f:FormElement>
                                             <f:FormElement>
                                                 <f:label>
-                                                    <Label text="Critical Component" />
+                                                    <Label text="Critical Assembly" />
                                                 </f:label>
                                                 <f:fields>
                                                     <CheckBox id="ECRQtyidCheck" select="onECRQtyCheck" />
