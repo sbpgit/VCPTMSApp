@@ -169,13 +169,13 @@ service CatalogService @(impl : './lib/cat-service.js'){
     //LOCATION_ID : String(4), PRODUCT_ID : String(40))
     // Generate Timeseries
     function generate_timeseriesF(LocProdData: String)     returns String;
-    action generateTimeseries(LOCATION_ID : String(4), PRODUCT_ID : String(40));
+    action generateTimeseries(LocProdData: String);
     // Generate Timeseries
-    action generateTimeseriesF(LOCATION_ID : String(4), PRODUCT_ID : String(40)) ;
+    action generateTimeseriesF(LocProdData: String);
     // Generate Unique
     action genUniqueID(LOCATION_ID : String(4), PRODUCT_ID : String(40)) ;
     // Generate Fully Configured Demand
-    action genFullConfigDemand(LOCATION_ID : String(4), PRODUCT_ID : String(40)) ;  
+    action genFullConfigDemand(LocProdData: String);// (LOCATION_ID : String(4), PRODUCT_ID : String(40)) ;  
 
 ////*****/ Partial /*****/
     @readonly

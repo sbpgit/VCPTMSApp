@@ -19747,26 +19747,16 @@
     "CatalogService.generateTimeseries": {
       "kind": "action",
       "params": {
-        "LOCATION_ID": {
-          "type": "cds.String",
-          "length": 4
-        },
-        "PRODUCT_ID": {
-          "type": "cds.String",
-          "length": 40
+        "LocProdData": {
+          "type": "cds.String"
         }
       }
     },
     "CatalogService.generateTimeseriesF": {
       "kind": "action",
       "params": {
-        "LOCATION_ID": {
-          "type": "cds.String",
-          "length": 4
-        },
-        "PRODUCT_ID": {
-          "type": "cds.String",
-          "length": 40
+        "LocProdData": {
+          "type": "cds.String"
         }
       }
     },
@@ -19786,13 +19776,8 @@
     "CatalogService.genFullConfigDemand": {
       "kind": "action",
       "params": {
-        "LOCATION_ID": {
-          "type": "cds.String",
-          "length": 4
-        },
-        "PRODUCT_ID": {
-          "type": "cds.String",
-          "length": 40
+        "LocProdData": {
+          "type": "cds.String"
         }
       }
     },

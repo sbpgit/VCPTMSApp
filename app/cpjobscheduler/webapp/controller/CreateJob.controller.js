@@ -2207,7 +2207,9 @@ sap.ui.define(
                 var oEntry = {
                     vcRulesList: [],
                 },
-                    oRuleList = [],
+                    oRuleList = {
+                        LocProdData: []
+                    },
                     vRuleslist;
 
                 oLocItem = that.oLoc.getValue();
@@ -2233,7 +2235,7 @@ sap.ui.define(
                             LOCATION_ID: oLocItem,
                             PRODUCT_ID: oProdItem[i].getText()
                         };
-                        oRuleList.push(vRuleslist);
+                        oRuleList.LocProdData.push(vRuleslist);
                     }
                     this.oGModel.setProperty("/vcrulesData", oRuleList);
 
@@ -2272,7 +2274,11 @@ sap.ui.define(
             onTimeSeriesF: function () {
                 var oProdItem, oLocItem;
                 // var vRuleslist;
-                var oRuleList = [],
+                var 
+                // oRuleList = [],
+                oRuleList = {
+                    LocProdData: []
+                },
                     vRuleslist;
 
 
@@ -2300,7 +2306,7 @@ sap.ui.define(
                             LOCATION_ID: oLocItem,
                             PRODUCT_ID: oProdItem[i].getText()
                         };
-                        oRuleList.push(vRuleslist);
+                        oRuleList.LocProdData.push(vRuleslist);
                     }
                     this.oGModel.setProperty("/vcrulesData", oRuleList);
 
@@ -2695,7 +2701,11 @@ sap.ui.define(
             onFullyDemand: function () {
                 var oProdItem, oLocItem, i;
                 // var vRuleslist;
-                var oRuleList = [],
+                var 
+                // oRuleList = [],
+                oRuleList = {
+                    LocProdData: []
+                },
                     vRuleslist;
 
 
@@ -2723,7 +2733,7 @@ sap.ui.define(
                             LOCATION_ID: oLocItem,
                             PRODUCT_ID: oProdItem[i].getText()
                         };
-                        oRuleList.push(vRuleslist);
+                        oRuleList.LocProdData.push(vRuleslist);
                     }
                     this.oGModel.setProperty("/vcrulesData", oRuleList);
 
@@ -3287,8 +3297,11 @@ sap.ui.define(
                     } else if (oJobType === "T" || oJobType === "F" || oJobType === "D") {
                         var finalList = {
                             jobId: that.oGModel.getProperty("/Jobdata").jobId,
-                            data: {
-                                LocProdData: vcRuleList,
+                            // data: {
+                            //     LocProdData: vcRuleList,
+                            // },
+                             data: {
+                                LocProdData: vcRuleList.LocProdData,
                             },
                             cron: Cron,
                             time: onetime,
@@ -3347,7 +3360,7 @@ sap.ui.define(
                         var finalList = {
                             jobId: that.oGModel.getProperty("/Jobdata").jobId,
                             data: {
-                                LocProdData: vcRuleList,
+                                LocProdData: vcRuleList.LocProdData,
                             },
                             cron: Cron,
                             time: onetime,
@@ -3479,7 +3492,7 @@ sap.ui.define(
                             createdAt: djSdate,
                             schedules: [{
                                 data: {
-                                    LocProdData: vcRuleList,
+                                    LocProdData: vcRuleList.LocProdData,
                                 },
                                 cron: Cron,
                                 time: onetime,
