@@ -155,7 +155,7 @@ module.exports = (srv) => {
                       "COMPONENT" ASC,
                       "WEEK_DATE" ASC`
         );
-        if(req.data.CRITICALKEY === 'X') {
+        if (req.data.CRITICALKEY === 'X') {
             liComp = await cds.run(
                 `
               SELECT DISTINCT "V_ASMREQ_PRODCONSD"."LOCATION_ID",
@@ -185,7 +185,7 @@ module.exports = (srv) => {
                 `') AND "V_ASMREQ_PRODCONSD"."MODEL_VERSION" = '` +
                 req.data.MODEL_VERSION +
                 `'  AND "CP_CRITICAL_COMP"."CRITICALKEY" = '` +
-                 req.data.CRITICALKEY + `'
+                req.data.CRITICALKEY + `'
                    ORDER BY 
                         "LOCATION_ID" ASC, 
                         "PRODUCT_ID" ASC,
@@ -195,9 +195,9 @@ module.exports = (srv) => {
                         "COMPONENT" ASC`
             );
         } else {
-        // const liComp = await cds.run(
-           liComp = await cds.run(
-            `
+            // const liComp = await cds.run(
+            liComp = await cds.run(
+                `
           SELECT DISTINCT "LOCATION_ID",
                           "PRODUCT_ID",
                           "VERSION",
@@ -206,21 +206,21 @@ module.exports = (srv) => {
                           "COMPONENT"
           FROM "V_ASMREQ_PRODCONSD"
           WHERE "LOCATION_ID" = '` +
-            req.data.LOCATION_ID +
-            `' AND "PRODUCT_ID" = '` +
-            req.data.PRODUCT_ID +
-            `' AND "VERSION" = '` +
-            req.data.VERSION +
-            `' AND "SCENARIO" = '` +
-            req.data.SCENARIO +
-            `' AND ( "WEEK_DATE" <= '` +
-            vDateTo +
-            `'
+                req.data.LOCATION_ID +
+                `' AND "PRODUCT_ID" = '` +
+                req.data.PRODUCT_ID +
+                `' AND "VERSION" = '` +
+                req.data.VERSION +
+                `' AND "SCENARIO" = '` +
+                req.data.SCENARIO +
+                `' AND ( "WEEK_DATE" <= '` +
+                vDateTo +
+                `'
                 AND "WEEK_DATE" >= '` +
-            vDateFrom +
-            `') AND "MODEL_VERSION" = '` +
-            req.data.MODEL_VERSION +
-            `'
+                vDateFrom +
+                `') AND "MODEL_VERSION" = '` +
+                req.data.MODEL_VERSION +
+                `'
                ORDER BY 
                     "LOCATION_ID" ASC, 
                     "PRODUCT_ID" ASC,
@@ -228,7 +228,7 @@ module.exports = (srv) => {
                     "SCENARIO" ASC,
                     "ITEM_NUM" ASC,
                     "COMPONENT" ASC`
-        );
+            );
         }
         var vDateSeries = vDateFrom;
         let dDate = new Date(vDateSeries);
@@ -808,83 +808,163 @@ module.exports = (srv) => {
 
     // Generate Timeseries using action call
     srv.on("generateTimeseries", async (req) => {
-        switch(await GenFunctions.getParameterValue('5')){
+
+        let lilocProd = {};
+        let lsData = {};
+        let Flag = '';
+        lilocProd = JSON.parse(req.data.LocProdData);
+        switch (await GenFunctions.getParameterValue('5')) {
             case 'M1':
                 const obgenTimeseries = new GenTimeseries();
-                await obgenTimeseries.genTimeseries(req.data, req);               
+                await obgenTimeseries.genTimeseries(req.data, req, Flag);
                 break;
             case 'M2':
                 const obgenTimeseriesM2 = new GenTimeseriesM2();
-                await obgenTimeseriesM2.genTimeseries(req.data, req);                
+                await obgenTimeseriesM2.genTimeseries(req.data, req,Flag);
                 break;
+        }
+        if(Flag === 'X'){
+            console.log("Success");
+            GenFunctions.jobSchMessage(Flag, "Timeseries History generation is complete", req);
+        }
+        else{
+            GenFunctions.jobSchMessage(Flag, "Timeseries History generation failed", req);
         }
     });
     srv.on("generateTimeseriesF", async (req) => {
-        switch(await GenFunctions.getParameterValue('5')){
+
+        let lilocProd = {};
+        let lsData = {}, Flag = '';
+        lilocProd = JSON.parse(req.data.LocProdData);
+        switch (await GenFunctions.getParameterValue('5')) {
             case 'M1':
-                const obgenTimeseries = new GenTimeseries();
-                await obgenTimeseries.genTimeseriesF(req.data, req);             
+                for (let i = 0; i < lilocProd.length; i++) {
+                    lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
+                    lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
+                    const obgenTimeseries = new GenTimeseries();
+                    await obgenTimeseries.genTimeseriesF(lsData, req, Flag);
+                }
                 break;
             case 'M2':
-                const obgenTimeseriesM2 = new GenTimeseriesM2();
-                await obgenTimeseriesM2.genTimeseriesF(req.data, req);              
+                for (let i = 0; i < lilocProd.length; i++) {
+                    lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
+                    lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
+                    const obgenTimeseriesM2 = new GenTimeseriesM2();
+                    await obgenTimeseriesM2.genTimeseriesF(lsData, req, Flag);
+                }
                 break;
+        }
+        if(Flag === 'X'){
+            console.log("Success");
+            GenFunctions.jobSchMessage(Flag, "Timeseries Future generation is complete", req);
+        }
+        else{
+            GenFunctions.jobSchMessage(Flag, "Timeseries Future generation failed", req);
         }
 
 
     });
     // Generate Timeseries fucntion calls
     srv.on("generate_timeseries", async (req) => {
-        // switch(await GenFunctions.getParameterValue('5')){
-        //     case 'M1':
-        //         const obgenTimeseries = new GenTimeseries();
-        //         await obgenTimeseries.genTimeseries(req.data, req);               
-        //         break;
-        //     case 'M2':
-        //         const obgenTimeseriesM2 = new GenTimeseriesM2();
-        //         await obgenTimeseriesM2.genTimeseries(req.data, req);                
-        //         break;
-        // }
-        const obgenTimeseries_rt = new GenTimeseriesRT();
-        await obgenTimeseries_rt.genTimeseries_rt(req.data, req);
+
+        let lilocProd = {};
+        let lsData = {};
+        let Flag = '';
+        lilocProd = JSON.parse(req.data.LocProdData);
+
+        switch (await GenFunctions.getParameterValue('5')) {
+            case 'M1':
+                for (let i = 0; i < lilocProd.length; i++) {
+                    lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
+                    lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
+                    const obgenTimeseries = new GenTimeseries();
+                    await obgenTimeseries.genTimeseries(lsData, req, Flag);
+                }
+                break;
+            case 'M2':
+                for (let i = 0; i < lilocProd.length; i++) {
+                    lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
+                    lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
+                    const obgenTimeseriesM2 = new GenTimeseriesM2();
+                    await obgenTimeseriesM2.genTimeseries(lsData, req, Flag);
+                }
+                break;
+        }
+        // const obgenTimeseries_rt = new GenTimeseriesRT();
+        // await obgenTimeseries_rt.genTimeseries_rt(req.data, req);
 
     });
     srv.on("generate_timeseriesF", async (req) => {
-        let value = await GenFunctions.getParameterValue('5');
-        console.log(value);
-        switch(await GenFunctions.getParameterValue('5')){
+
+        let lilocProd = {};
+        let lsData = {}, Flag = '';
+        lilocProd = JSON.parse(req.data.LocProdData);
+
+        switch (await GenFunctions.getParameterValue('5')) {
             case 'M1':
-                const obgenTimeseries = new GenTimeseries();
-                await obgenTimeseries.genTimeseriesF(req.data, req);             
+                for (let i = 0; i < lilocProd.length; i++) {
+                    lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
+                    lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
+                    const obgenTimeseries = new GenTimeseries();
+                    await obgenTimeseries.genTimeseriesF(lsData, req, Flag);
+                }
                 break;
             case 'M2':
-                const obgenTimeseriesM2 = new GenTimeseriesM2();
-                await obgenTimeseriesM2.genTimeseriesF(req.data, req);              
+                for (let i = 0; i < lilocProd.length; i++) {
+                    lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
+                    lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
+                    const obgenTimeseriesM2 = new GenTimeseriesM2();
+                    await obgenTimeseriesM2.genTimeseriesF(lsData, req, Flag);
+                }
                 break;
-        }    
+        }
         const obgenTimeseries_rt = new GenTimeseriesRT();
-        await obgenTimeseries_rt.genTimeseriesF_rt(req.data, req);    
+        await obgenTimeseries_rt.genTimeseriesF_rt(req.data, req);
     });
-    
+
     // Generate Unique ID
     srv.on("genUniqueID", async (req) => {
         const obgenSOFunctions = new SOFunctions();
-        await obgenSOFunctions.genUniqueID(req.data,req);
+        await obgenSOFunctions.genUniqueID(req.data, req);
     });
     // Generate Unique ID
     srv.on("gen_UniqueID", async (req) => {
         const obgenSOFunctions = new SOFunctions();
-        await obgenSOFunctions.genUniqueID(req.data,req);
+        await obgenSOFunctions.genUniqueID(req.data, req);
     });
     // Generate Fully Configured Demand
     srv.on("genFullConfigDemand", async (req) => {
-        const obgenTimeseriesM2 = new GenTimeseriesM2();
-        await obgenTimeseriesM2.genPrediction(req.data, req);
+
+        let lilocProd = {};
+        let lsData = {};
+        let Flag = '';
+        lilocProd = JSON.parse(req.data.LocProdData);
+        for (let i = 0; i < lilocProd.length; i++) {
+            lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
+            lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
+            const obgenTimeseriesM2 = new GenTimeseriesM2();
+            await obgenTimeseriesM2.genPrediction(lsData, req, Flag);
+        }
+        if(Flag === 'X'){
+            console.log("Success");
+            GenFunctions.jobSchMessage(Flag, " Fully Configured Requirement Generation is complete", req);
+        }
+        else{
+            GenFunctions.jobSchMessage(Flag, "Fully Configured Requirement Generation is failed", req);
+        }
     });
     // Generate Fully Configured Demand
     srv.on("gen_FullConfigDemand", async (req) => {
-        const obgenTimeseriesM2 = new GenTimeseriesM2();
-        await obgenTimeseriesM2.genPrediction(req.data,req);
+
+        let lilocProd = {};
+        let lsData = {};
+        lilocProd = JSON.parse(req.data.LocProdData);
+        for (let i = 0; i < lilocProd.length; i++) {
+            lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
+            lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
+            const obgenTimeseriesM2 = new GenTimeseriesM2();
+            await obgenTimeseriesM2.genPrediction(lsData, req, Flag);
+        }
     });
 
     srv.on("genVariantStruc", async (req) => {
@@ -1177,6 +1257,57 @@ module.exports = (srv) => {
             );
             return li_varcharps;
             // }
+        }
+        // Remove Primary char from Unique char
+        else if (req.data.FLAG === 'U') {
+            vFlag = '';
+            let vId;
+            const li_locprodunique = await cds.run(
+                `SELECT *
+                FROM "CP_UNIQUE_ID_HEADER"
+                WHERE "LOCATION_ID" = '` +
+                req.data.LOCATION_ID +
+                `'
+                AND "PRODUCT_ID" = '` +
+                req.data.PRODUCT_ID +
+                `' AND "UID_TYPE" = 'P'`
+            );
+            lsresults.LOCATION_ID = req.data.LOCATION_ID;
+            lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
+            lsresults.UID_TYPE = 'P';
+            try {
+                await cds.delete("CP_UNIQUE_ID_HEADER", lsresults);
+                vFlag = 'X';
+            } catch (e) {
+                //DONOTHING
+            }
+            if (vFlag === 'X') {
+                for (let i = 0; i < li_locprodunique.length; i++) {
+                    vId = parseInt(li_locprodunique[i].UNIQUE_ID);
+                    try {
+                        await cds.run(
+                            `DELETE FROM "CP_UNIQUE_ID_ITEM" WHERE "LOCATION_ID" = '` + li_locprodunique[i].LOCATION_ID + `' 
+                                                              AND "PRODUCT_ID" = '`+ li_locprodunique[i].PRODUCT_ID + `'
+                                                              AND "UNIQUE_ID" = `+ vId + ``
+                        );
+                        vFlag = 'S';
+                    }
+                    catch (e) {
+
+                    }
+                }
+            }
+            if (vFlag === 'S') {
+                lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
+                lsresults.LOCATION_ID = req.data.LOCATION_ID;
+                lsresults.CHAR_NUM = 'SUCCESS';
+                lsresults.CHAR_TYPE = 'S';
+                lsresults.SEQUENCE = vCount;
+                li_varcharps.push(GenFunctions.parse(lsresults));
+                return li_varcharps;
+                lsresults = {};
+            }
+
         }
 
     });
@@ -1694,8 +1825,9 @@ module.exports = (srv) => {
         const li_paravalues = await cds.run(
             `SELECT VALUE
                 FROM "CP_PARAMETER_VALUES"
-                WHERE "PARAMETER_ID" = 6
-                  OR "PARAMETER_ID" = 7
+                WHERE "LOCATION_ID" = '` + liSeeddata[0].LOCATION_ID + `'
+                AND ( "PARAMETER_ID" = 6
+                  OR "PARAMETER_ID" = 7 )
                 ORDER BY "PARAMETER_ID" `);
 
         vValue = parseInt(li_paravalues[0].VALUE) + 1;
@@ -1734,7 +1866,8 @@ module.exports = (srv) => {
                         .with({
                             VALUE: lspara.VALUE
                         })
-                        .where(`PARAMETER_ID = '${lspara.PARAMETER_ID}'`)
+                        .where(`LOCATION_ID = '${lsresults.LOCATION_ID}'
+                        AND PARAMETER_ID = '${lspara.PARAMETER_ID}'`)
                     responseMessage = lsresults.SEED_ORDER + " Created successfully";
                     await obgenSOFunctions.createSO(lsresults.LOCATION_ID, lsresults.PRODUCT_ID, lsresults.SEED_ORDER, lsresults.MAT_AVAILDATE, lsresults.ORD_QTY, lsresults.UNIQUE_ID);
                 } catch (e) {
@@ -1919,15 +2052,16 @@ module.exports = (srv) => {
 
         let vDateFrom = req.data.FROMDATE; //"2022-03-04";
         let vDateTo = req.data.TODATE; //"2023-01-03";
-        let liCompWeekly = [];
-        let lsCompWeekly = {};
+        let liCIRWeekly = [];
+        let lsCIRWeekly = {};
         let liDates = [],
             vWeekIndex,
-            vCompIndex,
+            vCIRIndex,
             vDateIndex,
             vComp,
             lsDates = {};
         let columnname = "WEEK";
+        let aCIR_ID = [];
 
         // const liCIRGen = await cds.run(`SELECT * from "CP_CIR_GENERATED" WHERE "LOCATION_ID" = '` +
         //     req.data.LOCATION_ID +
@@ -2027,30 +2161,38 @@ module.exports = (srv) => {
             // Initially set vWeekIndex to j to geneate Week columns
             // vCompIndex is to get Componnent quantity for all dates
             vWeekIndex = 0; //j
-            lsCompWeekly.UNIQUE_ID = liUniqueId[j].UNIQUE_ID;
-            lsCompWeekly.UNIQUE_DESC = liUniqueId[j].UNIQUE_DESC;
-            lsCompWeekly.LOCATION_ID = liUniqueId[j].LOCATION_ID;
-            lsCompWeekly.PRODUCT_ID = liUniqueId[j].PRODUCT_ID;
+            lsCIRWeekly.UNIQUE_ID = liUniqueId[j].UNIQUE_ID;
+            lsCIRWeekly.UNIQUE_DESC = liUniqueId[j].UNIQUE_DESC;
+            lsCIRWeekly.LOCATION_ID = liUniqueId[j].LOCATION_ID;
+            lsCIRWeekly.PRODUCT_ID = liUniqueId[j].PRODUCT_ID;
+            lsCIRWeekly.MODEL_VERSION = req.data.MODEL_VERSION;
+            lsCIRWeekly.VERSION = req.data.VERSION;
+            lsCIRWeekly.SCENARIO = req.data.SCENARIO;
+            aCIR_ID = [];
 
             for (let i = 0; i < liDates.length; i++) {
                 vWeekIndex = vWeekIndex + 1;
-                for (vCompIndex = 0; vCompIndex < liCIRQty.length; vCompIndex++) {
-                    lsCompWeekly[columnname + vWeekIndex] = 0;
+                for (vCIRIndex = 0; vCIRIndex < liCIRQty.length; vCIRIndex++) {
+                    lsCIRWeekly[columnname + vWeekIndex] = 0;
                     if (
-                        liCIRQty[vCompIndex].UNIQUE_ID === lsCompWeekly.UNIQUE_ID &&
-                        liCIRQty[vCompIndex].WEEK_DATE === liDates[i].WEEK_DATE
+                        liCIRQty[vCIRIndex].UNIQUE_ID === lsCIRWeekly.UNIQUE_ID &&
+                        liCIRQty[vCIRIndex].WEEK_DATE === liDates[i].WEEK_DATE
                     ) {
-                        lsCompWeekly[columnname + vWeekIndex] =
-                            liCIRQty[vCompIndex].CIR_QTY;
+                        lsCIRWeekly[columnname + vWeekIndex] =
+                            liCIRQty[vCIRIndex].CIR_QTY;
+
+                        aCIR_ID.push(liCIRQty[vCIRIndex].CIR_ID);
+
                         break;
                     }
                 }
             }
-            liCompWeekly.push(GenFunctions.parse(lsCompWeekly));
-            lsCompWeekly = {};
+            lsCIRWeekly.CIR_ID = aCIR_ID;
+            liCIRWeekly.push(GenFunctions.parse(lsCIRWeekly));
+            lsCIRWeekly = {};
         }
         // liCompWeekly.sort(GenFunctions.dynamicSortMultiple("STRUC_NODE", "UNIQUE_ID", "ITEM_NUM"));
-        return liCompWeekly;
+        return liCIRWeekly;
     });
 
 
@@ -2102,29 +2244,29 @@ module.exports = (srv) => {
         );
 
         if (req.data.FLAG === "C" || req.data.FLAG === "E") {
-                aFilteredChars = [];
-                iCounter = 0;
-                if (aCharCounters.length > 0) {
-                    aFilteredChars = aCharCounters.filter(function (aCharCounter) {
-                        return aCharCounter.CHAR_NUM === aRtrChar[i].CHAR_NUM;
-                    });
-                }
-                if (aFilteredChars.length === 0) {
-                    aFilteredChars = aRtrDetails.filter(function (aRtrChars) {
-                        return aRtrChars.CHAR_NUM === aRtrChar[i].CHAR_NUM;
-                    });
-                }
+            aFilteredChars = [];
+            iCounter = 0;
+            if (aCharCounters.length > 0) {
+                aFilteredChars = aCharCounters.filter(function (aCharCounter) {
+                    return aCharCounter.CHAR_NUM === aRtrChar[i].CHAR_NUM;
+                });
+            }
+            if (aFilteredChars.length === 0) {
+                aFilteredChars = aRtrDetails.filter(function (aRtrChars) {
+                    return aRtrChars.CHAR_NUM === aRtrChar[i].CHAR_NUM;
+                });
+            }
 
-                if (aFilteredChars.length > 0) {
-                    iCounter = aFilteredChars[0].CHAR_COUNTER;
+            if (aFilteredChars.length > 0) {
+                iCounter = aFilteredChars[0].CHAR_COUNTER;
 
-                    oCharCounter.CHAR_COUNTER = iCounter;
-                    aCharCounters.push(oCharCounter);
-                }
+                oCharCounter.CHAR_COUNTER = iCounter;
+                aCharCounters.push(oCharCounter);
+            }
 
-                    responseMessage = errRes.message;
-                // }
-            
+            responseMessage = errRes.message;
+            // }
+
         } else if (req.data.FLAG === "D") {
             for (var i = 0; i < aRtrChar.length; i++) {
                 oRtrDetailsIns.RESTRICTION = aRtrChar[i].RESTRICTION;
@@ -2142,7 +2284,7 @@ module.exports = (srv) => {
                 }
 
             }
-        
+
 
             if (iCounter > 0) { //  if deletion is successfull
                 aRtrDetailsIns = [];
@@ -2307,7 +2449,61 @@ module.exports = (srv) => {
         }
 
     });
+    // Save CIR FIRM Quantities
+    srv.on("modifyCIRFirmQuantities", async (req) => {
+        let aCIRQuantities = [];
+        let oCIRQtys = {};
+        let oCIRQuantities = {};
+        let bFlag = false;
+        var responseMessage;
+        oCIRQuantities = JSON.parse(req.data.CIR_QUANTITIES);
+        if (req.data.FLAG === "U") {
 
+            for (var i = 0; i < oCIRQuantities.length; i++) {
+                oCIRQtys.LOCATION_ID = oCIRQuantities[i].LOCATION_ID;
+                oCIRQtys.PRODUCT_ID = oCIRQuantities[i].PRODUCT_ID;
+                oCIRQtys.WEEK_DATE = oCIRQuantities[i].WEEK_DATE;
+                oCIRQtys.CIR_ID = oCIRQuantities[i].CIR_ID;
+                oCIRQtys.MODEL_VERSION = oCIRQuantities[i].MODEL_VERSION;
+                oCIRQtys.VERSION = oCIRQuantities[i].VERSION;
+                oCIRQtys.SCENARIO = oCIRQuantities[i].SCENARIO;
+                oCIRQtys.UNIQUE_ID = oCIRQuantities[i].UNIQUE_ID;
+                oCIRQtys.CIR_QTY = oCIRQuantities[i].CIR_QTY;
+
+                try {
+                    await UPDATE`CP_CIR_GENERATED`
+                        .with({
+                            CIR_QTY: oCIRQtys.CIR_QTY
+                        })
+                        .where(`LOCATION_ID = '${oCIRQtys.LOCATION_ID}'
+                                      AND PRODUCT_ID = '${oCIRQtys.PRODUCT_ID}'                                      
+                                      AND WEEK_DATE = '${oCIRQtys.WEEK_DATE}'
+                                      AND CIR_ID = '${oCIRQtys.CIR_ID}'
+                                      AND MODEL_VERSION = '${oCIRQtys.MODEL_VERSION}'
+                                      AND VERSION = '${oCIRQtys.VERSION}'
+                                      AND SCENARIO = '${oCIRQtys.SCENARIO}'
+                                      AND UNIQUE_ID = '${oCIRQtys.UNIQUE_ID}'                                      
+                                      `);
+                    responseMessage = " CIR Quantities Updated successfully";
+                } catch (e) {
+                    console.log(e);
+                }
+
+                // aCIRQuantities.push(oCIRQtys);
+                oCIRQtys = {};
+            }
+            // if (aCIRQuantities.length > 0 && bFlag === false) {
+            //     try {
+            //         // await cds.run(INSERT.into('CP_CIR_GENERATED').entries(aCIRQuantities));
+            //         responseMessage = " Creation/Updation successful";
+            //     } catch (e) {
+            //         responseMessage = " Creation failed";
+            //     }
+            // }
+        }
+        oCIRQtys = {};
+        return responseMessage;
+    });
 
     // EOI - Deepa
 

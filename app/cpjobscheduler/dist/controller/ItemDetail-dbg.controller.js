@@ -334,16 +334,16 @@ sap.ui.define(
                 sap.ui.getCore().byId("idJobData").getColumns()[0].setVisible(true);
                 sap.ui.getCore().byId("idJobData").getColumns()[1].setVisible(true);
                 sap.ui.getCore().byId("idJobData").getColumns()[8].setVisible(true);
-              } else if (oActionType === "exportComponentReq") {
+              } else if (oActionType === "exportComponentReq" || oActionType === "exportActCompDemand") {
                 sap.ui.getCore().byId("idJobData").getColumns()[0].setVisible(true);
                 sap.ui.getCore().byId("idJobData").getColumns()[1].setVisible(true);
                 sap.ui.getCore().byId("idJobData").getColumns()[9].setVisible(true);
                 sap.ui.getCore().byId("idJobData").getColumns()[10].setVisible(true);
-              } else if (oActionType === "exportActCompDemand") {
-                sap.ui.getCore().byId("idJobData").getColumns()[0].setVisible(true);
-                sap.ui.getCore().byId("idJobData").getColumns()[1].setVisible(true);
-                sap.ui.getCore().byId("idJobData").getColumns()[9].setVisible(true);
-                sap.ui.getCore().byId("idJobData").getColumns()[10].setVisible(true);
+            //   } else if (oActionType === "exportActCompDemand") {
+            //     sap.ui.getCore().byId("idJobData").getColumns()[0].setVisible(true);
+            //     sap.ui.getCore().byId("idJobData").getColumns()[1].setVisible(true);
+            //     sap.ui.getCore().byId("idJobData").getColumns()[9].setVisible(true);
+            //     sap.ui.getCore().byId("idJobData").getColumns()[10].setVisible(true);
               
               // 22-09-2022
           } else if (oActionType === "exportIBPCIR") {

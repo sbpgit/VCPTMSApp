@@ -189,11 +189,16 @@ class GenFunctions {
         }
     }
 
-    static async getParameterValue(lParameter) {
+/**
+ * Get VCP Configuration Parameters
+ * @param {Location} lLocation 
+ * @param {Parameter} lParameter 
+ */    
+    static async getParameterValue(lLocation, lParameter) {
         const lsValue = await SELECT.one
-            .from("CP_PARAMETER_VALUES")
-            .columns("VALUE")
-            .where(`PARAMETER_ID = ${parseInt(lParameter)}`)
+                                .from("CP_PARAMETER_VALUES")
+                                .columns("VALUE")
+                                .where(`LOCATION_ID = '${lLocation}' AND PARAMETER_ID = ${parseInt(lParameter)}`)
 
         return lsValue.VALUE;
     }

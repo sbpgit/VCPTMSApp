@@ -8,7 +8,7 @@ class GenTimeseriesM2 {
     /**
      * Generate Timeseries
      */
-    async genTimeseries(adata, req) {
+    async genTimeseries(adata, req, Flag) {
 
         await GenF.logMessage(req, `Started history timeseries`);
 
@@ -85,7 +85,10 @@ class GenTimeseriesM2 {
             }
         }
 
-
+        if(liPrimaryID.length === 0){
+            await GenF.logMessage(req, `Please check characteristics Priority , unable to generate timeseries`);
+            return;
+        }
         // const liPrimaryID = await cds.run(`SELECT UNIQUE_ID,
         //                                 PRODUCT_ID,
         //                                 LOCATION_ID,
@@ -236,9 +239,11 @@ class GenTimeseriesM2 {
         }
 
         await GenF.logMessage(req, `Completed history timeseries`);
+        
+        Flag = 'X';
     }
 
-    async genTimeseriesF(adata, req) {
+    async genTimeseriesF(adata, req, Flag) {
 
         let lFlag = '';
 
@@ -413,9 +418,10 @@ class GenTimeseriesM2 {
         }
 
         await GenF.logMessage(req, `Completed future timeseries`);
+        Flag = 'X';
     }
 
-    async genPrediction(adata, req) {
+    async genPrediction(adata, req, Flag) {
 
         await GenF.logMessage(req, `Started Fully Configured Requirement Generation`);
 
@@ -425,7 +431,7 @@ class GenTimeseriesM2 {
         const lStartDate = new Date(
             lDate.getFullYear(),
             lDate.getMonth(),
-            lDate.getDate() + parseInt(await GenF.getParameterValue(9))
+            lDate.getDate() + parseInt(await GenF.getParameterValue(adata.LOCATION_ID, 9))
         );
 
 // Get Predictions        
@@ -770,6 +776,7 @@ class GenTimeseriesM2 {
         }
 */
         await GenF.logMessage(req, `Completed Fully Configured Requirement Generation`);
+        Flag = 'X';
 
     }
 

@@ -43,6 +43,9 @@ sap.ui.define(
                 that.scenModel.setSizeLimit(1000);
                 that.charModel.setSizeLimit(1000);
 
+                // To Store changed CIR Quantities
+                that.aCIRQty = [];
+
                 // Declaring Dialogs
                 this._oCore = sap.ui.getCore();
 
@@ -87,6 +90,8 @@ sap.ui.define(
                     .getResourceBundle();
                 that.col = "";
                 that.colDate = "";
+                // To Store changed CIR Quantities
+                that.aCIRQty = [];
                 that.oList = this.byId("idTab");
                 this.oLoc = this.byId("idloc");
                 this.oProd = this.byId("idprodList");
@@ -150,7 +155,7 @@ sap.ui.define(
                         var iFrozenHorizon = parseInt(oData.results[0].VALUE) + 1;
                         var dDate = new Date();
                         dDate = new Date(dDate.setDate(dDate.getDate() + iFrozenHorizon));
-                        var oDateL = that.getDateFn(dDate);                        
+                        var oDateL = that.getDateFn(dDate);
                         var oDateH = new Date(
                             dDate.getFullYear(),
                             dDate.getMonth(),
@@ -161,13 +166,13 @@ sap.ui.define(
 
                         that.byId("fromDate").setValue(oDateL);
                         that.byId("toDate").setValue(oDateH);
-                        
+
                         // 
-                        // oParam = aParams.find(obj => obj.PARAMETER_ID === 9) 
-                        // var iFirmHorizon = parseInt(oParam.VALUE) + 1;
-                        // var dDateFHL = new Date();
-                        // dDateFHL = new Date(dDateL.setDate(dDateL.getDate() + iFirmHorizon));
-                        // that.dFirmHorizonDate = dDateFHL;
+                        oParam = aParams.find(obj => obj.PARAMETER_ID === 9)
+                        var iFirmHorizon = parseInt(oParam.VALUE);
+                        var dDateFHL = new Date();
+                        dDateFHL = new Date(dDateFHL.setDate(dDateFHL.getDate() + iFirmHorizon));
+                        that.dFirmHorizonDate = dDateFHL;
 
                         sap.ui.core.BusyIndicator.hide();
                     },
@@ -286,10 +291,11 @@ sap.ui.define(
                     weekIndex;
                 that.oGModel = that.getModel("oGModel");
                 that.tableData = that.oGModel.getProperty("/TData");
+                that.aFirmDates = [];
 
                 var rowData;
                 var fromDate = new Date(that.byId("fromDate").getDateValue()),
-                    toDate = new Date(that.byId("toDate").getDateValue());                
+                    toDate = new Date(that.byId("toDate").getDateValue());
 
                 fromDate = that.onConvertDateToString(fromDate);
                 toDate = that.onConvertDateToString(toDate);
@@ -340,14 +346,29 @@ sap.ui.define(
                                 ]
                             })
                         });
-                    } else {                         
-                        return new sap.ui.table.Column({
-                            width: "8rem",
-                            label: columnName,
-                            template: new sap.m.Text({
-                                text: "{" + columnName + "}",
-                            }),
-                        });                      
+                    } else {
+                        var dColName = new Date(columnName);
+                        if (that.dFirmHorizonDate > dColName) {
+                            that.aFirmDates.push(columnName);
+                            return new sap.ui.table.Column({
+                                width: "8rem",
+                                label: columnName,
+                                template: new sap.m.Input({
+                                    type: "Number",
+                                    placeholder: "{" + columnName + "}",
+                                    value: "{" + columnName + "}",
+                                    change: that.onChangeCIRQty,
+                                }),
+                            });
+                        } else {
+                            return new sap.ui.table.Column({
+                                width: "8rem",
+                                label: columnName,
+                                template: new sap.m.Text({
+                                    text: "{" + columnName + "}",
+                                }),
+                            });
+                        }
                     }
                     // }
                 });
@@ -421,8 +442,12 @@ sap.ui.define(
                 lDate.setTime(lDate.getTime() + timeOffsetInMS);
                 // lDate.setMinutes(lDate.getMinutes() + lDate.getTimezoneOffset());
                 let lDay = lDate.getDay();
-                if (lDay !== 0) lDay = 7 - lDay;
-                lDay = lDay + 1;
+                if (lDay === 1) {
+                    lDay = 0;
+                } else {
+                    if (lDay !== 0) lDay = 7 - lDay;
+                    lDay = lDay + 1;
+                }
                 const lNextSun = new Date(
                     lDate.getFullYear(),
                     lDate.getMonth(),
@@ -1006,12 +1031,10 @@ sap.ui.define(
                 }
             },
             /**
-             * Calls post service with data filters to send CIR Quantities to S4 HANA System
-             * -- It runs in background by creating a job in job scheduler
-             * @param {*} oEntry 
+             * Job Schedule Start and End Date , Time
              */
-            handlePublish: function (oEntry) {
-                var oModel = that.getOwnerComponent().getModel('CIRModel');
+            getScheduleSEDT: function () {
+                var aScheduleSEDT = {};
                 var dDate = new Date();
                 // 07-09-2022-1                
                 var idSchTime = dDate.setSeconds(dDate.getSeconds() + 20);
@@ -1019,11 +1042,11 @@ sap.ui.define(
                 var idSETime = dDate.setHours(dDate.getHours() + 2);
                 idSchTime = new Date(idSchTime);
                 idSETime = new Date(idSETime);
-                var onetime = idSchTime;
+                //var onetime = idSchTime;
                 var djSdate = new Date(),
                     djEdate = idSETime,
-                    dsSDate = new Date(), //this._oCore.byId("idSSTime").getDateValue(),
-                    dsEDate = idSETime, //this._oCore.byId("idSETime").getDateValue(),
+                    dsSDate = new Date(),
+                    dsEDate = idSETime,
                     tjStime,
                     tjEtime,
                     tsStime,
@@ -1038,15 +1061,62 @@ sap.ui.define(
                 dsEDate = dsEDate.toISOString().split("T");
                 tsEtime = dsEDate[1].split(":");
 
-                var dDate = new Date().toLocaleString().split(" "),
-                    djSdate =
-                        djSdate[0] + " " + tjStime[0] + ":" + tjStime[1] + " " + "+0000";
-                djEdate =
-                    djEdate[0] + " " + tjEtime[0] + ":" + tjEtime[1] + " " + "+0000";
-                dsSDate =
-                    dsSDate[0] + " " + tsStime[0] + ":" + tsStime[1] + " " + "+0000";
-                dsEDate =
-                    dsEDate[0] + " " + tsEtime[0] + ":" + tsEtime[1] + " " + "+0000";
+                var dDate = new Date().toLocaleString().split(" ");
+                aScheduleSEDT.djSdate = djSdate[0] + " " + tjStime[0] + ":" + tjStime[1] + " " + "+0000";
+                aScheduleSEDT.djEdate = djEdate[0] + " " + tjEtime[0] + ":" + tjEtime[1] + " " + "+0000";
+                aScheduleSEDT.dsSDate = dsSDate[0] + " " + tsStime[0] + ":" + tsStime[1] + " " + "+0000";
+                aScheduleSEDT.dsEDate = dsEDate[0] + " " + tsEtime[0] + ":" + tsEtime[1] + " " + "+0000";
+                aScheduleSEDT.oneTime = idSchTime;
+
+                return aScheduleSEDT;
+
+            },
+
+            /**
+             * Calls post service with data filters to send CIR Quantities to S4 HANA System
+             * -- It runs in background by creating a job in job scheduler
+             * @param {*} oEntry 
+             */
+            handlePublish: function (oEntry) {
+                var aScheduleSEDT = {};
+                var oModel = that.getOwnerComponent().getModel('CIRModel');
+                // var dDate = new Date();
+                // // 07-09-2022-1                
+                // var idSchTime = dDate.setSeconds(dDate.getSeconds() + 20);
+                // // 07-09-2022-1
+                // var idSETime = dDate.setHours(dDate.getHours() + 2);
+                // idSchTime = new Date(idSchTime);
+                // idSETime = new Date(idSETime);
+                // var onetime = idSchTime;
+                // var djSdate = new Date(),
+                //     djEdate = idSETime,
+                //     dsSDate = new Date(), //this._oCore.byId("idSSTime").getDateValue(),
+                //     dsEDate = idSETime, //this._oCore.byId("idSETime").getDateValue(),
+                //     tjStime,
+                //     tjEtime,
+                //     tsStime,
+                //     tsEtime;
+
+                // djSdate = djSdate.toISOString().split("T");
+                // tjStime = djSdate[1].split(":");
+                // djEdate = djEdate.toISOString().split("T");
+                // tjEtime = djEdate[1].split(":");
+                // dsSDate = dsSDate.toISOString().split("T");
+                // tsStime = dsSDate[1].split(":");
+                // dsEDate = dsEDate.toISOString().split("T");
+                // tsEtime = dsEDate[1].split(":");
+
+                // var dDate = new Date().toLocaleString().split(" "),
+                //     djSdate =
+                //         djSdate[0] + " " + tjStime[0] + ":" + tjStime[1] + " " + "+0000";
+                // djEdate =
+                //     djEdate[0] + " " + tjEtime[0] + ":" + tjEtime[1] + " " + "+0000";
+                // dsSDate =
+                //     dsSDate[0] + " " + tsStime[0] + ":" + tsStime[1] + " " + "+0000";
+                // dsEDate =
+                //     dsEDate[0] + " " + tsEtime[0] + ":" + tsEtime[1] + " " + "+0000";
+
+                aScheduleSEDT = that.getScheduleSEDT();
 
                 var vcRuleList = {
                     LOCATION_ID: oEntry.LOCATION_ID,
@@ -1069,16 +1139,16 @@ sap.ui.define(
                     action: encodeURIComponent(actionText),
                     active: true,
                     httpMethod: "POST",
-                    startTime: djSdate,
-                    endTime: djEdate,
-                    createdAt: djSdate,
+                    startTime: aScheduleSEDT.djSdate,
+                    endTime: aScheduleSEDT.djEdate,
+                    createdAt: aScheduleSEDT.djSdate,
                     schedules: [{
                         data: vcRuleList,
                         cron: "",
-                        time: onetime,
+                        time: aScheduleSEDT.oneTime,
                         active: true,
-                        startTime: dsSDate,
-                        endTime: dsEDate,
+                        startTime: aScheduleSEDT.dsSDate,
+                        endTime: aScheduleSEDT.dsEDate,
                     }]
                 };
                 that.getModel("JModel").callFunction("/addMLJob", {
@@ -1102,20 +1172,222 @@ sap.ui.define(
              * Converts Date to Local Date String with delimiter "-"
              * 
              */
-            onConvertDateToString: function(dDate) {
+            onConvertDateToString: function (dDate) {
                 var dtConvertDate = dDate;
                 var aDate = [];
                 dtConvertDate = dtConvertDate.toLocaleDateString();
                 aDate = dtConvertDate.split("/");
-                if(aDate[0].length === 1) {
-                  aDate[0] = "0" + aDate[0];
+                if (aDate[0].length === 1) {
+                    aDate[0] = "0" + aDate[0];
                 }
-                if(aDate[1].length === 1) {
+                if (aDate[1].length === 1) {
                     aDate[1] = "0" + aDate[1];
                 }
                 dtConvertDate = aDate[2] + "-" + aDate[0] + "-" + aDate[1];
                 return dtConvertDate;
-            }
+            },
+            /**
+             * 
+             * 
+             */
+            onPressSave: function (oEvent) {
+                var objEvent = oEvent;
+                MessageBox.confirm(
+                    "Would you like to save?", {
+                    icon: MessageBox.Icon.Conf,
+                    title: "Confirmation",
+                    actions: [MessageBox.Action.YES, MessageBox.Action.NO],
+                    emphasizedAction: MessageBox.Action.YES,
+                    onClose: function (oAction) {
+                        if (oAction === "YES") {
+                            that.onPressSaveConfirm(objEvent);
+                        } else {
+                            // Close Message Box
+                        }
+                    }
+                }
+                );
+            },
+            /**
+             * 
+             * 
+             */
+            onPressSaveConfirm: function (oEvent) {
+                sap.ui.core.BusyIndicator.show();
+                var oModel = that.getOwnerComponent().getModel('CIRModel');
+                var aCIRQtys = [],
+                    oCIRQtys = {};
+                var aCIRData = that.oGModel.getProperty("/TData");
+
+                var oCIRTable = that.getView().byId("idCIReq"); //.getItems();
+                var aRows = oCIRTable.getBinding("rows").oList;
+                for (var i = 0; i < aCIRData.length; i++) {
+                    // oCIRQtys = {};
+
+                    // oCIRQtys.LOCATION_ID = aCIRData[i].LOCATION_ID;
+                    // oCIRQtys.PRODUCT_ID = aCIRData[i].PRODUCT_ID;
+                    // // oCIRQtys.CIR_ID = aCIRData[i].CIR_ID;
+                    // oCIRQtys.MODEL_VERSION = aCIRData[i].MODEL_VERSION;
+                    // oCIRQtys.VERSION = aCIRData[i].VERSION;
+                    // oCIRQtys.SCENARIO = aCIRData[i].SCENARIO;
+                    // oCIRQtys.UNIQUE_ID = aCIRData[i].UNIQUE_ID;
+
+                    for (var j = 0; j < that.aFirmDates.length; j++) {
+                        oCIRQtys = {};
+                        oCIRQtys.LOCATION_ID = aCIRData[i].LOCATION_ID;
+                        oCIRQtys.PRODUCT_ID = aCIRData[i].PRODUCT_ID;
+                        oCIRQtys.MODEL_VERSION = aCIRData[i].MODEL_VERSION;
+                        oCIRQtys.VERSION = aCIRData[i].VERSION;
+                        oCIRQtys.SCENARIO = aCIRData[i].SCENARIO;
+                        oCIRQtys.UNIQUE_ID = aCIRData[i].UNIQUE_ID;
+                        oCIRQtys.CIR_ID = aCIRData[i].CIR_ID[j];
+                        oCIRQtys.WEEK_DATE = that.aFirmDates[j];
+                        oCIRQtys.CIR_QTY = parseInt(aRows[i][that.aFirmDates[j]]);
+
+                        aCIRQtys.push(oCIRQtys);
+
+
+                    }
+                }
+
+                oModel.callFunction("/modifyCIRFirmQuantities", {
+                    method: "GET",
+                    urlParameters: {
+                        FLAG: 'U',
+                        CIR_QUANTITIES: JSON.stringify(aCIRQtys)
+                    },
+                    success: function (oData, oResponse) {
+                        sap.ui.core.BusyIndicator.hide();
+                        sap.m.MessageToast.show(oResponse.data.modifyCIRFirmQuantities);
+                        that.onGetData;
+                        // sap.m.MessageToast.show(that.i18n.getText("postSuccess"));
+                    },
+                    error: function (oResponse) {
+                        sap.ui.core.BusyIndicator.hide();
+                        sap.m.MessageToast.show("Service Connectivity Issue, please try later!");
+                    },
+                });
+            },
+            /**
+             * 
+             * @param {*} oEvent 
+             */
+            onPressAssemblyRequirements: function (oEvent) {
+                var objEvent = oEvent;
+                var oEntry = {};
+                oEntry.LOCATION_ID = that.getView().byId("idloc").getValue();
+                oEntry.PRODUCT_ID = that.getView().byId("idprodList").getValue();
+
+                if (oEntry.LOCATION_ID !== undefined && oEntry.LOCATION_ID !== ""
+                    && oEntry.PRODUCT_ID !== undefined && oEntry.PRODUCT_ID !== "") {
+                    MessageBox.confirm(
+                        "Would you like to generate assembly requirements data?", {
+                        icon: MessageBox.Icon.Conf,
+                        title: "Confirmation",
+                        actions: [MessageBox.Action.YES, MessageBox.Action.NO],
+                        emphasizedAction: MessageBox.Action.YES,
+                        onClose: function (oAction) {
+                            if (oAction === "YES") {
+                                that.onPressAssemblyRequirementsConfirm(objEvent, oEntry);
+                            } else {
+                                // Close Message Box
+                            }
+                        }
+                    }
+                    );
+                } else {
+                    sap.m.MessageToast.show(
+                        "Please select a Location & Product!"
+                    );
+                }
+
+            },
+            /**
+             * 
+             * @param {*} oEvent 
+             */
+            onPressAssemblyRequirementsConfirm: function (oEvent, oEntry) {
+                var aScheduleSEDT = {};
+                // var oModel = that.getOwnerComponent().getModel('CIRModel');
+                sap.ui.core.BusyIndicator.show();
+
+                // Get Job Schedule Start/End Date/Time
+                aScheduleSEDT = that.getScheduleSEDT();
+
+                oEntry.LOCATION_ID = that.getView().byId("idloc").getValue();
+                oEntry.PRODUCT_ID = that.getView().byId("idprodList").getValue();
+
+                if (oEntry.LOCATION_ID !== undefined && oEntry.LOCATION_ID !== ""
+                    && oEntry.PRODUCT_ID !== undefined && oEntry.PRODUCT_ID !== "") {
+
+                    var vcRuleList = {
+                        LOCATION_ID: oEntry.LOCATION_ID,
+                        PRODUCT_ID: oEntry.PRODUCT_ID,
+                    };
+
+                    var dCurrDateTime = new Date().getTime();
+                    var actionText = "/catalog/generateAssemblyReq";
+                    var JobName = "Assembly Requirements" + dCurrDateTime;
+                    sap.ui.core.BusyIndicator.show();
+                    var finalList = {
+                        name: JobName,
+                        description: "Generate Assembly Requirements",
+                        action: encodeURIComponent(actionText),
+                        active: true,
+                        httpMethod: "POST",
+                        startTime: aScheduleSEDT.djSdate,
+                        endTime: aScheduleSEDT.djEdate,
+                        createdAt: aScheduleSEDT.djSdate,
+                        schedules: [{
+                            data: vcRuleList,
+                            cron: "",
+                            time: aScheduleSEDT.oneTime,
+                            active: true,
+                            startTime: aScheduleSEDT.dsSDate,
+                            endTime: aScheduleSEDT.dsEDate,
+                        }]
+                    };
+                    that.getModel("JModel").callFunction("/addMLJob", {
+                        method: "GET",
+                        urlParameters: {
+                            jobDetails: JSON.stringify(finalList),
+                        },
+                        success: function (oData) {
+                            sap.ui.core.BusyIndicator.hide();
+                            sap.m.MessageToast.show(oData.addMLJob + ": Job Created");
+
+                        },
+                        error: function (error) {
+                            sap.ui.core.BusyIndicator.hide();
+                            sap.m.MessageToast.show("Service Connectivity Issue!");
+                        },
+                    });
+                }
+            },
+            /**
+             * 
+             */
+            onChangeCIRQty: function(oEvent) {
+                // var aCIRData = that.oGModel.getProperty("/TData");
+                // var oCIRTable = that.getView().byId("idCIReq"); 
+                // var aRows = oCIRTable.getBinding("rows").oList;
+                // var oCIRChangedQty = {};
+
+                // var oCIRData = oEvent.getSource().getBindingContext().getObject();
+                // var inewValue = parseInt(oEvent.getParameter("newValue"));
+                // var iValue = parseInt(oEvent.getSource().getProperty("placeholder"));
+                // var sWeekDate = oEvent.getSource().mBindingInfos.placeholder.binding.sPath
+
+                // if(inewValue !== iValue) {
+                //    oCIRChangedQty.UNIQUE_ID = oCIRData.UNIQUE_ID;
+                // //    oCIRChangedQty.WEEK_DATE = oCIRData.WEE
+                // }
+
+
+
+
+             }
+
         });
     }
 );

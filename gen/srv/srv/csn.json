@@ -7390,6 +7390,15 @@
           "type": "cds.String",
           "length": 40
         },
+        "CIR_ID": {
+          "items": {
+            "type": "cds.Integer"
+          }
+        },
+        "MODEL_VERSION": {
+          "type": "cds.String",
+          "length": 20
+        },
         "UNIQUE_ID": {
           "type": "cds.Integer"
         },
@@ -19716,13 +19725,8 @@
     "CatalogService.generate_timeseries": {
       "kind": "function",
       "params": {
-        "LOCATION_ID": {
-          "type": "cds.String",
-          "length": 4
-        },
-        "PRODUCT_ID": {
-          "type": "cds.String",
-          "length": 40
+        "LocProdData": {
+          "type": "cds.String"
         }
       },
       "returns": {
@@ -19732,13 +19736,8 @@
     "CatalogService.generate_timeseriesF": {
       "kind": "function",
       "params": {
-        "LOCATION_ID": {
-          "type": "cds.String",
-          "length": 4
-        },
-        "PRODUCT_ID": {
-          "type": "cds.String",
-          "length": 40
+        "LocProdData": {
+          "type": "cds.String"
         }
       },
       "returns": {
@@ -19748,26 +19747,16 @@
     "CatalogService.generateTimeseries": {
       "kind": "action",
       "params": {
-        "LOCATION_ID": {
-          "type": "cds.String",
-          "length": 4
-        },
-        "PRODUCT_ID": {
-          "type": "cds.String",
-          "length": 40
+        "LocProdData": {
+          "type": "cds.String"
         }
       }
     },
     "CatalogService.generateTimeseriesF": {
       "kind": "action",
       "params": {
-        "LOCATION_ID": {
-          "type": "cds.String",
-          "length": 4
-        },
-        "PRODUCT_ID": {
-          "type": "cds.String",
-          "length": 40
+        "LocProdData": {
+          "type": "cds.String"
         }
       }
     },
@@ -19787,13 +19776,8 @@
     "CatalogService.genFullConfigDemand": {
       "kind": "action",
       "params": {
-        "LOCATION_ID": {
-          "type": "cds.String",
-          "length": 4
-        },
-        "PRODUCT_ID": {
-          "type": "cds.String",
-          "length": 40
+        "LocProdData": {
+          "type": "cds.String"
         }
       }
     },
@@ -21714,6 +21698,21 @@
           "type": "cds.String",
           "length": 20
         }
+      }
+    },
+    "CatalogService.modifyCIRFirmQuantities": {
+      "kind": "function",
+      "params": {
+        "FLAG": {
+          "type": "cds.String",
+          "length": 1
+        },
+        "CIR_QUANTITIES": {
+          "type": "cds.String"
+        }
+      },
+      "returns": {
+        "type": "cds.String"
       }
     },
     "CatalogService.getSalesStock": {

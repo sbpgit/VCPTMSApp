@@ -741,6 +741,7 @@ context cp {
 
     // Parameters Values
     entity PARAMETER_VALUES {
+        Key LOCATION_ID  : String(4);
         key PARAMETER_ID : Integer;
             VALUE        : String(500);
     }
