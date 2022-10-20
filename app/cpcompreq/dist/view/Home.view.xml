@@ -25,15 +25,15 @@
         <l:Grid defaultSpan="XL3 L3 M6 S12" >
             <VBox >
                 <Label text=""/>
-                <SearchField id="headSearch" liveChange="onSearchCompReq" placeholder="Component, Structure Node" />
+                <SearchField id="headSearch" liveChange="onSearchCompReq" placeholder="Assembly, Structure Node" />
             </VBox>
             <VBox >
                 <Label text="Location" required="true"/>
                 <Input id="idloc" value=""  placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
             </VBox>
             <VBox >
-                <Label text="Product" required="true"/>
-                <Input id="idprod"  placeholder="Product" value="" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                <Label text="Configurable Product" required="true"/>
+                <Input id="idprod"  placeholder="Configurable Product" value="" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
 
             </VBox>
             <VBox >
@@ -66,7 +66,7 @@
             <CheckBox id="idCheck1" select="onNonZero" text="Get Non-Zero" selected="true" />
             </VBox>
             <VBox >
-            <CheckBox id="idChkCritComp" select="onCriticalComponentCheck" text="Get Critical Components" selected="false" />
+            <CheckBox id="idChkCritComp" select="onCriticalComponentCheck" text="Get Only Critical Assemblies" selected="false" />
             </VBox>
             <VBox>
                 <HBox>

@@ -25,15 +25,15 @@
         <l:Grid defaultSpan="XL3 L3 M6 S12" >
                 <VBox>
                 <Label text="" />
-                <SearchField id="idSearch" placeholder="Location/ Product/ Sales Doc" liveChange="onTableSearch" />
+                <SearchField id="idSearch" placeholder="Location/ Configurable Product/ Sales Doc" liveChange="onTableSearch" />
                 </VBox>
                 <VBox >
                     <Label text="Location" required="true"/>
                     <Input id="idloc" value=""  placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
                 </VBox>
                 <VBox>
-                    <Label text="Product" required="true"/>
-                    <MultiInput id="prodInput"  placeholder="Product" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
+                    <Label text="Configurable Product" required="true"/>
+                    <MultiInput id="prodInput"  placeholder="Configurable Product" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
                 </VBox>
                 <VBox>
                     <Label text="Doc. Created Date"/>
