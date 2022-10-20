@@ -11,6 +11,15 @@ const conn_params = {
 
 const vcConfigTimePeriod = process.env.TimePeriod; 
 const classicalSchema = process.env.classicalSchema; 
+
+// const conn_params = {
+//     serverNode  : cds.env.requires.db.credentials.host + ":" + cds.env.requires.db.credentials.port,
+//     uid         : "SBPTECHTEAM", 
+//     pwd         : "Sbpcorp@22",
+//     encrypt: 'TRUE'
+// };
+// const classicalSchema = "DB_CONFIG_PROD_CLIENT1"; 
+// const vcConfigTimePeriod = "PERIOD_NUM";
 const minBuckets = 10;
 
 // Begin of HGBT Functions
@@ -155,6 +164,30 @@ async function _getDataObjForPredictions(vcRulesList, idx, modelType, numChars) 
     var sqlStr = "";
     var dataObj = [];	
 
+    let str = JSON.stringify(vcRulesList[idx]);
+    let obj = JSON.parse(str);
+    let arrayKeys = Object.keys(obj);
+    let arrayVals = Object.values(obj);
+    let hasStartDate = false;
+    let hasEndDate = false;
+    for (let arrayIndex = 0; arrayIndex < arrayKeys.length; arrayIndex++)
+    { 
+        if ( (arrayKeys[arrayIndex] == 'startDate') &&
+                (arrayVals[arrayIndex] != "") )
+            hasStartDate = true;
+        else if ( (arrayKeys[arrayIndex] == 'endDate') &&
+                    (arrayVals[arrayIndex] != "") )
+            hasEndDate = true;
+    }
+
+    let startDateSql = "";
+    let endDateSql = "";
+    if (hasStartDate == true)
+        startDateSql =  ' AND "PERIOD_NUM" >= CONCAT( YEAR (TO_DATE (\'' + vcRulesList[idx].startDate + '\'' + ', \'YYYY-MM-DD\')), lpad(WEEK (TO_DATE(\'' + vcRulesList[idx].startDate + '\'' +', \'YYYY-MM-DD\')),\'2\',\'00\') )';
+    if (hasEndDate == true)   
+        endDateSql =  ' AND "PERIOD_NUM" <= CONCAT( YEAR (TO_DATE (\'' + vcRulesList[idx].endDate + '\'' +', \'YYYY-MM-DD\')), lpad(WEEK (TO_DATE(\'' + vcRulesList[idx].endDate + '\'' + ', \'YYYY-MM-DD\')),\'2\',\'00\') ) ';
+
+
     if( (modelType == 'HGBT') ||
         (modelType == 'RDT') )
     {
@@ -166,6 +199,7 @@ async function _getDataObjForPredictions(vcRulesList, idx, modelType, numChars) 
                     ' AND "Location" =' + "'" +   vcRulesList[idx].Location + "'" + 
                     ' AND "VERSION" =' + "'" +   vcRulesList[idx].Version + "'" +
                     ' AND "SCENARIO" =' + "'" +   vcRulesList[idx].Scenario + "'" +
+                    startDateSql + endDateSql +
                     ' GROUP BY "Attribute", "' + vcConfigTimePeriod + '"' +
                     ' ORDER BY "' + vcConfigTimePeriod + '", "Attribute"';
 
@@ -570,6 +604,7 @@ async function _generatePredictions(req,isGet) {
     var sqlStr ="";
     var vcRulesList = [];
 
+
     if ( (vcRulesListReq.length == 1) &&
          ( (vcRulesListReq[0].GroupID == "ALL") && 
            (vcRulesListReq[0].Product == "ALL") && 
@@ -588,6 +623,29 @@ async function _generatePredictions(req,isGet) {
            (vcRulesListReq[0].Location != "ALL") ) )
     {
 
+        let str = JSON.stringify(vcRulesListReq[0]);
+        let obj = JSON.parse(str);
+        let arrayKeys = Object.keys(obj);
+        let arrayVals = Object.values(obj);
+        let hasStartDate = false;
+        let hasEndDate = false;
+        for (let arrayIndex = 0; arrayIndex < arrayKeys.length; arrayIndex++)
+        { 
+            if ( (arrayKeys[arrayIndex] == 'startDate') &&
+                 (arrayVals[arrayIndex] != "") )
+                hasStartDate = true;
+            else if ( (arrayKeys[arrayIndex] == 'endDate') &&
+                      (arrayVals[arrayIndex] != "") )
+                hasEndDate = true;
+        }
+
+        let startDateSql = "";
+        let endDateSql = "";
+        if (hasStartDate == true)
+            startDateSql =  ' AND "PERIOD_NUM" >= CONCAT( YEAR (TO_DATE (\'' + vcRulesListReq[0].startDate + '\'' + ', \'YYYY-MM-DD\')), lpad(WEEK (TO_DATE(\'' + vcRulesListReq[0].startDate + '\'' +', \'YYYY-MM-DD\')),\'2\',\'00\') )';
+        if (hasEndDate == true)   
+            endDateSql =  ' AND "PERIOD_NUM" <= CONCAT( YEAR (TO_DATE (\'' + vcRulesListReq[0].endDate + '\'' +', \'YYYY-MM-DD\')), lpad(WEEK (TO_DATE(\'' + vcRulesListReq[0].endDate + '\'' + ', \'YYYY-MM-DD\')),\'2\',\'00\') ) ';
+
         if ( (vcRulesListReq[0].Location != "ALL") &&
              (vcRulesListReq[0].Product == "ALL") )
         {
@@ -596,6 +654,7 @@ async function _generatePredictions(req,isGet) {
                      ' AND "Type" =' + "'" +   vcRulesListReq[0].Type + "'" +
                      ' AND "VERSION" =' + "'" +   vcRulesListReq[0].version + "'" +
                      ' AND "SCENARIO" =' + "'" +   vcRulesListReq[0].scenario + "'" +
+                      startDateSql    + endDateSql +              
                      ' GROUP BY "Location", "Product", "GroupID", "Type", "VERSION", "SCENARIO"';
         }
         else if ( (vcRulesListReq[0].Product != "ALL") &&
@@ -606,6 +665,7 @@ async function _generatePredictions(req,isGet) {
                      ' AND "Type" =' + "'" +   vcRulesListReq[0].Type + "'" +
                      ' AND "VERSION" =' + "'" +   vcRulesListReq[0].version + "'" +
                      ' AND "SCENARIO" =' + "'" +   vcRulesListReq[0].scenario + "'" +
+                     startDateSql    + endDateSql +              
                      ' GROUP BY "Location", "Product", "GroupID", "Type", "VERSION", "SCENARIO"';
         }
         else if ( (vcRulesListReq[0].Product != "ALL") &&
@@ -617,6 +677,7 @@ async function _generatePredictions(req,isGet) {
                 ' AND "Type" =' + "'" +   vcRulesListReq[0].Type + "'" +
                 ' AND "VERSION" =' + "'" +   vcRulesListReq[0].version + "'" +
                 ' AND "SCENARIO" =' + "'" +   vcRulesListReq[0].scenario + "'" +
+                startDateSql    + endDateSql +              
                 ' GROUP BY "Location", "Product", "GroupID", "Type", "VERSION", "SCENARIO"';
         }
         else
@@ -626,9 +687,11 @@ async function _generatePredictions(req,isGet) {
                 ' WHERE "Type" =' + "'" +   vcRulesListReq[0].Type + "'" +
                 ' AND "VERSION" =' + "'" +   vcRulesListReq[0].version + "'" +
                 ' AND "SCENARIO" =' + "'" +   vcRulesListReq[0].scenario + "'" +
-                    ' GROUP BY "Location", "Product", "GroupID", "Type", "VERSION", "SCENARIO"';  
+                startDateSql    + endDateSql +              
+               ' GROUP BY "Location", "Product", "GroupID", "Type", "VERSION", "SCENARIO"';  
         }
 
+        console.log("vcRuleListReqSql ", sqlStr);
         results = await cds.run(sqlStr);
 
         for (let index=0; index<results.length; index++) 
@@ -638,11 +701,20 @@ async function _generatePredictions(req,isGet) {
             let GroupID = results[index].GroupID;
             let Type = results[index].Type;
 
+
+
             // Request Array Length is of only 1 - Hence always refer to '0' in vcRulesListReq
             let modelVersion = vcRulesListReq[0].modelVersion;
             let Version = vcRulesListReq[0].version; //results[index].VERSION;
             let Scenario = vcRulesListReq[0].scenario; //results[index].SCENARIO;
             let override = vcRulesListReq[0].override;
+            let startDate ="";
+            let endDate = "";
+            if(hasStartDate == true)
+                startDate = vcRulesListReq[0].startDate;
+            if(hasEndDate == true) 
+                endDate = vcRulesListReq[0].endDate;
+
 
             sqlStr = 'SELECT "MODEL_PROFILE" FROM "CP_OD_MODEL_VERSIONS"' + 
                      ' WHERE "LOCATION_ID" = ' + "'" +   Location + "'" +
@@ -656,7 +728,7 @@ async function _generatePredictions(req,isGet) {
             if (mpResults.length > 0)
             {
                 let profile = mpResults[0].MODEL_PROFILE;
-                vcRulesList.push({profile,override,Version, Scenario, Location,Product,GroupID,Type,modelVersion});
+                vcRulesList.push({profile,override,Version, Scenario, Location,Product,GroupID,Type,modelVersion,startDate,endDate});
             }
         }
 
@@ -665,6 +737,29 @@ async function _generatePredictions(req,isGet) {
     {
         for (let index=0; index<vcRulesListReq.length; index++) 
         {
+
+            let str = JSON.stringify(vcRulesListReq[index]);
+            let obj = JSON.parse(str);
+            let arrayKeys = Object.keys(obj);
+            let arrayVals = Object.values(obj);
+            let hasStartDate = false;
+            let hasEndDate = false;
+            for (let arrayIndex = 0; arrayIndex < arrayKeys.length; arrayIndex++)
+            { 
+                if ( (arrayKeys[arrayIndex] == 'startDate') &&
+                     (arrayVals[arrayIndex] != "") )
+                    hasStartDate = true;
+                else if ( (arrayKeys[arrayIndex] == 'endDate') &&
+                          (arrayVals[arrayIndex] != "") )
+                    hasEndDate = true;
+            }
+            let startDateSql = "";
+            let endDateSql = "";
+            if (hasStartDate == true)
+                startDateSql =  ' AND "PERIOD_NUM" >= CONCAT( YEAR (TO_DATE (\'' + vcRulesListReq[0].startDate + '\'' +', \'YYYY-MM-DD\')), lpad(WEEK (TO_DATE(\'' + vcRulesListReq[0].startDate + '\'' +', \'YYYY-MM-DD\')),\'2\',\'00\') )';
+            if (hasEndDate == true)   
+                endDateSql =  ' AND "PERIOD_NUM" <= CONCAT( YEAR (TO_DATE (\'' + vcRulesListReq[0].endDate  + '\'' + ',\'YYYY-MM-DD\')), lpad(WEEK (TO_DATE(\'' + vcRulesListReq[0].endDate + '\'' +', \'YYYY-MM-DD\')),\'2\',\'00\') )';
+
             sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", "Type", "VERSION", "SCENARIO", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "V_PREDICTION_TS"' + 
                      ' WHERE "Location" = ' + "'" +   vcRulesListReq[index].Location + "'" +
                      ' AND "GroupID" =' + "'" +   vcRulesListReq[index].GroupID + "'" +
@@ -672,8 +767,9 @@ async function _generatePredictions(req,isGet) {
                      ' AND "Product" =' + "'" +   vcRulesListReq[index].Product + "'" + 
                      ' AND "VERSION" =' + "'" +   vcRulesListReq[index].version + "'" +
                      ' AND "SCENARIO" =' + "'" +   vcRulesListReq[index].scenario + "'" +
+                     startDateSql    + endDateSql +              
                      ' GROUP BY "Location", "Product", "GroupID", "Type", "VERSION", "SCENARIO"';
-
+            console.log("vcRuleListReqSql ", sqlStr);
             results = await cds.run(sqlStr);
 
             for (let rIndex=0; rIndex<results.length; rIndex++) 
@@ -690,6 +786,12 @@ async function _generatePredictions(req,isGet) {
                 let Scenario = vcRulesListReq[index].scenario; //results[rIndex].SCENARIO;
                 //let profile = vcRulesListReq[index].profile;
                 let override = vcRulesListReq[index].override;
+                let startDate = "";
+                let endDate = "";
+                if(hasStartDate == true)
+                    startDate = vcRulesListReq[index].startDate;
+                if(hasEndDate == true) 
+                    endDate = vcRulesListReq[index].endDate;
 
 
                 sqlStr = 'SELECT "MODEL_PROFILE" FROM "CP_OD_MODEL_VERSIONS"' + 
@@ -705,7 +807,7 @@ async function _generatePredictions(req,isGet) {
                 if (mpResults.length > 0)
                 {
                     let profile = mpResults[0].MODEL_PROFILE;
-                    vcRulesList.push({profile,override,Version, Scenario, Location,Product,GroupID,Type,modelVersion});
+                    vcRulesList.push({profile,override,Version, Scenario, Location,Product,GroupID,Type,modelVersion,startDate,endDate});
                 }
 
             }
@@ -790,6 +892,8 @@ async function _generatePredictions(req,isGet) {
         let url;
 
         var baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+        // var baseUrl = 'http' + '://' + req.headers.host;
+
         if ( modelType == 'HGBT')
             url =  baseUrl + '/pal/hgbtPredictionsV1';
         else if (modelType == 'RDT')
@@ -886,10 +990,42 @@ async function _generatePredictions(req,isGet) {
         }
         // Wait before posting Next Prediction Request
         // It allows CDS (cqn Query) to commit PalMlrPredictions / PalHgbtPredictions / PalVarmaPredictions
-        console.log('_generatePredictions Sleeping for ', dataObj.length*500, ' Milli Seconds');
-        console.log('_generatePredictions Sleep Start Time',new Date(), 'charcount ', 'index ',i, 'dimensions', vcRulesList[i].dimensions);
-        await sleep(dataObj.length*500);
-        console.log('_generatePredictions Sleep Completed Time',new Date(), 'charcount ', vcRulesList[i].dimensions);
+        if (dataObj.length <=5)
+        {
+            console.log('_generatePredictions Sleeping for ', dataObj.length*800, ' Milli Seconds', 'Intervals =' , dataObj.length);
+            console.log('_generatePredictions Sleep Start Time',new Date(), 'charcount ', 'index ',i, 'dimensions', vcRulesList[i].dimensions);
+            await sleep(dataObj.length*800);
+            console.log('_generatePredictions Sleep Completed Time',new Date(), 'charcount ', vcRulesList[i].dimensions);
+        }
+        else if (dataObj.length <=10)
+        {
+            console.log('_generatePredictions Sleeping for ', dataObj.length*400, ' Milli Seconds', 'Intervals =' , dataObj.length);
+            console.log('_generatePredictions Sleep Start Time',new Date(), 'charcount ', 'index ',i, 'dimensions', vcRulesList[i].dimensions);
+            await sleep(dataObj.length*400);
+            console.log('_generatePredictions Sleep Completed Time',new Date(), 'charcount ', vcRulesList[i].dimensions);
+        }
+        else if (dataObj.length <=20)
+        {
+            console.log('_generatePredictions Sleeping for ', dataObj.length*200, ' Milli Seconds', 'Intervals =' , dataObj.length);
+            console.log('_generatePredictions Sleep Start Time',new Date(), 'charcount ', 'index ',i, 'dimensions', vcRulesList[i].dimensions);
+            await sleep(dataObj.length*200);
+            console.log('_generatePredictions Sleep Completed Time',new Date(), 'charcount ', vcRulesList[i].dimensions);
+        }
+        else if (dataObj.length <=25)
+        {
+            console.log('_generatePredictions Sleeping for ', dataObj.length*150, ' Milli Seconds', 'Intervals =' , dataObj.length);
+            console.log('_generatePredictions Sleep Start Time',new Date(), 'charcount ', 'index ',i, 'dimensions', vcRulesList[i].dimensions);
+            await sleep(dataObj.length*150);
+            console.log('_generatePredictions Sleep Completed Time',new Date(), 'charcount ', vcRulesList[i].dimensions);
+        }
+        else
+        {
+            console.log('_generatePredictions Sleeping for ', dataObj.length*100, ' Milli Seconds', 'Intervals =' , dataObj.length);
+            console.log('_generatePredictions Sleep Start Time',new Date(), 'charcount ', 'index ',i, 'dimensions', vcRulesList[i].dimensions);
+            await sleep(dataObj.length*100);
+            console.log('_generatePredictions Sleep Completed Time',new Date(), 'charcount ', vcRulesList[i].dimensions);
+
+        }
     }
 
 
