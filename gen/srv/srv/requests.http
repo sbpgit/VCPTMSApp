@@ -120,3 +120,67 @@ Content-Type: application/json
     }
 }
 
+
+
+### generate Models
+POST http://localhost:4004/pal/generateModels
+Content-Type: application/json
+
+{
+	"vcRulesList": [
+		{
+			"profile": "SBP_HGBT_1",
+			"override": true,
+			"Location": "PL20",
+			"Product": "534EDPI0E119",
+			"GroupID": "ALL",
+			"Type": "PI",
+			"modelVersion": "Simulation"
+		}
+	]
+}
+
+
+
+### generate Predictions
+POST http://localhost:4004/pal/genPredictions
+Content-Type: application/json
+
+{
+	"vcRulesList": [
+		{
+			"override": true,
+			"Location": "PL20",
+			"Product": "534EDPI0E119",
+			"GroupID": "ALL",
+			"Type": "PI",
+			"modelVersion": "Simulation",
+			"version": "__BASELINE",
+			"scenario": "BSL_SCENARIO",
+            "startDate": "2022-10-24",
+            "endDate": "2022-10-31"
+
+		}
+	]
+}
+
+
+### generate Predictions
+POST http://localhost:4004/pal/genPredictions
+Content-Type: application/json
+
+{
+	"vcRulesList": [
+		{
+			"override": true,
+			"Location": "PL20",
+			"Product": "534EDPI0E119",
+			"GroupID": "534EDPI0E119_2741",
+			"Type": "PI",
+			"modelVersion": "Simulation",
+			"version": "__BASELINE",
+			"scenario": "BSL_SCENARIO",
+            "endDate" : "2022-10-24"
+		}
+	]
+}

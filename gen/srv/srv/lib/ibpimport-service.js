@@ -100,6 +100,7 @@ module.exports = cds.service.impl(async function () {
             try {
                 await cds.run(modQuery);
                 flag = 'X';
+                console.log("Step1");
             }
             catch (err) {
                 console.log(err);
@@ -107,9 +108,70 @@ module.exports = cds.service.impl(async function () {
             //  }
         }
         if (flag === 'X') {
-            return "Successfully imported demand from IBP";
+            
+            console.log("Step2");
+            var resUrl = "/SBPVCP?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
+
+            var req = await service.tx(request).get(resUrl);
+            // if(req.length > 0){
+            const vDelDate = new Date();
+            const vDateDel = vDelDate.toISOString().split('T')[0];
+            try {
+                await DELETE.from('CP_IBP_FCHARPLAN')
+                    .where(`LOCATION_ID = '${request.data.LOCATION_ID}' 
+                            AND PRODUCT_ID = '${request.data.PRODUCT_ID}'
+                            AND WEEK_DATE    < '${vDateDel}'`);
+            }
+            catch (e) {
+                //Do nothing
+            }
+            // }
+            flag = '';
+            for (var i in req) {
+                var vWeekDate = dateJSONToEDM(req[i].PERIODID4_TSTAMP).split('T')[0];
+                var vScenario = 'BSL_SCENARIO';
+                req[i].PERIODID4_TSTAMP = vWeekDate;
+                if (vWeekDate >= vDateDel) {
+                    await cds.run(
+                        `DELETE FROM "CP_IBP_FCHARPLAN" WHERE "LOCATION_ID" = '` + req[i].LOCID + `' 
+                                                          AND "PRODUCT_ID" = '`+ req[i].PRDID + `'
+                                                          AND "CLASS_NUM" = '` + req[i].VCCLASS + `' 
+                                                          AND "CHAR_NUM" = '` + req[i].VCCHAR + `' 
+                                                          AND "CHARVAL_NUM" = '` + req[i].VCCHARVALUE + `' 
+                                                          AND "VERSION" = '` + req[i].VERSIONID + `'
+                                                          AND "SCENARIO" = '` + vScenario + `'
+                                                          AND "WEEK_DATE" = '` + vWeekDate + `'`
+                    );
+
+                    let modQuery = 'INSERT INTO "CP_IBP_FCHARPLAN" VALUES (' +
+                        "'" + req[i].LOCID + "'" + "," +
+                        "'" + req[i].PRDID + "'" + "," +
+                        "'" + req[i].VCCLASS + "'" + "," +
+                        "'" + req[i].VCCHAR + "'" + "," +
+                        "'" + req[i].VCCHARVALUE + "'" + "," +
+                        "'" + req[i].VERSIONID + "'" + "," +
+                        "'" + vScenario + "'" + "," +
+                        "'" + vWeekDate + "'" + "," +
+                        "'" + req[i].OPTIONPERCENTAGE + "'" + "," +
+                        "'" + req[i].FINALDEMANDVC + "'" + ')';// + ' WITH PRIMARY KEY';
+                    try {
+                        await cds.run(modQuery);
+                        flag = 'S';
+                        console.log("Step3");
+                    }
+                    catch (err) {
+                        console.log(err);
+                    }
+                }
+            }
+            
         } else {
             return "Failed to import Demand from IBP";
+        }
+        if(flag === 'S'){
+            
+            console.log("Step4");
+            return "Successfully imported demand from IBP";
         }
     });
 

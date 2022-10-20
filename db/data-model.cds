@@ -627,14 +627,14 @@ context cp {
     }
 
     entity RESTRICT_HEADER {
-        key LOCATION_ID : String(4)  @title : 'Location ';
-        key LINE_ID     : String(40) @title : 'Line';
-        key RESTRICTION : String(30) @title : 'Restriction';
-            RTR_DESC    : String(30) @title : 'Restriction Desc';
-            RTR_TYPE    : String(10) @title : 'Restriction Type';
+        key LOCATION_ID : String(4)      @title : 'Location ';
+        key LINE_ID     : String(40)     @title : 'Line';
+        key RESTRICTION : String(30)     @title : 'Restriction';
+            RTR_DESC    : String(30)     @title : 'Restriction Desc';
+            RTR_TYPE    : String(10)     @title : 'Restriction Type';
             RTR_QTY     : Decimal(13, 3) @title : 'Component Quantity';
-            VALID_FROM  : Date       @title : 'Valid From';
-            VALID_TO    : Date       @title : 'Valid To';
+            VALID_FROM  : Date           @title : 'Valid From';
+            VALID_TO    : Date           @title : 'Valid To';
     }
     // Restriction details
 
@@ -655,9 +655,10 @@ context cp {
         key LINE_ID     : String(40) @title : 'Line';
         key PRODUCT_ID  : String(40) @title : 'Configurable Product';
     };
+
     entity LINEMASTER {
-        key LINE_ID     : String(40) @title : 'Line';
-            LINE_DESC    : String(30) @title : 'Line Desc';
+        key LINE_ID   : String(40) @title : 'Line';
+            LINE_DESC : String(30) @title : 'Line Desc';
     };
 
     // Product restrictions
@@ -679,7 +680,7 @@ context cp {
         key MODEL_VERSION : String(20) @title : 'MODEL_VERSION';
         key VERSION       : String(10) @title : 'Version';
         key SCENARIO      : String(32) @title : 'Scenario';
-        // key METHOD        : String(20) @title : 'Method';
+            // key METHOD        : String(20) @title : 'Method';
             UNIQUE_ID     : Integer    @title : 'Unique ID';
             CIR_QTY       : Integer    @title : 'Quantity';
     }
@@ -727,7 +728,7 @@ context cp {
     entity PLANNED_PARAMETERS {
             GROUP          : Association to PLANNED_GROUPS
                                  on GROUP.GROUP_ID = GROUP_ID;
-        key PARAMETER_ID   : Integer;        
+        key PARAMETER_ID   : Integer;
         key GROUP_ID       : Integer;
         key SEQUENCE       : Integer;
             DESCRIPTION    : String(100);
@@ -745,7 +746,7 @@ context cp {
 
     // Parameters Values
     entity PARAMETER_VALUES {
-        Key LOCATION_ID  : String(4);
+        key LOCATION_ID  : String(4);
         key PARAMETER_ID : Integer;
             VALUE        : String(500);
     }
@@ -765,7 +766,8 @@ context cp {
             CREATED_TIME : Time           @title : 'Created Time';
             CREATED_BY   : String(12)     @title : 'Created By';
     }
-    entity ASSEMBLY_REQ{
+
+    entity ASSEMBLY_REQ {
         key LOCATION_ID   : String(4)      @title : 'Location ';
         key PRODUCT_ID    : String(40)     @title : 'Product';
         key ITEM_NUM      : String(5)      @title : 'ITEM_NUM';
@@ -774,44 +776,54 @@ context cp {
         key MODEL_VERSION : String(20)     @title : 'MODEL_VERSION';
         key VERSION       : String(10)     @title : 'Version';
         key SCENARIO      : String(32)     @title : 'Scenario';
-        REF_PRODID        : String(40)     @title : ' Ref. Product'; 
-        COMPCIR_QTY       : Decimal(13, 3) @title : 'CIR Compoonent QTY';
+            REF_PRODID    : String(40)     @title : ' Ref. Product';
+            COMPCIR_QTY   : Decimal(13, 3) @title : 'CIR Compoonent QTY';
     }
 
     entity FACTORY_SALESLOC {
-        key LOCATION_ID   : String(4)  @title : 'Demand Location ';
-        key PRODUCT_ID    : String(40) @title : 'Product';
-        key PLAN_LOC      : String(4)  @title : 'Planning Location ';
-        key FACTORY_LOC   : String(4)  @title : 'Factory Location ';
-        // key SALES_PRODUCT : String(40) @title : 'Sales Product';
+        key LOCATION_ID : String(4)  @title : 'Demand Location ';
+        key PRODUCT_ID  : String(40) @title : 'Product';
+        key PLAN_LOC    : String(4)  @title : 'Planning Location ';
+        key FACTORY_LOC : String(4)  @title : 'Factory Location ';
+    // key SALES_PRODUCT : String(40) @title : 'Sales Product';
     }
+
     entity CRITICAL_COMP {
-        key LOCATION_ID   : String(4)  @title : 'Location ';
-        key PRODUCT_ID    : String(40) @title : 'Product';
-        key ITEM_NUM      : String(5)  @title : 'ITEM_NUM';
-        key COMPONENT     : String(40) @title : 'Assembly';
-        CRITICALKEY       : String(1);
+        key LOCATION_ID : String(4)  @title : 'Location ';
+        key PRODUCT_ID  : String(40) @title : 'Product';
+        key ITEM_NUM    : String(5)  @title : 'ITEM_NUM';
+        key COMPONENT   : String(40) @title : 'Assembly';
+            CRITICALKEY : String(1);
     }
+
+    entity DEF_MKTAUTH {
+        key LOCATION_ID : String(4)  @title : 'Location ';
+        key PRODUCT_ID  : String(40) @title : 'Product';
+        key CHAR_NUM    : String(10) @title : 'Internal Char. number';
+        key CHARVAL_NUM : String(10) @title : 'Internal Char. number';
+            OPT_PERCENT : Double     @title : 'Option Percentage';
+    }
+
 // End Of Insert - Deepa
 }
 
 
 @cds.persistence.exists
 entity![V_OBDHDR]{
-    key![LOCATION_ID]  : String(4)  @title : 'Location';
-    key![PRODUCT_ID]   : String(40) @title : 'Product';
-    key![ITEM_NUM]     : String(5)  @title : 'ITEM_NUM';
-    key![COMPONENT]    : String(40) @title : 'COMPONENT';
+    key![LOCATION_ID]  : String(4)      @title : 'Location';
+    key![PRODUCT_ID]   : String(40)     @title : 'Product';
+    key![ITEM_NUM]     : String(5)      @title : 'ITEM_NUM';
+    key![COMPONENT]    : String(40)     @title : 'COMPONENT';
     key![COMP_QTY]     : Decimal(13, 3) @title : 'COMP_QTY';
-    key![OBJ_DEP]      : String(30) @title : 'Object Dependency';
-    key![OBJDEP_DESC]  : String(30) @title : 'OBJDEP_DESC';
-    key![CLASS_NUM]    : String(18) @title : 'Internal Class Number';
-    key![CHAR_NUM]     : String(10) @title : 'Char Num';
-    key![CHARVAL_NUM]  : String(10) @title : 'Charval Num';
-    key![OD_CONDITION] : String(2)  @title : 'OD_CONDITION';
-    key![OBJ_COUNTER]  : Integer    @title : 'OBJ_COUNTER';
-    key![CHAR_COUNTER] : Integer    @title : 'CHAR_COUNTER';
-    key![ROW_ID]       : Integer    @title : 'ROW_ID';
+    key![OBJ_DEP]      : String(30)     @title : 'Object Dependency';
+    key![OBJDEP_DESC]  : String(30)     @title : 'OBJDEP_DESC';
+    key![CLASS_NUM]    : String(18)     @title : 'Internal Class Number';
+    key![CHAR_NUM]     : String(10)     @title : 'Char Num';
+    key![CHARVAL_NUM]  : String(10)     @title : 'Charval Num';
+    key![OD_CONDITION] : String(2)      @title : 'OD_CONDITION';
+    key![OBJ_COUNTER]  : Integer        @title : 'OBJ_COUNTER';
+    key![CHAR_COUNTER] : Integer        @title : 'CHAR_COUNTER';
+    key![ROW_ID]       : Integer        @title : 'ROW_ID';
 }
 
 @cds.persistence.exists
@@ -1143,7 +1155,7 @@ entity![V_CIR_CHAR_RATE]{
     key![CHAR_DESC]     : String(150);
     key![CHARVAL_NUM]   : String(70)      @title : 'CHARVAL_NUM';
     key![CHAR_VALUE]    : String(70)      @title : 'Characteristic Value';
-    key![CHARVAL_DESC]     : String(150);
+    key![CHARVAL_DESC]  : String(150);
     key![SEQUENCE]      : Integer         @title : 'SEQUENCE';
     key![PLAN_QTY]      : Decimal(13, 3)  @title : 'PLAN_QTY';
     key![GEN_QTY]       : Integer         @title : 'GEN_QTY';
@@ -1173,31 +1185,32 @@ entity![V_CIRVERSCEN]{
     key![VERSION]     : String(10) @title : 'VERSION';
     key![SCENARIO]    : String(32) @title : 'SCENARIO';
 }
-@cds.persistence.exists 
-Entity ![V_BOMCRITICALCOMP] {
-        ![LOCATION_ID]: String(4) not null  @title: 'LOCATION_ID' ; 
-        ![PRODUCT_ID]: String(40) not null  @title: 'PRODUCT_ID' ; 
-        ![ITEM_NUM]: String(5) not null  @title: 'ITEM_NUM' ; 
-        ![COMPONENT]: String(40) not null  @title: 'COMPONENT' ; 
-        ![VALID_FROM]: Date  @title: 'VALID_FROM' ; 
-        ![VALID_TO]: Date  @title: 'VALID_TO' ; 
-        ![CRITICALKEY]: String(1)  @title: 'CRITICALKEY' ; 
+
+@cds.persistence.exists
+entity![V_BOMCRITICALCOMP]{
+    ![LOCATION_ID] : String(4) not null  @title : 'LOCATION_ID';
+    ![PRODUCT_ID]  : String(40) not null @title : 'PRODUCT_ID';
+    ![ITEM_NUM]    : String(5) not null  @title : 'ITEM_NUM';
+    ![COMPONENT]   : String(40) not null @title : 'COMPONENT';
+    ![VALID_FROM]  : Date                @title : 'VALID_FROM';
+    ![VALID_TO]    : Date                @title : 'VALID_TO';
+    ![CRITICALKEY] : String(1)           @title : 'CRITICALKEY';
 }
 
-@cds.persistence.exists 
-Entity ![V_CIR_QTY_VARDESC] {
-        ![LOCATION_ID]: String(4) not null  @title: 'LOCATION_ID' ; 
-        ![PRODUCT_ID]: String(40) not null  @title: 'PRODUCT_ID' ; 
-        ![WEEK_DATE]: Date not null  @title: 'WEEK_DATE' ; 
-        ![MODEL_VERSION]: String(20) not null  @title: 'MODEL_VERSION' ; 
-        ![VERSION]: String(10) not null  @title: 'VERSION' ; 
-        ![SCENARIO]: String(32) not null  @title: 'SCENARIO' ; 
-        ![CHAR_NUM]: String(10) not null  @title: 'CHAR_NUM' ; 
-        ![CHARVAL_NUM]: String(15) not null  @title: 'CHARVAL_NUM' ; 
-        ![CHAR_DESC]: String(150)  @title: 'CHAR_DESC' ; 
-        ![CHARVAL_DESC]: String(150)  @title: 'CHARVAL_DESC' ; 
-        ![SEQUENCE]: Integer  @title: 'SEQUENCE' ; 
-        ![OPT_QTY]: Decimal(13, 3)  @title: 'OPT_QTY' ; 
-        ![CIR_QTY]: Integer  @title: 'CIR_QTY' ; 
-        ![DIFF_QTY]: Decimal(14, 3)  @title: 'DIFF_QTY' ; 
+@cds.persistence.exists
+entity![V_CIR_QTY_VARDESC]{
+    ![LOCATION_ID]   : String(4) not null  @title : 'LOCATION_ID';
+    ![PRODUCT_ID]    : String(40) not null @title : 'PRODUCT_ID';
+    ![WEEK_DATE]     : Date not null       @title : 'WEEK_DATE';
+    ![MODEL_VERSION] : String(20) not null @title : 'MODEL_VERSION';
+    ![VERSION]       : String(10) not null @title : 'VERSION';
+    ![SCENARIO]      : String(32) not null @title : 'SCENARIO';
+    ![CHAR_NUM]      : String(10) not null @title : 'CHAR_NUM';
+    ![CHARVAL_NUM]   : String(15) not null @title : 'CHARVAL_NUM';
+    ![CHAR_DESC]     : String(150)         @title : 'CHAR_DESC';
+    ![CHARVAL_DESC]  : String(150)         @title : 'CHARVAL_DESC';
+    ![SEQUENCE]      : Integer             @title : 'SEQUENCE';
+    ![OPT_QTY]       : Decimal(13, 3)      @title : 'OPT_QTY';
+    ![CIR_QTY]       : Integer             @title : 'CIR_QTY';
+    ![DIFF_QTY]      : Decimal(14, 3)      @title : 'DIFF_QTY';
 }

@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "view/charValue.fragment.xml": 1661869075015,
   "Component.js": 1661869075011,
   "utils/locate-reuse-libs.js": 1661869075015,
@@ -29,4 +30,36 @@
   "view/App.view.xml": 1661869075015,
   "css/style.css": 1661869075011,
   "index.html": 1661869075011
+=======
+  "Component-dbg.js": 1665479929689,
+  "model/models.js": 1665479929689,
+  "utils/locate-reuse-libs.js": 1665479929689,
+  "manifest.json": 1666266690701,
+  "controller/Home.controller.js": 1665479929689,
+  "controller/Detail.controller.js": 1665479929689,
+  "controller/BaseController.js": 1665479929689,
+  "controller/App.controller.js": 1665479929689,
+  "Component.js": 1665479929689,
+  "manifest-bundle.zip": 1666266690712,
+  "Component-preload.js": 1666266691162,
+  "controller/Detail-dbg.controller.js": 1665479929689,
+  "model/models-dbg.js": 1665479929689,
+  "controller/Home-dbg.controller.js": 1665479929689,
+  "utils/locate-reuse-libs-dbg.js": 1665479929689,
+  "controller/BaseController-dbg.js": 1665479929689,
+  "controller/App-dbg.controller.js": 1665479929689,
+  "i18n/i18n.properties": 1666258684216,
+  "view/className.fragment.xml": 1665479929689,
+  "view/charValue.fragment.xml": 1665479929689,
+  "view/charName.fragment.xml": 1665479929689,
+  "view/ProdDialog.fragment.xml": 1665479929689,
+  "view/LocDialog.fragment.xml": 1665479929689,
+  "view/Home.view.xml": 1665479929689,
+  "view/Detail.view.xml": 1666258684216,
+  "view/CreateProduct.fragment.xml": 1666258684216,
+  "view/CharDetails.fragment.xml": 1665479929689,
+  "view/App.view.xml": 1665479929689,
+  "css/style.css": 1665479929689,
+  "index.html": 1665479929689
+>>>>>>> 1c4441b6b2d9c2e426694c721cd34ebe16c39b22
 }

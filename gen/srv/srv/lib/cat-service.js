@@ -820,7 +820,11 @@ module.exports = (srv) => {
                     lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
                     lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
                 const obgenTimeseries = new GenTimeseries();
+<<<<<<< HEAD
                 await obgenTimeseries.genTimeseries(req.data, req, Flag);
+=======
+                await obgenTimeseries.genTimeseries(lsData, req, Flag);
+>>>>>>> 1c4441b6b2d9c2e426694c721cd34ebe16c39b22
             }
                 break;
             case 'M2':
@@ -829,7 +833,13 @@ module.exports = (srv) => {
                     lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
                     lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
                 const obgenTimeseriesM2 = new GenTimeseriesM2();
+<<<<<<< HEAD
                 await obgenTimeseriesM2.genTimeseries(req.data, req,Flag);
+=======
+                console.log( lsData.LOCATION_ID);
+                console.log( lsData.PRODUCT_ID);
+                await obgenTimeseriesM2.genTimeseries(lsData, req,Flag);
+>>>>>>> 1c4441b6b2d9c2e426694c721cd34ebe16c39b22
                 }
                 break;
         }
@@ -875,6 +885,36 @@ module.exports = (srv) => {
 
     });
     // Generate Timeseries fucntion calls
+    srv.on("generate_timeseriesH", async (req) => {
+
+        let lilocProd = {};
+        let lsData = {};
+        let Flag = '';
+        // lilocProd = JSON.parse(req.data.LocProdData);
+
+        switch ('M2') {
+            case 'M1':
+                // for (let i = 0; i < lilocProd.length; i++) {
+                //     lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
+                //     lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
+                    const obgenTimeseries = new GenTimeseries();
+                    await obgenTimeseries.genTimeseries(req.data, req, Flag);
+                // }
+                break;
+            case 'M2':
+                // for (let i = 0; i < lilocProd.length; i++) {
+                //     lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
+                //     lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
+                    const obgenTimeseriesM2 = new GenTimeseriesM2();
+                    await obgenTimeseriesM2.genTimeseries(req.data, req, Flag);
+                // }
+                break;
+        }
+        // const obgenTimeseries_rt = new GenTimeseriesRT();
+        // await obgenTimeseries_rt.genTimeseries_rt(req.data, req);
+
+    });
+    // Generate Timeseries fucntion calls
     srv.on("generate_timeseries", async (req) => {
 
         let lilocProd = {};
@@ -887,6 +927,7 @@ module.exports = (srv) => {
                 for (let i = 0; i < lilocProd.length; i++) {
                     lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
                     lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
+
                     const obgenTimeseries = new GenTimeseries();
                     await obgenTimeseries.genTimeseries(lsData, req, Flag);
                 }
@@ -895,6 +936,8 @@ module.exports = (srv) => {
                 for (let i = 0; i < lilocProd.length; i++) {
                     lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
                     lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
+                    console.log( lsData.LOCATION_ID);
+                    console.log( lsData.PRODUCT_ID);
                     const obgenTimeseriesM2 = new GenTimeseriesM2();
                     await obgenTimeseriesM2.genTimeseries(lsData, req, Flag);
                 }
