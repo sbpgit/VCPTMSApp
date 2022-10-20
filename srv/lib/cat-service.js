@@ -962,6 +962,7 @@ module.exports = (srv) => {
             lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
             lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
             const obgenTimeseriesM2 = new GenTimeseriesM2();
+            
             await obgenTimeseriesM2.genPrediction(lsData, req, Flag);
         }
         if(Flag === 'X'){
