@@ -21,7 +21,8 @@ class GenTimeseriesM2 {
             .from('CP_PARTIALPROD_INTRO')
             .columns('REF_PRODID')
             .where(`PRODUCT_ID = '${adata.PRODUCT_ID}' AND LOCATION_ID = '${adata.LOCATION_ID}'`);
-
+        console.log(adata.PRODUCT_ID);
+        console.log(adata.LOCATION_ID);
         if (lsMainProduct === null) {
 
             lMainProduct = GenF.parse(adata.PRODUCT_ID);
@@ -46,7 +47,7 @@ class GenTimeseriesM2 {
                         { ref: ["LOCATION_ID"] }, '=', { val: adata.LOCATION_ID }, 'and',
                         { ref: ["PRODUCT_ID"] }, '=', { val: lMainProduct }, 'and',
                         { ref: ["UID_TYPE"] }, '=', { val: 'P' }, 'and',
-                        { ref: ["ACTIVE"] }, '=', { val: 'true' }
+                        { ref: ["ACTIVE"] }, '=', { val: true }
                     ]
                 }
 

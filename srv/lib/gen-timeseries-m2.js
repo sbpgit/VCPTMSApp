@@ -11,12 +11,12 @@ class GenTimeseriesM2 {
     async genTimeseries(adata, req, Flag) {
 
         await GenF.logMessage(req, `Started history timeseries`);
-
         let lMainProduct = '';
         let lFlag = '';
 
         let liPrimaryID = [];
         let lsPrimaryID = {};
+        
         let lsMainProduct = await SELECT.one
             .from('CP_PARTIALPROD_INTRO')
             .columns('REF_PRODID')

@@ -13,6 +13,15 @@ const conn_params = {
 const vcConfigTimePeriod = process.env.TimePeriod; 
 const classicalSchema = process.env.classicalSchema; 
 
+// const conn_params = {
+//     serverNode  : cds.env.requires.db.credentials.host + ":" + cds.env.requires.db.credentials.port,
+//     uid         : "SBPTECHTEAM", 
+//     pwd         : "Sbpcorp@22",
+//     encrypt: 'TRUE'
+// };
+// const classicalSchema = "DB_CONFIG_PROD_CLIENT1"; 
+// const vcConfigTimePeriod = "PERIOD_NUM";
+
 exports._runHgbtRegressionsV1 = async function(req) {
 
 
@@ -1463,7 +1472,7 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
             ' AND "SCENARIO" = ' + "'" + scenario + "'" +
             ' ORDER BY ' + '"' + vcConfigTimePeriod + '"' + ' ASC';
     var distPeriods = await cds.run(sqlStr);
-    console.log("Time Periods for Group :", tpGroupId, " Results: ", distPeriods, "periods#",distPeriods.length, "resultsObj Length ",resultsObj.length);
+    // console.log("Time Periods for Group :", tpGroupId, " Results: ", distPeriods, "periods#",distPeriods.length, "resultsObj Length ",resultsObj.length);
     var predictedTime = new Date().toISOString();
     var trimmedPeriod = vcConfigTimePeriod.replace(/^(["]*)/g, '');
 
