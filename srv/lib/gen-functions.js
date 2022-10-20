@@ -171,7 +171,7 @@ class GenFunctions {
         console.log(lMessage);
 
         let errorObj = {};
-        errorObj["success"] = true;
+        // errorObj["success"] = true;
         errorObj["message"] = lMessage; 
         if (req.headers['x-sap-job-id'] > 0) {
             const scheduler = this.getJobscheduler(req);
