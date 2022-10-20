@@ -1,0 +1,3 @@
+<mvc:View height="100%" class="sapUiSizeCompact" controllerName="cpapp.cpplaningconfig.controller.Master" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns="sap.f">
+
+</mvc:View>

@@ -34,7 +34,7 @@ context cp {
 
     // Product
     entity PRODUCT {
-        key PRODUCT_ID     : String(40) @title : 'Product';
+        key PRODUCT_ID     : String(40) @title : 'Confiugurable Product';
             PROD_DESC      : String(40) @title : 'Product Description';
             PROD_FAMILY    : String(30) @title : 'Product Family';
             PROD_GROUP     : String(30) @title : 'Product Group';
@@ -53,7 +53,7 @@ context cp {
     // Product and LOcation table
     entity LOCATION_PRODUCT {
         key LOCATION_ID       : String(4)  @title : 'Location ';
-        key PRODUCT_ID        : String(40) @title : 'Product';
+        key PRODUCT_ID        : String(40) @title : 'Confiugurable Product';
             LOTSIZE_KEY       : String(2)  @title : 'Lot Size Key';
             LOT_SIZE          : Integer    @title : 'Lot Size';
             PROCUREMENT_TYPE  : String(1)  @title : 'Procurement Type';
@@ -63,7 +63,7 @@ context cp {
     // BOM header
     entity BOMHEADER {
         key LOCATION_ID : String(4)      @title : 'Location '; //Association to ZLOCATION;//
-        key PRODUCT_ID  : String(40)     @title : 'Product';
+        key PRODUCT_ID  : String(40)     @title : 'Confiugurable Product';
         key ITEM_NUM    : String(5)      @title : 'Item Number ';
         key COMPONENT   : String(40)     @title : 'Component';
             COMP_QTY    : Decimal(13, 3) @title : 'Component Quantity';
@@ -74,7 +74,7 @@ context cp {
     // BOM object dependency
     entity BOM_OBJDEPENDENCY {
         key LOCATION_ID : String(4)      @title : 'Location '; //Association to ZLOCATION;//
-        key PRODUCT_ID  : String(40)     @title : 'Product';
+        key PRODUCT_ID  : String(40)     @title : 'Confiugurable Product';
         key ITEM_NUM    : String(5)      @title : 'Item Number ';
         key COMPONENT   : String(40)     @title : 'Component';
         key OBJ_DEP     : String(30)     @title : 'Object Dependency';
@@ -653,7 +653,11 @@ context cp {
     entity PROD_LOC_LINE {
         key LOCATION_ID : String(4)  @title : 'Location ';
         key LINE_ID     : String(40) @title : 'Line';
-        key PRODUCT_ID  : String(40) @title : 'Product';
+        key PRODUCT_ID  : String(40) @title : 'Configurable Product';
+    };
+    entity LINEMASTER {
+        key LINE_ID     : String(40) @title : 'Line';
+            LINE_DESC    : String(30) @title : 'Line Desc';
     };
 
     // Product restrictions
@@ -741,6 +745,7 @@ context cp {
 
     // Parameters Values
     entity PARAMETER_VALUES {
+        Key LOCATION_ID  : String(4);
         key PARAMETER_ID : Integer;
             VALUE        : String(500);
     }
@@ -784,7 +789,7 @@ context cp {
         key LOCATION_ID   : String(4)  @title : 'Location ';
         key PRODUCT_ID    : String(40) @title : 'Product';
         key ITEM_NUM      : String(5)  @title : 'ITEM_NUM';
-        key COMPONENT     : String(40) @title : 'COMPONENT';
+        key COMPONENT     : String(40) @title : 'Assembly';
         CRITICALKEY       : String(1);
     }
 // End Of Insert - Deepa

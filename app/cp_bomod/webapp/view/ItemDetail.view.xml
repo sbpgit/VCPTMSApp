@@ -5,14 +5,14 @@
     xmlns:html="http://www.w3.org/1999/xhtml">
     <Page id="page" showHeader="false">
         <content>
-            <Panel id="idBomPanel" expandable="true" headerText="BOM Components" width="auto" >
+            <Panel id="idBomPanel" expandable="true" headerText="BOM Assemblies" width="auto" >
                 <content>
                     <Toolbar height="8%">
-                        <Text text="Product : {oGModel>/prdId}" ></Text>
+                        <Text text="Configurable Product : {oGModel>/prdId}" ></Text>
                         <ToolbarSpacer/>
                         <Text text="Location : {oGModel>/locId}" ></Text>                        
                     </Toolbar>
-                    <SearchField id="bomSearch" search="onbomSearch" placeholder="Component / Object Dependency"/>
+                    <SearchField id="bomSearch" search="onbomSearch" placeholder="Assembly / Object Dependency"/>
                     <Table id="idBom" items="{path: '/results', sorter : { path : 'ITEM_NUM'} }"  itemPress="onItemPress" selectionChange="onItemPress" rememberSelections="false" mode="SingleSelectMaster"  sticky="ColumnHeaders">
                         <columns>
                             <Column hAlign="Centre" width="80px">

@@ -813,14 +813,24 @@ module.exports = (srv) => {
         let lsData = {};
         let Flag = '';
         lilocProd = JSON.parse(req.data.LocProdData);
-        switch (await GenFunctions.getParameterValue('5')) {
+        switch (await GenFunctions.getParameterValue(lilocProd[0].LOCATION_ID,'5')) {
             case 'M1':
+                
+                for (let i = 0; i < lilocProd.length; i++) {
+                    lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
+                    lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
                 const obgenTimeseries = new GenTimeseries();
                 await obgenTimeseries.genTimeseries(req.data, req, Flag);
+            }
                 break;
             case 'M2':
+                
+                for (let i = 0; i < lilocProd.length; i++) {
+                    lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
+                    lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
                 const obgenTimeseriesM2 = new GenTimeseriesM2();
                 await obgenTimeseriesM2.genTimeseries(req.data, req,Flag);
+                }
                 break;
         }
         if(Flag === 'X'){
@@ -836,7 +846,7 @@ module.exports = (srv) => {
         let lilocProd = {};
         let lsData = {}, Flag = '';
         lilocProd = JSON.parse(req.data.LocProdData);
-        switch (await GenFunctions.getParameterValue('5')) {
+        switch (await GenFunctions.getParameterValue(lilocProd[0].LOCATION_ID,'5')) {
             case 'M1':
                 for (let i = 0; i < lilocProd.length; i++) {
                     lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
@@ -872,7 +882,7 @@ module.exports = (srv) => {
         let Flag = '';
         lilocProd = JSON.parse(req.data.LocProdData);
 
-        switch (await GenFunctions.getParameterValue('5')) {
+        switch (await GenFunctions.getParameterValue(lilocProd[0].LOCATION_ID,'5')) {
             case 'M1':
                 for (let i = 0; i < lilocProd.length; i++) {
                     lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
@@ -900,7 +910,7 @@ module.exports = (srv) => {
         let lsData = {}, Flag = '';
         lilocProd = JSON.parse(req.data.LocProdData);
 
-        switch (await GenFunctions.getParameterValue('5')) {
+        switch (await GenFunctions.getParameterValue(lilocProd[0].LOCATION_ID,'5')) {
             case 'M1':
                 for (let i = 0; i < lilocProd.length; i++) {
                     lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
@@ -924,13 +934,22 @@ module.exports = (srv) => {
 
     // Generate Unique ID
     srv.on("genUniqueID", async (req) => {
+        let Flag = '';
         const obgenSOFunctions = new SOFunctions();
-        await obgenSOFunctions.genUniqueID(req.data, req);
+        await obgenSOFunctions.genUniqueID(req.data, req,Flag);
+        if(Flag === 'X'){
+            console.log("Success");
+            GenFunctions.jobSchMessage(Flag, "Process Sales Order is complete", req);
+        }
+        else{
+            GenFunctions.jobSchMessage(Flag, "Process Sales Order failed", req);
+        }
     });
     // Generate Unique ID
     srv.on("gen_UniqueID", async (req) => {
+        let Flag = '';
         const obgenSOFunctions = new SOFunctions();
-        await obgenSOFunctions.genUniqueID(req.data, req);
+        await obgenSOFunctions.genUniqueID(req.data, req, Flag);
     });
     // Generate Fully Configured Demand
     srv.on("genFullConfigDemand", async (req) => {
@@ -1825,8 +1844,9 @@ module.exports = (srv) => {
         const li_paravalues = await cds.run(
             `SELECT VALUE
                 FROM "CP_PARAMETER_VALUES"
-                WHERE "PARAMETER_ID" = 6
-                  OR "PARAMETER_ID" = 7
+                WHERE "LOCATION_ID" = '` + liSeeddata[0].LOCATION_ID + `'
+                AND ( "PARAMETER_ID" = 6
+                  OR "PARAMETER_ID" = 7 )
                 ORDER BY "PARAMETER_ID" `);
 
         vValue = parseInt(li_paravalues[0].VALUE) + 1;
@@ -1865,7 +1885,8 @@ module.exports = (srv) => {
                         .with({
                             VALUE: lspara.VALUE
                         })
-                        .where(`PARAMETER_ID = '${lspara.PARAMETER_ID}'`)
+                        .where(`LOCATION_ID = '${lsresults.LOCATION_ID}'
+                        AND PARAMETER_ID = '${lspara.PARAMETER_ID}'`)
                     responseMessage = lsresults.SEED_ORDER + " Created successfully";
                     await obgenSOFunctions.createSO(lsresults.LOCATION_ID, lsresults.PRODUCT_ID, lsresults.SEED_ORDER, lsresults.MAT_AVAILDATE, lsresults.ORD_QTY, lsresults.UNIQUE_ID);
                 } catch (e) {

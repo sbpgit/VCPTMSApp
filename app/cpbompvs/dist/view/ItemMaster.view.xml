@@ -4,7 +4,7 @@
     <Page >
     <customHeader>
 			<Toolbar height="50%">
-				<SearchField id="headSearch" liveChange="onSearch" placeholder="Product/ Location"/>
+				<SearchField id="headSearch" liveChange="onSearch" placeholder="Configurable Product/ Location"/>
 				<ToolbarSpacer/>
 				<Button icon="sap-icon://add" press="onAccNode" tooltip="Add Access Node"/>
                 <Button icon="sap-icon://delete" press="onAccNodeDel" tooltip="Delete Access Node"/>
@@ -18,7 +18,7 @@
                 itemPress="onhandlePress"
                 selectionChange="onhandlePress"
                 enableBusyIndicator="true"
-                headerText="Products - Access Nodes"
+                headerText="Configurable Products - Access Nodes"
                 growing="true"
                 items="{
                     path: '/results'

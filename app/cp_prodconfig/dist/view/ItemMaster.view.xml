@@ -3,7 +3,7 @@
     xmlns:html="http://www.w3.org/1999/xhtml" class="ItemMaster">
     <Page showHeader="false">
         <content>
-            <SearchField id="headSearch" liveChange="onSearch" placeholder="Product/ Class name"/>
+            <SearchField id="headSearch" liveChange="onSearch" placeholder="Configurable Product/ Class name"/>
             <Table id="prodList" items="{path: '/results', sorter: {path: 'PRODUCT_ID'}}" growingScrollToLoad="true" rememberSelections="false" itemPress="onhandlePress" mode="SingleSelectMaster" selectionChange="onhandlePress">
                 <columns>
                     <Column hAlign="Center">
