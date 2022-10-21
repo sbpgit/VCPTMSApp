@@ -3480,7 +3480,7 @@ sap.ui.define(
                         };
                     } else if (bButton.includes("Time Series") || bButton === "Generate Forecast Demand") {
                         // 07-09-2022-1
-                        // var LocProdData = vcRuleList;
+                        var LocProdData = vcRuleList;
                         var finalList = {
                             name: JobName,
                             description: sap.ui.getCore().byId("idDesc").getValue(),

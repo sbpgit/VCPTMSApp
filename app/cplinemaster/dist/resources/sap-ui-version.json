@@ -1,11 +1,7 @@
 {
 	"name": "cpapp.cplinemaster",
 	"version": "0.0.1",
-<<<<<<< HEAD
-	"buildTimestamp": "202210191458",
-=======
-	"buildTimestamp": "202210201156",
->>>>>>> 1c4441b6b2d9c2e426694c721cd34ebe16c39b22
+	"buildTimestamp": "202210201518",
 	"scmRevision": "",
 	"libraries": []
 }

@@ -1,11 +1,7 @@
 {
 	"name": "cpapp.cpprodlocline",
 	"version": "0.0.1",
-<<<<<<< HEAD
-	"buildTimestamp": "202210191456",
-=======
-	"buildTimestamp": "202210201153",
->>>>>>> 1c4441b6b2d9c2e426694c721cd34ebe16c39b22
+	"buildTimestamp": "202210201516",
 	"scmRevision": "",
 	"libraries": []
 }

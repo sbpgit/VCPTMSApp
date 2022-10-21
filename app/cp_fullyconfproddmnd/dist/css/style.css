@@ -3,6 +3,10 @@
     padding-left : 0.1rem;
     margin-right : 0.1rem;
     margin-bottom: 1rem;
+    height: auto;
+}
+.tableScroll .sapUiTableVSb {
+    overflow-y: hidden;
 }
 .hdrBtnMargin {
   margin-left : 82rem;
