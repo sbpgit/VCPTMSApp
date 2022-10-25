@@ -4681,6 +4681,39 @@
         }
       }
     },
+    "cp.DEF_MKTAUTH": {
+      "kind": "entity",
+      "elements": {
+        "LOCATION_ID": {
+          "@title": "Location ",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "@title": "Product",
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+        "CHAR_NUM": {
+          "@title": "Internal Char. number",
+          "key": true,
+          "type": "cds.String",
+          "length": 10
+        },
+        "CHARVAL_NUM": {
+          "@title": "Internal Char. number",
+          "key": true,
+          "type": "cds.String",
+          "length": 10
+        },
+        "OPT_PERCENT": {
+          "@title": "Option Percentage",
+          "type": "cds.Double"
+        }
+      }
+    },
     "V_OBDHDR": {
       "kind": "entity",
       "@cds.persistence.exists": true,
@@ -15620,6 +15653,12 @@
               },
               "dimensions": {
                 "type": "cds.Integer"
+              },
+              "startDate": {
+                "type": "cds.Date"
+              },
+              "endDate": {
+                "type": "cds.Date"
               }
             }
           }
@@ -19766,6 +19805,22 @@
           "key": true,
           "type": "cds.Double"
         }
+      }
+    },
+    "CatalogService.generate_timeseriesH": {
+      "kind": "function",
+      "params": {
+        "LOCATION_ID": {
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "type": "cds.String",
+          "length": 40
+        }
+      },
+      "returns": {
+        "type": "cds.String"
       }
     },
     "CatalogService.generate_timeseries": {

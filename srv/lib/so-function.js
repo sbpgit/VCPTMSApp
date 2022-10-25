@@ -19,6 +19,7 @@ class SOFunctions {
         await GenF.logMessage(req, 'Started Sales Orders Processing');
         
         await this.processUniqueID(adata.LOCATION_ID, adata.PRODUCT_ID, '');
+        await this.genBaseMarketAuth(adata.LOCATION_ID, adata.PRODUCT_ID);
 
         await GenF.logMessage(req, 'Completed Sales Orders Processing');
         Flag = 'X';
@@ -802,6 +803,66 @@ class SOFunctions {
         }
     }
 
+
+    async genBaseMarketAuth(lLocation, lProduct) {
+        let liSOrdQty = await cds.run(`SELECT LOCATION_ID,
+                                             PRODUCT_ID,
+                                             SUM("ORD_QTY") AS ORD_QTY
+                                        FROM V_SALES_H
+                                       WHERE LOCATION_ID = '${lLocation}'
+                                         AND REF_PRODID = '${lProduct}'
+                                       GROUP BY LOCATION_ID,
+                                                PRODUCT_ID;`);
+        for (let cntS = 0; cntS < liSOrdQty.length; cntS++) {
+            await   DELETE .from('CP_DEF_MKTAUTH')
+                            .where(`LOCATION_ID = '${lLocation}' AND PRODUCT_ID = '${liSOrdQty[cntS].PRODUCT_ID}'`)
+            
+        }
+
+        let liCharValQty = await cds.run(`SELECT V_SALES_H.LOCATION_ID,
+                                                    V_SALES_H.PRODUCT_ID,
+                                                    V_UNIQUE_ID.CHAR_NUM,
+                                                    V_UNIQUE_ID.CHARVAL_NUM,
+                                                    SUM("ORD_QTY") AS ORD_QTY
+                                                FROM V_SALES_H
+                                                JOIN V_UNIQUE_ID
+                                                ON V_SALES_H.UNIQUE_ID = V_UNIQUE_ID.UNIQUE_ID
+                                                WHERE V_SALES_H.LOCATION_ID = '${lLocation}' AND V_SALES_H.REF_PRODID = '${lProduct}'
+                                            GROUP BY  V_SALES_H.LOCATION_ID,
+                                                    V_SALES_H.PRODUCT_ID,
+                                                    V_UNIQUE_ID.CHAR_NUM,
+                                                    V_UNIQUE_ID.CHARVAL_NUM`);
+        let lsDefMktAuth = {};
+        let liDefMktAuth = [];
+        let lOrdQty = 0;
+        for (let cntCVq = 0; cntCVq < liCharValQty.length; cntCVq++) {
+            lOrdQty = 0;
+            for (let cntS = 0; cntS < liSOrdQty.length; cntS++) {
+                if (liSOrdQty[cntS].LOCATION_ID === liCharValQty[cntCVq].LOCATION_ID &&
+                    liSOrdQty[cntS].PRODUCT_ID === liCharValQty[cntCVq].PRODUCT_ID) {
+                    lOrdQty = parseInt(liSOrdQty[cntS].ORD_QTY);
+                    break;
+                }
+            }
+
+            lsDefMktAuth = {};
+            lsDefMktAuth['LOCATION_ID'] = GenF.parse(lLocation);
+            lsDefMktAuth['PRODUCT_ID'] = GenF.parse(liCharValQty[cntCVq].PRODUCT_ID);
+            lsDefMktAuth['CHAR_NUM'] = GenF.parse(liCharValQty[cntCVq].CHAR_NUM);
+            lsDefMktAuth['CHARVAL_NUM'] = GenF.parse(liCharValQty[cntCVq].CHARVAL_NUM);
+            if (lOrdQty > 0) {
+                lsDefMktAuth['OPT_PERCENT'] = ((parseInt(liCharValQty[cntCVq].ORD_QTY) * 100) / lOrdQty).toFixed(2);
+            } else {
+                lsDefMktAuth['OPT_PERCENT'] = 0;
+            }
+            liDefMktAuth.push(GenF.parse(lsDefMktAuth));
+        }
+
+        await INSERT.into('CP_DEF_MKTAUTH')
+            .entries(liDefMktAuth);
+
+
+    }
 }
 
 module.exports = SOFunctions;

@@ -73,7 +73,7 @@
                                             <ToolbarSpacer />
                                             <Button text="Publish" press="onPressPublish" type="Emphasized" />
                                         </Toolbar> -->
-                                        <t:Table id="idCIReq" clas="table" fixedColumnCount="2"  selectionMode="None" alternateRowColors="true" enableSelectAll="false" visibleRowCount="auto">
+                                        <t:Table id="idCIReq" class="table, tableScroll"  fixedColumnCount="2"  selectionMode="None" alternateRowColors="true" enableSelectAll="false" visibleRowCount="10">
                                             <t:columns />
                                         </t:Table>
                                     </VBox>
@@ -90,6 +90,7 @@
                  <Button icon="sap-icon://it-host" text="Assembly Requirements" press="onPressAssemblyRequirements" type="Emphasized" />
                  <Button icon="sap-icon://save" text="Save" press="onPressSave" type="Emphasized" />
                  <Button icon="sap-icon://paper-plane" text="Publish" press="onPressPublish" type="Emphasized" />
+                 <Button icon="sap-icon://arrow-bottom" text="Download" press="onPressDownload" type="Emphasized" />
             </OverflowToolbar>
         </footer>
     </Page>

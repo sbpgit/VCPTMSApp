@@ -61,9 +61,7 @@ sap.ui.define(
             oGModel.setProperty("/prdId", oData.results[0].PRODUCT_ID);
             oGModel.setProperty("/locId", oData.results[0].LOCATION_ID);
             // Setting the default selected item for table
-            that
-              .byId("bomList")
-              .setSelectedItem(that.byId("bomList").getItems()[0], true);
+            that.byId("bomList").setSelectedItem(that.byId("bomList").getItems()[0], true);
             // Calling function to navigate to Item detail page
             that.onhandlePress();
             sap.ui.core.BusyIndicator.hide();
