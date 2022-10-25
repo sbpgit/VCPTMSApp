@@ -504,7 +504,7 @@
       ],
       "elements": {
         "PRODUCT_ID": {
-          "@title": "Product",
+          "@title": "Confiugurable Product",
           "key": true,
           "type": "cds.String",
           "length": 40
@@ -709,7 +709,7 @@
           "length": 4
         },
         "PRODUCT_ID": {
-          "@title": "Product",
+          "@title": "Confiugurable Product",
           "key": true,
           "type": "cds.String",
           "length": 40
@@ -745,7 +745,7 @@
           "length": 4
         },
         "PRODUCT_ID": {
-          "@title": "Product",
+          "@title": "Confiugurable Product",
           "key": true,
           "type": "cds.String",
           "length": 40
@@ -788,7 +788,7 @@
           "length": 4
         },
         "PRODUCT_ID": {
-          "@title": "Product",
+          "@title": "Confiugurable Product",
           "key": true,
           "type": "cds.String",
           "length": 40
@@ -3866,10 +3866,51 @@
           "length": 40
         },
         "PRODUCT_ID": {
-          "@title": "Product",
+          "@title": "Configurable Product",
           "key": true,
           "type": "cds.String",
           "length": 40
+        }
+      }
+    },
+    "cp.LINEMASTER": {
+      "kind": "entity",
+      "@UI.SelectionFields": [
+        {
+          "=": "LINE_ID"
+        }
+      ],
+      "@UI.LineItem": [
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "LINE_ID"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "LINE_DESC"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          }
+        }
+      ],
+      "elements": {
+        "LINE_ID": {
+          "@title": "Line",
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+        "LINE_DESC": {
+          "@title": "Line Desc",
+          "type": "cds.String",
+          "length": 30
         }
       }
     },
@@ -4196,6 +4237,11 @@
     "cp.PARAMETER_VALUES": {
       "kind": "entity",
       "elements": {
+        "LOCATION_ID": {
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
         "PARAMETER_ID": {
           "key": true,
           "type": "cds.Integer"
@@ -4624,7 +4670,7 @@
           "length": 5
         },
         "COMPONENT": {
-          "@title": "COMPONENT",
+          "@title": "Assembly",
           "key": true,
           "type": "cds.String",
           "length": 40
@@ -4632,6 +4678,39 @@
         "CRITICALKEY": {
           "type": "cds.String",
           "length": 1
+        }
+      }
+    },
+    "cp.DEF_MKTAUTH": {
+      "kind": "entity",
+      "elements": {
+        "LOCATION_ID": {
+          "@title": "Location ",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "@title": "Product",
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+        "CHAR_NUM": {
+          "@title": "Internal Char. number",
+          "key": true,
+          "type": "cds.String",
+          "length": 10
+        },
+        "CHARVAL_NUM": {
+          "@title": "Internal Char. number",
+          "key": true,
+          "type": "cds.String",
+          "length": 10
+        },
+        "OPT_PERCENT": {
+          "@title": "Option Percentage",
+          "type": "cds.Double"
         }
       }
     },
@@ -15574,6 +15653,12 @@
               },
               "dimensions": {
                 "type": "cds.Integer"
+              },
+              "startDate": {
+                "type": "cds.Date"
+              },
+              "endDate": {
+                "type": "cds.Date"
               }
             }
           }
@@ -15865,7 +15950,7 @@
               "ValueListProperty": "PROD_DESC"
             }
           ],
-          "@title": "Product",
+          "@title": "Confiugurable Product",
           "key": true,
           "type": "cds.String",
           "length": 40
@@ -16752,7 +16837,7 @@
               "ValueListProperty": "LOCATION_ID"
             }
           ],
-          "@title": "Product",
+          "@title": "Confiugurable Product",
           "key": true,
           "type": "cds.String",
           "length": 40
@@ -17195,7 +17280,7 @@
           "length": 4
         },
         "PRODUCT_ID": {
-          "@title": "Product",
+          "@title": "Confiugurable Product",
           "key": true,
           "type": "cds.String",
           "length": 40
@@ -17246,7 +17331,7 @@
           "length": 4
         },
         "PRODUCT_ID": {
-          "@title": "Product",
+          "@title": "Confiugurable Product",
           "key": true,
           "type": "cds.String",
           "length": 40
@@ -19722,6 +19807,22 @@
         }
       }
     },
+    "CatalogService.generate_timeseriesH": {
+      "kind": "function",
+      "params": {
+        "LOCATION_ID": {
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "type": "cds.String",
+          "length": 40
+        }
+      },
+      "returns": {
+        "type": "cds.String"
+      }
+    },
     "CatalogService.generate_timeseries": {
       "kind": "function",
       "params": {
@@ -20973,10 +21074,59 @@
               "ValueListProperty": "LOCATION_ID"
             }
           ],
-          "@title": "Product",
+          "@title": "Configurable Product",
           "key": true,
           "type": "cds.String",
           "length": 40
+        }
+      }
+    },
+    "CatalogService.getLine": {
+      "kind": "entity",
+      "@odata.draft.enabled": true,
+      "@UI.SelectionFields": [
+        {
+          "=": "LINE_ID"
+        }
+      ],
+      "@UI.LineItem": [
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "LINE_ID"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "LINE_DESC"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          }
+        }
+      ],
+      "projection": {
+        "from": {
+          "ref": [
+            "cp.LINEMASTER"
+          ]
+        }
+      },
+      "elements": {
+        "LINE_ID": {
+          "@title": "Line",
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+        "LINE_DESC": {
+          "@title": "Line Desc",
+          "type": "cds.String",
+          "length": 30
         }
       }
     },

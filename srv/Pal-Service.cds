@@ -67,6 +67,8 @@ service PalService{
             Type         : String(10); // //OD - Object Dependency, Restriction
             modelVersion : String(20);// Active, Simulation// Active, Simulation
             dimensions   : Integer;
+            startDate    : Date;
+            endDate    : Date;
         });
 
 

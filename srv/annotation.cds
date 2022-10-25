@@ -1785,3 +1785,27 @@ annotate service.FACTORY_SALESLOC with @(
         }]
     }]
 );
+
+// Customer Group annotations
+annotate service.LINEMASTER with @(
+    UI        : {
+        SelectionFields         : [
+            LINE_ID
+        ],
+        LineItem                : [
+            {
+                $Type : 'UI.DataField',
+                //Label : 'Location ID',
+                Value : LINE_ID,
+                ![@UI.Importance] : #High
+            },
+            {
+                $Type : 'UI.DataField',
+                //Label : 'Description',
+                Value : LINE_DESC,
+            ![@UI.Importance] : #High
+            }
+        ]
+        
+    }
+);

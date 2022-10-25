@@ -7,6 +7,8 @@ sap.ui.define(
         "sap/ui/model/FilterOperator",
         "sap/m/MessageToast",
         "sap/m/MessageBox",
+        "sap/ui/export/library",
+        "sap/ui/export/Spreadsheet"
     ],
     /**
      * @param {typeof sap.ui.core.mvc.Controller} Controller
@@ -18,9 +20,12 @@ sap.ui.define(
         Filter,
         FilterOperator,
         MessageToast,
-        MessageBox
+        MessageBox,
+        exportLibrary,
+        Spreadsheet
     ) {
         "use strict";
+        var EdmType = exportLibrary.EdmType;
         var oGModel, that;
         return BaseController.extend("cpapp.cpfullyconfproddmnd.controller.Home", {
             /**
@@ -354,11 +359,10 @@ sap.ui.define(
                                 width: "8rem",
                                 label: columnName,
                                 template: new sap.m.Input({
-<<<<<<< HEAD
                                     type: "Number",
-=======
->>>>>>> 84c86566222a54f9bd4bf83d58f55711bcf3134f
+                                    placeholder: "{" + columnName + "}",
                                     value: "{" + columnName + "}",
+                                    change: that.onChangeCIRQty,
                                 }),
                             });
                         } else {
@@ -949,21 +953,25 @@ sap.ui.define(
             */
             onPressPublish: function (oEvent) {
                 var objEvent = oEvent;
-                MessageBox.confirm(
-                    "Would you like to publish?", {
-                    icon: MessageBox.Icon.Conf,
-                    title: "Confirmation",
-                    actions: [MessageBox.Action.YES, MessageBox.Action.NO],
-                    emphasizedAction: MessageBox.Action.YES,
-                    onClose: function (oAction) {
-                        if (oAction === "YES") {
-                            that.onPressPublishConfirm(objEvent);
-                        } else {
-                            // Close Message Box
+                if (that.aCIRQty.length > 0) {
+                    MessageToast.show("Please save changed quantities before publish!");
+                } else {
+                    MessageBox.confirm(
+                        "Would you like to publish?", {
+                        icon: MessageBox.Icon.Conf,
+                        title: "Confirmation",
+                        actions: [MessageBox.Action.YES, MessageBox.Action.NO],
+                        emphasizedAction: MessageBox.Action.YES,
+                        onClose: function (oAction) {
+                            if (oAction === "YES") {
+                                that.onPressPublishConfirm(objEvent);
+                            } else {
+                                // Close Message Box
+                            }
                         }
                     }
+                    );
                 }
-                );
             },
             /**
              * Called when 'Publish' button is clicked on application
@@ -1259,11 +1267,9 @@ sap.ui.define(
                     },
                     success: function (oData, oResponse) {
                         sap.ui.core.BusyIndicator.hide();
+                        that.aCIRQty = [];
                         sap.m.MessageToast.show(oResponse.data.modifyCIRFirmQuantities);
-<<<<<<< HEAD
                         that.onGetData;
-=======
->>>>>>> 84c86566222a54f9bd4bf83d58f55711bcf3134f
                         // sap.m.MessageToast.show(that.i18n.getText("postSuccess"));
                     },
                     error: function (oResponse) {
@@ -1299,7 +1305,7 @@ sap.ui.define(
                         }
                     }
                     );
-                } else {                    
+                } else {
                     sap.m.MessageToast.show(
                         "Please select a Location & Product!"
                     );
@@ -1366,34 +1372,116 @@ sap.ui.define(
                             sap.m.MessageToast.show("Service Connectivity Issue!");
                         },
                     });
-                } 
-<<<<<<< HEAD
+                }
             },
             /**
              * 
              */
-            // onChangeCIRQty: function(oEvent) {
-            //     // var aCIRData = that.oGModel.getProperty("/TData");
-            //     // var oCIRTable = that.getView().byId("idCIReq"); 
-            //     // var aRows = oCIRTable.getBinding("rows").oList;
-            //     var oCIRChangedQty = {};
+            onChangeCIRQty: function (oEvent) {
+                var aCIRData = that.oGModel.getProperty("/TData");
+                var oCIRTable = that.getView().byId("idCIReq");
+                var aRows = oCIRTable.getBinding("rows").oList;
+                var oCIRChangedQty = {};
+                var oCIRData = oEvent.getSource().getBindingContext().getObject();
+                var inewValue = parseInt(oEvent.getParameter("newValue"));
+                var iValue = parseInt(oEvent.getSource().getProperty("placeholder"));
+                var sWeekDate = oEvent.getSource().mBindingInfos.placeholder.binding.sPath;
 
-            //     var oCIRData = oEvent.getSource().getBindingContext().getObject();
-            //     var inewValue = parseInt(oEvent.getParameter("newValue"));
-            //     var iValue = parseInt(oEvent.getSource().getProperty("placeholder"));
+                if (inewValue !== iValue) {
+                    oCIRChangedQty.UNIQUE_ID = oCIRData['Unique ID'];
+                    oCIRChangedQty.WEEK_DATE = sWeekDate;
+                    oCIRChangedQty.CIR_QTY = oCIRData[sWeekDate];
 
-            //     if(inewValue !== iValue) {
-            //        oCIRChangedQty.UNIQUE_ID = oCIRData.UNIQUE_ID;
-            //        oCIRChangedQty.WEEK_DATE = oCIRData.WEE
-            //     }
+                    that.aCIRQty.push(oCIRChangedQty);
+                } else {
+                    if (that.aCIRQty.length > 0) {
+
+                        for (var i = 0; i < that.aCIRQty.length; i++) {
+                            if (that.aCIRQty[i].UNIQUE_ID === oCIRData['Unique ID'] &&
+                                that.aCIRQty[i].WEEK_DATE === sWeekDate) {
+                                that.aCIRQty.splice(i, 1);
+
+                                break;
+                            }
+
+                        }
+                    }
+                }
+
+            },
+            /**
+             * 
+             * 
+             */
+            createColumnConfig: function () {
+                var aCols = [];
+                var oCIRTable = that.getView().byId("idCIReq");
+                var aColumns = oCIRTable.getBinding("columns").oList;
+
+                for (var i = 0; i < aColumns.length; i++) {
+                    if (i === 1) {
+                        // To Include Unique Description
+                        aCols.push({
+                            label: 'UNIQUE_DESC',
+                            type: EdmType.String,
+                            property: 'UNIQUE_DESC',
+                            width: 20,
+                            wrap: true
+                        });
+
+                        aCols.push({
+                            label: aColumns[i].WEEK_DATE,
+                            type: EdmType.String,
+                            property: aColumns[i].WEEK_DATE,
+                            width: 20,
+                            wrap: true
+                        });
+                        // For each WEEK DATE - To Change type of cell to Number for CIR Quantity  
+                    } else if (aColumns[i].WEEK_DATE.includes("-") === true) {
+                        aCols.push({
+                            label: aColumns[i].WEEK_DATE,
+                            type: EdmType.Number,
+                            property: aColumns[i].WEEK_DATE,
+                            width: 20,
+                            wrap: true
+                        });
+                        // Others
+                    } else {
+                        aCols.push({
+                            label: aColumns[i].WEEK_DATE,
+                            type: EdmType.String,
+                            property: aColumns[i].WEEK_DATE,
+                            width: 20,
+                            wrap: true
+                        });
+                    }
+                }
+
+                return aCols;
+            },
+            onPressDownload: function (oEvent) {
+                var aCols, oSettings, oSheet;
+                var oCIRTable = that.getView().byId("idCIReq");
+                var aRows = oCIRTable.getBinding("rows").oList;
+                var dCurrDateTime = new Date().getTime();
+                var sFileName = "Forecast Demand - " + dCurrDateTime;
+
+                aCols = that.createColumnConfig();
+
+                oSettings = {
+                    workbook: { columns: aCols },
+                    dataSource: aRows,
+                    fileName: sFileName,
+                    worker: false // We need to disable worker because we are using a Mockserver as OData Service
+                };
+
+                oSheet = new Spreadsheet(oSettings);
+                oSheet.build().finally(function () {
+                    oSheet.destroy();
+                });
 
 
-
-
-            // }
-=======
             }
->>>>>>> 84c86566222a54f9bd4bf83d58f55711bcf3134f
 
         });
     }

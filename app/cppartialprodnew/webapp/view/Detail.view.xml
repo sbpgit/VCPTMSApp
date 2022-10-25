@@ -19,8 +19,8 @@
                             <Label text="Product Desc."/>
                             <!-- <Input id="idProd" value="" width="225px" placeholder="New Product" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/> -->
                             <Input id="idProdDesc" value="" width="225px" placeholder="Product Desc." maxLength="40"/>
-                            <Label text="Ref. Product"/>
-                            <Input id="idrefprod" value="" width="225px" placeholder="Reference Product" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+                            <Label text="Configurable Product"/>
+                            <Input id="idrefprod" value="" width="225px" placeholder="Configurable Product" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
 
                         </f:content>
                     </f:SimpleForm>

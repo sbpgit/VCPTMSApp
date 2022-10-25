@@ -1,0 +1,165 @@
+{
+    "_version": "1.45.0",
+    "sap.app": {
+        "id": "cpapp.cplinemaster",
+        "type": "application",
+        "i18n": "i18n/i18n.properties",
+        "applicationVersion": {
+            "version": "0.0.1"
+        },
+        "title": "{{appTitle}}",
+        "description": "{{appDescription}}",
+        "resources": "resources.json",
+        "sourceTemplate": {
+            "id": "@sap/generator-fiori:lrop",
+            "version": "1.7.6",
+            "toolsId": "bb9997ef-ed76-4bcf-8359-c54a833ebfc0"
+        },
+        "dataSources": {
+            "mainService": {
+                "uri": "/catalog/",
+                "type": "OData",
+                "settings": {
+                    "annotations": [
+                        "annotation"
+                    ],
+                    "localUri": "localService/metadata.xml",
+                    "odataVersion": "4.0"
+                }
+            },
+            "annotation": {
+                "type": "ODataAnnotation",
+                "uri": "annotations/annotation.xml",
+                "settings": {
+                    "localUri": "annotations/annotation.xml"
+                }
+            }
+        },
+        "crossNavigation": {
+            "inbounds": {
+                "cpapp-cplinemaster-inbound": {
+                    "signature": {
+                        "parameters": {},
+                        "additionalParameters": "allowed"
+                    },
+                    "semanticObject": "cpappline",
+                    "action": "Display",
+                    "title": "{{flpTitle}}",
+                    "subTitle": "{{flpSubtitle}}",
+                    "icon": ""
+                }
+            }
+        }
+    },
+    "sap.ui": {
+        "technology": "UI5",
+        "icons": {
+            "icon": "",
+            "favIcon": "",
+            "phone": "",
+            "phone@2": "",
+            "tablet": "",
+            "tablet@2": ""
+        },
+        "deviceTypes": {
+            "desktop": true,
+            "tablet": true,
+            "phone": true
+        }
+    },
+    "sap.ui5": {
+        "flexEnabled": true,
+        "dependencies": {
+            "minUI5Version": "1.107.0",
+            "libs": {
+                "sap.m": {},
+                "sap.ui.core": {},
+                "sap.ushell": {},
+                "sap.fe.templates": {}
+            }
+        },
+        "contentDensities": {
+            "compact": true,
+            "cozy": true
+        },
+        "models": {
+            "i18n": {
+                "type": "sap.ui.model.resource.ResourceModel",
+                "settings": {
+                    "bundleName": "cpapp.cplinemaster.i18n.i18n"
+                }
+            },
+            "": {
+                "dataSource": "mainService",
+                "preload": true,
+                "settings": {
+                    "synchronizationMode": "None",
+                    "operationMode": "Server",
+                    "autoExpandSelect": true,
+                    "earlyRequests": true
+                }
+            },
+            "@i18n": {
+                "type": "sap.ui.model.resource.ResourceModel",
+                "uri": "i18n/i18n.properties"
+            }
+        },
+        "resources": {
+            "css": []
+        },
+        "routing": {
+            "config": {},
+            "routes": [
+                {
+                    "pattern": ":?query:",
+                    "name": "getLineList",
+                    "target": "getLineList"
+                },
+                {
+                    "pattern": "getLine({key}):?query:",
+                    "name": "getLineObjectPage",
+                    "target": "getLineObjectPage"
+                }
+            ],
+            "targets": {
+                "getLineList": {
+                    "type": "Component",
+                    "id": "getLineList",
+                    "name": "sap.fe.templates.ListReport",
+                    "options": {
+                        "settings": {
+                            "entitySet": "getLine",
+                            "variantManagement": "Page",
+                            "navigation": {
+                                "getLine": {
+                                    "detail": {
+                                        "route": "getLineObjectPage"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "getLineObjectPage": {
+                    "type": "Component",
+                    "id": "getLineObjectPage",
+                    "name": "sap.fe.templates.ObjectPage",
+                    "options": {
+                        "settings": {
+                            "editableHeaderContent": false,
+                            "entitySet": "getLine"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "sap.fiori": {
+        "registrationIds": [],
+        "archeType": "transactional"
+    },
+    "sap.cloud": {
+        "public": true,
+        "service": "configprod_approuter"
+    }
+}

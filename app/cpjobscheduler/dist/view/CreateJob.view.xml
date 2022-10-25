@@ -1,4 +1,5 @@
-<mvc:View controllerName="cpapp.cpjobscheduler.controller.CreateJob" xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form">
+<mvc:View controllerName="cpapp.cpjobscheduler.controller.CreateJob" xmlns="sap.m" xmlns:core="sap.ui.core" 
+xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form">
     <Page id="idCreateJob" title="Create Job" titleAlignment="Center" showNavButton="true" navButtonPress="onBack" showFooter="true">
         <tnt:ToolPage id="toolPage">
             <tnt:sideContent>
@@ -348,7 +349,7 @@
                             <!-- <RadioButton id="idMaster" groupName="master" text="Master Data"/> -->
                             <RadioButton id="idIBPLoc" group="master" text="Location" tooltip="Master"/>
                             <RadioButton id="idIBPCustGrp" group="master" text="Customer Group" />
-                            <RadioButton id="idIBPProd" name="master" text="Product" />
+                            <RadioButton id="idIBPProd" name="master" text="Configurable Product" />
                             <RadioButton id="idIBPClass" name="master" text="Class" />
                             <RadioButton id="idRestri" name="master" text="Restrictions" />
                             
@@ -356,7 +357,7 @@
                             <!-- <RadioButton id="idIBPSalesHisConfig" text="Sales History Config" /> -->
                             <RadioButton id="idIBPActCompDemd" text="Actual Components Demand" />
                             <RadioButton id="idIBPCompReqQty" text="Assembly Requirement Quantity" />
-                            <RadioButton id="idIBPExCIR" text="Fully Configured Demand" />
+                            <RadioButton id="idIBPExCIR" text="Forecast Demand" />
                             <RadioButton id="idResLikhood" text="Restriction Likelihood" />
 
                             
@@ -531,7 +532,7 @@
                                             </f:FormElement>
                                             <f:FormElement>
                                                 <f:label>
-                                                    <Label text="Critical Component" />
+                                                    <Label text="Critical Assembly" />
                                                 </f:label>
                                                 <f:fields>
                                                     <CheckBox id="EACDemandidCheck" select="onEACDemandCheck" />
@@ -584,7 +585,7 @@
                                             </f:FormElement>
                                             <f:FormElement>
                                                 <f:label>
-                                                    <Label text="Critical Component" />
+                                                    <Label text="Critical Assembly" />
                                                 </f:label>
                                                 <f:fields>
                                                     <CheckBox id="ECRQtyidCheck" select="onECRQtyCheck" />
@@ -702,9 +703,9 @@
                                                 <Select id="idSdi" change="onSdiChange" selectedKey="LO" class="buttonDesktop " width="400px">
                                                     <core:ListItem key="LO" text="{i18n>loc}" />
                                                     <core:ListItem key="CG" text="{i18n>custgrp}" />
-                                                    <core:ListItem key="PR" text="{i18n>prod}" />
+                                                    <core:ListItem key="PR" text="{i18n>confProd}" />
                                                     <core:ListItem key="LP" text="{i18n>locpprod}" />
-                                                    <core:ListItem key="PC" text="{i18n>prodclas}" />
+                                                    <core:ListItem key="PC" text="{i18n>confProdClas}" />
                                                     <core:ListItem key="BH" text="{i18n>bomheader}" />
                                                     <core:ListItem key="BO" text="{i18n>bomobjdep}" />
                                                     <core:ListItem key="OH" text="{i18n>objdephdr}" />
@@ -794,7 +795,7 @@
                                     </f:FormElement>
                                     <f:FormElement>
                                         <f:label>
-                                            <Label text="{i18n>prod}" required="true" />
+                                            <Label text="{i18n>confProd}" required="true" />
                                         </f:label>
                                         <f:fields>
                                             <MultiInput id="AprodInput" width="225px" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
@@ -837,7 +838,7 @@
                                     </f:FormElement>
                                     <f:FormElement>
                                         <f:label>
-                                            <Label text="{i18n>prod}" required="true" />
+                                            <Label text="{i18n>confProd}" required="true" />
                                         </f:label>
                                         <f:fields>
                                             <MultiInput id="OprodInput" width="225px" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />

@@ -171,7 +171,7 @@ class GenFunctions {
         console.log(lMessage);
 
         let errorObj = {};
-        errorObj["success"] = true;
+        // errorObj["success"] = true;
         errorObj["message"] = lMessage; 
         if (req.headers['x-sap-job-id'] > 0) {
             const scheduler = this.getJobscheduler(req);
@@ -211,6 +211,67 @@ class GenFunctions {
 
         return num;
 
+    }
+    static async jobSchMessage(lFlag, lMessage, req){
+        if (lFlag === 'X') {
+            let dataObj = {};
+            dataObj["success"] = true;
+            dataObj["message"] = "Export of "+ lMessage + new Date();
+
+
+            if (req.headers['x-sap-job-id'] > 0) {
+                const scheduler = this.getJobscheduler(req);
+
+                var updateReq = {
+                    jobId: req.headers['x-sap-job-id'],
+                    scheduleId: req.headers['x-sap-job-schedule-id'],
+                    runId: req.headers['x-sap-job-run-id'],
+                    data: dataObj
+                };
+                const vMessaage = lMessage + "and exported, to update req";
+                console.log(vMessaage, updateReq);
+
+                scheduler.updateJobRunLog(updateReq, function (err, result) {
+                    if (err) {
+                        return console.log('Error updating run log: %s', err);
+                    }
+                    //Run log updated successfully
+                    const vMessaage2 = lMessage + " and job update results are ";
+                    console.log(vMessaage2, result);
+
+                });
+            }
+        }
+        else {
+            let dataObj = {};
+            dataObj["failed"] = false;
+            dataObj["message"] = "Export of"+ lMessage + new Date();
+
+
+            if (req.headers['x-sap-job-id'] > 0) {
+                const scheduler = this.getJobscheduler(req);
+
+                var updateReq = {
+                    jobId: req.headers['x-sap-job-id'],
+                    scheduleId: req.headers['x-sap-job-schedule-id'],
+                    runId: req.headers['x-sap-job-run-id'],
+                    data: dataObj
+                };
+
+                const vMessaage = lMessage + "and exported, to update req";
+                console.log(vMessaage, updateReq);
+
+                scheduler.updateJobRunLog(updateReq, function (err, result) {
+                    if (err) {
+                        return console.log('Error updating run log: %s', err);
+                    }
+                    //Run log updated successfully
+                    const vMessaage2 = lMessage + " and job update results are ";
+                    console.log(vMessaage2, result);
+
+                });
+            }
+        }
     }
 
 }

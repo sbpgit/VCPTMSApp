@@ -165,6 +165,7 @@ service CatalogService @(impl : './lib/cat-service.js'){
     // Get BOM component-OD predcitions
     entity getBOMPred           as projection on V_COMPOD_TSPRED;
     // Generate Timeseries
+    function generate_timeseriesH(LOCATION_ID : String(4), PRODUCT_ID : String(40))                      returns String;
     function generate_timeseries(LocProdData: String)                        returns String;
     //LOCATION_ID : String(4), PRODUCT_ID : String(40))
     // Generate Timeseries
@@ -234,6 +235,9 @@ service CatalogService @(impl : './lib/cat-service.js'){
 
     @odata.draft.enabled
     entity getProdlocline       as projection on od.PROD_LOC_LINE;
+
+    @odata.draft.enabled
+    entity getLine              as projection on od.LINEMASTER;
 
     entity getProdLocRtrLine    as projection on V_LOCPRODLINERTR;
     

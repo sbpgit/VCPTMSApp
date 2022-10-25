@@ -219,6 +219,10 @@ modules:
       - cpappcpmaintenancevcplanner.zip
       name: cpappcpmaintenancevcplanner
       target-path: resources/
+    - artifacts:
+      - cpappcplinemaster.zip
+      name: cpappcplinemaster
+      target-path: resources/
 - name: cpodpcpodprofiles
   type: html5
   path: app/cp_odprofiles
@@ -617,6 +621,16 @@ modules:
 - name: cpappcpmaintenancevcplanner
   type: html5
   path: app/cpmaintenancevcplanner
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappcplinemaster
+  type: html5
+  path: app/cplinemaster
   build-parameters:
     build-result: dist
     builder: custom

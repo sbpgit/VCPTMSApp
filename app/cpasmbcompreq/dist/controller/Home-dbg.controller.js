@@ -923,19 +923,19 @@ sap.ui.define(
                     that.oGModel.setProperty("/SelectedProd", "");
 
                     // Calling service to get the Product data
-                    // this.getModel("BModel").read("/getLocProdDet", {
-                    //     filters: [
-                    //         new Filter(
-                    //             "LOCATION_ID",
-                    //             FilterOperator.EQ,
-                    //             aSelectedItems[0].getTitle()
-                    //         ),
-                    //     ],
-                    this.getModel("BModel").callFunction("/getAllProd", {
-                        method: "GET",
-                        urlParameters: {
-                            LOCATION_ID: aSelectedItems[0].getTitle()
-                        },
+                    this.getModel("BModel").read("/getLocProdDet", {
+                        filters: [
+                            new Filter(
+                                "LOCATION_ID",
+                                FilterOperator.EQ,
+                                aSelectedItems[0].getTitle()
+                            ),
+                        ],
+                    // this.getModel("BModel").callFunction("/getAllProd", {
+                    //     method: "GET",
+                    //     urlParameters: {
+                    //         LOCATION_ID: aSelectedItems[0].getTitle()
+                    //     },
                         success: function (oData) {
                             that.prodModel.setData(oData);
                             that.oProdList.setModel(that.prodModel);

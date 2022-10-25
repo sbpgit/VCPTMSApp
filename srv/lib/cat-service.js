@@ -1,6 +1,7 @@
 //const GenTimeseries = require("./cat-servicets");
 // const DbConnect = require("./dbConnect");
 const GenFunctions = require("./gen-functions");
+const { v1: uuidv1} = require('uuid')
 const cds = require("@sap/cds");
 const hana = require("@sap/hana-client");
 const { createLogger, format, transports } = require("winston");
@@ -812,15 +813,50 @@ module.exports = (srv) => {
         let lilocProd = {};
         let lsData = {};
         let Flag = '';
-        lilocProd = JSON.parse(req.data.LocProdData);
-        switch (await GenFunctions.getParameterValue('5')) {
+        let createtAt = new Date();
+        let id = uuidv1();
+        let values = [];	
+        let message = "Started Future timeseries";
+        let res = req._.req.res;
+        let lilocProdReq = JSON.parse(req.data.LocProdData);
+        if(lilocProdReq[0].PRODUCT_ID === "ALL"){
+            lilocProd = await cds
+            .transaction(req)
+            .run(
+                SELECT.distinct
+                    .from(getAllProd)
+                    .columns("LOCATION_ID", "PRODUCT_ID")
+                    .where(`LOCATION_ID = '${lilocProdReq[0].LOCATION_ID}'`)
+            );
+        }
+        else{
+            lilocProd = JSON.parse(req.data.LocProdData);  
+        }
+        values.push({id, createtAt, message, lilocProd});  
+        switch (await GenFunctions.getParameterValue(lilocProd[0].LOCATION_ID,'5')) {
             case 'M1':
+                
+                res.statusCode = 202;
+                res.send({values});   
+                for (let i = 0; i < lilocProd.length; i++) {
+                    lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
+                    lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
                 const obgenTimeseries = new GenTimeseries();
-                await obgenTimeseries.genTimeseries(req.data, req, Flag);
+                await obgenTimeseries.genTimeseries(lsData, req, Flag);
+            }
                 break;
             case 'M2':
+                
+                res.statusCode = 202;
+                res.send({values});   
+                for (let i = 0; i < lilocProd.length; i++) {
+                    lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
+                    lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
                 const obgenTimeseriesM2 = new GenTimeseriesM2();
-                await obgenTimeseriesM2.genTimeseries(req.data, req, Flag);
+                console.log( lsData.LOCATION_ID);
+                console.log( lsData.PRODUCT_ID);
+                await obgenTimeseriesM2.genTimeseries(lsData, req,Flag);
+                }
                 break;
         }
         if (Flag === 'X') {
@@ -835,9 +871,31 @@ module.exports = (srv) => {
 
         let lilocProd = {};
         let lsData = {}, Flag = '';
-        lilocProd = JSON.parse(req.data.LocProdData);
-        switch (await GenFunctions.getParameterValue('5')) {
+
+        let createtAt = new Date();
+        let id = uuidv1();
+        let values = [];	
+        let message = "Started Future timeseries";
+        let res = req._.req.res;
+        let lilocProdReq = JSON.parse(req.data.LocProdData);
+        if(lilocProdReq[0].PRODUCT_ID === "ALL"){
+            lilocProd = await cds
+            .transaction(req)
+            .run(
+                SELECT.distinct
+                    .from(getAllProd)
+                    .columns("LOCATION_ID", "PRODUCT_ID")
+                    .where(`LOCATION_ID = '${lilocProdReq[0].LOCATION_ID}'`)
+            );
+        }
+        else{
+            lilocProd = JSON.parse(req.data.LocProdData);  
+        }
+        values.push({id, createtAt, message, lilocProd});  
+        switch (await GenFunctions.getParameterValue(lilocProd[0].LOCATION_ID,'5')) {
             case 'M1':
+                res.statusCode = 202;
+                res.send({values});                  
                 for (let i = 0; i < lilocProd.length; i++) {
                     lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
                     lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
@@ -846,6 +904,8 @@ module.exports = (srv) => {
                 }
                 break;
             case 'M2':
+                res.statusCode = 202;
+                res.send({values});
                 for (let i = 0; i < lilocProd.length; i++) {
                     lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
                     lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
@@ -865,6 +925,36 @@ module.exports = (srv) => {
 
     });
     // Generate Timeseries fucntion calls
+    srv.on("generate_timeseriesH", async (req) => {
+
+        let lilocProd = {};
+        let lsData = {};
+        let Flag = '';
+        // lilocProd = JSON.parse(req.data.LocProdData);
+
+        switch ('M2') {
+            case 'M1':
+                // for (let i = 0; i < lilocProd.length; i++) {
+                //     lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
+                //     lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
+                    const obgenTimeseries = new GenTimeseries();
+                    await obgenTimeseries.genTimeseries(req.data, req, Flag);
+                // }
+                break;
+            case 'M2':
+                // for (let i = 0; i < lilocProd.length; i++) {
+                //     lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
+                //     lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
+                    const obgenTimeseriesM2 = new GenTimeseriesM2();
+                    await obgenTimeseriesM2.genTimeseries(req.data, req, Flag);
+                // }
+                break;
+        }
+        // const obgenTimeseries_rt = new GenTimeseriesRT();
+        // await obgenTimeseries_rt.genTimeseries_rt(req.data, req);
+
+    });
+    // Generate Timeseries fucntion calls
     srv.on("generate_timeseries", async (req) => {
 
         let lilocProd = {};
@@ -872,11 +962,12 @@ module.exports = (srv) => {
         let Flag = '';
         lilocProd = JSON.parse(req.data.LocProdData);
 
-        switch (await GenFunctions.getParameterValue('5')) {
+        switch (await GenFunctions.getParameterValue(lilocProd[0].LOCATION_ID,'5')) {
             case 'M1':
                 for (let i = 0; i < lilocProd.length; i++) {
                     lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
                     lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
+
                     const obgenTimeseries = new GenTimeseries();
                     await obgenTimeseries.genTimeseries(lsData, req, Flag);
                 }
@@ -885,6 +976,8 @@ module.exports = (srv) => {
                 for (let i = 0; i < lilocProd.length; i++) {
                     lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
                     lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
+                    console.log( lsData.LOCATION_ID);
+                    console.log( lsData.PRODUCT_ID);
                     const obgenTimeseriesM2 = new GenTimeseriesM2();
                     await obgenTimeseriesM2.genTimeseries(lsData, req, Flag);
                 }
@@ -900,7 +993,7 @@ module.exports = (srv) => {
         let lsData = {}, Flag = '';
         lilocProd = JSON.parse(req.data.LocProdData);
 
-        switch (await GenFunctions.getParameterValue('5')) {
+        switch (await GenFunctions.getParameterValue(lilocProd[0].LOCATION_ID,'5')) {
             case 'M1':
                 for (let i = 0; i < lilocProd.length; i++) {
                     lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
@@ -924,13 +1017,23 @@ module.exports = (srv) => {
 
     // Generate Unique ID
     srv.on("genUniqueID", async (req) => {
+        let Flag = '';
+        
         const obgenSOFunctions = new SOFunctions();
-        await obgenSOFunctions.genUniqueID(req.data, req);
+        await obgenSOFunctions.genUniqueID(req.data, req,Flag);
+        if(Flag === 'X'){
+            console.log("Success");
+            GenFunctions.jobSchMessage(Flag, "Process Sales Order is complete", req);
+        }
+        else{
+            GenFunctions.jobSchMessage(Flag, "Process Sales Order failed", req);
+        }
     });
     // Generate Unique ID
     srv.on("gen_UniqueID", async (req) => {
+        let Flag = '';
         const obgenSOFunctions = new SOFunctions();
-        await obgenSOFunctions.genUniqueID(req.data, req);
+        await obgenSOFunctions.genUniqueID(req.data, req, Flag);
     });
     // Generate Fully Configured Demand
     srv.on("genFullConfigDemand", async (req) => {
@@ -938,11 +1041,33 @@ module.exports = (srv) => {
         let lilocProd = {};
         let lsData = {};
         let Flag = '';
-        lilocProd = JSON.parse(req.data.LocProdData);
+        let createtAt = new Date();
+        let id = uuidv1();
+        let values = [];	
+        let message = "Started Future timeseries";
+        let res = req._.req.res;
+        let lilocProdReq = JSON.parse(req.data.LocProdData);
+        if(lilocProdReq[0].PRODUCT_ID === "ALL"){
+            lilocProd = await cds
+            .transaction(req)
+            .run(
+                SELECT.distinct
+                    .from(getAllProd)
+                    .columns("LOCATION_ID", "PRODUCT_ID")
+                    .where(`LOCATION_ID = '${lilocProdReq[0].LOCATION_ID}'`)
+            );
+        }
+        else{
+            lilocProd = JSON.parse(req.data.LocProdData);  
+        }
+        values.push({id, createtAt, message, lilocProd});  
+        res.statusCode = 202;
+        res.send({values});   
         for (let i = 0; i < lilocProd.length; i++) {
             lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
             lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
             const obgenTimeseriesM2 = new GenTimeseriesM2();
+            
             await obgenTimeseriesM2.genPrediction(lsData, req, Flag);
         }
         if (Flag === 'X') {
