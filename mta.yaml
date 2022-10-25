@@ -179,10 +179,6 @@ modules:
       - cpappcpprodlocline.zip
       name: cpappcpprodlocline
       target-path: resources/
-    # - artifacts:
-    #   - cpappcpprodrestr.zip
-    #   name: cpappcpprodrestr
-    #   target-path: resources/
     - artifacts:
       - cpappcpcharqtygraph.zip
       name: cpappcpcharqtygraph
@@ -523,17 +519,6 @@ modules:
     - npm run build:cf
     - rm -rf node_modules
     supported-platforms: []
-# - name: cpappcpprodrestr
-#   type: html5
-#   path: app/cpprodrestr
-#   build-parameters:
-#     build-result: dist
-#     builder: custom
-#     commands:
-#     - npm install
-#     - npm run build:cf
-#     - rm -rf node_modules
-#     supported-platforms: []
 - name: cpappcpcharqtygraph
   type: html5
   path: app/cpcharqtygraph
