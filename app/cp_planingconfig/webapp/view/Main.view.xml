@@ -1,10 +1,7 @@
 <mvc:View height="100%" class="sapUiSizeCompact" controllerName="cpapp.cpplaningconfig.controller.Main" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns="sap.f">
-<FlexibleColumnLayout id="idFCL" backgroundDesign="Solid">
-		<beginColumnPages>
-			<mvc:XMLView id="beginView" viewName="cpapp.cpplaningconfig.view.Master"/>
-		</beginColumnPages>
-		<midColumnPages>
-			<mvc:XMLView id="detailView" viewName="cpapp.cpplaningconfig.view.Detail"/>
-		</midColumnPages>
-	</FlexibleColumnLayout>
+<FlexibleColumnLayout
+		id="flexibleColumnLayout"
+		stateChange=".onStateChanged"
+		backgroundDesign="Solid"
+		layout="{/layout}"/>
 </mvc:View>

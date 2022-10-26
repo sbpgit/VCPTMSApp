@@ -107,35 +107,51 @@
                 "routerClass": "sap.m.routing.Router",
                 "viewType": "XML",
                 "async": true,
-                "viewPath": "cpapp.cpplaningconfig.view",
-                "controlAggregation": "pages",
-                "controlId": "app",
+                "viewPath": "cpapp.cpplaningconfig.view",   
+                "controlId": "flexibleColumnLayout",
+                "transition": "slide",
                 "clearControlAggregation": false
             },
             "routes": [
                 {
-                    "name": "RouteHome",
-                    "pattern": "",
+                    "name": "master",
+                    "pattern": ":layout:",
                     "target": [
-                        "TargetHome"
+                        "Master",
+						"TargetHome"
                     ]
-                }
+                },
+                {
+					"pattern": "detail/{location}/{layout}",
+					"name": "detail",
+					"target": [
+						"Master",
+						"TargetHome"
+					]
+				}
             ],
             "targets": {
+                "Master": {
+					"viewType": "XML",
+                    "transition": "slide",
+                    "viewId": "Master",
+                    "viewName": "Master",
+					"controlAggregation": "beginColumnPages"
+				},
                 "TargetHome": {
                     "viewType": "XML",
                     "transition": "slide",
-                    "clearControlAggregation": false,
                     "viewId": "Home",
-                    "viewName": "Home"
+                    "viewName": "Home",
+                    "controlAggregation": "midColumnPages"
                 }
             }
         },
         "rootView": {
-            "viewName": "cpapp.cpplaningconfig.view.App",
+            "viewName": "cpapp.cpplaningconfig.view.Main",
             "type": "XML",
             "async": true,
-            "id": "App"
+            "id": "fc1"
         }
     },
     "sap.cloud": {

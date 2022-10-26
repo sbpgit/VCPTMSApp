@@ -1174,6 +1174,7 @@ entity![V_PLANNEDCONFIG]{
     key![VALUE_HELP_TAB]    : String(20)  @title : 'VALUE_HELP_TAB';
     key![GROUP_DESCRIPTION] : String(100) @title : 'GROUP_DESCRIPTION';
     key![UNIT]              : String(5)   @title : 'UNIT';
+    key![LOCATION_ID]       : String(4)   @title : 'LOCATION_ID';
     key![VALUE]             : String(500) @title : 'VALUE';
 }
 
