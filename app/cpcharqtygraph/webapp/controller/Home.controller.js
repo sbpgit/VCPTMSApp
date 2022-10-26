@@ -301,6 +301,7 @@ sap.ui.define([
 
                     // Scenario List
                 } else if (sId.includes("scen")) {
+                    sap.ui.core.BusyIndicator.show();
                     this.oScen = that.byId("idscen");
                     aSelectedItems = oEvent.getParameter("selectedItems");
                     that.oScen.setValue(aSelectedItems[0].getTitle());
@@ -310,7 +311,7 @@ sap.ui.define([
                     );
 
                     //setting dates in date field
-                    sap.ui.core.BusyIndicator.show();
+                    
 
                     that.getView().getModel("oModel").read("/getCIRCharRate", {
                         filters: [

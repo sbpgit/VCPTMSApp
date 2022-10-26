@@ -180,6 +180,11 @@ sap.ui.define(
               });
               that.oList.setModel(that.listModel);
               that.onSearch();
+
+              // Setting the default selected item for table
+            that.byId("jobList").setSelectedItem(that.byId("jobList").getItems()[0], true);
+            oGModel.setProperty("/aDATA", aData[0]);
+              that.onhandlePress();
             },
             error: function (error) {
                 that.oList.setBusy(false);
@@ -238,6 +243,9 @@ sap.ui.define(
             });
             that.oList.setModel(that.listModel);
             that.onSearch();
+            that.byId("jobList").setSelectedItem(that.byId("jobList").getItems()[0], true);
+            oGModel.setProperty("/aDATA", aData[0]);
+              that.onhandlePress();
           },
 
 
@@ -290,6 +298,18 @@ sap.ui.define(
           oGModel.setProperty("/startTime", oSelItem.startTime);
           oGModel.setProperty("/endTime", oSelItem.endTime);
           oGModel.setProperty("/createdAt", oSelItem.createdAt);
+        } else {
+
+            var oSelItem = oGModel.getProperty("/aDATA");
+
+          // Setting the selected values
+          oGModel.setProperty("/Jobdata", that.byId("jobList").getItems()[0].getBindingContext().getObject());
+          oGModel.setProperty("/jobId", oSelItem.jobId);
+          oGModel.setProperty("/description", oSelItem.description);
+          oGModel.setProperty("/startTime", oSelItem.startTime);
+          oGModel.setProperty("/endTime", oSelItem.endTime);
+          oGModel.setProperty("/createdAt", oSelItem.createdAt);
+
         }
         // Calling Item Detail page
         that.getOwnerComponent().runAsOwner(function () {

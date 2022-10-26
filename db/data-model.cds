@@ -805,6 +805,21 @@ context cp {
     }
 
 // End Of Insert - Deepa
+//Start of VC Planner Doc-Pradeep
+entity PAGEHEADER {
+        key PAGEID         : Integer;
+            DESCRIPTION    : String(100);
+            PARENTNODEID   : Integer;
+            HEIRARCHYLEVEL : Integer;
+            
+    }
+
+    entity PAGEPARAGRAPH {
+        key PAGEID      : Integer;
+            DESCRIPTION : String(100);
+            CONTENT     : hana.CLOB;
+    }
+   // End Of VC Planner doc- Pradeep
 }
 
 

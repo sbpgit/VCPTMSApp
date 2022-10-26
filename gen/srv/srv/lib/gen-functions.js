@@ -220,7 +220,7 @@ class GenFunctions {
 
 
             if (req.headers['x-sap-job-id'] > 0) {
-                const scheduler = getJobscheduler(req);
+                const scheduler = this.getJobscheduler(req);
 
                 var updateReq = {
                     jobId: req.headers['x-sap-job-id'],
@@ -249,7 +249,7 @@ class GenFunctions {
 
 
             if (req.headers['x-sap-job-id'] > 0) {
-                const scheduler = getJobscheduler(req);
+                const scheduler = this.getJobscheduler(req);
 
                 var updateReq = {
                     jobId: req.headers['x-sap-job-id'],

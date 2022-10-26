@@ -37,14 +37,16 @@ sap.ui.define([
                 var bModel = new sap.ui.model.json.JSONModel();
                 var cModel = new sap.ui.model.json.JSONModel();
                 that.oGModel = that.getOwnerComponent().getModel("oGModel");
-                //*Loading Header Content data through local json file*//
-                jQuery.ajax({
-                    type: "GET",
-                    contentType: "application/json",
-                    url: "model/header.json",
-                    dataType: "json",
-                    async: false,
-                    success: function (data, textStatus, jqXHR) {
+                // //*Loading Header Content data through local json file*//
+                // jQuery.ajax({
+                //     type: "GET",
+                //     contentType: "application/json",
+                //     url: "model/header.json",
+                //     dataType: "json",
+                //     async: false,
+                //     success: function (data, textStatus, jqXHR) {
+                    this.getView().getModel("oModel").read("/getPageHdr", {
+                        success: function (data) {
                         that.oGModel.setProperty("/COMBOID", data);
                         for (var i = 0; i <= data.length - 1; i++) {
                             dataArray.push({
@@ -90,13 +92,15 @@ sap.ui.define([
                 //*End of local Header json file*//
 
                 //*Loading Paragraph Content data through local json file*//
-                jQuery.ajax({
-                    type: "GET",
-                    contentType: "application/json",
-                    url: "model/data.json",
-                    dataType: "json",
-                    async: false,
-                    success: function (data, textStatus, jqXHR) {
+                // jQuery.ajax({
+                //     type: "GET",
+                //     contentType: "application/json",
+                //     url: "model/data.json",
+                //     dataType: "json",
+                //     async: false,
+                //     success: function (data, textStatus, jqXHR) {
+                    this.getView().getModel("oModel").read("/getPagePgrh", {
+                        success: function (data) {
                         that.oGModel.setProperty("/Content", data);
                         that.byId("videoPanel").setVisible(true);
                         that.byId("content").setVisible(false);
@@ -121,8 +125,8 @@ sap.ui.define([
                         that.byId("detailTitle").setText(data[0].DESCRIPTION);
                         that.oGModel.setProperty("/editData", data);
                     },
-                    error: function () {
-                        alert("json not found");
+                    error: function (e) {
+                        sap.m.MessageToast.show(e);
                     }
                 });
                 //*End of local json file// 
@@ -189,12 +193,14 @@ sap.ui.define([
                     var pageid = detData.PAGEID;
                     var description = detData.DESCRIPTION;
                     var oModel = this.getView().getModel("oModel");
-                    oModel.callFunction("/addJson", {
+                    oModel.callFunction("/moveData", {
                         method: "GET",
                         urlParameters: {
+                            Flag:"i",
+                            CONTENT: htmlText,
                             PAGEID: pageid,
-                            DESCRIPTION: description,
-                            CONTENT: htmlText                         
+                            DESCRIPTION: description
+                                                     
                         },
                         success: function (oData, response) {
                             sap.ui.core.BusyIndicator.hide();                          
@@ -348,26 +354,48 @@ sap.ui.define([
                 var heirarchyLevel = sap.ui.getCore().byId("idHLedit").getValue();
                 var content = sap.ui.getCore().byId("idContentedit").getValue();
                 var oModel = this.getView().getModel("oModel");
-                //*Editing in local Header JSON file*//
-                oModel.callFunction("/editJSONHeader", {
+                oModel.callFunction("/editPAGEHEADER", {
                     method: "GET",
                     urlParameters: {
+                        Flag1:"e",
                         PAGEID: pageID,
                         DESCRIPTION: descriptioN,
                         PARENTNODEID: parentNodeID,
                         HEIRARCHYLEVEL: heirarchyLevel,
                     },
                     success: function (oData, response) {
-                        that.onClose1();
-                        that.onAfterRendering();
-                        that.byId("idHTML").setContent();                       
-                        sap.ui.core.BusyIndicator.hide();
-                        sap.m.MessageToast.show("Updated successfully");
+                        
+                        sap.m.MessageToast.show("Updated successfully in Header Page");
+
+
                     },
                     error: function (e) {
                         sap.m.MessageToast.show("Failed to Update in PAGEHEADER");
                     }
                 });
+
+                oModel.callFunction("/editPAGEPARAGRAPH", {
+                    method: "GET",
+                    urlParameters: {
+                        Flag1:"e",
+                        PAGEID: pageID,
+                        DESCRIPTION: descriptioN,
+                        CONTENT:content
+                    },
+                    success: function (oData, response) {
+                        that.onClose1();
+                        that.onAfterRendering();
+                        that.byId("idHTML").setContent(); 
+                        sap.ui.core.BusyIndicator.hide();
+                        sap.m.MessageToast.show("Updated successfully in Paragraph Page");
+
+
+                    },
+                    error: function (e) {
+                        sap.m.MessageToast.show("Failed to Update in PAGEHEADER");
+                    }
+                });
+                
             },
             onClose1: function () {
                 if (this._cDialog) {
