@@ -1,6 +1,7 @@
 //const GenTimeseries = require("./cat-servicets");
 // const DbConnect = require("./dbConnect");
 const GenFunctions = require("./gen-functions");
+const { v1: uuidv1} = require('uuid')
 const cds = require("@sap/cds");
 const hana = require("@sap/hana-client");
 const { createLogger, format, transports } = require("winston");
@@ -812,10 +813,31 @@ module.exports = (srv) => {
         let lilocProd = {};
         let lsData = {};
         let Flag = '';
-        lilocProd = JSON.parse(req.data.LocProdData);
+        let createtAt = new Date();
+        let id = uuidv1();
+        let values = [];	
+        let message = "Started Future timeseries";
+        let res = req._.req.res;
+        let lilocProdReq = JSON.parse(req.data.LocProdData);
+        if(lilocProdReq[0].PRODUCT_ID === "ALL"){
+            lilocProd = await cds
+            .transaction(req)
+            .run(
+                SELECT.distinct
+                    .from(getAllProd)
+                    .columns("LOCATION_ID", "PRODUCT_ID")
+                    .where(`LOCATION_ID = '${lilocProdReq[0].LOCATION_ID}'`)
+            );
+        }
+        else{
+            lilocProd = JSON.parse(req.data.LocProdData);  
+        }
+        values.push({id, createtAt, message, lilocProd});  
         switch (await GenFunctions.getParameterValue(lilocProd[0].LOCATION_ID,'5')) {
             case 'M1':
                 
+                res.statusCode = 202;
+                res.send({values});   
                 for (let i = 0; i < lilocProd.length; i++) {
                     lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
                     lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
@@ -825,6 +847,8 @@ module.exports = (srv) => {
                 break;
             case 'M2':
                 
+                res.statusCode = 202;
+                res.send({values});   
                 for (let i = 0; i < lilocProd.length; i++) {
                     lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
                     lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
@@ -835,11 +859,11 @@ module.exports = (srv) => {
                 }
                 break;
         }
-        if(Flag === 'X'){
+        if (Flag === 'X') {
             console.log("Success");
             GenFunctions.jobSchMessage(Flag, "Timeseries History generation is complete", req);
         }
-        else{
+        else {
             GenFunctions.jobSchMessage(Flag, "Timeseries History generation failed", req);
         }
     });
@@ -853,19 +877,19 @@ module.exports = (srv) => {
         let values = [];	
         let message = "Started Future timeseries";
         let res = req._.req.res;
-        lilocProd = JSON.parse(req.data.LocProdData);
-        if(lilocProd[i].PRODUCT_ID === "ALL"){
-            const results = await cds
+        let lilocProdReq = JSON.parse(req.data.LocProdData);
+        if(lilocProdReq[0].PRODUCT_ID === "ALL"){
+            lilocProd = await cds
             .transaction(req)
             .run(
                 SELECT.distinct
                     .from(getAllProd)
                     .columns("LOCATION_ID", "PRODUCT_ID")
+                    .where(`LOCATION_ID = '${lilocProdReq[0].LOCATION_ID}'`)
             );
-            const lsValue = await SELECT.one
-                                .from("CP_PARAMETER_VALUES")
-                                .columns("VALUE")
-                                .where(`LOCATION_ID = '${lLocation}' AND PARAMETER_ID = ${parseInt(lParameter)}`)
+        }
+        else{
+            lilocProd = JSON.parse(req.data.LocProdData);  
         }
         values.push({id, createtAt, message, lilocProd});  
         switch (await GenFunctions.getParameterValue(lilocProd[0].LOCATION_ID,'5')) {
@@ -890,11 +914,11 @@ module.exports = (srv) => {
                 }
                 break;
         }
-        if(Flag === 'X'){
+        if (Flag === 'X') {
             console.log("Success");
             GenFunctions.jobSchMessage(Flag, "Timeseries Future generation is complete", req);
         }
-        else{
+        else {
             GenFunctions.jobSchMessage(Flag, "Timeseries Future generation failed", req);
         }
 
@@ -994,6 +1018,7 @@ module.exports = (srv) => {
     // Generate Unique ID
     srv.on("genUniqueID", async (req) => {
         let Flag = '';
+        
         const obgenSOFunctions = new SOFunctions();
         await obgenSOFunctions.genUniqueID(req.data, req,Flag);
         if(Flag === 'X'){
@@ -1016,7 +1041,28 @@ module.exports = (srv) => {
         let lilocProd = {};
         let lsData = {};
         let Flag = '';
-        lilocProd = JSON.parse(req.data.LocProdData);
+        let createtAt = new Date();
+        let id = uuidv1();
+        let values = [];	
+        let message = "Started Future timeseries";
+        let res = req._.req.res;
+        let lilocProdReq = JSON.parse(req.data.LocProdData);
+        if(lilocProdReq[0].PRODUCT_ID === "ALL"){
+            lilocProd = await cds
+            .transaction(req)
+            .run(
+                SELECT.distinct
+                    .from(getAllProd)
+                    .columns("LOCATION_ID", "PRODUCT_ID")
+                    .where(`LOCATION_ID = '${lilocProdReq[0].LOCATION_ID}'`)
+            );
+        }
+        else{
+            lilocProd = JSON.parse(req.data.LocProdData);  
+        }
+        values.push({id, createtAt, message, lilocProd});  
+        res.statusCode = 202;
+        res.send({values});   
         for (let i = 0; i < lilocProd.length; i++) {
             lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
             lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
@@ -1024,11 +1070,11 @@ module.exports = (srv) => {
             
             await obgenTimeseriesM2.genPrediction(lsData, req, Flag);
         }
-        if(Flag === 'X'){
+        if (Flag === 'X') {
             console.log("Success");
             GenFunctions.jobSchMessage(Flag, " Fully Configured Requirement Generation is complete", req);
         }
-        else{
+        else {
             GenFunctions.jobSchMessage(Flag, "Fully Configured Requirement Generation is failed", req);
         }
     });
@@ -2587,6 +2633,50 @@ module.exports = (srv) => {
     // EOI - Deepa
 
     //VC Planner Document Maintenance- Pradeep
+    srv.on("moveData", async req => {
+        let contentData = {};
+        var deleteData = {};
+        var checkCONTENT = {};
+        var createResults = [];
+        var deleteResults = [];
+        var Flag = req.data.Flag;
+        var responseMessage;
+        var responseMessage1;
+        deleteData.PAGEID = req.data.PAGEID;
+        checkCONTENT.CONTENT = req.data.CONTENT
+
+        contentData.CONTENT = req.data.CONTENT;
+        contentData.DESCRIPTION = req.data.DESCRIPTION;
+        contentData.PAGEID = req.data.PAGEID;
+
+        if (Flag === "i") {
+            try {
+
+                await cds.delete("VCPLANNERDOCUMENT_PAGEPARAGRAPH", deleteData);
+
+                responseMessage = " Deletion successfull";
+
+                deleteResults.push(responseMessage);
+
+            } catch (e) {
+
+                responseMessage = " Deletion Failed";
+
+                deleteResults.push(responseMessage);
+
+            }
+            try {
+                await cds.run(INSERT.into("VCPLANNERDOCUMENT_PAGEPARAGRAPH").entries(contentData));
+                responseMessage1 = "Updated Successfully";
+                createResults.push(responseMessage1);
+            } catch (e) {
+                responseMessage1 = " Updation Failed";
+                createResults.push(responseMessage1);
+            }
+        }
+        return responseMessage1;
+    });
+
     srv.on("addPAGEHEADER", async req => {
         let masterData = {};
         var responseMessage1;
@@ -2596,20 +2686,15 @@ module.exports = (srv) => {
             masterData.DESCRIPTION = req.data.DESCRIPTION;
             masterData.PARENTNODEID = req.data.PARENTNODEID;
             masterData.HEIRARCHYLEVEL = req.data.HEIRARCHYLEVEL;
-            var fs = require("fs");
-            var json = fs.readFileSync("app/cpmaintenancevcplanner/webapp/model/header.json", 'utf8');
-            var words = JSON.parse(json);
-            const file = words;
-            var i = words.length;
-            file[i] = masterData;
-            fs.writeFile("app/cpmaintenancevcplanner/webapp/model/header.json", JSON.stringify(file), (err) => {
-                if (err) { console.error(err); return; };
-                console.log("File has been updated in Maintenance header.json");
-            });
-            fs.writeFile("app/cpvcplannerdocumentation/webapp/model/headerContent.json", JSON.stringify(file), (err) => {
-                if (err) { console.error(err); return; };
-                console.log("File has been updated in Project headerContent.json");
-            });
+            try {
+                await cds.run(INSERT.into("VCPLANNERDOCUMENT_PAGEHEADER").entries(masterData));
+                responseMessage1 = "Updated Successfully in PAGEHEADER";
+                masterResults.push(responseMessage1);
+            } catch (e) {
+                responseMessage1 = " Updation Failed";
+                masterResults.push(responseMessage1);
+            }
+
         }
         return responseMessage1;
     });
@@ -2621,20 +2706,14 @@ module.exports = (srv) => {
             detailData.PAGEID = req.data.PAGEID;
             detailData.DESCRIPTION = req.data.DESCRIPTION;
             detailData.CONTENT = req.data.CONTENT;
-            var fs = require("fs");
-            var json = fs.readFileSync("app/cpmaintenancevcplanner/webapp/model/data.json", 'utf8');
-            var words = JSON.parse(json);
-            const file = words;
-            var i = words.length;
-            file[i] = detailData;
-            fs.writeFile("app/cpmaintenancevcplanner/webapp/model/data.json", JSON.stringify(file), (err) => {
-                if (err) { console.error(err); return; };
-                console.log("File has been updated");
-            });
-            fs.writeFile("app/cpvcplannerdocumentation/webapp/model/contentdata.json", JSON.stringify(file), (err) => {
-                if (err) { console.error(err); return; };
-                console.log("File has been updated in Project contentdata.json");
-            });
+            try {
+                await cds.run(INSERT.into("VCPLANNERDOCUMENT_PAGEPARAGRAPH").entries(detailData));
+                responseMessage1 = "Updated Successfully in PAGEHEADER";
+                detailResults.push(responseMessage1);
+            } catch (e) {
+                responseMessage1 = " Updation Failed";
+                detailResults.push(responseMessage1);
+            }
         }
         return responseMessage1;
     });
@@ -2644,23 +2723,20 @@ module.exports = (srv) => {
         var Flag = req.data.Flag1;
         deleteNode.PAGEID = req.data.PAGEID;
         if (Flag === "d") {
-            var fs = require("fs");
-            var json = fs.readFileSync("app/cpmaintenancevcplanner/webapp/model/header.json", 'utf8');
-            var words = JSON.parse(json);
-            for (i = 0; i < words.length; i++) {
-                if (deleteNode.PAGEID === words[i].PAGEID) {
-                    let file = words;
-                    delete file[i];
-                    file = file.filter(function (obj) { if (obj != null) return obj })
-                    fs.writeFile("app/cpmaintenancevcplanner/webapp/model/header.json", JSON.stringify(file), (err) => {
-                        if (err) { console.error(err); return; };
-                        console.log("File has been updated in Maintenance header.json");
-                    });
-                    fs.writeFile("app/cpvcplannerdocumentation/webapp/model/headerContent.json", JSON.stringify(file), (err) => {
-                        if (err) { console.error(err); return; };
-                        console.log("File has been updated in Project headerContent.json");
-                    });
-                }
+            try {
+
+                await cds.delete("VCPLANNERDOCUMENT_PAGEHEADER", deleteNode);
+
+                responseMessage1 = " Deletion successfull";
+
+                deleteResults.push(responseMessage1);
+
+            } catch (e) {
+
+                responseMessage1 = " Deletion Failed";
+
+                deleteResults.push(responseMessage1);
+
             }
 
         }
@@ -2674,72 +2750,115 @@ module.exports = (srv) => {
         var Flag = req.data.Flag1;
         deleteNode.PAGEID = req.data.PAGEID;
         if (Flag === "d") {
-            var fs = require("fs");
-            var json = fs.readFileSync("app/cpmaintenancevcplanner/webapp/model/data.json", 'utf8');
-            var words = JSON.parse(json);
-            for (i = 0; i < words.length; i++) {
-                if (deleteNode.PAGEID === words[i].PAGEID) {
-                    let file = words;
-                    delete file[i];
-                    file = file.filter(function (obj) { if (obj != null) return obj })
-                    fs.writeFile("app/cpmaintenancevcplanner/webapp/model/data.json", JSON.stringify(file), (err) => {
-                        if (err) { console.error(err); return; };
-                        console.log("File has been updated in Maintenance data.json");
-                    });
-                    fs.writeFile("app/cpvcplannerdocumentation/webapp/model/contentdata.json", JSON.stringify(file), (err) => {
-                        if (err) { console.error(err); return; };
-                        console.log("File has been updated in Project contentdata.json");
-                    });
-                }
+            try {
+
+                await cds.delete("VCPLANNERDOCUMENT_PAGEPARAGRAPH", deleteNode);
+
+                responseMessage1 = " Deletion successfull";
+
+                deleteResults.push(responseMessage1);
+
+            } catch (e) {
+
+                responseMessage1 = " Deletion Failed";
+
+                deleteResults.push(responseMessage1);
+
             }
         }
         return responseMessage1;
     });
-    srv.on("addJson", async req => {
-        let deleteNode = {};
-        deleteNode.PAGEID = req.data.PAGEID;
-        deleteNode.DESCRIPTION = req.data.DESCRIPTION;
-        deleteNode.CONTENT = req.data.CONTENT;
-        var fs = require("fs");
-        var json = fs.readFileSync("app/cpmaintenancevcplanner/webapp/model/data.json", 'utf8');
-        var words = JSON.parse(json);
-        for (i = 0; i < words.length; i++) {
-            if (deleteNode.PAGEID === words[i].PAGEID) {
-                const file = words;
-                file[i].CONTENT = deleteNode.CONTENT;
-                fs.writeFile("app/cpmaintenancevcplanner/webapp/model/data.json", JSON.stringify(file), (err) => {
-                    if (err) { console.error(err); return; };
-                    console.log("File has been updated in Maintenance Data.json");
-                });
-                fs.writeFile("app/cpvcplannerdocumentation/webapp/model/contentdata.json", JSON.stringify(file), (err) => {
-                    if (err) { console.error(err); return; };
-                    console.log("File has been updated in Project contentdata.json");
-                });
+    srv.on("editPAGEPARAGRAPH", async req => {
+        let contentData = {};
+        var deleteData = {};
+
+        var createResults = [];
+        var deleteResults = [];
+        var Flag = req.data.Flag1;
+        var responseMessage;
+        var responseMessage1;
+        deleteData.PAGEID = req.data.PAGEID;
+
+
+        if (Flag === "e") {
+            try {
+
+                await cds.delete("VCPLANNERDOCUMENT_PAGEPARAGRAPH", deleteData);
+
+                responseMessage = " Deletion successfull";
+
+                deleteResults.push(responseMessage);
+
+            } catch (e) {
+
+                responseMessage = " Deletion Failed";
+
+                deleteResults.push(responseMessage);
+
+            }
+            contentData.CONTENT = req.data.CONTENT;
+            // contentData.ENTRY_TYPE = req.data.ENTRY_TYPE;
+            // contentData.POSITION = req.data.POSITION;
+            contentData.DESCRIPTION = req.data.DESCRIPTION;
+            contentData.PAGEID = req.data.PAGEID;
+
+            try {
+                await cds.run(INSERT.into("VCPLANNERDOCUMENT_PAGEPARAGRAPH").entries(contentData));
+                responseMessage1 = "Updated Successfully";
+                createResults.push(responseMessage1);
+            } catch (e) {
+                responseMessage1 = " Updation Failed";
+                createResults.push(responseMessage1);
             }
         }
+        return responseMessage1;
     });
-    srv.on("editJSONHeader", async req => {
-        let editNode = {};
-        editNode.PAGEID = req.data.PAGEID;
-        editNode.DESCRIPTION = req.data.DESCRIPTION;
-        editNode.CONTENT = req.data.CONTENT;
-        var fs = require("fs");
-        var json = fs.readFileSync("app/cpmaintenancevcplanner/webapp/model/header.json", 'utf8');
-        var words = JSON.parse(json);
-        for (i = 0; i < words.length; i++) {
-            if (editNode.PAGEID === words[i].PAGEID) {
-                const file = words;
-                file[i].DESCRIPTION = editNode.DESCRIPTION;
-                fs.writeFile("app/cpmaintenancevcplanner/webapp/model/header.json", JSON.stringify(file), (err) => {
-                    if (err) { console.error(err); return; };
-                    console.log("File has been updated in Maintenance header.json");
-                });
-                fs.writeFile("app/cpvcplannerdocumentation/webapp/model/headerContent.json", JSON.stringify(file), (err) => {
-                    if (err) { console.error(err); return; };
-                    console.log("File has been updated in Project headerContent.json");
-                });
+
+    srv.on("editPAGEHEADER", async req => {
+        let masterData = {};
+        var deleteData = {};
+
+        var createResults = [];
+        var deleteResults = [];
+        var Flag = req.data.Flag1;
+        var responseMessage;
+        var responseMessage1;
+        deleteData.PAGEID = req.data.PAGEID;
+
+        if (Flag === "e") {
+            try {
+
+                await cds.delete("VCPLANNERDOCUMENT_PAGEHEADER", deleteData);
+
+                responseMessage = " Deletion successfull";
+
+                deleteResults.push(responseMessage);
+
+            } catch (e) {
+
+                responseMessage = " Deletion Failed";
+
+                deleteResults.push(responseMessage);
+
+            }
+            masterData.PAGEID = req.data.PAGEID;
+            masterData.DESCRIPTION = req.data.DESCRIPTION;
+            masterData.PARENTNODEID = req.data.PARENTNODEID;
+            masterData.HEIRARCHYLEVEL = req.data.HEIRARCHYLEVEL;
+            // masterData.DRILLSTATE = req.data.DRILLSTATE;
+            try {
+                await cds.run(INSERT.into("VCPLANNERDOCUMENT_PAGEHEADER").entries(masterData));
+                responseMessage1 = "Updated Successfully";
+                createResults.push(responseMessage1);
+            } catch (e) {
+                responseMessage1 = " Updation Failed";
+                createResults.push(responseMessage1);
             }
         }
+        return responseMessage1;
+
+
     });
+
     //End of VC Planner Document Maintenance- Pradeep
 };

@@ -4714,6 +4714,41 @@
         }
       }
     },
+    "cp.PAGEHEADER": {
+      "kind": "entity",
+      "elements": {
+        "PAGEID": {
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "DESCRIPTION": {
+          "type": "cds.String",
+          "length": 100
+        },
+        "PARENTNODEID": {
+          "type": "cds.Integer"
+        },
+        "HEIRARCHYLEVEL": {
+          "type": "cds.Integer"
+        }
+      }
+    },
+    "cp.PAGEPARAGRAPH": {
+      "kind": "entity",
+      "elements": {
+        "PAGEID": {
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "DESCRIPTION": {
+          "type": "cds.String",
+          "length": 100
+        },
+        "CONTENT": {
+          "type": "cds.hana.CLOB"
+        }
+      }
+    },
     "V_OBDHDR": {
       "kind": "entity",
       "@cds.persistence.exists": true,
@@ -22213,26 +22248,12 @@
         "type": "cds.String"
       }
     },
-    "CatalogService.addJson": {
+    "CatalogService.editPAGEHEADER": {
       "kind": "function",
       "params": {
-        "PAGEID": {
-          "type": "cds.Integer"
-        },
-        "DESCRIPTION": {
+        "Flag1": {
           "type": "cds.String"
         },
-        "CONTENT": {
-          "type": "cds.String"
-        }
-      },
-      "returns": {
-        "type": "cds.String"
-      }
-    },
-    "CatalogService.editJSONHeader": {
-      "kind": "function",
-      "params": {
         "PAGEID": {
           "type": "cds.Integer"
         },
@@ -22244,6 +22265,26 @@
         },
         "HEIRARCHYLEVEL": {
           "type": "cds.Integer"
+        }
+      },
+      "returns": {
+        "type": "cds.String"
+      }
+    },
+    "CatalogService.editPAGEPARAGRAPH": {
+      "kind": "function",
+      "params": {
+        "Flag1": {
+          "type": "cds.String"
+        },
+        "PAGEID": {
+          "type": "cds.Integer"
+        },
+        "DESCRIPTION": {
+          "type": "cds.String"
+        },
+        "CONTENT": {
+          "type": "cds.String"
         }
       },
       "returns": {
