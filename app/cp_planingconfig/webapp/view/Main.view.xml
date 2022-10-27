@@ -1,7 +1,18 @@
-<mvc:View height="100%" class="sapUiSizeCompact" controllerName="cpapp.cpplaningconfig.controller.Main" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns="sap.f">
-<FlexibleColumnLayout
-		id="flexibleColumnLayout"
-		stateChange=".onStateChanged"
-		backgroundDesign="Solid"
-		layout="{/layout}"/>
+<mvc:View height="100%" class="sapUiSizeCompact" controllerName="cpapp.cpplaningconfig.controller.Main" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns="sap.m" xmlns:f="sap.f">
+   
+<Page id="pageId">
+		<customHeader>
+			<Bar>
+				<contentLeft>
+			<Button id="leftMenu" icon="sap-icon://menu2" tooltip="Side Menu Expand/Collapse" press="expandBegin" type="Transparent" visible="false"/>
+			</contentLeft>
+				<contentMiddle>
+					<Title text="{i18n>appTitle}" class="boldText"></Title>
+				</contentMiddle>
+			</Bar>
+		</customHeader>
+		<content>
+			<f:FlexibleColumnLayout id="fcl"></f:FlexibleColumnLayout>
+		</content>
+	</Page>
 </mvc:View>

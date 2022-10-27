@@ -1,5 +1,5 @@
 <!-- <mvc:View height="100%" class="sapUiSizeCompact" controllerName="cpapp.cpplaningconfig.controller.Master" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns="sap.f"> -->
-<mvc:View height="100%" class="sapUiSizeCompact" controllerName="cpapp.cpplaningconfig.controller.Master" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:ux="sap.uxap">
+<mvc:View height="100%" class="sapUiSizeCompact" controllerName="cpapp.cpplaningconfig.controller.Master" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:ux="sap.uxap" xmlns:f="sap.f">
     <Page showHeader="false" showFooter="true">
         <content>
             <ux:ObjectPageLayout id="idObjectPageLayout" useIconTabBar="true" showHeaderContent="false" showFooter="false">
@@ -16,16 +16,20 @@
                         <ux:subSections>
                             <ux:ObjectPageSubSection>
                                 <ux:blocks>
-                                    <List id="idLocations" headerText="Locations" mode="SingleSelectMaster"
-                                     itemPress="onListItemPress"
-                                     items="{
+                                    <List
+                                        id="idLocations"
+                                        headerText="Locations"
+                                        mode="SingleSelectMaster"
+                                        itemPress="onListItemPress"
+                                        items="{
 			                            path: '/locations',
 			                            sorter: {
 				                        path: 'LOCATION_ID'
 			                            }
-		                                }">
+		                                }"
+                                    >
                                         <items>
-                                            <StandardListItem title="{LOCATION_ID}" description="{LOCATION_ID}"  type="Navigation"/>
+                                            <StandardListItem title="{LOCATION_ID}" description="{LOCATION_ID}" type="Navigation" />
                                         </items>
                                     </List>
                                 </ux:blocks>

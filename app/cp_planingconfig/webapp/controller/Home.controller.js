@@ -1,21 +1,25 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
+    "cpapp/cpplaningconfig/controller/BaseController",
     'sap/m/GroupHeaderListItem',
     'sap/m/MessageToast',
     'sap/ui/model/json/JSONModel',
     'sap/ui/model/Filter',
     'sap/ui/model/FilterOperator',
+    "sap/ui/Device",
 ],
     /**
      * @param {typeof sap.ui.core.mvc.Controller} Controller
      */
-    function (Controller, GroupHeaderListItem, MessageToast, JSONModel, Filter, FilterOperator) {
+    function (Controller, BaseController, GroupHeaderListItem, MessageToast, JSONModel, Filter, FilterOperator, Device) {
         "use strict";
-        var that = this;
-        return Controller.extend("cpapp.cpplaningconfig.controller.Home", {
+        var that = this, oGModel;
+        return BaseController.extend("cpapp.cpplaningconfig.controller.Home", {
             onInit: function () {
                 var oRoute;
                 that = this;
+                this.bus = sap.ui.getCore().getEventBus();
+                oGModel = that.getOwnerComponent().getModel("oGModel");
 
                 that.oParameterModel = new JSONModel();
                 that.oMethodModel = new JSONModel();
@@ -25,16 +29,28 @@ sap.ui.define([
                     that.getView().addDependent(that.oMethodDialog);
                 }
 
-                oRoute = that.getRouter().getRoute("detail");
-                // oRoute.attachPatternMatched(that._onPatternMatched, that);
-                oRoute.attachMatched(that._onRouteMatched, that);
+                // oRoute = that.getRouter().getRoute("detail");
+                //  oRoute.attachPatternMatched(that._onPatternMatched, that);                
             },
+            /**
+       * Called after the view has been rendered.
+       * Calls the service to get Data.
+       */
+      onAfterRendering: function () {
+        oGModel = that.getOwnerComponent().getModel("oGModel");
+
+        var location = oGModel.getProperty("/location");
+
+        that.getParameters(location);
+      },
+
+
             /*
 
 */
-            getRouter: function () {
-                return sap.ui.core.UIComponent.getRouterFor(this);
-            },
+            // getRouter: function () {
+            //     return sap.ui.core.UIComponent.getRouterFor(this);
+            // },
             grouper: function (oGroup) {
                 return {
                     key: oGroup.oModel.oData.Steps[oGroup.sPath.split("/")[2]].GROUP_DESCRIPTION
@@ -103,9 +119,9 @@ sap.ui.define([
             /*
             *
             */
-            getParameters: function (oModel, slocation) {
+            getParameters: function (slocation) {
                 var aParameters = [];
-                oModel.read('/V_Parameters', {
+                that.getModel("PCModel").read('/V_Parameters', {
                     filters: [
                         new Filter("LOCATION_ID", FilterOperator.EQ, slocation)
                     ],
@@ -118,7 +134,7 @@ sap.ui.define([
                             parameters: aParameters  //oData.results
                         });
 
-                        that.byId("idParameterTable").setModel(that.oParameterModel);
+                        // that.byId("idParameterTable").setModel(that.oParameterModel);
 
                     }, error: function (oReponse) {
                         MessageToast.show("Failed to fetch Parameters!");
@@ -218,20 +234,15 @@ sap.ui.define([
              *
              *
              */
-            _onPatternMatched: function () {
-                var oModel = that.getOwnerComponent().getModel('PCModel');
-                that.i18n = that.getOwnerComponent().getModel("i18n").getResourceBundle();
-                that.getParameters(oModel);
-                that.getMethods(oModel);
-            },
-            _onRouteMatched: function (oEvent) {
+            _onPatternMatched: function (oEvent) {
                 var oModel = that.getOwnerComponent().getModel('PCModel');
                 var oArgs = oEvent.getParameter("arguments");
                 that.location = oArgs.location;
                 that.i18n = that.getOwnerComponent().getModel("i18n").getResourceBundle();
-                that.getParameters(oModel, oArgs.location);
+                // that.getParameters(oModel, oArgs.location);
                 that.getMethods(oModel);
             }
+            
             /**
              * 
              * 

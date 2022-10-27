@@ -10,12 +10,12 @@
                     </ux:ObjectPageDynamicHeaderTitle>
                 </ux:headerTitle>
 
-                <ux:sections>
+                <!-- <ux:sections>
                     <ux:ObjectPageSection showTitle="false">
                         <ux:subSections>
                             <ux:ObjectPageSubSection>
-                                <ux:blocks>
-                                    <Table
+                                <ux:blocks> -->
+                                    <!-- <Table
                                         id="idParameterTable"
                                         backgroundDesign="Solid"
                                         showSeparators="None"
@@ -30,7 +30,7 @@
                                 group: true },                              
                             groupHeaderFactory: '.getGroupHeader'
                             }"
-                                    >
+                                    > -->
                                         <!--                            
                                 <headerToolbar>
                                     <OverflowToolbar>
@@ -42,21 +42,21 @@
                                     </OverflowToolbar>
                                 </headerToolbar>
 -->
-                                        <columns>
+                                        <!-- <columns>
                                             <Column visible="false">
-                                                <!-- <Text text="GROUP_ID" /> -->
+                                               
                                             </Column>
                                             <Column minScreenWidth="Desktop" demandPopin="true" width="30em" hAlign="End">
-                                                <!-- <Text text="Description" /> -->
+                                                
                                             </Column>
                                             <Column minScreenWidth="Desktop" demandPopin="true" width="30em" hAlign="End">
-                                                <!-- <Text text="Value" /> -->
+                                                
                                             </Column>
                                             <Column minScreenWidth="Desktop" demandPopin="true" width="10em" hAlign="Begin">
-                                                <!-- <Text text="Value" /> -->
+                                                
                                             </Column>
-                                        </columns>
-                                        <items>
+                                        </columns> -->
+                                        <!-- <items>
                                             <ColumnListItem vAlign="Middle">
                                                 <cells>
                                                     <Text text="{PARAMETER_ID}" />
@@ -66,12 +66,12 @@
                                                 </cells>
                                             </ColumnListItem>
                                         </items>
-                                    </Table>
-                                </ux:blocks>
+                                    </Table>  -->
+                                <!-- </ux:blocks>
                             </ux:ObjectPageSubSection>
                         </ux:subSections>
                     </ux:ObjectPageSection>
-                </ux:sections>
+                </ux:sections> -->
 <!-- 
                 <ux:footer>
             <OverflowToolbar width="100%" design="Solid">

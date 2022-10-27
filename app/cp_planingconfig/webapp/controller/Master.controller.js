@@ -2,38 +2,49 @@ sap.ui.define(
     [
         "sap/ui/core/mvc/Controller",
         "cpapp/cpplaningconfig/controller/BaseController",
-        "sap/ui/model/json/JSONModel",    
-        "sap/f/library"    
+        "sap/ui/model/json/JSONModel",
+        "sap/f/library",
+        "sap/ui/Device",
 
     ],
-    function (Controller, BaseController, JSONModel, fioriLibrary) {
+    function (Controller, BaseController, JSONModel, fioriLibrary, Device) {
         "use strict";
-        var that;
+        var that, oGModel;
         return BaseController.extend("cpapp.cpplaningconfig.controller.Master", {
             onInit() {
                 that = this;
                 that.locModel = new JSONModel();
                 that.locModel.setSizeLimit(1000);
 
-                var oRoute = that.getRouter().getRoute("master");
-                oRoute.attachPatternMatched(that._onPatternMatched, that);
+                this.bus = sap.ui.getCore().getEventBus();
+                this.bus.subscribe("data", "refreshMaster", this.refreshMaster, this);
+                this.bus.publish("nav", "toBeginPage", {
+                    viewName: this.getView().getProperty("viewName"),
+                });
+
+                // var oRoute = that.getRouter().getRoute("Master");
+                // oRoute.attachPatternMatched(that._onPatternMatched, that);
             },
             /**
              * 
              * @param {*} oModel 
              */
-            onAfterRendering: function() {
+            onAfterRendering: function () {
+                that = this;
+                oGModel = this.getModel("oGModel");
+
                 that.oLocationList = that.getView().byId("idLocations");
+                that.getLocation();
             },
             /**
              * 
              * 
              */
-            getLocation: function() {
+            getLocation: function () {
                 //Location data
                 that.getModel("PCModel").read("/getLocation", {
                     success: function (oData) {
-                        that.locModel.setData({locations: oData.results});                        
+                        that.locModel.setData({ locations: oData.results });
                         that.oLocationList.setModel(that.locModel);
                     },
                     error: function (oData, error) {
@@ -41,25 +52,42 @@ sap.ui.define(
                         sap.ui.core.BusyIndicator.hide();
                     },
                 });
-                // oModel.read("/getLocation", {
-                //     success: function (oData) {
-                //         that.locModel.setData({locations: oData.results});                        
-                //         that.oLocationList.setModel(that.locModel);
-                //         // sap.ui.core.BusyIndicator.hide();
-                //     },
-                //     error: function (oData, error) {
-                //         MessageToast.show("error");
-                //         // sap.ui.core.BusyIndicator.hide();
-                //     },
-                // });
+
             },
             onListItemPress: function (oEvent) {
                 // var oNextUIState = that.getOwnerComponent().getHelper().getNextUIState(1),
-                    //productPath = oEvent.getSource().getSelectedItem().getBindingContext("locations").getPath(),
-                    //location = productPath.split("/").slice(-1).pop();
-                var location = oEvent.getParameter('listItem').getProperty("title");
-    
-                that.getRouter().navTo("detail", {layout: fioriLibrary.LayoutType.TwoColumnsMidExpanded, location: location});
+                //productPath = oEvent.getSource().getSelectedItem().getBindingContext("locations").getPath(),
+                //location = productPath.split("/").slice(-1).pop();
+                // var location = oEvent.getParameter('listItem').getProperty("title");
+
+                // that.getRouter().navTo("Home", { layout: fioriLibrary.LayoutType.TwoColumnsMidExpanded, location: location });
+                oGModel = that.getModel("oGModel");
+                if (oEvent) {
+                    var location = oEvent.getParameter('listItem').getProperty("title");
+                    oGModel.setProperty("/location", location);
+                    
+                }
+                // Calling Item Detail page
+                that.getOwnerComponent().runAsOwner(function () {
+                    if (!that.oDetailView) {
+                        try {
+                            that.oDetailView = sap.ui.view({
+                                viewName: "cpapp.cpplaningconfig.view.Home",
+                                type: "XML",
+                            });
+                            that.bus.publish("flexible", "addDetailPage", that.oDetailView);
+                            that.bus.publish("nav", "toDetailPage", {
+                                viewName: that.oDetailView.getViewName(),
+                            });
+                        } catch (e) {
+                            that.oDetailView.onAfterRendering();
+                        }
+                    } else {
+                        that.bus.publish("nav", "toDetailPage", {
+                            viewName: that.oDetailView.getViewName(),
+                        });
+                    }
+                });
             },
             /**
              *

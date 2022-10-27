@@ -60,8 +60,14 @@
     },
     "sap.ui5": {
         "flexEnabled": true,
+        "rootView": {
+            "viewName": "cpapp.cpplaningconfig.view.App",
+            "type": "XML",
+            "async": true,
+            "id": "App"
+        },
         "dependencies": {
-            "minUI5Version": "1.102.1",
+            "minUI5Version": "1.98.0",
             "libs": {
                 "sap.m": {},
                 "sap.ui.core": {},
@@ -70,9 +76,13 @@
                 "sap.ui.comp": {},
                 "sap.ui.generic.app": {},
                 "sap.ui.table": {},
-                "sap.ushell": {}
+                "sap.ushell": {},
+                "sap.uxap": {}
             }
         },
+        "config": {
+			"fullWidth": true
+		},
         "contentDensities": {
             "compact": true,
             "cozy": true
@@ -84,6 +94,13 @@
                     "bundleName": "cpapp.cpplaningconfig.i18n.i18n"
                 }
             },
+            "oGModel": {
+                "type": "sap.ui.model.json.JSONModel",
+                "settings": {
+                    "defaultBindingMode": "TwoWay"
+                },
+                "preload": true
+            },
             "PCModel": {
                 "dataSource": "mainService",
                 "preload": true,
@@ -91,7 +108,8 @@
                     "synchronizationMode": "None",
                     "operationMode": "Server",
                     "autoExpandSelect": true,
-                    "earlyRequests": true
+                    "earlyRequests": true,
+                    "groupId": "$direct"
                 }
             }
         },
@@ -105,54 +123,41 @@
         "routing": {
             "config": {
                 "routerClass": "sap.m.routing.Router",
-                "viewType": "XML",
-                "async": true,
+                "viewType": "XML", 
+                "async": true,               
                 "viewPath": "cpapp.cpplaningconfig.view",   
-                "controlId": "flexibleColumnLayout",
-                "transition": "slide",
-                "clearControlAggregation": false
+                "controlAggregation": "pages",
+                "controlId": "app",               
+                "clearControlAggregation": false                
             },
             "routes": [
                 {
-                    "name": "master",
-                    "pattern": ":layout:",
+                    "pattern": "",
+                    "name": "Main",                  
                     "target": [
-                        "Master",
-						"TargetHome"
+                        "Main"
                     ]
-                },
-                {
-					"pattern": "detail/{location}/{layout}",
-					"name": "detail",
-					"target": [
-						"Master",
-						"TargetHome"
-					]
-				}
+                }                
             ],
             "targets": {
-                "Master": {
+                "Main": {
 					"viewType": "XML",
-                    "transition": "slide",
-                    "viewId": "Master",
-                    "viewName": "Master",
-					"controlAggregation": "beginColumnPages"
+					"viewName": "Main",
+					"viewLevel": 1
 				},
-                "TargetHome": {
-                    "viewType": "XML",
-                    "transition": "slide",
-                    "viewId": "Home",
+                "Master": {
+                    "viewType": "XML",					
+                    "viewName": "Master",
+					"viewLevel": 2
+				},
+                "Home": { 
+                    "viewType": "XML",               
                     "viewName": "Home",
-                    "controlAggregation": "midColumnPages"
+                    "viewLevel": 3
                 }
             }
-        },
-        "rootView": {
-            "viewName": "cpapp.cpplaningconfig.view.Main",
-            "type": "XML",
-            "async": true,
-            "id": "fc1"
         }
+        
     },
     "sap.cloud": {
         "public": true,
