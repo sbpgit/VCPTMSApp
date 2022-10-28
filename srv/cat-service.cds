@@ -284,12 +284,14 @@ service CatalogService @(impl : './lib/cat-service.js'){
     action generateAssemblyReq(LOCATION_ID : String(4), PRODUCT_ID : String(40));
 
     //VC Planner Documentation Maintenance- Pradeep
+    entity getPageHdr as projection on od.PAGEHEADER;
+    entity getPagePgrh as projection on od.PAGEPARAGRAPH;
     function addPAGEHEADER(Flag1:String, PAGEID: Integer, DESCRIPTION:String, PARENTNODEID:Integer,HEIRARCHYLEVEL:Integer ) returns String;
    function addPAGEPARAGRAPH(Flag1:String, PAGEID: Integer, DESCRIPTION:String,  CONTENT:String ) returns String;
    function deletePAGEHEADER(Flag1:String,PAGEID:Integer) returns String;
    function deletePAGEPARAGRAPH(Flag1:String, PAGEID:Integer) returns String;
-   function addJson(PAGEID: Integer, DESCRIPTION:String,  CONTENT:String) returns String;
-   function editJSONHeader(PAGEID: Integer, DESCRIPTION:String, PARENTNODEID:Integer,HEIRARCHYLEVEL:Integer ) returns String;
+   function editPAGEHEADER(Flag1:String, PAGEID: Integer, DESCRIPTION:String, PARENTNODEID:Integer,HEIRARCHYLEVEL:Integer ) returns String;
+   function editPAGEPARAGRAPH(Flag1:String, PAGEID: Integer, DESCRIPTION:String,  CONTENT:String ) returns String;
    //End of VC Planner Documentation Maintenance- Pradeep
 
 //*****/ Critical Comp /*****/

@@ -702,6 +702,12 @@ context cp {
 
     // Sample table
     entity MARKETAUTH_WEEK {
+        key LOCATION_ID : String(4)  @title : 'Location ';
+        key PRODUCT_ID  : String(40) @title : 'Product';
+        key WEEK_DATE   : Date       @title : 'Week Date';
+    }
+ // Sample table
+    entity MARKETAUTH_CFG {
         key WEEK_DATE   : Date       @title : 'Week Date';
         key LOCATION_ID : String(4)  @title : 'Location ';
         key PRODUCT_ID  : String(40) @title : 'Product';
@@ -808,6 +814,21 @@ context cp {
     }
 
 // End Of Insert - Deepa
+//Start of VC Planner Doc-Pradeep
+entity PAGEHEADER {
+        key PAGEID         : Integer;
+            DESCRIPTION    : String(100);
+            PARENTNODEID   : Integer;
+            HEIRARCHYLEVEL : Integer;
+            
+    }
+
+    entity PAGEPARAGRAPH {
+        key PAGEID      : Integer;
+            DESCRIPTION : String(100);
+            CONTENT     : hana.CLOB;
+    }
+   // End Of VC Planner doc- Pradeep
 }
 
 
