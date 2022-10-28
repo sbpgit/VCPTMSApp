@@ -212,12 +212,17 @@ class GenFunctions {
         return num;
 
     }
+    
     static async jobSchMessage(lFlag, lMessage, req){
+console.log(lFlag);
+console.log(lMessage);
+console.log(req.headers['x-sap-job-id']);
+
         if (lFlag === 'X') {
             let dataObj = {};
             dataObj["success"] = true;
             dataObj["message"] = "Export of "+ lMessage + new Date();
-
+            
 
             if (req.headers['x-sap-job-id'] > 0) {
                 const scheduler = this.getJobscheduler(req);
@@ -230,7 +235,7 @@ class GenFunctions {
                 };
                 const vMessaage = lMessage + "and exported, to update req";
                 console.log(vMessaage, updateReq);
-
+                console.log("updateReq", updateReq);
                 scheduler.updateJobRunLog(updateReq, function (err, result) {
                     if (err) {
                         return console.log('Error updating run log: %s', err);
