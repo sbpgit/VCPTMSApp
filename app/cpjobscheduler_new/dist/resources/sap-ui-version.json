@@ -1,11 +1,7 @@
 {
 	"name": "cpapp.cpjobschedulernew",
 	"version": "0.0.1",
-<<<<<<< HEAD
-	"buildTimestamp": "202210211343",
-=======
-	"buildTimestamp": "202210280737",
->>>>>>> bf7852446abdd0eb9fa60c6a11f6c5ccdf1cdcb9
+	"buildTimestamp": "202210281154",
 	"scmRevision": "",
 	"libraries": []
 }

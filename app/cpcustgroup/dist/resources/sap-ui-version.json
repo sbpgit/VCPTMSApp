@@ -1,11 +1,7 @@
 {
 	"name": "cpapp.cpcustgroup",
 	"version": "0.0.1",
-<<<<<<< HEAD
-	"buildTimestamp": "202210211340",
-=======
-	"buildTimestamp": "202210280733",
->>>>>>> bf7852446abdd0eb9fa60c6a11f6c5ccdf1cdcb9
+	"buildTimestamp": "202210281150",
 	"scmRevision": "",
 	"libraries": []
 }

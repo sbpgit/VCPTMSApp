@@ -3989,6 +3989,44 @@
         }
       }
     },
+    "cp.MARKETAUTH_CFG": {
+      "kind": "entity",
+      "elements": {
+        "WEEK_DATE": {
+          "@title": "Week Date",
+          "key": true,
+          "type": "cds.Date"
+        },
+        "LOCATION_ID": {
+          "@title": "Location ",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "@title": "Product",
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+        "CHAR_NUM": {
+          "@title": "Internal Char. number",
+          "key": true,
+          "type": "cds.String",
+          "length": 10
+        },
+        "CHARVAL_NUM": {
+          "@title": "Internal Char. number",
+          "key": true,
+          "type": "cds.String",
+          "length": 10
+        },
+        "OPT_PERCENT": {
+          "@title": "Option Percentage",
+          "type": "cds.Double"
+        }
+      }
+    },
     "cp.SEEDORDER_HEADER": {
       "kind": "entity",
       "@UI.SelectionFields": [
@@ -21135,6 +21173,18 @@
           "length": 4
         },
         "LINE_ID": {
+          "@Common.ValueList.$Type": "Common.ValueListType",
+          "@Common.ValueList.Label": "Line ID",
+          "@Common.ValueList.CollectionPath": "getLine",
+          "@Common.ValueList.Parameters": [
+            {
+              "$Type": "Common.ValueListParameterOut",
+              "LocalDataProperty": {
+                "=": "LINE_ID"
+              },
+              "ValueListProperty": "LINE_ID"
+            }
+          ],
           "@title": "Line",
           "key": true,
           "type": "cds.String",

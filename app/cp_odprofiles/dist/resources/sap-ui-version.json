@@ -1,11 +1,7 @@
 {
 	"name": "cp.odp.cpodprofiles",
 	"version": "0.0.1",
-<<<<<<< HEAD
-	"buildTimestamp": "202210211336",
-=======
-	"buildTimestamp": "202210280728",
->>>>>>> bf7852446abdd0eb9fa60c6a11f6c5ccdf1cdcb9
+	"buildTimestamp": "202210281145",
 	"scmRevision": "",
 	"libraries": []
 }
