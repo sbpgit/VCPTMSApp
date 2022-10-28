@@ -1193,6 +1193,7 @@ entity![V_PLANNEDCONFIG]{
     key![VALUE]             : String(500) @title : 'VALUE';
 }
 
+
 @cds.persistence.exists
 entity![V_CIRVERSCEN]{
     key![LOCATION_ID] : String(4)  @title : 'LOCATION_ID';

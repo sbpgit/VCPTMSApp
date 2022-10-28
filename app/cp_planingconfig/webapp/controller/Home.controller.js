@@ -1,5 +1,4 @@
 sap.ui.define([
-    "sap/ui/core/mvc/Controller",
     "cpapp/cpplaningconfig/controller/BaseController",
     'sap/m/GroupHeaderListItem',
     'sap/m/MessageToast',
@@ -11,7 +10,7 @@ sap.ui.define([
     /**
      * @param {typeof sap.ui.core.mvc.Controller} Controller
      */
-    function (Controller, BaseController, GroupHeaderListItem, MessageToast, JSONModel, Filter, FilterOperator, Device) {
+    function (BaseController, GroupHeaderListItem, MessageToast, JSONModel, Filter, FilterOperator, Device) {
         "use strict";
         var that = this, oGModel;
         return BaseController.extend("cpapp.cpplaningconfig.controller.Home", {
@@ -21,8 +20,14 @@ sap.ui.define([
                 this.bus = sap.ui.getCore().getEventBus();
                 oGModel = that.getOwnerComponent().getModel("oGModel");
 
+                that.i18n = that.getResourceBundle();
+
                 that.oParameterModel = new JSONModel();
                 that.oMethodModel = new JSONModel();
+
+                var oDetailPage = this.getView().byId("idDetailView"),
+                bCurrentShowFooterState = oDetailPage.getShowFooter();
+                oDetailPage.setShowFooter(bCurrentShowFooterState);
 
                 if (!that.oMethodDialog) {
                     that.oMethodDialog = sap.ui.xmlfragment("cpapp.cpplaningconfig.view.MethodTyp", that);
@@ -36,13 +41,16 @@ sap.ui.define([
        * Called after the view has been rendered.
        * Calls the service to get Data.
        */
-      onAfterRendering: function () {
-        oGModel = that.getOwnerComponent().getModel("oGModel");
+            onAfterRendering: function () {
+                var oModel = that.getOwnerComponent().getModel('PCModel');
+                oGModel = that.getOwnerComponent().getModel("oGModel");
 
-        var location = oGModel.getProperty("/location");
 
-        that.getParameters(location);
-      },
+                var location = oGModel.getProperty("/location");
+
+                that.getPlannedParameters(location);
+                that.getMethods(oModel);
+            },
 
 
             /*
@@ -76,6 +84,7 @@ sap.ui.define([
                 },
                     oParamVals;
                 var sParamVal = "";
+                var sLocation = oGModel.getProperty("/location");
 
                 var aItems = that.getView().byId("idParameterTable").getItems();
 
@@ -89,7 +98,7 @@ sap.ui.define([
                                 sParamVal = oObj.getCells()[2].getValue();
                             }
                             oParamVals = {
-                                LOCATION_ID: that.location,
+                                LOCATION_ID: sLocation,
                                 PARAMETER_ID: oObj.getCells()[0].getText(),
                                 VALUE: sParamVal
                                 // VALUE: oObj.getCells()[2].getValue()
@@ -119,7 +128,7 @@ sap.ui.define([
             /*
             *
             */
-            getParameters: function (slocation) {
+            getPlannedParameters: function (slocation) {
                 var aParameters = [];
                 that.getModel("PCModel").read('/V_Parameters', {
                     filters: [
@@ -128,13 +137,48 @@ sap.ui.define([
                     success: function (oData) {
                         // MessageToast.show("Success");
                         aParameters = oData.results;
+                        if (aParameters.length > 0) {
+                            aParameters = aParameters.sort((a, b) => a.SEQUENCE - b.SEQUENCE);
+
+                            that.oParameterModel.setData({
+                                parameters: aParameters  //oData.results
+                            });
+
+                            that.byId("idParameterTable").setModel(that.oParameterModel);
+                        } else {
+                            that.getParameters();
+                        }
+
+                    }, error: function (oReponse) {
+                        MessageToast.show("Failed to fetch Parameters!");
+                    }
+                }
+                );
+            },
+            /**
+             * 
+             * @param {*} oModel 
+             */
+            getParameters: function () {
+                var aParameters = [];
+                that.getModel("PCModel").read('/V_Parameters', {
+                    success: function (oData) {
+                        // MessageToast.show("Success");
+                        aParameters = oData.results;
                         aParameters = aParameters.sort((a, b) => a.SEQUENCE - b.SEQUENCE);
 
+                        const ids = aParameters.map(o => o.PARAMETER_ID)
+                        const aFiltered = aParameters.filter(({ PARAMETER_ID }, index) => !ids.includes(PARAMETER_ID, index + 1))
+                        const aParams = aFiltered.map(obj => {
+                            
+                              return {...obj, VALUE: ''};
+                          });                       
+
                         that.oParameterModel.setData({
-                            parameters: aParameters  //oData.results
+                            parameters: aParams //aParameters  //oData.results
                         });
 
-                        // that.byId("idParameterTable").setModel(that.oParameterModel);
+                        that.byId("idParameterTable").setModel(that.oParameterModel);
 
                     }, error: function (oReponse) {
                         MessageToast.show("Failed to fetch Parameters!");
@@ -242,7 +286,7 @@ sap.ui.define([
                 // that.getParameters(oModel, oArgs.location);
                 that.getMethods(oModel);
             }
-            
+
             /**
              * 
              * 

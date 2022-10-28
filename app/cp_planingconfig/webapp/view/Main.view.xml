@@ -7,7 +7,7 @@
 			<Button id="leftMenu" icon="sap-icon://menu2" tooltip="Side Menu Expand/Collapse" press="expandBegin" type="Transparent" visible="false"/>
 			</contentLeft>
 				<contentMiddle>
-					<Title text="{i18n>appTitle}" class="boldText"></Title>
+					<Title text="{i18n>appTitle}" class="title"></Title>
 				</contentMiddle>
 			</Bar>
 		</customHeader>

@@ -1,21 +1,21 @@
 <mvc:View height="100%" class="sapUiSizeCompact" controllerName="cpapp.cpplaningconfig.controller.Home" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:ux="sap.uxap">
-    <Page showHeader="false" showFooter="true"> 
-         <content>
+    <Page id="idDetailView" showHeader="false" showFooter="true">
+        <content>
             <ux:ObjectPageLayout id="ObjectPageLayout" useIconTabBar="true" showHeaderContent="false" showFooter="false">
-                <ux:headerTitle>
+                <!-- <ux:headerTitle>
                     <ux:ObjectPageDynamicHeaderTitle class="titleAlign">
                         <ux:expandedHeading>
                             <Title text="{i18n>appTitle}" />
                         </ux:expandedHeading>
                     </ux:ObjectPageDynamicHeaderTitle>
-                </ux:headerTitle>
+                </ux:headerTitle> -->
 
-                <!-- <ux:sections>
+                <ux:sections>
                     <ux:ObjectPageSection showTitle="false">
                         <ux:subSections>
                             <ux:ObjectPageSubSection>
-                                <ux:blocks> -->
-                                    <!-- <Table
+                                <ux:blocks>
+                                    <Table
                                         id="idParameterTable"
                                         backgroundDesign="Solid"
                                         showSeparators="None"
@@ -30,7 +30,7 @@
                                 group: true },                              
                             groupHeaderFactory: '.getGroupHeader'
                             }"
-                                    > -->
+                                    >
                                         <!--                            
                                 <headerToolbar>
                                     <OverflowToolbar>
@@ -40,24 +40,16 @@
                                             <Button icon="sap-icon://save" type="Emphasized" text="Save" class="btnSize" press="onPressSave" />
                                         </content>
                                     </OverflowToolbar>
-                                </headerToolbar>
--->
-                                        <!-- <columns>
-                                            <Column visible="false">
-                                               
-                                            </Column>
-                                            <Column minScreenWidth="Desktop" demandPopin="true" width="30em" hAlign="End">
-                                                
-                                            </Column>
-                                            <Column minScreenWidth="Desktop" demandPopin="true" width="30em" hAlign="End">
-                                                
-                                            </Column>
-                                            <Column minScreenWidth="Desktop" demandPopin="true" width="10em" hAlign="Begin">
-                                                
-                                            </Column>
-                                        </columns> -->
-                                        <!-- <items>
-                                            <ColumnListItem vAlign="Middle">
+                                </headerToolbar> -->
+                                        
+                                        <columns>
+                                            <Column visible="false" />
+                                            <Column minScreenWidth="Tablet" demandPopin="true" width="30em"  />
+                                            <Column minScreenWidth="Tablet" demandPopin="true" width="30em" />
+                                            <Column minScreenWidth="Tablet" demandPopin="true" width="10em"  />
+                                        </columns>
+                                        <items>
+                                            <ColumnListItem>
                                                 <cells>
                                                     <Text text="{PARAMETER_ID}" />
                                                     <Label text="{DESCRIPTION}" required="true" />
@@ -66,13 +58,13 @@
                                                 </cells>
                                             </ColumnListItem>
                                         </items>
-                                    </Table>  -->
-                                <!-- </ux:blocks>
+                                    </Table>
+                                </ux:blocks>
                             </ux:ObjectPageSubSection>
                         </ux:subSections>
                     </ux:ObjectPageSection>
-                </ux:sections> -->
-<!-- 
+                </ux:sections>
+                <!--
                 <ux:footer>
             <OverflowToolbar width="100%" design="Solid">
                 <ToolbarSpacer />

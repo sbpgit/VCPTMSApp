@@ -3,11 +3,13 @@ sap.ui.define(
         "sap/ui/core/mvc/Controller",
         "cpapp/cpplaningconfig/controller/BaseController",
         "sap/ui/model/json/JSONModel",
+        'sap/ui/model/Filter',
+        'sap/ui/model/FilterOperator',
         "sap/f/library",
         "sap/ui/Device",
 
     ],
-    function (Controller, BaseController, JSONModel, fioriLibrary, Device) {
+    function (Controller, BaseController, JSONModel, Filter, FilterOperator, fioriLibrary, Device) {
         "use strict";
         var that, oGModel;
         return BaseController.extend("cpapp.cpplaningconfig.controller.Master", {
@@ -33,7 +35,7 @@ sap.ui.define(
                 that = this;
                 oGModel = this.getModel("oGModel");
 
-                that.oLocationList = that.getView().byId("idLocations");
+                that.oLocationList = that.getView().byId("idLocationsList");
                 that.getLocation();
             },
             /**
@@ -54,13 +56,33 @@ sap.ui.define(
                 });
 
             },
-            onListItemPress: function (oEvent) {
-                // var oNextUIState = that.getOwnerComponent().getHelper().getNextUIState(1),
-                //productPath = oEvent.getSource().getSelectedItem().getBindingContext("locations").getPath(),
-                //location = productPath.split("/").slice(-1).pop();
-                // var location = oEvent.getParameter('listItem').getProperty("title");
+            /**
+             * 
+             * @param {*} oEvent 
+             */
+            onSearchLocation: function(oEvent) {
+                var oFilter = [];
+                that.oLocationList = that.getView().byId("idLocationsList");
 
-                // that.getRouter().navTo("Home", { layout: fioriLibrary.LayoutType.TwoColumnsMidExpanded, location: location });
+                var sQuery =
+                    oEvent.getParameter("value") || oEvent.getParameter("newValue");
+                // Checking if search value is empty
+                if (sQuery) {
+                    oFilter = new Filter([
+                        new Filter("LOCATION_ID", FilterOperator.Contains, sQuery),
+                        new Filter("LOCATION_DESC", FilterOperator.Contains, sQuery)
+                    ], false);
+
+                    that.oLocationList.getBinding("items").filter(oFilter);
+                } else {
+                    that.oLocationList.getBinding("items").filter(oFilter);
+                }
+            },
+            /**
+             * 
+             * @param {*} oEvent 
+             */
+            onListItemPress: function (oEvent) {              
                 oGModel = that.getModel("oGModel");
                 if (oEvent) {
                     var location = oEvent.getParameter('listItem').getProperty("title");
@@ -93,11 +115,11 @@ sap.ui.define(
              *
              *
              */
-            _onPatternMatched: function (oEvent) {
-                var oModel = that.getOwnerComponent().getModel('PCModel');
-                // that.i18n = that.getOwnerComponent().getModel("i18n").getResourceBundle();
-                that.getLocation();
-            }
+            // _onPatternMatched: function (oEvent) {
+            //     var oModel = that.getOwnerComponent().getModel('PCModel');
+            //     // that.i18n = that.getOwnerComponent().getModel("i18n").getResourceBundle();
+            //     that.getLocation();
+            // }
         });
     }
 );

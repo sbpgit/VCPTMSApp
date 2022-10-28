@@ -263,6 +263,7 @@ service CatalogService @(impl : './lib/cat-service.js'){
     @readonly
     entity Method_Types      as projection on od.METHOD_TYPES;
     entity V_Parameters      as projection on V_PLANNEDCONFIG;
+    // entity getPlannedParameters as projection on V_PLANNEDPARAMS;
     function postParameterValues(FLAG : String(1), PARAMVALS : String) returns String;
 
     entity getCIRGenerated as projection on od.CIR_GENERATED;
@@ -284,6 +285,8 @@ service CatalogService @(impl : './lib/cat-service.js'){
     action generateAssemblyReq(LOCATION_ID : String(4), PRODUCT_ID : String(40));
 
     //VC Planner Documentation Maintenance- Pradeep
+    entity getPageHdr as projection on od.PAGEHEADER;
+    entity getPagePgrh as projection on od.PAGEPARAGRAPH;
     function addPAGEHEADER(Flag1:String, PAGEID: Integer, DESCRIPTION:String, PARENTNODEID:Integer,HEIRARCHYLEVEL:Integer ) returns String;
    function addPAGEPARAGRAPH(Flag1:String, PAGEID: Integer, DESCRIPTION:String,  CONTENT:String ) returns String;
    function deletePAGEHEADER(Flag1:String,PAGEID:Integer) returns String;

@@ -1,4 +1,3 @@
-<!-- <mvc:View height="100%" class="sapUiSizeCompact" controllerName="cpapp.cpplaningconfig.controller.Master" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns="sap.f"> -->
 <mvc:View height="100%" class="sapUiSizeCompact" controllerName="cpapp.cpplaningconfig.controller.Master" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:ux="sap.uxap" xmlns:f="sap.f">
     <Page showHeader="false" showFooter="true">
         <content>
@@ -6,7 +5,7 @@
                 <ux:headerTitle>
                     <ux:ObjectPageDynamicHeaderTitle class="titleAlign">
                         <ux:expandedHeading>
-                            <Title text="{i18n>appTitle}" />
+                            <Title text="Locations" />
                         </ux:expandedHeading>
                     </ux:ObjectPageDynamicHeaderTitle>
                 </ux:headerTitle>
@@ -16,9 +15,10 @@
                         <ux:subSections>
                             <ux:ObjectPageSubSection>
                                 <ux:blocks>
+                                    <VBox>
+                                    <SearchField id="idSearch" liveChange="onSearchLocation" placeholder="Location" />
                                     <List
-                                        id="idLocations"
-                                        headerText="Locations"
+                                        id="idLocationsList"
                                         mode="SingleSelectMaster"
                                         itemPress="onListItemPress"
                                         items="{
@@ -29,9 +29,10 @@
 		                                }"
                                     >
                                         <items>
-                                            <StandardListItem title="{LOCATION_ID}" description="{LOCATION_ID}" type="Navigation" />
+                                            <StandardListItem title="{LOCATION_ID}" description="{LOCATION_DESC}" type="Navigation" />
                                         </items>
                                     </List>
+                                    </VBox>
                                 </ux:blocks>
                             </ux:ObjectPageSubSection>
                         </ux:subSections>
@@ -42,7 +43,7 @@
         <footer>
             <OverflowToolbar width="100%">
                 <ToolbarSpacer />
-                <Button icon="sap-icon://save" type="Emphasized" text="Save" class="btnSize" press="onPressSave" />
+                <!-- <Button icon="sap-icon://save" type="Emphasized" text="Save" class="btnSize" press="onPressSave" /> -->
             </OverflowToolbar>
         </footer>
     </Page>
