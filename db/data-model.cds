@@ -706,6 +706,14 @@ context cp {
         key PRODUCT_ID  : String(40) @title : 'Product';
         key WEEK_DATE   : Date       @title : 'Week Date';
     }
+    entity MARKETAUTH_CFG {
+        key WEEK_DATE   : Date       @title : 'Week Date';
+        key LOCATION_ID : String(4)  @title : 'Location ';
+        key PRODUCT_ID  : String(40) @title : 'Product';
+        key CHAR_NUM    : String(10) @title : 'Internal Char. number';
+        key CHARVAL_NUM : String(10) @title : 'Internal Char. number';
+            OPT_PERCENT : Double     @title : 'Option Percentage';
+    }
 
     entity SEEDORDER_HEADER {
         key SEED_ORDER    : String(10)     @title : 'Seed Order';
