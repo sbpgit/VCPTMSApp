@@ -19,13 +19,16 @@ sap.ui.define([
                 that.oGModel = that.getOwnerComponent().getModel("oGModel");
                 that.byId("idHTML").setContent();
                 //*Loading Header Content data through local json file*//
-                jQuery.ajax({
-                    type: "GET",
-                    contentType: "application/json",
-                    url: "model/headerContent.json",
-                    dataType: "json",
-                    async: false,
-                    success: function (odata, textStatus, jqXHR) {
+                // jQuery.ajax({
+                //     type: "GET",
+                //     contentType: "application/json",
+                //     url: "model/headerContent.json",
+                //     dataType: "json",
+                //     async: false,
+                //     success: function (odata, textStatus, jqXHR) {
+                    this.getView().getModel("oModel").read("/getPageHdr", {
+                        success: function (oData) {
+                            var odata = oData.results;
                         for (var i = 0; i <= odata.length - 1; i++) {
                             dataArray.push({
                                 NodeID: odata[i].PAGEID,
@@ -69,13 +72,16 @@ sap.ui.define([
                 });
                 //*End of local Header json file*//
                 //*Loading Paragraph Content data through local json file*//
-                jQuery.ajax({
-                    type: "GET",
-                    contentType: "application/json",
-                    url: "model/contentdata.json",
-                    dataType: "json",
-                    async: false,
-                    success: function (oData, textStatus, jqXHR) {
+                // jQuery.ajax({
+                //     type: "GET",
+                //     contentType: "application/json",
+                //     url: "model/contentdata.json",
+                //     dataType: "json",
+                //     async: false,
+                //     success: function (oData, textStatus, jqXHR) {
+                    this.getView().getModel("oModel").read("/getPagePgrh", {
+                        success: function (oData) {
+                            var oData = oData.results;
                         that.oGModel.setProperty("/Content", oData);
                         that.oGModel.setProperty("/flag", "X");
                         that.byId("idHTML").setContent(oData[0].CONTENT);

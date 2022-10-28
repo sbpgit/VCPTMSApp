@@ -34,7 +34,7 @@ context cp {
 
     // Product
     entity PRODUCT {
-        key PRODUCT_ID     : String(40) @title : 'Confiugurable Product';
+        key PRODUCT_ID     : String(40) @title : 'Configurable Product';
             PROD_DESC      : String(40) @title : 'Product Description';
             PROD_FAMILY    : String(30) @title : 'Product Family';
             PROD_GROUP     : String(30) @title : 'Product Group';
@@ -53,7 +53,7 @@ context cp {
     // Product and LOcation table
     entity LOCATION_PRODUCT {
         key LOCATION_ID       : String(4)  @title : 'Location ';
-        key PRODUCT_ID        : String(40) @title : 'Confiugurable Product';
+        key PRODUCT_ID        : String(40) @title : 'Configurable Product';
             LOTSIZE_KEY       : String(2)  @title : 'Lot Size Key';
             LOT_SIZE          : Integer    @title : 'Lot Size';
             PROCUREMENT_TYPE  : String(1)  @title : 'Procurement Type';
@@ -63,7 +63,7 @@ context cp {
     // BOM header
     entity BOMHEADER {
         key LOCATION_ID : String(4)      @title : 'Location '; //Association to ZLOCATION;//
-        key PRODUCT_ID  : String(40)     @title : 'Confiugurable Product';
+        key PRODUCT_ID  : String(40)     @title : 'Configurable Product';
         key ITEM_NUM    : String(5)      @title : 'Item Number ';
         key COMPONENT   : String(40)     @title : 'Component';
             COMP_QTY    : Decimal(13, 3) @title : 'Component Quantity';
@@ -74,7 +74,7 @@ context cp {
     // BOM object dependency
     entity BOM_OBJDEPENDENCY {
         key LOCATION_ID : String(4)      @title : 'Location '; //Association to ZLOCATION;//
-        key PRODUCT_ID  : String(40)     @title : 'Confiugurable Product';
+        key PRODUCT_ID  : String(40)     @title : 'Configurable Product';
         key ITEM_NUM    : String(5)      @title : 'Item Number ';
         key COMPONENT   : String(40)     @title : 'Component';
         key OBJ_DEP     : String(30)     @title : 'Object Dependency';
@@ -706,7 +706,6 @@ context cp {
         key PRODUCT_ID  : String(40) @title : 'Product';
         key WEEK_DATE   : Date       @title : 'Week Date';
     }
- // Sample table
     entity MARKETAUTH_CFG {
         key WEEK_DATE   : Date       @title : 'Week Date';
         key LOCATION_ID : String(4)  @title : 'Location ';

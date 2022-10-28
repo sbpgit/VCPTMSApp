@@ -1,7 +1,11 @@
 {
 	"name": "cpapp.cpvcplannerdocumentation",
 	"version": "0.0.1",
+<<<<<<< HEAD
 	"buildTimestamp": "202210211344",
+=======
+	"buildTimestamp": "202210280738",
+>>>>>>> bf7852446abdd0eb9fa60c6a11f6c5ccdf1cdcb9
 	"scmRevision": "",
 	"libraries": []
 }

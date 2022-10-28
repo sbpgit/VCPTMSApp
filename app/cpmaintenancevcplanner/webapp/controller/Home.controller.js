@@ -46,7 +46,8 @@ sap.ui.define([
                 //     async: false,
                 //     success: function (data, textStatus, jqXHR) {
                     this.getView().getModel("oModel").read("/getPageHdr", {
-                        success: function (data) {
+                        success: function (oData) {
+                            var data =oData.results;
                         that.oGModel.setProperty("/COMBOID", data);
                         for (var i = 0; i <= data.length - 1; i++) {
                             dataArray.push({
@@ -100,7 +101,8 @@ sap.ui.define([
                 //     async: false,
                 //     success: function (data, textStatus, jqXHR) {
                     this.getView().getModel("oModel").read("/getPagePgrh", {
-                        success: function (data) {
+                        success: function (oData) {
+                            var data = oData.results;
                         that.oGModel.setProperty("/Content", data);
                         that.byId("videoPanel").setVisible(true);
                         that.byId("content").setVisible(false);
@@ -192,7 +194,7 @@ sap.ui.define([
                     var detData = that.oGModel.getProperty("/DetailsData");
                     var pageid = detData.PAGEID;
                     var description = detData.DESCRIPTION;
-                    var oModel = this.getView().getModel("oModel");
+                    var oModel = that.getView().getModel("oModel");
                     oModel.callFunction("/moveData", {
                         method: "GET",
                         urlParameters: {
