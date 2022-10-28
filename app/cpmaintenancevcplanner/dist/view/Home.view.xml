@@ -15,9 +15,9 @@
         <masterPages>
             <Page id="master" backgroundDesign="Solid" enableScrolling="true" class="Heading1">
                 <customHeader>
-                    <Toolbar height="2.56em" class="classHead">
+                    <Toolbar id="_IDGenToolbar1" height="2.56em" class="classHead">
                         <Title id="masterTitle" text="Contents" class="ClassHead" />
-                        <ToolbarSpacer />
+                        <ToolbarSpacer id="_IDGenToolbarSpacer1" />
                         <Button id="collapseButton" press="onCollapsePress" tooltip="Add node" icon="sap-icon://add" class="button" />
                         <Button id="btnedit" press="onEdit" tooltip="Rename node" icon="sap-icon://edit" class="button" />
                         <Button id="btndelete" press="onDelete" tooltip="Delete node" icon="sap-icon://delete" class="button" />
@@ -30,25 +30,25 @@
                         numberOfExpandedLevels: 3
 		            },
                     events: {change: '.onTreeChange'}}" mode="MultiSelect">
-                    <StandardTreeItem title="{Description}" type="Active" press="onSelectionChange" class="text" />
+                    <StandardTreeItem id="_IDGenStandardTreeItem1" title="{Description}" type="Active" press="onSelectionChange" class="text" />
                 </Tree>
             </Page>
         </masterPages>
         <detailPages>
             <Page id="detail" backgroundDesign="Solid" class="Heading1">
                 <customHeader>
-                    <Toolbar height="2.56em" class="classHead">
+                    <Toolbar id="_IDGenToolbar2" height="2.56em" class="classHead">
                         <Title id="detailTitle" text="{Description}" class="ClassHead" />
-                        <ToolbarSpacer />
+                        <ToolbarSpacer id="_IDGenToolbarSpacer2" />
                     </Toolbar>
                 </customHeader>
                 <FormattedText htmlText="" id="content" />
                 <Image id="image" class="image" />
                 <Text id="textContent" text="" />
                 <l:VerticalLayout id="videoPanel" class="sapUiContentPadding" width="100%" />
-                <HBox>
+                <HBox id="_IDGenHBox1">
                     <Button text="" press="onShown" id="btnShow" icon="sap-icon://show" tooltip="Show html content and length " />
-                    <ToolbarSpacer />
+                    <ToolbarSpacer id="_IDGenToolbarSpacer3" />
                     <Text text="" id="textLength" />
                 </HBox>
                 <TextArea width="100%" height="200px" value="" id="htmlText" />

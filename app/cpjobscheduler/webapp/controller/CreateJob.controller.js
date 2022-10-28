@@ -1663,7 +1663,7 @@ sap.ui.define(
                         that.oProd = this.byId("ECRQtyprodInput");
                         that.oDateRange = this.byId("ECRQtyDate");
                         that.byId("IBPCompReqQtyExport").setVisible(true);
-                    } else if (selRadioBt === "Forcast Demand") {
+                    } else if (selRadioBt === "Forecast Demand") {
                         that.oLoc = this.byId("ECIRlocInput");
                         that.oProd = this.byId("ECIRprodInput");
                         that.byId("IBPCIRExport").setVisible(true);

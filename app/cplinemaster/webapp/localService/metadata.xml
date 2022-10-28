@@ -2169,7 +2169,7 @@
                 </Annotation>
             </Annotations>
             <Annotations Target="CatalogService.getProducts/PRODUCT_ID">
-                <Annotation Term="Common.Label" String="Confiugurable Product"/>
+                <Annotation Term="Common.Label" String="Configurable Product"/>
             </Annotations>
             <Annotations Target="CatalogService.getProducts/PROD_DESC">
                 <Annotation Term="Common.Label" String="Product Description"/>
@@ -2755,7 +2755,7 @@
                 <Annotation Term="Common.Label" String="Location "/>
             </Annotations>
             <Annotations Target="CatalogService.getLocProd/PRODUCT_ID">
-                <Annotation Term="Common.Label" String="Confiugurable Product"/>
+                <Annotation Term="Common.Label" String="Configurable Product"/>
             </Annotations>
             <Annotations Target="CatalogService.getLocProd/LOTSIZE_KEY">
                 <Annotation Term="Common.Label" String="Lot Size Key"/>
@@ -3050,7 +3050,7 @@
                 <Annotation Term="Common.Label" String="Location "/>
             </Annotations>
             <Annotations Target="CatalogService.gBomHeaderet/PRODUCT_ID">
-                <Annotation Term="Common.Label" String="Confiugurable Product"/>
+                <Annotation Term="Common.Label" String="Configurable Product"/>
             </Annotations>
             <Annotations Target="CatalogService.gBomHeaderet/ITEM_NUM">
                 <Annotation Term="Common.Label" String="Item Number "/>
@@ -3088,7 +3088,7 @@
                 <Annotation Term="Common.Label" String="Location "/>
             </Annotations>
             <Annotations Target="CatalogService.getBomOD/PRODUCT_ID">
-                <Annotation Term="Common.Label" String="Confiugurable Product"/>
+                <Annotation Term="Common.Label" String="Configurable Product"/>
             </Annotations>
             <Annotations Target="CatalogService.getBomOD/ITEM_NUM">
                 <Annotation Term="Common.Label" String="Item Number "/>
