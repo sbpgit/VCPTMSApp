@@ -2652,7 +2652,7 @@ module.exports = (srv) => {
         if (Flag === "i") {
             try {
 
-                await cds.delete("VCPLANNERDOCUMENT_PAGEPARAGRAPH", deleteData);
+                await cds.delete("CP_PAGEPARAGRAPH", deleteData);
 
                 responseMessage = " Deletion successfull";
 
@@ -2666,7 +2666,7 @@ module.exports = (srv) => {
 
             }
             try {
-                await cds.run(INSERT.into("VCPLANNERDOCUMENT_PAGEPARAGRAPH").entries(contentData));
+                await cds.run(INSERT.into("CP_PAGEPARAGRAPH").entries(contentData));
                 responseMessage1 = "Updated Successfully";
                 createResults.push(responseMessage1);
             } catch (e) {
@@ -2679,6 +2679,7 @@ module.exports = (srv) => {
 
     srv.on("addPAGEHEADER", async req => {
         let masterData = {};
+        var masterResults = [];
         var responseMessage1;
         var Flag1 = req.data.Flag1;
         if (Flag1 === 'n') {
@@ -2687,7 +2688,7 @@ module.exports = (srv) => {
             masterData.PARENTNODEID = req.data.PARENTNODEID;
             masterData.HEIRARCHYLEVEL = req.data.HEIRARCHYLEVEL;
             try {
-                await cds.run(INSERT.into("VCPLANNERDOCUMENT_PAGEHEADER").entries(masterData));
+                await cds.run(INSERT.into("CP_PAGEHEADER").entries(masterData));
                 responseMessage1 = "Updated Successfully in PAGEHEADER";
                 masterResults.push(responseMessage1);
             } catch (e) {
@@ -2700,6 +2701,7 @@ module.exports = (srv) => {
     });
     srv.on("addPAGEPARAGRAPH", async req => {
         let detailData = {};
+        var detailResults = [];
         var responseMessage1;
         var Flag1 = req.data.Flag1;
         if (Flag1 === 'n') {
@@ -2707,7 +2709,7 @@ module.exports = (srv) => {
             detailData.DESCRIPTION = req.data.DESCRIPTION;
             detailData.CONTENT = req.data.CONTENT;
             try {
-                await cds.run(INSERT.into("VCPLANNERDOCUMENT_PAGEPARAGRAPH").entries(detailData));
+                await cds.run(INSERT.into("CP_PAGEPARAGRAPH").entries(detailData));
                 responseMessage1 = "Updated Successfully in PAGEHEADER";
                 detailResults.push(responseMessage1);
             } catch (e) {
@@ -2719,13 +2721,14 @@ module.exports = (srv) => {
     });
     srv.on("deletePAGEHEADER", async req => {
         let deleteNode = {};
+        var deleteResults = [];
         var responseMessage1;
         var Flag = req.data.Flag1;
         deleteNode.PAGEID = req.data.PAGEID;
         if (Flag === "d") {
             try {
 
-                await cds.delete("VCPLANNERDOCUMENT_PAGEHEADER", deleteNode);
+                await cds.delete("CP_PAGEHEADER", deleteNode);
 
                 responseMessage1 = " Deletion successfull";
 
@@ -2752,7 +2755,7 @@ module.exports = (srv) => {
         if (Flag === "d") {
             try {
 
-                await cds.delete("VCPLANNERDOCUMENT_PAGEPARAGRAPH", deleteNode);
+                await cds.delete("CP_PAGEPARAGRAPH", deleteNode);
 
                 responseMessage1 = " Deletion successfull";
 
@@ -2783,7 +2786,7 @@ module.exports = (srv) => {
         if (Flag === "e") {
             try {
 
-                await cds.delete("VCPLANNERDOCUMENT_PAGEPARAGRAPH", deleteData);
+                await cds.delete("CP_PAGEPARAGRAPH", deleteData);
 
                 responseMessage = " Deletion successfull";
 
@@ -2803,7 +2806,7 @@ module.exports = (srv) => {
             contentData.PAGEID = req.data.PAGEID;
 
             try {
-                await cds.run(INSERT.into("VCPLANNERDOCUMENT_PAGEPARAGRAPH").entries(contentData));
+                await cds.run(INSERT.into("CP_PAGEPARAGRAPH").entries(contentData));
                 responseMessage1 = "Updated Successfully";
                 createResults.push(responseMessage1);
             } catch (e) {
@@ -2828,7 +2831,7 @@ module.exports = (srv) => {
         if (Flag === "e") {
             try {
 
-                await cds.delete("VCPLANNERDOCUMENT_PAGEHEADER", deleteData);
+                await cds.delete("CP_PAGEHEADER", deleteData);
 
                 responseMessage = " Deletion successfull";
 
@@ -2847,7 +2850,7 @@ module.exports = (srv) => {
             masterData.HEIRARCHYLEVEL = req.data.HEIRARCHYLEVEL;
             // masterData.DRILLSTATE = req.data.DRILLSTATE;
             try {
-                await cds.run(INSERT.into("VCPLANNERDOCUMENT_PAGEHEADER").entries(masterData));
+                await cds.run(INSERT.into("CP_PAGEHEADER").entries(masterData));
                 responseMessage1 = "Updated Successfully";
                 createResults.push(responseMessage1);
             } catch (e) {
