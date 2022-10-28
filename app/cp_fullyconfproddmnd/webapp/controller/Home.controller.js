@@ -109,19 +109,26 @@ sap.ui.define(
                 that._valueHelpDialogVer.setTitleAlignment("Center");
                 that._valueHelpDialogScen.setTitleAlignment("Center");
 
-                // var dDate = new Date();
-                // var oDateL = that.getDateFn(dDate);
+                // Set FromDate and ToDate
+                var dDate = new Date();
+                // set minimum date
+                that.byId("fromDate").setMinDate(dDate);
+                that.byId("toDate").setMinDate(dDate);
 
-                // //Future 90 days selected date
-                // var oDateH = new Date(
-                //     dDate.getFullYear(),
-                //     dDate.getMonth(),
-                //     dDate.getDate() + 90
-                // );
-                // var oDateH = that.getDateFn(oDateH);
+                // that.byId("fromDate").$().find('INPUT').attr('disabled', true);
 
-                // that.byId("fromDate").setValue(oDateL);
-                // that.byId("toDate").setValue(oDateH);
+                var oDateL = that.getDateFn(dDate);
+
+                //Future 90 days selected date
+                var oDateH = new Date(
+                    dDate.getFullYear(),
+                    dDate.getMonth(),
+                    dDate.getDate() + 90
+                );
+                var oDateH = that.getDateFn(oDateH);
+
+                that.byId("fromDate").setValue(oDateL);
+                that.byId("toDate").setValue(oDateH);
 
                 this.oProdList = this._oCore.byId(
                     this._valueHelpDialogProd.getId() + "-list"
@@ -150,34 +157,83 @@ sap.ui.define(
                     },
                 });
 
-                sap.ui.core.BusyIndicator.show();
+                //sap.ui.core.BusyIndicator.show();
+                // // Planned Parameter Values
+                // this.getModel("CIRModel").read("/V_Parameters", {
+                //     success: function (oData) {
+                //         var aParams = oData.results;
+                //         var oParam = {};
+                //         // if Frozen Horizon is 14 Days, we need to consider from 15th day
+                //         //var iFrozenHorizon = parseInt(oData.results[0].VALUE) + 1;
+                //         var iFrozenHorizon = parseInt(oData.results[0].VALUE) * 7 + 1;
+                //         var dDate = new Date();
+                //         dDate = new Date(dDate.setDate(dDate.getDate() + iFrozenHorizon));
+                //         var oDateL = that.getDateFn(dDate);
+                //         var oDateH = new Date(
+                //             dDate.getFullYear(),
+                //             dDate.getMonth(),
+                //             dDate.getDate() + 90
+                //         );
+
+                //         var oDateH = that.getDateFn(oDateH);
+
+                //         that.byId("fromDate").setValue(oDateL);
+                //         that.byId("toDate").setValue(oDateH);
+
+                //         // 
+                //         oParam = aParams.find(obj => obj.PARAMETER_ID === 9)
+                //         var iFirmHorizon = parseInt(oParam.VALUE) * 7;
+                //         var dDateFHL = new Date();
+                //         dDateFHL = new Date(dDateFHL.setDate(dDateFHL.getDate() + iFirmHorizon));
+                //         that.dFirmHorizonDate = dDateFHL;
+
+                //         sap.ui.core.BusyIndicator.hide();
+                //     },
+                //     error: function (oData, error) {
+                //         MessageToast.show("error");
+                //         sap.ui.core.BusyIndicator.hide();
+                //     },
+                // });
+            },
+            /**
+             * 
+             */
+            getPlannedParameters: function () {
+                var sLocation = that.oGModel.getProperty("/SelectedLoc");
                 // Planned Parameter Values
-                this.getModel("CIRModel").read("/V_Parameters", {
+                sap.ui.core.BusyIndicator.show();
+                that.getModel("CIRModel").read("/V_Parameters", {
+                    filters: [
+                        new Filter("LOCATION_ID", FilterOperator.EQ, sLocation)
+                    ],
                     success: function (oData) {
                         var aParams = oData.results;
                         var oParam = {};
                         // if Frozen Horizon is 14 Days, we need to consider from 15th day
-                        var iFrozenHorizon = parseInt(oData.results[0].VALUE) + 1;
-                        var dDate = new Date();
-                        dDate = new Date(dDate.setDate(dDate.getDate() + iFrozenHorizon));
-                        var oDateL = that.getDateFn(dDate);
-                        var oDateH = new Date(
-                            dDate.getFullYear(),
-                            dDate.getMonth(),
-                            dDate.getDate() + 90
-                        );
+                        //var iFrozenHorizon = parseInt(oData.results[0].VALUE) + 1;
+                        if (aParams.length > 0) {
+                            var iFrozenHorizon = parseInt(oData.results[0].VALUE) * 7 + 1;
+                            var dDate = new Date();
+                            dDate = new Date(dDate.setDate(dDate.getDate() + iFrozenHorizon));
+                            var oDateL = that.getDateFn(dDate);
+                            var oDateH = new Date(
+                                dDate.getFullYear(),
+                                dDate.getMonth(),
+                                dDate.getDate() + 90
+                            );
 
-                        var oDateH = that.getDateFn(oDateH);
+                            var oDateH = that.getDateFn(oDateH);
 
-                        that.byId("fromDate").setValue(oDateL);
-                        that.byId("toDate").setValue(oDateH);
+                            that.byId("fromDate").setValue(oDateL);
+                            that.byId("toDate").setValue(oDateH);
 
-                        // 
-                        oParam = aParams.find(obj => obj.PARAMETER_ID === 9)
-                        var iFirmHorizon = parseInt(oParam.VALUE);
-                        var dDateFHL = new Date();
-                        dDateFHL = new Date(dDateFHL.setDate(dDateFHL.getDate() + iFirmHorizon));
-                        that.dFirmHorizonDate = dDateFHL;
+                            // 
+                            oParam = aParams.find(obj => obj.PARAMETER_ID === 9)
+                            var iFirmHorizon = parseInt(oParam.VALUE) * 7;
+                            var dDateFHL = new Date();
+                            dDateFHL = new Date(dDateFHL.setDate(dDateFHL.getDate() + iFirmHorizon));
+                            that.dFirmHorizonDate = dDateFHL;
+                        }
 
                         sap.ui.core.BusyIndicator.hide();
                     },
@@ -720,6 +776,9 @@ sap.ui.define(
                             MessageToast.show("error");
                         },
                     });
+
+                    // Get Parameter Values to set from date and to date
+                    that.getPlannedParameters();
 
                     // Product list
                 } else if (sId.includes("prod")) {

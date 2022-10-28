@@ -1,9 +1,11 @@
 sap.ui.define([
-        "sap/ui/core/UIComponent",
-        "sap/ui/Device",
-        "cpapp/cpplaningconfig/model/models"
-    ],
-    function (UIComponent, Device, models) {
+    "sap/ui/core/UIComponent",
+    "sap/ui/Device",
+    "cpapp/cpplaningconfig/model/models",
+    "sap/f/FlexibleColumnLayoutSemanticHelper",
+    "sap/f/library"
+],
+    function (UIComponent, Device, models, FlexibleColumnLayoutSemanticHelper, fioriLibrary) {
         "use strict";
 
         return UIComponent.extend("cpapp.cpplaningconfig.Component", {
@@ -17,6 +19,7 @@ sap.ui.define([
              * @override
              */
             init: function () {
+                var oRouter;
                 // call the base component's init function
                 UIComponent.prototype.init.apply(this, arguments);
 
@@ -24,8 +27,9 @@ sap.ui.define([
                 this.getRouter().initialize();
 
                 // set the device model
-                this.setModel(models.createDeviceModel(), "device");
-            }
+                this.setModel(models.createDeviceModel(), "device");                
+            } 
+            
         });
     }
 );
