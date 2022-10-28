@@ -42,4 +42,21 @@ annotate service.getProdlocline with {
          ]
         }   
     }; 
+    LINE_ID @Common : {
+        // Text            : LOCATION_ID_LOCATION_ID,
+        // TextArrangement : #TextOnly,
+        // //insert your value list here 
+        ValueList       : {
+            $Type          : 'Common.ValueListType',
+            Label          : 'Line ID',
+            CollectionPath : 'getLine',
+            Parameters     : [
+            {
+                $Type             : 'Common.ValueListParameterOut',
+                LocalDataProperty : LINE_ID,
+                ValueListProperty : 'LINE_ID'
+            }
+            ]
+        }   
+    }; 
 };

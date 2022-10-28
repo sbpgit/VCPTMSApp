@@ -245,7 +245,7 @@ class GenFunctions {
         else {
             let dataObj = {};
             dataObj["failed"] = false;
-            dataObj["message"] = "Export of"+ lMessage + new Date();
+            dataObj["message"] = "Export of "+ lMessage + new Date();
 
 
             if (req.headers['x-sap-job-id'] > 0) {
