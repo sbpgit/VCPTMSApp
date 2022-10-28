@@ -89,7 +89,7 @@ sap.ui.define(
              * Called after the view has been rendered.
              */
             onAfterRendering: function () {
-                // sap.ui.core.BusyIndicator.show();
+                // sap.ui.core.BusyIndicator.show();                
                 this.oResourceBundle = this.getView()
                     .getModel("i18n")
                     .getResourceBundle();
@@ -114,8 +114,7 @@ sap.ui.define(
                 // set minimum date
                 that.byId("fromDate").setMinDate(dDate);
                 that.byId("toDate").setMinDate(dDate);
-
-                // that.byId("fromDate").$().find('INPUT').attr('disabled', true);
+               
 
                 var oDateL = that.getDateFn(dDate);
 
@@ -142,6 +141,11 @@ sap.ui.define(
                 this.oScenList = this._oCore.byId(
                     this._valueHelpDialogScen.getId() + "-list"
                 );
+
+                // Set Visible Row Count
+                that.handleVisibleRowCount();
+                // Diable Date Input
+                // that.handleDateInputDisable();                
 
                 sap.ui.core.BusyIndicator.show();
                 //Location data
@@ -225,7 +229,7 @@ sap.ui.define(
                             var oDateH = that.getDateFn(oDateH);
 
                             that.byId("fromDate").setValue(oDateL);
-                            that.byId("toDate").setValue(oDateH);
+                            that.byId("toDate").setValue(oDateH);                           
 
                             // 
                             oParam = aParams.find(obj => obj.PARAMETER_ID === 9)
@@ -1539,8 +1543,48 @@ sap.ui.define(
                     oSheet.destroy();
                 });
 
+            },
+            /**
+             * 
+             */
+            handleDateInputDisable: function () {
+                // From Date - Input Disabled
+                var oFromDt = that.byId("fromDate");
+                oFromDt.addEventDelegate({
+                    onAfterRendering: function () {
+                        var oDateInner = this.$().find('.sapMInputBaseInner');
+                        var oID = oDateInner[0].id;
+                        $('#' + oID).attr("disabled", true);
+                    }
+                }, oFromDt);
 
-            }
+                // To Date - Input Disabled
+                var oToDt = that.byId("toDate");
+                oToDt.addEventDelegate({
+                    onAfterRendering: function () {
+                        var oDateInner = this.$().find('.sapMInputBaseInner');
+                        var oID = oDateInner[0].id;
+                        $('#' + oID).attr("disabled", true);
+                    }
+                }, oToDt);
+            },
+            /**
+             * 
+             */
+             handleVisibleRowCount: function() {
+                var iWinH = window.innerHeight;
+                if (iWinH > 750 && iWinH < 800) {
+                    that.byId("idCIReq").setVisibleRowCount(9);
+                } else if (iWinH > 800 && iWinH < 900) {
+                    that.byId("idCIReq").setVisibleRowCount(10);
+                } else if (iWinH > 900 && iWinH < 1000) {
+                    that.byId("idCIReq").setVisibleRowCount(12);
+                } else if (iWinH > 1000 && iWinH < 1100) {
+                    that.byId("idCIReq").setVisibleRowCount(14);
+                } else {
+                    that.byId("idCIReq").setVisibleRowCount(8);
+                }
+             }
 
         });
     }
