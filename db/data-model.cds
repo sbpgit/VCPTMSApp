@@ -34,7 +34,7 @@ context cp {
 
     // Product
     entity PRODUCT {
-        key PRODUCT_ID     : String(40) @title : 'Confiugurable Product';
+        key PRODUCT_ID     : String(40) @title : 'Configurable Product';
             PROD_DESC      : String(40) @title : 'Product Description';
             PROD_FAMILY    : String(30) @title : 'Product Family';
             PROD_GROUP     : String(30) @title : 'Product Group';
@@ -53,7 +53,7 @@ context cp {
     // Product and LOcation table
     entity LOCATION_PRODUCT {
         key LOCATION_ID       : String(4)  @title : 'Location ';
-        key PRODUCT_ID        : String(40) @title : 'Confiugurable Product';
+        key PRODUCT_ID        : String(40) @title : 'Configurable Product';
             LOTSIZE_KEY       : String(2)  @title : 'Lot Size Key';
             LOT_SIZE          : Integer    @title : 'Lot Size';
             PROCUREMENT_TYPE  : String(1)  @title : 'Procurement Type';
@@ -63,7 +63,7 @@ context cp {
     // BOM header
     entity BOMHEADER {
         key LOCATION_ID : String(4)      @title : 'Location '; //Association to ZLOCATION;//
-        key PRODUCT_ID  : String(40)     @title : 'Confiugurable Product';
+        key PRODUCT_ID  : String(40)     @title : 'Configurable Product';
         key ITEM_NUM    : String(5)      @title : 'Item Number ';
         key COMPONENT   : String(40)     @title : 'Component';
             COMP_QTY    : Decimal(13, 3) @title : 'Component Quantity';
@@ -74,7 +74,7 @@ context cp {
     // BOM object dependency
     entity BOM_OBJDEPENDENCY {
         key LOCATION_ID : String(4)      @title : 'Location '; //Association to ZLOCATION;//
-        key PRODUCT_ID  : String(40)     @title : 'Confiugurable Product';
+        key PRODUCT_ID  : String(40)     @title : 'Configurable Product';
         key ITEM_NUM    : String(5)      @title : 'Item Number ';
         key COMPONENT   : String(40)     @title : 'Component';
         key OBJ_DEP     : String(30)     @title : 'Object Dependency';
@@ -706,6 +706,14 @@ context cp {
         key PRODUCT_ID  : String(40) @title : 'Product';
         key WEEK_DATE   : Date       @title : 'Week Date';
     }
+    entity MARKETAUTH_CFG {
+        key WEEK_DATE   : Date       @title : 'Week Date';
+        key LOCATION_ID : String(4)  @title : 'Location ';
+        key PRODUCT_ID  : String(40) @title : 'Product';
+        key CHAR_NUM    : String(10) @title : 'Internal Char. number';
+        key CHARVAL_NUM : String(10) @title : 'Internal Char. number';
+            OPT_PERCENT : Double     @title : 'Option Percentage';
+    }
 
     entity SEEDORDER_HEADER {
         key SEED_ORDER    : String(10)     @title : 'Seed Order';
@@ -805,6 +813,21 @@ context cp {
     }
 
 // End Of Insert - Deepa
+//Start of VC Planner Doc-Pradeep
+entity PAGEHEADER {
+        key PAGEID         : Integer;
+            DESCRIPTION    : String(100);
+            PARENTNODEID   : Integer;
+            HEIRARCHYLEVEL : Integer;
+            
+    }
+
+    entity PAGEPARAGRAPH {
+        key PAGEID      : Integer;
+            DESCRIPTION : String(100);
+            CONTENT     : hana.CLOB;
+    }
+   // End Of VC Planner doc- Pradeep
 }
 
 
@@ -1174,8 +1197,10 @@ entity![V_PLANNEDCONFIG]{
     key![VALUE_HELP_TAB]    : String(20)  @title : 'VALUE_HELP_TAB';
     key![GROUP_DESCRIPTION] : String(100) @title : 'GROUP_DESCRIPTION';
     key![UNIT]              : String(5)   @title : 'UNIT';
+    key![LOCATION_ID]       : String(4)   @title : 'LOCATION_ID';
     key![VALUE]             : String(500) @title : 'VALUE';
 }
+
 
 @cds.persistence.exists
 entity![V_CIRVERSCEN]{

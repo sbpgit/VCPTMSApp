@@ -1438,7 +1438,7 @@ exports._runHgbtPredictionV1 = async function(hgbtType, group, version, scenario
     stmt=conn.prepare(sqlStr);
     let predictionResults=stmt.exec();
     stmt.drop();
-    console.log('Prediction Results ', predictionResults);
+    // console.log('Prediction Results ', predictionResults);
 
     // --------------- BEGIN --------------------
 

@@ -1551,7 +1551,7 @@ module.exports = cds.service.impl(async function () {
             .where(`LOCATION_ID = '${req.data.LOCATION_ID}' AND VALUE = 4 `);
         let vFromDate = new Date();
         let vToDate = new Date().toISOString().split('Z')[0].split('T')[0];
-        vFromDate.setDate(vFromDate.getDate() - parseInt(lsSales.VALUE));
+        vFromDate.setDate(vFromDate.getDate() - ( parseInt(lsSales.VALUE) * 7) );
         vFromDate = vFromDate.toISOString().split('Z')[0].split('T')[0];
         const liactcomp = await cds.run(
             `

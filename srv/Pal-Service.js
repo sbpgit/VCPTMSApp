@@ -1,6 +1,7 @@
 const cds = require('@sap/cds')
 const { v1: uuidv1} = require('uuid')
 const hana = require('@sap/hana-client');
+const rp = require('request-promise');
 
 const conn_params = {
     serverNode  : cds.env.requires.db.credentials.host + ":" + cds.env.requires.db.credentials.port,
@@ -21,6 +22,7 @@ const classicalSchema = process.env.classicalSchema;
 // const classicalSchema = "DB_CONFIG_PROD_CLIENT1"; 
 // const vcConfigTimePeriod = "PERIOD_NUM";
 const minBuckets = 10;
+const predictionsTimeout = 10000; // 10 seconds for now
 
 // Begin of HGBT Functions
 const hgbtMethods = require('./hgbt.js');
@@ -343,7 +345,7 @@ async function _getDataObjForPredictions(vcRulesList, idx, modelType, numChars) 
 
             }
         }
-   console.log('_getDataObjForPredictions ',JSON.stringify(dataObj));
+//    console.log('_getDataObjForPredictions ',JSON.stringify(dataObj));
     return dataObj;
    
 }
@@ -366,6 +368,7 @@ async function _postPredictionRequest(req,url,paramsObj,numChars,dataObj,modelTy
                 'Content-Type': 'application/json',
                 'Authorization' : auth
         },
+        'timeout': predictionsTimeout,
 
         body: JSON.stringify({
             "Product": vcRuleListObj[0].Product,
@@ -392,6 +395,7 @@ async function _postPredictionRequest(req,url,paramsObj,numChars,dataObj,modelTy
                 'Content-Type': 'application/json',
                 'Authorization' : auth
         },
+        'timeout': predictionsTimeout,
         body: JSON.stringify({
             "Product": vcRuleListObj[0].Product,
             "Location": vcRuleListObj[0].Location,
@@ -417,6 +421,7 @@ async function _postPredictionRequest(req,url,paramsObj,numChars,dataObj,modelTy
                 'Content-Type': 'application/json',
                 'Authorization' : auth
         },
+        'timeout': predictionsTimeout,
         body: JSON.stringify({
             "Product": vcRuleListObj[0].Product,
             "Location": vcRuleListObj[0].Location,
@@ -442,6 +447,7 @@ async function _postPredictionRequest(req,url,paramsObj,numChars,dataObj,modelTy
                 'Content-Type': 'application/json',
                 'Authorization' : auth
         },
+        'timeout': predictionsTimeout,
         body: JSON.stringify({
             "Product": vcRuleListObj[0].Product,
             "Location": vcRuleListObj[0].Location,
@@ -458,112 +464,119 @@ async function _postPredictionRequest(req,url,paramsObj,numChars,dataObj,modelTy
 
         };
     }
-    await request(options, async function (error, response) {
-        console.log('statusCode:', response.statusCode); // Print the response status code if a response was received
 
-        if (error) 
-        {
-            console.log('_postPredictionRequest - Error ', error);
+    let ret_response ="";
+    let error = false;
 
+    console.log('_postPredictionRequest Request Time = ', new Date());
 
-            throw new Error(error);
-            return;
+    await rp(options)
+    .then(function (response) {
+        console.log('_postPredictionRequest Response Time = ', new Date());
+        // console.log('Response   = ', response);
+        // ret_response = JSON.parse(response);
+        ret_response = response;
+        
+    })
+    .catch(function (err) {
+       console.log('_postPredictionRequest - Error ', err);
+       ret_response = err;
+       error = true;
 
-        }
-        if (response.statusCode == 200)
-        {
-            let cqnQuery = "";
-            let responseData = JSON.parse(response.body);
-            //var cqnQuery;
-            if (modelType == 'HGBT')
-            {
-
-                cqnQuery = {INSERT:{ into: { ref: ['CP_PALGENPREDICTIONS'] }, entries: [
-                    {   predictionsID: responseData.value[0].hgbtID, 
-                        createdAt : responseData.value[0].createdAt, 
-                        modelType : modelType,
-                        vcRulesList : vcRuleListObj
-                    }
-                ]}}
-
-            }
-            else if (modelType == 'RDT')
-            {
-
-                cqnQuery = {INSERT:{ into: { ref: ['CP_PALGENPREDICTIONS'] }, entries: [
-                    {   predictionsID: responseData.value[0].rdtID, 
-                        createdAt : responseData.value[0].createdAt, 
-                        modelType : modelType,
-                        vcRulesList : vcRuleListObj
-                    }
-                ]}}
-
-            }
-            else if (modelType == 'MLR')
-            {
-                cqnQuery = {INSERT:{ into: { ref: ['CP_PALGENPREDICTIONS'] }, entries: [
-                    {   predictionsID: responseData.value[0].mlrpID, 
-                        createdAt : responseData.value[0].createdAt, 
-                        modelType : modelType,
-                        vcRulesList : vcRuleListObj
-                    }
-                ]}}
-
-            }
-            else if (modelType == 'VARMA')
-            {
-                cqnQuery = {INSERT:{ into: { ref: ['CP_PALGENPREDICTIONS'] }, entries: [
-                    {   predictionsID: responseData.value[0].varmaID, 
-                        createdAt : responseData.value[0].createdAt, 
-                        modelType : modelType,
-                        vcRulesList : vcRuleListObj
-                    }
-                ]}}
-
-            }
-
-            await cds.run(cqnQuery);
-
-        }
-        else
-        {
-
-
-            let errorObj = {};
-            errorObj["success"] = false;
- 
-            errorObj["message"] = 'ERROR generate Predictions Response StatusCode : ' + response.statusCode + ' AT ' + new Date() +
-                                     '\n Response Details :' + 
-                                     '\n Location : ' + vcRuleListObj[0].Location +
-                                     '\n Product : ' + vcRuleListObj[0].Product +
-                                     '\n Group ID : ' + vcRuleListObj[0].GroupID +
-                                     '\n Type : ' + vcRuleListObj[0].Type +
-                                     '\n modelVersion : ' + vcRuleListObj[0].modelVersion +
-                                     '\n Version : ' + vcRuleListObj[0].Version +
-                                     '\n Scenario : ' + vcRuleListObj[0].Scenario;
-            if (req.headers['x-sap-job-id'] > 0)
-            {
-                const scheduler = getJobscheduler(req);
-
-                var updateReq = {
-                    jobId: req.headers['x-sap-job-id'],
-                    scheduleId: req.headers['x-sap-job-schedule-id'],
-                    runId: req.headers['x-sap-job-run-id'],
-                    data : errorObj
-                    };
-
-
-                scheduler.updateJobRunLog(updateReq, function(err, result) {
-                if (err) {
-                    return console.log('Error updating run log: %s', err);
-                }
-
-
-                });
-            }
-
-        }
     });
+
+
+    if (error == false)
+    {
+        let cqnQuery = "";
+        let responseData = JSON.parse(ret_response);
+
+        if (modelType == 'HGBT')
+        {
+            cqnQuery = {INSERT:{ into: { ref: ['CP_PALGENPREDICTIONS'] }, entries: [
+                {   predictionsID: responseData.value[0].hgbtID, 
+                    createdAt : responseData.value[0].createdAt, 
+                    modelType : modelType,
+                    vcRulesList : vcRuleListObj
+                }
+            ]}}
+
+        }
+        else if (modelType == 'RDT')
+        {
+            cqnQuery = {INSERT:{ into: { ref: ['CP_PALGENPREDICTIONS'] }, entries: [
+                {   predictionsID: responseData.value[0].rdtID, 
+                    createdAt : responseData.value[0].createdAt, 
+                    modelType : modelType,
+                    vcRulesList : vcRuleListObj
+                }
+            ]}}
+
+        }
+        else if (modelType == 'MLR')
+        {
+            cqnQuery = {INSERT:{ into: { ref: ['CP_PALGENPREDICTIONS'] }, entries: [
+                {   predictionsID: responseData.value[0].mlrpID, 
+                    createdAt : responseData.value[0].createdAt, 
+                    modelType : modelType,
+                    vcRulesList : vcRuleListObj
+                }
+            ]}}
+
+        }
+        else if (modelType == 'VARMA')
+        {
+            cqnQuery = {INSERT:{ into: { ref: ['CP_PALGENPREDICTIONS'] }, entries: [
+                {   predictionsID: responseData.value[0].varmaID, 
+                    createdAt : responseData.value[0].createdAt, 
+                    modelType : modelType,
+                    vcRulesList : vcRuleListObj
+                }
+            ]}}
+
+        }
+
+        await cds.run(cqnQuery);
+
+    }
+    else
+    {
+
+
+        let errorObj = {};
+        errorObj["success"] = false;
+
+        errorObj["message"] = 'ERROR generate Predictions ' + ret_response + ' AT ' + new Date() +
+                                    '\n Response Details :' + 
+                                    '\n Location : ' + vcRuleListObj[0].Location +
+                                    '\n Product : ' + vcRuleListObj[0].Product +
+                                    '\n Group ID : ' + vcRuleListObj[0].GroupID +
+                                    '\n Type : ' + vcRuleListObj[0].Type +
+                                    '\n modelVersion : ' + vcRuleListObj[0].modelVersion +
+                                    '\n Version : ' + vcRuleListObj[0].Version +
+                                    '\n Scenario : ' + vcRuleListObj[0].Scenario;
+        if (req.headers['x-sap-job-id'] > 0)
+        {
+            const scheduler = getJobscheduler(req);
+
+            var updateReq = {
+                jobId: req.headers['x-sap-job-id'],
+                scheduleId: req.headers['x-sap-job-schedule-id'],
+                runId: req.headers['x-sap-job-run-id'],
+                data : errorObj
+                };
+
+
+            scheduler.updateJobRunLog(updateReq, function(err, result) {
+            if (err) {
+                return console.log('Error updating run log: %s', err);
+            }
+
+
+            });
+        }
+
+    }
 }
 
 
@@ -990,42 +1003,42 @@ async function _generatePredictions(req,isGet) {
         }
         // Wait before posting Next Prediction Request
         // It allows CDS (cqn Query) to commit PalMlrPredictions / PalHgbtPredictions / PalVarmaPredictions
-        if (dataObj.length <=5)
-        {
-            console.log('_generatePredictions Sleeping for ', dataObj.length*800, ' Milli Seconds', 'Intervals =' , dataObj.length);
-            console.log('_generatePredictions Sleep Start Time',new Date(), 'charcount ', 'index ',i, 'dimensions', vcRulesList[i].dimensions);
-            await sleep(dataObj.length*800);
-            console.log('_generatePredictions Sleep Completed Time',new Date(), 'charcount ', vcRulesList[i].dimensions);
-        }
-        else if (dataObj.length <=10)
-        {
-            console.log('_generatePredictions Sleeping for ', dataObj.length*400, ' Milli Seconds', 'Intervals =' , dataObj.length);
-            console.log('_generatePredictions Sleep Start Time',new Date(), 'charcount ', 'index ',i, 'dimensions', vcRulesList[i].dimensions);
-            await sleep(dataObj.length*400);
-            console.log('_generatePredictions Sleep Completed Time',new Date(), 'charcount ', vcRulesList[i].dimensions);
-        }
-        else if (dataObj.length <=20)
-        {
-            console.log('_generatePredictions Sleeping for ', dataObj.length*200, ' Milli Seconds', 'Intervals =' , dataObj.length);
-            console.log('_generatePredictions Sleep Start Time',new Date(), 'charcount ', 'index ',i, 'dimensions', vcRulesList[i].dimensions);
-            await sleep(dataObj.length*200);
-            console.log('_generatePredictions Sleep Completed Time',new Date(), 'charcount ', vcRulesList[i].dimensions);
-        }
-        else if (dataObj.length <=25)
-        {
-            console.log('_generatePredictions Sleeping for ', dataObj.length*150, ' Milli Seconds', 'Intervals =' , dataObj.length);
-            console.log('_generatePredictions Sleep Start Time',new Date(), 'charcount ', 'index ',i, 'dimensions', vcRulesList[i].dimensions);
-            await sleep(dataObj.length*150);
-            console.log('_generatePredictions Sleep Completed Time',new Date(), 'charcount ', vcRulesList[i].dimensions);
-        }
-        else
-        {
-            console.log('_generatePredictions Sleeping for ', dataObj.length*100, ' Milli Seconds', 'Intervals =' , dataObj.length);
-            console.log('_generatePredictions Sleep Start Time',new Date(), 'charcount ', 'index ',i, 'dimensions', vcRulesList[i].dimensions);
-            await sleep(dataObj.length*100);
-            console.log('_generatePredictions Sleep Completed Time',new Date(), 'charcount ', vcRulesList[i].dimensions);
+        // if (dataObj.length <=5)
+        // {
+        //     console.log('_generatePredictions Sleeping for ', dataObj.length*800, ' Milli Seconds', 'Intervals =' , dataObj.length);
+        //     console.log('_generatePredictions Sleep Start Time',new Date(), 'charcount ', 'index ',i, 'dimensions', vcRulesList[i].dimensions);
+        //     await sleep(dataObj.length*800);
+        //     console.log('_generatePredictions Sleep Completed Time',new Date(), 'charcount ', vcRulesList[i].dimensions);
+        // }
+        // else if (dataObj.length <=10)
+        // {
+        //     console.log('_generatePredictions Sleeping for ', dataObj.length*400, ' Milli Seconds', 'Intervals =' , dataObj.length);
+        //     console.log('_generatePredictions Sleep Start Time',new Date(), 'charcount ', 'index ',i, 'dimensions', vcRulesList[i].dimensions);
+        //     await sleep(dataObj.length*400);
+        //     console.log('_generatePredictions Sleep Completed Time',new Date(), 'charcount ', vcRulesList[i].dimensions);
+        // }
+        // else if (dataObj.length <=20)
+        // {
+        //     console.log('_generatePredictions Sleeping for ', dataObj.length*200, ' Milli Seconds', 'Intervals =' , dataObj.length);
+        //     console.log('_generatePredictions Sleep Start Time',new Date(), 'charcount ', 'index ',i, 'dimensions', vcRulesList[i].dimensions);
+        //     await sleep(dataObj.length*200);
+        //     console.log('_generatePredictions Sleep Completed Time',new Date(), 'charcount ', vcRulesList[i].dimensions);
+        // }
+        // else if (dataObj.length <=25)
+        // {
+        //     console.log('_generatePredictions Sleeping for ', dataObj.length*150, ' Milli Seconds', 'Intervals =' , dataObj.length);
+        //     console.log('_generatePredictions Sleep Start Time',new Date(), 'charcount ', 'index ',i, 'dimensions', vcRulesList[i].dimensions);
+        //     await sleep(dataObj.length*150);
+        //     console.log('_generatePredictions Sleep Completed Time',new Date(), 'charcount ', vcRulesList[i].dimensions);
+        // }
+        // else
+        // {
+        //     console.log('_generatePredictions Sleeping for ', dataObj.length*100, ' Milli Seconds', 'Intervals =' , dataObj.length);
+        //     console.log('_generatePredictions Sleep Start Time',new Date(), 'charcount ', 'index ',i, 'dimensions', vcRulesList[i].dimensions);
+        //     await sleep(dataObj.length*100);
+        //     console.log('_generatePredictions Sleep Completed Time',new Date(), 'charcount ', vcRulesList[i].dimensions);
 
-        }
+        // }
     }
 
 

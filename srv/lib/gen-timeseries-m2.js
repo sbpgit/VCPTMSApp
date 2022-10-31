@@ -12,7 +12,7 @@ class GenTimeseriesM2 {
 
         await GenF.logMessage(req, `Started history timeseries`);
         let lMainProduct = '';
-        let lFlag = '';
+        let lFlag = '', FlagTest = '';
 
         let liPrimaryID = [];
         let lsPrimaryID = {};
@@ -87,6 +87,7 @@ class GenTimeseriesM2 {
         }
 
         if(liPrimaryID.length === 0){
+            console.log(liPrimaryID.length);
             await GenF.logMessage(req, `Please check characteristics Priority , unable to generate timeseries`);
             return;
         }
@@ -226,9 +227,11 @@ class GenTimeseriesM2 {
                     }
                     try {
                         await INSERT(liVCHistory).into('CP_VC_HISTORY_TS');
+                        FlagTest='S';
                         // await cds.run(INSERT.into("CP_VC_HISTORY_TS").entries(liVCHistory));
                     }
                     catch (er) {
+                        FlagTest='E';
                         console.log(er);
                     }
                     liVCHistory = [];
@@ -239,9 +242,11 @@ class GenTimeseriesM2 {
 
         }
 
+        console.log(FlagTest);
         await GenF.logMessage(req, `Completed history timeseries`);
         
         Flag = 'X';
+        console.log(Flag);
     }
 
     async genTimeseriesF(adata, req, Flag) {

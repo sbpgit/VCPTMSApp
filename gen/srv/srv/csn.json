@@ -504,7 +504,7 @@
       ],
       "elements": {
         "PRODUCT_ID": {
-          "@title": "Confiugurable Product",
+          "@title": "Configurable Product",
           "key": true,
           "type": "cds.String",
           "length": 40
@@ -709,7 +709,7 @@
           "length": 4
         },
         "PRODUCT_ID": {
-          "@title": "Confiugurable Product",
+          "@title": "Configurable Product",
           "key": true,
           "type": "cds.String",
           "length": 40
@@ -745,7 +745,7 @@
           "length": 4
         },
         "PRODUCT_ID": {
-          "@title": "Confiugurable Product",
+          "@title": "Configurable Product",
           "key": true,
           "type": "cds.String",
           "length": 40
@@ -788,7 +788,7 @@
           "length": 4
         },
         "PRODUCT_ID": {
-          "@title": "Confiugurable Product",
+          "@title": "Configurable Product",
           "key": true,
           "type": "cds.String",
           "length": 40
@@ -3989,6 +3989,44 @@
         }
       }
     },
+    "cp.MARKETAUTH_CFG": {
+      "kind": "entity",
+      "elements": {
+        "WEEK_DATE": {
+          "@title": "Week Date",
+          "key": true,
+          "type": "cds.Date"
+        },
+        "LOCATION_ID": {
+          "@title": "Location ",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "@title": "Product",
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+        "CHAR_NUM": {
+          "@title": "Internal Char. number",
+          "key": true,
+          "type": "cds.String",
+          "length": 10
+        },
+        "CHARVAL_NUM": {
+          "@title": "Internal Char. number",
+          "key": true,
+          "type": "cds.String",
+          "length": 10
+        },
+        "OPT_PERCENT": {
+          "@title": "Option Percentage",
+          "type": "cds.Double"
+        }
+      }
+    },
     "cp.SEEDORDER_HEADER": {
       "kind": "entity",
       "@UI.SelectionFields": [
@@ -4711,6 +4749,41 @@
         "OPT_PERCENT": {
           "@title": "Option Percentage",
           "type": "cds.Double"
+        }
+      }
+    },
+    "cp.PAGEHEADER": {
+      "kind": "entity",
+      "elements": {
+        "PAGEID": {
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "DESCRIPTION": {
+          "type": "cds.String",
+          "length": 100
+        },
+        "PARENTNODEID": {
+          "type": "cds.Integer"
+        },
+        "HEIRARCHYLEVEL": {
+          "type": "cds.Integer"
+        }
+      }
+    },
+    "cp.PAGEPARAGRAPH": {
+      "kind": "entity",
+      "elements": {
+        "PAGEID": {
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "DESCRIPTION": {
+          "type": "cds.String",
+          "length": 100
+        },
+        "CONTENT": {
+          "type": "cds.hana.CLOB"
         }
       }
     },
@@ -15751,6 +15824,57 @@
       "kind": "service",
       "@impl": "./lib/cat-service.js"
     },
+    "CatalogService.getPageHdr": {
+      "kind": "entity",
+      "@readonly": true,
+      "projection": {
+        "from": {
+          "ref": [
+            "cp.PAGEHEADER"
+          ]
+        }
+      },
+      "elements": {
+        "PAGEID": {
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "DESCRIPTION": {
+          "type": "cds.String",
+          "length": 100
+        },
+        "PARENTNODEID": {
+          "type": "cds.Integer"
+        },
+        "HEIRARCHYLEVEL": {
+          "type": "cds.Integer"
+        }
+      }
+    },
+    "CatalogService.getPagePgrh": {
+      "kind": "entity",
+      "@readonly": true,
+      "projection": {
+        "from": {
+          "ref": [
+            "cp.PAGEPARAGRAPH"
+          ]
+        }
+      },
+      "elements": {
+        "PAGEID": {
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "DESCRIPTION": {
+          "type": "cds.String",
+          "length": 100
+        },
+        "CONTENT": {
+          "type": "cds.hana.CLOB"
+        }
+      }
+    },
     "CatalogService.getProducts": {
       "kind": "entity",
       "@readonly": true,
@@ -15950,7 +16074,7 @@
               "ValueListProperty": "PROD_DESC"
             }
           ],
-          "@title": "Confiugurable Product",
+          "@title": "Configurable Product",
           "key": true,
           "type": "cds.String",
           "length": 40
@@ -16837,7 +16961,7 @@
               "ValueListProperty": "LOCATION_ID"
             }
           ],
-          "@title": "Confiugurable Product",
+          "@title": "Configurable Product",
           "key": true,
           "type": "cds.String",
           "length": 40
@@ -17280,7 +17404,7 @@
           "length": 4
         },
         "PRODUCT_ID": {
-          "@title": "Confiugurable Product",
+          "@title": "Configurable Product",
           "key": true,
           "type": "cds.String",
           "length": 40
@@ -17331,7 +17455,7 @@
           "length": 4
         },
         "PRODUCT_ID": {
-          "@title": "Confiugurable Product",
+          "@title": "Configurable Product",
           "key": true,
           "type": "cds.String",
           "length": 40
@@ -21049,6 +21173,18 @@
           "length": 4
         },
         "LINE_ID": {
+          "@Common.ValueList.$Type": "Common.ValueListType",
+          "@Common.ValueList.Label": "Line ID",
+          "@Common.ValueList.CollectionPath": "getLine",
+          "@Common.ValueList.Parameters": [
+            {
+              "$Type": "Common.ValueListParameterOut",
+              "LocalDataProperty": {
+                "=": "LINE_ID"
+              },
+              "ValueListProperty": "LINE_ID"
+            }
+          ],
           "@title": "Line",
           "key": true,
           "type": "cds.String",
@@ -22142,6 +22278,26 @@
         }
       }
     },
+    "CatalogService.moveData": {
+      "kind": "function",
+      "params": {
+        "Flag": {
+          "type": "cds.String"
+        },
+        "CONTENT": {
+          "type": "cds.String"
+        },
+        "PAGEID": {
+          "type": "cds.Integer"
+        },
+        "DESCRIPTION": {
+          "type": "cds.String"
+        }
+      },
+      "returns": {
+        "type": "cds.String"
+      }
+    },
     "CatalogService.addPAGEHEADER": {
       "kind": "function",
       "params": {
@@ -22213,26 +22369,12 @@
         "type": "cds.String"
       }
     },
-    "CatalogService.addJson": {
+    "CatalogService.editPAGEHEADER": {
       "kind": "function",
       "params": {
-        "PAGEID": {
-          "type": "cds.Integer"
-        },
-        "DESCRIPTION": {
+        "Flag1": {
           "type": "cds.String"
         },
-        "CONTENT": {
-          "type": "cds.String"
-        }
-      },
-      "returns": {
-        "type": "cds.String"
-      }
-    },
-    "CatalogService.editJSONHeader": {
-      "kind": "function",
-      "params": {
         "PAGEID": {
           "type": "cds.Integer"
         },
@@ -22244,6 +22386,26 @@
         },
         "HEIRARCHYLEVEL": {
           "type": "cds.Integer"
+        }
+      },
+      "returns": {
+        "type": "cds.String"
+      }
+    },
+    "CatalogService.editPAGEPARAGRAPH": {
+      "kind": "function",
+      "params": {
+        "Flag1": {
+          "type": "cds.String"
+        },
+        "PAGEID": {
+          "type": "cds.Integer"
+        },
+        "DESCRIPTION": {
+          "type": "cds.String"
+        },
+        "CONTENT": {
+          "type": "cds.String"
         }
       },
       "returns": {

@@ -180,7 +180,29 @@ Content-Type: application/json
 			"modelVersion": "Simulation",
 			"version": "__BASELINE",
 			"scenario": "BSL_SCENARIO",
-            "endDate" : "2022-10-24"
+            "startDate" : "2022-10-24"
 		}
 	]
 }
+
+
+### generate Predictions
+POST http://localhost:4004/pal/genPredictions
+Content-Type: application/json
+
+{
+	"vcRulesList": [
+		{
+			"override": true,
+			"Location": "PL20",
+			"Product": "534EDPI0E119",
+			"GroupID": "ALL",
+			"Type": "PI",
+			"modelVersion": "Simulation",
+			"version": "__BASELINE",
+			"scenario": "BSL_SCENARIO",
+            "startDate" : "2022-10-24"
+		}
+	]
+}
+
