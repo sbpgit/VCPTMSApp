@@ -4,7 +4,7 @@
             "roles" : ["CL1ROLE" ],
             "global_object_privileges": [
                 {
-                    "name": "VCPS4HSource",
+                    "name": "VCPS4HSOURCE400",
                     "type": "REMOTE SOURCE",
                     "privileges": [
                         "CREATE VIRTUAL TABLE",
@@ -19,7 +19,7 @@
             "roles" : ["CL1ROLE" ],
             "global_object_privileges": [
                 {
-                    "name": "VCPS4HSource",
+                    "name": "VCPS4HSOURCE400",
                     "type": "REMOTE SOURCE",
                     "privileges": [
                         "CREATE VIRTUAL TABLE",

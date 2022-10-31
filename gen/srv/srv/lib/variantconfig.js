@@ -48,15 +48,36 @@ class VarConfig {
     }
     async get_ind(im_valc, it_valc) {
         let ls_valc1 = {};
-        const ls_ind = await cds.run(` SELECT TOP 1 *
-                                        FROM CP_CUVTAB_IND
-                                       WHERE VTINT = '` + im_valc.VTINT + `'
-                                         AND ATINN = '` + im_valc.ATINN + `'`);
-        if (ls_ind.length <= 0) {
+        console.log("test1");
+        const ls_ind = await SELECT
+                            .from('CP_CUVTAB_IND')
+                            .columns(["VTINT",
+                                "INDID",
+                                "ATINN"])
+                            .where(
+                                {
+                                    xpr: [
+                                        { ref: ["VTINT"] }, '=', { val: im_valc.VTINT }, 'and',
+                                        { ref: ["ATINN"] }, '=', { val: im_valc.ATINN }
+                                    ]
+                                }
+                            );
+
+        console.log("test2");
+        console.log(im_valc.VTINT);
+        console.log(im_valc.ATINN);
+        // cds.run(` SELECT TOP 1 *
+        //                                 FROM CP_CUVTAB_IND
+        //                                WHERE VTINT = '` + im_valc.VTINT + `'
+        //                                  AND ATINN = '` + im_valc.ATINN + `'`);
+        console.log(ls_ind[0].VTINT);
+        console.log(ls_ind[0].INDID);
+        console.log(ls_ind[0].ATINN);
+        if (ls_ind.length === undefined) {
             // * GET THE INFERRED PARAMETERS
             const li_ind = await cds.run(`SELECT *
                                             FROM CP_CUVTAB_IND
-                                            WHERE VTINT = '` + im_valc.VTINT + `'`);
+                                            WHERE VTINT = '${im_valc.VTINT}'`);
             if (li_ind.length > 0) {
                 for (let iInd = 0; li_ind.length > 0; iInd++) {
                     // * GET VALC DATA BASED ON SLNID AND ATINN
@@ -64,10 +85,10 @@ class VarConfig {
                                                           FROM CP_CUVTAB_VALC
                                                           WHERE SLNID '` + im_valc.SLNID + `'
                                                             AND ATINN '` + li_ind[iInd].ATINN + `'`);
-                    
+
                     if (li_valc_temp.length > 0) {
                         li_valc_temp.sort(GenF.dynamicSortMultiple("ATINN", "VALC"));
-                        for(let i = 0 ; i < li_valc_temp.length ; i++){
+                        for (let i = 0; i < li_valc_temp.length; i++) {
                             try {
                                 let sqlStr = await conn.prepare(
                                     `INSERT INTO "CP_CUVTAB_VALC_TEMP" VALUES(
@@ -78,8 +99,8 @@ class VarConfig {
                                         '` + li_valc_temp[i].VALC + `')`
                                 )
                                 await sqlStr.exec();
-                                await sqlStr.drop();                      
-            
+                                await sqlStr.drop();
+
                             } catch (error) {
                                 console.log(error.message);
                             }
@@ -96,8 +117,8 @@ class VarConfig {
                                     `DELETE FROM CP_CUVTAB_VALC_TEMP`
                                 )
                                 await sqlStr.exec();
-                                await sqlStr.drop();                      
-            
+                                await sqlStr.drop();
+
                             } catch (error) {
                                 console.log(error.message);
                             }
@@ -129,8 +150,8 @@ class VarConfig {
                                                 '` + li_valc[iValc2].VALC + `')`
                                         )
                                         await sqlStr.exec();
-                                        await sqlStr.drop();                      
-                    
+                                        await sqlStr.drop();
+
                                     } catch (error) {
                                         console.log(error.message);
                                     }

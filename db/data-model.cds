@@ -706,6 +706,14 @@ context cp {
         key PRODUCT_ID  : String(40) @title : 'Product';
         key WEEK_DATE   : Date       @title : 'Week Date';
     }
+    entity MARKETAUTH_CFG {
+        key WEEK_DATE   : Date       @title : 'Week Date';
+        key LOCATION_ID : String(4)  @title : 'Location ';
+        key PRODUCT_ID  : String(40) @title : 'Product';
+        key CHAR_NUM    : String(10) @title : 'Internal Char. number';
+        key CHARVAL_NUM : String(10) @title : 'Internal Char. number';
+            OPT_PERCENT : Double     @title : 'Option Percentage';
+    }
 
     entity SEEDORDER_HEADER {
         key SEED_ORDER    : String(10)     @title : 'Seed Order';
@@ -1189,8 +1197,10 @@ entity![V_PLANNEDCONFIG]{
     key![VALUE_HELP_TAB]    : String(20)  @title : 'VALUE_HELP_TAB';
     key![GROUP_DESCRIPTION] : String(100) @title : 'GROUP_DESCRIPTION';
     key![UNIT]              : String(5)   @title : 'UNIT';
+    key![LOCATION_ID]       : String(4)   @title : 'LOCATION_ID';
     key![VALUE]             : String(500) @title : 'VALUE';
 }
+
 
 @cds.persistence.exists
 entity![V_CIRVERSCEN]{
