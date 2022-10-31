@@ -40,6 +40,7 @@
                     <Toolbar id="_IDGenToolbar2" height="2.56em" class="classHead">
                         <Title id="detailTitle" text="{Description}" class="ClassHead" />
                         <ToolbarSpacer id="_IDGenToolbarSpacer2" />
+                        <Button text="Navigate" id="idNav" press="onNavPress"/>
                     </Toolbar>
                 </customHeader>
                 <FormattedText htmlText="" id="content" />
