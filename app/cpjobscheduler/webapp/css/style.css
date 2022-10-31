@@ -1,5 +1,13 @@
-Enter your custom styles here
+/* Enter your custom styles here */
 
+
+
+input#idSETime-inner {
+    pointer-events: none;
+}
+input#idSSTime-inner {
+    pointer-events: none;
+}
 
 /* div#container-cpapp\.cpjobscheduler---Details--fcl-beginColumn{
     width: 350px !important;

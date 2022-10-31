@@ -535,7 +535,7 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                                                     <Label text="Critical Assembly" />
                                                 </f:label>
                                                 <f:fields>
-                                                    <CheckBox id="EACDemandidCheck" select="onEACDemandCheck" />
+                                                    <CheckBox id="EACDemandidCheck" select="onCheck" />
                                                 </f:fields>
                                             </f:FormElement>
                                             
@@ -588,7 +588,7 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                                                     <Label text="Critical Assembly" />
                                                 </f:label>
                                                 <f:fields>
-                                                    <CheckBox id="ECRQtyidCheck" select="onECRQtyCheck" />
+                                                    <CheckBox id="ECRQtyidCheck" select="onCheck" />
                                                 </f:fields>
                                             </f:FormElement>
                                         </f:formElements>
@@ -838,7 +838,7 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                                     </f:FormElement>
                                     <f:FormElement>
                                         <f:label>
-                                            <Label text="{i18n>confProd}" required="true" />
+                                            <Label text="{i18n>confProd}" />
                                         </f:label>
                                         <f:fields>
                                             <MultiInput id="OprodInput" width="225px" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
