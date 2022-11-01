@@ -172,7 +172,7 @@ class GenFunctions {
 
         let errorObj = {};
         // errorObj["success"] = true;
-        errorObj["message"] = lMessage; 
+        errorObj["message"] = lMessage;
         if (req.headers['x-sap-job-id'] > 0) {
             const scheduler = this.getJobscheduler(req);
             let updateReq = {
@@ -189,16 +189,16 @@ class GenFunctions {
         }
     }
 
-/**
- * Get VCP Configuration Parameters
- * @param {Location} lLocation 
- * @param {Parameter} lParameter 
- */    
+    /**
+     * Get VCP Configuration Parameters
+     * @param {Location} lLocation 
+     * @param {Parameter} lParameter 
+     */
     static async getParameterValue(lLocation, lParameter) {
         const lsValue = await SELECT.one
-                                .from("CP_PARAMETER_VALUES")
-                                .columns("VALUE")
-                                .where(`LOCATION_ID = '${lLocation}' AND PARAMETER_ID = ${parseInt(lParameter)}`)
+            .from("CP_PARAMETER_VALUES")
+            .columns("VALUE")
+            .where(`LOCATION_ID = '${lLocation}' AND PARAMETER_ID = ${parseInt(lParameter)}`)
 
         return lsValue.VALUE;
     }
@@ -212,17 +212,17 @@ class GenFunctions {
         return num;
 
     }
-    
-    static async jobSchMessage(lFlag, lMessage, req){
-console.log(lFlag);
-console.log(lMessage);
-console.log(req.headers['x-sap-job-id']);
+
+    static async jobSchMessage(lFlag, lMessage, req) {
+        console.log(lFlag);
+        console.log(lMessage);
+        console.log(req.headers['x-sap-job-id']);
 
         if (lFlag === 'X') {
             let dataObj = {};
             dataObj["success"] = true;
-            dataObj["message"] = "Export of "+ lMessage + new Date();
-            
+            dataObj["message"] = "Export of " + lMessage + new Date();
+
 
             if (req.headers['x-sap-job-id'] > 0) {
                 const scheduler = this.getJobscheduler(req);
@@ -250,7 +250,7 @@ console.log(req.headers['x-sap-job-id']);
         else {
             let dataObj = {};
             dataObj["failed"] = false;
-            dataObj["message"] = "Export of "+ lMessage + new Date();
+            dataObj["message"] = "Export of " + lMessage + new Date();
 
 
             if (req.headers['x-sap-job-id'] > 0) {

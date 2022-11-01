@@ -1,11 +1,7 @@
 {
 	"name": "cp.appf.cpibpfuturedemand",
 	"version": "0.0.1",
-<<<<<<< HEAD
-	"buildTimestamp": "202210291659",
-=======
-	"buildTimestamp": "202211010757",
->>>>>>> e79b621352294442442e5d5e08a096b049af7113
+	"buildTimestamp": "202211011046",
 	"scmRevision": "",
 	"libraries": []
 }

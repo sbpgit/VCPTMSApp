@@ -2504,6 +2504,12 @@
           "type": "cds.Decimal",
           "precision": 13,
           "scale": 3
+        },
+        "MANUALOPTION": {
+          "@title": "Manual Option Percnetage",
+          "type": "cds.Decimal",
+          "precision": 5,
+          "scale": 2
         }
       }
     },
@@ -4556,7 +4562,7 @@
           "length": 40
         },
         "COMPCIR_QTY": {
-          "@title": "CIR Compoonent QTY",
+          "@title": "CIR Component QTY",
           "type": "cds.Decimal",
           "precision": 13,
           "scale": 3
@@ -4749,6 +4755,60 @@
         "OPT_PERCENT": {
           "@title": "Option Percentage",
           "type": "cds.Double"
+        }
+      }
+    },
+    "cp.CIRLOG": {
+      "kind": "entity",
+      "elements": {
+        "PRODUCT_ID": {
+          "@title": "Configurable Product",
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+        "CIR_ID": {
+          "@title": "CIR ID",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "LOCATION_ID": {
+          "@title": "Location ",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "UNIQUE_ID": {
+          "@title": "Unique ID",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "WEEK_DATE": {
+          "@title": "Week Date",
+          "key": true,
+          "type": "cds.Date"
+        },
+        "CUST_PRODID": {
+          "@title": "Partial Product",
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+        "COMPCIR_QTY": {
+          "@title": "CIR Component QTY",
+          "type": "cds.Decimal",
+          "precision": 13,
+          "scale": 3
+        },
+        "MSG_TYP": {
+          "@title": "Message Type",
+          "type": "cds.String",
+          "length": 1
+        },
+        "MESSAGE": {
+          "@title": "Message",
+          "type": "cds.String",
+          "length": 220
         }
       }
     },
@@ -19974,8 +20034,13 @@
     "CatalogService.generate_timeseries": {
       "kind": "function",
       "params": {
-        "LocProdData": {
-          "type": "cds.String"
+        "LOCATION_ID": {
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "type": "cds.String",
+          "length": 40
         }
       },
       "returns": {
