@@ -1,5 +1,9 @@
 {
 <<<<<<< HEAD
+  "Component-dbg.js": 1665479929641,
+  "controller/CreateJob.controller.js": 1665479929641,
+=======
+<<<<<<< HEAD
   "controller/BaseController.js": 1663154939905,
   "controller/Home.controller.js": 1664884474734,
   "utils/locate-reuse-libs.js": 1663149985508,
@@ -38,24 +42,23 @@
   "index.html": 1664907685314
 =======
 <<<<<<< HEAD
+>>>>>>> 8f261864983612d07426bcd6c88cf983b5292079
   "utils/locate-reuse-libs.js": 1665479929645,
-  "manifest.json": 1667063084229,
-  "i18n/i18n.properties": 1665479929641,
   "model/models.js": 1665479929645,
   "controller/Home.controller.js": 1665479929641,
-  "controller/CreateJob.controller.js": 1665479929641,
+  "manifest.json": 1667299886532,
   "controller/BaseController.js": 1665479929641,
   "controller/App.controller.js": 1665479929641,
   "Component.js": 1665479929641,
-  "manifest-bundle.zip": 1667063084247,
-  "Component-preload.js": 1667063085293,
+  "manifest-bundle.zip": 1667299886551,
+  "Component-preload.js": 1667299887579,
   "utils/locate-reuse-libs-dbg.js": 1665479929645,
-  "model/models-dbg.js": 1665479929645,
-  "controller/Home-dbg.controller.js": 1665479929641,
   "controller/CreateJob-dbg.controller.js": 1665479929641,
   "controller/BaseController-dbg.js": 1665479929641,
   "controller/App-dbg.controller.js": 1665479929641,
-  "Component-dbg.js": 1665479929641,
+  "controller/Home-dbg.controller.js": 1665479929641,
+  "model/models-dbg.js": 1665479929645,
+  "i18n/i18n.properties": 1665479929641,
   "view/VersionDialog.fragment.xml": 1665479929645,
   "view/UpdateJobDialog.fragment.xml": 1665479929645,
   "view/ScheLog.fragment.xml": 1665479929645,
@@ -74,6 +77,8 @@
   "view/App.view.xml": 1665479929645,
   "css/style.css": 1665479929641,
   "index.html": 1665479929641
+<<<<<<< HEAD
+=======
 =======
   "controller/BaseController.js": 1663316076296,
   "i18n/i18n.properties": 1665563487154,
@@ -113,4 +118,5 @@
   "index.html": 1665563487154
 >>>>>>> e79b621352294442442e5d5e08a096b049af7113
 >>>>>>> 14aa2639ea299e30a4cd6698dddb888d61a955b3
+>>>>>>> 8f261864983612d07426bcd6c88cf983b5292079
 }

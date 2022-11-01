@@ -825,7 +825,7 @@ module.exports = (srv) => {
             // lilocProd = JSON.parse(lilocProdT);
         }
         else {
-            let lilocProdT= {};
+            let lilocProdT = {};
             lilocProdT = JSON.parse(req.data.LocProdData);
             lilocProd.push(GenFunctions.parse(lilocProdT));
         }
@@ -881,8 +881,8 @@ module.exports = (srv) => {
             lilocProd = await objCatFn.getAllProducts(req.data);
         }
         else {
-            
-            let lilocProdT= {};
+
+            let lilocProdT = {};
             lilocProdT = JSON.parse(req.data.LocProdData);
             lilocProd.push(GenFunctions.parse(lilocProdT));
         }
@@ -943,13 +943,13 @@ module.exports = (srv) => {
     // Generate Timeseries fucntion calls
     srv.on("generate_timeseries", async (req) => {
 
-        let lilocProd = {};
+        let lilocProd = [];
         let lsData = {};
         let Flag = '';
         if (req.data.PRODUCT_ID === "ALL") {
-            let lilocProdT= [];
+            let lilocProdT = [];
             const objCatFn = new Catservicefn();
-            lilocProdT = await objCatFn.getAllProducts(req.data);
+            lilocProd = await objCatFn.getAllProducts(req.data);
             // lilocProd = JSON.parse(lilocProdT);
         }
 
@@ -1008,10 +1008,25 @@ module.exports = (srv) => {
 
     // Generate Unique ID
     srv.on("genUniqueID", async (req) => {
-        let Flag = '';
+        let lilocProd = [];
+        let lsData = {}, Flag = '';
+        if (req.data.PRODUCT_ID === "ALL") {
+            const objCatFn = new Catservicefn();
+            lilocProd = await objCatFn.getAllProducts(req.data);
 
-        const obgenSOFunctions = new SOFunctions();
-        await obgenSOFunctions.genUniqueID(req.data, req, Flag);
+            for (let i = 0; i < lilocProd.length; i++) {
+                lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
+                lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
+                const obgenSOFunctions = new SOFunctions();
+                await obgenSOFunctions.genUniqueID(lsData, req, Flag);
+            }
+        }
+        else {
+            const obgenSOFunctions = new SOFunctions();
+            await obgenSOFunctions.genUniqueID(req.data, req, Flag);
+        }
+        // const obgenSOFunctions = new SOFunctions();
+        // await obgenSOFunctions.genUniqueID(req.data, req, Flag);
         // if (Flag === 'X') {
         //     console.log("Success");
         //     GenFunctions.jobSchMessage(Flag, `Process Sales Order is complete`, req);
@@ -1052,7 +1067,7 @@ module.exports = (srv) => {
         }
         else {
             // lilocProd = JSON.parse(req.data.LocProdData);
-            let lilocProdT= {};
+            let lilocProdT = {};
             lilocProdT = JSON.parse(req.data.LocProdData);
             lilocProd.push(GenFunctions.parse(lilocProdT));
         }

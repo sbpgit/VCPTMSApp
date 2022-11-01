@@ -1957,6 +1957,7 @@ module.exports = cds.service.impl(async function () {
                 }
 
             }
+<<<<<<< HEAD
 
         } else {
             for (i = 0; i < liactcompreq.length; i++) {
@@ -1971,6 +1972,22 @@ module.exports = cds.service.impl(async function () {
                 };
                 oReq.actcompreq.push(vactcompreq);
 
+=======
+
+        } else {
+            for (i = 0; i < liactcompreq.length; i++) {
+                var vWeekDate = new Date(liactcompreq[i].WEEK_DATE).toISOString().split('Z');
+                var vDemd = parseFloat(liactcompreq[i].COMPCIR_QTY).toFixed(2);
+                vactcompreq = {
+                    "LOCID": liactcompreq[i].LOCATION_ID,
+                    "PRDID": liactcompreq[i].PRODUCT_ID,
+                    "PRDFR": liactcompreq[i].COMPONENT,
+                    "COMPONENTREQUIREMENTQTY": vDemd.toString(),
+                    "PERIODID0_TSTAMP": vWeekDate[0]
+                };
+                oReq.actcompreq.push(vactcompreq);
+
+>>>>>>> 8f261864983612d07426bcd6c88cf983b5292079
             }
         }
 

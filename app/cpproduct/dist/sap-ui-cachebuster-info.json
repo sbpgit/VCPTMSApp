@@ -1,5 +1,8 @@
 {
 <<<<<<< HEAD
+  "index.html": 1665479929705,
+=======
+<<<<<<< HEAD
   "index.html": 1662042606665,
   "manifest.json": 1667296773488,
   "Component.js": 1662042606665,
@@ -9,12 +12,15 @@
   "i18n/i18n.properties": 1667221309077
 =======
 <<<<<<< HEAD
+>>>>>>> 8f261864983612d07426bcd6c88cf983b5292079
   "Component.js": 1665479929705,
-  "i18n/i18n.properties": 1666945288006,
-  "manifest.json": 1667062806847,
-  "manifest-bundle.zip": 1667062806879,
-  "Component-preload.js": 1667062807115,
+  "manifest.json": 1667299641490,
+  "manifest-bundle.zip": 1667299641501,
+  "Component-preload.js": 1667299641680,
   "Component-dbg.js": 1665479929705,
+<<<<<<< HEAD
+  "i18n/i18n.properties": 1666945288006
+=======
   "index.html": 1665479929705
 =======
   "Component-preload.js": 1667289502571,
@@ -26,4 +32,5 @@
   "index.html": 1661440197855
 >>>>>>> e79b621352294442442e5d5e08a096b049af7113
 >>>>>>> 14aa2639ea299e30a4cd6698dddb888d61a955b3
+>>>>>>> 8f261864983612d07426bcd6c88cf983b5292079
 }

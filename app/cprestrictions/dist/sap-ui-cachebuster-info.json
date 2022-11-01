@@ -1,5 +1,9 @@
 {
 <<<<<<< HEAD
+  "Component-preload.js": 1667299758506,
+  "controller/BaseController.js": 1665479929713,
+=======
+<<<<<<< HEAD
   "utils/locate-reuse-libs.js": 1662042606677,
   "i18n/i18n.properties": 1662042606673,
   "manifest.json": 1667296884630,
@@ -37,22 +41,23 @@
 <<<<<<< HEAD
   "i18n/i18n.properties": 1665479929717,
   "controller/ItemDetail.controller.js": 1665479929713,
+>>>>>>> 8f261864983612d07426bcd6c88cf983b5292079
   "utils/locate-reuse-libs.js": 1665479929717,
   "model/models.js": 1665479929717,
   "controller/ItemMaster.controller.js": 1665479929717,
-  "manifest.json": 1667062915832,
+  "controller/ItemDetail.controller.js": 1665479929713,
   "controller/Details.controller.js": 1665479929713,
-  "controller/BaseController.js": 1665479929713,
+  "manifest.json": 1667299758023,
   "controller/App.controller.js": 1665479929713,
   "Component.js": 1665479929713,
-  "manifest-bundle.zip": 1667062915846,
-  "Component-preload.js": 1667062916493,
+  "manifest-bundle.zip": 1667299758033,
+  "i18n/i18n.properties": 1665479929717,
+  "controller/BaseController-dbg.js": 1665479929713,
   "model/models-dbg.js": 1665479929717,
-  "utils/locate-reuse-libs-dbg.js": 1665479929717,
   "controller/ItemMaster-dbg.controller.js": 1665479929717,
   "controller/ItemDetail-dbg.controller.js": 1665479929713,
   "controller/Details-dbg.controller.js": 1665479929713,
-  "controller/BaseController-dbg.js": 1665479929713,
+  "utils/locate-reuse-libs-dbg.js": 1665479929717,
   "controller/App-dbg.controller.js": 1665479929713,
   "Component-dbg.js": 1665479929713,
   "view/className.fragment.xml": 1665479929717,
@@ -68,6 +73,8 @@
   "view/App.view.xml": 1665479929717,
   "css/style.css": 1665479929717,
   "index.html": 1665479929717
+<<<<<<< HEAD
+=======
 =======
   "view/LineDialog.fragment.xml": 1661440197859,
   "utils/locate-reuse-libs.js": 1661440197859,
@@ -104,4 +111,5 @@
   "index.html": 1661440197859
 >>>>>>> e79b621352294442442e5d5e08a096b049af7113
 >>>>>>> 14aa2639ea299e30a4cd6698dddb888d61a955b3
+>>>>>>> 8f261864983612d07426bcd6c88cf983b5292079
 }

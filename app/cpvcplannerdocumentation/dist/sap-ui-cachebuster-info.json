@@ -1,5 +1,9 @@
 {
 <<<<<<< HEAD
+  "images/6.png": 1665582799503,
+  "manifest.json": 1667299915541,
+=======
+<<<<<<< HEAD
   "images/14.png": 1665580883120,
   "model/headerContent.json": 1665580883136,
   "model/contentdata.json": 1665580883136,
@@ -58,18 +62,19 @@
 <<<<<<< HEAD
   "images/7.png": 1665582799503,
   "Component.js": 1665582799491,
+>>>>>>> 8f261864983612d07426bcd6c88cf983b5292079
   "model/contentdata.json": 1665582799507,
-  "manifest.json": 1667063118962,
+  "model/headerContent.json": 1665582799507,
   "utils/locate-reuse-libs.js": 1665582799507,
   "model/models.js": 1665582799507,
   "controller/Home.controller.js": 1666945288006,
   "controller/App.controller.js": 1665582799491,
-  "model/headerContent.json": 1665582799507,
-  "manifest-bundle.zip": 1667063118997,
-  "Component-preload.js": 1667063119595,
+  "Component.js": 1665582799491,
+  "manifest-bundle.zip": 1667299915558,
+  "Component-preload.js": 1667299915974,
+  "controller/Home-dbg.controller.js": 1666945288006,
   "model/models-dbg.js": 1665582799507,
   "utils/locate-reuse-libs-dbg.js": 1665582799507,
-  "controller/Home-dbg.controller.js": 1666945288006,
   "controller/App-dbg.controller.js": 1665582799491,
   "Component-dbg.js": 1665582799491,
   "view/Home.view.xml": 1665582799511,
@@ -82,8 +87,8 @@
   "images/Architecture.png": 1665582799503,
   "images/9.png": 1665582799503,
   "images/8.png": 1665582799503,
+  "images/7.png": 1665582799503,
   "i18n/i18n.properties": 1665582799491,
-  "images/6.png": 1665582799503,
   "images/5.png": 1665582799499,
   "images/4.png": 1665582799499,
   "images/3.png": 1665582799499,
@@ -110,6 +115,8 @@
   "images/10.png": 1665582799491,
   "css/style.css": 1665582799491,
   "index.html": 1665582799507
+<<<<<<< HEAD
+=======
 =======
   "images/5.png": 1665557398049,
   "controller/Home.controller.js": 1666870297299,
@@ -167,4 +174,5 @@
   "index.html": 1665558317550
 >>>>>>> e79b621352294442442e5d5e08a096b049af7113
 >>>>>>> 14aa2639ea299e30a4cd6698dddb888d61a955b3
+>>>>>>> 8f261864983612d07426bcd6c88cf983b5292079
 }

@@ -1,5 +1,9 @@
 {
 <<<<<<< HEAD
+  "controller/Detail-dbg.controller.js": 1665479929689,
+  "Component.js": 1665479929689,
+=======
+<<<<<<< HEAD
   "view/Detail.view.xml": 1666250927894,
   "controller/App.controller.js": 1662042606653,
   "utils/locate-reuse-libs.js": 1662042606657,
@@ -34,19 +38,20 @@
 <<<<<<< HEAD
   "view/Home.view.xml": 1665479929689,
   "controller/Detail.controller.js": 1665479929689,
+>>>>>>> 8f261864983612d07426bcd6c88cf983b5292079
   "utils/locate-reuse-libs.js": 1665479929689,
   "model/models.js": 1665479929689,
   "controller/Home.controller.js": 1665479929689,
-  "manifest.json": 1667062853637,
+  "controller/Detail.controller.js": 1665479929689,
   "controller/BaseController.js": 1665479929689,
   "controller/App.controller.js": 1665479929689,
-  "Component.js": 1665479929689,
-  "manifest-bundle.zip": 1667062853648,
-  "Component-preload.js": 1667062854076,
+  "manifest.json": 1667299692240,
+  "manifest-bundle.zip": 1667299692253,
+  "Component-preload.js": 1667299692778,
   "utils/locate-reuse-libs-dbg.js": 1665479929689,
   "model/models-dbg.js": 1665479929689,
   "controller/Home-dbg.controller.js": 1665479929689,
-  "controller/Detail-dbg.controller.js": 1665479929689,
+  "i18n/i18n.properties": 1666258684216,
   "controller/BaseController-dbg.js": 1665479929689,
   "controller/App-dbg.controller.js": 1665479929689,
   "Component-dbg.js": 1665479929689,
@@ -55,13 +60,15 @@
   "view/charName.fragment.xml": 1665479929689,
   "view/ProdDialog.fragment.xml": 1665479929689,
   "view/LocDialog.fragment.xml": 1665479929689,
-  "i18n/i18n.properties": 1666258684216,
+  "view/Home.view.xml": 1665479929689,
   "view/Detail.view.xml": 1666258684216,
   "view/CreateProduct.fragment.xml": 1666258684216,
   "view/CharDetails.fragment.xml": 1665479929689,
   "view/App.view.xml": 1665479929689,
   "css/style.css": 1665479929689,
   "index.html": 1665479929689
+<<<<<<< HEAD
+=======
 =======
   "manifest-bundle.zip": 1667289546228,
   "Component.js": 1661440197843,
@@ -95,4 +102,5 @@
   "index.html": 1661440197843
 >>>>>>> e79b621352294442442e5d5e08a096b049af7113
 >>>>>>> 14aa2639ea299e30a4cd6698dddb888d61a955b3
+>>>>>>> 8f261864983612d07426bcd6c88cf983b5292079
 }

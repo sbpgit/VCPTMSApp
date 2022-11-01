@@ -1,5 +1,8 @@
 {
 <<<<<<< HEAD
+  "images/17.png": 1665582799475,
+=======
+<<<<<<< HEAD
   "images/11.png": 1665580883088,
   "Component.js": 1665580883088,
   "model/data.json": 1666101727151,
@@ -60,21 +63,23 @@
 <<<<<<< HEAD
   "css/style.css": 1665582799471,
   "controller/App.controller.js": 1665582799471,
+>>>>>>> 8f261864983612d07426bcd6c88cf983b5292079
   "model/data.json": 1666007116018,
-  "manifest.json": 1667063135971,
+  "model/header.json": 1666007016006,
+  "manifest.json": 1667299927363,
   "utils/locate-reuse-libs.js": 1665582799487,
   "model/models.js": 1665582799487,
-  "controller/Home.controller.js": 1666945287998,
-  "model/header.json": 1666007016006,
+  "controller/Home.controller.js": 1667294722143,
+  "controller/App.controller.js": 1665582799471,
   "Component.js": 1665582799471,
-  "manifest-bundle.zip": 1667063135997,
-  "Component-preload.js": 1667063136808,
-  "model/models-dbg.js": 1665582799487,
-  "utils/locate-reuse-libs-dbg.js": 1665582799487,
-  "controller/Home-dbg.controller.js": 1666945287998,
-  "controller/App-dbg.controller.js": 1665582799471,
+  "manifest-bundle.zip": 1667299927419,
+  "Component-preload.js": 1667299929231,
   "Component-dbg.js": 1665582799471,
-  "view/Home.view.xml": 1666942658128,
+  "controller/App-dbg.controller.js": 1665582799471,
+  "utils/locate-reuse-libs-dbg.js": 1665582799487,
+  "model/models-dbg.js": 1665582799487,
+  "controller/Home-dbg.controller.js": 1667294722143,
+  "view/Home.view.xml": 1667294722143,
   "view/Edit.fragment.xml": 1665582799487,
   "view/Create.fragment.xml": 1665582799487,
   "view/App.view.xml": 1665582799487,
@@ -104,7 +109,7 @@
   "images/2.png": 1665582799475,
   "images/19.png": 1665582799475,
   "images/18.png": 1665582799475,
-  "images/17.png": 1665582799475,
+  "i18n/i18n.properties": 1665582799471,
   "images/16.png": 1665582799475,
   "images/15.png": 1665582799471,
   "images/14.png": 1665582799471,
@@ -112,6 +117,10 @@
   "images/12.png": 1665582799471,
   "images/11.png": 1665582799471,
   "images/10.png": 1665582799471,
+<<<<<<< HEAD
+  "css/style.css": 1665582799471,
+  "index.html": 1667294722143
+=======
   "i18n/i18n.properties": 1665582799471,
   "index.html": 1665582799487
 =======
@@ -173,4 +182,5 @@
   "index.html": 1667200474862
 >>>>>>> e79b621352294442442e5d5e08a096b049af7113
 >>>>>>> 14aa2639ea299e30a4cd6698dddb888d61a955b3
+>>>>>>> 8f261864983612d07426bcd6c88cf983b5292079
 }
