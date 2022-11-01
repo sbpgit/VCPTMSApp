@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "utils/locate-reuse-libs-dbg.js": 1665479929533,
   "model/models.js": 1665479929533,
   "utils/locate-reuse-libs.js": 1665479929533,
@@ -25,4 +26,32 @@
   "view/App.view.xml": 1665479929533,
   "css/style.css": 1665479929529,
   "index.html": 1665479929529
+=======
+  "view/App.view.xml": 1661440197771,
+  "Component.js": 1661440197767,
+  "utils/locate-reuse-libs.js": 1661440197771,
+  "model/models.js": 1661440197771,
+  "controller/Home.controller.js": 1661440197767,
+  "controller/BaseController.js": 1661440197767,
+  "controller/App.controller.js": 1661440197767,
+  "manifest.json": 1667289278370,
+  "manifest-bundle.zip": 1667289278394,
+  "Component-preload.js": 1667289278959,
+  "controller/Home-dbg.controller.js": 1661440197767,
+  "model/models-dbg.js": 1661440197771,
+  "utils/locate-reuse-libs-dbg.js": 1661440197771,
+  "controller/BaseController-dbg.js": 1661440197767,
+  "controller/App-dbg.controller.js": 1661440197767,
+  "Component-dbg.js": 1661440197767,
+  "view/StructureNodes.fragment.xml": 1661440197771,
+  "view/Profiles.fragment.xml": 1661440197771,
+  "view/ProdDialog.fragment.xml": 1661440197771,
+  "view/ObjDepDialog.fragment.xml": 1661440197771,
+  "view/LocDialog.fragment.xml": 1661440197771,
+  "view/Home.view.xml": 1661440197771,
+  "view/ComponentDialog.fragment.xml": 1666693187670,
+  "i18n/i18n.properties": 1666693187670,
+  "css/style.css": 1661440197767,
+  "index.html": 1661440197767
+>>>>>>> e79b621352294442442e5d5e08a096b049af7113
 }

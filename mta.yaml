@@ -53,6 +53,7 @@ modules:
     parameters:
       service-key:
         name: config_products_html_repo_host-key
+  - name: srv-api
   - name: uaa_config_products
     parameters:
       service-key:
@@ -61,6 +62,12 @@ modules:
     content:
       instance:
         destinations:
+        - Authentication: OAuth2UserTokenExchange
+          Name: config_products-srv
+          TokenServiceInstanceName: config_products-xsuaa-service
+          TokenServiceKeyName: uaa_config_products-key
+          URL: ~{srv-api/srv-url}
+          sap.cloud.service: configprod_approuter
         - Name: configprod_approuter_config_products_html_repo_host
           ServiceInstanceName: config_products-html5-app-host-service
           ServiceKeyName: config_products_html_repo_host-key
@@ -690,6 +697,18 @@ resources:
 - name: uaa_config_products
   type: org.cloudfoundry.managed-service
   parameters:
+    config:
+      role-collections:
+      - description: Manage Jobs
+        name: JobsManager
+        role-template-references:
+        - $XSAPPNAME.JobsManager
+      - description: View Jobs
+        name: JobsViewer
+        role-template-references:
+        - $XSAPPNAME.JobsViewer
+      tenant-mode: dedicated
+      xsappname: config_products
     path: ./xs-security.json
     service: xsuaa
     service-name: config_products-xsuaa-service
