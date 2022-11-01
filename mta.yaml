@@ -25,7 +25,7 @@ modules:
     - ./node_modules
 - name: config_products-db-deployer
   type: hdb
-  path: gen/db
+  path: db
   requires:
   - name: config_products-db
     properties:

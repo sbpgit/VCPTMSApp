@@ -1,38 +1,65 @@
 sap.ui.define([
-    "sap/ui/core/mvc/Controller",
+    "cpapp/cpplaningconfig/controller/BaseController",
     'sap/m/GroupHeaderListItem',
     'sap/m/MessageToast',
-    "sap/ui/model/json/JSONModel"
+    'sap/ui/model/json/JSONModel',
+    'sap/ui/model/Filter',
+    'sap/ui/model/FilterOperator',
+    "sap/ui/Device",
 ],
     /**
      * @param {typeof sap.ui.core.mvc.Controller} Controller
      */
-    function (Controller, GroupHeaderListItem, MessageToast, JSONModel) {
+    function (BaseController, GroupHeaderListItem, MessageToast, JSONModel, Filter, FilterOperator, Device) {
         "use strict";
-        var that = this;
-        return Controller.extend("cpapp.cpplaningconfig.controller.Home", {
+        var that = this, oGModel;
+        return BaseController.extend("cpapp.cpplaningconfig.controller.Home", {
             onInit: function () {
                 var oRoute;
                 that = this;
+                this.bus = sap.ui.getCore().getEventBus();
+                oGModel = that.getOwnerComponent().getModel("oGModel");
+
+                that.i18n = that.getResourceBundle();
 
                 that.oParameterModel = new JSONModel();
                 that.oMethodModel = new JSONModel();
+
+                var oDetailPage = this.getView().byId("idDetailView"),
+                bCurrentShowFooterState = oDetailPage.getShowFooter();
+                oDetailPage.setShowFooter(bCurrentShowFooterState);
 
                 if (!that.oMethodDialog) {
                     that.oMethodDialog = sap.ui.xmlfragment("cpapp.cpplaningconfig.view.MethodTyp", that);
                     that.getView().addDependent(that.oMethodDialog);
                 }
 
-                oRoute = that.getRouter().getRoute("RouteHome");
-                oRoute.attachPatternMatched(that._onPatternMatched, that);
+                // oRoute = that.getRouter().getRoute("detail");
+                //  oRoute.attachPatternMatched(that._onPatternMatched, that);                
             },
+            /**
+       * Called after the view has been rendered.
+       * Calls the service to get Data.
+       */
+            onAfterRendering: function () {
+                var oModel = that.getOwnerComponent().getModel('PCModel');
+                oGModel = that.getOwnerComponent().getModel("oGModel");
+
+
+                var location = oGModel.getProperty("/location");
+
+                that.getPlannedParameters(location);
+                that.getMethods(oModel);
+            },
+
+
             /*
 
 */
-            getRouter: function () {
-                return sap.ui.core.UIComponent.getRouterFor(this);
-            },
-            grouper: function(oGroup) {
+            // getRouter: function () {
+            //     return sap.ui.core.UIComponent.getRouterFor(this);
+            // },
+            grouper: function (oGroup) {
                 return {
                     key: oGroup.oModel.oData.Steps[oGroup.sPath.split("/")[2]].GROUP_DESCRIPTION
                 };
@@ -51,12 +78,13 @@ sap.ui.define([
             *
             */
             onPressSave: function () {
-                var oModel = that.getOwnerComponent().getModel('PCModel');  
+                var oModel = that.getOwnerComponent().getModel('PCModel');
                 var oEntry = {
                     PARAMVALS: [],
-                    },
+                },
                     oParamVals;
                 var sParamVal = "";
+                var sLocation = oGModel.getProperty("/location");
 
                 var aItems = that.getView().byId("idParameterTable").getItems();
 
@@ -64,12 +92,13 @@ sap.ui.define([
                     var oObj = aItems[i];
                     if (oObj._bGroupHeader === false) {
                         if (oObj.getCells()[2].getValue() !== "" && oObj.getCells()[2].getValueState() === "None") {
-                            if(oObj.getCells()[2].getName() !== "" && oObj.getCells()[2].getName() !== undefined) {
+                            if (oObj.getCells()[2].getName() !== "" && oObj.getCells()[2].getName() !== undefined) {
                                 sParamVal = oObj.getCells()[2].getName();
                             } else {
                                 sParamVal = oObj.getCells()[2].getValue();
                             }
                             oParamVals = {
+                                LOCATION_ID: sLocation,
                                 PARAMETER_ID: oObj.getCells()[0].getText(),
                                 VALUE: sParamVal
                                 // VALUE: oObj.getCells()[2].getValue()
@@ -99,18 +128,56 @@ sap.ui.define([
             /*
             *
             */
-            getParameters: function (oModel) {
+            getPlannedParameters: function (slocation) {
                 var aParameters = [];
-                oModel.read('/V_Parameters', {
+                that.getModel("PCModel").read('/V_Parameters', {
+                    filters: [
+                        new Filter("LOCATION_ID", FilterOperator.EQ, slocation)
+                    ],
                     success: function (oData) {
                         // MessageToast.show("Success");
-                       aParameters = oData.results;
-                       aParameters = aParameters.sort((a,b) => a.SEQUENCE-b.SEQUENCE);                       
+                        aParameters = oData.results;
+                        if (aParameters.length > 0) {
+                            aParameters = aParameters.sort((a, b) => a.SEQUENCE - b.SEQUENCE);
+
+                            that.oParameterModel.setData({
+                                parameters: aParameters  //oData.results
+                            });
+
+                            that.byId("idParameterTable").setModel(that.oParameterModel);
+                        } else {
+                            that.getParameters();
+                        }
+
+                    }, error: function (oReponse) {
+                        MessageToast.show("Failed to fetch Parameters!");
+                    }
+                }
+                );
+            },
+            /**
+             * 
+             * @param {*} oModel 
+             */
+            getParameters: function () {
+                var aParameters = [];
+                that.getModel("PCModel").read('/V_Parameters', {
+                    success: function (oData) {
+                        // MessageToast.show("Success");
+                        aParameters = oData.results;
+                        aParameters = aParameters.sort((a, b) => a.SEQUENCE - b.SEQUENCE);
+
+                        const ids = aParameters.map(o => o.PARAMETER_ID)
+                        const aFiltered = aParameters.filter(({ PARAMETER_ID }, index) => !ids.includes(PARAMETER_ID, index + 1))
+                        const aParams = aFiltered.map(obj => {
+                            
+                              return {...obj, VALUE: ''};
+                          });                       
 
                         that.oParameterModel.setData({
-                            parameters: aParameters  //oData.results
+                            parameters: aParams //aParameters  //oData.results
                         });
-                        
+
                         that.byId("idParameterTable").setModel(that.oParameterModel);
 
                     }, error: function (oReponse) {
@@ -161,10 +228,10 @@ sap.ui.define([
             onListItemPress: function (oEvent) {
                 var oSelectedItem = oEvent.getParameter("listItem").getTitle();
                 that.sSelMethodTyp = oEvent.getParameter("listItem").getInfo();
-                
+
                 if (that.oSelectedInputExe) {
-                    that.oSelectedInputExe.setValue(oSelectedItem);  
-                    that.oSelectedInputExe.setName(that.sSelMethodTyp);                  
+                    that.oSelectedInputExe.setValue(oSelectedItem);
+                    that.oSelectedInputExe.setName(that.sSelMethodTyp);
                 }
                 that.oMethodDialog.close();
 
@@ -191,10 +258,10 @@ sap.ui.define([
                 var sMinValue = oParamModel.getProperty("MIN_VALUE", oBindingContext);
                 var sMaxValue = oParamModel.getProperty("MAX_VALUE", oBindingContext);
                 var sNewValue = oEvent.getParameter("newValue");
-                if(oBindingContext.getObject().PARAMETER_ID === 9) {
+                if (oBindingContext.getObject().PARAMETER_ID === 9) {
                     var oParamData = oParamModel.getData().parameters[0];
                     sMinValue = oParamData.VALUE;
-                 }
+                }
                 if (parseInt(sMaxValue) > 0) {
                     if (parseInt(sNewValue) < parseInt(sMinValue) || parseInt(sNewValue) > parseInt(sMaxValue)) {
                         that.oSelectedInput.setValueState("Error");
@@ -211,11 +278,19 @@ sap.ui.define([
              *
              *
              */
-            _onPatternMatched: function () {
+            _onPatternMatched: function (oEvent) {
                 var oModel = that.getOwnerComponent().getModel('PCModel');
+                var oArgs = oEvent.getParameter("arguments");
+                that.location = oArgs.location;
                 that.i18n = that.getOwnerComponent().getModel("i18n").getResourceBundle();
-                that.getParameters(oModel);
+                // that.getParameters(oModel, oArgs.location);
                 that.getMethods(oModel);
             }
+
+            /**
+             * 
+             * 
+             */
+
         });
     });

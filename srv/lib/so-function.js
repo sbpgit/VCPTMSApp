@@ -18,12 +18,18 @@ class SOFunctions {
         
         await GenF.logMessage(req, 'Started Sales Orders Processing');
         
-        await this.processUniqueID(adata.LOCATION_ID, adata.PRODUCT_ID, '');
+        await this.processUniqueID(adata.LOCATION_ID, adata.PRODUCT_ID, '',Flag);
         await this.genBaseMarketAuth(adata.LOCATION_ID, adata.PRODUCT_ID);
 
         await GenF.logMessage(req, 'Completed Sales Orders Processing');
-        Flag = 'X';
-
+        // Flag = 'X';
+        if (Flag === 'X') {
+            console.log("Success");
+            GenF.jobSchMessage(Flag, `Process Sales Order is complete`, req);
+        }
+        else {
+            GenF.jobSchMessage(Flag, `Process Sales Order failed`, req);
+        }
     }
 
 /**

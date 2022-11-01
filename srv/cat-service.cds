@@ -177,7 +177,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
     entity getBOMPred           as projection on V_COMPOD_TSPRED;
     // Generate Timeseries
     function generate_timeseriesH(LOCATION_ID : String(4), PRODUCT_ID : String(40))                                                                                                                                                                                              returns String;
-    function generate_timeseries(LocProdData : String)                                                                                                                                                                                                                           returns String;
+    function generate_timeseries(LOCATION_ID : String(4), PRODUCT_ID : String(40))                                                                       returns String;
     //LOCATION_ID : String(4), PRODUCT_ID : String(40))
     // Generate Timeseries
     function generate_timeseriesF(LocProdData : String)                                                                                                                                                                                                                          returns String;
