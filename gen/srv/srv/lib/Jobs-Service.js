@@ -62,6 +62,9 @@ module.exports = async function (srv) {
   srv.on ('fUpdateJobs',    async req => {
     return (await _updateJobs(req,true));
   })
+  srv.before ('READ','getJobStatus', (req)=>{
+    console.log("get Job Status User Info", req.user);
+  })
 
 async function _updateJobs(req,isGet) {
 

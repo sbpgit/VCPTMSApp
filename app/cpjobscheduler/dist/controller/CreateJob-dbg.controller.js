@@ -2584,13 +2584,25 @@ sap.ui.define(
                         // var vDateRange = that.byId("EACDemandDate").getValue().split(' To ');
                         // var dLow = vDateRange[0],
                         //     dHigh = vDateRange[1];
-
-                        vRuleslist = {
-                            LOCATION_ID: oLocItem,
-                            PRODUCT_ID: oProdItem,
-                            // FROMDATE: dLow,
-                            // TODATE: dHigh,
-                        };
+                        if (rRadioBtn === "Restriction Likelihood") {
+                            vRuleslist = {
+                                LOCATION_ID: oLocItem,
+                                PRODUCT_ID: oProdItem,
+                                // FROMDATE: dLow,
+                                // TODATE: dHigh,
+                            };
+                        } else {
+                            var CriticalKey = that.byId("EACDemandidCheck").getSelected();
+                            var keyFlag = "";
+                            if(CriticalKey){
+                                keyFlag = "X";
+                            }
+                            vRuleslist = {
+                                LOCATION_ID: oLocItem,
+                                PRODUCT_ID: oProdItem,
+                                CRITICALKEY: keyFlag
+                            };
+                        }
                         this.oGModel.setProperty("/vcrulesData", vRuleslist);
 
                         // 07-09-2022-1
@@ -2612,11 +2624,17 @@ sap.ui.define(
                     var dLow = vDateRange[0],
                         dHigh = vDateRange[1];
                     if (oLocItem && oProdItem && dLow) {
+                        var CriticalKey = that.byId("ECRQtyidCheck").getSelected();
+                        var keyFlag = "";
+                        if(CriticalKey){
+                            keyFlag = "X";
+                        }  
                         vRuleslist = {
                             LOCATION_ID: oLocItem,
                             PRODUCT_ID: oProdItem,
                             FROMDATE: dLow,
                             TODATE: dHigh,
+                            CRITICALKEY: keyFlag
                         };
                         this.oGModel.setProperty("/vcrulesData", vRuleslist);
 
@@ -2688,6 +2706,7 @@ sap.ui.define(
 
                 // 07-09-2022-1
                 if (that.oGModel.getProperty("/EcecuteType") === "S") {
+                    // sap.ui.getCore().byId("idSSTime").$().find('INPUT').attr('disabled', true);
                     that._valueHelpDialogJobDetail.open();
                 } else if (that.oGModel.getProperty("/EcecuteType") === "E") {
                     sap.ui.getCore().byId("idJobSchtype").setSelectedKey("Im");
@@ -2695,6 +2714,13 @@ sap.ui.define(
                     that.onJobCreate();
                 }
                 // 07-09-2022-1
+            },
+
+            handleDateChange:function(){
+                sap.ui.getCore().byId("idSSTime").$().find('INPUT').attr('disabled', true);
+                sap.ui.getCore().byId("idSETime").$().find('INPUT').attr('disabled', true);
+                // sap.ui.getCore().byId("idSSTime");
+                // document.activeElement.blur();
             },
 
             // 07-09-2022
@@ -2845,6 +2871,12 @@ sap.ui.define(
                         LOCATION_ID: oLocItem,
                         PRODUCT_ID: oProdItem,
                     };
+                } else {
+                    vRuleslist = {
+                        LOCATION_ID: oLocItem,
+                        PRODUCT_ID: "ALL",
+                    };
+                }
 
                     this.oGModel.setProperty("/vcrulesData", vRuleslist);
                     sap.ui.getCore().byId("idSchTime").setDateValue();
@@ -2869,9 +2901,7 @@ sap.ui.define(
                     ) {
                         that.jobDataAddSche();
                     }
-                } else {
-                    MessageToast.show("Please select all fields");
-                }
+                
             },
 
 
@@ -3081,16 +3111,8 @@ sap.ui.define(
                     that.oGModel.getProperty("/newSch") !== "X" &&
                     that.oGModel.getProperty("/UpdateSch") !== "X"
                 ) {
-                    this._oCore
-                        .byId("idSTime")
-                        .setDateValue(
-                            new Date(this._oCore.byId("idSSTime").getDateValue())
-                        );
-                    this._oCore
-                        .byId("idETime")
-                        .setDateValue(
-                            new Date(this._oCore.byId("idSETime").getDateValue())
-                        );
+                    this._oCore.byId("idSTime").setDateValue(new Date(this._oCore.byId("idSSTime").getDateValue()));
+                    this._oCore.byId("idETime").setDateValue(new Date(this._oCore.byId("idSETime").getDateValue()));
                 }
 
                 var djSdate = this._oCore.byId("idSTime").getDateValue(),
@@ -3114,20 +3136,13 @@ sap.ui.define(
                 var dDate = new Date().toLocaleString().split(" "),
                     JobName = sName + new Date().getTime(),
                     actionText;
-                djSdate =
-                    djSdate[0] + " " + tjStime[0] + ":" + tjStime[1] + " " + "+0000";
-                djEdate =
-                    djEdate[0] + " " + tjEtime[0] + ":" + tjEtime[1] + " " + "+0000";
-                dsSDate =
-                    dsSDate[0] + " " + tsStime[0] + ":" + tsStime[1] + " " + "+0000";
-                dsEDate =
-                    dsEDate[0] + " " + tsEtime[0] + ":" + tsEtime[1] + " " + "+0000";
+                djSdate = djSdate[0] + " " + tjStime[0] + ":" + tjStime[1] + " " + "+0000";
+                djEdate = djEdate[0] + " " + tjEtime[0] + ":" + tjEtime[1] + " " + "+0000";
+                dsSDate = dsSDate[0] + " " + tsStime[0] + ":" + tsStime[1] + " " + "+0000";
+                dsEDate = dsEDate[0] + " " + tsEtime[0] + ":" + tsEtime[1] + " " + "+0000";
 
                 // Getting the schedule recurring details
-                var oJobschType = sap.ui
-                    .getCore()
-                    .byId("idJobSchtype")
-                    .getSelectedKey(),
+                var oJobschType = sap.ui.getCore().byId("idJobSchtype").getSelectedKey(),
                     onetime = "",
                     Cron = "";
                 if (oJobschType === "Im") {
@@ -3177,21 +3192,15 @@ sap.ui.define(
                         min = "*/" + min;
                     }
                     // Formating the recurring data
-                    Cron =
-                        "*" +
-                        " " +
-                        mnth +
-                        " " +
-                        date +
-                        " " +
-                        day +
-                        " " +
-                        hour +
-                        " " +
-                        min +
-                        " " +
-                        "0";
+                    Cron = "*" + " " + mnth + " " + date + " " + day + " " + hour + " " + min + " " + "0";
+
+                    
                 }
+
+                if(!mnth || !date || !day || !hour || !min){
+                    sap.m.MessageToast.show("Please fill corn values");
+                    
+                } else {
                 var oSelJobType = that.byId("idJobType").getSelectedKey();
                 // Maintaining the action based on job type selection
                 if (oSelJobType === "S") {
@@ -3545,6 +3554,7 @@ sap.ui.define(
                         },
                     });
                 }
+            }
             },
         }
         );

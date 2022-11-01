@@ -214,7 +214,7 @@ sap.ui.define(
                   };
                   ScheData.push(aIData);
                    // 04-10-2022
-                  } else if(jobType === "D" || jobType === "A" || jobType === "O" || jobType === "T"){
+                  } else if( jobType === "A" || jobType === "O" ){
                       var data = $.parseJSON(aData[i].data);
                       var aIData = {
                           Location: data.LOCATION_ID,
@@ -222,6 +222,14 @@ sap.ui.define(
                       };
                       ScheData.push(aIData);
                   // 04-10-2022
+                } else if(jobType === "D" || jobType === "T" ){
+                    var data = $.parseJSON(aData[i].data);
+                    var aIData = data.LocProdData;
+                    //   var aIData = {
+                    //       Location: data.LOCATION_ID,
+                    //       Product: data.PRODUCT_ID,
+                    //   };
+                      ScheData = aIData;
                 } else {
                   ScheData = aData[i].data;
                   ScheData = $.parseJSON(ScheData);
