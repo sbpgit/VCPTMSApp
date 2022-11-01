@@ -2007,7 +2007,7 @@ module.exports = cds.service.impl(async function () {
         else {
             let dataObj = {};
             dataObj["failed"] = false;
-            dataObj["message"] = "No Actual Component Demand exists " + new Date();
+            dataObj["message"] = "No Component requirement Qty exists " + new Date();
 
 
             if (req.headers['x-sap-job-id'] > 0) {
@@ -2020,14 +2020,14 @@ module.exports = cds.service.impl(async function () {
                     data: dataObj
                 };
 
-                console.log("Actual Component Demand job update req", updateReq);
+                console.log("Component requirement Qty job update req", updateReq);
 
                 scheduler.updateJobRunLog(updateReq, function (err, result) {
                     if (err) {
                         return console.log('Error updating run log: %s', err);
                     }
                     //Run log updated successfully
-                    console.log("No Actual Component Demand, job update results", result);
+                    console.log("No Component requirement Qty, job update results", result);
 
                 });
             }
