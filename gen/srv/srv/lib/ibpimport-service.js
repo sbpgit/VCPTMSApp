@@ -575,10 +575,17 @@ module.exports = cds.service.impl(async function () {
         } else {
 
             for (i = 0; i < liactcomp.length; i++) {
+<<<<<<< HEAD
 
                 var vWeekDate = new Date(liactcomp[i].WEEK_DATE).toISOString().split('Z');
                 var vDemd = liactcomp[i].ACTUALCOMPONENTDEMAND.split('.');
 
+=======
+
+                var vWeekDate = new Date(liactcomp[i].WEEK_DATE).toISOString().split('Z');
+                var vDemd = liactcomp[i].ACTUALCOMPONENTDEMAND.split('.');
+
+>>>>>>> 14aa2639ea299e30a4cd6698dddb888d61a955b3
                 vactcomp = {
                     "LOCID": liactcomp[i].LOCATION_ID,
                     "PRDID": liactcomp[i].PRODUCT_ID,
@@ -1611,6 +1618,7 @@ module.exports = cds.service.impl(async function () {
 
                 var vWeekDate = new Date(liactcomp[i].WEEK_DATE).toISOString().split('Z');
                 var vDemd = liactcomp[i].ACTUALCOMPONENTDEMAND.split('.');
+<<<<<<< HEAD
 
                 vactcomp = {
                     "LOCID": liactcomp[i].LOCATION_ID,
@@ -1620,6 +1628,17 @@ module.exports = cds.service.impl(async function () {
                     "PERIODID0_TSTAMP": vWeekDate[0]
                 };
 
+=======
+
+                vactcomp = {
+                    "LOCID": liactcomp[i].LOCATION_ID,
+                    "PRDID": liactcomp[i].PRODUCT_ID,
+                    "ACTUALCOMPONENTDEMAND": vDemd[0],
+                    "PRDFR": liactcomp[i].COMPONENT,
+                    "PERIODID0_TSTAMP": vWeekDate[0]
+                };
+
+>>>>>>> 14aa2639ea299e30a4cd6698dddb888d61a955b3
                 oReq.actcomp.push(vactcomp);
 
             }
@@ -1637,6 +1656,7 @@ module.exports = cds.service.impl(async function () {
             }
             // req.headers['Application-Interface-Key'] = vAIRKey;
             await service.tx(req).post("/SBPVCPTrans", oEntry);
+<<<<<<< HEAD
 
             var resUrl = "/getExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
             try {
@@ -1664,6 +1684,35 @@ module.exports = cds.service.impl(async function () {
 
                     console.log("Actual Component Demand has exported to update req", updateReq);
 
+=======
+
+            var resUrl = "/getExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
+            try {
+                return await service.tx(req).get(resUrl);
+                flag = 'X';
+            }
+            catch{
+
+            }
+            if (flag === 'X') {
+                let dataObj = {};
+                dataObj["success"] = true;
+                dataObj["message"] = "Actual Component Demand is successfull at " + new Date();
+
+
+                if (req.headers['x-sap-job-id'] > 0) {
+                    const scheduler = getJobscheduler(req);
+
+                    var updateReq = {
+                        jobId: req.headers['x-sap-job-id'],
+                        scheduleId: req.headers['x-sap-job-schedule-id'],
+                        runId: req.headers['x-sap-job-run-id'],
+                        data: dataObj
+                    };
+
+                    console.log("Actual Component Demand has exported to update req", updateReq);
+
+>>>>>>> 14aa2639ea299e30a4cd6698dddb888d61a955b3
                     scheduler.updateJobRunLog(updateReq, function (err, result) {
                         if (err) {
                             return console.log('Error updating run log: %s', err);

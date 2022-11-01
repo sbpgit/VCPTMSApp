@@ -14,6 +14,14 @@
         {
             "name": "$XSAPPNAME.Developer",
             "description": "UAA Display"
+        },
+        {
+            "name": "$XSAPPNAME.JobsViewer",
+            "description": "Jobs Viewer"
+        },
+        {
+            "name": "$XSAPPNAME.JobsManager",
+            "description": "Jobs Manager"
         }
     ],
     "role-templates": [
@@ -37,9 +45,27 @@
             "scope-references": [
                 "$XSAPPNAME.User"
             ]
+        },
+        {
+            "name": "JobsViewer",
+            "description": "Jobs Viewer",
+            "scope-references": [
+              "$XSAPPNAME.JobsViewer"
+            ],
+            "attribute-references": []
+        },
+        {
+            "name": "JobsManager",
+            "description": "Jobs Manager",
+            "scope-references": [
+              "$XSAPPNAME.JobsManager"
+            ],
+            "attribute-references": []
         }
     ],
     "oauth2-configuration": {
         "token-validity": 3600
-    }
+    },
+    "attributes": [],
+  "authorities-inheritance": false
 }

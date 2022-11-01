@@ -245,8 +245,15 @@ class GenTimeseriesM2 {
         console.log(FlagTest);
         await GenF.logMessage(req, `Completed history timeseries`);
         
-        Flag = 'X';
-        console.log(Flag);
+        // Flag = 'X';
+        // console.log(Flag);
+        if (FlagTest === 'S') {
+            console.log("Success");
+            GenF.jobSchMessage('X', "Timeseries History generation is complete", req);
+        }
+        else {
+            GenF.jobSchMessage('', "Timeseries History generation failed", req);
+        }
     }
 
     async genTimeseriesF(adata, req, Flag) {
@@ -415,6 +422,7 @@ class GenTimeseriesM2 {
                     console.log("CP_TS_OBJDEP_CHARHDR_F: " + liObjdepF.length);
                     try {
                         await INSERT(liObjdepF).into('CP_TS_OBJDEP_CHARHDR_F');
+                        Flag = 'X';
                     }
                     catch (e) {
                         console.log("error", e.meesage);
@@ -424,7 +432,13 @@ class GenTimeseriesM2 {
         }
 
         await GenF.logMessage(req, `Completed future timeseries`);
-        Flag = 'X';
+        if (Flag === 'X') {
+            console.log("Success");
+            GenF.jobSchMessage(Flag, `Timeseries Future generation is complete`, req);
+        }
+        else {
+            GenF.jobSchMessage(Flag, `Timeseries Future generation failed`, req);
+        }
     }
 
     async genPrediction(adata, req, Flag) {
@@ -727,6 +741,7 @@ class GenTimeseriesM2 {
                                     AND VERSION = '${lsCirLeast.VERSION}'
                                     AND SCENARIO = '${lsCirLeast.SCENARIO}'`);
                     liRound[cntR].DIFF = liRound[cntR].DIFF - 1;
+                    Flag = 'X';
                 }
 
 
@@ -782,7 +797,14 @@ class GenTimeseriesM2 {
         }
 */
         await GenF.logMessage(req, `Completed Fully Configured Requirement Generation`);
-        Flag = 'X';
+        // Flag = 'X';
+        if (Flag === 'X') {
+            console.log("Success");
+            GenF.jobSchMessage(Flag, " Fully Configured Requirement Generation is complete", req);
+        }
+        else {
+            GenF.jobSchMessage(Flag, "Fully Configured Requirement Generation is failed", req);
+        }
 
     }
 

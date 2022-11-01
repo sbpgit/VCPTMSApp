@@ -16,7 +16,17 @@ service JobsService @(impl : './lib/Jobs-Service.js') {
   @readonly
   entity logs as projection on js.LOGS;
 
-  entity getJobStatus  as projection on V_JOBSTATUS;
+//   entity getJobStatus  as projection on V_JOBSTATUS;
+  entity getJobStatus  @(restrict : [
+            {
+                grant : [ 'READ' ],
+                to : [ 'JobsViewer' ]
+            },
+            {
+                grant : [ '*' ],
+                to : [ 'JobsManager' ]
+            }
+      ]) as projection on V_JOBSTATUS;
   entity getJobRunStatus as projection on V_JOBRUNSTATUS; 
   entity getJobRunState as projection on V_JOBRUNSTATE; 
 

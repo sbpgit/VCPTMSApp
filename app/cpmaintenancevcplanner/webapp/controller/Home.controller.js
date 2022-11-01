@@ -499,6 +499,13 @@ sap.ui.define([
                         that.byId("detailTitle").setText(data1[i].DESCRIPTION);
                     }
                 }
+            },
+            onNavPress:function(){
+                var oCrossAppNav = sap.ushell.Container.getService("CrossApplicationNavigation"); 
+                 oCrossAppNav.toExternal({
+                    target: { semanticObject : "vcpdocdisplay", action: "Display" },
+                    
+                  }); 
             }
         });
     });
