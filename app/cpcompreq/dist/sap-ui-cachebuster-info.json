@@ -1,52 +1,20 @@
 {
-<<<<<<< HEAD
-  "view/StructureNodeDialog.fragment.xml": 1665479929589,
-  "controller/App.controller.js": 1665479929589,
-=======
-<<<<<<< HEAD
-  "css/style.css": 1662042606601,
-  "controller/Home.controller.js": 1665407065710,
-  "model/models.js": 1662042606605,
-  "manifest.json": 1667296719695,
-  "controller/BaseController.js": 1662042606601,
-  "controller/App.controller.js": 1662042606601,
-  "Component.js": 1662042606601,
-  "manifest-bundle.zip": 1667296719714,
-  "Component-preload.js": 1667296720272,
-  "controller/App-dbg.controller.js": 1662042606601,
-  "controller/Home-dbg.controller.js": 1665407065710,
-  "controller/BaseController-dbg.js": 1662042606601,
-  "model/models-dbg.js": 1662042606605,
-  "Component-dbg.js": 1662042606601,
-  "view/VersionDialog.fragment.xml": 1662042606605,
-  "view/StructureNodeDialog.fragment.xml": 1662042606605,
-  "view/ScenarioDialog.fragment.xml": 1662042606605,
-  "view/ProdDialog.fragment.xml": 1662042606605,
-  "view/LocDialog.fragment.xml": 1662042606605,
-  "view/Home.view.xml": 1666250927850,
-  "view/ComponentDialog.fragment.xml": 1662042606605,
-  "view/CompODBreakdown.fragment.xml": 1662042606605,
-  "view/App.view.xml": 1662042606605,
-  "i18n/i18n.properties": 1666250927850,
-  "index.html": 1662042606601
-=======
-<<<<<<< HEAD
-  "view/ScenarioDialog.fragment.xml": 1665479929589,
->>>>>>> 8f261864983612d07426bcd6c88cf983b5292079
+  "i18n/i18n.properties": 1666258684156,
   "model/models.js": 1665479929589,
+  "manifest.json": 1667302723875,
   "controller/Home.controller.js": 1665479929589,
   "controller/BaseController.js": 1665479929589,
-  "manifest.json": 1667299596099,
+  "controller/App.controller.js": 1665479929589,
   "Component.js": 1665479929589,
-  "manifest-bundle.zip": 1667299596115,
-  "Component-preload.js": 1667299596649,
+  "manifest-bundle.zip": 1667302723914,
+  "Component-preload.js": 1667302724558,
   "model/models-dbg.js": 1665479929589,
   "controller/Home-dbg.controller.js": 1665479929589,
   "controller/BaseController-dbg.js": 1665479929589,
   "controller/App-dbg.controller.js": 1665479929589,
   "Component-dbg.js": 1665479929589,
   "view/VersionDialog.fragment.xml": 1665479929589,
-  "i18n/i18n.properties": 1666258684156,
+  "view/StructureNodeDialog.fragment.xml": 1665479929589,
   "view/ScenarioDialog.fragment.xml": 1665479929589,
   "view/ProdDialog.fragment.xml": 1665479929589,
   "view/LocDialog.fragment.xml": 1665479929589,
@@ -56,35 +24,4 @@
   "view/App.view.xml": 1665479929589,
   "css/style.css": 1665479929589,
   "index.html": 1665479929589
-<<<<<<< HEAD
-=======
-=======
-  "controller/App.controller.js": 1661440197811,
-  "Component.js": 1661440197811,
-  "model/models.js": 1661440197811,
-  "controller/Home.controller.js": 1665563487106,
-  "controller/BaseController.js": 1661440197811,
-  "i18n/i18n.properties": 1666693187702,
-  "manifest.json": 1667289452031,
-  "manifest-bundle.zip": 1667289452043,
-  "Component-preload.js": 1667289452371,
-  "controller/BaseController-dbg.js": 1661440197811,
-  "controller/Home-dbg.controller.js": 1665563487106,
-  "model/models-dbg.js": 1661440197811,
-  "controller/App-dbg.controller.js": 1661440197811,
-  "Component-dbg.js": 1661440197811,
-  "view/VersionDialog.fragment.xml": 1661440197811,
-  "view/StructureNodeDialog.fragment.xml": 1661440197811,
-  "view/ScenarioDialog.fragment.xml": 1661440197811,
-  "view/ProdDialog.fragment.xml": 1661440197811,
-  "view/LocDialog.fragment.xml": 1661440197811,
-  "view/Home.view.xml": 1666693187702,
-  "view/ComponentDialog.fragment.xml": 1661440197811,
-  "view/CompODBreakdown.fragment.xml": 1661440197811,
-  "view/App.view.xml": 1661440197811,
-  "css/style.css": 1661440197811,
-  "index.html": 1661440197811
->>>>>>> e79b621352294442442e5d5e08a096b049af7113
->>>>>>> 14aa2639ea299e30a4cd6698dddb888d61a955b3
->>>>>>> 8f261864983612d07426bcd6c88cf983b5292079
 }

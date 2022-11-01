@@ -3196,7 +3196,6 @@ sap.ui.define(
 
                     
                 }
-<<<<<<< HEAD
                 // var JobFlag = "";
                 // if (oJobschType === "Cr") {
                 //     if (!mnth || !date || !day || !hour || !min) {
@@ -3210,13 +3209,6 @@ sap.ui.define(
                     
                 // } else {
             // if(JobFlag !== "X"){
-=======
-
-                if(!mnth || !date || !day || !hour || !min){
-                    sap.m.MessageToast.show("Please fill corn values");
-                    
-                } else {
->>>>>>> 14aa2639ea299e30a4cd6698dddb888d61a955b3
                 var oSelJobType = that.byId("idJobType").getSelectedKey();
                 // Maintaining the action based on job type selection
                 if (oSelJobType === "S") {
@@ -3570,11 +3562,7 @@ sap.ui.define(
                         },
                     });
                 }
-<<<<<<< HEAD
             // }
-=======
-            }
->>>>>>> 14aa2639ea299e30a4cd6698dddb888d61a955b3
             },
         }
         );

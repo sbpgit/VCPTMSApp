@@ -810,7 +810,7 @@ module.exports = (srv) => {
     // Generate Timeseries using action call
     srv.on("generateTimeseries", async (req) => {
 
-        let lilocProd = [];
+        let lilocProd = {};
         let lsData = {};
         let Flag = '';
         let createtAt = new Date();
@@ -821,16 +821,17 @@ module.exports = (srv) => {
         let lilocProdReq = JSON.parse(req.data.LocProdData);
         if (lilocProdReq[0].PRODUCT_ID === "ALL") {
             const objCatFn = new Catservicefn();
-            lilocProd = await objCatFn.getAllProducts(req.data);
-            // lilocProd = JSON.parse(lilocProdT);
+            const lilocProdT = await objCatFn.getAllProducts(req.data);
+            const litemp = JSON.stringify(lilocProdT);
+             lilocProd = JSON.parse(litemp);
         }
         else {
             let lilocProdT = {};
-            lilocProdT = JSON.parse(req.data.LocProdData);
-            lilocProd.push(GenFunctions.parse(lilocProdT));
+            lilocProd = JSON.parse(req.data.LocProdData);
+            // lilocProd.push(GenFunctions.parse(lilocProdT));
         }
         values.push({ id, createtAt, message, lilocProd });
-        switch (await GenFunctions.getParameterValue(lilocProd[0].LOCATION_ID, '5')) {
+        switch (await GenFunctions.getParameterValue(lilocProd[0].LOCATION_ID, 5)) {
             case 'M1':
 
                 res.statusCode = 202;
@@ -867,7 +868,7 @@ module.exports = (srv) => {
     });
     srv.on("generateTimeseriesF", async (req) => {
 
-        let lilocProd = [];
+        let lilocProd = {};
         let lsData = {}, Flag = '';
 
         let createtAt = new Date();
@@ -878,16 +879,18 @@ module.exports = (srv) => {
         let lilocProdReq = JSON.parse(req.data.LocProdData);
         if (lilocProdReq[0].PRODUCT_ID === "ALL") {
             const objCatFn = new Catservicefn();
-            lilocProd = await objCatFn.getAllProducts(req.data);
+            const lilocProdT = await objCatFn.getAllProducts(req.data);
+            const litemp = JSON.stringify(lilocProdT);
+             lilocProd = JSON.parse(litemp);
         }
         else {
 
             let lilocProdT = {};
-            lilocProdT = JSON.parse(req.data.LocProdData);
-            lilocProd.push(GenFunctions.parse(lilocProdT));
+            lilocProd = JSON.parse(req.data.LocProdData);
+            // lilocProd.push(GenFunctions.parse(lilocProdT));
         }
         values.push({ id, createtAt, message, lilocProd });
-        switch (await GenFunctions.getParameterValue(lilocProd[0].LOCATION_ID, '5')) {
+        switch (await GenFunctions.getParameterValue(lilocProd[0].LOCATION_ID, 5)) {
             case 'M1':
                 res.statusCode = 202;
                 res.send({ values });
@@ -943,37 +946,39 @@ module.exports = (srv) => {
     // Generate Timeseries fucntion calls
     srv.on("generate_timeseries", async (req) => {
 
-        let lilocProd = [];
+        let lilocProd = {};
         let lsData = {};
         let Flag = '';
         if (req.data.PRODUCT_ID === "ALL") {
-            let lilocProdT = [];
+            // let lilocProdT = [];
             const objCatFn = new Catservicefn();
-            lilocProd = await objCatFn.getAllProducts(req.data);
-            // lilocProd = JSON.parse(lilocProdT);
-        }
+            const lilocProdT = await objCatFn.getAllProducts(req.data);
+            const litemp = JSON.stringify(lilocProdT);
+             lilocProd = JSON.parse(litemp);
+             console.log(lilocProd[0].LOCATION_ID);
+            }
 
-        switch (await GenFunctions.getParameterValue(lilocProd[0].LOCATION_ID, '5')) {
-            case 'M1':
-                for (let i = 0; i < lilocProd.length; i++) {
-                    lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
-                    lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
+        // switch (await GenFunctions.getParameterValue(lilocProd[0].LOCATION_ID, 5)) {
+        //     case 'M1':
+        //         for (let i = 0; i < lilocProd.length; i++) {
+        //             lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
+        //             lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
 
-                    const obgenTimeseries = new GenTimeseries();
-                    await obgenTimeseries.genTimeseries(lsData, req, Flag);
-                }
-                break;
-            case 'M2':
-                for (let i = 0; i < lilocProd.length; i++) {
-                    lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
-                    lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
-                    console.log(lsData.LOCATION_ID);
-                    console.log(lsData.PRODUCT_ID);
-                    const obgenTimeseriesM2 = new GenTimeseriesM2();
-                    await obgenTimeseriesM2.genTimeseries(lsData, req, Flag);
-                }
-                break;
-        }
+        //             const obgenTimeseries = new GenTimeseries();
+        //             await obgenTimeseries.genTimeseries(lsData, req, Flag);
+        //         }
+        //         break;
+        //     case 'M2':
+        //         for (let i = 0; i < lilocProd.length; i++) {
+        //             lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
+        //             lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
+        //             console.log(lsData.LOCATION_ID);
+        //             console.log(lsData.PRODUCT_ID);
+        //             const obgenTimeseriesM2 = new GenTimeseriesM2();
+        //             await obgenTimeseriesM2.genTimeseries(lsData, req, Flag);
+        //         }
+        //         break;
+        // }
         // const obgenTimeseries_rt = new GenTimeseriesRT();
         // await obgenTimeseries_rt.genTimeseries_rt(req.data, req);
 
@@ -984,7 +989,7 @@ module.exports = (srv) => {
         let lsData = {}, Flag = '';
         lilocProd = JSON.parse(req.data.LocProdData);
 
-        switch (await GenFunctions.getParameterValue(lilocProd[0].LOCATION_ID, '5')) {
+        switch (await GenFunctions.getParameterValue(lilocProd[0].LOCATION_ID, 5)) {
             case 'M1':
                 for (let i = 0; i < lilocProd.length; i++) {
                     lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
@@ -1044,7 +1049,7 @@ module.exports = (srv) => {
     // Generate Fully Configured Demand
     srv.on("genFullConfigDemand", async (req) => {
 
-        let lilocProd = [];
+        let lilocProd = {};
         let lsData = {};
         let Flag = '';
         let createtAt = new Date();
@@ -1054,22 +1059,18 @@ module.exports = (srv) => {
         let res = req._.req.res;
         let lilocProdReq = JSON.parse(req.data.LocProdData);
         if (lilocProdReq[0].PRODUCT_ID === "ALL") {
-            // lilocProd = await cds
-            //     .transaction(req)
-            //     .run(
-            //         SELECT.distinct
-            //             .from(getAllProd)
-            //             .columns("LOCATION_ID", "PRODUCT_ID")
-            //             .where(`LOCATION_ID = '${lilocProdReq[0].LOCATION_ID}'`)
-            //     );
+            // const objCatFn = new Catservicefn();
+            // lilocProd = await objCatFn.getAllProducts(req.data);
+            
             const objCatFn = new Catservicefn();
-            lilocProd = await objCatFn.getAllProducts(req.data);
+            const lilocProdT = await objCatFn.getAllProducts(req.data);
+            const litemp = JSON.stringify(lilocProdT);
+             lilocProd = JSON.parse(litemp);
         }
         else {
-            // lilocProd = JSON.parse(req.data.LocProdData);
             let lilocProdT = {};
-            lilocProdT = JSON.parse(req.data.LocProdData);
-            lilocProd.push(GenFunctions.parse(lilocProdT));
+            lilocProd = JSON.parse(req.data.LocProdData);
+            // lilocProd.push(GenFunctions.parse(lilocProdT));
         }
         values.push({ id, createtAt, message, lilocProd });
         res.statusCode = 202;
@@ -1916,22 +1917,23 @@ module.exports = (srv) => {
 
     srv.on("trigrMAWeek", async (req) => {
         let liresults = [];
-        let lsresults = {};
-        lsresults.LOCATION_ID = req.data.LOCATION_ID;
-        lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
-        lsresults.WEEK_DATE = req.data.WEEK_DATE;
-        liresults.push(lsresults);
-        lsresults = {};
-        if (liresults.length > 0) {
-            try {
-                await cds.run(INSERT.into("CP_MARKETAUTH_WEEK").entries(liresults));
-                responseMessage = " Creation/Updation successful";
-            } catch (e) {
-                //DONOTHING
-                responseMessage = " Creation failed";
-                // createResults.push(responseMessage);
-            }
-        }
+        console.log("Hello");
+        // let lsresults = {};
+        // lsresults.LOCATION_ID = req.data.LOCATION_ID;
+        // lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
+        // lsresults.WEEK_DATE = req.data.WEEK_DATE;
+        // liresults.push(lsresults);
+        // lsresults = {};
+        // if (liresults.length > 0) {
+        //     try {
+        //         await cds.run(INSERT.into("CP_MARKETAUTH_WEEK").entries(liresults));
+        //         responseMessage = " Creation/Updation successful";
+        //     } catch (e) {
+        //         //DONOTHING
+        //         responseMessage = " Creation failed";
+        //         // createResults.push(responseMessage);
+        //     }
+        // }
     });
     srv.on("maintainSeedOrder", async (req) => {
         let liresults = [];
