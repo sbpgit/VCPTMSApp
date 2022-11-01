@@ -1,14 +1,14 @@
 <mvc:View height="100%" class="sapUiSizeCompact" controllerName="cpapp.cpplaningconfig.controller.Home" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:ux="sap.uxap">
-    <Page showHeader="false" showFooter="true"> 
-         <content>
+    <Page id="idDetailView" showHeader="false" showFooter="true">
+        <content>
             <ux:ObjectPageLayout id="ObjectPageLayout" useIconTabBar="true" showHeaderContent="false" showFooter="false">
-                <ux:headerTitle>
+                <!-- <ux:headerTitle>
                     <ux:ObjectPageDynamicHeaderTitle class="titleAlign">
                         <ux:expandedHeading>
                             <Title text="{i18n>appTitle}" />
                         </ux:expandedHeading>
                     </ux:ObjectPageDynamicHeaderTitle>
-                </ux:headerTitle>
+                </ux:headerTitle> -->
 
                 <ux:sections>
                     <ux:ObjectPageSection showTitle="false">
@@ -40,24 +40,16 @@
                                             <Button icon="sap-icon://save" type="Emphasized" text="Save" class="btnSize" press="onPressSave" />
                                         </content>
                                     </OverflowToolbar>
-                                </headerToolbar>
--->
+                                </headerToolbar> -->
+                                        
                                         <columns>
-                                            <Column visible="false">
-                                                <!-- <Text text="GROUP_ID" /> -->
-                                            </Column>
-                                            <Column minScreenWidth="Desktop" demandPopin="true" width="30em" hAlign="End">
-                                                <!-- <Text text="Description" /> -->
-                                            </Column>
-                                            <Column minScreenWidth="Desktop" demandPopin="true" width="30em" hAlign="End">
-                                                <!-- <Text text="Value" /> -->
-                                            </Column>
-                                            <Column minScreenWidth="Desktop" demandPopin="true" width="10em" hAlign="Begin">
-                                                <!-- <Text text="Value" /> -->
-                                            </Column>
+                                            <Column visible="false" />
+                                            <Column minScreenWidth="Tablet" demandPopin="true" width="30em"  />
+                                            <Column minScreenWidth="Tablet" demandPopin="true" width="30em" />
+                                            <Column minScreenWidth="Tablet" demandPopin="true" width="10em"  />
                                         </columns>
                                         <items>
-                                            <ColumnListItem vAlign="Middle">
+                                            <ColumnListItem>
                                                 <cells>
                                                     <Text text="{PARAMETER_ID}" />
                                                     <Label text="{DESCRIPTION}" required="true" />
@@ -72,7 +64,7 @@
                         </ux:subSections>
                     </ux:ObjectPageSection>
                 </ux:sections>
-<!-- 
+                <!--
                 <ux:footer>
             <OverflowToolbar width="100%" design="Solid">
                 <ToolbarSpacer />

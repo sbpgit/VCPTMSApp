@@ -2145,12 +2145,13 @@ module.exports = (srv) => {
         oParamValues = JSON.parse(req.data.PARAMVALS);
         if (req.data.FLAG === "C" || req.data.FLAG === "U") {
             try {
-                await cds.run(DELETE.from('CP_PARAMETER_VALUES'));
+                await cds.run(DELETE.from('CP_PARAMETER_VALUES').where(`LOCATION_ID = '${oParamValues[0].LOCATION_ID}'`));
             } catch {
                 bFlag = true;
             }
 
             for (var i = 0; i < oParamValues.length; i++) {
+                oParamVals.LOCATION_ID = oParamValues[i].LOCATION_ID;
                 oParamVals.PARAMETER_ID = parseInt(oParamValues[i].PARAMETER_ID);
                 oParamVals.VALUE = oParamValues[i].VALUE;
                 aParamVals.push(oParamVals);

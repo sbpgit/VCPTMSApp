@@ -6762,6 +6762,12 @@
           "type": "cds.String",
           "length": 5
         },
+        "LOCATION_ID": {
+          "@title": "LOCATION_ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
         "VALUE": {
           "@title": "VALUE",
           "key": true,
@@ -21789,6 +21795,12 @@
           "type": "cds.String",
           "length": 5
         },
+        "LOCATION_ID": {
+          "@title": "LOCATION_ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
         "VALUE": {
           "@title": "VALUE",
           "key": true,
@@ -22777,6 +22789,14 @@
         "LOCATION_ID": {
           "type": "cds.String",
           "length": 4
+        },
+        "PRODUCT_ID": {
+          "type": "cds.String",
+          "length": 40
+        },
+        "CRITICALKEY": {
+          "type": "cds.String",
+          "length": 1
         }
       },
       "returns": {
@@ -22912,6 +22932,10 @@
         },
         "TODATE": {
           "type": "cds.Date"
+        },
+        "CRITICALKEY": {
+          "type": "cds.String",
+          "length": 1
         }
       }
     },
@@ -22925,6 +22949,10 @@
         "PRODUCT_ID": {
           "type": "cds.String",
           "length": 40
+        },
+        "CRITICALKEY": {
+          "type": "cds.String",
+          "length": 1
         }
       }
     },

@@ -212,6 +212,7 @@ class GenFunctions {
         return num;
 
     }
+    
     static async jobSchMessage(lFlag, lMessage, req){
 console.log(lFlag);
 console.log(lMessage);
