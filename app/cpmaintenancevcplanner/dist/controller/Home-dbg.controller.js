@@ -502,9 +502,9 @@ sap.ui.define([
             },
             onNavPress:function(){
                 if (sap.ushell && sap.ushell.Container && sap.ushell.Container.getService) {
-                var oCrossAppNav = sap.ushell.Container.getService("CrossApplicationNavigation"); 
+                var oCrossAppNav = sap.ushell.Container.getServiceAsync("CrossApplicationNavigation"); 
                  oCrossAppNav.toExternal({
-                    target: { semanticObject : "cpappcpvcplannerdocumentation", action: "display" },
+                    target: { semanticObject : "vcpdocdisplay", action: "Display" }
                  
                   });
                 } 

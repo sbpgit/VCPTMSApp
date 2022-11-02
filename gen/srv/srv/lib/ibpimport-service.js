@@ -523,6 +523,7 @@ module.exports = cds.service.impl(async function () {
 
             let vFromDate = new Date();
             var Vnumber = 2;
+            const lsSales = await GenF.getParameterValue(req.data.LOCATION_ID, 4);
         let vToDate = new Date().toISOString().split('Z')[0].split('T')[0];
         vFromDate.setDate(vFromDate.getDate() - (Vnumber * 7));
         vFromDate = vFromDate.toISOString().split('Z')[0].split('T')[0];
@@ -1551,7 +1552,7 @@ module.exports = cds.service.impl(async function () {
         },
             vactcomp;
         // Fetch History period from Configuration table
-        const lsSales = GenF.getParameterValue(req.data.LOCATION_ID, 4);
+        const lsSales = await GenF.getParameterValue(req.data.LOCATION_ID, 4);
         console.log(lsSales.VALUE);
         let vFromDate = new Date();
         console.log(vFromDate);
@@ -1632,7 +1633,7 @@ module.exports = cds.service.impl(async function () {
 
             }
         }
-        if (oReq.actcomp.length > 0) {
+        if (oReq.actcomp) {
             var vTransID = new Date().getTime().toString();
             var oEntry =
             {
@@ -1933,7 +1934,7 @@ module.exports = cds.service.impl(async function () {
             }
         }
 
-        if (oReq.actcomp.length > 0) {
+        if (oReq.actcomp) {
             var vTransID = new Date().getTime().toString();
             var oEntry =
             {
