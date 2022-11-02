@@ -1,0 +1,18 @@
+{
+    "applications": {
+        "cpappcpmaintenancevcplanner-display": {
+            "title": "Maintenance VC Planner Documentation",
+            "description": "A Fiori application.",
+            "additionalInformation": "SAPUI5.Component=cpapp.cpmaintenancevcplanner",
+            "applicationType": "URL",
+            "url": "../"
+        },
+        "cpappcpvcplannerdocumentation-display": {
+            "title": "VC Planner Documentation",
+            "description": "A Fiori application.",
+            "additionalInformation": "SAPUI5.Component=cpapp.cpvcplannerdocumentation",
+            "applicationType": "URL",
+            "url": "../resources/cpapp.cpvcplannerdocumentation"
+        }
+    }
+  }
