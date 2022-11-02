@@ -92,7 +92,8 @@
         "watch-cpjobscheduler_new": "cds watch --open cpjobscheduler_new/webapp/index.html?sap-ui-xx-viewCache=false",
         "watch-cpcriticalcomp": "cds watch --open cpcriticalcomp/webapp/index.html?sap-ui-xx-viewCache=false",
         "watch-cpfactoryloc": "cds watch --open cpfactoryloc/webapp/index.html?sap-ui-xx-viewCache=false",
-        "watch-cplinemaster": "cds watch --open cplinemaster/webapp/index.html?sap-ui-xx-viewCache=false"
+        "watch-cplinemaster": "cds watch --open cplinemaster/webapp/index.html?sap-ui-xx-viewCache=false",
+        "watch-cpcirlog": "cds watch --open cpcirlog/webapp/index.html?sap-ui-xx-viewCache=false"
     },
     "eslintConfig": {
         "extends": "eslint:recommended",
@@ -307,10 +308,11 @@
         "app/cpjobscheduler_new",
         "app/cpcriticalcomp",
         "app/cpfactoryloc",
-        "app/cplinemaster"
+        "app/cplinemaster",
+        "app/cpcirlog"
     ],
     "devDependencies": {
-        "@sap/ux-specification": "^1.102.10",
+        "@sap/ux-specification": "^1.102.11",
         "rimraf": "^3.0.2"
     }
 }

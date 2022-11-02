@@ -251,8 +251,12 @@ class GenTimeseriesM2 {
             console.log("Success");
             GenF.jobSchMessage('X', "Timeseries History generation is complete", req);
         }
-        else {
+        else if (FlagTest === 'E') {
             GenF.jobSchMessage('', "Timeseries History generation failed", req);
+        }
+        else {
+            const vMsg = "Unable to generate timeseries for the product: " + adata.PRODUCT_ID + " ";
+            GenF.jobSchMessage('X', vMsg, req);
         }
     }
 
@@ -422,9 +426,10 @@ class GenTimeseriesM2 {
                     console.log("CP_TS_OBJDEP_CHARHDR_F: " + liObjdepF.length);
                     try {
                         await INSERT(liObjdepF).into('CP_TS_OBJDEP_CHARHDR_F');
-                        Flag = 'X';
+                        Flag = 'S';
                     }
                     catch (e) {
+                        Flag = 'E';
                         console.log("error", e.meesage);
                     }
                 }
@@ -432,12 +437,16 @@ class GenTimeseriesM2 {
         }
 
         await GenF.logMessage(req, `Completed future timeseries`);
-        if (Flag === 'X') {
+        if (Flag === 'S') {
             console.log("Success");
-            GenF.jobSchMessage(Flag, `Timeseries Future generation is complete`, req);
+            GenF.jobSchMessage('X', `Timeseries Future generation is complete`, req);
+        }
+        else if (Flag === 'E') {
+            GenF.jobSchMessage('', `Timeseries Future generation failed`, req);
         }
         else {
-            GenF.jobSchMessage(Flag, `Timeseries Future generation failed`, req);
+            const vMsg = "Unable to generate timeseries for the product: " + adata.PRODUCT_ID + " ";
+            GenF.jobSchMessage('X', vMsg, req);
         }
     }
 
@@ -796,14 +805,14 @@ class GenTimeseriesM2 {
             }
         }
 */
-        await GenF.logMessage(req, `Completed Fully Configured Requirement Generation`);
+        await GenF.logMessage(req, `Completed Forcast Demand Generation`);
         // Flag = 'X';
         if (Flag === 'X') {
             console.log("Success");
-            GenF.jobSchMessage(Flag, " Fully Configured Requirement Generation is complete", req);
+            GenF.jobSchMessage(Flag, "Forcast Demand Generation is complete", req);
         }
         else {
-            GenF.jobSchMessage(Flag, "Fully Configured Requirement Generation is failed", req);
+            GenF.jobSchMessage(Flag, "Forcast Demand Generation is failed", req);
         }
 
     }

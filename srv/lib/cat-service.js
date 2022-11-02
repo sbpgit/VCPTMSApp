@@ -820,8 +820,11 @@ module.exports = (srv) => {
         let res = req._.req.res;
         let lilocProdReq = JSON.parse(req.data.LocProdData);
         if (lilocProdReq[0].PRODUCT_ID === "ALL") {
+            lsData.LOCATION_ID = lilocProdReq[0].LOCATION_ID;
+            lsData.PRODUCT_ID = lilocProdReq[0].PRODUCT_ID;
             const objCatFn = new Catservicefn();
-            const lilocProdT = await objCatFn.getAllProducts(req.data);
+            const lilocProdT = await objCatFn.getAllProducts(lsData);
+            lsData = {};
             const litemp = JSON.stringify(lilocProdT);
              lilocProd = JSON.parse(litemp);
         }
@@ -878,8 +881,11 @@ module.exports = (srv) => {
         let res = req._.req.res;
         let lilocProdReq = JSON.parse(req.data.LocProdData);
         if (lilocProdReq[0].PRODUCT_ID === "ALL") {
+            lsData.LOCATION_ID = lilocProdReq[0].LOCATION_ID;
+            lsData.PRODUCT_ID = lilocProdReq[0].PRODUCT_ID;
             const objCatFn = new Catservicefn();
-            const lilocProdT = await objCatFn.getAllProducts(req.data);
+            const lilocProdT = await objCatFn.getAllProducts(lsData);
+            lsData = {};
             const litemp = JSON.stringify(lilocProdT);
              lilocProd = JSON.parse(litemp);
         }
@@ -949,36 +955,36 @@ module.exports = (srv) => {
         let lilocProd = {};
         let lsData = {};
         let Flag = '';
-        if (req.data.PRODUCT_ID === "ALL") {
-            // let lilocProdT = [];
-            const objCatFn = new Catservicefn();
-            const lilocProdT = await objCatFn.getAllProducts(req.data);
-            const litemp = JSON.stringify(lilocProdT);
-             lilocProd = JSON.parse(litemp);
-             console.log(lilocProd[0].LOCATION_ID);
-            }
+        // if (req.data.PRODUCT_ID === "ALL") {
+        //     // let lilocProdT = [];
+        //     const objCatFn = new Catservicefn();
+        //     const lilocProdT = await objCatFn.getAllProducts(req.data);
+        //     const litemp = JSON.stringify(lilocProdT);
+        //      lilocProd = JSON.parse(litemp);
+        //      console.log(lilocProd[0].LOCATION_ID);
+        //     }
 
-        // switch (await GenFunctions.getParameterValue(lilocProd[0].LOCATION_ID, 5)) {
-        //     case 'M1':
-        //         for (let i = 0; i < lilocProd.length; i++) {
-        //             lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
-        //             lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
+        switch (await GenFunctions.getParameterValue(req.data.LOCATION_ID, 5)) {
+            case 'M1':
+                // for (let i = 0; i < lilocProd.length; i++) {
+                //     lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
+                //     lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
 
-        //             const obgenTimeseries = new GenTimeseries();
-        //             await obgenTimeseries.genTimeseries(lsData, req, Flag);
-        //         }
-        //         break;
-        //     case 'M2':
-        //         for (let i = 0; i < lilocProd.length; i++) {
-        //             lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
-        //             lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
-        //             console.log(lsData.LOCATION_ID);
-        //             console.log(lsData.PRODUCT_ID);
-        //             const obgenTimeseriesM2 = new GenTimeseriesM2();
-        //             await obgenTimeseriesM2.genTimeseries(lsData, req, Flag);
-        //         }
-        //         break;
-        // }
+                    const obgenTimeseries = new GenTimeseries();
+                    await obgenTimeseries.genTimeseries(req.data, req, Flag);
+                // }
+                break;
+            case 'M2':
+                // for (let i = 0; i < lilocProd.length; i++) {
+                //     lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
+                //     lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
+                //     console.log(lsData.LOCATION_ID);
+                //     console.log(lsData.PRODUCT_ID);
+                    const obgenTimeseriesM2 = new GenTimeseriesM2();
+                    await obgenTimeseriesM2.genTimeseries(req.data, req, Flag);
+                // }
+                break;
+        }
         // const obgenTimeseries_rt = new GenTimeseriesRT();
         // await obgenTimeseries_rt.genTimeseries_rt(req.data, req);
 
@@ -1061,9 +1067,11 @@ module.exports = (srv) => {
         if (lilocProdReq[0].PRODUCT_ID === "ALL") {
             // const objCatFn = new Catservicefn();
             // lilocProd = await objCatFn.getAllProducts(req.data);
-            
+            lsData.LOCATION_ID = lilocProdReq[0].LOCATION_ID;
+            lsData.PRODUCT_ID = lilocProdReq[0].PRODUCT_ID;
             const objCatFn = new Catservicefn();
-            const lilocProdT = await objCatFn.getAllProducts(req.data);
+            const lilocProdT = await objCatFn.getAllProducts(lsData);
+            lsData = {};
             const litemp = JSON.stringify(lilocProdT);
              lilocProd = JSON.parse(litemp);
         }
