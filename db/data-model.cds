@@ -351,6 +351,7 @@ context cp {
         key WEEK_DATE   : Date           @title : 'Weekly Date';
             OPT_PERCENT : Decimal(5, 2)  @title : 'Option Percnetage';
             OPT_QTY     : Decimal(13, 3) @title : 'Option Quantity';
+            MANUALOPTION : Decimal(5, 2)  @title : 'Manual Option Percnetage';
     }
 
     // // IBP result plan table
@@ -706,6 +707,7 @@ context cp {
         key PRODUCT_ID  : String(40) @title : 'Product';
         key WEEK_DATE   : Date       @title : 'Week Date';
     }
+
     entity MARKETAUTH_CFG {
         key WEEK_DATE   : Date       @title : 'Week Date';
         key LOCATION_ID : String(4)  @title : 'Location ';
@@ -785,7 +787,7 @@ context cp {
         key VERSION       : String(10)     @title : 'Version';
         key SCENARIO      : String(32)     @title : 'Scenario';
             REF_PRODID    : String(40)     @title : ' Ref. Product';
-            COMPCIR_QTY   : Decimal(13, 3) @title : 'CIR Compoonent QTY';
+            COMPCIR_QTY   : Decimal(13, 3) @title : 'CIR Component QTY';
     }
 
     entity FACTORY_SALESLOC {
@@ -812,14 +814,26 @@ context cp {
             OPT_PERCENT : Double     @title : 'Option Percentage';
     }
 
-// End Of Insert - Deepa
-//Start of VC Planner Doc-Pradeep
-entity PAGEHEADER {
+    entity CIRLOG {
+        key PRODUCT_ID  : String(40)     @title : 'Configurable Product';
+        key CIR_ID      : Integer        @title : 'CIR ID';
+        key LOCATION_ID : String(4)      @title : 'Location ';
+        key UNIQUE_ID   : Integer        @title : 'Unique ID';
+        key WEEK_DATE   : Date           @title : 'Week Date';
+        key CUST_PRODID : String(40)     @title : 'Partial Product';
+            COMPCIR_QTY : Decimal(13, 3) @title : 'CIR Component QTY';
+            MSG_TYP     : String(1)      @title : 'Message Type';
+            MESSAGE     : String(220)    @title : 'Message';
+    }
+
+    // End Of Insert - Deepa
+    //Start of VC Planner Doc-Pradeep
+    entity PAGEHEADER {
         key PAGEID         : Integer;
             DESCRIPTION    : String(100);
             PARENTNODEID   : Integer;
             HEIRARCHYLEVEL : Integer;
-            
+
     }
 
     entity PAGEPARAGRAPH {
@@ -827,7 +841,7 @@ entity PAGEHEADER {
             DESCRIPTION : String(100);
             CONTENT     : hana.CLOB;
     }
-   // End Of VC Planner doc- Pradeep
+// End Of VC Planner doc- Pradeep
 }
 
 

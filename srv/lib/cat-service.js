@@ -816,24 +816,22 @@ module.exports = (srv) => {
         let createtAt = new Date();
         let id = uuidv1();
         let values = [];
-        let message = "Started Future timeseries";
+        let message = "Started History timeseries";
         let res = req._.req.res;
         let lilocProdReq = JSON.parse(req.data.LocProdData);
         if (lilocProdReq[0].PRODUCT_ID === "ALL") {
-            lilocProd = await cds
-                .transaction(req)
-                .run(
-                    SELECT.distinct
-                        .from(getAllProd)
-                        .columns("LOCATION_ID", "PRODUCT_ID")
-                        .where(`LOCATION_ID = '${lilocProdReq[0].LOCATION_ID}'`)
-                );
+            const objCatFn = new Catservicefn();
+            const lilocProdT = await objCatFn.getAllProducts(req.data);
+            const litemp = JSON.stringify(lilocProdT);
+             lilocProd = JSON.parse(litemp);
         }
         else {
+            let lilocProdT = {};
             lilocProd = JSON.parse(req.data.LocProdData);
+            // lilocProd.push(GenFunctions.parse(lilocProdT));
         }
         values.push({ id, createtAt, message, lilocProd });
-        switch (await GenFunctions.getParameterValue(lilocProd[0].LOCATION_ID, '5')) {
+        switch (await GenFunctions.getParameterValue(lilocProd[0].LOCATION_ID, 5)) {
             case 'M1':
 
                 res.statusCode = 202;
@@ -859,13 +857,14 @@ module.exports = (srv) => {
                 }
                 break;
         }
-        if (Flag === 'X') {
-            console.log("Success");
-            GenFunctions.jobSchMessage(Flag, `Timeseries History generation is complete`, req);
-        }
-        else {
-            GenFunctions.jobSchMessage(Flag, `Timeseries History generation failed`, req);
-        }
+        console.log(Flag);
+        // if (Flag === 'X') {
+        //     console.log("Success");
+        //     GenFunctions.jobSchMessage(Flag, "Timeseries History generation is complete", req);
+        // }
+        // else {
+        //     GenFunctions.jobSchMessage(Flag, "Timeseries History generation failed", req);
+        // }
     });
     srv.on("generateTimeseriesF", async (req) => {
 
@@ -879,20 +878,19 @@ module.exports = (srv) => {
         let res = req._.req.res;
         let lilocProdReq = JSON.parse(req.data.LocProdData);
         if (lilocProdReq[0].PRODUCT_ID === "ALL") {
-            lilocProd = await cds
-                .transaction(req)
-                .run(
-                    SELECT.distinct
-                        .from(getAllProd)
-                        .columns("LOCATION_ID", "PRODUCT_ID")
-                        .where(`LOCATION_ID = '${lilocProdReq[0].LOCATION_ID}'`)
-                );
+            const objCatFn = new Catservicefn();
+            const lilocProdT = await objCatFn.getAllProducts(req.data);
+            const litemp = JSON.stringify(lilocProdT);
+             lilocProd = JSON.parse(litemp);
         }
         else {
+
+            let lilocProdT = {};
             lilocProd = JSON.parse(req.data.LocProdData);
+            // lilocProd.push(GenFunctions.parse(lilocProdT));
         }
         values.push({ id, createtAt, message, lilocProd });
-        switch (await GenFunctions.getParameterValue(lilocProd[0].LOCATION_ID, '5')) {
+        switch (await GenFunctions.getParameterValue(lilocProd[0].LOCATION_ID, 5)) {
             case 'M1':
                 res.statusCode = 202;
                 res.send({ values });
@@ -914,13 +912,13 @@ module.exports = (srv) => {
                 }
                 break;
         }
-        if (Flag === 'X') {
-            console.log("Success");
-            GenFunctions.jobSchMessage(Flag, `Timeseries Future generation is complete`, req);
-        }
-        else {
-            GenFunctions.jobSchMessage(Flag, `Timeseries Future generation failed`, req);
-        }
+        // if (Flag === 'X') {
+        //     console.log("Success");
+        //     GenFunctions.jobSchMessage(Flag, `Timeseries Future generation is complete`, req);
+        // }
+        // else {
+        //     GenFunctions.jobSchMessage(Flag, `Timeseries Future generation failed`, req);
+        // }
 
 
     });
@@ -931,23 +929,14 @@ module.exports = (srv) => {
         let lsData = {};
         let Flag = '';
         // lilocProd = JSON.parse(req.data.LocProdData);
-
         switch ('M2') {
             case 'M1':
-                // for (let i = 0; i < lilocProd.length; i++) {
-                //     lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
-                //     lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
                 const obgenTimeseries = new GenTimeseries();
                 await obgenTimeseries.genTimeseries(req.data, req, Flag);
-                // }
                 break;
             case 'M2':
-                // for (let i = 0; i < lilocProd.length; i++) {
-                //     lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
-                //     lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
                 const obgenTimeseriesM2 = new GenTimeseriesM2();
                 await obgenTimeseriesM2.genTimeseries(req.data, req, Flag);
-                // }
                 break;
         }
         // const obgenTimeseries_rt = new GenTimeseriesRT();
@@ -960,29 +949,36 @@ module.exports = (srv) => {
         let lilocProd = {};
         let lsData = {};
         let Flag = '';
-        lilocProd = JSON.parse(req.data.LocProdData);
+        if (req.data.PRODUCT_ID === "ALL") {
+            // let lilocProdT = [];
+            const objCatFn = new Catservicefn();
+            const lilocProdT = await objCatFn.getAllProducts(req.data);
+            const litemp = JSON.stringify(lilocProdT);
+             lilocProd = JSON.parse(litemp);
+             console.log(lilocProd[0].LOCATION_ID);
+            }
 
-        switch (await GenFunctions.getParameterValue(lilocProd[0].LOCATION_ID, '5')) {
-            case 'M1':
-                for (let i = 0; i < lilocProd.length; i++) {
-                    lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
-                    lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
+        // switch (await GenFunctions.getParameterValue(lilocProd[0].LOCATION_ID, 5)) {
+        //     case 'M1':
+        //         for (let i = 0; i < lilocProd.length; i++) {
+        //             lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
+        //             lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
 
-                    const obgenTimeseries = new GenTimeseries();
-                    await obgenTimeseries.genTimeseries(lsData, req, Flag);
-                }
-                break;
-            case 'M2':
-                for (let i = 0; i < lilocProd.length; i++) {
-                    lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
-                    lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
-                    console.log(lsData.LOCATION_ID);
-                    console.log(lsData.PRODUCT_ID);
-                    const obgenTimeseriesM2 = new GenTimeseriesM2();
-                    await obgenTimeseriesM2.genTimeseries(lsData, req, Flag);
-                }
-                break;
-        }
+        //             const obgenTimeseries = new GenTimeseries();
+        //             await obgenTimeseries.genTimeseries(lsData, req, Flag);
+        //         }
+        //         break;
+        //     case 'M2':
+        //         for (let i = 0; i < lilocProd.length; i++) {
+        //             lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
+        //             lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
+        //             console.log(lsData.LOCATION_ID);
+        //             console.log(lsData.PRODUCT_ID);
+        //             const obgenTimeseriesM2 = new GenTimeseriesM2();
+        //             await obgenTimeseriesM2.genTimeseries(lsData, req, Flag);
+        //         }
+        //         break;
+        // }
         // const obgenTimeseries_rt = new GenTimeseriesRT();
         // await obgenTimeseries_rt.genTimeseries_rt(req.data, req);
 
@@ -993,7 +989,7 @@ module.exports = (srv) => {
         let lsData = {}, Flag = '';
         lilocProd = JSON.parse(req.data.LocProdData);
 
-        switch (await GenFunctions.getParameterValue(lilocProd[0].LOCATION_ID, '5')) {
+        switch (await GenFunctions.getParameterValue(lilocProd[0].LOCATION_ID, 5)) {
             case 'M1':
                 for (let i = 0; i < lilocProd.length; i++) {
                     lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
@@ -1017,17 +1013,32 @@ module.exports = (srv) => {
 
     // Generate Unique ID
     srv.on("genUniqueID", async (req) => {
-        let Flag = '';
+        let lilocProd = [];
+        let lsData = {}, Flag = '';
+        if (req.data.PRODUCT_ID === "ALL") {
+            const objCatFn = new Catservicefn();
+            lilocProd = await objCatFn.getAllProducts(req.data);
 
-        const obgenSOFunctions = new SOFunctions();
-        await obgenSOFunctions.genUniqueID(req.data, req, Flag);
-        if (Flag === 'X') {
-            console.log("Success");
-            GenFunctions.jobSchMessage(Flag, `Process Sales Order is complete`, req);
+            for (let i = 0; i < lilocProd.length; i++) {
+                lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
+                lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
+                const obgenSOFunctions = new SOFunctions();
+                await obgenSOFunctions.genUniqueID(lsData, req, Flag);
+            }
         }
         else {
-            GenFunctions.jobSchMessage(Flag, `Process Sales Order failed`, req);
+            const obgenSOFunctions = new SOFunctions();
+            await obgenSOFunctions.genUniqueID(req.data, req, Flag);
         }
+        // const obgenSOFunctions = new SOFunctions();
+        // await obgenSOFunctions.genUniqueID(req.data, req, Flag);
+        // if (Flag === 'X') {
+        //     console.log("Success");
+        //     GenFunctions.jobSchMessage(Flag, `Process Sales Order is complete`, req);
+        // }
+        // else {
+        //     GenFunctions.jobSchMessage(Flag, `Process Sales Order failed`, req);
+        // }
     });
     // Generate Unique ID
     srv.on("gen_UniqueID", async (req) => {
@@ -1048,17 +1059,18 @@ module.exports = (srv) => {
         let res = req._.req.res;
         let lilocProdReq = JSON.parse(req.data.LocProdData);
         if (lilocProdReq[0].PRODUCT_ID === "ALL") {
-            lilocProd = await cds
-                .transaction(req)
-                .run(
-                    SELECT.distinct
-                        .from(getAllProd)
-                        .columns("LOCATION_ID", "PRODUCT_ID")
-                        .where(`LOCATION_ID = '${lilocProdReq[0].LOCATION_ID}'`)
-                );
+            // const objCatFn = new Catservicefn();
+            // lilocProd = await objCatFn.getAllProducts(req.data);
+            
+            const objCatFn = new Catservicefn();
+            const lilocProdT = await objCatFn.getAllProducts(req.data);
+            const litemp = JSON.stringify(lilocProdT);
+             lilocProd = JSON.parse(litemp);
         }
         else {
+            let lilocProdT = {};
             lilocProd = JSON.parse(req.data.LocProdData);
+            // lilocProd.push(GenFunctions.parse(lilocProdT));
         }
         values.push({ id, createtAt, message, lilocProd });
         res.statusCode = 202;
@@ -1070,13 +1082,13 @@ module.exports = (srv) => {
 
             await obgenTimeseriesM2.genPrediction(lsData, req, Flag);
         }
-        if (Flag === 'X') {
-            console.log("Success");
-            GenFunctions.jobSchMessage(Flag, " Fully Configured Requirement Generation is complete", req);
-        }
-        else {
-            GenFunctions.jobSchMessage(Flag, "Fully Configured Requirement Generation is failed", req);
-        }
+        // if (Flag === 'X') {
+        //     console.log("Success");
+        //     GenFunctions.jobSchMessage(Flag, " Fully Configured Requirement Generation is complete", req);
+        // }
+        // else {
+        //     GenFunctions.jobSchMessage(Flag, "Fully Configured Requirement Generation is failed", req);
+        // }
     });
     // Generate Fully Configured Demand
     srv.on("gen_FullConfigDemand", async (req) => {
@@ -1905,22 +1917,23 @@ module.exports = (srv) => {
 
     srv.on("trigrMAWeek", async (req) => {
         let liresults = [];
-        let lsresults = {};
-        lsresults.LOCATION_ID = req.data.LOCATION_ID;
-        lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
-        lsresults.WEEK_DATE = req.data.WEEK_DATE;
-        liresults.push(lsresults);
-        lsresults = {};
-        if (liresults.length > 0) {
-            try {
-                await cds.run(INSERT.into("CP_MARKETAUTH_WEEK").entries(liresults));
-                responseMessage = " Creation/Updation successful";
-            } catch (e) {
-                //DONOTHING
-                responseMessage = " Creation failed";
-                // createResults.push(responseMessage);
-            }
-        }
+        console.log("Hello");
+        // let lsresults = {};
+        // lsresults.LOCATION_ID = req.data.LOCATION_ID;
+        // lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
+        // lsresults.WEEK_DATE = req.data.WEEK_DATE;
+        // liresults.push(lsresults);
+        // lsresults = {};
+        // if (liresults.length > 0) {
+        //     try {
+        //         await cds.run(INSERT.into("CP_MARKETAUTH_WEEK").entries(liresults));
+        //         responseMessage = " Creation/Updation successful";
+        //     } catch (e) {
+        //         //DONOTHING
+        //         responseMessage = " Creation failed";
+        //         // createResults.push(responseMessage);
+        //     }
+        // }
     });
     srv.on("maintainSeedOrder", async (req) => {
         let liresults = [];

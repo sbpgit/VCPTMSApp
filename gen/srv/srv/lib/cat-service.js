@@ -810,27 +810,24 @@ module.exports = (srv) => {
     // Generate Timeseries using action call
     srv.on("generateTimeseries", async (req) => {
 
-        let lilocProd = {};
+        let lilocProd = [];
         let lsData = {};
         let Flag = '';
         let createtAt = new Date();
         let id = uuidv1();
         let values = [];
-        let message = "Started Future timeseries";
+        let message = "Started History timeseries";
         let res = req._.req.res;
         let lilocProdReq = JSON.parse(req.data.LocProdData);
         if (lilocProdReq[0].PRODUCT_ID === "ALL") {
-            lilocProd = await cds
-                .transaction(req)
-                .run(
-                    SELECT.distinct
-                        .from(getAllProd)
-                        .columns("LOCATION_ID", "PRODUCT_ID")
-                        .where(`LOCATION_ID = '${lilocProdReq[0].LOCATION_ID}'`)
-                );
+            const objCatFn = new Catservicefn();
+            lilocProd = await objCatFn.getAllProducts(req.data);
+            // lilocProd = JSON.parse(lilocProdT);
         }
         else {
-            lilocProd = JSON.parse(req.data.LocProdData);
+            let lilocProdT = {};
+            lilocProdT = JSON.parse(req.data.LocProdData);
+            lilocProd.push(GenFunctions.parse(lilocProdT));
         }
         values.push({ id, createtAt, message, lilocProd });
         switch (await GenFunctions.getParameterValue(lilocProd[0].LOCATION_ID, '5')) {
@@ -859,17 +856,18 @@ module.exports = (srv) => {
                 }
                 break;
         }
-        if (Flag === 'X') {
-            console.log("Success");
-            GenFunctions.jobSchMessage(Flag, `Timeseries History generation is complete`, req);
-        }
-        else {
-            GenFunctions.jobSchMessage(Flag, `Timeseries History generation failed`, req);
-        }
+        console.log(Flag);
+        // if (Flag === 'X') {
+        //     console.log("Success");
+        //     GenFunctions.jobSchMessage(Flag, "Timeseries History generation is complete", req);
+        // }
+        // else {
+        //     GenFunctions.jobSchMessage(Flag, "Timeseries History generation failed", req);
+        // }
     });
     srv.on("generateTimeseriesF", async (req) => {
 
-        let lilocProd = {};
+        let lilocProd = [];
         let lsData = {}, Flag = '';
 
         let createtAt = new Date();
@@ -879,17 +877,14 @@ module.exports = (srv) => {
         let res = req._.req.res;
         let lilocProdReq = JSON.parse(req.data.LocProdData);
         if (lilocProdReq[0].PRODUCT_ID === "ALL") {
-            lilocProd = await cds
-                .transaction(req)
-                .run(
-                    SELECT.distinct
-                        .from(getAllProd)
-                        .columns("LOCATION_ID", "PRODUCT_ID")
-                        .where(`LOCATION_ID = '${lilocProdReq[0].LOCATION_ID}'`)
-                );
+            const objCatFn = new Catservicefn();
+            lilocProd = await objCatFn.getAllProducts(req.data);
         }
         else {
-            lilocProd = JSON.parse(req.data.LocProdData);
+
+            let lilocProdT = {};
+            lilocProdT = JSON.parse(req.data.LocProdData);
+            lilocProd.push(GenFunctions.parse(lilocProdT));
         }
         values.push({ id, createtAt, message, lilocProd });
         switch (await GenFunctions.getParameterValue(lilocProd[0].LOCATION_ID, '5')) {
@@ -914,13 +909,13 @@ module.exports = (srv) => {
                 }
                 break;
         }
-        if (Flag === 'X') {
-            console.log("Success");
-            GenFunctions.jobSchMessage(Flag, `Timeseries Future generation is complete`, req);
-        }
-        else {
-            GenFunctions.jobSchMessage(Flag, `Timeseries Future generation failed`, req);
-        }
+        // if (Flag === 'X') {
+        //     console.log("Success");
+        //     GenFunctions.jobSchMessage(Flag, `Timeseries Future generation is complete`, req);
+        // }
+        // else {
+        //     GenFunctions.jobSchMessage(Flag, `Timeseries Future generation failed`, req);
+        // }
 
 
     });
@@ -931,23 +926,14 @@ module.exports = (srv) => {
         let lsData = {};
         let Flag = '';
         // lilocProd = JSON.parse(req.data.LocProdData);
-
         switch ('M2') {
             case 'M1':
-                // for (let i = 0; i < lilocProd.length; i++) {
-                //     lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
-                //     lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
                 const obgenTimeseries = new GenTimeseries();
                 await obgenTimeseries.genTimeseries(req.data, req, Flag);
-                // }
                 break;
             case 'M2':
-                // for (let i = 0; i < lilocProd.length; i++) {
-                //     lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
-                //     lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
                 const obgenTimeseriesM2 = new GenTimeseriesM2();
                 await obgenTimeseriesM2.genTimeseries(req.data, req, Flag);
-                // }
                 break;
         }
         // const obgenTimeseries_rt = new GenTimeseriesRT();
@@ -957,10 +943,15 @@ module.exports = (srv) => {
     // Generate Timeseries fucntion calls
     srv.on("generate_timeseries", async (req) => {
 
-        let lilocProd = {};
+        let lilocProd = [];
         let lsData = {};
         let Flag = '';
-        lilocProd = JSON.parse(req.data.LocProdData);
+        if (req.data.PRODUCT_ID === "ALL") {
+            let lilocProdT = [];
+            const objCatFn = new Catservicefn();
+            lilocProd = await objCatFn.getAllProducts(req.data);
+            // lilocProd = JSON.parse(lilocProdT);
+        }
 
         switch (await GenFunctions.getParameterValue(lilocProd[0].LOCATION_ID, '5')) {
             case 'M1':
@@ -1017,17 +1008,32 @@ module.exports = (srv) => {
 
     // Generate Unique ID
     srv.on("genUniqueID", async (req) => {
-        let Flag = '';
+        let lilocProd = [];
+        let lsData = {}, Flag = '';
+        if (req.data.PRODUCT_ID === "ALL") {
+            const objCatFn = new Catservicefn();
+            lilocProd = await objCatFn.getAllProducts(req.data);
 
-        const obgenSOFunctions = new SOFunctions();
-        await obgenSOFunctions.genUniqueID(req.data, req, Flag);
-        if (Flag === 'X') {
-            console.log("Success");
-            GenFunctions.jobSchMessage(Flag, `Process Sales Order is complete`, req);
+            for (let i = 0; i < lilocProd.length; i++) {
+                lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
+                lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
+                const obgenSOFunctions = new SOFunctions();
+                await obgenSOFunctions.genUniqueID(lsData, req, Flag);
+            }
         }
         else {
-            GenFunctions.jobSchMessage(Flag, `Process Sales Order failed`, req);
+            const obgenSOFunctions = new SOFunctions();
+            await obgenSOFunctions.genUniqueID(req.data, req, Flag);
         }
+        // const obgenSOFunctions = new SOFunctions();
+        // await obgenSOFunctions.genUniqueID(req.data, req, Flag);
+        // if (Flag === 'X') {
+        //     console.log("Success");
+        //     GenFunctions.jobSchMessage(Flag, `Process Sales Order is complete`, req);
+        // }
+        // else {
+        //     GenFunctions.jobSchMessage(Flag, `Process Sales Order failed`, req);
+        // }
     });
     // Generate Unique ID
     srv.on("gen_UniqueID", async (req) => {
@@ -1038,7 +1044,7 @@ module.exports = (srv) => {
     // Generate Fully Configured Demand
     srv.on("genFullConfigDemand", async (req) => {
 
-        let lilocProd = {};
+        let lilocProd = [];
         let lsData = {};
         let Flag = '';
         let createtAt = new Date();
@@ -1048,17 +1054,22 @@ module.exports = (srv) => {
         let res = req._.req.res;
         let lilocProdReq = JSON.parse(req.data.LocProdData);
         if (lilocProdReq[0].PRODUCT_ID === "ALL") {
-            lilocProd = await cds
-                .transaction(req)
-                .run(
-                    SELECT.distinct
-                        .from(getAllProd)
-                        .columns("LOCATION_ID", "PRODUCT_ID")
-                        .where(`LOCATION_ID = '${lilocProdReq[0].LOCATION_ID}'`)
-                );
+            // lilocProd = await cds
+            //     .transaction(req)
+            //     .run(
+            //         SELECT.distinct
+            //             .from(getAllProd)
+            //             .columns("LOCATION_ID", "PRODUCT_ID")
+            //             .where(`LOCATION_ID = '${lilocProdReq[0].LOCATION_ID}'`)
+            //     );
+            const objCatFn = new Catservicefn();
+            lilocProd = await objCatFn.getAllProducts(req.data);
         }
         else {
-            lilocProd = JSON.parse(req.data.LocProdData);
+            // lilocProd = JSON.parse(req.data.LocProdData);
+            let lilocProdT = {};
+            lilocProdT = JSON.parse(req.data.LocProdData);
+            lilocProd.push(GenFunctions.parse(lilocProdT));
         }
         values.push({ id, createtAt, message, lilocProd });
         res.statusCode = 202;
@@ -1070,13 +1081,13 @@ module.exports = (srv) => {
 
             await obgenTimeseriesM2.genPrediction(lsData, req, Flag);
         }
-        if (Flag === 'X') {
-            console.log("Success");
-            GenFunctions.jobSchMessage(Flag, " Fully Configured Requirement Generation is complete", req);
-        }
-        else {
-            GenFunctions.jobSchMessage(Flag, "Fully Configured Requirement Generation is failed", req);
-        }
+        // if (Flag === 'X') {
+        //     console.log("Success");
+        //     GenFunctions.jobSchMessage(Flag, " Fully Configured Requirement Generation is complete", req);
+        // }
+        // else {
+        //     GenFunctions.jobSchMessage(Flag, "Fully Configured Requirement Generation is failed", req);
+        // }
     });
     // Generate Fully Configured Demand
     srv.on("gen_FullConfigDemand", async (req) => {

@@ -222,9 +222,16 @@ sap.ui.define(
                       };
                       ScheData.push(aIData);
                   // 04-10-2022
-                } else if(jobType === "D" || jobType === "T" ){
+                } else if(jobType === "D" || jobType === "T" || jobType === "F"){
                     var data = $.parseJSON(aData[i].data);
-                    var aIData = data.LocProdData;
+                    var aIData = $.parseJSON(data.LocProdData);
+
+
+                    aIData.forEach(function (row) {
+                        row.Location = row.LOCATION_ID;
+                        row.Product = row.PRODUCT_ID;
+                      }, that);
+
                     //   var aIData = {
                     //       Location: data.LOCATION_ID,
                     //       Product: data.PRODUCT_ID,
@@ -407,7 +414,7 @@ sap.ui.define(
               },
               error: function (error) {
                 sap.ui.core.BusyIndicator.hide();
-                MessageToast.show("Failed to get data");
+                MessageToast.show("Failed to get Schedule data");
               },
             });
           },

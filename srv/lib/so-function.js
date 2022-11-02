@@ -805,6 +805,7 @@ class SOFunctions {
 
 
     async genBaseMarketAuth(lLocation, lProduct) {
+        console.log('Generate Market Authorization');
         let liSOrdQty = await cds.run(`SELECT LOCATION_ID,
                                              PRODUCT_ID,
                                              SUM("ORD_QTY") AS ORD_QTY
@@ -860,6 +861,31 @@ class SOFunctions {
 
         await INSERT.into('CP_DEF_MKTAUTH')
             .entries(liDefMktAuth);
+
+        let lWeeks = await GenF.getParameterValue(lLocation, 3);
+
+        let lDate = new Date();
+                                                  
+        do {
+            let lDateSQL = GenF.getNextMondayCmp(lDate.toISOString().split('T')[0]);   
+// Loop through all the partial products 
+// if manual load exists skip                    
+            for (let cntS = 0; cntS < liSOrdQty.length; cntS++) {
+                await cds.run(`INSERT INTO "CP_MARKETAUTH_CFG"  SELECT  '${lDateSQL}',
+                                                                        LOCATION_ID,
+                                                                        PRODUCT_ID,
+                                                                        CHAR_NUM,
+                                                                        CHARVAL_NUM,
+                                                                        OPT_PERCENT
+                                                                   FROM CP_DEF_MKTAUTH
+                                                                  WHERE LOCATION_ID = '${liSOrdQty[cntS].LOCATION_ID}'
+                                                                    AND PRODUCT_ID = '${liSOrdQty[cntS].PRODUCT_ID}'`);
+              
+            }
+            lWeeks = parseInt(lWeeks) - 1;
+            lDate = new Date(lDate.getFullYear(), lDate.getMonth(), lDate.getDate() + 7);
+          }
+          while (lWeeks > 0);
 
 
     }

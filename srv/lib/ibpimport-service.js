@@ -1545,10 +1545,7 @@ module.exports = cds.service.impl(async function () {
         },
             vactcomp;
         // Fetch History period from Configuration table
-        const lsSales = await SELECT.one
-            .columns('VALUE')
-            .from('CP_PARAMETER_VALUES')
-            .where(`LOCATION_ID = '${req.data.LOCATION_ID}' AND VALUE = 4 `);
+        const lsSales = GenF.getParameterValue(req.data.LOCATION_ID, 4);
         let vFromDate = new Date();
         let vToDate = new Date().toISOString().split('Z')[0].split('T')[0];
         vFromDate.setDate(vFromDate.getDate() - (parseInt(lsSales.VALUE) * 7));
