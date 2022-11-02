@@ -815,13 +815,13 @@ module.exports = (srv) => {
         var flag = '';
         // remove history data from Sales tables
 
-        const lsSales = GenF.getParameterValue(req.data.LOCATION_ID, 4);
+        const lsSales = await GenF.getParameterValue(req.data.LOCATION_ID, 4);
         // await SELECT.one
         //     .columns('VALUE')
         //     .from('CP_PARAMETER_VALUES')
         //     .where(`LOCATION_ID = '${req.data.LOCATION_ID}' AND VALUE = 4 `);
         let vFromDate = new Date();
-        vFromDate.setDate(vFromDate.getDate() - ( parseInt(lsSales.VALUE) * 7) );
+        vFromDate.setDate(vFromDate.getDate() - ( parseInt(lsSales) * 7) );
         vFromDate = vFromDate.toISOString().split('Z')[0].split('T')[0];
 
         try {
