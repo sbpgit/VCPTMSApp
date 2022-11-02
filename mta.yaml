@@ -230,6 +230,10 @@ modules:
       - cpappcplinemaster.zip
       name: cpappcplinemaster
       target-path: resources/
+    - artifacts:
+      - cpappcpcirlog.zip
+      name: cpappcpcirlog
+      target-path: resources/
 - name: cpodpcpodprofiles
   type: html5
   path: app/cp_odprofiles
@@ -638,6 +642,16 @@ modules:
 - name: cpappcplinemaster
   type: html5
   path: app/cplinemaster
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappcpcirlog
+  type: html5
+  path: app/cpcirlog
   build-parameters:
     build-result: dist
     builder: custom

@@ -66,3 +66,5 @@ using from './cpcriticalcomp/annotations';
 using from './cpfactoryloc/annotations';
 
 using from './cplinemaster/annotations';
+
+using from './cpcirlog/annotations';

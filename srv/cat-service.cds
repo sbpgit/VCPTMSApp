@@ -253,7 +253,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
     entity getCIRCharRate       as projection on V_CIR_QTY_VARDESC; //V_CIR_CHAR_RATE;
     entity getCIRVerScen        as projection on V_CIRVERSCEN;
     /// /*****/ Market Authorizations /*****/
-    action   trigrMAWeek(LOCATION_ID : String(4), PRODUCT_ID : String(40), WEEK_DATE : Date);
+    action   trigrMAWeek();
     ///*****/ Seed Order Creation /*****/
     entity getSeedOrder         as projection on od.SEEDORDER_HEADER;
     function maintainSeedOrder(FLAG : String(1), SEEDDATA : String)                                                                                                                                                                                                              returns String;
@@ -267,6 +267,8 @@ service CatalogService @(impl : './lib/cat-service.js') {
     function postParameterValues(FLAG : String(1), PARAMVALS : String)                                                                                                                                                                                                           returns String;
     entity getCIRGenerated      as projection on od.CIR_GENERATED;
     ///*****/ CIR weekly /*****/
+    @readonly
+    entity getCIRLog    as projection on od.CIRLOG;
     function getCIRWeekly(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), FROMDATE : Date, TODATE : Date, MODEL_VERSION : String(20))                                                                                             returns array of ds.cirWkly;
     // function getCIRWeekly(FROMDATE : Date, TODATE : Date)  returns array of ds.cirWkly;
     function getUniqueIdItems(UNIQUE_ID : Integer)                                                                                                                                                                                                                               returns array of ds.uniqueCharItems;
