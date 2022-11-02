@@ -821,7 +821,7 @@ module.exports = (srv) => {
         //     .from('CP_PARAMETER_VALUES')
         //     .where(`LOCATION_ID = '${req.data.LOCATION_ID}' AND VALUE = 4 `);
         let vFromDate = new Date();
-        vFromDate.setDate(vFromDate.getDate() - ( parseInt(lsSales.VALUE) * 7) );
+        vFromDate.setDate(vFromDate.getDate() - ( parseInt(lsSales) * 7) );
         vFromDate = vFromDate.toISOString().split('Z')[0].split('T')[0];
 
         try {
