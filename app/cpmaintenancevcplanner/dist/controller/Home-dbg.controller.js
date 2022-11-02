@@ -502,11 +502,21 @@ sap.ui.define([
             },
             onNavPress:function(){
                 if (sap.ushell && sap.ushell.Container && sap.ushell.Container.getService) {
-                var oCrossAppNav = sap.ushell.Container.getServiceAsync("CrossApplicationNavigation"); 
-                 oCrossAppNav.toExternal({
-                    target: { semanticObject : "vcpdocdisplay", action: "Display" }
+                // var oCrossAppNav = sap.ushell.Container.getService("CrossApplicationNavigation"); 
+                //  oCrossAppNav.toExternal({
+                //     target: { semanticObject : "vcpdocdisplay", action: "Display" }
                  
-                  });
+                //   });
+
+                sap.ushell.Container.getServiceAsync("CrossApplicationNavigation").then( function (oService) {
+
+                    oService.toExternal({
+                        target : {
+                            semanticObject: "vcpdocdisplay",
+                            action: "display"
+                        }
+                    });
+                 });
                 } 
             }
         });
