@@ -520,6 +520,12 @@ module.exports = cds.service.impl(async function () {
             actcomp: [],
         },
             vactcomp;
+
+            let vFromDate = new Date();
+            var Vnumber = 2;
+        let vToDate = new Date().toISOString().split('Z')[0].split('T')[0];
+        vFromDate.setDate(vFromDate.getDate() - (Vnumber * 7));
+        vFromDate = vFromDate.toISOString().split('Z')[0].split('T')[0];
         const liactcomp = await cds.run(
             `
             SELECT DISTINCT "WEEK_DATE",
@@ -1546,10 +1552,15 @@ module.exports = cds.service.impl(async function () {
             vactcomp;
         // Fetch History period from Configuration table
         const lsSales = GenF.getParameterValue(req.data.LOCATION_ID, 4);
+        console.log(lsSales.VALUE);
         let vFromDate = new Date();
+        console.log(vFromDate);
         let vToDate = new Date().toISOString().split('Z')[0].split('T')[0];
+        console.log(vToDate);
         vFromDate.setDate(vFromDate.getDate() - (parseInt(lsSales.VALUE) * 7));
+        console.log(vFromDate);
         vFromDate = vFromDate.toISOString().split('Z')[0].split('T')[0];
+        console.log(vFromDate);
         const liactcomp = await cds.run(
             `
             SELECT  "WEEK_DATE",

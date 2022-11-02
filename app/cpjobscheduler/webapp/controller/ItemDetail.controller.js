@@ -64,6 +64,10 @@ sap.ui.define(
           oGModel.setProperty("/UpdateSch", "");
           oGModel.setProperty("/flagcron", "");
           oGModel.setProperty("/flagonetime", "");
+
+          if(oGModel.getProperty("/dataFlag") === "X"){
+
+          
           
           // Calling service to get the Job details
           that.getModel("JModel").callFunction("/readJobDetails", {
@@ -161,7 +165,9 @@ sap.ui.define(
               that.getView().byId("idJobLogs").setSelectedItem(that.getView().byId("idJobLogs").getItems()[0], true);
               if(aData.length){
 
-                that.onScheduleClick();
+                that.onScheduleData();
+
+                // that.onScheduleClick();
               }
 
             },
@@ -170,6 +176,7 @@ sap.ui.define(
               MessageToast.show("Failed to get data");
             },
           });
+        }
       },
 
       /**
@@ -370,6 +377,40 @@ sap.ui.define(
                 that._valueHelpDialogJobData.open();
               }
             }
+          },
+
+          onScheduleData: function (oEvent) {
+            var oJobId = oGModel.getProperty("/Jobdata").jobId,
+            oScheId = this.byId("idJobLogs").getSelectedItems()[0].getBindingContext().getObject().scheduleId;
+
+            sap.ui.core.BusyIndicator.show();
+            that.getModel("JModel").callFunction("/readJobRunLogs", {
+              method: "GET",
+              urlParameters: {
+                jobId: oJobId,
+                scheduleId: oScheId,
+                page_size: 50,
+                offset: 0,
+              },
+              success: function (oData) {
+                sap.ui.core.BusyIndicator.hide();
+                that.ScheLogModel.setData({
+                  statusresults: oData.results,
+                });
+                that.byId("idScheLogData").setModel(that.ScheLogModel);
+
+                that.getView().byId("idScheLogData").setSelectedItem(that.getView().byId("idScheLogData").getItems()[0], true);
+                that.LogData = oData.results;
+                if(oData.results.length){
+                that.onRunlogs();
+                }
+                // that._valueHelpDialogScheLog.open();
+              },
+              error: function (error) {
+                sap.ui.core.BusyIndicator.hide();
+                MessageToast.show("Failed to get Schedule data");
+              },
+            });
           },
   
           /**
