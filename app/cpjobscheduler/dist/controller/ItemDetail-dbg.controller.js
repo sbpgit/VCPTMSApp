@@ -65,7 +65,7 @@ sap.ui.define(
           oGModel.setProperty("/flagcron", "");
           oGModel.setProperty("/flagonetime", "");
 
-        //   if(oGModel.getProperty("/dataFlag") === "X"){
+          if(oGModel.getProperty("/dataFlag") === "X"){
 
           
           
@@ -176,7 +176,7 @@ sap.ui.define(
               MessageToast.show("Failed to get data");
             },
           });
-        // }
+        }
       },
 
       /**
