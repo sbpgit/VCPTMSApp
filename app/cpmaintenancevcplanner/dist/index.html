@@ -10,6 +10,30 @@
             height: 100%;
         }
     </style>
+    <script type="text/javascript">
+        window["sap-ushell-config"] = {
+           defaultRenderer: "fiori2",
+           bootstrapPlugins: {
+               "KeyUserPlugin": {
+                   "component": "sap.ushell.plugins.rta"
+               },
+               "PersonalizePlugin": {
+                   "component": "sap.ushell.plugins.rta-personalize"
+               }
+           },
+           applications: {
+               "cpappcpmaintenancevcplanner-display": {
+                   title: "Maintenance VC Planner Documentation",
+                   description: "A Fiori application.",
+                   additionalInformation: "SAPUI5.Component=cpapp.cpmaintenancevcplanner",
+                   applicationType: "URL",
+                   url: "../"
+               }
+           }
+       };
+   </script>
+   
+      <script src="https://sapui5.hana.ondemand.com/1.102.1/test-resources/sap/ushell/bootstrap/sandbox.js" id="sap-ushell-bootstrap"></script> 
     <script
         id="sap-ui-bootstrap"
         src="https://sapui5.hana.ondemand.com/1.102.1/resources/sap-ui-core.js"
@@ -22,13 +46,15 @@
         data-sap-ui-async="true"
         data-sap-ui-frameOptions="trusted"
     ></script>
-    <script src="resources/sap/ushell_abap/bootstrap/abap.js"></script>
     <script data-main="scripts/main" src="scripts/require.js"></script>
     <script>
         function myJsFunc() {
                     sap.ui.controller("cpapp.cpmaintenancevcplanner.controller.Home").myJsFunc();
         }
     </script>
+    <!-- <script>
+		sap.ui.getCore().attachInit(() => sap.ushell.Container.createRenderer().placeAt("content"));
+	</script> -->
 </head>
 <body class="sapUiBody sapUiSizeCompact" id="content">
     <div
