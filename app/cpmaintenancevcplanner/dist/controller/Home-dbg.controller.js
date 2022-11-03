@@ -502,25 +502,30 @@ sap.ui.define([
             },
             onNavPress:function(){
                 if (sap.ushell && sap.ushell.Container && sap.ushell.Container.getService) {
-                var oCrossAppNav = sap.ushell.Container.getService("CrossApplicationNavigation"); 
-                 var hashUrl=(oCrossAppNav && oCrossAppNav.hrefForExternal({
-                    target: { semanticObject : "vcpdocdisplay", action: "Display" }
+                // var oCrossAppNav = sap.ushell.Container.getService("CrossApplicationNavigation"); 
+                //  var hashUrl=(oCrossAppNav && oCrossAppNav.hrefForExternal({
+                //     target: { semanticObject : "vcpdocdisplay", action: "Display" }
                  
-                  })
-                 );
-                  oCrossAppNav.toExternal({target: {shellHash: hashUrl}});
+                //   })
+                //  );
+                //   oCrossAppNav.toExternal({target: {shellHash: hashUrl}});
 
-                //   sap.ushell.Container.getServiceAsync("CrossApplicationNavigation").then( function (oService) {
+                  var hash = sap.ushell.Container.getServiceAsync("CrossApplicationNavigation").then( function (oService) {
 
-                //     oService.hrefForExternalAsync({
-                //         target : {
-                //             semanticObject: "vcpdocdisplay",
-                //             action: "Display"
-                //         }
-                //     }).then( function(sHref) {
-                //         sHref.toExternal({target: {shellHash: oService}});
-                //     });
-                //  });
+                    oService.hrefForExternalAsync({
+                        target : {
+                            semanticObject: "vcpdocdisplay",
+                            action: "Display"
+                        }
+                    })
+                 });
+                //  var oCrossAppNav = sap.ushell.Container.getServiceAsync("CrossApplicationNavigation");
+                //  oCrossAppNav.toExternal({target: {shellHash: hash}});
+                sap.ushell.Container.getServiceAsync("CrossApplicationNavigation").then( function (oService) {
+
+                    oService.toExternal({target: {shellHash: hash}})
+                        
+                 });
 
 
                 } 
