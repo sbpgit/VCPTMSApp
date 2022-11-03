@@ -502,11 +502,46 @@ sap.ui.define([
             },
             onNavPress:function(){
                 if (sap.ushell && sap.ushell.Container && sap.ushell.Container.getService) {
-                var oCrossAppNav = sap.ushell.Container.getService("CrossApplicationNavigation"); 
-                 oCrossAppNav.toExternal({
-                    target: { semanticObject : "cpappcpvcplannerdocumentation", action: "display" },
+                // // var oCrossAppNav = sap.ushell.Container.getService("CrossApplicationNavigation"); 
+                // //  var hashUrl=(oCrossAppNav && oCrossAppNav.hrefForExternal({
+                // //     target: { semanticObject : "vcpdocdisplay", action: "Display" }
                  
-                  });
+                // //   })
+                // //  );
+                // //   oCrossAppNav.toExternal({target: {shellHash: hashUrl}});
+
+                //   var hash = sap.ushell.Container.getServiceAsync("CrossApplicationNavigation").then( function (oService) {
+
+                //     oService.hrefForExternalAsync({
+                //         target : {
+                //             semanticObject: "vcpdocdisplay",
+                //             action: "Display"
+                //         }
+                //     })
+                //  });
+                //   var oCrossAppNav = sap.ushell.Container.getService("CrossApplicationNavigation");
+                //   oCrossAppNav.isNavigationSupported(hash);
+
+                var oCrossAppNavigator = sap.ushell.Container.getService("CrossApplicationNavigation"); 
+			oCrossAppNavigator.isIntentSupported(["vcpdocdisplay-Display"])
+				.done(function(aResponses) {
+ sap.m.MessageToast.show("Provide corresponding intent to navigate");
+				})
+				.fail(function() {
+					 sap.m.MessageToast.show("Provide corresponding intent to navigate");
+				});
+			// generate the Hash to display a employee Id
+			var hash = (oCrossAppNavigator && oCrossAppNavigator.hrefForExternal({
+				target: {
+					semanticObject: "vcpdocdisplay",
+					action: "Display"
+				}
+			})) || ""; 
+			//Generate a  URL for the second application
+			var url = window.location.href.split('#')[0] + hash; 
+			//Navigate to second app
+			sap.m.URLHelper.redirect(url, true); 
+
                 } 
             }
         });

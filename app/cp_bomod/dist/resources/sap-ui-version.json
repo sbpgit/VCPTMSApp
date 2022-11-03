@@ -1,7 +1,11 @@
 {
 	"name": "cp.appf.cpbomod",
 	"version": "0.0.1",
+<<<<<<< HEAD
 	"buildTimestamp": "202211020813",
+=======
+	"buildTimestamp": "202211030655",
+>>>>>>> 0dd4dbfebeee62049507f11d7e8455cb6bfbdb5a
 	"scmRevision": "",
 	"libraries": []
 }
