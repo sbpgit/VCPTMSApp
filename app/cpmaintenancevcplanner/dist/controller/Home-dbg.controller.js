@@ -502,9 +502,22 @@ sap.ui.define([
             },
             onNavPress:function(){
                 if (sap.ushell && sap.ushell.Container && sap.ushell.Container.getService) {
+<<<<<<< HEAD
                 // // var oCrossAppNav = sap.ushell.Container.getService("CrossApplicationNavigation"); 
                 // //  var hashUrl=(oCrossAppNav && oCrossAppNav.hrefForExternal({
                 // //     target: { semanticObject : "vcpdocdisplay", action: "Display" }
+=======
+<<<<<<< HEAD
+                var oCrossAppNav = sap.ushell.Container.getService("CrossApplicationNavigation"); 
+                 oCrossAppNav.toExternal({
+                    target: { semanticObject : "cpappcpvcplannerdocumentation", action: "display" },
+                 
+                  });
+=======
+                // var oCrossAppNav = sap.ushell.Container.getService("CrossApplicationNavigation"); 
+                //  var hashUrl=(oCrossAppNav && oCrossAppNav.hrefForExternal({
+                //     target: { semanticObject : "vcpdocdisplay", action: "Display" }
+>>>>>>> b36b73222eca812e7e069e5b5c1e60e4aef87e97
                  
                 // //   })
                 // //  );
@@ -542,6 +555,7 @@ sap.ui.define([
 			//Navigate to second app
 			sap.m.URLHelper.redirect(url, true); 
 
+>>>>>>> 0dd4dbfebeee62049507f11d7e8455cb6bfbdb5a
                 } 
             }
         });

@@ -1,7 +1,15 @@
 {
 	"name": "cpapp.cpfullyconfproddmnd",
 	"version": "0.0.1",
+<<<<<<< HEAD
 	"buildTimestamp": "202211031241",
+=======
+<<<<<<< HEAD
+	"buildTimestamp": "202211020820",
+=======
+	"buildTimestamp": "202211030659",
+>>>>>>> 0dd4dbfebeee62049507f11d7e8455cb6bfbdb5a
+>>>>>>> b36b73222eca812e7e069e5b5c1e60e4aef87e97
 	"scmRevision": "",
 	"libraries": []
 }

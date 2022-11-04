@@ -15,5 +15,7 @@ service SDIService @(impl : './lib/sdi-service.js') {
     action ImportECCSaleshCfg();
     // action ImportECCAsmbcomp();
     action ImportCuvtabInd(); 
+    action ImportCIRLog(); 
+    action ImportSOStock(); 
     // action ImportCuvtabValc();
 }
