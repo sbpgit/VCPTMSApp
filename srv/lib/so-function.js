@@ -857,13 +857,14 @@ class SOFunctions {
         }
         if (liDefMktAuth) {
             try {
-                await INSERT.into('CP_DEF_MKTAUTH')
-                    .columns('LOCATION_ID',
-                        'PRODUCT_ID',
-                        'CHAR_NUM',
-                        'CHARVAL_NUM',
-                        'OPT_PERCENT')
-                    .entries(liDefMktAuth);
+                await cds.run(INSERT.into("CP_DEF_MKTAUTH").entries(liDefMktAuth));
+                // await INSERT.into('CP_DEF_MKTAUTH')
+                //     .columns('LOCATION_ID',
+                //         'PRODUCT_ID',
+                //         'CHAR_NUM',
+                //         'CHARVAL_NUM',
+                //         'OPT_PERCENT')
+                //     .entries(liDefMktAuth);
             }
             catch (error) {
                 console.log(error);
