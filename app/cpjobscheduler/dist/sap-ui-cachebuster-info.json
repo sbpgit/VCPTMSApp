@@ -1,6 +1,16 @@
 {
+<<<<<<< HEAD
   "view/LocDialog.fragment.xml": 1665479929629,
   "controller/ItemMaster.controller.js": 1667480653229,
+=======
+<<<<<<< HEAD
+  "view/ItemMaster.view.xml": 1665743677449,
+  "controller/ItemDetail.controller.js": 1667387799149,
+=======
+<<<<<<< HEAD
+  "view/CreateJobDetails.fragment.xml": 1665479929629,
+  "model/models.js": 1665479929629,
+>>>>>>> 8d98184ea2f4e7b84c23bf21b4fb150efa6e99f2
   "utils/locate-reuse-libs.js": 1665479929629,
   "model/models.js": 1665479929629,
   "manifest.json": 1667487073116,
@@ -41,4 +51,52 @@
   "view/App.view.xml": 1665479929629,
   "css/style.css": 1667294722135,
   "index.html": 1665479929629
+<<<<<<< HEAD
+=======
+=======
+  "view/CreateJobDetails.fragment.xml": 1662978440294,
+  "controller/Details.controller.js": 1665743677449,
+>>>>>>> b36b73222eca812e7e069e5b5c1e60e4aef87e97
+  "utils/locate-reuse-libs.js": 1661440197823,
+  "model/models.js": 1661440197823,
+  "controller/ItemMaster.controller.js": 1667387799149,
+  "manifest.json": 1667479123714,
+  "controller/Details.controller.js": 1665743677449,
+  "controller/CreateJob.controller.js": 1667374133014,
+  "controller/BaseController.js": 1665563487146,
+  "controller/App.controller.js": 1665563487146,
+  "Component.js": 1661440197823,
+  "manifest-bundle.zip": 1667479123725,
+  "Component-preload.js": 1667479124639,
+  "controller/ItemMaster-dbg.controller.js": 1667387799149,
+  "controller/ItemDetail-dbg.controller.js": 1667387799149,
+  "controller/Details-dbg.controller.js": 1665743677449,
+  "controller/CreateJob-dbg.controller.js": 1667374133014,
+  "controller/BaseController-dbg.js": 1665563487146,
+  "controller/App-dbg.controller.js": 1665563487146,
+  "utils/locate-reuse-libs-dbg.js": 1661440197823,
+  "model/models-dbg.js": 1661440197823,
+  "Component-dbg.js": 1661440197823,
+  "view/VersionDialog.fragment.xml": 1661440197823,
+  "view/UpdateJobDialog.fragment.xml": 1661440197823,
+  "view/ScheLog.fragment.xml": 1661440197823,
+  "view/ScenarioDialog.fragment.xml": 1661440197823,
+  "view/RunLogData.fragment.xml": 1661440197823,
+  "view/ProdDialog.fragment.xml": 1661440197823,
+  "view/PredDialog.fragment.xml": 1661440197823,
+  "view/ObjDepDialog.fragment.xml": 1661440197823,
+  "view/LocDialog.fragment.xml": 1661440197823,
+  "view/JobData.fragment.xml": 1661440197823,
+  "i18n/i18n.properties": 1666693187718,
+  "view/ItemDetail.view.xml": 1667289000970,
+  "view/Details.view.xml": 1665563487146,
+  "view/CustomerDialog.fragment.xml": 1661440197823,
+  "view/CreateJobDetails.fragment.xml": 1662978440294,
+  "view/CreateJob.view.xml": 1667289000970,
+  "view/ClassDialog.fragment.xml": 1661440197823,
+  "view/App.view.xml": 1665563487146,
+  "css/style.css": 1667289000966,
+  "index.html": 1665563487146
+>>>>>>> 0dd4dbfebeee62049507f11d7e8455cb6bfbdb5a
+>>>>>>> 8d98184ea2f4e7b84c23bf21b4fb150efa6e99f2
 }

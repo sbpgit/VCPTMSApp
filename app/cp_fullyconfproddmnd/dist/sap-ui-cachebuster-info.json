@@ -1,4 +1,13 @@
 {
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+  "Component-preload.js": 1667479268320,
+=======
+<<<<<<< HEAD
+  "utils/locate-reuse-libs-dbg.js": 1665479929509,
+  "Component.js": 1665479929505,
+>>>>>>> 8d98184ea2f4e7b84c23bf21b4fb150efa6e99f2
   "utils/locate-reuse-libs.js": 1665479929509,
   "Component.js": 1665479929505,
   "i18n/i18n.properties": 1666945287986,
@@ -24,4 +33,36 @@
   "view/App.view.xml": 1665479929509,
   "css/style.css": 1666959728477,
   "index.html": 1665479929509
+<<<<<<< HEAD
+=======
+=======
+  "view/ProdDialog.fragment.xml": 1662978440266,
+  "Component.js": 1662978440262,
+>>>>>>> b36b73222eca812e7e069e5b5c1e60e4aef87e97
+  "utils/locate-reuse-libs.js": 1662978440266,
+  "manifest.json": 1667479267667,
+  "model/models.js": 1662978440266,
+  "controller/Home.controller.js": 1667199444392,
+  "controller/BaseController.js": 1662978440262,
+  "controller/App.controller.js": 1663229251978,
+  "Component.js": 1662978440262,
+  "manifest-bundle.zip": 1667479267683,
+  "i18n/i18n.properties": 1666941714811,
+  "Component-dbg.js": 1662978440262,
+  "model/models-dbg.js": 1662978440266,
+  "controller/Home-dbg.controller.js": 1667199444392,
+  "controller/BaseController-dbg.js": 1662978440262,
+  "controller/App-dbg.controller.js": 1663229251978,
+  "utils/locate-reuse-libs-dbg.js": 1662978440266,
+  "view/VersionDialog.fragment.xml": 1662978440266,
+  "view/ScenarioDialog.fragment.xml": 1662978440266,
+  "view/ProdDialog.fragment.xml": 1662978440266,
+  "view/LocDialog.fragment.xml": 1662978440266,
+  "view/Home.view.xml": 1667199444396,
+  "view/CharDetails.fragment.xml": 1663749091069,
+  "view/App.view.xml": 1662978440266,
+  "css/style.css": 1667199444392,
+  "index.html": 1662978440262
+>>>>>>> 0dd4dbfebeee62049507f11d7e8455cb6bfbdb5a
+>>>>>>> 8d98184ea2f4e7b84c23bf21b4fb150efa6e99f2
 }

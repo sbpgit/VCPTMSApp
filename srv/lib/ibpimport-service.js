@@ -725,29 +725,93 @@ module.exports = cds.service.impl(async function () {
             actcompreq: [],
         },
             vactcompreq;
-        const liactcompreq = await cds.run(  //V_COMP_REQ
+        // const liactcompreq = await cds.run(  //V_COMP_REQ
+        //     `
+        //     SELECT DISTINCT "WEEK_DATE",
+        //             "LOCATION_ID",
+        //             "PRODUCT_ID",
+        //             "COMPONENT",
+        //             "COMPCIR_QTY"
+        //             FROM CP_ASSEMBLY_REQ
+        //             WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
+        //                AND REF_PRODID = '`+ req.data.PRODUCT_ID + `' AND WEEK_DATE >= '2022-10-17' AND WEEK_DATE <= '2023-09-04' AND COMPCIR_QTY >= 0`);
+
+        // for (i = 0; i < liactcompreq.length; i++) {
+        //     var vWeekDate = new Date(liactcompreq[i].WEEK_DATE).toISOString().split('Z');
+        //     var vDemd = parseFloat(liactcompreq[i].COMPCIR_QTY).toFixed(2);
+        //     vactcompreq = {
+        //         "LOCID": liactcompreq[i].LOCATION_ID,
+        //         "PRDID": liactcompreq[i].PRODUCT_ID,
+        //         "PRDFR": liactcompreq[i].COMPONENT,
+        //         "COMPONENTREQUIREMENTQTY": vDemd.toString(),
+        //         "PERIODID0_TSTAMP": vWeekDate[0]
+        //     };
+        //     oReq.actcompreq.push(vactcompreq);
+
+        // }
+        const liactcompreq = await cds.run(
             `
             SELECT DISTINCT "WEEK_DATE",
                     "LOCATION_ID",
                     "PRODUCT_ID",
                     "COMPONENT",
+                    "REF_PRODID",
                     "COMPCIR_QTY"
                     FROM CP_ASSEMBLY_REQ
                     WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
-                       AND REF_PRODID = '`+ req.data.PRODUCT_ID + `' AND WEEK_DATE >= '2022-10-17' AND WEEK_DATE <= '2023-09-04' AND COMPCIR_QTY >= 0`);
+                       AND REF_PRODID = '`+ req.data.PRODUCT_ID +
+            `' AND WEEK_DATE >= '2022-10-17' AND WEEK_DATE <= '2023-09-04' AND COMPCIR_QTY >= 0`);  
 
-        for (i = 0; i < liactcompreq.length; i++) {
-            var vWeekDate = new Date(liactcompreq[i].WEEK_DATE).toISOString().split('Z');
-            var vDemd = parseFloat(liactcompreq[i].COMPCIR_QTY).toFixed(2);
-            vactcompreq = {
-                "LOCID": liactcompreq[i].LOCATION_ID,
-                "PRDID": liactcompreq[i].PRODUCT_ID,
-                "PRDFR": liactcompreq[i].COMPONENT,
-                "COMPONENTREQUIREMENTQTY": vDemd.toString(),
-                "PERIODID0_TSTAMP": vWeekDate[0]
-            };
-            oReq.actcompreq.push(vactcompreq);
+        const licriticalcomp = await cds.run(
+            `
+            SELECT  "LOCATION_ID",
+                    "PRODUCT_ID",
+                    "ITEM_NUM",
+                    "COMPONENT",
+                    "CRITICALKEY"
+                FROM CP_CRITICAL_COMP
+                WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
+                      AND PRODUCT_ID = '`+ req.data.PRODUCT_ID + `'                               
+                      AND CRITICALKEY = '` + req.data.CRITICALKEY + `'`);
 
+        if (req.data.CRITICALKEY === "X") {
+            for (i = 0; i < liactcompreq.length; i++) {
+                for (var j = 0; j < licriticalcomp.length; j++) {
+                    if (liactcompreq[i].LOCATION_ID === licriticalcomp[j].LOCATION_ID &&
+                        liactcompreq[i].REF_PRODID === licriticalcomp[j].PRODUCT_ID &&
+                        //liactcompreq[i].ITEM_NUM === licriticalcomp[j].ITEM_NUM &&
+                        liactcompreq[i].COMPONENT === licriticalcomp[j].COMPONENT) {
+
+                        var vWeekDate = new Date(liactcompreq[i].WEEK_DATE).toISOString().split('Z');
+                        var vDemd = parseFloat(liactcompreq[i].COMPCIR_QTY).toFixed(2);
+
+                        vactcompreq = {
+                            "LOCID": liactcompreq[i].LOCATION_ID,
+                            "PRDID": liactcompreq[i].PRODUCT_ID,
+                            "PRDFR": liactcompreq[i].COMPONENT,
+                            "COMPONENTREQUIREMENTQTY": vDemd.toString(),
+                            "PERIODID0_TSTAMP": vWeekDate[0]
+                        };
+                        oReq.actcompreq.push(vactcompreq);
+                    }
+                }
+
+            }
+
+        } else {
+            for (i = 0; i < liactcompreq.length; i++) {
+                var vWeekDate = new Date(liactcompreq[i].WEEK_DATE).toISOString().split('Z');
+                var vDemd = parseFloat(liactcompreq[i].COMPCIR_QTY).toFixed(2);
+                vactcompreq = {
+                    "LOCID": liactcompreq[i].LOCATION_ID,
+                    "PRDID": liactcompreq[i].PRODUCT_ID,
+                    "PRDFR": liactcompreq[i].COMPONENT,
+                    "COMPONENTREQUIREMENTQTY": vDemd.toString(),
+                    "PERIODID0_TSTAMP": vWeekDate[0]
+                };
+                oReq.actcompreq.push(vactcompreq);
+
+            }
         }
         var vTransID = new Date().getTime().toString();
         var oEntry =
@@ -1874,6 +1938,7 @@ module.exports = cds.service.impl(async function () {
                     "LOCATION_ID",
                     "PRODUCT_ID",
                     "COMPONENT",
+                    "REF_PRODID",
                     "COMPCIR_QTY"
                     FROM CP_ASSEMBLY_REQ
                     WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
@@ -1898,7 +1963,7 @@ module.exports = cds.service.impl(async function () {
             for (i = 0; i < liactcompreq.length; i++) {
                 for (var j = 0; j < licriticalcomp.length; j++) {
                     if (liactcompreq[i].LOCATION_ID === licriticalcomp[j].LOCATION_ID &&
-                        liactcompreq[i].PRODUCT_ID === licriticalcomp[j].PRODUCT_ID &&
+                        liactcompreq[i].REF_PRODID === licriticalcomp[j].PRODUCT_ID &&
                         //liactcompreq[i].ITEM_NUM === licriticalcomp[j].ITEM_NUM &&
                         liactcompreq[i].COMPONENT === licriticalcomp[j].COMPONENT) {
 
@@ -1907,7 +1972,7 @@ module.exports = cds.service.impl(async function () {
 
                         vactcompreq = {
                             "LOCID": liactcompreq[i].LOCATION_ID,
-                            "PRDID": liactcompreq[i].PRODUCT_ID,
+                            "PRDID": liactcompreq[i].REF_PRODID,
                             "PRDFR": liactcompreq[i].COMPONENT,
                             "COMPONENTREQUIREMENTQTY": vDemd.toString(),
                             "PERIODID0_TSTAMP": vWeekDate[0]
@@ -1924,7 +1989,7 @@ module.exports = cds.service.impl(async function () {
                 var vDemd = parseFloat(liactcompreq[i].COMPCIR_QTY).toFixed(2);
                 vactcompreq = {
                     "LOCID": liactcompreq[i].LOCATION_ID,
-                    "PRDID": liactcompreq[i].PRODUCT_ID,
+                    "PRDID": liactcompreq[i].REF_PRODID,
                     "PRDFR": liactcompreq[i].COMPONENT,
                     "COMPONENTREQUIREMENTQTY": vDemd.toString(),
                     "PERIODID0_TSTAMP": vWeekDate[0]

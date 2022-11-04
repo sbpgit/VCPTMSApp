@@ -1717,8 +1717,7 @@ annotate service.SALES_S with @(
 annotate service.FACTORY_SALESLOC with @(
     UI        : {
         SelectionFields         : [
-            LOCATION_ID,
-            PRODUCT_ID
+            LOCATION_ID
         ],
         LineItem                : [
             {

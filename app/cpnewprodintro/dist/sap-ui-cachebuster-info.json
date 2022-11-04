@@ -1,4 +1,15 @@
 {
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+  "controller/BaseController.js": 1661440197843,
+  "manifest.json": 1667479156340,
+=======
+<<<<<<< HEAD
+  "view/className.fragment.xml": 1665479929689,
+  "controller/Detail.controller.js": 1665479929689,
+  "utils/locate-reuse-libs.js": 1665479929689,
+>>>>>>> 8d98184ea2f4e7b84c23bf21b4fb150efa6e99f2
   "model/models.js": 1665479929689,
   "controller/App.controller.js": 1665479929689,
   "utils/locate-reuse-libs.js": 1665479929689,
@@ -29,4 +40,39 @@
   "view/App.view.xml": 1665479929689,
   "css/style.css": 1665479929689,
   "index.html": 1665479929689
+<<<<<<< HEAD
+=======
+=======
+  "view/Detail.view.xml": 1666693187782,
+>>>>>>> b36b73222eca812e7e069e5b5c1e60e4aef87e97
+  "utils/locate-reuse-libs.js": 1661440197847,
+  "model/models.js": 1661440197847,
+  "controller/Home.controller.js": 1661440197843,
+  "controller/Detail.controller.js": 1661440197843,
+  "i18n/i18n.properties": 1666693187782,
+  "controller/App.controller.js": 1661440197843,
+  "Component.js": 1661440197843,
+  "manifest-bundle.zip": 1667479156351,
+  "Component-preload.js": 1667479156767,
+  "controller/Detail-dbg.controller.js": 1661440197843,
+  "model/models-dbg.js": 1661440197847,
+  "controller/Home-dbg.controller.js": 1661440197843,
+  "utils/locate-reuse-libs-dbg.js": 1661440197847,
+  "controller/BaseController-dbg.js": 1661440197843,
+  "controller/App-dbg.controller.js": 1661440197843,
+  "Component-dbg.js": 1661440197843,
+  "view/className.fragment.xml": 1661440197847,
+  "view/charValue.fragment.xml": 1661440197847,
+  "view/charName.fragment.xml": 1661440197847,
+  "view/ProdDialog.fragment.xml": 1661440197847,
+  "view/LocDialog.fragment.xml": 1661440197847,
+  "view/Home.view.xml": 1661440197847,
+  "view/Detail.view.xml": 1666693187782,
+  "view/CreateProduct.fragment.xml": 1666693187782,
+  "view/CharDetails.fragment.xml": 1661440197847,
+  "view/App.view.xml": 1661440197847,
+  "css/style.css": 1661440197843,
+  "index.html": 1661440197843
+>>>>>>> 0dd4dbfebeee62049507f11d7e8455cb6bfbdb5a
+>>>>>>> 8d98184ea2f4e7b84c23bf21b4fb150efa6e99f2
 }
