@@ -29,6 +29,13 @@ sap.ui.define([
 
                 // set the device model
                 this.setModel(models.createDeviceModel(), "device");
+                var oRootPath = jQuery.sap.getModulePath("cpapp.cpmaintenancevcplanner"); // your resource root
+		
+var oImageModel = new sap.ui.model.json.JSONModel({
+	path : oRootPath,
+});
+		
+this.setModel(oImageModel, "imageModel");
             }
         });
     }
