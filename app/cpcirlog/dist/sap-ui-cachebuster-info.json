@@ -1,14 +1,20 @@
 {
 <<<<<<< HEAD
+  "annotations/annotation.xml": 1667375245876,
+=======
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
   "Component-preload.js": 1667377346535,
+>>>>>>> 8d98184ea2f4e7b84c23bf21b4fb150efa6e99f2
   "Component.js": 1667375245872,
-  "manifest.json": 1667377346186,
-  "i18n/i18n.properties": 1667375312773,
+  "manifest.json": 1667487355949,
+  "Component-preload.js": 1667487356262,
   "Component-dbg.js": 1667375245872,
-  "annotations/annotation.xml": 1667375245876,
+  "i18n/i18n.properties": 1667375312773,
   "index.html": 1667375245872
+<<<<<<< HEAD
+=======
 =======
   "index.html": 1667387799121,
   "manifest.json": 1667458824888,
@@ -25,4 +31,5 @@
   "i18n/i18n.properties": 1667387799121
 >>>>>>> 0dd4dbfebeee62049507f11d7e8455cb6bfbdb5a
 >>>>>>> b36b73222eca812e7e069e5b5c1e60e4aef87e97
+>>>>>>> 8d98184ea2f4e7b84c23bf21b4fb150efa6e99f2
 }

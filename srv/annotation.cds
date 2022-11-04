@@ -1717,8 +1717,7 @@ annotate service.SALES_S with @(
 annotate service.FACTORY_SALESLOC with @(
     UI        : {
         SelectionFields         : [
-            LOCATION_ID,
-            PRODUCT_ID
+            LOCATION_ID
         ],
         LineItem                : [
             {
@@ -1727,12 +1726,12 @@ annotate service.FACTORY_SALESLOC with @(
                 ![@UI.Importance]   : #High,
                 ![@HTML5.CssDefaults] : {width : '15rem'}
             },
-            {
-                $Type : 'UI.DataField',
-                Value : PRODUCT_ID,
-                ![@UI.Importance]   : #High,
-                ![@HTML5.CssDefaults] : {width : '15rem'}
-            },
+            // {
+            //     $Type : 'UI.DataField',
+            //     Value : PRODUCT_ID,
+            //     ![@UI.Importance]   : #High,
+            //     ![@HTML5.CssDefaults] : {width : '15rem'}
+            // },
             {
                 $Type : 'UI.DataField',
                 Value : PLAN_LOC,
@@ -1748,7 +1747,7 @@ annotate service.FACTORY_SALESLOC with @(
         ],
         HeaderInfo              : {
             Title          : {Value : LOCATION_ID},
-            Description    : {Value : PRODUCT_ID},
+            Description    : {Value : LOCATION_ID},
             TypeName       : 'Demand - Plan - Factory Location',
             TypeNamePlural : 'Demand - Plan - Factory Location-Product',
         },

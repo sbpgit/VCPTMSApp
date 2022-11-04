@@ -506,6 +506,18 @@ sap.ui.define([
                 // // var oCrossAppNav = sap.ushell.Container.getService("CrossApplicationNavigation"); 
                 // //  var hashUrl=(oCrossAppNav && oCrossAppNav.hrefForExternal({
                 // //     target: { semanticObject : "vcpdocdisplay", action: "Display" }
+                 
+                // //   })
+                // //  );
+                // //   oCrossAppNav.toExternal({target: {shellHash: hashUrl}});
+
+                //   var hash = sap.ushell.Container.getServiceAsync("CrossApplicationNavigation").then( function (oService) {
+
+=======
+<<<<<<< HEAD
+                // // var oCrossAppNav = sap.ushell.Container.getService("CrossApplicationNavigation"); 
+                // //  var hashUrl=(oCrossAppNav && oCrossAppNav.hrefForExternal({
+                // //     target: { semanticObject : "vcpdocdisplay", action: "Display" }
 =======
 <<<<<<< HEAD
                 var oCrossAppNav = sap.ushell.Container.getService("CrossApplicationNavigation"); 
@@ -525,6 +537,7 @@ sap.ui.define([
 
                 //   var hash = sap.ushell.Container.getServiceAsync("CrossApplicationNavigation").then( function (oService) {
 
+>>>>>>> 8d98184ea2f4e7b84c23bf21b4fb150efa6e99f2
                 //     oService.hrefForExternalAsync({
                 //         target : {
                 //             semanticObject: "vcpdocdisplay",
@@ -555,7 +568,6 @@ sap.ui.define([
 			//Navigate to second app
 			sap.m.URLHelper.redirect(url, true); 
 
->>>>>>> 0dd4dbfebeee62049507f11d7e8455cb6bfbdb5a
                 } 
             }
         });
