@@ -792,7 +792,7 @@ context cp {
 
     entity FACTORY_SALESLOC {
         key LOCATION_ID : String(4)  @title : 'Demand Location ';
-        key PRODUCT_ID  : String(40) @title : 'Product';
+        // key PRODUCT_ID  : String(40) @title : 'Product';
         key PLAN_LOC    : String(4)  @title : 'Planning Location ';
         key FACTORY_LOC : String(4)  @title : 'Factory Location ';
     // key SALES_PRODUCT : String(40) @title : 'Sales Product';

@@ -1021,6 +1021,14 @@ module.exports = (srv) => {
     srv.on("genUniqueID", async (req) => {
         let lilocProd = [];
         let lsData = {}, Flag = '';
+        
+        let createtAt = new Date();
+        let id = uuidv1();
+        let values = [];
+        let message = "Started Process Sales Order";
+        let res = req._.req.res;
+        
+        values.push({ id, createtAt, message, lilocProd });
         if (req.data.PRODUCT_ID === "ALL") {
             const objCatFn = new Catservicefn();
             lilocProd = await objCatFn.getAllProducts(req.data);
@@ -1051,6 +1059,7 @@ module.exports = (srv) => {
         let Flag = '';
         const obgenSOFunctions = new SOFunctions();
         await obgenSOFunctions.genUniqueID(req.data, req, Flag);
+        return "success";
     });
     // Generate Fully Configured Demand
     srv.on("genFullConfigDemand", async (req) => {
