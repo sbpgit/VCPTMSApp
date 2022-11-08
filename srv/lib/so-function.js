@@ -21,7 +21,7 @@ class SOFunctions {
         // await this.processUniqueID(adata.LOCATION_ID, adata.PRODUCT_ID, '');
         await this.genBaseMarketAuth(adata.LOCATION_ID, adata.PRODUCT_ID);
         await this.genPartialProd(adata.LOCATION_ID, adata.PRODUCT_ID);
-        await this.genFactoryLoc(adata.LOCATION_ID, adata.PRODUCT_ID);
+      //  await this.genFactoryLoc(adata.LOCATION_ID, adata.PRODUCT_ID);
         await GenF.logMessage(req, 'Completed Sales Orders Processing');
         Flag = 'X';
 
@@ -1000,11 +1000,14 @@ class SOFunctions {
             .from('CP_LOCATION');
         console.log("test1");
         try{
-        const liFtLoc = await SELECT.columns(
-            "LOCATION_ID",
-            "PLAN_LOC",
-            "FACTORY_LOC")
-            .from('CP_FACTORY_SALESLOC');
+            const liFtLoc = await cds.run(`
+                                SELECT * 
+                                FROM CP_FACTORY_SALESLOC                `);
+        // const liFtLoc = await SELECT.columns(
+        //     "LOCATION_ID",
+        //     "PLAN_LOC",
+        //     "FACTORY_LOC")
+        //     .from('CP_FACTORY_SALESLOC');
         }
         catch(error){
             
