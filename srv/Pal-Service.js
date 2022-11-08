@@ -21,6 +21,7 @@ const classicalSchema = process.env.classicalSchema;
 // };
 // const classicalSchema = "DB_CONFIG_PROD_CLIENT1"; 
 // const vcConfigTimePeriod = "PERIOD_NUM";
+
 const minBuckets = 10;
 const predictionsTimeout = 10000; // 10 seconds for now
 
@@ -102,6 +103,10 @@ module.exports = srv => {
         return (await _generatePredictions(req,false));
     })
 
+    srv.on ('purgePredictions',    async req => {
+        return (await _purgePredictions(req,false));
+    })
+
 
     srv.on ('fgModels',    async req => {
         return (await _generateRegModels(req,true));   
@@ -110,6 +115,11 @@ module.exports = srv => {
 
     srv.on ('fgPredictions',    async req => {
         return (await _generatePredictions(req,true));
+    })
+
+
+    srv.on ('fpurgePredictions',    async req => {
+        return (await _purgePredictions(req,true));
     })
 
 
@@ -546,7 +556,7 @@ async function _postPredictionRequest(req,url,paramsObj,numChars,dataObj,modelTy
         let errorObj = {};
         errorObj["success"] = false;
 
-        errorObj["message"] = 'ERROR generate Predictions ' + ret_response + ' AT ' + new Date() +
+        errorObj["message"] = 'ERROR Generate Predictions ' + ret_response + ' AT ' + new Date() +
                                     '\n Response Details :' + 
                                     '\n Location : ' + vcRuleListObj[0].Location +
                                     '\n Product : ' + vcRuleListObj[0].Product +
@@ -873,8 +883,21 @@ async function _generatePredictions(req,isGet) {
             }
             else
             {
-                vcRulesList[i].modelType ="NA";       
+                sqlStr = 'SELECT * FROM "CP_PAL_PROFILEMETH_PARA"' +
+                            ' WHERE "PROFILE" = ' + "'" + vcRulesList[i].profile + "'";
+
+                results = await cds.run(sqlStr);
+
+                if (results.length > 0)
+                {
+                    vcRulesList[i].modelType = results[0].METHOD;
+                }
+                else
+                {
+                    vcRulesList[i].modelType ="NA"; 
+                }
             }
+
         }
         else
         {
@@ -1044,7 +1067,7 @@ async function _generatePredictions(req,isGet) {
 
     let dataObj = {};
     dataObj["success"] = true;
-    dataObj["message"] = "generate Predictions Job Completed Successfully at " +  new Date();
+    dataObj["message"] = "Generate Predictions Job Completed Successfully at " +  new Date();
 
 
     if (req.headers['x-sap-job-id'] > 0)
@@ -1087,7 +1110,7 @@ async function _getRuleListTypeForGenModels(vcRulesList, modelType, numChars)
                                 ' AND "LOCATION_ID" = ' + "'" + vcRulesList[i].Location + "'" + 
                                 ' AND "OBJ_DEP" = ' + "'" + vcRulesList[i].GroupID + "'" +
                                 ' AND "OBJ_TYPE" = ' + "'" + vcRulesList[i].Type + "'" ;
-                    console.log('sqlStr: ', sqlStr);            
+                    // console.log('sqlStr: ', sqlStr);            
 
                     results = await cds.run(sqlStr);
 
@@ -1101,6 +1124,8 @@ async function _getRuleListTypeForGenModels(vcRulesList, modelType, numChars)
                             ' WHERE "PROFILE" = ' + "'" + profileID + "'" +
                             ' AND "METHOD" = ' + "'" + modelType + "'";
 
+                        // console.log('sqlStr: ', sqlStr);            
+
                         results = await cds.run(sqlStr);
 
                         if (results.length > 0)
@@ -1112,6 +1137,29 @@ async function _getRuleListTypeForGenModels(vcRulesList, modelType, numChars)
                                             "modelVersion":vcRulesList[i].modelVersion,
                                             "modelType":results[0].METHOD, 
                                             "profileID":profileID, 
+                                            "override":vcRulesList[i].override,
+                                            "dimensions" : numChars});
+                        }
+
+                    }
+                    else
+                    {
+                        sqlStr = 'SELECT * FROM "CP_PAL_PROFILEMETH_PARA"' +
+                        ' WHERE "PROFILE" = ' + "'" + vcRulesList[i].profile + "'" +
+                        ' AND "METHOD" = ' + "'" + modelType + "'";
+                        // console.log('sqlStr: ', sqlStr);            
+
+                        results = await cds.run(sqlStr);
+
+                        if (results.length > 0)
+                        {
+                            ruleListObj.push({"Location":vcRulesList[i].Location, 
+                                            "Product":vcRulesList[i].Product, 
+                                            "GroupID":vcRulesList[i].GroupID,
+                                            "Type":vcRulesList[i].Type, 
+                                            "modelVersion":vcRulesList[i].modelVersion, 
+                                            "modelType":results[0].METHOD, 
+                                            "profileID":results[0].PROFILE, 
                                             "override":vcRulesList[i].override,
                                             "dimensions" : numChars});
                         }
@@ -1141,6 +1189,7 @@ async function _getRuleListTypeForGenModels(vcRulesList, modelType, numChars)
             //}
         }
     }
+
 
     return ruleListObj;
 
@@ -1182,6 +1231,19 @@ async function _getParamsObjForGenModels(vcRulesList, modelType, numChars)
                 {
                     method = results[0].METHOD;
                 }
+
+            }
+            else
+            {
+                sqlStr = 'SELECT * FROM "CP_PAL_PROFILEMETH_PARA"' +
+                    ' WHERE "PROFILE" = ' + "'" + vcRulesList[i].profileID + "'"; 
+
+                results = await cds.run(sqlStr);
+
+                if (results.length > 0)
+                {
+                    method = results[0].METHOD;
+                }
             }
         }
         else
@@ -1200,6 +1262,7 @@ async function _getParamsObjForGenModels(vcRulesList, modelType, numChars)
         {
             let palGroupId =  vcRulesList[i].profileID + '#' + vcRulesList[i].Type + '#' +vcRulesList[i].GroupID + '#' + vcRulesList[i].Location + '#' + vcRulesList[i].Product;
 
+            // console.log(" palGroupId ", palGroupId);
             for (let index=0; index<results.length; index++) 
             {
                 paramsObj.push({"groupId":palGroupId, 
@@ -2012,7 +2075,7 @@ if (hasCharCount1 == true)
 
     let dataObj = {};
     dataObj["success"] = true;
-    dataObj["message"] = "generate Models Job Completed Successfully at " +  new Date();
+    dataObj["message"] = "Generate Models Job Completed Successfully at " +  new Date();
 
     if (req.headers['x-sap-job-id'] > 0)
     {
@@ -2332,7 +2395,7 @@ async function _postRegressionRequest(req,url,paramsObj,numChars,dataObj,modelTy
         if (error) {
             let errObj = {};
             errObj["success"] = false;
-            errObj["message"] = "generate Models Job Failed StatusCode : ", response.statusCode, " ERROR : " + error + " AT " + new Date();
+            errObj["message"] = "Generate Models Job Failed StatusCode : ", response.statusCode, " ERROR : " + error + " AT " + new Date();
 
 
             if (req.headers['x-sap-job-id'] > 0)
@@ -2418,7 +2481,7 @@ async function _postRegressionRequest(req,url,paramsObj,numChars,dataObj,modelTy
             let errorObj = {};
             errorObj["success"] = false;
  
-            errorObj["message"] = 'ERROR generate Models Response StatusCode : ' + response.statusCode + ' AT ' + new Date() +
+            errorObj["message"] = 'ERROR Generate Models Response StatusCode : ' + response.statusCode + ' AT ' + new Date() +
                                      '\n Response Details :' + 
                                      '\n Location : ' + vcRuleListObj[0].Location +
                                      '\n Product : ' + vcRuleListObj[0].Product +
@@ -2446,4 +2509,203 @@ async function _postRegressionRequest(req,url,paramsObj,numChars,dataObj,modelTy
             }
         }
     });
+}
+
+
+
+async function _purgePredictions(req,isGet) {
+
+    var vcRulesListReq = {};
+    if (isGet == true) //GET -- Kludge
+    {
+        vcRulesListReq = JSON.parse(req.data.vcRulesList);
+    }
+    else
+    {
+        vcRulesListReq = req.data.vcRulesList;
+    }
+   
+    let createtAt = new Date();
+    let id = uuidv1();
+    let values = [];	
+    let message = "Request for Purge Predictions Queued Sucessfully";
+   
+    values.push({id, createtAt, message, vcRulesListReq});    
+   
+   
+    if (isGet == true)
+    {
+        req.reply({values});
+    }
+    else
+    {
+        let res = req._.req.res;
+        res.statusCode = 202;
+        res.send({values});
+    }
+    
+      
+    var sqlStrPred ="";
+    var sqlStrImpact ="";
+    var sqlStrIbpResultPlan ="";
+    let dataObj = {};
+
+
+    if ( (vcRulesListReq.length == 1) &&
+        ( (vcRulesListReq[0].GroupID == "ALL") && 
+            (vcRulesListReq[0].Product == "ALL") && 
+            (vcRulesListReq[0].Location == "ALL") ) ||
+
+            ( (vcRulesListReq[0].GroupID == "ALL") && 
+            (vcRulesListReq[0].Product == "ALL") && 
+            (vcRulesListReq[0].Location != "ALL") ) ||
+
+            ( (vcRulesListReq[0].GroupID == "ALL") && 
+            (vcRulesListReq[0].Product != "ALL") && 
+            (vcRulesListReq[0].Location == "ALL") ) ||
+            
+            ( (vcRulesListReq[0].GroupID == "ALL") && 
+            (vcRulesListReq[0].Product != "ALL") && 
+            (vcRulesListReq[0].Location != "ALL") ) )
+    {
+
+        let str = JSON.stringify(vcRulesListReq[0]);
+        let obj = JSON.parse(str);
+        let arrayKeys = Object.keys(obj);
+        let arrayVals = Object.values(obj);
+        let hasStartDate = false;
+        for (let arrayIndex = 0; arrayIndex < arrayKeys.length; arrayIndex++)
+        { 
+            if ( (arrayKeys[arrayIndex] == 'startDate') &&
+                (arrayVals[arrayIndex] != "") )
+                hasStartDate = true;
+        }
+
+        let startDateSql = "";
+        let purgeError = false;
+
+        if (hasStartDate == true)
+            startDateSql =  ' AND "CAL_DATE" < ' + '\' + vcRulesListReq[0].startDate + \'';   
+        else
+            startDateSql = ' ADD_YEARS(CURRENT_DATE, -2) AS "CAL_DATE" ';
+
+        if ( (vcRulesListReq[0].Location != "ALL") &&
+            (vcRulesListReq[0].Product == "ALL") )
+        {
+            sqlStrPred = 'DELETE FROM "CP_TS_PREDICTIONS"' + 
+                    'WHERE "LOCATION_ID" =' + "'" +   vcRulesListReq[0].Location + "'" +
+                        startDateSql;
+            sqlStrImpact = 'DELETE FROM "CP_TS_OBJDEP_CHAR_IMPACT_F"' + 
+                        'WHERE "LOCATION_ID" =' + "'" +   vcRulesListReq[0].Location + "'" +
+                        startDateSql;
+
+            sqlStrIbpResultPlan = 'DELETE FROM "CP_IBP_RESULTPLAN_TS"' + 
+                        'WHERE "LOCATION_ID" =' + "'" +   vcRulesListReq[0].Location + "'" +
+                        startDateSql;
+        }
+        else if ( (vcRulesListReq[0].Product != "ALL") &&
+                    (vcRulesListReq[0].Location == "ALL") )
+        {
+            sqlStrPred = 'DELETE FROM "CP_TS_PREDICTIONS"' + 
+                    'WHERE "PRODUCT_ID" =' + "'" +   vcRulesListReq[0].Product + "'" +
+                    startDateSql;
+            sqlStrImpact = 'DELETE FROM "CP_TS_OBJDEP_CHAR_IMPACT_F"' + 
+                    'WHERE "PRODUCT_ID" =' + "'" +   vcRulesListReq[0].Product + "'" +
+                    startDateSql;
+
+            sqlStrIbpResultPlan = 'DELETE FROM "CP_IBP_RESULTPLAN_TS"' + 
+                    'WHERE "PRODUCT_ID" =' + "'" +   vcRulesListReq[0].Product + "'" +
+                    startDateSql;
+        }
+        else if ( (vcRulesListReq[0].Product != "ALL") &&
+                    (vcRulesListReq[0].Location != "ALL") )
+        {
+            sqlStrPred = 'DELETE FROM "CP_TS_PREDICTIONS"' + 
+                    'WHERE "PRODUCT_ID" =' + "'" +   vcRulesListReq[0].Product + "'" +                   
+                    ' AND "LOCATION_ID" =' + "'" +   vcRulesListReq[0].Location + "'" +
+                    startDateSql;
+
+            sqlStrImpact = 'DELETE FROM "CP_TS_OBJDEP_CHAR_IMPACT_F"' + 
+                    'WHERE "PRODUCT_ID" =' + "'" +   vcRulesListReq[0].Product + "'" +                   
+                    ' AND "LOCATION_ID" =' + "'" +   vcRulesListReq[0].Location + "'" +
+                    startDateSql;
+
+            sqlStrIbpResultPlan = 'DELETE FROM "CP_IBP_RESULTPLAN_TS"' + 
+                    'WHERE "PRODUCT_ID" =' + "'" +   vcRulesListReq[0].Product + "'" +                   
+                    ' AND "LOCATION_ID" =' + "'" +   vcRulesListReq[0].Location + "'" +
+                    startDateSql;
+        }
+        else
+        {
+            sqlStrPred = 'DELETE FROM "CP_TS_PREDICTIONS"' +  
+                        startDateSql;
+            sqlStrImpact = 'DELETE FROM "CP_TS_OBJDEP_CHAR_IMPACT_F"' +  
+                        startDateSql;
+            sqlStrIbpResultPlan = 'DELETE FROM "CP_IBP_RESULTPLAN_TS"' +  
+                        startDateSql;  
+        }
+
+        try {
+            console.log("_purgePredictions sqlStrPred ", sqlStrPred);
+            await cds.run(sqlStrPred);
+        }
+        catch (exception) {
+            purgeError = true;
+            console.log("_purgePredictions  sqlStrPred ", sqlStrPred);
+            throw new Error(exception.toString());
+        }
+
+        try {
+            console.log("_purgePredictions sqlStrImpact ", sqlStrImpact);
+            await cds.run(sqlStrImpact);
+        }
+        catch (exception) {
+            purgeError = true;
+            console.log("_purgePredictions  sqlStrImpact ", sqlStrImpact);
+            throw new Error(exception.toString());
+        }
+
+        
+        try {
+            console.log("_purgePredictions sqlStrIbpResultPlan ", sqlStrIbpResultPlan);
+            await cds.run(sqlStrIbpResultPlan);
+        }
+        catch (exception) {
+            purgeError = true;
+            console.log("_purgePredictions  sqlStrIbpResultPlan ", sqlStrIbpResultPlan);
+            throw new Error(exception.toString());
+        }
+
+    }
+
+    if ( purgeError == false)
+    {
+        dataObj["success"] = true;
+        dataObj["message"] = "Purge Predictions Job Completed Successfully at " +  new Date();
+    }
+    else
+    {
+        dataObj["success"] = false;
+        dataObj["message"] = "Purge Predictions Job Errored at " +  new Date();
+    }
+
+    if (req.headers['x-sap-job-id'] > 0)
+    {
+        const scheduler = getJobscheduler(req);
+
+        var updateReq = {
+            jobId: req.headers['x-sap-job-id'],
+            scheduleId: req.headers['x-sap-job-schedule-id'],
+            runId: req.headers['x-sap-job-run-id'],
+            data : dataObj
+            };
+
+            scheduler.updateJobRunLog(updateReq, function(err, result) {
+            if (err) {
+                return console.log('Purge Predictions Error updating run log: %s', err);
+            }
+
+            });
+    }
+
 }
