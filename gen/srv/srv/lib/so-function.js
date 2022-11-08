@@ -18,7 +18,11 @@ class SOFunctions {
 
         await GenF.logMessage(req, 'Started Sales Orders Processing');
 
+<<<<<<< HEAD
         await this.processUniqueID(adata.LOCATION_ID, adata.PRODUCT_ID, '');
+=======
+       // await this.processUniqueID(adata.LOCATION_ID, adata.PRODUCT_ID, '');
+>>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
         await this.genBaseMarketAuth(adata.LOCATION_ID, adata.PRODUCT_ID);
         await this.genPartialProd(adata.LOCATION_ID, adata.PRODUCT_ID);
         await this.genFactoryLoc(adata.LOCATION_ID, adata.PRODUCT_ID);
@@ -800,6 +804,10 @@ class SOFunctions {
 
         let lDate = new Date();
         lDate = new Date(lDate.getFullYear(), lDate.getMonth(), lDate.getDate() + (7 * lFirmnWeeks));
+<<<<<<< HEAD
+=======
+        let lDateD = lDate.toISOString().split('Z')[0].split('T')[0];
+>>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
         lWeeks = lWeeks - lFirmnWeeks;
         let liSOrdQty = await cds.run(`SELECT LOCATION_ID,
                                              PRODUCT_ID,
@@ -813,7 +821,11 @@ class SOFunctions {
             await DELETE.from('CP_DEF_MKTAUTH')
                 .where(`LOCATION_ID = '${lLocation}' AND PRODUCT_ID = '${liSOrdQty[cntS].PRODUCT_ID}'`);
             await DELETE.from('CP_MARKETAUTH_CFG')
+<<<<<<< HEAD
                 .where(`LOCATION_ID = '${lLocation}' AND PRODUCT_ID = '${liSOrdQty[cntS].PRODUCT_ID}' AND WEEK_DATE > '${lDate}'`);
+=======
+                .where(`LOCATION_ID = '${lLocation}' AND PRODUCT_ID = '${liSOrdQty[cntS].PRODUCT_ID}' AND WEEK_DATE > '${lDateD}'`);
+>>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
 
         }
 
@@ -857,6 +869,7 @@ class SOFunctions {
         }
         if (liDefMktAuth) {
             try {
+<<<<<<< HEAD
                 await INSERT.into('CP_DEF_MKTAUTH')
                     .columns('LOCATION_ID',
                         'PRODUCT_ID',
@@ -864,6 +877,16 @@ class SOFunctions {
                         'CHARVAL_NUM',
                         'OPT_PERCENT')
                     .entries(liDefMktAuth);
+=======
+                await cds.run(INSERT.into("CP_DEF_MKTAUTH").entries(liDefMktAuth));
+                // await INSERT.into('CP_DEF_MKTAUTH')
+                //     .columns('LOCATION_ID',
+                //         'PRODUCT_ID',
+                //         'CHAR_NUM',
+                //         'CHARVAL_NUM',
+                //         'OPT_PERCENT')
+                //     .entries(liDefMktAuth);
+>>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
             }
             catch (error) {
                 console.log(error);
@@ -872,7 +895,11 @@ class SOFunctions {
         }
 
         do {
+<<<<<<< HEAD
             let lDateSQL = GenF.getNextMondayCmp(lDate.toISOString().split('T')[0]);
+=======
+            let lDateSQL = GenF.getNextMondayCmp(lDate.toISOString().split('Z')[0].split('T')[0]);//(lDate.toISOString().split('T')[0]);
+>>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
             // Loop through all the partial products                     
             for (let cntS = 0; cntS < liSOrdQty.length; cntS++) {
                 await cds.run(`INSERT INTO "CP_MARKETAUTH_CFG"  SELECT  '${lDateSQL}',
@@ -897,6 +924,7 @@ class SOFunctions {
         let vFlag = '';
         const liProd = await cds.run(`
             SELECT * 
+<<<<<<< HEAD
               FROM CP_PRODUCT
              WHERE LOCATION_ID   = '${lLocation}'
                AND (PRODUCT_ID NOT IN ( SELECT PRODUCT_ID 
@@ -904,12 +932,26 @@ class SOFunctions {
                                   WHERE LOCATION_ID   = '${lLocation}' ) 
         `);
         const liProdCfg = await SELECT.columns("LOCATION_ID",
+=======
+              FROM V_LOCPROD
+             WHERE LOCATION_ID   = '${lLocation}'
+               AND (PRODUCT_ID NOT IN ( SELECT PRODUCT_ID 
+                                  FROM CP_PARTIALPROD_INTRO 
+                                  WHERE LOCATION_ID   = '${lLocation}' ) )
+        `);
+        const liProdCfg = await SELECT.columns(
+>>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
             "PRODUCT_ID",
             "CLASS_NUM",
             "CHAR_NUM",
             "CHARVAL_NUM")
+<<<<<<< HEAD
             .from('V_LOCPRODCLASSCHAR')
             .where(`LOCATION_ID   = '${lLocation}'`)
+=======
+            .from('V_PRODCLSCHARVAL')
+            // .where(`LOCATION_ID   = '${lLocation}'`)
+>>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
         let liPartialProd = [];
         let lsProd = {};
         let liPartialProdChar = [];
@@ -973,14 +1015,22 @@ class SOFunctions {
             SELECT * 
               FROM V_LOCPROD
              WHERE LOCATION_ID NOT IN ( SELECT DISTINCT LOCATION_ID 
+<<<<<<< HEAD
                                   FROM CP_FACTORY_SALESLOC 
+=======
+                                  FROM CP_FACTORY_SALESLOC )
+>>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
         `);
         let liFactLoc = [];
         let lsFactLoc = {};
         for (let cntLC = 0; cntLC < liLoc.length; cntLC++) {
             lsFactLoc = {};
             lsFactLoc['LOCATION_ID'] = GenF.parse(liLoc[cntLC].LOCATION_ID);
+<<<<<<< HEAD
             lsFactLoc['PRODUCT_ID'] = GenF.parse(liLoc[cntLC].PRODUCT_ID);
+=======
+            // lsFactLoc['PRODUCT_ID'] = GenF.parse(liLoc[cntLC].PRODUCT_ID);
+>>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
             lsFactLoc['PLAN_LOC'] = GenF.parse(liLoc[cntLC].LOCATION_ID);
             lsFactLoc['FACTORY_LOC'] = GenF.parse(liLoc[cntLC].LOCATION_ID);
             liFactLoc.push(GenF.parse(lsFactLoc));

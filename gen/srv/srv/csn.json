@@ -4574,9 +4574,12 @@
       "@UI.SelectionFields": [
         {
           "=": "LOCATION_ID"
+<<<<<<< HEAD
         },
         {
           "=": "PRODUCT_ID"
+=======
+>>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
         }
       ],
       "@UI.LineItem": [
@@ -4595,6 +4598,7 @@
         {
           "$Type": "UI.DataField",
           "Value": {
+<<<<<<< HEAD
             "=": "PRODUCT_ID"
           },
           "@UI.Importance": {
@@ -4607,6 +4611,8 @@
         {
           "$Type": "UI.DataField",
           "Value": {
+=======
+>>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
             "=": "PLAN_LOC"
           },
           "@UI.Importance": {
@@ -4633,7 +4639,11 @@
         "=": "LOCATION_ID"
       },
       "@UI.HeaderInfo.Description.Value": {
+<<<<<<< HEAD
         "=": "PRODUCT_ID"
+=======
+        "=": "LOCATION_ID"
+>>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
       },
       "@UI.HeaderInfo.TypeName": "Demand - Plan - Factory Location",
       "@UI.HeaderInfo.TypeNamePlural": "Demand - Plan - Factory Location-Product",
@@ -4672,12 +4682,15 @@
           "type": "cds.String",
           "length": 4
         },
+<<<<<<< HEAD
         "PRODUCT_ID": {
           "@title": "Product",
           "key": true,
           "type": "cds.String",
           "length": 40
         },
+=======
+>>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
         "PLAN_LOC": {
           "@title": "Planning Location ",
           "key": true,
@@ -22949,9 +22962,12 @@
       "@UI.SelectionFields": [
         {
           "=": "LOCATION_ID"
+<<<<<<< HEAD
         },
         {
           "=": "PRODUCT_ID"
+=======
+>>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
         }
       ],
       "@UI.LineItem": [
@@ -22970,6 +22986,7 @@
         {
           "$Type": "UI.DataField",
           "Value": {
+<<<<<<< HEAD
             "=": "PRODUCT_ID"
           },
           "@UI.Importance": {
@@ -22982,6 +22999,8 @@
         {
           "$Type": "UI.DataField",
           "Value": {
+=======
+>>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
             "=": "PLAN_LOC"
           },
           "@UI.Importance": {
@@ -23008,7 +23027,11 @@
         "=": "LOCATION_ID"
       },
       "@UI.HeaderInfo.Description.Value": {
+<<<<<<< HEAD
         "=": "PRODUCT_ID"
+=======
+        "=": "LOCATION_ID"
+>>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
       },
       "@UI.HeaderInfo.TypeName": "Demand - Plan - Factory Location",
       "@UI.HeaderInfo.TypeNamePlural": "Demand - Plan - Factory Location-Product",
@@ -23066,6 +23089,7 @@
           "type": "cds.String",
           "length": 4
         },
+<<<<<<< HEAD
         "PRODUCT_ID": {
           "@Common.ValueList.$Type": "Common.ValueListType",
           "@Common.ValueList.Label": "Products",
@@ -23091,6 +23115,8 @@
           "type": "cds.String",
           "length": 40
         },
+=======
+>>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
         "PLAN_LOC": {
           "@Common.ValueList.$Type": "Common.ValueListType",
           "@Common.ValueList.Label": "Location",
@@ -23236,6 +23262,13 @@
         "PRODUCT_ID": {
           "type": "cds.String",
           "length": 40
+<<<<<<< HEAD
+=======
+        },
+        "CRITICALKEY": {
+          "type": "cds.String",
+          "length": 1
+>>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
         }
       },
       "returns": {
@@ -23549,9 +23582,12 @@
     "SDIService.ImportCIRLog": {
       "kind": "action"
     },
+<<<<<<< HEAD
     "SDIService.ImportSOStock": {
       "kind": "action"
     },
+=======
+>>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
     "UserInfoService": {
       "@source": "srv/user-info.cds",
       "kind": "service",
@@ -31226,6 +31262,35 @@
   },
   "extensions": [
     {
+<<<<<<< HEAD
+=======
+      "annotate": "CatalogService.getFactoryLoc",
+      "elements": {
+        "PRODUCT_ID": {
+          "@Common.ValueList.$Type": "Common.ValueListType",
+          "@Common.ValueList.Label": "Products",
+          "@Common.ValueList.CollectionPath": "getLocProd",
+          "@Common.ValueList.Parameters": [
+            {
+              "$Type": "Common.ValueListParameterInOut",
+              "LocalDataProperty": {
+                "=": "PRODUCT_ID"
+              },
+              "ValueListProperty": "PRODUCT_ID"
+            },
+            {
+              "$Type": "Common.ValueListParameterIn",
+              "LocalDataProperty": {
+                "=": "LOCATION_ID"
+              },
+              "ValueListProperty": "LOCATION_ID"
+            }
+          ]
+        }
+      }
+    },
+    {
+>>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
       "annotate": "cp.PRODRESTRICT",
       "@UI.SelectionFields": [
         {
