@@ -135,7 +135,7 @@ context js {
 
     entity JOBS  {
         key JOB_ID  : Integer @title : 'Job ID';
-        key JOB_NAME  : String(50) @title : 'Job Name';
+        key JOB_NAME  : String(200) @title : 'Job Name';
         key ACTION : String(200) @title : 'Action';
         key ACTIVE : Boolean @title : 'Active';
         key HTTP_METHOD : String(50) @title : 'Http Method';
@@ -199,7 +199,7 @@ context js {
 @cds.persistence.exists 
 Entity ![V_JOBSTATUS] {
 key     ![JOB_ID]: Integer  @title: 'Job ID' ; 
-key     ![JOB_NAME]: String(50)  @title: 'Job Name' ; 
+key     ![JOB_NAME]: String(200)  @title: 'Job Name' ; 
 key     ![ACTION]: String(200)  @title: 'Action' ; 
 key     ![JOB_DES]: String(100)  @title: 'Job Description' ; 
 key     ![SCH_STARTTIME]: String(50)  @title: 'Scheduled Start Time' ; 

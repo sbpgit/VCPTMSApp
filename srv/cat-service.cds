@@ -266,6 +266,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
     entity V_Parameters         as projection on V_PLANNEDCONFIG;
     function postParameterValues(FLAG : String(1), PARAMVALS : String)                                                                                                                                                                                                           returns String;
     entity getCIRGenerated      as projection on od.CIR_GENERATED;
+    entity getPlancfgPara       as projection on od.PARAMETER_VALUES;
     ///*****/ CIR weekly /*****/
     @readonly
     entity getCIRLog    as projection on od.CIRLOG;
