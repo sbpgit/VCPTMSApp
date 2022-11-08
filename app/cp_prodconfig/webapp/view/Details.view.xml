@@ -7,6 +7,10 @@
 			</contentLeft>
 				<contentMiddle>
 					<Title text="{i18n>detailsTitle}" class="boldText"></Title>
+                    <VBox id="_IDGenVBox9" >
+                         <Button class="hdrBtnMarginHdr" icon="sap-icon://sys-help" id="idNav1" press="onNavPress" type="Emphasized" tooltip="Help Document" />
+                    </VBox>
+
 				</contentMiddle>
 			</Bar>
 		</customHeader>

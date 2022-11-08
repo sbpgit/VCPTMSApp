@@ -1,14 +1,14 @@
 <mvc:View xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m" controllerName="cp.appf.cpbomod.controller.ItemMaster"
     xmlns:html="http://www.w3.org/1999/xhtml" class="ItemMaster">
-    <Page showHeader="false">
+    <Page id="_IDGenPage1" showHeader="false">
         <content>
-            <SearchField id="headSearch" liveChange="onSearch" placeholder="Configurable Product or Location"/>
+            <SearchField id="headSearch" liveChange="onSearch" placeholder="Configurable Product or Location"/>        
             <List id="bomList" headerText="Configurable Products / Location" items="{ path : '/results', sorter : { path : 'PRODUCT_ID'} }" mode="SingleSelectMaster" noDataText="No Data" selectionChange="onhandlePress">
                 <items>
-                    <ObjectListItem press="onhandlePress" title="{PRODUCT_ID}">
+                    <ObjectListItem id="_IDGenObjectListItem1" press="onhandlePress" title="{PRODUCT_ID}">
                         <attributes>
-                            <ObjectAttribute text="{LOCATION_ID}"/>
+                            <ObjectAttribute id="_IDGenObjectAttribute1" text="{LOCATION_ID}"/>
                         </attributes>
                     </ObjectListItem>
                 </items>

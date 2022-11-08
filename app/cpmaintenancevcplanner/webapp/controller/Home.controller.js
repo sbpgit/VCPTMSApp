@@ -514,8 +514,6 @@ sap.ui.define([
 			var url = window.location.href.split('#')[0] + hash; 
 			//Navigate to second app
 			sap.m.URLHelper.redirect(url, true); 
-                
-
                 } 
             }
         });

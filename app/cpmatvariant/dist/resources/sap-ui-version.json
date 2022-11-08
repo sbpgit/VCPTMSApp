@@ -1,15 +1,7 @@
 {
 	"name": "cpapp.cpmatvariant",
 	"version": "0.0.1",
-<<<<<<< HEAD
-	"buildTimestamp": "202211031239",
-=======
-<<<<<<< HEAD
-	"buildTimestamp": "202211020818",
-=======
-	"buildTimestamp": "202211030657",
->>>>>>> 0dd4dbfebeee62049507f11d7e8455cb6bfbdb5a
->>>>>>> b36b73222eca812e7e069e5b5c1e60e4aef87e97
+	"buildTimestamp": "202211040630",
 	"scmRevision": "",
 	"libraries": []
 }

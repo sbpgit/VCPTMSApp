@@ -22,7 +22,7 @@
 						<Title id="_IDGenTitle2" text="{i18n>pageTitle}" wrapping="true" />
                         <HBox id="_IDGenHBox2" class="newHBOX">
                         <ToolbarSpacer id="_IDGenToolbarSpacer1"/>
-                        <Button icon="sap-icon://sys-help" id="idNav" press="onNavPress" type="Emphasized" tooltip="Help Document"/>
+                        <Button class="hdrBtnMarginHdr" icon="sap-icon://sys-help" id="idNav" press="onNavPress" type="Emphasized" tooltip="Help Document"/>
                         </HBox>
 					</FlexBox>
 				</ux:snappedHeading>
@@ -72,13 +72,13 @@
                         <HBox id="_IDGenHBox1">
                             <Button id="_IDGenButton1" text="Go" type="Emphasized" press="onGetData" tooltip="Get data based on filters" class="sapUiTinyMarginEnd"/>
                             <Button id="_IDGenButton2" text="Reset" type="Transparent" press="onResetDate" tooltip="Reset Valid To Date"/>
+                        <Button class="hdrBtnMargin" icon="sap-icon://sys-help" id="idNav1" press="onNavPress" type="Emphasized" tooltip="Help Document"/>
                         </HBox>
                     </VBox>
-                    <ToolbarSpacer id="_IDGenToolbarSpacer2"/>
-                    <HBox id="HBOX1">
+                    
+                   
        
-                        <Button icon="sap-icon://sys-help" id="idNav1" press="onNavPress" type="Emphasized" tooltip="Help Document"/>             
-</HBox>
+                                     
                 </l:Grid>
             </FlexBox>
         </ux:headerContent>

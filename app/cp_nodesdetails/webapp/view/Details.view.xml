@@ -7,9 +7,13 @@
 			</contentLeft>
 				<contentMiddle>
 					<Title text="{i18n>title}" class="boldText"></Title>
-				</contentMiddle>
+                </contentMiddle>
+				<contentRight>
+				<Button icon="sap-icon://sys-help" id="idNav" press="onNavPress" type="Emphasized" tooltip="Help Document"/>
+				</contentRight>
 			</Bar>
 		</customHeader>
+       
 		<content>
 			<f:FlexibleColumnLayout id="fcl"></f:FlexibleColumnLayout>
 		</content>

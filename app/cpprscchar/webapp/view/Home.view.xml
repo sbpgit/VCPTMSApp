@@ -18,10 +18,12 @@
                     <ux:ObjectPageDynamicHeaderTitle>
                         <ux:expandedHeading>
                             <Title text="{i18n>title}" class="boldText" titleAlignment="Center" />
+                           
                         </ux:expandedHeading>
                         <ux:snappedHeading>
                             <FlexBox fitContainer="true" alignItems="Center">
                                 <Title text="{i18n>title}" wrapping="true" />
+                                <Button class="hdrBtnMarginHdr" icon="sap-icon://sys-help" id="idNav" press="onNavPress" type="Emphasized" tooltip="Help Document"/>
                             </FlexBox>
                         </ux:snappedHeading>
                     </ux:ObjectPageDynamicHeaderTitle>
@@ -45,6 +47,7 @@
                                 <Label text="" />
                                 <HBox>
                                     <Button id="idData" text="Go" type="Emphasized" press="onGetData" />
+                                     <Button class="hdrBtnMargin" icon="sap-icon://sys-help" id="idNav1" press="onNavPress" type="Emphasized" tooltip="Help Document"/>
 
                                     <!-- <Label text="" width="50px" />
                                     <Button id="idUpdate" text="Update" type="Accept" press="onPressUpdate" />

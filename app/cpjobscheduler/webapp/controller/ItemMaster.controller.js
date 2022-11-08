@@ -480,13 +480,8 @@ sap.ui.define(
             var oRouter = sap.ui.core.UIComponent.getRouterFor(that);
             oRouter.navTo("CreateJob", {}, true);
           },
-  
-
+          
      
-      
-
-
-      
     });
   }
 );
