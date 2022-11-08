@@ -17,5 +17,6 @@ service SDIService @(impl : './lib/sdi-service.js') {
     action ImportCuvtabInd(); 
     action ImportCIRLog(); 
     action ImportSOStock(); 
+    action ImportPartialProd();
     // action ImportCuvtabValc();
 }

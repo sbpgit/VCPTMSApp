@@ -1082,7 +1082,7 @@ module.exports = (srv) => {
                         return console.log('Error updating run log: %s', err);
                     }
                     //Run log updated successfully
-                    console.log("Assembly components job update results", result);
+                    console.log("Value assignment alternatives for variant table job update results", result);
 
                 });
             }
@@ -1090,7 +1090,7 @@ module.exports = (srv) => {
         else {
             let dataObj = {};
             dataObj["failed"] = false;
-            dataObj["message"] = "Assembly components has failed at" + new Date();
+            dataObj["message"] = "Value assignment alternatives for variant table has failed at" + new Date();
 
 
             if (req.headers['x-sap-job-id'] > 0) {
@@ -1103,14 +1103,227 @@ module.exports = (srv) => {
                     data: dataObj
                 };
 
-                console.log("Assembly components job update req", updateReq);
+                console.log("Value assignment alternatives for variant table job update req", updateReq);
 
                 scheduler.updateJobRunLog(updateReq, function (err, result) {
                     if (err) {
                         return console.log('Error updating run log: %s', err);
                     }
                     //Run log updated successfully
-                    console.log("Assembly components job update results", result);
+                    console.log("Value assignment alternatives for variant table job update results", result);
+
+                });
+            }
+        }
+
+    });
+    srv.on("ImportCIRLog", async (req) => {
+        var flag = '';
+        try {
+            const dbClass = require("sap-hdb-promisfied")
+            let dbConn = new dbClass(await dbClass.createConnectionFromEnv())
+            const sp = await dbConn.loadProcedurePromisified(null, '"FG_LOGCIR_SP"');
+            const output = await dbConn.callProcedurePromisified(sp, [])
+            console.log(output.results);
+            flag = 'X';
+        } catch (error) {
+            console.error(error);
+        }
+        if (flag === 'X') {
+            let dataObj = {};
+            dataObj["success"] = true;
+            dataObj["message"] = "Import CIR Logs is successfull at " + new Date();
+
+
+            if (req.headers['x-sap-job-id'] > 0) {
+                const scheduler = getJobscheduler(req);
+
+                var updateReq = {
+                    jobId: req.headers['x-sap-job-id'],
+                    scheduleId: req.headers['x-sap-job-schedule-id'],
+                    runId: req.headers['x-sap-job-run-id'],
+                    data: dataObj
+                };
+
+                console.log("CIR Logs imported, to update req", updateReq);
+
+                scheduler.updateJobRunLog(updateReq, function (err, result) {
+                    if (err) {
+                        return console.log('Error updating run log: %s', err);
+                    }
+                    //Run log updated successfully
+                    console.log("CIR Logs update results", result);
+
+                });
+            }
+        }
+        else {
+            let dataObj = {};
+            dataObj["failed"] = false;
+            dataObj["message"] = "CIR Logs has failed at" + new Date();
+
+
+            if (req.headers['x-sap-job-id'] > 0) {
+                const scheduler = getJobscheduler(req);
+
+                var updateReq = {
+                    jobId: req.headers['x-sap-job-id'],
+                    scheduleId: req.headers['x-sap-job-schedule-id'],
+                    runId: req.headers['x-sap-job-run-id'],
+                    data: dataObj
+                };
+
+                console.log("CIR Logs job update req", updateReq);
+
+                scheduler.updateJobRunLog(updateReq, function (err, result) {
+                    if (err) {
+                        return console.log('Error updating run log: %s', err);
+                    }
+                    //Run log updated successfully
+                    console.log("CIR Logs job update results", result);
+
+                });
+            }
+        }
+
+    });
+    srv.on("ImportSOStock", async (req) => {
+        var flag = '';
+        try {
+            const dbClass = require("sap-hdb-promisfied")
+            let dbConn = new dbClass(await dbClass.createConnectionFromEnv())
+            const sp = await dbConn.loadProcedurePromisified(null, '"FG_IBPSTOCK_SP"');
+            const output = await dbConn.callProcedurePromisified(sp, [])
+            console.log(output.results);
+            flag = 'X';
+        } catch (error) {
+            console.error(error);
+        }
+        if (flag === 'X') {
+            let dataObj = {};
+            dataObj["success"] = true;
+            dataObj["message"] = "Import of Salesorder stock status is successfull at " + new Date();
+
+
+            if (req.headers['x-sap-job-id'] > 0) {
+                const scheduler = getJobscheduler(req);
+
+                var updateReq = {
+                    jobId: req.headers['x-sap-job-id'],
+                    scheduleId: req.headers['x-sap-job-schedule-id'],
+                    runId: req.headers['x-sap-job-run-id'],
+                    data: dataObj
+                };
+
+                console.log("Salesorder stock status imported, to update req", updateReq);
+
+                scheduler.updateJobRunLog(updateReq, function (err, result) {
+                    if (err) {
+                        return console.log('Error updating run log: %s', err);
+                    }
+                    //Run log updated successfully
+                    console.log("Salesorder stock status update results", result);
+
+                });
+            }
+        }
+        else {
+            let dataObj = {};
+            dataObj["failed"] = false;
+            dataObj["message"] = "Salesorder stock status import has failed at" + new Date();
+
+
+            if (req.headers['x-sap-job-id'] > 0) {
+                const scheduler = getJobscheduler(req);
+
+                var updateReq = {
+                    jobId: req.headers['x-sap-job-id'],
+                    scheduleId: req.headers['x-sap-job-schedule-id'],
+                    runId: req.headers['x-sap-job-run-id'],
+                    data: dataObj
+                };
+
+                console.log("Salesorder stock status job update req", updateReq);
+
+                scheduler.updateJobRunLog(updateReq, function (err, result) {
+                    if (err) {
+                        return console.log('Error updating run log: %s', err);
+                    }
+                    //Run log updated successfully
+                    console.log("Salesorder stock status job update results", result);
+
+                });
+            }
+        }
+
+    });
+    srv.on("ImportPartialProd", async (req) => {
+        var flag = '';
+        try {
+            const dbClass = require("sap-hdb-promisfied")
+            let dbConn = new dbClass(await dbClass.createConnectionFromEnv())
+            const sp = await dbConn.loadProcedurePromisified(null, '"FG_PARTIALPROD_SP"');
+            const sp2 = await dbConn.loadProcedurePromisified(null, '"FG_PARTIALPRODCFG_SP"');
+            const output = await dbConn.callProcedurePromisified(sp, [])
+            const output2 = await dbConn.callProcedurePromisified(sp2, [])
+            console.log(output.results);
+            console.log(output2.results);
+            flag = 'X';
+        } catch (error) {
+            console.error(error);
+        }
+        if (flag === 'X') {
+            let dataObj = {};
+            dataObj["success"] = true;
+            dataObj["message"] = "Import of Partial Products is successfull at " + new Date();
+
+
+            if (req.headers['x-sap-job-id'] > 0) {
+                const scheduler = getJobscheduler(req);
+
+                var updateReq = {
+                    jobId: req.headers['x-sap-job-id'],
+                    scheduleId: req.headers['x-sap-job-schedule-id'],
+                    runId: req.headers['x-sap-job-run-id'],
+                    data: dataObj
+                };
+
+                console.log("Partial Products imported, to update req", updateReq);
+
+                scheduler.updateJobRunLog(updateReq, function (err, result) {
+                    if (err) {
+                        return console.log('Error updating run log: %s', err);
+                    }
+                    //Run log updated successfully
+                    console.log("Partial Products job update results", result);
+
+                });
+            }
+        }
+        else {
+            let dataObj = {};
+            dataObj["failed"] = false;
+            dataObj["message"] = "Partial Products has failed at" + new Date();
+
+
+            if (req.headers['x-sap-job-id'] > 0) {
+                const scheduler = getJobscheduler(req);
+
+                var updateReq = {
+                    jobId: req.headers['x-sap-job-id'],
+                    scheduleId: req.headers['x-sap-job-schedule-id'],
+                    runId: req.headers['x-sap-job-run-id'],
+                    data: dataObj
+                };
+
+                console.log("Partial Products job update req", updateReq);
+
+                scheduler.updateJobRunLog(updateReq, function (err, result) {
+                    if (err) {
+                        return console.log('Error updating run log: %s', err);
+                    }
+                    //Run log updated successfully
+                    console.log("Partial Products job update results", result);
 
                 });
             }

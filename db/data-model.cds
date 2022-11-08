@@ -34,7 +34,7 @@ context cp {
 
     // Product
     entity PRODUCT {
-        key PRODUCT_ID     : String(40) @title : 'Configurable Product';
+        key PRODUCT_ID     : String(40) @title : 'Product';
             PROD_DESC      : String(40) @title : 'Product Description';
             PROD_FAMILY    : String(30) @title : 'Product Family';
             PROD_GROUP     : String(30) @title : 'Product Group';
@@ -53,7 +53,7 @@ context cp {
     // Product and LOcation table
     entity LOCATION_PRODUCT {
         key LOCATION_ID       : String(4)  @title : 'Location ';
-        key PRODUCT_ID        : String(40) @title : 'Configurable Product';
+        key PRODUCT_ID        : String(40) @title : 'Product';
             LOTSIZE_KEY       : String(2)  @title : 'Lot Size Key';
             LOT_SIZE          : Integer    @title : 'Lot Size';
             PROCUREMENT_TYPE  : String(1)  @title : 'Procurement Type';
@@ -63,7 +63,7 @@ context cp {
     // BOM header
     entity BOMHEADER {
         key LOCATION_ID : String(4)      @title : 'Location '; //Association to ZLOCATION;//
-        key PRODUCT_ID  : String(40)     @title : 'Configurable Product';
+        key PRODUCT_ID  : String(40)     @title : 'Product';
         key ITEM_NUM    : String(5)      @title : 'Item Number ';
         key COMPONENT   : String(40)     @title : 'Component';
             COMP_QTY    : Decimal(13, 3) @title : 'Component Quantity';
@@ -74,7 +74,7 @@ context cp {
     // BOM object dependency
     entity BOM_OBJDEPENDENCY {
         key LOCATION_ID : String(4)      @title : 'Location '; //Association to ZLOCATION;//
-        key PRODUCT_ID  : String(40)     @title : 'Configurable Product';
+        key PRODUCT_ID  : String(40)     @title : 'Product';
         key ITEM_NUM    : String(5)      @title : 'Item Number ';
         key COMPONENT   : String(40)     @title : 'Component';
         key OBJ_DEP     : String(30)     @title : 'Object Dependency';
@@ -92,7 +92,7 @@ context cp {
         key CLASS_NUM    : String(18) @title : 'Internal class number';
         key CHAR_NUM     : String(10) @title : 'Internal Char. number';
         key CHAR_COUNTER : Integer    @title : 'Characteristic counter';
-        key CHARVAL_NUM  : String(10) @title : 'Internal Char. number';
+        key CHARVAL_NUM  : String(70) @title : 'Internal Char. number';
             OD_CONDITION : String(2)  @title : 'Object Dependency condition ';
             ROW_ID       : Integer    @title : 'Attribute Index ';
     };
@@ -169,7 +169,7 @@ context cp {
         key SALES_DOC     : String(10) @title : 'Sales Document';
         key SALESDOC_ITEM : String(6)  @title : 'Sales Document Item';
         key CHAR_NUM      : String(10) @title : 'Internal number Char.';
-            CHARVAL_NUM   : String(10) @title : 'Internal number Char. Value ';
+            CHARVAL_NUM   : String(70) @title : 'Internal number Char. Value ';
             PRODUCT_ID    : String(40) @title : 'Product Id';
             // PROD_AVAILDATE : Date      @title : 'Prod Availability Date';
             CHANGED_DATE  : Date       @title : 'Changed Date';
@@ -184,7 +184,7 @@ context cp {
     entity SALESH_CFG_SMRY {
         key WEEK_DATE      : Date           @title : 'Week Date';
         key CHAR_NUM       : String(10)     @title : 'Internal number Char.';
-        key CHARVAL_NUM    : String(10)     @title : 'Internal number Char. Value ';
+        key CHARVAL_NUM    : String(70)     @title : 'Internal number Char. Value ';
         key CLASS_NUM      : String(18)     @title : 'Internal number class';
         key PRODUCT_ID     : String(40)     @title : 'Product ID';
         key CUSTOMER_GROUP : String(20)     @title : 'Customer Group';
@@ -288,7 +288,7 @@ context cp {
     // Characteristic Values
     entity CHAR_VALUES {
         key CHAR_NUM     : String(10)  @title : 'Internal Char. number';
-        key CHARVAL_NUM  : String(15)  @title : 'Internal Char. number';
+        key CHARVAL_NUM  : String(70)  @title : 'Internal Char. number';
             CHAR_VALUE   : String(70)  @title : 'Charateristic Value';
             CHARVAL_DESC : String(150) @title : 'Charateristic Value Desc.';
             CATCH_ALL    : String(1)   @title : 'Catch all';
@@ -341,16 +341,16 @@ context cp {
 
     // IBp Future characteristic plan
     entity IBP_FCHARPLAN {
-        key LOCATION_ID : String(4)      @title : 'Location ID';
-        key PRODUCT_ID  : String(40)     @title : 'Product ID';
-        key CLASS_NUM   : String(20)     @title : 'Class Name';
-        key CHAR_NUM    : String(30)     @title : 'Charateristic Name';
-        key CHARVAL_NUM : String(70)     @title : 'Charateristic Value';
-        key VERSION     : String(10)     @title : 'Version';
-        key SCENARIO    : String(32)     @title : 'Scenario';
-        key WEEK_DATE   : Date           @title : 'Weekly Date';
-            OPT_PERCENT : Decimal(5, 2)  @title : 'Option Percnetage';
-            OPT_QTY     : Decimal(13, 3) @title : 'Option Quantity';
+        key LOCATION_ID  : String(4)      @title : 'Location ID';
+        key PRODUCT_ID   : String(40)     @title : 'Product ID';
+        key CLASS_NUM    : String(20)     @title : 'Class Name';
+        key CHAR_NUM     : String(30)     @title : 'Charateristic Name';
+        key CHARVAL_NUM  : String(70)     @title : 'Charateristic Value';
+        key VERSION      : String(10)     @title : 'Version';
+        key SCENARIO     : String(32)     @title : 'Scenario';
+        key WEEK_DATE    : Date           @title : 'Weekly Date';
+            OPT_PERCENT  : Decimal(5, 2)  @title : 'Option Percnetage';
+            OPT_QTY      : Decimal(13, 3) @title : 'Option Quantity';
             MANUALOPTION : Decimal(5, 2)  @title : 'Manual Option Percnetage';
     }
 
@@ -645,7 +645,7 @@ context cp {
         key CLASS_NUM    : String(18) @title : 'Internal class number';
         key CHAR_NUM     : String(10) @title : 'Internal Char. number';
         key CHAR_COUNTER : Integer    @title : 'Characteristic counter';
-        key CHARVAL_NUM  : String(15) @title : 'Internal Char. number';
+        key CHARVAL_NUM  : String(70) @title : 'Internal Char. number';
             OD_CONDITION : String(2)  @title : 'Restriction condition ';
             ROW_ID       : Integer    @title : 'Attribute Index ';
     };
@@ -654,7 +654,7 @@ context cp {
     entity PROD_LOC_LINE {
         key LOCATION_ID : String(4)  @title : 'Location ';
         key LINE_ID     : String(40) @title : 'Line';
-        key PRODUCT_ID  : String(40) @title : 'Configurable Product';
+        key PRODUCT_ID  : String(40) @title : 'Product';
     };
 
     entity LINEMASTER {
@@ -713,7 +713,9 @@ context cp {
         key LOCATION_ID : String(4)  @title : 'Location ';
         key PRODUCT_ID  : String(40) @title : 'Product';
         key CHAR_NUM    : String(10) @title : 'Internal Char. number';
-        key CHARVAL_NUM : String(10) @title : 'Internal Char. number';
+        key CHARVAL_NUM : String(70) @title : 'Internal Char. number';
+        key VERSION     : String(10) @title : 'Version';
+        key SCENARIO    : String(32) @title : 'Scenario';
             OPT_PERCENT : Double     @title : 'Option Percentage';
     }
 
@@ -791,11 +793,9 @@ context cp {
     }
 
     entity FACTORY_SALESLOC {
-        key LOCATION_ID : String(4)  @title : 'Demand Location ';
-        key PRODUCT_ID  : String(40) @title : 'Product';
-        key PLAN_LOC    : String(4)  @title : 'Planning Location ';
-        key FACTORY_LOC : String(4)  @title : 'Factory Location ';
-    // key SALES_PRODUCT : String(40) @title : 'Sales Product';
+        key LOCATION_ID : String(4) @title : 'Demand Location ';
+        key PLAN_LOC    : String(4) @title : 'Planning Location ';
+        key FACTORY_LOC : String(4) @title : 'Factory Location ';
     }
 
     entity CRITICAL_COMP {
@@ -810,12 +810,12 @@ context cp {
         key LOCATION_ID : String(4)  @title : 'Location ';
         key PRODUCT_ID  : String(40) @title : 'Product';
         key CHAR_NUM    : String(10) @title : 'Internal Char. number';
-        key CHARVAL_NUM : String(10) @title : 'Internal Char. number';
+        key CHARVAL_NUM : String(70) @title : 'Internal Char. number';
             OPT_PERCENT : Double     @title : 'Option Percentage';
     }
 
     entity CIRLOG {
-        key PRODUCT_ID  : String(40)     @title : 'Configurable Product';
+        key PRODUCT_ID  : String(40)     @title : 'Product';
         key CIR_ID      : Integer        @title : 'CIR ID';
         key LOCATION_ID : String(4)      @title : 'Location ';
         key UNIQUE_ID   : Integer        @title : 'Unique ID';
@@ -856,7 +856,7 @@ entity![V_OBDHDR]{
     key![OBJDEP_DESC]  : String(30)     @title : 'OBJDEP_DESC';
     key![CLASS_NUM]    : String(18)     @title : 'Internal Class Number';
     key![CHAR_NUM]     : String(10)     @title : 'Char Num';
-    key![CHARVAL_NUM]  : String(10)     @title : 'Charval Num';
+    key![CHARVAL_NUM]  : String(70)     @title : 'Charval Num';
     key![OD_CONDITION] : String(2)      @title : 'OD_CONDITION';
     key![OBJ_COUNTER]  : Integer        @title : 'OBJ_COUNTER';
     key![CHAR_COUNTER] : Integer        @title : 'CHAR_COUNTER';
@@ -873,7 +873,7 @@ entity![V_CLASSCHARVAL]{
     key![CHAR_DESC]    : String(150) @title : 'CHAR_NAME';
     key![CHAR_GROUP]   : String(10)  @title : 'CHAR_NAME';
     key![CHAR_VALUE]   : String(70)  @title : 'CHAR_VALUE';
-    key![CHARVAL_NUM]  : String(10)  @title : 'CHARVAL_NUM';
+    key![CHARVAL_NUM]  : String(70)  @title : 'CHARVAL_NUM';
     key![CHARVAL_DESC] : String(150) @title : 'CHAR_DESC';
 }
 
@@ -941,7 +941,7 @@ entity![V_ODCHARVAL]{
     key![CLASS_NAME]   : String(20) @title : 'CLASS_NAME';
     key![CHAR_NUM]     : String(10) @title : 'CHAR_NUM';
     key![CHAR_NAME]    : String(30) @title : 'CHAR_NAME';
-    key![CHARVAL_NUM]  : String(10) @title : 'CHARVAL_NUM';
+    key![CHARVAL_NUM]  : String(70) @title : 'CHARVAL_NUM';
     key![CHAR_VALUE]   : String(70) @title : 'CHAR_VALUE';
     key![OD_CONDITION] : String(2)  @title : 'OD_CONDITION';
     key![CHAR_COUNTER] : Integer    @title : 'CHAR_COUNTER';
@@ -1077,7 +1077,7 @@ entity![V_PRODCLSCHARVAL]{
     key![CHAR_NUM]     : String(10)  @title : 'CHAR_NUM';
     key![CHAR_NAME]    : String(30)  @title : 'CHAR_NAME';
     key![CHAR_DESC]    : String(150) @title : 'CHAR_DESC';
-    key![CHARVAL_NUM]  : String(15)  @title : 'CHARVAL_NUM';
+    key![CHARVAL_NUM]  : String(70)  @title : 'CHARVAL_NUM';
     key![CHAR_VALUE]   : String(70)  @title : 'CHAR_VALUE';
     key![CHARVAL_DESC] : String(150) @title : 'CHAR_DESC';
 }
@@ -1163,7 +1163,7 @@ entity![V_ODRESTRICT]{
     key![CLASS_NAME]   : String(20) @title : 'Class Name';
     key![CHAR_NUM]     : String(10) @title : 'Internal No. Characteristic';
     key![CHAR_NAME]    : String(30) @title : 'Characteristic Name';
-    key![CHARVAL_NUM]  : String(10) @title : 'Internal No. Characteristic value';
+    key![CHARVAL_NUM]  : String(70) @title : 'Internal No. Characteristic value';
     key![CHAR_VALUE]   : String(70) @title : 'Characteristic Value';
     key![OD_CONDITION] : String(2)  @title : 'Object Dep. Condition';
     key![CHAR_COUNTER] : Integer    @title : 'Characteristic Counter';
@@ -1245,7 +1245,7 @@ entity![V_CIR_QTY_VARDESC]{
     ![VERSION]       : String(10) not null @title : 'VERSION';
     ![SCENARIO]      : String(32) not null @title : 'SCENARIO';
     ![CHAR_NUM]      : String(10) not null @title : 'CHAR_NUM';
-    ![CHARVAL_NUM]   : String(15) not null @title : 'CHARVAL_NUM';
+    ![CHARVAL_NUM]   : String(70) not null @title : 'CHARVAL_NUM';
     ![CHAR_DESC]     : String(150)         @title : 'CHAR_DESC';
     ![CHARVAL_DESC]  : String(150)         @title : 'CHARVAL_DESC';
     ![SEQUENCE]      : Integer             @title : 'SEQUENCE';

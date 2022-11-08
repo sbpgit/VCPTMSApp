@@ -206,7 +206,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
     entity getUniqueHeader      as projection on od.UNIQUE_ID_HEADER;
     entity getUniqueItem        as projection on V_UNIQUE_ID_ITEM;
     entity getUniqueId          as projection on V_UNIQUE_ID;
-    function gen_UniqueID(LOCATION_ID : String(4), PRODUCT_ID : String(40))                                                                                                                                                                                                      returns String;
+    function gen_UniqueID(LOCATION_ID : String(4), PRODUCT_ID : String(40))                     returns String;
     function changeUnique(UNIQUE_ID : Integer, LOCATION_ID : String(4), PRODUCT_ID : String(40), UID_TYPE : String(1), UNIQUE_DESC : String(50), ACTIVE : String(1), FLAG : String)                                                                                              returns String;
     function maintainUniqueChar(FLAG : String(1), UNIQUECHAR : String)                                                                                                                                                                                                           returns String;
 
