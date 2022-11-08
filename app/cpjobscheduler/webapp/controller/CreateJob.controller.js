@@ -158,6 +158,16 @@ sap.ui.define(
                 this.oClassList = this._oCore.byId(
                     this._valueHelpDialogClassDetails.getId() + "-list"
                 );
+
+                that.typeData = {"Types":[{"name":"Restrictions","key":"RT"},
+
+                {"name":"Primary","key":"PI"}
+                
+                ]};
+
+                var jmodel= new sap.ui.model.json.JSONModel(that.typeData);
+                    this.getView().byId("MidType").setModel(jmodel);
+
                 // calling function to select the Job Type
                 that.fixDate();
                 that.onJobSelect();
@@ -347,6 +357,12 @@ sap.ui.define(
                     switch (oSelJob) {
                         case "M":
                             that.byId("modelGenPanel").setVisible(true);
+                            that.typeData = {
+                                "Types": [{ "name": "Restrictions", "key": "RT" },
+                                          { "name": "Primary", "key": "PI" }]
+                                    };
+                            var jmodel = new sap.ui.model.json.JSONModel(that.typeData);
+                            this.getView().byId("MidType").setModel(jmodel);
                             break;
                         case "P":
                             that.byId("PredPanel").setVisible(true);
@@ -399,6 +415,7 @@ sap.ui.define(
                         */
                         case "S":
                             that.byId("sdiPanel").setVisible(true);
+                            that.byId("idSdi").setSelectedKey("LO");
                             break;
                         case "D":
                             that.byId("FullDemandPanel").setVisible(true);
@@ -1098,6 +1115,33 @@ sap.ui.define(
                         },
                     });
                 }
+
+                if (oJobType === "M" || oJobType === "P") {
+                this.getModel("BModel").read("/getPlancfgPara", {
+                    filters: [
+                        new Filter( "LOCATION_ID", FilterOperator.EQ, that.oLoc.getValue() ),
+                        new Filter( "PARAMETER_ID", FilterOperator.EQ, "5" ),
+                    ],
+                    success: function (oData) {
+                        if(oData.results[0].VALUE !== "M2"){
+                            that.typeData = {
+                                "Types": [{ "name": "Restrictions", "key": "RT" },
+                                          { "name": "Primary", "key": "PI" },
+                                          { "name": "Object Dependency", "key": "OD" }]
+                                    };
+                            var jmodel = new sap.ui.model.json.JSONModel(that.typeData);
+                            this.getView().byId("MidType").setModel(jmodel);
+                        }
+                    },
+                    error: function (oData, error) {
+                        MessageToast.show("error");
+                    },
+                });
+            }
+
+
+                
+
             },
 
             jobtypeProduct: function (data, type) {

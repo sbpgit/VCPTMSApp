@@ -92,10 +92,11 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                                             <Label text="{i18n>type}" />
                                         </f:label>
                                         <f:fields>
-                                            <Select id="MidType" selectedKey="RT" class="buttonDesktop">                                                
-                                                <core:ListItem key="RT" text="Restrictions" />
-                                                <core:ListItem key="PI" text="Primary" />
-                                                <core:ListItem key="OD" text="Object Dependency"/>
+                                            <Select id="MidType" selectedKey="RT" class="buttonDesktop" items="{/Types}">   
+                                                <core:Item text="{name}" key="{key}"/>                                            
+                                                <!-- <core:Item key="RT" text="Restrictions" />
+                                                <core:Item key="PI" text="Primary" />
+                                                <core:Item key="OD" text="Object Dependency"/> -->
                                             </Select>
                                         </f:fields>
                                     </f:FormElement>
