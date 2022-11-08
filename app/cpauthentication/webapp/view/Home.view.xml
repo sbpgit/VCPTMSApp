@@ -2,6 +2,13 @@
     xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
     xmlns="sap.m">
     <Page id="page" title="{i18n>title}">
+    <customHeader>
+            <Toolbar id="_IDGenToolbar1" >
+                <Title id="profTitle" text="{i18n>title}" class="boldText"></Title>
+                <ToolbarSpacer id="_IDGenToolbarSpacer1"/>
+                <Button icon="sap-icon://sys-help" id="idNav" press="onNavPress" type="Emphasized" tooltip="Help Document"/>
+            </Toolbar>
+        </customHeader>
         <content>
         <VBox>
         <Label text = "Display Name : {userModel>/decodedJWTToken/givenName} {userModel>/decodedJWTToken/family_name}"/>

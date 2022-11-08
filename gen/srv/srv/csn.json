@@ -504,7 +504,11 @@
       ],
       "elements": {
         "PRODUCT_ID": {
+<<<<<<< HEAD
+          "@title": "Product",
+=======
           "@title": "Configurable Product",
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
           "key": true,
           "type": "cds.String",
           "length": 40
@@ -709,7 +713,11 @@
           "length": 4
         },
         "PRODUCT_ID": {
+<<<<<<< HEAD
+          "@title": "Product",
+=======
           "@title": "Configurable Product",
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
           "key": true,
           "type": "cds.String",
           "length": 40
@@ -745,7 +753,11 @@
           "length": 4
         },
         "PRODUCT_ID": {
+<<<<<<< HEAD
+          "@title": "Product",
+=======
           "@title": "Configurable Product",
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
           "key": true,
           "type": "cds.String",
           "length": 40
@@ -788,7 +800,11 @@
           "length": 4
         },
         "PRODUCT_ID": {
+<<<<<<< HEAD
+          "@title": "Product",
+=======
           "@title": "Configurable Product",
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
           "key": true,
           "type": "cds.String",
           "length": 40
@@ -867,7 +883,11 @@
           "@title": "Internal Char. number",
           "key": true,
           "type": "cds.String",
+<<<<<<< HEAD
+          "length": 70
+=======
           "length": 10
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
         },
         "OD_CONDITION": {
           "@title": "Object Dependency condition ",
@@ -1046,7 +1066,11 @@
         "CHARVAL_NUM": {
           "@title": "Internal number Char. Value ",
           "type": "cds.String",
+<<<<<<< HEAD
+          "length": 70
+=======
           "length": 10
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
         },
         "PRODUCT_ID": {
           "@title": "Product Id",
@@ -1255,7 +1279,11 @@
           "@title": "Internal number Char. Value ",
           "key": true,
           "type": "cds.String",
+<<<<<<< HEAD
+          "length": 70
+=======
           "length": 10
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
         },
         "CLASS_NUM": {
           "@title": "Internal number class",
@@ -1982,7 +2010,11 @@
           "@title": "Internal Char. number",
           "key": true,
           "type": "cds.String",
+<<<<<<< HEAD
+          "length": 70
+=======
           "length": 15
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
         },
         "CHAR_VALUE": {
           "@title": "Charateristic Value",
@@ -3764,7 +3796,11 @@
           "@title": "Internal Char. number",
           "key": true,
           "type": "cds.String",
+<<<<<<< HEAD
+          "length": 70
+=======
           "length": 15
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
         },
         "OD_CONDITION": {
           "@title": "Restriction condition ",
@@ -3872,7 +3908,11 @@
           "length": 40
         },
         "PRODUCT_ID": {
+<<<<<<< HEAD
+          "@title": "Product",
+=======
           "@title": "Configurable Product",
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
           "key": true,
           "type": "cds.String",
           "length": 40
@@ -4025,8 +4065,25 @@
           "@title": "Internal Char. number",
           "key": true,
           "type": "cds.String",
+<<<<<<< HEAD
+          "length": 70
+        },
+        "VERSION": {
+          "@title": "Version",
+          "key": true,
+          "type": "cds.String",
           "length": 10
         },
+        "SCENARIO": {
+          "@title": "Scenario",
+          "key": true,
+          "type": "cds.String",
+          "length": 32
+        },
+=======
+          "length": 10
+        },
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
         "OPT_PERCENT": {
           "@title": "Option Percentage",
           "type": "cds.Double"
@@ -4574,6 +4631,15 @@
       "@UI.SelectionFields": [
         {
           "=": "LOCATION_ID"
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+        },
+        {
+          "=": "PRODUCT_ID"
+=======
+>>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
         }
       ],
       "@UI.LineItem": [
@@ -4592,6 +4658,24 @@
         {
           "$Type": "UI.DataField",
           "Value": {
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+            "=": "PRODUCT_ID"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          },
+          "@HTML5.CssDefaults": {
+            "width": "15rem"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+=======
+>>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
             "=": "PLAN_LOC"
           },
           "@UI.Importance": {
@@ -4618,7 +4702,15 @@
         "=": "LOCATION_ID"
       },
       "@UI.HeaderInfo.Description.Value": {
+<<<<<<< HEAD
         "=": "LOCATION_ID"
+=======
+<<<<<<< HEAD
+        "=": "PRODUCT_ID"
+=======
+        "=": "LOCATION_ID"
+>>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
       },
       "@UI.HeaderInfo.TypeName": "Demand - Plan - Factory Location",
       "@UI.HeaderInfo.TypeNamePlural": "Demand - Plan - Factory Location-Product",
@@ -4657,6 +4749,18 @@
           "type": "cds.String",
           "length": 4
         },
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+        "PRODUCT_ID": {
+          "@title": "Product",
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+=======
+>>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
         "PLAN_LOC": {
           "@title": "Planning Location ",
           "key": true,
@@ -4729,7 +4833,11 @@
           "@title": "Internal Char. number",
           "key": true,
           "type": "cds.String",
+<<<<<<< HEAD
+          "length": 70
+=======
           "length": 10
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
         },
         "OPT_PERCENT": {
           "@title": "Option Percentage",
@@ -4889,7 +4997,11 @@
       ],
       "elements": {
         "PRODUCT_ID": {
+<<<<<<< HEAD
+          "@title": "Product",
+=======
           "@title": "Configurable Product",
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
           "key": true,
           "type": "cds.String",
           "length": 40
@@ -5037,7 +5149,11 @@
           "@title": "Charval Num",
           "key": true,
           "type": "cds.String",
+<<<<<<< HEAD
+          "length": 70
+=======
           "length": 10
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
         },
         "OD_CONDITION": {
           "@title": "OD_CONDITION",
@@ -5118,7 +5234,11 @@
           "@title": "CHARVAL_NUM",
           "key": true,
           "type": "cds.String",
+<<<<<<< HEAD
+          "length": 70
+=======
           "length": 10
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
         },
         "CHARVAL_DESC": {
           "@title": "CHAR_DESC",
@@ -5628,7 +5748,11 @@
           "@title": "CHARVAL_NUM",
           "key": true,
           "type": "cds.String",
+<<<<<<< HEAD
+          "length": 70
+=======
           "length": 10
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
         },
         "CHAR_VALUE": {
           "@title": "CHAR_VALUE",
@@ -6338,7 +6462,11 @@
           "@title": "CHARVAL_NUM",
           "key": true,
           "type": "cds.String",
+<<<<<<< HEAD
+          "length": 70
+=======
           "length": 15
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
         },
         "CHAR_VALUE": {
           "@title": "CHAR_VALUE",
@@ -6730,7 +6858,11 @@
           "@title": "Internal No. Characteristic value",
           "key": true,
           "type": "cds.String",
+<<<<<<< HEAD
+          "length": 70
+=======
           "length": 10
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
         },
         "CHAR_VALUE": {
           "@title": "Characteristic Value",
@@ -7090,7 +7222,11 @@
         "CHARVAL_NUM": {
           "@title": "CHARVAL_NUM",
           "type": "cds.String",
+<<<<<<< HEAD
+          "length": 70,
+=======
           "length": 15,
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
           "notNull": true
         },
         "CHAR_DESC": {
@@ -8695,7 +8831,11 @@
           "@title": "Job Name",
           "key": true,
           "type": "cds.String",
+<<<<<<< HEAD
+          "length": 200
+=======
           "length": 50
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
         },
         "ACTION": {
           "@title": "Action",
@@ -9068,7 +9208,11 @@
           "@title": "Job Name",
           "key": true,
           "type": "cds.String",
+<<<<<<< HEAD
+          "length": 200
+=======
           "length": 50
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
         },
         "ACTION": {
           "@title": "Action",
@@ -11960,7 +12104,11 @@
           "@title": "Job Name",
           "key": true,
           "type": "cds.String",
+<<<<<<< HEAD
+          "length": 200
+=======
           "length": 50
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
         },
         "ACTION": {
           "@title": "Action",
@@ -12389,7 +12537,11 @@
           "@title": "Job Name",
           "key": true,
           "type": "cds.String",
+<<<<<<< HEAD
+          "length": 200
+=======
           "length": 50
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
         },
         "ACTION": {
           "@title": "Action",
@@ -15949,6 +16101,39 @@
         }
       }
     },
+<<<<<<< HEAD
+    "PalService.purgePredictions": {
+      "kind": "action",
+      "params": {
+        "vcRulesList": {
+          "items": {
+            "elements": {
+              "Location": {
+                "type": "cds.String",
+                "length": 4
+              },
+              "Product": {
+                "type": "cds.String",
+                "length": 40
+              },
+              "GroupID": {
+                "type": "cds.String",
+                "length": 20
+              },
+              "Type": {
+                "type": "cds.String",
+                "length": 10
+              },
+              "startDate": {
+                "type": "cds.Date"
+              }
+            }
+          }
+        }
+      }
+    },
+=======
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
     "PalService.fgModels": {
       "kind": "function",
       "params": {
@@ -16285,7 +16470,11 @@
               "ValueListProperty": "PROD_DESC"
             }
           ],
+<<<<<<< HEAD
+          "@title": "Product",
+=======
           "@title": "Configurable Product",
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
           "key": true,
           "type": "cds.String",
           "length": 40
@@ -17172,7 +17361,11 @@
               "ValueListProperty": "LOCATION_ID"
             }
           ],
+<<<<<<< HEAD
+          "@title": "Product",
+=======
           "@title": "Configurable Product",
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
           "key": true,
           "type": "cds.String",
           "length": 40
@@ -17260,7 +17453,11 @@
         "CHARVAL_NUM": {
           "@title": "Internal number Char. Value ",
           "type": "cds.String",
+<<<<<<< HEAD
+          "length": 70
+=======
           "length": 10
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
         },
         "PRODUCT_ID": {
           "@title": "Product Id",
@@ -17615,7 +17812,11 @@
           "length": 4
         },
         "PRODUCT_ID": {
+<<<<<<< HEAD
+          "@title": "Product",
+=======
           "@title": "Configurable Product",
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
           "key": true,
           "type": "cds.String",
           "length": 40
@@ -17666,7 +17867,11 @@
           "length": 4
         },
         "PRODUCT_ID": {
+<<<<<<< HEAD
+          "@title": "Product",
+=======
           "@title": "Configurable Product",
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
           "key": true,
           "type": "cds.String",
           "length": 40
@@ -18948,7 +19153,11 @@
           "@title": "Charval Num",
           "key": true,
           "type": "cds.String",
+<<<<<<< HEAD
+          "length": 70
+=======
           "length": 10
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
         },
         "OD_CONDITION": {
           "@title": "OD_CONDITION",
@@ -19413,7 +19622,11 @@
           "@title": "CHARVAL_NUM",
           "key": true,
           "type": "cds.String",
+<<<<<<< HEAD
+          "length": 70
+=======
           "length": 15
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
         },
         "CHAR_VALUE": {
           "@title": "CHAR_VALUE",
@@ -19491,7 +19704,11 @@
           "@title": "CHARVAL_NUM",
           "key": true,
           "type": "cds.String",
+<<<<<<< HEAD
+          "length": 70
+=======
           "length": 10
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
         },
         "CHARVAL_DESC": {
           "@title": "CHAR_DESC",
@@ -19610,7 +19827,11 @@
           "@title": "CHARVAL_NUM",
           "key": true,
           "type": "cds.String",
+<<<<<<< HEAD
+          "length": 70
+=======
           "length": 10
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
         },
         "CHAR_VALUE": {
           "@title": "CHAR_VALUE",
@@ -21254,7 +21475,11 @@
           "@title": "Internal No. Characteristic value",
           "key": true,
           "type": "cds.String",
+<<<<<<< HEAD
+          "length": 70
+=======
           "length": 10
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
         },
         "CHAR_VALUE": {
           "@title": "Characteristic Value",
@@ -21426,7 +21651,11 @@
               "ValueListProperty": "LOCATION_ID"
             }
           ],
+<<<<<<< HEAD
+          "@title": "Product",
+=======
           "@title": "Configurable Product",
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
           "key": true,
           "type": "cds.String",
           "length": 40
@@ -21642,7 +21871,11 @@
         "CHARVAL_NUM": {
           "@title": "CHARVAL_NUM",
           "type": "cds.String",
+<<<<<<< HEAD
+          "length": 70,
+=======
           "length": 15,
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
           "notNull": true
         },
         "CHAR_DESC": {
@@ -22081,6 +22314,34 @@
         }
       }
     },
+<<<<<<< HEAD
+    "CatalogService.getPlancfgPara": {
+      "kind": "entity",
+      "projection": {
+        "from": {
+          "ref": [
+            "cp.PARAMETER_VALUES"
+          ]
+        }
+      },
+      "elements": {
+        "LOCATION_ID": {
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "PARAMETER_ID": {
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "VALUE": {
+          "type": "cds.String",
+          "length": 500
+        }
+      }
+    },
+=======
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
     "CatalogService.getCIRLog": {
       "kind": "entity",
       "@readonly": true,
@@ -22260,7 +22521,11 @@
               "ValueListProperty": "LOCATION_ID"
             }
           ],
+<<<<<<< HEAD
+          "@title": "Product",
+=======
           "@title": "Configurable Product",
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
           "key": true,
           "type": "cds.String",
           "length": 40
@@ -22928,6 +23193,15 @@
       "@UI.SelectionFields": [
         {
           "=": "LOCATION_ID"
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+        },
+        {
+          "=": "PRODUCT_ID"
+=======
+>>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
         }
       ],
       "@UI.LineItem": [
@@ -22946,6 +23220,24 @@
         {
           "$Type": "UI.DataField",
           "Value": {
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+            "=": "PRODUCT_ID"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          },
+          "@HTML5.CssDefaults": {
+            "width": "15rem"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+=======
+>>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
             "=": "PLAN_LOC"
           },
           "@UI.Importance": {
@@ -22972,7 +23264,15 @@
         "=": "LOCATION_ID"
       },
       "@UI.HeaderInfo.Description.Value": {
+<<<<<<< HEAD
         "=": "LOCATION_ID"
+=======
+<<<<<<< HEAD
+        "=": "PRODUCT_ID"
+=======
+        "=": "LOCATION_ID"
+>>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
       },
       "@UI.HeaderInfo.TypeName": "Demand - Plan - Factory Location",
       "@UI.HeaderInfo.TypeNamePlural": "Demand - Plan - Factory Location-Product",
@@ -23030,6 +23330,37 @@
           "type": "cds.String",
           "length": 4
         },
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+        "PRODUCT_ID": {
+          "@Common.ValueList.$Type": "Common.ValueListType",
+          "@Common.ValueList.Label": "Products",
+          "@Common.ValueList.CollectionPath": "getLocProd",
+          "@Common.ValueList.Parameters": [
+            {
+              "$Type": "Common.ValueListParameterInOut",
+              "LocalDataProperty": {
+                "=": "PRODUCT_ID"
+              },
+              "ValueListProperty": "PRODUCT_ID"
+            },
+            {
+              "$Type": "Common.ValueListParameterIn",
+              "LocalDataProperty": {
+                "=": "LOCATION_ID"
+              },
+              "ValueListProperty": "LOCATION_ID"
+            }
+          ],
+          "@title": "Product",
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+=======
+>>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
         "PLAN_LOC": {
           "@Common.ValueList.$Type": "Common.ValueListType",
           "@Common.ValueList.Label": "Location",
@@ -23175,10 +23506,19 @@
         "PRODUCT_ID": {
           "type": "cds.String",
           "length": 40
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
         },
         "CRITICALKEY": {
           "type": "cds.String",
           "length": 1
+<<<<<<< HEAD
+=======
+>>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
         }
       },
       "returns": {
@@ -23434,6 +23774,22 @@
         }
       }
     },
+<<<<<<< HEAD
+    "IBPImportSrv.exportMktAuth": {
+      "kind": "action",
+      "params": {
+        "LOCATION_ID": {
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "type": "cds.String",
+          "length": 40
+        }
+      }
+    },
+=======
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
     "IbpImportRest": {
       "@source": "srv/ibpimport-service.cds",
       "kind": "service",
@@ -23492,6 +23848,21 @@
     "SDIService.ImportCIRLog": {
       "kind": "action"
     },
+<<<<<<< HEAD
+    "SDIService.ImportSOStock": {
+      "kind": "action"
+    },
+    "SDIService.ImportPartialProd": {
+      "kind": "action"
+    },
+=======
+<<<<<<< HEAD
+    "SDIService.ImportSOStock": {
+      "kind": "action"
+    },
+=======
+>>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
     "UserInfoService": {
       "@source": "srv/user-info.cds",
       "kind": "service",
@@ -31166,6 +31537,11 @@
   },
   "extensions": [
     {
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
       "annotate": "CatalogService.getFactoryLoc",
       "elements": {
         "PRODUCT_ID": {
@@ -31192,6 +31568,10 @@
       }
     },
     {
+<<<<<<< HEAD
+=======
+>>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
       "annotate": "cp.PRODRESTRICT",
       "@UI.SelectionFields": [
         {

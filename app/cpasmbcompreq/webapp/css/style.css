@@ -11,3 +11,11 @@
 .sapUiSizeCompact .sapUxAPObjectPageSectionHeader, .sapUxAPObjectPageSectionHeader {
     height: 0.1rem !important;
 }
+
+.hdrBtnMargin{
+    margin-left: 60rem;
+}
+
+.hdrBtnMarginHdr{
+    margin-left: 71.5rem;
+}

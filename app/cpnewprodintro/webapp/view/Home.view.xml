@@ -10,6 +10,7 @@
                 <ToolbarSpacer/>
                 <Button id="idAdd" text="Create" icon="sap-icon://add" press="onCreate" tooltip = "Create new product"/>
                 <Button id="idUpdate" text="Update" icon="sap-icon://edit" press="onCreate" tooltip = "Update product"/>
+                <Button class="hdrBtnMarginHdr" icon="sap-icon://sys-help" id="idNav" press="onNavPress" type="Emphasized" tooltip="Help Document"/>
             </Toolbar>
         </customHeader>
 
