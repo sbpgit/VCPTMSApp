@@ -71,6 +71,14 @@ service PalService{
             endDate    : Date;
         });
 
+        action purgePredictions(vcRulesList : array of {
+            Location     : String(4);
+            Product      : String(40);
+            GroupID      : String(20);
+            Type         : String(10); // Object Dependency, Restriction, Primary
+            startDate    : Date; // Delete Prediction Tables Data older than start date
+        });
+
 
         // function f_generateModels(vcRulesList : array of{
         //     profile      : String(50);

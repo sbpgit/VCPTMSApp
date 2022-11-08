@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "manifest-bundle.zip": 1667566141175,
   "manifest.json": 1667566141139,
   "Component.js": 1662042606573,
@@ -7,4 +8,14 @@
   "Component-dbg.js": 1662042606573,
   "annotations/annotation.xml": 1662042606573,
   "index.html": 1662042606573
+=======
+  "Component-preload.js": 1667555766551,
+  "Component.js": 1665479929545,
+  "manifest.json": 1667555766248,
+  "manifest-bundle.zip": 1667555766264,
+  "i18n/i18n.properties": 1665479929545,
+  "Component-dbg.js": 1665479929545,
+  "annotations/annotation.xml": 1665479929545,
+  "index.html": 1665479929545
+>>>>>>> 2f6d053032bebd817aa5e16b0d32c9ea8065b6c9
 }
