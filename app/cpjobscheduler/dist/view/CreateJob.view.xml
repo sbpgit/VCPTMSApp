@@ -344,14 +344,13 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                             <!-- <RadioButton id="idIBPFutPlan" text="IBP Future Plan" /> -->
                         </RadioButtonGroup>
                         
-                        <RadioButtonGroup id="idRbtnExport" group="master" columns="1" select="ExportRadioChange" visible="false">
+                        <RadioButtonGroup id="idRbtnExport"  columns="1" select="ExportRadioChange" visible="false">
                             
-                            <!-- <RadioButton id="idMaster" groupName="master" text="Master Data"/> -->
-                            <RadioButton id="idIBPLoc" group="master" text="Location" tooltip="Master"/>
-                            <RadioButton id="idIBPCustGrp" group="master" text="Customer Group" />
-                            <RadioButton id="idIBPProd" name="master" text="Configurable Product" />
-                            <RadioButton id="idIBPClass" name="master" text="Class" />
-                            <RadioButton id="idRestri" name="master" text="Restrictions" />
+                            <RadioButton id="idIBPLoc"  text="Location" tooltip="Master"/>
+                            <RadioButton id="idIBPCustGrp"  text="Customer Group" />
+                            <RadioButton id="idIBPProd"  text="Product" />
+                            <RadioButton id="idIBPClass"  text="Class" />
+                            <RadioButton id="idRestri"  text="Restrictions" />
                             
                             <RadioButton id="idIBPSalesHis" text="Sales History" />
                             <!-- <RadioButton id="idIBPSalesHisConfig" text="Sales History Config" /> -->
@@ -716,6 +715,8 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                                                     <!-- <core:ListItem key="SC" text="{i18n>salehisconfig}" /> -->
                                                     <core:ListItem key="AC" text="{i18n>asmbcomp}" />
                                                     <core:ListItem key="VT" text="{i18n>vartable}" />
+                                                    <core:ListItem key="CL" text="{i18n>cirlog}" />
+                                                    <core:ListItem key="SS" text="{i18n>sostockstatus}" />
                                                 </Select>
                                             </f:fields>
                                         </f:FormElement>

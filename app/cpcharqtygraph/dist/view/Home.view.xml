@@ -13,64 +13,72 @@
     xmlns:html="http://www.w3.org/1999/xhtml">
     <ux:ObjectPageLayout id="ObjectPageLayout">
         <ux:headerTitle>
-            <ux:ObjectPageDynamicHeaderTitle>
+            <ux:ObjectPageDynamicHeaderTitle id="_IDGenObjectPageDynamicHeaderTitle1">
                 <ux:expandedHeading>
-                    <Title text="{i18n>pageTitle}" class="boldText" titleAlignment="Center" />
+                    <Title id="_IDGenTitle1" text="{i18n>pageTitle}" class="boldText" titleAlignment="Center" />
                 </ux:expandedHeading>
                 <ux:snappedHeading>
-					<FlexBox fitContainer="true" alignItems="Center" >
-						<Title text="{i18n>pageTitle}" wrapping="true" />
+					<FlexBox id="_IDGenFlexBox1" fitContainer="true" alignItems="Center" >
+						<Title id="_IDGenTitle2" text="{i18n>pageTitle}" wrapping="true" />
+                        <HBox id="_IDGenHBox2" class="newHBOX">
+                        <ToolbarSpacer id="_IDGenToolbarSpacer1"/>
+                        <Button icon="sap-icon://sys-help" id="idNav" press="onNavPress" type="Emphasized" tooltip="Help Document"/>
+                        </HBox>
 					</FlexBox>
 				</ux:snappedHeading>
             </ux:ObjectPageDynamicHeaderTitle>
         </ux:headerTitle>
         <ux:headerContent>
-            <FlexBox wrap="Wrap" fitContainer="true">
-                <l:Grid defaultSpan="XL3 L3 M6 S12">
+            <FlexBox id="_IDGenFlexBox2" wrap="Wrap" fitContainer="true">
+                <l:Grid id="_IDGenGrid1" defaultSpan="XL3 L3 M6 S12">
                     
-                    <VBox >
-                        <Label text="Location" required= "true"/>
+                    <VBox id="_IDGenVBox1" >
+                        <Label id="_IDGenLabel1" text="Location" required= "true"/>
                         <Input id="idloc" value="" placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                     </VBox>
-                    <VBox >
-                        <Label text="Product" required= "true"/>
+                    <VBox id="_IDGenVBox2" >
+                        <Label id="_IDGenLabel2" text="Product" required= "true"/>
                         <Input id="idprod" placeholder="Product" value="" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
 
                     </VBox>
-                    <VBox >
-                        <Label text="IBP Version" required= "true"/>
+                    <VBox id="_IDGenVBox3" >
+                        <Label id="_IDGenLabel3" text="IBP Version" required= "true"/>
                         <Input id="idver" value="" placeholder="Version" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                     </VBox>
                     
-                    <VBox >
-                        <Label text="IBP Scenario" required= "true"/>
+                    <VBox id="_IDGenVBox4" >
+                        <Label id="_IDGenLabel4" text="IBP Scenario" required= "true"/>
                         <Input id="idscen" value="" placeholder="Scenario" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
 
                     </VBox>
-                    <VBox >
-                        <Label text="Week Date"  />
+                    <VBox id="_IDGenVBox5" >
+                        <Label id="_IDGenLabel5" text="Week Date"  />
                 <ComboBox id="fromDate" placeholder="Select Date"  items="{path:'/resultsCombos'}" change="handleDateChange" width="350px" editable="false">
-                <core:Item key="{WEEK_DATE}" text="{WEEK_DATE}"/>
+                <core:Item id="_IDGenItem1" key="{WEEK_DATE}" text="{WEEK_DATE}"/>
                 </ComboBox>
                     </VBox>
-<VBox >
-                <Label text="IBP Model-Version" required="true" />            
+<VBox id="_IDGenVBox6" >
+                <Label id="_IDGenLabel6" text="IBP Model-Version" required="true" />            
                 <ComboBox id="idComboBox" width="auto" placeholder="Select" change="onSelect" class="CombBox" selectedKey="Active"
 									showButton="true">
-									<core:Item key="Active" text="Active"/>
-									<core:Item key="Simulation" text="Simulation"/>
+									<core:Item id="_IDGenItem2" key="Active" text="Active"/>
+									<core:Item id="_IDGenItem3" key="Simulation" text="Simulation"/>
 									
 								</ComboBox>
                         
             </VBox>
-                    <VBox>
-                        <Label text=""/>
-                        <HBox>
-                            <Button text="Go" type="Emphasized" press="onGetData" tooltip="Get data based on filters" class="sapUiTinyMarginEnd"/>
-                            <Button text="Reset" type="Transparent" press="onResetDate" tooltip="Reset Valid To Date"/>
+                    <VBox id="_IDGenVBox7">
+                        <Label id="_IDGenLabel7" text=""/>
+                        <HBox id="_IDGenHBox1">
+                            <Button id="_IDGenButton1" text="Go" type="Emphasized" press="onGetData" tooltip="Get data based on filters" class="sapUiTinyMarginEnd"/>
+                            <Button id="_IDGenButton2" text="Reset" type="Transparent" press="onResetDate" tooltip="Reset Valid To Date"/>
                         </HBox>
                     </VBox>
-
+                    <ToolbarSpacer id="_IDGenToolbarSpacer2"/>
+                    <HBox id="HBOX1">
+       
+                        <Button icon="sap-icon://sys-help" id="idNav1" press="onNavPress" type="Emphasized" tooltip="Help Document"/>             
+</HBox>
                 </l:Grid>
             </FlexBox>
         </ux:headerContent>
@@ -87,23 +95,23 @@
 									showLegend="true" showSelectionDetails="false" >
 
                                     <commons:content>
-										<commons:ChartContainerContent>
+										<commons:ChartContainerContent id="_IDGenChartContainerContent1">
 											<commons:content>
                         
                             <viz:Popover id="idPopOver"></viz:Popover>
                                 <viz:VizFrame xmlns="sap.viz" id="idVizFrame" vizType="line" height='600px' width="100%" >
                                     <viz:dataset>
-                                        <viz.data:FlattenedDataset data="{/results}">
+                                        <viz.data:FlattenedDataset id="_IDGenFlattenedDataset1" data="{/results}">
                                             <viz.data:dimensions>
-                            <viz.data:DimensionDefinition name="Char.Desc"
+                            <viz.data:DimensionDefinition id="_IDGenDimensionDefinition1" name="Char.Desc"
                                 value="{CHAR_DESC}" />
-                                <viz.data:DimensionDefinition name="Char.Value Desc"
+                                <viz.data:DimensionDefinition id="_IDGenDimensionDefinition2" name="Char.Value Desc"
                                 value="{CHARVAL_DESC}" />
                         </viz.data:dimensions>
                         <viz.data:measures>
-                            <viz.data:MeasureDefinition name="Generated Qty"
+                            <viz.data:MeasureDefinition id="_IDGenMeasureDefinition1" name="Generated Qty"
                                 value="{CIR_QTY}" />
-                            <viz.data:MeasureDefinition name="Planned Qty"
+                            <viz.data:MeasureDefinition id="_IDGenMeasureDefinition2" name="Planned Qty"
                                 value="{OPT_QTY}" />
                         </viz.data:measures>
                                         </viz.data:FlattenedDataset>
