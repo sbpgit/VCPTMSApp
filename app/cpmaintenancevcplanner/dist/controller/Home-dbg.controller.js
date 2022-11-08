@@ -502,61 +502,8 @@ sap.ui.define([
             },
             onNavPress:function(){
                 if (sap.ushell && sap.ushell.Container && sap.ushell.Container.getService) {
-<<<<<<< HEAD
-                // // var oCrossAppNav = sap.ushell.Container.getService("CrossApplicationNavigation"); 
-                // //  var hashUrl=(oCrossAppNav && oCrossAppNav.hrefForExternal({
-                // //     target: { semanticObject : "vcpdocdisplay", action: "Display" }
-                 
-                // //   })
-                // //  );
-                // //   oCrossAppNav.toExternal({target: {shellHash: hashUrl}});
-
-                //   var hash = sap.ushell.Container.getServiceAsync("CrossApplicationNavigation").then( function (oService) {
-
-=======
-<<<<<<< HEAD
-                // // var oCrossAppNav = sap.ushell.Container.getService("CrossApplicationNavigation"); 
-                // //  var hashUrl=(oCrossAppNav && oCrossAppNav.hrefForExternal({
-                // //     target: { semanticObject : "vcpdocdisplay", action: "Display" }
-=======
-<<<<<<< HEAD
-                var oCrossAppNav = sap.ushell.Container.getService("CrossApplicationNavigation"); 
-                 oCrossAppNav.toExternal({
-                    target: { semanticObject : "cpappcpvcplannerdocumentation", action: "display" },
-                 
-                  });
-=======
-                // var oCrossAppNav = sap.ushell.Container.getService("CrossApplicationNavigation"); 
-                //  var hashUrl=(oCrossAppNav && oCrossAppNav.hrefForExternal({
-                //     target: { semanticObject : "vcpdocdisplay", action: "Display" }
->>>>>>> b36b73222eca812e7e069e5b5c1e60e4aef87e97
-                 
-                // //   })
-                // //  );
-                // //   oCrossAppNav.toExternal({target: {shellHash: hashUrl}});
-
-                //   var hash = sap.ushell.Container.getServiceAsync("CrossApplicationNavigation").then( function (oService) {
-
->>>>>>> 8d98184ea2f4e7b84c23bf21b4fb150efa6e99f2
-                //     oService.hrefForExternalAsync({
-                //         target : {
-                //             semanticObject: "vcpdocdisplay",
-                //             action: "Display"
-                //         }
-                //     })
-                //  });
-                //   var oCrossAppNav = sap.ushell.Container.getService("CrossApplicationNavigation");
-                //   oCrossAppNav.isNavigationSupported(hash);
-
-                var oCrossAppNavigator = sap.ushell.Container.getService("CrossApplicationNavigation"); 
-			oCrossAppNavigator.isIntentSupported(["vcpdocdisplay-Display"])
-				.done(function(aResponses) {
- sap.m.MessageToast.show("Provide corresponding intent to navigate");
-				})
-				.fail(function() {
-					 sap.m.MessageToast.show("Provide corresponding intent to navigate");
-				});
-			// generate the Hash to display a employee Id
+			var oCrossAppNavigator = sap.ushell.Container.getService("CrossApplicationNavigation"); 
+			// generate the Hash to display 
 			var hash = (oCrossAppNavigator && oCrossAppNavigator.hrefForExternal({
 				target: {
 					semanticObject: "vcpdocdisplay",
@@ -567,6 +514,7 @@ sap.ui.define([
 			var url = window.location.href.split('#')[0] + hash; 
 			//Navigate to second app
 			sap.m.URLHelper.redirect(url, true); 
+                
 
                 } 
             }

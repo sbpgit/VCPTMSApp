@@ -197,11 +197,7 @@ sap.ui.define(
             var aData = oGModel.getProperty("/aJobDetails"),
               ScheData = [];
             // Getting the schedule Id for the selected Job
-            var scheduleId = oEvent
-            .getSource()
-            .getParent()
-            .getBindingContext()
-            .getObject().scheduleId;
+          var scheduleId = oEvent.getSource().getParent().getBindingContext().getObject().scheduleId;
             // 04-10-2022
             var jobType = oGModel.getProperty("/JobType");
             // 04-10-2022
@@ -296,7 +292,7 @@ sap.ui.define(
                 sap.ui.getCore().byId("idJobData").getColumns()[5].setVisible(false);
               //   sap.ui.getCore().byId("idJobData").getColumns()[6].setVisible(true);
               } else if (oActionType === "exportIBPLocation" || oActionType === "exportIBPCustomer" ||
-                         oActionType.includes("ImportECC")   || oActionType.includes("ImportCuvtabInd") ) {
+                         oActionType.includes("ImportECC")   || oActionType.includes("ImportCuvtabInd") || jobType === "S" ) {
                 MessageToast.show( "There is no schedule data to display for the selected job type" );
                 iCount = 1;
               } else if (oActionType === "exportIBPMasterProd") {
