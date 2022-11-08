@@ -859,7 +859,7 @@ class SOFunctions {
         if (liDefMktAuth) {
             try {
                 await cds.run(INSERT.into("CP_DEF_MKTAUTH").entries(liDefMktAuth));
-                // await ]ointo('CP_DEF_MKTAUTH')
+                // await INSERT.into('CP_DEF_MKTAUTH')
                 //     .columns('LOCATION_ID',
                 //         'PRODUCT_ID',
                 //         'CHAR_NUM',

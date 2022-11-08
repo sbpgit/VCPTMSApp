@@ -1936,6 +1936,9 @@ module.exports = cds.service.impl(async function () {
             `' AND WEEK_DATE >= '` + req.data.FROMDATE +
             `' AND WEEK_DATE <= '` + req.data.TODATE + `'
                        AND COMPCIR_QTY >= 0`);
+                       console.log(liactcompreq.length);
+                       console.log(liactcompreq);
+
 
         const licriticalcomp = await cds.run(
             `
@@ -1948,6 +1951,8 @@ module.exports = cds.service.impl(async function () {
                 WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
                       AND PRODUCT_ID = '`+ req.data.PRODUCT_ID + `'                               
                       AND CRITICALKEY = '` + req.data.CRITICALKEY + `'`);
+                      console.log(licriticalcomp.length);
+                      console.log(licriticalcomp);
 
         if (req.data.CRITICALKEY === "X") {
             for (i = 0; i < liactcompreq.length; i++) {
@@ -1962,7 +1967,7 @@ module.exports = cds.service.impl(async function () {
 
                         vactcompreq = {
                             "LOCID": liactcompreq[i].LOCATION_ID,
-                            "PRDID": liactcompreq[i].REF_PRODID,
+                            "PRDID": liactcompreq[i].PRODUCT_ID,
                             "PRDFR": liactcompreq[i].COMPONENT,
                             "COMPONENTREQUIREMENTQTY": vDemd.toString(),
                             "PERIODID0_TSTAMP": vWeekDate[0]
@@ -1972,6 +1977,8 @@ module.exports = cds.service.impl(async function () {
                 }
 
             }
+            console.log(oReq.actcompreq.length);
+                      console.log(oReq.actcompreq);
 
         } else {
             for (i = 0; i < liactcompreq.length; i++) {
@@ -1979,7 +1986,7 @@ module.exports = cds.service.impl(async function () {
                 var vDemd = parseFloat(liactcompreq[i].COMPCIR_QTY).toFixed(2);
                 vactcompreq = {
                     "LOCID": liactcompreq[i].LOCATION_ID,
-                    "PRDID": liactcompreq[i].REF_PRODID,
+                    "PRDID": liactcompreq[i].PRODUCT_ID,
                     "PRDFR": liactcompreq[i].COMPONENT,
                     "COMPONENTREQUIREMENTQTY": vDemd.toString(),
                     "PERIODID0_TSTAMP": vWeekDate[0]
@@ -1987,6 +1994,8 @@ module.exports = cds.service.impl(async function () {
                 oReq.actcompreq.push(vactcompreq);
 
             }
+            console.log(oReq.actcompreq.length);
+                      console.log(oReq.actcompreq);
         }
 
         if (oReq.actcomp) {
