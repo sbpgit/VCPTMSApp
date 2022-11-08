@@ -2549,6 +2549,7 @@ async function _purgePredictions(req,isGet) {
     var sqlStrImpact ="";
     var sqlStrIbpResultPlan ="";
     let dataObj = {};
+    let purgeError = false;
 
 
     if ( (vcRulesListReq.length == 1) &&
@@ -2582,10 +2583,9 @@ async function _purgePredictions(req,isGet) {
         }
 
         let startDateSql = "";
-        let purgeError = false;
 
         if (hasStartDate == true)
-            startDateSql =  ' AND "CAL_DATE" < ' + '\' + vcRulesListReq[0].startDate + \'';   
+            startDateSql =  ' AND "CAL_DATE" < ' + '\'' + vcRulesListReq[0].startDate + '\'';   
         else
             startDateSql = ' ADD_YEARS(CURRENT_DATE, -2) AS "CAL_DATE" ';
 
