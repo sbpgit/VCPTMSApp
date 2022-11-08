@@ -92,10 +92,10 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                                             <Label text="{i18n>type}" />
                                         </f:label>
                                         <f:fields>
-                                            <Select id="MidType" selectedKey="OD" class="buttonDesktop">
-                                                <core:ListItem key="OD" text="Object Dependency" />
+                                            <Select id="MidType" selectedKey="RT" class="buttonDesktop">                                                
                                                 <core:ListItem key="RT" text="Restrictions" />
                                                 <core:ListItem key="PI" text="Primary" />
+                                                <core:ListItem key="OD" text="Object Dependency"/>
                                             </Select>
                                         </f:fields>
                                     </f:FormElement>
@@ -715,8 +715,9 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                                                     <!-- <core:ListItem key="SC" text="{i18n>salehisconfig}" /> -->
                                                     <core:ListItem key="AC" text="{i18n>asmbcomp}" />
                                                     <core:ListItem key="VT" text="{i18n>vartable}" />
-                                                    <core:ListItem key="CL" text="{i18n>cirlog}" />
+                                                    <core:ListItem key="CIL" text="{i18n>cirlog}" />
                                                     <core:ListItem key="SS" text="{i18n>sostockstatus}" />
+                                                    <core:ListItem key="PP" text="{i18n>partialprod}" />
                                                 </Select>
                                             </f:fields>
                                         </f:FormElement>

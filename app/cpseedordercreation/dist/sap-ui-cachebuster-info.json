@@ -1,6 +1,67 @@
 {
+<<<<<<< HEAD
   "controller/BaseController-dbg.js": 1665479929725,
   "controller/App.controller.js": 1665479929725,
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+  "controller/App.controller.js": 1662364970585,
+  "controller/Home.controller.js": 1665563487174,
+  "utils/locate-reuse-libs.js": 1662364970589,
+  "model/models.js": 1662364970585,
+  "manifest.json": 1667543681195,
+  "controller/BaseController.js": 1662364970585,
+  "i18n/i18n.properties": 1666693187790,
+  "Component.js": 1662364970585,
+  "manifest-bundle.zip": 1667543681217,
+  "Component-preload.js": 1667543681854,
+  "controller/BaseController-dbg.js": 1662364970585,
+  "utils/locate-reuse-libs-dbg.js": 1662364970589,
+  "controller/Home-dbg.controller.js": 1665563487174,
+  "model/models-dbg.js": 1662364970585,
+  "controller/App-dbg.controller.js": 1662364970585,
+  "Component-dbg.js": 1662364970585,
+  "view/UniqId.fragment.xml": 1665563487174,
+  "view/SortDialog.fragment.xml": 1663757551498,
+  "view/ProdDialog.fragment.xml": 1665563487174,
+  "view/OrderCreate.fragment.xml": 1663749091109,
+  "view/LocDialog.fragment.xml": 1665563487174,
+  "view/Home.view.xml": 1666693187790,
+  "view/CustomerGroup.fragment.xml": 1663338233791,
+  "view/App.view.xml": 1662364970589,
+  "css/style.css": 1663689294681,
+  "index.html": 1665563487174
+=======
+  "manifest.json": 1667566192027,
+  "controller/App.controller.js": 1662042606689,
+  "utils/locate-reuse-libs.js": 1662042606693,
+  "model/models.js": 1662042606693,
+  "controller/Home.controller.js": 1664541252831,
+  "controller/BaseController.js": 1662042606689,
+  "i18n/i18n.properties": 1666250927898,
+  "Component.js": 1662042606689,
+  "manifest-bundle.zip": 1667566192049,
+  "Component-preload.js": 1667566192521,
+  "utils/locate-reuse-libs-dbg.js": 1662042606693,
+  "model/models-dbg.js": 1662042606693,
+  "controller/Home-dbg.controller.js": 1664541252831,
+  "controller/BaseController-dbg.js": 1662042606689,
+  "controller/App-dbg.controller.js": 1662042606689,
+  "Component-dbg.js": 1662042606689,
+  "view/UniqId.fragment.xml": 1664279005166,
+  "view/SortDialog.fragment.xml": 1663828197796,
+  "view/ProdDialog.fragment.xml": 1664439017434,
+  "view/OrderCreate.fragment.xml": 1663703394288,
+  "view/LocDialog.fragment.xml": 1664439015138,
+  "view/Home.view.xml": 1666250927898,
+  "view/CustomerGroup.fragment.xml": 1663353376924,
+  "view/App.view.xml": 1662042606693,
+  "css/style.css": 1663828197796,
+  "index.html": 1664289287531
+>>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
+=======
+  "controller/Home-dbg.controller.js": 1665479929725,
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
   "utils/locate-reuse-libs.js": 1665479929725,
   "model/models.js": 1665479929725,
   "controller/Home.controller.js": 1665479929725,
@@ -25,4 +86,5 @@
   "view/App.view.xml": 1665479929725,
   "css/style.css": 1665479929725,
   "index.html": 1665479929725
+>>>>>>> 2f6d053032bebd817aa5e16b0d32c9ea8065b6c9
 }

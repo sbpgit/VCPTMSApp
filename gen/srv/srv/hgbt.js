@@ -37,6 +37,10 @@ exports._runHgbtRegressionsV1 = async function(req) {
 exports._updateHgbtGroupParamsV1 = function(req) {
     const hgbtGroupParams = req.data.regressionParameters;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
     var conn = hana.createConnection();
 
     conn.connect(conn_params);

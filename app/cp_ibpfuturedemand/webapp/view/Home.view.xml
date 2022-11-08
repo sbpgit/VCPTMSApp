@@ -8,51 +8,53 @@
     xmlns:html="http://www.w3.org/1999/xhtml">
     <ux:ObjectPageLayout id="ObjectPageLayout">
         <ux:headerTitle>
-            <ux:ObjectPageDynamicHeaderTitle>
+            <ux:ObjectPageDynamicHeaderTitle id="_IDGenObjectPageDynamicHeaderTitle1">
                 <ux:expandedHeading>
-                    <Title text="{i18n>pageTitle}" class="boldText" titleAlignment="Center" />
+                    <Title id="_IDGenTitle1" text="{i18n>pageTitle}" class="boldText" titleAlignment="Center" />
                 </ux:expandedHeading>
                 <ux:snappedHeading>
-					<FlexBox fitContainer="true" alignItems="Center" >
-						<Title text="{i18n>pageTitle}" wrapping="true" />
+					<FlexBox id="_IDGenFlexBox1" fitContainer="true" alignItems="Center" >
+						<Title id="_IDGenTitle2" text="{i18n>pageTitle}" wrapping="true" />
+                        <Button class="classMargin" icon="sap-icon://sys-help" id="idNav1" press="onNavPress" type="Emphasized" tooltip="Help Document"/>
 					</FlexBox>
 				</ux:snappedHeading>
             </ux:ObjectPageDynamicHeaderTitle>
         </ux:headerTitle>
         <ux:headerContent>
-            <FlexBox wrap="Wrap" fitContainer="true">
-                <l:Grid defaultSpan="XL3 L3 M6 S12">
-                    <VBox >
-                        <Label text=""/>
+            <FlexBox id="_IDGenFlexBox2" wrap="Wrap" fitContainer="true">
+                <l:Grid id="_IDGenGrid1" defaultSpan="XL3 L3 M6 S12">
+                    <VBox id="_IDGenVBox1" >
+                        <Label id="_IDGenLabel1" text=""/>
                         <SearchField id="headSearch" liveChange="onSearch" placeholder="Week Date(MM/DD/yyyy)/ Quantity/ Version/ Scenario"/>
                     </VBox>
-                    <VBox >
-                        <Label text="Location" required= "true"/>
+                    <VBox id="_IDGenVBox2" >
+                        <Label id="_IDGenLabel2" text="Location" required= "true"/>
                         <Input id="idloc" value="" placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                     </VBox>
-                    <VBox >
-                        <Label text="Product" required= "true"/>
+                    <VBox id="_IDGenVBox3" >
+                        <Label id="_IDGenLabel3" text="Product" required= "true"/>
                         <Input id="idprod" placeholder="Product" value="" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
 
                     </VBox>
-                    <VBox >
-                        <Label text="IBP Version"/>
+                    <VBox id="_IDGenVBox4" >
+                        <Label id="_IDGenLabel4" text="IBP Version"/>
                         <Input id="idver" value="" placeholder="Version" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                     </VBox>
-                    <VBox >
-                        <Label text="IBP Scenario"/>
+                    <VBox id="_IDGenVBox5" >
+                        <Label id="_IDGenLabel5" text="IBP Scenario"/>
                         <Input id="idscen" value="" placeholder="Scenario" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
 
                     </VBox>
-                    <VBox >
-                        <Label text=""/>
+                    <VBox id="_IDGenVBox6" >
+                        <Label id="_IDGenLabel6" text=""/>
                         <CheckBox id="idCheck1" select="onNonZero" text="Get Non-Zero" selected="true" />
                     </VBox>
-                    <VBox>
-                        <Label text=""/>
-                        <HBox>
-                            <Button text="Go" type="Emphasized" press="onGetData" tooltip="Get data based on filters" class="sapUiTinyMarginEnd"/>
-                            <Button text="Reset" type="Transparent" press="onResetDate" tooltip="Reset Valid To Date"/>
+                    <VBox id="_IDGenVBox7">
+                        <Label id="_IDGenLabel7" text=""/>
+                        <HBox id="_IDGenHBox1">
+                            <Button id="_IDGenButton1" text="Go" type="Emphasized" press="onGetData" tooltip="Get data based on filters" class="sapUiTinyMarginEnd"/>
+                            <Button id="_IDGenButton2" text="Reset" type="Transparent" press="onResetDate" tooltip="Reset Valid To Date"/>
+                            <Button class="classHdr" icon="sap-icon://sys-help" id="idNav2" press="onNavPress" type="Emphasized" tooltip="Help Document"/>
                         </HBox>
                     </VBox>
 
@@ -60,40 +62,40 @@
             </FlexBox>
         </ux:headerContent>
         <ux:sections>
-            <ux:ObjectPageSection >
+            <ux:ObjectPageSection id="_IDGenObjectPageSection1" >
                 <ux:subSections>
-                    <ux:ObjectPageSubSection>
+                    <ux:ObjectPageSubSection id="_IDGenObjectPageSubSection1">
                         <ux:blocks>
                             <Table id="IBPfdemList" items="{path: '/results'}" itemPress="onhandlePress" growingScrollToLoad="true" mode="SingleSelectMaster" selectionChange="onhandlePress" rememberSelections="false">
                                 <columns>
-                                    <Column hAlign="Left" vAlign="Middle" visible="false">
-                                        <Text text="{i18n>loc}" />
+                                    <Column id="_IDGenColumn1" hAlign="Left" vAlign="Middle" visible="false">
+                                        <Text id="_IDGenText1" text="{i18n>loc}" />
                                     </Column>
-                                    <Column hAlign="Left" vAlign="Middle" visible="false">
-                                        <Text text="{i18n>prod}"/>
+                                    <Column id="_IDGenColumn2" hAlign="Left" vAlign="Middle" visible="false">
+                                        <Text id="_IDGenText2" text="{i18n>prod}"/>
                                     </Column>
-                                    <Column hAlign="Left" vAlign="Middle">
-                                        <Text text="{i18n>version}"/>
+                                    <Column id="_IDGenColumn3" hAlign="Left" vAlign="Middle">
+                                        <Text id="_IDGenText3" text="{i18n>version}"/>
                                     </Column>
-                                    <Column hAlign="Left" vAlign="Middle">
-                                        <Text text="{i18n>scen}"/>
+                                    <Column id="_IDGenColumn4" hAlign="Left" vAlign="Middle">
+                                        <Text id="_IDGenText4" text="{i18n>scen}"/>
                                     </Column>
-                                    <Column hAlign="Left" vAlign="Middle">
-                                        <Text text="{i18n>week}"/>
+                                    <Column id="_IDGenColumn5" hAlign="Left" vAlign="Middle">
+                                        <Text id="_IDGenText5" text="{i18n>week}"/>
                                     </Column>
-                                    <Column hAlign="Left" vAlign="Middle">
-                                        <Text text="{i18n>quan}"/>
+                                    <Column id="_IDGenColumn6" hAlign="Left" vAlign="Middle">
+                                        <Text id="_IDGenText6" text="{i18n>quan}"/>
                                     </Column>
                                 </columns>
                                 <items>
-                                    <ColumnListItem>
+                                    <ColumnListItem id="_IDGenColumnListItem1">
                                         <cells>
-                                            <Text text="{LOCATION_ID}" />
-                                            <Text text="{PRODUCT_ID}"/>
-                                            <Text text="{VERSION}"/>
-                                            <Text text="{SCENARIO}"/>
-                                            <DatePicker valueFormat="MM/dd/yyyy" displayFormat="MM/dd/yyyy" value="{WEEK_DATE}" editable="false" />
-                                            <Text text="{QUANTITY}"/>
+                                            <Text id="_IDGenText7" text="{LOCATION_ID}" />
+                                            <Text id="_IDGenText8" text="{PRODUCT_ID}"/>
+                                            <Text id="_IDGenText9" text="{VERSION}"/>
+                                            <Text id="_IDGenText10" text="{SCENARIO}"/>
+                                            <DatePicker id="_IDGenDatePicker1" valueFormat="MM/dd/yyyy" displayFormat="MM/dd/yyyy" value="{WEEK_DATE}" editable="false" />
+                                            <Text id="_IDGenText11" text="{QUANTITY}"/>
                                         </cells>
                                     </ColumnListItem>
                                 </items>

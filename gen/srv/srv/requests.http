@@ -129,10 +129,17 @@ Content-Type: application/json
 {
 	"vcRulesList": [
 		{
+<<<<<<< HEAD
 			"profile": "SBP_HGBT_0",
 			"override": false,
 			"Location": "PL20",
 			"Product": "534EDPI0E131",
+=======
+			"profile": "SBP_HGBT_1",
+			"override": true,
+			"Location": "PL20",
+			"Product": "534EDPI0E119",
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
 			"GroupID": "ALL",
 			"Type": "PI",
 			"modelVersion": "Simulation"
@@ -149,16 +156,27 @@ Content-Type: application/json
 {
 	"vcRulesList": [
 		{
+<<<<<<< HEAD
 			"override": false,
 			"Location": "PL20",
 			"Product": "534EDPI0E131",
+=======
+			"override": true,
+			"Location": "PL20",
+			"Product": "534EDPI0E119",
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
 			"GroupID": "ALL",
 			"Type": "PI",
 			"modelVersion": "Simulation",
 			"version": "__BASELINE",
 			"scenario": "BSL_SCENARIO",
+<<<<<<< HEAD
             "startDate": "2022-11-21",
             "endDate": "2022-12-28"
+=======
+            "startDate": "2022-10-24",
+            "endDate": "2022-10-31"
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
 
 		}
 	]

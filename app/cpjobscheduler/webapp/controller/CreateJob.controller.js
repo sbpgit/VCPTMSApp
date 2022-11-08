@@ -244,98 +244,6 @@ sap.ui.define(
                     }
 
 
-                    // if (key === "M") {
-                    //     that.byId("modelGenPanel").setVisible(true);
-                    //     that.byId("PredPanel").setVisible(false);
-                    //     that.byId("timeSeriesPanel").setVisible(false);
-                    //     that.byId("timeSeriesFPanel").setVisible(false);
-                    //     that.byId("IbpPanel").setVisible(false);
-                    //     that.byId("sdiPanel").setVisible(false);
-                    //     that.byId("FullDemandPanel").setVisible(false);
-                    //     that.byId("AsmblyReqPanel").setVisible(false);
-                    //     that.byId("salesOrdPanel").setVisible(false);
-                    // } else if (key === "P") {
-                    //     that.byId("modelGenPanel").setVisible(false);
-                    //     that.byId("PredPanel").setVisible(true);
-                    //     that.byId("timeSeriesPanel").setVisible(false);
-                    //     that.byId("timeSeriesFPanel").setVisible(false);
-                    //     that.byId("IbpPanel").setVisible(false);
-                    //     that.byId("sdiPanel").setVisible(false);
-                    //     that.byId("FullDemandPanel").setVisible(false);
-                    //     that.byId("AsmblyReqPanel").setVisible(false);
-                    //     that.byId("salesOrdPanel").setVisible(false);
-                    // } else if (key === "T") {
-                    //     that.byId("modelGenPanel").setVisible(false);
-                    //     that.byId("PredPanel").setVisible(false);
-                    //     that.byId("timeSeriesPanel").setVisible(true);
-                    //     that.byId("timeSeriesFPanel").setVisible(false);
-                    //     that.byId("IbpPanel").setVisible(false);
-                    //     that.byId("sdiPanel").setVisible(false);
-                    //     that.byId("FullDemandPanel").setVisible(false);
-                    //     that.byId("AsmblyReqPanel").setVisible(false);
-                    //     that.byId("salesOrdPanel").setVisible(false);
-                    // } else if (key === "F") {
-                    //     that.byId("modelGenPanel").setVisible(false);
-                    //     that.byId("PredPanel").setVisible(false);
-                    //     that.byId("timeSeriesPanel").setVisible(false);
-                    //     that.byId("timeSeriesFPanel").setVisible(true);
-                    //     that.byId("IbpPanel").setVisible(false);
-                    //     that.byId("sdiPanel").setVisible(false);
-                    //     that.byId("FullDemandPanel").setVisible(false);
-                    //     that.byId("AsmblyReqPanel").setVisible(false);
-                    //     that.byId("salesOrdPanel").setVisible(false);
-                    // } else if (key === "I" || key === "E") {
-                    //     that.byId("modelGenPanel").setVisible(false);
-                    //     that.byId("PredPanel").setVisible(false);
-                    //     that.byId("timeSeriesPanel").setVisible(false);
-                    //     that.byId("timeSeriesFPanel").setVisible(false);
-                    //     that.byId("IbpPanel").setVisible(true);
-                    //     that.byId("sdiPanel").setVisible(false);
-                    //     that.byId("FullDemandPanel").setVisible(false);
-                    //     that.byId("AsmblyReqPanel").setVisible(false);
-                    //     that.byId("salesOrdPanel").setVisible(false);
-                    // } else if (key === "S") {
-                    //     that.byId("modelGenPanel").setVisible(false);
-                    //     that.byId("PredPanel").setVisible(false);
-                    //     that.byId("timeSeriesPanel").setVisible(false);
-                    //     that.byId("timeSeriesFPanel").setVisible(false);
-                    //     that.byId("IbpPanel").setVisible(false);
-                    //     that.byId("sdiPanel").setVisible(true);
-                    //     that.byId("FullDemandPanel").setVisible(false);
-                    //     that.byId("AsmblyReqPanel").setVisible(false);
-                    //     that.byId("salesOrdPanel").setVisible(false);
-                    // } else if (key === "D") {
-                    //     that.byId("modelGenPanel").setVisible(false);
-                    //     that.byId("PredPanel").setVisible(false);
-                    //     that.byId("timeSeriesPanel").setVisible(false);
-                    //     that.byId("timeSeriesFPanel").setVisible(false);
-                    //     that.byId("IbpPanel").setVisible(false);
-                    //     that.byId("sdiPanel").setVisible(false);
-                    //     that.byId("FullDemandPanel").setVisible(true);
-                    //     that.byId("AsmblyReqPanel").setVisible(false);
-                    //     that.byId("salesOrdPanel").setVisible(false);
-                    // } else if (key === "A") {
-                    //     that.byId("modelGenPanel").setVisible(false);
-                    //     that.byId("PredPanel").setVisible(false);
-                    //     that.byId("timeSeriesPanel").setVisible(false);
-                    //     that.byId("timeSeriesFPanel").setVisible(false);
-                    //     that.byId("IbpPanel").setVisible(false);
-                    //     that.byId("sdiPanel").setVisible(false);
-                    //     that.byId("FullDemandPanel").setVisible(false);
-                    //     that.byId("AsmblyReqPanel").setVisible(true);
-                    //     that.byId("salesOrdPanel").setVisible(false);
-                    // } else if (key === "O") {
-                    //     that.byId("modelGenPanel").setVisible(false);
-                    //     that.byId("PredPanel").setVisible(false);
-                    //     that.byId("timeSeriesPanel").setVisible(false);
-                    //     that.byId("timeSeriesFPanel").setVisible(false);
-                    //     that.byId("IbpPanel").setVisible(false);
-                    //     that.byId("sdiPanel").setVisible(false);
-                    //     that.byId("FullDemandPanel").setVisible(false);
-                    //     that.byId("AsmblyReqPanel").setVisible(false);
-                    //     that.byId("salesOrdPanel").setVisible(true);
-                    // }
-
                     // 07-09-2022
 
                     if (that.oGModel.getProperty("/UpdateSch") === "X") {
@@ -567,6 +475,12 @@ sap.ui.define(
                             that.byId("idSdi").setSelectedKey("AC");
                         } else if (sServiceText === "ImportCuvtabInd") {
                             that.byId("idSdi").setSelectedKey("VT");
+                        } else if (sServiceText === "ImportCIRLog") {
+                            that.byId("idSdi").setSelectedKey("CIL");
+                        } else if (sServiceText === "ImportSOStock") {
+                            that.byId("idSdi").setSelectedKey("SS");
+                        } else if (sServiceText === "ImportPartialProd") {
+                            that.byId("idSdi").setSelectedKey("PP");
                         }
                     }
                 }
@@ -587,7 +501,7 @@ sap.ui.define(
                     that.byId("MpmInput").setValue("");
                     // 15-09-2022
 
-                    that.byId("MidType").setSelectedKey("OD");
+                    that.byId("MidType").setSelectedKey("RT");
 
                     // 15-09-2022
                     that.byId("PlocInput").setValue("");
@@ -1627,6 +1541,16 @@ sap.ui.define(
                         that.byId("idSdi").setSelectedKey("AC");
                     } else if (sServiceText === "ImportCuvtabInd") {
                         that.byId("idSdi").setSelectedKey("VT");
+                    }
+
+                    else if (sServiceText === "ImportCIRLog") {
+                        that.byId("idSdi").setSelectedKey("CIL");
+                    }
+                    else if (sServiceText === "ImportSOStock") {
+                        that.byId("idSdi").setSelectedKey("SS");
+                    }
+                    else if (sServiceText === "ImportPartialProd") {
+                        that.byId("idSdi").setSelectedKey("PP");
                     }
                 }
             },
@@ -3249,6 +3173,12 @@ sap.ui.define(
                         actionText = "/sdi/ImportECCAsmbcomp";
                     } else if (sSdiType === "VT") {
                         actionText = "/sdi/ImportCuvtabInd";
+                    } else if (sSdiType === "CIL") {
+                        actionText = "/sdi/ImportCIRLog";
+                    } else if (sSdiType === "SS") {
+                        actionText = "/sdi/ImportSOStock";
+                    } else if (sSdiType === "PP") {
+                        actionText = "/sdi/ImportPartialProd";
                     }
                 } else {
                     if (bButton.includes("Prediction")) {

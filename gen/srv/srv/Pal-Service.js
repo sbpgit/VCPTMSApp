@@ -21,7 +21,10 @@ const classicalSchema = process.env.classicalSchema;
 // };
 // const classicalSchema = "DB_CONFIG_PROD_CLIENT1"; 
 // const vcConfigTimePeriod = "PERIOD_NUM";
+<<<<<<< HEAD
 
+=======
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
 const minBuckets = 10;
 const predictionsTimeout = 10000; // 10 seconds for now
 
@@ -103,10 +106,13 @@ module.exports = srv => {
         return (await _generatePredictions(req,false));
     })
 
+<<<<<<< HEAD
     srv.on ('purgePredictions',    async req => {
         return (await _purgePredictions(req,false));
     })
 
+=======
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
 
     srv.on ('fgModels',    async req => {
         return (await _generateRegModels(req,true));   
@@ -118,11 +124,14 @@ module.exports = srv => {
     })
 
 
+<<<<<<< HEAD
     srv.on ('fpurgePredictions',    async req => {
         return (await _purgePredictions(req,true));
     })
 
 
+=======
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
  }
 
 
@@ -556,7 +565,11 @@ async function _postPredictionRequest(req,url,paramsObj,numChars,dataObj,modelTy
         let errorObj = {};
         errorObj["success"] = false;
 
+<<<<<<< HEAD
         errorObj["message"] = 'ERROR Generate Predictions ' + ret_response + ' AT ' + new Date() +
+=======
+        errorObj["message"] = 'ERROR generate Predictions ' + ret_response + ' AT ' + new Date() +
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
                                     '\n Response Details :' + 
                                     '\n Location : ' + vcRuleListObj[0].Location +
                                     '\n Product : ' + vcRuleListObj[0].Product +
@@ -883,6 +896,7 @@ async function _generatePredictions(req,isGet) {
             }
             else
             {
+<<<<<<< HEAD
                 sqlStr = 'SELECT * FROM "CP_PAL_PROFILEMETH_PARA"' +
                             ' WHERE "PROFILE" = ' + "'" + vcRulesList[i].profile + "'";
 
@@ -898,6 +912,10 @@ async function _generatePredictions(req,isGet) {
                 }
             }
 
+=======
+                vcRulesList[i].modelType ="NA";       
+            }
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
         }
         else
         {
@@ -1067,7 +1085,11 @@ async function _generatePredictions(req,isGet) {
 
     let dataObj = {};
     dataObj["success"] = true;
+<<<<<<< HEAD
     dataObj["message"] = "Generate Predictions Job Completed Successfully at " +  new Date();
+=======
+    dataObj["message"] = "generate Predictions Job Completed Successfully at " +  new Date();
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
 
 
     if (req.headers['x-sap-job-id'] > 0)
@@ -1110,7 +1132,11 @@ async function _getRuleListTypeForGenModels(vcRulesList, modelType, numChars)
                                 ' AND "LOCATION_ID" = ' + "'" + vcRulesList[i].Location + "'" + 
                                 ' AND "OBJ_DEP" = ' + "'" + vcRulesList[i].GroupID + "'" +
                                 ' AND "OBJ_TYPE" = ' + "'" + vcRulesList[i].Type + "'" ;
+<<<<<<< HEAD
                     // console.log('sqlStr: ', sqlStr);            
+=======
+                    console.log('sqlStr: ', sqlStr);            
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
 
                     results = await cds.run(sqlStr);
 
@@ -1124,8 +1150,11 @@ async function _getRuleListTypeForGenModels(vcRulesList, modelType, numChars)
                             ' WHERE "PROFILE" = ' + "'" + profileID + "'" +
                             ' AND "METHOD" = ' + "'" + modelType + "'";
 
+<<<<<<< HEAD
                         // console.log('sqlStr: ', sqlStr);            
 
+=======
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
                         results = await cds.run(sqlStr);
 
                         if (results.length > 0)
@@ -1140,6 +1169,7 @@ async function _getRuleListTypeForGenModels(vcRulesList, modelType, numChars)
                                             "override":vcRulesList[i].override,
                                             "dimensions" : numChars});
                         }
+<<<<<<< HEAD
 
                     }
                     else
@@ -1163,6 +1193,8 @@ async function _getRuleListTypeForGenModels(vcRulesList, modelType, numChars)
                                             "override":vcRulesList[i].override,
                                             "dimensions" : numChars});
                         }
+=======
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
                     }
                 }
                 else
@@ -1190,7 +1222,10 @@ async function _getRuleListTypeForGenModels(vcRulesList, modelType, numChars)
         }
     }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
     return ruleListObj;
 
 }
@@ -1231,6 +1266,7 @@ async function _getParamsObjForGenModels(vcRulesList, modelType, numChars)
                 {
                     method = results[0].METHOD;
                 }
+<<<<<<< HEAD
 
             }
             else
@@ -1244,6 +1280,8 @@ async function _getParamsObjForGenModels(vcRulesList, modelType, numChars)
                 {
                     method = results[0].METHOD;
                 }
+=======
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
             }
         }
         else
@@ -1262,7 +1300,10 @@ async function _getParamsObjForGenModels(vcRulesList, modelType, numChars)
         {
             let palGroupId =  vcRulesList[i].profileID + '#' + vcRulesList[i].Type + '#' +vcRulesList[i].GroupID + '#' + vcRulesList[i].Location + '#' + vcRulesList[i].Product;
 
+<<<<<<< HEAD
             // console.log(" palGroupId ", palGroupId);
+=======
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
             for (let index=0; index<results.length; index++) 
             {
                 paramsObj.push({"groupId":palGroupId, 
@@ -2075,7 +2116,11 @@ if (hasCharCount1 == true)
 
     let dataObj = {};
     dataObj["success"] = true;
+<<<<<<< HEAD
     dataObj["message"] = "Generate Models Job Completed Successfully at " +  new Date();
+=======
+    dataObj["message"] = "generate Models Job Completed Successfully at " +  new Date();
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
 
     if (req.headers['x-sap-job-id'] > 0)
     {
@@ -2395,7 +2440,11 @@ async function _postRegressionRequest(req,url,paramsObj,numChars,dataObj,modelTy
         if (error) {
             let errObj = {};
             errObj["success"] = false;
+<<<<<<< HEAD
             errObj["message"] = "Generate Models Job Failed StatusCode : ", response.statusCode, " ERROR : " + error + " AT " + new Date();
+=======
+            errObj["message"] = "generate Models Job Failed StatusCode : ", response.statusCode, " ERROR : " + error + " AT " + new Date();
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
 
 
             if (req.headers['x-sap-job-id'] > 0)
@@ -2481,7 +2530,11 @@ async function _postRegressionRequest(req,url,paramsObj,numChars,dataObj,modelTy
             let errorObj = {};
             errorObj["success"] = false;
  
+<<<<<<< HEAD
             errorObj["message"] = 'ERROR Generate Models Response StatusCode : ' + response.statusCode + ' AT ' + new Date() +
+=======
+            errorObj["message"] = 'ERROR generate Models Response StatusCode : ' + response.statusCode + ' AT ' + new Date() +
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
                                      '\n Response Details :' + 
                                      '\n Location : ' + vcRuleListObj[0].Location +
                                      '\n Product : ' + vcRuleListObj[0].Product +
@@ -2509,6 +2562,7 @@ async function _postRegressionRequest(req,url,paramsObj,numChars,dataObj,modelTy
             }
         }
     });
+<<<<<<< HEAD
 }
 
 
@@ -2708,4 +2762,6 @@ async function _purgePredictions(req,isGet) {
             });
     }
 
+=======
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
 }

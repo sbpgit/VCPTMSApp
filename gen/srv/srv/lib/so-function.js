@@ -18,10 +18,21 @@ class SOFunctions {
 
         await GenF.logMessage(req, 'Started Sales Orders Processing');
 
+<<<<<<< HEAD
         await this.processUniqueID(adata.LOCATION_ID, adata.PRODUCT_ID, '');
         await this.genBaseMarketAuth(adata.LOCATION_ID, adata.PRODUCT_ID);
         await this.genPartialProd(adata.LOCATION_ID, adata.PRODUCT_ID);
       //  await this.genFactoryLoc(adata.LOCATION_ID, adata.PRODUCT_ID);
+=======
+<<<<<<< HEAD
+        await this.processUniqueID(adata.LOCATION_ID, adata.PRODUCT_ID, '');
+=======
+       // await this.processUniqueID(adata.LOCATION_ID, adata.PRODUCT_ID, '');
+>>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
+        await this.genBaseMarketAuth(adata.LOCATION_ID, adata.PRODUCT_ID);
+        await this.genPartialProd(adata.LOCATION_ID, adata.PRODUCT_ID);
+        await this.genFactoryLoc(adata.LOCATION_ID, adata.PRODUCT_ID);
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
         await GenF.logMessage(req, 'Completed Sales Orders Processing');
         Flag = 'X';
 
@@ -800,7 +811,14 @@ class SOFunctions {
 
         let lDate = new Date();
         lDate = new Date(lDate.getFullYear(), lDate.getMonth(), lDate.getDate() + (7 * lFirmnWeeks));
+<<<<<<< HEAD
         let lDateD = lDate.toISOString().split('Z')[0].split('T')[0];
+=======
+<<<<<<< HEAD
+=======
+        let lDateD = lDate.toISOString().split('Z')[0].split('T')[0];
+>>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
         lWeeks = lWeeks - lFirmnWeeks;
         let liSOrdQty = await cds.run(`SELECT LOCATION_ID,
                                              PRODUCT_ID,
@@ -814,7 +832,15 @@ class SOFunctions {
             await DELETE.from('CP_DEF_MKTAUTH')
                 .where(`LOCATION_ID = '${lLocation}' AND PRODUCT_ID = '${liSOrdQty[cntS].PRODUCT_ID}'`);
             await DELETE.from('CP_MARKETAUTH_CFG')
+<<<<<<< HEAD
                 .where(`LOCATION_ID = '${lLocation}' AND PRODUCT_ID = '${liSOrdQty[cntS].PRODUCT_ID}' AND WEEK_DATE > '${lDateD}'`);
+=======
+<<<<<<< HEAD
+                .where(`LOCATION_ID = '${lLocation}' AND PRODUCT_ID = '${liSOrdQty[cntS].PRODUCT_ID}' AND WEEK_DATE > '${lDate}'`);
+=======
+                .where(`LOCATION_ID = '${lLocation}' AND PRODUCT_ID = '${liSOrdQty[cntS].PRODUCT_ID}' AND WEEK_DATE > '${lDateD}'`);
+>>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
 
         }
 
@@ -858,6 +884,18 @@ class SOFunctions {
         }
         if (liDefMktAuth) {
             try {
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+                await INSERT.into('CP_DEF_MKTAUTH')
+                    .columns('LOCATION_ID',
+                        'PRODUCT_ID',
+                        'CHAR_NUM',
+                        'CHARVAL_NUM',
+                        'OPT_PERCENT')
+                    .entries(liDefMktAuth);
+=======
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
                 await cds.run(INSERT.into("CP_DEF_MKTAUTH").entries(liDefMktAuth));
                 // await INSERT.into('CP_DEF_MKTAUTH')
                 //     .columns('LOCATION_ID',
@@ -866,6 +904,10 @@ class SOFunctions {
                 //         'CHARVAL_NUM',
                 //         'OPT_PERCENT')
                 //     .entries(liDefMktAuth);
+<<<<<<< HEAD
+=======
+>>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
             }
             catch (error) {
                 console.log(error);
@@ -874,7 +916,15 @@ class SOFunctions {
         }
 
         do {
+<<<<<<< HEAD
             let lDateSQL = GenF.getNextMondayCmp(lDate.toISOString().split('Z')[0].split('T')[0]);//(lDate.toISOString().split('T')[0]);
+=======
+<<<<<<< HEAD
+            let lDateSQL = GenF.getNextMondayCmp(lDate.toISOString().split('T')[0]);
+=======
+            let lDateSQL = GenF.getNextMondayCmp(lDate.toISOString().split('Z')[0].split('T')[0]);//(lDate.toISOString().split('T')[0]);
+>>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
             // Loop through all the partial products                     
             for (let cntS = 0; cntS < liSOrdQty.length; cntS++) {
                 await cds.run(`INSERT INTO "CP_MARKETAUTH_CFG"  SELECT  '${lDateSQL}',
@@ -896,6 +946,7 @@ class SOFunctions {
 
     }
     async genPartialProd(lLocation, lProduct) {
+<<<<<<< HEAD
         // const liProd = await cds.run(`
         //     SELECT * 
         //       FROM V_LOCPROD
@@ -916,10 +967,33 @@ class SOFunctions {
         `);
 
         const liProdCfg = await SELECT.columns(
+=======
+        let vFlag = '';
+        const liProd = await cds.run(`
+            SELECT * 
+<<<<<<< HEAD
+              FROM CP_PRODUCT
+             WHERE LOCATION_ID   = '${lLocation}'
+               AND (PRODUCT_ID NOT IN ( SELECT PRODUCT_ID 
+                                  FROM CP_PARTIALPROD_INTRO 
+                                  WHERE LOCATION_ID   = '${lLocation}' ) 
+        `);
+        const liProdCfg = await SELECT.columns("LOCATION_ID",
+=======
+              FROM V_LOCPROD
+             WHERE LOCATION_ID   = '${lLocation}'
+               AND (PRODUCT_ID NOT IN ( SELECT PRODUCT_ID 
+                                  FROM CP_PARTIALPROD_INTRO 
+                                  WHERE LOCATION_ID   = '${lLocation}' ) )
+        `);
+        const liProdCfg = await SELECT.columns(
+>>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
             "PRODUCT_ID",
             "CLASS_NUM",
             "CHAR_NUM",
             "CHARVAL_NUM")
+<<<<<<< HEAD
             .from('V_PRODCLSCHARVAL');
         console.log("prod");
         let liPartialProd = [];
@@ -956,6 +1030,38 @@ class SOFunctions {
             }
         }
 
+=======
+<<<<<<< HEAD
+            .from('V_LOCPRODCLASSCHAR')
+            .where(`LOCATION_ID   = '${lLocation}'`)
+=======
+            .from('V_PRODCLSCHARVAL')
+            // .where(`LOCATION_ID   = '${lLocation}'`)
+>>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
+        let liPartialProd = [];
+        let lsProd = {};
+        let liPartialProdChar = [];
+        let lsProdCh = {};
+        for (let cntPD = 0; cntPD < liProd.length; cntPD++) {
+            lsProd = {};
+            lsProd['LOCATION_ID'] = GenF.parse(lLocation);
+            lsProd['PRODUCT_ID'] = GenF.parse(liProd[cntPD].PRODUCT_ID);
+            lsProd['REF_PRODID'] = GenF.parse(liProd[cntPD].PRODUCT_ID);
+            lsProd['PROD_DESC'] = GenF.parse(liProd[cntPD].PROD_DESC);
+            liPartialProd.push(GenF.parse(lsProd));
+            for (let cntCfg = 0; cntCfg < liProdCfg.length; cntCfg++) {
+                if (liProdCfg[cntCfg].PRODUCT_ID === liProd[cntPD].PRODUCT_ID) {
+                    lsProdCh = {};
+                    lsProdCh['LOCATION_ID'] = GenF.parse(lLocation);
+                    lsProdCh['PRODUCT_ID'] = GenF.parse(liProdCfg[cntCfg].PRODUCT_ID);
+                    lsProdCh['CLASS_NUM'] = GenF.parse(liProdCfg[cntCfg].CLASS_NUM);
+                    lsProdCh['CHAR_NUM'] = GenF.parse(liProdCfg[cntCfg].CHAR_NUM);
+                    lsProdCh['CHARVAL_NUM'] = GenF.parse(liProdCfg[cntCfg].CHARVAL_NUM);
+                    liPartialProdChar.push(GenF.parse(lsProdCh));
+                }
+            }
+        }
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
         if (liPartialProd) {
             try {
                 cds.run({
@@ -988,6 +1094,7 @@ class SOFunctions {
                 }
             }
         }
+<<<<<<< HEAD
         else {
             console.log("No data to insert records");
         }
@@ -1036,6 +1143,36 @@ class SOFunctions {
             }
         }
         console.log("loc2")
+=======
+
+    }
+    async genFactoryLoc(lLocation, lProduct) {
+
+        const liLoc = await cds.run(`
+            SELECT * 
+              FROM V_LOCPROD
+             WHERE LOCATION_ID NOT IN ( SELECT DISTINCT LOCATION_ID 
+<<<<<<< HEAD
+                                  FROM CP_FACTORY_SALESLOC 
+=======
+                                  FROM CP_FACTORY_SALESLOC )
+>>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
+        `);
+        let liFactLoc = [];
+        let lsFactLoc = {};
+        for (let cntLC = 0; cntLC < liLoc.length; cntLC++) {
+            lsFactLoc = {};
+            lsFactLoc['LOCATION_ID'] = GenF.parse(liLoc[cntLC].LOCATION_ID);
+<<<<<<< HEAD
+            lsFactLoc['PRODUCT_ID'] = GenF.parse(liLoc[cntLC].PRODUCT_ID);
+=======
+            // lsFactLoc['PRODUCT_ID'] = GenF.parse(liLoc[cntLC].PRODUCT_ID);
+>>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
+            lsFactLoc['PLAN_LOC'] = GenF.parse(liLoc[cntLC].LOCATION_ID);
+            lsFactLoc['FACTORY_LOC'] = GenF.parse(liLoc[cntLC].LOCATION_ID);
+            liFactLoc.push(GenF.parse(lsFactLoc));
+        }
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
         if (liFactLoc) {
             try {
                 cds.run({
@@ -1051,9 +1188,12 @@ class SOFunctions {
                 console.log("Unable to insert records", error)
             }
         }
+<<<<<<< HEAD
         else {
             console.log("No data to insert records");
         }
+=======
+>>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
     }
 }
 
