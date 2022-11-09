@@ -2715,7 +2715,7 @@ module.exports = cds.service.impl(async function () {
                    CP_MARKETAUTH_CFG."PRODUCT_ID",
                    CP_MARKETAUTH_CFG."OPT_PERCENT",
                    CP_MARKETAUTH_CFG."VERSION",
-                   CP_MARKETAUTH_CFG."SCENARIO",
+                   CP_MARKETAUTH_CFG."SCENARIO"
                 FROM CP_MARKETAUTH_CFG
           INNER JOIN V_CHARVAL
                   ON CP_MARKETAUTH_CFG.CHAR_NUM  = V_CHARVAL.CHAR_NUM
