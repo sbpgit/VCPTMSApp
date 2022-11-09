@@ -42,6 +42,18 @@ GET http://localhost:4004/plstr-data/fgenPartialProducts()
 ### UPDATE JOBS LOCALLY
 GET http://localhost:4004/jobs/fUpdateJobs()
 
+### purge Job Logs
+POST http://localhost:4004/jobs/purgeJobLogs
+Content-Type: application/json
+
+{
+	"purgeDays" : 5
+}
+
+
+### PURGE JOB LOGS
+GET http://localhost:4004/jobs/fpurgeJobLogs(purgeDays=3)
+
 ### READ JOBS LOCALLY
 GET http://localhost:4004/jobs/lreadJobs()
 
@@ -205,4 +217,5 @@ Content-Type: application/json
 		}
 	]
 }
+
 
