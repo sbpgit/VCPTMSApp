@@ -496,13 +496,7 @@ sap.ui.define(
         return (imDate = vMonth + "/" + vDate + "/" + imDate.getFullYear());
       },
 
-
-
-
-
-
-
-
+     
         });
     }
 );

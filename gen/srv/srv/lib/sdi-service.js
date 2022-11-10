@@ -1187,7 +1187,6 @@ module.exports = (srv) => {
         }
 
     });
-<<<<<<< HEAD
     srv.on("ImportSOStock", async (req) => {
         var flag = '';
         try {
@@ -1331,6 +1330,4 @@ module.exports = (srv) => {
         }
 
     });
-=======
->>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
 };

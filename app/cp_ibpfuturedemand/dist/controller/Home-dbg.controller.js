@@ -120,7 +120,7 @@ sap.ui.define(
           },
         });
       },
-      
+
       /**
        * This function is called when click on Reset button.
        * This will clear all the input box values.
@@ -131,11 +131,11 @@ sap.ui.define(
         that.oVer.setValue("");
         that.oScen.setValue("");
         // that.onAfterRendering();
-        that.data = [];
-        that.TableModel.setData({
-            results: that.data,
-          });
-          that.byId("IBPfdemList").setModel(that.TableModel);
+        that.data = [];
+        that.TableModel.setData({
+          results: that.data,
+        });
+        that.byId("IBPfdemList").setModel(that.TableModel);
 
 
       },
@@ -150,7 +150,7 @@ sap.ui.define(
           oProd = that.byId("idprod").getValue(),
           oVer = that.byId("idver").getValue(),
           oScen = that.byId("idscen").getValue();
-          that.oGModel = that.getModel("oGModel");
+        that.oGModel = that.getModel("oGModel");
 
         var oFilters = [];
 
@@ -192,12 +192,12 @@ sap.ui.define(
           that.getModel("BModel").read("/getIBPFdem", {
             filters: oFilters,
             success: function (oData) {
-                sap.ui.core.BusyIndicator.hide();
+              sap.ui.core.BusyIndicator.hide();
               oData.results.forEach(function (row) {
                 // Calling function to handle the date format
                 row.WEEK_DATE = that.getInMMddyyyyFormat(row.WEEK_DATE);
               }, that);
-              
+
 
               that.oGModel.setProperty("/tableData", oData.results)
               that.onNonZero();
@@ -240,24 +240,24 @@ sap.ui.define(
         that.oTable = that.byId("IBPfdemList");
         that.oGModel = that.getModel("oGModel");
         var selected = that.byId("idCheck1").getSelected();
-          that.aData = that.oGModel.getProperty("/tableData");
+        that.aData = that.oGModel.getProperty("/tableData");
         that.FinalData = [];
 
         if (selected) {
           // Filtering data which has row values, removing the rows which has all values as "0" or "null"
           for (var i = 0; i < that.aData.length; i++) {
-            if(that.aData[i].QUANTITY !== "0"){
+            if (that.aData[i].QUANTITY !== "0") {
               that.FinalData.push(that.aData[i]);
             }
           }
         } else {
           that.FinalData = that.aData;
         }
-        
+
         that.TableModel.setData({
-            results: that.FinalData,
-          });
-          that.byId("IBPfdemList").setModel(that.TableModel);
+          results: that.FinalData,
+        });
+        that.byId("IBPfdemList").setModel(that.TableModel);
       },
 
 
@@ -340,7 +340,7 @@ sap.ui.define(
        */
       handleSearch: function (oEvent) {
         var sQuery =
-            oEvent.getParameter("value") || oEvent.getParameter("newValue"),
+          oEvent.getParameter("value") || oEvent.getParameter("newValue"),
           sId = oEvent.getParameter("id"),
           oFilters = [];
         // Check if search filter is to be applied
@@ -428,18 +428,18 @@ sap.ui.define(
           that.oGModel.setProperty("/SelectedProd", "");
 
           // Calling service to get Product list
-        //   this.getModel("BModel").read("/getLocProdDet", {
-        //     filters: [
-        //       new Filter(
-        //         "LOCATION_ID",
-        //         FilterOperator.EQ,
-        //         aSelectedItems[0].getTitle()
-        //       ),
-        //     ],
-        that.getModel("BModel").callFunction("/getAllProd", {
+          //   this.getModel("BModel").read("/getLocProdDet", {
+          //     filters: [
+          //       new Filter(
+          //         "LOCATION_ID",
+          //         FilterOperator.EQ,
+          //         aSelectedItems[0].getTitle()
+          //       ),
+          //     ],
+          that.getModel("BModel").callFunction("/getAllProd", {
             method: "GET",
             urlParameters: {
-                LOCATION_ID: that.oLoc.getValue()
+              LOCATION_ID: that.oLoc.getValue()
             },
             success: function (oData) {
               that.prodModel.setData(oData);
@@ -596,6 +596,22 @@ sap.ui.define(
         }
         that.byId("IBPfdemList").getBinding("items").filter(oFilters);
       },
+      onNavPress: function () {
+            if (sap.ushell && sap.ushell.Container && sap.ushell.Container.getService) {
+        var oCrossAppNavigator = sap.ushell.Container.getService("CrossApplicationNavigation"); 
+        // // generate the Hash to display 
+        var hash = (oCrossAppNavigator && oCrossAppNavigator.hrefForExternal({
+          target: {
+            semanticObject: "vcpdocdisplay",
+            action: "Display"
+          }
+        })) || "";
+        // //Generate a  URL for the second application
+        var url = window.location.href.split('#')[0] + hash;
+        // //Navigate to second app
+        sap.m.URLHelper.redirect(url, true);
+            } 
+        }
     });
   }
 );

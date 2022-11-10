@@ -1,19 +1,7 @@
 {
 	"name": "cpapp.cpjoblog",
 	"version": "0.0.1",
-<<<<<<< HEAD
-	"buildTimestamp": "202211081058",
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-	"buildTimestamp": "202211040630",
-=======
-	"buildTimestamp": "202211041247",
->>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
-=======
-	"buildTimestamp": "202211040954",
->>>>>>> 2f6d053032bebd817aa5e16b0d32c9ea8065b6c9
->>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
+	"buildTimestamp": "202211091209",
 	"scmRevision": "",
 	"libraries": []
 }

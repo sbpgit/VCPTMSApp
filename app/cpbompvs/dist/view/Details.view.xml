@@ -1,13 +1,16 @@
 <mvc:View controllerName="cpapp.cpbompvs.controller.Details" xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:f="sap.f">
 	<Page id="pageId">
 		<customHeader>
-			<Bar>
+			<Bar id="_IDGenBar1">
 				<contentLeft>
 			<Button id="leftMenu" icon="sap-icon://menu2" tooltip="Side Menu Expand/Collapse" press="expandBegin" type="Transparent" visible="false"/>
 			</contentLeft>
 				<contentMiddle>
-					<Title text="{i18n>title}" class="boldText"></Title>
+					<Title id="_IDGenTitle1" text="{i18n>title}" class="boldText"></Title>
 				</contentMiddle>
+				<contentRight>
+				<Button  icon="sap-icon://sys-help" id="idNav2" press="onNavPress" type="Emphasized" tooltip="Help Document" />
+				</contentRight>
 			</Bar>
 		</customHeader>
 		<content>
