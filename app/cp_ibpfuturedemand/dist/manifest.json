@@ -85,6 +85,11 @@
             "compact": true,
             "cozy": true
         },
+        "services": {
+            "CrossApplicationNavigation": {
+                "factoryName": "sap.ushell.services.CrossApplicationNavigation"
+            }
+        },
         "models": {
             "i18n": {
                 "type": "sap.ui.model.resource.ResourceModel",

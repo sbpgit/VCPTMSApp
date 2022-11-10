@@ -3,7 +3,8 @@
     xmlns="sap.m">
 
     <App id="app">
-        <pages></pages>
+        <pages>
+        </pages>
     </App>
 
 </mvc:View>

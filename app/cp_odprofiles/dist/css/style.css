@@ -12,3 +12,11 @@ div#container-cp\.odp\.cpodprofiles---Home--page-title {
 .sapUiSizeCompact .sapUxAPObjectPageSectionHeader, .sapUxAPObjectPageSectionHeader {
     height: 0.1rem !important;
 }
+
+.hdrBtnMargin {
+    margin-left : 42rem;
+  }
+
+  .hdrBtnMarginHdr {
+    margin-left : 72.5rem;
+  }

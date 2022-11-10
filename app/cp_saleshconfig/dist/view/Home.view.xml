@@ -9,88 +9,96 @@
 
         <ux:ObjectPageLayout id="ObjectPageLayout">
             <ux:headerTitle>
-                <ux:ObjectPageDynamicHeaderTitle>
+                <ux:ObjectPageDynamicHeaderTitle id="_IDGenObjectPageDynamicHeaderTitle1">
                     <ux:expandedHeading>
-                        <Title text="{i18n>title}" class="boldText" titleAlignment="Center" />
+                        <Title id="_IDGenTitle1" text="{i18n>title}" class="boldText" titleAlignment="Center" />
                     </ux:expandedHeading>
                     <ux:snappedHeading>
-                        <FlexBox fitContainer="true" alignItems="Center" >
-                            <Title text="{i18n>title}" wrapping="true" />
+                        <FlexBox id="_IDGenFlexBox1" fitContainer="true" alignItems="Center" >
+                            <Title id="_IDGenTitle2" text="{i18n>title}" wrapping="true" />
+                            <Button class="hdrBtnMarginHdr" icon="sap-icon://sys-help" id="idNav2" press="onNavPress" type="Emphasized" tooltip="Help Document" />
                         </FlexBox>
                     </ux:snappedHeading>
                 </ux:ObjectPageDynamicHeaderTitle>
             </ux:headerTitle>
             <ux:headerContent>
-                <FlexBox wrap="Wrap" fitContainer="true">
-        <l:Grid defaultSpan="XL3 L3 M6 S12" >
-                <VBox>
-                <Label text="" />
+                <FlexBox id="_IDGenFlexBox2" wrap="Wrap" fitContainer="true">
+        <l:Grid id="_IDGenGrid1" defaultSpan="XL3 L3 M6 S12" >
+                <VBox id="_IDGenVBox1">
+                <Label id="_IDGenLabel1" text="" />
                 <SearchField id="idSearch" placeholder="Location/ Configurable Product/ Sales Doc" liveChange="onTableSearch" />
                 </VBox>
-                <VBox >
-                    <Label text="Location" required="true"/>
+                <VBox id="_IDGenVBox2" >
+                    <Label id="_IDGenLabel2" text="Location" required="true" width="100px"/>
                     <Input id="idloc" value=""  placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
                 </VBox>
-                <VBox>
-                    <Label text="Configurable Product" required="true"/>
+                <VBox id="_IDGenVBox3">
+                    <Label id="_IDGenLabel3" text="Configurable Product" required="true"/>
                     <MultiInput id="prodInput"  placeholder="Configurable Product" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate"/>
                 </VBox>
-                <VBox>
-                    <Label text="Doc. Created Date"/>
-                    <HBox>
-                    <DatePicker id="idDate" displayFormat="yyyy-MM-dd" change="handleDateChange"/>
-                    <VBox>
-                    <Button text="Go" type="Emphasized" press="onGetData" tooltip="Get data based on filters"/>
+                <VBox id="_IDGenVBox4">
+                    <Label id="_IDGenLabel4" text="Doc. Created Date"/>
+                    <HBox id="_IDGenHBox1">
+                    <DatePicker id="idDate" displayFormat="yyyy-MM-dd" change="handleDateChange" width="130px"/>
+                    <VBox id="_IDGenVBox5">
+                    <HBox id="_IDGenHBox2">
+                    <HBox id="_IDGenHBox3">
+                    <Button id="_IDGenButton1" class="buttonClass" text="Go" type="Emphasized" press="onGetData" tooltip="Get data based on filters"/>
+                    <Button class="hdrBtnMargin" icon="sap-icon://sys-help" id="idNav1" press="onNavPress" type="Emphasized" tooltip="Help Document" />
+                    </HBox>
+                    </HBox>
                     </VBox>
                     </HBox>
                 </VBox>
+                
+
                 </l:Grid>
             </FlexBox>
             </ux:headerContent>
             <ux:sections>
-                <ux:ObjectPageSection >
+                <ux:ObjectPageSection id="_IDGenObjectPageSection1" >
                     <ux:subSections>
-                        <ux:ObjectPageSubSection>
+                        <ux:ObjectPageSubSection id="_IDGenObjectPageSubSection1">
                             <ux:blocks>
                 <Table id="idTab" items="{path: '/results'}" growingScrollToLoad="true" rememberSelections="false" itemPress="onhandlePress" mode="SingleSelectMaster" selectionChange="onhandlePress" sticky="ColumnHeaders">
                     
                     <columns>
-                        <Column hAlign="Left" vAlign="Middle">
-                            <Text text="{i18n>salDoc}" />
+                        <Column id="_IDGenColumn1" hAlign="Left" vAlign="Middle">
+                            <Text id="_IDGenText1" text="{i18n>salDoc}" />
                         </Column>
-                        <Column hAlign="Left" vAlign="Middle">
-                            <Text text="{i18n>SalDocItem}" />
+                        <Column id="_IDGenColumn2" hAlign="Left" vAlign="Middle">
+                            <Text id="_IDGenText2" text="{i18n>SalDocItem}" />
                         </Column>
-                        <Column hAlign="Left" vAlign="Middle">
-                            <Text text="{i18n>docCreDate}"/>
+                        <Column id="_IDGenColumn3" hAlign="Left" vAlign="Middle">
+                            <Text id="_IDGenText3" text="{i18n>docCreDate}"/>
                         </Column>
-                        <Column hAlign="Left" vAlign="Middle">
-                            <Text text="{i18n>schLine}"/>
+                        <Column id="_IDGenColumn4" hAlign="Left" vAlign="Middle">
+                            <Text id="_IDGenText4" text="{i18n>schLine}"/>
                         </Column>
-                        <Column hAlign="Left" vAlign="Middle">
-                            <Text text="{i18n>PrdId}"/>
+                        <Column id="_IDGenColumn5" hAlign="Left" vAlign="Middle">
+                            <Text id="_IDGenText5" text="{i18n>PrdId}"/>
                         </Column>
-                        <Column hAlign="Left" vAlign="Middle">
-                            <Text text="{i18n>Custgrp}"/>
+                        <Column id="_IDGenColumn6" hAlign="Left" vAlign="Middle">
+                            <Text id="_IDGenText6" text="{i18n>Custgrp}"/>
                         </Column>
-                        <Column hAlign="Left" vAlign="Middle" visible="false">
-                            <Text text="{i18n>Loc}"/>
+                        <Column id="_IDGenColumn7" hAlign="Left" vAlign="Middle" visible="false">
+                            <Text id="_IDGenText7" text="{i18n>Loc}"/>
                         </Column>
-                        <Column hAlign="Left" vAlign="Middle">
-                            <Text text="{i18n>ordQuan}"/>
+                        <Column id="_IDGenColumn8" hAlign="Left" vAlign="Middle">
+                            <Text id="_IDGenText8" text="{i18n>ordQuan}"/>
                         </Column>
                     </columns>
                     <items>
-                        <ColumnListItem>
+                        <ColumnListItem id="_IDGenColumnListItem1">
                             <cells>
-                                <Text text="{SALES_DOC}"/>
-                                <Text text="{SALESDOC_ITEM}"/>
-                                <Text text="{path: 'DOC_CREATEDDATE', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'MM/dd/yyyy' }}"/>
-                                <Text text="{SCHEDULELINE_NUM}"/>
-                                <Text text="{PRODUCT_ID}"/>
-                                <Text text="{CUSTOMER_GROUP}"/>
-                                <Text text="{LOCATION_ID}"/>
-                                <Text text="{ORD_QTY}"/>
+                                <Text id="_IDGenText9" text="{SALES_DOC}"/>
+                                <Text id="_IDGenText10" text="{SALESDOC_ITEM}"/>
+                                <Text id="_IDGenText11" text="{path: 'DOC_CREATEDDATE', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'MM/dd/yyyy' }}"/>
+                                <Text id="_IDGenText12" text="{SCHEDULELINE_NUM}"/>
+                                <Text id="_IDGenText13" text="{PRODUCT_ID}"/>
+                                <Text id="_IDGenText14" text="{CUSTOMER_GROUP}"/>
+                                <Text id="_IDGenText15" text="{LOCATION_ID}"/>
+                                <Text id="_IDGenText16" text="{ORD_QTY}"/>
                             </cells>
                         </ColumnListItem>
                     </items>

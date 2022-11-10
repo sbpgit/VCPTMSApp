@@ -1,19 +1,7 @@
 {
 	"name": "cp.lp.cplocprod",
 	"version": "0.0.1",
-<<<<<<< HEAD
-	"buildTimestamp": "202211081054",
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-	"buildTimestamp": "202211040624",
-=======
-	"buildTimestamp": "202211041243",
->>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
-=======
-	"buildTimestamp": "202211040949",
->>>>>>> 2f6d053032bebd817aa5e16b0d32c9ea8065b6c9
->>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
+	"buildTimestamp": "202211091205",
 	"scmRevision": "",
 	"libraries": []
 }

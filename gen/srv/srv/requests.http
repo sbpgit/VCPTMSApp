@@ -42,6 +42,18 @@ GET http://localhost:4004/plstr-data/fgenPartialProducts()
 ### UPDATE JOBS LOCALLY
 GET http://localhost:4004/jobs/fUpdateJobs()
 
+### purge Job Logs
+POST http://localhost:4004/jobs/purgeJobLogs
+Content-Type: application/json
+
+{
+	"purgeDays" : 5
+}
+
+
+### PURGE JOB LOGS
+GET http://localhost:4004/jobs/fpurgeJobLogs(purgeDays=3)
+
 ### READ JOBS LOCALLY
 GET http://localhost:4004/jobs/lreadJobs()
 
@@ -129,17 +141,10 @@ Content-Type: application/json
 {
 	"vcRulesList": [
 		{
-<<<<<<< HEAD
 			"profile": "SBP_HGBT_0",
 			"override": false,
 			"Location": "PL20",
 			"Product": "534EDPI0E131",
-=======
-			"profile": "SBP_HGBT_1",
-			"override": true,
-			"Location": "PL20",
-			"Product": "534EDPI0E119",
->>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
 			"GroupID": "ALL",
 			"Type": "PI",
 			"modelVersion": "Simulation"
@@ -156,27 +161,16 @@ Content-Type: application/json
 {
 	"vcRulesList": [
 		{
-<<<<<<< HEAD
 			"override": false,
 			"Location": "PL20",
 			"Product": "534EDPI0E131",
-=======
-			"override": true,
-			"Location": "PL20",
-			"Product": "534EDPI0E119",
->>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
 			"GroupID": "ALL",
 			"Type": "PI",
 			"modelVersion": "Simulation",
 			"version": "__BASELINE",
 			"scenario": "BSL_SCENARIO",
-<<<<<<< HEAD
             "startDate": "2022-11-21",
             "endDate": "2022-12-28"
-=======
-            "startDate": "2022-10-24",
-            "endDate": "2022-10-31"
->>>>>>> 5c47fee8306c663b65f101f8dcc80090bc7e677f
 
 		}
 	]
@@ -223,4 +217,5 @@ Content-Type: application/json
 		}
 	]
 }
+
 

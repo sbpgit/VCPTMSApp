@@ -41,6 +41,7 @@ service IBPImportSrv @(impl : './lib/ibpimport-service.js') {
     action generateFCharPlan(LOCATION_ID : String(4), PRODUCT_ID : String(40), FROMDATE : Date, TODATE : Date);
     action exportIBPCIR(LOCATION_ID : String(4),PRODUCT_ID : String(40));  // Partial Product
     action exportMktAuth(LOCATION_ID : String(4),PRODUCT_ID : String(40));//returns String;
+    // function exportMktAuth(LOCATION_ID : String(4),PRODUCT_ID : String(40)) returns String;
 
 }
 @protocol : 'rest'

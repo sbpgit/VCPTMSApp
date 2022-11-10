@@ -16,6 +16,7 @@
                 <ux:snappedHeading>
 					<FlexBox fitContainer="true" alignItems="Center" >
 						<Title text="{i18n>title}" wrapping="true" />
+                        <Button class="hdrBtnMarginHdr" icon="sap-icon://sys-help" id="idNav" press="onNavPress" type="Emphasized" tooltip="Help Document"/>
 					</FlexBox>
 				</ux:snappedHeading>
             </ux:ObjectPageDynamicHeaderTitle>
@@ -41,6 +42,8 @@
                         <HBox>
                             <Button text="Go" type="Emphasized" press="onGetData" tooltip="Get data based on filters" class="sapUiTinyMarginEnd"/>
                             <Button text="Reset" type="Transparent" press="onResetDate" tooltip="Reset Valid To Date"/>
+                            <Button class="hdrBtnMargin" icon="sap-icon://sys-help" id="idNav1" press="onNavPress" type="Emphasized" tooltip="Help Document"/>
+
                         </HBox>
                     </VBox>
                 </l:Grid>
@@ -58,6 +61,7 @@
                                             <ToolbarSpacer/>
                                             <Button id="idCreate" type='Ghost' text="Create Order" press="onOrderCreate"></Button>
                                             <Button tooltip="Sort" icon="sap-icon://sort" press="handleSortButtonPressed" id="idSort" visible="false" type="Emphasized"/>
+                                        
                                         </content>
                                     </Toolbar>
                                 </headerToolbar>
