@@ -180,7 +180,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
     function generate_timeseries(LOCATION_ID : String(4), PRODUCT_ID : String(40))                                                                       returns String;
     //LOCATION_ID : String(4), PRODUCT_ID : String(40))
     // Generate Timeseries
-    function generate_timeseriesF(LocProdData : String)                                                                                                                                                                                                                          returns String;
+    function generate_timeseriesF(LOCATION_ID : String(4), PRODUCT_ID : String(40))                                                                                                                                                                                                                          returns String;
     action   generateTimeseries(LocProdData : String);
     // Generate Timeseries
     action   generateTimeseriesF(LocProdData : String);

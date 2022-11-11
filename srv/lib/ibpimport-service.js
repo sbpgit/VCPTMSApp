@@ -3,6 +3,7 @@ const GenF = require("./gen-functions");
 const IBPFunc = require("./ibp-functions");
 const hana = require("@sap/hana-client");
 const xsenv = require("@sap/xsenv");
+const { v1: uuidv1 } = require('uuid');
 const JobSchedulerClient = require("@sap/jobs-client");
 const vAIRKey = process.env.AIR;
 const obibpfucntions = new IBPFunc();
@@ -1539,12 +1540,13 @@ module.exports = cds.service.impl(async function () {
             "NavSBPVCP": oReq.sales
         }
         // req.headers['Application-Interface-Key'] = vAIRKey;
-        await service.tx(req).post("/SBPVCPTrans", oEntry);
-
+        
         // var resUrl = "/SBPVCPMessage?$select=Transactionid,ExceptionId,MsgText&$filter=Transactionid eq '" + vTransID + "'";
         var resUrl = "/getExportResult?P_TransactionID='" + vTransID + "'";
         try {
-            return await service.tx(req).get(resUrl);
+            await service.tx(req).post("/SBPVCPTrans", oEntry);
+
+            // return await service.tx(req).get(resUrl);
             flag = 'S';
         }
         catch {
@@ -1564,11 +1566,11 @@ module.exports = cds.service.impl(async function () {
                 "NavSBPVCP": oReq.sales
             }
             // req.headers['Application-Interface-Key'] = vAIRKey;
-            await service.tx(req).post("/SBPVCPTrans", oEntryCfg);
-
+            
             var resUrl = "/getExportResult?P_TransactionID='" + vTransID + "'";
             try {
-                return await service.tx(req).get(resUrl);
+                await service.tx(req).post("/SBPVCPTrans", oEntryCfg);
+                // return await service.tx(req).get(resUrl);
                 flag = 'X';
             }
             catch {
@@ -2703,6 +2705,16 @@ module.exports = cds.service.impl(async function () {
             mktauth: [],
         },
             vMktauth, vFlag = '';
+            
+        let createtAt = new Date();
+        let id = uuidv1();
+        let values = [];
+        let message = "Started exporting Market authorizations";
+        let res = req._.req.res;
+         let RequestData = req.data;
+        values.push({ id, createtAt, message, RequestData });
+        res.statusCode = 202;
+        res.send({ values });
         const limkauth = await cds.run(
             `
             SELECT CP_MARKETAUTH_CFG."WEEK_DATE",
@@ -2751,7 +2763,7 @@ module.exports = cds.service.impl(async function () {
                 // "SCENARIOID": limkauth[i].SCENARIO,
                 "MARKETAUTHORIZATION": vDemd.toString()
             };
-            console.log(vMktauth);
+           // console.log(vMktauth);
             oReq.mktauth.push(vMktauth);
 
         }
