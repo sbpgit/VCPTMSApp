@@ -150,6 +150,24 @@
                             "entitySet": "getARObj"
                         }
                     }
+                },
+                "getPagePgrhList": {
+                    "options": {
+                        "settings": {
+                            "content": {
+                                "header": {
+                                    "actions": {
+                                        "idHelpPress": {
+                                            "id": "idHelpPressButton",
+                                            "text": "Help",
+                                            "press": "cpapp.cpauthorization.custom.ListReportExtController.onHelpPress",
+                                            "requiresSelection": false
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

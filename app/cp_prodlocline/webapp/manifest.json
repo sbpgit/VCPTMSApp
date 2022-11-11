@@ -78,6 +78,30 @@
                 "sap.fe.templates": {}
             }
         },
+        "extends": {
+            "extensions": {
+                "sap.ui.controllerExtensions": {
+                    "sap.suite.ui.generic.template.ListReport.ListReportController": {
+                        "controllerName": "cpapp.cpprodlocline.ext.controller.MyListReportExt",
+                        "sap.ui.generic.app":{
+                            "getProdlocline":{
+                                "EntitySet":"getProdlocline",
+                                "Actions":{
+                                    "btnid":{
+                                        "id":"btnIdButton",
+                                        "text":"Help",
+                                        "press":"onHelpPress",
+                                        "requiresSelection":false
+                                    }
+                                }
+
+                                
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "contentDensities": {
             "compact": true,
             "cozy": true
@@ -119,6 +143,11 @@
                     "pattern": "getProdlocline({key}):?query:",
                     "name": "getProdloclineObjectPage",
                     "target": "getProdloclineObjectPage"
+                },
+                {
+                    "pattern": ":?query:",
+                    "name": "default",
+                    "target": "sample"
                 }
             ],
             "targets": {
@@ -136,7 +165,7 @@
                                         "route": "getProdloclineObjectPage"
                                     }
                                 }
-                            },                           
+                            },
                             "initialLoad": true
                         }
                     }
@@ -149,6 +178,31 @@
                         "settings": {
                             "editableHeaderContent": false,
                             "entitySet": "getProdlocline"
+                        }
+                    }
+                },
+                "sample": {
+                    "type": "Component",
+                    "id": "Default",
+                    "name": "sap.fe.templates.ListReport",
+                    "viewLevel": 1,
+                    "options": {
+                        "settings": {
+                            "entitySet": "getProdlocline",
+                            "editableHeaderContent": true,
+                            "content": {
+                                "header": {
+                                    "actions": {
+                                        "customHeaderActionShowMessage": {
+                                            "press": ".extension.cpapp.cpprodlocline.MyListReportExt.onHelpPress",
+                                            "text": "Help",
+                                            "visible": true,
+											"enabled": true,
+                                           "requiresSelection":false
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
