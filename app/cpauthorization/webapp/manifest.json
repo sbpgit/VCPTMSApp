@@ -136,6 +136,18 @@
                                         "route": "getARObjObjectPage"
                                     }
                                 }
+                            },
+                            "content": {
+                                "header": {
+                                    "actions": {
+                                        "idBtnHelp": {
+                                            "id": "idBtnHelpButton",
+                                            "text": "Help",
+                                            "press": "cpapp.cpauthorization.custom.ListReportExtController.onHelpPress",
+                                            "requiresSelection": false
+                                        }
+                                    }
+                                }
                             }
                         }
                     }

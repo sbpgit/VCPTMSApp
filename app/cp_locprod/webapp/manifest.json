@@ -116,8 +116,20 @@
                                         "route": "getLocProdObjectPage"
                                     }
                                 }
-                            },                           
-                            "initialLoad": true
+                            },
+                            "initialLoad": true,
+                            "content": {
+                                "header": {
+                                    "actions": {
+                                        "idBtnHelp": {
+                                            "id": "idBtnHelpButton",
+                                            "text": "Help",
+                                            "press": "cp.lp.cplocprod.custom.ListReportExtController.onHelpPress",
+                                            "requiresSelection": false
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 },

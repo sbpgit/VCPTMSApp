@@ -2,6 +2,7 @@ sap.ui.define([],
 function (){
     "use strict";
     return {
+        
         onHelpPress: function(oEvent) {
             var hash = "#vcpdocdisplay-Display";
 

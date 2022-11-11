@@ -78,30 +78,6 @@
                 "sap.fe.templates": {}
             }
         },
-        "extends": {
-            "extensions": {
-                "sap.ui.controllerExtensions": {
-                    "sap.suite.ui.generic.template.ListReport.ListReportController": {
-                        "controllerName": "cpapp.cpprodlocline.ext.controller.MyListReportExt",
-                        "sap.ui.generic.app":{
-                            "getProdlocline":{
-                                "EntitySet":"getProdlocline",
-                                "Actions":{
-                                    "btnid":{
-                                        "id":"btnIdButton",
-                                        "text":"Help",
-                                        "press":"onHelpPress",
-                                        "requiresSelection":false
-                                    }
-                                }
-
-                                
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "contentDensities": {
             "compact": true,
             "cozy": true
@@ -166,7 +142,19 @@
                                     }
                                 }
                             },
-                            "initialLoad": true
+                            "initialLoad": true,
+                            "content": {
+                                "header": {
+                                    "actions": {
+                                        "idHplBtn": {
+                                            "id": "idHplBtnButton",
+                                            "text": "Help",
+                                            "press": "cpapp.cpprodlocline.custom.ListReportExtController.onHelpPress",
+                                            "requiresSelection": false
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 },
@@ -197,8 +185,8 @@
                                             "press": ".extension.cpapp.cpprodlocline.MyListReportExt.onHelpPress",
                                             "text": "Help",
                                             "visible": true,
-											"enabled": true,
-                                           "requiresSelection":false
+                                            "enabled": true,
+                                            "requiresSelection": false
                                         }
                                     }
                                 }

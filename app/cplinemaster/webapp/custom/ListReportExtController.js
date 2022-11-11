@@ -5,9 +5,9 @@ function (){
         onHelpPress: function(oEvent) {
             var hash = "#vcpdocdisplay-Display";
 
-                var url = window.location.href.split('#')[0] + hash;
+            var url = window.location.href.split('#')[0] + hash;
 
-                sap.m.URLHelper.redirect(url, true);
+            sap.m.URLHelper.redirect(url, true);
         }
     };
 });
