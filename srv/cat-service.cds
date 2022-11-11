@@ -180,7 +180,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
     function generate_timeseries(LOCATION_ID : String(4), PRODUCT_ID : String(40))                                                                       returns String;
     //LOCATION_ID : String(4), PRODUCT_ID : String(40))
     // Generate Timeseries
-    function generate_timeseriesF(LocProdData : String)                                                                                                                                                                                                                          returns String;
+    function generate_timeseriesF(LOCATION_ID : String(4), PRODUCT_ID : String(40))                                                                                                                                                                                                                          returns String;
     action   generateTimeseries(LocProdData : String);
     // Generate Timeseries
     action   generateTimeseriesF(LocProdData : String);
@@ -266,6 +266,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
     entity V_Parameters         as projection on V_PLANNEDCONFIG;
     function postParameterValues(FLAG : String(1), PARAMVALS : String)                                                                                                                                                                                                           returns String;
     entity getCIRGenerated      as projection on od.CIR_GENERATED;
+    entity getPlancfgPara       as projection on od.PARAMETER_VALUES;
     ///*****/ CIR weekly /*****/
     @readonly
     entity getCIRLog    as projection on od.CIRLOG;

@@ -33,8 +33,11 @@ service JobsService @(impl : './lib/Jobs-Service.js') {
 
 
   action updateJobs();
+  action purgeJobLogs(purgeDays :  Integer ) returns String;
+
   // KLUDGE function API for Alternate to POST updateJobs()
   function fUpdateJobs() returns String;
+  function fpurgeJobLogs(purgeDays :  Integer ) returns String;
 
 // LOCAL API's for UI purpose
   function lreadJobs() returns String;
@@ -80,5 +83,6 @@ service JobsService @(impl : './lib/Jobs-Service.js') {
   action createJobSchedule(jobId : Integer, jobSchedule : js.mlSchedules) returns String;
   action deleteJobSchedule(jobId : Integer, scheduleId : String) returns String;
   action updateJobSchedule(jobId : Integer, scheduleId : String,jobSchedule : js.mlSchedules) returns String;
+
 
 }

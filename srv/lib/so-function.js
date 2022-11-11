@@ -18,7 +18,7 @@ class SOFunctions {
 
         await GenF.logMessage(req, 'Started Sales Orders Processing');
 
-        // await this.processUniqueID(adata.LOCATION_ID, adata.PRODUCT_ID, '');
+        await this.processUniqueID(adata.LOCATION_ID, adata.PRODUCT_ID, '');
         await this.genBaseMarketAuth(adata.LOCATION_ID, adata.PRODUCT_ID);
         await this.genPartialProd(adata.LOCATION_ID, adata.PRODUCT_ID);
       //  await this.genFactoryLoc(adata.LOCATION_ID, adata.PRODUCT_ID);
@@ -189,6 +189,12 @@ class SOFunctions {
         for (let cntSO = 0; cntSO < liSOHM.length; cntSO++) {
             let lIgnoreProduct = '';
             for (let cntPC = 0; cntPC < liPartialProd.length; cntPC++) {
+                // Rest for every change in Partial Product
+                if (cntPC === 0 ||
+                    liPartialProd[cntPC].LOCATION_ID !== liPartialProd[GenF.subOne(cntPC, liPartialProd.length)].LOCATION_ID ||
+                    liPartialProd[cntPC].PRODUCT_ID !== liPartialProd[GenF.subOne(cntPC, liPartialProd.length)].PRODUCT_ID) {
+                    lIgnoreProduct = '';
+                }
                 let lSuccess = '';
                 for (let cntSOC = 0; cntSOC < liSOHM[cntSO].CONFIG.length; cntSOC++) {
                     if (liSOHM[cntSO].CONFIG[cntSOC].CHAR_NUM === liPartialProd[cntPC].CHAR_NUM &&
@@ -833,6 +839,7 @@ class SOFunctions {
                                                     V_UNIQUE_ID.CHARVAL_NUM`);
         let lsDefMktAuth = {};
         let liDefMktAuth = [];
+        let liCfgMktAuth = [];
         let lOrdQty = 0;
         for (let cntCVq = 0; cntCVq < liCharValQty.length; cntCVq++) {
             lOrdQty = 0;
@@ -855,6 +862,9 @@ class SOFunctions {
                 lsDefMktAuth['OPT_PERCENT'] = 0;
             }
             liDefMktAuth.push(GenF.parse(lsDefMktAuth));
+            lsDefMktAuth['VERSION'] = '';
+            lsDefMktAuth['SCENARIO'] = '';
+            liCfgMktAuth.push(GenF.parse(lsDefMktAuth));
         }
         if (liDefMktAuth) {
             try {
@@ -877,15 +887,22 @@ class SOFunctions {
             let lDateSQL = GenF.getNextMondayCmp(lDate.toISOString().split('Z')[0].split('T')[0]);//(lDate.toISOString().split('T')[0]);
             // Loop through all the partial products                     
             for (let cntS = 0; cntS < liSOrdQty.length; cntS++) {
-                await cds.run(`INSERT INTO "CP_MARKETAUTH_CFG"  SELECT  '${lDateSQL}',
-                                                                        LOCATION_ID,
-                                                                        PRODUCT_ID,
-                                                                        CHAR_NUM,
-                                                                        CHARVAL_NUM,
+                // await cds.run(INSERT.into("CP_DEF_MKTAUTH").entries(liDefMktAuth));
+                
+                await cds.run(`INSERT INTO "CP_MARKETAUTH_CFG"  ( SELECT  '${lDateSQL}',
+                                                                        A.LOCATION_ID,
+                                                                        A.PRODUCT_ID,
+                                                                        A.CHAR_NUM,
+                                                                        A.CHARVAL_NUM,
+                                                                        B.VERSION,
+                                                                        B.SCENARIO,
                                                                         OPT_PERCENT
-                                                                   FROM CP_DEF_MKTAUTH
+                                                                   FROM CP_DEF_MKTAUTH as A
+                                                                   inner join V_IBPVERSCENARIO AS B
+                                                                   ON A.LOCATION_ID = B.LOCATION_ID
+                                                                   AND A.PRODUCT_ID =  B.PRODUCT_ID
                                                                   WHERE LOCATION_ID = '${liSOrdQty[cntS].LOCATION_ID}'
-                                                                    AND PRODUCT_ID = '${liSOrdQty[cntS].PRODUCT_ID}'`);
+                                                                    AND PRODUCT_ID = '${liSOrdQty[cntS].PRODUCT_ID}')`);
 
             }
             lWeeks = parseInt(lWeeks) - 1;

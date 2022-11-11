@@ -28,13 +28,6 @@
             "destination": "ui5"
         },
         {
-            "source": "^/service/(.*)$",
-            "target": "$1",
-            "destination": "USERAPI",
-            "authenticationType": "xsuaa",
-            "csrfProtection": false
-        },
-        {
             "source": "^/test-resources/(.*)$",
             "target": "/test-resources/$1",
             "authenticationType": "none",

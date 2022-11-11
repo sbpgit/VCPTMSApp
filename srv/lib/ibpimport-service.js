@@ -3,6 +3,7 @@ const GenF = require("./gen-functions");
 const IBPFunc = require("./ibp-functions");
 const hana = require("@sap/hana-client");
 const xsenv = require("@sap/xsenv");
+const { v1: uuidv1 } = require('uuid');
 const JobSchedulerClient = require("@sap/jobs-client");
 const vAIRKey = process.env.AIR;
 const obibpfucntions = new IBPFunc();
@@ -1539,12 +1540,13 @@ module.exports = cds.service.impl(async function () {
             "NavSBPVCP": oReq.sales
         }
         // req.headers['Application-Interface-Key'] = vAIRKey;
-        await service.tx(req).post("/SBPVCPTrans", oEntry);
-
+        
         // var resUrl = "/SBPVCPMessage?$select=Transactionid,ExceptionId,MsgText&$filter=Transactionid eq '" + vTransID + "'";
         var resUrl = "/getExportResult?P_TransactionID='" + vTransID + "'";
         try {
-            return await service.tx(req).get(resUrl);
+            await service.tx(req).post("/SBPVCPTrans", oEntry);
+
+            // return await service.tx(req).get(resUrl);
             flag = 'S';
         }
         catch {
@@ -1564,11 +1566,11 @@ module.exports = cds.service.impl(async function () {
                 "NavSBPVCP": oReq.sales
             }
             // req.headers['Application-Interface-Key'] = vAIRKey;
-            await service.tx(req).post("/SBPVCPTrans", oEntryCfg);
-
+            
             var resUrl = "/getExportResult?P_TransactionID='" + vTransID + "'";
             try {
-                return await service.tx(req).get(resUrl);
+                await service.tx(req).post("/SBPVCPTrans", oEntryCfg);
+                // return await service.tx(req).get(resUrl);
                 flag = 'X';
             }
             catch {
@@ -2703,6 +2705,16 @@ module.exports = cds.service.impl(async function () {
             mktauth: [],
         },
             vMktauth, vFlag = '';
+            
+        let createtAt = new Date();
+        let id = uuidv1();
+        let values = [];
+        let message = "Started exporting Market authorizations";
+        let res = req._.req.res;
+         let RequestData = req.data;
+        values.push({ id, createtAt, message, RequestData });
+        res.statusCode = 202;
+        res.send({ values });
         const limkauth = await cds.run(
             `
             SELECT CP_MARKETAUTH_CFG."WEEK_DATE",
@@ -2715,7 +2727,7 @@ module.exports = cds.service.impl(async function () {
                    CP_MARKETAUTH_CFG."PRODUCT_ID",
                    CP_MARKETAUTH_CFG."OPT_PERCENT",
                    CP_MARKETAUTH_CFG."VERSION",
-                   CP_MARKETAUTH_CFG."SCENARIO",
+                   CP_MARKETAUTH_CFG."SCENARIO"
                 FROM CP_MARKETAUTH_CFG
           INNER JOIN V_CHARVAL
                   ON CP_MARKETAUTH_CFG.CHAR_NUM  = V_CHARVAL.CHAR_NUM
@@ -2747,11 +2759,11 @@ module.exports = cds.service.impl(async function () {
                 "VCCLASS": limkauth[i].CLASS_NUM,
                 "CUSTID": "NULL",//lisales[i].CUSTOMER_GROUP,
                 "PERIODID4_TSTAMP": vWeekDate[0],
-                "VERSIONID": limkauth[i].VERSIONID,
-                "SCENARIOID": limkauth[i].SCENARIOID,
+                // "VERSIONID": limkauth[i].VERSION,
+                // "SCENARIOID": limkauth[i].SCENARIO,
                 "MARKETAUTHORIZATION": vDemd.toString()
             };
-            console.log(vMktauth);
+           // console.log(vMktauth);
             oReq.mktauth.push(vMktauth);
 
         }
@@ -2759,7 +2771,7 @@ module.exports = cds.service.impl(async function () {
         var oEntry =
         {
             "Transactionid": vTransID,
-            "AggregationLevelFieldsString": "PERIODID4_TSTAMP,VCCHAR,VCCHARVALUE,VCCLASS,CUSTID,LOCID,PRDID,VERSIONID,SCENARIOID,MARKETAUTHORIZATION",
+            "AggregationLevelFieldsString": "PERIODID4_TSTAMP,VCCHAR,VCCHARVALUE,VCCLASS,CUSTID,LOCID,PRDID,MARKETAUTHORIZATION",
             "VersionID": "",
             "DoCommit": true,
             "ScenarioID": "",
@@ -2786,13 +2798,13 @@ module.exports = cds.service.impl(async function () {
             dataObj["message"] = "Export of Market authorizations details is successfull at " + new Date();
 
 
-            if (request.headers['x-sap-job-id'] > 0) {
-                const scheduler = getJobscheduler(request);
+            if (req.headers['x-sap-job-id'] > 0) {
+                const scheduler = getJobscheduler(req);
 
                 var updateReq = {
-                    jobId: request.headers['x-sap-job-id'],
-                    scheduleId: request.headers['x-sap-job-schedule-id'],
-                    runId: request.headers['x-sap-job-run-id'],
+                    jobId: req.headers['x-sap-job-id'],
+                    scheduleId: req.headers['x-sap-job-schedule-id'],
+                    runId: req.headers['x-sap-job-run-id'],
                     data: dataObj
                 };
 
@@ -2816,13 +2828,13 @@ module.exports = cds.service.impl(async function () {
             dataObj["message"] = "Export of Market authorizations details has failed at" + new Date();
 
 
-            if (request.headers['x-sap-job-id'] > 0) {
-                const scheduler = getJobscheduler(request);
+            if (req.headers['x-sap-job-id'] > 0) {
+                const scheduler = getJobscheduler(req);
 
                 var updateReq = {
-                    jobId: request.headers['x-sap-job-id'],
-                    scheduleId: request.headers['x-sap-job-schedule-id'],
-                    runId: request.headers['x-sap-job-run-id'],
+                    jobId: req.headers['x-sap-job-id'],
+                    scheduleId: req.headers['x-sap-job-schedule-id'],
+                    runId: req.headers['x-sap-job-run-id'],
                     data: dataObj
                 };
 

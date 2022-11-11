@@ -504,7 +504,7 @@
       ],
       "elements": {
         "PRODUCT_ID": {
-          "@title": "Configurable Product",
+          "@title": "Product",
           "key": true,
           "type": "cds.String",
           "length": 40
@@ -709,7 +709,7 @@
           "length": 4
         },
         "PRODUCT_ID": {
-          "@title": "Configurable Product",
+          "@title": "Product",
           "key": true,
           "type": "cds.String",
           "length": 40
@@ -745,7 +745,7 @@
           "length": 4
         },
         "PRODUCT_ID": {
-          "@title": "Configurable Product",
+          "@title": "Product",
           "key": true,
           "type": "cds.String",
           "length": 40
@@ -788,7 +788,7 @@
           "length": 4
         },
         "PRODUCT_ID": {
-          "@title": "Configurable Product",
+          "@title": "Product",
           "key": true,
           "type": "cds.String",
           "length": 40
@@ -867,7 +867,7 @@
           "@title": "Internal Char. number",
           "key": true,
           "type": "cds.String",
-          "length": 10
+          "length": 70
         },
         "OD_CONDITION": {
           "@title": "Object Dependency condition ",
@@ -1046,7 +1046,7 @@
         "CHARVAL_NUM": {
           "@title": "Internal number Char. Value ",
           "type": "cds.String",
-          "length": 10
+          "length": 70
         },
         "PRODUCT_ID": {
           "@title": "Product Id",
@@ -1255,7 +1255,7 @@
           "@title": "Internal number Char. Value ",
           "key": true,
           "type": "cds.String",
-          "length": 10
+          "length": 70
         },
         "CLASS_NUM": {
           "@title": "Internal number class",
@@ -1982,7 +1982,7 @@
           "@title": "Internal Char. number",
           "key": true,
           "type": "cds.String",
-          "length": 15
+          "length": 70
         },
         "CHAR_VALUE": {
           "@title": "Charateristic Value",
@@ -3764,7 +3764,7 @@
           "@title": "Internal Char. number",
           "key": true,
           "type": "cds.String",
-          "length": 15
+          "length": 70
         },
         "OD_CONDITION": {
           "@title": "Restriction condition ",
@@ -3872,7 +3872,7 @@
           "length": 40
         },
         "PRODUCT_ID": {
-          "@title": "Configurable Product",
+          "@title": "Product",
           "key": true,
           "type": "cds.String",
           "length": 40
@@ -4025,7 +4025,19 @@
           "@title": "Internal Char. number",
           "key": true,
           "type": "cds.String",
+          "length": 70
+        },
+        "VERSION": {
+          "@title": "Version",
+          "key": true,
+          "type": "cds.String",
           "length": 10
+        },
+        "SCENARIO": {
+          "@title": "Scenario",
+          "key": true,
+          "type": "cds.String",
+          "length": 32
         },
         "OPT_PERCENT": {
           "@title": "Option Percentage",
@@ -4574,12 +4586,6 @@
       "@UI.SelectionFields": [
         {
           "=": "LOCATION_ID"
-<<<<<<< HEAD
-        },
-        {
-          "=": "PRODUCT_ID"
-=======
->>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
         }
       ],
       "@UI.LineItem": [
@@ -4598,21 +4604,6 @@
         {
           "$Type": "UI.DataField",
           "Value": {
-<<<<<<< HEAD
-            "=": "PRODUCT_ID"
-          },
-          "@UI.Importance": {
-            "#": "High"
-          },
-          "@HTML5.CssDefaults": {
-            "width": "15rem"
-          }
-        },
-        {
-          "$Type": "UI.DataField",
-          "Value": {
-=======
->>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
             "=": "PLAN_LOC"
           },
           "@UI.Importance": {
@@ -4639,11 +4630,7 @@
         "=": "LOCATION_ID"
       },
       "@UI.HeaderInfo.Description.Value": {
-<<<<<<< HEAD
-        "=": "PRODUCT_ID"
-=======
         "=": "LOCATION_ID"
->>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
       },
       "@UI.HeaderInfo.TypeName": "Demand - Plan - Factory Location",
       "@UI.HeaderInfo.TypeNamePlural": "Demand - Plan - Factory Location-Product",
@@ -4682,15 +4669,6 @@
           "type": "cds.String",
           "length": 4
         },
-<<<<<<< HEAD
-        "PRODUCT_ID": {
-          "@title": "Product",
-          "key": true,
-          "type": "cds.String",
-          "length": 40
-        },
-=======
->>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
         "PLAN_LOC": {
           "@title": "Planning Location ",
           "key": true,
@@ -4763,7 +4741,7 @@
           "@title": "Internal Char. number",
           "key": true,
           "type": "cds.String",
-          "length": 10
+          "length": 70
         },
         "OPT_PERCENT": {
           "@title": "Option Percentage",
@@ -4923,7 +4901,7 @@
       ],
       "elements": {
         "PRODUCT_ID": {
-          "@title": "Configurable Product",
+          "@title": "Product",
           "key": true,
           "type": "cds.String",
           "length": 40
@@ -5071,7 +5049,7 @@
           "@title": "Charval Num",
           "key": true,
           "type": "cds.String",
-          "length": 10
+          "length": 70
         },
         "OD_CONDITION": {
           "@title": "OD_CONDITION",
@@ -5152,7 +5130,7 @@
           "@title": "CHARVAL_NUM",
           "key": true,
           "type": "cds.String",
-          "length": 10
+          "length": 70
         },
         "CHARVAL_DESC": {
           "@title": "CHAR_DESC",
@@ -5662,7 +5640,7 @@
           "@title": "CHARVAL_NUM",
           "key": true,
           "type": "cds.String",
-          "length": 10
+          "length": 70
         },
         "CHAR_VALUE": {
           "@title": "CHAR_VALUE",
@@ -6372,7 +6350,7 @@
           "@title": "CHARVAL_NUM",
           "key": true,
           "type": "cds.String",
-          "length": 15
+          "length": 70
         },
         "CHAR_VALUE": {
           "@title": "CHAR_VALUE",
@@ -6764,7 +6742,7 @@
           "@title": "Internal No. Characteristic value",
           "key": true,
           "type": "cds.String",
-          "length": 10
+          "length": 70
         },
         "CHAR_VALUE": {
           "@title": "Characteristic Value",
@@ -7124,7 +7102,7 @@
         "CHARVAL_NUM": {
           "@title": "CHARVAL_NUM",
           "type": "cds.String",
-          "length": 15,
+          "length": 70,
           "notNull": true
         },
         "CHAR_DESC": {
@@ -8729,7 +8707,7 @@
           "@title": "Job Name",
           "key": true,
           "type": "cds.String",
-          "length": 50
+          "length": 200
         },
         "ACTION": {
           "@title": "Action",
@@ -8757,7 +8735,7 @@
         "JOB_DES": {
           "@title": "Job Description",
           "type": "cds.String",
-          "length": 100
+          "length": 500
         },
         "JOB_TYPE": {
           "@tiletle": "Job Type",
@@ -9102,7 +9080,7 @@
           "@title": "Job Name",
           "key": true,
           "type": "cds.String",
-          "length": 50
+          "length": 200
         },
         "ACTION": {
           "@title": "Action",
@@ -9114,7 +9092,7 @@
           "@title": "Job Description",
           "key": true,
           "type": "cds.String",
-          "length": 100
+          "length": 500
         },
         "SCH_STARTTIME": {
           "@title": "Scheduled Start Time",
@@ -11994,7 +11972,7 @@
           "@title": "Job Name",
           "key": true,
           "type": "cds.String",
-          "length": 50
+          "length": 200
         },
         "ACTION": {
           "@title": "Action",
@@ -12022,7 +12000,7 @@
         "JOB_DES": {
           "@title": "Job Description",
           "type": "cds.String",
-          "length": 100
+          "length": 500
         },
         "JOB_TYPE": {
           "@tiletle": "Job Type",
@@ -12423,7 +12401,7 @@
           "@title": "Job Name",
           "key": true,
           "type": "cds.String",
-          "length": 50
+          "length": 200
         },
         "ACTION": {
           "@title": "Action",
@@ -12435,7 +12413,7 @@
           "@title": "Job Description",
           "key": true,
           "type": "cds.String",
-          "length": 100
+          "length": 500
         },
         "SCH_STARTTIME": {
           "@title": "Scheduled Start Time",
@@ -12577,8 +12555,30 @@
     "JobsService.updateJobs": {
       "kind": "action"
     },
+    "JobsService.purgeJobLogs": {
+      "kind": "action",
+      "params": {
+        "purgeDays": {
+          "type": "cds.Integer"
+        }
+      },
+      "returns": {
+        "type": "cds.String"
+      }
+    },
     "JobsService.fUpdateJobs": {
       "kind": "function",
+      "returns": {
+        "type": "cds.String"
+      }
+    },
+    "JobsService.fpurgeJobLogs": {
+      "kind": "function",
+      "params": {
+        "purgeDays": {
+          "type": "cds.Integer"
+        }
+      },
       "returns": {
         "type": "cds.String"
       }
@@ -15983,6 +15983,36 @@
         }
       }
     },
+    "PalService.purgePredictions": {
+      "kind": "action",
+      "params": {
+        "vcRulesList": {
+          "items": {
+            "elements": {
+              "Location": {
+                "type": "cds.String",
+                "length": 4
+              },
+              "Product": {
+                "type": "cds.String",
+                "length": 40
+              },
+              "GroupID": {
+                "type": "cds.String",
+                "length": 20
+              },
+              "Type": {
+                "type": "cds.String",
+                "length": 10
+              },
+              "startDate": {
+                "type": "cds.Date"
+              }
+            }
+          }
+        }
+      }
+    },
     "PalService.fgModels": {
       "kind": "function",
       "params": {
@@ -16319,7 +16349,7 @@
               "ValueListProperty": "PROD_DESC"
             }
           ],
-          "@title": "Configurable Product",
+          "@title": "Product",
           "key": true,
           "type": "cds.String",
           "length": 40
@@ -17206,7 +17236,7 @@
               "ValueListProperty": "LOCATION_ID"
             }
           ],
-          "@title": "Configurable Product",
+          "@title": "Product",
           "key": true,
           "type": "cds.String",
           "length": 40
@@ -17294,7 +17324,7 @@
         "CHARVAL_NUM": {
           "@title": "Internal number Char. Value ",
           "type": "cds.String",
-          "length": 10
+          "length": 70
         },
         "PRODUCT_ID": {
           "@title": "Product Id",
@@ -17649,7 +17679,7 @@
           "length": 4
         },
         "PRODUCT_ID": {
-          "@title": "Configurable Product",
+          "@title": "Product",
           "key": true,
           "type": "cds.String",
           "length": 40
@@ -17700,7 +17730,7 @@
           "length": 4
         },
         "PRODUCT_ID": {
-          "@title": "Configurable Product",
+          "@title": "Product",
           "key": true,
           "type": "cds.String",
           "length": 40
@@ -18982,7 +19012,7 @@
           "@title": "Charval Num",
           "key": true,
           "type": "cds.String",
-          "length": 10
+          "length": 70
         },
         "OD_CONDITION": {
           "@title": "OD_CONDITION",
@@ -19447,7 +19477,7 @@
           "@title": "CHARVAL_NUM",
           "key": true,
           "type": "cds.String",
-          "length": 15
+          "length": 70
         },
         "CHAR_VALUE": {
           "@title": "CHAR_VALUE",
@@ -19525,7 +19555,7 @@
           "@title": "CHARVAL_NUM",
           "key": true,
           "type": "cds.String",
-          "length": 10
+          "length": 70
         },
         "CHARVAL_DESC": {
           "@title": "CHAR_DESC",
@@ -19644,7 +19674,7 @@
           "@title": "CHARVAL_NUM",
           "key": true,
           "type": "cds.String",
-          "length": 10
+          "length": 70
         },
         "CHAR_VALUE": {
           "@title": "CHAR_VALUE",
@@ -21288,7 +21318,7 @@
           "@title": "Internal No. Characteristic value",
           "key": true,
           "type": "cds.String",
-          "length": 10
+          "length": 70
         },
         "CHAR_VALUE": {
           "@title": "Characteristic Value",
@@ -21460,7 +21490,7 @@
               "ValueListProperty": "LOCATION_ID"
             }
           ],
-          "@title": "Configurable Product",
+          "@title": "Product",
           "key": true,
           "type": "cds.String",
           "length": 40
@@ -21676,7 +21706,7 @@
         "CHARVAL_NUM": {
           "@title": "CHARVAL_NUM",
           "type": "cds.String",
-          "length": 15,
+          "length": 70,
           "notNull": true
         },
         "CHAR_DESC": {
@@ -22115,6 +22145,31 @@
         }
       }
     },
+    "CatalogService.getPlancfgPara": {
+      "kind": "entity",
+      "projection": {
+        "from": {
+          "ref": [
+            "cp.PARAMETER_VALUES"
+          ]
+        }
+      },
+      "elements": {
+        "LOCATION_ID": {
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "PARAMETER_ID": {
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "VALUE": {
+          "type": "cds.String",
+          "length": 500
+        }
+      }
+    },
     "CatalogService.getCIRLog": {
       "kind": "entity",
       "@readonly": true,
@@ -22294,7 +22349,7 @@
               "ValueListProperty": "LOCATION_ID"
             }
           ],
-          "@title": "Configurable Product",
+          "@title": "Product",
           "key": true,
           "type": "cds.String",
           "length": 40
@@ -22962,12 +23017,6 @@
       "@UI.SelectionFields": [
         {
           "=": "LOCATION_ID"
-<<<<<<< HEAD
-        },
-        {
-          "=": "PRODUCT_ID"
-=======
->>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
         }
       ],
       "@UI.LineItem": [
@@ -22986,21 +23035,6 @@
         {
           "$Type": "UI.DataField",
           "Value": {
-<<<<<<< HEAD
-            "=": "PRODUCT_ID"
-          },
-          "@UI.Importance": {
-            "#": "High"
-          },
-          "@HTML5.CssDefaults": {
-            "width": "15rem"
-          }
-        },
-        {
-          "$Type": "UI.DataField",
-          "Value": {
-=======
->>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
             "=": "PLAN_LOC"
           },
           "@UI.Importance": {
@@ -23027,11 +23061,7 @@
         "=": "LOCATION_ID"
       },
       "@UI.HeaderInfo.Description.Value": {
-<<<<<<< HEAD
-        "=": "PRODUCT_ID"
-=======
         "=": "LOCATION_ID"
->>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
       },
       "@UI.HeaderInfo.TypeName": "Demand - Plan - Factory Location",
       "@UI.HeaderInfo.TypeNamePlural": "Demand - Plan - Factory Location-Product",
@@ -23089,34 +23119,6 @@
           "type": "cds.String",
           "length": 4
         },
-<<<<<<< HEAD
-        "PRODUCT_ID": {
-          "@Common.ValueList.$Type": "Common.ValueListType",
-          "@Common.ValueList.Label": "Products",
-          "@Common.ValueList.CollectionPath": "getLocProd",
-          "@Common.ValueList.Parameters": [
-            {
-              "$Type": "Common.ValueListParameterInOut",
-              "LocalDataProperty": {
-                "=": "PRODUCT_ID"
-              },
-              "ValueListProperty": "PRODUCT_ID"
-            },
-            {
-              "$Type": "Common.ValueListParameterIn",
-              "LocalDataProperty": {
-                "=": "LOCATION_ID"
-              },
-              "ValueListProperty": "LOCATION_ID"
-            }
-          ],
-          "@title": "Product",
-          "key": true,
-          "type": "cds.String",
-          "length": 40
-        },
-=======
->>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
         "PLAN_LOC": {
           "@Common.ValueList.$Type": "Common.ValueListType",
           "@Common.ValueList.Label": "Location",
@@ -23262,13 +23264,10 @@
         "PRODUCT_ID": {
           "type": "cds.String",
           "length": 40
-<<<<<<< HEAD
-=======
         },
         "CRITICALKEY": {
           "type": "cds.String",
           "length": 1
->>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
         }
       },
       "returns": {
@@ -23524,6 +23523,19 @@
         }
       }
     },
+    "IBPImportSrv.exportMktAuth": {
+      "kind": "action",
+      "params": {
+        "LOCATION_ID": {
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "type": "cds.String",
+          "length": 40
+        }
+      }
+    },
     "IbpImportRest": {
       "@source": "srv/ibpimport-service.cds",
       "kind": "service",
@@ -23582,12 +23594,12 @@
     "SDIService.ImportCIRLog": {
       "kind": "action"
     },
-<<<<<<< HEAD
     "SDIService.ImportSOStock": {
       "kind": "action"
     },
-=======
->>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
+    "SDIService.ImportPartialProd": {
+      "kind": "action"
+    },
     "UserInfoService": {
       "@source": "srv/user-info.cds",
       "kind": "service",
@@ -31262,8 +31274,6 @@
   },
   "extensions": [
     {
-<<<<<<< HEAD
-=======
       "annotate": "CatalogService.getFactoryLoc",
       "elements": {
         "PRODUCT_ID": {
@@ -31290,7 +31300,6 @@
       }
     },
     {
->>>>>>> 91770498ae12ab4da73d8a2cc91e894ac4444678
       "annotate": "cp.PRODRESTRICT",
       "@UI.SelectionFields": [
         {

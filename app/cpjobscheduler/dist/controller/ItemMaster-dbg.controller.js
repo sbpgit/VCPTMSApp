@@ -371,11 +371,7 @@ sap.ui.define(
            * @param {object} oEvent -the event information.
            */
           onUpdateJob: function (oEvent) {
-            var oJobId = oEvent
-  .getSource()
-  .getParent()
-  .getBindingContext()
-  .getObject(),
+            var oJobId = oEvent.getSource().getParent().getBindingContext().getObject(),
               bActive,
               dStartTime,
               dEndTime;
@@ -480,13 +476,8 @@ sap.ui.define(
             var oRouter = sap.ui.core.UIComponent.getRouterFor(that);
             oRouter.navTo("CreateJob", {}, true);
           },
-  
-
+          
      
-      
-
-
-      
     });
   }
 );
