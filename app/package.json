@@ -1,5 +1,5 @@
 {
-  "name": "configprod_approuter",
+  "name": "app",
   "description": "Node.js based application router service",
   "engines": {
     "node": "^12.0.0 || ^14.0.0"

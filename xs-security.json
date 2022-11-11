@@ -64,7 +64,11 @@
         }
     ],
     "oauth2-configuration": {
-        "token-validity": 3600
+        "token-validity": 3600,
+        "redirect-uris": [
+            "https://*.hana.ondemand.com/**",
+            "https://*.applicationstudio.cloud.sap/**"
+        ]
     },
     "attributes": [],
   "authorities-inheritance": false

@@ -34,8 +34,15 @@
             "destination": "ui5"
         },
         {
+            "source": "/user-info/(.*)",
+            "destination": "srv-api",
+            "csrfProtection": true,
+            "authenticationType": "xsuaa"
+        },
+        {
             "source": "^(.*)$",
             "target": "$1",
+            "localDir": "root",
             "service": "html5-apps-repo-rt",
             "authenticationType": "xsuaa"
         }

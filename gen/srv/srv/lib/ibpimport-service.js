@@ -2747,8 +2747,8 @@ module.exports = cds.service.impl(async function () {
                 "VCCLASS": limkauth[i].CLASS_NUM,
                 "CUSTID": "NULL",//lisales[i].CUSTOMER_GROUP,
                 "PERIODID4_TSTAMP": vWeekDate[0],
-                "VERSIONID": limkauth[i].VERSIONID,
-                "SCENARIOID": limkauth[i].SCENARIOID,
+                // "VERSIONID": limkauth[i].VERSION,
+                // "SCENARIOID": limkauth[i].SCENARIO,
                 "MARKETAUTHORIZATION": vDemd.toString()
             };
             console.log(vMktauth);
@@ -2759,7 +2759,7 @@ module.exports = cds.service.impl(async function () {
         var oEntry =
         {
             "Transactionid": vTransID,
-            "AggregationLevelFieldsString": "PERIODID4_TSTAMP,VCCHAR,VCCHARVALUE,VCCLASS,CUSTID,LOCID,PRDID,VERSIONID,SCENARIOID,MARKETAUTHORIZATION",
+            "AggregationLevelFieldsString": "PERIODID4_TSTAMP,VCCHAR,VCCHARVALUE,VCCLASS,CUSTID,LOCID,PRDID,MARKETAUTHORIZATION",
             "VersionID": "",
             "DoCommit": true,
             "ScenarioID": "",
@@ -2786,13 +2786,13 @@ module.exports = cds.service.impl(async function () {
             dataObj["message"] = "Export of Market authorizations details is successfull at " + new Date();
 
 
-            if (request.headers['x-sap-job-id'] > 0) {
-                const scheduler = getJobscheduler(request);
+            if (req.headers['x-sap-job-id'] > 0) {
+                const scheduler = getJobscheduler(req);
 
                 var updateReq = {
-                    jobId: request.headers['x-sap-job-id'],
-                    scheduleId: request.headers['x-sap-job-schedule-id'],
-                    runId: request.headers['x-sap-job-run-id'],
+                    jobId: req.headers['x-sap-job-id'],
+                    scheduleId: req.headers['x-sap-job-schedule-id'],
+                    runId: req.headers['x-sap-job-run-id'],
                     data: dataObj
                 };
 
@@ -2816,13 +2816,13 @@ module.exports = cds.service.impl(async function () {
             dataObj["message"] = "Export of Market authorizations details has failed at" + new Date();
 
 
-            if (request.headers['x-sap-job-id'] > 0) {
-                const scheduler = getJobscheduler(request);
+            if (req.headers['x-sap-job-id'] > 0) {
+                const scheduler = getJobscheduler(req);
 
                 var updateReq = {
-                    jobId: request.headers['x-sap-job-id'],
-                    scheduleId: request.headers['x-sap-job-schedule-id'],
-                    runId: request.headers['x-sap-job-run-id'],
+                    jobId: req.headers['x-sap-job-id'],
+                    scheduleId: req.headers['x-sap-job-schedule-id'],
+                    runId: req.headers['x-sap-job-run-id'],
                     data: dataObj
                 };
 
