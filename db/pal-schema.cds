@@ -758,3 +758,44 @@ entity TS_OBJDEP_CHAR_IMPACT_F {
     PREDICTED_TIME       : Timestamp @title : 'Predicted Time';
 
 };
+
+
+entity CLUSTER_DATA {
+    key LOCATION_ID : String(4) @title : 'Location ID';
+    key PRODUCT_ID  : String(40)@title : 'Product ID';
+    key UNIQUE_ID : String(50)@title : 'Unique ID';
+    C1 : String (10) @title : 'CHAR1';
+    C2 : String (10) @title : 'CHAR2'; 
+    C3 : String (10) @title : 'CHAR3'; 
+    C4 : String (10) @title : 'CHAR4'; 
+    C5 : String (10) @title : 'CHAR5'; 
+    C6 : String (10) @title : 'CHAR6';
+    C7 : String (10) @title : 'CHAR7'; 
+    C8 : String (10) @title : 'CHAR8'; 
+    C9 : String (10) @title : 'CHAR9';
+    C10 : String (10) @title : 'CHAR10'; 
+    C11 : String (10) @title : 'CHAR11'; 
+    C12 : String (10) @title : 'CHAR12';
+};
+
+entity AHC_CLUSTER_COMBINE_PROCESS {
+    key LOCATION_ID : String(4) @title : 'Location ID';
+    key PRODUCT_ID  : String(40)@title : 'Product ID';
+    key UNIQUE_ID : String(50)@title : 'Unique ID';
+    key STAGE : Integer @title : 'Stage';
+    key LEFT_ID : String(50)@title : 'Left Unique ID in Stage';
+    key RIGHT_ID : String(50)@title : 'Right Unique ID in Stage';
+    key DISTANCE : Double @title : 'Distance between two Combined Clusters'
+};
+
+entity AHC_CLUSTER_RESULTS {
+    key LOCATION_ID : String(4) @title : 'Location ID';
+    key PRODUCT_ID  : String(40)@title : 'Product ID';
+    key UNIQUE_ID : String(50)@title : 'Unique ID';
+    key STAGE : Integer @title : 'Stage';
+    key LEFT_ID : String(50)@title : 'Left Unique ID in Stage';
+    key RIGHT_ID : String(50)@title : 'Right Unique ID in Stage';
+    key DISTANCE : Double @title : 'Distance between two Combined Clusters'
+};
+
+
