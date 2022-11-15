@@ -24,7 +24,7 @@ const classicalSchema = process.env.classicalSchema;
 
 const minBuckets = 10;
 const predictionsTimeout = 10000; // 10 seconds for now
-
+const MAX_CLUSTER_CHARS = 12;
 // Begin of HGBT Functions
 const hgbtMethods = require('./hgbt.js');
 // End of HGBT functions
@@ -107,6 +107,10 @@ module.exports = srv => {
         return (await _purgePredictions(req,false));
     })
 
+    srv.on ('genClusterInputs',    async req => {
+        return (await _genClusterInputs(req,false));
+    })
+
 
     srv.on ('fgModels',    async req => {
         return (await _generateRegModels(req,true));   
@@ -120,6 +124,11 @@ module.exports = srv => {
 
     srv.on ('fpurgePredictions',    async req => {
         return (await _purgePredictions(req,true));
+    })
+
+
+    srv.on ('fgenClusterInputs',    async req => {
+        return (await _genClusterInputs(req,true));
     })
 
 
@@ -2707,5 +2716,153 @@ async function _purgePredictions(req,isGet) {
 
             });
     }
+
+}
+
+
+
+
+async function _genClusterInputs(req,isGet) {
+
+    var clusterInputReq = {};
+    if (isGet == true) //GET -- Kludge
+    {
+        clusterInputReq.Location = req.data.Location;
+        clusterInputReq.Product = req.data.Product;
+
+    }
+    else
+    {
+        clusterInputReq = req.data;
+    }
+   
+    let createtAt = new Date();
+    let id = uuidv1();
+    let values = [];	
+    let message = "Request for Generating Cluster Input Data Queued Sucessfully";
+   
+    values.push({id, createtAt, message, clusterInputReq});    
+   
+   
+    if (isGet == true)
+    {
+        req.reply({values});
+    }
+    else
+    {
+        let res = req._.req.res;
+        res.statusCode = 202;
+        res.send({values});
+    }
+    
+    
+    let sqlStr = 'SELECT DISTINCT PRODUCT_ID, LOCATION_ID, PRIMARY_ID, PRIMARY_ID_CHARVALS AS PRIMARY_CHARVALS' +
+                ' FROM PLSTR_PRIMARY_IDS ' +
+                ' WHERE PRODUCT_ID = ' + "'" + req.data.Product  + "'" +
+                ' AND LOCATION_ID = ' + "'" + req.data.Location + "'";
+
+    // console.log(" _genClusterInputs sqlSTr : ", sqlStr);
+    let sqlClusterResults = await cds.run(sqlStr);
+    // console.log(" _genClusterInputs sqlClusterResults : ", sqlClusterResults);
+    let numIds = sqlClusterResults.length;
+    let tableObj = [];
+
+    for (let clusterIdx = 0; clusterIdx < numIds; clusterIdx ++)
+    {
+        let char1= char2 = char3 = char4 = char5 = char6 = char7 = char8 = char9 = char10 = char11 = char12 = 'NA';
+
+        let charVals = sqlClusterResults[clusterIdx].PRIMARY_CHARVALS;
+        let productId =  sqlClusterResults[clusterIdx].PRODUCT_ID;
+        let locationId =  sqlClusterResults[clusterIdx].LOCATION_ID;
+        let uniqueId =  sqlClusterResults[clusterIdx].PRIMARY_ID;
+    
+        let charStr = charVals.split(',');
+        // console.log("_genClusterInputs  productIr", productId, "locationId ", locationId, "uniqueId ", uniqueId, "charVals ", charVals,"numCharVals ", charStr.length);
+
+        for (let charIdx = 0; charIdx < charStr.length; charIdx ++)
+        {
+            if (charIdx === 0)
+            {
+                char1 = charStr[charIdx];
+            }
+            else if (charIdx === 1)
+            {
+                char2 = charStr[charIdx];
+            }
+            else if (charIdx === 2)
+            {
+                char3 = charStr[charIdx];
+            }
+            else if (charIdx === 3)
+            {
+                char4 = charStr[charIdx];
+            }
+            else if (charIdx === 4)
+            {
+                char5 = charStr[charIdx];
+            }
+            else if (charIdx === 5)
+            {
+                char6 = charStr[charIdx];
+            }
+            else if (charIdx === 6)
+            {
+                char7 = charStr[charIdx];
+            }
+            else if (charIdx === 7)
+            {
+                char8 = charStr[charIdx];
+            }
+            else if (charIdx === 8)
+            {
+                char9 = charStr[charIdx];
+            }
+            else if (charIdx === 9)
+            {
+                char10 = charStr[charIdx];
+            }
+            else if (charIdx === 10)
+            {
+                char11 = charStr[charIdx];
+            }
+            else if (charIdx === 11)
+            {
+                char12 = charStr[charIdx];
+            }
+        }
+        let rowObj = {   LOCATION_ID: locationId, 
+            PRODUCT_ID : productId,
+            UNIQUE_ID : uniqueId,
+            C1 : char1,
+            C2 : char2,            
+            C3 : char3,
+            C4 : char4, 
+            C5 : char5,
+            C6 : char6,            
+            C7 : char7,
+            C8 : char8, 
+            C9 : char9,
+            C10 : char10,            
+            C11 : char11,
+            C12 : char12 };
+
+        tableObj.push(rowObj);
+
+    }
+
+    sqlStr = 'DELETE FROM CP_CLUSTER_DATA' +
+                ' WHERE PRODUCT_ID = ' + "'" + req.data.Product  + "'" +
+                ' AND LOCATION_ID = ' + "'" + req.data.Location + "'";
+
+    // console.log("sqlStr ", sqlStr);
+
+    await cds.run(sqlStr);
+
+    // console.log("tableObj ", tableObj);
+    
+    cqnQuery = {INSERT:{ into: { ref: ['CP_CLUSTER_DATA'] }, entries:  tableObj }};
+
+    await cds.run(cqnQuery);
+
 
 }
