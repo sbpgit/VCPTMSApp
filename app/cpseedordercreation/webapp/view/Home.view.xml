@@ -88,6 +88,9 @@
                                     <Column hAlign="Left" vAlign="Middle">
                                         <Text text=""/>
                                     </Column>
+                                    <Column hAlign="Left" vAlign="Middle">
+                                        <Text text=""/>
+                                    </Column>
                                 </columns>
                                 <items>
                                     <ColumnListItem>
@@ -101,6 +104,7 @@
                                             <Text text="{path: 'MAT_AVAILDATE', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'MM/dd/yyyy' }}"/>
                                             <!-- <DatePicker valueFormat="MM/dd/yyyy" displayFormat="MM/dd/yyyy" value="{MAT_AVAILDATE}" editable="false" /> -->
                                             <Button id="idEdit"  icon="sap-icon://edit" press="onEdit" tooltip = "Edit Order" iconDensityAware="false" type="Transparent"/>
+                                            <Button id="idDelete"  icon="sap-icon://sys-cancel-2" press="onDelete" tooltip = "Delete Order" iconDensityAware="false" type="Transparent"/>
                                         </cells>
                                     </ColumnListItem>
                                 </items>

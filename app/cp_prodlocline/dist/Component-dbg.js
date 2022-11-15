@@ -6,7 +6,8 @@ sap.ui.define(
         return Component.extend("cpapp.cpprodlocline.Component", {
             metadata: {
                 manifest: "json"
-            }
+            },
+            
         });
     }
 );

@@ -1,7 +1,7 @@
 //const GenTimeseries = require("./cat-servicets");
 // const DbConnect = require("./dbConnect");
 const GenFunctions = require("./gen-functions");
-const { v1: uuidv1 } = require('uuid')
+const { v1: uuidv1 } = require('uuid');
 const cds = require("@sap/cds");
 const hana = require("@sap/hana-client");
 const { createLogger, format, transports } = require("winston");
@@ -993,28 +993,28 @@ module.exports = (srv) => {
 
         let lilocProd = {};
         let lsData = {}, Flag = '';
-        lilocProd = JSON.parse(req.data.LocProdData);
+        // lilocProd = JSON.parse(req.data.LocProdData);
 
-        switch (await GenFunctions.getParameterValue(lilocProd[0].LOCATION_ID, 5)) {
+        switch (await GenFunctions.getParameterValue(req.data.LOCATION_ID, 5)) {
             case 'M1':
-                for (let i = 0; i < lilocProd.length; i++) {
-                    lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
-                    lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
+                // for (let i = 0; i < lilocProd.length; i++) {
+                //     lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
+                //     lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
                     const obgenTimeseries = new GenTimeseries();
-                    await obgenTimeseries.genTimeseriesF(lsData, req, Flag);
-                }
+                    await obgenTimeseries.genTimeseriesF(req.data, req, Flag);
+                // }
                 break;
             case 'M2':
-                for (let i = 0; i < lilocProd.length; i++) {
-                    lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
-                    lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
+                // for (let i = 0; i < lilocProd.length; i++) {
+                //     lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
+                //     lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
                     const obgenTimeseriesM2 = new GenTimeseriesM2();
-                    await obgenTimeseriesM2.genTimeseriesF(lsData, req, Flag);
-                }
+                    await obgenTimeseriesM2.genTimeseriesF(req.data, req, Flag);
+                // }
                 break;
         }
-        const obgenTimeseries_rt = new GenTimeseriesRT();
-        await obgenTimeseries_rt.genTimeseriesF_rt(req.data, req);
+        // const obgenTimeseries_rt = new GenTimeseriesRT();
+        // await obgenTimeseries_rt.genTimeseriesF_rt(req.data, req);
     });
 
     // Generate Unique ID

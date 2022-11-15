@@ -1,0 +1,1 @@
+sap.ui.define([],function(){"use strict";return{onHelpPress:function(e){var i="#vcpdocdisplay-Display";var r=window.location.href.split("#")[0]+i;sap.m.URLHelper.redirect(r,true)}}});
