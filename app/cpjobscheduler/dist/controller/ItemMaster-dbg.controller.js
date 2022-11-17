@@ -135,6 +135,7 @@ sap.ui.define(
           that.oList.removeSelections(true);
 
           that.getView().byId("headSearch").setValue();
+          oGModel.setProperty("/dataFlag", "");
 
         //   var nowH = new Date();
         //   //past 15 days selected date
@@ -184,6 +185,7 @@ sap.ui.define(
               // Setting the default selected item for table
             that.byId("jobList").setSelectedItem(that.byId("jobList").getItems()[0], true);
             oGModel.setProperty("/aDATA", aData[0]);
+            oGModel.setProperty("/dataFlag", "X");
               that.onhandlePress();
             },
             error: function (error) {
@@ -324,7 +326,7 @@ sap.ui.define(
                 viewName: that.oDetailView.getViewName(),
               });
             } catch (e) {
-              that.oDetailView.onAfterRendering();
+            //   that.oDetailView.onAfterRendering();
             }
           } else {
             that.bus.publish("nav", "toDetailPage", {
@@ -369,11 +371,7 @@ sap.ui.define(
            * @param {object} oEvent -the event information.
            */
           onUpdateJob: function (oEvent) {
-            var oJobId = oEvent
-  .getSource()
-  .getParent()
-  .getBindingContext()
-  .getObject(),
+            var oJobId = oEvent.getSource().getParent().getBindingContext().getObject(),
               bActive,
               dStartTime,
               dEndTime;
@@ -478,13 +476,8 @@ sap.ui.define(
             var oRouter = sap.ui.core.UIComponent.getRouterFor(that);
             oRouter.navTo("CreateJob", {}, true);
           },
-  
-
+          
      
-      
-
-
-      
     });
   }
 );

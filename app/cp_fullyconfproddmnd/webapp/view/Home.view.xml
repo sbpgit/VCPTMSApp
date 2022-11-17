@@ -1,79 +1,81 @@
 <mvc:View controllerName="cpapp.cpfullyconfproddmnd.controller.Home" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core" displayBlock="true" xmlns="sap.m" xmlns:f="sap.ui.layout.form" xmlns:t="sap.ui.table" xmlns:ux="sap.uxap" xmlns:l="sap.ui.layout" xmlns:html="http://www.w3.org/1999/xhtml">
-    <Page showHeader="false" showFooter="true" enableScrolling="false">
+    <Page id="_IDGenPage1" showHeader="false" showFooter="true" enableScrolling="false">
         <content>
-            <ux:ObjectPageLayout id="ObjectPageLayout" headerContentPinned="true" preserveHeaderStateOnScroll="true" alwaysShowContentHeader="true" useIconTabBar="true">
+            <ux:ObjectPageLayout id="ObjectPageLayout" headerContentPinned="true" preserveHeaderStateOnScroll="true">
                 <ux:headerTitle>
-                    <ux:ObjectPageDynamicHeaderTitle>
+                    <ux:ObjectPageDynamicHeaderTitle id="_IDGenObjectPageDynamicHeaderTitle1">
                         <ux:expandedHeading>
-                            <Title text="{i18n>appTitle}" titleAlignment="Center" />
+                            <Title id="_IDGenTitle1" text="{i18n>appTitle}" titleAlignment="Center" />
                         </ux:expandedHeading>
-                        <!-- <ux:snappedHeading>
-                            <FlexBox fitContainer="true" alignItems="Center">
-                                <Title text="{i18n>appTitle}" wrapping="true" />
+                        <ux:snappedHeading>
+                            <FlexBox id="_IDGenFlexBox1" fitContainer="true" alignItems="Center">                         
+                            <Title id="_IDGenTitle2" text="{i18n>appTitle}" wrapping="true" />
+                            <Button class="classHdr" icon="sap-icon://sys-help" id="idNav2" press="onNavPress" type="Emphasized" tooltip="Help Document"/>                             
                             </FlexBox>
-                        </ux:snappedHeading> -->
+                        </ux:snappedHeading>
                     </ux:ObjectPageDynamicHeaderTitle>
                 </ux:headerTitle>
                 <ux:headerContent>
-                    <FlexBox wrap="Wrap" fitContainer="true">
-                        <l:Grid defaultSpan="XL3 L3 M6 S12">
-                            <VBox>
-                                <Label text="" />
+                    <FlexBox id="_IDGenFlexBox2" wrap="Wrap" fitContainer="true">
+                        <l:Grid id="_IDGenGrid1" defaultSpan="XL3 L3 M6 S12">
+                            <VBox id="_IDGenVBox1">
+                                <Label id="_IDGenLabel1" text="" />
                                 <SearchField id="idSearch" liveChange="onSearchUniqueId" placeholder="Unique Id, Product" />
                             </VBox>
-                            <VBox>
-                                <Label text="Location" required="true" />
+                            <VBox id="_IDGenVBox2">
+                                <Label id="_IDGenLabel2" text="Location" required="true" />
                                 <Input id="idloc" value="" placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                             </VBox>
-                            <VBox>
-                                <Label text="Configurable Product" required="true" />
+                            <VBox id="_IDGenVBox3">
+                                <Label id="_IDGenLabel3" text="Configurable Product" required="true" />
                                 <Input id="idprodList" placeholder="Configurable Product" value="" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                             </VBox>
-                            <VBox>
-                                <Label text="IBP Version" required="true" />
+                            <VBox id="_IDGenVBox4">
+                                <Label id="_IDGenLabel4" text="IBP Version" required="true" />
                                 <Input id="idver" value="" placeholder="Version" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                             </VBox>
-                            <VBox>
-                                <Label text="IBP Scenario" required="true" />
+                            <VBox id="_IDGenVBox5">
+                                <Label id="_IDGenLabel5" text="IBP Scenario" required="true" />
                                 <Input id="idscen" value="" placeholder="Scenario" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                             </VBox>
-                            <VBox>
-                                <Label text="Valid From" required="true" />
+                            <VBox id="_IDGenVBox6">
+                                <Label id="_IDGenLabel6" text="Valid From" required="true" />
                                 <DatePicker id="fromDate" value="" displayFormat="yyyy-MM-dd" valueFormat="yyyy-MM-dd" change="handleDateChange" />
                             </VBox>
-                            <VBox>
-                                <Label text="Valid To" required="true" />
+                            <VBox id="_IDGenVBox7">
+                                <Label id="_IDGenLabel7" text="Valid To" required="true" />
                                 <DatePicker id="toDate" value="" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="handleDateChange" />
                             </VBox>
-                            <VBox>
-                                <Label text="Model Version" />
+                            <VBox id="_IDGenVBox8">
+                                <Label id="_IDGenLabel8" text="Model Version" />
                                 <Select id="idModelVer" selectedKey="Active">
-                                    <core:ListItem key="Active" text="Active" />
-                                    <core:ListItem key="Simulation" text="Simulation" />
+                                    <core:ListItem id="_IDGenListItem1" key="Active" text="Active" />
+                                    <core:ListItem id="_IDGenListItem2" key="Simulation" text="Simulation" />
                                 </Select>
                             </VBox>
 
                             <!-- <VBox>
                         <Label text="" /> -->
-                            <HBox class="hdrBtnMargin">
-                                <Button text="Go" type="Emphasized" press="onGetData" tooltip="Get data based on filters" />
-                                <Button text="Reset" type="Transparent" press="onResetData" tooltip="Reset filters and Data" />
+                            <HBox id="_IDGenHBox1" class="hdrBtnMargin">
+                                <Button id="_IDGenButton1" text="Go" type="Emphasized" press="onGetData" tooltip="Get data based on filters" />
+                                <Button id="_IDGenButton2" text="Reset" type="Transparent" press="onResetData" tooltip="Reset filters and Data" />
+                                <Button icon="sap-icon://sys-help" id="idNav1" press="onNavPress" type="Emphasized" tooltip="Help Document"/> 
                             </HBox>
                             <!-- </VBox> -->
                         </l:Grid>
                     </FlexBox>
                 </ux:headerContent>
                 <ux:sections>
-                    <ux:ObjectPageSection class="sapUiNoMargin" width="auto" showTitle="false">
+                    <ux:ObjectPageSection id="_IDGenObjectPageSection1" class="sapUiNoMargin" width="auto" showTitle="false">
                         <ux:subSections>
-                            <ux:ObjectPageSubSection class="sapUiNoMargin">
+                            <ux:ObjectPageSubSection id="_IDGenObjectPageSubSection1" class="sapUiNoMargin">
                                 <ux:blocks>
-                                    <VBox class="sapUiNoMargin">
+                                    <VBox id="_IDGenVBox9" class="sapUiNoMargin">
                                         <!-- <Toolbar>
                                             <ToolbarSpacer />
                                             <Button text="Publish" press="onPressPublish" type="Emphasized" />
                                         </Toolbar> -->
-                                        <t:Table id="idCIReq" class="table" fixedColumnCount="2" selectionMode="None" alternateRowColors="true" enableSelectAll="false" visibleRowCount="11">
+                                        <t:Table id="idCIReq" class="table" fixedColumnCount="2" selectionMode="None" alternateRowColors="true" enableSelectAll="false" visibleRowCount="8">
                                             <t:columns />
                                         </t:Table>
                                     </VBox>
@@ -85,12 +87,12 @@
             </ux:ObjectPageLayout>
         </content>
         <footer>
-            <OverflowToolbar width="100%">
-                <Button icon="sap-icon://arrow-bottom" text="Download" press="onPressDownload" type="Emphasized" />
-                <ToolbarSpacer />
-                <Button icon="sap-icon://it-host" text="Assembly Requirements" press="onPressAssemblyRequirements" type="Emphasized" />
-                <Button icon="sap-icon://save" text="Save" press="onPressSave" type="Emphasized" />
-                <Button icon="sap-icon://paper-plane" text="Publish" press="onPressPublish" type="Emphasized" />
+            <OverflowToolbar id="_IDGenOverflowToolbar1" width="100%">
+                <Button id="_IDGenButton3" icon="sap-icon://arrow-bottom" text="Download" press="onPressDownload" type="Emphasized" />
+                <ToolbarSpacer id="_IDGenToolbarSpacer1" />
+                <Button id="_IDGenButton4" icon="sap-icon://it-host" text="Assembly Requirements" press="onPressAssemblyRequirements" type="Emphasized" />
+                <Button id="_IDGenButton5" icon="sap-icon://save" text="Save" press="onPressSave" type="Emphasized" />
+                <Button id="_IDGenButton6" icon="sap-icon://paper-plane" text="Publish" press="onPressPublish" type="Emphasized" />
             </OverflowToolbar>
         </footer>
     </Page>

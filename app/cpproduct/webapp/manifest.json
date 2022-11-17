@@ -116,8 +116,20 @@
                                         "route": "getProductsObjectPage"
                                     }
                                 }
-                            },                           
-                            "initialLoad": true
+                            },
+                            "initialLoad": true,
+                            "content": {
+                                "header": {
+                                    "actions": {
+                                        "Help": {
+                                            "id": "HelpButton",
+                                            "text": "Help",
+                                            "press": "cpapp.cpproduct.custom.ListReportExtController.onHelpPress",
+                                            "requiresSelection": false
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 },

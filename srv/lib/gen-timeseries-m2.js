@@ -32,35 +32,58 @@ class GenTimeseriesM2 {
             lMainProduct = lsMainProduct.REF_PRODID;
         }
         // Get Sales Count Information
-        const liPrimaryIDMain = await SELECT.from('V_UNIQUE_ID')
-            .columns(["UNIQUE_ID",
-                "PRODUCT_ID",
-                "LOCATION_ID",
-                "UNIQUE_DESC",
-                "UID_TYPE",
-                "ACTIVE",
-                "CHAR_NUM",
-                "CHARVAL_NUM"])
-            .where(
-                {
-                    xpr: [
-                        { ref: ["LOCATION_ID"] }, '=', { val: adata.LOCATION_ID }, 'and',
-                        { ref: ["PRODUCT_ID"] }, '=', { val: lMainProduct }, 'and',
-                        { ref: ["UID_TYPE"] }, '=', { val: 'P' }, 'and',
-                        { ref: ["ACTIVE"] }, '=', { val: true }
-                    ]
-                }
+        // const liPrimaryIDMain = await SELECT.from('V_UNIQUE_ID')
+        //     .columns(["UNIQUE_ID",
+        //         "PRODUCT_ID",
+        //         "LOCATION_ID",
+        //         "UNIQUE_DESC",
+        //         "UID_TYPE",
+        //         "ACTIVE",
+        //         "CHAR_NUM",
+        //         "CHARVAL_NUM"])
+        //     .where(
+        //         {
+        //             xpr: [
+        //                 { ref: ["LOCATION_ID"] }, '=', { val: adata.LOCATION_ID }, 'and',
+        //                 { ref: ["PRODUCT_ID"] }, '=', { val: lMainProduct }, 'and',
+        //                 { ref: ["UID_TYPE"] }, '=', { val: 'P' }, 'and',
+        //                 { ref: ["ACTIVE"] }, '=', { val: true }
+        //             ]
+        //         }
 
-            )
-            .orderBy("UNIQUE_ID", "CHAR_NUM");
+        //     )
+        //     .orderBy("UNIQUE_ID", "CHAR_NUM");
+
+        const liPrimaryIDMain = await cds.run(`SELECT 
+                                                    "UNIQUE_ID",
+                                                    "PRODUCT_ID",
+                                                    "LOCATION_ID",
+                                                    "UNIQUE_DESC",
+                                                    "UID_TYPE",
+                                                    "ACTIVE",
+                                                    "CHAR_NUM",
+                                                    "CHARVAL_NUM"
+                                                FROM V_UNIQUE_ID
+                                                WHERE "LOCATION_ID" = '${adata.LOCATION_ID}'
+                                                    AND (unique_id IN (SELECT DISTINCT PRIMARY_ID
+                                                        FROM CP_SALES_HM
+                                                        WHERE LOCATION_ID = '${adata.LOCATION_ID}'
+                                                            AND PRODUCT_ID = '${adata.PRODUCT_ID}'))
+                                                    AND "UID_TYPE" = 'P'
+                                                    AND "ACTIVE" = true
+                                                ORDER BY 
+                                                    "UNIQUE_ID" ASC, 
+                                                    "CHAR_NUM" ASC;`);
+
 
         // Remove Partial Characteristics
         const lipartialchar = await cds.run(
             `SELECT *
         FROM "V_PARTIALPRODCHAR"
         WHERE "LOCATION_ID" = '` + adata.LOCATION_ID + `'
-        AND ( "PRODUCT_ID" = '` + lMainProduct + `'
-        OR "REF_PRODID" = '` + lMainProduct + `' )`
+        AND ( "PRODUCT_ID" = '` + adata.PRODUCT_ID + `')`
+        // AND ( "PRODUCT_ID" = '` + lMainProduct + `')`
+        // OR "REF_PRODID" = '` + lMainProduct + `' )`
         );
 
         for (let i = 0; i < liPrimaryIDMain.length; i++) {
@@ -245,8 +268,19 @@ class GenTimeseriesM2 {
         console.log(FlagTest);
         await GenF.logMessage(req, `Completed history timeseries`);
         
-        Flag = 'X';
-        console.log(Flag);
+        // Flag = 'X';
+        // console.log(Flag);
+        if (FlagTest === 'S') {
+            console.log("Success");
+            GenF.jobSchMessage('X', "Timeseries History generation is complete", req);
+        }
+        else if (FlagTest === 'E') {
+            GenF.jobSchMessage('', "Timeseries History generation failed", req);
+        }
+        else {
+            const vMsg = "Unable to generate timeseries for the product: " + adata.PRODUCT_ID + " ";
+            GenF.jobSchMessage('X', vMsg, req);
+        }
     }
 
     async genTimeseriesF(adata, req, Flag) {
@@ -296,26 +330,47 @@ class GenTimeseriesM2 {
         }
         console.log("Main prod:" + lMainProduct);
         // Get Sales Count Information
-        const liPrimaryIDMain = await SELECT.from('V_UNIQUE_ID')
-            .columns(["UNIQUE_ID",
-                "PRODUCT_ID",
-                "LOCATION_ID",
-                "UNIQUE_DESC",
-                "UID_TYPE",
-                "ACTIVE",
-                "CHAR_NUM",
-                "CHARVAL_NUM"])
-            .where(
-                {
-                    xpr: [
-                        { ref: ["LOCATION_ID"] }, '=', { val: adata.LOCATION_ID }, 'and',
-                        { ref: ["PRODUCT_ID"] }, '=', { val: lMainProduct }, 'and',
-                        { ref: ["UID_TYPE"] }, '=', { val: 'P' }
-                    ]
-                }
+        // const liPrimaryIDMain = await SELECT.from('V_UNIQUE_ID')
+        //     .columns(["UNIQUE_ID",
+        //         "PRODUCT_ID",
+        //         "LOCATION_ID",
+        //         "UNIQUE_DESC",
+        //         "UID_TYPE",
+        //         "ACTIVE",
+        //         "CHAR_NUM",
+        //         "CHARVAL_NUM"])
+        //     .where(
+        //         {
+        //             xpr: [
+        //                 { ref: ["LOCATION_ID"] }, '=', { val: adata.LOCATION_ID }, 'and',
+        //                 { ref: ["PRODUCT_ID"] }, '=', { val: lMainProduct }, 'and',
+        //                 { ref: ["UID_TYPE"] }, '=', { val: 'P' }
+        //             ]
+        //         }
 
-            ).
-            orderBy("UNIQUE_ID", "CHAR_NUM");
+        //     ).
+        //     orderBy("UNIQUE_ID", "CHAR_NUM");
+
+        const liPrimaryIDMain = await cds.run(`SELECT 
+                                                    "UNIQUE_ID",
+                                                    "PRODUCT_ID",
+                                                    "LOCATION_ID",
+                                                    "UNIQUE_DESC",
+                                                    "UID_TYPE",
+                                                    "ACTIVE",
+                                                    "CHAR_NUM",
+                                                    "CHARVAL_NUM"
+                                                FROM V_UNIQUE_ID
+                                                WHERE "LOCATION_ID" = '${adata.LOCATION_ID}'
+                                                    AND (unique_id IN (SELECT DISTINCT PRIMARY_ID
+                                                        FROM CP_SALES_HM
+                                                        WHERE LOCATION_ID = '${adata.LOCATION_ID}'
+                                                            AND PRODUCT_ID = '${adata.PRODUCT_ID}'))
+                                                    AND "UID_TYPE" = 'P'
+                                                    AND "ACTIVE" = true
+                                                ORDER BY 
+                                                    "UNIQUE_ID" ASC, 
+                                                    "CHAR_NUM" ASC;`);
 
 
         // Remove Partial Characteristics
@@ -323,8 +378,8 @@ class GenTimeseriesM2 {
             `SELECT *
                     FROM "V_PARTIALPRODCHAR"
                     WHERE "LOCATION_ID" = '` + adata.LOCATION_ID + `'
-                    AND ( "PRODUCT_ID" = '` + lMainProduct + `'
-                    OR "REF_PRODID" = '` + lMainProduct + `' )`
+                    AND ( "PRODUCT_ID" = '` + adata.PRODUCT_ID + `')`
+                    // OR "REF_PRODID" = '` + lMainProduct + `' )`
         );
 
         for (let i = 0; i < liPrimaryIDMain.length; i++) {
@@ -415,8 +470,10 @@ class GenTimeseriesM2 {
                     console.log("CP_TS_OBJDEP_CHARHDR_F: " + liObjdepF.length);
                     try {
                         await INSERT(liObjdepF).into('CP_TS_OBJDEP_CHARHDR_F');
+                        Flag = 'S';
                     }
                     catch (e) {
+                        Flag = 'E';
                         console.log("error", e.meesage);
                     }
                 }
@@ -424,7 +481,17 @@ class GenTimeseriesM2 {
         }
 
         await GenF.logMessage(req, `Completed future timeseries`);
-        Flag = 'X';
+        if (Flag === 'S') {
+            console.log("Success");
+            GenF.jobSchMessage('X', `Timeseries Future generation is complete`, req);
+        }
+        else if (Flag === 'E') {
+            GenF.jobSchMessage('', `Timeseries Future generation failed`, req);
+        }
+        else {
+            const vMsg = "Unable to generate timeseries for the product: " + adata.PRODUCT_ID + " ";
+            GenF.jobSchMessage('X', vMsg, req);
+        }
     }
 
     async genPrediction(adata, req, Flag) {
@@ -727,6 +794,7 @@ class GenTimeseriesM2 {
                                     AND VERSION = '${lsCirLeast.VERSION}'
                                     AND SCENARIO = '${lsCirLeast.SCENARIO}'`);
                     liRound[cntR].DIFF = liRound[cntR].DIFF - 1;
+                    Flag = 'X';
                 }
 
 
@@ -781,8 +849,15 @@ class GenTimeseriesM2 {
             }
         }
 */
-        await GenF.logMessage(req, `Completed Fully Configured Requirement Generation`);
-        Flag = 'X';
+        await GenF.logMessage(req, `Completed Forcast Demand Generation`);
+        // Flag = 'X';
+        if (Flag === 'X') {
+            console.log("Success");
+            GenF.jobSchMessage(Flag, "Forcast Demand Generation is complete", req);
+        }
+        else {
+            GenF.jobSchMessage(Flag, "Forcast Demand Generation is failed", req);
+        }
 
     }
 

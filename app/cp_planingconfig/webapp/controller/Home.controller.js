@@ -286,12 +286,13 @@ sap.ui.define([
                 that.i18n = that.getOwnerComponent().getModel("i18n").getResourceBundle();
                 // that.getParameters(oModel, oArgs.location);
                 that.getMethods(oModel);
-            }
+            },
 
             /**
              * 
              * 
              */
+           
 
         });
     });

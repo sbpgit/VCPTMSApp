@@ -136,7 +136,19 @@
                                     }
                                 }
                             },
-                            "initialLoad": true
+                            "initialLoad": true,
+                            "content": {
+                                "header": {
+                                    "actions": {
+                                        "idBtnHelp": {
+                                            "id": "idBtnHelpButton",
+                                            "text": "Help",
+                                            "press": "cpapp.cpjoblog.custom.ListReportExtController.onHelpPress",
+                                            "requiresSelection": false
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 },
@@ -159,7 +171,7 @@
         "archeType": "transactional"
     },
     "sap.cloud": {
-        "public": false,
+        "public": true,
         "service": "configprod_approuter"
     },
     "sap.platform.cf": {

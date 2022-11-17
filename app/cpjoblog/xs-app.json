@@ -5,9 +5,9 @@
     {
       "source": "^/jobs/(.*)$",
       "target": "/jobs/$1",
-      "destination": "ConfigProd",
+      "destination": "config_products-srv",
       "authenticationType": "xsuaa",
-      "csrfProtection": true,
+      "csrfProtection": false,
       "scope":{
         "GET": ["$XSAPPNAME.User"],
         "PUT": ["$XSAPPNAME.User"],

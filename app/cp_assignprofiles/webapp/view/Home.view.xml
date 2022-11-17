@@ -1,44 +1,45 @@
 <mvc:View controllerName="cp.appf.cpassignprofiles.controller.Home"
     xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
     xmlns="sap.m">
-    <Page >
+    <Page id="_IDGenPage1" >
         <customHeader>
-            <Toolbar >
+            <Toolbar id="_IDGenToolbar1" >
                 <Title id="profTitle" text="{i18n>profTitle}" class="boldText"></Title>
-                <ToolbarSpacer/>
+                <ToolbarSpacer id="_IDGenToolbarSpacer1"/>
                 <Button id="idAdd" text="Create" icon="sap-icon://add" press="onCreate" tooltip = "Create"/>
                 <Button id="idCopy" text="Copy" icon="sap-icon://copy" press="onCreate" tooltip = "Copy"/>
                 <Button id="idEdit" text="Edit" icon="sap-icon://edit" press="onCreate" tooltip = "Edit"/>
                 <Button id="idDelete" text="Delete" icon="sap-icon://delete" press="onDelete" tooltip = "Delete"/>
+                <Button icon="sap-icon://sys-help" id="idNav" press="onNavPress" type="Emphasized" tooltip="Help Document"/>
             </Toolbar>
         </customHeader>
         <content>
             <SearchField id="headSearch" liveChange="onSearch" placeholder="Profile or Description"/>
             <Table id="profList" items="{path: '/results'}" mode="SingleSelectLeft">
                 <columns>
-                    <Column hAlign="Left" vAlign="Middle">
-                        <Text text="{i18n>prof}" />
+                    <Column id="_IDGenColumn1" hAlign="Left" vAlign="Middle">
+                        <Text id="_IDGenText1" text="{i18n>prof}" />
                     </Column>
-                    <Column hAlign="Left" vAlign="Middle">
-                        <Text text="{i18n>method}"/>
+                    <Column id="_IDGenColumn2" hAlign="Left" vAlign="Middle">
+                        <Text id="_IDGenText2" text="{i18n>method}"/>
                     </Column>
-                    <Column hAlign="Left" vAlign="Middle">
-                        <Text text="{i18n>profDesc}"/>
+                    <Column id="_IDGenColumn3" hAlign="Left" vAlign="Middle">
+                        <Text id="_IDGenText3" text="{i18n>profDesc}"/>
                     </Column>
-                    <Column hAlign="Left" vAlign="Middle">
-                        <Text text="{i18n>auth}"/>
+                    <Column id="_IDGenColumn4" hAlign="Left" vAlign="Middle">
+                        <Text id="_IDGenText4" text="{i18n>auth}"/>
                     </Column>
-                    <Column hAlign="Left" vAlign="Middle">
-                        <Text text=""/>
+                    <Column id="_IDGenColumn5" hAlign="Left" vAlign="Middle">
+                        <Text id="_IDGenText5" text=""/>
                     </Column>
                 </columns>
                 <items>
-                    <ColumnListItem>
+                    <ColumnListItem id="_IDGenColumnListItem1">
                         <cells>
-                            <ObjectIdentifier title="{PROFILE}" />
-                            <Text text="{METHOD}"/>
-                            <Text text="{PRF_DESC}"/>
-                            <Text text="{AUTHORIZATION}"/>
+                            <ObjectIdentifier id="_IDGenObjectIdentifier1" title="{PROFILE}" />
+                            <Text id="_IDGenText6" text="{METHOD}"/>
+                            <Text id="_IDGenText7" text="{PRF_DESC}"/>
+                            <Text id="_IDGenText8" text="{AUTHORIZATION}"/>
                             <Button id="idDisplay" icon="sap-icon://display" tooltip="Display" press="onParameters" iconDensityAware="false" type="Transparent"/>
                         </cells>
                     </ColumnListItem>

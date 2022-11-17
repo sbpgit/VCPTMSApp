@@ -129,6 +129,7 @@ sap.ui.define(
         }
         that.byId("prodList").getBinding("items").filter(oFilters);
       },
+      
     });
   }
 );

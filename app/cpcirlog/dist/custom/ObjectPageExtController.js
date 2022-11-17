@@ -1,0 +1,1 @@
+sap.ui.define([],function(){"use strict";return{onHelpPress:function(e){alert("onHelpPress")}}});

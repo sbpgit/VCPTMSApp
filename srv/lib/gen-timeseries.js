@@ -239,13 +239,20 @@ class GenTimeseries {
 
             if(liVCHistory.length > 0){
                 await INSERT(liVCHistory) .into('CP_VC_HISTORY_TS');
+                Flag = 'S';
 
             }
 
         }
 
         await GenF.logMessage(req, `Completed history timeseries`);
-        Flag = 'X';
+        if (Flag === 'S') {
+            console.log("Success");
+            GenF.jobSchMessage('X', "Timeseries History generation is complete", req);
+        }
+        else {
+            GenF.jobSchMessage('', "Timeseries History generation failed", req);
+        }
 
     }
 
@@ -474,6 +481,7 @@ class GenTimeseries {
                                      liObjdepF[index].SUCCESS_RATE]
                             }
                         })
+                        Flag = 'X';
 /*
                         var sqlStr =
                             //"INSERT INTO CP_TS_OBJDEP_CHARHDR_F(CAL_DATE, LOCATION_ID, PRODUCT_ID, OBJ_TYPE, OBJ_DEP, OBJ_COUNTER, ROW_ID, VERSION, SCENARIO, SUCCESS, SUCCESS_RATE) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -522,7 +530,14 @@ class GenTimeseries {
             "Processing time : " + lProcessTime + " Minutes"
         );
 
-        await GenF.logMessage(req, `Completed future timeseries`);          
+        await GenF.logMessage(req, `Completed future timeseries`);    
+        if (Flag === 'X') {
+            console.log("Success");
+            GenF.jobSchMessage(Flag, `Timeseries Future generation is complete`, req);
+        }
+        else {
+            GenF.jobSchMessage(Flag, `Timeseries Future generation failed`, req);
+        }      
     }
 
       

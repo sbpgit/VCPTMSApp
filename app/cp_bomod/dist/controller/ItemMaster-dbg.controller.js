@@ -134,6 +134,7 @@ sap.ui.define(
         }
         that.byId("bomList").getBinding("items").filter(oFilters);
       },
+      
     });
   }
 );

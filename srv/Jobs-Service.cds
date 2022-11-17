@@ -16,14 +16,28 @@ service JobsService @(impl : './lib/Jobs-Service.js') {
   @readonly
   entity logs as projection on js.LOGS;
 
-  entity getJobStatus  as projection on V_JOBSTATUS;
+//   entity getJobStatus  as projection on V_JOBSTATUS;
+  entity getJobStatus  @(restrict : [
+            {
+                grant : [ 'READ' ],
+                to : [ 'JobsViewer' ]
+            },
+            {
+                grant : [ '*' ],
+                to : [ 'JobsManager' ]
+            }
+      ]) as projection on V_JOBSTATUS;
+      
   entity getJobRunStatus as projection on V_JOBRUNSTATUS; 
   entity getJobRunState as projection on V_JOBRUNSTATE; 
 
 
   action updateJobs();
+  action purgeJobLogs(purgeDays :  Integer ) returns String;
+
   // KLUDGE function API for Alternate to POST updateJobs()
   function fUpdateJobs() returns String;
+  function fpurgeJobLogs(purgeDays :  Integer ) returns String;
 
 // LOCAL API's for UI purpose
   function lreadJobs() returns String;
@@ -69,5 +83,6 @@ service JobsService @(impl : './lib/Jobs-Service.js') {
   action createJobSchedule(jobId : Integer, jobSchedule : js.mlSchedules) returns String;
   action deleteJobSchedule(jobId : Integer, scheduleId : String) returns String;
   action updateJobSchedule(jobId : Integer, scheduleId : String,jobSchedule : js.mlSchedules) returns String;
+
 
 }

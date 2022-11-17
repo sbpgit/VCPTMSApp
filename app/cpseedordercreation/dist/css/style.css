@@ -1,5 +1,13 @@
 /* Enter your custom styles here */
 
+.hdrBtnMargin{
+    margin-left:23rem;
+}
+
+.hdrBtnMarginHdr{
+    margin-left:74rem;
+}
+
 
 .sapUxAPObjectPageContainerNoBar>.sapUxAPObjectPageSection:first-child:not(.sapUxAPObjectPageSectionNoTitle) {
     margin-top: 0.1rem !important;

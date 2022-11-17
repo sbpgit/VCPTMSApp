@@ -1717,8 +1717,7 @@ annotate service.SALES_S with @(
 annotate service.FACTORY_SALESLOC with @(
     UI        : {
         SelectionFields         : [
-            LOCATION_ID,
-            PRODUCT_ID
+            LOCATION_ID
         ],
         LineItem                : [
             {
@@ -1727,12 +1726,12 @@ annotate service.FACTORY_SALESLOC with @(
                 ![@UI.Importance]   : #High,
                 ![@HTML5.CssDefaults] : {width : '15rem'}
             },
-            {
-                $Type : 'UI.DataField',
-                Value : PRODUCT_ID,
-                ![@UI.Importance]   : #High,
-                ![@HTML5.CssDefaults] : {width : '15rem'}
-            },
+            // {
+            //     $Type : 'UI.DataField',
+            //     Value : PRODUCT_ID,
+            //     ![@UI.Importance]   : #High,
+            //     ![@HTML5.CssDefaults] : {width : '15rem'}
+            // },
             {
                 $Type : 'UI.DataField',
                 Value : PLAN_LOC,
@@ -1748,7 +1747,7 @@ annotate service.FACTORY_SALESLOC with @(
         ],
         HeaderInfo              : {
             Title          : {Value : LOCATION_ID},
-            Description    : {Value : PRODUCT_ID},
+            Description    : {Value : LOCATION_ID},
             TypeName       : 'Demand - Plan - Factory Location',
             TypeNamePlural : 'Demand - Plan - Factory Location-Product',
         },
@@ -1805,7 +1804,138 @@ annotate service.LINEMASTER with @(
                 Value : LINE_DESC,
             ![@UI.Importance] : #High
             }
-        ]
-        
-    }
+        ],
+        HeaderInfo              : {
+            Title          : {Value : LINE_ID},
+            Description    : {Value : LINE_ID},
+            TypeName       : 'Line Master',
+            TypeNamePlural : 'Line Master',
+        },
+        FieldGroup #Details     : {Data : [
+            {
+                $Type : 'UI.DataField',
+                Value : LINE_ID
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : LINE_DESC
+            }
+        ]}
+    },
+
+    // Page Facets
+    UI.Facets : [{
+        $Type  : 'UI.CollectionFacet',
+        ID     : 'linemstr',
+        Label  : 'Line Master',
+        Facets : [{
+            $Type  : 'UI.ReferenceFacet',
+            Label  : 'Line Master',
+            Target : '@UI.FieldGroup#Details'
+        }]
+    }]
+);
+// CIR log
+annotate service.CIRLOG with @(
+    UI        : {
+        SelectionFields         : [
+            LOCATION_ID,
+            PRODUCT_ID
+        ],
+        LineItem                : [
+            {
+                $Type : 'UI.DataField',
+                Value : WEEK_DATE,
+                ![@UI.Importance]   : #High,
+                ![@HTML5.CssDefaults] : {width : '15rem'}
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : LOCATION_ID,
+                ![@UI.Importance]   : #High,
+                ![@HTML5.CssDefaults] : {width : '15rem'}
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : PRODUCT_ID,
+                ![@UI.Importance]   : #High,
+                ![@HTML5.CssDefaults] : {width : '15rem'}
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : CIR_ID,
+                ![@UI.Importance]   : #High,
+                ![@HTML5.CssDefaults] : {width : '15rem'}
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : UNIQUE_ID,
+                ![@UI.Importance]   : #High,
+                ![@HTML5.CssDefaults] : {width : '15rem'}
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : MESSAGE,
+                ![@UI.Importance]   : #High,
+                ![@HTML5.CssDefaults] : {width : '15rem'}
+            }
+        ],
+        HeaderInfo              : {
+            Title          : {Value : CIR_ID},
+            Description    : {Value : WEEK_DATE},
+            TypeName       : 'CIR Log',
+            TypeNamePlural : 'CIR Logs',
+        },
+        // HeaderFacets            : [{
+        //     $Type             : 'UI.ReferenceFacet',
+        //     Target            : '@UI.FieldGroup#Description',
+        //     ![@UI.Importance] : #Medium
+        // }],
+        // FieldGroup #Description : {Data : [{
+        //     $Type : 'UI.DataField',
+        //     Value : LOTSIZE_KEY
+        // }]},
+        FieldGroup #Details     : {Data : [
+            {
+                $Type : 'UI.DataField',
+                Value : LOCATION_ID
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : PRODUCT_ID
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : UNIQUE_ID
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : CUST_PRODID
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : COMPCIR_QTY
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : MSG_TYP
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : MESSAGE
+            }
+        ]}
+    },
+
+    // Page Facets
+    UI.Facets : [{
+        $Type  : 'UI.CollectionFacet',
+        ID     : 'Cirlog',
+        Label  : 'CIR Logs',
+        Facets : [{
+            $Type  : 'UI.ReferenceFacet',
+            Label  : 'CIR Logs Details',
+            Target : '@UI.FieldGroup#Details'
+        }]
+    }]
 );

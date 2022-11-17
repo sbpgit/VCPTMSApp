@@ -15,23 +15,24 @@ class SOFunctions {
      * @param {Data} adata 
      */
     async genUniqueID(adata, req, Flag) {
-        
+
         await GenF.logMessage(req, 'Started Sales Orders Processing');
-        
+
         await this.processUniqueID(adata.LOCATION_ID, adata.PRODUCT_ID, '');
         await this.genBaseMarketAuth(adata.LOCATION_ID, adata.PRODUCT_ID);
-
+        await this.genPartialProd(adata.LOCATION_ID, adata.PRODUCT_ID);
+        // await this.genFactoryLoc(adata.LOCATION_ID, adata.PRODUCT_ID);
         await GenF.logMessage(req, 'Completed Sales Orders Processing');
         Flag = 'X';
 
     }
 
-/**
- * 
- * @param {Location} lLocation 
- * @param {Product} lProduct 
- */
-    async processUniqueID(lLocation, lProduct, lSO){
+    /**
+     * 
+     * @param {Location} lLocation 
+     * @param {Product} lProduct 
+     */
+    async processUniqueID(lLocation, lProduct, lSO) {
 
         const liSalesh = await this.getSalesHistory(lLocation, lProduct, lSO);
         const liUniqueData = await this.getUnique(lLocation, lProduct);
@@ -185,28 +186,49 @@ class SOFunctions {
         let liSalesUpdate = [];
         let lsSalesUpdate = {};
 
+        // Process through sales Order
         for (let cntSO = 0; cntSO < liSOHM.length; cntSO++) {
             let lIgnoreProduct = '';
+
+            // Process through Partial Product
             for (let cntPC = 0; cntPC < liPartialProd.length; cntPC++) {
+
+                // Rest for every change in Partial Product
+                if (cntPC === 0 ||
+                    liPartialProd[cntPC].LOCATION_ID !== liPartialProd[GenF.subOne(cntPC, liPartialProd.length)].LOCATION_ID ||
+                    liPartialProd[cntPC].PRODUCT_ID !== liPartialProd[GenF.subOne(cntPC, liPartialProd.length)].PRODUCT_ID) {
+                    lIgnoreProduct = '';
+                }
+
+                // Check if Partial product configuration matches with Sales Order Configuration
                 let lSuccess = '';
                 for (let cntSOC = 0; cntSOC < liSOHM[cntSO].CONFIG.length; cntSOC++) {
+                    // if (liSOHM[cntSO].CONFIG[cntSOC].CHAR_NUM === liPartialProd[cntPC].CHAR_NUM &&
+                    //     liSOHM[cntSO].CONFIG[cntSOC].CHARVAL_NUM === liPartialProd[cntPC].CHARVAL_NUM) {
+                    //     lSuccess = 'X';
+                    //     break;
+                    // }
+
                     if (liSOHM[cntSO].CONFIG[cntSOC].CHAR_NUM === liPartialProd[cntPC].CHAR_NUM &&
                         liSOHM[cntSO].CONFIG[cntSOC].CHARVAL_NUM === liPartialProd[cntPC].CHARVAL_NUM) {
                         lSuccess = 'X';
                         break;
                     }
+
+
                 }
                 if (lSuccess === '') {
+                    // Ignore this partial product as configuration of sales order is not matched
                     lIgnoreProduct = GenF.parse(liPartialProd[cntPC].PRODUCT_ID);
                 }
-                if (liPartialProd[cntPC].PRODUCT_ID !== lIgnoreProduct) {
-                    if (cntPC === GenF.addOne(cntPC, liPartialProd.length) ||
-                        liPartialProd[cntPC].LOCATION_ID !== liPartialProd[GenF.addOne(cntPC, liPartialProd.length)].LOCATION_ID ||
-                        liPartialProd[cntPC].PRODUCT_ID !== liPartialProd[GenF.addOne(cntPC, liPartialProd.length)].PRODUCT_ID) {
 
+                // For every change in Partial product
+                if (cntPC === GenF.addOne(cntPC, liPartialProd.length) ||
+                    liPartialProd[cntPC].LOCATION_ID !== liPartialProd[GenF.addOne(cntPC, liPartialProd.length)].LOCATION_ID ||
+                    liPartialProd[cntPC].PRODUCT_ID !== liPartialProd[GenF.addOne(cntPC, liPartialProd.length)].PRODUCT_ID) {
+                    if (liPartialProd[cntPC].PRODUCT_ID !== lIgnoreProduct) {
                         liSOHM[cntSO].PRODUCT_ID = GenF.parse(liPartialProd[cntPC].PRODUCT_ID);
                         break;
-
                     }
                 }
             }
@@ -246,7 +268,7 @@ class SOFunctions {
     async getSalesHistory(lLocation, lProduct, lSO) {
 
         let liSalesData = [];
-        if(lSO === ''){
+        if (lSO === '') {
             liSalesData = await cds.run(
                 `SELECT *
                     FROM CP_SALESH AS A
@@ -258,7 +280,7 @@ class SOFunctions {
                     ORDER BY A.SALES_DOC,
                             A.SALESDOC_ITEM,
                             B.CHAR_NUM`);
-        }else{
+        } else {
             liSalesData = await cds.run(
                 `SELECT *
                     FROM CP_SALESH AS A
@@ -326,7 +348,7 @@ class SOFunctions {
      * @param {Product} lProduct 
      */
     async getUnique(lLocation, lProduct) {
-        
+
         const liUniqueGet = await cds.run(
             `SELECT "UNIQUE_ID",
                     "LOCATION_ID",
@@ -342,7 +364,7 @@ class SOFunctions {
                      CHAR_NUM,
                      CHARVAL_NUM`
         );
-        
+
         let lsUniqueConfig = {};
         let lsUnique = {};
         let liUniqueData = [];
@@ -586,38 +608,38 @@ class SOFunctions {
         const lMainProd = await this.getMainProduct(lLocation, lProduct);
 
         await INSERT.into('CP_SALESH')
-                    .columns( 'SALES_DOC',
-                            'SALESDOC_ITEM',
-                            'PRODUCT_ID',
-                            'CONFIRMED_QTY',
-                            'ORD_QTY',
-                            'MAT_AVAILDATE',
-                            'LOCATION_ID')
-                    .values(lSO,
-                            lSOItem,
-                            lMainProd,
-                            lQty,
-                            lQty,
-                            lDate,
-                            lLocation);
+            .columns('SALES_DOC',
+                'SALESDOC_ITEM',
+                'PRODUCT_ID',
+                'CONFIRMED_QTY',
+                'ORD_QTY',
+                'MAT_AVAILDATE',
+                'LOCATION_ID')
+            .values(lSO,
+                lSOItem,
+                lMainProd,
+                lQty,
+                lQty,
+                lDate,
+                lLocation);
 
         const liUnique = await SELECT.columns("CHAR_NUM",
-                                                "CHARVAL_NUM")
-                                    .from('V_UNIQUE_ID')
-                                    .where(`UNIQUE_ID = '${lUnique}'`)
+            "CHARVAL_NUM")
+            .from('V_UNIQUE_ID')
+            .where(`UNIQUE_ID = '${lUnique}'`)
 
         for (let cntUI = 0; cntUI < liUnique.length; cntUI++) {
             await INSERT.into('CP_SALESH_CONFIG')
-                        .columns(   'SALES_DOC',
-                                    'SALESDOC_ITEM',
-                                    'CHAR_NUM',
-                                    'CHARVAL_NUM',
-                                    'PRODUCT_ID')
-                        .values(    lSO,
-                                    lSOItem,
-                                    liUnique[cntUI].CHAR_NUM,
-                                    liUnique[cntUI].CHARVAL_NUM,
-                                    lProduct);
+                .columns('SALES_DOC',
+                    'SALESDOC_ITEM',
+                    'CHAR_NUM',
+                    'CHARVAL_NUM',
+                    'PRODUCT_ID')
+                .values(lSO,
+                    lSOItem,
+                    liUnique[cntUI].CHAR_NUM,
+                    liUnique[cntUI].CHARVAL_NUM,
+                    lProduct);
         }
 
         await this.processUniqueID(lLocation, lMainProd, lSO);
@@ -790,21 +812,17 @@ class SOFunctions {
 
     }
 
-    async getTopLocation(lLocation, lProduct){
-        const lsLocation = await SELECT.columns('LOCATION_ID', 'PRODUCT_ID')
-                                       .from('CP_FACTORY_SALESLOC')
-                                       .where(`SALE_LOCATION = '${lLocation}'
-                                       AND SALE_PRODUCT = '${lProduct}'`)
-        if(lsLocation){
-            return this.getTopLocation(lsLocation.LOCATION_ID, lsLocation.PRODUCT_ID)
-        }
-        else{
-            return lLocation;
-        }
-    }
-
-
     async genBaseMarketAuth(lLocation, lProduct) {
+        console.log('Generate Market Authorization');
+
+        let lWeeks = await GenF.getParameterValue(lLocation, 3);
+
+        let lFirmnWeeks = await GenF.getParameterValue(lLocation, 9);
+
+        let lDate = new Date();
+        lDate = new Date(lDate.getFullYear(), lDate.getMonth(), lDate.getDate() + (7 * lFirmnWeeks));
+        let lDateD = lDate.toISOString().split('Z')[0].split('T')[0];
+        lWeeks = lWeeks - lFirmnWeeks;
         let liSOrdQty = await cds.run(`SELECT LOCATION_ID,
                                              PRODUCT_ID,
                                              SUM("ORD_QTY") AS ORD_QTY
@@ -814,9 +832,11 @@ class SOFunctions {
                                        GROUP BY LOCATION_ID,
                                                 PRODUCT_ID;`);
         for (let cntS = 0; cntS < liSOrdQty.length; cntS++) {
-            await   DELETE .from('CP_DEF_MKTAUTH')
-                            .where(`LOCATION_ID = '${lLocation}' AND PRODUCT_ID = '${liSOrdQty[cntS].PRODUCT_ID}'`)
-            
+            await DELETE.from('CP_DEF_MKTAUTH')
+                .where(`LOCATION_ID = '${lLocation}' AND PRODUCT_ID = '${liSOrdQty[cntS].PRODUCT_ID}'`);
+            await DELETE.from('CP_MARKETAUTH_CFG')
+                .where(`LOCATION_ID = '${lLocation}' AND PRODUCT_ID = '${liSOrdQty[cntS].PRODUCT_ID}' AND WEEK_DATE > '${lDateD}'`);
+
         }
 
         let liCharValQty = await cds.run(`SELECT V_SALES_H.LOCATION_ID,
@@ -857,11 +877,218 @@ class SOFunctions {
             }
             liDefMktAuth.push(GenF.parse(lsDefMktAuth));
         }
+        if (liDefMktAuth) {
+            try {
+                await cds.run(INSERT.into("CP_DEF_MKTAUTH").entries(liDefMktAuth));
+                // await INSERT.into('CP_DEF_MKTAUTH')
+                //     .columns('LOCATION_ID',
+                //         'PRODUCT_ID',
+                //         'CHAR_NUM',
+                //         'CHARVAL_NUM',
+                //         'OPT_PERCENT')
+                //     .entries(liDefMktAuth);
 
-        await INSERT.into('CP_DEF_MKTAUTH')
-            .entries(liDefMktAuth);
+
+            }
+            catch (error) {
+                console.log(error);
+            }
+
+        }
+
+        do {
+            let lDateSQL = GenF.getNextMondayCmp(lDate.toISOString().split('Z')[0].split('T')[0]);//(lDate.toISOString().split('T')[0]);
+            // Loop through all the partial products                     
+            for (let cntS = 0; cntS < liSOrdQty.length; cntS++) {
+                // await cds.run(`INSERT INTO "CP_MARKETAUTH_CFG"  SELECT  '${lDateSQL}',
+                //                                                         LOCATION_ID,
+                //                                                         PRODUCT_ID,
+                //                                                         CHAR_NUM,
+                //                                                         CHARVAL_NUM,
+                //                                                         OPT_PERCENT
+                //                                                    FROM CP_DEF_MKTAUTH
+                //                                                   WHERE LOCATION_ID = '${liSOrdQty[cntS].LOCATION_ID}'
+                //                                                     AND PRODUCT_ID = '${liSOrdQty[cntS].PRODUCT_ID}'`);
+
+                await cds.run(`INSERT INTO "CP_MARKETAUTH_CFG"  ( SELECT  '${lDateSQL}',
+                                                                        A.LOCATION_ID,
+                                                                        A.PRODUCT_ID,
+                                                                        A.CHAR_NUM,
+                                                                        A.CHARVAL_NUM,
+                                                                        B.VERSION,
+                                                                        B.SCENARIO,
+                                                                        A.OPT_PERCENT
+                                                                   FROM CP_DEF_MKTAUTH as A
+                                                                   inner join V_IBPVERSCENARIO AS B
+                                                                   ON A.LOCATION_ID = B.LOCATION_ID
+                                                                   AND A.PRODUCT_ID =  B.PRODUCT_ID
+                                                                  WHERE A.LOCATION_ID = '${liSOrdQty[cntS].LOCATION_ID}'
+                                                                    AND A.PRODUCT_ID = '${liSOrdQty[cntS].PRODUCT_ID}')`);
+
+            }
+            lWeeks = parseInt(lWeeks) - 1;
+            lDate = new Date(lDate.getFullYear(), lDate.getMonth(), lDate.getDate() + 7);
+        }
+        while (lWeeks > 0);
 
 
+    }
+    async genPartialProd(lLocation, lProduct) {
+        // const liProd = await cds.run(`
+        //     SELECT * 
+        //       FROM V_LOCPROD
+        //      WHERE LOCATION_ID   = '${lLocation}'
+        //        AND (PRODUCT_ID NOT IN ( SELECT PRODUCT_ID 
+        //                           FROM CP_PARTIALPROD_INTRO 
+        //                           WHERE LOCATION_ID   = '${lLocation}' ) )
+        // `);
+        const liProd = await cds.run(`
+                                SELECT * 
+                                FROM V_LOCPROD
+                                WHERE LOCATION_ID   = '${lLocation}'
+                `);
+        const liPartProd = await cds.run(`
+           SELECT PRODUCT_ID 
+                                  FROM CP_PARTIALPROD_INTRO 
+                                  WHERE LOCATION_ID   = '${lLocation}' 
+        `);
+
+        const liProdCfg = await SELECT.columns(
+            "PRODUCT_ID",
+            "CLASS_NUM",
+            "CHAR_NUM",
+            "CHARVAL_NUM")
+            .from('V_PRODCLSCHARVAL');
+        console.log("prod");
+        let liPartialProd = [];
+        let lsProd = {}, vFlag = '';
+        let liPartialProdChar = [];
+        let lsProdCh = {};
+        for (let cntPD = 0; cntPD < liProd.length; cntPD++) {
+            for (let i = 0; i < liPartProd.length; i++) {
+                if (liPartProd[i].PRODUCT_ID === liProd[cntPD].PRODUCT_ID &&
+                    liPartProd[i].LOCATION_ID === liProd[cntPD].LOCATION_ID &&
+                    liPartProd[i].REF_PRODID === liProd[cntPD].PRODUCT_ID) {
+                    vFlag = 'X';
+                    break;
+                }
+            }
+            if (vFlag === '') {
+                lsProd = {};
+                lsProd['LOCATION_ID'] = GenF.parse(lLocation);
+                lsProd['PRODUCT_ID'] = GenF.parse(liProd[cntPD].PRODUCT_ID);
+                lsProd['REF_PRODID'] = GenF.parse(liProd[cntPD].PRODUCT_ID);
+                lsProd['PROD_DESC'] = GenF.parse(liProd[cntPD].PROD_DESC);
+                liPartialProd.push(GenF.parse(lsProd));
+                for (let cntCfg = 0; cntCfg < liProdCfg.length; cntCfg++) {
+                    if (liProdCfg[cntCfg].PRODUCT_ID === liProd[cntPD].PRODUCT_ID) {
+                        lsProdCh = {};
+                        lsProdCh['LOCATION_ID'] = GenF.parse(lLocation);
+                        lsProdCh['PRODUCT_ID'] = GenF.parse(liProdCfg[cntCfg].PRODUCT_ID);
+                        lsProdCh['CLASS_NUM'] = GenF.parse(liProdCfg[cntCfg].CLASS_NUM);
+                        lsProdCh['CHAR_NUM'] = GenF.parse(liProdCfg[cntCfg].CHAR_NUM);
+                        lsProdCh['CHARVAL_NUM'] = GenF.parse(liProdCfg[cntCfg].CHARVAL_NUM);
+                        liPartialProdChar.push(GenF.parse(lsProdCh));
+                    }
+                }
+            }
+        }
+
+        if (liPartialProd) {
+            try {
+                cds.run({
+                    INSERT:
+                    {
+                        into: { ref: ['CP_PARTIALPROD_INTRO'] },
+                        entries: liPartialProd
+                    }
+                });
+                vFlag = 'X';
+
+            }
+            catch (error) {
+                console.log("Unable to insert records into Partial table:", error);
+            }
+            if (vFlag === 'X' && liPartialProdChar.length > 0) {
+                try {
+                    cds.run({
+                        INSERT:
+                        {
+                            into: { ref: ['CP_PARTIALPROD_CHAR'] },
+                            entries: liPartialProdChar
+                        }
+                    })
+
+                    console.log("Partial records got created");
+                }
+                catch (error) {
+                    console.log("Unbale to insert records into Partial Config:", error);
+                }
+            }
+        }
+        else {
+            console.log("No data to insert records");
+        }
+
+    }
+    async genFactoryLoc(lLocation, lProduct) {
+        console.log("llocation");
+        const liLocation = await SELECT.columns(
+            "LOCATION_ID")
+            .from('CP_LOCATION');
+        console.log("test1");
+        try {
+            const liFtLoc = await SELECT.columns(
+                "LOCATION_ID",
+                "PLAN_LOC",
+                "FACTORY_LOC")
+                .from('CP_FACTORY_SALESLOC');
+        }
+        catch (error) {
+
+            console.log(error);
+        }
+        console.log("loc3");
+        let vFlag = '';
+        let liFactLoc = [];
+        let lsFactLoc = {};
+        for (let cntLC = 0; cntLC < liLocation.length; cntLC++) {
+            for (let i = 0; i < liFtLoc.length; i++) {
+                if (liFtLoc[i].PLAN_LOC === liLocation[cntLC].LOCATION_ID &&
+                    liFtLoc[i].LOCATION_ID === liLocation[cntLC].LOCATION_ID &&
+                    liFtLoc[i].FACTORY_LOC === liLocation[cntLC].LOCATION_ID) {
+                    vFlag = 'X';
+                    break;
+                }
+            }
+            if (vFlag === '') {
+                lsFactLoc = {};
+                lsFactLoc['LOCATION_ID'] = GenF.parse(liLocation[cntLC].LOCATION_ID);
+                lsFactLoc['PLAN_LOC'] = GenF.parse(liLocation[cntLC].LOCATION_ID);
+                lsFactLoc['FACTORY_LOC'] = GenF.parse(liLocation[cntLC].LOCATION_ID);
+                console.log(lsFactLoc);
+                liFactLoc.push(GenF.parse(lsFactLoc));
+            }
+        }
+        console.log("loc2")
+        if (liFactLoc) {
+            try {
+                cds.run({
+                    INSERT:
+                    {
+                        into: { ref: ['CP_FACTORY_SALESLOC'] },
+                        entries: liFactLoc
+                    }
+                });
+                console.log("Updated Factory Location");
+            }
+            catch (error) {
+                console.log("Unable to insert records", error)
+            }
+        }
+        else {
+            console.log("No data to insert records");
+        }
     }
 }
 

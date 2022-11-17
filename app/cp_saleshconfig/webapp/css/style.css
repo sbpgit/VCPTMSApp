@@ -1,6 +1,17 @@
 /* Enter your custom styles here */
 
+.hdrBtnMargin{
+    margin-left : 18rem;
 
+}
+.hdrBtnMarginHdr{
+    margin-left : 79rem;
+
+}
+
+.buttonClass{
+    margin-left:2rem;
+}
 
 
 .boldText {

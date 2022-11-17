@@ -72,8 +72,8 @@
                         <Column hAlign="Left" vAlign="Middle" width="200px">
                             <Text text="{i18n>unidesc}" />
                         </Column>
-                        <Column hAlign="Left" vAlign="Middle" width="100px" visible="false">
-                            <Text text="{i18n>uniRate}"/>
+                        <Column hAlign="Left" vAlign="Middle" width="70px" >
+                            <Text text="{i18n>uidtype}"/>
                         </Column>
 
                         <Column hAlign="Left" vAlign="Middle" width="100px">
@@ -87,7 +87,7 @@
                         <ColumnListItem>
                             <cells>
                                 <ObjectIdentifier title="{UNIQUE_ID}" text="{UNIQUE_DESC}"/>
-                                <Text text="{UID_RATE}"/>
+                                <Text text="{= ${UID_TYPE} === 'U' ? 'Unique' : 'Primary'}"/>
                                 <Switch type="AcceptReject" state="{= ${ACTIVE} === true ? true : false}" change="onChange" >
                                     <layoutData>
                                         <FlexItemData growFactor="1" />

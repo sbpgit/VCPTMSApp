@@ -640,6 +640,24 @@ sap.ui.define([
                 }
                 // return month + "/" + date + "/" + oDate.getFullYear();
                 return oDate.getFullYear() + "-" + month + "-" + date;
+            },
+            onNavPress:function(){
+                if (sap.ushell && sap.ushell.Container && sap.ushell.Container.getService) {
+			var oCrossAppNavigator = sap.ushell.Container.getService("CrossApplicationNavigation"); 
+			// generate the Hash to display 
+			var hash = (oCrossAppNavigator && oCrossAppNavigator.hrefForExternal({
+				target: {
+					semanticObject: "vcpdocdisplay",
+					action: "Display"
+				}
+			})) || ""; 
+			//Generate a  URL for the second application
+			var url = window.location.href.split('#')[0] + hash; 
+			//Navigate to second app
+			sap.m.URLHelper.redirect(url, true); 
+                
+
+                } 
             }
         });
     });

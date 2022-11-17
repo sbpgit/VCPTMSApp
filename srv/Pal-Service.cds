@@ -30,6 +30,13 @@ service PalService{
     entity getODImpactVals as projection on pal.TS_OBJDEP_CHAR_IMPACT_F;
     entity getODModelVersions as projection on pal.OD_MODEL_VERSIONS;
 
+    entity getClustersInput as projection on pal.CLUSTER_DATA;
+    entity getClusterStages as projection on pal.AHC_COMBINE_PROCESS;
+    entity getClusterIds as projection on pal.AHC_RESULTS;
+
+
+
+
 
     // @odata.draft.enabled
     // entity modelProfiles as projection on pal.PalModelProfiles;
@@ -70,6 +77,21 @@ service PalService{
             startDate    : Date;
             endDate    : Date;
         });
+
+        action purgePredictions(vcRulesList : array of {
+            Location     : String(4);
+            Product      : String(40);
+            GroupID      : String(20);
+            Type         : String(10); // Object Dependency, Restriction, Primary
+            startDate    : Date; // Delete Prediction Tables Data older than start date
+        });
+
+        action genClusterInputs (
+            Location     : String(4),
+            Product      : String(40)
+        );
+
+        function fgenClusterInputs(Location : String(4), Product:String(40)) returns String;
 
 
         // function f_generateModels(vcRulesList : array of{

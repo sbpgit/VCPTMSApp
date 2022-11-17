@@ -52,7 +52,7 @@
                             <Column hAlign="Left" vAlign="Middle" width="100px" class="boldText">
                                 <Text text="{i18n>type}" />
                             </Column>
-                            <Column hAlign="Left" vAlign="Middle" visible="{= ${oGModel>/flagcron} === 'X' ? true : false }">
+                            <Column hAlign="Left" width="115px" vAlign="Middle" visible="{= ${oGModel>/flagcron} === 'X' ? true : false }">
                                 <Text text="{i18n>cron}" />
                             </Column>
                             <Column hAlign="Left" vAlign="Middle" visible="false">

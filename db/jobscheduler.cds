@@ -135,12 +135,12 @@ context js {
 
     entity JOBS  {
         key JOB_ID  : Integer @title : 'Job ID';
-        key JOB_NAME  : String(50) @title : 'Job Name';
+        key JOB_NAME  : String(200) @title : 'Job Name';
         key ACTION : String(200) @title : 'Action';
         key ACTIVE : Boolean @title : 'Active';
         key HTTP_METHOD : String(50) @title : 'Http Method';
         key CREATAT : String(50) @title : 'Created At';
-        JOB_DES : String(100) @title : 'Job Description';
+        JOB_DES : String(500) @title : 'Job Description';
         JOB_TYPE: String(50) @tiletle : 'Job Type';
         START_TIME : String(50) @title : 'Start TIme';
         END_TIME : String(50) @title : 'End Time';
@@ -199,9 +199,9 @@ context js {
 @cds.persistence.exists 
 Entity ![V_JOBSTATUS] {
 key     ![JOB_ID]: Integer  @title: 'Job ID' ; 
-key     ![JOB_NAME]: String(50)  @title: 'Job Name' ; 
+key     ![JOB_NAME]: String(200)  @title: 'Job Name' ; 
 key     ![ACTION]: String(200)  @title: 'Action' ; 
-key     ![JOB_DES]: String(100)  @title: 'Job Description' ; 
+key     ![JOB_DES]: String(500)  @title: 'Job Description' ; 
 key     ![SCH_STARTTIME]: String(50)  @title: 'Scheduled Start Time' ; 
 key     ![SCH_END_TIME]: String(50)  @title: 'Scheduled End time' ; 
 key     ![SCH_TIME]: String(50)  @title: 'Scheduled Time' ; 

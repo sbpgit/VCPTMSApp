@@ -16,6 +16,7 @@
                 <ux:snappedHeading>
 					<FlexBox fitContainer="true" alignItems="Center" >
 						<Title text="{i18n>pageTitle}" wrapping="true" />
+                        <Button class="hdrBtnMarginHdr" icon="sap-icon://sys-help" id="idNav" press="onNavPress" type="Emphasized" tooltip="Help Document"/>
 					</FlexBox>
 				</ux:snappedHeading>
             </ux:ObjectPageDynamicHeaderTitle>
@@ -72,6 +73,7 @@
                 <HBox>
                     <Button text="Go" type="Emphasized" press="onGetData" tooltip="Get data based on filters" class="sapUiTinyMarginEnd"/>
                     <Button text="Reset" type="Transparent" press="onResetDate" tooltip="Reset Valid To Date"/>
+                    <Button class="hdrBtnMargin" icon="sap-icon://sys-help" id="idNav1" press="onNavPress" type="Emphasized" tooltip="Help Document"/>
                 </HBox>
             </VBox>
             <Label text="Component" visible="false"/>

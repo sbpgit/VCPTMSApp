@@ -28,21 +28,21 @@
             "destination": "ui5"
         },
         {
-            "source": "^/service/(.*)$",
-            "target": "$1",
-            "destination": "USERAPI",
-            "authenticationType": "xsuaa",
-            "csrfProtection": false
-        },
-        {
             "source": "^/test-resources/(.*)$",
             "target": "/test-resources/$1",
             "authenticationType": "none",
             "destination": "ui5"
         },
         {
+            "source": "/user-info/(.*)",
+            "destination": "srv-api",
+            "csrfProtection": true,
+            "authenticationType": "xsuaa"
+        },
+        {
             "source": "^(.*)$",
             "target": "$1",
+            "localDir": "root",
             "service": "html5-apps-repo-rt",
             "authenticationType": "xsuaa"
         }
