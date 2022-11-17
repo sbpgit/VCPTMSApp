@@ -41,6 +41,10 @@ const varmaMethods = require('./varma.js');
 const rdtMethods = require('./rdt-functions.js');
 // End of RDT functions
 
+// Begin of RDT Functions
+const ahcMethors = require('./ahc.js');
+// End of RDT functions
+
 const JobSchedulerClient = require("@sap/jobs-client");
 const xsenv = require("@sap/xsenv");
 
@@ -2766,6 +2770,12 @@ async function _genClusterInputs(req,isGet) {
     // console.log(" _genClusterInputs sqlClusterResults : ", sqlClusterResults);
     let numIds = sqlClusterResults.length;
     let tableObj = [];
+
+    // Limit Number of Characters to MAX_CLUSTER_CHARS
+    if(numIds > MAX_CLUSTER_CHARS)
+    {
+        numIds =  MAX_CLUSTER_CHARS;
+    }
 
     for (let clusterIdx = 0; clusterIdx < numIds; clusterIdx ++)
     {

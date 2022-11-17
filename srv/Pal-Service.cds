@@ -31,8 +31,8 @@ service PalService{
     entity getODModelVersions as projection on pal.OD_MODEL_VERSIONS;
 
     entity getClustersInput as projection on pal.CLUSTER_DATA;
-    entity getClusterStages as projection on pal.AHC_CLUSTER_COMBINE_PROCESS;
-    entity getClusterIds as projection on pal.AHC_CLUSTER_RESULTS;
+    entity getClusterStages as projection on pal.AHC_COMBINE_PROCESS;
+    entity getClusterIds as projection on pal.AHC_RESULTS;
 
 
 
