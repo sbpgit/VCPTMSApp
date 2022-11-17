@@ -6762,6 +6762,12 @@
           "type": "cds.String",
           "length": 5
         },
+        "LOCATION_ID": {
+          "@title": "LOCATION_ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
         "VALUE": {
           "@title": "VALUE",
           "key": true,
@@ -21788,6 +21794,12 @@
           "key": true,
           "type": "cds.String",
           "length": 5
+        },
+        "LOCATION_ID": {
+          "@title": "LOCATION_ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
         },
         "VALUE": {
           "@title": "VALUE",

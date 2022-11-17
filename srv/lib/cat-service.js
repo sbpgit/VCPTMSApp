@@ -70,7 +70,8 @@ module.exports = (srv) => {
         const xsuaa = await cds.connect.to(api_def);
         // console.log(xsuaa);
         return await xsuaa.get("/userinfo");
-    });
+    }); 
+    
     srv.after('READ', 'getLocationtemp', async (data, req) => {
         vUser = req.headers['x-username'];
         // return {

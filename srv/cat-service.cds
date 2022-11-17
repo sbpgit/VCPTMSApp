@@ -225,7 +225,8 @@ service CatalogService @(impl : './lib/cat-service.js') {
     entity getUsers             as projection on od.USERDETAILS;
     function genVariantStruc(CHAR_NUM : String(10), CHAR_NAME : String(30))                                                                                                                                                                                                      returns String;
     function userInfo()                                                                                                                                                                                                                                                          returns String; // using req.user approach (user attribute - of class cds.User - from the request object)
-    function userInfoUAA()                                                                                                                                                                                                                                                       returns String; // usi
+    function userInfoUAA()
+                                                                                                                                                                                                                                   returns String; // usi
 
     ///*****/ Restrictions /*****/
     //Get Restriction header
@@ -296,4 +297,5 @@ service CatalogService @(impl : './lib/cat-service.js') {
     //*****/ Factory Location/*****/
     @odata.draft.enabled
     entity getFactoryLoc        as projection on od.FACTORY_SALESLOC;
+    
 }

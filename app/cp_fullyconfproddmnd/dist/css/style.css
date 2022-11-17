@@ -2,7 +2,7 @@
 .table {
     padding-left : 0.1rem;
     margin-right : 0.1rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.1rem;
     height: auto;
 }
 .tableScroll .sapUiTableVSb {
@@ -11,3 +11,8 @@
 .hdrBtnMargin {
   margin-left : 82rem;
 }
+.disableDP input{
+    pointer-events: none;
+    color: transparent;
+    text-shadow: 0 0 0 gray;
+   }

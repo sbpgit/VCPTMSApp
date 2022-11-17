@@ -1,17 +1,17 @@
 <mvc:View controllerName="cpapp.cpfullyconfproddmnd.controller.Home" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core" displayBlock="true" xmlns="sap.m" xmlns:f="sap.ui.layout.form" xmlns:t="sap.ui.table" xmlns:ux="sap.uxap" xmlns:l="sap.ui.layout" xmlns:html="http://www.w3.org/1999/xhtml">
     <Page showHeader="false" showFooter="true" enableScrolling="false">
         <content>
-            <ux:ObjectPageLayout id="ObjectPageLayout" headerContentPinned="true" preserveHeaderStateOnScroll="true">
+            <ux:ObjectPageLayout id="ObjectPageLayout" headerContentPinned="true" preserveHeaderStateOnScroll="true" alwaysShowContentHeader="true" useIconTabBar="true">
                 <ux:headerTitle>
                     <ux:ObjectPageDynamicHeaderTitle>
                         <ux:expandedHeading>
                             <Title text="{i18n>appTitle}" titleAlignment="Center" />
                         </ux:expandedHeading>
-                        <ux:snappedHeading>
+                        <!-- <ux:snappedHeading>
                             <FlexBox fitContainer="true" alignItems="Center">
                                 <Title text="{i18n>appTitle}" wrapping="true" />
                             </FlexBox>
-                        </ux:snappedHeading>
+                        </ux:snappedHeading> -->
                     </ux:ObjectPageDynamicHeaderTitle>
                 </ux:headerTitle>
                 <ux:headerContent>
@@ -73,7 +73,7 @@
                                             <ToolbarSpacer />
                                             <Button text="Publish" press="onPressPublish" type="Emphasized" />
                                         </Toolbar> -->
-                                        <t:Table id="idCIReq" class="table" fixedColumnCount="2" selectionMode="None" alternateRowColors="true" enableSelectAll="false" visibleRowCount="8">
+                                        <t:Table id="idCIReq" class="table" fixedColumnCount="2" selectionMode="None" alternateRowColors="true" enableSelectAll="false" visibleRowCount="11">
                                             <t:columns />
                                         </t:Table>
                                     </VBox>
