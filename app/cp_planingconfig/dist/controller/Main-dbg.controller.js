@@ -228,8 +228,6 @@ sap.ui.define(
                 this.bus.unsubscribe("nav", "toBeginPage", this.toBeginPage, this);
                 this.bus.unsubscribe("nav", "toDetailPage", this.toDetailPage, this);
                 this.bus.unsubscribe("nav", "backToBegin", this.backToBegin, this);
-<<<<<<< HEAD
-=======
             },
             onNavPress:function(){
                 if (sap.ushell && sap.ushell.Container && sap.ushell.Container.getService) {
@@ -246,7 +244,6 @@ sap.ui.define(
 			//Navigate to second app
 			sap.m.URLHelper.redirect(url, true); 
                 } 
->>>>>>> cb864fe3f1f6506666aff5164a796509d8b512b7
             }
         });
     }

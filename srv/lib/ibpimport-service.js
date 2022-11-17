@@ -25,13 +25,13 @@ function getJobscheduler(req) {
     }
 }
 module.exports = cds.service.impl(async function () {
-    const { VCPQ } = this.entities;
+    const { SBPVCP } = this.entities;
     //  const service = await cdse.connect.to('IBPDemandsrv');
     const service = await cds.connect.to('IBPDemandsrv');
     const servicePost = await cds.connect.to('IBPMasterDataAPI');
     var vTransid;
     // var csrfProtection = csrf({ cookie: true })
-    this.on('READ', VCPQ, request => {
+    this.on('READ', SBPVCP, request => {
         try {
             return service.tx(request).run(request.query);
         }
@@ -44,7 +44,7 @@ module.exports = cds.service.impl(async function () {
         var flag;
 
         // var resUrl = "/SBPVCP?$select=PRDID,LOCID,PERIODID4_TSTAMP,TOTALDEMANDOUTPUT,UOMTOID,VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and UOMTOID eq 'EA'";
-        var resUrl = "/VCPQ?$select=PRDID,LOCID,PERIODID4_TSTAMP,TOTALDEMANDOUTPUT,UOMTOID,VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "'and UOMTOID eq 'EA'";
+        var resUrl = "/SBPVCP?$select=PRDID,LOCID,PERIODID4_TSTAMP,TOTALDEMANDOUTPUT,UOMTOID,VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "'and UOMTOID eq 'EA'";
         var req = await service.tx(req).get(resUrl);
         // if(req.length > 0){
         const vDelDate = new Date();
@@ -110,7 +110,7 @@ module.exports = cds.service.impl(async function () {
         if (flag === 'X') {
 
             console.log("Step2");
-            var resUrl = "/VCPQ?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
+            var resUrl = "/SBPVCP?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
 
             var req = await service.tx(request).get(resUrl);
             // if(req.length > 0){
@@ -202,14 +202,14 @@ module.exports = cds.service.impl(async function () {
         var vNextMonthDate = GenF.addMonths("2022-10-01", 1).toISOString().split('Z')[0];
         while (vLoop === 1) {
             if (vNextMonthDate <= vToDate) {
-                resUrl = "/VCPQ?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and PERIODID4_TSTAMP gt datetime'" + vFromDate + "' and PERIODID4_TSTAMP lt datetime'" + vNextMonthDate + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
+                resUrl = "/SBPVCP?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and PERIODID4_TSTAMP gt datetime'" + vFromDate + "' and PERIODID4_TSTAMP lt datetime'" + vNextMonthDate + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
                 vFromDate = vNextMonthDate;
                 vNextMonthDate = GenF.addMonths(vFromDate, 1).toISOString().split('Z')[0];
             }
             else if (vNextMonthDate > vToDate) {
                 vNextMonthDate = vToDate;
                 vLoop = 0;
-                resUrl = "/VCPQ?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and PERIODID4_TSTAMP gt datetime'" + vFromDate + "' and PERIODID4_TSTAMP lt datetime'" + vNextMonthDate + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
+                resUrl = "/SBPVCP?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and PERIODID4_TSTAMP gt datetime'" + vFromDate + "' and PERIODID4_TSTAMP lt datetime'" + vNextMonthDate + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
             }
             else {
                 vLoop = 0;
@@ -430,11 +430,11 @@ module.exports = cds.service.impl(async function () {
             "TransactionID": vTransID,
             "RequestedAttributes": "VCMODELRANGE,PRDFAMILY,PRDID,PRDGROUP,VCMODEL,PRDDESCR,PRDSERIES",
             "DoCommit": true,
-            "NavVCQPRODUCT": oReq.masterProd
+            "NavVCPPRODUCT": oReq.masterProd
         }
         // req.headers['Application-Interface-Key'] = vAIRKey;
-        await servicePost.tx(req).post("/VCQPRODUCTTrans", oEntry);
-        var resUrl = "/GetExportResult?P_EntityName='VCPQ'&P_TransactionID='" + vTransID + "'";
+        await servicePost.tx(req).post("/VCPPRODUCTTrans", oEntry);
+        var resUrl = "/GetExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
         return await servicePost.tx(req).get(resUrl);
         try {
             // var vResponse = await servicePost.tx(req).get(resUrl);
@@ -473,10 +473,10 @@ module.exports = cds.service.impl(async function () {
             "TransactionID": vTransID,
             "RequestedAttributes": "LOCID,LOCDESCR",
             "DoCommit": true,
-            "NavVCQLOCATION": oReq.newLoc
+            "NavVCPLOCATION": oReq.newLoc
         }
-        await servicePost.tx(req).post("/VCQLOCATIONTrans", oEntry);
-        var resUrl = "/GetExportResult?P_EntityName='VCPQ'&P_TransactionID='" + vTransID + "'";
+        await servicePost.tx(req).post("/VCPLOCATIONTrans", oEntry);
+        var resUrl = "/GetExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
         return await servicePost.tx(req).get(resUrl)
         // GetExportResult
     });
@@ -508,10 +508,10 @@ module.exports = cds.service.impl(async function () {
             "TransactionID": vTransID,
             "RequestedAttributes": "CUSTID,CUSTDESCR",
             "DoCommit": true,
-            "NavVCQCUSTOMER": oReq.cust
+            "NavVCPCUSTOMER": oReq.cust
         }
-        await servicePost.tx(req).post("/VCQCUSTOMERTrans", oEntry);
-        var resUrl = "/GetExportResult?P_EntityName='VCPQ'&P_TransactionID='" + vTransID + "'";
+        await servicePost.tx(req).post("/VCPCUSTOMERTrans", oEntry);
+        var resUrl = "/GetExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
         return await servicePost.tx(req).get(resUrl)
         // GetExportResult
     });
@@ -551,16 +551,16 @@ module.exports = cds.service.impl(async function () {
             "Transactionid": vTransID,
             "AggregationLevelFieldsString": "LOCID,PRDID,VCCLASS,VCCHAR,VCCHARVALUE,CUSTID,CIRQTY,PERIODID4_TSTAMP",
             "DoCommit": true,
-            "NavVCPQ": oReq.cir
+            "NavSBPVCP": oReq.cir
         }
         try {
-            await service.tx(req).post("/VCPQTrans", oEntry);
+            await service.tx(req).post("/SBPVCPTrans", oEntry);
             response = "Success";
         }
         catch (e) {
 
         }
-        var resUrl = "/GetExportResult?P_EntityName='VCPQ'&P_Transactionid='" + vTransID + "'";
+        var resUrl = "/GetExportResult?P_EntityName='SBPVCP'&P_Transactionid='" + vTransID + "'";
         return await service.tx(req).get(resUrl)
         // GetExportResult
     });
@@ -609,10 +609,10 @@ module.exports = cds.service.impl(async function () {
             "TransactionID": vTransID,
             "RequestedAttributes": "VCCHAR,VCCHARGROUP,VCCHARNAME,VCCHARVALUE,VCCHARVALUENAME,VCCLASS,VCCLASSNAME,VCCHARDESC,VCCHARVALUEDESC,VCCLASSDESC",
             "DoCommit": true,
-            "NavVCQCLASS": oReq.class
+            "NavVCPCLASS": oReq.class
         }
-        await servicePost.tx(req).post("/VCQCLASSTrans", oEntry);
-        var resUrl = "/GetExportResult?P_EntityName='VCPQ'&P_TransactionID='" + vTransID + "'";
+        await servicePost.tx(req).post("/VCPCLASSTrans", oEntry);
+        var resUrl = "/GetExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
         try {
 
             return await servicePost.tx(req).get(resUrl)
@@ -813,12 +813,12 @@ module.exports = cds.service.impl(async function () {
                 "VersionID": "",
                 "DoCommit": true,
                 "ScenarioID": "",
-                "NavVCPQ": oReq.actcomp
+                "NavSBPVCP": oReq.actcomp
             }
             // req.headers['Application-Interface-Key'] = vAIRKey;
-            await service.tx(req).post("/VCPQTrans", oEntry);
+            await service.tx(req).post("/SBPVCPTrans", oEntry);
 
-            var resUrl = "/getExportResult?P_EntityName='VCPQ'&P_TransactionID='" + vTransID + "'";
+            var resUrl = "/getExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
             try {
                 return await service.tx(req).get(resUrl);
                 flag = 'X';
@@ -840,10 +840,10 @@ module.exports = cds.service.impl(async function () {
             "VersionID": "",
             "DoCommit": true,
             "ScenarioID": "",
-            "NavVCPQ": oReq.sales
+            "NavSBPVCP": oReq.sales
         }
         // req.headers['Application-Interface-Key'] = vAIRKey;
-        await service.tx(req).post("/VCPQTrans", oEntry);
+        await service.tx(req).post("/SBPVCPTrans", oEntry);
 
         var resUrl = "/getExportResult?P_TransactionID='" + vTransID + "'";
         try {
@@ -951,11 +951,11 @@ module.exports = cds.service.impl(async function () {
             "VersionID": "",
             "DoCommit": true,
             "ScenarioID": "",
-            "NavVCPQ": oReq.sales
+            "NavSBPVCP": oReq.sales
         }
-        await service.tx(req).post("/VCPQTrans", oEntry);
+        await service.tx(req).post("/SBPVCPTrans", oEntry);
 
-        var resUrl = "/getExportResult?P_EntityName='VCPQ'&P_TransactionID='" + vTransID + "'";
+        var resUrl = "/getExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
         var res = await service.tx(req).get(resUrl);
         return res[0].Value;
 
@@ -1062,9 +1062,9 @@ module.exports = cds.service.impl(async function () {
             "VersionID": "",
             "DoCommit": true,
             "ScenarioID": "",
-            "NavVCPQ": oReq.actcompreq
+            "NavSBPVCP": oReq.actcompreq
         }
-        await service.tx(req).post("/VCPQTrans", oEntry);
+        await service.tx(req).post("/SBPVCPTrans", oEntry);
 
         var resUrl = "/getExportResult?P_TransactionID='" + vTransID + "'";
         var res = await service.tx(req).get(resUrl);
@@ -1108,10 +1108,10 @@ module.exports = cds.service.impl(async function () {
             "TransactionID": vTransID,
             "RequestedAttributes": "LOCID,PRDID,PLANNINGSTRGY,PLUNITID,PROCUREMENTTYPE,VCLOTSIZE",
             "DoCommit": true,
-            "NavVCQLOCATIONPRODUCT": oReq.newLocProd
+            "NavVCPLOCATIONPRODUCT": oReq.newLocProd
         }
-        await servicePost.tx(req).post("/VCQLOCATIONPRODUCTTrans", oEntry);
-        var resUrl = "/GetExportResult?P_EntityName='VCPQ'&P_TransactionID='" + vTransID + "'";
+        await servicePost.tx(req).post("/VCPLOCATIONPRODUCTTrans", oEntry);
+        var resUrl = "/GetExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
         return await servicePost.tx(req).get(resUrl)
         // GetExportResult
     });
@@ -1126,24 +1126,24 @@ module.exports = cds.service.impl(async function () {
             "TransactionID": vTransID,
             "RequestedAttributes": "VCRESTRICTIONID,VCRESTRICTIONDESC,VCRESTRICTIONTYPE",
             "DoCommit": true,
-            "NavVCQRESTRICTION": oReq.rtrhdr
+            "NavVCPRESTRICTION": oReq.rtrhdr
         }
         var oEntry2 =
         {
             "TransactionID": vTransID2,
             "RequestedAttributes": "LOCID,VCRESTRICTIONID,VCPLACEHOLDER",
             "DoCommit": true,
-            "NavVCQRESTRICTION": oReq.locrtr
+            "NavVCPRESTRICTION": oReq.locrtr
         }
         try {
-            await servicePost.tx(req).post("/VCQRESTRICTIONTrans", oEntry);
-            await servicePost.tx(req).post("/VCQLOCRESTRICTIONTrans", oEntry2);
+            await servicePost.tx(req).post("/VCPRESTRICTIONTrans", oEntry);
+            await servicePost.tx(req).post("/VCPLOCRESTRICTIONTrans", oEntry2);
             vFlag = 'S';
         }
         catch (e) {
             vFlag = '';
         }
-        var resUrl = "/GetExportResult?P_EntityName='VCPQ'&P_TransactionID='" + vTransID2 + "'";
+        var resUrl = "/GetExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID2 + "'";
         return await servicePost.tx(req).get(resUrl)
         // GetExportResult
     });
@@ -1246,11 +1246,11 @@ module.exports = cds.service.impl(async function () {
             "TransactionID": vTransID,
             "RequestedAttributes": "VCMODELRANGE,PRDFAMILY,PRDID,PRDGROUP,VCMODEL,PRDDESCR,PRDSERIES",
             "DoCommit": true,
-            "NavVCQPRODUCT": oReq.masterProd
+            "NavVCPPRODUCT": oReq.masterProd
         }
         // req.headers['Application-Interface-Key'] = vAIRKey;
-        await servicePost.tx(req).post("/VCQPRODUCTTrans", oEntry);
-        var resUrl = "/GetExportResult?P_EntityName='VCPQ'&P_TransactionID='" + vTransID + "'";
+        await servicePost.tx(req).post("/VCPPRODUCTTrans", oEntry);
+        var resUrl = "/GetExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
         //return await servicePost.tx(req).get(resUrl);
         try {
             var vResponse = await servicePost.tx(req).get(resUrl);
@@ -1347,14 +1347,14 @@ module.exports = cds.service.impl(async function () {
             "TransactionID": vTransID,
             "RequestedAttributes": "LOCID,LOCDESCR",
             "DoCommit": true,
-            "NavVCQLOCATION": oReq.newLoc
+            "NavVCPLOCATION": oReq.newLoc
         }
 
         // req.headers['Application-Interface-Key'] = vAIRKey;
-        await servicePost.tx(req).post("/VCQLOCATIONTrans", oEntry);
+        await servicePost.tx(req).post("/VCPLOCATIONTrans", oEntry);
         console.log(req);
         console.log(req.headers);
-        var resUrl = "/GetExportResult?P_EntityName='VCPQ'&P_TransactionID='" + vTransID + "'";
+        var resUrl = "/GetExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
         try {
             var vResponse = await servicePost.tx(req).get(resUrl);
             flag = 'X';
@@ -1456,11 +1456,11 @@ module.exports = cds.service.impl(async function () {
             "TransactionID": vTransID,
             "RequestedAttributes": "LOCID,PRDID,PLANNINGSTRGY,PLUNITID,PROCUREMENTTYPE,VCLOTSIZE",
             "DoCommit": true,
-            "NavVCQLOCATIONPRODUCT": oReq.newLocProd
+            "NavVCPLOCATIONPRODUCT": oReq.newLocProd
         }
         // req.headers['Application-Interface-Key'] = vAIRKey;
-        await servicePost.tx(req).post("/VCQLOCATIONPRODUCTTrans", oEntry);
-        var resUrl = "/GetExportResult?P_EntityName='VCPQ'&P_TransactionID='" + vTransID + "'";
+        await servicePost.tx(req).post("/VCPLOCATIONPRODUCTTrans", oEntry);
+        var resUrl = "/GetExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
         try {
             var vResponse = await servicePost.tx(req).get(resUrl);
             flag = 'X';
@@ -1554,11 +1554,11 @@ module.exports = cds.service.impl(async function () {
             "TransactionID": vTransID,
             "RequestedAttributes": "CUSTID,CUSTDESCR",
             "DoCommit": true,
-            "NavVCQCUSTOMER": oReq.cust
+            "NavVCPCUSTOMER": oReq.cust
         }
         // req.headers['Application-Interface-Key'] = vAIRKey;
-        await servicePost.tx(req).post("/VCQCUSTOMERTrans", oEntry);
-        var resUrl = "/GetExportResult?P_EntityName='VCPQ'&P_TransactionID='" + vTransID + "'";
+        await servicePost.tx(req).post("/VCPCUSTOMERTrans", oEntry);
+        var resUrl = "/GetExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
         // return await servicePost.tx(req).get(resUrl)
         try {
             var aResponse = await servicePost.tx(req).get(resUrl);
@@ -1669,11 +1669,11 @@ module.exports = cds.service.impl(async function () {
             "TransactionID": vTransID,
             "RequestedAttributes": "VCCHAR,VCCHARGROUP,VCCHARNAME,VCCHARVALUE,VCCHARVALUENAME,VCCLASS,VCCLASSNAME,VCCHARDESC,VCCHARVALUEDESC,VCCLASSDESC",
             "DoCommit": true,
-            "NavVCQCLASS": oReq.class
+            "NavVCPCLASS": oReq.class
         }
         // req.headers['Application-Interface-Key'] = vAIRKey;
-        await servicePost.tx(req).post("/VCQCLASSTrans", oEntry);
-        var resUrl = "/GetExportResult?P_EntityName='VCPQ'&P_TransactionID='" + vTransID + "'";
+        await servicePost.tx(req).post("/VCPCLASSTrans", oEntry);
+        var resUrl = "/GetExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
         try {
             aResponse = await servicePost.tx(req).get(resUrl);
             flag = 'X';
@@ -1779,14 +1779,14 @@ module.exports = cds.service.impl(async function () {
             "VersionID": "",
             "DoCommit": true,
             "ScenarioID": "",
-            "NavVCPQ": oReq.sales
+            "NavSBPVCP": oReq.sales
         }
         // req.headers['Application-Interface-Key'] = vAIRKey;
 
         // var resUrl = "/SBPVCPMessage?$select=Transactionid,ExceptionId,MsgText&$filter=Transactionid eq '" + vTransID + "'";
         // var resUrl = "/getExportResult?P_TransactionID='" + vTransID + "'";
         try {
-            await service.tx(req).post("/VCPQTrans", oEntry);
+            await service.tx(req).post("/SBPVCPTrans", oEntry);
             // return await service.tx(req).get(resUrl);
             flag = 'S';
         }
@@ -1804,11 +1804,11 @@ module.exports = cds.service.impl(async function () {
                 "VersionID": "",
                 "DoCommit": true,
                 "ScenarioID": "",
-                "NavVCPQ": oReq.sales
+                "NavSBPVCP": oReq.sales
             }
             // req.headers['Application-Interface-Key'] = vAIRKey;
             try {
-                await service.tx(req).post("/VCPQTrans", oEntryCfg);
+                await service.tx(req).post("/SBPVCPTrans", oEntryCfg);
                 // return await service.tx(req).get(resUrl);
                 flag = 'X';
             }
@@ -1973,12 +1973,12 @@ module.exports = cds.service.impl(async function () {
                 "VersionID": "",
                 "DoCommit": true,
                 "ScenarioID": "",
-                "NavVCPQ": oReq.actcomp
+                "NavSBPVCP": oReq.actcomp
             }
             // req.headers['Application-Interface-Key'] = vAIRKey;
-            await service.tx(req).post("/VCPQTrans", oEntry);
+            await service.tx(req).post("/SBPVCPTrans", oEntry);
 
-            var resUrl = "/getExportResult?P_EntityName='VCPQ'&P_TransactionID='" + vTransID + "'";
+            var resUrl = "/getExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
             try {
              //   return await service.tx(req).get(resUrl);
                 flag = 'X';
@@ -2167,10 +2167,10 @@ module.exports = cds.service.impl(async function () {
                 "VersionID": "",
                 "DoCommit": true,
                 "ScenarioID": "",
-                "NavVCPQ": oReq.actcompreq
+                "NavSBPVCP": oReq.actcompreq
             }
             // req.headers['Application-Interface-Key'] = vAIRKey;
-            await service.tx(req).post("/VCPQTrans", oEntry);
+            await service.tx(req).post("/SBPVCPTrans", oEntry);
 
             var resUrl = "/getExportResult?P_TransactionID='" + vTransID + "'";
             try {
@@ -2277,7 +2277,7 @@ module.exports = cds.service.impl(async function () {
         var flag;        
 
         await GenF.logMessage(request, `Started importing Future Demand`);
-        var resUrl = "/VCPQ?$select=PRDID,LOCID,PERIODID4_TSTAMP,TOTALDEMANDOUTPUT,UOMTOID,VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "'and UOMTOID eq 'EA'";
+        var resUrl = "/SBPVCP?$select=PRDID,LOCID,PERIODID4_TSTAMP,TOTALDEMANDOUTPUT,UOMTOID,VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "'and UOMTOID eq 'EA'";
 
         // req.headers['Application-Interface-Key'] = vAIRKey;
         var req = await service.tx(req).get(resUrl);
@@ -2350,7 +2350,7 @@ module.exports = cds.service.impl(async function () {
                 return string;
             };
 
-            resUrlFplan = "/VCPQ?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
+            resUrlFplan = "/SBPVCP?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
 
             var req = await service.tx(request).get(resUrlFplan);
             const vDelDate = new Date();
@@ -2566,7 +2566,7 @@ module.exports = cds.service.impl(async function () {
         //     break;
         // }
         // req.headers['Application-Interface-Key'] = vAIRKey;
-        resUrl = "/VCPQ?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
+        resUrl = "/SBPVCP?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
 
         var req = await service.tx(request).get(resUrl);
         // if(req.length > 0){
@@ -2714,11 +2714,11 @@ module.exports = cds.service.impl(async function () {
             "Transactionid": vTransID,
             "AggregationLevelFieldsString": "LOCID,PRDID,VCCLASS,VCCHAR,VCCHARVALUE,CUSTID,CIRQTY,PERIODID4_TSTAMP",
             "DoCommit": true,
-            "NavVCPQ": oReq.cir
+            "NavSBPVCP": oReq.cir
         }
 
         try {
-            await service.tx(request).post("/VCPQTrans", oEntry);
+            await service.tx(request).post("/SBPVCPTrans", oEntry);
             flag = 'X';
         }
         catch (err) {
@@ -2797,18 +2797,18 @@ module.exports = cds.service.impl(async function () {
             "TransactionID": vTransID,
             "RequestedAttributes": "VCRESTRICTIONID,VCRESTRICTIONDESC,VCRESTRICTIONTYPE",
             "DoCommit": true,
-            "NavVCQRESTRICTION": oReq.rtrhdr
+            "NavVCPRESTRICTION": oReq.rtrhdr
         }
         var oEntry2 =
         {
             "TransactionID": vTransID2,
             "RequestedAttributes": "LOCID,VCRESTRICTIONID,VCPLACEHOLDER",
             "DoCommit": true,
-            "NavVCQRESTRICTION": oReq.locrtr
+            "NavVCPRESTRICTION": oReq.locrtr
         }
         try {
-            await servicePost.tx(req).post("/VCQRESTRICTIONTrans", oEntry);
-            await servicePost.tx(req).post("/VCQLOCRESTRICTIONTrans", oEntry2);
+            await servicePost.tx(req).post("/VCPRESTRICTIONTrans", oEntry);
+            await servicePost.tx(req).post("/VCPLOCRESTRICTIONTrans", oEntry2);
             vFlag = 'S';
         }
         catch (e) {

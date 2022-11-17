@@ -8,12 +8,9 @@
 			</contentLeft>
 				<contentMiddle>
 					<Title text="{i18n>appTitle}" class="title"></Title>
-<<<<<<< HEAD
-=======
                     <VBox id="_IDGenVBox9" >
                          <Button class="hdrBtnMarginHdr" icon="sap-icon://sys-help" id="idNav1" press="onNavPress" type="Emphasized" tooltip="Help Document" />
                     </VBox>
->>>>>>> cb864fe3f1f6506666aff5164a796509d8b512b7
 				</contentMiddle>
 			</Bar>
 		</customHeader>

@@ -34,6 +34,8 @@ sap.ui.define([
                     that.getView().addDependent(that.oMethodDialog);
                 }
 
+                
+
                 // oRoute = that.getRouter().getRoute("detail");
                 //  oRoute.attachPatternMatched(that._onPatternMatched, that);                
             },
@@ -43,8 +45,7 @@ sap.ui.define([
        */
             onAfterRendering: function () {
                 var oModel = that.getOwnerComponent().getModel('PCModel');
-                oGModel = that.getOwnerComponent().getModel("oGModel");
-
+                oGModel = that.getOwnerComponent().getModel("oGModel");   
 
                 var location = oGModel.getProperty("/location");
 
@@ -129,7 +130,6 @@ sap.ui.define([
             *
             */
             getPlannedParameters: function (slocation) {
-<<<<<<< HEAD
                 var aParameters = [];
                 that.getModel("PCModel").read('/V_Parameters', {
                     filters: [
@@ -166,44 +166,6 @@ sap.ui.define([
                     success: function (oData) {
                         // MessageToast.show("Success");
                         aParameters = oData.results;
-=======
-                var aParameters = [];
-                that.getModel("PCModel").read('/V_Parameters', {
-                    filters: [
-                        new Filter("LOCATION_ID", FilterOperator.EQ, slocation)
-                    ],
-                    success: function (oData) {
-                        // MessageToast.show("Success");
-                        aParameters = oData.results;
-                        if (aParameters.length > 0) {
-                            aParameters = aParameters.sort((a, b) => a.SEQUENCE - b.SEQUENCE);
-
-                            that.oParameterModel.setData({
-                                parameters: aParameters  //oData.results
-                            });
-
-                            that.byId("idParameterTable").setModel(that.oParameterModel);
-                        } else {
-                            that.getParameters();
-                        }
-
-                    }, error: function (oReponse) {
-                        MessageToast.show("Failed to fetch Parameters!");
-                    }
-                }
-                );
-            },
-            /**
-             * 
-             * @param {*} oModel 
-             */
-            getParameters: function () {
-                var aParameters = [];
-                that.getModel("PCModel").read('/V_Parameters', {
-                    success: function (oData) {
-                        // MessageToast.show("Success");
-                        aParameters = oData.results;
->>>>>>> cb864fe3f1f6506666aff5164a796509d8b512b7
                         aParameters = aParameters.sort((a, b) => a.SEQUENCE - b.SEQUENCE);
 
                         const ids = aParameters.map(o => o.PARAMETER_ID)
@@ -324,20 +286,13 @@ sap.ui.define([
                 that.i18n = that.getOwnerComponent().getModel("i18n").getResourceBundle();
                 // that.getParameters(oModel, oArgs.location);
                 that.getMethods(oModel);
-<<<<<<< HEAD
-            }
-=======
             },
->>>>>>> cb864fe3f1f6506666aff5164a796509d8b512b7
 
             /**
              * 
              * 
              */
-<<<<<<< HEAD
-=======
            
->>>>>>> cb864fe3f1f6506666aff5164a796509d8b512b7
 
         });
     });

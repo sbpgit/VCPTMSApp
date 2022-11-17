@@ -1,23 +1,12 @@
 {
-<<<<<<< HEAD
-  "Component.js": 1661869074987,
-  "manifest.json": 1666960840189,
+  "manifest.json": 1668690464093,
   "i18n/i18n.properties": 1661869074987,
-  "manifest-bundle.zip": 1666960840199,
-  "Component-preload.js": 1666960840353,
+  "custom/ListReportExtController.js": 1668670306185,
+  "Component.js": 1661869074987,
+  "manifest-bundle.zip": 1668690464109,
+  "Component-preload.js": 1668690464373,
   "Component-dbg.js": 1661869074987,
+  "custom/ListReportExtController-dbg.js": 1668670306185,
   "annotations/annotation.xml": 1661869074987,
   "index.html": 1661869074987
-=======
-  "i18n/i18n.properties": 1661440197819,
-  "Component.js": 1661440197819,
-  "custom/ListReportExtController.js": 1668150094359,
-  "manifest.json": 1668168537914,
-  "manifest-bundle.zip": 1668168537928,
-  "Component-preload.js": 1668168538175,
-  "Component-dbg.js": 1661440197819,
-  "custom/ListReportExtController-dbg.js": 1668150094359,
-  "annotations/annotation.xml": 1661440197819,
-  "index.html": 1668150005342
->>>>>>> cb864fe3f1f6506666aff5164a796509d8b512b7
 }
