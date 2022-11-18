@@ -34,6 +34,8 @@ sap.ui.define([
                     that.getView().addDependent(that.oMethodDialog);
                 }
 
+                
+
                 // oRoute = that.getRouter().getRoute("detail");
                 //  oRoute.attachPatternMatched(that._onPatternMatched, that);                
             },
@@ -43,8 +45,7 @@ sap.ui.define([
        */
             onAfterRendering: function () {
                 var oModel = that.getOwnerComponent().getModel('PCModel');
-                oGModel = that.getOwnerComponent().getModel("oGModel");
-
+                oGModel = that.getOwnerComponent().getModel("oGModel");   
 
                 var location = oGModel.getProperty("/location");
 

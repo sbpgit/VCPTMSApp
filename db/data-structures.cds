@@ -396,4 +396,12 @@ context cp_ds {
         HeaderConfig : array of uniqueIDChars;
     }
 
+    // testing
+
+    type cfDestInfo {
+        Flag : String(1);
+        DestName : String(20);
+        User : String(60);
+    }
+
 }

@@ -733,22 +733,24 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                                                 <Select id="idSdi" change="onSdiChange" selectedKey="LO" class="buttonDesktop " width="400px">
                                                     <core:ListItem key="LO" text="{i18n>loc}" />
                                                     <core:ListItem key="CG" text="{i18n>custgrp}" />
-                                                    <core:ListItem key="PR" text="{i18n>confProd}" />
+                                                    <core:ListItem key="PR" text="{i18n>prod}" />
                                                     <core:ListItem key="LP" text="{i18n>locpprod}" />
-                                                    <core:ListItem key="PC" text="{i18n>confProdClas}" />
+                                                    <core:ListItem key="PC" text="{i18n>prodclas}" />
                                                     <core:ListItem key="BH" text="{i18n>bomheader}" />
                                                     <core:ListItem key="BO" text="{i18n>bomobjdep}" />
-                                                    <core:ListItem key="OH" text="{i18n>objdephdr}" />
+                                                   
                                                     <core:ListItem key="CL" text="{i18n>class}" />
                                                     <core:ListItem key="CH" text="{i18n>char}" />
                                                     <core:ListItem key="CV" text="{i18n>charval}" />
+                                                     <core:ListItem key="OH" text="{i18n>objdephdr}" />
+                                                    <core:ListItem key="PP" text="{i18n>partialprod}" />
                                                     <core:ListItem key="SH" text="{i18n>saleshis}" />
                                                     <!-- <core:ListItem key="SC" text="{i18n>salehisconfig}" /> -->
                                                     <core:ListItem key="AC" text="{i18n>asmbcomp}" />
                                                     <core:ListItem key="VT" text="{i18n>vartable}" />
                                                     <core:ListItem key="CIL" text="{i18n>cirlog}" />
                                                     <core:ListItem key="SS" text="{i18n>sostockstatus}" />
-                                                    <core:ListItem key="PP" text="{i18n>partialprod}" />
+                                                    
                                                 </Select>
                                             </f:fields>
                                         </f:FormElement>

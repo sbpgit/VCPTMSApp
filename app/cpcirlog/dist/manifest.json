@@ -137,7 +137,19 @@
                                     }
                                 }
                             },
-                            "initialLoad": true
+                            "initialLoad": true,
+                            "content": {
+                                "header": {
+                                    "actions": {
+                                        "idBtnHelp": {
+                                            "id": "idBtnHelpButton",
+                                            "text": "Help",
+                                            "press": "cpapp.cpcirlog.custom.ListReportExtController.onHelpPress",
+                                            "requiresSelection": false
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 },

@@ -1,5 +1,5 @@
 const GenFunctions = require("./gen-functions");
-const { v1: uuidv1 } = require('uuid');
+const { v1: uuidv1 } = require('uuid')
 const cds = require("@sap/cds");
 const hana = require("@sap/hana-client");
 const GenTimeseries = require("./gen-timeseries");
@@ -244,7 +244,7 @@ module.exports = (srv) => {
                         liCompQty[vCompIndex].COMPONENT === lsCompWeekly.COMPONENT &&
                         liCompQty[vCompIndex].WEEK_DATE === liDates[i].CAL_DATE
                     ) {
-                        lsCompWeekly.STRUC_NODE = '';//liCompQty[vCompIndex].STRUC_NODE;
+                        lsCompWeekly.STRUC_NODE = liCompQty[vCompIndex].STRUC_NODE;
                         lsCompWeekly[columnname + vWeekIndex] =
                             liCompQty[vCompIndex].COMPCIR_QTY;
                         break;
@@ -916,7 +916,7 @@ module.exports = (srv) => {
                 await obgenTimeseriesM2.genTimeseriesF(req.data, req, Flag);
                 break;
         }
-        // const obgenTimeseries_rt = new GenTimeseriesRT();
+        const obgenTimeseries_rt = new GenTimeseriesRT();
         // await obgenTimeseries_rt.genTimeseriesF_rt(req.data, req);
     });
 
@@ -943,7 +943,7 @@ module.exports = (srv) => {
             }
         }
         else {
-            
+
             const litemp = JSON.stringify(req.data);
             lilocProd = JSON.parse(litemp);
             values.push({ id, createtAt, message, lilocProd });
@@ -1862,7 +1862,6 @@ module.exports = (srv) => {
                 ORDER BY "PARAMETER_ID" `);
 
         vValue = parseInt(li_paravalues[0].VALUE) + 1;
-
         vPrefix = li_paravalues[1].VALUE;
         const obgenSOFunctions = new SOFunctions();
         if (req.data.FLAG === "C") {
@@ -1877,18 +1876,18 @@ module.exports = (srv) => {
                 vOrder = vPrefix.concat(vTemp.toString());
                 const li_sodata = await cds.run(
                     `SELECT *
-                    FROM "CP_SEEDORDER_HEADER"
-                    WHERE "LOCATION_ID" = '` +
+                        FROM "CP_SEEDORDER_HEADER"
+                        WHERE "LOCATION_ID" = '` +
                     liSeeddata[0].LOCATION_ID +
                     `'
-                    AND "PRODUCT_ID" = '` +
+                        AND "PRODUCT_ID" = '` +
                     liSeeddata[0].PRODUCT_ID +
                     `' 
-                    AND "SEED_ORDER" = '` +
+                        AND "SEED_ORDER" = '` +
                     vOrder +
                     `' ORDER BY SEED_ORDER DESC`
                 );
-                if (li_sodata) {
+                if (li_sodata.length > 0) {
                     vNoOrd = 6;
                     vValue = parseInt(vValue) + 1;
                 }
@@ -1903,7 +1902,6 @@ module.exports = (srv) => {
             if (liresults.length > 0) {
                 console.log(lsresults);
                 try {
-
                     await cds.run(INSERT.into("CP_SEEDORDER_HEADER").entries(liresults));
                     await UPDATE`CP_PARAMETER_VALUES`
                         .with({
@@ -1933,13 +1931,19 @@ module.exports = (srv) => {
                     })
                     .where(`SEED_ORDER = '${lsresults.SEED_ORDER}'`)
                 responseMessage = lsresults.SEED_ORDER + " Update is successfull";
-
             } catch (e) {
                 responseMessage = "Update Failed";
-
                 //DONOTHING
             }
             // }
+        }
+        else if (req.data.FLAG === "d") {
+            try {
+                await cds.run(DELETE.from('CP_SEEDORDER_HEADER').where(`SEED_ORDER = '${liSeeddata[0].SEED_ORDER}'`));
+                responseMessage = "Deletion Successfull";
+            } catch (e) {
+                responseMessage = "Deletion Failed";
+            }
         }
         lsresults = {};
         return responseMessage;
@@ -2430,6 +2434,10 @@ module.exports = (srv) => {
                 catch (e) {
                     console.log(e);
                 }
+
+            }
+            if (i === 1) {
+                break;
             }
         }
 
@@ -2570,19 +2578,13 @@ module.exports = (srv) => {
 
         if (Flag === "i") {
             try {
-
                 await cds.delete("CP_PAGEPARAGRAPH", deleteData);
-
-                responseMessage = " Deletion successfull";
-
+                responseMessage = "Deletion successfull";
                 deleteResults.push(responseMessage);
 
             } catch (e) {
-
-                responseMessage = " Deletion Failed";
-
+                responseMessage = " Deletion Failed";
                 deleteResults.push(responseMessage);
-
             }
             try {
                 await cds.run(INSERT.into("CP_PAGEPARAGRAPH").entries(contentData));

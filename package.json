@@ -93,7 +93,8 @@
         "watch-cpcriticalcomp": "cds watch --open cpcriticalcomp/webapp/index.html?sap-ui-xx-viewCache=false",
         "watch-cpfactoryloc": "cds watch --open cpfactoryloc/webapp/index.html?sap-ui-xx-viewCache=false",
         "watch-cplinemaster": "cds watch --open cplinemaster/webapp/index.html?sap-ui-xx-viewCache=false",
-        "watch-cpcirlog": "cds watch --open cpcirlog/webapp/index.html?sap-ui-xx-viewCache=false"
+        "watch-cpcirlog": "cds watch --open cpcirlog/webapp/index.html?sap-ui-xx-viewCache=false",
+        "watch-cpmarketauthorization": "cds watch --open cpmarketauthorization/webapp/index.html?sap-ui-xx-viewCache=false"
     },
     "eslintConfig": {
         "extends": "eslint:recommended",
@@ -197,10 +198,8 @@
                 },
                 "[production]": {
                     "credentials": {
-                        "url": "http://sbps4d.sbpcorp.com:50000/sap/opu/odata//SBPC/IBP_CIR_SRV",
-                        "authentication": "BasicAuthentication",
-                        "username": "SBPTECHTEAM",
-                        "password": "sbpdev01"
+                        "destination": "S4D_HTTP",
+                        "path": "/sap/opu/odata//SBPC/IBP_CIR_SRV"
                     }
                 }
             }
@@ -309,10 +308,11 @@
         "app/cpcriticalcomp",
         "app/cpfactoryloc",
         "app/cplinemaster",
-        "app/cpcirlog"
+        "app/cpcirlog",
+        "app/cpmarketauthorization"
     ],
     "devDependencies": {
-        "@sap/ux-specification": "^1.102.11",
+        "@sap/ux-specification": "^1.102.12",
         "rimraf": "^3.0.2"
     }
 }

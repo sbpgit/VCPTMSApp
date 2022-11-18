@@ -136,6 +136,18 @@
                                         "route": "getFactoryLocObjectPage"
                                     }
                                 }
+                            },
+                            "content": {
+                                "header": {
+                                    "actions": {
+                                        "idBtnHelp": {
+                                            "id": "idBtnHelpButton",
+                                            "text": "Help",
+                                            "press": "cpapp.cpfactoryloc.custom.ListReportExtController.onHelpPress",
+                                            "requiresSelection": false
+                                        }
+                                    }
+                                }
                             }
                         }
                     }

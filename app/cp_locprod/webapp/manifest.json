@@ -116,8 +116,21 @@
                                         "route": "getLocProdObjectPage"
                                     }
                                 }
-                            },                           
-                            "initialLoad": true
+                            },
+                            "initialLoad": true,
+                            "content": {
+                                "header": {
+                                    "actions": {
+                                        "idBtnHelp": {
+                                            "id": "idBtnHelpButton",
+                                            "iconUrl":"sap-icon://sys-help",
+                                            "text": "Help",
+                                            "press": "cp.lp.cplocprod.custom.ListReportExtController.onHelpPress",
+                                            "requiresSelection": false
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 },

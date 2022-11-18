@@ -1,7 +1,11 @@
 {
 	"name": "cp.appf.cpassignprofiles",
 	"version": "0.0.1",
+<<<<<<< HEAD
 	"buildTimestamp": "202211101020",
+=======
+	"buildTimestamp": "202211171303",
+>>>>>>> 28b4cbdcefef27b470353a829db9bc87d32c7296
 	"scmRevision": "",
 	"libraries": []
 }

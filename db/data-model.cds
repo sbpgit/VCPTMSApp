@@ -64,7 +64,7 @@ context cp {
     entity BOMHEADER {
         key LOCATION_ID : String(4)      @title : 'Location '; //Association to ZLOCATION;//
         key PRODUCT_ID  : String(40)     @title : 'Product';
-        key ITEM_NUM    : String(5)      @title : 'Item Number ';
+        key ITEM_NUM    : String(6)      @title : 'Item Number ';
         key COMPONENT   : String(40)     @title : 'Component';
             COMP_QTY    : Decimal(13, 3) @title : 'Component Quantity';
             VALID_FROM  : Date           @title : 'Valid From';
@@ -75,7 +75,7 @@ context cp {
     entity BOM_OBJDEPENDENCY {
         key LOCATION_ID : String(4)      @title : 'Location '; //Association to ZLOCATION;//
         key PRODUCT_ID  : String(40)     @title : 'Product';
-        key ITEM_NUM    : String(5)      @title : 'Item Number ';
+        key ITEM_NUM    : String(6)      @title : 'Item Number ';
         key COMPONENT   : String(40)     @title : 'Component';
         key OBJ_DEP     : String(30)     @title : 'Object Dependency';
             OBJDEP_DESC : String(30)     @title : 'Object Dependency Desc';
@@ -317,7 +317,7 @@ context cp {
     entity PVS_BOM : managed {
         key LOCATION_ID : String(4)  @title : 'Location ID';
         key PRODUCT_ID  : String(40) @title : 'Product ID';
-        key ITEM_NUM    : String(5)  @title : 'Item Number ';
+        key ITEM_NUM    : String(6)  @title : 'Item Number ';
         key COMPONENT   : String(40) @title : 'Component';
             STRUC_NODE  : String(50) @title : 'Structure Node'
     }
@@ -400,6 +400,12 @@ context cp {
         key OBJ_TYPE    : String(2) default 'OD' @title : 'Object Type';
             STRUC_NODE  : String(50);
     }
+    
+    entity PAL_PROFILE_LOC_PROD : managed {
+        key LOCATION_ID : String(4);
+        key PRODUCT_ID  : String(40);
+        key PROFILE     : String(50);
+    }
 
     // entity IP_PROFILEOD {
     //     key CREATED_DATE    : Date;
@@ -437,7 +443,7 @@ context cp {
         key PRODUCT_ID   : String(40) @title : 'Product ID';
         key VERSION      : String(10) @title : 'Version';
         key SCENARIO     : String(32) @title : 'Scenario';
-        key ITEM_NUM     : String(5)  @title : 'Item Number ';
+        key ITEM_NUM     : String(6)  @title : 'Item Number ';
         key COMPONENT    : String(40) @title : 'Component';
         key CAL_DATE     : Date       @title : 'Weekly Date';
             STRUC_NODE   : String(50) @title : 'Structure Node';
@@ -782,7 +788,7 @@ context cp {
     entity ASSEMBLY_REQ {
         key LOCATION_ID   : String(4)      @title : 'Location ';
         key PRODUCT_ID    : String(40)     @title : 'Product';
-        key ITEM_NUM      : String(5)      @title : 'ITEM_NUM';
+        key ITEM_NUM      : String(6)      @title : 'ITEM_NUM';
         key COMPONENT     : String(40)     @title : 'COMPONENT';
         key WEEK_DATE     : Date           @title : 'Week Date';
         key MODEL_VERSION : String(20)     @title : 'MODEL_VERSION';
@@ -801,7 +807,7 @@ context cp {
     entity CRITICAL_COMP {
         key LOCATION_ID : String(4)  @title : 'Location ';
         key PRODUCT_ID  : String(40) @title : 'Product';
-        key ITEM_NUM    : String(5)  @title : 'ITEM_NUM';
+        key ITEM_NUM    : String(6)  @title : 'ITEM_NUM';
         key COMPONENT   : String(40) @title : 'Assembly';
             CRITICALKEY : String(1);
     }
@@ -849,7 +855,7 @@ context cp {
 entity![V_OBDHDR]{
     key![LOCATION_ID]  : String(4)      @title : 'Location';
     key![PRODUCT_ID]   : String(40)     @title : 'Product';
-    key![ITEM_NUM]     : String(5)      @title : 'ITEM_NUM';
+    key![ITEM_NUM]     : String(6)      @title : 'ITEM_NUM';
     key![COMPONENT]    : String(40)     @title : 'COMPONENT';
     key![COMP_QTY]     : Decimal(13, 3) @title : 'COMP_QTY';
     key![OBJ_DEP]      : String(30)     @title : 'Object Dependency';
@@ -896,7 +902,7 @@ entity![V_PRODCLSCHAR]{
 entity![V_BOMODCOND]{
     key![LOCATION_ID] : String(4)      @title : 'LOCATION_ID';
     key![PRODUCT_ID]  : String(40)     @title : 'PRODUCT_ID';
-    key![ITEM_NUM]    : String(5)      @title : 'ITEM_NUM';
+    key![ITEM_NUM]    : String(6)      @title : 'ITEM_NUM';
     key![COMPONENT]   : String(40)     @title : 'COMPONENT';
     key![OBJ_DEP]     : String(42)     @title : 'OBJ_DEP';
     key![OBJDEP_DESC] : String(30)     @title : 'OBJDEP_DESC';
@@ -910,7 +916,7 @@ entity![V_BOMODCOND]{
 entity![V_ODPROFILES]{
     key![LOCATION_ID] : String(4)  @title : 'LOCATION_ID';
     key![PRODUCT_ID]  : String(40) @title : 'PRODUCT_ID';
-    key![ITEM_NUM]    : String(5)  @title : 'ITEM_NUM';
+    key![ITEM_NUM]    : String(6)  @title : 'ITEM_NUM';
     key![COMPONENT]   : String(40) @title : 'COMPONENT';
     key![STRUC_NODE]  : String(50) @title : 'STRUC_NODE';
     key![PROFILE]     : String(50) @title : 'PROFILE';
@@ -959,7 +965,7 @@ entity![V_LOCPROD]{
 entity![V_BOMPVS]{
     key![LOCATION_ID] : String(4)      @title : 'LOCATION_ID';
     key![PRODUCT_ID]  : String(40)     @title : 'PRODUCT_ID';
-    key![ITEM_NUM]    : String(5)      @title : 'ITEM_NUM';
+    key![ITEM_NUM]    : String(6)      @title : 'ITEM_NUM';
     key![COMPONENT]   : String(40)     @title : 'COMPONENT';
     key![COMP_QTY]    : Decimal(13, 3) @title : 'COMP_QTY';
     key![VALID_FROM]  : Date           @title : 'VALID_FROM';
@@ -996,7 +1002,7 @@ entity![V_TS_ODCHARPREDICTIONS]{
 entity![V_BOM_TSPREDICTION]{
     key![LOCATION_ID]   : String(4)  @title : 'LOCATION_ID';
     key![PRODUCT_ID]    : String(40) @title : 'PRODUCT_ID';
-    key![ITEM_NUM]      : String(5)  @title : 'ITEM_NUM';
+    key![ITEM_NUM]      : String(6)  @title : 'ITEM_NUM';
     key![COMPONENT]     : String(40) @title : 'COMPONENT';
     key![OBJ_DEP]       : String(30) @title : 'OBJ_DEP';
     key![MODEL_VERSION] : String(20) @title : 'MODEL_VERSION';
@@ -1010,7 +1016,7 @@ entity![V_BOM_TSPREDICTION]{
 entity![V_COMPOD_TSPRED]{
     key![LOCATION_ID]   : String(4)  @title : 'LOCATION_ID';
     key![PRODUCT_ID]    : String(40) @title : 'PRODUCT_ID';
-    key![ITEM_NUM]      : String(5)  @title : 'ITEM_NUM';
+    key![ITEM_NUM]      : String(6)  @title : 'ITEM_NUM';
     key![COMPONENT]     : String(40) @title : 'COMPONENT';
     key![OBJ_DEP]       : String(30) @title : 'OBJ_DEP';
     key![OBJ_COUNTER]   : Integer    @title : 'OBJ_COUNTER';
@@ -1229,7 +1235,7 @@ entity![V_CIRVERSCEN]{
 entity![V_BOMCRITICALCOMP]{
     ![LOCATION_ID] : String(4) not null  @title : 'LOCATION_ID';
     ![PRODUCT_ID]  : String(40) not null @title : 'PRODUCT_ID';
-    ![ITEM_NUM]    : String(5) not null  @title : 'ITEM_NUM';
+    ![ITEM_NUM]    : String(6) not null  @title : 'ITEM_NUM';
     ![COMPONENT]   : String(40) not null @title : 'COMPONENT';
     ![VALID_FROM]  : Date                @title : 'VALID_FROM';
     ![VALID_TO]    : Date                @title : 'VALID_TO';

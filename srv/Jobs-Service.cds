@@ -27,6 +27,7 @@ service JobsService @(impl : './lib/Jobs-Service.js') {
                 to : [ 'JobsManager' ]
             }
       ]) as projection on V_JOBSTATUS;
+      
   entity getJobRunStatus as projection on V_JOBRUNSTATUS; 
   entity getJobRunState as projection on V_JOBRUNSTATE; 
 

@@ -119,6 +119,11 @@
                     "pattern": "getProdlocline({key}):?query:",
                     "name": "getProdloclineObjectPage",
                     "target": "getProdloclineObjectPage"
+                },
+                {
+                    "pattern": ":?query:",
+                    "name": "default",
+                    "target": "sample"
                 }
             ],
             "targets": {
@@ -136,8 +141,20 @@
                                         "route": "getProdloclineObjectPage"
                                     }
                                 }
-                            },                           
-                            "initialLoad": true
+                            },
+                            "initialLoad": true,
+                            "content": {
+                                "header": {
+                                    "actions": {
+                                        "idHplBtn": {
+                                            "id": "idHplBtnButton",
+                                            "text": "Help",
+                                            "press": "cpapp.cpprodlocline.custom.ListReportExtController.onHelpPress",
+                                            "requiresSelection": false
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 },
@@ -149,6 +166,31 @@
                         "settings": {
                             "editableHeaderContent": false,
                             "entitySet": "getProdlocline"
+                        }
+                    }
+                },
+                "sample": {
+                    "type": "Component",
+                    "id": "Default",
+                    "name": "sap.fe.templates.ListReport",
+                    "viewLevel": 1,
+                    "options": {
+                        "settings": {
+                            "entitySet": "getProdlocline",
+                            "editableHeaderContent": true,
+                            "content": {
+                                "header": {
+                                    "actions": {
+                                        "customHeaderActionShowMessage": {
+                                            "press": ".extension.cpapp.cpprodlocline.MyListReportExt.onHelpPress",
+                                            "text": "Help",
+                                            "visible": true,
+                                            "enabled": true,
+                                            "requiresSelection": false
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }

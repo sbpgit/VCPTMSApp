@@ -11,7 +11,7 @@ modules:
   - name: uaa_config_products
   - name: jobscheduler_inst
   - name: config_products-destination-service
-  - name: ext_odata
+  - name: config_products-connectivity
   - name: config_products-mdestination-service
   provides:
   - name: srv-api
@@ -41,9 +41,6 @@ modules:
   type: com.sap.application.content
   requires:
   - name: config_products-destination-service
-    parameters:
-      content-target: true
-  - name: ext_odata
     parameters:
       content-target: true
   - name: config_products-mdestination-service
@@ -233,6 +230,10 @@ modules:
     - artifacts:
       - cpappcpcirlog.zip
       name: cpappcpcirlog
+      target-path: resources/
+    - artifacts:
+      - cpappcpmarketauthorization.zip
+      name: cpappcpmarketauthorization
       target-path: resources/
 - name: cpodpcpodprofiles
   type: html5
@@ -659,6 +660,16 @@ modules:
     - npm install
     - npm run build:cf
     supported-platforms: []
+- name: cpappcpmarketauthorization
+  type: html5
+  path: app/cpmarketauthorization
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
 resources:
 - name: config_products-db
   type: com.sap.xs.hdi-container
@@ -667,14 +678,15 @@ resources:
     service-plan: hdi-shared
   properties:
     hdi-service-name: ${service-name}
+- name: config_products-connectivity
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: connectivity
+    service-plan: lite
 - name: config_products-destination-service
   type: org.cloudfoundry.existing-service
   parameters:
     service-name: config_products-destination-service
-- name: ext_odata
-  type: org.cloudfoundry.existing-service
-  parameters:
-    service-name: ext_odata
 - name: config_products-mdestination-service
   type: org.cloudfoundry.managed-service
   parameters:

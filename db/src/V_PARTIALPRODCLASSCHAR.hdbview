@@ -6,7 +6,7 @@
 -----------------------------------------------------------------------------------------
 VIEW "V_PARTIALPRODCLASSCHAR"
 AS SELECT distinct A.LOCATION_ID,
-          A.PRODUCT_ID,
+          C.PRODUCT_ID,
           C.REF_PRODID,
           A.CLASS_NUM,
           B.CLASS_NAME,
