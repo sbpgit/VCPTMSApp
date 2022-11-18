@@ -35,6 +35,16 @@
                         <Label id="_IDGenLabel2" text="Product" required= "true"/>
                         <Input id="idprod" placeholder="Product" value="" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
                     </VBox>
+                    <VBox id="_IDGenVBox3" >
+                        <Label id="_IDGenLabel3" text="IBP Version" required= "true"/>
+                        <Input id="idver" value="" placeholder="Version" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                    </VBox>
+                    
+                    <VBox id="_IDGenVBox4" >
+                        <Label id="_IDGenLabel4" text="IBP Scenario" required= "true"/>
+                        <Input id="idscen" value="" placeholder="Scenario" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+
+                    </VBox>
                     <VBox id="_IDGenVBox5" >
                         <Label id="_IDGenLabel5" text="Date"  />
                 <DateRangeSelection id="fromDate" placeholder="Select Date"/>
