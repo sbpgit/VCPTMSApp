@@ -2055,19 +2055,9 @@ module.exports = (srv) => {
         else if (req.data.FLAG === "d") {
             try {
                 await cds.run(DELETE.from('CP_SEEDORDER_HEADER').where(`SEED_ORDER = '${liSeeddata[0].SEED_ORDER}'`));
-<<<<<<< HEAD
-
-
-                responseMessage = " Deletion Successfull";
-
-            } catch (e) {
-
-                responseMessage = " Deletion Failed";
-=======
                 responseMessage = "Deletion Successfull";
             } catch (e) {
                 responseMessage = "Deletion Failed";
->>>>>>> 25d2bced454f9a7c26614fcb17192e185e59728d
             }
         }
         lsresults = {};
