@@ -221,7 +221,7 @@ class GenFunctions {
         if (lFlag === 'X') {
             let dataObj = {};
             dataObj["success"] = true;
-            dataObj["message"] = "Export of " + lMessage + new Date();
+            dataObj["message"] = lMessage + new Date();
 
 
             if (req.headers['x-sap-job-id'] > 0) {
@@ -250,7 +250,7 @@ class GenFunctions {
         else {
             let dataObj = {};
             dataObj["failed"] = false;
-            dataObj["message"] = "Export of " + lMessage + new Date();
+            dataObj["message"] = lMessage + new Date();
 
 
             if (req.headers['x-sap-job-id'] > 0) {

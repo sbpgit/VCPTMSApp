@@ -604,7 +604,7 @@ module.exports = (srv) => {
         try {
             const dbClass = require("sap-hdb-promisfied")
             let dbConn = new dbClass(await dbClass.createConnectionFromEnv())
-            const sp = await dbConn.loadProcedurePromisified(null, '"FG_CHAR_SP"')
+            const sp = await dbConn.loadProcedurePromisified(null, '"FG_CHARACTERISTICS_SP"')
             const output = await dbConn.callProcedurePromisified(sp, [])
             console.log(output.results);
             flag = 'X';
@@ -815,38 +815,34 @@ module.exports = (srv) => {
         var flag = '';
         // remove history data from Sales tables
 
-        const lsSales = await GenF.getParameterValue(req.data.LOCATION_ID, 4);
-        // await SELECT.one
-        //     .columns('VALUE')
-        //     .from('CP_PARAMETER_VALUES')
-        //     .where(`LOCATION_ID = '${req.data.LOCATION_ID}' AND VALUE = 4 `);
-        let vFromDate = new Date();
-        vFromDate.setDate(vFromDate.getDate() - ( parseInt(lsSales) * 7) );
-        vFromDate = vFromDate.toISOString().split('Z')[0].split('T')[0];
+        // const lsSales = await GenF.getParameterValue(req.data.LOCATION_ID, 4);
+        // let vFromDate = new Date();
+        // vFromDate.setDate(vFromDate.getDate() - ( parseInt(lsSales) * 7) );
+        // vFromDate = vFromDate.toISOString().split('Z')[0].split('T')[0];
 
-        try {
-            await DELETE.from('CP_SALESH')
-                .where(`MAT_AVAILDATE  < '${vFromDate}'`);
-            await cds.run(
-                `DELETE FROM "CP_SALESH_CONFIG" WHERE SALES_DOC IN ( SELECT SALES_DOC
-                    FROM "CP_SALESH"
-                    WHERE MAT_AVAILDATE  < '`+ vFromDate + `')`);
-        }
-        catch (e) {
+        // try {
+        //     await DELETE.from('CP_SALESH')
+        //         .where(`MAT_AVAILDATE  < '${vFromDate}'`);
+        //     await cds.run(
+        //         `DELETE FROM "CP_SALESH_CONFIG" WHERE SALES_DOC IN ( SELECT SALES_DOC
+        //             FROM "CP_SALESH"
+        //             WHERE MAT_AVAILDATE  < '`+ vFromDate + `')`);
+        // }
+        // catch (e) {
 
-        }
-        try {
-            const dbClass = require("sap-hdb-promisfied")
-            let dbConn = new dbClass(await dbClass.createConnectionFromEnv())
-            const sp = await dbConn.loadProcedurePromisified(null, '"FG_SALESH_SP"')
-            const output = await dbConn.callProcedurePromisified(sp, [])
-            const spcfg = await dbConn.loadProcedurePromisified(null, '"FG_SALESHCFG_SP"')
-            const outputcfg = await dbConn.callProcedurePromisified(spcfg, [])
-            console.log(output.results);
-            flag = 'X';
-        } catch (error) {
-            console.error(error);
-        }
+        // }
+        // try {
+        //     const dbClass = require("sap-hdb-promisfied")
+        //     let dbConn = new dbClass(await dbClass.createConnectionFromEnv())
+        //     const sp = await dbConn.loadProcedurePromisified(null, '"FG_SALESH_SP"')
+        //     const output = await dbConn.callProcedurePromisified(sp, [])
+        //     const spcfg = await dbConn.loadProcedurePromisified(null, '"FG_SALESHCFG_SP"')
+        //     const outputcfg = await dbConn.callProcedurePromisified(spcfg, [])
+        //     console.log(output.results);
+        //     flag = 'X';
+        // } catch (error) {
+        //     console.error(error);
+        // }
         if (flag === 'X') {
             let dataObj = {};
             dataObj["success"] = true;

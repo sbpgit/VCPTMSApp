@@ -896,13 +896,13 @@ class SOFunctions {
                                                                         A.CHARVAL_NUM,
                                                                         B.VERSION,
                                                                         B.SCENARIO,
-                                                                        OPT_PERCENT
+                                                                        A.OPT_PERCENT
                                                                    FROM CP_DEF_MKTAUTH as A
                                                                    inner join V_IBPVERSCENARIO AS B
                                                                    ON A.LOCATION_ID = B.LOCATION_ID
                                                                    AND A.PRODUCT_ID =  B.PRODUCT_ID
-                                                                  WHERE LOCATION_ID = '${liSOrdQty[cntS].LOCATION_ID}'
-                                                                    AND PRODUCT_ID = '${liSOrdQty[cntS].PRODUCT_ID}')`);
+                                                                  WHERE A.LOCATION_ID = '${liSOrdQty[cntS].LOCATION_ID}'
+                                                                    AND A.PRODUCT_ID = '${liSOrdQty[cntS].PRODUCT_ID}')`);
 
             }
             lWeeks = parseInt(lWeeks) - 1;
