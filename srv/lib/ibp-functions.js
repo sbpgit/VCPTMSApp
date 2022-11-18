@@ -20,8 +20,8 @@ class IBPFunctions {
                         "CHAR_NUM",
                         "CHARVAL_NUM"
                         FROM V_IBP_SALESHCONFIG_VC
-                        WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
-                           AND PRODUCT_ID = '`+ req.data.PRODUCT_ID +
+                        WHERE LOCATION_ID = '`+ req.LOCATION_ID + `'
+                           AND PRODUCT_ID = '`+ req.PRODUCT_ID +
             `'`);
         // `' AND CUSTOMER_GROUP = '` + req.data.CUSTOMER_GROUP +e
 
