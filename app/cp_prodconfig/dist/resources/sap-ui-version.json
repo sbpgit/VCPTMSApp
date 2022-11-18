@@ -1,11 +1,7 @@
 {
 	"name": "cp.appf.cpprodconfig",
 	"version": "0.0.1",
-<<<<<<< HEAD
-	"buildTimestamp": "202211101020",
-=======
-	"buildTimestamp": "202211171304",
->>>>>>> 28b4cbdcefef27b470353a829db9bc87d32c7296
+	"buildTimestamp": "202211181300",
 	"scmRevision": "",
 	"libraries": []
 }

@@ -32,7 +32,7 @@ sap.ui.define([
                 that.uniqModel = new JSONModel();
                 that.custModel = new JSONModel();
 
-                this.oModel.setSizeLimit(1000);
+                that.oModel.setSizeLimit(1000);
                 that.locModel.setSizeLimit(1000);
                 that.prodModel.setSizeLimit(1000);
                 that.uniqModel.setSizeLimit(1000);
@@ -462,7 +462,7 @@ sap.ui.define([
                         //            new Filter( "PRODUCT_ID", FilterOperator.EQ, Prod ), ],
                         success: function (oData) {
                             sap.ui.core.BusyIndicator.hide();
-                            that.oModel = new JSONModel();
+                            // that.oModel = new JSONModel();
                             if (oData.results.length === 0) {
                                 that.byId("idSort").setVisible(false);
                                 that.oModel.setData([]);

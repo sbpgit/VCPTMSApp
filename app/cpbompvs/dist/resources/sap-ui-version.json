@@ -1,11 +1,7 @@
 {
 	"name": "cpapp.cpbompvs",
 	"version": "0.0.1",
-<<<<<<< HEAD
-	"buildTimestamp": "202211101022",
-=======
-	"buildTimestamp": "202211171305",
->>>>>>> 28b4cbdcefef27b470353a829db9bc87d32c7296
+	"buildTimestamp": "202211181301",
 	"scmRevision": "",
 	"libraries": []
 }
