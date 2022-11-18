@@ -21,7 +21,7 @@ class SOFunctions {
         await this.processUniqueID(adata.LOCATION_ID, adata.PRODUCT_ID, '');
         await this.genBaseMarketAuth(adata.LOCATION_ID, adata.PRODUCT_ID);
         await this.genPartialProd(adata.LOCATION_ID, adata.PRODUCT_ID);
-      //  await this.genFactoryLoc(adata.LOCATION_ID, adata.PRODUCT_ID);
+        // await this.genFactoryLoc(adata.LOCATION_ID, adata.PRODUCT_ID);
         await GenF.logMessage(req, 'Completed Sales Orders Processing');
         Flag = 'X';
 
@@ -186,34 +186,49 @@ class SOFunctions {
         let liSalesUpdate = [];
         let lsSalesUpdate = {};
 
+        // Process through sales Order
         for (let cntSO = 0; cntSO < liSOHM.length; cntSO++) {
             let lIgnoreProduct = '';
+
+            // Process through Partial Product
             for (let cntPC = 0; cntPC < liPartialProd.length; cntPC++) {
+
                 // Rest for every change in Partial Product
                 if (cntPC === 0 ||
                     liPartialProd[cntPC].LOCATION_ID !== liPartialProd[GenF.subOne(cntPC, liPartialProd.length)].LOCATION_ID ||
                     liPartialProd[cntPC].PRODUCT_ID !== liPartialProd[GenF.subOne(cntPC, liPartialProd.length)].PRODUCT_ID) {
                     lIgnoreProduct = '';
                 }
+
+                // Check if Partial product configuration matches with Sales Order Configuration
                 let lSuccess = '';
                 for (let cntSOC = 0; cntSOC < liSOHM[cntSO].CONFIG.length; cntSOC++) {
+                    // if (liSOHM[cntSO].CONFIG[cntSOC].CHAR_NUM === liPartialProd[cntPC].CHAR_NUM &&
+                    //     liSOHM[cntSO].CONFIG[cntSOC].CHARVAL_NUM === liPartialProd[cntPC].CHARVAL_NUM) {
+                    //     lSuccess = 'X';
+                    //     break;
+                    // }
+
                     if (liSOHM[cntSO].CONFIG[cntSOC].CHAR_NUM === liPartialProd[cntPC].CHAR_NUM &&
                         liSOHM[cntSO].CONFIG[cntSOC].CHARVAL_NUM === liPartialProd[cntPC].CHARVAL_NUM) {
                         lSuccess = 'X';
                         break;
                     }
+
+
                 }
                 if (lSuccess === '') {
+                    // Ignore this partial product as configuration of sales order is not matched
                     lIgnoreProduct = GenF.parse(liPartialProd[cntPC].PRODUCT_ID);
                 }
-                if (liPartialProd[cntPC].PRODUCT_ID !== lIgnoreProduct) {
-                    if (cntPC === GenF.addOne(cntPC, liPartialProd.length) ||
-                        liPartialProd[cntPC].LOCATION_ID !== liPartialProd[GenF.addOne(cntPC, liPartialProd.length)].LOCATION_ID ||
-                        liPartialProd[cntPC].PRODUCT_ID !== liPartialProd[GenF.addOne(cntPC, liPartialProd.length)].PRODUCT_ID) {
 
+                // For every change in Partial product
+                if (cntPC === GenF.addOne(cntPC, liPartialProd.length) ||
+                    liPartialProd[cntPC].LOCATION_ID !== liPartialProd[GenF.addOne(cntPC, liPartialProd.length)].LOCATION_ID ||
+                    liPartialProd[cntPC].PRODUCT_ID !== liPartialProd[GenF.addOne(cntPC, liPartialProd.length)].PRODUCT_ID) {
+                    if (liPartialProd[cntPC].PRODUCT_ID !== lIgnoreProduct) {
                         liSOHM[cntSO].PRODUCT_ID = GenF.parse(liPartialProd[cntPC].PRODUCT_ID);
                         break;
-
                     }
                 }
             }
@@ -839,7 +854,6 @@ class SOFunctions {
                                                     V_UNIQUE_ID.CHARVAL_NUM`);
         let lsDefMktAuth = {};
         let liDefMktAuth = [];
-        let liCfgMktAuth = [];
         let lOrdQty = 0;
         for (let cntCVq = 0; cntCVq < liCharValQty.length; cntCVq++) {
             lOrdQty = 0;
@@ -862,9 +876,6 @@ class SOFunctions {
                 lsDefMktAuth['OPT_PERCENT'] = 0;
             }
             liDefMktAuth.push(GenF.parse(lsDefMktAuth));
-            lsDefMktAuth['VERSION'] = '';
-            lsDefMktAuth['SCENARIO'] = '';
-            liCfgMktAuth.push(GenF.parse(lsDefMktAuth));
         }
         if (liDefMktAuth) {
             try {
@@ -876,6 +887,8 @@ class SOFunctions {
                 //         'CHARVAL_NUM',
                 //         'OPT_PERCENT')
                 //     .entries(liDefMktAuth);
+
+
             }
             catch (error) {
                 console.log(error);
@@ -887,8 +900,16 @@ class SOFunctions {
             let lDateSQL = GenF.getNextMondayCmp(lDate.toISOString().split('Z')[0].split('T')[0]);//(lDate.toISOString().split('T')[0]);
             // Loop through all the partial products                     
             for (let cntS = 0; cntS < liSOrdQty.length; cntS++) {
-                // await cds.run(INSERT.into("CP_DEF_MKTAUTH").entries(liDefMktAuth));
-                
+                // await cds.run(`INSERT INTO "CP_MARKETAUTH_CFG"  SELECT  '${lDateSQL}',
+                //                                                         LOCATION_ID,
+                //                                                         PRODUCT_ID,
+                //                                                         CHAR_NUM,
+                //                                                         CHARVAL_NUM,
+                //                                                         OPT_PERCENT
+                //                                                    FROM CP_DEF_MKTAUTH
+                //                                                   WHERE LOCATION_ID = '${liSOrdQty[cntS].LOCATION_ID}'
+                //                                                     AND PRODUCT_ID = '${liSOrdQty[cntS].PRODUCT_ID}'`);
+
                 await cds.run(`INSERT INTO "CP_MARKETAUTH_CFG"  ( SELECT  '${lDateSQL}',
                                                                         A.LOCATION_ID,
                                                                         A.PRODUCT_ID,
@@ -896,13 +917,13 @@ class SOFunctions {
                                                                         A.CHARVAL_NUM,
                                                                         B.VERSION,
                                                                         B.SCENARIO,
-                                                                        OPT_PERCENT
+                                                                        A.OPT_PERCENT
                                                                    FROM CP_DEF_MKTAUTH as A
                                                                    inner join V_IBPVERSCENARIO AS B
                                                                    ON A.LOCATION_ID = B.LOCATION_ID
                                                                    AND A.PRODUCT_ID =  B.PRODUCT_ID
-                                                                  WHERE LOCATION_ID = '${liSOrdQty[cntS].LOCATION_ID}'
-                                                                    AND PRODUCT_ID = '${liSOrdQty[cntS].PRODUCT_ID}')`);
+                                                                  WHERE A.LOCATION_ID = '${liSOrdQty[cntS].LOCATION_ID}'
+                                                                    AND A.PRODUCT_ID = '${liSOrdQty[cntS].PRODUCT_ID}')`);
 
             }
             lWeeks = parseInt(lWeeks) - 1;
@@ -1016,18 +1037,15 @@ class SOFunctions {
             "LOCATION_ID")
             .from('CP_LOCATION');
         console.log("test1");
-        try{
-            const liFtLoc = await cds.run(`
-                                SELECT * 
-                                FROM CP_FACTORY_SALESLOC                `);
-        // const liFtLoc = await SELECT.columns(
-        //     "LOCATION_ID",
-        //     "PLAN_LOC",
-        //     "FACTORY_LOC")
-        //     .from('CP_FACTORY_SALESLOC');
+        try {
+            const liFtLoc = await SELECT.columns(
+                "LOCATION_ID",
+                "PLAN_LOC",
+                "FACTORY_LOC")
+                .from('CP_FACTORY_SALESLOC');
         }
-        catch(error){
-            
+        catch (error) {
+
             console.log(error);
         }
         console.log("loc3");

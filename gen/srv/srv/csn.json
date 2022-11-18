@@ -754,7 +754,7 @@
           "@title": "Item Number ",
           "key": true,
           "type": "cds.String",
-          "length": 5
+          "length": 6
         },
         "COMPONENT": {
           "@title": "Component",
@@ -797,7 +797,7 @@
           "@title": "Item Number ",
           "key": true,
           "type": "cds.String",
-          "length": 5
+          "length": 6
         },
         "COMPONENT": {
           "@title": "Component",
@@ -2305,7 +2305,7 @@
           "@title": "Item Number ",
           "key": true,
           "type": "cds.String",
-          "length": 5
+          "length": 6
         },
         "COMPONENT": {
           "@title": "Component",
@@ -2725,7 +2725,7 @@
           "@title": "Item Number ",
           "key": true,
           "type": "cds.String",
-          "length": 5
+          "length": 6
         },
         "COMPONENT": {
           "@title": "Component",
@@ -3906,6 +3906,42 @@
           }
         }
       ],
+      "@UI.HeaderInfo.Title.Value": {
+        "=": "LINE_ID"
+      },
+      "@UI.HeaderInfo.Description.Value": {
+        "=": "LINE_ID"
+      },
+      "@UI.HeaderInfo.TypeName": "Line Master",
+      "@UI.HeaderInfo.TypeNamePlural": "Line Master",
+      "@UI.FieldGroup#Details.Data": [
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "LINE_ID"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "LINE_DESC"
+          }
+        }
+      ],
+      "@UI.Facets": [
+        {
+          "$Type": "UI.CollectionFacet",
+          "ID": "linemstr",
+          "Label": "Line Master",
+          "Facets": [
+            {
+              "$Type": "UI.ReferenceFacet",
+              "Label": "Line Master",
+              "Target": "@UI.FieldGroup#Details"
+            }
+          ]
+        }
+      ],
       "elements": {
         "LINE_ID": {
           "@title": "Line",
@@ -4537,7 +4573,7 @@
           "@title": "ITEM_NUM",
           "key": true,
           "type": "cds.String",
-          "length": 5
+          "length": 6
         },
         "COMPONENT": {
           "@title": "COMPONENT",
@@ -4702,7 +4738,7 @@
           "@title": "ITEM_NUM",
           "key": true,
           "type": "cds.String",
-          "length": 5
+          "length": 6
         },
         "COMPONENT": {
           "@title": "Assembly",
@@ -5006,7 +5042,7 @@
           "@title": "ITEM_NUM",
           "key": true,
           "type": "cds.String",
-          "length": 5
+          "length": 6
         },
         "COMPONENT": {
           "@title": "COMPONENT",
@@ -5226,7 +5262,7 @@
           "@title": "ITEM_NUM",
           "key": true,
           "type": "cds.String",
-          "length": 5
+          "length": 6
         },
         "COMPONENT": {
           "@title": "COMPONENT",
@@ -5285,7 +5321,7 @@
           "@title": "ITEM_NUM",
           "key": true,
           "type": "cds.String",
-          "length": 5
+          "length": 6
         },
         "COMPONENT": {
           "@title": "COMPONENT",
@@ -5710,7 +5746,7 @@
           "@title": "ITEM_NUM",
           "key": true,
           "type": "cds.String",
-          "length": 5
+          "length": 6
         },
         "COMPONENT": {
           "@title": "COMPONENT",
@@ -5866,7 +5902,7 @@
           "@title": "ITEM_NUM",
           "key": true,
           "type": "cds.String",
-          "length": 5
+          "length": 6
         },
         "COMPONENT": {
           "@title": "COMPONENT",
@@ -5930,7 +5966,7 @@
           "@title": "ITEM_NUM",
           "key": true,
           "type": "cds.String",
-          "length": 5
+          "length": 6
         },
         "COMPONENT": {
           "@title": "COMPONENT",
@@ -7030,7 +7066,7 @@
         "ITEM_NUM": {
           "@title": "ITEM_NUM",
           "type": "cds.String",
-          "length": 5,
+          "length": 6,
           "notNull": true
         },
         "COMPONENT": {
@@ -8312,6 +8348,23 @@
           "items": {
             "type": "cp_ds.uniqueIDChars"
           }
+        }
+      }
+    },
+    "cp_ds.cfDestInfo": {
+      "kind": "type",
+      "elements": {
+        "Flag": {
+          "type": "cds.String",
+          "length": 1
+        },
+        "DestName": {
+          "type": "cds.String",
+          "length": 20
+        },
+        "User": {
+          "type": "cds.String",
+          "length": 60
         }
       }
     },
@@ -11280,6 +11333,110 @@
         }
       }
     },
+    "cp.PalClustering": {
+      "kind": "entity",
+      "elements": {
+        "clustersID": {
+          "key": true,
+          "type": "cds.String",
+          "length": 50
+        },
+        "createdAt": {
+          "type": "cds.Timestamp"
+        },
+        "Location": {
+          "type": "cds.String",
+          "length": 4
+        },
+        "Product": {
+          "type": "cds.String",
+          "length": 40
+        },
+        "clusterParameters": {
+          "items": {
+            "elements": {
+              "groupId": {
+                "type": "cds.String",
+                "length": 100
+              },
+              "paramName": {
+                "type": "cds.String",
+                "length": 100
+              },
+              "intVal": {
+                "type": "cds.Integer"
+              },
+              "doubleVal": {
+                "type": "cds.Double"
+              },
+              "strVal": {
+                "type": "cds.String",
+                "length": 100
+              }
+            }
+          }
+        },
+        "clusterType": {
+          "@assert.range": [
+            1,
+            12
+          ],
+          "type": "cds.Integer"
+        },
+        "clusterData": {
+          "items": {
+            "elements": {
+              "groupId": {
+                "type": "cds.String",
+                "length": 100
+              },
+              "ID": {
+                "type": "cds.Integer"
+              },
+              "att1": {
+                "type": "cds.Double"
+              },
+              "att2": {
+                "type": "cds.Double"
+              },
+              "att3": {
+                "type": "cds.Double"
+              },
+              "att4": {
+                "type": "cds.Double"
+              },
+              "att5": {
+                "type": "cds.Double"
+              },
+              "att6": {
+                "type": "cds.Double"
+              },
+              "att7": {
+                "type": "cds.Double"
+              },
+              "att8": {
+                "type": "cds.Double"
+              },
+              "att9": {
+                "type": "cds.Double"
+              },
+              "att10": {
+                "type": "cds.Double"
+              },
+              "att11": {
+                "type": "cds.Double"
+              },
+              "att12": {
+                "type": "cds.Double"
+              },
+              "target": {
+                "type": "cds.Double"
+              }
+            }
+          }
+        }
+      }
+    },
     "cp.OD_MODEL_VERSIONS": {
       "kind": "entity",
       "elements": {
@@ -11927,6 +12084,162 @@
         "PREDICTED_TIME": {
           "@title": "Predicted Time",
           "type": "cds.Timestamp"
+        }
+      }
+    },
+    "cp.CLUSTER_DATA": {
+      "kind": "entity",
+      "elements": {
+        "LOCATION_ID": {
+          "@title": "Location ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "@title": "Product ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+        "UNIQUE_ID": {
+          "@title": "Unique ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 50
+        },
+        "C1": {
+          "@title": "CHAR1",
+          "type": "cds.String",
+          "length": 10
+        },
+        "C2": {
+          "@title": "CHAR2",
+          "type": "cds.String",
+          "length": 10
+        },
+        "C3": {
+          "@title": "CHAR3",
+          "type": "cds.String",
+          "length": 10
+        },
+        "C4": {
+          "@title": "CHAR4",
+          "type": "cds.String",
+          "length": 10
+        },
+        "C5": {
+          "@title": "CHAR5",
+          "type": "cds.String",
+          "length": 10
+        },
+        "C6": {
+          "@title": "CHAR6",
+          "type": "cds.String",
+          "length": 10
+        },
+        "C7": {
+          "@title": "CHAR7",
+          "type": "cds.String",
+          "length": 10
+        },
+        "C8": {
+          "@title": "CHAR8",
+          "type": "cds.String",
+          "length": 10
+        },
+        "C9": {
+          "@title": "CHAR9",
+          "type": "cds.String",
+          "length": 10
+        },
+        "C10": {
+          "@title": "CHAR10",
+          "type": "cds.String",
+          "length": 10
+        },
+        "C11": {
+          "@title": "CHAR11",
+          "type": "cds.String",
+          "length": 10
+        },
+        "C12": {
+          "@title": "CHAR12",
+          "type": "cds.String",
+          "length": 10
+        }
+      }
+    },
+    "cp.AHC_COMBINE_PROCESS": {
+      "kind": "entity",
+      "elements": {
+        "LOCATION_ID": {
+          "@title": "Location ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "@title": "Product ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+        "UNIQUE_ID": {
+          "@title": "Unique ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 50
+        },
+        "STAGE": {
+          "@title": "Stage",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "LEFT_ID": {
+          "@title": "Left Unique ID in Stage",
+          "key": true,
+          "type": "cds.String",
+          "length": 50
+        },
+        "RIGHT_ID": {
+          "@title": "Right Unique ID in Stage",
+          "key": true,
+          "type": "cds.String",
+          "length": 50
+        },
+        "DISTANCE": {
+          "@title": "Distance between two Combined Clusters",
+          "key": true,
+          "type": "cds.Double"
+        }
+      }
+    },
+    "cp.AHC_RESULTS": {
+      "kind": "entity",
+      "elements": {
+        "LOCATION_ID": {
+          "@title": "Location ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "@title": "Product ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+        "UNIQUE_ID": {
+          "@title": "Unique ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 50
+        },
+        "CLUSTER_ID": {
+          "@title": "Stage",
+          "key": true,
+          "type": "cds.Integer"
         }
       }
     },
@@ -15816,6 +16129,183 @@
         }
       }
     },
+    "PalService.getClustersInput": {
+      "kind": "entity",
+      "projection": {
+        "from": {
+          "ref": [
+            "cp.CLUSTER_DATA"
+          ]
+        }
+      },
+      "elements": {
+        "LOCATION_ID": {
+          "@title": "Location ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "@title": "Product ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+        "UNIQUE_ID": {
+          "@title": "Unique ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 50
+        },
+        "C1": {
+          "@title": "CHAR1",
+          "type": "cds.String",
+          "length": 10
+        },
+        "C2": {
+          "@title": "CHAR2",
+          "type": "cds.String",
+          "length": 10
+        },
+        "C3": {
+          "@title": "CHAR3",
+          "type": "cds.String",
+          "length": 10
+        },
+        "C4": {
+          "@title": "CHAR4",
+          "type": "cds.String",
+          "length": 10
+        },
+        "C5": {
+          "@title": "CHAR5",
+          "type": "cds.String",
+          "length": 10
+        },
+        "C6": {
+          "@title": "CHAR6",
+          "type": "cds.String",
+          "length": 10
+        },
+        "C7": {
+          "@title": "CHAR7",
+          "type": "cds.String",
+          "length": 10
+        },
+        "C8": {
+          "@title": "CHAR8",
+          "type": "cds.String",
+          "length": 10
+        },
+        "C9": {
+          "@title": "CHAR9",
+          "type": "cds.String",
+          "length": 10
+        },
+        "C10": {
+          "@title": "CHAR10",
+          "type": "cds.String",
+          "length": 10
+        },
+        "C11": {
+          "@title": "CHAR11",
+          "type": "cds.String",
+          "length": 10
+        },
+        "C12": {
+          "@title": "CHAR12",
+          "type": "cds.String",
+          "length": 10
+        }
+      }
+    },
+    "PalService.getClusterStages": {
+      "kind": "entity",
+      "projection": {
+        "from": {
+          "ref": [
+            "cp.AHC_COMBINE_PROCESS"
+          ]
+        }
+      },
+      "elements": {
+        "LOCATION_ID": {
+          "@title": "Location ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "@title": "Product ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+        "UNIQUE_ID": {
+          "@title": "Unique ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 50
+        },
+        "STAGE": {
+          "@title": "Stage",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "LEFT_ID": {
+          "@title": "Left Unique ID in Stage",
+          "key": true,
+          "type": "cds.String",
+          "length": 50
+        },
+        "RIGHT_ID": {
+          "@title": "Right Unique ID in Stage",
+          "key": true,
+          "type": "cds.String",
+          "length": 50
+        },
+        "DISTANCE": {
+          "@title": "Distance between two Combined Clusters",
+          "key": true,
+          "type": "cds.Double"
+        }
+      }
+    },
+    "PalService.getClusterIds": {
+      "kind": "entity",
+      "projection": {
+        "from": {
+          "ref": [
+            "cp.AHC_RESULTS"
+          ]
+        }
+      },
+      "elements": {
+        "LOCATION_ID": {
+          "@title": "Location ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "@title": "Product ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+        "UNIQUE_ID": {
+          "@title": "Unique ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 50
+        },
+        "CLUSTER_ID": {
+          "@title": "Stage",
+          "key": true,
+          "type": "cds.Integer"
+        }
+      }
+    },
     "PalService.get_palparameters": {
       "kind": "entity",
       "projection": {
@@ -16011,6 +16501,35 @@
             }
           }
         }
+      }
+    },
+    "PalService.genClusterInputs": {
+      "kind": "action",
+      "params": {
+        "Location": {
+          "type": "cds.String",
+          "length": 4
+        },
+        "Product": {
+          "type": "cds.String",
+          "length": 40
+        }
+      }
+    },
+    "PalService.fgenClusterInputs": {
+      "kind": "function",
+      "params": {
+        "Location": {
+          "type": "cds.String",
+          "length": 4
+        },
+        "Product": {
+          "type": "cds.String",
+          "length": 40
+        }
+      },
+      "returns": {
+        "type": "cds.String"
       }
     },
     "PalService.fgModels": {
@@ -17688,7 +18207,7 @@
           "@title": "Item Number ",
           "key": true,
           "type": "cds.String",
-          "length": 5
+          "length": 6
         },
         "COMPONENT": {
           "@title": "Component",
@@ -17739,7 +18258,7 @@
           "@title": "Item Number ",
           "key": true,
           "type": "cds.String",
-          "length": 5
+          "length": 6
         },
         "COMPONENT": {
           "@title": "Component",
@@ -18780,7 +19299,7 @@
           "@title": "Item Number ",
           "key": true,
           "type": "cds.String",
-          "length": 5
+          "length": 6
         },
         "COMPONENT": {
           "@title": "Component",
@@ -18821,7 +19340,7 @@
           "@title": "ITEM_NUM",
           "key": true,
           "type": "cds.String",
-          "length": 5
+          "length": 6
         },
         "COMPONENT": {
           "@title": "COMPONENT",
@@ -18969,7 +19488,7 @@
           "@title": "ITEM_NUM",
           "key": true,
           "type": "cds.String",
-          "length": 5
+          "length": 6
         },
         "COMPONENT": {
           "@title": "COMPONENT",
@@ -19173,7 +19692,7 @@
           "@title": "ITEM_NUM",
           "key": true,
           "type": "cds.String",
-          "length": 5
+          "length": 6
         },
         "COMPONENT": {
           "@title": "COMPONENT",
@@ -19591,7 +20110,7 @@
           "@title": "ITEM_NUM",
           "key": true,
           "type": "cds.String",
-          "length": 5
+          "length": 6
         },
         "COMPONENT": {
           "@title": "COMPONENT",
@@ -20157,7 +20676,7 @@
           "@title": "ITEM_NUM",
           "key": true,
           "type": "cds.String",
-          "length": 5
+          "length": 6
         },
         "COMPONENT": {
           "@title": "COMPONENT",
@@ -21530,6 +22049,42 @@
           }
         }
       ],
+      "@UI.HeaderInfo.Title.Value": {
+        "=": "LINE_ID"
+      },
+      "@UI.HeaderInfo.Description.Value": {
+        "=": "LINE_ID"
+      },
+      "@UI.HeaderInfo.TypeName": "Line Master",
+      "@UI.HeaderInfo.TypeNamePlural": "Line Master",
+      "@UI.FieldGroup#Details.Data": [
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "LINE_ID"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "LINE_DESC"
+          }
+        }
+      ],
+      "@UI.Facets": [
+        {
+          "$Type": "UI.CollectionFacet",
+          "ID": "linemstr",
+          "Label": "Line Master",
+          "Facets": [
+            {
+              "$Type": "UI.ReferenceFacet",
+              "Label": "Line Master",
+              "Target": "@UI.FieldGroup#Details"
+            }
+          ]
+        }
+      ],
       "projection": {
         "from": {
           "ref": [
@@ -22075,6 +22630,31 @@
         }
       }
     },
+    "CatalogService.getPlancfgPara": {
+      "kind": "entity",
+      "projection": {
+        "from": {
+          "ref": [
+            "cp.PARAMETER_VALUES"
+          ]
+        }
+      },
+      "elements": {
+        "LOCATION_ID": {
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "PARAMETER_ID": {
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "VALUE": {
+          "type": "cds.String",
+          "length": 500
+        }
+      }
+    },
     "CatalogService.postParameterValues": {
       "kind": "function",
       "params": {
@@ -22147,31 +22727,6 @@
         "CIR_QTY": {
           "@title": "Quantity",
           "type": "cds.Integer"
-        }
-      }
-    },
-    "CatalogService.getPlancfgPara": {
-      "kind": "entity",
-      "projection": {
-        "from": {
-          "ref": [
-            "cp.PARAMETER_VALUES"
-          ]
-        }
-      },
-      "elements": {
-        "LOCATION_ID": {
-          "key": true,
-          "type": "cds.String",
-          "length": 4
-        },
-        "PARAMETER_ID": {
-          "key": true,
-          "type": "cds.Integer"
-        },
-        "VALUE": {
-          "type": "cds.String",
-          "length": 500
         }
       }
     },
@@ -22981,7 +23536,7 @@
         "ITEM_NUM": {
           "@title": "ITEM_NUM",
           "type": "cds.String",
-          "length": 5,
+          "length": 6,
           "notNull": true
         },
         "COMPONENT": {
@@ -23528,19 +24083,6 @@
         }
       }
     },
-    "IBPImportSrv.exportMktAuth": {
-      "kind": "action",
-      "params": {
-        "LOCATION_ID": {
-          "type": "cds.String",
-          "length": 4
-        },
-        "PRODUCT_ID": {
-          "type": "cds.String",
-          "length": 40
-        }
-      }
-    },
     "IbpImportRest": {
       "@source": "srv/ibpimport-service.cds",
       "kind": "service",
@@ -23597,9 +24139,6 @@
       "kind": "action"
     },
     "SDIService.ImportCIRLog": {
-      "kind": "action"
-    },
-    "SDIService.ImportSOStock": {
       "kind": "action"
     },
     "SDIService.ImportPartialProd": {

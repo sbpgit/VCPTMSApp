@@ -17,6 +17,29 @@
       "name": "Run config_products-25",
       "request": "launch",
       "type": "pwa-node",
+      "cwd": "${workspaceFolder}/config_products",
+      "runtimeExecutable": "npx",
+      "args": [
+        "cds",
+        "watch",
+        "--profile",
+        "hybrid"
+      ],
+      "console": "internalConsole",
+      "internalConsoleOptions": "openOnSessionStart",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "envFile": "${workspaceFolder}/config_products/.env25",
+      "env": {
+        "NODE_ENV": "development",
+        "run.config": "{\"handlerId\":\"cap_run_config_handler_id\",\"runnableId\":\"{\\\"projectPath\\\":\\\"/home/user/projects/config_products\\\",\\\"profileName\\\":\\\"development\\\"}\"}"
+      }
+    },
+    {
+      "name": "Run config_products-27",
+      "request": "launch",
+      "type": "pwa-node",
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "npx",
       "args": [
@@ -30,7 +53,7 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "envFile": "${workspaceFolder}/.env25",
+      "envFile": "${workspaceFolder}/.env27",
       "env": {
         "NODE_ENV": "development",
         "run.config": "{\"handlerId\":\"cap_run_config_handler_id\",\"runnableId\":\"{\\\"projectPath\\\":\\\"/home/user/projects/config_products\\\",\\\"profileName\\\":\\\"development\\\"}\"}"

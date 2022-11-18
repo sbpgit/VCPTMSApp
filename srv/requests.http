@@ -233,4 +233,17 @@ Content-Type: application/json
 	]
 }
 
+### generate Clusters
+POST http://localhost:4004/pal/genClusters
+Content-Type: application/json
 
+{
+	"vcRulesList": [
+		{
+			"profile": "SBP_AHC_0",
+			"override": false,
+			"Location": "PL20",
+			"Product": "534EDPI0E119"
+		}
+	]
+}

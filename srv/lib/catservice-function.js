@@ -77,13 +77,13 @@ async maintainUniqueHeader(lFlag,adata) {
 async getAllProducts(adata){
     let  lsprod = {};
     let liprod = [];
-    const limasterprod = await cds.run(
-        `
-     SELECT DISTINCT PRODUCT_ID,
-            LOCATION_ID,
-            PROD_DESC
-       FROM "V_LOCPROD"
-       WHERE LOCATION_ID = '`+ adata.LOCATION_ID + `'`);
+    // const limasterprod = await cds.run(
+    //     `
+    //  SELECT DISTINCT PRODUCT_ID,
+    //         LOCATION_ID,
+    //         PROD_DESC
+    //    FROM "V_LOCPROD"
+    //    WHERE LOCATION_ID = '`+ adata.LOCATION_ID + `'`);
 
     const lipartialprod = await cds.run(
         `
@@ -97,24 +97,24 @@ async getAllProducts(adata){
 
 
     //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
-    for (let i = 0; i < limasterprod.length; i++) {
-        lsprod = {};
-        lsprod.LOCATION_ID = limasterprod[i].LOCATION_ID;
-        lsprod.PRODUCT_ID = limasterprod[i].PRODUCT_ID;
-        lsprod.PROD_DESC = limasterprod[i].PROD_DESC;
-        // vDesc = limasterprod[i].PROD_DESC;
-        liprod.push(lsprod);
-        lsprod = {};
+    // for (let i = 0; i < limasterprod.length; i++) {
+    //     lsprod = {};
+    //     lsprod.LOCATION_ID = limasterprod[i].LOCATION_ID;
+    //     lsprod.PRODUCT_ID = limasterprod[i].PRODUCT_ID;
+    //     lsprod.PROD_DESC = limasterprod[i].PROD_DESC;
+    //     // vDesc = limasterprod[i].PROD_DESC;
+    //     liprod.push(lsprod);
+    //     lsprod = {};
         for (let iPartial = 0; iPartial < lipartialprod.length; iPartial++) {
-            if (lipartialprod[iPartial].REF_PRODID === limasterprod[i].PRODUCT_ID) {
+            // if (lipartialprod[iPartial].REF_PRODID === limasterprod[i].PRODUCT_ID) {
                 lsprod.LOCATION_ID = lipartialprod[iPartial].LOCATION_ID;
                 lsprod.PRODUCT_ID = lipartialprod[iPartial].PRODUCT_ID;
                 lsprod.PROD_DESC = lipartialprod[iPartial].PROD_DESC;
                 liprod.push(lsprod);
                 lsprod = {};
-            }
+            // }
         }
-    }
+    // }
     return liprod;
 }
 }

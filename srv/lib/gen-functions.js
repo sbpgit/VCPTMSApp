@@ -213,6 +213,18 @@ class GenFunctions {
 
     }
 
+    static removeSOleadzeros(num) {
+
+        num = num.toString();
+        num = num.replace(/^0+/, '');
+        
+
+        // while (num.length < size) num = "0" + num;
+
+        return num;
+
+    }
+
     static async jobSchMessage(lFlag, lMessage, req) {
         console.log(lFlag);
         console.log(lMessage);

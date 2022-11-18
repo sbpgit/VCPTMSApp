@@ -177,15 +177,18 @@ service CatalogService @(impl : './lib/cat-service.js') {
     entity getBOMPred           as projection on V_COMPOD_TSPRED;
     // Generate Timeseries
     function generate_timeseriesH(LOCATION_ID : String(4), PRODUCT_ID : String(40))                                                                                                                                                                                              returns String;
-    function generate_timeseries(LOCATION_ID : String(4), PRODUCT_ID : String(40))                                                                                                                                                                                               returns String;
+    function generate_timeseries(LOCATION_ID : String(4), PRODUCT_ID : String(40))                                                                       returns String;
     //LOCATION_ID : String(4), PRODUCT_ID : String(40))
     // Generate Timeseries
-    function generate_timeseriesF(LOCATION_ID : String(4), PRODUCT_ID : String(40))                                                                                                                                                                                              returns String;
+    // function generate_timeseriesF(LocProdData : String)    
+      function generate_timeseriesF(LOCATION_ID : String(4), PRODUCT_ID : String(40)) returns String;    // Local                                                                                                                                                                                                                        returns String;
     action   generateTimeseries(LocProdData : String);
     // Generate Timeseries
     action   generateTimeseriesF(LocProdData : String);
     // Generate Unique
+    
     action   genUniqueID(LOCATION_ID : String(4), PRODUCT_ID : String(40));
+    // function  genUniqueID(LOCATION_ID : String(4), PRODUCT_ID : String(40));
     // Generate Fully Configured Demand
     action   genFullConfigDemand(LocProdData : String); // (LOCATION_ID : String(4), PRODUCT_ID : String(40)) ;
 
@@ -206,7 +209,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
     entity getUniqueHeader      as projection on od.UNIQUE_ID_HEADER;
     entity getUniqueItem        as projection on V_UNIQUE_ID_ITEM;
     entity getUniqueId          as projection on V_UNIQUE_ID;
-    function gen_UniqueID(LOCATION_ID : String(4), PRODUCT_ID : String(40))                                                                                                                                                                                                      returns String;
+    function gen_UniqueID(LOCATION_ID : String(4), PRODUCT_ID : String(40))                     returns String;
     function changeUnique(UNIQUE_ID : Integer, LOCATION_ID : String(4), PRODUCT_ID : String(40), UID_TYPE : String(1), UNIQUE_DESC : String(50), ACTIVE : String(1), FLAG : String)                                                                                              returns String;
     function maintainUniqueChar(FLAG : String(1), UNIQUECHAR : String)                                                                                                                                                                                                           returns String;
 
@@ -232,7 +235,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
     @odata.draft.enabled
     entity genRtrHeader         as projection on od.RESTRICT_HEADER;
 
-    //Object dependency restrict
+    //Object dependency restric
     @odata.draft.enabled
     entity getODHdrRstr         as projection on V_ODRESTRICT;
 
@@ -258,21 +261,19 @@ service CatalogService @(impl : './lib/cat-service.js') {
     ///*****/ Seed Order Creation /*****/
     entity getSeedOrder         as projection on od.SEEDORDER_HEADER;
     function maintainSeedOrder(FLAG : String(1), SEEDDATA : String)                                                                                                                                                                                                              returns String;
-    
-        ///*****/ Planning Configuration /*****/
+
+    ///*****/ Planning Configuration /*****/
     // BOI - Deepa
     @readonly
     entity Method_Types         as projection on od.METHOD_TYPES;
 
     entity V_Parameters         as projection on V_PLANNEDCONFIG;
+    entity getPlancfgPara       as projection on od.PARAMETER_VALUES;
     function postParameterValues(FLAG : String(1), PARAMVALS : String)                                                                                                                                                                                                           returns String;
     entity getCIRGenerated      as projection on od.CIR_GENERATED;
-    entity getPlancfgPara       as projection on od.PARAMETER_VALUES;
-
     ///*****/ CIR weekly /*****/
     @readonly
-    entity getCIRLog            as projection on od.CIRLOG;
-
+    entity getCIRLog    as projection on od.CIRLOG;
     function getCIRWeekly(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), FROMDATE : Date, TODATE : Date, MODEL_VERSION : String(20))                                                                                             returns array of ds.cirWkly;
     // function getCIRWeekly(FROMDATE : Date, TODATE : Date)  returns array of ds.cirWkly;
     function getUniqueIdItems(UNIQUE_ID : Integer)                                                                                                                                                                                                                               returns array of ds.uniqueCharItems;
@@ -286,8 +287,8 @@ service CatalogService @(impl : './lib/cat-service.js') {
     function genAssemblyreq(LOCATION_ID : String(4), PRODUCT_ID : String(40))                                                                                                                                                                                                    returns String;
     action   generateAssemblyReq(LOCATION_ID : String(4), PRODUCT_ID : String(40));
     //VC Planner Documentation Maintenance- Pradeep
-    function moveData(Flag : String, CONTENT : String, PAGEID : Integer, DESCRIPTION : String)                                                                                                                                                                                   returns String;
-    function addPAGEHEADER(Flag1 : String, PAGEID : Integer, DESCRIPTION : String, PARENTNODEID : Integer, HEIRARCHYLEVEL : Integer)                                                                                                                                             returns String;
+    function moveData(Flag : String, CONTENT : String, PAGEID : Integer, DESCRIPTION : String)returns String;                                                                                                                                                                                  
+    function addPAGEHEADER(Flag1 : String, PAGEID : Integer, DESCRIPTION : String, PARENTNODEID : Integer, HEIRARCHYLEVEL : Integer) returns String;
     function addPAGEPARAGRAPH(Flag1 : String, PAGEID : Integer, DESCRIPTION : String, CONTENT : String)                                                                                                                                                                          returns String;
     function deletePAGEHEADER(Flag1 : String, PAGEID : Integer)                                                                                                                                                                                                                  returns String;
     function deletePAGEPARAGRAPH(Flag1 : String, PAGEID : Integer)                                                                                                                                                                                                               returns String;

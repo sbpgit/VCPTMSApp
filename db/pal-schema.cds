@@ -660,6 +660,43 @@ entity PalGenRegressionModels {
 }
 
 
+entity PalGenClusters {
+    key clustersID            : String(50);
+    createdAt            : Timestamp;
+    Location             : String(4);
+    Product              : String(40);
+    clusterParameters : array of {
+        groupId          : String(100);
+        paramName        : String(100);
+        intVal           : Integer;
+        doubleVal        : Double;
+        strVal           : String(100);
+    };
+
+    clusterType             : Integer                      @assert.range : [
+        1,
+        12
+    ];
+
+    clusterData       : array of {
+        groupId          : String(100);
+        ID               : String(100);
+        att1             : String(10);
+        att2             : String(10);
+        att3             : String(10);
+        att4             : String(10);
+        att5             : String(10);
+        att6             : String(10);
+        att7             : String(10);
+        att8             : String(10);
+        att9             : String(10);
+        att10            : String(10);
+        att11            : String(10);
+        att12            : String(10);
+    };
+
+}
+
 entity OD_MODEL_VERSIONS {
     key LOCATION_ID   : String(4)    @title : 'Location ID';
     key PRODUCT_ID    : String(40)   @title : 'Product ID';
@@ -778,24 +815,23 @@ entity CLUSTER_DATA {
     C12 : String (10) @title : 'CHAR12';
 };
 
-entity AHC_CLUSTER_COMBINE_PROCESS {
+entity AHC_COMBINE_PROCESS {
     key LOCATION_ID : String(4) @title : 'Location ID';
     key PRODUCT_ID  : String(40)@title : 'Product ID';
-    key UNIQUE_ID : String(50)@title : 'Unique ID';
+    key MODEL_PROFILE    : String(50) @title : 'PAL Model Profile';
+    // key UNIQUE_ID : String(50)@title : 'Unique ID';
     key STAGE : Integer @title : 'Stage';
     key LEFT_ID : String(50)@title : 'Left Unique ID in Stage';
     key RIGHT_ID : String(50)@title : 'Right Unique ID in Stage';
     key DISTANCE : Double @title : 'Distance between two Combined Clusters'
 };
 
-entity AHC_CLUSTER_RESULTS {
+entity AHC_RESULTS {
     key LOCATION_ID : String(4) @title : 'Location ID';
     key PRODUCT_ID  : String(40)@title : 'Product ID';
+    key MODEL_PROFILE    : String(50) @title : 'PAL Model Profile';
     key UNIQUE_ID : String(50)@title : 'Unique ID';
-    key STAGE : Integer @title : 'Stage';
-    key LEFT_ID : String(50)@title : 'Left Unique ID in Stage';
-    key RIGHT_ID : String(50)@title : 'Right Unique ID in Stage';
-    key DISTANCE : Double @title : 'Distance between two Combined Clusters'
+    key CLUSTER_ID : Integer @title : 'Stage';
 };
 
 

@@ -1,7 +1,7 @@
 //const GenTimeseries = require("./cat-servicets");
 // const DbConnect = require("./dbConnect");
 const GenFunctions = require("./gen-functions");
-const { v1: uuidv1 } = require('uuid');
+const { v1: uuidv1 } = require('uuid')
 const cds = require("@sap/cds");
 const hana = require("@sap/hana-client");
 const { createLogger, format, transports } = require("winston");
@@ -274,7 +274,7 @@ module.exports = (srv) => {
                         liCompQty[vCompIndex].COMPONENT === lsCompWeekly.COMPONENT &&
                         liCompQty[vCompIndex].WEEK_DATE === liDates[i].CAL_DATE
                     ) {
-                        lsCompWeekly.STRUC_NODE = '';//liCompQty[vCompIndex].STRUC_NODE;
+                        lsCompWeekly.STRUC_NODE = liCompQty[vCompIndex].STRUC_NODE;
                         lsCompWeekly[columnname + vWeekIndex] =
                             liCompQty[vCompIndex].COMPCIR_QTY;
                         break;
@@ -1013,7 +1013,7 @@ module.exports = (srv) => {
                 // }
                 break;
         }
-        // const obgenTimeseries_rt = new GenTimeseriesRT();
+        const obgenTimeseries_rt = new GenTimeseriesRT();
         // await obgenTimeseries_rt.genTimeseriesF_rt(req.data, req);
     });
 
@@ -1976,7 +1976,6 @@ module.exports = (srv) => {
                 ORDER BY "PARAMETER_ID" `);
 
         vValue = parseInt(li_paravalues[0].VALUE) + 1;
-
         vPrefix = li_paravalues[1].VALUE;
         const obgenSOFunctions = new SOFunctions();
         if (req.data.FLAG === "C") {
@@ -2012,20 +2011,12 @@ module.exports = (srv) => {
             } while (vNoOrd > 0)
 
             lsresults.SEED_ORDER = vOrder;
-
-
-            // vTemp = parseInt(vValue);
-            // // vTemp = parseInt(vTemp) + 1;
-            // vTemp = GenFunctions.addleadzeros(vTemp, 8);
-            // lsresults.SEED_ORDER = vPrefix.concat(vTemp.toString());
             liresults.push(lsresults);
             lspara.PARAMETER_ID = 6;
             lspara.VALUE = vTemp.toString();
-            // lsresults = {};
             if (liresults.length > 0) {
                 console.log(lsresults);
                 try {
-
                     await cds.run(INSERT.into("CP_SEEDORDER_HEADER").entries(liresults));
                     await UPDATE`CP_PARAMETER_VALUES`
                         .with({
@@ -2055,19 +2046,16 @@ module.exports = (srv) => {
                     })
                     .where(`SEED_ORDER = '${lsresults.SEED_ORDER}'`)
                 responseMessage = lsresults.SEED_ORDER + " Update is successfull";
-
             } catch (e) {
                 responseMessage = "Update Failed";
-
                 //DONOTHING
             }
             // }
         }
         else if (req.data.FLAG === "d") {
             try {
-
-                // await cds.delete("CP_SEEDORDER_HEADER", liSeeddata[0].SEED_ORDER);
                 await cds.run(DELETE.from('CP_SEEDORDER_HEADER').where(`SEED_ORDER = '${liSeeddata[0].SEED_ORDER}'`));
+<<<<<<< HEAD
 
 
                 responseMessage = " Deletion Successfull";
@@ -2075,6 +2063,11 @@ module.exports = (srv) => {
             } catch (e) {
 
                 responseMessage = " Deletion Failed";
+=======
+                responseMessage = "Deletion Successfull";
+            } catch (e) {
+                responseMessage = "Deletion Failed";
+>>>>>>> 25d2bced454f9a7c26614fcb17192e185e59728d
             }
         }
         lsresults = {};
@@ -2566,6 +2559,10 @@ module.exports = (srv) => {
                 catch (e) {
                     console.log(e);
                 }
+
+            }
+            if (i === 1) {
+                break;
             }
         }
 

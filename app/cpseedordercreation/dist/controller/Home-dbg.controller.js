@@ -6,19 +6,25 @@ sap.ui.define([
     "sap/ui/model/FilterOperator",
     "sap/ui/core/library",
     "sap/ui/model/Sorter",
-    "jquery.sap.global"
+    "jquery.sap.global",
+    "sap/m/Dialog",
+    "sap/m/library",
+    "sap/m/Text",
+    "sap/m/Button"
 ],
     /**
      * @param {typeof sap.ui.core.mvc.Controller} Controller
      */
-    function (BaseController, JSONModel, MessageToast, Filter, FilterOperator, library, Sorter, jquery) {
+    function (BaseController, JSONModel, MessageToast, Filter, FilterOperator, library, Sorter, jquery,Dialog, mobileLibrary, Text, Button) {
         "use strict";
         var that, oGModel;
+        var DialogType = mobileLibrary.DialogType;
+        var ButtonType = mobileLibrary.ButtonType;
 
         return BaseController.extend("cpapp.cpseedordercreation.controller.Home", {
             onInit: function () {
                 that = this;
-
+                
                 // Declaring JSON Model and size limit
                 that.oModel = new JSONModel();
                 that.locModel = new JSONModel();
@@ -93,7 +99,7 @@ sap.ui.define([
                 // this.oLocList = this._oCore.byId(
                 //     this._valueHelpDialogLoc.getId() + "-list"
                 // );
-                
+
 
                 // this.oUniqList = this._oCore.byId(
                 //     this._valueHelpDialogUniq.getId() + "-list"
@@ -141,58 +147,58 @@ sap.ui.define([
                     // Prod Dialog
                 } else if (sId.includes("prod")) {
                     // that._valueHelpDialogProd.open();
-                      if (that.byId("idloc").getValue()) {
-                    that._valueHelpDialogProd.open();
-                      } else {
+                    if (that.byId("idloc").getValue()) {
+                        that._valueHelpDialogProd.open();
+                    } else {
                         MessageToast.show("Select Location");
-                      }
-                // } else if (sId.includes("Location")) {
-                //     that._valueHelpDialogLoc.open();
-                //     // Prod Dialog
-                // } else if (sId.includes("Product")) {
-                //     if (sap.ui.getCore().byId("idLocation").getValue()) {
-                //         that._valueHelpDialogProd.open();
-                //     } else {
-                //         MessageToast.show("Select Location");
-                //     }
+                    }
+                    // } else if (sId.includes("Location")) {
+                    //     that._valueHelpDialogLoc.open();
+                    //     // Prod Dialog
+                    // } else if (sId.includes("Product")) {
+                    //     if (sap.ui.getCore().byId("idLocation").getValue()) {
+                    //         that._valueHelpDialogProd.open();
+                    //     } else {
+                    //         MessageToast.show("Select Location");
+                    //     }
 
                     // Uniq ID Dialog
                 } else if (sId.includes("Uniq")) {
                     if (sap.ui.getCore().byId("idLocation").getValue() &&
                         sap.ui.getCore().byId("idProduct").getValue()) {
-                        
+
 
                         sap.ui.core.BusyIndicator.show();
-                    // service to get the Uniq ID's based of location and products
-                    this.getModel("BModel").read("/getUniqueHeader", {
-                        filters: [
-                            new Filter(
-                                "LOCATION_ID",
-                                FilterOperator.EQ,
-                                sap.ui.getCore().byId("idLocation").getValue()
-                            ),
-                            new Filter(
-                                "PRODUCT_ID",
-                                FilterOperator.EQ,
-                                sap.ui.getCore().byId("idProduct").getValue()
-                            ),
-                        ],
-                        success: function (oData) {
-                            sap.ui.core.BusyIndicator.hide();
+                        // service to get the Uniq ID's based of location and products
+                        this.getModel("BModel").read("/getUniqueHeader", {
+                            filters: [
+                                new Filter(
+                                    "LOCATION_ID",
+                                    FilterOperator.EQ,
+                                    sap.ui.getCore().byId("idLocation").getValue()
+                                ),
+                                new Filter(
+                                    "PRODUCT_ID",
+                                    FilterOperator.EQ,
+                                    sap.ui.getCore().byId("idProduct").getValue()
+                                ),
+                            ],
+                            success: function (oData) {
+                                sap.ui.core.BusyIndicator.hide();
 
-                            oData.results.forEach(function (row) {
-                                row.UNIQUE_ID = row.UNIQUE_ID.toString();
+                                oData.results.forEach(function (row) {
+                                    row.UNIQUE_ID = row.UNIQUE_ID.toString();
 
-                            }, that);
-                            that.uniqModel.setData(oData);
-                            that.oUniqList.setModel(that.uniqModel);
-                            that._valueHelpDialogUniq.open();
-                        },
-                        error: function (oData, error) {
-                            sap.ui.core.BusyIndicator.hide();
-                            MessageToast.show("error");
-                        },
-                    });
+                                }, that);
+                                that.uniqModel.setData(oData);
+                                that.oUniqList.setModel(that.uniqModel);
+                                that._valueHelpDialogUniq.open();
+                            },
+                            error: function (oData, error) {
+                                sap.ui.core.BusyIndicator.hide();
+                                MessageToast.show("error");
+                            },
+                        });
                     } else {
                         MessageToast.show("Select Location and Product");
                     }
@@ -297,7 +303,7 @@ sap.ui.define([
                     that.oUniqList.getBinding("items").filter(oFilters);
                 } else if (sId.includes("head")) {
                     if (sQuery !== "") {
-                    
+
                         oFilters.push(
                             new Filter({
                                 filters: [
@@ -421,7 +427,7 @@ sap.ui.define([
                 that.oGModel.setProperty("/productID", Prod);
 
                 var oFilters = [];
-                
+
                 // getting the filters
 
                 if (loc !== "") {
@@ -446,10 +452,10 @@ sap.ui.define([
                 }
                 if (loc !== "" && Prod !== "") {
                     this.byId("headSearch").setValue("");
-                    if(that.oList.getItems().length){
+                    if (that.oList.getItems().length) {
                         that.oList.getBinding("items").filter(oFilters);
                     }
-                    
+
                     this.getModel("BModel").read("/getSeedOrder", {
                         filters: [oFilters],
                         // filters: [ new Filter( "LOCATION_ID",  FilterOperator.EQ,  loc ),
@@ -469,10 +475,10 @@ sap.ui.define([
                                     // Calling function to handle the date format
                                     // row.UNIQUE_ID = row.UNIQUE_ID.toString();
                                     row.ORD_QTY = parseFloat(row.ORD_QTY);
-                                  }, that);
+                                }, that);
 
                                 that.byId("idSort").setVisible(true);
-                                
+
                                 that.oModel.setData(oData);
                                 that.oList.setModel(that.oModel);
                             }
@@ -555,22 +561,22 @@ sap.ui.define([
                 that._valueHelpDialogOrderCreate.close();
             },
 
-            onNumChange:function(){
-               
+            onNumChange: function () {
+
                 var squan = sap.ui.getCore().byId("idQuantity").getValue();
                 sap.ui.getCore().byId("idQuantity").setValueState("None");
 
-                    if(squan < 1){
-        
-                        sap.ui.getCore().byId("idQuantity").setValue("");
-                        sap.ui.getCore().byId("idQuantity").setValueState("Error");
-                        sap.ui.getCore().byId("idQuantity").setValueStateText("Quantity can not be empty or 0");
-                    }
+                if (squan < 1) {
 
-                    if(squan.includes(".")){
-                        sap.ui.getCore().byId("idQuantity").setValueState("Error");
-                        sap.ui.getCore().byId("idQuantity").setValueStateText("Decimals not allowed");
-                    }
+                    sap.ui.getCore().byId("idQuantity").setValue("");
+                    sap.ui.getCore().byId("idQuantity").setValueState("Error");
+                    sap.ui.getCore().byId("idQuantity").setValueStateText("Quantity can not be empty or 0");
+                }
+
+                if (squan.includes(".")) {
+                    sap.ui.getCore().byId("idQuantity").setValueState("Error");
+                    sap.ui.getCore().byId("idQuantity").setValueStateText("Decimals not allowed");
+                }
             },
 
             onSaveOrder: function () {
@@ -602,27 +608,27 @@ sap.ui.define([
                 };
                 oEntry.SEEDDATA.push(vRuleslist);
                 if (squan && sDate !== "" && sUniq) {
-                    if(sap.ui.getCore().byId("idQuantity").getValueState() !== "Error"){
-                    that.getModel("BModel").callFunction("/maintainSeedOrder", {
-                        method: "GET",
-                        urlParameters: {
-                            FLAG: oFlag,
-                            SEEDDATA: JSON.stringify(oEntry.SEEDDATA)
-                        },
-                        success: function (oData) {
-                            sap.ui.core.BusyIndicator.hide();
-                            sap.m.MessageToast.show("Seed Order created/ updated successfully");
-                            that.onCancelOrder();
-                            that.onGetData();
-                        },
-                        error: function (error) {
-                            sap.ui.core.BusyIndicator.hide();
-                            sap.m.MessageToast.show("Error creating a Seed Order ");
-                        },
-                    });
-                } else {
-                    sap.m.MessageToast.show("Decimals are not allowed");
-                }
+                    if (sap.ui.getCore().byId("idQuantity").getValueState() !== "Error") {
+                        that.getModel("BModel").callFunction("/maintainSeedOrder", {
+                            method: "GET",
+                            urlParameters: {
+                                FLAG: oFlag,
+                                SEEDDATA: JSON.stringify(oEntry.SEEDDATA)
+                            },
+                            success: function (oData) {
+                                sap.ui.core.BusyIndicator.hide();
+                                sap.m.MessageToast.show("Seed Order created/ updated successfully");
+                                that.onCancelOrder();
+                                that.onGetData();
+                            },
+                            error: function (error) {
+                                sap.ui.core.BusyIndicator.hide();
+                                sap.m.MessageToast.show("Error creating a Seed Order ");
+                            },
+                        });
+                    } else {
+                        sap.m.MessageToast.show("Decimals are not allowed");
+                    }
                 } else {
                     sap.m.MessageToast.show("Please fill all fields");
                 }
@@ -654,21 +660,82 @@ sap.ui.define([
                 // apply the selected sort and group settings
                 oBinding.sort(aSorters);
             },
-            onNavPress:function(){
+            onNavPress: function () {
                 if (sap.ushell && sap.ushell.Container && sap.ushell.Container.getService) {
-			var oCrossAppNavigator = sap.ushell.Container.getService("CrossApplicationNavigation"); 
-			// generate the Hash to display 
-			var hash = (oCrossAppNavigator && oCrossAppNavigator.hrefForExternal({
-				target: {
-					semanticObject: "vcpdocdisplay",
-					action: "Display"
-				}
-			})) || ""; 
-			//Generate a  URL for the second application
-			var url = window.location.href.split('#')[0] + hash; 
-			//Navigate to second app
-			sap.m.URLHelper.redirect(url, true); 
-                } 
+                    var oCrossAppNavigator = sap.ushell.Container.getService("CrossApplicationNavigation");
+                    // generate the Hash to display 
+                    var hash = (oCrossAppNavigator && oCrossAppNavigator.hrefForExternal({
+                        target: {
+                            semanticObject: "vcpdocdisplay",
+                            action: "Display"
+                        }
+                    })) || "";
+                    //Generate a  URL for the second application
+                    var url = window.location.href.split('#')[0] + hash;
+                    //Navigate to second app
+                    sap.m.URLHelper.redirect(url, true);
+                }
+            },
+            onDelete: function (oEvent) {
+                var sSeedOrder = oEvent.getSource().getBindingContext().getProperty().SEED_ORDER,
+                sloc = oEvent.getSource().getBindingContext().getProperty().LOCATION_ID,
+                sprod=oEvent.getSource().getBindingContext().getProperty().PRODUCT_ID,
+                sUniq = oEvent.getSource().getBindingContext().getProperty().UNIQUE_ID,
+                sOrd = oEvent.getSource().getBindingContext().getProperty().ORD_QTY,
+                sMatAvail=oEvent.getSource().getBindingContext().getProperty().MAT_AVAILDATE;
+                var oEntry = {
+                    SEEDDATA: [],
+                },
+                    vRuleslist;
+                vRuleslist = {
+                    SEED_ORDER: sSeedOrder,
+                    LOCATION_ID: sloc,
+                    PRODUCT_ID: sprod,
+                    UNIQUE_ID: sUniq,
+                    ORD_QTY: sOrd,
+                    MAT_AVAILDATE: sMatAvail,
+                };
+                oEntry.SEEDDATA.push(vRuleslist);
+if (!this.oApproveDialog) {
+                        this.oApproveDialog = new Dialog({
+                            type: DialogType.Message,
+                            title: sSeedOrder,
+                            content: new Text({ text: "Do you want to delete this Seed Order?" }),
+                            beginButton: new Button({
+                                type: ButtonType.Emphasized,
+                                text: "Submit",
+                                press: function () {
+                                    sap.ui.core.BusyIndicator.show();
+                                    var oModel = this.getView().getModel("BModel");
+                                    oModel.callFunction("/maintainSeedOrder", {
+                                        method: "GET",
+                                        urlParameters: {
+                                            FLAG: "d",
+                                            SEEDDATA: JSON.stringify(oEntry.SEEDDATA) 
+                                        },
+                                        success: function (oData, response) {
+                                            that.onGetData();
+                                            that.oApproveDialog.close();
+                                            sap.ui.core.BusyIndicator.hide();
+                                            sap.m.MessageToast.show("Seed Order Deleted Successfully");
+                                        },
+                                        error: function (e) {
+                                            sap.ui.core.BusyIndicator.hide();
+                                            sap.m.MessageToast.show("Failed to delete SeedOrder");
+                                        }
+                                    });
+                                    
+                                }.bind(this)
+                            }),
+                            endButton: new Button({
+                                text: "Cancel",
+                                press: function () {
+                                    this.oApproveDialog.close();
+                                }.bind(this)
+                            })
+                        });
+                    }
+                    this.oApproveDialog.open();
             }
         });
     });

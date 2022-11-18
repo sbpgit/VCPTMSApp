@@ -30,9 +30,12 @@ service PalService{
     entity getODImpactVals as projection on pal.TS_OBJDEP_CHAR_IMPACT_F;
     entity getODModelVersions as projection on pal.OD_MODEL_VERSIONS;
 
+
+    entity generateAhcClusters as projection on pal.PalGenClusters;
+
     entity getClustersInput as projection on pal.CLUSTER_DATA;
-    entity getClusterStages as projection on pal.AHC_CLUSTER_COMBINE_PROCESS;
-    entity getClusterIds as projection on pal.AHC_CLUSTER_RESULTS;
+    entity getClusterStages as projection on pal.AHC_COMBINE_PROCESS;
+    entity getClusterIds as projection on pal.AHC_RESULTS;
 
 
 
@@ -90,6 +93,15 @@ service PalService{
             Location     : String(4),
             Product      : String(40)
         );
+
+
+        action genClusters(vcRulesList : array of{
+            profile      : String(50);
+            override     : Boolean;
+            Location     : String(4);
+            Product      : String(40);
+            // GroupID      : String(20);
+        });
 
         function fgenClusterInputs(Location : String(4), Product:String(40)) returns String;
 

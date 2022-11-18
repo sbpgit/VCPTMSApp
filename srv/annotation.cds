@@ -1804,9 +1804,36 @@ annotate service.LINEMASTER with @(
                 Value : LINE_DESC,
             ![@UI.Importance] : #High
             }
-        ]
-        
-    }
+        ],
+        HeaderInfo              : {
+            Title          : {Value : LINE_ID},
+            Description    : {Value : LINE_ID},
+            TypeName       : 'Line Master',
+            TypeNamePlural : 'Line Master',
+        },
+        FieldGroup #Details     : {Data : [
+            {
+                $Type : 'UI.DataField',
+                Value : LINE_ID
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : LINE_DESC
+            }
+        ]}
+    },
+
+    // Page Facets
+    UI.Facets : [{
+        $Type  : 'UI.CollectionFacet',
+        ID     : 'linemstr',
+        Label  : 'Line Master',
+        Facets : [{
+            $Type  : 'UI.ReferenceFacet',
+            Label  : 'Line Master',
+            Target : '@UI.FieldGroup#Details'
+        }]
+    }]
 );
 // CIR log
 annotate service.CIRLOG with @(

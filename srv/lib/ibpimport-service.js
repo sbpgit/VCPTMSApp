@@ -3,7 +3,6 @@ const GenF = require("./gen-functions");
 const IBPFunc = require("./ibp-functions");
 const hana = require("@sap/hana-client");
 const xsenv = require("@sap/xsenv");
-const { v1: uuidv1 } = require('uuid');
 const JobSchedulerClient = require("@sap/jobs-client");
 const vAIRKey = process.env.AIR;
 const obibpfucntions = new IBPFunc();
@@ -265,10 +264,84 @@ module.exports = cds.service.impl(async function () {
 
     // Master data products to IBP
     this.on("createIBPMasterProd", async (req) => {
+        // var oReq = {
+        //     masterProd: [],
+        // },
+        //     vmasterProd;
+
+        // const limasterprod = await cds.run(
+        //     `
+        //  SELECT A.PRODUCT_ID,
+        //  B.LOCATION_ID,
+        //  A.PROD_DESC,
+        //  A.PROD_FAMILY,
+        //  A.PROD_GROUP,
+        //  A.PROD_MODEL,
+        //  A.PROD_MDLRANGE,
+        //  A.PROD_SERIES,
+        //  A.RESERVE_FIELD3
+        //    FROM "CP_PRODUCT" AS A
+        //    INNER JOIN "CP_LOCATION_PRODUCT" AS B
+        //    ON A.PRODUCT_ID = B.PRODUCT_ID 
+        //    WHERE B.LOCATION_ID = '`+ req.data.LOCATION_ID + `'`);
+
+        // const lipartialprod = await cds.run(
+        //     `
+        //  SELECT PRODUCT_ID,
+        //         LOCATION_ID,
+        //         PROD_DESC,
+        //         REF_PRODID
+        //    FROM "CP_PARTIALPROD_INTRO"
+        //    WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
+        //    ORDER BY REF_PRODID`);
+
+
+        // //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
+        // for (i = 0; i < limasterprod.length; i++) {
+        //     vmasterProd = {
+        //         "VCMODELRANGE": limasterprod[i].PROD_MDLRANGE,
+        //         "PRDFAMILY": limasterprod[i].PROD_FAMILY,
+        //         "PRDID": limasterprod[i].PRODUCT_ID,
+        //         "PRDGROUP": limasterprod[i].PROD_GROUP,
+        //         "VCMODEL": limasterprod[i].PROD_MODEL,
+        //         "PRDDESCR": limasterprod[i].PROD_DESC,
+        //         "PRDSERIES": limasterprod[i].PROD_SERIES
+        //         // "VCSTRUCTURENODE": limasterprod[i].RESERVE_FIELD3
+        //     };
+        //     oReq.masterProd.push(vmasterProd);
+        //     for (iPartial = 0; iPartial < lipartialprod.length; iPartial++) {
+        //         if (lipartialprod[iPartial].REF_PRODID === limasterprod[i].PRODUCT_ID) {
+        //             vmasterProd = {
+        //                 "VCMODELRANGE": limasterprod[i].PROD_MDLRANGE,
+        //                 "PRDFAMILY": limasterprod[i].PROD_FAMILY,
+        //                 "PRDID": lipartialprod[iPartial].PRODUCT_ID,
+        //                 "PRDGROUP": limasterprod[i].PROD_GROUP,
+        //                 "VCMODEL": limasterprod[i].PROD_MODEL,
+        //                 "PRDDESCR": lipartialprod[iPartial].PROD_DESC,
+        //                 "PRDSERIES": limasterprod[i].PROD_SERIES
+        //                 // "VCSTRUCTURENODE": limasterprod[i].RESERVE_FIELD3
+        //             };
+        //             oReq.masterProd.push(vmasterProd);
+        //         }
+        //     }
+        // }
+        // var vTransID = new Date().getTime().toString();
+        // var oEntry =
+        // {
+        //     "TransactionID": vTransID,
+        //     "RequestedAttributes": "VCMODELRANGE,PRDFAMILY,PRDID,PRDGROUP,VCMODEL,PRDDESCR",
+        //     "DoCommit": true,
+        //     "NavVCQPRODUCT": oReq.masterProd
+        // }
+        // await servicePost.tx(req).post("/VCQPRODUCTTrans", oEntry);
+        // var resUrl = "/GetExportResult?P_EntityName='VCPQ'&P_TransactionID='" + vTransID + "'";
+        // return await servicePost.tx(req).get(resUrl)
+        // GetExportResult
+
         var oReq = {
             masterProd: [],
         },
-            vmasterProd;
+            vmasterProd, flag = '';
 
         const limasterprod = await cds.run(
             `
@@ -280,36 +353,42 @@ module.exports = cds.service.impl(async function () {
          A.PROD_MODEL,
          A.PROD_MDLRANGE,
          A.PROD_SERIES,
-         A.RESERVE_FIELD3
+         A.RESERVE_FIELD3         
            FROM "CP_PRODUCT" AS A
            INNER JOIN "CP_LOCATION_PRODUCT" AS B
-           ON A.PRODUCT_ID = B.PRODUCT_ID 
+           ON A.PRODUCT_ID = B.PRODUCT_ID            
            WHERE B.LOCATION_ID = '`+ req.data.LOCATION_ID + `'`);
 
         const lipartialprod = await cds.run(
             `
          SELECT PRODUCT_ID,
                 LOCATION_ID,
-                PROD_DESC,
                 REF_PRODID
            FROM "CP_PARTIALPROD_INTRO"
            WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
            ORDER BY REF_PRODID`);
 
+        const liComp = await cds.run(
+            `
+         SELECT DISTINCT PRODUCT_ID,
+                LOCATION_ID,
+                COMPONENT
+           FROM "CP_BOMHEADER"
+           WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
+           ORDER BY COMPONENT`);
 
         //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
         for (i = 0; i < limasterprod.length; i++) {
-            vmasterProd = {
-                "VCMODELRANGE": limasterprod[i].PROD_MDLRANGE,
-                "PRDFAMILY": limasterprod[i].PROD_FAMILY,
-                "PRDID": limasterprod[i].PRODUCT_ID,
-                "PRDGROUP": limasterprod[i].PROD_GROUP,
-                "VCMODEL": limasterprod[i].PROD_MODEL,
-                "PRDDESCR": limasterprod[i].PROD_DESC,
-                "PRDSERIES": limasterprod[i].PROD_SERIES
-                // "VCSTRUCTURENODE": limasterprod[i].RESERVE_FIELD3
-            };
-            oReq.masterProd.push(vmasterProd);
+            //     vmasterProd = {
+            //         "VCMODELRANGE": limasterprod[i].PROD_MDLRANGE,
+            //         "PRDFAMILY": limasterprod[i].PROD_FAMILY,
+            //         "PRDID": limasterprod[i].PRODUCT_ID,
+            //         "PRDGROUP": limasterprod[i].PROD_GROUP,
+            //         "VCMODEL": limasterprod[i].PROD_MODEL,
+            //         "PRDDESCR": limasterprod[i].PROD_DESC,
+            //         "PRDSERIES": limasterprod[i].PROD_SERIES
+            //     };
+            //     oReq.masterProd.push(vmasterProd);
             for (iPartial = 0; iPartial < lipartialprod.length; iPartial++) {
                 if (lipartialprod[iPartial].REF_PRODID === limasterprod[i].PRODUCT_ID) {
                     vmasterProd = {
@@ -318,26 +397,53 @@ module.exports = cds.service.impl(async function () {
                         "PRDID": lipartialprod[iPartial].PRODUCT_ID,
                         "PRDGROUP": limasterprod[i].PROD_GROUP,
                         "VCMODEL": limasterprod[i].PROD_MODEL,
-                        "PRDDESCR": lipartialprod[iPartial].PROD_DESC,
+                        "PRDDESCR": limasterprod[i].PROD_DESC,
                         "PRDSERIES": limasterprod[i].PROD_SERIES
                         // "VCSTRUCTURENODE": limasterprod[i].RESERVE_FIELD3
                     };
                     oReq.masterProd.push(vmasterProd);
                 }
             }
+            // BOM Components
+            for (iComp = 0; iComp < liComp.length; iComp++) {
+                if (liComp[iComp].PRODUCT_ID === limasterprod[i].PRODUCT_ID &&
+                    liComp[iComp].LOCATION_ID === limasterprod[i].LOCATION_ID) {
+                    vmasterProd = {
+                        "VCMODELRANGE": limasterprod[i].PROD_MDLRANGE,
+                        "PRDFAMILY": limasterprod[i].PROD_FAMILY,
+                        "PRDID": liComp[iComp].COMPONENT,
+                        "PRDGROUP": limasterprod[i].PROD_GROUP,
+                        "VCMODEL": limasterprod[i].PROD_MODEL,
+                        "PRDDESCR": limasterprod[i].PROD_DESC,
+                        "PRDSERIES": limasterprod[i].PROD_SERIES
+                        // "VCSTRUCTURENODE": limasterprod[i].RESERVE_FIELD3
+                    };
+                    oReq.masterProd.push(vmasterProd);
+                }
+            }
+
         }
+        // console.log(oReq.masterProd);
         var vTransID = new Date().getTime().toString();
         var oEntry =
         {
             "TransactionID": vTransID,
-            "RequestedAttributes": "VCMODELRANGE,PRDFAMILY,PRDID,PRDGROUP,VCMODEL,PRDDESCR",
+            "RequestedAttributes": "VCMODELRANGE,PRDFAMILY,PRDID,PRDGROUP,VCMODEL,PRDDESCR,PRDSERIES",
             "DoCommit": true,
             "NavVCPPRODUCT": oReq.masterProd
         }
+        // req.headers['Application-Interface-Key'] = vAIRKey;
         await servicePost.tx(req).post("/VCPPRODUCTTrans", oEntry);
         var resUrl = "/GetExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
-        return await servicePost.tx(req).get(resUrl)
-        // GetExportResult
+        return await servicePost.tx(req).get(resUrl);
+        try {
+            // var vResponse = await servicePost.tx(req).get(resUrl);
+            flag = 'X';
+        }
+        catch (error) {
+
+        }
+
     });
     // Create Locations in IBP
     this.on("createIBPLocation", async (req) => {
@@ -517,17 +623,118 @@ module.exports = cds.service.impl(async function () {
     });
     // Actual Component Demand:
     this.on("createActCompDemand", async (req) => {
+        // var oReq = {
+        //     actcomp: [],
+        // },
+        //     vactcomp;
+
+        // let vFromDate = new Date();
+        // var Vnumber = 2;
+        // const lsSales = await GenF.getParameterValue(req.data.LOCATION_ID, 4);
+        // let vToDate = new Date().toISOString().split('Z')[0].split('T')[0];
+        // vFromDate.setDate(vFromDate.getDate() - (Vnumber * 7));
+        // vFromDate = vFromDate.toISOString().split('Z')[0].split('T')[0];
+        // const liactcomp = await cds.run(
+        //     `
+        //     SELECT DISTINCT "WEEK_DATE",
+        //             "LOCATION_ID",
+        //             "PRODUCT_ID",
+        //             "ACTUALCOMPONENTDEMAND",
+        //             "COMPONENT"
+        //             FROM V_IBP_LOCPRODCOMP_ACTDEMD
+        //             WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'`);
+        // //            AND PRODUCT_ID = '`+ req.data.PRODUCT_ID +
+        // // `' AND WEEK_DATE >= '2020-08-01' AND WEEK_DATE <= '2021-11-30'`);
+
+        // //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
+        // const licriticalcomp = await cds.run(
+        //     `
+        //     SELECT  "LOCATION_ID",
+        //             "PRODUCT_ID",
+        //             "ITEM_NUM",
+        //             "COMPONENT",
+        //             "CRITICALKEY"
+        //             FROM CP_CRITICAL_COMP
+        //             WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
+        //               AND PRODUCT_ID = '`+ req.data.PRODUCT_ID + `'                               
+        //               AND CRITICALKEY = '` + req.data.CRITICALKEY + `'`);
+
+        // // `' AND WEEK_DATE >= '` + req.data.FROMDATE +
+        // // `' AND WEEK_DATE <= '` + req.data.TODATE + `'`);
+        // if (req.data.CRITICALKEY === "X") {
+        //     for (i = 0; i < liactcomp.length; i++) {
+        //         for (var j = 0; j < licriticalcomp.length; j++) {
+        //             if (liactcomp[i].LOCATION_ID === licriticalcomp[j].LOCATION_ID &&
+        //                 liactcomp[i].PRODUCT_ID === licriticalcomp[j].PRODUCT_ID &&
+        //                 //liactcomp[i].ITEM_NUM === licriticalcomp[j].ITEM_NUM &&
+        //                 liactcomp[i].COMPONENT === licriticalcomp[j].COMPONENT) {
+
+        //                 var vWeekDate = new Date(liactcomp[i].WEEK_DATE).toISOString().split('Z');
+        //                 var vDemd = liactcomp[i].ACTUALCOMPONENTDEMAND.split('.');
+
+        //                 vactcomp = {
+        //                     "LOCID": liactcomp[i].LOCATION_ID,
+        //                     "PRDID": liactcomp[i].PRODUCT_ID,
+        //                     "ACTUALCOMPONENTDEMAND": vDemd[0],
+        //                     "PRDFR": liactcomp[i].COMPONENT,
+        //                     "PERIODID0_TSTAMP": vWeekDate[0]
+        //                 };
+
+        //                 oReq.actcomp.push(vactcomp);
+        //             }
+        //         }
+
+        //     }
+
+        // } else {
+
+        //     for (i = 0; i < liactcomp.length; i++) {
+
+        //         var vWeekDate = new Date(liactcomp[i].WEEK_DATE).toISOString().split('Z');
+        //         var vDemd = liactcomp[i].ACTUALCOMPONENTDEMAND.split('.');
+
+        //         vactcomp = {
+        //             "LOCID": liactcomp[i].LOCATION_ID,
+        //             "PRDID": liactcomp[i].PRODUCT_ID,
+        //             "ACTUALCOMPONENTDEMAND": vDemd[0],
+        //             "PRDFR": liactcomp[i].COMPONENT,
+        //             "PERIODID0_TSTAMP": vWeekDate[0]
+        //         };
+
+        //         oReq.actcomp.push(vactcomp);
+
+        //     }
+        // }
+        // var vTransID = new Date().getTime().toString();
+        // var oEntry =
+        // {
+        //     "Transactionid": vTransID,
+        //     "AggregationLevelFieldsString": "LOCID,PRDID,ACTUALCOMPONENTDEMAND,PERIODID0_TSTAMP,PRDFR",
+        //     "VersionID": "",
+        //     "DoCommit": true,
+        //     "ScenarioID": "",
+        //     "NavVCPQ": oReq.actcomp
+        // }
+        // await service.tx(req).post("/VCPQTrans", oEntry);
+
+        // var resUrl = "/getExportResult?P_EntityName='VCPQ'&P_TransactionID='" + vTransID + "'";
+        // var res = await service.tx(req).get(resUrl);
+        // return res[0].Value;
         var oReq = {
             actcomp: [],
         },
             vactcomp;
-
-        let vFromDate = new Date();
-        var Vnumber = 2;
+        // Fetch History period from Configuration table
         const lsSales = await GenF.getParameterValue(req.data.LOCATION_ID, 4);
+        console.log(lsSales);
+        let vFromDate = new Date();
+        console.log(vFromDate);
         let vToDate = new Date().toISOString().split('Z')[0].split('T')[0];
-        vFromDate.setDate(vFromDate.getDate() - (Vnumber * 7));
+        console.log(vToDate);
+        vFromDate.setDate(vFromDate.getDate() - (parseInt(lsSales) * 7));
+        console.log(vFromDate);
         vFromDate = vFromDate.toISOString().split('Z')[0].split('T')[0];
+        console.log(vFromDate);
         const liactcomp = await cds.run(
             `
             SELECT DISTINCT "WEEK_DATE",
@@ -536,22 +743,20 @@ module.exports = cds.service.impl(async function () {
                     "ACTUALCOMPONENTDEMAND",
                     "COMPONENT"
                     FROM V_IBP_LOCPRODCOMP_ACTDEMD
-                    WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'`);
-        //            AND PRODUCT_ID = '`+ req.data.PRODUCT_ID +
-        // `' AND WEEK_DATE >= '2020-08-01' AND WEEK_DATE <= '2021-11-30'`);
+                    WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
+                       AND PRODUCT_ID = '`+ req.data.PRODUCT_ID + `'`);
 
-        //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
         const licriticalcomp = await cds.run(
             `
-            SELECT  "LOCATION_ID",
-                    "PRODUCT_ID",
-                    "ITEM_NUM",
-                    "COMPONENT",
-                    "CRITICALKEY"
-                    FROM CP_CRITICAL_COMP
-                    WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
-                      AND PRODUCT_ID = '`+ req.data.PRODUCT_ID + `'                               
-                      AND CRITICALKEY = '` + req.data.CRITICALKEY + `'`);
+                SELECT  "LOCATION_ID",
+                        "PRODUCT_ID",
+                        "ITEM_NUM",
+                        "COMPONENT",
+                        "CRITICALKEY"
+                        FROM CP_CRITICAL_COMP
+                        WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
+                          AND PRODUCT_ID = '`+ req.data.PRODUCT_ID + `'                               
+                          AND CRITICALKEY = '` + req.data.CRITICALKEY + `'`);
 
         // `' AND WEEK_DATE >= '` + req.data.FROMDATE +
         // `' AND WEEK_DATE <= '` + req.data.TODATE + `'`);
@@ -599,71 +804,106 @@ module.exports = cds.service.impl(async function () {
 
             }
         }
-        var vTransID = new Date().getTime().toString();
-        var oEntry =
-        {
-            "Transactionid": vTransID,
-            "AggregationLevelFieldsString": "LOCID,PRDID,ACTUALCOMPONENTDEMAND,PERIODID0_TSTAMP,PRDFR",
-            "VersionID": "",
-            "DoCommit": true,
-            "ScenarioID": "",
-            "NavSBPVCP": oReq.actcomp
-        }
-        await service.tx(req).post("/SBPVCPTrans", oEntry);
+        if (oReq.actcomp) {
+            var vTransID = new Date().getTime().toString();
+            var oEntry =
+            {
+                "Transactionid": vTransID,
+                "AggregationLevelFieldsString": "LOCID,PRDID,ACTUALCOMPONENTDEMAND,PERIODID0_TSTAMP,PRDFR",
+                "VersionID": "",
+                "DoCommit": true,
+                "ScenarioID": "",
+                "NavSBPVCP": oReq.actcomp
+            }
+            // req.headers['Application-Interface-Key'] = vAIRKey;
+            await service.tx(req).post("/SBPVCPTrans", oEntry);
 
-        var resUrl = "/getExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
-        var res = await service.tx(req).get(resUrl);
-        return res[0].Value;
+            var resUrl = "/getExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
+            try {
+                return await service.tx(req).get(resUrl);
+                flag = 'X';
+            }
+            catch {
+
+            }
+        }
     });
     // Actual Demand:
     this.on("createIBPSalesTrans", async (req) => {
-        var oReq = {
-            sales: [],
-        },
-            vsales;
-        const lisales = await cds.run(
-            `
-            SELECT  "WEEK_DATE",
-                    "LOCATION_ID",
-                    "PRODUCT_ID",
-                    "ORD_QTY",
-                    "CUSTOMER_GROUP"
-                    FROM V_IBP_SALESH_ACTDEMD
-                    WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
-            `);
 
-        //            AND PRODUCT_ID = '`+ req.data.PRODUCT_ID +
-        // `' AND CUSTOMER_GROUP = '` + req.data.CUSTOMER_GROUP +`'
-
-        //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
-        for (i = 0; i < lisales.length; i++) {
-            var vWeekDate = new Date(lisales[i].WEEK_DATE).toISOString().split('Z');
-            var vDemd = lisales[i].ORD_QTY.split('.');
-            vsales = {
-                "LOCID": lisales[i].LOCATION_ID,
-                "PRDID": lisales[i].PRODUCT_ID,
-                "CUSTID": "NULL",//lisales[i].CUSTOMER_GROUP,
-                "ACTUALDEMAND": vDemd[0],
-                "PERIODID0_TSTAMP": vWeekDate[0]
-            };
-            oReq.sales.push(vsales);
-
-        }
+        let oReq = await obibpfucntions.exportSalesCfg(req);
         var vTransID = new Date().getTime().toString();
         var oEntry =
         {
             "Transactionid": vTransID,
-            "AggregationLevelFieldsString": "LOCID,PRDID,CUSTID,ACTUALDEMAND,PERIODID0_TSTAMP",
+            "AggregationLevelFieldsString": "LOCID,PRDID,VCCHAR,VCCHARVALUE,VCCLASS,ACTUALDEMANDVC,CUSTID,PERIODID0_TSTAMP",
             "VersionID": "",
             "DoCommit": true,
             "ScenarioID": "",
             "NavSBPVCP": oReq.sales
         }
+        // req.headers['Application-Interface-Key'] = vAIRKey;
         await service.tx(req).post("/SBPVCPTrans", oEntry);
 
         var resUrl = "/getExportResult?P_TransactionID='" + vTransID + "'";
-        var res = await service.tx(req).get(resUrl);
-        return res[0].Value;
+        try {
+            return await service.tx(req).get(resUrl);
+            flag = 'X';
+        }
+        catch {
+
+        }
+
+
+
+     /////////////////
+        // var oReq = {
+        //     sales: [],
+        // },
+        //     vsales;
+        // const lisales = await cds.run(
+        //     `
+        //     SELECT  "WEEK_DATE",
+        //             "LOCATION_ID",
+        //             "PRODUCT_ID",
+        //             "ORD_QTY",
+        //             "CUSTOMER_GROUP"
+        //             FROM V_IBP_SALESH_ACTDEMD
+        //             WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
+        //     `);
+
+        // //            AND PRODUCT_ID = '`+ req.data.PRODUCT_ID +
+        // // `' AND CUSTOMER_GROUP = '` + req.data.CUSTOMER_GROUP +`'
+
+        // //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
+        // for (i = 0; i < lisales.length; i++) {
+        //     var vWeekDate = new Date(lisales[i].WEEK_DATE).toISOString().split('Z');
+        //     var vDemd = lisales[i].ORD_QTY.split('.');
+        //     vsales = {
+        //         "LOCID": lisales[i].LOCATION_ID,
+        //         "PRDID": lisales[i].PRODUCT_ID,
+        //         "CUSTID": "NULL",//lisales[i].CUSTOMER_GROUP,
+        //         "ACTUALDEMAND": vDemd[0],
+        //         "PERIODID0_TSTAMP": vWeekDate[0]
+        //     };
+        //     oReq.sales.push(vsales);
+
+        // }
+        // var vTransID = new Date().getTime().toString();
+        // var oEntry =
+        // {
+        //     "Transactionid": vTransID,
+        //     "AggregationLevelFieldsString": "LOCID,PRDID,CUSTID,ACTUALDEMAND,PERIODID0_TSTAMP",
+        //     "VersionID": "",
+        //     "DoCommit": true,
+        //     "ScenarioID": "",
+        //     "NavVCPQ": oReq.sales
+        // }
+        // await service.tx(req).post("/VCPQTrans", oEntry);
+
+        // var resUrl = "/getExportResult?P_TransactionID='" + vTransID + "'";
+        // var res = await service.tx(req).get(resUrl);
+        // return res[0].Value;
     });
     // Actual Demand at VC
     this.on("createIBPSalesConfig", async (req) => {
@@ -928,40 +1168,43 @@ module.exports = cds.service.impl(async function () {
          A.PROD_MODEL,
          A.PROD_MDLRANGE,
          A.PROD_SERIES,
-         A.RESERVE_FIELD3
+         A.RESERVE_FIELD3         
            FROM "CP_PRODUCT" AS A
            INNER JOIN "CP_LOCATION_PRODUCT" AS B
-           ON A.PRODUCT_ID = B.PRODUCT_ID 
+           ON A.PRODUCT_ID = B.PRODUCT_ID            
            WHERE B.LOCATION_ID = '`+ req.data.LOCATION_ID + `'`);
 
         const lipartialprod = await cds.run(
             `
          SELECT PRODUCT_ID,
                 LOCATION_ID,
+                PROD_DESC,
                 REF_PRODID
            FROM "CP_PARTIALPROD_INTRO"
            WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
            ORDER BY REF_PRODID`);
 
         const liComp = await cds.run(
-            `SELECT PRODUCT_ID,
-                    LOCATION_ID,
-                    COMPONENT
-            FROM "CP_BOMHEADER"
-            WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
-            ORDER BY COMPONENT`);
+            `
+         SELECT DISTINCT PRODUCT_ID,
+                LOCATION_ID,
+                COMPONENT
+           FROM "CP_BOMHEADER"
+           WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
+           ORDER BY COMPONENT`);
+
         //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
         for (i = 0; i < limasterprod.length; i++) {
-            // vmasterProd = {
-            //     "VCMODELRANGE": limasterprod[i].PROD_MDLRANGE,
-            //     "PRDFAMILY": limasterprod[i].PROD_FAMILY,
-            //     "PRDID": limasterprod[i].PRODUCT_ID,
-            //     "PRDGROUP": limasterprod[i].PROD_GROUP,
-            //     "VCMODEL": limasterprod[i].PROD_MODEL,
-            //     "PRDDESCR": limasterprod[i].PROD_DESC,
-            //     "PRDSERIES": limasterprod[i].PROD_SERIES
-            // };
-            // oReq.masterProd.push(vmasterProd);
+            //     vmasterProd = {
+            //         "VCMODELRANGE": limasterprod[i].PROD_MDLRANGE,
+            //         "PRDFAMILY": limasterprod[i].PROD_FAMILY,
+            //         "PRDID": limasterprod[i].PRODUCT_ID,
+            //         "PRDGROUP": limasterprod[i].PROD_GROUP,
+            //         "VCMODEL": limasterprod[i].PROD_MODEL,
+            //         "PRDDESCR": limasterprod[i].PROD_DESC,
+            //         "PRDSERIES": limasterprod[i].PROD_SERIES
+            //     };
+            //     oReq.masterProd.push(vmasterProd);
             for (iPartial = 0; iPartial < lipartialprod.length; iPartial++) {
                 if (lipartialprod[iPartial].REF_PRODID === limasterprod[i].PRODUCT_ID) {
                     vmasterProd = {
@@ -970,13 +1213,14 @@ module.exports = cds.service.impl(async function () {
                         "PRDID": lipartialprod[iPartial].PRODUCT_ID,
                         "PRDGROUP": limasterprod[i].PROD_GROUP,
                         "VCMODEL": limasterprod[i].PROD_MODEL,
-                        "PRDDESCR": limasterprod[i].PROD_DESC,
+                        "PRDDESCR": lipartialprod[iPartial].PROD_DESC,
                         "PRDSERIES": limasterprod[i].PROD_SERIES
                         // "VCSTRUCTURENODE": limasterprod[i].RESERVE_FIELD3
                     };
                     oReq.masterProd.push(vmasterProd);
                 }
             }
+            // BOM Components
             for (iComp = 0; iComp < liComp.length; iComp++) {
                 if (liComp[iComp].PRODUCT_ID === limasterprod[i].PRODUCT_ID &&
                     liComp[iComp].LOCATION_ID === limasterprod[i].LOCATION_ID) {
@@ -988,11 +1232,14 @@ module.exports = cds.service.impl(async function () {
                         "VCMODEL": limasterprod[i].PROD_MODEL,
                         "PRDDESCR": limasterprod[i].PROD_DESC,
                         "PRDSERIES": limasterprod[i].PROD_SERIES
+                        // "VCSTRUCTURENODE": limasterprod[i].RESERVE_FIELD3
                     };
                     oReq.masterProd.push(vmasterProd);
                 }
             }
+
         }
+        console.log(oReq.masterProd);
         var vTransID = new Date().getTime().toString();
         var oEntry =
         {
@@ -1012,6 +1259,7 @@ module.exports = cds.service.impl(async function () {
         catch (error) {
 
         }
+        // return "Success";
         if (flag === 'X') {
             let dataObj = {};
             dataObj["success"] = true;
@@ -1068,6 +1316,7 @@ module.exports = cds.service.impl(async function () {
                 });
             }
         }
+
         // GetExportResult
     });
     // Create Locations in IBP
@@ -1179,16 +1428,13 @@ module.exports = cds.service.impl(async function () {
             vNewLocProd, flag = '';
         const lilocprod = await cds.run(
             ` SELECT
-                    CP_LOCATION_PRODUCT."LOCATION_ID",
-                    CP_LOCATION_PRODUCT."PRODUCT_ID",
-                    CP_FACTORY_SALESLOC."FACTORY_LOC",
-                    CP_LOCATION_PRODUCT."LOTSIZE_KEY",
-                    CP_LOCATION_PRODUCT."LOT_SIZE",
-                    CP_LOCATION_PRODUCT."PROCUREMENT_TYPE",
-                    CP_LOCATION_PRODUCT."PLANNING_STRATEGY"
+                    "LOCATION_ID",
+                    "PRODUCT_ID",
+                    "LOTSIZE_KEY",
+                    "LOT_SIZE",
+                    "PROCUREMENT_TYPE",
+                    "PLANNING_STRATEGY"
                   FROM CP_LOCATION_PRODUCT
-                  INNER JOIN CP_FACTORY_SALESLOC
-                  ON CP_LOCATION_PRODUCT."LOCATION_ID" = CP_FACTORY_SALESLOC."LOCATION_ID"
                   WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'`);
 
         //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
@@ -1198,7 +1444,6 @@ module.exports = cds.service.impl(async function () {
                 "PRDID": lilocprod[i].PRODUCT_ID,
                 "PLANNINGSTRGY": lilocprod[i].PLANNING_STRATEGY,
                 "PLUNITID": "TEST",
-                "VCMANUFACTURINGLOC": lilocprod[i].FACTORY_LOC,
                 "PROCUREMENTTYPE": lilocprod[i].PROCUREMENT_TYPE,
                 "VCLOTSIZE": lilocprod[i].LOT_SIZE.toString()
             };
@@ -1209,7 +1454,7 @@ module.exports = cds.service.impl(async function () {
         var oEntry =
         {
             "TransactionID": vTransID,
-            "RequestedAttributes": "LOCID,PRDID,PLANNINGSTRGY,PLUNITID,VCMANUFACTURINGLOC,PROCUREMENTTYPE,VCLOTSIZE",
+            "RequestedAttributes": "LOCID,PRDID,PLANNINGSTRGY,PLUNITID,PROCUREMENTTYPE,VCLOTSIZE",
             "DoCommit": true,
             "NavVCPLOCATIONPRODUCT": oReq.newLocProd
         }
@@ -1436,6 +1681,7 @@ module.exports = cds.service.impl(async function () {
         catch (error) {
 
         }
+
         if (flag === 'X') {
             let dataObj = {};
             dataObj["success"] = true;
@@ -1503,7 +1749,7 @@ module.exports = cds.service.impl(async function () {
         await GenF.logMessage(req, `Started exporting Sales History and Configurations`);
         const lisales = await cds.run(
             `
-                SELECT  "WEEK_DATE",
+                SELECT DISTINCT "WEEK_DATE",
                         "LOCATION_ID",
                         "PRODUCT_ID",
                         "ORD_QTY",
@@ -1512,10 +1758,6 @@ module.exports = cds.service.impl(async function () {
                         WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
                            AND PRODUCT_ID = '`+ req.data.PRODUCT_ID +
             `'`);
-        // `' AND CUSTOMER_GROUP = '` + req.data.CUSTOMER_GROUP +
-        // `'`);
-
-        //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
         for (i = 0; i < lisales.length; i++) {
             var vWeekDate = new Date(lisales[i].WEEK_DATE).toISOString().split('Z');
             var vDemd = lisales[i].ORD_QTY.split('.');
@@ -1540,17 +1782,16 @@ module.exports = cds.service.impl(async function () {
             "NavSBPVCP": oReq.sales
         }
         // req.headers['Application-Interface-Key'] = vAIRKey;
-        
+
         // var resUrl = "/SBPVCPMessage?$select=Transactionid,ExceptionId,MsgText&$filter=Transactionid eq '" + vTransID + "'";
-        var resUrl = "/getExportResult?P_TransactionID='" + vTransID + "'";
+        // var resUrl = "/getExportResult?P_TransactionID='" + vTransID + "'";
         try {
             await service.tx(req).post("/SBPVCPTrans", oEntry);
-
             // return await service.tx(req).get(resUrl);
             flag = 'S';
         }
         catch {
-
+            console.log("Unable to send Actual demand");
         }
         // Once Sales History is successfull , send sales Config
         if (flag === 'S') {
@@ -1566,16 +1807,15 @@ module.exports = cds.service.impl(async function () {
                 "NavSBPVCP": oReq.sales
             }
             // req.headers['Application-Interface-Key'] = vAIRKey;
-            
-            var resUrl = "/getExportResult?P_TransactionID='" + vTransID + "'";
             try {
                 await service.tx(req).post("/SBPVCPTrans", oEntryCfg);
                 // return await service.tx(req).get(resUrl);
                 flag = 'X';
             }
             catch {
-
+                console.log("Unable to send Actual demand at VC");
             }
+
         }
         if (flag === 'X') {
             let dataObj = {};
@@ -1655,7 +1895,7 @@ module.exports = cds.service.impl(async function () {
         console.log(vFromDate);
         const liactcomp = await cds.run(
             `
-            SELECT  "WEEK_DATE",
+            SELECT DISTINCT "WEEK_DATE",
                     "LOCATION_ID",
                     "PRODUCT_ID",
                     "ACTUALCOMPONENTDEMAND",
@@ -1740,7 +1980,7 @@ module.exports = cds.service.impl(async function () {
 
             var resUrl = "/getExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
             try {
-                return await service.tx(req).get(resUrl);
+             //   return await service.tx(req).get(resUrl);
                 flag = 'X';
             }
             catch {
@@ -1834,90 +2074,6 @@ module.exports = cds.service.impl(async function () {
         // GetExportResult
     });
 
-    // Actual Demand at VC
-    this.on("exportIBPSalesConfig", async (req) => {
-
-        let oReq = await obibpfucntions.exportSalesCfg(req);
-        var vTransID = new Date().getTime().toString();
-        var oEntry =
-        {
-            "Transactionid": vTransID,
-            "AggregationLevelFieldsString": "LOCID,PRDID,VCCHAR,VCCHARVALUE,VCCLASS,ACTUALDEMANDVC,CUSTID,PERIODID0_TSTAMP",
-            "VersionID": "",
-            "DoCommit": true,
-            "ScenarioID": "",
-            "NavSBPVCP": oReq.sales
-        }
-        // req.headers['Application-Interface-Key'] = vAIRKey;
-        await service.tx(req).post("/SBPVCPTrans", oEntry);
-
-        var resUrl = "/getExportResult?P_TransactionID='" + vTransID + "'";
-        try {
-            return await service.tx(req).get(resUrl);
-            flag = 'X';
-        }
-        catch {
-
-        }
-        if (flag === 'X') {
-            let dataObj = {};
-            dataObj["success"] = true;
-            dataObj["message"] = "Actual Demand at VC is successfull at " + new Date();
-
-
-            if (req.headers['x-sap-job-id'] > 0) {
-                const scheduler = getJobscheduler(req);
-
-                var updateReq = {
-                    jobId: req.headers['x-sap-job-id'],
-                    scheduleId: req.headers['x-sap-job-schedule-id'],
-                    runId: req.headers['x-sap-job-run-id'],
-                    data: dataObj
-                };
-
-                console.log("Actual Demand at VC has exported to update req", updateReq);
-
-                scheduler.updateJobRunLog(updateReq, function (err, result) {
-                    if (err) {
-                        return console.log('Error updating run log: %s', err);
-                    }
-                    //Run log updated successfully
-                    console.log("Actual Demand at VC job update results", result);
-
-                });
-            }
-            //return "Successfully imported IBP Future char.plan";
-        } else {
-            let dataObj = {};
-            dataObj["failed"] = false;
-            dataObj["message"] = "Actual Demand at VC has failed at" + new Date();
-
-
-            if (req.headers['x-sap-job-id'] > 0) {
-                const scheduler = getJobscheduler(req);
-
-                var updateReq = {
-                    jobId: req.headers['x-sap-job-id'],
-                    scheduleId: req.headers['x-sap-job-schedule-id'],
-                    runId: req.headers['x-sap-job-run-id'],
-                    data: dataObj
-                };
-
-                console.log("Actual Demand at VC job update req", updateReq);
-
-                scheduler.updateJobRunLog(updateReq, function (err, result) {
-                    if (err) {
-                        return console.log('Error updating run log: %s', err);
-                    }
-                    //Run log updated successfully
-                    console.log("Actual Demand at VC job update results", result);
-
-                });
-            }
-        }
-        // GetExportResult
-
-    });
     // Component requirement Qty
     this.on("exportComponentReq", async (req) => {
         var oReq = {
@@ -1938,8 +2094,10 @@ module.exports = cds.service.impl(async function () {
             `' AND WEEK_DATE >= '` + req.data.FROMDATE +
             `' AND WEEK_DATE <= '` + req.data.TODATE + `'
                        AND COMPCIR_QTY >= 0`);
-                       console.log(liactcompreq.length);
-                       console.log(liactcompreq);
+
+
+        console.log(liactcompreq.length);
+        console.log(liactcompreq);
 
 
         const licriticalcomp = await cds.run(
@@ -1953,8 +2111,8 @@ module.exports = cds.service.impl(async function () {
                 WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
                       AND PRODUCT_ID = '`+ req.data.PRODUCT_ID + `'                               
                       AND CRITICALKEY = '` + req.data.CRITICALKEY + `'`);
-                      console.log(licriticalcomp.length);
-                      console.log(licriticalcomp);
+        console.log(licriticalcomp.length);
+        console.log(licriticalcomp);
 
         if (req.data.CRITICALKEY === "X") {
             for (i = 0; i < liactcompreq.length; i++) {
@@ -1980,7 +2138,7 @@ module.exports = cds.service.impl(async function () {
 
             }
             console.log(oReq.actcompreq.length);
-                      console.log(oReq.actcompreq);
+            console.log(oReq.actcompreq);
 
         } else {
             for (i = 0; i < liactcompreq.length; i++) {
@@ -1997,10 +2155,10 @@ module.exports = cds.service.impl(async function () {
 
             }
             console.log(oReq.actcompreq.length);
-                      console.log(oReq.actcompreq);
+            console.log(oReq.actcompreq);
         }
 
-        if (oReq.actcomp) {
+        if (oReq.actcompreq) {
             var vTransID = new Date().getTime().toString();
             var oEntry =
             {
@@ -2116,7 +2274,7 @@ module.exports = cds.service.impl(async function () {
     //// Future Demand Qty
 
     this.on("generateFDemandQty", async (request) => {
-        var flag;
+        var flag;        
 
         await GenF.logMessage(request, `Started importing Future Demand`);
         var resUrl = "/SBPVCP?$select=PRDID,LOCID,PERIODID4_TSTAMP,TOTALDEMANDOUTPUT,UOMTOID,VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$filter=LOCID eq '" + request.data.LOCATION_ID + "' and PRDID eq '" + request.data.PRODUCT_ID + "'and UOMTOID eq 'EA'";
@@ -2222,6 +2380,20 @@ module.exports = cds.service.impl(async function () {
                                                           AND "WEEK_DATE" = '` + vWeekDate + `'`
                     );
 
+                    // let modQuery = 'INSERT INTO "CP_IBP_FCHARPLAN" VALUES (' +
+                    //     "'" + req[i].LOCID + "'" + "," +
+                    //     "'" + req[i].PRDID + "'" + "," +
+                    //     "'" + req[i].VCCLASS + "'" + "," +
+                    //     "'" + req[i].VCCHAR + "'" + "," +
+                    //     "'" + req[i].VCCHARVALUE + "'" + "," +
+                    //     "'" + req[i].VERSIONID + "'" + "," +
+                    //     "'" + vScenario + "'" + "," +
+                    //     "'" + vWeekDate + "'" + "," +
+                    //     "'" + req[i].OPTIONPERCENTAGE + "'" + "," +
+                    //     "'" + req[i].FINALDEMANDVC + "'" + ')';// + ' WITH PRIMARY KEY';  
+
+                    let manual_opt = 0.0;
+                    
                     let modQuery = 'INSERT INTO "CP_IBP_FCHARPLAN" VALUES (' +
                         "'" + req[i].LOCID + "'" + "," +
                         "'" + req[i].PRDID + "'" + "," +
@@ -2232,7 +2404,8 @@ module.exports = cds.service.impl(async function () {
                         "'" + vScenario + "'" + "," +
                         "'" + vWeekDate + "'" + "," +
                         "'" + req[i].OPTIONPERCENTAGE + "'" + "," +
-                        "'" + req[i].FINALDEMANDVC + "'" + ')';// + ' WITH PRIMARY KEY';
+                        "'" + req[i].FINALDEMANDVC + "'" + "," +
+                        "'" + manual_opt + "'" + ')';// + ' WITH PRIMARY KEY';
                     try {
                         await cds.run(modQuery);
                         flag = 'S';
@@ -2299,6 +2472,8 @@ module.exports = cds.service.impl(async function () {
         //         });
         //     }
         // }
+
+        //  return "SUCCESS";
         if (flag === 'S') {
 
 
@@ -2550,6 +2725,7 @@ module.exports = cds.service.impl(async function () {
             console.log(err);
             flag = ' ';
         }
+        // return "Success";
         if (flag === 'X') {
             let dataObj = {};
             dataObj["success"] = true;
@@ -2700,156 +2876,4 @@ module.exports = cds.service.impl(async function () {
             // return "Failed to import IBP Future char.plan";
         }
     });
-    this.on("exportMktAuth", async (req) => {
-        var oReq = {
-            mktauth: [],
-        },
-            vMktauth, vFlag = '';
-            
-        let createtAt = new Date();
-        let id = uuidv1();
-        let values = [];
-        let message = "Started exporting Market authorizations";
-        let res = req._.req.res;
-         let RequestData = req.data;
-        values.push({ id, createtAt, message, RequestData });
-        res.statusCode = 202;
-        res.send({ values });
-        const limkauth = await cds.run(
-            `
-            SELECT CP_MARKETAUTH_CFG."WEEK_DATE",
-                   CP_MARKETAUTH_CFG."LOCATION_ID",
-                   CP_MARKETAUTH_CFG."PRODUCT_ID",
-                   V_CHARVAL."CLASS_NUM",
-                   CP_MARKETAUTH_CFG."CHAR_NUM",
-                   CP_MARKETAUTH_CFG."CHARVAL_NUM",
-                   CP_MARKETAUTH_CFG."LOCATION_ID",
-                   CP_MARKETAUTH_CFG."PRODUCT_ID",
-                   CP_MARKETAUTH_CFG."OPT_PERCENT",
-                   CP_MARKETAUTH_CFG."VERSION",
-                   CP_MARKETAUTH_CFG."SCENARIO"
-                FROM CP_MARKETAUTH_CFG
-          INNER JOIN V_CHARVAL
-                  ON CP_MARKETAUTH_CFG.CHAR_NUM  = V_CHARVAL.CHAR_NUM
-                 AND CP_MARKETAUTH_CFG.CHARVAL_NUM  = V_CHARVAL.CHARVAL_NUM
-               WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
-                 AND PRODUCT_ID = '`+ req.data.PRODUCT_ID + `' 
-        `);
-        for (i = 0; i < limkauth.length; i++) {
-            let vDemd;
-            let vWeekDate = new Date(limkauth[i].WEEK_DATE).toISOString().split('Z');
-            // let vOpt = ((parseFloat(limkauth[i].OPT_PERCENT)/100)).toString();
-
-            let vOpt = limkauth[i].OPT_PERCENT.toString();
-            let vSrch = vOpt.search(".");
-            if (vSrch > 0) {
-                vDemd = vOpt.split('.')[0];
-            }
-            else {
-                vDemd = vOpt;
-            }
-            vDemd = parseInt(vDemd) / 100;
-            console.log(vWeekDate);
-            console.log(vDemd);
-            vMktauth = {
-                "LOCID": limkauth[i].LOCATION_ID,
-                "PRDID": limkauth[i].PRODUCT_ID,
-                "VCCHAR": limkauth[i].CHAR_NUM,
-                "VCCHARVALUE": limkauth[i].CHARVAL_NUM,
-                "VCCLASS": limkauth[i].CLASS_NUM,
-                "CUSTID": "NULL",//lisales[i].CUSTOMER_GROUP,
-                "PERIODID4_TSTAMP": vWeekDate[0],
-                // "VERSIONID": limkauth[i].VERSION,
-                // "SCENARIOID": limkauth[i].SCENARIO,
-                "MARKETAUTHORIZATION": vDemd.toString()
-            };
-           // console.log(vMktauth);
-            oReq.mktauth.push(vMktauth);
-
-        }
-        var vTransID = new Date().getTime().toString();
-        var oEntry =
-        {
-            "Transactionid": vTransID,
-            "AggregationLevelFieldsString": "PERIODID4_TSTAMP,VCCHAR,VCCHARVALUE,VCCLASS,CUSTID,LOCID,PRDID,MARKETAUTHORIZATION",
-            "VersionID": "",
-            "DoCommit": true,
-            "ScenarioID": "",
-            "NavSBPVCP": oReq.mktauth
-        }
-
-        console.log(limkauth.length);
-
-        try {
-            await service.tx(req).post("/SBPVCPTrans", oEntry);
-            vFlag = 'S';
-        }
-        catch (error) {
-            vFlag = '';
-        }
-        // var resUrl = "/getExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
-        // var res = await service.tx(req).get(resUrl);
-        // return res[0].Value;
-        if (vFlag === 'S') {
-
-            await GenF.logMessage(req, `Export of Market authorizations is successfull`);
-            let dataObj = {};
-            dataObj["success"] = true;
-            dataObj["message"] = "Export of Market authorizations details is successfull at " + new Date();
-
-
-            if (req.headers['x-sap-job-id'] > 0) {
-                const scheduler = getJobscheduler(req);
-
-                var updateReq = {
-                    jobId: req.headers['x-sap-job-id'],
-                    scheduleId: req.headers['x-sap-job-schedule-id'],
-                    runId: req.headers['x-sap-job-run-id'],
-                    data: dataObj
-                };
-
-                console.log("Export of Market authorizations, update req", updateReq);
-
-                scheduler.updateJobRunLog(updateReq, function (err, result) {
-                    if (err) {
-                        return console.log('Error updating run log: %s', err);
-                    }
-                    //Run log updated successfully
-                    console.log("Export of Market authorizations details, job update results", result);
-
-                });
-            }
-            //return "Successfully imported IBP Future char.plan";
-        } else {
-
-            await GenF.logMessage(req, `Export of Market authorizations failed`);
-            let dataObj = {};
-            dataObj["failed"] = false;
-            dataObj["message"] = "Export of Market authorizations details has failed at" + new Date();
-
-
-            if (req.headers['x-sap-job-id'] > 0) {
-                const scheduler = getJobscheduler(req);
-
-                var updateReq = {
-                    jobId: req.headers['x-sap-job-id'],
-                    scheduleId: req.headers['x-sap-job-schedule-id'],
-                    runId: req.headers['x-sap-job-run-id'],
-                    data: dataObj
-                };
-
-                console.log("Export of Market authorizations, job update req", updateReq);
-
-                scheduler.updateJobRunLog(updateReq, function (err, result) {
-                    if (err) {
-                        return console.log('Error updating run log: %s', err);
-                    }
-                    //Run log updated successfully
-                    console.log("Export of Market authorizations, job update results", result);
-
-                });
-            }
-        }
-    });
-
 });

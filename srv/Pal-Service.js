@@ -41,6 +41,10 @@ const varmaMethods = require('./varma.js');
 const rdtMethods = require('./rdt-functions.js');
 // End of RDT functions
 
+// Begin of RDT Functions
+const ahcMethods = require('./ahc.js');
+// End of RDT functions
+
 const JobSchedulerClient = require("@sap/jobs-client");
 const xsenv = require("@sap/xsenv");
 
@@ -78,8 +82,13 @@ module.exports = srv => {
    srv.on ('CREATE', 'varmaModels',    varmaMethods._genVarmaModels)
    srv.on ('CREATE', 'varmaPredictions', varmaMethods._runVarmaPredictions)
 
+   srv.on('CREATE', 'generateAhcClusters', ahcMethods._runAhcClusters)
+
+   srv.on ('CREATE', 'generateClusters',    _generateClusters)
+
    srv.on ('CREATE', 'generateRegModels',    _generateRegModels)
    srv.on ('CREATE', 'generatePredictions',  _generatePredictions)
+
 
     srv.on ('testCorrelation',    async req => {
  
@@ -111,6 +120,9 @@ module.exports = srv => {
         return (await _genClusterInputs(req,false));
     })
 
+    srv.on ('genClusters',    async req => {
+        return (await _generateClusters(req,false));
+    })
 
     srv.on ('fgModels',    async req => {
         return (await _generateRegModels(req,true));   
@@ -129,6 +141,10 @@ module.exports = srv => {
 
     srv.on ('fgenClusterInputs',    async req => {
         return (await _genClusterInputs(req,true));
+    })
+
+    srv.on ('fgenClusters',    async req => {
+        return (await _generateClusters(req,true));
     })
 
 
@@ -2761,11 +2777,17 @@ async function _genClusterInputs(req,isGet) {
                 ' WHERE PRODUCT_ID = ' + "'" + req.data.Product  + "'" +
                 ' AND LOCATION_ID = ' + "'" + req.data.Location + "'";
 
-    // console.log(" _genClusterInputs sqlSTr : ", sqlStr);
+    console.log(" _genClusterInputs sqlSTr : ", sqlStr);
     let sqlClusterResults = await cds.run(sqlStr);
     // console.log(" _genClusterInputs sqlClusterResults : ", sqlClusterResults);
     let numIds = sqlClusterResults.length;
     let tableObj = [];
+
+    // Limit Number of Characters to MAX_CLUSTER_CHARS
+    // if(numIds > MAX_CLUSTER_CHARS)
+    // {
+    //     numIds =  MAX_CLUSTER_CHARS;
+    // }
 
     for (let clusterIdx = 0; clusterIdx < numIds; clusterIdx ++)
     {
@@ -2866,3 +2888,472 @@ async function _genClusterInputs(req,isGet) {
 
 
 }
+
+async function _getRuleListTypeForClusters(vcRulesList)
+{
+
+
+    var sqlStr ="";
+    var ruleListObj = [];
+    for (var i = 0; i < vcRulesList.length; i++)
+    {
+
+        results = [];
+
+        if (vcRulesList[i].override == false)
+        {
+
+            sqlStr = 'SELECT * FROM "CP_PAL_PROFILE_LOC_PROD"' +
+                        ' WHERE "PRODUCT_ID" = ' + "'" + vcRulesList[i].Product + "'" + 
+                        ' AND "LOCATION_ID" = ' + "'" + vcRulesList[i].Location + "'" ;
+            // console.log('sqlStr: ', sqlStr);            
+
+            results = await cds.run(sqlStr);
+
+
+            let profileID = 0;
+            if (results.length > 0)
+            {
+                profileID = results[0].PROFILE;
+                results = [];
+                sqlStr = 'SELECT * FROM "CP_PAL_PROFILEMETH_PARA"' +
+                    ' WHERE "PROFILE" = ' + "'" + profileID + "'";
+
+                // console.log('sqlStr: ', sqlStr);            
+
+                results = await cds.run(sqlStr);
+
+                if (results.length > 0)
+                {
+                    ruleListObj.push({"Location":vcRulesList[i].Location, 
+                                    "Product":vcRulesList[i].Product, 
+                                    // "GroupID":vcRulesList[i].GroupID, 
+                                    "profileID":profileID, 
+                                    "override":vcRulesList[i].override});
+                }
+
+            }
+            else
+            {
+                sqlStr = 'SELECT * FROM "CP_PAL_PROFILEMETH_PARA"' +
+                ' WHERE "PROFILE" = ' + "'" + vcRulesList[i].profile + "'";
+                // console.log('sqlStr: ', sqlStr);            
+
+                results = await cds.run(sqlStr);
+
+                if (results.length > 0)
+                {
+                    ruleListObj.push({"Location":vcRulesList[i].Location, 
+                                    "Product":vcRulesList[i].Product, 
+                                    // "GroupID":vcRulesList[i].GroupID,
+                                    "profileID":results[0].PROFILE, 
+                                    "override":vcRulesList[i].override});
+                }
+            }
+        }
+        else
+        {
+            sqlStr = 'SELECT * FROM "CP_PAL_PROFILEMETH_PARA"' +
+                    ' WHERE "PROFILE" = ' + "'" + vcRulesList[i].profile + "'";
+
+            results = await cds.run(sqlStr);
+
+            if (results.length > 0)
+            {
+                ruleListObj.push({"Location":vcRulesList[i].Location, 
+                                "Product":vcRulesList[i].Product, 
+                                // "GroupID":vcRulesList[i].GroupID,
+                                "profileID":results[0].PROFILE, 
+                                "override":vcRulesList[i].override});
+            }
+        }
+
+    }
+
+
+    return ruleListObj;
+
+}
+
+async function _getParamsObjForClusters(vcRulesList)
+{
+
+    var sqlStr = "";
+    var results= [];
+    var paramsObj = [];
+    var method = 0;
+    for (var i = 0; i < vcRulesList.length; i++)
+    {
+
+        if (vcRulesList[i].override == false)
+        {
+
+            sqlStr = 'SELECT * FROM "CP_PAL_PROFILE_LOC_PROD"' +
+                            ' WHERE "PRODUCT_ID" = ' + "'" + vcRulesList[i].Product + "'" + 
+                            ' AND "LOCATION_ID" = ' + "'" + vcRulesList[i].Location + "'";
+
+            results = await cds.run(sqlStr);
+            
+            let profileID = 0;
+            if (results.length > 0)
+            {
+                profileID = results[0].PROFILE;
+                results = [];
+
+                sqlStr = 'SELECT * FROM "CP_PAL_PROFILEMETH_PARA"' +
+                            ' WHERE "PROFILE" = ' + "'" + profileID + "'"; 
+
+                results = await cds.run(sqlStr);
+
+            }
+            else
+            {
+                sqlStr = 'SELECT * FROM "CP_PAL_PROFILEMETH_PARA"' +
+                    ' WHERE "PROFILE" = ' + "'" + vcRulesList[i].profileID + "'"; 
+
+                results = await cds.run(sqlStr);
+            }
+        }
+        else
+        {
+            sqlStr = 'SELECT * FROM "CP_PAL_PROFILEMETH_PARA"' +
+                        ' WHERE "PROFILE" = ' + "'" + vcRulesList[i].profileID + "'"; 
+
+            results = await cds.run(sqlStr);
+
+        }
+
+        let palGroupId =  vcRulesList[i].profileID + '#' + vcRulesList[i].Location + '#' + vcRulesList[i].Product;
+
+
+        // console.log(" palGroupId ", palGroupId);
+        for (let index=0; index<results.length; index++) 
+        {
+            paramsObj.push({"groupId":palGroupId, 
+                            "paramName":results[index].PARA_NAME, 
+                            "intVal":results[index].INTVAL,
+                            "doubleVal": results[index].DOUBLEVAL, 
+                            "strVal" : results[index].STRVAL});
+
+        }
+    }
+    return paramsObj;
+}
+
+async function _getDataObjForClusters(vcRulesList) {
+
+    var sqlStr = "";
+    var results= [];
+    var dataObj = [];	
+
+    for (var i = 0; i < vcRulesList.length; i++)
+    {
+        sqlStr = 'SELECT "UNIQUE_ID", "C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9", "C10", "C11", "C12" FROM "CP_CLUSTER_DATA" WHERE "PRODUCT_ID" =' +
+                "'" +  vcRulesList[i].Product + "'" +  
+                ' AND "LOCATION_ID" =' + "'" +   vcRulesList[i].Location + "'";// +
+                // ' AND "UNIQUE_ID" =' + "'" +   vcRulesList[i].GroupID + "'";
+
+        results = await cds.run(sqlStr);
+
+        let ID, att1, att2, att3, att4, att5, att6, att7, att8, att9, att10, att11, att12;
+        for (let index=0; index<results.length; index++) 
+        {
+            ID = results[index].UNIQUE_ID;
+            att1 = results[index].C1;
+            att2 = results[index].C2;
+            att3 = results[index].C3;
+            att4 = results[index].C4;
+            att5 = results[index].C5;
+            att6 = results[index].C6;
+            att7 = results[index].C7;
+            att8 = results[index].C8;
+            att9 = results[index].C9;
+            att10 = results[index].C10;
+            att11 = results[index].C11;
+            att12 = results[index].C12;
+
+            let palGroupId =  vcRulesList[i].profileID + '#' + vcRulesList[i].Location + '#' + vcRulesList[i].Product;
+
+            dataObj.push({"groupId":palGroupId,"ID": ID, "att1":att1, "att2":att2,"att3":att3,"att4":att4,"att5":att5,"att6":att6,"att7":att7,"att8":att8,"att9":att9,"att10":att10,"att11":att11,"att12":att12});
+                
+        }
+    }
+
+    // console.log("_getDataObjForClusters", dataObj);
+    return dataObj;
+   
+}
+
+
+async function _postClustersRequest(req,url,paramsObj,dataObj,vcRuleListObj)
+{
+    var request = require('request');
+    var options;
+    let username = "SBPTECHTEAM";
+    let password = "Sbpcorp@22";
+    var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
+
+    // console.log("_postClustersRequest paramsObj", paramsObj);
+    // console.log("_postClustersRequest dataObj", dataObj);
+
+
+    // console.log("_postClustersRequest paramsObj", paramsObj, "dataObj", dataObj);
+    options = {
+        'method': 'POST',
+        'url': url,
+        'headers': {
+            'Authorization' : auth,
+            'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+        "Product": vcRuleListObj[0].Product,
+        "Location": vcRuleListObj[0].Location,
+        "clusterParameters": paramsObj,
+        "clusterData": dataObj
+    })
+
+    };
+
+    
+    await request(options, async function (error, response) {
+        console.log('statusCode:', response.statusCode); // Print the response status code if a response was received
+        if (error) {
+            let errObj = {};
+            errObj["success"] = false;
+            errObj["message"] = "Generate Cluster Job Failed StatusCode : ", response.statusCode, " ERROR : " + error + " AT " + new Date();
+
+
+            if (req.headers['x-sap-job-id'] > 0)
+            {
+                const scheduler = getJobscheduler(req);
+
+                var updateReq = {
+                    jobId: req.headers['x-sap-job-id'],
+                    scheduleId: req.headers['x-sap-job-schedule-id'],
+                    runId: req.headers['x-sap-job-run-id'],
+                    data : errObj
+                    };
+
+
+                scheduler.updateJobRunLog(updateReq, function(err, result) {
+                if (err) {
+                    return console.log('Error updating run log: %s', err);
+                }
+
+                });
+            }
+
+            throw new Error(error);
+        }
+
+        if (response.statusCode == 200)
+        {
+            let responseData = JSON.parse(response.body);
+            console.log("Cluster responseData", responseData);
+        }
+        else
+        {
+            console.error('_postClusterRequest - error:', error); // Print the error if one occurred
+
+            let errorObj = {};
+            errorObj["success"] = false;
+ 
+            errorObj["message"] = 'ERROR Generate Clusters Response StatusCode : ' + response.statusCode + ' AT ' + new Date() +
+                                     '\n Response Details :' + 
+                                     '\n Location : ' + vcRuleListObj[0].Location +
+                                     '\n Product : ' + vcRuleListObj[0].Product +
+                                     '\n Models generation Response : ' + JSON.parse(response.body);
+
+            if (req.headers['x-sap-job-id'] > 0)
+            {
+                const scheduler = getJobscheduler(req);
+
+                var updateReq = {
+                    jobId: req.headers['x-sap-job-id'],
+                    scheduleId: req.headers['x-sap-job-schedule-id'],
+                    runId: req.headers['x-sap-job-run-id'],
+                    data : errorObj
+                    };
+
+                scheduler.updateJobRunLog(updateReq, function(err, result) {
+                if (err) {
+                    return console.log('Error updating run log: %s', err);
+                }
+
+
+                });
+            }
+        }
+    });
+}
+
+async function _generateClusters (req,isGet) {
+    var vcRulesListReq = {};
+    if (isGet == true)
+    {
+        vcRulesListReq = JSON.parse(req.data.vcRulesList);
+    }
+    else
+    {
+        vcRulesListReq = req.data.vcRulesList;
+    }
+ 
+     let createtAt = new Date();
+     let id = uuidv1();
+     let values = [];	
+     let message = "Request for CLuesters generation Queued Sucessfully";
+ 
+     values.push({id, createtAt, message, vcRulesListReq});    
+ 
+     if (isGet == true)
+     {
+         req.reply({values});
+         // req.reply();
+     }
+     else
+     {
+         let res = req._.req.res;
+         res.statusCode = 202;
+         res.send({values});
+     }
+ 
+     var url;
+ 
+     var baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+    //  var baseUrl = 'http' + '://' + req.headers.host;
+ 
+ 
+     var sqlStr = "";
+     var results= [];
+     var vcRulesList = [];
+     if ( (vcRulesListReq.length == 1) &&
+           ( (vcRulesListReq[0].Product == "ALL") && 
+           (vcRulesListReq[0].Location == "ALL") ) ||
+ 
+           ( (vcRulesListReq[0].Product == "ALL") && 
+             (vcRulesListReq[0].Location != "ALL") ) ||
+ 
+           ( (vcRulesListReq[0].Product != "ALL") && 
+             (vcRulesListReq[0].Location == "ALL") )  )
+    {
+ 
+        if ( (vcRulesListReq[0].Location != "ALL") &&
+             (vcRulesListReq[0].Product == "ALL") )
+        {
+            // sqlStr = 'SELECT DISTINCT "LOCATION_ID", "PRODUCT_ID", "UNIQUE_ID"  FROM "CP_CLUSTER_DATA"' + 
+            //          ' WHERE "LOCATION_ID" =' + "'" +   vcRulesListReq[0].Location + "'" +
+            //          ' GROUP BY "LOCATION_ID", "PRODUCT_ID", "UNIQUE_ID" ';
+            sqlStr = 'SELECT DISTINCT "LOCATION_ID", "PRODUCT_ID" FROM "CP_CLUSTER_DATA"' + 
+                        ' WHERE "LOCATION_ID" =' + "'" +   vcRulesListReq[0].Location + "'" +
+                        ' GROUP BY "LOCATION_ID", "PRODUCT_ID"';
+        }
+        else if ( (vcRulesListReq[0].Product != "ALL") &&
+                  (vcRulesListReq[0].Location == "ALL") )
+        {
+            // sqlStr = 'SELECT DISTINCT "LOCATION_ID", "PRODUCT_ID", "UNIQUE_ID"  FROM "CP_CLUSTER_DATA"' + 
+            //         ' WHERE "PRODUCT_ID" =' + "'" +   vcRulesListReq[0].Product + "'" +
+            //         ' GROUP BY "LOCATION_ID", "PRODUCT_ID", "UNIQUE_ID" '; LUSTER_DATA"' + 
+                    ' WHERE "PRODUCT_ID" =' + "'" +   vcRulesListReq[0].Product + "'" +
+                    ' GROUP BY "LOCATION_ID", "PRODUCT_ID"';
+        }
+        else
+        {
+            // sqlStr = 'SELECT DISTINCT "LOCATION_ID", "PRODUCT_ID", "UNIQUE_ID"  FROM "CP_CLUSTER_DATA"' + 
+            //     ' GROUP BY "LOCATION_ID", "PRODUCT_ID", "UNIQUE_ID" ';
+            sqlStr = 'SELECT DISTINCT "LOCATION_ID", "PRODUCT_ID" FROM "CP_CLUSTER_DATA"' + 
+                ' GROUP BY "LOCATION_ID", "PRODUCT_ID"';
+        }
+ 
+ 
+        //  console.log("_generateClusters sqlStr", sqlStr);
+         results = await cds.run(sqlStr);
+         // console.log('_generateRegModels vcRulesList sqlStr ', sqlStr );
+         // console.log('_generateRegModels vcRulesList sqlStr results', results );
+ 
+ 
+         for (let index=0; index<results.length; index++) 
+         {
+             
+             let Location = results[index].LOCATION_ID;
+             let Product = results[index].PRODUCT_ID;
+            //  let GroupID = results[index].UNIQUE_ID;
+             let profile = vcRulesListReq[0].profile;
+             let override = vcRulesListReq[0].override;
+             vcRulesList.push({profile,override,Location,Product});
+ 
+         }
+ 
+     }
+     else
+     {
+         for (var i = 0; i < vcRulesListReq.length; i++)
+         {
+            // sqlStr = 'SELECT DISTINCT "LOCATION_ID", "PRODUCT_ID", "UNIQUE_ID"  FROM "CP_CLUSTER_DATA"' + 
+            //             ' WHERE "PRODUCT_ID" =' + "'" +   vcRulesListReq[i].Product + "'" +
+            //             ' AND "LOCATION_ID" =' + "'" +   vcRulesListReq[i].Location + "'" + 
+            //             ' GROUP BY "LOCATION_ID", "PRODUCT_ID", "UNIQUE_ID" ';
+
+            sqlStr = 'SELECT DISTINCT "LOCATION_ID", "PRODUCT_ID" FROM "CP_CLUSTER_DATA"' + 
+                        ' WHERE "PRODUCT_ID" =' + "'" +   vcRulesListReq[i].Product + "'" +
+                        ' AND "LOCATION_ID" =' + "'" +   vcRulesListReq[i].Location + "'" + 
+                        ' GROUP BY "LOCATION_ID", "PRODUCT_ID"';
+            // console.log("_generateClusters sqlStr", sqlStr);
+
+             results = await cds.run(sqlStr);
+             // console.log('_generateRegModels vcRulesList ELSE sqlStr ', sqlStr, 'index = ', i );
+             // console.log('_generateRegModels vcRulesList ELSE sqlStr results', results );
+     
+             if (results.length > 0)
+             {  for (let index=0; index<results.length; index++) 
+                {
+                    let Location = results[index].LOCATION_ID;
+                    let Product = results[index].PRODUCT_ID;
+                    // let GroupID = results[index].UNIQUE_ID;
+                    let profile = vcRulesListReq[i].profile;
+                    let override = vcRulesListReq[i].override;
+                    // vcRulesList.push({profile,override,Location,Product,GroupID});
+                    vcRulesList.push({profile,override,Location,Product});
+
+                }
+ 
+             }
+         }
+     }
+    //  console.log("_generateCluster vcRulesList ", vcRulesList);
+     let ruleList = await _getRuleListTypeForClusters(vcRulesList);
+     if (ruleList.length > 0)
+     {
+         let paramsObj =  await _getParamsObjForClusters(ruleList);
+ 
+         let dataObj = await _getDataObjForClusters(ruleList);
+         url = baseUrl + '/pal/generateAhcClusters';
+         await _postClustersRequest(req,url,paramsObj,dataObj,ruleList);
+     }
+     
+   
+     console.log('_generateClusters End Time',new Date());
+ 
+     let dataObj = {};
+     dataObj["success"] = true;
+     dataObj["message"] = "Generate Clusters Job Completed Successfully at " +  new Date();
+ 
+     if (req.headers['x-sap-job-id'] > 0)
+     {
+         const scheduler = getJobscheduler(req);
+ 
+         var updateReq = {
+             jobId: req.headers['x-sap-job-id'],
+             scheduleId: req.headers['x-sap-job-schedule-id'],
+             runId: req.headers['x-sap-job-run-id'],
+             data : dataObj
+             };
+ 
+         scheduler.updateJobRunLog(updateReq, function(err, result) {
+         if (err) {
+             return console.log('Error updating run log: %s', err);
+         }
+  
+         });
+     }
+ 
+ }
