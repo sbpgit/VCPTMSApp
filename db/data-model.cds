@@ -400,6 +400,12 @@ context cp {
         key OBJ_TYPE    : String(2) default 'OD' @title : 'Object Type';
             STRUC_NODE  : String(50);
     }
+    
+    entity PAL_PROFILE_LOC_PROD : managed {
+        key LOCATION_ID : String(4);
+        key PRODUCT_ID  : String(40);
+        key PROFILE     : String(50);
+    }
 
     // entity IP_PROFILEOD {
     //     key CREATED_DATE    : Date;

@@ -660,7 +660,7 @@ entity PalGenRegressionModels {
 }
 
 
-entity PalClustering {
+entity PalGenClusters {
     key clustersID            : String(50);
     createdAt            : Timestamp;
     Location             : String(4);
@@ -680,20 +680,19 @@ entity PalClustering {
 
     clusterData       : array of {
         groupId          : String(100);
-        ID               : Integer;
-        att1             : Double;
-        att2             : Double;
-        att3             : Double;
-        att4             : Double;
-        att5             : Double;
-        att6             : Double;
-        att7             : Double;
-        att8             : Double;
-        att9             : Double;
-        att10            : Double;
-        att11            : Double;
-        att12            : Double;
-        target           : Double;
+        ID               : String(100);
+        att1             : String(10);
+        att2             : String(10);
+        att3             : String(10);
+        att4             : String(10);
+        att5             : String(10);
+        att6             : String(10);
+        att7             : String(10);
+        att8             : String(10);
+        att9             : String(10);
+        att10            : String(10);
+        att11            : String(10);
+        att12            : String(10);
     };
 
 }
@@ -819,7 +818,8 @@ entity CLUSTER_DATA {
 entity AHC_COMBINE_PROCESS {
     key LOCATION_ID : String(4) @title : 'Location ID';
     key PRODUCT_ID  : String(40)@title : 'Product ID';
-    key UNIQUE_ID : String(50)@title : 'Unique ID';
+    key MODEL_PROFILE    : String(50) @title : 'PAL Model Profile';
+    // key UNIQUE_ID : String(50)@title : 'Unique ID';
     key STAGE : Integer @title : 'Stage';
     key LEFT_ID : String(50)@title : 'Left Unique ID in Stage';
     key RIGHT_ID : String(50)@title : 'Right Unique ID in Stage';
@@ -829,6 +829,7 @@ entity AHC_COMBINE_PROCESS {
 entity AHC_RESULTS {
     key LOCATION_ID : String(4) @title : 'Location ID';
     key PRODUCT_ID  : String(40)@title : 'Product ID';
+    key MODEL_PROFILE    : String(50) @title : 'PAL Model Profile';
     key UNIQUE_ID : String(50)@title : 'Unique ID';
     key CLUSTER_ID : Integer @title : 'Stage';
 };
