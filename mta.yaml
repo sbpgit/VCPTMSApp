@@ -234,6 +234,10 @@ modules:
       - cpappcpcirlog.zip
       name: cpappcpcirlog
       target-path: resources/
+    - artifacts:
+      - cpappcpmarketauthorization.zip
+      name: cpappcpmarketauthorization
+      target-path: resources/
 - name: cpodpcpodprofiles
   type: html5
   path: app/cp_odprofiles
@@ -652,6 +656,16 @@ modules:
 - name: cpappcpcirlog
   type: html5
   path: app/cpcirlog
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappcpmarketauthorization
+  type: html5
+  path: app/cpmarketauthorization
   build-parameters:
     build-result: dist
     builder: custom

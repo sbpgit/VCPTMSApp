@@ -254,6 +254,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
     entity getCIRVerScen        as projection on V_CIRVERSCEN;
     /// /*****/ Market Authorizations /*****/
     action   trigrMAWeek();
+    function generateMarketAuth( MARKETDATA : String) returns String;
     ///*****/ Seed Order Creation /*****/
     entity getSeedOrder         as projection on od.SEEDORDER_HEADER;
     function maintainSeedOrder(FLAG : String(1), SEEDDATA : String)                                                                                                                                                                                                              returns String;

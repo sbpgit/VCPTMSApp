@@ -68,3 +68,5 @@ using from './cpfactoryloc/annotations';
 using from './cplinemaster/annotations';
 
 using from './cpcirlog/annotations';
+
+using from './cpmarketauthorization/annotations';
