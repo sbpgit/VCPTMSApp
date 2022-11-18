@@ -53,7 +53,8 @@ class GenTimeseriesM2 {
 
         //     )
         //     .orderBy("UNIQUE_ID", "CHAR_NUM");
-        const liPrimaryIDMain = await cds.run(`SELECT
+
+        const liPrimaryIDMain = await cds.run(`SELECT 
                                                     "UNIQUE_ID",
                                                     "PRODUCT_ID",
                                                     "LOCATION_ID",
@@ -70,15 +71,19 @@ class GenTimeseriesM2 {
                                                             AND PRODUCT_ID = '${adata.PRODUCT_ID}'))
                                                     AND "UID_TYPE" = 'P'
                                                     AND "ACTIVE" = true
-                                                ORDER BY
-                                                    "UNIQUE_ID" ASC,
+                                                ORDER BY 
+                                                    "UNIQUE_ID" ASC, 
                                                     "CHAR_NUM" ASC;`);
+
+
         // Remove Partial Characteristics
         const lipartialchar = await cds.run(
             `SELECT *
         FROM "V_PARTIALPRODCHAR"
         WHERE "LOCATION_ID" = '` + adata.LOCATION_ID + `'
-        AND ("PRODUCT_ID" = '` + lMainProduct + `')`
+        AND ( "PRODUCT_ID" = '` + adata.PRODUCT_ID + `')`
+        // AND ( "PRODUCT_ID" = '` + lMainProduct + `')`
+        // OR "REF_PRODID" = '` + lMainProduct + `' )`
         );
 
         for (let i = 0; i < liPrimaryIDMain.length; i++) {
@@ -273,7 +278,7 @@ class GenTimeseriesM2 {
             GenF.jobSchMessage('', "Timeseries History generation failed", req);
         }
         else {
-            const vMsg = "Unable to generate timeseries for the product: " + adata.PRODUCT_ID + " ";
+            const vMsg = "Timeseries generation for the product: " + adata.PRODUCT_ID + " is unsuccessful because of insufficient data";
             GenF.jobSchMessage('X', vMsg, req);
         }
     }
@@ -325,26 +330,47 @@ class GenTimeseriesM2 {
         }
         console.log("Main prod:" + lMainProduct);
         // Get Sales Count Information
-        const liPrimaryIDMain = await SELECT.from('V_UNIQUE_ID')
-            .columns(["UNIQUE_ID",
-                "PRODUCT_ID",
-                "LOCATION_ID",
-                "UNIQUE_DESC",
-                "UID_TYPE",
-                "ACTIVE",
-                "CHAR_NUM",
-                "CHARVAL_NUM"])
-            .where(
-                {
-                    xpr: [
-                        { ref: ["LOCATION_ID"] }, '=', { val: adata.LOCATION_ID }, 'and',
-                        { ref: ["PRODUCT_ID"] }, '=', { val: lMainProduct }, 'and',
-                        { ref: ["UID_TYPE"] }, '=', { val: 'P' }
-                    ]
-                }
+        // const liPrimaryIDMain = await SELECT.from('V_UNIQUE_ID')
+        //     .columns(["UNIQUE_ID",
+        //         "PRODUCT_ID",
+        //         "LOCATION_ID",
+        //         "UNIQUE_DESC",
+        //         "UID_TYPE",
+        //         "ACTIVE",
+        //         "CHAR_NUM",
+        //         "CHARVAL_NUM"])
+        //     .where(
+        //         {
+        //             xpr: [
+        //                 { ref: ["LOCATION_ID"] }, '=', { val: adata.LOCATION_ID }, 'and',
+        //                 { ref: ["PRODUCT_ID"] }, '=', { val: lMainProduct }, 'and',
+        //                 { ref: ["UID_TYPE"] }, '=', { val: 'P' }
+        //             ]
+        //         }
 
-            ).
-            orderBy("UNIQUE_ID", "CHAR_NUM");
+        //     ).
+        //     orderBy("UNIQUE_ID", "CHAR_NUM");
+
+        const liPrimaryIDMain = await cds.run(`SELECT 
+                                                    "UNIQUE_ID",
+                                                    "PRODUCT_ID",
+                                                    "LOCATION_ID",
+                                                    "UNIQUE_DESC",
+                                                    "UID_TYPE",
+                                                    "ACTIVE",
+                                                    "CHAR_NUM",
+                                                    "CHARVAL_NUM"
+                                                FROM V_UNIQUE_ID
+                                                WHERE "LOCATION_ID" = '${adata.LOCATION_ID}'
+                                                    AND (unique_id IN (SELECT DISTINCT PRIMARY_ID
+                                                        FROM CP_SALES_HM
+                                                        WHERE LOCATION_ID = '${adata.LOCATION_ID}'
+                                                            AND PRODUCT_ID = '${adata.PRODUCT_ID}'))
+                                                    AND "UID_TYPE" = 'P'
+                                                    AND "ACTIVE" = true
+                                                ORDER BY 
+                                                    "UNIQUE_ID" ASC, 
+                                                    "CHAR_NUM" ASC;`);
 
 
         // Remove Partial Characteristics
@@ -352,8 +378,8 @@ class GenTimeseriesM2 {
             `SELECT *
                     FROM "V_PARTIALPRODCHAR"
                     WHERE "LOCATION_ID" = '` + adata.LOCATION_ID + `'
-                    AND ( "PRODUCT_ID" = '` + lMainProduct + `'
-                    OR "REF_PRODID" = '` + lMainProduct + `' )`
+                    AND ( "PRODUCT_ID" = '` + adata.PRODUCT_ID + `')`
+                    // OR "REF_PRODID" = '` + lMainProduct + `' )`
         );
 
         for (let i = 0; i < liPrimaryIDMain.length; i++) {
@@ -463,7 +489,8 @@ class GenTimeseriesM2 {
             GenF.jobSchMessage('', `Timeseries Future generation failed`, req);
         }
         else {
-            const vMsg = "Unable to generate timeseries for the product: " + adata.PRODUCT_ID + " ";
+            // const vMsg = "Unable to generate timeseries for the product: " + adata.PRODUCT_ID + " ";
+            const vMsg = "Timeseries generation for the product: " + adata.PRODUCT_ID + " is unsuccessful because of insufficient data";
             GenF.jobSchMessage('X', vMsg, req);
         }
     }

@@ -54,6 +54,21 @@ Content-Type: application/json
 ### PURGE JOB LOGS
 GET http://localhost:4004/jobs/fpurgeJobLogs(purgeDays=3)
 
+
+### generate Clusters Input Data
+POST http://localhost:4004/pal/genClusterInputs
+Content-Type: application/json
+
+{
+	"Location" : "PL20",
+	"Product" : "534EDPI0E119"
+}
+
+
+### generate Clusters Input Data
+GET http://localhost:4004/pal/fgenClusterInputs(Location='PL20',Product='534EDPI0E119')
+
+
 ### READ JOBS LOCALLY
 GET http://localhost:4004/jobs/lreadJobs()
 
@@ -218,4 +233,17 @@ Content-Type: application/json
 	]
 }
 
+### generate Clusters
+POST http://localhost:4004/pal/genClusters
+Content-Type: application/json
 
+{
+	"vcRulesList": [
+		{
+			"profile": "SBP_AHC_0",
+			"override": false,
+			"Location": "PL20",
+			"Product": "534EDPI0E119"
+		}
+	]
+}

@@ -180,12 +180,15 @@ service CatalogService @(impl : './lib/cat-service.js') {
     function generate_timeseries(LOCATION_ID : String(4), PRODUCT_ID : String(40))                                                                       returns String;
     //LOCATION_ID : String(4), PRODUCT_ID : String(40))
     // Generate Timeseries
-    function generate_timeseriesF(LOCATION_ID : String(4), PRODUCT_ID : String(40))                                                                                                                                                                                                                          returns String;
+    // function generate_timeseriesF(LocProdData : String)    
+      function generate_timeseriesF(LOCATION_ID : String(4), PRODUCT_ID : String(40)) returns String;    // Local                                                                                                                                                                                                                        returns String;
     action   generateTimeseries(LocProdData : String);
     // Generate Timeseries
     action   generateTimeseriesF(LocProdData : String);
     // Generate Unique
+    
     action   genUniqueID(LOCATION_ID : String(4), PRODUCT_ID : String(40));
+    // function  genUniqueID(LOCATION_ID : String(4), PRODUCT_ID : String(40));
     // Generate Fully Configured Demand
     action   genFullConfigDemand(LocProdData : String); // (LOCATION_ID : String(4), PRODUCT_ID : String(40)) ;
 
@@ -232,7 +235,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
     @odata.draft.enabled
     entity genRtrHeader         as projection on od.RESTRICT_HEADER;
 
-    //Object dependency restrict
+    //Object dependency restric
     @odata.draft.enabled
     entity getODHdrRstr         as projection on V_ODRESTRICT;
 
@@ -254,6 +257,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
     entity getCIRVerScen        as projection on V_CIRVERSCEN;
     /// /*****/ Market Authorizations /*****/
     action   trigrMAWeek();
+    function generateMarketAuth( MARKETDATA : String) returns String;
     ///*****/ Seed Order Creation /*****/
     entity getSeedOrder         as projection on od.SEEDORDER_HEADER;
     function maintainSeedOrder(FLAG : String(1), SEEDDATA : String)                                                                                                                                                                                                              returns String;
@@ -264,9 +268,9 @@ service CatalogService @(impl : './lib/cat-service.js') {
     entity Method_Types         as projection on od.METHOD_TYPES;
 
     entity V_Parameters         as projection on V_PLANNEDCONFIG;
+    entity getPlancfgPara       as projection on od.PARAMETER_VALUES;
     function postParameterValues(FLAG : String(1), PARAMVALS : String)                                                                                                                                                                                                           returns String;
     entity getCIRGenerated      as projection on od.CIR_GENERATED;
-    entity getPlancfgPara       as projection on od.PARAMETER_VALUES;
     ///*****/ CIR weekly /*****/
     @readonly
     entity getCIRLog    as projection on od.CIRLOG;

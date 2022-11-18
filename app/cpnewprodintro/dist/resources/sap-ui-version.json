@@ -1,7 +1,11 @@
 {
 	"name": "cpapp.cpnewprodintro",
 	"version": "0.0.1",
-	"buildTimestamp": "202211100859",
+<<<<<<< HEAD
+	"buildTimestamp": "202211101023",
+=======
+	"buildTimestamp": "202211171307",
+>>>>>>> 28b4cbdcefef27b470353a829db9bc87d32c7296
 	"scmRevision": "",
 	"libraries": []
 }

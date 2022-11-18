@@ -728,7 +728,8 @@ sap.ui.define(
             handleCharClose: function (oEvent) {
                 var sId = oEvent.getParameter("id");
                 if (sId.includes("className")) {
-                    that._oCore.byId(this._valueHelpDialogclassName.getId() + "-searchField")
+                    that._oCore.byId(this.
+                        .getId() + "-searchField")
                         .setValue("");
                     if (that.oClassnameList.getBinding("items")) {
                         that.oClassnameList.getBinding("items").filter([]);

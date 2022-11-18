@@ -6,6 +6,9 @@
     "hdbconstraint": {
       "plugin_name": "com.sap.hana.di.constraint"
     },
+    "hdbflowgraph": {
+      "plugin_name": "com.sap.hana.di.flowgraph"
+    },
     "hdbindex": {
       "plugin_name": "com.sap.hana.di.index"
     },

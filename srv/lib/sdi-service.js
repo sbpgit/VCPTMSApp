@@ -108,7 +108,7 @@ module.exports = (srv) => {
         if (flag === 'X') {
         }
 
-});
+    });
     srv.on("ImportECCLoc", async (req) => {
         var flag = '';
         try {
@@ -323,7 +323,7 @@ module.exports = (srv) => {
         try {
             const dbClass = require("sap-hdb-promisfied")
             let dbConn = new dbClass(await dbClass.createConnectionFromEnv())
-            const sp = await dbConn.loadProcedurePromisified(null, '"FG_BOMOBJDEP_SP"')
+            const sp = await dbConn.loadProcedurePromisified(null, '"FG_BOMOBJDEPENDENCY_SP"')
             const output = await dbConn.callProcedurePromisified(sp, [])
             console.log(output.results);
             flag = 'X';
@@ -393,7 +393,7 @@ module.exports = (srv) => {
         try {
             const dbClass = require("sap-hdb-promisfied")
             let dbConn = new dbClass(await dbClass.createConnectionFromEnv())
-            const sp = await dbConn.loadProcedurePromisified(null, '"FG_ODHEADER_SP"')
+            const sp = await dbConn.loadProcedurePromisified(null, '"FG_OBJDEP_HEADER_SP"')
             const output = await dbConn.callProcedurePromisified(sp, [])
             console.log(output.results);
             flag = 'X';
@@ -604,7 +604,7 @@ module.exports = (srv) => {
         try {
             const dbClass = require("sap-hdb-promisfied")
             let dbConn = new dbClass(await dbClass.createConnectionFromEnv())
-            const sp = await dbConn.loadProcedurePromisified(null, '"FG_CHAR_SP"')
+            const sp = await dbConn.loadProcedurePromisified(null, '"FG_CHARACTERISTICS_SP"')
             const output = await dbConn.callProcedurePromisified(sp, [])
             console.log(output.results);
             flag = 'X';
@@ -746,7 +746,7 @@ module.exports = (srv) => {
         try {
             const dbClass = require("sap-hdb-promisfied")
             let dbConn = new dbClass(await dbClass.createConnectionFromEnv())
-            const sp = await dbConn.loadProcedurePromisified(null, '"FG_LOCPROD_SP"')
+            const sp = await dbConn.loadProcedurePromisified(null, '"FG_PRODUCT_LOCATION_STOP_SP"')
             const output = await dbConn.callProcedurePromisified(sp, [])
             console.log(output.results);
             flag = 'X';
@@ -810,31 +810,31 @@ module.exports = (srv) => {
             }
         }
     });
-    
+
     srv.on("ImportECCSalesh", async (req) => {
         var flag = '';
         // remove history data from Sales tables
 
-        const lsSales = await GenF.getParameterValue(req.data.LOCATION_ID, 4);
+        // const lsSales = await GenF.getParameterValue(req.data.LOCATION_ID, 4);
         // await SELECT.one
         //     .columns('VALUE')
         //     .from('CP_PARAMETER_VALUES')
         //     .where(`LOCATION_ID = '${req.data.LOCATION_ID}' AND VALUE = 4 `);
-        let vFromDate = new Date();
-        vFromDate.setDate(vFromDate.getDate() - ( parseInt(lsSales) * 7) );
-        vFromDate = vFromDate.toISOString().split('Z')[0].split('T')[0];
+        // let vFromDate = new Date();
+        // vFromDate.setDate(vFromDate.getDate() - ( parseInt(lsSales) * 7) );
+        // vFromDate = vFromDate.toISOString().split('Z')[0].split('T')[0];
 
-        try {
-            await DELETE.from('CP_SALESH')
-                .where(`MAT_AVAILDATE  < '${vFromDate}'`);
-            await cds.run(
-                `DELETE FROM "CP_SALESH_CONFIG" WHERE SALES_DOC IN ( SELECT SALES_DOC
-                    FROM "CP_SALESH"
-                    WHERE MAT_AVAILDATE  < '`+ vFromDate + `')`);
-        }
-        catch (e) {
+        // try {
+        //     await DELETE.from('CP_SALESH')
+        //         .where(`MAT_AVAILDATE  < '${vFromDate}'`);
+        //     await cds.run(
+        //         `DELETE FROM "CP_SALESH_CONFIG" WHERE SALES_DOC IN ( SELECT SALES_DOC
+        //             FROM "CP_SALESH"
+        //             WHERE MAT_AVAILDATE  < '`+ vFromDate + `')`);
+        // }
+        // catch (e) {
 
-        }
+        // }
         try {
             const dbClass = require("sap-hdb-promisfied")
             let dbConn = new dbClass(await dbClass.createConnectionFromEnv())
@@ -1187,147 +1187,148 @@ module.exports = (srv) => {
         }
 
     });
-    srv.on("ImportSOStock", async (req) => {
-        var flag = '';
-        try {
-            const dbClass = require("sap-hdb-promisfied")
-            let dbConn = new dbClass(await dbClass.createConnectionFromEnv())
-            const sp = await dbConn.loadProcedurePromisified(null, '"FG_IBPSTOCK_SP"');
-            const output = await dbConn.callProcedurePromisified(sp, [])
-            console.log(output.results);
-            flag = 'X';
-        } catch (error) {
-            console.error(error);
-        }
-        if (flag === 'X') {
-            let dataObj = {};
-            dataObj["success"] = true;
-            dataObj["message"] = "Import of Salesorder stock status is successfull at " + new Date();
 
-
-            if (req.headers['x-sap-job-id'] > 0) {
-                const scheduler = getJobscheduler(req);
-
-                var updateReq = {
-                    jobId: req.headers['x-sap-job-id'],
-                    scheduleId: req.headers['x-sap-job-schedule-id'],
-                    runId: req.headers['x-sap-job-run-id'],
-                    data: dataObj
-                };
-
-                console.log("Salesorder stock status imported, to update req", updateReq);
-
-                scheduler.updateJobRunLog(updateReq, function (err, result) {
-                    if (err) {
-                        return console.log('Error updating run log: %s', err);
-                    }
-                    //Run log updated successfully
-                    console.log("Salesorder stock status update results", result);
-
-                });
-            }
-        }
-        else {
-            let dataObj = {};
-            dataObj["failed"] = false;
-            dataObj["message"] = "Salesorder stock status import has failed at" + new Date();
-
-
-            if (req.headers['x-sap-job-id'] > 0) {
-                const scheduler = getJobscheduler(req);
-
-                var updateReq = {
-                    jobId: req.headers['x-sap-job-id'],
-                    scheduleId: req.headers['x-sap-job-schedule-id'],
-                    runId: req.headers['x-sap-job-run-id'],
-                    data: dataObj
-                };
-
-                console.log("Salesorder stock status job update req", updateReq);
-
-                scheduler.updateJobRunLog(updateReq, function (err, result) {
-                    if (err) {
-                        return console.log('Error updating run log: %s', err);
-                    }
-                    //Run log updated successfully
-                    console.log("Salesorder stock status job update results", result);
-
-                });
-            }
-        }
-
-    });
     srv.on("ImportPartialProd", async (req) => {
+
         var flag = '';
+
         try {
+
             const dbClass = require("sap-hdb-promisfied")
+
             let dbConn = new dbClass(await dbClass.createConnectionFromEnv())
+
             const sp = await dbConn.loadProcedurePromisified(null, '"FG_PARTIALPROD_SP"');
+
             const sp2 = await dbConn.loadProcedurePromisified(null, '"FG_PARTIALPRODCFG_SP"');
+
             const output = await dbConn.callProcedurePromisified(sp, [])
+
             const output2 = await dbConn.callProcedurePromisified(sp2, [])
+
             console.log(output.results);
+
             console.log(output2.results);
+
             flag = 'X';
+
         } catch (error) {
+
             console.error(error);
+
         }
+
         if (flag === 'X') {
+
             let dataObj = {};
+
             dataObj["success"] = true;
+
             dataObj["message"] = "Import of Partial Products is successfull at " + new Date();
 
 
+
+
             if (req.headers['x-sap-job-id'] > 0) {
+
                 const scheduler = getJobscheduler(req);
 
+
+
                 var updateReq = {
+
                     jobId: req.headers['x-sap-job-id'],
+
                     scheduleId: req.headers['x-sap-job-schedule-id'],
+
                     runId: req.headers['x-sap-job-run-id'],
+
                     data: dataObj
+
                 };
+
+
 
                 console.log("Partial Products imported, to update req", updateReq);
 
+
+
                 scheduler.updateJobRunLog(updateReq, function (err, result) {
+
                     if (err) {
+
                         return console.log('Error updating run log: %s', err);
+
                     }
+
                     //Run log updated successfully
+
                     console.log("Partial Products job update results", result);
 
+
+
                 });
+
             }
+
         }
+
         else {
+
             let dataObj = {};
+
             dataObj["failed"] = false;
+
             dataObj["message"] = "Partial Products has failed at" + new Date();
 
 
+
+
             if (req.headers['x-sap-job-id'] > 0) {
+
                 const scheduler = getJobscheduler(req);
 
+
+
                 var updateReq = {
+
                     jobId: req.headers['x-sap-job-id'],
+
                     scheduleId: req.headers['x-sap-job-schedule-id'],
+
                     runId: req.headers['x-sap-job-run-id'],
+
                     data: dataObj
+
                 };
+
+
 
                 console.log("Partial Products job update req", updateReq);
 
+
+
                 scheduler.updateJobRunLog(updateReq, function (err, result) {
+
                     if (err) {
+
                         return console.log('Error updating run log: %s', err);
+
                     }
+
                     //Run log updated successfully
+
                     console.log("Partial Products job update results", result);
 
+
+
                 });
+
             }
+
         }
+
+
 
     });
 };

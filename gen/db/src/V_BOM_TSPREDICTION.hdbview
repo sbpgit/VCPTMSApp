@@ -22,4 +22,8 @@ JOIN CP_TS_PREDICTIONS AS B
  AND A.PRODUCT_ID = B.PRODUCT_ID
  AND A.OBJ_DEP = B.OBJ_DEP
 --  and (B.CAL_DATE >= A.VALID_FROM AND B.CAL_DATE <= A.VALID_TO)
- where B.OBJ_TYPE = 'OD'
+<<<<<<< HEAD
+--  where B.OBJ_TYPE = 'OD'  commented on 16-Nov-2022
+=======
+--  where B.OBJ_TYPE = 'OD'
+>>>>>>> 28b4cbdcefef27b470353a829db9bc87d32c7296

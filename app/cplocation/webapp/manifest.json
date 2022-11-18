@@ -106,7 +106,19 @@
                             "entitySet": "getLocation",
                             "variantManagement": "Page",
                             "navigation": {},
-                            "initialLoad": true
+                            "initialLoad": true,
+                            "content": {
+                                "header": {
+                                    "actions": {
+                                        "idBtnHelp": {
+                                            "id": "idBtnHelpButton",
+                                            "text": "Help",
+                                            "press": "cpapp.cplocation.custom.ListReportExtController.onHelpPress",
+                                            "requiresSelection": false
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 },

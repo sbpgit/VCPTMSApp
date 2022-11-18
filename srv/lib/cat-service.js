@@ -1,12 +1,7 @@
-//const GenTimeseries = require("./cat-servicets");
-// const DbConnect = require("./dbConnect");
 const GenFunctions = require("./gen-functions");
-const { v1: uuidv1 } = require('uuid');
+const { v1: uuidv1 } = require('uuid')
 const cds = require("@sap/cds");
 const hana = require("@sap/hana-client");
-const { createLogger, format, transports } = require("winston");
-const { combine, timestamp, label, prettyPrint } = format;
-//const ComponentReq = require("./component-req");
 const GenTimeseries = require("./gen-timeseries");
 const GenTimeseriesM2 = require("./gen-timeseries-m2");
 const GenTimeseriesRT = require("./gen-timeseries-rt");
@@ -14,19 +9,7 @@ const SOFunctions = require("./so-function");
 const Catservicefn = require("./catservice-function");
 const VarConfig = require("./variantconfig");
 const AssemblyReq = require("./assembly-req");
-const CIRService = require("./cirdata-functions");          // 
-const containerSchema = cds.env.requires.db.credentials.schema;
-// Create connection parameters to continer
-const conn_params_container = {
-    serverNode:
-        cds.env.requires.db.credentials.host +
-        ":" +
-        cds.env.requires.db.credentials.port,
-    uid: cds.env.requires.db.credentials.user, //cds userid environment variable
-    pwd: cds.env.requires.db.credentials.password, //cds password environment variable
-    encrypt: "TRUE",
-    //  ssltruststore: cds.env.requires.hana.credentials.certificate,
-};
+const CIRService = require("./cirdata-functions");
 /**
  * 
  * @param {Location} lLocation 
@@ -34,20 +17,7 @@ const conn_params_container = {
  * 
  * */
 
-// const readFunction = async (req) => {
-// 	return [
-//             {
-//                 username: req.user.id
-//             }
-//         ];
-// };
 module.exports = (srv) => {
-    // srv.on('READ', 'USERDETAILS',async (data, req) => {
-    //     console.log(req.authInfo);
-    // });
-    // API reference
-
-
     // using req.user approach (user attribute - of class cds.User - from the request object)
     srv.on('userInfo', async (req) => {
 
@@ -274,7 +244,7 @@ module.exports = (srv) => {
                         liCompQty[vCompIndex].COMPONENT === lsCompWeekly.COMPONENT &&
                         liCompQty[vCompIndex].WEEK_DATE === liDates[i].CAL_DATE
                     ) {
-                        lsCompWeekly.STRUC_NODE = '';//liCompQty[vCompIndex].STRUC_NODE;
+                        lsCompWeekly.STRUC_NODE = liCompQty[vCompIndex].STRUC_NODE;
                         lsCompWeekly[columnname + vWeekIndex] =
                             liCompQty[vCompIndex].COMPCIR_QTY;
                         break;
@@ -302,11 +272,6 @@ module.exports = (srv) => {
             vComp,
             lsDates = {};
         let columnname = "WEEK";
-
-        const liasmbcomp = await cds.run(`SELECT * from "CP_ASSEMBLY_COMP" WHERE "LOCATION_ID" = '` +
-            req.data.LOCATION_ID +
-            `'`);
-
         const liCompQty = await cds.run(
             `
             SELECT * FROM "V_ASMCOMPQTY_CONSD"  
@@ -335,7 +300,6 @@ module.exports = (srv) => {
                       "CAL_DATE" ASC`
         );
         const liComp = await cds.run(
-            //"
             `
           SELECT DISTINCT "LOCATION_ID",
                           "PRODUCT_ID",
@@ -650,7 +614,6 @@ module.exports = (srv) => {
         }
         lireturn = await cds.transaction(req).run(SELECT.from(genProdAccessNode));
         return lireturn;
-        //res.send({ value: createResults });
     });
     // assign BOM structure node
     srv.on("genCompSN", async (req) => {
@@ -702,25 +665,21 @@ module.exports = (srv) => {
         let liresults = [];
         let lsresults = {};
         let lireturn = [];
-        let createResults = [];
         let res;
         let flagvs;
-        var responseMessage;
         res = req._.req.res;
         if (req.data.NODE_TYPE === "VS" && req.data.FLAG !== "D") {
-            // liresults_t = await cds.run(SELECT.from("CP_PVS_NODES") .where ({CHILD_NODE: { in:req.data.CHILD_NODE}, and: {
-            //    PARENT_NODE: { in:req.data.PARENT_NODE }}}))
             const lires = await cds.run(
                 `SELECT "CHILD_NODE",
-        "PARENT_NODE",
-        "ACCESS_NODES",
-        "NODE_TYPE",
-        "NODE_DESC",
-        "AUTH_GROUP",
-        "UPPERLIMIT",
-        "LOWERLIMIT"
-            FROM "CP_PVS_NODES"
-            WHERE "CHILD_NODE" = '` +
+                        "PARENT_NODE",
+                        "ACCESS_NODES",
+                        "NODE_TYPE",
+                        "NODE_DESC",
+                        "AUTH_GROUP",
+                        "UPPERLIMIT",
+                        "LOWERLIMIT"
+                FROM "CP_PVS_NODES"
+                WHERE "CHILD_NODE" = '` +
                 req.data.CHILD_NODE +
                 `' AND "NODE_TYPE" = 'VS'`
             );
@@ -789,7 +748,6 @@ module.exports = (srv) => {
             //Do nothing
         }
         return lireturn;
-        // res.send({ value: createResults });
     });
 
 
@@ -826,12 +784,10 @@ module.exports = (srv) => {
             const lilocProdT = await objCatFn.getAllProducts(lsData);
             lsData = {};
             const litemp = JSON.stringify(lilocProdT);
-             lilocProd = JSON.parse(litemp);
+            lilocProd = JSON.parse(litemp);
         }
         else {
-            let lilocProdT = {};
             lilocProd = JSON.parse(req.data.LocProdData);
-            // lilocProd.push(GenFunctions.parse(lilocProdT));
         }
         values.push({ id, createtAt, message, lilocProd });
         switch (await GenFunctions.getParameterValue(lilocProd[0].LOCATION_ID, 5)) {
@@ -861,13 +817,6 @@ module.exports = (srv) => {
                 break;
         }
         console.log(Flag);
-        // if (Flag === 'X') {
-        //     console.log("Success");
-        //     GenFunctions.jobSchMessage(Flag, "Timeseries History generation is complete", req);
-        // }
-        // else {
-        //     GenFunctions.jobSchMessage(Flag, "Timeseries History generation failed", req);
-        // }
     });
     srv.on("generateTimeseriesF", async (req) => {
 
@@ -887,13 +836,10 @@ module.exports = (srv) => {
             const lilocProdT = await objCatFn.getAllProducts(lsData);
             lsData = {};
             const litemp = JSON.stringify(lilocProdT);
-             lilocProd = JSON.parse(litemp);
+            lilocProd = JSON.parse(litemp);
         }
         else {
-
-            let lilocProdT = {};
             lilocProd = JSON.parse(req.data.LocProdData);
-            // lilocProd.push(GenFunctions.parse(lilocProdT));
         }
         values.push({ id, createtAt, message, lilocProd });
         switch (await GenFunctions.getParameterValue(lilocProd[0].LOCATION_ID, 5)) {
@@ -918,23 +864,12 @@ module.exports = (srv) => {
                 }
                 break;
         }
-        // if (Flag === 'X') {
-        //     console.log("Success");
-        //     GenFunctions.jobSchMessage(Flag, `Timeseries Future generation is complete`, req);
-        // }
-        // else {
-        //     GenFunctions.jobSchMessage(Flag, `Timeseries Future generation failed`, req);
-        // }
-
 
     });
     // Generate Timeseries fucntion calls
     srv.on("generate_timeseriesH", async (req) => {
 
-        let lilocProd = {};
-        let lsData = {};
         let Flag = '';
-        // lilocProd = JSON.parse(req.data.LocProdData);
         switch ('M2') {
             case 'M1':
                 const obgenTimeseries = new GenTimeseries();
@@ -951,38 +886,15 @@ module.exports = (srv) => {
     });
     // Generate Timeseries fucntion calls
     srv.on("generate_timeseries", async (req) => {
-
-        let lilocProd = {};
-        let lsData = {};
         let Flag = '';
-        // if (req.data.PRODUCT_ID === "ALL") {
-        //     // let lilocProdT = [];
-        //     const objCatFn = new Catservicefn();
-        //     const lilocProdT = await objCatFn.getAllProducts(req.data);
-        //     const litemp = JSON.stringify(lilocProdT);
-        //      lilocProd = JSON.parse(litemp);
-        //      console.log(lilocProd[0].LOCATION_ID);
-        //     }
-
         switch (await GenFunctions.getParameterValue(req.data.LOCATION_ID, 5)) {
             case 'M1':
-                // for (let i = 0; i < lilocProd.length; i++) {
-                //     lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
-                //     lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
-
-                    const obgenTimeseries = new GenTimeseries();
-                    await obgenTimeseries.genTimeseries(req.data, req, Flag);
-                // }
+                const obgenTimeseries = new GenTimeseries();
+                await obgenTimeseries.genTimeseries(req.data, req, Flag);
                 break;
             case 'M2':
-                // for (let i = 0; i < lilocProd.length; i++) {
-                //     lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
-                //     lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
-                //     console.log(lsData.LOCATION_ID);
-                //     console.log(lsData.PRODUCT_ID);
-                    const obgenTimeseriesM2 = new GenTimeseriesM2();
-                    await obgenTimeseriesM2.genTimeseries(req.data, req, Flag);
-                // }
+                const obgenTimeseriesM2 = new GenTimeseriesM2();
+                await obgenTimeseriesM2.genTimeseries(req.data, req, Flag);
                 break;
         }
         // const obgenTimeseries_rt = new GenTimeseriesRT();
@@ -993,27 +905,18 @@ module.exports = (srv) => {
 
         let lilocProd = {};
         let lsData = {}, Flag = '';
-        // lilocProd = JSON.parse(req.data.LocProdData);
 
         switch (await GenFunctions.getParameterValue(req.data.LOCATION_ID, 5)) {
             case 'M1':
-                // for (let i = 0; i < lilocProd.length; i++) {
-                //     lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
-                //     lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
-                    const obgenTimeseries = new GenTimeseries();
-                    await obgenTimeseries.genTimeseriesF(req.data, req, Flag);
-                // }
+                const obgenTimeseries = new GenTimeseries();
+                await obgenTimeseries.genTimeseriesF(req.data, req, Flag);
                 break;
             case 'M2':
-                // for (let i = 0; i < lilocProd.length; i++) {
-                //     lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
-                //     lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
-                    const obgenTimeseriesM2 = new GenTimeseriesM2();
-                    await obgenTimeseriesM2.genTimeseriesF(req.data, req, Flag);
-                // }
+                const obgenTimeseriesM2 = new GenTimeseriesM2();
+                await obgenTimeseriesM2.genTimeseriesF(req.data, req, Flag);
                 break;
         }
-        // const obgenTimeseries_rt = new GenTimeseriesRT();
+        const obgenTimeseries_rt = new GenTimeseriesRT();
         // await obgenTimeseries_rt.genTimeseriesF_rt(req.data, req);
     });
 
@@ -1021,18 +924,17 @@ module.exports = (srv) => {
     srv.on("genUniqueID", async (req) => {
         let lilocProd = [];
         let lsData = {}, Flag = '';
-        
+
         let createtAt = new Date();
         let id = uuidv1();
         let values = [];
         let message = "Started Process Sales Order";
         let res = req._.req.res;
-        
-        values.push({ id, createtAt, message, lilocProd });
+
         if (req.data.PRODUCT_ID === "ALL") {
             const objCatFn = new Catservicefn();
             lilocProd = await objCatFn.getAllProducts(req.data);
-
+            values.push({ id, createtAt, message, lilocProd });
             for (let i = 0; i < lilocProd.length; i++) {
                 lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
                 lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
@@ -1041,18 +943,13 @@ module.exports = (srv) => {
             }
         }
         else {
+
+            const litemp = JSON.stringify(req.data);
+            lilocProd = JSON.parse(litemp);
+            values.push({ id, createtAt, message, lilocProd });
             const obgenSOFunctions = new SOFunctions();
             await obgenSOFunctions.genUniqueID(req.data, req, Flag);
         }
-        // const obgenSOFunctions = new SOFunctions();
-        // await obgenSOFunctions.genUniqueID(req.data, req, Flag);
-        // if (Flag === 'X') {
-        //     console.log("Success");
-        //     GenFunctions.jobSchMessage(Flag, `Process Sales Order is complete`, req);
-        // }
-        // else {
-        //     GenFunctions.jobSchMessage(Flag, `Process Sales Order failed`, req);
-        // }
     });
     // Generate Unique ID
     srv.on("gen_UniqueID", async (req) => {
@@ -1063,7 +960,6 @@ module.exports = (srv) => {
     });
     // Generate Fully Configured Demand
     srv.on("genFullConfigDemand", async (req) => {
-
         let lilocProd = {};
         let lsData = {};
         let Flag = '';
@@ -1082,12 +978,10 @@ module.exports = (srv) => {
             const lilocProdT = await objCatFn.getAllProducts(lsData);
             lsData = {};
             const litemp = JSON.stringify(lilocProdT);
-             lilocProd = JSON.parse(litemp);
+            lilocProd = JSON.parse(litemp);
         }
         else {
-            let lilocProdT = {};
             lilocProd = JSON.parse(req.data.LocProdData);
-            // lilocProd.push(GenFunctions.parse(lilocProdT));
         }
         values.push({ id, createtAt, message, lilocProd });
         res.statusCode = 202;
@@ -1096,16 +990,8 @@ module.exports = (srv) => {
             lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
             lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
             const obgenTimeseriesM2 = new GenTimeseriesM2();
-
             await obgenTimeseriesM2.genPrediction(lsData, req, Flag);
         }
-        // if (Flag === 'X') {
-        //     console.log("Success");
-        //     GenFunctions.jobSchMessage(Flag, " Fully Configured Requirement Generation is complete", req);
-        // }
-        // else {
-        //     GenFunctions.jobSchMessage(Flag, "Fully Configured Requirement Generation is failed", req);
-        // }
     });
     // Generate Fully Configured Demand
     srv.on("gen_FullConfigDemand", async (req) => {
@@ -1957,21 +1843,11 @@ module.exports = (srv) => {
         let lsresults = {};
         let lspara = {};
         let liSeeddata = {};
-        let vValue = 0, vTemp;
+        let vValue = 0, vTemp, vOrder, vNoOrd = 5;
         let vPrefix = 'SE';
         var responseMessage;
 
         liSeeddata = JSON.parse(req.data.SEEDDATA);
-        // const li_sodata = await cds.run(
-        //     `SELECT *
-        //     FROM "CP_SEEDORDER_HEADER"
-        //     WHERE "LOCATION_ID" = '` +
-        //     liSeeddata[0].LOCATION_ID +
-        //     `'
-        //     AND "PRODUCT_ID" = '` +
-        //     liSeeddata[0].PRODUCT_ID +
-        //     `' ORDER BY SEED_ORDER DESC`
-        // );
         const li_sodata = await cds.run(
             `SELECT *
             FROM "CP_SEEDORDER_HEADER"
@@ -1986,7 +1862,6 @@ module.exports = (srv) => {
                 ORDER BY "PARAMETER_ID" `);
 
         vValue = parseInt(li_paravalues[0].VALUE) + 1;
-
         vPrefix = li_paravalues[1].VALUE;
         const obgenSOFunctions = new SOFunctions();
         if (req.data.FLAG === "C") {
@@ -1995,27 +1870,38 @@ module.exports = (srv) => {
             lsresults.UNIQUE_ID = liSeeddata[0].UNIQUE_ID;
             lsresults.ORD_QTY = parseFloat(liSeeddata[0].ORD_QTY);
             lsresults.MAT_AVAILDATE = liSeeddata[0].MAT_AVAILDATE;
-            // if (!li_sodata[0].SEED_ORDER) {
-            //     vTemp = 0;
-            // }
-            // else {
-            //     vTemp = li_sodata[0].SEED_ORDER;
-            //     console.log(vTemp);
-            //     vTemp = vTemp.slice(2);
-            //     console.log(vTemp);
-            // }
-            vTemp = parseInt(vValue);
-            // vTemp = parseInt(vTemp) + 1;
-            vTemp = GenFunctions.addleadzeros(vTemp, 8);
-            lsresults.SEED_ORDER = vPrefix.concat(vTemp.toString());
+            do {
+                vTemp = parseInt(vValue);
+                vTemp = GenFunctions.addleadzeros(vTemp, 8);
+                vOrder = vPrefix.concat(vTemp.toString());
+                const li_sodata = await cds.run(
+                    `SELECT *
+                        FROM "CP_SEEDORDER_HEADER"
+                        WHERE "LOCATION_ID" = '` +
+                    liSeeddata[0].LOCATION_ID +
+                    `'
+                        AND "PRODUCT_ID" = '` +
+                    liSeeddata[0].PRODUCT_ID +
+                    `' 
+                        AND "SEED_ORDER" = '` +
+                    vOrder +
+                    `' ORDER BY SEED_ORDER DESC`
+                );
+                if (li_sodata.length > 0) {
+                    vNoOrd = 6;
+                    vValue = parseInt(vValue) + 1;
+                }
+                else {
+                    vNoOrd = -1;
+                }
+            } while (vNoOrd > 0)
+            lsresults.SEED_ORDER = vOrder;
             liresults.push(lsresults);
             lspara.PARAMETER_ID = 6;
             lspara.VALUE = vTemp.toString();
-            // lsresults = {};
             if (liresults.length > 0) {
                 console.log(lsresults);
                 try {
-
                     await cds.run(INSERT.into("CP_SEEDORDER_HEADER").entries(liresults));
                     await UPDATE`CP_PARAMETER_VALUES`
                         .with({
@@ -2045,13 +1931,19 @@ module.exports = (srv) => {
                     })
                     .where(`SEED_ORDER = '${lsresults.SEED_ORDER}'`)
                 responseMessage = lsresults.SEED_ORDER + " Update is successfull";
-
             } catch (e) {
                 responseMessage = "Update Failed";
-
                 //DONOTHING
             }
             // }
+        }
+        else if (req.data.FLAG === "d") {
+            try {
+                await cds.run(DELETE.from('CP_SEEDORDER_HEADER').where(`SEED_ORDER = '${liSeeddata[0].SEED_ORDER}'`));
+                responseMessage = "Deletion Successfull";
+            } catch (e) {
+                responseMessage = "Deletion Failed";
+            }
         }
         lsresults = {};
         return responseMessage;
@@ -2542,6 +2434,10 @@ module.exports = (srv) => {
                 catch (e) {
                     console.log(e);
                 }
+
+            }
+            if (i === 1) {
+                break;
             }
         }
 
@@ -2682,19 +2578,13 @@ module.exports = (srv) => {
 
         if (Flag === "i") {
             try {
-
                 await cds.delete("CP_PAGEPARAGRAPH", deleteData);
-
-                responseMessage = " Deletion successfull";
-
+                responseMessage = "Deletion successfull";
                 deleteResults.push(responseMessage);
 
             } catch (e) {
-
-                responseMessage = " Deletion Failed";
-
+                responseMessage = " Deletion Failed";
                 deleteResults.push(responseMessage);
-
             }
             try {
                 await cds.run(INSERT.into("CP_PAGEPARAGRAPH").entries(contentData));
