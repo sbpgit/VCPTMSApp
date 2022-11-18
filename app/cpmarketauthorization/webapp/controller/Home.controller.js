@@ -418,9 +418,10 @@ sap.ui.define([
                 oprod = that.byId("idprod").getValue(),
                 oVers = that.byId("idver").getValue(),
                 oScen = that.byId("idscen").getValue();
-                
                 var FromDate = that.byId("fromDate").getFrom();
                 var ToDate = that.byId("fromDate").getTo();
+               var vFromDate = that.getDateFn(FromDate);
+                 var   vToDate = that.getDateFn(ToDate);
 
                 var oEntry = {
                     MARKETDATA: [],
@@ -435,31 +436,111 @@ sap.ui.define([
                         PRODUCT_ID: oProd[i],
                         VERSION:oVers,
                         SCENARIO:oScen,
-                        FROMDATE: FromDate,
-                        TODATE: ToDate
+                        FROMDATE: vFromDate,
+                        TODATE: vToDate,
                     };
                     oEntry.MARKETDATA.push(vList);
                 }
+                var aScheduleSEDT = {};
+                aScheduleSEDT = that.getScheduleSEDT();
+                var dCurrDateTime = new Date().getTime();
+                var actionText = "/catalog/generateMarketAuth";
+                var JobName = "CIRQtys" + dCurrDateTime;
+                sap.ui.core.BusyIndicator.show();
+                var finalList = {
+                    name: JobName,
+                    description: "Market Authorization",
+                    action: encodeURIComponent(actionText),
+                    active: true,
+                    httpMethod: "POST",
+                    startTime: aScheduleSEDT.djSdate,
+                    endTime: aScheduleSEDT.djEdate,
+                    createdAt: aScheduleSEDT.djSdate,
+                    schedules: [{
+                        data: JSON.stringify(oEntry.MARKETDATA),
+                        cron: "",
+                        time: aScheduleSEDT.oneTime,
+                        active: true,
+                        startTime: aScheduleSEDT.dsSDate,
+                        endTime: aScheduleSEDT.dsEDate,
+                    }]
+                };
+                this.getView().getModel("JModel").callFunction("/addMLJob", {
+                    method: "GET",
+                    urlParameters: {
+                        jobDetails: JSON.stringify(finalList),
+                    },
+                    success: function (oData) {
+                        sap.ui.core.BusyIndicator.hide();
+                        sap.m.MessageToast.show(oData.addMLJob + ": Job Created");
 
-                    this.getView().getModel("oModel").callFunction("/generateMarketAuth", {
-                        method: "GET",
-                        urlParameters: {
-                            MARKETDATA: JSON.stringify(oEntry.MARKETDATA)
-                        },
-                        success: function (oData) {
-                            sap.ui.core.BusyIndicator.hide();
-                            sap.m.MessageToast.show("Market Data Authorised");
+                    },
+                    error: function (error) {
+                        sap.ui.core.BusyIndicator.hide();
+                        sap.m.MessageToast.show("Error While publishing data!");
+                    },
+                });
 
-                        },
-                        error: function (error) {
-                            sap.ui.core.BusyIndicator.hide();
-                            sap.m.MessageToast.show("Error creating Market Data");
-                        },
-                    });
+                    
                 }
                 else{
                     sap.m.MessageToast.show("Select Location/Product/Version/Scenario/Date");
                 }
+            },
+            getDateFn: function (imDate) {
+                var vMonth, vDate, exDate;
+                var vMnthFrm = imDate.getMonth() + 1;
+
+                if (vMnthFrm < 10) {
+                    vMonth = "0" + vMnthFrm;
+                } else {
+                    vMonth = vMnthFrm;
+                }
+
+                if (imDate.getDate() < 10) {
+                    vDate = "0" + imDate.getDate();
+                } else {
+                    vDate = imDate.getDate();
+                }
+                return (imDate = imDate.getFullYear() + "-" + vMonth + "-" + vDate);
+            },
+            getScheduleSEDT: function () {
+                var aScheduleSEDT = {};
+                var dDate = new Date();
+                               
+                var idSchTime = dDate.setSeconds(dDate.getSeconds() + 20);
+            
+                var idSETime = dDate.setHours(dDate.getHours() + 2);
+                idSchTime = new Date(idSchTime);
+                idSETime = new Date(idSETime);
+                //var onetime = idSchTime;
+                var djSdate = new Date(),
+                    djEdate = idSETime,
+                    dsSDate = new Date(),
+                    dsEDate = idSETime,
+                    tjStime,
+                    tjEtime,
+                    tsStime,
+                    tsEtime;
+
+                djSdate = djSdate.toISOString().split("T");
+                tjStime = djSdate[1].split(":");
+                djEdate = djEdate.toISOString().split("T");
+                tjEtime = djEdate[1].split(":");
+                dsSDate = dsSDate.toISOString().split("T");
+                tsStime = dsSDate[1].split(":");
+                dsEDate = dsEDate.toISOString().split("T");
+                tsEtime = dsEDate[1].split(":");
+
+                var dDate = new Date().toLocaleString().split(" ");
+                aScheduleSEDT.djSdate = djSdate[0] + " " + tjStime[0] + ":" + tjStime[1] + " " + "+0000";
+                aScheduleSEDT.djEdate = djEdate[0] + " " + tjEtime[0] + ":" + tjEtime[1] + " " + "+0000";
+                aScheduleSEDT.dsSDate = dsSDate[0] + " " + tsStime[0] + ":" + tsStime[1] + " " + "+0000";
+                aScheduleSEDT.dsEDate = dsEDate[0] + " " + tsEtime[0] + ":" + tsEtime[1] + " " + "+0000";
+                aScheduleSEDT.oneTime = idSchTime;
+
+                return aScheduleSEDT;
+
             }
         });
     });

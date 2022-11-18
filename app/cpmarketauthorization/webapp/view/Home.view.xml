@@ -49,6 +49,7 @@
                         <Label id="_IDGenLabel5" text="Date"  />
                 <DateRangeSelection id="fromDate" placeholder="Select Date"/>
                     </VBox>
+                    
                     <VBox id="_IDGenVBox7">
                         <Label id="_IDGenLabel7" text=""/>
                         <HBox id="_IDGenHBox1">
