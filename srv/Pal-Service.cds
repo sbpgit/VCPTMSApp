@@ -93,8 +93,11 @@ service PalService{
             Location     : String(4),
             Product      : String(40)
         );
-
-
+        action genClusterUniqueIDS
+        (
+            Location     : String(4),
+            Product      : String(40)
+        );
         action genClusters(vcRulesList : array of{
             profile      : String(50);
             override     : Boolean;

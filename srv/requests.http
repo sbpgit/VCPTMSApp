@@ -55,18 +55,6 @@ Content-Type: application/json
 GET http://localhost:4004/jobs/fpurgeJobLogs(purgeDays=3)
 
 
-### generate Clusters Input Data
-POST http://localhost:4004/pal/genClusterInputs
-Content-Type: application/json
-
-{
-	"Location" : "PL20",
-	"Product" : "534EDPI0E119"
-}
-
-
-### generate Clusters Input Data
-GET http://localhost:4004/pal/fgenClusterInputs(Location='PL20',Product='534EDPI0E119')
 
 
 ### READ JOBS LOCALLY
@@ -233,6 +221,54 @@ Content-Type: application/json
 	]
 }
 
+### generate Clusters Input Data
+POST http://localhost:4004/pal/genClusterInputs
+Content-Type: application/json
+
+{
+	"Location" : "PL20",
+	"Product" : "534EDPI0E119"
+}
+
+
+### generate Clusters Input Data
+POST http://localhost:4004/pal/genClusterUniqueIDS
+Content-Type: application/json
+
+{
+	"Location" : "PL20",
+	"Product" : "534EDPI0E119"
+}
+
+
+### generate Clusters Input Data
+POST http://localhost:4004/pal/genClusterUniqueIDS
+Content-Type: application/json
+
+{
+	"Location" : "PL20",
+	"Product" : "ALL"
+}
+
+### generate Clusters Input Data
+GET http://localhost:4004/pal/fgenClusterInputs(Location='PL20',Product='534EDPI0E119')
+
+
+### generate Clusters
+POST http://localhost:4004/pal/genClusters
+Content-Type: application/json
+
+{
+	"vcRulesList": [
+		{
+			"profile": "SBP_AHC_0",
+			"override": false,
+			"Location": "PL20",
+			"Product": "534EDPI0E131"
+		}
+	]
+}
+
 ### generate Clusters
 POST http://localhost:4004/pal/genClusters
 Content-Type: application/json
@@ -244,6 +280,47 @@ Content-Type: application/json
 			"override": false,
 			"Location": "PL20",
 			"Product": "534EDPI0E119"
+		},
+		{
+			"profile": "SBP_AHC_0",
+			"override": false,
+			"Location": "PL20",
+			"Product": "534EDPI0E131"
+		},
+		{
+			"profile": "SBP_AHC_0",
+			"override": false,
+			"Location": "PL20",
+			"Product": "534EDPI0E139"
+		},
+		{
+			"profile": "SBP_AHC_0",
+			"override": false,
+			"Location": "PL20",
+			"Product": "534EDPI0E161"
+		},
+		{
+			"profile": "SBP_AHC_0",
+			"override": false,
+			"Location": "PL20",
+			"Product": "534EDPI0E215"
+		}
+	]
+}
+
+
+
+### generate Clusters
+POST http://localhost:4004/pal/genClusters
+Content-Type: application/json
+
+{
+	"vcRulesList": [
+		{
+			"profile": "SBP_AHC_0",
+			"override": false,
+			"Location": "PL20",
+			"Product": "ALL"
 		}
 	]
 }
