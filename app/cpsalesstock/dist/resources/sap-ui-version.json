@@ -1,11 +1,7 @@
 {
 	"name": "cpapp.cpsalesstock",
 	"version": "0.0.1",
-<<<<<<< HEAD
-	"buildTimestamp": "202211101026",
-=======
-	"buildTimestamp": "202211171310",
->>>>>>> 28b4cbdcefef27b470353a829db9bc87d32c7296
+	"buildTimestamp": "202211181306",
 	"scmRevision": "",
 	"libraries": []
 }
