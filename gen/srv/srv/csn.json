@@ -22599,14 +22599,47 @@
       "kind": "action"
     },
     "CatalogService.generateMarketAuth": {
-      "kind": "function",
+      "kind": "action",
       "params": {
         "MARKETDATA": {
           "type": "cds.String"
         }
+      }
+    },
+    "CatalogService.generateMarketAuthfn": {
+      "kind": "function",
+      "params": {
+        "LOCATION_ID": {
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "type": "cds.String",
+          "length": 40
+        },
+        "VERSION": {
+          "type": "cds.String",
+          "length": 10
+        },
+        "SCENARIO": {
+          "type": "cds.String",
+          "length": 32
+        },
+        "FROMDATE": {
+          "type": "cds.Date"
+        },
+        "TODATE": {
+          "type": "cds.Date"
+        },
+        "MODEL_VERSION": {
+          "type": "cds.String",
+          "length": 20
+        }
       },
       "returns": {
-        "type": "cds.String"
+        "items": {
+          "type": "cp_ds.cirWkly"
+        }
       }
     },
     "CatalogService.getSeedOrder": {

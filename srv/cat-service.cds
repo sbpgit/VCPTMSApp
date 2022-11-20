@@ -258,6 +258,8 @@ service CatalogService @(impl : './lib/cat-service.js') {
     /// /*****/ Market Authorizations /*****/
     action   trigrMAWeek();
     action generateMarketAuth( MARKETDATA : String);
+    function generateMarketAuthfn(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), FROMDATE : Date, TODATE : Date, MODEL_VERSION : String(20))                                                                                             returns array of ds.cirWkly;
+    
     ///*****/ Seed Order Creation /*****/
     entity getSeedOrder         as projection on od.SEEDORDER_HEADER;
     function maintainSeedOrder(FLAG : String(1), SEEDDATA : String)                                                                                                                                                                                                              returns String;

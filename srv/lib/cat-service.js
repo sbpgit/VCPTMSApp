@@ -2644,6 +2644,94 @@ module.exports = (srv) => {
         }
         GenF.jobSchMessage('X', lMessage, request);
     });
+    ///////////////////////////////////////////////////////////
+    srv.on("generateMarketAuthfn", async (request) => {
+    //     var flag, lMessage = '';
+    //     // Generating payload for job scheduler logs
+    //     // let lilocProd = {};
+    //     // let lsData = {};
+    //     // let createtAt = new Date();
+    //     // let id = uuidv1();
+    //     // let values = [];
+    //     // let message = "Started importing IBP Future Demand and Characteristic Plan";
+    //     // let res = req._.req.res;
+    //     // let lilocProdReq = JSON.parse(req.data.MARKETDATA);
+        
+    //     if (lilocProdReq[0].PRODUCT_ID === "ALL") {
+    //         lsData.LOCATION_ID = lilocProdReq[0].LOCATION_ID;
+    //         lsData.PRODUCT_ID = lilocProdReq[0].PRODUCT_ID;
+    //         const objCatFn = new Catservicefn();
+    //         const lilocProdT = await objCatFn.getAllProducts(lsData);
+    //         // lsData = {};
+    //         const litemp = JSON.stringify(lilocProdT);
+    //         lilocProd = JSON.parse(litemp);
+    //     }
+    //     else {
+    //         lilocProd = JSON.parse(req.data.LocProdData);
+    //     }
+    //     values.push({ id, createtAt, message, lilocProd });
+    //     res.statusCode = 202;
+    //     res.send({ values });
+        flag = await obibpfucntions.importFutureDemandcharPlan(lilocProd,request,'MKTAUTH');
+        if(flag === 'S'){
+            for (let iloc = 0;  iloc < lilocProd.length; iloc++) {
+                lsData.LOCATION_ID = lilocProd[iloc].LOCATION_ID;
+                lsData.PRODUCT_ID = lilocProd[iloc].PRODUCT_ID;
+                const licir = await cds.run(
+                    `
+                SELECT *
+                   FROM "V_CIRTOIBP" 
+                   WHERE LOCATION_ID = '${lsData.LOCATION_ID}'
+                              AND PRODUCT_ID = '${lsData.PRODUCT_ID}'
+                              AND ( WEEK_DATE > '${lilocProdReq[0].WEEK_DATE}'
+                              AND WEEK_DATE < '${lilocProdReq[0].WEEK_DATE}' )`);
+    
+                //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
+                for (let i = 0; i < licir.length; i++) {
+    
+                    var vWeekDate = new Date(licir[i].WEEK_DATE).toISOString().split('Z')[0];
+                    vCIR = {
+                        "LOCID": licir[i].LOCATION_ID,
+                        "PRDID": licir[i].PRODUCT_ID,
+                        "VCCLASS": licir[i].CLASS_NUM,
+                        "VCCHAR": licir[i].CHAR_NUM,
+                        "VCCHARVALUE": licir[i].CHARVAL_NUM,
+                        "CUSTID": "NULL",
+                        "CIRQTY": licir[i].CIRQTY.toString(),
+                        "PERIODID4_TSTAMP": vWeekDate
+                    };
+                    oReq.cir.push(vCIR);
+                }
+                var vTransID = new Date().getTime().toString();
+                var oEntry =
+                {
+                    "Transactionid": vTransID,
+                    "AggregationLevelFieldsString": "LOCID,PRDID,VCCLASS,VCCHAR,VCCHARVALUE,CUSTID,CIRQTY,PERIODID4_TSTAMP",
+                    "DoCommit": true,
+                    "NavSBPVCP": oReq.cir
+                }
+    
+                try {
+                    await service.tx(request).post("/SBPVCPTrans", oEntry);
+                    flag = 'X';
+                }
+                catch (err) {
+                    console.log(err);
+                    flag = ' ';
+                }
+    
+                if (flag === 'X') {
+                    lMessage = lMessage + ' ' + "Export of CIR to IBP is successful for product" + lsData.PRODUCT_ID;
+                } else {
+                    lMessage = lMessage + ' ' + "Export of CIR to IBP has failed for product" + lsData.PRODUCT_ID;
+                }
+    
+                GenF.jobSchMessage('X', lMessage, request);
+            }
+        }
+        GenF.jobSchMessage('X', lMessage, request);
+    });
+    /////////////////////////////////////////////////////////////////
     //VC Planner Document Maintenance- Pradeep
     srv.on("moveData", async req => {
         let contentData = {};
