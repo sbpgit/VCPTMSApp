@@ -599,10 +599,10 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                                             </f:FormElement>
                                             <f:FormElement>
                                                 <f:label>
-                                                    <Label text="{i18n>prod}" />
+                                                    <Label text="{i18n>prod}" required="true" />
                                                 </f:label>
                                                 <f:fields>
-                                                    <MultiInput id="ECRQtyprodInput" placeholder="{i18n>allprod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
+                                                    <MultiInput id="ECRQtyprodInput" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
                                                 </f:fields>
                                             </f:FormElement>
                                             <f:FormElement>
@@ -730,24 +730,36 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                                                 <Label text="Import Using SDI" required="true" />
                                             </f:label> -->
                                             <f:fields>
-                                           <RadioButtonGroup id="idSdi" columns="1" select="onSdiChange" class="buttonDesktop" >
-                                                <RadioButton id="LO" text="{i18n>loc}" />
-                                                    <RadioButton id="CG" text="{i18n>custgrp}" />
-                                                    <RadioButton id="PR" text="{i18n>prod}" />
-                                                    <RadioButton id="LP" text="{i18n>locpprod}" />
-                                                    <RadioButton id="PC" text="{i18n>prodclas}" />
-                                                    <RadioButton id="BH" text="{i18n>bomheader}" />
-                                                    <RadioButton id="BO" text="{i18n>bomobjdep}" />                                                   
-                                                    <RadioButton id="CL" text="{i18n>class}" />
-                                                    <RadioButton id="CH" text="{i18n>char}" />
-                                                    <RadioButton id="CV" text="{i18n>charval}" />
-                                                     <RadioButton id="OH" text="{i18n>objdephdr}" />
+                                           <RadioButtonGroup id="idSdi" columns="2" select="onSdiChange" class="buttonDesktop" >
+                                                    <RadioButton id="LO" text="{i18n>loc}" />
                                                     <RadioButton id="PP" text="{i18n>partialprod}" />
-                                                    <RadioButton id="SH" text="{i18n>saleshis}" />
+                                                    <RadioButton id="CG" text="{i18n>custgrp}" />
+                                                    <RadioButton id="PVN" text="{i18n>pvsnode}" />
+                                                    <RadioButton id="PR" text="{i18n>prod}" />
+                                                    <RadioButton id="PVB" text="{i18n>pvsbom}" />
+                                                    <RadioButton id="LP" text="{i18n>locpprod}" />
                                                     <RadioButton id="AC" text="{i18n>asmbcomp}" />
-                                                    <RadioButton id="VT" text="{i18n>vartable}" />
+                                                    <RadioButton id="PC" text="{i18n>prodclas}" />
+                                                    <RadioButton id="SH" text="{i18n>saleshis}" />
+                                                    <RadioButton id="BH" text="{i18n>bomheader}" />
+                                                    <!-- <RadioButton id="BO" text="{i18n>bomobjdep}" />  --> 
+                                                    <RadioButton id="VT" text="{i18n>vartable}" />                                                 
+                                                    <RadioButton id="CL" text="{i18n>classC}" />
+                                                    <!-- <RadioButton id="CH" text="{i18n>char}" />-->
+                                                    <!-- <RadioButton id="CV" text="{i18n>charval}" /> -->
                                                     <RadioButton id="CIL" text="{i18n>cirlog}" />
+                                                    <RadioButton id="OH" text="{i18n>objdephdr}" />
                                                     <RadioButton id="SS" text="{i18n>sostockstatus}" />
+
+
+                                                    <!-- <RadioButton id="PP" text="{i18n>partialprod}" /> -->
+                                                    <!-- <RadioButton id="SH" text="{i18n>saleshis}" /> -->
+                                                    <!-- <RadioButton id="AC" text="{i18n>asmbcomp}" /> -->
+                                                    <!-- <RadioButton id="VT" text="{i18n>vartable}" /> -->
+                                                    <!-- <RadioButton id="CIL" text="{i18n>cirlog}" /> -->
+                                                    <!-- <RadioButton id="SS" text="{i18n>sostockstatus}" /> -->
+                                                    <!-- <RadioButton id="PVN" text="{i18n>pvsnode}" /> -->
+                                                    <!-- <RadioButton id="PVB" text="{i18n>pvsbom}" /> -->
                                             </RadioButtonGroup>
 
                                                 <!-- <Select id="idSdi" change="onSdiChange" selectedKey="LO" class="buttonDesktop " width="400px">
