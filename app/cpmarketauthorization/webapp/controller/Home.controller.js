@@ -445,7 +445,7 @@ sap.ui.define([
                 aScheduleSEDT = that.getScheduleSEDT();
                 var dCurrDateTime = new Date().getTime();
                 var actionText = "/catalog/generateMarketAuth";
-                var JobName = "CIRQtys" + dCurrDateTime;
+                var JobName = "Market Auth" + dCurrDateTime;
                 sap.ui.core.BusyIndicator.show();
                 var finalList = {
                     name: JobName,
@@ -457,7 +457,7 @@ sap.ui.define([
                     endTime: aScheduleSEDT.djEdate,
                     createdAt: aScheduleSEDT.djSdate,
                     schedules: [{
-                        data: JSON.stringify(oEntry.MARKETDATA),
+                        data:{MARKETDATA: JSON.stringify(oEntry.MARKETDATA)},
                         cron: "",
                         time: aScheduleSEDT.oneTime,
                         active: true,
@@ -473,6 +473,7 @@ sap.ui.define([
                     success: function (oData) {
                         sap.ui.core.BusyIndicator.hide();
                         sap.m.MessageToast.show(oData.addMLJob + ": Job Created");
+                        that.onResetDate();
 
                     },
                     error: function (error) {
