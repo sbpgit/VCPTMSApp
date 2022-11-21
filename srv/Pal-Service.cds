@@ -37,7 +37,7 @@ service PalService{
     entity getClusterStages as projection on pal.AHC_COMBINE_PROCESS;
     entity getClusterIds as projection on pal.AHC_RESULTS;
 
- 
+    entity getClustersByDistance as projection on pal.V_AHC_CLUSTER_RESULTS; 
     entity getClusterChars as projection on pal.V_CLUSTER_CHARS;
 
 
@@ -153,4 +153,3 @@ service PalService{
       returns result;
 */
 //}   entity getLeftClusters as projection on pal.V_AHC_LEFT_CLUSTER;
-    entity getClustersByDistance as projection on pal.V_AHC_CLUSTER_RESULTS;
