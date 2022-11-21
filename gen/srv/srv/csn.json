@@ -16742,6 +16742,19 @@
         }
       }
     },
+    "PalService.genClusterUniqueIDS": {
+      "kind": "action",
+      "params": {
+        "Location": {
+          "type": "cds.String",
+          "length": 4
+        },
+        "Product": {
+          "type": "cds.String",
+          "length": 40
+        }
+      }
+    },
     "PalService.genClusters": {
       "kind": "action",
       "params": {
@@ -24376,6 +24389,9 @@
     "SDIService.ImportECCODhdr": {
       "kind": "action"
     },
+    "SDIService.ImportECCProdClass": {
+      "kind": "action"
+    },
     "SDIService.ImportECCClass": {
       "kind": "action"
     },
@@ -24391,6 +24407,9 @@
     "SDIService.ImportECCSaleshCfg": {
       "kind": "action"
     },
+    "SDIService.ImportECCAsmbcomp": {
+      "kind": "action"
+    },
     "SDIService.ImportCuvtabInd": {
       "kind": "action"
     },
@@ -24398,6 +24417,15 @@
       "kind": "action"
     },
     "SDIService.ImportPartialProd": {
+      "kind": "action"
+    },
+    "SDIService.ImportSOStock": {
+      "kind": "action"
+    },
+    "SDIService.ImportPVSNode": {
+      "kind": "action"
+    },
+    "SDIService.ImportPVSBOM": {
       "kind": "action"
     },
     "UserInfoService": {

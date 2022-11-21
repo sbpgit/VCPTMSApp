@@ -98,26 +98,92 @@ module.exports = (srv) => {
             lsDates = {};
         let columnname = "WEEK";
         let liComp = [];
+        let liCompQty;
+        switch (await GenFunctions.getParameterValue(req.data.LOCATION_ID, 5)) {
+            case 'M1':
+                const liasmbcomp = await cds.run(`SELECT * from "CP_ASSEMBLY_COMP" WHERE "LOCATION_ID" = '` +
+                    req.data.LOCATION_ID +
+                    `'`);
 
-        const liCompQty = await cds.run(
-            `
+                liCompQty = await cds.run(
+                    `
+            SELECT * FROM "V_ASMCOMPQTY_CONSD"
+            WHERE "LOCATION_ID" = '` +
+                    req.data.LOCATION_ID +
+                    `'
+                 AND "PRODUCT_ID" = '` +
+                    req.data.PRODUCT_ID +
+                    `' AND "VERSION" = '` +
+                    req.data.VERSION +
+                    `' AND "SCENARIO" = '` +
+                    req.data.SCENARIO +
+                    `' AND ( "CAL_DATE" <= '` +
+                    vDateTo +
+                    `' AND "CAL_DATE" >= '` +
+                    vDateFrom +
+                    `') AND "MODEL_VERSION" = '` +
+                    req.data.MODEL_VERSION +
+                    `'
+                 ORDER BY 
+                      "LOCATION_ID" ASC, 
+                      "PRODUCT_ID" ASC,
+                      "VERSION" ASC,
+                      "SCENARIO" ASC,
+                      "COMPONENT" ASC,
+                      "CAL_DATE" ASC`
+                );
+                liComp = await cds.run(
+                    `
+          SELECT DISTINCT "LOCATION_ID",
+                          "PRODUCT_ID",
+                          "VERSION",
+                          "SCENARIO",
+                          "COMPONENT"
+          FROM "V_ASMCOMPQTY_CONSD"
+          WHERE "LOCATION_ID" = '` +
+                    req.data.LOCATION_ID +
+                    `' AND "PRODUCT_ID" = '` +
+                    req.data.PRODUCT_ID +
+                    `' AND "VERSION" = '` +
+                    req.data.VERSION +
+                    `' AND "SCENARIO" = '` +
+                    req.data.SCENARIO +
+                    `' AND ( "CAL_DATE" <= '` +
+                    vDateTo +
+                    `'
+                AND "CAL_DATE" >= '` +
+                    vDateFrom +
+                    `') AND "MODEL_VERSION" = '` +
+                    req.data.MODEL_VERSION +
+                    `'
+               ORDER BY 
+                    "LOCATION_ID" ASC, 
+                    "PRODUCT_ID" ASC,
+                    "VERSION" ASC,
+                    "SCENARIO" ASC,
+                    "COMPONENT" ASC`
+                );
+                break;
+            case 'M2':
+                const liCompQty = await cds.run(
+                    `
             SELECT * FROM "V_ASMREQ_PRODCONSD"
             WHERE "LOCATION_ID" = '` +
-            req.data.LOCATION_ID +
-            `'
+                    req.data.LOCATION_ID +
+                    `'
                  AND "PRODUCT_ID" = '` +
-            req.data.PRODUCT_ID +
-            `' AND "VERSION" = '` +
-            req.data.VERSION +
-            `' AND "SCENARIO" = '` +
-            req.data.SCENARIO +
-            `' AND ( "WEEK_DATE" <= '` +
-            vDateTo +
-            `' AND "WEEK_DATE" >= '` +
-            vDateFrom +
-            `') AND "MODEL_VERSION" = '` +
-            req.data.MODEL_VERSION +
-            `'
+                    req.data.PRODUCT_ID +
+                    `' AND "VERSION" = '` +
+                    req.data.VERSION +
+                    `' AND "SCENARIO" = '` +
+                    req.data.SCENARIO +
+                    `' AND ( "WEEK_DATE" <= '` +
+                    vDateTo +
+                    `' AND "WEEK_DATE" >= '` +
+                    vDateFrom +
+                    `') AND "MODEL_VERSION" = '` +
+                    req.data.MODEL_VERSION +
+                    `'
                  ORDER BY 
                       "LOCATION_ID" ASC, 
                       "PRODUCT_ID" ASC,
@@ -125,10 +191,10 @@ module.exports = (srv) => {
                       "SCENARIO" ASC,
                       "COMPONENT" ASC,
                       "WEEK_DATE" ASC`
-        );
-        if (req.data.CRITICALKEY === 'X') {
-            liComp = await cds.run(
-                `
+                );
+                if (req.data.CRITICALKEY === 'X') {
+                    liComp = await cds.run(
+                        `
               SELECT DISTINCT "V_ASMREQ_PRODCONSD"."LOCATION_ID",
                                "V_ASMREQ_PRODCONSD"."PRODUCT_ID",
                                "V_ASMREQ_PRODCONSD"."VERSION",
@@ -141,22 +207,22 @@ module.exports = (srv) => {
                AND "V_ASMREQ_PRODCONSD"."PRODUCT_ID"  = "CP_CRITICAL_COMP"."PRODUCT_ID"
                AND "V_ASMREQ_PRODCONSD"."ITEM_NUM"    = "CP_CRITICAL_COMP"."ITEM_NUM"
              WHERE "V_ASMREQ_PRODCONSD"."LOCATION_ID" = '` +
-                req.data.LOCATION_ID +
-                `' AND "V_ASMREQ_PRODCONSD"."PRODUCT_ID" = '` +
-                req.data.PRODUCT_ID +
-                `' AND "V_ASMREQ_PRODCONSD"."VERSION" = '` +
-                req.data.VERSION +
-                `' AND "V_ASMREQ_PRODCONSD"."SCENARIO" = '` +
-                req.data.SCENARIO +
-                `' AND ( "V_ASMREQ_PRODCONSD"."WEEK_DATE" <= '` +
-                vDateTo +
-                `'
+                        req.data.LOCATION_ID +
+                        `' AND "V_ASMREQ_PRODCONSD"."PRODUCT_ID" = '` +
+                        req.data.PRODUCT_ID +
+                        `' AND "V_ASMREQ_PRODCONSD"."VERSION" = '` +
+                        req.data.VERSION +
+                        `' AND "V_ASMREQ_PRODCONSD"."SCENARIO" = '` +
+                        req.data.SCENARIO +
+                        `' AND ( "V_ASMREQ_PRODCONSD"."WEEK_DATE" <= '` +
+                        vDateTo +
+                        `'
                     AND "V_ASMREQ_PRODCONSD"."WEEK_DATE" >= '` +
-                vDateFrom +
-                `') AND "V_ASMREQ_PRODCONSD"."MODEL_VERSION" = '` +
-                req.data.MODEL_VERSION +
-                `'  AND "CP_CRITICAL_COMP"."CRITICALKEY" = '` +
-                req.data.CRITICALKEY + `'
+                        vDateFrom +
+                        `') AND "V_ASMREQ_PRODCONSD"."MODEL_VERSION" = '` +
+                        req.data.MODEL_VERSION +
+                        `'  AND "CP_CRITICAL_COMP"."CRITICALKEY" = '` +
+                        req.data.CRITICALKEY + `'
                    ORDER BY 
                         "LOCATION_ID" ASC, 
                         "PRODUCT_ID" ASC,
@@ -164,11 +230,11 @@ module.exports = (srv) => {
                         "SCENARIO" ASC,
                         "ITEM_NUM" ASC,
                         "COMPONENT" ASC`
-            );
-        } else {
-            // const liComp = await cds.run(
-            liComp = await cds.run(
-                `
+                    );
+                } else {
+                    // const liComp = await cds.run(
+                    liComp = await cds.run(
+                        `
           SELECT DISTINCT "LOCATION_ID",
                           "PRODUCT_ID",
                           "VERSION",
@@ -177,21 +243,21 @@ module.exports = (srv) => {
                           "COMPONENT"
           FROM "V_ASMREQ_PRODCONSD"
           WHERE "LOCATION_ID" = '` +
-                req.data.LOCATION_ID +
-                `' AND "PRODUCT_ID" = '` +
-                req.data.PRODUCT_ID +
-                `' AND "VERSION" = '` +
-                req.data.VERSION +
-                `' AND "SCENARIO" = '` +
-                req.data.SCENARIO +
-                `' AND ( "WEEK_DATE" <= '` +
-                vDateTo +
-                `'
+                        req.data.LOCATION_ID +
+                        `' AND "PRODUCT_ID" = '` +
+                        req.data.PRODUCT_ID +
+                        `' AND "VERSION" = '` +
+                        req.data.VERSION +
+                        `' AND "SCENARIO" = '` +
+                        req.data.SCENARIO +
+                        `' AND ( "WEEK_DATE" <= '` +
+                        vDateTo +
+                        `'
                 AND "WEEK_DATE" >= '` +
-                vDateFrom +
-                `') AND "MODEL_VERSION" = '` +
-                req.data.MODEL_VERSION +
-                `'
+                        vDateFrom +
+                        `') AND "MODEL_VERSION" = '` +
+                        req.data.MODEL_VERSION +
+                        `'
                ORDER BY 
                     "LOCATION_ID" ASC, 
                     "PRODUCT_ID" ASC,
@@ -199,7 +265,9 @@ module.exports = (srv) => {
                     "SCENARIO" ASC,
                     "ITEM_NUM" ASC,
                     "COMPONENT" ASC`
-            );
+                    );
+                }
+                break;
         }
         var vDateSeries = vDateFrom;
         let dDate = new Date(vDateSeries);
@@ -816,6 +884,8 @@ module.exports = (srv) => {
                 }
                 break;
         }
+        const obgenTimeseries_rt = new GenTimeseriesRT();
+        await obgenTimeseries_rt.genTimeseries_rt(req.data, req);
         console.log(Flag);
     });
     srv.on("generateTimeseriesF", async (req) => {
@@ -864,6 +934,8 @@ module.exports = (srv) => {
                 }
                 break;
         }
+        const obgenTimeseries_rt = new GenTimeseriesRT();
+        await obgenTimeseries_rt.genTimeseriesF_rt(req.data, req);
 
     });
     // Generate Timeseries fucntion calls
@@ -2567,9 +2639,9 @@ module.exports = (srv) => {
         let id = uuidv1();
         let values = [];
         let message = "Started importing IBP Future Demand and Characteristic Plan";
-        let res = req._.req.res;
-        let lilocProdReq = JSON.parse(req.data.MARKETDATA);
-        
+        let res = request._.request.res;
+        let lilocProdReq = JSON.parse(request.data.MARKETDATA);
+
         if (lilocProdReq[0].PRODUCT_ID === "ALL") {
             lsData.LOCATION_ID = lilocProdReq[0].LOCATION_ID;
             lsData.PRODUCT_ID = lilocProdReq[0].PRODUCT_ID;
@@ -2580,14 +2652,14 @@ module.exports = (srv) => {
             lilocProd = JSON.parse(litemp);
         }
         else {
-            lilocProd = JSON.parse(req.data.LocProdData);
+            lilocProd = JSON.parse(request.data.LocProdData);
         }
         values.push({ id, createtAt, message, lilocProd });
         res.statusCode = 202;
         res.send({ values });
-        flag = await obibpfucntions.importFutureDemandcharPlan(lilocProd,request,'MKTAUTH');
-        if(flag === 'S'){
-            for (let iloc = 0;  iloc < lilocProd.length; iloc++) {
+        flag = await obibpfucntions.importFutureDemandcharPlan(lilocProd, request, 'MKTAUTH');
+        if (flag === 'S') {
+            for (let iloc = 0; iloc < lilocProd.length; iloc++) {
                 lsData.LOCATION_ID = lilocProd[iloc].LOCATION_ID;
                 lsData.PRODUCT_ID = lilocProd[iloc].PRODUCT_ID;
                 const licir = await cds.run(
@@ -2598,10 +2670,10 @@ module.exports = (srv) => {
                               AND PRODUCT_ID = '${lsData.PRODUCT_ID}'
                               AND ( WEEK_DATE > '${lilocProdReq[0].WEEK_DATE}'
                               AND WEEK_DATE < '${lilocProdReq[0].WEEK_DATE}' )`);
-    
+
                 //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
                 for (let i = 0; i < licir.length; i++) {
-    
+
                     var vWeekDate = new Date(licir[i].WEEK_DATE).toISOString().split('Z')[0];
                     vCIR = {
                         "LOCID": licir[i].LOCATION_ID,
@@ -2623,7 +2695,7 @@ module.exports = (srv) => {
                     "DoCommit": true,
                     "NavSBPVCP": oReq.cir
                 }
-    
+
                 try {
                     await service.tx(request).post("/SBPVCPTrans", oEntry);
                     flag = 'X';
@@ -2632,13 +2704,13 @@ module.exports = (srv) => {
                     console.log(err);
                     flag = ' ';
                 }
-    
+
                 if (flag === 'X') {
                     lMessage = lMessage + ' ' + "Export of CIR to IBP is successful for product" + lsData.PRODUCT_ID;
                 } else {
                     lMessage = lMessage + ' ' + "Export of CIR to IBP has failed for product" + lsData.PRODUCT_ID;
                 }
-    
+
                 GenF.jobSchMessage('X', lMessage, request);
             }
         }
@@ -2646,35 +2718,35 @@ module.exports = (srv) => {
     });
     ///////////////////////////////////////////////////////////
     srv.on("generateMarketAuthfn", async (request) => {
-    //     var flag, lMessage = '';
-    //     // Generating payload for job scheduler logs
-    //     // let lilocProd = {};
-    //     // let lsData = {};
-    //     // let createtAt = new Date();
-    //     // let id = uuidv1();
-    //     // let values = [];
-    //     // let message = "Started importing IBP Future Demand and Characteristic Plan";
-    //     // let res = req._.req.res;
-    //     // let lilocProdReq = JSON.parse(req.data.MARKETDATA);
-        
-    //     if (lilocProdReq[0].PRODUCT_ID === "ALL") {
-    //         lsData.LOCATION_ID = lilocProdReq[0].LOCATION_ID;
-    //         lsData.PRODUCT_ID = lilocProdReq[0].PRODUCT_ID;
-    //         const objCatFn = new Catservicefn();
-    //         const lilocProdT = await objCatFn.getAllProducts(lsData);
-    //         // lsData = {};
-    //         const litemp = JSON.stringify(lilocProdT);
-    //         lilocProd = JSON.parse(litemp);
-    //     }
-    //     else {
-    //         lilocProd = JSON.parse(req.data.LocProdData);
-    //     }
-    //     values.push({ id, createtAt, message, lilocProd });
-    //     res.statusCode = 202;
-    //     res.send({ values });
-        flag = await obibpfucntions.importFutureDemandcharPlan(lilocProd,request,'MKTAUTH');
-        if(flag === 'S'){
-            for (let iloc = 0;  iloc < lilocProd.length; iloc++) {
+        //     var flag, lMessage = '';
+        //     // Generating payload for job scheduler logs
+        //     // let lilocProd = {};
+        //     // let lsData = {};
+        //     // let createtAt = new Date();
+        //     // let id = uuidv1();
+        //     // let values = [];
+        //     // let message = "Started importing IBP Future Demand and Characteristic Plan";
+        //     // let res = req._.req.res;
+        //     // let lilocProdReq = JSON.parse(req.data.MARKETDATA);
+
+        //     if (lilocProdReq[0].PRODUCT_ID === "ALL") {
+        //         lsData.LOCATION_ID = lilocProdReq[0].LOCATION_ID;
+        //         lsData.PRODUCT_ID = lilocProdReq[0].PRODUCT_ID;
+        //         const objCatFn = new Catservicefn();
+        //         const lilocProdT = await objCatFn.getAllProducts(lsData);
+        //         // lsData = {};
+        //         const litemp = JSON.stringify(lilocProdT);
+        //         lilocProd = JSON.parse(litemp);
+        //     }
+        //     else {
+        lilocProd = JSON.parse(req.data);
+        //     }
+        //     values.push({ id, createtAt, message, lilocProd });
+        //     res.statusCode = 202;
+        //     res.send({ values });
+        flag = await obibpfucntions.importFutureDemandcharPlan(lilocProd, request, 'MKTAUTH');
+        if (flag === 'S') {
+            for (let iloc = 0; iloc < lilocProd.length; iloc++) {
                 lsData.LOCATION_ID = lilocProd[iloc].LOCATION_ID;
                 lsData.PRODUCT_ID = lilocProd[iloc].PRODUCT_ID;
                 const licir = await cds.run(
@@ -2685,10 +2757,10 @@ module.exports = (srv) => {
                               AND PRODUCT_ID = '${lsData.PRODUCT_ID}'
                               AND ( WEEK_DATE > '${lilocProdReq[0].WEEK_DATE}'
                               AND WEEK_DATE < '${lilocProdReq[0].WEEK_DATE}' )`);
-    
+
                 //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
                 for (let i = 0; i < licir.length; i++) {
-    
+
                     var vWeekDate = new Date(licir[i].WEEK_DATE).toISOString().split('Z')[0];
                     vCIR = {
                         "LOCID": licir[i].LOCATION_ID,
@@ -2710,7 +2782,7 @@ module.exports = (srv) => {
                     "DoCommit": true,
                     "NavSBPVCP": oReq.cir
                 }
-    
+
                 try {
                     await service.tx(request).post("/SBPVCPTrans", oEntry);
                     flag = 'X';
@@ -2719,13 +2791,13 @@ module.exports = (srv) => {
                     console.log(err);
                     flag = ' ';
                 }
-    
+
                 if (flag === 'X') {
                     lMessage = lMessage + ' ' + "Export of CIR to IBP is successful for product" + lsData.PRODUCT_ID;
                 } else {
                     lMessage = lMessage + ' ' + "Export of CIR to IBP has failed for product" + lsData.PRODUCT_ID;
                 }
-    
+
                 GenF.jobSchMessage('X', lMessage, request);
             }
         }

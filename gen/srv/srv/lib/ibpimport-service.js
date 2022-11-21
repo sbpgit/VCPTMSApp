@@ -2,6 +2,7 @@ const cds = require("@sap/cds");
 const GenF = require("./gen-functions");
 const IBPFunc = require("./ibp-functions");
 const hana = require("@sap/hana-client");
+const { v1: uuidv1 } = require('uuid')
 const xsenv = require("@sap/xsenv");
 const JobSchedulerClient = require("@sap/jobs-client");
 const vAIRKey = process.env.AIR;
