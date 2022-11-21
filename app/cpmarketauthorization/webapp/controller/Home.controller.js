@@ -445,7 +445,7 @@ sap.ui.define([
                 aScheduleSEDT = that.getScheduleSEDT();
                 var dCurrDateTime = new Date().getTime();
                 var actionText = "/catalog/generateMarketAuth";
-                var JobName = "Market Auth." + dCurrDateTime;
+                var JobName = "Market Auth" + dCurrDateTime;
                 sap.ui.core.BusyIndicator.show();
                 var finalList = {
                     name: JobName,
@@ -475,6 +475,7 @@ sap.ui.define([
                     success: function (oData) {
                         sap.ui.core.BusyIndicator.hide();
                         sap.m.MessageToast.show(oData.addMLJob + ": Job Created");
+                        that.onResetDate();
 
                     },
                     error: function (error) {
