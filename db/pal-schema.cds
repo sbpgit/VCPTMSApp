@@ -867,5 +867,6 @@ entity![V_CLUSTER_CHARS]{
     key![UNIQUE_ID]   : Integer @title : 'UNIQUE_ID';
     key![CHAR_NAME]    : String(30) @title : 'CHAR_NAME';
     key![CHAR_VALUE]   : String(70) @title : 'CHAR_VALUE';
+    key![CHARVAL_NUM]   : String(70) @title : 'CHARVAL_NUM';
 }
 
