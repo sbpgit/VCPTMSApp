@@ -2,6 +2,7 @@ const cds = require("@sap/cds");
 const GenF = require("./gen-functions");
 const IBPFunc = require("./ibp-functions");
 const hana = require("@sap/hana-client");
+const { v1: uuidv1 } = require('uuid')
 const xsenv = require("@sap/xsenv");
 const JobSchedulerClient = require("@sap/jobs-client");
 const vAIRKey = process.env.AIR;
@@ -2016,9 +2017,9 @@ module.exports = cds.service.impl(async function () {
         values.push({ id, createtAt, message, lilocProd });
         res.statusCode = 202;
         res.send({ values });
-        for (let i = 0; i < lilocProd.length; i++) {
-            lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
-            lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
+        for (let iloc = 0;  iloc < lilocProd.length; iloc++) {
+            lsData.LOCATION_ID = lilocProd[iloc].LOCATION_ID;
+            lsData.PRODUCT_ID = lilocProd[iloc].PRODUCT_ID;
             const licir = await cds.run(
                 `
             SELECT *
@@ -2027,7 +2028,7 @@ module.exports = cds.service.impl(async function () {
                           AND PRODUCT_ID = '`+ lsData.PRODUCT_ID + `'`);
 
             //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
-            for (i = 0; i < licir.length; i++) {
+            for (let i = 0; i < licir.length; i++) {
 
                 var vWeekDate = new Date(licir[i].WEEK_DATE).toISOString().split('Z')[0];
                 vCIR = {

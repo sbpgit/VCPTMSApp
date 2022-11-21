@@ -24,6 +24,14 @@
                     "localUri": "localService/metadata.xml",
                     "odataVersion": "2.0"
                 }
+            },
+            "Jobs": {
+                "uri": "v2/jobs/",
+                "type": "OData",
+                "settings": {
+                    "odataVersion": "2.0",
+                    "localUri": "localService/metadata.xml"
+                }
             }
         },
         "crossNavigation": {
@@ -96,6 +104,10 @@
             },
             "oGModel": {
                 "type": "sap.ui.model.json.JSONModel"
+            },
+            "JModel": {
+                "dataSource": "Jobs",
+                "preload": true
             }
         },
         "resources": {
@@ -144,5 +156,10 @@
     "sap.cloud": {
         "public": true,
         "service": "configprod_approuter"
+    },
+    "sap.platform.cf": {
+        "oAuthScopes": [
+            "$XSAPPNAME.User"
+        ]
     }
 }

@@ -835,3 +835,38 @@ entity AHC_RESULTS {
 };
 
 
+@cds.persistence.exists
+entity![V_AHC_LEFT_CLUSTER]{
+    key![LOCATION_ID]  : String(4) @title : 'LOCATION_ID';
+    key![PRODUCT_ID]   : String(40) @title : 'PRODUCT_ID';
+    key![PROFILE]      : String(50) @title : 'PROFILE';
+    key![LEFT_ID_CLUSTER]    : Integer @title : 'LEFT_ID_CLUSTER';
+    key![LEFT_ID]      : String(50) @title : 'LEFT_ID';
+    key![RIGHT_ID]      : String(50) @title : 'RIGHT_ID';
+    key![DISTANCE]      : Decimal(13,4) @title : 'DISTANCE';
+
+}
+
+@cds.persistence.exists
+entity![V_AHC_CLUSTER_RESULTS]{
+    key![LOCATION_ID]  : String(4) @title : 'LOCATION_ID';
+    key![PRODUCT_ID]   : String(40) @title : 'PRODUCT_ID';
+    key![PROFILE]      : String(50) @title : 'PROFILE';
+    key![LEFT_ID_CLUSTER]    : Integer @title : 'LEFT_ID_CLUSTER';
+    key![RIGHT_ID_CLUSTER]    : Integer @title : 'RIGHT_ID_CLUSTER';
+    key![LEFT_ID]      : String(50) @title : 'LEFT_ID';
+    key![RIGHT_ID]      : String(50) @title : 'RIGHT_ID';
+    key![DISTANCE]      : Decimal(13,4) @title : 'DISTANCE';
+
+}
+
+@cds.persistence.exists
+entity![V_CLUSTER_CHARS]{
+    key![LOCATION_ID]      : String(4) @title : 'LOCATION_ID';
+    key![PRODUCT_ID]    : String(40) @title : 'PRODUCT_ID';
+    key![UNIQUE_ID]   : Integer @title : 'UNIQUE_ID';
+    key![CHAR_NAME]    : String(30) @title : 'CHAR_NAME';
+    key![CHAR_VALUE]   : String(70) @title : 'CHAR_VALUE';
+    key![CHARVAL_NUM]   : String(70) @title : 'CHARVAL_NUM';
+}
+
