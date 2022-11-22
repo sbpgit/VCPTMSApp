@@ -92,10 +92,6 @@ service PalService{
             startDate    : Date; // Delete Prediction Tables Data older than start date
         });
 
-        action genClusterInputs (
-            Location     : String(4),
-            Product      : String(40)
-        );
         action genClusterUniqueIDS
         (
             Location     : String(4),
@@ -108,8 +104,6 @@ service PalService{
             Product      : String(40);
             // GroupID      : String(20);
         });
-
-        function fgenClusterInputs(Location : String(4), Product:String(40)) returns String;
 
 
         // function f_generateModels(vcRulesList : array of{
