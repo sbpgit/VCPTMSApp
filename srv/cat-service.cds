@@ -35,7 +35,8 @@ using {
 } from '../db/data-model';
 using V_PLANNEDCONFIG from '../db/data-model';
 using {S4ODataService as external} from './external/S4ODataService';
-
+// using {IBPDemandsrv as externalget} from './external/IBPDemandsrv.csn';
+// using {IBPMasterDataAPI as externalPost} from './external/IBPMasterDataAPI.csn';
 
 // using V_ASMCOMP_REQ from '../db/data-model';
 service CatalogService @(impl : './lib/cat-service.js') {
@@ -258,7 +259,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
     /// /*****/ Market Authorizations /*****/
     action   trigrMAWeek();
     action generateMarketAuth( MARKETDATA : String);
-    function generateMarketAuthfn(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), FROMDATE : Date, TODATE : Date, MODEL_VERSION : String(20))                                                                                             returns array of ds.cirWkly;
+    function generateMarketAuthfn() returns String;//LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), FROMDATE : Date, TODATE : Date, MODEL_VERSION : String(20))                                                                                             returns array of ds.cirWkly;
     
     ///*****/ Seed Order Creation /*****/
     entity getSeedOrder         as projection on od.SEEDORDER_HEADER;

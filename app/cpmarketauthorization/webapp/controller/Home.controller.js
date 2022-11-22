@@ -444,7 +444,7 @@ sap.ui.define([
                 var aScheduleSEDT = {};
                 aScheduleSEDT = that.getScheduleSEDT();
                 var dCurrDateTime = new Date().getTime();
-                var actionText = "/catalog/generateMarketAuth";
+                var actionText = "/ibpimport-srv/generateMarketAuth";
                 var JobName = "Market Auth" + dCurrDateTime;
                 sap.ui.core.BusyIndicator.show();
                 var finalList = {
