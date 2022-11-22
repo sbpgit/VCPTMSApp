@@ -4,7 +4,9 @@ const hana = require("@sap/hana-client");
 const MktAuth = require("./market-auth");
 const obgenMktAuth = new MktAuth();
 class IBPFunctions {
-    constructor() { }
+    constructor() {
+
+     }
     async exportSalesCfg(req) {
         var oReq = {
             sales: [],
@@ -81,29 +83,19 @@ class IBPFunctions {
         }
         return oReq;
     }
-    async importFutureDemandcharPlan(aLocProd, request, vServ) {
+    async importFutureDemandcharPlan(request){   //aLocProd, request, vServ) {
         let lMessage = '', flag;
         let lVersion, lScenario, vFromDate, vToDate;
-        let lilocProdReq = JSON.parse(request.data.LocProdData);
-        const service = await cds.connect.to('IBPDemandsrv');
-        for (let iloc = 0; iloc < aLocProd.length; iloc++) {
-            lsData.LOCATION_ID = aLocProd[iloc].LOCATION_ID;
-            lsData.PRODUCT_ID = aLocProd[iloc].PRODUCT_ID;
-            lVersion = aLocProd[iloc].VERSION;
-            lScenario = aLocProd[iloc].SCENARIO;
-            vFromDate = aLocProd[iloc].FROMDATE;
-            vToDate = aLocProd[iloc].TODATE;
-            // if (vServ === 'IBP') {
-            //     var resUrl = "/SBPVCP?$select=PRDID,LOCID,PERIODID4_TSTAMP,TOTALDEMANDOUTPUT,UOMTOID,VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$filter=LOCID eq '" + lsData.LOCATION_ID + "' and PRDID eq '" + lsData.PRODUCT_ID + "'and UOMTOID eq 'EA'";
-            // }
-            // else if (vServ === 'MKTAUTH') {
-            // lVersion = lilocProdReq[0].VERSION;
-            // lScenario = lilocProdReq[0].SCENARIO;
-            // vFromDate = lilocProdReq[0].FROMDATE;
-            // vToDate = lilocProdReq[0].TODATE;
+       // let lilocProdReq = JSON.parse(request.data.MARKETDATA);
+        let lsData = {};
+        // for (let iloc = 0; iloc < aLocProd.length; iloc++) {
+            lsData.LOCATION_ID = "PL20";//aLocProd[iloc].LOCATION_ID;
+            lsData.PRODUCT_ID = "61AEAPP0E219";//aLocProd[iloc].PRODUCT_ID;
+            lVersion = '__BASELINE';//lilocProdReq[0].VERSION;
+            lScenario = 'BSL_SCENARIO';//lilocProdReq[0].SCENARIO;
+            vFromDate = '2022-11-21'//lilocProdReq[0].FROMDATE;
+            vToDate = '2022-12-21'// lilocProdReq[0].TODATE;
             var resUrl = "/SBPVCP?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + lsData.LOCATION_ID + "' and PRDID eq '" + lsData.PRODUCT_ID + "' and PERIODID4_TSTAMP gt datetime'" + vFromDate + "' and PERIODID4_TSTAMP lt datetime'" + vToDate + "' and VERSIONID eq '" + lVersion + "' and SCENARIOID eq '" + lScenario + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
-            // }
-            // req.headers['Application-Interface-Key'] = vAIRKey;
             var req = await service.tx(req).get(resUrl);
             // if(req.length > 0){
             const vDelDate = new Date();
@@ -159,7 +151,7 @@ class IBPFunctions {
                 //////////////////////////////////////////
                 flag = '';
                 var resUrlFplan;
-                const dateJSONToEDM = jsonDate => {
+                const dateJSONToEDM2 = jsonDate => {
                     const content = /\d+/.exec(String(jsonDate));
                     const timestamp = content ? Number(content[0]) : 0;
                     const date = new Date(timestamp);
@@ -185,7 +177,7 @@ class IBPFunctions {
                     //Do nothing
                 }
                 for (var i in req) {
-                    var vWeekDate = dateJSONToEDM(req[i].PERIODID4_TSTAMP).split('T')[0];
+                    var vWeekDate = dateJSONToEDM2(req[i].PERIODID4_TSTAMP).split('T')[0];
                     var vScenario = 'BSL_SCENARIO';
                     req[i].PERIODID4_TSTAMP = vWeekDate;
                     if (vWeekDate >= vDateDel) {
@@ -226,7 +218,7 @@ class IBPFunctions {
                     }
                 }
             }
-        }
+        // }
         return flag;
     }
 }
