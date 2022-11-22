@@ -97,6 +97,8 @@ sap.ui.define([
                     },
                 });
             },
+            /*Value help function on click of f4 helps
+            */
             handleValueHelp: function (oEvent) {
                 var sId = oEvent.getParameter("id");
                 // Loc Dialog
@@ -125,6 +127,7 @@ sap.ui.define([
                     }
                 }
             },
+            /*Function triggers on select of option in value helps*/
             handleSelection: function (oEvent) {
                 that.oGModel = that.getOwnerComponent().getModel("oGModel");
                 var sId = oEvent.getParameter("id"),
@@ -289,6 +292,8 @@ sap.ui.define([
                 }
                 that.handleClose(oEvent);
             },
+
+            /*Function for closing of dialog fragments*/
             handleClose: function (oEvent) {
                 var sId = oEvent.getParameter("id");
                 // Loc Dialog
@@ -325,6 +330,7 @@ sap.ui.define([
                     }
                 }
             },
+            /*Function for navigation to VC Planner documentation*/
             onNavPress: function () {
                 if (sap.ushell && sap.ushell.Container && sap.ushell.Container.getService) {
                     var oCrossAppNavigator = sap.ushell.Container.getService("CrossApplicationNavigation");
@@ -343,6 +349,7 @@ sap.ui.define([
 
                 }
             },
+            /*Search function in dialog fragments*/
             handleSearch: function (oEvent) {
                 var sQuery =
                     oEvent.getParameter("value") || oEvent.getParameter("newValue"),
@@ -406,6 +413,7 @@ sap.ui.define([
                     that.oScenList.getBinding("items").filter(oFilters);
                 }
             },
+            /*For reset of data on button click*/
             onResetDate: function () {
                 that.oLoc.setValue("");
                 that.oProd.setValue("");
@@ -413,6 +421,7 @@ sap.ui.define([
                 that.oScen.setValue("");
                 that.byId("fromDate").setValue("");
             },
+            /*Function triggers on click of "Go" for creating a Job*/
             onGetData: function () {
                 var oLoc = that.byId("idloc").getValue(),
                 oprod = that.byId("idprod").getValue(),
