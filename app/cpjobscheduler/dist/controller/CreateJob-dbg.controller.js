@@ -481,6 +481,10 @@ sap.ui.define(
                         } else if (sServiceText === "ImportPartialProd") {
                             // that.byId("idSdi").setSelectedKey("PP");
                             that.byId("PP").setSelected(true);
+                        } else if (sServiceText === "ImportPVSNode") {
+                            that.byId("PVN").setSelected(true);
+                        } else if (sServiceText === "ImportPVSBOM") {
+                            that.byId("PVB").setSelected(true);
                         }
                     }
                 }
@@ -1793,6 +1797,10 @@ sap.ui.define(
                     } else if (sServiceText === "ImportPartialProd") {
                         // that.byId("idSdi").setSelectedKey("PP");
                         that.byId("PP").setSelected(true);
+                    } else if (sServiceText === "ImportPVSNode") {
+                        that.byId("PVN").setSelected(true);
+                    } else if (sServiceText === "ImportPVSBOM") {
+                        that.byId("PVB").setSelected(true);
                     }
                 }
             },
@@ -2964,43 +2972,43 @@ sap.ui.define(
                     var vDateRange = that.byId("ECRQtyDate").getValue().split(' To ');
                     var dLow = vDateRange[0],
                         dHigh = vDateRange[1];
-                    if (oLocItem && dLow) {
+                    if (oLocItem && dLow && oProdItem) {
                         var CriticalKey = that.byId("ECRQtyidCheck").getSelected();
                         var keyFlag = "";
                         if (CriticalKey) {
                             keyFlag = "X";
                         }
-                        // vRuleslist = {
-                        //     LOCATION_ID: oLocItem,
-                        //     PRODUCT_ID: oProdItem,
-                        //     FROMDATE: dLow,
-                        //     TODATE: dHigh,
-                        //     CRITICALKEY: keyFlag
-                        // };
-                        // this.oGModel.setProperty("/vcrulesData", vRuleslist);
+                        vRuleslist = {
+                            LOCATION_ID: oLocItem,
+                            PRODUCT_ID: oProdItem,
+                            FROMDATE: dLow,
+                            TODATE: dHigh,
+                            CRITICALKEY: keyFlag
+                        };
+                        this.oGModel.setProperty("/vcrulesData", vRuleslist);
 
-                        if (this.oProd.getTokens().length > 0) {
-                            for (var i = 0; i < oProdItem.length; i++) {
-                                vRuleslist = {
-                                    LOCATION_ID: oLocItem,
-                                    PRODUCT_ID: oProdItem[i].getText(),
-                                    FROMDATE: dLow,
-                                    TODATE: dHigh,
-                                    CRITICALKEY: keyFlag
-                                };
-                                oRuleList.LocProdData.push(vRuleslist);
-                            }
-                        } else {
-                            vRuleslist = {
-                                LOCATION_ID: oLocItem,
-                                PRODUCT_ID: "ALL",
-                                FROMDATE: dLow,
-                                TODATE: dHigh,
-                                CRITICALKEY: keyFlag
-                            };
-                            oRuleList.LocProdData.push(vRuleslist);
-                        }
-                        this.oGModel.setProperty("/vcrulesData", oRuleList);
+                        // if (this.oProd.getTokens().length > 0) {
+                        //     for (var i = 0; i < oProdItem.length; i++) {
+                        //         vRuleslist = {
+                        //             LOCATION_ID: oLocItem,
+                        //             PRODUCT_ID: oProdItem[i].getText(),
+                        //             FROMDATE: dLow,
+                        //             TODATE: dHigh,
+                        //             CRITICALKEY: keyFlag
+                        //         };
+                        //         oRuleList.LocProdData.push(vRuleslist);
+                        //     }
+                        // } else {
+                        //     vRuleslist = {
+                        //         LOCATION_ID: oLocItem,
+                        //         PRODUCT_ID: "ALL",
+                        //         FROMDATE: dLow,
+                        //         TODATE: dHigh,
+                        //         CRITICALKEY: keyFlag
+                        //     };
+                        //     oRuleList.LocProdData.push(vRuleslist);
+                        // }
+                        // this.oGModel.setProperty("/vcrulesData", oRuleList);
 
                         // 07-09-2022-1
                         if (that.oGModel.getProperty("/EcecuteType") === "S") {
@@ -3607,12 +3615,17 @@ sap.ui.define(
                         actionText = "/sdi/ImportECCAsmbcomp";
                     } else if (sSdiType === "Variant Table") {
                         actionText = "/sdi/ImportCuvtabInd";
-                    } else if (sSdiType === "CIR Log") {
+                    } else if (sSdiType === "Forecast Demand") {
                         actionText = "/sdi/ImportCIRLog";
                     } else if (sSdiType === "SalesOrder Stock") {
                         actionText = "/sdi/ImportSOStock";
                     } else if (sSdiType === "Partial Product") {
                         actionText = "/sdi/ImportPartialProd";
+
+                    } else if (sSdiType === "PVS Node Structure") {
+                        actionText = "/sdi/ImportPVSNode";
+                    } else if (sSdiType === "PVS BOM") {
+                        actionText = "/sdi/ImportPVSBOM";
                     }
                 } else {
                     if (bButton.includes("Prediction")) {
