@@ -117,7 +117,7 @@ exports._updateAhcGroupData = function(req) {
     var tableObj = [];	
 
     
-    let att1, att2, att3, att4, att5, att6, att7, att8, att9, att10, att11, att12 = 'NA';
+    let att1, att2, att3, att4, att5, att6, att7, att8, att9, att10, att11, att12, att13, att14, att15, att16, att17, att18, att19, att20 = 'NA';
     let ID, groupId;
     for (var i = 0; i < ahcGroupData.length; i++)
     {
@@ -136,13 +136,21 @@ exports._updateAhcGroupData = function(req) {
         att10 = ahcGroupData[i].att10;
         att11 = ahcGroupData[i].att11;
         att12 = ahcGroupData[i].att12;
+        att13 = ahcGroupData[i].att13;
+        att14 = ahcGroupData[i].att14;
+        att15 = ahcGroupData[i].att15;
+        att16 = ahcGroupData[i].att16;
+        att17 = ahcGroupData[i].att17;
+        att18 = ahcGroupData[i].att18;
+        att19 = ahcGroupData[i].att19;
+        att20 = ahcGroupData[i].att20;
 
         var rowObj = [];
-        rowObj.push(groupId,ID, att1,att2,att3,att4,att5,att6,att7,att8,att9,att10,att11,att12);
+        rowObj.push(groupId,ID, att1,att2,att3,att4,att5,att6,att7,att8,att9,att10,att11,att12,att13,att14,att15,att16,att17,att18,att19,att20);
 
         tableObj.push(rowObj);
     }
-    sqlStr = "INSERT INTO PAL_AHC_DATA_GRP_TAB_T(GROUP_ID,ID,C1,C2,C3,C4,C5,C6,C7,C8,C9,C10,C11,C12) VALUES(?, ?, ?, ?, ?,?,?,?,?,?,?,?,?,?)";
+    sqlStr = "INSERT INTO PAL_AHC_DATA_GRP_TAB_T(GROUP_ID,ID,C1,C2,C3,C4,C5,C6,C7,C8,C9,C10,C11,C12,C13,C14,C15,C16,C17,C18,C19,C20) VALUES(?, ?, ?, ?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     stmt = conn.prepare(sqlStr);
 
     stmt.execBatch(tableObj);
