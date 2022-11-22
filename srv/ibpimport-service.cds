@@ -40,11 +40,12 @@ service IBPImportSrv @(impl : './lib/ibpimport-service.js') {
     action exportMktAuth(LocProdData: String);//LOCATION_ID : String(4),PRODUCT_ID : String(40));
     action exportIBPCIR(LocProdData: String);//LOCATION_ID : String(4),PRODUCT_ID : String(40));  // Partial Product
     //Inbound from BTP
-    action generateFDemandQty(LOCATION_ID : String(4), PRODUCT_ID : String(40));
+    action generateFDemandQty(LocProdData: String);//LOCATION_ID : String(4), PRODUCT_ID : String(40));
     // function generateFDemandQty(LOCATION_ID : String(4), PRODUCT_ID : String(40)) returns String;
     action generateFCharPlan(LOCATION_ID : String(4), PRODUCT_ID : String(40), FROMDATE : Date, TODATE : Date);
     // function exportMktAuth(LOCATION_ID : String(4),PRODUCT_ID : String(40)) returns String;
 
+    action generateMarketAuth( MARKETDATA : String);
 }
 @protocol : 'rest'
 service IbpImportRest {

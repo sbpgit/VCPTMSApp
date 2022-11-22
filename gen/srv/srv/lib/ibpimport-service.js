@@ -1,11 +1,14 @@
 const cds = require("@sap/cds");
 const GenF = require("./gen-functions");
-const IBPFunc = require("./ibp-functions");
 const hana = require("@sap/hana-client");
+const { v1: uuidv1 } = require('uuid')
 const xsenv = require("@sap/xsenv");
 const JobSchedulerClient = require("@sap/jobs-client");
+const MktAuth = require("./market-auth");
 const vAIRKey = process.env.AIR;
+const IBPFunc = require("./ibp-functions");
 const obibpfucntions = new IBPFunc();
+const obgenMktAuth = new MktAuth();
 
 function getJobscheduler(req) {
 
@@ -1840,8 +1843,8 @@ module.exports = cds.service.impl(async function () {
         let id = uuidv1();
         let values = [];
         let message = "Started importing IBP Future Demand and Characteristic Plan";
-        let res = req._.req.res;
-        let lilocProdReq = JSON.parse(req.data.LocProdData);
+        let res = request._.req.res;
+        let lilocProdReq = JSON.parse(request.data.LocProdData);
         if (lilocProdReq[0].PRODUCT_ID === "ALL") {
             lsData.LOCATION_ID = lilocProdReq[0].LOCATION_ID;
             lsData.PRODUCT_ID = lilocProdReq[0].PRODUCT_ID;
@@ -1852,7 +1855,7 @@ module.exports = cds.service.impl(async function () {
             lilocProd = JSON.parse(litemp);
         }
         else {
-            lilocProd = JSON.parse(req.data.LocProdData);
+            lilocProd = JSON.parse(request.data.LocProdData);
         }
         values.push({ id, createtAt, message, lilocProd });
         res.statusCode = 202;
@@ -2016,9 +2019,9 @@ module.exports = cds.service.impl(async function () {
         values.push({ id, createtAt, message, lilocProd });
         res.statusCode = 202;
         res.send({ values });
-        for (let i = 0; i < lilocProd.length; i++) {
-            lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
-            lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
+        for (let iloc = 0;  iloc < lilocProd.length; iloc++) {
+            lsData.LOCATION_ID = lilocProd[iloc].LOCATION_ID;
+            lsData.PRODUCT_ID = lilocProd[iloc].PRODUCT_ID;
             const licir = await cds.run(
                 `
             SELECT *
@@ -2027,7 +2030,7 @@ module.exports = cds.service.impl(async function () {
                           AND PRODUCT_ID = '`+ lsData.PRODUCT_ID + `'`);
 
             //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
-            for (i = 0; i < licir.length; i++) {
+            for (let i = 0; i < licir.length; i++) {
 
                 var vWeekDate = new Date(licir[i].WEEK_DATE).toISOString().split('Z')[0];
                 vCIR = {
@@ -2216,5 +2219,249 @@ module.exports = cds.service.impl(async function () {
         }
         GenF.jobSchMessage('X', lMessage, req);
     });
+    this.on("generateMarketAuth", async (request) => {
+        // const { SBPVCP } = this.entities;
+        // const service = await cds.connect.to('IBPDemandsrv');
+        var flag, lMessage = '';
+        // Generating payload for job scheduler logs
+        let lVersion, lScenario, vFromDate, vToDate;
+        let lilocProd = {};
+        let lsData = {};
+        let createtAt = new Date();
+        let id = uuidv1();
+        let values = [];
+        let message = "Started importing IBP Future Demand and Characteristic Plan";
+        let res = request._.req.res;
+        let lilocProdReq = JSON.parse(request.data.MARKETDATA);
 
+        if (lilocProdReq[0].PRODUCT_ID === "ALL") {
+            lsData.LOCATION_ID = lilocProdReq[0].LOCATION_ID;
+            lsData.PRODUCT_ID = lilocProdReq[0].PRODUCT_ID;
+            const objCatFn = new Catservicefn();
+            const lilocProdT = await objCatFn.getAllProducts(lsData);
+            // lsData = {};
+            const litemp = JSON.stringify(lilocProdT);
+            lilocProd = JSON.parse(litemp);
+        }
+        else {
+            lilocProd = JSON.parse(request.data.MARKETDATA);
+        }
+        values.push({ id, createtAt, message, lilocProd });
+        res.statusCode = 202;
+        res.send({ values });
+        // flag = await obibpfucntions.importFutureDemandcharPlan(lilocProd, req, 'MKTAUTH');
+        /////////////////////////////////////////////////////////////////////////////////////
+        // let lilocProdReq = JSON.parse(request.data.MARKETDATA);
+        lsData = {};
+        for (let iloc = 0; iloc < lilocProd.length; iloc++) {
+            lsData.LOCATION_ID = lilocProd[iloc].LOCATION_ID;
+            lsData.PRODUCT_ID = lilocProd[iloc].PRODUCT_ID;
+            lVersion = lilocProdReq[0].VERSION;
+            lScenario = lilocProdReq[0].SCENARIO;
+            vFromDate = lilocProdReq[0].FROMDATE;
+            vToDate = lilocProdReq[0].TODATE;
+            var resUrl = "/SBPVCP?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + lsData.LOCATION_ID + "' and PRDID eq '" + lsData.PRODUCT_ID + "' and PERIODID4_TSTAMP gt datetime'" + vFromDate + "' and PERIODID4_TSTAMP lt datetime'" + vToDate + "' and VERSIONID eq '" + lVersion + "' and SCENARIOID eq '" + lScenario + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
+            var req = await service.tx(req).get(resUrl);
+            // if(req.length > 0){
+            const vDelDate = new Date();
+            const vDateDeld = vDelDate.toISOString().split('T')[0];
+            try {
+                await DELETE.from('CP_IBP_FUTUREDEMAND')
+                    .where(`LOCATION_ID = '${lsData.LOCATION_ID}' 
+                        AND PRODUCT_ID = '${lsData.PRODUCT_ID}'
+                        AND WEEK_DATE  < '${vDateDeld}'`);
+            }
+            catch (e) {
+                //Do nothing
+            }
+            // }
+            const dateJSONToEDM = jsonDate => {
+                const content = /\d+/.exec(String(jsonDate));
+                const timestamp = content ? Number(content[0]) : 0;
+                const date = new Date(timestamp);
+                const string = date.toISOString().split('T')[0];
+                return string;
+            };
+            flag = '';
+            for (var i in req) {
+                var vWeekDate = dateJSONToEDM(req[i].PERIODID4_TSTAMP);
+                var vScenario = 'BSL_SCENARIO';
+                req[i].PERIODID4_TSTAMP = vWeekDate;
+
+                if (vWeekDate >= vDateDeld) {
+                    await cds.run(
+                        `DELETE FROM "CP_IBP_FUTUREDEMAND" WHERE "LOCATION_ID" = '` + req[i].LOCID + `' 
+                                                      AND "PRODUCT_ID" = '`+ req[i].PRDID + `'
+                                                      AND "VERSION" = '` + req[i].VERSIONID + `'
+                                                      AND "SCENARIO" = '` + vScenario + `'
+                                                      AND "WEEK_DATE" = '` + vWeekDate + `'`
+                    );
+                    let modQuery = 'INSERT INTO "CP_IBP_FUTUREDEMAND" VALUES (' +
+                        "'" + req[i].LOCID + "'" + "," +
+                        "'" + req[i].PRDID + "'" + "," +
+                        "'" + req[i].VERSIONID + "'" + "," +
+                        "'" + vScenario + "'" + "," +
+                        "'" + vWeekDate + "'" + "," +
+                        "'" + req[i].TOTALDEMANDOUTPUT + "'" + ')';// + ' WITH PRIMARY KEY';
+                    try {
+                        await cds.run(modQuery);
+                        flag = 'D';
+                    }
+                    catch (err) {
+                        console.log(err);
+                    }
+                }
+            }
+            if (flag === 'D') {
+                //////////////////////////////////////////
+                flag = '';
+                var resUrlFplan;
+                const dateJSONToEDM2 = jsonDate => {
+                    const content = /\d+/.exec(String(jsonDate));
+                    const timestamp = content ? Number(content[0]) : 0;
+                    const date = new Date(timestamp);
+                    const string = date.toISOString();
+                    return string;
+                };
+                resUrlFplan = "/SBPVCP?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + lsData.LOCATION_ID + "' and PRDID eq '" + lsData.PRODUCT_ID + "' and PERIODID4_TSTAMP gt datetime'" + vFromDate + "' and PERIODID4_TSTAMP lt datetime'" + vToDate + "' and VERSIONID eq '" + lVersion + "' and SCENARIOID eq '" + lScenario + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
+                var req = await service.tx(request).get(resUrlFplan);
+                const vDelDate = new Date();
+                const vDateDel = vDelDate.toISOString().split('T')[0];
+                try {
+                    await DELETE.from('CP_IBP_FCHARPLAN')
+                        .where(`LOCATION_ID = '${lsData.LOCATION_ID}' 
+                        AND PRODUCT_ID = '${lsData.PRODUCT_ID}'
+                        AND WEEK_DATE    < '${vDateDel}'`);
+                }
+                catch (e) {
+                    //Do nothing
+                }
+                for (var i in req) {
+                    var vWeekDate = dateJSONToEDM2(req[i].PERIODID4_TSTAMP).split('T')[0];
+                    var vScenario = 'BSL_SCENARIO';
+                    req[i].PERIODID4_TSTAMP = vWeekDate;
+                    if (vWeekDate >= vDateDel) {
+                        await cds.run(
+                            `DELETE FROM "CP_IBP_FCHARPLAN" WHERE "LOCATION_ID" = '` + req[i].LOCID + `' 
+                                                          AND "PRODUCT_ID" = '`+ req[i].PRDID + `'
+                                                          AND "CLASS_NUM" = '` + req[i].VCCLASS + `' 
+                                                          AND "CHAR_NUM" = '` + req[i].VCCHAR + `' 
+                                                          AND "CHARVAL_NUM" = '` + req[i].VCCHARVALUE + `' 
+                                                          AND "VERSION" = '` + req[i].VERSIONID + `'
+                                                          AND "SCENARIO" = '` + vScenario + `'
+                                                          AND "WEEK_DATE" = '` + vWeekDate + `'`
+                        );
+
+                        let modQuery = 'INSERT INTO "CP_IBP_FCHARPLAN" VALUES (' +
+                            "'" + req[i].LOCID + "'" + "," +
+                            "'" + req[i].PRDID + "'" + "," +
+                            "'" + req[i].VCCLASS + "'" + "," +
+                            "'" + req[i].VCCHAR + "'" + "," +
+                            "'" + req[i].VCCHARVALUE + "'" + "," +
+                            "'" + req[i].VERSIONID + "'" + "," +
+                            "'" + vScenario + "'" + "," +
+                            "'" + vWeekDate + "'" + "," +
+                            "'" + req[i].OPTIONPERCENTAGE + "'" + "," +
+                            "'" + req[i].FINALDEMANDVC + "'" + "," +
+                            "'" + req[i].MANUALOPTION + "'" + ')';// + ' WITH PRIMARY KEY';
+                        try {
+                            await cds.run(modQuery);
+                            flag = 'S';
+                            // if (vServ === 'MKTAUTH') {
+                            obgenMktAuth.updateOptPer(req[i].LOCID, req[i].PRDID, vWeekDate, req[i].VERSIONID, vScenario);
+                            // }
+                        }
+                        catch (err) {
+                            flag = 'E';
+                            console.log(err);
+                        }
+                    }
+                }
+            }
+            //////////////////////////////////////////////////////////////////////////////////////
+            if (flag === 'S') {
+                lsData = {};
+                for (let i = 0; i < lilocProd.length; i++) {
+                    lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
+                    lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
+                    const limkauth = await cds.run(
+                        `
+            SELECT CP_MARKETAUTH_CFG."WEEK_DATE",
+                   CP_MARKETAUTH_CFG."LOCATION_ID",
+                   CP_MARKETAUTH_CFG."PRODUCT_ID",
+                   V_CHARVAL."CLASS_NUM",
+                   CP_MARKETAUTH_CFG."CHAR_NUM",
+                   CP_MARKETAUTH_CFG."CHARVAL_NUM",
+                   CP_MARKETAUTH_CFG."LOCATION_ID",
+                   CP_MARKETAUTH_CFG."PRODUCT_ID",
+                   CP_MARKETAUTH_CFG."OPT_PERCENT",
+                   CP_MARKETAUTH_CFG."VERSION",
+                   CP_MARKETAUTH_CFG."SCENARIO"
+                FROM CP_MARKETAUTH_CFG
+          INNER JOIN V_CHARVAL
+                  ON CP_MARKETAUTH_CFG.CHAR_NUM  = V_CHARVAL.CHAR_NUM
+                 AND CP_MARKETAUTH_CFG.CHARVAL_NUM  = V_CHARVAL.CHARVAL_NUM
+               WHERE LOCATION_ID = '${lsData.LOCATION_ID}'
+                 AND PRODUCT_ID = '${lsData.PRODUCT_ID}'
+                 AND VERSION = '${lilocProdReq[0].VERSION}'
+                 AND SCENARIO = '${lilocProdReq[0].SCENARIO}'
+                 AND ( WEEK_DATE > '${lilocProdReq[0].FROMDATE}'
+                 AND WEEK_DATE < '${lilocProdReq[0].TODATE}' )
+        `);
+                    for (imk = 0; imk < limkauth.length; imk++) {
+                        let vDemd;
+                        let vWeekDate = new Date(limkauth[imk].WEEK_DATE).toISOString().split('Z');
+
+                        let vOpt = limkauth[imk].OPT_PERCENT.toString();
+                        let vSrch = vOpt.search(".");
+                        if (vSrch > 0) {
+                            vDemd = vOpt.split('.')[0];
+                        }
+                        else {
+                            vDemd = vOpt;
+                        }
+                        vDemd = parseInt(vDemd) / 100;
+                        // console.log(vWeekDate);
+                        // console.log(vDemd);
+                        vMktauth = {
+                            "LOCID": limkauth[imk].LOCATION_ID,
+                            "PRDID": limkauth[imk].PRODUCT_ID,
+                            "VCCHAR": limkauth[imk].CHAR_NUM,
+                            "VCCHARVALUE": limkauth[imk].CHARVAL_NUM,
+                            "VCCLASS": limkauth[imk].CLASS_NUM,
+                            "CUSTID": "NULL",//lisales[i].CUSTOMER_GROUP,
+                            "PERIODID4_TSTAMP": vWeekDate[0],
+                            // "VERSIONID": limkauth[i].VERSION,
+                            // "SCENARIOID": limkauth[i].SCENARIO,
+                            "MARKETAUTHORIZATION": vDemd.toString()
+                        };
+                        // console.log(vMktauth);
+                        oReq.mktauth.push(vMktauth);
+
+                    }
+                    var vTransID = new Date().getTime().toString();
+                    var oEntry =
+                    {
+                        "Transactionid": vTransID,
+                        "AggregationLevelFieldsString": "PERIODID4_TSTAMP,VCCHAR,VCCHARVALUE,VCCLASS,CUSTID,LOCID,PRDID,MARKETAUTHORIZATION",
+                        "VersionID": "",
+                        "DoCommit": true,
+                        "ScenarioID": "",
+                        "NavSBPVCP": oReq.mktauth
+                    }
+
+                    // console.log(limkauth.length);
+
+                    try {
+                        await service.tx(req).post("/SBPVCPTrans", oEntry);
+                        lMessage = lMessage + ' ' + "Export of Market authorization is successfull for product" + lsData.PRODUCT_ID;
+                    }
+                    catch (error) {
+                        lMessage = lMessage + ' ' + "Export of Market authorization has failed for product" + lsData.PRODUCT_ID;
+                    }
+                }
+            }
+        }
+        GenF.jobSchMessage('X', lMessage, req);
+    });
 });

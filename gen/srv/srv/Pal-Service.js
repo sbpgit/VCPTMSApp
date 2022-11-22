@@ -120,6 +120,11 @@ module.exports = srv => {
         return (await _genClusterInputs(req,false));
     })
 
+
+    srv.on ('genClusterUniqueIDS',    async req => {
+        return (await _genClusterUniqueIDS(req,false));
+    })
+
     srv.on ('genClusters',    async req => {
         return (await _generateClusters(req,false));
     })
@@ -141,6 +146,10 @@ module.exports = srv => {
 
     srv.on ('fgenClusterInputs',    async req => {
         return (await _genClusterInputs(req,true));
+    })
+
+    srv.on ('fgenClusterUniqueIDS',    async req => {
+        return (await _genClusterUniqueIDS(req,true));
     })
 
     srv.on ('fgenClusters',    async req => {
@@ -2885,6 +2894,442 @@ async function _genClusterInputs(req,isGet) {
     cqnQuery = {INSERT:{ into: { ref: ['CP_CLUSTER_DATA'] }, entries:  tableObj }};
 
     await cds.run(cqnQuery);
+
+
+}
+
+async function _genClusterUniqueIDSByLocProduct(location, product)
+{
+    let sqlCharsStr = 'SELECT * FROM CP_CHARACTERISTICS WHERE CLASS_NUM = \'55555\' ' +
+    ' AND CHAR_GROUP != \'PARTIAL\' ORDER BY CHAR_NUM';
+
+    let sqlCharsResults = await cds.run(sqlCharsStr);
+
+    sqlStr = 'SELECT DISTINCT LOCATION_ID, PRODUCT_ID, PARTIAL_ID, CHARS, CHARVALS FROM V_PLSTR_PRIMARY_SCNDRY_CHARS' +
+                ' WHERE PARTIAL_ID = ' + "'" + product  + "'" +
+                ' AND LOCATION_ID = ' + "'" + location + "'";
+    console.log(" _genClusterUniqueIDS sqlSTr : ", sqlStr);
+    let sqlClusterResults = await cds.run(sqlStr);
+    // console.log(" _genClusterInputs sqlClusterResults : ", sqlClusterResults);
+    let numIds = sqlClusterResults.length;
+    let tableObj = [];
+
+    let uniqueId = 0;
+    for (let clusterIdx = 0; clusterIdx < numIds; clusterIdx ++)
+    {
+        let char1= char2 = char3 = char4 = char5 = char6 = char7 = char8 = char9 = char10 = char11 = char12 = 'NA';
+        let chars = sqlClusterResults[clusterIdx].CHARS;
+        let charVals = sqlClusterResults[clusterIdx].CHARVALS;
+        let productId =  sqlClusterResults[clusterIdx].PARTIAL_ID;
+        let locationId =  sqlClusterResults[clusterIdx].LOCATION_ID;
+        uniqueId = uniqueId +1;
+    
+        let charStr = chars.split(',');
+
+        let charValStr = charVals.split(',');
+        // console.log("_genClusterInputs  productIr", productId, "locationId ", locationId, "uniqueId ", uniqueId, "charVals ", charVals,"numCharVals ", charStr.length);
+        // console.log("charStr", charStr, "charValStr", charValStr);
+
+        for (let charIdx = 0; charIdx < sqlCharsResults.length; charIdx ++)
+        {
+            let charMatch = false;
+            let charValNum = 'NA';
+
+            for (let charStrIdx = 0; charStrIdx < charStr.length; charStrIdx ++)
+            {
+                if (sqlCharsResults[charIdx].CHAR_NUM == charStr[charStrIdx])
+                {
+                    charMatch = true;
+                    charValNum = charValStr[charStrIdx];
+                    charStrIdx = charStr.length;
+                    // console.log("charStrIdx", charStrIdx, "charValNum", charValNum);
+                }
+            }
+
+            if(charMatch)
+            {
+                // console.log("charIdx", charIdx, "CharStr",charStr[charIdx],  "sqlCharsResults",sqlCharsResults[charIdx].CHAR_NUM);
+
+                if (charIdx === 0)                    
+                {
+                    char1 = charValNum; //charValStr[charIdx];
+                }
+                else if (charIdx === 1)
+                {
+                    char2 = charValNum; //charValStr[charIdx];
+                }
+                else if (charIdx === 2)
+                {
+                    char3 = charValNum; //charValStr[charIdx];
+                }
+                else if (charIdx === 3)
+                {
+                    char4 = charValNum; //charValStr[charIdx];
+                }
+                else if (charIdx === 4)
+                {
+                    char5 = charValNum; //charValStr[charIdx];
+                }
+                else if (charIdx === 5)
+                {
+                    char6 = charValNum; //charValStr[charIdx];
+                }
+                else if (charIdx === 6)
+                {
+                    char7 = charValNum; //charValStr[charIdx];
+                }
+                else if (charIdx === 7)
+                {
+                    char8 = charValNum; //charValStr[charIdx];
+                }
+                else if (charIdx === 8)
+                {
+                    char9 = charValNum; //charValStr[charIdx];
+                }
+                else if (charIdx === 9)
+                {
+                    char10 = charValNum; //charValStr[charIdx];
+                }
+                else if (charIdx === 10)
+                {
+                    char11 = charValNum; //charValStr[charIdx];
+                }
+                else if (charIdx === 11)
+                {
+                    char12 = charValNum; //charValStr[charIdx];
+                }
+            }
+        }
+        let rowObj = {   LOCATION_ID: locationId, 
+            PRODUCT_ID : productId,
+            UNIQUE_ID : uniqueId.toString(),
+            C1 : char1,
+            C2 : char2,            
+            C3 : char3,
+            C4 : char4, 
+            C5 : char5,
+            C6 : char6,            
+            C7 : char7,
+            C8 : char8, 
+            C9 : char9,
+            C10 : char10,            
+            C11 : char11,
+            C12 : char12 };
+
+        tableObj.push(rowObj);
+
+    }
+    
+    sqlStr = 'DELETE FROM CP_CLUSTER_DATA' +
+                ' WHERE PRODUCT_ID = ' + "'" + product  + "'" +
+                ' AND LOCATION_ID = ' + "'" + location + "'";
+    
+
+    console.log("sqlStr ", sqlStr);
+
+    await cds.run(sqlStr);
+
+    // console.log("tableObj ", tableObj);
+    
+    let cqnQuery = {INSERT:{ into: { ref: ['CP_CLUSTER_DATA'] }, entries:  tableObj }};
+
+    await cds.run(cqnQuery);
+    const sleep = require('await-sleep');
+    await sleep(1000);
+
+
+}
+
+async function _genClusterUniqueIDS(req,isGet) {
+
+    var clusterInputReq = {};
+    if (isGet == true) //GET -- Kludge
+    {
+        clusterInputReq.Location = req.data.Location;
+        clusterInputReq.Product = req.data.Product;
+
+    }
+    else
+    {
+        clusterInputReq = req.data;
+    }
+   
+    let createtAt = new Date();
+    let id = uuidv1();
+    let values = [];	
+    let message = "Request for Generating Cluster Unique IDS Input Data Queued Sucessfully";
+   
+    values.push({id, createtAt, message, clusterInputReq});    
+   
+   
+    if (isGet == true)
+    {
+        req.reply({values});
+    }
+    else
+    {
+        let res = req._.req.res;
+        res.statusCode = 202;
+        res.send({values});
+    }
+
+ 
+    let sqlStr = "";
+    
+    if ( (req.data.Product == "ALL") && (req.data.Location == "ALL" ))
+    {
+        sqlStr = 'SELECT DISTINCT LOCATION_ID, PRODUCT_ID FROM CP_PARTIALPROD_INTRO' +
+                 'WHERE PRODUCT_ID LIKE \'%534%\' ';
+    }
+    else if ( (req.data.Product != "ALL") && (req.data.Location == "ALL" ))
+    {
+        sqlStr = 'SELECT DISTINCT LOCATION_ID, PRODUCT_ID FROM CP_PARTIALPROD_INTRO' +
+                    ' WHERE PRODUCT_ID = ' + "'" + req.data.Product + "'"+
+                    ' AND PRODUCT_ID LIKE \'%534%\' ';
+    }
+    else if ( (req.data.Product == "ALL") && (req.data.Location != "ALL" ))
+    {
+        sqlStr = 'SELECT DISTINCT LOCATION_ID, PRODUCT_ID FROM CP_PARTIALPROD_INTRO' +
+                ' WHERE LOCATION_ID = ' + "'" + req.data.Location  + "'"+
+                ' AND PRODUCT_ID LIKE \'%534%\' ';
+    }
+    else
+    {   
+        sqlStr = 'SELECT DISTINCT LOCATION_ID, PRODUCT_ID FROM CP_PARTIALPROD_INTRO' +
+                ' WHERE PRODUCT_ID = ' + "'" + req.data.Product  + "'" +
+                ' AND LOCATION_ID = ' + "'" + req.data.Location + "'"+
+                ' AND PRODUCT_ID LIKE \'%534%\' ';
+     
+    }
+
+
+    console.log(" _genClusterUniqueIDS sqlSTr : ", sqlStr);
+    let sqlClusterResults = await cds.run(sqlStr);
+    let numIds = sqlClusterResults.length;
+
+    console.log(" _genClusterUniqueIDS numIds : ", sqlClusterResults);
+    for (let locProdIdx = 0; locProdIdx < numIds; locProdIdx ++)
+    {
+        let location = sqlClusterResults[locProdIdx].LOCATION_ID;
+        let product = sqlClusterResults[locProdIdx].PRODUCT_ID;
+        if (product.length > 7)
+            _genClusterUniqueIDSByLocProduct(location, product);
+
+    }
+    
+
+}
+
+async function _genClusterUniqueIDS_old(req,isGet) {
+
+    var clusterInputReq = {};
+    if (isGet == true) //GET -- Kludge
+    {
+        clusterInputReq.Location = req.data.Location;
+        clusterInputReq.Product = req.data.Product;
+
+    }
+    else
+    {
+        clusterInputReq = req.data;
+    }
+   
+    let createtAt = new Date();
+    let id = uuidv1();
+    let values = [];	
+    let message = "Request for Generating Cluster Unique IDS Input Data Queued Sucessfully";
+   
+    values.push({id, createtAt, message, clusterInputReq});    
+   
+   
+    if (isGet == true)
+    {
+        req.reply({values});
+    }
+    else
+    {
+        let res = req._.req.res;
+        res.statusCode = 202;
+        res.send({values});
+    }
+    let sqlCharsStr = 'SELECT * FROM CP_CHARACTERISTICS WHERE CLASS_NUM = \'55555\' ' +
+                      ' AND CHAR_GROUP != \'PARTIAL\' ORDER BY CHAR_NUM';
+
+    let sqlCharsResults = await cds.run(sqlCharsStr);
+
+
+    // let sqlStr = 'SELECT DISTINCT LOCATION_ID, PRODUCT_ID, PARTIAL_ID, CHARS, CHARVALS FROM V_PLSTR_ALL_CHARS' +
+    //              ' WHERE PARTIAL_ID = ' + "'" + req.data.Product  + "'" +
+    //              ' AND LOCATION_ID = ' + "'" + req.data.Location + "'";
+  
+    let sqlStr = "";
+    
+    if ( (req.data.Product == "ALL") && (req.data.Location == "ALL" ))
+    {
+        sqlStr = 'SELECT DISTINCT LOCATION_ID, PRODUCT_ID, PARTIAL_ID, CHARS, CHARVALS FROM V_PLSTR_PRIMARY_SCNDRY_CHARS';
+    }
+    else if ( (req.data.Product != "ALL") && (req.data.Location == "ALL" ))
+    {
+        sqlStr = 'SELECT DISTINCT LOCATION_ID, PRODUCT_ID, PARTIAL_ID, CHARS, CHARVALS FROM V_PLSTR_PRIMARY_SCNDRY_CHARS';
+                    ' WHERE PARTIAL_ID = ' + "'" + req.data.Product + "'";
+    }
+    else if ( (req.data.Product == "ALL") && (req.data.Location != "ALL" ))
+    {
+        sqlStr = 'SELECT DISTINCT LOCATION_ID, PRODUCT_ID, PARTIAL_ID, CHARS, CHARVALS FROM V_PLSTR_PRIMARY_SCNDRY_CHARS' +
+                ' WHERE LOCATION_ID = ' + "'" + req.data.Location  + "'";
+    }
+    else
+    {   
+        sqlStr = 'SELECT DISTINCT LOCATION_ID, PRODUCT_ID, PARTIAL_ID, CHARS, CHARVALS FROM V_PLSTR_PRIMARY_SCNDRY_CHARS' +
+                ' WHERE PARTIAL_ID = ' + "'" + req.data.Product  + "'" +
+                ' AND LOCATION_ID = ' + "'" + req.data.Location + "'";
+     
+    }
+
+
+    console.log(" _genClusterUniqueIDS sqlSTr : ", sqlStr);
+    let sqlClusterResults = await cds.run(sqlStr);
+    // console.log(" _genClusterInputs sqlClusterResults : ", sqlClusterResults);
+    let numIds = sqlClusterResults.length;
+    let tableObj = [];
+
+    let uniqueId = 0;
+    for (let clusterIdx = 0; clusterIdx < numIds; clusterIdx ++)
+    {
+        let char1= char2 = char3 = char4 = char5 = char6 = char7 = char8 = char9 = char10 = char11 = char12 = 'NA';
+        let chars = sqlClusterResults[clusterIdx].CHARS;
+        let charVals = sqlClusterResults[clusterIdx].CHARVALS;
+        let productId =  sqlClusterResults[clusterIdx].PARTIAL_ID;
+        let locationId =  sqlClusterResults[clusterIdx].LOCATION_ID;
+        uniqueId = uniqueId +1;
+    
+        let charStr = chars.split(',');
+
+        let charValStr = charVals.split(',');
+        // console.log("_genClusterInputs  productIr", productId, "locationId ", locationId, "uniqueId ", uniqueId, "charVals ", charVals,"numCharVals ", charStr.length);
+        // console.log("charStr", charStr, "charValStr", charValStr);
+
+        for (let charIdx = 0; charIdx < sqlCharsResults.length; charIdx ++)
+        {
+            let charMatch = false;
+            let charValNum = 'NA';
+
+            for (let charStrIdx = 0; charStrIdx < charStr.length; charStrIdx ++)
+            {
+                if (sqlCharsResults[charIdx].CHAR_NUM == charStr[charStrIdx])
+                {
+                    charMatch = true;
+                    charValNum = charValStr[charStrIdx];
+                    charStrIdx = charStr.length;
+                    // console.log("charStrIdx", charStrIdx, "charValNum", charValNum);
+                }
+            }
+
+            if(charMatch)
+            {
+                // console.log("charIdx", charIdx, "CharStr",charStr[charIdx],  "sqlCharsResults",sqlCharsResults[charIdx].CHAR_NUM);
+
+                if (charIdx === 0)                    
+                {
+                    char1 = charValNum; //charValStr[charIdx];
+                }
+                else if (charIdx === 1)
+                {
+                    char2 = charValNum; //charValStr[charIdx];
+                }
+                else if (charIdx === 2)
+                {
+                    char3 = charValNum; //charValStr[charIdx];
+                }
+                else if (charIdx === 3)
+                {
+                    char4 = charValNum; //charValStr[charIdx];
+                }
+                else if (charIdx === 4)
+                {
+                    char5 = charValNum; //charValStr[charIdx];
+                }
+                else if (charIdx === 5)
+                {
+                    char6 = charValNum; //charValStr[charIdx];
+                }
+                else if (charIdx === 6)
+                {
+                    char7 = charValNum; //charValStr[charIdx];
+                }
+                else if (charIdx === 7)
+                {
+                    char8 = charValNum; //charValStr[charIdx];
+                }
+                else if (charIdx === 8)
+                {
+                    char9 = charValNum; //charValStr[charIdx];
+                }
+                else if (charIdx === 9)
+                {
+                    char10 = charValNum; //charValStr[charIdx];
+                }
+                else if (charIdx === 10)
+                {
+                    char11 = charValNum; //charValStr[charIdx];
+                }
+                else if (charIdx === 11)
+                {
+                    char12 = charValNum; //charValStr[charIdx];
+                }
+            }
+        }
+        let rowObj = {   LOCATION_ID: locationId, 
+            PRODUCT_ID : productId,
+            UNIQUE_ID : uniqueId.toString(),
+            C1 : char1,
+            C2 : char2,            
+            C3 : char3,
+            C4 : char4, 
+            C5 : char5,
+            C6 : char6,            
+            C7 : char7,
+            C8 : char8, 
+            C9 : char9,
+            C10 : char10,            
+            C11 : char11,
+            C12 : char12 };
+
+        tableObj.push(rowObj);
+
+    }
+    if ( (req.data.Product == "ALL") && (req.data.Location == "ALL" ))
+    {
+        sqlStr = 'DELETE FROM CP_CLUSTER_DATA';
+    }
+    else if ( (req.data.Product != "ALL") && (req.data.Location == "ALL" ))
+    {
+        sqlStr = 'DELETE FROM CP_CLUSTER_DATA' +
+                ' WHERE PRODUCT_ID = ' + "'" + req.data.Product  + "'";
+    }
+    else if ( (req.data.Product != "ALL") && (req.data.Location == "ALL" ))
+    {
+        sqlStr = 'DELETE FROM CP_CLUSTER_DATA' +
+                ' WHERE LOCATION_ID = ' + "'" + req.data.Location  + "'";
+    }
+    else
+    {
+        sqlStr = 'DELETE FROM CP_CLUSTER_DATA' +
+                ' WHERE PRODUCT_ID = ' + "'" + req.data.Product  + "'" +
+                ' AND LOCATION_ID = ' + "'" + req.data.Location + "'";
+    }
+
+    console.log("sqlStr ", sqlStr);
+
+    await cds.run(sqlStr);
+
+    // console.log("tableObj ", tableObj);
+    
+    let cqnQuery = {INSERT:{ into: { ref: ['CP_CLUSTER_DATA'] }, entries:  tableObj }};
+
+    await cds.run(cqnQuery);
+    const sleep = require('await-sleep');
+    await sleep(5000);
 
 
 }

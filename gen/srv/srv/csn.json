@@ -4039,6 +4039,46 @@
         }
       }
     },
+    "cp.LOCPRODRESTRICT": {
+      "kind": "entity",
+      "elements": {
+        "WEEK_DATE": {
+          "@title": "Week Date",
+          "key": true,
+          "type": "cds.Date"
+        },
+        "LOCATION_ID": {
+          "@title": "Location ",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "LINE_ID": {
+          "@title": "Line",
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+        "PRODUCT_ID": {
+          "@title": "Product",
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+        "RESTRICTION": {
+          "@title": "Restriction",
+          "key": true,
+          "type": "cds.String",
+          "length": 30
+        },
+        "RTR_QTY": {
+          "@title": "Component Quantity",
+          "type": "cds.Decimal",
+          "precision": 13,
+          "scale": 3
+        }
+      }
+    },
     "cp.CIR_GENERATED": {
       "kind": "entity",
       "elements": {
@@ -12342,6 +12382,148 @@
         }
       }
     },
+    "cp.V_AHC_LEFT_CLUSTER": {
+      "kind": "entity",
+      "@cds.persistence.exists": true,
+      "elements": {
+        "LOCATION_ID": {
+          "@title": "LOCATION_ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "@title": "PRODUCT_ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+        "PROFILE": {
+          "@title": "PROFILE",
+          "key": true,
+          "type": "cds.String",
+          "length": 50
+        },
+        "LEFT_ID_CLUSTER": {
+          "@title": "LEFT_ID_CLUSTER",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "LEFT_ID": {
+          "@title": "LEFT_ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 50
+        },
+        "RIGHT_ID": {
+          "@title": "RIGHT_ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 50
+        },
+        "DISTANCE": {
+          "@title": "DISTANCE",
+          "key": true,
+          "type": "cds.Decimal",
+          "precision": 13,
+          "scale": 4
+        }
+      }
+    },
+    "cp.V_AHC_CLUSTER_RESULTS": {
+      "kind": "entity",
+      "@cds.persistence.exists": true,
+      "elements": {
+        "LOCATION_ID": {
+          "@title": "LOCATION_ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "@title": "PRODUCT_ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+        "PROFILE": {
+          "@title": "PROFILE",
+          "key": true,
+          "type": "cds.String",
+          "length": 50
+        },
+        "LEFT_ID_CLUSTER": {
+          "@title": "LEFT_ID_CLUSTER",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "RIGHT_ID_CLUSTER": {
+          "@title": "RIGHT_ID_CLUSTER",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "LEFT_ID": {
+          "@title": "LEFT_ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 50
+        },
+        "RIGHT_ID": {
+          "@title": "RIGHT_ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 50
+        },
+        "DISTANCE": {
+          "@title": "DISTANCE",
+          "key": true,
+          "type": "cds.Decimal",
+          "precision": 13,
+          "scale": 4
+        }
+      }
+    },
+    "cp.V_CLUSTER_CHARS": {
+      "kind": "entity",
+      "@cds.persistence.exists": true,
+      "elements": {
+        "LOCATION_ID": {
+          "@title": "LOCATION_ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "@title": "PRODUCT_ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+        "UNIQUE_ID": {
+          "@title": "UNIQUE_ID",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "CHAR_NAME": {
+          "@title": "CHAR_NAME",
+          "key": true,
+          "type": "cds.String",
+          "length": 30
+        },
+        "CHAR_VALUE": {
+          "@title": "CHAR_VALUE",
+          "key": true,
+          "type": "cds.String",
+          "length": 70
+        },
+        "CHARVAL_NUM": {
+          "@title": "CHARVAL_NUM",
+          "key": true,
+          "type": "cds.String",
+          "length": 70
+        }
+      }
+    },
     "IbpService": {
       "@source": "srv/Ibp-Service.cds",
       "kind": "service",
@@ -16532,6 +16714,53 @@
         }
       }
     },
+    "PalService.getClusterChars": {
+      "kind": "entity",
+      "projection": {
+        "from": {
+          "ref": [
+            "cp.V_CLUSTER_CHARS"
+          ]
+        }
+      },
+      "elements": {
+        "LOCATION_ID": {
+          "@title": "LOCATION_ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "@title": "PRODUCT_ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+        "UNIQUE_ID": {
+          "@title": "UNIQUE_ID",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "CHAR_NAME": {
+          "@title": "CHAR_NAME",
+          "key": true,
+          "type": "cds.String",
+          "length": 30
+        },
+        "CHAR_VALUE": {
+          "@title": "CHAR_VALUE",
+          "key": true,
+          "type": "cds.String",
+          "length": 70
+        },
+        "CHARVAL_NUM": {
+          "@title": "CHARVAL_NUM",
+          "key": true,
+          "type": "cds.String",
+          "length": 70
+        }
+      }
+    },
     "PalService.get_palparameters": {
       "kind": "entity",
       "projection": {
@@ -16742,6 +16971,19 @@
         }
       }
     },
+    "PalService.genClusterUniqueIDS": {
+      "kind": "action",
+      "params": {
+        "Location": {
+          "type": "cds.String",
+          "length": 4
+        },
+        "Product": {
+          "type": "cds.String",
+          "length": 40
+        }
+      }
+    },
     "PalService.genClusters": {
       "kind": "action",
       "params": {
@@ -16804,6 +17046,65 @@
       },
       "returns": {
         "type": "cds.String"
+      }
+    },
+    "getClustersByDistance": {
+      "kind": "entity",
+      "projection": {
+        "from": {
+          "ref": [
+            "cp.V_AHC_CLUSTER_RESULTS"
+          ]
+        }
+      },
+      "elements": {
+        "LOCATION_ID": {
+          "@title": "LOCATION_ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "@title": "PRODUCT_ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+        "PROFILE": {
+          "@title": "PROFILE",
+          "key": true,
+          "type": "cds.String",
+          "length": 50
+        },
+        "LEFT_ID_CLUSTER": {
+          "@title": "LEFT_ID_CLUSTER",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "RIGHT_ID_CLUSTER": {
+          "@title": "RIGHT_ID_CLUSTER",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "LEFT_ID": {
+          "@title": "LEFT_ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 50
+        },
+        "RIGHT_ID": {
+          "@title": "RIGHT_ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 50
+        },
+        "DISTANCE": {
+          "@title": "DISTANCE",
+          "key": true,
+          "type": "cds.Decimal",
+          "precision": 13,
+          "scale": 4
+        }
       }
     },
     "PlstrDataService": {
@@ -22599,12 +22900,15 @@
       "kind": "action"
     },
     "CatalogService.generateMarketAuth": {
-      "kind": "function",
+      "kind": "action",
       "params": {
         "MARKETDATA": {
           "type": "cds.String"
         }
-      },
+      }
+    },
+    "CatalogService.generateMarketAuthfn": {
+      "kind": "function",
       "returns": {
         "type": "cds.String"
       }
@@ -24277,13 +24581,8 @@
     "IBPImportSrv.generateFDemandQty": {
       "kind": "action",
       "params": {
-        "LOCATION_ID": {
-          "type": "cds.String",
-          "length": 4
-        },
-        "PRODUCT_ID": {
-          "type": "cds.String",
-          "length": 40
+        "LocProdData": {
+          "type": "cds.String"
         }
       }
     },
@@ -24303,6 +24602,14 @@
         },
         "TODATE": {
           "type": "cds.Date"
+        }
+      }
+    },
+    "IBPImportSrv.generateMarketAuth": {
+      "kind": "action",
+      "params": {
+        "MARKETDATA": {
+          "type": "cds.String"
         }
       }
     },
@@ -24343,6 +24650,9 @@
     "SDIService.ImportECCODhdr": {
       "kind": "action"
     },
+    "SDIService.ImportECCProdClass": {
+      "kind": "action"
+    },
     "SDIService.ImportECCClass": {
       "kind": "action"
     },
@@ -24358,6 +24668,9 @@
     "SDIService.ImportECCSaleshCfg": {
       "kind": "action"
     },
+    "SDIService.ImportECCAsmbcomp": {
+      "kind": "action"
+    },
     "SDIService.ImportCuvtabInd": {
       "kind": "action"
     },
@@ -24365,6 +24678,15 @@
       "kind": "action"
     },
     "SDIService.ImportPartialProd": {
+      "kind": "action"
+    },
+    "SDIService.ImportSOStock": {
+      "kind": "action"
+    },
+    "SDIService.ImportPVSNode": {
+      "kind": "action"
+    },
+    "SDIService.ImportPVSBOM": {
       "kind": "action"
     },
     "UserInfoService": {

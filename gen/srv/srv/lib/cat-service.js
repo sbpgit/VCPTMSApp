@@ -10,6 +10,8 @@ const Catservicefn = require("./catservice-function");
 const VarConfig = require("./variantconfig");
 const AssemblyReq = require("./assembly-req");
 const CIRService = require("./cirdata-functions");
+const IBPFunc = require("./ibp-functions");
+const obibpfucntions = new IBPFunc();
 /**
  * 
  * @param {Location} lLocation 
@@ -18,6 +20,16 @@ const CIRService = require("./cirdata-functions");
  * */
 
 module.exports = (srv) => {
+    
+    // const { SBPVCP } = srv.entities;
+    // srv.on('READ', SBPVCP, request => {
+    //     try {
+    //         return service.tx(request).run(request.query);
+    //     }
+    //     catch (err) {
+    //         console.log(err);
+    //     }
+    // });
     // using req.user approach (user attribute - of class cds.User - from the request object)
     srv.on('userInfo', async (req) => {
 
@@ -98,26 +110,92 @@ module.exports = (srv) => {
             lsDates = {};
         let columnname = "WEEK";
         let liComp = [];
+        let liCompQty;
+        switch (await GenFunctions.getParameterValue(req.data.LOCATION_ID, 5)) {
+            case 'M1':
+                const liasmbcomp = await cds.run(`SELECT * from "CP_ASSEMBLY_COMP" WHERE "LOCATION_ID" = '` +
+                    req.data.LOCATION_ID +
+                    `'`);
 
-        const liCompQty = await cds.run(
-            `
+                liCompQty = await cds.run(
+                    `
+            SELECT * FROM "V_ASMCOMPQTY_CONSD"
+            WHERE "LOCATION_ID" = '` +
+                    req.data.LOCATION_ID +
+                    `'
+                 AND "PRODUCT_ID" = '` +
+                    req.data.PRODUCT_ID +
+                    `' AND "VERSION" = '` +
+                    req.data.VERSION +
+                    `' AND "SCENARIO" = '` +
+                    req.data.SCENARIO +
+                    `' AND ( "CAL_DATE" <= '` +
+                    vDateTo +
+                    `' AND "CAL_DATE" >= '` +
+                    vDateFrom +
+                    `') AND "MODEL_VERSION" = '` +
+                    req.data.MODEL_VERSION +
+                    `'
+                 ORDER BY 
+                      "LOCATION_ID" ASC, 
+                      "PRODUCT_ID" ASC,
+                      "VERSION" ASC,
+                      "SCENARIO" ASC,
+                      "COMPONENT" ASC,
+                      "CAL_DATE" ASC`
+                );
+                liComp = await cds.run(
+                    `
+          SELECT DISTINCT "LOCATION_ID",
+                          "PRODUCT_ID",
+                          "VERSION",
+                          "SCENARIO",
+                          "COMPONENT"
+          FROM "V_ASMCOMPQTY_CONSD"
+          WHERE "LOCATION_ID" = '` +
+                    req.data.LOCATION_ID +
+                    `' AND "PRODUCT_ID" = '` +
+                    req.data.PRODUCT_ID +
+                    `' AND "VERSION" = '` +
+                    req.data.VERSION +
+                    `' AND "SCENARIO" = '` +
+                    req.data.SCENARIO +
+                    `' AND ( "CAL_DATE" <= '` +
+                    vDateTo +
+                    `'
+                AND "CAL_DATE" >= '` +
+                    vDateFrom +
+                    `') AND "MODEL_VERSION" = '` +
+                    req.data.MODEL_VERSION +
+                    `'
+               ORDER BY 
+                    "LOCATION_ID" ASC, 
+                    "PRODUCT_ID" ASC,
+                    "VERSION" ASC,
+                    "SCENARIO" ASC,
+                    "COMPONENT" ASC`
+                );
+                break;
+            case 'M2':
+                const liCompQty = await cds.run(
+                    `
             SELECT * FROM "V_ASMREQ_PRODCONSD"
             WHERE "LOCATION_ID" = '` +
-            req.data.LOCATION_ID +
-            `'
+                    req.data.LOCATION_ID +
+                    `'
                  AND "PRODUCT_ID" = '` +
-            req.data.PRODUCT_ID +
-            `' AND "VERSION" = '` +
-            req.data.VERSION +
-            `' AND "SCENARIO" = '` +
-            req.data.SCENARIO +
-            `' AND ( "WEEK_DATE" <= '` +
-            vDateTo +
-            `' AND "WEEK_DATE" >= '` +
-            vDateFrom +
-            `') AND "MODEL_VERSION" = '` +
-            req.data.MODEL_VERSION +
-            `'
+                    req.data.PRODUCT_ID +
+                    `' AND "VERSION" = '` +
+                    req.data.VERSION +
+                    `' AND "SCENARIO" = '` +
+                    req.data.SCENARIO +
+                    `' AND ( "WEEK_DATE" <= '` +
+                    vDateTo +
+                    `' AND "WEEK_DATE" >= '` +
+                    vDateFrom +
+                    `') AND "MODEL_VERSION" = '` +
+                    req.data.MODEL_VERSION +
+                    `'
                  ORDER BY 
                       "LOCATION_ID" ASC, 
                       "PRODUCT_ID" ASC,
@@ -125,10 +203,10 @@ module.exports = (srv) => {
                       "SCENARIO" ASC,
                       "COMPONENT" ASC,
                       "WEEK_DATE" ASC`
-        );
-        if (req.data.CRITICALKEY === 'X') {
-            liComp = await cds.run(
-                `
+                );
+                if (req.data.CRITICALKEY === 'X') {
+                    liComp = await cds.run(
+                        `
               SELECT DISTINCT "V_ASMREQ_PRODCONSD"."LOCATION_ID",
                                "V_ASMREQ_PRODCONSD"."PRODUCT_ID",
                                "V_ASMREQ_PRODCONSD"."VERSION",
@@ -141,22 +219,22 @@ module.exports = (srv) => {
                AND "V_ASMREQ_PRODCONSD"."PRODUCT_ID"  = "CP_CRITICAL_COMP"."PRODUCT_ID"
                AND "V_ASMREQ_PRODCONSD"."ITEM_NUM"    = "CP_CRITICAL_COMP"."ITEM_NUM"
              WHERE "V_ASMREQ_PRODCONSD"."LOCATION_ID" = '` +
-                req.data.LOCATION_ID +
-                `' AND "V_ASMREQ_PRODCONSD"."PRODUCT_ID" = '` +
-                req.data.PRODUCT_ID +
-                `' AND "V_ASMREQ_PRODCONSD"."VERSION" = '` +
-                req.data.VERSION +
-                `' AND "V_ASMREQ_PRODCONSD"."SCENARIO" = '` +
-                req.data.SCENARIO +
-                `' AND ( "V_ASMREQ_PRODCONSD"."WEEK_DATE" <= '` +
-                vDateTo +
-                `'
+                        req.data.LOCATION_ID +
+                        `' AND "V_ASMREQ_PRODCONSD"."PRODUCT_ID" = '` +
+                        req.data.PRODUCT_ID +
+                        `' AND "V_ASMREQ_PRODCONSD"."VERSION" = '` +
+                        req.data.VERSION +
+                        `' AND "V_ASMREQ_PRODCONSD"."SCENARIO" = '` +
+                        req.data.SCENARIO +
+                        `' AND ( "V_ASMREQ_PRODCONSD"."WEEK_DATE" <= '` +
+                        vDateTo +
+                        `'
                     AND "V_ASMREQ_PRODCONSD"."WEEK_DATE" >= '` +
-                vDateFrom +
-                `') AND "V_ASMREQ_PRODCONSD"."MODEL_VERSION" = '` +
-                req.data.MODEL_VERSION +
-                `'  AND "CP_CRITICAL_COMP"."CRITICALKEY" = '` +
-                req.data.CRITICALKEY + `'
+                        vDateFrom +
+                        `') AND "V_ASMREQ_PRODCONSD"."MODEL_VERSION" = '` +
+                        req.data.MODEL_VERSION +
+                        `'  AND "CP_CRITICAL_COMP"."CRITICALKEY" = '` +
+                        req.data.CRITICALKEY + `'
                    ORDER BY 
                         "LOCATION_ID" ASC, 
                         "PRODUCT_ID" ASC,
@@ -164,11 +242,11 @@ module.exports = (srv) => {
                         "SCENARIO" ASC,
                         "ITEM_NUM" ASC,
                         "COMPONENT" ASC`
-            );
-        } else {
-            // const liComp = await cds.run(
-            liComp = await cds.run(
-                `
+                    );
+                } else {
+                    // const liComp = await cds.run(
+                    liComp = await cds.run(
+                        `
           SELECT DISTINCT "LOCATION_ID",
                           "PRODUCT_ID",
                           "VERSION",
@@ -177,21 +255,21 @@ module.exports = (srv) => {
                           "COMPONENT"
           FROM "V_ASMREQ_PRODCONSD"
           WHERE "LOCATION_ID" = '` +
-                req.data.LOCATION_ID +
-                `' AND "PRODUCT_ID" = '` +
-                req.data.PRODUCT_ID +
-                `' AND "VERSION" = '` +
-                req.data.VERSION +
-                `' AND "SCENARIO" = '` +
-                req.data.SCENARIO +
-                `' AND ( "WEEK_DATE" <= '` +
-                vDateTo +
-                `'
+                        req.data.LOCATION_ID +
+                        `' AND "PRODUCT_ID" = '` +
+                        req.data.PRODUCT_ID +
+                        `' AND "VERSION" = '` +
+                        req.data.VERSION +
+                        `' AND "SCENARIO" = '` +
+                        req.data.SCENARIO +
+                        `' AND ( "WEEK_DATE" <= '` +
+                        vDateTo +
+                        `'
                 AND "WEEK_DATE" >= '` +
-                vDateFrom +
-                `') AND "MODEL_VERSION" = '` +
-                req.data.MODEL_VERSION +
-                `'
+                        vDateFrom +
+                        `') AND "MODEL_VERSION" = '` +
+                        req.data.MODEL_VERSION +
+                        `'
                ORDER BY 
                     "LOCATION_ID" ASC, 
                     "PRODUCT_ID" ASC,
@@ -199,7 +277,9 @@ module.exports = (srv) => {
                     "SCENARIO" ASC,
                     "ITEM_NUM" ASC,
                     "COMPONENT" ASC`
-            );
+                    );
+                }
+                break;
         }
         var vDateSeries = vDateFrom;
         let dDate = new Date(vDateSeries);
@@ -816,6 +896,8 @@ module.exports = (srv) => {
                 }
                 break;
         }
+        const obgenTimeseries_rt = new GenTimeseriesRT();
+        await obgenTimeseries_rt.genTimeseries_rt(req.data, req);
         console.log(Flag);
     });
     srv.on("generateTimeseriesF", async (req) => {
@@ -864,6 +946,8 @@ module.exports = (srv) => {
                 }
                 break;
         }
+        const obgenTimeseries_rt = new GenTimeseriesRT();
+        await obgenTimeseries_rt.genTimeseriesF_rt(req.data, req);
 
     });
     // Generate Timeseries fucntion calls
@@ -2558,7 +2642,96 @@ module.exports = (srv) => {
     });
 
     // EOI - Deepa
+    
+    ///////////////////////////////////////////////////////////
+    srv.on("generateMarketAuthfn", async (request) => {
+        //     var flag, lMessage = '';
+        //     // Generating payload for job scheduler logs
+        //     // let lilocProd = {};
+        //     // let lsData = {};
+        //     // let createtAt = new Date();
+        //     // let id = uuidv1();
+        //     // let values = [];
+        //     // let message = "Started importing IBP Future Demand and Characteristic Plan";
+        //     // let res = req._.req.res;
+        //     // let lilocProdReq = JSON.parse(req.data.MARKETDATA);
 
+        //     if (lilocProdReq[0].PRODUCT_ID === "ALL") {
+        //         lsData.LOCATION_ID = lilocProdReq[0].LOCATION_ID;
+        //         lsData.PRODUCT_ID = lilocProdReq[0].PRODUCT_ID;
+        //         const objCatFn = new Catservicefn();
+        //         const lilocProdT = await objCatFn.getAllProducts(lsData);
+        //         // lsData = {};
+        //         const litemp = JSON.stringify(lilocProdT);
+        //         lilocProd = JSON.parse(litemp);
+        //     }
+        //     else {
+        // lilocProd = JSON.parse(req.data);
+        //     }
+        //     values.push({ id, createtAt, message, lilocProd });
+        //     res.statusCode = 202;
+        //     res.send({ values });
+        let flag = await obibpfucntions.importFutureDemandcharPlan(request);
+
+        // if (flag === 'S') {
+        //     for (let iloc = 0; iloc < lilocProd.length; iloc++) {
+        //         lsData.LOCATION_ID = lilocProd[iloc].LOCATION_ID;
+        //         lsData.PRODUCT_ID = lilocProd[iloc].PRODUCT_ID;
+        //         const licir = await cds.run(
+        //             `
+        //         SELECT *
+        //            FROM "V_CIRTOIBP" 
+        //            WHERE LOCATION_ID = '${lsData.LOCATION_ID}'
+        //                       AND PRODUCT_ID = '${lsData.PRODUCT_ID}'
+        //                       AND ( WEEK_DATE > '${lilocProdReq[0].WEEK_DATE}'
+        //                       AND WEEK_DATE < '${lilocProdReq[0].WEEK_DATE}' )`);
+
+        //         //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
+        //         for (let i = 0; i < licir.length; i++) {
+
+        //             var vWeekDate = new Date(licir[i].WEEK_DATE).toISOString().split('Z')[0];
+        //             vCIR = {
+        //                 "LOCID": licir[i].LOCATION_ID,
+        //                 "PRDID": licir[i].PRODUCT_ID,
+        //                 "VCCLASS": licir[i].CLASS_NUM,
+        //                 "VCCHAR": licir[i].CHAR_NUM,
+        //                 "VCCHARVALUE": licir[i].CHARVAL_NUM,
+        //                 "CUSTID": "NULL",
+        //                 "CIRQTY": licir[i].CIRQTY.toString(),
+        //                 "PERIODID4_TSTAMP": vWeekDate
+        //             };
+        //             oReq.cir.push(vCIR);
+        //         }
+        //         var vTransID = new Date().getTime().toString();
+        //         var oEntry =
+        //         {
+        //             "Transactionid": vTransID,
+        //             "AggregationLevelFieldsString": "LOCID,PRDID,VCCLASS,VCCHAR,VCCHARVALUE,CUSTID,CIRQTY,PERIODID4_TSTAMP",
+        //             "DoCommit": true,
+        //             "NavSBPVCP": oReq.cir
+        //         }
+
+        //         try {
+        //             await service.tx(request).post("/SBPVCPTrans", oEntry);
+        //             flag = 'X';
+        //         }
+        //         catch (err) {
+        //             console.log(err);
+        //             flag = ' ';
+        //         }
+
+        //         if (flag === 'X') {
+        //             lMessage = lMessage + ' ' + "Export of CIR to IBP is successful for product" + lsData.PRODUCT_ID;
+        //         } else {
+        //             lMessage = lMessage + ' ' + "Export of CIR to IBP has failed for product" + lsData.PRODUCT_ID;
+        //         }
+
+        //         GenF.jobSchMessage('X', lMessage, request);
+        //     }
+        // }
+        // GenF.jobSchMessage('X', lMessage, request);
+    });
+    /////////////////////////////////////////////////////////////////
     //VC Planner Document Maintenance- Pradeep
     srv.on("moveData", async req => {
         let contentData = {};
@@ -2591,7 +2764,7 @@ module.exports = (srv) => {
                 responseMessage1 = "Updated Successfully";
                 createResults.push(responseMessage1);
             } catch (e) {
-                responseMessage1 = " Updation Failed";
+                responseMessage1 = " Updation Failed";
                 createResults.push(responseMessage1);
             }
         }
@@ -2613,7 +2786,7 @@ module.exports = (srv) => {
                 responseMessage1 = "Updated Successfully in PAGEHEADER";
                 masterResults.push(responseMessage1);
             } catch (e) {
-                responseMessage1 = " Updation Failed";
+                responseMessage1 = " Updation Failed";
                 masterResults.push(responseMessage1);
             }
 
@@ -2634,7 +2807,7 @@ module.exports = (srv) => {
                 responseMessage1 = "Updated Successfully in PAGEHEADER";
                 detailResults.push(responseMessage1);
             } catch (e) {
-                responseMessage1 = " Updation Failed";
+                responseMessage1 = " Updation Failed";
                 detailResults.push(responseMessage1);
             }
         }
@@ -2648,21 +2821,15 @@ module.exports = (srv) => {
         deleteNode.PAGEID = req.data.PAGEID;
         if (Flag === "d") {
             try {
-
                 await cds.delete("CP_PAGEHEADER", deleteNode);
-
-                responseMessage1 = " Deletion successfull";
-
+                responseMessage1 = "Deletion successfull";
                 deleteResults.push(responseMessage1);
 
             } catch (e) {
 
-                responseMessage1 = " Deletion Failed";
-
+                responseMessage1 = "Deletion Failed";
                 deleteResults.push(responseMessage1);
-
             }
-
         }
         return responseMessage1;
     });
@@ -2675,19 +2842,12 @@ module.exports = (srv) => {
         deleteNode.PAGEID = req.data.PAGEID;
         if (Flag === "d") {
             try {
-
                 await cds.delete("CP_PAGEPARAGRAPH", deleteNode);
-
-                responseMessage1 = " Deletion successfull";
-
+                responseMessage1 = "Deletion successfull";
                 deleteResults.push(responseMessage1);
-
             } catch (e) {
-
-                responseMessage1 = " Deletion Failed";
-
+                responseMessage1 = "Deletion Failed";
                 deleteResults.push(responseMessage1);
-
             }
         }
         return responseMessage1;
@@ -2695,30 +2855,20 @@ module.exports = (srv) => {
     srv.on("editPAGEPARAGRAPH", async req => {
         let contentData = {};
         var deleteData = {};
-
         var createResults = [];
         var deleteResults = [];
         var Flag = req.data.Flag1;
         var responseMessage;
         var responseMessage1;
         deleteData.PAGEID = req.data.PAGEID;
-
-
         if (Flag === "e") {
             try {
-
                 await cds.delete("CP_PAGEPARAGRAPH", deleteData);
-
-                responseMessage = " Deletion successfull";
-
+                responseMessage = "Deletion successfull";
                 deleteResults.push(responseMessage);
-
             } catch (e) {
-
-                responseMessage = " Deletion Failed";
-
+                responseMessage = "Deletion Failed";
                 deleteResults.push(responseMessage);
-
             }
             contentData.CONTENT = req.data.CONTENT;
             // contentData.ENTRY_TYPE = req.data.ENTRY_TYPE;
@@ -2731,7 +2881,7 @@ module.exports = (srv) => {
                 responseMessage1 = "Updated Successfully";
                 createResults.push(responseMessage1);
             } catch (e) {
-                responseMessage1 = " Updation Failed";
+                responseMessage1 = " Updation Failed";
                 createResults.push(responseMessage1);
             }
         }
@@ -2754,13 +2904,13 @@ module.exports = (srv) => {
 
                 await cds.delete("CP_PAGEHEADER", deleteData);
 
-                responseMessage = " Deletion successfull";
+                responseMessage = " Deletion successfull";
 
                 deleteResults.push(responseMessage);
 
             } catch (e) {
 
-                responseMessage = " Deletion Failed";
+                responseMessage = " Deletion Failed";
 
                 deleteResults.push(responseMessage);
 
@@ -2775,7 +2925,7 @@ module.exports = (srv) => {
                 responseMessage1 = "Updated Successfully";
                 createResults.push(responseMessage1);
             } catch (e) {
-                responseMessage1 = " Updation Failed";
+                responseMessage1 = " Updation Failed";
                 createResults.push(responseMessage1);
             }
         }

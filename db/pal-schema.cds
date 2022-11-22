@@ -813,6 +813,14 @@ entity CLUSTER_DATA {
     C10 : String (10) @title : 'CHAR10'; 
     C11 : String (10) @title : 'CHAR11'; 
     C12 : String (10) @title : 'CHAR12';
+    C13 : String (10) @title : 'CHAR13'; 
+    C14 : String (10) @title : 'CHAR14';
+    C15 : String (10) @title : 'CHAR15'; 
+    C16 : String (10) @title : 'CHAR16'; 
+    C17 : String (10) @title : 'CHAR17';
+    C18 : String (10) @title : 'CHAR18'; 
+    C19 : String (10) @title : 'CHAR19'; 
+    C20 : String (10) @title : 'CHAR20';
 };
 
 entity AHC_COMBINE_PROCESS {
@@ -867,5 +875,6 @@ entity![V_CLUSTER_CHARS]{
     key![UNIQUE_ID]   : Integer @title : 'UNIQUE_ID';
     key![CHAR_NAME]    : String(30) @title : 'CHAR_NAME';
     key![CHAR_VALUE]   : String(70) @title : 'CHAR_VALUE';
+    key![CHARVAL_NUM]   : String(70) @title : 'CHARVAL_NUM';
 }
 

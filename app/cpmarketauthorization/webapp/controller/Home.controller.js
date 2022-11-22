@@ -453,7 +453,7 @@ sap.ui.define([
                 var aScheduleSEDT = {};
                 aScheduleSEDT = that.getScheduleSEDT();
                 var dCurrDateTime = new Date().getTime();
-                var actionText = "/catalog/generateMarketAuth";
+                var actionText = "/ibpimport-srv/generateMarketAuth";
                 var JobName = "Market Auth" + dCurrDateTime;
                 sap.ui.core.BusyIndicator.show();
                 var finalList = {
@@ -466,7 +466,9 @@ sap.ui.define([
                     endTime: aScheduleSEDT.djEdate,
                     createdAt: aScheduleSEDT.djSdate,
                     schedules: [{
-                        data:{MARKETDATA: JSON.stringify(oEntry.MARKETDATA)},
+                        data: {
+                            MARKETDATA:JSON.stringify(oEntry.MARKETDATA)
+                        },
                         cron: "",
                         time: aScheduleSEDT.oneTime,
                         active: true,
