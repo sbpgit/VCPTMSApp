@@ -24,15 +24,14 @@ class GenTimeseries {
         let lMainProduct = '';
         let lsMainProduct = await SELECT .one
                                   .from('CP_PARTIALPROD_INTRO')
-                                  .columns('REF_PRODID')
+                                  .columns('PRODUCT_ID')
                                   .where(`LOCATION_ID = '${adata.LOCATION_ID}' AND PRODUCT_ID = '${adata.PRODUCT_ID}'`);
-        // if (lsMainProduct === null) {
-        //     lMainProduct = GenF.parse(adata.PRODUCT_ID);
-        // }
-        // else {
-            lMainProduct = lsMainProduct.REF_PRODID;
-        // }
-       
+        if (lsMainProduct === null) {
+            lMainProduct = GenF.parse(adata.PRODUCT_ID);
+        }
+        else {
+            lMainProduct = lsMainProduct.PRODUCT_ID;
+        }
         const liODChar = await cds.run(
             `SELECT DISTINCT RESTRICTION,
                             CLASS_NUM,
@@ -54,8 +53,6 @@ class GenTimeseries {
         for (let cntODC = 0; cntODC < liODChar.length; cntODC++) {
             if (cntODC === 0 ||
                 liODChar[cntODC].RESTRICTION !== liODChar[GenF.subOne(cntODC)].RESTRICTION
-                //  ||
-                // liODChar[cntODC].OBJ_COUNTER !== liODChar[GenF.subOne(cntODC)].OBJ_COUNTER
                 ) {
                     lsOD = {};
                     lsOD['RESTRICTION'] = GenF.parse(liODChar[cntODC].RESTRICTION);

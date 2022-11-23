@@ -1859,7 +1859,8 @@ module.exports = cds.service.impl(async function () {
                 for (var i in req) {
                     var vWeekDate = dateJSONToEDM(req[i].PERIODID4_TSTAMP).split('T')[0];
                     var vScenario = 'BSL_SCENARIO';
-                    req[i].PERIODID4_TSTAMP = vWeekDate;
+                    let vManualOpt = '0.0';
+                                        req[i].PERIODID4_TSTAMP = vWeekDate;
                     if (vWeekDate >= vDateDel) {
                         await cds.run(
                             `DELETE FROM "CP_IBP_FCHARPLAN" WHERE "LOCATION_ID" = '` + req[i].LOCID + `' 
@@ -1883,7 +1884,7 @@ module.exports = cds.service.impl(async function () {
                             "'" + vWeekDate + "'" + "," +
                             "'" + req[i].OPTIONPERCENTAGE + "'" + "," +
                             "'" + req[i].FINALDEMANDVC + "'" + "," +
-                            "'" + req[i].MANUALOPTION + "'" + ')';// + ' WITH PRIMARY KEY';
+                            "'" + vManualOpt + "'" + ')';// + ' WITH PRIMARY KEY';
                         try {
                             await cds.run(modQuery);
                             flag = 'S';
@@ -1915,8 +1916,8 @@ module.exports = cds.service.impl(async function () {
         let id = uuidv1();
         let values = [];
         let message = "Started exporting CIR to IBP";
-        let res = req._.req.res;
-        let lilocProdReq = JSON.parse(req.data.LocProdData);
+        let res = request._.req.res;
+        let lilocProdReq = JSON.parse(request.data.LocProdData);
         if (lilocProdReq[0].PRODUCT_ID === "ALL") {
             lsData.LOCATION_ID = lilocProdReq[0].LOCATION_ID;
             lsData.PRODUCT_ID = lilocProdReq[0].PRODUCT_ID;
@@ -1927,7 +1928,7 @@ module.exports = cds.service.impl(async function () {
             lilocProd = JSON.parse(litemp);
         }
         else {
-            lilocProd = JSON.parse(req.data.LocProdData);
+            lilocProd = JSON.parse(request.data.LocProdData);
         }
         values.push({ id, createtAt, message, lilocProd });
         res.statusCode = 202;
@@ -2171,7 +2172,7 @@ module.exports = cds.service.impl(async function () {
             lScenario = lilocProdReq[0].SCENARIO;
             vFromDate = new Date(lilocProdReq[0].FROMDATE).toISOString().split('Z')[0];
             vToDate = new Date(lilocProdReq[0].TODATE).toISOString().split('Z')[0];
-            var resUrl = "/SBPVCP?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + lsData.LOCATION_ID + "' and PRDID eq '" + lsData.PRODUCT_ID + "' and PERIODID4_TSTAMP gt datetime'" + vFromDate + "' and PERIODID4_TSTAMP lt datetime'" + vToDate + "' and VERSIONID eq '" + lVersion + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
+            var resUrl = "/SBPVCP?$select=PRDID,LOCID,PERIODID4_TSTAMP,TOTALDEMANDOUTPUT,UOMTOID,VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$filter=LOCID eq '" + lsData.LOCATION_ID + "' and PRDID eq '" + lsData.PRODUCT_ID + "' and PERIODID4_TSTAMP gt datetime'" + vFromDate + "' and PERIODID4_TSTAMP lt datetime'" + vToDate + "' and VERSIONID eq '" + lVersion + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
              var req = await service.tx(req).get(resUrl);
             // if(req.length > 0){
             const vDelDate = new Date();
@@ -2251,6 +2252,7 @@ module.exports = cds.service.impl(async function () {
                     var vWeekDate = dateJSONToEDM2(req[i].PERIODID4_TSTAMP).split('T')[0];
                     var vScenario = 'BSL_SCENARIO';
                     req[i].PERIODID4_TSTAMP = vWeekDate;
+                    let vManualOpt = '0.0';
                     if (vWeekDate >= vDateDel) {
                         await cds.run(
                             `DELETE FROM "CP_IBP_FCHARPLAN" WHERE "LOCATION_ID" = '` + req[i].LOCID + `' 
@@ -2274,7 +2276,7 @@ module.exports = cds.service.impl(async function () {
                             "'" + vWeekDate + "'" + "," +
                             "'" + req[i].OPTIONPERCENTAGE + "'" + "," +
                             "'" + req[i].FINALDEMANDVC + "'" + "," +
-                            "'" + req[i].MANUALOPTION + "'" + ')';// + ' WITH PRIMARY KEY';
+                            "'" + vManualOpt + "'" + ')';// + ' WITH PRIMARY KEY';
                         try {
                             await cds.run(modQuery);
                             flag = 'S';
@@ -2373,7 +2375,7 @@ module.exports = cds.service.impl(async function () {
                 }
             }
         }
-        GenF.jobSchMessage('X', lMessage, req);
+        GenF.jobSchMessage('X', lMessage, request);
     });
     this.on("generateMarketAuthfn", async (request) => {
         // const { SBPVCP } = this.entities;
