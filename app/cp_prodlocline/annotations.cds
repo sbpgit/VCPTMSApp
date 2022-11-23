@@ -22,7 +22,7 @@ annotate service.getProdlocline with {
         ValueList       : {
             $Type          : 'Common.ValueListType',
             Label          : 'Products',
-            CollectionPath : 'getLocProd',
+            CollectionPath : 'genPartialProd',
             Parameters     : [
             {
                 $Type             : 'Common.ValueListParameterInOut',
@@ -55,6 +55,11 @@ annotate service.getProdlocline with {
                 $Type             : 'Common.ValueListParameterOut',
                 LocalDataProperty : LINE_ID,
                 ValueListProperty : 'LINE_ID'
+            },
+            {
+                $Type             : 'Common.ValueListParameterIn',
+                LocalDataProperty : LOCATION_ID,
+                ValueListProperty : 'LOCATION_ID'
             }
             ]
         }   

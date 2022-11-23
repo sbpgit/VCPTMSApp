@@ -3966,10 +3966,22 @@
       "kind": "entity",
       "@UI.SelectionFields": [
         {
+          "=": "LOCATION_ID"
+        },
+        {
           "=": "LINE_ID"
         }
       ],
       "@UI.LineItem": [
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "LOCATION_ID"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          }
+        },
         {
           "$Type": "UI.DataField",
           "Value": {
@@ -4001,6 +4013,12 @@
         {
           "$Type": "UI.DataField",
           "Value": {
+            "=": "LOCATION_ID"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
             "=": "LINE_ID"
           }
         },
@@ -4026,6 +4044,12 @@
         }
       ],
       "elements": {
+        "LOCATION_ID": {
+          "@title": "Location ",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
         "LINE_ID": {
           "@title": "Line",
           "key": true,
@@ -12300,6 +12324,46 @@
           "@title": "CHAR12",
           "type": "cds.String",
           "length": 10
+        },
+        "C13": {
+          "@title": "CHAR13",
+          "type": "cds.String",
+          "length": 10
+        },
+        "C14": {
+          "@title": "CHAR14",
+          "type": "cds.String",
+          "length": 10
+        },
+        "C15": {
+          "@title": "CHAR15",
+          "type": "cds.String",
+          "length": 10
+        },
+        "C16": {
+          "@title": "CHAR16",
+          "type": "cds.String",
+          "length": 10
+        },
+        "C17": {
+          "@title": "CHAR17",
+          "type": "cds.String",
+          "length": 10
+        },
+        "C18": {
+          "@title": "CHAR18",
+          "type": "cds.String",
+          "length": 10
+        },
+        "C19": {
+          "@title": "CHAR19",
+          "type": "cds.String",
+          "length": 10
+        },
+        "C20": {
+          "@title": "CHAR20",
+          "type": "cds.String",
+          "length": 10
         }
       }
     },
@@ -16618,6 +16682,46 @@
           "@title": "CHAR12",
           "type": "cds.String",
           "length": 10
+        },
+        "C13": {
+          "@title": "CHAR13",
+          "type": "cds.String",
+          "length": 10
+        },
+        "C14": {
+          "@title": "CHAR14",
+          "type": "cds.String",
+          "length": 10
+        },
+        "C15": {
+          "@title": "CHAR15",
+          "type": "cds.String",
+          "length": 10
+        },
+        "C16": {
+          "@title": "CHAR16",
+          "type": "cds.String",
+          "length": 10
+        },
+        "C17": {
+          "@title": "CHAR17",
+          "type": "cds.String",
+          "length": 10
+        },
+        "C18": {
+          "@title": "CHAR18",
+          "type": "cds.String",
+          "length": 10
+        },
+        "C19": {
+          "@title": "CHAR19",
+          "type": "cds.String",
+          "length": 10
+        },
+        "C20": {
+          "@title": "CHAR20",
+          "type": "cds.String",
+          "length": 10
         }
       }
     },
@@ -16711,6 +16815,65 @@
           "@title": "Stage",
           "key": true,
           "type": "cds.Integer"
+        }
+      }
+    },
+    "PalService.getClustersByDistance": {
+      "kind": "entity",
+      "projection": {
+        "from": {
+          "ref": [
+            "cp.V_AHC_CLUSTER_RESULTS"
+          ]
+        }
+      },
+      "elements": {
+        "LOCATION_ID": {
+          "@title": "LOCATION_ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "@title": "PRODUCT_ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+        "PROFILE": {
+          "@title": "PROFILE",
+          "key": true,
+          "type": "cds.String",
+          "length": 50
+        },
+        "LEFT_ID_CLUSTER": {
+          "@title": "LEFT_ID_CLUSTER",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "RIGHT_ID_CLUSTER": {
+          "@title": "RIGHT_ID_CLUSTER",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "LEFT_ID": {
+          "@title": "LEFT_ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 50
+        },
+        "RIGHT_ID": {
+          "@title": "RIGHT_ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 50
+        },
+        "DISTANCE": {
+          "@title": "DISTANCE",
+          "key": true,
+          "type": "cds.Decimal",
+          "precision": 13,
+          "scale": 4
         }
       }
     },
@@ -16958,19 +17121,6 @@
         }
       }
     },
-    "PalService.genClusterInputs": {
-      "kind": "action",
-      "params": {
-        "Location": {
-          "type": "cds.String",
-          "length": 4
-        },
-        "Product": {
-          "type": "cds.String",
-          "length": 40
-        }
-      }
-    },
     "PalService.genClusterUniqueIDS": {
       "kind": "action",
       "params": {
@@ -17010,22 +17160,6 @@
         }
       }
     },
-    "PalService.fgenClusterInputs": {
-      "kind": "function",
-      "params": {
-        "Location": {
-          "type": "cds.String",
-          "length": 4
-        },
-        "Product": {
-          "type": "cds.String",
-          "length": 40
-        }
-      },
-      "returns": {
-        "type": "cds.String"
-      }
-    },
     "PalService.fgModels": {
       "kind": "function",
       "params": {
@@ -17046,65 +17180,6 @@
       },
       "returns": {
         "type": "cds.String"
-      }
-    },
-    "getClustersByDistance": {
-      "kind": "entity",
-      "projection": {
-        "from": {
-          "ref": [
-            "cp.V_AHC_CLUSTER_RESULTS"
-          ]
-        }
-      },
-      "elements": {
-        "LOCATION_ID": {
-          "@title": "LOCATION_ID",
-          "key": true,
-          "type": "cds.String",
-          "length": 4
-        },
-        "PRODUCT_ID": {
-          "@title": "PRODUCT_ID",
-          "key": true,
-          "type": "cds.String",
-          "length": 40
-        },
-        "PROFILE": {
-          "@title": "PROFILE",
-          "key": true,
-          "type": "cds.String",
-          "length": 50
-        },
-        "LEFT_ID_CLUSTER": {
-          "@title": "LEFT_ID_CLUSTER",
-          "key": true,
-          "type": "cds.Integer"
-        },
-        "RIGHT_ID_CLUSTER": {
-          "@title": "RIGHT_ID_CLUSTER",
-          "key": true,
-          "type": "cds.Integer"
-        },
-        "LEFT_ID": {
-          "@title": "LEFT_ID",
-          "key": true,
-          "type": "cds.String",
-          "length": 50
-        },
-        "RIGHT_ID": {
-          "@title": "RIGHT_ID",
-          "key": true,
-          "type": "cds.String",
-          "length": 50
-        },
-        "DISTANCE": {
-          "@title": "DISTANCE",
-          "key": true,
-          "type": "cds.Decimal",
-          "precision": 13,
-          "scale": 4
-        }
       }
     },
     "PlstrDataService": {
@@ -22540,6 +22615,13 @@
                 "=": "LINE_ID"
               },
               "ValueListProperty": "LINE_ID"
+            },
+            {
+              "$Type": "Common.ValueListParameterIn",
+              "LocalDataProperty": {
+                "=": "LOCATION_ID"
+              },
+              "ValueListProperty": "LOCATION_ID"
             }
           ],
           "@title": "Line",
@@ -22550,7 +22632,7 @@
         "PRODUCT_ID": {
           "@Common.ValueList.$Type": "Common.ValueListType",
           "@Common.ValueList.Label": "Products",
-          "@Common.ValueList.CollectionPath": "getLocProd",
+          "@Common.ValueList.CollectionPath": "genPartialProd",
           "@Common.ValueList.Parameters": [
             {
               "$Type": "Common.ValueListParameterInOut",
@@ -22579,10 +22661,22 @@
       "@odata.draft.enabled": true,
       "@UI.SelectionFields": [
         {
+          "=": "LOCATION_ID"
+        },
+        {
           "=": "LINE_ID"
         }
       ],
       "@UI.LineItem": [
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "LOCATION_ID"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          }
+        },
         {
           "$Type": "UI.DataField",
           "Value": {
@@ -22611,6 +22705,12 @@
       "@UI.HeaderInfo.TypeName": "Line Master",
       "@UI.HeaderInfo.TypeNamePlural": "Line Master",
       "@UI.FieldGroup#Details.Data": [
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "LOCATION_ID"
+          }
+        },
         {
           "$Type": "UI.DataField",
           "Value": {
@@ -22646,6 +22746,24 @@
         }
       },
       "elements": {
+        "LOCATION_ID": {
+          "@Common.ValueList.$Type": "Common.ValueListType",
+          "@Common.ValueList.Label": "Location",
+          "@Common.ValueList.CollectionPath": "getLocation",
+          "@Common.ValueList.Parameters": [
+            {
+              "$Type": "Common.ValueListParameterOut",
+              "LocalDataProperty": {
+                "=": "LOCATION_ID"
+              },
+              "ValueListProperty": "LOCATION_ID"
+            }
+          ],
+          "@title": "Location ",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
         "LINE_ID": {
           "@title": "Line",
           "key": true,

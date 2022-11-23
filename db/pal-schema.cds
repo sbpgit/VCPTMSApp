@@ -693,6 +693,14 @@ entity PalGenClusters {
         att10            : String(10);
         att11            : String(10);
         att12            : String(10);
+        att13             : String(10);
+        att14             : String(10);
+        att15             : String(10);
+        att16             : String(10);
+        att17             : String(10);
+        att18            : String(10);
+        att19            : String(10);
+        att20            : String(10);
     };
 
 }
