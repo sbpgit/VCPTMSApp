@@ -227,7 +227,18 @@ Content-Type: application/json
 
 {
 	"Location" : "PL20",
-	"Product" : "534EDPI0E119"
+	"Product" : "534EDPI0E119",
+	"ProdType": true
+}
+
+### generate Clusters Input Data
+POST http://localhost:4004/pal/genClusterUniqueIDS
+Content-Type: application/json
+
+{
+	"Location" : "PL20",
+	"Product" : "ALL",
+	"ProdType": true
 }
 
 
@@ -237,7 +248,9 @@ Content-Type: application/json
 
 {
 	"Location" : "PL20",
-	"Product" : "ALL"
+	"Product" : "ALL",
+	"ProdType": false
+
 }
 
 ### generate Clusters Input Data
@@ -294,6 +307,27 @@ Content-Type: application/json
 			"override": false,
 			"Location": "PL20",
 			"Product": "534EDPI0E215"
+		}
+	]
+}
+
+### generate Clusters
+POST http://localhost:4004/pal/genClusters
+Content-Type: application/json
+
+{
+	"vcRulesList": [
+		{
+			"profile": "SBP_AHC_0",
+			"override": false,
+			"Location": "PL20",
+			"Product": "534EDPI"
+		},
+		{
+			"profile": "SBP_AHC_0",
+			"override": false,
+			"Location": "PL20",
+			"Product": "534ECPP"
 		}
 	]
 }
