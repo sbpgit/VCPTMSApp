@@ -2746,24 +2746,20 @@ async function _genClusterUniqueIDSByLocProduct(location, product)
 
     let sqlCharsResults = await cds.run(sqlCharsStr);
 
-    // sqlStr = 'SELECT DISTINCT LOCATION_ID, PRODUCT_ID, PARTIAL_ID, CHARS, CHARVALS FROM V_PLSTR_PRIMARY_SCNDRY_CHARS' +
+
+    // sqlStr = 'SELECT DISTINCT LOCATION_ID, PRODUCT_ID, CHARS, CHARVALS FROM CP_V_CHAR_CHARVALS_BY_LOCPROD' +
     //             ' WHERE PRODUCT_ID = ' + "'" + product  + "'" +
     //             ' AND LOCATION_ID = ' + "'" + location + "'";
 
-    sqlStr = 'SELECT DISTINCT LOCATION_ID, PRODUCT_ID, CHARS, CHARVALS FROM CP_V_CHAR_CHARVALS_BY_LOCPROD' +
+
+
+    
+    sqlStr = 'SELECT DISTINCT LOCATION_ID, PRODUCT_ID, SALES_CHARS AS CHARS, SALES_CHARVALS AS CHARVALS' + 
+                ' FROM CP_V_SALESH_BY_PRODID_PARTID' +
                 ' WHERE PRODUCT_ID = ' + "'" + product  + "'" +
                 ' AND LOCATION_ID = ' + "'" + location + "'";
 
-    // if (isPartial)
-    //     sqlStr = 'SELECT DISTINCT LOCATION_ID, PRODUCT_ID, PARTIAL_ID, CHARS, CHARVALS FROM V_PLSTR_PRIMARY_SCNDRY_CHARS' +
-    //                 ' WHERE PARTIAL_ID = ' + "'" + product  + "'" +
-    //                 ' AND LOCATION_ID = ' + "'" + location + "'";
-    // else
-    //     sqlStr = 'SELECT DISTINCT LOCATION_ID, PRODUCT_ID, CHARS, CHARVALS FROM CP_V_CHAR_CHARVALS_BY_LOCPROD' +
-    //                 ' WHERE PRODUCT_ID = ' + "'" + product  + "'" +
-    //                 ' AND LOCATION_ID = ' + "'" + location + "'";
-
-    console.log(" _genClusterUniqueIDS sqlSTr : ", sqlStr);
+    // console.log(" _genClusterUniqueIDS sqlSTr : ", sqlStr);
     let sqlClusterResults = await cds.run(sqlStr);
     // console.log(" _genClusterUniqueIDSByLocProduct sqlClusterResults : ", sqlClusterResults);
 
@@ -2963,11 +2959,13 @@ async function _genClusterUniqueIDSByLocProduct_Partial(location, product)
 
     let sqlCharsResults = await cds.run(sqlCharsStr);
 
-    sqlStr = 'SELECT DISTINCT LOCATION_ID, PRODUCT_ID, PARTIAL_ID, CHARS, CHARVALS FROM V_PLSTR_PRIMARY_SCNDRY_CHARS' +
+
+    sqlStr = 'SELECT DISTINCT LOCATION_ID, PRODUCT_ID, PARTIAL_ID, SALES_CHARS AS CHARS, SALES_CHARVALS AS CHARVALS, ' + 
+                ' PRTL_CHARS AS P_CHARS, PRTL_CHARVALS AS P_CHARVALS FROM CP_V_SALESH_BY_PRODID_PARTID' +
                 ' WHERE PARTIAL_ID = ' + "'" + product  + "'" +
                 ' AND LOCATION_ID = ' + "'" + location + "'";
 
-    console.log(" _genClusterUniqueIDS sqlSTr : ", sqlStr);
+    // console.log(" _genClusterUniqueIDS sqlSTr : ", sqlStr);
     let sqlClusterResults = await cds.run(sqlStr);
     // console.log(" _genClusterUniqueIDSByLocProduct sqlClusterResults : ", sqlClusterResults);
     let numIds = sqlClusterResults.length;
@@ -2982,9 +2980,12 @@ async function _genClusterUniqueIDSByLocProduct_Partial(location, product)
         let charVals = sqlClusterResults[clusterIdx].CHARVALS;
         let productId =  sqlClusterResults[clusterIdx].PARTIAL_ID;
         let locationId =  sqlClusterResults[clusterIdx].LOCATION_ID;
+        let p_chars = sqlClusterResults[clusterIdx].P_CHARS;
+        // let p_charVals = sqlClusterResults[clusterIdx].P_CHARVALS;
         uniqueId = uniqueId +1;
     
         let charStr = chars.split(',');
+        let p_charStr = p_chars.split(',');
 
         let charValStr = charVals.split(',');
         // console.log("_genClusterUniqueIDSByLocProduct  productIr", productId, "locationId ", locationId, "uniqueId ", uniqueId, "charVals ", charVals,"numCharVals ", charStr.length);
@@ -2995,7 +2996,7 @@ async function _genClusterUniqueIDSByLocProduct_Partial(location, product)
             let charMatch = false;
             let charValNum = 'NA';
 
-            for (let charStrIdx = 0; charStrIdx < charStr.length; charStrIdx ++)
+            for (let charStrIdx = charStr.length - p_charStr.length; charStrIdx < charStr.length; charStrIdx ++)
             {
                 if (sqlCharsResults[charIdx].CHAR_NUM == charStr[charStrIdx])
                 {
@@ -3135,7 +3136,7 @@ async function _genClusterUniqueIDSByLocProduct_Partial(location, product)
 
     await cds.run(cqnQuery);
     const sleep = require('await-sleep');
-    await sleep(5000);
+    await sleep(1000);
 
 
 }
@@ -3239,7 +3240,7 @@ async function _genClusterUniqueIDS(req,isGet) {
     }
 
 
-    console.log(" _genClusterUniqueIDS sqlSTr : ", sqlStr);
+    // console.log(" _genClusterUniqueIDS sqlSTr : ", sqlStr);
     let sqlClusterResults = await cds.run(sqlStr);
     let numIds = sqlClusterResults.length;
 
@@ -3327,7 +3328,7 @@ async function _genClusterUniqueIDS_bkup(req,isGet) {
     }
 
 
-    console.log(" _genClusterUniqueIDS sqlSTr : ", sqlStr);
+    // console.log(" _genClusterUniqueIDS sqlSTr : ", sqlStr);
     let sqlClusterResults = await cds.run(sqlStr);
     let numIds = sqlClusterResults.length;
 
