@@ -189,8 +189,10 @@
                 "model": "srv/external/S4ODataService",
                 "[development]": {
                     "credentials": {
-                        "destination": "S4D_HTTP",
-                        "path": "/sap/opu/odata//SBPC/IBP_CIR_SRV"
+                        "url": "http://sbps4d.sbpcorp.com:50000/sap/opu/odata//SBPC/IBP_CIR_SRV",
+                        "authentication": "BasicAuthentication",
+                        "username": "SBPTECHTEAM",
+                        "password": "sbpdev01"
                     }
                 },
                 "[production]": {
