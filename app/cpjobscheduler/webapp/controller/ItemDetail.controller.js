@@ -316,7 +316,7 @@ sap.ui.define(
           }
           // 22-09-2022
   
-            if (oGModel.getProperty("/JobType") !== "I" && oGModel.getProperty("/JobType") !== "S" ) {
+            if (oGModel.getProperty("/JobType") !== "I" && oGModel.getProperty("/JobType") !== "E" && oGModel.getProperty("/JobType") !== "S" ) {
               that._valueHelpDialogJobData.open();
             } else {
               var oActionType = oGModel.getProperty("/IBPService");
