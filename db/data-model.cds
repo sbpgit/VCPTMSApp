@@ -400,7 +400,7 @@ context cp {
         key OBJ_TYPE    : String(2) default 'OD' @title : 'Object Type';
             STRUC_NODE  : String(50);
     }
-    
+
     entity PAL_PROFILE_LOC_PROD : managed {
         key LOCATION_ID : String(4);
         key PRODUCT_ID  : String(40);
@@ -664,18 +664,19 @@ context cp {
     };
 
     entity LINEMASTER {
-        key LINE_ID   : String(40) @title : 'Line';
-            LINE_DESC : String(30) @title : 'Line Desc';
+        key LOCATION_ID : String(4)  @title : 'Location ';
+        key LINE_ID     : String(40) @title : 'Line';
+            LINE_DESC   : String(30) @title : 'Line Desc';
     };
 
     // Product restrictions
     entity LOCPRODRESTRICT {
-        key WEEK_DATE     : Date       @title : 'Week Date';
-        key LOCATION_ID   : String(4)      @title : 'Location '; //Association to ZLOCATION;//
-        key LINE_ID       : String(40) @title : 'Line';
-        key PRODUCT_ID    : String(40)     @title : 'Product';
-        key RESTRICTION   : String(30)     @title : 'Restriction';
-            RTR_QTY       : Decimal(13, 3) @title : 'Component Quantity';
+        key WEEK_DATE   : Date           @title : 'Week Date';
+        key LOCATION_ID : String(4)      @title : 'Location '; //Association to ZLOCATION;//
+        key LINE_ID     : String(40)     @title : 'Line';
+        key PRODUCT_ID  : String(40)     @title : 'Product';
+        key RESTRICTION : String(30)     @title : 'Restriction';
+            RTR_QTY     : Decimal(13, 3) @title : 'Component Quantity';
     };
 
 
@@ -848,6 +849,14 @@ context cp {
             CONTENT     : hana.CLOB;
     }
 // End Of VC Planner doc- Pradeep
+
+// Import IBP Veersion and Scenario
+    entity IBPVERSIONSCENARIO {
+        key VERSION       : String(10) @title : 'Version';
+        key SCENARIO      : String(32) @title : 'Scenario';
+            VERSION_NAME  : String(50)    @title : 'Version_Name';
+            SCENARIO_NAME : String(50)     @title : 'Scenario_Name';
+    };
 }
 
 
@@ -1259,3 +1268,4 @@ entity![V_CIR_QTY_VARDESC]{
     ![CIR_QTY]       : Integer             @title : 'CIR_QTY';
     ![DIFF_QTY]      : Decimal(14, 3)      @title : 'DIFF_QTY';
 }
+

@@ -12,25 +12,6 @@ input#idSSTime-inner {
     margin-left:1rem;
 }
 
-/* div#container-cpapp\.cpjobscheduler---Details--fcl-beginColumn{
-    width: 350px !important;
-}
-
-div#application-cpjobscheduler-display-component---Details--fcl-beginColumn {
-    width: 350px !important;
-}
-
-div#container-cpapp\.cpjobscheduler---Details--fcl-midColumn{
-    width: 110% !important;
-    width: 1550px !important;
-    margin-left: -250px !important;
-} 
-div#application-cpjobscheduler-display-component---Details--fcl-midColumn{
-    width: 110% !important;
-    width: 1550px !important;
-    margin-left: -250px !important;
-}  */
-
 section#__splitter4-content-0 {
     height: 45% !important;
 }
@@ -75,22 +56,6 @@ section#__splitter4-content-1 {
     font-size: .875rem;
 }
 
-/* div#__title2 {
-    margin-left: 240px;
-} */
-
-/* div#container-cpapp\.cpjobscheduler---Details--fcl-midColumn{
-    width: 1180px !important;
-} */
-
-/* div#__xmlview0 {
-    width: 300px !important;
-} */
-
-
-/* table#__xmlview2--idJobLogs-listUl {
-    width: 1150px;
-} */
 
 div#__xmlview0--idDateRange {
     width: 60% !important;
@@ -115,37 +80,25 @@ div#container-cpapp\.cpjobscheduler---CreateJob--idRbtn {
     margin-top: 20px;
 } 
 
+<<<<<<< HEAD
 
 /* button#__button3 {
     margin-left: 430px;
 } */
 
+=======
+>>>>>>> 5a6f96f8cd44c3992135036cfa33098d432b1300
 h5#__title4 {
     text-decoration: underline;
 }
 h5#__title5 {
     text-decoration: underline;
 }
-/* button#__button6 {
-    margin-left: 485px;
-}
-button#__button5 {
-    margin-left: 200px;
-} */
 
 div#container-cpapp\.cpjobscheduler---Home--idTitle {
     margin-left: 500px;
 }
 
-/* Time series Button*/
-/* div#__container3--Grid-wrapperfor-__button2 {
-    margin-left: 200px;
-} */
-
-/* IBP Import Button*/
-/* div#__container4--Grid-wrapperfor-__button3 {
-    margin-left: 255px;
-} */
 
 div#container-cpapp\.cpjobscheduler---CreateJob--idCreateJob-title {
     font-weight: bold;
@@ -194,4 +147,10 @@ div#__data203 {
     margin-top: 0.7%;
     margin-left: 10%;
     margin-right: 2%;
+}
+
+/* Radio buttons */
+.sapMRbGCol {
+
+    margin-right: 50px !important;
 }

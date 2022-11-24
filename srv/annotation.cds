@@ -1789,9 +1789,16 @@ annotate service.FACTORY_SALESLOC with @(
 annotate service.LINEMASTER with @(
     UI        : {
         SelectionFields         : [
+            LOCATION_ID,
             LINE_ID
         ],
         LineItem                : [
+            {
+                $Type : 'UI.DataField',
+                //Label : 'Location ID',
+                Value : LOCATION_ID,
+                ![@UI.Importance] : #High
+            },
             {
                 $Type : 'UI.DataField',
                 //Label : 'Location ID',
@@ -1812,6 +1819,10 @@ annotate service.LINEMASTER with @(
             TypeNamePlural : 'Line Master',
         },
         FieldGroup #Details     : {Data : [
+            {
+                $Type : 'UI.DataField',
+                Value : LOCATION_ID
+            },
             {
                 $Type : 'UI.DataField',
                 Value : LINE_ID

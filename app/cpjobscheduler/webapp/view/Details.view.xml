@@ -3,6 +3,7 @@
 
         <customHeader>
             <Toolbar >
+			<Button id="leftMenu" icon="sap-icon://menu2" tooltip="Side Menu Expand/Collapse" press="expandBegin" type="Transparent" visible="false"/>
             <ToolbarSpacer/>
                 <Title  text="{i18n>title}" class="boldText"></Title>               
 				<ToolbarSpacer/>

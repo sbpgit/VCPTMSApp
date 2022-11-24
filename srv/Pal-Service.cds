@@ -95,7 +95,8 @@ service PalService{
         action genClusterUniqueIDS
         (
             Location     : String(4),
-            Product      : String(40)
+            Product      : String(40),
+            ProdType     : Boolean // 1 (true) - Partial; 0(false) - Reference Product
         );
         action genClusters(vcRulesList : array of{
             profile      : String(50);
