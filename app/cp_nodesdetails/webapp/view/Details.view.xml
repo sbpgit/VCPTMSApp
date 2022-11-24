@@ -9,7 +9,8 @@
 					<Title text="{i18n>title}" class="boldText"></Title>
                 </contentMiddle>
 				<contentRight>
-				<Button icon="sap-icon://sys-help" id="idNav" press="onNavPress" type="Emphasized" tooltip="Help Document"/>
+								<Button class="hdrBtnMarginHdr" icon="sap-icon://sys-help" id="idNav" press="onNavPress" type="Emphasized" tooltip="Help Document"/>
+	
 				</contentRight>
 			</Bar>
 		</customHeader>

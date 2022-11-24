@@ -8,6 +8,9 @@ input#idSETime-inner {
 input#idSSTime-inner {
     pointer-events: none;
 }
+.hdrBtnMarginHdr1{
+    margin-left:1rem;
+}
 
 /* div#container-cpapp\.cpjobscheduler---Details--fcl-beginColumn{
     width: 350px !important;
@@ -95,7 +98,8 @@ div#__xmlview0--idDateRange {
 
 
 .boldText {
-    font-weight: bold !important;
+    font-weight: bold;
+    margin-top:0.185rem;
 }
 .headerText {
     font-weight: bold !important;
@@ -110,7 +114,6 @@ div#container-cpapp\.cpjobscheduler---CreateJob--idRbtn {
     margin-left: 160px;
     margin-top: 20px;
 } 
-
 
 
 /* button#__button3 {

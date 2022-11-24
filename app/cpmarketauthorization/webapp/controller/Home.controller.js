@@ -179,10 +179,10 @@ sap.ui.define([
                     that.byId("fromDate").setValue("");
                     that.oVer.setValue("");
                     that.oScen.setValue("");
-                    this.getView().getModel("oModel").callFunction("/getAllVerScen", {
+                    this.getView().getModel("oModel").callFunction("/getVerScnmaster", {
                         method: "GET",
                         urlParameters: {
-                            LOCATION_ID: that.oGModel.getProperty("/SelectedLoc")
+                            // LOCATION_ID: that.oGModel.getProperty("/SelectedLoc")
                             // PRODUCT_ID: aSelectedItems[0].getTitle()     
                         },
                         success: function (oData) {
@@ -429,8 +429,7 @@ sap.ui.define([
                 oScen = that.byId("idscen").getValue();
                 var FromDate = that.byId("fromDate").getFrom();
                 var ToDate = that.byId("fromDate").getTo();
-               var vFromDate = that.getDateFn(FromDate);
-                 var   vToDate = that.getDateFn(ToDate);
+               
 
                 var oEntry = {
                     MARKETDATA: [],
@@ -439,6 +438,8 @@ sap.ui.define([
                 
                 if (oLoc && oprod && oVers && oScen &&FromDate && ToDate){
                     var oProd = that.oGModel.getProperty("/SelectedProd");
+                    var vFromDate = that.getDateFn(FromDate);
+                 var   vToDate = that.getDateFn(ToDate);
                 for (var i in oProd) {
                     vList = {
                         LOCATION_ID: oLoc,
