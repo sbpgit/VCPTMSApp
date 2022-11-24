@@ -849,6 +849,14 @@ context cp {
             CONTENT     : hana.CLOB;
     }
 // End Of VC Planner doc- Pradeep
+
+// Import IBP Veersion and Scenario
+    entity IBPVERSIONSCENARIO {
+        key VERSION       : String(10) @title : 'Version';
+        key SCENARIO      : String(32) @title : 'Scenario';
+            VERSION_NAME  : String(50)    @title : 'Version_Name';
+            SCENARIO_NAME : String(50)     @title : 'Scenario_Name';
+    };
 }
 
 
@@ -1260,3 +1268,4 @@ entity![V_CIR_QTY_VARDESC]{
     ![CIR_QTY]       : Integer             @title : 'CIR_QTY';
     ![DIFF_QTY]      : Decimal(14, 3)      @title : 'DIFF_QTY';
 }
+
