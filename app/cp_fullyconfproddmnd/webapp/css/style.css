@@ -9,7 +9,7 @@
     overflow-y: hidden;
 }
 .hdrBtnMargin {
-  margin-left : 82rem;
+  margin-left : 80rem;
 }
 .disableDP input{
     pointer-events: none;
@@ -18,5 +18,5 @@
    }
 
    .classHdr{
-    margin-left: 77rem;
+    margin-left: 90rem;
    }

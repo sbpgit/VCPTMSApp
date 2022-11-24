@@ -109,23 +109,105 @@ class CIRData {
 
         return li_uniqueIdItem;
     }
-    /**
-     * Get Restriction Items Details
-     */
-    async getRestrictDetails(req) {
-        const li_uniqueIdItem = await cds.run(
-            `SELECT *
-            FROM "CP_RESTRICT_DETAILS"
-            WHERE "LOCATION_ID" = '` +
-            req.data.LOCATION_ID +
-            `'
-            AND "PRODUCT_ID" = '` +
-            req.data.PRODUCT_ID +
-            `'`
-        );
 
-        return li_uniqueIdItem;
-    }
+    // /**
+    //  * Get Auth Token
+    //  */
+    //  async getCFAuthToken() {
+    //     const request = require('request');
+    //     const rp = require('request-promise');
+    //     const cfenv = require('cfenv');
+
+    //     /*********************************************************************
+    //      *************** Step 1: Read the environment variables ***************
+    //      *********************************************************************/
+    //     const oServices = cfenv.getAppEnv().getServices();
+    //     const uaa_service = cfenv.getAppEnv().getService('config_products-xsuaa-service');
+    //     const dest_service = cfenv.getAppEnv().getService('config_products-destination-service');
+    //     const sUaaCredentials = dest_service.credentials.clientid + ':' + dest_service.credentials.clientsecret;
+
+    //     const sDestinationName = 'S4D_HTTP';
+    //     const sEndpoint = '/secure/';
+
+    //     /*********************************************************************
+    //      **** Step 2: Request a JWT token to access the destination service ***
+    //      *********************************************************************/
+    //     const post_options = {
+    //         url: uaa_service.credentials.url + '/oauth/token',
+    //         method: 'POST',
+    //         headers: {
+    //             'Authorization': 'Basic ' + Buffer.from(sUaaCredentials).toString('base64'),
+    //             'Content-type': 'application/x-www-form-urlencoded'
+    //         },
+    //         form: {
+    //             'client_id': dest_service.credentials.clientid,
+    //             'grant_type': 'client_credentials'
+    //         }
+    //     }
+
+    //     let ret_response = "";
+    //     await rp(post_options)
+    //         .then(function (response) {
+    //             console.log('Get Token - Success');
+    //             let sToken = JSON.parse(response).access_token;
+    //             ret_response = getCFDestUser(sToken);
+
+    //         })
+    //         .catch(function (error) {
+    //             console.log('Get Token - Error ', error);
+    //             ret_response = JSON.parse(error);
+    //         });
+
+    //     console.log(ret_response);
+    //     return ret_response;
+        
+    // }
+    
+    // /**
+    //  * Get Destination User 
+    //  */
+    //   async getCFDestUser(sToken) {
+    //     const request = require('request');
+    //     const rp = require('request-promise');
+    //     const cfenv = require('cfenv');
+
+    //     /*********************************************************************
+    //      *************** Step 1: Read the environment variables ***************
+    //      *********************************************************************/
+    //     const oServices = cfenv.getAppEnv().getServices();
+    //     const uaa_service = cfenv.getAppEnv().getService('config_products-xsuaa-service');
+    //     const dest_service = cfenv.getAppEnv().getService('config_products-destination-service');
+    //     const sUaaCredentials = dest_service.credentials.clientid + ':' + dest_service.credentials.clientsecret;
+
+    //     const sDestinationName = 'S4D_HTTP';
+    //     const sEndpoint = '/secure/';
+    //     /*************************************************************
+    //      *** Step 3: Search your destination in the destination service ***
+    //      *************************************************************/
+    //      const token = sToken; //req.data.TOKEN;   //JSON.parse(req.data.DATA).access_token;
+    //      const get_options = {
+    //          url: dest_service.credentials.uri + '/destination-configuration/v1/destinations/' + sDestinationName,
+    //          headers: {
+    //              'Authorization': 'Bearer ' + token
+    //          }
+    //      }
+ 
+    //      let ret_response = "";
+    //      await rp(get_options)
+    //          .then(function (response) {
+    //              const oDestination = JSON.parse(response);
+    //              console.log(oDestination.destinationConfiguration.User);
+    //              ret_response = oDestination.destinationConfiguration.User;
+    //          })
+    //          .catch(function (error) {
+    //              console.log('Get Destination - Error ', error);
+    //              ret_response = JSON.parse(error);
+    //          });
+ 
+    //      console.log(ret_response);
+    //      return ret_response;
+        
+    // }
 
 }
 
