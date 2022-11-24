@@ -971,18 +971,18 @@ module.exports = (srv) => {
     // Generate Timeseries fucntion calls
     srv.on("generate_timeseries", async (req) => {
         let Flag = '';
-        switch (await GenFunctions.getParameterValue(req.data.LOCATION_ID, 5)) {
-            case 'M1':
-                const obgenTimeseries = new GenTimeseries();
-                await obgenTimeseries.genTimeseries(req.data, req, Flag);
-                break;
-            case 'M2':
-                const obgenTimeseriesM2 = new GenTimeseriesM2();
-                await obgenTimeseriesM2.genTimeseries(req.data, req, Flag);
-                break;
-        }
-        // const obgenTimeseries_rt = new GenTimeseriesRT();
-        // await obgenTimeseries_rt.genTimeseries_rt(req.data, req);
+        // switch (await GenFunctions.getParameterValue(req.data.LOCATION_ID, 5)) {
+        //     case 'M1':
+        //         const obgenTimeseries = new GenTimeseries();
+        //         await obgenTimeseries.genTimeseries(req.data, req, Flag);
+        //         break;
+        //     case 'M2':
+        //         const obgenTimeseriesM2 = new GenTimeseriesM2();
+        //         await obgenTimeseriesM2.genTimeseries(req.data, req, Flag);
+        //         break;
+        // }
+        const obgenTimeseries_rt = new GenTimeseriesRT();
+        await obgenTimeseries_rt.genTimeseries_rt(req.data, req);
 
     });
     srv.on("generate_timeseriesF", async (req) => {
@@ -2461,8 +2461,7 @@ module.exports = (srv) => {
         }
         oRtrDetailsIns = {};
         return responseMessage;
-    });
-
+    });    
 
     // POST Service for Unique Characteristic Items and Weekly Quantities
     srv.on("postCIRQuantities", async (req) => {
@@ -2473,11 +2472,15 @@ module.exports = (srv) => {
         const liCIRQty = oCIRData.liCIRQty;
         const liUniqueId = oCIRData.liUniqueId;
         const aUniqueIdChar = await objCIR.getUniqueIdCharacteristics(req);
+        const sLoginUserId = req.headers['x-username'];
+        const sCFDestUser = req.data.VALIDUSER;   
         let aFilteredChar = [], aFilteredCIR = [];
         let sUniqueId = "";
         let oUniqueIdChars = {};
         let aUniqueIdChars = [];
-        let oEntry = {};
+        let oEntry = {};  
+        
+
         for (let i = 0; i < liUniqueId.length; i++) {
             // Unique Id Characteristics
             aUniqueIdChars = [];
@@ -2510,6 +2513,8 @@ module.exports = (srv) => {
                 oEntry.Quantity = (aFilteredCIR[j].CIR_QTY).toString();
                 oEntry.UniqueId = (aFilteredCIR[j].UNIQUE_ID).toString();
                 oEntry.Datum = aFilteredCIR[j].WEEK_DATE + "T10:00:00";
+                oEntry.Valid_User = sCFDestUser;
+                oEntry.User_Id = sLoginUserId;
                 oEntry.HeaderConfig = aUniqueIdChars;
                 try {
                     let sReturn = await oModel.tx(req).post("/headerSet", oEntry);
@@ -2535,6 +2540,8 @@ module.exports = (srv) => {
         const liCIRQty = oCIRData.liCIRQty;
         const liUniqueId = oCIRData.liUniqueId;
         const aUniqueIdChar = await objCIR.getUniqueIdCharacteristics(req);
+        const sCFDestUser = req.data.VALIDUSER; 
+        const sLoginUserId = req.headers['x-username'];
         let aFilteredChar = [], aFilteredCIR = [];
         let sUniqueId = "";
         let oUniqueIdChars = {};
@@ -2572,6 +2579,8 @@ module.exports = (srv) => {
                 oEntry.Quantity = (aFilteredCIR[j].CIR_QTY).toString();
                 oEntry.UniqueId = (aFilteredCIR[j].UNIQUE_ID).toString();
                 oEntry.Datum = aFilteredCIR[j].WEEK_DATE + "T10:00:00";
+                oEntry.Valid_User = sCFDestUser;
+                oEntry.User_Id = sLoginUserId;
                 oEntry.HeaderConfig = aUniqueIdChars;
                 try {
                     await oModel.tx(req).post("/headerSet", oEntry);
@@ -2935,4 +2944,104 @@ module.exports = (srv) => {
     });
 
     //End of VC Planner Document Maintenance- Pradeep
+
+    // BOI Deepa
+    srv.on('getCFAuthToken', async (res) => {
+        let sData = '';
+        const request = require('request');
+        const rp = require('request-promise');
+        const cfenv = require('cfenv');
+
+        /*********************************************************************
+         *************** Step 1: Read the environment variables ***************
+         *********************************************************************/
+        const oServices = cfenv.getAppEnv().getServices();
+        const uaa_service = cfenv.getAppEnv().getService('config_products-xsuaa-service');
+        const dest_service = cfenv.getAppEnv().getService('config_products-destination-service');
+        const sUaaCredentials = dest_service.credentials.clientid + ':' + dest_service.credentials.clientsecret;
+
+        const sDestinationName = 'S4D_HTTP';
+        const sEndpoint = '/secure/';
+
+        /*********************************************************************
+         **** Step 2: Request a JWT token to access the destination service ***
+         *********************************************************************/
+        const post_options = {
+            url: uaa_service.credentials.url + '/oauth/token',
+            method: 'POST',
+            headers: {
+                'Authorization': 'Basic ' + Buffer.from(sUaaCredentials).toString('base64'),
+                'Content-type': 'application/x-www-form-urlencoded'
+            },
+            form: {
+                'client_id': dest_service.credentials.clientid,
+                'grant_type': 'client_credentials'
+            }
+        }
+
+        let ret_response = "";
+        await rp(post_options)
+            .then(function (response) {
+                console.log('Get Token - Success');
+                ret_response = JSON.parse(response).access_token;
+
+            })
+            .catch(function (error) {
+                console.log('Get Token - Error ', error);
+                ret_response = JSON.parse(error);
+            });
+
+        console.log(ret_response);
+        return ret_response;
+    });
+
+
+    srv.on('getCFDestinationUser', async (req) => {
+        let sUser = '';
+        const request = require('request');
+        const rp = require('request-promise');
+        const cfenv = require('cfenv');
+
+        /*********************************************************************
+         *************** Step 1: Read the environment variables ***************
+         *********************************************************************/
+        const oServices = cfenv.getAppEnv().getServices();
+        const uaa_service = cfenv.getAppEnv().getService('config_products-xsuaa-service');
+        const dest_service = cfenv.getAppEnv().getService('config_products-destination-service');
+        const sUaaCredentials = dest_service.credentials.clientid + ':' + dest_service.credentials.clientsecret;
+
+        const sDestinationName = 'S4D_HTTP';
+        const sEndpoint = '/secure/';       
+
+
+        /*************************************************************
+         *** Step 3: Search your destination in the destination service ***
+         *************************************************************/
+        const token = req.data.TOKEN;   //JSON.parse(req.data.DATA).access_token;
+        const get_options = {
+            url: dest_service.credentials.uri + '/destination-configuration/v1/destinations/' + sDestinationName,
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        }
+
+        let ret_response = "";
+        await rp(get_options)
+            .then(function (response) {
+                const oDestination = JSON.parse(response);
+                console.log(oDestination.destinationConfiguration.User);
+                ret_response = oDestination.destinationConfiguration.User;
+            })
+            .catch(function (error) {
+                console.log('Get Destination - Error ', error);
+                ret_response = JSON.parse(error);
+            });
+
+        console.log(ret_response);
+        return ret_response;        
+
+    });
+
+
+    // EOI Deepa
 };

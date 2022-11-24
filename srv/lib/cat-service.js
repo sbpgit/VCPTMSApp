@@ -2541,7 +2541,8 @@ module.exports = (srv) => {
         const liUniqueId = oCIRData.liUniqueId;
         const aUniqueIdChar = await objCIR.getUniqueIdCharacteristics(req);
         const sCFDestUser = req.data.VALIDUSER; 
-        const sLoginUserId = req.headers['x-username'];
+        // const sLoginUserId = req.headers['x-username'];
+        const sLoginUserId = req.user;
         let aFilteredChar = [], aFilteredCIR = [];
         let sUniqueId = "";
         let oUniqueIdChars = {};

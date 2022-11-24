@@ -1,6 +1,6 @@
 <mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:core="sap.ui.core" controllerName="cpapp.cpjobscheduler.controller.ItemDetail" xmlns:html="http://www.w3.org/1999/xhtml">
     <l:ResponsiveSplitter defaultPane="default">
-        <l:PaneContainer orientation="Vertical">
+        <l:PaneContainer orientation="Vertical" id="orient">
             <l:SplitPane id="default" height="300px">
                 <l:layoutData>
                     <l:SplitterLayoutData size="{sizes>/pane1}" />
@@ -85,7 +85,7 @@
                                 <Button id="idRunlogData"  icon="sap-icon://display" tooltip="Run logs" press="onRunlogs" iconDensityAware="false" type="Transparent"/> -->
                                         <Button id="idscheData" icon="sap-icon://form" tooltip="Schedule Data" press="onScheData" iconDensityAware="false" type="Transparent" />
                                         <Button id="idScheUpdate" icon="sap-icon://edit" press="onScheUpdate" tooltip="Update Schedule" iconDensityAware="false" type="Transparent" />
-                                        <Button id="idScheDele" icon="sap-icon://decline" press="onScheDelete" tooltip="Delete Schedule" />
+                                        <Button id="idScheDele" icon="sap-icon://decline" press="onScheDelete" tooltip="Delete Schedule" iconDensityAware="false" type="Transparent" />
                                     </HBox>
                                 </cells>
                             </ColumnListItem>
@@ -96,7 +96,7 @@
                 <!-- </Panel> -->
             </l:SplitPane>
             <l:PaneContainer resize=".onInnerContainerResize">
-                <l:SplitPane requiredParentWidth="600">
+                <l:SplitPane requiredParentWidth="800">
                     <l:layoutData>
                         <l:SplitterLayoutData size="{sizes>/pane2}" />
                     </l:layoutData>

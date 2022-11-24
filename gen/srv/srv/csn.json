@@ -11588,6 +11588,38 @@
               "att12": {
                 "type": "cds.String",
                 "length": 10
+              },
+              "att13": {
+                "type": "cds.String",
+                "length": 10
+              },
+              "att14": {
+                "type": "cds.String",
+                "length": 10
+              },
+              "att15": {
+                "type": "cds.String",
+                "length": 10
+              },
+              "att16": {
+                "type": "cds.String",
+                "length": 10
+              },
+              "att17": {
+                "type": "cds.String",
+                "length": 10
+              },
+              "att18": {
+                "type": "cds.String",
+                "length": 10
+              },
+              "att19": {
+                "type": "cds.String",
+                "length": 10
+              },
+              "att20": {
+                "type": "cds.String",
+                "length": 10
               }
             }
           }
@@ -16589,6 +16621,38 @@
               "att12": {
                 "type": "cds.String",
                 "length": 10
+              },
+              "att13": {
+                "type": "cds.String",
+                "length": 10
+              },
+              "att14": {
+                "type": "cds.String",
+                "length": 10
+              },
+              "att15": {
+                "type": "cds.String",
+                "length": 10
+              },
+              "att16": {
+                "type": "cds.String",
+                "length": 10
+              },
+              "att17": {
+                "type": "cds.String",
+                "length": 10
+              },
+              "att18": {
+                "type": "cds.String",
+                "length": 10
+              },
+              "att19": {
+                "type": "cds.String",
+                "length": 10
+              },
+              "att20": {
+                "type": "cds.String",
+                "length": 10
               }
             }
           }
@@ -17131,6 +17195,9 @@
         "Product": {
           "type": "cds.String",
           "length": 40
+        },
+        "ProdType": {
+          "type": "cds.Boolean"
         }
       }
     },
@@ -23733,6 +23800,10 @@
         "MODEL_VERSION": {
           "type": "cds.String",
           "length": 20
+        },
+        "VALIDUSER": {
+          "type": "cds.String",
+          "length": 12
         }
       },
       "returns": {
@@ -23767,6 +23838,10 @@
         "MODEL_VERSION": {
           "type": "cds.String",
           "length": 20
+        },
+        "VALIDUSER": {
+          "type": "cds.String",
+          "length": 12
         }
       }
     },
@@ -23778,6 +23853,23 @@
           "length": 1
         },
         "CIR_QUANTITIES": {
+          "type": "cds.String"
+        }
+      },
+      "returns": {
+        "type": "cds.String"
+      }
+    },
+    "CatalogService.getCFAuthToken": {
+      "kind": "function",
+      "returns": {
+        "type": "cds.String"
+      }
+    },
+    "CatalogService.getCFDestinationUser": {
+      "kind": "function",
+      "params": {
+        "TOKEN": {
           "type": "cds.String"
         }
       },
