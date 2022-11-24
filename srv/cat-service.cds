@@ -306,4 +306,9 @@ service CatalogService @(impl : './lib/cat-service.js') {
     //*****/ Factory Location/*****/
     @odata.draft.enabled
     entity getFactoryLoc        as projection on od.FACTORY_SALESLOC;
+
+
+    // Get IBP Version Scenario
+ 
+    entity getVerScnmaster          as projection on od.IBPVERSIONSCENARIO;
 }
