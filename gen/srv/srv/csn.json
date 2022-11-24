@@ -2694,6 +2694,89 @@
         }
       }
     },
+    "cp.PAL_PROFILE_LOC_PROD": {
+      "kind": "entity",
+      "includes": [
+        "managed"
+      ],
+      "elements": {
+        "createdAt": {
+          "@cds.on.insert": {
+            "=": "$now"
+          },
+          "@UI.HiddenFilter": true,
+          "@Core.Immutable": true,
+          "@title": "{i18n>CreatedAt}",
+          "@readonly": true,
+          "@odata.on.insert": {
+            "#": "now"
+          },
+          "type": "cds.Timestamp"
+        },
+        "createdBy": {
+          "@cds.on.insert": {
+            "=": "$user"
+          },
+          "@UI.HiddenFilter": true,
+          "@Core.Immutable": true,
+          "@title": "{i18n>CreatedBy}",
+          "@readonly": true,
+          "@odata.on.insert": {
+            "#": "user"
+          },
+          "@description": "{i18n>UserID.Description}",
+          "type": "User",
+          "length": 255
+        },
+        "modifiedAt": {
+          "@cds.on.insert": {
+            "=": "$now"
+          },
+          "@cds.on.update": {
+            "=": "$now"
+          },
+          "@UI.HiddenFilter": true,
+          "@title": "{i18n>ChangedAt}",
+          "@readonly": true,
+          "@odata.on.update": {
+            "#": "now"
+          },
+          "type": "cds.Timestamp"
+        },
+        "modifiedBy": {
+          "@cds.on.insert": {
+            "=": "$user"
+          },
+          "@cds.on.update": {
+            "=": "$user"
+          },
+          "@UI.HiddenFilter": true,
+          "@title": "{i18n>ChangedBy}",
+          "@readonly": true,
+          "@odata.on.update": {
+            "#": "user"
+          },
+          "@description": "{i18n>UserID.Description}",
+          "type": "User",
+          "length": 255
+        },
+        "LOCATION_ID": {
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+        "PROFILE": {
+          "key": true,
+          "type": "cds.String",
+          "length": 50
+        }
+      }
+    },
     "cp.COMPQTYDETERMINE": {
       "kind": "entity",
       "elements": {
@@ -3883,10 +3966,22 @@
       "kind": "entity",
       "@UI.SelectionFields": [
         {
+          "=": "LOCATION_ID"
+        },
+        {
           "=": "LINE_ID"
         }
       ],
       "@UI.LineItem": [
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "LOCATION_ID"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          }
+        },
         {
           "$Type": "UI.DataField",
           "Value": {
@@ -3918,6 +4013,12 @@
         {
           "$Type": "UI.DataField",
           "Value": {
+            "=": "LOCATION_ID"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
             "=": "LINE_ID"
           }
         },
@@ -3943,6 +4044,12 @@
         }
       ],
       "elements": {
+        "LOCATION_ID": {
+          "@title": "Location ",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
         "LINE_ID": {
           "@title": "Line",
           "key": true,
@@ -3953,6 +4060,46 @@
           "@title": "Line Desc",
           "type": "cds.String",
           "length": 30
+        }
+      }
+    },
+    "cp.LOCPRODRESTRICT": {
+      "kind": "entity",
+      "elements": {
+        "WEEK_DATE": {
+          "@title": "Week Date",
+          "key": true,
+          "type": "cds.Date"
+        },
+        "LOCATION_ID": {
+          "@title": "Location ",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "LINE_ID": {
+          "@title": "Line",
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+        "PRODUCT_ID": {
+          "@title": "Product",
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+        "RESTRICTION": {
+          "@title": "Restriction",
+          "key": true,
+          "type": "cds.String",
+          "length": 30
+        },
+        "RTR_QTY": {
+          "@title": "Component Quantity",
+          "type": "cds.Decimal",
+          "precision": 13,
+          "scale": 3
         }
       }
     },
@@ -11333,7 +11480,7 @@
         }
       }
     },
-    "cp.PalClustering": {
+    "cp.PalGenClusters": {
       "kind": "entity",
       "elements": {
         "clustersID": {
@@ -11391,46 +11538,56 @@
                 "length": 100
               },
               "ID": {
-                "type": "cds.Integer"
+                "type": "cds.String",
+                "length": 100
               },
               "att1": {
-                "type": "cds.Double"
+                "type": "cds.String",
+                "length": 10
               },
               "att2": {
-                "type": "cds.Double"
+                "type": "cds.String",
+                "length": 10
               },
               "att3": {
-                "type": "cds.Double"
+                "type": "cds.String",
+                "length": 10
               },
               "att4": {
-                "type": "cds.Double"
+                "type": "cds.String",
+                "length": 10
               },
               "att5": {
-                "type": "cds.Double"
+                "type": "cds.String",
+                "length": 10
               },
               "att6": {
-                "type": "cds.Double"
+                "type": "cds.String",
+                "length": 10
               },
               "att7": {
-                "type": "cds.Double"
+                "type": "cds.String",
+                "length": 10
               },
               "att8": {
-                "type": "cds.Double"
+                "type": "cds.String",
+                "length": 10
               },
               "att9": {
-                "type": "cds.Double"
+                "type": "cds.String",
+                "length": 10
               },
               "att10": {
-                "type": "cds.Double"
+                "type": "cds.String",
+                "length": 10
               },
               "att11": {
-                "type": "cds.Double"
+                "type": "cds.String",
+                "length": 10
               },
               "att12": {
-                "type": "cds.Double"
-              },
-              "target": {
-                "type": "cds.Double"
+                "type": "cds.String",
+                "length": 10
               }
             }
           }
@@ -12167,6 +12324,46 @@
           "@title": "CHAR12",
           "type": "cds.String",
           "length": 10
+        },
+        "C13": {
+          "@title": "CHAR13",
+          "type": "cds.String",
+          "length": 10
+        },
+        "C14": {
+          "@title": "CHAR14",
+          "type": "cds.String",
+          "length": 10
+        },
+        "C15": {
+          "@title": "CHAR15",
+          "type": "cds.String",
+          "length": 10
+        },
+        "C16": {
+          "@title": "CHAR16",
+          "type": "cds.String",
+          "length": 10
+        },
+        "C17": {
+          "@title": "CHAR17",
+          "type": "cds.String",
+          "length": 10
+        },
+        "C18": {
+          "@title": "CHAR18",
+          "type": "cds.String",
+          "length": 10
+        },
+        "C19": {
+          "@title": "CHAR19",
+          "type": "cds.String",
+          "length": 10
+        },
+        "C20": {
+          "@title": "CHAR20",
+          "type": "cds.String",
+          "length": 10
         }
       }
     },
@@ -12185,8 +12382,8 @@
           "type": "cds.String",
           "length": 40
         },
-        "UNIQUE_ID": {
-          "@title": "Unique ID",
+        "MODEL_PROFILE": {
+          "@title": "PAL Model Profile",
           "key": true,
           "type": "cds.String",
           "length": 50
@@ -12230,6 +12427,12 @@
           "type": "cds.String",
           "length": 40
         },
+        "MODEL_PROFILE": {
+          "@title": "PAL Model Profile",
+          "key": true,
+          "type": "cds.String",
+          "length": 50
+        },
         "UNIQUE_ID": {
           "@title": "Unique ID",
           "key": true,
@@ -12240,6 +12443,148 @@
           "@title": "Stage",
           "key": true,
           "type": "cds.Integer"
+        }
+      }
+    },
+    "cp.V_AHC_LEFT_CLUSTER": {
+      "kind": "entity",
+      "@cds.persistence.exists": true,
+      "elements": {
+        "LOCATION_ID": {
+          "@title": "LOCATION_ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "@title": "PRODUCT_ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+        "PROFILE": {
+          "@title": "PROFILE",
+          "key": true,
+          "type": "cds.String",
+          "length": 50
+        },
+        "LEFT_ID_CLUSTER": {
+          "@title": "LEFT_ID_CLUSTER",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "LEFT_ID": {
+          "@title": "LEFT_ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 50
+        },
+        "RIGHT_ID": {
+          "@title": "RIGHT_ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 50
+        },
+        "DISTANCE": {
+          "@title": "DISTANCE",
+          "key": true,
+          "type": "cds.Decimal",
+          "precision": 13,
+          "scale": 4
+        }
+      }
+    },
+    "cp.V_AHC_CLUSTER_RESULTS": {
+      "kind": "entity",
+      "@cds.persistence.exists": true,
+      "elements": {
+        "LOCATION_ID": {
+          "@title": "LOCATION_ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "@title": "PRODUCT_ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+        "PROFILE": {
+          "@title": "PROFILE",
+          "key": true,
+          "type": "cds.String",
+          "length": 50
+        },
+        "LEFT_ID_CLUSTER": {
+          "@title": "LEFT_ID_CLUSTER",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "RIGHT_ID_CLUSTER": {
+          "@title": "RIGHT_ID_CLUSTER",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "LEFT_ID": {
+          "@title": "LEFT_ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 50
+        },
+        "RIGHT_ID": {
+          "@title": "RIGHT_ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 50
+        },
+        "DISTANCE": {
+          "@title": "DISTANCE",
+          "key": true,
+          "type": "cds.Decimal",
+          "precision": 13,
+          "scale": 4
+        }
+      }
+    },
+    "cp.V_CLUSTER_CHARS": {
+      "kind": "entity",
+      "@cds.persistence.exists": true,
+      "elements": {
+        "LOCATION_ID": {
+          "@title": "LOCATION_ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "@title": "PRODUCT_ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+        "UNIQUE_ID": {
+          "@title": "UNIQUE_ID",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "CHAR_NAME": {
+          "@title": "CHAR_NAME",
+          "key": true,
+          "type": "cds.String",
+          "length": 30
+        },
+        "CHAR_VALUE": {
+          "@title": "CHAR_VALUE",
+          "key": true,
+          "type": "cds.String",
+          "length": 70
+        },
+        "CHARVAL_NUM": {
+          "@title": "CHARVAL_NUM",
+          "key": true,
+          "type": "cds.String",
+          "length": 70
         }
       }
     },
@@ -16129,6 +16474,127 @@
         }
       }
     },
+    "PalService.generateAhcClusters": {
+      "kind": "entity",
+      "projection": {
+        "from": {
+          "ref": [
+            "cp.PalGenClusters"
+          ]
+        }
+      },
+      "elements": {
+        "clustersID": {
+          "key": true,
+          "type": "cds.String",
+          "length": 50
+        },
+        "createdAt": {
+          "type": "cds.Timestamp"
+        },
+        "Location": {
+          "type": "cds.String",
+          "length": 4
+        },
+        "Product": {
+          "type": "cds.String",
+          "length": 40
+        },
+        "clusterParameters": {
+          "items": {
+            "elements": {
+              "groupId": {
+                "type": "cds.String",
+                "length": 100
+              },
+              "paramName": {
+                "type": "cds.String",
+                "length": 100
+              },
+              "intVal": {
+                "type": "cds.Integer"
+              },
+              "doubleVal": {
+                "type": "cds.Double"
+              },
+              "strVal": {
+                "type": "cds.String",
+                "length": 100
+              }
+            }
+          }
+        },
+        "clusterType": {
+          "@assert.range": [
+            1,
+            12
+          ],
+          "type": "cds.Integer"
+        },
+        "clusterData": {
+          "items": {
+            "elements": {
+              "groupId": {
+                "type": "cds.String",
+                "length": 100
+              },
+              "ID": {
+                "type": "cds.String",
+                "length": 100
+              },
+              "att1": {
+                "type": "cds.String",
+                "length": 10
+              },
+              "att2": {
+                "type": "cds.String",
+                "length": 10
+              },
+              "att3": {
+                "type": "cds.String",
+                "length": 10
+              },
+              "att4": {
+                "type": "cds.String",
+                "length": 10
+              },
+              "att5": {
+                "type": "cds.String",
+                "length": 10
+              },
+              "att6": {
+                "type": "cds.String",
+                "length": 10
+              },
+              "att7": {
+                "type": "cds.String",
+                "length": 10
+              },
+              "att8": {
+                "type": "cds.String",
+                "length": 10
+              },
+              "att9": {
+                "type": "cds.String",
+                "length": 10
+              },
+              "att10": {
+                "type": "cds.String",
+                "length": 10
+              },
+              "att11": {
+                "type": "cds.String",
+                "length": 10
+              },
+              "att12": {
+                "type": "cds.String",
+                "length": 10
+              }
+            }
+          }
+        }
+      }
+    },
     "PalService.getClustersInput": {
       "kind": "entity",
       "projection": {
@@ -16216,6 +16682,46 @@
           "@title": "CHAR12",
           "type": "cds.String",
           "length": 10
+        },
+        "C13": {
+          "@title": "CHAR13",
+          "type": "cds.String",
+          "length": 10
+        },
+        "C14": {
+          "@title": "CHAR14",
+          "type": "cds.String",
+          "length": 10
+        },
+        "C15": {
+          "@title": "CHAR15",
+          "type": "cds.String",
+          "length": 10
+        },
+        "C16": {
+          "@title": "CHAR16",
+          "type": "cds.String",
+          "length": 10
+        },
+        "C17": {
+          "@title": "CHAR17",
+          "type": "cds.String",
+          "length": 10
+        },
+        "C18": {
+          "@title": "CHAR18",
+          "type": "cds.String",
+          "length": 10
+        },
+        "C19": {
+          "@title": "CHAR19",
+          "type": "cds.String",
+          "length": 10
+        },
+        "C20": {
+          "@title": "CHAR20",
+          "type": "cds.String",
+          "length": 10
         }
       }
     },
@@ -16241,8 +16747,8 @@
           "type": "cds.String",
           "length": 40
         },
-        "UNIQUE_ID": {
-          "@title": "Unique ID",
+        "MODEL_PROFILE": {
+          "@title": "PAL Model Profile",
           "key": true,
           "type": "cds.String",
           "length": 50
@@ -16293,6 +16799,12 @@
           "type": "cds.String",
           "length": 40
         },
+        "MODEL_PROFILE": {
+          "@title": "PAL Model Profile",
+          "key": true,
+          "type": "cds.String",
+          "length": 50
+        },
         "UNIQUE_ID": {
           "@title": "Unique ID",
           "key": true,
@@ -16303,6 +16815,112 @@
           "@title": "Stage",
           "key": true,
           "type": "cds.Integer"
+        }
+      }
+    },
+    "PalService.getClustersByDistance": {
+      "kind": "entity",
+      "projection": {
+        "from": {
+          "ref": [
+            "cp.V_AHC_CLUSTER_RESULTS"
+          ]
+        }
+      },
+      "elements": {
+        "LOCATION_ID": {
+          "@title": "LOCATION_ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "@title": "PRODUCT_ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+        "PROFILE": {
+          "@title": "PROFILE",
+          "key": true,
+          "type": "cds.String",
+          "length": 50
+        },
+        "LEFT_ID_CLUSTER": {
+          "@title": "LEFT_ID_CLUSTER",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "RIGHT_ID_CLUSTER": {
+          "@title": "RIGHT_ID_CLUSTER",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "LEFT_ID": {
+          "@title": "LEFT_ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 50
+        },
+        "RIGHT_ID": {
+          "@title": "RIGHT_ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 50
+        },
+        "DISTANCE": {
+          "@title": "DISTANCE",
+          "key": true,
+          "type": "cds.Decimal",
+          "precision": 13,
+          "scale": 4
+        }
+      }
+    },
+    "PalService.getClusterChars": {
+      "kind": "entity",
+      "projection": {
+        "from": {
+          "ref": [
+            "cp.V_CLUSTER_CHARS"
+          ]
+        }
+      },
+      "elements": {
+        "LOCATION_ID": {
+          "@title": "LOCATION_ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "@title": "PRODUCT_ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+        "UNIQUE_ID": {
+          "@title": "UNIQUE_ID",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "CHAR_NAME": {
+          "@title": "CHAR_NAME",
+          "key": true,
+          "type": "cds.String",
+          "length": 30
+        },
+        "CHAR_VALUE": {
+          "@title": "CHAR_VALUE",
+          "key": true,
+          "type": "cds.String",
+          "length": 70
+        },
+        "CHARVAL_NUM": {
+          "@title": "CHARVAL_NUM",
+          "key": true,
+          "type": "cds.String",
+          "length": 70
         }
       }
     },
@@ -16503,7 +17121,7 @@
         }
       }
     },
-    "PalService.genClusterInputs": {
+    "PalService.genClusterUniqueIDS": {
       "kind": "action",
       "params": {
         "Location": {
@@ -16516,20 +17134,30 @@
         }
       }
     },
-    "PalService.fgenClusterInputs": {
-      "kind": "function",
+    "PalService.genClusters": {
+      "kind": "action",
       "params": {
-        "Location": {
-          "type": "cds.String",
-          "length": 4
-        },
-        "Product": {
-          "type": "cds.String",
-          "length": 40
+        "vcRulesList": {
+          "items": {
+            "elements": {
+              "profile": {
+                "type": "cds.String",
+                "length": 50
+              },
+              "override": {
+                "type": "cds.Boolean"
+              },
+              "Location": {
+                "type": "cds.String",
+                "length": 4
+              },
+              "Product": {
+                "type": "cds.String",
+                "length": 40
+              }
+            }
+          }
         }
-      },
-      "returns": {
-        "type": "cds.String"
       }
     },
     "PalService.fgModels": {
@@ -21987,6 +22615,13 @@
                 "=": "LINE_ID"
               },
               "ValueListProperty": "LINE_ID"
+            },
+            {
+              "$Type": "Common.ValueListParameterIn",
+              "LocalDataProperty": {
+                "=": "LOCATION_ID"
+              },
+              "ValueListProperty": "LOCATION_ID"
             }
           ],
           "@title": "Line",
@@ -21997,7 +22632,7 @@
         "PRODUCT_ID": {
           "@Common.ValueList.$Type": "Common.ValueListType",
           "@Common.ValueList.Label": "Products",
-          "@Common.ValueList.CollectionPath": "getLocProd",
+          "@Common.ValueList.CollectionPath": "genPartialProd",
           "@Common.ValueList.Parameters": [
             {
               "$Type": "Common.ValueListParameterInOut",
@@ -22026,10 +22661,22 @@
       "@odata.draft.enabled": true,
       "@UI.SelectionFields": [
         {
+          "=": "LOCATION_ID"
+        },
+        {
           "=": "LINE_ID"
         }
       ],
       "@UI.LineItem": [
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "LOCATION_ID"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          }
+        },
         {
           "$Type": "UI.DataField",
           "Value": {
@@ -22058,6 +22705,12 @@
       "@UI.HeaderInfo.TypeName": "Line Master",
       "@UI.HeaderInfo.TypeNamePlural": "Line Master",
       "@UI.FieldGroup#Details.Data": [
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "LOCATION_ID"
+          }
+        },
         {
           "$Type": "UI.DataField",
           "Value": {
@@ -22093,6 +22746,24 @@
         }
       },
       "elements": {
+        "LOCATION_ID": {
+          "@Common.ValueList.$Type": "Common.ValueListType",
+          "@Common.ValueList.Label": "Location",
+          "@Common.ValueList.CollectionPath": "getLocation",
+          "@Common.ValueList.Parameters": [
+            {
+              "$Type": "Common.ValueListParameterOut",
+              "LocalDataProperty": {
+                "=": "LOCATION_ID"
+              },
+              "ValueListProperty": "LOCATION_ID"
+            }
+          ],
+          "@title": "Location ",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
         "LINE_ID": {
           "@title": "Line",
           "key": true,
@@ -22345,6 +23016,20 @@
     },
     "CatalogService.trigrMAWeek": {
       "kind": "action"
+    },
+    "CatalogService.generateMarketAuth": {
+      "kind": "action",
+      "params": {
+        "MARKETDATA": {
+          "type": "cds.String"
+        }
+      }
+    },
+    "CatalogService.generateMarketAuthfn": {
+      "kind": "function",
+      "returns": {
+        "type": "cds.String"
+      }
     },
     "CatalogService.getSeedOrder": {
       "kind": "entity",
@@ -23930,43 +24615,6 @@
         }
       }
     },
-    "IBPImportSrv.exportIBPSalesTrans": {
-      "kind": "action",
-      "params": {
-        "LOCATION_ID": {
-          "type": "cds.String",
-          "length": 4
-        },
-        "PRODUCT_ID": {
-          "type": "cds.String",
-          "length": 40
-        },
-        "CUSTOMER_GROUP": {
-          "type": "cds.String",
-          "length": 20
-        },
-        "DOC_DATE": {
-          "type": "cds.Date"
-        }
-      }
-    },
-    "IBPImportSrv.exportIBPSalesConfig": {
-      "kind": "action",
-      "params": {
-        "LOCATION_ID": {
-          "type": "cds.String",
-          "length": 4
-        },
-        "PRODUCT_ID": {
-          "type": "cds.String",
-          "length": 40
-        },
-        "CUSTOMER_GROUP": {
-          "type": "cds.String",
-          "length": 20
-        }
-      }
-    },
     "IBPImportSrv.exportComponentReq": {
       "kind": "action",
       "params": {
@@ -23983,23 +24631,6 @@
         },
         "TODATE": {
           "type": "cds.Date"
-        },
-        "CRITICALKEY": {
-          "type": "cds.String",
-          "length": 1
-        }
-      }
-    },
-    "IBPImportSrv.exportActCompDemand": {
-      "kind": "action",
-      "params": {
-        "LOCATION_ID": {
-          "type": "cds.String",
-          "length": 4
-        },
-        "PRODUCT_ID": {
-          "type": "cds.String",
-          "length": 40
         },
         "CRITICALKEY": {
           "type": "cds.String",
@@ -24025,29 +24656,51 @@
         }
       }
     },
+    "IBPImportSrv.exportIBPSalesTrans": {
+      "kind": "action",
+      "params": {
+        "LocProdData": {
+          "type": "cds.String"
+        }
+      }
+    },
+    "IBPImportSrv.exportActCompDemand": {
+      "kind": "action",
+      "params": {
+        "LocProdData": {
+          "type": "cds.String"
+        }
+      }
+    },
     "IBPImportSrv.exportRestrReq": {
       "kind": "action",
       "params": {
-        "LOCATION_ID": {
-          "type": "cds.String",
-          "length": 4
-        },
-        "PRODUCT_ID": {
-          "type": "cds.String",
-          "length": 40
+        "LocProdData": {
+          "type": "cds.String"
+        }
+      }
+    },
+    "IBPImportSrv.exportMktAuth": {
+      "kind": "action",
+      "params": {
+        "LocProdData": {
+          "type": "cds.String"
+        }
+      }
+    },
+    "IBPImportSrv.exportIBPCIR": {
+      "kind": "action",
+      "params": {
+        "LocProdData": {
+          "type": "cds.String"
         }
       }
     },
     "IBPImportSrv.generateFDemandQty": {
       "kind": "action",
       "params": {
-        "LOCATION_ID": {
-          "type": "cds.String",
-          "length": 4
-        },
-        "PRODUCT_ID": {
-          "type": "cds.String",
-          "length": 40
+        "LocProdData": {
+          "type": "cds.String"
         }
       }
     },
@@ -24070,16 +24723,11 @@
         }
       }
     },
-    "IBPImportSrv.exportIBPCIR": {
+    "IBPImportSrv.generateMarketAuth": {
       "kind": "action",
       "params": {
-        "LOCATION_ID": {
-          "type": "cds.String",
-          "length": 4
-        },
-        "PRODUCT_ID": {
-          "type": "cds.String",
-          "length": 40
+        "MARKETDATA": {
+          "type": "cds.String"
         }
       }
     },
@@ -24120,6 +24768,9 @@
     "SDIService.ImportECCODhdr": {
       "kind": "action"
     },
+    "SDIService.ImportECCProdClass": {
+      "kind": "action"
+    },
     "SDIService.ImportECCClass": {
       "kind": "action"
     },
@@ -24135,6 +24786,9 @@
     "SDIService.ImportECCSaleshCfg": {
       "kind": "action"
     },
+    "SDIService.ImportECCAsmbcomp": {
+      "kind": "action"
+    },
     "SDIService.ImportCuvtabInd": {
       "kind": "action"
     },
@@ -24142,6 +24796,15 @@
       "kind": "action"
     },
     "SDIService.ImportPartialProd": {
+      "kind": "action"
+    },
+    "SDIService.ImportSOStock": {
+      "kind": "action"
+    },
+    "SDIService.ImportPVSNode": {
+      "kind": "action"
+    },
+    "SDIService.ImportPVSBOM": {
       "kind": "action"
     },
     "UserInfoService": {

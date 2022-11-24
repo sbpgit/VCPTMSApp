@@ -23,6 +23,7 @@ const classicalSchema = process.env.classicalSchema;
 
 exports._runAhcClusters = async function(req) {
 
+    // console.log("_runAhcClusters data ",req.data);
 
     ahcFuncs._updateAhcGroupParams(req);   
   
@@ -36,6 +37,7 @@ exports._runAhcClusters = async function(req) {
 exports._updateAhcGroupParams = function(req) {
     const ahcGroupParams = req.data.clusterParameters;
 
+    // console.log("_updateAhcGroupParams ",ahcGroupParams );
     var conn = hana.createConnection();
 
     conn.connect(conn_params);
@@ -115,7 +117,7 @@ exports._updateAhcGroupData = function(req) {
     var tableObj = [];	
 
     
-    let att1, att2, att3, att4, att5, att6, att7, att8, att9, att10, att11, att12 = 'NA';
+    let att1, att2, att3, att4, att5, att6, att7, att8, att9, att10, att11, att12, att13, att14, att15, att16, att17, att18, att19, att20 = 'NA';
     let ID, groupId;
     for (var i = 0; i < ahcGroupData.length; i++)
     {
@@ -134,13 +136,21 @@ exports._updateAhcGroupData = function(req) {
         att10 = ahcGroupData[i].att10;
         att11 = ahcGroupData[i].att11;
         att12 = ahcGroupData[i].att12;
+        att13 = ahcGroupData[i].att13;
+        att14 = ahcGroupData[i].att14;
+        att15 = ahcGroupData[i].att15;
+        att16 = ahcGroupData[i].att16;
+        att17 = ahcGroupData[i].att17;
+        att18 = ahcGroupData[i].att18;
+        att19 = ahcGroupData[i].att19;
+        att20 = ahcGroupData[i].att20;
 
         var rowObj = [];
-        rowObj.push(groupId,ID, att1,att2,att3,att4,att5,att6,att7,att8,att9,att10,att11,att12);
+        rowObj.push(groupId,ID, att1,att2,att3,att4,att5,att6,att7,att8,att9,att10,att11,att12,att13,att14,att15,att16,att17,att18,att19,att20);
 
         tableObj.push(rowObj);
     }
-    sqlStr = "INSERT INTO PAL_AHC_DATA_GRP_TAB_T(GROUP_ID,ID,C1,C2,C3,C4,C5,C6,C7,C8,C9,C10,C11,C12) VALUES(?, ?, ?, ?, ?,?,?,?,?,?,?,?,?,?)";
+    sqlStr = "INSERT INTO PAL_AHC_DATA_GRP_TAB_T(GROUP_ID,ID,C1,C2,C3,C4,C5,C6,C7,C8,C9,C10,C11,C12,C13,C14,C15,C16,C17,C18,C19,C20) VALUES(?, ?, ?, ?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     stmt = conn.prepare(sqlStr);
 
     stmt.execBatch(tableObj);
@@ -168,6 +178,8 @@ exports._runAhClustersGroup = async function(req) {
 
 ////////////////////////////////////////////////////////////////////////////////////
     const ahcGroupParams = req.data.clusterParameters;
+    const ahcGroupData = req.data.clusterData;
+
 
     let inGroups = [];
     let inGroup = ahcGroupParams[0].groupId;
@@ -206,42 +218,47 @@ exports._runAhClustersGroup = async function(req) {
     stmt.drop();
     
   
-    var cpGroups = [];
-    var cpGroup = cpResults[0].GROUP_ID;
-    cpGroups.push(cpGroup);
-    for (var i in cpResults)
-    { 
-        if (i > 0)
-        {
-            if( cpResults[i].GROUP_ID != cpResults[i-1].GROUP_ID)
-            {
-                cpGroups.push(cpResults[i].GROUP_ID);
-            }
-        }
-    }
+    // var cpGroups = [];
+    // var cpGroup = cpResults[0].GROUP_ID;
+    // cpGroups.push(cpGroup);
+    // for (var i in cpResults)
+    // { 
+    //     if (i > 0)
+    //     {
+    //         if( cpResults[i].GROUP_ID != cpResults[i-1].GROUP_ID)
+    //         {
+    //             cpGroups.push(cpResults[i].GROUP_ID);
+    //         }
+    //     }
+    // }
 
     let cpTableObj = [];
 
     for (let i=0; i< cpResults.length; i++)
     {     
         let groupId = cpResults[i].GROUP_ID;
-        let stage = cpResults[i].STAGE;
-        let leftId = cpResults[i].LEFT_ID;
-        let rightId = cpResults[i].ROGHT_D;
-        let distance = cpResults[i].DISTNACE;
+        let STAGE = cpResults[i].STAGE;
+        let LEFT_ID = cpResults[i].LEFT_ID;
+        let RIGHT_ID = cpResults[i].RIGHT_ID;
+        let DISTANCE = cpResults[i].DISTANCE;
 
-        let grpStr=inGroups[groupId].split('#');
-        let location = grpStr[0];
-        let product = grpStr[1];
-        cpTableObj.push({location,product,stage,leftId,rightId,distance});
+        let grpStr=groupId.split('#');
+        let MODEL_PROFILE = grpStr[0]; 
+        let LOCATION_ID = grpStr[1];
+        let PRODUCT_ID = grpStr[2];
+        // cpTableObj.push({location,product,profileID,GroupId,stage,leftId,rightId,distance});
+        cpTableObj.push({LOCATION_ID,PRODUCT_ID,MODEL_PROFILE,STAGE,LEFT_ID,RIGHT_ID,DISTANCE});
 
-        let sqlStr = 'DELETE FROM CP_AHC_COMBINE_PROCESS WHERE '
-                     ' LOCATION_ID = ' + "'" + location + "'" + ' AND ' +
-                     ' PRODUCT_ID = ' + "'" + product + "'";
+
+        let sqlStr = 'DELETE FROM CP_AHC_COMBINE_PROCESS WHERE ' +
+                     ' LOCATION_ID = ' + "'" + LOCATION_ID + "'" + ' AND ' +
+                     ' PRODUCT_ID = ' + "'" + PRODUCT_ID + "'"+ ' AND ' +
+                     ' MODEL_PROFILE = ' + "'" + MODEL_PROFILE + "'";
         await cds.run(sqlStr);
 
     }
-    cqnQuery = {INSERT:{ into: { ref: ['CP_AHC_COMBINE_PROCESS'] }, entries:  cpTableObj }};
+    // console.log(" cpTableObj ", cpTableObj);
+    let cqnQuery = {INSERT:{ into: { ref: ['CP_AHC_COMBINE_PROCESS'] }, entries:  cpTableObj }};
 
     await cds.run(cqnQuery);
 
@@ -256,17 +273,21 @@ exports._runAhClustersGroup = async function(req) {
     for (let i=0; i< clusterResults.length; i++)
     {     
         let groupId = clusterResults[i].GROUP_ID;
-        let ID = clusterResults[i].ID;
-        let cluster_id = clusterResults[i].CLUSTER_ID;
+        let UNIQUE_ID = clusterResults[i].ID;
+        let CLUSTER_ID = clusterResults[i].CLUSTER_ID;
 
-        let grpStr=inGroups[groupId].split('#');
-        let location = grpStr[0];
-        let product = grpStr[1];
-        clustersTableObj.push({location,product,ID,cluster_id});
+        let grpStr=groupId.split('#');
 
-        let sqlStr = 'DELETE FROM CP_AHC_RESULTS WHERE '
-                     ' LOCATION_ID = ' + "'" + location + "'" + ' AND ' +
-                     ' PRODUCT_ID = ' + "'" + product + "'";
+        let MODEL_PROFILE = grpStr[0]; 
+        let LOCATION_ID = grpStr[1];
+        let PRODUCT_ID = grpStr[2];
+        
+        clustersTableObj.push({LOCATION_ID,PRODUCT_ID,MODEL_PROFILE,UNIQUE_ID,CLUSTER_ID});
+
+        let sqlStr = 'DELETE FROM CP_AHC_RESULTS WHERE ' +
+                     ' LOCATION_ID = ' + "'" + LOCATION_ID + "'" + ' AND ' +
+                     ' PRODUCT_ID = ' + "'" + PRODUCT_ID + "'" + ' AND ' +
+                     ' MODEL_PROFILE = ' + "'" + MODEL_PROFILE + "'";
         await cds.run(sqlStr);
     }
 
@@ -280,7 +301,7 @@ exports._runAhClustersGroup = async function(req) {
     let returnObj = [];	
     let createdAt = createtAtObj;
     let clustersID = idObj; //uuidObj;
-    returnObj.push({clustersID, createdAt,clusterParameters,clusterData});
+    returnObj.push({clustersID, createdAt,ahcGroupParams,ahcGroupData});
     var res = req._.req.res;
     res.send({"value":returnObj});
 

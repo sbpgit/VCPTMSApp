@@ -257,7 +257,7 @@ sap.ui.define(
         this.bus.publish("nav", "backToBegin");
         /* Handling Ment button when we are in Item Master page  */
         if (!Device.system.desktop) {
-          this.byId("leftMenu").setVisible(false);
+          this.byId("leftMenu").setVisible(true);
           this.getModel("appView").setProperty("/expanded", true);
         }
       },

@@ -401,6 +401,12 @@ context cp {
             STRUC_NODE  : String(50);
     }
 
+    entity PAL_PROFILE_LOC_PROD : managed {
+        key LOCATION_ID : String(4);
+        key PRODUCT_ID  : String(40);
+        key PROFILE     : String(50);
+    }
+
     // entity IP_PROFILEOD {
     //     key CREATED_DATE    : Date;
     //         FLAG            : String(1);
@@ -658,19 +664,20 @@ context cp {
     };
 
     entity LINEMASTER {
-        key LINE_ID   : String(40) @title : 'Line';
-            LINE_DESC : String(30) @title : 'Line Desc';
+        key LOCATION_ID : String(4)  @title : 'Location ';
+        key LINE_ID     : String(40) @title : 'Line';
+            LINE_DESC   : String(30) @title : 'Line Desc';
     };
 
     // Product restrictions
-    // entity PRODRESTRICT {
-    //     key LOCATION_ID : String(4)      @title : 'Location '; //Association to ZLOCATION;//
-    //     key PRODUCT_ID  : String(40)     @title : 'Product';
-    //     key RESTRICTION : String(30)     @title : 'Restriction';
-    //         RTR_QTY     : Decimal(13, 3) @title : 'Component Quantity';
-    //         VALID_FROM  : Date           @title : 'Valid From';
-    //         VALID_TO    : Date           @title : 'Valid To';
-    // };
+    entity LOCPRODRESTRICT {
+        key WEEK_DATE   : Date           @title : 'Week Date';
+        key LOCATION_ID : String(4)      @title : 'Location '; //Association to ZLOCATION;//
+        key LINE_ID     : String(40)     @title : 'Line';
+        key PRODUCT_ID  : String(40)     @title : 'Product';
+        key RESTRICTION : String(30)     @title : 'Restriction';
+            RTR_QTY     : Decimal(13, 3) @title : 'Component Quantity';
+    };
 
 
     entity CIR_GENERATED {

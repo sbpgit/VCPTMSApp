@@ -56,6 +56,11 @@ sap.ui.define(
        * Calls the service to get Data.
        */
       onAfterRendering: function () {
+        if (!Device.system.desktop) {
+        this.byId("orient").setOrientation("Horizontal");
+        } else {
+          this.byId("orient").setOrientation("Vertical");
+        }
         oGModel = that.getOwnerComponent().getModel("oGModel");
         var oJobId = oGModel.getProperty("/jobId");
         
@@ -204,7 +209,7 @@ sap.ui.define(
             // Looping through the data to get the data for IBP Integration and SDI Integration
             for (var i = 0; i < aData.length; i++) {
               if (scheduleId === aData[i].scheduleId) {
-                if (jobType === "I" || jobType === "E" || jobType === "S" ) {
+                if (jobType === "S" ) {
                   var data = $.parseJSON(aData[i].data);
                   var aIData = {
                     Location: data.LOCATION_ID,
@@ -225,22 +230,53 @@ sap.ui.define(
                       };
                       ScheData.push(aIData);
                   // 04-10-2022
-                } else if(jobType === "D" || jobType === "T" || jobType === "F"){
-                    var data = $.parseJSON(aData[i].data);
-                    var aIData = $.parseJSON(data.LocProdData);
-
+                } else if(jobType === "D" || jobType === "T" || jobType === "F" ){
+                    var aIData = $.parseJSON(aData[i].data);
+                    if(aIData.LocProdData){
+                    var aIData = $.parseJSON(aIData.LocProdData);
 
                     aIData.forEach(function (row) {
-                        row.Location = row.LOCATION_ID;
-                        row.Product = row.PRODUCT_ID;
-                      }, that);
-
-                    //   var aIData = {
-                    //       Location: data.LOCATION_ID,
-                    //       Product: data.PRODUCT_ID,
-                    //   };
+                      row.Location = row.LOCATION_ID;
+                      row.Product = row.PRODUCT_ID;
+                    }, that);
+                    } else {
+                      var aIData = {
+                          Location: data.LOCATION_ID,
+                          Product: data.PRODUCT_ID,
+                      };
+                    }
                       ScheData = aIData;
-                } else {
+                } else if(jobType === "I" || jobType === "E" ){
+                  var data = $.parseJSON(aData[i].data);
+                  if(oGModel.getProperty("/IBPService") === "exportComponentReq"){
+                    var aIData = data;
+
+                    var aIData = {
+                      Location: data.LOCATION_ID,
+                      Product: data.PRODUCT_ID,
+                      fromdate: data.FROMDATE,
+                      todate: data.TODATE,
+                    };
+                    ScheData.push(aIData);
+
+                  } else {
+                  var aIData = data.LocProdData;
+                  aIData = $.parseJSON(aIData);
+                  aIData.forEach(function (row) {
+                    row.Location = row.LOCATION_ID;
+                    row.Product = row.PRODUCT_ID;
+                  }, that);
+
+                //   var aIData = {
+                //       Location: data.LOCATION_ID,
+                //       Product: data.PRODUCT_ID,
+                //   };
+                  ScheData = aIData;
+                  }
+
+
+                  
+              } else {
                   ScheData = aData[i].data;
                   ScheData = $.parseJSON(ScheData);
                   ScheData = ScheData.vcRulesList;

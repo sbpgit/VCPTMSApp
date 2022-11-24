@@ -101,7 +101,7 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                                         </f:fields>
                                     </f:FormElement>
                                     <!-- 25-08-2022 -->
-                                    <f:FormElement id="idMoverRide" visible="false">
+                                    <f:FormElement id="idMoverRide" visible="true">
                                         <f:label>
                                             <Label text="{i18n>override}" />
                                         </f:label>
@@ -211,7 +211,7 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                                         </f:fields>
                                     </f:FormElement>
                                     <!-- 25-08-2022 -->
-                                    <f:FormElement id="idPoverRide" visible="false">
+                                    <f:FormElement id="idPoverRide" visible="true">
                                         <f:label>
                                             <Label text="{i18n>override}" />
                                         </f:label>
@@ -263,7 +263,7 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                                         </f:label>
                                         <f:fields>
                                             <!-- <Input id="TprodInput" width="225px" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/> -->
-                                            <MultiInput id="TprodInput"  placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
+                                            <MultiInput id="TprodInput"  placeholder="{i18n>allprod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
                                         </f:fields>
                                     </f:FormElement>
                                     <!-- <f:FormElement>
@@ -313,7 +313,7 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                                             <Label text="{i18n>prod}"  />
                                         </f:label>
                                         <f:fields>
-                                            <MultiInput id="TFprodInput"  placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
+                                            <MultiInput id="TFprodInput"  placeholder="{i18n>allprod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
                                         </f:fields>
                                     </f:FormElement>
 
@@ -386,10 +386,10 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                                             </f:FormElement>
                                             <f:FormElement>
                                                 <f:label>
-                                                    <Label text="{i18n>prod}" required="true" />
+                                                    <Label text="{i18n>prod}"  />
                                                 </f:label>
                                                 <f:fields>
-                                                    <MultiInput id="IprodInput" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
+                                                    <MultiInput id="IprodInput" placeholder="{i18n>allprod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
                                                 </f:fields>
                                             </f:FormElement>
                                         </f:formElements>
@@ -454,10 +454,10 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                                             </f:FormElement>
                                             <f:FormElement>
                                                 <f:label>
-                                                    <Label text="{i18n>prod}" required="true" />
+                                                    <Label text="{i18n>prod}"  />
                                                 </f:label>
                                                 <f:fields>
-                                                    <MultiInput id="ESHprodInput" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
+                                                    <MultiInput id="ESHprodInput" placeholder="{i18n>allprod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
                                                 </f:fields>
                                             </f:FormElement>
                                             <f:FormElement>
@@ -526,10 +526,10 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                                             </f:FormElement>
                                             <f:FormElement>
                                                 <f:label>
-                                                    <Label text="{i18n>prod}" required="true" />
+                                                    <Label text="{i18n>prod}"  />
                                                 </f:label>
                                                 <f:fields>
-                                                    <MultiInput id="EACDemandprodInput" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
+                                                    <MultiInput id="EACDemandprodInput" placeholder="{i18n>allprod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
                                                 </f:fields>
                                             </f:FormElement>
                                             <f:FormElement>
@@ -571,10 +571,10 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                                             </f:FormElement>
                                             <f:FormElement>
                                                 <f:label>
-                                                    <Label text="{i18n>prod}" required="true" />
+                                                    <Label text="{i18n>prod}" />
                                                 </f:label>
                                                 <f:fields>
-                                                    <MultiInput id="EMktAuthprodInput" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
+                                                    <MultiInput id="EMktAuthprodInput" placeholder="{i18n>allprod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
                                                 </f:fields>
                                             </f:FormElement>
                                         </f:formElements>
@@ -643,10 +643,10 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                                             </f:FormElement>
                                             <f:FormElement>
                                                 <f:label>
-                                                    <Label text="{i18n>prod}" required="true" />
+                                                    <Label text="{i18n>prod}" />
                                                 </f:label>
                                                 <f:fields>
-                                                    <MultiInput id="ECIRprodInput" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
+                                                    <MultiInput id="ECIRprodInput" placeholder="{i18n>allprod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
                                                 </f:fields>
                                             </f:FormElement>
                                         </f:formElements>
@@ -691,10 +691,10 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                                             </f:FormElement>
                                             <f:FormElement>
                                                 <f:label>
-                                                    <Label text="{i18n>prod}" required="true" />
+                                                    <Label text="{i18n>prod}" />
                                                 </f:label>
                                                 <f:fields>
-                                                    <MultiInput id="EReLiHprodInput" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
+                                                    <MultiInput id="EReLiHprodInput" placeholder="{i18n>allprod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
                                                 </f:fields>
                                             </f:FormElement>
                                         </f:formElements>
@@ -726,11 +726,43 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                                 <f:FormContainer>
                                     <f:formElements>
                                         <f:FormElement>
-                                            <f:label>
+                                            <!-- <f:label>
                                                 <Label text="Import Using SDI" required="true" />
-                                            </f:label>
+                                            </f:label> -->
                                             <f:fields>
-                                                <Select id="idSdi" change="onSdiChange" selectedKey="LO" class="buttonDesktop " width="400px">
+                                           <RadioButtonGroup id="idSdi" columns="2" select="onSdiChange" class="buttonDesktop" >
+                                                    <RadioButton id="LO" text="{i18n>loc}" />
+                                                    <RadioButton id="PP" text="{i18n>partialprod}" />
+                                                    <RadioButton id="CG" text="{i18n>custgrp}" />
+                                                    <RadioButton id="PVN" text="{i18n>pvsnode}" />
+                                                    <RadioButton id="PR" text="{i18n>prod}" />
+                                                    <RadioButton id="PVB" text="{i18n>pvsbom}" />
+                                                    <RadioButton id="LP" text="{i18n>locpprod}" />
+                                                    <RadioButton id="AC" text="{i18n>asmbcomp}" />
+                                                    <RadioButton id="PC" text="{i18n>prodclas}" />
+                                                    <RadioButton id="SH" text="{i18n>saleshis}" />
+                                                    <RadioButton id="BH" text="{i18n>bomheader}" />
+                                                    <!-- <RadioButton id="BO" text="{i18n>bomobjdep}" />  --> 
+                                                    <RadioButton id="VT" text="{i18n>vartable}" />                                                 
+                                                    <RadioButton id="CL" text="{i18n>classC}" />
+                                                    <!-- <RadioButton id="CH" text="{i18n>char}" />-->
+                                                    <!-- <RadioButton id="CV" text="{i18n>charval}" /> -->
+                                                    <RadioButton id="CIL" text="{i18n>cirlog}" />
+                                                    <RadioButton id="OH" text="{i18n>objdephdr}" />
+                                                    <RadioButton id="SS" text="{i18n>sostockstatus}" />
+
+
+                                                    <!-- <RadioButton id="PP" text="{i18n>partialprod}" /> -->
+                                                    <!-- <RadioButton id="SH" text="{i18n>saleshis}" /> -->
+                                                    <!-- <RadioButton id="AC" text="{i18n>asmbcomp}" /> -->
+                                                    <!-- <RadioButton id="VT" text="{i18n>vartable}" /> -->
+                                                    <!-- <RadioButton id="CIL" text="{i18n>cirlog}" /> -->
+                                                    <!-- <RadioButton id="SS" text="{i18n>sostockstatus}" /> -->
+                                                    <!-- <RadioButton id="PVN" text="{i18n>pvsnode}" /> -->
+                                                    <!-- <RadioButton id="PVB" text="{i18n>pvsbom}" /> -->
+                                            </RadioButtonGroup>
+
+                                                <!-- <Select id="idSdi" change="onSdiChange" selectedKey="LO" class="buttonDesktop " width="400px">
                                                     <core:ListItem key="LO" text="{i18n>loc}" />
                                                     <core:ListItem key="CG" text="{i18n>custgrp}" />
                                                     <core:ListItem key="PR" text="{i18n>prod}" />
@@ -745,13 +777,12 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                                                      <core:ListItem key="OH" text="{i18n>objdephdr}" />
                                                     <core:ListItem key="PP" text="{i18n>partialprod}" />
                                                     <core:ListItem key="SH" text="{i18n>saleshis}" />
-                                                    <!-- <core:ListItem key="SC" text="{i18n>salehisconfig}" /> -->
                                                     <core:ListItem key="AC" text="{i18n>asmbcomp}" />
                                                     <core:ListItem key="VT" text="{i18n>vartable}" />
                                                     <core:ListItem key="CIL" text="{i18n>cirlog}" />
                                                     <core:ListItem key="SS" text="{i18n>sostockstatus}" />
                                                     
-                                                </Select>
+                                                </Select> -->
                                             </f:fields>
                                         </f:FormElement>
                                     </f:formElements>
@@ -790,7 +821,7 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                                             <Label text="{i18n>prod}"  />
                                         </f:label>
                                         <f:fields>
-                                            <MultiInput id="DprodInput" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
+                                            <MultiInput id="DprodInput" placeholder="{i18n>allprod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
                                         </f:fields>
                                     </f:FormElement>
 

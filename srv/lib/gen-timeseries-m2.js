@@ -278,7 +278,7 @@ class GenTimeseriesM2 {
             GenF.jobSchMessage('', "Timeseries History generation failed", req);
         }
         else {
-            const vMsg = "Unable to generate timeseries for the product: " + adata.PRODUCT_ID + " ";
+            const vMsg = "Timeseries generation for the product: " + adata.PRODUCT_ID + " is unsuccessful because of insufficient data";
             GenF.jobSchMessage('X', vMsg, req);
         }
     }
@@ -489,7 +489,8 @@ class GenTimeseriesM2 {
             GenF.jobSchMessage('', `Timeseries Future generation failed`, req);
         }
         else {
-            const vMsg = "Unable to generate timeseries for the product: " + adata.PRODUCT_ID + " ";
+            // const vMsg = "Unable to generate timeseries for the product: " + adata.PRODUCT_ID + " ";
+            const vMsg = "Timeseries generation for the product: " + adata.PRODUCT_ID + " is unsuccessful because of insufficient data";
             GenF.jobSchMessage('X', vMsg, req);
         }
     }

@@ -30,9 +30,15 @@ service PalService{
     entity getODImpactVals as projection on pal.TS_OBJDEP_CHAR_IMPACT_F;
     entity getODModelVersions as projection on pal.OD_MODEL_VERSIONS;
 
+
+    entity generateAhcClusters as projection on pal.PalGenClusters;
+
     entity getClustersInput as projection on pal.CLUSTER_DATA;
     entity getClusterStages as projection on pal.AHC_COMBINE_PROCESS;
     entity getClusterIds as projection on pal.AHC_RESULTS;
+
+    entity getClustersByDistance as projection on pal.V_AHC_CLUSTER_RESULTS; 
+    entity getClusterChars as projection on pal.V_CLUSTER_CHARS;
 
 
 
@@ -86,12 +92,19 @@ service PalService{
             startDate    : Date; // Delete Prediction Tables Data older than start date
         });
 
-        action genClusterInputs (
+        action genClusterUniqueIDS
+        (
             Location     : String(4),
-            Product      : String(40)
+            Product      : String(40),
+            ProdType     : Boolean // 1 (true) - Partial; 0(false) - Reference Product
         );
-
-        function fgenClusterInputs(Location : String(4), Product:String(40)) returns String;
+        action genClusters(vcRulesList : array of{
+            profile      : String(50);
+            override     : Boolean;
+            Location     : String(4);
+            Product      : String(40);
+            // GroupID      : String(20);
+        });
 
 
         // function f_generateModels(vcRulesList : array of{
@@ -134,4 +147,4 @@ service PalService{
     function execCorrelation(a : Integer, b :  Integer)
       returns result;
 */
-//}
+//}   entity getLeftClusters as projection on pal.V_AHC_LEFT_CLUSTER;

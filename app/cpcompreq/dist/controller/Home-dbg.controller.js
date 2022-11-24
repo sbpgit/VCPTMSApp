@@ -36,6 +36,7 @@ sap.ui.define(
                 oDeviceModel.setDefaultBindingMode("OneWay");
                 this.setModel(oDeviceModel, "device");
                 this.rowData;
+                this.plntMethod;
                 // Declaring JSON Models and size limits
                 that.locModel = new JSONModel();
                 that.prodModel = new JSONModel();
@@ -251,7 +252,7 @@ sap.ui.define(
                     oModelVersion = that.byId("idModelVer").getSelectedKey(),
                     bCriticalKey = '';
 
-                if(that.byId("idChkCritComp").getSelected() === true) {
+                if (that.byId("idChkCritComp").getSelected() === true) {
                     bCriticalKey = 'X';
                 } else {
                     bCriticalKey = ' ';
@@ -300,7 +301,7 @@ sap.ui.define(
                             FROMDATE: vFromDate,
                             TODATE: vToDate,
                             MODEL_VERSION: oModelVersion,
-                            CRITICALKEY : bCriticalKey,
+                            CRITICALKEY: bCriticalKey,
                         },
                         success: function (data) {
                             sap.ui.core.BusyIndicator.hide();
@@ -382,8 +383,8 @@ sap.ui.define(
                 var fromDate = new Date(that.byId("fromDate").getDateValue()),
                     toDate = new Date(that.byId("toDate").getDateValue());
 
-                    fromDate = that.onConvertDateToString(fromDate);
-                    toDate = that.onConvertDateToString(toDate);
+                fromDate = that.onConvertDateToString(fromDate);
+                toDate = that.onConvertDateToString(toDate);
 
                 // fromDate = fromDate.toISOString().split("T")[0];
                 // toDate = toDate.toISOString().split("T")[0];
@@ -426,14 +427,25 @@ sap.ui.define(
                             template: columnName,
                         });
                     } else {
-                        return new sap.ui.table.Column({
-                            width: "8rem",
-                            label: columnName,
-                            template: new sap.m.Link({
-                                text: "{" + columnName + "}",
-                                press: that.linkPressed,
-                            }),
-                        });
+                        if (that.plntMethod === 'M1') {
+                            return new sap.ui.table.Column({
+                                width: "8rem",
+                                label: columnName,
+                                template: new sap.m.Link({
+                                    text: "{" + columnName + "}",
+                                    press: that.linkPressed,
+                                }),
+                            });
+                        }
+                        else {
+                            return new sap.ui.table.Column({
+                                width: "8rem",
+                                label: columnName,
+                                template: new sap.m.Text({
+                                    text: "{" + columnName + "}"
+                                }),
+                            });
+                        }
                     }
                     // }
                 });
@@ -968,25 +980,34 @@ sap.ui.define(
                     that.oGModel.setProperty("/SelectedProd", "");
 
                     // Calling service to get the Product data
-                      this.getModel("BModel").read("/getLocProdDet", {
+                    this.getModel("BModel").read("/getLocProdDet", {
                         filters: [
-                          new Filter(
-                            "LOCATION_ID",
-                            FilterOperator.EQ,
-                            aSelectedItems[0].getTitle()
-                          ),
+                            new Filter(
+                                "LOCATION_ID",
+                                FilterOperator.EQ,
+                                aSelectedItems[0].getTitle()
+                            ),
                         ],
-                    // this.getModel("BModel").callFunction("/getAllProd", {
-                    //     method: "GET",
-                    //     urlParameters: {
-                    //         LOCATION_ID: aSelectedItems[0].getTitle()
-                    //     },
                         success: function (oData) {
                             that.prodModel.setData(oData);
                             that.oProdList.setModel(that.prodModel);
                         },
                         error: function (oData, error) {
                             MessageToast.show("error");
+                        },
+                    });
+                    that.getModel("BModel").read("/getPlancfgPara", {
+                        filters: [
+                            new Filter("LOCATION_ID", FilterOperator.EQ, aSelectedItems[0].getTitle()),
+                            new Filter("PARAMETER_ID", FilterOperator.EQ, "5"),
+                        ],
+                        success: function (oData) {
+                            if (oData.results) {
+                                that.plntMethod = oData.results[0].VALUE
+                            }
+                        },
+                        error: function (oData, error) {
+                            MessageToast.show("Please maintain Planning Configuration for the selected plant");
                         },
                     });
 
@@ -1225,42 +1246,42 @@ sap.ui.define(
             /**
              * 
              */
-            onCriticalComponentCheck: function(oEvent) {
+            onCriticalComponentCheck: function (oEvent) {
                 // var selected = that.byId("idCheck1").getSelected(),
             },
             /**
              * Converts Date to Local Date String with delimiter "-"
              * 
              */
-            onConvertDateToString: function(dDate) {
+            onConvertDateToString: function (dDate) {
                 var dtConvertDate = dDate;
                 var aDate = [];
                 dtConvertDate = dtConvertDate.toLocaleDateString();
                 aDate = dtConvertDate.split("/");
-                if(aDate[0].length === 1) {
-                  aDate[0] = "0" + aDate[0];
+                if (aDate[0].length === 1) {
+                    aDate[0] = "0" + aDate[0];
                 }
-                if(aDate[1].length === 1) {
+                if (aDate[1].length === 1) {
                     aDate[1] = "0" + aDate[1];
                 }
                 dtConvertDate = aDate[2] + "-" + aDate[0] + "-" + aDate[1];
                 return dtConvertDate;
             },
-            onNavPress:function(){
+            onNavPress: function () {
                 if (sap.ushell && sap.ushell.Container && sap.ushell.Container.getService) {
-			var oCrossAppNavigator = sap.ushell.Container.getService("CrossApplicationNavigation"); 
-			// generate the Hash to display 
-			var hash = (oCrossAppNavigator && oCrossAppNavigator.hrefForExternal({
-				target: {
-					semanticObject: "vcpdocdisplay",
-					action: "Display"
-				}
-			})) || ""; 
-			//Generate a  URL for the second application
-			var url = window.location.href.split('#')[0] + hash; 
-			//Navigate to second app
-			sap.m.URLHelper.redirect(url, true); 
-                } 
+                    var oCrossAppNavigator = sap.ushell.Container.getService("CrossApplicationNavigation");
+                    // generate the Hash to display 
+                    var hash = (oCrossAppNavigator && oCrossAppNavigator.hrefForExternal({
+                        target: {
+                            semanticObject: "vcpdocdisplay",
+                            action: "Display"
+                        }
+                    })) || "";
+                    //Generate a  URL for the second application
+                    var url = window.location.href.split('#')[0] + hash;
+                    //Navigate to second app
+                    sap.m.URLHelper.redirect(url, true);
+                }
             }
         });
     }

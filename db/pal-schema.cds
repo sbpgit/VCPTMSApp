@@ -660,7 +660,7 @@ entity PalGenRegressionModels {
 }
 
 
-entity PalClustering {
+entity PalGenClusters {
     key clustersID            : String(50);
     createdAt            : Timestamp;
     Location             : String(4);
@@ -680,20 +680,27 @@ entity PalClustering {
 
     clusterData       : array of {
         groupId          : String(100);
-        ID               : Integer;
-        att1             : Double;
-        att2             : Double;
-        att3             : Double;
-        att4             : Double;
-        att5             : Double;
-        att6             : Double;
-        att7             : Double;
-        att8             : Double;
-        att9             : Double;
-        att10            : Double;
-        att11            : Double;
-        att12            : Double;
-        target           : Double;
+        ID               : String(100);
+        att1             : String(10);
+        att2             : String(10);
+        att3             : String(10);
+        att4             : String(10);
+        att5             : String(10);
+        att6             : String(10);
+        att7             : String(10);
+        att8             : String(10);
+        att9             : String(10);
+        att10            : String(10);
+        att11            : String(10);
+        att12            : String(10);
+        att13             : String(10);
+        att14             : String(10);
+        att15             : String(10);
+        att16             : String(10);
+        att17             : String(10);
+        att18            : String(10);
+        att19            : String(10);
+        att20            : String(10);
     };
 
 }
@@ -814,12 +821,21 @@ entity CLUSTER_DATA {
     C10 : String (10) @title : 'CHAR10'; 
     C11 : String (10) @title : 'CHAR11'; 
     C12 : String (10) @title : 'CHAR12';
+    C13 : String (10) @title : 'CHAR13'; 
+    C14 : String (10) @title : 'CHAR14';
+    C15 : String (10) @title : 'CHAR15'; 
+    C16 : String (10) @title : 'CHAR16'; 
+    C17 : String (10) @title : 'CHAR17';
+    C18 : String (10) @title : 'CHAR18'; 
+    C19 : String (10) @title : 'CHAR19'; 
+    C20 : String (10) @title : 'CHAR20';
 };
 
 entity AHC_COMBINE_PROCESS {
     key LOCATION_ID : String(4) @title : 'Location ID';
     key PRODUCT_ID  : String(40)@title : 'Product ID';
-    key UNIQUE_ID : String(50)@title : 'Unique ID';
+    key MODEL_PROFILE    : String(50) @title : 'PAL Model Profile';
+    // key UNIQUE_ID : String(50)@title : 'Unique ID';
     key STAGE : Integer @title : 'Stage';
     key LEFT_ID : String(50)@title : 'Left Unique ID in Stage';
     key RIGHT_ID : String(50)@title : 'Right Unique ID in Stage';
@@ -829,8 +845,44 @@ entity AHC_COMBINE_PROCESS {
 entity AHC_RESULTS {
     key LOCATION_ID : String(4) @title : 'Location ID';
     key PRODUCT_ID  : String(40)@title : 'Product ID';
+    key MODEL_PROFILE    : String(50) @title : 'PAL Model Profile';
     key UNIQUE_ID : String(50)@title : 'Unique ID';
     key CLUSTER_ID : Integer @title : 'Stage';
 };
 
+
+@cds.persistence.exists
+entity![V_AHC_LEFT_CLUSTER]{
+    key![LOCATION_ID]  : String(4) @title : 'LOCATION_ID';
+    key![PRODUCT_ID]   : String(40) @title : 'PRODUCT_ID';
+    key![PROFILE]      : String(50) @title : 'PROFILE';
+    key![LEFT_ID_CLUSTER]    : Integer @title : 'LEFT_ID_CLUSTER';
+    key![LEFT_ID]      : String(50) @title : 'LEFT_ID';
+    key![RIGHT_ID]      : String(50) @title : 'RIGHT_ID';
+    key![DISTANCE]      : Decimal(13,4) @title : 'DISTANCE';
+
+}
+
+@cds.persistence.exists
+entity![V_AHC_CLUSTER_RESULTS]{
+    key![LOCATION_ID]  : String(4) @title : 'LOCATION_ID';
+    key![PRODUCT_ID]   : String(40) @title : 'PRODUCT_ID';
+    key![PROFILE]      : String(50) @title : 'PROFILE';
+    key![LEFT_ID_CLUSTER]    : Integer @title : 'LEFT_ID_CLUSTER';
+    key![RIGHT_ID_CLUSTER]    : Integer @title : 'RIGHT_ID_CLUSTER';
+    key![LEFT_ID]      : String(50) @title : 'LEFT_ID';
+    key![RIGHT_ID]      : String(50) @title : 'RIGHT_ID';
+    key![DISTANCE]      : Decimal(13,4) @title : 'DISTANCE';
+
+}
+
+@cds.persistence.exists
+entity![V_CLUSTER_CHARS]{
+    key![LOCATION_ID]      : String(4) @title : 'LOCATION_ID';
+    key![PRODUCT_ID]    : String(40) @title : 'PRODUCT_ID';
+    key![UNIQUE_ID]   : Integer @title : 'UNIQUE_ID';
+    key![CHAR_NAME]    : String(30) @title : 'CHAR_NAME';
+    key![CHAR_VALUE]   : String(70) @title : 'CHAR_VALUE';
+    key![CHARVAL_NUM]   : String(70) @title : 'CHARVAL_NUM';
+}
 

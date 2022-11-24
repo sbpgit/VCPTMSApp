@@ -204,7 +204,7 @@ sap.ui.define(
             // Looping through the data to get the data for IBP Integration and SDI Integration
             for (var i = 0; i < aData.length; i++) {
               if (scheduleId === aData[i].scheduleId) {
-                if (jobType === "I" || jobType === "E" || jobType === "S" ) {
+                if (jobType === "S" ) {
                   var data = $.parseJSON(aData[i].data);
                   var aIData = {
                     Location: data.LOCATION_ID,
@@ -225,7 +225,7 @@ sap.ui.define(
                       };
                       ScheData.push(aIData);
                   // 04-10-2022
-                } else if(jobType === "D" || jobType === "T" || jobType === "F"){
+                } else if(jobType === "D" || jobType === "T" || jobType === "F" ){
                     var data = $.parseJSON(aData[i].data);
                     var aIData = $.parseJSON(data.LocProdData);
 
@@ -240,7 +240,36 @@ sap.ui.define(
                     //       Product: data.PRODUCT_ID,
                     //   };
                       ScheData = aIData;
-                } else {
+                } else if(jobType === "I" || jobType === "E" ){
+                  var data = $.parseJSON(aData[i].data);
+                  if(oGModel.getProperty("/IBPService") === "exportComponentReq"){
+                    var aIData = data;
+
+                    var aIData = {
+                      Location: data.LOCATION_ID,
+                      Product: data.PRODUCT_ID,
+                      fromdate: data.FROMDATE,
+                      todate: data.TODATE,
+                    };
+                    ScheData.push(aIData);
+
+                  } else {
+                  var aIData = data.LocProdData;
+                  aIData.forEach(function (row) {
+                    row.Location = row.LOCATION_ID;
+                    row.Product = row.PRODUCT_ID;
+                  }, that);
+
+                //   var aIData = {
+                //       Location: data.LOCATION_ID,
+                //       Product: data.PRODUCT_ID,
+                //   };
+                  ScheData = aIData;
+                  }
+
+
+                  
+              } else {
                   ScheData = aData[i].data;
                   ScheData = $.parseJSON(ScheData);
                   ScheData = ScheData.vcRulesList;
