@@ -1,11 +1,11 @@
 sap.ui.define([
 	"sap/ui/core/UIComponent",
 	"sap/ui/Device",
-	"cpapp/cpcompreq/model/models"
+	"cpapp/cprestrictionlikelihood/model/models"
 ], function (UIComponent, Device, models) {
 	"use strict";
 
-	return UIComponent.extend("cpapp.cpcompreq.Component", {
+	return UIComponent.extend("cpapp.cprestrictionlikelihood.Component", {
 
 		metadata: {
 			manifest: "json"

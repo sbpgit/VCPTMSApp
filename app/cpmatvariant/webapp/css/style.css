@@ -21,8 +21,16 @@
     margin-left:20px;
     margin-top:0px;
 }
+.boldText1{
+    margin-top:0.185rem;
+}
 .BtnClass1{
     margin-left:10px;
     margin-top:0px;
     margin-right: 10px;
+}
+
+.hdrBtnMarginHdr1{
+    margin-left:1rem;
+    margin-top:0.185rem
 }

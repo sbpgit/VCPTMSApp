@@ -3,10 +3,11 @@
 		<customHeader>
 			<Bar id="_IDGenBar1">
 				<contentMiddle>
-					<!-- <Title text="{i18n>detailsTitle}" class="boldText"></Title> -->
-                    <ToolbarSpacer id="_IDGenToolbarSpacer1"/>
-                <Button icon="sap-icon://sys-help" id="idNav1" press="onNavPress" type="Emphasized" tooltip="Help Document"/>
+					<!-- <Title text="{i18n>detailsTitle}" class="boldText"></Title>  -->
 				</contentMiddle>
+				<contentRight>
+				<Button class="hdrBtnMarginHdr" icon="sap-icon://sys-help" id="idNav1" press="onNavPress" type="Emphasized" tooltip="Help Document"/>
+				</contentRight>
 			</Bar>
 		</customHeader>
 		<content>

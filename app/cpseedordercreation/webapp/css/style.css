@@ -5,7 +5,7 @@
 }
 
 .hdrBtnMarginHdr{
-    margin-left:74rem;
+   margin-left:1rem;
 }
 
 
@@ -15,6 +15,10 @@
 
 .sapUiSizeCompact .sapUxAPObjectPageSectionHeader, .sapUxAPObjectPageSectionHeader {
     height: 0.1rem !important;
+}
+.sapFDynamicPageTitleMain>.sapFDynamicPageTitleMainInner .sapFDynamicPageTitleMainHeading .sapFDynamicPageTitleMainHeadingInner .sapMTitle {
+    font-size: 1.25rem;
+    margin-top: 0.25rem;
 }
 
 /*PopOver*/
