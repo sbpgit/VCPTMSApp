@@ -5,7 +5,7 @@
 --                  CP_PROD_LOC_LINE - table for Location, Product and Restriction
 --                  CP_RESTRICT_HEADER - Restriction header table
 -------------------------------------------------------------------------------------------
-VIEW "V_LOCPRODRT_DET" AS
+VIEW "V_LOCPRODRT_DETAILS" AS
 SELECT distinct CP_PROD_LOC_LINE.LOCATION_ID,
 CP_PROD_LOC_LINE.PRODUCT_ID,
 CP_RESTRICT_HEADER.RESTRICTION,

@@ -3,6 +3,6 @@
     <SelectDialog id="LineSlctList" title="{i18n>lineid}" rememberSelections="false" search="handleSearch" 
     liveChange="handleSearch" confirm="handleSelection" cancel="handleClose" contentWidth="320px" items="{/results}" 
     selectionChange="handleProdChange" growing="false">
-        <StandardListItem title="{LINE_ID}" description="{PRODUCT_ID}" type="Active"/>
+        <StandardListItem title="{LINE_ID}" description="{LINE_DESC}" type="Active"/>
     </SelectDialog>
 </core:FragmentDefinition>

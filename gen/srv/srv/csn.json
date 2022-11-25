@@ -17222,6 +17222,9 @@
         "Product": {
           "type": "cds.String",
           "length": 40
+        },
+        "ProdType": {
+          "type": "cds.Boolean"
         }
       }
     },

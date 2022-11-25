@@ -277,7 +277,7 @@ sap.ui.define(
                             new Filter({
                                 filters: [
                                     new Filter("LINE_ID", FilterOperator.Contains, sQuery),
-                                    new Filter("PRODUCT_ID", FilterOperator.Contains, sQuery),
+                                    new Filter("LINE_DESC", FilterOperator.Contains, sQuery),
                                 ],
                                 and: false,
                             })
@@ -311,7 +311,7 @@ sap.ui.define(
 
 
                     // Calling service to get the Line ID data
-                    this.getModel("BModel").read("/getProdlocline", {
+                    this.getModel("BModel").read("/getLine", {
                         filters: [
                             new Filter(
                                 "LOCATION_ID",
@@ -436,7 +436,7 @@ sap.ui.define(
 
                         },
                         error: function (oData) {
-                            MessageToast.show("Failed to create /updaate the producr");
+                            MessageToast.show("Failed to create /updaate the Restrictions");
                             sap.ui.core.BusyIndicator.hide();
                         },
                     });
