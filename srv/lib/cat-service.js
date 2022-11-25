@@ -462,6 +462,125 @@ module.exports = (srv) => {
         liCompWeekly.sort(GenFunctions.dynamicSortMultiple("STRUC_NODE", "COMPONENT", "ITEM_NUM"));
         return liCompWeekly;
     });
+
+    // Service for weekly component requirements- assembly component
+    srv.on("getRestrLikelihood", async (req) => {
+        let vDateFrom = req.data.FROMDATE; //"2022-03-04";
+        let vDateTo = req.data.TODATE; //"2023-01-03";
+        let liRestrWeekly = [];
+        let lsRestrWeekly = {};
+        let liDates = [],
+            vWeekIndex,
+            vRestrIndex,
+            vDateIndex,
+            vRestr,
+            lsDates = {};
+        let columnname = "WEEK";
+        const liRestrQty = await cds.run(
+            `
+            SELECT * FROM "CP_LOCPRODRESTRICT"  
+            WHERE "LOCATION_ID" = '` +
+            req.data.LOCATION_ID +
+            `'
+                 AND "PRODUCT_ID" = '` +
+            req.data.PRODUCT_ID +
+            `' AND "VERSION" = '` +
+            req.data.VERSION +
+            `' AND "SCENARIO" = '` +
+            req.data.SCENARIO +
+            `' AND ( "WEEK_DATE" <= '` +
+            vDateTo +
+            `' AND "WEEK_DATE" >= '` +
+            vDateFrom +
+            `') AND "MODEL_VERSION" = '` +
+            req.data.MODEL_VERSION +
+            `'
+                 ORDER BY 
+                      "LOCATION_ID" ASC, 
+                      "PRODUCT_ID" ASC,
+                      "VERSION" ASC,
+                      "SCENARIO" ASC,
+                      "WEEK_DATE" ASC`
+        );
+        const liRestr = await cds.run(
+            `
+          SELECT DISTINCT "LOCATION_ID",
+                          "PRODUCT_ID",
+                          "LINE_ID",
+                          "VERSION",
+                          "SCENARIO"
+          FROM "CP_LOCPRODRESTRICT"
+          WHERE "LOCATION_ID" = '` +
+            req.data.LOCATION_ID +
+            `' AND "PRODUCT_ID" = '` +
+            req.data.PRODUCT_ID +
+            `' AND "VERSION" = '` +
+            req.data.VERSION +
+            `' AND "SCENARIO" = '` +
+            req.data.SCENARIO +
+            `' AND ( "WEEK_DATE" <= '` +
+            vDateTo +
+            `'
+                AND "WEEK_DATE" >= '` +
+            vDateFrom +
+            `') AND "MODEL_VERSION" = '` +
+            req.data.MODEL_VERSION +
+            `'
+               ORDER BY 
+                    "LOCATION_ID" ASC, 
+                    "PRODUCT_ID" ASC,
+                    "LINE_ID",
+                    "VERSION" ASC,
+                    "SCENARIO" ASC`
+        );
+        var vDateSeries = vDateFrom;
+        lsDates.WEEK_DATE = GenFunctions.getNextMondayCmp(vDateSeries);
+        vDateSeries = lsDates.WEEK_DATE;
+        liDates.push(lsDates);
+        lsDates = {};
+        while (vDateSeries <= vDateTo) {
+            vDateSeries = GenFunctions.addDays(vDateSeries, 7);
+            lsDates.WEEK_DATE = vDateSeries;
+            liDates.push(lsDates);
+            lsDates = {};
+        }
+        vRestr = 0;
+
+        for (let j = 0; j < liRestr.length; j++) {
+            // Initially set vWeekIndex to j to geneate Week columns
+            // vRestrIndex is to get Componnent quantity for all dates
+            vWeekIndex = 0; //j
+            lsRestrWeekly.LOCATION_ID = liRestr[j].LOCATION_ID;
+            lsRestrWeekly.PRODUCT_ID = liRestr[j].PRODUCT_ID;
+            lsRestrWeekly.LINE_ID = liRestr[j].LINE_ID;
+            // lsRestrWeekly.RESTRICTION = liRestr[j].RESTRICTION;
+            lsRestrWeekly.VERSION = liRestr[j].VERSION;
+            lsRestrWeekly.SCENARIO = liRestr[j].SCENARIO;
+            // lsRestrWeekly.QTYTYPE = "Normalized";
+
+            for (let i = 0; i < liDates.length; i++) {
+                vWeekIndex = vWeekIndex + 1;
+                for (vRestrIndex = 0; vRestrIndex < liRestrQty.length; vRestrIndex++) {
+                    lsRestrWeekly[columnname + vWeekIndex] = 0;
+                    if (
+                        liRestrQty[vRestrIndex].RESTRICTION === lsRestrWeekly.RESTRICTION &&
+                        liRestrQty[vRestrIndex].WEEK_DATE === liDates[i].WEEK_DATE
+                    ) {
+                        //   lsRestrWeekly.STRUC_NODE = liRestrQty[vRestrIndex].STRUC_NODE;
+                        lsRestrWeekly[columnname + vWeekIndex] =
+                            liRestrQty[vRestrIndex].COMP_QTY;
+                        break;
+                    }
+                }
+            }
+            liRestrWeekly.push(GenFunctions.parse(lsRestrWeekly));
+            // lsCompWeekly = {};
+            // }
+            lsRestrWeekly = {};
+        }
+        liRestrWeekly.sort(GenFunctions.dynamicSortMultiple("LINE_ID", "PRODUCT_ID"));
+        return liRestrWeekly;
+    });
     // Create profiles
     srv.on("createProfiles", async (req) => {
         let liProfiles = [];
