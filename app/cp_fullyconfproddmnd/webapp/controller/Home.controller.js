@@ -1605,6 +1605,9 @@ sap.ui.define(
                     },
                     success: function (oData, oResponse) {
                         that.sCFUserDestination = oResponse.data.getCFDestinationUser;
+                        if(that.sCFUserDestination) {
+                            that.sCFUserDestination = that.sCFUserDestination.toUpperCase();
+                        }
                     },
                     error: function (oResponse) {
                         sap.m.MessageToast.show("Failed to get Destination User!");

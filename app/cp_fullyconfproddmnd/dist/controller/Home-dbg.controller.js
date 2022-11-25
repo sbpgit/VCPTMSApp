@@ -41,12 +41,18 @@ sap.ui.define(
                 that.verModel = new JSONModel();
                 that.scenModel = new JSONModel();
                 that.charModel = new JSONModel();
+                that.allCharsModel = new JSONModel();
+                that.locProdCharModel = new JSONModel();
 
                 that.locModel.setSizeLimit(1000);
                 that.prodModel.setSizeLimit(1000);
                 that.verModel.setSizeLimit(1000);
                 that.scenModel.setSizeLimit(1000);
                 that.charModel.setSizeLimit(1000);
+                that.allCharsModel.setSizeLimit(1000);
+                that.locProdCharModel.setSizeLimit(1000);
+
+                that.sCFUserDestination = "";
 
                 // To Store changed CIR Quantities
                 that.aCIRQty = [];
@@ -82,6 +88,9 @@ sap.ui.define(
                     );
                     this.getView().addDependent(this._valueHelpDialogScen);
                 }
+                
+                // Get User Configured in Cloud Foundry Destination User
+                that.getValidUser();               
 
             },
 
@@ -114,7 +123,7 @@ sap.ui.define(
                 // set minimum date
                 that.byId("fromDate").setMinDate(dDate);
                 that.byId("toDate").setMinDate(dDate);
-               
+
 
                 var oDateL = that.getDateFn(dDate);
 
@@ -142,6 +151,8 @@ sap.ui.define(
                     this._valueHelpDialogScen.getId() + "-list"
                 );
 
+
+
                 // Set Visible Row Count
                 that.handleVisibleRowCount();
                 // Diable Date Input
@@ -160,44 +171,6 @@ sap.ui.define(
                         sap.ui.core.BusyIndicator.hide();
                     },
                 });
-
-                //sap.ui.core.BusyIndicator.show();
-                // // Planned Parameter Values
-                // this.getModel("CIRModel").read("/V_Parameters", {
-                //     success: function (oData) {
-                //         var aParams = oData.results;
-                //         var oParam = {};
-                //         // if Frozen Horizon is 14 Days, we need to consider from 15th day
-                //         //var iFrozenHorizon = parseInt(oData.results[0].VALUE) + 1;
-                //         var iFrozenHorizon = parseInt(oData.results[0].VALUE) * 7 + 1;
-                //         var dDate = new Date();
-                //         dDate = new Date(dDate.setDate(dDate.getDate() + iFrozenHorizon));
-                //         var oDateL = that.getDateFn(dDate);
-                //         var oDateH = new Date(
-                //             dDate.getFullYear(),
-                //             dDate.getMonth(),
-                //             dDate.getDate() + 90
-                //         );
-
-                //         var oDateH = that.getDateFn(oDateH);
-
-                //         that.byId("fromDate").setValue(oDateL);
-                //         that.byId("toDate").setValue(oDateH);
-
-                //         // 
-                //         oParam = aParams.find(obj => obj.PARAMETER_ID === 9)
-                //         var iFirmHorizon = parseInt(oParam.VALUE) * 7;
-                //         var dDateFHL = new Date();
-                //         dDateFHL = new Date(dDateFHL.setDate(dDateFHL.getDate() + iFirmHorizon));
-                //         that.dFirmHorizonDate = dDateFHL;
-
-                //         sap.ui.core.BusyIndicator.hide();
-                //     },
-                //     error: function (oData, error) {
-                //         MessageToast.show("error");
-                //         sap.ui.core.BusyIndicator.hide();
-                //     },
-                // });
             },
             /**
              * 
@@ -229,7 +202,7 @@ sap.ui.define(
                             var oDateH = that.getDateFn(oDateH);
 
                             that.byId("fromDate").setValue(oDateL);
-                            that.byId("toDate").setValue(oDateH);                           
+                            that.byId("toDate").setValue(oDateH);
 
                             // 
                             oParam = aParams.find(obj => obj.PARAMETER_ID === 9)
@@ -332,6 +305,7 @@ sap.ui.define(
                             that.oGModel.setProperty("/TData", data.results);
                             // Calling function to generate UI table dynamically based on data
                             that.TableGenerate();
+                            that.getLocProdCharacteristics();
                         },
                         error: function (data) {
                             sap.ui.core.BusyIndicator.hide();
@@ -439,14 +413,7 @@ sap.ui.define(
                 });
 
                 that.oTable.bindRows("/rows");
-            },
-
-            // /**
-            //  * Called when 'Close/Cancel' button in any dialog is pressed.
-            //  */
-            // handleDialogClose() {
-            //     that._odGraphDialog.close();
-            // },
+            },           
 
             /**
              * This function is called when generating Date series for column names.
@@ -599,7 +566,14 @@ sap.ui.define(
                     } else {
                         MessageToast.show("Select Location and Product");
                     }
+                } else if (sId.includes("LocProdChar")) {
+                    if (that.byId("idloc").getValue() && that.byId("idprodList").getValue()) {
+                        that._valueHelpAllCharDetails.open();
+                    } else {
+                        MessageToast.show("Select Location and Product");
+                    }
                 }
+
             },
 
             /**
@@ -1071,9 +1045,11 @@ sap.ui.define(
                     oEntry.FROMDATE = vFromDate;
                     oEntry.TODATE = vToDate;
 
-                    that.handlePublish(oEntry);
+                    // Call service through Job Scheduler
+                    that.handlePublish(oEntry);   
 
-                    // // calling service based on filters
+                    
+                    // // calling service based on filters (Without Job Scheduler)
                     // that.getModel("CIRModel").callFunction("/postCIRQuantities", {
                     //     method: "GET",
                     //     urlParameters: {
@@ -1084,8 +1060,9 @@ sap.ui.define(
                     //         FROMDATE: vFromDate,
                     //         TODATE: vToDate,
                     //         MODEL_VERSION: oEntry.MODEL_VERSION,
+                    //         VALIDUSER: that.sCFUserDestination
                     //     },
-                    //     success: function (data) {
+                    //     success: function (data, oResponse) {
                     //         sap.ui.core.BusyIndicator.hide();
                     //         MessageToast.show("Data Successfully Published");
                     //     },
@@ -1198,6 +1175,7 @@ sap.ui.define(
                     FROMDATE: oEntry.FROMDATE,
                     TODATE: oEntry.TODATE,
                     MODEL_VERSION: oEntry.MODEL_VERSION,
+                    VALIDUSER: that.sCFUserDestination
                 };
                 // that.oGModel.setProperty("/vcrulesData", vRuleslist);
                 // var vcRuleList = that.oGModel.getProperty("/vcrulesData");
@@ -1332,7 +1310,7 @@ sap.ui.define(
                         sap.ui.core.BusyIndicator.hide();
                         that.aCIRQty = [];
                         sap.m.MessageToast.show(oResponse.data.modifyCIRFirmQuantities);
-                        that.onGetData;
+                        that.onGetData();
                         // sap.m.MessageToast.show(that.i18n.getText("postSuccess"));
                     },
                     error: function (oResponse) {
@@ -1571,7 +1549,7 @@ sap.ui.define(
             /**
              * 
              */
-             handleVisibleRowCount: function() {
+            handleVisibleRowCount: function () {
                 var iWinH = window.innerHeight;
                 if (iWinH > 750 && iWinH < 800) {
                     that.byId("idCIReq").setVisibleRowCount(9);
@@ -1584,22 +1562,152 @@ sap.ui.define(
                 } else {
                     that.byId("idCIReq").setVisibleRowCount(8);
                 }
-             },
-             onNavPress:function(){
+            },
+            onNavPress: function () {
                 if (sap.ushell && sap.ushell.Container && sap.ushell.Container.getService) {
-			var oCrossAppNavigator = sap.ushell.Container.getService("CrossApplicationNavigation"); 
-			// generate the Hash to display 
-			var hash = (oCrossAppNavigator && oCrossAppNavigator.hrefForExternal({
-				target: {
-					semanticObject: "vcpdocdisplay",
-					action: "Display"
-				}
-			})) || ""; 
-			//Generate a  URL for the second application
-			var url = window.location.href.split('#')[0] + hash; 
-			//Navigate to second app
-			sap.m.URLHelper.redirect(url, true); 
-                } 
+                    var oCrossAppNavigator = sap.ushell.Container.getService("CrossApplicationNavigation");
+                    // generate the Hash to display 
+                    var hash = (oCrossAppNavigator && oCrossAppNavigator.hrefForExternal({
+                        target: {
+                            semanticObject: "vcpdocdisplay",
+                            action: "Display"
+                        }
+                    })) || "";
+                    //Generate a  URL for the second application
+                    var url = window.location.href.split('#')[0] + hash;
+                    //Navigate to second app
+                    sap.m.URLHelper.redirect(url, true);
+                }
+            },
+
+            /** Get Valid CF Auth Token and Configured User in Destination for S4D */
+            getValidUser: function(oEvent) {
+                var oModel = that.getOwnerComponent().getModel('CIRModel');
+                oModel.callFunction("/getCFAuthToken", {
+                    method: "GET",                    
+
+                    success: function (oData, oResponse) {
+                        that.authToken = oResponse.data.getCFAuthToken;
+                        that.getCFDestinationUser(that.authToken);
+                    },
+                    error: function (oResponse) {
+                        sap.m.MessageToast.show("Failed to get Destination User!");
+                    },
+                });
+            },
+            /** Get CF Configured Destination User */
+            getCFDestinationUser: function (sauthToken) {
+                var oModel = that.getOwnerComponent().getModel('CIRModel');
+                oModel.callFunction("/getCFDestinationUser", {
+                    method: "GET",                    
+                    urlParameters: {
+                        TOKEN: sauthToken,                        
+                    },
+                    success: function (oData, oResponse) {
+                        that.sCFUserDestination = oResponse.data.getCFDestinationUser;
+                    },
+                    error: function (oResponse) {
+                        sap.m.MessageToast.show("Failed to get Destination User!");
+                    },
+                });
+            },
+            /** Get all the Unique Items Configuration */
+            getLocProdCharacteristics: function (oEvent) {
+
+                that.getModel("CIRModel").read("/getUniqueItem", {
+                    filters: [
+                        new Filter(
+                            "PRODUCT_ID",
+                            FilterOperator.EQ,
+                            that.oGModel.getProperty("/SelectedProd")
+                        ),
+                        new Filter(
+                            "LOCATION_ID",
+                            FilterOperator.EQ,
+                            that.oGModel.getProperty("/SelectedLoc")
+                        )
+                    ],
+                    success: function (oData) {
+                        var aResults = oData.results;
+                        that.allCharsModel.setData({
+                            charDetails: oData.results,
+                        });
+
+                        // remove duplicates
+                        var aFilteredChar = aResults.filter((obj, pos, arr) => {
+                            return (
+                                aResults.map((mapObj) => mapObj.CHARVAL_NUM).indexOf(obj.CHARVAL_NUM) == pos
+                            );
+                        });
+
+                        that.locProdCharModel.setData({
+                            charDetails: aFilteredChar,
+                        });
+
+
+                        that.getView().byId("idUniqueCharDetails").setModel(that.locProdCharModel);
+
+                    },
+                    error: function (oData, OResponse) {
+                        MessageToast.show("Failed to get characteristics data");
+                    },
+                });
+
+
+            },
+            /** Filter Unique Ids based on Characteristics Selections */
+            onCharSelectionFinish: function (oEvent) {
+                var aUniqueChars = [];
+                var aFilterUniqueIds = [];
+                var aSelectedItems = [];
+                var sCharVal_Num = '';
+                var sCharNum = '';
+                var sUniqueId = '';
+                var iCount = 0;
+                var aUniqueIdFilter = [];
+                var aFilter = [];
+                that.oTable = that.byId("idCIReq");
+
+                aUniqueChars = that.allCharsModel.getData().charDetails;
+                aSelectedItems = oEvent.getParameter('selectedItems');
+                if (aSelectedItems.length > 0) {                   
+
+
+                    var aFilteredUniqueChars = aUniqueChars;
+                    for (var i = 0; i < aSelectedItems.length; i++) {
+                        sCharNum = aSelectedItems[i].getKey().split(':')[0];
+                        sCharVal_Num = aSelectedItems[i].getKey().split(':')[1];
+
+                        if (aUniqueIdFilter.length > 0) {
+                            const ids = aUniqueIdFilter.map(o => o.UNIQUE_ID)
+                            // aFilteredUniqueChars = aUniqueChars.filter(({ UNIQUE_ID }, index) => !ids.includes(UNIQUE_ID,index + 1));
+                            aFilteredUniqueChars = aUniqueChars.filter((i) => ids.indexOf(i.UNIQUE_ID) !== -1);
+                        }
+                        aUniqueIdFilter = [];
+                        for (var j = 0; j < aFilteredUniqueChars.length; j++) {
+                           
+                            if (sCharNum === aFilteredUniqueChars[j].CHAR_NUM &&
+                                sCharVal_Num === aFilteredUniqueChars[j].CHARVAL_NUM) {
+
+                                sUniqueId = aFilteredUniqueChars[j].UNIQUE_ID;
+                                if (aUniqueIdFilter.includes(sUniqueId) === false) {
+                                    aUniqueIdFilter.push({ UNIQUE_ID: sUniqueId });
+                                }
+                            }
+                        }
+
+                    }
+                    if(aUniqueIdFilter.length > 0) {
+                        for(var k = 0; k < aUniqueIdFilter.length; k++){
+                            aFilterUniqueIds.push(new Filter("Unique ID", FilterOperator.EQ, aUniqueIdFilter[k].UNIQUE_ID))
+                        }
+                    }
+
+                    aFilter = new Filter(aFilterUniqueIds, false);
+                    that.oTable.getBinding().filter(aFilter);
+                } else {
+                    that.oTable.getBinding().filter(aFilter);
+                }
             }
 
         });

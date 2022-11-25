@@ -96,7 +96,6 @@ service PalService{
         (
             Location     : String(4),
             Product      : String(40),
-            ProdType     : Boolean // 1 (true) - Partial; 0(false) - Reference Product
         );
         action genClusters(vcRulesList : array of{
             profile      : String(50);
@@ -121,6 +120,8 @@ service PalService{
 
         function fgModels(vcRulesList : String) returns String;
         function fgPredictions(vcRulesList : String) returns String;
+        function  fgenClusterUniqueIDS(Location: String(4), Product: String(40)) returns String;
+        
 
 
         // function f_genPredictions(vcRulesList : array of {
