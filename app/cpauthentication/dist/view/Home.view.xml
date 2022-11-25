@@ -5,8 +5,8 @@
     <customHeader>
             <Toolbar id="_IDGenToolbar1" >
                 <Title id="profTitle" text="{i18n>title}" class="boldText"></Title>
-                <ToolbarSpacer id="_IDGenToolbarSpacer1"/>
-                <Button icon="sap-icon://sys-help" id="idNav" press="onNavPress" type="Emphasized" tooltip="Help Document"/>
+                <!-- <ToolbarSpacer id="_IDGenToolbarSpacer1"/> -->
+                <Button class="hdrBtnMarginHdr" icon="sap-icon://sys-help" id="idNav" press="onNavPress" type="Emphasized" tooltip="Help Document"/>
             </Toolbar>
         </customHeader>
         <content>

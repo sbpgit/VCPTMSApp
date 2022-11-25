@@ -17,6 +17,10 @@ div#container-cp\.odp\.cpodprofiles---Home--page-title {
     margin-left : 42rem;
   }
 
-  .hdrBtnMarginHdr {
-    margin-left : 72.5rem;
-  }
+  .hdrBtnMarginHdr{
+    margin-left:1rem
+}
+.sapFDynamicPageTitleMain>.sapFDynamicPageTitleMainInner .sapFDynamicPageTitleMainHeading .sapFDynamicPageTitleMainHeadingInner .sapMTitle {
+    font-size: 1.25rem;
+    margin-top: 0.25rem;
+}

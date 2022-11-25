@@ -17222,9 +17222,6 @@
         "Product": {
           "type": "cds.String",
           "length": 40
-        },
-        "ProdType": {
-          "type": "cds.Boolean"
         }
       }
     },
@@ -17270,6 +17267,22 @@
       "params": {
         "vcRulesList": {
           "type": "cds.String"
+        }
+      },
+      "returns": {
+        "type": "cds.String"
+      }
+    },
+    "PalService.fgenClusterUniqueIDS": {
+      "kind": "function",
+      "params": {
+        "Location": {
+          "type": "cds.String",
+          "length": 4
+        },
+        "Product": {
+          "type": "cds.String",
+          "length": 40
         }
       },
       "returns": {

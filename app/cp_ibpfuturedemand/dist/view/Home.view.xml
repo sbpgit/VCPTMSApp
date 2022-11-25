@@ -2,6 +2,7 @@
     xmlns:mvc="sap.ui.core.mvc"
     xmlns:core="sap.ui.core" displayBlock="true"
     xmlns="sap.m"
+    xmlns:m="sap.m"
     xmlns:l="sap.ui.layout"
     xmlns:ux="sap.uxap"
     xmlns:f="sap.ui.layout.form"
@@ -10,14 +11,18 @@
         <ux:headerTitle>
             <ux:ObjectPageDynamicHeaderTitle id="_IDGenObjectPageDynamicHeaderTitle1">
                 <ux:expandedHeading>
+                <HBox>
                     <Title id="_IDGenTitle1" text="{i18n>pageTitle}" class="boldText" titleAlignment="Center" />
+                     <Button class="hdrBtnMarginHdr" id="_IDGenOverflowToolbarButton1" icon="sap-icon://sys-help" text="" type="Emphasized" press="onNavPress" tooltip="Help Document"/>
+                        </HBox>
                 </ux:expandedHeading>
                 <ux:snappedHeading>
-					<FlexBox id="_IDGenFlexBox1" fitContainer="true" alignItems="Center" >
+					<HBox id="_IDGenFlexBox1" fitContainer="true" alignItems="Center" >
 						<Title id="_IDGenTitle2" text="{i18n>pageTitle}" wrapping="true" />
-                        <Button class="classMargin" icon="sap-icon://sys-help" id="idNav1" press="onNavPress" type="Emphasized" tooltip="Help Document"/>
-					</FlexBox>
+					<Button class="hdrBtnMarginHdr" id="_IDGenOverflowToolbarButton2" icon="sap-icon://sys-help" text="" type="Emphasized" press="onNavPress" tooltip="Help Document"/>
+                            </HBox>
 				</ux:snappedHeading>
+                
             </ux:ObjectPageDynamicHeaderTitle>
         </ux:headerTitle>
         <ux:headerContent>
@@ -54,7 +59,7 @@
                         <HBox id="_IDGenHBox1">
                             <Button id="_IDGenButton1" text="Go" type="Emphasized" press="onGetData" tooltip="Get data based on filters" class="sapUiTinyMarginEnd"/>
                             <Button id="_IDGenButton2" text="Reset" type="Transparent" press="onResetDate" tooltip="Reset Valid To Date"/>
-                            <Button class="classHdr" icon="sap-icon://sys-help" id="idNav2" press="onNavPress" type="Emphasized" tooltip="Help Document"/>
+                           
                         </HBox>
                     </VBox>
 

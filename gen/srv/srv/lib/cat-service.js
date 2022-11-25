@@ -2542,7 +2542,7 @@ module.exports = (srv) => {
         const aUniqueIdChar = await objCIR.getUniqueIdCharacteristics(req);
         const sCFDestUser = req.data.VALIDUSER; 
         // const sLoginUserId = req.headers['x-username'];
-        const sLoginUserId = "";
+        let sLoginUserId = "";
         let aFilteredChar = [], aFilteredCIR = [];
         let sUniqueId = "";
         let oUniqueIdChars = {};

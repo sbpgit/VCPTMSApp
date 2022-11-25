@@ -2,7 +2,7 @@
 jQuery.sap.registerPreloadedModules({
 "version":"2.0",
 "modules":{
-	"cp/lp/cplocprod/Component.js":function(){sap.ui.define(["sap/fe/core/AppComponent"],function(e){"use strict";return e.extend("cp.lp.cplocprod.Component",{onBeforeRendering:function(){this.getView()},metadata:{manifest:"json"}})});
+	"cp/lp/cplocprod/Component.js":function(){sap.ui.define(["sap/fe/core/AppComponent"],function(e){"use strict";return e.extend("cp.lp.cplocprod.Component",{metadata:{manifest:"json"}})});
 },
 	"cp/lp/cplocprod/custom/ListReportExtController.js":function(){sap.ui.define([],function(){"use strict";return{onHelpPress:function(e){var i="#vcpdocdisplay-Display";var r=window.location.href.split("#")[0]+i;sap.m.URLHelper.redirect(r,true)}}});
 },
