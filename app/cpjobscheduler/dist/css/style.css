@@ -8,6 +8,9 @@ input#idSETime-inner {
 input#idSSTime-inner {
     pointer-events: none;
 }
+.hdrBtnMarginHdr1{
+    margin-left:1rem;
+}
 
 section#__splitter4-content-0 {
     height: 45% !important;
@@ -60,7 +63,8 @@ div#__xmlview0--idDateRange {
 
 
 .boldText {
-    font-weight: bold !important;
+    font-weight: bold;
+    margin-top:0.185rem;
 }
 .headerText {
     font-weight: bold !important;
@@ -76,6 +80,14 @@ div#container-cpapp\.cpjobscheduler---CreateJob--idRbtn {
     margin-top: 20px;
 } 
 
+<<<<<<< HEAD
+
+/* button#__button3 {
+    margin-left: 430px;
+} */
+
+=======
+>>>>>>> 5a6f96f8cd44c3992135036cfa33098d432b1300
 h5#__title4 {
     text-decoration: underline;
 }

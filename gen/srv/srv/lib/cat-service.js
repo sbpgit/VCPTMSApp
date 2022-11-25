@@ -2472,7 +2472,7 @@ module.exports = (srv) => {
         const liCIRQty = oCIRData.liCIRQty;
         const liUniqueId = oCIRData.liUniqueId;
         const aUniqueIdChar = await objCIR.getUniqueIdCharacteristics(req);
-        const sLoginUserId = req.headers['x-username'];
+        // const sLoginUserId = req.headers['x-username'];
         const sCFDestUser = req.data.VALIDUSER;   
         let aFilteredChar = [], aFilteredCIR = [];
         let sUniqueId = "";
@@ -2514,7 +2514,7 @@ module.exports = (srv) => {
                 oEntry.UniqueId = (aFilteredCIR[j].UNIQUE_ID).toString();
                 oEntry.Datum = aFilteredCIR[j].WEEK_DATE + "T10:00:00";
                 oEntry.Valid_User = sCFDestUser;
-                oEntry.User_Id = sLoginUserId;
+                // oEntry.User_Id = sLoginUserId;
                 oEntry.HeaderConfig = aUniqueIdChars;
                 try {
                     let sReturn = await oModel.tx(req).post("/headerSet", oEntry);
@@ -2541,12 +2541,20 @@ module.exports = (srv) => {
         const liUniqueId = oCIRData.liUniqueId;
         const aUniqueIdChar = await objCIR.getUniqueIdCharacteristics(req);
         const sCFDestUser = req.data.VALIDUSER; 
-        const sLoginUserId = req.headers['x-username'];
+        // const sLoginUserId = req.headers['x-username'];
+        let sLoginUserId = "";
         let aFilteredChar = [], aFilteredCIR = [];
         let sUniqueId = "";
         let oUniqueIdChars = {};
         let aUniqueIdChars = [];
         let oEntry = {};
+        // if(req.user) {
+        //   sLoginUserId = req.user;
+        // }
+        if(req.req.rawHeaders[1]) {
+           sLoginUserId = req.req.rawHeaders[1];
+        }
+        console.log(req.req.rawHeaders[1]);
         for (let i = 0; i < liUniqueId.length; i++) {
             // Unique Id Characteristics
             aUniqueIdChars = [];
@@ -2580,8 +2588,10 @@ module.exports = (srv) => {
                 oEntry.UniqueId = (aFilteredCIR[j].UNIQUE_ID).toString();
                 oEntry.Datum = aFilteredCIR[j].WEEK_DATE + "T10:00:00";
                 oEntry.Valid_User = sCFDestUser;
-                oEntry.User_Id = sLoginUserId;
-                oEntry.HeaderConfig = aUniqueIdChars;
+                if(sLoginUserId) {
+                  oEntry.User_Id = sLoginUserId;
+                }
+                 oEntry.HeaderConfig = aUniqueIdChars;
                 try {
                     await oModel.tx(req).post("/headerSet", oEntry);
                 }
@@ -2991,7 +3001,7 @@ module.exports = (srv) => {
                 ret_response = JSON.parse(error);
             });
 
-        console.log(ret_response);
+        // console.log(ret_response);
         return ret_response;
     });
 
@@ -3037,7 +3047,7 @@ module.exports = (srv) => {
                 ret_response = JSON.parse(error);
             });
 
-        console.log(ret_response);
+        // console.log(ret_response);
         return ret_response;        
 
     });

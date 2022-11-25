@@ -1,22 +1,41 @@
 /* Enter your custom styles here */
 .table {
-    padding-left : 0.1rem;
-    margin-right : 0.1rem;
+    padding-left: 0.1rem;
+    margin-right: 0.1rem;
     margin-bottom: 0.1rem;
     height: auto;
 }
+
 .tableScroll .sapUiTableVSb {
     overflow-y: hidden;
 }
+<<<<<<< HEAD
 .hdrBtnMarginHdr {
   margin-left :1rem;
+=======
+
+.hdrBtnMarginHdr {
+    margin-left: 1rem;
 }
-.disableDP input{
+
+.hdrBtnMargin {
+    margin-left: 80rem;
+>>>>>>> 6a99c875dc444be4c9828a359b030af9c11b6b9f
+}
+
+.disableDP input {
     pointer-events: none;
     color: transparent;
     text-shadow: 0 0 0 gray;
-   }
+}
 
+.classHdr {
+    margin-left: 90rem;
+}
+
+.sapFDynamicPageTitleMain>.sapFDynamicPageTitleMainInner .sapFDynamicPageTitleMainHeading .sapFDynamicPageTitleMainHeadingInner .sapMTitle {
+
+<<<<<<< HEAD
    .classHdr{
     margin-left: 77rem;
    }
@@ -24,3 +43,9 @@
     font-size: 1.25rem;
     margin-top: 0.25rem;
 }
+=======
+    font-size: 1.25rem;
+    margin-top: 0.25rem;
+
+}
+>>>>>>> 6a99c875dc444be4c9828a359b030af9c11b6b9f
