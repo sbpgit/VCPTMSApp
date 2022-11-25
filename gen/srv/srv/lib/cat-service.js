@@ -971,18 +971,18 @@ module.exports = (srv) => {
     // Generate Timeseries fucntion calls
     srv.on("generate_timeseries", async (req) => {
         let Flag = '';
-        switch (await GenFunctions.getParameterValue(req.data.LOCATION_ID, 5)) {
-            case 'M1':
-                const obgenTimeseries = new GenTimeseries();
-                await obgenTimeseries.genTimeseries(req.data, req, Flag);
-                break;
-            case 'M2':
-                const obgenTimeseriesM2 = new GenTimeseriesM2();
-                await obgenTimeseriesM2.genTimeseries(req.data, req, Flag);
-                break;
-        }
-        // const obgenTimeseries_rt = new GenTimeseriesRT();
-        // await obgenTimeseries_rt.genTimeseries_rt(req.data, req);
+        // switch (await GenFunctions.getParameterValue(req.data.LOCATION_ID, 5)) {
+        //     case 'M1':
+        //         const obgenTimeseries = new GenTimeseries();
+        //         await obgenTimeseries.genTimeseries(req.data, req, Flag);
+        //         break;
+        //     case 'M2':
+        //         const obgenTimeseriesM2 = new GenTimeseriesM2();
+        //         await obgenTimeseriesM2.genTimeseries(req.data, req, Flag);
+        //         break;
+        // }
+        const obgenTimeseries_rt = new GenTimeseriesRT();
+        await obgenTimeseries_rt.genTimeseries_rt(req.data, req);
 
     });
     srv.on("generate_timeseriesF", async (req) => {
