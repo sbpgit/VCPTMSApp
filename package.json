@@ -203,6 +203,11 @@
                         "path": "/sap/opu/odata//SBPC/IBP_CIR_SRV"
                     }
                 }
+            },
+            "[production]": {
+                "auth": {
+                    "kind": "xsuaa"
+                }
             }
         },
         "sapux": [
