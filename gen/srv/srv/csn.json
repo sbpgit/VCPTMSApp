@@ -5169,6 +5169,33 @@
         }
       }
     },
+    "cp.IBPVERSIONSCENARIO": {
+      "kind": "entity",
+      "elements": {
+        "VERSION": {
+          "@title": "Version",
+          "key": true,
+          "type": "cds.String",
+          "length": 10
+        },
+        "SCENARIO": {
+          "@title": "Scenario",
+          "key": true,
+          "type": "cds.String",
+          "length": 32
+        },
+        "VERSION_NAME": {
+          "@title": "Version_Name",
+          "type": "cds.String",
+          "length": 50
+        },
+        "SCENARIO_NAME": {
+          "@title": "Scenario_Name",
+          "type": "cds.String",
+          "length": 50
+        }
+      }
+    },
     "V_OBDHDR": {
       "kind": "entity",
       "@cds.persistence.exists": true,
@@ -24494,6 +24521,40 @@
         }
       }
     },
+    "CatalogService.getVerScnmaster": {
+      "kind": "entity",
+      "projection": {
+        "from": {
+          "ref": [
+            "cp.IBPVERSIONSCENARIO"
+          ]
+        }
+      },
+      "elements": {
+        "VERSION": {
+          "@title": "Version",
+          "key": true,
+          "type": "cds.String",
+          "length": 10
+        },
+        "SCENARIO": {
+          "@title": "Scenario",
+          "key": true,
+          "type": "cds.String",
+          "length": 32
+        },
+        "VERSION_NAME": {
+          "@title": "Version_Name",
+          "type": "cds.String",
+          "length": 50
+        },
+        "SCENARIO_NAME": {
+          "@title": "Scenario_Name",
+          "type": "cds.String",
+          "length": 50
+        }
+      }
+    },
     "IBPImportSrv": {
       "@source": "srv/ibpimport-service.cds",
       "kind": "service",
@@ -24822,6 +24883,9 @@
           "type": "cds.String"
         }
       }
+    },
+    "IBPImportSrv.importibpversce": {
+      "kind": "action"
     },
     "IbpImportRest": {
       "@source": "srv/ibpimport-service.cds",

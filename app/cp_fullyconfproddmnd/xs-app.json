@@ -5,9 +5,9 @@
         {
             "source": "/v2/catalog/(.*)$",
             "target": "/v2/catalog/$1",
-            "destination": "ConfigProd",
+            "destination": "config_products-srv",
             "authenticationType": "xsuaa",
-            "csrfProtection": true,
+            "csrfProtection": false,
             "scope":{
                 "GET": ["$XSAPPNAME.User"],
                 "PUT": ["$XSAPPNAME.User"],

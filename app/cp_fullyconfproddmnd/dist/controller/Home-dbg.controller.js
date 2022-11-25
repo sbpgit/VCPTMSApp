@@ -1046,7 +1046,7 @@ sap.ui.define(
                     oEntry.TODATE = vToDate;
 
                     // Call service through Job Scheduler
-                    that.handlePublish(oEntry);   
+                     that.handlePublish(oEntry);   
 
                     
                     // // calling service based on filters (Without Job Scheduler)
@@ -1060,7 +1060,7 @@ sap.ui.define(
                     //         FROMDATE: vFromDate,
                     //         TODATE: vToDate,
                     //         MODEL_VERSION: oEntry.MODEL_VERSION,
-                    //         VALIDUSER: that.sCFUserDestination
+                    //         VALIDUSER: that.sCFUserDestination  
                     //     },
                     //     success: function (data, oResponse) {
                     //         sap.ui.core.BusyIndicator.hide();
@@ -1605,6 +1605,9 @@ sap.ui.define(
                     },
                     success: function (oData, oResponse) {
                         that.sCFUserDestination = oResponse.data.getCFDestinationUser;
+                        if(that.sCFUserDestination) {
+                            that.sCFUserDestination = that.sCFUserDestination.toUpperCase();
+                        }
                     },
                     error: function (oResponse) {
                         sap.m.MessageToast.show("Failed to get Destination User!");
