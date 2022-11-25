@@ -4,14 +4,20 @@ sap.ui.define([
     "sap/ui/model/Filter",
     "sap/ui/model/FilterOperator",
     "sap/m/MessageToast",
-    "sap/m/MessageBox"
+    "sap/m/MessageBox",
+    "sap/m/Dialog",
+    "sap/m/library",
+    "sap/m/Text",
+    "sap/m/Button"
 ],
     /**
      * @param {typeof sap.ui.core.mvc.Controller} Controller
      */
-    function (Controller, JSONModel, Filter, FilterOperator, MessageToast, MessageBox) {
+    function (Controller, JSONModel, Filter, FilterOperator, MessageToast, MessageBox, Dialog, mobileLibrary, Text, Button) {
         "use strict";
         var that;
+        var DialogType = mobileLibrary.DialogType;
+        var ButtonType = mobileLibrary.ButtonType;
         return Controller.extend("cpapp.cpmarketauthorization.controller.Home", {
             onInit: function () {
 
@@ -145,6 +151,8 @@ sap.ui.define([
                         aSelectedItems[0].getTitle()
                     );
                     that.oProd.setValue("");
+                    that.oVer.setValue("");
+                    that.oScen.setValue("");
                     that.byId("fromDate").setValue("");
                     that.oGModel.setProperty("/SelectedProd", "");
 
@@ -174,12 +182,12 @@ sap.ui.define([
                         array[i] = (aSelectedItems[i].getTitle());
                         oFilter.push(sFilter);
                     }
-                    that.oGModel.setProperty("/SelectedProd",array);
+                    that.oGModel.setProperty("/SelectedProd", array);
                     that.oProd.setValue(array);
                     that.byId("fromDate").setValue("");
                     that.oVer.setValue("");
                     that.oScen.setValue("");
-                    this.getView().getModel("oModel").callFunction("/getVerScnmaster", {
+                    this.getView().getModel("oModel").read("/getVerScnmaster", {
                         method: "GET",
                         urlParameters: {
                             // LOCATION_ID: that.oGModel.getProperty("/SelectedLoc")
@@ -195,33 +203,29 @@ sap.ui.define([
                             }
                             else {
                                 var adata = [];
+                                var bdata = [];
                                 for (var i = 0; i < oData.results.length; i++) {
-                                    for (var j = 0; j < aSelectedItems.length; j++){
-                                    if (oData.results[i].PRODUCT_ID === aSelectedItems[j].getTitle()) {
-                                        // adata.push({
-                                        //     "VERSION": oData.results[i].VERSION
-                                        // });
-                                        if (that.aOrder.indexOf(oData.results[i].VERSION) === -1) {
-                                            that.aOrder.push(oData.results[i].VERSION);
-                                            if (oData.results[i].VERSION !== "") {
-                                                that.oOrdData = {
-                                                    "VERSION": oData.results[i].VERSION
-                                                };
-                                                adata.push(that.oOrdData);
-                                            }
+                                    if (that.aOrder.indexOf(oData.results[i].VERSION) === -1) {
+                                        that.aOrder.push(oData.results[i].VERSION);
+                                        if (oData.results[i].VERSION !== "") {
+                                            that.oOrdData = {
+                                                "VERSION": oData.results[i].VERSION
+                                            };
+                                            adata.push(that.oOrdData);
                                         }
                                     }
+
                                 }
-                                }
-                                
-                                if (adata.length > 0) {
-                                    that.verModel.setData({
-                                        results: adata
-                                    });
-                                    that.oVerList.setModel(that.verModel);
-                                }
-                                // sap.ui.core.BusyIndicator.hide();
                             }
+                            that.oGModel.setProperty("/scenarios", oData.results);
+                            if (adata.length > 0) {
+                                that.verModel.setData({
+                                    results: adata
+                                });
+                                that.oVerList.setModel(that.verModel);
+                            }
+                            // sap.ui.core.BusyIndicator.hide();
+
                         },
                         error: function (oData, error) {
                             MessageToast.show("error");
@@ -230,58 +234,33 @@ sap.ui.define([
 
                 }
                 else if (sId.includes("Ver")) {
+                    var scenArray = [];
                     this.oVer = that.byId("idver");
                     aSelectedItems = oEvent.getParameter("selectedItems");
                     that.oVer.setValue(aSelectedItems[0].getTitle());
                     that.oScen.setValue("");
+                    that.byId("fromDate").setValue("");
                     that.oGModel.setProperty(
                         "/SelectedVer",
                         aSelectedItems[0].getTitle()
                     );
-                    var vProd = that.oGModel.getProperty("/SelectedProd");
-                    this.getView().getModel("oModel").callFunction("/getAllVerScen", {
-                        method: "GET",
-                        urlParameters: {
-                            LOCATION_ID: that.oGModel.getProperty("/SelectedLoc")
-                            // PRODUCT_ID: aSelectedItems[0].getTitle()
-                            // VERSION:  aSelectedItems[0].getTitle()
-                        },
-                        success: function (oData) {
-                            var adata = [];
-                            for (var i = 0; i < oData.results.length; i++) {
-                                for(var j=0;j< vProd.length;j++){
-                                if (oData.results[i].PRODUCT_ID === vProd[j]
-                                    && oData.results[i].VERSION === aSelectedItems[0].getTitle()) {
-                                    // adata.push({
-                                    //     "SCENARIO": oData.results[i].SCENARIO
-                                    // });
-                                    if (that.bOrder.indexOf(oData.results[i].SCENARIO) === -1) {
-                                        that.bOrder.push(oData.results[i].SCENARIO);
-                                        if (oData.results[i].SCENARIO !== "") {
-                                            that.bOrdData = {
-                                                "SCENARIO": oData.results[i].SCENARIO
-                                            };
-                                            adata.push(that.bOrdData);
-                                        }
-                                    }
-                                }
-                            }
-                            }
-                            if (adata.length > 0) {
-                                that.scenModel.setData({
-                                    results: adata
-                                });
-                                that.oScenList.setModel(that.scenModel);
-                            }
-                        },
-                        error: function (oData, error) {
-                            MessageToast.show("error");
-                        },
+                    var scenarios = that.oGModel.getProperty("/scenarios");
+                    for (var i in scenarios) {
+                        if (aSelectedItems[0].getTitle() === scenarios[i].VERSION && scenarios[i].SCENARIO !== "") {
+                            scenArray.push(scenarios[i]);
+                        }
+                    }
+                    that.scenModel.setData({
+                        results: scenArray
                     });
+                    that.oScenList.setModel(that.scenModel);
+
                 }
                 else if (sId.includes("scen")) {
                     sap.ui.core.BusyIndicator.show();
                     this.oScen = that.byId("idscen");
+
+                    that.byId("fromDate").setValue("");
                     aSelectedItems = oEvent.getParameter("selectedItems");
                     that.oScen.setValue(aSelectedItems[0].getTitle());
                     that.oGModel.setProperty(
@@ -424,80 +403,80 @@ sap.ui.define([
             /*Function triggers on click of "Go" for creating a Job*/
             onGetData: function () {
                 var oLoc = that.byId("idloc").getValue(),
-                oprod = that.byId("idprod").getValue(),
-                oVers = that.byId("idver").getValue(),
-                oScen = that.byId("idscen").getValue();
+                    oprod = that.byId("idprod").getValue(),
+                    oVers = that.byId("idver").getValue(),
+                    oScen = that.byId("idscen").getValue();
                 var FromDate = that.byId("fromDate").getFrom();
                 var ToDate = that.byId("fromDate").getTo();
-               
+
 
                 var oEntry = {
                     MARKETDATA: [],
                 };
                 var vList = {};
-                
-                if (oLoc && oprod && oVers && oScen &&FromDate && ToDate){
+
+                if (oLoc && oprod && oVers && FromDate && ToDate) {
                     var oProd = that.oGModel.getProperty("/SelectedProd");
                     var vFromDate = that.getDateFn(FromDate);
-                 var   vToDate = that.getDateFn(ToDate);
-                for (var i in oProd) {
-                    vList = {
-                        LOCATION_ID: oLoc,
-                        PRODUCT_ID: oProd[i],
-                        VERSION:oVers,
-                        SCENARIO:oScen,
-                        FROMDATE: vFromDate,
-                        TODATE: vToDate,
-                    };
-                    oEntry.MARKETDATA.push(vList);
-                }
-                var aScheduleSEDT = {};
-                aScheduleSEDT = that.getScheduleSEDT();
-                var dCurrDateTime = new Date().getTime();
-                var actionText = "/ibpimport-srv/generateMarketAuth";
-                var JobName = "Market Auth" + dCurrDateTime;
-                sap.ui.core.BusyIndicator.show();
-                var finalList = {
-                    name: JobName,
-                    description: "Market Authorization",
-                    action: encodeURIComponent(actionText),
-                    active: true,
-                    httpMethod: "POST",
-                    startTime: aScheduleSEDT.djSdate,
-                    endTime: aScheduleSEDT.djEdate,
-                    createdAt: aScheduleSEDT.djSdate,
-                    schedules: [{
-                        data: {
-                            MARKETDATA:JSON.stringify(oEntry.MARKETDATA)
-                        },
-                        cron: "",
-                        time: aScheduleSEDT.oneTime,
+                    var vToDate = that.getDateFn(ToDate);
+                    for (var i in oProd) {
+                        vList = {
+                            LOCATION_ID: oLoc,
+                            PRODUCT_ID: oProd[i],
+                            VERSION: oVers,
+                            SCENARIO: oScen,
+                            FROMDATE: vFromDate,
+                            TODATE: vToDate,
+                        };
+                        oEntry.MARKETDATA.push(vList);
+                    }
+                    var aScheduleSEDT = {};
+                    aScheduleSEDT = that.getScheduleSEDT();
+                    var dCurrDateTime = new Date().getTime();
+                    var actionText = "/ibpimport-srv/generateMarketAuth";
+                    var JobName = "Market Auth" + dCurrDateTime;
+                    sap.ui.core.BusyIndicator.show();
+                    var finalList = {
+                        name: JobName,
+                        description: "Market Authorization",
+                        action: encodeURIComponent(actionText),
                         active: true,
-                        startTime: aScheduleSEDT.dsSDate,
-                        endTime: aScheduleSEDT.dsEDate,
-                    }]
-                };
-                this.getView().getModel("JModel").callFunction("/addMLJob", {
-                    method: "GET",
-                    urlParameters: {
-                        jobDetails: JSON.stringify(finalList),
-                    },
-                    success: function (oData) {
-                        sap.ui.core.BusyIndicator.hide();
-                        sap.m.MessageToast.show(oData.addMLJob + ": Job Created");
-                        that.onResetDate();
+                        httpMethod: "POST",
+                        startTime: aScheduleSEDT.djSdate,
+                        endTime: aScheduleSEDT.djEdate,
+                        createdAt: aScheduleSEDT.djSdate,
+                        schedules: [{
+                            data: {
+                                MARKETDATA: JSON.stringify(oEntry.MARKETDATA)
+                            },
+                            cron: "",
+                            time: aScheduleSEDT.oneTime,
+                            active: true,
+                            startTime: aScheduleSEDT.dsSDate,
+                            endTime: aScheduleSEDT.dsEDate,
+                        }]
+                    };
+                    this.getView().getModel("JModel").callFunction("/addMLJob", {
+                        method: "GET",
+                        urlParameters: {
+                            jobDetails: JSON.stringify(finalList),
+                        },
+                        success: function (oData) {
+                            sap.ui.core.BusyIndicator.hide();
+                            sap.m.MessageToast.show(oData.addMLJob + ": Job Created");
+                            that.onResetDate();
 
-                    },
-                    error: function (error) {
-                        sap.ui.core.BusyIndicator.hide();
-                        sap.m.MessageToast.show("Error While publishing data!");
-                    },
-                });
+                        },
+                        error: function (error) {
+                            sap.ui.core.BusyIndicator.hide();
+                            sap.m.MessageToast.show("Error While publishing data!");
+                        },
+                    });
 
-                    
+
                 }
-                else{
-                    sap.m.MessageToast.show("Select Location/Product/Version/Scenario/Date");
+                else {
+                    sap.m.MessageToast.show("Select Location/Product/Version/Date");
                 }
             },
             getDateFn: function (imDate) {
@@ -520,9 +499,9 @@ sap.ui.define([
             getScheduleSEDT: function () {
                 var aScheduleSEDT = {};
                 var dDate = new Date();
-                               
+
                 var idSchTime = dDate.setSeconds(dDate.getSeconds() + 20);
-            
+
                 var idSETime = dDate.setHours(dDate.getHours() + 2);
                 idSchTime = new Date(idSchTime);
                 idSETime = new Date(idSETime);
@@ -554,6 +533,88 @@ sap.ui.define([
 
                 return aScheduleSEDT;
 
+            },
+            onSubmitPress: function () {
+                var oLoc = that.byId("idloc").getValue(),
+                    oprod = that.oGModel.getProperty("/SelectedProd"),
+                    oVers = that.byId("idver").getValue(),
+                    oScen = that.byId("idscen").getValue();
+                var oFilter = [];
+                var sFilter = [];
+                // oFilter.push(new Filter("LOCATION_ID", FilterOperator.EQ, oLoc));
+                // oFilter.push(new Filter("VERSION", FilterOperator.EQ, oVers));
+                // oFilter.push(new Filter("SCENARIO", FilterOperator.EQ, oScen));
+
+                // for(var i in oprod){
+                //     oFilter.push(new Filter("PRODUCT_ID", FilterOperator.EQ, oprod[i]))
+                // }
+                sFilter = new sap.ui.model.Filter({
+                    path: "LOCATION_ID",
+                    operator: sap.ui.model.FilterOperator.EQ,
+                    value1: oLoc,
+                });
+                oFilter.push(sFilter);
+                sFilter = new sap.ui.model.Filter({
+                    path: "VERSION",
+                    operator: sap.ui.model.FilterOperator.EQ,
+                    value1: oVers
+                });
+                oFilter.push(sFilter);
+                if(oScen !==""){
+                sFilter = new sap.ui.model.Filter({
+                    path: "SCENARIO",
+                    operator: sap.ui.model.FilterOperator.EQ,
+                    value1: oScen,
+                });
+                oFilter.push(sFilter);
+            }
+                for(var i in oprod){
+                    sFilter = new sap.ui.model.Filter({
+						path: "PRODUCT_ID",
+						operator: sap.ui.model.FilterOperator.EQ,
+						value1: oprod[i],
+					});
+					oFilter.push(sFilter);
+                }
+
+                this.getView().getModel("oModel").read("/getIbpVerScn", {
+                    
+                    filters: oFilter,
+                    success: function (oData) {
+                        if(oData.results.length === 0){
+                            if (!that.oApproveDialog) {
+                                that.oApproveDialog = new Dialog({
+                                    type: DialogType.Message,
+                                    title: "Confirmation",
+                                    content: new Text({ text: "Selected Version/ Scenario does not exist in previous IBP requests. Do you want to continue?" }),
+                                    beginButton: new Button({
+                                        type: ButtonType.Emphasized,
+                                        text: "Create",
+                                        press: function () {
+                                            that.onGetData();
+                                            that.oApproveDialog.close();
+                                        }.bind(this)
+                                    }),
+                                    endButton: new Button({
+                                        text: "Cancel",
+                                        press: function () {
+                                            that.oApproveDialog.close();
+                                        }.bind(this)
+                                    })
+                                });
+                            }
+                            that.oApproveDialog.open();
+        
+                        }
+                        else{
+                            that.onGetData();
+                        }
+                    },
+                    error: function (e) {
+                        MessageToast.show("Hi");
+                    }
+
+                });
             }
         });
     });

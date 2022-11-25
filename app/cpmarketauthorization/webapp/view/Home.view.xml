@@ -53,7 +53,7 @@
                     <!-- </HBox> -->
                     
                     <!-- <HBox id="_IDGenVBox4" > -->
-                        <Label id="_IDGenLabel4" text="IBP Scenario" required= "true" />
+                        <Label id="_IDGenLabel4" text="IBP Scenario" required= "false" />
                         <Input id="idscen" value="" placeholder="Scenario" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" width="200px" />
 
                     <!-- </HBox> -->
@@ -65,7 +65,7 @@
                     <!-- <VBox id="_IDGenVBox7"> -->
                         <Label id="_IDGenLabel7" text="" />
                         <!-- <HBox id="_IDGenHBox1"> -->
-                            <Button id="_IDGenButton1" text="Submit" type="Accept" press="onGetData" tooltip="Get data based on filters" width="75px" />
+                            <Button id="_IDGenButton1" text="Submit" type="Accept" press="onSubmitPress" tooltip="Get data based on filters" width="75px" />
                             <Button id="_IDGenButton2" text="Reset" type="Emphasized" press="onResetDate" tooltip="Reset Valid To Date" width="75px" />
                        
                         <!-- </HBox> -->
