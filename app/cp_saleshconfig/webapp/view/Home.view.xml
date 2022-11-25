@@ -5,20 +5,25 @@
     xmlns:ux="sap.uxap"
     xmlns:mvc="sap.ui.core.mvc" 
     displayBlock="true"
-    xmlns="sap.m">
+    xmlns="sap.m"
+    xmlns:m="sap.m">
 
         <ux:ObjectPageLayout id="ObjectPageLayout">
             <ux:headerTitle>
                 <ux:ObjectPageDynamicHeaderTitle id="_IDGenObjectPageDynamicHeaderTitle1">
                     <ux:expandedHeading>
-                        <Title id="_IDGenTitle1" text="{i18n>title}" class="boldText" titleAlignment="Center" />
+                        <HBox>
+                    <Title id="_IDGenTitle1" text="{i18n>title}" titleAlignment="Center" />
+                     <Button class="hdrBtnMarginHdr" id="_IDGenOverflowToolbarButton1" icon="sap-icon://sys-help" text="" type="Emphasized" press="onNavPress" tooltip="Help Document"/>
+                        </HBox>
                     </ux:expandedHeading>
                     <ux:snappedHeading>
-                        <FlexBox id="_IDGenFlexBox1" fitContainer="true" alignItems="Center" >
-                            <Title id="_IDGenTitle2" text="{i18n>title}" wrapping="true" />
-                            <Button class="hdrBtnMarginHdr" icon="sap-icon://sys-help" id="idNav2" press="onNavPress" type="Emphasized" tooltip="Help Document" />
-                        </FlexBox>
+                        <HBox id="_IDGenFlexBox1" fitContainer="true" alignItems="Center" >
+						<Title id="_IDGenTitle2" text="{i18n>title}" wrapping="true" />
+					<Button class="hdrBtnMarginHdr" id="_IDGenOverflowToolbarButton2" icon="sap-icon://sys-help" text="" type="Emphasized" press="onNavPress" tooltip="Help Document"/>
+                            </HBox>
                     </ux:snappedHeading>
+                    
                 </ux:ObjectPageDynamicHeaderTitle>
             </ux:headerTitle>
             <ux:headerContent>
@@ -44,7 +49,7 @@
                     <HBox id="_IDGenHBox2">
                     <HBox id="_IDGenHBox3">
                     <Button id="_IDGenButton1" class="buttonClass" text="Go" type="Emphasized" press="onGetData" tooltip="Get data based on filters"/>
-                    <Button class="hdrBtnMargin" icon="sap-icon://sys-help" id="idNav1" press="onNavPress" type="Emphasized" tooltip="Help Document" />
+                    
                     </HBox>
                     </HBox>
                     </VBox>

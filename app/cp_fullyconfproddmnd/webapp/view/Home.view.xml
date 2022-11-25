@@ -1,18 +1,39 @@
-<mvc:View controllerName="cpapp.cpfullyconfproddmnd.controller.Home" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core" displayBlock="true" xmlns="sap.m" xmlns:f="sap.ui.layout.form" xmlns:t="sap.ui.table" xmlns:ux="sap.uxap" xmlns:l="sap.ui.layout" xmlns:html="http://www.w3.org/1999/xhtml">
+<mvc:View
+    controllerName="cpapp.cpfullyconfproddmnd.controller.Home"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core"
+    displayBlock="true"
+    xmlns:m="sap.m"
+    xmlns="sap.m"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:t="sap.ui.table"
+    xmlns:ux="sap.uxap"
+    xmlns:l="sap.ui.layout"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+>
     <Page id="_IDGenPage1" showHeader="false" showFooter="true" enableScrolling="false">
         <content>
             <ux:ObjectPageLayout id="ObjectPageLayout" headerContentPinned="true" preserveHeaderStateOnScroll="true">
                 <ux:headerTitle>
                     <ux:ObjectPageDynamicHeaderTitle id="_IDGenObjectPageDynamicHeaderTitle1">
                         <ux:expandedHeading>
-                            <Title id="_IDGenTitle1" text="{i18n>appTitle}" titleAlignment="Center" />
+                            <HBox>
+                                <Title id="_IDGenTitle1" text="{i18n>title}" class="boldText" titleAlignment="Center" />
+
+                                <Button class="hdrBtnMarginHdr" id="_IDGenOverflowToolbarButton1" icon="sap-icon://sys-help" text="" type="Emphasized" press="onNavPress" tooltip="Help Document" />
+                            </HBox>
                         </ux:expandedHeading>
+
                         <ux:snappedHeading>
-                            <FlexBox id="_IDGenFlexBox1" fitContainer="true" alignItems="Center">                         
-                            <Title id="_IDGenTitle2" text="{i18n>appTitle}" wrapping="true" />
-                            <Button class="classHdr" icon="sap-icon://sys-help" id="idNav2" press="onNavPress" type="Emphasized" tooltip="Help Document"/>                             
-                            </FlexBox>
+                            <HBox id="_IDGenFlexBox1" fitContainer="true" alignItems="Center">
+                                <Title id="_IDGenTitle2" text="{i18n>title}" />
+
+                                <Button class="hdrBtnMarginHdr" id="_IDGenOverflowToolbarButton2" icon="sap-icon://sys-help" text="" type="Emphasized" press="onNavPress" tooltip="Help Document" />
+                            </HBox>
                         </ux:snappedHeading>
+                        <!-- <ux:navigationActions>
+                          <Button class="classHdr" icon="sap-icon://sys-help" id="idNav3" press="onNavPress" type="Emphasized" tooltip="Help Document" />
+                        </ux:navigationActions> -->
                     </ux:ObjectPageDynamicHeaderTitle>
                 </ux:headerTitle>
                 <ux:headerContent>
@@ -56,10 +77,11 @@
 
                             <!-- <VBox>
                         <Label text="" /> -->
+
                             <HBox id="_IDGenHBox1" class="hdrBtnMargin">
                                 <Button id="_IDGenButton1" text="Go" type="Emphasized" press="onGetData" tooltip="Get data based on filters" />
                                 <Button id="_IDGenButton2" text="Reset" type="Transparent" press="onResetData" tooltip="Reset filters and Data" />
-                                <Button icon="sap-icon://sys-help" id="idNav1" press="onNavPress" type="Emphasized" tooltip="Help Document"/> 
+                                <!-- <Button icon="sap-icon://sys-help" id="idNav1" press="onNavPress" type="Emphasized" tooltip="Help Document" /> -->
                             </HBox>
                             <!-- </VBox> -->
                         </l:Grid>
@@ -71,10 +93,24 @@
                             <ux:ObjectPageSubSection id="_IDGenObjectPageSubSection1" class="sapUiNoMargin">
                                 <ux:blocks>
                                     <VBox id="_IDGenVBox9" class="sapUiNoMargin">
-                                        <!-- <Toolbar>
+                                        <Toolbar>
                                             <ToolbarSpacer />
-                                            <Button text="Publish" press="onPressPublish" type="Emphasized" />
-                                        </Toolbar> -->
+                                            <!-- <Button text="Publish" press="onPressPublish" type="Emphasized" /> -->
+                                            <Label id="_IDGenLabel10" text="Characteristics" />
+                                            <MultiComboBox
+                                                id="idUniqueCharDetails"
+                                                showSelectAll="true"
+                                                showSecondaryValues="true"
+                                                selectionFinish="onCharSelectionFinish"
+                                                width="500px"
+                                                items="{
+				                            path: '/charDetails',
+				                            sorter: { path: 'CHAR_NAME' }
+			                                        }"
+                                            >
+                                                <core:ListItem key="{CHAR_NUM}:{CHARVAL_NUM}" text="{CHAR_DESC}:{CHAR_NAME}" additionalText="{CHARVAL_DESC}:{CHAR_VALUE}" />
+                                            </MultiComboBox>
+                                        </Toolbar>
                                         <t:Table id="idCIReq" class="table" fixedColumnCount="2" selectionMode="None" alternateRowColors="true" enableSelectAll="false" visibleRowCount="8">
                                             <t:columns />
                                         </t:Table>

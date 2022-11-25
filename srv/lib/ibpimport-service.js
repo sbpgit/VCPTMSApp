@@ -2639,4 +2639,41 @@ module.exports = cds.service.impl(async function () {
         }
         GenF.jobSchMessage('X', lMessage, req);
     });
+    this.on("importibpversce", async (request) => {
+        var flag, lMessage;
+        var resUrl = "/SBPVCP?$select=VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$inlinecount=allpages";
+        var req = await service.tx(req).get(resUrl);
+        if(req.length){
+            await DELETE.from('CP_IBPVERSIONSCENARIO');
+        }
+        
+        for (var i in req) {
+            
+            let modQuery = 'INSERT INTO "CP_IBPVERSIONSCENARIO" VALUES (' +
+                "'" + req[i].VERSIONID + "'" + "," +
+                "'" + req[i].SCENARIOID + "'" + "," +
+                "'" + req[i].VERSIONNAME + "'" + "," +
+                "'" + req[i].SCENARIONAME + "'" + ')';
+            try {
+                await cds.run(modQuery);
+                flag = 'S';
+                
+            }
+            catch (err) {
+                console.log(err);
+            }
+            
+        }
+        
+        if (flag === 'S') {
+            // return "Success";
+            lMessage = "Successfully imported version scenario from IBP";
+            console.log(lMessage);
+        } else {
+            lMessage = "Failed to imported version scenario from IBP";
+            console.log(lMessage);
+            // return "Failed";
+        }
+    });
+
 });

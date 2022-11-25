@@ -227,6 +227,7 @@ Content-Type: application/json
 
 {
 	"Location" : "PL20",
+<<<<<<< HEAD
 	"Product" : "534EDPI0E119",
 	"ProdType": true
 }
@@ -237,10 +238,11 @@ Content-Type: application/json
 
 {
 	"Location" : "PL20",
+=======
+>>>>>>> b5b084cc5c9b7de51691878bd4801b4e0c9bbe23
 	"Product" : "ALL",
 	"ProdType": true
 }
-
 
 ### generate Clusters Input Data
 POST http://localhost:4004/pal/genClusterUniqueIDS
@@ -248,13 +250,19 @@ Content-Type: application/json
 
 {
 	"Location" : "PL20",
+<<<<<<< HEAD
 	"Product" : "ALL",
 	"ProdType": false
 
+=======
+	"Product" : "534EDPI0E119"
+>>>>>>> b5b084cc5c9b7de51691878bd4801b4e0c9bbe23
 }
 
+
+
 ### generate Clusters Input Data
-GET http://localhost:4004/pal/fgenClusterInputs(Location='PL20',Product='534EDPI0E119')
+GET http://localhost:4004/pal/fgenClusterUniqueIDS(Location='PL20',Product='ALL')
 
 
 ### generate Clusters

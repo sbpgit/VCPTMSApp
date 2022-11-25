@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "i18n/i18n.properties": 1667896894785,
   "Component.js": 1668768211728,
   "utils/locate-reuse-libs.js": 1665479929521,
@@ -10,4 +11,17 @@
   "utils/locate-reuse-libs-dbg.js": 1665479929521,
   "Component-dbg.js": 1668768211728,
   "index.html": 1668768211728
+=======
+  "manifest.json": 1669365237168,
+  "utils/locate-reuse-libs.js": 1661869074935,
+  "i18n/i18n.properties": 1668670306145,
+  "custom/ListReportExtController.js": 1668670306145,
+  "Component.js": 1669364937913,
+  "manifest-bundle.zip": 1669365237176,
+  "Component-preload.js": 1669365237340,
+  "utils/locate-reuse-libs-dbg.js": 1661869074935,
+  "custom/ListReportExtController-dbg.js": 1668670306145,
+  "Component-dbg.js": 1669364937913,
+  "index.html": 1668670306145
+>>>>>>> b5b084cc5c9b7de51691878bd4801b4e0c9bbe23
 }

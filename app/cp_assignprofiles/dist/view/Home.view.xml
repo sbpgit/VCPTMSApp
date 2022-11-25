@@ -5,12 +5,14 @@
         <customHeader>
             <Toolbar id="_IDGenToolbar1" >
                 <Title id="profTitle" text="{i18n>profTitle}" class="boldText"></Title>
+                <!-- <Button class="hdrBtnMarginHdr" icon="sap-icon://sys-help" id="idNav" press="onNavPress" type="Emphasized" tooltip="Help Document"/> -->
                 <ToolbarSpacer id="_IDGenToolbarSpacer1"/>
                 <Button id="idAdd" text="Create" icon="sap-icon://add" press="onCreate" tooltip = "Create"/>
                 <Button id="idCopy" text="Copy" icon="sap-icon://copy" press="onCreate" tooltip = "Copy"/>
                 <Button id="idEdit" text="Edit" icon="sap-icon://edit" press="onCreate" tooltip = "Edit"/>
                 <Button id="idDelete" text="Delete" icon="sap-icon://delete" press="onDelete" tooltip = "Delete"/>
-                <Button icon="sap-icon://sys-help" id="idNav" press="onNavPress" type="Emphasized" tooltip="Help Document"/>
+                <Button class="hdrBtnMarginHdr" icon="sap-icon://sys-help" id="idNav" press="onNavPress" type="Emphasized" tooltip="Help Document"/>
+                
             </Toolbar>
         </customHeader>
         <content>

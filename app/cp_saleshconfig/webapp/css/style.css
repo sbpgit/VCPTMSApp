@@ -1,12 +1,13 @@
 /* Enter your custom styles here */
 
-.hdrBtnMargin{
-    margin-left : 18rem;
+
+.hdrBtnMarginHdr{
+    margin-left : 1rem;
 
 }
-.hdrBtnMarginHdr{
-    margin-left : 79rem;
-
+.sapFDynamicPageTitleMain>.sapFDynamicPageTitleMainInner .sapFDynamicPageTitleMainHeading .sapFDynamicPageTitleMainHeadingInner .sapMTitle {
+    font-size: 1.25rem;
+    margin-top: 0.25rem;
 }
 
 .buttonClass{

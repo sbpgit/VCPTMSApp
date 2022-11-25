@@ -279,15 +279,19 @@ service CatalogService @(impl : './lib/cat-service.js') {
     entity getCIRLog    as projection on od.CIRLOG;
     function getCIRWeekly(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), FROMDATE : Date, TODATE : Date, MODEL_VERSION : String(20))                                                                                             returns array of ds.cirWkly;
     // function getCIRWeekly(FROMDATE : Date, TODATE : Date)  returns array of ds.cirWkly;
-    function getUniqueIdItems(UNIQUE_ID : Integer)                                                                                                                                                                                                                               returns array of ds.uniqueCharItems;
+    function getUniqueIdItems(UNIQUE_ID : Integer)  returns array of ds.uniqueCharItems;
     // Publish CIR data to ECC
-    function postCIRQuantities(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), FROMDATE : Date, TODATE : Date, MODEL_VERSION : String(20))                                                                                        returns String;
-    action   postCIRQuantitiesToS4(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), FROMDATE : Date, TODATE : Date, MODEL_VERSION : String(20));
-    function modifyCIRFirmQuantities(FLAG : String(1), CIR_QUANTITIES : String)                                                                                                                                                                                                  returns String;
+    function postCIRQuantities(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), FROMDATE : Date, TODATE : Date, MODEL_VERSION : String(20), VALIDUSER : String(12)) returns String;
+    action   postCIRQuantitiesToS4(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), FROMDATE : Date, TODATE : Date, MODEL_VERSION : String(20), VALIDUSER : String(12));
+    function modifyCIRFirmQuantities(FLAG : String(1), CIR_QUANTITIES : String) returns String;
+    function getCFAuthToken() returns String;
+    function getCFDestinationUser(TOKEN : String) returns String;
+
     // EOI - Deepa
     entity getSalesStock        as projection on od.SALES_S;
+    
     ///*****/ Assembly Requirements /*****/
-    function genAssemblyreq(LOCATION_ID : String(4), PRODUCT_ID : String(40))                                                                                                                                                                                                    returns String;
+    function genAssemblyreq(LOCATION_ID : String(4), PRODUCT_ID : String(40)) returns String;
     action   generateAssemblyReq(LOCATION_ID : String(4), PRODUCT_ID : String(40));
     //VC Planner Documentation Maintenance- Pradeep
     function moveData(Flag : String, CONTENT : String, PAGEID : Integer, DESCRIPTION : String)returns String;                                                                                                                                                                                  
@@ -306,4 +310,9 @@ service CatalogService @(impl : './lib/cat-service.js') {
     //*****/ Factory Location/*****/
     @odata.draft.enabled
     entity getFactoryLoc        as projection on od.FACTORY_SALESLOC;
+
+
+    // Get IBP Version Scenario
+ 
+    entity getVerScnmaster          as projection on od.IBPVERSIONSCENARIO;
 }

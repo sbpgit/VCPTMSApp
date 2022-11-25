@@ -2736,7 +2736,7 @@ async function _purgePredictions(req,isGet) {
 }
 
 
-async function _genClusterUniqueIDSByLocProduct(location, product)
+async function _genClusterUniqueIDSByLocProduct(location, product, refProdId)
 {
     // let sqlCharsStr = 'SELECT * FROM CP_CHARACTERISTICS WHERE CLASS_NUM = \'55555\' ' +
     // ' AND CHAR_GROUP != \'PARTIAL\' ORDER BY CHAR_NUM';
@@ -2963,14 +2963,30 @@ async function _genClusterUniqueIDSByLocProduct_Partial(location, product)
 
     let sqlCharsResults = await cds.run(sqlCharsStr);
 
-    sqlStr = 'SELECT DISTINCT LOCATION_ID, PRODUCT_ID, PARTIAL_ID, CHARS, CHARVALS FROM V_PLSTR_PRIMARY_SCNDRY_CHARS' +
-                ' WHERE PARTIAL_ID = ' + "'" + product  + "'" +
+    if ( product == refProdId)
+    {
+
+        sqlStr = 'SELECT DISTINCT LOCATION_ID, PRODUCT_ID, SALES_CHARS AS CHARS, SALES_CHARVALS AS CHARVALS, ' + 
+                ' PRTL_CHARS AS P_CHARS, PRTL_CHARVALS AS P_CHARVALS FROM CP_V_SALESH_BY_PRODID_PARTID' +
+                ' WHERE  PRODUCT_ID = ' + "'" + refProdId  + "'" +
                 ' AND LOCATION_ID = ' + "'" + location + "'";
+<<<<<<< HEAD
+=======
+    }
+    else
+    {
+        sqlStr = 'SELECT DISTINCT LOCATION_ID, PRODUCT_ID, PARTIAL_ID, SALES_CHARS AS CHARS, SALES_CHARVALS AS CHARVALS, ' + 
+                ' PRTL_CHARS AS P_CHARS, PRTL_CHARVALS AS P_CHARVALS FROM CP_V_SALESH_BY_PRODID_PARTID' +
+                ' WHERE PARTIAL_ID = ' + "'" + product  + "'"  + 
+                ' AND LOCATION_ID = ' + "'" + location + "'";
+    }
+>>>>>>> b5b084cc5c9b7de51691878bd4801b4e0c9bbe23
 
     console.log(" _genClusterUniqueIDS sqlSTr : ", sqlStr);
     let sqlClusterResults = await cds.run(sqlStr);
     // console.log(" _genClusterUniqueIDSByLocProduct sqlClusterResults : ", sqlClusterResults);
     let numIds = sqlClusterResults.length;
+
     let tableObj = [];
 
     let uniqueId = 0;
@@ -2980,11 +2996,30 @@ async function _genClusterUniqueIDSByLocProduct_Partial(location, product)
         let char13= char14 = char15 = char16 = char17 = char18 = char19 = char20 = 'NA'; 
         let chars = sqlClusterResults[clusterIdx].CHARS;
         let charVals = sqlClusterResults[clusterIdx].CHARVALS;
-        let productId =  sqlClusterResults[clusterIdx].PARTIAL_ID;
+        
+        let productId = "";
+        
+        if ( product == refProdId)
+        {
+            productId =  sqlClusterResults[clusterIdx].PRODUCT_ID;
+            console.log("partialId ", productId);
+        }
+        else
+        {
+            productId =  sqlClusterResults[clusterIdx].PARTIAL_ID;
+            console.log("productId ", productId);
+
+        }
         let locationId =  sqlClusterResults[clusterIdx].LOCATION_ID;
+        let p_chars = sqlClusterResults[clusterIdx].P_CHARS;
+        // let p_charVals = sqlClusterResults[clusterIdx].P_CHARVALS;
+
+        console.log(" _genClusterUniqueIDS productId : ", productId);
+
         uniqueId = uniqueId +1;
     
         let charStr = chars.split(',');
+        let p_charStr = p_chars.split(',');
 
         let charValStr = charVals.split(',');
         // console.log("_genClusterUniqueIDSByLocProduct  productIr", productId, "locationId ", locationId, "uniqueId ", uniqueId, "charVals ", charVals,"numCharVals ", charStr.length);
@@ -2995,7 +3030,7 @@ async function _genClusterUniqueIDSByLocProduct_Partial(location, product)
             let charMatch = false;
             let charValNum = 'NA';
 
-            for (let charStrIdx = 0; charStrIdx < charStr.length; charStrIdx ++)
+            for (let charStrIdx = charStr.length - p_charStr.length; charStrIdx < charStr.length; charStrIdx ++)
             {
                 if (sqlCharsResults[charIdx].CHAR_NUM == charStr[charStrIdx])
                 {
@@ -3149,6 +3184,7 @@ async function _genClusterUniqueIDS(req,isGet) {
         clusterInputReq.Product = req.data.Product;
         clusterInputReq.ProdType = req.data.ProdType;
 
+<<<<<<< HEAD
 
     }
     else
@@ -3271,6 +3307,8 @@ async function _genClusterUniqueIDS_bkup(req,isGet) {
     {
         clusterInputReq.Location = req.data.Location;
         clusterInputReq.Product = req.data.Product;
+=======
+>>>>>>> b5b084cc5c9b7de51691878bd4801b4e0c9bbe23
 
     }
     else
@@ -3300,34 +3338,38 @@ async function _genClusterUniqueIDS_bkup(req,isGet) {
  
     let sqlStr = "";
     
+    // Cluster Data for Partial Products
+
     if ( (req.data.Product == "ALL") && (req.data.Location == "ALL" ))
     {
-        sqlStr = 'SELECT DISTINCT LOCATION_ID, PRODUCT_ID FROM CP_PARTIALPROD_INTRO' +
-                 'WHERE PRODUCT_ID LIKE \'%534%\' ';
+        sqlStr = 'SELECT DISTINCT LOCATION_ID, PRODUCT_ID, REF_PRODID FROM CP_PARTIALPROD_INTRO' +
+                'WHERE PRODUCT_ID LIKE \'%534%\' ';
     }
     else if ( (req.data.Product != "ALL") && (req.data.Location == "ALL" ))
     {
-        sqlStr = 'SELECT DISTINCT LOCATION_ID, PRODUCT_ID FROM CP_PARTIALPROD_INTRO' +
+        sqlStr = 'SELECT DISTINCT LOCATION_ID, PRODUCT_ID, REF_PRODID FROM CP_PARTIALPROD_INTRO' +
                     ' WHERE PRODUCT_ID = ' + "'" + req.data.Product + "'"+
                     ' AND PRODUCT_ID LIKE \'%534%\' ';
     }
     else if ( (req.data.Product == "ALL") && (req.data.Location != "ALL" ))
     {
-        sqlStr = 'SELECT DISTINCT LOCATION_ID, PRODUCT_ID FROM CP_PARTIALPROD_INTRO' +
+        sqlStr = 'SELECT DISTINCT LOCATION_ID, PRODUCT_ID, REF_PRODID FROM CP_PARTIALPROD_INTRO' +
                 ' WHERE LOCATION_ID = ' + "'" + req.data.Location  + "'"+
                 ' AND PRODUCT_ID LIKE \'%534%\' ';
     }
     else
     {   
-        sqlStr = 'SELECT DISTINCT LOCATION_ID, PRODUCT_ID FROM CP_PARTIALPROD_INTRO' +
+        sqlStr = 'SELECT DISTINCT LOCATION_ID, PRODUCT_ID, REF_PRODID FROM CP_PARTIALPROD_INTRO' +
                 ' WHERE PRODUCT_ID = ' + "'" + req.data.Product  + "'" +
                 ' AND LOCATION_ID = ' + "'" + req.data.Location + "'"+
                 ' AND PRODUCT_ID LIKE \'%534%\' ';
-     
+    
     }
 
+    
 
-    console.log(" _genClusterUniqueIDS sqlSTr : ", sqlStr);
+
+    // console.log(" _genClusterUniqueIDS sqlSTr : ", sqlStr);
     let sqlClusterResults = await cds.run(sqlStr);
     let numIds = sqlClusterResults.length;
 
@@ -3336,9 +3378,9 @@ async function _genClusterUniqueIDS_bkup(req,isGet) {
     {
         let location = sqlClusterResults[locProdIdx].LOCATION_ID;
         let product = sqlClusterResults[locProdIdx].PRODUCT_ID;
-        if (product.length > 7)
-            _genClusterUniqueIDSByLocProduct(location, product);
+        let refProdId = sqlClusterResults[locProdIdx].REF_PRODID;
 
+        _genClusterUniqueIDSByLocProduct(location, product, refProdId);
     }
     
 

@@ -3,7 +3,7 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
     <Page id="idCreateJob" title="Create Job" titleAlignment="Center" showNavButton="true" navButtonPress="onBack" showFooter="true">
         <tnt:ToolPage id="toolPage">
             <tnt:sideContent>
-                <tnt:SideNavigation id="idJobType" itemSelect="onJobSelect" selectedKey="S" width='100%'>
+                <tnt:SideNavigation id="idJobType" itemSelect="onJobSelect" selectedKey="S" >
                     <tnt:NavigationList>
                         <tnt:NavigationListItem id="S" key="S" text="{i18n>sdi}" />
                         <tnt:NavigationListItem id="O" key="O" text="{i18n>procsalesord}" />
@@ -23,6 +23,8 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                 </tnt:SideNavigation>
             </tnt:sideContent>
             <tnt:mainContents>
+            <!-- <NavContainer  >
+				<pages> -->
                 <Panel id="modelGenPanel" visible="false">
                     <headerToolbar>
                         <OverflowToolbar>
@@ -730,7 +732,7 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                                                 <Label text="Import Using SDI" required="true" />
                                             </f:label> -->
                                             <f:fields>
-                                           <RadioButtonGroup id="idSdi" columns="2" select="onSdiChange" class="buttonDesktop" >
+                                           <RadioButtonGroup id="idSdi" columns="2" select="onSdiChange" class="buttonDesktop sapUiLargeMarginEnd" >
                                                     <RadioButton id="LO" text="{i18n>loc}" />
                                                     <RadioButton id="PP" text="{i18n>partialprod}" />
                                                     <RadioButton id="CG" text="{i18n>custgrp}" />
@@ -923,6 +925,8 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                         </f:formContainers>
                     </f:Form>
                 </Panel>
+                <!-- </pages>
+			</NavContainer> -->
             </tnt:mainContents>
         </tnt:ToolPage>
         <footer>
