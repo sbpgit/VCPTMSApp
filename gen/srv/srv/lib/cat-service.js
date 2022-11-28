@@ -2551,9 +2551,9 @@ module.exports = (srv) => {
         // if(req.user) {
         //   sLoginUserId = req.user;
         // }
-        if(req.req.rawHeaders[1]) {
-           sLoginUserId = req.req.rawHeaders[1];
-        }
+        // if(req.req.rawHeaders[1]) {
+        //    sLoginUserId = req.req.rawHeaders[1];
+        // }
         console.log(req.req.rawHeaders[1]);
         for (let i = 0; i < liUniqueId.length; i++) {
             // Unique Id Characteristics

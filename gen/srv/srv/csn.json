@@ -4095,6 +4095,24 @@
           "type": "cds.String",
           "length": 30
         },
+        "MODEL_VERSION": {
+          "@title": "MODEL_VERSION",
+          "key": true,
+          "type": "cds.String",
+          "length": 20
+        },
+        "VERSION": {
+          "@title": "Version",
+          "key": true,
+          "type": "cds.String",
+          "length": 10
+        },
+        "SCENARIO": {
+          "@title": "Scenario",
+          "key": true,
+          "type": "cds.String",
+          "length": 32
+        },
         "RTR_QTY": {
           "@title": "Component Quantity",
           "type": "cds.Decimal",
@@ -17222,9 +17240,6 @@
         "Product": {
           "type": "cds.String",
           "length": 40
-        },
-        "ProdType": {
-          "type": "cds.Boolean"
         }
       }
     },

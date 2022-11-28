@@ -86,17 +86,22 @@ class IBPFunctions {
     async importFutureDemandcharPlan(request){   //aLocProd, request, vServ) {
         let lMessage = '', flag;
         let lVersion, lScenario, vFromDate, vToDate;
-       // let lilocProdReq = JSON.parse(request.data.MARKETDATA);
+        let lilocProdReq = JSON.parse(request.data.MARKETDATA);
         let lsData = {};
-        // for (let iloc = 0; iloc < aLocProd.length; iloc++) {
-            lsData.LOCATION_ID = "PL20";//aLocProd[iloc].LOCATION_ID;
-            lsData.PRODUCT_ID = "61AEAPP0E219";//aLocProd[iloc].PRODUCT_ID;
-            lVersion = '__BASELINE';//lilocProdReq[0].VERSION;
-            lScenario = 'BSL_SCENARIO';//lilocProdReq[0].SCENARIO;
-            vFromDate = '2022-11-21'//lilocProdReq[0].FROMDATE;
-            vToDate = '2022-12-21'// lilocProdReq[0].TODATE;
+        for (let iloc = 0; iloc < aLocProd.length; iloc++) {
+            lsData.LOCATION_ID = aLocProd[iloc].LOCATION_ID;//"PL20";//
+            lsData.PRODUCT_ID = aLocProd[iloc].PRODUCT_ID;//"61AEAPP0E219";//
+            lVersion = lilocProdReq[0].VERSION;//'__BASELINE';//
+            lScenario = lilocProdReq[0].SCENARIO;//'BSL_SCENARIO';//
+            vFromDate = lilocProdReq[0].FROMDATE;//'2022-11-21'//
+            vToDate = lilocProdReq[0].TODATE;//'2022-12-21'// 
             var resUrl = "/SBPVCP?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + lsData.LOCATION_ID + "' and PRDID eq '" + lsData.PRODUCT_ID + "' and PERIODID4_TSTAMP gt datetime'" + vFromDate + "' and PERIODID4_TSTAMP lt datetime'" + vToDate + "' and VERSIONID eq '" + lVersion + "' and SCENARIOID eq '" + lScenario + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
+            try{
             var req = await service.tx(req).get(resUrl);
+            }
+            catch(e){
+                flag = 'T';
+            }
             // if(req.length > 0){
             const vDelDate = new Date();
             const vDateDeld = vDelDate.toISOString().split('T')[0];
@@ -164,7 +169,12 @@ class IBPFunctions {
                 // else if (vServ === 'MKTAUTH') {
                 resUrlFplan = "/SBPVCP?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + lsData.LOCATION_ID + "' and PRDID eq '" + lsData.PRODUCT_ID + "' and PERIODID4_TSTAMP gt datetime'" + vFromDate + "' and PERIODID4_TSTAMP lt datetime'" + vToDate + "' and VERSIONID eq '" + lVersion + "' and SCENARIOID eq '" + lScenario + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
                 // }
+                try{
                 var req = await service.tx(request).get(resUrlFplan);
+                }
+                catch(e){
+                    flag = 'T';
+                }
                 const vDelDate = new Date();
                 const vDateDel = vDelDate.toISOString().split('T')[0];
                 try {
@@ -218,7 +228,7 @@ class IBPFunctions {
                     }
                 }
             }
-        // }
+        }
         return flag;
     }
 }

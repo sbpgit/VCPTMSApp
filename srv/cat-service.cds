@@ -281,11 +281,12 @@ service CatalogService @(impl : './lib/cat-service.js') {
     // function getCIRWeekly(FROMDATE : Date, TODATE : Date)  returns array of ds.cirWkly;
     function getUniqueIdItems(UNIQUE_ID : Integer)  returns array of ds.uniqueCharItems;
     // Publish CIR data to ECC
-    function postCIRQuantities(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), FROMDATE : Date, TODATE : Date, MODEL_VERSION : String(20), VALIDUSER : String(12)) returns String;
-    action   postCIRQuantitiesToS4(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), FROMDATE : Date, TODATE : Date, MODEL_VERSION : String(20), VALIDUSER : String(12));
+    function postCIRQuantities(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), FROMDATE : Date, TODATE : Date, MODEL_VERSION : String(20), VALIDUSER : String(12),USER_ID : String(100)) returns String;
+    action   postCIRQuantitiesToS4(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), FROMDATE : Date, TODATE : Date, MODEL_VERSION : String(20), VALIDUSER : String(12), USER_ID : String(100));
     function modifyCIRFirmQuantities(FLAG : String(1), CIR_QUANTITIES : String) returns String;
     function getCFAuthToken() returns String;
     function getCFDestinationUser(TOKEN : String) returns String;
+
 
     // EOI - Deepa
     entity getSalesStock        as projection on od.SALES_S;
@@ -315,4 +316,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
     // Get IBP Version Scenario
  
     entity getVerScnmaster          as projection on od.IBPVERSIONSCENARIO;
+
+    @requires: 'authenticated-user'
+    function getUserInfo() returns String;
 }
