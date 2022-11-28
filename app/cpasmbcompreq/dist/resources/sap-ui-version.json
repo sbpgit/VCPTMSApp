@@ -1,7 +1,11 @@
 {
 	"name": "cpapp.cpasmbcompreq",
 	"version": "0.0.1",
+<<<<<<< HEAD
 	"buildTimestamp": "202211261119",
+=======
+	"buildTimestamp": "202211251420",
+>>>>>>> f37579e49ac413754e08829b82cc38fee4db1cbc
 	"scmRevision": "",
 	"libraries": []
 }

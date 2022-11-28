@@ -178,16 +178,16 @@ service CatalogService @(impl : './lib/cat-service.js') {
     entity getBOMPred           as projection on V_COMPOD_TSPRED;
     // Generate Timeseries
     function generate_timeseriesH(LOCATION_ID : String(4), PRODUCT_ID : String(40))                                                                                                                                                                                              returns String;
-    function generate_timeseries(LOCATION_ID : String(4), PRODUCT_ID : String(40))                                                                       returns String;
+    function generate_timeseries(LOCATION_ID : String(4), PRODUCT_ID : String(40))                                                                                                                                                                                               returns String;
     //LOCATION_ID : String(4), PRODUCT_ID : String(40))
     // Generate Timeseries
-    // function generate_timeseriesF(LocProdData : String)    
-      function generate_timeseriesF(LOCATION_ID : String(4), PRODUCT_ID : String(40)) returns String;    // Local                                                                                                                                                                                                                        returns String;
+    // function generate_timeseriesF(LocProdData : String)
+    function generate_timeseriesF(LOCATION_ID : String(4), PRODUCT_ID : String(40))                                                                                                                                                                                              returns String; // Local                                                                                                                                                                                                                        returns String;
     action   generateTimeseries(LocProdData : String);
     // Generate Timeseries
     action   generateTimeseriesF(LocProdData : String);
     // Generate Unique
-    
+
     action   genUniqueID(LOCATION_ID : String(4), PRODUCT_ID : String(40));
     // function  genUniqueID(LOCATION_ID : String(4), PRODUCT_ID : String(40));
     // Generate Fully Configured Demand
@@ -210,7 +210,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
     entity getUniqueHeader      as projection on od.UNIQUE_ID_HEADER;
     entity getUniqueItem        as projection on V_UNIQUE_ID_ITEM;
     entity getUniqueId          as projection on V_UNIQUE_ID;
-    function gen_UniqueID(LOCATION_ID : String(4), PRODUCT_ID : String(40))                     returns String;
+    function gen_UniqueID(LOCATION_ID : String(4), PRODUCT_ID : String(40))                                                                                                                                                                                                      returns String;
     function changeUnique(UNIQUE_ID : Integer, LOCATION_ID : String(4), PRODUCT_ID : String(40), UID_TYPE : String(1), UNIQUE_DESC : String(50), ACTIVE : String(1), FLAG : String)                                                                                              returns String;
     function maintainUniqueChar(FLAG : String(1), UNIQUECHAR : String)                                                                                                                                                                                                           returns String;
 
@@ -253,14 +253,15 @@ service CatalogService @(impl : './lib/cat-service.js') {
     function maintainRestrHdr(LOCATION_ID : String(4), LINE_ID : String(40), RESTRICTION : String(30), RTR_DESC : String(30), VALID_FROM : Date, VALID_TO : Date, Flag : String(1))                                                                                              returns String;
     function maintainRestrDet(FLAG : String(1), RTRCHAR : String)                                                                                                                                                                                                                returns String;
     function maintainRestrDetail(FLAG : String(1), RTRCHAR : String)                                                                                                                                                                                                             returns String;
+    function getRestrLikelihood(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), FROMDATE : Date, TODATE : Date, MODEL_VERSION : String(20))                                                                                       returns array of ds.restrreq;
     ///*****/ CIR char rate /*****/
     entity getCIRCharRate       as projection on V_CIR_QTY_VARDESC; //V_CIR_CHAR_RATE;
     entity getCIRVerScen        as projection on V_CIRVERSCEN;
     /// /*****/ Market Authorizations /*****/
     action   trigrMAWeek();
-    action generateMarketAuth( MARKETDATA : String);
-    function generateMarketAuthfn() returns String;//LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), FROMDATE : Date, TODATE : Date, MODEL_VERSION : String(20))                                                                                             returns array of ds.cirWkly;
-    
+    action   generateMarketAuth(MARKETDATA : String);
+    function generateMarketAuthfn()                                                                                                                                                                                                                                              returns String; //LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), FROMDATE : Date, TODATE : Date, MODEL_VERSION : String(20))                                                                                             returns array of ds.cirWkly;
+
     ///*****/ Seed Order Creation /*****/
     entity getSeedOrder         as projection on od.SEEDORDER_HEADER;
     function maintainSeedOrder(FLAG : String(1), SEEDDATA : String)                                                                                                                                                                                                              returns String;
@@ -274,29 +275,29 @@ service CatalogService @(impl : './lib/cat-service.js') {
     entity getPlancfgPara       as projection on od.PARAMETER_VALUES;
     function postParameterValues(FLAG : String(1), PARAMVALS : String)                                                                                                                                                                                                           returns String;
     entity getCIRGenerated      as projection on od.CIR_GENERATED;
+
     ///*****/ CIR weekly /*****/
     @readonly
-    entity getCIRLog    as projection on od.CIRLOG;
+    entity getCIRLog            as projection on od.CIRLOG;
+
     function getCIRWeekly(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), FROMDATE : Date, TODATE : Date, MODEL_VERSION : String(20))                                                                                             returns array of ds.cirWkly;
     // function getCIRWeekly(FROMDATE : Date, TODATE : Date)  returns array of ds.cirWkly;
-    function getUniqueIdItems(UNIQUE_ID : Integer)  returns array of ds.uniqueCharItems;
+    function getUniqueIdItems(UNIQUE_ID : Integer)                                                                                                                                                                                                                               returns array of ds.uniqueCharItems;
     // Publish CIR data to ECC
     function postCIRQuantities(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), FROMDATE : Date, TODATE : Date, MODEL_VERSION : String(20), VALIDUSER : String(12),USER_ID : String(100)) returns String;
     action   postCIRQuantitiesToS4(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), FROMDATE : Date, TODATE : Date, MODEL_VERSION : String(20), VALIDUSER : String(12), USER_ID : String(100));
     function modifyCIRFirmQuantities(FLAG : String(1), CIR_QUANTITIES : String) returns String;
     function getCFAuthToken() returns String;
     function getCFDestinationUser(TOKEN : String) returns String;
-
-
+                                                                                                                                                                                                                             returns String;
     // EOI - Deepa
     entity getSalesStock        as projection on od.SALES_S;
-    
     ///*****/ Assembly Requirements /*****/
-    function genAssemblyreq(LOCATION_ID : String(4), PRODUCT_ID : String(40)) returns String;
+    function genAssemblyreq(LOCATION_ID : String(4), PRODUCT_ID : String(40))                                                                                                                                                                                                    returns String;
     action   generateAssemblyReq(LOCATION_ID : String(4), PRODUCT_ID : String(40));
     //VC Planner Documentation Maintenance- Pradeep
-    function moveData(Flag : String, CONTENT : String, PAGEID : Integer, DESCRIPTION : String)returns String;                                                                                                                                                                                  
-    function addPAGEHEADER(Flag1 : String, PAGEID : Integer, DESCRIPTION : String, PARENTNODEID : Integer, HEIRARCHYLEVEL : Integer) returns String;
+    function moveData(Flag : String, CONTENT : String, PAGEID : Integer, DESCRIPTION : String)                                                                                                                                                                                   returns String;
+    function addPAGEHEADER(Flag1 : String, PAGEID : Integer, DESCRIPTION : String, PARENTNODEID : Integer, HEIRARCHYLEVEL : Integer)                                                                                                                                             returns String;
     function addPAGEPARAGRAPH(Flag1 : String, PAGEID : Integer, DESCRIPTION : String, CONTENT : String)                                                                                                                                                                          returns String;
     function deletePAGEHEADER(Flag1 : String, PAGEID : Integer)                                                                                                                                                                                                                  returns String;
     function deletePAGEPARAGRAPH(Flag1 : String, PAGEID : Integer)                                                                                                                                                                                                               returns String;
@@ -314,9 +315,13 @@ service CatalogService @(impl : './lib/cat-service.js') {
 
 
     // Get IBP Version Scenario
- 
-    entity getVerScnmaster          as projection on od.IBPVERSIONSCENARIO;
 
+    entity getVerScnmaster      as projection on od.IBPVERSIONSCENARIO;
+
+
+    // Get User Info
     @requires: 'authenticated-user'
     function getUserInfo() returns String;
+
+    
 }
