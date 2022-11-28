@@ -1,99 +1,109 @@
-<mvc:View controllerName="cpapp.cpcompreq.controller.Home"
+<mvc:View
+    controllerName="cpapp.cprestrictionlikelihood.controller.Home"
     xmlns:mvc="sap.ui.core.mvc"
-    xmlns:core="sap.ui.core" displayBlock="true"
+    xmlns:core="sap.ui.core"
+    displayBlock="true"
     xmlns="sap.m"
+    xmlns:m="sap.m"
     xmlns:f="sap.ui.layout.form"
     xmlns:ux="sap.uxap"
     xmlns:l="sap.ui.layout"
     xmlns:html="http://www.w3.org/1999/xhtml"
-    xmlns:t="sap.ui.table">
-<ux:ObjectPageLayout id="ObjectPageLayout">
+    xmlns:t="sap.ui.table"
+>
+    <ux:ObjectPageLayout id="ObjectPageLayout">
         <ux:headerTitle>
-            <ux:ObjectPageDynamicHeaderTitle>
+            <ux:ObjectPageDynamicHeaderTitle id="_IDGenObjectPageDynamicHeaderTitle1">
                 <ux:expandedHeading>
-                    <Title text="{i18n>pageTitle}" class="boldText" titleAlignment="Center" />
+                    <HBox>
+                    <Title id="_IDGenTitle1" text="{i18n>pageTitle}" class="boldText" titleAlignment="Center" />
+                     <Button class="hdrBtnMarginHdr" id="_IDGenOverflowToolbarButton1" icon="sap-icon://sys-help" text="" type="Emphasized" press="onNavPress" tooltip="Help Document"/>
+                        </HBox>
                 </ux:expandedHeading>
                 <ux:snappedHeading>
-					<FlexBox fitContainer="true" alignItems="Center" >
-						<Title text="{i18n>pageTitle}" wrapping="true" />
-                        <Button class="hdrBtnMarginHdr" icon="sap-icon://sys-help" id="idNav" press="onNavPress" type="Emphasized" tooltip="Help Document"/>
-					</FlexBox>
-				</ux:snappedHeading>
+                    <HBox id="_IDGenFlexBox1" fitContainer="true" alignItems="Center" >
+						<Title id="_IDGenTitle2" text="{i18n>pageTitle}"  />
+					<Button class="hdrBtnMarginHdr" id="_IDGenOverflowToolbarButton2" icon="sap-icon://sys-help" text="" type="Emphasized" press="onNavPress" tooltip="Help Document"/>
+                            </HBox>
+                </ux:snappedHeading>
             </ux:ObjectPageDynamicHeaderTitle>
         </ux:headerTitle>
         <ux:headerContent>
-            <FlexBox wrap="Wrap" fitContainer="true">
-        <l:Grid defaultSpan="XL3 L3 M6 S12" >
-            <VBox >
-                <Label text=""/>
-                <SearchField id="headSearch" liveChange="onSearchCompReq" placeholder="Assembly, Structure Node" />
-            </VBox>
-            <VBox >
-                <Label text="Location" required="true"/>
-                <Input id="idloc" value=""  placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
-            </VBox>
-            <VBox >
+            <FlexBox id="_IDGenFlexBox2" wrap="Wrap" fitContainer="true">
+                <l:Grid id="_IDGenGrid1" defaultSpan="XL3 L3 M6 S12">
+                    <VBox id="_IDGenVBox1">
+                        <Label id="_IDGenLabel1" text="" />
+                        <SearchField id="headSearch" liveChange="onSearchCompReq" placeholder="Line, Product" />
+                    </VBox>
+                    <VBox id="_IDGenVBox2">
+                        <Label id="_IDGenLabel2" text="Location" required="true" />
+                        <Input id="idloc" value="" placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                    </VBox>
+                    <!-- <VBox >
                 <Label text="Configurable Product" required="true"/>
                 <Input id="idprod"  placeholder="Configurable Product" value="" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
 
-            </VBox>
-            <VBox >
-                <Label text="IBP Version" required="true"/>
-                <Input id="idver" value=""  placeholder="Version" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
-            </VBox>
-            <VBox >
-                <Label text="IBP Scenario" required="true"/>
-                <Input id="idscen" value=""  placeholder="Scenario" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
-
-            </VBox>
-            <VBox >
-                <Label text="Valid From" required="true"/>
-                <DatePicker id="fromDate"  value="" displayFormat="yyyy-MM-dd" valueFormat="yyyy-MM-dd" change="handleDateChange"/>
-
-            </VBox>
-            <VBox >
-                <Label text="Valid To" required="true"/>
-                <DatePicker id="toDate"  value="" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="handleDateChange"/>
-
-            </VBox>
-            <VBox >
-                <Label text="Model Version" />
-                <Select id="idModelVer" selectedKey="Active">
-                    <core:ListItem key="Active" text="Active"/>
-                    <core:ListItem key="Simulation" text="Simulation"/>
-                </Select>
-            </VBox>
-            <VBox >
-            <CheckBox id="idCheck1" select="onNonZero" text="Get Non-Zero" selected="true" />
-            </VBox>
-            <VBox >
+            </VBox> -->
+                    <VBox id="_IDGenVBox3">
+                        <Label id="_IDGenLabel3" text="IBP Version" required="true" />
+                        <Input id="idver" value="" placeholder="Version" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                    </VBox>
+                    <VBox id="_IDGenVBox4">
+                        <Label id="_IDGenLabel4" text="IBP Scenario" required="true" />
+                        <Input id="idscen" value="" placeholder="Scenario" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                    </VBox>
+                    <VBox id="_IDGenVBox5">
+                        <Label id="_IDGenLabel5" text="Valid From" required="true" />
+                        <DatePicker id="fromDate" value="" displayFormat="yyyy-MM-dd" valueFormat="yyyy-MM-dd" change="handleDateChange" />
+                    </VBox>
+                    <VBox id="_IDGenVBox6">
+                        <Label id="_IDGenLabel6" text="Valid To" required="true" />
+                        <DatePicker id="toDate" value="" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="handleDateChange" />
+                    </VBox>
+                    <VBox id="_IDGenVBox7">
+                        <Label id="_IDGenLabel7" text="Model Version" />
+                        <Select id="idModelVer" selectedKey="Active">
+                            <core:ListItem id="_IDGenListItem1" key="Active" text="Active" />
+                            <core:ListItem id="_IDGenListItem2" key="Simulation" text="Simulation" />
+                        </Select>
+                    </VBox>
+                    <!-- <HBox id="_IDGenHBox2"> -->
+                    <VBox id="_IDGenVBox8">
+                        <Label id="_IDGenLabel11" text="" />
+                        <CheckBox id="idCheck1" select="onNonZero" text="Get Non-Zero" selected="true" />
+                    </VBox>
+                    <!-- <VBox id="_IDGenVBox9" >
             <CheckBox id="idChkCritComp" select="onCriticalComponentCheck" text="Get Only Critical Assemblies" selected="false" />
-            </VBox>
-            <VBox>
-                <HBox>
-                    <Button text="Go" type="Emphasized" press="onGetData" tooltip="Get data based on filters" class="sapUiTinyMarginEnd"/>
-                    <Button text="Reset" type="Transparent" press="onResetDate" tooltip="Reset Valid To Date"/>
-                    <Button class="hdrBtnMargin" icon="sap-icon://sys-help" id="idNav1" press="onNavPress" type="Emphasized" tooltip="Help Document"/>
-                </HBox>
-            </VBox>
-            <Label text="Component" visible="false"/>
-            <Input id="idcomp"  value=""  placeholder="Component" visible="false" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
-            <Label text="Structure Node" visible="false"/>
-            <Input id="idstru" value=""  placeholder="Structure Node" visible="false" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
-        
-        </l:Grid>
-        </FlexBox>
+            </VBox> -->
+                    <VBox id="_IDGenVBox10">
+                        <HBox id="_IDGenHBox1">
+                            <VBox id="_IDGenVBox11">
+                                <Label id="_IDGenLabel12" text="" />
+                                <Button id="_IDGenButton1" text="Go" type="Emphasized" press="onGetData" tooltip="Get data based on filters" class="sapUiTinyMarginEnd" />
+                            </VBox>
+                            <VBox id="_IDGenVBox12">
+                                <Label id="_IDGenLabel13" text="" />
+                                <Button id="_IDGenButton2" text="Reset" type="Transparent" press="onResetDate" tooltip="Reset Valid To Date" />
+                            </VBox>
+                        </HBox>
+                    </VBox>
+                    <!-- </HBox> -->
+                    <Label id="_IDGenLabel8" text="Component" visible="false" />
+                    <Input id="idcomp" value="" placeholder="Component" visible="false" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                    <Label id="_IDGenLabel9" text="Structure Node" visible="false" />
+                    <Input id="idstru" value="" placeholder="Structure Node" visible="false" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                </l:Grid>
+            </FlexBox>
         </ux:headerContent>
         <ux:sections>
-            <ux:ObjectPageSection >
+            <ux:ObjectPageSection id="_IDGenObjectPageSection1">
                 <ux:subSections>
-                    <ux:ObjectPageSubSection>
+                    <ux:ObjectPageSubSection id="_IDGenObjectPageSubSection1">
                         <ux:blocks>
-            <t:Table id="idCompReq" fixedColumnCount="3" selectionMode="Single" alternateRowColors="true" enableSelectAll="false" visibleRowCount="15">
-                <t:columns>
-                </t:columns>
-            </t:Table>
-        </ux:blocks>
+                            <t:Table id="idCompReq" fixedColumnCount="3" selectionMode="Single" alternateRowColors="true" enableSelectAll="false" visibleRowCount="15">
+                                <t:columns />
+                            </t:Table>
+                        </ux:blocks>
                     </ux:ObjectPageSubSection>
                 </ux:subSections>
             </ux:ObjectPageSection>

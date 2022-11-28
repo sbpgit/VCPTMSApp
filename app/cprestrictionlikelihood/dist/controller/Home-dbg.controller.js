@@ -1,7 +1,7 @@
 sap.ui.define(
     [
         "sap/ui/core/mvc/Controller",
-        "cpapp/cpcompreq/controller/BaseController",
+        "cpapp/cprestrictionlikelihood/controller/BaseController",
         "sap/ui/model/json/JSONModel",
         "sap/ui/model/Filter",
         "sap/ui/model/FilterOperator",
@@ -24,7 +24,7 @@ sap.ui.define(
     ) {
         "use strict";
         var oGModel, that;
-        return BaseController.extend("cpapp.cpcompreq.controller.Home", {
+        return BaseController.extend("cpapp.cprestrictionlikelihood.controller.Home", {
             /**
              * Called when a controller is instantiated and its View controls (if available) are already created.
              * Can be used to modify the View before it is displayed, to bind event handlers and do other one-time initialization.
@@ -57,49 +57,49 @@ sap.ui.define(
                 this._oCore = sap.ui.getCore();
                 if (!this._valueHelpDialogLoc) {
                     this._valueHelpDialogLoc = sap.ui.xmlfragment(
-                        "cpapp.cpcompreq.view.LocDialog",
+                        "cpapp.cprestrictionlikelihood.view.LocDialog",
                         this
                     );
                     this.getView().addDependent(this._valueHelpDialogLoc);
                 }
                 if (!this._valueHelpDialogProd) {
                     this._valueHelpDialogProd = sap.ui.xmlfragment(
-                        "cpapp.cpcompreq.view.ProdDialog",
+                        "cpapp.cprestrictionlikelihood.view.ProdDialog",
                         this
                     );
                     this.getView().addDependent(this._valueHelpDialogProd);
                 }
                 if (!this._valueHelpDialogVer) {
                     this._valueHelpDialogVer = sap.ui.xmlfragment(
-                        "cpapp.cpcompreq.view.VersionDialog",
+                        "cpapp.cprestrictionlikelihood.view.VersionDialog",
                         this
                     );
                     this.getView().addDependent(this._valueHelpDialogVer);
                 }
                 if (!this._valueHelpDialogScen) {
                     this._valueHelpDialogScen = sap.ui.xmlfragment(
-                        "cpapp.cpcompreq.view.ScenarioDialog",
+                        "cpapp.cprestrictionlikelihood.view.ScenarioDialog",
                         this
                     );
                     this.getView().addDependent(this._valueHelpDialogScen);
                 }
                 if (!this._valueHelpDialogComp) {
                     this._valueHelpDialogComp = sap.ui.xmlfragment(
-                        "cpapp.cpcompreq.view.ComponentDialog",
+                        "cpapp.cprestrictionlikelihood.view.ComponentDialog",
                         this
                     );
                     this.getView().addDependent(this._valueHelpDialogComp);
                 }
                 if (!this._valueHelpDialogStru) {
                     this._valueHelpDialogStru = sap.ui.xmlfragment(
-                        "cpapp.cpcompreq.view.StructureNodeDialog",
+                        "cpapp.cprestrictionlikelihood.view.StructureNodeDialog",
                         this
                     );
                     this.getView().addDependent(this._valueHelpDialogStru);
                 }
                 if (!this._odGraphDialog) {
                     this._odGraphDialog = sap.ui.xmlfragment(
-                        "cpapp.cpcompreq.view.CompODBreakdown",
+                        "cpapp.cprestrictionlikelihood.view.CompODBreakdown",
                         this
                     );
                     this.getView().addDependent(this._odGraphDialog);
@@ -118,7 +118,7 @@ sap.ui.define(
                 that.colDate = "";
                 that.oList = this.byId("idTab");
                 this.oLoc = this.byId("idloc");
-                this.oProd = this.byId("idprod");
+                // this.oProd = this.byId("idprod");
                 this.oVer = this.byId("idver");
                 this.oScen = this.byId("idscen");
                 this.oComp = this.byId("idcomp");
@@ -148,9 +148,9 @@ sap.ui.define(
                 that.byId("fromDate").setValue(oDateL);
                 that.byId("toDate").setValue(oDateH);
 
-                this.oProdList = this._oCore.byId(
-                    this._valueHelpDialogProd.getId() + "-list"
-                );
+                // this.oProdList = this._oCore.byId(
+                //     this._valueHelpDialogProd.getId() + "-list"
+                // );
                 this.oLocList = this._oCore.byId(
                     this._valueHelpDialogLoc.getId() + "-list"
                 );
@@ -224,7 +224,7 @@ sap.ui.define(
                 that.byId("toDate").setValue("");
                 // oGModel.setProperty("/resetFlag", "X");
                 that.oLoc.setValue("");
-                that.oProd.setValue("");
+                // that.oProd.setValue("");
                 that.oVer.setValue("");
                 that.oScen.setValue("");
                 that.oComp.setValue("");
@@ -243,7 +243,7 @@ sap.ui.define(
 
                 // getting the input values
                 var oLoc = that.oGModel.getProperty("/SelectedLoc"),
-                    oProd = that.oGModel.getProperty("/SelectedProd"),
+                    // oProd = that.oGModel.getProperty("/SelectedProd"),
                     oVer = that.oGModel.getProperty("/SelectedVer"),
                     oScen = that.oGModel.getProperty("/SelectedScen"),
                     oComp = that.oGModel.getProperty("/SelectedComp"),
@@ -268,7 +268,7 @@ sap.ui.define(
                 // checking if the inpus are not undefined
                 if (
                     oLoc !== undefined &&
-                    oProd !== undefined &&
+                    // oProd !== undefined &&
                     oVer !== undefined &&
                     oScen !== undefined &&
                     oModelVersion !== undefined &&
@@ -292,7 +292,7 @@ sap.ui.define(
                         method: "GET",
                         urlParameters: {
                             LOCATION_ID: oLoc,
-                            PRODUCT_ID: oProd,
+                            // PRODUCT_ID: oProd,
                             VERSION: oVer,
                             SCENARIO: oScen,
                             COMPONENT: oComp,
@@ -300,7 +300,7 @@ sap.ui.define(
                             FROMDATE: vFromDate,
                             TODATE: vToDate,
                             MODEL_VERSION: oModelVersion,
-                            CRITICALKEY : bCriticalKey,
+                            // CRITICALKEY : bCriticalKey,
                         },
                         success: function (data) {
                             sap.ui.core.BusyIndicator.hide();
@@ -757,28 +757,28 @@ sap.ui.define(
                     }
                     // Version  Dialog
                 } else if (sId.includes("ver")) {
-                    if (that.byId("idloc").getValue() && that.byId("idprod").getValue()) {
+                    if (that.byId("idloc").getValue() ) {
                         that._valueHelpDialogVer.open();
                     } else {
                         MessageToast.show("Select Location and Product");
                     }
                     // Scenario Dialog
                 } else if (sId.includes("scen")) {
-                    if (that.byId("idloc").getValue() && that.byId("idprod").getValue()) {
+                    if (that.byId("idloc").getValue() ) {
                         that._valueHelpDialogScen.open();
                     } else {
                         MessageToast.show("Select Location and Product");
                     }
                     // Component Dialog
                 } else if (sId.includes("idcomp")) {
-                    if (that.byId("idloc").getValue() && that.byId("idprod").getValue()) {
+                    if (that.byId("idloc").getValue() ) {
                         that._valueHelpDialogComp.open();
                     } else {
                         MessageToast.show("Select Location and Product");
                     }
                     // Structure Dialog
                 } else if (sId.includes("stru")) {
-                    if (that.byId("idloc").getValue() && that.byId("idprod").getValue()) {
+                    if (that.byId("idloc").getValue() ) {
                         that._valueHelpDialogStru.open();
                     } else {
                         MessageToast.show("Select Location and Product");
@@ -804,9 +804,9 @@ sap.ui.define(
                     that._oCore
                         .byId(this._valueHelpDialogProd.getId() + "-searchField")
                         .setValue("");
-                    if (that.oProdList.getBinding("items")) {
-                        that.oProdList.getBinding("items").filter([]);
-                    }
+                    // if (that.oProdList.getBinding("items")) {
+                    //     that.oProdList.getBinding("items").filter([]);
+                    // }
                     // Version Dialog
                 } else if (sId.includes("Ver")) {
                     that._oCore
@@ -882,7 +882,7 @@ sap.ui.define(
                             })
                         );
                     }
-                    that.oProdList.getBinding("items").filter(oFilters);
+                    // that.oProdList.getBinding("items").filter(oFilters);
                     // Version
                 } else if (sId.includes("ver")) {
                     if (sQuery !== "") {
@@ -952,7 +952,7 @@ sap.ui.define(
                 //Location list
                 if (sId.includes("Loc")) {
                     that.oLoc = that.byId("idloc");
-                    that.oProd = that.byId("idprod");
+                    // that.oProd = that.byId("idprod");
                     aSelectedItems = oEvent.getParameter("selectedItems");
                     that.oLoc.setValue(aSelectedItems[0].getTitle());
                     that.oGModel.setProperty(
@@ -960,30 +960,58 @@ sap.ui.define(
                         aSelectedItems[0].getTitle()
                     );
                     // Removing the input box values when Location changed
-                    that.oProd.setValue("");
+                    // that.oProd.setValue("");
                     that.oVer.setValue("");
                     that.oScen.setValue("");
                     that.oComp.setValue("");
                     that.oStru.setValue("");
-                    that.oGModel.setProperty("/SelectedProd", "");
+                    // that.oGModel.setProperty("/SelectedProd", "");
 
                     // Calling service to get the Product data
-                      this.getModel("BModel").read("/getLocProdDet", {
-                        filters: [
-                          new Filter(
-                            "LOCATION_ID",
-                            FilterOperator.EQ,
-                            aSelectedItems[0].getTitle()
-                          ),
-                        ],
+                    //   this.getModel("BModel").read("/getLocProdDet", {
+                    //     filters: [
+                    //       new Filter(
+                    //         "LOCATION_ID",
+                    //         FilterOperator.EQ,
+                    //         aSelectedItems[0].getTitle()
+                    //       ),
+                    //     ],
                     // this.getModel("BModel").callFunction("/getAllProd", {
                     //     method: "GET",
                     //     urlParameters: {
                     //         LOCATION_ID: aSelectedItems[0].getTitle()
                     //     },
+                    //     success: function (oData) {
+                    //         that.prodModel.setData(oData);
+                    //         // that.oProdList.setModel(that.prodModel);
+                    //     },
+                    //     error: function (oData, error) {
+                    //         MessageToast.show("error");
+                    //     },
+                    // });
+                    this.getModel("BModel").callFunction("/getAllVerScen", {
+                        method: "GET",
+                        urlParameters: {
+                            LOCATION_ID: that.oGModel.getProperty("/SelectedLoc")
+                        },
                         success: function (oData) {
-                            that.prodModel.setData(oData);
-                            that.oProdList.setModel(that.prodModel);
+                            var adata = [];
+                            for (var i = 0; i < oData.results.length; i++) {
+                                if (oData.results[i].LOCATION_ID === aSelectedItems[0].getTitle()) {
+                                    adata.push({
+                                        "VERSION": oData.results[i].VERSION
+                                    });
+                                }
+                            }
+                            if (adata.length > 0) {
+                                that.verModel.setData({
+                                    results: adata
+                                });
+                                that.oVerList.setModel(that.verModel);
+                            }
+                            // success: function (oData) {
+                            //   that.verModel.setData(oData);
+                            //   that.oVerList.setModel(that.verModel);
                         },
                         error: function (oData, error) {
                             MessageToast.show("error");
@@ -992,9 +1020,9 @@ sap.ui.define(
 
                     // Product list
                 } else if (sId.includes("prod")) {
-                    that.oProd = that.byId("idprod");
+                    // that.oProd = that.byId("idprod");
                     aSelectedItems = oEvent.getParameter("selectedItems");
-                    that.oProd.setValue(aSelectedItems[0].getTitle());
+                    // that.oProd.setValue(aSelectedItems[0].getTitle());
                     that.oGModel.setProperty(
                         "/SelectedProd",
                         aSelectedItems[0].getTitle()
@@ -1019,34 +1047,7 @@ sap.ui.define(
                     //         aSelectedItems[0].getTitle()
                     //       ),
                     //     ],
-                    this.getModel("BModel").callFunction("/getAllVerScen", {
-                        method: "GET",
-                        urlParameters: {
-                            LOCATION_ID: that.oGModel.getProperty("/SelectedLoc")
-                        },
-                        success: function (oData) {
-                            var adata = [];
-                            for (var i = 0; i < oData.results.length; i++) {
-                                if (oData.results[i].PRODUCT_ID === aSelectedItems[0].getTitle()) {
-                                    adata.push({
-                                        "VERSION": oData.results[i].VERSION
-                                    });
-                                }
-                            }
-                            if (adata.length > 0) {
-                                that.verModel.setData({
-                                    results: adata
-                                });
-                                that.oVerList.setModel(that.verModel);
-                            }
-                            // success: function (oData) {
-                            //   that.verModel.setData(oData);
-                            //   that.oVerList.setModel(that.verModel);
-                        },
-                        error: function (oData, error) {
-                            MessageToast.show("error");
-                        },
-                    });
+                    
 
                     // Calling service to get the Component List data
                     this.getModel("BModel").read("/gBomHeaderet", {
@@ -1112,8 +1113,8 @@ sap.ui.define(
                         success: function (oData) {
                             var adata = [];
                             for (var i = 0; i < oData.results.length; i++) {
-                                if (oData.results[i].PRODUCT_ID === that.byId("idprod").getValue()
-                                    && oData.results[i].VERSION === aSelectedItems[0].getTitle()) {
+                                if (oData.results[i].VERSION === aSelectedItems[0].getTitle()) 
+                                {
                                     adata.push({
                                         "SCENARIO": oData.results[i].SCENARIO
                                     });

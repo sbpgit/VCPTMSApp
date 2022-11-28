@@ -128,13 +128,15 @@
             },
             "routes": [
                 {
-                    "name": "Home",
-                    "pattern": "",
-                    "target": "Home"
+                    "name": "RouteHome",
+                    "pattern": ":?query:",
+                    "target": [
+                        "TargetHome"
+                    ]
                 }
             ],
             "targets": {
-                "Home": {
+                "TargetHome": {
                     "viewType": "XML",
                     "transition": "slide",
                     "clearControlAggregation": false,

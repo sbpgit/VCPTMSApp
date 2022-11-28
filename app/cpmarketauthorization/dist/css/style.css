@@ -3,10 +3,52 @@
 .newHBox {
     margin-left: 250px;
 }
-.hdrBtnMargin{
-    margin-left:60rem;
+.hdrBtn{
+    margin-top:0.5rem;
 }
 
-.hdrBtnMarginHdr{
-    margin-left:70rem;
+/* .sapUiSizeCompact .sapMInputBaseHeightMargin {
+    margin-top:-0.185rem;
+} */
+.classLabel{
+    margin-bottom:2rem;
+}
+.classLabel1{
+    margin-top:2rem;
+    
+} 
+
+.classBttn{
+    margin-left:0.01rem;
+}
+
+.sapUiRespGridMedia-Std-LargeDesktop.sapUiRespGridHSpace0>.sapUiRespGridSpanXL2 {
+    width:9%;
+}
+.boldText{
+    margin-left:650px;
+}
+
+.sapMBarTitleAlignAuto .sapMBarPH {
+    justify-content: center;
+}
+
+.sapUiSizeCompact .sapMPageHeader .sapMIBar, .sapUiSizeCompact .sapMPageFooter .sapMIBar {
+    height: 50px;
+}
+.sapMIBar-CTX .sapMTitle {
+    color: #32363a;
+    text-shadow: none;
+    font-size: 20px;
+}
+
+.sapUiFormM>.sapUiFormResGrid>.sapUiFormResGridMain.sapUiRespGridOverflowHidden>div[class*="sapUiFormResGrid"] {
+    overflow: visible;
+    margin-top: 2rem;
+}
+.sapUiFormLblColon .sapUiRespGridMedia-Std-Desktop.sapUiFormResGridCont>:not(.sapUiRespGridSpanL12).sapUiFormElementLbl>.sapMLabel, .sapUiFormLblColon .sapUiRespGridMedia-Std-LargeDesktop.sapUiFormResGridCont>:not(.sapUiRespGridSpanXL12).sapUiFormElementLbl>.sapMLabel, .sapUiFormLblColon .sapUiFormResLayout .sapUiRFLRow:first-child>.sapUiRFLContainer:first-child:not(.sapUiRFLFullLength)>.sapUiRFLContainerContent.sapUiFormElementLbl>.sapMLabel, .sapUiFormLblColon .sapUiFormCL.sapUiFormCLSmallColumns :not(.sapUiFormCLCellsS12).sapUiFormElementLbl>.sapMLabel, .sapUiFormLblColon .sapUiFormCL.sapUiFormCLWideColumns :not(.sapUiFormCLCellsL12).sapUiFormElementLbl>.sapMLabel {
+    display: inline-block;
+    position: relative;
+    padding-right: 0.85em;
+    padding-top: 0.5rem;
 }

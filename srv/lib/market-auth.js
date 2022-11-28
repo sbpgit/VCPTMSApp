@@ -9,7 +9,7 @@ class MarketAuth {
     constructor() { }
 
 
-    async updateOptPer(lLocation, lProduct, lDate, lVersion, lScenario) {
+    async updateOptPer(lLocation, lProduct, lDate, lVersion, lScenario,req) {
         
         await GenF.logMessage(req, 'Started Sales Orders Processing');
 
@@ -31,9 +31,9 @@ class MarketAuth {
                                            FROM CP_DEF_MKTAUTH
                                           WHERE LOCATION_ID = '${lLocation}'
                                             AND PRODUCT_ID  = '${lProduct}'
-                                            ORDER BY LOCATION_ID
-                                                        PRODUCT_ID
-                                                        CHAR_NUM
+                                            ORDER BY LOCATION_ID,
+                                                        PRODUCT_ID,
+                                                        CHAR_NUM,
                                                         CHARVAL_NUM;`);
         // Get Future option percentages
         let liFutOptPer = await cds.run(`SELECT *
@@ -43,11 +43,11 @@ class MarketAuth {
                                             AND WEEK_DATE   = '${lDate}'
                                             AND VERSION     = '${lVersion}'
                                             AND SCENARIO    = '${lScenario}'
-                                            ORDER BY LOCATION_ID
-                                                     PRODUCT_ID
-                                                     VERSION
-                                                     SCENARIO
-                                                     CHAR_NUM
+                                            ORDER BY LOCATION_ID,
+                                                     PRODUCT_ID,
+                                                     VERSION,
+                                                     SCENARIO,
+                                                     CHAR_NUM,
                                                      CHARVAL_NUM;`);
 
         let lsCharVal = {};
