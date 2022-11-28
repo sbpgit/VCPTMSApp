@@ -289,7 +289,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
     function modifyCIRFirmQuantities(FLAG : String(1), CIR_QUANTITIES : String) returns String;
     function getCFAuthToken() returns String;
     function getCFDestinationUser(TOKEN : String) returns String;
-                                                                                                                                                                                                                             returns String;
+    
     // EOI - Deepa
     entity getSalesStock        as projection on od.SALES_S;
     ///*****/ Assembly Requirements /*****/
