@@ -10,7 +10,8 @@
                 <Label text="{i18n>daterange}"/>
 					<DateRangeSelection id="idDateRange" width="20%" delimiter="To" dateValue="" secondDateValue="" valueFormat="yyyy-MM-dd"
 							displayFormat="yyyy-MM-dd" change="handleDateChange" maxDate=""/>
-                            <Button class="hdrBtnMarginHdr" icon="sap-icon://sys-help" id="idNav" press="onNavPress" type="Emphasized" tooltip="Help Document"/>
+                <Button class="hdrBtnMarginHdr" icon="sap-icon://sys-help" id="idNav" press="onNavPress" type="Emphasized" tooltip="Help Document"/>
+                            
             </Toolbar>
         </customHeader>
         <content>

@@ -1,75 +1,75 @@
 {
-    "xsappname": "config_products",
-    "tenant-mode": "dedicated",
-    "description": "Security profile of called application",
-    "scopes": [
-        {
-            "name": "uaa.user",
-            "description": "UAA"
-        },
-        {
-            "name": "$XSAPPNAME.User",
-            "description": "UAA Display"
-        },
-        {
-            "name": "$XSAPPNAME.Developer",
-            "description": "UAA Display"
-        },
-        {
-            "name": "$XSAPPNAME.JobsViewer",
-            "description": "Jobs Viewer"
-        },
-        {
-            "name": "$XSAPPNAME.JobsManager",
-            "description": "Jobs Manager"
-        }
-    ],
-    "role-templates": [
-        {
-            "name": "Token_Exchange",
-            "description": "UAA",
-            "scope-references": [
-                "uaa.user"
-            ]
-        },
-        {
-            "name": "VCPDeveloperRole",
-            "description": "UAA VCPDeveloperRole",
-            "scope-references": [
-                "$XSAPPNAME.Developer"
-            ]
-        },
-        {
-            "name": "VCPUserRole",
-            "description": "UAA VCPUserRole",
-            "scope-references": [
-                "$XSAPPNAME.User"
-            ]
-        },
-        {
-            "name": "JobsViewer",
-            "description": "Jobs Viewer",
-            "scope-references": [
-              "$XSAPPNAME.JobsViewer"
-            ],
-            "attribute-references": []
-        },
-        {
-            "name": "JobsManager",
-            "description": "Jobs Manager",
-            "scope-references": [
-              "$XSAPPNAME.JobsManager"
-            ],
-            "attribute-references": []
-        }
-    ],
-    "oauth2-configuration": {
-        "token-validity": 3600,
-        "redirect-uris": [
-            "https://*.hana.ondemand.com/**",
-            "https://*.applicationstudio.cloud.sap/**"
-        ]
+  "xsappname": "config_products",
+  "tenant-mode": "dedicated",
+  "description": "Security profile of called application",
+  "scopes": [
+    {
+      "name": "uaa.user",
+      "description": "UAA"
     },
-    "attributes": [],
+    {
+      "name": "$XSAPPNAME.User",
+      "description": "UAA Display"
+    },
+    {
+      "name": "$XSAPPNAME.Developer",
+      "description": "UAA Display"
+    },
+    {
+      "name": "$XSAPPNAME.JobsViewer",
+      "description": "Jobs Viewer"
+    },
+    {
+      "name": "$XSAPPNAME.JobsManager",
+      "description": "Jobs Manager"
+    }
+  ],
+  "role-templates": [
+    {
+      "name": "Token_Exchange",
+      "description": "UAA",
+      "scope-references": [
+        "uaa.user"
+      ]
+    },
+    {
+      "name": "VCPDeveloperRole",
+      "description": "UAA VCPDeveloperRole",
+      "scope-references": [
+        "$XSAPPNAME.Developer"
+      ]
+    },
+    {
+      "name": "VCPUserRole",
+      "description": "UAA VCPUserRole",
+      "scope-references": [
+        "$XSAPPNAME.User"
+      ]
+    },
+    {
+      "name": "JobsViewer",
+      "description": "Jobs Viewer",
+      "scope-references": [
+        "$XSAPPNAME.JobsViewer"
+      ],
+      "attribute-references": []
+    },
+    {
+      "name": "JobsManager",
+      "description": "Jobs Manager",
+      "scope-references": [
+        "$XSAPPNAME.JobsManager"
+      ],
+      "attribute-references": []
+    }
+  ],
+  "oauth2-configuration": {
+    "token-validity": 3600,
+    "redirect-uris": [
+      "https://*.hana.ondemand.com/**",
+      "https://*.applicationstudio.cloud.sap/**"
+    ]
+  },
+  "attributes": [],
   "authorities-inheritance": false
 }

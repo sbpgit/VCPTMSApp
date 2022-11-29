@@ -2210,7 +2210,7 @@ module.exports = cds.service.impl(async function () {
                         try {
                             await cds.run(modQuery);
                             flag = 'S';
-                            obgenMktAuth.updateOptPer(req[i].LOCID, req[i].PRDID, vWeekDate, req[i].VERSIONID, vScenario);
+                            obgenMktAuth.updateOptPer(req[i].LOCID, req[i].PRDID, vWeekDate, req[i].VERSIONID, vScenario,request);
                         }
                         catch (err) {
                             flag = 'E';

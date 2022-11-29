@@ -2667,6 +2667,7 @@ module.exports = (srv) => {
         let oUniqueIdChars = {};
         let aUniqueIdChars = [];
         let oEntry = {};
+        sLoginUserId = req.data.USER_ID;
         // if(req.user) {
         //   sLoginUserId = req.user;
         // }
@@ -3170,6 +3171,13 @@ module.exports = (srv) => {
         return ret_response;        
 
     });
+
+
+    srv.on('getUserInfo', async (req) => {
+          console.log("Login User", req.user.id); 
+          return req.user.id;
+    });
+
 
 
     // EOI Deepa
