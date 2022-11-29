@@ -53,6 +53,7 @@ sap.ui.define(
                 that.locProdCharModel.setSizeLimit(1000);
 
                 that.sCFUserDestination = "";
+                that.sUserId = "";
 
                 // To Store changed CIR Quantities
                 that.aCIRQty = [];
@@ -90,7 +91,8 @@ sap.ui.define(
                 }
                 
                 // Get User Configured in Cloud Foundry Destination User
-                that.getValidUser();               
+                that.getValidUser();  
+                that.getUserInfo();             
 
             },
 
@@ -1175,7 +1177,8 @@ sap.ui.define(
                     FROMDATE: oEntry.FROMDATE,
                     TODATE: oEntry.TODATE,
                     MODEL_VERSION: oEntry.MODEL_VERSION,
-                    VALIDUSER: that.sCFUserDestination
+                    VALIDUSER: that.sCFUserDestination,
+                    USER_ID: that.sUserId
                 };
                 // that.oGModel.setProperty("/vcrulesData", vRuleslist);
                 // var vcRuleList = that.oGModel.getProperty("/vcrulesData");
@@ -1711,6 +1714,23 @@ sap.ui.define(
                 } else {
                     that.oTable.getBinding().filter(aFilter);
                 }
+            },
+
+            /**
+             * 
+             */
+            getUserInfo: function(oEvent) {
+                var oModel = that.getOwnerComponent().getModel('CIRModel');
+                oModel.callFunction("/getUserInfo", {
+                    method: "GET", 
+                    success: function (oData, oResponse) {
+                        // sap.m.MessageToast.show(oResponse.data.getUserInfo);
+                        that.sUserId = oResponse.data.getUserInfo;
+                    },
+                    error: function (oResponse) {
+                        sap.m.MessageToast.show("Failed to get User Info!");
+                    },
+                });
             }
 
         });

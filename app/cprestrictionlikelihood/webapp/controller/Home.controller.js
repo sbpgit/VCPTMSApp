@@ -1,3 +1,5 @@
+
+
 sap.ui.define(
     [
         "sap/ui/core/mvc/Controller",
@@ -118,7 +120,7 @@ sap.ui.define(
                 that.colDate = "";
                 that.oList = this.byId("idTab");
                 this.oLoc = this.byId("idloc");
-                // this.oProd = this.byId("idprod");
+                this.oProd = this.byId("idprod");
                 this.oVer = this.byId("idver");
                 this.oScen = this.byId("idscen");
                 this.oComp = this.byId("idcomp");
@@ -148,9 +150,9 @@ sap.ui.define(
                 that.byId("fromDate").setValue(oDateL);
                 that.byId("toDate").setValue(oDateH);
 
-                // this.oProdList = this._oCore.byId(
-                //     this._valueHelpDialogProd.getId() + "-list"
-                // );
+                this.oProdList = this._oCore.byId(
+                    this._valueHelpDialogProd.getId() + "-list"
+                );
                 this.oLocList = this._oCore.byId(
                     this._valueHelpDialogLoc.getId() + "-list"
                 );
@@ -243,19 +245,19 @@ sap.ui.define(
 
                 // getting the input values
                 var oLoc = that.oGModel.getProperty("/SelectedLoc"),
-                    // oProd = that.oGModel.getProperty("/SelectedProd"),
+                    oProd = that.oGModel.getProperty("/SelectedProd"),
                     oVer = that.oGModel.getProperty("/SelectedVer"),
                     oScen = that.oGModel.getProperty("/SelectedScen"),
-                    oComp = that.oGModel.getProperty("/SelectedComp"),
-                    oStru = that.oGModel.getProperty("/SelectedStru"),
-                    oModelVersion = that.byId("idModelVer").getSelectedKey(),
-                    bCriticalKey = '';
+                    // oComp = that.oGModel.getProperty("/SelectedComp"),
+                    // oStru = that.oGModel.getProperty("/SelectedStru"),
+                    oModelVersion = that.byId("idModelVer").getSelectedKey();
+                //     bCriticalKey = '';
 
-                if(that.byId("idChkCritComp").getSelected() === true) {
-                    bCriticalKey = 'X';
-                } else {
-                    bCriticalKey = ' ';
-                }
+                // if(that.byId("idChkCritComp").getSelected() === true) {
+                //     bCriticalKey = 'X';
+                // } else {
+                //     bCriticalKey = ' ';
+                // }
 
                 that.oGModel.setProperty(
                     "/SelectedMV",
@@ -265,10 +267,10 @@ sap.ui.define(
                 var vToDate = this.byId("toDate").getDateValue();
 
 
-                // checking if the inpus are not undefined
+                // checking if the inputs are not undefined
                 if (
                     oLoc !== undefined &&
-                    // oProd !== undefined &&
+                    oProd !== undefined &&
                     oVer !== undefined &&
                     oScen !== undefined &&
                     oModelVersion !== undefined &&
@@ -280,23 +282,23 @@ sap.ui.define(
                     // Calling function to convert date string
                     vFromDate = that.getDateFn(vFromDate);
                     vToDate = that.getDateFn(vToDate);
-                    if (oComp === undefined) {
-                        oComp = "";
-                    }
-                    if (oStru === undefined) {
-                        oStru = "";
-                    }
+                    // if (oComp === undefined) {
+                    //     oComp = "";
+                    // }
+                    // if (oStru === undefined) {
+                    //     oStru = "";
+                    // }
 
                     // calling service based on filters
-                    that.getModel("BModel").callFunction("/getCompReqFWeekly", {
+                    that.getModel("BModel").callFunction("/getRestrLikelihood", {
                         method: "GET",
                         urlParameters: {
                             LOCATION_ID: oLoc,
-                            // PRODUCT_ID: oProd,
+                            PRODUCT_ID: oProd,
                             VERSION: oVer,
                             SCENARIO: oScen,
-                            COMPONENT: oComp,
-                            STRUCNODE: oStru,
+                            // COMPONENT: oComp,
+                            // STRUCNODE: oStru,
                             FROMDATE: vFromDate,
                             TODATE: vToDate,
                             MODEL_VERSION: oModelVersion,
@@ -324,7 +326,7 @@ sap.ui.define(
                 } else {
                     sap.ui.core.BusyIndicator.hide();
                     sap.m.MessageToast.show(
-                        "Please select a Location/Product/Version/Scenario/Date Range"
+                        "Please select a Location/Version/Scenario/Date Range"
                     );
                 }
             },
@@ -392,12 +394,12 @@ sap.ui.define(
 
                 // Looping through the data to generate columns
                 for (var i = 0; i < that.tableData.length; i++) {
-                    sRowData.ItemNum = that.tableData[i].ITEM_NUM;
-                    sRowData.Assembly = that.tableData[i].COMPONENT;
-                    sRowData.StructureNode = that.tableData[i].STRUC_NODE;
-                    sRowData.Type = that.tableData[i].QTYTYPE;
+                    sRowData.LINE_ID = that.tableData[i].LINE_ID;
+                    sRowData.PRODUCT_ID = that.tableData[i].PRODUCT_ID;
+                    // sRowData.StructureNode = that.tableData[i].STRUC_NODE;
+                    // sRowData.Type = that.tableData[i].QTYTYPE;
                     weekIndex = 1;
-                    for (let index = 3; index < liDates.length; index++) {
+                    for (let index = 2; index < liDates.length; index++) {
                         sRowData[liDates[index].CAL_DATE] =
                             that.tableData[i]["WEEK" + weekIndex];
                         weekIndex++;
@@ -416,9 +418,8 @@ sap.ui.define(
                     var columnName = oContext.getObject().CAL_DATE;
                     // Checking column names and applying sap.m.Link to column values
                     if (
-                        columnName === "Assembly" ||
-                        columnName === "ItemNum" ||
-                        columnName === "StructureNode"
+                        columnName === "LineID" ||
+                        columnName === "ProductID" 
                     ) {
                         return new sap.ui.table.Column({
                             width: "8rem",
@@ -635,15 +636,13 @@ sap.ui.define(
                     liDates = [];
                 var vDateSeries = imFromDate;
 
-                lsDates.CAL_DATE = "Assembly"; //Component";
+                lsDates.CAL_DATE = "LineID"; //Component";
                 liDates.push(lsDates);
                 lsDates = {};
-                lsDates.CAL_DATE = "ItemNum";
+                lsDates.CAL_DATE = "ProductID";
                 liDates.push(lsDates);
                 lsDates = {};
-                lsDates.CAL_DATE = "StructureNode";
-                liDates.push(lsDates);
-                lsDates = {};
+                
                 // Calling function to get the next Sunday date of From date
                 lsDates.CAL_DATE = that.getNextMonday(vDateSeries);
                 vDateSeries = lsDates.CAL_DATE;
@@ -760,30 +759,31 @@ sap.ui.define(
                     if (that.byId("idloc").getValue() ) {
                         that._valueHelpDialogVer.open();
                     } else {
-                        MessageToast.show("Select Location and Product");
+                        MessageToast.show("Select Location");
                     }
                     // Scenario Dialog
                 } else if (sId.includes("scen")) {
                     if (that.byId("idloc").getValue() ) {
                         that._valueHelpDialogScen.open();
                     } else {
-                        MessageToast.show("Select Location and Product");
+                        MessageToast.show("Select Location");
                     }
                     // Component Dialog
-                } else if (sId.includes("idcomp")) {
-                    if (that.byId("idloc").getValue() ) {
-                        that._valueHelpDialogComp.open();
-                    } else {
-                        MessageToast.show("Select Location and Product");
-                    }
-                    // Structure Dialog
-                } else if (sId.includes("stru")) {
-                    if (that.byId("idloc").getValue() ) {
-                        that._valueHelpDialogStru.open();
-                    } else {
-                        MessageToast.show("Select Location and Product");
-                    }
-                }
+                } 
+                // else if (sId.includes("idcomp")) {
+                //     if (that.byId("idloc").getValue() ) {
+                //         that._valueHelpDialogComp.open();
+                //     } else {
+                //         MessageToast.show("Select Location and Product");
+                //     }
+                //     // Structure Dialog
+                // } else if (sId.includes("stru")) {
+                //     if (that.byId("idloc").getValue() ) {
+                //         that._valueHelpDialogStru.open();
+                //     } else {
+                //         MessageToast.show("Select Location and Product");
+                //     }
+                // }
             },
 
             /**
@@ -882,9 +882,9 @@ sap.ui.define(
                             })
                         );
                     }
-                    // that.oProdList.getBinding("items").filter(oFilters);
+                    that.oProdList.getBinding("items").filter(oFilters);
                     // Version
-                } else if (sId.includes("ver")) {
+                } else if (sId.includes("Ver")) {
                     if (sQuery !== "") {
                         oFilters.push(
                             new Filter({
@@ -909,34 +909,8 @@ sap.ui.define(
                         );
                     }
                     that.oScenList.getBinding("items").filter(oFilters);
-                    // Component
-                } else if (sId.includes("Comp")) {
-                    if (sQuery !== "") {
-                        oFilters.push(
-                            new Filter({
-                                filters: [
-                                    new Filter("COMPONENT", FilterOperator.Contains, sQuery),
-                                    new Filter("ITEM_NUM", FilterOperator.Contains, sQuery),
-                                ],
-                                and: false,
-                            })
-                        );
-                    }
-                    that.oCompList.getBinding("items").filter(oFilters);
-                    // Structure Node
-                } else if (sId.includes("Stru")) {
-                    if (sQuery !== "") {
-                        oFilters.push(
-                            new Filter({
-                                filters: [
-                                    new Filter("STRUC_NODE", FilterOperator.Contains, sQuery),
-                                ],
-                                and: false,
-                            })
-                        );
-                    }
-                    that.oStruList.getBinding("items").filter(oFilters);
-                }
+                    
+                } 
             },
 
             /**
@@ -976,19 +950,19 @@ sap.ui.define(
                     //         aSelectedItems[0].getTitle()
                     //       ),
                     //     ],
-                    // this.getModel("BModel").callFunction("/getAllProd", {
-                    //     method: "GET",
-                    //     urlParameters: {
-                    //         LOCATION_ID: aSelectedItems[0].getTitle()
-                    //     },
-                    //     success: function (oData) {
-                    //         that.prodModel.setData(oData);
-                    //         // that.oProdList.setModel(that.prodModel);
-                    //     },
-                    //     error: function (oData, error) {
-                    //         MessageToast.show("error");
-                    //     },
-                    // });
+                    this.getModel("BModel").callFunction("/getAllProd", {
+                        method: "GET",
+                        urlParameters: {
+                            LOCATION_ID: aSelectedItems[0].getTitle()
+                        },
+                        success: function (oData) {
+                            that.prodModel.setData(oData);
+                            that.oProdList.setModel(that.prodModel);
+                        },
+                        error: function (oData, error) {
+                            MessageToast.show("error");
+                        },
+                    });
                     this.getModel("BModel").callFunction("/getAllVerScen", {
                         method: "GET",
                         urlParameters: {
@@ -996,18 +970,42 @@ sap.ui.define(
                         },
                         success: function (oData) {
                             var adata = [];
+                            var bdata=[];
                             for (var i = 0; i < oData.results.length; i++) {
                                 if (oData.results[i].LOCATION_ID === aSelectedItems[0].getTitle()) {
                                     adata.push({
                                         "VERSION": oData.results[i].VERSION
                                     });
-                                }
+                                    bdata.push({
+                                        "SCENARIO": oData.results[i].SCENARIO
+                                    });
+                                }   
                             }
-                            if (adata.length > 0) {
+                            var filadata = adata.filter((obj, pos, arr) => {
+                                return (
+                                    arr.map((mapObj) => mapObj.VERSION).indexOf(obj.VERSION) == pos
+                                );
+                            });
+
+                            var filScen = bdata.filter((obj, pos, arr) => {
+                                return (
+                                    arr.map((mapObj) => mapObj.SCENARIO).indexOf(obj.SCENARIO) == pos
+                                );
+                            });
+
+
+
+                            if (filadata.length > 0) {
                                 that.verModel.setData({
-                                    results: adata
+                                    results: filadata
                                 });
                                 that.oVerList.setModel(that.verModel);
+                            }
+                            if (filScen.length > 0) {
+                                that.scenModel.setData({
+                                    results: filScen
+                                });
+                                that.oScenList.setModel(that.scenModel);
                             }
                             // success: function (oData) {
                             //   that.verModel.setData(oData);
@@ -1020,9 +1018,9 @@ sap.ui.define(
 
                     // Product list
                 } else if (sId.includes("prod")) {
-                    // that.oProd = that.byId("idprod");
+                    that.oProd = that.byId("idprod");
                     aSelectedItems = oEvent.getParameter("selectedItems");
-                    // that.oProd.setValue(aSelectedItems[0].getTitle());
+                    that.oProd.setValue(aSelectedItems[0].getTitle());
                     that.oGModel.setProperty(
                         "/SelectedProd",
                         aSelectedItems[0].getTitle()
@@ -1050,27 +1048,27 @@ sap.ui.define(
                     
 
                     // Calling service to get the Component List data
-                    this.getModel("BModel").read("/gBomHeaderet", {
-                        filters: [
-                            new Filter(
-                                "LOCATION_ID",
-                                FilterOperator.EQ,
-                                that.oGModel.getProperty("/SelectedLoc")
-                            ),
-                            new Filter(
-                                "PRODUCT_ID",
-                                FilterOperator.EQ,
-                                aSelectedItems[0].getTitle()
-                            ),
-                        ],
-                        success: function (oData) {
-                            that.compModel.setData(oData);
-                            that.oCompList.setModel(that.compModel);
-                        },
-                        error: function (oData, error) {
-                            MessageToast.show("error");
-                        },
-                    });
+                    // this.getModel("BModel").read("/gBomHeaderet", {
+                    //     filters: [
+                    //         new Filter(
+                    //             "LOCATION_ID",
+                    //             FilterOperator.EQ,
+                    //             that.oGModel.getProperty("/SelectedLoc")
+                    //         ),
+                    //         new Filter(
+                    //             "PRODUCT_ID",
+                    //             FilterOperator.EQ,
+                    //             aSelectedItems[0].getTitle()
+                    //         ),
+                    //     ],
+                    //     success: function (oData) {
+                    //         that.compModel.setData(oData);
+                    //         that.oCompList.setModel(that.compModel);
+                    //     },
+                    //     error: function (oData, error) {
+                    //         MessageToast.show("error");
+                    //     },
+                    // });
 
                     // IBP Vaerion list
                 } else if (sId.includes("Ver")) {
@@ -1105,33 +1103,7 @@ sap.ui.define(
                     //     success: function (oData) {
                     //       that.scenModel.setData(oData);
                     //       that.oScenList.setModel(that.scenModel);
-                    this.getModel("BModel").callFunction("/getAllVerScen", {
-                        method: "GET",
-                        urlParameters: {
-                            LOCATION_ID: that.oGModel.getProperty("/SelectedLoc")
-                        },
-                        success: function (oData) {
-                            var adata = [];
-                            for (var i = 0; i < oData.results.length; i++) {
-                                if (oData.results[i].VERSION === aSelectedItems[0].getTitle()) 
-                                {
-                                    adata.push({
-                                        "SCENARIO": oData.results[i].SCENARIO
-                                    });
-                                }
-                            }
-                            if (adata.length > 0) {
-                                that.scenModel.setData({
-                                    results: adata
-                                });
-                                that.oScenList.setModel(that.scenModel);
-                            }
-
-                        },
-                        error: function (oData, error) {
-                            MessageToast.show("error");
-                        },
-                    });
+                    // 
                     // Scenario List
                 } else if (sId.includes("scen")) {
                     this.oScen = that.byId("idscen");
@@ -1142,63 +1114,64 @@ sap.ui.define(
                         aSelectedItems[0].getTitle()
                     );
                     // Component List
-                } else if (sId.includes("Comp")) {
-                    this.oComp = that.byId("idcomp");
-                    aSelectedItems = oEvent.getParameter("selectedItems");
-                    that.oComp.setValue(aSelectedItems[0].getTitle());
-                    that.oGModel.setProperty(
-                        "/SelectedComp",
-                        aSelectedItems[0].getTitle()
-                    );
-                    that.oGModel.setProperty(
-                        "/SelectedCompItem",
-                        aSelectedItems[0].getDescription()
-                    );
+                } 
+                // else if (sId.includes("Comp")) {
+                //     this.oComp = that.byId("idcomp");
+                //     aSelectedItems = oEvent.getParameter("selectedItems");
+                //     that.oComp.setValue(aSelectedItems[0].getTitle());
+                //     that.oGModel.setProperty(
+                //         "/SelectedComp",
+                //         aSelectedItems[0].getTitle()
+                //     );
+                //     that.oGModel.setProperty(
+                //         "/SelectedCompItem",
+                //         aSelectedItems[0].getDescription()
+                //     );
 
-                    that.oStru.setValue("");
+                //     that.oStru.setValue("");
 
-                    // Calling service to get the Structure Node data
-                    this.getModel("BModel").read("/genCompStrcNode", {
-                        filters: [
-                            new Filter(
-                                "LOCATION_ID",
-                                FilterOperator.EQ,
-                                that.oGModel.getProperty("/SelectedLoc")
-                            ),
-                            new Filter(
-                                "PRODUCT_ID",
-                                FilterOperator.EQ,
-                                that.oGModel.getProperty("/SelectedProd")
-                            ),
-                            new Filter(
-                                "COMPONENT",
-                                FilterOperator.EQ,
-                                that.oGModel.getProperty("/SelectedComp")
-                            ),
-                            new Filter(
-                                "ITEM_NUM",
-                                FilterOperator.EQ,
-                                that.oGModel.getProperty("/SelectedCompItem")
-                            ),
-                        ],
-                        success: function (oData) {
-                            that.struModel.setData(oData);
-                            that.oStruList.setModel(that.struModel);
-                        },
-                        error: function (oData, error) {
-                            MessageToast.show("error");
-                        },
-                    });
-                    // Structure Node List
-                } else if (sId.includes("Stru")) {
-                    this.oStru = that.byId("idstru");
-                    aSelectedItems = oEvent.getParameter("selectedItems");
-                    that.oStru.setValue(aSelectedItems[0].getTitle());
-                    that.oGModel.setProperty(
-                        "/SelectedStru",
-                        aSelectedItems[0].getTitle()
-                    );
-                }
+                //     // Calling service to get the Structure Node data
+                //     this.getModel("BModel").read("/genCompStrcNode", {
+                //         filters: [
+                //             new Filter(
+                //                 "LOCATION_ID",
+                //                 FilterOperator.EQ,
+                //                 that.oGModel.getProperty("/SelectedLoc")
+                //             ),
+                //             new Filter(
+                //                 "PRODUCT_ID",
+                //                 FilterOperator.EQ,
+                //                 that.oGModel.getProperty("/SelectedProd")
+                //             ),
+                //             new Filter(
+                //                 "COMPONENT",
+                //                 FilterOperator.EQ,
+                //                 that.oGModel.getProperty("/SelectedComp")
+                //             ),
+                //             new Filter(
+                //                 "ITEM_NUM",
+                //                 FilterOperator.EQ,
+                //                 that.oGModel.getProperty("/SelectedCompItem")
+                //             ),
+                //         ],
+                //         success: function (oData) {
+                //             that.struModel.setData(oData);
+                //             that.oStruList.setModel(that.struModel);
+                //         },
+                //         error: function (oData, error) {
+                //             MessageToast.show("error");
+                //         },
+                //     });
+                //     // Structure Node List
+                // } else if (sId.includes("Stru")) {
+                //     this.oStru = that.byId("idstru");
+                //     aSelectedItems = oEvent.getParameter("selectedItems");
+                //     that.oStru.setValue(aSelectedItems[0].getTitle());
+                //     that.oGModel.setProperty(
+                //         "/SelectedStru",
+                //         aSelectedItems[0].getTitle()
+                //     );
+                // }
                 that.handleClose(oEvent);
             },
 

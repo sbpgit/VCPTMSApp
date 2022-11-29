@@ -20,7 +20,7 @@ const obibpfucntions = new IBPFunc();
  * */
 
 module.exports = (srv) => {
-    
+
     // const { SBPVCP } = srv.entities;
     // srv.on('READ', SBPVCP, request => {
     //     try {
@@ -53,27 +53,73 @@ module.exports = (srv) => {
         // console.log(xsuaa);
         return await xsuaa.get("/userinfo");
     });
-    srv.after('READ', 'getLocationtemp', async (data, req) => {
-        vUser = req.headers['x-username'];
+     /* Filter Products based on Authorization */
+    srv.after('READ', 'getLocProdDet', async (data, req) => {
+        // console.log("User:", req.user.id);
+        let aFilteredResults = [];
+        vUser = req.user.id;
+
+        const li_roleparam = await cds.run(            `
+            SELECT * FROM "CP_USER_AUTHOBJ"
+            WHERE "USER" = '`+ vUser + `'`
+            // AND PARAMETER = 'LOCATION_ID'`
+        );
+
+        if (li_roleparam.length > 0) {
+            let aResults = req.results;
+            aFilteredResults = aResults.filter((el) => {
+                return li_roleparam.some((f) => {
+                    return f.PARAMETER === el.PRODUCT_ID && f.AUTH_GROUP === el.AUTH_GROUP;
+                });
+            });            
+        } 
+        if(aFilteredResults.length > 0) {
+            req.results = aFilteredResults;
+        }
+        
+    });
+
+    /* Filter Locations based on Authorization */
+    srv.after('READ', 'getLocation', async (data, req) => {
+        let aFilteredResults = [];
+        // vUser = req.headers['x-username'];
+        // console.log("User:", req.user.id);
+        vUser = req.user.id;
+        
         // return {
         //     id:         req.user.id,
         //     firstName:  req.req.authInfo.getGivenName(),
         //     lastName:   req.req.authInfo.getFamilyName(),
         //     email:      req.req.authInfo.getEmail()
         //   }
-        console.log(req.user.id);
+        // console.log(req.user.id);
 
         // console.log(req.authInfo.getGivenName());
         // console.log(req.authInfo.getFamilyName());
         // console.log(req.authInfo.getEmail());
 
         // console.log(req.headers);
-        // const li_roleparam = await cds.run(
-        //     `
-        //     SELECT * FROM "CP_USER_AUTHOBJ"
-        //     WHERE "USER" = '`+ vUser + `'`
-        //     // AND PARAMETER = 'LOCATION_ID'`
-        // );
+        const li_roleparam = await cds.run(
+            `
+            SELECT * FROM "CP_USER_AUTHOBJ"
+            WHERE "USER" = '`+ vUser + `'`
+            // AND PARAMETER = 'LOCATION_ID'`
+        );
+
+        if (li_roleparam.length > 0) {
+            let aResults = req.results;
+            aFilteredResults = aResults.filter((el) => {
+                return li_roleparam.some((f) => {
+                    return f.PARAMETER === el.LOCATION_ID && f.AUTH_GROUP === el.AUTH_GROUP;
+                });
+            });
+           
+        } 
+
+        if(aFilteredResults.length > 0) {
+            req.results = aFilteredResults;
+        }
+
         // var cnRs = 0;
         //     return data.map(async data => {
         //         const li_roleparam = await cds.run(
@@ -98,6 +144,10 @@ module.exports = (srv) => {
         //     }
         // }
     });
+    /**     */
+
+
+
     // Service for weekly component requirements- assembly
     srv.on("getCompReqFWeekly", async (req) => {
         let vDateFrom = req.data.FROMDATE; //"2022-03-04";
@@ -177,7 +227,7 @@ module.exports = (srv) => {
                 );
                 break;
             case 'M2':
-                const liCompQty = await cds.run(
+                 liCompQty = await cds.run(
                     `
             SELECT * FROM "V_ASMREQ_PRODCONSD"
             WHERE "LOCATION_ID" = '` +
@@ -2580,7 +2630,7 @@ module.exports = (srv) => {
         }
         oRtrDetailsIns = {};
         return responseMessage;
-    });    
+    });
 
     // POST Service for Unique Characteristic Items and Weekly Quantities
     srv.on("postCIRQuantities", async (req) => {
@@ -2592,13 +2642,13 @@ module.exports = (srv) => {
         const liUniqueId = oCIRData.liUniqueId;
         const aUniqueIdChar = await objCIR.getUniqueIdCharacteristics(req);
         // const sLoginUserId = req.headers['x-username'];
-        const sCFDestUser = req.data.VALIDUSER;   
+        const sCFDestUser = req.data.VALIDUSER;
         let aFilteredChar = [], aFilteredCIR = [];
         let sUniqueId = "";
         let oUniqueIdChars = {};
         let aUniqueIdChars = [];
-        let oEntry = {};  
-        
+        let oEntry = {};
+
 
         for (let i = 0; i < liUniqueId.length; i++) {
             // Unique Id Characteristics
@@ -2659,7 +2709,7 @@ module.exports = (srv) => {
         const liCIRQty = oCIRData.liCIRQty;
         const liUniqueId = oCIRData.liUniqueId;
         const aUniqueIdChar = await objCIR.getUniqueIdCharacteristics(req);
-        const sCFDestUser = req.data.VALIDUSER; 
+        const sCFDestUser = req.data.VALIDUSER;
         // const sLoginUserId = req.headers['x-username'];
         let sLoginUserId = "";
         let aFilteredChar = [], aFilteredCIR = [];
@@ -2667,6 +2717,7 @@ module.exports = (srv) => {
         let oUniqueIdChars = {};
         let aUniqueIdChars = [];
         let oEntry = {};
+        sLoginUserId = req.data.USER_ID;
         // if(req.user) {
         //   sLoginUserId = req.user;
         // }
@@ -2707,10 +2758,10 @@ module.exports = (srv) => {
                 oEntry.UniqueId = (aFilteredCIR[j].UNIQUE_ID).toString();
                 oEntry.Datum = aFilteredCIR[j].WEEK_DATE + "T10:00:00";
                 oEntry.Valid_User = sCFDestUser;
-                if(sLoginUserId) {
-                  oEntry.User_Id = sLoginUserId;
+                if (sLoginUserId) {
+                    oEntry.User_Id = sLoginUserId;
                 }
-                 oEntry.HeaderConfig = aUniqueIdChars;
+                oEntry.HeaderConfig = aUniqueIdChars;
                 try {
                     await oModel.tx(req).post("/headerSet", oEntry);
                 }
@@ -2780,7 +2831,7 @@ module.exports = (srv) => {
     });
 
     // EOI - Deepa
-    
+
     ///////////////////////////////////////////////////////////
     srv.on("generateMarketAuthfn", async (request) => {
         //     var flag, lMessage = '';
@@ -3140,7 +3191,7 @@ module.exports = (srv) => {
         const sUaaCredentials = dest_service.credentials.clientid + ':' + dest_service.credentials.clientsecret;
 
         const sDestinationName = 'S4D_HTTP';
-        const sEndpoint = '/secure/';       
+        const sEndpoint = '/secure/';
 
 
         /*************************************************************
@@ -3167,9 +3218,16 @@ module.exports = (srv) => {
             });
 
         // console.log(ret_response);
-        return ret_response;        
+        return ret_response;
 
     });
+
+
+    srv.on('getUserInfo', async (req) => {
+        console.log("Login User", req.user.id);
+        return req.user.id;
+    });
+
 
 
     // EOI Deepa
