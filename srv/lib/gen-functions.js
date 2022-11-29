@@ -215,8 +215,8 @@ class GenFunctions {
             .where(`PARAMETER_ID = ${parseInt(8)} OR PARAMETER_ID = ${parseInt(10)}`)
             .orderBy("PARAMETER_ID");
         let lKeys = ['PARAMETER_ID', 'VALUE'];
-        liParaValue = GenF.removeDuplicate(liParaValue, lKeys);
-        return liParaValue;
+        liParaValue = this.removeDuplicate(liParaValue, lKeys);
+        return liParaValue;//[liParaValue[0].VALUE, liParaValue[1].VALUE];
     }
     static addleadzeros(num, size) {
 

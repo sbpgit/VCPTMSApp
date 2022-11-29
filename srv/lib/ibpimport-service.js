@@ -251,16 +251,14 @@ module.exports = cds.service.impl(async function () {
 
     // Master data products to IBP
     this.on("createIBPMasterProd", async (req) => {
-        let liParaValue = await SELECT
-            .from("CP_PARAMETER_VALUES")
-            .columns("PARAMETER_ID", "VALUE")
-            .where(`PARAMETER_ID = ${parseInt(8)} OR PARAMETER_ID = ${parseInt(10)}`)
-            .orderBy("PARAMETER_ID");
-        let lKeys = ['PARAMETER_ID', 'VALUE'];
-        liParaValue = GenF.removeDuplicate(liParaValue, lKeys);
+        // Get Planning area and Prefix configurations for IBP
+        let liParaValue = await GenF.getIBPParameterValue();
+        console.log(liParaValue);
         let lData = "Nav" + liParaValue[1].VALUE.toString() + "PRODUCT";
         let lEntity = "/" + liParaValue[1].VALUE.toString() + "PRODUCTTrans";
-
+        console.log(lData);
+        console.log(lEntity);
+        console.log(liParaValue[0]);
         let oReq = {
             masterProd: [],
         },
@@ -350,7 +348,7 @@ module.exports = cds.service.impl(async function () {
         // req.headers['Application-Interface-Key'] = vAIRKey;
         await servicePost.tx(req).post(lEntity, oEntry);
         // await servicePost.tx(req).post("/VCPPRODUCTTrans", oEntry);
-        let resUrl = "/GetExportResult?P_EntityName='" + liParaValue[0].VALUE + "' &P_TransactionID='" + vTransID + "'";
+        let resUrl = "/GetExportResult?P_EntityName='" + liParaValue[0].VALUE+ "' &P_TransactionID='" + vTransID + "'";
         return await servicePost.tx(req).get(resUrl);
         // try {
         //     // let vResponse = await servicePost.tx(req).get(resUrl);
@@ -976,7 +974,7 @@ module.exports = cds.service.impl(async function () {
     this.on("exportIBPMasterProd", async (req) => {
 
         // Get Planning area and Prefix configurations for IBP
-        let liParaValue = GenF.getIBPParameterValue();
+        let liParaValue = await GenF.getIBPParameterValue();
         let lData = "Nav" + liParaValue[1].VALUE.toString() + "PRODUCT";
         let lEntity = "/" + liParaValue[1].VALUE.toString() + "PRODUCTTrans";
 
@@ -1088,7 +1086,7 @@ module.exports = cds.service.impl(async function () {
     this.on("exportIBPLocation", async (req) => {
 
         // Get Planning area and Prefix configurations for IBP
-        let liParaValue = GenF.getIBPParameterValue();
+        let liParaValue = await GenF.getIBPParameterValue();
         let lData = "Nav" + liParaValue[1].VALUE.toString() + "LOCATION";
         let lEntity = "/" + liParaValue[1].VALUE.toString() + "LOCATIONTrans";
         let oReq = {
@@ -1139,7 +1137,7 @@ module.exports = cds.service.impl(async function () {
     this.on("exportIBPLocProd", async (req) => {
 
         // Get Planning area and Prefix configurations for IBP
-        let liParaValue = GenF.getIBPParameterValue();
+        let liParaValue = await GenF.getIBPParameterValue();
         let lData = "Nav" + liParaValue[1].VALUE.toString() + "LOCATIONPRODUCT";
         let lEntity = "/" + liParaValue[1].VALUE.toString() + "LOCATIONPRODUCTTrans";
         let oReq = {
@@ -1198,7 +1196,7 @@ module.exports = cds.service.impl(async function () {
     this.on("exportIBPCustomer", async (req) => {
 
         // Get Planning area and Prefix configurations for IBP
-        let liParaValue = GenF.getIBPParameterValue();
+        let liParaValue = await GenF.getIBPParameterValue();
         let lData = "Nav" + liParaValue[1].VALUE.toString() + "CUSTOMER";
         let lEntity = "/" + liParaValue[1].VALUE.toString() + "CUSTOMERTrans";
         let oReq = {
@@ -1249,7 +1247,7 @@ module.exports = cds.service.impl(async function () {
     // Create class in IBP
     this.on("exportIBPClass", async (req) => {
         // Get Planning area and Prefix configurations for IBP
-        let liParaValue = GenF.getIBPParameterValue();
+        let liParaValue = await GenF.getIBPParameterValue();
         let lData = "Nav" + liParaValue[1].VALUE.toString() + "CLASS";
         let lEntity = "/" + liParaValue[1].VALUE.toString() + "CLASSTrans";
         let oReq = {
@@ -1318,7 +1316,7 @@ module.exports = cds.service.impl(async function () {
     this.on("exportIBPSalesTrans", async (req) => {
 
         // Get Planning area and Prefix configurations for IBP
-        let liParaValue = GenF.getIBPParameterValue();
+        let liParaValue = await GenF.getIBPParameterValue();
         let lData = "Nav" + liParaValue[1].VALUE.toString() + "SBPVCP";
         let lEntity = "/" + liParaValue[1].VALUE.toString() + "SBPVCPTrans";
         let oReq = {
@@ -1425,7 +1423,7 @@ module.exports = cds.service.impl(async function () {
     this.on("exportActCompDemand", async (req) => {
 
         // Get Planning area and Prefix configurations for IBP
-        let liParaValue = GenF.getIBPParameterValue();
+        let liParaValue = await GenF.getIBPParameterValue();
         let lData = "Nav" + liParaValue[1].VALUE.toString() + "SBPVCP";
         let lEntity = "/" + liParaValue[1].VALUE.toString() + "SBPVCPTrans";
 
@@ -1567,7 +1565,7 @@ module.exports = cds.service.impl(async function () {
     this.on("exportComponentReq", async (req) => {
 
         // Get Planning area and Prefix configurations for IBP
-        let liParaValue = GenF.getIBPParameterValue();
+        let liParaValue = await GenF.getIBPParameterValue();
         let lData = "Nav" + liParaValue[1].VALUE.toString() + "SBPVCP";
         let lEntity = "/" + liParaValue[1].VALUE.toString() + "SBPVCPTrans";
         let oReq = {
@@ -1849,7 +1847,7 @@ module.exports = cds.service.impl(async function () {
     this.on("exportIBPCIR", async (request) => {
 
         // Get Planning area and Prefix configurations for IBP
-        let liParaValue = GenF.getIBPParameterValue();
+        let liParaValue = await GenF.getIBPParameterValue();
         let lData = "Nav" + liParaValue[1].VALUE.toString() + "SBPVCP";
         let lEntity = "/" + liParaValue[1].VALUE.toString() + "SBPVCPTrans";
         let oReq = {
@@ -1936,7 +1934,7 @@ module.exports = cds.service.impl(async function () {
     this.on("exportRestrDetails", async (req) => {
 
         // Get Planning area and Prefix configurations for IBP
-        let liParaValue = GenF.getIBPParameterValue();
+        let liParaValue = await GenF.getIBPParameterValue();
         let lData = "Nav" + liParaValue[1].VALUE.toString() + "RESTRICTION";
         let lEntity = "/" + liParaValue[1].VALUE.toString() + "RESTRICTIONTrans";
         let lEntityLoc = "/" + liParaValue[1].VALUE.toString() + "LOCRESTRICTIONTrans";
@@ -1978,7 +1976,7 @@ module.exports = cds.service.impl(async function () {
     this.on("exportMktAuth", async (req) => {
 
         // Get Planning area and Prefix configurations for IBP
-        let liParaValue = GenF.getIBPParameterValue();
+        let liParaValue = await GenF.getIBPParameterValue();
         let lData = "Nav" + liParaValue[1].VALUE.toString() + "SBPVCP";
         let lEntity = "/" + liParaValue[1].VALUE.toString() + "SBPVCPTrans";
         let oReq = {
@@ -2090,13 +2088,7 @@ module.exports = cds.service.impl(async function () {
     });
     this.on("generateMarketAuth", async (request) => {
         // Get Planning area and Prefix configurations for IBP
-        let liParaValue = await SELECT
-            .from("CP_PARAMETER_VALUES")
-            .columns("PARAMETER_ID", "VALUE")
-            .where(`PARAMETER_ID = ${parseInt(8)} OR PARAMETER_ID = ${parseInt(10)}`)
-            .orderBy("PARAMETER_ID");
-        let lKeys = ['PARAMETER_ID', 'VALUE'];
-        liParaValue = GenF.removeDuplicate(liParaValue, lKeys);
+        let liParaValue = await GenF.getIBPParameterValue();
         let lData = "Nav" + liParaValue[1].VALUE.toString() + "SBPVCP";
         let lEntity = "/" + liParaValue[1].VALUE.toString() + "SBPVCPTrans";
         let flag, lMessage = '';
@@ -2610,7 +2602,7 @@ module.exports = cds.service.impl(async function () {
     });
     this.on("importibpversce", async (request) => {
         // Get Planning area and Prefix configurations for IBP
-        let liParaValue = GenF.getIBPParameterValue();
+        let liParaValue = await GenF.getIBPParameterValue();
         let flag, lMessage = '';
         let resUrl = "/" + liParaValue[0].VALUE + "?$select=VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$inlinecount=allpages";
         let req = await service.tx(req).get(resUrl);
