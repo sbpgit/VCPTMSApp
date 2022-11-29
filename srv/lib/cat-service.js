@@ -167,7 +167,7 @@ module.exports = (srv) => {
                     req.data.LOCATION_ID +
                     `'`);
 
-                liCompQty = await cds.run(
+              liCompQty = await cds.run(
                     `
             SELECT * FROM "V_ASMCOMPQTY_CONSD"
             WHERE "LOCATION_ID" = '` +
