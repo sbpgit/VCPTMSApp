@@ -294,6 +294,19 @@ sap.ui.define(
                 }
               }
 
+            } else if (jobType === "" && oGModel.getProperty("/wFlag") === "X") {
+              var data = $.parseJSON(aData[i].data);
+              var aIData = {
+                  Location: data.LOCATION_ID,
+                Product: data.PRODUCT_ID,
+                scenario: data.SCENARIO,
+                version: data.VERSION,
+                fromdate: data.FROMDATE,
+                todate: data.TODATE,
+                modelVersion: data.MODEL_VERSION
+
+              };
+              ScheData.push(aIData);
             } else {
               ScheData = aData[i].data;
               ScheData = $.parseJSON(ScheData);
@@ -397,6 +410,15 @@ sap.ui.define(
             sap.ui.getCore().byId("idJobData").getColumns()[0].setVisible(true);
             sap.ui.getCore().byId("idJobData").getColumns()[1].setVisible(true);
             break;
+          case "":
+            sap.ui.getCore().byId("idJobData").getColumns()[0].setVisible(true);
+            sap.ui.getCore().byId("idJobData").getColumns()[1].setVisible(true);
+            sap.ui.getCore().byId("idJobData").getColumns()[4].setVisible(true);
+            sap.ui.getCore().byId("idJobData").getColumns()[5].setVisible(true);
+            sap.ui.getCore().byId("idJobData").getColumns()[6].setVisible(true);
+            sap.ui.getCore().byId("idJobData").getColumns()[9].setVisible(true);
+            sap.ui.getCore().byId("idJobData").getColumns()[10].setVisible(true);
+            
           default:
             break;
         }

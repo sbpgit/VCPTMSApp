@@ -346,7 +346,7 @@ module.exports = cds.service.impl(async function () {
         // }
         // catch (error) {
 
-        }
+        // }
 
     });
     // Create Locations in IBP
@@ -2419,7 +2419,6 @@ module.exports = cds.service.impl(async function () {
                 for (var i in req) {
                     var vWeekDate = dateJSONToEDM2(req[i].PERIODID4_TSTAMP).split('T')[0];
                     var vScenario = 'BSL_SCENARIO';
-                    var vManual = 0.0;
                     req[i].PERIODID4_TSTAMP = vWeekDate;
                     let vManual = 0.0;
                     if (vWeekDate >= vDateDel) {
