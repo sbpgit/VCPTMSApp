@@ -9,6 +9,10 @@
 .tableScroll .sapUiTableVSb {
     overflow-y: hidden;
 }
+<<<<<<< HEAD
+.hdrBtnMarginHdr {
+  margin-left :1rem;
+=======
 
 .hdrBtnMarginHdr {
     margin-left: 1rem;
@@ -16,6 +20,7 @@
 
 .hdrBtnMargin {
     margin-left: 80rem;
+>>>>>>> 6a99c875dc444be4c9828a359b030af9c11b6b9f
 }
 
 .disableDP input {
@@ -30,7 +35,17 @@
 
 .sapFDynamicPageTitleMain>.sapFDynamicPageTitleMainInner .sapFDynamicPageTitleMainHeading .sapFDynamicPageTitleMainHeadingInner .sapMTitle {
 
+<<<<<<< HEAD
+   .classHdr{
+    margin-left: 77rem;
+   }
+   .sapFDynamicPageTitleMain>.sapFDynamicPageTitleMainInner .sapFDynamicPageTitleMainHeading .sapFDynamicPageTitleMainHeadingInner .sapMTitle {
+    font-size: 1.25rem;
+    margin-top: 0.25rem;
+}
+=======
     font-size: 1.25rem;
     margin-top: 0.25rem;
 
 }
+>>>>>>> 6a99c875dc444be4c9828a359b030af9c11b6b9f

@@ -105,6 +105,8 @@ service PalService{
             // GroupID      : String(20);
         });
 
+        action genUniqueIdCharVals(Location: String(4),Product: String(40));
+
 
         // function f_generateModels(vcRulesList : array of{
         //     profile      : String(50);
@@ -121,7 +123,8 @@ service PalService{
         function fgModels(vcRulesList : String) returns String;
         function fgPredictions(vcRulesList : String) returns String;
         function  fgenClusterUniqueIDS(Location: String(4), Product: String(40)) returns String;
-        
+        function  fgenUniqueIdCharVals(Location: String(4), Product: String(40)) returns String;
+
 
 
         // function f_genPredictions(vcRulesList : array of {

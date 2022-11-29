@@ -239,6 +239,9 @@ service CatalogService @(impl : './lib/cat-service.js') {
     //Object dependency restric
     @odata.draft.enabled
     entity getODHdrRstr         as projection on V_ODRESTRICT;
+    // entity getRestrLikelihood   as projection on od.LOCPRODRESTRICT;
+
+
 
     // @odata.draft.enabled
     // entity getProdRestr         as projection on od.PRODRESTRICT;

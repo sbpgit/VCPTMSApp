@@ -227,7 +227,7 @@ module.exports = (srv) => {
                 );
                 break;
             case 'M2':
-                const liCompQty = await cds.run(
+                 liCompQty = await cds.run(
                     `
             SELECT * FROM "V_ASMREQ_PRODCONSD"
             WHERE "LOCATION_ID" = '` +

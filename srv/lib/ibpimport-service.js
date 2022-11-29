@@ -2310,36 +2310,36 @@ module.exports = cds.service.impl(async function () {
         let id = uuidv1();
         let values = [];
         let message = "Started importing IBP Future Demand and Characteristic Plan";
-        let res = request._.req.res;
-        let lilocProdReq = JSON.parse(request.data.MARKETDATA);
+        // let res = request._.req.res;
+        // let lilocProdReq = JSON.parse(request.data.MARKETDATA);
 
-        if (lilocProdReq[0].PRODUCT_ID === "ALL") {
-            lsData.LOCATION_ID = lilocProdReq[0].LOCATION_ID;
-            lsData.PRODUCT_ID = lilocProdReq[0].PRODUCT_ID;
-            const objCatFn = new Catservicefn();
-            const lilocProdT = await objCatFn.getAllProducts(lsData);
-            // lsData = {};
-            const litemp = JSON.stringify(lilocProdT);
-            lilocProd = JSON.parse(litemp);
-        }
-        else {
-            lilocProd = JSON.parse(request.data.MARKETDATA);
-        }
-        values.push({ id, createtAt, message, lilocProd });
-        res.statusCode = 202;
-        res.send({ values });
+        // if (lilocProdReq[0].PRODUCT_ID === "ALL") {
+        //     lsData.LOCATION_ID = lilocProdReq[0].LOCATION_ID;
+        //     lsData.PRODUCT_ID = lilocProdReq[0].PRODUCT_ID;
+        //     const objCatFn = new Catservicefn();
+        //     const lilocProdT = await objCatFn.getAllProducts(lsData);
+        //     // lsData = {};
+        //     const litemp = JSON.stringify(lilocProdT);
+        //     lilocProd = JSON.parse(litemp);
+        // }
+        // else {
+        //     lilocProd = JSON.parse(request.data.MARKETDATA);
+        // }
+        // values.push({ id, createtAt, message, lilocProd });
+        // res.statusCode = 202;
+        // res.send({ values });
         // flag = await obibpfucntions.importFutureDemandcharPlan(lilocProd, req, 'MKTAUTH');
         /////////////////////////////////////////////////////////////////////////////////////
         // let lilocProdReq = JSON.parse(request.data.MARKETDATA);
         lsData = {};
-        for (let iloc = 0; iloc < lilocProd.length; iloc++) {
-            lsData.LOCATION_ID = lilocProd[iloc].LOCATION_ID;
-            lsData.PRODUCT_ID = lilocProd[iloc].PRODUCT_ID;
-            lVersion = lilocProdReq[0].VERSION;
-            lScenario = lilocProdReq[0].SCENARIO;
-            vFromDate = new Date(lilocProdReq[0].FROMDATE).toISOString().split('Z')[0];
-            vToDate = new Date(lilocProdReq[0].TODATE).toISOString().split('Z')[0];
-            var resUrl = "/SBPVCP?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + lsData.LOCATION_ID + "' and PRDID eq '" + lsData.PRODUCT_ID + "' and PERIODID4_TSTAMP gt datetime'" + vFromDate + "' and PERIODID4_TSTAMP lt datetime'" + vToDate + "' and VERSIONID eq '" + lVersion + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
+        // for (let iloc = 0; iloc < lilocProd.length; iloc++) {
+            lsData.LOCATION_ID = "PL20";//lilocProd[iloc].LOCATION_ID;
+            lsData.PRODUCT_ID = "61AEEPI0E119"; //lilocProd[iloc].PRODUCT_ID;
+            // lVersion = lilocProdReq[0].VERSION;
+            // lScenario = lilocProdReq[0].SCENARIO;
+            // vFromDate = new Date(lilocProdReq[0].FROMDATE).toISOString().split('Z')[0];
+            // vToDate = new Date(lilocProdReq[0].TODATE).toISOString().split('Z')[0];
+            var resUrl = "/SBPVCP?$select=PRDID,LOCID,PERIODID4_TSTAMP,TOTALDEMANDOUTPUT,UOMTOID,VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$filter=LOCID eq '" + lsData.LOCATION_ID + "' and PRDID eq '" + lsData.PRODUCT_ID + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
             var req = await service.tx(req).get(resUrl);
             // if(req.length > 0){
             const vDelDate = new Date();
@@ -2402,7 +2402,7 @@ module.exports = cds.service.impl(async function () {
                     const string = date.toISOString();
                     return string;
                 };
-                resUrlFplan = "/SBPVCP?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + lsData.LOCATION_ID + "' and PRDID eq '" + lsData.PRODUCT_ID + "' and PERIODID4_TSTAMP gt datetime'" + vFromDate + "' and PERIODID4_TSTAMP lt datetime'" + vToDate + "' and VERSIONID eq '" + lVersion + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
+                resUrlFplan = "/SBPVCP?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + lsData.LOCATION_ID + "' and PRDID eq '" + lsData.PRODUCT_ID + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
                 var req = await service.tx(request).get(resUrlFplan);
                 const vDelDate = new Date();
                 const vDateDel = vDelDate.toISOString().split('T')[0];
@@ -2419,6 +2419,7 @@ module.exports = cds.service.impl(async function () {
                     var vWeekDate = dateJSONToEDM2(req[i].PERIODID4_TSTAMP).split('T')[0];
                     var vScenario = 'BSL_SCENARIO';
                     req[i].PERIODID4_TSTAMP = vWeekDate;
+                    let vManual = 0.0;
                     if (vWeekDate >= vDateDel) {
                         await cds.run(
                             `DELETE FROM "CP_IBP_FCHARPLAN" WHERE "LOCATION_ID" = '` + req[i].LOCID + `' 
@@ -2442,12 +2443,12 @@ module.exports = cds.service.impl(async function () {
                             "'" + vWeekDate + "'" + "," +
                             "'" + req[i].OPTIONPERCENTAGE + "'" + "," +
                             "'" + req[i].FINALDEMANDVC + "'" + "," +
-                            "'" + req[i].MANUALOPTION + "'" + ')';// + ' WITH PRIMARY KEY';
+                            "'" + vManual + "'" + ')';// + ' WITH PRIMARY KEY';
                         try {
                             await cds.run(modQuery);
                             flag = 'S';
                             // if (vServ === 'MKTAUTH') {
-                            obgenMktAuth.updateOptPer(req[i].LOCID, req[i].PRDID, vWeekDate, req[i].VERSIONID, vScenario);
+                            obgenMktAuth.updateOptPer(req[i].LOCID, req[i].PRDID, vWeekDate, req[i].VERSIONID, vScenario,request);
                             // }
                         }
                         catch (err) {
@@ -2461,8 +2462,8 @@ module.exports = cds.service.impl(async function () {
             if (flag === 'S') {
                 lsData = {};
                 for (let i = 0; i < lilocProd.length; i++) {
-                    lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
-                    lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
+                    lsData.LOCATION_ID = "PL20";//lilocProd[i].LOCATION_ID;
+                    lsData.PRODUCT_ID = "61AEEPI0E119";//lilocProd[i].PRODUCT_ID;
                     const limkauth = await cds.run(
                         `
             SELECT CP_MARKETAUTH_CFG."WEEK_DATE",
@@ -2482,11 +2483,7 @@ module.exports = cds.service.impl(async function () {
                  AND CP_MARKETAUTH_CFG.CHARVAL_NUM  = V_CHARVAL.CHARVAL_NUM
                WHERE LOCATION_ID = '${lsData.LOCATION_ID}'
                  AND PRODUCT_ID = '${lsData.PRODUCT_ID}'
-                 AND VERSION = '${lilocProdReq[0].VERSION}'
-                 AND SCENARIO = '${lilocProdReq[0].SCENARIO}'
-                 AND ( WEEK_DATE > '${lilocProdReq[0].FROMDATE}'
-                 AND WEEK_DATE < '${lilocProdReq[0].TODATE}' )
-        `);
+                         `);
                     for (imk = 0; imk < limkauth.length; imk++) {
                         let vDemd;
                         let vWeekDate = new Date(limkauth[imk].WEEK_DATE).toISOString().split('Z');
@@ -2540,7 +2537,7 @@ module.exports = cds.service.impl(async function () {
                     }
                 }
             }
-        }
+        // }
         GenF.jobSchMessage('X', lMessage, req);
     });
     this.on("importibpversce", async (request) => {

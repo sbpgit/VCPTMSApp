@@ -17,6 +17,19 @@
                 <ux:headerTitle>
                     <ux:ObjectPageDynamicHeaderTitle id="_IDGenObjectPageDynamicHeaderTitle1">
                         <ux:expandedHeading>
+<<<<<<< HEAD
+                    <HBox>
+                    <Title id="_IDGenTitle1" text="{i18n>title}" class="boldText" titleAlignment="Center" />
+                     <Button class="hdrBtnMarginHdr" id="_IDGenOverflowToolbarButton1" icon="sap-icon://sys-help" text="" type="Emphasized" press="onNavPress" tooltip="Help Document"/>
+                        </HBox>
+                </ux:expandedHeading>
+                <ux:snappedHeading>
+                    <HBox id="_IDGenFlexBox1" fitContainer="true" alignItems="Center" >
+						<Title id="_IDGenTitle2" text="{i18n>title}"  />
+					<Button class="hdrBtnMarginHdr" id="_IDGenOverflowToolbarButton2" icon="sap-icon://sys-help" text="" type="Emphasized" press="onNavPress" tooltip="Help Document"/>
+                            </HBox>
+                    
+=======
                             <HBox>
                                 <Title id="_IDGenTitle1" text="{i18n>title}" class="boldText" titleAlignment="Center" />
 
@@ -30,6 +43,7 @@
 
                                 <!-- <Button class="hdrBtnMarginHdr" id="_IDGenOverflowToolbarButton2" icon="sap-icon://sys-help" text="" type="Emphasized" press="onNavPress" tooltip="Help Document" /> -->
                             </HBox>
+>>>>>>> 6a99c875dc444be4c9828a359b030af9c11b6b9f
                         </ux:snappedHeading>
                         <!-- <ux:navigationActions>
                           <Button class="classHdr" icon="sap-icon://sys-help" id="idNav3" press="onNavPress" type="Emphasized" tooltip="Help Document" />
@@ -81,7 +95,11 @@
                             <HBox id="_IDGenHBox1" class="hdrBtnMargin">
                                 <Button id="_IDGenButton1" text="Go" type="Emphasized" press="onGetData" tooltip="Get data based on filters" />
                                 <Button id="_IDGenButton2" text="Reset" type="Transparent" press="onResetData" tooltip="Reset filters and Data" />
+<<<<<<< HEAD
+                               
+=======
                                 <!-- <Button icon="sap-icon://sys-help" id="idNav1" press="onNavPress" type="Emphasized" tooltip="Help Document" /> -->
+>>>>>>> 6a99c875dc444be4c9828a359b030af9c11b6b9f
                             </HBox>
                             <!-- </VBox> -->
                         </l:Grid>
