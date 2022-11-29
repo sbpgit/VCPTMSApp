@@ -15,6 +15,7 @@ general:
   inferBuildTool: true
 
 ### Step-specific configuration
+
 steps:
   mavenExecute:
     dockerImage: devxci/mbtci:1.0.14

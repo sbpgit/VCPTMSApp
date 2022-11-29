@@ -4,6 +4,7 @@
     xmlns:core="sap.ui.core"
     displayBlock="true"
     xmlns="sap.m"
+    xmlns:m="sap.m"
     xmlns:l="sap.ui.layout"
     xmlns:ux="sap.uxap"
     xmlns:layout="sap.ui.layout"
@@ -18,16 +19,17 @@
         <ux:headerTitle>
             <ux:ObjectPageDynamicHeaderTitle id="_IDGenObjectPageDynamicHeaderTitle1">
                 <ux:expandedHeading>
+                    <HBox>
                     <Title id="_IDGenTitle1" text="{i18n>pageTitle}" class="boldText" titleAlignment="Center" />
+                     <Button class="hdrBtnMarginHdr" id="_IDGenOverflowToolbarButton1" icon="sap-icon://sys-help" text="" type="Emphasized" press="onNavPress" tooltip="Help Document"/>
+                        </HBox>
                 </ux:expandedHeading>
                 <ux:snappedHeading>
-                    <FlexBox id="_IDGenFlexBox1" fitContainer="true" alignItems="Center">
-                        <Title id="_IDGenTitle2" text="{i18n>pageTitle}" wrapping="true" />
-                        <HBox id="_IDGenHBox2" class="newHBOX">
-                            <ToolbarSpacer id="_IDGenToolbarSpacer1" />
-                            <Button class="hdrBtnMarginHdr" icon="sap-icon://sys-help" id="idNav" press="onNavPress" type="Emphasized" tooltip="Help Document" />
-                        </HBox>
-                    </FlexBox>
+                    <HBox id="_IDGenFlexBox1" fitContainer="true" alignItems="Center" >
+						<Title id="_IDGenTitle2" text="{i18n>pageTitle}"  />
+					<Button class="hdrBtnMarginHdr" id="_IDGenOverflowToolbarButton2" icon="sap-icon://sys-help" text="" type="Emphasized" press="onNavPress" tooltip="Help Document"/>
+                            </HBox>
+                    
                 </ux:snappedHeading>
             </ux:ObjectPageDynamicHeaderTitle>
         </ux:headerTitle>
@@ -69,20 +71,20 @@
                         <HBox id="_IDGenHBox1">
                             <Button id="_IDGenButton1" text="Go" type="Emphasized" press="onGetData" tooltip="Get data based on filters" class="sapUiTinyMarginEnd" />
                             <Button id="_IDGenButton2" text="Reset" type="Transparent" press="onResetDate" tooltip="Reset Valid To Date" />
-                            <Button class="hdrBtnMargin" icon="sap-icon://sys-help" id="idNav1" press="onNavPress" type="Emphasized" tooltip="Help Document" />
+                           
                         </HBox>
                     </VBox>
                 </l:Grid>
             </FlexBox>
         </ux:headerContent>
         <ux:sections>
-            <ux:ObjectPageSection id="idOBPageSec">
-                <ux:subSections id="idSubSec">
+            <ux:ObjectPageSection id="idOBPageSec" showTitle="false">
+                <ux:subSections >
                     <ux:ObjectPageSubSection id="idObjectPageSub">
-                        <ux:blocks id="idblocks">
-                            <layout:Splitter id="idSplitter" height="auto" width="100%" class="sapUiNoContentPadding" visible="false">
-                                <layout:FixFlex id='chartFixFlex' minFlexSize="500" class="fixFlex">
-                                    <layout:flexContent class="fixFlex">
+                        <ux:blocks >
+                            <!-- <layout:Splitter id="idSplitter" height="auto" width="100%" class="sapUiNoContentPadding" visible="true"> -->
+                                <!-- <layout:FixFlex id='chartFixFlex' minFlexSize="500" class="fixFlex">
+                                    <layout:flexContent > -->
                                         <commons:ChartContainer id="idInvChartContainer" showFullScreen="true" showPersonalization="false" showZoom="false" autoAdjustHeight="true" showLegend="true" showSelectionDetails="false">
                                             <commons:content>
                                                 <commons:ChartContainerContent id="_IDGenChartContainerContent1">
@@ -112,9 +114,9 @@
                                                 </commons:ChartContainerContent>
                                             </commons:content>
                                         </commons:ChartContainer>
-                                    </layout:flexContent>
-                                </layout:FixFlex>
-                            </layout:Splitter>
+                                    <!-- </layout:flexContent>
+                                </layout:FixFlex> -->
+                            <!-- </layout:Splitter> -->
                         </ux:blocks>
                     </ux:ObjectPageSubSection>
                 </ux:subSections>

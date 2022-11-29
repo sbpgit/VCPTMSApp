@@ -5,8 +5,13 @@
 .sapMBar .sapMBarRight.sapMBarContainer>*:first-child:last-child, .sapMBar .sapMBarLeft.sapMBarContainer>*:first-child:last-child, .sapMBar .sapMBarMiddle .sapMBarContainer>*:first-child:last-child {
 
     font-weight: bold;
+    
 }
 
-.hdrBtnMarginHdr {
-    margin-left : 75rem;
+.hdrBtnMarginHdr 1{
+    margin-left : 1rem;
+    margin-top:0.185rem;
+  }
+  .boldText1{
+    margin-top:0.185rem;
   }

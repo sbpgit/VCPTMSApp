@@ -8,11 +8,16 @@ div#__xmlview3--struTitle {
 }
 
 .boldText {
-    font-weight: bold !important;
+    font-weight: bold ;
+    margin-top:0.185rem
 }
 
 header#__xmlview1--accessList-header {
     font-weight: bold;
+}
+.hdrBtnMarginHdr{
+    margin-left: 1rem;
+    margin-top:0.185rem
 }
 
 

@@ -2,6 +2,7 @@
     xmlns:mvc="sap.ui.core.mvc"
     xmlns:core="sap.ui.core" displayBlock="true"
     xmlns="sap.m"
+    xmlns:m="sap.m"
     xmlns:l="sap.ui.layout"
     xmlns:ux="sap.uxap"
     xmlns:f="sap.ui.layout.form"
@@ -11,13 +12,17 @@
         <ux:headerTitle>
             <ux:ObjectPageDynamicHeaderTitle>
                 <ux:expandedHeading>
-                    <Title text="{i18n>title}" class="boldText" titleAlignment="Center" />
+                <HBox>
+                    <Title text="{i18n>title}" class="boldText" titleAlignment="Center"  wrapping="true" />
+                    <Button class="hdrBtnMarginHdr" type="Emphasized" icon="sap-icon://sys-help" press="onNavPress" tooltip="Help Document" id="nav2"/>
+                    </HBox>
                 </ux:expandedHeading>
                 <ux:snappedHeading>
-					<FlexBox fitContainer="true" alignItems="Center" >
+					<HBox fitContainer="true" alignItems="Center" >
 						<Title text="{i18n>title}" wrapping="true" />
-                        <Button class="hdrBtnMarginHdr" icon="sap-icon://sys-help" id="idNav" press="onNavPress" type="Emphasized" tooltip="Help Document"/>
-					</FlexBox>
+                        <Button class="hdrBtnMarginHdr" type="Emphasized" icon="sap-icon://sys-help" press="onNavPress" tooltip="Help Document" id="nav"/>
+                        
+					</HBox>
 				</ux:snappedHeading>
             </ux:ObjectPageDynamicHeaderTitle>
         </ux:headerTitle>
@@ -42,7 +47,7 @@
                         <HBox>
                             <Button text="Go" type="Emphasized" press="onGetData" tooltip="Get data based on filters" class="sapUiTinyMarginEnd"/>
                             <Button text="Reset" type="Transparent" press="onResetDate" tooltip="Reset Valid To Date"/>
-                            <Button class="hdrBtnMargin" icon="sap-icon://sys-help" id="idNav1" press="onNavPress" type="Emphasized" tooltip="Help Document"/>
+                           
 
                         </HBox>
                     </VBox>

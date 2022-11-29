@@ -1,18 +1,20 @@
-<mvc:View controllerName="cp.odp.cpodprofiles.controller.Home" xmlns:l="sap.ui.layout" xmlns:core="sap.ui.core" xmlns:f="sap.ui.layout.form" xmlns:ux="sap.uxap" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns="sap.m">
+<mvc:View controllerName="cp.odp.cpodprofiles.controller.Home" xmlns:l="sap.ui.layout" xmlns:m="sap.m" xmlns:core="sap.ui.core" xmlns:f="sap.ui.layout.form" xmlns:ux="sap.uxap" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns="sap.m">
     <ux:ObjectPageLayout id="ObjectPageLayout">
         <ux:headerTitle>
             <ux:ObjectPageDynamicHeaderTitle id="_IDGenObjectPageDynamicHeaderTitle1">
                 <ux:expandedHeading>
+                   <HBox>
                     <Title id="_IDGenTitle1" text="{i18n>title}" class="boldText" titleAlignment="Center" />
+                     <Button class="hdrBtnMarginHdr" id="_IDGenOverflowToolbarButton1" icon="sap-icon://sys-help" text="" type="Emphasized" press="onNavPress" tooltip="Help Document"/>
+                        </HBox>
                 </ux:expandedHeading>
                 <ux:snappedHeading>
-                    <FlexBox id="_IDGenFlexBox1" fitContainer="true" alignItems="Center">
-                        <Title id="_IDGenTitle2" text="{i18n>title}" wrapping="true" />
-                        <VBox id="_IDGenVBox9" >
-                         <Button class="hdrBtnMarginHdr" icon="sap-icon://sys-help" id="idNav1" press="onNavPress" type="Emphasized" tooltip="Help Document" />
-                    </VBox>
-                    </FlexBox>
+                    <HBox id="_IDGenFlexBox1" fitContainer="true" alignItems="Center" >
+						<Title id="_IDGenTitle2" text="{i18n>title}" wrapping="true" />
+					<Button class="hdrBtnMarginHdr" id="_IDGenOverflowToolbarButton2" icon="sap-icon://sys-help" text="" type="Emphasized" press="onNavPress" tooltip="Help Document"/>
+                            </HBox>
                 </ux:snappedHeading>
+                
             </ux:ObjectPageDynamicHeaderTitle>
         </ux:headerTitle>
         <ux:headerContent>
@@ -47,10 +49,7 @@
                         
                         </VBox >
                         
-                       <VBox id="_IDGenVBox7" >
-                       <Label id="_IDGenLabel7" text="" />
-                         <Button class="hdrBtnMargin" icon="sap-icon://sys-help" id="idNav" press="onNavPress" type="Emphasized" tooltip="Help Document" />
-                    </VBox>
+                       
                    
                     <VBox id="_IDGenVBox8">
                         <Label id="_IDGenLabel8" text="Object Dep :" visible="false" />

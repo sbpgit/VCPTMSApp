@@ -56,6 +56,11 @@ sap.ui.define(
        * Calls the service to get Data.
        */
       onAfterRendering: function () {
+        if (!Device.system.desktop) {
+        this.byId("orient").setOrientation("Horizontal");
+        } else {
+          this.byId("orient").setOrientation("Vertical");
+        }
         oGModel = that.getOwnerComponent().getModel("oGModel");
         var oJobId = oGModel.getProperty("/jobId");
         
@@ -226,19 +231,20 @@ sap.ui.define(
                       ScheData.push(aIData);
                   // 04-10-2022
                 } else if(jobType === "D" || jobType === "T" || jobType === "F" ){
-                    var data = $.parseJSON(aData[i].data);
-                    var aIData = $.parseJSON(data.LocProdData);
-
+                    var aIData = $.parseJSON(aData[i].data);
+                    if(aIData.LocProdData){
+                    var aIData = $.parseJSON(aIData.LocProdData);
 
                     aIData.forEach(function (row) {
-                        row.Location = row.LOCATION_ID;
-                        row.Product = row.PRODUCT_ID;
-                      }, that);
-
-                    //   var aIData = {
-                    //       Location: data.LOCATION_ID,
-                    //       Product: data.PRODUCT_ID,
-                    //   };
+                      row.Location = row.LOCATION_ID;
+                      row.Product = row.PRODUCT_ID;
+                    }, that);
+                    } else {
+                      var aIData = {
+                          Location: data.LOCATION_ID,
+                          Product: data.PRODUCT_ID,
+                      };
+                    }
                       ScheData = aIData;
                 } else if(jobType === "I" || jobType === "E" ){
                   var data = $.parseJSON(aData[i].data);
@@ -255,6 +261,7 @@ sap.ui.define(
 
                   } else {
                   var aIData = data.LocProdData;
+                  aIData = $.parseJSON(aIData);
                   aIData.forEach(function (row) {
                     row.Location = row.LOCATION_ID;
                     row.Product = row.PRODUCT_ID;
@@ -309,7 +316,7 @@ sap.ui.define(
           }
           // 22-09-2022
   
-            if (oGModel.getProperty("/JobType") !== "I" && oGModel.getProperty("/JobType") !== "S" ) {
+            if (oGModel.getProperty("/JobType") !== "I" && oGModel.getProperty("/JobType") !== "E" && oGModel.getProperty("/JobType") !== "S" ) {
               that._valueHelpDialogJobData.open();
             } else {
               var oActionType = oGModel.getProperty("/IBPService");

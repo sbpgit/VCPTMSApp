@@ -7,5 +7,14 @@
 }
 
 .hdrBtnMarginHdr{
-    margin-left:72.5rem;
+    margin-left:1rem;
+}
+
+.sapFDynamicPageTitleMain>.sapFDynamicPageTitleMainInner .sapFDynamicPageTitleMainHeading .sapFDynamicPageTitleMainHeadingInner .sapMTitle {
+    font-size: 1.25rem;
+    margin-top: 0.25rem;
+}
+.sapUxAPObjectPageSubSection {
+
+    padding: 0rem !important;
 }

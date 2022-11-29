@@ -9,6 +9,7 @@
     xmlns:l="sap.ui.layout"
     xmlns:html="http://www.w3.org/1999/xhtml"
     xmlns:custom="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+    xmlns:dnd="sap.ui.core.dnd"
     xmlns:demo="control"
     height="100%">
     <SplitApp id="SplitAppDemo" initialDetail="detail" initialMaster="master">
@@ -30,6 +31,13 @@
                         numberOfExpandedLevels: 3
 		            },
                     events: {change: '.onTreeChange'}}" mode="MultiSelect">
+                    <dragDropConfig>
+					<dnd:DragDropInfo id="_IDGenDragDropInfo1"
+							sourceAggregation="items"
+							targetAggregation="items"
+							dragStart="onDragStart"
+							drop="onDrop"/>
+				</dragDropConfig>
                     <StandardTreeItem id="_IDGenStandardTreeItem1" title="{Description}" type="Active" press="onSelectionChange" class="text" />
                 </Tree>
             </Page>

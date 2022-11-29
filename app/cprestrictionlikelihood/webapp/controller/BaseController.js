@@ -4,7 +4,7 @@ sap.ui.define(
       "use strict";
   
       return Controller.extend(
-        "cpapp.cpcompreq.controller.BaseController",
+        "cpapp.cprestrictionlikelihood.controller.BaseController",
         {
           /**
            * Convenience method for accessing the router.

@@ -1,9 +1,12 @@
 /* Enter your custom styles here */
 
-.boldText {
+/* .boldText {
     font-weight: bold !important;
-}
+    margin-left:650px;
+    margin-top:0.25rem;
+} */
 
 div#container-cpapp\.cppartialprodnew---Home--Title {
     margin-left: 650px;
+    margin-top:0.185rem;
 }

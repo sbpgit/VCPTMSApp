@@ -20,7 +20,7 @@ const obibpfucntions = new IBPFunc();
  * */
 
 module.exports = (srv) => {
-    
+
     // const { SBPVCP } = srv.entities;
     // srv.on('READ', SBPVCP, request => {
     //     try {
@@ -53,27 +53,73 @@ module.exports = (srv) => {
         // console.log(xsuaa);
         return await xsuaa.get("/userinfo");
     });
-    srv.after('READ', 'getLocationtemp', async (data, req) => {
-        vUser = req.headers['x-username'];
+     /* Filter Products based on Authorization */
+    srv.after('READ', 'getLocProdDet', async (data, req) => {
+        // console.log("User:", req.user.id);
+        let aFilteredResults = [];
+        vUser = req.user.id;
+
+        const li_roleparam = await cds.run(            `
+            SELECT * FROM "CP_USER_AUTHOBJ"
+            WHERE "USER" = '`+ vUser + `'`
+            // AND PARAMETER = 'LOCATION_ID'`
+        );
+
+        if (li_roleparam.length > 0) {
+            let aResults = req.results;
+            aFilteredResults = aResults.filter((el) => {
+                return li_roleparam.some((f) => {
+                    return f.PARAMETER === el.PRODUCT_ID && f.AUTH_GROUP === el.AUTH_GROUP;
+                });
+            });            
+        } 
+        if(aFilteredResults.length > 0) {
+            req.results = aFilteredResults;
+        }
+        
+    });
+
+    /* Filter Locations based on Authorization */
+    srv.after('READ', 'getLocation', async (data, req) => {
+        let aFilteredResults = [];
+        // vUser = req.headers['x-username'];
+        // console.log("User:", req.user.id);
+        vUser = req.user.id;
+        
         // return {
         //     id:         req.user.id,
         //     firstName:  req.req.authInfo.getGivenName(),
         //     lastName:   req.req.authInfo.getFamilyName(),
         //     email:      req.req.authInfo.getEmail()
         //   }
-        console.log(req.user.id);
+        // console.log(req.user.id);
 
         // console.log(req.authInfo.getGivenName());
         // console.log(req.authInfo.getFamilyName());
         // console.log(req.authInfo.getEmail());
 
         // console.log(req.headers);
-        // const li_roleparam = await cds.run(
-        //     `
-        //     SELECT * FROM "CP_USER_AUTHOBJ"
-        //     WHERE "USER" = '`+ vUser + `'`
-        //     // AND PARAMETER = 'LOCATION_ID'`
-        // );
+        const li_roleparam = await cds.run(
+            `
+            SELECT * FROM "CP_USER_AUTHOBJ"
+            WHERE "USER" = '`+ vUser + `'`
+            // AND PARAMETER = 'LOCATION_ID'`
+        );
+
+        if (li_roleparam.length > 0) {
+            let aResults = req.results;
+            aFilteredResults = aResults.filter((el) => {
+                return li_roleparam.some((f) => {
+                    return f.PARAMETER === el.LOCATION_ID && f.AUTH_GROUP === el.AUTH_GROUP;
+                });
+            });
+           
+        } 
+
+        if(aFilteredResults.length > 0) {
+            req.results = aFilteredResults;
+        }
+
         // var cnRs = 0;
         //     return data.map(async data => {
         //         const li_roleparam = await cds.run(
@@ -98,6 +144,10 @@ module.exports = (srv) => {
         //     }
         // }
     });
+    /**     */
+
+
+
     // Service for weekly component requirements- assembly
     srv.on("getCompReqFWeekly", async (req) => {
         let vDateFrom = req.data.FROMDATE; //"2022-03-04";
@@ -461,6 +511,125 @@ module.exports = (srv) => {
         }
         liCompWeekly.sort(GenFunctions.dynamicSortMultiple("STRUC_NODE", "COMPONENT", "ITEM_NUM"));
         return liCompWeekly;
+    });
+
+    // Service for weekly component requirements- assembly component
+    srv.on("getRestrLikelihood", async (req) => {
+        let vDateFrom = req.data.FROMDATE; //"2022-03-04";
+        let vDateTo = req.data.TODATE; //"2023-01-03";
+        let liRestrWeekly = [];
+        let lsRestrWeekly = {};
+        let liDates = [],
+            vWeekIndex,
+            vRestrIndex,
+            vDateIndex,
+            vRestr,
+            lsDates = {};
+        let columnname = "WEEK";
+        const liRestrQty = await cds.run(
+            `
+            SELECT * FROM "CP_LOCPRODRESTRICT"  
+            WHERE "LOCATION_ID" = '` +
+            req.data.LOCATION_ID +
+            `'
+                 AND "PRODUCT_ID" = '` +
+            req.data.PRODUCT_ID +
+            `' AND "VERSION" = '` +
+            req.data.VERSION +
+            `' AND "SCENARIO" = '` +
+            req.data.SCENARIO +
+            `' AND ( "WEEK_DATE" <= '` +
+            vDateTo +
+            `' AND "WEEK_DATE" >= '` +
+            vDateFrom +
+            `') AND "MODEL_VERSION" = '` +
+            req.data.MODEL_VERSION +
+            `'
+                 ORDER BY 
+                      "LOCATION_ID" ASC, 
+                      "PRODUCT_ID" ASC,
+                      "VERSION" ASC,
+                      "SCENARIO" ASC,
+                      "WEEK_DATE" ASC`
+        );
+        const liRestr = await cds.run(
+            `
+          SELECT DISTINCT "LOCATION_ID",
+                          "PRODUCT_ID",
+                          "LINE_ID",
+                          "VERSION",
+                          "SCENARIO"
+          FROM "CP_LOCPRODRESTRICT"
+          WHERE "LOCATION_ID" = '` +
+            req.data.LOCATION_ID +
+            `' AND "PRODUCT_ID" = '` +
+            req.data.PRODUCT_ID +
+            `' AND "VERSION" = '` +
+            req.data.VERSION +
+            `' AND "SCENARIO" = '` +
+            req.data.SCENARIO +
+            `' AND ( "WEEK_DATE" <= '` +
+            vDateTo +
+            `'
+                AND "WEEK_DATE" >= '` +
+            vDateFrom +
+            `') AND "MODEL_VERSION" = '` +
+            req.data.MODEL_VERSION +
+            `'
+               ORDER BY 
+                    "LOCATION_ID" ASC, 
+                    "PRODUCT_ID" ASC,
+                    "LINE_ID",
+                    "VERSION" ASC,
+                    "SCENARIO" ASC`
+        );
+        var vDateSeries = vDateFrom;
+        lsDates.WEEK_DATE = GenFunctions.getNextMondayCmp(vDateSeries);
+        vDateSeries = lsDates.WEEK_DATE;
+        liDates.push(lsDates);
+        lsDates = {};
+        while (vDateSeries <= vDateTo) {
+            vDateSeries = GenFunctions.addDays(vDateSeries, 7);
+            lsDates.WEEK_DATE = vDateSeries;
+            liDates.push(lsDates);
+            lsDates = {};
+        }
+        vRestr = 0;
+
+        for (let j = 0; j < liRestr.length; j++) {
+            // Initially set vWeekIndex to j to geneate Week columns
+            // vRestrIndex is to get Componnent quantity for all dates
+            vWeekIndex = 0; //j
+            lsRestrWeekly.LOCATION_ID = liRestr[j].LOCATION_ID;
+            lsRestrWeekly.PRODUCT_ID = liRestr[j].PRODUCT_ID;
+            lsRestrWeekly.LINE_ID = liRestr[j].LINE_ID;
+            // lsRestrWeekly.RESTRICTION = liRestr[j].RESTRICTION;
+            lsRestrWeekly.VERSION = liRestr[j].VERSION;
+            lsRestrWeekly.SCENARIO = liRestr[j].SCENARIO;
+            // lsRestrWeekly.QTYTYPE = "Normalized";
+
+            for (let i = 0; i < liDates.length; i++) {
+                vWeekIndex = vWeekIndex + 1;
+                for (vRestrIndex = 0; vRestrIndex < liRestrQty.length; vRestrIndex++) {
+                    lsRestrWeekly[columnname + vWeekIndex] = 0;
+                    if (
+                        liRestrQty[vRestrIndex].RESTRICTION === lsRestrWeekly.RESTRICTION &&
+                        liRestrQty[vRestrIndex].WEEK_DATE === liDates[i].WEEK_DATE
+                    ) {
+                        //   lsRestrWeekly.STRUC_NODE = liRestrQty[vRestrIndex].STRUC_NODE;
+                        lsRestrWeekly[columnname + vWeekIndex] =
+                            liRestrQty[vRestrIndex].COMP_QTY;
+                        break;
+                    }
+                }
+            }
+            liRestrWeekly.push(GenFunctions.parse(lsRestrWeekly));
+            // lsCompWeekly = {};
+            // }
+            lsRestrWeekly = {};
+        }
+        liRestrWeekly.sort(GenFunctions.dynamicSortMultiple("LINE_ID", "PRODUCT_ID"));
+        return liRestrWeekly;
     });
     // Create profiles
     srv.on("createProfiles", async (req) => {
@@ -2461,7 +2630,7 @@ module.exports = (srv) => {
         }
         oRtrDetailsIns = {};
         return responseMessage;
-    });    
+    });
 
     // POST Service for Unique Characteristic Items and Weekly Quantities
     srv.on("postCIRQuantities", async (req) => {
@@ -2472,14 +2641,14 @@ module.exports = (srv) => {
         const liCIRQty = oCIRData.liCIRQty;
         const liUniqueId = oCIRData.liUniqueId;
         const aUniqueIdChar = await objCIR.getUniqueIdCharacteristics(req);
-        const sLoginUserId = req.headers['x-username'];
-        const sCFDestUser = req.data.VALIDUSER;   
+        // const sLoginUserId = req.headers['x-username'];
+        const sCFDestUser = req.data.VALIDUSER;
         let aFilteredChar = [], aFilteredCIR = [];
         let sUniqueId = "";
         let oUniqueIdChars = {};
         let aUniqueIdChars = [];
-        let oEntry = {};  
-        
+        let oEntry = {};
+
 
         for (let i = 0; i < liUniqueId.length; i++) {
             // Unique Id Characteristics
@@ -2514,7 +2683,7 @@ module.exports = (srv) => {
                 oEntry.UniqueId = (aFilteredCIR[j].UNIQUE_ID).toString();
                 oEntry.Datum = aFilteredCIR[j].WEEK_DATE + "T10:00:00";
                 oEntry.Valid_User = sCFDestUser;
-                oEntry.User_Id = sLoginUserId;
+                // oEntry.User_Id = sLoginUserId;
                 oEntry.HeaderConfig = aUniqueIdChars;
                 try {
                     let sReturn = await oModel.tx(req).post("/headerSet", oEntry);
@@ -2540,13 +2709,22 @@ module.exports = (srv) => {
         const liCIRQty = oCIRData.liCIRQty;
         const liUniqueId = oCIRData.liUniqueId;
         const aUniqueIdChar = await objCIR.getUniqueIdCharacteristics(req);
-        const sCFDestUser = req.data.VALIDUSER; 
-        const sLoginUserId = req.headers['x-username'];
+        const sCFDestUser = req.data.VALIDUSER;
+        // const sLoginUserId = req.headers['x-username'];
+        let sLoginUserId = "";
         let aFilteredChar = [], aFilteredCIR = [];
         let sUniqueId = "";
         let oUniqueIdChars = {};
         let aUniqueIdChars = [];
         let oEntry = {};
+        sLoginUserId = req.data.USER_ID;
+        // if(req.user) {
+        //   sLoginUserId = req.user;
+        // }
+        // if(req.req.rawHeaders[1]) {
+        //    sLoginUserId = req.req.rawHeaders[1];
+        // }
+        console.log(req.req.rawHeaders[1]);
         for (let i = 0; i < liUniqueId.length; i++) {
             // Unique Id Characteristics
             aUniqueIdChars = [];
@@ -2580,7 +2758,9 @@ module.exports = (srv) => {
                 oEntry.UniqueId = (aFilteredCIR[j].UNIQUE_ID).toString();
                 oEntry.Datum = aFilteredCIR[j].WEEK_DATE + "T10:00:00";
                 oEntry.Valid_User = sCFDestUser;
-                oEntry.User_Id = sLoginUserId;
+                if (sLoginUserId) {
+                    oEntry.User_Id = sLoginUserId;
+                }
                 oEntry.HeaderConfig = aUniqueIdChars;
                 try {
                     await oModel.tx(req).post("/headerSet", oEntry);
@@ -2651,7 +2831,7 @@ module.exports = (srv) => {
     });
 
     // EOI - Deepa
-    
+
     ///////////////////////////////////////////////////////////
     srv.on("generateMarketAuthfn", async (request) => {
         //     var flag, lMessage = '';
@@ -2991,7 +3171,7 @@ module.exports = (srv) => {
                 ret_response = JSON.parse(error);
             });
 
-        console.log(ret_response);
+        // console.log(ret_response);
         return ret_response;
     });
 
@@ -3011,7 +3191,7 @@ module.exports = (srv) => {
         const sUaaCredentials = dest_service.credentials.clientid + ':' + dest_service.credentials.clientsecret;
 
         const sDestinationName = 'S4D_HTTP';
-        const sEndpoint = '/secure/';       
+        const sEndpoint = '/secure/';
 
 
         /*************************************************************
@@ -3037,10 +3217,17 @@ module.exports = (srv) => {
                 ret_response = JSON.parse(error);
             });
 
-        console.log(ret_response);
-        return ret_response;        
+        // console.log(ret_response);
+        return ret_response;
 
     });
+
+
+    srv.on('getUserInfo', async (req) => {
+        console.log("Login User", req.user.id);
+        return req.user.id;
+    });
+
 
 
     // EOI Deepa

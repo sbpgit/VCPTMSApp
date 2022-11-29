@@ -227,7 +227,7 @@ Content-Type: application/json
 
 {
 	"Location" : "PL20",
-	"Product" : "534EDPI0E119",
+	"Product" : "ALL",
 	"ProdType": true
 }
 
@@ -237,24 +237,25 @@ Content-Type: application/json
 
 {
 	"Location" : "PL20",
-	"Product" : "ALL",
-	"ProdType": true
+	"Product" : "534EDPI"
 }
 
 
-### generate Clusters Input Data
-POST http://localhost:4004/pal/genClusterUniqueIDS
+### generate UniqueId CharVals  Input Data
+POST http://localhost:4004/pal/genUniqueIdCharVals
 Content-Type: application/json
 
 {
 	"Location" : "PL20",
-	"Product" : "ALL",
-	"ProdType": false
-
+	"Product" : "534EDPI0E119"
 }
 
+
+### generate UniqueId CharVals  Input Data
+GET http://localhost:4004/pal/fgenUniqueIdCharVals(Location='PL20',Product='534EDPI0E119')
+
 ### generate Clusters Input Data
-GET http://localhost:4004/pal/fgenClusterInputs(Location='PL20',Product='534EDPI0E119')
+GET http://localhost:4004/pal/fgenClusterUniqueIDS(Location='PL20',Product='ALL')
 
 
 ### generate Clusters
@@ -267,7 +268,7 @@ Content-Type: application/json
 			"profile": "SBP_AHC_0",
 			"override": false,
 			"Location": "PL20",
-			"Product": "534EDPI0E131"
+			"Product": "534EDPI"
 		}
 	]
 }
@@ -341,10 +342,10 @@ Content-Type: application/json
 {
 	"vcRulesList": [
 		{
-			"profile": "SBP_AHC_0",
+			"profile": "SBP_AHC_1",
 			"override": false,
 			"Location": "PL20",
-			"Product": "534EDPI"
+			"Product": "ALL"
 		}
 	]
 }

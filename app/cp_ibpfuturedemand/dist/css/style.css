@@ -20,8 +20,12 @@ div#__xmlview0--idPage-title {
 div#__title1-left-inner {
     margin-left: 600px;
 }
-.classHdr{
-    margin-left:35rem
+.hdrBtnMarginHdr{
+    margin-left:1rem
+}
+.sapFDynamicPageTitleMain>.sapFDynamicPageTitleMainInner .sapFDynamicPageTitleMainHeading .sapFDynamicPageTitleMainHeadingInner .sapMTitle {
+    font-size: 1.25rem;
+    margin-top: 0.25rem;
 }
 
 .classMargin{
