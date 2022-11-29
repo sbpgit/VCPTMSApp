@@ -78,7 +78,7 @@
             </FlexBox>
         </ux:headerContent>
         <ux:sections>
-            <ux:ObjectPageSection id="idOBPageSec">
+            <ux:ObjectPageSection id="idOBPageSec" showTitle="false">
                 <ux:subSections >
                     <ux:ObjectPageSubSection id="idObjectPageSub">
                         <ux:blocks >
