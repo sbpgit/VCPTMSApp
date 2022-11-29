@@ -1,0 +1,17 @@
+----------------------------------------------------------------------------------------
+-- Name:            V_IBPVERSCENARIO
+-- Description:     Fetch IBP version and scenario for a location-product
+-- Join Details:    A: CP_IBP_FCHARPLAN-  IBP future charateristic plan
+--                  B: CP_PRODUCT_CLASS- Master table for Product and Class
+-----------------------------------------------------------------------------------------
+VIEW "V_IBPVERSCENARIO"
+AS SELECT DISTINCT LOCATION_ID,
+PRODUCT_ID,
+VERSION,
+SCENARIO
+from "CP_IBP_FCHARPLAN" 
+
+-- AS A
+-- INNER JOIN "CP_PRODUCT_CLASS" AS B
+-- ON A.PRODUCT_ID = B.PRODUCT_ID
+-- AND A.CLASS_NUM = B.CLASS_NUM;
