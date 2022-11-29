@@ -137,20 +137,6 @@ sap.ui.define(
           that.getView().byId("headSearch").setValue();
           oGModel.setProperty("/dataFlag", "");
 
-        //   var nowH = new Date();
-        //   //past 15 days selected date
-        //   var oDateL = new Date(
-        //     nowH.getFullYear(),
-        //     nowH.getMonth(),
-        //     nowH.getDate() - 15
-        //   );
-        //   // Setting the date values to filter the data
-        //   this.byId("idDateRange").setDateValue(oDateL);
-        //   this.byId("idDateRange").setSecondDateValue(nowH);
-
-        //   that.byId("JobPanel").setExpanded(true);
-        //   that.byId("jobDetailsPanel").setExpanded(false);
-        //   sap.ui.core.BusyIndicator.show();
         that.oList.setBusy(true);
           that.getModel("JModel").callFunction("/readJobs", {
             method: "GET",
@@ -159,6 +145,10 @@ sap.ui.define(
             //   sap.ui.core.BusyIndicator.hide();
               oData.results.forEach(function (row) {
                 row.jobId = row.jobId.toString();
+                row.wFlag = "";
+                if(row.description.includes("Weekly")){
+                  row.wFlag = "X";
+                }
               }, that);
               oGModel.setProperty("/tableData", oData.results);
               var aData = [];
@@ -300,6 +290,12 @@ sap.ui.define(
           oGModel.setProperty("/startTime", oSelItem.startTime);
           oGModel.setProperty("/endTime", oSelItem.endTime);
           oGModel.setProperty("/createdAt", oSelItem.createdAt);
+          if(oSelItem.wFlag === "X"){
+          oGModel.setProperty("/wFlag", "X");
+          } else {
+            oGModel.setProperty("/wFlag", "");
+          }
+
         } else {
 
             var oSelItem = oGModel.getProperty("/aDATA");
@@ -311,6 +307,11 @@ sap.ui.define(
           oGModel.setProperty("/startTime", oSelItem.startTime);
           oGModel.setProperty("/endTime", oSelItem.endTime);
           oGModel.setProperty("/createdAt", oSelItem.createdAt);
+          if(oSelItem.wFlag.includes("Weekly")){
+            oGModel.setProperty("/wFlag", "X");
+            } else {
+              oGModel.setProperty("/wFlag", "");
+            }
 
         }
         // Calling Item Detail page

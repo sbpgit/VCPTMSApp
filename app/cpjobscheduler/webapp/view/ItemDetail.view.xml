@@ -13,7 +13,8 @@
                     <ToolbarSpacer/>
                     <ToolbarSpacer/>
                         <Button id="btnRefresh" tooltip="Refresh" icon="sap-icon://refresh"  press="onScheduleClick"  />
-                        <Button id="btnaddSche" tooltip="{i18n>addsch}" icon="sap-icon://create-entry-time" press="onAddSchedule"  />
+                        <Button id="btnaddSche" tooltip="{i18n>addsch}" icon="sap-icon://create-entry-time" press="onAddSchedule"
+                                enabled="{= ${oGModel>/wFlag} === 'X' ? false : true }"  />
                     </Toolbar>
                     <!-- <l:Grid defaultSpan="XL2 L2 M3 S6">
                         <VBox>
@@ -84,8 +85,10 @@
                                         <!-- <Button id="idStatus" text="Status" tooltip="Schedule status" press="onSchestatus" iconDensityAware="false" type="Emphasized" />
                                 <Button id="idRunlogData"  icon="sap-icon://display" tooltip="Run logs" press="onRunlogs" iconDensityAware="false" type="Transparent"/> -->
                                         <Button id="idscheData" icon="sap-icon://form" tooltip="Schedule Data" press="onScheData" iconDensityAware="false" type="Transparent" />
-                                        <Button id="idScheUpdate" icon="sap-icon://edit" press="onScheUpdate" tooltip="Update Schedule" iconDensityAware="false" type="Transparent" />
-                                        <Button id="idScheDele" icon="sap-icon://decline" press="onScheDelete" tooltip="Delete Schedule" iconDensityAware="false" type="Transparent" />
+                                        <Button id="idScheUpdate" icon="sap-icon://edit" press="onScheUpdate" tooltip="Update Schedule" iconDensityAware="false" type="Transparent" 
+                                                enabled="{= ${oGModel>/wFlag} === 'X' ? false : true }" />
+                                        <Button id="idScheDele" icon="sap-icon://decline" press="onScheDelete" tooltip="Delete Schedule" iconDensityAware="false" type="Transparent" 
+                                                enabled="{= ${oGModel>/wFlag} === 'X' ? false : true }" />
                                     </HBox>
                                 </cells>
                             </ColumnListItem>

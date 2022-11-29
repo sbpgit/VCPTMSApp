@@ -40,7 +40,8 @@
                                 <Text text="{name}" />
                             </VBox>
                             <HBox>
-                                <Button id="idJobUpdate" icon="sap-icon://edit" press="onUpdateJob" tooltip="Update Job" iconDensityAware="false" type="Transparent" />
+                                <Button id="idJobUpdate" icon="sap-icon://edit" press="onUpdateJob" tooltip="Update Job" iconDensityAware="false" type="Transparent" 
+                                        enabled="{= ${wFlag} === 'X' ? false : true }"/>
                                 <Button id="idJobDele" icon="sap-icon://decline" tooltip="Delete Job" press="onJobDelete" iconDensityAware="false" type="Transparent" />
                             </HBox>
                         </cells>
