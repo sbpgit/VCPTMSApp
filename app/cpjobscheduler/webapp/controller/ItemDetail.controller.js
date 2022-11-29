@@ -211,17 +211,7 @@ sap.ui.define(
         for (var i = 0; i < aData.length; i++) {
           if (scheduleId === aData[i].scheduleId) {
             if (jobType === "S") {
-              // var data = $.parseJSON(aData[i].data);
-              // var aIData = {
-              //   Location: data.LOCATION_ID,
-              //   Product: data.PRODUCT_ID,
-              //   scenario: data.SCENARIO,
-              //   version: data.VERSION,
-              //   fromdate: data.FROMDATE,
-              //   todate: data.TODATE,
-              //   CUSTOMER_GROUP: data.CUSTOMER_GROUP,
-              // };
-              ScheData.push(aIData);
+              ScheData = [];
               // 04-10-2022
             } else if (jobType === "A" || jobType === "O") {
               var data = $.parseJSON(aData[i].data);
