@@ -267,7 +267,7 @@ sap.ui.define(
                 var vToDate = this.byId("toDate").getDateValue();
 
 
-                // checking if the inpus are not undefined
+                // checking if the inputs are not undefined
                 if (
                     oLoc !== undefined &&
                     oProd !== undefined &&
@@ -326,7 +326,7 @@ sap.ui.define(
                 } else {
                     sap.ui.core.BusyIndicator.hide();
                     sap.m.MessageToast.show(
-                        "Please select a Location/Product/Version/Scenario/Date Range"
+                        "Please select a Location/Version/Scenario/Date Range"
                     );
                 }
             },
@@ -759,14 +759,14 @@ sap.ui.define(
                     if (that.byId("idloc").getValue() ) {
                         that._valueHelpDialogVer.open();
                     } else {
-                        MessageToast.show("Select Location and Product");
+                        MessageToast.show("Select Location");
                     }
                     // Scenario Dialog
                 } else if (sId.includes("scen")) {
                     if (that.byId("idloc").getValue() ) {
                         that._valueHelpDialogScen.open();
                     } else {
-                        MessageToast.show("Select Location and Product");
+                        MessageToast.show("Select Location");
                     }
                     // Component Dialog
                 } 
@@ -882,9 +882,9 @@ sap.ui.define(
                             })
                         );
                     }
-                    // that.oProdList.getBinding("items").filter(oFilters);
+                    that.oProdList.getBinding("items").filter(oFilters);
                     // Version
-                } else if (sId.includes("ver")) {
+                } else if (sId.includes("Ver")) {
                     if (sQuery !== "") {
                         oFilters.push(
                             new Filter({
@@ -909,34 +909,8 @@ sap.ui.define(
                         );
                     }
                     that.oScenList.getBinding("items").filter(oFilters);
-                    // Component
-                } else if (sId.includes("Comp")) {
-                    if (sQuery !== "") {
-                        oFilters.push(
-                            new Filter({
-                                filters: [
-                                    new Filter("COMPONENT", FilterOperator.Contains, sQuery),
-                                    new Filter("ITEM_NUM", FilterOperator.Contains, sQuery),
-                                ],
-                                and: false,
-                            })
-                        );
-                    }
-                    that.oCompList.getBinding("items").filter(oFilters);
-                    // Structure Node
-                } else if (sId.includes("Stru")) {
-                    if (sQuery !== "") {
-                        oFilters.push(
-                            new Filter({
-                                filters: [
-                                    new Filter("STRUC_NODE", FilterOperator.Contains, sQuery),
-                                ],
-                                and: false,
-                            })
-                        );
-                    }
-                    that.oStruList.getBinding("items").filter(oFilters);
-                }
+                    
+                } 
             },
 
             /**
