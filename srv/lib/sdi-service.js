@@ -600,7 +600,7 @@ module.exports = (srv) => {
             let dbConn = new dbClass(await dbClass.createConnectionFromEnv())
             const sp = await dbConn.loadProcedurePromisified(null, '"FG_CLASS_SP"')
             const sp2 = await dbConn.loadProcedurePromisified(null, '"FG_CHARACTERISTICS_SP"')
-            const sp3 = await dbConn.loadProcedurePromisified(null, '"FG_CHARVAL_SP"')
+            const sp3 = await dbConn.loadProcedurePromisified(null, '"FG_CHAR_VALUES_SP"')
             const output = await dbConn.callProcedurePromisified(sp, [])
             const output2 = await dbConn.callProcedurePromisified(sp2, [])
             const output3 = await dbConn.callProcedurePromisified(sp3, [])
