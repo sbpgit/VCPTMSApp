@@ -40,6 +40,15 @@
                     <Column hAlign="Left" vAlign="Middle">
 						<Text text="Past Days"/>
 					</Column>
+					<Column hAlign="Left" vAlign="Middle">
+						<Text text="Profile"/>
+					</Column>
+					<Column hAlign="Left" vAlign="Middle">
+						<Text text="OverRide Assignment"/>
+					</Column>
+					<Column hAlign="Left" vAlign="Middle">
+						<Text text="Critical Key"/>
+					</Column>
 				</columns>
 				<items>
 					<ColumnListItem>
@@ -56,6 +65,9 @@
                             <Text text="{fromdate}"/>
                             <Text text="{todate}"/>
                             <Text text="{PAST_DAYS}"/>
+							<Text text="{profile}"/>
+							<Text text="{override}"/>
+							<Text text="{CRITICALKEY}"/>
 						</cells>
 					</ColumnListItem>
 				</items>

@@ -83,7 +83,7 @@ class IBPFunctions {
         }
         return oReq;
     }
-    async importFutureDemandcharPlan(request){   //aLocProd, request, vServ) {
+    async importFutureDemandcharPlan(aLocProd, request, vServ) {
         let lMessage = '', flag;
         let lVersion, lScenario, vFromDate, vToDate;
         let lilocProdReq = JSON.parse(request.data.MARKETDATA);
