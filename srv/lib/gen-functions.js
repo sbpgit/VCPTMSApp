@@ -202,7 +202,22 @@ class GenFunctions {
 
         return lsValue.VALUE;
     }
-
+    /**
+         * Get IBP Configuration Parameters
+         * @param {Location} lLocation 
+         * @param {Parameter} lParameter 
+         */
+    static async getIBPParameterValue() {
+        // Get Planning area and Prefix configurations for IBP
+        let liParaValue = await SELECT
+            .from("CP_PARAMETER_VALUES")
+            .columns("PARAMETER_ID", "VALUE")
+            .where(`PARAMETER_ID = ${parseInt(8)} OR PARAMETER_ID = ${parseInt(10)}`)
+            .orderBy("PARAMETER_ID");
+        let lKeys = ['PARAMETER_ID', 'VALUE'];
+        liParaValue = this.removeDuplicate(liParaValue, lKeys);
+        return liParaValue;//[liParaValue[0].VALUE, liParaValue[1].VALUE];
+    }
     static addleadzeros(num, size) {
 
         num = num.toString();
@@ -217,7 +232,7 @@ class GenFunctions {
 
         num = num.toString();
         num = num.replace(/^0+/, '');
-        
+
 
         // while (num.length < size) num = "0" + num;
 
