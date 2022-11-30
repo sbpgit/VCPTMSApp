@@ -25513,10 +25513,7 @@
       }
     },
     "IBPImportSrv.importibpversce": {
-      "kind": "function",
-      "returns": {
-        "type": "cds.String"
-      }
+      "kind": "action"
     },
     "IbpImportRest": {
       "@source": "srv/ibpimport-service.cds",

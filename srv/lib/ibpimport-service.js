@@ -1683,7 +1683,7 @@ module.exports = cds.service.impl(async function () {
     //// Future Demand Qty
     this.on("generateFDemandQty", async (request) => {
         // Get IBP planning area
-        let lsValue = await SELECT.ONE
+        let lsValue = await SELECT.one
             .from("CP_PARAMETER_VALUES")
             .columns("VALUE")
             .where(`PARAMETER_ID = ${parseInt(8)}`);
@@ -2605,7 +2605,8 @@ module.exports = cds.service.impl(async function () {
         let liParaValue = await GenF.getIBPParameterValue();
         let flag, lMessage = '';
         let resUrl = "/" + liParaValue[0].VALUE + "?$select=VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$inlinecount=allpages";
-        let req = await service.tx(req).get(resUrl);
+        let req = await service.tx(request).get(resUrl);
+           
         if (req.length) {
             await DELETE.from('CP_IBPVERSIONSCENARIO');
         }
@@ -2631,11 +2632,11 @@ module.exports = cds.service.impl(async function () {
         if (flag === 'S') {
             lMessage = "Successfully imported version scenario from IBP";
             console.log(lMessage);
-            // return "Success";
+            return "Success";
         } else {
             lMessage = "Failed to import version scenario from IBP";
             console.log(lMessage);
-            // return "Failed";
+            return "Failed";
         }
     });
 

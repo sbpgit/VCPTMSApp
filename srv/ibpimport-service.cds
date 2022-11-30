@@ -47,8 +47,8 @@ service IBPImportSrv @(impl : './lib/ibpimport-service.js') {
 
     action generateMarketAuth( MARKETDATA : String);
 
-    action importibpversce();
-    // function importibpversce() returns String;
+    // action importibpversce();
+    function importibpversce() returns String;
 }
 @protocol : 'rest'
 service IbpImportRest {

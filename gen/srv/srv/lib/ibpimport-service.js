@@ -2631,11 +2631,11 @@ module.exports = cds.service.impl(async function () {
         if (flag === 'S') {
             lMessage = "Successfully imported version scenario from IBP";
             console.log(lMessage);
-            return "Success";
+            // return "Success";
         } else {
             lMessage = "Failed to import version scenario from IBP";
             console.log(lMessage);
-            return "Failed";
+            // return "Failed";
         }
     });
 
