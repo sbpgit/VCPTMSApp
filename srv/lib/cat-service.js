@@ -3167,9 +3167,9 @@ module.exports = (srv) => {
 
             })
             .catch(function (error) {
-                console.log('Get Token - Error ', error);
+                console.log('Get Token - Error ', error); 
                 ret_response = JSON.parse(error);
-            });
+             });
 
         // console.log(ret_response);
         return ret_response;
