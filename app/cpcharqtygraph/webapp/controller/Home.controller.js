@@ -590,7 +590,7 @@ sap.ui.define([
                             }
                             else {
                                 
-                                that.byId("application-cpcharqtygraph-display-component---Home--ObjectPageLayout-OPHeaderContent-collapseBtn-inner").firePress();
+                                that.byId("application-cpcharqtygraph-display-component---Home--ObjectPageLayout-OPHeaderContent-collapseBtn").firePress();
                                 oData.results.forEach(function (row) {
                                     // Calling function to handle the date format
                                     row.WEEK_DATE = that.getInMMddyyyyFormat(row.WEEK_DATE);
