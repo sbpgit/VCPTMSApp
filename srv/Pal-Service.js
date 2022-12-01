@@ -2746,87 +2746,106 @@ async function _purgePredictions(req,isGet) {
 async function _genUniqueIdCharVals(req,isGet) 
 {
 
-    let inputData = "";
-    // if (isGet == true) //GET -- Kludge
-    // {
-    //     inputData = JSON.parse(req.data);
-    // }
-    // else
-    // {
-    //     inputData = req.data;
-    // }
     let locationId = req.data.Location;
     let productId = req.data.Product;
     let sqlStr = 'SELECT DISTINCT LOCATION_ID, PRODUCT_ID, CHAR_NUM, CHAR_NAME FROM CP_V_CLUSTER_CHARS ' +
                     ' WHERE PRODUCT_ID = ' + "'" + productId + "'" +
                     ' ORDER BY CHAR_NUM';
-    console.log("_genUniqueIdCharVals Distinct Chars Sql  ", sqlStr);
+    // console.log("_genUniqueIdCharVals Distinct Chars Sql  ", sqlStr);
     let sqlStrResults = await cds.run(sqlStr);
     let charStr = sqlStrResults[0].CHAR_NAME;
+    let charNumStr = sqlStrResults[0].CHAR_NUM;
+
     let tableObj = [];
     for (let charIndex = 1; charIndex < sqlStrResults.length ; charIndex++)
     {
-        // if (charIndex ==  (sqlStrResults.length -1))
-        // {
-        //     charStr = charStr + sqlStrResults[charIndex].CHAR_NAME;
-        // }
-        // else
-        // {
-            charStr = charStr + "," + sqlStrResults[charIndex].CHAR_NAME;
-        // }
+        charStr = charStr + "," + sqlStrResults[charIndex].CHAR_NAME;
+        charNumStr = charNumStr + "," + sqlStrResults[charIndex].CHAR_NUM;
     }
+
+    let charNums = charNumStr.split(',');
+    var charVals = [];
+    
+    for (let charValIdx = 0; charValIdx < charNums.length; charValIdx ++)
+    {
+        charVals[charValIdx] = 'NA';
+    } 
+
+
     let column1 = 'LOCATION_ID';
     let column2 = 'PRODUCT_ID';
     let column3 = 'UNIQUE_ID';
     let columnsStr =charStr;
     tableObj.push({column1, column2, column3, columnsStr});    
-    console.log("_genUniqueIdCharVals Column Header",tableObj);
+    // console.log("_genUniqueIdCharVals Column Header",tableObj);
 
     sqlStr = 'SELECT DISTINCT LOCATION_ID, PRODUCT_ID, UNIQUE_ID, CHAR_NUM, CHAR_VALUE FROM CP_V_CLUSTER_CHARS' +
                 ' WHERE PRODUCT_ID = ' + "'" + productId + "'" +
                 ' AND LOCATION_ID = ' + "'" + locationId + "'" +
                 ' ORDER BY LOCATION_ID, PRODUCT_ID, UNIQUE_ID, CHAR_NUM';
+
+    console.log("sqlStr = ",sqlStr );
+
     
-    sqlStrResults = await cds.run(sqlStr);
-    // console.log("sqlStrResults = ",sqlStrResults );
+    let sqlUniqueStrResults = await cds.run(sqlStr);
+    // console.log("sqlUniqueStrResults = ",sqlUniqueStrResults );    
+    
 
-    if (sqlStrResults.length > 0)
+    if (sqlUniqueStrResults.length > 0)
     {
-        let uniqueId = sqlStrResults[0].UNIQUE_ID;
-        let charValStr ="";
-        for (let charIndex = 0; charIndex < sqlStrResults.length ; charIndex++)
+
+        let columnValStr ="";
+        // for (let charIndex = 0; charIndex < sqlUniqueStrResults.length ; charIndex++)
+        for (let charIndex = 0; charIndex < sqlUniqueStrResults.length ; charIndex++)
         {
-            // if (charIndex < 10)
-            // console.log("sqlStrResults[", charIndex, "] = ",sqlStrResults[charIndex] );
 
-            let curUniqueId = sqlStrResults[charIndex].UNIQUE_ID;
-            if (curUniqueId != uniqueId) 
+            let uniqueId = sqlUniqueStrResults[charIndex].UNIQUE_ID;
+            let nextUniqueId = 0;
+            if (charIndex < sqlUniqueStrResults.length-1)
+                nextUniqueId = sqlUniqueStrResults[charIndex+1].UNIQUE_ID;
+            
+            for (let charNumsIdx = 0; charNumsIdx < charNums.length; charNumsIdx++)
             {
-                tableObj.push({locationId, productId, uniqueId, charValStr});    
-                uniqueId =  curUniqueId;
-                // charValStr = "";
-                // charValStr = sqlStrResults[charIndex].CHAR_VALUE + ",";
-                charValStr = sqlStrResults[charIndex].CHAR_VALUE;
-
+                if ( charNums[charNumsIdx] == sqlUniqueStrResults[charIndex].CHAR_NUM)
+                {
+                    
+                    charVals[charNumsIdx] = sqlUniqueStrResults[charIndex].CHAR_VALUE;
+                    // console.log("uniqueId", uniqueId, "charNumsIdx ", charNumsIdx, "charIndex", charIndex, "charVals", charVals );
+                    break;
+                }
 
             }
-            else
+
+            if (uniqueId != nextUniqueId)
             {
-
-                // charValStr = charValStr + sqlStrResults[charIndex].CHAR_VALUE + ",";
-                if (charIndex !=0 )
-                    charValStr = charValStr + "," + sqlStrResults[charIndex].CHAR_VALUE;
-                else
-                    charValStr = sqlStrResults[charIndex].CHAR_VALUE;
-
+                for (let charNumsIdx = 0; charNumsIdx < charNums.length; charNumsIdx++)
+                {
+                    if (charNumsIdx < charNums.length -1)
+                    {
+                        columnValStr = columnValStr + charVals[charNumsIdx] + ',';
+                    }
+                    else
+                    {
+                        columnValStr = columnValStr + charVals[charNumsIdx];
+                    }
+                }
+                tableObj.push({locationId, productId, uniqueId, columnValStr});  
+                // console.log("tableObj pushed for columnValStr", columnValStr);
+  
+                columnValStr ="";
+                for (let charValIdx = 0; charValIdx < charNums.length; charValIdx ++)
+                {
+                    charVals[charValIdx] = 'NA';
+            
+                }
+                uniqueId = sqlUniqueStrResults[charIndex].UNIQUE_ID;
 
 
             }
 
         }
-    }
-    console.log("_genUniqueIdCharVals Row Objs ",tableObj);
 
+    }
 
     if (isGet == true)
     {
@@ -2840,102 +2859,6 @@ async function _genUniqueIdCharVals(req,isGet)
     }
 }
 
-async function _genUniqueIdCharVals_old(req,isGet) 
-{
-
-    let inputData = "";
-    // if (isGet == true) //GET -- Kludge
-    // {
-    //     inputData = JSON.parse(req.data);
-    // }
-    // else
-    // {
-    //     inputData = req.data;
-    // }
-    let locationId = req.data.Location;
-    let productId = req.data.Product;
-    let sqlStr = 'SELECT DISTINCT LOCATION_ID, PRODUCT_ID, CHAR_NUM, CHAR_NAME FROM CP_V_CLUSTER_CHARS ' +
-                    ' WHERE PRODUCT_ID = ' + "'" + productId + "'" +
-                    ' ORDER BY CHAR_NUM';
-    console.log("_genUniqueIdCharVals Distinct Chars Sql  ", sqlStr);
-    let sqlStrResults = await cds.run(sqlStr);
-    let charStr = sqlStrResults[0].CHAR_NAME;
-    let tableObj = [];
-    for (let charIndex = 1; charIndex < sqlStrResults.length ; charIndex++)
-    {
-        // if (charIndex ==  (sqlStrResults.length -1))
-        // {
-        //     charStr = charStr + sqlStrResults[charIndex].CHAR_NAME;
-        // }
-        // else
-        // {
-            charStr = charStr + "," + sqlStrResults[charIndex].CHAR_NAME;
-        // }
-    }
-    let column1 = 'LOCATION_ID';
-    let column2 = 'PRODUCT_ID';
-    let column3 = 'UNIQUE_ID';
-    let columnsStr =charStr;
-    tableObj.push({column1, column2, column3, columnsStr});    
-    console.log("_genUniqueIdCharVals Column Header",tableObj);
-
-    sqlStr = 'SELECT DISTINCT LOCATION_ID, PRODUCT_ID, UNIQUE_ID, CHAR_NUM, CHAR_VALUE FROM CP_V_CLUSTER_CHARS' +
-                ' WHERE PRODUCT_ID = ' + "'" + productId + "'" +
-                ' AND LOCATION_ID = ' + "'" + locationId + "'" +
-                ' ORDER BY LOCATION_ID, PRODUCT_ID, UNIQUE_ID, CHAR_NUM';
-    
-    sqlStrResults = await cds.run(sqlStr);
-    // console.log("sqlStrResults = ",sqlStrResults );
-
-    if (sqlStrResults.length > 0)
-    {
-        let uniqueId = sqlStrResults[0].UNIQUE_ID;
-        let charValStr ="";
-        for (let charIndex = 0; charIndex < sqlStrResults.length ; charIndex++)
-        {
-            // if (charIndex < 10)
-            // console.log("sqlStrResults[", charIndex, "] = ",sqlStrResults[charIndex] );
-
-            let curUniqueId = sqlStrResults[charIndex].UNIQUE_ID;
-            if (curUniqueId != uniqueId) 
-            {
-                tableObj.push({locationId, productId, uniqueId, charValStr});    
-                uniqueId =  curUniqueId;
-                // charValStr = "";
-                // charValStr = sqlStrResults[charIndex].CHAR_VALUE + ",";
-                charValStr = sqlStrResults[charIndex].CHAR_VALUE;
-
-
-            }
-            else
-            {
-
-                // charValStr = charValStr + sqlStrResults[charIndex].CHAR_VALUE + ",";
-                if (charIndex !=0 )
-                    charValStr = charValStr + "," + sqlStrResults[charIndex].CHAR_VALUE;
-                else
-                    charValStr = sqlStrResults[charIndex].CHAR_VALUE;
-
-
-
-            }
-
-        }
-    }
-    console.log("_genUniqueIdCharVals Row Objs ",tableObj);
-
-
-    if (isGet == true)
-    {
-        req.reply({tableObj});
-    }
-    else
-    {
-        let res = req._.req.res;
-        res.statusCode = 200;
-        res.send({tableObj});
-    }
-}
 
 async function _genClusterUniqueIDSByLocProduct(location, product, refProdId)
 {
