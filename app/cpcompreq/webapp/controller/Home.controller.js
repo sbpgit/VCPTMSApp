@@ -250,12 +250,12 @@ sap.ui.define(
                     oComp = that.oGModel.getProperty("/SelectedComp"),
                     oStru = that.oGModel.getProperty("/SelectedStru"),
                     oModelVersion = that.byId("idModelVer").getSelectedKey(),
-                    bCriticalKey = '';
+                    bCriticalKey = "";
 
                 if (that.byId("idChkCritComp").getSelected() === true) {
-                    bCriticalKey = 'X';
+                    bCriticalKey = "X";
                 } else {
-                    bCriticalKey = ' ';
+                    bCriticalKey = "";
                 }
 
                 that.oGModel.setProperty(
@@ -667,7 +667,7 @@ sap.ui.define(
                     if (vDateSeries > imToDate) {
                         break;
                     }
-                    // Calling function to get the next Sunday date of From date
+                    
                     lsDates.CAL_DATE = vDateSeries;//that.getNextMonday(vDateSeries);
                     //vDateSeries = lsDates.CAL_DATE;
                     liDates.push(lsDates);

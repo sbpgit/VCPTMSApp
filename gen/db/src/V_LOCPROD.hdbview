@@ -1,0 +1,14 @@
+----------------------------------------------------------------------------------------
+-- Name:            V_LOCPROD
+-- Description:     Fetch Location and products listed in Products master table
+-- Join Details:    A: CP_LOCATION_PRODUCT-  Master table for location and product
+--                  B: CP_PRODUCT- Master table for Products
+-----------------------------------------------------------------------------------------
+VIEW "V_LOCPROD"
+AS SELECT DISTINCT
+A.PRODUCT_ID,
+A.LOCATION_ID,
+B.PROD_DESC
+FROM "CP_LOCATION_PRODUCT" AS A
+LEFT OUTER JOIN "CP_PRODUCT" AS B
+ON A."PRODUCT_ID" = B."PRODUCT_ID";

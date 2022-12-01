@@ -990,7 +990,9 @@ entity![V_IBPVERSCENARIO]{
     key![LOCATION_ID] : String(4)  @title : 'LOCATION_ID';
     key![PRODUCT_ID]  : String(40) @title : 'PRODUCT_ID';
     key![VERSION]     : String(10) @title : 'VERSION';
+    key![VERSION_NAME]     : String(50) @title : 'VERSION';
     key![SCENARIO]    : String(32) @title : 'SCENARIO';
+    key![SCENARIO_NAME]    : String(50) @title : 'SCENARIO';
 }
 
 
