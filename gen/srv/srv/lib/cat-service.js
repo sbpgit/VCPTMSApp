@@ -1426,7 +1426,7 @@ module.exports = (srv) => {
                 // lsresults.REF_PRODID = liProdChar[i].REF_PRODID;
                 if (req.data.FLAG === "E" && i === 0) {
                     try {
-                        await cds.delete("CP_NEWPROD_CHAR", lsresults);
+                        await cds.F("CP_NEWPROD_CHAR", lsresults);
                     } catch (e) {
                         //DONOTHING
                     }

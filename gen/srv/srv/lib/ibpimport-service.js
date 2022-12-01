@@ -1683,7 +1683,7 @@ module.exports = cds.service.impl(async function () {
     //// Future Demand Qty
     this.on("generateFDemandQty", async (request) => {
         // Get IBP planning area
-        let lsValue = await SELECT.ONE
+        let lsValue = await SELECT.one
             .from("CP_PARAMETER_VALUES")
             .columns("VALUE")
             .where(`PARAMETER_ID = ${parseInt(8)}`);
@@ -1719,7 +1719,7 @@ module.exports = cds.service.impl(async function () {
             let resUrl = "/" + lsValue + "?$select=PRDID,LOCID,PERIODID4_TSTAMP,TOTALDEMANDOUTPUT,UOMTOID,VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$filter=LOCID eq '" + lsData.LOCATION_ID + "' and PRDID eq '" + lsData.PRODUCT_ID + "'and UOMTOID eq 'EA'";
 
             // req.headers['Application-Interface-Key'] = vAIRKey;
-            let req = await service.tx(req).get(resUrl);
+            let req = await service.tx(request).get(resUrl);
             // if(req.length > 0){
             const vDelDate = new Date();
             const vDateDeld = vDelDate.toISOString().split('T')[0];
@@ -2600,39 +2600,55 @@ module.exports = cds.service.impl(async function () {
         // }
         GenF.jobSchMessage('X', lMessage, req);
     });
-    this.on("importibpversce", async (request) => {
+    this.on("importibpversce", async (req) => {
         // Get Planning area and Prefix configurations for IBP
+        console.log("Started");
         let liParaValue = await GenF.getIBPParameterValue();
+        console.log("liParaValue");
         let flag, lMessage = '';
+        console.log("declaration");
         let resUrl = "/" + liParaValue[0].VALUE + "?$select=VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$inlinecount=allpages";
-        let req = await service.tx(req).get(resUrl);
-        if (req.length) {
-            await DELETE.from('CP_IBPVERSIONSCENARIO');
+        console.log("RESURL" + resUrl);
+        let req1 = await service.tx(req).get(resUrl);
+        console.log("req1"+ req1);
+           
+        if (req1.length) {
+            console.log("Delete started");
+            // await DELETE.from('CP_IBPVERSIONSCENARIO');
+            await cds.run(
+                `DELETE FROM "CP_IBPVERSIONSCENARIO" `
+            );
+            console.log("Delete success");
         }
 
-        for (let i in req) {
-
+        for (let i in req1) {
+            console.log("For Loop");
             let modQuery = 'INSERT INTO "CP_IBPVERSIONSCENARIO" VALUES (' +
-                "'" + req[i].VERSIONID + "'" + "," +
-                "'" + req[i].SCENARIOID + "'" + "," +
-                "'" + req[i].VERSIONNAME + "'" + "," +
-                "'" + req[i].SCENARIONAME + "'" + ')';
+                "'" + req1[i].VERSIONID + "'" + "," +
+                "'" + req1[i].SCENARIOID + "'" + "," +
+                "'" + req1[i].VERSIONNAME + "'" + "," +
+                "'" + req1[i].SCENARIONAME + "'" + ')';
             try {
+                console.log("try start");
                 await cds.run(modQuery);
                 flag = 'S';
+                console.log("try End");
 
             }
             catch (err) {
+                console.log("Catch Error");
                 console.log(err);
             }
 
         }
 
         if (flag === 'S') {
+            console.log("Flag S");
             lMessage = "Successfully imported version scenario from IBP";
             console.log(lMessage);
             // return "Success";
         } else {
+            console.log("Flag E");
             lMessage = "Failed to import version scenario from IBP";
             console.log(lMessage);
             // return "Failed";
