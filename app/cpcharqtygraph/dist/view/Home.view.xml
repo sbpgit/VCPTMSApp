@@ -15,7 +15,7 @@
     xmlns:f="sap.ui.layout.form"
     xmlns:html="http://www.w3.org/1999/xhtml"
 >
-    <ux:ObjectPageLayout id="ObjectPageLayout">
+    <ux:ObjectPageLayout id="ObjectPageLayout" alwaysShowContentHeader="true">
         <ux:headerTitle>
             <ux:ObjectPageDynamicHeaderTitle id="_IDGenObjectPageDynamicHeaderTitle1">
                 <ux:expandedHeading>

@@ -2602,56 +2602,43 @@ module.exports = cds.service.impl(async function () {
     });
     this.on("importibpversce", async (req) => {
         // Get Planning area and Prefix configurations for IBP
-        console.log("Started");
         let liParaValue = await GenF.getIBPParameterValue();
-        console.log("liParaValue");
         let flag, lMessage = '';
-        console.log("declaration");
         let resUrl = "/" + liParaValue[0].VALUE + "?$select=VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$inlinecount=allpages";
-        console.log("RESURL" + resUrl);
         let req1 = await service.tx(req).get(resUrl);
-        console.log("req1"+ req1);
            
         if (req1.length) {
-            console.log("Delete started");
             // await DELETE.from('CP_IBPVERSIONSCENARIO');
             await cds.run(
                 `DELETE FROM "CP_IBPVERSIONSCENARIO" `
             );
-            console.log("Delete success");
         }
 
         for (let i in req1) {
-            console.log("For Loop");
             let modQuery = 'INSERT INTO "CP_IBPVERSIONSCENARIO" VALUES (' +
                 "'" + req1[i].VERSIONID + "'" + "," +
                 "'" + req1[i].SCENARIOID + "'" + "," +
                 "'" + req1[i].VERSIONNAME + "'" + "," +
                 "'" + req1[i].SCENARIONAME + "'" + ')';
             try {
-                console.log("try start");
                 await cds.run(modQuery);
                 flag = 'S';
-                console.log("try End");
 
             }
             catch (err) {
-                console.log("Catch Error");
                 console.log(err);
             }
 
         }
 
         if (flag === 'S') {
-            console.log("Flag S");
-            lMessage = "Successfully imported version scenario from IBP";
-            console.log(lMessage);
-            // return "Success";
+            // lMessage = "Successfully imported version scenario from IBP";
+            // console.log(lMessage);
+            return "Success";
         } else {
-            console.log("Flag E");
-            lMessage = "Failed to import version scenario from IBP";
-            console.log(lMessage);
-            // return "Failed";
+            // lMessage = "Failed to import version scenario from IBP";
+            // console.log(lMessage);
+            return "Failed";
         }
     });
 

@@ -2600,26 +2600,26 @@ module.exports = cds.service.impl(async function () {
         // }
         GenF.jobSchMessage('X', lMessage, req);
     });
-    this.on("importibpversce", async (req) => {
+    this.on("importibpversce", async (request) => {
         // Get Planning area and Prefix configurations for IBP
         let liParaValue = await GenF.getIBPParameterValue();
         let flag, lMessage = '';
         let resUrl = "/" + liParaValue[0].VALUE + "?$select=VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$inlinecount=allpages";
-        let req1 = await service.tx(req).get(resUrl);
+        let req = await service.tx(request).get(resUrl);
            
-        if (req1.length) {
+        if (req.length) {
             // await DELETE.from('CP_IBPVERSIONSCENARIO');
             await cds.run(
                 `DELETE FROM "CP_IBPVERSIONSCENARIO" `
             );
         }
 
-        for (let i in req1) {
+        for (let i in req) {
             let modQuery = 'INSERT INTO "CP_IBPVERSIONSCENARIO" VALUES (' +
-                "'" + req1[i].VERSIONID + "'" + "," +
-                "'" + req1[i].SCENARIOID + "'" + "," +
-                "'" + req1[i].VERSIONNAME + "'" + "," +
-                "'" + req1[i].SCENARIONAME + "'" + ')';
+                "'" + req[i].VERSIONID + "'" + "," +
+                "'" + req[i].SCENARIOID + "'" + "," +
+                "'" + req[i].VERSIONNAME + "'" + "," +
+                "'" + req[i].SCENARIONAME + "'" + ')';
             try {
                 await cds.run(modQuery);
                 flag = 'S';
