@@ -834,12 +834,12 @@ entity CLUSTER_DATA {
 entity AHC_COMBINE_PROCESS {
     key LOCATION_ID : String(4) @title : 'Location ID';
     key PRODUCT_ID  : String(40)@title : 'Product ID';
-    key MODEL_PROFILE    : String(50) @title : 'PAL Model Profile';
+    key MODEL_PROFILE    : String(50) @title : 'Profile';
     // key UNIQUE_ID : String(50)@title : 'Unique ID';
     key STAGE : Integer @title : 'Stage';
-    key LEFT_ID : String(50)@title : 'Left Unique ID in Stage';
-    key RIGHT_ID : String(50)@title : 'Right Unique ID in Stage';
-    key DISTANCE : Double @title : 'Distance between two Combined Clusters'
+    key LEFT_ID : String(50)@title : 'Left Unique ID';
+    key RIGHT_ID : String(50)@title : 'Right Unique ID';
+    key DISTANCE : Double @title : 'Distance between Left and RIght Unique IDs'
 };
 
 entity AHC_RESULTS {
