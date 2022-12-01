@@ -2605,6 +2605,20 @@ module.exports = cds.service.impl(async function () {
         let liParaValue = await GenF.getIBPParameterValue();
         let flag, lMessage = '';
         let resUrl = "/" + liParaValue[0].VALUE + "?$select=VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$inlinecount=allpages";
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+        let req = await service.tx(request).get(resUrl);
+           
+        if (req.length) {
+            await DELETE.from('CP_IBPVERSIONSCENARIO');
+        }
+
+        for (let i in req) {
+
+=======
+        console.log("RESURL" + resUrl);
+>>>>>>> 006d4bf39da4635abad6b6dea96bef918e1cefca
         let req1 = await service.tx(req).get(resUrl);
            
         if (req1.length) {
@@ -2615,6 +2629,11 @@ module.exports = cds.service.impl(async function () {
         }
 
         for (let i in req1) {
+<<<<<<< HEAD
+=======
+            console.log("For Loop");
+>>>>>>> e71dd30691a5ccdf3ec52b2c2c2d73258c149211
+>>>>>>> 006d4bf39da4635abad6b6dea96bef918e1cefca
             let modQuery = 'INSERT INTO "CP_IBPVERSIONSCENARIO" VALUES (' +
                 "'" + req1[i].VERSIONID + "'" + "," +
                 "'" + req1[i].SCENARIOID + "'" + "," +
@@ -2632,12 +2651,23 @@ module.exports = cds.service.impl(async function () {
         }
 
         if (flag === 'S') {
+<<<<<<< HEAD
             // lMessage = "Successfully imported version scenario from IBP";
             // console.log(lMessage);
             return "Success";
         } else {
             // lMessage = "Failed to import version scenario from IBP";
             // console.log(lMessage);
+=======
+            console.log("Flag S");
+            lMessage = "Successfully imported version scenario from IBP";
+            console.log(lMessage);
+            return "Success";
+        } else {
+            console.log("Flag E");
+            lMessage = "Failed to import version scenario from IBP";
+            console.log(lMessage);
+>>>>>>> 006d4bf39da4635abad6b6dea96bef918e1cefca
             return "Failed";
         }
     });
