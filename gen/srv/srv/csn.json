@@ -12965,7 +12965,7 @@
           "length": 40
         },
         "MODEL_PROFILE": {
-          "@title": "PAL Model Profile",
+          "@title": "Profile",
           "key": true,
           "type": "cds.String",
           "length": 50
@@ -12976,19 +12976,19 @@
           "type": "cds.Integer"
         },
         "LEFT_ID": {
-          "@title": "Left Unique ID in Stage",
+          "@title": "Left Unique ID",
           "key": true,
           "type": "cds.String",
           "length": 50
         },
         "RIGHT_ID": {
-          "@title": "Right Unique ID in Stage",
+          "@title": "Right Unique ID",
           "key": true,
           "type": "cds.String",
           "length": 50
         },
         "DISTANCE": {
-          "@title": "Distance between two Combined Clusters",
+          "@title": "Distance between Left and RIght Unique IDs",
           "key": true,
           "type": "cds.Double"
         }
@@ -17362,7 +17362,7 @@
           "length": 40
         },
         "MODEL_PROFILE": {
-          "@title": "PAL Model Profile",
+          "@title": "Profile",
           "key": true,
           "type": "cds.String",
           "length": 50
@@ -17373,19 +17373,19 @@
           "type": "cds.Integer"
         },
         "LEFT_ID": {
-          "@title": "Left Unique ID in Stage",
+          "@title": "Left Unique ID",
           "key": true,
           "type": "cds.String",
           "length": 50
         },
         "RIGHT_ID": {
-          "@title": "Right Unique ID in Stage",
+          "@title": "Right Unique ID",
           "key": true,
           "type": "cds.String",
           "length": 50
         },
         "DISTANCE": {
-          "@title": "Distance between two Combined Clusters",
+          "@title": "Distance between Left and RIght Unique IDs",
           "key": true,
           "type": "cds.Double"
         }
@@ -25513,7 +25513,10 @@
       }
     },
     "IBPImportSrv.importibpversce": {
-      "kind": "action"
+      "kind": "function",
+      "returns": {
+        "type": "cds.String"
+      }
     },
     "IbpImportRest": {
       "@source": "srv/ibpimport-service.cds",
