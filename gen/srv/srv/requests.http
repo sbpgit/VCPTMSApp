@@ -247,9 +247,20 @@ Content-Type: application/json
 
 {
 	"Location" : "PL20",
-	"Product" : "534EDPI0E119"
+	"Product" : "534EDPI"
 }
 
+
+### generate UniqueId CharVals  Input Data
+POST http://localhost:4004/pal/genUidCharValsForClusterResults
+Content-Type: application/json
+
+{
+	"Location" : "PL20",
+	"Product" : "534EDPI",
+	"Profile" : "SBP_AHC_0"
+
+}
 
 ### generate UniqueId CharVals  Input Data
 GET http://localhost:4004/pal/fgenUniqueIdCharVals(Location='PL20',Product='534EDPI0E119')
