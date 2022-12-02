@@ -177,6 +177,11 @@ sap.ui.define(
 
                 // calling function to select the Job Type
                 that.fixDate();
+
+                if (that.oGModel.getProperty("/newSch") !== "X" || that.oGModel.getProperty("/UpdateSch") !== "X") {
+                    that.byId("idJobType").setSelectedKey("S");
+                }
+                
                 that.onJobSelect();
 
                 // Calling service to get the Location data
@@ -950,8 +955,14 @@ sap.ui.define(
 
                     // 07-09-2022-1
                     if (that.oGModel.getProperty("/UpdateSch") !== "X" && (oJobKey === "M" || oJobKey === "P" || oJobKey === "T" || oJobKey === "F" ||
-                        oJobKey === "I" || oJobKey === "E" || oJobKey === "D")) {
+                        oJobKey === "I" || oJobKey === "D")) {
                         that.oProd.removeAllTokens();
+                    } else if (that.oGModel.getProperty("/UpdateSch") !== "X" && oJobKey === "E") {
+                        var selRadio = that.byId("idRbtnExport").getSelectedButton().getText();
+                        if (selRadio !== "Location" && selRadio !== "Customer Group" && selRadio !== "Product" && selRadio !== "Class"
+                            && selRadio !== "Restrictions" && selRadio !== "Assembly Requirement Quantity") {
+                            that.oProd.removeAllTokens();
+                        }
                     }
                 }
                 // 07-09-2022-1
@@ -1334,34 +1345,41 @@ sap.ui.define(
                 var selectedButton = that.byId("idRbtnExport").getSelectedButton().getText();
 
                 if (jobType === "I" || jobType === "E" || jobType === "T" || jobType === "F" || jobType === "D") {
-                    var oScheData = $.parseJSON(oScheData.LocProdData);
-                    location = oScheData[0].LOCATION_ID;
+                    // var oScheData = $.parseJSON(oScheData.LocProdData);
+                    // location = oScheData[0].LOCATION_ID;
 
                     if (jobType === "E" && selectedButton === "Assembly Requirement Quantity") {
-                        ExportFlag === "X";
+                        ExportFlag = "X";
                     }
-
+                    // 03-12
+                    if (jobType === "I" || jobType === "E"){
                     switch (selectedButton) {
                         case "Location":
-                            Flag === "X";
+                            Flag = "X";
                             break;
                         case "Customer Group":
-                            Flag === "X";
+                            Flag = "X";
                             break;
                         case "Product":
-                            Flag === "X";
+                            Flag = "X";
+                            that.oLoc.setValue(oScheData.LOCATION_ID);
                             break;
                         case "Class":
-                            Flag === "X";
+                            Flag = "X";
+                            that.oClass.setValue(oScheData.CLASS_NUM);
                             break;
                         case "Restrictions":
-                            Flag === "X";
+                            Flag = "X";
+                            that.oLoc.setValue(oScheData.LOCATION_ID);
                             break;
                         default:
                             break;
                     }
+                }
 
                     if (Flag === "" && ExportFlag === "") {
+                        var oScheData = $.parseJSON(oScheData.LocProdData);
+                    location = oScheData[0].LOCATION_ID;
 
                         that.getModel("BModel").callFunction("/getAllProd", {
                             method: "GET",
@@ -1686,6 +1704,8 @@ sap.ui.define(
                 that.byId("IBPCompReqQtyExport").setVisible(false);
                 that.byId("IBPCIRExport").setVisible(false);
                 if (that.byId("idJobType").getSelectedKey() === "E") {
+                    var aData = that.oGModel.getProperty("/aScheUpdate").data;
+                    var oScheData = $.parseJSON(aData);
                     switch (selRadioBt) {
                         case "Product":
                             that.oLoc = that.byId("EPlocInput");
@@ -3557,6 +3577,8 @@ sap.ui.define(
                     } else if (oJobType === "T" || oJobType === "F" || oJobType === "D") {
                         var finalList = {
                             jobId: that.oGModel.getProperty("/Jobdata").jobId,
+                            // 03-12
+                            scheduleId: that.oGModel.getProperty("/aScheUpdate").scheduleId,
                             data: {
                                 LocProdData: JSON.stringify(vcRuleList.LocProdData),
                             },
