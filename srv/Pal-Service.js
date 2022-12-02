@@ -128,6 +128,10 @@ module.exports = srv => {
         return (await _genUniqueIdCharVals(req,false));
     })
 
+    srv.on ('genUidCharValsForClusterResults',    async req => {
+        return (await _getUniqueIdCharValsForClusterResults(req,false));
+    })
+
     srv.on ('fgModels',    async req => {
         return (await _generateRegModels(req,true));   
     })
@@ -145,6 +149,10 @@ module.exports = srv => {
 
     srv.on ('fgenClusterUniqueIDS',    async req => {
         return (await _genClusterUniqueIDS(req,true));
+    })
+
+    srv.on ('fgenUidCharValsForClusterResults',    async req => {
+        return (await _getUniqueIdCharValsForClusterResults(req,true));
     })
 
     srv.on ('fgenClusters',    async req => {
@@ -2742,6 +2750,144 @@ async function _purgePredictions(req,isGet) {
 
 }
 
+
+async function _getUniqueIdCharValsForClusterResults(req,isGet) 
+{
+
+    let locationId = req.data.Location;
+    let productId = req.data.Product;
+    let profile = req.data.Profile;
+
+    let sqlStr = 'SELECT DISTINCT LOCATION_ID, PRODUCT_ID, CHAR_NUM, CHAR_NAME FROM CP_V_AHC_CLUSTER_RESULTS_W_CHARVALS ' +
+                    ' WHERE PRODUCT_ID = ' + "'" + productId + "'" +
+                    ' AND LOCATION_ID = ' + "'" + locationId + "'" +
+                    ' ORDER BY CHAR_NUM';
+    // console.log("_getUniqueIdCharValsForClusterResults Distinct Chars Sql  ", sqlStr);
+    let sqlStrResults = await cds.run(sqlStr);
+    let charStr = sqlStrResults[0].CHAR_NAME;
+    let charNumStr = sqlStrResults[0].CHAR_NUM;
+
+    let tableObj = [];
+    for (let charIndex = 1; charIndex < sqlStrResults.length ; charIndex++)
+    {
+        charStr = charStr + "," + sqlStrResults[charIndex].CHAR_NAME;
+        charNumStr = charNumStr + "," + sqlStrResults[charIndex].CHAR_NUM;
+    }
+
+    let charNums = charNumStr.split(',');
+    var charVals = [];
+    
+    for (let charValIdx = 0; charValIdx < charNums.length; charValIdx ++)
+    {
+        charVals[charValIdx] = 'NA';
+    } 
+
+
+    let column1 = 'LOCATION_ID';
+    let column2 = 'PRODUCT_ID';
+    let column3 = 'PROFILE';
+    let column4 = 'STAGE';
+    let column5 = 'UNIQUE_ID';
+    let column6 = 'LEFT_ID_CLUSTER';
+    let column7 = 'RIGHT_ID_CLUSTER';
+    let column8 = 'LEFT_ID';
+    let column9 = 'RIGHT_ID';
+    let column10 = 'DISTANCE';
+
+
+    let columnsStr =charStr;
+    tableObj.push({column1, column2, column3, column4, column5, column6, column7, column8, column9, column10, columnsStr});    
+    // console.log("_genUniqueIdCharVals Column Header",tableObj);
+
+    sqlStr = 'SELECT DISTINCT LOCATION_ID, PRODUCT_ID, PROFILE, STAGE, UNIQUE_ID, ' +
+                ' LEFT_ID_CLUSTER, RIGHT_ID_CLUSTER, LEFT_ID, RIGHT_ID, DISTANCE, CHAR_NUM, CHAR_VALUE FROM CP_V_AHC_CLUSTER_RESULTS_W_CHARVALS' +
+                ' WHERE PRODUCT_ID = ' + "'" + productId + "'" +
+                ' AND LOCATION_ID = ' + "'" + locationId + "'" +
+                ' AND PROFILE = ' + "'" + profile + "'" +
+                ' ORDER BY LOCATION_ID, PRODUCT_ID, PROFILE, UNIQUE_ID, CHAR_NUM';
+
+    console.log("sqlStr = ",sqlStr );
+
+    
+    let sqlUniqueStrResults = await cds.run(sqlStr);
+    // console.log("sqlUniqueStrResults = ",sqlUniqueStrResults );    
+    
+
+    if (sqlUniqueStrResults.length > 0)
+    {
+
+        let columnValStr ="";
+        // for (let charIndex = 0; charIndex < sqlUniqueStrResults.length ; charIndex++)
+        for (let charIndex = 0; charIndex < sqlUniqueStrResults.length ; charIndex++)
+        {
+
+            let profile = sqlUniqueStrResults[charIndex].PROFILE;
+            let stage = sqlUniqueStrResults[charIndex].STAGE;
+            let uniqueId = sqlUniqueStrResults[charIndex].UNIQUE_ID;
+            let leftIdCluster = sqlUniqueStrResults[charIndex].LEFT_ID_CLUSTER;
+            let rightIdCluster = sqlUniqueStrResults[charIndex].RIGHT_ID_CLUSTER;
+            let leftId = sqlUniqueStrResults[charIndex].LEFT_ID;
+            let rightId = sqlUniqueStrResults[charIndex].RIGHT_ID;
+            let distance = sqlUniqueStrResults[charIndex].DISTANCE;
+
+            let nextUniqueId = 0;
+            if (charIndex < sqlUniqueStrResults.length-1)
+                nextUniqueId = sqlUniqueStrResults[charIndex+1].UNIQUE_ID;
+            
+            for (let charNumsIdx = 0; charNumsIdx < charNums.length; charNumsIdx++)
+            {
+                if ( charNums[charNumsIdx] == sqlUniqueStrResults[charIndex].CHAR_NUM)
+                {
+                    
+                    charVals[charNumsIdx] = sqlUniqueStrResults[charIndex].CHAR_VALUE;
+                    // console.log("uniqueId", uniqueId, "charNumsIdx ", charNumsIdx, "charIndex", charIndex, "charVals", charVals );
+                    break;
+                }
+
+            }
+
+            if (uniqueId != nextUniqueId)
+            {
+                for (let charNumsIdx = 0; charNumsIdx < charNums.length; charNumsIdx++)
+                {
+                    if (charNumsIdx < charNums.length -1)
+                    {
+                        columnValStr = columnValStr + charVals[charNumsIdx] + ',';
+                    }
+                    else
+                    {
+                        columnValStr = columnValStr + charVals[charNumsIdx];
+                    }
+                }
+                tableObj.push({locationId, productId, profile, stage, uniqueId, leftIdCluster, rightIdCluster, leftId, rightId, distance, columnValStr});  
+                // console.log("tableObj pushed for columnValStr", columnValStr);
+  
+                columnValStr ="";
+                for (let charValIdx = 0; charValIdx < charNums.length; charValIdx ++)
+                {
+                    charVals[charValIdx] = 'NA';
+            
+                }
+                uniqueId = sqlUniqueStrResults[charIndex].UNIQUE_ID;
+
+
+            }
+
+        }
+
+    }
+
+    if (isGet == true)
+    {
+        req.reply({tableObj});
+    }
+    else
+    {
+        let res = req._.req.res;
+        res.statusCode = 200;
+        res.send({tableObj});
+    }
+}
 
 async function _genUniqueIdCharVals(req,isGet) 
 {
