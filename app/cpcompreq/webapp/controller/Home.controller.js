@@ -1135,7 +1135,7 @@ sap.ui.define(
                             var adata = [];
                             for (var i = 0; i < oData.results.length; i++) {
                                 if (oData.results[i].PRODUCT_ID === that.byId("idprod").getValue()
-                                    && oData.results[i].VERSION === aSelectedItems[0].getTitle()) {
+                                    && oData.results[i].VERSION === that.oGModel.getProperty("/SelectedVer")) {
                                     adata.push({
                                         "SCENARIO": oData.results[i].SCENARIO
                                     });

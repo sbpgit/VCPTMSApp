@@ -17787,6 +17787,23 @@
         }
       }
     },
+    "PalService.genUidCharValsForClusterResults": {
+      "kind": "action",
+      "params": {
+        "Location": {
+          "type": "cds.String",
+          "length": 4
+        },
+        "Product": {
+          "type": "cds.String",
+          "length": 40
+        },
+        "Profile": {
+          "type": "cds.String",
+          "length": 50
+        }
+      }
+    },
     "PalService.fgModels": {
       "kind": "function",
       "params": {
@@ -17835,6 +17852,26 @@
         "Product": {
           "type": "cds.String",
           "length": 40
+        }
+      },
+      "returns": {
+        "type": "cds.String"
+      }
+    },
+    "PalService.fgenUidCharValsForClusterResults": {
+      "kind": "function",
+      "params": {
+        "Location": {
+          "type": "cds.String",
+          "length": 4
+        },
+        "Product": {
+          "type": "cds.String",
+          "length": 40
+        },
+        "Profile": {
+          "type": "cds.String",
+          "length": 50
         }
       },
       "returns": {
