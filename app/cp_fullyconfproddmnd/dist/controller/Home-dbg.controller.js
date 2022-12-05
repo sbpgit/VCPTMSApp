@@ -305,11 +305,26 @@ sap.ui.define(
                         success: function (data) {
                             sap.ui.core.BusyIndicator.hide();
                             that.rowData = data.results;
+                            if (data.results.length > 0) {
+                                that.oGModel.setProperty("/TData", data.results);
+                                // Code to close header
+                                var collapseBtnId = that.byId("application-cpfullyconfproddmnd-display-component---Home--ObjectPageLayout-OPHeaderContent-collapseBtn");
+                                if (collapseBtnId === undefined) {
+                                    collapseBtnId = that.byId("container-cpapp.cpfullyconfproddmnd---Home--ObjectPageLayout-OPHeaderContent-collapseBtn");
+                                }
+                                if (collapseBtnId) {
+                                    collapseBtnId.firePress();
+                                    that.handleVisibleRowCount(5);
+                                }
+                                // Calling function to generate UI table dynamically based on dat
+                                that.TableGenerate();
+                                that.getLocProdCharacteristics();
 
-                            that.oGModel.setProperty("/TData", data.results);
-                            // Calling function to generate UI table dynamically based on data
-                            that.TableGenerate();
-                            that.getLocProdCharacteristics();
+                            }
+                            // that.oGModel.setProperty("/TData", data.results);
+                            // // Calling function to generate UI table dynamically based on data
+                            // that.TableGenerate();
+                            // that.getLocProdCharacteristics();
                         },
                         error: function (data) {
                             sap.ui.core.BusyIndicator.hide();
@@ -1676,7 +1691,10 @@ sap.ui.define(
                                 aResults.map((mapObj) => mapObj.CHARVAL_NUM).indexOf(obj.CHARVAL_NUM) == pos
                             );
                         });
-
+                         // Code to Concatenate CHAR_DESC & CHAR_NAME property values into new Property
+                        aFilteredChar.forEach((oEntry) => {
+                            oEntry.CHARACTERISTIC = oEntry.CHAR_DESC + " " + "-" + " " + oEntry.CHAR_NAME;
+                         });
                         that.locProdCharModel.setData({
                             charDetails: aFilteredChar,
                         });

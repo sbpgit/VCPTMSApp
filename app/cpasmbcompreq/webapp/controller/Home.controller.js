@@ -29,7 +29,8 @@ sap.ui.define(
              */
             onInit: function () {
                 that = this;
-                this.rowData;
+                this.rowData;                
+                this.plntMethod;
                 // Declaring JSON Models and size limits
                 that.locModel = new JSONModel();
                 that.prodModel = new JSONModel();
@@ -359,15 +360,35 @@ sap.ui.define(
                             template: columnName,
                         });
                     } else {
-                        return new sap.ui.table.Column({
-                            width: "8rem",
-                            label: columnName,
-                            template: new sap.m.Link({
-                                text: "{" + columnName + "}",
-                                press: that.asmbcompLinkpress,
-                            }),
-                        });
+                        if (that.plntMethod === 'M1') {
+                            return new sap.ui.table.Column({
+                                width: "8rem",
+                                label: columnName,
+                                template: new sap.m.Link({
+                                    text: "{" + columnName + "}",
+                                    press: that.linkPressed,
+                                }),
+                            });
+                        }
+                        else {
+                            return new sap.ui.table.Column({
+                                width: "8rem",
+                                label: columnName,
+                                template: new sap.m.Text({
+                                    text: "{" + columnName + "}"
+                                }),
+                            });
+                        }
                     }
+                        // return new sap.ui.table.Column({
+                        //     width: "8rem",
+                        //     label: columnName,
+                        //     template: new sap.m.Link({
+                        //         text: "{" + columnName + "}",
+                        //         press: that.asmbcompLinkpress,
+                        //     }),
+                        // });
+                    
                     // }
                 });
 
@@ -931,17 +952,26 @@ sap.ui.define(
                                 aSelectedItems[0].getTitle()
                             ),
                         ],
-                    // this.getModel("BModel").callFunction("/getAllProd", {
-                    //     method: "GET",
-                    //     urlParameters: {
-                    //         LOCATION_ID: aSelectedItems[0].getTitle()
-                    //     },
                         success: function (oData) {
                             that.prodModel.setData(oData);
                             that.oProdList.setModel(that.prodModel);
                         },
                         error: function (oData, error) {
                             MessageToast.show("error");
+                        },
+                    });
+                    this.getModel("BModel").read("/getPlancfgPara", {
+                        filters: [
+                            new Filter("LOCATION_ID", FilterOperator.EQ, aSelectedItems[0].getTitle()),
+                            new Filter("PARAMETER_ID", FilterOperator.EQ, "5"),
+                        ],
+                        success: function (oData) {
+                            if (oData.results) {
+                                that.plntMethod = oData.results[0].VALUE
+                            }
+                        },
+                        error: function (oData, error) {
+                            MessageToast.show("Please maintain Planning Configuration for the selected plant");
                         },
                     });
 
@@ -982,7 +1012,11 @@ sap.ui.define(
                         success: function (oData) {
                             var adata = [];
                             for (var i = 0; i < oData.results.length; i++) {
+<<<<<<< HEAD
+                                if (oData.results[i].PRODUCT_ID === that.oGModel.getProperty("/SelectedProd") ) {
+=======
                                 if (oData.results[i].PRODUCT_ID === that.oGModel.getProperty("/SelectedProd")) {
+>>>>>>> 28572205e8c7de3e81f65a1fa52119e34f364125
                                     adata.push({
                                         "VERSION": oData.results[i].VERSION
                                     });

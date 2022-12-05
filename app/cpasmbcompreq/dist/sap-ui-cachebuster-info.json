@@ -1,5 +1,33 @@
 {
 <<<<<<< HEAD
+  "Component-dbg.js": 1669789252617,
+  "Component.js": 1669789252617,
+  "model/models.js": 1669789252625,
+  "controller/Home.controller.js": 1670231353012,
+  "controller/BaseController.js": 1669789252617,
+  "controller/App.controller.js": 1669789252617,
+  "manifest.json": 1670237000477,
+  "manifest-bundle.zip": 1670237000498,
+  "Component-preload.js": 1670237001013,
+  "i18n/i18n.properties": 1669789252617,
+  "controller/Home-dbg.controller.js": 1670231353012,
+  "controller/BaseController-dbg.js": 1669789252617,
+  "controller/App-dbg.controller.js": 1669789252617,
+  "model/models-dbg.js": 1669789252625,
+  "view/VersionDialog.fragment.xml": 1669789252625,
+  "view/StructureNodeDialog.fragment.xml": 1669789252625,
+  "view/ScenarioDialog.fragment.xml": 1669789252625,
+  "view/ProdDialog.fragment.xml": 1669789252625,
+  "view/LocDialog.fragment.xml": 1669789252625,
+  "view/Home.view.xml": 1669789349546,
+  "view/ComponentDialog.fragment.xml": 1669789252625,
+  "view/CompODBreakdown.fragment.xml": 1669789252625,
+  "view/AsmbCompDialog.fragment.xml": 1669789252625,
+  "view/App.view.xml": 1669789252625,
+  "css/style.css": 1669789349546,
+  "index.html": 1669789252617
+=======
+<<<<<<< HEAD
   "controller/BaseController.js": 1669107428016,
   "controller/Home.controller.js": 1669107428016,
   "model/models.js": 1669107428016,
@@ -54,4 +82,5 @@
   "css/style.css": 1669275816358,
   "index.html": 1667546290537
 >>>>>>> 43022460fae5a814598bffb47b717ae8ffd57816
+>>>>>>> 28572205e8c7de3e81f65a1fa52119e34f364125
 }

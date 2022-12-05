@@ -135,6 +135,7 @@ sap.ui.define(
                     that.byId("idClassChar").setTitle("Update Product");
                     that.byId("idloc").setEditable(false);
                     that.byId("idProd").setEditable(false);
+                    that.byId("idrefprod").setEditable(false);
 
                     that.byId("idloc").setValue(oGModel.getProperty("/Loc"));
                     that.byId("idProd").setValue(oGModel.getProperty("/Prod"));
@@ -187,13 +188,15 @@ sap.ui.define(
 
             getCharData: function () {
                 var sSelProd = oGModel.getProperty("/Prod"),
-                    sSelrefProd = oGModel.getProperty("/refProd");
+                    sSelrefProd = oGModel.getProperty("/refProd"),
+                    sSelLoc = oGModel.getProperty("/Loc");
 
 
                 this.getModel("BModel").read("/getPartialChar", {
                     filters: [
                         new Filter("PRODUCT_ID", FilterOperator.EQ, sSelProd),
                         new Filter("REF_PRODID", FilterOperator.EQ, sSelrefProd),
+                        new Filter("LOCATION_ID", FilterOperator.EQ, sSelLoc)
                     ],
                     success: function (oData) {
                         that.ListModel.setData({
@@ -651,13 +654,6 @@ sap.ui.define(
                     success: function (oData) {
                         sap.ui.core.BusyIndicator.hide();
 
-                        // function removeDuplicate(array, key) {
-                        //     var check = new Set();
-                        //     return array.filter(obj => !check.has(obj[key]) && check.add(obj[key]));
-                        // }
-                        // that.classnameModel.setData({
-                        //     results: removeDuplicate(oData.results, 'CLASS_NAME')
-                        // });
                         that.classnameModel.setData({
                             results: oData.results
                         });
@@ -672,60 +668,14 @@ sap.ui.define(
             },
 
 
-            // onAdd: function () {
-            //     var oClassName = that.byId("idClassname").getValue(),
-            //         oCharName = that.byId("idCharname").getValue(),
-            //         oCharVel = that.byId("idCharval").getValue();
-
-            //     if (oClassName !== "" && oCharName !== "" && oCharVel !== "") {
-
-            //         this.oData = {
-            //             "CLASS_NAME": oClassName,
-            //             "CLASS_NUM": that.byId("idClassno").getValue(),
-            //             "CHAR_NAME": oCharName,
-            //             "CHAR_NUM": that.byId("idCharno").getValue(),
-            //             "CHAR_VALUE": oCharVel,
-            //             "CHARVAL_NUM": that.byId("idCharvalno").getValue()
-            //         };
-            //         // Add entry to the table model
-            //         that.aData.push(that.oData);
-
-            //         that.ListModel.setData({
-            //             results: that.aData
-            //         });
-            //         that.byId("idCharList").setModel(that.ListModel);
-
-            //         that.byId("idClassname").setValue("");
-            //         that.byId("idClassno").setValue("");
-            //         that.byId("idCharname").setValue("");
-            //         that.byId("idCharno").setValue("");
-            //         that.byId("idCharval").setValue("");
-            //         that.byId("idCharvalno").setValue("");
-
-            //     } else {
-            //         MessageToast.show("Please select all inputs");
-            //     }
-
-            // },
-
             onCharDel: function (oEvent) {
                 var oSelItem = oEvent.getParameters("listItem").id.split("CharList-")[1];
-                var aData = that.ListModel.getData().results;
-                aData.splice(oSelItem, 1); //removing 1 record from i th index.
+                that.aData = that.ListModel.getData().results;
+                that.aData.splice(oSelItem, 1); //removing 1 record from i th index.
                 that.ListModel.refresh();
-
-
             },
 
-            // onCharPanel: function () {
-            //     if (that.byId("idrefprod").getValue() && that.byId("idProd").getValue()) {
-            //         that.byId("idCharPanel").setExpanded(true);
-            //     } else {
-            //         that.byId("idCharPanel").setExpanded(false);
-            //         MessageToast.show("Select product and ref product");
-            //     }
-
-            // },
+          
 
             /**
            * This function is called when click on save button to create or update the product.
@@ -743,6 +693,8 @@ sap.ui.define(
                         "Reference product and new product can not be same"
                     );
                 } else {
+                    
+                    sap.ui.core.BusyIndicator.show();
                     that.getModel("BModel").callFunction("/maintainPartialProd", {
                         method: "GET",
                         urlParameters: {
@@ -761,7 +713,7 @@ sap.ui.define(
                             //   }
 
                             that.createChar();
-                            that.createIBPProd();
+                            //that.createIBPProd();
 
                         },
                         error: function (oData) {
@@ -826,69 +778,8 @@ sap.ui.define(
                         that.onBack();
                     }
                 });
-
-
-                // that.getModel("IModel").callFunction("/createIBPSalesTrans", {
-                //     method: "GET",
-                //     urlParameters: {
-                //         LOCATION_ID: that.byId("idloc").getValue(),
-                //     },
-                //     success: function (oData) {
-                //         sap.ui.core.BusyIndicator.hide();
-                //     },
-                //     error: function (error) {
-                //         sap.ui.core.BusyIndicator.hide();
-                //         that.onBack();
-                //     }
-                // });
-
-
-                // that.getModel("IModel").callFunction("/createIBPSalesConfig", {
-                //     method: "GET",
-                //     urlParameters: {
-                //         LOCATION_ID: that.byId("idloc").getValue(),
-                //     },
-                //     success: function (oData) {
-                //         sap.ui.core.BusyIndicator.hide();
-                //         that.onBack();
-                //     },
-                //     error: function (error) {
-                //         sap.ui.core.BusyIndicator.hide();
-                //         that.onBack();
-                //     }
-                // });
-
-
-
-
-
-
-
             }
-
-
-
-            //   createIBPProd:function(){            
-
-            //     sap.ui.core.BusyIndicator.show();
-            //     that.getModel("IModel").callFunction("/createIBPProduct", {
-            //         method: "GET",
-            //         urlParameters: {
-            //             LOCATION_ID: that.byId("idloc").getValue(),
-            //             PRODUCT_ID: that.byId("idProd").getValue()
-            //         },
-            //         success: function (oData) {
-            //           sap.ui.core.BusyIndicator.hide();
-            //           sap.m.MessageToast.show("Exported product to IBP");
-            //           that.onBack();
-            //         },
-            //         error: function (error) {
-            //           sap.ui.core.BusyIndicator.hide();
-            //           sap.m.MessageToast.show("Export product to IBP");
-            //           that.onBack();
-            //         }
-            //       });            
-            //   }        
+      
         });
     }
 );

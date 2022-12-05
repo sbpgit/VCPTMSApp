@@ -248,7 +248,7 @@ sap.ui.define([
                             else {
                                 var adata = [];
                                 for (var i = 0; i < oData.results.length; i++) {
-                                    if (oData.results[i].PRODUCT_ID === aSelectedItems[0].getTitle()) {
+                                    if (oData.results[i].PRODUCT_ID === that.oGModel.getProperty("/SelectedProd")) {
                                         adata.push({
                                             "VERSION": oData.results[i].VERSION
                                         });
@@ -289,7 +289,7 @@ sap.ui.define([
                             var adata = [];
                             for (var i = 0; i < oData.results.length; i++) {
                                 if (oData.results[i].PRODUCT_ID === that.byId("idprod").getValue()
-                                    && oData.results[i].VERSION === aSelectedItems[0].getTitle()) {
+                                    && oData.results[i].VERSION === that.oGModel.getProperty("/SelectedVer")) {
                                     adata.push({
                                         "SCENARIO": oData.results[i].SCENARIO
                                     });
@@ -591,10 +591,14 @@ sap.ui.define([
                             else {
                                 
 <<<<<<< HEAD
+                                that.byId("application-cpcharqtygraph-display-component---Home--ObjectPageLayout-OPHeaderContent-collapseBtn").firePress();
+=======
+<<<<<<< HEAD
                                 that.byId("application-cpcharqtygraph-display-component---Home--ObjectPageLayout-OPHeaderContent-collapseBtn-inner").firePress();
 =======
                                 that.byId("application-cpcharqtygraph-display-component---Home--ObjectPageLayout-OPHeaderContent-collapseBtn").firePress();
 >>>>>>> 43022460fae5a814598bffb47b717ae8ffd57816
+>>>>>>> 28572205e8c7de3e81f65a1fa52119e34f364125
                                 oData.results.forEach(function (row) {
                                     // Calling function to handle the date format
                                     row.WEEK_DATE = that.getInMMddyyyyFormat(row.WEEK_DATE);

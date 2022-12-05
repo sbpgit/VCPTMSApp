@@ -493,7 +493,7 @@ context cp {
     }
 
     entity VARCHAR_PS {
-        key PRODUCT_ID  : String(40) @title : 'New Product';
+        key PRODUCT_ID  : String(40) @title : 'Configurable Product';
         key LOCATION_ID : String(4)  @title : 'Location ';
         key CHAR_NUM    : String(30) @title : 'Charateristic Name';
             CHAR_TYPE   : String(2)  @title : 'Characteristic Type';
@@ -859,7 +859,16 @@ context cp {
         key SCENARIO      : String(32) @title : 'Scenario';
             VERSION_NAME  : String(50) @title : 'Version_Name';
             SCENARIO_NAME : String(50) @title : 'Scenario_Name';
-    };
+    }
+
+     entity IBPCHAR_PS{
+        key PRODUCT_ID  : String(40) @title : 'Configurable Product';
+        key LOCATION_ID : String(4)  @title : 'Location ';
+        key CHAR_NUM    : String(30) @title : 'Charateristic Name';
+            CHAR_TYPE   : String(2)  @title : 'Characteristic Type';
+            SEQUENCE    : Integer    @title : 'Secondary Char. Position';
+    }
+
 }
 
 

@@ -1,5 +1,37 @@
 {
 <<<<<<< HEAD
+  "manifest.json": 1670236897613,
+  "controller/Details.controller.js": 1669789252569,
+  "utils/locate-reuse-libs.js": 1669789252569,
+  "model/models.js": 1669789252569,
+  "controller/ItemMaster.controller.js": 1669789252569,
+  "controller/ItemDetail.controller.js": 1669789252569,
+  "i18n/i18n.properties": 1669789252569,
+  "controller/BaseController.js": 1669789252569,
+  "controller/App.controller.js": 1669789252569,
+  "Component.js": 1669789252569,
+  "manifest-bundle.zip": 1670236897625,
+  "Component-preload.js": 1670236898087,
+  "controller/ItemMaster-dbg.controller.js": 1669789252569,
+  "model/models-dbg.js": 1669789252569,
+  "utils/locate-reuse-libs-dbg.js": 1669789252569,
+  "controller/ItemDetail-dbg.controller.js": 1669789252569,
+  "controller/Details-dbg.controller.js": 1669789252569,
+  "controller/BaseController-dbg.js": 1669789252569,
+  "controller/App-dbg.controller.js": 1669789252569,
+  "Component-dbg.js": 1669789252569,
+  "view/ViewNodesCreation.fragment.xml": 1669789252569,
+  "view/ViewNodes.fragment.xml": 1669789252569,
+  "view/StructureNodes.fragment.xml": 1669789252569,
+  "view/ItemMaster.view.xml": 1669789252569,
+  "view/ItemDetail.view.xml": 1669789252569,
+  "view/Details.view.xml": 1669789349510,
+  "view/App.view.xml": 1669789252569,
+  "view/AccesNodes.fragment.xml": 1669789252569,
+  "css/style.css": 1669789349506,
+  "index.html": 1669789252569
+=======
+<<<<<<< HEAD
   "controller/ItemDetail-dbg.controller.js": 1669107427968,
   "controller/ItemDetail.controller.js": 1669107427968,
   "utils/locate-reuse-libs.js": 1669107427968,
@@ -62,4 +94,5 @@
   "css/style.css": 1669284842765,
   "index.html": 1667545833297
 >>>>>>> 43022460fae5a814598bffb47b717ae8ffd57816
+>>>>>>> 28572205e8c7de3e81f65a1fa52119e34f364125
 }
