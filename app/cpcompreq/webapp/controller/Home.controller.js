@@ -1049,7 +1049,8 @@ sap.ui.define(
                     this.getModel("BModel").callFunction("/getAllVerScen", {
                         method: "GET",
                         urlParameters: {
-                            LOCATION_ID: that.oGModel.getProperty("/SelectedLoc")
+                            LOCATION_ID: that.oGModel.getProperty("/SelectedLoc"),
+                            // PRODUCT_ID:  aSelectedItems[0].getTitle() 
                         },
                         success: function (oData) {
                             var adata = [];
@@ -1086,7 +1087,7 @@ sap.ui.define(
                             new Filter(
                                 "PRODUCT_ID",
                                 FilterOperator.EQ,
-                                aSelectedItems[0].getTitle()
+                                that.oGModel.getProperty("/SelectedProd")
                             ),
                         ],
                         success: function (oData) {

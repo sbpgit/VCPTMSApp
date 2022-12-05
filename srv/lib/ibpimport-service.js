@@ -1958,7 +1958,6 @@ module.exports = cds.service.impl(async function () {
             } else {
                 lMessage = lMessage + ' ' + "Export of CIR to IBP has failed for product" + lsData.PRODUCT_ID;
             }
-            // return "S";
             await GenF.jobSchMessage('X', lMessage, request);
         }
     });
@@ -2202,9 +2201,9 @@ module.exports = cds.service.impl(async function () {
             flag = '';
             for (let i in req) {
                 let vWeekDate = dateJSONToEDM(req[i].PERIODID4_TSTAMP);
-                // if (req[i].SCENARIOID === null) {
-                vScen = 'BSL_SCENARIO';//' ';
-                // }
+                if (req[i].SCENARIOID === null) {
+                    vScen = 'BSL_SCENARIO';//' ';
+                }
                 // let vScenario = 'BSL_SCENARIO';
                 req[i].PERIODID4_TSTAMP = vWeekDate;
 
@@ -2271,9 +2270,9 @@ module.exports = cds.service.impl(async function () {
                 }
                 for (let i in req) {
                     let vWeekDate = dateJSONToEDM2(req[i].PERIODID4_TSTAMP).split('T')[0];
-                    // if (req[i].SCENARIOID === null) {
-                    vScen = 'BSL_SCENARIO';//' ';
-                    // }
+                    if (req[i].SCENARIOID === null) {
+                        vScen = 'BSL_SCENARIO';//' ';
+                    }
                     req[i].PERIODID4_TSTAMP = vWeekDate;
                     let vManualOpt = '0.0';
                     if (vWeekDate >= vDateDel) {
@@ -2389,7 +2388,6 @@ module.exports = cds.service.impl(async function () {
         }
         await GenF.jobSchMessage('X', lMessage, request);
     });
-
     this.on("importibpversce", async (request) => {
         // Get Planning area and Prefix configurations for IBP
         let liParaValue = await GenF.getIBPParameterValue();
@@ -2419,12 +2417,12 @@ module.exports = cds.service.impl(async function () {
         }
 
         if (flag === 'S') {
-            lMessage = "Successfully imported version scenario from IBP";
-            console.log(lMessage);
+            // lMessage = "Successfully imported version scenario from IBP";
+            // console.log(lMessage);
             return "Success";
         } else {
-            lMessage = "Failed to import version scenario from IBP";
-            console.log(lMessage);
+            // lMessage = "Failed to import version scenario from IBP";
+            // console.log(lMessage);
             return "Failed";
         }
     });

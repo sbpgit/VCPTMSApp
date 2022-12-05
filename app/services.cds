@@ -72,3 +72,5 @@ using from './cpcirlog/annotations';
 using from './cpmarketauthorization/annotations';
 
 using from './cprestrictionlikelihood/annotations';
+
+using from './cpibpcharacteristic/annotations';

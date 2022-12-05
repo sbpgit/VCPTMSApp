@@ -1494,7 +1494,7 @@ module.exports = (srv) => {
                 // lsresults.REF_PRODID = liProdChar[i].REF_PRODID;
                 if (req.data.FLAG === "E" && i === 0) {
                     try {
-                        await cds.delete("CP_NEWPROD_CHAR", lsresults);
+                        await cds.F("CP_NEWPROD_CHAR", lsresults);
                     } catch (e) {
                         //DONOTHING
                     }
@@ -3444,9 +3444,9 @@ module.exports = (srv) => {
 
             })
             .catch(function (error) {
-                console.log('Get Token - Error ', error);
+                console.log('Get Token - Error ', error); 
                 ret_response = JSON.parse(error);
-            });
+             });
 
         // console.log(ret_response);
         return ret_response;

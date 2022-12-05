@@ -1012,7 +1012,11 @@ sap.ui.define(
                         success: function (oData) {
                             var adata = [];
                             for (var i = 0; i < oData.results.length; i++) {
+<<<<<<< HEAD
                                 if (oData.results[i].PRODUCT_ID === that.oGModel.getProperty("/SelectedProd") ) {
+=======
+                                if (oData.results[i].PRODUCT_ID === that.oGModel.getProperty("/SelectedProd")) {
+>>>>>>> 28572205e8c7de3e81f65a1fa52119e34f364125
                                     adata.push({
                                         "VERSION": oData.results[i].VERSION
                                     });
@@ -1043,7 +1047,7 @@ sap.ui.define(
                             new Filter(
                                 "PRODUCT_ID",
                                 FilterOperator.EQ,
-                                aSelectedItems[0].getTitle()
+                                that.oGModel.getProperty("/SelectedProd")
                             ),
                         ],
                         success: function (oData) {

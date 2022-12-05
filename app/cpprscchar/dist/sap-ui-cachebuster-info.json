@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "index.html": 1669789252853,
   "controller/App.controller.js": 1669789252853,
   "utils/locate-reuse-libs.js": 1669789252853,
@@ -23,4 +24,57 @@
   "view/App.view.xml": 1669789252853,
   "css/style.css": 1669789349682,
   "i18n/i18n.properties": 1669789252853
+=======
+<<<<<<< HEAD
+  "view/App.view.xml": 1669107428232,
+  "controller/App.controller.js": 1669107428232,
+  "utils/locate-reuse-libs.js": 1669107428232,
+  "model/models.js": 1669107428232,
+  "controller/Home.controller.js": 1669107428232,
+  "controller/BaseController.js": 1669107428232,
+  "manifest.json": 1669894631782,
+  "Utils.js": 1669107428232,
+  "Component.js": 1669107428232,
+  "manifest-bundle.zip": 1669894631793,
+  "Component-preload.js": 1669894632177,
+  "Utils-dbg.js": 1669107428232,
+  "model/models-dbg.js": 1669107428232,
+  "controller/Home-dbg.controller.js": 1669107428232,
+  "controller/BaseController-dbg.js": 1669107428232,
+  "controller/App-dbg.controller.js": 1669107428232,
+  "utils/locate-reuse-libs-dbg.js": 1669107428232,
+  "Component-dbg.js": 1669107428232,
+  "view/ProdDialog.fragment.xml": 1669107428236,
+  "view/LocDialog.fragment.xml": 1669107428232,
+  "view/Home.view.xml": 1669715346784,
+  "i18n/i18n.properties": 1669107428232,
+  "css/style.css": 1669715346784,
+  "index.html": 1669107428232
+=======
+  "i18n/i18n.properties": 1666693187786,
+  "controller/Home.controller.js": 1667547127159,
+  "utils/locate-reuse-libs.js": 1661440197855,
+  "model/models.js": 1661440197855,
+  "manifest.json": 1669964973362,
+  "controller/BaseController.js": 1661440197855,
+  "controller/App.controller.js": 1661440197855,
+  "Utils.js": 1661440197855,
+  "Component.js": 1661440197855,
+  "manifest-bundle.zip": 1669964973374,
+  "Component-preload.js": 1669964973768,
+  "utils/locate-reuse-libs-dbg.js": 1661440197855,
+  "model/models-dbg.js": 1661440197855,
+  "controller/Home-dbg.controller.js": 1667547127159,
+  "controller/BaseController-dbg.js": 1661440197855,
+  "controller/App-dbg.controller.js": 1661440197855,
+  "Utils-dbg.js": 1661440197855,
+  "Component-dbg.js": 1661440197855,
+  "view/ProdDialog.fragment.xml": 1661440197855,
+  "view/LocDialog.fragment.xml": 1661440197855,
+  "view/Home.view.xml": 1669278669057,
+  "view/App.view.xml": 1661440197855,
+  "css/style.css": 1669278739989,
+  "index.html": 1667547116515
+>>>>>>> 43022460fae5a814598bffb47b717ae8ffd57816
+>>>>>>> 28572205e8c7de3e81f65a1fa52119e34f364125
 }

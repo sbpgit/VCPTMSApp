@@ -48,7 +48,6 @@ service IBPImportSrv @(impl : './lib/ibpimport-service.js') {
     action generateFDemandQty(LocProdData: String);//LOCATION_ID : String(4), PRODUCT_ID : String(40));
     action generateFCharPlan(LOCATION_ID : String(4), PRODUCT_ID : String(40), FROMDATE : Date, TODATE : Date);
     action generateMarketAuth( MARKETDATA : String);
-
     // action importibpversce();
     function importibpversce() returns String;
 }
