@@ -1,10 +1,10 @@
 sap.ui.define([
-    "cpapp/cpprscchar/controller/BaseController",
+    "cpapp/cpibpcharacteristic/controller/BaseController",
     "sap/ui/model/json/JSONModel",
     "sap/m/MessageToast",
     "sap/ui/model/Filter",
     "sap/ui/model/FilterOperator",
-    "cpapp/cpprscchar/Utils",
+    "cpapp/cpibpcharacteristic/Utils",
     "sap/ui/core/dnd/DragInfo",
     "sap/ui/core/dnd/DropInfo",
     "sap/ui/core/library",
@@ -19,10 +19,9 @@ sap.ui.define([
         var DropLayout = library.dnd.DropLayout;
         var DropPosition = library.dnd.DropPosition;
 
-        return BaseController.extend("cpapp.cpprscchar.controller.Home", {
+        return BaseController.extend("cpapp.cpibpcharacteristic.controller.Home", {
             onInit: function () {
                 that = this;
-                oGModel = this.getModel("oGModel");
                 // Declaration of JSON models and size limits
                 this.PrimarylistModel = new JSONModel();
                 this.SeclistModel = new JSONModel();
@@ -37,14 +36,14 @@ sap.ui.define([
                 this._oCore = sap.ui.getCore();
                 if (!this._valueHelpDialogLoc) {
                     this._valueHelpDialogLoc = sap.ui.xmlfragment(
-                        "cpapp.cpprscchar.view.LocDialog",
+                        "cpapp.cpibpcharacteristic.view.LocDialog",
                         this
                     );
                     this.getView().addDependent(this._valueHelpDialogLoc);
                 }
                 if (!this._valueHelpDialogProd) {
                     this._valueHelpDialogProd = sap.ui.xmlfragment(
-                        "cpapp.cpprscchar.view.ProdDialog",
+                        "cpapp.cpibpcharacteristic.view.ProdDialog",
                         this
                     );
                     this.getView().addDependent(this._valueHelpDialogProd);
@@ -96,7 +95,7 @@ sap.ui.define([
 
                 if (sLoc !== "" && sProd !== "") {
                     sap.ui.core.BusyIndicator.show();
-                    this.getModel("BModel").callFunction("/getSecondaryChar", {
+                    this.getModel("BModel").callFunction("/getPrimaryCharIBP", {
                         method: "GET",
                         urlParameters: {
                             FLAG: "G",
@@ -186,7 +185,7 @@ sap.ui.define([
                 var sLoc = that.byId("idloc").getValue(),
                     sProd = that.byId("prodInput").getValue();
                 that.oSelectedItem = "";
-                this.getModel("BModel").callFunction("/getSecondaryChar", {
+                this.getModel("BModel").callFunction("/getPrimaryCharIBP", {
                     method: "GET",
                     urlParameters: {
                         FLAG: "R",
@@ -412,8 +411,6 @@ sap.ui.define([
             },
             // function drop list items
             onDrop: function (oInfo) {
-                oGModel = this.getModel("oGModel");
-                        oGModel.setProperty("/primFlag", "");
                 var oDragged = oInfo.getParameter("draggedControl"),
                     oDropped = oInfo.getParameter("droppedControl"),
                     sInsertPosition = oInfo.getParameter("dropPosition"),
@@ -428,6 +425,16 @@ sap.ui.define([
 
                     iDragPosition = oDragContainer.indexOfItem(oDragged),
                     iDropPosition = oDropContainer.indexOfItem(oDropped);
+                    var Flag = "";
+                    if (oDragModelData.results[0].CHAR_TYPE === "S") {
+                        length = that.byId("Primarytable").getItems().length;
+                        if(length === 7){
+                            Flag = "X";
+                        }
+
+                    }
+
+                    if(!Flag){
 
                 // remove the item
                 var oItem = oDragModelData.results[iDragPosition];
@@ -446,21 +453,21 @@ sap.ui.define([
 
                 if (oDragModel !== oDropModel) {
                     var oChar_Type;
-                    var iSeq = 0;
+                    var iSeq = 0,
+                        length = 0;
+                        
                     if (oItem.CHAR_TYPE === "S") {
                         iSeq = oItem.SEQUENCE;
                         oChar_Type = "P";
-
+                        
                     } else {
                         oChar_Type = "S"
                         iSeq = oDropModelData.results.length;
-                        
-                        oGModel.setProperty("/primFlag", "X");
-                        
 
                     }
 
-                    that.getModel("BModel").callFunction("/changeToPrimary", {
+
+                    that.getModel("BModel").callFunction("/changeToPrimaryIBP", {
                         method: "GET",
                         urlParameters: {
                             LOCATION_ID: oItem.LOCATION_ID,
@@ -477,19 +484,16 @@ sap.ui.define([
                             that.byId("searchField").setValue("");
                             that.onCharSearch();
                             that.onGetData();
-                            if(oGModel.getProperty("/primFlag") === "X"){
-                                that.byId("idText").setVisible(true);
-                                that.byId("idText").addStyleClass("textColour");
-                            }
                         },
                         error: function (oData) {
                             sap.ui.core.BusyIndicator.hide();
                             MessageToast.show("Failed to changes the char");
                         },
                     });
+                
                 } else {
                     oDropModel.setData(oDropModelData);
-                    var aData = this.byId("Secondarytable").getItems();
+                    var aData = this.byId("Primarytable").getItems();
 
                     // for (var i = 0; i < aData.length; i++) {
                     //     if (oItem.CHAR_NAME === aData[i].getCells()[1].getText()) {
@@ -500,12 +504,16 @@ sap.ui.define([
                     that.oSelectedItem = oItem.CHAR_NAME
                     that.onSaveSeq(iDropPosition);
                 }
+            } else {
+                MessageToast.show("Please remove existing IBP Characteristics to add new");
+            }
+                
             },
 
             onSaveSeq: function (index) {
-                var aData = this.byId("Secondarytable").getItems();
-                // that.count = aData.length;
-                that.count = index + 2;
+                var aData = this.byId("Primarytable").getItems();
+                that.count = aData.length;
+                // that.count = index + 2;
                 var successCount = 0;
 
 
@@ -519,9 +527,9 @@ sap.ui.define([
                     // oEntry.charName = aData[i].getCells()[1].getText();
                     oEntry.SEQUENCE = i + 1;
                     oEntry.FLAG = "E";
-                    oEntry.CHAR_TYPE = "S";
+                    oEntry.CHAR_TYPE = "P";
 
-                    that.getModel("BModel").callFunction("/changeToPrimary", {
+                    that.getModel("BModel").callFunction("/changeToPrimaryIBP", {
                         method: "GET",
                         urlParameters: {
                             LOCATION_ID: oEntry.Location,
@@ -537,7 +545,7 @@ sap.ui.define([
                                 successCount = successCount + 1;
                             }
 
-                            if (successCount + 1 === that.count) {
+                            if (successCount === that.count) {
                                 // MessageToast.show(oData.changeToPrimary);
                                 MessageToast.show("Successfully changed the sequence");
                                 that.byId("searchField").setValue("");
@@ -623,7 +631,7 @@ sap.ui.define([
 
                 if (sLoc !== "" && sProd !== "") {
                     sap.ui.core.BusyIndicator.show();
-                    this.getModel("BModel").callFunction("/getSecondaryChar", {
+                    this.getModel("BModel").callFunction("/getPrimaryCharIBP", {
                         method: "GET",
                         urlParameters: {
                             FLAG: "U",
@@ -690,9 +698,6 @@ sap.ui.define([
                                     }
                                 }
                             }
-                            oGModel.setProperty("/primFlag", "");
-                                that.byId("idText").setVisible(false);
-                                that.byId("idText").removeStyleClass("textColour");
 
                         },
                         error: function (oData, error) {

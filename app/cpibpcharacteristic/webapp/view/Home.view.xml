@@ -1,5 +1,5 @@
 <mvc:View
-    controllerName="cpapp.cpprscchar.controller.Home"
+    controllerName="cpapp.cpibpcharacteristic.controller.Home"
     xmlns:dnd="sap.ui.core.dnd"
     xmlns:ux="sap.uxap"
     xmlns:html="http://www.w3.org/1999/xhtml"
@@ -87,7 +87,7 @@
 									</Menu>
 								</contextMenu> -->
                                     <columns>
-                                        <Column hAlign="Center" visible="false">
+                                        <Column hAlign="Center" visible="true">
                                             <Text text="{i18n>charno}" />
                                         </Column>
                                         <Column hAlign="Center">

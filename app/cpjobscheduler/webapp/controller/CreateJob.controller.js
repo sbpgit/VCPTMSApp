@@ -177,9 +177,11 @@ sap.ui.define(
 
                 // calling function to select the Job Type
                 that.fixDate();
-
-                if (that.oGModel.getProperty("/newSch") !== "X" || that.oGModel.getProperty("/UpdateSch") !== "X") {
+                // 03-12
+                if (that.oGModel.getProperty("/newSch") !== "X" && that.oGModel.getProperty("/UpdateSch") !== "X") {
                     that.byId("idJobType").setSelectedKey("S");
+                    // 03-12
+                    that.byId("idSdi").setEnabled(true);
                 }
                 
                 that.onJobSelect();
@@ -895,7 +897,8 @@ sap.ui.define(
              * This function is used to set the input Id for the selected Job type .
              */
             JobType: function () {
-                if (that.oGModel.getProperty("/newSch") !== "X" || that.oGModel.getProperty("/UpdateSch") !== "X") {
+                // 03-12
+                if (that.oGModel.getProperty("/newSch") !== "X" && that.oGModel.getProperty("/UpdateSch") !== "X") {
                     var oJobKey = that.byId("idJobType").getSelectedKey();
 
                     // Changing the Id's based on selected job type
@@ -3470,7 +3473,8 @@ sap.ui.define(
                         case "Market Authorizations":
                             actionText = "/ibpimport-srv/exportMktAuth";
                             break;
-                        case "Assembly Requirement":
+                            //03-12
+                        case "Assembly Requirement Quantity":
                             actionText = "/ibpimport-srv/exportComponentReq";
                             break;
                         case "Forecast Demand":
