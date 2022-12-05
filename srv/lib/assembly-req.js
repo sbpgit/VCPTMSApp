@@ -31,18 +31,26 @@ class AssemblyReq {
                                   FROM CP_PARTIALPROD_INTRO 
                                   WHERE REF_PRODID    = '${adata.PRODUCT_ID}'
                                   AND LOCATION_ID   = '${adata.LOCATION_ID}' ) 
-                OR PRODUCT_ID = '${adata.PRODUCT_ID}')
+                )
                 ORDER BY LOCATION_ID,
                          PRODUCT_ID,
                          WEEK_DATE, 
-                         CIR_ID, 
                          MODEL_VERSION,
                          VERSION, 
-                         SCENARIO, 
-                         UNIQUE_ID, 
+                         SCENARIO,                         
+                         CIR_ID, 
+                         UNIQUE_ID,  
                          CIR_QTY
         `);
-
+        try {
+            await DELETE.from('CP_ASSEMBLY_REQ')
+                .where(`LOCATION_ID = '${adata.LOCATION_ID}' 
+                     AND REF_PRODID = '${adata.PRODUCT_ID}'`)
+        }
+        catch (err) {
+            console.log(err.message);
+        }
+//OR PRODUCT_ID = '${adata.PRODUCT_ID}'
         let liCIR = [];
         let lsCIR = {};
         let liChar = [];
@@ -109,6 +117,7 @@ class AssemblyReq {
 
         let liComponent = [];
         let lsComponent = {};
+        let lsODCount = {};
 
         for (let cntOD = 0; cntOD < liODChar.length; cntOD++) {
             if (cntOD === 0 ||
@@ -132,13 +141,13 @@ class AssemblyReq {
                 liODChar[cntOD].COMPONENT !== liODChar[GenF.subOne(cntOD)].COMPONENT ||
                 liODChar[cntOD].OBJ_DEP !== liODChar[GenF.subOne(cntOD)].OBJ_DEP ||
                 liODChar[cntOD].OBJ_COUNTER !== liODChar[GenF.subOne(cntOD)].OBJ_COUNTER) {
-                let lsODCount = {};
+                lsODCount = {};
                 lsODCount.OBJ_COUNTER = GenF.parse(liODChar[cntOD].OBJ_COUNTER);
                 lsODCount.CHAR = [];
             }
             let lsChar = {};
-            let lsODCount = {};
-            lsODCount.CHAR = [];
+            // let lsODCount = {};
+            // lsODCount.CHAR = [];
             lsChar.CHAR_NUM = GenF.parse(liODChar[cntOD].CHAR_NUM);
             lsChar.CHARVAL_NUM = GenF.parse(liODChar[cntOD].CHARVAL_NUM);
             lsChar.OD_CONDITION = GenF.parse(liODChar[cntOD].OD_CONDITION);
@@ -240,7 +249,8 @@ class AssemblyReq {
                     liCIR[cntCIR].WEEK_DATE !== liCIR[GenF.addOne(cntCIR, liCIR.length)].WEEK_DATE ||
                     liCIR[cntCIR].MODEL_VERSION !== liCIR[GenF.addOne(cntCIR, liCIR.length)].MODEL_VERSION ||
                     liCIR[cntCIR].VERSION !== liCIR[GenF.addOne(cntCIR, liCIR.length)].VERSION ||
-                    liCIR[cntCIR].SCENARIO !== liCIR[GenF.addOne(cntCIR, liCIR.length)].SCENARIO) {
+                    liCIR[cntCIR].SCENARIO !== liCIR[GenF.addOne(cntCIR, liCIR.length)].SCENARIO ||
+                    liCIR[cntCIR].COMPONENT !== liCIR[GenF.addOne(cntCIR, liCIR.length)].COMPONENT ) {
                     // vCIRQTY = GenF.parse(liCIR[cntCIR].CIR_QTY) + vCIRQTY;
                     lsAsmReq.LOCATION_ID = GenF.parse(liCIR[cntCIR].LOCATION_ID);
                     lsAsmReq.PRODUCT_ID = GenF.parse(liCIR[cntCIR].PRODUCT_ID);
@@ -251,7 +261,7 @@ class AssemblyReq {
                     lsAsmReq.ITEM_NUM = GenF.parse(liComponent[cntC].ITEM_NUM);
                     lsAsmReq.COMPONENT = GenF.parse(liComponent[cntC].COMPONENT);
 
-                    await cds.delete("CP_ASSEMBLY_REQ", lsAsmReq);
+                    // await cds.delete("CP_ASSEMBLY_REQ", lsAsmReq);
                     lsAsmReq.REF_PRODID = GenF.parse(liCIR[cntCIR].REF_PRODID);
                     lsAsmReq.COMPCIR_QTY = parseInt(vCIRQTY) * parseInt(liComponent[cntC].COMP_QTY);
                     if (vCIRQTY > 0) {
@@ -269,60 +279,19 @@ class AssemblyReq {
                     await cds.run(INSERT.into("CP_ASSEMBLY_REQ").entries(liAsmReq));
                     console.log(" Created successfully ");
                 } catch (e) {
-                    console.log(" Creation failed");
+                    console.log(e.message);
+                    throw new Error(exception.toString());
                     // createResults.push(responseMessage);
                 }
             }
-            liAsmReq = [];
+                liAsmReq = [];
         }
 
 
-        // let liOD = [];
-        // let lsOD = {};
-        // let lRowID = 0;
+        let lMsg = "Completed Assembly Requirement Calculation";
+        await GenF.jobSchMessage('X', lMsg, req);
 
-        // for (let cntODC = 0; cntODC < liODChar.length; cntODC++) {
-        //     if (cntODC === 0 ||
-        //         liODChar[cntODC].OBJ_DEP !== liODChar[GenF.subOne(cntODC)].OBJ_DEP ||
-        //         liODChar[cntODC].OBJ_COUNTER !== liODChar[GenF.subOne(cntODC)].OBJ_COUNTER) {
-        //         lsOD = {};
-        //         lsOD['OBJ_DEP'] = GenF.parse(liODChar[cntODC].OBJ_DEP);
-        //         lsOD['OBJ_COUNTER'] = GenF.parse(liODChar[cntODC].OBJ_COUNTER);
-        //         lsOD['CHAR'] = [];
-        //         lRowID = 0;
-        //     }
-        //     let lsODC = {};
-        //     lsODC['CHAR_COUNTER'] = GenF.parse(liODChar[cntODC].CHAR_COUNTER);
-        //     lsODC['CHAR_NUM'] = GenF.parse(liODChar[cntODC].CHAR_NUM);
-        //     lsODC['CHARVAL_NUM'] = GenF.parse(liODChar[cntODC].CHARVAL_NUM);
-        //     lsODC['OD_CONDITION'] = GenF.parse(liODChar[cntODC].OD_CONDITION);
-
-        //     // Check if Characteristic already assigne a Row ID. If not, check for the highest number and add one            
-        //     for (let cntC = 0; cntC < lsOD['CHAR'].length; cntC++) {
-        //         if (lsOD['CHAR'][cntC].CHAR_NUM === liODChar[cntODC].CHAR_NUM) {
-        //             lRowID = parseInt(lsOD['CHAR'][cntC].ROW_ID);
-        //             break;
-        //         }
-        //         if (parseInt(lsOD['CHAR'][cntC].ROW_ID) > lRowID) {
-        //             lRowID = parseInt(lsOD['CHAR'][cntC].ROW_ID)
-        //         }
-        //         if (GenF.addOne(cntC) === lsOD['CHAR'].length) {
-        //             lRowID = parseInt(lRowID) + 1;
-        //         }
-        //     }
-
-        //     lsODC['ROW_ID'] = lRowID;
-        //     lsOD['CHAR'].push(lsODC);
-
-        //     if (cntODC == GenF.addOne(cntODC, liODChar.length) ||
-        //         liODChar[cntODC].OBJ_DEP !== liODChar[GenF.addOne(cntODC, liODChar.length)].OBJ_DEP ||
-        //         liODChar[cntODC].OBJ_COUNTER !== liODChar[GenF.addOne(cntODC, liODChar.length)].OBJ_COUNTER) {
-        //         liOD.push(lsOD);
-        //     }
-        // }
-
-
-        await GenF.logMessage(req, `Completed Assembly Requirement Calculation`);  
+        // await GenF.logMessage(req, `Completed Assembly Requirement Calculation`);  
     }
 
 }

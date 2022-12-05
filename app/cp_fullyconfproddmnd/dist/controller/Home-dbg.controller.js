@@ -89,10 +89,10 @@ sap.ui.define(
                     );
                     this.getView().addDependent(this._valueHelpDialogScen);
                 }
-                
+
                 // Get User Configured in Cloud Foundry Destination User
-                that.getValidUser();  
-                that.getUserInfo();             
+                that.getValidUser();
+                that.getUserInfo();
 
             },
 
@@ -156,7 +156,7 @@ sap.ui.define(
 
 
                 // Set Visible Row Count
-                that.handleVisibleRowCount();
+                that.handleVisibleRowCount(0);
                 // Diable Date Input
                 // that.handleDateInputDisable();                
 
@@ -165,6 +165,7 @@ sap.ui.define(
                 this.getModel("CIRModel").read("/getLocation", {
                     success: function (oData) {
                         that.locModel.setData(oData);
+
                         that.oLocList.setModel(that.locModel);
                         sap.ui.core.BusyIndicator.hide();
                     },
@@ -194,17 +195,18 @@ sap.ui.define(
                             var iFrozenHorizon = parseInt(oData.results[0].VALUE) * 7 + 1;
                             var dDate = new Date();
                             dDate = new Date(dDate.setDate(dDate.getDate() + iFrozenHorizon));
-                            var oDateL = that.getDateFn(dDate);
-                            var oDateH = new Date(
-                                dDate.getFullYear(),
-                                dDate.getMonth(),
-                                dDate.getDate() + 90
-                            );
+                            that.dFrozenHorizonDate = dDate;
+                            // var oDateL = that.getDateFn(dDate);
+                            // var oDateH = new Date(
+                            //     dDate.getFullYear(),
+                            //     dDate.getMonth(),
+                            //     dDate.getDate() + 90
+                            // );
 
-                            var oDateH = that.getDateFn(oDateH);
+                            // var oDateH = that.getDateFn(oDateH);
 
-                            that.byId("fromDate").setValue(oDateL);
-                            that.byId("toDate").setValue(oDateH);
+                            // that.byId("fromDate").setValue(oDateL);
+                            // that.byId("toDate").setValue(oDateH);
 
                             // 
                             oParam = aParams.find(obj => obj.PARAMETER_ID === 9)
@@ -303,11 +305,26 @@ sap.ui.define(
                         success: function (data) {
                             sap.ui.core.BusyIndicator.hide();
                             that.rowData = data.results;
+                            if (data.results.length > 0) {
+                                that.oGModel.setProperty("/TData", data.results);
+                                // Code to close header
+                                var collapseBtnId = that.byId("application-cpfullyconfproddmnd-display-component---Home--ObjectPageLayout-OPHeaderContent-collapseBtn");
+                                if (collapseBtnId === undefined) {
+                                    collapseBtnId = that.byId("container-cpapp.cpfullyconfproddmnd---Home--ObjectPageLayout-OPHeaderContent-collapseBtn");
+                                }
+                                if (collapseBtnId) {
+                                    collapseBtnId.firePress();
+                                    that.handleVisibleRowCount(5);
+                                }
+                                // Calling function to generate UI table dynamically based on dat
+                                that.TableGenerate();
+                                that.getLocProdCharacteristics();
 
-                            that.oGModel.setProperty("/TData", data.results);
-                            // Calling function to generate UI table dynamically based on data
-                            that.TableGenerate();
-                            that.getLocProdCharacteristics();
+                            }
+                            // that.oGModel.setProperty("/TData", data.results);
+                            // // Calling function to generate UI table dynamically based on data
+                            // that.TableGenerate();
+                            // that.getLocProdCharacteristics();
                         },
                         error: function (data) {
                             sap.ui.core.BusyIndicator.hide();
@@ -346,6 +363,7 @@ sap.ui.define(
                 // toDate = toDate.toISOString().split("T")[0];
                 // Calling function to generate column names based on dates
                 var liDates = that.generateDateseries(fromDate, toDate);
+                that.oGModel.setProperty("/TDates", liDates);
                 // Looping through the data to generate columns
                 for (var i = 0; i < that.tableData.length; i++) {
                     sRowData['Unique ID'] = (that.tableData[i].UNIQUE_ID).toString();
@@ -388,12 +406,17 @@ sap.ui.define(
                             })
                         });
                     } else {
+                        var iTotalQty = that.getTotalWeekQty(columnName);
                         var dColName = new Date(columnName);
-                        if (that.dFirmHorizonDate > dColName) {
+                        var columnText = columnName + " (" + iTotalQty + ")";
+                        // if (that.dFirmHorizonDate > dColName) {
+                        if (dColName >= that.dFrozenHorizonDate && dColName <= that.dFirmHorizonDate) {
                             that.aFirmDates.push(columnName);
                             return new sap.ui.table.Column({
-                                width: "8rem",
-                                label: columnName,
+                                width: "9rem",
+                                // label: new sap.m.ObjectIdentifier({title: columnName}),
+                                label: columnText,
+                                // multiLabels: [new sap.m.Text({text: columnName}), new sap.m.Text({text: "SUM"})],
                                 template: new sap.m.Input({
                                     type: "Number",
                                     placeholder: "{" + columnName + "}",
@@ -402,9 +425,14 @@ sap.ui.define(
                                 }),
                             });
                         } else {
+
+                            if (columnName.includes("-") === false) {
+                                columnText = columnName;
+                            }
                             return new sap.ui.table.Column({
-                                width: "8rem",
-                                label: columnName,
+                                width: "9rem",
+                                label: columnText,
+                                // label: columnName,
                                 template: new sap.m.Text({
                                     text: "{" + columnName + "}",
                                 }),
@@ -415,7 +443,7 @@ sap.ui.define(
                 });
 
                 that.oTable.bindRows("/rows");
-            },           
+            },
 
             /**
              * This function is called when generating Date series for column names.
@@ -706,8 +734,10 @@ sap.ui.define(
                     ], false);
 
                     that.oTable.getBinding().filter(oFilter);
+                    that.onUniqueIdsFilter();
                 } else {
                     that.oTable.getBinding().filter(oFilter);
+                    that.onUniqueIdsFilter();
                 }
 
             },
@@ -757,7 +787,7 @@ sap.ui.define(
                         },
                     });
 
-                    // Get Parameter Values to set from date and to date
+                    // // Get Parameter Values to set from date and to date
                     that.getPlannedParameters();
 
                     // Product list
@@ -1048,9 +1078,9 @@ sap.ui.define(
                     oEntry.TODATE = vToDate;
 
                     // Call service through Job Scheduler
-                     that.handlePublish(oEntry);   
+                    that.handlePublish(oEntry);
 
-                    
+
                     // // calling service based on filters (Without Job Scheduler)
                     // that.getModel("CIRModel").callFunction("/postCIRQuantities", {
                     //     method: "GET",
@@ -1552,20 +1582,36 @@ sap.ui.define(
             /**
              * 
              */
-            handleVisibleRowCount: function () {
+            handleVisibleRowCount: function (iCount) {
                 var iWinH = window.innerHeight;
                 if (iWinH > 750 && iWinH < 800) {
-                    that.byId("idCIReq").setVisibleRowCount(9);
+                    that.byId("idCIReq").setVisibleRowCount(9+iCount);
                 } else if (iWinH > 800 && iWinH < 900) {
-                    that.byId("idCIReq").setVisibleRowCount(10);
+                    that.byId("idCIReq").setVisibleRowCount(10+iCount);
                 } else if (iWinH > 900 && iWinH < 1000) {
-                    that.byId("idCIReq").setVisibleRowCount(12);
+                    that.byId("idCIReq").setVisibleRowCount(12+iCount);
                 } else if (iWinH > 1000 && iWinH < 1100) {
-                    that.byId("idCIReq").setVisibleRowCount(14);
+                    that.byId("idCIReq").setVisibleRowCount(14+iCount);
                 } else {
-                    that.byId("idCIReq").setVisibleRowCount(8);
+                    that.byId("idCIReq").setVisibleRowCount(7+iCount);
                 }
+
+            //    that.getView().byId("container-cpapp.cpfullyconfproddmnd---Home--ObjectPageLayout-opwrapper");
             },
+            /**
+             * 
+             */
+             onChangeHeaderPinStatus: function(oEvent){
+                if(oEvent.getSource()._bHeaderExpanded === true){
+                  that.handleVisibleRowCount(5);
+                } else {
+                    that.handleVisibleRowCount(0);
+                }
+
+             },
+            /**
+             * 
+             */
             onNavPress: function () {
                 if (sap.ushell && sap.ushell.Container && sap.ushell.Container.getService) {
                     var oCrossAppNavigator = sap.ushell.Container.getService("CrossApplicationNavigation");
@@ -1584,10 +1630,10 @@ sap.ui.define(
             },
 
             /** Get Valid CF Auth Token and Configured User in Destination for S4D */
-            getValidUser: function(oEvent) {
+            getValidUser: function (oEvent) {
                 var oModel = that.getOwnerComponent().getModel('CIRModel');
                 oModel.callFunction("/getCFAuthToken", {
-                    method: "GET",                    
+                    method: "GET",
 
                     success: function (oData, oResponse) {
                         that.authToken = oResponse.data.getCFAuthToken;
@@ -1602,13 +1648,13 @@ sap.ui.define(
             getCFDestinationUser: function (sauthToken) {
                 var oModel = that.getOwnerComponent().getModel('CIRModel');
                 oModel.callFunction("/getCFDestinationUser", {
-                    method: "GET",                    
+                    method: "GET",
                     urlParameters: {
-                        TOKEN: sauthToken,                        
+                        TOKEN: sauthToken,
                     },
                     success: function (oData, oResponse) {
                         that.sCFUserDestination = oResponse.data.getCFDestinationUser;
-                        if(that.sCFUserDestination) {
+                        if (that.sCFUserDestination) {
                             that.sCFUserDestination = that.sCFUserDestination.toUpperCase();
                         }
                     },
@@ -1645,7 +1691,10 @@ sap.ui.define(
                                 aResults.map((mapObj) => mapObj.CHARVAL_NUM).indexOf(obj.CHARVAL_NUM) == pos
                             );
                         });
-
+                         // Code to Concatenate CHAR_DESC & CHAR_NAME property values into new Property
+                        aFilteredChar.forEach((oEntry) => {
+                            oEntry.CHARACTERISTIC = oEntry.CHAR_DESC + " " + "-" + " " + oEntry.CHAR_NAME;
+                         });
                         that.locProdCharModel.setData({
                             charDetails: aFilteredChar,
                         });
@@ -1676,7 +1725,7 @@ sap.ui.define(
 
                 aUniqueChars = that.allCharsModel.getData().charDetails;
                 aSelectedItems = oEvent.getParameter('selectedItems');
-                if (aSelectedItems.length > 0) {                   
+                if (aSelectedItems.length > 0) {
 
 
                     var aFilteredUniqueChars = aUniqueChars;
@@ -1691,7 +1740,7 @@ sap.ui.define(
                         }
                         aUniqueIdFilter = [];
                         for (var j = 0; j < aFilteredUniqueChars.length; j++) {
-                           
+
                             if (sCharNum === aFilteredUniqueChars[j].CHAR_NUM &&
                                 sCharVal_Num === aFilteredUniqueChars[j].CHARVAL_NUM) {
 
@@ -1703,26 +1752,28 @@ sap.ui.define(
                         }
 
                     }
-                    if(aUniqueIdFilter.length > 0) {
-                        for(var k = 0; k < aUniqueIdFilter.length; k++){
+                    if (aUniqueIdFilter.length > 0) {
+                        for (var k = 0; k < aUniqueIdFilter.length; k++) {
                             aFilterUniqueIds.push(new Filter("Unique ID", FilterOperator.EQ, aUniqueIdFilter[k].UNIQUE_ID))
                         }
                     }
 
                     aFilter = new Filter(aFilterUniqueIds, false);
                     that.oTable.getBinding().filter(aFilter);
+                    that.onUniqueIdsFilter();
                 } else {
                     that.oTable.getBinding().filter(aFilter);
+                    that.onUniqueIdsFilter();
                 }
             },
 
             /**
              * 
              */
-            getUserInfo: function(oEvent) {
+            getUserInfo: function (oEvent) {
                 var oModel = that.getOwnerComponent().getModel('CIRModel');
                 oModel.callFunction("/getUserInfo", {
-                    method: "GET", 
+                    method: "GET",
                     success: function (oData, oResponse) {
                         // sap.m.MessageToast.show(oResponse.data.getUserInfo);
                         that.sUserId = oResponse.data.getUserInfo;
@@ -1731,6 +1782,53 @@ sap.ui.define(
                         sap.m.MessageToast.show("Failed to get User Info!");
                     },
                 });
+            },
+            /**
+             * 
+             */
+            getTotalWeekQty: function (sWeekDate) {
+                that.oGModel = that.getModel("oGModel");
+                var oTableData = that.oGModel.getProperty("/TData");
+                var liDates = that.oGModel.getProperty("/TDates");
+                var iWeekIndex = 0;
+                var iTotalQty = 0;
+                for (let index = 2; index < liDates.length; index++) {
+                    iWeekIndex = iWeekIndex + 1;
+                    if (liDates[index].WEEK_DATE === sWeekDate) {
+                        break;
+                    }
+                }
+
+                // Looping through the data to generate columns SUM
+                
+                for (var i = 0; i < that.tableData.length; i++) {
+                     iTotalQty = iTotalQty + that.tableData[i]["WEEK" + iWeekIndex];                    
+                }
+
+                return iTotalQty;
+            },
+            /**
+             * 
+             */
+            onUniqueIdsFilter: function() {
+               // var oSource = oEvent.getSource();
+              var aColumns = that.oTable.getColumns();
+              var aIndices = that.oTable.getBinding().aIndices;
+              var aList = that.oTable.getBinding().oList;
+              var aFilteredList = [];
+              var sColLabel = " ";
+              var iTotalQty = 0;
+              var sColumnName = "";
+              aFilteredList = aList.filter((el,i)=>aIndices.some(j => i === j));
+              for(var i = 2; i < aColumns.length; i++) {
+                  sColLabel = aColumns[i].getLabel().getText().split(" ");
+                  iTotalQty = 0;
+                  for(var j = 0; j < aFilteredList.length; j++) {
+                    iTotalQty = iTotalQty + aFilteredList[j][sColLabel[0]];
+                  }
+                  sColumnName = sColLabel[0] + " (" + iTotalQty + ")";
+                  aColumns[i].setLabel(sColumnName);
+              }
             }
 
         });

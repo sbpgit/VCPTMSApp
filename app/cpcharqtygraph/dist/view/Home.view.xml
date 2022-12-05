@@ -15,7 +15,7 @@
     xmlns:f="sap.ui.layout.form"
     xmlns:html="http://www.w3.org/1999/xhtml"
 >
-    <ux:ObjectPageLayout id="ObjectPageLayout">
+    <ux:ObjectPageLayout id="ObjectPageLayout" alwaysShowContentHeader="true">
         <ux:headerTitle>
             <ux:ObjectPageDynamicHeaderTitle id="_IDGenObjectPageDynamicHeaderTitle1">
                 <ux:expandedHeading>
@@ -78,13 +78,13 @@
             </FlexBox>
         </ux:headerContent>
         <ux:sections>
-            <ux:ObjectPageSection id="idOBPageSec">
-                <ux:subSections id="idSubSec">
+            <ux:ObjectPageSection id="idOBPageSec" showTitle="false">
+                <ux:subSections >
                     <ux:ObjectPageSubSection id="idObjectPageSub">
-                        <ux:blocks id="idblocks">
-                            <layout:Splitter id="idSplitter" height="auto" width="100%" class="sapUiNoContentPadding" visible="false">
-                                <layout:FixFlex id='chartFixFlex' minFlexSize="500" class="fixFlex">
-                                    <layout:flexContent class="fixFlex">
+                        <ux:blocks >
+                            <!-- <layout:Splitter id="idSplitter" height="auto" width="100%" class="sapUiNoContentPadding" visible="true"> -->
+                                <!-- <layout:FixFlex id='chartFixFlex' minFlexSize="500" class="fixFlex">
+                                    <layout:flexContent > -->
                                         <commons:ChartContainer id="idInvChartContainer" showFullScreen="true" showPersonalization="false" showZoom="false" autoAdjustHeight="true" showLegend="true" showSelectionDetails="false">
                                             <commons:content>
                                                 <commons:ChartContainerContent id="_IDGenChartContainerContent1">
@@ -114,9 +114,9 @@
                                                 </commons:ChartContainerContent>
                                             </commons:content>
                                         </commons:ChartContainer>
-                                    </layout:flexContent>
-                                </layout:FixFlex>
-                            </layout:Splitter>
+                                    <!-- </layout:flexContent>
+                                </layout:FixFlex> -->
+                            <!-- </layout:Splitter> -->
                         </ux:blocks>
                     </ux:ObjectPageSubSection>
                 </ux:subSections>

@@ -52,7 +52,7 @@
                     "action": "display",
                     "title": "{{flpTitle}}",
                     "subTitle": "{{flpSubtitle}}",
-                    "icon": ""
+                    "icon": "sap-icon://BusinessSuiteInAppSymbols/icon-partially-delivered"
                 }
             }
         }

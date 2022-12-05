@@ -19,7 +19,7 @@
                 </ux:expandedHeading>
                 <ux:snappedHeading>
                     <HBox id="_IDGenFlexBox1" fitContainer="true" alignItems="Center" >
-						<Title id="_IDGenTitle2" text="{i18n>pageTitle}"  />
+						<Title id="_IDGenTitle2" text="{i18n>pageTitle}" class="sapUiLargeMarginEnd" />
 					<Button class="hdrBtnMarginHdr" id="_IDGenOverflowToolbarButton2" icon="sap-icon://sys-help" text="" type="Emphasized" press="onNavPress" tooltip="Help Document"/>
                             </HBox>
                     

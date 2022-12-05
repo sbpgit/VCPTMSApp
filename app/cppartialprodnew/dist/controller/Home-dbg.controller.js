@@ -179,13 +179,10 @@ sap.ui.define(
             /**
              * This function is called when a click on product Characteristics button.
              */
-            onCharDetails: function (oEvent) {
+             onCharDetails: function (oEvent) {
+                var sSelLoc = oEvent.getSource().getParent().getCells()[0].getText();
                 var sSelProd = oEvent.getSource().getParent().getCells()[1].getText();
-                var sSelrefProd = oEvent
-                    .getSource()
-                    .getParent()
-                    .getCells()[3]
-                    .getText();
+                var sSelrefProd = oEvent.getSource().getParent().getCells()[3].getText();
 
                 if (!that._onCharDetails) {
                     that._onCharDetails = sap.ui.xmlfragment(
@@ -196,13 +193,15 @@ sap.ui.define(
                 }
                 that._onCharDetails.setTitleAlignment("Center");
                 that.CharDetailList = sap.ui.getCore().byId("idCharDetail");
-
+                sap.ui.core.BusyIndicator.show();
                 this.getModel("BModel").read("/getPartialChar", {
                     filters: [
+                        new Filter("LOCATION_ID", FilterOperator.EQ, sSelLoc),
                         new Filter("PRODUCT_ID", FilterOperator.EQ, sSelProd),
                         new Filter("REF_PRODID", FilterOperator.EQ, sSelrefProd),
                     ],
                     success: function (oData) {
+                        sap.ui.core.BusyIndicator.hide();
                         that.charModel.setData({
                             results: oData.results,
                         });
@@ -210,6 +209,7 @@ sap.ui.define(
                         that._onCharDetails.open();
                     },
                     error: function () {
+                        sap.ui.core.BusyIndicator.hide();
                         MessageToast.show("Failed to get data");
                     },
                 });
