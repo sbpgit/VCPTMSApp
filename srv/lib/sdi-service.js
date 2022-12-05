@@ -825,7 +825,7 @@ module.exports = (srv) => {
         try {
             const dbClass = require("sap-hdb-promisfied")
             let dbConn = new dbClass(await dbClass.createConnectionFromEnv())
-            const sp = await dbConn.loadProcedurePromisified(null, '"FG_PRODUCT_LOCATION_STOP_SP"')
+            const sp = await dbConn.loadProcedurePromisified(null, '"FG_LOCATIONPROD_SP"')
             const output = await dbConn.callProcedurePromisified(sp, [])
             console.log(output.results);
             flag = 'X';

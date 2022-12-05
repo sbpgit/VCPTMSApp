@@ -20,7 +20,7 @@
                             <HBox>
                                 <Title id="_IDGenTitle1" text="{i18n>title}" class="boldText" titleAlignment="Center" />
 
-                                <Button class="hdrBtnMarginHdr" id="_IDGenOverflowToolbarButton1" icon="sap-icon://sys-help" text="" type="Emphasized" press="onNavPress" tooltip="Help Document" />
+                                <!-- <Button class="hdrBtnMarginHdr" id="_IDGenOverflowToolbarButton1" icon="sap-icon://sys-help" text="" type="Emphasized" press="onNavPress" tooltip="Help Document" /> -->
                             </HBox>
                         </ux:expandedHeading>
 
@@ -28,12 +28,12 @@
                             <HBox id="_IDGenFlexBox1" fitContainer="true" alignItems="Center">
                                 <Title id="_IDGenTitle2" text="{i18n>title}" />
 
-                                <Button class="hdrBtnMarginHdr" id="_IDGenOverflowToolbarButton2" icon="sap-icon://sys-help" text="" type="Emphasized" press="onNavPress" tooltip="Help Document" />
+                                <!-- <Button class="hdrBtnMarginHdr" id="_IDGenOverflowToolbarButton2" icon="sap-icon://sys-help" text="" type="Emphasized" press="onNavPress" tooltip="Help Document" /> -->
                             </HBox>
                         </ux:snappedHeading>
-                        <!-- <ux:navigationActions>
+                        <ux:navigationActions>
                           <Button class="classHdr" icon="sap-icon://sys-help" id="idNav3" press="onNavPress" type="Emphasized" tooltip="Help Document" />
-                        </ux:navigationActions> -->
+                        </ux:navigationActions>
                     </ux:ObjectPageDynamicHeaderTitle>
                 </ux:headerTitle>
                 <ux:headerContent>
