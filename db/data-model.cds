@@ -861,14 +861,13 @@ context cp {
             SCENARIO_NAME : String(50) @title : 'Scenario_Name';
     }
 
-     entity IBPCHAR_PS{
+     entity IBPCHAR_PS {
         key PRODUCT_ID  : String(40) @title : 'Configurable Product';
         key LOCATION_ID : String(4)  @title : 'Location';
         key CHAR_NUM    : String(30) @title : 'Charateristic Name';
             CHAR_TYPE   : String(2)  @title : 'Characteristic Type';
             SEQUENCE    : Integer    @title : 'Secondary Char. Position';
     }
-
 }
 
 
