@@ -118,16 +118,34 @@ sap.ui.define([
                                 }
                             }
 
-                            that.finalSecData = [];
-                            for (var j = 0; j <= that.secData.length; j++) {
-                                for (var k = 0; k < that.secData.length; k++) {
-                                    if (j === that.secData[k].SEQUENCE) {
-                                        that.finalSecData.push(that.secData[k]);
+                                that.finalPrimData = [];
+                            for (var j = 0; j <= that.primaryData.length; j++) {
+                                for (var k = 0; k < that.primaryData.length; k++) {
+                                    if (j === that.primaryData[k].SEQUENCE) {
+                                        that.finalPrimData.push(that.primaryData[k]);
                                         break;
                                     }
                                 }
 
                             }
+
+
+
+
+
+
+
+                            that.finalSecData = that.secData;
+                            // that.finalSecData = [];
+                            // for (var j = 0; j <= that.secData.length; j++) {
+                            //     for (var k = 0; k < that.secData.length; k++) {
+                            //         if (j === that.secData[k].SEQUENCE) {
+                            //             that.finalSecData.push(that.secData[k]);
+                            //             break;
+                            //         }
+                            //     }
+
+                            // }
                             // var aData = that.finalSecData;
                             //     if(that.oSelectedItem){
                             //     for (var i = 0; i < aData.length; i++) {
@@ -140,7 +158,7 @@ sap.ui.define([
 
 
                             that.PrimarylistModel.setData({
-                                results: that.primaryData,
+                                results: that.finalPrimData,
                             });
                             that.oPList.setModel(that.PrimarylistModel);
 
@@ -457,12 +475,14 @@ sap.ui.define([
                         length = 0;
                         
                     if (oItem.CHAR_TYPE === "S") {
-                        iSeq = oItem.SEQUENCE;
+                        // iSeq = oItem.SEQUENCE;
                         oChar_Type = "P";
+                        iSeq = oDropModelData.results.length;
+
                         
                     } else {
                         oChar_Type = "S"
-                        iSeq = oDropModelData.results.length;
+                        // iSeq = oDropModelData.results.length;
 
                     }
 
