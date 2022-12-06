@@ -177,17 +177,13 @@ sap.ui.define(
 
                 // calling function to select the Job Type
                 that.fixDate();
-<<<<<<< HEAD
-                if (that.oGModel.getProperty("/newSch") !== "X" || that.oGModel.getProperty("/UpdateSch") !== "X") {
+                // 03-12
+                if (that.oGModel.getProperty("/newSch") !== "X" && that.oGModel.getProperty("/UpdateSch") !== "X") {
                     that.byId("idJobType").setSelectedKey("S");
-                }
-=======
-
-                if (that.oGModel.getProperty("/newSch") !== "X" || that.oGModel.getProperty("/UpdateSch") !== "X") {
-                    that.byId("idJobType").setSelectedKey("S");
+                    // 03-12
+                    that.byId("idSdi").setEnabled(true);
                 }
                 
->>>>>>> 28572205e8c7de3e81f65a1fa52119e34f364125
                 that.onJobSelect();
 
                 // Calling service to get the Location data
@@ -901,7 +897,8 @@ sap.ui.define(
              * This function is used to set the input Id for the selected Job type .
              */
             JobType: function () {
-                if (that.oGModel.getProperty("/newSch") !== "X" || that.oGModel.getProperty("/UpdateSch") !== "X") {
+                // 03-12
+                if (that.oGModel.getProperty("/newSch") !== "X" && that.oGModel.getProperty("/UpdateSch") !== "X") {
                     var oJobKey = that.byId("idJobType").getSelectedKey();
 
                     // Changing the Id's based on selected job type
@@ -960,10 +957,6 @@ sap.ui.define(
                     }
 
                     // 07-09-2022-1
-                    // if (that.oGModel.getProperty("/UpdateSch") !== "X" && (oJobKey === "M" || oJobKey === "P" || oJobKey === "T" || oJobKey === "F" ||
-                    //     oJobKey === "I" || oJobKey === "E" || oJobKey === "D")) {
-                    //     that.oProd.removeAllTokens();
-                    // }
                     if (that.oGModel.getProperty("/UpdateSch") !== "X" && (oJobKey === "M" || oJobKey === "P" || oJobKey === "T" || oJobKey === "F" ||
                         oJobKey === "I" || oJobKey === "D")) {
                         that.oProd.removeAllTokens();
@@ -1361,10 +1354,6 @@ sap.ui.define(
                     if (jobType === "E" && selectedButton === "Assembly Requirement Quantity") {
                         ExportFlag = "X";
                     }
-<<<<<<< HEAD
-                    if (jobType === "I" || jobType === "E") {
-
-=======
                     // 03-12
                     if (jobType === "I" || jobType === "E"){
                     switch (selectedButton) {
@@ -1390,38 +1379,10 @@ sap.ui.define(
                             break;
                     }
                 }
->>>>>>> 28572205e8c7de3e81f65a1fa52119e34f364125
 
-                        switch (selectedButton) {
-                            case "Location":
-                                Flag === "X";
-                                break;
-                            case "Customer Group":
-                                Flag === "X";
-                                break;
-                            case "Product":
-                                Flag === "X";
-                                that.oLoc.setValue(oScheData.LOCATION_ID);
-                                break;
-                            case "Class":
-                                Flag === "X";
-                                that.oClass.setValue(oScheData.CLASS_NUM);
-                                break;
-                            case "Restrictions":
-                                Flag === "X";
-                                that.oLoc.setValue(oScheData.LOCATION_ID);
-                                break;
-                            default:
-                                break;
-                        }
-                    }
                     if (Flag === "" && ExportFlag === "") {
                         var oScheData = $.parseJSON(oScheData.LocProdData);
-<<<<<<< HEAD
-                        location = oScheData[0].LOCATION_ID;
-=======
                     location = oScheData[0].LOCATION_ID;
->>>>>>> 28572205e8c7de3e81f65a1fa52119e34f364125
 
                         that.getModel("BModel").callFunction("/getAllProd", {
                             method: "GET",
@@ -3512,6 +3473,7 @@ sap.ui.define(
                         case "Market Authorizations":
                             actionText = "/ibpimport-srv/exportMktAuth";
                             break;
+                            //03-12
                         case "Assembly Requirement Quantity":
                             actionText = "/ibpimport-srv/exportComponentReq";
                             break;
@@ -3619,10 +3581,7 @@ sap.ui.define(
                     } else if (oJobType === "T" || oJobType === "F" || oJobType === "D") {
                         var finalList = {
                             jobId: that.oGModel.getProperty("/Jobdata").jobId,
-<<<<<<< HEAD
-=======
                             // 03-12
->>>>>>> 28572205e8c7de3e81f65a1fa52119e34f364125
                             scheduleId: that.oGModel.getProperty("/aScheUpdate").scheduleId,
                             data: {
                                 LocProdData: JSON.stringify(vcRuleList.LocProdData),

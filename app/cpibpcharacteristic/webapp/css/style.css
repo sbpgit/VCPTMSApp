@@ -1,1 +1,59 @@
 /* Enter your custom styles here */
+
+
+/* div#__vbox0 {
+    margin-left: 15px;
+}
+
+div#__vbox1 {
+    margin-left: 15px;
+    margin-right: 15px;
+} */
+
+.bold{
+    font-weight: bold !important;
+    font-size: large !important;
+}
+
+div#__vbox4 {
+    margin-right: 20px;
+}
+
+.sapUxAPObjectPageContainerNoBar>.sapUxAPObjectPageSection:first-child:not(.sapUxAPObjectPageSectionNoTitle) {
+    margin-top: 0.1rem !important;
+}
+
+.hdrBtnMarginHdr{
+    margin-left:1rem;
+}
+.sapFDynamicPageTitleMain>.sapFDynamicPageTitleMainInner .sapFDynamicPageTitleMainHeading .sapFDynamicPageTitleMainHeadingInner .sapMTitle {
+    font-size: 1.25rem;
+    margin-top: 0.25rem;
+}
+
+.hdrBtnMargin{
+    margin-left:40rem;
+}
+
+.sapUiSizeCompact .sapUxAPObjectPageSectionHeader, .sapUxAPObjectPageSectionHeader {
+    height: 0.1rem !important;
+}
+
+/* section#__page1-cont {
+    height: 80%;
+} */
+.sapUiSizeCompact .sapMInputBaseHasEndIcons .sapMInputBaseInner {
+    padding-right: 0.25rem;
+    width: 500px;
+}
+.sapUiLoSplitterH.sapUiLoSplitter .sapUiLoSplitterContent {
+    white-space: normal;
+    display: inline-block;
+    vertical-align: top;
+    height: 75% !important;
+}
+
+.sapUiSizeCompact .sapMInputBaseHasEndIcons .sapMInputBaseInner {
+    padding-right: 0.25rem;
+    width: 500px;
+}
