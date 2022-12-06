@@ -1,10 +1,11 @@
 {
   "role": {
-    "schema_analytic_privileges": [
+    "name": "SACVIEWSACCESS",
+    "schema_privileges": [
       {
-        "schema_reference": "4167A112608D48049ADB20CCE53B4F4F",
         "privileges": [
-          "SAC"
+          "SELECT",
+          "EXECUTE"
         ]
       }
     ]
