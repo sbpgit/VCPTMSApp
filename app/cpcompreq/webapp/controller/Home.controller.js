@@ -190,30 +190,30 @@ sap.ui.define(
 
                 // Planned Parameter Values
 
-                this.getModel("BModel").read("/V_Parameters", {
-                    success: function (oData) {
-                        // if Frozen Horizon is 14 Days, we need to consider from 15th day
-                        var iFrozenHorizon = parseInt(oData.results[0].VALUE) + 1;
-                        var dDate = new Date();
-                        // var oDateL = that.getDateFn(dDate);
-                        // oDateL = that.addDays(oDateL, iFrozenHorizon);
-                        dDate = new Date(dDate.setDate(dDate.getDate() + iFrozenHorizon));
-                        var oDateL = that.getDateFn(dDate);
-                        var oDateH = new Date(
-                            dDate.getFullYear(),
-                            dDate.getMonth(),
-                            dDate.getDate() + 90
-                        );
-                        var oDateH = that.getDateFn(oDateH);
-                        that.byId("fromDate").setValue(oDateL);
-                        that.byId("toDate").setValue(oDateH);
-                        sap.ui.core.BusyIndicator.hide();
-                    },
-                    error: function (oData, error) {
-                        MessageToast.show("error");
-                        sap.ui.core.BusyIndicator.hide();
-                    },
-                });
+                // this.getModel("BModel").read("/V_Parameters", {
+                //     success: function (oData) {
+                //         // if Frozen Horizon is 14 Days, we need to consider from 15th day
+                //         var iFrozenHorizon = parseInt(oData.results[0].VALUE) + 1;
+                //         var dDate = new Date();
+                //         // var oDateL = that.getDateFn(dDate);
+                //         // oDateL = that.addDays(oDateL, iFrozenHorizon);
+                //         dDate = new Date(dDate.setDate(dDate.getDate() + iFrozenHorizon));
+                //         var oDateL = that.getDateFn(dDate);
+                //         var oDateH = new Date(
+                //             dDate.getFullYear(),
+                //             dDate.getMonth(),
+                //             dDate.getDate() + 90
+                //         );
+                //         var oDateH = that.getDateFn(oDateH);
+                //         that.byId("fromDate").setValue(oDateL);
+                //         that.byId("toDate").setValue(oDateH);
+                //         sap.ui.core.BusyIndicator.hide();
+                //     },
+                //     error: function (oData, error) {
+                //         MessageToast.show("error");
+                //         sap.ui.core.BusyIndicator.hide();
+                //     },
+                // });
             },
 
             /**
@@ -692,8 +692,14 @@ sap.ui.define(
                 var timeOffsetInMS = lDate.getTimezoneOffset() * 60000;
                 lDate.setTime(lDate.getTime() + timeOffsetInMS);
                 let lDay = lDate.getDay();
-                if (lDay !== 0) lDay = 7 - lDay;
-                lDay = lDay + 1;
+                // if (lDay !== 0) lDay = 7 - lDay;
+                // lDay = lDay + 1;
+                if (lDay === 1) {
+                    lDay = 0;
+                } else {
+                    if (lDay !== 0) lDay = 7 - lDay;
+                    lDay = lDay + 1;
+                }
                 const lNextSun = new Date(
                     lDate.getFullYear(),
                     lDate.getMonth(),

@@ -3,11 +3,34 @@
   "authenticationMethod": "route",
   "routes": [
     {
-      "source": "^/catalog/(.*)$",
-      "target": "/catalog/$1",
-      "destination": "config_products-srv",
+      "source": "^/v2/pal/(.*)$",
+      "target": "/v2/pal/$1",
+      "destination": "ConfigProd_DB",
       "authenticationType": "xsuaa",
-      "csrfProtection": false
+      "csrfProtection": true,
+      "scope":{
+          "GET": ["$XSAPPNAME.User"],
+          "PUT": ["$XSAPPNAME.User"],
+          "PATCH": ["$XSAPPNAME.User"],
+          "POST": ["$XSAPPNAME.User"],
+          "DELETE": ["$XSAPPNAME.User"],
+          "default": ["$XSAPPNAME.User"]
+      }
+    },
+    {
+      "source": "^/v2/catalog/(.*)$",
+      "target": "/v2/catalog/$1",
+      "destination": "ConfigProd",
+      "authenticationType": "xsuaa",
+      "csrfProtection": true,
+      "scope":{
+          "GET": ["$XSAPPNAME.User"],
+          "PUT": ["$XSAPPNAME.User"],
+          "PATCH": ["$XSAPPNAME.User"],
+          "POST": ["$XSAPPNAME.User"],
+          "DELETE": ["$XSAPPNAME.User"],
+          "default": ["$XSAPPNAME.User"]
+      }
     },
     {
       "source": "^/resources/(.*)$",

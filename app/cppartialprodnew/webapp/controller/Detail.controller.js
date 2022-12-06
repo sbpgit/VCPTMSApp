@@ -104,6 +104,7 @@ sap.ui.define(
                     that.byId("idClassChar").setTitle("Update Product");
                     that.byId("idloc").setEditable(false);
                     that.byId("idProd").setEditable(false);
+                    that.byId("idrefprod").setEditable(false);
 
                     that.byId("idloc").setValue(oGModel.getProperty("/Loc"));
                     that.byId("idProd").setValue(oGModel.getProperty("/Prod"));
@@ -154,13 +155,15 @@ sap.ui.define(
 
             getCharData: function () {
                 var sSelProd = oGModel.getProperty("/Prod"),
-                    sSelrefProd = oGModel.getProperty("/refProd");
+                    sSelrefProd = oGModel.getProperty("/refProd"),
+                    sSelLoc = oGModel.getProperty("/Loc");
 
 
                 this.getModel("BModel").read("/getPartialChar", {
                     filters: [
                         new Filter("PRODUCT_ID", FilterOperator.EQ, sSelProd),
                         new Filter("REF_PRODID", FilterOperator.EQ, sSelrefProd),
+                        new Filter("LOCATION_ID", FilterOperator.EQ, sSelLoc)
                     ],
                     success: function (oData) {
                         that.ListModel.setData({
@@ -465,6 +468,10 @@ sap.ui.define(
                     ],
                     success: function (oData) {
                         sap.ui.core.BusyIndicator.hide();
+<<<<<<< HEAD
+
+=======
+>>>>>>> 28572205e8c7de3e81f65a1fa52119e34f364125
                         that.classnameModel.setData({
                             results: oData.results
                         });
@@ -484,10 +491,13 @@ sap.ui.define(
                 that.aData = that.ListModel.getData().results;
                 that.aData.splice(oSelItem, 1); //removing 1 record from i th index.
                 that.ListModel.refresh();
-
-
             },
 
+<<<<<<< HEAD
+          
+
+=======
+>>>>>>> 28572205e8c7de3e81f65a1fa52119e34f364125
             /**
            * This function is called when click on save button to create or update the product.
            * @param {object} oEvent -the event information.
@@ -504,6 +514,10 @@ sap.ui.define(
                         "Reference product and new product can not be same"
                     );
                 } else {
+<<<<<<< HEAD
+                    
+=======
+>>>>>>> 28572205e8c7de3e81f65a1fa52119e34f364125
                     sap.ui.core.BusyIndicator.show();
                     that.getModel("BModel").callFunction("/maintainPartialProd", {
                         method: "GET",
@@ -518,7 +532,7 @@ sap.ui.define(
                             sap.ui.core.BusyIndicator.hide();
 
                             that.createChar();
-                            that.createIBPProd();
+                            //that.createIBPProd();
 
                         },
                         error: function (oData) {
@@ -582,69 +596,8 @@ sap.ui.define(
                         that.onBack();
                     }
                 });
-
-
-                // that.getModel("IModel").callFunction("/createIBPSalesTrans", {
-                //     method: "GET",
-                //     urlParameters: {
-                //         LOCATION_ID: that.byId("idloc").getValue(),
-                //     },
-                //     success: function (oData) {
-                //         sap.ui.core.BusyIndicator.hide();
-                //     },
-                //     error: function (error) {
-                //         sap.ui.core.BusyIndicator.hide();
-                //         that.onBack();
-                //     }
-                // });
-
-
-                // that.getModel("IModel").callFunction("/createIBPSalesConfig", {
-                //     method: "GET",
-                //     urlParameters: {
-                //         LOCATION_ID: that.byId("idloc").getValue(),
-                //     },
-                //     success: function (oData) {
-                //         sap.ui.core.BusyIndicator.hide();
-                //         that.onBack();
-                //     },
-                //     error: function (error) {
-                //         sap.ui.core.BusyIndicator.hide();
-                //         that.onBack();
-                //     }
-                // });
-
-
-
-
-
-
-
             }
-
-
-
-            //   createIBPProd:function(){            
-
-            //     sap.ui.core.BusyIndicator.show();
-            //     that.getModel("IModel").callFunction("/createIBPProduct", {
-            //         method: "GET",
-            //         urlParameters: {
-            //             LOCATION_ID: that.byId("idloc").getValue(),
-            //             PRODUCT_ID: that.byId("idProd").getValue()
-            //         },
-            //         success: function (oData) {
-            //           sap.ui.core.BusyIndicator.hide();
-            //           sap.m.MessageToast.show("Exported product to IBP");
-            //           that.onBack();
-            //         },
-            //         error: function (error) {
-            //           sap.ui.core.BusyIndicator.hide();
-            //           sap.m.MessageToast.show("Export product to IBP");
-            //           that.onBack();
-            //         }
-            //       });            
-            //   }        
+      
         });
     }
 );

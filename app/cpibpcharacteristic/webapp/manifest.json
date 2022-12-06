@@ -17,14 +17,21 @@
         },
         "dataSources": {
             "mainService": {
-                "uri": "/catalog/",
+                "uri": "/v2/catalog/",
                 "type": "OData",
                 "settings": {
-                    "annotations": [],
-                    "localUri": "localService/metadata.xml",
-                    "odataVersion": "4.0"
+                  "localUri": "localService/CatalogService/metadata.xml",
+                  "odataVersion": "2.0"
                 }
-            }
+              },
+              "Pal": {
+                "uri": "/v2/pal/",
+                "type": "OData",
+                "settings": {
+                  "odataVersion": "2.0",
+                  "localUri": "localService/metadata.xml"
+                }
+              }
         },
         "crossNavigation": {
             "inbounds": {
@@ -60,6 +67,12 @@
     },
     "sap.ui5": {
         "flexEnabled": true,
+        "rootView": {
+            "viewName": "cpapp.cpibpcharacteristic.view.App",
+            "type": "XML",
+            "async": true,
+            "id": "App"
+        },
         "dependencies": {
             "minUI5Version": "1.108.0",
             "libs": {
@@ -84,16 +97,32 @@
                     "bundleName": "cpapp.cpibpcharacteristic.i18n.i18n"
                 }
             },
-            "": {
+            "oGModel": {
+                "type": "sap.ui.model.json.JSONModel",
+                "settings": {
+                    "defaultBindingMode": "TwoWay"
+                },
+                "preload": true
+            },
+            "BModel": {
                 "dataSource": "mainService",
                 "preload": true,
                 "settings": {
-                    "synchronizationMode": "None",
-                    "operationMode": "Server",
-                    "autoExpandSelect": true,
-                    "earlyRequests": true
+                  "synchronizationMode": "None",
+                  "operationMode": "Server",
+                  "autoExpandSelect": true,
+                  "earlyRequests": true,
+                  "groupId": "$direct"
                 }
-            }
+              },
+              "PModel": {
+                "dataSource": "Pal",
+                "preload": true,
+                "settings": {
+                  "useBatch": true,
+                  "defaultBindingMode": "TwoWay"
+                }
+              }
         },
         "resources": {
             "css": [
@@ -114,15 +143,15 @@
             },
             "routes": [
                 {
-                    "name": "RouteHome",
-                    "pattern": ":?query:",
+                    "name": "Home",
+                    "pattern": "",
                     "target": [
-                        "TargetHome"
+                        "Home"
                     ]
                 }
             ],
             "targets": {
-                "TargetHome": {
+                "Home": {
                     "viewType": "XML",
                     "transition": "slide",
                     "clearControlAggregation": false,
@@ -130,12 +159,6 @@
                     "viewName": "Home"
                 }
             }
-        },
-        "rootView": {
-            "viewName": "cpapp.cpibpcharacteristic.view.App",
-            "type": "XML",
-            "async": true,
-            "id": "App"
         }
     },
     "sap.cloud": {

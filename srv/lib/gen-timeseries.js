@@ -248,10 +248,10 @@ class GenTimeseries {
         await GenF.logMessage(req, `Completed history timeseries`);
         if (Flag === 'S') {
             console.log("Success");
-            GenF.jobSchMessage('X', "Timeseries History generation is complete", req);
+            await GenF.jobSchMessage('X', "Timeseries History generation is complete", req);
         }
         else {
-            GenF.jobSchMessage('', "Timeseries History generation failed", req);
+            await GenF.jobSchMessage('', "Timeseries History generation failed", req);
         }
 
     }
@@ -533,10 +533,10 @@ class GenTimeseries {
         await GenF.logMessage(req, `Completed future timeseries`);    
         if (Flag === 'X') {
             console.log("Success");
-            GenF.jobSchMessage(Flag, `Timeseries Future generation is complete`, req);
+          await GenF.jobSchMessage(Flag, `Timeseries Future generation is complete`, req);
         }
         else {
-            GenF.jobSchMessage(Flag, `Timeseries Future generation failed`, req);
+          await GenF.jobSchMessage(Flag, `Timeseries Future generation failed`, req);
         }      
     }
 

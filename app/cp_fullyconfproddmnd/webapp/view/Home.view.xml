@@ -108,8 +108,10 @@
 				                            sorter: { path: 'CHAR_NAME' }
 			                                        }"
                                             >
-                                                <core:ListItem key="{CHAR_NUM}:{CHARVAL_NUM}" text="{CHAR_DESC}:{CHAR_NAME}" additionalText="{CHARVAL_DESC}:{CHAR_VALUE}" />
-                                            </MultiComboBox>
+                                                <!-- <core:ListItem key="{CHAR_NUM}:{CHARVAL_NUM}" text="{CHAR_DESC}:{CHAR_NAME}" additionalText="{CHARVAL_DESC}:{CHAR_VALUE}" /> -->
+                                           
+                                        <core:ListItem key="{CHAR_NUM}-{CHARVAL_NUM}" text="{CHARACTERISTIC}" additionalText="{CHARVAL_DESC}-{CHAR_VALUE}" />                                            
+                                        </MultiComboBox>
                                         </Toolbar>
                                         <t:Table id="idCIReq" class="table" fixedColumnCount="2" selectionMode="None" alternateRowColors="true"  enableSelectAll="false" visibleRowCount="7">
                                             <t:columns />

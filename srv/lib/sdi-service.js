@@ -287,8 +287,11 @@ module.exports = (srv) => {
             const dbClass = require("sap-hdb-promisfied")
             let dbConn = new dbClass(await dbClass.createConnectionFromEnv())
             const sp = await dbConn.loadProcedurePromisified(null, '"FG_BOMHEADER_SP"')
+            const sp2 = await dbConn.loadProcedurePromisified(null, '"FG_BOMOBJDEPENDENCY_SP"')
             const output = await dbConn.callProcedurePromisified(sp, [])
+            const output2 = await dbConn.callProcedurePromisified(sp2, [])
             console.log(output.results);
+            console.log(output2.results);
             flag = 'X';
         } catch (error) {
             console.error(error);
@@ -1360,17 +1363,19 @@ module.exports = (srv) => {
             const dbClass = require("sap-hdb-promisfied")
             let dbConn = new dbClass(await dbClass.createConnectionFromEnv())
             const sp = await dbConn.loadProcedurePromisified(null, '"FG_PVSNODE_SP"');
+            const sp2 = await dbConn.loadProcedurePromisified(null, '"FG_PVSBOM_SP"');
             const output = await dbConn.callProcedurePromisified(sp, [])
+            const output2 = await dbConn.callProcedurePromisified(sp2, [])
             console.log(output.results);
             flag = 'X';
         } catch (error) {
             console.error(error);
         }
         if (flag === 'X') {
-            GenF.jobSchMessage('X', "Import of PVS node structure is successfull ", req);
+            await GenF.jobSchMessage('X', "Import of PVS node structure is successfull ", req);
         }
         else {
-            GenF.jobSchMessage('', "Import of PVS node structure has failed", req);
+            await GenF.jobSchMessage('', "Import of PVS node structure has failed", req);
         }
 
     });
@@ -1395,10 +1400,10 @@ module.exports = (srv) => {
             console.error(error);
         }
         if (flag === 'X') {
-            GenF.jobSchMessage('X', "Import of PVS-BOM is successfull ", req);
+            await GenF.jobSchMessage('X', "Import of PVS-BOM is successfull ", req);
         }
         else {
-            GenF.jobSchMessage('', "Import of PVS-BOM has failed", req);
+            await GenF.jobSchMessage('', "Import of PVS-BOM has failed", req);
         }
     });
     srv.on("ImportSOStock", async (req) => { 
@@ -1422,10 +1427,10 @@ module.exports = (srv) => {
             console.error(error);
         }
         if (flag === 'X') {
-            GenF.jobSchMessage('X', "Import of Salesorder Stock is successfull ", req);
+            await GenF.jobSchMessage('X', "Import of Salesorder Stock is successfull ", req);
         }
         else {
-            GenF.jobSchMessage('', "Import of Salesorder Stock has failed", req);
+            await GenF.jobSchMessage('', "Import of Salesorder Stock has failed", req);
         }
     });
 };
