@@ -2283,65 +2283,65 @@ module.exports = (srv) => {
     });
     // Retriction rule
     // Maintain partial configurations for new product
-    srv.on("maintainRestrDet", async (req) => {
-        let liresults = [];
-        let lsresults = {};
-        let liRtrChar = {};
-        var responseMessage;
-        liRtrChar = JSON.parse(req.data.RTRCHAR);
-        if (req.data.FLAG === "C" || req.data.FLAG === "E") {
-            for (var i = 0; i < liRtrChar.length; i++) {
-                lsresults.RESTRICTION = liRtrChar[i].RESTRICTION;
-                // lsresults.RTR_COUNTER = liRtrChar[i].RTR_COUNTER;
-                lsresults.CLASS_NUM = liRtrChar[i].CLASS_NUM;
-                lsresults.CHAR_NUM = liRtrChar[i].CHAR_NUM;
-                lsresults.CHAR_COUNTER = liRtrChar[i].CHAR_COUNTER;
-                lsresults.CHARVAL_NUM = liRtrChar[i].CHARVAL_NUM;
-                // if (req.data.FLAG === "E" && i === 0) {
-                if (req.data.FLAG === "E") {
-                    try {
-                        await cds.delete("CP_RESTRICT_DETAILS", lsresults);
-                    } catch (e) {
-                        //DONOTHING
-                    }
-                }
-                lsresults.OD_CONDITION = liRtrChar[i].OD_CONDITION;
-                lsresults.ROW_ID = liRtrChar[i].ROW_ID;
-                liresults.push(lsresults);
-                lsresults = {};
-            }
-            if (liresults.length > 0) {
-                try {
-                    await cds.run(INSERT.into("CP_RESTRICT_DETAILS").entries(liresults));
-                    responseMessage = " Creation/Updation successful";
-                } catch (e) {
-                    //DONOTHING
-                    responseMessage = " Creation failed";
-                    // createResults.push(responseMessage);
-                }
-            }
-        }
-        else if (req.data.FLAG === "D") {
-            for (var i = 0; i < liRtrChar.length; i++) {
-                lsresults.RESTRICTION = liRtrChar[i].RESTRICTION;
-                // lsresults.RTR_COUNTER = liRtrChar[i].RTR_COUNTER;
-                lsresults.CLASS_NUM = liRtrChar[i].CLASS_NUM;
-                lsresults.CHAR_NUM = liRtrChar[i].CHAR_NUM;
-                lsresults.CHAR_COUNTER = liRtrChar[i].CHAR_COUNTER;
-                lsresults.CHARVAL_NUM = liRtrChar[i].CHARVAL_NUM;
-                // if (req.data.FLAG === "E" && i === 0) {
-                try {
-                    await cds.delete("CP_RESTRICT_DETAILS", lsresults);
-                    break;
-                } catch (e) {
-                    //DONOTHING
-                }
-                // }
-            }
-        }
-        lsresults = {};
-        return responseMessage;
-    });
+    // srv.on("maintainRestrDet", async (req) => {
+    //     let liresults = [];
+    //     let lsresults = {};
+    //     let liRtrChar = {};
+    //     var responseMessage;
+    //     liRtrChar = JSON.parse(req.data.RTRCHAR);
+    //     if (req.data.FLAG === "C" || req.data.FLAG === "E") {
+    //         for (var i = 0; i < liRtrChar.length; i++) {
+    //             lsresults.RESTRICTION = liRtrChar[i].RESTRICTION;
+    //             // lsresults.RTR_COUNTER = liRtrChar[i].RTR_COUNTER;
+    //             lsresults.CLASS_NUM = liRtrChar[i].CLASS_NUM;
+    //             lsresults.CHAR_NUM = liRtrChar[i].CHAR_NUM;
+    //             lsresults.CHAR_COUNTER = liRtrChar[i].CHAR_COUNTER;
+    //             lsresults.CHARVAL_NUM = liRtrChar[i].CHARVAL_NUM;
+    //             // if (req.data.FLAG === "E" && i === 0) {
+    //             if (req.data.FLAG === "E") {
+    //                 try {
+    //                     await cds.delete("CP_RESTRICT_DETAILS", lsresults);
+    //                 } catch (e) {
+    //                     //DONOTHING
+    //                 }
+    //             }
+    //             lsresults.OD_CONDITION = liRtrChar[i].OD_CONDITION;
+    //             lsresults.ROW_ID = liRtrChar[i].ROW_ID;
+    //             liresults.push(lsresults);
+    //             lsresults = {};
+    //         }
+    //         if (liresults.length > 0) {
+    //             try {
+    //                 await cds.run(INSERT.into("CP_RESTRICT_DETAILS").entries(liresults));
+    //                 responseMessage = " Creation/Updation successful";
+    //             } catch (e) {
+    //                 //DONOTHING
+    //                 responseMessage = " Creation failed";
+    //                 // createResults.push(responseMessage);
+    //             }
+    //         }
+    //     }
+    //     else if (req.data.FLAG === "D") {
+    //         for (var i = 0; i < liRtrChar.length; i++) {
+    //             lsresults.RESTRICTION = liRtrChar[i].RESTRICTION;
+    //             // lsresults.RTR_COUNTER = liRtrChar[i].RTR_COUNTER;
+    //             lsresults.CLASS_NUM = liRtrChar[i].CLASS_NUM;
+    //             lsresults.CHAR_NUM = liRtrChar[i].CHAR_NUM;
+    //             lsresults.CHAR_COUNTER = liRtrChar[i].CHAR_COUNTER;
+    //             lsresults.CHARVAL_NUM = liRtrChar[i].CHARVAL_NUM;
+    //             // if (req.data.FLAG === "E" && i === 0) {
+    //             try {
+    //                 await cds.delete("CP_RESTRICT_DETAILS", lsresults);
+    //                 break;
+    //             } catch (e) {
+    //                 //DONOTHING
+    //             }
+    //             // }
+    //         }
+    //     }
+    //     lsresults = {};
+    //     return responseMessage;
+    // });
 
     srv.on("trigrMAWeek", async (req) => {
         let liresults = [];
@@ -2799,8 +2799,6 @@ module.exports = (srv) => {
 
     });
 
-    // Retriction rule
-    // Maintain partial configurations for new product
     srv.on("maintainRestrDetail", async (req) => {
         let aRtrDetailsIns = [];
         let oRtrDetailsIns = {};
@@ -2813,43 +2811,79 @@ module.exports = (srv) => {
         let index = 0, iCounter = 0, imaxCounter = 0;
         aRtrChar = JSON.parse(req.data.RTRCHAR);
         let sRTR = aRtrChar[0].RESTRICTION;
-
         const aRtrDetails = await cds.run(
             `SELECT *
             FROM "CP_RESTRICT_DETAILS" 
             WHERE "RESTRICTION" = '` + sRTR + `'
             ORDER BY  "CHAR_NUM", "CHAR_COUNTER"`
         );
-
         if (req.data.FLAG === "C" || req.data.FLAG === "E") {
-            aFilteredChars = [];
-            iCounter = 0;
-            if (aCharCounters.length > 0) {
-                aFilteredChars = aCharCounters.filter(function (aCharCounter) {
-                    return aCharCounter.CHAR_NUM === aRtrChar[i].CHAR_NUM;
-                });
+            // Get Max Char Counter of Characteristics
+            imaxCounter = await cds.run(
+                `SELECT MAX("CHAR_COUNTER") as COUNTER
+                FROM "CP_RESTRICT_DETAILS"
+                WHERE "RESTRICTION" = '` + sRTR + `'`
+            );
+            if (imaxCounter) {
+                imaxCounter = imaxCounter[0].COUNTER;
             }
-            if (aFilteredChars.length === 0) {
-                aFilteredChars = aRtrDetails.filter(function (aRtrChars) {
-                    return aRtrChars.CHAR_NUM === aRtrChar[i].CHAR_NUM;
-                });
+            for (var i = 0; i < aRtrChar.length; i++) {
+                oCharCounter = {};
+                aFilteredChars = [];
+                iCounter = 0;
+                if (aCharCounters.length > 0) {
+                    aFilteredChars = aCharCounters.filter(function (aCharCounter) {
+                        return aCharCounter.CHAR_NUM === aRtrChar[i].CHAR_NUM;
+                    });
+                }
+                if (aFilteredChars.length === 0) {
+                    aFilteredChars = aRtrDetails.filter(function (aRtrChars) {
+                        return aRtrChars.CHAR_NUM === aRtrChar[i].CHAR_NUM;
+                    });
+                }
+                if (aFilteredChars.length > 0) {
+                    iCounter = aFilteredChars[0].CHAR_COUNTER;
+                    oCharCounter.CHAR_NUM = aRtrChar[i].CHAR_NUM;
+                    oCharCounter.CHAR_COUNTER = iCounter;
+                    index = aCharCounters.findIndex((obj) => obj.CHAR_NUM === aRtrChar[i].CHAR_NUM); // find index
+                    if (index === -1) {
+                        index = aCharCounters.length;
+                    }
+                    aCharCounters[index] = oCharCounter; // replace with new object 
+                } else {
+                    imaxCounter = imaxCounter + 1;
+                    iCounter = imaxCounter;
+                    oCharCounter.CHAR_NUM = aRtrChar[i].CHAR_NUM;
+                    oCharCounter.CHAR_COUNTER = iCounter;
+                    aCharCounters.push(oCharCounter);
+                }
+                oRtrDetailsIns.RESTRICTION = aRtrChar[i].RESTRICTION;
+                oRtrDetailsIns.CLASS_NUM = aRtrChar[i].CLASS_NUM;
+                oRtrDetailsIns.CHAR_NUM = aRtrChar[i].CHAR_NUM;
+                oRtrDetailsIns.CHAR_COUNTER = iCounter;
+                oRtrDetailsIns.CHARVAL_NUM = aRtrChar[i].CHARVAL_NUM;
+                oRtrDetailsIns.OD_CONDITION = aRtrChar[i].OD_CONDITION;
+                oRtrDetailsIns.ROW_ID = iCounter;
+                aRtrDetailsIns.push(oRtrDetailsIns);
+                oRtrDetailsIns = {};
             }
-
-            if (aFilteredChars.length > 0) {
-                iCounter = aFilteredChars[0].CHAR_COUNTER;
-
-                oCharCounter.CHAR_COUNTER = iCounter;
-                aCharCounters.push(oCharCounter);
+            if (aRtrDetailsIns.length > 0) {
+                try {
+                    await cds.run(INSERT.into("CP_RESTRICT_DETAILS").entries(aRtrDetailsIns));
+                    responseMessage = " Restriction Rule Created Successfully";
+                } catch (errRes) {
+                    //DONOTHING
+                    // responseMessage = " Creation failed";
+                    responseMessage = errRes.message;
+                }
             }
-
-            responseMessage = errRes.message;
-            // }
-
-        } else if (req.data.FLAG === "D") {
+        }
+        else if (req.data.FLAG === "D") {
             for (var i = 0; i < aRtrChar.length; i++) {
                 oRtrDetailsIns.RESTRICTION = aRtrChar[i].RESTRICTION;
                 oRtrDetailsIns.CLASS_NUM = aRtrChar[i].CLASS_NUM;
                 oRtrDetailsIns.CHAR_NUM = aRtrChar[i].CHAR_NUM;
+                oRtrDetailsIns.CHAR_COUNTER = aRtrChar[i].CHAR_COUNTER;
                 oRtrDetailsIns.CHARVAL_NUM = aRtrChar[i].CHARVAL_NUM;
                 try {
                     await cds.delete("CP_RESTRICT_DETAILS", oRtrDetailsIns);
@@ -2860,15 +2894,11 @@ module.exports = (srv) => {
                     //DONOTHING
                     responseMessage = errRes.message;;
                 }
-
             }
-
-
             if (iCounter > 0) { //  if deletion is successfull
                 aRtrDetailsIns = [];
                 oRtrDetailsIns = {};
                 aFilteredChars = [];
-
                 // To check the count of char counter being deleted 
                 aFilteredChars = aRtrDetails.filter(function (aRtrChars) {
                     return aRtrChars.CHAR_COUNTER === iCounter;
@@ -2894,7 +2924,6 @@ module.exports = (srv) => {
                             }
                         }
                     }
-
                     if (aRtrDetailsIns.length > 0) {
                         try {
                             await cds.run(INSERT.into("CP_RESTRICT_DETAILS").entries(aRtrDetailsIns));

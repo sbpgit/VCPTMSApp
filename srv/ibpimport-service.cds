@@ -21,9 +21,7 @@ service IBPImportSrv @(impl : './lib/ibpimport-service.js') {
     function exportIBPLocProd_fn(LOCATION_ID : String(4)) returns String;
     function exportRestrDetails_fn(LOCATION_ID : String(4)) returns String;
     // function exportRestrictions_fn(LOCATIOn)
-
     // actions for testing from CF/ jobscheduler 
-
      // Outbound to IBP
     action exportIBPMasterProd(LOCATION_ID : String(4));
     // function exportIBPMasterProd(LOCATION_ID : String(4)) returns String;
