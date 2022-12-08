@@ -1180,7 +1180,7 @@ sap.ui.define(
                     }
                 } else if (oJobType === "T" || oJobType === "F" || oJobType === "D" || oJobType === "I" || oJobType === "E") {
                     var radioSel = that.byId("idRbtnExport").getSelectedButton().getText();
-                    if (radioSel !== "Assembly Requirement Quantity"  && radioSel !== "Assemblies") {
+                    if (radioSel !== "Assembly Requirement Quantity"  && radioSel !== "Assemblies"  && radioSel !== "Location Product") {
                         sap.ui.getCore().byId("prodSlctList").setMultiSelect(true);
                         sap.ui.getCore().byId("prodSlctList").setRememberSelections(true);
                     } else {
@@ -1359,7 +1359,9 @@ sap.ui.define(
                         ExportFlag = "X";
                     }
                     // 03-12
-                    if (jobType === "I" || jobType === "E"){
+                    // if (jobType === "I" || jobType === "E"){
+                        if (
+                            jobType === "E"){
                     switch (selectedButton) {
                         case "Location":
                             Flag = "X";
