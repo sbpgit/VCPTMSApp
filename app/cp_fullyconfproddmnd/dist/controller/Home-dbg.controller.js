@@ -165,7 +165,11 @@ sap.ui.define(
                 this.getModel("CIRModel").read("/getLocation", {
                     success: function (oData) {
                         that.locModel.setData(oData);
+<<<<<<< HEAD
 
+=======
+                        
+>>>>>>> 84b7c307bf663cb87aee50219854b661ab655476
                         that.oLocList.setModel(that.locModel);
                         sap.ui.core.BusyIndicator.hide();
                     },

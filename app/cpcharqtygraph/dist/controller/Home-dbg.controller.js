@@ -363,6 +363,7 @@ sap.ui.define([
                                     if (that.aOrder.indexOf(oData1.results[i].WEEK_DATE) === -1) {
                                         that.aOrder.push(oData1.results[i].WEEK_DATE);
                                     }
+<<<<<<< HEAD
                                 }
                                 for(var k=0;k<that.aOrder.length;k++){
                                     that.oOrdData = {
@@ -370,8 +371,21 @@ sap.ui.define([
                                             };
                                             that.aSelOrder.push(that.oOrdData);
                                         }                                                            
+=======
+                                }
+                                for(var k=0;k<that.aOrder.length;k++){
+                                    that.oOrdData = {
+                                                "WEEK_DATE": that.aOrder[k]
+                                            };
+                                            that.aSelOrder.push(that.oOrdData);
+                                }
+                               
+                                
+>>>>>>> 84b7c307bf663cb87aee50219854b661ab655476
                                 that.oDateModel = new JSONModel();
                                 that.oDateModel.setData({ resultsCombos: that.aSelOrder });
+                                that.aOrder=[];
+                                that.aSelOrder=[];
                                 that.byId("fromDate").setModel(that.oDateModel);
                                 that.byId("fromDate").setEditable(true);
                             }
@@ -613,8 +627,20 @@ sap.ui.define([
                                         visible: true
                                     }
                                 });
+<<<<<<< HEAD
                                 var oPopOver = that.byId("idPopOver");
                                 oPopOver.connect(oVizFrame.getVizUid());
+=======
+                                // that.byId("idObjectPageSub").setMode("Expanded");
+                                // that.byId("idObjectPageSub").setVisible(true);
+
+                                var oPopOver = that.byId("idPopOver");
+                                oPopOver.connect(oVizFrame.getVizUid());
+
+                                // that.byId("idSplitter").setVisible(true);
+
+
+>>>>>>> 84b7c307bf663cb87aee50219854b661ab655476
                                 sap.ui.core.BusyIndicator.hide();
                                 that.oGModel.setProperty("/tableData", oData.results)
                             }

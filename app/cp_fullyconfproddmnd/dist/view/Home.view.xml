@@ -21,7 +21,11 @@
                                 <Title id="_IDGenTitle1" text="{i18n>title}" class="boldText" titleAlignment="Center" />
 
                                 <!-- <Button class="hdrBtnMarginHdr" id="_IDGenOverflowToolbarButton1" icon="sap-icon://sys-help" text="" type="Emphasized" press="onNavPress" tooltip="Help Document" /> -->
+<<<<<<< HEAD
                             <!-- </HBox> -->
+=======
+                            </HBox>
+>>>>>>> 84b7c307bf663cb87aee50219854b661ab655476
                         </ux:expandedHeading>
 
                         <ux:snappedHeading>
@@ -29,7 +33,11 @@
                                 <Title id="_IDGenTitle2" text="{i18n>title}" />
 
                                 <!-- <Button class="hdrBtnMarginHdr" id="_IDGenOverflowToolbarButton2" icon="sap-icon://sys-help" text="" type="Emphasized" press="onNavPress" tooltip="Help Document" /> -->
+<<<<<<< HEAD
                             <!-- </HBox> -->
+=======
+                            </HBox>
+>>>>>>> 84b7c307bf663cb87aee50219854b661ab655476
                         </ux:snappedHeading>
                         <ux:navigationActions>
                           <Button class="classHdr" icon="sap-icon://sys-help" id="idNav3" press="onNavPress" type="Emphasized" tooltip="Help Document" />
