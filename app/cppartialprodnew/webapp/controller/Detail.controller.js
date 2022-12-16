@@ -468,10 +468,6 @@ sap.ui.define(
                     ],
                     success: function (oData) {
                         sap.ui.core.BusyIndicator.hide();
-<<<<<<< HEAD
-
-=======
->>>>>>> 28572205e8c7de3e81f65a1fa52119e34f364125
                         that.classnameModel.setData({
                             results: oData.results
                         });
@@ -493,11 +489,8 @@ sap.ui.define(
                 that.ListModel.refresh();
             },
 
-<<<<<<< HEAD
           
 
-=======
->>>>>>> 28572205e8c7de3e81f65a1fa52119e34f364125
             /**
            * This function is called when click on save button to create or update the product.
            * @param {object} oEvent -the event information.
@@ -514,10 +507,7 @@ sap.ui.define(
                         "Reference product and new product can not be same"
                     );
                 } else {
-<<<<<<< HEAD
                     
-=======
->>>>>>> 28572205e8c7de3e81f65a1fa52119e34f364125
                     sap.ui.core.BusyIndicator.show();
                     that.getModel("BModel").callFunction("/maintainPartialProd", {
                         method: "GET",

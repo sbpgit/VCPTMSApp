@@ -128,6 +128,10 @@ module.exports = srv => {
         return (await _genUniqueIdCharVals(req,false));
     })
 
+    srv.on ('genUidCharValsForClusterResults',    async req => {
+        return (await _getUniqueIdCharValsForClusterResults(req,false));
+    })
+
     srv.on ('fgModels',    async req => {
         return (await _generateRegModels(req,true));   
     })
@@ -145,6 +149,10 @@ module.exports = srv => {
 
     srv.on ('fgenClusterUniqueIDS',    async req => {
         return (await _genClusterUniqueIDS(req,true));
+    })
+
+    srv.on ('fgenUidCharValsForClusterResults',    async req => {
+        return (await _getUniqueIdCharValsForClusterResults(req,true));
     })
 
     srv.on ('fgenClusters',    async req => {
@@ -661,21 +669,21 @@ async function _generatePredictions(req,isGet) {
 
 
     if ( (vcRulesListReq.length == 1) &&
-         ( (vcRulesListReq[0].GroupID == "ALL") && 
-           (vcRulesListReq[0].Product == "ALL") && 
-           (vcRulesListReq[0].Location == "ALL") ) ||
+          ( ( (vcRulesListReq[0].GroupID == "ALL") && 
+            (vcRulesListReq[0].Product == "ALL") && 
+            (vcRulesListReq[0].Location == "ALL") ) ||
 
-           ( (vcRulesListReq[0].GroupID == "ALL") && 
-           (vcRulesListReq[0].Product == "ALL") && 
-           (vcRulesListReq[0].Location != "ALL") ) ||
+            ( (vcRulesListReq[0].GroupID == "ALL") && 
+            (vcRulesListReq[0].Product == "ALL") && 
+            (vcRulesListReq[0].Location != "ALL") ) ||
 
-           ( (vcRulesListReq[0].GroupID == "ALL") && 
-           (vcRulesListReq[0].Product != "ALL") && 
-           (vcRulesListReq[0].Location == "ALL") ) ||
-           
-           ( (vcRulesListReq[0].GroupID == "ALL") && 
-           (vcRulesListReq[0].Product != "ALL") && 
-           (vcRulesListReq[0].Location != "ALL") ) )
+            ( (vcRulesListReq[0].GroupID == "ALL") && 
+            (vcRulesListReq[0].Product != "ALL") && 
+            (vcRulesListReq[0].Location == "ALL") ) ||
+            
+            ( (vcRulesListReq[0].GroupID == "ALL") && 
+            (vcRulesListReq[0].Product != "ALL") && 
+            (vcRulesListReq[0].Location != "ALL") ) ) )
     {
 
         let str = JSON.stringify(vcRulesListReq[0]);
@@ -815,15 +823,45 @@ async function _generatePredictions(req,isGet) {
             if (hasEndDate == true)   
                 endDateSql =  ' AND "PERIOD_NUM" <= CONCAT( YEAR (TO_DATE (\'' + vcRulesListReq[0].endDate  + '\'' + ',\'YYYY-MM-DD\')), lpad(WEEK (TO_DATE(\'' + vcRulesListReq[0].endDate + '\'' +', \'YYYY-MM-DD\')),\'2\',\'00\') )';
 
+            let varSql = "";
+
+            if ( (vcRulesListReq[index].Location != "ALL") &&
+                    (vcRulesListReq[index].Product != "ALL") &&
+                    (vcRulesListReq[index].GroupID != "ALL") )
+            {
+                varSql =  ' "Location" =' + "'" +   vcRulesListReq[index].Location + "'" +
+                            ' AND "Product" =' + "'" +   vcRulesListReq[index].Product + "'" +
+                            ' AND "GroupID" =' + "'" +   vcRulesListReq[index].GroupID + "'";
+            }
+            else if ( (vcRulesListReq[index].Location == "ALL") &&
+                    (vcRulesListReq[index].Product != "ALL") &&
+                    (vcRulesListReq[index].GroupID != "ALL") )
+            {
+                varSql =  ' "Product" =' + "'" +   vcRulesListReq[index].Product + "'" +
+                            ' AND "GroupID" =' + "'" +   vcRulesListReq[index].GroupID + "'";
+            }
+            else if ( (vcRulesListReq[index].Location != "ALL") &&
+            (vcRulesListReq[index].Product != "ALL") &&
+            (vcRulesListReq[index].GroupID == "ALL") )
+            {
+                varSql =   ' "Location" =' + "'" +   vcRulesListReq[index].Location + "'" +
+                            ' AND "Product" =' + "'" +   vcRulesListReq[index].Product + "'";
+            }
+            else if ( (vcRulesListReq[index].Location == "ALL") &&
+                    (vcRulesListReq[index].Product == "ALL") &&
+                    (vcRulesListReq[index].GroupID != "ALL") )
+            {
+                varSql =  ' "GroupID" =' + "'" +   vcRulesListReq[index].GroupID + "'";
+            }
+        
+              
             sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", "Type", "VERSION", "SCENARIO", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "V_PREDICTION_TS"' + 
-                     ' WHERE "Location" = ' + "'" +   vcRulesListReq[index].Location + "'" +
-                     ' AND "GroupID" =' + "'" +   vcRulesListReq[index].GroupID + "'" +
-                     ' AND "Type" =' + "'" +   vcRulesListReq[index].Type + "'" +
-                     ' AND "Product" =' + "'" +   vcRulesListReq[index].Product + "'" + 
-                     ' AND "VERSION" =' + "'" +   vcRulesListReq[index].version + "'" +
-                     ' AND "SCENARIO" =' + "'" +   vcRulesListReq[index].scenario + "'" +
-                     startDateSql    + endDateSql +              
-                     ' GROUP BY "Location", "Product", "GroupID", "Type", "VERSION", "SCENARIO"';
+                    ' WHERE ' + varSql +
+                    ' AND "Type" =' + "'" +   vcRulesListReq[index].Type + "'" +
+                    ' AND "VERSION" =' + "'" +   vcRulesListReq[index].version + "'" +
+                    ' AND "SCENARIO" =' + "'" +   vcRulesListReq[index].scenario + "'" +
+                    startDateSql    + endDateSql +              
+                    ' GROUP BY "Location", "Product", "GroupID", "Type", "VERSION", "SCENARIO"';
             console.log("vcRuleListReqSql ", sqlStr);
             results = await cds.run(sqlStr);
 
@@ -1401,22 +1439,25 @@ async function _generateRegModels (req,isGet) {
     var sqlStr = "";
     var results= [];
     var vcRulesList = [];
-    if ( (vcRulesListReq.length == 1) &&
-        ( (vcRulesListReq[0].GroupID == "ALL") && 
-          (vcRulesListReq[0].Product == "ALL") && 
-          (vcRulesListReq[0].Location == "ALL") ) ||
+    let arrayLength = vcRulesListReq.length;
+    console.log("arrayLength ", arrayLength);
 
-          ( (vcRulesListReq[0].GroupID == "ALL") && 
-          (vcRulesListReq[0].Product == "ALL") && 
-          (vcRulesListReq[0].Location != "ALL") ) ||
+    if ( (arrayLength == 1) &&
+          ( ( (vcRulesListReq[0].GroupID == "ALL") && 
+            (vcRulesListReq[0].Product == "ALL") && 
+            (vcRulesListReq[0].Location == "ALL") ) ||
 
-          ( (vcRulesListReq[0].GroupID == "ALL") && 
-          (vcRulesListReq[0].Product != "ALL") && 
-          (vcRulesListReq[0].Location == "ALL") ) ||
-          
-          ( (vcRulesListReq[0].GroupID == "ALL") && 
-          (vcRulesListReq[0].Product != "ALL") && 
-          (vcRulesListReq[0].Location != "ALL") ) )
+            ( (vcRulesListReq[0].GroupID == "ALL") && 
+            (vcRulesListReq[0].Product == "ALL") && 
+            (vcRulesListReq[0].Location != "ALL") ) ||
+
+            ( (vcRulesListReq[0].GroupID == "ALL") && 
+            (vcRulesListReq[0].Product != "ALL") && 
+            (vcRulesListReq[0].Location == "ALL") ) ||
+            
+            ( (vcRulesListReq[0].GroupID == "ALL") && 
+            (vcRulesListReq[0].Product != "ALL") && 
+            (vcRulesListReq[0].Location != "ALL") ) ) )
    {
 
        if ( (vcRulesListReq[0].Location != "ALL") &&
@@ -1455,7 +1496,6 @@ async function _generateRegModels (req,isGet) {
 
 
         results = await cds.run(sqlStr);
-        // console.log('_generateRegModels vcRulesList sqlStr ', sqlStr );
         // console.log('_generateRegModels vcRulesList sqlStr results', results );
 
 
@@ -1478,28 +1518,62 @@ async function _generateRegModels (req,isGet) {
     {
         for (var i = 0; i < vcRulesListReq.length; i++)
         {
-            sqlStr = 'SELECT  "LOCATION_ID", "PRODUCT_ID", "GROUP_ID", "TYPE" FROM "CP_VC_HISTORY_TS" WHERE "PRODUCT_ID" =' +
-                        "'" +  vcRulesListReq[i].Product + "'" +  
-                        ' AND "GROUP_ID" =' + "'" +   vcRulesListReq[i].GroupID + "'" +
-                        ' AND "LOCATION_ID" =' + "'" +   vcRulesListReq[i].Location + "'" +
+                
+            let varSql = "";
+    
+            if ( (vcRulesListReq[i].Location != "ALL") &&
+                 (vcRulesListReq[i].Product != "ALL") &&
+                 (vcRulesListReq[i].GroupID != "ALL") )
+            {
+                varSql =  ' "LOCATION_ID" =' + "'" +   vcRulesListReq[i].Location + "'" +
+                          ' AND "PRODUCT_ID" =' + "'" +   vcRulesListReq[i].Product + "'" +
+                          ' AND "GROUP_ID" =' + "'" +   vcRulesListReq[i].GroupID + "'";
+            }
+            else if ( (vcRulesListReq[i].Location == "ALL") &&
+                 (vcRulesListReq[i].Product != "ALL") &&
+                 (vcRulesListReq[i].GroupID != "ALL") )
+            {
+                varSql =  ' "PRODUCT_ID" =' + "'" +   vcRulesListReq[i].Product + "'" +
+                          ' AND "GROUP_ID" =' + "'" +   vcRulesListReq[i].GroupID + "'";
+            }
+            else if ( (vcRulesListReq[i].Location != "ALL") &&
+            (vcRulesListReq[i].Product != "ALL") &&
+            (vcRulesListReq[i].GroupID == "ALL") )
+            {
+                varSql =   ' "LOCATION_ID" =' + "'" +   vcRulesListReq[i].Location + "'" +
+                            ' AND "PRODUCT_ID" =' + "'" +   vcRulesListReq[i].Product + "'";
+            }
+            else if ( (vcRulesListReq[i].Location == "ALL") &&
+                 (vcRulesListReq[i].Product == "ALL") &&
+                 (vcRulesListReq[i].GroupID != "ALL") )
+            {
+                varSql =  ' "GROUP_ID" =' + "'" +   vcRulesListReq[i].GroupID + "'";
+            }
+    
+            sqlStr = 'SELECT  "LOCATION_ID", "PRODUCT_ID", "GROUP_ID", "TYPE" FROM "CP_VC_HISTORY_TS" WHERE ' +
+                        varSql +
                         ' AND "TYPE" =' + "'" +   vcRulesListReq[i].Type + "'" +
                         ' GROUP BY "LOCATION_ID", "PRODUCT_ID", "GROUP_ID", "TYPE"' +
-                        ' HAVING COUNT(DISTINCT "' + vcConfigTimePeriod + '") > ' + "'" + minBuckets + "'";// + 'ORDER BY "WeekOfYear"';   
+                        ' HAVING COUNT(DISTINCT "' + vcConfigTimePeriod + '") > ' + "'" + minBuckets + "'";// + 'ORDER BY "WeekOfYear"';  
+            
             results = await cds.run(sqlStr);
-            // console.log('_generateRegModels vcRulesList ELSE sqlStr ', sqlStr, 'index = ', i );
+            console.log('_generateRegModels vcRulesList sqlStr ', sqlStr, 'index = ', i );
             // console.log('_generateRegModels vcRulesList ELSE sqlStr results', results );
     
             if (results.length > 0)
             {    
-                let Location = results[0].LOCATION_ID;
-                let Product = results[0].PRODUCT_ID;
-                let GroupID = results[0].GROUP_ID;
-                let Type = results[0].TYPE;
-                let modelVersion = vcRulesListReq[0].modelVersion;
-                let profile = vcRulesListReq[i].profile;
-                let override = vcRulesListReq[i].override;
-                vcRulesList.push({profile,override,Location,Product,GroupID,Type,modelVersion});
-
+                for (rIndex = 0 ; rIndex < results.length; rIndex ++)
+                {
+                    let Location = results[rIndex].LOCATION_ID;
+                    let Product = results[rIndex].PRODUCT_ID;
+                    let GroupID = results[rIndex].GROUP_ID;
+                    let Type = results[rIndex].TYPE;
+                    // let modelVersion = vcRulesListReq[0].modelVersion;
+                    let modelVersion = vcRulesListReq[i].modelVersion;
+                    let profile = vcRulesListReq[i].profile;
+                    let override = vcRulesListReq[i].override;
+                    vcRulesList.push({profile,override,Location,Product,GroupID,Type,modelVersion});
+                }
             }
         }
     }
@@ -1545,7 +1619,7 @@ async function _generateRegModels (req,isGet) {
         if (vcRulesList[i].dimensions == 12)
            hasCharCount12 = true;
         
-           console.log('_generateRegModels index i = ', i, ' vcRulesList[i].dimensions = ',vcRulesList[i].dimensions);
+        //    console.log('_generateRegModels index i = ', i, ' vcRulesList[i].dimensions = ',vcRulesList[i].dimensions);
 
     }
     
@@ -2743,90 +2817,247 @@ async function _purgePredictions(req,isGet) {
 }
 
 
+async function _getUniqueIdCharValsForClusterResults(req,isGet) 
+{
+
+    let locationId = req.data.Location;
+    let productId = req.data.Product;
+    let profile = req.data.Profile;
+
+    let sqlStr = 'SELECT DISTINCT LOCATION_ID, PRODUCT_ID, CHAR_NUM, CHAR_NAME FROM CP_V_AHC_CLUSTER_RESULTS_W_CHARVALS ' +
+                    ' WHERE PRODUCT_ID = ' + "'" + productId + "'" +
+                    ' AND LOCATION_ID = ' + "'" + locationId + "'" +
+                    ' ORDER BY CHAR_NUM';
+    // console.log("_getUniqueIdCharValsForClusterResults Distinct Chars Sql  ", sqlStr);
+    let sqlStrResults = await cds.run(sqlStr);
+    let charStr = sqlStrResults[0].CHAR_NAME;
+    let charNumStr = sqlStrResults[0].CHAR_NUM;
+
+    let tableObj = [];
+    for (let charIndex = 1; charIndex < sqlStrResults.length ; charIndex++)
+    {
+        charStr = charStr + "," + sqlStrResults[charIndex].CHAR_NAME;
+        charNumStr = charNumStr + "," + sqlStrResults[charIndex].CHAR_NUM;
+    }
+
+    let charNums = charNumStr.split(',');
+    var charVals = [];
+    
+    for (let charValIdx = 0; charValIdx < charNums.length; charValIdx ++)
+    {
+        charVals[charValIdx] = 'NA';
+    } 
+
+
+    let column1 = 'LOCATION_ID';
+    let column2 = 'PRODUCT_ID';
+    let column3 = 'PROFILE';
+    let column4 = 'STAGE';
+    let column5 = 'UNIQUE_ID';
+    let column6 = 'LEFT_ID_CLUSTER';
+    let column7 = 'RIGHT_ID_CLUSTER';
+    let column8 = 'LEFT_ID';
+    let column9 = 'RIGHT_ID';
+    let column10 = 'DISTANCE';
+
+
+    let columnsStr =charStr;
+    tableObj.push({column1, column2, column3, column4, column5, column6, column7, column8, column9, column10, columnsStr});    
+    // console.log("_genUniqueIdCharVals Column Header",tableObj);
+
+    sqlStr = 'SELECT DISTINCT LOCATION_ID, PRODUCT_ID, PROFILE, STAGE, UNIQUE_ID, ' +
+                ' LEFT_ID_CLUSTER, RIGHT_ID_CLUSTER, LEFT_ID, RIGHT_ID, DISTANCE, CHAR_NUM, CHAR_VALUE FROM CP_V_AHC_CLUSTER_RESULTS_W_CHARVALS' +
+                ' WHERE PRODUCT_ID = ' + "'" + productId + "'" +
+                ' AND LOCATION_ID = ' + "'" + locationId + "'" +
+                ' AND PROFILE = ' + "'" + profile + "'" +
+                ' ORDER BY LOCATION_ID, PRODUCT_ID, PROFILE, UNIQUE_ID, CHAR_NUM';
+
+    console.log("sqlStr = ",sqlStr );
+
+    
+    let sqlUniqueStrResults = await cds.run(sqlStr);
+    // console.log("sqlUniqueStrResults = ",sqlUniqueStrResults );    
+    
+
+    if (sqlUniqueStrResults.length > 0)
+    {
+
+        let columnValStr ="";
+        // for (let charIndex = 0; charIndex < sqlUniqueStrResults.length ; charIndex++)
+        for (let charIndex = 0; charIndex < sqlUniqueStrResults.length ; charIndex++)
+        {
+
+            let profile = sqlUniqueStrResults[charIndex].PROFILE;
+            let stage = sqlUniqueStrResults[charIndex].STAGE;
+            let uniqueId = sqlUniqueStrResults[charIndex].UNIQUE_ID;
+            let leftIdCluster = sqlUniqueStrResults[charIndex].LEFT_ID_CLUSTER;
+            let rightIdCluster = sqlUniqueStrResults[charIndex].RIGHT_ID_CLUSTER;
+            let leftId = sqlUniqueStrResults[charIndex].LEFT_ID;
+            let rightId = sqlUniqueStrResults[charIndex].RIGHT_ID;
+            let distance = sqlUniqueStrResults[charIndex].DISTANCE;
+
+            let nextUniqueId = 0;
+            if (charIndex < sqlUniqueStrResults.length-1)
+                nextUniqueId = sqlUniqueStrResults[charIndex+1].UNIQUE_ID;
+            
+            for (let charNumsIdx = 0; charNumsIdx < charNums.length; charNumsIdx++)
+            {
+                if ( charNums[charNumsIdx] == sqlUniqueStrResults[charIndex].CHAR_NUM)
+                {
+                    
+                    charVals[charNumsIdx] = sqlUniqueStrResults[charIndex].CHAR_VALUE;
+                    // console.log("uniqueId", uniqueId, "charNumsIdx ", charNumsIdx, "charIndex", charIndex, "charVals", charVals );
+                    break;
+                }
+
+            }
+
+            if (uniqueId != nextUniqueId)
+            {
+                for (let charNumsIdx = 0; charNumsIdx < charNums.length; charNumsIdx++)
+                {
+                    if (charNumsIdx < charNums.length -1)
+                    {
+                        columnValStr = columnValStr + charVals[charNumsIdx] + ',';
+                    }
+                    else
+                    {
+                        columnValStr = columnValStr + charVals[charNumsIdx];
+                    }
+                }
+                tableObj.push({locationId, productId, profile, stage, uniqueId, leftIdCluster, rightIdCluster, leftId, rightId, distance, columnValStr});  
+                // console.log("tableObj pushed for columnValStr", columnValStr);
+  
+                columnValStr ="";
+                for (let charValIdx = 0; charValIdx < charNums.length; charValIdx ++)
+                {
+                    charVals[charValIdx] = 'NA';
+            
+                }
+                uniqueId = sqlUniqueStrResults[charIndex].UNIQUE_ID;
+
+
+            }
+
+        }
+
+    }
+
+    if (isGet == true)
+    {
+        req.reply({tableObj});
+    }
+    else
+    {
+        let res = req._.req.res;
+        res.statusCode = 200;
+        res.send({tableObj});
+    }
+}
+
 async function _genUniqueIdCharVals(req,isGet) 
 {
 
-    let inputData = "";
-    // if (isGet == true) //GET -- Kludge
-    // {
-    //     inputData = JSON.parse(req.data);
-    // }
-    // else
-    // {
-    //     inputData = req.data;
-    // }
     let locationId = req.data.Location;
     let productId = req.data.Product;
     let sqlStr = 'SELECT DISTINCT LOCATION_ID, PRODUCT_ID, CHAR_NUM, CHAR_NAME FROM CP_V_CLUSTER_CHARS ' +
                     ' WHERE PRODUCT_ID = ' + "'" + productId + "'" +
                     ' ORDER BY CHAR_NUM';
-    console.log("_genUniqueIdCharVals Distinct Chars Sql  ", sqlStr);
+    // console.log("_genUniqueIdCharVals Distinct Chars Sql  ", sqlStr);
     let sqlStrResults = await cds.run(sqlStr);
     let charStr = sqlStrResults[0].CHAR_NAME;
+    let charNumStr = sqlStrResults[0].CHAR_NUM;
+
     let tableObj = [];
     for (let charIndex = 1; charIndex < sqlStrResults.length ; charIndex++)
     {
-        // if (charIndex ==  (sqlStrResults.length -1))
-        // {
-        //     charStr = charStr + sqlStrResults[charIndex].CHAR_NAME;
-        // }
-        // else
-        // {
-            charStr = charStr + "," + sqlStrResults[charIndex].CHAR_NAME;
-        // }
+        charStr = charStr + "," + sqlStrResults[charIndex].CHAR_NAME;
+        charNumStr = charNumStr + "," + sqlStrResults[charIndex].CHAR_NUM;
     }
+
+    let charNums = charNumStr.split(',');
+    var charVals = [];
+    
+    for (let charValIdx = 0; charValIdx < charNums.length; charValIdx ++)
+    {
+        charVals[charValIdx] = 'NA';
+    } 
+
+
     let column1 = 'LOCATION_ID';
     let column2 = 'PRODUCT_ID';
     let column3 = 'UNIQUE_ID';
     let columnsStr =charStr;
     tableObj.push({column1, column2, column3, columnsStr});    
-    console.log("_genUniqueIdCharVals Column Header",tableObj);
+    // console.log("_genUniqueIdCharVals Column Header",tableObj);
 
     sqlStr = 'SELECT DISTINCT LOCATION_ID, PRODUCT_ID, UNIQUE_ID, CHAR_NUM, CHAR_VALUE FROM CP_V_CLUSTER_CHARS' +
                 ' WHERE PRODUCT_ID = ' + "'" + productId + "'" +
                 ' AND LOCATION_ID = ' + "'" + locationId + "'" +
                 ' ORDER BY LOCATION_ID, PRODUCT_ID, UNIQUE_ID, CHAR_NUM';
+
+    console.log("sqlStr = ",sqlStr );
+
     
-    sqlStrResults = await cds.run(sqlStr);
-    // console.log("sqlStrResults = ",sqlStrResults );
+    let sqlUniqueStrResults = await cds.run(sqlStr);
+    // console.log("sqlUniqueStrResults = ",sqlUniqueStrResults );    
+    
 
-    if (sqlStrResults.length > 0)
+    if (sqlUniqueStrResults.length > 0)
     {
-        let uniqueId = sqlStrResults[0].UNIQUE_ID;
-        let charValStr ="";
-        for (let charIndex = 0; charIndex < sqlStrResults.length ; charIndex++)
+
+        let columnValStr ="";
+        // for (let charIndex = 0; charIndex < sqlUniqueStrResults.length ; charIndex++)
+        for (let charIndex = 0; charIndex < sqlUniqueStrResults.length ; charIndex++)
         {
-            // if (charIndex < 10)
-            // console.log("sqlStrResults[", charIndex, "] = ",sqlStrResults[charIndex] );
 
-            let curUniqueId = sqlStrResults[charIndex].UNIQUE_ID;
-            if (curUniqueId != uniqueId) 
+            let uniqueId = sqlUniqueStrResults[charIndex].UNIQUE_ID;
+            let nextUniqueId = 0;
+            if (charIndex < sqlUniqueStrResults.length-1)
+                nextUniqueId = sqlUniqueStrResults[charIndex+1].UNIQUE_ID;
+            
+            for (let charNumsIdx = 0; charNumsIdx < charNums.length; charNumsIdx++)
             {
-                tableObj.push({locationId, productId, uniqueId, charValStr});    
-                uniqueId =  curUniqueId;
-                // charValStr = "";
-                // charValStr = sqlStrResults[charIndex].CHAR_VALUE + ",";
-                charValStr = sqlStrResults[charIndex].CHAR_VALUE;
-
+                if ( charNums[charNumsIdx] == sqlUniqueStrResults[charIndex].CHAR_NUM)
+                {
+                    
+                    charVals[charNumsIdx] = sqlUniqueStrResults[charIndex].CHAR_VALUE;
+                    // console.log("uniqueId", uniqueId, "charNumsIdx ", charNumsIdx, "charIndex", charIndex, "charVals", charVals );
+                    break;
+                }
 
             }
-            else
+
+            if (uniqueId != nextUniqueId)
             {
-
-                // charValStr = charValStr + sqlStrResults[charIndex].CHAR_VALUE + ",";
-                if (charIndex !=0 )
-                    charValStr = charValStr + "," + sqlStrResults[charIndex].CHAR_VALUE;
-                else
-                    charValStr = sqlStrResults[charIndex].CHAR_VALUE;
-
+                for (let charNumsIdx = 0; charNumsIdx < charNums.length; charNumsIdx++)
+                {
+                    if (charNumsIdx < charNums.length -1)
+                    {
+                        columnValStr = columnValStr + charVals[charNumsIdx] + ',';
+                    }
+                    else
+                    {
+                        columnValStr = columnValStr + charVals[charNumsIdx];
+                    }
+                }
+                tableObj.push({locationId, productId, uniqueId, columnValStr});  
+                // console.log("tableObj pushed for columnValStr", columnValStr);
+  
+                columnValStr ="";
+                for (let charValIdx = 0; charValIdx < charNums.length; charValIdx ++)
+                {
+                    charVals[charValIdx] = 'NA';
+            
+                }
+                uniqueId = sqlUniqueStrResults[charIndex].UNIQUE_ID;
 
 
             }
 
         }
-    }
-    console.log("_genUniqueIdCharVals Row Objs ",tableObj);
 
+    }
 
     if (isGet == true)
     {
@@ -2840,102 +3071,6 @@ async function _genUniqueIdCharVals(req,isGet)
     }
 }
 
-async function _genUniqueIdCharVals_old(req,isGet) 
-{
-
-    let inputData = "";
-    // if (isGet == true) //GET -- Kludge
-    // {
-    //     inputData = JSON.parse(req.data);
-    // }
-    // else
-    // {
-    //     inputData = req.data;
-    // }
-    let locationId = req.data.Location;
-    let productId = req.data.Product;
-    let sqlStr = 'SELECT DISTINCT LOCATION_ID, PRODUCT_ID, CHAR_NUM, CHAR_NAME FROM CP_V_CLUSTER_CHARS ' +
-                    ' WHERE PRODUCT_ID = ' + "'" + productId + "'" +
-                    ' ORDER BY CHAR_NUM';
-    console.log("_genUniqueIdCharVals Distinct Chars Sql  ", sqlStr);
-    let sqlStrResults = await cds.run(sqlStr);
-    let charStr = sqlStrResults[0].CHAR_NAME;
-    let tableObj = [];
-    for (let charIndex = 1; charIndex < sqlStrResults.length ; charIndex++)
-    {
-        // if (charIndex ==  (sqlStrResults.length -1))
-        // {
-        //     charStr = charStr + sqlStrResults[charIndex].CHAR_NAME;
-        // }
-        // else
-        // {
-            charStr = charStr + "," + sqlStrResults[charIndex].CHAR_NAME;
-        // }
-    }
-    let column1 = 'LOCATION_ID';
-    let column2 = 'PRODUCT_ID';
-    let column3 = 'UNIQUE_ID';
-    let columnsStr =charStr;
-    tableObj.push({column1, column2, column3, columnsStr});    
-    console.log("_genUniqueIdCharVals Column Header",tableObj);
-
-    sqlStr = 'SELECT DISTINCT LOCATION_ID, PRODUCT_ID, UNIQUE_ID, CHAR_NUM, CHAR_VALUE FROM CP_V_CLUSTER_CHARS' +
-                ' WHERE PRODUCT_ID = ' + "'" + productId + "'" +
-                ' AND LOCATION_ID = ' + "'" + locationId + "'" +
-                ' ORDER BY LOCATION_ID, PRODUCT_ID, UNIQUE_ID, CHAR_NUM';
-    
-    sqlStrResults = await cds.run(sqlStr);
-    // console.log("sqlStrResults = ",sqlStrResults );
-
-    if (sqlStrResults.length > 0)
-    {
-        let uniqueId = sqlStrResults[0].UNIQUE_ID;
-        let charValStr ="";
-        for (let charIndex = 0; charIndex < sqlStrResults.length ; charIndex++)
-        {
-            // if (charIndex < 10)
-            // console.log("sqlStrResults[", charIndex, "] = ",sqlStrResults[charIndex] );
-
-            let curUniqueId = sqlStrResults[charIndex].UNIQUE_ID;
-            if (curUniqueId != uniqueId) 
-            {
-                tableObj.push({locationId, productId, uniqueId, charValStr});    
-                uniqueId =  curUniqueId;
-                // charValStr = "";
-                // charValStr = sqlStrResults[charIndex].CHAR_VALUE + ",";
-                charValStr = sqlStrResults[charIndex].CHAR_VALUE;
-
-
-            }
-            else
-            {
-
-                // charValStr = charValStr + sqlStrResults[charIndex].CHAR_VALUE + ",";
-                if (charIndex !=0 )
-                    charValStr = charValStr + "," + sqlStrResults[charIndex].CHAR_VALUE;
-                else
-                    charValStr = sqlStrResults[charIndex].CHAR_VALUE;
-
-
-
-            }
-
-        }
-    }
-    console.log("_genUniqueIdCharVals Row Objs ",tableObj);
-
-
-    if (isGet == true)
-    {
-        req.reply({tableObj});
-    }
-    else
-    {
-        let res = req._.req.res;
-        res.statusCode = 200;
-        res.send({tableObj});
-    }
-}
 
 async function _genClusterUniqueIDSByLocProduct(location, product, refProdId)
 {

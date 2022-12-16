@@ -216,7 +216,7 @@ class GenFunctions {
             .orderBy("PARAMETER_ID");
         let lKeys = ['PARAMETER_ID', 'VALUE'];
         liParaValue = this.removeDuplicate(liParaValue, lKeys);
-        return liParaValue;
+        return liParaValue;//[liParaValue[0].VALUE, liParaValue[1].VALUE];
     }
     static addleadzeros(num, size) {
 

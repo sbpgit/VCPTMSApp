@@ -1,47 +1,11 @@
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-  "manifest-bundle.zip": 1670237011801,
-  "custom/ListReportExtController.js": 1669789349682,
-  "manifest.json": 1670237011789,
-  "Component.js": 1669789252849,
-  "i18n/i18n.properties": 1669789252849,
-  "Component-preload.js": 1670237011968,
-  "Component-dbg.js": 1669789252849,
-  "custom/ListReportExtController-dbg.js": 1669789349682,
-  "index.html": 1669789349682
-=======
-<<<<<<< HEAD
-  "Component-dbg.js": 1669107428232,
-  "Component.js": 1669107428232,
-  "custom/ListReportExtController.js": 1669107428232,
-  "manifest.json": 1669894564827,
-  "manifest-bundle.zip": 1669894564839,
-  "Component-preload.js": 1669894564995,
-  "i18n/i18n.properties": 1669107428232,
-  "custom/ListReportExtController-dbg.js": 1669107428232,
-  "index.html": 1669107428232
-=======
-  "i18n/i18n.properties": 1667906485094,
-  "Component.js": 1661440197855,
-  "custom/ListReportExtController.js": 1668162340339,
-  "manifest.json": 1669964867237,
-  "manifest-bundle.zip": 1669964867252,
-  "Component-preload.js": 1669964867428,
-  "Component-dbg.js": 1661440197855,
-  "custom/ListReportExtController-dbg.js": 1668162340339,
-  "index.html": 1668162209694
->>>>>>> 43022460fae5a814598bffb47b717ae8ffd57816
->>>>>>> 28572205e8c7de3e81f65a1fa52119e34f364125
-=======
-  "Component-preload.js": 1669732986595,
-  "Component.js": 1669729244195,
-  "custom/ListReportExtController.js": 1669729244195,
-  "manifest.json": 1669732986380,
-  "manifest-bundle.zip": 1669732986393,
-  "i18n/i18n.properties": 1669729244195,
-  "Component-dbg.js": 1669729244195,
-  "custom/ListReportExtController-dbg.js": 1669729244195,
-  "index.html": 1669729244195
->>>>>>> 84b7c307bf663cb87aee50219854b661ab655476
+  "custom/ListReportExtController.js": 1671100323930,
+  "i18n/i18n.properties": 1671100323930,
+  "manifest.json": 1671200637429,
+  "Component.js": 1671100323930,
+  "manifest-bundle.zip": 1671200637442,
+  "Component-preload.js": 1671200637597,
+  "Component-dbg.js": 1671100323930,
+  "custom/ListReportExtController-dbg.js": 1671100323930,
+  "index.html": 1671100323930
 }

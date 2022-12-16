@@ -1,55 +1,13 @@
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-  "utils/locate-reuse-libs.js": 1669789252565,
-  "Component.js": 1669789349506,
-  "i18n/i18n.properties": 1669789252565,
-  "custom/ListReportExtController.js": 1669789349506,
-  "manifest.json": 1670236847486,
-  "manifest-bundle.zip": 1670236847500,
-  "Component-preload.js": 1670236847812,
-  "custom/ListReportExtController-dbg.js": 1669789349506,
-  "utils/locate-reuse-libs-dbg.js": 1669789252565,
-  "Component-dbg.js": 1669789349506,
-  "index.html": 1669789349506
-=======
-<<<<<<< HEAD
-  "Component-preload.js": 1669894385601,
-  "custom/ListReportExtController.js": 1669107427964,
-  "utils/locate-reuse-libs.js": 1669107427964,
-  "manifest.json": 1669894385262,
-  "Component.js": 1669715346700,
-  "manifest-bundle.zip": 1669894385279,
-  "i18n/i18n.properties": 1669107427964,
-  "utils/locate-reuse-libs-dbg.js": 1669107427964,
-  "custom/ListReportExtController-dbg.js": 1669107427964,
-  "Component-dbg.js": 1669715346700,
-  "index.html": 1669107427964
-=======
-  "i18n/i18n.properties": 1667906485054,
-  "Component.js": 1669118193997,
-  "utils/locate-reuse-libs.js": 1661440197763,
-  "custom/ListReportExtController.js": 1668406379982,
-  "manifest.json": 1669964563639,
-  "manifest-bundle.zip": 1669964563671,
-  "Component-preload.js": 1669964564075,
-  "utils/locate-reuse-libs-dbg.js": 1661440197763,
-  "custom/ListReportExtController-dbg.js": 1668406379982,
-  "Component-dbg.js": 1669118193997,
-  "index.html": 1668161623440
->>>>>>> 43022460fae5a814598bffb47b717ae8ffd57816
->>>>>>> 28572205e8c7de3e81f65a1fa52119e34f364125
-=======
-  "Component-dbg.js": 1669729243983,
-  "Component.js": 1669729243983,
-  "utils/locate-reuse-libs.js": 1669729243983,
-  "custom/ListReportExtController.js": 1669729243983,
-  "manifest.json": 1669732869875,
-  "manifest-bundle.zip": 1669732869888,
-  "Component-preload.js": 1669732870277,
-  "utils/locate-reuse-libs-dbg.js": 1669729243983,
-  "custom/ListReportExtController-dbg.js": 1669729243983,
-  "i18n/i18n.properties": 1669729243983,
-  "index.html": 1669729243983
->>>>>>> 84b7c307bf663cb87aee50219854b661ab655476
+  "Component.js": 1671100323670,
+  "i18n/i18n.properties": 1671100323670,
+  "utils/locate-reuse-libs.js": 1671100323670,
+  "custom/ListReportExtController.js": 1671100323670,
+  "manifest.json": 1671200418729,
+  "manifest-bundle.zip": 1671200418748,
+  "Component-preload.js": 1671200419052,
+  "utils/locate-reuse-libs-dbg.js": 1671100323670,
+  "custom/ListReportExtController-dbg.js": 1671100323670,
+  "Component-dbg.js": 1671100323670,
+  "index.html": 1671100323670
 }

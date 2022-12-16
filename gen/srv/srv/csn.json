@@ -2985,7 +2985,7 @@
       "kind": "entity",
       "elements": {
         "PRODUCT_ID": {
-          "@title": "New Product",
+          "@title": "Configurable Product",
           "key": true,
           "type": "cds.String",
           "length": 40
@@ -5211,6 +5211,38 @@
           "@title": "Scenario_Name",
           "type": "cds.String",
           "length": 50
+        }
+      }
+    },
+    "cp.IBPCHAR_PS": {
+      "kind": "entity",
+      "elements": {
+        "PRODUCT_ID": {
+          "@title": "Configurable Product",
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+        "LOCATION_ID": {
+          "@title": "Location",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "CHAR_NUM": {
+          "@title": "Charateristic Name",
+          "key": true,
+          "type": "cds.String",
+          "length": 30
+        },
+        "CHAR_TYPE": {
+          "@title": "Characteristic Type",
+          "type": "cds.String",
+          "length": 2
+        },
+        "SEQUENCE": {
+          "@title": "Secondary Char. Position",
+          "type": "cds.Integer"
         }
       }
     },
@@ -12965,7 +12997,7 @@
           "length": 40
         },
         "MODEL_PROFILE": {
-          "@title": "PAL Model Profile",
+          "@title": "Profile",
           "key": true,
           "type": "cds.String",
           "length": 50
@@ -12976,19 +13008,19 @@
           "type": "cds.Integer"
         },
         "LEFT_ID": {
-          "@title": "Left Unique ID in Stage",
+          "@title": "Left Unique ID",
           "key": true,
           "type": "cds.String",
           "length": 50
         },
         "RIGHT_ID": {
-          "@title": "Right Unique ID in Stage",
+          "@title": "Right Unique ID",
           "key": true,
           "type": "cds.String",
           "length": 50
         },
         "DISTANCE": {
-          "@title": "Distance between two Combined Clusters",
+          "@title": "Distance between Left and RIght Unique IDs",
           "key": true,
           "type": "cds.Double"
         }
@@ -17362,7 +17394,7 @@
           "length": 40
         },
         "MODEL_PROFILE": {
-          "@title": "PAL Model Profile",
+          "@title": "Profile",
           "key": true,
           "type": "cds.String",
           "length": 50
@@ -17373,19 +17405,19 @@
           "type": "cds.Integer"
         },
         "LEFT_ID": {
-          "@title": "Left Unique ID in Stage",
+          "@title": "Left Unique ID",
           "key": true,
           "type": "cds.String",
           "length": 50
         },
         "RIGHT_ID": {
-          "@title": "Right Unique ID in Stage",
+          "@title": "Right Unique ID",
           "key": true,
           "type": "cds.String",
           "length": 50
         },
         "DISTANCE": {
-          "@title": "Distance between two Combined Clusters",
+          "@title": "Distance between Left and RIght Unique IDs",
           "key": true,
           "type": "cds.Double"
         }
@@ -17787,6 +17819,23 @@
         }
       }
     },
+    "PalService.genUidCharValsForClusterResults": {
+      "kind": "action",
+      "params": {
+        "Location": {
+          "type": "cds.String",
+          "length": 4
+        },
+        "Product": {
+          "type": "cds.String",
+          "length": 40
+        },
+        "Profile": {
+          "type": "cds.String",
+          "length": 50
+        }
+      }
+    },
     "PalService.fgModels": {
       "kind": "function",
       "params": {
@@ -17835,6 +17884,26 @@
         "Product": {
           "type": "cds.String",
           "length": 40
+        }
+      },
+      "returns": {
+        "type": "cds.String"
+      }
+    },
+    "PalService.fgenUidCharValsForClusterResults": {
+      "kind": "function",
+      "params": {
+        "Location": {
+          "type": "cds.String",
+          "length": 4
+        },
+        "Product": {
+          "type": "cds.String",
+          "length": 40
+        },
+        "Profile": {
+          "type": "cds.String",
+          "length": 50
         }
       },
       "returns": {
@@ -22693,7 +22762,7 @@
       },
       "elements": {
         "PRODUCT_ID": {
-          "@title": "New Product",
+          "@title": "Configurable Product",
           "key": true,
           "type": "cds.String",
           "length": 40
@@ -22825,6 +22894,112 @@
       },
       "returns": {
         "type": "cds.String"
+      }
+    },
+    "CatalogService.getIBPPriSecChar": {
+      "kind": "entity",
+      "projection": {
+        "from": {
+          "ref": [
+            "V_GETVARCHARPS"
+          ]
+        }
+      },
+      "elements": {
+        "PRODUCT_ID": {
+          "@title": "PRODUCT_ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+        "LOCATION_ID": {
+          "@title": "LOCATION_ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "CHAR_NUM": {
+          "@title": "CHAR_NUM",
+          "key": true,
+          "type": "cds.String",
+          "length": 30
+        },
+        "CHAR_NAME": {
+          "@title": "CHAR_NAME",
+          "key": true,
+          "type": "cds.String",
+          "length": 30
+        },
+        "CHAR_DESC": {
+          "@title": "CHAR_DESC",
+          "key": true,
+          "type": "cds.String",
+          "length": 150
+        },
+        "CHAR_TYPE": {
+          "@title": "CHAR_TYPE",
+          "key": true,
+          "type": "cds.String",
+          "length": 2
+        },
+        "SEQUENCE": {
+          "@title": "SEQUENCE",
+          "key": true,
+          "type": "cds.Integer"
+        }
+      }
+    },
+    "CatalogService.changeToPrimaryIBP": {
+      "kind": "function",
+      "params": {
+        "LOCATION_ID": {
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "type": "cds.String",
+          "length": 40
+        },
+        "CHAR_NUM": {
+          "type": "cds.String",
+          "length": 10
+        },
+        "CHAR_TYPE": {
+          "type": "cds.String",
+          "length": 1
+        },
+        "SEQUENCE": {
+          "type": "cds.Integer"
+        },
+        "FLAG": {
+          "type": "cds.String",
+          "length": 1
+        }
+      },
+      "returns": {
+        "type": "cds.String"
+      }
+    },
+    "CatalogService.getPrimaryCharIBP": {
+      "kind": "function",
+      "params": {
+        "FLAG": {
+          "type": "cds.String",
+          "length": 1
+        },
+        "LOCATION_ID": {
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "type": "cds.String",
+          "length": 40
+        }
+      },
+      "returns": {
+        "items": {
+          "type": "CatalogService.getIBPPriSecChar"
+        }
       }
     },
     "CatalogService.getARObj": {
@@ -25188,6 +25363,190 @@
       "kind": "service",
       "@impl": "./lib/ibpimport-service.js"
     },
+    "IBPImportSrv.getFDemandQty": {
+      "kind": "function",
+      "params": {
+        "LOCATION_ID": {
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "type": "cds.String",
+          "length": 40
+        }
+      },
+      "returns": {
+        "type": "cds.String"
+      }
+    },
+    "IBPImportSrv.getFCharPlan": {
+      "kind": "function",
+      "params": {
+        "LOCATION_ID": {
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "type": "cds.String",
+          "length": 40
+        }
+      },
+      "returns": {
+        "type": "cds.String"
+      }
+    },
+    "IBPImportSrv.createIBPMasterProd": {
+      "kind": "function",
+      "params": {
+        "LOCATION_ID": {
+          "type": "cds.String",
+          "length": 4
+        }
+      },
+      "returns": {
+        "type": "cds.String"
+      }
+    },
+    "IBPImportSrv.createIBPLocation": {
+      "kind": "function",
+      "returns": {
+        "type": "cds.String"
+      }
+    },
+    "IBPImportSrv.createIBPCustomer": {
+      "kind": "function",
+      "returns": {
+        "type": "cds.String"
+      }
+    },
+    "IBPImportSrv.createIBPClass": {
+      "kind": "function",
+      "params": {
+        "CLASS_NUM": {
+          "type": "cds.String",
+          "length": 18
+        }
+      },
+      "returns": {
+        "type": "cds.String"
+      }
+    },
+    "IBPImportSrv.createIBPSalesTrans": {
+      "kind": "function",
+      "params": {
+        "LOCATION_ID": {
+          "type": "cds.String",
+          "length": 4
+        }
+      },
+      "returns": {
+        "type": "cds.String"
+      }
+    },
+    "IBPImportSrv.createIBPSalesConfig": {
+      "kind": "function",
+      "params": {
+        "LOCATION_ID": {
+          "type": "cds.String",
+          "length": 4
+        }
+      },
+      "returns": {
+        "type": "cds.String"
+      }
+    },
+    "IBPImportSrv.createComponentReq": {
+      "kind": "function",
+      "params": {
+        "LOCATION_ID": {
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "type": "cds.String",
+          "length": 40
+        },
+        "CRITICALKEY": {
+          "type": "cds.String",
+          "length": 1
+        }
+      },
+      "returns": {
+        "type": "cds.String"
+      }
+    },
+    "IBPImportSrv.createActCompDemand": {
+      "kind": "function",
+      "params": {
+        "LOCATION_ID": {
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "type": "cds.String",
+          "length": 40
+        },
+        "CRITICALKEY": {
+          "type": "cds.String",
+          "length": 1
+        }
+      },
+      "returns": {
+        "type": "cds.String"
+      }
+    },
+    "IBPImportSrv.createIBPLocProd": {
+      "kind": "function",
+      "params": {
+        "LOCATION_ID": {
+          "type": "cds.String",
+          "length": 4
+        }
+      },
+      "returns": {
+        "type": "cds.String"
+      }
+    },
+    "IBPImportSrv.createIBPCIR": {
+      "kind": "function",
+      "params": {
+        "LOCATION_ID": {
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "type": "cds.String",
+          "length": 40
+        }
+      },
+      "returns": {
+        "type": "cds.String"
+      }
+    },
+    "IBPImportSrv.exportIBPLocProd_fn": {
+      "kind": "function",
+      "params": {
+        "LOCATION_ID": {
+          "type": "cds.String",
+          "length": 4
+        }
+      },
+      "returns": {
+        "type": "cds.String"
+      }
+    },
+    "IBPImportSrv.exportRestrDetails_fn": {
+      "kind": "function",
+      "params": {
+        "LOCATION_ID": {
+          "type": "cds.String",
+          "length": 4
+        }
+      },
+      "returns": {
+        "type": "cds.String"
+      }
+    },
     "IBPImportSrv.exportIBPMasterProd": {
       "kind": "action",
       "params": {
@@ -25245,6 +25604,15 @@
       }
     },
     "IBPImportSrv.exportRestrDetails": {
+      "kind": "action",
+      "params": {
+        "LOCATION_ID": {
+          "type": "cds.String",
+          "length": 4
+        }
+      }
+    },
+    "IBPImportSrv.exportIBPAssembly": {
       "kind": "action",
       "params": {
         "LOCATION_ID": {

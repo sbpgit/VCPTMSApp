@@ -17,11 +17,7 @@
                 <ux:headerTitle>
                     <ux:ObjectPageDynamicHeaderTitle id="_IDGenObjectPageDynamicHeaderTitle1">
                         <ux:expandedHeading>
-<<<<<<< HEAD
                             <!-- <HBox> -->
-=======
-                            <HBox>
->>>>>>> 84b7c307bf663cb87aee50219854b661ab655476
                                 <Title id="_IDGenTitle1" text="{i18n>title}" class="boldText" titleAlignment="Center" />
 
                                 <!-- <Button class="hdrBtnMarginHdr" id="_IDGenOverflowToolbarButton1" icon="sap-icon://sys-help" text="" type="Emphasized" press="onNavPress" tooltip="Help Document" /> -->
@@ -33,11 +29,7 @@
                                 <Title id="_IDGenTitle2" text="{i18n>title}" />
 
                                 <!-- <Button class="hdrBtnMarginHdr" id="_IDGenOverflowToolbarButton2" icon="sap-icon://sys-help" text="" type="Emphasized" press="onNavPress" tooltip="Help Document" /> -->
-<<<<<<< HEAD
                             <!-- </HBox> -->
-=======
-                            </HBox>
->>>>>>> 84b7c307bf663cb87aee50219854b661ab655476
                         </ux:snappedHeading>
                         <ux:navigationActions>
                           <Button class="classHdr" icon="sap-icon://sys-help" id="idNav3" press="onNavPress" type="Emphasized" tooltip="Help Document" />
@@ -89,11 +81,7 @@
                             <HBox id="_IDGenHBox1" class="hdrBtnMargin">
                                 <Button id="_IDGenButton1" text="Go" type="Emphasized" press="onGetData" tooltip="Get data based on filters" />
                                 <Button id="_IDGenButton2" text="Reset" type="Transparent" press="onResetData" tooltip="Reset filters and Data" />
-<<<<<<< HEAD
                                
-=======
-                                <!-- <Button icon="sap-icon://sys-help" id="idNav1" press="onNavPress" type="Emphasized" tooltip="Help Document" /> -->
->>>>>>> 84b7c307bf663cb87aee50219854b661ab655476
                             </HBox>
                             <!-- </VBox> -->
                         </l:Grid>
@@ -122,7 +110,7 @@
                                             >
                                                 <!-- <core:ListItem key="{CHAR_NUM}:{CHARVAL_NUM}" text="{CHAR_DESC}:{CHAR_NAME}" additionalText="{CHARVAL_DESC}:{CHAR_VALUE}" /> -->
                                            
-                                        <core:ListItem key="{CHAR_NUM}-{CHARVAL_NUM}" text="{CHARACTERISTIC}" additionalText="{CHARVAL_DESC}-{CHAR_VALUE}" />                                            
+                                        <core:ListItem key="{CHAR_NUM}:{CHARVAL_NUM}" text="{CHARACTERISTIC}" additionalText="{CHARVAL_DESC}-{CHAR_VALUE}" />                                            
                                         </MultiComboBox>
                                         </Toolbar>
                                         <t:Table id="idCIReq" class="table" fixedColumnCount="2" selectionMode="None" alternateRowColors="true"  enableSelectAll="false" visibleRowCount="7">
