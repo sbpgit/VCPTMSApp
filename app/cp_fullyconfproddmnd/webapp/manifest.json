@@ -138,6 +138,13 @@
                     "target": [
                         "TargetHome"
                     ]
+                },
+                {
+                    "name": "RouteUniqChar",
+                    "pattern": "uniqueChar",
+                    "target": [
+                        "TargetUniqChar"
+                    ]
                 }
             ],
             "targets": {
@@ -147,6 +154,13 @@
                     "clearControlAggregation": false,
                     "viewId": "Home",
                     "viewName": "Home"
+                },
+                "TargetUniqChar": {
+                    "viewType": "XML",
+                    "transition": "slide",
+                    "clearControlAggregation": false,
+                    "viewId": "UniqueCharDetails",
+                    "viewName": "UniqueCharDetails"
                 }
             }
         },
