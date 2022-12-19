@@ -29,7 +29,8 @@ sap.ui.define(
              */
             onInit: function () {
                 that = this;
-                this.rowData;
+                this.rowData;                
+                this.plntMethod;
                 // Declaring JSON Models and size limits
                 that.locModel = new JSONModel();
                 that.prodModel = new JSONModel();
@@ -329,7 +330,9 @@ sap.ui.define(
                 fromDate = fromDate.toISOString().split("T")[0];
                 toDate = toDate.toISOString().split("T")[0];
                 // Calling function to generate column names based on dates
-                var liDates = that.generateDateseries(fromDate, toDate);
+                var liDates = that.generateDateseries(fromDate, toDate);                
+                that.oGModel.setProperty("/TDates", liDates);
+
                 // Looping through the data to generate columns
                 for (var i = 0; i < that.tableData.length; i++) {
                     sRowData.Component = that.tableData[i].COMPONENT;
@@ -359,16 +362,29 @@ sap.ui.define(
                             template: columnName,
                         });
                     } else {
-                        return new sap.ui.table.Column({
-                            width: "8rem",
-                            label: columnName,
-                            template: new sap.m.Link({
-                                text: "{" + columnName + "}",
-                                press: that.asmbcompLinkpress,
-                            }),
-                        });
+                        // Fetch Total on a Date   
+                        var iTotalQty = that.getTotalWeekQty(columnName);
+                        var columnText = columnName + " (" + iTotalQty + ")";
+                        if (that.plntMethod === 'M1') {
+                            return new sap.ui.table.Column({
+                                width: "8rem",
+                                label: columnText,
+                                template: new sap.m.Link({
+                                    text: "{" + columnName + "}",
+                                    press: that.linkPressed,
+                                }),
+                            });
+                        }
+                        else {
+                            return new sap.ui.table.Column({
+                                width: "8rem",
+                                label: columnText,
+                                template: new sap.m.Text({
+                                    text: "{" + columnName + "}"
+                                }),
+                            });
+                        }
                     }
-                    // }
                 });
 
                 that.oTable.bindRows("/rows");
@@ -414,7 +430,30 @@ sap.ui.define(
                 // Calling function to generate UI table based on filter data
                 that.TableGenerate();
             },
+             /**
+             * 
+             */
+              getTotalWeekQty: function (sWeekDate) {
+                that.oGModel = that.getModel("oGModel");
+                var oTableData = that.oGModel.getProperty("/TData");
+                var liDates = that.oGModel.getProperty("/TDates");
+                var iWeekIndex = 0;
+                var iTotalQty = 0;
+                for (let index = 1; index < liDates.length; index++) {
+                    iWeekIndex = iWeekIndex + 1;
+                    if (liDates[index].CAL_DATE === sWeekDate) {
+                        break;
+                    }
+                }
 
+                // Looping through the data to generate columns SUM
+                
+                for (var i = 0; i < that.tableData.length; i++) {
+                    iTotalQty = iTotalQty + parseInt(that.tableData[i]["WEEK" + iWeekIndex]);                    
+                }
+
+                return iTotalQty;
+            },
             /**
              * This function is called when a click on any row item.
              * In this function we will fetch the data which need to display
@@ -931,17 +970,26 @@ sap.ui.define(
                                 aSelectedItems[0].getTitle()
                             ),
                         ],
-                    // this.getModel("BModel").callFunction("/getAllProd", {
-                    //     method: "GET",
-                    //     urlParameters: {
-                    //         LOCATION_ID: aSelectedItems[0].getTitle()
-                    //     },
                         success: function (oData) {
                             that.prodModel.setData(oData);
                             that.oProdList.setModel(that.prodModel);
                         },
                         error: function (oData, error) {
                             MessageToast.show("error");
+                        },
+                    });
+                    this.getModel("BModel").read("/getPlancfgPara", {
+                        filters: [
+                            new Filter("LOCATION_ID", FilterOperator.EQ, aSelectedItems[0].getTitle()),
+                            new Filter("PARAMETER_ID", FilterOperator.EQ, "5"),
+                        ],
+                        success: function (oData) {
+                            if (oData.results) {
+                                that.plntMethod = oData.results[0].VALUE
+                            }
+                        },
+                        error: function (oData, error) {
+                            MessageToast.show("Please maintain Planning Configuration for the selected plant");
                         },
                     });
 
@@ -982,7 +1030,11 @@ sap.ui.define(
                         success: function (oData) {
                             var adata = [];
                             for (var i = 0; i < oData.results.length; i++) {
-                                if (oData.results[i].PRODUCT_ID === aSelectedItems[0].getTitle()) {
+<<<<<<< HEAD
+                                if (oData.results[i].PRODUCT_ID === that.oGModel.getProperty("/SelectedProd") ) {
+=======
+                                if (oData.results[i].PRODUCT_ID === that.oGModel.getProperty("/SelectedProd")) {
+>>>>>>> 28572205e8c7de3e81f65a1fa52119e34f364125
                                     adata.push({
                                         "VERSION": oData.results[i].VERSION
                                     });
@@ -1013,7 +1065,7 @@ sap.ui.define(
                             new Filter(
                                 "PRODUCT_ID",
                                 FilterOperator.EQ,
-                                aSelectedItems[0].getTitle()
+                                that.oGModel.getProperty("/SelectedProd")
                             ),
                         ],
                         success: function (oData) {
@@ -1064,7 +1116,7 @@ sap.ui.define(
                             var adata = [];
                             for (var i = 0; i < oData.results.length; i++) {
                                 if (oData.results[i].PRODUCT_ID === that.byId("idprod").getValue()
-                                    && oData.results[i].VERSION === aSelectedItems[0].getTitle()) {
+                                    && oData.results[i].VERSION === that.oGModel.getProperty("/SelectedVer")) {
                                     adata.push({
                                         "SCENARIO": oData.results[i].SCENARIO
                                     });

@@ -39,11 +39,11 @@
                         <Label id="_IDGenLabel2" text="Location" required="true" />
                         <Input id="idloc" value="" placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                     </VBox>
-                    <!-- <VBox >
+                    <VBox >
                 <Label text="Configurable Product" required="true"/>
                 <Input id="idprod"  placeholder="Configurable Product" value="" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
 
-            </VBox> -->
+            </VBox>
                     <VBox id="_IDGenVBox3">
                         <Label id="_IDGenLabel3" text="IBP Version" required="true" />
                         <Input id="idver" value="" placeholder="Version" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
@@ -100,7 +100,7 @@
                 <ux:subSections>
                     <ux:ObjectPageSubSection id="_IDGenObjectPageSubSection1">
                         <ux:blocks>
-                            <t:Table id="idCompReq" fixedColumnCount="3" selectionMode="Single" alternateRowColors="true" enableSelectAll="false" visibleRowCount="15">
+                            <t:Table id="idCompReq" fixedColumnCount="2" selectionMode="Single" alternateRowColors="true" enableSelectAll="false" visibleRowCount="15">
                                 <t:columns />
                             </t:Table>
                         </ux:blocks>

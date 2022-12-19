@@ -379,39 +379,8 @@ sap.ui.define([
                     } else if (Flag === "X") {
                         this.oProd = sap.ui.getCore().byId("idProduct");
                     }
-                    // that.oProd.setValue(aSelectedProd[0].getTitle());
                     that.oProd.setValue(oEvent.getParameters().listItem.getCells()[0].getTitle());
-                    // sap.ui.core.BusyIndicator.show();
-                    // // service to get the Uniq ID's based of location and products
-                    // this.getModel("BModel").read("/getUniqueHeader", {
-                    //     filters: [
-                    //         new Filter(
-                    //             "LOCATION_ID",
-                    //             FilterOperator.EQ,
-                    //             sap.ui.getCore().byId("idLocation").getValue()
-                    //         ),
-                    //         new Filter(
-                    //             "PRODUCT_ID",
-                    //             FilterOperator.EQ,
-                    //             sap.ui.getCore().byId("idProduct").getValue()
-                    //         ),
-                    //     ],
-                    //     success: function (oData) {
-                    //         sap.ui.core.BusyIndicator.hide();
-
-                    //         oData.results.forEach(function (row) {
-                    //             row.UNIQUE_ID = row.UNIQUE_ID.toString();
-
-                    //         }, that);
-                    //         that.uniqModel.setData(oData);
-                    //         that.oUniqList.setModel(that.uniqModel);
-                    //     },
-                    //     error: function (oData, error) {
-                    //         sap.ui.core.BusyIndicator.hide();
-                    //         MessageToast.show("error");
-                    //     },
-                    // });
-                    // Uniq ID list
+                   
                 } else if (sId.includes("Uniq")) {
                     var aSelectedProd = oEvent.getParameter("selectedItems");
                     this.oUniq = sap.ui.getCore().byId("idUniq");
@@ -455,7 +424,7 @@ sap.ui.define([
                     if (that.oList.getItems().length) {
                         that.oList.getBinding("items").filter(oFilters);
                     }
-
+                    sap.ui.core.BusyIndicator.show();
                     this.getModel("BModel").read("/getSeedOrder", {
                         filters: [oFilters],
                         // filters: [ new Filter( "LOCATION_ID",  FilterOperator.EQ,  loc ),
@@ -608,6 +577,7 @@ sap.ui.define([
                 };
                 oEntry.SEEDDATA.push(vRuleslist);
                 if (squan && sDate !== "" && sUniq) {
+                    sap.ui.core.BusyIndicator.show();
                     if (sap.ui.getCore().byId("idQuantity").getValueState() !== "Error") {
                         that.getModel("BModel").callFunction("/maintainSeedOrder", {
                             method: "GET",

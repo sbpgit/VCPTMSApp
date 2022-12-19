@@ -131,7 +131,11 @@ sap.ui.define([
                 that.oVer.setValue("");
                 that.oScen.setValue("");
                 this.oModVer.setSelectedKey("Active");
-                that.byId("idObjectPageSub").setVisible(false);
+                // that.byId("idObjectPageSub").setVisible(false);
+                var filterJSON = new JSONModel();
+                filterJSON.setData([]);
+                                var oVizFrame = that.byId("idVizFrame");
+                                oVizFrame.setModel(filterJSON);
                 this.oDate = this.byId("fromDate");
                 this.oDate.setSelectedKey("");
                 // that.onAfterRendering();
@@ -145,14 +149,18 @@ sap.ui.define([
                     filterJSON1.setData([]);
                     var oVizFrame = that.byId("idVizFrame");
                     oVizFrame.setModel(filterJSON1);
-                    that.byId("idObjectPageSub").setVisible(false);
-                    that.byId("idSplitter").setVisible(false);
                     that.byId("fromDate").setEditable(false);
                     that.byId("fromDate").setSelectedKey("");
                     // Prod Dialog
                 } else if (sId.includes("prod")) {
                     if (that.byId("idloc").getValue()) {
                         that._valueHelpDialogProd.open();
+                        var filterJSON1 = new JSONModel();
+                    filterJSON1.setData([]);
+                    var oVizFrame = that.byId("idVizFrame");
+                    oVizFrame.setModel(filterJSON1);
+                    that.byId("fromDate").setEditable(false);
+                    that.byId("fromDate").setSelectedKey("");
                     } else {
                         MessageToast.show("Select Location");
                     }
@@ -240,7 +248,7 @@ sap.ui.define([
                             else {
                                 var adata = [];
                                 for (var i = 0; i < oData.results.length; i++) {
-                                    if (oData.results[i].PRODUCT_ID === aSelectedItems[0].getTitle()) {
+                                    if (oData.results[i].PRODUCT_ID === that.oGModel.getProperty("/SelectedProd")) {
                                         adata.push({
                                             "VERSION": oData.results[i].VERSION
                                         });
@@ -281,7 +289,7 @@ sap.ui.define([
                             var adata = [];
                             for (var i = 0; i < oData.results.length; i++) {
                                 if (oData.results[i].PRODUCT_ID === that.byId("idprod").getValue()
-                                    && oData.results[i].VERSION === aSelectedItems[0].getTitle()) {
+                                    && oData.results[i].VERSION === that.oGModel.getProperty("/SelectedVer")) {
                                     adata.push({
                                         "SCENARIO": oData.results[i].SCENARIO
                                     });
@@ -309,10 +317,7 @@ sap.ui.define([
                         "/SelectedScen",
                         aSelectedItems[0].getTitle()
                     );
-
-                    //setting dates in date field
-                    
-
+                    //setting dates in date field                   
                     that.getView().getModel("oModel").read("/getCIRCharRate", {
                         filters: [
                             new Filter(
@@ -347,31 +352,29 @@ sap.ui.define([
                                 that.byId("fromDate").setEditable(false);
                             }
                             else {
+                                that.aOrder=[];
+                                that.aSelOrder=[];
                                 sap.ui.core.BusyIndicator.hide();
                                 oData1.results.forEach(function (row) {
                                     // Calling function to handle the date format
                                     row.WEEK_DATE = that.getInMMddyyyyFormat(row.WEEK_DATE);
                                 }, that);
-
                                 for (var i = 0; i < oData1.results.length; i++) {
-
                                     if (that.aOrder.indexOf(oData1.results[i].WEEK_DATE) === -1) {
                                         that.aOrder.push(oData1.results[i].WEEK_DATE);
-                                        if (oData1.results[i].WEEK_DATE !== "") {
-                                            that.oOrdData = {
-                                                "WEEK_DATE": oData1.results[i].WEEK_DATE
-                                            };
-                                            that.aSelOrder.push(that.oOrdData);
-                                        }
                                     }
                                 }
+                                for(var k=0;k<that.aOrder.length;k++){
+                                    that.oOrdData = {
+                                                "WEEK_DATE": that.aOrder[k]
+                                            };
+                                            that.aSelOrder.push(that.oOrdData);
+                                        }                                                            
                                 that.oDateModel = new JSONModel();
                                 that.oDateModel.setData({ resultsCombos: that.aSelOrder });
                                 that.byId("fromDate").setModel(that.oDateModel);
                                 that.byId("fromDate").setEditable(true);
-
                             }
-
                         },
                         error: function (oData, error) {
                             sap.ui.core.BusyIndicator.hide();
@@ -555,6 +558,7 @@ sap.ui.define([
                             operator: sap.ui.model.FilterOperator.EQ,
                             value1: newDate,
                         });
+                        that.oGModel.setProperty("/date",newDate);
                         oFilters.push(sFilter);
                     }
                     else {
@@ -563,6 +567,7 @@ sap.ui.define([
                             operator: sap.ui.model.FilterOperator.EQ,
                             value1: oDate,
                         });
+                        that.oGModel.setProperty("/date",oDate);
                         oFilters.push(sFilter);
 
                     }
@@ -575,7 +580,8 @@ sap.ui.define([
                             var filterJSON = new JSONModel();
                             sap.ui.core.BusyIndicator.hide();
                             if (oData.results.length === 0) {
-                                newDate = that.getInMMddyyyyFormat(newDate);
+                                newDate = that.oGModel.getProperty("/date");
+                                // newDate = that.getInMMddyyyyFormat(newDate);
 
                                 sap.m.MessageToast.show("No data available for " + newDate + "");
                                 filterJSON.setData([]);
@@ -583,12 +589,20 @@ sap.ui.define([
                                 oVizFrame.setModel(filterJSON);
                             }
                             else {
+                                
+<<<<<<< HEAD
+                                that.byId("application-cpcharqtygraph-display-component---Home--ObjectPageLayout-OPHeaderContent-collapseBtn").firePress();
+=======
+<<<<<<< HEAD
+                                that.byId("application-cpcharqtygraph-display-component---Home--ObjectPageLayout-OPHeaderContent-collapseBtn-inner").firePress();
+=======
+                                that.byId("application-cpcharqtygraph-display-component---Home--ObjectPageLayout-OPHeaderContent-collapseBtn").firePress();
+>>>>>>> 43022460fae5a814598bffb47b717ae8ffd57816
+>>>>>>> 28572205e8c7de3e81f65a1fa52119e34f364125
                                 oData.results.forEach(function (row) {
                                     // Calling function to handle the date format
                                     row.WEEK_DATE = that.getInMMddyyyyFormat(row.WEEK_DATE);
                                 }, that);
-
-
                                 filterJSON.setData({ results: oData.results });
                                 var oVizFrame = that.byId("idVizFrame");
                                 oVizFrame.setModel(filterJSON);
@@ -599,15 +613,8 @@ sap.ui.define([
                                         visible: true
                                     }
                                 });
-                                // that.byId("idObjectPageSub").setMode("Expanded");
-                                that.byId("idObjectPageSub").setVisible(true);
-
                                 var oPopOver = that.byId("idPopOver");
                                 oPopOver.connect(oVizFrame.getVizUid());
-
-                                that.byId("idSplitter").setVisible(true);
-
-
                                 sap.ui.core.BusyIndicator.hide();
                                 that.oGModel.setProperty("/tableData", oData.results)
                             }

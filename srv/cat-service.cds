@@ -221,6 +221,12 @@ service CatalogService @(impl : './lib/cat-service.js') {
     function getSecondaryChar(FLAG : String(1), LOCATION_ID : String(4), PRODUCT_ID : String(40))  returns array of getPriSecChar;
     function changeToPrimary(LOCATION_ID : String(4), PRODUCT_ID : String(40), CHAR_NUM : String(10), CHAR_TYPE : String(1), SEQUENCE : Integer, FLAG : String(1))                                                                                                               returns String;
 
+    /*** ***/
+    // IBP char.
+    /*** ***/
+    entity getIBPPriSecChar        as projection on V_GETVARCHARPS;
+function changeToPrimaryIBP(LOCATION_ID : String(4), PRODUCT_ID : String(40), CHAR_NUM : String(10), CHAR_TYPE : String(1), SEQUENCE : Integer, FLAG : String(1))                                                                                                               returns String;
+ function getPrimaryCharIBP(FLAG : String(1), LOCATION_ID : String(4), PRODUCT_ID : String(40))                                                                                                                                                                                returns array of getIBPPriSecChar;
     ///*****/ Authorizations /*****/
     @odata.draft.enabled
     entity getARObj             as projection on od.USER_AUTHOBJ;

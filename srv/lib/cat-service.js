@@ -402,9 +402,14 @@ module.exports = (srv) => {
             vComp,
             lsDates = {};
         let columnname = "WEEK";
-        const liCompQty = await cds.run(
+        
+        let liComp = [];
+        let liCompQty;
+        switch (await GenFunctions.getParameterValue(req.data.LOCATION_ID, 5)) {
+            case 'M1':
+       liCompQty = await cds.run(
             `
-            SELECT * FROM "V_ASMCOMPQTY_CONSD"  
+            SELECT * FROM "V_ASMCOMP_REQ"  
             WHERE "LOCATION_ID" = '` +
             req.data.LOCATION_ID +
             `'
@@ -429,14 +434,14 @@ module.exports = (srv) => {
                       "COMPONENT" ASC,
                       "CAL_DATE" ASC`
         );
-        const liComp = await cds.run(
+        liComp = await cds.run(
             `
           SELECT DISTINCT "LOCATION_ID",
                           "PRODUCT_ID",
                           "VERSION",
                           "SCENARIO",
                           "COMPONENT"
-          FROM "V_ASMCOMPQTY_CONSD"
+          FROM "V_ASMCOMP_REQ"
           WHERE "LOCATION_ID" = '` +
             req.data.LOCATION_ID +
             `' AND "PRODUCT_ID" = '` +
@@ -460,6 +465,68 @@ module.exports = (srv) => {
                     "SCENARIO" ASC,
                     "COMPONENT" ASC`
         );
+        break;
+        case 'M2':
+            liCompQty = await cds.run(
+                `
+                SELECT * FROM "V_COMPASMREQM2"  
+                WHERE "LOCATION_ID" = '` +
+                req.data.LOCATION_ID +
+                `'
+                     AND "PRODUCT_ID" = '` +
+                req.data.PRODUCT_ID +
+                `' AND "VERSION" = '` +
+                req.data.VERSION +
+                `' AND "SCENARIO" = '` +
+                req.data.SCENARIO +
+                `' AND ( "CAL_DATE" <= '` +
+                vDateTo +
+                `' AND "CAL_DATE" >= '` +
+                vDateFrom +
+                `') AND "MODEL_VERSION" = '` +
+                req.data.MODEL_VERSION +
+                `'
+                     ORDER BY 
+                          "LOCATION_ID" ASC, 
+                          "PRODUCT_ID" ASC,
+                          "VERSION" ASC,
+                          "SCENARIO" ASC,
+                          "COMPONENT" ASC,
+                          "CAL_DATE" ASC`
+            );
+            liComp = await cds.run(
+                `
+              SELECT DISTINCT "LOCATION_ID",
+                              "PRODUCT_ID",
+                              "VERSION",
+                              "SCENARIO",
+                              "COMPONENT"
+              FROM "V_COMPASMREQM2"
+              WHERE "LOCATION_ID" = '` +
+                req.data.LOCATION_ID +
+                `' AND "PRODUCT_ID" = '` +
+                req.data.PRODUCT_ID +
+                `' AND "VERSION" = '` +
+                req.data.VERSION +
+                `' AND "SCENARIO" = '` +
+                req.data.SCENARIO +
+                `' AND ( "CAL_DATE" <= '` +
+                vDateTo +
+                `'
+                    AND "CAL_DATE" >= '` +
+                vDateFrom +
+                `') AND "MODEL_VERSION" = '` +
+                req.data.MODEL_VERSION +
+                `'
+                   ORDER BY 
+                        "LOCATION_ID" ASC, 
+                        "PRODUCT_ID" ASC,
+                        "VERSION" ASC,
+                        "SCENARIO" ASC,
+                        "COMPONENT" ASC`
+            );
+            break;
+        }
         var vDateSeries = vDateFrom;
         lsDates.CAL_DATE = GenFunctions.getNextMondayCmp(vDateSeries);
         vDateSeries = lsDates.CAL_DATE;
@@ -1065,9 +1132,9 @@ module.exports = (srv) => {
                 }
                 break;
         }
-        const obgenTimeseries_rt = new GenTimeseriesRT();
-        await obgenTimeseries_rt.genTimeseries_rt(req.data, req);
-        console.log(Flag);
+        // const obgenTimeseries_rt = new GenTimeseriesRT();
+        // await obgenTimeseries_rt.genTimeseries_rt(req.data, req);
+        // console.log(Flag);
     });
     srv.on("generateTimeseriesF", async (req) => {
 
@@ -1115,8 +1182,8 @@ module.exports = (srv) => {
                 }
                 break;
         }
-        const obgenTimeseries_rt = new GenTimeseriesRT();
-        await obgenTimeseries_rt.genTimeseriesF_rt(req.data, req);
+        // const obgenTimeseries_rt = new GenTimeseriesRT();
+        // await obgenTimeseries_rt.genTimeseriesF_rt(req.data, req);
 
     });
     // Generate Timeseries fucntion calls
@@ -1209,7 +1276,8 @@ module.exports = (srv) => {
         let Flag = '';
         const obgenSOFunctions = new SOFunctions();
         await obgenSOFunctions.genUniqueID(req.data, req, Flag);
-        return "success";
+        return "success";     
+
     });
     // Generate Fully Configured Demand
     srv.on("genFullConfigDemand", async (req) => {
@@ -1251,13 +1319,13 @@ module.exports = (srv) => {
 
         let lilocProd = {};
         let lsData = {};
-        lilocProd = JSON.parse(req.data.LocProdData);
-        for (let i = 0; i < lilocProd.length; i++) {
-            lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
-            lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
+        // lilocProd = JSON.parse(req.data.LocProdData);
+        // for (let i = 0; i < lilocProd.length; i++) {
+        //     lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
+        //     lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
             const obgenTimeseriesM2 = new GenTimeseriesM2();
-            await obgenTimeseriesM2.genPrediction(lsData, req, Flag);
-        }
+            await obgenTimeseriesM2.genPrediction(req.data, req, '');
+        // }
     });
 
     srv.on("genVariantStruc", async (req) => {
@@ -1426,7 +1494,7 @@ module.exports = (srv) => {
                 // lsresults.REF_PRODID = liProdChar[i].REF_PRODID;
                 if (req.data.FLAG === "E" && i === 0) {
                     try {
-                        await cds.delete("CP_NEWPROD_CHAR", lsresults);
+                        await cds.F("CP_NEWPROD_CHAR", lsresults);
                     } catch (e) {
                         //DONOTHING
                     }
@@ -1604,7 +1672,7 @@ module.exports = (srv) => {
         }
 
     });
-    // Maintain partial configurations for new product
+    // Change to Primary
     srv.on("changeToPrimary", async (req) => {
         let { genvarcharps } = srv.entities;
         let liresults = [];
@@ -1731,6 +1799,210 @@ module.exports = (srv) => {
         }
         lsresults = {};
         return responseMessage;
+    });
+
+    // Change to Primary in IBP char.
+    srv.on("changeToPrimaryIBP", async (req) => {
+        let { genvarcharps } = srv.entities;
+        let liresults = [];
+        let lsresults = {};
+        let liProdChar = {};
+        var responseMessage;
+
+        let li_varcharps
+        li_varcharps = await cds.run(
+            `SELECT *
+            FROM "CP_IBPCHAR_PS"
+            WHERE "LOCATION_ID" = '` +
+            req.data.LOCATION_ID +
+            `'
+            AND "PRODUCT_ID" = '` +
+            req.data.PRODUCT_ID +
+            `'
+            AND "SEQUENCE" > `+
+            req.data.SEQUENCE + `
+            ORDER BY SEQUENCE`
+        );
+        if (req.data.FLAG === "C") {
+            lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
+            lsresults.LOCATION_ID = req.data.LOCATION_ID;
+            lsresults.CHAR_NUM = req.data.CHAR_NUM;
+            lsresults.CHAR_TYPE = req.data.CHAR_TYPE;
+            if (req.data.CHAR_TYPE === "S") {
+                lsresults.SEQUENCE = 0;
+            }
+            else {
+                lsresults.SEQUENCE = req.data.SEQUENCE;
+            }
+            liresults.push(lsresults);
+
+            if (liresults.length > 0) {
+                try {
+                    await UPDATE`CP_IBPCHAR_PS`
+                        .with({
+                            CHAR_TYPE: lsresults.CHAR_TYPE,
+                            SEQUENCE: lsresults.SEQUENCE
+                        })
+                        .where(`LOCATION_ID = '${lsresults.LOCATION_ID}'
+                                          AND PRODUCT_ID = '${lsresults.PRODUCT_ID}'
+                                          AND CHAR_NUM = '${lsresults.CHAR_NUM}'`);
+
+                    responseMessage = " Creation/Updation successful";
+                } catch (e) {
+                    responseMessage = " Creation failed";
+                }
+            }
+            // }
+            if (lsresults.CHAR_TYPE !== "P") {
+
+                lsresults = {};
+                liresults = [];
+                li_varcharps = await cds.run(
+                    `SELECT *
+                    FROM "CP_IBPCHAR_PS"
+                    WHERE "LOCATION_ID" = '` +
+                    req.data.LOCATION_ID +
+                    `'
+                    AND "PRODUCT_ID" = '` +
+                    req.data.PRODUCT_ID +
+                    `'
+                    ORDER BY SEQUENCE`
+                );
+                for (let i = 0; i < li_varcharps.length; i++) {
+                    lsresults.PRODUCT_ID = li_varcharps[i].PRODUCT_ID;
+                    lsresults.LOCATION_ID = li_varcharps[i].LOCATION_ID;
+                    lsresults.CHAR_NUM = li_varcharps[i].CHAR_NUM;
+                    lsresults.CHAR_TYPE = 'P';
+                    if (li_varcharps[i].SEQUENCE > req.data.SEQUENCE) {
+                        lsresults.SEQUENCE = li_varcharps[i].SEQUENCE - 1;
+                        await UPDATE`CP_IBPCHAR_PS`
+                            .with({
+                                CHAR_TYPE: lsresults.CHAR_TYPE,
+                                SEQUENCE: lsresults.SEQUENCE
+                            })
+                            .where(`LOCATION_ID = '${lsresults.LOCATION_ID}'
+                                          AND PRODUCT_ID = '${lsresults.PRODUCT_ID}'
+                                          AND CHAR_NUM = '${lsresults.CHAR_NUM}'`);
+
+                        liresults.push(lsresults);
+                    }
+                    lsresults = {};
+                }
+                if (liresults.length > 0) {
+                }
+            }
+        }
+        else if (req.data.FLAG === "E") {
+
+            lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
+            lsresults.LOCATION_ID = req.data.LOCATION_ID;
+            lsresults.CHAR_NUM = req.data.CHAR_NUM;
+            lsresults.CHAR_TYPE = req.data.CHAR_TYPE;
+            lsresults.SEQUENCE = req.data.SEQUENCE;
+            liresults.push(lsresults);
+            if (liresults.length > 0) {
+                try {
+                    await UPDATE`CP_IBPCHAR_PS`
+                        .with({
+                            CHAR_TYPE: lsresults.CHAR_TYPE,
+                            SEQUENCE: lsresults.SEQUENCE
+                        })
+                        .where(`LOCATION_ID = '${lsresults.LOCATION_ID}'
+                                          AND PRODUCT_ID = '${lsresults.PRODUCT_ID}'
+                                          AND CHAR_NUM = '${lsresults.CHAR_NUM}'`);
+
+                    // await cds.run(INSERT.into("CP_VARCHAR_PS").entries(liresults));
+                    responseMessage = " Creation/Updation successful";
+                } catch (e) {
+                    responseMessage = " Creation failed";
+                }
+            }
+        }
+        lsresults = {};
+        return responseMessage;
+    });
+     // Maintain seconf
+     srv.on("getPrimaryCharIBP", async (req) => {
+        let liresults = [];
+        let lsresults = {};
+        let vCount = 1;
+        let vFlag = '';
+        let vCharFlag = '';
+        let li_ibpcharps = [];
+        li_ibpcharps = await cds.run(
+            `SELECT *
+            FROM "V_GETIBPCHARPS"
+            WHERE "LOCATION_ID" = '` +
+            req.data.LOCATION_ID +
+            `'
+            AND "PRODUCT_ID" = '` +
+            req.data.PRODUCT_ID +
+            `'`
+        );
+        if (req.data.FLAG === 'G' && li_ibpcharps.length > 0) {
+            return li_ibpcharps;
+        }
+        else if (req.data.FLAG === 'R' || li_ibpcharps.length === 0) {
+            const li_locprodclass = await cds.run(
+                `SELECT *
+                FROM "V_LOCPRODCLASSCHAR"
+                WHERE "LOCATION_ID" = '` +
+                req.data.LOCATION_ID +
+                `'
+                AND "PRODUCT_ID" = '` +
+                req.data.PRODUCT_ID +
+                `' ORDER BY LOCATION_ID, PRODUCT_ID,
+                CHAR_NAME`
+            );
+            vCount = 1;
+            for (i = 0; i < li_locprodclass.length; i++) {
+                vCharFlag = '';
+                lsresults.PRODUCT_ID = li_locprodclass[i].PRODUCT_ID;
+                lsresults.LOCATION_ID = li_locprodclass[i].LOCATION_ID;
+                lsresults.CHAR_NUM = li_locprodclass[i].CHAR_NUM;
+                lsresults.CHAR_TYPE = 'P';
+                lsresults.SEQUENCE = vCount;
+                if (li_ibpcharps.length > 0) {
+                    for (j = 0; j < li_ibpcharps.length; j++) {
+                        if (li_ibpcharps[j].CHAR_NUM === lsresults.CHAR_NUM) {
+                            vCharFlag = 'X';
+                            break;
+                        }
+                    }
+                    if (vCharFlag === '') {
+                        liresults.push(lsresults);
+                        vCount = vCount + 1;
+                    }
+                }
+                else {
+                    liresults.push(lsresults);
+                    vCount = vCount + 1;
+                }
+                lsresults = {};
+            }
+            if (liresults.length > 0) {
+                try {
+                    await cds.run(INSERT.into("CP_IBPCHAR_PS").entries(liresults));
+                    vFlag = 'X';
+                } catch (e) {
+                    vFlag = '';
+                }
+            }
+            // if (vFlag === 'X') {
+            li_ibpcharps = await cds.run(
+                `SELECT *
+                FROM "V_GETIBPCHARPS"
+                WHERE "LOCATION_ID" = '` +
+                req.data.LOCATION_ID +
+                `'
+                AND "PRODUCT_ID" = '` +
+                req.data.PRODUCT_ID +
+                `'`
+            );
+            return li_ibpcharps;
+        }
+        
+
     });
     //Change Active status
     srv.on("changeUnique", async (req) => {
@@ -2011,65 +2283,65 @@ module.exports = (srv) => {
     });
     // Retriction rule
     // Maintain partial configurations for new product
-    srv.on("maintainRestrDet", async (req) => {
-        let liresults = [];
-        let lsresults = {};
-        let liRtrChar = {};
-        var responseMessage;
-        liRtrChar = JSON.parse(req.data.RTRCHAR);
-        if (req.data.FLAG === "C" || req.data.FLAG === "E") {
-            for (var i = 0; i < liRtrChar.length; i++) {
-                lsresults.RESTRICTION = liRtrChar[i].RESTRICTION;
-                // lsresults.RTR_COUNTER = liRtrChar[i].RTR_COUNTER;
-                lsresults.CLASS_NUM = liRtrChar[i].CLASS_NUM;
-                lsresults.CHAR_NUM = liRtrChar[i].CHAR_NUM;
-                lsresults.CHAR_COUNTER = liRtrChar[i].CHAR_COUNTER;
-                lsresults.CHARVAL_NUM = liRtrChar[i].CHARVAL_NUM;
-                // if (req.data.FLAG === "E" && i === 0) {
-                if (req.data.FLAG === "E") {
-                    try {
-                        await cds.delete("CP_RESTRICT_DETAILS", lsresults);
-                    } catch (e) {
-                        //DONOTHING
-                    }
-                }
-                lsresults.OD_CONDITION = liRtrChar[i].OD_CONDITION;
-                lsresults.ROW_ID = liRtrChar[i].ROW_ID;
-                liresults.push(lsresults);
-                lsresults = {};
-            }
-            if (liresults.length > 0) {
-                try {
-                    await cds.run(INSERT.into("CP_RESTRICT_DETAILS").entries(liresults));
-                    responseMessage = " Creation/Updation successful";
-                } catch (e) {
-                    //DONOTHING
-                    responseMessage = " Creation failed";
-                    // createResults.push(responseMessage);
-                }
-            }
-        }
-        else if (req.data.FLAG === "D") {
-            for (var i = 0; i < liRtrChar.length; i++) {
-                lsresults.RESTRICTION = liRtrChar[i].RESTRICTION;
-                // lsresults.RTR_COUNTER = liRtrChar[i].RTR_COUNTER;
-                lsresults.CLASS_NUM = liRtrChar[i].CLASS_NUM;
-                lsresults.CHAR_NUM = liRtrChar[i].CHAR_NUM;
-                lsresults.CHAR_COUNTER = liRtrChar[i].CHAR_COUNTER;
-                lsresults.CHARVAL_NUM = liRtrChar[i].CHARVAL_NUM;
-                // if (req.data.FLAG === "E" && i === 0) {
-                try {
-                    await cds.delete("CP_RESTRICT_DETAILS", lsresults);
-                    break;
-                } catch (e) {
-                    //DONOTHING
-                }
-                // }
-            }
-        }
-        lsresults = {};
-        return responseMessage;
-    });
+    // srv.on("maintainRestrDet", async (req) => {
+    //     let liresults = [];
+    //     let lsresults = {};
+    //     let liRtrChar = {};
+    //     var responseMessage;
+    //     liRtrChar = JSON.parse(req.data.RTRCHAR);
+    //     if (req.data.FLAG === "C" || req.data.FLAG === "E") {
+    //         for (var i = 0; i < liRtrChar.length; i++) {
+    //             lsresults.RESTRICTION = liRtrChar[i].RESTRICTION;
+    //             // lsresults.RTR_COUNTER = liRtrChar[i].RTR_COUNTER;
+    //             lsresults.CLASS_NUM = liRtrChar[i].CLASS_NUM;
+    //             lsresults.CHAR_NUM = liRtrChar[i].CHAR_NUM;
+    //             lsresults.CHAR_COUNTER = liRtrChar[i].CHAR_COUNTER;
+    //             lsresults.CHARVAL_NUM = liRtrChar[i].CHARVAL_NUM;
+    //             // if (req.data.FLAG === "E" && i === 0) {
+    //             if (req.data.FLAG === "E") {
+    //                 try {
+    //                     await cds.delete("CP_RESTRICT_DETAILS", lsresults);
+    //                 } catch (e) {
+    //                     //DONOTHING
+    //                 }
+    //             }
+    //             lsresults.OD_CONDITION = liRtrChar[i].OD_CONDITION;
+    //             lsresults.ROW_ID = liRtrChar[i].ROW_ID;
+    //             liresults.push(lsresults);
+    //             lsresults = {};
+    //         }
+    //         if (liresults.length > 0) {
+    //             try {
+    //                 await cds.run(INSERT.into("CP_RESTRICT_DETAILS").entries(liresults));
+    //                 responseMessage = " Creation/Updation successful";
+    //             } catch (e) {
+    //                 //DONOTHING
+    //                 responseMessage = " Creation failed";
+    //                 // createResults.push(responseMessage);
+    //             }
+    //         }
+    //     }
+    //     else if (req.data.FLAG === "D") {
+    //         for (var i = 0; i < liRtrChar.length; i++) {
+    //             lsresults.RESTRICTION = liRtrChar[i].RESTRICTION;
+    //             // lsresults.RTR_COUNTER = liRtrChar[i].RTR_COUNTER;
+    //             lsresults.CLASS_NUM = liRtrChar[i].CLASS_NUM;
+    //             lsresults.CHAR_NUM = liRtrChar[i].CHAR_NUM;
+    //             lsresults.CHAR_COUNTER = liRtrChar[i].CHAR_COUNTER;
+    //             lsresults.CHARVAL_NUM = liRtrChar[i].CHARVAL_NUM;
+    //             // if (req.data.FLAG === "E" && i === 0) {
+    //             try {
+    //                 await cds.delete("CP_RESTRICT_DETAILS", lsresults);
+    //                 break;
+    //             } catch (e) {
+    //                 //DONOTHING
+    //             }
+    //             // }
+    //         }
+    //     }
+    //     lsresults = {};
+    //     return responseMessage;
+    // });
 
     srv.on("trigrMAWeek", async (req) => {
         let liresults = [];
@@ -2117,6 +2389,7 @@ module.exports = (srv) => {
         vValue = parseInt(li_paravalues[0].VALUE) + 1;
         vPrefix = li_paravalues[1].VALUE;
         const obgenSOFunctions = new SOFunctions();
+
         if (req.data.FLAG === "C") {
             lsresults.LOCATION_ID = liSeeddata[0].LOCATION_ID;
             lsresults.PRODUCT_ID = liSeeddata[0].PRODUCT_ID;
@@ -2202,8 +2475,12 @@ module.exports = (srv) => {
             // }
         }
         else if (req.data.FLAG === "d") {
+            lsresults.LOCATION_ID = liSeeddata[0].LOCATION_ID;
+            lsresults.PRODUCT_ID = liSeeddata[0].PRODUCT_ID;
             try {
                 await cds.run(DELETE.from('CP_SEEDORDER_HEADER').where(`SEED_ORDER = '${liSeeddata[0].SEED_ORDER}'`));
+                await obgenSOFunctions.deleteSO(liSeeddata[0].LOCATION_ID, liSeeddata[0].PRODUCT_ID, liSeeddata[0].SEED_ORDER);
+
                 responseMessage = "Deletion Successfull";
             } catch (e) {
                 responseMessage = "Deletion Failed";
@@ -2471,8 +2748,6 @@ module.exports = (srv) => {
 
     });
 
-    // Retriction rule
-    // Maintain partial configurations for new product
     srv.on("maintainRestrDetail", async (req) => {
         let aRtrDetailsIns = [];
         let oRtrDetailsIns = {};
@@ -2485,43 +2760,79 @@ module.exports = (srv) => {
         let index = 0, iCounter = 0, imaxCounter = 0;
         aRtrChar = JSON.parse(req.data.RTRCHAR);
         let sRTR = aRtrChar[0].RESTRICTION;
-
         const aRtrDetails = await cds.run(
             `SELECT *
             FROM "CP_RESTRICT_DETAILS" 
             WHERE "RESTRICTION" = '` + sRTR + `'
             ORDER BY  "CHAR_NUM", "CHAR_COUNTER"`
         );
-
         if (req.data.FLAG === "C" || req.data.FLAG === "E") {
-            aFilteredChars = [];
-            iCounter = 0;
-            if (aCharCounters.length > 0) {
-                aFilteredChars = aCharCounters.filter(function (aCharCounter) {
-                    return aCharCounter.CHAR_NUM === aRtrChar[i].CHAR_NUM;
-                });
+            // Get Max Char Counter of Characteristics
+            imaxCounter = await cds.run(
+                `SELECT MAX("CHAR_COUNTER") as COUNTER
+                FROM "CP_RESTRICT_DETAILS"
+                WHERE "RESTRICTION" = '` + sRTR + `'`
+            );
+            if (imaxCounter) {
+                imaxCounter = imaxCounter[0].COUNTER;
             }
-            if (aFilteredChars.length === 0) {
-                aFilteredChars = aRtrDetails.filter(function (aRtrChars) {
-                    return aRtrChars.CHAR_NUM === aRtrChar[i].CHAR_NUM;
-                });
+            for (var i = 0; i < aRtrChar.length; i++) {
+                oCharCounter = {};
+                aFilteredChars = [];
+                iCounter = 0;
+                if (aCharCounters.length > 0) {
+                    aFilteredChars = aCharCounters.filter(function (aCharCounter) {
+                        return aCharCounter.CHAR_NUM === aRtrChar[i].CHAR_NUM;
+                    });
+                }
+                if (aFilteredChars.length === 0) {
+                    aFilteredChars = aRtrDetails.filter(function (aRtrChars) {
+                        return aRtrChars.CHAR_NUM === aRtrChar[i].CHAR_NUM;
+                    });
+                }
+                if (aFilteredChars.length > 0) {
+                    iCounter = aFilteredChars[0].CHAR_COUNTER;
+                    oCharCounter.CHAR_NUM = aRtrChar[i].CHAR_NUM;
+                    oCharCounter.CHAR_COUNTER = iCounter;
+                    index = aCharCounters.findIndex((obj) => obj.CHAR_NUM === aRtrChar[i].CHAR_NUM); // find index
+                    if (index === -1) {
+                        index = aCharCounters.length;
+                    }
+                    aCharCounters[index] = oCharCounter; // replace with new object 
+                } else {
+                    imaxCounter = imaxCounter + 1;
+                    iCounter = imaxCounter;
+                    oCharCounter.CHAR_NUM = aRtrChar[i].CHAR_NUM;
+                    oCharCounter.CHAR_COUNTER = iCounter;
+                    aCharCounters.push(oCharCounter);
+                }
+                oRtrDetailsIns.RESTRICTION = aRtrChar[i].RESTRICTION;
+                oRtrDetailsIns.CLASS_NUM = aRtrChar[i].CLASS_NUM;
+                oRtrDetailsIns.CHAR_NUM = aRtrChar[i].CHAR_NUM;
+                oRtrDetailsIns.CHAR_COUNTER = iCounter;
+                oRtrDetailsIns.CHARVAL_NUM = aRtrChar[i].CHARVAL_NUM;
+                oRtrDetailsIns.OD_CONDITION = aRtrChar[i].OD_CONDITION;
+                oRtrDetailsIns.ROW_ID = iCounter;
+                aRtrDetailsIns.push(oRtrDetailsIns);
+                oRtrDetailsIns = {};
             }
-
-            if (aFilteredChars.length > 0) {
-                iCounter = aFilteredChars[0].CHAR_COUNTER;
-
-                oCharCounter.CHAR_COUNTER = iCounter;
-                aCharCounters.push(oCharCounter);
+            if (aRtrDetailsIns.length > 0) {
+                try {
+                    await cds.run(INSERT.into("CP_RESTRICT_DETAILS").entries(aRtrDetailsIns));
+                    responseMessage = " Restriction Rule Created Successfully";
+                } catch (errRes) {
+                    //DONOTHING
+                    // responseMessage = " Creation failed";
+                    responseMessage = errRes.message;
+                }
             }
-
-            responseMessage = errRes.message;
-            // }
-
-        } else if (req.data.FLAG === "D") {
+        }
+        else if (req.data.FLAG === "D") {
             for (var i = 0; i < aRtrChar.length; i++) {
                 oRtrDetailsIns.RESTRICTION = aRtrChar[i].RESTRICTION;
                 oRtrDetailsIns.CLASS_NUM = aRtrChar[i].CLASS_NUM;
                 oRtrDetailsIns.CHAR_NUM = aRtrChar[i].CHAR_NUM;
+                oRtrDetailsIns.CHAR_COUNTER = aRtrChar[i].CHAR_COUNTER;
                 oRtrDetailsIns.CHARVAL_NUM = aRtrChar[i].CHARVAL_NUM;
                 try {
                     await cds.delete("CP_RESTRICT_DETAILS", oRtrDetailsIns);
@@ -2532,15 +2843,11 @@ module.exports = (srv) => {
                     //DONOTHING
                     responseMessage = errRes.message;;
                 }
-
             }
-
-
             if (iCounter > 0) { //  if deletion is successfull
                 aRtrDetailsIns = [];
                 oRtrDetailsIns = {};
                 aFilteredChars = [];
-
                 // To check the count of char counter being deleted 
                 aFilteredChars = aRtrDetails.filter(function (aRtrChars) {
                     return aRtrChars.CHAR_COUNTER === iCounter;
@@ -2566,7 +2873,6 @@ module.exports = (srv) => {
                             }
                         }
                     }
-
                     if (aRtrDetailsIns.length > 0) {
                         try {
                             await cds.run(INSERT.into("CP_RESTRICT_DETAILS").entries(aRtrDetailsIns));
@@ -2864,10 +3170,10 @@ module.exports = (srv) => {
         //             lMessage = lMessage + ' ' + "Export of CIR to IBP has failed for product" + lsData.PRODUCT_ID;
         //         }
 
-        //         GenF.jobSchMessage('X', lMessage, request);
+        //         GenFunctions.jobSchMessage('X', lMessage, request);
         //     }
         // }
-        // GenF.jobSchMessage('X', lMessage, request);
+        // GenFunctions.jobSchMessage('X', lMessage, request);
     });
     /////////////////////////////////////////////////////////////////
     //VC Planner Document Maintenance- Pradeep

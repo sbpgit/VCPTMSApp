@@ -21,9 +21,11 @@ class SOFunctions {
         await this.processUniqueID(adata.LOCATION_ID, adata.PRODUCT_ID, '');
         await this.genBaseMarketAuth(adata.LOCATION_ID, adata.PRODUCT_ID);
         await this.genPartialProd(adata.LOCATION_ID, adata.PRODUCT_ID);
-        // await this.genFactoryLoc(adata.LOCATION_ID, adata.PRODUCT_ID);
-        await GenF.logMessage(req, 'Completed Sales Orders Processing');
-        Flag = 'X';
+        await this.genFactoryLoc();
+        //await GenF.logMessage(req, 'Completed Sales Orders Processing');
+        let lMessage = "Completed Sales Orders Processing"
+        await GenF.jobSchMessage('X', lMessage , req);
+        // Flag = 'X';
 
     }
 
@@ -667,7 +669,27 @@ class SOFunctions {
         //     console.log(e.message);
         // }
     }
+    /**
+         * 
+         * @param {Location} lLocation 
+         * @param {Product} lProduct 
+         * @param {Sales ORder} lSO 
+         */
+    async deleteSO(lLocation, lProduct, lSO) {
 
+        try {
+            await DELETE.from('CP_SALESH')
+                .where(`LOCATION_ID = '${lLocation}' AND PRODUCT_ID = '${lProduct}' AND SALES_DOC = '${lSO}'`);
+            await DELETE.from('CP_SALESH_CONFIG')
+                .where(`PRODUCT_ID = '${lProduct}' AND SALES_DOC = '${lSO}'`);
+            await DELETE.from('CP_SALES_HM')
+                .where(`LOCATION_ID = '${lLocation}' AND PRODUCT_ID = '${lProduct}' AND SALES_DOC = '${lSO}'`);
+        }
+        catch (err) {
+            console.log("Deletion failed");
+        }
+
+    }
     /**
      * 
      * @param {Location} lLocation 
@@ -897,7 +919,7 @@ class SOFunctions {
         }
 
         do {
-            let lDateSQL = GenF.getNextMondayCmp(lDate.toISOString().split('Z')[0].split('T')[0]);//(lDate.toISOString().split('T')[0]);
+            let lDateSQL = await GenF.getNextMondayCmp(lDate.toISOString().split('Z')[0].split('T')[0]);//(lDate.toISOString().split('T')[0]);
             // Loop through all the partial products                     
             for (let cntS = 0; cntS < liSOrdQty.length; cntS++) {
                 // await cds.run(`INSERT INTO "CP_MARKETAUTH_CFG"  SELECT  '${lDateSQL}',
@@ -919,7 +941,7 @@ class SOFunctions {
                                                                         B.SCENARIO,
                                                                         A.OPT_PERCENT
                                                                    FROM CP_DEF_MKTAUTH as A
-                                                                   inner join V_IBPVERSCENARIO AS B
+                                                                   INNER JOIN V_IBPVERSCENARIO AS B
                                                                    ON A.LOCATION_ID = B.LOCATION_ID
                                                                    AND A.PRODUCT_ID =  B.PRODUCT_ID
                                                                   WHERE A.LOCATION_ID = '${liSOrdQty[cntS].LOCATION_ID}'
@@ -934,21 +956,15 @@ class SOFunctions {
 
     }
     async genPartialProd(lLocation, lProduct) {
-        // const liProd = await cds.run(`
-        //     SELECT * 
-        //       FROM V_LOCPROD
-        //      WHERE LOCATION_ID   = '${lLocation}'
-        //        AND (PRODUCT_ID NOT IN ( SELECT PRODUCT_ID 
-        //                           FROM CP_PARTIALPROD_INTRO 
-        //                           WHERE LOCATION_ID   = '${lLocation}' ) )
-        // `);
         const liProd = await cds.run(`
-                                SELECT * 
+                                SELECT DISTINCT * 
                                 FROM V_LOCPROD
                                 WHERE LOCATION_ID   = '${lLocation}'
                 `);
         const liPartProd = await cds.run(`
-           SELECT PRODUCT_ID 
+                                SELECT "PRODUCT_ID",
+                                        "LOCATION_ID",
+                                        "REF_PRODID" 
                                   FROM CP_PARTIALPROD_INTRO 
                                   WHERE LOCATION_ID   = '${lLocation}' 
         `);
@@ -959,12 +975,13 @@ class SOFunctions {
             "CHAR_NUM",
             "CHARVAL_NUM")
             .from('V_PRODCLSCHARVAL');
-        console.log("prod");
+
         let liPartialProd = [];
         let lsProd = {}, vFlag = '';
         let liPartialProdChar = [];
         let lsProdCh = {};
         for (let cntPD = 0; cntPD < liProd.length; cntPD++) {
+            vFlag = '';
             for (let i = 0; i < liPartProd.length; i++) {
                 if (liPartProd[i].PRODUCT_ID === liProd[cntPD].PRODUCT_ID &&
                     liPartProd[i].LOCATION_ID === liProd[cntPD].LOCATION_ID &&
@@ -994,9 +1011,9 @@ class SOFunctions {
             }
         }
 
-        if (liPartialProd) {
+        if (liPartialProd.length > 0) {
             try {
-                cds.run({
+                await cds.run({
                     INSERT:
                     {
                         into: { ref: ['CP_PARTIALPROD_INTRO'] },
@@ -1011,7 +1028,7 @@ class SOFunctions {
             }
             if (vFlag === 'X' && liPartialProdChar.length > 0) {
                 try {
-                    cds.run({
+                    await cds.run({
                         INSERT:
                         {
                             into: { ref: ['CP_PARTIALPROD_CHAR'] },
@@ -1027,28 +1044,19 @@ class SOFunctions {
             }
         }
         else {
-            console.log("No data to insert records");
+            console.log("No records to update in Partial Products");
         }
 
     }
-    async genFactoryLoc(lLocation, lProduct) {
-        console.log("llocation");
+    async genFactoryLoc() {
         const liLocation = await SELECT.columns(
             "LOCATION_ID")
             .from('CP_LOCATION');
-        console.log("test1");
-        try {
             const liFtLoc = await SELECT.columns(
                 "LOCATION_ID",
                 "PLAN_LOC",
                 "FACTORY_LOC")
                 .from('CP_FACTORY_SALESLOC');
-        }
-        catch (error) {
-
-            console.log(error);
-        }
-        console.log("loc3");
         let vFlag = '';
         let liFactLoc = [];
         let lsFactLoc = {};
@@ -1070,8 +1078,8 @@ class SOFunctions {
                 liFactLoc.push(GenF.parse(lsFactLoc));
             }
         }
-        console.log("loc2")
-        if (liFactLoc) {
+        
+        if (liFactLoc.length > 0) {
             try {
                 cds.run({
                     INSERT:
@@ -1087,7 +1095,7 @@ class SOFunctions {
             }
         }
         else {
-            console.log("No data to insert records");
+            console.log("No records to update Factory-Locations");
         }
     }
 }

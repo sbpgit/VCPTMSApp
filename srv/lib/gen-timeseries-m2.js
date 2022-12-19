@@ -272,14 +272,14 @@ class GenTimeseriesM2 {
         // console.log(Flag);
         if (FlagTest === 'S') {
             console.log("Success");
-            GenF.jobSchMessage('X', "Timeseries History generation is complete", req);
+            await GenF.jobSchMessage('X', "Timeseries History generation is complete", req);
         }
         else if (FlagTest === 'E') {
-            GenF.jobSchMessage('', "Timeseries History generation failed", req);
+            await GenF.jobSchMessage('', "Timeseries History generation failed", req);
         }
         else {
             const vMsg = "Timeseries generation for the product: " + adata.PRODUCT_ID + " is unsuccessful because of insufficient data";
-            GenF.jobSchMessage('X', vMsg, req);
+            await GenF.jobSchMessage('X', vMsg, req);
         }
     }
 
@@ -483,15 +483,15 @@ class GenTimeseriesM2 {
         await GenF.logMessage(req, `Completed future timeseries`);
         if (Flag === 'S') {
             console.log("Success");
-            GenF.jobSchMessage('X', `Timeseries Future generation is complete`, req);
+            await GenF.jobSchMessage('X', `Timeseries Future generation is complete`, req);
         }
         else if (Flag === 'E') {
-            GenF.jobSchMessage('', `Timeseries Future generation failed`, req);
+            await GenF.jobSchMessage('', `Timeseries Future generation failed`, req);
         }
         else {
             // const vMsg = "Unable to generate timeseries for the product: " + adata.PRODUCT_ID + " ";
             const vMsg = "Timeseries generation for the product: " + adata.PRODUCT_ID + " is unsuccessful because of insufficient data";
-            GenF.jobSchMessage('X', vMsg, req);
+            await GenF.jobSchMessage('X', vMsg, req);
         }
     }
 
@@ -505,7 +505,7 @@ class GenTimeseriesM2 {
         const lStartDate = new Date(
             lDate.getFullYear(),
             lDate.getMonth(),
-            lDate.getDate() + parseInt(await GenF.getParameterValue(adata.LOCATION_ID, 9))
+            lDate.getDate() + ( parseInt(await GenF.getParameterValue(adata.LOCATION_ID, 9)) * 7 )
         );
 
 // Get Predictions        
@@ -850,14 +850,14 @@ class GenTimeseriesM2 {
             }
         }
 */
-        await GenF.logMessage(req, `Completed Forcast Demand Generation`);
-        // Flag = 'X';
+        // await GenF.logMessage(req, `Completed Forcast Demand Generation`);
+        // // Flag = 'X';
         if (Flag === 'X') {
             console.log("Success");
-            GenF.jobSchMessage(Flag, "Forcast Demand Generation is complete", req);
+            await GenF.jobSchMessage(Flag, "Forcast Demand Generation is complete", req);
         }
         else {
-            GenF.jobSchMessage(Flag, "Forcast Demand Generation is failed", req);
+            await GenF.jobSchMessage(Flag, "Forcast Demand Generation is failed", req);
         }
 
     }
