@@ -200,13 +200,19 @@ context cp_ds {
 
     }
 
+    type cirIdsWkly {
+      WEEK_DATE : Date;
+      CIR_ID : Integer;
+    }
+
     type cirWkly {
         // CAL_DATE    : Date;
         LOCATION_ID   : String(4);
         PRODUCT_ID    : String(40);
+        PROD_DESC     : String(40);
         // ASSEMBLY    : String(40);
-        CIR_ID        : array of Integer;                                      //
-        MODEL_VERSION : String(20);                                   // 
+        CIR_ID        : array of cirIdsWkly;   //Integer; //
+        MODEL_VERSION : String(20); //
         UNIQUE_ID     : Integer;
         UNIQUE_DESC   : String(50);
         VERSION       : String(10);
@@ -399,15 +405,15 @@ context cp_ds {
     // testing
 
     type cfDestInfo {
-        Flag : String(1);
+        Flag     : String(1);
         DestName : String(20);
-        User : String(60);
+        User     : String(60);
     }
 
     type restrreq {
         LOCATION_ID : String(4);
         PRODUCT_ID  : String(40);
-        LINE_ID       : String(40);
+        LINE_ID     : String(40);
         VERSION     : String(10);
         SCENARIO    : String(32);
         // RESTRICTION  : String(30);
@@ -569,6 +575,22 @@ context cp_ds {
         WEEK156     : Integer;
 
 
+    }
+
+    type uniqueConfig {
+        CLASS_NUM    : String(18);
+        CHAR_NUM     : String(30);
+        CHAR_NAME    : String(30);
+        CHAR_DESC    : String(150);
+        CHARVAL_NUM  : String(70);
+        CHAR_VALUE   : String(70);
+        CHARVAL_DESC : String(150);
+    }
+
+    type uniqueCharacteristics {
+        UNIQUE_ID : Integer;
+        CONFIG    : array of uniqueConfig;
+        TOTAL     : Integer;
     }
 
 }

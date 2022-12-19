@@ -53,13 +53,13 @@ module.exports = (srv) => {
         // console.log(xsuaa);
         return await xsuaa.get("/userinfo");
     });
-     /* Filter Products based on Authorization */
+    /* Filter Products based on Authorization */
     srv.after('READ', 'getLocProdDet', async (data, req) => {
         // console.log("User:", req.user.id);
         let aFilteredResults = [];
         vUser = req.user.id;
 
-        const li_roleparam = await cds.run(            `
+        const li_roleparam = await cds.run(`
             SELECT * FROM "CP_USER_AUTHOBJ"
             WHERE "USER" = '`+ vUser + `'`
             // AND PARAMETER = 'LOCATION_ID'`
@@ -71,12 +71,12 @@ module.exports = (srv) => {
                 return li_roleparam.some((f) => {
                     return f.PARAMETER === el.PRODUCT_ID && f.AUTH_GROUP === el.AUTH_GROUP;
                 });
-            });            
-        } 
-        if(aFilteredResults.length > 0) {
+            });
+        }
+        if (aFilteredResults.length > 0) {
             req.results = aFilteredResults;
         }
-        
+
     });
 
     /* Filter Locations based on Authorization */
@@ -85,7 +85,7 @@ module.exports = (srv) => {
         // vUser = req.headers['x-username'];
         // console.log("User:", req.user.id);
         vUser = req.user.id;
-        
+
         // return {
         //     id:         req.user.id,
         //     firstName:  req.req.authInfo.getGivenName(),
@@ -113,10 +113,10 @@ module.exports = (srv) => {
                     return f.PARAMETER === el.LOCATION_ID && f.AUTH_GROUP === el.AUTH_GROUP;
                 });
             });
-           
-        } 
 
-        if(aFilteredResults.length > 0) {
+        }
+
+        if (aFilteredResults.length > 0) {
             req.results = aFilteredResults;
         }
 
@@ -167,7 +167,7 @@ module.exports = (srv) => {
                     req.data.LOCATION_ID +
                     `'`);
 
-              liCompQty = await cds.run(
+                liCompQty = await cds.run(
                     `
             SELECT * FROM "V_ASMCOMPQTY_CONSD"
             WHERE "LOCATION_ID" = '` +
@@ -227,7 +227,7 @@ module.exports = (srv) => {
                 );
                 break;
             case 'M2':
-                 liCompQty = await cds.run(
+                liCompQty = await cds.run(
                     `
             SELECT * FROM "V_ASMREQ_PRODCONSD"
             WHERE "LOCATION_ID" = '` +
@@ -2174,6 +2174,8 @@ module.exports = (srv) => {
         else if (req.data.FLAG === "E") {
             // for (var i = 0; i < liRtrChar.length; i++) {
             lsresults.SEED_ORDER = liSeeddata[0].SEED_ORDER;
+            lsresults.LOCATION_ID = liSeeddata[0].LOCATION_ID;
+            lsresults.PRODUCT_ID = liSeeddata[0].PRODUCT_ID;
             lsresults.ORD_QTY = parseFloat(liSeeddata[0].ORD_QTY);
             lsresults.MAT_AVAILDATE = liSeeddata[0].MAT_AVAILDATE;
             try {
@@ -2183,7 +2185,16 @@ module.exports = (srv) => {
                         MAT_AVAILDATE: lsresults.MAT_AVAILDATE
                     })
                     .where(`SEED_ORDER = '${lsresults.SEED_ORDER}'`)
-                responseMessage = lsresults.SEED_ORDER + " Update is successfull";
+
+                await UPDATE`CP_SALESH`
+                    .with({
+                        ORD_QTY: lsresults.ORD_QTY,
+                        MAT_AVAILDATE: lsresults.MAT_AVAILDATE
+                    })
+                    .where(`LOCATION_ID = '${lsresults.LOCATION_ID}' AND PRODUCT_ID = '${lsresults.PRODUCT_ID}' AND SALES_DOC = '${lsresults.SEED_ORDER}'
+                       AND SALESDOC_ITEM = '10'`)
+                
+                    responseMessage = lsresults.SEED_ORDER + " Update is successfull";
             } catch (e) {
                 responseMessage = "Update Failed";
                 //DONOTHING
@@ -2363,76 +2374,8 @@ module.exports = (srv) => {
             lsDates = {};
         let columnname = "WEEK";
         let aCIR_ID = [];
+        let oCIR_ID = {};
 
-        // const liCIRGen = await cds.run(`SELECT * from "CP_CIR_GENERATED" WHERE "LOCATION_ID" = '` +
-        //     req.data.LOCATION_ID +
-        //     `'`);
-
-        // const liCIRQty = await cds.run(
-        //     `
-        //     SELECT * 
-        //     FROM "CP_CIR_GENERATED" 
-        //     inner join "CP_PARTIALPROD_INTRO"
-        //     ON "CP_CIR_GENERATED"."PRODUCT_ID" = "CP_PARTIALPROD_INTRO"."PRODUCT_ID"
-        //     AND "CP_CIR_GENERATED"."LOCATION_ID" = "CP_PARTIALPROD_INTRO"."LOCATION_ID"
-        //     WHERE  "CP_CIR_GENERATED"."LOCATION_ID" = '` +
-        //     req.data.LOCATION_ID +
-        //     `'
-        //          AND  "CP_PARTIALPROD_INTRO"."REF_PRODID" = '` +
-        //     req.data.PRODUCT_ID +
-        //     `' AND  "CP_CIR_GENERATED"."VERSION" = '` +
-        //     req.data.VERSION +
-        //     `' AND  "CP_CIR_GENERATED"."SCENARIO" = '` +
-        //     req.data.SCENARIO +
-        //     `' AND (  "CP_CIR_GENERATED"."WEEK_DATE" <= '` +
-        //     vDateTo +
-        //     `' AND  "CP_CIR_GENERATED"."WEEK_DATE" >= '` +
-        //     vDateFrom +
-        //     `') AND  "CP_CIR_GENERATED"."MODEL_VERSION" = '` +
-        //     req.data.MODEL_VERSION +
-        //     `'
-        //          ORDER BY 
-        //          "CP_CIR_GENERATED"."LOCATION_ID" ASC, 
-        //          "CP_CIR_GENERATED"."PRODUCT_ID" ASC,
-        //          "CP_CIR_GENERATED"."VERSION" ASC,
-        //          "CP_CIR_GENERATED"."SCENARIO" ASC,
-        //          "CP_CIR_GENERATED"."WEEK_DATE" ASC`
-        // );
-
-
-        // const liUniqueId = await cds.run(
-        //     `
-        //   SELECT DISTINCT "CP_CIR_GENERATED"."LOCATION_ID", 
-        //   "CP_CIR_GENERATED"."PRODUCT_ID",
-        //   "CP_CIR_GENERATED"."VERSION",
-        //   "CP_CIR_GENERATED"."SCENARIO",
-        //   "CP_CIR_GENERATED"."UNIQUE_ID"
-        //                   FROM "CP_CIR_GENERATED" 
-        //                   inner join "CP_PARTIALPROD_INTRO"
-        //                   ON "CP_CIR_GENERATED"."PRODUCT_ID" = "CP_PARTIALPROD_INTRO"."PRODUCT_ID"
-        //                   AND "CP_CIR_GENERATED"."LOCATION_ID" = "CP_PARTIALPROD_INTRO"."LOCATION_ID"
-        //                   WHERE  "CP_CIR_GENERATED"."LOCATION_ID" = '` +
-        //     req.data.LOCATION_ID +
-        //     `' AND  "CP_PARTIALPROD_INTRO"."REF_PRODID" = '` +
-        //     req.data.PRODUCT_ID +
-        //     `' AND  "CP_CIR_GENERATED"."VERSION" = '` +
-        //     req.data.VERSION +
-        //     `' AND  "CP_CIR_GENERATED"."SCENARIO" = '` +
-        //     req.data.SCENARIO +
-        //     `' AND (  "CP_CIR_GENERATED"."WEEK_DATE" <= '` +
-        //     vDateTo +
-        //     `' AND  "CP_CIR_GENERATED"."WEEK_DATE" >= '` +
-        //     vDateFrom +
-        //     `') AND  "CP_CIR_GENERATED"."MODEL_VERSION" = '` +
-        //     req.data.MODEL_VERSION +
-        //     `'
-        //                        ORDER BY 
-        //                        "CP_CIR_GENERATED"."LOCATION_ID" ASC, 
-        //                        "CP_CIR_GENERATED"."PRODUCT_ID" ASC,
-        //                        "CP_CIR_GENERATED"."VERSION" ASC,
-        //                        "CP_CIR_GENERATED"."SCENARIO" ASC,
-        //                        "CP_CIR_GENERATED"."UNIQUE_ID" ASC`
-        // );
 
         const liCIRQty = oCIRData.liCIRQty;
         const liUniqueId = oCIRData.liUniqueId;
@@ -2466,6 +2409,7 @@ module.exports = (srv) => {
             lsCIRWeekly.UNIQUE_DESC = liUniqueId[j].UNIQUE_DESC;
             lsCIRWeekly.LOCATION_ID = liUniqueId[j].LOCATION_ID;
             lsCIRWeekly.PRODUCT_ID = liUniqueId[j].PRODUCT_ID;
+            lsCIRWeekly.PROD_DESC = liUniqueId[j].PROD_DESC;
             lsCIRWeekly.MODEL_VERSION = req.data.MODEL_VERSION;
             lsCIRWeekly.VERSION = req.data.VERSION;
             lsCIRWeekly.SCENARIO = req.data.SCENARIO;
@@ -2473,6 +2417,7 @@ module.exports = (srv) => {
 
             for (let i = 0; i < liDates.length; i++) {
                 vWeekIndex = vWeekIndex + 1;
+                oCIR_ID = {};
                 for (vCIRIndex = 0; vCIRIndex < liCIRQty.length; vCIRIndex++) {
                     lsCIRWeekly[columnname + vWeekIndex] = 0;
                     if (
@@ -2482,7 +2427,11 @@ module.exports = (srv) => {
                         lsCIRWeekly[columnname + vWeekIndex] =
                             liCIRQty[vCIRIndex].CIR_QTY;
 
-                        aCIR_ID.push(liCIRQty[vCIRIndex].CIR_ID);
+                        oCIR_ID.WEEK_DATE = liDates[i].WEEK_DATE;
+                        oCIR_ID.CIR_ID = liCIRQty[vCIRIndex].CIR_ID;
+                        aCIR_ID.push(oCIR_ID);
+
+                        // aCIR_ID.push(liCIRQty[vCIRIndex].CIR_ID);
 
                         break;
                     }
@@ -3167,9 +3116,9 @@ module.exports = (srv) => {
 
             })
             .catch(function (error) {
-                console.log('Get Token - Error ', error); 
+                console.log('Get Token - Error ', error);
                 ret_response = JSON.parse(error);
-             });
+            });
 
         // console.log(ret_response);
         return ret_response;
@@ -3222,13 +3171,121 @@ module.exports = (srv) => {
 
     });
 
-
+    // Get Login User Id
     srv.on('getUserInfo', async (req) => {
         console.log("Login User", req.user.id);
         return req.user.id;
     });
 
+    // Get Unique Id Characteristics
+    srv.on("getUniqueChars", async (req) => {
+        const objCIR = new CIRService();
+        const aUniqueIdChar = await objCIR.getUniqueIdCharacteristics(req);
+        const aDistinctUniqueIds = await objCIR.getDistinctUniqueIds(req);
+        // const aVarcharPS = await objCIR.getVarcharPS(req);
 
+        let aBaseUniqueId = [];
+        let aFilteredUniqChars = [];
+        let aMatchedChars = [];
+        let aUniqueCharCount = [];
+        let sUniqueId = req.data.UNIQUE_ID;
+        let iCount = 0,
+            iPCount = 0,
+            iSCount = 0;
+        let oUniqueCharCount = {};
+        let oUniqueConfig = {};
+        let oUniqueChar = {};
+        let oMatchedChars = {};
+        let aUniqueConfig = [];
+        let aUniqueCharRes = [];
+        let aFilVarcharPS = [];
+
+
+        aBaseUniqueId = aUniqueIdChar.filter(function (aUniqChar) {
+            return aUniqChar.UNIQUE_ID === sUniqueId;
+        });
+
+        for (let i = 0; i < aDistinctUniqueIds.length; i++) {
+            aFilteredUniqChars = [];
+
+            aFilteredUniqChars = aUniqueIdChar.filter(function (aUniqChar) {
+                return aUniqChar.UNIQUE_ID === aDistinctUniqueIds[i].UNIQUE_ID;
+            });
+
+            iCount = 0;
+            oUniqueCharCount = {};
+            oMatchedChars = {};
+
+            if (aFilteredUniqChars.length > 0) {
+                for (let j = 0; j < aBaseUniqueId.length; j++) {
+                    for (k = 0; k < aFilteredUniqChars.length; k++) {
+                        if (aBaseUniqueId[j].CHAR_NUM === aFilteredUniqChars[k].CHAR_NUM &&
+                            aBaseUniqueId[j].CHARVAL_NUM === aFilteredUniqChars[k].CHARVAL_NUM) {
+                            iCount = iCount + 1;
+
+                            break;
+                        }
+                    }
+
+                }
+
+                if (iCount > 0) {
+                    oUniqueCharCount = {
+                        UNIQUE_ID: aDistinctUniqueIds[i].UNIQUE_ID,
+                        COUNT: iCount
+                    }
+
+                    aUniqueCharCount.push(oUniqueCharCount);
+                    oMatchedChars = {
+                        UNIQUE_ID: aDistinctUniqueIds[i].UNIQUE_ID,
+                        CONFIG: aFilteredUniqChars
+                    }
+                    aMatchedChars.push(oMatchedChars);
+
+                }
+            }
+        }
+
+        if (aUniqueCharCount.length > 0) {
+            aUniqueCharCount = aUniqueCharCount.sort((a, b) => b.COUNT - a.COUNT);
+
+            for (let l = 0; l < aUniqueCharCount.length; l++) {
+                // for (let l = 0; l < 6; l++) {
+                oUniqueChar = {};
+
+                oUniqueChar.UNIQUE_ID = aUniqueCharCount[l].UNIQUE_ID;
+
+                aFilteredUniqChars = aMatchedChars.filter(function (aUniqChar) {
+                    return aUniqChar.UNIQUE_ID === aUniqueCharCount[l].UNIQUE_ID;
+                });
+
+                aFilteredUniqChars = aFilteredUniqChars[0].CONFIG;
+
+                aUniqueConfig = [];
+                for (let m = 0; m < aFilteredUniqChars.length; m++) {
+                    oUniqueConfig = {};
+                    oUniqueConfig.CLASS_NUM = aFilteredUniqChars[m].CLASS_NUM;
+                    oUniqueConfig.CHAR_NUM = aFilteredUniqChars[m].CHAR_NUM;
+                    oUniqueConfig.CHAR_NAME = aFilteredUniqChars[m].CHAR_NAME;
+                    oUniqueConfig.CHAR_DESC = aFilteredUniqChars[m].CHAR_DESC;
+                    oUniqueConfig.CHARVAL_NUM = aFilteredUniqChars[m].CHARVAL_NUM;
+                    oUniqueConfig.CHAR_VALUE = aFilteredUniqChars[m].CHAR_VALUE;
+                    oUniqueConfig.CHARVAL_DESC = aFilteredUniqChars[m].CHARVAL_DESC;
+
+                    aUniqueConfig.push(oUniqueConfig);
+                }
+
+                oUniqueChar.CONFIG = aUniqueConfig;
+                oUniqueChar.TOTAL = aUniqueCharCount[l].COUNT;
+
+                aUniqueCharRes.push(oUniqueChar);
+
+            }
+        }
+
+        return aUniqueCharRes;
+
+    });
 
     // EOI Deepa
 };
