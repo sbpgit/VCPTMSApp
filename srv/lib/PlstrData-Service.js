@@ -95,8 +95,12 @@ module.exports = async function (srv) {
         res.send({values});
     }
 
-    let sqlStr ='UPSERT PLSTR_PRODUCT ("PRODUCT_ID", "PROD_DESC", "PROD_FAMILY", "PROD_GROUP", "PROD_SERIES", "RESERVE_FIELD1","RESERVE_FIELD2")' +
-                    ' SELECT DISTINCT PRODUCT_ID, PRODUCT_NAME, MODEL_D ,\'CARS\',MOTOR_CODE_D, SALES_VERSION_ID_D , DENOMINATION_D FROM "PLSTR_DATA_DEMO"';
+    // let sqlStr ='UPSERT PLSTR_PRODUCT ("PRODUCT_ID", "PROD_DESC", "PROD_FAMILY", "PROD_GROUP", "PROD_SERIES", "RESERVE_FIELD1","RESERVE_FIELD2")' +
+    //                 ' SELECT DISTINCT PRODUCT_ID, PRODUCT_NAME, MODEL_D ,\'CARS\',MOTOR_CODE_D, SALES_VERSION_ID_D , DENOMINATION_D FROM "PLSTR_DATA_DEMO"';
+    
+    let sqlStr ='UPSERT PLSTR_PRODUCT ("PRODUCT_ID", "PROD_DESC", "PROD_FAMILY", "PROD_GROUP")' +
+                    ' SELECT DISTINCT MODEL_D, PRODUCT_NAME, MODEL_D ,\'CARS\' FROM "PLSTR_DATA_DEMO"';
+
     console.log("PLSTR PRODUCTS sqlStr ", sqlStr);
 
     let results = await cds.run(sqlStr);
@@ -169,27 +173,40 @@ module.exports = async function (srv) {
 
         let plstrDataResults = await cds.run(sqlPlstrData); 
         console.log("PLSTR_CHAR_VALUES  ", plstrDataResults);
-        str = plstrDataResults.length.toString(),
-        len = str.length;
+        // str = plstrDataResults.length.toString(),
+        // len = str.length;
         let prefix ="";
-        if (len == 1)
-        {
-            prefix = '000';
-        }
-        else if (len == 2)
-        {
-            prefix = '00';
-        }
-        else if (len == 3)
-        {
-            prefix = '0';
-        }
+        // if (len == 1)
+        // {
+        //     prefix = '000';
+        // }
+        // else if (len == 2)
+        // {
+        //     prefix = '00';
+        // }
+        // else if (len == 3)
+        // {
+        //     prefix = '0';
+        // }
         // console.log("PLSTR_CHAR_VALUES prefix ", prefix);
         let charvalNumIndex = 0;
         for(charvalIndex = 0; charvalIndex < plstrDataResults.length; charvalIndex++ )
         {
             charvalNumIndex ++;
             let charNum = results[rIndex].CHAR_NUM;
+
+            if (charvalNumIndex < 10 )
+            {
+                prefix = '000'; 
+            }
+            else if (charvalNumIndex < 100 )
+            {
+                prefix = '00'; 
+            }
+            else if (charvalNumIndex < 1000 )
+            {
+                prefix = '0';
+            }
             let charvalNum = results[rIndex].CHAR_NUM + '_' + prefix + charvalNumIndex; //rIndex + 1;
 
             
@@ -237,53 +254,53 @@ module.exports = async function (srv) {
     const uom = 'EA';
 
     
-    for(let shIndex = 0; shIndex < plstrData.length; shIndex++)
-    {
-        let salesDocId = salesDocBaseID + plstrData[shIndex].UNIQUE_ID;
+    // for(let shIndex = 0; shIndex < plstrData.length; shIndex++)
+    // {
+    //     let salesDocId = salesDocBaseID + plstrData[shIndex].UNIQUE_ID;
 
-        let countryCode = plstrData[shIndex].COUNTRY ;
-        let custGroup = '';
-        if ( (countryCode == 'GB') ||
-             (countryCode == 'AT') ||
-             (countryCode == 'IS') ||
-             (countryCode == 'NL') ||
-             (countryCode == 'SE') ||
-             (countryCode == 'BE') ||
-             (countryCode == 'CH') ||
-             (countryCode == 'DE') ||
-             (countryCode == 'DK') ||
-             (countryCode == 'FI') ||
-             (countryCode == 'NO') ||
-             (countryCode == 'LU') ||
-             (countryCode == 'PT') ||
-             (countryCode == 'ES') ||
-             (countryCode == 'IE') )
-        {
-            custGroup = 'EU';
-        }
-        else if ((countryCode == 'US') ||
-                 (countryCode == 'CA') )
-        {
-            custGroup = 'NA';
-        }
-        else if ((countryCode == 'NZ') ||
-                 (countryCode == 'AU') ||
-                 (countryCode == 'CN') )
-        {
-            custGroup = 'OS';
-        }
-        else if ((countryCode == 'SG') ||
-                 (countryCode == 'KR') ||
-                 (countryCode == 'HK'))
-        {
-            custGroup = 'SE';
-        }       
-        else if ((countryCode == 'KW') ||
-                 (countryCode == 'AE') ||
-                 (countryCode == 'IL'))
-        {
-            custGroup = 'OT';
-        }
+    //     let countryCode = plstrData[shIndex].COUNTRY ;
+    //     let custGroup = '';
+    //     if ( (countryCode == 'GB') ||
+    //          (countryCode == 'AT') ||
+    //          (countryCode == 'IS') ||
+    //          (countryCode == 'NL') ||
+    //          (countryCode == 'SE') ||
+    //          (countryCode == 'BE') ||
+    //          (countryCode == 'CH') ||
+    //          (countryCode == 'DE') ||
+    //          (countryCode == 'DK') ||
+    //          (countryCode == 'FI') ||
+    //          (countryCode == 'NO') ||
+    //          (countryCode == 'LU') ||
+    //          (countryCode == 'PT') ||
+    //          (countryCode == 'ES') ||
+    //          (countryCode == 'IE') )
+    //     {
+    //         custGroup = 'EU';
+    //     }
+    //     else if ((countryCode == 'US') ||
+    //              (countryCode == 'CA') )
+    //     {
+    //         custGroup = 'NA';
+    //     }
+    //     else if ((countryCode == 'NZ') ||
+    //              (countryCode == 'AU') ||
+    //              (countryCode == 'CN') )
+    //     {
+    //         custGroup = 'OS';
+    //     }
+    //     else if ((countryCode == 'SG') ||
+    //              (countryCode == 'KR') ||
+    //              (countryCode == 'HK'))
+    //     {
+    //         custGroup = 'SE';
+    //     }       
+    //     else if ((countryCode == 'KW') ||
+    //              (countryCode == 'AE') ||
+    //              (countryCode == 'IL'))
+    //     {
+    //         custGroup = 'OT';
+    //     }
 
         sqlStr = 'UPSERT PLSTR_SALESH VALUES (' +
                     "'" + salesDocId + "'" + "," +
@@ -297,7 +314,7 @@ module.exports = async function (srv) {
                     "'" + plstrData[shIndex].HANDOVERS_COUNT + "'" + "," +
                     "'" + plstrData[shIndex].START_DATE + "'" + "," +
                     "'" + 9999999 + "'" + "," +
-                    "'" + custGroup + "'" + "," +
+                    "'" + countryCode + "'" + "," +
                     "'PL99'" + "," +
                     "'" + plstrData[shIndex].START_DATE + "'" + "," +
                     "''" + "," +
@@ -339,8 +356,12 @@ module.exports = async function (srv) {
                                      ' FROM PLSTR_CHARACTERISTICS AS charc' +
                                      ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
                                      ' charc.CHAR_NUM = charval.CHAR_NUM' + 
-                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].MODEL + "'";        
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].MODEL_D + "'";     
+            // console.log("sqlSalesCfgCharCharval ", sqlSalesCfgCharCharval)
+   
             let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
+
+            // console.log("sqlSalesCfgCharCharvalResults ", sqlSalesCfgCharCharvalResults)
    
         }
 
@@ -360,7 +381,7 @@ module.exports = async function (srv) {
                                      ' FROM PLSTR_CHARACTERISTICS AS charc' +
                                      ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
                                      ' charc.CHAR_NUM = charval.CHAR_NUM' + 
-                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].MOTOR_CODE + "'";        
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].MOTOR_CODE_D + "'";        
             let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
    
         }
@@ -381,7 +402,7 @@ module.exports = async function (srv) {
                                      ' FROM PLSTR_CHARACTERISTICS AS charc' +
                                      ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
                                      ' charc.CHAR_NUM = charval.CHAR_NUM' + 
-                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].DENOMINATION + "'";        
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].DENOMINATION_D + "'";        
             let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
    
         }
@@ -404,7 +425,7 @@ module.exports = async function (srv) {
                                      ' FROM PLSTR_CHARACTERISTICS AS charc' +
                                      ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
                                      ' charc.CHAR_NUM = charval.CHAR_NUM' + 
-                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].SALES_VERSION_ID + "'";
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].SALES_VERSION_ID_D + "'";
             let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
 
         }
@@ -426,7 +447,7 @@ module.exports = async function (srv) {
                                      ' FROM PLSTR_CHARACTERISTICS AS charc' +
                                      ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
                                      ' charc.CHAR_NUM = charval.CHAR_NUM' + 
-                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].BODY_VERSION + "'";
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].BODY_VERSION_D + "'";
             let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
 
         }
@@ -447,7 +468,7 @@ module.exports = async function (srv) {
                                      ' FROM PLSTR_CHARACTERISTICS AS charc' +
                                      ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
                                      ' charc.CHAR_NUM = charval.CHAR_NUM' + 
-                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].TRANSMISSION + "'";
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].TRANSMISSION_D + "'";
             let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
 
         }
@@ -468,7 +489,7 @@ module.exports = async function (srv) {
                                      ' FROM PLSTR_CHARACTERISTICS AS charc' +
                                      ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
                                      ' charc.CHAR_NUM = charval.CHAR_NUM' + 
-                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].STEERING + "'";
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].STEERING_D + "'";
             let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
 
         }
@@ -489,7 +510,7 @@ module.exports = async function (srv) {
                                      ' FROM PLSTR_CHARACTERISTICS AS charc' +
                                      ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
                                      ' charc.CHAR_NUM = charval.CHAR_NUM' + 
-                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].MARKET_CODE + "'";
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].MARKET_CODE_D + "'";
             let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
 
         }
@@ -511,7 +532,7 @@ module.exports = async function (srv) {
                                      ' FROM PLSTR_CHARACTERISTICS AS charc' +
                                      ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
                                      ' charc.CHAR_NUM = charval.CHAR_NUM' + 
-                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].EXTERIOR_ID + "'";
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].EXTERIOR_ID_D + "'";
             let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
 
         }
@@ -532,7 +553,7 @@ module.exports = async function (srv) {
                                      ' FROM PLSTR_CHARACTERISTICS AS charc' +
                                      ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
                                      ' charc.CHAR_NUM = charval.CHAR_NUM' + 
-                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].INTERIOR + "'";
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].INTERIOR_D + "'";
             let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
 
         }
@@ -553,7 +574,7 @@ module.exports = async function (srv) {
                                      ' FROM PLSTR_CHARACTERISTICS AS charc' +
                                      ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
                                      ' charc.CHAR_NUM = charval.CHAR_NUM' + 
-                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].OPT_WHEELS + "'";
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].OPT_WHEELS_D + "'";
             let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
 
         }
@@ -574,7 +595,7 @@ module.exports = async function (srv) {
                                      ' FROM PLSTR_CHARACTERISTICS AS charc' +
                                      ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
                                      ' charc.CHAR_NUM = charval.CHAR_NUM' + 
-                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].OPT_PERFORM + "'";
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].OPT_PERFORM_D + "'";
             let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
 
         }
@@ -595,7 +616,7 @@ module.exports = async function (srv) {
                                      ' FROM PLSTR_CHARACTERISTICS AS charc' +
                                      ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
                                      ' charc.CHAR_NUM = charval.CHAR_NUM' + 
-                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].OPT_PLUS + "'";
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].OPT_PLUS_D + "'";
             let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
 
         }
@@ -616,7 +637,7 @@ module.exports = async function (srv) {
                                      ' FROM PLSTR_CHARACTERISTICS AS charc' +
                                      ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
                                      ' charc.CHAR_NUM = charval.CHAR_NUM' + 
-                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].OPT_PILOT + "'";
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].OPT_PILOT_D + "'";
             let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
 
         }
@@ -637,7 +658,7 @@ module.exports = async function (srv) {
                                      ' FROM PLSTR_CHARACTERISTICS AS charc' +
                                      ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
                                      ' charc.CHAR_NUM = charval.CHAR_NUM' + 
-                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].OPT_PILOT_LITE + "'";
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].OPT_PILOT_LITE_D + "'";
             let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
 
         }
@@ -659,7 +680,7 @@ module.exports = async function (srv) {
                                      ' FROM PLSTR_CHARACTERISTICS AS charc' +
                                      ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
                                      ' charc.CHAR_NUM = charval.CHAR_NUM' + 
-                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].OPT_TOWBAR + "'";
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].OPT_TOWBAR_D + "'";
             let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
 
         }
@@ -669,8 +690,7 @@ module.exports = async function (srv) {
         //      break;
         if( shIndex % 1000 == 0)
            await cds.run('COMMIT');
-    }
-
+    
 
     let custGrpSql  = 'UPSERT PLSTR_CUSTOMERGROUP ("CUSTOMER_GROUP", "CUSTOMER_DESC")' +
                         ' SELECT DISTINCT "CUSTOMER_GROUP" ,' +
