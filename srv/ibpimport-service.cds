@@ -32,8 +32,8 @@ service IBPImportSrv @(impl : './lib/ibpimport-service.js') {
     // function exportComponentReq(LOCATION_ID : String(4),PRODUCT_ID : String(40),CRITICALKEY :String(1)) returns String;
     action exportIBPLocProd(LOCATION_ID : String(4));
     action exportRestrDetails(LOCATION_ID: String(4)); 
-    action exportIBPAssembly(LOCATION_ID : String(4));
-    //  function exportIBPAssembly(LOCATION_ID : String(4)) returns String;
+    // action exportIBPAssembly(LOCATION_ID : String(4));
+     function exportIBPAssembly(LOCATION_ID : String(4)) returns String;
   
     action exportIBPSalesTrans(LocProdData: String);//LOCATION_ID : String(4),PRODUCT_ID : String(40),CUSTOMER_GROUP : String(20),DOC_DATE:Date);
     action exportActCompDemand(LocProdData: String);//LOCATION_ID : String(4),PRODUCT_ID : String(40),CRITICALKEY :String(1));//,FROMDATE: Date, TODATE: Date);
