@@ -99,7 +99,7 @@ module.exports = async function (srv) {
     //                 ' SELECT DISTINCT PRODUCT_ID, PRODUCT_NAME, MODEL_D ,\'CARS\',MOTOR_CODE_D, SALES_VERSION_ID_D , DENOMINATION_D FROM "PLSTR_DATA_DEMO"';
     
     let sqlStr ='UPSERT PLSTR_PRODUCT ("PRODUCT_ID", "PROD_DESC", "PROD_FAMILY", "PROD_GROUP")' +
-                    ' SELECT DISTINCT MODEL_D, PRODUCT_NAME, MODEL_D ,\'CARS\' FROM "PLSTR_DATA_DEMO"';
+                    ' SELECT DISTINCT PRODUCT_ID, PRODUCT_NAME, PRODUCT_ID ,\'CARS\' FROM "PLSTR_DATA_DEMO"';
 
     console.log("PLSTR PRODUCTS sqlStr ", sqlStr);
 
@@ -108,7 +108,8 @@ module.exports = async function (srv) {
 
 
     sqlStr = 'UPSERT PLSTR_LOCATION("LOCATION_ID","LOCATION_DESC","LOCATION_TYPE")' +
-                ' SELECT \'PL99\', \'PL99 Location\' , \'2\'FROM DUMMY';
+                    ' SELECT DISTINCT  CONCAT(\'PL\',"COUNTRY"),  CONCAT(\'PL\',CONCAT ("COUNTRY", \' Location\')),\'2\'FROM "PLSTR_DATA_DEMO"'; 
+                // ' SELECT \'PL99\', \'PL99 Location\' , \'2\'FROM DUMMY';
 
     console.log("PLSTR LOCATION sqlStr ", sqlStr);
 
@@ -134,7 +135,7 @@ module.exports = async function (srv) {
 
 
     sqlStr = 'UPSERT PLSTR_LOCATION_PRODUCT ("LOCATION_ID", "PRODUCT_ID","LOTSIZE_KEY","LOT_SIZE", "PROCUREMENT_TYPE","PLANNING_STRATEGY")' +
-					  ' SELECT DISTINCT \'PL99\', PRODUCT_ID, \'EX\',' +  1 + ' , \'E\',  \'56\' FROM PLSTR_PRODUCT';
+					  ' SELECT DISTINCT CONCAT(\'PL\',"COUNTRY"), PRODUCT_ID, \'EX\',' +  1 + ' , \'E\',  \'56\' FROM PLSTR_DATA_DEMO';
 
 
     console.log("PLSTR_LOCATION_PRODUCT sqlStr ", sqlStr);
@@ -254,53 +255,53 @@ module.exports = async function (srv) {
     const uom = 'EA';
 
     
-    // for(let shIndex = 0; shIndex < plstrData.length; shIndex++)
-    // {
-    //     let salesDocId = salesDocBaseID + plstrData[shIndex].UNIQUE_ID;
+    for(let shIndex = 0; shIndex < plstrData.length; shIndex++)
+    {
+        let salesDocId = salesDocBaseID + plstrData[shIndex].UNIQUE_ID;
 
-    //     let countryCode = plstrData[shIndex].COUNTRY ;
-    //     let custGroup = '';
-    //     if ( (countryCode == 'GB') ||
-    //          (countryCode == 'AT') ||
-    //          (countryCode == 'IS') ||
-    //          (countryCode == 'NL') ||
-    //          (countryCode == 'SE') ||
-    //          (countryCode == 'BE') ||
-    //          (countryCode == 'CH') ||
-    //          (countryCode == 'DE') ||
-    //          (countryCode == 'DK') ||
-    //          (countryCode == 'FI') ||
-    //          (countryCode == 'NO') ||
-    //          (countryCode == 'LU') ||
-    //          (countryCode == 'PT') ||
-    //          (countryCode == 'ES') ||
-    //          (countryCode == 'IE') )
-    //     {
-    //         custGroup = 'EU';
-    //     }
-    //     else if ((countryCode == 'US') ||
-    //              (countryCode == 'CA') )
-    //     {
-    //         custGroup = 'NA';
-    //     }
-    //     else if ((countryCode == 'NZ') ||
-    //              (countryCode == 'AU') ||
-    //              (countryCode == 'CN') )
-    //     {
-    //         custGroup = 'OS';
-    //     }
-    //     else if ((countryCode == 'SG') ||
-    //              (countryCode == 'KR') ||
-    //              (countryCode == 'HK'))
-    //     {
-    //         custGroup = 'SE';
-    //     }       
-    //     else if ((countryCode == 'KW') ||
-    //              (countryCode == 'AE') ||
-    //              (countryCode == 'IL'))
-    //     {
-    //         custGroup = 'OT';
-    //     }
+        let countryCode = plstrData[shIndex].COUNTRY ;
+        let custGroup = '';
+        // if ( (countryCode == 'GB') ||
+        //      (countryCode == 'AT') ||
+        //      (countryCode == 'IS') ||
+        //      (countryCode == 'NL') ||
+        //      (countryCode == 'SE') ||
+        //      (countryCode == 'BE') ||
+        //      (countryCode == 'CH') ||
+        //      (countryCode == 'DE') ||
+        //      (countryCode == 'DK') ||
+        //      (countryCode == 'FI') ||
+        //      (countryCode == 'NO') ||
+        //      (countryCode == 'LU') ||
+        //      (countryCode == 'PT') ||
+        //      (countryCode == 'ES') ||
+        //      (countryCode == 'IE') )
+        // {
+        //     custGroup = 'EU';
+        // }
+        // else if ((countryCode == 'US') ||
+        //          (countryCode == 'CA') )
+        // {
+        //     custGroup = 'NA';
+        // }
+        // else if ((countryCode == 'NZ') ||
+        //          (countryCode == 'AU') ||
+        //          (countryCode == 'CN') )
+        // {
+        //     custGroup = 'OS';
+        // }
+        // else if ((countryCode == 'SG') ||
+        //          (countryCode == 'KR') ||
+        //          (countryCode == 'HK'))
+        // {
+        //     custGroup = 'SE';
+        // }       
+        // else if ((countryCode == 'KW') ||
+        //          (countryCode == 'AE') ||
+        //          (countryCode == 'IL'))
+        // {
+        //     custGroup = 'OT';
+        // }
 
         sqlStr = 'UPSERT PLSTR_SALESH VALUES (' +
                     "'" + salesDocId + "'" + "," +
@@ -315,7 +316,7 @@ module.exports = async function (srv) {
                     "'" + plstrData[shIndex].START_DATE + "'" + "," +
                     "'" + 9999999 + "'" + "," +
                     "'" + countryCode + "'" + "," +
-                    "'PL99'" + "," +
+                    "'" + 'PL' + countryCode + "'" + "," +
                     "'" + plstrData[shIndex].START_DATE + "'" + "," +
                     "''" + "," +
                     "'" + plstrData[shIndex].START_DATE + "'" + "," +
@@ -327,9 +328,10 @@ module.exports = async function (srv) {
 
         let saleshResults = await cds.run(sqlStr);
         // console.log("PLSTR_SALESH  ", saleshResults);
-        console.log("PLSTR_SALESH salesDoc ", salesDocId, "shIndex ",shIndex);
+        if (shIndex %100 == 0)
+         console.log("PLSTR_SALESH salesDoc ", salesDocId, "shIndex ",shIndex);
 
-        let sqlSaleConfig = 'SELECT DISTINCT MODEL_D, MOTOR_CODE_D, DENOMINATION_D, SALES_VERSION_ID_D, BODY_VERSION_D, TRANSMISSION_D, STEERING_D, ' +
+        let sqlSaleConfig = 'SELECT DISTINCT MOTOR_CODE_D, DENOMINATION_D, SALES_VERSION_ID_D, BODY_VERSION_D, TRANSMISSION_D, STEERING_D, ' +
                             ' MARKET_CODE_D, EXTERIOR_ID_D, INTERIOR_D, OPT_WHEELS_D,  OPT_PERFORM_D, OPT_PLUS_D, OPT_PILOT_D, OPT_PILOT_LITE_D, OPT_TOWBAR_D' +
                             ' FROM PLSTR_DATA_DEMO WHERE ' +  
                             ' UNIQUE_ID = ' + "'" + plstrData[shIndex].UNIQUE_ID + "'";
@@ -340,30 +342,6 @@ module.exports = async function (srv) {
         // console.log(" salesConfigResults ", salesConfigResults);
 
         let sqlSalesCfgCharCharval = '';
-        if( plstrData[shIndex].MODEL_D != 'NULL')
-        {
-            sqlSalesCfgCharCharval = 'UPSERT PLSTR_SALESH_CONFIG ("SALES_DOC", "SALESDOC_ITEM", ' + 
-                                     '"CHAR_NUM", "CHARVAL_NUM","PRODUCT_ID","CHANGED_DATE", ' +
-                                     '"CREATED_DATE", "CREATED_BY" '+')' +
-                                     ' SELECT ' + 
-                                     "'" + salesDocId + "'" + "," +
-                                     "'" + salesDocItem + "'" + "," +
-                                     'charval."CHAR_NUM", charval."CHARVAL_NUM",' +
-                                     "'" + plstrData[shIndex].PRODUCT_ID + "'" + "," +
-                                     "'" + plstrData[shIndex].START_DATE + "'" + "," +
-                                     "'" + plstrData[shIndex].START_DATE + "'" + "," +
-                                     "'SBP'" +
-                                     ' FROM PLSTR_CHARACTERISTICS AS charc' +
-                                     ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
-                                     ' charc.CHAR_NUM = charval.CHAR_NUM' + 
-                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].MODEL_D + "'";     
-            // console.log("sqlSalesCfgCharCharval ", sqlSalesCfgCharCharval)
-   
-            let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
-
-            // console.log("sqlSalesCfgCharCharvalResults ", sqlSalesCfgCharCharvalResults)
-   
-        }
 
         if( plstrData[shIndex].MOTOR_CODE_D != 'NULL')
         {
@@ -690,7 +668,7 @@ module.exports = async function (srv) {
         //      break;
         if( shIndex % 1000 == 0)
            await cds.run('COMMIT');
-    
+    }
 
     let custGrpSql  = 'UPSERT PLSTR_CUSTOMERGROUP ("CUSTOMER_GROUP", "CUSTOMER_DESC")' +
                         ' SELECT DISTINCT "CUSTOMER_GROUP" ,' +
