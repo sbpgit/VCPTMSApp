@@ -229,20 +229,22 @@ sap.ui.define([
 
 
                         that.finalpriData = [];
-                        for (var j = 0; j <= that.primaryData.length; j++) {
-                            for (var k = 0; k < that.primaryData.length; k++) {
-                                if (j === that.primaryData[k].SEQUENCE) {
-                                    that.finalpriData.push(that.primaryData[k]);
-                                    break;
+                            for (var j = 0; j <= that.primaryData.length; j++) {
+                                for (var k = 0; k < that.primaryData.length; k++) {
+                                    if (j === that.primaryData[k].SEQUENCE) {
+                                        that.finalpriData.push(that.primaryData[k]);
+                                        break;
+                                    }
                                 }
+
                             }
 
-                        }
+                            var length = j;
 
 
 
                         that.finalSecData = [];
-                        for (var j = 0; j <= that.secData.length; j++) {
+                        for (var j = length; j <= that.secData.length; j++) {
                             for (var k = 0; k < that.secData.length; k++) {
                                 if (j === that.secData[k].SEQUENCE) {
                                     that.finalSecData.push(that.secData[k]);
@@ -696,6 +698,7 @@ sap.ui.define([
                                     that.secData.push(oData.results[i]);
                                 }
                             }
+                            
 
                             that.finalpriData = [];
                             for (var j = 0; j <= that.primaryData.length; j++) {
@@ -708,8 +711,10 @@ sap.ui.define([
 
                             }
 
+                            var length = j;
+
                             that.finalSecData = [];
-                            for (var j = 0; j <= that.secData.length; j++) {
+                            for (var j = length; j <= that.secData.length; j++) {
                                 for (var k = 0; k < that.secData.length; k++) {
                                     if (j === that.secData[k].SEQUENCE) {
                                         that.finalSecData.push(that.secData[k]);
