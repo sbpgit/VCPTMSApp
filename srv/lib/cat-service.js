@@ -1679,7 +1679,7 @@ module.exports = (srv) => {
         let lsresults = {};
         let liProdChar = {};
         var responseMessage;
-        let alength;
+        let lilength;
 
         let li_varcharps;
         if(req.data.CHAR_TYPE === "P"){
@@ -1718,7 +1718,7 @@ module.exports = (srv) => {
             lsresults.CHAR_TYPE = req.data.CHAR_TYPE;
             if (req.data.CHAR_TYPE === "P") {
                 lsresults.SEQUENCE = li_varcharps.length + 1;
-                alength = li_varcharps.length + 1;
+                lilength = li_varcharps.length + 1;
             }
             else {
                 lsresults.SEQUENCE = li_varcharps.length + 1;
@@ -1748,8 +1748,8 @@ module.exports = (srv) => {
             lsresults = {};
             liresults = [];
             let finalP;
-            let primary;
-            primary = await cds.run(
+            let liPrimary;
+            const liData = await cds.run(
                 `SELECT *
                     FROM "CP_VARCHAR_PS"
                     WHERE "LOCATION_ID" = '` +
@@ -1758,18 +1758,29 @@ module.exports = (srv) => {
                     AND "PRODUCT_ID" = '` +
                 req.data.PRODUCT_ID +
                 `'
-                    AND "CHAR_TYPE" = 'P` +
-                `'
-                    ORDER BY SEQUENCE`
+                ORDER BY SEQUENCE`
+                //     AND "CHAR_TYPE" = 'P` +
+                // `'
+                //     ORDER BY SEQUENCE`
+
             );
+                
+            result = liData.reduce((r, o) => {
+                r[o.CHAR_TYPE === 'P' ? 'liprimarydata' : 'liseconddata'].push(o);
+                return r; 
+            }, { liprimarydata: [], liseconddata: [] });
+
+            liPrimary = result.liprimarydata;
+            li_varcharps = result.liseconddata;
+            
             if (req.data.CHAR_TYPE === "S") {
-                for (let i = 0; i < primary.length; i++) {
-                    lsresults.PRODUCT_ID = primary[i].PRODUCT_ID;
-                    lsresults.LOCATION_ID = primary[i].LOCATION_ID;
-                    lsresults.CHAR_NUM = primary[i].CHAR_NUM;
+                for (let i = 0; i < liPrimary.length; i++) {
+                    lsresults.PRODUCT_ID = liPrimary[i].PRODUCT_ID;
+                    lsresults.LOCATION_ID = liPrimary[i].LOCATION_ID;
+                    lsresults.CHAR_NUM = liPrimary[i].CHAR_NUM;
                     lsresults.CHAR_TYPE = 'P' 
-                    if (primary[i].SEQUENCE > req.data.SEQUENCE) {
-                        lsresults.SEQUENCE = primary[i].SEQUENCE - 1;
+                    if (liPrimary[i].SEQUENCE > req.data.SEQUENCE) {
+                        lsresults.SEQUENCE = liPrimary[i].SEQUENCE - 1;
                         
                         await UPDATE`CP_VARCHAR_PS`
                             .with({
@@ -1786,36 +1797,18 @@ module.exports = (srv) => {
                     lsresults = {};
                 }
             } else {
-                finalP = primary.length;
+                finalP = liPrimary.length;
             }
 
 
-            li_varcharps = await cds.run(
-                `SELECT *
-                    FROM "CP_VARCHAR_PS"
-                    WHERE "LOCATION_ID" = '` +
-                req.data.LOCATION_ID +
-                `'
-                    AND "PRODUCT_ID" = '` +
-                req.data.PRODUCT_ID +
-                `'
-                    AND "CHAR_TYPE" = 'S` +
-                // charType +
-                `'
-                    ORDER BY SEQUENCE`
-            );
-
-            // if(){
-
-            // }
-            primary = finalP + 1;
+            liPrimary = finalP + 1;
             for (let i = 0; i < li_varcharps.length; i++) {
                 lsresults.PRODUCT_ID = li_varcharps[i].PRODUCT_ID;
                 lsresults.LOCATION_ID = li_varcharps[i].LOCATION_ID;
                 lsresults.CHAR_NUM = li_varcharps[i].CHAR_NUM;
                 lsresults.CHAR_TYPE = 'S' //li_varcharps[i].CHAR_TYPE;
                 // if (li_varcharps[i].SEQUENCE > req.data.SEQUENCE) {
-                lsresults.SEQUENCE = primary + i; // li_varcharps[i].SEQUENCE - 1;
+                lsresults.SEQUENCE = liPrimary + i; // li_varcharps[i].SEQUENCE - 1;
                 // }
                 await UPDATE`CP_VARCHAR_PS`
                     .with({
