@@ -111,6 +111,15 @@ sap.ui.define([
                             that.primaryData = [],
                                 that.secData = [];
 
+                                // oData.results.forEach(function (row) {
+                                    
+                                //     if(row.CHAR_TYPE === "P" && row.SEQUENCE < 6){
+                                //         row.Partial = "X";
+                                //     } else {
+                                //         row.Partial = "";
+                                //     }
+                                // }, that);
+
                             for (var i = 0; i < oData.results.length; i++) {
                                 if (oData.results[i].CHAR_TYPE === "P") {
                                     that.primaryData.push(oData.results[i]);
@@ -200,6 +209,22 @@ sap.ui.define([
                     MessageToast.show("Please select Location and Product");
                 }
             },
+
+            // onTableupdate:function(oEvent){
+
+            //     that.oPList = that.byId("Primarytable").getItems();
+            //     var PartialVal;
+            //     for(var i = 0; i < that.oPList.length; i++){
+            //         PartialVal = that.oPList[i].getBindingContext().getObject().Partial;
+            //         if(PartialVal === "X"){
+            //             that.oPList[i].addStyleClass("partialColor");
+            //         } else {
+            //             that.oPList[i].removeStyleClass("partialColor");
+            //         }
+            //     }
+            // },
+
+
             onReset: function () {
                 var sLoc = that.byId("idloc").getValue(),
                     sProd = that.byId("prodInput").getValue();
