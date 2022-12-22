@@ -28,7 +28,7 @@ class IBPFunctions {
             `'`);
         // `' AND CUSTOMER_GROUP = '` + req.data.CUSTOMER_GROUP +e
 
-        for (i = 0; i < lisales.length; i++) {
+        for (let i = 0; i < lisales.length; i++) {
             var vWeekDate = new Date(lisales[i].WEEK_DATE).toISOString().split('Z');
             var vDemd = lisales[i].ORD_QTY.split('.');
             vsales = {
@@ -38,7 +38,7 @@ class IBPFunctions {
                 "VCCHARVALUE": lisales[i].CHARVAL_NUM,
                 "VCCLASS": lisales[i].CLASS_NUM,
                 "ACTUALDEMANDVC": vDemd[0],
-                "CUSTID": "NULL",//lisales[i].CUSTOMER_GROUP,
+                "CUSTID": lisales[i].CUSTOMER_GROUP,
                 "PERIODID0_TSTAMP": vWeekDate[0]
             };
             oReq.sales.push(vsales);

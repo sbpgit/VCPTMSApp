@@ -455,30 +455,7 @@ sap.ui.define(
 
                 that.oTable.bindRows("/rows");
             },
-/**
-             * 
-             */
-            getTotalWeekQty: function (sWeekDate) {
-                that.oGModel = that.getModel("oGModel");
-                var oTableData = that.oGModel.getProperty("/TData");
-                var liDates = that.oGModel.getProperty("/TDates");
-                var iWeekIndex = 0;
-                var iTotalQty = 0;
-                for (let index = 2; index < liDates.length; index++) {
-                    iWeekIndex = iWeekIndex + 1;
-                    if (liDates[index].WEEK_DATE === sWeekDate) {
-                        break;
-                    }
-                }
 
-                // Looping through the data to generate columns SUM
-                
-                for (var i = 0; i < that.tableData.length; i++) {
-                    iTotalQty = iTotalQty + that.tableData[i]["WEEK" + iWeekIndex];                    
-                }
-
-                return iTotalQty;
-            },
             /**
              * This function is called when checkbox Get Non-Zero is checked or unchecked.
              * In this function removing the rows which have all row values as "0".
@@ -519,6 +496,30 @@ sap.ui.define(
                 // Calling function to generate UI table based on filter data
                 that.TableGenerate();
             },
+            /**
+             * 
+             */
+             getTotalWeekQty: function (sWeekDate) {
+                that.oGModel = that.getModel("oGModel");
+                var oTableData = that.oGModel.getProperty("/TData");
+                var liDates = that.oGModel.getProperty("/TDates");
+                var iWeekIndex = 0;
+                var iTotalQty = 0;
+                for (let index = 3; index < liDates.length; index++) {
+                    iWeekIndex = iWeekIndex + 1;
+                    if (liDates[index].CAL_DATE === sWeekDate) {
+                        break;
+                    }
+                }
+
+                // Looping through the data to generate columns SUM
+                
+                for (var i = 0; i < that.tableData.length; i++) {
+                    iTotalQty = iTotalQty + parseInt(that.tableData[i]["WEEK" + iWeekIndex]);                    
+                }
+
+                return iTotalQty;
+            },
 
             /**
              * This function is called when a click on any row item.
@@ -558,6 +559,8 @@ sap.ui.define(
                         }
                     }
 
+                    
+                    selColumnDate = selColumnDate.split(" ")[0];
                     that.colDate = selColumnDate;
                     if (selColumnValue > 0) {
                         this.getModel("BModel").read("/getBOMPred", {
@@ -610,7 +613,10 @@ sap.ui.define(
              */
             onExpand: function (oEvent) {
                 var oHdr = oEvent.getSource().getHeaderText();
-                var objDep = oHdr.split(":");
+                var objDep = oHdr.split(":")[0];
+                objDep =objDep.split("_");
+                let objDepVal = objDep[0].concat("_",objDep[1]);
+                let objCntr = objDep[2];
                 that.getModel("BModel").read("/getOdCharImpact", {
                     filters: [
                         new Filter(
@@ -634,11 +640,12 @@ sap.ui.define(
                             that.oGModel.getProperty("/SelectedScen")
                         ),
                         new Filter("CAL_DATE", FilterOperator.EQ, that.colDate),
-                        new Filter("OBJ_DEP", FilterOperator.EQ, objDep[0].split("_")[0]),
+                        new Filter("OBJ_DEP", FilterOperator.EQ, objDepVal),//objDep[0].split("_")[0]),
                         new Filter(
                             "OBJ_COUNTER",
                             FilterOperator.EQ,
-                            objDep[0].split("_")[1]
+                            objCntr
+                           // objDep[0].split("_")[1]
                         ),
                         new Filter(
                             "MODEL_VERSION",
@@ -1075,8 +1082,7 @@ sap.ui.define(
                     this.getModel("BModel").callFunction("/getAllVerScen", {
                         method: "GET",
                         urlParameters: {
-                            LOCATION_ID: that.oGModel.getProperty("/SelectedLoc"),
-                            // PRODUCT_ID:  aSelectedItems[0].getTitle() 
+                            LOCATION_ID: that.oGModel.getProperty("/SelectedLoc")
                         },
                         success: function (oData) {
                             var adata = [];
@@ -1113,7 +1119,7 @@ sap.ui.define(
                             new Filter(
                                 "PRODUCT_ID",
                                 FilterOperator.EQ,
-                                that.oGModel.getProperty("/SelectedProd")
+                                aSelectedItems[0].getTitle()
                             ),
                         ],
                         success: function (oData) {

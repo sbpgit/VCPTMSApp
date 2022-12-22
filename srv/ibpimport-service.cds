@@ -31,6 +31,7 @@ service IBPImportSrv @(impl : './lib/ibpimport-service.js') {
     action exportComponentReq(LOCATION_ID : String(4),PRODUCT_ID : String(40),FROMDATE: Date, TODATE: Date,CRITICALKEY :String(1));
     // function exportComponentReq(LOCATION_ID : String(4),PRODUCT_ID : String(40),CRITICALKEY :String(1)) returns String;
     action exportIBPLocProd(LOCATION_ID : String(4));
+    // function exportIBPLocProd(LOCATION_ID : String(4)) returns String;
     action exportRestrDetails(LOCATION_ID: String(4)); 
     action exportIBPAssembly(LOCATION_ID : String(4));
     //  function exportIBPAssembly(LOCATION_ID : String(4)) returns String;
@@ -42,10 +43,14 @@ service IBPImportSrv @(impl : './lib/ibpimport-service.js') {
     action exportIBPCIR(LocProdData: String);//LOCATION_ID : String(4),PRODUCT_ID : String(40));  // Partial Product
     
     // function exportIBPCIR(LOCATION_ID : String(4),PRODUCT_ID : String(40)) returns String;  // Partial Product
-    //Inbound from BTP
+    function exportIBPSalesTrans_fn(LOCATION_ID : String(4),PRODUCT_ID : String(40)) returns String;  // Partial Product
+   //Inbound from BTP
     action generateFDemandQty(LocProdData: String);//LOCATION_ID : String(4), PRODUCT_ID : String(40));
+    function generateFDemandQtyfn(LOCATION_ID : String(4), PRODUCT_ID : String(40)) returns String;
+    
     action generateFCharPlan(LOCATION_ID : String(4), PRODUCT_ID : String(40), FROMDATE : Date, TODATE : Date);
     action generateMarketAuth( MARKETDATA : String);
+    function generateMarketAuthfn() returns String;
     // action importibpversce();
     function importibpversce() returns String;
 }

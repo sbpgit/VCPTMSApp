@@ -22,7 +22,6 @@ sap.ui.define([
         return BaseController.extend("cpapp.cpprscchar.controller.Home", {
             onInit: function () {
                 that = this;
-                oGModel = this.getModel("oGModel");
                 // Declaration of JSON models and size limits
                 this.PrimarylistModel = new JSONModel();
                 this.SeclistModel = new JSONModel();
@@ -412,8 +411,6 @@ sap.ui.define([
             },
             // function drop list items
             onDrop: function (oInfo) {
-                oGModel = this.getModel("oGModel");
-                        oGModel.setProperty("/primFlag", "");
                 var oDragged = oInfo.getParameter("draggedControl"),
                     oDropped = oInfo.getParameter("droppedControl"),
                     sInsertPosition = oInfo.getParameter("dropPosition"),
@@ -454,9 +451,6 @@ sap.ui.define([
                     } else {
                         oChar_Type = "S"
                         iSeq = oDropModelData.results.length;
-                        
-                        oGModel.setProperty("/primFlag", "X");
-                        
 
                     }
 
@@ -477,10 +471,6 @@ sap.ui.define([
                             that.byId("searchField").setValue("");
                             that.onCharSearch();
                             that.onGetData();
-                            if(oGModel.getProperty("/primFlag") === "X"){
-                                that.byId("idText").setVisible(true);
-                                that.byId("idText").addStyleClass("textColour");
-                            }
                         },
                         error: function (oData) {
                             sap.ui.core.BusyIndicator.hide();
@@ -690,9 +680,6 @@ sap.ui.define([
                                     }
                                 }
                             }
-                            oGModel.setProperty("/primFlag", "");
-                                that.byId("idText").setVisible(false);
-                                that.byId("idText").removeStyleClass("textColour");
 
                         },
                         error: function (oData, error) {

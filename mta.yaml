@@ -204,10 +204,6 @@ modules:
       name: cpappcpsalesstock
       target-path: resources/
     - artifacts:
-      - cpappcpjobschedulernew.zip
-      name: cpappcpjobschedulernew
-      target-path: resources/
-    - artifacts:
       - cpappcpcriticalcomp.zip
       name: cpappcpcriticalcomp
       target-path: resources/
@@ -242,6 +238,10 @@ modules:
     - artifacts:
       - cpappcpibpcharacteristic.zip
       name: cpappcpibpcharacteristic
+      target-path: resources/
+    - artifacts:
+      - cpappcptimeseriesf.zip
+      name: cpappcptimeseriesf
       target-path: resources/
 - name: cpodpcpodprofiles
   type: html5
@@ -598,16 +598,6 @@ modules:
     - npm run build:cf
     - rm -rf node_modules
     supported-platforms: []
-- name: cpappcpjobschedulernew
-  type: html5
-  path: app/cpjobscheduler_new
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    supported-platforms: []
 - name: cpappcpcriticalcomp
   type: html5
   path: app/cpcriticalcomp
@@ -691,6 +681,16 @@ modules:
 - name: cpappcpibpcharacteristic
   type: html5
   path: app/cpibpcharacteristic
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cpappcptimeseriesf
+  type: html5
+  path: app/cptimeseriesf
   build-parameters:
     build-result: dist
     builder: custom

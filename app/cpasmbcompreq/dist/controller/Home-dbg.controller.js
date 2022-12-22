@@ -331,6 +331,8 @@ sap.ui.define(
                 toDate = toDate.toISOString().split("T")[0];
                 // Calling function to generate column names based on dates
                 var liDates = that.generateDateseries(fromDate, toDate);
+                that.oGModel.setProperty("/TDates", liDates);
+
                 // Looping through the data to generate columns
                 for (var i = 0; i < that.tableData.length; i++) {
                     sRowData.Component = that.tableData[i].COMPONENT;
@@ -359,11 +361,14 @@ sap.ui.define(
                             label: columnName,
                             template: columnName,
                         });
-                    } else {
+                    } else {                     
+                        // Fetch Total on a   
+                        var iTotalQty = that.getTotalWeekQty(columnName);
+                        var columnText = columnName + " (" + iTotalQty + ")";
                         if (that.plntMethod === 'M1') {
                             return new sap.ui.table.Column({
                                 width: "8rem",
-                                label: columnName,
+                                label: columnText,
                                 template: new sap.m.Link({
                                     text: "{" + columnName + "}",
                                     press: that.linkPressed,
@@ -373,23 +378,13 @@ sap.ui.define(
                         else {
                             return new sap.ui.table.Column({
                                 width: "8rem",
-                                label: columnName,
+                                label: columnText,
                                 template: new sap.m.Text({
                                     text: "{" + columnName + "}"
                                 }),
                             });
                         }
                     }
-                        // return new sap.ui.table.Column({
-                        //     width: "8rem",
-                        //     label: columnName,
-                        //     template: new sap.m.Link({
-                        //         text: "{" + columnName + "}",
-                        //         press: that.asmbcompLinkpress,
-                        //     }),
-                        // });
-                    
-                    // }
                 });
 
                 that.oTable.bindRows("/rows");
@@ -435,7 +430,30 @@ sap.ui.define(
                 // Calling function to generate UI table based on filter data
                 that.TableGenerate();
             },
+             /**
+             * 
+             */
+              getTotalWeekQty: function (sWeekDate) {
+                that.oGModel = that.getModel("oGModel");
+                var oTableData = that.oGModel.getProperty("/TData");
+                var liDates = that.oGModel.getProperty("/TDates");
+                var iWeekIndex = 0;
+                var iTotalQty = 0;
+                for (let index = 1; index < liDates.length; index++) {
+                    iWeekIndex = iWeekIndex + 1;
+                    if (liDates[index].CAL_DATE === sWeekDate) {
+                        break;
+                    }
+                }
 
+                // Looping through the data to generate columns SUM
+                
+                for (var i = 0; i < that.tableData.length; i++) {
+                    iTotalQty = iTotalQty + parseInt(that.tableData[i]["WEEK" + iWeekIndex]);                    
+                }
+
+                return iTotalQty;
+            },
             /**
              * This function is called when a click on any row item.
              * In this function we will fetch the data which need to display
