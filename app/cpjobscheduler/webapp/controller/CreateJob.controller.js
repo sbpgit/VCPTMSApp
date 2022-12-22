@@ -2016,10 +2016,10 @@ sap.ui.define(
                     that.byId("EReLiHprodInput").setValue();
 
                     that.byId("ELPlocInput").setValue();
-                    // that.byId("ELPprodInput").setValue();
+                    that.byId("ELPprodInput").setValue();
 
                     that.byId("EIAlocInput").setValue();
-                    // that.byId("EIAprodInput").setValue();
+                    that.byId("EIAprodInput").setValue();
                 }
 
                 // 22-09-2022
@@ -2903,35 +2903,13 @@ sap.ui.define(
                             that.onJobTypeChange();
                             that.onJobCreate();
                         }
-                       
+                        // 07-09-2022-1
                     } else {
-                        MessageToast.show("Please select Location");
+                        MessageToast.show("Please select all fields");
                     }
-                } 
-                // else if (rRadioBtn === "Assembly") {
-                //     oLocItem = that.oLoc.getValue();
-                //     oProdItem = this.oProd.getValue();
-                //     if (oLocItem && oProdItem) {
-                //         vRuleslist = {
-                //             LOCATION_ID: oLocItem,
-                //             PRODUCT_ID: oProdItem
-                //         };
-                //         this.oGModel.setProperty("/vcrulesData", vRuleslist);
-
-                //         // 07-09-2022-1
-                //         if (that.oGModel.getProperty("/EcecuteType") === "S") {
-                //             that._valueHelpDialogJobDetail.open();
-                //         } else if (that.oGModel.getProperty("/EcecuteType") === "E") {
-                //             sap.ui.getCore().byId("idJobSchtype").setSelectedKey("Im");
-                //             that.onJobTypeChange();
-                //             that.onJobCreate();
-                //         }
-                //         // 07-09-2022-1
-                //     } else {
-                //         MessageToast.show("Please select all fields");
-                //     }
                     // 22-09-2022
-                // }
+                }
+                // 22-09-2022
             },
 
             /*
@@ -3733,8 +3711,6 @@ sap.ui.define(
                         // bButton.includes("Product") ||
                         // bButton.includes("Class") ||
                         // bButton.includes("Assembly Requirement") ||
-                        // bButton === "Restrictions" ||
-                        // oSelJobType === "S"
                         bButton === "Location" ||
                         bButton === "Customer" ||
                         bButton === "Product" ||
@@ -3766,12 +3742,18 @@ sap.ui.define(
                         // Getting data for Timeseries
                         // 07-09-2022-1
                     } else if (
-                        bButton.includes("Sales History") ||
-                        bButton.includes("Actual Components") ||
-                        bButton.includes("Market Authorizations") ||
+                        // bButton.includes("Sales History") ||
+                        // bButton.includes("Actual Components") ||
+                        // bButton.includes("Market Authorizations") ||
+                        // bButton === "Forecast Demand" ||
+                        // bButton === "Restrictions" ||
+                        // bButton.includes("Likelihood")
+                        bButton === "Sales History" ||
+                        bButton === "Actual Components" ||
+                        bButton === "Market Authorizations" ||
                         bButton === "Forecast Demand" ||
                         bButton === "Restrictions" ||
-                        bButton.includes("Likelihood")
+                        bButton === "Restriction Likelihood"
                     ) {
                         var finalList = {
                             name: JobName,

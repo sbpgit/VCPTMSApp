@@ -222,7 +222,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
 
     entity genvarcharps         as projection on od.VARCHAR_PS;
     entity getPriSecChar        as projection on V_GETVARCHARPS;
-    function getSecondaryChar(FLAG : String(1), LOCATION_ID : String(4), PRODUCT_ID : String(40))                                                                                                                                                                                returns array of getPriSecChar;
+    function getSecondaryChar(FLAG : String(1), LOCATION_ID : String(4), PRODUCT_ID : String(40))  returns array of getPriSecChar;
     function changeToPrimary(LOCATION_ID : String(4), PRODUCT_ID : String(40), CHAR_NUM : String(10), CHAR_TYPE : String(1), SEQUENCE : Integer, FLAG : String(1))                                                                                                               returns String;
 
     /*** ***/
@@ -291,9 +291,9 @@ service CatalogService @(impl : './lib/cat-service.js') {
     @readonly
     entity getCIRLog            as projection on od.CIRLOG;
 
-    function getCIRWeekly(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), FROMDATE : Date, TODATE : Date, MODEL_VERSION : String(20))                                                                                             returns array of ds.cirWkly;
+    function getCIRWeekly(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), FROMDATE : Date, TODATE : Date, MODEL_VERSION : String(20))  returns array of ds.cirWkly;
     // function getCIRWeekly(FROMDATE : Date, TODATE : Date)  returns array of ds.cirWkly;
-    function getUniqueIdItems(UNIQUE_ID : Integer)                                                                                                                                                                                                                               returns array of ds.uniqueCharItems;
+    function getUniqueIdItems(UNIQUE_ID : Integer)  returns array of ds.uniqueCharItems;
     // Publish CIR data to ECC
     function postCIRQuantities(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), FROMDATE : Date, TODATE : Date, MODEL_VERSION : String(20), VALIDUSER : String(12),USER_ID : String(100)) returns String;
     action   postCIRQuantitiesToS4(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), FROMDATE : Date, TODATE : Date, MODEL_VERSION : String(20), VALIDUSER : String(12), USER_ID : String(100));
@@ -331,6 +331,9 @@ service CatalogService @(impl : './lib/cat-service.js') {
 
     entity getVerScnmaster      as projection on od.IBPVERSIONSCENARIO;
 
+  
+    // Get Unique Characteristics
+    function getUniqueChars(UNIQUE_ID : Integer, PRODUCT_ID : String(40), LOCATION_ID : String(4)) returns array of ds.uniqueCharacteristics;
 
     // Get User Info
     @requires: 'authenticated-user'

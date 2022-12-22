@@ -57,3 +57,13 @@ div#__vbox4 {
     padding-right: 0.25rem;
     width: 500px;
 }
+
+
+.textColour {
+    color: red !important;
+    font-size: large !important;
+}
+
+.partialColor{
+    background: #cef2cfd0 !important;
+}

@@ -24,11 +24,11 @@ function getJobscheduler(req) {
 module.exports = async function (srv) {
 
   srv.on ('genMasterData',    async req => {
-     return (await _genMasterData(req,false));
+     return (await _genMasterDataDemo(req,false));
   })
 
   srv.on ('fgenMasterData',    async req => {
-    return (await _genMasterData(req,true));
+    return (await _genMasterDataDemo(req,true));
   })
 
   srv.on ('genPartialProducts',    async req => {
@@ -72,6 +72,619 @@ module.exports = async function (srv) {
     return (await _genPrimeAndUqiue(req,true));
   })
 
+
+  async function _genMasterDataDemo(req,isGet) {
+
+    var reqData = "Request for Master Data Generation Queued Sucessfully";
+
+    console.log("_genMasterData reqData : ", reqData);
+    let createtAt = new Date();
+    let id = uuidv1();
+    let values = [];	
+  
+    values.push({id, createtAt, reqData});    
+
+    if (isGet == true)
+    {
+        req.reply({values});
+    }
+    else
+    {
+        let res = req._.req.res;
+        res.statusCode = 202;
+        res.send({values});
+    }
+
+    // let sqlStr ='UPSERT PLSTR_PRODUCT ("PRODUCT_ID", "PROD_DESC", "PROD_FAMILY", "PROD_GROUP", "PROD_SERIES", "RESERVE_FIELD1","RESERVE_FIELD2")' +
+    //                 ' SELECT DISTINCT PRODUCT_ID, PRODUCT_NAME, MODEL_D ,\'CARS\',MOTOR_CODE_D, SALES_VERSION_ID_D , DENOMINATION_D FROM "PLSTR_DATA_DEMO"';
+    
+    let sqlStr ='UPSERT PLSTR_PRODUCT ("PRODUCT_ID", "PROD_DESC", "PROD_FAMILY", "PROD_GROUP")' +
+                    ' SELECT DISTINCT PRODUCT_ID, PRODUCT_NAME, PRODUCT_ID ,\'CARS\' FROM "PLSTR_DATA_DEMO"';
+
+    console.log("PLSTR PRODUCTS sqlStr ", sqlStr);
+
+    let results = await cds.run(sqlStr);
+    console.log("PLSTR PRODUCTS  ", results);
+
+
+    sqlStr = 'UPSERT PLSTR_LOCATION("LOCATION_ID","LOCATION_DESC","LOCATION_TYPE")' +
+                    ' SELECT DISTINCT  CONCAT(\'PL\',"COUNTRY"),  CONCAT(\'PL\',CONCAT ("COUNTRY", \' Location\')),\'2\'FROM "PLSTR_DATA_DEMO"'; 
+                // ' SELECT \'PL99\', \'PL99 Location\' , \'2\'FROM DUMMY';
+
+    console.log("PLSTR LOCATION sqlStr ", sqlStr);
+
+    results = await cds.run(sqlStr);
+    console.log("PLSTR LOCATION  ", results);
+
+    sqlStr = 'UPSERT PLSTR_CLASS("CLASS_NUM","CLASS_NAME","CLASS_TYPE","CLASS_DESC")' +
+             ' SELECT \'99999\', \'PS2_Class\', \'300\', \'PS2_Class_003\' FROM DUMMY';
+
+    console.log("PLSTR CLASS sqlStr ", sqlStr);
+
+    results = await cds.run(sqlStr);
+    console.log("PLSTR CLASS  ", results);
+
+    sqlStr = 'UPSERT PLSTR_PRODUCT_CLASS ("PRODUCT_ID", "CLASS_NUM", "CREATED_BY")' +
+					  ' SELECT DISTINCT "PRODUCT_ID", \'99999\',\'SBP\' FROM PLSTR_PRODUCT';
+
+
+    console.log("PLSTR PRODUCT CLASS sqlStr ", sqlStr);
+
+    results = await cds.run(sqlStr);
+    console.log("PLSTR PRODUCT CLASS  ", results);
+
+
+    sqlStr = 'UPSERT PLSTR_LOCATION_PRODUCT ("LOCATION_ID", "PRODUCT_ID","LOTSIZE_KEY","LOT_SIZE", "PROCUREMENT_TYPE","PLANNING_STRATEGY")' +
+					  ' SELECT DISTINCT CONCAT(\'PL\',"COUNTRY"), PRODUCT_ID, \'EX\',' +  1 + ' , \'E\',  \'56\' FROM PLSTR_DATA_DEMO';
+
+
+    console.log("PLSTR_LOCATION_PRODUCT sqlStr ", sqlStr);
+
+    results = await cds.run(sqlStr);
+    console.log("PPLSTR_LOCATION_PRODUCT  ", results);
+
+
+
+    sqlStr = 'UPSERT PLSTR_CHARACTERISTICS ("CLASS_NUM", "CHAR_NUM", "CHAR_NAME", "CHAR_DESC","CHAR_GROUP","CHAR_TYPE","ENTRY_REQ")' +
+                ' SELECT DISTINCT  \'99999\',"CHAR_NUM", "CHAR_NAME", "CHAR_DESC","CHAR_GROUP","CHAR_TYPE", \'Y\' FROM PLSTR_CHAR_CHARNUM';
+
+
+    console.log("PLSTR PLSTR_CHARACTERISTICS sqlStr ", sqlStr);
+
+    results = await cds.run(sqlStr);
+    console.log("PLSTR_CHARACTERISTICS  ", results);
+
+    sqlStr = 'SELECT DISTINCT "CHAR_NAME", "CHAR_NUM", "CHAR_DESC" FROM "PLSTR_CHAR_CHARNUM"';
+    console.log("PLSTR_CHAR_CHARNUM sqlStr ", sqlStr);
+
+    results = await cds.run(sqlStr);
+    console.log("PLSTR_CHAR_CHARNUM  ", results);
+
+    for(let rIndex = 0; rIndex < results.length; rIndex++)
+    {
+        let sqlPlstrData = "";
+        let charDesc = results[rIndex].CHAR_DESC;
+        if (charDesc != '')
+            sqlPlstrData = 'SELECT DISTINCT ' +  results[rIndex].CHAR_NAME + "," + results[rIndex].CHAR_DESC + ' FROM PLSTR_DATA_DEMO' + 
+                             ' WHERE ' +  results[rIndex].CHAR_NAME + '!= \'null\'';
+        else
+            sqlPlstrData = 'SELECT DISTINCT ' +  results[rIndex].CHAR_NAME + ', ' +  results[rIndex].CHAR_NAME + ' FROM PLSTR_DATA_DEMO' + 
+                            ' WHERE ' +  results[rIndex].CHAR_NAME + '!= \'null\'';
+        console.log("PLSTR_DATA_DEMO CHAR sqlPlstrData ", sqlPlstrData);
+
+        let plstrDataResults = await cds.run(sqlPlstrData); 
+        console.log("PLSTR_CHAR_VALUES  ", plstrDataResults);
+        // str = plstrDataResults.length.toString(),
+        // len = str.length;
+        let prefix ="";
+        // if (len == 1)
+        // {
+        //     prefix = '000';
+        // }
+        // else if (len == 2)
+        // {
+        //     prefix = '00';
+        // }
+        // else if (len == 3)
+        // {
+        //     prefix = '0';
+        // }
+        // console.log("PLSTR_CHAR_VALUES prefix ", prefix);
+        let charvalNumIndex = 0;
+        for(charvalIndex = 0; charvalIndex < plstrDataResults.length; charvalIndex++ )
+        {
+            charvalNumIndex ++;
+            let charNum = results[rIndex].CHAR_NUM;
+
+            if (charvalNumIndex < 10 )
+            {
+                prefix = '000'; 
+            }
+            else if (charvalNumIndex < 100 )
+            {
+                prefix = '00'; 
+            }
+            else if (charvalNumIndex < 1000 )
+            {
+                prefix = '0';
+            }
+            let charvalNum = results[rIndex].CHAR_NUM + '_' + prefix + charvalNumIndex; //rIndex + 1;
+
+            
+
+            let str = JSON.stringify(plstrDataResults[charvalIndex]);
+            let obj = JSON.parse(str);
+            let arrayVals = Object.values(obj);
+
+            let charName = arrayVals[0];
+            let chavalDesc = 'NULL';
+            if(arrayVals.length > 1)
+                chavalDesc = arrayVals[1];
+            else
+            chavalDesc = arrayVals[0];
+            console.log("charNum = ", charNum, "charName = ",charName, "charvalNum = ",charvalNum, "chavalDesc = ",chavalDesc);
+            
+            sqlStr = 'UPSERT PLSTR_CHAR_VALUES VALUES (' +
+                    "'" + charNum + "'" + "," +
+                    "'" + charvalNum + "'" + "," +
+                    "'" + charName + "'" + "," +
+                    "'" + chavalDesc + "'" + "," +
+                    'null' +')' + ' WITH PRIMARY KEY';
+
+            console.log("PLSTR_CHAR_VALUES sqlStr", sqlStr);
+
+            let charValResults = await cds.run(sqlStr);
+            console.log("PLSTR_CHAR_VALUES  ", charValResults);
+
+        }
+
+
+    }
+
+    // SALES HISTORY
+
+    sqlStr = 'select * FROM PLSTR_DATA_DEMO';
+    plstrData = await cds.run(sqlStr);
+
+    console.log("PLSTR_DATA_DEMO rows", plstrData.length);
+
+    // var plstrJson = JSON.stringify(plstrData);
+    const salesDocBaseID = 9990000000;
+    const salesDocItem = 50;
+    const sheduledLineNum = 10;
+    const uom = 'EA';
+
+    
+    for(let shIndex = 0; shIndex < plstrData.length; shIndex++)
+    {
+        let salesDocId = salesDocBaseID + plstrData[shIndex].UNIQUE_ID;
+
+        let countryCode = plstrData[shIndex].COUNTRY ;
+        let custGroup = '';
+        // if ( (countryCode == 'GB') ||
+        //      (countryCode == 'AT') ||
+        //      (countryCode == 'IS') ||
+        //      (countryCode == 'NL') ||
+        //      (countryCode == 'SE') ||
+        //      (countryCode == 'BE') ||
+        //      (countryCode == 'CH') ||
+        //      (countryCode == 'DE') ||
+        //      (countryCode == 'DK') ||
+        //      (countryCode == 'FI') ||
+        //      (countryCode == 'NO') ||
+        //      (countryCode == 'LU') ||
+        //      (countryCode == 'PT') ||
+        //      (countryCode == 'ES') ||
+        //      (countryCode == 'IE') )
+        // {
+        //     custGroup = 'EU';
+        // }
+        // else if ((countryCode == 'US') ||
+        //          (countryCode == 'CA') )
+        // {
+        //     custGroup = 'NA';
+        // }
+        // else if ((countryCode == 'NZ') ||
+        //          (countryCode == 'AU') ||
+        //          (countryCode == 'CN') )
+        // {
+        //     custGroup = 'OS';
+        // }
+        // else if ((countryCode == 'SG') ||
+        //          (countryCode == 'KR') ||
+        //          (countryCode == 'HK'))
+        // {
+        //     custGroup = 'SE';
+        // }       
+        // else if ((countryCode == 'KW') ||
+        //          (countryCode == 'AE') ||
+        //          (countryCode == 'IL'))
+        // {
+        //     custGroup = 'OT';
+        // }
+
+        sqlStr = 'UPSERT PLSTR_SALESH VALUES (' +
+                    "'" + salesDocId + "'" + "," +
+                    "'" + salesDocItem + "'" + "," +
+                    "'" + plstrData[shIndex].START_DATE + "'" + "," +
+                    "'" + sheduledLineNum + "'" + "," +
+                    "'" + plstrData[shIndex].PRODUCT_ID + "'" + "," +
+                    "''" + "," +
+                    "'" + uom + "'" + "," +
+                    "'" + plstrData[shIndex].HANDOVERS_COUNT + "'" + "," +
+                    "'" + plstrData[shIndex].HANDOVERS_COUNT + "'" + "," +
+                    "'" + plstrData[shIndex].START_DATE + "'" + "," +
+                    "'" + 9999999 + "'" + "," +
+                    "'" + countryCode + "'" + "," +
+                    "'" + 'PL' + countryCode + "'" + "," +
+                    "'" + plstrData[shIndex].START_DATE + "'" + "," +
+                    "''" + "," +
+                    "'" + plstrData[shIndex].START_DATE + "'" + "," +
+                    "'SBP'" + "," +
+                    "''" + "," +
+                    "''" +')' + ' WITH PRIMARY KEY';
+
+        // console.log("PLSTR_SALESH VALUES sqlStr", sqlStr);
+
+        let saleshResults = await cds.run(sqlStr);
+        // console.log("PLSTR_SALESH  ", saleshResults);
+        if (shIndex %100 == 0)
+         console.log("PLSTR_SALESH salesDoc ", salesDocId, "shIndex ",shIndex);
+
+        let sqlSaleConfig = 'SELECT DISTINCT MOTOR_CODE_D, DENOMINATION_D, SALES_VERSION_ID_D, BODY_VERSION_D, TRANSMISSION_D, STEERING_D, ' +
+                            ' MARKET_CODE_D, EXTERIOR_ID_D, INTERIOR_D, OPT_WHEELS_D,  OPT_PERFORM_D, OPT_PLUS_D, OPT_PILOT_D, OPT_PILOT_LITE_D, OPT_TOWBAR_D' +
+                            ' FROM PLSTR_DATA_DEMO WHERE ' +  
+                            ' UNIQUE_ID = ' + "'" + plstrData[shIndex].UNIQUE_ID + "'";
+        
+        // console.log(" sqlSaleConfig ", sqlSaleConfig);
+
+        let salesConfigResults = await cds.run(sqlSaleConfig);
+        // console.log(" salesConfigResults ", salesConfigResults);
+
+        let sqlSalesCfgCharCharval = '';
+
+        if( plstrData[shIndex].MOTOR_CODE_D != 'NULL')
+        {
+            sqlSalesCfgCharCharval = 'UPSERT PLSTR_SALESH_CONFIG ("SALES_DOC", "SALESDOC_ITEM", ' + 
+                                     '"CHAR_NUM", "CHARVAL_NUM","PRODUCT_ID","CHANGED_DATE", ' +
+                                     '"CREATED_DATE", "CREATED_BY" '+')' +
+                                     ' SELECT ' + 
+                                     "'" + salesDocId + "'" + "," +
+                                     "'" + salesDocItem + "'" + "," +
+                                     'charval."CHAR_NUM", charval."CHARVAL_NUM",' +
+                                     "'" + plstrData[shIndex].PRODUCT_ID + "'" + "," +
+                                     "'" + plstrData[shIndex].START_DATE + "'" + "," +
+                                     "'" + plstrData[shIndex].START_DATE + "'" + "," +
+                                     "'SBP'" +
+                                     ' FROM PLSTR_CHARACTERISTICS AS charc' +
+                                     ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
+                                     ' charc.CHAR_NUM = charval.CHAR_NUM' + 
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].MOTOR_CODE_D + "'";        
+            let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
+   
+        }
+
+        if( plstrData[shIndex].DENOMINATION_D != 'NULL')
+        {
+            sqlSalesCfgCharCharval = 'UPSERT PLSTR_SALESH_CONFIG ("SALES_DOC", "SALESDOC_ITEM", ' + 
+                                     '"CHAR_NUM", "CHARVAL_NUM","PRODUCT_ID","CHANGED_DATE", ' +
+                                     '"CREATED_DATE", "CREATED_BY" '+')' +
+                                     ' SELECT ' + 
+                                     "'" + salesDocId + "'" + "," +
+                                     "'" + salesDocItem + "'" + "," +
+                                     'charval."CHAR_NUM", charval."CHARVAL_NUM",' +
+                                     "'" + plstrData[shIndex].PRODUCT_ID + "'" + "," +
+                                     "'" + plstrData[shIndex].START_DATE + "'" + "," +
+                                     "'" + plstrData[shIndex].START_DATE + "'" + "," +
+                                     "'SBP'" +
+                                     ' FROM PLSTR_CHARACTERISTICS AS charc' +
+                                     ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
+                                     ' charc.CHAR_NUM = charval.CHAR_NUM' + 
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].DENOMINATION_D + "'";        
+            let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
+   
+        }
+        // console.log(" sqlSalesCfgCharCharval ", sqlSalesCfgCharCharval);
+
+
+        if( plstrData[shIndex].SALES_VERSION_ID_D != 'NULL')
+        {
+            sqlSalesCfgCharCharval = 'UPSERT PLSTR_SALESH_CONFIG ("SALES_DOC", "SALESDOC_ITEM", ' + 
+                                     '"CHAR_NUM", "CHARVAL_NUM","PRODUCT_ID","CHANGED_DATE", ' +
+                                     '"CREATED_DATE", "CREATED_BY" '+')' +
+                                     ' SELECT ' + 
+                                     "'" + salesDocId + "'" + "," +
+                                     "'" + salesDocItem + "'" + "," +
+                                     'charval."CHAR_NUM", charval."CHARVAL_NUM",' +
+                                     "'" + plstrData[shIndex].PRODUCT_ID + "'" + "," +
+                                     "'" + plstrData[shIndex].START_DATE + "'" + "," +
+                                     "'" + plstrData[shIndex].START_DATE + "'" + "," +
+                                     "'SBP'" +
+                                     ' FROM PLSTR_CHARACTERISTICS AS charc' +
+                                     ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
+                                     ' charc.CHAR_NUM = charval.CHAR_NUM' + 
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].SALES_VERSION_ID_D + "'";
+            let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
+
+        }
+
+
+        if( plstrData[shIndex].BODY_VERSION_D != 'NULL')
+        {
+            sqlSalesCfgCharCharval = 'UPSERT PLSTR_SALESH_CONFIG ("SALES_DOC", "SALESDOC_ITEM", ' + 
+                                     '"CHAR_NUM", "CHARVAL_NUM","PRODUCT_ID","CHANGED_DATE", ' +
+                                     '"CREATED_DATE", "CREATED_BY" '+')' +
+                                     ' SELECT ' + 
+                                     "'" + salesDocId + "'" + "," +
+                                     "'" + salesDocItem + "'" + "," +
+                                     'charval."CHAR_NUM", charval."CHARVAL_NUM",' +
+                                     "'" + plstrData[shIndex].PRODUCT_ID + "'" + "," +
+                                     "'" + plstrData[shIndex].START_DATE + "'" + "," +
+                                     "'" + plstrData[shIndex].START_DATE + "'" + "," +
+                                     "'SBP'" +
+                                     ' FROM PLSTR_CHARACTERISTICS AS charc' +
+                                     ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
+                                     ' charc.CHAR_NUM = charval.CHAR_NUM' + 
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].BODY_VERSION_D + "'";
+            let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
+
+        }
+
+        if( plstrData[shIndex].TRANSMISSION_D != 'NULL')
+        {
+            sqlSalesCfgCharCharval = 'UPSERT PLSTR_SALESH_CONFIG ("SALES_DOC", "SALESDOC_ITEM", ' + 
+                                     '"CHAR_NUM", "CHARVAL_NUM","PRODUCT_ID","CHANGED_DATE", ' +
+                                     '"CREATED_DATE", "CREATED_BY" '+')' +
+                                     ' SELECT ' + 
+                                     "'" + salesDocId + "'" + "," +
+                                     "'" + salesDocItem + "'" + "," +
+                                     'charval."CHAR_NUM", charval."CHARVAL_NUM",' +
+                                     "'" + plstrData[shIndex].PRODUCT_ID + "'" + "," +
+                                     "'" + plstrData[shIndex].START_DATE + "'" + "," +
+                                     "'" + plstrData[shIndex].START_DATE + "'" + "," +
+                                     "'SBP'" +
+                                     ' FROM PLSTR_CHARACTERISTICS AS charc' +
+                                     ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
+                                     ' charc.CHAR_NUM = charval.CHAR_NUM' + 
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].TRANSMISSION_D + "'";
+            let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
+
+        }
+
+        if( plstrData[shIndex].STEERING_D != 'NULL')
+        {
+            sqlSalesCfgCharCharval = 'UPSERT PLSTR_SALESH_CONFIG ("SALES_DOC", "SALESDOC_ITEM", ' + 
+                                     '"CHAR_NUM", "CHARVAL_NUM","PRODUCT_ID","CHANGED_DATE", ' +
+                                     '"CREATED_DATE", "CREATED_BY" '+')' +
+                                     ' SELECT ' + 
+                                     "'" + salesDocId + "'" + "," +
+                                     "'" + salesDocItem + "'" + "," +
+                                     'charval."CHAR_NUM", charval."CHARVAL_NUM",' +
+                                     "'" + plstrData[shIndex].PRODUCT_ID + "'" + "," +
+                                     "'" + plstrData[shIndex].START_DATE + "'" + "," +
+                                     "'" + plstrData[shIndex].START_DATE + "'" + "," +
+                                     "'SBP'" +
+                                     ' FROM PLSTR_CHARACTERISTICS AS charc' +
+                                     ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
+                                     ' charc.CHAR_NUM = charval.CHAR_NUM' + 
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].STEERING_D + "'";
+            let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
+
+        }
+
+        if( plstrData[shIndex].MARKET_CODE_D != 'NULL')
+        {
+            sqlSalesCfgCharCharval = 'UPSERT PLSTR_SALESH_CONFIG ("SALES_DOC", "SALESDOC_ITEM", ' + 
+                                     '"CHAR_NUM", "CHARVAL_NUM","PRODUCT_ID","CHANGED_DATE", ' +
+                                     '"CREATED_DATE", "CREATED_BY" '+')' +
+                                     ' SELECT ' + 
+                                     "'" + salesDocId + "'" + "," +
+                                     "'" + salesDocItem + "'" + "," +
+                                     'charval."CHAR_NUM", charval."CHARVAL_NUM",' +
+                                     "'" + plstrData[shIndex].PRODUCT_ID + "'" + "," +
+                                     "'" + plstrData[shIndex].START_DATE + "'" + "," +
+                                     "'" + plstrData[shIndex].START_DATE + "'" + "," +
+                                     "'SBP'" +
+                                     ' FROM PLSTR_CHARACTERISTICS AS charc' +
+                                     ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
+                                     ' charc.CHAR_NUM = charval.CHAR_NUM' + 
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].MARKET_CODE_D + "'";
+            let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
+
+        }
+
+
+        if( plstrData[shIndex].EXTERIOR_ID_D != 'NULL')
+        {
+            sqlSalesCfgCharCharval = 'UPSERT PLSTR_SALESH_CONFIG ("SALES_DOC", "SALESDOC_ITEM", ' + 
+                                     '"CHAR_NUM", "CHARVAL_NUM","PRODUCT_ID","CHANGED_DATE", ' +
+                                     '"CREATED_DATE", "CREATED_BY" '+')' +
+                                     ' SELECT ' + 
+                                     "'" + salesDocId + "'" + "," +
+                                     "'" + salesDocItem + "'" + "," +
+                                     'charval."CHAR_NUM", charval."CHARVAL_NUM",' +
+                                     "'" + plstrData[shIndex].PRODUCT_ID + "'" + "," +
+                                     "'" + plstrData[shIndex].START_DATE + "'" + "," +
+                                     "'" + plstrData[shIndex].START_DATE + "'" + "," +
+                                     "'SBP'" +
+                                     ' FROM PLSTR_CHARACTERISTICS AS charc' +
+                                     ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
+                                     ' charc.CHAR_NUM = charval.CHAR_NUM' + 
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].EXTERIOR_ID_D + "'";
+            let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
+
+        }
+
+        if( plstrData[shIndex].INTERIOR_D != 'NULL')
+        {
+            sqlSalesCfgCharCharval = 'UPSERT PLSTR_SALESH_CONFIG ("SALES_DOC", "SALESDOC_ITEM", ' + 
+                                     '"CHAR_NUM", "CHARVAL_NUM","PRODUCT_ID","CHANGED_DATE", ' +
+                                     '"CREATED_DATE", "CREATED_BY" '+')' +
+                                     ' SELECT ' + 
+                                     "'" + salesDocId + "'" + "," +
+                                     "'" + salesDocItem + "'" + "," +
+                                     'charval."CHAR_NUM", charval."CHARVAL_NUM",' +
+                                     "'" + plstrData[shIndex].PRODUCT_ID + "'" + "," +
+                                     "'" + plstrData[shIndex].START_DATE + "'" + "," +
+                                     "'" + plstrData[shIndex].START_DATE + "'" + "," +
+                                     "'SBP'" +
+                                     ' FROM PLSTR_CHARACTERISTICS AS charc' +
+                                     ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
+                                     ' charc.CHAR_NUM = charval.CHAR_NUM' + 
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].INTERIOR_D + "'";
+            let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
+
+        }
+
+        if( plstrData[shIndex].OPT_WHEELS_D != 'NULL')
+        {
+            sqlSalesCfgCharCharval = 'UPSERT PLSTR_SALESH_CONFIG ("SALES_DOC", "SALESDOC_ITEM", ' + 
+                                     '"CHAR_NUM", "CHARVAL_NUM","PRODUCT_ID","CHANGED_DATE", ' +
+                                     '"CREATED_DATE", "CREATED_BY" '+')' +
+                                     ' SELECT ' + 
+                                     "'" + salesDocId + "'" + "," +
+                                     "'" + salesDocItem + "'" + "," +
+                                     'charval."CHAR_NUM", charval."CHARVAL_NUM",' +
+                                     "'" + plstrData[shIndex].PRODUCT_ID + "'" + "," +
+                                     "'" + plstrData[shIndex].START_DATE + "'" + "," +
+                                     "'" + plstrData[shIndex].START_DATE + "'" + "," +
+                                     "'SBP'" +
+                                     ' FROM PLSTR_CHARACTERISTICS AS charc' +
+                                     ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
+                                     ' charc.CHAR_NUM = charval.CHAR_NUM' + 
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].OPT_WHEELS_D + "'";
+            let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
+
+        }
+
+        if( plstrData[shIndex].OPT_PERFORM_D != 'NULL')
+        {
+            sqlSalesCfgCharCharval = 'UPSERT PLSTR_SALESH_CONFIG ("SALES_DOC", "SALESDOC_ITEM", ' + 
+                                     '"CHAR_NUM", "CHARVAL_NUM","PRODUCT_ID","CHANGED_DATE", ' +
+                                     '"CREATED_DATE", "CREATED_BY" '+')' +
+                                     ' SELECT ' + 
+                                     "'" + salesDocId + "'" + "," +
+                                     "'" + salesDocItem + "'" + "," +
+                                     'charval."CHAR_NUM", charval."CHARVAL_NUM",' +
+                                     "'" + plstrData[shIndex].PRODUCT_ID + "'" + "," +
+                                     "'" + plstrData[shIndex].START_DATE + "'" + "," +
+                                     "'" + plstrData[shIndex].START_DATE + "'" + "," +
+                                     "'SBP'" +
+                                     ' FROM PLSTR_CHARACTERISTICS AS charc' +
+                                     ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
+                                     ' charc.CHAR_NUM = charval.CHAR_NUM' + 
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].OPT_PERFORM_D + "'";
+            let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
+
+        }
+
+        if( plstrData[shIndex].OPT_PLUS_D != 'NULL')
+        {
+            sqlSalesCfgCharCharval = 'UPSERT PLSTR_SALESH_CONFIG ("SALES_DOC", "SALESDOC_ITEM", ' + 
+                                     '"CHAR_NUM", "CHARVAL_NUM","PRODUCT_ID","CHANGED_DATE", ' +
+                                     '"CREATED_DATE", "CREATED_BY" '+')' +
+                                     ' SELECT ' + 
+                                     "'" + salesDocId + "'" + "," +
+                                     "'" + salesDocItem + "'" + "," +
+                                     'charval."CHAR_NUM", charval."CHARVAL_NUM",' +
+                                     "'" + plstrData[shIndex].PRODUCT_ID + "'" + "," +
+                                     "'" + plstrData[shIndex].START_DATE + "'" + "," +
+                                     "'" + plstrData[shIndex].START_DATE + "'" + "," +
+                                     "'SBP'" +
+                                     ' FROM PLSTR_CHARACTERISTICS AS charc' +
+                                     ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
+                                     ' charc.CHAR_NUM = charval.CHAR_NUM' + 
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].OPT_PLUS_D + "'";
+            let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
+
+        }
+
+        if( plstrData[shIndex].OPT_PILOT_D != 'NULL')
+        {
+            sqlSalesCfgCharCharval = 'UPSERT PLSTR_SALESH_CONFIG ("SALES_DOC", "SALESDOC_ITEM", ' + 
+                                     '"CHAR_NUM", "CHARVAL_NUM","PRODUCT_ID","CHANGED_DATE", ' +
+                                     '"CREATED_DATE", "CREATED_BY" '+')' +
+                                     ' SELECT ' + 
+                                     "'" + salesDocId + "'" + "," +
+                                     "'" + salesDocItem + "'" + "," +
+                                     'charval."CHAR_NUM", charval."CHARVAL_NUM",' +
+                                     "'" + plstrData[shIndex].PRODUCT_ID + "'" + "," +
+                                     "'" + plstrData[shIndex].START_DATE + "'" + "," +
+                                     "'" + plstrData[shIndex].START_DATE + "'" + "," +
+                                     "'SBP'" +
+                                     ' FROM PLSTR_CHARACTERISTICS AS charc' +
+                                     ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
+                                     ' charc.CHAR_NUM = charval.CHAR_NUM' + 
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].OPT_PILOT_D + "'";
+            let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
+
+        }
+
+        if( plstrData[shIndex].OPT_PILOT_LITE_D != 'NULL')
+        {
+            sqlSalesCfgCharCharval = 'UPSERT PLSTR_SALESH_CONFIG ("SALES_DOC", "SALESDOC_ITEM", ' + 
+                                     '"CHAR_NUM", "CHARVAL_NUM","PRODUCT_ID","CHANGED_DATE", ' +
+                                     '"CREATED_DATE", "CREATED_BY" '+')' +
+                                     ' SELECT ' + 
+                                     "'" + salesDocId + "'" + "," +
+                                     "'" + salesDocItem + "'" + "," +
+                                     'charval."CHAR_NUM", charval."CHARVAL_NUM",' +
+                                     "'" + plstrData[shIndex].PRODUCT_ID + "'" + "," +
+                                     "'" + plstrData[shIndex].START_DATE + "'" + "," +
+                                     "'" + plstrData[shIndex].START_DATE + "'" + "," +
+                                     "'SBP'" +
+                                     ' FROM PLSTR_CHARACTERISTICS AS charc' +
+                                     ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
+                                     ' charc.CHAR_NUM = charval.CHAR_NUM' + 
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].OPT_PILOT_LITE_D + "'";
+            let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
+
+        }
+
+
+        if( plstrData[shIndex].OPT_TOWBAR_D != 'NULL')
+        {
+            sqlSalesCfgCharCharval = 'UPSERT PLSTR_SALESH_CONFIG ("SALES_DOC", "SALESDOC_ITEM", ' + 
+                                     '"CHAR_NUM", "CHARVAL_NUM","PRODUCT_ID","CHANGED_DATE", ' +
+                                     '"CREATED_DATE", "CREATED_BY" '+')' +
+                                     ' SELECT ' + 
+                                     "'" + salesDocId + "'" + "," +
+                                     "'" + salesDocItem + "'" + "," +
+                                     'charval."CHAR_NUM", charval."CHARVAL_NUM",' +
+                                     "'" + plstrData[shIndex].PRODUCT_ID + "'" + "," +
+                                     "'" + plstrData[shIndex].START_DATE + "'" + "," +
+                                     "'" + plstrData[shIndex].START_DATE + "'" + "," +
+                                     "'SBP'" +
+                                     ' FROM PLSTR_CHARACTERISTICS AS charc' +
+                                     ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
+                                     ' charc.CHAR_NUM = charval.CHAR_NUM' + 
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].OPT_TOWBAR_D + "'";
+            let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
+
+        }
+        // console.log(" sqlSalesCfgCharCharval ", sqlSalesCfgCharCharval);
+        // console.log(" salesConfigResults ", sqlSalesCfgCharCharvalResults);
+        // if (shIndex == 0)
+        //      break;
+        if( shIndex % 1000 == 0)
+           await cds.run('COMMIT');
+    }
+
+    let custGrpSql  = 'UPSERT PLSTR_CUSTOMERGROUP ("CUSTOMER_GROUP", "CUSTOMER_DESC")' +
+                        ' SELECT DISTINCT "CUSTOMER_GROUP" ,' +
+                        ' CONCAT("CUSTOMER_GROUP", ' + '\' Customer \'' + ')' + 
+                        ' FROM "PLSTR_SALESH" WHERE LOCATION_ID = ' + '\'PL99\'';
+    console.log("custGrpSql = ", custGrpSql);
+    let custGrpSqlResults = await cds.run(custGrpSql);
+    console.log("custGrpSqlResults = ", custGrpSqlResults);
+
+
+    let dataObj = {};
+    dataObj["success"] = true;
+    dataObj["message"] = "update Master Data Completed Successfully at " +  new Date();
+
+
+  }
 
   async function _genMasterData(req,isGet) {
 
@@ -285,7 +898,10 @@ module.exports = async function (srv) {
              (countryCode == 'DK') ||
              (countryCode == 'FI') ||
              (countryCode == 'NO') ||
-             (countryCode == 'LU') )
+             (countryCode == 'LU') ||
+             (countryCode == 'PT') ||
+             (countryCode == 'ES') ||
+             (countryCode == 'IE') )
         {
             custGroup = 'EU';
         }
@@ -301,11 +917,14 @@ module.exports = async function (srv) {
             custGroup = 'OS';
         }
         else if ((countryCode == 'SG') ||
-                 (countryCode == 'KR') )
+                 (countryCode == 'KR') ||
+                 (countryCode == 'HK'))
         {
             custGroup = 'SE';
         }       
-        else if ((countryCode == 'KW'))
+        else if ((countryCode == 'KW') ||
+                 (countryCode == 'AE') ||
+                 (countryCode == 'IL'))
         {
             custGroup = 'OT';
         }

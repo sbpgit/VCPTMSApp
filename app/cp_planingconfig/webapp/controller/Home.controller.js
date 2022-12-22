@@ -26,7 +26,7 @@ sap.ui.define([
                 that.oMethodModel = new JSONModel();
 
                 var oDetailPage = this.getView().byId("idDetailView"),
-                bCurrentShowFooterState = oDetailPage.getShowFooter();
+                    bCurrentShowFooterState = oDetailPage.getShowFooter();
                 oDetailPage.setShowFooter(bCurrentShowFooterState);
 
                 if (!that.oMethodDialog) {
@@ -34,7 +34,7 @@ sap.ui.define([
                     that.getView().addDependent(that.oMethodDialog);
                 }
 
-                
+
 
                 // oRoute = that.getRouter().getRoute("detail");
                 //  oRoute.attachPatternMatched(that._onPatternMatched, that);                
@@ -45,11 +45,12 @@ sap.ui.define([
        */
             onAfterRendering: function () {
                 var oModel = that.getOwnerComponent().getModel('PCModel');
-                oGModel = that.getOwnerComponent().getModel("oGModel");   
+                oGModel = that.getOwnerComponent().getModel("oGModel");
 
                 var location = oGModel.getProperty("/location");
 
-                that.getPlannedParameters(location);
+                // that.getPlannedParameters(location);
+                that.getParameters();
                 that.getMethods(oModel);
             },
 
@@ -131,6 +132,9 @@ sap.ui.define([
             */
             getPlannedParameters: function (slocation) {
                 var aParameters = [];
+                // var aFilter = [new Filter("LOCATION_ID", FilterOperator.EQ, slocation),
+                //                           new Filter("VALUE", FilterOperator.EQ, ' ')];
+
                 that.getModel("PCModel").read('/V_Parameters', {
                     filters: [
                         new Filter("LOCATION_ID", FilterOperator.EQ, slocation)
@@ -166,20 +170,22 @@ sap.ui.define([
                     success: function (oData) {
                         // MessageToast.show("Success");
                         aParameters = oData.results;
-                        aParameters = aParameters.sort((a, b) => a.SEQUENCE - b.SEQUENCE);
+                        if (aParameters.length > 0) {                            
+                            that.getFilteredData(aParameters);
+                            // aParameters = aParameters.sort((a, b) => a.SEQUENCE - b.SEQUENCE);
 
-                        const ids = aParameters.map(o => o.PARAMETER_ID)
-                        const aFiltered = aParameters.filter(({ PARAMETER_ID }, index) => !ids.includes(PARAMETER_ID, index + 1))
-                        const aParams = aFiltered.map(obj => {
-                            
-                              return {...obj, VALUE: ''};
-                          });                       
+                            // const ids = aParameters.map(o => o.PARAMETER_ID)
+                            // const aFiltered = aParameters.filter(({ PARAMETER_ID }, index) => !ids.includes(PARAMETER_ID, index + 1))
+                            // const aParams = aFiltered.map(obj => {
 
-                        that.oParameterModel.setData({
-                            parameters: aParams //aParameters  //oData.results
-                        });
+                            //     return { ...obj, VALUE: '' };
+                            // });
 
-                        that.byId("idParameterTable").setModel(that.oParameterModel);
+                            // that.oParameterModel.setData({
+                            //     parameters: aParams //aParameters  //oData.results
+                            // });
+                        }
+                        // that.byId("idParameterTable").setModel(that.oParameterModel);
 
                     }, error: function (oReponse) {
                         MessageToast.show("Failed to fetch Parameters!");
@@ -187,6 +193,49 @@ sap.ui.define([
                 }
                 );
             },
+            /**
+             * 
+             * @param {*} oModel 
+             */
+            getFilteredData: function (aParameters) {
+                var sLocation = oGModel.getProperty("/location");
+                var aNewParams = [];               
+                var aFilteredParams = aParameters.filter(function (aParams) {
+                    return aParams.LOCATION_ID === sLocation;
+                });
+                var aNewParams = aParameters.filter(function (aParams) {
+                    return aParams.LOCATION_ID === '' || aParams.LOCATION_ID === null;
+                });
+                if (aFilteredParams.length > 0) {
+                    if (aNewParams.length > 0) {
+                        for(var i = 0; i < aNewParams.length; i++) {
+                            aFilteredParams.push(aNewParams[i]);
+                        }                       
+                    }
+
+                    aFilteredParams = aFilteredParams.sort((a, b) => a.SEQUENCE - b.SEQUENCE);
+                    that.oParameterModel.setData({
+                        parameters: aFilteredParams
+                    });
+
+                } else {
+                    aParameters = aParameters.sort((a, b) => a.SEQUENCE - b.SEQUENCE);
+                    const ids = aParameters.map(o => o.PARAMETER_ID)
+                    const aFiltered = aParameters.filter(({ PARAMETER_ID }, index) => !ids.includes(PARAMETER_ID, index + 1))
+                    const aParams = aFiltered.map(obj => {
+
+                        return { ...obj, VALUE: '' };
+                    });
+
+                    that.oParameterModel.setData({
+                        parameters: aParams
+                    });
+                }
+                that.byId("idParameterTable").setModel(that.oParameterModel);
+
+
+            },
+
             /*
             *
             */
@@ -292,7 +341,7 @@ sap.ui.define([
              * 
              * 
              */
-           
+
 
         });
     });
