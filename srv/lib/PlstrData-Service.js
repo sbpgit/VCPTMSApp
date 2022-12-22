@@ -196,7 +196,9 @@ module.exports = async function (srv) {
             {
                 prefix = '0';
             }
-            let charvalNum = results[rIndex].CHAR_NUM + '_' + prefix + charvalNumIndex; //rIndex + 1;
+            // let charvalNum = results[rIndex].CHAR_NUM + '_' + prefix + charvalNumIndex; //rIndex + 1;
+            let charvalNum = prefix + charvalNumIndex; //rIndex + 1;
+
 
             
 
