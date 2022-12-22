@@ -243,8 +243,8 @@ module.exports = async function (srv) {
     const uom = 'EA';
 
     
-    // for(let shIndex = 0; shIndex < plstrData.length; shIndex++)
-    for(let shIndex = 18000; shIndex < plstrData.length; shIndex++)
+    for(let shIndex = 0; shIndex < plstrData.length; shIndex++)
+    // for(let shIndex = 18000; shIndex < plstrData.length; shIndex++)
     {
         let salesDocId = salesDocBaseID + plstrData[shIndex].UNIQUE_ID;
 
