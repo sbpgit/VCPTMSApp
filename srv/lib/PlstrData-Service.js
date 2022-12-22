@@ -243,7 +243,7 @@ module.exports = async function (srv) {
 
     // SALES HISTORY
 
-    sqlStr = 'select * FROM PLSTR_DATA_DEMO';
+    sqlStr = 'select * FROM PLSTR_DATA_DEMO ORDER BY UNIQUE_ID ASC';
     plstrData = await cds.run(sqlStr);
 
     console.log("PLSTR_DATA_DEMO rows", plstrData.length);
@@ -359,7 +359,8 @@ module.exports = async function (srv) {
                                      ' FROM PLSTR_CHARACTERISTICS AS charc' +
                                      ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
                                      ' charc.CHAR_NUM = charval.CHAR_NUM' + 
-                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].MOTOR_CODE_D + "'";        
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].MOTOR_CODE_D + "'" +
+                                     ' AND charc.CHAR_NAME = \'MOTOR_CODE_D\'';        
             let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
    
         }
@@ -380,7 +381,8 @@ module.exports = async function (srv) {
                                      ' FROM PLSTR_CHARACTERISTICS AS charc' +
                                      ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
                                      ' charc.CHAR_NUM = charval.CHAR_NUM' + 
-                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].DENOMINATION_D + "'";        
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].DENOMINATION_D + "'" +
+                                     ' AND charc.CHAR_NAME = \'DENOMINATION_D\'';                
             let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
    
         }
@@ -403,7 +405,8 @@ module.exports = async function (srv) {
                                      ' FROM PLSTR_CHARACTERISTICS AS charc' +
                                      ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
                                      ' charc.CHAR_NUM = charval.CHAR_NUM' + 
-                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].SALES_VERSION_ID_D + "'";
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].SALES_VERSION_ID_D + "'" +
+                                     ' AND charc.CHAR_NAME = \'SALES_VERSION_ID_D\'';      
             let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
 
         }
@@ -425,7 +428,8 @@ module.exports = async function (srv) {
                                      ' FROM PLSTR_CHARACTERISTICS AS charc' +
                                      ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
                                      ' charc.CHAR_NUM = charval.CHAR_NUM' + 
-                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].BODY_VERSION_D + "'";
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].BODY_VERSION_D + "'" +
+                                     ' AND charc.CHAR_NAME = \'BODY_VERSION_D\'';      
             let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
 
         }
@@ -446,7 +450,8 @@ module.exports = async function (srv) {
                                      ' FROM PLSTR_CHARACTERISTICS AS charc' +
                                      ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
                                      ' charc.CHAR_NUM = charval.CHAR_NUM' + 
-                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].TRANSMISSION_D + "'";
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].TRANSMISSION_D + "'" +
+                                     ' AND charc.CHAR_NAME = \'TRANSMISSION_D\'';      
             let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
 
         }
@@ -467,7 +472,8 @@ module.exports = async function (srv) {
                                      ' FROM PLSTR_CHARACTERISTICS AS charc' +
                                      ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
                                      ' charc.CHAR_NUM = charval.CHAR_NUM' + 
-                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].STEERING_D + "'";
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].STEERING_D + "'" +
+                                     ' AND charc.CHAR_NAME = \'STEERING_D\'';      
             let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
 
         }
@@ -488,7 +494,8 @@ module.exports = async function (srv) {
                                      ' FROM PLSTR_CHARACTERISTICS AS charc' +
                                      ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
                                      ' charc.CHAR_NUM = charval.CHAR_NUM' + 
-                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].MARKET_CODE_D + "'";
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].MARKET_CODE_D + "'" +
+                                     ' AND charc.CHAR_NAME = \'MARKET_CODE_D\'';      
             let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
 
         }
@@ -510,7 +517,8 @@ module.exports = async function (srv) {
                                      ' FROM PLSTR_CHARACTERISTICS AS charc' +
                                      ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
                                      ' charc.CHAR_NUM = charval.CHAR_NUM' + 
-                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].EXTERIOR_ID_D + "'";
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].EXTERIOR_ID_D + "'" +
+                                     ' AND charc.CHAR_NAME = \'EXTERIOR_ID_D\'';      
             let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
 
         }
@@ -531,7 +539,8 @@ module.exports = async function (srv) {
                                      ' FROM PLSTR_CHARACTERISTICS AS charc' +
                                      ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
                                      ' charc.CHAR_NUM = charval.CHAR_NUM' + 
-                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].INTERIOR_D + "'";
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].INTERIOR_D + "'" +
+                                     ' AND charc.CHAR_NAME = \'INTERIOR_D\'';      
             let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
 
         }
@@ -552,8 +561,15 @@ module.exports = async function (srv) {
                                      ' FROM PLSTR_CHARACTERISTICS AS charc' +
                                      ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
                                      ' charc.CHAR_NUM = charval.CHAR_NUM' + 
-                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].OPT_WHEELS_D + "'";
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].OPT_WHEELS_D + "'" +
+                                     ' AND charc.CHAR_NAME = \'OPT_WHEELS_D\'';      
             let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
+            // console.log("sqlSalesCfgCharCharval",sqlSalesCfgCharCharval);
+
+            // console.log("salesDocId",salesDocId, " OPT_WHEELS_D ", plstrData[shIndex].OPT_WHEELS_D );
+
+
+            // console.log("sqlSalesCfgCharCharvalResults",sqlSalesCfgCharCharvalResults);
 
         }
 
@@ -573,8 +589,16 @@ module.exports = async function (srv) {
                                      ' FROM PLSTR_CHARACTERISTICS AS charc' +
                                      ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
                                      ' charc.CHAR_NUM = charval.CHAR_NUM' + 
-                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].OPT_PERFORM_D + "'";
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].OPT_PERFORM_D + "'" +
+                                     ' AND charc.CHAR_NAME = \'OPT_PERFORM_D\'';      
             let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
+
+            // console.log("sqlSalesCfgCharCharval",sqlSalesCfgCharCharval);
+
+            // console.log("salesDocId",salesDocId, " OPT_PERFORM_D ", plstrData[shIndex].OPT_PERFORM_D );
+
+
+            // console.log("sqlSalesCfgCharCharvalResults",sqlSalesCfgCharCharvalResults);
 
         }
 
@@ -594,7 +618,8 @@ module.exports = async function (srv) {
                                      ' FROM PLSTR_CHARACTERISTICS AS charc' +
                                      ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
                                      ' charc.CHAR_NUM = charval.CHAR_NUM' + 
-                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].OPT_PLUS_D + "'";
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].OPT_PLUS_D + "'" +
+                                     ' AND charc.CHAR_NAME = \'OPT_PLUS_D\'';      
             let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
 
         }
@@ -615,7 +640,8 @@ module.exports = async function (srv) {
                                      ' FROM PLSTR_CHARACTERISTICS AS charc' +
                                      ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
                                      ' charc.CHAR_NUM = charval.CHAR_NUM' + 
-                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].OPT_PILOT_D + "'";
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].OPT_PILOT_D + "'" +
+                                     ' AND charc.CHAR_NAME = \'OPT_PILOT_D\'';      
             let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
 
         }
@@ -636,7 +662,8 @@ module.exports = async function (srv) {
                                      ' FROM PLSTR_CHARACTERISTICS AS charc' +
                                      ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
                                      ' charc.CHAR_NUM = charval.CHAR_NUM' + 
-                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].OPT_PILOT_LITE_D + "'";
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].OPT_PILOT_LITE_D + "'" +
+                                     ' AND charc.CHAR_NAME = \'OPT_PILOT_LITE_D\'';      
             let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
 
         }
@@ -658,7 +685,8 @@ module.exports = async function (srv) {
                                      ' FROM PLSTR_CHARACTERISTICS AS charc' +
                                      ' INNER JOIN PLSTR_CHAR_VALUES AS charval ON '+
                                      ' charc.CHAR_NUM = charval.CHAR_NUM' + 
-                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].OPT_TOWBAR_D + "'";
+                                     ' WHERE charval.CHAR_VALUE = ' +  "'" + plstrData[shIndex].OPT_TOWBAR_D +"'" +
+                                     ' AND charc.CHAR_NAME = \'OPT_TOWBAR_D\'';      
             let sqlSalesCfgCharCharvalResults = await cds.run(sqlSalesCfgCharCharval);
 
         }
