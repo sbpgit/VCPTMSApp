@@ -678,7 +678,7 @@ context cp {
         key RESTRICTION   : String(30)     @title : 'Restriction';
         key MODEL_VERSION : String(20)     @title : 'MODEL_VERSION';
         key VERSION       : String(10)     @title : 'Version';
-        key SCENARIO      : String(32)     @title : 'Scenario';        
+        key SCENARIO      : String(32)     @title : 'Scenario';
             RTR_QTY       : Decimal(13, 3) @title : 'Component Quantity';
     };
 
@@ -860,6 +860,21 @@ context cp {
             VERSION_NAME  : String(50) @title : 'Version_Name';
             SCENARIO_NAME : String(50) @title : 'Scenario_Name';
     };
+
+    //start of Variant Table - Pradeep
+    entity CREATEVARIANT {
+        key VARIANTID        : Integer @title : 'Variant ID';
+            VARIANTNAME      : String(10) @title : 'Variant Name';
+        key USER             : String(50) @title : 'User';
+        key APPLICATION_NAME : String(50) @title : 'Application_Name';
+        key FIELD            : String(50) @title : 'Field';
+        key FIELD_CENTER     : String(50) @title : 'Field_Center';
+            VALUE            : String(50) @title : 'Value';
+            SCOPE            : String(50) @title : 'Scope';
+    };
+
+//End of Variant Table - Pradeep
+
 }
 
 
@@ -987,12 +1002,12 @@ entity![V_BOMPVS]{
 
 @cds.persistence.exists
 entity![V_IBPVERSCENARIO]{
-    key![LOCATION_ID] : String(4)  @title : 'LOCATION_ID';
-    key![PRODUCT_ID]  : String(40) @title : 'PRODUCT_ID';
-    key![VERSION]     : String(10) @title : 'VERSION';
-    key![VERSION_NAME]     : String(50) @title : 'VERSION';
-    key![SCENARIO]    : String(32) @title : 'SCENARIO';
-    key![SCENARIO_NAME]    : String(50) @title : 'SCENARIO';
+    key![LOCATION_ID]   : String(4)  @title : 'LOCATION_ID';
+    key![PRODUCT_ID]    : String(40) @title : 'PRODUCT_ID';
+    key![VERSION]       : String(10) @title : 'VERSION';
+    key![VERSION_NAME]  : String(50) @title : 'VERSION';
+    key![SCENARIO]      : String(32) @title : 'SCENARIO';
+    key![SCENARIO_NAME] : String(50) @title : 'SCENARIO';
 }
 
 

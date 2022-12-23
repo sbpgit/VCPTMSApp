@@ -53,13 +53,13 @@ module.exports = (srv) => {
         // console.log(xsuaa);
         return await xsuaa.get("/userinfo");
     });
-     /* Filter Products based on Authorization */
+    /* Filter Products based on Authorization */
     srv.after('READ', 'getLocProdDet', async (data, req) => {
         // console.log("User:", req.user.id);
         let aFilteredResults = [];
         vUser = req.user.id;
 
-        const li_roleparam = await cds.run(            `
+        const li_roleparam = await cds.run(`
             SELECT * FROM "CP_USER_AUTHOBJ"
             WHERE "USER" = '`+ vUser + `'`
             // AND PARAMETER = 'LOCATION_ID'`
@@ -71,12 +71,12 @@ module.exports = (srv) => {
                 return li_roleparam.some((f) => {
                     return f.PARAMETER === el.PRODUCT_ID && f.AUTH_GROUP === el.AUTH_GROUP;
                 });
-            });            
-        } 
-        if(aFilteredResults.length > 0) {
+            });
+        }
+        if (aFilteredResults.length > 0) {
             req.results = aFilteredResults;
         }
-        
+
     });
 
     /* Filter Locations based on Authorization */
@@ -85,7 +85,7 @@ module.exports = (srv) => {
         // vUser = req.headers['x-username'];
         // console.log("User:", req.user.id);
         vUser = req.user.id;
-        
+
         // return {
         //     id:         req.user.id,
         //     firstName:  req.req.authInfo.getGivenName(),
@@ -113,10 +113,10 @@ module.exports = (srv) => {
                     return f.PARAMETER === el.LOCATION_ID && f.AUTH_GROUP === el.AUTH_GROUP;
                 });
             });
-           
-        } 
 
-        if(aFilteredResults.length > 0) {
+        }
+
+        if (aFilteredResults.length > 0) {
             req.results = aFilteredResults;
         }
 
@@ -167,7 +167,7 @@ module.exports = (srv) => {
                     req.data.LOCATION_ID +
                     `'`);
 
-              liCompQty = await cds.run(
+                liCompQty = await cds.run(
                     `
             SELECT * FROM "V_ASMCOMPQTY_CONSD"
             WHERE "LOCATION_ID" = '` +
@@ -227,7 +227,7 @@ module.exports = (srv) => {
                 );
                 break;
             case 'M2':
-                 liCompQty = await cds.run(
+                liCompQty = await cds.run(
                     `
             SELECT * FROM "V_ASMREQ_PRODCONSD"
             WHERE "LOCATION_ID" = '` +
@@ -3124,6 +3124,44 @@ module.exports = (srv) => {
     });
 
     //End of VC Planner Document Maintenance- Pradeep
+    //Start of variant creation-Pradeep
+    srv.on("createVariant", async req => {
+        let lsResults = {};
+        let liResults = {};
+        let finalResults = [];
+        var responseMessage1;
+        var Flag = req.data.Flag;
+        var User = req.user.id;
+        lsResults = JSON.parse(req.data.VARDATA);
+        // liResults.push(lsResults);
+
+        for (var i = 0; i < lsResults.length; i++) {
+            liResults.VARIANTID = lsResults[i].ID;
+            liResults.VARIANTNAME = lsResults[i].IDNAME;
+            liResults.FIELD = lsResults[i].Field;
+            liResults.FIELD_CENTER = lsResults[i].FieldCenter;
+            liResults.VALUE = lsResults[i].Value;
+            liResults.USER = User;
+            liResults.APPLICATION_NAME = lsResults[i].App_Name;
+            liResults.SCOPE = "G";
+            finalResults.push(liResults)
+            liResults={};
+        }
+        if (Flag === "X") {
+
+            try {
+                await cds.run(INSERT.into("CP_CREATEVARIANT").entries(finalResults));
+                responseMessage1 = "Created Successfully";
+
+            } catch (e) {
+                responseMessage1 = "Creation Failed";
+            }
+        }
+
+        return responseMessage1;
+    });
+    //End of variant creation -Pradeep
+
 
     // BOI Deepa
     srv.on('getCFAuthToken', async (res) => {
@@ -3167,9 +3205,9 @@ module.exports = (srv) => {
 
             })
             .catch(function (error) {
-                console.log('Get Token - Error ', error); 
+                console.log('Get Token - Error ', error);
                 ret_response = JSON.parse(error);
-             });
+            });
 
         // console.log(ret_response);
         return ret_response;

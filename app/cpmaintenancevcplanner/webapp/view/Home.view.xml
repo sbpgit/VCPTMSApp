@@ -31,13 +31,13 @@
                         numberOfExpandedLevels: 3
 		            },
                     events: {change: '.onTreeChange'}}" mode="MultiSelect">
-                    <dragDropConfig>
+                    <!-- <dragDropConfig>
 					<dnd:DragDropInfo id="_IDGenDragDropInfo1"
 							sourceAggregation="items"
 							targetAggregation="items"
 							dragStart="onDragStart"
 							drop="onDrop"/>
-				</dragDropConfig>
+				</dragDropConfig> -->
                     <StandardTreeItem id="_IDGenStandardTreeItem1" title="{Description}" type="Active" press="onSelectionChange" class="text" />
                 </Tree>
             </Page>

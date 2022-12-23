@@ -48,6 +48,10 @@ service CatalogService @(impl : './lib/cat-service.js') {
     @readonly
     entity getPagePgrh          as projection on od.PAGEPARAGRAPH;
 
+    //Create Variant
+    @readonly
+    entity getVariant           as projection on od.CREATEVARIANT;
+
     // Get Products
     @readonly
     entity getProducts          as projection on od.PRODUCT;
@@ -242,7 +246,6 @@ service CatalogService @(impl : './lib/cat-service.js') {
     // entity getRestrLikelihood   as projection on od.LOCPRODRESTRICT;
 
 
-
     // @odata.draft.enabled
     // entity getProdRestr         as projection on od.PRODRESTRICT;
 
@@ -287,12 +290,11 @@ service CatalogService @(impl : './lib/cat-service.js') {
     // function getCIRWeekly(FROMDATE : Date, TODATE : Date)  returns array of ds.cirWkly;
     function getUniqueIdItems(UNIQUE_ID : Integer)                                                                                                                                                                                                                               returns array of ds.uniqueCharItems;
     // Publish CIR data to ECC
-    function postCIRQuantities(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), FROMDATE : Date, TODATE : Date, MODEL_VERSION : String(20), VALIDUSER : String(12),USER_ID : String(100)) returns String;
+    function postCIRQuantities(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), FROMDATE : Date, TODATE : Date, MODEL_VERSION : String(20), VALIDUSER : String(12), USER_ID : String(100))                                         returns String;
     action   postCIRQuantitiesToS4(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), FROMDATE : Date, TODATE : Date, MODEL_VERSION : String(20), VALIDUSER : String(12), USER_ID : String(100));
-    function modifyCIRFirmQuantities(FLAG : String(1), CIR_QUANTITIES : String) returns String;
-    function getCFAuthToken() returns String;
-    function getCFDestinationUser(TOKEN : String) returns String;
-    
+    function modifyCIRFirmQuantities(FLAG : String(1), CIR_QUANTITIES : String)                                                                                                                                                                                                  returns String;
+    function getCFAuthToken()                                                                                                                                                                                                                                                    returns String;
+    function getCFDestinationUser(TOKEN : String)                                                                                                                                                                                                                                returns String;
     // EOI - Deepa
     entity getSalesStock        as projection on od.SALES_S;
     ///*****/ Assembly Requirements /*****/
@@ -307,6 +309,9 @@ service CatalogService @(impl : './lib/cat-service.js') {
     function editPAGEHEADER(Flag1 : String, PAGEID : Integer, DESCRIPTION : String, PARENTNODEID : Integer, HEIRARCHYLEVEL : Integer)                                                                                                                                            returns String;
     function editPAGEPARAGRAPH(Flag1 : String, PAGEID : Integer, DESCRIPTION : String, CONTENT : String)                                                                                                                                                                         returns String;
     //End of VC Planner Documentation Maintenance- Pradeep
+    //Start of Create Variant
+    function createVariant(Flag: String, VARDATA:String)                                                                                                                                                                                                                      returns String;                                       
+    //End of Create Variant
 
     //*****/ Critical Comp /*****/
     entity getCriticalComp      as projection on V_BOMCRITICALCOMP; //od.CRITICAL_COMP;
@@ -323,8 +328,8 @@ service CatalogService @(impl : './lib/cat-service.js') {
 
 
     // Get User Info
-    @requires: 'authenticated-user'
-    function getUserInfo() returns String;
+    @requires : 'authenticated-user'
+    function getUserInfo()                                                                                                                                                                                                                                                       returns String;
 
-    
+
 }
