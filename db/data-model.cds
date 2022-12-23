@@ -861,7 +861,6 @@ context cp {
             SCENARIO_NAME : String(50) @title : 'Scenario_Name';
     };
 
-<<<<<<< HEAD
     //start of Variant Table - Pradeep
     entity CREATEVARIANT {
         key VARIANTID        : Integer @title : 'Variant ID';
@@ -876,7 +875,6 @@ context cp {
 
 //End of Variant Table - Pradeep
 
-=======
     entity IBPCHAR_PS {
         key PRODUCT_ID  : String(40) @title : 'Configurable Product';
         key LOCATION_ID : String(4)  @title : 'Location';
@@ -884,7 +882,6 @@ context cp {
             CHAR_TYPE   : String(2)  @title : 'Characteristic Type';
             SEQUENCE    : Integer    @title : 'Secondary Char. Position';
     }
->>>>>>> ac8a832001f9cdb701f761a7fc58672118b7c1f7
 }
 
 

@@ -480,197 +480,152 @@ sap.ui.define(
       },
 
       //Variant Code//
-      // onSaveVariant: function () {
-      //   this._nameFragment.open();
-      // },
-      // onClose: function () {
-      //   sap.ui.getCore().byId("idInput").setValue("");
-      //   that.byId("idloc").setValue("");
-      //   that.byId("prodInput").setTokens([]);
-      //   this._nameFragment.close();
-      // },
-      // onCreate: function () {
-      //   var oEntry = { RTRCHAR: [] };
-      //   var array = [];
-      //   var details = {};
-      //   var sLocation = that.byId("idloc").getValue();
-      //   var Field1 = that.byId("idloc").getParent().getItems()[0].getText();
-      //   var sProduct = that.byId("prodInput").getTokens();
-      //   var Field2 = that.byId("prodInput").getParent().getItems()[0].getText();
-      //   var varName = sap.ui.getCore().byId("idInput").getValue();
-      //   // for (var i = 0; i < sLocation.length; i++) {
-      //   details = {
-      //     Field: Field1,
-      //     FieldCenter: (1).toString(),
-      //     Value: sLocation
-      //   }
-      //   array.push(details);
-      //   // }
+      onSaveVariant: function () {
+        this._nameFragment.open();
+      },
+      onClose: function () {
+        sap.ui.getCore().byId("idInput").setValue("");
+        that.byId("idloc").setValue("");
+        that.byId("prodInput").setTokens([]);
+        this._nameFragment.close();
+      },
+      onCreate: function () {
+        var oEntry = { RTRCHAR: [] };
+        var array = [];
+        var details = {};
+        var sLocation = that.byId("idloc").getValue();
+        var Field1 = that.byId("idloc").getParent().getItems()[0].getText();
+        var sProduct = that.byId("prodInput").getTokens();
+        var Field2 = that.byId("prodInput").getParent().getItems()[0].getText();
+        var varName = sap.ui.getCore().byId("idInput").getValue();
+        // for (var i = 0; i < sLocation.length; i++) {
+        details = {
+          Field: Field1,
+          FieldCenter: (1).toString(),
+          Value: sLocation
+        }
+        array.push(details);
+        // }
 
-      //   for (var k = 0; k < sProduct.length; k++) {
-      //     details = {
-      //       Field: Field2,
-      //       FieldCenter: (k + 1).toString(),
-      //       Value: sProduct[k].getText()
-      //     }
-      //     array.push(details);
-      //   }
-
-      //   for (var j = 0; j < array.length; j++) {
-      //     var ID = that.oGModel.getProperty("/Id");
-      //     ID = ID + 1;
-      //     array[j].ID = ID;
-      //     array[j].IDNAME = varName;
-      //     array[j].App_Name = "Sales History Configuration"
-      //   }
-      //   // oEntry.RTRCHAR.push(array);
-
-      //   that.getModel("BModel").callFunction("/createVariant", {
-      //     method: "GET",
-      //     urlParameters: {
-      //       Flag: "X",
-      //       VARDATA: JSON.stringify(array)
-      //     },
-      //     success: function (oData) {
-      //       MessageToast.show(oData.createVariant);
-      //       that.getData();
-      //       that.onClose();
-      //     },
-      //     error: function (error) {
-      //       MessageToast.show("Failed to create variant");
-      //     },
-      //   });
-      // },
-      // onShowPress: function () {
-      //   that._variantFragment.open();
-      // },
-      // handleCloseVariant: function () {
-      //   that._variantFragment.close();
-      // },
-      // onTitlePress: function (oEvent) {
-      //   var oData = {};
-      //   var newData = [];
-      //   var oButton = oEvent.getSource();
-      //   var variantName = oEvent.getSource().getTitle();
-      //   var data = that.oGModel.getProperty("/variantDetails");
-      //   for (var i = 0; i < data.length; i++) {
-      //     if (variantName === data[i].VARIANTNAME) {
-      //       oData.VARIANTID = data[i].VARIANTID;
-      //       oData.VARIANTNAME = data[i].VARIANTNAME;
-      //       oData.USER = data[i].USER;
-      //       oData.APPLICATION_NAME = data[i].APPLICATION_NAME;
-      //       oData.FIELD = data[i].FIELD;
-      //       oData.FIELDCENTER = data[i].FIELDCENTER;
-      //       oData.VALUE = data[i].VALUE;
-      //       oData.SCOPE = data[i].SCOPE;
-      //       newData.push(oData);
-      //       oData = {};
-      //     }
-      //   }
-      //   var newJSONMODEL = new JSONModel();
-      //   newJSONMODEL.setData({ items1: newData });
-      //   sap.ui.getCore().byId("varNameList").setModel(newJSONMODEL);
-      //   that._popOver.openBy(oButton);
-
-      // },
-      // handleSelectClose: function () {
-      //   that._popOver.close();
-      // },
-      // handleSelectPress: function () {
-      //   var oLoc, oTokens = {}, finalToken = [];
-      //   var oTableItems = sap.ui.getCore().byId("varNameList").getItems();
-      //   for (var i = 0; i < oTableItems.length; i++) {
-      //     if (oTableItems[i].getCells()[4].getText().includes("Loc")) {
-      //       oLoc = oTableItems[i].getCells()[6].getText();
-      //     }
-      //     else if (oTableItems[i].getCells()[4].getText().includes("Prod")) {
-            
-      //       var oItemTemplate = new sap.m.Token({
-      //         key: i,
-      //         text: oTableItems[i].getCells()[6].getText()
-      //     });
-      //     finalToken.push(oItemTemplate);
-      //     oItemTemplate={};
-      //     }
-      //   }
-      //   that.byId("idloc").setValue(oLoc);
-      //   this.getModel("BModel").read("/getLocProdDet", {
-      //     filters: [
-      //       new Filter(
-      //         "LOCATION_ID",
-      //         FilterOperator.EQ,
-      //         oLoc
-      //       ),
-      //     ],
-      //     success: function (oData) {
-      //       that.prodModel.setData(oData);
-      //       that.oProdList.setModel(that.prodModel);
-      //     },
-      //     error: function (oData, error) {
-      //       MessageToast.show("error");
-      //     },
-      //   });
-      //   that._popOver.close();
-      //   that._variantFragment.close();
-
-      //   // for(var k =0;k<oTokens.length;k++){
-      //   // var fnValidator = function (args) {
-      //   //   var text = args.text;
-      //   //   return finalToken({ key: text, text: text });
-      //   // };
-      //   // that.byId("prodInput").addValidator(fnValidator);
-      //   that.byId("prodInput").setTokens(finalToken);
-      //   // }
-      // }
-      setFilterVariant: function (itemName, key, text, data, bDefault, callback, fnError) {
-        sap.ushell.Container.getService("Personalization").getContainer("cp.appf").done(function (oCC) {
-          if (!oCC.containsItem(itemName)) {
-            oCC.setItemValue(itemName, {
-              items: []
-            });
+        for (var k = 0; k < sProduct.length; k++) {
+          details = {
+            Field: Field2,
+            FieldCenter: (k + 1).toString(),
+            Value: sProduct[k].getText()
           }
-          var ovar = oCC.getItemValue(itemName);
-          if (!ovar.hasOwnProperty("defaultKey")) {
-            ovar["defaultKey"] = "*standard*";
+          array.push(details);
+        }
+
+        for (var j = 0; j < array.length; j++) {
+          var ID = that.oGModel.getProperty("/Id");
+          if(ID === undefined){
+            ID = 0;
           }
-          if (bDefault) {
-            ovar["defaultKey"] = key;
-          }
-          if (key != "*standard*") {
-            ovar.items.push({
-              key: key,
-              text: text
-            });
-          } // if not standard then push into items
-          if (data) {
-            ovar[key] = JSON.parse(JSON.stringify(data));
-          } // if data is available then add data
-          oCC.setItemValue(itemName, ovar);
-          oCC.save().done(function () {
-            if (callback) {
-              callback(oCC);
-            }
-          }).fail(function (err) {
-            if (fnError) {
-              fnError();
-            }
-          });
+          ID = ID + 1;
+          array[j].ID = ID;
+          array[j].IDNAME = varName;
+          array[j].App_Name = "Sales History Configuration"
+        }
+        // oEntry.RTRCHAR.push(array);
+
+        that.getModel("BModel").callFunction("/createVariant", {
+          method: "GET",
+          urlParameters: {
+            Flag: "X",
+            VARDATA: JSON.stringify(array)
+          },
+          success: function (oData) {
+            MessageToast.show(oData.createVariant);
+            that.getData();
+            that.onClose();
+          },
+          error: function (error) {
+            MessageToast.show("Failed to create variant");
+          },
         });
       },
-      setVariantList: function (oCC, oVM) {
-        var itemName = oVM.data("itemName");
-        var ovar = oCC.getItemValue(itemName);
-        if (ovar.hasOwnProperty("items")) {
-          oVM.getModel().setData(ovar.items);
+      onShowPress: function () {
+        that._variantFragment.open();
+      },
+      handleCloseVariant: function () {
+        that._variantFragment.close();
+      },
+      onTitlePress: function (oEvent) {
+        var oData = {};
+        var newData = [];
+        var oButton = oEvent.getSource();
+        var variantName = oEvent.getSource().getTitle();
+        var data = that.oGModel.getProperty("/variantDetails");
+        for (var i = 0; i < data.length; i++) {
+          if (variantName === data[i].VARIANTNAME) {
+            oData.VARIANTID = data[i].VARIANTID;
+            oData.VARIANTNAME = data[i].VARIANTNAME;
+            oData.USER = data[i].USER;
+            oData.APPLICATION_NAME = data[i].APPLICATION_NAME;
+            oData.FIELD = data[i].FIELD;
+            oData.FIELDCENTER = data[i].FIELDCENTER;
+            oData.VALUE = data[i].VALUE;
+            oData.SCOPE = data[i].SCOPE;
+            newData.push(oData);
+            oData = {};
+          }
         }
-        // set inital default key
-        oVM.setInitialSelectionKey(ovar.defaultKey);
-        oVM.setDefaultVariantKey(ovar.defaultKey);
-        //	this.getOwnerComponent().getModel("filterM").setData(ovar[ovar.defaultKey] === undefined ? "*standard*" : ovar[ovar.defaultKey]);
-        that.oGModel.setProperty("/SelectedModuleMain", ovar[ovar.defaultKey]["SelectedModuleMain"]);
-        that.oGModel.setProperty("/SelectedSubModuleMain", ovar[ovar.defaultKey]["SelectedSubModuleMain"]);
-        //	this.createToken();
+        var newJSONMODEL = new JSONModel();
+        newJSONMODEL.setData({ items1: newData });
+        sap.ui.getCore().byId("varNameList").setModel(newJSONMODEL);
+        that._popOver.openBy(oButton);
+
+      },
+      handleSelectClose: function () {
+        that._popOver.close();
+      },
+      handleSelectPress: function () {
+        var oLoc, oTokens = {}, finalToken = [];
+        var oTableItems = sap.ui.getCore().byId("varNameList").getItems();
+        for (var i = 0; i < oTableItems.length; i++) {
+          if (oTableItems[i].getCells()[4].getText().includes("Loc")) {
+            oLoc = oTableItems[i].getCells()[6].getText();
+          }
+          else if (oTableItems[i].getCells()[4].getText().includes("Prod")) {
+            
+            var oItemTemplate = new sap.m.Token({
+              key: i,
+              text: oTableItems[i].getCells()[6].getText()
+          });
+          finalToken.push(oItemTemplate);
+          oItemTemplate={};
+          }
+        }
+        that.byId("idloc").setValue(oLoc);
+        this.getModel("BModel").read("/getLocProdDet", {
+          filters: [
+            new Filter(
+              "LOCATION_ID",
+              FilterOperator.EQ,
+              oLoc
+            ),
+          ],
+          success: function (oData) {
+            that.prodModel.setData(oData);
+            that.oProdList.setModel(that.prodModel);
+          },
+          error: function (oData, error) {
+            MessageToast.show("error");
+          },
+        });
+        that._popOver.close();
+        that._variantFragment.close();
+
+        // for(var k =0;k<oTokens.length;k++){
+        // var fnValidator = function (args) {
+        //   var text = args.text;
+        //   return finalToken({ key: text, text: text });
+        // };
+        // that.byId("prodInput").addValidator(fnValidator);
+        that.byId("prodInput").setTokens(finalToken);
+        // }
       }
+      
     });
   }
 );

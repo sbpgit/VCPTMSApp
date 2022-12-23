@@ -255,11 +255,8 @@ service CatalogService @(impl : './lib/cat-service.js') {
     @odata.draft.enabled
     entity getODHdrRstr         as projection on V_ODRESTRICT;
     // entity getRestrLikelihood   as projection on od.LOCPRODRESTRICT;
-<<<<<<< HEAD
 
 
-=======
->>>>>>> ac8a832001f9cdb701f761a7fc58672118b7c1f7
     // @odata.draft.enabled
     // entity getProdRestr         as projection on od.PRODRESTRICT;
 

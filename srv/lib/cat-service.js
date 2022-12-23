@@ -83,23 +83,6 @@ module.exports = (srv) => {
     srv.after('READ', 'getLocation', async (data, req) => {
         let aFilteredResults = [];
         vUser = req.user.id;
-<<<<<<< HEAD
-
-        // return {
-        //     id:         req.user.id,
-        //     firstName:  req.req.authInfo.getGivenName(),
-        //     lastName:   req.req.authInfo.getFamilyName(),
-        //     email:      req.req.authInfo.getEmail()
-        //   }
-        // console.log(req.user.id);
-
-        // console.log(req.authInfo.getGivenName());
-        // console.log(req.authInfo.getFamilyName());
-        // console.log(req.authInfo.getEmail());
-
-        // console.log(req.headers);
-=======
->>>>>>> ac8a832001f9cdb701f761a7fc58672118b7c1f7
         const li_roleparam = await cds.run(
             `
             SELECT * FROM "CP_USER_AUTHOBJ"
@@ -114,13 +97,7 @@ module.exports = (srv) => {
                     return f.PARAMETER === el.LOCATION_ID && f.AUTH_GROUP === el.AUTH_GROUP;
                 });
             });
-<<<<<<< HEAD
-
         }
-
-=======
-        }
->>>>>>> ac8a832001f9cdb701f761a7fc58672118b7c1f7
         if (aFilteredResults.length > 0) {
             req.results = aFilteredResults;
         }
