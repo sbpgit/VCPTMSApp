@@ -131,16 +131,16 @@ class CIRData {
     /**
      * Get Primary & Secondary Characteristics
      */
-    //  async getVarcharPS(req) {
-    //     const li_varchar_ps = await cds.run(
-    //         `SELECT DISTINCT *
-    //         FROM "CP_VARCHAR_PS"
-    //         WHERE "LOCATION_ID" = '` + req.data.LOCATION_ID + `'
-    //         AND "PRODUCT_ID" = '` + req.data.PRODUCT_ID + `'`
-    //     );
+     async getVarcharPS(req) {
+        const li_varchar_ps = await cds.run(
+            `SELECT DISTINCT *
+            FROM "CP_VARCHAR_PS"
+            WHERE "LOCATION_ID" = '` + req.data.LOCATION_ID + `'
+            AND "PRODUCT_ID" = '` + req.data.PRODUCT_ID + `'`
+        );
 
-    //     return li_varchar_ps;
-    // }
+        return li_varchar_ps;
+    }
 
 
     // /**

@@ -13,7 +13,7 @@
 >
     <Page id="_IDGenUPage1" showHeader="false" showFooter="true" enableScrolling="false">
         <content>
-            <ux:ObjectPageLayout id="idObjectPageLayoutU" headerContentPinned="true" toggleAnchorBar="onChangeHeaderPinStatus" showTitleInHeaderContent="true" showEditHeaderButton="true" preserveHeaderStateOnScroll="true">
+            <ux:ObjectPageLayout id="idObjectPageLayoutU" headerContentPinned="true" toggleAnchorBar="onChangeHeaderPinStatusU" showTitleInHeaderContent="true" showEditHeaderButton="true" preserveHeaderStateOnScroll="true">
                 <ux:headerTitle>
                     <ux:ObjectPageDynamicHeaderTitle id="_IDGenUObjectPageDynamicHeaderTitle1">
                         <ux:expandedHeading>
@@ -44,23 +44,13 @@
                                 <Label id="_IDGenULabel4" text="Unique Id" required="true" />
                                 <Input id="idUniqueId" placeholder="Unique Id" enabled="false" />
                             </VBox>
+                            
                             <VBox id="_IDGenUVBox5">
-                                <Label id="_IDGenULabel5" text="Filter Type" required="true" />
-                                <Select id="_IDGenUSelect" selectedKey="NE" width="100%" change="onFilterSelectionChange">
-                                    
-                                    <core:Item key="NE" text="Not Equals" />
-                                    <core:Item key="EQ" text="Equals" />
-                                    
-                                </Select>
-                            </VBox>
-                            <VBox id="_IDGenUVBox6">
-                                <Label id="_IDGenULabel6" text="Characteristics" required="true" />
-
-                                <MultiComboBox
-                                    id="idUniqueCharDetailsU"
+                                <Label id="_IDGenULabel5" text="Filter Type (Equals)" required="true" />
+                               <MultiComboBox
+                                    id="idUniqueCharDetailsEQ"
                                     showSelectAll="true"
                                     showSecondaryValues="true"
-                                    selectionFinish="onCharacteristicSelFinish"
                                     items="{
 				                            path: '/charDetails',
 				                            sorter: { path: 'CHAR_NAME' }
@@ -69,13 +59,29 @@
                                     <core:ListItem key="{CHAR_NUM}:{CHARVAL_NUM}" text="{CHAR_DESC} - {CHAR_NAME}" additionalText="{CHARVAL_DESC} - {CHAR_VALUE}" />
                                 </MultiComboBox>
                             </VBox>
-                            <!-- <VBox>
+                            <VBox id="_IDGenUVBox6">
+                                <Label id="_IDGenULabel6" text="Filter Type (Not Equals)" required="true" />
+
+                                <MultiComboBox
+                                    id="idUniqueCharDetailsNEQ"
+                                    showSelectAll="true"
+                                    showSecondaryValues="true"
+                                    items="{
+				                            path: '/charDetails',
+				                            sorter: { path: 'CHAR_NAME' }
+			                                        }"
+                                >
+                                    <core:ListItem key="{CHAR_NUM}:{CHARVAL_NUM}" text="{CHAR_DESC} - {CHAR_NAME}" additionalText="{CHARVAL_DESC} - {CHAR_VALUE}" />
+                                </MultiComboBox>
+                            </VBox>
+                            <VBox>
                                 <Label text="" />
                                 <HBox id="_IDGenUHBox1">
                                     <Button id="_IDGenUButton1" text="Go" type="Emphasized" press="onFilterData" tooltip="Get data based on filters" />
                                     <Button id="_IDGenUButton2" text="Reset" type="Transparent" press="onResetFilters" tooltip="Reset filters and Data" />
                                 </HBox>
-                            </VBox> -->
+                            </VBox>
+                            
                         </l:Grid>
                     </FlexBox>
                 </ux:headerContent>
@@ -85,6 +91,14 @@
                             <ux:ObjectPageSubSection id="_IDGenUObjectPageSubSection1" mode="Expanded" class="sapUiNoMargin">
                                 <ux:blocks>
                                     <VBox id="_IDGenUVBox9" class="sapUiNoMargin">
+                                       <Toolbar>
+                                        <ToolbarSpacer />
+                                        <RadioButtonGroup id="idRBGChars" columns="3" valueState="Information" select="onSelectRBCharFilter">
+                                            <RadioButton id="idAllChars" text="All" selected="true" />
+                                            <RadioButton id="idMatchd" text="Matched" />
+                                            <RadioButton id="idUnMatchd" text="UnMatched" />
+                                        </RadioButtonGroup>
+                                        </Toolbar>
                                         <t:Table id="idUniqueIdChars" class="table" fixedColumnCount="2" selectionMode="None" alternateRowColors="true" enableSelectAll="false" visibleRowCount="8">
                                             <t:columns />
                                         </t:Table>

@@ -1,4 +1,8 @@
 /* Enter your custom styles here */
+.yellow {
+    background-color: #FFFF66;
+}
+
 .table {
     padding-left: 0.1rem;
     margin-right: 0.1rem;
@@ -42,4 +46,8 @@
 .tableScrollV {
     overflow-x: hidden;
     overflow-y: hidden;
+}
+
+.iconDisp {
+    margin-top: 1px;
 }

@@ -50,6 +50,14 @@ sap.ui.define(
                 oRouter = sap.ui.core.UIComponent.getRouterFor(this);
                 oRouter.getRoute("RouteUniqChar").attachMatched(this._onRouteMatched, this);
             },
+            /**
+             * 
+             * @param {*} oEvent 
+             */
+            onAfterRendering: function (oEvent) {
+                // Set Visible Row Count
+                that.handleVisibleRowCountU(0);
+            },
 
             /**
             * 
@@ -102,6 +110,8 @@ sap.ui.define(
                 var iCounter = 0, iTotal = 0;
                 var columnName;
                 var bVisible = true;
+                var bCellColor = "";
+                var sCellColor;
                 var sColumnName,
                     sCharValPath,
                     sCharValDescPath;
@@ -141,11 +151,16 @@ sap.ui.define(
                             aFilteredUniqueChars = aFilteredUniqueChars[0].CONFIG;
 
                             for (var l = 0; l < aFilteredUniqueChars.length; l++) {
+                                bCellColor = "";
                                 if (aConfig[j].CHAR_NAME === aFilteredUniqueChars[l].CHAR_NAME &&
                                     aConfig[j].CHAR_DESC === aFilteredUniqueChars[l].CHAR_DESC &&
                                     aConfig[j].CHAR_NUM === aFilteredUniqueChars[l].CHAR_NUM
                                 ) {
-                                    oRowData[aColumns[k].UNIQUE_CHAR] = [{ CHAR_VALUE: aFilteredUniqueChars[l].CHAR_VALUE, CHARVAL_DESC: aFilteredUniqueChars[l].CHARVAL_DESC, CHAR_NUM: aFilteredUniqueChars[l].CHAR_NUM, CHARVAL_NUM: aFilteredUniqueChars[l].CHARVAL_NUM }];
+                                    if (aConfig[j].CHARVAL_NUM !== aFilteredUniqueChars[l].CHARVAL_NUM) {
+                                        bCellColor = "sap-icon://sys-cancel-2";
+                                    }
+                                    oRowData[aColumns[k].UNIQUE_CHAR] = [{ CHAR_VALUE: aFilteredUniqueChars[l].CHAR_VALUE, CHARVAL_DESC: aFilteredUniqueChars[l].CHARVAL_DESC, CHAR_NUM: aFilteredUniqueChars[l].CHAR_NUM, CHARVAL_NUM: aFilteredUniqueChars[l].CHARVAL_NUM, CELL_COLOR: bCellColor }];
+
                                     //   oRowData[aColumns[k].UNIQUE_CHAR] = [aConfig[j].CHAR_VALUE, aConfig[j].CHARVAL_DESC];    
                                     break;
                                 }
@@ -167,6 +182,7 @@ sap.ui.define(
                         iTotal = 0;
                         iCounter = iCounter + 1;
                         columnName = oContext.getObject().UNIQUE_CHAR;
+
                         iTotal = oContext.getObject().TOTAL;
                         sColumnName = columnName.toString() + " (" + iTotal + ")";
 
@@ -190,15 +206,25 @@ sap.ui.define(
 
                             sCharValPath = columnName + "/0/CHAR_VALUE";
                             sCharValDescPath = columnName + "/0/CHARVAL_DESC";
+                            sCellColor = columnName + "/0/CELL_COLOR";
+
                             return new sap.ui.table.Column({
                                 // width: "13rem",
                                 label: sColumnName,
-                                // filterProperty: columnName,
                                 visible: bVisible,
-                                template: new sap.m.ObjectIdentifier({
-                                    title: "{" + sCharValDescPath + "}",
-                                    text: "{" + sCharValPath + "}"
+                                template: new sap.m.HBox({
+                                    alignItems: "Center",
+                                    justifyContent: "SpaceBetween",
+                                    items: [
+                                        new sap.m.ObjectIdentifier({
+                                            title: "{" + sCharValDescPath + "}",
+                                            text: "{" + sCharValPath + "}"
+                                        }),
+                                        new sap.ui.core.Icon({ src: "{" + sCellColor + "}", color: "Critical" })
+
+                                    ]
                                 })
+
 
                             });
                         }
@@ -273,13 +299,13 @@ sap.ui.define(
                 } else {
 
                     for (var k = 0; k < aColumns.length; k++) {
-                        if(k < 7 ) {
-                        if (!aColumns[k].getProperty("visible")) {
-                            aColumns[k].setVisible(true);
+                        if (k < 7) {
+                            if (!aColumns[k].getProperty("visible")) {
+                                aColumns[k].setVisible(true);
+                            }
+                        } else {
+                            aColumns[k].setVisible(false);
                         }
-                       } else {
-                        aColumns[k].setVisible(false);
-                       }
                     }
                 }
             },
@@ -329,23 +355,24 @@ sap.ui.define(
 
                 }
                 if (aUniqueIdFilter.length > 0) {
-                    for (var k = 2; k < aColumns.length; k++) {
-                        scolumnName = aColumns[k].getLabel().getText().split(' (')[0];
-                        aFilterUniqueIds = aUniqueIdFilter.filter(function (aUniqChar) {
-                            return aUniqChar.UNIQUE_ID === parseInt(scolumnName);
-                        });
-                        if (aFilterUniqueIds.length > 0) {
-                            iCounter = iCounter + 1;
-                            if (iCounter >= 5) {
-                                aColumns[k].setVisible(false);
-                            } else {
-                                aColumns[k].setVisible(true)
-                            }
-                        } else {
-                            aColumns[k].setVisible(false);
-                        }
+                    return aUniqueIdFilter;
+                    // for (var k = 2; k < aColumns.length; k++) {
+                    //     scolumnName = aColumns[k].getLabel().getText().split(' (')[0];
+                    //     aFilterUniqueIds = aUniqueIdFilter.filter(function (aUniqChar) {
+                    //         return aUniqChar.UNIQUE_ID === parseInt(scolumnName);
+                    //     });
+                    //     if (aFilterUniqueIds.length > 0) {
+                    //         iCounter = iCounter + 1;
+                    //         if (iCounter >= 5) {
+                    //             aColumns[k].setVisible(false);
+                    //         } else {
+                    //             aColumns[k].setVisible(true)
+                    //         }
+                    //     } else {
+                    //         aColumns[k].setVisible(false);
+                    //     }
 
-                    }
+                    // }
 
                 }
 
@@ -396,23 +423,24 @@ sap.ui.define(
 
                 }
                 if (aUniqueIdFilter.length > 0) {
-                    for (var k = 2; k < aColumns.length; k++) {
-                        scolumnName = aColumns[k].getLabel().getText().split(' (')[0];
-                        aFilterUniqueIds = aUniqueIdFilter.filter(function (aUniqChar) {
-                            return aUniqChar.UNIQUE_ID === parseInt(scolumnName);
-                        });
-                        if (aFilterUniqueIds.length > 0) {
-                            iCounter = iCounter + 1;
-                            if (iCounter >= 5) {
-                                aColumns[k].setVisible(false);
-                            } else {
-                                aColumns[k].setVisible(true)
-                            }
-                        } else {
-                            aColumns[k].setVisible(false);
-                        }
+                    return aUniqueIdFilter;
+                    // for (var k = 2; k < aColumns.length; k++) {
+                    //     scolumnName = aColumns[k].getLabel().getText().split(' (')[0];
+                    //     aFilterUniqueIds = aUniqueIdFilter.filter(function (aUniqChar) {
+                    //         return aUniqChar.UNIQUE_ID === parseInt(scolumnName);
+                    //     });
+                    //     if (aFilterUniqueIds.length > 0) {
+                    //         iCounter = iCounter + 1;
+                    //         if (iCounter >= 5) {
+                    //             aColumns[k].setVisible(false);
+                    //         } else {
+                    //             aColumns[k].setVisible(true)
+                    //         }
+                    //     } else {
+                    //         aColumns[k].setVisible(false);
+                    //     }
 
-                    }
+                    // }
 
                 }
 
@@ -441,6 +469,199 @@ sap.ui.define(
                     aColumns[i].setLabel(sColumnName);
                 }
             },
+            /**
+             * 
+             */
+            onSelectRBCharFilter: function (oEvent) {
+                var aFilter = [];
+                var sSelText = oEvent.getSource().getSelectedButton().getText();
+                var oTable = that.byId("idUniqueIdChars");
+                var aColumns = oTable.getColumns();
+                var aFilterUniqueIds = [];
+                var sColLabel = '';
+                var sPath = "";
+                switch (sSelText) {
+                    case 'All':
+                        oTable.getBinding().filter(aFilter);
+                        break;
+                    case 'Matched':
+                        for (var i = 2; i < 7; i++) {
+                            sColLabel = aColumns[i].getLabel().getText().split(" ");
+                            sPath = sColLabel[0] + '/0/CELL_COLOR';
+                            aFilterUniqueIds.push(new Filter(sPath, FilterOperator.EQ, ''));
+                        }
+                        aFilter = new Filter(aFilterUniqueIds, true);
+                        oTable.getBinding().filter(aFilter);
+
+                        break;
+                    case 'UnMatched':
+                        for (var i = 0; i < 7; i++) {
+                            sColLabel = aColumns[i].getLabel().getText().split(" ");
+                            sPath = sColLabel[0] + '/0/CELL_COLOR';
+                            aFilterUniqueIds.push(new Filter(sPath, FilterOperator.EQ, 'sap-icon://sys-cancel-2'));
+                        }
+                        aFilter = new Filter(aFilterUniqueIds, false);
+                        oTable.getBinding().filter(aFilter);
+                        break;
+                    default:
+                        oTable.getBinding().filter(aFilter);
+                        break;
+
+                }
+
+            },
+            /**
+             * 
+             * @param {*} oEvent 
+             */
+            onFilterData: function (oEvent) {
+                var aSelectedItemsEQ = [], aSelectedItemsNEQ = [];
+                var oMulCombBoxEQ, oMulCombBoxNEQ;
+                var aEQUniqueChars = [],
+                    aNEQUniqueChars = [],
+                    aFilterUniqueIds = [],
+                    aFilterUniqueIdsNEQ = [],
+                    aColumns = [];
+                var scolumnName = '';
+                var iCounter = 0;
+                that.oUniqueCharTable = that.getView().byId("idUniqueIdChars");
+                aColumns = that.oUniqueCharTable.getColumns();
+                oMulCombBoxEQ = that.getView().byId("idUniqueCharDetailsEQ");
+                oMulCombBoxNEQ = that.getView().byId("idUniqueCharDetailsNEQ");
+                aSelectedItemsEQ = oMulCombBoxEQ.getSelectedItems();
+                aSelectedItemsNEQ = oMulCombBoxNEQ.getSelectedItems();
+
+                if (aSelectedItemsEQ.length > 0) {
+                    aEQUniqueChars = that.getUniqueIdsEQSelChars(aSelectedItemsEQ);
+                }
+
+                if (aSelectedItemsNEQ.length > 0) {
+                    aNEQUniqueChars = that.getUniqueIdsNESelChars(aSelectedItemsNEQ);
+                }
+
+                if (aEQUniqueChars.length > 0 && aNEQUniqueChars.length > 0) {
+                    for (var k = 2; k < aColumns.length; k++) {
+                        scolumnName = aColumns[k].getLabel().getText().split(' (')[0];
+                        aFilterUniqueIds = aEQUniqueChars.filter(function (aUniqChar) {
+                            return aUniqChar.UNIQUE_ID === parseInt(scolumnName);
+                        });
+                        aFilterUniqueIdsNEQ = aNEQUniqueChars.filter(function (aUniqChar) {
+                            return aUniqChar.UNIQUE_ID === parseInt(scolumnName);
+                        });
+                        if (aFilterUniqueIds.length > 0 && aFilterUniqueIdsNEQ.length > 0) {
+                            iCounter = iCounter + 1;
+                            if (iCounter > 5) {
+                                aColumns[k].setVisible(false);
+                            } else {
+                                aColumns[k].setVisible(true)
+                            }
+                        } else {
+                            aColumns[k].setVisible(false);
+                        }
+
+                    }
+
+                } else if (aEQUniqueChars.length > 0 && aNEQUniqueChars.length === 0) {
+                    for (var k = 2; k < aColumns.length; k++) {
+                        scolumnName = aColumns[k].getLabel().getText().split(' (')[0];
+                        aFilterUniqueIds = aEQUniqueChars.filter(function (aUniqChar) {
+                            return aUniqChar.UNIQUE_ID === parseInt(scolumnName);
+                        });
+                        if (aFilterUniqueIds.length > 0) {
+                            iCounter = iCounter + 1;
+                            if (iCounter > 5) {
+                                aColumns[k].setVisible(false);
+                            } else {
+                                aColumns[k].setVisible(true)
+                            }
+                        } else {
+                            aColumns[k].setVisible(false);
+                        }
+
+                    }
+
+                } else if (aEQUniqueChars.length === 0 && aNEQUniqueChars.length > 0) {
+                    for (var k = 2; k < aColumns.length; k++) {
+                        scolumnName = aColumns[k].getLabel().getText().split(' (')[0];
+                        aFilterUniqueIds = aNEQUniqueChars.filter(function (aUniqChar) {
+                            return aUniqChar.UNIQUE_ID === parseInt(scolumnName);
+                        });
+                        if (aFilterUniqueIds.length > 0) {
+                            iCounter = iCounter + 1;
+                            if (iCounter > 5) {
+                                aColumns[k].setVisible(false);
+                            } else {
+                                aColumns[k].setVisible(true)
+                            }
+                        } else {
+                            aColumns[k].setVisible(false);
+                        }
+
+                    }
+
+                } else {
+                    for (var k = 2; k < aColumns.length; k++) {
+                        scolumnName = aColumns[k].getLabel().getText().split(' (')[0];
+                        iCounter = iCounter + 1;
+                        if (iCounter > 5) {
+                            aColumns[k].setVisible(false);
+                        } else {
+                            aColumns[k].setVisible(true)
+                        }
+                    }
+                }
+            },
+            /**
+             * 
+             */
+            onChangeHeaderPinStatusU: function (oEvent) {
+                if (oEvent.getSource()._bHeaderExpanded === true) {
+                    that.handleVisibleRowCountU(5);
+                } else {
+                    that.handleVisibleRowCountU(0);
+                }
+
+            },
+            /**
+             * 
+             */
+            handleVisibleRowCountU: function (iCount) {
+                var iWinH = window.innerHeight;
+                if (iWinH > 750 && iWinH < 800) {
+                    that.byId("idUniqueIdChars").setVisibleRowCount(9 + iCount);
+                } else if (iWinH > 800 && iWinH < 900) {
+                    that.byId("idUniqueIdChars").setVisibleRowCount(10 + iCount);
+                } else if (iWinH > 900 && iWinH < 1000) {
+                    that.byId("idUniqueIdChars").setVisibleRowCount(12 + iCount);
+                } else if (iWinH > 1000 && iWinH < 1100) {
+                    that.byId("idUniqueIdChars").setVisibleRowCount(14 + iCount);
+                } else {
+                    that.byId("idUniqueIdChars").setVisibleRowCount(7 + iCount);
+                }
+            },
+            /**
+             * 
+             */
+            onResetFilters: function() {                
+                var aColumns = [];
+                var scolumnName = '';
+                var iCounter = 0;
+                that.oUniqueCharTable = that.getView().byId("idUniqueIdChars");
+                aColumns = that.oUniqueCharTable.getColumns();
+                
+                that.getView().byId("idUniqueCharDetailsEQ").removeAllSelectedItems();
+                that.getView().byId("idUniqueCharDetailsNEQ").removeAllSelectedItems();
+
+                for (var k = 2; k < aColumns.length; k++) {
+                    scolumnName = aColumns[k].getLabel().getText().split(' (')[0];
+                    iCounter = iCounter + 1;
+                    if (iCounter > 5) {
+                        aColumns[k].setVisible(false);
+                    } else {
+                        aColumns[k].setVisible(true)
+                    }
+                }
+            },
 
             /**
              * 
@@ -459,6 +680,10 @@ sap.ui.define(
                 that.getView().byId("idprodListU").setValue(that.ProductId);
                 that.getView().byId("idUniqueId").setValue(that.UniqueId);
 
+
+                that.getView().byId("idUniqueCharDetailsEQ").removeAllSelectedItems();
+                that.getView().byId("idUniqueCharDetailsNEQ").removeAllSelectedItems();
+
                 that.allCharsModel.setData({
                     charDetails: that.aAllUniqueChars,
                 });
@@ -468,14 +693,12 @@ sap.ui.define(
                 });
 
 
-                that.getView().byId("idUniqueCharDetailsU").setModel(that.locProdCharModel);
+                that.getView().byId("idUniqueCharDetailsEQ").setModel(that.locProdCharModel);
+                that.getView().byId("idUniqueCharDetailsNEQ").setModel(that.locProdCharModel);
 
                 that.onUniqueIdLinkPress();
 
-
             }
-
-
 
 
         });

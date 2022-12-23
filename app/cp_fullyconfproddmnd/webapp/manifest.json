@@ -14,7 +14,7 @@
             "id": "@sap/generator-fiori:basic",
             "version": "1.7.3",
             "toolsId": "8fc69177-a52f-41cf-8b34-b33b76e7170c"
-        },
+        },        
         "dataSources": {
             "mainService": {
                 "uri": "/v2/catalog/",
@@ -68,6 +68,7 @@
     },
     "sap.ui5": {
         "flexEnabled": true,
+        "smartVariantManagement": true,
         "dependencies": {
             "minUI5Version": "1.106.0",
             "libs": {
