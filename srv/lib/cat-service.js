@@ -3405,6 +3405,44 @@ module.exports = (srv) => {
     });
 
     //End of VC Planner Document Maintenance- Pradeep
+    //Start of variant creation-Pradeep
+    srv.on("createVariant", async req => {
+        let lsResults = {};
+        let liResults = {};
+        let finalResults = [];
+        var responseMessage1;
+        var Flag = req.data.Flag;
+        var User = req.user.id;
+        lsResults = JSON.parse(req.data.VARDATA);
+        // liResults.push(lsResults);
+
+        for (var i = 0; i < lsResults.length; i++) {
+            liResults.VARIANTID = lsResults[i].ID;
+            liResults.VARIANTNAME = lsResults[i].IDNAME;
+            liResults.FIELD = lsResults[i].Field;
+            liResults.FIELD_CENTER = lsResults[i].FieldCenter;
+            liResults.VALUE = lsResults[i].Value;
+            liResults.USER = User;
+            liResults.APPLICATION_NAME = lsResults[i].App_Name;
+            liResults.SCOPE = "G";
+            finalResults.push(liResults)
+            liResults={};
+        }
+        if (Flag === "X") {
+
+            try {
+                await cds.run(INSERT.into("CP_CREATEVARIANT").entries(finalResults));
+                responseMessage1 = "Created Successfully";
+
+            } catch (e) {
+                responseMessage1 = "Creation Failed";
+            }
+        }
+
+        return responseMessage1;
+    });
+    //End of variant creation -Pradeep
+
 
     // BOI Deepa
     srv.on('getCFAuthToken', async (res) => {
