@@ -33,6 +33,7 @@ context cp_ds {
         // CAL_DATE    : Date;
         LOCATION_ID : String(4);
         PRODUCT_ID  : String(40);
+        PARTIALPROD : String(40);
         ITEM_NUM    : String(5);
         // ASSEMBLY    : String(40);
         COMPONENT   : String(40);

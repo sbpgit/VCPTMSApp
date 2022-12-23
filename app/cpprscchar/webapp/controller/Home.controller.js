@@ -22,7 +22,6 @@ sap.ui.define([
         return BaseController.extend("cpapp.cpprscchar.controller.Home", {
             onInit: function () {
                 that = this;
-                oGModel = this.getModel("oGModel");
                 // Declaration of JSON models and size limits
                 this.PrimarylistModel = new JSONModel();
                 this.SeclistModel = new JSONModel();
@@ -515,10 +514,7 @@ sap.ui.define([
                     } else {
                         oChar_Type = "S"
                         iSeq = oItem.SEQUENCE;
-
                         oGModel.setProperty("/primFlag", "X");
-
-
                     }
 
                     that.getModel("BModel").callFunction("/changeToPrimary", {

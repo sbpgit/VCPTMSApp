@@ -246,7 +246,7 @@ sap.ui.define([
                     );
                     var scenarios = that.oGModel.getProperty("/scenarios");
                     for (var i in scenarios) {
-                        if (that.oGModel.getProperty("/SelectedVer") === scenarios[i].VERSION && scenarios[i].SCENARIO !== "") {
+                        if (aSelectedItems[0].getTitle() === scenarios[i].VERSION && scenarios[i].SCENARIO !== "") {
                             scenArray.push(scenarios[i]);
                         }
                     }

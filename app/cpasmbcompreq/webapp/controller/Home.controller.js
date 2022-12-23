@@ -330,7 +330,7 @@ sap.ui.define(
                 fromDate = fromDate.toISOString().split("T")[0];
                 toDate = toDate.toISOString().split("T")[0];
                 // Calling function to generate column names based on dates
-                var liDates = that.generateDateseries(fromDate, toDate);                
+                var liDates = that.generateDateseries(fromDate, toDate);
                 that.oGModel.setProperty("/TDates", liDates);
 
                 // Looping through the data to generate columns
@@ -361,8 +361,8 @@ sap.ui.define(
                             label: columnName,
                             template: columnName,
                         });
-                    } else {
-                        // Fetch Total on a Date   
+                    } else {                     
+                        // Fetch Total on a   
                         var iTotalQty = that.getTotalWeekQty(columnName);
                         var columnText = columnName + " (" + iTotalQty + ")";
                         if (that.plntMethod === 'M1') {
@@ -1030,11 +1030,7 @@ sap.ui.define(
                         success: function (oData) {
                             var adata = [];
                             for (var i = 0; i < oData.results.length; i++) {
-<<<<<<< HEAD
                                 if (oData.results[i].PRODUCT_ID === that.oGModel.getProperty("/SelectedProd") ) {
-=======
-                                if (oData.results[i].PRODUCT_ID === that.oGModel.getProperty("/SelectedProd")) {
->>>>>>> 28572205e8c7de3e81f65a1fa52119e34f364125
                                     adata.push({
                                         "VERSION": oData.results[i].VERSION
                                     });
@@ -1065,7 +1061,7 @@ sap.ui.define(
                             new Filter(
                                 "PRODUCT_ID",
                                 FilterOperator.EQ,
-                                that.oGModel.getProperty("/SelectedProd")
+                                aSelectedItems[0].getTitle()
                             ),
                         ],
                         success: function (oData) {

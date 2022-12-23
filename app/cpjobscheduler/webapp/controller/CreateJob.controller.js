@@ -1916,12 +1916,12 @@ sap.ui.define(
                         break;
                     case "Location Product":
                         that.oLoc = this.byId("ELPlocInput");
-                        that.oProd = this.byId("ELPprodInput");
+                        // that.oProd = this.byId("ELPprodInput");
                         that.byId("IBPLocProdExport").setVisible(true);
                         break;
                     case "Assembly":
                         that.oLoc = this.byId("EIAlocInput");
-                        that.oProd = this.byId("EIAprodInput");
+                        // that.oProd = this.byId("EIAprodInput");
                         that.byId("IBPAssemblyExport").setVisible(true);
                         break;
                     case "Class":
@@ -2885,13 +2885,13 @@ sap.ui.define(
                     } else {
                         MessageToast.show("Please select all fields");
                     }
-                } else if (rRadioBtn === "Location Product" || rRadioBtn === "Assembly") {
+                } else if (rRadioBtn === "Location Product" || rRadioBtn === "Assembly" ) {
                     oLocItem = that.oLoc.getValue();
-                    oProdItem = this.oProd.getValue();
-                    if (oLocItem && oProdItem) {
+                    // oProdItem = this.oProd.getValue();
+                    if (oLocItem ) {
                         vRuleslist = {
                             LOCATION_ID: oLocItem,
-                            PRODUCT_ID: oProdItem
+                            // PRODUCT_ID: oProdItem
                         };
                         this.oGModel.setProperty("/vcrulesData", vRuleslist);
 

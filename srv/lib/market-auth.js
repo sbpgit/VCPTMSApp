@@ -9,22 +9,23 @@ class MarketAuth {
     constructor() { }
 
 
-    async updateOptPer(lLocation, lProduct, lDate, lVersion, lScenario,req) {
-        
+    async updateOptPer(lLocation, lProduct, lDate, lVersion, lScenario, req) {
+        let Flag;
+
         await GenF.logMessage(req, 'Started Sales Orders Processing');
 
 
         let lOrdQty = 0;
-// Get total Quantity of the product        
+        // Get total Quantity of the product        
         let liSOrdQty = await cds.run(`SELECT SUM("ORD_QTY") AS ORD_QTY
                                         FROM V_SALES_H
                                        WHERE LOCATION_ID = '${lLocation}'
                                          AND PRODUCT_ID = '${lProduct}'
                                        GROUP BY LOCATION_ID,
-                                                PRODUCT_ID;`);  
-        if(liSOrdQty.length > 0){
+                                                PRODUCT_ID;`);
+        if (liSOrdQty.length > 0) {
             lOrdQty = parseInt(liSOrdQty[0].ORD_QTY);
-        }                                                      
+        }
 
         // Get Default Market Authorization
         let liDefOptPer = await cds.run(`SELECT *
@@ -49,7 +50,18 @@ class MarketAuth {
                                                      SCENARIO,
                                                      CHAR_NUM,
                                                      CHARVAL_NUM;`);
-
+        try {
+            await DELETE.from('CP_MARKETAUTH_CFG')
+                .where(`LOCATION_ID = '${lLocation}' 
+                AND PRODUCT_ID = '${lProduct}'
+                AND WEEK_DATE  = '${lDate}'
+                AND VERSION = '${lVersion}'
+                AND SCENARIO = '${lScenario}'
+                `);
+        }
+        catch (e) {
+            console.log("unable to delete");
+        }
         let lsCharVal = {};
         let liCharVal = [];
 
@@ -57,30 +69,30 @@ class MarketAuth {
         for (let cntFP = 0; cntFP < liFutOptPer.length; cntFP++) {
             let lFound = '';
             for (let cntDP = 0; cntDP < liDefOptPer.length; cntDP++) {
-                if (liDefOptPer[cntDP].CHAR_NUM === liFutOptPer[cntFP ].CHAR_NUM &&
-                    liDefOptPer[cntDP].CHARVAL_NUM === liFutOptPer[cntFP ].CHARVAL_NUM ) {
-                        lFound = 'X';
-                        // if (liDefOptPer[cntDP].OPT_PERCENT !== liFutOptPer[cntFP ].OPT_PERCENT) {
-                            lsCharVal = {};
-                            lsCharVal['VERSION'] = GenF.parse(liFutOptPer[cntFP ].VERSION);
-                            lsCharVal['SCENARIO'] = GenF.parse(liFutOptPer[cntFP ].SCENARIO);
-                            lsCharVal['CHAR_NUM'] = GenF.parse(liFutOptPer[cntFP ].CHAR_NUM);
-                            lsCharVal['CHARVAL_NUM'] = GenF.parse(liFutOptPer[cntFP ].CHARVAL_NUM);
-                            if(liDefOptPer[cntDP].OPT_PERCENT > 0){
-                                lsCharVal['CORRECTION_FACTOR'] = liFutOptPer[cntFP ].OPT_PERCENT / liDefOptPer[cntDP].OPT_PERCENT;
-                            } else {
-                                lsCharVal['CORRECTION_FACTOR'] = 1; 
-                            }
-                            liCharVal.push(lsCharVal);
-                        // }
+                if (liDefOptPer[cntDP].CHAR_NUM === liFutOptPer[cntFP].CHAR_NUM &&
+                    liDefOptPer[cntDP].CHARVAL_NUM === liFutOptPer[cntFP].CHARVAL_NUM) {
+                    lFound = 'X';
+                    // if (liDefOptPer[cntDP].OPT_PERCENT !== liFutOptPer[cntFP ].OPT_PERCENT) {
+                    lsCharVal = {};
+                    lsCharVal['VERSION'] = GenF.parse(liFutOptPer[cntFP].VERSION);
+                    lsCharVal['SCENARIO'] = GenF.parse(liFutOptPer[cntFP].SCENARIO);
+                    lsCharVal['CHAR_NUM'] = GenF.parse(liFutOptPer[cntFP].CHAR_NUM);
+                    lsCharVal['CHARVAL_NUM'] = GenF.parse(liFutOptPer[cntFP].CHARVAL_NUM);
+                    if (liDefOptPer[cntDP].OPT_PERCENT > 0) {
+                        lsCharVal['CORRECTION_FACTOR'] = liFutOptPer[cntFP].OPT_PERCENT / liDefOptPer[cntDP].OPT_PERCENT;
+                    } else {
+                        lsCharVal['CORRECTION_FACTOR'] = 1;
+                    }
+                    liCharVal.push(lsCharVal);
+                    // }
                 } else {
                     if (lFound === 'X') {
                         break;
                     }
                 }
             }
-        }                             
-        
+        }
+
         let lsVersion = {};
         let liVersion = [];
         let lsChar = {};
@@ -89,38 +101,39 @@ class MarketAuth {
         let liCharValTemp = [];
 
         for (let cntCV = 0; cntCV < liCharVal.length; cntCV++) {
-  
-            lsCharValTemp = {};           
+
+            lsCharValTemp = {};
             lsCharValTemp['CHARVAL_NUM'] = GenF.parse(liCharVal[cntCV].CHARVAL_NUM);
             lsCharValTemp['CORRECTION_FACTOR'] = GenF.parse(liCharVal[cntCV].CORRECTION_FACTOR)
-            if(lsCharValTemp['CORRECTION_FACTOR'] !== 1){
+            if (lsCharValTemp['CORRECTION_FACTOR'] !== 1) {
                 lsChar['PROCESS'] = 'X';
             }
             liCharValTemp.push(lsCharValTemp);
 
-            if(cntCV === GenF.addOne(cntCV,liCharVal.length) ||
-                liCharVal[cntCV].CHAR_NUM !== liCharVal[GenF.addOne(cntCV)].CHAR_NUM){
-                 
-                 lsChar['CHAR_NUM'] = liCharVal[cntCV].CHAR_NUM;
-                 lsChar['VAL']      = GenF.parse(liCharValTemp);
-                 liCharValTemp = [];
-                 lsChar = {};
-             }                 
-           
-            if(cntCV === GenF.addOne(cntCV, liCharVal.length) ||
+            if (cntCV === GenF.addOne(cntCV, liCharVal.length) ||
+                liCharVal[cntCV].CHAR_NUM !== liCharVal[GenF.addOne(cntCV)].CHAR_NUM) {
+
+                lsChar['CHAR_NUM'] = liCharVal[cntCV].CHAR_NUM;
+                lsChar['VAL'] = GenF.parse(liCharValTemp);
+                liChar.push(lsChar);
+                liCharValTemp = [];
+                lsChar = {};
+            }
+
+            if (cntCV === GenF.addOne(cntCV, liCharVal.length) ||
                 liCharVal[cntCV].VERSION !== liCharVal[GenF.addOne(cntCV)].VERSION ||
-                liCharVal[cntCV].SCENARIO !== liCharVal[GenF.addOne(cntCV)].SCENARIO){
-                    lsVersion['VERSION'] = GenF.parse(liCharVal[cntCV].VERSION);
-                    lsVersion['SCENARIO'] = GenF.parse(liCharVal[cntCV].SCENARIO);
-                    lsVersion['CHAR'] = GenF.parse(liChar);
-                    liVersion.push(lsVersion);
-                    
-                    liChar = [];
-            }            
-            
+                liCharVal[cntCV].SCENARIO !== liCharVal[GenF.addOne(cntCV)].SCENARIO) {
+                lsVersion['VERSION'] = GenF.parse(liCharVal[cntCV].VERSION);
+                lsVersion['SCENARIO'] = GenF.parse(liCharVal[cntCV].SCENARIO);
+                lsVersion['CHAR'] = GenF.parse(liChar);
+                liVersion.push(lsVersion);
+
+                liChar = [];
+            }
+
         }
 
-       
+
         let liCharOpt = [];
         let liCharOptOt = [];
         let lNumChar = 0;
@@ -130,15 +143,15 @@ class MarketAuth {
             liCharOpt = [];
             for (let cntVC = 0; cntVC < liVersionChar.length; cntVC++) {
                 let liVersionCharValue = liVersionChar[cntVC].VAL;
-                if(liVersionChar[cntVC].PROCESS === 'X'){
+                if (liVersionChar[cntVC].PROCESS === 'X') {
                     lNumChar = lNumChar + 1;
                     for (let cntVCV = 0; cntVCV < liVersionCharValue.length; cntVCV++) {
-                    
-                        liCharOptOt = await cds.run(`SELECT V_UNIQUE_ID_COUNT.LOCATION_ID,
+                        try {
+                            liCharOptOt = await cds.run(`SELECT V_UNIQUE_ID_COUNT.LOCATION_ID,
                                                             V_UNIQUE_ID_COUNT.PRODUCT_ID,
                                                             V_UNIQUE_ID.CHAR_NUM,
                                                             V_UNIQUE_ID.CHARVAL_NUM,
-                                                            SUM(V_UNIQUE_ID_COUNT.ORD_QTY) * ${liVersionCharValue[cntVCV].CORRECTION_FACTOR} AS ORD_QTY
+                                                            SUM(V_UNIQUE_ID_COUNT.ORD_QTY) AS ORD_QTY
                                                     FROM V_UNIQUE_ID_COUNT
                                             INNER JOIN CP_PARTIALPROD_INTRO
                                                     ON CP_PARTIALPROD_INTRO.LOCATION_ID = V_UNIQUE_ID_COUNT.LOCATION_ID
@@ -156,7 +169,7 @@ class MarketAuth {
                                                                                                                                     FROM CP_PARTIALPROD_INTRO
                                                                                                                                     WHERE LOCATION_ID = '${lLocation}'
                                                                                                                                     AND PRODUCT_ID = '${lProduct}'))
-                                                                                                                                    AND CHAR_NUM = '${liVersionCharValue.CHAR_NUM}'
+                                                                                                                                    AND CHAR_NUM = '${liVersionChar[cntVC].CHAR_NUM}'
                                                                                                                                     AND CHARVAL_NUM = '${liVersionCharValue[cntVCV].CHARVAL_NUM}'))
                                                     GROUP BY 
                                                         V_UNIQUE_ID_COUNT.LOCATION_ID,
@@ -164,33 +177,39 @@ class MarketAuth {
                                                         V_UNIQUE_ID.CHAR_NUM,
                                                         V_UNIQUE_ID.CHARVAL_NUM
                                                         ORDER BY CHAR_NUM, CHARVAL_NUM;`);
-
+                        }
+                        catch (e) {
+                            console.log(e);
+                        }
+                        let lsOptPer = {};
+                        // let liCharOpt = [];
                         for (let cntC = 0; cntC < liCharOptOt.length; cntC++) {
                             let lSuccess = '';
                             for (let cntCC = 0; cntCC < liCharOpt.length; cntCC++) {
-                                if (liCharOpt[cntC].LOCATION_ID === liCharOptOt[cntC].LOCATION_ID &&
-                                    liCharOpt[cntC].PRODUCT_ID  === liCharOptOt[cntC].PRODUCT_ID &&
-                                    liCharOpt[cntC].VERSION === liVersion[cntV].VERSION &&
-                                    liCharOpt[cntC].SCENARIO === liVersion[cntV].SCENARIO &&                                
-                                    liCharOpt[cntC].CHAR_NUM    === liCharOptOt[cntC].CHAR_NUM &&
-                                    liCharOpt[cntC].CHARVAL_NUM === liCharOptOt[cntC].CHARVAL_NUM) {
-                                        liCharOpt[cntC].ORD_QTY =  parseInt(liCharOpt[cntC].ORD_QTY) + parseInt(liCharOptOt[cntC].ORD_QTY);
-                                        lSuccess = 'X';
-                                        break;
+                                if (liCharOpt[cntCC].LOCATION_ID === liCharOptOt[cntC].LOCATION_ID &&
+                                    liCharOpt[cntCC].PRODUCT_ID === liCharOptOt[cntC].PRODUCT_ID &&
+                                    liCharOpt[cntCC].VERSION === liVersion[cntV].VERSION &&
+                                    liCharOpt[cntCC].SCENARIO === liVersion[cntV].SCENARIO &&
+                                    liCharOpt[cntCC].CHAR_NUM === liCharOptOt[cntC].CHAR_NUM &&
+                                    liCharOpt[cntCC].CHARVAL_NUM === liCharOptOt[cntC].CHARVAL_NUM) {
+                                    liCharOpt[cntCC].ORD_QTY = parseInt(liCharOpt[cntCC].ORD_QTY) + parseInt(liCharOptOt[cntC].ORD_QTY);
+                                    lSuccess = 'X';
+                                    break;
                                 }
                             }
-                            if(lSuccess === ''){
+                            if (lSuccess === '') {
                                 lsOptPer.LOCATION_ID = GenF.parse(liCharOptOt[cntC].LOCATION_ID);
-                                lsOptPer.PRODUCT_ID  = GenF.parse(liCharOptOt[cntC].PRODUCT_ID);
-                                lsOptPer.VERSION     = GenF.parse(liVersion[cntV].VERSION);
-                                lsOptPer.SCENARIO    = GenF.parse(liVersion[cntV].SCENARIO);
-                                lsOptPer.CHAR_NUM    = GenF.parse(liCharOptOt[cntC].CHAR_NUM);
+                                lsOptPer.PRODUCT_ID = GenF.parse(liCharOptOt[cntC].PRODUCT_ID);
+                                lsOptPer.VERSION = GenF.parse(liVersion[cntV].VERSION);
+                                lsOptPer.SCENARIO = GenF.parse(liVersion[cntV].SCENARIO);
+                                lsOptPer.CHAR_NUM = GenF.parse(liCharOptOt[cntC].CHAR_NUM);
                                 lsOptPer.CHARVAL_NUM = GenF.parse(liCharOptOt[cntC].CHARVAL_NUM);
-                                lsOptPer.ORD_QTY     = parseInt(liCharOptOt[cntC].ORD_QTY);
+                                lsOptPer.ORD_QTY = parseInt(liCharOptOt[cntC].ORD_QTY);
 
-                                liCharOpt.push(lsOptPer);
+                                liCharOpt.push(GenF.parse(lsOptPer));
+                                lsOptPer = {};
                             }
-                            
+
                         }
 
                     }
@@ -226,7 +245,7 @@ class MarketAuth {
                 //     V_UNIQUE_ID.CHAR_NUM,
                 //     V_UNIQUE_ID.CHARVAL_NUM
                 //     ORDER BY CHAR_NUM, CHARVAL_NUM;`)   
-                    
+
                 //     for (let cntC = 0; cntC < liCharOptOt.length; cntC++) {
                 //         let lSuccess = '';
                 //         for (let cntCC = 0; cntCC < liCharOpt.length; cntCC++) {
@@ -249,33 +268,37 @@ class MarketAuth {
                 //             lsOptPer.CHAR_NUM    = liCharOptOt[cntC].CHAR_NUM;
                 //             lsOptPer.CHARVAL_NUM = liCharOptOt[cntC].CHARVAL_NUM;
                 //             lsOptPer.CHARVAL_NUM = liCharOptOt[cntC].CHARVAL_NUM;
-            
+
                 //             liCharOpt.push(lsOptPer);
                 //         }
-                        
+
                 //     }                    
 
             }
             let lsMarketAuth = {};
             let liMarketAuth = [];
             for (let cntOP = 0; cntOP < liCharOpt.length; cntOP++) {
-                lsMarketAuth['WEEK_DATE']   = GenF.parse(lDate);
+                lsMarketAuth['WEEK_DATE'] = GenF.parse(lDate);
                 lsMarketAuth['LOCATION_ID'] = GenF.parse(liCharOpt[cntOP].LOCATION_ID);
-                lsMarketAuth['PRODUCT_ID']  = GenF.parse(liCharOpt[cntOP].PRODUCT_ID);
-                lsMarketAuth['CHAR_NUM']    = GenF.parse(liCharOpt[cntOP].CHAR_NUM);
-                lsMarketAuth['CHARVAL_NUM'] = GenF.parse(liCharOpt[cntOP].CHARVAL_NUM);                
-                lsMarketAuth['VERSION ']    = GenF.parse(liCharOpt[cntOP].VERSION);
-                lsMarketAuth['SCENARIO']    = GenF.parse(liCharOpt[cntOP].SCENARIO);    
-                if(lOrdQty > 0)            {
-                    lsMarketAuth['OPT_PERCENT'] = liCharOpt[cntOP].ORD_QTY / ( parseInt(lNumChar) * lOrdQty);
+                lsMarketAuth['PRODUCT_ID'] = GenF.parse(liCharOpt[cntOP].PRODUCT_ID);
+                lsMarketAuth['CHAR_NUM'] = GenF.parse(liCharOpt[cntOP].CHAR_NUM);
+                lsMarketAuth['CHARVAL_NUM'] = GenF.parse(liCharOpt[cntOP].CHARVAL_NUM);
+                lsMarketAuth['VERSION '] = GenF.parse(liCharOpt[cntOP].VERSION);
+                lsMarketAuth['SCENARIO'] = GenF.parse(liCharOpt[cntOP].SCENARIO);
+                if (lOrdQty > 0) {
+                    lsMarketAuth['OPT_PERCENT'] = liCharOpt[cntOP].ORD_QTY / (parseInt(lNumChar) * lOrdQty);
                 } else {
                     lsMarketAuth['OPT_PERCENT'] = 0;
                 }
                 liMarketAuth.push(lsMarketAuth);
             }
+            try {
+                await INSERT.into('CP_MARKETAUTH_CFG')
+                    .entries(liMarketAuth);
+            }
+            catch (e) {
 
-            await INSERT .INTO('CP_MARKETAUTH_CFG')
-                         .ENTRIES(liMarketAuth);
+            }
 
         }
 
