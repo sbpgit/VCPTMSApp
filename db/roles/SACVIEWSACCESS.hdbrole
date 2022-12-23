@@ -1,0 +1,14 @@
+{
+  "role": {
+    "name": "SACVIEWSACCESS",
+    "schema_privileges": [
+      {
+        "privileges": [
+          "SELECT",
+          "EXECUTE",
+          "SELECT METADATA"
+        ]
+      }
+    ]
+  }
+}

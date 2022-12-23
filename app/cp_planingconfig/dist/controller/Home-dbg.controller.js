@@ -131,9 +131,6 @@ sap.ui.define([
             */
             getPlannedParameters: function (slocation) {
                 var aParameters = [];
-                // var aFilter = [new Filter("LOCATION_ID", FilterOperator.EQ, slocation),
-                //                           new Filter("VALUE", FilterOperator.EQ, ' ')];
-                                                
                 that.getModel("PCModel").read('/V_Parameters', {
                     filters: [
                         new Filter("LOCATION_ID", FilterOperator.EQ, slocation)

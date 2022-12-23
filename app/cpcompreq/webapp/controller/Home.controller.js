@@ -190,30 +190,30 @@ sap.ui.define(
 
                 // Planned Parameter Values
 
-                this.getModel("BModel").read("/V_Parameters", {
-                    success: function (oData) {
-                        // if Frozen Horizon is 14 Days, we need to consider from 15th day
-                        var iFrozenHorizon = parseInt(oData.results[0].VALUE) + 1;
-                        var dDate = new Date();
-                        // var oDateL = that.getDateFn(dDate);
-                        // oDateL = that.addDays(oDateL, iFrozenHorizon);
-                        dDate = new Date(dDate.setDate(dDate.getDate() + iFrozenHorizon));
-                        var oDateL = that.getDateFn(dDate);
-                        var oDateH = new Date(
-                            dDate.getFullYear(),
-                            dDate.getMonth(),
-                            dDate.getDate() + 90
-                        );
-                        var oDateH = that.getDateFn(oDateH);
-                        that.byId("fromDate").setValue(oDateL);
-                        that.byId("toDate").setValue(oDateH);
-                        sap.ui.core.BusyIndicator.hide();
-                    },
-                    error: function (oData, error) {
-                        MessageToast.show("error");
-                        sap.ui.core.BusyIndicator.hide();
-                    },
-                });
+                // this.getModel("BModel").read("/V_Parameters", {
+                //     success: function (oData) {
+                //         // if Frozen Horizon is 14 Days, we need to consider from 15th day
+                //         var iFrozenHorizon = parseInt(oData.results[0].VALUE) + 1;
+                //         var dDate = new Date();
+                //         // var oDateL = that.getDateFn(dDate);
+                //         // oDateL = that.addDays(oDateL, iFrozenHorizon);
+                //         dDate = new Date(dDate.setDate(dDate.getDate() + iFrozenHorizon));
+                //         var oDateL = that.getDateFn(dDate);
+                //         var oDateH = new Date(
+                //             dDate.getFullYear(),
+                //             dDate.getMonth(),
+                //             dDate.getDate() + 90
+                //         );
+                //         var oDateH = that.getDateFn(oDateH);
+                //         that.byId("fromDate").setValue(oDateL);
+                //         that.byId("toDate").setValue(oDateH);
+                //         sap.ui.core.BusyIndicator.hide();
+                //     },
+                //     error: function (oData, error) {
+                //         MessageToast.show("error");
+                //         sap.ui.core.BusyIndicator.hide();
+                //     },
+                // });
             },
 
             /**
@@ -390,6 +390,7 @@ sap.ui.define(
                 // toDate = toDate.toISOString().split("T")[0];
                 // Calling function to generate column names based on dates
                 var liDates = that.generateDateseries(fromDate, toDate);
+                that.oGModel.setProperty("/TDates", liDates);
 
                 // Looping through the data to generate columns
                 for (var i = 0; i < that.tableData.length; i++) {
@@ -427,10 +428,12 @@ sap.ui.define(
                             template: columnName,
                         });
                     } else {
+                        var iTotalQty = that.getTotalWeekQty(columnName);
+                        var columnText = columnName + " (" + iTotalQty + ")";
                         if (that.plntMethod === 'M1') {
                             return new sap.ui.table.Column({
                                 width: "8rem",
-                                label: columnName,
+                                label: columnText,
                                 template: new sap.m.Link({
                                     text: "{" + columnName + "}",
                                     press: that.linkPressed,
@@ -440,7 +443,7 @@ sap.ui.define(
                         else {
                             return new sap.ui.table.Column({
                                 width: "8rem",
-                                label: columnName,
+                                label: columnText,
                                 template: new sap.m.Text({
                                     text: "{" + columnName + "}"
                                 }),
@@ -493,6 +496,30 @@ sap.ui.define(
                 // Calling function to generate UI table based on filter data
                 that.TableGenerate();
             },
+            /**
+             * 
+             */
+             getTotalWeekQty: function (sWeekDate) {
+                that.oGModel = that.getModel("oGModel");
+                var oTableData = that.oGModel.getProperty("/TData");
+                var liDates = that.oGModel.getProperty("/TDates");
+                var iWeekIndex = 0;
+                var iTotalQty = 0;
+                for (let index = 3; index < liDates.length; index++) {
+                    iWeekIndex = iWeekIndex + 1;
+                    if (liDates[index].CAL_DATE === sWeekDate) {
+                        break;
+                    }
+                }
+
+                // Looping through the data to generate columns SUM
+                
+                for (var i = 0; i < that.tableData.length; i++) {
+                    iTotalQty = iTotalQty + parseInt(that.tableData[i]["WEEK" + iWeekIndex]);                    
+                }
+
+                return iTotalQty;
+            },
 
             /**
              * This function is called when a click on any row item.
@@ -532,6 +559,8 @@ sap.ui.define(
                         }
                     }
 
+                    
+                    selColumnDate = selColumnDate.split(" ")[0];
                     that.colDate = selColumnDate;
                     if (selColumnValue > 0) {
                         this.getModel("BModel").read("/getBOMPred", {
@@ -584,7 +613,10 @@ sap.ui.define(
              */
             onExpand: function (oEvent) {
                 var oHdr = oEvent.getSource().getHeaderText();
-                var objDep = oHdr.split(":");
+                var objDep = oHdr.split(":")[0];
+                objDep =objDep.split("_");
+                let objDepVal = objDep[0].concat("_",objDep[1]);
+                let objCntr = objDep[2];
                 that.getModel("BModel").read("/getOdCharImpact", {
                     filters: [
                         new Filter(
@@ -608,11 +640,12 @@ sap.ui.define(
                             that.oGModel.getProperty("/SelectedScen")
                         ),
                         new Filter("CAL_DATE", FilterOperator.EQ, that.colDate),
-                        new Filter("OBJ_DEP", FilterOperator.EQ, objDep[0].split("_")[0]),
+                        new Filter("OBJ_DEP", FilterOperator.EQ, objDepVal),//objDep[0].split("_")[0]),
                         new Filter(
                             "OBJ_COUNTER",
                             FilterOperator.EQ,
-                            objDep[0].split("_")[1]
+                            objCntr
+                           // objDep[0].split("_")[1]
                         ),
                         new Filter(
                             "MODEL_VERSION",
@@ -692,8 +725,14 @@ sap.ui.define(
                 var timeOffsetInMS = lDate.getTimezoneOffset() * 60000;
                 lDate.setTime(lDate.getTime() + timeOffsetInMS);
                 let lDay = lDate.getDay();
-                if (lDay !== 0) lDay = 7 - lDay;
-                lDay = lDay + 1;
+                // if (lDay !== 0) lDay = 7 - lDay;
+                // lDay = lDay + 1;
+                if (lDay === 1) {
+                    lDay = 0;
+                } else {
+                    if (lDay !== 0) lDay = 7 - lDay;
+                    lDay = lDay + 1;
+                }
                 const lNextSun = new Date(
                     lDate.getFullYear(),
                     lDate.getMonth(),
@@ -1080,7 +1119,7 @@ sap.ui.define(
                             new Filter(
                                 "PRODUCT_ID",
                                 FilterOperator.EQ,
-                                that.oGModel.getProperty("/SelectedProd")
+                                aSelectedItems[0].getTitle()
                             ),
                         ],
                         success: function (oData) {

@@ -669,21 +669,21 @@ async function _generatePredictions(req,isGet) {
 
 
     if ( (vcRulesListReq.length == 1) &&
-         ( (vcRulesListReq[0].GroupID == "ALL") && 
-           (vcRulesListReq[0].Product == "ALL") && 
-           (vcRulesListReq[0].Location == "ALL") ) ||
+          ( ( (vcRulesListReq[0].GroupID == "ALL") && 
+            (vcRulesListReq[0].Product == "ALL") && 
+            (vcRulesListReq[0].Location == "ALL") ) ||
 
-           ( (vcRulesListReq[0].GroupID == "ALL") && 
-           (vcRulesListReq[0].Product == "ALL") && 
-           (vcRulesListReq[0].Location != "ALL") ) ||
+            ( (vcRulesListReq[0].GroupID == "ALL") && 
+            (vcRulesListReq[0].Product == "ALL") && 
+            (vcRulesListReq[0].Location != "ALL") ) ||
 
-           ( (vcRulesListReq[0].GroupID == "ALL") && 
-           (vcRulesListReq[0].Product != "ALL") && 
-           (vcRulesListReq[0].Location == "ALL") ) ||
-           
-           ( (vcRulesListReq[0].GroupID == "ALL") && 
-           (vcRulesListReq[0].Product != "ALL") && 
-           (vcRulesListReq[0].Location != "ALL") ) )
+            ( (vcRulesListReq[0].GroupID == "ALL") && 
+            (vcRulesListReq[0].Product != "ALL") && 
+            (vcRulesListReq[0].Location == "ALL") ) ||
+            
+            ( (vcRulesListReq[0].GroupID == "ALL") && 
+            (vcRulesListReq[0].Product != "ALL") && 
+            (vcRulesListReq[0].Location != "ALL") ) ) )
     {
 
         let str = JSON.stringify(vcRulesListReq[0]);
@@ -823,15 +823,45 @@ async function _generatePredictions(req,isGet) {
             if (hasEndDate == true)   
                 endDateSql =  ' AND "PERIOD_NUM" <= CONCAT( YEAR (TO_DATE (\'' + vcRulesListReq[0].endDate  + '\'' + ',\'YYYY-MM-DD\')), lpad(WEEK (TO_DATE(\'' + vcRulesListReq[0].endDate + '\'' +', \'YYYY-MM-DD\')),\'2\',\'00\') )';
 
+            let varSql = "";
+
+            if ( (vcRulesListReq[index].Location != "ALL") &&
+                    (vcRulesListReq[index].Product != "ALL") &&
+                    (vcRulesListReq[index].GroupID != "ALL") )
+            {
+                varSql =  ' "Location" =' + "'" +   vcRulesListReq[index].Location + "'" +
+                            ' AND "Product" =' + "'" +   vcRulesListReq[index].Product + "'" +
+                            ' AND "GroupID" =' + "'" +   vcRulesListReq[index].GroupID + "'";
+            }
+            else if ( (vcRulesListReq[index].Location == "ALL") &&
+                    (vcRulesListReq[index].Product != "ALL") &&
+                    (vcRulesListReq[index].GroupID != "ALL") )
+            {
+                varSql =  ' "Product" =' + "'" +   vcRulesListReq[index].Product + "'" +
+                            ' AND "GroupID" =' + "'" +   vcRulesListReq[index].GroupID + "'";
+            }
+            else if ( (vcRulesListReq[index].Location != "ALL") &&
+            (vcRulesListReq[index].Product != "ALL") &&
+            (vcRulesListReq[index].GroupID == "ALL") )
+            {
+                varSql =   ' "Location" =' + "'" +   vcRulesListReq[index].Location + "'" +
+                            ' AND "Product" =' + "'" +   vcRulesListReq[index].Product + "'";
+            }
+            else if ( (vcRulesListReq[index].Location == "ALL") &&
+                    (vcRulesListReq[index].Product == "ALL") &&
+                    (vcRulesListReq[index].GroupID != "ALL") )
+            {
+                varSql =  ' "GroupID" =' + "'" +   vcRulesListReq[index].GroupID + "'";
+            }
+        
+              
             sqlStr = 'SELECT DISTINCT "Location", "Product", "GroupID", "Type", "VERSION", "SCENARIO", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "V_PREDICTION_TS"' + 
-                     ' WHERE "Location" = ' + "'" +   vcRulesListReq[index].Location + "'" +
-                     ' AND "GroupID" =' + "'" +   vcRulesListReq[index].GroupID + "'" +
-                     ' AND "Type" =' + "'" +   vcRulesListReq[index].Type + "'" +
-                     ' AND "Product" =' + "'" +   vcRulesListReq[index].Product + "'" + 
-                     ' AND "VERSION" =' + "'" +   vcRulesListReq[index].version + "'" +
-                     ' AND "SCENARIO" =' + "'" +   vcRulesListReq[index].scenario + "'" +
-                     startDateSql    + endDateSql +              
-                     ' GROUP BY "Location", "Product", "GroupID", "Type", "VERSION", "SCENARIO"';
+                    ' WHERE ' + varSql +
+                    ' AND "Type" =' + "'" +   vcRulesListReq[index].Type + "'" +
+                    ' AND "VERSION" =' + "'" +   vcRulesListReq[index].version + "'" +
+                    ' AND "SCENARIO" =' + "'" +   vcRulesListReq[index].scenario + "'" +
+                    startDateSql    + endDateSql +              
+                    ' GROUP BY "Location", "Product", "GroupID", "Type", "VERSION", "SCENARIO"';
             console.log("vcRuleListReqSql ", sqlStr);
             results = await cds.run(sqlStr);
 
@@ -1409,22 +1439,25 @@ async function _generateRegModels (req,isGet) {
     var sqlStr = "";
     var results= [];
     var vcRulesList = [];
-    if ( (vcRulesListReq.length == 1) &&
-        ( (vcRulesListReq[0].GroupID == "ALL") && 
-          (vcRulesListReq[0].Product == "ALL") && 
-          (vcRulesListReq[0].Location == "ALL") ) ||
+    let arrayLength = vcRulesListReq.length;
+    console.log("arrayLength ", arrayLength);
 
-          ( (vcRulesListReq[0].GroupID == "ALL") && 
-          (vcRulesListReq[0].Product == "ALL") && 
-          (vcRulesListReq[0].Location != "ALL") ) ||
+    if ( (arrayLength == 1) &&
+          ( ( (vcRulesListReq[0].GroupID == "ALL") && 
+            (vcRulesListReq[0].Product == "ALL") && 
+            (vcRulesListReq[0].Location == "ALL") ) ||
 
-          ( (vcRulesListReq[0].GroupID == "ALL") && 
-          (vcRulesListReq[0].Product != "ALL") && 
-          (vcRulesListReq[0].Location == "ALL") ) ||
-          
-          ( (vcRulesListReq[0].GroupID == "ALL") && 
-          (vcRulesListReq[0].Product != "ALL") && 
-          (vcRulesListReq[0].Location != "ALL") ) )
+            ( (vcRulesListReq[0].GroupID == "ALL") && 
+            (vcRulesListReq[0].Product == "ALL") && 
+            (vcRulesListReq[0].Location != "ALL") ) ||
+
+            ( (vcRulesListReq[0].GroupID == "ALL") && 
+            (vcRulesListReq[0].Product != "ALL") && 
+            (vcRulesListReq[0].Location == "ALL") ) ||
+            
+            ( (vcRulesListReq[0].GroupID == "ALL") && 
+            (vcRulesListReq[0].Product != "ALL") && 
+            (vcRulesListReq[0].Location != "ALL") ) ) )
    {
 
        if ( (vcRulesListReq[0].Location != "ALL") &&
@@ -1463,7 +1496,6 @@ async function _generateRegModels (req,isGet) {
 
 
         results = await cds.run(sqlStr);
-        // console.log('_generateRegModels vcRulesList sqlStr ', sqlStr );
         // console.log('_generateRegModels vcRulesList sqlStr results', results );
 
 
@@ -1486,28 +1518,62 @@ async function _generateRegModels (req,isGet) {
     {
         for (var i = 0; i < vcRulesListReq.length; i++)
         {
-            sqlStr = 'SELECT  "LOCATION_ID", "PRODUCT_ID", "GROUP_ID", "TYPE" FROM "CP_VC_HISTORY_TS" WHERE "PRODUCT_ID" =' +
-                        "'" +  vcRulesListReq[i].Product + "'" +  
-                        ' AND "GROUP_ID" =' + "'" +   vcRulesListReq[i].GroupID + "'" +
-                        ' AND "LOCATION_ID" =' + "'" +   vcRulesListReq[i].Location + "'" +
+                
+            let varSql = "";
+    
+            if ( (vcRulesListReq[i].Location != "ALL") &&
+                 (vcRulesListReq[i].Product != "ALL") &&
+                 (vcRulesListReq[i].GroupID != "ALL") )
+            {
+                varSql =  ' "LOCATION_ID" =' + "'" +   vcRulesListReq[i].Location + "'" +
+                          ' AND "PRODUCT_ID" =' + "'" +   vcRulesListReq[i].Product + "'" +
+                          ' AND "GROUP_ID" =' + "'" +   vcRulesListReq[i].GroupID + "'";
+            }
+            else if ( (vcRulesListReq[i].Location == "ALL") &&
+                 (vcRulesListReq[i].Product != "ALL") &&
+                 (vcRulesListReq[i].GroupID != "ALL") )
+            {
+                varSql =  ' "PRODUCT_ID" =' + "'" +   vcRulesListReq[i].Product + "'" +
+                          ' AND "GROUP_ID" =' + "'" +   vcRulesListReq[i].GroupID + "'";
+            }
+            else if ( (vcRulesListReq[i].Location != "ALL") &&
+            (vcRulesListReq[i].Product != "ALL") &&
+            (vcRulesListReq[i].GroupID == "ALL") )
+            {
+                varSql =   ' "LOCATION_ID" =' + "'" +   vcRulesListReq[i].Location + "'" +
+                            ' AND "PRODUCT_ID" =' + "'" +   vcRulesListReq[i].Product + "'";
+            }
+            else if ( (vcRulesListReq[i].Location == "ALL") &&
+                 (vcRulesListReq[i].Product == "ALL") &&
+                 (vcRulesListReq[i].GroupID != "ALL") )
+            {
+                varSql =  ' "GROUP_ID" =' + "'" +   vcRulesListReq[i].GroupID + "'";
+            }
+    
+            sqlStr = 'SELECT  "LOCATION_ID", "PRODUCT_ID", "GROUP_ID", "TYPE" FROM "CP_VC_HISTORY_TS" WHERE ' +
+                        varSql +
                         ' AND "TYPE" =' + "'" +   vcRulesListReq[i].Type + "'" +
                         ' GROUP BY "LOCATION_ID", "PRODUCT_ID", "GROUP_ID", "TYPE"' +
-                        ' HAVING COUNT(DISTINCT "' + vcConfigTimePeriod + '") > ' + "'" + minBuckets + "'";// + 'ORDER BY "WeekOfYear"';   
+                        ' HAVING COUNT(DISTINCT "' + vcConfigTimePeriod + '") > ' + "'" + minBuckets + "'";// + 'ORDER BY "WeekOfYear"';  
+            
             results = await cds.run(sqlStr);
-            // console.log('_generateRegModels vcRulesList ELSE sqlStr ', sqlStr, 'index = ', i );
+            console.log('_generateRegModels vcRulesList sqlStr ', sqlStr, 'index = ', i );
             // console.log('_generateRegModels vcRulesList ELSE sqlStr results', results );
     
             if (results.length > 0)
             {    
-                let Location = results[0].LOCATION_ID;
-                let Product = results[0].PRODUCT_ID;
-                let GroupID = results[0].GROUP_ID;
-                let Type = results[0].TYPE;
-                let modelVersion = vcRulesListReq[0].modelVersion;
-                let profile = vcRulesListReq[i].profile;
-                let override = vcRulesListReq[i].override;
-                vcRulesList.push({profile,override,Location,Product,GroupID,Type,modelVersion});
-
+                for (rIndex = 0 ; rIndex < results.length; rIndex ++)
+                {
+                    let Location = results[rIndex].LOCATION_ID;
+                    let Product = results[rIndex].PRODUCT_ID;
+                    let GroupID = results[rIndex].GROUP_ID;
+                    let Type = results[rIndex].TYPE;
+                    // let modelVersion = vcRulesListReq[0].modelVersion;
+                    let modelVersion = vcRulesListReq[i].modelVersion;
+                    let profile = vcRulesListReq[i].profile;
+                    let override = vcRulesListReq[i].override;
+                    vcRulesList.push({profile,override,Location,Product,GroupID,Type,modelVersion});
+                }
             }
         }
     }
@@ -1553,7 +1619,7 @@ async function _generateRegModels (req,isGet) {
         if (vcRulesList[i].dimensions == 12)
            hasCharCount12 = true;
         
-           console.log('_generateRegModels index i = ', i, ' vcRulesList[i].dimensions = ',vcRulesList[i].dimensions);
+        //    console.log('_generateRegModels index i = ', i, ' vcRulesList[i].dimensions = ',vcRulesList[i].dimensions);
 
     }
     

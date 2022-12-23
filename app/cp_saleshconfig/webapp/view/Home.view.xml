@@ -57,6 +57,7 @@
                     </VBox>
                 </l:Grid>
             </FlexBox>
+<<<<<<< HEAD
         </ux:headerContent>
         <ux:sections>
             <ux:ObjectPageSection id="_IDGenObjectPageSection1">
@@ -112,3 +113,65 @@
         </ux:sections>
     </ux:ObjectPageLayout>
 </mvc:View>
+=======
+            </ux:headerContent>
+            <ux:sections>
+                <ux:ObjectPageSection id="_IDGenObjectPageSection1" >
+                    <ux:subSections>
+                        <ux:ObjectPageSubSection id="_IDGenObjectPageSubSection1">
+                            <ux:blocks>
+                <Table id="idTab" items="{path: '/results'}" growingScrollToLoad="true" rememberSelections="false" itemPress="onhandlePress" mode="SingleSelectMaster" selectionChange="onhandlePress" sticky="ColumnHeaders">
+                    
+                    <columns>
+                        <Column id="_IDGenColumn1" hAlign="Left" vAlign="Middle">
+                            <Text id="_IDGenText1" text="{i18n>salDoc}" />
+                        </Column>
+                        <Column id="_IDGenColumn2" hAlign="Left" vAlign="Middle">
+                            <Text id="_IDGenText2" text="{i18n>SalDocItem}" />
+                        </Column>
+                        <Column id="_IDGenColumn3" hAlign="Left" vAlign="Middle">
+                            <Text id="_IDGenText3" text="{i18n>docCreDate}"/>
+                        </Column>
+                        <Column id="_IDGenColumn4" hAlign="Left" vAlign="Middle">
+                            <Text id="_IDGenText4" text="{i18n>schLine}"/>
+                        </Column>
+                        <Column id="_IDGenColumn5" hAlign="Left" vAlign="Middle">
+                            <Text id="_IDGenText5" text="{i18n>PrdId}"/>
+                        </Column>
+                        <Column id="_IDGenColumn6" hAlign="Left" vAlign="Middle">
+                            <Text id="_IDGenText6" text="{i18n>Custgrp}"/>
+                        </Column>
+                        <Column id="_IDGenColumn7" hAlign="Left" vAlign="Middle" visible="false">
+                            <Text id="_IDGenText7" text="{i18n>Loc}"/>
+                        </Column>
+                        <Column id="_IDGenColumn8" hAlign="Left" vAlign="Middle">
+                            <Text id="_IDGenText8" text="{i18n>ordQuan}"/>
+                        </Column>
+                        <Column id="_IDGenColumn9" hAlign="Left" vAlign="Middle">
+                            <Text id="_IDGenText17" text="{i18n>UID}" />
+                        </Column>
+                    </columns>
+                    <items>
+                        <ColumnListItem id="_IDGenColumnListItem1">
+                            <cells>
+                                <Text id="_IDGenText9" text="{SALES_DOC}"/>
+                                <Text id="_IDGenText10" text="{SALESDOC_ITEM}"/>
+                                <Text id="_IDGenText11" text="{path: 'DOC_CREATEDDATE', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'MM/dd/yyyy' }}"/>
+                                <Text id="_IDGenText12" text="{SCHEDULELINE_NUM}"/>
+                                <Text id="_IDGenText13" text="{PRODUCT_ID}"/>
+                                <Text id="_IDGenText14" text="{CUSTOMER_GROUP}"/>
+                                <Text id="_IDGenText15" text="{LOCATION_ID}"/>
+                                <Text id="_IDGenText16" text="{ORD_QTY}"/>
+                                <Text id="_IDGenText18" text="{UNIQUE_ID}"/>
+                            </cells>
+                        </ColumnListItem>
+                    </items>
+                </Table>
+                </ux:blocks>
+                        </ux:ObjectPageSubSection>
+                    </ux:subSections>
+                </ux:ObjectPageSection>
+            </ux:sections>
+        </ux:ObjectPageLayout>
+</mvc:View>
+>>>>>>> ac8a832001f9cdb701f761a7fc58672118b7c1f7

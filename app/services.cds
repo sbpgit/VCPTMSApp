@@ -22,7 +22,6 @@ using from './cpjoblog/annotations';
 using from './cppartialprodnew/annotations';
 
 using from './cpnewprodintro/annotations';
-using from './cpjobscheduler_test/annotations';
 
 // using from './cpprscchar/annotations';
 
@@ -56,8 +55,6 @@ using from './cp_planingconfig/annotations';
 
 using from './cpsalesstock/annotations';
 
-using from './cpjobscheduler_new/annotations';
-
 using from './cpvcplannerdocumentation/annotations';
 
 using from './cpmaintenancevcplanner/annotations';
@@ -72,3 +69,5 @@ using from './cpcirlog/annotations';
 using from './cpmarketauthorization/annotations';
 
 using from './cprestrictionlikelihood/annotations';
+
+using from './cptimeseriesf/annotations';

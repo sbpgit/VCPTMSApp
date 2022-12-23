@@ -179,7 +179,7 @@ sap.ui.define(
             /**
              * This function is called when a click on product Characteristics button.
              */
-            onCharDetails: function (oEvent) {
+             onCharDetails: function (oEvent) {
                 var sSelLoc = oEvent.getSource().getParent().getCells()[0].getText();
                 var sSelProd = oEvent.getSource().getParent().getCells()[1].getText();
                 var sSelrefProd = oEvent.getSource().getParent().getCells()[3].getText();

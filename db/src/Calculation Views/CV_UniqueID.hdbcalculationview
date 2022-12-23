@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_UniqueID" applyPrivilegeType="NONE" dataCategory="CUBE" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="false">
+<descriptions defaultDescription="CV_UniqueID.hdbcalculationview"/>
+<localVariables/>
+<variableMappings/>
+<dataSources>
+  <DataSource id="V_UNIQUE_ID_ITEM">
+    <resourceUri>V_UNIQUE_ID_ITEM</resourceUri>
+  </DataSource>
+</dataSources>
+<snapshotProcedures/>
+<calculationViews/>
+<logicalModel id="V_UNIQUE_ID_ITEM">
+  <attributes>
+    <attribute id="UNIQUE_ID" order="1" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="UNIQUE_ID"/>
+      <keyMapping columnObjectName="V_UNIQUE_ID_ITEM" columnName="UNIQUE_ID"/>
+    </attribute>
+    <attribute id="PRODUCT_ID" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="PRODUCT_ID"/>
+      <keyMapping columnObjectName="V_UNIQUE_ID_ITEM" columnName="PRODUCT_ID"/>
+    </attribute>
+    <attribute id="LOCATION_ID" order="3" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="LOCATION_ID"/>
+      <keyMapping columnObjectName="V_UNIQUE_ID_ITEM" columnName="LOCATION_ID"/>
+    </attribute>
+    <attribute id="UNIQUE_DESC" order="4" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="UNIQUE_DESC"/>
+      <keyMapping columnObjectName="V_UNIQUE_ID_ITEM" columnName="UNIQUE_DESC"/>
+    </attribute>
+    <attribute id="CLASS_NUM" order="5" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CLASS_NUM"/>
+      <keyMapping columnObjectName="V_UNIQUE_ID_ITEM" columnName="CLASS_NUM"/>
+    </attribute>
+    <attribute id="CHAR_NUM" order="6" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CHAR_NUM"/>
+      <keyMapping columnObjectName="V_UNIQUE_ID_ITEM" columnName="CHAR_NUM"/>
+    </attribute>
+    <attribute id="CHAR_NAME" order="7" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CHAR_NAME"/>
+      <keyMapping columnObjectName="V_UNIQUE_ID_ITEM" columnName="CHAR_NAME"/>
+    </attribute>
+    <attribute id="CHAR_DESC" order="8" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CHAR_DESC"/>
+      <keyMapping columnObjectName="V_UNIQUE_ID_ITEM" columnName="CHAR_DESC"/>
+    </attribute>
+    <attribute id="CHARVAL_NUM" order="9" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CHARVAL_NUM"/>
+      <keyMapping columnObjectName="V_UNIQUE_ID_ITEM" columnName="CHARVAL_NUM"/>
+    </attribute>
+    <attribute id="CHAR_VALUE" order="10" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CHAR_VALUE"/>
+      <keyMapping columnObjectName="V_UNIQUE_ID_ITEM" columnName="CHAR_VALUE"/>
+    </attribute>
+    <attribute id="CHARVAL_DESC" order="11" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CHARVAL_DESC"/>
+      <keyMapping columnObjectName="V_UNIQUE_ID_ITEM" columnName="CHARVAL_DESC"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures>
+    <measure id="UID_CHAR_RATE" order="12" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="UID_CHAR_RATE"/>
+      <measureMapping columnObjectName="V_UNIQUE_ID_ITEM" columnName="UID_CHAR_RATE"/>
+    </measure>
+  </baseMeasures>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+  <localDimensions/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="40" y="85"/>
+    </shape>
+  </shapes>
+</layout>
+</Calculation:scenario>

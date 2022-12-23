@@ -30,7 +30,7 @@
                     "action": "display",
                     "title": "{{flpTitle}}",
                     "subTitle": "{{flpSubtitle}}",
-                    "icon": "sap-icon://activity-assigned-to-goal"
+                    "icon": "sap-icon://org-chart"
                 }
             }
         }
