@@ -354,7 +354,7 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                             <RadioButton id="idIBPCustGrp"  text="Customer Group" />
                             <RadioButton id="idIBPProd"  text="Product" />
                             <RadioButton id="idIBPLocProd" text="Location Product" />
-                            <RadioButton id="idIBPAssembly" text="Assemblies" />
+                            <RadioButton id="idIBPAssembly" text="Assembly" />
                             <RadioButton id="idIBPClass"  text="Class" />
                             <RadioButton id="idRestri"  text="Restrictions" />
                             

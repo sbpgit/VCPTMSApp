@@ -615,7 +615,7 @@ sap.ui.define(
                                 oSelJob === "F" || oSelJob === "D" || oSelJob === "I" ||
                                 oSelJob === "E") {
                                 var radioSel = that.byId("idRbtnExport").getSelectedButton().getText();
-                                if (radioSel !== "Assembly Requirement Quantity" && radioSel !== "Assemblies" && radioSel !== "Location Product") {
+                                if (radioSel !== "Assembly Requirement Quantity" && radioSel !== "Assembly" && radioSel !== "Location Product") {
                                     sap.ui.getCore().byId("prodSlctList").setMultiSelect(true);
                                     sap.ui.getCore().byId("prodSlctList").setRememberSelections(true);
                                 } else {
@@ -965,7 +965,7 @@ sap.ui.define(
                         var selRadio = that.byId("idRbtnExport").getSelectedButton().getText();
                         if (selRadio !== "Location" && selRadio !== "Customer Group" && selRadio !== "Product" && selRadio !== "Class"
                             && selRadio !== "Restrictions" && selRadio !== "Assembly Requirement Quantity" &&
-                            selRadio !== "Location Product" && selRadio !== "Assemblies") {
+                            selRadio !== "Location Product" && selRadio !== "Assembly") {
                             that.oProd.removeAllTokens();
                         }
                     }
@@ -1017,7 +1017,7 @@ sap.ui.define(
                         // 07-09-2022
                         if (oJobType === "M" || oJobType === "P" || oJobType === "T" || oJobType === "F" || oJobType === "D" || oJobType === "I" || oJobType === "E") {
                             var selRadio = that.byId("idRbtnExport").getSelectedButton().getText();
-                            if (oJobType === "E" && (selRadio === "Assembly Requirement Quantity" || selRadio === "Location Product" || selRadio === "Assemblies")) {
+                            if (oJobType === "E" && (selRadio === "Assembly Requirement Quantity" || selRadio === "Location Product" || selRadio === "Assembly")) {
                                 that.oProd.setValue(aSelectedProd[0].getTitle());
                             } else {
                                 that.oProd.removeAllTokens();
@@ -1180,7 +1180,7 @@ sap.ui.define(
                     }
                 } else if (oJobType === "T" || oJobType === "F" || oJobType === "D" || oJobType === "I" || oJobType === "E") {
                     var radioSel = that.byId("idRbtnExport").getSelectedButton().getText();
-                    if (radioSel !== "Assembly Requirement Quantity"  && radioSel !== "Assemblies"  && radioSel !== "Location Product") {
+                    if (radioSel !== "Assembly Requirement Quantity"  && radioSel !== "Assembly"  && radioSel !== "Location Product") {
                         sap.ui.getCore().byId("prodSlctList").setMultiSelect(true);
                         sap.ui.getCore().byId("prodSlctList").setRememberSelections(true);
                     } else {
@@ -1919,7 +1919,7 @@ sap.ui.define(
                         that.oProd = this.byId("ELPprodInput");
                         that.byId("IBPLocProdExport").setVisible(true);
                         break;
-                    case "Assemblies":
+                    case "Assembly":
                         that.oLoc = this.byId("EIAlocInput");
                         that.oProd = this.byId("EIAprodInput");
                         that.byId("IBPAssemblyExport").setVisible(true);
@@ -2885,7 +2885,7 @@ sap.ui.define(
                     } else {
                         MessageToast.show("Please select all fields");
                     }
-                } else if (rRadioBtn === "Location Product" || rRadioBtn === "Assemblies") {
+                } else if (rRadioBtn === "Location Product" || rRadioBtn === "Assembly") {
                     oLocItem = that.oLoc.getValue();
                     oProdItem = this.oProd.getValue();
                     if (oLocItem && oProdItem) {
@@ -3512,7 +3512,7 @@ sap.ui.define(
                         case "Location Product":
                             actionText = "/ibpimport-srv/exportIBPLocProd";
                             break;
-                        case "Assemblies":
+                        case "Assembly":
                             actionText = "/ibpimport-srv/exportIBPAssembly";
                             break;
                         case "Class":
@@ -3718,7 +3718,7 @@ sap.ui.define(
                         bButton === "Assembly Requirement Quantity" ||
                         bButton === "Restrictions" ||
                         bButton === "Location Product" ||
-                        bButton === "Assemblies" ||
+                        bButton === "Assembly" ||
                         oSelJobType === "S"
                     ) {
                         var finalList = {
