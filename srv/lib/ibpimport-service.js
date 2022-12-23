@@ -2551,6 +2551,7 @@ module.exports = cds.service.impl(async function () {
                     }
                 }
             }
+
             //  Update Charactertic plan once demand is updated from IBP
             if (flag === 'D') {
                 req = '';
@@ -2577,6 +2578,8 @@ module.exports = cds.service.impl(async function () {
                 catch (e) {
                     lMessage = "Request to IBP failed for the requested inputs: " + lsData.LOCATION_ID + "," + lsData.PRODUCT_ID + "," + lVersion + "," + lScenario;
                 }
+
+                // Delete previous records before insert
                 const vDelDate = new Date();
                 const vDateDel = vDelDate.toISOString().split('T')[0];
                 try {
@@ -2588,6 +2591,8 @@ module.exports = cds.service.impl(async function () {
                 catch (e) {
                     //Do nothing
                 }
+
+                // Insert into Fchar plan
                 for (let i in req) {
                     let vWeekDate = dateJSONToEDM2(req[i].PERIODID4_TSTAMP).split('T')[0];
                     // if (req[i].SCENARIOID === null) {

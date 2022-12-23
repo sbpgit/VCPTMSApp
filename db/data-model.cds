@@ -156,6 +156,7 @@ context cp {
             NET_VALUE        : Decimal(15, 2) @title : 'Net Value';
             CUSTOMER_GROUP   : String(20)     @title : 'Customer Group';
             LOCATION_ID      : String(4)      @title : 'Location ID';
+            SEEDORD_CHK      : String(1)      @title : 'Seed Order Check';
             CHANGED_DATE     : Date           @title : 'Changed Date';
             CHANGED_BY       : String(12)     @title : 'Changed By';
             CREATED_DATE     : Date           @title : 'Created Date';
@@ -995,6 +996,7 @@ entity ![V_SALES_H] {
         ![SALE_LOCATION]: String(4)  @title: 'SALE_LOCATION' ; 
         ![PLAN_LOC]: String(4)  @title: 'PLAN_LOC' ; 
         ![FACTORY_LOC]: String(4)  @title: 'FACTORY_LOC' ; 
+        ![SEEDORD_CHK]: String(1) @title:'SEEDORD_CHK';
         ![CHANGED_DATE]: Date  @title: 'CHANGED_DATE' ; 
         ![CHANGED_BY]: String(12)  @title: 'CHANGED_BY' ; 
         ![CREATED_DATE]: Date  @title: 'CREATED_DATE' ; 
