@@ -1,1 +1,1 @@
-sap.ui.define([],function(){"use strict";return{getStatus:function(e){var n="";if(e==="X"){n="sap-icon://decline"}else{n=""}return n}}});
+sap.ui.define([],function(){"use strict";return{getStatus:function(e){var n="";if(e==="X"){n="sap-icon://decline"}else{n=""}return n},Button:function(e){if(e==="T"){return new sap.m.CheckBox}else{return new sap.m.RadioButton}}}});

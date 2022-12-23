@@ -41,3 +41,10 @@ div#container-cp\.appf\.cpsaleshconfig---Home--page-title {
 .sapMIBar>.sapMBarLeft>.sapMBarChild:last-child, .sapMIBar .sapMBarPH>.sapMBarChild:last-child {
     font-weight: bold !important;
 }
+
+.VBOX{
+    margin-left:2rem;
+}
+.Middle{
+    margin-left: 35rem;
+}
