@@ -365,7 +365,10 @@ module.exports = cds.service.impl(async function () {
             newLoc: [],
         },
             vNewLoc;
-
+            let liParaValue = await GenF.getIBPParameterValue();
+            console.log(liParaValue);
+            let lData = "Nav" + liParaValue[1].VALUE.toString() + "PRODUCT";
+            let lEntity = "/" + liParaValue[1].VALUE.toString() + "PRODUCTTrans";
         const linewloc = await cds.run(
             `
             SELECT "LOCATION_ID",
@@ -387,10 +390,14 @@ module.exports = cds.service.impl(async function () {
             "TransactionID": vTransID,
             "RequestedAttributes": "LOCID,LOCDESCR",
             "DoCommit": true,
-            "NavVCPLOCATION": oReq.newLoc
+           // "NavVCPLOCATION": oReq.newLoc
         }
-        await servicePost.tx(req).post("/VCPLOCATIONTrans", oEntry);
-        let resUrl = "/GetExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
+        oEntry[lData] = oReq.newLoc;
+        // await servicePost.tx(req).post("/VCPLOCATIONTrans", oEntry);
+        await servicePost.tx(req).post(lEntity, oEntry);
+        let resUrl = "/GetExportResult?P_EntityName='" + liParaValue[0].VALUE + "' &P_TransactionID='" + vTransID + "'";
+       
+        // let resUrl = "/GetExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
         return await servicePost.tx(req).get(resUrl)
         // GetExportResult
     });
