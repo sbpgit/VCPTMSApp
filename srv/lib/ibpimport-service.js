@@ -365,10 +365,10 @@ module.exports = cds.service.impl(async function () {
             newLoc: [],
         },
             vNewLoc;
-            let liParaValue = await GenF.getIBPParameterValue();
-            console.log(liParaValue);
-            let lData = "Nav" + liParaValue[1].VALUE.toString() + "PRODUCT";
-            let lEntity = "/" + liParaValue[1].VALUE.toString() + "PRODUCTTrans";
+        let liParaValue = await GenF.getIBPParameterValue();
+        console.log(liParaValue);
+        let lData = "Nav" + liParaValue[1].VALUE.toString() + "PRODUCT";
+        let lEntity = "/" + liParaValue[1].VALUE.toString() + "PRODUCTTrans";
         const linewloc = await cds.run(
             `
             SELECT "LOCATION_ID",
@@ -390,13 +390,13 @@ module.exports = cds.service.impl(async function () {
             "TransactionID": vTransID,
             "RequestedAttributes": "LOCID,LOCDESCR",
             "DoCommit": true,
-           // "NavVCPLOCATION": oReq.newLoc
+            // "NavVCPLOCATION": oReq.newLoc
         }
         oEntry[lData] = oReq.newLoc;
         // await servicePost.tx(req).post("/VCPLOCATIONTrans", oEntry);
         await servicePost.tx(req).post(lEntity, oEntry);
         let resUrl = "/GetExportResult?P_EntityName='" + liParaValue[0].VALUE + "' &P_TransactionID='" + vTransID + "'";
-       
+
         // let resUrl = "/GetExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
         return await servicePost.tx(req).get(resUrl)
         // GetExportResult
@@ -414,25 +414,25 @@ module.exports = cds.service.impl(async function () {
                    "CUSTOMER_DESC"
                    FROM "CP_CUSTOMERGROUP" `);
 
-        //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
-        // for (i = 0; i < licust.length; i++) {
+        // const li_Transid = servicePost.tx(req).get("/GetTransactionID");
+        for (i = 0; i < licust.length; i++) {
         vcust = {
-            "CUSTID": "NULL",//licust[i].CUSTOMER_GROUP,
-            "CUSTDESCR": ""//licust[i].CUSTOMER_DESC,
+            "CUSTID": licust[i].CUSTOMER_GROUP,
+            "CUSTDESCR": licust[i].CUSTOMER_DESC,
         };
-        // oReq.cust.push(vcust);
+        oReq.cust.push(vcust);
 
-        // }
+        }
         let vTransID = new Date().getTime().toString();
         let oEntry =
         {
             "TransactionID": vTransID,
             "RequestedAttributes": "CUSTID,CUSTDESCR",
             "DoCommit": true,
-            "NavVCPCUSTOMER": oReq.cust
+            "NavVCDCUSTOMER": oReq.cust
         }
-        await servicePost.tx(req).post("/VCPCUSTOMERTrans", oEntry);
-        let resUrl = "/GetExportResult?P_EntityName='SBPVCP'&P_TransactionID='" + vTransID + "'";
+        await servicePost.tx(req).post("/VCDCUSTOMERTrans", oEntry);
+        let resUrl = "/GetExportResult?P_EntityName='VCPD'&P_TransactionID='" + vTransID + "'";
         return await servicePost.tx(req).get(resUrl)
         // GetExportResult
     });
@@ -1295,14 +1295,14 @@ module.exports = cds.service.impl(async function () {
                    FROM "CP_CUSTOMERGROUP" `);
 
         //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
-        // for (i = 0; i < licust.length; i++) {
-        vcust = {
-            "CUSTID": licust[i].CUSTOMER_GROUP,
-            "CUSTDESCR": licust[i].CUSTOMER_DESC,
-        };
-        oReq.cust.push(vcust);
+        for (i = 0; i < licust.length; i++) {
+            vcust = {
+                "CUSTID": licust[i].CUSTOMER_GROUP,
+                "CUSTDESCR": licust[i].CUSTOMER_DESC,
+            };
+            oReq.cust.push(vcust);
 
-        // }
+        }
         let vTransID = new Date().getTime().toString();
         let oEntry =
         {
@@ -2453,8 +2453,8 @@ module.exports = cds.service.impl(async function () {
         let req;
         let lilocProd = {};
         let lsData = {},
-        lsFchar = {},
-        liFchar = [];
+            lsFchar = {},
+            liFchar = [];
 
         let createtAt = new Date();
         let id = uuidv1();
@@ -2940,12 +2940,12 @@ module.exports = cds.service.impl(async function () {
                         //     }
                         // }
                         // if (iCount === 0) {
-                            lsFchar['LOCATION_ID'] = GenF.parse(reqFchar[i].LOCID);
-                            lsFchar['PRODUCT_ID'] = GenF.parse(reqFchar[i].PRDID);
-                            lsFchar['VERSION '] = GenF.parse(reqFchar[i].VERSIONID);
-                            lsFchar['SCENARIO'] = GenF.parse(vScen);
-                            lsFchar['WEEK_DATE'] = GenF.parse(vWeekDate);
-                            liFchar.push(GenF.parse(lsFchar));
+                        lsFchar['LOCATION_ID'] = GenF.parse(reqFchar[i].LOCID);
+                        lsFchar['PRODUCT_ID'] = GenF.parse(reqFchar[i].PRDID);
+                        lsFchar['VERSION '] = GenF.parse(reqFchar[i].VERSIONID);
+                        lsFchar['SCENARIO'] = GenF.parse(vScen);
+                        lsFchar['WEEK_DATE'] = GenF.parse(vWeekDate);
+                        liFchar.push(GenF.parse(lsFchar));
                         // }
                         // obgenMktAuth.updateOptPer(reqFchar[i].LOCID, reqFchar[i].PRDID, vWeekDate, reqFchar[i].VERSIONID, vScen, request);
 
