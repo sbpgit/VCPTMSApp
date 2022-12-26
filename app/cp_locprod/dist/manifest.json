@@ -109,7 +109,7 @@
                     "options": {
                         "settings": {
                             "entitySet": "getLocProd",
-                            "variantManagement": "Page",
+                            "smartVariantManagement": true,
                             "navigation": {
                                 "getLocProd": {
                                     "detail": {

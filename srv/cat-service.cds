@@ -4,12 +4,14 @@ using cp_ds as ds from '../db/data-structures';
 using V_OBDHDR from '../db/data-model';
 using V_CLASSCHARVAL from '../db/data-model';
 using {
+    V_SALES_H,
     V_PRODCLSCHAR,
     V_PRODCLSCHARVAL,
     V_ODPROFILES,
     V_PARTIALPRODCHAR,
     V_NEWPRODREFCHAR,
     V_GETVARCHARPS,
+    V_GETIBPCHARPS,
     V_UNIQUE_ID_ITEM,
     V_UNIQUE_ID,
     V_ODRESTRICT,
@@ -48,6 +50,10 @@ service CatalogService @(impl : './lib/cat-service.js') {
     @readonly
     entity getPagePgrh          as projection on od.PAGEPARAGRAPH;
 
+    //Create Variant
+    @readonly
+    entity getVariant           as projection on od.CREATEVARIANT;
+
     // Get Products
     @readonly
     entity getProducts          as projection on od.PRODUCT;
@@ -65,7 +71,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
 
     // Get Sales history
     @readonly
-    entity getSalesh            as projection on od.SALESH;
+    entity getSalesh            as projection on V_SALES_H;//od.SALESH;
 
     //Get location product
     @readonly
@@ -105,6 +111,8 @@ service CatalogService @(impl : './lib/cat-service.js') {
     @readonly
     entity getIBPFplan          as projection on V_FCHARPLAN;
 
+    @readonly
+    entity getTimeseriesF       as projection on od.TS_OBJDEP_CHARHDR_F;
     ///*****/ Product Variant Structure/*****/
     // Get PVS nodes ( Access, Structure and View nodes)
     entity getPVSNodes          as projection on od.PVS_NODES;
@@ -224,9 +232,10 @@ service CatalogService @(impl : './lib/cat-service.js') {
     /*** ***/
     // IBP char.
     /*** ***/
-    entity getIBPPriSecChar        as projection on V_GETVARCHARPS;
-function changeToPrimaryIBP(LOCATION_ID : String(4), PRODUCT_ID : String(40), CHAR_NUM : String(10), CHAR_TYPE : String(1), SEQUENCE : Integer, FLAG : String(1))                                                                                                               returns String;
- function getPrimaryCharIBP(FLAG : String(1), LOCATION_ID : String(4), PRODUCT_ID : String(40))                                                                                                                                                                                returns array of getIBPPriSecChar;
+    entity getIBPPriSecChar        as projection on V_GETIBPCHARPS;
+    function changeToPrimaryIBP(LOCATION_ID : String(4), PRODUCT_ID : String(40), CHAR_NUM : String(10), CHAR_TYPE : String(1), SEQUENCE : Integer, FLAG : String(1))                                                                                                               returns String;
+    function getPrimaryCharIBP(FLAG : String(1), LOCATION_ID : String(4), PRODUCT_ID : String(40))                                                                                                                                                                                returns array of getIBPPriSecChar;
+    
     ///*****/ Authorizations /*****/
     @odata.draft.enabled
     entity getARObj             as projection on od.USER_AUTHOBJ;
@@ -246,7 +255,6 @@ function changeToPrimaryIBP(LOCATION_ID : String(4), PRODUCT_ID : String(40), CH
     @odata.draft.enabled
     entity getODHdrRstr         as projection on V_ODRESTRICT;
     // entity getRestrLikelihood   as projection on od.LOCPRODRESTRICT;
-
 
 
     // @odata.draft.enabled
@@ -293,17 +301,18 @@ function changeToPrimaryIBP(LOCATION_ID : String(4), PRODUCT_ID : String(40), CH
     // function getCIRWeekly(FROMDATE : Date, TODATE : Date)  returns array of ds.cirWkly;
     function getUniqueIdItems(UNIQUE_ID : Integer)  returns array of ds.uniqueCharItems;
     // Publish CIR data to ECC
-    function postCIRQuantities(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), FROMDATE : Date, TODATE : Date, MODEL_VERSION : String(20), VALIDUSER : String(12),USER_ID : String(100)) returns String;
+    function postCIRQuantities(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), FROMDATE : Date, TODATE : Date, MODEL_VERSION : String(20), VALIDUSER : String(12), USER_ID : String(100))                                         returns String;
     action   postCIRQuantitiesToS4(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), FROMDATE : Date, TODATE : Date, MODEL_VERSION : String(20), VALIDUSER : String(12), USER_ID : String(100));
-    function modifyCIRFirmQuantities(FLAG : String(1), CIR_QUANTITIES : String) returns String;
-    function getCFAuthToken() returns String;
-    function getCFDestinationUser(TOKEN : String) returns String;
-    
+    function modifyCIRFirmQuantities(FLAG : String(1), CIR_QUANTITIES : String)                                                                                                                                                                                                  returns String;
+    function getCFAuthToken()                                                                                                                                                                                                                                                    returns String;
+    function getCFDestinationUser(TOKEN : String)                                                                                                                                                                                                                                returns String;
     // EOI - Deepa
     entity getSalesStock        as projection on od.SALES_S;
+
     ///*****/ Assembly Requirements /*****/
     function genAssemblyreq(LOCATION_ID : String(4), PRODUCT_ID : String(40))                                                                                                                                                                                                    returns String;
     action   generateAssemblyReq(LOCATION_ID : String(4), PRODUCT_ID : String(40));
+
     //VC Planner Documentation Maintenance- Pradeep
     function moveData(Flag : String, CONTENT : String, PAGEID : Integer, DESCRIPTION : String)                                                                                                                                                                                   returns String;
     function addPAGEHEADER(Flag1 : String, PAGEID : Integer, DESCRIPTION : String, PARENTNODEID : Integer, HEIRARCHYLEVEL : Integer)                                                                                                                                             returns String;
@@ -313,6 +322,9 @@ function changeToPrimaryIBP(LOCATION_ID : String(4), PRODUCT_ID : String(40), CH
     function editPAGEHEADER(Flag1 : String, PAGEID : Integer, DESCRIPTION : String, PARENTNODEID : Integer, HEIRARCHYLEVEL : Integer)                                                                                                                                            returns String;
     function editPAGEPARAGRAPH(Flag1 : String, PAGEID : Integer, DESCRIPTION : String, CONTENT : String)                                                                                                                                                                         returns String;
     //End of VC Planner Documentation Maintenance- Pradeep
+    //Start of Create Variant
+    function createVariant(Flag: String, VARDATA:String)                                                                                                                                                                                                                      returns String;                                       
+    //End of Create Variant
 
     //*****/ Critical Comp /*****/
     entity getCriticalComp      as projection on V_BOMCRITICALCOMP; //od.CRITICAL_COMP;
@@ -332,8 +344,8 @@ function changeToPrimaryIBP(LOCATION_ID : String(4), PRODUCT_ID : String(40), CH
     function getUniqueChars(UNIQUE_ID : Integer, PRODUCT_ID : String(40), LOCATION_ID : String(4)) returns array of ds.uniqueCharacteristics;
 
     // Get User Info
-    @requires: 'authenticated-user'
-    function getUserInfo() returns String;
+    @requires : 'authenticated-user'
+    function getUserInfo()                                                                                                                                                                                                                                                       returns String;
 
-    
+
 }

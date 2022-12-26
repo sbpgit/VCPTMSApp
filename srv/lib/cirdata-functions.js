@@ -59,6 +59,7 @@ class CIRData {
                           FROM "CP_CIR_GENERATED" 
                           inner join "CP_UNIQUE_ID_HEADER"
                           ON "CP_CIR_GENERATED"."UNIQUE_ID" = "CP_UNIQUE_ID_HEADER"."UNIQUE_ID"
+                          AND "CP_CIR_GENERATED"."LOCATION_ID" = "CP_UNIQUE_ID_HEADER"."LOCATION_ID"
                           inner join "CP_PARTIALPROD_INTRO"
                           ON "CP_CIR_GENERATED"."PRODUCT_ID" = "CP_PARTIALPROD_INTRO"."PRODUCT_ID"
                           AND "CP_CIR_GENERATED"."LOCATION_ID" = "CP_PARTIALPROD_INTRO"."LOCATION_ID"

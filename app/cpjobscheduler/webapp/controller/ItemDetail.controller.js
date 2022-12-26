@@ -243,6 +243,22 @@ sap.ui.define(
                 var data = $.parseJSON(aData[i].data);
 
                 switch (service) {
+                  case "exportIBPLocProd":
+                    // var aIData = data;
+                    var aIData = {
+                      Location: data.LOCATION_ID,
+                      Product: data.PRODUCT_ID
+                    };
+                    ScheData.push(aIData);
+                    break;
+                  case "exportIBPAssembly":
+                    // var aIData = data;
+                    var aIData = {
+                      Location: data.vcRulesList.LOCATION_ID,
+                      Product: data.vcRulesList.PRODUCT_ID
+                    };
+                    ScheData.push(aIData);
+                    break;
                   case "exportComponentReq":
                     var aIData = data;
                     var aIData = {

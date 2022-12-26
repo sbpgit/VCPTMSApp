@@ -70,6 +70,7 @@ sap.ui.define(
             MessageToast.show("Failed to get profiles");
           },
         });
+        that.doSomethingUserDetails();
       },
 
       /**
@@ -260,6 +261,9 @@ sap.ui.define(
       onNavPress:function(){
         if (sap.ushell && sap.ushell.Container && sap.ushell.Container.getService) {
     var oCrossAppNavigator = sap.ushell.Container.getService("CrossApplicationNavigation"); 
+    // sap.ushell.Container.getServiceAsync("UserInfo").then(function(UserInfo){
+    //   return UserInfo;
+    // });
     // generate the Hash to display 
     var hash = (oCrossAppNavigator && oCrossAppNavigator.hrefForExternal({
         target: {
@@ -272,7 +276,26 @@ sap.ui.define(
     //Navigate to second app
     sap.m.URLHelper.redirect(url, true); 
         } 
-    }
+    },
+
+    // In Controller
+      doSomethingUserDetails: async function() {
+        const oUserInfo = await this.getUserInfoService();
+        const sUserId = oUserInfo.getId(); // And in SAPUI5 1.86, those became public: .getEmail(), .getFirstName(), .getLastName(), .getFullName(), ... 
+        // ...
+      },
+      
+      getUserInfoService: function() {
+        return new Promise(resolve => sap.ui.require([
+          "sap/ushell/library"
+        ], oSapUshellLib => {
+          const oContainer = oSapUshellLib.Container;
+          const pService = oContainer.getServiceAsync("UserInfo"); // .getService is deprecated!
+          resolve(pService);
+        }));
+      },
+    
+
     });
   }
 );

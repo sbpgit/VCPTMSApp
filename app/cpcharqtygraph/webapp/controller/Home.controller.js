@@ -588,12 +588,8 @@ sap.ui.define([
                                 var oVizFrame = that.byId("idVizFrame");
                                 oVizFrame.setModel(filterJSON);
                             }
-<<<<<<< HEAD
                             else {
                                 
-=======
-                            else {                  
->>>>>>> 28572205e8c7de3e81f65a1fa52119e34f364125
                                 that.byId("application-cpcharqtygraph-display-component---Home--ObjectPageLayout-OPHeaderContent-collapseBtn").firePress();
                                 oData.results.forEach(function (row) {
                                     // Calling function to handle the date format

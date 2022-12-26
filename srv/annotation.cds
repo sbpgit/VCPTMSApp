@@ -1950,3 +1950,113 @@ annotate service.CIRLOG with @(
         }]
     }]
 );
+/// Annotation for Future timeseries
+// CIR log
+annotate service.TS_OBJDEP_CHARHDR_F with @(
+    UI        : {
+        SelectionFields         : [
+            CAL_DATE,
+            LOCATION_ID,
+            PRODUCT_ID
+        ],
+        LineItem                : [
+            {
+                $Type : 'UI.DataField',
+                Value : CAL_DATE,
+                ![@UI.Importance]   : #High,
+                ![@HTML5.CssDefaults] : {width : '15rem'}
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : LOCATION_ID,
+                ![@UI.Importance]   : #High,
+                ![@HTML5.CssDefaults] : {width : '15rem'}
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : PRODUCT_ID,
+                ![@UI.Importance]   : #High,
+                ![@HTML5.CssDefaults] : {width : '15rem'}
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : OBJ_TYPE,
+                ![@UI.Importance]   : #High,
+                ![@HTML5.CssDefaults] : {width : '15rem'}
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : OBJ_DEP,
+                ![@UI.Importance]   : #High,
+                ![@HTML5.CssDefaults] : {width : '15rem'}
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : OBJ_COUNTER,
+                ![@UI.Importance]   : #High,
+                ![@HTML5.CssDefaults] : {width : '15rem'}
+            }
+        ],
+        HeaderInfo              : {
+            Title          : {Value : CAL_DATE},
+            Description    : {Value : LOCATION_ID},
+            TypeName       : 'Time Series Future',
+            TypeNamePlural : 'Time Series Future',
+        },
+        // HeaderFacets            : [{
+        //     $Type             : 'UI.ReferenceFacet',
+        //     Target            : '@UI.FieldGroup#Description',
+        //     ![@UI.Importance] : #Medium
+        // }],
+        // FieldGroup #Description : {Data : [{
+        //     $Type : 'UI.DataField',
+        //     Value : LOTSIZE_KEY
+        // }]},
+        FieldGroup #Details     : {Data : [
+            {
+                $Type : 'UI.DataField',
+                Value : LOCATION_ID
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : PRODUCT_ID
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : OBJ_TYPE
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : ROW_ID
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : VERSION
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : SCENARIO
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : SUCCESS
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : SUCCESS_RATE
+            }
+        ]}
+    },
+
+    // Page Facets
+    UI.Facets : [{
+        $Type  : 'UI.CollectionFacet',
+        ID     : 'TIMESERIESF',
+        Label  : 'Time Series Future',
+        Facets : [{
+            $Type  : 'UI.ReferenceFacet',
+            Label  : 'Time Series Future',
+            Target : '@UI.FieldGroup#Details'
+        }]
+    }]
+);

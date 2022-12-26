@@ -353,6 +353,8 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                             <RadioButton id="idIBPLoc"  text="Location" tooltip="Master"/>
                             <RadioButton id="idIBPCustGrp"  text="Customer Group" />
                             <RadioButton id="idIBPProd"  text="Product" />
+                            <RadioButton id="idIBPLocProd" text="Location Product" />
+                            <RadioButton id="idIBPAssembly" text="Assembly" />
                             <RadioButton id="idIBPClass"  text="Class" />
                             <RadioButton id="idRestri"  text="Restrictions" />
                             
@@ -363,6 +365,7 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                             <RadioButton id="idIBPCompReqQty" text="Assembly Requirement Quantity" />
                             <RadioButton id="idIBPExCIR" text="Forecast Demand" />
                             <RadioButton id="idResLikhood" text="Restriction Likelihood" />
+                            
 
                             
                         </RadioButtonGroup>
@@ -412,6 +415,61 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                                                 </f:label>
                                                 <f:fields>
                                                     <Input id="EPlocInput" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                                </f:fields>
+                                            </f:FormElement>
+                                        </f:formElements>
+                                    </f:FormContainer>
+                                </f:formContainers>
+                            </f:Form>
+                            <f:Form editable="true" id="IBPLocProdExport" visible="false">
+                                <f:layout>
+                                    <f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2" singleContainerFullSize="false" />
+                                </f:layout>
+                                <f:formContainers>
+                                    <f:FormContainer>
+                                        <f:formElements>
+                                            <f:FormElement>
+                                                <f:label>
+                                                    <Label text="{i18n>loc}" required="true" />
+                                                </f:label>
+                                                <f:fields>
+                                                    <Input id="ELPlocInput" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                                </f:fields>
+                                            </f:FormElement>
+                                            <f:FormElement>
+                                                <f:label>
+                                                    <Label text="{i18n>prod}" required="true"  />
+                                                </f:label>
+                                                <f:fields>
+                                                    <MultiInput id="ELPprodInput" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
+                                                </f:fields>
+                                            </f:FormElement>
+                                        </f:formElements>
+                                    </f:FormContainer>
+                                </f:formContainers>
+                            </f:Form>
+
+                            <f:Form editable="true" id="IBPAssemblyExport" visible="false">
+                                <f:layout>
+                                    <f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2" singleContainerFullSize="false" />
+                                </f:layout>
+                                <f:formContainers>
+                                    <f:FormContainer>
+                                        <f:formElements>
+                                            <f:FormElement>
+                                                <f:label>
+                                                    <Label text="{i18n>loc}" required="true" />
+                                                </f:label>
+                                                <f:fields>
+                                                    <Input id="EIAlocInput" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                                </f:fields>
+                                            </f:FormElement>
+                                            <f:FormElement>
+                                                <f:label>
+                                                    <Label text="{i18n>prod}" required="true"  />
+                                                </f:label>
+                                                <f:fields>
+                                                    <MultiInput id="EIAprodInput" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
                                                 </f:fields>
                                             </f:FormElement>
                                         </f:formElements>
@@ -703,6 +761,8 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                                     </f:FormContainer>
                                 </f:formContainers>
                             </f:Form>
+
+                            
 
                         </VBox>
 

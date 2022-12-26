@@ -1,0 +1,100 @@
+<mvc:View
+    controllerName="cpapp.cpfullyconfproddmnd.controller.UniqueCharDetails"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core"
+    displayBlock="true"
+    xmlns:m="sap.m"
+    xmlns="sap.m"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:t="sap.ui.table"
+    xmlns:ux="sap.uxap"
+    xmlns:l="sap.ui.layout"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+>
+    <Page id="_IDGenUPage1" showHeader="false" showFooter="true" enableScrolling="false">
+        <content>
+            <ux:ObjectPageLayout id="idObjectPageLayoutU" headerContentPinned="true" toggleAnchorBar="onChangeHeaderPinStatus" showTitleInHeaderContent="true" showEditHeaderButton="true" preserveHeaderStateOnScroll="true">
+                <ux:headerTitle>
+                    <ux:ObjectPageDynamicHeaderTitle id="_IDGenUObjectPageDynamicHeaderTitle1">
+                        <ux:expandedHeading>
+                            <Title id="_IDGenUTitle1" text="{i18n>title}" class="boldText" titleAlignment="Center" />
+                        </ux:expandedHeading>
+
+                        <ux:snappedHeading>
+                            <Title id="_IDGenUTitle2" text="{i18n>title}" />
+                        </ux:snappedHeading>
+                    </ux:ObjectPageDynamicHeaderTitle>
+                </ux:headerTitle>
+                <ux:headerContent>
+                    <FlexBox id="_IDGenUFlexBox2" wrap="Wrap" fitContainer="true">
+                        <l:Grid id="_IDGenUGrid1" defaultSpan="XL4 L4 M6 S12" width="100%" class="sapUiRespGridOverflowHidden">
+                            <!-- <VBox id="_IDGenUVBox1">
+                                <Label id="_IDGenULabel1" text="" />
+                                <SearchField id="idSearchU" liveChange="onSearchUniqueChar" placeholder="Characteristic" />
+                            </VBox> -->
+                            <VBox id="_IDGenUVBox2">
+                                <Label id="_IDGenULabel2" text="Location" required="true" />
+                                <Input id="idlocU" value="" placeholder="Location" enabled="false" />
+                            </VBox>
+                            <VBox id="_IDGenUVBox3">
+                                <Label id="_IDGenULabel3" text="Configurable Product" required="true" />
+                                <Input id="idprodListU" placeholder="Configurable Product" enabled="false" />
+                            </VBox>
+                            <VBox id="_IDGenUVBox4">
+                                <Label id="_IDGenULabel4" text="Unique Id" required="true" />
+                                <Input id="idUniqueId" placeholder="Unique Id" enabled="false" />
+                            </VBox>
+                            <VBox id="_IDGenUVBox5">
+                                <Label id="_IDGenULabel5" text="Filter Type" required="true" />
+                                <Select id="_IDGenUSelect" selectedKey="NE" width="100%" change="onFilterSelectionChange">
+                                    
+                                    <core:Item key="NE" text="Not Equals" />
+                                    <core:Item key="EQ" text="Equals" />
+                                    
+                                </Select>
+                            </VBox>
+                            <VBox id="_IDGenUVBox6">
+                                <Label id="_IDGenULabel6" text="Characteristics" required="true" />
+
+                                <MultiComboBox
+                                    id="idUniqueCharDetailsU"
+                                    showSelectAll="true"
+                                    showSecondaryValues="true"
+                                    selectionFinish="onCharacteristicSelFinish"
+                                    items="{
+				                            path: '/charDetails',
+				                            sorter: { path: 'CHAR_NAME' }
+			                                        }"
+                                >
+                                    <core:ListItem key="{CHAR_NUM}:{CHARVAL_NUM}" text="{CHAR_DESC} - {CHAR_NAME}" additionalText="{CHARVAL_DESC} - {CHAR_VALUE}" />
+                                </MultiComboBox>
+                            </VBox>
+                            <!-- <VBox>
+                                <Label text="" />
+                                <HBox id="_IDGenUHBox1">
+                                    <Button id="_IDGenUButton1" text="Go" type="Emphasized" press="onFilterData" tooltip="Get data based on filters" />
+                                    <Button id="_IDGenUButton2" text="Reset" type="Transparent" press="onResetFilters" tooltip="Reset filters and Data" />
+                                </HBox>
+                            </VBox> -->
+                        </l:Grid>
+                    </FlexBox>
+                </ux:headerContent>
+                <ux:sections>
+                    <ux:ObjectPageSection id="_IDGenUObjectPageSection1" class="sapUiNoMargin" width="auto" showTitle="false">
+                        <ux:subSections>
+                            <ux:ObjectPageSubSection id="_IDGenUObjectPageSubSection1" mode="Expanded" class="sapUiNoMargin">
+                                <ux:blocks>
+                                    <VBox id="_IDGenUVBox9" class="sapUiNoMargin">
+                                        <t:Table id="idUniqueIdChars" class="table" fixedColumnCount="2" selectionMode="None" alternateRowColors="true" enableSelectAll="false" visibleRowCount="8">
+                                            <t:columns />
+                                        </t:Table>
+                                    </VBox>
+                                </ux:blocks>
+                            </ux:ObjectPageSubSection>
+                        </ux:subSections>
+                    </ux:ObjectPageSection>
+                </ux:sections>
+            </ux:ObjectPageLayout>
+        </content>
+    </Page>
+</mvc:View>

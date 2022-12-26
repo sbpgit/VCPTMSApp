@@ -1,3 +1,5 @@
+
+
 sap.ui.define(
     [
         "cpapp/cpmatvariant/controller/BaseController",
@@ -7,6 +9,7 @@ sap.ui.define(
         "sap/ui/model/FilterOperator",
         "sap/m/MessageBox",
         "sap/ui/Device",
+        "../model/formatter"
     ],
     function (
         BaseController,
@@ -15,22 +18,29 @@ sap.ui.define(
         Filter,
         FilterOperator,
         MessageBox,
-        Device
+        Device,
+        formatter
     ) {
         "use strict";
         var that, oGModel;
 
         return BaseController.extend("cpapp.cpmatvariant.controller.ItemMaster", {
+            formatter: formatter,
+
             /**
              * Called when a controller is instantiated and its View controls (if available) are already created.
              * Can be used to modify the View before it is displayed, to bind event handlers and do other one-time initialization.
              */
             onInit: function () {
                 that = this;
+                that.selectedArray = [];
+                that.indexArray = [];
+                that.oIndexArray = [];
                 // Declaring JSON Model and size limit
                 that.oModel = new JSONModel();
                 this.locModel = new JSONModel();
                 this.prodModel = new JSONModel();
+                that.oGModel = that.getOwnerComponent().getModel("oGModel");
 
                 // Declaring JSON Models and size limit
                 that.oCharModel = new JSONModel();
@@ -261,11 +271,11 @@ sap.ui.define(
                     oItem = oEvent.getParameter("selectedItems"),
                     aSelectedItems,
                     aODdata = [];
-                    this.oLoc = that.byId("idloc");
-                    this.oProd = that.byId("prodInput");
+                this.oLoc = that.byId("idloc");
+                this.oProd = that.byId("prodInput");
                 //Location list
                 if (sId.includes("Loc")) {
-                    
+
                     aSelectedItems = oEvent.getParameter("selectedItems");
 
                     that.oLoc.setValue(oEvent.getParameters().listItem.getCells()[0].getTitle());
@@ -359,13 +369,13 @@ sap.ui.define(
                     );
                 }
                 if (oSloc !== "" && oSprod !== "") {
-                        this.byId("idMatSearch").setValue("");
-                    if(that.byId("idMatVHead").getItems().length){
+                    this.byId("idMatSearch").setValue("");
+                    if (that.byId("idMatVHead").getItems().length) {
                         that.byId("idMatVHead").getBinding("items").filter(oFilters);
                     }
                     sap.ui.core.BusyIndicator.show();
                     this.getModel("BModel").read("/getUniqueHeader", {
-                        filters: [oFilters],                   
+                        filters: [oFilters],
                         success: function (oData) {
                             sap.ui.core.BusyIndicator.hide();
                             if (oData.results.length) {
@@ -374,7 +384,7 @@ sap.ui.define(
                                 //     // Calling function to handle the date format
                                 //     row.UNIQUE_ID = row.UNIQUE_ID.toString();
                                 //   }, that);
-                    
+
 
                                 that.oModel.setData({
                                     results: oData.results,
@@ -403,7 +413,7 @@ sap.ui.define(
                             that.byId("idCopyBtn").setVisible(true);
                             // Calling function to navigate to Item detail page
                             that.onhandlePress();
-                       },
+                        },
                         error: function () {
                             sap.ui.core.BusyIndicator.hide();
                             MessageToast.show("Failed to get data");
@@ -557,6 +567,7 @@ sap.ui.define(
                 });
             },
             onCreateBtn: function () {
+                that.selectedArray = [];
                 that.oTableData = [];
                 sap.ui.getCore().byId("idUniqDesc1").setValue("");
                 that.ListModel = new JSONModel();
@@ -579,34 +590,39 @@ sap.ui.define(
                 sap.ui.getCore().byId("idCharItem").setModel(that.ListModel);
                 if (oProdid) {
                     that._createCharacterstics.open();
-                    that.CharData();
+
                 } else {
                     MessageToast.show("Please select Location/ Product");
                 }
             },
 
             onCopyBtn: function (oEvent) {
+                that.selectedArray = [];
                 var oData = that.byId("idMatVHead").getSelectedItem();
-                if(oData){
-                var selUniq = oData.getBindingContext().getProperty();
-                sap.ui.getCore().byId("locId1").setValue(selUniq.LOCATION_ID);
-                sap.ui.getCore().byId("prodId1").setValue(selUniq.PRODUCT_ID);
-                sap.ui.getCore().byId("idUniqDesc1").setValue(selUniq.UNIQUE_DESC);
-                oGModel.setProperty("/New", "C");
-                that.oTableData = oGModel.getProperty("/CharData");
-                that.ListModel = new JSONModel();
-                that.ListModel.setData({
-                    results: that.oTableData
-                });
-                sap.ui.getCore().byId("idCharItem").setModel(that.ListModel);
-                that._createCharacterstics.open();
-                that.CharData();
-            } else {
-                MessageToast.show("Please select a uniq id to copy");
-            }
+                if (oData) {
+                    var selUniq = oData.getBindingContext().getProperty();
+                    sap.ui.getCore().byId("locId1").setValue(selUniq.LOCATION_ID);
+                    sap.ui.getCore().byId("prodId1").setValue(selUniq.PRODUCT_ID);
+                    sap.ui.getCore().byId("idUniqDesc1").setValue(selUniq.UNIQUE_DESC);
+                    oGModel.setProperty("/New", "C");
+                    that.oTableData = oGModel.getProperty("/CharData");
+                    that.ListModel = new JSONModel();
+                    that.ListModel.setData({
+                        results: that.oTableData
+                    });
+                    sap.ui.getCore().byId("idCharItem").setModel(that.ListModel);
+                    that.oGModel.setProperty("/copy", "X");
+                    that.oGModel.setProperty("/setData", "");
+                    that._createCharacterstics.open();
+                    that.CharData();
+                } else {
+                    MessageToast.show("Please select a uniq id to copy");
+                }
             },
 
             CharData: function () {
+                sap.ui.core.BusyIndicator.show();
+                var adata = [];
                 var sPrdId = this.byId("prodInput").getValue();
                 if (sPrdId) {
                     this.getModel("BModel").read("/getProdClsChar", {
@@ -615,12 +631,102 @@ sap.ui.define(
                         ],
                         success: function (oData) {
                             sap.ui.core.BusyIndicator.hide();
-                            that.classNameData = oData.results;
-                            var newClassModel = new JSONModel();
-                            newClassModel.setData({
-                                results: that.classNameData
+                            that.oGModel.setProperty("/child", "Y")
+                            // that.classNameData = oData.results;
+                            // var newClassModel = new JSONModel();
+                            // newClassModel.setData({
+                            //     results: that.classNameData
+                            // });
+                            // sap.ui.getCore().byId("classNameList").setModel(newClassModel);
+
+                            for (var i = 0; i < oData.results.length; i++) {
+                                adata.push({
+                                    "Description": oData.results[i].CLASS_NAME,
+
+                                });
+                            }
+                            var filadata = adata.filter((obj, pos, arr) => {
+                                return (
+                                    arr.map((mapObj) => mapObj.Description).indexOf(obj.Description) == pos
+                                );
                             });
-                            sap.ui.getCore().byId("classNameList").setModel(newClassModel);
+                            var class_names = filadata;
+                            var new_names;
+                            var charData = [];
+                            var flat = {};
+                            var newData = [];
+
+                            var root = [];
+                            for (var i = 0; i < filadata.length; i++) {
+                                for (var j = 0; j < oData.results.length; j++) {
+                                    if (filadata[i].Description === oData.results[j].CLASS_NAME) {
+                                        newData.push(oData.results[j]);
+                                        var key = filadata[i].Description;
+                                        flat[key] = newData;
+                                    }
+                                }
+
+                                newData = [];
+                            }
+                            charData = flat;
+                            root = charData;
+                            for (var i in class_names) {
+                                class_names[i].children = [];
+                            }
+
+                            for (var k = 0; k < filadata.length; k++) {
+                                var newFlat = [];
+                                var newKey = filadata[k].Description;
+                                for (var s = 0; s < flat[newKey].length; s++) {
+                                    var skey = flat[newKey][s].CHAR_NAME;
+                                    newFlat.push({
+                                        "Description": skey,
+
+                                    });
+                                }
+                                newFlat = newFlat.filter((obj, pos, arr) => {
+                                    return (
+                                        arr.map((mapObj) => mapObj.Description).indexOf(obj.Description) == pos
+                                    );
+                                });
+
+                                // add children container
+                                for (var i in newFlat) {
+                                    newFlat[i].nodes = [];
+                                }
+                                // populate the child container arrays  
+                                for (var h = 0; h < newFlat.length; h++) {
+                                    for (var l = 0; l < flat[newKey].length; l++) {
+                                        if (newFlat[h].Description === flat[newKey][l].CHAR_NAME) {
+                                            newFlat[h].nodes.push({
+                                                "CLASS_NAME": flat[newKey][l].CLASS_NAME,
+                                                "CHAR_VALUE": flat[newKey][l].CHAR_VALUE,
+                                                "CHAR_NAME": flat[newKey][l].CHAR_NAME,
+                                                "CHAR_NUM": flat[newKey][l].CHAR_NUM,
+                                                "CHARVAL_NUM": flat[newKey][l].CHARVAL_NUM,
+                                                "Description": flat[newKey][l].CHAR_VALUE,
+                                                "Selected":false
+                                            });
+                                        }
+                                    }
+                                }
+                                class_names[k].children = newFlat;
+                                new_names = newFlat;
+                            }
+                            var newClassModel = new JSONModel();
+                            newClassModel.setData(class_names);
+                            // var newClassModel1 = new JSONModel();
+                            // newClassModel1.setData(
+                            //     new_names
+                            // );
+
+                            // sap.ui.getCore().byId("nodes").setModel(newClassModel);
+                            // sap.ui.getCore().byId("idList").setModel(newClassModel,"oModel");
+                            // sap.ui.getCore().byId("idList2").setModel(newClassModel,"oFodel");
+                            // sap.ui.getCore().byId("rbg2").setModel(newClassModel);
+                            that._valueHelpDialogclassName.setModel(newClassModel, "oModel");
+                            that.oGModel.setProperty("/mainData", newClassModel);
+
                         },
                         error: function (oData, error) {
                             sap.ui.core.BusyIndicator.hide();
@@ -640,89 +746,204 @@ sap.ui.define(
 
 
             onAddChar: function () {
-                sap.ui.getCore().byId("idClassname2").setValue("");
-                sap.ui.getCore().byId("idCharname2").setValue("");
-                sap.ui.getCore().byId("idCharval2").setValue("");
-                sap.ui.getCore().byId("idCharno2").setValue("");
-                sap.ui.getCore().byId("idCharvalno2").setValue("");
-                that.oClassnameList = sap.ui.getCore().byId("classNameList");
-                sap.ui.getCore().byId("idCharSearch").setValue("");
-                that.oClassnameList.getBinding("items").filter([]);
+                var tableDetails = {};
+                // sap.ui.getCore().byId("idClassname2").setValue("");
+                // sap.ui.getCore().byId("idCharname2").setValue("");
+                // sap.ui.getCore().byId("idCharval2").setValue("");
+                // sap.ui.getCore().byId("idCharno2").setValue("");
+                // sap.ui.getCore().byId("idCharvalno2").setValue("");
+                // that.oClassnameList = sap.ui.getCore().byId("classNameList");
+                // sap.ui.getCore().byId("idCharSearch").setValue("");
+                // that.oClassnameList.getBinding("items").filter([]);
+                if (that.oGModel.getProperty("/setData") === "" || that.oGModel.getProperty("/setData") === undefined) {
+                    that.CharData();
+                    sap.ui.getCore().byId("_IDGenPanel2").setExpanded(false);
+                    sap.ui.getCore().byId("idCharSearch").setValue();
+                }
+                // sap.ui.getCore().byId("idCharSearch").setValue();
+                if (that.oGModel.getProperty("/copy") === "X") {
+                    var oItemTable = sap.ui.getCore().byId("idCharItem").getItems();
+                    for (var i = 0; i < oItemTable.length; i++) {
+                        tableDetails = {
+                            "CHAR_NAME": oItemTable[i].getCells()[0].getText(),
+                            "CHAR_NUM": oItemTable[i].getCells()[1].getText(),
+                            "CHAR_VALUE": oItemTable[i].getCells()[2].getText(),
+                            "CHARVAL_NUM": oItemTable[i].getCells()[3].getText(),
+                        }
+                        that.selectedArray.push(tableDetails);
+                    }
+                    that.oGModel.setProperty("/copy", "");
+                    var fullData = that.oGModel.getProperty("/mainData");
+                    var oData = fullData.oData;
+                    for (var i = 0; i < oData.length; i++) {
+                        for (var j = 0; j < oData[i].children.length; j++) {
+                            for (var k = 0; k < oData[i].children[j].nodes.length; k++) {
+                                for (var s = 0; s < that.selectedArray.length; s++) {
+                                    if (that.selectedArray[s].CHAR_VALUE === oData[i].children[j].nodes[k].CHAR_VALUE && that.selectedArray[s].CHAR_NAME === oData[i].children[j].nodes[k].CHAR_NAME
+                                    ) {
+                                        oData[i].children[j].nodes[k].Selected = true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    var newModel1 = new JSONModel();
+                    newModel1.setData(oData);
+                    that._valueHelpDialogclassName.setModel(newModel1,"oModel");
+                }
                 that._valueHelpDialogclassName.open();
-                jQuery.sap.delayedCall(300, null, function () {
-                    sap.ui.getCore().byId("idCharSearch").focus();
-                })
+                // jQuery.sap.delayedCall(300, null, function () {
+                //     sap.ui.getCore().byId("idCharSearch").focus();
+                // })
             },
 
             handleCharSelection: function (oEvent) {
                 that.oGModel = that.getModel("oGModel");
-                var aSelectedItems = oEvent.getSource().getSelectedItems()[0].getBindingContext().getProperty();
-                var className = aSelectedItems.CLASS_NAME,
-                    charName = aSelectedItems.CHAR_NAME,
-                    charNum = aSelectedItems.CHAR_NUM,
-                    charVal_Name = aSelectedItems.CHAR_VALUE,
-                    charVal_Num = aSelectedItems.CHARVAL_NUM;
-                if (charName !== "" && charVal_Name !== "" && className !== "") {
-                    this.oData = {
-                        "CLASS_NAME": className,
-                        "CHAR_NAME": charName,
-                        "CHAR_NUM": charNum,
-                        "CHAR_VALUE": charVal_Name,
-                        "CHARVAL_NUM": charVal_Num,
-                        "OFLAG": "X",
-                    };
-                    var oItemTable = sap.ui.getCore().byId("idCharItem").getItems();
-                    var count = 0;
-                    for (var i = 0; i < oItemTable.length; i++) {
-                        if (oItemTable[i].getCells()[1].getText() === charNum &&
-                            oItemTable[i].getCells()[3].getText() === charVal_Num) {
-                            count = count + 1;
-                        }
-                    }
-                    if (count === 0) {
-                        // Add entry to the table model
-                        that.oTableData.push(that.oData);
-                        that.ListModel = new JSONModel();
-                        that.ListModel.setData({
-                            results: that.oTableData
-                        });
-                        sap.ui.getCore().byId("idCharItem").setModel(that.ListModel);
-                        sap.ui.getCore().byId("classNameList").removeSelections();
-                        this._valueHelpDialogclassName.close();
+                var tableDetails = {};
 
-                    } else {
-                        sap.m.MessageToast.show("Characterstic is already maintained");
-                    }
-                } else {
-                    MessageToast.show("Please fill all inputs");
-                }
+                // var aSelectedItems = oEvent.getSource().getSelectedItems()[0].getBindingContext().getProperty();
+                // var className = aSelectedItems.CLASS_NAME,
+                //     charName = aSelectedItems.CHAR_NAME,
+                //     charNum = aSelectedItems.CHAR_NUM,
+                //     charVal_Name = aSelectedItems.CHAR_VALUE,
+                //     charVal_Num = aSelectedItems.CHARVAL_NUM;
+                // if (charName !== "" && charVal_Name !== "" && className !== "") {
+                //     this.oData = {
+                //         "CLASS_NAME": className,
+                //         "CHAR_NAME": charName,
+                //         "CHAR_NUM": charNum,
+                //         "CHAR_VALUE": charVal_Name,
+                //         "CHARVAL_NUM": charVal_Num,
+                //         "OFLAG": "X",
+                //     };
+
+
+                var selectedItems = that.selectedArray;
+
+                // var count = 0;
+                // for (var i = 0; i < oItemTable.length; i++) {
+                //     for (var j = 0; j < selectedItems.length; j++) {
+                //         if (oItemTable[i].getCells()[1].getText() === selectedItems[j].CHAR_NUM &&
+                //             oItemTable[i].getCells()[3].getText() === selectedItems[j].CHARVAL_NUM) {
+                //             // count = count + 1;
+                //             var index = selectedItems.indexOf(selectedItems[j]);
+                //             that.indexArray.push(index);
+                //         }
+                //     }
+                // }
+                // if (that.indexArray.length > 0) {
+                //     for (var i in that.indexArray) {
+                //         selectedItems.splice(that.indexArray[i], 1)
+                //     }
+                // }
+                // for (var k = 0; k < oItemTable.length; k++) {
+                //     tableDetails = {
+                //         "CHAR_NAME": oItemTable[k].getCells()[0].getText(),
+                //         "CHAR_NUM": oItemTable[k].getCells()[1].getText(),
+                //         "CHAR_VALUE": oItemTable[k].getCells()[2].getText(),
+                //         "CHARVAL_NUM": oItemTable[k].getCells()[3].getText(),
+                //     }
+                //     selectedItems.push(tableDetails);
+                // }
+                // if (count === 0) {
+                // Add entry to the table model
+                // that.oTableData.push(selectedItems);
+                that.ListModel = new JSONModel();
+                that.ListModel.setData({
+                    results: selectedItems
+                });
+                sap.ui.getCore().byId("idCharItem").setModel(that.ListModel);
+                that.oGModel.setProperty("/setData", "X");
+                that.oGModel.setProperty("/arrayFlag", "X");
+                // sap.ui.getCore().byId("classNameList").removeSelections();
+
+                that._valueHelpDialogclassName.close();
+
+                // } else {
+                //     this._valueHelpDialogclassName.close();
+                //     sap.m.MessageToast.show("Characterstic is already maintained");
+                // }
+                // } 
+                // else {
+                //     MessageToast.show("Please fill all inputs");
+                // }
             },
 
             onClassClose: function () {
+                // sap.ui.getCore().byId("rbg2").setSelectedIndex(-1);
+                // sap.ui.getCore().byId("_IDGenPanel2").setExpanded(false);
+                // that._valueHelpDialogclassName.setModel(that.oGModel.getProperty("/mainData"), "oModel");
+                var newModel = new JSONModel();
+                newModel.setData([]);
+                that._valueHelpDialogclassName.setModel(newModel);
                 this._valueHelpDialogclassName.close();
+                // if (this._valueHelpDialogclassName) {
+                //     this._valueHelpDialogclassName.destroy();
+                //     this._valueHelpDialogclassName = null; // make it falsy so that it can be created next time
+                //   }
+
+                // this._valueHelpDialogclassName.destroy();
+
             },
 
             handleCharSearch: function (oEvent) {
-                var sQuery =oEvent.getParameter("value") || oEvent.getParameter("newValue"),
-                    oFilters = [];
-                // Check if search filter is to be applied
-                sQuery = sQuery ? sQuery.trim() : "";
-                if (sQuery !== "") {
-                    oFilters.push(
-                        new Filter({
-                            filters: [
-                                new Filter("CLASS_NAME", FilterOperator.Contains, sQuery),
-                                new Filter("CHAR_NAME", FilterOperator.Contains, sQuery),
-                                new Filter("CHAR_VALUE", FilterOperator.Contains, sQuery),
-                                new Filter("CHAR_NUM", FilterOperator.Contains, sQuery),
-                                new Filter("CHARVAL_NUM", FilterOperator.Contains, sQuery),
-                            ],
-                            and: false,
-                        })
-                    );
+                // var sQuery = oEvent.getParameter("value") || oEvent.getParameter("newValue"),
+                //     oFilters = [];
+                // // Check if search filter is to be applied
+                // sQuery = sQuery ? sQuery.trim() : "";
+                // if (sQuery !== "") {
+                //     oFilters.push(
+                //         new Filter({
+                //             filters: [
+                //                 new Filter("Description", FilterOperator.Contains, sQuery),
+                //                 // new Filter("children.Description", FilterOperator.Contains, sQuery),
+                //                 new Filter("CHAR_VALUE", FilterOperator.Contains, sQuery),
+                //                 new Filter("CHAR_NUM", FilterOperator.Contains, sQuery),
+                //                 new Filter("CHARVAL_NUM", FilterOperator.Contains, sQuery),
+                //             ],
+                //             and: false,
+                //         })
+                //     );
+                // }
+                // that.oClassnameList = sap.ui.getCore().byId("idList");
+                // that.oClassnameList.getBinding("items").filter(oFilters);
+                // that.oCharnameList = sap.ui.getCore().byId("idList2");
+                // that.oCharnameList.getBinding("items").filter(oFilters);
+
+                let sQuery = oEvent.getSource().getValue();
+                if (sQuery.length > 0) {
+                    // sap.ui.getCore().byId("_IDGenPanel1").setExpanded(true);
+                    sap.ui.getCore().byId("_IDGenPanel2").setExpanded(true);
+                    let originalModel = that.oGModel.getProperty("/mainData");
+                    let originalDataCopy = JSON.parse(JSON.stringify(originalModel.oData));
+                    let filtered = originalDataCopy.filter(topGroup => {
+                        // Filter second level groups
+                        let filteredMidGroups = topGroup.children.filter(midGroup => {
+                            // Filter last Level
+                            let filteredSingleElements = midGroup.nodes.filter(singleElement => {
+                                let search = sQuery.toLowerCase();
+                                let valueFound = (
+                                    singleElement.CLASS_NAME.toLowerCase().includes(search) ||
+                                    singleElement.CHAR_NAME.toLowerCase().includes(search) ||
+                                    singleElement.CHAR_VALUE.toLowerCase().includes(search)
+                                );
+                                return valueFound;
+                            });
+                            midGroup.nodes = filteredSingleElements;
+                            return (filteredSingleElements.length > 0);
+                        });
+                        topGroup.children = filteredMidGroups;
+                        return (filteredMidGroups.length > 0);
+                    });
+                    var classnames = filtered;
+                    let newModel = new JSONModel();
+                    newModel.setData(classnames);
+                    that._valueHelpDialogclassName.setModel(newModel, "oModel");
                 }
-                that.oClassnameList = sap.ui.getCore().byId("classNameList");
-                that.oClassnameList.getBinding("items").filter(oFilters);        
+                else {
+                    sap.ui.getCore().byId("_IDGenPanel2").setExpanded(false);
+                    that._valueHelpDialogclassName.setModel(that.oGModel.getProperty("/mainData"), "oModel");
+                }
             },
 
             handleCharClose: function (oEvent) {
@@ -848,6 +1069,8 @@ sap.ui.define(
                         sap.m.MessageToast.show(oData.maintainUniqueChar);
                         that.onGetData();
                         that.onCloseCreate();
+                        that.onClassClose();
+                        that.selectedArray = [];
                     },
                     error: function (error) {
                         sap.ui.core.BusyIndicator.hide();
@@ -899,6 +1122,7 @@ sap.ui.define(
                         sap.m.MessageToast.show(oData.maintainUniqueChar);
                         that.onGetData();
                         that.onCloseCreate();
+                        that.onClassClose();
 
                     },
                     error: function (error) {
@@ -937,7 +1161,44 @@ sap.ui.define(
                     });
                 }
             },
-            
+
+            onSelect: function (oEvent) {
+                that.oIndexArray = [];
+                if (that.oGModel.getProperty("/arrayFlag") === "X") {
+                    // that.selectedArray = [];
+                    that.indexArray = [];
+                    that.oGModel.setProperty("/arrayFlag", "");
+                }
+                var selectedItems = oEvent.getSource().getSelectedButton().getBindingContext("oModel").getObject();
+                var count = 0;
+                var charName = selectedItems.CHAR_NAME,
+                    charNum = selectedItems.CHAR_NUM,
+                    charVal_Name = selectedItems.CHAR_VALUE,
+                    charVal_Num = selectedItems.CHARVAL_NUM;
+                that.selectedDetails = {
+                    "CHAR_NAME": charName,
+                    "CHAR_NUM": charNum,
+                    "CHAR_VALUE": charVal_Name,
+                    "CHARVAL_NUM": charVal_Num,
+                };
+                if (that.selectedArray.length === 0) {
+                    that.selectedArray.push(that.selectedDetails);
+                }
+                else {
+                    for (var i = 0; i < that.selectedArray.length; i++) {
+                        if (that.selectedArray[i].CHAR_NAME === charName) {
+                            var index = that.selectedArray.indexOf(that.selectedArray[i]);
+                            that.oIndexArray.push(index);
+                        }
+                    }
+                    if (that.oIndexArray.length > 0) {
+                        for (var i in that.oIndexArray) {
+                            that.selectedArray.splice(that.oIndexArray[i], 1);
+                        }
+                    }
+                    that.selectedArray.push(that.selectedDetails);
+                }
+            }
 
         })
     })

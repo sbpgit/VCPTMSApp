@@ -1,7 +1,10 @@
-<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
-	<Dialog id="idChar" contentWidth="650px" title="Characteristics" >
-		<content id="idContent">
-			<Table id="classNameList" mode="SingleSelectMaster" selectionChange="handleCharSelection" growing="true" growingThreshold="1000"
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:ui="sap.ui.table" xmlns:m="sap.m" xmlns:u="sap.ui.unified">
+    <Dialog id="idChar" contentWidth="650px" title="Characteristics">
+        <content>
+            <Toolbar id="_IDGenToolbar1">
+                <SearchField id="idCharSearch" liveChange="handleCharSearch" placeholder="Class/Char Name, Char Value" />
+            </Toolbar>
+            <!-- <Table id="classNameList" mode="SingleSelectMaster" selectionChange="handleCharSelection" growing="true" growingThreshold="1000"
 				items="{path: '/results'}" sticky="ColumnHeaders">
 				<headerToolbar>
 					<Toolbar>
@@ -28,10 +31,117 @@
 						</cells>
 					</ColumnListItem>
 				</items>
-			</Table>
-		</content>
-		<buttons>
-				<Button type='Reject' text="Close" press="onClassClose"></Button>
-		</buttons>
-	</Dialog>
+			</Table> -->
+
+            <!-- <Tree id="nodes" items="{path: 'oModel>/',
+				    parameters : {
+                        arrayNames: ['children'],
+		                countMode: 'Inline',
+                        numberOfExpandedLevels:1
+		            }}" mode="None"  includeItemInSelection="false">
+                    <StandardTreeItem id="_IDGenStandardTreeItem1" title="{oModel>Description}" press="onSelectionChange" class="text" />
+               <CustomTreeItem id="_IDGenCustomTreeItem1">
+			<List id="_IDGenList1" items="{oModel>children}">
+			<items>
+      <CustomListItem id="_IDGenCustomListItem3">
+	  <RadioButtonGroup id="rbg2"  selectedIndex="-1" buttons="{oModel>nodes}" select="onSelect">
+			<RadioButton id="RB2-1" text="{oModel>CHAR_VALUE}" />
+				</RadioButtonGroup>
+	  </CustomListItem>
+	  </items>
+    </List>
+		</CustomTreeItem>
+			    </Tree> -->
+
+            <!-- <ui:TreeTable
+                    id="TreeTableBasic"
+                    rows="{path:'/items', parameters: {arrayNames:['children'],numberOfExpandedLevels: 1},events: {change: '.onTreeChange'}}"
+                  selectionMode="MultiToggle"
+                    enableSelectAll="false"
+                    ariaLabelledBy="title"
+					visibleRowCountMode="Fixed"
+					>
+					<ui:columns>
+					
+                    <ui:Column id="_IDGenColumn2" >
+                        <m:Label id="_IDGenLabel2" text="Class Names"/>
+                        <ui:template>
+                            <m:Text id="_IDGenText2" text="{Description}" wrapping="false" />
+                        </ui:template>
+                    </ui:Column>
+					<ui:Column id="_IDGenColumn1" width="5rem" >
+                        <m:Label id="_IDGenLabel1" text=""/>
+                        <ui:template>
+						<HBox id="_IDGenHBox1"> -->
+
+            <!-- <m:CheckBox id="_IDGenText1" visible="{=${Node}==='T'}"  /> -->
+            <!-- <m:RadioButtonGroup id="_IDGenRadio1" selectedIndex="-1"> -->
+            <!-- <m:RadioButton id="_IDGenRadioButton1" visible="{=${Node}==='E'}"/> -->
+            <!-- </m:RadioButtonGroup> -->
+            <!-- </HBox>
+                        </ui:template>
+                    </ui:Column>
+					</ui:columns>
+            </ui:TreeTable> -->
+
+            <List id="idList" items="{oModel>/}">
+                <items>
+                    <CustomListItem id="_IDGenCustomListItem1">
+                        <Panel id="_IDGenPanel1" expandable="true" expanded="true" headerText="{oModel>Description}">
+                            <content>
+                                <List id="idList2" items="{oModel>children/}">
+                                    <items>
+                                        <CustomListItem id="_IDGenCustomListItem2">
+                                            <Panel id="_IDGenPanel2" expandable="true" expanded="false" headerText="{oModel>Description}">
+                                                <content>
+                                                    <RadioButtonGroup id="rbg2" buttons="{oModel>nodes}" select="onSelect">
+                                                   
+                                                        <RadioButton id="RB2-1" text="{oModel>CHAR_VALUE}" selected="{oModel>Selected}"/>
+                                                        
+                                                    </RadioButtonGroup>
+                                                </content>
+                                            </Panel>
+                                        </CustomListItem>
+                                    </items>
+                                </List>
+                            </content>
+                        </Panel>
+                    </CustomListItem>
+                </items>
+            </List>
+
+            <!-- <List id="grid1" growingScrollToLoad="true" items="{oModel>/}">
+                <items>
+                    <CustomListItem id="_IDGenCustomListItem1">
+                        <Panel id="idPanel" headerText="{oModel>Description}" expandable="true" expanded="true" expand="onExpand">
+                            <content>
+                            <List id="grid2" growingScrollToLoad="true" items="{oModel>children/}">
+                            <items>
+                    <CustomListItem id="_IDGenCustomListItem2">
+                            <Panel id="idPanel1" headerText="{oModel>Description}" expandable="true" expanded="false">
+                            <content>
+                                <Tree id="nodes" items="{path: 'oModel>nodes',
+				    parameters : {
+                        arrayNames: ['nodes'],
+		                countMode: 'Inline',
+                        numberOfExpandedLevels:0
+		            }}" mode="SingleSelect" includeItemInSelection="false">
+                    <StandardTreeItem id="_IDGenStandardTreeItem1" title="{oModel>Description}" press="onSelectionChange" class="text" /> -->
+            <!-- </Tree>
+                                </content>
+                                </Panel>
+                                </CustomListItem>
+                </items>
+            </List>
+                            </content>
+                        </Panel>
+                    </CustomListItem>
+                </items>
+            </List> -->
+        </content>
+        <buttons>
+            <Button id="_IDGenButton1" type='Accept' text="Submit" press="handleCharSelection" />
+            <Button id="_IDGenButton2" type='Reject' text="Close" press="onClassClose" />
+        </buttons>
+    </Dialog>
 </core:FragmentDefinition>

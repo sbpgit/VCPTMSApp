@@ -18,17 +18,16 @@
                 <ux:headerTitle>
                     <ux:ObjectPageDynamicHeaderTitle>
                         <ux:expandedHeading>
-                           <HBox>
-                    <Title id="_IDGenTitle1" text="{i18n>title}" class="boldText" titleAlignment="Center" />
-                     <Button class="hdrBtnMarginHdr" id="_IDGenOverflowToolbarButton1" icon="sap-icon://sys-help" text="" type="Emphasized" press="onNavPress" tooltip="Help Document"/>
-                        </HBox>
-                </ux:expandedHeading>
-                <ux:snappedHeading>
-                    <HBox id="_IDGenFlexBox1" fitContainer="true" alignItems="Center" >
-						<Title id="_IDGenTitle2" text="{i18n>title}"  />
-					<Button class="hdrBtnMarginHdr" id="_IDGenOverflowToolbarButton2" icon="sap-icon://sys-help" text="" type="Emphasized" press="onNavPress" tooltip="Help Document"/>
+                            <HBox>
+                                <Title id="_IDGenTitle1" text="{i18n>title}" class="boldText" titleAlignment="Center" />
+                                <Button class="hdrBtnMarginHdr" id="_IDGenOverflowToolbarButton1" icon="sap-icon://sys-help" text="" type="Emphasized" press="onNavPress" tooltip="Help Document" />
                             </HBox>
-                    
+                        </ux:expandedHeading>
+                        <ux:snappedHeading>
+                            <HBox id="_IDGenFlexBox1" fitContainer="true" alignItems="Center">
+                                <Title id="_IDGenTitle2" text="{i18n>title}" />
+                                <Button class="hdrBtnMarginHdr" id="_IDGenOverflowToolbarButton2" icon="sap-icon://sys-help" text="" type="Emphasized" press="onNavPress" tooltip="Help Document" />
+                            </HBox>
                         </ux:snappedHeading>
                     </ux:ObjectPageDynamicHeaderTitle>
                 </ux:headerTitle>
@@ -51,7 +50,6 @@
                                 <Label text="" />
                                 <HBox>
                                     <Button id="idData" text="Go" type="Emphasized" press="onGetData" />
-                                    
 
                                     <!-- <Label text="" width="50px" />
                                     <Button id="idUpdate" text="Update" type="Accept" press="onPressUpdate" />
@@ -80,18 +78,22 @@
                                 <Toolbar>
                                     <SearchField liveChange="onPrimarySearch" placeholder="Characteristics Name" width="100%" id="idPrimarySearch" />
                                 </Toolbar>
-                                <Table id="Primarytable" mode="SingleSelectMaster" items="{ path: '/results'}">
+                                <Table id="Primarytable" mode="SingleSelectMaster" items="{ path: '/results'}" updateFinished="onTableupdate">
                                     <!-- <contextMenu>
 									<Menu>
 										<MenuItem text="Move to Selected Products" press="moveToSelectedProductsTable"/>
 									</Menu>
 								</contextMenu> -->
                                     <columns>
-                                        <Column hAlign="Center" visible="false">
+                                        
+                                        <Column hAlign="Center" visible="true">
                                             <Text text="{i18n>charno}" />
                                         </Column>
                                         <Column hAlign="Center">
                                             <Text text="{i18n>charname}" />
+                                        </Column>
+                                        <Column hAlign="Center" visible="true">
+                                            <Text text="{i18n>seq}" />
                                         </Column>
                                         <Column hAlign="Center">
                                             <Text text="{i18n>chardesc}" />
@@ -105,8 +107,10 @@
                                     <items>
                                         <ColumnListItem>
                                             <cells>
+                                                
                                                 <Text text="{CHAR_NUM}" />
                                                 <Text text="{CHAR_NAME}" />
+                                                <Text text="{SEQUENCE}" />
                                                 <Text text="{CHAR_DESC}" />
                                             </cells>
                                         </ColumnListItem>
@@ -130,13 +134,13 @@
 								</Menu>
 							</contextMenu> -->
                                 <columns>
-                                    <Column hAlign="Center" visible="false">
+                                    <Column hAlign="Center" visible="true">
                                         <Text text="{i18n>charno}" />
                                     </Column>
                                     <Column hAlign="Center">
                                         <Text text="{i18n>charname}" />
                                     </Column>
-                                    <Column hAlign="Center" visible="false">
+                                    <Column hAlign="Center" visible="true">
                                         <Text text="{i18n>seq}" />
                                     </Column>
                                     <Column hAlign="Center">
@@ -166,8 +170,8 @@
         </content>
         <footer>
             <OverflowToolbar>
-            <Text id="idText" text= "Please click on update button to update the Primary Characteristics" visible="false"/>
-                <ToolbarSpacer/>
+                <Text id="idText" text="Please click on update button to update the Primary Characteristics" visible="false" />
+                <ToolbarSpacer />
                 <Button id="idUpdate" icon="sap-icon://cancel-maintenance" text="Update Primary Char." type="Emphasized" press="onPressUpdate" />
                 <Button id="idReset" icon="sap-icon://repost" text="Reload Char." type="Emphasized" press="onReset" />
             </OverflowToolbar>

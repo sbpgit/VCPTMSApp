@@ -34,3 +34,18 @@
     margin-left:1rem;
     margin-top:0.185rem
 }
+.text.sapMLIBSelectM {
+    display:none
+  }
+
+  div[aria-level='3']{
+    pointer-events: none !important;
+    visibility: hidden;
+}
+div[aria-level='3'] {
+    background-color: whitesmoke;
+    visibility: hidden;
+}
+
+
+
