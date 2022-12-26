@@ -978,6 +978,19 @@ module.exports = cds.service.impl(async function () {
     /**************************************************************************/
     // Master data products to IBP
     this.on("exportIBPMasterProd", async (req) => {
+        // Send Response to Scheduler
+        let liJobData = [];
+        let createtAt = new Date();
+        let id = uuidv1();
+        let values = [];
+        let message = "Started export of Master Data";
+        let res = req._.req.res;
+        const litemp = JSON.stringify(req.data);
+        liJobData = JSON.parse(litemp);
+        values.push({ id, createtAt, message, liJobData });
+        res.statusCode = 202;
+        res.send({ values });
+
 
         // Get Planning area and Prefix configurations for IBP
         let liParaValue = await GenF.getIBPParameterValue();
@@ -1169,6 +1182,19 @@ module.exports = cds.service.impl(async function () {
     });
     // Create Locations in IBP
     this.on("exportIBPLocProd", async (req) => {
+        // Send Response to Scheduler
+        let liJobData = [];
+        let createtAt = new Date();
+        let id = uuidv1();
+        let values = [];
+        let message = "Started Location-Product export";
+        let res = req._.req.res;
+        const litemp = JSON.stringify(req.data);
+        liJobData = JSON.parse(litemp);
+        values.push({ id, createtAt, message, liJobData });
+        res.statusCode = 202;
+        res.send({ values });
+
 
         // Get Planning area and Prefix configurations for IBP
         let liParaValue = await GenF.getIBPParameterValue();
@@ -1330,6 +1356,19 @@ module.exports = cds.service.impl(async function () {
     });
     // Create class in IBP
     this.on("exportIBPClass", async (req) => {
+        // Send Response to Scheduler
+        let liJobData = [];
+        let createtAt = new Date();
+        let id = uuidv1();
+        let values = [];
+        let message = "Started export of Class , Charateristics and Charateristics values";
+        let res = req._.req.res;
+        const litemp = JSON.stringify(req.data);
+        liJobData = JSON.parse(litemp);
+        values.push({ id, createtAt, message, liJobData });
+        res.statusCode = 202;
+        res.send({ values });
+
         // Get Planning area and Prefix configurations for IBP
         let liParaValue = await GenF.getIBPParameterValue();
         let lData = "Nav" + liParaValue[1].VALUE.toString() + "CLASS";
@@ -1732,6 +1771,19 @@ module.exports = cds.service.impl(async function () {
 
     // Component requirement Qty
     this.on("exportComponentReq", async (req) => {
+        // Send Response to Scheduler
+        let liJobData = [];
+        let createtAt = new Date();
+        let id = uuidv1();
+        let values = [];
+        let message = "Started export of Component req.";
+        let res = req._.req.res;
+        const litemp = JSON.stringify(req.data);
+        liJobData = JSON.parse(litemp);
+        values.push({ id, createtAt, message, liJobData });
+        res.statusCode = 202;
+        res.send({ values });
+
 
         // Get Planning area and Prefix configurations for IBP
         let liParaValue = await GenF.getIBPParameterValue();
@@ -2042,30 +2094,8 @@ module.exports = cds.service.impl(async function () {
         let liParaValue = await GenF.getIBPParameterValue();
         let flag, lMessage = '';
         // Generating payload for job scheduler logs
-        let lilocProd = {};
         let lsData = {};
-        // let createtAt = new Date();
-        // let id = uuidv1();
-        // let values = [];
-        // let message = "Started importing IBP Future Demand and Characteristic Plan";
-        // let res = request._.req.res;
-        // let lilocProdReq = JSON.parse(request.data.LocProdData);
-        // if (lilocProdReq[0].PRODUCT_ID === "ALL") {
-        //     lsData.LOCATION_ID = lilocProdReq[0].LOCATION_ID;
-        //     lsData.PRODUCT_ID = lilocProdReq[0].PRODUCT_ID;
-        //     const objCatFn = new Catservicefn();
-        //     const lilocProdT = await objCatFn.getAllProducts(lsData);
-        //     lsData = {};
-        //     const litemp = JSON.stringify(lilocProdT);
-        //     lilocProd = JSON.parse(litemp);
-        // }
-        // else {
-        //     lilocProd = JSON.parse(request.data.LocProdData);
-        // }
-        // values.push({ id, createtAt, message, lilocProd });
-        // res.statusCode = 202;
-        // res.send({ values });
-        // for (let iloc = 0; iloc < lilocProd.length; iloc++) {
+       
         lsData.LOCATION_ID = request.data.LOCATION_ID;
         lsData.PRODUCT_ID = request.data.PRODUCT_ID;
         let resUrl = "/" + liParaValue[0].VALUE + "?$select=PRDID,LOCID,PERIODID4_TSTAMP,TOTALDEMANDOUTPUT,UOMTOID,VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$filter=LOCID eq '" + lsData.LOCATION_ID + "' and PRDID eq '" + lsData.PRODUCT_ID + "'and UOMTOID eq 'EA'";
@@ -2748,33 +2778,7 @@ module.exports = cds.service.impl(async function () {
         let vScen, resUrl;
         let req;
         let lilocProd = {};
-        let lsData = {};
-        let createtAt = new Date();
-        let id = uuidv1();
-        let values = [];
-        let message = "Started importing IBP Future Demand and Characteristic Plan";
-        // let res = request._.req.res;
-        // let lilocProdReq = JSON.parse(request.data.MARKETDATA);
-        // Get Plannng area and Prefix
-
-        // Handle service for both ALL and Selected projects
-        //////////////////////////////////
-        // if (lilocProdReq[0].PRODUCT_ID === "ALL") {
-        //     lsData.LOCATION_ID = lilocProdReq[0].LOCATION_ID;
-        //     lsData.PRODUCT_ID = lilocProdReq[0].PRODUCT_ID;
-        //     const objCatFn = new Catservicefn();
-        //     const lilocProdT = await objCatFn.getAllProducts(lsData);
-        //     const litemp = JSON.stringify(lilocProdT);
-        //     lilocProd = JSON.parse(litemp);
-        // }
-        // else {
-        //     lilocProd = JSON.parse(request.data.MARKETDATA);
-        // }
-        /////////////////////////
-        // Acknowledge Job scheduler for the inputs selected
-        // values.push({ id, createtAt, message, lilocProd });
-        // res.statusCode = 202;
-        // res.send({ values });
+       
 
         lsData = {};
         lsFchar = {};

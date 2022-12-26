@@ -1230,7 +1230,9 @@ module.exports = (srv) => {
             values.push({ id, createtAt, message, lilocProd });
             const obgenSOFunctions = new SOFunctions();
             await obgenSOFunctions.genUniqueID(req.data, req, Flag);
-        }
+        }        
+        res.statusCode = 202;
+        res.send({ values });
     });
     // Generate Unique ID
     srv.on("gen_UniqueID", async (req) => {

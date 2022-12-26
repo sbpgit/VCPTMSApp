@@ -436,14 +436,14 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                                                     <Input id="ELPlocInput" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                                                 </f:fields>
                                             </f:FormElement>
-                                            <f:FormElement>
+                                            <!-- <f:FormElement>
                                                 <f:label>
                                                     <Label text="{i18n>prod}" required="true"  />
                                                 </f:label>
                                                 <f:fields>
                                                     <MultiInput id="ELPprodInput" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
                                                 </f:fields>
-                                            </f:FormElement>
+                                            </f:FormElement> -->
                                         </f:formElements>
                                     </f:FormContainer>
                                 </f:formContainers>
@@ -464,14 +464,14 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                                                     <Input id="EIAlocInput" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                                                 </f:fields>
                                             </f:FormElement>
-                                            <f:FormElement>
+                                            <!-- <f:FormElement>
                                                 <f:label>
                                                     <Label text="{i18n>prod}" required="true"  />
                                                 </f:label>
                                                 <f:fields>
                                                     <MultiInput id="EIAprodInput" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
                                                 </f:fields>
-                                            </f:FormElement>
+                                            </f:FormElement> -->
                                         </f:formElements>
                                     </f:FormContainer>
                                 </f:formContainers>
