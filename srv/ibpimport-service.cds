@@ -18,7 +18,6 @@ service IBPImportSrv @(impl : './lib/ibpimport-service.js') {
     function createActCompDemand(LOCATION_ID : String(4),PRODUCT_ID : String(40),CRITICALKEY :String(1)) returns String;// ,PRODUCT_ID : String(40)) returns String;
     function createIBPLocProd(LOCATION_ID : String(4)) returns String;
     function createIBPCIR(LOCATION_ID : String(4),PRODUCT_ID : String(40)) returns String;  // Partial Product
-    function exportIBPLocProd_fn(LOCATION_ID : String(4)) returns String;
     function exportRestrDetails_fn(LOCATION_ID : String(4)) returns String;
     // function exportRestrictions_fn(LOCATIOn)
     // actions for testing from CF/ jobscheduler 
@@ -33,8 +32,8 @@ service IBPImportSrv @(impl : './lib/ibpimport-service.js') {
     action exportIBPLocProd(LOCATION_ID : String(4));
     // function exportIBPLocProd(LOCATION_ID : String(4)) returns String;
     action exportRestrDetails(LOCATION_ID: String(4)); 
-    // action exportIBPAssembly(LOCATION_ID : String(4));
-     function exportIBPAssembly(LOCATION_ID : String(4)) returns String;
+    action exportIBPAssembly(LOCATION_ID : String(4));
+    //  function exportIBPAssembly(LOCATION_ID : String(4)) returns String;
   
     action exportIBPSalesTrans(LocProdData: String);//LOCATION_ID : String(4),PRODUCT_ID : String(40),CUSTOMER_GROUP : String(20),DOC_DATE:Date);
     action exportActCompDemand(LocProdData: String);//LOCATION_ID : String(4),PRODUCT_ID : String(40),CRITICALKEY :String(1));//,FROMDATE: Date, TODATE: Date);

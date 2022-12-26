@@ -110,6 +110,15 @@ sap.ui.define([
                             that.primaryData = [],
                                 that.secData = [];
 
+                            oData.results.forEach(function (row) {
+
+                                if (row.CHAR_TYPE === "P" && row.SEQUENCE < 6) {
+                                    row.Partial = "X";
+                                } else {
+                                    row.Partial = "";
+                                }
+                            }, that);
+
                             for (var i = 0; i < oData.results.length; i++) {
                                 if (oData.results[i].CHAR_TYPE === "P") {
                                     that.primaryData.push(oData.results[i]);
@@ -118,16 +127,34 @@ sap.ui.define([
                                 }
                             }
 
-                            that.finalSecData = [];
-                            for (var j = 0; j <= that.secData.length; j++) {
-                                for (var k = 0; k < that.secData.length; k++) {
-                                    if (j === that.secData[k].SEQUENCE) {
-                                        that.finalSecData.push(that.secData[k]);
+                            that.finalpriData = [];
+                            for (var j = 0; j <= that.primaryData.length; j++) {
+                                for (var k = 0; k < that.primaryData.length; k++) {
+                                    if (j === that.primaryData[k].SEQUENCE) {
+                                        that.finalpriData.push(that.primaryData[k]);
                                         break;
                                     }
                                 }
 
                             }
+
+                            var length = j;
+
+                            that.finalSecData = [];
+                            for (var j = length; j <= oData.results.length; j++) {
+                                for (var k = 0; k < oData.results.length; k++) {
+                                    if (j === oData.results[k].SEQUENCE) {
+                                        that.finalSecData.push(oData.results[k]);
+                                        break;
+                                    }
+                                }
+
+                            }
+
+                            that.oGModel = that.getModel("oGModel");
+                            that.oGModel.setProperty("/secSeqSt", that.finalSecData[0].SEQUENCE);
+
+
                             // var aData = that.finalSecData;
                             //     if(that.oSelectedItem){
                             //     for (var i = 0; i < aData.length; i++) {
@@ -140,7 +167,7 @@ sap.ui.define([
 
 
                             that.PrimarylistModel.setData({
-                                results: that.primaryData,
+                                results: that.finalpriData,
                             });
                             that.oPList.setModel(that.PrimarylistModel);
 
@@ -181,6 +208,22 @@ sap.ui.define([
                     MessageToast.show("Please select Location and Product");
                 }
             },
+
+            onTableupdate: function (oEvent) {
+
+                that.oPList = that.byId("Primarytable").getItems();
+                var PartialVal;
+                for (var i = 0; i < that.oPList.length; i++) {
+                    PartialVal = that.oPList[i].getBindingContext().getObject().Partial;
+                    if (PartialVal === "X") {
+                        that.oPList[i].addStyleClass("partialColor");
+                    } else {
+                        that.oPList[i].removeStyleClass("partialColor");
+                    }
+                }
+            },
+
+
             onReset: function () {
                 var sLoc = that.byId("idloc").getValue(),
                     sProd = that.byId("prodInput").getValue();
@@ -208,8 +251,24 @@ sap.ui.define([
                             }
                         }
 
+
+                        that.finalpriData = [];
+                        for (var j = 0; j <= that.primaryData.length; j++) {
+                            for (var k = 0; k < that.primaryData.length; k++) {
+                                if (j === that.primaryData[k].SEQUENCE) {
+                                    that.finalpriData.push(that.primaryData[k]);
+                                    break;
+                                }
+                            }
+
+                        }
+
+                        var length = j;
+
+
+
                         that.finalSecData = [];
-                        for (var j = 0; j <= that.secData.length; j++) {
+                        for (var j = length; j <= that.secData.length; j++) {
                             for (var k = 0; k < that.secData.length; k++) {
                                 if (j === that.secData[k].SEQUENCE) {
                                     that.finalSecData.push(that.secData[k]);
@@ -220,8 +279,10 @@ sap.ui.define([
                         }
 
 
+
+
                         that.PrimarylistModel.setData({
-                            results: that.primaryData,
+                            results: that.finalpriData,
                         });
                         that.oPList.setModel(that.PrimarylistModel);
 
@@ -411,6 +472,8 @@ sap.ui.define([
             },
             // function drop list items
             onDrop: function (oInfo) {
+                oGModel = this.getModel("oGModel");
+                oGModel.setProperty("/primFlag", "");
                 var oDragged = oInfo.getParameter("draggedControl"),
                     oDropped = oInfo.getParameter("droppedControl"),
                     sInsertPosition = oInfo.getParameter("dropPosition"),
@@ -450,8 +513,8 @@ sap.ui.define([
 
                     } else {
                         oChar_Type = "S"
-                        iSeq = oDropModelData.results.length;
-
+                        iSeq = oItem.SEQUENCE;
+                        oGModel.setProperty("/primFlag", "X");
                     }
 
                     that.getModel("BModel").callFunction("/changeToPrimary", {
@@ -471,6 +534,10 @@ sap.ui.define([
                             that.byId("searchField").setValue("");
                             that.onCharSearch();
                             that.onGetData();
+                            if (oGModel.getProperty("/primFlag") === "X") {
+                                that.byId("idText").setVisible(true);
+                                that.byId("idText").addStyleClass("textColour");
+                            }
                         },
                         error: function (oData) {
                             sap.ui.core.BusyIndicator.hide();
@@ -479,7 +546,12 @@ sap.ui.define([
                     });
                 } else {
                     oDropModel.setData(oDropModelData);
-                    var aData = this.byId("Secondarytable").getItems();
+
+                    if (oDropModelData.results[0].CHAR_TYPE === "P") {
+                        var aData = this.byId("Primarytable").getItems();
+                    } else if (oDropModelData.results[0].CHAR_TYPE === "S") {
+                        var aData = this.byId("Secondarytable").getItems();
+                    }
 
                     // for (var i = 0; i < aData.length; i++) {
                     //     if (oItem.CHAR_NAME === aData[i].getCells()[1].getText()) {
@@ -488,15 +560,26 @@ sap.ui.define([
                     //     }
                     // }
                     that.oSelectedItem = oItem.CHAR_NAME
-                    that.onSaveSeq(iDropPosition);
+                    that.onSaveSeq(iDropPosition, aData);
                 }
             },
 
-            onSaveSeq: function (index) {
-                var aData = this.byId("Secondarytable").getItems();
-                // that.count = aData.length;
-                that.count = index + 2;
-                var successCount = 0;
+            onSaveSeq: function (index, data) {
+                // var aData = this.byId("Secondarytable").getItems();
+                // // that.count = aData.length;
+                // // that.count = index + 2;
+                // var successCount = 0;
+
+                var aData = data,
+                    successCount = 0;
+                that.count = aData.length;
+                var seq;
+                if (aData[0].getBindingContext().getObject().CHAR_TYPE === "S") {
+                    seq = parseInt(that.oGModel.getProperty("/secSeqSt"));
+                } else {
+                    seq = 1;
+                }
+
 
 
                 for (var i = 0; i < aData.length; i++) {
@@ -507,9 +590,9 @@ sap.ui.define([
                     oEntry.product = that.byId("prodInput").getValue();
                     oEntry.CharNo = aData[i].getCells()[0].getText();
                     // oEntry.charName = aData[i].getCells()[1].getText();
-                    oEntry.SEQUENCE = i + 1;
+                    oEntry.SEQUENCE = seq + i;
                     oEntry.FLAG = "E";
-                    oEntry.CHAR_TYPE = "S";
+                    oEntry.CHAR_TYPE = aData[i].getBindingContext().getObject().CHAR_TYPE;
 
                     that.getModel("BModel").callFunction("/changeToPrimary", {
                         method: "GET",
@@ -624,7 +707,7 @@ sap.ui.define([
                             sap.ui.core.BusyIndicator.hide();
                             MessageToast.show("Updated Successfully");
                             that.oPList = that.byId("Primarytable"),
-                            that.oSList = that.byId("Secondarytable");
+                                that.oSList = that.byId("Secondarytable");
 
                             that.primaryData = [],
                                 that.secData = [];
@@ -637,8 +720,22 @@ sap.ui.define([
                                 }
                             }
 
+
+                            that.finalpriData = [];
+                            for (var j = 0; j <= that.primaryData.length; j++) {
+                                for (var k = 0; k < that.primaryData.length; k++) {
+                                    if (j === that.primaryData[k].SEQUENCE) {
+                                        that.finalpriData.push(that.primaryData[k]);
+                                        break;
+                                    }
+                                }
+
+                            }
+
+                            var length = j;
+
                             that.finalSecData = [];
-                            for (var j = 0; j <= that.secData.length; j++) {
+                            for (var j = length; j <= that.secData.length; j++) {
                                 for (var k = 0; k < that.secData.length; k++) {
                                     if (j === that.secData[k].SEQUENCE) {
                                         that.finalSecData.push(that.secData[k]);
@@ -647,10 +744,10 @@ sap.ui.define([
                                 }
 
                             }
-                            
+
 
                             that.PrimarylistModel.setData({
-                                results: that.primaryData,
+                                results: that.finalpriData,
                             });
                             that.oPList.setModel(that.PrimarylistModel);
 
@@ -680,6 +777,9 @@ sap.ui.define([
                                     }
                                 }
                             }
+                            oGModel.setProperty("/primFlag", "");
+                            that.byId("idText").setVisible(false);
+                            that.byId("idText").removeStyleClass("textColour");
 
                         },
                         error: function (oData, error) {
@@ -693,21 +793,21 @@ sap.ui.define([
 
 
             },
-            onNavPress:function(){
+            onNavPress: function () {
                 if (sap.ushell && sap.ushell.Container && sap.ushell.Container.getService) {
-			var oCrossAppNavigator = sap.ushell.Container.getService("CrossApplicationNavigation"); 
-			// generate the Hash to display 
-			var hash = (oCrossAppNavigator && oCrossAppNavigator.hrefForExternal({
-				target: {
-					semanticObject: "vcpdocdisplay",
-					action: "Display"
-				}
-			})) || ""; 
-			//Generate a  URL for the second application
-			var url = window.location.href.split('#')[0] + hash; 
-			//Navigate to second app
-			sap.m.URLHelper.redirect(url, true); 
-                } 
+                    var oCrossAppNavigator = sap.ushell.Container.getService("CrossApplicationNavigation");
+                    // generate the Hash to display 
+                    var hash = (oCrossAppNavigator && oCrossAppNavigator.hrefForExternal({
+                        target: {
+                            semanticObject: "vcpdocdisplay",
+                            action: "Display"
+                        }
+                    })) || "";
+                    //Generate a  URL for the second application
+                    var url = window.location.href.split('#')[0] + hash;
+                    //Navigate to second app
+                    sap.m.URLHelper.redirect(url, true);
+                }
             }
 
 

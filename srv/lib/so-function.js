@@ -669,6 +669,61 @@ class SOFunctions {
         //     console.log(e.message);
         // }
     }
+    
+    /**
+     * 
+     * @param {Location} lLocation 
+     * @param {Product} lProduct 
+     * @param {Sales ORder} lSO
+     * @param {Date} lDate 
+     * @param {Quantity} lQty 
+     * @param {Unique ID} liUnique 
+     */
+    async createSOTemp(lLocation, lProduct, lSO, lDate, lQty, lUnique) {
+
+        const lSOItem = '10';
+        // Get Main Product        
+        const lMainProd = await this.getMainProduct(lLocation, lProduct);
+
+        // await INSERT.into('CP_SALESH')
+        //     .columns('SALES_DOC',
+        //         'SALESDOC_ITEM',
+        //         'PRODUCT_ID',
+        //         'CONFIRMED_QTY',
+        //         'ORD_QTY',
+        //         'MAT_AVAILDATE',
+        //         'LOCATION_ID')
+        //     .values(lSO,
+        //         lSOItem,
+        //         lMainProd,
+        //         lQty,
+        //         lQty,
+        //         lDate,
+        //         lLocation);
+
+        const liUnique = await SELECT.columns("CHAR_NUM",
+            "CHARVAL_NUM")
+            .from('V_UNIQUE_ID')
+            .where(`UNIQUE_ID = '${lUnique}'`)
+
+        for (let cntUI = 0; cntUI < liUnique.length; cntUI++) {
+            await INSERT.into('CP_SALESH_CONFIG')
+                .columns('SALES_DOC',
+                    'SALESDOC_ITEM',
+                    'CHAR_NUM',
+                    'CHARVAL_NUM',
+                    'PRODUCT_ID')
+                .values(lSO,
+                    lSOItem,
+                    liUnique[cntUI].CHAR_NUM,
+                    liUnique[cntUI].CHARVAL_NUM,
+                    lProduct);
+        }
+
+        await this.processUniqueID(lLocation, lMainProd, lSO);
+
+      
+    }
     /**
          * 
          * @param {Location} lLocation 
