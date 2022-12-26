@@ -3749,7 +3749,7 @@ sap.ui.define(
                         // bButton === "Restrictions" ||
                         // bButton.includes("Likelihood")
                         bButton === "Sales History" ||
-                        bButton === "Actual Components" ||
+                        bButton === "Actual Components Demand" ||
                         bButton === "Market Authorizations" ||
                         bButton === "Forecast Demand" ||
                         bButton === "Restrictions" ||

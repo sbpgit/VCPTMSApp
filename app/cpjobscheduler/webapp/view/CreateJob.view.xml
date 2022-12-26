@@ -348,9 +348,9 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                             <!-- <RadioButton id="idIBPFutPlan" text="IBP Future Plan" /> -->
                         </RadioButtonGroup>
                         
-                        <RadioButtonGroup id="idRbtnExport"  columns="1" select="ExportRadioChange" visible="false">
+                        <RadioButtonGroup id="idRbtnExport"  columns="2" select="ExportRadioChange" visible="false">
                             
-                            <RadioButton id="idIBPLoc"  text="Location" tooltip="Master"/>
+                            <!-- <RadioButton id="idIBPLoc"  text="Location" tooltip="Master"/>
                             <RadioButton id="idIBPCustGrp"  text="Customer Group" />
                             <RadioButton id="idIBPProd"  text="Product" />
                             <RadioButton id="idIBPLocProd" text="Location Product" />
@@ -359,15 +359,28 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                             <RadioButton id="idRestri"  text="Restrictions" />
                             
                             <RadioButton id="idIBPSalesHis" text="Sales History" />
-                            <!-- <RadioButton id="idIBPSalesHisConfig" text="Sales History Config" /> -->
                             <RadioButton id="idIBPActCompDemd" text="Actual Components Demand" />
                             <RadioButton id="idMarketAuth" text="Market Authorizations" />
                             <RadioButton id="idIBPCompReqQty" text="Assembly Requirement Quantity" />
                             <RadioButton id="idIBPExCIR" text="Forecast Demand" />
+                            <RadioButton id="idResLikhood" text="Restriction Likelihood" /> -->
+                            
+                            <RadioButton id="idIBPLoc"  text="Location" tooltip="Master"/>
+                            <RadioButton id="idIBPSalesHis" text="Sales History" />
+                            <RadioButton id="idIBPCustGrp"  text="Customer Group" />
+                            <RadioButton id="idIBPActCompDemd" text="Actual Components Demand" />
+                            <RadioButton id="idIBPProd"  text="Product" />
+                            <RadioButton id="idMarketAuth" text="Market Authorizations" />
+
+                            <RadioButton id="idIBPLocProd" text="Location Product" />
+                            <RadioButton id="idIBPCompReqQty" text="Assembly Requirement Quantity" />
+                            <RadioButton id="idIBPAssembly" text="Assembly" />
+                            <RadioButton id="idIBPExCIR" text="Forecast Demand" />
+                            <RadioButton id="idIBPClass"  text="Class" />
                             <RadioButton id="idResLikhood" text="Restriction Likelihood" />
+                            <RadioButton id="idRestri"  text="Restrictions" />
                             
 
-                            
                         </RadioButtonGroup>
                         
 
