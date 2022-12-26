@@ -24890,6 +24890,22 @@
         "type": "cds.String"
       }
     },
+    "CatalogService.mainSOTemp": {
+      "kind": "function",
+      "params": {
+        "LOCATION_ID": {
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "type": "cds.String",
+          "length": 40
+        }
+      },
+      "returns": {
+        "type": "cds.String"
+      }
+    },
     "CatalogService.Method_Types": {
       "kind": "entity",
       "@readonly": true,
@@ -26451,6 +26467,26 @@
         "LocProdData": {
           "type": "cds.String"
         }
+      }
+    },
+    "IBPImportSrv.exportActCompDemandfn": {
+      "kind": "function",
+      "params": {
+        "LOCATION_ID": {
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "type": "cds.String",
+          "length": 40
+        },
+        "CRITICALKEY": {
+          "type": "cds.String",
+          "length": 1
+        }
+      },
+      "returns": {
+        "type": "cds.String"
       }
     },
     "IBPImportSrv.exportRestrReq": {
