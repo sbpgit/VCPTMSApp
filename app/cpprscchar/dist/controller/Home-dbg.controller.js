@@ -22,6 +22,7 @@ sap.ui.define([
         return BaseController.extend("cpapp.cpprscchar.controller.Home", {
             onInit: function () {
                 that = this;
+                oGModel = this.getModel("oGModel");
                 // Declaration of JSON models and size limits
                 this.PrimarylistModel = new JSONModel();
                 this.SeclistModel = new JSONModel();
@@ -473,7 +474,11 @@ sap.ui.define([
             // function drop list items
             onDrop: function (oInfo) {
                 oGModel = this.getModel("oGModel");
+<<<<<<< HEAD
                 oGModel.setProperty("/primFlag", "");
+=======
+                        oGModel.setProperty("/primFlag", "");
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
                 var oDragged = oInfo.getParameter("draggedControl"),
                     oDropped = oInfo.getParameter("droppedControl"),
                     sInsertPosition = oInfo.getParameter("dropPosition"),
@@ -513,8 +518,16 @@ sap.ui.define([
 
                     } else {
                         oChar_Type = "S"
+<<<<<<< HEAD
                         iSeq = oItem.SEQUENCE;
                         oGModel.setProperty("/primFlag", "X");
+=======
+                        iSeq = oDropModelData.results.length;
+                        
+                        oGModel.setProperty("/primFlag", "X");
+                        
+
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
                     }
 
                     that.getModel("BModel").callFunction("/changeToPrimary", {
@@ -534,7 +547,11 @@ sap.ui.define([
                             that.byId("searchField").setValue("");
                             that.onCharSearch();
                             that.onGetData();
+<<<<<<< HEAD
                             if (oGModel.getProperty("/primFlag") === "X") {
+=======
+                            if(oGModel.getProperty("/primFlag") === "X"){
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
                                 that.byId("idText").setVisible(true);
                                 that.byId("idText").addStyleClass("textColour");
                             }
@@ -778,8 +795,13 @@ sap.ui.define([
                                 }
                             }
                             oGModel.setProperty("/primFlag", "");
+<<<<<<< HEAD
                             that.byId("idText").setVisible(false);
                             that.byId("idText").removeStyleClass("textColour");
+=======
+                                that.byId("idText").setVisible(false);
+                                that.byId("idText").removeStyleClass("textColour");
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
 
                         },
                         error: function (oData, error) {

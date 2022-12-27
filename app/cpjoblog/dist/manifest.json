@@ -116,7 +116,7 @@
                 },
                 {
                     "pattern": "getJobStatus({key}):?query:",
-                    "name": "getJobStatusObjectPage",
+                    "name": "`getJobStatusObjectPage`",
                     "target": "getJobStatusObjectPage"
                 }
             ],

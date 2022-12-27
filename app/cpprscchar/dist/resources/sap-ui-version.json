@@ -1,7 +1,11 @@
 {
 	"name": "cpapp.cpprscchar",
 	"version": "0.0.1",
+<<<<<<< HEAD
 	"buildTimestamp": "202212261433",
+=======
+	"buildTimestamp": "202212161424",
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
 	"scmRevision": "",
 	"libraries": []
 }

@@ -994,11 +994,14 @@
           "type": "cds.String",
           "length": 4
         },
+<<<<<<< HEAD
         "SEEDORD_CHK": {
           "@title": "Seed Order Check",
           "type": "cds.String",
           "length": 1
         },
+=======
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
         "CHANGED_DATE": {
           "@title": "Changed Date",
           "type": "cds.Date"
@@ -1834,6 +1837,7 @@
     },
     "cp.TS_OBJDEP_CHARHDR_F": {
       "kind": "entity",
+<<<<<<< HEAD
       "@UI.SelectionFields": [
         {
           "=": "CAL_DATE"
@@ -1991,6 +1995,8 @@
           ]
         }
       ],
+=======
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
       "elements": {
         "CAL_DATE": {
           "@title": "Date",
@@ -3147,7 +3153,11 @@
       "kind": "entity",
       "elements": {
         "PRODUCT_ID": {
+<<<<<<< HEAD
           "@title": "New Product",
+=======
+          "@title": "Configurable Product",
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
           "key": true,
           "type": "cds.String",
           "length": 40
@@ -5376,6 +5386,7 @@
         }
       }
     },
+<<<<<<< HEAD
     "cp.CREATEVARIANT": {
       "kind": "entity",
       "elements": {
@@ -5425,6 +5436,8 @@
         }
       }
     },
+=======
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
     "cp.IBPCHAR_PS": {
       "kind": "entity",
       "elements": {
@@ -6137,6 +6150,7 @@
         }
       }
     },
+<<<<<<< HEAD
     "V_SALES_H": {
       "kind": "entity",
       "@cds.persistence.exists": true,
@@ -6325,6 +6339,63 @@
         "COMP_QTY": {
           "@title": "COMP_QTY",
           "key": true,
+=======
+    "V_LOCPROD": {
+      "kind": "entity",
+      "@cds.persistence.exists": true,
+      "elements": {
+        "PRODUCT_ID": {
+          "@title": "PRODUCT_ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+        "LOCATION_ID": {
+          "@title": "LOCATION_ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "PROD_DESC": {
+          "@title": "PROD_DESC",
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        }
+      }
+    },
+    "V_BOMPVS": {
+      "kind": "entity",
+      "@cds.persistence.exists": true,
+      "elements": {
+        "LOCATION_ID": {
+          "@title": "LOCATION_ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "@title": "PRODUCT_ID",
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+        "ITEM_NUM": {
+          "@title": "ITEM_NUM",
+          "key": true,
+          "type": "cds.String",
+          "length": 6
+        },
+        "COMPONENT": {
+          "@title": "COMPONENT",
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+        "COMP_QTY": {
+          "@title": "COMP_QTY",
+          "key": true,
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
           "type": "cds.Decimal",
           "precision": 13,
           "scale": 3
@@ -6628,12 +6699,15 @@
           "type": "cds.String",
           "length": 10
         },
+<<<<<<< HEAD
         "CHAR_DESC": {
           "@title": "CHAR_NUM",
           "key": true,
           "type": "cds.String",
           "length": 150
         },
+=======
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
         "CHAR_NAME": {
           "@title": "CHAR_NAME",
           "key": true,
@@ -6874,7 +6948,11 @@
       "kind": "entity",
       "@cds.persistence.exists": true,
       "elements": {
+<<<<<<< HEAD
         "WEEK_DATE": {
+=======
+        "CAL_DATE": {
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
           "@title": "CAL_DATE",
           "key": true,
           "type": "cds.Date"
@@ -7203,6 +7281,7 @@
         }
       }
     },
+<<<<<<< HEAD
     "V_GETIBPCHARPS": {
       "kind": "entity",
       "@cds.persistence.exists": true,
@@ -7250,6 +7329,8 @@
         }
       }
     },
+=======
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
     "V_UNIQUE_ID_ITEM": {
       "kind": "entity",
       "@cds.persistence.exists": true,
@@ -7911,10 +7992,13 @@
           "type": "cds.String",
           "length": 40
         },
+<<<<<<< HEAD
         "PARTIALPROD": {
           "type": "cds.String",
           "length": 40
         },
+=======
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
         "ITEM_NUM": {
           "type": "cds.String",
           "length": 5
@@ -8409,6 +8493,7 @@
         }
       }
     },
+<<<<<<< HEAD
     "cp_ds.cirIdsWkly": {
       "kind": "type",
       "elements": {
@@ -8420,6 +8505,8 @@
         }
       }
     },
+=======
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
     "cp_ds.cirWkly": {
       "kind": "type",
       "elements": {
@@ -8431,6 +8518,7 @@
           "type": "cds.String",
           "length": 40
         },
+<<<<<<< HEAD
         "PROD_DESC": {
           "type": "cds.String",
           "length": 40
@@ -8438,6 +8526,11 @@
         "CIR_ID": {
           "items": {
             "type": "cp_ds.cirIdsWkly"
+=======
+        "CIR_ID": {
+          "items": {
+            "type": "cds.Integer"
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
           }
         },
         "MODEL_VERSION": {
@@ -9513,6 +9606,7 @@
         }
       }
     },
+<<<<<<< HEAD
     "cp_ds.uniqueConfig": {
       "kind": "type",
       "elements": {
@@ -9562,6 +9656,8 @@
         }
       }
     },
+=======
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
     "js": {
       "kind": "context"
     },
@@ -18490,6 +18586,7 @@
         }
       }
     },
+<<<<<<< HEAD
     "CatalogService.getVariant": {
       "kind": "entity",
       "@readonly": true,
@@ -18559,6 +18656,20 @@
           "@UI.Importance": {
             "#": "High"
           }
+=======
+    "CatalogService.getProducts": {
+      "kind": "entity",
+      "@readonly": true,
+      "@UI.LineItem": [
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "PRODUCT_ID"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          }
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
         },
         {
           "$Type": "UI.DataField",
@@ -19360,12 +19471,17 @@
       "projection": {
         "from": {
           "ref": [
+<<<<<<< HEAD
             "V_SALES_H"
+=======
+            "cp.SALESH"
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
           ]
         }
       },
       "elements": {
         "SALES_DOC": {
+<<<<<<< HEAD
           "@title": "SALES_DOC",
           "type": "cds.String",
           "length": 10,
@@ -19406,6 +19522,35 @@
         },
         "REASON_REJ": {
           "@title": "REASON_REJ",
+=======
+          "@title": "Sales Document",
+          "key": true,
+          "type": "cds.String",
+          "length": 10
+        },
+        "SALESDOC_ITEM": {
+          "@title": "Sales Document Item",
+          "key": true,
+          "type": "cds.String",
+          "length": 6
+        },
+        "DOC_CREATEDDATE": {
+          "@title": "Document Created on",
+          "type": "cds.Date"
+        },
+        "SCHEDULELINE_NUM": {
+          "@title": "Schedule Line Number",
+          "type": "cds.String",
+          "length": 4
+        },
+        "PRODUCT_ID": {
+          "@title": "Product Id",
+          "type": "cds.String",
+          "length": 40
+        },
+        "REASON_REJ": {
+          "@title": "Reason rejection",
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
           "type": "cds.String",
           "length": 2
         },
@@ -19415,33 +19560,54 @@
           "length": 3
         },
         "CONFIRMED_QTY": {
+<<<<<<< HEAD
           "@title": "CONFIRMED_QTY",
+=======
+          "@title": "Confirmed Qty",
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
           "type": "cds.Decimal",
           "precision": 13,
           "scale": 3
         },
         "ORD_QTY": {
+<<<<<<< HEAD
           "@title": "ORD_QTY",
+=======
+          "@title": "Order Quantity",
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
           "type": "cds.Decimal",
           "precision": 13,
           "scale": 3
         },
         "MAT_AVAILDATE": {
+<<<<<<< HEAD
           "@title": "MAT_AVAILDATE",
           "type": "cds.Date"
         },
         "NET_VALUE": {
           "@title": "NET_VALUE",
+=======
+          "@title": "Material Availability Date",
+          "type": "cds.Date"
+        },
+        "NET_VALUE": {
+          "@title": "Net Value",
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
           "type": "cds.Decimal",
           "precision": 15,
           "scale": 2
         },
         "CUSTOMER_GROUP": {
+<<<<<<< HEAD
           "@title": "CUSTOMER_GROUP",
+=======
+          "@title": "Customer Group",
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
           "type": "cds.String",
           "length": 20
         },
         "LOCATION_ID": {
+<<<<<<< HEAD
           "@title": "LOCATION_ID",
           "type": "cds.String",
           "length": 4
@@ -19472,24 +19638,52 @@
         },
         "CHANGED_BY": {
           "@title": "CHANGED_BY",
+=======
+          "@title": "Location ID",
+          "type": "cds.String",
+          "length": 4
+        },
+        "CHANGED_DATE": {
+          "@title": "Changed Date",
+          "type": "cds.Date"
+        },
+        "CHANGED_BY": {
+          "@title": "Changed By",
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
           "type": "cds.String",
           "length": 12
         },
         "CREATED_DATE": {
+<<<<<<< HEAD
           "@title": "CREATED_DATE",
           "type": "cds.Date"
         },
         "CREATED_BY": {
           "@title": "CREATED_BY",
+=======
+          "@title": "Created Date",
+          "type": "cds.Date"
+        },
+        "CREATED_BY": {
+          "@title": "Created By",
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
           "type": "cds.String",
           "length": 12
         },
         "CHANGED_TIME": {
+<<<<<<< HEAD
           "@title": "CHANGED_TIME",
           "type": "cds.Time"
         },
         "CREATED_TIME": {
           "@title": "CREATED_TIME",
+=======
+          "@title": "Changed Time",
+          "type": "cds.Time"
+        },
+        "CREATED_TIME": {
+          "@title": "Created Time",
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
           "type": "cds.Time"
         }
       }
@@ -20713,6 +20907,7 @@
           "=": "PRODUCT_ID"
         }
       ],
+<<<<<<< HEAD
       "@UI.LineItem": [
         {
           "$Type": "UI.DataField",
@@ -20970,11 +21165,22 @@
           },
           "@HTML5.CssDefaults": {
             "width": "15rem"
+=======
+      "@UI.LineItem": [
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "LOCATION_ID"
+          },
+          "@UI.Importance": {
+            "#": "High"
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
           }
         },
         {
           "$Type": "UI.DataField",
           "Value": {
+<<<<<<< HEAD
             "=": "OBJ_COUNTER"
           },
           "@UI.Importance": {
@@ -20998,47 +21204,105 @@
           "$Type": "UI.DataField",
           "Value": {
             "=": "LOCATION_ID"
-          }
-        },
-        {
-          "$Type": "UI.DataField",
-          "Value": {
+=======
             "=": "PRODUCT_ID"
+          },
+          "@UI.Importance": {
+            "#": "High"
           }
         },
         {
           "$Type": "UI.DataField",
           "Value": {
+            "=": "CLASS_NAME"
+          },
+          "@UI.Importance": {
+            "#": "High"
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+<<<<<<< HEAD
+            "=": "PRODUCT_ID"
+=======
+            "=": "CHAR_NAME"
+          },
+          "@UI.Importance": {
+            "#": "High"
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+<<<<<<< HEAD
             "=": "OBJ_TYPE"
+=======
+            "=": "CHAR_VALUE"
+          },
+          "@UI.Importance": {
+            "#": "High"
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
           }
         },
         {
           "$Type": "UI.DataField",
           "Value": {
+<<<<<<< HEAD
             "=": "ROW_ID"
-          }
-        },
-        {
-          "$Type": "UI.DataField",
-          "Value": {
+=======
             "=": "VERSION"
+          },
+          "@UI.Importance": {
+            "#": "High"
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
           }
         },
         {
           "$Type": "UI.DataField",
           "Value": {
+<<<<<<< HEAD
+            "=": "VERSION"
+=======
             "=": "SCENARIO"
+          },
+          "@UI.Importance": {
+            "#": "High"
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
           }
         },
         {
           "$Type": "UI.DataField",
           "Value": {
+<<<<<<< HEAD
+            "=": "SCENARIO"
+=======
+            "=": "WEEK_DATE"
+          },
+          "@UI.Importance": {
+            "#": "High"
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+<<<<<<< HEAD
             "=": "SUCCESS"
+=======
+            "=": "OPT_PERCENT"
+          },
+          "@UI.Importance": {
+            "#": "High"
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
           }
         },
         {
           "$Type": "UI.DataField",
           "Value": {
+<<<<<<< HEAD
             "=": "SUCCESS_RATE"
           }
         }
@@ -21061,27 +21325,54 @@
         "from": {
           "ref": [
             "cp.TS_OBJDEP_CHARHDR_F"
+=======
+            "=": "OPT_QTY"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          }
+        }
+      ],
+      "projection": {
+        "from": {
+          "ref": [
+            "V_FCHARPLAN"
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
           ]
         }
       },
       "elements": {
+<<<<<<< HEAD
         "CAL_DATE": {
           "@title": "Date",
+=======
+        "WEEK_DATE": {
+          "@title": "Week Date",
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
           "key": true,
           "type": "cds.Date"
         },
         "LOCATION_ID": {
+<<<<<<< HEAD
           "@title": "Location ID",
+=======
+          "@title": "Location",
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
           "key": true,
           "type": "cds.String",
           "length": 4
         },
         "PRODUCT_ID": {
+<<<<<<< HEAD
           "@title": "Product ID",
+=======
+          "@title": "Product",
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
           "key": true,
           "type": "cds.String",
           "length": 40
         },
+<<<<<<< HEAD
         "OBJ_TYPE": {
           "@title": "Object Type",
           "key": true,
@@ -21090,10 +21381,27 @@
         },
         "OBJ_DEP": {
           "@title": "Object Dependency",
+=======
+        "CLASS_NUM": {
+          "@title": "Int. Counter for Class",
+          "key": true,
+          "type": "cds.String",
+          "length": 20
+        },
+        "CLASS_NAME": {
+          "@title": "Class Name",
+          "key": true,
+          "type": "cds.String",
+          "length": 20
+        },
+        "CHAR_NUM": {
+          "@title": "Int. Counter for Characteristic ",
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
           "key": true,
           "type": "cds.String",
           "length": 30
         },
+<<<<<<< HEAD
         "OBJ_COUNTER": {
           "@title": "Object Counter",
           "key": true,
@@ -21103,6 +21411,25 @@
           "@title": " Attribute Index",
           "key": true,
           "type": "cds.Integer"
+=======
+        "CHAR_NAME": {
+          "@title": "Characteristic",
+          "key": true,
+          "type": "cds.String",
+          "length": 30
+        },
+        "CHARVAL_NUM": {
+          "@title": "Int.counter for Characteristic",
+          "key": true,
+          "type": "cds.String",
+          "length": 70
+        },
+        "CHAR_VALUE": {
+          "@title": "Characteristic Value ",
+          "key": true,
+          "type": "cds.String",
+          "length": 70
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
         },
         "VERSION": {
           "@title": "Version",
@@ -21116,6 +21443,7 @@
           "type": "cds.String",
           "length": 32
         },
+<<<<<<< HEAD
         "SUCCESS": {
           "@title": "Count",
           "type": "cds.Integer"
@@ -21123,6 +21451,21 @@
         "SUCCESS_RATE": {
           "@title": "Sucess Rate",
           "type": "cds.Double"
+=======
+        "OPT_PERCENT": {
+          "@title": "Option Percent",
+          "key": true,
+          "type": "cds.Decimal",
+          "precision": 5,
+          "scale": 2
+        },
+        "OPT_QTY": {
+          "@title": "Option Quantity",
+          "key": true,
+          "type": "cds.Decimal",
+          "precision": 13,
+          "scale": 3
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
         }
       }
     },
@@ -22456,7 +22799,11 @@
         }
       },
       "elements": {
+<<<<<<< HEAD
         "WEEK_DATE": {
+=======
+        "CAL_DATE": {
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
           "@title": "CAL_DATE",
           "key": true,
           "type": "cds.Date"
@@ -22754,12 +23101,15 @@
           "type": "cds.String",
           "length": 10
         },
+<<<<<<< HEAD
         "CHAR_DESC": {
           "@title": "CHAR_NUM",
           "key": true,
           "type": "cds.String",
           "length": 150
         },
+=======
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
         "CHAR_NAME": {
           "@title": "CHAR_NAME",
           "key": true,
@@ -23555,7 +23905,11 @@
       },
       "elements": {
         "PRODUCT_ID": {
+<<<<<<< HEAD
           "@title": "New Product",
+=======
+          "@title": "Configurable Product",
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
           "key": true,
           "type": "cds.String",
           "length": 40
@@ -23694,7 +24048,11 @@
       "projection": {
         "from": {
           "ref": [
+<<<<<<< HEAD
             "V_GETIBPCHARPS"
+=======
+            "V_GETVARCHARPS"
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
           ]
         }
       },
@@ -24890,6 +25248,7 @@
         "type": "cds.String"
       }
     },
+<<<<<<< HEAD
     "CatalogService.mainSOTemp": {
       "kind": "function",
       "params": {
@@ -24906,6 +25265,8 @@
         "type": "cds.String"
       }
     },
+=======
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
     "CatalogService.Method_Types": {
       "kind": "entity",
       "@readonly": true,
@@ -25920,6 +26281,7 @@
         "type": "cds.String"
       }
     },
+<<<<<<< HEAD
     "CatalogService.createVariant": {
       "kind": "function",
       "params": {
@@ -25934,6 +26296,8 @@
         "type": "cds.String"
       }
     },
+=======
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
     "CatalogService.getCriticalComp": {
       "kind": "entity",
       "projection": {
@@ -26174,6 +26538,7 @@
         }
       }
     },
+<<<<<<< HEAD
     "CatalogService.getUniqueChars": {
       "kind": "function",
       "params": {
@@ -26195,6 +26560,8 @@
         }
       }
     },
+=======
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
     "CatalogService.getUserInfo": {
       "kind": "function",
       "@requires": "authenticated-user",
@@ -26367,6 +26734,21 @@
         "type": "cds.String"
       }
     },
+<<<<<<< HEAD
+=======
+    "IBPImportSrv.exportIBPLocProd_fn": {
+      "kind": "function",
+      "params": {
+        "LOCATION_ID": {
+          "type": "cds.String",
+          "length": 4
+        }
+      },
+      "returns": {
+        "type": "cds.String"
+      }
+    },
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
     "IBPImportSrv.exportRestrDetails_fn": {
       "kind": "function",
       "params": {
@@ -26469,6 +26851,7 @@
         }
       }
     },
+<<<<<<< HEAD
     "IBPImportSrv.exportActCompDemandfn": {
       "kind": "function",
       "params": {
@@ -26489,6 +26872,8 @@
         "type": "cds.String"
       }
     },
+=======
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
     "IBPImportSrv.exportRestrReq": {
       "kind": "action",
       "params": {
@@ -26513,6 +26898,7 @@
         }
       }
     },
+<<<<<<< HEAD
     "IBPImportSrv.exportIBPSalesTrans_fn": {
       "kind": "function",
       "params": {
@@ -26529,6 +26915,8 @@
         "type": "cds.String"
       }
     },
+=======
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
     "IBPImportSrv.generateFDemandQty": {
       "kind": "action",
       "params": {
@@ -26537,6 +26925,7 @@
         }
       }
     },
+<<<<<<< HEAD
     "IBPImportSrv.generateFDemandQtyfn": {
       "kind": "function",
       "params": {
@@ -26553,6 +26942,8 @@
         "type": "cds.String"
       }
     },
+=======
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
     "IBPImportSrv.generateFCharPlan": {
       "kind": "action",
       "params": {
@@ -26580,12 +26971,15 @@
         }
       }
     },
+<<<<<<< HEAD
     "IBPImportSrv.generateMarketAuthfn": {
       "kind": "function",
       "returns": {
         "type": "cds.String"
       }
     },
+=======
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
     "IBPImportSrv.importibpversce": {
       "kind": "function",
       "returns": {

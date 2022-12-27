@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "i18n/i18n.properties": 1665479929613,
   "custom/ListReportExtController.js": 1668768211732,
   "manifest.json": 1672065127101,
@@ -8,4 +9,15 @@
   "Component-dbg.js": 1665479929613,
   "custom/ListReportExtController-dbg.js": 1668768211732,
   "index.html": 1668768211732
+=======
+  "manifest.json": 1671200645596,
+  "Component.js": 1671100323758,
+  "custom/ListReportExtController.js": 1671100323758,
+  "i18n/i18n.properties": 1671100323758,
+  "manifest-bundle.zip": 1671200645612,
+  "Component-preload.js": 1671200645798,
+  "Component-dbg.js": 1671100323758,
+  "custom/ListReportExtController-dbg.js": 1671100323758,
+  "index.html": 1671100323758
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
 }

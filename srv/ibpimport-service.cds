@@ -23,7 +23,6 @@ service IBPImportSrv @(impl : './lib/ibpimport-service.js') {
     // actions for testing from CF/ jobscheduler 
      // Outbound to IBP
     action exportIBPMasterProd(LOCATION_ID : String(4));
-    // function exportIBPMasterProd(LOCATION_ID : String(4)) returns String;
     action exportIBPLocation();
     action exportIBPCustomer();
     action exportIBPClass(CLASS_NUM: String(18));  
@@ -57,13 +56,4 @@ service IBPImportSrv @(impl : './lib/ibpimport-service.js') {
 }
 @protocol : 'rest'
 service IbpImportRest {
-    // entity getIBPDemdext as projection on IBPImportSrv.SBPVCP{
-    //                                     LOCID, 
-    //                                     PRDID,
-    //                                     VERSIONID,
-    //                                     SCENARIOID,
-    //                                     PERIODID0_TSTAMP, 
-    //                                     PLANNEDINDEPENDENTREQ
-    //                                 } 
-    //                                 where PLANNEDINDEPENDENTREQ  <> '0' or PLANNEDINDEPENDENTREQ  <> 0 ;
 }

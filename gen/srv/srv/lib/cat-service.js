@@ -21,6 +21,7 @@ const obibpfucntions = new IBPFunc();
 
 module.exports = (srv) => {
 
+<<<<<<< HEAD
     // const { SBPVCP } = srv.entities;
     // srv.on('READ', SBPVCP, request => {
     //     try {
@@ -30,6 +31,8 @@ module.exports = (srv) => {
     //         console.log(err);
     //     }
     // });
+=======
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
     // using req.user approach (user attribute - of class cds.User - from the request object)
     srv.on('userInfo', async (req) => {
 
@@ -83,6 +86,10 @@ module.exports = (srv) => {
     srv.after('READ', 'getLocation', async (data, req) => {
         let aFilteredResults = [];
         vUser = req.user.id;
+<<<<<<< HEAD
+=======
+        
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
         const li_roleparam = await cds.run(
             `
             SELECT * FROM "CP_USER_AUTHOBJ"
@@ -97,6 +104,7 @@ module.exports = (srv) => {
                     return f.PARAMETER === el.LOCATION_ID && f.AUTH_GROUP === el.AUTH_GROUP;
                 });
             });
+<<<<<<< HEAD
         }
         if (aFilteredResults.length > 0) {
             req.results = aFilteredResults;
@@ -105,6 +113,16 @@ module.exports = (srv) => {
     /**     */
 
 
+=======
+
+        }
+
+        if (aFilteredResults.length > 0) {
+            req.results = aFilteredResults;
+        }
+
+    });
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
 
     // Service for weekly component requirements- assembly
     srv.on("getCompReqFWeekly", async (req) => {
@@ -127,6 +145,7 @@ module.exports = (srv) => {
 
                 liCompQty = await cds.run(
                     `
+<<<<<<< HEAD
                     SELECT * FROM "V_ASSEMBLYREQ"
                     WHERE "LOCATION_ID" = '` +
                             req.data.LOCATION_ID +
@@ -152,15 +171,47 @@ module.exports = (srv) => {
                             "COMPONENT" ASC,
                             "WEEK_DATE" ASC`
                         );
+=======
+            SELECT * FROM "V_ASMCOMPQTY_CONSD"
+            WHERE "LOCATION_ID" = '` +
+                    req.data.LOCATION_ID +
+                    `'
+                 AND "PRODUCT_ID" = '` +
+                    req.data.PRODUCT_ID +
+                    `' AND "VERSION" = '` +
+                    req.data.VERSION +
+                    `' AND "SCENARIO" = '` +
+                    req.data.SCENARIO +
+                    `' AND ( "CAL_DATE" <= '` +
+                    vDateTo +
+                    `' AND "CAL_DATE" >= '` +
+                    vDateFrom +
+                    `') AND "MODEL_VERSION" = '` +
+                    req.data.MODEL_VERSION +
+                    `'
+                 ORDER BY 
+                      "LOCATION_ID" ASC, 
+                      "PRODUCT_ID" ASC,
+                      "VERSION" ASC,
+                      "SCENARIO" ASC,
+                      "COMPONENT" ASC,
+                      "CAL_DATE" ASC`
+                );
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
                 liComp = await cds.run(
                     `
           SELECT DISTINCT "LOCATION_ID",
                           "PRODUCT_ID",
                           "VERSION",
                           "SCENARIO",
+<<<<<<< HEAD
                           "ITEM_NUM",
                           "COMPONENT"
           FROM "V_ASSEMBLYREQ"
+=======
+                          "COMPONENT"
+          FROM "V_ASMCOMPQTY_CONSD"
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
           WHERE "LOCATION_ID" = '` +
                     req.data.LOCATION_ID +
                     `' AND "PRODUCT_ID" = '` +
@@ -169,10 +220,17 @@ module.exports = (srv) => {
                     req.data.VERSION +
                     `' AND "SCENARIO" = '` +
                     req.data.SCENARIO +
+<<<<<<< HEAD
                     `' AND ( "WEEK_DATE" <= '` +
                     vDateTo +
                     `'
                 AND "WEEK_DATE" >= '` +
+=======
+                    `' AND ( "CAL_DATE" <= '` +
+                    vDateTo +
+                    `'
+                AND "CAL_DATE" >= '` +
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
                     vDateFrom +
                     `') AND "MODEL_VERSION" = '` +
                     req.data.MODEL_VERSION +
@@ -335,7 +393,11 @@ module.exports = (srv) => {
                     ) {
                         lsCompWeekly.STRUC_NODE = liCompQty[vCompIndex].STRUC_NODE;
                         lsCompWeekly[columnname + vWeekIndex] =
+<<<<<<< HEAD
                             liCompQty[vCompIndex].COMP_QTY;
+=======
+                            liCompQty[vCompIndex].COMPCIR_QTY;
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
                         break;
                     }
                 }
@@ -361,11 +423,16 @@ module.exports = (srv) => {
             vComp,
             lsDates = {};
         let columnname = "WEEK";
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
         let liComp = [];
         let liCompQty;
         switch (await GenFunctions.getParameterValue(req.data.LOCATION_ID, 5)) {
             case 'M1':
+<<<<<<< HEAD
                 liCompQty = await cds.run(
                     `
             SELECT * FROM "V_ASMCOMPQTY_CONSD"  
@@ -385,6 +452,27 @@ module.exports = (srv) => {
                     `') AND "MODEL_VERSION" = '` +
                     req.data.MODEL_VERSION +
                     `'
+=======
+       liCompQty = await cds.run(
+            `
+            SELECT * FROM "V_ASMCOMP_REQ"  
+            WHERE "LOCATION_ID" = '` +
+            req.data.LOCATION_ID +
+            `'
+                 AND "PRODUCT_ID" = '` +
+            req.data.PRODUCT_ID +
+            `' AND "VERSION" = '` +
+            req.data.VERSION +
+            `' AND "SCENARIO" = '` +
+            req.data.SCENARIO +
+            `' AND ( "CAL_DATE" <= '` +
+            vDateTo +
+            `' AND "CAL_DATE" >= '` +
+            vDateFrom +
+            `') AND "MODEL_VERSION" = '` +
+            req.data.MODEL_VERSION +
+            `'
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
                  ORDER BY 
                       "LOCATION_ID" ASC, 
                       "PRODUCT_ID" ASC,
@@ -392,14 +480,21 @@ module.exports = (srv) => {
                       "SCENARIO" ASC,
                       "COMPONENT" ASC,
                       "CAL_DATE" ASC`
+<<<<<<< HEAD
                 );
                 liComp = await cds.run(
                     `
+=======
+        );
+        liComp = await cds.run(
+            `
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
           SELECT DISTINCT "LOCATION_ID",
                           "PRODUCT_ID",
                           "VERSION",
                           "SCENARIO",
                           "COMPONENT"
+<<<<<<< HEAD
           FROM "V_ASMCOMPQTY_CONSD"
           WHERE "LOCATION_ID" = '` +
                     req.data.LOCATION_ID +
@@ -417,12 +512,32 @@ module.exports = (srv) => {
                     `') AND "MODEL_VERSION" = '` +
                     req.data.MODEL_VERSION +
                     `'
+=======
+          FROM "V_ASMCOMP_REQ"
+          WHERE "LOCATION_ID" = '` +
+            req.data.LOCATION_ID +
+            `' AND "PRODUCT_ID" = '` +
+            req.data.PRODUCT_ID +
+            `' AND "VERSION" = '` +
+            req.data.VERSION +
+            `' AND "SCENARIO" = '` +
+            req.data.SCENARIO +
+            `' AND ( "CAL_DATE" <= '` +
+            vDateTo +
+            `'
+                AND "CAL_DATE" >= '` +
+            vDateFrom +
+            `') AND "MODEL_VERSION" = '` +
+            req.data.MODEL_VERSION +
+            `'
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
                ORDER BY 
                     "LOCATION_ID" ASC, 
                     "PRODUCT_ID" ASC,
                     "VERSION" ASC,
                     "SCENARIO" ASC,
                     "COMPONENT" ASC`
+<<<<<<< HEAD
                 );
                 break;
             case 'M2':
@@ -445,6 +560,30 @@ module.exports = (srv) => {
                     `') AND "MODEL_VERSION" = '` +
                     req.data.MODEL_VERSION +
                     `'
+=======
+        );
+        break;
+        case 'M2':
+            liCompQty = await cds.run(
+                `
+                SELECT * FROM "V_COMPASMREQM2"  
+                WHERE "LOCATION_ID" = '` +
+                req.data.LOCATION_ID +
+                `'
+                     AND "PRODUCT_ID" = '` +
+                req.data.PRODUCT_ID +
+                `' AND "VERSION" = '` +
+                req.data.VERSION +
+                `' AND "SCENARIO" = '` +
+                req.data.SCENARIO +
+                `' AND ( "CAL_DATE" <= '` +
+                vDateTo +
+                `' AND "CAL_DATE" >= '` +
+                vDateFrom +
+                `') AND "MODEL_VERSION" = '` +
+                req.data.MODEL_VERSION +
+                `'
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
                      ORDER BY 
                           "LOCATION_ID" ASC, 
                           "PRODUCT_ID" ASC,
@@ -452,9 +591,15 @@ module.exports = (srv) => {
                           "SCENARIO" ASC,
                           "COMPONENT" ASC,
                           "CAL_DATE" ASC`
+<<<<<<< HEAD
                 );
                 liComp = await cds.run(
                     `
+=======
+            );
+            liComp = await cds.run(
+                `
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
               SELECT DISTINCT "LOCATION_ID",
                               "PRODUCT_ID",
                               "VERSION",
@@ -462,6 +607,7 @@ module.exports = (srv) => {
                               "COMPONENT"
               FROM "V_COMPASMREQM2"
               WHERE "LOCATION_ID" = '` +
+<<<<<<< HEAD
                     req.data.LOCATION_ID +
                     `' AND "PRODUCT_ID" = '` +
                     req.data.PRODUCT_ID +
@@ -477,14 +623,36 @@ module.exports = (srv) => {
                     `') AND "MODEL_VERSION" = '` +
                     req.data.MODEL_VERSION +
                     `'
+=======
+                req.data.LOCATION_ID +
+                `' AND "PRODUCT_ID" = '` +
+                req.data.PRODUCT_ID +
+                `' AND "VERSION" = '` +
+                req.data.VERSION +
+                `' AND "SCENARIO" = '` +
+                req.data.SCENARIO +
+                `' AND ( "CAL_DATE" <= '` +
+                vDateTo +
+                `'
+                    AND "CAL_DATE" >= '` +
+                vDateFrom +
+                `') AND "MODEL_VERSION" = '` +
+                req.data.MODEL_VERSION +
+                `'
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
                    ORDER BY 
                         "LOCATION_ID" ASC, 
                         "PRODUCT_ID" ASC,
                         "VERSION" ASC,
                         "SCENARIO" ASC,
                         "COMPONENT" ASC`
+<<<<<<< HEAD
                 );
                 break;
+=======
+            );
+            break;
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
         }
         var vDateSeries = vDateFrom;
         lsDates.CAL_DATE = GenFunctions.getNextMondayCmp(vDateSeries);
@@ -1176,10 +1344,15 @@ module.exports = (srv) => {
         //         await obgenTimeseriesM2.genTimeseries(req.data, req, Flag);
         //         break;
         // }
+<<<<<<< HEAD
                 const obgenTimeseries = new GenTimeseries();
                 await obgenTimeseries.genTimeseries(req.data, req, Flag);
         // const obgenTimeseries_rt = new GenTimeseriesRT();
         // await obgenTimeseries_rt.genTimeseries_rt(req.data, req);
+=======
+        const obgenTimeseries_rt = new GenTimeseriesRT();
+        await obgenTimeseries_rt.genTimeseries_rt(req.data, req);
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
 
     });
     srv.on("generate_timeseriesF", async (req) => {
@@ -1230,16 +1403,24 @@ module.exports = (srv) => {
             values.push({ id, createtAt, message, lilocProd });
             const obgenSOFunctions = new SOFunctions();
             await obgenSOFunctions.genUniqueID(req.data, req, Flag);
+<<<<<<< HEAD
         }        
         res.statusCode = 202;
         res.send({ values });
+=======
+        }
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
     });
     // Generate Unique ID
     srv.on("gen_UniqueID", async (req) => {
         let Flag = '';
         const obgenSOFunctions = new SOFunctions();
         await obgenSOFunctions.genUniqueID(req.data, req, Flag);
+<<<<<<< HEAD
         return "success";
+=======
+        return "success";     
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
 
     });
     // Generate Fully Configured Demand
@@ -1286,8 +1467,13 @@ module.exports = (srv) => {
         // for (let i = 0; i < lilocProd.length; i++) {
         //     lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
         //     lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
+<<<<<<< HEAD
         const obgenTimeseriesM2 = new GenTimeseriesM2();
         await obgenTimeseriesM2.genPrediction(req.data, req, '');
+=======
+            const obgenTimeseriesM2 = new GenTimeseriesM2();
+            await obgenTimeseriesM2.genPrediction(req.data, req, '');
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
         // }
     });
 
@@ -1457,7 +1643,11 @@ module.exports = (srv) => {
                 // lsresults.REF_PRODID = liProdChar[i].REF_PRODID;
                 if (req.data.FLAG === "E" && i === 0) {
                     try {
+<<<<<<< HEAD
                         await cds.delete("CP_NEWPROD_CHAR", lsresults);
+=======
+                        await cds.F("CP_NEWPROD_CHAR", lsresults);
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
                     } catch (e) {
                         //DONOTHING
                     }
@@ -1642,10 +1832,15 @@ module.exports = (srv) => {
         let lsresults = {};
         let liProdChar = {};
         var responseMessage;
+<<<<<<< HEAD
         let lilength;
 
         let li_varcharps;
         if(req.data.CHAR_TYPE === "P"){
+=======
+
+        let li_varcharps
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
         li_varcharps = await cds.run(
             `SELECT *
             FROM "CP_VARCHAR_PS"
@@ -1655,6 +1850,7 @@ module.exports = (srv) => {
             AND "PRODUCT_ID" = '` +
             req.data.PRODUCT_ID +
             `'
+<<<<<<< HEAD
             AND "CHAR_TYPE" = '` +
             req.data.CHAR_TYPE + 
             `'
@@ -1674,17 +1870,30 @@ module.exports = (srv) => {
             );
         }
 
+=======
+            AND "SEQUENCE" > `+
+            req.data.SEQUENCE + `
+            ORDER BY SEQUENCE`
+        );
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
         if (req.data.FLAG === "C") {
             lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
             lsresults.LOCATION_ID = req.data.LOCATION_ID;
             lsresults.CHAR_NUM = req.data.CHAR_NUM;
             lsresults.CHAR_TYPE = req.data.CHAR_TYPE;
             if (req.data.CHAR_TYPE === "P") {
+<<<<<<< HEAD
                 lsresults.SEQUENCE = li_varcharps.length + 1;
                 lilength = li_varcharps.length + 1;
             }
             else {
                 lsresults.SEQUENCE = li_varcharps.length + 1;
+=======
+                lsresults.SEQUENCE = 0;
+            }
+            else {
+                lsresults.SEQUENCE = req.data.SEQUENCE;
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
             }
             liresults.push(lsresults);
 
@@ -1704,6 +1913,7 @@ module.exports = (srv) => {
                     responseMessage = " Creation failed";
                 }
             }
+<<<<<<< HEAD
 
 
             // if (lsresults.CHAR_TYPE !== "S") {
@@ -1745,6 +1955,31 @@ module.exports = (srv) => {
                     if (liPrimary[i].SEQUENCE > req.data.SEQUENCE) {
                         lsresults.SEQUENCE = liPrimary[i].SEQUENCE - 1;
                         
+=======
+            // }
+            if (lsresults.CHAR_TYPE !== "S") {
+
+                lsresults = {};
+                liresults = [];
+                li_varcharps = await cds.run(
+                    `SELECT *
+                    FROM "CP_VARCHAR_PS"
+                    WHERE "LOCATION_ID" = '` +
+                    req.data.LOCATION_ID +
+                    `'
+                    AND "PRODUCT_ID" = '` +
+                    req.data.PRODUCT_ID +
+                    `'
+                    ORDER BY SEQUENCE`
+                );
+                for (let i = 0; i < li_varcharps.length; i++) {
+                    lsresults.PRODUCT_ID = li_varcharps[i].PRODUCT_ID;
+                    lsresults.LOCATION_ID = li_varcharps[i].LOCATION_ID;
+                    lsresults.CHAR_NUM = li_varcharps[i].CHAR_NUM;
+                    lsresults.CHAR_TYPE = 'S';
+                    if (li_varcharps[i].SEQUENCE > req.data.SEQUENCE) {
+                        lsresults.SEQUENCE = li_varcharps[i].SEQUENCE - 1;
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
                         await UPDATE`CP_VARCHAR_PS`
                             .with({
                                 CHAR_TYPE: lsresults.CHAR_TYPE,
@@ -1756,6 +1991,7 @@ module.exports = (srv) => {
 
                         liresults.push(lsresults);
                     }
+<<<<<<< HEAD
                     finalP = lsresults.SEQUENCE;
                     lsresults = {};
                 }
@@ -1797,6 +2033,21 @@ module.exports = (srv) => {
                 //     // }
                 // }
             // }
+=======
+                    lsresults = {};
+                }
+                if (liresults.length > 0) {
+                    // try {
+                    //     await cds.run(INSERT.into("CP_VARCHAR_PS").entries(liresults));
+                    //     responseMessage = " Creation/Updation successful";
+                    // } catch (e) {
+                    //     //DONOTHING
+                    //     responseMessage = " Creation failed";
+                    //     // createResults.push(responseMessage);
+                    // }
+                }
+            }
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
         }
         else if (req.data.FLAG === "E") {
 
@@ -1828,7 +2079,10 @@ module.exports = (srv) => {
         return responseMessage;
     });
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
     // Change to Primary in IBP char.
     srv.on("changeToPrimaryIBP", async (req) => {
         let { genvarcharps } = srv.entities;
@@ -1949,8 +2203,13 @@ module.exports = (srv) => {
         lsresults = {};
         return responseMessage;
     });
+<<<<<<< HEAD
     // Maintain seconf
     srv.on("getPrimaryCharIBP", async (req) => {
+=======
+     // Maintain seconf
+     srv.on("getPrimaryCharIBP", async (req) => {
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
         let liresults = [];
         let lsresults = {};
         let vCount = 1;
@@ -1988,8 +2247,13 @@ module.exports = (srv) => {
                 lsresults.PRODUCT_ID = li_locprodclass[i].PRODUCT_ID;
                 lsresults.LOCATION_ID = li_locprodclass[i].LOCATION_ID;
                 lsresults.CHAR_NUM = li_locprodclass[i].CHAR_NUM;
+<<<<<<< HEAD
                 lsresults.CHAR_TYPE = 'S';
                 lsresults.SEQUENCE = 0;
+=======
+                lsresults.CHAR_TYPE = 'P';
+                lsresults.SEQUENCE = vCount;
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
                 if (li_ibpcharps.length > 0) {
                     for (j = 0; j < li_ibpcharps.length; j++) {
                         if (li_ibpcharps[j].CHAR_NUM === lsresults.CHAR_NUM) {
@@ -2029,7 +2293,11 @@ module.exports = (srv) => {
             );
             return li_ibpcharps;
         }
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
 
     });
     //Change Active status
@@ -2213,6 +2481,7 @@ module.exports = (srv) => {
                 responseMessage = "Update Failed"
             }
         }
+<<<<<<< HEAD
         // else if (req.data.FLAG === 'C') {//Copy
         //     vID = await objCatFn.maintainUniqueHeader(req.data.FLAG, liuniquechar[0]);
         //     if (vID !== ' ') {
@@ -2256,6 +2525,9 @@ module.exports = (srv) => {
         //     }
         // }
 
+=======
+       
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
         return responseMessage;
     });
     // Maintain partial configurations for new product
@@ -2311,6 +2583,7 @@ module.exports = (srv) => {
     });
     // Retriction rule
     // Maintain partial configurations for new product
+<<<<<<< HEAD
     srv.on("maintainRestrDet", async (req) => {
         let liresults = [];
         let lsresults = {};
@@ -2370,10 +2643,72 @@ module.exports = (srv) => {
         lsresults = {};
         return responseMessage;
     });
+=======
+    // srv.on("maintainRestrDet", async (req) => {
+    //     let liresults = [];
+    //     let lsresults = {};
+    //     let liRtrChar = {};
+    //     var responseMessage;
+    //     liRtrChar = JSON.parse(req.data.RTRCHAR);
+    //     if (req.data.FLAG === "C" || req.data.FLAG === "E") {
+    //         for (var i = 0; i < liRtrChar.length; i++) {
+    //             lsresults.RESTRICTION = liRtrChar[i].RESTRICTION;
+    //             // lsresults.RTR_COUNTER = liRtrChar[i].RTR_COUNTER;
+    //             lsresults.CLASS_NUM = liRtrChar[i].CLASS_NUM;
+    //             lsresults.CHAR_NUM = liRtrChar[i].CHAR_NUM;
+    //             lsresults.CHAR_COUNTER = liRtrChar[i].CHAR_COUNTER;
+    //             lsresults.CHARVAL_NUM = liRtrChar[i].CHARVAL_NUM;
+    //             // if (req.data.FLAG === "E" && i === 0) {
+    //             if (req.data.FLAG === "E") {
+    //                 try {
+    //                     await cds.delete("CP_RESTRICT_DETAILS", lsresults);
+    //                 } catch (e) {
+    //                     //DONOTHING
+    //                 }
+    //             }
+    //             lsresults.OD_CONDITION = liRtrChar[i].OD_CONDITION;
+    //             lsresults.ROW_ID = liRtrChar[i].ROW_ID;
+    //             liresults.push(lsresults);
+    //             lsresults = {};
+    //         }
+    //         if (liresults.length > 0) {
+    //             try {
+    //                 await cds.run(INSERT.into("CP_RESTRICT_DETAILS").entries(liresults));
+    //                 responseMessage = " Creation/Updation successful";
+    //             } catch (e) {
+    //                 //DONOTHING
+    //                 responseMessage = " Creation failed";
+    //                 // createResults.push(responseMessage);
+    //             }
+    //         }
+    //     }
+    //     else if (req.data.FLAG === "D") {
+    //         for (var i = 0; i < liRtrChar.length; i++) {
+    //             lsresults.RESTRICTION = liRtrChar[i].RESTRICTION;
+    //             // lsresults.RTR_COUNTER = liRtrChar[i].RTR_COUNTER;
+    //             lsresults.CLASS_NUM = liRtrChar[i].CLASS_NUM;
+    //             lsresults.CHAR_NUM = liRtrChar[i].CHAR_NUM;
+    //             lsresults.CHAR_COUNTER = liRtrChar[i].CHAR_COUNTER;
+    //             lsresults.CHARVAL_NUM = liRtrChar[i].CHARVAL_NUM;
+    //             // if (req.data.FLAG === "E" && i === 0) {
+    //             try {
+    //                 await cds.delete("CP_RESTRICT_DETAILS", lsresults);
+    //                 break;
+    //             } catch (e) {
+    //                 //DONOTHING
+    //             }
+    //             // }
+    //         }
+    //     }
+    //     lsresults = {};
+    //     return responseMessage;
+    // });
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
 
     srv.on("trigrMAWeek", async (req) => {
         let liresults = [];
         console.log("Hello");
+<<<<<<< HEAD
         // let lsresults = {};
         // lsresults.LOCATION_ID = req.data.LOCATION_ID;
         // lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
@@ -2390,6 +2725,8 @@ module.exports = (srv) => {
         //         // createResults.push(responseMessage);
         //     }
         // }
+=======
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
     });
     srv.on("maintainSeedOrder", async (req) => {
         let liresults = [];
@@ -2475,8 +2812,11 @@ module.exports = (srv) => {
         else if (req.data.FLAG === "E") {
             // for (var i = 0; i < liRtrChar.length; i++) {
             lsresults.SEED_ORDER = liSeeddata[0].SEED_ORDER;
+<<<<<<< HEAD
             lsresults.LOCATION_ID = liSeeddata[0].LOCATION_ID;
             lsresults.PRODUCT_ID = liSeeddata[0].PRODUCT_ID;
+=======
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
             lsresults.ORD_QTY = parseFloat(liSeeddata[0].ORD_QTY);
             lsresults.MAT_AVAILDATE = liSeeddata[0].MAT_AVAILDATE;
             try {
@@ -2486,6 +2826,7 @@ module.exports = (srv) => {
                         MAT_AVAILDATE: lsresults.MAT_AVAILDATE
                     })
                     .where(`SEED_ORDER = '${lsresults.SEED_ORDER}'`)
+<<<<<<< HEAD
 
                 await UPDATE`CP_SALESH`
                     .with({
@@ -2496,6 +2837,9 @@ module.exports = (srv) => {
                        AND SALESDOC_ITEM = '10'`)
                 
                     responseMessage = lsresults.SEED_ORDER + " Update is successfull";
+=======
+                responseMessage = lsresults.SEED_ORDER + " Update is successfull";
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
             } catch (e) {
                 responseMessage = "Update Failed";
                 //DONOTHING
@@ -2517,6 +2861,7 @@ module.exports = (srv) => {
         lsresults = {};
         return responseMessage;
     });
+<<<<<<< HEAD
     srv.on("mainSOTemp", async (req) => {
         const li_sodata = await cds.run(
             `SELECT *
@@ -2530,6 +2875,8 @@ module.exports = (srv) => {
               
         }
     });
+=======
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
     srv.on("getAllProd", async (req) => {
         let lsprod = {};
         let liprod = [];
@@ -2692,9 +3039,12 @@ module.exports = (srv) => {
             lsDates = {};
         let columnname = "WEEK";
         let aCIR_ID = [];
+<<<<<<< HEAD
         let oCIR_ID = {};
 
 
+=======
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
         const liCIRQty = oCIRData.liCIRQty;
         const liUniqueId = oCIRData.liUniqueId;
 
@@ -2727,7 +3077,10 @@ module.exports = (srv) => {
             lsCIRWeekly.UNIQUE_DESC = liUniqueId[j].UNIQUE_DESC;
             lsCIRWeekly.LOCATION_ID = liUniqueId[j].LOCATION_ID;
             lsCIRWeekly.PRODUCT_ID = liUniqueId[j].PRODUCT_ID;
+<<<<<<< HEAD
             lsCIRWeekly.PROD_DESC = liUniqueId[j].PROD_DESC;
+=======
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
             lsCIRWeekly.MODEL_VERSION = req.data.MODEL_VERSION;
             lsCIRWeekly.VERSION = req.data.VERSION;
             lsCIRWeekly.SCENARIO = req.data.SCENARIO;
@@ -2735,7 +3088,10 @@ module.exports = (srv) => {
 
             for (let i = 0; i < liDates.length; i++) {
                 vWeekIndex = vWeekIndex + 1;
+<<<<<<< HEAD
                 oCIR_ID = {};
+=======
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
                 for (vCIRIndex = 0; vCIRIndex < liCIRQty.length; vCIRIndex++) {
                     lsCIRWeekly[columnname + vWeekIndex] = 0;
                     if (
@@ -2745,11 +3101,15 @@ module.exports = (srv) => {
                         lsCIRWeekly[columnname + vWeekIndex] =
                             liCIRQty[vCIRIndex].CIR_QTY;
 
+<<<<<<< HEAD
                         oCIR_ID.WEEK_DATE = liDates[i].WEEK_DATE;
                         oCIR_ID.CIR_ID = liCIRQty[vCIRIndex].CIR_ID;
                         aCIR_ID.push(oCIR_ID);
 
                         // aCIR_ID.push(liCIRQty[vCIRIndex].CIR_ID);
+=======
+                        aCIR_ID.push(liCIRQty[vCIRIndex].CIR_ID);
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
 
                         break;
                     }
@@ -2771,6 +3131,7 @@ module.exports = (srv) => {
         let liUniqueItems = [];
         let lsUniqueItems = {};
         let vUniqueId = req.data.UNIQUE_ID;
+<<<<<<< HEAD
         // let liDates = [],
         //     vWeekIndex,
         //     vCompIndex,
@@ -2780,6 +3141,8 @@ module.exports = (srv) => {
         // let columnname = "WEEK";
 
 
+=======
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
 
         const ltUniqueItems = await cds.run(
             `
@@ -3113,6 +3476,7 @@ module.exports = (srv) => {
                 // aCIRQuantities.push(oCIRQtys);
                 oCIRQtys = {};
             }
+<<<<<<< HEAD
             // if (aCIRQuantities.length > 0 && bFlag === false) {
             //     try {
             //         // await cds.run(INSERT.into('CP_CIR_GENERATED').entries(aCIRQuantities));
@@ -3121,6 +3485,8 @@ module.exports = (srv) => {
             //         responseMessage = " Creation failed";
             //     }
             // }
+=======
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
         }
         oCIRQtys = {};
         return responseMessage;
@@ -3128,6 +3494,7 @@ module.exports = (srv) => {
 
     // EOI - Deepa
 
+<<<<<<< HEAD
     ///////////////////////////////////////////////////////////
     srv.on("generateMarketAuthfn", async (request) => {
         //     var flag, lMessage = '';
@@ -3156,6 +3523,10 @@ module.exports = (srv) => {
         //     values.push({ id, createtAt, message, lilocProd });
         //     res.statusCode = 202;
         //     res.send({ values });
+=======
+    srv.on("generateMarketAuthfn", async (request) => {
+        
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
         let flag = await obibpfucntions.importFutureDemandcharPlan(request);
 
         // if (flag === 'S') {
@@ -3216,7 +3587,10 @@ module.exports = (srv) => {
         // }
         // GenFunctions.jobSchMessage('X', lMessage, request);
     });
+<<<<<<< HEAD
     /////////////////////////////////////////////////////////////////
+=======
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
     //VC Planner Document Maintenance- Pradeep
     srv.on("moveData", async req => {
         let contentData = {};
@@ -3420,6 +3794,7 @@ module.exports = (srv) => {
     });
 
     //End of VC Planner Document Maintenance- Pradeep
+<<<<<<< HEAD
     //Start of variant creation-Pradeep
     srv.on("createVariant", async req => {
         let lsResults = {};
@@ -3458,6 +3833,8 @@ module.exports = (srv) => {
     });
     //End of variant creation -Pradeep
 
+=======
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
 
     // BOI Deepa
     srv.on('getCFAuthToken', async (res) => {
@@ -3501,9 +3878,15 @@ module.exports = (srv) => {
 
             })
             .catch(function (error) {
+<<<<<<< HEAD
                 console.log('Get Token - Error ', error);
                 ret_response = JSON.parse(error);
             });
+=======
+                console.log('Get Token - Error ', error); 
+                ret_response = JSON.parse(error);
+             });
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
 
         // console.log(ret_response);
         return ret_response;
@@ -3556,12 +3939,17 @@ module.exports = (srv) => {
 
     });
 
+<<<<<<< HEAD
     // Get Login User Id
+=======
+
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
     srv.on('getUserInfo', async (req) => {
         console.log("Login User", req.user.id);
         return req.user.id;
     });
 
+<<<<<<< HEAD
     // Get Unique Id Characteristics
     srv.on("getUniqueChars", async (req) => {
         const objCIR = new CIRService();
@@ -3671,6 +4059,9 @@ module.exports = (srv) => {
         return aUniqueCharRes;
 
     });
+=======
+
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
 
     // EOI Deepa
 };

@@ -28,9 +28,9 @@
 }
 
 .sapFDynamicPageTitleMain>.sapFDynamicPageTitleMainInner .sapFDynamicPageTitleMainHeading .sapFDynamicPageTitleMainHeadingInner .sapMTitle {
-
     font-size: 1.25rem;
     margin-top: 0.25rem;
+<<<<<<< HEAD
 
 }
 /* 
@@ -43,3 +43,6 @@
     overflow-x: hidden;
     overflow-y: hidden;
 }
+=======
+}
+>>>>>>> 84b7c307bf663cb87aee50219854b661ab655476

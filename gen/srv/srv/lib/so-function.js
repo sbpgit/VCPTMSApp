@@ -17,7 +17,11 @@ class SOFunctions {
     async genUniqueID(adata, req, Flag) {
 
         await GenF.logMessage(req, 'Started Sales Orders Processing');
+<<<<<<< HEAD
         await this.clearSalesH();
+=======
+
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
         await this.processUniqueID(adata.LOCATION_ID, adata.PRODUCT_ID, '');
         await this.genBaseMarketAuth(adata.LOCATION_ID, adata.PRODUCT_ID);
         await this.genPartialProd(adata.LOCATION_ID, adata.PRODUCT_ID);
@@ -669,6 +673,7 @@ class SOFunctions {
         //     console.log(e.message);
         // }
     }
+<<<<<<< HEAD
     
     /**
      * 
@@ -724,6 +729,8 @@ class SOFunctions {
 
       
     }
+=======
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
     /**
          * 
          * @param {Location} lLocation 
@@ -1103,6 +1110,7 @@ class SOFunctions {
         }
 
     }
+<<<<<<< HEAD
     // Factory location update for Mater data
     async genFactoryLoc() {
         // Get data from Master tables
@@ -1111,11 +1119,21 @@ class SOFunctions {
             .from('CP_LOCATION');
 
         const liFtLoc = await SELECT.columns(
+=======
+    async genFactoryLoc() {
+        const liLocation = await SELECT.columns(
+            "LOCATION_ID")
+            .from('CP_LOCATION');
+            const liFtLoc = await SELECT.columns(
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
                 "LOCATION_ID",
                 "PLAN_LOC",
                 "FACTORY_LOC")
                 .from('CP_FACTORY_SALESLOC');
+<<<<<<< HEAD
         // Insert master data which doesnot exist in Factory location table
+=======
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
         let vFlag = '';
         let liFactLoc = [];
         let lsFactLoc = {};
@@ -1157,9 +1175,12 @@ class SOFunctions {
             console.log("No records to update Factory-Locations");
         }
     }
+<<<<<<< HEAD
     async clearSalesH(){
         
     }
+=======
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
 }
 
 module.exports = SOFunctions;
