@@ -515,22 +515,11 @@ oCC1: null,
           array.push(details);
           // }
 
-<<<<<<< HEAD
           for (var k = 0; k < sProduct.length; k++) {
             details = {
               Field: Field2,
               FieldCenter: (k + 1).toString(),
               Value: sProduct[k].getText()
-=======
-          for (var i = 0; i < aSelectedItem.length; i++) {
-            if (aSelectedItem[i].getTitle() !== "All") {
-              sFilter = new sap.ui.model.Filter({
-                path: "REF_PRODID",
-                operator: sap.ui.model.FilterOperator.EQ,
-                value1: aSelectedItem[i].getTitle(),
-              });
-              oFilters.push(sFilter);
->>>>>>> c6a54f26ca4ce5031b5972d3f494fb37f8abb50c
             }
             array.push(details);
           }
