@@ -462,7 +462,7 @@ module.exports = cds.service.impl(async function () {
                 "VCCHAR": licir[i].CHAR_NUM,
                 "VCCHARVALUE": licir[i].CHARVAL_NUM,
                 "CUSTID": "NULL",
-                "CIRQTY": licir[i].CIRQTY.toString(),
+                "FORECASTORDERQTY": licir[i].CIRQTY.toString(),
                 "PERIODID4_TSTAMP": vWeekDate
             };
             oReq.cir.push(vCIR);
@@ -471,7 +471,7 @@ module.exports = cds.service.impl(async function () {
         let oEntry =
         {
             "Transactionid": vTransID,
-            "AggregationLevelFieldsString": "LOCID,PRDID,VCCLASS,VCCHAR,VCCHARVALUE,CUSTID,CIRQTY,PERIODID4_TSTAMP",
+            "AggregationLevelFieldsString": "LOCID,PRDID,VCCLASS,VCCHAR,VCCHARVALUE,CUSTID,FORECASTORDERQTY,PERIODID4_TSTAMP",
             "DoCommit": true,
             "NavSBPVCP": oReq.cir
         }
