@@ -1,3 +1,5 @@
+
+oCC1: null,
 sap.ui.define(
   [
     "cp/appf/cpsaleshconfig/controller/BaseController",
@@ -31,14 +33,18 @@ sap.ui.define(
        * Can be used to modify the View before it is displayed, to bind event handlers and do other one-time initialization.
        */
       onInit: function () {
+        var thiz=this;
         that = this;
+        that.oGModel = that.getOwnerComponent().getModel("oGModel");
         // Declaring JSON Models and size limits
         that.oListModel = new JSONModel();
         this.locModel = new JSONModel();
         this.prodModel = new JSONModel();
+        this.variantModel = new JSONModel();
         this.oListModel.setSizeLimit(5000);
         that.locModel.setSizeLimit(1000);
         that.prodModel.setSizeLimit(1000);
+        that.variantModel.setSizeLimit(5000);
 
         // Declaring value help dialogs
         this._oCore = sap.ui.getCore();
@@ -56,6 +62,43 @@ sap.ui.define(
           );
           this.getView().addDependent(this._valueHelpDialogProd);
         }
+        if (!this._nameFragment) {
+          this._nameFragment = sap.ui.xmlfragment(
+            "cp.appf.cpsaleshconfig.view.NameVariant",
+            this
+          );
+          this.getView().addDependent(this._nameFragment);
+        }
+        if (!this._variantFragment) {
+          this._variantFragment = sap.ui.xmlfragment(
+            "cp.appf.cpsaleshconfig.view.ShowVariants",
+            this
+          );
+          this.getView().addDependent(this._variantFragment);
+        }
+        if (!this._popOver) {
+          this._popOver = sap.ui.xmlfragment(
+            "cp.appf.cpsaleshconfig.view.VariantNames",
+            this
+          );
+          this.getView().addDependent(this._popOver);
+        }
+
+        //Variant Configuration
+      //   var oVM = this.getView().byId("Variants");
+			// var itemName = oVM.data("itemName"); // get item name
+			// oVM.setModel(new JSONModel()); // set model
+			// // this.fixVariant(oVM); // fix variant 
+			// var data = {
+			// 	SelectedModuleMain: "",
+			// 	SelectedSubModuleMain: ""
+			// };
+			// this.setFilterVariant(itemName, "*standard*", null, data, false, function (oCC) { // create item
+			// 	thiz.oCC1 = oCC;
+			// 	thiz.setVariantList(oCC, oVM); // set variant list
+			// });
+      //Variant Configuration
+
       },
 
       /**
@@ -88,6 +131,8 @@ sap.ui.define(
        * Getting Data Initially and binding to elements.
        */
       getData: function () {
+        var aData = [];
+
         this.getModel("BModel").read("/getLocation", {
           success: function (oData) {
             that.locModel.setData(oData);
@@ -98,6 +143,30 @@ sap.ui.define(
             MessageToast.show("error");
           },
         });
+        this.getModel("BModel").read("/getVariant", {
+          success: function (oData) {
+            that.oGModel.setProperty("/variantDetails", oData.results);
+            for (var i = 0; i < oData.results.length; i++) {
+              aData.push({
+                "VARIANTNAME": oData.results[i].VARIANTNAME,
+                "APPLICATION_NAME": oData.results[i].APPLICATION_NAME
+              });
+            }
+            var uniqueName = aData.filter((obj, pos, arr) => {
+              return (
+                arr.map((mapObj) => mapObj.VARIANTNAME).indexOf(obj.VARIANTNAME) == pos
+              );
+            });
+            that.variantModel.setData({ items: uniqueName });
+           that.byId("Variants").setModel(that.variantModel);
+            var IDlength = oData.results.length
+            that.oGModel.setProperty("/Id", oData.results[IDlength - 1].VARIANTID);
+          },
+          error: function (oData, error) {
+            MessageToast.show("error while loading variant details");
+          },
+        });
+
       },
 
       /**
@@ -143,6 +212,7 @@ sap.ui.define(
             that.oProdList.getBinding("items").filter([]);
           }
         }
+
       },
 
       /**
@@ -151,7 +221,7 @@ sap.ui.define(
        */
       handleSearch: function (oEvent) {
         var sQuery =
-            oEvent.getParameter("value") || oEvent.getParameter("newValue"),
+          oEvent.getParameter("value") || oEvent.getParameter("newValue"),
           sId = oEvent.getParameter("id"),
           oFilters = [];
         // Check if search filter is to be applied
@@ -184,6 +254,20 @@ sap.ui.define(
             );
           }
           that.oProdList.getBinding("items").filter(oFilters);
+        }
+        else if (sId.includes("var")) {
+          if (sQuery !== "") {
+            oFilters.push(
+              new Filter({
+                filters: [
+                  new Filter("VARIANTNAME", FilterOperator.Contains, sQuery),
+                  new Filter("APPLICATION_NAME", FilterOperator.Contains, sQuery),
+                ],
+                and: false,
+              })
+            );
+          }
+          sap.ui.getCore().byId("varSlctList").getBinding("items").filter(oFilters);
         }
       },
 
@@ -257,7 +341,7 @@ sap.ui.define(
 
         // Checking for Loc and Prod are not initial
         if (
-            that.byId("idloc").getValue() !== "" &&
+          that.byId("idloc").getValue() !== "" &&
           that.oProdList.getSelectedItems().length !== 0
         ) {
           var aSelectedItem = that.oProdList.getSelectedItems();
@@ -361,7 +445,7 @@ sap.ui.define(
        */
       onTableSearch: function (oEvent) {
         var sQuery =
-            oEvent.getParameter("value") || oEvent.getParameter("newValue"),
+          oEvent.getParameter("value") || oEvent.getParameter("newValue"),
           oFilters = [];
 
         if (sQuery !== "") {
@@ -378,22 +462,170 @@ sap.ui.define(
         }
         that.oList.getBinding("items").filter(oFilters);
       },
-      onNavPress:function(){
+      onNavPress: function () {
         if (sap.ushell && sap.ushell.Container && sap.ushell.Container.getService) {
-    var oCrossAppNavigator = sap.ushell.Container.getService("CrossApplicationNavigation"); 
-    // generate the Hash to display 
-    var hash = (oCrossAppNavigator && oCrossAppNavigator.hrefForExternal({
-        target: {
-            semanticObject: "vcpdocdisplay",
-            action: "Display"
+          var oCrossAppNavigator = sap.ushell.Container.getService("CrossApplicationNavigation");
+          // generate the Hash to display 
+          var hash = (oCrossAppNavigator && oCrossAppNavigator.hrefForExternal({
+            target: {
+              semanticObject: "vcpdocdisplay",
+              action: "Display"
+            }
+          })) || "";
+          //Generate a  URL for the second application
+          var url = window.location.href.split('#')[0] + hash;
+          //Navigate to second app
+          sap.m.URLHelper.redirect(url, true);
         }
-    })) || ""; 
-    //Generate a  URL for the second application
-    var url = window.location.href.split('#')[0] + hash; 
-    //Navigate to second app
-    sap.m.URLHelper.redirect(url, true); 
-        } 
-    }
+      },
+
+      //Variant Code//
+      onSaveVariant: function () {
+        this._nameFragment.open();
+      },
+      onClose: function () {
+        sap.ui.getCore().byId("idInput").setValue("");
+        that.byId("idloc").setValue("");
+        that.byId("prodInput").setTokens([]);
+        this._nameFragment.close();
+      },
+      onCreate: function () {
+        var oEntry = { RTRCHAR: [] };
+        var array = [];
+        var details = {};
+        var sLocation = that.byId("idloc").getValue();
+        var Field1 = that.byId("idloc").getParent().getItems()[0].getText();
+        var sProduct = that.byId("prodInput").getTokens();
+        var Field2 = that.byId("prodInput").getParent().getItems()[0].getText();
+        var varName = sap.ui.getCore().byId("idInput").getValue();
+        // for (var i = 0; i < sLocation.length; i++) {
+        details = {
+          Field: Field1,
+          FieldCenter: (1).toString(),
+          Value: sLocation
+        }
+        array.push(details);
+        // }
+
+        for (var k = 0; k < sProduct.length; k++) {
+          details = {
+            Field: Field2,
+            FieldCenter: (k + 1).toString(),
+            Value: sProduct[k].getText()
+          }
+          array.push(details);
+        }
+
+        for (var j = 0; j < array.length; j++) {
+          var ID = that.oGModel.getProperty("/Id");
+          if(ID === undefined){
+            ID = 0;
+          }
+          ID = ID + 1;
+          array[j].ID = ID;
+          array[j].IDNAME = varName;
+          array[j].App_Name = "Sales History Configuration"
+        }
+        // oEntry.RTRCHAR.push(array);
+
+        that.getModel("BModel").callFunction("/createVariant", {
+          method: "GET",
+          urlParameters: {
+            Flag: "X",
+            VARDATA: JSON.stringify(array)
+          },
+          success: function (oData) {
+            MessageToast.show(oData.createVariant);
+            that.getData();
+            that.onClose();
+          },
+          error: function (error) {
+            MessageToast.show("Failed to create variant");
+          },
+        });
+      },
+      onShowPress: function () {
+        that._variantFragment.open();
+      },
+      handleCloseVariant: function () {
+        that._variantFragment.close();
+      },
+      onTitlePress: function (oEvent) {
+        var oData = {};
+        var newData = [];
+        var oButton = oEvent.getSource();
+        var variantName = oEvent.getSource().getTitle();
+        var data = that.oGModel.getProperty("/variantDetails");
+        for (var i = 0; i < data.length; i++) {
+          if (variantName === data[i].VARIANTNAME) {
+            oData.VARIANTID = data[i].VARIANTID;
+            oData.VARIANTNAME = data[i].VARIANTNAME;
+            oData.USER = data[i].USER;
+            oData.APPLICATION_NAME = data[i].APPLICATION_NAME;
+            oData.FIELD = data[i].FIELD;
+            oData.FIELDCENTER = data[i].FIELDCENTER;
+            oData.VALUE = data[i].VALUE;
+            oData.SCOPE = data[i].SCOPE;
+            newData.push(oData);
+            oData = {};
+          }
+        }
+        var newJSONMODEL = new JSONModel();
+        newJSONMODEL.setData({ items1: newData });
+        sap.ui.getCore().byId("varNameList").setModel(newJSONMODEL);
+        that._popOver.openBy(oButton);
+
+      },
+      handleSelectClose: function () {
+        that._popOver.close();
+      },
+      handleSelectPress: function () {
+        var oLoc, oTokens = {}, finalToken = [];
+        var oTableItems = sap.ui.getCore().byId("varNameList").getItems();
+        for (var i = 0; i < oTableItems.length; i++) {
+          if (oTableItems[i].getCells()[4].getText().includes("Loc")) {
+            oLoc = oTableItems[i].getCells()[6].getText();
+          }
+          else if (oTableItems[i].getCells()[4].getText().includes("Prod")) {
+            
+            var oItemTemplate = new sap.m.Token({
+              key: i,
+              text: oTableItems[i].getCells()[6].getText()
+          });
+          finalToken.push(oItemTemplate);
+          oItemTemplate={};
+          }
+        }
+        that.byId("idloc").setValue(oLoc);
+        this.getModel("BModel").read("/getLocProdDet", {
+          filters: [
+            new Filter(
+              "LOCATION_ID",
+              FilterOperator.EQ,
+              oLoc
+            ),
+          ],
+          success: function (oData) {
+            that.prodModel.setData(oData);
+            that.oProdList.setModel(that.prodModel);
+          },
+          error: function (oData, error) {
+            MessageToast.show("error");
+          },
+        });
+        that._popOver.close();
+        that._variantFragment.close();
+
+        // for(var k =0;k<oTokens.length;k++){
+        // var fnValidator = function (args) {
+        //   var text = args.text;
+        //   return finalToken({ key: text, text: text });
+        // };
+        // that.byId("prodInput").addValidator(fnValidator);
+        that.byId("prodInput").setTokens(finalToken);
+        // }
+      }
+      
     });
   }
 );

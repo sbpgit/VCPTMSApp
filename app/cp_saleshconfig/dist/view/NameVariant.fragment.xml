@@ -1,0 +1,16 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:f="sap.ui.layout.form" xmlns:semantic="sap.m.semantic" xmlns:l="sap.ui.layout">
+    <Dialog id="openDialog" title="Create Variant" afterClose="onAfterClose">
+        <f:SimpleForm id="createVariant" visible="true" editable="true" layout="ResponsiveGridLayout" adjustLabelSpan="false" emptySpanL="6" columnsL="1">
+            <f:content>
+                <Label id="_IDGenLabel1" text="Enter Name for your Variant" />
+                <Input value="" id="idInput" />
+            </f:content>
+        </f:SimpleForm>
+        <beginButton>
+            <Button id="_IDGenButton1" text="Create" press="onCreate" type="Emphasized" />
+        </beginButton>
+        <endButton>
+            <Button id="_IDGenButton2" text="Close" press="onClose" type="Emphasized" />
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>

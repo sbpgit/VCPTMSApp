@@ -35,6 +35,7 @@ sap.ui.define(
             onInit: function () {
                 that = this;
                 this.rowData;
+                that.oRouter;
                 // Declaring JSON Models and size limits
                 that.locModel = new JSONModel();
                 that.prodModel = new JSONModel();
@@ -44,13 +45,13 @@ sap.ui.define(
                 that.allCharsModel = new JSONModel();
                 that.locProdCharModel = new JSONModel();
 
-                that.locModel.setSizeLimit(1000);
-                that.prodModel.setSizeLimit(1000);
-                that.verModel.setSizeLimit(1000);
-                that.scenModel.setSizeLimit(1000);
-                that.charModel.setSizeLimit(1000);
-                that.allCharsModel.setSizeLimit(1000);
-                that.locProdCharModel.setSizeLimit(1000);
+                that.locModel.setSizeLimit(2000);
+                that.prodModel.setSizeLimit(2000);
+                that.verModel.setSizeLimit(2000);
+                that.scenModel.setSizeLimit(2000);
+                that.charModel.setSizeLimit(2000);
+                that.allCharsModel.setSizeLimit(2000);
+                that.locProdCharModel.setSizeLimit(2000);
 
                 that.sCFUserDestination = "";
                 that.sUserId = "";
@@ -307,6 +308,7 @@ sap.ui.define(
                             that.rowData = data.results;
                             if (data.results.length > 0) {
                                 that.oGModel.setProperty("/TData", data.results);
+
                                 // Code to close header
                                 var collapseBtnId = that.byId("application-cpfullyconfproddmnd-display-component---Home--ObjectPageLayout-OPHeaderContent-collapseBtn");
                                 if (collapseBtnId === undefined) {
@@ -316,15 +318,12 @@ sap.ui.define(
                                     collapseBtnId.firePress();
                                     that.handleVisibleRowCount(5);
                                 }
-                                // Calling function to generate UI table dynamically based on dat
+
+
+                                // Calling function to generate UI table dynamically based on data
                                 that.TableGenerate();
                                 that.getLocProdCharacteristics();
-
                             }
-                            // that.oGModel.setProperty("/TData", data.results);
-                            // // Calling function to generate UI table dynamically based on data
-                            // that.TableGenerate();
-                            // that.getLocProdCharacteristics();
                         },
                         error: function (data) {
                             sap.ui.core.BusyIndicator.hide();
@@ -369,6 +368,7 @@ sap.ui.define(
                     sRowData['Unique ID'] = (that.tableData[i].UNIQUE_ID).toString();
                     sRowData.UNIQUE_DESC = that.tableData[i].UNIQUE_DESC;
                     sRowData['Product'] = that.tableData[i].PRODUCT_ID;
+                    sRowData.PROD_DESC = that.tableData[i].PROD_DESC;
                     weekIndex = 1;
                     for (let index = 2; index < liDates.length; index++) {
                         sRowData[liDates[index].WEEK_DATE] =
@@ -388,7 +388,17 @@ sap.ui.define(
                 // Checking column names and applying sap.m.Link to column values
                 that.oTable.bindColumns("/columns", function (sId, oContext) {
                     var columnName = oContext.getObject().WEEK_DATE;
-                    if (columnName === "Unique ID") {
+                    if(columnName === "Product") {
+                        return new sap.ui.table.Column({
+                            width: "12rem",
+                            label: columnName,
+                            // template: columnName,
+                            template: new sap.m.ObjectIdentifier({
+                                title : "{PROD_DESC}",
+                                text: "{" + columnName + "}"
+                            }),
+                        });
+                    } else if (columnName === "Unique ID") {
                         return new sap.ui.table.Column({
                             width: "12rem",
                             label: columnName,
@@ -397,7 +407,8 @@ sap.ui.define(
                                 items: [
                                     new sap.m.Link({
                                         text: "{" + columnName + "}",
-                                        press: that.uniqueIdLinkpress,
+                                        // press: that.uniqueIdLinkpress,
+                                        press: that.onUniqueIdLinkPress,
                                     }),
                                     new sap.m.ObjectIdentifier({
                                         text: "{UNIQUE_DESC}",
@@ -409,6 +420,7 @@ sap.ui.define(
                         var iTotalQty = that.getTotalWeekQty(columnName);
                         var dColName = new Date(columnName);
                         var columnText = columnName + " (" + iTotalQty + ")";
+                        var sCount = columnName.slice(4)
                         // if (that.dFirmHorizonDate > dColName) {
                         if (dColName >= that.dFrozenHorizonDate && dColName <= that.dFirmHorizonDate) {
                             that.aFirmDates.push(columnName);
@@ -417,12 +429,22 @@ sap.ui.define(
                                 // label: new sap.m.ObjectIdentifier({title: columnName}),
                                 label: columnText,
                                 // multiLabels: [new sap.m.Text({text: columnName}), new sap.m.Text({text: "SUM"})],
-                                template: new sap.m.Input({
-                                    type: "Number",
-                                    placeholder: "{" + columnName + "}",
-                                    value: "{" + columnName + "}",
-                                    change: that.onChangeCIRQty,
-                                }),
+                                template: new sap.m.VBox({
+                                    items: [
+                                        new sap.m.Input({
+                                            type: "Number",
+                                            placeholder: "{" + columnName + "}",
+                                            value: "{" + columnName + "}",
+                                            change: that.onChangeCIRQty,
+                                        }),
+                                        new sap.m.ObjectIdentifier({
+                                            title: 15,
+                                            text: 5,
+                                        }),
+                                    ]
+                                })
+                                
+                                
                             });
                         } else {
 
@@ -455,13 +477,13 @@ sap.ui.define(
                     liDates = [];
                 var vDateSeries = imFromDate;
 
-                // Unique Id
-                lsDates.WEEK_DATE = "Unique ID";
-                liDates.push(lsDates);
-                lsDates = {};
-
                 // Product Id
                 lsDates.WEEK_DATE = "Product";
+                liDates.push(lsDates);
+                lsDates = {};
+                
+                // Unique Id
+                lsDates.WEEK_DATE = "Unique ID";
                 liDates.push(lsDates);
                 lsDates = {};
 
@@ -988,7 +1010,8 @@ sap.ui.define(
                     that._onCharDetails.setTitleAlignment("Center");
                     that.CharDetailList = sap.ui.getCore().byId("idCharDetail");
 
-                    this.getModel("CIRModel").read("/getUniqueItem", {
+                    // this.getModel("CIRModel").read("/getUniqueItem", {
+                    this.getModel("CIRModel").read("/getUniqueChars", {
                         filters: [
                             new Filter("UNIQUE_ID", FilterOperator.EQ, selUniqueId),
                             new Filter(
@@ -1275,21 +1298,79 @@ sap.ui.define(
              */
             onPressSave: function (oEvent) {
                 var objEvent = oEvent;
-                MessageBox.confirm(
-                    "Would you like to save?", {
-                    icon: MessageBox.Icon.Conf,
-                    title: "Confirmation",
-                    actions: [MessageBox.Action.YES, MessageBox.Action.NO],
-                    emphasizedAction: MessageBox.Action.YES,
-                    onClose: function (oAction) {
-                        if (oAction === "YES") {
-                            that.onPressSaveConfirm(objEvent);
-                        } else {
-                            // Close Message Box
+                var oReturn = {};
+                var sMessage = '';
+
+                oReturn = that.checkTotalDemandQty();
+
+                if (oReturn.bFlag === true) {
+                    MessageBox.confirm(
+                        "Would you like to save?", {
+                        icon: MessageBox.Icon.Conf,
+                        title: "Confirmation",
+                        actions: [MessageBox.Action.YES, MessageBox.Action.NO],
+                        emphasizedAction: MessageBox.Action.YES,
+                        onClose: function (oAction) {
+                            if (oAction === "YES") {
+                                that.onPressSaveConfirm(objEvent);
+                            } else {
+                                // Close Message Box
+                            }
+                        }
+                    }
+                    );
+                } else {
+                    sMessage = "Please adjust quatities as per total demand for week(s)  -  " + oReturn.Weeks;
+                    MessageToast.show(sMessage, {width : "35em"});
+                }
+            },
+            /**
+             * 
+             * @param {*} oEvent 
+             */
+            checkTotalDemandQty: function (oEvent) {
+                var aColumns = that.oTable.getColumns();
+                var aIndices = that.oTable.getBinding().aIndices;
+                var aList = that.oTable.getBinding().oList;
+                var aFilteredList = [];
+                var sColLabel = " ";
+                var iTotalQty = 0;
+                var iDmndQty = 0;
+                var sColumnName = "";
+                var oReturn = {};
+                var aRetWeeks = [];
+                aFilteredList = aList.filter((el, i) => aIndices.some(j => i === j));
+                for (var i = 2; i < aColumns.length; i++) {
+
+                    sColLabel = aColumns[i].getLabel().getText().split(" ");
+                    if (that.aFirmDates.length > 0) {
+                       if(that.aFirmDates.includes(sColLabel[0]) === false) {
+                           continue;
+                       }
+
+                        iDmndQty = sColLabel[1].split("(")[1].split(")")[0];
+                        iTotalQty = 0;
+                        for (var j = 0; j < aFilteredList.length; j++) {
+                            iTotalQty = iTotalQty + parseInt(aFilteredList[j][sColLabel[0]]);
+                        }
+                        // sColumnName = sColLabel[0] + " (" + iTotalQty + ")";
+                        // aColumns[i].setLabel(sColumnName);
+
+                        if (iTotalQty !== parseInt(iDmndQty)) {
+                            aRetWeeks.push(sColLabel[0]);
                         }
                     }
                 }
-                );
+
+                if (aRetWeeks.length > 0) {
+                    oReturn.bFlag = false;
+                    oReturn.Weeks = aRetWeeks;
+                } else {
+                    oReturn.bFlag = true;
+                    oReturn.Weeks = aRetWeeks;
+                }
+
+                return oReturn;
             },
             /**
              * 
@@ -1303,19 +1384,19 @@ sap.ui.define(
                 var aCIRData = that.oGModel.getProperty("/TData");
 
                 var oCIRTable = that.getView().byId("idCIReq"); //.getItems();
+                var aFilIndices = oCIRTable.getBinding("rows").aIndices;
                 var aRows = oCIRTable.getBinding("rows").oList;
+                var aCIR_ID = [];
                 for (var i = 0; i < aCIRData.length; i++) {
-                    // oCIRQtys = {};
-
-                    // oCIRQtys.LOCATION_ID = aCIRData[i].LOCATION_ID;
-                    // oCIRQtys.PRODUCT_ID = aCIRData[i].PRODUCT_ID;
-                    // // oCIRQtys.CIR_ID = aCIRData[i].CIR_ID;
-                    // oCIRQtys.MODEL_VERSION = aCIRData[i].MODEL_VERSION;
-                    // oCIRQtys.VERSION = aCIRData[i].VERSION;
-                    // oCIRQtys.SCENARIO = aCIRData[i].SCENARIO;
-                    // oCIRQtys.UNIQUE_ID = aCIRData[i].UNIQUE_ID;
+                    // If Unique Ids are filtered, check in filtered indices to avoid looping complete data
+                    if (aFilIndices.length > 0) {
+                        if (aFilIndices.includes(i) === false) {
+                            continue;
+                        }
+                    }
 
                     for (var j = 0; j < that.aFirmDates.length; j++) {
+
                         oCIRQtys = {};
                         oCIRQtys.LOCATION_ID = aCIRData[i].LOCATION_ID;
                         oCIRQtys.PRODUCT_ID = aCIRData[i].PRODUCT_ID;
@@ -1323,12 +1404,17 @@ sap.ui.define(
                         oCIRQtys.VERSION = aCIRData[i].VERSION;
                         oCIRQtys.SCENARIO = aCIRData[i].SCENARIO;
                         oCIRQtys.UNIQUE_ID = aCIRData[i].UNIQUE_ID;
-                        oCIRQtys.CIR_ID = aCIRData[i].CIR_ID[j];
+                        // oCIRQtys.CIR_ID = aCIRData[i].CIR_ID[j];
+
+                        aCIR_ID = aCIRData[i].CIR_ID.filter(function (aCIRIDs) {
+                            return aCIRIDs.WEEK_DATE === that.aFirmDates[j];
+                        });
+
+                        oCIRQtys.CIR_ID = aCIR_ID[0].CIR_ID;
                         oCIRQtys.WEEK_DATE = that.aFirmDates[j];
                         oCIRQtys.CIR_QTY = parseInt(aRows[i][that.aFirmDates[j]]);
 
                         aCIRQtys.push(oCIRQtys);
-
 
                     }
                 }
@@ -1585,30 +1671,30 @@ sap.ui.define(
             handleVisibleRowCount: function (iCount) {
                 var iWinH = window.innerHeight;
                 if (iWinH > 750 && iWinH < 800) {
-                    that.byId("idCIReq").setVisibleRowCount(9+iCount);
+                    that.byId("idCIReq").setVisibleRowCount(9 + iCount);
                 } else if (iWinH > 800 && iWinH < 900) {
-                    that.byId("idCIReq").setVisibleRowCount(10+iCount);
+                    that.byId("idCIReq").setVisibleRowCount(10 + iCount);
                 } else if (iWinH > 900 && iWinH < 1000) {
-                    that.byId("idCIReq").setVisibleRowCount(12+iCount);
+                    that.byId("idCIReq").setVisibleRowCount(12 + iCount);
                 } else if (iWinH > 1000 && iWinH < 1100) {
-                    that.byId("idCIReq").setVisibleRowCount(14+iCount);
+                    that.byId("idCIReq").setVisibleRowCount(14 + iCount);
                 } else {
-                    that.byId("idCIReq").setVisibleRowCount(7+iCount);
+                    that.byId("idCIReq").setVisibleRowCount(7 + iCount);
                 }
 
-            //    that.getView().byId("container-cpapp.cpfullyconfproddmnd---Home--ObjectPageLayout-opwrapper");
+                //    that.getView().byId("container-cpapp.cpfullyconfproddmnd---Home--ObjectPageLayout-opwrapper");
             },
             /**
              * 
              */
-             onChangeHeaderPinStatus: function(oEvent){
-                if(oEvent.getSource()._bHeaderExpanded === true){
-                  that.handleVisibleRowCount(5);
+            onChangeHeaderPinStatus: function (oEvent) {
+                if (oEvent.getSource()._bHeaderExpanded === true) {
+                    that.handleVisibleRowCount(5);
                 } else {
                     that.handleVisibleRowCount(0);
                 }
 
-             },
+            },
             /**
              * 
              */
@@ -1691,16 +1777,22 @@ sap.ui.define(
                                 aResults.map((mapObj) => mapObj.CHARVAL_NUM).indexOf(obj.CHARVAL_NUM) == pos
                             );
                         });
-                         // Code to Concatenate CHAR_DESC & CHAR_NAME property values into new Property
-                        aFilteredChar.forEach((oEntry) => {
-                            oEntry.CHARACTERISTIC = oEntry.CHAR_DESC + " " + "-" + " " + oEntry.CHAR_NAME;
-                         });
+
+                        // // Code to Concatenate CHAR_DESC & CHAR_NAME property values into new Property
+                        // aFilteredChar.forEach((oEntry) => {
+                        //     oEntry.CHARACTERISTIC = oEntry.CHAR_DESC + " " + "-" + " " + oEntry.CHAR_NAME;
+                        // });
+
                         that.locProdCharModel.setData({
                             charDetails: aFilteredChar,
                         });
 
 
                         that.getView().byId("idUniqueCharDetails").setModel(that.locProdCharModel);
+
+                        // To show characteristics drop down in the next view on click on unique id
+                        that.oGModel.setProperty("/AllUniqueChars", oData.results);
+                        that.oGModel.setProperty("/aFilteredChar", aFilteredChar);
 
                     },
                     error: function (oData, OResponse) {
@@ -1800,9 +1892,9 @@ sap.ui.define(
                 }
 
                 // Looping through the data to generate columns SUM
-                
+
                 for (var i = 0; i < that.tableData.length; i++) {
-                     iTotalQty = iTotalQty + that.tableData[i]["WEEK" + iWeekIndex];                    
+                    iTotalQty = iTotalQty + that.tableData[i]["WEEK" + iWeekIndex];
                 }
 
                 return iTotalQty;
@@ -1810,26 +1902,206 @@ sap.ui.define(
             /**
              * 
              */
-            onUniqueIdsFilter: function() {
-               // var oSource = oEvent.getSource();
-              var aColumns = that.oTable.getColumns();
-              var aIndices = that.oTable.getBinding().aIndices;
-              var aList = that.oTable.getBinding().oList;
-              var aFilteredList = [];
-              var sColLabel = " ";
-              var iTotalQty = 0;
-              var sColumnName = "";
-              aFilteredList = aList.filter((el,i)=>aIndices.some(j => i === j));
-              for(var i = 2; i < aColumns.length; i++) {
-                  sColLabel = aColumns[i].getLabel().getText().split(" ");
-                  iTotalQty = 0;
-                  for(var j = 0; j < aFilteredList.length; j++) {
-                    iTotalQty = iTotalQty + aFilteredList[j][sColLabel[0]];
-                  }
-                  sColumnName = sColLabel[0] + " (" + iTotalQty + ")";
-                  aColumns[i].setLabel(sColumnName);
-              }
-            }
+            onUniqueIdsFilter: function () {
+                // var oSource = oEvent.getSource();
+                var aColumns = that.oTable.getColumns();
+                var aIndices = that.oTable.getBinding().aIndices;
+                var aList = that.oTable.getBinding().oList;
+                var aFilteredList = [];
+                var sColLabel = " ";
+                var iTotalQty = 0;
+                var sColumnName = "";
+                aFilteredList = aList.filter((el, i) => aIndices.some(j => i === j));
+                for (var i = 2; i < aColumns.length; i++) {
+                    sColLabel = aColumns[i].getLabel().getText().split(" ");
+                    iTotalQty = 0;
+                    for (var j = 0; j < aFilteredList.length; j++) {
+                        iTotalQty = iTotalQty + aFilteredList[j][sColLabel[0]];
+                    }
+                    sColumnName = sColLabel[0] + " (" + iTotalQty + ")";
+                    aColumns[i].setLabel(sColumnName);
+                }
+            },
+
+            /**
+             * 
+             */
+            onUniqueIdLinkPress: function (oEvent) {
+                sap.ui.core.BusyIndicator.show();
+                var selColumnId = oEvent.getSource().getAriaLabelledBy()[0];
+                var tableColumns = that.byId("idCIReq").getColumns(),
+                    selColumnValue = oEvent.getSource().getText(),
+                    ObindingData = oEvent.getSource().getBindingContext().getObject(),
+                    selUniqueId = ObindingData['Unique ID'];  //ObindingData.Unique_ID;                             
+
+                // Calling function if selected item is not empty
+
+                if (selColumnValue > 0) {
+                    // that._onUniqueCharDetails.open();
+                    that.oGModel.setProperty("/SelectedUniqueId", selUniqueId);
+                    that.oRouter = sap.ui.core.UIComponent.getRouterFor(that);
+                    that.oRouter.navTo("RouteUniqChar");
+
+
+                    // if (!that._onUniqueCharDetails) {
+                    //     that._onUniqueCharDetails = sap.ui.xmlfragment(
+                    //         "cpapp.cpfullyconfproddmnd.view.UniqueChars",
+                    //         that
+                    //     );
+                    //     that.getView().addDependent(that._onUniqueCharDetails);
+                    // }
+                    // that._onUniqueCharDetails.setTitleAlignment("Center");
+                    // that.uniqueCharDetailList = sap.ui.getCore().byId("idUniqueChars");
+
+                    // that.getModel("CIRModel").callFunction("/getUniqueChars", {
+                    //     method: "GET",
+                    //     urlParameters: {
+                    //         UNIQUE_ID: selUniqueId,
+                    //         PRODUCT_ID: that.oGModel.getProperty("/SelectedProd"),
+                    //         LOCATION_ID: that.oGModel.getProperty("/SelectedLoc")
+                    //     },
+                    //     success: function (oData) {
+                    //         sap.ui.core.BusyIndicator.hide();
+                    //         that.formatUniqueCharsData(oData.results);
+                    //         // that.charModel.setData({
+                    //         //     results: oData.results,
+                    //         // });
+
+                    //         // that.CharDetailList.setModel(that.charModel);
+                    //         // that._onCharDetails.open();
+                    //     },
+                    //     error: function (data) {
+                    //         sap.ui.core.BusyIndicator.hide();
+                    //         sap.m.MessageToast.show("Error While fetching data");
+                    //     },
+                    // });
+                }
+            },
+
+            /**
+             * 
+             */
+            formatUniqueCharsData: function (aUniqueChars) {
+
+                var aUniqueIdsChars = aUniqueChars;
+                var oColumn = {},
+                    oRowData = {},
+                    aColumns = [],
+                    aRowData = [];
+                var aConfig = [];
+                var aFilteredUniqueChars = [];
+                var sColumnName,
+                    sCharValPath,
+                    sCharValDescPath;
+
+
+                if (!that._onUniqueCharDetails) {
+                    that._onUniqueCharDetails = sap.ui.xmlfragment(
+                        "cpapp.cpfullyconfproddmnd.view.UniqueChars",
+                        that
+                    );
+                    that.getView().addDependent(that._onUniqueCharDetails);
+                }
+                that._onUniqueCharDetails.setTitleAlignment("Center");
+                that.oUniqueCharTable = sap.ui.getCore().byId("idUniqueChars");
+
+                if (aUniqueIdsChars.length > 0) {
+                    // Looping through the data to generate columns
+                    for (var i = 0; i < aUniqueIdsChars.length; i++) {
+                        oColumn = {};
+
+                        if (i === 0) {
+                            aConfig = aUniqueIdsChars[i].CONFIG;
+                            oColumn.UNIQUE_CHAR = 'Characteristic';
+                            oColumn.TOTAL = aUniqueIdsChars[i].TOTAL;
+                            aColumns.push(oColumn);
+                            oColumn = {};
+                        }
+
+                        // Columns (UNIQUE_IDs)
+                        oColumn.UNIQUE_CHAR = aUniqueIdsChars[i].UNIQUE_ID;
+                        oColumn.TOTAL = aUniqueIdsChars[i].TOTAL;
+                        aColumns.push(oColumn);
+                    }
+
+                    for (var j = 0; j < aConfig.length; j++) { // Base Configurations
+                        oRowData = {};
+                        oRowData['Characteristic'] = [{ CHAR_NAME: aConfig[j].CHAR_NAME, CHAR_DESC: aConfig[j].CHAR_DESC }];
+
+                        for (var k = 1; k < aColumns.length; k++) {
+
+                            aFilteredUniqueChars = [];
+                            aFilteredUniqueChars = aUniqueIdsChars.filter(function (aUniqChar) {
+                                return aUniqChar.UNIQUE_ID === aColumns[k].UNIQUE_CHAR;
+                            });
+                            aFilteredUniqueChars = aFilteredUniqueChars[0].CONFIG;
+
+                            for (var l = 0; l < aFilteredUniqueChars.length; l++) {
+                                if (aConfig[j].CHAR_NAME === aFilteredUniqueChars[l].CHAR_NAME &&
+                                    aConfig[j].CHAR_DESC === aFilteredUniqueChars[l].CHAR_DESC &&
+                                    aConfig[j].CHAR_NUM === aFilteredUniqueChars[l].CHAR_NUM
+                                ) {
+                                    oRowData[aColumns[k].UNIQUE_CHAR] = [{ CHAR_VALUE: aFilteredUniqueChars[l].CHAR_VALUE, CHARVAL_DESC: aFilteredUniqueChars[l].CHARVAL_DESC }];
+                                    //   oRowData[aColumns[k].UNIQUE_CHAR] = [aConfig[j].CHAR_VALUE, aConfig[j].CHARVAL_DESC];    
+                                    break;
+                                }
+                            }
+                        }
+                        aRowData.push(oRowData);
+                        oRowData = {};
+                    }
+
+                    // Adding rows and columns data to JSON Model
+                    var oModel = new sap.ui.model.json.JSONModel();
+                    oModel.setData({
+                        rows: aRowData,
+                        columns: aColumns,
+                    });
+                    that.oUniqueCharTable.setModel(oModel);
+                    // Checking column names and applying sap.m.Link to column values
+                    that.oUniqueCharTable.bindColumns("/columns", function (sId, oContext) {
+                        var columnName = oContext.getObject().UNIQUE_CHAR;
+                        var iTotal = oContext.getObject().TOTAL;
+                        sColumnName = columnName.toString() + " (" + iTotal + ")";
+
+                        if (columnName === 'Characteristic') {
+                            sCharValPath = columnName + "/0/CHAR_NAME";
+                            sCharValDescPath = columnName + "/0/CHAR_DESC";
+                            return new sap.ui.table.Column({
+                                width: "12rem",
+                                label: sColumnName,
+                                template: new sap.m.ObjectIdentifier({
+                                    title: "{" + sCharValDescPath + "}",
+                                    text: "{" + sCharValPath + "}"
+                                })
+                            });
+
+                        } else {
+                            sCharValPath = columnName + "/0/CHAR_VALUE";
+                            sCharValDescPath = columnName + "/0/CHARVAL_DESC";
+                            return new sap.ui.table.Column({
+                                width: "12rem",
+                                label: sColumnName,
+                                template: new sap.m.ObjectIdentifier({
+                                    title: "{" + sCharValDescPath + "}",
+                                    text: "{" + sCharValPath + "}"
+                                })
+
+                            });
+                        }
+                    });
+
+                    that.oUniqueCharTable.bindRows("/rows");
+
+                }
+
+            },
+            /**
+             * Called when 'Close/Cancel' button in any dialog is pressed.
+            */
+            onUniqueCharClose: function () {
+                that._onUniqueCharDetails.close();
+            },
 
         });
     }

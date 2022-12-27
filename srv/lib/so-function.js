@@ -1,6 +1,7 @@
 const GenF = require("./gen-functions");
 const cds = require("@sap/cds");
 const hana = require("@sap/hana-client");
+const Catservicefn = require("./catservice-function");
 const { createLogger, format, transports } = require("winston");
 const { combine, timestamp, label, prettyPrint } = format;
 
@@ -17,14 +18,14 @@ class SOFunctions {
     async genUniqueID(adata, req, Flag) {
 
         await GenF.logMessage(req, 'Started Sales Orders Processing');
-
+        await this.clearSalesH();
         await this.processUniqueID(adata.LOCATION_ID, adata.PRODUCT_ID, '');
         await this.genBaseMarketAuth(adata.LOCATION_ID, adata.PRODUCT_ID);
-        await this.genPartialProd(adata.LOCATION_ID, adata.PRODUCT_ID);
+        await this.genPartialProd(adata.LOCATION_ID);
         await this.genFactoryLoc();
         //await GenF.logMessage(req, 'Completed Sales Orders Processing');
         let lMessage = "Completed Sales Orders Processing"
-        await GenF.jobSchMessage('X', lMessage , req);
+        await GenF.jobSchMessage('X', lMessage, req);
         // Flag = 'X';
 
     }
@@ -605,7 +606,7 @@ class SOFunctions {
      */
     async createSO(lLocation, lProduct, lSO, lDate, lQty, lUnique) {
 
-        const lSOItem = '10';
+        const lSOItem = '000010';
         // Get Main Product        
         const lMainProd = await this.getMainProduct(lLocation, lProduct);
 
@@ -668,6 +669,61 @@ class SOFunctions {
         // catch (e) {
         //     console.log(e.message);
         // }
+    }
+
+    /**
+     * 
+     * @param {Location} lLocation 
+     * @param {Product} lProduct 
+     * @param {Sales ORder} lSO
+     * @param {Date} lDate 
+     * @param {Quantity} lQty 
+     * @param {Unique ID} liUnique 
+     */
+    async createSOTemp(lLocation, lProduct, lSO, lDate, lQty, lUnique) {
+
+        const lSOItem = '000010';
+        // Get Main Product        
+        const lMainProd = await this.getMainProduct(lLocation, lProduct);
+
+        // await INSERT.into('CP_SALESH')
+        //     .columns('SALES_DOC',
+        //         'SALESDOC_ITEM',
+        //         'PRODUCT_ID',
+        //         'CONFIRMED_QTY',
+        //         'ORD_QTY',
+        //         'MAT_AVAILDATE',
+        //         'LOCATION_ID')
+        //     .values(lSO,
+        //         lSOItem,
+        //         lMainProd,
+        //         lQty,
+        //         lQty,
+        //         lDate,
+        //         lLocation);
+
+        const liUnique = await SELECT.columns("CHAR_NUM",
+            "CHARVAL_NUM")
+            .from('V_UNIQUE_ID')
+            .where(`UNIQUE_ID = '${lUnique}'`)
+
+        for (let cntUI = 0; cntUI < liUnique.length; cntUI++) {
+            await INSERT.into('CP_SALESH_CONFIG')
+                .columns('SALES_DOC',
+                    'SALESDOC_ITEM',
+                    'CHAR_NUM',
+                    'CHARVAL_NUM',
+                    'PRODUCT_ID')
+                .values(lSO,
+                    lSOItem,
+                    liUnique[cntUI].CHAR_NUM,
+                    liUnique[cntUI].CHARVAL_NUM,
+                    lProduct);
+        }
+
+        await this.processUniqueID(lLocation, lMainProd, lSO);
+
+
     }
     /**
          * 
@@ -833,7 +889,11 @@ class SOFunctions {
         return lCntVariantID;
 
     }
-
+    /**
+     * 
+     * @param {Location} lLocation 
+     * @param {Product} lProduct 
+     */
     async genBaseMarketAuth(lLocation, lProduct) {
         console.log('Generate Market Authorization');
 
@@ -955,7 +1015,11 @@ class SOFunctions {
 
 
     }
-    async genPartialProd(lLocation, lProduct) {
+    /**
+     * 
+     * @param {Location} lLocation 
+     */
+    async genPartialProd(lLocation) {
         const liProd = await cds.run(`
                                 SELECT DISTINCT * 
                                 FROM V_LOCPROD
@@ -1048,15 +1112,21 @@ class SOFunctions {
         }
 
     }
+    /**
+     *  Factory location update for Mater data
+     */
     async genFactoryLoc() {
+        // Get data from Master tables
         const liLocation = await SELECT.columns(
             "LOCATION_ID")
             .from('CP_LOCATION');
-            const liFtLoc = await SELECT.columns(
-                "LOCATION_ID",
-                "PLAN_LOC",
-                "FACTORY_LOC")
-                .from('CP_FACTORY_SALESLOC');
+
+        const liFtLoc = await SELECT.columns(
+            "LOCATION_ID",
+            "PLAN_LOC",
+            "FACTORY_LOC")
+            .from('CP_FACTORY_SALESLOC');
+        // Insert master data which doesnot exist in Factory location table
         let vFlag = '';
         let liFactLoc = [];
         let lsFactLoc = {};
@@ -1078,7 +1148,7 @@ class SOFunctions {
                 liFactLoc.push(GenF.parse(lsFactLoc));
             }
         }
-        
+
         if (liFactLoc.length > 0) {
             try {
                 cds.run({
@@ -1097,6 +1167,14 @@ class SOFunctions {
         else {
             console.log("No records to update Factory-Locations");
         }
+    }
+    /**
+     * Clear Sales History
+     */
+    async clearSalesH() {
+       // Delete only before sales horizon
+        const objCatFn = new Catservicefn();
+        await objCatFn.deleteSalesHistory('N');
     }
 }
 

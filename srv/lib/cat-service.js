@@ -1230,7 +1230,9 @@ module.exports = (srv) => {
             values.push({ id, createtAt, message, lilocProd });
             const obgenSOFunctions = new SOFunctions();
             await obgenSOFunctions.genUniqueID(req.data, req, Flag);
-        }
+        }        
+        res.statusCode = 202;
+        res.send({ values });
     });
     // Generate Unique ID
     srv.on("gen_UniqueID", async (req) => {
@@ -2514,6 +2516,19 @@ module.exports = (srv) => {
         }
         lsresults = {};
         return responseMessage;
+    });
+    srv.on("mainSOTemp", async (req) => {
+        const li_sodata = await cds.run(
+            `SELECT *
+            FROM "CP_SEEDORDER_HEADER"
+             ORDER BY SEED_ORDER DESC
+             WHERE LOCATION_ID = '${req.data.LOCATION_ID}'
+             AND PRODUCT_ID = '${req.data.PRODUCT_ID}'`
+        );
+        for(let i = 0 ;i < li_sodata.length ; i++){
+            await obgenSOFunctions.createSOTemp(li_sodata[i].LOCATION_ID, li_sodata[i].PRODUCT_ID, li_sodata[i].SEED_ORDER, li_sodata[i].MAT_AVAILDATE, li_sodata[i].ORD_QTY, li_sodata[i].UNIQUE_ID);
+              
+        }
     });
     srv.on("getAllProd", async (req) => {
         let lsprod = {};

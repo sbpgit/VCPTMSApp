@@ -1,0 +1,16 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns:l="sap.ui.layout" xmlns:t="sap.ui.table" xmlns:f="sap.ui.layout.form">
+    <Dialog title="Unique ID Characteristics" contentWidth="1300px">
+        <subHeader>
+			<Toolbar>
+				<SearchField width="100%" />
+			</Toolbar>
+		</subHeader>
+        <t:Table id="idUniqueChars" fixedColumnCount="2"  selectionMode="None" alternateRowColors="true" enableSelectAll="false" visibleRowCount="20">
+            <t:columns />
+        </t:Table>
+
+        <buttons>
+            <Button type='Reject' text="{i18n>close}" press="onUniqueCharClose" />
+        </buttons>
+    </Dialog>
+</core:FragmentDefinition>

@@ -110,14 +110,14 @@ sap.ui.define([
                             that.primaryData = [],
                                 that.secData = [];
 
-                                // oData.results.forEach(function (row) {
-                                    
-                                //     if(row.CHAR_TYPE === "P" && row.SEQUENCE < 6){
-                                //         row.Partial = "X";
-                                //     } else {
-                                //         row.Partial = "";
-                                //     }
-                                // }, that);
+                            // oData.results.forEach(function (row) {
+
+                            //     if (row.CHAR_TYPE === "P" && row.SEQUENCE < 6) {
+                            //         row.Partial = "X";
+                            //     } else {
+                            //         row.Partial = "";
+                            //     }
+                            // }, that);
 
                             for (var i = 0; i < oData.results.length; i++) {
                                 if (oData.results[i].CHAR_TYPE === "P") {
@@ -152,9 +152,9 @@ sap.ui.define([
                             }
 
                             that.oGModel = that.getModel("oGModel");
-                            that.oGModel.setProperty("/secSeqSt", that.finalSecData[0].SEQUENCE );
+                            that.oGModel.setProperty("/secSeqSt", that.finalSecData[0].SEQUENCE);
 
-                            
+
                             // var aData = that.finalSecData;
                             //     if(that.oSelectedItem){
                             //     for (var i = 0; i < aData.length; i++) {
@@ -209,19 +209,19 @@ sap.ui.define([
                 }
             },
 
-            // onTableupdate:function(oEvent){
+            onTableupdate: function (oEvent) {
 
-            //     that.oPList = that.byId("Primarytable").getItems();
-            //     var PartialVal;
-            //     for(var i = 0; i < that.oPList.length; i++){
-            //         PartialVal = that.oPList[i].getBindingContext().getObject().Partial;
-            //         if(PartialVal === "X"){
-            //             that.oPList[i].addStyleClass("partialColor");
-            //         } else {
-            //             that.oPList[i].removeStyleClass("partialColor");
-            //         }
-            //     }
-            // },
+                // that.oPList = that.byId("Primarytable").getItems();
+                // var PartialVal;
+                // for (var i = 0; i < that.oPList.length; i++) {
+                //     PartialVal = that.oPList[i].getBindingContext().getObject().Partial;
+                //     if (PartialVal === "X") {
+                //         that.oPList[i].addStyleClass("partialColor");
+                //     } else {
+                //         that.oPList[i].removeStyleClass("partialColor");
+                //     }
+                // }
+            },
 
 
             onReset: function () {
@@ -253,17 +253,17 @@ sap.ui.define([
 
 
                         that.finalpriData = [];
-                            for (var j = 0; j <= that.primaryData.length; j++) {
-                                for (var k = 0; k < that.primaryData.length; k++) {
-                                    if (j === that.primaryData[k].SEQUENCE) {
-                                        that.finalpriData.push(that.primaryData[k]);
-                                        break;
-                                    }
+                        for (var j = 0; j <= that.primaryData.length; j++) {
+                            for (var k = 0; k < that.primaryData.length; k++) {
+                                if (j === that.primaryData[k].SEQUENCE) {
+                                    that.finalpriData.push(that.primaryData[k]);
+                                    break;
                                 }
-
                             }
 
-                            var length = j;
+                        }
+
+                        var length = j;
 
 
 
@@ -547,9 +547,9 @@ sap.ui.define([
                 } else {
                     oDropModel.setData(oDropModelData);
 
-                    if(oDropModelData.results[0].CHAR_TYPE === "P"){
+                    if (oDropModelData.results[0].CHAR_TYPE === "P") {
                         var aData = this.byId("Primarytable").getItems();
-                    } else if(oDropModelData.results[0].CHAR_TYPE === "S"){
+                    } else if (oDropModelData.results[0].CHAR_TYPE === "S") {
                         var aData = this.byId("Secondarytable").getItems();
                     }
 
@@ -571,10 +571,10 @@ sap.ui.define([
                 // var successCount = 0;
 
                 var aData = data,
-                successCount = 0;
+                    successCount = 0;
                 that.count = aData.length;
                 var seq;
-                if(aData[0].getBindingContext().getObject().CHAR_TYPE === "S"){
+                if (aData[0].getBindingContext().getObject().CHAR_TYPE === "S") {
                     seq = parseInt(that.oGModel.getProperty("/secSeqSt"));
                 } else {
                     seq = 1;
@@ -719,7 +719,7 @@ sap.ui.define([
                                     that.secData.push(oData.results[i]);
                                 }
                             }
-                            
+
 
                             that.finalpriData = [];
                             for (var j = 0; j <= that.primaryData.length; j++) {

@@ -4,6 +4,7 @@ const JobSchedulerClient = require("@sap/jobs-client");
 const { v1: uuidv1 } = require('uuid')
 const xsenv = require("@sap/xsenv");
 const GenF = require("./gen-functions");
+const Catservicefn = require("./catservice-function");
 
 
 function getJobscheduler(req) {
@@ -209,7 +210,7 @@ module.exports = (srv) => {
         try {
             const dbClass = require("sap-hdb-promisfied")
             let dbConn = new dbClass(await dbClass.createConnectionFromEnv())
-            const sp = await dbConn.loadProcedurePromisified(null, '"FG_CUSTGRP_SP"')
+            const sp = await dbConn.loadProcedurePromisified(null, '"FG_CUSTOMERGROUP_SP"')
             const output = await dbConn.callProcedurePromisified(sp, [])
             console.log(output.results);
             flag = 'X';
@@ -904,11 +905,16 @@ module.exports = (srv) => {
         res.statusCode = 202;
         res.send({ values });
         try {
+            
+            // Delete All sales History
+            const objCatFn = new Catservicefn();
+            // await objCatFn.deleteSalesHistory('X');
+
             const dbClass = require("sap-hdb-promisfied")
             let dbConn = new dbClass(await dbClass.createConnectionFromEnv())
             const sp = await dbConn.loadProcedurePromisified(null, '"FG_SALESH_SP"')
             const output = await dbConn.callProcedurePromisified(sp, [])
-            const spcfg = await dbConn.loadProcedurePromisified(null, '"FG_SALESHCFG_SP"')
+            const spcfg = await dbConn.loadProcedurePromisified(null, '"FG_SALESH_CONFIG_SP"')
             const outputcfg = await dbConn.callProcedurePromisified(spcfg, [])
             console.log(output.results);
             console.log(outputcfg.results);
@@ -916,6 +922,7 @@ module.exports = (srv) => {
         } catch (error) {
             console.error(error);
         }
+
         if (flag === 'X') {
             let dataObj = {};
             dataObj["success"] = true;
