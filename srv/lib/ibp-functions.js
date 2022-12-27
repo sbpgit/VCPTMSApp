@@ -18,6 +18,7 @@ class IBPFunctions {
                         "LOCATION_ID",
                         "PRODUCT_ID",
                         "ORD_QTY",
+                        "ADJ_QTY,
                         "CUSTOMER_GROUP",
                         "CLASS_NUM",
                         "CHAR_NUM",
@@ -31,6 +32,7 @@ class IBPFunctions {
         for (let i = 0; i < lisales.length; i++) {
             var vWeekDate = new Date(lisales[i].WEEK_DATE).toISOString().split('Z');
             var vDemd = lisales[i].ORD_QTY.split('.');
+            let vAdjqty = lisales[i].ADJ_QTY.split('.');
             vsales = {
                 "LOCID": lisales[i].LOCATION_ID,
                 "PRDID": lisales[i].PRODUCT_ID,
@@ -38,6 +40,7 @@ class IBPFunctions {
                 "VCCHARVALUE": lisales[i].CHARVAL_NUM,
                 "VCCLASS": lisales[i].CLASS_NUM,
                 "ACTUALDEMANDVC": vDemd[0],
+                "SEEDORDERDEMANDVC": vAdjqty[0],
                 "CUSTID": lisales[i].CUSTOMER_GROUP,
                 "PERIODID0_TSTAMP": vWeekDate[0]
             };
