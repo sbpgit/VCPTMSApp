@@ -145,7 +145,7 @@ oCC1: null,
           });
           this.getModel("BModel").read("/getVariant", {
             success: function (oData) {
-              that.oGModel.setProperty("/variantDetails", oData.results);
+              
               for (var i = 0; i < oData.results.length; i++) {
                 aData.push({
                   "VARIANTNAME": oData.results[i].VARIANTNAME,
@@ -162,9 +162,11 @@ oCC1: null,
               var IDlength = oData.results.length
               if (IDlength === 0) {
                 that.oGModel.setProperty("/Id", 0);
+                that.oGModel.setProperty("/variantDetails","");
               }
               else {
                 that.oGModel.setProperty("/Id", oData.results[IDlength - 1].VARIANTID);
+                that.oGModel.setProperty("/variantDetails", oData.results);
               }
             },
             error: function (oData, error) {
@@ -576,59 +578,12 @@ oCC1: null,
             },
           });
         },
-        // onShowPress: function () {
-        //   that._variantFragment.open();
-        // },
-        // handleCloseVariant: function () {
-        //   that._variantFragment.close();
-        // },
-        onTitlePress: function (oEvent) {
-          var oData = {};
-          var newData = [];
-          var oButton = oEvent.getSource();
-          var variantName = oEvent.getSource().getTitle();
-          var data = that.oGModel.getProperty("/variantDetails");
-          for (var i = 0; i < data.length; i++) {
-            if (variantName === data[i].VARIANTNAME) {
-              oData.VARIANTID = data[i].VARIANTID;
-              oData.VARIANTNAME = data[i].VARIANTNAME;
-              oData.USER = data[i].USER;
-              oData.APPLICATION_NAME = data[i].APPLICATION_NAME;
-              oData.FIELD = data[i].FIELD;
-              oData.FIELDCENTER = data[i].FIELDCENTER;
-              oData.VALUE = data[i].VALUE;
-              oData.SCOPE = data[i].SCOPE;
-              newData.push(oData);
-              oData = {};
-            }
-          }
-          var newJSONMODEL = new JSONModel();
-          newJSONMODEL.setData({ items1: newData });
-          sap.ui.getCore().byId("varNameList").setModel(newJSONMODEL);
-          that._popOver.openBy(oButton);
 
-        },
-        handleSelectClose: function () {
-          that._popOver.close();
-        },
         handleSelectPress: function (oEvent) {
           var oLoc, oTokens = {}, finalToken = [];
           var oTableItems = that.oGModel.getProperty("/variantDetails");
           var selectedApp = oEvent.getSource().getSelectionKey();
-          // for (var i = 0; i < oTableItems.length; i++) {
-          //   if (oTableItems[i].getCells()[4].getText().includes("Loc")) {
-          //     oLoc = oTableItems[i].getCells()[6].getText();
-          //   }
-          //   else if (oTableItems[i].getCells()[4].getText().includes("Prod")) {
 
-          //     var oItemTemplate = new sap.m.Token({
-          //       key: i,
-          //       text: oTableItems[i].getCells()[6].getText()
-          //   });
-          //   finalToken.push(oItemTemplate);
-          //   oItemTemplate={};
-          //   }
-          // }
           for (var i = 0; i < oTableItems.length; i++) {
             if (selectedApp === oTableItems[i].VARIANTNAME) {
               if (oTableItems[i].FIELD.includes("Loc")) {
@@ -645,6 +600,7 @@ oCC1: null,
               }
             }
           }
+
           that.byId("idloc").setValue(oLoc);
           this.getModel("BModel").read("/getLocProdDet", {
             filters: [
@@ -657,6 +613,7 @@ oCC1: null,
             success: function (oData) {
               that.prodModel.setData(oData);
               that.oProdList.setModel(that.prodModel);
+              that.oProdList.addToken(finalToken);
             },
             error: function (oData, error) {
               MessageToast.show("error");
@@ -665,7 +622,7 @@ oCC1: null,
           // that._popOver.close();
           // that._variantFragment.close();
 
-          that.byId("prodInput").setTokens(finalToken);
+          // that.byId("prodInput").setTokens(finalToken);
           // that.onGetData();
 
           // }
