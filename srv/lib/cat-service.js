@@ -1710,7 +1710,7 @@ module.exports = (srv) => {
 
             lsresults = {};
             liresults = [];
-            let lifinalP;
+            let v_finalP;
             let liPrimary;
             const liData = await cds.run(
                 `SELECT *
@@ -1735,8 +1735,15 @@ module.exports = (srv) => {
 
             liPrimary = liresultA.liprimarydata;
             li_varcharps = liresultA.liseconddata;
+
+            let v_seq = liPrimary.length - 1;
+            let flag="";
+            if(req.data.SEQUENCE > liPrimary[v_seq].SEQUENCE){
+                flag = "X";
+            }
             
-            if (req.data.CHAR_TYPE === "S") {
+            if (req.data.CHAR_TYPE === "S" && flag === "") {
+                if(liPrimary.length > 0){
                 for (let i = 0; i < liPrimary.length; i++) {
                     lsresults.PRODUCT_ID = liPrimary[i].PRODUCT_ID;
                     lsresults.LOCATION_ID = liPrimary[i].LOCATION_ID;
@@ -1755,16 +1762,23 @@ module.exports = (srv) => {
                                           AND CHAR_NUM = '${lsresults.CHAR_NUM}'`);
 
                         liresults.push(lsresults);
+                        v_finalP = lsresults.SEQUENCE;
                     }
-                    lifinalP = lsresults.SEQUENCE;
+                    
                     lsresults = {};
                 }
+                // if(v_finalP){
+                //     v_finalP = liPrimary.length;
+                // }
             } else {
-                lifinalP = liPrimary.length;
+                v_finalP = 0;
+            }
+            } else {
+                v_finalP = liPrimary.length;
             }
 
 
-            liPrimary = lifinalP + 1;
+            liPrimary = v_finalP + 1;
             for (let i = 0; i < li_varcharps.length; i++) {
                 lsresults.PRODUCT_ID = li_varcharps[i].PRODUCT_ID;
                 lsresults.LOCATION_ID = li_varcharps[i].LOCATION_ID;
