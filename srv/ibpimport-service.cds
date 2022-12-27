@@ -28,7 +28,7 @@ service IBPImportSrv @(impl : './lib/ibpimport-service.js') {
     action exportIBPCustomer();
     action exportIBPClass(CLASS_NUM: String(18));  
     action exportComponentReq(LOCATION_ID : String(4),PRODUCT_ID : String(40),FROMDATE: Date, TODATE: Date,CRITICALKEY :String(1));
-    // function exportComponentReq(LOCATION_ID : String(4),PRODUCT_ID : String(40),CRITICALKEY :String(1)) returns String;
+    
     action exportIBPLocProd(LOCATION_ID : String(4));
     // function exportIBPLocProd(LOCATION_ID : String(4)) returns String;
     action exportRestrDetails(LOCATION_ID: String(4)); 
@@ -37,6 +37,8 @@ service IBPImportSrv @(impl : './lib/ibpimport-service.js') {
   
     action exportIBPSalesTrans(LocProdData: String);//LOCATION_ID : String(4),PRODUCT_ID : String(40),CUSTOMER_GROUP : String(20),DOC_DATE:Date);
     action exportActCompDemand(LocProdData: String);//LOCATION_ID : String(4),PRODUCT_ID : String(40),CRITICALKEY :String(1));//,FROMDATE: Date, TODATE: Date);
+    
+    function exportActCompDemandfn(LOCATION_ID : String(4),PRODUCT_ID : String(40),CRITICALKEY :String(1)) returns String;
     action exportRestrReq(LocProdData: String);//LOCATION_ID : String(4),PRODUCT_ID : String(40));
     action exportMktAuth(LocProdData: String);//LOCATION_ID : String(4),PRODUCT_ID : String(40));
     action exportIBPCIR(LocProdData: String);//LOCATION_ID : String(4),PRODUCT_ID : String(40));  // Partial Product
