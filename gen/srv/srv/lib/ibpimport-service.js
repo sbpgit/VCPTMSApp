@@ -5,6 +5,7 @@ const { v1: uuidv1 } = require('uuid')
 const xsenv = require("@sap/xsenv");
 const JobSchedulerClient = require("@sap/jobs-client");
 const MktAuth = require("./market-auth");
+const Catservicefn =  require("./catservice-function");
 const vAIRKey = process.env.AIR;
 const IBPFunc = require("./ibp-functions");
 const obibpfucntions = new IBPFunc();

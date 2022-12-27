@@ -17,7 +17,7 @@ class SOFunctions {
     async genUniqueID(adata, req, Flag) {
 
         await GenF.logMessage(req, 'Started Sales Orders Processing');
-
+        await this.clearSalesH();
         await this.processUniqueID(adata.LOCATION_ID, adata.PRODUCT_ID, '');
         await this.genBaseMarketAuth(adata.LOCATION_ID, adata.PRODUCT_ID);
         await this.genPartialProd(adata.LOCATION_ID, adata.PRODUCT_ID);
@@ -1103,15 +1103,19 @@ class SOFunctions {
         }
 
     }
+    // Factory location update for Mater data
     async genFactoryLoc() {
+        // Get data from Master tables
         const liLocation = await SELECT.columns(
             "LOCATION_ID")
             .from('CP_LOCATION');
-            const liFtLoc = await SELECT.columns(
+
+        const liFtLoc = await SELECT.columns(
                 "LOCATION_ID",
                 "PLAN_LOC",
                 "FACTORY_LOC")
                 .from('CP_FACTORY_SALESLOC');
+        // Insert master data which doesnot exist in Factory location table
         let vFlag = '';
         let liFactLoc = [];
         let lsFactLoc = {};
@@ -1152,6 +1156,9 @@ class SOFunctions {
         else {
             console.log("No records to update Factory-Locations");
         }
+    }
+    async clearSalesH(){
+        
     }
 }
 
