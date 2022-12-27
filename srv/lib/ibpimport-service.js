@@ -5,7 +5,7 @@ const { v1: uuidv1 } = require('uuid')
 const xsenv = require("@sap/xsenv");
 const JobSchedulerClient = require("@sap/jobs-client");
 const MktAuth = require("./market-auth");
-const Catservicefn =  require("./catservice-function");
+const Catservicefn = require("./catservice-function");
 const vAIRKey = process.env.AIR;
 const IBPFunc = require("./ibp-functions");
 const obibpfucntions = new IBPFunc();
@@ -417,11 +417,11 @@ module.exports = cds.service.impl(async function () {
 
         // const li_Transid = servicePost.tx(req).get("/GetTransactionID");
         for (i = 0; i < licust.length; i++) {
-        vcust = {
-            "CUSTID": licust[i].CUSTOMER_GROUP,
-            "CUSTDESCR": licust[i].CUSTOMER_DESC,
-        };
-        oReq.cust.push(vcust);
+            vcust = {
+                "CUSTID": licust[i].CUSTOMER_GROUP,
+                "CUSTDESCR": licust[i].CUSTOMER_DESC,
+            };
+            oReq.cust.push(vcust);
 
         }
         let vTransID = new Date().getTime().toString();
@@ -1480,6 +1480,7 @@ module.exports = cds.service.impl(async function () {
                             "LOCATION_ID",
                             "PRODUCT_ID",
                             "ORD_QTY",
+                            "ADJ_QTY,
                             "CUSTOMER_GROUP"
                             FROM V_IBP_SALESH_ACTDEMD
                             WHERE LOCATION_ID = '`+ lsData.LOCATION_ID + `'
@@ -1488,11 +1489,13 @@ module.exports = cds.service.impl(async function () {
             for (i = 0; i < lisales.length; i++) {
                 let vWeekDate = new Date(lisales[i].WEEK_DATE).toISOString().split('Z');
                 let vDemd = lisales[i].ORD_QTY.split('.');
+                let vAdjqty = lisales[i].ADJ_QTY.split('.');
                 vsales = {
                     "LOCID": lisales[i].LOCATION_ID,
                     "PRDID": lisales[i].PRODUCT_ID,
                     "CUSTID": lisales[i].CUSTOMER_GROUP,
                     "ACTUALDEMAND": vDemd[0],
+                    "SEEDORDERDEMAND":vAdjqty[0],
                     "PERIODID0_TSTAMP": vWeekDate[0]
                 };
                 oReq.sales.push(vsales);
@@ -1781,7 +1784,7 @@ module.exports = cds.service.impl(async function () {
         },
             vactcomp, lMessage = '';
         // Generating payload for job scheduler logs
-        
+
         // Fetch History period from Configuration table
         const lsSales = await GenF.getParameterValue(req.data.LOCATION_ID, 4);
         console.log(lsSales);
@@ -1793,8 +1796,8 @@ module.exports = cds.service.impl(async function () {
         vFromDate = vFromDate.toISOString().split('Z')[0].split('T')[0];
         console.log(vFromDate);
 
-            const liactcomp = await cds.run(
-                `
+        const liactcomp = await cds.run(
+            `
                 SELECT DISTINCT "WEEK_DATE",
                         "LOCATION_ID",
                         "PRODUCT_ID",
@@ -1803,11 +1806,11 @@ module.exports = cds.service.impl(async function () {
                         FROM V_IBP_LOCPRODCOMP_ACTDEMD
                         WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
                            AND PRODUCT_ID = '`+ req.data.PRODUCT_ID +
-                `' AND WEEK_DATE >= '` + vFromDate +
-                `' AND WEEK_DATE <= '` + vToDate + `'`);
+            `' AND WEEK_DATE >= '` + vFromDate +
+            `' AND WEEK_DATE <= '` + vToDate + `'`);
 
-            const licriticalcomp = await cds.run(
-                `
+        const licriticalcomp = await cds.run(
+            `
                     SELECT  "LOCATION_ID",
                             "PRODUCT_ID",
                             "ITEM_NUM",
@@ -1817,68 +1820,68 @@ module.exports = cds.service.impl(async function () {
                             WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
                               AND PRODUCT_ID = '`+ req.data.PRODUCT_ID + `'                               
                               AND CRITICALKEY = '` + req.data.CRITICALKEY + `'`);
-            if (req.data.CRITICALKEY === "X") {
-                for (i = 0; i < liactcomp.length; i++) {
-                    for (let j = 0; j < licriticalcomp.length; j++) {
-                        if (liactcomp[i].LOCATION_ID === licriticalcomp[j].LOCATION_ID &&
-                            liactcomp[i].PRODUCT_ID === licriticalcomp[j].PRODUCT_ID &&
-                            //liactcomp[i].ITEM_NUM === licriticalcomp[j].ITEM_NUM &&
-                            liactcomp[i].COMPONENT === licriticalcomp[j].COMPONENT) {
+        if (req.data.CRITICALKEY === "X") {
+            for (i = 0; i < liactcomp.length; i++) {
+                for (let j = 0; j < licriticalcomp.length; j++) {
+                    if (liactcomp[i].LOCATION_ID === licriticalcomp[j].LOCATION_ID &&
+                        liactcomp[i].PRODUCT_ID === licriticalcomp[j].PRODUCT_ID &&
+                        //liactcomp[i].ITEM_NUM === licriticalcomp[j].ITEM_NUM &&
+                        liactcomp[i].COMPONENT === licriticalcomp[j].COMPONENT) {
 
-                            let vWeekDate = new Date(liactcomp[i].WEEK_DATE).toISOString().split('Z');
-                            let vDemd = liactcomp[i].ACTUALCOMPONENTDEMAND.split('.');
+                        let vWeekDate = new Date(liactcomp[i].WEEK_DATE).toISOString().split('Z');
+                        let vDemd = liactcomp[i].ACTUALCOMPONENTDEMAND.split('.');
 
-                            vactcomp = {
-                                "LOCID": liactcomp[i].LOCATION_ID,
-                                "PRDID": liactcomp[i].PRODUCT_ID,
-                                "ACTUALCOMPONENTDEMAND": vDemd[0],
-                                "PRDFR": liactcomp[i].COMPONENT,
-                                "PERIODID0_TSTAMP": vWeekDate[0]
-                            };
+                        vactcomp = {
+                            "LOCID": liactcomp[i].LOCATION_ID,
+                            "PRDID": liactcomp[i].PRODUCT_ID,
+                            "ACTUALCOMPONENTDEMAND": vDemd[0],
+                            "PRDFR": liactcomp[i].COMPONENT,
+                            "PERIODID0_TSTAMP": vWeekDate[0]
+                        };
 
-                            oReq.actcomp.push(vactcomp);
-                        }
+                        oReq.actcomp.push(vactcomp);
                     }
                 }
-            } else {
-                for (i = 0; i < liactcomp.length; i++) {
-                    let vWeekDate = new Date(liactcomp[i].WEEK_DATE).toISOString().split('Z');
-                    let vDemd = liactcomp[i].ACTUALCOMPONENTDEMAND.split('.');
-                    vactcomp = {
-                        "LOCID": liactcomp[i].LOCATION_ID,
-                        "PRDID": liactcomp[i].PRODUCT_ID,
-                        "ACTUALCOMPONENTDEMAND": vDemd[0],
-                        "PRDFR": liactcomp[i].COMPONENT,
-                        "PERIODID0_TSTAMP": vWeekDate[0]
-                    };
-                    oReq.actcomp.push(vactcomp);
-                }
             }
-            if (oReq.actcomp.lenght > 0) {
-                let vTransID = new Date().getTime().toString();
-                let oEntry =
-                {
-                    "Transactionid": vTransID,
-                    "AggregationLevelFieldsString": "LOCID,PRDID,ACTUALCOMPONENTDEMAND,PERIODID0_TSTAMP,PRDFR",
-                    "VersionID": "",
-                    "DoCommit": true,
-                    "ScenarioID": ""
-                }
-                oEntry[lData] = oReq.actcomp;
-                try {
-                    await service.tx(req).post(lEntity, oEntry);
-                    let resUrl = "/getExportResult?P_EntityName='" + liParaValue[0].VALUE + "'&P_TransactionID='" + vTransID + "'";
-                    await service.tx(req).get(resUrl);
-                    flag = 'X';
-                    lMessage = lMessage + ' ' + 'Export of Actual Component Demand is successfull for product:' + lsData.PRODUCT_ID;
-                }
-                catch {
-                    lMessage = lMessage + ' ' + 'Export of Actual Component Demand failed for product:' + lsData.PRODUCT_ID;
-                }
+        } else {
+            for (i = 0; i < liactcomp.length; i++) {
+                let vWeekDate = new Date(liactcomp[i].WEEK_DATE).toISOString().split('Z');
+                let vDemd = liactcomp[i].ACTUALCOMPONENTDEMAND.split('.');
+                vactcomp = {
+                    "LOCID": liactcomp[i].LOCATION_ID,
+                    "PRDID": liactcomp[i].PRODUCT_ID,
+                    "ACTUALCOMPONENTDEMAND": vDemd[0],
+                    "PRDFR": liactcomp[i].COMPONENT,
+                    "PERIODID0_TSTAMP": vWeekDate[0]
+                };
+                oReq.actcomp.push(vactcomp);
             }
-            else {
-                lMessage = lMessage + ' ' + 'No Actual Component Demand exists on Crtical components for product:' + lsData.PRODUCT_ID;
+        }
+        if (oReq.actcomp.lenght > 0) {
+            let vTransID = new Date().getTime().toString();
+            let oEntry =
+            {
+                "Transactionid": vTransID,
+                "AggregationLevelFieldsString": "LOCID,PRDID,ACTUALCOMPONENTDEMAND,PERIODID0_TSTAMP,PRDFR",
+                "VersionID": "",
+                "DoCommit": true,
+                "ScenarioID": ""
             }
+            oEntry[lData] = oReq.actcomp;
+            try {
+                await service.tx(req).post(lEntity, oEntry);
+                let resUrl = "/getExportResult?P_EntityName='" + liParaValue[0].VALUE + "'&P_TransactionID='" + vTransID + "'";
+                await service.tx(req).get(resUrl);
+                flag = 'X';
+                lMessage = lMessage + ' ' + 'Export of Actual Component Demand is successfull for product:' + lsData.PRODUCT_ID;
+            }
+            catch {
+                lMessage = lMessage + ' ' + 'Export of Actual Component Demand failed for product:' + lsData.PRODUCT_ID;
+            }
+        }
+        else {
+            lMessage = lMessage + ' ' + 'No Actual Component Demand exists on Crtical components for product:' + lsData.PRODUCT_ID;
+        }
         // await GenF.jobSchMessage('X', lMessage, req);
         return lMessage;
     });
@@ -2045,7 +2048,7 @@ module.exports = cds.service.impl(async function () {
         // Get IBP planning area
         // Get Planning area and Prefix configurations for IBP
         let liParaValue = await GenF.getIBPParameterValue();
-        let flag, lMessage = '';
+        let flag, lMessage = '', vScenario = '';
         // Generating payload for job scheduler logs
         let lilocProd = {};
         let lsData = {};
@@ -2100,7 +2103,13 @@ module.exports = cds.service.impl(async function () {
             flag = '';
             for (let i in req) {
                 let vWeekDate = dateJSONToEDM(req[i].PERIODID4_TSTAMP);
-                let vScenario = req[i].SCENARIOID; //'BSL_SCENARIO';
+
+                if (req[i].SCENARIOID === '' || req[i].SCENARIOID === null) {
+                    vScenario = '_PLAN';
+                }
+                else {
+                    vScenario = req[i].SCENARIOID; //'BSL_SCENARIO';
+                }
                 req[i].PERIODID4_TSTAMP = vWeekDate;
 
                 if (vWeekDate >= vDateDeld) {
@@ -2155,7 +2164,12 @@ module.exports = cds.service.impl(async function () {
                 }
                 for (let i in req) {
                     let vWeekDate = dateJSONToEDM(req[i].PERIODID4_TSTAMP).split('T')[0];
-                    let vScenario = req[i].SCENARIOID;//'BSL_SCENARIO';
+                    if (req[i].SCENARIOID === '' || req[i].SCENARIOID === null) {
+                        vScenario = '_PLAN';
+                    }
+                    else {
+                        vScenario = req[i].SCENARIOID; //'BSL_SCENARIO';
+                    }
                     let vManualOpt = '0.0';
                     req[i].PERIODID4_TSTAMP = vWeekDate;
                     if (vWeekDate >= vDateDel) {
@@ -2208,7 +2222,7 @@ module.exports = cds.service.impl(async function () {
         let flag, lMessage = '';
         // Generating payload for job scheduler logs
         let lsData = {};
-       
+
         lsData.LOCATION_ID = request.data.LOCATION_ID;
         lsData.PRODUCT_ID = request.data.PRODUCT_ID;
         let resUrl = "/" + liParaValue[0].VALUE + "?$select=PRDID,LOCID,PERIODID4_TSTAMP,TOTALDEMANDOUTPUT,UOMTOID,VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$filter=LOCID eq '" + lsData.LOCATION_ID + "' and PRDID eq '" + lsData.PRODUCT_ID + "'and UOMTOID eq 'EA'";
@@ -2592,7 +2606,7 @@ module.exports = cds.service.impl(async function () {
 
         // Generating payload for job scheduler logs
         let lVersion, lScenario, vFromDate, vToDate;
-        let vScen, resUrl;
+        let vScen = '', resUrl;
         let req;
         let lilocProd = {};
         let lsData = {},
@@ -2670,10 +2684,13 @@ module.exports = cds.service.impl(async function () {
             flag = '';
             for (let i in req) {
                 let vWeekDate = dateJSONToEDM(req[i].PERIODID4_TSTAMP);
-                // if (req[i].SCENARIOID === null) {
-                vScen = req[i].SCENARIOID;//'BSL_SCENARIO';//' ';
-                // }
-                // let vScenario = 'BSL_SCENARIO';
+                vScen = ''
+                if (req[i].SCENARIOID === '' || req[i].SCENARIOID === null) {
+                    vScen = '_PLAN';
+                }
+                else {
+                    vScen = req[i].SCENARIOID; //'BSL_SCENARIO';
+                }
                 req[i].PERIODID4_TSTAMP = vWeekDate;
 
                 if (vWeekDate >= vDateDeld) {
@@ -2695,6 +2712,7 @@ module.exports = cds.service.impl(async function () {
                     try {
                         await cds.run(modQuery);
                         flag = 'D';
+
                     }
                     catch (err) {
                         console.log(err);
@@ -2745,9 +2763,12 @@ module.exports = cds.service.impl(async function () {
                 // Insert into Fchar plan
                 for (let i in req) {
                     let vWeekDate = dateJSONToEDM2(req[i].PERIODID4_TSTAMP).split('T')[0];
-                    // if (req[i].SCENARIOID === null) {
-                    vScen = req[i].SCENARIOID;//'BSL_SCENARIO';//' ';
-                    // }
+                    if (req[i].SCENARIOID === '' || req[i].SCENARIOID === null) {
+                        vScen = '_PLAN';
+                    }
+                    else {
+                        vScen = req[i].SCENARIOID; //'BSL_SCENARIO';
+                    }
                     req[i].PERIODID4_TSTAMP = vWeekDate;
                     let vManualOpt = '0.0';
                     if (vWeekDate >= vDateDel) {
@@ -2891,7 +2912,7 @@ module.exports = cds.service.impl(async function () {
         let vScen, resUrl;
         let req;
         let lilocProd = {};
-       
+
 
         lsData = {};
         lsFchar = {};
