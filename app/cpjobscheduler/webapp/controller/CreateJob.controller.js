@@ -1112,6 +1112,7 @@ sap.ui.define(
                     aSelectedVer = oEvent.getParameter("selectedItems");
                     that.oVer.setValue(aSelectedVer[0].getTitle());
                     that.oGModel.setProperty("/Flag", "X");
+                    that.oGModel.setProperty("/SelVersion", aSelectedVer[0].getBindingContext().getObject().VERSION);
                     that.oScen.setValue("");
 
                     that.getScenario();
@@ -1121,6 +1122,7 @@ sap.ui.define(
                     var aSelectedScen = oEvent.getParameter("selectedItems");
                     that.oGModel.setProperty("/Flag", "X");
                     that.oScen.setValue(aSelectedScen[0].getTitle());
+                    that.oGModel.setProperty("/SelScenario", aSelectedVer[0].getBindingContext().getObject().SCENARIO);
                     // Profile List
                 } else if (sId.includes("ppfSlctList")) {
                     var aSelectedPPF = oEvent.getParameter("selectedItems");
@@ -1282,7 +1284,7 @@ sap.ui.define(
                 });
                 oFilters.push(sFilter);
 
-                if (oJobType === "M" || oJobType === "P") {
+                if (oJobType === "M" || oJobType === "P" || oJobType === "PF") {
                     aSelectedProd = that.oProd.getTokens();
                     for (var i = 0; i < aSelectedProd.length; i++) {
                         if (aSelectedProd[i].getText() !== "All") {
@@ -1341,7 +1343,7 @@ sap.ui.define(
                 var sFilter = new sap.ui.model.Filter({
                     path: "VERSION",
                     operator: sap.ui.model.FilterOperator.EQ,
-                    value1: that.oVer.getValue(),
+                    value1: that.oGModel.getProperty("/SelVersion"),
                 });
                 oFilters.push(sFilter);
 
@@ -2184,6 +2186,9 @@ sap.ui.define(
                     case "O":
                         that.onProcSalesOrd();
                         break;
+                    case "PF":
+                        that.onPublishForecast();
+                        break;
                     default:
                         break;
                 }
@@ -2335,16 +2340,12 @@ sap.ui.define(
                 oProdItems = that.oProd.getTokens();
                 cSelected = that.byId("PidCheck").getSelected();
                 oSelModelVer = this.byId("PidModelVer").getSelectedKey();
-                oSelVer = this.oVer.getValue();
-                oSelScen = this.oScen.getValue();
+                oSelVer = that.oGModel.getProperty("/SelVersion");
+                oSelScen = that.oGModel.getProperty("/SelScenario");
                 //   25-08-2022
                 var oSelType = this.byId("PidType").getSelectedKey();
                 //   25-08-2022
-                if (
-                    this.oProd.getTokens().length > 0 &&
-                    this.oVer.getValue() &&
-                    this.oScen.getValue()
-                ) {
+                if (this.oProd.getTokens().length > 0 && this.oVer.getValue()) {
                     for (i = 0; i < oProdItems.length; i++) {
                         vRuleslist = {
                             override: cSelected,
@@ -2412,6 +2413,15 @@ sap.ui.define(
                 } else {
                     MessageToast.show("Please select all fields");
                 }
+            },
+
+            /**
+             * This function is called when click on create Job for Create Publish ForeCast Order button.
+             * @param {object} oEvent -the event information.
+             */
+            onPublishForecast:function(){
+
+
             },
 
             /**

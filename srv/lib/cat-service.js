@@ -1710,7 +1710,7 @@ module.exports = (srv) => {
 
             lsresults = {};
             liresults = [];
-            let finalP;
+            let lifinalP;
             let liPrimary;
             const liData = await cds.run(
                 `SELECT *
@@ -1728,13 +1728,13 @@ module.exports = (srv) => {
 
             );
                 
-            result = liData.reduce((r, o) => {
+            let liresultA = liData.reduce((r, o) => {
                 r[o.CHAR_TYPE === 'P' ? 'liprimarydata' : 'liseconddata'].push(o);
                 return r; 
             }, { liprimarydata: [], liseconddata: [] });
 
-            liPrimary = result.liprimarydata;
-            li_varcharps = result.liseconddata;
+            liPrimary = liresultA.liprimarydata;
+            li_varcharps = liresultA.liseconddata;
             
             if (req.data.CHAR_TYPE === "S") {
                 for (let i = 0; i < liPrimary.length; i++) {
@@ -1756,15 +1756,15 @@ module.exports = (srv) => {
 
                         liresults.push(lsresults);
                     }
-                    finalP = lsresults.SEQUENCE;
+                    lifinalP = lsresults.SEQUENCE;
                     lsresults = {};
                 }
             } else {
-                finalP = liPrimary.length;
+                lifinalP = liPrimary.length;
             }
 
 
-            liPrimary = finalP + 1;
+            liPrimary = lifinalP + 1;
             for (let i = 0; i < li_varcharps.length; i++) {
                 lsresults.PRODUCT_ID = li_varcharps[i].PRODUCT_ID;
                 lsresults.LOCATION_ID = li_varcharps[i].LOCATION_ID;

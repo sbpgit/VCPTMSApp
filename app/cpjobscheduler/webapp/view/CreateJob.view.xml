@@ -193,7 +193,7 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                                     </f:FormElement>
                                     <f:FormElement>
                                         <f:label>
-                                            <Label text="{i18n>ibpscen}" required="true" />
+                                            <Label text="{i18n>ibpscen}"  />
                                         </f:label>
                                         <f:fields>
                                             <Input id="Pidscen" value="" placeholder="{i18n>ibpscen}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
@@ -1042,7 +1042,7 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                                     </f:FormElement>
                                     <f:FormElement>
                                         <f:label>
-                                            <Label text="{i18n>ibpver}" />
+                                            <Label text="{i18n>ibpver}" required="true" />
                                         </f:label>
                                         <f:fields>
                                             <Input id="PFidver" value="" placeholder="{i18n>ibpver}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
@@ -1059,7 +1059,7 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                                     
                                     <f:FormElement>
                                         <f:label>
-                                            <Label text="{i18n>daterange}" />
+                                            <Label text="{i18n>daterange}" required="true" />
                                         </f:label>
                                         <f:fields>
                                             <DateRangeSelection id="PFidDateRange"  delimiter="To" dateValue="" secondDateValue="" valueFormat="MM-dd-yyyy"
