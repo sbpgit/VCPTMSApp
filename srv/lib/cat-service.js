@@ -3409,33 +3409,54 @@ module.exports = (srv) => {
     srv.on("createVariant", async req => {
         let lsResults = {};
         let liResults = {};
+        let hResults={};
+        let headerResults=[];
         let finalResults = [];
         var responseMessage1;
         var Flag = req.data.Flag;
         var User = req.user.id;
         lsResults = JSON.parse(req.data.VARDATA);
         // liResults.push(lsResults);
-
-        for (var i = 0; i < lsResults.length; i++) {
-            liResults.VARIANTID = lsResults[i].ID;
-            liResults.VARIANTNAME = lsResults[i].IDNAME;
-            liResults.FIELD = lsResults[i].Field;
-            liResults.FIELD_CENTER = lsResults[i].FieldCenter;
-            liResults.VALUE = lsResults[i].Value;
-            liResults.USER = User;
-            liResults.APPLICATION_NAME = lsResults[i].App_Name;
-            liResults.SCOPE = "G";
-            finalResults.push(liResults)
-            liResults={};
-        }
         if (Flag === "X") {
+            for (var i = 0; i < lsResults.length; i++) {
+                liResults.VARIANTID = lsResults[i].ID;
+                liResults.VARIANTNAME = lsResults[i].IDNAME;
+                liResults.FIELD = lsResults[i].Field;
+                liResults.FIELD_CENTER = lsResults[i].FieldCenter;
+                liResults.VALUE = lsResults[i].Value;
+                liResults.USER = User;
+                liResults.APPLICATION_NAME = lsResults[i].App_Name;
+                liResults.SCOPE = lsResults[i].SCOPE;
+                finalResults.push(liResults)
+                liResults={};
+            }
+            hResults.VARIANTID = lsResults[0].ID;
+                hResults.VARIANTNAME = lsResults[0].IDNAME;
+                hResults.USER = User;
+                hResults.DEFAULT = lsResults[0].DEFAULT;
+                hResults.SCOPE = lsResults[0].SCOPE;
+                headerResults.push(hResults);
+                hResults={};
 
             try {
                 await cds.run(INSERT.into("CP_CREATEVARIANT").entries(finalResults));
+                await cds.run(INSERT.into("CP_CREATEVARIANTHEADER").entries(headerResults));
                 responseMessage1 = "Created Successfully";
 
             } catch (e) {
                 responseMessage1 = "Creation Failed";
+            }
+        }
+        else if (Flag === "D") {
+            try {
+                await cds.delete("CP_CREATEVARIANTHEADER", finalResults);
+                responseMessage1 = "Deletion successfull";
+                
+
+            } catch (e) {
+
+                responseMessage1 = "Deletion Failed";
+               
             }
         }
 
