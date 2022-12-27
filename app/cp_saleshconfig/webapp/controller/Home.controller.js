@@ -160,7 +160,21 @@ oCC1: null,
               that.variantModel.setData({ items: uniqueName });
               that.byId("Variants").setModel(that.variantModel);
               var IDlength = oData.results.length
-              that.oGModel.setProperty("/Id", oData.results[IDlength - 1].VARIANTID);
+              if (IDlength === 0) {
+                that.oGModel.setProperty("/Id", 0);
+              }
+              else {
+                that.oGModel.setProperty("/Id", oData.results[IDlength - 1].VARIANTID);
+              }
+            },
+            error: function (oData, error) {
+              MessageToast.show("error while loading variant details");
+            },
+          });
+
+          this.getModel("BModel").read("/getVariantHeader", {
+            success: function (oData) {
+              that.oGModel.setProperty("/variantHeader", oData.results);
             },
             error: function (oData, error) {
               MessageToast.show("error while loading variant details");
@@ -497,20 +511,28 @@ oCC1: null,
           var Field1 = that.byId("idloc").getParent().getItems()[0].getText();
           var sProduct = that.byId("prodInput").getTokens();
           var Field2 = that.byId("prodInput").getParent().getItems()[0].getText();
-          var varName = document.getElementById("container-cp.appf.cpsaleshconfig---Home--Variants-name-inner").value;
+          var varName = oEvent.getParameters().name;
           var sScope = document.getElementById("container-cp.appf.cpsaleshconfig---Home--Variants-share-CB");
-          if(sScope){
+          if (sScope.checked) {
             var Scope = "Public";
           }
-          else{
+          else {
             var Scope = "Private";
+          }
+          var sDefault = document.getElementById("container-cp.appf.cpsaleshconfig---Home--Variants-default-CB");
+          if (sDefault.checked) {
+            var defaultChecked = "Y";
+          }
+          else {
+            var defaultChecked = "N";
           }
           // for (var i = 0; i < sLocation.length; i++) {
           details = {
             Field: Field1,
             FieldCenter: (1).toString(),
             Value: sLocation,
-            Scope : Scope
+            Scope: Scope,
+            Default: defaultChecked
           }
           array.push(details);
           // }
@@ -519,7 +541,9 @@ oCC1: null,
             details = {
               Field: Field2,
               FieldCenter: (k + 1).toString(),
-              Value: sProduct[k].getText()
+              Value: sProduct[k].getText(),
+              Scope: Scope,
+              Default: defaultChecked
             }
             array.push(details);
           }
@@ -608,16 +632,16 @@ oCC1: null,
           for (var i = 0; i < oTableItems.length; i++) {
             if (selectedApp === oTableItems[i].VARIANTNAME) {
               if (oTableItems[i].FIELD.includes("Loc")) {
-                    oLoc = oTableItems[i].VALUE;
-                  }
-                  else if (oTableItems[i].FIELD.includes("Prod")) {
-      
-                    var oItemTemplate = new sap.m.Token({
-                      key: i,
-                      text: oTableItems[i].VALUE
-                  });
-                  finalToken.push(oItemTemplate);
-                  oItemTemplate={};
+                oLoc = oTableItems[i].VALUE;
+              }
+              else if (oTableItems[i].FIELD.includes("Prod")) {
+
+                var oItemTemplate = new sap.m.Token({
+                  key: i,
+                  text: oTableItems[i].VALUE
+                });
+                finalToken.push(oItemTemplate);
+                oItemTemplate = {};
               }
             }
           }
@@ -643,14 +667,48 @@ oCC1: null,
 
           that.byId("prodInput").setTokens(finalToken);
           // that.onGetData();
-          
+
           // }
         },
 
-        onManage:function(oEvent){
-            // that._popOver.open();
-            document.getElementById("container-cp.appf.cpsaleshconfig---Home--Variants-managementTable-listUl").getElementsByTagName("td")[3].innerText
-            document.getElementById("container-cp.appf.cpsaleshconfig---Home--Variants-managementTable-listUl").rows[1].cells[1].innerText
+        onManage: function (oEvent) {
+          var details = {};
+          var array = []
+          var deletedItems = oEvent.getParameters().deleted;
+          var totalHeaderItems = that.oGModel.getProperty("/variantHeader");
+          var totalVariantItems = that.oGModel.getProperty("/variantDetails");
+          for (var i = 0; i < deletedItems.length; i++) {
+            for (var j = 0; j < totalVariantItems.length; j++) {
+              if (deletedItems[i] === totalVariantItems[j].VARIANTNAME) {
+                details = {
+                  ID: totalVariantItems[j].VARIANTID,
+                  NAME: totalVariantItems[j].VARIANTNAME
+                }
+                array.push(details);
+                details={};
+              }
+            }
+          }
+          var uniqueName = array.filter((obj, pos, arr) => {
+            return (
+              arr.map((mapObj) => mapObj.ID).indexOf(obj.ID) == pos
+            );
+          });
+          that.getModel("BModel").callFunction("/createVariant", {
+            method: "GET",
+            urlParameters: {
+              Flag: "D",
+              VARDATA: JSON.stringify(uniqueName)
+            },
+            success: function (oData) {
+              MessageToast.show(oData.createVariant);
+              that.getData();
+            },
+            error: function (error) {
+              MessageToast.show("Failed to create variant");
+            },
+          });
+
         }
 
       });

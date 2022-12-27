@@ -3455,21 +3455,22 @@ module.exports = (srv) => {
                 liResults.VALUE = lsResults[i].Value;
                 liResults.USER = User;
                 liResults.APPLICATION_NAME = lsResults[i].App_Name;
-                liResults.SCOPE = lsResults[i].SCOPE;
+                liResults.SCOPE = lsResults[i].Scope;
+                liResults.DEFAULT = lsResults[i].Default;
                 finalResults.push(liResults)
                 liResults={};
             }
             hResults.VARIANTID = lsResults[0].ID;
                 hResults.VARIANTNAME = lsResults[0].IDNAME;
                 hResults.USER = User;
-                hResults.DEFAULT = lsResults[0].DEFAULT;
-                hResults.SCOPE = lsResults[0].SCOPE;
+                hResults.DEFAULT = lsResults[0].Default;
+                hResults.SCOPE = lsResults[0].Scope;
                 headerResults.push(hResults);
                 hResults={};
 
             try {
-                await cds.run(INSERT.into("CP_CREATEVARIANT").entries(finalResults));
                 await cds.run(INSERT.into("CP_CREATEVARIANTHEADER").entries(headerResults));
+                await cds.run(INSERT.into("CP_CREATEVARIANT").entries(finalResults));
                 responseMessage1 = "Created Successfully";
 
             } catch (e) {
@@ -3477,16 +3478,29 @@ module.exports = (srv) => {
             }
         }
         else if (Flag === "D") {
-            try {
-                await cds.delete("CP_CREATEVARIANTHEADER", finalResults);
-                responseMessage1 = "Deletion successfull";
-                
-
-            } catch (e) {
-
-                responseMessage1 = "Deletion Failed";
-               
+            for(var j=0; j< lsResults.length;j++){
+                liResults.VARIANTID = lsResults[j].ID,
+                liResults.VARIANTNAME=lsResults[j].NAME,
+                liResults.USER = User
+                finalResults.push(liResults);
+                // liResults={};
+                try {
+                    await cds.delete("CP_CREATEVARIANTHEADER", liResults);
+                    await cds.delete("CP_CREATEVARIANT", liResults);
+                    
+                   
+                    responseMessage1 = "Deletion successfull";
+                    
+    
+                } catch (e) {
+    
+                    responseMessage1 = "Deletion Failed";
+                    break;
+                   
+                }
+                finalResults=[];
             }
+            
         }
 
         return responseMessage1;

@@ -54,6 +54,9 @@ service CatalogService @(impl : './lib/cat-service.js') {
     @readonly
     entity getVariant           as projection on od.CREATEVARIANT;
 
+    @readonly
+    entity getVariantHeader         as projection on od.CREATEVARIANTHEADER;
+
     // Get Products
     @readonly
     entity getProducts          as projection on od.PRODUCT;

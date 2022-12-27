@@ -864,23 +864,23 @@ context cp {
 
     //start of Variant Table - Pradeep
     entity CREATEVARIANT {
-        key VARIANTID        : Integer @title : 'Variant ID';
+        key VARIANTID        : Integer    @title : 'Variant ID';
         key VARIANTNAME      : String(10) @title : 'Variant Name';
         key USER             : String(50) @title : 'User';
         key APPLICATION_NAME : String(50) @title : 'Application_Name';
         key FIELD            : String(50) @title : 'Field';
         key FIELD_CENTER     : String(50) @title : 'Field_Center';
-        DEFAULT              : String(2) @title:'Default';
+            DEFAULT          : String(2)  @title : 'Default';
             VALUE            : String(50) @title : 'Value';
             SCOPE            : String(50) @title : 'Scope';
     };
 
     entity CREATEVARIANTHEADER {
-        key VARIANTID        : Integer @title : 'Variant ID';
-        key VARIANTNAME      : String(10) @title : 'Variant Name';
-        key USER             : String(50) @title : 'User';
-            DEFAULT          : String(2) @title : 'Default';
-            SCOPE            : String(50) @title : 'Scope';
+        key VARIANTID        : Integer      @title : 'Variant ID';
+        key VARIANTNAME      : String(10)   @title : 'Variant Name';
+        key USER             : String(50)   @title : 'User';
+            DEFAULT          : String(2)    @title : 'Default';
+            SCOPE            : String(50)   @title : 'Scope';
     };
 
 //End of Variant Table - Pradeep
