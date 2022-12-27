@@ -916,6 +916,7 @@ module.exports = (srv) => {
         } catch (error) {
             console.error(error);
         }
+
         if (flag === 'X') {
             let dataObj = {};
             dataObj["success"] = true;
