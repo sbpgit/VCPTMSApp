@@ -6,7 +6,7 @@
                     <HBox id="_IDGenHBox4">
                         <variant:VariantManagement variantItems="{/items}"   select="handleSelectPress" save="onCreate" enabled="true" manage="onManage" showExecuteOnSelection="false" showShare="true" id="Variants">
                             <variant:variantItems>
-                                <variant:VariantItem id="_IDGenVariantItem1" text="{VARIANTNAME}" key="{VARIANTID}" />
+                                <variant:VariantItem id="_IDGenVariantItem1" text="{VARIANTNAME}" key="{VARIANTNAME}" />
                             </variant:variantItems>
                         </variant:VariantManagement>
                         <Title id="_IDGenTitle1" text="{i18n>title}" class="Middle" />
