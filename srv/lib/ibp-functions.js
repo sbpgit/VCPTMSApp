@@ -18,7 +18,7 @@ class IBPFunctions {
                         "LOCATION_ID",
                         "PRODUCT_ID",
                         "ORD_QTY",
-                        "ADJ_QTY,
+                        "ADJ_QTY",
                         "CUSTOMER_GROUP",
                         "CLASS_NUM",
                         "CHAR_NUM",

@@ -18,7 +18,7 @@ class SOFunctions {
     async genUniqueID(adata, req, Flag) {
 
         await GenF.logMessage(req, 'Started Sales Orders Processing');
-        await this.clearSalesH();
+        // await this.clearSalesH();
         await this.processUniqueID(adata.LOCATION_ID, adata.PRODUCT_ID, '');
         await this.genBaseMarketAuth(adata.LOCATION_ID, adata.PRODUCT_ID);
         await this.genPartialProd(adata.LOCATION_ID);

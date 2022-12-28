@@ -382,7 +382,7 @@ sap.ui.define(
           for (var i = 0; i < aSelectedItem.length; i++) {
             if (aSelectedItem[i].getTitle() !== "All") {
               sFilter = new sap.ui.model.Filter({
-                path: "PRODUCT_ID",
+                path: "REF_PRODID",
                 operator: sap.ui.model.FilterOperator.EQ,
                 value1: aSelectedItem[i].getTitle(),
               });

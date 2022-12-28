@@ -115,8 +115,8 @@ class Catservicefn {
         const liSalesDataAll = await cds.run(
             `SELECT *
              FROM CP_SALESH
-             ORDER BY A.SALES_DOC,
-                     A.SALESDOC_ITEM`);
+             ORDER BY SALES_DOC,
+                     SALESDOC_ITEM`);
         // Filter data belwo the histry horizon
         let result = liSalesDataAll.reduce((r, o) => {
             r[o.MAT_AVAILDATE < '${vFromDate}' ? 'liSalesData' : 'liSalesDataTemp'].push(o);
@@ -200,7 +200,15 @@ class Catservicefn {
             catch (e) {
                 console.log(" Unable to delete from Sales History")
             }
-
+            try {
+                await cds.run(
+                    `DELETE FROM CP_SEEDORDER_HEADER
+                                 WHERE MAT_AVAILDATE   < '` + vFromDate + `'`
+                );
+            }
+            catch (e) {
+                console.log(" Unable to delete from Sales History")
+            }
         }
     }
 }

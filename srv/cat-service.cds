@@ -54,6 +54,9 @@ service CatalogService @(impl : './lib/cat-service.js') {
     @readonly
     entity getVariant           as projection on od.CREATEVARIANT;
 
+    @readonly
+    entity getVariantHeader     as projection on od.CREATEVARIANTHEADER;
+
     // Get Products
     @readonly
     entity getProducts          as projection on od.PRODUCT;
@@ -71,7 +74,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
 
     // Get Sales history
     @readonly
-    entity getSalesh            as projection on V_SALES_H;//od.SALESH;
+    entity getSalesh            as projection on V_SALES_H; //od.SALESH;
 
     //Get location product
     @readonly
@@ -113,6 +116,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
 
     @readonly
     entity getTimeseriesF       as projection on od.TS_OBJDEP_CHARHDR_F;
+
     ///*****/ Product Variant Structure/*****/
     // Get PVS nodes ( Access, Structure and View nodes)
     entity getPVSNodes          as projection on od.PVS_NODES;
@@ -226,16 +230,19 @@ service CatalogService @(impl : './lib/cat-service.js') {
 
     entity genvarcharps         as projection on od.VARCHAR_PS;
     entity getPriSecChar        as projection on V_GETVARCHARPS;
-    function getSecondaryChar(FLAG : String(1), LOCATION_ID : String(4), PRODUCT_ID : String(40))  returns array of getPriSecChar;
+    function getSecondaryChar(FLAG : String(1), LOCATION_ID : String(4), PRODUCT_ID : String(40))                                                                                                                                                                                returns array of getPriSecChar;
     function changeToPrimary(LOCATION_ID : String(4), PRODUCT_ID : String(40), CHAR_NUM : String(10), CHAR_TYPE : String(1), SEQUENCE : Integer, FLAG : String(1))                                                                                                               returns String;
-
-    /*** ***/
+    /**
+     * \*\*
+     */
     // IBP char.
-    /*** ***/
-    entity getIBPPriSecChar        as projection on V_GETIBPCHARPS;
-    function changeToPrimaryIBP(LOCATION_ID : String(4), PRODUCT_ID : String(40), CHAR_NUM : String(10), CHAR_TYPE : String(1), SEQUENCE : Integer, FLAG : String(1))                                                                                                               returns String;
-    function getPrimaryCharIBP(FLAG : String(1), LOCATION_ID : String(4), PRODUCT_ID : String(40))                                                                                                                                                                                returns array of getIBPPriSecChar;
-    
+    /**
+     * \*\*
+     */
+    entity getIBPPriSecChar     as projection on V_GETIBPCHARPS;
+    function changeToPrimaryIBP(LOCATION_ID : String(4), PRODUCT_ID : String(40), CHAR_NUM : String(10), CHAR_TYPE : String(1), SEQUENCE : Integer, FLAG : String(1))                                                                                                            returns String;
+    function getPrimaryCharIBP(FLAG : String(1), LOCATION_ID : String(4), PRODUCT_ID : String(40))                                                                                                                                                                               returns array of getIBPPriSecChar;
+
     ///*****/ Authorizations /*****/
     @odata.draft.enabled
     entity getARObj             as projection on od.USER_AUTHOBJ;
@@ -282,7 +289,8 @@ service CatalogService @(impl : './lib/cat-service.js') {
     ///*****/ Seed Order Creation /*****/
     entity getSeedOrder         as projection on od.SEEDORDER_HEADER;
     function maintainSeedOrder(FLAG : String(1), SEEDDATA : String)                                                                                                                                                                                                              returns String;
-    function mainSOTemp(LOCATION_ID : String(4), PRODUCT_ID : String(40)) returns String;
+    function mainSOTemp(LOCATION_ID : String(4), PRODUCT_ID : String(40))                                                                                                                                                                                                        returns String;
+
     ///*****/ Planning Configuration /*****/
     // BOI - Deepa
     @readonly
@@ -297,9 +305,9 @@ service CatalogService @(impl : './lib/cat-service.js') {
     @readonly
     entity getCIRLog            as projection on od.CIRLOG;
 
-    function getCIRWeekly(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), FROMDATE : Date, TODATE : Date, MODEL_VERSION : String(20))  returns array of ds.cirWkly;
+    function getCIRWeekly(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), FROMDATE : Date, TODATE : Date, MODEL_VERSION : String(20))                                                                                             returns array of ds.cirWkly;
     // function getCIRWeekly(FROMDATE : Date, TODATE : Date)  returns array of ds.cirWkly;
-    function getUniqueIdItems(UNIQUE_ID : Integer)  returns array of ds.uniqueCharItems;
+    function getUniqueIdItems(UNIQUE_ID : Integer)                                                                                                                                                                                                                               returns array of ds.uniqueCharItems;
     // Publish CIR data to ECC
     function postCIRQuantities(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), FROMDATE : Date, TODATE : Date, MODEL_VERSION : String(20), VALIDUSER : String(12), USER_ID : String(100))                                         returns String;
     action   postCIRQuantitiesToS4(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), FROMDATE : Date, TODATE : Date, MODEL_VERSION : String(20), VALIDUSER : String(12), USER_ID : String(100));
@@ -308,11 +316,9 @@ service CatalogService @(impl : './lib/cat-service.js') {
     function getCFDestinationUser(TOKEN : String)                                                                                                                                                                                                                                returns String;
     // EOI - Deepa
     entity getSalesStock        as projection on od.SALES_S;
-
     ///*****/ Assembly Requirements /*****/
     function genAssemblyreq(LOCATION_ID : String(4), PRODUCT_ID : String(40))                                                                                                                                                                                                    returns String;
     action   generateAssemblyReq(LOCATION_ID : String(4), PRODUCT_ID : String(40));
-
     //VC Planner Documentation Maintenance- Pradeep
     function moveData(Flag : String, CONTENT : String, PAGEID : Integer, DESCRIPTION : String)                                                                                                                                                                                   returns String;
     function addPAGEHEADER(Flag1 : String, PAGEID : Integer, DESCRIPTION : String, PARENTNODEID : Integer, HEIRARCHYLEVEL : Integer)                                                                                                                                             returns String;
@@ -323,7 +329,8 @@ service CatalogService @(impl : './lib/cat-service.js') {
     function editPAGEPARAGRAPH(Flag1 : String, PAGEID : Integer, DESCRIPTION : String, CONTENT : String)                                                                                                                                                                         returns String;
     //End of VC Planner Documentation Maintenance- Pradeep
     //Start of Create Variant
-    function createVariant(Flag: String, VARDATA:String)                                                                                                                                                                                                                      returns String;                                       
+    function createVariant(Flag : String, VARDATA : String)                                                                                                                                                                                                                      returns String;
+    function updateVariant(VARDATA : String)                                                                                                                                                                                                                                     returns String;
     //End of Create Variant
 
     //*****/ Critical Comp /*****/
@@ -338,10 +345,8 @@ service CatalogService @(impl : './lib/cat-service.js') {
     // Get IBP Version Scenario
 
     entity getVerScnmaster      as projection on od.IBPVERSIONSCENARIO;
-
-  
     // Get Unique Characteristics
-    function getUniqueChars(UNIQUE_ID : Integer, PRODUCT_ID : String(40), LOCATION_ID : String(4)) returns array of ds.uniqueCharacteristics;
+    function getUniqueChars(UNIQUE_ID : Integer, PRODUCT_ID : String(40), LOCATION_ID : String(4))                                                                                                                                                                               returns array of ds.uniqueCharacteristics;
 
     // Get User Info
     @requires : 'authenticated-user'
