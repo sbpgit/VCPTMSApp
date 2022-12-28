@@ -145,11 +145,17 @@ oCC1: null,
           });
           this.getModel("BModel").read("/getVariant", {
             success: function (oData) {
-              
+              var IDlength = oData.results.length
+              if (IDlength === 0) {
+                that.oGModel.setProperty("/Id", 0);
+                that.oGModel.setProperty("/variantDetails","");
+              }
+              else {
               for (var i = 0; i < oData.results.length; i++) {
                 aData.push({
                   "VARIANTNAME": oData.results[i].VARIANTNAME,
-                  "APPLICATION_NAME": oData.results[i].APPLICATION_NAME
+                  "VARIANTID": oData.results[i].VARIANTID,
+                  "DEFAULT":oData.results[i].DEFAULT
                 });
               }
               var uniqueName = aData.filter((obj, pos, arr) => {
@@ -158,13 +164,7 @@ oCC1: null,
                 );
               });
               that.variantModel.setData({ items: uniqueName });
-              that.byId("Variants").setModel(that.variantModel);
-              var IDlength = oData.results.length
-              if (IDlength === 0) {
-                that.oGModel.setProperty("/Id", 0);
-                that.oGModel.setProperty("/variantDetails","");
-              }
-              else {
+              that.byId("Variants").setModel(that.variantModel);          
                 that.oGModel.setProperty("/Id", oData.results[IDlength - 1].VARIANTID);
                 that.oGModel.setProperty("/variantDetails", oData.results);
               }
@@ -570,8 +570,9 @@ oCC1: null,
             },
             success: function (oData) {
               MessageToast.show(oData.createVariant);
-              that.getData();
-              that.onClose();
+              that.onAfterRendering();
+             
+             
             },
             error: function (error) {
               MessageToast.show("Failed to create variant");
@@ -600,7 +601,7 @@ oCC1: null,
               }
             }
           }
-
+          
           that.byId("idloc").setValue(oLoc);
           this.getModel("BModel").read("/getLocProdDet", {
             filters: [
@@ -613,7 +614,6 @@ oCC1: null,
             success: function (oData) {
               that.prodModel.setData(oData);
               that.oProdList.setModel(that.prodModel);
-              that.oProdList.addToken(finalToken);
             },
             error: function (oData, error) {
               MessageToast.show("error");
@@ -622,7 +622,7 @@ oCC1: null,
           // that._popOver.close();
           // that._variantFragment.close();
 
-          // that.byId("prodInput").setTokens(finalToken);
+          that.byId("prodInput").setTokens(finalToken);
           // that.onGetData();
 
           // }
