@@ -12,6 +12,8 @@ const AssemblyReq = require("./assembly-req");
 const CIRService = require("./cirdata-functions");
 const IBPFunc = require("./ibp-functions");
 const obibpfucntions = new IBPFunc();
+const MktAuth = require("./market-auth");
+const obgenMktAuth = new MktAuth();
 /**
  * 
  * @param {Location} lLocation 
@@ -1176,8 +1178,8 @@ module.exports = (srv) => {
         //         await obgenTimeseriesM2.genTimeseries(req.data, req, Flag);
         //         break;
         // }
-        const obgenTimeseries = new GenTimeseries();
-        await obgenTimeseries.genTimeseries(req.data, req, Flag);
+                const obgenTimeseriesM2 = new GenTimeseriesM2();
+                await obgenTimeseriesM2.genTimeseries(req.data, req, Flag);
         // const obgenTimeseries_rt = new GenTimeseriesRT();
         // await obgenTimeseries_rt.genTimeseries_rt(req.data, req);
 
@@ -1187,18 +1189,19 @@ module.exports = (srv) => {
         let lilocProd = {};
         let lsData = {}, Flag = '';
 
-        switch (await GenFunctions.getParameterValue(req.data.LOCATION_ID, 5)) {
-            case 'M1':
-                const obgenTimeseries = new GenTimeseries();
-                await obgenTimeseries.genTimeseriesF(req.data, req, Flag);
-                break;
-            case 'M2':
-                const obgenTimeseriesM2 = new GenTimeseriesM2();
-                await obgenTimeseriesM2.genTimeseriesF(req.data, req, Flag);
-                break;
-        }
-        const obgenTimeseries_rt = new GenTimeseriesRT();
+        // switch (await GenFunctions.getParameterValue(req.data.LOCATION_ID, 5)) {
+        //     case 'M1':
+        //         const obgenTimeseries = new GenTimeseries();
+        //         await obgenTimeseries.genTimeseriesF(req.data, req, Flag);
+        //         break;
+        //     case 'M2':
+                // const obgenTimeseriesM2 = new GenTimeseriesM2();
+                // await obgenTimeseriesM2.genTimeseriesF(req.data, req, Flag);
+                // break;
+        // }
+        // const obgenTimeseries_rt = new GenTimeseriesRT();
         // await obgenTimeseries_rt.genTimeseriesF_rt(req.data, req);
+        await obgenMktAuth.updateOptPer('AS01','000000000000000059','2023-02-27', '__BASELINE','_PLAN', req);
     });
 
     // Generate Unique ID

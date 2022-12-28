@@ -2617,7 +2617,9 @@ module.exports = cds.service.impl(async function () {
         let lsData = {},
             lsFchar = {},
             liFchar = [];
-
+            let oReq = {
+                mktauth: [],
+            };
         let createtAt = new Date();
         let id = uuidv1();
         let values = [];
@@ -2803,9 +2805,9 @@ module.exports = cds.service.impl(async function () {
                             await cds.run(modQuery);
                             flag = 'S';
                             lsFchar = {};
-                            lsFchar['LOCATION_ID'] = GenF.parse(reqFchar[i].LOCID);
-                            lsFchar['PRODUCT_ID'] = GenF.parse(reqFchar[i].PRDID);
-                            lsFchar['VERSION '] = GenF.parse(reqFchar[i].VERSIONID);
+                            lsFchar['LOCATION_ID'] = GenF.parse(req[i].LOCID);
+                            lsFchar['PRODUCT_ID'] = GenF.parse(req[i].PRDID);
+                            lsFchar['VERSION '] = GenF.parse(req[i].VERSIONID);
                             lsFchar['SCENARIO'] = GenF.parse(vScen);
                             lsFchar['WEEK_DATE'] = GenF.parse(vWeekDate);
                             liFchar.push(GenF.parse(lsFchar));
@@ -2882,6 +2884,7 @@ module.exports = cds.service.impl(async function () {
                     oReq.mktauth.push(vMktauth);
 
                 }
+                if(oReq.mktauth.length > 0){
                 let vTransID = new Date().getTime().toString();
                 let oEntry =
                 {
@@ -2900,12 +2903,15 @@ module.exports = cds.service.impl(async function () {
                     lMessage = lMessage + ' ' + "Export of Market authorization has failed for product" + lsData.PRODUCT_ID;
                 }
             }
+            }
         }
         // }
         // return lMessage;
         await GenF.jobSchMessage('X', lMessage, request);
     });
     this.on("generateMarketAuthfn", async (request) => {
+      
+           
         // Get Planning area and Prefix configurations for IBP
         let liParaValue = await GenF.getIBPParameterValue();
         let lData = "Nav" + liParaValue[0].VALUE.toString();
