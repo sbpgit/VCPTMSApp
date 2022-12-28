@@ -152,8 +152,11 @@ sap.ui.define([
                             }
 
                             that.oGModel = that.getModel("oGModel");
+                            if(that.finalSecData.length !== 0){
                             that.oGModel.setProperty("/secSeqSt", that.finalSecData[0].SEQUENCE);
-
+                            } else {
+                                that.oGModel.setProperty("/secSeqSt", 0);
+                            }
 
                             // var aData = that.finalSecData;
                             //     if(that.oSelectedItem){
@@ -532,7 +535,7 @@ sap.ui.define([
                             that.byId("idPrimarySearch").setValue("");
                             that.onPrimarySearch();
                             that.byId("searchField").setValue("");
-                            that.onCharSearch();
+                            // that.onCharSearch();
                             that.onGetData();
                             if (oGModel.getProperty("/primFlag") === "X") {
                                 that.byId("idText").setVisible(true);

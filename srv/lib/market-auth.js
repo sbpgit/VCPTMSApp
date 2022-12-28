@@ -215,65 +215,6 @@ class MarketAuth {
                     }
                 }
 
-                // liCharOptOt = await cds.run(`SELECT V_UNIQUE_ID_COUNT.LOCATION_ID,
-                //                                 V_UNIQUE_ID_COUNT.PRODUCT_ID,
-                //                                 V_UNIQUE_ID.CHAR_NUM,
-                //                                 V_UNIQUE_ID.CHARVAL_NUM,
-                //                                 SUM(V_UNIQUE_ID_COUNT.ORD_QTY) AS ORD_QTY
-                //                             FROM V_UNIQUE_ID_COUNT
-                //                         INNER JOIN CP_PARTIALPROD_INTRO
-                //                                 ON CP_PARTIALPROD_INTRO.LOCATION_ID = V_UNIQUE_ID_COUNT.LOCATION_ID
-                //                             AND CP_PARTIALPROD_INTRO.PRODUCT_ID = V_UNIQUE_ID_COUNT.PRODUCT_ID
-                //                         INNER JOIN V_UNIQUE_ID
-                //                                 ON V_UNIQUE_ID.LOCATION_ID = V_UNIQUE_ID_COUNT.LOCATION_ID
-                //                             AND V_UNIQUE_ID.PRODUCT_ID = CP_PARTIALPROD_INTRO.REF_PRODID
-                //                             AND V_UNIQUE_ID.UNIQUE_ID = V_UNIQUE_ID_COUNT.UNIQUE_ID
-                //                             WHERE V_UNIQUE_ID_COUNT.LOCATION_ID = '${lLocation}'
-                //                             AND V_UNIQUE_ID_COUNT.PRODUCT_ID = '${lProduct}'
-                //                             AND (V_UNIQUE_ID_COUNT.UNIQUE_ID NOT IN (SELECT DISTINCT UNIQUE_ID
-                //                                                                                 FROM V_UNIQUE_ID
-                //                                                                                 WHERE LOCATION_ID = '${lLocation}'
-                //                                                                                     AND (PRODUCT_ID IN (SELECT DISTINCT REF_PRODID
-                //                                                                                                                 FROM CP_PARTIALPROD_INTRO
-                //                                                                                                                 WHERE LOCATION_ID = '${lLocation}'
-                //                                                                                                                     AND PRODUCT_ID = '${lProduct}'))
-                //                                                                                                                     AND CHAR_NUM = '${lCharNum}'
-                //                                                                                                                     AND CHARVAL_NUM = '${lCharValNum}'))
-                // GROUP BY 
-                //     V_UNIQUE_ID_COUNT.LOCATION_ID,
-                //     V_UNIQUE_ID_COUNT.PRODUCT_ID,
-                //     V_UNIQUE_ID.CHAR_NUM,
-                //     V_UNIQUE_ID.CHARVAL_NUM
-                //     ORDER BY CHAR_NUM, CHARVAL_NUM;`)   
-
-                //     for (let cntC = 0; cntC < liCharOptOt.length; cntC++) {
-                //         let lSuccess = '';
-                //         for (let cntCC = 0; cntCC < liCharOpt.length; cntCC++) {
-                //             if (liCharOpt[cntC].LOCATION_ID === liCharOptOt[cntC].LOCATION_ID &&
-                //                 liCharOpt[cntC].PRODUCT_ID  === liCharOptOt[cntC].PRODUCT_ID &&
-                //                 liCharOpt[cntC].VERSION === liVersion[cntV].VERSION;
-                //                 liCharOpt[cntC].SCENARIO === liVersion[cntV].SCENARIO;                                
-                //                 liCharOpt[cntC].CHAR_NUM    === liCharOptOt[cntC].CHAR_NUM &&
-                //                 liCharOpt[cntC].CHARVAL_NUM === liCharOptOt[cntC].CHARVAL_NUM) {
-                //                     liCharOpt[cntC].ORD_QTY =  parseInt(liCharOpt[cntC].ORD_QTY) + parseInt(liCharOptOt[cntC].ORD_QTY);
-                //                     lSuccess = 'X';
-                //                     break;
-                //             }
-                //         }
-                //         if(lSuccess === ''){
-                //             lsOptPer.LOCATION_ID = liCharOptOt[cntC].LOCATION_ID;
-                //             lsOptPer.PRODUCT_ID  = liCharOptOt[cntC].PRODUCT_ID;
-                //             lsOptPer.VERSION  = liVersion[cntV].VERSION;
-                //             lsOptPer.SCENARIO  = liVersion[cntV].SCENARIO;
-                //             lsOptPer.CHAR_NUM    = liCharOptOt[cntC].CHAR_NUM;
-                //             lsOptPer.CHARVAL_NUM = liCharOptOt[cntC].CHARVAL_NUM;
-                //             lsOptPer.CHARVAL_NUM = liCharOptOt[cntC].CHARVAL_NUM;
-
-                //             liCharOpt.push(lsOptPer);
-                //         }
-
-                //     }                    
-
             }
             let lsMarketAuth = {};
             let liMarketAuth = [];
