@@ -1455,10 +1455,12 @@ module.exports = cds.service.impl(async function () {
         let values = [];
         let message = "Started exporting Sales History and Configurations";
         let res = req._.req.res;
+        // let lilocProdReq = {};
         let lilocProdReq = JSON.parse(req.data.LocProdData);
+        // lilocProdReq.LOCATION_ID = "AS01";
+        // lilocProdReq.PRODUCT_ID = "ALL"
         if (lilocProdReq[0].PRODUCT_ID === "ALL") {
             lsData.LOCATION_ID = lilocProdReq[0].LOCATION_ID;
-            lsData.PRODUCT_ID = lilocProdReq[0].PRODUCT_ID;
             const objCatFn = new Catservicefn();
             const lilocProdT = await objCatFn.getAllProducts(lsData);
             lsData = {};
@@ -1472,6 +1474,7 @@ module.exports = cds.service.impl(async function () {
         res.statusCode = 202;
         res.send({ values });
         for (let i = 0; i < lilocProd.length; i++) {
+            lsData = {};
             lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
             lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
             const lisales = await cds.run(
@@ -1480,7 +1483,7 @@ module.exports = cds.service.impl(async function () {
                             "LOCATION_ID",
                             "PRODUCT_ID",
                             "ORD_QTY",
-                            "ADJ_QTY,
+                            "ADJ_QTY",
                             "CUSTOMER_GROUP"
                             FROM V_IBP_SALESH_ACTDEMD
                             WHERE LOCATION_ID = '`+ lsData.LOCATION_ID + `'
@@ -1501,11 +1504,12 @@ module.exports = cds.service.impl(async function () {
                 oReq.sales.push(vsales);
 
             }
+            if(oReq.sales.length > 0){
             let vTransID = new Date().getTime().toString();
             let oEntry =
             {
                 "Transactionid": vTransID,
-                "AggregationLevelFieldsString": "LOCID,PRDID,CUSTID,ACTUALDEMAND,PERIODID0_TSTAMP",
+                "AggregationLevelFieldsString": "LOCID,PRDID,CUSTID,ACTUALDEMAND,SEEDORDERDEMAND,PERIODID0_TSTAMP",
                 "VersionID": "",
                 "DoCommit": true,
                 "ScenarioID": ""
@@ -1525,7 +1529,7 @@ module.exports = cds.service.impl(async function () {
                 let oEntryCfg =
                 {
                     "Transactionid": vTransID,
-                    "AggregationLevelFieldsString": "LOCID,PRDID,VCCHAR,VCCHARVALUE,VCCLASS,ACTUALDEMANDVC,CUSTID,PERIODID0_TSTAMP",
+                    "AggregationLevelFieldsString": "LOCID,PRDID,VCCHAR,VCCHARVALUE,VCCLASS,ACTUALDEMANDVC,SEEDORDERDEMANDVC,CUSTID,PERIODID0_TSTAMP",
                     "VersionID": "",
                     "DoCommit": true,
                     "ScenarioID": ""
@@ -1541,6 +1545,7 @@ module.exports = cds.service.impl(async function () {
                     lMessage = lMessage + ' ' + 'Export of Sales History and Configuration export is failed for product:' + lsData.PRODUCT_ID;
                 }
             }
+        }
         }
         await GenF.jobSchMessage('X', lMessage, req);
         // GetExportResult
@@ -2352,7 +2357,7 @@ module.exports = cds.service.impl(async function () {
         // }
         await GenF.jobSchMessage('X', lMessage, request);
     });
-    // Generate char plan
+    // Generate Forcast order
     this.on("exportIBPCIR", async (request) => {
 
         // Get Planning area and Prefix configurations for IBP
@@ -2410,7 +2415,7 @@ module.exports = cds.service.impl(async function () {
                     "VCCHAR": licir[i].CHAR_NUM,
                     "VCCHARVALUE": licir[i].CHARVAL_NUM,
                     "CUSTID": "NULL",
-                    "CIRQTY": licir[i].CIRQTY.toString(),
+                    "FORECASTORDERQTY": licir[i].CIRQTY.toString(),
                     "PERIODID4_TSTAMP": vWeekDate
                 };
                 oReq.cir.push(vCIR);
@@ -2419,7 +2424,7 @@ module.exports = cds.service.impl(async function () {
             let oEntry =
             {
                 "Transactionid": vTransID,
-                "AggregationLevelFieldsString": "LOCID,PRDID,VCCLASS,VCCHAR,VCCHARVALUE,CUSTID,CIRQTY,PERIODID4_TSTAMP",
+                "AggregationLevelFieldsString": "LOCID,PRDID,VCCLASS,VCCHAR,VCCHARVALUE,CUSTID,FORECASTORDERQTY,PERIODID4_TSTAMP",
                 "DoCommit": true
             }
             oEntry[lData] = oReq.cir;
