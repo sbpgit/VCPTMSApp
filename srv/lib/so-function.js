@@ -1126,24 +1126,32 @@ class SOFunctions {
             "PLAN_LOC",
             "FACTORY_LOC")
             .from('CP_FACTORY_SALESLOC');
+            const liPartProd = await cds.run(`
+            SELECT "PRODUCT_ID",
+                    "LOCATION_ID",
+                    "REF_PRODID" 
+              FROM CP_PARTIALPROD_INTRO
+              WHERE LOCATION_ID IN ( SELECT "LOCATION_ID" FROM CP_LOCATION)
+`);
         // Insert master data which doesnot exist in Factory location table
         let vFlag = '';
         let liFactLoc = [];
         let lsFactLoc = {};
-        for (let cntLC = 0; cntLC < liLocation.length; cntLC++) {
+        for (let cntLC = 0; cntLC < liPartProd.length; cntLC++) {
             for (let i = 0; i < liFtLoc.length; i++) {
-                if (liFtLoc[i].PLAN_LOC === liLocation[cntLC].LOCATION_ID &&
-                    liFtLoc[i].LOCATION_ID === liLocation[cntLC].LOCATION_ID &&
-                    liFtLoc[i].FACTORY_LOC === liLocation[cntLC].LOCATION_ID) {
+                if (liFtLoc[i].PLAN_LOC === liPartProd[cntLC].LOCATION_ID &&
+                    liFtLoc[i].LOCATION_ID === liPartProd[cntLC].LOCATION_ID &&
+                    liFtLoc[i].FACTORY_LOC === liPartProd[cntLC].LOCATION_ID) {
                     vFlag = 'X';
                     break;
                 }
             }
             if (vFlag === '') {
                 lsFactLoc = {};
-                lsFactLoc['LOCATION_ID'] = GenF.parse(liLocation[cntLC].LOCATION_ID);
-                lsFactLoc['PLAN_LOC'] = GenF.parse(liLocation[cntLC].LOCATION_ID);
-                lsFactLoc['FACTORY_LOC'] = GenF.parse(liLocation[cntLC].LOCATION_ID);
+                lsFactLoc['LOCATION_ID'] = GenF.parse(liPartProd[cntLC].LOCATION_ID);
+                lsFactLoc['PRODUCT_ID'] = GenF.parse(liPartProd[cntLC].PRODUCT_ID);
+                lsFactLoc['PLAN_LOC'] = GenF.parse(liPartProd[cntLC].LOCATION_ID);
+                lsFactLoc['FACTORY_LOC'] = GenF.parse(liPartProd[cntLC].LOCATION_ID);
                 console.log(lsFactLoc);
                 liFactLoc.push(GenF.parse(lsFactLoc));
             }
