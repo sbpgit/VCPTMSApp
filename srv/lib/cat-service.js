@@ -3511,7 +3511,7 @@ module.exports = (srv) => {
 
     srv.on("updateVariant", async req => {
         let lsResults = {};
-        let liResults = {};
+        let liResults = [];
         var responseMessage;
         lsResults = JSON.parse(req.data.VARDATA);
         liResults.push(lsResults);
@@ -3519,17 +3519,17 @@ module.exports = (srv) => {
             try {
                 await UPDATE`CP_CREATEVARIANT`
                     .with({
-                        DEFAULT: lsResults.DEFAULT
+                        DEFAULT: lsResults[0].DEFAULT
                     })
-                    .where(`VARIANTID = '${lsResults.VARIANTID}'
-                                      AND VARIANTNAME = '${lsResults.VARIANTNAME}'`);
+                    .where(`VARIANTID = '${lsResults[0].VARIANTID}'
+                                      AND VARIANTNAME = '${lsResults[0].VARIANTNAME}'`);
 
                 await UPDATE`CP_CREATEVARIANTHEADER`
                     .with({
-                        DEFAULT: lsResults.DEFAULT
+                        DEFAULT: lsResults[0].DEFAULT
                     })
-                    .where(`VARIANTID = '${lsResults.VARIANTID}'
-                                                        AND VARIANTNAME = '${lsResults.VARIANTNAME}'`);
+                    .where(`VARIANTID = '${lsResults[0].VARIANTID}'
+                                                        AND VARIANTNAME = '${lsResults[0].VARIANTNAME}'`);
 
                 responseMessage = " Creation/Updation successful";
             } catch (e) {

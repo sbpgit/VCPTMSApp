@@ -132,12 +132,12 @@ oCC1: null,
          */
         getData: function () {
           var aData = [];
-          var bData=[];
-          var details={};
-          var defaultDetails=[];
+          var bData = [];
+          var details = {};
+          var defaultDetails = [];
           this.getModel("BModel").callFunction("/getUserInfo", {
             success: function (user) {
-               that.oGModel.setProperty("/UserId",user.getUserInfo);
+              that.oGModel.setProperty("/UserId", user.getUserInfo);
 
             },
             error: function (e) {
@@ -164,14 +164,14 @@ oCC1: null,
               }
               else {
                 for (var i = 0; i < oData.results.length; i++) {
-                  if(that.oGModel.getProperty("/UserId")=== oData.results[i].USER){
-                  aData.push({
-                    "VARIANTNAME": oData.results[i].VARIANTNAME,
-                    "VARIANTID": oData.results[i].VARIANTID,
-                    "DEFAULT": oData.results[i].DEFAULT,
-                    "USER": that.oGModel.getProperty("/UserId")
-                  });
-                }
+                  if (that.oGModel.getProperty("/UserId") === oData.results[i].USER) {
+                    aData.push({
+                      "VARIANTNAME": oData.results[i].VARIANTNAME,
+                      "VARIANTID": oData.results[i].VARIANTID,
+                      "DEFAULT": oData.results[i].DEFAULT,
+                      "USER": that.oGModel.getProperty("/UserId")
+                    });
+                  }
                 }
                 var uniqueName = aData.filter((obj, pos, arr) => {
                   return (
@@ -182,23 +182,26 @@ oCC1: null,
                 that.byId("Variants").setModel(that.variantModel);
                 that.oGModel.setProperty("/Id", oData.results[IDlength - 1].VARIANTID);
                 that.oGModel.setProperty("/variantDetails", oData.results);
-                for(var k=0;k<uniqueName.length;k++){
-                  if(uniqueName[k].DEFAULT === "Y"){
+                for (var k = 0; k < uniqueName.length; k++) {
+                  if (uniqueName[k].DEFAULT === "Y") {
                     var Default = uniqueName[k].VARIANTNAME;
-                    details={
+                    details = {
                       "VARIANTNAME": uniqueName[k].VARIANTNAME,
-                    "VARIANTID": uniqueName[k].VARIANTID,
-                    "USER": uniqueName[k].USER
+                      "VARIANTID": uniqueName[k].VARIANTID,
+                      "USER": uniqueName[k].USER,
+                      "DEFAULT": "N"
                     };
                     defaultDetails.push(details);
-                    details={};
+                    details = {};
                   }
                 }
-                that.oGModel.setProperty("/defaultDetails",defaultDetails);
+                that.oGModel.setProperty("/defaultDetails", defaultDetails);
+                if(Default){
                 that.byId("Variants").setInitialSelectionKey(Default);
-                that.oGModel.setProperty("/fromFunction","X");
+                }
+                that.oGModel.setProperty("/fromFunction", "X");
                 that.handleSelectPress(Default);
-                
+
               }
             },
             error: function (oData, error) {
@@ -209,8 +212,8 @@ oCC1: null,
           this.getModel("BModel").read("/getVariantHeader", {
             success: function (oData) {
               for (var i = 0; i < oData.results.length; i++) {
-                if(that.oGModel.getProperty("/UserId")=== oData.results[i].USER){
-                  bData.push(oData.results[i]);             
+                if (that.oGModel.getProperty("/UserId") === oData.results[i].USER) {
+                  bData.push(oData.results[i]);
                 }
               }
               that.oGModel.setProperty("/variantHeader", bData);
@@ -563,7 +566,7 @@ oCC1: null,
             var defaultChecked = "Y";
             that.getModel("BModel").callFunction("/updateVariant", {
               method: "GET",
-              urlParameters: {  
+              urlParameters: {
                 VARDATA: JSON.stringify(that.oGModel.getProperty("/defaultDetails"))
               },
               success: function (oData) {
@@ -633,12 +636,18 @@ oCC1: null,
         handleSelectPress: function (oEvent) {
           var oLoc, oTokens = {}, finalToken = [];
           var oTableItems = that.oGModel.getProperty("/variantDetails");
-          if(that.oGModel.getProperty("/fromFunction")==="X"){
-            that.oGModel.setProperty("/fromFunction","");
+          if (that.oGModel.getProperty("/fromFunction") === "X") {
+            that.oGModel.setProperty("/fromFunction", "");
             var selectedApp = oEvent;
           }
-          else{
-          var selectedApp = oEvent.getSource().getSelectionKey();
+          else {
+            var App = oEvent.getSource().getSelectionKey();
+            if (App.includes("SV")) {
+              var selectedApp = oTableItems[oTableItems.length - 1].VARIANTNAME;
+            }
+            else{
+              var selectedApp = App;
+            }
           }
           for (var i = 0; i < oTableItems.length; i++) {
             if (selectedApp === oTableItems[i].VARIANTNAME) {
@@ -669,6 +678,15 @@ oCC1: null,
             success: function (oData) {
               that.prodModel.setData(oData);
               that.oProdList.setModel(that.prodModel);
+              that.oProdList.removeSelections();
+              // that.oProdList.removeAllAssociation();
+              for(var i=0;i<finalToken.length;i++){
+                for(var k=0;k<that.oProdList.getItems().length;k++){
+                  if(that.oProdList.getItems()[k].getTitle()===finalToken[i].getText()){
+                    that.oProdList.getItems()[k].setSelected(true);
+                  }
+                }
+              }
             },
             error: function (oData, error) {
               MessageToast.show("error");
