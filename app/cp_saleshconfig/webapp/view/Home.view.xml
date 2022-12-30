@@ -9,8 +9,8 @@
                                 <variant:VariantItem id="_IDGenVariantItem1" text="{VARIANTNAME}" key="{VARIANTNAME}" />
                             </variant:variantItems>
                         </variant:VariantManagement> -->
-                        <Label id="idVariantName" required="false" text="" class="Text"/>
-                        <ToggleButton id="idDropDown" icon="sap-icon://slim-arrow-down" press="onDropDownPress"/>
+                        <!-- <Label id="idVariantName" required="false" text="" class="Text"/>
+                        <ToggleButton id="idDropDown" icon="sap-icon://slim-arrow-down" press="onDropDownPress"/> -->
                         <Title id="_IDGenTitle1" text="{i18n>title}" class="Middle" />
                         <Button class="hdrBtnMarginHdr" id="_IDGenOverflowToolbarButton1" icon="sap-icon://sys-help"  type="Emphasized" press="onNavPress" tooltip="Help Document" />
                     </HBox>

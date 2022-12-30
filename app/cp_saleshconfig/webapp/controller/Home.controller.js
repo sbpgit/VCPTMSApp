@@ -129,15 +129,15 @@ oCC1: null,
           var bData = [];
           var details = {};
           var defaultDetails = [];
-          this.getModel("BModel").callFunction("/getUserInfo", {
-            success: function (user) {
-              that.oGModel.setProperty("/UserId", user.getUserInfo.toUpperCase());
+          // this.getModel("BModel").callFunction("/getUserInfo", {
+          //   success: function (user) {
+          //     that.oGModel.setProperty("/UserId", user.getUserInfo.toUpperCase());
 
-            },
-            error: function (e) {
-              MessageToast.show("Failed to get User Details");
-            }
-          });
+          //   },
+          //   error: function (e) {
+          //     MessageToast.show("Failed to get User Details");
+          //   }
+          // });
 
           this.getModel("BModel").read("/getLocation", {
             success: function (oData) {
@@ -149,90 +149,90 @@ oCC1: null,
               MessageToast.show("error");
             },
           });
-          this.getModel("BModel").read("/getVariant", {
-            success: function (oData) {
-              var IDlength = oData.results.length
-              if (IDlength === 0) {
-                that.oGModel.setProperty("/Id", 0);
-                that.oGModel.setProperty("/variantDetails", "");
-              }
-              else {
-                that.oGModel.setProperty("/Id", oData.results[IDlength - 1].VARIANTID);
-                that.oGModel.setProperty("/variantDetails", oData.results);
-                for (var i = 0; i < oData.results.length; i++) {
-                  if (that.oGModel.getProperty("/UserId") === oData.results[i].USER.toUpperCase()) {
-                    aData.push({
-                      "VARIANTNAME": oData.results[i].VARIANTNAME,
-                      "VARIANTID": oData.results[i].VARIANTID,
-                      "DEFAULT": oData.results[i].DEFAULT,
-                      "USER": that.oGModel.getProperty("/UserId")
-                    });
-                  }
-                }
-                var uniqueName = aData.filter((obj, pos, arr) => {
-                  return (
-                    arr.map((mapObj) => mapObj.VARIANTNAME).indexOf(obj.VARIANTNAME) == pos
-                  );
-                });
-                uniqueName.unshift({
-                  "VARIANTNAME": "Standard",
-                  "VARINATID": "0",
-                  "DEFAULT": "N",
-                })
-                that.variantModel.setData({ items1: uniqueName });
-                sap.ui.getCore().byId("idList").setModel(that.variantModel);
+          // this.getModel("BModel").read("/getVariant", {
+          //   success: function (oData) {
+          //     var IDlength = oData.results.length
+          //     if (IDlength === 0) {
+          //       that.oGModel.setProperty("/Id", 0);
+          //       that.oGModel.setProperty("/variantDetails", "");
+          //     }
+          //     else {
+          //       that.oGModel.setProperty("/Id", oData.results[IDlength - 1].VARIANTID);
+          //       that.oGModel.setProperty("/variantDetails", oData.results);
+          //       for (var i = 0; i < oData.results.length; i++) {
+          //         if (that.oGModel.getProperty("/UserId") === oData.results[i].USER.toUpperCase()) {
+          //           aData.push({
+          //             "VARIANTNAME": oData.results[i].VARIANTNAME,
+          //             "VARIANTID": oData.results[i].VARIANTID,
+          //             "DEFAULT": oData.results[i].DEFAULT,
+          //             "USER": that.oGModel.getProperty("/UserId")
+          //           });
+          //         }
+          //       }
+          //       var uniqueName = aData.filter((obj, pos, arr) => {
+          //         return (
+          //           arr.map((mapObj) => mapObj.VARIANTNAME).indexOf(obj.VARIANTNAME) == pos
+          //         );
+          //       });
+          //       uniqueName.unshift({
+          //         "VARIANTNAME": "Standard",
+          //         "VARINATID": "0",
+          //         "DEFAULT": "N",
+          //       })
+          //       that.variantModel.setData({ items1: uniqueName });
+          //       sap.ui.getCore().byId("idList").setModel(that.variantModel);
 
-                for (var k = 0; k < uniqueName.length; k++) {
-                  if (uniqueName[k].DEFAULT === "Y") {
-                    var Default = uniqueName[k].VARIANTNAME;
-                    details = {
-                      "VARIANTNAME": uniqueName[k].VARIANTNAME,
-                      "VARIANTID": uniqueName[k].VARIANTID,
-                      "USER": uniqueName[k].USER,
-                      "DEFAULT": "N"
-                    };
-                    defaultDetails.push(details);
-                    details = {};
-                  }
-                }
+          //       for (var k = 0; k < uniqueName.length; k++) {
+          //         if (uniqueName[k].DEFAULT === "Y") {
+          //           var Default = uniqueName[k].VARIANTNAME;
+          //           details = {
+          //             "VARIANTNAME": uniqueName[k].VARIANTNAME,
+          //             "VARIANTID": uniqueName[k].VARIANTID,
+          //             "USER": uniqueName[k].USER,
+          //             "DEFAULT": "N"
+          //           };
+          //           defaultDetails.push(details);
+          //           details = {};
+          //         }
+          //       }
 
-                that.oGModel.setProperty("/fromFunction", "X");
-                if (Default) {
-                  that.oGModel.setProperty("/defaultDetails", defaultDetails);
-                  // that.byId("idVariantName").setText(Default);
-                  that.handleSelectPress(Default);
-                }
-                else {
-                  that.oGModel.setProperty("/defaultDetails", "");
-                  Default = "Standard";
-                  that.handleSelectPress(Default);
-                }
+          //       that.oGModel.setProperty("/fromFunction", "X");
+          //       if (Default) {
+          //         that.oGModel.setProperty("/defaultDetails", defaultDetails);
+          //         // that.byId("idVariantName").setText(Default);
+          //         that.handleSelectPress(Default);
+          //       }
+          //       else {
+          //         that.oGModel.setProperty("/defaultDetails", "");
+          //         Default = "Standard";
+          //         that.handleSelectPress(Default);
+          //       }
 
 
 
-              }
-            },
-            error: function (oData, error) {
-              MessageToast.show("error while loading variant details");
-            },
-          });
+          //     }
+          //   },
+          //   error: function (oData, error) {
+          //     MessageToast.show("error while loading variant details");
+          //   },
+          // });
 
-          this.getModel("BModel").read("/getVariantHeader", {
-            success: function (oData) {
+          // this.getModel("BModel").read("/getVariantHeader", {
+          //   success: function (oData) {
 
-              for (var i = 0; i < oData.results.length; i++) {
-                if (that.oGModel.getProperty("/UserId").toUpperCase() === oData.results[i].USER.toUpperCase()) {
-                  bData.push(oData.results[i]);
-                }
-              }
-              that.variantHeaderModel.setData({ itemsHeader: bData });
-              sap.ui.getCore().byId("varNameList").setModel(that.variantHeaderModel);
-              that.oGModel.setProperty("/variantHeader", bData);
-            },
-            error: function (oData, error) {
-              MessageToast.show("error while loading variant details");
-            },
-          });
+          //     for (var i = 0; i < oData.results.length; i++) {
+          //       if (that.oGModel.getProperty("/UserId").toUpperCase() === oData.results[i].USER.toUpperCase()) {
+          //         bData.push(oData.results[i]);
+          //       }
+          //     }
+          //     that.variantHeaderModel.setData({ itemsHeader: bData });
+          //     sap.ui.getCore().byId("varNameList").setModel(that.variantHeaderModel);
+          //     that.oGModel.setProperty("/variantHeader", bData);
+          //   },
+          //   error: function (oData, error) {
+          //     MessageToast.show("error while loading variant details");
+          //   },
+          // });
 
         },
         onDropDownPress: function (oEvent) {
