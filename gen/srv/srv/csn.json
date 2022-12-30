@@ -26018,6 +26018,17 @@
         "type": "cds.String"
       }
     },
+    "CatalogService.updateVariant": {
+      "kind": "function",
+      "params": {
+        "VARDATA": {
+          "type": "cds.String"
+        }
+      },
+      "returns": {
+        "type": "cds.String"
+      }
+    },
     "CatalogService.getCriticalComp": {
       "kind": "entity",
       "projection": {

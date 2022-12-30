@@ -3446,7 +3446,7 @@ module.exports = (srv) => {
         let finalResults = [];
         var responseMessage1;
         var Flag = req.data.Flag;
-        var User = req.user.id;
+        var User = req.user.id.toUpperCase();
         lsResults = JSON.parse(req.data.VARDATA);
         // liResults.push(lsResults);
         if (Flag === "X") {
@@ -3490,13 +3490,8 @@ module.exports = (srv) => {
                 try {
                     await cds.delete("CP_CREATEVARIANTHEADER", liResults);
                     await cds.delete("CP_CREATEVARIANT", liResults);
-
-
                     responseMessage1 = "Deletion successfull";
-
-
                 } catch (e) {
-
                     responseMessage1 = "Deletion Failed";
                     break;
 

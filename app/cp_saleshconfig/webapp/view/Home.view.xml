@@ -4,11 +4,13 @@
             <ux:ObjectPageDynamicHeaderTitle id="_IDGenObjectPageDynamicHeaderTitle1">
                 <ux:expandedHeading>
                     <HBox id="_IDGenHBox4">
-                        <variant:VariantManagement variantItems="{/items}"   select="handleSelectPress" save="onCreate" enabled="true" manage="onManage" showExecuteOnSelection="false" showShare="true" id="Variants">
+                        <!-- <variant:VariantManagement variantItems="{/items}"   select="handleSelectPress" save="onCreate" enabled="true" manage="onManage" showExecuteOnSelection="true" showShare="true" id="Variants">
                             <variant:variantItems>
                                 <variant:VariantItem id="_IDGenVariantItem1" text="{VARIANTNAME}" key="{VARIANTNAME}" />
                             </variant:variantItems>
-                        </variant:VariantManagement>
+                        </variant:VariantManagement> -->
+                        <Label id="idVariantName" required="false" text="" class="Text"/>
+                        <ToggleButton id="idDropDown" icon="sap-icon://slim-arrow-down" press="onDropDownPress"/>
                         <Title id="_IDGenTitle1" text="{i18n>title}" class="Middle" />
                         <Button class="hdrBtnMarginHdr" id="_IDGenOverflowToolbarButton1" icon="sap-icon://sys-help"  type="Emphasized" press="onNavPress" tooltip="Help Document" />
                     </HBox>
