@@ -2,10 +2,29 @@
 	"name": "cpapp.cpmarketauthorization",
 	"version": "0.0.1",
 <<<<<<< HEAD
+<<<<<<< HEAD
 	"buildTimestamp": "202212300812",
 =======
 	"buildTimestamp": "202212281442",
 >>>>>>> 1ad216ca187e72ab61b68dd3c3032c64edf68e7b
+=======
+	"buildTimestamp": "202212261441",
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+	"buildTimestamp": "202212051048",
+=======
+<<<<<<< HEAD
+	"buildTimestamp": "202212011140",
+=======
+	"buildTimestamp": "202212020714",
+>>>>>>> 43022460fae5a814598bffb47b717ae8ffd57816
+>>>>>>> 28572205e8c7de3e81f65a1fa52119e34f364125
+=======
+	"buildTimestamp": "202211291447",
+>>>>>>> 84b7c307bf663cb87aee50219854b661ab655476
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
+>>>>>>> 655ca4900db762f00444b4730811dfe522b460ec
 	"scmRevision": "",
 	"libraries": []
 }

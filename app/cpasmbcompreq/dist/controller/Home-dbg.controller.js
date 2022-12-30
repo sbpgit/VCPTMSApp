@@ -330,7 +330,11 @@ sap.ui.define(
                 fromDate = fromDate.toISOString().split("T")[0];
                 toDate = toDate.toISOString().split("T")[0];
                 // Calling function to generate column names based on dates
+<<<<<<< HEAD
                 var liDates = that.generateDateseries(fromDate, toDate);
+=======
+                var liDates = that.generateDateseries(fromDate, toDate);                
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
                 that.oGModel.setProperty("/TDates", liDates);
 
                 // Looping through the data to generate columns
@@ -361,8 +365,13 @@ sap.ui.define(
                             label: columnName,
                             template: columnName,
                         });
+<<<<<<< HEAD
                     } else {                     
                         // Fetch Total on a   
+=======
+                    } else {
+                        // Fetch Total on a Date   
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
                         var iTotalQty = that.getTotalWeekQty(columnName);
                         var columnText = columnName + " (" + iTotalQty + ")";
                         if (that.plntMethod === 'M1') {
@@ -1030,7 +1039,7 @@ sap.ui.define(
                         success: function (oData) {
                             var adata = [];
                             for (var i = 0; i < oData.results.length; i++) {
-                                if (oData.results[i].PRODUCT_ID === that.oGModel.getProperty("/SelectedProd") ) {
+                                if (oData.results[i].PRODUCT_ID === that.oGModel.getProperty("/SelectedProd")) {
                                     adata.push({
                                         "VERSION": oData.results[i].VERSION
                                     });
@@ -1061,7 +1070,7 @@ sap.ui.define(
                             new Filter(
                                 "PRODUCT_ID",
                                 FilterOperator.EQ,
-                                aSelectedItems[0].getTitle()
+                                that.oGModel.getProperty("/SelectedProd")
                             ),
                         ],
                         success: function (oData) {

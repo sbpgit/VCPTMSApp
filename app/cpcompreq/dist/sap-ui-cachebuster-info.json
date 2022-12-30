@@ -1,6 +1,10 @@
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
   "controller/BaseController-dbg.js": 1665479929589,
+=======
+  "manifest-bundle.zip": 1672064980736,
+>>>>>>> 655ca4900db762f00444b4730811dfe522b460ec
   "model/models.js": 1665479929589,
   "manifest.json": 1672387624895,
   "controller/Home.controller.js": 1671700670235,
@@ -26,6 +30,7 @@
   "css/style.css": 1669712774042,
   "index.html": 1667910898090
 =======
+<<<<<<< HEAD
   "index.html": 1667546481214,
   "controller/BaseController.js": 1661440197811,
   "model/models.js": 1661440197811,
@@ -52,4 +57,32 @@
   "css/style.css": 1669372986742,
   "i18n/i18n.properties": 1666693187702
 >>>>>>> 1ad216ca187e72ab61b68dd3c3032c64edf68e7b
+=======
+  "controller/Home-dbg.controller.js": 1671100323746,
+  "controller/App.controller.js": 1671100323746,
+  "model/models.js": 1671100323750,
+  "controller/Home.controller.js": 1671100323746,
+  "controller/BaseController.js": 1671100323746,
+  "manifest.json": 1671200568730,
+  "Component.js": 1671100323746,
+  "manifest-bundle.zip": 1671200568751,
+  "Component-preload.js": 1671200569281,
+  "i18n/i18n.properties": 1671100323746,
+  "model/models-dbg.js": 1671100323750,
+  "controller/BaseController-dbg.js": 1671100323746,
+  "controller/App-dbg.controller.js": 1671100323746,
+  "Component-dbg.js": 1671100323746,
+  "view/VersionDialog.fragment.xml": 1671100323750,
+  "view/StructureNodeDialog.fragment.xml": 1671100323750,
+  "view/ScenarioDialog.fragment.xml": 1671100323750,
+  "view/ProdDialog.fragment.xml": 1671100323750,
+  "view/LocDialog.fragment.xml": 1671100323750,
+  "view/Home.view.xml": 1671100323750,
+  "view/ComponentDialog.fragment.xml": 1671100323750,
+  "view/CompODBreakdown.fragment.xml": 1671100323750,
+  "view/App.view.xml": 1671100323750,
+  "css/style.css": 1671100323746,
+  "index.html": 1671100323746
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
+>>>>>>> 655ca4900db762f00444b4730811dfe522b460ec
 }

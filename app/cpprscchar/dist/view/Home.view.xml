@@ -170,8 +170,13 @@
         </content>
         <footer>
             <OverflowToolbar>
+<<<<<<< HEAD
                 <Text id="idText" text="Please click on update button to update the Primary Characteristics" visible="false" />
                 <ToolbarSpacer />
+=======
+            <Text id="idText" text= "Please click on update button to update the Primary Characteristics" visible="false"/>
+                <ToolbarSpacer/>
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
                 <Button id="idUpdate" icon="sap-icon://cancel-maintenance" text="Update Primary Char." type="Emphasized" press="onPressUpdate" />
                 <Button id="idReset" icon="sap-icon://repost" text="Reload Char." type="Emphasized" press="onReset" />
             </OverflowToolbar>

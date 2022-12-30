@@ -9,23 +9,39 @@ class MarketAuth {
     constructor() { }
 
 
+<<<<<<< HEAD
     async updateOptPer(lLocation, lProduct, lDate, lVersion, lScenario, req) {
         let Flag;
 
+=======
+    async updateOptPer(lLocation, lProduct, lDate, lVersion, lScenario,req) {
+        
+>>>>>>> 655ca4900db762f00444b4730811dfe522b460ec
         await GenF.logMessage(req, 'Started Sales Orders Processing');
 
 
         let lOrdQty = 0;
+<<<<<<< HEAD
         // Get total Quantity of the product        
+=======
+// Get total Quantity of the product        
+>>>>>>> 655ca4900db762f00444b4730811dfe522b460ec
         let liSOrdQty = await cds.run(`SELECT SUM("ORD_QTY") AS ORD_QTY
                                         FROM V_SALES_H
                                        WHERE LOCATION_ID = '${lLocation}'
                                          AND PRODUCT_ID = '${lProduct}'
                                        GROUP BY LOCATION_ID,
+<<<<<<< HEAD
                                                 PRODUCT_ID;`);
         if (liSOrdQty.length > 0) {
             lOrdQty = parseInt(liSOrdQty[0].ORD_QTY);
         }
+=======
+                                                PRODUCT_ID;`);  
+        if(liSOrdQty.length > 0){
+            lOrdQty = parseInt(liSOrdQty[0].ORD_QTY);
+        }                                                      
+>>>>>>> 655ca4900db762f00444b4730811dfe522b460ec
 
         // Get Default Market Authorization
         let liDefOptPer = await cds.run(`SELECT *
@@ -50,6 +66,7 @@ class MarketAuth {
                                                      SCENARIO,
                                                      CHAR_NUM,
                                                      CHARVAL_NUM;`);
+<<<<<<< HEAD
         try {
             await DELETE.from('CP_MARKETAUTH_CFG')
                 .where(`LOCATION_ID = '${lLocation}' 
@@ -62,6 +79,9 @@ class MarketAuth {
         catch (e) {
             console.log("unable to delete");
         }
+=======
+
+>>>>>>> 655ca4900db762f00444b4730811dfe522b460ec
         let lsCharVal = {};
         let liCharVal = [];
 
@@ -69,6 +89,7 @@ class MarketAuth {
         for (let cntFP = 0; cntFP < liFutOptPer.length; cntFP++) {
             let lFound = '';
             for (let cntDP = 0; cntDP < liDefOptPer.length; cntDP++) {
+<<<<<<< HEAD
                 if (liDefOptPer[cntDP].CHAR_NUM === liFutOptPer[cntFP].CHAR_NUM &&
                     liDefOptPer[cntDP].CHARVAL_NUM === liFutOptPer[cntFP].CHARVAL_NUM) {
                     lFound = 'X';
@@ -85,14 +106,37 @@ class MarketAuth {
                     }
                     liCharVal.push(lsCharVal);
                     // }
+=======
+                if (liDefOptPer[cntDP].CHAR_NUM === liFutOptPer[cntFP ].CHAR_NUM &&
+                    liDefOptPer[cntDP].CHARVAL_NUM === liFutOptPer[cntFP ].CHARVAL_NUM ) {
+                        lFound = 'X';
+                        // if (liDefOptPer[cntDP].OPT_PERCENT !== liFutOptPer[cntFP ].OPT_PERCENT) {
+                            lsCharVal = {};
+                            lsCharVal['VERSION'] = GenF.parse(liFutOptPer[cntFP ].VERSION);
+                            lsCharVal['SCENARIO'] = GenF.parse(liFutOptPer[cntFP ].SCENARIO);
+                            lsCharVal['CHAR_NUM'] = GenF.parse(liFutOptPer[cntFP ].CHAR_NUM);
+                            lsCharVal['CHARVAL_NUM'] = GenF.parse(liFutOptPer[cntFP ].CHARVAL_NUM);
+                            if(liDefOptPer[cntDP].OPT_PERCENT > 0){
+                                lsCharVal['CORRECTION_FACTOR'] = liFutOptPer[cntFP ].OPT_PERCENT / liDefOptPer[cntDP].OPT_PERCENT;
+                            } else {
+                                lsCharVal['CORRECTION_FACTOR'] = 1; 
+                            }
+                            liCharVal.push(lsCharVal);
+                        // }
+>>>>>>> 655ca4900db762f00444b4730811dfe522b460ec
                 } else {
                     if (lFound === 'X') {
                         break;
                     }
                 }
             }
+<<<<<<< HEAD
         }
 
+=======
+        }                             
+        
+>>>>>>> 655ca4900db762f00444b4730811dfe522b460ec
         let lsVersion = {};
         let liVersion = [];
         let lsChar = {};
@@ -101,15 +145,24 @@ class MarketAuth {
         let liCharValTemp = [];
 
         for (let cntCV = 0; cntCV < liCharVal.length; cntCV++) {
+<<<<<<< HEAD
 
             lsCharValTemp = {};
             lsCharValTemp['CHARVAL_NUM'] = GenF.parse(liCharVal[cntCV].CHARVAL_NUM);
             lsCharValTemp['CORRECTION_FACTOR'] = GenF.parse(liCharVal[cntCV].CORRECTION_FACTOR)
             if (lsCharValTemp['CORRECTION_FACTOR'] !== 1) {
+=======
+  
+            lsCharValTemp = {};           
+            lsCharValTemp['CHARVAL_NUM'] = GenF.parse(liCharVal[cntCV].CHARVAL_NUM);
+            lsCharValTemp['CORRECTION_FACTOR'] = GenF.parse(liCharVal[cntCV].CORRECTION_FACTOR)
+            if(lsCharValTemp['CORRECTION_FACTOR'] !== 1){
+>>>>>>> 655ca4900db762f00444b4730811dfe522b460ec
                 lsChar['PROCESS'] = 'X';
             }
             liCharValTemp.push(lsCharValTemp);
 
+<<<<<<< HEAD
             if (cntCV === GenF.addOne(cntCV, liCharVal.length) ||
                 liCharVal[cntCV].CHAR_NUM !== liCharVal[GenF.addOne(cntCV)].CHAR_NUM) {
 
@@ -134,6 +187,31 @@ class MarketAuth {
         }
 
 
+=======
+            if(cntCV === GenF.addOne(cntCV,liCharVal.length) ||
+                liCharVal[cntCV].CHAR_NUM !== liCharVal[GenF.addOne(cntCV)].CHAR_NUM){
+                 
+                 lsChar['CHAR_NUM'] = liCharVal[cntCV].CHAR_NUM;
+                 lsChar['VAL']      = GenF.parse(liCharValTemp);
+                 liCharValTemp = [];
+                 lsChar = {};
+             }                 
+           
+            if(cntCV === GenF.addOne(cntCV, liCharVal.length) ||
+                liCharVal[cntCV].VERSION !== liCharVal[GenF.addOne(cntCV)].VERSION ||
+                liCharVal[cntCV].SCENARIO !== liCharVal[GenF.addOne(cntCV)].SCENARIO){
+                    lsVersion['VERSION'] = GenF.parse(liCharVal[cntCV].VERSION);
+                    lsVersion['SCENARIO'] = GenF.parse(liCharVal[cntCV].SCENARIO);
+                    lsVersion['CHAR'] = GenF.parse(liChar);
+                    liVersion.push(lsVersion);
+                    
+                    liChar = [];
+            }            
+            
+        }
+
+       
+>>>>>>> 655ca4900db762f00444b4730811dfe522b460ec
         let liCharOpt = [];
         let liCharOptOt = [];
         let lNumChar = 0;
@@ -143,6 +221,7 @@ class MarketAuth {
             liCharOpt = [];
             for (let cntVC = 0; cntVC < liVersionChar.length; cntVC++) {
                 let liVersionCharValue = liVersionChar[cntVC].VAL;
+<<<<<<< HEAD
                 if (liVersionChar[cntVC].PROCESS === 'X') {
                     lNumChar = lNumChar + 1;
                     for (let cntVCV = 0; cntVCV < liVersionCharValue.length; cntVCV++) {
@@ -152,6 +231,17 @@ class MarketAuth {
                                                             V_UNIQUE_ID.CHAR_NUM,
                                                             V_UNIQUE_ID.CHARVAL_NUM,
                                                             SUM(V_UNIQUE_ID_COUNT.ORD_QTY) AS ORD_QTY
+=======
+                if(liVersionChar[cntVC].PROCESS === 'X'){
+                    lNumChar = lNumChar + 1;
+                    for (let cntVCV = 0; cntVCV < liVersionCharValue.length; cntVCV++) {
+                    
+                        liCharOptOt = await cds.run(`SELECT V_UNIQUE_ID_COUNT.LOCATION_ID,
+                                                            V_UNIQUE_ID_COUNT.PRODUCT_ID,
+                                                            V_UNIQUE_ID.CHAR_NUM,
+                                                            V_UNIQUE_ID.CHARVAL_NUM,
+                                                            SUM(V_UNIQUE_ID_COUNT.ORD_QTY) * ${liVersionCharValue[cntVCV].CORRECTION_FACTOR} AS ORD_QTY
+>>>>>>> 655ca4900db762f00444b4730811dfe522b460ec
                                                     FROM V_UNIQUE_ID_COUNT
                                             INNER JOIN CP_PARTIALPROD_INTRO
                                                     ON CP_PARTIALPROD_INTRO.LOCATION_ID = V_UNIQUE_ID_COUNT.LOCATION_ID
@@ -169,7 +259,11 @@ class MarketAuth {
                                                                                                                                     FROM CP_PARTIALPROD_INTRO
                                                                                                                                     WHERE LOCATION_ID = '${lLocation}'
                                                                                                                                     AND PRODUCT_ID = '${lProduct}'))
+<<<<<<< HEAD
                                                                                                                                     AND CHAR_NUM = '${liVersionChar[cntVC].CHAR_NUM}'
+=======
+                                                                                                                                    AND CHAR_NUM = '${liVersionCharValue.CHAR_NUM}'
+>>>>>>> 655ca4900db762f00444b4730811dfe522b460ec
                                                                                                                                     AND CHARVAL_NUM = '${liVersionCharValue[cntVCV].CHARVAL_NUM}'))
                                                     GROUP BY 
                                                         V_UNIQUE_ID_COUNT.LOCATION_ID,
@@ -177,6 +271,7 @@ class MarketAuth {
                                                         V_UNIQUE_ID.CHAR_NUM,
                                                         V_UNIQUE_ID.CHARVAL_NUM
                                                         ORDER BY CHAR_NUM, CHARVAL_NUM;`);
+<<<<<<< HEAD
                         }
                         catch (e) {
                             console.log(e);
@@ -210,15 +305,107 @@ class MarketAuth {
                                 lsOptPer = {};
                             }
 
+=======
+
+                        for (let cntC = 0; cntC < liCharOptOt.length; cntC++) {
+                            let lSuccess = '';
+                            for (let cntCC = 0; cntCC < liCharOpt.length; cntCC++) {
+                                if (liCharOpt[cntC].LOCATION_ID === liCharOptOt[cntC].LOCATION_ID &&
+                                    liCharOpt[cntC].PRODUCT_ID  === liCharOptOt[cntC].PRODUCT_ID &&
+                                    liCharOpt[cntC].VERSION === liVersion[cntV].VERSION &&
+                                    liCharOpt[cntC].SCENARIO === liVersion[cntV].SCENARIO &&                                
+                                    liCharOpt[cntC].CHAR_NUM    === liCharOptOt[cntC].CHAR_NUM &&
+                                    liCharOpt[cntC].CHARVAL_NUM === liCharOptOt[cntC].CHARVAL_NUM) {
+                                        liCharOpt[cntC].ORD_QTY =  parseInt(liCharOpt[cntC].ORD_QTY) + parseInt(liCharOptOt[cntC].ORD_QTY);
+                                        lSuccess = 'X';
+                                        break;
+                                }
+                            }
+                            if(lSuccess === ''){
+                                lsOptPer.LOCATION_ID = GenF.parse(liCharOptOt[cntC].LOCATION_ID);
+                                lsOptPer.PRODUCT_ID  = GenF.parse(liCharOptOt[cntC].PRODUCT_ID);
+                                lsOptPer.VERSION     = GenF.parse(liVersion[cntV].VERSION);
+                                lsOptPer.SCENARIO    = GenF.parse(liVersion[cntV].SCENARIO);
+                                lsOptPer.CHAR_NUM    = GenF.parse(liCharOptOt[cntC].CHAR_NUM);
+                                lsOptPer.CHARVAL_NUM = GenF.parse(liCharOptOt[cntC].CHARVAL_NUM);
+                                lsOptPer.ORD_QTY     = parseInt(liCharOptOt[cntC].ORD_QTY);
+
+                                liCharOpt.push(lsOptPer);
+                            }
+                            
+>>>>>>> 655ca4900db762f00444b4730811dfe522b460ec
                         }
 
                     }
                 }
 
+<<<<<<< HEAD
+=======
+                // liCharOptOt = await cds.run(`SELECT V_UNIQUE_ID_COUNT.LOCATION_ID,
+                //                                 V_UNIQUE_ID_COUNT.PRODUCT_ID,
+                //                                 V_UNIQUE_ID.CHAR_NUM,
+                //                                 V_UNIQUE_ID.CHARVAL_NUM,
+                //                                 SUM(V_UNIQUE_ID_COUNT.ORD_QTY) AS ORD_QTY
+                //                             FROM V_UNIQUE_ID_COUNT
+                //                         INNER JOIN CP_PARTIALPROD_INTRO
+                //                                 ON CP_PARTIALPROD_INTRO.LOCATION_ID = V_UNIQUE_ID_COUNT.LOCATION_ID
+                //                             AND CP_PARTIALPROD_INTRO.PRODUCT_ID = V_UNIQUE_ID_COUNT.PRODUCT_ID
+                //                         INNER JOIN V_UNIQUE_ID
+                //                                 ON V_UNIQUE_ID.LOCATION_ID = V_UNIQUE_ID_COUNT.LOCATION_ID
+                //                             AND V_UNIQUE_ID.PRODUCT_ID = CP_PARTIALPROD_INTRO.REF_PRODID
+                //                             AND V_UNIQUE_ID.UNIQUE_ID = V_UNIQUE_ID_COUNT.UNIQUE_ID
+                //                             WHERE V_UNIQUE_ID_COUNT.LOCATION_ID = '${lLocation}'
+                //                             AND V_UNIQUE_ID_COUNT.PRODUCT_ID = '${lProduct}'
+                //                             AND (V_UNIQUE_ID_COUNT.UNIQUE_ID NOT IN (SELECT DISTINCT UNIQUE_ID
+                //                                                                                 FROM V_UNIQUE_ID
+                //                                                                                 WHERE LOCATION_ID = '${lLocation}'
+                //                                                                                     AND (PRODUCT_ID IN (SELECT DISTINCT REF_PRODID
+                //                                                                                                                 FROM CP_PARTIALPROD_INTRO
+                //                                                                                                                 WHERE LOCATION_ID = '${lLocation}'
+                //                                                                                                                     AND PRODUCT_ID = '${lProduct}'))
+                //                                                                                                                     AND CHAR_NUM = '${lCharNum}'
+                //                                                                                                                     AND CHARVAL_NUM = '${lCharValNum}'))
+                // GROUP BY 
+                //     V_UNIQUE_ID_COUNT.LOCATION_ID,
+                //     V_UNIQUE_ID_COUNT.PRODUCT_ID,
+                //     V_UNIQUE_ID.CHAR_NUM,
+                //     V_UNIQUE_ID.CHARVAL_NUM
+                //     ORDER BY CHAR_NUM, CHARVAL_NUM;`)   
+                    
+                //     for (let cntC = 0; cntC < liCharOptOt.length; cntC++) {
+                //         let lSuccess = '';
+                //         for (let cntCC = 0; cntCC < liCharOpt.length; cntCC++) {
+                //             if (liCharOpt[cntC].LOCATION_ID === liCharOptOt[cntC].LOCATION_ID &&
+                //                 liCharOpt[cntC].PRODUCT_ID  === liCharOptOt[cntC].PRODUCT_ID &&
+                //                 liCharOpt[cntC].VERSION === liVersion[cntV].VERSION;
+                //                 liCharOpt[cntC].SCENARIO === liVersion[cntV].SCENARIO;                                
+                //                 liCharOpt[cntC].CHAR_NUM    === liCharOptOt[cntC].CHAR_NUM &&
+                //                 liCharOpt[cntC].CHARVAL_NUM === liCharOptOt[cntC].CHARVAL_NUM) {
+                //                     liCharOpt[cntC].ORD_QTY =  parseInt(liCharOpt[cntC].ORD_QTY) + parseInt(liCharOptOt[cntC].ORD_QTY);
+                //                     lSuccess = 'X';
+                //                     break;
+                //             }
+                //         }
+                //         if(lSuccess === ''){
+                //             lsOptPer.LOCATION_ID = liCharOptOt[cntC].LOCATION_ID;
+                //             lsOptPer.PRODUCT_ID  = liCharOptOt[cntC].PRODUCT_ID;
+                //             lsOptPer.VERSION  = liVersion[cntV].VERSION;
+                //             lsOptPer.SCENARIO  = liVersion[cntV].SCENARIO;
+                //             lsOptPer.CHAR_NUM    = liCharOptOt[cntC].CHAR_NUM;
+                //             lsOptPer.CHARVAL_NUM = liCharOptOt[cntC].CHARVAL_NUM;
+                //             lsOptPer.CHARVAL_NUM = liCharOptOt[cntC].CHARVAL_NUM;
+            
+                //             liCharOpt.push(lsOptPer);
+                //         }
+                        
+                //     }                    
+
+>>>>>>> 655ca4900db762f00444b4730811dfe522b460ec
             }
             let lsMarketAuth = {};
             let liMarketAuth = [];
             for (let cntOP = 0; cntOP < liCharOpt.length; cntOP++) {
+<<<<<<< HEAD
                 lsMarketAuth['WEEK_DATE'] = GenF.parse(lDate);
                 lsMarketAuth['LOCATION_ID'] = GenF.parse(liCharOpt[cntOP].LOCATION_ID);
                 lsMarketAuth['PRODUCT_ID'] = GenF.parse(liCharOpt[cntOP].PRODUCT_ID);
@@ -228,11 +415,23 @@ class MarketAuth {
                 lsMarketAuth['SCENARIO'] = GenF.parse(liCharOpt[cntOP].SCENARIO);
                 if (lOrdQty > 0) {
                     lsMarketAuth['OPT_PERCENT'] = liCharOpt[cntOP].ORD_QTY / (parseInt(lNumChar) * lOrdQty);
+=======
+                lsMarketAuth['WEEK_DATE']   = GenF.parse(lDate);
+                lsMarketAuth['LOCATION_ID'] = GenF.parse(liCharOpt[cntOP].LOCATION_ID);
+                lsMarketAuth['PRODUCT_ID']  = GenF.parse(liCharOpt[cntOP].PRODUCT_ID);
+                lsMarketAuth['CHAR_NUM']    = GenF.parse(liCharOpt[cntOP].CHAR_NUM);
+                lsMarketAuth['CHARVAL_NUM'] = GenF.parse(liCharOpt[cntOP].CHARVAL_NUM);                
+                lsMarketAuth['VERSION ']    = GenF.parse(liCharOpt[cntOP].VERSION);
+                lsMarketAuth['SCENARIO']    = GenF.parse(liCharOpt[cntOP].SCENARIO);    
+                if(lOrdQty > 0)            {
+                    lsMarketAuth['OPT_PERCENT'] = liCharOpt[cntOP].ORD_QTY / ( parseInt(lNumChar) * lOrdQty);
+>>>>>>> 655ca4900db762f00444b4730811dfe522b460ec
                 } else {
                     lsMarketAuth['OPT_PERCENT'] = 0;
                 }
                 liMarketAuth.push(lsMarketAuth);
             }
+<<<<<<< HEAD
             try {
                 await INSERT.into('CP_MARKETAUTH_CFG')
                     .entries(liMarketAuth);
@@ -240,6 +439,11 @@ class MarketAuth {
             catch (e) {
 
             }
+=======
+
+            await INSERT .INTO('CP_MARKETAUTH_CFG')
+                         .ENTRIES(liMarketAuth);
+>>>>>>> 655ca4900db762f00444b4730811dfe522b460ec
 
         }
 

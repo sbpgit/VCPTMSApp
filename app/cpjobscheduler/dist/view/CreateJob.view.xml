@@ -355,7 +355,11 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                             <RadioButton id="idIBPCustGrp"  text="Customer Group" />
                             <RadioButton id="idIBPProd"  text="Product" />
                             <RadioButton id="idIBPLocProd" text="Location Product" />
+<<<<<<< HEAD
                             <RadioButton id="idIBPAssembly" text="Assembly" />
+=======
+                            <RadioButton id="idIBPAssembly" text="Assemblies" />
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
                             <RadioButton id="idIBPClass"  text="Class" />
                             <RadioButton id="idRestri"  text="Restrictions" />
                             
@@ -364,6 +368,7 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                             <RadioButton id="idMarketAuth" text="Market Authorizations" />
                             <RadioButton id="idIBPCompReqQty" text="Assembly Requirement Quantity" />
                             <RadioButton id="idIBPExCIR" text="Forecast Demand" />
+<<<<<<< HEAD
                             <RadioButton id="idResLikhood" text="Restriction Likelihood" /> -->
                             
                             <RadioButton id="idIBPLoc"  text="Location" tooltip="Master"/>
@@ -372,6 +377,10 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                             <RadioButton id="idIBPActCompDemd" text="Actual Components Demand" />
                             <RadioButton id="idIBPProd"  text="Product" />
                             <RadioButton id="idMarketAuth" text="Market Authorizations" />
+=======
+                            <RadioButton id="idResLikhood" text="Restriction Likelihood" />
+                            
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
 
                             <RadioButton id="idIBPLocProd" text="Location Product" />
                             <RadioButton id="idIBPCompReqQty" text="Assembly Requirement Quantity" />
@@ -450,14 +459,22 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                                                     <Input id="ELPlocInput" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                                                 </f:fields>
                                             </f:FormElement>
+<<<<<<< HEAD
                                             <!-- <f:FormElement>
+=======
+                                            <f:FormElement>
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
                                                 <f:label>
                                                     <Label text="{i18n>prod}" required="true"  />
                                                 </f:label>
                                                 <f:fields>
                                                     <MultiInput id="ELPprodInput" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
                                                 </f:fields>
+<<<<<<< HEAD
                                             </f:FormElement> -->
+=======
+                                            </f:FormElement>
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
                                         </f:formElements>
                                     </f:FormContainer>
                                 </f:formContainers>
@@ -478,14 +495,22 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                                                     <Input id="EIAlocInput" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                                                 </f:fields>
                                             </f:FormElement>
+<<<<<<< HEAD
                                             <!-- <f:FormElement>
+=======
+                                            <f:FormElement>
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
                                                 <f:label>
                                                     <Label text="{i18n>prod}" required="true"  />
                                                 </f:label>
                                                 <f:fields>
                                                     <MultiInput id="EIAprodInput" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
                                                 </f:fields>
+<<<<<<< HEAD
                                             </f:FormElement> -->
+=======
+                                            </f:FormElement>
+>>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
                                         </f:formElements>
                                     </f:FormContainer>
                                 </f:formContainers>
