@@ -7,7 +7,7 @@ class IBPFunctions {
     constructor() {
 
     }
-    async exportSalesCfg(req,imDates) {
+    async exportSalesCfg(req, imDates) {
         var oReq = {
             sales: [],
         },
@@ -28,7 +28,7 @@ class IBPFunctions {
                            AND PRODUCT_ID = '`+ req.PRODUCT_ID +
             `'`);
         // `' AND CUSTOMER_GROUP = '` + req.data.CUSTOMER_GROUP +e
-        
+
         let liDates = imDates;
         let vDemd, vAdjqty, vWeekDate;
 
@@ -293,6 +293,45 @@ class IBPFunctions {
         return lireturn;
 
     }
+    /**
+     * 
+     * @param {Request} request 
+     */
+    async importVerScen(request) {
+
+        const service = await cds.connect.to('IBPDemandsrv');
+        const servicePost = await cds.connect.to('IBPMasterDataAPI');
+        // Get Planning area and Prefix configurations for IBP
+        let liParaValue = await GenF.getIBPParameterValue();
+        let flag, lMessage = '', vScenario;
+        let resUrl = "/" + liParaValue[0].VALUE + "?$select=VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$inlinecount=allpages";
+        let req = await service.tx(request).get(resUrl);
+        if (req.length) {
+            await DELETE.from('CP_IBPVERSIONSCENARIO');
+        }
+        for (let i in req) {
+            if (req[i].SCENARIOID === '' || req[i].SCENARIOID === null) {
+                vScenario = '_PLAN';
+            }
+            else {
+                vScenario = req[i].SCENARIOID; //'BSL_SCENARIO';
+            }
+            let modQuery = 'INSERT INTO "CP_IBPVERSIONSCENARIO" VALUES (' +
+                "'" + req[i].VERSIONID + "'" + "," +
+                "'" + vScenario + "'" + "," +
+                "'" + req[i].VERSIONNAME + "'" + "," +
+                "'" + req[i].SCENARIONAME + "'" + ')';
+            try {
+                await cds.run(modQuery);
+                flag = 'S';
+            }
+            catch (err) {
+                console.log(err);
+            }
+        }
+        return "S";
+    }
+
 }
 
 module.exports = IBPFunctions;

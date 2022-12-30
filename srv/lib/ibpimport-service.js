@@ -1616,17 +1616,17 @@ module.exports = cds.service.impl(async function () {
 
         }
         vWeekDate = new Date(liDates[24].WEEK_DATE).toISOString().split('Z');
-                    vDemd = "-2";
-                    vAdjqty = "-3";
-                    vsales = {
-                        "LOCID": "PL10",
-                        "PRDID": "FG_100",
-                        "CUSTID": "A1",
-                        "ACTUALDEMAND": "-1",
-                        "SEEDORDERDEMAND": "-2",
-                        "PERIODID0_TSTAMP": vWeekDate[0]
-                    };
-                    oReq.sales.push(vsales);
+        vDemd = "-2";
+        vAdjqty = "-3";
+        vsales = {
+            "LOCID": "PL10",
+            "PRDID": "FG_100",
+            "CUSTID": "A1",
+            "ACTUALDEMAND": "-1",
+            "SEEDORDERDEMAND": "-2",
+            "PERIODID0_TSTAMP": vWeekDate[0]
+        };
+        oReq.sales.push(vsales);
         let vTransID = new Date().getTime().toString();
         let oEntry =
         {
@@ -1641,12 +1641,12 @@ module.exports = cds.service.impl(async function () {
             await service.tx(req).post(lEntity, oEntry);
             flag = 'E';
         }
-        catch (E){
+        catch (E) {
             console.log("Unable to send Actual demand at VC");
         }
         // Once Sales History is successfull , send sales Config . Actual demand at VC
         if (flag === 'S') {
-            let oReqCfg = await obibpfucntions.exportSalesCfg(lsData,liDates);
+            let oReqCfg = await obibpfucntions.exportSalesCfg(lsData, liDates);
             let vTransID = new Date().getTime().toString();
             let oEntryCfg =
             {
@@ -2115,6 +2115,16 @@ module.exports = cds.service.impl(async function () {
         values.push({ id, createtAt, message, lilocProd });
         res.statusCode = 202;
         res.send({ values });
+        flag = await obibpfucntions.importVerScen(request);
+        if (flag === 'S') {
+            lMessage = "Successfully imported version scenario from IBP";
+            console.log(lMessage);
+        } else {
+            lMessage = "Failed to import version scenario from IBP";
+            console.log(lMessage);
+        }
+        flag = '';
+        lMessage = '';
         for (let iloc = 0; iloc < lilocProd.length; iloc++) {
             lsData.LOCATION_ID = lilocProd[iloc].LOCATION_ID;
             lsData.PRODUCT_ID = lilocProd[iloc].PRODUCT_ID;
@@ -2431,6 +2441,7 @@ module.exports = cds.service.impl(async function () {
         res.statusCode = 202;
         res.send({ values });
         for (let iloc = 0; iloc < lilocProd.length; iloc++) {
+            flag = ' ';
             lsData.LOCATION_ID = lilocProd[iloc].LOCATION_ID;
             lsData.PRODUCT_ID = lilocProd[iloc].PRODUCT_ID;
             const licir = await cds.run(
@@ -2451,33 +2462,38 @@ module.exports = cds.service.impl(async function () {
                     "VCCLASS": licir[i].CLASS_NUM,
                     "VCCHAR": licir[i].CHAR_NUM,
                     "VCCHARVALUE": licir[i].CHARVAL_NUM,
-                    "CUSTID": "NULL",
+                    // "CUSTID": "NULL",
                     "FORECASTORDERQTY": licir[i].CIRQTY.toString(),
                     "PERIODID4_TSTAMP": vWeekDate
                 };
                 oReq.cir.push(vCIR);
             }
-            let vTransID = new Date().getTime().toString();
-            let oEntry =
-            {
-                "Transactionid": vTransID,
-                "AggregationLevelFieldsString": "LOCID,PRDID,VCCLASS,VCCHAR,VCCHARVALUE,CUSTID,FORECASTORDERQTY,PERIODID4_TSTAMP",
-                "DoCommit": true
-            }
-            oEntry[lData] = oReq.cir;
-            try {
-                await service.tx(request).post(lEntity, oEntry);
-                flag = 'X';
-            }
-            catch (err) {
-                console.log(err);
-                flag = ' ';
-            }
+            if (oReq.cir.length > 0) {
+                let vTransID = new Date().getTime().toString();
+                let oEntry =
+                {
+                    "Transactionid": vTransID,
+                    "AggregationLevelFieldsString": "LOCID,PRDID,VCCLASS,VCCHAR,VCCHARVALUE,FORECASTORDERQTY,PERIODID4_TSTAMP",
+                    "DoCommit": true
+                }
+                oEntry[lData] = oReq.cir;
+                try {
+                    await service.tx(request).post(lEntity, oEntry);
+                    flag = 'X';
+                }
+                catch (err) {
+                    console.log(err);
+                    flag = ' ';
+                }
 
-            if (flag === 'X') {
-                lMessage = lMessage + ' ' + "Export of CIR to IBP is successful for product" + lsData.PRODUCT_ID;
-            } else {
-                lMessage = lMessage + ' ' + "Export of CIR to IBP has failed for product" + lsData.PRODUCT_ID;
+                if (flag === 'X') {
+                    lMessage = lMessage + ' ' + "Export of CIR to IBP is successful for product" + lsData.PRODUCT_ID;
+                } else {
+                    lMessage = lMessage + ' ' + "Export of CIR to IBP has failed for product" + lsData.PRODUCT_ID;
+                }
+            }
+            else {
+                lMessage = lMessage + ' ' + "Export of CIR to IBP is unsuccessful product" + lsData.PRODUCT_ID + " beacuse of insufficient data ";
             }
             // return "S";
             await GenF.jobSchMessage('X', lMessage, request);
@@ -2495,35 +2511,37 @@ module.exports = cds.service.impl(async function () {
 
         await GenF.logMessage(req, `Started exporting Restriction header`);
         let oReq = await obibpfucntions.exportRtrHdrDet(req);
-        let vTransID = new Date().getTime().toString();
-        let vTransID2 = new Date().getTime().toString();
-        let oEntry =
-        {
-            "TransactionID": vTransID,
-            "RequestedAttributes": "VCRESTRICTIONID,VCRESTRICTIONDESC,VCRESTRICTIONTYPE",
-            "DoCommit": true
-        }
-        oEntry[lData] = oReq.rtrhdr;
-        let oEntry2 =
-        {
-            "TransactionID": vTransID2,
-            "RequestedAttributes": "LOCID,VCRESTRICTIONID,VCPLACEHOLDER",
-            "DoCommit": true
-        }
-        oEntry2[lData] = oReq.locrtr;
-        try {
-            await servicePost.tx(req).post(lEntity, oEntry);
-            await servicePost.tx(req).post(lEntityLoc, oEntry2);
-            vFlag = 'S';
-        }
-        catch (e) {
-            vFlag = '';
-        }
-        if (vFlag === 'S') {
-            await GenF.jobSchMessage('X', "Export Restriction header details is successful ", req);
-        }
-        else {
-            await GenF.jobSchMessage('', "Export Restriction header details has failed", req);
+        if (oReq.rtrhdr.length > 0) {
+            let vTransID = new Date().getTime().toString();
+            let vTransID2 = new Date().getTime().toString();
+            let oEntry =
+            {
+                "TransactionID": vTransID,
+                "RequestedAttributes": "VCRESTRICTIONID,VCRESTRICTIONDESC,VCRESTRICTIONTYPE",
+                "DoCommit": true
+            }
+            oEntry[lData] = oReq.rtrhdr;
+            let oEntry2 =
+            {
+                "TransactionID": vTransID2,
+                "RequestedAttributes": "LOCID,VCRESTRICTIONID,VCPLACEHOLDER",
+                "DoCommit": true
+            }
+            oEntry2[lData] = oReq.locrtr;
+            try {
+                await servicePost.tx(req).post(lEntity, oEntry);
+                await servicePost.tx(req).post(lEntityLoc, oEntry2);
+                vFlag = 'S';
+            }
+            catch (e) {
+                vFlag = '';
+            }
+            if (vFlag === 'S') {
+                await GenF.jobSchMessage('X', "Export Restriction header details is successful ", req);
+            }
+            else {
+                await GenF.jobSchMessage('', "Export Restriction header details has failed", req);
+            }
         }
     });
     this.on("exportMktAuth", async (request) => {
@@ -2684,6 +2702,16 @@ module.exports = cds.service.impl(async function () {
 
         lsData = {};
 
+        flag = await obibpfucntions.importVerScen(request);
+        if (flag === 'S') {
+            lMessage = "Successfully imported version scenario from IBP";
+            console.log(lMessage);
+        } else {
+            lMessage = "Failed to import version scenario from IBP";
+            console.log(lMessage);
+        }
+        flag = '';
+        lMessage = '';
         // Fetch OPtion percentages for a location product and weekDate
         for (let iloc = 0; iloc < lilocProd.length; iloc++) {
             lsData.LOCATION_ID = lilocProd[iloc].LOCATION_ID;
@@ -3230,32 +3258,33 @@ module.exports = cds.service.impl(async function () {
         // await GenF.jobSchMessage('X', lMessage, request);
     });
     this.on("importibpversce", async (request) => {
+        let flag = await obibpfucntions.importVerScen(request);
         // Get Planning area and Prefix configurations for IBP
-        let liParaValue = await GenF.getIBPParameterValue();
-        let flag, lMessage = '';
-        let resUrl = "/" + liParaValue[0].VALUE + "?$select=VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$inlinecount=allpages";
-        let req = await service.tx(request).get(resUrl);
-        if (req.length) {
-            await DELETE.from('CP_IBPVERSIONSCENARIO');
-        }
+        // let liParaValue = await GenF.getIBPParameterValue();
+        // let flag, lMessage = '';
+        // let resUrl = "/" + liParaValue[0].VALUE + "?$select=VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$inlinecount=allpages";
+        // let req = await service.tx(request).get(resUrl);
+        // if (req.length) {
+        //     await DELETE.from('CP_IBPVERSIONSCENARIO');
+        // }
 
-        for (let i in req) {
+        // for (let i in req) {
 
-            let modQuery = 'INSERT INTO "CP_IBPVERSIONSCENARIO" VALUES (' +
-                "'" + req[i].VERSIONID + "'" + "," +
-                "'" + req[i].SCENARIOID + "'" + "," +
-                "'" + req[i].VERSIONNAME + "'" + "," +
-                "'" + req[i].SCENARIONAME + "'" + ')';
-            try {
-                await cds.run(modQuery);
-                flag = 'S';
+        //     let modQuery = 'INSERT INTO "CP_IBPVERSIONSCENARIO" VALUES (' +
+        //         "'" + req[i].VERSIONID + "'" + "," +
+        //         "'" + req[i].SCENARIOID + "'" + "," +
+        //         "'" + req[i].VERSIONNAME + "'" + "," +
+        //         "'" + req[i].SCENARIONAME + "'" + ')';
+        //     try {
+        //         await cds.run(modQuery);
+        //         flag = 'S';
 
-            }
-            catch (err) {
-                console.log(err);
-            }
+        //     }
+        //     catch (err) {
+        //         console.log(err);
+        //     }
 
-        }
+        // }
 
         if (flag === 'S') {
             lMessage = "Successfully imported version scenario from IBP";

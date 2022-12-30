@@ -121,6 +121,12 @@ module.exports = (srv) => {
         let columnname = "WEEK";
         let liComp = [];
         let liCompQty;
+        // Get Factory and Demand Locations
+        const liFtLoc = await SELECT.columns(
+            "LOCATION_ID",
+            "PLAN_LOC",
+            "FACTORY_LOC")
+            .from('CP_FACTORY_SALESLOC');
         switch (await GenFunctions.getParameterValue(req.data.LOCATION_ID, 5)) {
             case 'M1':
                 const liasmbcomp = await cds.run(`SELECT * from "CP_ASSEMBLY_COMP" WHERE "LOCATION_ID" = '` +

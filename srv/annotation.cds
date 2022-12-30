@@ -1726,12 +1726,12 @@ annotate service.FACTORY_SALESLOC with @(
                 ![@UI.Importance]   : #High,
                 ![@HTML5.CssDefaults] : {width : '15rem'}
             },
-            // {
-            //     $Type : 'UI.DataField',
-            //     Value : PRODUCT_ID,
-            //     ![@UI.Importance]   : #High,
-            //     ![@HTML5.CssDefaults] : {width : '15rem'}
-            // },
+            {
+                $Type : 'UI.DataField',
+                Value : PRODUCT_ID,
+                ![@UI.Importance]   : #High,
+                ![@HTML5.CssDefaults] : {width : '15rem'}
+            },
             {
                 $Type : 'UI.DataField',
                 Value : PLAN_LOC,

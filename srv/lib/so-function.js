@@ -19,9 +19,9 @@ class SOFunctions {
 
         await GenF.logMessage(req, 'Started Sales Orders Processing');
         // await this.clearSalesH();
-        await this.processUniqueID(adata.LOCATION_ID, adata.PRODUCT_ID, '');
-        await this.genBaseMarketAuth(adata.LOCATION_ID, adata.PRODUCT_ID);
-        await this.genPartialProd(adata.LOCATION_ID);
+        // await this.processUniqueID(adata.LOCATION_ID, adata.PRODUCT_ID, '');
+        // await this.genBaseMarketAuth(adata.LOCATION_ID, adata.PRODUCT_ID);
+        // await this.genPartialProd(adata.LOCATION_ID);
         await this.genFactoryLoc();
         //await GenF.logMessage(req, 'Completed Sales Orders Processing');
         let lMessage = "Completed Sales Orders Processing"
@@ -162,7 +162,7 @@ class SOFunctions {
 
                 }
 
-                cds.run({
+                await cds.run({
                     INSERT:
                     {
                         into: { ref: ['CP_UNIQUE_ID_ITEM'] },
@@ -878,7 +878,7 @@ class SOFunctions {
             liChar.push(lsChar);
         }
 
-        cds.run({
+        await cds.run({
             INSERT:
             {
                 into: { ref: ['CP_UNIQUE_ID_ITEM'] },
@@ -1126,7 +1126,7 @@ class SOFunctions {
             "PLAN_LOC",
             "FACTORY_LOC")
             .from('CP_FACTORY_SALESLOC');
-            const liPartProd = await cds.run(`
+        const liPartProd = await cds.run(`
             SELECT "PRODUCT_ID",
                     "LOCATION_ID",
                     "REF_PRODID" 
@@ -1138,28 +1138,32 @@ class SOFunctions {
         let liFactLoc = [];
         let lsFactLoc = {};
         for (let cntLC = 0; cntLC < liPartProd.length; cntLC++) {
-            for (let i = 0; i < liFtLoc.length; i++) {
-                if (liFtLoc[i].PLAN_LOC === liPartProd[cntLC].LOCATION_ID &&
-                    liFtLoc[i].LOCATION_ID === liPartProd[cntLC].LOCATION_ID &&
-                    liFtLoc[i].FACTORY_LOC === liPartProd[cntLC].LOCATION_ID) {
-                    vFlag = 'X';
-                    break;
+            if (liPartProd[cntLC].PRODUCT_ID !== liPartProd[cntLC].REF_PRODID) {
+                for (let i = 0; i < liFtLoc.length; i++) {
+                    if (liFtLoc[i].PLAN_LOC === liPartProd[cntLC].LOCATION_ID &&
+                        liFtLoc[i].PRODUCT_ID === liPartProd[cntLC].PRODUCT_ID &&
+                        liFtLoc[i].LOCATION_ID === liPartProd[cntLC].LOCATION_ID &&
+                        liFtLoc[i].FACTORY_LOC === liPartProd[cntLC].LOCATION_ID) {
+                        vFlag = 'X';
+                        break;
+                    }
                 }
-            }
-            if (vFlag === '') {
-                lsFactLoc = {};
-                lsFactLoc['LOCATION_ID'] = GenF.parse(liPartProd[cntLC].LOCATION_ID);
-                lsFactLoc['PRODUCT_ID'] = GenF.parse(liPartProd[cntLC].PRODUCT_ID);
-                lsFactLoc['PLAN_LOC'] = GenF.parse(liPartProd[cntLC].LOCATION_ID);
-                lsFactLoc['FACTORY_LOC'] = GenF.parse(liPartProd[cntLC].LOCATION_ID);
-                console.log(lsFactLoc);
-                liFactLoc.push(GenF.parse(lsFactLoc));
+                if (vFlag === '') {
+                    lsFactLoc = {};
+                    lsFactLoc['LOCATION_ID'] = GenF.parse(liPartProd[cntLC].LOCATION_ID);
+                    lsFactLoc['PRODUCT_ID'] = GenF.parse(liPartProd[cntLC].PRODUCT_ID);
+                    lsFactLoc['PLAN_LOC'] = GenF.parse(liPartProd[cntLC].LOCATION_ID);
+                    lsFactLoc['FACTORY_LOC'] = GenF.parse(liPartProd[cntLC].LOCATION_ID);
+                    // console.log(lsFactLoc);
+                    liFactLoc.push(GenF.parse(lsFactLoc));
+                }
             }
         }
 
         if (liFactLoc.length > 0) {
             try {
-                cds.run({
+                
+                await cds.run({
                     INSERT:
                     {
                         into: { ref: ['CP_FACTORY_SALESLOC'] },
@@ -1180,7 +1184,7 @@ class SOFunctions {
      * Clear Sales History
      */
     async clearSalesH() {
-       // Delete only before sales horizon
+        // Delete only before sales horizon
         const objCatFn = new Catservicefn();
         await objCatFn.deleteSalesHistory('N');
     }
