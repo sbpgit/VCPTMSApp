@@ -667,10 +667,10 @@ module.exports = cds.service.impl(async function () {
             "VersionID": "",
             "DoCommit": true,
             "ScenarioID": "",
-            "NavSBPVCP": oReq.sales
+            "NavVCD": oReq.sales
         }
         // req.headers['Application-Interface-Key'] = vAIRKey;
-        await service.tx(req).post("/SBPVCPTrans", oEntry);
+        await service.tx(req).post("/VCDTrans", oEntry);
 
         let resUrl = "/getExportResult?P_TransactionID='" + vTransID + "'";
         try {
@@ -1498,54 +1498,54 @@ module.exports = cds.service.impl(async function () {
                     "PRDID": lisales[i].PRODUCT_ID,
                     "CUSTID": lisales[i].CUSTOMER_GROUP,
                     "ACTUALDEMAND": vDemd[0],
-                    "SEEDORDERDEMAND":vAdjqty[0],
+                    "SEEDORDERDEMAND": vAdjqty[0],
                     "PERIODID0_TSTAMP": vWeekDate[0]
                 };
                 oReq.sales.push(vsales);
 
             }
-            if(oReq.sales.length > 0){
-            let vTransID = new Date().getTime().toString();
-            let oEntry =
-            {
-                "Transactionid": vTransID,
-                "AggregationLevelFieldsString": "LOCID,PRDID,CUSTID,ACTUALDEMAND,SEEDORDERDEMAND,PERIODID0_TSTAMP",
-                "VersionID": "",
-                "DoCommit": true,
-                "ScenarioID": ""
-            }
-            oEntry[lData] = oReq.sales
-            try {
-                await service.tx(req).post(lEntity, oEntry);
-                flag = 'S';
-            }
-            catch {
-                console.log("Unable to send Actual demand at VC");
-            }
-            // Once Sales History is successfull , send sales Config . Actual demand at VC
-            if (flag === 'S') {
-                let oReqCfg = await obibpfucntions.exportSalesCfg(lsData);
+            if (oReq.sales.length > 0) {
                 let vTransID = new Date().getTime().toString();
-                let oEntryCfg =
+                let oEntry =
                 {
                     "Transactionid": vTransID,
-                    "AggregationLevelFieldsString": "LOCID,PRDID,VCCHAR,VCCHARVALUE,VCCLASS,ACTUALDEMANDVC,SEEDORDERDEMANDVC,CUSTID,PERIODID0_TSTAMP",
+                    "AggregationLevelFieldsString": "LOCID,PRDID,CUSTID,ACTUALDEMAND,SEEDORDERDEMAND,PERIODID0_TSTAMP",
                     "VersionID": "",
                     "DoCommit": true,
                     "ScenarioID": ""
                 }
-                oEntryCfg[lData] = oReqCfg.sales;
+                oEntry[lData] = oReq.sales
                 try {
-                    await service.tx(req).post(lEntity, oEntryCfg);
-                    flag = 'X';
-                    lMessage = lMessage + ' ' + 'Export of Sales History and Configuration export is successful for product:' + lsData.PRODUCT_ID;
-
+                    await service.tx(req).post(lEntity, oEntry);
+                    flag = 'S';
                 }
                 catch {
-                    lMessage = lMessage + ' ' + 'Export of Sales History and Configuration export is failed for product:' + lsData.PRODUCT_ID;
+                    console.log("Unable to send Actual demand at VC");
+                }
+                // Once Sales History is successfull , send sales Config . Actual demand at VC
+                if (flag === 'S') {
+                    let oReqCfg = await obibpfucntions.exportSalesCfg(lsData);
+                    let vTransID = new Date().getTime().toString();
+                    let oEntryCfg =
+                    {
+                        "Transactionid": vTransID,
+                        "AggregationLevelFieldsString": "LOCID,PRDID,VCCHAR,VCCHARVALUE,VCCLASS,ACTUALDEMANDVC,SEEDORDERDEMANDVC,CUSTID,PERIODID0_TSTAMP",
+                        "VersionID": "",
+                        "DoCommit": true,
+                        "ScenarioID": ""
+                    }
+                    oEntryCfg[lData] = oReqCfg.sales;
+                    try {
+                        await service.tx(req).post(lEntity, oEntryCfg);
+                        flag = 'X';
+                        lMessage = lMessage + ' ' + 'Export of Sales History and Configuration export is successful for product:' + lsData.PRODUCT_ID;
+
+                    }
+                    catch {
+                        lMessage = lMessage + ' ' + 'Export of Sales History and Configuration export is failed for product:' + lsData.PRODUCT_ID;
+                    }
                 }
             }
-        }
         }
         await GenF.jobSchMessage('X', lMessage, req);
         // GetExportResult
@@ -1572,29 +1572,66 @@ module.exports = cds.service.impl(async function () {
                         "LOCATION_ID",
                         "PRODUCT_ID",
                         "ORD_QTY",
+                        "ADJ_QTY",
                         "CUSTOMER_GROUP"
                         FROM V_IBP_SALESH_ACTDEMD
                         WHERE LOCATION_ID = '`+ lsData.LOCATION_ID + `'
                            AND PRODUCT_ID = '`+ lsData.PRODUCT_ID +
-            `'`);
-        for (i = 0; i < lisales.length; i++) {
-            let vWeekDate = new Date(lisales[i].WEEK_DATE).toISOString().split('Z');
-            let vDemd = lisales[i].ORD_QTY.split('.');
-            vsales = {
-                "LOCID": lisales[i].LOCATION_ID,
-                "PRDID": lisales[i].PRODUCT_ID,
-                "CUSTID": lisales[i].CUSTOMER_GROUP,
-                "ACTUALDEMAND": vDemd[0],
-                "PERIODID0_TSTAMP": vWeekDate[0]
-            };
-            oReq.sales.push(vsales);
+            `' ORDER BY WEEK_DATE`);
+        let vLength = parseInt(lisales.length) - 1;
+        let liDates = obibpfucntions.generateDateseries(lisales[0].WEEK_DATE, lisales[vLength].WEEK_DATE);
+        let vDemd, vAdjqty, vWeekDate;
+        for (let i = 0; i < lisales.length; i++) {
+            for (let iDate = 0; iDate < liDates.length; iDate++) {
+                vDemd = "", vAdjqty = "", vWeekDate = "";
+                if (liDates[iDate].WEEK_DATE === lisales[i].WEEK_DATE) {
+                    vWeekDate = new Date(lisales[i].WEEK_DATE).toISOString().split('Z');
+                    vDemd = lisales[i].ORD_QTY.split('.');
+                    vAdjqty = lisales[i].ADJ_QTY.split('.');
+                    vsales = {
+                        "LOCID": lisales[i].LOCATION_ID,
+                        "PRDID": lisales[i].PRODUCT_ID,
+                        "CUSTID": lisales[i].CUSTOMER_GROUP,
+                        "ACTUALDEMAND": vDemd,
+                        "SEEDORDERDEMAND": vAdjqty,
+                        "PERIODID0_TSTAMP": vWeekDate[0]
+                    };
+                }
+                else {
+                    vWeekDate = new Date(liDates[iDate].WEEK_DATE).toISOString().split('Z');
+                    vDemd = "-2";
+                    vAdjqty = "-3";
+                    vsales = {
+                        "LOCID": lisales[i].LOCATION_ID,
+                        "PRDID": lisales[i].PRODUCT_ID,
+                        "CUSTID": lisales[i].CUSTOMER_GROUP,
+                        "ACTUALDEMAND": vDemd,
+                        "SEEDORDERDEMAND": vAdjqty,
+                        "PERIODID0_TSTAMP": vWeekDate[0]
+                    };
+                }
+                oReq.sales.push(vsales);
+                break;
+            }
 
         }
+        vWeekDate = new Date(liDates[24].WEEK_DATE).toISOString().split('Z');
+                    vDemd = "-2";
+                    vAdjqty = "-3";
+                    vsales = {
+                        "LOCID": "PL10",
+                        "PRDID": "FG_100",
+                        "CUSTID": "A1",
+                        "ACTUALDEMAND": "-1",
+                        "SEEDORDERDEMAND": "-2",
+                        "PERIODID0_TSTAMP": vWeekDate[0]
+                    };
+                    oReq.sales.push(vsales);
         let vTransID = new Date().getTime().toString();
         let oEntry =
         {
             "Transactionid": vTransID,
-            "AggregationLevelFieldsString": "LOCID,PRDID,CUSTID,ACTUALDEMAND,PERIODID0_TSTAMP",
+            "AggregationLevelFieldsString": "LOCID,PRDID,CUSTID,ACTUALDEMAND,SEEDORDERDEMAND,PERIODID0_TSTAMP",
             "VersionID": "",
             "DoCommit": true,
             "ScenarioID": ""
@@ -1602,14 +1639,14 @@ module.exports = cds.service.impl(async function () {
         oEntry[lData] = oReq.sales
         try {
             await service.tx(req).post(lEntity, oEntry);
-            flag = 'S';
+            flag = 'E';
         }
-        catch {
+        catch (E){
             console.log("Unable to send Actual demand at VC");
         }
         // Once Sales History is successfull , send sales Config . Actual demand at VC
         if (flag === 'S') {
-            let oReqCfg = await obibpfucntions.exportSalesCfg(lsData);
+            let oReqCfg = await obibpfucntions.exportSalesCfg(lsData,liDates);
             let vTransID = new Date().getTime().toString();
             let oEntryCfg =
             {
@@ -1862,7 +1899,7 @@ module.exports = cds.service.impl(async function () {
                 oReq.actcomp.push(vactcomp);
             }
         }
-        if (oReq.actcomp.lenght > 0) {
+        if (oReq.actcomp.length > 0) {
             let vTransID = new Date().getTime().toString();
             let oEntry =
             {
@@ -2617,9 +2654,9 @@ module.exports = cds.service.impl(async function () {
         let lsData = {},
             lsFchar = {},
             liFchar = [];
-            let oReq = {
-                mktauth: [],
-            };
+        let oReq = {
+            mktauth: [],
+        };
         let createtAt = new Date();
         let id = uuidv1();
         let values = [];
@@ -2884,25 +2921,25 @@ module.exports = cds.service.impl(async function () {
                     oReq.mktauth.push(vMktauth);
 
                 }
-                if(oReq.mktauth.length > 0){
-                let vTransID = new Date().getTime().toString();
-                let oEntry =
-                {
-                    "Transactionid": vTransID,
-                    "AggregationLevelFieldsString": "PERIODID4_TSTAMP,VCCHAR,VCCHARVALUE,VCCLASS,CUSTID,LOCID,PRDID,MARKETAUTHORIZATION",
-                    "VersionID": "",
-                    "DoCommit": true,
-                    "ScenarioID": ""
+                if (oReq.mktauth.length > 0) {
+                    let vTransID = new Date().getTime().toString();
+                    let oEntry =
+                    {
+                        "Transactionid": vTransID,
+                        "AggregationLevelFieldsString": "PERIODID4_TSTAMP,VCCHAR,VCCHARVALUE,VCCLASS,CUSTID,LOCID,PRDID,MARKETAUTHORIZATION",
+                        "VersionID": "",
+                        "DoCommit": true,
+                        "ScenarioID": ""
+                    }
+                    oEntry[lData] = oReq.mktauth;
+                    try {
+                        await service.tx(request).post(lEntity, oEntry);
+                        lMessage = lMessage + ' ' + "Export of Market authorization is successfull for product" + lsData.PRODUCT_ID;
+                    }
+                    catch (error) {
+                        lMessage = lMessage + ' ' + "Export of Market authorization has failed for product" + lsData.PRODUCT_ID;
+                    }
                 }
-                oEntry[lData] = oReq.mktauth;
-                try {
-                    await service.tx(request).post(lEntity, oEntry);
-                    lMessage = lMessage + ' ' + "Export of Market authorization is successfull for product" + lsData.PRODUCT_ID;
-                }
-                catch (error) {
-                    lMessage = lMessage + ' ' + "Export of Market authorization has failed for product" + lsData.PRODUCT_ID;
-                }
-            }
             }
         }
         // }
@@ -2910,8 +2947,8 @@ module.exports = cds.service.impl(async function () {
         await GenF.jobSchMessage('X', lMessage, request);
     });
     this.on("generateMarketAuthfn", async (request) => {
-      
-           
+
+
         // Get Planning area and Prefix configurations for IBP
         let liParaValue = await GenF.getIBPParameterValue();
         let lData = "Nav" + liParaValue[0].VALUE.toString();
