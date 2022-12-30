@@ -8,9 +8,14 @@
                         <Input value="" id="idInput" />
                     </VBox>
                     <CheckBox id="_IDGenCheckBox1" text="Set as Default" />
-                    <CheckBox id="_IDGenCheckBox2" text="Apply Automatically" />
+                    <CheckBox id="_IDGenCheckBox2" text="Public" />
+                    <CheckBox id="_IDGenCheckBox3" text="Apply Automatically" visible="false" />
                 </VBox>
             </f:content>
         </f:SimpleForm>
+        <buttons>
+            <Button id="idSaveBtn" text="Save" press="onCreate" type="Emphasized"/>
+            <Button id="idCanBtn"  text="Close" press="onSaveClose" />
+        </buttons>
     </Dialog>
 </core:FragmentDefinition>

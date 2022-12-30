@@ -6,8 +6,8 @@ const obgenMktAuth = new MktAuth();
 class IBPFunctions {
     constructor() {
 
-     }
-    async exportSalesCfg(req) {
+    }
+    async exportSalesCfg(req, imDates) {
         var oReq = {
             sales: [],
         },
@@ -29,23 +29,47 @@ class IBPFunctions {
             `'`);
         // `' AND CUSTOMER_GROUP = '` + req.data.CUSTOMER_GROUP +e
 
-        for (let i = 0; i < lisales.length; i++) {
-            var vWeekDate = new Date(lisales[i].WEEK_DATE).toISOString().split('Z');
-            var vDemd = lisales[i].ORD_QTY.split('.');
-            let vAdjqty = lisales[i].ADJ_QTY.split('.');
-            vsales = {
-                "LOCID": lisales[i].LOCATION_ID,
-                "PRDID": lisales[i].PRODUCT_ID,
-                "VCCHAR": lisales[i].CHAR_NUM,
-                "VCCHARVALUE": lisales[i].CHARVAL_NUM,
-                "VCCLASS": lisales[i].CLASS_NUM,
-                "ACTUALDEMANDVC": vDemd[0],
-                "SEEDORDERDEMANDVC": vAdjqty[0],
-                "CUSTID": lisales[i].CUSTOMER_GROUP,
-                "PERIODID0_TSTAMP": vWeekDate[0]
-            };
-            oReq.sales.push(vsales);
+        let liDates = imDates;
+        let vDemd, vAdjqty, vWeekDate;
 
+        for (let i = 0; i < lisales.length; i++) {
+            for (let iDate = 0; iDate < liDates.length; iDate++) {
+                vDemd = "", vAdjqty = "", vWeekDate = "";
+                if (liDates[iDate].WEEK_DATE === lisales[i].WEEK_DATE) {
+                    vWeekDate = new Date(lisales[i].WEEK_DATE).toISOString().split('Z');
+                    vDemd = lisales[i].ORD_QTY.split('.');
+                    vAdjqty = lisales[i].ADJ_QTY.split('.');
+                    vsales = {
+                        "LOCID": lisales[i].LOCATION_ID,
+                        "PRDID": lisales[i].PRODUCT_ID,
+                        "VCCHAR": lisales[i].CHAR_NUM,
+                        "VCCHARVALUE": lisales[i].CHARVAL_NUM,
+                        "VCCLASS": lisales[i].CLASS_NUM,
+                        "ACTUALDEMANDVC": vDemd,
+                        "SEEDORDERDEMANDVC": vAdjqty,
+                        "CUSTID": lisales[i].CUSTOMER_GROUP,
+                        "PERIODID0_TSTAMP": vWeekDate[0]
+                    };
+                }
+                else {
+                    vWeekDate = new Date(liDates[iDate].WEEK_DATE).toISOString().split('Z');
+                    vDemd = "-2";
+                    vAdjqty = "-3";
+                    vsales = {
+                        "LOCID": lisales[i].LOCATION_ID,
+                        "PRDID": lisales[i].PRODUCT_ID,
+                        "VCCHAR": lisales[i].CHAR_NUM,
+                        "VCCHARVALUE": lisales[i].CHARVAL_NUM,
+                        "VCCLASS": lisales[i].CLASS_NUM,
+                        "ACTUALDEMANDVC": vDemd,
+                        "SEEDORDERDEMANDVC": vAdjqty,
+                        "CUSTID": lisales[i].CUSTOMER_GROUP,
+                        "PERIODID0_TSTAMP": vWeekDate[0]
+                    };
+                }
+                oReq.sales.push(vsales);
+                break;
+            }
         }
         return oReq;
     }
@@ -99,10 +123,10 @@ class IBPFunctions {
             vFromDate = lilocProdReq[0].FROMDATE;//'2022-11-21'//
             vToDate = lilocProdReq[0].TODATE;//'2022-12-21'// 
             var resUrl = "/SBPVCP?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + lsData.LOCATION_ID + "' and PRDID eq '" + lsData.PRODUCT_ID + "' and PERIODID4_TSTAMP gt datetime'" + vFromDate + "' and PERIODID4_TSTAMP lt datetime'" + vToDate + "' and VERSIONID eq '" + lVersion + "' and SCENARIOID eq '" + lScenario + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
-            try{
-            var req = await service.tx(req).get(resUrl);
+            try {
+                var req = await service.tx(req).get(resUrl);
             }
-            catch(e){
+            catch (e) {
                 flag = 'T';
             }
             // if(req.length > 0){
@@ -172,10 +196,10 @@ class IBPFunctions {
                 // else if (vServ === 'MKTAUTH') {
                 resUrlFplan = "/SBPVCP?$select=PERIODID4_TSTAMP,PRDID,LOCID,VCCLASS,VCCHARVALUE,VCCHAR,FINALDEMANDVC,OPTIONPERCENTAGE,VERSIONID,SCENARIOID&$filter=LOCID eq '" + lsData.LOCATION_ID + "' and PRDID eq '" + lsData.PRODUCT_ID + "' and PERIODID4_TSTAMP gt datetime'" + vFromDate + "' and PERIODID4_TSTAMP lt datetime'" + vToDate + "' and VERSIONID eq '" + lVersion + "' and SCENARIOID eq '" + lScenario + "' and UOMTOID eq 'EA' and FINALDEMANDVC gt 0&$inlinecount=allpages";
                 // }
-                try{
-                var req = await service.tx(request).get(resUrlFplan);
+                try {
+                    var req = await service.tx(request).get(resUrlFplan);
                 }
-                catch(e){
+                catch (e) {
                     flag = 'T';
                 }
                 const vDelDate = new Date();
@@ -234,6 +258,80 @@ class IBPFunctions {
         }
         return flag;
     }
+    /**
+     * 
+     * @param {FromDate} lFromDate 
+     * @param {ToDate} lToDate 
+     */
+    generateDateseries(lFromDate, lToDate) {
+        var lsDates = {},
+            liDates = [];
+        var vDateSeries = lFromDate;
+        lsDates = {};
+        // Calling function to get the next Sunday date of From date
+        lsDates.WEEK_DATE = lFromDate;
+        vDateSeries = lsDates.WEEK_DATE;
+        liDates.push(lsDates);
+        lsDates = {};
+        while (vDateSeries <= lToDate) {
+            // Calling function to add Days
+            vDateSeries = GenF.addDays(vDateSeries, 7);
+            if (vDateSeries > lToDate) {
+                break;
+            }
+
+            lsDates.WEEK_DATE = vDateSeries;
+            liDates.push(lsDates);
+            lsDates = {};
+        }
+        // remove duplicates
+        var lireturn = liDates.filter((obj, pos, arr) => {
+            return (
+                arr.map((mapObj) => mapObj.WEEK_DATE).indexOf(obj.WEEK_DATE) == pos
+            );
+        });
+        return lireturn;
+
+    }
+    /**
+     * 
+     * @param {Request} request 
+     */
+    async importVerScen(request) {
+
+        const service = await cds.connect.to('IBPDemandsrv');
+        const servicePost = await cds.connect.to('IBPMasterDataAPI');
+        // Get Planning area and Prefix configurations for IBP
+        let liParaValue = await GenF.getIBPParameterValue();
+        let flag, lMessage = '', vScenario;
+        let resUrl = "/" + liParaValue[0].VALUE + "?$select=VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$inlinecount=allpages";
+        let req = await service.tx(request).get(resUrl);
+        if (req.length) {
+            await DELETE.from('CP_IBPVERSIONSCENARIO');
+        }
+        for (let i in req) {
+            if (req[i].SCENARIOID === '' || req[i].SCENARIOID === null) {
+                vScenario = '_PLAN';
+            }
+            else {
+                vScenario = req[i].SCENARIOID; //'BSL_SCENARIO';
+            }
+            let modQuery = 'INSERT INTO "CP_IBPVERSIONSCENARIO" VALUES (' +
+                "'" + req[i].VERSIONID + "'" + "," +
+                "'" + vScenario + "'" + "," +
+                "'" + req[i].VERSIONNAME + "'" + "," +
+                "'" + req[i].SCENARIONAME + "'" + ')';
+            try {
+                await cds.run(modQuery);
+                flag = 'S';
+            }
+            catch (err) {
+                console.log(err);
+            }
+        }
+        return "S";
+    }
+
 }
 
 module.exports = IBPFunctions;
