@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "custom/ListReportExtController-dbg.js": 1668768211732,
   "custom/ObjectPageExtController.js": 1668768211732,
   "manifest.json": 1672387923023,
@@ -10,4 +11,17 @@
   "custom/ObjectPageExtController-dbg.js": 1668768211732,
   "annotations/annotation.xml": 1667375245876,
   "index.html": 1668768211732
+=======
+  "custom/ObjectPageExtController.js": 1668085236235,
+  "i18n/i18n.properties": 1667387799121,
+  "manifest.json": 1672238535601,
+  "custom/ListReportExtController.js": 1668147706058,
+  "Component.js": 1667387799117,
+  "Component-preload.js": 1672238536185,
+  "Component-dbg.js": 1667387799117,
+  "custom/ListReportExtController-dbg.js": 1668147706058,
+  "custom/ObjectPageExtController-dbg.js": 1668085236235,
+  "annotations/annotation.xml": 1667387799121,
+  "index.html": 1668147297544
+>>>>>>> 1ad216ca187e72ab61b68dd3c3032c64edf68e7b
 }
