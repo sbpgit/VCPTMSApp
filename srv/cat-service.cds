@@ -76,6 +76,9 @@ service CatalogService @(impl : './lib/cat-service.js') {
     @readonly
     entity getSalesh            as projection on V_SALES_H; //od.SALESH;
 
+    //  @readonly
+    //  entity getFactoryLocDesc    as projection on V_FACTORY_LOC;
+
     //Get location product
     @readonly
     entity getLocProd           as projection on od.LOCATION_PRODUCT;
@@ -337,9 +340,12 @@ service CatalogService @(impl : './lib/cat-service.js') {
     entity getCriticalComp      as projection on V_BOMCRITICALCOMP; //od.CRITICAL_COMP;
     function changeToCritical(criticalComp : String)                                                                                                                                                                                                                             returns String;
 
+
     //*****/ Factory Location/*****/
     @odata.draft.enabled
     entity getFactoryLoc        as projection on od.FACTORY_SALESLOC;
+
+   
 
 
     // Get IBP Version Scenario

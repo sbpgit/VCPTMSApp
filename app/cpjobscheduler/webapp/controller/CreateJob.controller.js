@@ -1540,6 +1540,14 @@ sap.ui.define(
                             Flag = "X";
                             that.oLoc.setValue(oScheData.LOCATION_ID);
                             break;
+                        case "Location Product":
+                            Flag = "X";
+                            that.oLoc.setValue(oScheData.LOCATION_ID);
+                            break;
+                        case "Assembly":
+                            Flag = "X";
+                            that.oLoc.setValue(oScheData.LOCATION_ID);
+                            break;
                         case "Class":
                             Flag = "X";
                             that.oClass.setValue(oScheData.CLASS_NUM);
@@ -1876,6 +1884,8 @@ sap.ui.define(
                 // 22-09-2022
                 that.byId("IBPimport").setVisible(false);
                 that.byId("IBPProdExport").setVisible(false);
+                that.byId("IBPLocProdExport").setVisible(false);
+                that.byId("IBPAssemblyExport").setVisible(false);
                 that.byId("IBPClassExport").setVisible(false);
                 that.byId("IBPSalesHisExport").setVisible(false);
                 that.byId("IBPActCompDemandExport").setVisible(false);
@@ -1889,6 +1899,14 @@ sap.ui.define(
                         case "Product":
                             that.oLoc = that.byId("EPlocInput");
                             that.byId("IBPProdExport").setVisible(true);
+                            break;
+                        case "Location Product":
+                            that.oLoc = that.byId("ELPlocInput");
+                            that.byId("IBPLocProdExport").setVisible(true);
+                            break;
+                        case "Assembly":
+                            that.oLoc = that.byId("EIAlocInput");
+                            that.byId("IBPAssemblyExport").setVisible(true);
                             break;
                         case "Class":
                             that.oClass = this.byId("IBPclassInput");
@@ -2039,6 +2057,14 @@ sap.ui.define(
                             that.byId("idRbtnExport").setSelectedButton(that.byId("idResLikhood"));
                             that.byId("IBPResLikhoodExport").setVisible(true);
                             break;
+                        case "exportIBPLocProd":
+                            that.byId("idRbtnExport").setSelectedButton(that.byId("idIBPLocProd"));
+                            that.byId("IBPLocProdExport").setVisible(true);
+                            break;
+                        case "exportIBPAssembly":
+                            that.byId("idRbtnExport").setSelectedButton(that.byId("idIBPAssembly"));
+                            that.byId("IBPAssemblyExport").setVisible(true);
+                             break;
                         default:
                             break;
                     }
@@ -3839,7 +3865,6 @@ sap.ui.define(
                             actionText = "/ibpimport-srv/exportRestrReq";
                             break;
                         case "Publish Forecast":
-                            // actionText = "/ibpimport-srv/exportRestrReq";
                             actionText = "/catalog/postCIRQuantitiesToS4";
                             break;
                         default:
