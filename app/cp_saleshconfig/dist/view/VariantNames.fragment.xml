@@ -1,46 +1,48 @@
 <core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
-    <Dialog id="_IDGenDialog1" title="Variant Names" contentWidth="450px" titleAlignment="Center">
+    <Dialog id="_IDGenDialog1" title="Manage Views" contentWidth="auto" titleAlignment="Center">
         <Toolbar id="_IDGenToolbar1">
             <SearchField id="_IDGenSearchField1" width="100%" liveChange="onVariantSearch" />
         </Toolbar>
-        <Table id="varNameList" items="{path: '/items1'}">
+        <Table id="varNameList" items="{path: '/itemsHeader'}" mode="Delete" delete="onViewDelete">
             <columns>
                 <Column id="_IDGenColumn1">
-                    <Text id="_IDGenText1" text="Variant Name" />
+                    <Text id="_IDGenText1" text="View" />
                 </Column>
                 <Column id="_IDGenColumn2">
-                    <Text id="_IDGenText2" text="Variant Description" />
+                    <Text id="_IDGenText2" text="Public/Private" />
                 </Column>
                 <Column id="_IDGenColumn3">
-                    <Text id="_IDGenText3" text="Public/Private" />
+                    <Text id="_IDGenText3" text="Default" />
                 </Column>
-                <Column id="_IDGenColumn4">
+                <!-- <Column id="_IDGenColumn4">
                     <Text id="_IDGenText4" text="Default" />
-                </Column>
-                <Column id="_IDGenColumn5">
-                    <Text id="_IDGenText5" text="Application Name" />
-                </Column>
+                </Column> -->
+                
                 <Column id="_IDGenColumn6">
                     <Text id="_IDGenText6" text="Created By" />
+                </Column>
+                <Column id="_IDGenColumn5" visible="false">
+                    <Text id="_IDGenText5" text="Application Name" />
                 </Column>
             </columns>
             <items>
                 <ColumnListItem id="_IDGenColumnListItem1">
                     <cells>
                         <!-- <ObjectIdentifier title="{VARIANTNAME}" text="{APPLICATION_NAME}"  titleActive="true" titlePress="onTitlePress"/> -->
-                        <Text id="_IDGenText9" text="{VARIANTID}" />
+                        <!-- <Text id="_IDGenText9" text="{VARIANTID}" /> -->
                         <Text id="_IDGenText10" text="{VARIANTNAME}" />
-                        <Text id="_IDGenText11" text="{USER}" />
-                        <Text id="_IDGenText12" text="{APPLICATION_NAME}" />
-                        <Text id="_IDGenText13" text="{FIELD}" />
-                        <Text id="_IDGenText14" text="{FIELD_CENTER}" />
+                        <Text id="_IDGenText11" text="{SCOPE}" />
+                        <RadioButton id="_IDGenText12" selected="{= ${DEFAULT} === 'Y'}" />
+                        <Text id="_IDGenText13" text="{USER}" />
+                        <Text id="_IDGenText14" text="{VARIANTID}" />
+                        <!-- <Text id="_IDGenText14" text="{FIELD_CENTER}" /> -->
                     </cells>
                 </ColumnListItem>
             </items>
         </Table>
         <buttons>
-            <Button id="_IDGenButt" type='Accept' text="Save" press="handleSelectPress" />
-            <Button id="_IDGenButton2" type='Reject' text="Close" press="handleSelectClose" />
+            <Button id="_IDGenButt" type='Emphasized' text="Save" press="onManage" />
+            <Button id="_IDGenButton2"  text="Close" press="handleManageClose" />
         </buttons>
     </Dialog>
 </core:FragmentDefinition>

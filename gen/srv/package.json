@@ -155,7 +155,7 @@
                 "model": "srv/external/IBPDemandsrv",
                 "[development]": {
                     "credentials": {
-                        "url": "https://my400323-api.scmibp.ondemand.com/sap/opu/odata/ibp/PLANNING_DATA_API_SRV",
+                        "url": "https://my308633.scmibp1.ondemand.com/sap/opu/odata/ibp/PLANNING_DATA_API_SRV",
                         "authentication": "BasicAuthentication",
                         "username": "BTPUSER",
                         "password": "Sbp@btpproductdevelopment01"
@@ -173,7 +173,7 @@
                 "model": "srv/external/IBPMasterDataAPI",
                 "[development]": {
                     "credentials": {
-                        "url": "https://my400323-api.scmibp.ondemand.com/sap/opu/odata/IBP/MASTER_DATA_API_SRV",
+                        "url": "https://my308633.scmibp1.ondemand.com/sap/opu/odata/IBP/MASTER_DATA_API_SRV",
                         "authentication": "BasicAuthentication",
                         "username": "BTPUSER",
                         "password": "Sbp@btpproductdevelopment01"

@@ -1,18 +1,7 @@
 {
 	"name": "cpapp.cprestrictions",
 	"version": "0.0.1",
-<<<<<<< HEAD
-<<<<<<< HEAD
-	"buildTimestamp": "202212300809",
-=======
-	"buildTimestamp": "202212281436",
->>>>>>> 1ad216ca187e72ab61b68dd3c3032c64edf68e7b
-=======
-	"buildTimestamp": "202212261435",
-=======
-	"buildTimestamp": "202212161425",
->>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
->>>>>>> 655ca4900db762f00444b4730811dfe522b460ec
+	"buildTimestamp": "202212311319",
 	"scmRevision": "",
 	"libraries": []
 }

@@ -455,30 +455,7 @@ sap.ui.define(
 
                 that.oTable.bindRows("/rows");
             },
-/**
-             * 
-             */
-            getTotalWeekQty: function (sWeekDate) {
-                that.oGModel = that.getModel("oGModel");
-                var oTableData = that.oGModel.getProperty("/TData");
-                var liDates = that.oGModel.getProperty("/TDates");
-                var iWeekIndex = 0;
-                var iTotalQty = 0;
-                for (let index = 2; index < liDates.length; index++) {
-                    iWeekIndex = iWeekIndex + 1;
-                    if (liDates[index].WEEK_DATE === sWeekDate) {
-                        break;
-                    }
-                }
 
-                // Looping through the data to generate columns SUM
-                
-                for (var i = 0; i < that.tableData.length; i++) {
-                    iTotalQty = iTotalQty + that.tableData[i]["WEEK" + iWeekIndex];                    
-                }
-
-                return iTotalQty;
-            },
             /**
              * This function is called when checkbox Get Non-Zero is checked or unchecked.
              * In this function removing the rows which have all row values as "0".
@@ -1105,8 +1082,7 @@ sap.ui.define(
                     this.getModel("BModel").callFunction("/getAllVerScen", {
                         method: "GET",
                         urlParameters: {
-                            LOCATION_ID: that.oGModel.getProperty("/SelectedLoc"),
-                            // PRODUCT_ID:  aSelectedItems[0].getTitle() 
+                            LOCATION_ID: that.oGModel.getProperty("/SelectedLoc")
                         },
                         success: function (oData) {
                             var adata = [];
@@ -1143,7 +1119,7 @@ sap.ui.define(
                             new Filter(
                                 "PRODUCT_ID",
                                 FilterOperator.EQ,
-                                that.oGModel.getProperty("/SelectedProd")
+                                aSelectedItems[0].getTitle()
                             ),
                         ],
                         success: function (oData) {

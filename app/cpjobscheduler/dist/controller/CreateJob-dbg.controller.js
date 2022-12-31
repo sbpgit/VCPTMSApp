@@ -628,11 +628,7 @@ sap.ui.define(
                                 oSelJob === "F" || oSelJob === "D" || oSelJob === "I" ||
                                 oSelJob === "E" ){ // || oSelJob === "PF") {
                                 var radioSel = that.byId("idRbtnExport").getSelectedButton().getText();
-<<<<<<< HEAD
                                 if (radioSel !== "Assembly Requirement Quantity" && radioSel !== "Assembly" && radioSel !== "Location Product") {
-=======
-                                if (radioSel !== "Assembly Requirement Quantity" && radioSel !== "Assemblies" && radioSel !== "Location Product") {
->>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
                                     sap.ui.getCore().byId("prodSlctList").setMultiSelect(true);
                                     // sap.ui.getCore().byId("prodSlctList").setRememberSelections(true);
                                 } else {
@@ -1006,11 +1002,7 @@ sap.ui.define(
                         var selRadio = that.byId("idRbtnExport").getSelectedButton().getText();
                         if (selRadio !== "Location" && selRadio !== "Customer Group" && selRadio !== "Product" && selRadio !== "Class"
                             && selRadio !== "Restrictions" && selRadio !== "Assembly Requirement Quantity" &&
-<<<<<<< HEAD
                             selRadio !== "Location Product" && selRadio !== "Assembly") {
-=======
-                            selRadio !== "Location Product" && selRadio !== "Assemblies") {
->>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
                             that.oProd.removeAllTokens();
                         }
                     }
@@ -1064,16 +1056,8 @@ sap.ui.define(
                         if (oJobType === "M" || oJobType === "P" || oJobType === "T" || oJobType === "F" || oJobType === "D" 
                             || oJobType === "I" || oJobType === "E"){   // || oJobType === "PF"){
                             var selRadio = that.byId("idRbtnExport").getSelectedButton().getText();
-<<<<<<< HEAD
                             if (oJobType === "E" && (selRadio === "Assembly Requirement Quantity" || selRadio === "Location Product"
                                  || selRadio === "Assembly")) {
-=======
-<<<<<<< HEAD
-                            if (oJobType === "E" && (selRadio === "Assembly Requirement Quantity" || selRadio === "Location Product" || selRadio === "Assembly")) {
-=======
-                            if (oJobType === "E" && (selRadio === "Assembly Requirement Quantity" || selRadio === "Location Product" || selRadio === "Assemblies")) {
->>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
->>>>>>> 655ca4900db762f00444b4730811dfe522b460ec
                                 that.oProd.setValue(aSelectedProd[0].getTitle());
                             } else {
                                 that.oProd.removeAllTokens();
@@ -1301,11 +1285,7 @@ sap.ui.define(
                 } else if (oJobType === "T" || oJobType === "F" || oJobType === "D" || oJobType === "I"
                              || oJobType === "E" ){ // || oJobType === "PF") {
                     var radioSel = that.byId("idRbtnExport").getSelectedButton().getText();
-<<<<<<< HEAD
                     if (radioSel !== "Assembly Requirement Quantity"  && radioSel !== "Assembly"  && radioSel !== "Location Product") {
-=======
-                    if (radioSel !== "Assembly Requirement Quantity"  && radioSel !== "Assemblies"  && radioSel !== "Location Product") {
->>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
                         sap.ui.getCore().byId("prodSlctList").setMultiSelect(true);
                         // sap.ui.getCore().byId("prodSlctList").setRememberSelections(true);
                     } else {
@@ -2106,21 +2086,12 @@ sap.ui.define(
                         break;
                     case "Location Product":
                         that.oLoc = this.byId("ELPlocInput");
-<<<<<<< HEAD
                         // that.oProd = this.byId("ELPprodInput");
                         that.byId("IBPLocProdExport").setVisible(true);
                         break;
                     case "Assembly":
                         that.oLoc = this.byId("EIAlocInput");
                         // that.oProd = this.byId("EIAprodInput");
-=======
-                        that.oProd = this.byId("ELPprodInput");
-                        that.byId("IBPLocProdExport").setVisible(true);
-                        break;
-                    case "Assemblies":
-                        that.oLoc = this.byId("EIAlocInput");
-                        that.oProd = this.byId("EIAprodInput");
->>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
                         that.byId("IBPAssemblyExport").setVisible(true);
                         break;
                     case "Class":
@@ -3203,7 +3174,6 @@ sap.ui.define(
                     } else {
                         MessageToast.show("Please select all fields");
                     }
-<<<<<<< HEAD
                 } else if (rRadioBtn === "Location Product" || rRadioBtn === "Assembly" ) {
                     oLocItem = that.oLoc.getValue();
                     // oProdItem = this.oProd.getValue();
@@ -3211,15 +3181,6 @@ sap.ui.define(
                         vRuleslist = {
                             LOCATION_ID: oLocItem,
                             // PRODUCT_ID: oProdItem
-=======
-                } else if (rRadioBtn === "Location Product" || rRadioBtn === "Assemblies") {
-                    oLocItem = that.oLoc.getValue();
-                    oProdItem = this.oProd.getValue();
-                    if (oLocItem && oProdItem) {
-                        vRuleslist = {
-                            LOCATION_ID: oLocItem,
-                            PRODUCT_ID: oProdItem
->>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
                         };
                         this.oGModel.setProperty("/vcrulesData", vRuleslist);
 
@@ -3840,11 +3801,7 @@ sap.ui.define(
                         case "Location Product":
                             actionText = "/ibpimport-srv/exportIBPLocProd";
                             break;
-<<<<<<< HEAD
                         case "Assembly":
-=======
-                        case "Assemblies":
->>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
                             actionText = "/ibpimport-srv/exportIBPAssembly";
                             break;
                         case "Class":

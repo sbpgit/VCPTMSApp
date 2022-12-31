@@ -34,12 +34,16 @@ sap.ui.define(
                 that.locModel = new JSONModel();
                 that.prodModel = new JSONModel();
                 that.classnameModel = new JSONModel();
+                // that.charnameModel = new JSONModel();
+                // that.charvalueModel = new JSONModel();
 
 
                 that.ListModel.setSizeLimit(1000);
                 that.locModel.setSizeLimit(1000);
                 that.prodModel.setSizeLimit(1000);
                 that.classnameModel.setSizeLimit(1000);
+                // that.charnameModel.setSizeLimit(1000);
+                // that.charvalueModel.setSizeLimit(1000);
 
                 that.oData = {};
                 // Declaration of Dialogs
@@ -68,6 +72,23 @@ sap.ui.define(
                     );
                     this.getView().addDependent(this._valueHelpDialogclassName);
                 }
+
+                // if (!this._valueHelpDialogcharName) {
+                //     this._valueHelpDialogcharName = sap.ui.xmlfragment(
+                //         "cpapp.cppartialprodnew.view.charName",
+                //         this
+                //     );
+                //     this.getView().addDependent(this._valueHelpDialogcharName);
+                // }
+
+                // if (!this._valueHelpDialogcharValue) {
+                //     this._valueHelpDialogcharValue = sap.ui.xmlfragment(
+                //         "cpapp.cppartialprodnew.view.charValue",
+                //         this
+                //     );
+                //     this.getView().addDependent(this._valueHelpDialogcharValue);
+                // }
+
                 that.aData = [];
             },
 
@@ -83,6 +104,9 @@ sap.ui.define(
                 oGModel = this.getModel("oGModel");
                 this.oLoc = that.byId("idloc");
                 this.oProd = that.byId("idrefprod");
+                // this.oClassName = that.byId("idClassname");
+                // this.oCharName = that.byId("idCharname");
+                // this.oCharValue = that.byId("idCharval");
 
                 that._valueHelpDialogProd.setTitleAlignment("Center");
                 that._valueHelpDialogLoc.setTitleAlignment("Center");
@@ -98,6 +122,13 @@ sap.ui.define(
                     this._valueHelpDialogclassName.getId() + "-list"
                 );
 
+                // this.oCharnameList = this._oCore.byId(
+                //     this._valueHelpDialogcharName.getId() + "-list"
+                // );
+
+                // this.oCharvalueList = this._oCore.byId(
+                //     this._valueHelpDialogcharValue.getId() + "-list"
+                // );
                 that.aData = [];
                 // setting data based on button click in Home view
                 if (oGModel.getProperty("/sFlag") === "E") {
@@ -111,6 +142,7 @@ sap.ui.define(
                     that.byId("idrefprod").setValue(oGModel.getProperty("/refProd"));
                     that.getCharData();
                     that.byId("idprodPanel").setExpanded(false);
+                    // that.byId("idCharPanel").setExpanded(true);
 
                 } else if (oGModel.getProperty("/sFlag") === "C") {
                     that.byId("idClassChar").setTitle("New Product");
@@ -125,6 +157,7 @@ sap.ui.define(
                         results: that.aData
                     });
                     that.byId("idprodPanel").setExpanded(true);
+                    // that.byId("idCharPanel").setExpanded(false);
 
                 }
 
@@ -231,6 +264,13 @@ sap.ui.define(
                     MessageToast.show("Select Location/ Partial/ Ref Product");
                 }
                 }
+                // else if (sId.includes("Classname")) {
+                //     that._valueHelpDialogclassName.open();
+                // } else if (sId.includes("Charname")) {
+                //     that._valueHelpDialogcharName.open();
+                // } else if (sId.includes("Charval")) {
+                //     that._valueHelpDialogcharValue.open();
+                // }
             },
 
             /**
@@ -290,6 +330,21 @@ sap.ui.define(
                         that.oClassnameList.getBinding("items").filter([]);
                     }
                 } 
+                // else if (sId.includes("charName")) {
+                //     that._oCore
+                //         .byId(this._valueHelpDialogcharName.getId() + "-searchField")
+                //         .setValue("");
+                //     if (that.oCharnameList.getBinding("items")) {
+                //         that.oCharnameList.getBinding("items").filter([]);
+                //     }
+                // } else if (sId.includes("charVal")) {
+                //     that._oCore
+                //         .byId(this._valueHelpDialogcharValue.getId() + "-searchField")
+                //         .setValue("");
+                //     if (that.oCharvalueList.getBinding("items")) {
+                //         that.oCharvalueList.getBinding("items").filter([]);
+                //     }
+                // }
             },
 
             /**
@@ -347,8 +402,36 @@ sap.ui.define(
                         );
                     }
                     that.oClassnameList.getBinding("items").filter(oFilters);
-                    
+                    // Char Name
                 } 
+                // else if (sId.includes("charName")) {
+                //     if (sQuery !== "") {
+                //         oFilters.push(
+                //             new Filter({
+                //                 filters: [
+                //                     new Filter("CHAR_NAME", FilterOperator.Contains, sQuery),
+                //                     new Filter("CHAR_NUM", FilterOperator.Contains, sQuery),
+                //                 ],
+                //                 and: false,
+                //             })
+                //         );
+                //     }
+                //     that.oCharnameList.getBinding("items").filter(oFilters);
+                //     // Char Value
+                // } else if (sId.includes("charVal")) {
+                //     if (sQuery !== "") {
+                //         oFilters.push(
+                //             new Filter({
+                //                 filters: [
+                //                     new Filter("CHAR_VALUE", FilterOperator.Contains, sQuery),
+                //                     new Filter("CHARVAL_NUM", FilterOperator.Contains, sQuery),
+                //                 ],
+                //                 and: false,
+                //             })
+                //         );
+                //     }
+                //     that.oCharvalueList.getBinding("items").filter(oFilters);
+                // }
             },
 
             /**
@@ -395,6 +478,12 @@ sap.ui.define(
                         });
                         that.byId("idCharList").setModel(that.ListModel);
                         that.charData();
+                        // that.byId("idClassname").setValue("");
+                        // that.byId("idClassno").setValue("");
+                        // that.byId("idCharname").setValue("");
+                        // that.byId("idCharno").setValue("");
+                        // that.byId("idCharval").setValue("");
+                        // that.byId("idCharvalno").setValue("");
                         if (that.byId("idProd").getValue()) {
                             that.byId("idprodPanel").setExpanded(false);
                             // that.byId("idCharPanel").setExpanded(true);
@@ -413,8 +502,17 @@ sap.ui.define(
                     }
                 } else if (sId.includes("className")) {
 
+                    // that.oClassName = that.byId("idClassname");
+                    // aSelectedItems = oEvent.getParameter("selectedItems");
                     aSelectedItems = oEvent.getParameter("selectedItems")[0].getBindingContext().getProperty();
 
+                    // that.oClassName.setValue(aSelectedItems.CLASS_NAME);
+
+                    // that.byId("idClassno").setValue(aSelectedItems.CLASS_NUM);
+                    // that.byId("idCharname").setValue(aSelectedItems.CHAR_NAME);
+                    // that.byId("idCharno").setValue(aSelectedItems.CHAR_NUM);
+                    // that.byId("idCharval").setValue(aSelectedItems.CHAR_VALUE);
+                    // that.byId("idCharvalno").setValue(aSelectedItems.CHARVAL_NUM);
                     var count = 0;
                     if(that.aData.length){
                     
@@ -454,6 +552,93 @@ sap.ui.define(
 
                 }
 
+                    // this.getModel("BModel").read("/getProdClsChar", {
+                    //     filters: [
+                    //     new Filter(
+                    //         "PRODUCT_ID",
+                    //         FilterOperator.EQ,
+                    //         that.byId("idrefprod").getValue()
+                    //     ),
+                    //     new Filter(
+                    //         "CLASS_NAME",
+                    //         FilterOperator.EQ,
+                    //         that.byId("idClassname").getValue()
+                    //     ),
+                    //     ],
+                    //     success: function (oData) {
+                    //     sap.ui.core.BusyIndicator.hide();
+
+                    //     function removeDuplicate(array, key) {
+                    //         var check = new Set();
+                    //         return array.filter(obj => !check.has(obj[key]) && check.add(obj[key]));
+                    //     }
+                    //     that.charnameModel.setData({
+                    //         results: removeDuplicate(oData.results, 'CHAR_NAME')
+                    //     });
+
+                    //     that.oCharnameList.setModel(that.charnameModel);
+                    //     },
+                    //     error: function (oData, error) {
+                    //     sap.ui.core.BusyIndicator.hide();
+                    //     MessageToast.show("error");
+                    //     },
+                    // });
+                // }
+                // else if (sId.includes("charName")) {
+
+                //     that.oCharName = that.byId("idCharname");
+                //     aSelectedItems = oEvent.getParameter("selectedItems");
+                //     that.oCharName.setValue(aSelectedItems[0].getTitle());
+
+                //     that.byId("idCharno").setValue(aSelectedItems[0].getDescription());
+
+                //     that.byId("idCharval").setValue("");
+                //     that.byId("idCharvalno").setValue("");
+
+                //     this.getModel("BModel").read("/getProdClsChar", {
+                //         filters: [
+                //         new Filter(
+                //             "PRODUCT_ID",
+                //             FilterOperator.EQ,
+                //             that.byId("idrefprod").getValue()
+                //         ),
+                //         new Filter(
+                //             "CLASS_NAME",
+                //             FilterOperator.EQ,
+                //             that.byId("idClassname").getValue()
+                //         ),
+                //         new Filter(
+                //             "CHAR_NAME",
+                //             FilterOperator.EQ,
+                //             that.byId("idCharname").getValue()
+                //         ),
+                //         ],
+                //         success: function (oData) {
+                //         sap.ui.core.BusyIndicator.hide();
+
+                //         function removeDuplicate(array, key) {
+                //             var check = new Set();
+                //             return array.filter(obj => !check.has(obj[key]) && check.add(obj[key]));
+                //         }
+                //         that.charvalueModel.setData({
+                //             results: removeDuplicate(oData.results, 'CHAR_VALUE')
+                //         });
+
+                //         that.oCharvalueList.setModel(that.charvalueModel);
+                //         },
+                //         error: function (oData, error) {
+                //         sap.ui.core.BusyIndicator.hide();
+                //         MessageToast.show("error");
+                //         },
+                //     });
+                //  } else if (sId.includes("charVal")) {
+
+                //     that.oCharValue = that.byId("idCharval");
+                //     aSelectedItems = oEvent.getParameter("selectedItems");
+                //     that.oCharValue.setValue(aSelectedItems[0].getTitle());
+                //     that.byId("idCharvalno").setValue(aSelectedItems[0].getDescription());
+
+                //  }
                 that.handleClose(oEvent);
             },
 
@@ -520,6 +705,11 @@ sap.ui.define(
                         },
                         success: function (oData) {
                             sap.ui.core.BusyIndicator.hide();
+                            //   if (oFlag === "C") {
+                            //     MessageToast.show("Partial product created successfully");
+                            //   } else {
+                            //     MessageToast.show("Successfully updated the product");
+                            //   }
 
                             that.createChar();
                             //that.createIBPProd();
@@ -545,6 +735,7 @@ sap.ui.define(
                     vRuleslist = {
                         PRODUCT_ID: that.byId("idProd").getValue(),
                         LOCATION_ID: that.byId("idloc").getValue(),
+                        // REF_PRODID: that.byId("idrefprod").getValue(),
                         CLASS_NUM: aData[i].CLASS_NUM,
                         CHAR_NUM: aData[i].CHAR_NUM,
                         CHARVAL_NUM: aData[i].CHARVAL_NUM

@@ -16,8 +16,8 @@ class CIRData {
         //const liUniqueId = [];
         const liCIRQty = await cds.run(
             `
-            SELECT * 
-            FROM "CP_CIR_GENERATED" 
+            SELECT *            
+            FROM "CP_CIR_GENERATED"             
             inner join "CP_PARTIALPROD_INTRO"
             ON "CP_CIR_GENERATED"."PRODUCT_ID" = "CP_PARTIALPROD_INTRO"."PRODUCT_ID"
             AND "CP_CIR_GENERATED"."LOCATION_ID" = "CP_PARTIALPROD_INTRO"."LOCATION_ID"
@@ -50,11 +50,12 @@ class CIRData {
           `
           SELECT DISTINCT 
           "CP_CIR_GENERATED"."LOCATION_ID", 
-          "CP_CIR_GENERATED"."PRODUCT_ID",                                             
+          "CP_CIR_GENERATED"."PRODUCT_ID",
           "CP_CIR_GENERATED"."VERSION",
           "CP_CIR_GENERATED"."SCENARIO",
-          "CP_CIR_GENERATED"."UNIQUE_ID",
-          "CP_UNIQUE_ID_HEADER"."UNIQUE_DESC"
+          "CP_CIR_GENERATED"."UNIQUE_ID",          
+          "CP_UNIQUE_ID_HEADER"."UNIQUE_DESC",
+          "CP_PARTIALPROD_INTRO"."PROD_DESC"          
                           FROM "CP_CIR_GENERATED" 
                           inner join "CP_UNIQUE_ID_HEADER"
                           ON "CP_CIR_GENERATED"."UNIQUE_ID" = "CP_UNIQUE_ID_HEADER"."UNIQUE_ID"
@@ -109,6 +110,38 @@ class CIRData {
 
         return li_uniqueIdItem;
     }
+
+    /**
+     * Get Distinct Unique Ids 
+     */
+     async getDistinctUniqueIds(req) {
+        const li_uniqueId = await cds.run(
+            `SELECT DISTINCT "UNIQUE_ID"
+            FROM "V_UNIQUE_ID_ITEM"
+            WHERE "LOCATION_ID" = '` +
+            req.data.LOCATION_ID +
+            `'
+            AND "PRODUCT_ID" = '` +
+            req.data.PRODUCT_ID +
+            `'`
+        );
+
+        return li_uniqueId;
+    }
+    /**
+     * Get Primary & Secondary Characteristics
+     */
+    //  async getVarcharPS(req) {
+    //     const li_varchar_ps = await cds.run(
+    //         `SELECT DISTINCT *
+    //         FROM "CP_VARCHAR_PS"
+    //         WHERE "LOCATION_ID" = '` + req.data.LOCATION_ID + `'
+    //         AND "PRODUCT_ID" = '` + req.data.PRODUCT_ID + `'`
+    //     );
+
+    //     return li_varchar_ps;
+    // }
+
 
     // /**
     //  * Get Auth Token

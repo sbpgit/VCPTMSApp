@@ -20,32 +20,16 @@
                             <!-- <HBox> -->
                             <Title id="_IDGenTitle1" text="{i18n>title}" class="boldText" titleAlignment="Center" />
 
-<<<<<<< HEAD
                             <!-- <Button class="hdrBtnMarginHdr" id="_IDGenOverflowToolbarButton1" icon="sap-icon://sys-help" text="" type="Emphasized" press="onNavPress" tooltip="Help Document" /> -->
-=======
-                                <!-- <Button class="hdrBtnMarginHdr" id="_IDGenOverflowToolbarButton1" icon="sap-icon://sys-help" text="" type="Emphasized" press="onNavPress" tooltip="Help Document" /> -->
-<<<<<<< HEAD
->>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
                             <!-- </HBox> -->
-=======
-                            </HBox>
->>>>>>> 84b7c307bf663cb87aee50219854b661ab655476
                         </ux:expandedHeading>
 
                         <ux:snappedHeading>
                             <!-- <HBox id="_IDGenFlexBox1" fitContainer="true" alignItems="Center"> -->
                             <Title id="_IDGenTitle2" text="{i18n>title}" />
 
-<<<<<<< HEAD
                             <!-- <Button class="hdrBtnMarginHdr" id="_IDGenOverflowToolbarButton2" icon="sap-icon://sys-help" text="" type="Emphasized" press="onNavPress" tooltip="Help Document" /> -->
-=======
-                                <!-- <Button class="hdrBtnMarginHdr" id="_IDGenOverflowToolbarButton2" icon="sap-icon://sys-help" text="" type="Emphasized" press="onNavPress" tooltip="Help Document" /> -->
-<<<<<<< HEAD
->>>>>>> dc0a85a5a4f1cb4b7111ea665a3eae6a06abec9b
                             <!-- </HBox> -->
-=======
-                            </HBox>
->>>>>>> 84b7c307bf663cb87aee50219854b661ab655476
                         </ux:snappedHeading>
                         <ux:navigationActions>
                             <Button class="classHdr" icon="sap-icon://sys-help" id="idNav3" press="onNavPress" type="Emphasized" tooltip="Help Document" />
