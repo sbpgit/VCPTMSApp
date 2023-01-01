@@ -1,0 +1,17 @@
+------------------------------------------------------------------------------------
+-- Name:            V_IBPVERSCENARIO
+-- Description:     Fetch IBP version and scenario for a location-product
+-- Join Details:    A: CP_IBP_FCHARPLAN-  IBP future charateristic plan
+--                  B: CP_IBPVERSIONSCENARIO- Master table for Version and Scenario
+-------------------------------------------------------------------------------------
+VIEW "V_IBPVERSCENARIO" AS
+SELECT DISTINCT "CP_IBP_FCHARPLAN"."LOCATION_ID",
+  "CP_IBP_FCHARPLAN"."PRODUCT_ID",
+  "CP_IBP_FCHARPLAN"."VERSION",
+  "CP_IBPVERSIONSCENARIO"."VERSION_NAME",
+  "CP_IBP_FCHARPLAN"."SCENARIO",
+  "CP_IBPVERSIONSCENARIO"."SCENARIO_NAME"
+FROM "CP_IBP_FCHARPLAN"
+  LEFT OUTER JOIN "CP_IBPVERSIONSCENARIO"
+ ON "CP_IBP_FCHARPLAN"."VERSION" = "CP_IBPVERSIONSCENARIO"."VERSION"
+  AND "CP_IBP_FCHARPLAN"."SCENARIO" = "CP_IBPVERSIONSCENARIO"."SCENARIO";

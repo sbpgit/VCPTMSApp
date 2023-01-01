@@ -76,8 +76,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
     @readonly
     entity getSalesh            as projection on V_SALES_H; //od.SALESH;
 
-    //  @readonly
-    //  entity getFactoryLocDesc    as projection on V_FACTORY_LOC;
+    
 
     //Get location product
     @readonly
@@ -85,6 +84,10 @@ service CatalogService @(impl : './lib/cat-service.js') {
 
     // Get Location products based on product master
     entity getLocProdDet        as projection on V_LOCPROD;
+
+    // Get Factory Location based on factory location
+    // @readonly
+    // entity getfactorylocdesc    as projection on V_FACTORYLOC;
 
     // Get sales history configuration
     @readonly

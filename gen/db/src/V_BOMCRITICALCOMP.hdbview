@@ -1,0 +1,20 @@
+----------------------------------------------------------------------------------------
+-- Name:            V_BOMCRITICALCOMP
+-- Description:     View to fetch BOM object dependecy with counter
+-- Join Details:    CP_CRITICAL_COMP -  TABLE for critical component
+--                  CP_BOMHEADER - Table for BOM object Dep.
+-----------------------------------------------------------------------------------------
+VIEW "V_BOMCRITICALCOMP"
+AS SELECT distinct CP_BOMHEADER.LOCATION_ID,
+CP_BOMHEADER.PRODUCT_ID,
+CP_BOMHEADER.ITEM_NUM,
+CP_BOMHEADER.COMPONENT,
+CP_BOMHEADER.VALID_FROM,
+CP_BOMHEADER.VALID_TO,
+CP_CRITICAL_COMP.CRITICALKEY
+ FROM CP_BOMHEADER
+ LEFT OUTER JOIN CP_CRITICAL_COMP 
+ ON CP_BOMHEADER.LOCATION_ID = CP_CRITICAL_COMP.LOCATION_ID
+   AND CP_BOMHEADER.PRODUCT_ID = CP_CRITICAL_COMP.PRODUCT_ID
+   AND CP_BOMHEADER.ITEM_NUM = CP_CRITICAL_COMP.ITEM_NUM
+   AND CP_BOMHEADER.COMPONENT = CP_CRITICAL_COMP.COMPONENT
