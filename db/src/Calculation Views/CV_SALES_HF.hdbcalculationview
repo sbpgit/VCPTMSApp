@@ -62,7 +62,7 @@
       <viewAttribute id="ORD_QTY" aggregationType="sum"/>
     </viewAttributes>
     <calculatedViewAttributes/>
-    <input node="Projection_1">
+    <input node="Projection_1" emptyUnionBehavior="NO_ROW">
       <mapping xsi:type="Calculation:AttributeMapping" target="WEEK_DATE" source="WEEK_DATE"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="LOCATION_ID" source="LOCATION_ID"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="PRODUCT_ID" source="PRODUCT_ID"/>
@@ -70,7 +70,7 @@
       <mapping xsi:type="Calculation:AttributeMapping" target="CIR_QTY" source="CIR_QTY"/>
       <mapping xsi:type="Calculation:ConstantAttributeMapping" target="ORD_QTY" null="true" value=""/>
     </input>
-    <input node="Join_1">
+    <input node="Join_1" emptyUnionBehavior="NO_ROW">
       <mapping xsi:type="Calculation:AttributeMapping" target="WEEK_DATE" source="WEEK_DATE"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="LOCATION_ID" source="LOCATION_ID"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="PRODUCT_ID" source="PRODUCT_ID"/>
@@ -125,11 +125,11 @@
     </shape>
     <shape modelObjectName="V_IBP_SALESH_CUST_LOC_PROD_WEEK_DATE" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
       <upperLeftCorner x="57" y="9"/>
-      <rectangleSize width="347.83984375"/>
+      <rectangleSize width="347"/>
     </shape>
     <shape modelObjectName="V_SALES_H" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
       <upperLeftCorner x="320" y="30"/>
-      <rectangleSize width="201.52685546875"/>
+      <rectangleSize width="201"/>
     </shape>
     <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
       <upperLeftCorner x="-17" y="322"/>
