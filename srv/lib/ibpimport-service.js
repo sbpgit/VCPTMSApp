@@ -5,6 +5,7 @@ const { v1: uuidv1 } = require('uuid')
 const xsenv = require("@sap/xsenv");
 const JobSchedulerClient = require("@sap/jobs-client");
 const MktAuth = require("./market-auth");
+const Catservicefn = require("./catservice-function");
 const vAIRKey = process.env.AIR;
 const IBPFunc = require("./ibp-functions");
 const obibpfucntions = new IBPFunc();
@@ -68,7 +69,7 @@ module.exports = cds.service.impl(async function () {
         flag = '';
         for (let i in req) {
             let vWeekDate = dateJSONToEDM(req[i].PERIODID4_TSTAMP);
-            let vScenario = 'BSL_SCENARIO';
+            let vScenario = req[i].SCENARIOID;//'BSL_SCENARIO';
             req[i].PERIODID4_TSTAMP = vWeekDate;
             // try {
             await DELETE.from('CP_IBP_FUTUREDEMAND')
@@ -416,11 +417,11 @@ module.exports = cds.service.impl(async function () {
 
         // const li_Transid = servicePost.tx(req).get("/GetTransactionID");
         for (i = 0; i < licust.length; i++) {
-        vcust = {
-            "CUSTID": licust[i].CUSTOMER_GROUP,
-            "CUSTDESCR": licust[i].CUSTOMER_DESC,
-        };
-        oReq.cust.push(vcust);
+            vcust = {
+                "CUSTID": licust[i].CUSTOMER_GROUP,
+                "CUSTDESCR": licust[i].CUSTOMER_DESC,
+            };
+            oReq.cust.push(vcust);
 
         }
         let vTransID = new Date().getTime().toString();
@@ -666,10 +667,10 @@ module.exports = cds.service.impl(async function () {
             "VersionID": "",
             "DoCommit": true,
             "ScenarioID": "",
-            "NavSBPVCP": oReq.sales
+            "NavVCD": oReq.sales
         }
         // req.headers['Application-Interface-Key'] = vAIRKey;
-        await service.tx(req).post("/SBPVCPTrans", oEntry);
+        await service.tx(req).post("/VCDTrans", oEntry);
 
         let resUrl = "/getExportResult?P_TransactionID='" + vTransID + "'";
         try {
@@ -1454,10 +1455,12 @@ module.exports = cds.service.impl(async function () {
         let values = [];
         let message = "Started exporting Sales History and Configurations";
         let res = req._.req.res;
+        // let lilocProdReq = {};
         let lilocProdReq = JSON.parse(req.data.LocProdData);
+        // lilocProdReq.LOCATION_ID = "AS01";
+        // lilocProdReq.PRODUCT_ID = "ALL"
         if (lilocProdReq[0].PRODUCT_ID === "ALL") {
             lsData.LOCATION_ID = lilocProdReq[0].LOCATION_ID;
-            lsData.PRODUCT_ID = lilocProdReq[0].PRODUCT_ID;
             const objCatFn = new Catservicefn();
             const lilocProdT = await objCatFn.getAllProducts(lsData);
             lsData = {};
@@ -1471,6 +1474,7 @@ module.exports = cds.service.impl(async function () {
         res.statusCode = 202;
         res.send({ values });
         for (let i = 0; i < lilocProd.length; i++) {
+            lsData = {};
             lsData.LOCATION_ID = lilocProd[i].LOCATION_ID;
             lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
             const lisales = await cds.run(
@@ -1479,6 +1483,7 @@ module.exports = cds.service.impl(async function () {
                             "LOCATION_ID",
                             "PRODUCT_ID",
                             "ORD_QTY",
+                            "ADJ_QTY",
                             "CUSTOMER_GROUP"
                             FROM V_IBP_SALESH_ACTDEMD
                             WHERE LOCATION_ID = '`+ lsData.LOCATION_ID + `'
@@ -1487,54 +1492,58 @@ module.exports = cds.service.impl(async function () {
             for (i = 0; i < lisales.length; i++) {
                 let vWeekDate = new Date(lisales[i].WEEK_DATE).toISOString().split('Z');
                 let vDemd = lisales[i].ORD_QTY.split('.');
+                let vAdjqty = lisales[i].ADJ_QTY.split('.');
                 vsales = {
                     "LOCID": lisales[i].LOCATION_ID,
                     "PRDID": lisales[i].PRODUCT_ID,
                     "CUSTID": lisales[i].CUSTOMER_GROUP,
                     "ACTUALDEMAND": vDemd[0],
+                    "SEEDORDERDEMAND": vAdjqty[0],
                     "PERIODID0_TSTAMP": vWeekDate[0]
                 };
                 oReq.sales.push(vsales);
 
             }
-            let vTransID = new Date().getTime().toString();
-            let oEntry =
-            {
-                "Transactionid": vTransID,
-                "AggregationLevelFieldsString": "LOCID,PRDID,CUSTID,ACTUALDEMAND,PERIODID0_TSTAMP",
-                "VersionID": "",
-                "DoCommit": true,
-                "ScenarioID": ""
-            }
-            oEntry[lData] = oReq.sales
-            try {
-                await service.tx(req).post(lEntity, oEntry);
-                flag = 'S';
-            }
-            catch {
-                console.log("Unable to send Actual demand at VC");
-            }
-            // Once Sales History is successfull , send sales Config . Actual demand at VC
-            if (flag === 'S') {
-                let oReqCfg = await obibpfucntions.exportSalesCfg(lsData);
+            if (oReq.sales.length > 0) {
                 let vTransID = new Date().getTime().toString();
-                let oEntryCfg =
+                let oEntry =
                 {
                     "Transactionid": vTransID,
-                    "AggregationLevelFieldsString": "LOCID,PRDID,VCCHAR,VCCHARVALUE,VCCLASS,ACTUALDEMANDVC,CUSTID,PERIODID0_TSTAMP",
+                    "AggregationLevelFieldsString": "LOCID,PRDID,CUSTID,ACTUALDEMAND,SEEDORDERDEMAND,PERIODID0_TSTAMP",
                     "VersionID": "",
                     "DoCommit": true,
                     "ScenarioID": ""
                 }
-                oEntryCfg[lData] = oReqCfg.sales;
+                oEntry[lData] = oReq.sales
                 try {
-                    await service.tx(req).post(lEntity, oEntryCfg);
-                    flag = 'X';
-                    lMessage = lMessage + ' ' + 'Export of Sales History and Configuration export is successful for product:' + lsData.PRODUCT_ID;
-
+                    await service.tx(req).post(lEntity, oEntry);
+                    flag = 'S';
                 }
                 catch {
-                    lMessage = lMessage + ' ' + 'Export of Sales History and Configuration export is failed for product:' + lsData.PRODUCT_ID;
+                    console.log("Unable to send Actual demand at VC");
+                }
+                // Once Sales History is successfull , send sales Config . Actual demand at VC
+                if (flag === 'S') {
+                    let oReqCfg = await obibpfucntions.exportSalesCfg(lsData);
+                    let vTransID = new Date().getTime().toString();
+                    let oEntryCfg =
+                    {
+                        "Transactionid": vTransID,
+                        "AggregationLevelFieldsString": "LOCID,PRDID,VCCHAR,VCCHARVALUE,VCCLASS,ACTUALDEMANDVC,SEEDORDERDEMANDVC,CUSTID,PERIODID0_TSTAMP",
+                        "VersionID": "",
+                        "DoCommit": true,
+                        "ScenarioID": ""
+                    }
+                    oEntryCfg[lData] = oReqCfg.sales;
+                    try {
+                        await service.tx(req).post(lEntity, oEntryCfg);
+                        flag = 'X';
+                        lMessage = lMessage + ' ' + 'Export of Sales History and Configuration export is successful for product:' + lsData.PRODUCT_ID;
+
+                    }
+                    catch {
+                        lMessage = lMessage + ' ' + 'Export of Sales History and Configuration export is failed for product:' + lsData.PRODUCT_ID;
+                    }
                 }
             }
         }
@@ -1563,29 +1572,66 @@ module.exports = cds.service.impl(async function () {
                         "LOCATION_ID",
                         "PRODUCT_ID",
                         "ORD_QTY",
+                        "ADJ_QTY",
                         "CUSTOMER_GROUP"
                         FROM V_IBP_SALESH_ACTDEMD
                         WHERE LOCATION_ID = '`+ lsData.LOCATION_ID + `'
                            AND PRODUCT_ID = '`+ lsData.PRODUCT_ID +
-            `'`);
-        for (i = 0; i < lisales.length; i++) {
-            let vWeekDate = new Date(lisales[i].WEEK_DATE).toISOString().split('Z');
-            let vDemd = lisales[i].ORD_QTY.split('.');
-            vsales = {
-                "LOCID": lisales[i].LOCATION_ID,
-                "PRDID": lisales[i].PRODUCT_ID,
-                "CUSTID": lisales[i].CUSTOMER_GROUP,
-                "ACTUALDEMAND": vDemd[0],
-                "PERIODID0_TSTAMP": vWeekDate[0]
-            };
-            oReq.sales.push(vsales);
+            `' ORDER BY WEEK_DATE`);
+        let vLength = parseInt(lisales.length) - 1;
+        let liDates = obibpfucntions.generateDateseries(lisales[0].WEEK_DATE, lisales[vLength].WEEK_DATE);
+        let vDemd, vAdjqty, vWeekDate;
+        for (let i = 0; i < lisales.length; i++) {
+            for (let iDate = 0; iDate < liDates.length; iDate++) {
+                vDemd = "", vAdjqty = "", vWeekDate = "";
+                if (liDates[iDate].WEEK_DATE === lisales[i].WEEK_DATE) {
+                    vWeekDate = new Date(lisales[i].WEEK_DATE).toISOString().split('Z');
+                    vDemd = lisales[i].ORD_QTY.split('.');
+                    vAdjqty = lisales[i].ADJ_QTY.split('.');
+                    vsales = {
+                        "LOCID": lisales[i].LOCATION_ID,
+                        "PRDID": lisales[i].PRODUCT_ID,
+                        "CUSTID": lisales[i].CUSTOMER_GROUP,
+                        "ACTUALDEMAND": vDemd,
+                        "SEEDORDERDEMAND": vAdjqty,
+                        "PERIODID0_TSTAMP": vWeekDate[0]
+                    };
+                }
+                else {
+                    vWeekDate = new Date(liDates[iDate].WEEK_DATE).toISOString().split('Z');
+                    vDemd = "-2";
+                    vAdjqty = "-3";
+                    vsales = {
+                        "LOCID": lisales[i].LOCATION_ID,
+                        "PRDID": lisales[i].PRODUCT_ID,
+                        "CUSTID": lisales[i].CUSTOMER_GROUP,
+                        "ACTUALDEMAND": vDemd,
+                        "SEEDORDERDEMAND": vAdjqty,
+                        "PERIODID0_TSTAMP": vWeekDate[0]
+                    };
+                }
+                oReq.sales.push(vsales);
+                break;
+            }
 
         }
+        vWeekDate = new Date(liDates[24].WEEK_DATE).toISOString().split('Z');
+        vDemd = "-2";
+        vAdjqty = "-3";
+        vsales = {
+            "LOCID": "PL10",
+            "PRDID": "FG_100",
+            "CUSTID": "A1",
+            "ACTUALDEMAND": "-1",
+            "SEEDORDERDEMAND": "-2",
+            "PERIODID0_TSTAMP": vWeekDate[0]
+        };
+        oReq.sales.push(vsales);
         let vTransID = new Date().getTime().toString();
         let oEntry =
         {
             "Transactionid": vTransID,
-            "AggregationLevelFieldsString": "LOCID,PRDID,CUSTID,ACTUALDEMAND,PERIODID0_TSTAMP",
+            "AggregationLevelFieldsString": "LOCID,PRDID,CUSTID,ACTUALDEMAND,SEEDORDERDEMAND,PERIODID0_TSTAMP",
             "VersionID": "",
             "DoCommit": true,
             "ScenarioID": ""
@@ -1593,14 +1639,14 @@ module.exports = cds.service.impl(async function () {
         oEntry[lData] = oReq.sales
         try {
             await service.tx(req).post(lEntity, oEntry);
-            flag = 'S';
+            flag = 'E';
         }
-        catch {
+        catch (E) {
             console.log("Unable to send Actual demand at VC");
         }
         // Once Sales History is successfull , send sales Config . Actual demand at VC
         if (flag === 'S') {
-            let oReqCfg = await obibpfucntions.exportSalesCfg(lsData);
+            let oReqCfg = await obibpfucntions.exportSalesCfg(lsData, liDates);
             let vTransID = new Date().getTime().toString();
             let oEntryCfg =
             {
@@ -1666,12 +1712,11 @@ module.exports = cds.service.impl(async function () {
         // Fetch History period from Configuration table
         const lsSales = await GenF.getParameterValue(lilocProd[0].LOCATION_ID, 4);
         console.log(lsSales);
-        let vFromDate = new Date();
-        console.log(vFromDate);
         let vToDate = new Date().toISOString().split('Z')[0].split('T')[0];
         console.log(vToDate);
+
+        let vFromDate = new Date();
         vFromDate.setDate(vFromDate.getDate() - (parseInt(lsSales) * 7));
-        console.log(vFromDate);
         vFromDate = vFromDate.toISOString().split('Z')[0].split('T')[0];
         console.log(vFromDate);
 
@@ -1740,7 +1785,7 @@ module.exports = cds.service.impl(async function () {
                     oReq.actcomp.push(vactcomp);
                 }
             }
-            if (oReq.actcomp) {
+            if (oReq.actcomp.length > 0) {
                 let vTransID = new Date().getTime().toString();
                 let oEntry =
                 {
@@ -1767,8 +1812,121 @@ module.exports = cds.service.impl(async function () {
             }
         }
         await GenF.jobSchMessage('X', lMessage, req);
+        return "S";
     });
+    this.on("exportActCompDemandfn", async (req) => {
 
+        // Get Planning area and Prefix configurations for IBP
+        let liParaValue = await GenF.getIBPParameterValue();
+        let lData = "Nav" + liParaValue[0].VALUE.toString();
+        let lEntity = "/" + liParaValue[0].VALUE.toString() + "Trans";
+
+        let oReq = {
+            actcomp: [],
+        },
+            vactcomp, lMessage = '';
+        // Generating payload for job scheduler logs
+
+        // Fetch History period from Configuration table
+        const lsSales = await GenF.getParameterValue(req.data.LOCATION_ID, 4);
+        console.log(lsSales);
+        let vToDate = new Date().toISOString().split('Z')[0].split('T')[0];
+        console.log(vToDate);
+
+        let vFromDate = new Date();
+        vFromDate.setDate(vFromDate.getDate() - (parseInt(lsSales) * 7));
+        vFromDate = vFromDate.toISOString().split('Z')[0].split('T')[0];
+        console.log(vFromDate);
+
+        const liactcomp = await cds.run(
+            `
+                SELECT DISTINCT "WEEK_DATE",
+                        "LOCATION_ID",
+                        "PRODUCT_ID",
+                        "ACTUALCOMPONENTDEMAND",
+                        "COMPONENT"
+                        FROM V_IBP_LOCPRODCOMP_ACTDEMD
+                        WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
+                           AND PRODUCT_ID = '`+ req.data.PRODUCT_ID +
+            `' AND WEEK_DATE >= '` + vFromDate +
+            `' AND WEEK_DATE <= '` + vToDate + `'`);
+
+        const licriticalcomp = await cds.run(
+            `
+                    SELECT  "LOCATION_ID",
+                            "PRODUCT_ID",
+                            "ITEM_NUM",
+                            "COMPONENT",
+                            "CRITICALKEY"
+                            FROM CP_CRITICAL_COMP
+                            WHERE LOCATION_ID = '`+ req.data.LOCATION_ID + `'
+                              AND PRODUCT_ID = '`+ req.data.PRODUCT_ID + `'                               
+                              AND CRITICALKEY = '` + req.data.CRITICALKEY + `'`);
+        if (req.data.CRITICALKEY === "X") {
+            for (i = 0; i < liactcomp.length; i++) {
+                for (let j = 0; j < licriticalcomp.length; j++) {
+                    if (liactcomp[i].LOCATION_ID === licriticalcomp[j].LOCATION_ID &&
+                        liactcomp[i].PRODUCT_ID === licriticalcomp[j].PRODUCT_ID &&
+                        //liactcomp[i].ITEM_NUM === licriticalcomp[j].ITEM_NUM &&
+                        liactcomp[i].COMPONENT === licriticalcomp[j].COMPONENT) {
+
+                        let vWeekDate = new Date(liactcomp[i].WEEK_DATE).toISOString().split('Z');
+                        let vDemd = liactcomp[i].ACTUALCOMPONENTDEMAND.split('.');
+
+                        vactcomp = {
+                            "LOCID": liactcomp[i].LOCATION_ID,
+                            "PRDID": liactcomp[i].PRODUCT_ID,
+                            "ACTUALCOMPONENTDEMAND": vDemd[0],
+                            "PRDFR": liactcomp[i].COMPONENT,
+                            "PERIODID0_TSTAMP": vWeekDate[0]
+                        };
+
+                        oReq.actcomp.push(vactcomp);
+                    }
+                }
+            }
+        } else {
+            for (i = 0; i < liactcomp.length; i++) {
+                let vWeekDate = new Date(liactcomp[i].WEEK_DATE).toISOString().split('Z');
+                let vDemd = liactcomp[i].ACTUALCOMPONENTDEMAND.split('.');
+                vactcomp = {
+                    "LOCID": liactcomp[i].LOCATION_ID,
+                    "PRDID": liactcomp[i].PRODUCT_ID,
+                    "ACTUALCOMPONENTDEMAND": vDemd[0],
+                    "PRDFR": liactcomp[i].COMPONENT,
+                    "PERIODID0_TSTAMP": vWeekDate[0]
+                };
+                oReq.actcomp.push(vactcomp);
+            }
+        }
+        if (oReq.actcomp.length > 0) {
+            let vTransID = new Date().getTime().toString();
+            let oEntry =
+            {
+                "Transactionid": vTransID,
+                "AggregationLevelFieldsString": "LOCID,PRDID,ACTUALCOMPONENTDEMAND,PERIODID0_TSTAMP,PRDFR",
+                "VersionID": "",
+                "DoCommit": true,
+                "ScenarioID": ""
+            }
+            oEntry[lData] = oReq.actcomp;
+            try {
+                await service.tx(req).post(lEntity, oEntry);
+                let resUrl = "/getExportResult?P_EntityName='" + liParaValue[0].VALUE + "'&P_TransactionID='" + vTransID + "'";
+                await service.tx(req).get(resUrl);
+                flag = 'X';
+                lMessage = lMessage + ' ' + 'Export of Actual Component Demand is successfull for product:' + lsData.PRODUCT_ID;
+            }
+            catch {
+                lMessage = lMessage + ' ' + 'Export of Actual Component Demand failed for product:' + lsData.PRODUCT_ID;
+            }
+        }
+        else {
+            lMessage = lMessage + ' ' + 'No Actual Component Demand exists on Crtical components for product:' + lsData.PRODUCT_ID;
+        }
+        // await GenF.jobSchMessage('X', lMessage, req);
+        return lMessage;
+    });
     // Component requirement Qty
     this.on("exportComponentReq", async (req) => {
         // Send Response to Scheduler
@@ -1893,7 +2051,7 @@ module.exports = cds.service.impl(async function () {
             console.log(oReq.actcompreq);
         }
 
-        if (oReq.actcompreq) {
+        if (oReq.actcompreq.length > 0) {
             let vTransID = new Date().getTime().toString();
             let oEntry =
             {
@@ -1932,7 +2090,7 @@ module.exports = cds.service.impl(async function () {
         // Get IBP planning area
         // Get Planning area and Prefix configurations for IBP
         let liParaValue = await GenF.getIBPParameterValue();
-        let flag, lMessage = '';
+        let flag, lMessage = '', vScenario = '';
         // Generating payload for job scheduler logs
         let lilocProd = {};
         let lsData = {};
@@ -1957,6 +2115,16 @@ module.exports = cds.service.impl(async function () {
         values.push({ id, createtAt, message, lilocProd });
         res.statusCode = 202;
         res.send({ values });
+        flag = await obibpfucntions.importVerScen(request);
+        if (flag === 'S') {
+            lMessage = "Successfully imported version scenario from IBP";
+            console.log(lMessage);
+        } else {
+            lMessage = "Failed to import version scenario from IBP";
+            console.log(lMessage);
+        }
+        flag = '';
+        lMessage = '';
         for (let iloc = 0; iloc < lilocProd.length; iloc++) {
             lsData.LOCATION_ID = lilocProd[iloc].LOCATION_ID;
             lsData.PRODUCT_ID = lilocProd[iloc].PRODUCT_ID;
@@ -1987,7 +2155,13 @@ module.exports = cds.service.impl(async function () {
             flag = '';
             for (let i in req) {
                 let vWeekDate = dateJSONToEDM(req[i].PERIODID4_TSTAMP);
-                let vScenario = 'BSL_SCENARIO';
+
+                if (req[i].SCENARIOID === '' || req[i].SCENARIOID === null) {
+                    vScenario = '_PLAN';
+                }
+                else {
+                    vScenario = req[i].SCENARIOID; //'BSL_SCENARIO';
+                }
                 req[i].PERIODID4_TSTAMP = vWeekDate;
 
                 if (vWeekDate >= vDateDeld) {
@@ -2042,7 +2216,12 @@ module.exports = cds.service.impl(async function () {
                 }
                 for (let i in req) {
                     let vWeekDate = dateJSONToEDM(req[i].PERIODID4_TSTAMP).split('T')[0];
-                    let vScenario = 'BSL_SCENARIO';
+                    if (req[i].SCENARIOID === '' || req[i].SCENARIOID === null) {
+                        vScenario = '_PLAN';
+                    }
+                    else {
+                        vScenario = req[i].SCENARIOID; //'BSL_SCENARIO';
+                    }
                     let vManualOpt = '0.0';
                     req[i].PERIODID4_TSTAMP = vWeekDate;
                     if (vWeekDate >= vDateDel) {
@@ -2095,7 +2274,7 @@ module.exports = cds.service.impl(async function () {
         let flag, lMessage = '';
         // Generating payload for job scheduler logs
         let lsData = {};
-       
+
         lsData.LOCATION_ID = request.data.LOCATION_ID;
         lsData.PRODUCT_ID = request.data.PRODUCT_ID;
         let resUrl = "/" + liParaValue[0].VALUE + "?$select=PRDID,LOCID,PERIODID4_TSTAMP,TOTALDEMANDOUTPUT,UOMTOID,VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$filter=LOCID eq '" + lsData.LOCATION_ID + "' and PRDID eq '" + lsData.PRODUCT_ID + "'and UOMTOID eq 'EA'";
@@ -2225,7 +2404,7 @@ module.exports = cds.service.impl(async function () {
         // }
         await GenF.jobSchMessage('X', lMessage, request);
     });
-    // Generate char plan
+    // Generate Forcast order
     this.on("exportIBPCIR", async (request) => {
 
         // Get Planning area and Prefix configurations for IBP
@@ -2262,6 +2441,7 @@ module.exports = cds.service.impl(async function () {
         res.statusCode = 202;
         res.send({ values });
         for (let iloc = 0; iloc < lilocProd.length; iloc++) {
+            flag = ' ';
             lsData.LOCATION_ID = lilocProd[iloc].LOCATION_ID;
             lsData.PRODUCT_ID = lilocProd[iloc].PRODUCT_ID;
             const licir = await cds.run(
@@ -2282,33 +2462,38 @@ module.exports = cds.service.impl(async function () {
                     "VCCLASS": licir[i].CLASS_NUM,
                     "VCCHAR": licir[i].CHAR_NUM,
                     "VCCHARVALUE": licir[i].CHARVAL_NUM,
-                    "CUSTID": "NULL",
-                    "CIRQTY": licir[i].CIRQTY.toString(),
+                    // "CUSTID": "NULL",
+                    "FORECASTORDERQTY": licir[i].CIRQTY.toString(),
                     "PERIODID4_TSTAMP": vWeekDate
                 };
                 oReq.cir.push(vCIR);
             }
-            let vTransID = new Date().getTime().toString();
-            let oEntry =
-            {
-                "Transactionid": vTransID,
-                "AggregationLevelFieldsString": "LOCID,PRDID,VCCLASS,VCCHAR,VCCHARVALUE,CUSTID,CIRQTY,PERIODID4_TSTAMP",
-                "DoCommit": true
-            }
-            oEntry[lData] = oReq.cir;
-            try {
-                await service.tx(request).post(lEntity, oEntry);
-                flag = 'X';
-            }
-            catch (err) {
-                console.log(err);
-                flag = ' ';
-            }
+            if (oReq.cir.length > 0) {
+                let vTransID = new Date().getTime().toString();
+                let oEntry =
+                {
+                    "Transactionid": vTransID,
+                    "AggregationLevelFieldsString": "LOCID,PRDID,VCCLASS,VCCHAR,VCCHARVALUE,FORECASTORDERQTY,PERIODID4_TSTAMP",
+                    "DoCommit": true
+                }
+                oEntry[lData] = oReq.cir;
+                try {
+                    await service.tx(request).post(lEntity, oEntry);
+                    flag = 'X';
+                }
+                catch (err) {
+                    console.log(err);
+                    flag = ' ';
+                }
 
-            if (flag === 'X') {
-                lMessage = lMessage + ' ' + "Export of CIR to IBP is successful for product" + lsData.PRODUCT_ID;
-            } else {
-                lMessage = lMessage + ' ' + "Export of CIR to IBP has failed for product" + lsData.PRODUCT_ID;
+                if (flag === 'X') {
+                    lMessage = lMessage + ' ' + "Export of CIR to IBP is successful for product" + lsData.PRODUCT_ID;
+                } else {
+                    lMessage = lMessage + ' ' + "Export of CIR to IBP has failed for product" + lsData.PRODUCT_ID;
+                }
+            }
+            else {
+                lMessage = lMessage + ' ' + "Export of CIR to IBP is unsuccessful product" + lsData.PRODUCT_ID + " beacuse of insufficient data ";
             }
             // return "S";
             await GenF.jobSchMessage('X', lMessage, request);
@@ -2326,35 +2511,37 @@ module.exports = cds.service.impl(async function () {
 
         await GenF.logMessage(req, `Started exporting Restriction header`);
         let oReq = await obibpfucntions.exportRtrHdrDet(req);
-        let vTransID = new Date().getTime().toString();
-        let vTransID2 = new Date().getTime().toString();
-        let oEntry =
-        {
-            "TransactionID": vTransID,
-            "RequestedAttributes": "VCRESTRICTIONID,VCRESTRICTIONDESC,VCRESTRICTIONTYPE",
-            "DoCommit": true
-        }
-        oEntry[lData] = oReq.rtrhdr;
-        let oEntry2 =
-        {
-            "TransactionID": vTransID2,
-            "RequestedAttributes": "LOCID,VCRESTRICTIONID,VCPLACEHOLDER",
-            "DoCommit": true
-        }
-        oEntry2[lData] = oReq.locrtr;
-        try {
-            await servicePost.tx(req).post(lEntity, oEntry);
-            await servicePost.tx(req).post(lEntityLoc, oEntry2);
-            vFlag = 'S';
-        }
-        catch (e) {
-            vFlag = '';
-        }
-        if (vFlag === 'S') {
-            await GenF.jobSchMessage('X', "Export Restriction header details is successful ", req);
-        }
-        else {
-            await GenF.jobSchMessage('', "Export Restriction header details has failed", req);
+        if (oReq.rtrhdr.length > 0) {
+            let vTransID = new Date().getTime().toString();
+            let vTransID2 = new Date().getTime().toString();
+            let oEntry =
+            {
+                "TransactionID": vTransID,
+                "RequestedAttributes": "VCRESTRICTIONID,VCRESTRICTIONDESC,VCRESTRICTIONTYPE",
+                "DoCommit": true
+            }
+            oEntry[lData] = oReq.rtrhdr;
+            let oEntry2 =
+            {
+                "TransactionID": vTransID2,
+                "RequestedAttributes": "LOCID,VCRESTRICTIONID,VCPLACEHOLDER",
+                "DoCommit": true
+            }
+            oEntry2[lData] = oReq.locrtr;
+            try {
+                await servicePost.tx(req).post(lEntity, oEntry);
+                await servicePost.tx(req).post(lEntityLoc, oEntry2);
+                vFlag = 'S';
+            }
+            catch (e) {
+                vFlag = '';
+            }
+            if (vFlag === 'S') {
+                await GenF.jobSchMessage('X', "Export Restriction header details is successful ", req);
+            }
+            else {
+                await GenF.jobSchMessage('', "Export Restriction header details has failed", req);
+            }
         }
     });
     this.on("exportMktAuth", async (request) => {
@@ -2479,13 +2666,15 @@ module.exports = cds.service.impl(async function () {
 
         // Generating payload for job scheduler logs
         let lVersion, lScenario, vFromDate, vToDate;
-        let vScen, resUrl;
+        let vScen = '', resUrl;
         let req;
         let lilocProd = {};
         let lsData = {},
             lsFchar = {},
             liFchar = [];
-
+        let oReq = {
+            mktauth: [],
+        };
         let createtAt = new Date();
         let id = uuidv1();
         let values = [];
@@ -2513,6 +2702,16 @@ module.exports = cds.service.impl(async function () {
 
         lsData = {};
 
+        flag = await obibpfucntions.importVerScen(request);
+        if (flag === 'S') {
+            lMessage = "Successfully imported version scenario from IBP";
+            console.log(lMessage);
+        } else {
+            lMessage = "Failed to import version scenario from IBP";
+            console.log(lMessage);
+        }
+        flag = '';
+        lMessage = '';
         // Fetch OPtion percentages for a location product and weekDate
         for (let iloc = 0; iloc < lilocProd.length; iloc++) {
             lsData.LOCATION_ID = lilocProd[iloc].LOCATION_ID;
@@ -2557,10 +2756,13 @@ module.exports = cds.service.impl(async function () {
             flag = '';
             for (let i in req) {
                 let vWeekDate = dateJSONToEDM(req[i].PERIODID4_TSTAMP);
-                // if (req[i].SCENARIOID === null) {
-                vScen = 'BSL_SCENARIO';//' ';
-                // }
-                // let vScenario = 'BSL_SCENARIO';
+                vScen = ''
+                if (req[i].SCENARIOID === '' || req[i].SCENARIOID === null) {
+                    vScen = '_PLAN';
+                }
+                else {
+                    vScen = req[i].SCENARIOID; //'BSL_SCENARIO';
+                }
                 req[i].PERIODID4_TSTAMP = vWeekDate;
 
                 if (vWeekDate >= vDateDeld) {
@@ -2582,6 +2784,7 @@ module.exports = cds.service.impl(async function () {
                     try {
                         await cds.run(modQuery);
                         flag = 'D';
+
                     }
                     catch (err) {
                         console.log(err);
@@ -2632,9 +2835,12 @@ module.exports = cds.service.impl(async function () {
                 // Insert into Fchar plan
                 for (let i in req) {
                     let vWeekDate = dateJSONToEDM2(req[i].PERIODID4_TSTAMP).split('T')[0];
-                    // if (req[i].SCENARIOID === null) {
-                    vScen = 'BSL_SCENARIO';//' ';
-                    // }
+                    if (req[i].SCENARIOID === '' || req[i].SCENARIOID === null) {
+                        vScen = '_PLAN';
+                    }
+                    else {
+                        vScen = req[i].SCENARIOID; //'BSL_SCENARIO';
+                    }
                     req[i].PERIODID4_TSTAMP = vWeekDate;
                     let vManualOpt = '0.0';
                     if (vWeekDate >= vDateDel) {
@@ -2664,9 +2870,9 @@ module.exports = cds.service.impl(async function () {
                             await cds.run(modQuery);
                             flag = 'S';
                             lsFchar = {};
-                            lsFchar['LOCATION_ID'] = GenF.parse(reqFchar[i].LOCID);
-                            lsFchar['PRODUCT_ID'] = GenF.parse(reqFchar[i].PRDID);
-                            lsFchar['VERSION '] = GenF.parse(reqFchar[i].VERSIONID);
+                            lsFchar['LOCATION_ID'] = GenF.parse(req[i].LOCID);
+                            lsFchar['PRODUCT_ID'] = GenF.parse(req[i].PRDID);
+                            lsFchar['VERSION '] = GenF.parse(req[i].VERSIONID);
                             lsFchar['SCENARIO'] = GenF.parse(vScen);
                             lsFchar['WEEK_DATE'] = GenF.parse(vWeekDate);
                             liFchar.push(GenF.parse(lsFchar));
@@ -2743,22 +2949,24 @@ module.exports = cds.service.impl(async function () {
                     oReq.mktauth.push(vMktauth);
 
                 }
-                let vTransID = new Date().getTime().toString();
-                let oEntry =
-                {
-                    "Transactionid": vTransID,
-                    "AggregationLevelFieldsString": "PERIODID4_TSTAMP,VCCHAR,VCCHARVALUE,VCCLASS,CUSTID,LOCID,PRDID,MARKETAUTHORIZATION",
-                    "VersionID": "",
-                    "DoCommit": true,
-                    "ScenarioID": ""
-                }
-                oEntry[lData] = oReq.mktauth;
-                try {
-                    await service.tx(request).post(lEntity, oEntry);
-                    lMessage = lMessage + ' ' + "Export of Market authorization is successfull for product" + lsData.PRODUCT_ID;
-                }
-                catch (error) {
-                    lMessage = lMessage + ' ' + "Export of Market authorization has failed for product" + lsData.PRODUCT_ID;
+                if (oReq.mktauth.length > 0) {
+                    let vTransID = new Date().getTime().toString();
+                    let oEntry =
+                    {
+                        "Transactionid": vTransID,
+                        "AggregationLevelFieldsString": "PERIODID4_TSTAMP,VCCHAR,VCCHARVALUE,VCCLASS,CUSTID,LOCID,PRDID,MARKETAUTHORIZATION",
+                        "VersionID": "",
+                        "DoCommit": true,
+                        "ScenarioID": ""
+                    }
+                    oEntry[lData] = oReq.mktauth;
+                    try {
+                        await service.tx(request).post(lEntity, oEntry);
+                        lMessage = lMessage + ' ' + "Export of Market authorization is successfull for product" + lsData.PRODUCT_ID;
+                    }
+                    catch (error) {
+                        lMessage = lMessage + ' ' + "Export of Market authorization has failed for product" + lsData.PRODUCT_ID;
+                    }
                 }
             }
         }
@@ -2767,6 +2975,8 @@ module.exports = cds.service.impl(async function () {
         await GenF.jobSchMessage('X', lMessage, request);
     });
     this.on("generateMarketAuthfn", async (request) => {
+
+
         // Get Planning area and Prefix configurations for IBP
         let liParaValue = await GenF.getIBPParameterValue();
         let lData = "Nav" + liParaValue[0].VALUE.toString();
@@ -2778,7 +2988,7 @@ module.exports = cds.service.impl(async function () {
         let vScen, resUrl;
         let req;
         let lilocProd = {};
-       
+
 
         lsData = {};
         lsFchar = {};
@@ -2830,7 +3040,7 @@ module.exports = cds.service.impl(async function () {
         for (let i in req) {
             let vWeekDate = dateJSONToEDM(req[i].PERIODID4_TSTAMP);
             // if (req[i].SCENARIOID === null) {
-            vScen = 'BSL_SCENARIO';//' ';
+            vScen = req[i].SCENARIOID;//'BSL_SCENARIO';//' ';
             // }
             // let vScenario = 'BSL_SCENARIO';
             req[i].PERIODID4_TSTAMP = vWeekDate;
@@ -2902,7 +3112,7 @@ module.exports = cds.service.impl(async function () {
             for (let i in reqFchar) {
                 let vWeekDate = dateJSONToEDM2(reqFchar[i].PERIODID4_TSTAMP).split('T')[0];
                 // if (reqFchar[i].SCENARIOID === null) {
-                vScen = 'BSL_SCENARIO';//' ';
+                vScen = reqFchar[i].SCENARIOID;//'BSL_SCENARIO';//' ';
                 // }
                 reqFchar[i].PERIODID4_TSTAMP = vWeekDate;
                 let vManualOpt = '0.0';
@@ -3048,32 +3258,33 @@ module.exports = cds.service.impl(async function () {
         // await GenF.jobSchMessage('X', lMessage, request);
     });
     this.on("importibpversce", async (request) => {
+        let flag = await obibpfucntions.importVerScen(request);
         // Get Planning area and Prefix configurations for IBP
-        let liParaValue = await GenF.getIBPParameterValue();
-        let flag, lMessage = '';
-        let resUrl = "/" + liParaValue[0].VALUE + "?$select=VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$inlinecount=allpages";
-        let req = await service.tx(request).get(resUrl);
-        if (req.length) {
-            await DELETE.from('CP_IBPVERSIONSCENARIO');
-        }
+        // let liParaValue = await GenF.getIBPParameterValue();
+        // let flag, lMessage = '';
+        // let resUrl = "/" + liParaValue[0].VALUE + "?$select=VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$inlinecount=allpages";
+        // let req = await service.tx(request).get(resUrl);
+        // if (req.length) {
+        //     await DELETE.from('CP_IBPVERSIONSCENARIO');
+        // }
 
-        for (let i in req) {
+        // for (let i in req) {
 
-            let modQuery = 'INSERT INTO "CP_IBPVERSIONSCENARIO" VALUES (' +
-                "'" + req[i].VERSIONID + "'" + "," +
-                "'" + req[i].SCENARIOID + "'" + "," +
-                "'" + req[i].VERSIONNAME + "'" + "," +
-                "'" + req[i].SCENARIONAME + "'" + ')';
-            try {
-                await cds.run(modQuery);
-                flag = 'S';
+        //     let modQuery = 'INSERT INTO "CP_IBPVERSIONSCENARIO" VALUES (' +
+        //         "'" + req[i].VERSIONID + "'" + "," +
+        //         "'" + req[i].SCENARIOID + "'" + "," +
+        //         "'" + req[i].VERSIONNAME + "'" + "," +
+        //         "'" + req[i].SCENARIONAME + "'" + ')';
+        //     try {
+        //         await cds.run(modQuery);
+        //         flag = 'S';
 
-            }
-            catch (err) {
-                console.log(err);
-            }
+        //     }
+        //     catch (err) {
+        //         console.log(err);
+        //     }
 
-        }
+        // }
 
         if (flag === 'S') {
             lMessage = "Successfully imported version scenario from IBP";

@@ -277,6 +277,8 @@ sap.ui.define(
                 oGModel.setProperty("/JobType", "A");
             } else if(oData.readJobDetails.action.includes("genUniqueID") ){
                 oGModel.setProperty("/JobType", "O");
+            } else if(oData.readJobDetails.action.includes("postCIRQuantitiesToS4") ){
+              oGModel.setProperty("/JobType", "PF");
             } else if(oData.readJobDetails.action.includes("ibpimport-srv")) {
                 // 20-09-2022
                 if(oData.readJobDetails.action.includes("generateFDemandQty")){ 

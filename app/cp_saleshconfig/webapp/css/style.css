@@ -14,6 +14,13 @@
     margin-left:2rem;
 }
 
+.Text{
+    font-size:1.25rem;
+    padding-top:0.3rem;
+    padding-right:0.2rem;
+    color: #0a6ed1;
+}
+
 
 .boldText {
 
@@ -47,4 +54,41 @@ div#container-cp\.appf\.cpsaleshconfig---Home--page-title {
 }
 .Middle{
     margin-left: 35rem;
+}
+
+.sapMPopover {
+    position: absolute;
+    color: #32363a;
+    min-width: 6.25rem;
+    box-sizing: border-box;
+    outline: none;
+    width: 25%;
+    height: auto;
+    overflow: hidden;
+    background: #fff;
+    border: none;
+    box-shadow: 0 0 0 0.0625rem rgb(0 0 0 / 42%), 0 0.625rem 1.875rem 0 rgb(0 0 0 / 30%);
+    border-radius: 0.25rem;
+    min-height: 2rem;
+}
+.sapMPopoverHeader .sapMBarMiddle>.sapMBarPH {
+    box-sizing: border-box;
+    justify-content: flex-start;
+}
+
+.sapMIBar>.sapMBarLeft>.sapMBarChild:last-child, .sapMIBar .sapMBarPH>.sapMBarChild:last-child{
+    font-weight: normal !important;
+    padding-left: 0.75rem;
+    color:#32363a;
+}
+
+.sapContrast.sapMBtnInner, .sapContrast .sapMBtnInner {
+    
+    border: 0.0625rem solid #a0b2c1;
+    color: #0a6ed1;
+}
+
+html.sap-desktop .sapContrast .sapMIBar.sapMFooter-CTX, html.sap-desktop .sapContrast.sapMIBar.sapMFooter-CTX{
+    background-color: white;
+    border-top: 1px solid #475b6d;
 }

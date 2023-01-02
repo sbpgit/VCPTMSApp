@@ -1,29 +1,31 @@
-<mvc:View controllerName="cpapp.cpjobscheduler.controller.CreateJob" xmlns="sap.m" xmlns:core="sap.ui.core" 
-xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form">
+<mvc:View controllerName="cpapp.cpjobscheduler.controller.CreateJob" xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form">
     <Page id="idCreateJob" title="Create Job" titleAlignment="Center" showNavButton="true" navButtonPress="onBack" showFooter="true">
         <tnt:ToolPage id="toolPage">
             <tnt:sideContent>
-                <tnt:SideNavigation id="idJobType" itemSelect="onJobSelect" selectedKey="S" >
+                <tnt:SideNavigation id="idJobType" itemSelect="onJobSelect" selectedKey="S">
                     <tnt:NavigationList>
                         <tnt:NavigationListItem id="S" key="S" text="{i18n>sdi}" />
                         <tnt:NavigationListItem id="O" key="O" text="{i18n>procsalesord}" />
                         <tnt:NavigationListItem id="T" key="T" text="{i18n>timeseries}" />
                         <tnt:NavigationListItem id="M" key="M" text="{i18n>mdlgene}" />
-                        
-                        <tnt:NavigationListItem id="idIBPselect" key="I" text="{i18n>ibpI}" expanded="true" itemSelect="onIBPSelect">                        
+
+                        <tnt:NavigationListItem id="idIBPselect" key="I" text="{i18n>ibpI}" expanded="true" itemSelect="onIBPSelect">
                             <tnt:NavigationListItem id="II" key="I" text="Import" />
-                            <tnt:NavigationListItem id="IE" key="E" text="Export" />                       
+                            <tnt:NavigationListItem id="IE" key="E" text="Export" />
                         </tnt:NavigationListItem>
-                        
+
                         <tnt:NavigationListItem id="F" key="F" text="{i18n>timeseriesF}" />
                         <tnt:NavigationListItem id="P" key="P" text="{i18n>predi}" />
                         <tnt:NavigationListItem id="D" key="D" text="{i18n>genfulcondemand}" />
                         <tnt:NavigationListItem id="A" key="A" text="{i18n>genasmbrequirments}" />
+                        <tnt:NavigationListItem id="PF" key="PF" text="{i18n>publishforecast}" />
+                        <tnt:NavigationListItem id="PDH" key="PDH" text="{i18n>predefhistory}" />
+                        <tnt:NavigationListItem id="PDF" key="PDF" text="{i18n>predeffuture}" />
                     </tnt:NavigationList>
                 </tnt:SideNavigation>
             </tnt:sideContent>
             <tnt:mainContents>
-            <!-- <NavContainer  >
+                <!-- <NavContainer  >
 				<pages> -->
                 <Panel id="modelGenPanel" visible="false">
                     <headerToolbar>
@@ -94,8 +96,8 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                                             <Label text="{i18n>type}" />
                                         </f:label>
                                         <f:fields>
-                                            <Select id="MidType" selectedKey="RT" class="buttonDesktop" items="{/Types}">   
-                                                <core:Item text="{name}" key="{key}"/>                                            
+                                            <Select id="MidType" selectedKey="RT" class="buttonDesktop" items="{/Types}">
+                                                <core:Item text="{name}" key="{key}" />
                                                 <!-- <core:Item key="RT" text="Restrictions" />
                                                 <core:Item key="PI" text="Primary" />
                                                 <core:Item key="OD" text="Object Dependency"/> -->
@@ -184,7 +186,7 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                                     </f:FormElement>
                                     <f:FormElement>
                                         <f:label>
-                                            <Label text="{i18n>ibpver}" />
+                                            <Label text="{i18n>ibpver}" required="true" />
                                         </f:label>
                                         <f:fields>
                                             <Input id="Pidver" value="" placeholder="{i18n>ibpver}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
@@ -204,8 +206,8 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                                             <Label text="{i18n>type}" />
                                         </f:label>
                                         <f:fields>
-                                            <Select id="PidType" selectedKey="RT" class="buttonDesktop" items="{/Types}">   
-                                                <core:Item text="{name}" key="{key}"/>                  
+                                            <Select id="PidType" selectedKey="RT" class="buttonDesktop" items="{/Types}">
+                                                <core:Item text="{name}" key="{key}" />
                                                 <!-- <core:ListItem key="OD" text="Object Dependency" />
                                                 <core:ListItem key="RT" text="Restrictions" />
                                                 <core:ListItem key="PI" text="Primary" /> -->
@@ -261,11 +263,11 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                                     </f:FormElement>
                                     <f:FormElement>
                                         <f:label>
-                                            <Label text="{i18n>prod}"  />
+                                            <Label text="{i18n>prod}" />
                                         </f:label>
                                         <f:fields>
                                             <!-- <Input id="TprodInput" width="225px" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/> -->
-                                            <MultiInput id="TprodInput"  placeholder="{i18n>allprod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
+                                            <MultiInput id="TprodInput" placeholder="{i18n>allprod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
                                         </f:fields>
                                     </f:FormElement>
                                     <!-- <f:FormElement>
@@ -312,10 +314,10 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                                     </f:FormElement>
                                     <f:FormElement>
                                         <f:label>
-                                            <Label text="{i18n>prod}"  />
+                                            <Label text="{i18n>prod}" />
                                         </f:label>
                                         <f:fields>
-                                            <MultiInput id="TFprodInput"  placeholder="{i18n>allprod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
+                                            <MultiInput id="TFprodInput" placeholder="{i18n>allprod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
                                         </f:fields>
                                     </f:FormElement>
 
@@ -347,9 +349,8 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                             <RadioButton id="idIBPDemand" text="IBP Demand" visible="false" />
                             <!-- <RadioButton id="idIBPFutPlan" text="IBP Future Plan" /> -->
                         </RadioButtonGroup>
-                        
-                        <RadioButtonGroup id="idRbtnExport"  columns="2" select="ExportRadioChange" visible="false">
-                            
+
+                        <RadioButtonGroup id="idRbtnExport" columns="2" select="ExportRadioChange" visible="false">
                             <!-- <RadioButton id="idIBPLoc"  text="Location" tooltip="Master"/>
                             <RadioButton id="idIBPCustGrp"  text="Customer Group" />
                             <RadioButton id="idIBPProd"  text="Product" />
@@ -364,25 +365,22 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                             <RadioButton id="idIBPCompReqQty" text="Assembly Requirement Quantity" />
                             <RadioButton id="idIBPExCIR" text="Forecast Demand" />
                             <RadioButton id="idResLikhood" text="Restriction Likelihood" /> -->
-                            
-                            <RadioButton id="idIBPLoc"  text="Location" tooltip="Master"/>
+
+                            <RadioButton id="idIBPLoc" text="Location" tooltip="Master" />
                             <RadioButton id="idIBPSalesHis" text="Sales History" />
-                            <RadioButton id="idIBPCustGrp"  text="Customer Group" />
+                            <RadioButton id="idIBPCustGrp" text="Customer Group" />
                             <RadioButton id="idIBPActCompDemd" text="Actual Components Demand" />
-                            <RadioButton id="idIBPProd"  text="Product" />
+                            <RadioButton id="idIBPProd" text="Product" />
                             <RadioButton id="idMarketAuth" text="Market Authorizations" />
 
                             <RadioButton id="idIBPLocProd" text="Location Product" />
                             <RadioButton id="idIBPCompReqQty" text="Assembly Requirement Quantity" />
                             <RadioButton id="idIBPAssembly" text="Assembly" />
                             <RadioButton id="idIBPExCIR" text="Forecast Demand" />
-                            <RadioButton id="idIBPClass"  text="Class" />
+                            <RadioButton id="idIBPClass" text="Class" />
                             <RadioButton id="idResLikhood" text="Restriction Likelihood" />
-                            <RadioButton id="idRestri"  text="Restrictions" />
-                            
-
+                            <RadioButton id="idRestri" text="Restrictions" />
                         </RadioButtonGroup>
-                        
 
                         <!-- </content> -->
 
@@ -404,7 +402,7 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                                             </f:FormElement>
                                             <f:FormElement>
                                                 <f:label>
-                                                    <Label text="{i18n>prod}"  />
+                                                    <Label text="{i18n>prod}" />
                                                 </f:label>
                                                 <f:fields>
                                                     <MultiInput id="IprodInput" placeholder="{i18n>allprod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
@@ -527,7 +525,7 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                                             </f:FormElement>
                                             <f:FormElement>
                                                 <f:label>
-                                                    <Label text="{i18n>prod}"  />
+                                                    <Label text="{i18n>prod}" />
                                                 </f:label>
                                                 <f:fields>
                                                     <MultiInput id="ESHprodInput" placeholder="{i18n>allprod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
@@ -599,7 +597,7 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                                             </f:FormElement>
                                             <f:FormElement>
                                                 <f:label>
-                                                    <Label text="{i18n>prod}"  />
+                                                    <Label text="{i18n>prod}" />
                                                 </f:label>
                                                 <f:fields>
                                                     <MultiInput id="EACDemandprodInput" placeholder="{i18n>allprod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
@@ -613,7 +611,7 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                                                     <CheckBox id="EACDemandidCheck" select="onCheck" />
                                                 </f:fields>
                                             </f:FormElement>
-                                            
+
                                             <!-- <f:FormElement>
                                                 <f:label>
                                                     <Label text="{i18n>daterange}" />
@@ -741,13 +739,13 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                                                 <f:fields>
                                                     <Input id="ERestlocInput" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                                                 </f:fields>
-                                            </f:FormElement>                                            
+                                            </f:FormElement>
                                         </f:formElements>
                                     </f:FormContainer>
                                 </f:formContainers>
                             </f:Form>
 
-                             <f:Form editable="true" id="IBPResLikhoodExport" visible="false">
+                            <f:Form editable="true" id="IBPResLikhoodExport" visible="false">
                                 <f:layout>
                                     <f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2" singleContainerFullSize="false" />
                                 </f:layout>
@@ -774,9 +772,6 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                                     </f:FormContainer>
                                 </f:formContainers>
                             </f:Form>
-
-                            
-
                         </VBox>
 
                         <Button visible="false" id="idbtImport" type="Emphasized" text="Import From IBP" press="onIbpJobImport" width="10%" />
@@ -805,7 +800,7 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                                                 <Label text="Import Using SDI" required="true" />
                                             </f:label> -->
                                             <f:fields>
-                                           <RadioButtonGroup id="idSdi" columns="2" select="onSdiChange" class="buttonDesktop sapUiLargeMarginEnd" >
+                                                <RadioButtonGroup id="idSdi" columns="2" select="onSdiChange" class="buttonDesktop sapUiLargeMarginEnd">
                                                     <RadioButton id="LO" text="{i18n>loc}" />
                                                     <RadioButton id="PP" text="{i18n>partialprod}" />
                                                     <RadioButton id="CG" text="{i18n>custgrp}" />
@@ -817,15 +812,14 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                                                     <RadioButton id="PC" text="{i18n>prodclas}" />
                                                     <RadioButton id="SH" text="{i18n>saleshis}" />
                                                     <RadioButton id="BH" text="{i18n>bomheader}" />
-                                                    <!-- <RadioButton id="BO" text="{i18n>bomobjdep}" />  --> 
-                                                    <RadioButton id="VT" text="{i18n>vartable}" />                                                 
+                                                    <!-- <RadioButton id="BO" text="{i18n>bomobjdep}" />  -->
+                                                    <RadioButton id="VT" text="{i18n>vartable}" />
                                                     <RadioButton id="CL" text="{i18n>classC}" />
                                                     <!-- <RadioButton id="CH" text="{i18n>char}" />-->
                                                     <!-- <RadioButton id="CV" text="{i18n>charval}" /> -->
                                                     <RadioButton id="CIL" text="{i18n>cirlog}" />
                                                     <RadioButton id="OH" text="{i18n>objdephdr}" />
                                                     <RadioButton id="SS" text="{i18n>sostockstatus}" />
-
 
                                                     <!-- <RadioButton id="PP" text="{i18n>partialprod}" /> -->
                                                     <!-- <RadioButton id="SH" text="{i18n>saleshis}" /> -->
@@ -835,7 +829,7 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                                                     <!-- <RadioButton id="SS" text="{i18n>sostockstatus}" /> -->
                                                     <!-- <RadioButton id="PVN" text="{i18n>pvsnode}" /> -->
                                                     <!-- <RadioButton id="PVB" text="{i18n>pvsbom}" /> -->
-                                            </RadioButtonGroup>
+                                                </RadioButtonGroup>
 
                                                 <!-- <Select id="idSdi" change="onSdiChange" selectedKey="LO" class="buttonDesktop " width="400px">
                                                     <core:ListItem key="LO" text="{i18n>loc}" />
@@ -869,7 +863,7 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                         <!-- 07-09-2022-1 -->
                     </content>
                 </Panel>
-                
+
                 <Panel id="FullDemandPanel" visible="false">
                     <headerToolbar>
                         <OverflowToolbar>
@@ -893,7 +887,7 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                                     </f:FormElement>
                                     <f:FormElement>
                                         <f:label>
-                                            <Label text="{i18n>prod}"  />
+                                            <Label text="{i18n>prod}" />
                                         </f:label>
                                         <f:fields>
                                             <MultiInput id="DprodInput" placeholder="{i18n>allprod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
@@ -998,6 +992,273 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
                         </f:formContainers>
                     </f:Form>
                 </Panel>
+
+                <Panel id="PForecastPanel" visible="false">
+                    <headerToolbar>
+                        <OverflowToolbar>
+                            <Title text="{i18n>forePanel}" class="boldText" />
+                        </OverflowToolbar>
+                    </headerToolbar>
+                    <f:Form editable="true" id="formIdForecast">
+                        <f:layout>
+                            <f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2" singleContainerFullSize="false" />
+                        </f:layout>
+                        <f:formContainers>
+                            <f:FormContainer>
+                                <f:formElements>
+                                    <f:FormElement>
+                                        <f:label>
+                                            <Label text="{i18n>loc}" required="true" />
+                                        </f:label>
+                                        <f:fields>
+                                            <Input id="PFlocInput" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                        </f:fields>
+                                    </f:FormElement>
+                                    <f:FormElement>
+                                        <f:label>
+                                            <Label text="{i18n>prod}" required="true" />
+                                        </f:label>
+                                        <f:fields>
+                                            <MultiInput id="PFprodInput" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
+                                        </f:fields>
+                                    </f:FormElement>
+                                    <f:FormElement>
+                                        <f:label>
+                                            <Label text="{i18n>modelver}" />
+                                        </f:label>
+                                        <f:fields>
+                                            <Select id="PFidModelVer" selectedKey="Active">
+                                                <core:ListItem key="Active" text="Active" />
+                                                <core:ListItem key="Simulation" text="Simulation" />
+                                            </Select>
+                                        </f:fields>
+                                    </f:FormElement>
+                                    <f:FormElement>
+                                        <f:label>
+                                            <Label text="{i18n>ibpver}" required="true" />
+                                        </f:label>
+                                        <f:fields>
+                                            <Input id="PFidver" value="" placeholder="{i18n>ibpver}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                        </f:fields>
+                                    </f:FormElement>
+                                    <f:FormElement>
+                                        <f:label>
+                                            <Label text="{i18n>ibpscen}" />
+                                        </f:label>
+                                        <f:fields>
+                                            <Input id="PFidscen" value="" placeholder="{i18n>ibpscen}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                        </f:fields>
+                                    </f:FormElement>
+
+                                    <f:FormElement>
+                                        <f:label>
+                                            <Label text="{i18n>daterange}" required="true" />
+                                        </f:label>
+                                        <f:fields>
+                                            <DateRangeSelection id="PFidDateRange" delimiter="To" dateValue="" secondDateValue="" valueFormat="MM-dd-yyyy" displayFormat="MM-dd-yyyy" change="handleDateChange" maxDate="" />
+                                        </f:fields>
+                                    </f:FormElement>
+                                </f:formElements>
+                            </f:FormContainer>
+                        </f:formContainers>
+                    </f:Form>
+                </Panel>
+
+                <Panel id="PredefHistoryPanel" visible="false">
+                    <headerToolbar>
+                        <OverflowToolbar>
+                            <Title text="{i18n>predefhistory}" class="boldText" />
+                        </OverflowToolbar>
+                    </headerToolbar>
+                    <f:Form editable="true">
+                        <f:layout>
+                            <f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2" singleContainerFullSize="false" />
+                        </f:layout>
+                        <f:formContainers>
+                            <f:FormContainer>
+                                <f:formElements>
+                                    <f:FormElement>
+                                        <f:label>
+                                            <Label text="{i18n>loc}" required="true" />
+                                        </f:label>
+                                        <f:fields>
+                                            <Input id="PDHlocInput" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                        </f:fields>
+                                    </f:FormElement>
+                                    <f:FormElement>
+                                        <f:label>
+                                            <Label text="{i18n>prod}" required="true" />
+                                        </f:label>
+                                        <f:fields>
+                                            <MultiInput id="PDHprodInput" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
+                                        </f:fields>
+                                    </f:FormElement>
+                                    <f:FormElement>
+                                        <f:label>
+                                            <Label text="{i18n>modelver}" />
+                                        </f:label>
+                                        <f:fields>
+                                            <ComboBox id="PDHidmdlver" selectedKey="act" selectionChange="onSelectionChange">
+                                                <core:Item key="act" text="Active" />
+                                                <core:Item key="sim" text="Simulation" />
+                                            </ComboBox>
+                                        </f:fields>
+                                    </f:FormElement>
+                                    <f:FormElement>
+                                        <f:label>
+                                            <Label text="{i18n>predpf}" required="true" />
+                                        </f:label>
+                                        <f:fields>
+                                            <Input id="PDHpmInput" placeholder="{i18n>predpf}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                        </f:fields>
+                                    </f:FormElement>
+                                    <!-- 25-08-2022 -->
+                                    <f:FormElement>
+                                        <f:label>
+                                            <Label text="{i18n>type}" />
+                                        </f:label>
+                                        <f:fields>
+                                            <Select id="PDHidType" selectedKey="RT" class="buttonDesktop" items="{/Types}">
+                                                <core:Item text="{name}" key="{key}" />
+                                            </Select>
+                                        </f:fields>
+                                    </f:FormElement>
+                                    <f:FormElement>
+                                        <f:label>
+                                            <Label text="{i18n>class}" required="true" />
+                                        </f:label>
+                                        <f:fields>
+                                            <Input id="PDHclassInput" placeholder="{i18n>class}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                        </f:fields>
+                                    </f:FormElement>
+                                    <f:FormElement>
+                                        <f:label>
+                                            <Label text="{i18n>daterange}" required="true" />
+                                        </f:label>
+                                        <f:fields>
+                                            <DateRangeSelection id="PDHidDateRange" delimiter="To" dateValue="" secondDateValue="" valueFormat="MM-dd-yyyy" displayFormat="MM-dd-yyyy" change="handleDateChange" maxDate="" />
+                                        </f:fields>
+                                    </f:FormElement>
+                                    <!-- 25-08-2022 -->
+                                    <f:FormElement id="idPDHoverRide" visible="true">
+                                        <f:label>
+                                            <Label text="{i18n>override}" />
+                                        </f:label>
+                                        <f:fields>
+                                            <CheckBox id="PDHidCheckOR" select="onCheck" />
+                                        </f:fields>
+                                    </f:FormElement>
+                                    <f:FormElement>
+                                        <f:label>
+                                            <Label text="Critical Assembly" />
+                                        </f:label>
+                                        <f:fields>
+                                            <CheckBox id="PDHidCheck" select="onPDHCheck" />
+                                        </f:fields>
+                                    </f:FormElement>
+                                </f:formElements>
+                            </f:FormContainer>
+                        </f:formContainers>
+                    </f:Form>
+                </Panel>
+
+                <Panel id="PredefFuturePanel" visible="false">
+                    <headerToolbar>
+                        <OverflowToolbar>
+                            <Title text="{i18n>predeffuture}" class="boldText" />
+                        </OverflowToolbar>
+                    </headerToolbar>
+                    <f:Form editable="true">
+                        <f:layout>
+                            <f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2" singleContainerFullSize="false" />
+                        </f:layout>
+                        <f:formContainers>
+                            <f:FormContainer>
+                                <f:formElements>
+                                    <f:FormElement>
+                                        <f:label>
+                                            <Label text="{i18n>loc}" required="true" />
+                                        </f:label>
+                                        <f:fields>
+                                            <Input id="PDFlocInput" placeholder="{i18n>loc}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                        </f:fields>
+                                    </f:FormElement>
+                                    <f:FormElement>
+                                        <f:label>
+                                            <Label text="{i18n>prod}" required="true" />
+                                        </f:label>
+                                        <f:fields>
+                                            <MultiInput id="PDFprodInput" placeholder="{i18n>prod}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" tokenUpdate="handleTokenUpdate" />
+                                        </f:fields>
+                                    </f:FormElement>
+                                    <f:FormElement>
+                                        <f:label>
+                                            <Label text="{i18n>modelver}" />
+                                        </f:label>
+                                        <f:fields>
+                                            <Select id="PDFidModelVer" selectedKey="Active">
+                                                <core:ListItem key="Active" text="Active" />
+                                                <core:ListItem key="Simulation" text="Simulation" />
+                                            </Select>
+                                        </f:fields>
+                                    </f:FormElement>
+                                    <f:FormElement>
+                                        <f:label>
+                                            <Label text="{i18n>ibpver}" required="true" />
+                                        </f:label>
+                                        <f:fields>
+                                            <Input id="PDFidver" value="" placeholder="{i18n>ibpver}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                        </f:fields>
+                                    </f:FormElement>
+                                    <f:FormElement>
+                                        <f:label>
+                                            <Label text="{i18n>ibpscen}" />
+                                        </f:label>
+                                        <f:fields>
+                                            <Input id="PDFidscen" value="" placeholder="{i18n>ibpscen}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                                        </f:fields>
+                                    </f:FormElement>
+
+                                    <f:FormElement>
+                                        <f:label>
+                                            <Label text="{i18n>type}" />
+                                        </f:label>
+                                        <f:fields>
+                                            <Select id="PDFidType" selectedKey="RT" class="buttonDesktop" items="{/Types}">
+                                                <core:Item text="{name}" key="{key}" />
+                                            </Select>
+                                        </f:fields>
+                                    </f:FormElement>
+                                    <f:FormElement>
+                                        <f:label>
+                                            <Label text="{i18n>daterange}" required="true" />
+                                        </f:label>
+                                        <f:fields>
+                                            <DateRangeSelection id="PDFidDateRange" delimiter="To" dateValue="" secondDateValue="" valueFormat="MM-dd-yyyy" displayFormat="MM-dd-yyyy" change="handleDateChange" maxDate="" />
+                                        </f:fields>
+                                    </f:FormElement>
+                                    <f:FormElement id="PDFidPoverRide" visible="true">
+                                        <f:label>
+                                            <Label text="{i18n>override}" />
+                                        </f:label>
+                                        <f:fields>
+                                            <CheckBox id="PDFidCheckOR" select="onCheck" />
+                                        </f:fields>
+                                    </f:FormElement>
+
+                                    <f:FormElement>
+                                        <f:label>
+                                            <Label text="Critical Assembly" />
+                                        </f:label>
+                                        <f:fields>
+                                            <CheckBox id="PDFidCheck" select="onPDHCheck" />
+                                        </f:fields>
+                                    </f:FormElement>
+                                </f:formElements>
+                            </f:FormContainer>
+                        </f:formContainers>
+                    </f:Form>
+                </Panel>
                 <!-- </pages>
 			</NavContainer> -->
             </tnt:mainContents>
@@ -1005,10 +1266,9 @@ xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" displayBlock="true" xmlns:l="sap
         <footer>
             <OverflowToolbar>
                 <ToolbarSpacer />
-                
+
                 <Button type="Emphasized" icon="sap-icon://create-entry-time" text="Schedule Job" press="onExecute" />
                 <Button type="Emphasized" icon="sap-icon://begin" text="Execute" press="onExecute" class="sapUiTinyMarginBeginEnd" />
-
             </OverflowToolbar>
         </footer>
     </Page>

@@ -804,9 +804,10 @@ context cp {
     }
 
     entity FACTORY_SALESLOC {
-        key LOCATION_ID : String(4) @title : 'Demand Location ';
-        key PLAN_LOC    : String(4) @title : 'Planning Location ';
-        key FACTORY_LOC : String(4) @title : 'Factory Location ';
+        key LOCATION_ID : String(4)  @title : 'Demand Location ';
+        key PRODUCT_ID  : String(40) @title : 'Product';
+        key PLAN_LOC    : String(4)  @title : 'Planning Location ';
+        key FACTORY_LOC : String(4)  @title : 'Factory Location ';
     }
 
     entity CRITICAL_COMP {
@@ -864,17 +865,26 @@ context cp {
 
     //start of Variant Table - Pradeep
     entity CREATEVARIANT {
-        key VARIANTID        : Integer @title : 'Variant ID';
-            VARIANTNAME      : String(10) @title : 'Variant Name';
+        key VARIANTID        : Integer    @title : 'Variant ID';
+        key VARIANTNAME      : String(10) @title : 'Variant Name';
         key USER             : String(50) @title : 'User';
         key APPLICATION_NAME : String(50) @title : 'Application_Name';
         key FIELD            : String(50) @title : 'Field';
         key FIELD_CENTER     : String(50) @title : 'Field_Center';
+            DEFAULT          : String(2)  @title : 'Default';
             VALUE            : String(50) @title : 'Value';
             SCOPE            : String(50) @title : 'Scope';
     };
 
-//End of Variant Table - Pradeep
+    entity CREATEVARIANTHEADER {
+        key VARIANTID   : Integer    @title : 'Variant ID';
+        key VARIANTNAME : String(10) @title : 'Variant Name';
+        key USER        : String(50) @title : 'User';
+            DEFAULT     : String(2)  @title : 'Default';
+            SCOPE       : String(50) @title : 'Scope';
+    };
+
+    //End of Variant Table - Pradeep
 
     entity IBPCHAR_PS {
         key PRODUCT_ID  : String(40) @title : 'Configurable Product';
@@ -989,34 +999,34 @@ entity![V_ODCHARVAL]{
     key![ROW_ID]       : Integer    @title : 'ROW_ID';
 }
 
-@cds.persistence.exists 
-entity ![V_SALES_H] {
-        ![SALES_DOC]: String(10) not null  @title: 'SALES_DOC' ; 
-        ![SALESDOC_ITEM]: String(6) not null  @title: 'SALESDOC_ITEM' ; 
-        ![REF_PRODID]: String(40)  @title: 'REF_PRODID' ; 
-        ![PRODUCT_ID]: String(40)  @title: 'PRODUCT_ID' ; 
-        ![UNIQUE_ID]: Integer  @title: 'UNIQUE_ID' ; 
-        ![PRIMARY_ID]: Integer  @title: 'PRIMARY_ID' ; 
-        ![DOC_CREATEDDATE]: Date  @title: 'DOC_CREATEDDATE' ; 
-        ![SCHEDULELINE_NUM]: String(4)  @title: 'SCHEDULELINE_NUM' ; 
-        ![REASON_REJ]: String(2)  @title: 'REASON_REJ' ; 
-        ![UOM]: String(3)  @title: 'UOM' ; 
-        ![CONFIRMED_QTY]: Decimal(13, 3)  @title: 'CONFIRMED_QTY' ; 
-        ![ORD_QTY]: Decimal(13, 3)  @title: 'ORD_QTY' ; 
-        ![MAT_AVAILDATE]: Date  @title: 'MAT_AVAILDATE' ; 
-        ![NET_VALUE]: Decimal(15, 2)  @title: 'NET_VALUE' ; 
-        ![CUSTOMER_GROUP]: String(20)  @title: 'CUSTOMER_GROUP' ; 
-        ![LOCATION_ID]: String(4)  @title: 'LOCATION_ID' ; 
-        ![SALE_LOCATION]: String(4)  @title: 'SALE_LOCATION' ; 
-        ![PLAN_LOC]: String(4)  @title: 'PLAN_LOC' ; 
-        ![FACTORY_LOC]: String(4)  @title: 'FACTORY_LOC' ; 
-        ![SEEDORD_CHK]: String(1) @title:'SEEDORD_CHK';
-        ![CHANGED_DATE]: Date  @title: 'CHANGED_DATE' ; 
-        ![CHANGED_BY]: String(12)  @title: 'CHANGED_BY' ; 
-        ![CREATED_DATE]: Date  @title: 'CREATED_DATE' ; 
-        ![CREATED_BY]: String(12)  @title: 'CREATED_BY' ; 
-        ![CHANGED_TIME]: Time  @title: 'CHANGED_TIME' ; 
-        ![CREATED_TIME]: Time  @title: 'CREATED_TIME' ; 
+@cds.persistence.exists
+entity![V_SALES_H]{
+    ![SALES_DOC]        : String(10) not null @title : 'SALES_DOC';
+    ![SALESDOC_ITEM]    : String(6) not null  @title : 'SALESDOC_ITEM';
+    ![REF_PRODID]       : String(40)          @title : 'REF_PRODID';
+    ![PRODUCT_ID]       : String(40)          @title : 'PRODUCT_ID';
+    ![UNIQUE_ID]        : Integer             @title : 'UNIQUE_ID';
+    ![PRIMARY_ID]       : Integer             @title : 'PRIMARY_ID';
+    ![DOC_CREATEDDATE]  : Date                @title : 'DOC_CREATEDDATE';
+    ![SCHEDULELINE_NUM] : String(4)           @title : 'SCHEDULELINE_NUM';
+    ![REASON_REJ]       : String(2)           @title : 'REASON_REJ';
+    ![UOM]              : String(3)           @title : 'UOM';
+    ![CONFIRMED_QTY]    : Decimal(13, 3)      @title : 'CONFIRMED_QTY';
+    ![ORD_QTY]          : Decimal(13, 3)      @title : 'ORD_QTY';
+    ![MAT_AVAILDATE]    : Date                @title : 'MAT_AVAILDATE';
+    ![NET_VALUE]        : Decimal(15, 2)      @title : 'NET_VALUE';
+    ![CUSTOMER_GROUP]   : String(20)          @title : 'CUSTOMER_GROUP';
+    ![LOCATION_ID]      : String(4)           @title : 'LOCATION_ID';
+    ![SALE_LOCATION]    : String(4)           @title : 'SALE_LOCATION';
+    ![PLAN_LOC]         : String(4)           @title : 'PLAN_LOC';
+    ![FACTORY_LOC]      : String(4)           @title : 'FACTORY_LOC';
+    ![SEEDORD_CHK]      : String(1)           @title : 'SEEDORD_CHK';
+    ![CHANGED_DATE]     : Date                @title : 'CHANGED_DATE';
+    ![CHANGED_BY]       : String(12)          @title : 'CHANGED_BY';
+    ![CREATED_DATE]     : Date                @title : 'CREATED_DATE';
+    ![CREATED_BY]       : String(12)          @title : 'CREATED_BY';
+    ![CHANGED_TIME]     : Time                @title : 'CHANGED_TIME';
+    ![CREATED_TIME]     : Time                @title : 'CREATED_TIME';
 }
 
 @cds.persistence.exists
@@ -1025,6 +1035,12 @@ entity![V_LOCPROD]{
     key![LOCATION_ID] : String(4)  @title : 'LOCATION_ID';
     key![PROD_DESC]   : String(40) @title : 'PROD_DESC';
 }
+
+// @cds.persistence.exists
+// entity![V_FACTORYLOC]{
+//     key![LOCATION_ID]  : String(40) @title : 'LOCATION_ID';
+//     key![LOCATION_DESC]   : String(40) @title : 'LOCATION_DESC';
+// }
 
 @cds.persistence.exists
 entity![V_BOMPVS]{
@@ -1096,21 +1112,21 @@ entity![V_COMPOD_TSPRED]{
 
 @cds.persistence.exists
 entity![V_ODCHARIMPACT_VALUE]{
-    key![LOCATION_ID]     : String(4)  @title : 'LOCATION_ID';
-    key![PRODUCT_ID]      : String(40) @title : 'PRODUCT_ID';
-    key![OBJ_DEP]         : String(30) @title : 'OBJ_DEP';
-    key![OBJ_COUNTER]     : Integer    @title : 'OBJ_COUNTER';
-    key![CHAR_NUM]        : String(10) @title : 'CHAR_NUM';
-    key![CHAR_DESC]        : String(150) @title : 'CHAR_NUM';
-    key![CHAR_NAME]       : String(30) @title : 'CHAR_NAME';
-    key![ROW_ID]          : Integer    @title : 'ROW_ID';
-    key![MODEL_VERSION]   : String(20) @title : 'MODEL_VERSION';
-    key![VERSION]         : String(10) @title : 'VERSION';
-    key![SCENARIO]        : String(32) @title : 'SCENARIO';
-    key![CAL_DATE]        : Date       @title : 'CAL_DATE';
-    key![CHAR_IMPACT_VAL] : Double     @title : 'CHAR_IMPACT_VAL';
-    key![PREDICTED_VAL]   : Double     @title : 'PREDICTED_VAL';
-    key![OPT_PERCENT]     : Double     @title : 'Option Percnetage';
+    key![LOCATION_ID]     : String(4)   @title : 'LOCATION_ID';
+    key![PRODUCT_ID]      : String(40)  @title : 'PRODUCT_ID';
+    key![OBJ_DEP]         : String(30)  @title : 'OBJ_DEP';
+    key![OBJ_COUNTER]     : Integer     @title : 'OBJ_COUNTER';
+    key![CHAR_NUM]        : String(10)  @title : 'CHAR_NUM';
+    key![CHAR_DESC]       : String(150) @title : 'CHAR_NUM';
+    key![CHAR_NAME]       : String(30)  @title : 'CHAR_NAME';
+    key![ROW_ID]          : Integer     @title : 'ROW_ID';
+    key![MODEL_VERSION]   : String(20)  @title : 'MODEL_VERSION';
+    key![VERSION]         : String(10)  @title : 'VERSION';
+    key![SCENARIO]        : String(32)  @title : 'SCENARIO';
+    key![CAL_DATE]        : Date        @title : 'CAL_DATE';
+    key![CHAR_IMPACT_VAL] : Double      @title : 'CHAR_IMPACT_VAL';
+    key![PREDICTED_VAL]   : Double      @title : 'PREDICTED_VAL';
+    key![OPT_PERCENT]     : Double      @title : 'Option Percnetage';
 }
 
 @cds.persistence.exists
@@ -1132,7 +1148,7 @@ entity![V_FCHARPLAN]{
 
 @cds.persistence.exists
 entity![V_ASMCOMP_REQ]{
-    key![WEEK_DATE]      : Date       @title : 'CAL_DATE';
+    key![WEEK_DATE]     : Date       @title : 'CAL_DATE';
     key![LOCATION_ID]   : String(4)  @title : 'LOCATION_ID';
     key![PRODUCT_ID]    : String(40) @title : 'PRODUCT_ID';
     key![ASSEMBLY]      : String(40) @title : 'ASSEMBLY';
@@ -1200,6 +1216,7 @@ entity![V_GETVARCHARPS]{
     key![CHAR_TYPE]   : String(2)   @title : 'CHAR_TYPE';
     key![SEQUENCE]    : Integer     @title : 'SEQUENCE';
 }
+
 @cds.persistence.exists
 entity![V_GETIBPCHARPS]{
     key![PRODUCT_ID]  : String(40)  @title : 'PRODUCT_ID';

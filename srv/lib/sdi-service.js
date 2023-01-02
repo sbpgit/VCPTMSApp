@@ -4,6 +4,7 @@ const JobSchedulerClient = require("@sap/jobs-client");
 const { v1: uuidv1 } = require('uuid')
 const xsenv = require("@sap/xsenv");
 const GenF = require("./gen-functions");
+const Catservicefn = require("./catservice-function");
 
 
 function getJobscheduler(req) {
@@ -904,6 +905,11 @@ module.exports = (srv) => {
         res.statusCode = 202;
         res.send({ values });
         try {
+            
+            // Delete All sales History
+            const objCatFn = new Catservicefn();
+            // await objCatFn.deleteSalesHistory('X');
+
             const dbClass = require("sap-hdb-promisfied")
             let dbConn = new dbClass(await dbClass.createConnectionFromEnv())
             const sp = await dbConn.loadProcedurePromisified(null, '"FG_SALESH_SP"')
@@ -916,6 +922,7 @@ module.exports = (srv) => {
         } catch (error) {
             console.error(error);
         }
+
         if (flag === 'X') {
             let dataObj = {};
             dataObj["success"] = true;

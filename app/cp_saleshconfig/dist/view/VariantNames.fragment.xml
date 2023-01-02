@@ -1,68 +1,46 @@
-<core:FragmentDefinition
-	xmlns="sap.m"
-	xmlns:core="sap.ui.core">
-	<Popover
-		id="myPopover"
-		title="VARIANT NAME"
-		class="sapUiResponsivePadding--header sapUiResponsivePadding--footer"
-		placement="Auto"
-		initialFocus="email">
-		<footer>
-			<OverflowToolbar id="_IDGenOverflowToolbar1">
-				<ToolbarSpacer id="_IDGenToolbarSpacer1"/>
-				<Button
-					id="idSelect"
-					text="Select"
-					press="handleSelectPress" />
-                    <Button
-					id="idClose"
-					text="Close"
-					press="handleSelectClose" />
-			</OverflowToolbar>
-		</footer>
-		<Table id="varNameList" items="{path: '/items1'}">
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+    <Dialog id="_IDGenDialog1" title="Variant Names" contentWidth="450px" titleAlignment="Center">
+        <Toolbar id="_IDGenToolbar1">
+            <SearchField id="_IDGenSearchField1" width="100%" liveChange="onVariantSearch" />
+        </Toolbar>
+        <Table id="varNameList" items="{path: '/items1'}">
             <columns>
-                <Column id="_IDGenColumn1" >
-                    <Text id="_IDGenText1" text="Variant ID" />
+                <Column id="_IDGenColumn1">
+                    <Text id="_IDGenText1" text="Variant Name" />
                 </Column>
-                <Column id="_IDGenColumn2" >
-                    <Text id="_IDGenText2" text="Variant Name" />
+                <Column id="_IDGenColumn2">
+                    <Text id="_IDGenText2" text="Variant Description" />
                 </Column>
-                <Column id="_IDGenColumn3" >
-                    <Text id="_IDGenText3" text="User Name" />
+                <Column id="_IDGenColumn3">
+                    <Text id="_IDGenText3" text="Public/Private" />
                 </Column>
-                <Column id="_IDGenColumn4" >
-                    <Text id="_IDGenText4" text="Application Name" />
+                <Column id="_IDGenColumn4">
+                    <Text id="_IDGenText4" text="Default" />
                 </Column>
-                <Column id="_IDGenColumn5" >
-                    <Text id="_IDGenText5" text="Field" />
+                <Column id="_IDGenColumn5">
+                    <Text id="_IDGenText5" text="Application Name" />
                 </Column>
-                <Column id="_IDGenColumn6" >
-                    <Text id="_IDGenText6" text="Field Center" />
+                <Column id="_IDGenColumn6">
+                    <Text id="_IDGenText6" text="Created By" />
                 </Column>
-                <Column id="_IDGenColumn7" >
-                    <Text id="_IDGenText7" text="Value" />
-                </Column>
-                <Column id="_IDGenColumn8" >
-                    <Text id="_IDGenText8" text="Scope" />
-                </Column>
-				</columns>
-				<items>
+            </columns>
+            <items>
                 <ColumnListItem id="_IDGenColumnListItem1">
                     <cells>
                         <!-- <ObjectIdentifier title="{VARIANTNAME}" text="{APPLICATION_NAME}"  titleActive="true" titlePress="onTitlePress"/> -->
-						 <Text id="_IDGenText9" text="{VARIANTID}" />
-                         <Text id="_IDGenText10" text="{VARIANTNAME}" />
-                         <Text id="_IDGenText11" text="{USER}" />
-                         <Text id="_IDGenText12" text="{APPLICATION_NAME}" />
-                         <Text id="_IDGenText13" text="{FIELD}" />
-                         <Text id="_IDGenText14" text="{FIELD_CENTER}" />
-                         <Text id="_IDGenText15" text="{VALUE}" />
-                         <Text id="_IDGenText16" text="{SCOPE}" />
-                         
-                         </cells>
+                        <Text id="_IDGenText9" text="{VARIANTID}" />
+                        <Text id="_IDGenText10" text="{VARIANTNAME}" />
+                        <Text id="_IDGenText11" text="{USER}" />
+                        <Text id="_IDGenText12" text="{APPLICATION_NAME}" />
+                        <Text id="_IDGenText13" text="{FIELD}" />
+                        <Text id="_IDGenText14" text="{FIELD_CENTER}" />
+                    </cells>
                 </ColumnListItem>
             </items>
         </Table>
-	</Popover>
+        <buttons>
+            <Button id="_IDGenButt" type='Accept' text="Save" press="handleSelectPress" />
+            <Button id="_IDGenButton2" type='Reject' text="Close" press="handleSelectClose" />
+        </buttons>
+    </Dialog>
 </core:FragmentDefinition>

@@ -175,7 +175,9 @@ sap.ui.define(
                 );
                 sap.ui.core.BusyIndicator.show();
                 // Location data
-                this.getModel("BModel").read("/getLocation", {
+                // this.getModel("BModel").read("/getFactoryLoc", {
+                this.getModel("BModel").read("/getfactorylocdesc", {
+
                     success: function (oData) {
                         that.locModel.setData(oData);
                         that.oLocList.setModel(that.locModel);
