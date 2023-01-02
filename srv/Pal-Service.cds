@@ -108,6 +108,7 @@ service PalService{
         action genUniqueIdCharVals(Location: String(4),Product: String(40));
         action genUidCharValsForClusterResults(Location: String(4),Product: String(40), Profile: String(50));
 
+        action getClusterUniqueIDs(Location: String(4), Product: String(40), Profile : String(50), UniqueId : String(50));
 
 
         // function f_generateModels(vcRulesList : array of{
@@ -128,6 +129,7 @@ service PalService{
         function  fgenUniqueIdCharVals(Location: String(4), Product: String(40)) returns String;
         function  fgenUidCharValsForClusterResults(Location: String(4), Product: String(40), Profile: String(50)) returns String;
 
+        function fgetClusterUniqueIDs(Location: String(4), Product: String(40), Profile : String(50),  UniqueId : String(50)) returns String;
 
 
         // function f_genPredictions(vcRulesList : array of {
