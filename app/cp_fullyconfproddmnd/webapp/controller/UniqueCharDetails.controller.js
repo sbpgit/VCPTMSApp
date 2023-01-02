@@ -45,6 +45,9 @@ sap.ui.define(
                 that.locProdCharModel = new JSONModel();
                 that.locProdCharModel.setSizeLimit(2000);
 
+                that.weeklyCIRModel = new JSONModel();
+                that.weeklyCIRModel.setSizeLimit(2000);
+
                 that.oUniqueCharTable = that.getView().byId("idUniqueIdChars");
 
                 oRouter = sap.ui.core.UIComponent.getRouterFor(this);
@@ -99,7 +102,7 @@ sap.ui.define(
              * 
              */
             formatUniqueCharsData: function (aUniqueChars) {
-
+                oGModel = that.getOwnerComponent().getModel('oGModel');
                 var aUniqueIdsChars = aUniqueChars;
                 var oColumn = {},
                     oRowData = {},
@@ -107,15 +110,18 @@ sap.ui.define(
                     aRowData = [];
                 var aConfig = [];
                 var aFilteredUniqueChars = [];
-                var iCounter = 0, iTotal = 0;
+                var iCounter = 0, iTotal = 0, iCIRQty = 0;
                 var columnName;
                 var bVisible = true;
                 var bCellColor = "";
                 var sCellColor;
                 var sColumnName,
+                    sColDesc,
                     sCharValPath,
                     sCharValDescPath;
-
+                var aCIRData = oGModel.getProperty("/CIRQtys");
+                var aFilCIRData = [];
+                var dSelDate = that.SEL_DATE;
 
                 that.oUniqueCharTable = that.getView().byId("idUniqueIdChars");
 
@@ -128,12 +134,25 @@ sap.ui.define(
                             aConfig = aUniqueIdsChars[i].CONFIG;
                             oColumn.UNIQUE_CHAR = 'Characteristic';
                             oColumn.TOTAL = aUniqueIdsChars[i].TOTAL;
+                            oColumn.CIRQTY = '';
                             aColumns.push(oColumn);
                             oColumn = {};
                         }
 
+                        // Get Weekly Quantity
+                        aFilCIRData = [];
+                        aFilCIRData = aCIRData.filter(function (aCIRQty) {
+                                return aCIRQty['Unique ID'] === (aUniqueIdsChars[i].UNIQUE_ID).toString();
+                            });
+                        if(aFilCIRData.length > 0) {
+                          oColumn.CIRQTY = aFilCIRData[0][dSelDate];
+                        } else {
+                            oColumn.CIRQTY = 0;
+                        }
+
                         // Columns (UNIQUE_IDs)
                         oColumn.UNIQUE_CHAR = aUniqueIdsChars[i].UNIQUE_ID;
+                        oColumn.UNIQUE_DESC = aUniqueIdsChars[i].UNIQUE_DESC;
                         oColumn.TOTAL = aUniqueIdsChars[i].TOTAL;
                         aColumns.push(oColumn);
                     }
@@ -184,7 +203,10 @@ sap.ui.define(
                         columnName = oContext.getObject().UNIQUE_CHAR;
 
                         iTotal = oContext.getObject().TOTAL;
-                        sColumnName = columnName.toString() + " (" + iTotal + ")";
+                        iCIRQty = oContext.getObject().CIRQTY;
+                        // sColumnName = columnName.toString() + " (" + iTotal + ")";
+                        sColumnName = columnName.toString();
+                        sColDesc = oContext.getObject().UNIQUE_DESC + " (" + iTotal + ")" + " - (" + iCIRQty + ")";
 
                         if (columnName === 'Characteristic') {
                             sCharValPath = columnName + "/0/CHAR_NAME";
@@ -210,7 +232,8 @@ sap.ui.define(
 
                             return new sap.ui.table.Column({
                                 // width: "13rem",
-                                label: sColumnName,
+                                name: sColumnName,
+                                label: sColDesc,
                                 visible: bVisible,
                                 template: new sap.m.HBox({
                                     alignItems: "Center",
@@ -486,8 +509,10 @@ sap.ui.define(
                         break;
                     case 'Matched':
                         for (var i = 2; i < 7; i++) {
-                            sColLabel = aColumns[i].getLabel().getText().split(" ");
-                            sPath = sColLabel[0] + '/0/CELL_COLOR';
+                            // sColLabel = aColumns[i].getLabel().getText().split(" ");
+                            // sPath = sColLabel[0] + '/0/CELL_COLOR';
+                            sColLabel = aColumns[i].getName();
+                            sPath = sColLabel + '/0/CELL_COLOR';
                             aFilterUniqueIds.push(new Filter(sPath, FilterOperator.EQ, ''));
                         }
                         aFilter = new Filter(aFilterUniqueIds, true);
@@ -496,8 +521,10 @@ sap.ui.define(
                         break;
                     case 'UnMatched':
                         for (var i = 0; i < 7; i++) {
-                            sColLabel = aColumns[i].getLabel().getText().split(" ");
-                            sPath = sColLabel[0] + '/0/CELL_COLOR';
+                            // sColLabel = aColumns[i].getLabel().getText().split(" ");
+                            // sPath = sColLabel[0] + '/0/CELL_COLOR';
+                            sColLabel = aColumns[i].getName();
+                            sPath = sColLabel + '/0/CELL_COLOR';
                             aFilterUniqueIds.push(new Filter(sPath, FilterOperator.EQ, 'sap-icon://sys-cancel-2'));
                         }
                         aFilter = new Filter(aFilterUniqueIds, false);
@@ -541,7 +568,8 @@ sap.ui.define(
 
                 if (aEQUniqueChars.length > 0 && aNEQUniqueChars.length > 0) {
                     for (var k = 2; k < aColumns.length; k++) {
-                        scolumnName = aColumns[k].getLabel().getText().split(' (')[0];
+                        // scolumnName = aColumns[k].getLabel().getText().split(' (')[0];
+                        scolumnName = aColumns[k].getName();
                         aFilterUniqueIds = aEQUniqueChars.filter(function (aUniqChar) {
                             return aUniqChar.UNIQUE_ID === parseInt(scolumnName);
                         });
@@ -563,7 +591,8 @@ sap.ui.define(
 
                 } else if (aEQUniqueChars.length > 0 && aNEQUniqueChars.length === 0) {
                     for (var k = 2; k < aColumns.length; k++) {
-                        scolumnName = aColumns[k].getLabel().getText().split(' (')[0];
+                        // scolumnName = aColumns[k].getLabel().getText().split(' (')[0];
+                        scolumnName = aColumns[k].getName();
                         aFilterUniqueIds = aEQUniqueChars.filter(function (aUniqChar) {
                             return aUniqChar.UNIQUE_ID === parseInt(scolumnName);
                         });
@@ -582,7 +611,8 @@ sap.ui.define(
 
                 } else if (aEQUniqueChars.length === 0 && aNEQUniqueChars.length > 0) {
                     for (var k = 2; k < aColumns.length; k++) {
-                        scolumnName = aColumns[k].getLabel().getText().split(' (')[0];
+                        // scolumnName = aColumns[k].getLabel().getText().split(' (')[0];
+                        scolumnName = aColumns[k].getName();
                         aFilterUniqueIds = aNEQUniqueChars.filter(function (aUniqChar) {
                             return aUniqChar.UNIQUE_ID === parseInt(scolumnName);
                         });
@@ -601,7 +631,8 @@ sap.ui.define(
 
                 } else {
                     for (var k = 2; k < aColumns.length; k++) {
-                        scolumnName = aColumns[k].getLabel().getText().split(' (')[0];
+                        // scolumnName = aColumns[k].getLabel().getText().split(' (')[0];
+                        scolumnName = aColumns[k].getName();
                         iCounter = iCounter + 1;
                         if (iCounter > 5) {
                             aColumns[k].setVisible(false);
@@ -642,18 +673,19 @@ sap.ui.define(
             /**
              * 
              */
-            onResetFilters: function() {                
+            onResetFilters: function () {
                 var aColumns = [];
                 var scolumnName = '';
                 var iCounter = 0;
                 that.oUniqueCharTable = that.getView().byId("idUniqueIdChars");
                 aColumns = that.oUniqueCharTable.getColumns();
-                
+
                 that.getView().byId("idUniqueCharDetailsEQ").removeAllSelectedItems();
                 that.getView().byId("idUniqueCharDetailsNEQ").removeAllSelectedItems();
 
                 for (var k = 2; k < aColumns.length; k++) {
-                    scolumnName = aColumns[k].getLabel().getText().split(' (')[0];
+                    // scolumnName = aColumns[k].getLabel().getText().split(' (')[0];
+                    scolumnName = aColumns[k].getName();
                     iCounter = iCounter + 1;
                     if (iCounter > 5) {
                         aColumns[k].setVisible(false);
@@ -661,6 +693,95 @@ sap.ui.define(
                         aColumns[k].setVisible(true)
                     }
                 }
+            },
+            /**
+             * 
+             * @param {*} oEvent 
+             */
+            setWeekDates: function (oEvent) {
+                oGModel = that.getOwnerComponent().getModel("oGModel");                
+                var aDates = oGModel.getProperty("/TDates");
+                var dFrozenHorizonDate = oGModel.getProperty("/dFrozenHorizonDate");
+                // var dFirmHorizonDate = oGModel.getProperty("/dFirmHorizonDate");
+                var oWeekDates = {},
+                    aWeekDates = [];
+                var bFlag = false;
+                var dWeekDate;
+                var iWeekIndex;
+
+                for (var i = 0; i < aDates.length; i++) {
+                    oWeekDates = {};
+                    dWeekDate = new Date(aDates[i].WEEK_DATE);
+                    if ((aDates[i].WEEK_DATE).includes("-") === true) {
+                        oWeekDates.WEEK_DATE = aDates[i].WEEK_DATE;
+                        if (dWeekDate >= dFrozenHorizonDate) {
+
+                            if (bFlag === false) {
+                                that.SEL_DATE = aDates[i].WEEK_DATE;
+                                bFlag = true;
+                            }
+                        }
+                        iWeekIndex = that.getWeekNumber(aDates[i].WEEK_DATE);
+                        oWeekDates.WEEK_INDEX = "W" + iWeekIndex;
+                        aWeekDates.push(oWeekDates);
+                    }
+
+                }
+                if (aWeekDates.length > 0) {
+                    that.weeklyCIRModel.setData({
+                        weeks: aWeekDates
+                    });
+
+                    that.getView().byId("_IDWeekDtSel").setModel(that.weeklyCIRModel);
+                    that.getView().byId("_IDWeekDtSel").setSelectedKey(that.SEL_DATE);
+                }
+
+            },
+            /**
+             * 
+             * @param {*} oEvent 
+             */
+            onChangeWeekDate: function(oEvent) {
+                that.SEL_DATE = oEvent.getParameter('selectedItem').getKey();
+                var aColumns = [];
+                var scolumnName = '';
+                var sColLabel = '';
+                var iCIRQty = 0;
+                var aCIRData = oGModel.getProperty("/CIRQtys");
+                var aFilCIRData = [];
+                var sColumnLabel = '';
+                that.oUniqueCharTable = that.getView().byId("idUniqueIdChars");
+                aColumns = that.oUniqueCharTable.getColumns();               
+
+                for (var k = 1; k < aColumns.length; k++) {                    
+                    scolumnName = aColumns[k].getName();
+
+                    // iCounter = iCounter + 1;
+                    // if (iCounter > 5) {
+                    //     aColumns[k].setVisible(false);
+                    // } else {
+                    //     aColumns[k].setVisible(true)
+                    // }
+
+                    sColLabel = aColumns[k].getLabel().getText().split(' ');                    
+                    iCIRQty = 0;
+
+                    // Get Weekly Quantity
+                    aFilCIRData = [];
+                    aFilCIRData = aCIRData.filter(function (aCIRQty) {
+                            return aCIRQty['Unique ID'] === (scolumnName).toString();
+                        });
+                    if(aFilCIRData.length > 0) {
+                      iCIRQty = aFilCIRData[0][that.SEL_DATE];
+                    } else {
+                      iCIRQty = 0;
+                    }
+                    
+                    sColumnLabel = sColLabel[0] + " " + sColLabel[1] + " - (" + iCIRQty + ")";
+                    aColumns[k].setLabel(sColumnLabel);
+
+                }
+                
             },
 
             /**
@@ -695,6 +816,8 @@ sap.ui.define(
 
                 that.getView().byId("idUniqueCharDetailsEQ").setModel(that.locProdCharModel);
                 that.getView().byId("idUniqueCharDetailsNEQ").setModel(that.locProdCharModel);
+
+                that.setWeekDates();
 
                 that.onUniqueIdLinkPress();
 

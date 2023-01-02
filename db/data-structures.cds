@@ -590,6 +590,7 @@ context cp_ds {
 
     type uniqueCharacteristics {
         UNIQUE_ID : Integer;
+        UNIQUE_DESC : String(50);
         CONFIG    : array of uniqueConfig;
         TOTAL     : Integer;
     }

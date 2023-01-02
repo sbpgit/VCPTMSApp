@@ -196,7 +196,8 @@ sap.ui.define(
                             var iFrozenHorizon = parseInt(oData.results[0].VALUE) * 7 + 1;
                             var dDate = new Date();
                             dDate = new Date(dDate.setDate(dDate.getDate() + iFrozenHorizon));
-                            that.dFrozenHorizonDate = dDate;
+                            // that.dFrozenHorizonDate = dDate;
+                            that.oGModel.setProperty("/dFrozenHorizonDate", dDate);
                             // var oDateL = that.getDateFn(dDate);
                             // var oDateH = new Date(
                             //     dDate.getFullYear(),
@@ -214,7 +215,10 @@ sap.ui.define(
                             var iFirmHorizon = parseInt(oParam.VALUE) * 7;
                             var dDateFHL = new Date();
                             dDateFHL = new Date(dDateFHL.setDate(dDateFHL.getDate() + iFirmHorizon));
-                            that.dFirmHorizonDate = dDateFHL;
+                            //  that.dFirmHorizonDate = dDateFHL;
+                            that.oGModel.setProperty("/dFirmHorizonDate", dDateFHL);
+
+                            //that.oGModel("/dFrozenHorizonDate")
                         }
 
                         sap.ui.core.BusyIndicator.hide();
@@ -346,6 +350,8 @@ sap.ui.define(
                 var sRowData = {},
                     iRowData = [],
                     weekIndex;
+                var dFrozenHorizonDate,
+                    dFirmHorizonDate;
                 that.oGModel = that.getModel("oGModel");
                 that.tableData = that.oGModel.getProperty("/TData");
                 that.aFirmDates = [];
@@ -353,6 +359,9 @@ sap.ui.define(
                 var rowData;
                 var fromDate = new Date(that.byId("fromDate").getDateValue()),
                     toDate = new Date(that.byId("toDate").getDateValue());
+
+                dFrozenHorizonDate = that.oGModel.getProperty("/dFrozenHorizonDate");
+                dFirmHorizonDate = that.oGModel.getProperty("/dFirmHorizonDate");
 
                 fromDate = that.onConvertDateToString(fromDate);
                 toDate = that.onConvertDateToString(toDate);
@@ -388,19 +397,21 @@ sap.ui.define(
                 // Checking column names and applying sap.m.Link to column values
                 that.oTable.bindColumns("/columns", function (sId, oContext) {
                     var columnName = oContext.getObject().WEEK_DATE;
-                    if(columnName === "Product") {
+                    if (columnName === "Product") {
                         return new sap.ui.table.Column({
                             width: "12rem",
+                            name: columnName,
                             label: columnName,
                             // template: columnName,
                             template: new sap.m.ObjectIdentifier({
-                                title : "{PROD_DESC}",
+                                title: "{PROD_DESC}",
                                 text: "{" + columnName + "}"
                             }),
                         });
                     } else if (columnName === "Unique ID") {
                         return new sap.ui.table.Column({
                             width: "12rem",
+                            name: columnName,
                             label: columnName,
                             // template: columnName,
                             template: new sap.m.VBox({
@@ -419,14 +430,18 @@ sap.ui.define(
                     } else {
                         var iTotalQty = that.getTotalWeekQty(columnName);
                         var dColName = new Date(columnName);
-                        var columnText = columnName + " (" + iTotalQty + ")";
-                        var sCount = columnName.slice(4)
+                        var iWeekIndex = that.getWeekNumber(columnName);
+                        var columnText = 'W' + iWeekIndex + " (" + iTotalQty + ")";
+
+                        //var columnText = columnName + " (" + iTotalQty + ")";
+                        //var sCount = columnName.slice(4)
                         // if (that.dFirmHorizonDate > dColName) {
-                        if (dColName >= that.dFrozenHorizonDate && dColName <= that.dFirmHorizonDate) {
+                        if (dColName >= dFrozenHorizonDate && dColName <= dFirmHorizonDate) {
                             that.aFirmDates.push(columnName);
                             return new sap.ui.table.Column({
                                 width: "9rem",
                                 // label: new sap.m.ObjectIdentifier({title: columnName}),
+                                name: columnName,
                                 label: columnText,
                                 // multiLabels: [new sap.m.Text({text: columnName}), new sap.m.Text({text: "SUM"})],
                                 template: new sap.m.VBox({
@@ -437,14 +452,14 @@ sap.ui.define(
                                             value: "{" + columnName + "}",
                                             change: that.onChangeCIRQty,
                                         }),
-                                        new sap.m.ObjectIdentifier({
-                                            title: 15,
-                                            text: 5,
-                                        }),
+                                        // new sap.m.ObjectIdentifier({
+                                        //     title: 15,
+                                        //     text: 5,
+                                        // }),
                                     ]
                                 })
-                                
-                                
+
+
                             });
                         } else {
 
@@ -453,6 +468,7 @@ sap.ui.define(
                             }
                             return new sap.ui.table.Column({
                                 width: "9rem",
+                                name: columnName,
                                 label: columnText,
                                 // label: columnName,
                                 template: new sap.m.Text({
@@ -481,7 +497,7 @@ sap.ui.define(
                 lsDates.WEEK_DATE = "Product";
                 liDates.push(lsDates);
                 lsDates = {};
-                
+
                 // Unique Id
                 lsDates.WEEK_DATE = "Unique ID";
                 liDates.push(lsDates);
@@ -490,6 +506,8 @@ sap.ui.define(
                 // Calling function to get the next Sunday date of From date
                 lsDates.WEEK_DATE = that.getNextMonday(vDateSeries);
                 vDateSeries = lsDates.WEEK_DATE;
+
+
                 liDates.push(lsDates);
                 lsDates = {};
                 while (vDateSeries <= imToDate) {
@@ -1321,7 +1339,7 @@ sap.ui.define(
                     );
                 } else {
                     sMessage = "Please adjust quatities as per total demand for week(s)  -  " + oReturn.Weeks;
-                    MessageToast.show(sMessage, {width : "35em"});
+                    MessageToast.show(sMessage, { width: "35em" });
                 }
             },
             /**
@@ -1344,9 +1362,9 @@ sap.ui.define(
 
                     sColLabel = aColumns[i].getLabel().getText().split(" ");
                     if (that.aFirmDates.length > 0) {
-                       if(that.aFirmDates.includes(sColLabel[0]) === false) {
-                           continue;
-                       }
+                        if (that.aFirmDates.includes(sColLabel[0]) === false) {
+                            continue;
+                        }
 
                         iDmndQty = sColLabel[1].split("(")[1].split(")")[0];
                         iTotalQty = 0;
@@ -1908,15 +1926,17 @@ sap.ui.define(
                 var aIndices = that.oTable.getBinding().aIndices;
                 var aList = that.oTable.getBinding().oList;
                 var aFilteredList = [];
-                var sColLabel = " ";
+                var sColLabel = " ", sColName = " ";
                 var iTotalQty = 0;
                 var sColumnName = "";
                 aFilteredList = aList.filter((el, i) => aIndices.some(j => i === j));
                 for (var i = 2; i < aColumns.length; i++) {
                     sColLabel = aColumns[i].getLabel().getText().split(" ");
+                    sColName = aColumns[i].getName();
                     iTotalQty = 0;
                     for (var j = 0; j < aFilteredList.length; j++) {
-                        iTotalQty = iTotalQty + aFilteredList[j][sColLabel[0]];
+                        // iTotalQty = iTotalQty + aFilteredList[j][sColLabel[0]];
+                        iTotalQty = iTotalQty + aFilteredList[j][sColName];
                     }
                     sColumnName = sColLabel[0] + " (" + iTotalQty + ")";
                     aColumns[i].setLabel(sColumnName);
@@ -1932,13 +1952,17 @@ sap.ui.define(
                 var tableColumns = that.byId("idCIReq").getColumns(),
                     selColumnValue = oEvent.getSource().getText(),
                     ObindingData = oEvent.getSource().getBindingContext().getObject(),
-                    selUniqueId = ObindingData['Unique ID'];  //ObindingData.Unique_ID;                             
+                    selUniqueId = ObindingData['Unique ID'];  //ObindingData.Unique_ID; 
+                var aCIRData = [];
+                aCIRData = that.byId("idCIReq").getBinding().oList;
 
                 // Calling function if selected item is not empty
 
                 if (selColumnValue > 0) {
                     // that._onUniqueCharDetails.open();
+
                     that.oGModel.setProperty("/SelectedUniqueId", selUniqueId);
+                    that.oGModel.setProperty("/CIRQtys", aCIRData);
                     that.oRouter = sap.ui.core.UIComponent.getRouterFor(that);
                     that.oRouter.navTo("RouteUniqChar");
 
@@ -2102,6 +2126,18 @@ sap.ui.define(
             onUniqueCharClose: function () {
                 that._onUniqueCharDetails.close();
             },
+            // /**
+            //  * 
+            //  */
+            // getWeekNumber: function (dInpDate) {
+
+            //     var dCurrentDate = new Date(dInpDate);
+            //     var dStartDate = new Date(dCurrentDate.getFullYear(), 0, 1);
+            //     var iDays = Math.floor((dCurrentDate - dStartDate) / (24 * 60 * 60 * 1000));
+            //     var iWeek = Math.ceil(iDays / 7);
+            //     return iWeek;
+
+            // }
 
         });
     }

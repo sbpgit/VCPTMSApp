@@ -27,7 +27,7 @@
                 </ux:headerTitle>
                 <ux:headerContent>
                     <FlexBox id="_IDGenUFlexBox2" wrap="Wrap" fitContainer="true">
-                        <l:Grid id="_IDGenUGrid1" defaultSpan="XL4 L4 M6 S12" width="100%" class="sapUiRespGridOverflowHidden">
+                        <l:Grid id="_IDGenUGrid1" defaultSpan="XL3 L3 M6 S12" width="100%" class="sapUiRespGridOverflowHidden">
                             <!-- <VBox id="_IDGenUVBox1">
                                 <Label id="_IDGenULabel1" text="" />
                                 <SearchField id="idSearchU" liveChange="onSearchUniqueChar" placeholder="Characteristic" />
@@ -44,33 +44,32 @@
                                 <Label id="_IDGenULabel4" text="Unique Id" required="true" />
                                 <Input id="idUniqueId" placeholder="Unique Id" enabled="false" />
                             </VBox>
-                            
+
+                            <VBox id="_IDGenUVBox7">
+                                <Label id="_IDGenULabel7" text="Week Date" required="true" />
+                                <Select id="_IDWeekDtSel" forceSelection="false" change="onChangeWeekDate" items="{
+						            path: '/weeks'
+					            }">
+                                    <core:Item key="{WEEK_DATE}" text="{WEEK_INDEX}" />
+                                </Select>
+                            </VBox>
+
                             <VBox id="_IDGenUVBox5">
                                 <Label id="_IDGenULabel5" text="Filter Type (Equals)" required="true" />
-                               <MultiComboBox
-                                    id="idUniqueCharDetailsEQ"
-                                    showSelectAll="true"
-                                    showSecondaryValues="true"
-                                    items="{
+                                <MultiComboBox id="idUniqueCharDetailsEQ" showSelectAll="true" showSecondaryValues="true" items="{
 				                            path: '/charDetails',
 				                            sorter: { path: 'CHAR_NAME' }
-			                                        }"
-                                >
+			                                        }">
                                     <core:ListItem key="{CHAR_NUM}:{CHARVAL_NUM}" text="{CHAR_DESC} - {CHAR_NAME}" additionalText="{CHARVAL_DESC} - {CHAR_VALUE}" />
                                 </MultiComboBox>
                             </VBox>
                             <VBox id="_IDGenUVBox6">
                                 <Label id="_IDGenULabel6" text="Filter Type (Not Equals)" required="true" />
 
-                                <MultiComboBox
-                                    id="idUniqueCharDetailsNEQ"
-                                    showSelectAll="true"
-                                    showSecondaryValues="true"
-                                    items="{
+                                <MultiComboBox id="idUniqueCharDetailsNEQ" showSelectAll="true" showSecondaryValues="true" items="{
 				                            path: '/charDetails',
 				                            sorter: { path: 'CHAR_NAME' }
-			                                        }"
-                                >
+			                                        }">
                                     <core:ListItem key="{CHAR_NUM}:{CHARVAL_NUM}" text="{CHAR_DESC} - {CHAR_NAME}" additionalText="{CHARVAL_DESC} - {CHAR_VALUE}" />
                                 </MultiComboBox>
                             </VBox>
@@ -81,7 +80,6 @@
                                     <Button id="_IDGenUButton2" text="Reset" type="Transparent" press="onResetFilters" tooltip="Reset filters and Data" />
                                 </HBox>
                             </VBox>
-                            
                         </l:Grid>
                     </FlexBox>
                 </ux:headerContent>
@@ -91,13 +89,13 @@
                             <ux:ObjectPageSubSection id="_IDGenUObjectPageSubSection1" mode="Expanded" class="sapUiNoMargin">
                                 <ux:blocks>
                                     <VBox id="_IDGenUVBox9" class="sapUiNoMargin">
-                                       <Toolbar>
-                                        <ToolbarSpacer />
-                                        <RadioButtonGroup id="idRBGChars" columns="3" valueState="Information" select="onSelectRBCharFilter">
-                                            <RadioButton id="idAllChars" text="All" selected="true" />
-                                            <RadioButton id="idMatchd" text="Matched" />
-                                            <RadioButton id="idUnMatchd" text="UnMatched" />
-                                        </RadioButtonGroup>
+                                        <Toolbar>
+                                            <ToolbarSpacer />
+                                            <RadioButtonGroup id="idRBGChars" columns="3" valueState="Information" select="onSelectRBCharFilter">
+                                                <RadioButton id="idAllChars" text="All" selected="true" />
+                                                <RadioButton id="idMatchd" text="Matched" />
+                                                <RadioButton id="idUnMatchd" text="UnMatched" />
+                                            </RadioButtonGroup>
                                         </Toolbar>
                                         <t:Table id="idUniqueIdChars" class="table" fixedColumnCount="2" selectionMode="None" alternateRowColors="true" enableSelectAll="false" visibleRowCount="8">
                                             <t:columns />

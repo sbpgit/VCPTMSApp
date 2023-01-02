@@ -1230,7 +1230,9 @@ module.exports = (srv) => {
             values.push({ id, createtAt, message, lilocProd });
             const obgenSOFunctions = new SOFunctions();
             await obgenSOFunctions.genUniqueID(req.data, req, Flag);
-        }
+        }        
+        res.statusCode = 202;
+        res.send({ values });
     });
     // Generate Unique ID
     srv.on("gen_UniqueID", async (req) => {
@@ -2515,6 +2517,21 @@ module.exports = (srv) => {
         lsresults = {};
         return responseMessage;
     });
+    srv.on("mainSOTemp", async (req) => {
+        const obgenSOFunctions = new SOFunctions();
+        const li_sodata = await cds.run(
+            `SELECT *
+            FROM "CP_SEEDORDER_HEADER"             
+             WHERE "LOCATION_ID" = '${req.data.LOCATION_ID}'
+             AND "PRODUCT_ID" = '${req.data.PRODUCT_ID}'
+             ORDER BY SEED_ORDER DESC`
+        );
+        for(let i = 0 ;i < li_sodata.length ; i++){
+            await obgenSOFunctions.createSOTemp(li_sodata[i].LOCATION_ID, li_sodata[i].PRODUCT_ID, li_sodata[i].SEED_ORDER, li_sodata[i].MAT_AVAILDATE, li_sodata[i].ORD_QTY, li_sodata[i].UNIQUE_ID);
+              
+        }
+        return "Success";
+    });
     srv.on("getAllProd", async (req) => {
         let lsprod = {};
         let liprod = [];
@@ -3635,6 +3652,7 @@ module.exports = (srv) => {
                 aSecSequence.sort(function (a, b) { return a - b });      // Sort Ascending Order 
                 oUniqueCharCount = {
                     UNIQUE_ID: aDistinctUniqueIds[i].UNIQUE_ID,
+                    UNIQUE_DESC: aDistinctUniqueIds[i].UNIQUE_DESC,
                     COUNT: iCount,
                     PRIMARY: iPCount,
                     SECONDARY: iSCount,
@@ -3683,6 +3701,7 @@ module.exports = (srv) => {
                 oUniqueChar = {};
 
                 oUniqueChar.UNIQUE_ID = aUniqueChars[l].UNIQUE_ID;
+                oUniqueChar.UNIQUE_DESC = aUniqueChars[l].UNIQUE_DESC;
 
                 aFilteredUniqChars = aMatchedChars.filter(function (aUniqChar) {
                     return aUniqChar.UNIQUE_ID === aUniqueChars[l].UNIQUE_ID;

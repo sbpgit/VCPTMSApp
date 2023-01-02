@@ -26351,18 +26351,6 @@
         "type": "cds.String"
       }
     },
-    "IBPImportSrv.exportIBPLocProd_fn": {
-      "kind": "function",
-      "params": {
-        "LOCATION_ID": {
-          "type": "cds.String",
-          "length": 4
-        }
-      },
-      "returns": {
-        "type": "cds.String"
-      }
-    },
     "IBPImportSrv.exportRestrDetails_fn": {
       "kind": "function",
       "params": {
@@ -26441,15 +26429,12 @@
       }
     },
     "IBPImportSrv.exportIBPAssembly": {
-      "kind": "function",
+      "kind": "action",
       "params": {
         "LOCATION_ID": {
           "type": "cds.String",
           "length": 4
         }
-      },
-      "returns": {
-        "type": "cds.String"
       }
     },
     "IBPImportSrv.exportIBPSalesTrans": {

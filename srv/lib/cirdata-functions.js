@@ -117,7 +117,7 @@ class CIRData {
      */
      async getDistinctUniqueIds(req) {
         const li_uniqueId = await cds.run(
-            `SELECT DISTINCT "UNIQUE_ID"
+            `SELECT DISTINCT "UNIQUE_ID", "UNIQUE_DESC"
             FROM "V_UNIQUE_ID_ITEM"
             WHERE "LOCATION_ID" = '` +
             req.data.LOCATION_ID +

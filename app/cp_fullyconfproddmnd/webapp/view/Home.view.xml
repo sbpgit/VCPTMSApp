@@ -43,7 +43,24 @@
                                 <Label id="_IDGenLabel1" text="" />
                                 <SearchField id="idSearch" liveChange="onSearchUniqueId" placeholder="Unique Id, Product" />
                             </VBox>
-                        
+
+                            <!-- New Filter********************************************* -->
+                            <!-- <VBox>
+                                <Label text="Product" required="true" />
+                                <Input placeholder="Product" value="" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                            </VBox>
+                            <VBox>
+                                <Label text="Manufacturing Location" required="true" />
+                                <Input value="" placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                            </VBox>
+                            
+                            <VBox>
+                                <Label text="Demand Location" required="true" />
+                                <Input value="" placeholder="Version" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                            </VBox> -->
+
+                            <!--********************************************************** -->
+
                             <VBox id="_IDGenVBox2">
                                 <Label id="_IDGenLabel2" text="Location" required="true" />
                                 <Input id="idloc" value="" placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
