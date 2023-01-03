@@ -156,6 +156,25 @@ Content-Type: application/json
 }
 
 
+### generate Models
+POST http://localhost:4004/pal/generateModels
+Content-Type: application/json
+
+{
+	"vcRulesList": [
+		{
+			"profile": "SBP_HGBT_1",
+			"override": true,
+			"Location": "PLBE",
+			"Product": "000000000000000064",
+			"GroupID": "ALL",
+			"Type": "PI",
+			"modelVersion": "Active"
+		}
+	]
+}
+
+
 
 ### generate Predictions
 POST http://localhost:4004/pal/genPredictions
@@ -240,6 +259,17 @@ Content-Type: application/json
 	"Product" : "534EDPI"
 }
 
+
+### generate Clusters Input Data
+POST http://localhost:4004/pal/getClusterUniqueIDs
+Content-Type: application/json
+
+{
+	"Location" : "PL20",
+	"Product" : "534EDPI",
+	"Profile" : "SBP_AHC_0",
+	"UniqueId" : "215"
+}
 
 ### generate UniqueId CharVals  Input Data
 POST http://localhost:4004/pal/genUniqueIdCharVals

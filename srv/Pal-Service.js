@@ -132,6 +132,10 @@ module.exports = srv => {
         return (await _getUniqueIdCharValsForClusterResults(req,false));
     })
 
+    srv.on ('getClusterUniqueIDs',    async req => {
+        return (await _getClusterUniqueIDs(req,false));
+    })
+
     srv.on ('fgModels',    async req => {
         return (await _generateRegModels(req,true));   
     })
@@ -162,6 +166,11 @@ module.exports = srv => {
     srv.on ('fgenUniqueIdCharVals',    async req => {
         return (await _genUniqueIdCharVals(req,true));
     })
+
+    srv.on ('fgetClusterUniqueIDs',    async req => {
+        return (await _getClusterUniqueIDs(req,true));
+    })
+
 
  }
 
@@ -1495,7 +1504,7 @@ async function _generateRegModels (req,isGet) {
 
 
 
-        results = await cds.run(sqlStr);
+       results = await cds.run(sqlStr);
         // console.log('_generateRegModels vcRulesList sqlStr results', results );
 
 
@@ -3068,6 +3077,110 @@ async function _genUniqueIdCharVals(req,isGet)
         let res = req._.req.res;
         res.statusCode = 200;
         res.send({tableObj});
+    }
+}
+
+
+async function _getClusterUniqueIDs(req,isGet) 
+{
+
+    let locationId = req.data.Location;
+    let productId = req.data.Product;
+    let profile = req.data.Profile;
+    let uniqueId = req.data.UniqueId;
+
+    let nearestsIDs = [];
+
+    
+    let sqlStr = 'SELECT DISTINCT LOCATION_ID, PRODUCT_ID, PROFILE, LEFT_ID, RIGHT_ID, DISTANCE FROM CP_V_AHC_CLUSTER_RESULTS ' +
+                ' WHERE LOCATION_ID = ' + "'" + locationId + "'" +
+                ' AND PRODUCT_ID = ' + "'" + productId + "'" +
+                ' AND PROFILE = ' + "'" + profile + "'" +
+                ' AND LEFT_ID = ' + "'" + uniqueId + "'" +
+                ' ORDER BY LOCATION_ID, PRODUCT_ID, PROFILE, DISTANCE, LEFT_ID';
+    console.log("_getClusterUniqueIDs UNique IDs sqlStr  ", sqlStr);
+
+    
+    let sqlUniqueStrResults = await cds.run(sqlStr);
+    console.log("sqlUniqueStrResults = ",sqlUniqueStrResults );    
+    
+
+    if (sqlUniqueStrResults.length > 0)
+    {
+
+        for (let uniqueIdx = 0; uniqueIdx < sqlUniqueStrResults.length ; uniqueIdx++)
+        {
+            let LOCATION_ID = sqlUniqueStrResults[uniqueIdx].LOCATION_ID;
+            let PRODUCT_ID = sqlUniqueStrResults[uniqueIdx].PRODUCT_ID;
+            let PROFILE = sqlUniqueStrResults[uniqueIdx].PROFILE;
+            let UNIQUE_ID = sqlUniqueStrResults[uniqueIdx].LEFT_ID;
+            let NEAREST_ID = sqlUniqueStrResults[uniqueIdx].RIGHT_ID;
+            let DISTANCE = sqlUniqueStrResults[uniqueIdx].DISTANCE;
+            
+            nearestsIDs.push({LOCATION_ID, PRODUCT_ID, PROFILE, UNIQUE_ID, NEAREST_ID,DISTANCE});  
+
+        }
+
+    }
+    else
+    {
+
+        
+
+        let sqlStr = 'SELECT DISTINCT LOCATION_ID, PRODUCT_ID, PROFILE, LEFT_ID, RIGHT_ID, DISTANCE FROM CP_V_AHC_CLUSTER_RESULTS ' +
+                ' WHERE LOCATION_ID = ' + "'" + locationId + "'" +
+                ' AND PRODUCT_ID = ' + "'" + productId + "'" +
+                ' AND PROFILE = ' + "'" + profile + "'" +
+                ' AND RiGHT_ID = ' + "'" + req.data.UniqueId + "'" +
+                ' ORDER BY LOCATION_ID, PRODUCT_ID, PROFILE, DISTANCE, LEFT_ID';
+        console.log("_getClusterUniqueIDs UNique IDs sqlStr  ", sqlStr);
+
+    
+        let sqlRightUniqueStrResults = await cds.run(sqlStr);
+        console.log("sqlRightUniqueStrResults = ",sqlRightUniqueStrResults );    
+
+        let uniqueId = sqlRightUniqueStrResults[0].LEFT_ID;
+
+        sqlStr = 'SELECT DISTINCT LOCATION_ID, PRODUCT_ID, PROFILE, LEFT_ID, RIGHT_ID, DISTANCE FROM CP_V_AHC_CLUSTER_RESULTS ' +
+                ' WHERE LOCATION_ID = ' + "'" + locationId + "'" +
+                ' AND PRODUCT_ID = ' + "'" + productId + "'" +
+                ' AND PROFILE = ' + "'" + profile + "'" +
+                ' AND LEFT_ID = ' + "'" + uniqueId + "'" +
+                ' AND RIGHT_ID != ' + "'" + req.data.UniqueId + "'" +
+                ' ORDER BY LOCATION_ID, PRODUCT_ID, PROFILE, DISTANCE, RIGHT_ID';
+        console.log("_getClusterUniqueIDs UNique IDs sqlStr  ", sqlStr);
+
+    
+        let sqlUniqueStrResults = await cds.run(sqlStr);
+        console.log("sqlUniqueStrResults = ",sqlUniqueStrResults );   
+
+        if (sqlUniqueStrResults.length > 0)
+        {
+    
+            for (let uniqueIdx = 0; uniqueIdx < sqlUniqueStrResults.length ; uniqueIdx++)
+            {
+                let LOCATION_ID = sqlUniqueStrResults[uniqueIdx].LOCATION_ID;
+                let PRODUCT_ID = sqlUniqueStrResults[uniqueIdx].PRODUCT_ID;
+                let PROFILE = sqlUniqueStrResults[uniqueIdx].PROFILE;
+                let UNIQUE_ID = req.data.UniqueId;
+                let NEAREST_ID = sqlUniqueStrResults[uniqueIdx].RIGHT_ID;
+                let DISTANCE = sqlUniqueStrResults[uniqueIdx].DISTANCE;
+                
+                nearestsIDs.push({LOCATION_ID, PRODUCT_ID, PROFILE, UNIQUE_ID, NEAREST_ID,DISTANCE});  
+    
+            }
+        }
+    }
+
+    if (isGet == true)
+    {
+        req.reply({nearestsIDs});
+    }
+    else
+    {
+        let res = req._.req.res;
+        res.statusCode = 200;
+        res.send({nearestsIDs});
     }
 }
 
