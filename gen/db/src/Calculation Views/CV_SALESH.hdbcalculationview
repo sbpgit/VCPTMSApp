@@ -86,7 +86,7 @@
     </shape>
     <shape modelObjectName="V_IBP_SALESH_CUST_LOC_PROD_WEEK_DATE" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
       <upperLeftCorner x="24" y="24"/>
-      <rectangleSize width="347.83984375"/>
+      <rectangleSize width="347"/>
     </shape>
     <shape modelObjectName="V_SALES_H" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
       <upperLeftCorner x="433" y="30"/>
