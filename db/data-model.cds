@@ -143,26 +143,39 @@ context cp {
 
     // Sales history
     entity SALESH {
-        key SALES_DOC        : String(10)     @title : 'Sales Document';
-        key SALESDOC_ITEM    : String(6)      @title : 'Sales Document Item';
-            DOC_CREATEDDATE  : Date           @title : 'Document Created on';
-            SCHEDULELINE_NUM : String(4)      @title : 'Schedule Line Number';
-            PRODUCT_ID       : String(40)     @title : 'Product Id';
-            REASON_REJ       : String(2)      @title : 'Reason rejection';
-            UOM              : String(3)      @title : 'UOM';
-            CONFIRMED_QTY    : Decimal(13, 3) @title : 'Confirmed Qty';
-            ORD_QTY          : Decimal(13, 3) @title : 'Order Quantity';
-            MAT_AVAILDATE    : Date           @title : 'Material Availability Date';
-            NET_VALUE        : Decimal(15, 2) @title : 'Net Value';
-            CUSTOMER_GROUP   : String(20)     @title : 'Customer Group';
-            LOCATION_ID      : String(4)      @title : 'Location ID';
-            SEEDORD_CHK      : String(1)      @title : 'Seed Order Check';
-            CHANGED_DATE     : Date           @title : 'Changed Date';
-            CHANGED_BY       : String(12)     @title : 'Changed By';
-            CREATED_DATE     : Date           @title : 'Created Date';
-            CREATED_BY       : String(12)     @title : 'Created By';
-            CHANGED_TIME     : Time           @title : 'Changed Time';
-            CREATED_TIME     : Time           @title : 'Created Time';
+        key SALES_DOC         : String(10)     @title : 'Sales Document';
+        key SALESDOC_ITEM     : String(6)      @title : 'Sales Document Item';
+            DOC_CREATEDDATE   : Date           @title : 'Document Created on';
+            SCHEDULELINE_NUM  : String(4)      @title : 'Schedule Line Number';
+            PRODUCT_ID        : String(40)     @title : 'Product Id';
+            REASON_REJ        : String(2)      @title : 'Reason rejection';
+            UOM               : String(3)      @title : 'UOM';
+            CONFIRMED_QTY     : Decimal(13, 3) @title : 'Confirmed Qty';
+            ORD_QTY           : Decimal(13, 3) @title : 'Order Quantity';
+            MAT_AVAILDATE     : Date           @title : 'Material Availability Date';
+            NET_VALUE         : Decimal(15, 2) @title : 'Net Value';
+            CUSTOMER_GROUP    : String(20)     @title : 'Customer Group';
+            LOCATION_ID       : String(4)      @title : 'Location ID';
+            SEEDORD_CHK       : String(1)      @title : 'Seed Order Check';
+            SALES_ORG         : String(4)      @title : 'Sales Org.';
+            DISTR_CHANNEL     : String(2)      @title : 'Distribution Channel';
+            DIVISION          : String(2)      @title : 'Division';
+            SAL_DOCU_TYPE     : String(4)      @title : 'Sales Doc. Type';
+            IBP_CUSTOMER      : String(10);
+            RELEVENT_FOR_PLAN : String(1);
+            CREATED_ON_DATE     : String(8);
+            CHANGE_ON_DATE     : String(8);
+            OPEN_ORDER        : String(1);
+            CHARG             : String(10);
+            RESERVE_FIELD1     : String(20);
+            RESERVE_FIELD2     : String(20);
+            RESERVE_FIELD3     : String(20);
+            CHANGED_DATE      : Date           @title : 'Changed Date';
+            CHANGED_BY        : String(12)     @title : 'Changed By';
+            CREATED_DATE      : Date           @title : 'Created Date';
+            CREATED_BY        : String(12)     @title : 'Created By';
+            CHANGED_TIME      : Time           @title : 'Changed Time';
+            CREATED_TIME      : Time           @title : 'Created Time';
     };
 
     // Sales History configuration
@@ -267,11 +280,12 @@ context cp {
 
     // Classes
     entity CLASS {
-        key CLASS_NUM  : String(18)  @title : 'Internal class number';
-            CLASS_NAME : String(20)  @title : 'Class Name';
-            CLASS_TYPE : String(3)   @title : 'Class Type';
-            CLASS_DESC : String(150) @title : 'Class Description';
-            AUTHGROUP  : String(4)   @title : 'Authorization Group';
+        key CLASS_NUM     : String(18)  @title : 'Internal class number';
+            CLASS_NAME    : String(20)  @title : 'Class Name';
+            CLASS_TYPE    : String(3)   @title : 'Class Type';
+            CLASS_DESC    : String(150) @title : 'Class Description';
+            IBPCHAR_CHK : Boolean   @title : 'IBP Characteristics check';
+            AUTHGROUP     : String(4)   @title : 'Authorization Group';
     };
 
     //Characteristitcs
@@ -919,6 +933,7 @@ entity![V_CLASSCHARVAL]{
     key![CLASS_NUM]    : String(18)  @title : 'CLASS_NUM';
     key![CLASS_NAME]   : String(20)  @title : 'CLASS_NAME';
     key![CLASS_DESC]   : String(150) @title : 'CHAR_NAME';
+    key![IBPCHAR_CHK]  : Boolean     @title : 'IBP Char. Check';
     key![CHAR_NUM]     : String(10)  @title : 'CHAR_NUM';
     key![CHAR_NAME]    : String(30)  @title : 'CHAR_NAME';
     key![CHAR_DESC]    : String(150) @title : 'CHAR_NAME';

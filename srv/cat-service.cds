@@ -104,8 +104,11 @@ service CatalogService @(impl : './lib/cat-service.js') {
 
     //History timeseries for Object dependency characteristics
 
-    entity getODCharHdr         as projection on od.TS_OBJDEP_CHARHDR
+    entity getODCharHdr         as projection on od.TS_OBJDEP_CHARHDR;
+
+    // @odata.draft.enabled
     entity getClass             as projection on od.CLASS;
+    function updateIBPClass(CLASSDATA: String) returns String;
 
     ///*****/IBP Future demand and IBP Future Characteristic plan/*****/
     @readonly

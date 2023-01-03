@@ -1392,7 +1392,8 @@ module.exports = cds.service.impl(async function () {
                     CHARVAL_NUM,
                     CHARVAL_DESC
                     FROM V_CLASSCHARVAL 
-                WHERE CLASS_NUM = '`+ req.data.CLASS_NUM + `'`);
+                WHERE CLASS_NUM = '`+ req.data.CLASS_NUM + `'
+                AND IBPCHAR_CHK = 'X'`);
 
         //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
         for (i = 0; i < liclass.length; i++) {
@@ -1484,7 +1485,8 @@ module.exports = cds.service.impl(async function () {
                             "PRODUCT_ID",
                             "ORD_QTY",
                             "ADJ_QTY",
-                            "CUSTOMER_GROUP"
+                            "CUSTOMER_GROUP",
+                            "IBP_CUSTOMER",
                             FROM V_IBP_SALESH_ACTDEMD
                             WHERE LOCATION_ID = '`+ lsData.LOCATION_ID + `'
                                AND PRODUCT_ID = '`+ lsData.PRODUCT_ID +

@@ -142,6 +142,7 @@ module.exports = (srv) => {
                     `'
                         ORDER BY 
                             "LOCATION_ID" ASC, 
+                            "FACTORY_LOC" ASC,
                             "PRODUCT_ID" ASC,
                             "VERSION" ASC,
                             "SCENARIO" ASC,
@@ -151,6 +152,7 @@ module.exports = (srv) => {
                 liComp = await cds.run(
                     `
           SELECT DISTINCT "LOCATION_ID",
+                          "FACTORY_LOC",
                           "PRODUCT_ID",
                           "VERSION",
                           "SCENARIO",
@@ -175,6 +177,7 @@ module.exports = (srv) => {
                     `'
                ORDER BY 
                     "LOCATION_ID" ASC, 
+                    "FACTORY_LOC" ASC,
                     "PRODUCT_ID" ASC,
                     "VERSION" ASC,
                     "SCENARIO" ASC,
@@ -203,6 +206,7 @@ module.exports = (srv) => {
                     `'
                  ORDER BY 
                       "LOCATION_ID" ASC, 
+                      "FACTORY_LOC" ASC,
                       "PRODUCT_ID" ASC,
                       "VERSION" ASC,
                       "SCENARIO" ASC,
@@ -212,7 +216,8 @@ module.exports = (srv) => {
                 if (req.data.CRITICALKEY === 'X') {
                     liComp = await cds.run(
                         `
-              SELECT DISTINCT "V_ASMREQ_PRODCONSD"."LOCATION_ID",
+              SELECT DISTINCT "V_ASMREQ_PRODCONSD"."LOCATION_ID",              
+                               "V_ASMREQ_PRODCONSD"."FACTORY_LOC",
                                "V_ASMREQ_PRODCONSD"."PRODUCT_ID",
                                "V_ASMREQ_PRODCONSD"."VERSION",
                                "V_ASMREQ_PRODCONSD"."SCENARIO",
@@ -241,7 +246,8 @@ module.exports = (srv) => {
                         `'  AND "CP_CRITICAL_COMP"."CRITICALKEY" = '` +
                         req.data.CRITICALKEY + `'
                    ORDER BY 
-                        "LOCATION_ID" ASC, 
+                        "LOCATION_ID" ASC,
+                        "FACTORY_LOC" ASC,
                         "PRODUCT_ID" ASC,
                         "VERSION" ASC,
                         "SCENARIO" ASC,
@@ -253,6 +259,7 @@ module.exports = (srv) => {
                     liComp = await cds.run(
                         `
           SELECT DISTINCT "LOCATION_ID",
+                          "FACTORY_LOC",
                           "PRODUCT_ID",
                           "VERSION",
                           "SCENARIO",
@@ -277,6 +284,7 @@ module.exports = (srv) => {
                         `'
                ORDER BY 
                     "LOCATION_ID" ASC, 
+                    "FACTORY_LOC" ASC,
                     "PRODUCT_ID" ASC,
                     "VERSION" ASC,
                     "SCENARIO" ASC,
@@ -313,6 +321,7 @@ module.exports = (srv) => {
             // vCompIndex is to get Componnent quantity for all dates
             vWeekIndex = 0; //j
             lsCompWeekly.LOCATION_ID = liComp[j].LOCATION_ID;
+            lsCompWeekly.FACTORY_LOC = liComp[j].FACTORY_LOC;
             lsCompWeekly.PRODUCT_ID = liComp[j].REF_PRODID;
             lsCompWeekly.ITEM_NUM = liComp[j].ITEM_NUM;
             //   lsCompWeekly.ASSEMBLY = liComp[j].COMPONENT;
@@ -1172,8 +1181,8 @@ module.exports = (srv) => {
         //         await obgenTimeseriesM2.genTimeseries(req.data, req, Flag);
         //         break;
         // }
-                const obgenTimeseriesM2 = new GenTimeseriesM2();
-                await obgenTimeseriesM2.genTimeseries(req.data, req, Flag);
+        const obgenTimeseriesM2 = new GenTimeseriesM2();
+        await obgenTimeseriesM2.genTimeseries(req.data, req, Flag);
         // const obgenTimeseries_rt = new GenTimeseriesRT();
         // await obgenTimeseries_rt.genTimeseries_rt(req.data, req);
 
@@ -1189,13 +1198,13 @@ module.exports = (srv) => {
         //         await obgenTimeseries.genTimeseriesF(req.data, req, Flag);
         //         break;
         //     case 'M2':
-                // const obgenTimeseriesM2 = new GenTimeseriesM2();
-                // await obgenTimeseriesM2.genTimeseriesF(req.data, req, Flag);
-                // break;
+        // const obgenTimeseriesM2 = new GenTimeseriesM2();
+        // await obgenTimeseriesM2.genTimeseriesF(req.data, req, Flag);
+        // break;
         // }
         // const obgenTimeseries_rt = new GenTimeseriesRT();
         // await obgenTimeseries_rt.genTimeseriesF_rt(req.data, req);
-        await obgenMktAuth.updateOptPer('AS01','000000000000000059','2023-02-27', '__BASELINE','_PLAN', req);
+        await obgenMktAuth.updateOptPer('AS01', '000000000000000059', '2023-02-27', '__BASELINE', '_PLAN', req);
     });
 
     // Generate Unique ID
@@ -2224,7 +2233,7 @@ module.exports = (srv) => {
                 responseMessage = "Update Failed"
             }
         }
-       
+
         return responseMessage;
     });
     // Maintain partial configurations for new product
@@ -2343,6 +2352,35 @@ module.exports = (srv) => {
     srv.on("trigrMAWeek", async (req) => {
         let liresults = [];
         console.log("Hello");
+    });
+
+    srv.on("updateIBPClass", async (req) => {
+        let liClassData = {};
+        let lsClassData = {};
+        let vResponse;
+        liClassData = JSON.parse(req.data.CLASSDATA);
+        for (let i = 0; i < liClassData.length; i++) {
+            lsClassData = {};
+            lsClassData.CLASS_NUM = liClassData[i].CLASS_NUM;
+            if (liClassData[i].IBPCHAR_CHK === 'X') {
+                lsClassData.IBPCHAR_CHK = Boolean(true);
+            }
+            else {
+                lsClassData.IBPCHAR_CHK = Boolean(false);
+            }
+            try {
+                await UPDATE`CP_CLASS`
+                    .with({
+                        IBPCHAR_CHK: lsClassData.IBPCHAR_CHK
+                    })
+                    .where(`CLASS_NUM = '${lsClassData.CLASS_NUM}'`);
+                vResponse = "S";
+            }
+            catch (e) {
+                vResponse = "E";
+            }
+        }        
+        return vResponse;
     });
     srv.on("maintainSeedOrder", async (req) => {
         let liresults = [];
@@ -3065,7 +3103,7 @@ module.exports = (srv) => {
     // EOI - Deepa
 
     srv.on("generateMarketAuthfn", async (request) => {
-        
+
         let flag = await obibpfucntions.importFutureDemandcharPlan(request);
 
         // if (flag === 'S') {
@@ -3641,6 +3679,5 @@ module.exports = (srv) => {
         return aUniqueCharRes;
 
     });
-
     // EOI Deepa
 };

@@ -95,7 +95,9 @@
         "watch-cpcirlog": "cds watch --open cpcirlog/webapp/index.html?sap-ui-xx-viewCache=false",
         "watch-cpmarketauthorization": "cds watch --open cpmarketauthorization/webapp/index.html?sap-ui-xx-viewCache=false",
         "watch-cprestrictionlikelihood": "cds watch --open cprestrictionlikelihood/webapp/index.html?sap-ui-xx-viewCache=false",
-        "watch-cpibpcharacteristic": "cds watch --open cpibpcharacteristic/webapp/index.html?sap-ui-xx-viewCache=false"
+        "watch-cpibpcharacteristic": "cds watch --open cpibpcharacteristic/webapp/index.html?sap-ui-xx-viewCache=false",
+        "watch-cpclass": "cds watch --open cpclass/webapp/index.html?sap-ui-xx-viewCache=false",
+        "watch-cpclassibp": "cds watch --open cpclassibp/webapp/index.html?sap-ui-xx-viewCache=false"
     },
     "eslintConfig": {
         "extends": "eslint:recommended",
@@ -317,10 +319,12 @@
         "app/cpcirlog",
         "app/cpmarketauthorization",
         "app/cprestrictionlikelihood",
-        "app/cpibpcharacteristic"
+        "app/cpibpcharacteristic",
+        "app/cpclass",
+        "app/cpclassibp"
     ],
     "devDependencies": {
-        "@sap/ux-specification": "^1.102.13",
+        "@sap/ux-specification": "^1.102.14",
         "rimraf": "^3.0.2"
     }
 }

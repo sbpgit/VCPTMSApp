@@ -10,6 +10,7 @@ AS SELECT distinct A.LOCATION_ID,
           C.REF_PRODID,
           A.CLASS_NUM,
           B.CLASS_NAME,
+          B.IBPCHAR_CHK,
           B.CHAR_NUM,
           B.CHAR_NAME,
           B.CHARVAL_NUM

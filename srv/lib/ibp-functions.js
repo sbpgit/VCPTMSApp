@@ -25,8 +25,8 @@ class IBPFunctions {
                         "CHARVAL_NUM"
                         FROM V_IBP_SALESHCONFIG_VC
                         WHERE LOCATION_ID = '`+ req.LOCATION_ID + `'
-                           AND PRODUCT_ID = '`+ req.PRODUCT_ID +
-            `'`);
+                           AND PRODUCT_ID = '`+ req.PRODUCT_ID + `'
+                           AND IBPCHAR_CHK = 'X'`);
         // `' AND CUSTOMER_GROUP = '` + req.data.CUSTOMER_GROUP +e
 
         let liDates = imDates;

@@ -71,3 +71,7 @@ using from './cpmarketauthorization/annotations';
 using from './cprestrictionlikelihood/annotations';
 
 using from './cptimeseriesf/annotations';
+
+using from './cpclass/annotations';
+
+using from './cpclassibp/annotations';
