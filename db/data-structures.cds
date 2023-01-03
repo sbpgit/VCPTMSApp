@@ -202,17 +202,19 @@ context cp_ds {
     }
 
     type cirIdsWkly {
-      WEEK_DATE : Date;
-      CIR_ID : Integer;
+        WEEK_DATE : Date;
+        CIR_ID    : Integer;
     }
 
     type cirWkly {
         // CAL_DATE    : Date;
         LOCATION_ID   : String(4);
+        DEMAND_LOC    : String(4);
+        PLANNED_LOC   : String(4);
         PRODUCT_ID    : String(40);
         PROD_DESC     : String(40);
         // ASSEMBLY    : String(40);
-        CIR_ID        : array of cirIdsWkly;   //Integer; //
+        CIR_ID        : array of cirIdsWkly; //Integer; //
         MODEL_VERSION : String(20); //
         UNIQUE_ID     : Integer;
         UNIQUE_DESC   : String(50);
@@ -589,10 +591,21 @@ context cp_ds {
     }
 
     type uniqueCharacteristics {
-        UNIQUE_ID : Integer;
+        UNIQUE_ID   : Integer;
         UNIQUE_DESC : String(50);
-        CONFIG    : array of uniqueConfig;
-        TOTAL     : Integer;
+        CONFIG      : array of uniqueConfig;
+        TOTAL       : Integer;
+    }
+
+    type partialProdLoc {
+        PARTIALPROD      : String(40);
+        PARTIALPROD_DESC : String(40);
+        FACTORY_LOC      : String(4);
+        FACTORYLOC_DESC  : String(30);
+        DEMAND_LOC       : String(4);
+        DEMANDLOC_DESC   : String(30);
+        PLANNING_LOC     : String(4);
+        PLANNINGLOC_DESC : String(30);
     }
 
 }

@@ -1184,8 +1184,8 @@ module.exports = (srv) => {
         //         await obgenTimeseriesM2.genTimeseries(req.data, req, Flag);
         //         break;
         // }
-                const obgenTimeseriesM2 = new GenTimeseriesM2();
-                await obgenTimeseriesM2.genTimeseries(req.data, req, Flag);
+        const obgenTimeseriesM2 = new GenTimeseriesM2();
+        await obgenTimeseriesM2.genTimeseries(req.data, req, Flag);
         // const obgenTimeseries_rt = new GenTimeseriesRT();
         // await obgenTimeseries_rt.genTimeseries_rt(req.data, req);
 
@@ -1201,13 +1201,13 @@ module.exports = (srv) => {
         //         await obgenTimeseries.genTimeseriesF(req.data, req, Flag);
         //         break;
         //     case 'M2':
-                // const obgenTimeseriesM2 = new GenTimeseriesM2();
-                // await obgenTimeseriesM2.genTimeseriesF(req.data, req, Flag);
-                // break;
+        // const obgenTimeseriesM2 = new GenTimeseriesM2();
+        // await obgenTimeseriesM2.genTimeseriesF(req.data, req, Flag);
+        // break;
         // }
         // const obgenTimeseries_rt = new GenTimeseriesRT();
         // await obgenTimeseries_rt.genTimeseriesF_rt(req.data, req);
-        await obgenMktAuth.updateOptPer('AS01','000000000000000059','2023-02-27', '__BASELINE','_PLAN', req);
+        await obgenMktAuth.updateOptPer('AS01', '000000000000000059', '2023-02-27', '__BASELINE', '_PLAN', req);
     });
 
     // Generate Unique ID
@@ -2703,6 +2703,7 @@ module.exports = (srv) => {
     srv.on("getCIRWeekly", async (req) => {
         const objCIR = new CIRService();
         let oCIRData = {};
+        // let aPlanningLoc = JSON.parse(req.data.PLANNING_LOC);
         oCIRData = await objCIR.getCIRData(req);
 
         let vDateFrom = req.data.FROMDATE; //"2022-03-04";
@@ -2745,12 +2746,14 @@ module.exports = (srv) => {
         vComp = 0;
 
         for (let j = 0; j < liUniqueId.length; j++) {
-            // Initially set vWeekIndex to j to geneate Week columns
+            // Initially set vWeekIndex to j to generate Week columns
             // vCompIndex is to get Componnent quantity for all dates
             vWeekIndex = 0; //j
             lsCIRWeekly.UNIQUE_ID = liUniqueId[j].UNIQUE_ID;
             lsCIRWeekly.UNIQUE_DESC = liUniqueId[j].UNIQUE_DESC;
             lsCIRWeekly.LOCATION_ID = liUniqueId[j].LOCATION_ID;
+            lsCIRWeekly.DEMAND_LOC = liUniqueId[j].DEMAND_LOC;
+            lsCIRWeekly.PLANNED_LOC = liUniqueId[j].PLANNED_LOC;
             lsCIRWeekly.PRODUCT_ID = liUniqueId[j].PRODUCT_ID;
             lsCIRWeekly.PROD_DESC = liUniqueId[j].PROD_DESC;
             lsCIRWeekly.MODEL_VERSION = req.data.MODEL_VERSION;
@@ -3682,143 +3685,169 @@ module.exports = (srv) => {
                     return 1;
                 }
             }
-    }
+        }
 
         aBaseUniqueId = aUniqueIdChar.filter(function (aUniqChar) {
-        return aUniqChar.UNIQUE_ID === sUniqueId;
-    });
-
-    for (let i = 0; i < aDistinctUniqueIds.length; i++) {
-        aFilteredUniqChars = [];
-
-        aFilteredUniqChars = aUniqueIdChar.filter(function (aUniqChar) {
-            return aUniqChar.UNIQUE_ID === aDistinctUniqueIds[i].UNIQUE_ID;
+            return aUniqChar.UNIQUE_ID === sUniqueId;
         });
 
-        iCount = 0;
-        iPCount = 0;
-        iSCount = 0;
-        iIndx = 0;
-        aSecSequence = [];
-        oUniqueCharCount = {};
-        oMatchedChars = {};
+        for (let i = 0; i < aDistinctUniqueIds.length; i++) {
+            aFilteredUniqChars = [];
 
-
-        if (aFilteredUniqChars.length > 0) {
-            for (let j = 0; j < aBaseUniqueId.length; j++) {
-
-                for (k = 0; k < aFilteredUniqChars.length; k++) {
-                    if (aBaseUniqueId[j].CHAR_NUM === aFilteredUniqChars[k].CHAR_NUM &&
-                        aBaseUniqueId[j].CHARVAL_NUM === aFilteredUniqChars[k].CHARVAL_NUM) {
-                        iCount = iCount + 1;
-
-                        // Check if Primary / Secondary Characteristic
-                        aFilVarcharPS = [];
-                        aFilVarcharPS = aVarcharPS.filter(function (aCharPS) {
-                            return aCharPS.CHAR_NUM === aFilteredUniqChars[k].CHAR_NUM;
-                        });
-                        if (aFilVarcharPS) {
-                            if (aFilVarcharPS[0].CHAR_TYPE === 'P') {
-                                iPCount = iPCount + 1;
-                            } else {
-                                iSCount = iSCount + 1;
-                                aSecSequence.push(aFilVarcharPS[0].SEQUENCE);
-                            }
-                        }
-
-                        break;
-                    }
-                }
-
-            }
-
-            if (iCount > 0) {
-                aSecSequence.sort(function (a, b) { return a - b });      // Sort Ascending Order 
-                oUniqueCharCount = {
-                    UNIQUE_ID: aDistinctUniqueIds[i].UNIQUE_ID,
-                    UNIQUE_DESC: aDistinctUniqueIds[i].UNIQUE_DESC,
-                    COUNT: iCount,
-                    PRIMARY: iPCount,
-                    SECONDARY: iSCount,
-                    SEC_SEQUENCE: aSecSequence
-                }
-
-                aUniqueCharCount.push(oUniqueCharCount);
-                // if (aDistinctPrimaryChars.length > 0) {
-                //     iIndx = aDistinctPrimaryChars.findIndex(item => item.PRIMARY === iPCount)
-                //     aDistinctPrimaryChars.push(oUniqueCharCount);
-                // } else {
-                //     aDistinctPrimaryChars.push(oUniqueCharCount);
-                // }
-
-
-                oMatchedChars = {
-                    UNIQUE_ID: aDistinctUniqueIds[i].UNIQUE_ID,
-                    CONFIG: aFilteredUniqChars
-                }
-                aMatchedChars.push(oMatchedChars);
-
-            }
-        }
-    }
-
-    if (aUniqueCharCount.length > 0) {
-
-        // aUniqueCharCount = aUniqueCharCount.sort((a, b) => b.COUNT - a.COUNT);
-        aUniqueCharCount = aUniqueCharCount.sort((a, b) => b.PRIMARY - a.PRIMARY);
-        const ids = aUniqueCharCount.map(o => o.PRIMARY);
-        const aDistinctPrimaryChars = aUniqueCharCount.filter(({ PRIMARY }, index) => !ids.includes(PRIMARY, index + 1));
-
-        for (let n = 0; n < aDistinctPrimaryChars.length; n++) {
-            aUniqueChars = [];
-
-            aUniqueChars = aUniqueCharCount.filter(function (aUniqChar) {
-                return aUniqChar.PRIMARY === aDistinctPrimaryChars[n].PRIMARY;
+            aFilteredUniqChars = aUniqueIdChar.filter(function (aUniqChar) {
+                return aUniqChar.UNIQUE_ID === aDistinctUniqueIds[i].UNIQUE_ID;
             });
-            // Sort in descending order to get least priority for secondary count as 0
-            aUniqueChars = aUniqueChars.sort((a, b) => b.SECONDARY - a.SECONDARY);  
-            // Sort sec_sequence in ascending order
-            aUniqueChars = aUniqueChars.sort(sorter);
 
-            for (let l = 0; l < aUniqueChars.length; l++) {
-                // for (let l = 0; l < 6; l++) {
-                oUniqueChar = {};
+            iCount = 0;
+            iPCount = 0;
+            iSCount = 0;
+            iIndx = 0;
+            aSecSequence = [];
+            oUniqueCharCount = {};
+            oMatchedChars = {};
 
-                oUniqueChar.UNIQUE_ID = aUniqueChars[l].UNIQUE_ID;
-                oUniqueChar.UNIQUE_DESC = aUniqueChars[l].UNIQUE_DESC;
 
-                aFilteredUniqChars = aMatchedChars.filter(function (aUniqChar) {
-                    return aUniqChar.UNIQUE_ID === aUniqueChars[l].UNIQUE_ID;
-                });
+            if (aFilteredUniqChars.length > 0) {
+                for (let j = 0; j < aBaseUniqueId.length; j++) {
 
-                aFilteredUniqChars = aFilteredUniqChars[0].CONFIG;
+                    for (k = 0; k < aFilteredUniqChars.length; k++) {
+                        if (aBaseUniqueId[j].CHAR_NUM === aFilteredUniqChars[k].CHAR_NUM &&
+                            aBaseUniqueId[j].CHARVAL_NUM === aFilteredUniqChars[k].CHARVAL_NUM) {
+                            iCount = iCount + 1;
 
-                aUniqueConfig = [];
-                for (let m = 0; m < aFilteredUniqChars.length; m++) {
-                    oUniqueConfig = {};
-                    oUniqueConfig.CLASS_NUM = aFilteredUniqChars[m].CLASS_NUM;
-                    oUniqueConfig.CHAR_NUM = aFilteredUniqChars[m].CHAR_NUM;
-                    oUniqueConfig.CHAR_NAME = aFilteredUniqChars[m].CHAR_NAME;
-                    oUniqueConfig.CHAR_DESC = aFilteredUniqChars[m].CHAR_DESC;
-                    oUniqueConfig.CHARVAL_NUM = aFilteredUniqChars[m].CHARVAL_NUM;
-                    oUniqueConfig.CHAR_VALUE = aFilteredUniqChars[m].CHAR_VALUE;
-                    oUniqueConfig.CHARVAL_DESC = aFilteredUniqChars[m].CHARVAL_DESC;
+                            // Check if Primary / Secondary Characteristic
+                            aFilVarcharPS = [];
+                            aFilVarcharPS = aVarcharPS.filter(function (aCharPS) {
+                                return aCharPS.CHAR_NUM === aFilteredUniqChars[k].CHAR_NUM;
+                            });
+                            if (aFilVarcharPS) {
+                                if (aFilVarcharPS[0].CHAR_TYPE === 'P') {
+                                    iPCount = iPCount + 1;
+                                } else {
+                                    iSCount = iSCount + 1;
+                                    aSecSequence.push(aFilVarcharPS[0].SEQUENCE);
+                                }
+                            }
 
-                    aUniqueConfig.push(oUniqueConfig);
+                            break;
+                        }
+                    }
+
                 }
 
-                oUniqueChar.CONFIG = aUniqueConfig;
-                oUniqueChar.TOTAL = aUniqueChars[l].COUNT;
+                if (iCount > 0) {
+                    aSecSequence.sort(function (a, b) { return a - b });      // Sort Ascending Order 
+                    oUniqueCharCount = {
+                        UNIQUE_ID: aDistinctUniqueIds[i].UNIQUE_ID,
+                        UNIQUE_DESC: aDistinctUniqueIds[i].UNIQUE_DESC,
+                        COUNT: iCount,
+                        PRIMARY: iPCount,
+                        SECONDARY: iSCount,
+                        SEC_SEQUENCE: aSecSequence
+                    }
 
-                aUniqueCharRes.push(oUniqueChar);
+                    aUniqueCharCount.push(oUniqueCharCount);
+                    // if (aDistinctPrimaryChars.length > 0) {
+                    //     iIndx = aDistinctPrimaryChars.findIndex(item => item.PRIMARY === iPCount)
+                    //     aDistinctPrimaryChars.push(oUniqueCharCount);
+                    // } else {
+                    //     aDistinctPrimaryChars.push(oUniqueCharCount);
+                    // }
 
+
+                    oMatchedChars = {
+                        UNIQUE_ID: aDistinctUniqueIds[i].UNIQUE_ID,
+                        CONFIG: aFilteredUniqChars
+                    }
+                    aMatchedChars.push(oMatchedChars);
+
+                }
             }
         }
-    }
 
-    return aUniqueCharRes;
+        if (aUniqueCharCount.length > 0) {
 
-});
+            // aUniqueCharCount = aUniqueCharCount.sort((a, b) => b.COUNT - a.COUNT);
+            aUniqueCharCount = aUniqueCharCount.sort((a, b) => b.PRIMARY - a.PRIMARY);
+            const ids = aUniqueCharCount.map(o => o.PRIMARY);
+            const aDistinctPrimaryChars = aUniqueCharCount.filter(({ PRIMARY }, index) => !ids.includes(PRIMARY, index + 1));
+
+            for (let n = 0; n < aDistinctPrimaryChars.length; n++) {
+                aUniqueChars = [];
+
+                aUniqueChars = aUniqueCharCount.filter(function (aUniqChar) {
+                    return aUniqChar.PRIMARY === aDistinctPrimaryChars[n].PRIMARY;
+                });
+                // Sort in descending order to get least priority for secondary count as 0
+                aUniqueChars = aUniqueChars.sort((a, b) => b.SECONDARY - a.SECONDARY);
+                // Sort sec_sequence in ascending order
+                aUniqueChars = aUniqueChars.sort(sorter);
+
+                for (let l = 0; l < aUniqueChars.length; l++) {
+                    // for (let l = 0; l < 6; l++) {
+                    oUniqueChar = {};
+
+                    oUniqueChar.UNIQUE_ID = aUniqueChars[l].UNIQUE_ID;
+                    oUniqueChar.UNIQUE_DESC = aUniqueChars[l].UNIQUE_DESC;
+
+                    aFilteredUniqChars = aMatchedChars.filter(function (aUniqChar) {
+                        return aUniqChar.UNIQUE_ID === aUniqueChars[l].UNIQUE_ID;
+                    });
+
+                    aFilteredUniqChars = aFilteredUniqChars[0].CONFIG;
+
+                    aUniqueConfig = [];
+                    for (let m = 0; m < aFilteredUniqChars.length; m++) {
+                        oUniqueConfig = {};
+                        oUniqueConfig.CLASS_NUM = aFilteredUniqChars[m].CLASS_NUM;
+                        oUniqueConfig.CHAR_NUM = aFilteredUniqChars[m].CHAR_NUM;
+                        oUniqueConfig.CHAR_NAME = aFilteredUniqChars[m].CHAR_NAME;
+                        oUniqueConfig.CHAR_DESC = aFilteredUniqChars[m].CHAR_DESC;
+                        oUniqueConfig.CHARVAL_NUM = aFilteredUniqChars[m].CHARVAL_NUM;
+                        oUniqueConfig.CHAR_VALUE = aFilteredUniqChars[m].CHAR_VALUE;
+                        oUniqueConfig.CHARVAL_DESC = aFilteredUniqChars[m].CHARVAL_DESC;
+
+                        aUniqueConfig.push(oUniqueConfig);
+                    }
+
+                    oUniqueChar.CONFIG = aUniqueConfig;
+                    oUniqueChar.TOTAL = aUniqueChars[l].COUNT;
+
+                    aUniqueCharRes.push(oUniqueChar);
+
+                }
+            }
+        }
+
+        return aUniqueCharRes;
+
+    });
+    // Get Partial Product & Locations
+    srv.on('getPartialProdLoc', async (req) => {
+        // console.log('Test');
+        const aPartialProdLoc = await cds.run(`
+            SELECT DISTINCT 
+            "CP_FACTORY_SALESLOC"."PRODUCT_ID" AS "PARTIALPROD", 
+            "CP_PARTIALPROD_INTRO"."PROD_DESC" AS "PARTIALPROD_DESC",
+            "CP_FACTORY_SALESLOC"."FACTORY_LOC" AS "FACTORY_LOC",
+            "CP_FACTORY_SALESLOC"."LOCATION_ID" AS "DEMAND_LOC",
+            "CP_FACTORY_SALESLOC"."PLAN_LOC" AS "PLANNING_LOC",
+            "CP_LOCATION"."LOCATION_DESC" AS "FACTORYLOC_DESC",
+            "CP_LOCATION"."LOCATION_DESC" AS "DEMANDLOC_DESC",
+            "CP_LOCATION"."LOCATION_DESC" AS "PLANNINGLOC_DESC"
+                            FROM "CP_FACTORY_SALESLOC" 
+                            INNER JOIN "CP_PARTIALPROD_INTRO"
+                            ON "CP_FACTORY_SALESLOC"."PRODUCT_ID" = "CP_PARTIALPROD_INTRO"."PRODUCT_ID"
+                            INNER JOIN "CP_LOCATION"
+                            ON "CP_FACTORY_SALESLOC"."FACTORY_LOC" = "CP_LOCATION"."LOCATION_ID"
+                            AND "CP_FACTORY_SALESLOC"."LOCATION_ID" = "CP_LOCATION"."LOCATION_ID"
+                            AND "CP_FACTORY_SALESLOC"."PLAN_LOC" = "CP_LOCATION"."LOCATION_ID"`
+        );
+
+        return aPartialProdLoc;
+
+    });
+
 
     // EOI Deepa
 };

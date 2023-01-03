@@ -13,18 +13,25 @@ class CIRData {
         let vDateFrom = req.data.FROMDATE; //"2022-03-04";
         let vDateTo = req.data.TODATE; //"2023-01-03";
         let oEntry = {};
+        let aPlanningLoc = JSON.parse(req.data.PLANNING_LOC);
+        let aFilterLoc = [];
         //const liUniqueId = [];
+        // if(aPlanningLoc.length > 0) {
+        //     for(let l = 0; l < aPlanningLoc.length; l++) {
+        //         aFilterLoc.push(aPlanningLoc[l].PLANNING_LOC);
+        //     }
+        // }
+        // req.data.LOCATION_ID +
         const liCIRQty = await cds.run(
             `
             SELECT *            
             FROM "CP_CIR_GENERATED"             
-            inner join "CP_PARTIALPROD_INTRO"
-            ON "CP_CIR_GENERATED"."PRODUCT_ID" = "CP_PARTIALPROD_INTRO"."PRODUCT_ID"
-            AND "CP_CIR_GENERATED"."LOCATION_ID" = "CP_PARTIALPROD_INTRO"."LOCATION_ID"
-            WHERE  "CP_CIR_GENERATED"."LOCATION_ID" = '` +
-            req.data.LOCATION_ID +
-            `'
-                 AND  "CP_PARTIALPROD_INTRO"."REF_PRODID" = '` +
+            inner join "CP_FACTORY_SALESLOC"
+            ON "CP_CIR_GENERATED"."PRODUCT_ID" = "CP_FACTORY_SALESLOC"."PRODUCT_ID"
+            AND "CP_CIR_GENERATED"."LOCATION_ID" = "CP_FACTORY_SALESLOC"."PLAN_LOC"
+            WHERE  "CP_FACTORY_SALESLOC"."FACTORY_LOC" = '` +
+            req.data.LOCATION_ID + `'
+                 AND  "CP_FACTORY_SALESLOC"."PRODUCT_ID" = '` +
             req.data.PRODUCT_ID +
             `' AND  "CP_CIR_GENERATED"."VERSION" = '` +
             req.data.VERSION +
@@ -55,17 +62,22 @@ class CIRData {
           "CP_CIR_GENERATED"."SCENARIO",
           "CP_CIR_GENERATED"."UNIQUE_ID",          
           "CP_UNIQUE_ID_HEADER"."UNIQUE_DESC",
-          "CP_PARTIALPROD_INTRO"."PROD_DESC"          
+          "CP_PARTIALPROD_INTRO"."PROD_DESC",
+          "CP_FACTORY_SALESLOC"."LOCATION_ID" AS "DEMAND_LOC",
+          "CP_FACTORY_SALESLOC"."PLAN_LOC" AS "PLANNED_LOC"          
                           FROM "CP_CIR_GENERATED" 
+                          inner join "CP_FACTORY_SALESLOC"
+                          ON "CP_CIR_GENERATED"."PRODUCT_ID" = "CP_FACTORY_SALESLOC"."PRODUCT_ID"
+                          AND "CP_CIR_GENERATED"."LOCATION_ID" = "CP_FACTORY_SALESLOC"."PLAN_LOC"
                           inner join "CP_UNIQUE_ID_HEADER"
                           ON "CP_CIR_GENERATED"."UNIQUE_ID" = "CP_UNIQUE_ID_HEADER"."UNIQUE_ID"
                           AND "CP_CIR_GENERATED"."LOCATION_ID" = "CP_UNIQUE_ID_HEADER"."LOCATION_ID"
                           inner join "CP_PARTIALPROD_INTRO"
                           ON "CP_CIR_GENERATED"."PRODUCT_ID" = "CP_PARTIALPROD_INTRO"."PRODUCT_ID"
                           AND "CP_CIR_GENERATED"."LOCATION_ID" = "CP_PARTIALPROD_INTRO"."LOCATION_ID"
-                          WHERE  "CP_CIR_GENERATED"."LOCATION_ID" = '` +
-            req.data.LOCATION_ID +
-            `' AND  "CP_PARTIALPROD_INTRO"."REF_PRODID" = '` +
+                          WHERE  "CP_FACTORY_SALESLOC"."FACTORY_LOC" = '` +
+                          req.data.LOCATION_ID +
+            `' AND  "CP_CIR_GENERATED"."PRODUCT_ID" = '` +
             req.data.PRODUCT_ID +
             `' AND  "CP_CIR_GENERATED"."VERSION" = '` +
             req.data.VERSION +
@@ -86,6 +98,15 @@ class CIRData {
                                "CP_CIR_GENERATED"."UNIQUE_ID" ASC`
         );
         oEntry.liUniqueId = liUniqueId;
+        if(aPlanningLoc.length > 0){
+            //Filter by Selected Demand / Planning Location
+            // Filter array of objects based on another array of objects
+            oEntry.liUniqueId = liUniqueId.filter((el) => {
+                return aPlanningLoc.some((f) => {
+                    return f.DEMAND_LOC === e1.DEMAND_LOC && f.PLANNING_LOC === el.PLANNED_LOC;
+                });
+            });            
+        }
        }
        catch(e) {
            console.log(e);

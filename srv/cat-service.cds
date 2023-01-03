@@ -311,7 +311,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
     @readonly
     entity getCIRLog            as projection on od.CIRLOG;
 
-    function getCIRWeekly(LOCATION_ID : String(4), PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), FROMDATE : Date, TODATE : Date, MODEL_VERSION : String(20))                                                                                             returns array of ds.cirWkly;
+    function getCIRWeekly(LOCATION_ID : String(4),PLANNING_LOC : String, PRODUCT_ID : String(40), VERSION : String(10), SCENARIO : String(32), FROMDATE : Date, TODATE : Date, MODEL_VERSION : String(20))  returns array of ds.cirWkly;
     // function getCIRWeekly(FROMDATE : Date, TODATE : Date)  returns array of ds.cirWkly;
     function getUniqueIdItems(UNIQUE_ID : Integer)                                                                                                                                                                                                                               returns array of ds.uniqueCharItems;
     // Publish CIR data to ECC
@@ -320,6 +320,9 @@ service CatalogService @(impl : './lib/cat-service.js') {
     function modifyCIRFirmQuantities(FLAG : String(1), CIR_QUANTITIES : String)                                                                                                                                                                                                  returns String;
     function getCFAuthToken()                                                                                                                                                                                                                                                    returns String;
     function getCFDestinationUser(TOKEN : String)                                                                                                                                                                                                                                returns String;
+    // Get Partial Products & Locations
+    function getPartialProdLoc() returns array of ds.partialProdLoc;  
+
     // EOI - Deepa
     entity getSalesStock        as projection on od.SALES_S;
     ///*****/ Assembly Requirements /*****/
@@ -359,7 +362,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
 
     // Get User Info
     @requires : 'authenticated-user'
-    function getUserInfo()                                                                                                                                                                                                                                                       returns String;
-
-
+    function getUserInfo()  returns String; 
+    
+    
 }

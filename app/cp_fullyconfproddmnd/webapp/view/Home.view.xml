@@ -45,30 +45,34 @@
                             </VBox>
 
                             <!-- New Filter********************************************* -->
-                            <!-- <VBox>
-                                <Label text="Product" required="true" />
-                                <Input placeholder="Product" value="" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                            <VBox id="_IDGenVBox2">
+                                <Label id="_IDGenLabel2" text="Manufacturing Location" required="true" />
+                                <Input id="idloc" value="" placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                             </VBox>
-                            <VBox>
-                                <Label text="Manufacturing Location" required="true" />
-                                <Input value="" placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+
+                            <VBox id="_IDGenVBox10">
+                                <Label id="_IDGenLabel9" text="Demand Location" required="true" />
+                                <!-- <Input id="idDmndloc" value="" placeholder="Version" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" /> -->
+                                <MultiInput id="idDmndLoc"  showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp">
+                                    <!-- <core:Item key="{ProductId}" text="{Name}" /> -->
+                                </MultiInput>
                             </VBox>
-                            
-                            <VBox>
-                                <Label text="Demand Location" required="true" />
-                                <Input value="" placeholder="Version" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
-                            </VBox> -->
+
+                            <VBox id="_IDGenVBox3">
+                                <Label id="_IDGenLabel3" text="Product" required="true" />
+                                <Input id="idprodList" placeholder="Partial Product" value="" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                            </VBox>                           
 
                             <!--********************************************************** -->
 
-                            <VBox id="_IDGenVBox2">
+                            <!-- <VBox id="_IDGenVBox2">
                                 <Label id="_IDGenLabel2" text="Location" required="true" />
                                 <Input id="idloc" value="" placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
-                            </VBox>
-                            <VBox id="_IDGenVBox3">
+                            </VBox> -->
+                            <!-- <VBox id="_IDGenVBox3">
                                 <Label id="_IDGenLabel3" text="Configurable Product" required="true" />
                                 <Input id="idprodList" placeholder="Configurable Product" value="" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
-                            </VBox>
+                            </VBox> -->
                             <VBox id="_IDGenVBox4">
                                 <Label id="_IDGenLabel4" text="IBP Version" required="true" />
                                 <Input id="idver" value="" placeholder="Version" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
@@ -92,10 +96,7 @@
                                     <core:ListItem id="_IDGenListItem2" key="Simulation" text="Simulation" />
                                 </Select>
                             </VBox>
-
-                            <!-- <VBox>
-                        <Label text="" /> -->
-
+                            
                             <HBox id="_IDGenHBox1" class="hdrBtnMargin">
                                 <Button id="_IDGenButton1" text="Go" type="Emphasized" press="onGetData" tooltip="Get data based on filters" />
                                 <Button id="_IDGenButton2" text="Reset" type="Transparent" press="onResetData" tooltip="Reset filters and Data" />
@@ -128,7 +129,7 @@
                                                 <core:ListItem key="{CHAR_NUM}:{CHARVAL_NUM}" text="{CHAR_DESC} - {CHAR_NAME}" additionalText="{CHARVAL_DESC} - {CHAR_VALUE}" />
                                             </MultiComboBox>
                                         </Toolbar>
-                                        <t:Table id="idCIReq" class="table" fixedColumnCount="2" threshold="10" selectionMode="None" alternateRowColors="true" enableSelectAll="false" visibleRowCount="7">
+                                        <t:Table id="idCIReq" class="table" fixedColumnCount="3" threshold="10" selectionMode="None" alternateRowColors="true" enableSelectAll="false" visibleRowCount="7">
                                             <t:columns />
                                         </t:Table>
                                     </VBox>
