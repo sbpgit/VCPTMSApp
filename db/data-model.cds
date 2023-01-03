@@ -1051,6 +1051,12 @@ entity![V_LOCPROD]{
     key![PROD_DESC]   : String(40) @title : 'PROD_DESC';
 }
 
+// @cds.persistence.exists
+// entity![V_FACTORYLOC]{
+//     key![LOCATION_ID]  : String(40) @title : 'LOCATION_ID';
+//     key![LOCATION_DESC]   : String(40) @title : 'LOCATION_DESC';
+// }
+
 @cds.persistence.exists
 entity![V_BOMPVS]{
     key![LOCATION_ID] : String(4)      @title : 'LOCATION_ID';

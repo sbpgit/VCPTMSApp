@@ -4,11 +4,8 @@
 <localVariables/>
 <variableMappings/>
 <dataSources>
-  <DataSource id="V_IBP_SALESH_CUST_LOC_PROD_WEEK_DATE">
-    <resourceUri>V_IBP_SALESH_CUST_LOC_PROD_WEEK_DATE</resourceUri>
-  </DataSource>
-  <DataSource id="V_SALES_H">
-    <resourceUri>V_SALES_H</resourceUri>
+  <DataSource id="V_SAC_SALESH">
+    <resourceUri>V_SAC_SALESH</resourceUri>
   </DataSource>
   <DataSource id="CP_CIR_GENERATED">
     <resourceUri>CP_CIR_GENERATED</resourceUri>
@@ -16,30 +13,24 @@
 </dataSources>
 <snapshotProcedures/>
 <calculationViews>
-  <calculationView xsi:type="Calculation:JoinView" id="Join_1" cardinality="CN_N" joinType="inner">
+  <calculationView xsi:type="Calculation:JoinView" id="Join_1">
     <viewAttributes>
-      <viewAttribute id="WEEK_DATE"/>
       <viewAttribute id="LOCATION_ID"/>
       <viewAttribute id="PRODUCT_ID"/>
-      <viewAttribute id="ORD_QTY" aggregationType="sum"/>
       <viewAttribute id="UNIQUE_ID" aggregationType="sum"/>
-      <viewAttribute hidden="true" id="JOIN$SALES_DOC$SALES_DOC"/>
+      <viewAttribute id="PRIMARY_ID" aggregationType="sum"/>
+      <viewAttribute id="ORD_QTY" aggregationType="sum"/>
+      <viewAttribute id="WEEK_DATE"/>
     </viewAttributes>
     <calculatedViewAttributes/>
-    <input node="V_IBP_SALESH_CUST_LOC_PROD_WEEK_DATE">
-      <mapping xsi:type="Calculation:AttributeMapping" target="WEEK_DATE" source="WEEK_DATE"/>
+    <input node="V_SAC_SALESH">
       <mapping xsi:type="Calculation:AttributeMapping" target="LOCATION_ID" source="LOCATION_ID"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="PRODUCT_ID" source="PRODUCT_ID"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="ORD_QTY" source="ORD_QTY"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$SALES_DOC$SALES_DOC" source="SALES_DOC"/>
-    </input>
-    <input node="V_SALES_H">
       <mapping xsi:type="Calculation:AttributeMapping" target="UNIQUE_ID" source="UNIQUE_ID"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$SALES_DOC$SALES_DOC" source="SALES_DOC"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="PRODUCT_ID" source="PRODUCT_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PRIMARY_ID" source="PRIMARY_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="ORD_QTY" source="ORD_QTY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="WEEK_DATE" source="WEEK_DATE"/>
     </input>
-    <joinAttribute name="JOIN$SALES_DOC$SALES_DOC"/>
-    <joinAttribute name="PRODUCT_ID"/>
   </calculationView>
   <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
     <viewAttributes>
@@ -48,8 +39,17 @@
       <viewAttribute id="PRODUCT_ID"/>
       <viewAttribute id="CIR_QTY"/>
       <viewAttribute id="UNIQUE_ID"/>
+    
+      <viewAttribute id="CIR_ID"/>
+      <viewAttribute id="MODEL_VERSION"/>
+      <viewAttribute id="VERSION"/>
+      <viewAttribute id="SCENARIO"/>
     </viewAttributes>
-    <calculatedViewAttributes/>
+    <calculatedViewAttributes>
+      <calculatedViewAttribute id="Ordered_Qty" datatype="DECIMAL" length="13" scale="3" expressionLanguage="SQL">
+        <formula>&quot;CIR_QTY&quot;</formula>
+      </calculatedViewAttribute>
+    </calculatedViewAttributes>
     <input node="CP_CIR_GENERATED"/>
   </calculationView>
   <calculationView xsi:type="Calculation:UnionView" id="Union_1">
@@ -58,25 +58,25 @@
       <viewAttribute id="LOCATION_ID"/>
       <viewAttribute id="PRODUCT_ID"/>
       <viewAttribute id="UNIQUE_ID" aggregationType="sum"/>
+      <viewAttribute id="PRIMARY_ID" aggregationType="sum"/>
       <viewAttribute id="CIR_QTY" aggregationType="sum"/>
-      <viewAttribute id="ORD_QTY" aggregationType="sum"/>
     </viewAttributes>
     <calculatedViewAttributes/>
-    <input node="Projection_1">
+    <input node="Projection_1" emptyUnionBehavior="NO_ROW">
       <mapping xsi:type="Calculation:AttributeMapping" target="WEEK_DATE" source="WEEK_DATE"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="LOCATION_ID" source="LOCATION_ID"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="PRODUCT_ID" source="PRODUCT_ID"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="UNIQUE_ID" source="UNIQUE_ID"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="CIR_QTY" source="CIR_QTY"/>
-      <mapping xsi:type="Calculation:ConstantAttributeMapping" target="ORD_QTY" null="true" value=""/>
+      <mapping xsi:type="Calculation:ConstantAttributeMapping" target="PRIMARY_ID" null="true" value=""/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CIR_QTY" source="Ordered_Qty"/>
     </input>
-    <input node="Join_1">
-      <mapping xsi:type="Calculation:AttributeMapping" target="WEEK_DATE" source="WEEK_DATE"/>
+    <input node="Join_1" emptyUnionBehavior="NO_ROW">
+      <mapping xsi:type="Calculation:ConstantAttributeMapping" target="WEEK_DATE" null="true" value=""/>
       <mapping xsi:type="Calculation:AttributeMapping" target="LOCATION_ID" source="LOCATION_ID"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="PRODUCT_ID" source="PRODUCT_ID"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="UNIQUE_ID" source="UNIQUE_ID"/>
-      <mapping xsi:type="Calculation:ConstantAttributeMapping" target="CIR_QTY" null="true" value=""/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="ORD_QTY" source="ORD_QTY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PRIMARY_ID" source="PRIMARY_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CIR_QTY" source="ORD_QTY"/>
     </input>
   </calculationView>
 </calculationViews>
@@ -98,16 +98,16 @@
       <descriptions defaultDescription="UNIQUE_ID"/>
       <keyMapping columnObjectName="Union_1" columnName="UNIQUE_ID"/>
     </attribute>
+    <attribute id="PRIMARY_ID" order="5" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="PRIMARY_ID"/>
+      <keyMapping columnObjectName="Union_1" columnName="PRIMARY_ID"/>
+    </attribute>
   </attributes>
   <calculatedAttributes/>
   <baseMeasures>
-    <measure id="CIR_QTY" order="5" aggregationType="sum" measureType="simple">
-      <descriptions defaultDescription="CIR_QTY"/>
-      <measureMapping columnObjectName="Union_1" columnName="CIR_QTY"/>
-    </measure>
-    <measure id="ORD_QTY" order="6" aggregationType="sum" measureType="simple">
+    <measure id="CIR_QTY" order="6" aggregationType="sum" measureType="simple">
       <descriptions defaultDescription="ORD_QTY"/>
-      <measureMapping columnObjectName="Union_1" columnName="ORD_QTY"/>
+      <measureMapping columnObjectName="Union_1" columnName="CIR_QTY"/>
     </measure>
   </baseMeasures>
   <calculatedMeasures/>
@@ -123,13 +123,9 @@
       <upperLeftCorner x="242" y="322"/>
       <rectangleSize height="30" width="160"/>
     </shape>
-    <shape modelObjectName="V_IBP_SALESH_CUST_LOC_PROD_WEEK_DATE" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
-      <upperLeftCorner x="57" y="9"/>
-      <rectangleSize width="347.83984375"/>
-    </shape>
-    <shape modelObjectName="V_SALES_H" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
-      <upperLeftCorner x="320" y="30"/>
-      <rectangleSize width="201.52685546875"/>
+    <shape modelObjectName="V_SAC_SALESH" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="20" y="30"/>
+      <rectangleSize width="159"/>
     </shape>
     <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
       <upperLeftCorner x="-17" y="322"/>
