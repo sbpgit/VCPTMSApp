@@ -1051,11 +1051,15 @@ entity![V_LOCPROD]{
     key![PROD_DESC]   : String(40) @title : 'PROD_DESC';
 }
 
-// @cds.persistence.exists
-// entity![V_FACTORYLOC]{
-//     key![LOCATION_ID]  : String(40) @title : 'LOCATION_ID';
-//     key![LOCATION_DESC]   : String(40) @title : 'LOCATION_DESC';
-// }
+@cds.persistence.exists
+entity![V_FACTORYLOC]{
+    key![FACTORY_LOC] : String(4)  @title : 'Factory Location ';
+    key![PLAN_LOC]    : String(4)  @title : 'Planning Location ';
+    key![Demand_Loc] : String(4)  @title : 'Demand Location ';
+    key![PRODUCT_ID]  : String(40) @title : 'Product';
+    key![LOCATION_DESC]   : String(40) @title : 'Location Description';
+    key![LOCATION_ID] : String(4)  @title : 'Location ';
+}
 
 @cds.persistence.exists
 entity![V_BOMPVS]{
