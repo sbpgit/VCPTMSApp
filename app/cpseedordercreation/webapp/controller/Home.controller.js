@@ -70,6 +70,14 @@ sap.ui.define([
                     );
                     this.getView().addDependent(this._valueHelpDialogOrderCreate);
                 }
+                
+                if (!this._valueHelpDialogCustomer) {
+                    this._valueHelpDialogCustomer = sap.ui.xmlfragment(
+                        "cpapp.cpseedordercreation.view.CustomerGroup",
+                        this
+                    );
+                    this.getView().addDependent(this._valueHelpDialogCustomer);
+                }
 
             },
             /**
@@ -108,6 +116,7 @@ sap.ui.define([
                 this.oProdList = sap.ui.getCore().byId("prodSlctList");
                 this.oLocList = sap.ui.getCore().byId("LocSlctList");
                 this.oUniqList = sap.ui.getCore().byId("UniqSlctList");
+                this.oCustList = sap.ui.getCore().byId("CustSlctList");
 
                 sap.ui.core.BusyIndicator.show();
                 // Calling service to get Location data
@@ -116,6 +125,19 @@ sap.ui.define([
                         sap.ui.core.BusyIndicator.hide();
                         that.locModel.setData(oData);
                         that.oLocList.setModel(that.locModel);
+                    },
+                    error: function (oData, error) {
+                        sap.ui.core.BusyIndicator.hide();
+                        MessageToast.show("error");
+                    },
+                });
+
+                // Calling service to get Customer data
+                this.getModel("BModel").read("/getCustgroup", {
+                    success: function (oData) {
+                        sap.ui.core.BusyIndicator.hide();
+                        that.custModel.setData(oData);
+                        that.oCustList.setModel(that.custModel);
                     },
                     error: function (oData, error) {
                         sap.ui.core.BusyIndicator.hide();
@@ -145,7 +167,11 @@ sap.ui.define([
                 if (sId.includes("loc")) {
                     that._valueHelpDialogLoc.open();
                     // Prod Dialog
-                } else if (sId.includes("prod")) {
+                } 
+                else if (sId.includes("cust")) {
+                    that._valueHelpDialogCustomer.open();
+                }
+                else if (sId.includes("prod")) {
                     // that._valueHelpDialogProd.open();
                     if (that.byId("idloc").getValue()) {
                         that._valueHelpDialogProd.open();
@@ -215,16 +241,22 @@ sap.ui.define([
                 // Loc Dialog
                 if (sId.includes("Loc")) {
                     sap.ui.getCore().byId("LocSearch").setValue("");
-                    // that._oCore
-                    //     .byId(this._valueHelpDialogLoc.getId() + "-searchField")
-                    //     .setValue("");
                     if (that.oLocList.getBinding("items")) {
                         that.oLocList.getBinding("items").filter([]);
                     }
                     sap.ui.getCore().byId("LocSlctList").removeSelections();
                     that._valueHelpDialogLoc.close();
                     // Prod Dialog
-                } else if (sId.includes("Prod")) {
+                } 
+                else if (sId.includes("Cust")) {
+                    sap.ui.getCore().byId("CustSearch").setValue("");
+                    if (that.oCustList.getBinding("items")) {
+                        that.oCustList.getBinding("items").filter([]);
+                    }
+                    sap.ui.getCore().byId("CustSlctList").removeSelections();
+                    that._valueHelpDialogCustomer.close();
+                    // Prod Dialog
+                }else if (sId.includes("Prod")) {
                     sap.ui.getCore().byId("ProdSearch").setValue("");
                     // that._oCore
                     //     .byId(this._valueHelpDialogProd.getId() + "-searchField")
@@ -273,6 +305,21 @@ sap.ui.define([
                         );
                     }
                     that.oLocList.getBinding("items").filter(oFilters);
+                    
+                } // Customer
+                else if (sId.includes("Cust")) {
+                    if (sQuery !== "") {
+                        oFilters.push(
+                            new Filter({
+                                filters: [
+                                    new Filter("CUSTOMER_GROUP", FilterOperator.Contains, sQuery),
+                                    new Filter("CUSTOMER_DESC", FilterOperator.Contains, sQuery),
+                                ],
+                                and: false,
+                            })
+                        );
+                    }
+                    that.oCustList.getBinding("items").filter(oFilters);
                     // Product
                 } else if (sId.includes("Prod")) {
                     if (sQuery !== "") {
@@ -381,7 +428,10 @@ sap.ui.define([
                     }
                     that.oProd.setValue(oEvent.getParameters().listItem.getCells()[0].getTitle());
                    
-                } else if (sId.includes("Uniq")) {
+                } else if (sId.includes("Cust")) {
+                    this.oCust = sap.ui.getCore().byId("idCust");
+                    that.oCust.setValue(oEvent.getParameters().listItem.getCells()[0].getTitle());
+                }else if (sId.includes("Uniq")) {
                     var aSelectedProd = oEvent.getParameter("selectedItems");
                     this.oUniq = sap.ui.getCore().byId("idUniq");
                     that.oUniq.setValue(oEvent.getParameters().listItem.getCells()[0].getTitle());

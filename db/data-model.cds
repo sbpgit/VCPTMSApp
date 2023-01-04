@@ -748,6 +748,7 @@ context cp {
         key SEED_ORDER    : String(10)     @title : 'Seed Order';
             LOCATION_ID   : String(4)      @title : 'Location ';
             PRODUCT_ID    : String(40)     @title : 'Product';
+            CUSTOMER_GROUP  : String(20)     @title : 'Customer Group';
             UNIQUE_ID     : Integer        @title : 'Unique ID';
             ORD_QTY       : Decimal(13, 3) @title : 'Ordered Qty';
             MAT_AVAILDATE : Date           @title : 'Material Avail. Date';

@@ -2412,6 +2412,7 @@ module.exports = (srv) => {
         if (req.data.FLAG === "C") {
             lsresults.LOCATION_ID = liSeeddata[0].LOCATION_ID;
             lsresults.PRODUCT_ID = liSeeddata[0].PRODUCT_ID;
+            lsresults.CUSTOMER_GROUP = liSeeddata[0].CUSTOMER_GROUP;
             lsresults.UNIQUE_ID = liSeeddata[0].UNIQUE_ID;
             lsresults.ORD_QTY = parseFloat(liSeeddata[0].ORD_QTY);
             lsresults.MAT_AVAILDATE = liSeeddata[0].MAT_AVAILDATE;
@@ -2427,8 +2428,9 @@ module.exports = (srv) => {
                     `'
                         AND "PRODUCT_ID" = '` +
                     liSeeddata[0].PRODUCT_ID +
-                    `' 
-                        AND "SEED_ORDER" = '` +
+                    `'  AND "CUSTOMER_GROUP" = '` +
+                    liSeeddata[0].CUSTOMER_GROUP +
+                    `'  AND "SEED_ORDER" = '` +
                     vOrder +
                     `' ORDER BY SEED_ORDER DESC`
                 );
@@ -2455,7 +2457,7 @@ module.exports = (srv) => {
                         .where(`LOCATION_ID = '${lsresults.LOCATION_ID}'
                         AND PARAMETER_ID = '${lspara.PARAMETER_ID}'`)
                     responseMessage = lsresults.SEED_ORDER + " Created successfully";
-                    await obgenSOFunctions.createSO(lsresults.LOCATION_ID, lsresults.PRODUCT_ID, lsresults.SEED_ORDER, lsresults.MAT_AVAILDATE, lsresults.ORD_QTY, lsresults.UNIQUE_ID);
+                    await obgenSOFunctions.createSO(lsresults.LOCATION_ID, lsresults.PRODUCT_ID, lsresults.CUSTOMER_GROUP, lsresults.SEED_ORDER, lsresults.MAT_AVAILDATE, lsresults.ORD_QTY, lsresults.UNIQUE_ID);
                 } catch (e) {
                     //DONOTHING
                     responseMessage = " Creation failed";

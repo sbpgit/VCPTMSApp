@@ -1485,8 +1485,7 @@ module.exports = cds.service.impl(async function () {
                             "PRODUCT_ID",
                             "ORD_QTY",
                             "ADJ_QTY",
-                            "CUSTOMER_GROUP",
-                            "IBP_CUSTOMER",
+                            "CUSTOMER_GROUP"
                             FROM V_IBP_SALESH_ACTDEMD
                             WHERE LOCATION_ID = '`+ lsData.LOCATION_ID + `'
                                AND PRODUCT_ID = '`+ lsData.PRODUCT_ID +
@@ -1583,8 +1582,8 @@ module.exports = cds.service.impl(async function () {
         let vLength = parseInt(lisales.length) - 1;
         let liDates = obibpfucntions.generateDateseries(lisales[0].WEEK_DATE, lisales[vLength].WEEK_DATE);
         let vDemd, vAdjqty, vWeekDate;
-        for (let i = 0; i < lisales.length; i++) {
             for (let iDate = 0; iDate < liDates.length; iDate++) {
+                for (let i = 0; i < lisales.length; i++) {
                 vDemd = "", vAdjqty = "", vWeekDate = "";
                 if (liDates[iDate].WEEK_DATE === lisales[i].WEEK_DATE) {
                     vWeekDate = new Date(lisales[i].WEEK_DATE).toISOString().split('Z');
@@ -1617,18 +1616,18 @@ module.exports = cds.service.impl(async function () {
             }
 
         }
-        vWeekDate = new Date(liDates[24].WEEK_DATE).toISOString().split('Z');
-        vDemd = "-2";
-        vAdjqty = "-3";
-        vsales = {
-            "LOCID": "PL10",
-            "PRDID": "FG_100",
-            "CUSTID": "A1",
-            "ACTUALDEMAND": "-1",
-            "SEEDORDERDEMAND": "-2",
-            "PERIODID0_TSTAMP": vWeekDate[0]
-        };
-        oReq.sales.push(vsales);
+        // vWeekDate = new Date(liDates[24].WEEK_DATE).toISOString().split('Z');
+        // vDemd = "-2";
+        // vAdjqty = "-3";
+        // vsales = {
+        //     "LOCID": "PL10",
+        //     "PRDID": "FG_100",
+        //     "CUSTID": "A1",
+        //     "ACTUALDEMAND": "-1",
+        //     "SEEDORDERDEMAND": "-2",
+        //     "PERIODID0_TSTAMP": vWeekDate[0]
+        // };
+        // oReq.sales.push(vsales);
         let vTransID = new Date().getTime().toString();
         let oEntry =
         {
