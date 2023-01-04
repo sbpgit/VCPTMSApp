@@ -268,7 +268,7 @@ Content-Type: application/json
 	"Location" : "PL20",
 	"Product" : "534EDPI",
 	"Profile" : "SBP_AHC_0",
-	"UniqueId" : "215"
+	"UniqueId" : "212"
 }
 
 ### generate UniqueId CharVals  Input Data
