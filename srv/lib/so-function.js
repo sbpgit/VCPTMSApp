@@ -604,7 +604,7 @@ class SOFunctions {
      * @param {Quantity} lQty 
      * @param {Unique ID} liUnique 
      */
-    async createSO(lLocation, lProduct, lSO, lDate, lQty, lUnique) {
+    async createSO(lLocation, lProduct,     , lSO, lDate, lQty, lUnique) {
 
         const lSOItem = '000010';
         // Get Main Product        
@@ -617,6 +617,7 @@ class SOFunctions {
                 'CONFIRMED_QTY',
                 'ORD_QTY',
                 'MAT_AVAILDATE',
+                'CUSTOMER_GROUP',
                 'LOCATION_ID')
             .values(lSO,
                 lSOItem,
@@ -624,6 +625,7 @@ class SOFunctions {
                 lQty,
                 lQty,
                 lDate,
+                lCustomer,
                 lLocation);
 
         const liUnique = await SELECT.columns("CHAR_NUM",
