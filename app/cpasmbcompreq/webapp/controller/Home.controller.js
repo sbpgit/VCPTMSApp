@@ -58,6 +58,14 @@ sap.ui.define(
                     );
                     this.getView().addDependent(this._valueHelpDialogLoc);
                 }
+
+                if (!this._valueHelpDialogDLoc) {
+                    this._valueHelpDialogDLoc = sap.ui.xmlfragment(
+                        "cpapp.cpasmbcompreq.view.DemandLocDialog",
+                        this
+                    );
+                    this.getView().addDependent(this._valueHelpDialogDLoc);
+                }
                 if (!this._valueHelpDialogProd) {
                     this._valueHelpDialogProd = sap.ui.xmlfragment(
                         "cpapp.cpasmbcompreq.view.ProdDialog",
@@ -155,6 +163,9 @@ sap.ui.define(
                 this.oLocList = this._oCore.byId(
                     this._valueHelpDialogLoc.getId() + "-list"
                 );
+                this.oDLocList = this._oCore.byId(
+                    this._valueHelpDialogDLoc.getId() + "-list"
+                );
                 this.oVerList = this._oCore.byId(
                     this._valueHelpDialogVer.getId() + "-list"
                 );
@@ -179,8 +190,16 @@ sap.ui.define(
                 this.getModel("BModel").read("/getfactorylocdesc", {
 
                     success: function (oData) {
-                        that.locModel.setData(oData);
-                        that.oLocList.setModel(that.locModel);
+
+                        function removeDuplicate(array, key) {
+                            var check = new Set();
+                            return array.filter(obj => !check.has(obj[key]) && check.add(obj[key]));
+                        }
+                        oData.results = removeDuplicate(oData.results, 'FACTORY_LOC');
+
+                        that.LocData = oData.results;
+                        // that.locModel.setData(oData);
+                        // that.oLocList.setModel(that.locModel);
                         sap.ui.core.BusyIndicator.hide();
                     },
                     error: function (oData, error) {
@@ -742,9 +761,34 @@ sap.ui.define(
             handleValueHelp: function (oEvent) {
                 var sId = oEvent.getParameter("id");
                 // Location Dialog
-                if (sId.includes("loc")) {
+                if (sId.includes("idloc")) {
+                    var Loc = that.LocData;
+                    that.locMod =  new JSONModel();
+                        that.locMod.setData({
+							Locitems: that.LocData
+						});
+                        that.oLocList.setModel(that.locMod);
                     that._valueHelpDialogLoc.open();
-                    // Product Dialog
+                // Demand Location Dialog
+                } else if(sId.includes("idDemdloc")){
+                    
+                    var DemandLoc = that.LocData;
+                    that.Loc=[];
+                    var FLoc = that.byId("idloc").getValue();
+                    for(var i=0; i<DemandLoc.length; i++){
+                        if(FLoc === DemandLoc[i].Demand_Loc){
+                            that.Loc.push(DemandLoc[i]);
+                        }
+                    }
+                        that.DlocMod =  new JSONModel();
+                        that.DlocMod.setData({
+							DLocitems: that.Loc
+
+						});
+                        that.oDLocList.setModel(that.DlocMod);
+
+                    that._valueHelpDialogDLoc.open();
+                // Product Dialog
                 } else if (sId.includes("prod")) {
                     if (that.byId("idloc").getValue()) {
                         that._valueHelpDialogProd.open();
@@ -788,12 +832,19 @@ sap.ui.define(
             handleClose: function (oEvent) {
                 var sId = oEvent.getParameter("id");
                 // Location Dialog
-                if (sId.includes("Loc")) {
+                if (sId.includes("LocSlctList")) {
                     that._oCore
                         .byId(this._valueHelpDialogLoc.getId() + "-searchField")
                         .setValue("");
                     if (that.oLocList.getBinding("items")) {
                         that.oLocList.getBinding("items").filter([]);
+                    }
+                } else if (sId.includes("LocDSlctList")) {
+                    that._oCore
+                        .byId(this._valueHelpDialogDLoc.getId() + "-searchField")
+                        .setValue("");
+                    if (that.oDLocList.getBinding("items")) {
+                        that.oDLocList.getBinding("items").filter([]);
                     }
                     // Product Dialog
                 } else if (sId.includes("prod")) {
@@ -852,7 +903,7 @@ sap.ui.define(
                 // Check if search filter is to be applied
                 sQuery = sQuery ? sQuery.trim() : "";
                 // Location
-                if (sId.includes("Loc")) {
+                if (sId.includes("LocSlctList")) {
                     if (sQuery !== "") {
                         oFilters.push(
                             new Filter({
@@ -865,6 +916,19 @@ sap.ui.define(
                         );
                     }
                     that.oLocList.getBinding("items").filter(oFilters);
+                } else if (sId.includes("LocDSlctList")) {
+                    if (sQuery !== "") {
+                        oFilters.push(
+                            new Filter({
+                                filters: [
+                                    new Filter("LOCATION_ID", FilterOperator.Contains, sQuery),
+                                    new Filter("LOCATION_DESC", FilterOperator.Contains, sQuery),
+                                ],
+                                and: false,
+                            })
+                        );
+                    }
+                    that.oDLocList.getBinding("items").filter(oFilters);
                     // Product
                 } else if (sId.includes("prod")) {
                     if (sQuery !== "") {
@@ -946,7 +1010,7 @@ sap.ui.define(
                     aSelectedItems,
                     aODdata = [];
                 //Location list
-                if (sId.includes("Loc")) {
+                if (sId.includes("LocSlctList")) {
                     that.oLoc = that.byId("idloc");
                     that.oProd = that.byId("idprod");
                     aSelectedItems = oEvent.getParameter("selectedItems");
@@ -956,6 +1020,7 @@ sap.ui.define(
                         aSelectedItems[0].getTitle()
                     );
                     // Removing the input box values when Location changed
+                    that.byId("idDemdloc").setValue("");
                     that.oProd.setValue("");
                     that.oVer.setValue("");
                     that.oScen.setValue("");
@@ -994,7 +1059,10 @@ sap.ui.define(
                             MessageToast.show("Please maintain Planning Configuration for the selected plant");
                         },
                     });
-
+                } else if (sId.includes("LocDSlctList")) {
+                    that.odLoc = that.byId("idDemdloc");
+                    aSelectedItems = oEvent.getParameter("selectedItems");
+                    that.odLoc.setValue(aSelectedItems[0].getTitle());
                     // Product list
                 } else if (sId.includes("prod")) {
                     that.oProd = that.byId("idprod");

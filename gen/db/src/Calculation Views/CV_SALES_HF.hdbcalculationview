@@ -4,34 +4,15 @@
 <localVariables/>
 <variableMappings/>
 <dataSources>
-  <DataSource id="V_SAC_SALESH">
-    <resourceUri>V_SAC_SALESH</resourceUri>
-  </DataSource>
   <DataSource id="CP_CIR_GENERATED">
     <resourceUri>CP_CIR_GENERATED</resourceUri>
+  </DataSource>
+  <DataSource id="V_SAC_SALESH">
+    <resourceUri>V_SAC_SALESH</resourceUri>
   </DataSource>
 </dataSources>
 <snapshotProcedures/>
 <calculationViews>
-  <calculationView xsi:type="Calculation:JoinView" id="Join_1">
-    <viewAttributes>
-      <viewAttribute id="LOCATION_ID"/>
-      <viewAttribute id="PRODUCT_ID"/>
-      <viewAttribute id="UNIQUE_ID" aggregationType="sum"/>
-      <viewAttribute id="PRIMARY_ID" aggregationType="sum"/>
-      <viewAttribute id="ORD_QTY" aggregationType="sum"/>
-      <viewAttribute id="WEEK_DATE"/>
-    </viewAttributes>
-    <calculatedViewAttributes/>
-    <input node="V_SAC_SALESH">
-      <mapping xsi:type="Calculation:AttributeMapping" target="LOCATION_ID" source="LOCATION_ID"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="PRODUCT_ID" source="PRODUCT_ID"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="UNIQUE_ID" source="UNIQUE_ID"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="PRIMARY_ID" source="PRIMARY_ID"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="ORD_QTY" source="ORD_QTY"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="WEEK_DATE" source="WEEK_DATE"/>
-    </input>
-  </calculationView>
   <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
     <viewAttributes>
       <viewAttribute id="WEEK_DATE"/>
@@ -52,14 +33,27 @@
     </calculatedViewAttributes>
     <input node="CP_CIR_GENERATED"/>
   </calculationView>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_2">
+    <viewAttributes>
+      <viewAttribute id="LOCATION_ID"/>
+      <viewAttribute id="PRODUCT_ID"/>
+      <viewAttribute id="UNIQUE_ID"/>
+      <viewAttribute id="PRIMARY_ID"/>
+      <viewAttribute id="ORD_QTY"/>
+      <viewAttribute id="WEEK_DATE"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="V_SAC_SALESH"/>
+  </calculationView>
   <calculationView xsi:type="Calculation:UnionView" id="Union_1">
     <viewAttributes>
       <viewAttribute id="WEEK_DATE"/>
       <viewAttribute id="LOCATION_ID"/>
       <viewAttribute id="PRODUCT_ID"/>
       <viewAttribute id="UNIQUE_ID" aggregationType="sum"/>
-      <viewAttribute id="PRIMARY_ID" aggregationType="sum"/>
       <viewAttribute id="CIR_QTY" aggregationType="sum"/>
+    
+      <viewAttribute id="PRIMARY_ID" aggregationType="sum"/>
     </viewAttributes>
     <calculatedViewAttributes/>
     <input node="Projection_1" emptyUnionBehavior="NO_ROW">
@@ -67,16 +61,17 @@
       <mapping xsi:type="Calculation:AttributeMapping" target="LOCATION_ID" source="LOCATION_ID"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="PRODUCT_ID" source="PRODUCT_ID"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="UNIQUE_ID" source="UNIQUE_ID"/>
-      <mapping xsi:type="Calculation:ConstantAttributeMapping" target="PRIMARY_ID" null="true" value=""/>
       <mapping xsi:type="Calculation:AttributeMapping" target="CIR_QTY" source="Ordered_Qty"/>
+    
+      <mapping xsi:type="Calculation:ConstantAttributeMapping" target="PRIMARY_ID" null="true" value=""/>
     </input>
-    <input node="Join_1" emptyUnionBehavior="NO_ROW">
-      <mapping xsi:type="Calculation:ConstantAttributeMapping" target="WEEK_DATE" null="true" value=""/>
+    <input node="Projection_2">
       <mapping xsi:type="Calculation:AttributeMapping" target="LOCATION_ID" source="LOCATION_ID"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="PRODUCT_ID" source="PRODUCT_ID"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="UNIQUE_ID" source="UNIQUE_ID"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="PRIMARY_ID" source="PRIMARY_ID"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="CIR_QTY" source="ORD_QTY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="WEEK_DATE" source="WEEK_DATE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PRIMARY_ID" source="PRIMARY_ID"/>
     </input>
   </calculationView>
 </calculationViews>
@@ -98,14 +93,14 @@
       <descriptions defaultDescription="UNIQUE_ID"/>
       <keyMapping columnObjectName="Union_1" columnName="UNIQUE_ID"/>
     </attribute>
-    <attribute id="PRIMARY_ID" order="5" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="PRIMARY_ID" order="6" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="PRIMARY_ID"/>
       <keyMapping columnObjectName="Union_1" columnName="PRIMARY_ID"/>
     </attribute>
   </attributes>
   <calculatedAttributes/>
   <baseMeasures>
-    <measure id="CIR_QTY" order="6" aggregationType="sum" measureType="simple">
+    <measure id="CIR_QTY" order="5" aggregationType="sum" measureType="simple">
       <descriptions defaultDescription="ORD_QTY"/>
       <measureMapping columnObjectName="Union_1" columnName="CIR_QTY"/>
     </measure>
@@ -119,20 +114,17 @@
     <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
       <upperLeftCorner x="40" y="85"/>
     </shape>
-    <shape expanded="true" modelObjectName="Join_1" modelObjectNameSpace="CalculationView">
-      <upperLeftCorner x="242" y="322"/>
-      <rectangleSize height="30" width="160"/>
-    </shape>
-    <shape modelObjectName="V_SAC_SALESH" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
-      <upperLeftCorner x="20" y="30"/>
-      <rectangleSize width="159"/>
-    </shape>
     <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
       <upperLeftCorner x="-17" y="322"/>
       <rectangleSize height="30" width="160"/>
     </shape>
     <shape expanded="true" modelObjectName="Union_1" modelObjectNameSpace="CalculationView">
       <upperLeftCorner x="92" y="194"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+  
+    <shape expanded="true" modelObjectName="Projection_2" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="224" y="322"/>
       <rectangleSize height="30" width="160"/>
     </shape>
   </shapes>
