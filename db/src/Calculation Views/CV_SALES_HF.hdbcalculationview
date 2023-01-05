@@ -65,7 +65,7 @@
     
       <mapping xsi:type="Calculation:ConstantAttributeMapping" target="PRIMARY_ID" null="true" value=""/>
     </input>
-    <input node="Projection_2">
+    <input node="Projection_2" emptyUnionBehavior="NO_ROW">
       <mapping xsi:type="Calculation:AttributeMapping" target="LOCATION_ID" source="LOCATION_ID"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="PRODUCT_ID" source="PRODUCT_ID"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="UNIQUE_ID" source="UNIQUE_ID"/>
@@ -118,15 +118,15 @@
       <upperLeftCorner x="-17" y="322"/>
       <rectangleSize height="30" width="160"/>
     </shape>
-    <shape expanded="true" modelObjectName="Union_1" modelObjectNameSpace="CalculationView">
-      <upperLeftCorner x="92" y="194"/>
-      <rectangleSize height="30" width="160"/>
-    </shape>
   
     <shape expanded="true" modelObjectName="Projection_2" modelObjectNameSpace="CalculationView">
       <upperLeftCorner x="224" y="322"/>
       <rectangleSize height="30" width="160"/>
     </shape>
-  </shapes>
+  
+    <shape expanded="true" modelObjectName="Union_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="92" y="194"/>
+      <rectangleSize height="30" width="160"/>
+    </shape></shapes>
 </layout>
 </Calculation:scenario>
