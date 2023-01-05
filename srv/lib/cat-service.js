@@ -383,9 +383,9 @@ module.exports = (srv) => {
                     req.data.VERSION +
                     `' AND "SCENARIO" = '` +
                     req.data.SCENARIO +
-                    `' AND ( "CAL_DATE" <= '` +
+                    `' AND ( "WEEK_DATE" <= '` +
                     vDateTo +
-                    `' AND "CAL_DATE" >= '` +
+                    `' AND "WEEK_DATE" >= '` +
                     vDateFrom +
                     `') AND "MODEL_VERSION" = '` +
                     req.data.MODEL_VERSION +
@@ -396,7 +396,7 @@ module.exports = (srv) => {
                       "VERSION" ASC,
                       "SCENARIO" ASC,
                       "COMPONENT" ASC,
-                      "CAL_DATE" ASC`
+                      "WEEK_DATE" ASC`
                 );
                 liComp = await cds.run(
                     `
@@ -414,10 +414,10 @@ module.exports = (srv) => {
                     req.data.VERSION +
                     `' AND "SCENARIO" = '` +
                     req.data.SCENARIO +
-                    `' AND ( "CAL_DATE" <= '` +
+                    `' AND ( "WEEK_DATE" <= '` +
                     vDateTo +
                     `'
-                AND "CAL_DATE" >= '` +
+                AND "WEEK_DATE" >= '` +
                     vDateFrom +
                     `') AND "MODEL_VERSION" = '` +
                     req.data.MODEL_VERSION +
@@ -443,9 +443,9 @@ module.exports = (srv) => {
                     req.data.VERSION +
                     `' AND "SCENARIO" = '` +
                     req.data.SCENARIO +
-                    `' AND ( "CAL_DATE" <= '` +
+                    `' AND ( "WEEK_DATE" <= '` +
                     vDateTo +
-                    `' AND "CAL_DATE" >= '` +
+                    `' AND "WEEK_DATE" >= '` +
                     vDateFrom +
                     `') AND "MODEL_VERSION" = '` +
                     req.data.MODEL_VERSION +
@@ -456,7 +456,7 @@ module.exports = (srv) => {
                           "VERSION" ASC,
                           "SCENARIO" ASC,
                           "COMPONENT" ASC,
-                          "CAL_DATE" ASC`
+                          "WEEK_DATE" ASC`
                 );
                 liComp = await cds.run(
                     `
@@ -474,10 +474,10 @@ module.exports = (srv) => {
                     req.data.VERSION +
                     `' AND "SCENARIO" = '` +
                     req.data.SCENARIO +
-                    `' AND ( "CAL_DATE" <= '` +
+                    `' AND ( "WEEK_DATE" <= '` +
                     vDateTo +
                     `'
-                    AND "CAL_DATE" >= '` +
+                    AND "WEEK_DATE" >= '` +
                     vDateFrom +
                     `') AND "MODEL_VERSION" = '` +
                     req.data.MODEL_VERSION +
@@ -491,9 +491,22 @@ module.exports = (srv) => {
                 );
                 break;
         }
+        // var vDateSeries = vDateFrom;
+        // lsDates.CAL_DATE = GenFunctions.getNextMondayCmp(vDateSeries);
+        // vDateSeries = lsDates.CAL_DATE;
+        //////////////////////////////
         var vDateSeries = vDateFrom;
-        lsDates.CAL_DATE = GenFunctions.getNextMondayCmp(vDateSeries);
+        let dDate = new Date(vDateSeries);
+        let dDay = dDate.getDay();
+        if (dDay === 1) {
+            lsDates.CAL_DATE = vDateFrom;
+        } else {
+            lsDates.CAL_DATE = GenFunctions.getNextMondayCmp(vDateSeries);
+        }
+        // lsDates.CAL_DATE = GenFunctions.getNextMondayCmp(vDateSeries);
         vDateSeries = lsDates.CAL_DATE;
+        ////////////////////////////////
+
         liDates.push(lsDates);
         lsDates = {};
         while (vDateSeries <= vDateTo) {
@@ -526,7 +539,7 @@ module.exports = (srv) => {
                     lsCompWeekly[columnname + vWeekIndex] = 0;
                     if (
                         liCompQty[vCompIndex].COMPONENT === lsCompWeekly.COMPONENT &&
-                        liCompQty[vCompIndex].CAL_DATE === liDates[i].CAL_DATE
+                        liCompQty[vCompIndex].WEEK_DATE === liDates[i].CAL_DATE
                     ) {
                         //   lsCompWeekly.STRUC_NODE = liCompQty[vCompIndex].STRUC_NODE;
                         lsCompWeekly[columnname + vWeekIndex] =

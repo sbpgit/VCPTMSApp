@@ -395,7 +395,7 @@ sap.ui.define(
                                 label: columnText,
                                 template: new sap.m.Link({
                                     text: "{" + columnName + "}",
-                                    press: that.linkPressed,
+                                    press: that.asmbcompLinkpress,
                                 }),
                             });
                         }
