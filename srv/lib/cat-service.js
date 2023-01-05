@@ -2717,12 +2717,20 @@ module.exports = (srv) => {
             vComp,
             lsDates = {};
         let columnname = "WEEK";
+        let sColQty = "_Q";
+        let sActQty = ".ACT_QTY";
+        let sOpenQty = ".OPEN_QTY";
+        let aFilSalesH = [];
+        let iQty = 0;
         let aCIR_ID = [];
         let oCIR_ID = {};
+        let oCIRQty = {};
+        let aCIRQty = [];
 
-
+        // Data
         const liCIRQty = oCIRData.liCIRQty;
         const liUniqueId = oCIRData.liUniqueId;
+        const liSalesH = oCIRData.liSalesH;
 
         let vDateSeries = vDateFrom;
         let dDate = new Date(vDateSeries);
@@ -2747,8 +2755,9 @@ module.exports = (srv) => {
 
         for (let j = 0; j < liUniqueId.length; j++) {
             // Initially set vWeekIndex to j to generate Week columns
-            // vCompIndex is to get Componnent quantity for all dates
+            // vCompIndex is to get Component quantity for all dates
             vWeekIndex = 0; //j
+            iQty = 0;
             lsCIRWeekly.UNIQUE_ID = liUniqueId[j].UNIQUE_ID;
             lsCIRWeekly.UNIQUE_DESC = liUniqueId[j].UNIQUE_DESC;
             lsCIRWeekly.LOCATION_ID = liUniqueId[j].LOCATION_ID;
@@ -2764,6 +2773,31 @@ module.exports = (srv) => {
             for (let i = 0; i < liDates.length; i++) {
                 vWeekIndex = vWeekIndex + 1;
                 oCIR_ID = {};
+                iQty = 0;
+                oCIRQty = {};
+                aFilSalesH = [];
+                oCIRQty.ACT_QTY = 0;
+                oCIRQty.OPEN_QTY = 0;
+                aFilSalesH = liSalesH.filter(function (aSalesH) {
+                    return aSalesH.UNIQUE_ID === lsCIRWeekly.UNIQUE_ID;
+                });
+                // aFilSalesH = liSalesH.filter(function (aSalesH) {
+                //     return aSalesH.UNIQUE_ID === lsCIRWeekly.UNIQUE_ID && aSalesH.MAT_AVAILDATE >= liDates[i].WEEK_DATE
+                //         && aSalesH.MAT_AVAILDATE < liDates[GenFunctions.addOne(i, liDates.length)].WEEK_DATE;
+                // });
+                if (aFilSalesH.length > 0) {
+                    for (let vQtyIndex = 0; vQtyIndex < aFilSalesH.length; vQtyIndex++) {
+                        if(aFilSalesH[vQtyIndex].MAT_AVAILDATE >= liDates[i].WEEK_DATE
+                             && aFilSalesH[vQtyIndex].MAT_AVAILDATE < liDates[GenFunctions.addOne(i, liDates.length)].WEEK_DATE) {
+                        
+                                iQty = iQty + parseInt(aFilSalesH[vQtyIndex].ORD_QTY);
+                        }
+                    }
+                } 
+                // else {
+                //     oCIRQty.ACT_QTY = iQty;
+                // }                
+
                 for (vCIRIndex = 0; vCIRIndex < liCIRQty.length; vCIRIndex++) {
                     lsCIRWeekly[columnname + vWeekIndex] = 0;
                     if (
@@ -2772,6 +2806,16 @@ module.exports = (srv) => {
                     ) {
                         lsCIRWeekly[columnname + vWeekIndex] =
                             liCIRQty[vCIRIndex].CIR_QTY;
+
+                        oCIRQty.ACT_QTY = iQty;
+                        //oCIRQty.OPEN_QTY = liCIRQty[vCIRIndex].CIR_QTY;
+                        
+                        oCIRQty.OPEN_QTY = liCIRQty[vCIRIndex].CIR_QTY - iQty;
+                        
+
+                        if (oCIRQty.OPEN_QTY < 0) {
+                            oCIRQty.OPEN_QTY = 0;
+                        }
 
                         oCIR_ID.WEEK_DATE = liDates[i].WEEK_DATE;
                         oCIR_ID.CIR_ID = liCIRQty[vCIRIndex].CIR_ID;
@@ -2782,6 +2826,7 @@ module.exports = (srv) => {
                         break;
                     }
                 }
+                lsCIRWeekly[columnname + vWeekIndex + sColQty] = oCIRQty;
             }
             lsCIRWeekly.CIR_ID = aCIR_ID;
             liCIRWeekly.push(GenFunctions.parse(lsCIRWeekly));
@@ -3827,24 +3872,62 @@ module.exports = (srv) => {
         // console.log('Test');
         const aPartialProdLoc = await cds.run(`
             SELECT DISTINCT 
-            "CP_FACTORY_SALESLOC"."PRODUCT_ID" AS "PARTIALPROD", 
-            "CP_PARTIALPROD_INTRO"."PROD_DESC" AS "PARTIALPROD_DESC",
-            "CP_FACTORY_SALESLOC"."FACTORY_LOC" AS "FACTORY_LOC",
-            "CP_FACTORY_SALESLOC"."LOCATION_ID" AS "DEMAND_LOC",
-            "CP_FACTORY_SALESLOC"."PLAN_LOC" AS "PLANNING_LOC",
-            "CP_LOCATION"."LOCATION_DESC" AS "FACTORYLOC_DESC",
-            "CP_LOCATION"."LOCATION_DESC" AS "DEMANDLOC_DESC",
-            "CP_LOCATION"."LOCATION_DESC" AS "PLANNINGLOC_DESC"
+                    "CP_FACTORY_SALESLOC"."PRODUCT_ID" AS "PARTIALPROD", 
+                    "CP_PARTIALPROD_INTRO"."REF_PRODID" AS "REF_PRODID",
+                    "CP_PARTIALPROD_INTRO"."PROD_DESC" AS "PARTIALPROD_DESC",
+                    "CP_FACTORY_SALESLOC"."FACTORY_LOC" AS "FACTORY_LOC",
+                    "CP_FACTORY_SALESLOC"."LOCATION_ID" AS "DEMAND_LOC",
+                    "CP_FACTORY_SALESLOC"."PLAN_LOC" AS "PLANNING_LOC",
+                    "CP_LOCATION"."LOCATION_DESC" AS "FACTORYLOC_DESC",
+                    "CP_LOCATION"."LOCATION_DESC" AS "DEMANDLOC_DESC",
+                    "CP_LOCATION"."LOCATION_DESC" AS "PLANNINGLOC_DESC"
                             FROM "CP_FACTORY_SALESLOC" 
                             INNER JOIN "CP_PARTIALPROD_INTRO"
-                            ON "CP_FACTORY_SALESLOC"."PRODUCT_ID" = "CP_PARTIALPROD_INTRO"."PRODUCT_ID"
+                               ON "CP_FACTORY_SALESLOC"."PRODUCT_ID" = "CP_PARTIALPROD_INTRO"."PRODUCT_ID"
+                              AND "CP_FACTORY_SALESLOC"."PLAN_LOC" = "CP_PARTIALPROD_INTRO"."LOCATION_ID"
                             INNER JOIN "CP_LOCATION"
-                            ON "CP_FACTORY_SALESLOC"."FACTORY_LOC" = "CP_LOCATION"."LOCATION_ID"
-                            AND "CP_FACTORY_SALESLOC"."LOCATION_ID" = "CP_LOCATION"."LOCATION_ID"
-                            AND "CP_FACTORY_SALESLOC"."PLAN_LOC" = "CP_LOCATION"."LOCATION_ID"`
+                               ON "CP_FACTORY_SALESLOC"."FACTORY_LOC" = "CP_LOCATION"."LOCATION_ID"
+                              AND "CP_FACTORY_SALESLOC"."LOCATION_ID" = "CP_LOCATION"."LOCATION_ID"
+                              AND "CP_FACTORY_SALESLOC"."PLAN_LOC" = "CP_LOCATION"."LOCATION_ID"`
         );
 
         return aPartialProdLoc;
+
+    });
+
+    // Get Unique Id Characteristics for Partial Products
+    srv.on('getLocProdChar', async (req) => {
+        // console.log('Test');
+        const aLocProdChar = await cds.run(`
+        SELECT DISTINCT UNIQUE_ID,
+        CHAR_NUM,
+        CHAR_NAME,
+        CHAR_DESC,
+        CHAR_VALUE,
+        CHARVAL_NUM,
+        CHARVAL_DESC
+        FROM V_UNIQUE_ID_ITEM
+        WHERE (UNIQUE_ID IN (SELECT DISTINCT unique_id
+                    FROM CP_SALES_HM
+                    WHERE LOCATION_ID = '${req.data.LOCATION_ID}'
+                        AND PRODUCT_ID = '${req.data.PRODUCT_ID}'))
+        ORDER BY CHAR_DESC,
+        CHARVAL_DESC`
+        );
+
+        // SELECT * 
+        //   FROM "V_PARTIALPRODCHAR" 
+        //  INNER JOIN "V_UNIQUE_ID_ITEM"
+        //     ON "V_PARTIALPRODCHAR"."REF_PRODID"  = "V_UNIQUE_ID_ITEM"."PRODUCT_ID"
+        //    AND "V_PARTIALPRODCHAR"."LOCATION_ID" = "V_UNIQUE_ID_ITEM"."LOCATION_ID"
+        //  WHERE "V_PARTIALPRODCHAR"."LOCATION_ID" = '`
+        // + req.data.LOCATION_ID + `'
+        //   AND "V_PARTIALPRODCHAR"."PRODUCT_ID" = '` +
+        // req.data.PRODUCT_ID +
+        // `'`
+
+
+        return aLocProdChar;
 
     });
 

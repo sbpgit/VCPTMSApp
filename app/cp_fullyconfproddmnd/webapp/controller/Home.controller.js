@@ -377,6 +377,7 @@ sap.ui.define(
                     weekIndex;
                 var dFrozenHorizonDate,
                     dFirmHorizonDate;
+                var columnName, iactQty, iopenQty;
                 that.oGModel = that.getModel("oGModel");
                 that.tableData = that.oGModel.getProperty("/TData");
                 that.aFirmDates = [];
@@ -409,6 +410,7 @@ sap.ui.define(
                     for (let index = 3; index < liDates.length; index++) {
                         sRowData[liDates[index].WEEK_DATE] =
                             that.tableData[i]["WEEK" + weekIndex];
+                        sRowData[liDates[index].WEEK_DATE + "_Q"] = that.tableData[i]["WEEK" + weekIndex + "_Q"];
                         weekIndex++;
                     }
                     iRowData.push(sRowData);
@@ -423,7 +425,8 @@ sap.ui.define(
                 that.oTable.setModel(oModel);
                 // Checking column names and applying sap.m.Link to column values
                 that.oTable.bindColumns("/columns", function (sId, oContext) {
-                    var columnName = oContext.getObject().WEEK_DATE;
+                    columnName = oContext.getObject().WEEK_DATE;
+                    
                     if (columnName === "Location") {
                         return new sap.ui.table.Column({
                             width: "8rem",
@@ -470,9 +473,10 @@ sap.ui.define(
                         var dColName = new Date(columnName);
                         var iWeekIndex = that.getWeekNumber(columnName);
                         var columnText = 'W' + iWeekIndex + " (" + iTotalQty + ")";
+                        iactQty = columnName + "_Q" + "/ACT_QTY";
+                        iopenQty = columnName + "_Q" + "/OPEN_QTY";
+                        // var iOpenQty = "=parseInt(${/columnName} - ${/colQty})";   // - ${/colQty}"; 
 
-                        //var columnText = columnName + " (" + iTotalQty + ")";
-                        //var sCount = columnName.slice(4)
                         // if (that.dFirmHorizonDate > dColName) {
                         if (dColName >= dFrozenHorizonDate && dColName <= dFirmHorizonDate) {
                             that.aFirmDates.push(columnName);
@@ -490,10 +494,10 @@ sap.ui.define(
                                             value: "{" + columnName + "}",
                                             change: that.onChangeCIRQty,
                                         }),
-                                        // new sap.m.ObjectIdentifier({
-                                        //     title: 15,
-                                        //     text: 5,
-                                        // }),
+                                        new sap.m.ObjectIdentifier({
+                                            title: "{" + iactQty + "}",
+                                            text: "{" + iopenQty + "}"
+                                        })
                                     ]
                                 })
 
@@ -509,9 +513,17 @@ sap.ui.define(
                                 name: columnName,
                                 label: columnText,
                                 // label: columnName,
-                                template: new sap.m.Text({
-                                    text: "{" + columnName + "}",
-                                }),
+                                template: new sap.m.VBox({
+                                    items: [
+                                        new sap.m.Text({
+                                            text: "{" + columnName + "}",
+                                        }),
+                                        new sap.m.ObjectIdentifier({
+                                            title: "{" + iactQty + "}",
+                                            text: "{" + iopenQty + "}"
+                                        })
+                                    ]
+                                })
                             });
                         }
                     }
@@ -519,6 +531,15 @@ sap.ui.define(
                 });
 
                 that.oTable.bindRows("/rows");
+            },
+            /**
+             * 
+             * @param {*} imFromDate 
+             * @param {*} imToDate 
+             * @returns 
+             */
+            getOpenQty(sColName) {
+                MessageToast("test");
             },
 
             /**
@@ -1843,12 +1864,19 @@ sap.ui.define(
                 var oCIRTable = that.getView().byId("idCIReq");
                 var aRows = oCIRTable.getBinding("rows").oList;
                 var oCIRChangedQty = {};
+                var sColQty = "_Q";
                 var oCIRData = oEvent.getSource().getBindingContext().getObject();
                 var inewValue = parseInt(oEvent.getParameter("newValue"));
                 var iValue = parseInt(oEvent.getSource().getProperty("placeholder"));
                 var sWeekDate = oEvent.getSource().mBindingInfos.placeholder.binding.sPath;
+                var iActQty = oCIRData[sWeekDate + sColQty];
 
-                if (inewValue !== iValue) {
+                if (inewValue !== iValue) { 
+                    if(inewValue < iActQty.ACT_QTY){
+                        MessageToast.show("Cannot set quantity less than actual qty!", { width: "25rem" });
+                        oCIRData[sWeekDate] = iValue;
+                        return;
+                    }
                     oCIRChangedQty.UNIQUE_ID = oCIRData['Unique ID'];
                     oCIRChangedQty.WEEK_DATE = sWeekDate;
                     oCIRChangedQty.CIR_QTY = oCIRData[sWeekDate];
@@ -2052,20 +2080,25 @@ sap.ui.define(
             },
             /** Get all the Unique Items Configuration */
             getLocProdCharacteristics: function (oEvent) {
-
-                that.getModel("CIRModel").read("/getUniqueItem", {
-                    filters: [
-                        new Filter(
-                            "PRODUCT_ID",
-                            FilterOperator.EQ,
-                            that.oGModel.getProperty("/SelectedProd")
-                        ),
-                        new Filter(
-                            "LOCATION_ID",
-                            FilterOperator.EQ,
-                            that.oGModel.getProperty("/SelectedLoc")
-                        )
-                    ],
+                // that.getModel("CIRModel").read("/getUniqueItem", {
+                that.getModel("CIRModel").callFunction("/getLocProdChar", {
+                    method: "GET",
+                    urlParameters: {
+                        LOCATION_ID: that.oGModel.getProperty("/SelectedLoc"),
+                        PRODUCT_ID: that.oGModel.getProperty("/SelectedProd")
+                    },
+                    // filters: [
+                    //     new Filter(
+                    //         "PRODUCT_ID",
+                    //         FilterOperator.EQ,
+                    //         that.oGModel.getProperty("/SelectedProd")
+                    //     ),
+                    //     new Filter(
+                    //         "LOCATION_ID",
+                    //         FilterOperator.EQ,
+                    //         that.oGModel.getProperty("/SelectedLoc")
+                    //     )
+                    // ],
                     success: function (oData) {
                         var aResults = oData.results;
                         that.allCharsModel.setData({

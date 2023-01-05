@@ -142,10 +142,10 @@ sap.ui.define(
                         // Get Weekly Quantity
                         aFilCIRData = [];
                         aFilCIRData = aCIRData.filter(function (aCIRQty) {
-                                return aCIRQty['Unique ID'] === (aUniqueIdsChars[i].UNIQUE_ID).toString();
-                            });
-                        if(aFilCIRData.length > 0) {
-                          oColumn.CIRQTY = aFilCIRData[0][dSelDate];
+                            return aCIRQty['Unique ID'] === (aUniqueIdsChars[i].UNIQUE_ID).toString();
+                        });
+                        if (aFilCIRData.length > 0) {
+                            oColumn.CIRQTY = aFilCIRData[0][dSelDate];
                         } else {
                             oColumn.CIRQTY = 0;
                         }
@@ -541,6 +541,62 @@ sap.ui.define(
              * 
              * @param {*} oEvent 
              */
+            onEQSelectionChange: function (oEvent) {
+                var aSelectedItemsEQ = [];
+                var oMulCombBoxEQ;
+                var aSelCharNum = [];
+                var sCharNum = '';
+                oMulCombBoxEQ = that.getView().byId("idUniqueCharDetailsEQ");
+                aSelectedItemsEQ = oMulCombBoxEQ.getSelectedItems();
+                for (var i = 0; i < aSelectedItemsEQ.length; i++) {
+                    sCharNum = aSelectedItemsEQ[i].getKey().split(':')[0];
+                    // sCharVal_Num = aSelectedItemsEQ[i].getKey().split(':')[1];
+                    if (aSelCharNum.length > 0) {
+                        if (aSelCharNum.includes(sCharNum) === true) {
+                            MessageToast.show("Cannot select multiple values for each characteristic!",
+                                { width: "25rem" });
+                            oMulCombBoxEQ.removeSelectedItem(aSelectedItemsEQ[i]);
+                            break;
+                        } else {
+                            aSelCharNum.push(sCharNum);
+                        }
+                    } else {
+                        aSelCharNum.push(sCharNum);
+                    }
+                }
+            },
+            /**
+             * 
+             * @param {*} oEvent 
+             */
+            onNEQSelectionChange: function (oEvent) {
+                var aSelectedItemsNEQ = [];
+                var oMulCombBoxNEQ;
+                var aSelCharNum = [];
+                var sCharNum = '';
+                oMulCombBoxNEQ = that.getView().byId("idUniqueCharDetailsNEQ");
+                aSelectedItemsNEQ = oMulCombBoxNEQ.getSelectedItems();
+                for (var i = 0; i < aSelectedItemsNEQ.length; i++) {
+                    sCharNum = aSelectedItemsNEQ[i].getKey().split(':')[0];
+                    // sCharVal_Num = aSelectedItemsEQ[i].getKey().split(':')[1];
+                    if (aSelCharNum.length > 0) {
+                        if (aSelCharNum.includes(sCharNum) === true) {
+                            MessageToast.show("Cannot select multiple values for each characteristic!",
+                                { width: "25rem" });
+                            oMulCombBoxNEQ.removeSelectedItem(aSelectedItemsNEQ[i]);
+                            break;
+                        } else {
+                            aSelCharNum.push(sCharNum);
+                        }
+                    } else {
+                        aSelCharNum.push(sCharNum);
+                    }
+                }
+            },
+            /**
+             * 
+             * @param {*} oEvent 
+             */
             onFilterData: function (oEvent) {
                 var aSelectedItemsEQ = [], aSelectedItemsNEQ = [];
                 var oMulCombBoxEQ, oMulCombBoxNEQ;
@@ -560,10 +616,16 @@ sap.ui.define(
 
                 if (aSelectedItemsEQ.length > 0) {
                     aEQUniqueChars = that.getUniqueIdsEQSelChars(aSelectedItemsEQ);
+                    if (aEQUniqueChars === undefined) {
+                        aEQUniqueChars = [];
+                    }
                 }
 
                 if (aSelectedItemsNEQ.length > 0) {
                     aNEQUniqueChars = that.getUniqueIdsNESelChars(aSelectedItemsNEQ);
+                    if (aNEQUniqueChars === undefined) {
+                        aNEQUniqueChars = [];
+                    }
                 }
 
                 if (aEQUniqueChars.length > 0 && aNEQUniqueChars.length > 0) {
@@ -699,7 +761,7 @@ sap.ui.define(
              * @param {*} oEvent 
              */
             setWeekDates: function (oEvent) {
-                oGModel = that.getOwnerComponent().getModel("oGModel");                
+                oGModel = that.getOwnerComponent().getModel("oGModel");
                 var aDates = oGModel.getProperty("/TDates");
                 var dFrozenHorizonDate = oGModel.getProperty("/dFrozenHorizonDate");
                 // var dFirmHorizonDate = oGModel.getProperty("/dFirmHorizonDate");
@@ -741,7 +803,7 @@ sap.ui.define(
              * 
              * @param {*} oEvent 
              */
-            onChangeWeekDate: function(oEvent) {
+            onChangeWeekDate: function (oEvent) {
                 that.SEL_DATE = oEvent.getParameter('selectedItem').getKey();
                 var aColumns = [];
                 var scolumnName = '';
@@ -751,9 +813,9 @@ sap.ui.define(
                 var aFilCIRData = [];
                 var sColumnLabel = '';
                 that.oUniqueCharTable = that.getView().byId("idUniqueIdChars");
-                aColumns = that.oUniqueCharTable.getColumns();               
+                aColumns = that.oUniqueCharTable.getColumns();
 
-                for (var k = 1; k < aColumns.length; k++) {                    
+                for (var k = 1; k < aColumns.length; k++) {
                     scolumnName = aColumns[k].getName();
 
                     // iCounter = iCounter + 1;
@@ -763,25 +825,25 @@ sap.ui.define(
                     //     aColumns[k].setVisible(true)
                     // }
 
-                    sColLabel = aColumns[k].getLabel().getText().split(' ');                    
+                    sColLabel = aColumns[k].getLabel().getText().split(' ');
                     iCIRQty = 0;
 
                     // Get Weekly Quantity
                     aFilCIRData = [];
                     aFilCIRData = aCIRData.filter(function (aCIRQty) {
-                            return aCIRQty['Unique ID'] === (scolumnName).toString();
-                        });
-                    if(aFilCIRData.length > 0) {
-                      iCIRQty = aFilCIRData[0][that.SEL_DATE];
+                        return aCIRQty['Unique ID'] === (scolumnName).toString();
+                    });
+                    if (aFilCIRData.length > 0) {
+                        iCIRQty = aFilCIRData[0][that.SEL_DATE];
                     } else {
-                      iCIRQty = 0;
+                        iCIRQty = 0;
                     }
-                    
+
                     sColumnLabel = sColLabel[0] + " " + sColLabel[1] + " - (" + iCIRQty + ")";
                     aColumns[k].setLabel(sColumnLabel);
 
                 }
-                
+
             },
 
             /**

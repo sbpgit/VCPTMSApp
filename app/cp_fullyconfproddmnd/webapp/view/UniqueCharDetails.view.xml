@@ -37,8 +37,8 @@
                                 <Input id="idlocU" value="" placeholder="Location" enabled="false" />
                             </VBox>
                             <VBox id="_IDGenUVBox3">
-                                <Label id="_IDGenULabel3" text="Configurable Product" required="true" />
-                                <Input id="idprodListU" placeholder="Configurable Product" enabled="false" />
+                                <Label id="_IDGenULabel3" text="Product" required="true" />
+                                <Input id="idprodListU" placeholder="Product" enabled="false" />
                             </VBox>
                             <VBox id="_IDGenUVBox4">
                                 <Label id="_IDGenULabel4" text="Unique Id" required="true" />
@@ -56,7 +56,9 @@
 
                             <VBox id="_IDGenUVBox5">
                                 <Label id="_IDGenULabel5" text="Filter Type (Equals)" required="true" />
-                                <MultiComboBox id="idUniqueCharDetailsEQ" showSelectAll="true" showSecondaryValues="true" items="{
+                                <MultiComboBox id="idUniqueCharDetailsEQ" showSelectAll="true" showSecondaryValues="true" 
+                                              selectionChange = "onEQSelectionChange"
+                                             items="{
 				                            path: '/charDetails',
 				                            sorter: { path: 'CHAR_NAME' }
 			                                        }">
@@ -66,7 +68,9 @@
                             <VBox id="_IDGenUVBox6">
                                 <Label id="_IDGenULabel6" text="Filter Type (Not Equals)" required="true" />
 
-                                <MultiComboBox id="idUniqueCharDetailsNEQ" showSelectAll="true" showSecondaryValues="true" items="{
+                                <MultiComboBox id="idUniqueCharDetailsNEQ" showSelectAll="true" showSecondaryValues="true" 
+                                          selectionChange = "onNEQSelectionChange"
+                                          items="{
 				                            path: '/charDetails',
 				                            sorter: { path: 'CHAR_NAME' }
 			                                        }">
