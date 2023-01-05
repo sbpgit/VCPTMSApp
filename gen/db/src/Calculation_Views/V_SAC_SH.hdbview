@@ -1,0 +1,16 @@
+----------------------------------------------------------------------------------------
+-- Name:            V_SAC_SalesH
+-- Description:     View to get sales history configuration with charanteristic values
+-- Join Details:    A: CP_SALESH-  Table for sales history
+--                  B: V_CHARVAL  - View to characteristics and char. values for its internal counters
+--                  C: CP_SALESHM - Table for sales history with unique ID
+-----------------------------------------------------------------------------------------
+VIEW "V_SAC_SALESH"
+AS SELECT 
+LOCATION_ID,
+PRODUCT_ID,
+"UNIQUE_ID",
+"PRIMARY_ID",
+ORD_QTY,
+ADD_DAYS (TO_DATE ("MAT_AVAILDATE", 'YYYY-MM-DD'), -WEEKDAY (TO_DATE ("MAT_AVAILDATE", 'YYYY-MM-DD'))) AS "WEEK_DATE"
+frOM V_SALES_H 
