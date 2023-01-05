@@ -168,7 +168,7 @@ sap.ui.define([
                     that._valueHelpDialogLoc.open();
                     // Prod Dialog
                 } 
-                else if (sId.includes("cust")) {
+                else if (sId.includes("Cust")) {
                     that._valueHelpDialogCustomer.open();
                 }
                 else if (sId.includes("prod")) {
@@ -502,9 +502,9 @@ sap.ui.define([
                                 that.oList.setModel(that.oModel);
                             }
                         },
-                        error: function () {
+                        error: function (e) {
                             sap.ui.core.BusyIndicator.hide();
-                            MessageToast.show("Failed to get profiles");
+                            MessageToast.show("Failed to get Seed Orders");
                         },
                     });
                 } else {
@@ -553,6 +553,7 @@ sap.ui.define([
                 sap.ui.getCore().byId("idseedord").setEditable(false);
                 sap.ui.getCore().byId("idLocation").setEditable(false);
                 sap.ui.getCore().byId("idProduct").setEditable(false);
+                sap.ui.getCore().byId("idCust").setEditable(false);
                 sap.ui.getCore().byId("idUniq").setEditable(false);
                 sap.ui.getCore().byId("idseedord").setValue(sSelRow.SEED_ORDER);
                 sap.ui.getCore().byId("idLocation").setValue(sSelRow.LOCATION_ID);
@@ -566,6 +567,7 @@ sap.ui.define([
             onCancelOrder: function () {
                 sap.ui.getCore().byId("idLocation").setValue("");
                 sap.ui.getCore().byId("idProduct").setValue("");
+                sap.ui.getCore().byId("idCust").setValue("");
                 sap.ui.getCore().byId("idUniq").setValue("");
                 sap.ui.getCore().byId("idQuantity").setValue("");
                 sap.ui.getCore().byId("idDate").setValue("");
@@ -601,6 +603,7 @@ sap.ui.define([
             onSaveOrder: function () {
                 var sLoc = sap.ui.getCore().byId("idLocation").getValue(),
                     sProd = sap.ui.getCore().byId("idProduct").getValue(),
+                    sCust = sap.ui.getCore().byId("idCust").getValue(),
                     sUniq = parseInt(sap.ui.getCore().byId("idUniq").getValue()),
                     squan = parseInt(sap.ui.getCore().byId("idQuantity").getValue()),
                     sDate = sap.ui.getCore().byId("idDate").getValue(),
@@ -621,6 +624,7 @@ sap.ui.define([
                     SEED_ORDER: seedOrder,
                     LOCATION_ID: sLoc,
                     PRODUCT_ID: sProd,
+                    CUSTOMER_GROUP: sCust,
                     UNIQUE_ID: sUniq,
                     ORD_QTY: squan,
                     MAT_AVAILDATE: sDate,
@@ -637,7 +641,8 @@ sap.ui.define([
                             },
                             success: function (oData) {
                                 sap.ui.core.BusyIndicator.hide();
-                                sap.m.MessageToast.show("Seed Order created/ updated successfully");
+                                let vMsg = oData.maintainSeedOrder;
+                                sap.m.MessageToast.show(vMsg);
                                 that.onCancelOrder();
                                 that.onGetData();
                             },
