@@ -2749,12 +2749,11 @@ module.exports = (srv) => {
                 oCIRQty.OPEN_QTY = 0;
                 nextDtIndex = GenFunctions.addOne(i, liDates.length);
                 aFilSalesH = liSalesH.filter(function (aSalesH) {
-                    return aSalesH.UNIQUE_ID === lsCIRWeekly.UNIQUE_ID;
-                });
-                aFilSalesH = liSalesH.filter(function (aSalesH) {
-                    return aSalesH.MAT_AVAILDATE >= liDates[i].WEEK_DATE
+                    return aSalesH.UNIQUE_ID === lsCIRWeekly.UNIQUE_ID   
+                        && aSalesH.MAT_AVAILDATE >= liDates[i].WEEK_DATE
                         && aSalesH.MAT_AVAILDATE < liDates[nextDtIndex].WEEK_DATE;
                 });
+                
                 if (aFilSalesH.length > 0) {
                     for (let vQtyIndex = 0; vQtyIndex < aFilSalesH.length; vQtyIndex++) {
                         // if(aFilSalesH[vQtyIndex].MAT_AVAILDATE >= liDates[i].WEEK_DATE &&
