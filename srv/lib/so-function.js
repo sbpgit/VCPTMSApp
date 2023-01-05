@@ -604,7 +604,7 @@ class SOFunctions {
      * @param {Quantity} lQty 
      * @param {Unique ID} liUnique 
      */
-    async createSO(lLocation, lProduct,     , lSO, lDate, lQty, lUnique) {
+    async createSO(lLocation, lProduct, lSO, lDate, lQty, lUnique) {
 
         const lSOItem = '000010';
         // Get Main Product        
