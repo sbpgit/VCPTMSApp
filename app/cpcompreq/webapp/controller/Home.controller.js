@@ -63,6 +63,13 @@ sap.ui.define(
                     );
                     this.getView().addDependent(this._valueHelpDialogLoc);
                 }
+                if (!this._valueHelpDialogDLoc) {
+                    this._valueHelpDialogDLoc = sap.ui.xmlfragment(
+                        "cpapp.cpcompreq.view.DemandLocDialog",
+                        this
+                    );
+                    this.getView().addDependent(this._valueHelpDialogDLoc);
+                }
                 if (!this._valueHelpDialogProd) {
                     this._valueHelpDialogProd = sap.ui.xmlfragment(
                         "cpapp.cpcompreq.view.ProdDialog",
@@ -155,6 +162,9 @@ sap.ui.define(
                 this.oLocList = this._oCore.byId(
                     this._valueHelpDialogLoc.getId() + "-list"
                 );
+                this.oDLocList = this._oCore.byId(
+                    this._valueHelpDialogDLoc.getId() + "-list"
+                );
                 this.oVerList = this._oCore.byId(
                     this._valueHelpDialogVer.getId() + "-list"
                 );
@@ -175,16 +185,29 @@ sap.ui.define(
                 );
                 sap.ui.core.BusyIndicator.show();
                 // Location data
-                this.getModel("BModel").read("/getLocation", {
-                    success: function (oData) {
-                        that.locModel.setData(oData);
-                        that.oLocList.setModel(that.locModel);
-                        sap.ui.core.BusyIndicator.hide();
-                    },
-                    error: function (oData, error) {
-                        sap.ui.core.BusyIndicator.hide();
-                        MessageToast.show("error");
-                    },
+                // this.getModel("BModel").read("/getLocation", {
+                    this.getModel("BModel").read("/getfactorylocdesc", {
+                        success: function (oData) {
+                            // that.locModel.setData(oData);
+                            // that.oLocList.setModel(that.locModel);
+                            // sap.ui.core.BusyIndicator.hide();
+                            function removeDuplicate(array, key) {
+                                var check = new Set();
+                                return array.filter(obj => !check.has(obj[key]) && check.add(obj[key]));
+                            }
+                            oData.results = removeDuplicate(oData.results, 'FACTORY_LOC');
+
+                            that.LocData = oData.results;
+                            that.locModel.setData({
+                                Locitems: that.LocData
+                            });
+                            that.oLocList.setModel(that.locModel);
+                            sap.ui.core.BusyIndicator.hide();
+                        },
+                        error: function (oData, error) {
+                            sap.ui.core.BusyIndicator.hide();
+                            MessageToast.show("error");
+                        },
                 });
                 sap.ui.core.BusyIndicator.show();
 
@@ -394,12 +417,13 @@ sap.ui.define(
 
                 // Looping through the data to generate columns
                 for (var i = 0; i < that.tableData.length; i++) {
+                    sRowData.DemandLocation = that.tableData[i].LOCATION_ID;
                     sRowData.ItemNum = that.tableData[i].ITEM_NUM;
                     sRowData.Assembly = that.tableData[i].COMPONENT;
                     sRowData.StructureNode = that.tableData[i].STRUC_NODE;
                     sRowData.Type = that.tableData[i].QTYTYPE;
                     weekIndex = 1;
-                    for (let index = 3; index < liDates.length; index++) {
+                    for (let index = 4; index < liDates.length; index++) {
                         sRowData[liDates[index].CAL_DATE] =
                             that.tableData[i]["WEEK" + weekIndex];
                         weekIndex++;
@@ -418,6 +442,7 @@ sap.ui.define(
                     var columnName = oContext.getObject().CAL_DATE;
                     // Checking column names and applying sap.m.Link to column values
                     if (
+                        columnName === "DemandLocation" ||
                         columnName === "Assembly" ||
                         columnName === "ItemNum" ||
                         columnName === "StructureNode"
@@ -469,8 +494,9 @@ sap.ui.define(
                     counter;
                 that.searchData = that.rowData;
                 that.FinalData = [];
+                that.FinalfilterData=[];
 
-                var columns = that.oTable.getColumns().length - 3,
+                var columns = that.oTable.getColumns().length - 4,
                     data = that.tableData;
                 if (selected) {
                     // Filtering data which has row values, removing the rows which has all values as "0" or "null"
@@ -492,10 +518,93 @@ sap.ui.define(
                 } else {
                     that.FinalData = that.searchData;
                 }
+
+                var selectedDLoc = that.byId("idDemdloc").getTokens(),
+                // var selected = sap.ui.getCore().byId("LocDSlctList").getSelectedItems(),
+                    FactoryLoc = that.byId("idloc").getValue();
+                that.searchData = that.FinalData;
+                if(selectedDLoc.length){
+                for (var i = 0; i < that.searchData.length; i++) {
+                    for (var j = 0; j < selectedDLoc.length; j++) {
+                        if (that.searchData[i].LOCATION_ID === selectedDLoc[j].getText() &&
+                            that.searchData[i].FACTORY_LOC === FactoryLoc) {
+                            counter = counter + 1;
+                            break;
+                        }
+                    }
+                    if (counter !== 0) {
+                        that.FinalfilterData.push(that.searchData[i]);
+                    }
+                }
+            } else {
+                that.FinalfilterData = [];
+                sap.m.MessageToast.show("There is no demand location selected");
+            }
+
+                that.oGModel.setProperty("/TData", that.FinalfilterData);
+                // Calling function to generate UI table based on filter data
+                that.TableGenerate();
+            },
+
+
+             /**
+             * This function is called when Demand location is checked or unchecked.
+             * @param {object} oEvent -the event information.
+             */
+              onFilterDemandLoc: function (oEvent) {
+                that.oTable = that.byId("idCompReq");
+                that.oGModel = that.getModel("oGModel");
+                // var selected = sap.ui.getCore().byId("LocDSlctList").getSelectedItems(),
+                var selected = that.odLoc.getTokens(),
+                    name,
+                    counter;
+                    // that.byId("idCheck1").setSelected(true);
+                    var checked = that.byId("idCheck1").getSelected();
+                that.searchData = that.rowData;
+                that.FinalData = [];
+
+                var FactoryLoc = that.byId("idloc").getValue(),
+
+                // var columns = that.oTable.getColumns().length - 3,
+                    data = that.tableData;
+                  if (selected.length) {
+                      // Filtering data which has row values, removing the rows which has all values as "0" or "null"
+                      for (var i = 0; i < that.searchData.length; i++) {
+                          counter = 0;
+                          for (var j = 0; j < selected.length; j++) {
+                            if(checked){
+                                if (that.searchData[i].LOCATION_ID === selected[j].getText() &&
+                                  that.searchData[i].FACTORY_LOC === FactoryLoc &&
+                                  that.searchData[i]["WEEK" + (j + 1)] !== 0 &&
+                                  that.searchData[i]["WEEK" + (j + 1)] !== null
+                              ) {
+                                  counter = counter + 1;
+                                  break;
+                              }
+                            } else {
+                                if (that.searchData[i].LOCATION_ID === selected[j].getText() &&
+                                  that.searchData[i].FACTORY_LOC === FactoryLoc 
+                              ) {
+                                  counter = counter + 1;
+                                  break;
+                              }
+                            }
+                              
+                          }
+                          if (counter !== 0) {
+                              that.FinalData.push(that.searchData[i]);
+                          }
+                      }
+                } else {
+                    // that.FinalData = that.searchData;
+                    that.FinalData =  [];
+                    sap.m.MessageToast.show("There is no demand location selected");
+                }
                 that.oGModel.setProperty("/TData", that.FinalData);
                 // Calling function to generate UI table based on filter data
                 that.TableGenerate();
             },
+
             /**
              * 
              */
@@ -531,7 +640,8 @@ sap.ui.define(
                 if (
                     selColumnId === "__column0" ||
                     selColumnId === "__column1" ||
-                    selColumnId === "__column2"
+                    selColumnId === "__column2" ||
+                    selColumnId === "__column3"
                 ) {
                     sap.m.MessageToast.show("Please click on any quantity");
                 } else {
@@ -679,7 +789,10 @@ sap.ui.define(
                 var lsDates = {},
                     liDates = [];
                 var vDateSeries = imFromDate;
-
+                //Demand loc
+                lsDates.CAL_DATE = "DemandLocation"; 
+                liDates.push(lsDates);
+                lsDates = {};
                 lsDates.CAL_DATE = "Assembly"; //Component";
                 liDates.push(lsDates);
                 lsDates = {};
@@ -797,9 +910,34 @@ sap.ui.define(
             handleValueHelp: function (oEvent) {
                 var sId = oEvent.getParameter("id");
                 // Location Dialog
-                if (sId.includes("loc")) {
+                if (sId.includes("idloc")) {
+                    // var Loc = that.LocData;
+                    // that.locMod =  new JSONModel();
+                    //     that.locMod.setData({
+					// 		Locitems: that.LocData
+					// 	});
+                    //     that.oLocList.setModel(that.locMod);
                     that._valueHelpDialogLoc.open();
-                    // Product Dialog
+                   // Demand Location Dialog
+                } else if(sId.includes("idDemdloc")){
+                    
+                    // var DemandLoc = that.LocData;
+                    // that.Loc=[];
+                    // var FLoc = that.byId("idloc").getValue();
+                    // for(var i=0; i<DemandLoc.length; i++){
+                    //     if(FLoc === DemandLoc[i].Demand_Loc){
+                    //         that.Loc.push(DemandLoc[i]);
+                    //     }
+                    // }
+                    //     that.DlocMod =  new JSONModel();
+                    //     that.DlocMod.setData({
+					// 		DLocitems: that.Loc
+
+					// 	});
+                    //     that.oDLocList.setModel(that.DlocMod);
+
+                    that._valueHelpDialogDLoc.open();
+                // Product Dialog
                 } else if (sId.includes("prod")) {
                     if (that.byId("idloc").getValue()) {
                         that._valueHelpDialogProd.open();
@@ -843,12 +981,19 @@ sap.ui.define(
             handleClose: function (oEvent) {
                 var sId = oEvent.getParameter("id");
                 // Location Dialog
-                if (sId.includes("Loc")) {
+                if (sId.includes("LocSlctList")) {
                     that._oCore
                         .byId(this._valueHelpDialogLoc.getId() + "-searchField")
                         .setValue("");
                     if (that.oLocList.getBinding("items")) {
                         that.oLocList.getBinding("items").filter([]);
+                    }
+                } else if (sId.includes("LocDSlctList")) {
+                    that._oCore
+                        .byId(this._valueHelpDialogDLoc.getId() + "-searchField")
+                        .setValue("");
+                    if (that.oDLocList.getBinding("items")) {
+                        that.oDLocList.getBinding("items").filter([]);
                     }
                     // Product Dialog
                 } else if (sId.includes("prod")) {
@@ -907,7 +1052,20 @@ sap.ui.define(
                 // Check if search filter is to be applied
                 sQuery = sQuery ? sQuery.trim() : "";
                 // Location
-                if (sId.includes("Loc")) {
+                if (sId.includes("LocSlctList")) {
+                    if (sQuery !== "") {
+                        oFilters.push(
+                            new Filter({
+                                filters: [
+                                    new Filter("FACTORY_LOC", FilterOperator.Contains, sQuery),
+                                    new Filter("LOCATION_DESC", FilterOperator.Contains, sQuery),
+                                ],
+                                and: false,
+                            })
+                        );
+                    }
+                    that.oLocList.getBinding("items").filter(oFilters);
+                } else if (sId.includes("LocDSlctList")) {
                     if (sQuery !== "") {
                         oFilters.push(
                             new Filter({
@@ -919,7 +1077,7 @@ sap.ui.define(
                             })
                         );
                     }
-                    that.oLocList.getBinding("items").filter(oFilters);
+                    that.oDLocList.getBinding("items").filter(oFilters);
                     // Product
                 } else if (sId.includes("prod")) {
                     if (sQuery !== "") {
@@ -1001,9 +1159,10 @@ sap.ui.define(
                     aSelectedItems,
                     aODdata = [];
                 //Location list
-                if (sId.includes("Loc")) {
+                if (sId.includes("LocSlctList")) {
                     that.oLoc = that.byId("idloc");
                     that.oProd = that.byId("idprod");
+                    // that.odLoc = that.byId("idDemdloc");
                     aSelectedItems = oEvent.getParameter("selectedItems");
                     that.oLoc.setValue(aSelectedItems[0].getTitle());
                     that.oGModel.setProperty(
@@ -1011,6 +1170,7 @@ sap.ui.define(
                         aSelectedItems[0].getTitle()
                     );
                     // Removing the input box values when Location changed
+                    that.byId("idDemdloc").setValue("");
                     that.oProd.setValue("");
                     that.oVer.setValue("");
                     that.oScen.setValue("");
@@ -1050,6 +1210,53 @@ sap.ui.define(
                         },
                     });
 
+
+                    that.byId("idDemdloc").removeAllTokens();
+                    var DemandLoc = that.LocData;
+                    that.Loc = [];
+                    var FLoc = that.byId("idloc").getValue();
+                    for (var i = 0; i < DemandLoc.length; i++) {
+                        if (FLoc === DemandLoc[i].Demand_Loc) {
+                            that.Loc.push(DemandLoc[i]);
+                        }
+                    }
+                    that.DlocMod = new JSONModel();
+                    that.DlocMod.setData({
+                        DLocitems: that.Loc
+
+                    });
+                    that.oDLocList.setModel(that.DlocMod);
+
+                    that.byId("idDemdloc").removeAllTokens();
+                    that._valueHelpDialogDLoc.getAggregation("_dialog").getContent()[1].selectAll();
+
+                 
+                    var  aSelectedItems = that.Loc;
+                    aSelectedItems.forEach(function (oItem) {
+                        that.byId("idDemdloc").addToken(
+                            new sap.m.Token({
+                                key: oItem.LOCATION_ID,
+                                text: oItem.LOCATION_ID,
+                            })
+                        );
+                    });
+
+                } else if (sId.includes("LocDSlctList")) {
+                    that.odLoc = that.byId("idDemdloc");
+                    aSelectedItems = oEvent.getParameter("selectedItems");
+                    // that.odLoc.setValue(aSelectedItems[0].getTitle());
+
+                    that.odLoc.removeAllTokens();
+                    aSelectedItems.forEach(function (oItem) {
+                        that.odLoc.addToken(
+                            new sap.m.Token({
+                                key: oItem.getTitle(),
+                                text: oItem.getTitle(),
+                            })
+                        );
+                    });
+
+                    that.onFilterDemandLoc();
                     // Product list
                 } else if (sId.includes("prod")) {
                     that.oProd = that.byId("idprod");

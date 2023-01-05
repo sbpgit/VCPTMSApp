@@ -89,7 +89,7 @@ sap.ui.define([
           oFilters = [];
         // Check if search filter is to be applied
         sQuery = sQuery ? sQuery.trim() : "";
-        if (sId.includes("idSearch")) {
+        // if (sId.includes("idSearch")) {
           if (sQuery !== "") {
             oFilters.push(
               new Filter({
@@ -103,6 +103,6 @@ sap.ui.define([
           }
           that.byId("classList").getBinding("items").filter(oFilters);
         }
-      }
+      // }
     });
   });

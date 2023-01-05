@@ -170,7 +170,7 @@ sap.ui.define([
                     success: function (oData) {
                         // MessageToast.show("Success");
                         aParameters = oData.results;
-                        if (aParameters.length > 0) {                            
+                        if (aParameters.length > 0) {
                             that.getFilteredData(aParameters);
                             // aParameters = aParameters.sort((a, b) => a.SEQUENCE - b.SEQUENCE);
 
@@ -199,18 +199,28 @@ sap.ui.define([
              */
             getFilteredData: function (aParameters) {
                 var sLocation = oGModel.getProperty("/location");
-                var aNewParams = [];               
+                var iIndx = 0;
+                aParameters = aParameters.sort((a, b) => a.SEQUENCE - b.SEQUENCE);
+                const ids = aParameters.map(o => o.PARAMETER_ID)
+                const aFiltered = aParameters.filter(({ PARAMETER_ID }, index) => !ids.includes(PARAMETER_ID, index + 1))
+                const aParams = aFiltered.map(obj => {
+
+                    return { ...obj, VALUE: '' };
+                });
                 var aFilteredParams = aParameters.filter(function (aParams) {
                     return aParams.LOCATION_ID === sLocation;
                 });
-                var aNewParams = aParameters.filter(function (aParams) {
-                    return aParams.LOCATION_ID === '' || aParams.LOCATION_ID === null;
-                });
+                
                 if (aFilteredParams.length > 0) {
-                    if (aNewParams.length > 0) {
-                        for(var i = 0; i < aNewParams.length; i++) {
-                            aFilteredParams.push(aNewParams[i]);
-                        }                       
+                    if (aParams.length > 0) {
+                        for (var i = 0; i < aParams.length; i++) {
+                            iIndx = 0;
+                            aFilteredParams.indexOf(aParams[i]);
+                            iIndx = aFilteredParams.findIndex(item => item.PARAMETER_ID === aParams[i].PARAMETER_ID);
+                            if(iIndx === -1) {
+                                aFilteredParams.push(aParams[i]);
+                            }
+                        }
                     }
 
                     aFilteredParams = aFilteredParams.sort((a, b) => a.SEQUENCE - b.SEQUENCE);
@@ -219,20 +229,12 @@ sap.ui.define([
                     });
 
                 } else {
-                    aParameters = aParameters.sort((a, b) => a.SEQUENCE - b.SEQUENCE);
-                    const ids = aParameters.map(o => o.PARAMETER_ID)
-                    const aFiltered = aParameters.filter(({ PARAMETER_ID }, index) => !ids.includes(PARAMETER_ID, index + 1))
-                    const aParams = aFiltered.map(obj => {
-
-                        return { ...obj, VALUE: '' };
-                    });
 
                     that.oParameterModel.setData({
                         parameters: aParams
                     });
                 }
                 that.byId("idParameterTable").setModel(that.oParameterModel);
-
 
             },
 
