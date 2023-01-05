@@ -484,8 +484,7 @@ sap.ui.define(
                                 width: "6rem",
                                 // label: new sap.m.ObjectIdentifier({title: columnName}),
                                 name: columnName,
-                                label: columnText,
-                                // multiLabels: [new sap.m.Text({text: columnName}), new sap.m.Text({text: "SUM"})],
+                                label: columnText,                                
                                 template: new sap.m.VBox({
                                     items: [
                                         new sap.m.Input({
@@ -509,7 +508,7 @@ sap.ui.define(
                                 columnText = columnName;
                             }
                             return new sap.ui.table.Column({
-                                width: "9rem",
+                                width: "6rem",
                                 name: columnName,
                                 label: columnText,
                                 // label: columnName,

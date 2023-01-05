@@ -23,7 +23,7 @@ class SOFunctions {
         await this.processUniqueID(adata.LOCATION_ID, adata.PRODUCT_ID, '');
         await this.genBaseMarketAuth(adata.LOCATION_ID, adata.PRODUCT_ID);
         await this.genPartialProd(adata.LOCATION_ID);
-        // await this.genFactoryLoc();
+        await this.genFactoryLoc();
         await this.saveClusterData(adata.LOCATION_ID, adata.PRODUCT_ID);
         await this.genClusterResults(adata.LOCATION_ID, adata.PRODUCT_ID);
         //await GenF.logMessage(req, 'Completed Sales Orders Processing');
@@ -609,7 +609,7 @@ class SOFunctions {
      * @param {Quantity} lQty 
      * @param {Unique ID} liUnique 
      */
-    async createSO(lLocation, lProduct,     , lSO, lDate, lQty, lUnique) {
+    async createSO(lLocation, lProduct, lCustomer, lSO, lDate, lQty, lUnique) {
 
         const lSOItem = '000010';
         // Get Main Product        
