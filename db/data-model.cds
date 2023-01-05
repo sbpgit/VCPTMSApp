@@ -1173,6 +1173,9 @@ entity![V_FCHARPLAN]{
 entity![V_ASMCOMP_REQ]{
     key![WEEK_DATE]     : Date       @title : 'CAL_DATE';
     key![LOCATION_ID]   : String(4)  @title : 'LOCATION_ID';
+// addded
+    key![FACTORY_LOC]   : String(4)  @title : 'FACTORY_LOC';
+// end
     key![PRODUCT_ID]    : String(40) @title : 'PRODUCT_ID';
     key![ASSEMBLY]      : String(40) @title : 'ASSEMBLY';
     key![COMPONENT]     : String(40) @title : 'COMPONENT';

@@ -369,6 +369,7 @@ module.exports = (srv) => {
 
         let liComp = [];
         let liCompQty;
+        
         switch (await GenFunctions.getParameterValue(req.data.LOCATION_ID, 5)) {
             case 'M1':
                 liCompQty = await cds.run(

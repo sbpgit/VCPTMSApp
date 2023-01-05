@@ -19,8 +19,8 @@
                         <tnt:NavigationListItem id="D" key="D" text="{i18n>genfulcondemand}" />
                         <tnt:NavigationListItem id="A" key="A" text="{i18n>genasmbrequirments}" />
                         <tnt:NavigationListItem id="PF" key="PF" text="{i18n>publishforecast}" />
-                        <tnt:NavigationListItem id="PDH" key="PDH" text="{i18n>predefhistory}" />
-                        <tnt:NavigationListItem id="PDF" key="PDF" text="{i18n>predeffuture}" />
+                        <tnt:NavigationListItem id="PDH" key="PDH" text="{i18n>predefhistory}"  visible="false"/>
+                        <tnt:NavigationListItem id="PDF" key="PDF" text="{i18n>predeffuture}" visible="false"/>
                     </tnt:NavigationList>
                 </tnt:SideNavigation>
             </tnt:sideContent>
