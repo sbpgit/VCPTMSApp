@@ -1184,6 +1184,7 @@ entity![V_PRODCLSCHARVAL]{
     key![PRODUCT_ID]   : String(40)  @title : 'Product';
     key![CLASS_NUM]    : String(18)  @title : 'CLASS_NUM';
     key![CLASS_NAME]   : String(20)  @title : 'CLASS_NAME';
+    key![IBPCHAR_CHK]  : Boolean     @title : 'IBPCHAR_CHK';
     key![CHAR_NUM]     : String(10)  @title : 'CHAR_NUM';
     key![CHAR_NAME]    : String(30)  @title : 'CHAR_NAME';
     key![CHAR_DESC]    : String(150) @title : 'CHAR_DESC';
