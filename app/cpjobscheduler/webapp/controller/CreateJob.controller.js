@@ -183,7 +183,7 @@ sap.ui.define(
                     // 03-12
                     that.byId("idSdi").setEnabled(true);
                 }
-                
+
                 that.onJobSelect();
 
                 // Calling service to get the Location data
@@ -210,7 +210,7 @@ sap.ui.define(
                         MessageToast.show("error");
                     },
                 });
-                
+
                 // Checking for the operation to be perform update or new schedule
                 if (that.oGModel.getProperty("/newSch") === "X" || that.oGModel.getProperty("/UpdateSch") === "X") {
                     // Getting the selected job type and makeing it as default selected
@@ -665,7 +665,7 @@ sap.ui.define(
                     // Product Dialog
                 } else if (sId.includes("prod")) {
                     if (that.oLoc.getValue()) {
-                        if ( that.oGModel.getProperty("/UpdateSch") === "X" && that.oGModel.getProperty("/Flag") === "" ) {
+                        if (that.oGModel.getProperty("/UpdateSch") === "X" && that.oGModel.getProperty("/Flag") === "") {
                             that.getProducts();
                             that._valueHelpDialogProd.open();
                         } else {
@@ -684,13 +684,13 @@ sap.ui.define(
                                 sap.ui.getCore().byId("prodSlctList").setMultiSelect(false);
                                 sap.ui.getCore().byId("prodSlctList").setRememberSelections(false);
                             }
-                            if(sap.ui.getCore().byId("prodSlctList").getMultiSelect()){
+                            if (sap.ui.getCore().byId("prodSlctList").getMultiSelect()) {
                                 var aData = sap.ui.getCore().byId("prodSlctList").getItems();
                                 var atokens = that.oProd.getTokens();
 
-                                for(var i=0; i < atokens.length; i++){
-                                    for(var j = 0; j < aData.length; j++){
-                                        if(atokens[i].getText() === aData[j].getTitle()){
+                                for (var i = 0; i < atokens.length; i++) {
+                                    for (var j = 0; j < aData.length; j++) {
+                                        if (atokens[i].getText() === aData[j].getTitle()) {
                                             aData[j].setSelected(true);
                                             break;
                                         }
@@ -744,22 +744,22 @@ sap.ui.define(
                     }
                 } else if (sId.includes("pmInput")) {
                     that._valueHelpDialogPPF.open();
-                // } else if (sId.includes("Cust")) {
-                //     sap.ui.core.BusyIndicator.show();
-                //     // Calling service to get the Customer data
-                //     this.getModel("BModel").read("/getCustgroup", {
-                //         success: function (oData) {
-                //             sap.ui.core.BusyIndicator.hide();
-                //             that.custModel.setData(oData);
-                //             that.oCustList.setModel(that.custModel);
-                //         },
-                //         error: function (oData, error) {
-                //             sap.ui.core.BusyIndicator.hide();
-                //             MessageToast.show("error");
-                //         },
-                //     });
+                    // } else if (sId.includes("Cust")) {
+                    //     sap.ui.core.BusyIndicator.show();
+                    //     // Calling service to get the Customer data
+                    //     this.getModel("BModel").read("/getCustgroup", {
+                    //         success: function (oData) {
+                    //             sap.ui.core.BusyIndicator.hide();
+                    //             that.custModel.setData(oData);
+                    //             that.oCustList.setModel(that.custModel);
+                    //         },
+                    //         error: function (oData, error) {
+                    //             sap.ui.core.BusyIndicator.hide();
+                    //             MessageToast.show("error");
+                    //         },
+                    //     });
 
-                //     that._valueHelpDialogCustDetails.open();
+                    //     that._valueHelpDialogCustDetails.open();
                 } else if (sId.includes("classInput")) {
                     sap.ui.core.BusyIndicator.show();
                     // Calling service to get the Customer data
@@ -974,97 +974,97 @@ sap.ui.define(
             JobType: function () {
                 // 03-12
                 // if (that.oGModel.getProperty("/newSch") !== "X" && that.oGModel.getProperty("/UpdateSch") !== "X") {
-                    var oJobKey = that.byId("idJobType").getSelectedKey();
+                var oJobKey = that.byId("idJobType").getSelectedKey();
 
-                    // Changing the Id's based on selected job type
-                    switch (oJobKey) {
-                        case "M":
-                            that.oLoc = this.byId("MlocInput");
-                            that.oProd = this.byId("MprodInput");
-                            that.oPredProfile = this.byId("MpmInput");
-                            break;
+                // Changing the Id's based on selected job type
+                switch (oJobKey) {
+                    case "M":
+                        that.oLoc = this.byId("MlocInput");
+                        that.oProd = this.byId("MprodInput");
+                        that.oPredProfile = this.byId("MpmInput");
+                        break;
 
-                        case "P":
-                            that.oLoc = this.byId("PlocInput");
-                            that.oProd = this.byId("PprodInput");
-                            that.oVer = this.byId("Pidver");
-                            that.oScen = this.byId("Pidscen");
-                            break;
+                    case "P":
+                        that.oLoc = this.byId("PlocInput");
+                        that.oProd = this.byId("PprodInput");
+                        that.oVer = this.byId("Pidver");
+                        that.oScen = this.byId("Pidscen");
+                        break;
 
-                        case "T":
-                            that.oLoc = this.byId("TlocInput");
-                            that.oProd = this.byId("TprodInput");
-                            break;
+                    case "T":
+                        that.oLoc = this.byId("TlocInput");
+                        that.oProd = this.byId("TprodInput");
+                        break;
 
-                        case "F":
-                            that.oLoc = this.byId("TFlocInput");
-                            that.oProd = this.byId("TFprodInput");
-                            break;
+                    case "F":
+                        that.oLoc = this.byId("TFlocInput");
+                        that.oProd = this.byId("TFprodInput");
+                        break;
 
-                        case "I":
-                            var rRadioBtn = that.byId("idRbtnImport").getSelectedButton().getText();
-                            that.oLoc = this.byId("IlocInput");
-                            that.oProd = this.byId("IprodInput");
-                            break;
+                    case "I":
+                        var rRadioBtn = that.byId("idRbtnImport").getSelectedButton().getText();
+                        that.oLoc = this.byId("IlocInput");
+                        that.oProd = this.byId("IprodInput");
+                        break;
 
-                        case "E":
-                            that.ExportRadioChange();
-                            break;
+                    case "E":
+                        that.ExportRadioChange();
+                        break;
 
-                        case "D":
-                            that.oLoc = this.byId("DlocInput");
-                            that.oProd = this.byId("DprodInput");
-                            break;
+                    case "D":
+                        that.oLoc = this.byId("DlocInput");
+                        that.oProd = this.byId("DprodInput");
+                        break;
 
-                        case "A":
-                            that.oLoc = this.byId("AlocInput");
-                            that.oProd = this.byId("AprodInput");
-                            break;
+                    case "A":
+                        that.oLoc = this.byId("AlocInput");
+                        that.oProd = this.byId("AprodInput");
+                        break;
 
-                        case "O":
-                            that.oLoc = this.byId("OlocInput");
-                            that.oProd = this.byId("OprodInput");
-                            break;
+                    case "O":
+                        that.oLoc = this.byId("OlocInput");
+                        that.oProd = this.byId("OprodInput");
+                        break;
 
-                        case "PF":
-                            that.oLoc = this.byId("PFlocInput");
-                            that.oProd = this.byId("PFprodInput");
-                            that.oVer = this.byId("PFidver");
-                            that.oScen = this.byId("PFidscen");
-                            that.DateRange = that.byId("PFidDateRange");
-                            break;
+                    case "PF":
+                        that.oLoc = this.byId("PFlocInput");
+                        that.oProd = this.byId("PFprodInput");
+                        that.oVer = this.byId("PFidver");
+                        that.oScen = this.byId("PFidscen");
+                        that.DateRange = that.byId("PFidDateRange");
+                        break;
 
-                        case "PDH":
-                            that.oLoc = this.byId("PDHlocInput");
-                            that.oProd = this.byId("PDHprodInput");
-                            that.oPredProfile = this.byId("PDHpmInput");
-                            that.oClass = this.byId("PDHclassInput");
-                            break;
+                    case "PDH":
+                        that.oLoc = this.byId("PDHlocInput");
+                        that.oProd = this.byId("PDHprodInput");
+                        that.oPredProfile = this.byId("PDHpmInput");
+                        that.oClass = this.byId("PDHclassInput");
+                        break;
 
-                        case "PDF":
-                            that.oLoc = this.byId("PDFlocInput");
-                            that.oProd = this.byId("PDFprodInput");
-                            that.oVer = this.byId("PDFidver");
-                            that.oScen = this.byId("PDFidscen");
-                            break;
+                    case "PDF":
+                        that.oLoc = this.byId("PDFlocInput");
+                        that.oProd = this.byId("PDFprodInput");
+                        that.oVer = this.byId("PDFidver");
+                        that.oScen = this.byId("PDFidscen");
+                        break;
 
-                        default:
-                            break
+                    default:
+                        break
 
-                    }
+                }
 
-                    // 07-09-2022-1
-                    if (that.oGModel.getProperty("/UpdateSch") !== "X" && (oJobKey === "M" || oJobKey === "P" || oJobKey === "T" || oJobKey === "F" ||
-                        oJobKey === "I" || oJobKey === "D" )) {     // || oJobKey === "PF")) {
+                // 07-09-2022-1
+                if (that.oGModel.getProperty("/UpdateSch") !== "X" && (oJobKey === "M" || oJobKey === "P" || oJobKey === "T" || oJobKey === "F" ||
+                    oJobKey === "I" || oJobKey === "D")) {     // || oJobKey === "PF")) {
+                    that.oProd.removeAllTokens();
+                } else if (that.oGModel.getProperty("/UpdateSch") !== "X" && oJobKey === "E") {
+                    var selRadio = that.byId("idRbtnExport").getSelectedButton().getText();
+                    if (selRadio !== "Location" && selRadio !== "Customer Group" && selRadio !== "Product" && selRadio !== "Class"
+                        && selRadio !== "Restrictions" && selRadio !== "Assembly Requirement Quantity" &&
+                        selRadio !== "Location Product" && selRadio !== "Assembly") {
                         that.oProd.removeAllTokens();
-                    } else if (that.oGModel.getProperty("/UpdateSch") !== "X" && oJobKey === "E") {
-                        var selRadio = that.byId("idRbtnExport").getSelectedButton().getText();
-                        if (selRadio !== "Location" && selRadio !== "Customer Group" && selRadio !== "Product" && selRadio !== "Class"
-                            && selRadio !== "Restrictions" && selRadio !== "Assembly Requirement Quantity" &&
-                            selRadio !== "Location Product" && selRadio !== "Assembly") {
-                            that.oProd.removeAllTokens();
-                        }
                     }
+                }
                 // }
                 // 07-09-2022-1
                 // 07-09-2022
@@ -1086,7 +1086,7 @@ sap.ui.define(
                     that.oLoc.setValue(aSelectedLoc[0].getTitle());
                     that.oGModel.setProperty("/Flag", "X");
 
-                    if (oJobType === "M" || oJobType === "P" || oJobType === "T" || oJobType === "F" || oJobType === "D" 
+                    if (oJobType === "M" || oJobType === "P" || oJobType === "T" || oJobType === "F" || oJobType === "D"
                         || oJobType === "I" || oJobType === "E" || oJobType === "PDH" || oJobType === "PDF") {
                         that.oProd.removeAllTokens();
                         this._valueHelpDialogProd.getAggregation("_dialog").getContent()[1].removeSelections();
@@ -1112,11 +1112,11 @@ sap.ui.define(
                             that.oProd.setValue(aSelectedProd[0].getTitle());
                         }
                         // 07-09-2022
-                        if (oJobType === "M" || oJobType === "P" || oJobType === "T" || oJobType === "F" || oJobType === "D" 
-                            || oJobType === "I" || oJobType === "E" || oJobType === "PDH" || oJobType === "PDF"){
+                        if (oJobType === "M" || oJobType === "P" || oJobType === "T" || oJobType === "F" || oJobType === "D"
+                            || oJobType === "I" || oJobType === "E" || oJobType === "PDH" || oJobType === "PDF") {
                             var selRadio = that.byId("idRbtnExport").getSelectedButton().getText();
                             if (oJobType === "E" && (selRadio === "Assembly Requirement Quantity" || selRadio === "Location Product"
-                                 || selRadio === "Assembly")) {
+                                || selRadio === "Assembly")) {
                                 that.oProd.setValue(aSelectedProd[0].getTitle());
                             } else {
                                 that.oProd.removeAllTokens();
@@ -1135,7 +1135,7 @@ sap.ui.define(
                             that.getVersion();
                         }
                     } else {
-                        if (oJobType === "M" || oJobType === "P" || oJobType === "T" || oJobType === "F" 
+                        if (oJobType === "M" || oJobType === "P" || oJobType === "T" || oJobType === "F"
                             || oJobType === "D" || oJobType === "PDH" || oJobType === "PDF") {
                             that.oProd.removeAllTokens();
                         }
@@ -1253,11 +1253,11 @@ sap.ui.define(
                                 jmodel = new sap.ui.model.json.JSONModel(that.typeData);
                                 if (oJobType === "M") {
                                     that.getView().byId("MidType").setModel(jmodel);
-                                } else if(oJobType === "P") {
+                                } else if (oJobType === "P") {
                                     that.getView().byId("PidType").setModel(jmodel);
-                                } else if(oJobType === "PDH") {
+                                } else if (oJobType === "PDH") {
                                     that.getView().byId("PDHidType").setModel(jmodel);
-                                } else if(oJobType === "PDF") {
+                                } else if (oJobType === "PDF") {
                                     that.getView().byId("PDFidType").setModel(jmodel);
                                 }
                             }
@@ -1278,13 +1278,13 @@ sap.ui.define(
                             sap.ui.core.BusyIndicator.hide();
                             var aParams = oData.results;
                             var oParam = {};
-                            var filterData = [1 , 2];
-                                // {"PARAMETER_ID" : 1},
-                                //               {"PARAMETER_ID" : 2}];
+                            var filterData = [1, 2];
+                            // {"PARAMETER_ID" : 1},
+                            //               {"PARAMETER_ID" : 2}];
                             var aFrozenData,
-                            aForecastData;
+                                aForecastData;
 
-                            
+
 
                             aFrozenData = aParams.filter(function (aData) {
                                 return aData.PARAMETER_ID === 1;
@@ -1303,7 +1303,7 @@ sap.ui.define(
                                 // that.fDate = FDate;
 
                                 var iForecastHorizon = parseInt(aForecastData[0].VALUE) - parseInt(aFrozenData[0].VALUE);
-                                    iForecastHorizon = iForecastHorizon * 7;
+                                iForecastHorizon = iForecastHorizon * 7;
                                 var TDate = new Date();
                                 TDate = new Date(TDate.setDate(TDate.getDate() + iForecastHorizon));
                                 // that.TDate = TDate;
@@ -1335,7 +1335,7 @@ sap.ui.define(
                     oJobType = type;
 
 
-                if (oJobType === "M" || oJobType === "P"|| oJobType === "PDH" || oJobType === "PDF") {
+                if (oJobType === "M" || oJobType === "P" || oJobType === "PDH" || oJobType === "PDF") {
                     sap.ui.getCore().byId("prodSlctList").setMultiSelect(true);
                     // sap.ui.getCore().byId("prodSlctList").setRememberSelections(true);
 
@@ -1346,9 +1346,9 @@ sap.ui.define(
                         });
                     }
                 } else if (oJobType === "T" || oJobType === "F" || oJobType === "D" || oJobType === "I"
-                             || oJobType === "E" ){ // || oJobType === "PF") {
+                    || oJobType === "E") { // || oJobType === "PF") {
                     var radioSel = that.byId("idRbtnExport").getSelectedButton().getText();
-                    if (radioSel !== "Assembly Requirement Quantity"  && radioSel !== "Assembly"  && radioSel !== "Location Product") {
+                    if (radioSel !== "Assembly Requirement Quantity" && radioSel !== "Assembly" && radioSel !== "Location Product") {
                         sap.ui.getCore().byId("prodSlctList").setMultiSelect(true);
                         // sap.ui.getCore().byId("prodSlctList").setRememberSelections(true);
                     } else {
@@ -1421,24 +1421,55 @@ sap.ui.define(
                     oFilters.push(sFilter);
                 }
 
-                // Calling sercive to get the IBP Vaersions list
-                this.getModel("BModel").read("/getIbpVerScn", {
-                    filters: oFilters,
-                    success: function (oData) {
-                        function removeDuplicate(array, key) {
-                            var check = new Set();
-                            return array.filter(obj => !check.has(obj[key]) && check.add(obj[key]));
-                        }
-                        that.verModel.setData({
-                            results: removeDuplicate(oData.results, 'VERSION')
-                        });
+                if (oJobType === "PF") {
+                    that.getModel("BModel").callFunction("/getAllVerScen", {
+                        method: "GET",
+                        urlParameters: {
+                            LOCATION_ID: that.oLoc.getValue(),
+                        },
 
-                        that.oVerList.setModel(that.verModel);
-                    },
-                    error: function (oData, error) {
-                        MessageToast.show("error");
-                    },
-                });
+                        success: function (oData, oResponse) {
+                            var adata = [];
+                            for (var i = 0; i < oData.results.length; i++) {
+                                if (oData.results[i].PRODUCT_ID === that.oProd.getValue()) {
+                                    adata.push({
+                                        "VERSION_NAME": oData.results[i].VERSION
+                                    });
+                                }
+                            }
+                            if (adata.length > 0) {
+                                that.verModel.setData({
+                                    results: adata
+                                });
+
+                                that.oVerList.setModel(that.verModel);
+                            }
+                        },
+                        error: function (oResponse) {
+                            sap.m.MessageToast.show("Failed to get Version!");
+                        },
+                    });
+
+                } else {
+                    // Calling sercive to get the IBP Versions list
+                    this.getModel("BModel").read("/getIbpVerScn", {
+                        filters: oFilters,
+                        success: function (oData) {
+                            function removeDuplicate(array, key) {
+                                var check = new Set();
+                                return array.filter(obj => !check.has(obj[key]) && check.add(obj[key]));
+                            }
+                            that.verModel.setData({
+                                results: removeDuplicate(oData.results, 'VERSION')
+                            });
+
+                            that.oVerList.setModel(that.verModel);
+                        },
+                        error: function (oData, error) {
+                            MessageToast.show("error");
+                        },
+                    });
+                }
             },
 
             /**
@@ -1473,52 +1504,83 @@ sap.ui.define(
                         oFilters.push(sFilter);
                     }
                 }
-                
-                // Calling sercive to get the IBP Scenario list
-                this.getModel("BModel").read("/getIbpVerScn", {
-                    filters: oFilters,
-                    success: function (oData) {
-                        function removeDuplicate(array, key) {
-                            var check = new Set();
-                            return array.filter(obj => !check.has(obj[key]) && check.add(obj[key]));
-                        }
-                        that.scenModel.setData({
-                            results: removeDuplicate(oData.results, 'SCENARIO')
-                        });
-                        // that.scenModel.setData(oData);
-                        that.oScenList.setModel(that.scenModel);
-                    },
-                    error: function (oData, error) {
-                        MessageToast.show("error");
-                    },
-                });
+                if (that.byId("idJobType").getSelectedKey() === "PF") {
+                    that.getModel("BModel").callFunction("/getAllVerScen", {
+                        method: "GET",
+                        urlParameters: {
+                            LOCATION_ID: that.oLoc.getValue(),
+                        },
 
-                if(that.byId("idJobType").getSelectedKey() === "PF"){
-                /** Get Valid CF Auth Token and Configured User in Destination for S4D */
-                that.getModel("BModel").callFunction("/getCFAuthToken", {
-                    method: "GET",
+                        success: function (oData, oResponse) {
+                            var adata = [];
+                            for (var i = 0; i < oData.results.length; i++) {
+                                if (oData.results[i].PRODUCT_ID === that.oProd.getValue()) {
+                                    adata.push({
+                                        "SCENARIO": oData.results[i].SCENARIO
+                                    });
+                                }
+                            }
+                            if (adata.length > 0) {
+                                that.scenModel.setData({
+                                    results: adata
+                                });
 
-                    success: function (oData, oResponse) {
-                        that.authToken = oResponse.data.getCFAuthToken;
-                        that.getCFDestinationUser(that.authToken);
-                    },
-                    error: function (oResponse) {
-                        sap.m.MessageToast.show("Failed to get Destination User!");
-                    },
-                });
-                that.getModel("BModel").callFunction("/getUserInfo", {
-                    method: "GET",
-                    success: function (oData, oResponse) {
-                        // sap.m.MessageToast.show(oResponse.data.getUserInfo);
-                        that.sUserId = oResponse.data.getUserInfo;
-                    },
-                    error: function (oResponse) {
-                        sap.m.MessageToast.show("Failed to get User Info!");
-                    },
-                });
+                                that.oScenList.setModel(that.scenModel);
+                            }
+                        },
+                        error: function (oResponse) {
+                            sap.m.MessageToast.show("Failed to get Scenario!");
+                        },
+                    });
 
-            }
-           
+                } else {
+
+                    // Calling sercive to get the IBP Scenario list
+                    this.getModel("BModel").read("/getIbpVerScn", {
+                        filters: oFilters,
+                        success: function (oData) {
+                            function removeDuplicate(array, key) {
+                                var check = new Set();
+                                return array.filter(obj => !check.has(obj[key]) && check.add(obj[key]));
+                            }
+                            that.scenModel.setData({
+                                results: removeDuplicate(oData.results, 'SCENARIO')
+                            });
+                            // that.scenModel.setData(oData);
+                            that.oScenList.setModel(that.scenModel);
+                        },
+                        error: function (oData, error) {
+                            MessageToast.show("error");
+                        },
+                    });
+                }
+
+                if (that.byId("idJobType").getSelectedKey() === "PF") {
+                    /** Get Valid CF Auth Token and Configured User in Destination for S4D */
+                    that.getModel("BModel").callFunction("/getCFAuthToken", {
+                        method: "GET",
+
+                        success: function (oData, oResponse) {
+                            that.authToken = oResponse.data.getCFAuthToken;
+                            that.getCFDestinationUser(that.authToken);
+                        },
+                        error: function (oResponse) {
+                            sap.m.MessageToast.show("Failed to get Destination User!");
+                        },
+                    });
+                    that.getModel("BModel").callFunction("/getUserInfo", {
+                        method: "GET",
+                        success: function (oData, oResponse) {
+                            // sap.m.MessageToast.show(oResponse.data.getUserInfo);
+                            that.sUserId = oResponse.data.getUserInfo;
+                        },
+                        error: function (oResponse) {
+                            sap.m.MessageToast.show("Failed to get User Info!");
+                        },
+                    });
+
+                }
+
             },
 
             /** Get CF Configured Destination User */
@@ -1591,43 +1653,43 @@ sap.ui.define(
                     }
                     // 03-12
                     // if (jobType === "I" || jobType === "E"){
-                        if (
-                            jobType === "E"){
-                    switch (selectedButton) {
-                        case "Location":
-                            Flag = "X";
-                            break;
-                        case "Customer Group":
-                            Flag = "X";
-                            break;
-                        case "Product":
-                            Flag = "X";
-                            that.oLoc.setValue(oScheData.LOCATION_ID);
-                            break;
-                        case "Location Product":
-                            Flag = "X";
-                            that.oLoc.setValue(oScheData.LOCATION_ID);
-                            break;
-                        case "Assembly":
-                            Flag = "X";
-                            that.oLoc.setValue(oScheData.LOCATION_ID);
-                            break;
-                        case "Class":
-                            Flag = "X";
-                            that.oClass.setValue(oScheData.CLASS_NUM);
-                            break;
-                        case "Restrictions":
-                            Flag = "X";
-                            that.oLoc.setValue(oScheData.LOCATION_ID);
-                            break;
-                        default:
-                            break;
+                    if (
+                        jobType === "E") {
+                        switch (selectedButton) {
+                            case "Location":
+                                Flag = "X";
+                                break;
+                            case "Customer Group":
+                                Flag = "X";
+                                break;
+                            case "Product":
+                                Flag = "X";
+                                that.oLoc.setValue(oScheData.LOCATION_ID);
+                                break;
+                            case "Location Product":
+                                Flag = "X";
+                                that.oLoc.setValue(oScheData.LOCATION_ID);
+                                break;
+                            case "Assembly":
+                                Flag = "X";
+                                that.oLoc.setValue(oScheData.LOCATION_ID);
+                                break;
+                            case "Class":
+                                Flag = "X";
+                                that.oClass.setValue(oScheData.CLASS_NUM);
+                                break;
+                            case "Restrictions":
+                                Flag = "X";
+                                that.oLoc.setValue(oScheData.LOCATION_ID);
+                                break;
+                            default:
+                                break;
+                        }
                     }
-                }
 
                     if (Flag === "" && ExportFlag === "") {
                         var oScheData = $.parseJSON(oScheData.LocProdData);
-                    location = oScheData[0].LOCATION_ID;
+                        location = oScheData[0].LOCATION_ID;
 
                         that.getModel("BModel").callFunction("/getAllProd", {
                             method: "GET",
@@ -1687,7 +1749,7 @@ sap.ui.define(
                                         );
                                     }
 
-                                    
+
                                 }
 
                             },
@@ -2150,7 +2212,7 @@ sap.ui.define(
                         case "exportIBPAssembly":
                             that.byId("idRbtnExport").setSelectedButton(that.byId("idIBPAssembly"));
                             that.byId("IBPAssemblyExport").setVisible(true);
-                             break;
+                            break;
                         default:
                             break;
                     }
@@ -2261,7 +2323,7 @@ sap.ui.define(
                             that.oProd.removeAllTokens();
                         }
                         break;
-                    
+
                     default:
                         break;
                 }
@@ -2417,7 +2479,7 @@ sap.ui.define(
             },
 
 
-           
+
 
             // 07-09-2022-1
 
@@ -2531,7 +2593,7 @@ sap.ui.define(
                 }
             },
 
-            
+
 
             /**
              * This function is called when click on create Job for Create Prediction button.
@@ -2643,7 +2705,7 @@ sap.ui.define(
              * This function is called when click on create Job for Create Publish ForeCast Order button.
              * @param {object} oEvent -the event information.
              */
-            onPublishForecast:function(){
+            onPublishForecast: function () {
                 if (that.oGModel.getProperty("/newSch") === "X") {
                     sap.ui.getCore().byId("idSavebt").setText("Add Schedule");
                 } else if (that.oGModel.getProperty("/UpdateSch") === "X") {
@@ -2684,47 +2746,47 @@ sap.ui.define(
                 }
 
                 // if (this.oProd.getTokens().length > 0 && this.oVer.getValue() && oDateRng) {
-                    // for (i = 0; i < oProdItems.length; i++) {
-                    //     vRuleslist = {
-                    //         LOCATION_ID: oLocItem,
-                    //         PRODUCT_ID: oProdItems[i].getText(),
-                    //         MODEL_VERSION: oSelModelVer,
-                    //         VERSION: oSelVer,
-                    //         SCENARIO: oSelScen,
-                    //         FROMDATE: vFromDate,
-                    //         TODATE: vToDate,
-                    //         VALIDUSER: that.sCFUserDestination,
-                    //         USER_ID: that.sUserId
-                    //     };
-                    //     oRuleList.LocProdData.push(vRuleslist);
-                    // }
-                    if (oProdItems && this.oVer.getValue() && oDateRng) {
-                        vRuleslist = {
-                            LOCATION_ID: oLocItem,
-                            PRODUCT_ID: oProdItems,
-                            MODEL_VERSION: oSelModelVer,
-                            VERSION: oSelVer,
-                            SCENARIO: oSelScen,
-                            FROMDATE: vFromDate,
-                            TODATE: vToDate,
-                            VALIDUSER: that.sCFUserDestination,
-                            USER_ID: that.sUserId
-                        };
-                        // oRuleList.push(vRuleslist);
+                // for (i = 0; i < oProdItems.length; i++) {
+                //     vRuleslist = {
+                //         LOCATION_ID: oLocItem,
+                //         PRODUCT_ID: oProdItems[i].getText(),
+                //         MODEL_VERSION: oSelModelVer,
+                //         VERSION: oSelVer,
+                //         SCENARIO: oSelScen,
+                //         FROMDATE: vFromDate,
+                //         TODATE: vToDate,
+                //         VALIDUSER: that.sCFUserDestination,
+                //         USER_ID: that.sUserId
+                //     };
+                //     oRuleList.LocProdData.push(vRuleslist);
+                // }
+                if (oProdItems && this.oVer.getValue() && oDateRng) {
+                    vRuleslist = {
+                        LOCATION_ID: oLocItem,
+                        PRODUCT_ID: oProdItems,
+                        MODEL_VERSION: oSelModelVer,
+                        VERSION: oSelVer,
+                        SCENARIO: oSelScen,
+                        FROMDATE: vFromDate,
+                        TODATE: vToDate,
+                        VALIDUSER: that.sCFUserDestination,
+                        USER_ID: that.sUserId
+                    };
+                    // oRuleList.push(vRuleslist);
                     // this.oGModel.setProperty("/vcrulesData", oRuleList);
                     this.oGModel.setProperty("/vcrulesData", vRuleslist);
 
-                    if (that.oGModel.getProperty("/newSch") === "X" || that.oGModel.getProperty("/UpdateSch") === "X" ){
+                    if (that.oGModel.getProperty("/newSch") === "X" || that.oGModel.getProperty("/UpdateSch") === "X") {
                         that.jobDataAddSche();
                     }
 
-                        if (that.oGModel.getProperty("/ExecuteType") === "S") {
-                            that._valueHelpDialogJobDetail.open();
-                        } else if (that.oGModel.getProperty("/ExecuteType") === "E") {
-                            sap.ui.getCore().byId("idJobSchtype").setSelectedKey("Im");
-                            that.onJobTypeChange();
-                            that.onJobCreate();
-                        }
+                    if (that.oGModel.getProperty("/ExecuteType") === "S") {
+                        that._valueHelpDialogJobDetail.open();
+                    } else if (that.oGModel.getProperty("/ExecuteType") === "E") {
+                        sap.ui.getCore().byId("idJobSchtype").setSelectedKey("Im");
+                        that.onJobTypeChange();
+                        that.onJobCreate();
+                    }
 
                     sap.ui.getCore().byId("idSchTime").setDateValue();
                     sap.ui.getCore().byId("idmnth").setValue("");
@@ -2741,7 +2803,7 @@ sap.ui.define(
              * This function is called to convert the input dates to Date String.
              * @param {object} imDate - Contains Date
              */
-             getDateFn: function (imDate) {
+            getDateFn: function (imDate) {
                 var vMonth, vDate, exDate;
                 var vMnthFrm = imDate.getMonth() + 1;
 
@@ -3297,10 +3359,10 @@ sap.ui.define(
                     } else {
                         MessageToast.show("Please select all fields");
                     }
-                } else if (rRadioBtn === "Location Product" || rRadioBtn === "Assembly" ) {
+                } else if (rRadioBtn === "Location Product" || rRadioBtn === "Assembly") {
                     oLocItem = that.oLoc.getValue();
                     // oProdItem = this.oProd.getValue();
-                    if (oLocItem ) {
+                    if (oLocItem) {
                         vRuleslist = {
                             LOCATION_ID: oLocItem,
                             // PRODUCT_ID: oProdItem
@@ -3560,10 +3622,10 @@ sap.ui.define(
             },
 
 
-             /**
-             * This function is called when click on Predefined History button.
-             */
-              onPredefHistory:function(){
+            /**
+            * This function is called when click on Predefined History button.
+            */
+            onPredefHistory: function () {
                 var cSelected = that.byId("PDHidCheckOR").getSelected();
                 // Changing the button text
                 if (that.oGModel.getProperty("/newSch") === "X") {
@@ -3577,12 +3639,12 @@ sap.ui.define(
 
                 this.oModel = this.getModel("PModel");
                 var oProdItems, oPredProfile, cSelected, oPredProfile, oLocItem, oClass, oDateRng, vFromDate,
-                vToDate, i,
-                
+                    vToDate, i,
+
                     vRuleslist,
-                 oRuleList = {
-                    LocProdData: []
-                };
+                    oRuleList = {
+                        LocProdData: []
+                    };
                 var oMdlVer = that.byId("PDHidmdlver").getSelectedKey(),
                     vMdlVer;
                 //   25-08-2022
@@ -3611,10 +3673,10 @@ sap.ui.define(
                 }
 
                 var CriticalKey = that.byId("PDHidCheck").getSelected();
-                        var keyFlag = "";
-                        if (CriticalKey) {
-                            keyFlag = "X";
-                        }
+                var keyFlag = "";
+                if (CriticalKey) {
+                    keyFlag = "X";
+                }
 
                 if (this.oProd.getTokens().length > 0 && oClass && oDateRng && oPredProfile) {
                     for (i = 0; i < oProdItems.length; i++) {
@@ -3693,7 +3755,7 @@ sap.ui.define(
              * This function is called when click on Predefined Future button.
              * @param {object} oEvent -the event information.
              */
-             onPredefFuture: function (){
+            onPredefFuture: function () {
                 // var cSelected = that.byId("PidCheck").getSelected();
                 if (that.oGModel.getProperty("/newSch") === "X") {
                     sap.ui.getCore().byId("idSavebt").setText("Add Schedule");
@@ -3710,7 +3772,7 @@ sap.ui.define(
                     oLocItem,
                     oSelScen,
                     vFromDate,
-                    vToDate, 
+                    vToDate,
                     i,
                     oRuleList = {
                         LocProdData: []
@@ -3725,7 +3787,7 @@ sap.ui.define(
                 oSelScen = that.oGModel.getProperty("/SelScenario");
                 var oSelType = this.byId("PDFidType").getSelectedKey(),
 
-                oDateRng = that.byId("PDFidDateRange").getDateValue();
+                    oDateRng = that.byId("PDFidDateRange").getDateValue();
 
                 if (oDateRng) {
                     vFromDate = that.byId("PDFidDateRange").getFrom();
@@ -3736,10 +3798,10 @@ sap.ui.define(
                 }
 
                 var CriticalKey = that.byId("PDFidCheck").getSelected();
-                        var keyFlag = "";
-                        if (CriticalKey) {
-                            keyFlag = "X";
-                        }
+                var keyFlag = "";
+                if (CriticalKey) {
+                    keyFlag = "X";
+                }
 
                 if (this.oProd.getTokens().length > 0 && this.oVer.getValue()) {
                     for (i = 0; i < oProdItems.length; i++) {
@@ -4193,7 +4255,7 @@ sap.ui.define(
                         case "Market Authorizations":
                             actionText = "/ibpimport-srv/exportMktAuth";
                             break;
-                            //03-12
+                        //03-12
                         case "Assembly Requirement Quantity":
                             actionText = "/ibpimport-srv/exportComponentReq";
                             break;
@@ -4218,7 +4280,7 @@ sap.ui.define(
                         case "Publish Forecast":
                             actionText = "/catalog/postCIRQuantitiesToS4";
                             break;
-                    // service name for predefined History and future
+                        // service name for predefined History and future
                         case "Predefined History":
                             actionText = "//preDefinedHistory";
                             break;
@@ -4358,7 +4420,7 @@ sap.ui.define(
                     });
                 } else {
                     // filling data to create new job and schedule based on inputs provided
-                    if (bButton === "IBP Demand" ) {
+                    if (bButton === "IBP Demand") {
                         var finalList = {
                             name: JobName,
                             description: sap.ui.getCore().byId("idDesc").getValue(),
@@ -4395,7 +4457,7 @@ sap.ui.define(
                         bButton === "Restrictions" ||
                         bButton === "Location Product" ||
                         bButton === "Assembly" ||
-                        oSelJobType === "S"|| bButton === "Publish Forecast"
+                        oSelJobType === "S" || bButton === "Publish Forecast"
                     ) {
                         var finalList = {
                             name: JobName,
@@ -4472,7 +4534,7 @@ sap.ui.define(
                             },],
                         };
                     } else if (bButton.includes("Time Series") || bButton === "Generate Forecast Order" ||
-                                bButton === "Predefined History" || bButton === "Predefined Future") {
+                        bButton === "Predefined History" || bButton === "Predefined Future") {
                         // 07-09-2022-1
                         // var LocProdData = vcRuleList;
                         var finalList = {

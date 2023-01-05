@@ -1,3 +1,4 @@
+const request = require('request');
 const GenF = require("./gen-functions");
 const cds = require("@sap/cds");
 const hana = require("@sap/hana-client");
@@ -19,12 +20,14 @@ class SOFunctions {
 
         await GenF.logMessage(req, 'Started Sales Orders Processing');
         // await this.clearSalesH();
-        // await this.processUniqueID(adata.LOCATION_ID, adata.PRODUCT_ID, '');
-        // await this.genBaseMarketAuth(adata.LOCATION_ID, adata.PRODUCT_ID);
-        // await this.genPartialProd(adata.LOCATION_ID);
-        await this.genFactoryLoc();
+        await this.processUniqueID(adata.LOCATION_ID, adata.PRODUCT_ID, '');
+        await this.genBaseMarketAuth(adata.LOCATION_ID, adata.PRODUCT_ID);
+        await this.genPartialProd(adata.LOCATION_ID);
+        // await this.genFactoryLoc();
+        await this.saveClusterData(adata.LOCATION_ID, adata.PRODUCT_ID);
+        await this.genClusterResults(adata.LOCATION_ID, adata.PRODUCT_ID);
         //await GenF.logMessage(req, 'Completed Sales Orders Processing');
-        let lMessage = "Completed Sales Orders Processing"
+        let lMessage = "Completed Sales Orders Processing";
         await GenF.jobSchMessage('X', lMessage, req);
         // Flag = 'X';
 
@@ -131,7 +134,7 @@ class SOFunctions {
                     INSERT:
                     {
                         into: { ref: ['CP_UNIQUE_ID_HEADER'] },
-                        values: [liUnique[cntU].UNIQUE_ID, lLocation, lProduct, '', liUnique[cntU].UID_TYPE, 0, true]
+                        values: [liUnique[cntU].UNIQUE_ID, lLocation, lProduct, liUnique[cntU].UNIQUE_ID, liUnique[cntU].UID_TYPE, 0, true]
                     }
                 })
 
@@ -256,6 +259,8 @@ class SOFunctions {
         if (liSalesUpdate.length > 0) {
             await INSERT(liSalesUpdate).into('CP_SALES_HM');
         }
+
+
         console.log("Process Completed");
 
         await this.updateUniqueRate(lLocation, lProduct);
@@ -1164,7 +1169,7 @@ class SOFunctions {
 
         if (liFactLoc.length > 0) {
             try {
-                
+
                 await cds.run({
                     INSERT:
                     {
@@ -1189,6 +1194,187 @@ class SOFunctions {
         // Delete only before sales horizon
         const objCatFn = new Catservicefn();
         await objCatFn.deleteSalesHistory('N');
+    }
+    /**
+     * Generate Cluster Results to CP_V_AHC_CLUSTER_RESULTS
+     */
+    async genClusterResults(lLocation, lProduct) {
+        // var request = require('request');
+        var baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host;  // Un-Comment while deploying
+        console.log("Started Generation of Clusters");
+        // var baseUrl = 'http' + '://' + req.headers.host;
+        var sUrl = baseUrl + '/pal/genClusters';
+
+        const liDistinctProd = await cds.run(
+            `SELECT DISTINCT PRODUCT_ID
+               FROM V_SALES_H
+              WHERE LOCATION_ID = '${lLocation}'
+                AND REF_PRODID = '${lProduct}'`
+        );
+
+        if (liDistinctProd.length > 0) {
+            for (let i = 0; i < liDistinctProd.length; i++) {
+                var options = {
+                    'method': 'POST',
+                    'url': sUrl,
+                    'headers': {
+                        'Content-Type': 'application/json'
+                    },
+
+                    body: JSON.stringify({
+                        "vcRulesList": [
+                            {
+                                "profile": "SBP_AHC_0",
+                                "override": false,
+                                "Location": lLocation,
+                                "Product": liDistinctProd[i].PRODUCT_ID
+                            }
+                        ]
+                    })
+
+                };
+
+                request(options, function (error, response) {
+
+                    if (error) throw new Error(error);
+
+                    console.log(response.body);
+
+                });
+            }
+            console.log("Completed Cluster Results Generation");
+        }
+
+
+    }
+
+    /**
+     * 
+     * @param {Location} lLocation 
+     * @param {Product} lProduct 
+     */
+    async saveClusterData(lLocation, lProduct) {
+        let liProd = [];
+        let lsClusterData = {};
+        let liClusterData = [];
+        let aFilterUniqChars = [];
+        let iCharCount = 0;
+
+        console.log("Started Cluster Data Updation");
+        const liUniqueId = await cds.run(
+            `SELECT UNIQUE_ID,
+                    CHAR_NUM,
+                    CHARVAL_NUM
+              FROM V_UNIQUE_ID
+             WHERE (UNIQUE_ID IN (SELECT DISTINCT UNIQUE_ID
+             FROM V_SALES_H
+            WHERE LOCATION_ID = '${lLocation}'
+              AND REF_PRODID = '${lProduct}'))`
+        );
+
+        const keys = ['UNIQUE_ID'];
+        const liDistinctUniqueIds = GenF.removeDuplicate(liUniqueId, keys);
+
+        let liPriChar = [];
+        liPriChar = await cds.run(`SELECT "CHAR_NUM"
+                                     FROM "CP_VARCHAR_PS"
+                                    WHERE "PRODUCT_ID" = '` + lProduct + `'
+                                      AND "LOCATION_ID" = '` + lLocation + `'
+                                      AND "CHAR_TYPE" = 'P'`);
+
+        let liSecChar = [];
+        liSecChar = await cds.run(`SELECT "CHAR_NUM"
+                                     FROM "CP_VARCHAR_PS"
+                                    WHERE "PRODUCT_ID" = '` + lProduct + `'
+                                      AND "LOCATION_ID" = '` + lLocation + `'
+                                      AND "CHAR_TYPE" = 'S'`);
+
+        for (let i = 0; i < liDistinctUniqueIds.length; i++) {
+
+            liProd = await cds.run(
+                `SELECT DISTINCT PRODUCT_ID
+                      FROM V_SALES_H
+                     WHERE LOCATION_ID = '${lLocation}'
+                       AND REF_PRODID  = '${lProduct}'
+                       AND UNIQUE_ID   = '${liDistinctUniqueIds[i].UNIQUE_ID}'`
+            );
+
+            lsClusterData['LOCATION_ID'] = lLocation;
+            lsClusterData['PRODUCT_ID'] = liProd[0].PRODUCT_ID;
+            lsClusterData['UNIQUE_ID'] = liDistinctUniqueIds[i].UNIQUE_ID;
+
+            iCharCount = 0;
+            for (let cntPC = 0; cntPC < liPriChar.length; cntPC++) {
+                aFilterUniqChars = [];
+                if (iCharCount < 20) {
+                    aFilterUniqChars = liUniqueId.filter(function (aUnichar) {
+                        return aUnichar.CHAR_NUM === liPriChar[cntPC].CHAR_NUM
+                    });
+
+                    if (aFilterUniqChars.length > 0) {
+                        for (let cntUPC = 0; cntUPC < aFilterUniqChars.length; cntUPC++) {
+                            iCharCount = iCharCount + 1;
+                            if (iCharCount <= 20) {
+                                lsClusterData["C" + iCharCount] = aFilterUniqChars[cntUPC].CHARVAL_NUM;
+                            } else {
+                                break;
+                            }
+                        }
+                    }
+                } else {
+                    break;
+                }
+            }
+
+            for (let cntSC = 0; cntSC < liSecChar.length; cntSC++) {
+                aFilterUniqChars = [];
+                if (iCharCount < 20) {
+                    aFilterUniqChars = liUniqueId.filter(function (aUnichar) {
+                        return aUnichar.CHAR_NUM === liSecCha[cntSC].CHAR_NUM
+                    });
+
+                    if (aFilterUniqChars.length > 0) {
+                        for (let cntUSC = 0; cntUSC < aFilterUniqChars.length; cntUSC++) {
+                            iCharCount = iCharCount + 1;
+                            if (iCharCount <= 20) {
+                                lsClusterData["C" + iCharCount] = aFilterUniqChars[cntUSC].CHARVAL_NUM;
+                            }
+                        }
+                    }
+                } else {
+                    break;
+                }
+            }
+
+            liClusterData.push(lsClusterData);
+
+            // iCharCount = 0;
+            // if (liSOHM[cntSO].PCONFIG.length > 0) {
+            //     for (let cntSOPC = 0; cntSOPC < liSOHM[cntSO].PCONFIG.length; cntSOPC++) {
+            //         iCharCount = iCharCount + 1;
+            //         if (iCharCount <= 20) {
+            //             lsClusterData["C" + iCharCount] = liSOHM[cntSO].PCONFIG[cntSOPC].CHARVAL_NUM;
+            //         }
+            //     }
+            // }
+            // if (liSOHM[cntSO].CONFIG.length > 0 && iCharCount < 20) {
+            //     for (let cntSOC = 0; cntSOC < liSOHM[cntSO].CONFIG.length; cntSOC++) {
+            //         iCharCount = iCharCount + 1;
+            //         if (iCharCount <= 20) {
+            //             lsClusterData["C" + iCharCount] = liSOHM[cntSO].CONFIG[cntSOC].CHARVAL_NUM;
+            //         }
+            //     }
+            // }
+
+            // liClusterData.push(lsClusterData);
+
+        }
+
+        if (liClusterData.length > 0) {
+            await INSERT(liClusterData).into('CP_CLUSTER_DATA');
+        }
+        console.log("Completed Cluster Data Updation");
+
     }
 }
 

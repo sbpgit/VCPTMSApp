@@ -3,6 +3,7 @@
     <SelectDialog id="prodSlctList" title="{i18n>PrdId}" rememberSelections="false" search="handleSearch" 
     liveChange="handleSearch" confirm="handleSelection" cancel="handleClose" contentWidth="320px" items="{/results}" 
     selectionChange="handleProdChange" growing="false">
-        <StandardListItem title="{PRODUCT_ID}" description="{PROD_DESC}" type="Active"/>
+        <!-- <StandardListItem title="{PRODUCT_ID}" description="{PROD_DESC}" type="Active"/> -->
+        <StandardListItem title="{PARTIALPROD}" description="{PARTIALPROD_DESC}" type="Active"/>
     </SelectDialog>
 </core:FragmentDefinition>
