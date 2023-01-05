@@ -59,13 +59,13 @@ sap.ui.define(
                     this.getView().addDependent(this._valueHelpDialogLoc);
                 }
 
-                if (!this._valueHelpDialogDLoc) {
-                    this._valueHelpDialogDLoc = sap.ui.xmlfragment(
-                        "cpapp.cpasmbcompreq.view.DemandLocDialog",
-                        this
-                    );
-                    this.getView().addDependent(this._valueHelpDialogDLoc);
-                }
+                // if (!this._valueHelpDialogDLoc) {
+                //     this._valueHelpDialogDLoc = sap.ui.xmlfragment(
+                //         "cpapp.cpasmbcompreq.view.DemandLocDialog",
+                //         this
+                //     );
+                //     this.getView().addDependent(this._valueHelpDialogDLoc);
+                // }
                 if (!this._valueHelpDialogProd) {
                     this._valueHelpDialogProd = sap.ui.xmlfragment(
                         "cpapp.cpasmbcompreq.view.ProdDialog",
@@ -163,9 +163,9 @@ sap.ui.define(
                 this.oLocList = this._oCore.byId(
                     this._valueHelpDialogLoc.getId() + "-list"
                 );
-                this.oDLocList = this._oCore.byId(
-                    this._valueHelpDialogDLoc.getId() + "-list"
-                );
+                // this.oDLocList = this._oCore.byId(
+                //     this._valueHelpDialogDLoc.getId() + "-list"
+                // );
                 this.oVerList = this._oCore.byId(
                     this._valueHelpDialogVer.getId() + "-list"
                 );
@@ -186,8 +186,8 @@ sap.ui.define(
                 );
                 sap.ui.core.BusyIndicator.show();
                 // Location data
-                // this.getModel("BModel").read("/getFactoryLoc", {
-                this.getModel("BModel").read("/getfactorylocdesc", {
+                this.getModel("BModel").read("/getFactoryLoc", {
+                // this.getModel("BModel").read("/getfactorylocdesc", {
 
                     success: function (oData) {
 
