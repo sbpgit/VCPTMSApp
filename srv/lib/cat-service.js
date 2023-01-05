@@ -369,7 +369,12 @@ module.exports = (srv) => {
 
         let liComp = [];
         let liCompQty;
-        
+        // Get Factory and Demand Locations
+        const liFtLoc = await SELECT.columns(
+            "LOCATION_ID",
+            "PLAN_LOC",
+            "FACTORY_LOC")
+            .from('CP_FACTORY_SALESLOC');
         switch (await GenFunctions.getParameterValue(req.data.LOCATION_ID, 5)) {
             case 'M1':
                 liCompQty = await cds.run(
@@ -393,6 +398,7 @@ module.exports = (srv) => {
                     `'
                  ORDER BY 
                       "LOCATION_ID" ASC, 
+                      "FACTORY_LOC" ASC,
                       "PRODUCT_ID" ASC,
                       "VERSION" ASC,
                       "SCENARIO" ASC,
@@ -402,6 +408,7 @@ module.exports = (srv) => {
                 liComp = await cds.run(
                     `
           SELECT DISTINCT "LOCATION_ID",
+                            "FACTORY_LOC",
                           "PRODUCT_ID",
                           "VERSION",
                           "SCENARIO",
@@ -425,6 +432,7 @@ module.exports = (srv) => {
                     `'
                ORDER BY 
                     "LOCATION_ID" ASC, 
+                    "FACTORY_LOC" ASC,
                     "PRODUCT_ID" ASC,
                     "VERSION" ASC,
                     "SCENARIO" ASC,
@@ -453,6 +461,7 @@ module.exports = (srv) => {
                     `'
                      ORDER BY 
                           "LOCATION_ID" ASC, 
+                          "FACTORY_LOC" ASC,
                           "PRODUCT_ID" ASC,
                           "VERSION" ASC,
                           "SCENARIO" ASC,
@@ -462,6 +471,7 @@ module.exports = (srv) => {
                 liComp = await cds.run(
                     `
               SELECT DISTINCT "LOCATION_ID",
+                                "FACTORY_LOC",
                               "PRODUCT_ID",
                               "VERSION",
                               "SCENARIO",
@@ -484,7 +494,8 @@ module.exports = (srv) => {
                     req.data.MODEL_VERSION +
                     `'
                    ORDER BY 
-                        "LOCATION_ID" ASC, 
+                        "LOCATION_ID" ASC,
+                        "FACTORY_LOC" ASC, 
                         "PRODUCT_ID" ASC,
                         "VERSION" ASC,
                         "SCENARIO" ASC,
@@ -526,6 +537,7 @@ module.exports = (srv) => {
             // vCompIndex is to get Componnent quantity for all dates
             vWeekIndex = 0; //j
             lsCompWeekly.LOCATION_ID = liComp[j].LOCATION_ID;
+            lsCompWeekly.FACTORY_LOC = liComp[j].FACTORY_LOC;
             lsCompWeekly.PRODUCT_ID = liComp[j].PRODUCT_ID;
             lsCompWeekly.ITEM_NUM = '';
             //   lsCompWeekly.ASSEMBLY = liComp[j].COMPONENT;
