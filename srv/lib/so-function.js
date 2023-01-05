@@ -19,7 +19,7 @@ class SOFunctions {
     async genUniqueID(adata, req, Flag) {
 
         await GenF.logMessage(req, 'Started Sales Orders Processing');
-        // await this.clearSalesH();
+        await this.clearSalesH();
         await this.processUniqueID(adata.LOCATION_ID, adata.PRODUCT_ID, '');
         await this.genBaseMarketAuth(adata.LOCATION_ID, adata.PRODUCT_ID);
         await this.genPartialProd(adata.LOCATION_ID);
@@ -604,6 +604,7 @@ class SOFunctions {
      * 
      * @param {Location} lLocation 
      * @param {Product} lProduct 
+     * @param {Customer} lCustomer 
      * @param {Sales ORder} lSO
      * @param {Date} lDate 
      * @param {Quantity} lQty 
@@ -612,6 +613,7 @@ class SOFunctions {
     async createSO(lLocation, lProduct, lCustomer, lSO, lDate, lQty, lUnique) {
 
         const lSOItem = '000010';
+        const lUOM = 'EA';
         // Get Main Product        
         const lMainProd = await this.getMainProduct(lLocation, lProduct);
 
@@ -619,6 +621,7 @@ class SOFunctions {
             .columns('SALES_DOC',
                 'SALESDOC_ITEM',
                 'PRODUCT_ID',
+                'UOM',
                 'CONFIRMED_QTY',
                 'ORD_QTY',
                 'MAT_AVAILDATE',
@@ -627,6 +630,7 @@ class SOFunctions {
             .values(lSO,
                 lSOItem,
                 lMainProd,
+                lUOM,
                 lQty,
                 lQty,
                 lDate,

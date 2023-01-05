@@ -8,6 +8,7 @@ VIEW "V_PRODCLSCHARVAL"
 AS SELECT distinct A.PRODUCT_ID,
           A.CLASS_NUM,
           B.CLASS_NAME,
+          B.IBPCHAR_CHK,
           B.CHAR_NUM,
           B.CHAR_NAME,
           B.CHAR_DESC,

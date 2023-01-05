@@ -12,11 +12,18 @@ class IBPFunctions {
             sales: [],
         },
             vsales;
+
+        const liCust = await cds.run(
+            `
+                SELECT "CUSTOMER_GROUP",
+                        "CUSTOMER_DESC"
+                        FROM "CP_CUSTOMERGROUP" `);
         const lisales = await cds.run(
             `
                 SELECT  "WEEK_DATE",
                         "LOCATION_ID",
                         "PRODUCT_ID",
+                        "REF_PRODID",
                         "ORD_QTY",
                         "ADJ_QTY",
                         "CUSTOMER_GROUP",
@@ -28,47 +35,66 @@ class IBPFunctions {
                            AND PRODUCT_ID = '`+ req.PRODUCT_ID + `'
                            AND IBPCHAR_CHK = 'X'`);
         // `' AND CUSTOMER_GROUP = '` + req.data.CUSTOMER_GROUP +e
-
+        const liProdChar = await cds.run(`
+                                SELECT PRODUCT_ID,
+                                       CLASS_NUM,
+                                       CHAR_NUM,
+                                       CHARVAL_NUM
+                            FROM  V_PRODCLSCHARVAL 
+                            WHERE IBPCHAR_CHK = 'X'
+        `);
         let liDates = imDates;
-        let vDemd, vAdjqty, vWeekDate;
-
-        for (let i = 0; i < lisales.length; i++) {
-            for (let iDate = 0; iDate < liDates.length; iDate++) {
-                vDemd = "", vAdjqty = "", vWeekDate = "";
-                if (liDates[iDate].WEEK_DATE === lisales[i].WEEK_DATE) {
-                    vWeekDate = new Date(lisales[i].WEEK_DATE).toISOString().split('Z');
-                    vDemd = lisales[i].ORD_QTY.split('.');
-                    vAdjqty = lisales[i].ADJ_QTY.split('.');
-                    vsales = {
-                        "LOCID": lisales[i].LOCATION_ID,
-                        "PRDID": lisales[i].PRODUCT_ID,
-                        "VCCHAR": lisales[i].CHAR_NUM,
-                        "VCCHARVALUE": lisales[i].CHARVAL_NUM,
-                        "VCCLASS": lisales[i].CLASS_NUM,
-                        "ACTUALDEMANDVC": vDemd,
-                        "SEEDORDERDEMANDVC": vAdjqty,
-                        "CUSTID": lisales[i].CUSTOMER_GROUP,
-                        "PERIODID0_TSTAMP": vWeekDate[0]
-                    };
+        let vDemd, vAdjqty, vWeekDate, lSuccess = '';
+        let liProdCharTemp = liProdChar;
+        for (let iDate = 0; iDate < liDates.length; iDate++) {
+            for (let iCust = 0; iCust < liCust.length; iCust++) {
+                for (let iPrdc = 0; iPrdc < liProdChar.length; iPrdc++) {
+                    for (let i = 0; i < lisales.length; i++) {
+                        vDemd = "", vAdjqty = "", vWeekDate = "";
+                        if (liDates[iDate].WEEK_DATE === lisales[i].WEEK_DATE &&
+                            liCust[iCust].CUSTOMER_GROUP === lisales[i].CUSTOMER_GROUP &&
+                            liProdChar[iPrdc].PRODUCT_ID === lisales[i].REF_PRODID) {
+                            // Week data in Datetime and quantities in String
+                            vWeekDate = new Date(lisales[i].WEEK_DATE).toISOString().split('Z');
+                            vDemd = lisales[i].ORD_QTY.split('.');
+                            vAdjqty = lisales[i].ADJ_QTY.split('.');
+                            vsales = {
+                                "LOCID": lisales[i].LOCATION_ID,
+                                "PRDID": lisales[i].PRODUCT_ID,
+                                "VCCHAR": lisales[i].CHAR_NUM,
+                                "VCCHARVALUE": lisales[i].CHARVAL_NUM,
+                                "VCCLASS": lisales[i].CLASS_NUM,
+                                "ACTUALDEMANDVC": vDemd[0],
+                                "SEEDORDERDEMANDVC": vAdjqty[0],
+                                "CUSTID": lisales[i].CUSTOMER_GROUP,
+                                "PERIODID0_TSTAMP": vWeekDate[0]
+                            };
+                            oReq.sales.push(vsales);
+                            lSuccess = 'X';
+                        }
+                    }
+                    if (lSuccess === '') {
+                        for (let iPrdct = 0; iPrdct < liProdCharTemp.length; iPrdct++) {
+                            if (liProdChar[iPrdc].PRODUCT_ID === liProdCharTemp[iPrdct].PRODUCT_ID) {
+                                vWeekDate = new Date(liDates[iDate].WEEK_DATE).toISOString().split('Z');
+                                vDemd = "-1";
+                                vAdjqty = "-2";
+                                vsales = {
+                                    "LOCID": req.LOCATION_ID,
+                                    "PRDID": liProdChar[iPrdc].PRODUCT_ID,
+                                    "VCCHAR": liProdCharTemp[iPrdct].CHAR_NUM,
+                                    "VCCHARVALUE": liProdCharTemp[iPrdct].CHARVAL_NUM,
+                                    "VCCLASS": liProdCharTemp[iPrdct].CLASS_NUM,
+                                    "ACTUALDEMANDVC": vDemd,
+                                    "SEEDORDERDEMANDVC": vAdjqty,
+                                    "CUSTID": lisales[i].CUSTOMER_GROUP,
+                                    "PERIODID0_TSTAMP": vWeekDate[0]
+                                };
+                                oReq.sales.push(vsales);
+                            }
+                        }
+                    }
                 }
-                else {
-                    vWeekDate = new Date(liDates[iDate].WEEK_DATE).toISOString().split('Z');
-                    vDemd = "-2";
-                    vAdjqty = "-3";
-                    vsales = {
-                        "LOCID": lisales[i].LOCATION_ID,
-                        "PRDID": lisales[i].PRODUCT_ID,
-                        "VCCHAR": lisales[i].CHAR_NUM,
-                        "VCCHARVALUE": lisales[i].CHARVAL_NUM,
-                        "VCCLASS": lisales[i].CLASS_NUM,
-                        "ACTUALDEMANDVC": vDemd,
-                        "SEEDORDERDEMANDVC": vAdjqty,
-                        "CUSTID": lisales[i].CUSTOMER_GROUP,
-                        "PERIODID0_TSTAMP": vWeekDate[0]
-                    };
-                }
-                oReq.sales.push(vsales);
-                break;
             }
         }
         return oReq;
