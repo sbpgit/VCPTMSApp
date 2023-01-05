@@ -274,10 +274,6 @@ service CatalogService @(impl : './lib/cat-service.js') {
     entity getODHdrRstr         as projection on V_ODRESTRICT;
     // entity getRestrLikelihood   as projection on od.LOCPRODRESTRICT;
 
-
-    // @odata.draft.enabled
-    // entity getProdRestr         as projection on od.PRODRESTRICT;
-
     @odata.draft.enabled
     entity getProdlocline       as projection on od.PROD_LOC_LINE;
 
@@ -300,8 +296,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
     ///*****/ Seed Order Creation /*****/
     entity getSeedOrder         as projection on od.SEEDORDER_HEADER;
     function maintainSeedOrder(FLAG : String(1), SEEDDATA : String)                                                                                                                                                                                                              returns String;
-    function mainSOTemp(LOCATION_ID : String(4), PRODUCT_ID : String(40))                                                                                                                                                                                                        returns String;
-
+    
     ///*****/ Planning Configuration /*****/
     // BOI - Deepa
     @readonly

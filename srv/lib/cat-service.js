@@ -2510,21 +2510,6 @@ module.exports = (srv) => {
         lsresults = {};
         return responseMessage;
     });
-    srv.on("mainSOTemp", async (req) => {
-        const obgenSOFunctions = new SOFunctions();
-        const li_sodata = await cds.run(
-            `SELECT *
-            FROM "CP_SEEDORDER_HEADER"             
-             WHERE "LOCATION_ID" = '${req.data.LOCATION_ID}'
-             AND "PRODUCT_ID" = '${req.data.PRODUCT_ID}'
-             ORDER BY SEED_ORDER DESC`
-        );
-        for (let i = 0; i < li_sodata.length; i++) {
-            await obgenSOFunctions.createSOTemp(li_sodata[i].LOCATION_ID, li_sodata[i].PRODUCT_ID, li_sodata[i].SEED_ORDER, li_sodata[i].MAT_AVAILDATE, li_sodata[i].ORD_QTY, li_sodata[i].UNIQUE_ID);
-
-        }
-        return "Success";
-    });
     srv.on("getAllProd", async (req) => {
         let lsprod = {};
         let liprod = [];

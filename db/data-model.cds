@@ -161,15 +161,18 @@ context cp {
             DISTR_CHANNEL     : String(2)      @title : 'Distribution Channel';
             DIVISION          : String(2)      @title : 'Division';
             SAL_DOCU_TYPE     : String(4)      @title : 'Sales Doc. Type';
-            IBP_CUSTOMER      : String(10);
-            RELEVENT_FOR_PLAN : String(1);
-            CREATED_ON_DATE     : String(8);
-            CHANGE_ON_DATE     : String(8);
+            ITEM_CREATED_DATE : Date;
+            ITEM_CHANGE_DATE  : Date;
             OPEN_ORDER        : String(1);
             CHARG             : String(10);
-            RESERVE_FIELD1     : String(20);
-            RESERVE_FIELD2     : String(20);
-            RESERVE_FIELD3     : String(20);
+            IBP_CUSTOMER      : String(10);
+            RELEVENT_FOR_PLAN : String(1);
+            ON_HAND_STOCK     : String(1);
+            IN_TRANSIT        : String(1);
+            SHIP_FROM_LOC     : String(4);
+            RESERVE_FIELD1    : String(20);
+            RESERVE_FIELD2    : String(20);
+            RESERVE_FIELD3    : String(20);
             CHANGED_DATE      : Date           @title : 'Changed Date';
             CHANGED_BY        : String(12)     @title : 'Changed By';
             CREATED_DATE      : Date           @title : 'Created Date';
@@ -280,12 +283,12 @@ context cp {
 
     // Classes
     entity CLASS {
-        key CLASS_NUM     : String(18)  @title : 'Internal class number';
-            CLASS_NAME    : String(20)  @title : 'Class Name';
-            CLASS_TYPE    : String(3)   @title : 'Class Type';
-            CLASS_DESC    : String(150) @title : 'Class Description';
-            IBPCHAR_CHK : Boolean   @title : 'IBP Characteristics check';
-            AUTHGROUP     : String(4)   @title : 'Authorization Group';
+        key CLASS_NUM   : String(18)  @title : 'Internal class number';
+            CLASS_NAME  : String(20)  @title : 'Class Name';
+            CLASS_TYPE  : String(3)   @title : 'Class Type';
+            CLASS_DESC  : String(150) @title : 'Class Description';
+            IBPCHAR_CHK : Boolean     @title : 'IBP Characteristics check';
+            AUTHGROUP   : String(4)   @title : 'Authorization Group';
     };
 
     //Characteristitcs
@@ -745,13 +748,13 @@ context cp {
     }
 
     entity SEEDORDER_HEADER {
-        key SEED_ORDER    : String(10)     @title : 'Seed Order';
-            LOCATION_ID   : String(4)      @title : 'Location ';
-            PRODUCT_ID    : String(40)     @title : 'Product';
-            CUSTOMER_GROUP  : String(20)     @title : 'Customer Group';
-            UNIQUE_ID     : Integer        @title : 'Unique ID';
-            ORD_QTY       : Decimal(13, 3) @title : 'Ordered Qty';
-            MAT_AVAILDATE : Date           @title : 'Material Avail. Date';
+        key SEED_ORDER     : String(10)     @title : 'Seed Order';
+            LOCATION_ID    : String(4)      @title : 'Location ';
+            PRODUCT_ID     : String(40)     @title : 'Product';
+            CUSTOMER_GROUP : String(20)     @title : 'Customer Group';
+            UNIQUE_ID      : Integer        @title : 'Unique ID';
+            ORD_QTY        : Decimal(13, 3) @title : 'Ordered Qty';
+            MAT_AVAILDATE  : Date           @title : 'Material Avail. Date';
     }
 
     // Begin Of Insert - Deepa
@@ -1054,12 +1057,12 @@ entity![V_LOCPROD]{
 
 @cds.persistence.exists
 entity![V_FACTORYLOC]{
-    key![FACTORY_LOC] : String(4)  @title : 'Factory Location ';
-    key![PLAN_LOC]    : String(4)  @title : 'Planning Location ';
-    key![Demand_Loc] : String(4)  @title : 'Demand Location ';
-    key![PRODUCT_ID]  : String(40) @title : 'Product';
-    key![LOCATION_DESC]   : String(40) @title : 'Location Description';
-    key![LOCATION_ID] : String(4)  @title : 'Location ';
+    key![FACTORY_LOC]   : String(4)  @title : 'Factory Location ';
+    key![PLAN_LOC]      : String(4)  @title : 'Planning Location ';
+    key![Demand_Loc]    : String(4)  @title : 'Demand Location ';
+    key![PRODUCT_ID]    : String(40) @title : 'Product';
+    key![LOCATION_DESC] : String(40) @title : 'Location Description';
+    key![LOCATION_ID]   : String(4)  @title : 'Location ';
 }
 
 @cds.persistence.exists
