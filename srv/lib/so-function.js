@@ -1198,9 +1198,9 @@ class SOFunctions {
      */
     async genClusterResults(lLocation, lProduct) {
         // var request = require('request');
-        // var baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host;  // Un-Comment while deploying
+        var baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host;  // Un-Comment while deploying
         console.log("Started Generation of Clusters");
-        var baseUrl = 'http' + '://' + req.headers.host;
+        // var baseUrl = 'http' + '://' + req.headers.host;
         var sUrl = baseUrl + '/pal/genClusters';
 
         const liDistinctProd = await cds.run(
