@@ -3139,6 +3139,19 @@ async function _getClusterUniqueIDs(req,isGet)
         let sqlRightUniqueStrResults = await cds.run(sqlStr);
         console.log("sqlRightUniqueStrResults = ",sqlRightUniqueStrResults );    
 
+        let rightIdDistance =0;
+        if (sqlRightUniqueStrResults.length > 0)
+        {
+            let LOCATION_ID = sqlRightUniqueStrResults[0].LOCATION_ID;
+            let PRODUCT_ID = sqlRightUniqueStrResults[0].PRODUCT_ID;
+            let PROFILE = sqlRightUniqueStrResults[0].PROFILE;
+            let UNIQUE_ID = req.data.UniqueId;
+            let NEAREST_ID = sqlRightUniqueStrResults[0].LEFT_ID;
+            let DISTANCE = sqlRightUniqueStrResults[0].DISTANCE;
+            nearestsIDs.push({LOCATION_ID, PRODUCT_ID, PROFILE, UNIQUE_ID, NEAREST_ID,DISTANCE}); 
+            rightIdDistance = sqlRightUniqueStrResults[0].DISTANCE;
+        }
+
         let uniqueId = sqlRightUniqueStrResults[0].LEFT_ID;
 
         sqlStr = 'SELECT DISTINCT LOCATION_ID, PRODUCT_ID, PROFILE, LEFT_ID, RIGHT_ID, DISTANCE FROM CP_V_AHC_CLUSTER_RESULTS ' +
@@ -3165,6 +3178,10 @@ async function _getClusterUniqueIDs(req,isGet)
                 let UNIQUE_ID = req.data.UniqueId;
                 let NEAREST_ID = sqlUniqueStrResults[uniqueIdx].RIGHT_ID;
                 let DISTANCE = sqlUniqueStrResults[uniqueIdx].DISTANCE;
+                if (rightIdDistance > DISTANCE)
+                {
+                    DISTANCE = rightIdDistance;
+                }
                 
                 nearestsIDs.push({LOCATION_ID, PRODUCT_ID, PROFILE, UNIQUE_ID, NEAREST_ID,DISTANCE});  
     

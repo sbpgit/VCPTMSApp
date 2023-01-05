@@ -26,6 +26,7 @@ using V_BOMODCOND from '../db/data-model';
 using V_SALESHCFG_CHARVAL from '../db/data-model';
 using V_ODCHARVAL from '../db/data-model';
 using V_LOCPROD from '../db/data-model';
+using V_FACTORYLOC from '../db/data-model';
 using V_IBPVERSCENARIO from '../db/data-model';
 using V_BOMPVS from '../db/data-model';
 using V_TS_ODCHARPREDICTIONS from '../db/data-model';
@@ -87,7 +88,7 @@ service CatalogService @(impl : './lib/cat-service.js') {
 
     // Get Factory Location based on factory location
     // @readonly
-    // entity getfactorylocdesc    as projection on V_FACTORYLOC;
+    entity getfactorylocdesc    as projection on V_FACTORYLOC;
 
     // Get sales history configuration
     @readonly
@@ -110,8 +111,11 @@ service CatalogService @(impl : './lib/cat-service.js') {
 
     //History timeseries for Object dependency characteristics
 
-    entity getODCharHdr         as projection on od.TS_OBJDEP_CHARHDR
+    entity getODCharHdr         as projection on od.TS_OBJDEP_CHARHDR;
+
+    // @odata.draft.enabled
     entity getClass             as projection on od.CLASS;
+    function updateIBPClass(CLASSDATA: String) returns String;
 
     ///*****/IBP Future demand and IBP Future Characteristic plan/*****/
     @readonly

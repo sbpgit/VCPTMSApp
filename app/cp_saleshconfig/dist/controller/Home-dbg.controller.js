@@ -10,6 +10,10 @@ oCC1: null,
       "sap/ui/model/FilterOperator",
       "sap/ui/Device",
       "sap/ui/core/Fragment",
+      "sap/m/Dialog",
+      "sap/m/library",
+      "sap/m/Text",
+      "sap/m/Button"
     ],
     /**
      * @param {typeof sap.ui.core.mvc.Controller} Controller
@@ -22,10 +26,12 @@ oCC1: null,
       Filter,
       FilterOperator,
       Device,
-      Fragment
+      Fragment,Dialog,mobileLibrary,Text, Button
     ) {
       "use strict";
       var that, oGModel;
+      var DialogType = mobileLibrary.DialogType;
+      var ButtonType = mobileLibrary.ButtonType;
 
       return BaseController.extend("cp.appf.cpsaleshconfig.controller.Home", {
         /**
@@ -35,12 +41,14 @@ oCC1: null,
         onInit: function () {
           var thiz = this;
           that = this;
+          that.deletedArray = [];
           that.oGModel = that.getOwnerComponent().getModel("oGModel");
           // Declaring JSON Models and size limits
           that.oListModel = new JSONModel();
           this.locModel = new JSONModel();
           this.prodModel = new JSONModel();
           this.variantModel = new JSONModel();
+          that.variantHeaderModel = new JSONModel();
           this.oListModel.setSizeLimit(5000);
           that.locModel.setSizeLimit(1000);
           that.prodModel.setSizeLimit(1000);
@@ -69,35 +77,21 @@ oCC1: null,
             );
             this.getView().addDependent(this._nameFragment);
           }
-          // if (!this._variantFragment) {
-          //   this._variantFragment = sap.ui.xmlfragment(
-          //     "cp.appf.cpsaleshconfig.view.ShowVariants",
-          //     this
-          //   );
-          //   this.getView().addDependent(this._variantFragment);
-          // }
           if (!this._popOver) {
             this._popOver = sap.ui.xmlfragment(
-              "cp.appf.cpsaleshconfig.view.VariantNames",
+              "cp.appf.cpsaleshconfig.view.PopOver",
               this
             );
             this.getView().addDependent(this._popOver);
           }
+          if (!this._manageVariant) {
+            this._manageVariant = sap.ui.xmlfragment(
+              "cp.appf.cpsaleshconfig.view.VariantNames",
+              this
+            );
+            this.getView().addDependent(this._manageVariant);
+          }
 
-          //Variant Configuration
-          //   var oVM = this.getView().byId("Variants");
-          // var itemName = oVM.data("itemName"); // get item name
-          // oVM.setModel(new JSONModel()); // set model
-          // // this.fixVariant(oVM); // fix variant 
-          // var data = {
-          // 	SelectedModuleMain: "",
-          // 	SelectedSubModuleMain: ""
-          // };
-          // this.setFilterVariant(itemName, "*standard*", null, data, false, function (oCC) { // create item
-          // 	thiz.oCC1 = oCC;
-          // 	thiz.setVariantList(oCC, oVM); // set variant list
-          // });
-          //Variant Configuration
 
         },
 
@@ -135,15 +129,15 @@ oCC1: null,
           var bData = [];
           var details = {};
           var defaultDetails = [];
-          this.getModel("BModel").callFunction("/getUserInfo", {
-            success: function (user) {
-              that.oGModel.setProperty("/UserId", user.getUserInfo);
+          // this.getModel("BModel").callFunction("/getUserInfo", {
+          //   success: function (user) {
+          //     that.oGModel.setProperty("/UserId", user.getUserInfo.toUpperCase());
 
-            },
-            error: function (e) {
-              MessageToast.show("Failed to get User Details");
-            }
-          });
+          //   },
+          //   error: function (e) {
+          //     MessageToast.show("Failed to get User Details");
+          //   }
+          // });
 
           this.getModel("BModel").read("/getLocation", {
             success: function (oData) {
@@ -155,74 +149,100 @@ oCC1: null,
               MessageToast.show("error");
             },
           });
-          this.getModel("BModel").read("/getVariant", {
-            success: function (oData) {
-              var IDlength = oData.results.length
-              if (IDlength === 0) {
-                that.oGModel.setProperty("/Id", 0);
-                that.oGModel.setProperty("/variantDetails", "");
-              }
-              else {
-                for (var i = 0; i < oData.results.length; i++) {
-                  if (that.oGModel.getProperty("/UserId") === oData.results[i].USER) {
-                    aData.push({
-                      "VARIANTNAME": oData.results[i].VARIANTNAME,
-                      "VARIANTID": oData.results[i].VARIANTID,
-                      "DEFAULT": oData.results[i].DEFAULT,
-                      "USER": that.oGModel.getProperty("/UserId")
-                    });
-                  }
-                }
-                var uniqueName = aData.filter((obj, pos, arr) => {
-                  return (
-                    arr.map((mapObj) => mapObj.VARIANTNAME).indexOf(obj.VARIANTNAME) == pos
-                  );
-                });
-                that.variantModel.setData({ items: uniqueName });
-                that.byId("Variants").setModel(that.variantModel);
-                that.oGModel.setProperty("/Id", oData.results[IDlength - 1].VARIANTID);
-                that.oGModel.setProperty("/variantDetails", oData.results);
-                for (var k = 0; k < uniqueName.length; k++) {
-                  if (uniqueName[k].DEFAULT === "Y") {
-                    var Default = uniqueName[k].VARIANTNAME;
-                    details = {
-                      "VARIANTNAME": uniqueName[k].VARIANTNAME,
-                      "VARIANTID": uniqueName[k].VARIANTID,
-                      "USER": uniqueName[k].USER,
-                      "DEFAULT": "N"
-                    };
-                    defaultDetails.push(details);
-                    details = {};
-                  }
-                }
-                that.oGModel.setProperty("/defaultDetails", defaultDetails);
-                if(Default){
-                that.byId("Variants").setInitialSelectionKey(Default);
-                }
-                that.oGModel.setProperty("/fromFunction", "X");
-                that.handleSelectPress(Default);
+          // this.getModel("BModel").read("/getVariant", {
+          //   success: function (oData) {
+          //     var IDlength = oData.results.length
+          //     if (IDlength === 0) {
+          //       that.oGModel.setProperty("/Id", 0);
+          //       that.oGModel.setProperty("/variantDetails", "");
+          //     }
+          //     else {
+          //       that.oGModel.setProperty("/Id", oData.results[IDlength - 1].VARIANTID);
+          //       that.oGModel.setProperty("/variantDetails", oData.results);
+          //       for (var i = 0; i < oData.results.length; i++) {
+          //         if (that.oGModel.getProperty("/UserId") === oData.results[i].USER.toUpperCase()) {
+          //           aData.push({
+          //             "VARIANTNAME": oData.results[i].VARIANTNAME,
+          //             "VARIANTID": oData.results[i].VARIANTID,
+          //             "DEFAULT": oData.results[i].DEFAULT,
+          //             "USER": that.oGModel.getProperty("/UserId")
+          //           });
+          //         }
+          //       }
+          //       var uniqueName = aData.filter((obj, pos, arr) => {
+          //         return (
+          //           arr.map((mapObj) => mapObj.VARIANTNAME).indexOf(obj.VARIANTNAME) == pos
+          //         );
+          //       });
+          //       uniqueName.unshift({
+          //         "VARIANTNAME": "Standard",
+          //         "VARINATID": "0",
+          //         "DEFAULT": "N",
+          //       })
+          //       that.variantModel.setData({ items1: uniqueName });
+          //       sap.ui.getCore().byId("idList").setModel(that.variantModel);
 
-              }
-            },
-            error: function (oData, error) {
-              MessageToast.show("error while loading variant details");
-            },
-          });
+          //       for (var k = 0; k < uniqueName.length; k++) {
+          //         if (uniqueName[k].DEFAULT === "Y") {
+          //           var Default = uniqueName[k].VARIANTNAME;
+          //           details = {
+          //             "VARIANTNAME": uniqueName[k].VARIANTNAME,
+          //             "VARIANTID": uniqueName[k].VARIANTID,
+          //             "USER": uniqueName[k].USER,
+          //             "DEFAULT": "N"
+          //           };
+          //           defaultDetails.push(details);
+          //           details = {};
+          //         }
+          //       }
 
-          this.getModel("BModel").read("/getVariantHeader", {
-            success: function (oData) {
-              for (var i = 0; i < oData.results.length; i++) {
-                if (that.oGModel.getProperty("/UserId") === oData.results[i].USER) {
-                  bData.push(oData.results[i]);
-                }
-              }
-              that.oGModel.setProperty("/variantHeader", bData);
-            },
-            error: function (oData, error) {
-              MessageToast.show("error while loading variant details");
-            },
-          });
+          //       that.oGModel.setProperty("/fromFunction", "X");
+          //       if (Default) {
+          //         that.oGModel.setProperty("/defaultDetails", defaultDetails);
+          //         // that.byId("idVariantName").setText(Default);
+          //         that.handleSelectPress(Default);
+          //       }
+          //       else {
+          //         that.oGModel.setProperty("/defaultDetails", "");
+          //         Default = "Standard";
+          //         that.handleSelectPress(Default);
+          //       }
 
+
+
+          //     }
+          //   },
+          //   error: function (oData, error) {
+          //     MessageToast.show("error while loading variant details");
+          //   },
+          // });
+
+          // this.getModel("BModel").read("/getVariantHeader", {
+          //   success: function (oData) {
+
+          //     for (var i = 0; i < oData.results.length; i++) {
+          //       if (that.oGModel.getProperty("/UserId").toUpperCase() === oData.results[i].USER.toUpperCase()) {
+          //         bData.push(oData.results[i]);
+          //       }
+          //     }
+          //     that.variantHeaderModel.setData({ itemsHeader: bData });
+          //     sap.ui.getCore().byId("varNameList").setModel(that.variantHeaderModel);
+          //     that.oGModel.setProperty("/variantHeader", bData);
+          //   },
+          //   error: function (oData, error) {
+          //     MessageToast.show("error while loading variant details");
+          //   },
+          // });
+
+        },
+        onDropDownPress: function (oEvent) {
+
+          if (oEvent.getSource().getPressed()) {
+            this._popOver.openBy(oEvent.getSource());
+          }
+          else {
+            this._popOver.close();
+          }
         },
 
         /**
@@ -536,16 +556,20 @@ oCC1: null,
         },
 
         //Variant Code//
-        onSaveAs: function () {
-          // this._nameFragment.open();
+        onVariantSave: function () {
+          that.byId("idDropDown").setPressed(false);
+          that._popOver.close();
+          that._nameFragment.open();
+          sap.ui.getCore().byId("idInput").setValue();
         },
-        onClose: function () {
+        onSaveClose: function () {
           // sap.ui.getCore().byId("idInput").setValue("");
           // that.byId("idloc").setValue("");
           // that.byId("prodInput").setTokens([]);
-          this._nameFragment.close();
+          that._nameFragment.close();
         },
         onCreate: function (oEvent) {
+          that.byId("idDropDown").setPressed(false);
           var oEntry = { RTRCHAR: [] };
           var array = [];
           var details = {};
@@ -553,16 +577,19 @@ oCC1: null,
           var Field1 = that.byId("idloc").getParent().getItems()[0].getText();
           var sProduct = that.byId("prodInput").getTokens();
           var Field2 = that.byId("prodInput").getParent().getItems()[0].getText();
-          var varName = oEvent.getParameters().name;
-          var sScope = document.getElementById("container-cp.appf.cpsaleshconfig---Home--Variants-share-CB");
-          if (sScope.checked) {
+          // var varName = oEvent.getParameters().name;
+          var varName = sap.ui.getCore().byId("idInput").getValue();
+          // var sScope = document.getElementById("container-cp.appf.cpsaleshconfig---Home--Variants-share-CB");
+          var sScope = sap.ui.getCore().byId("_IDGenCheckBox2").getSelected();
+          if (sScope) {
             var Scope = "Public";
           }
           else {
             var Scope = "Private";
           }
-          var sDefault = document.getElementById("container-cp.appf.cpsaleshconfig---Home--Variants-default-CB");
-          if (sDefault.checked) {
+          //   var sDefault = document.getElementById("container-cp.appf.cpsaleshconfig---Home--Variants-default-CB");
+          var sDefault = sap.ui.getCore().byId("_IDGenCheckBox1").getSelected();
+          if (sDefault && that.oGModel.getProperty("/defaultDetails").length > 0) {
             var defaultChecked = "Y";
             that.getModel("BModel").callFunction("/updateVariant", {
               method: "GET",
@@ -623,121 +650,168 @@ oCC1: null,
             },
             success: function (oData) {
               MessageToast.show(oData.createVariant);
+              sap.ui.getCore().byId("_IDGenCheckBox2").setSelected(false);
+              sap.ui.getCore().byId("_IDGenCheckBox1").setSelected(false);
+              sap.ui.getCore().byId("idInput").setValue();
+              that._nameFragment.close();
               that.onAfterRendering();
 
 
             },
             error: function (error) {
+
               MessageToast.show("Failed to create variant");
             },
           });
+
         },
 
         handleSelectPress: function (oEvent) {
           var oLoc, oTokens = {}, finalToken = [];
           var oTableItems = that.oGModel.getProperty("/variantDetails");
+          // var selectedApp = oEvent;
           if (that.oGModel.getProperty("/fromFunction") === "X") {
             that.oGModel.setProperty("/fromFunction", "");
             var selectedApp = oEvent;
+            that.byId("idVariantName").setText(selectedApp);
+            that.oGModel.setProperty("/variantName", selectedApp);
           }
           else {
-            var App = oEvent.getSource().getSelectionKey();
-            if (App.includes("SV")) {
-              var selectedApp = oTableItems[oTableItems.length - 1].VARIANTNAME;
-            }
-            else{
-              var selectedApp = App;
-            }
+            var selectedApp = oEvent.getSource().getTitle();
+            that.byId("idVariantName").setText(selectedApp);
+            that.oGModel.setProperty("/variantName", selectedApp);
           }
-          for (var i = 0; i < oTableItems.length; i++) {
-            if (selectedApp === oTableItems[i].VARIANTNAME) {
-              if (oTableItems[i].FIELD.includes("Loc")) {
-                oLoc = oTableItems[i].VALUE;
-              }
-              else if (oTableItems[i].FIELD.includes("Prod")) {
+          if (selectedApp !== "Standard") {
+            for (var i = 0; i < oTableItems.length; i++) {
+              if (selectedApp === oTableItems[i].VARIANTNAME) {
+                if (oTableItems[i].FIELD.includes("Loc")) {
+                  oLoc = oTableItems[i].VALUE;
+                }
+                else if (oTableItems[i].FIELD.includes("Prod")) {
 
-                var oItemTemplate = new sap.m.Token({
-                  key: i,
-                  text: oTableItems[i].VALUE
-                });
-                finalToken.push(oItemTemplate);
-                oItemTemplate = {};
+                  var oItemTemplate = new sap.m.Token({
+                    key: i,
+                    text: oTableItems[i].VALUE
+                  });
+                  finalToken.push(oItemTemplate);
+                  oItemTemplate = {};
+                }
               }
             }
-          }
 
-          that.byId("idloc").setValue(oLoc);
-          this.getModel("BModel").read("/getLocProdDet", {
-            filters: [
-              new Filter(
-                "LOCATION_ID",
-                FilterOperator.EQ,
-                oLoc
-              ),
-            ],
-            success: function (oData) {
-              that.prodModel.setData(oData);
-              that.oProdList.setModel(that.prodModel);
-              that.oProdList.removeSelections();
-              // that.oProdList.removeAllAssociation();
-              for(var i=0;i<finalToken.length;i++){
-                for(var k=0;k<that.oProdList.getItems().length;k++){
-                  if(that.oProdList.getItems()[k].getTitle()===finalToken[i].getText()){
-                    that.oProdList.getItems()[k].setSelected(true);
+            that.byId("idloc").setValue(oLoc);
+            this.getModel("BModel").read("/getLocProdDet", {
+              filters: [
+                new Filter(
+                  "LOCATION_ID",
+                  FilterOperator.EQ,
+                  oLoc
+                ),
+              ],
+              success: function (oData) {
+                that.prodModel.setData(oData);
+                that.oProdList.setModel(that.prodModel);
+                that.oProdList.removeSelections();
+                // that.oProdList.removeAllAssociation();
+                for (var i = 0; i < finalToken.length; i++) {
+                  for (var k = 0; k < that.oProdList.getItems().length; k++) {
+                    if (that.oProdList.getItems()[k].getTitle() === finalToken[i].getText()) {
+                      that.oProdList.getItems()[k].setSelected(true);
+                    }
                   }
                 }
-              }
-            },
-            error: function (oData, error) {
-              MessageToast.show("error");
-            },
-          });
-          // that._popOver.close();
-          // that._variantFragment.close();
+              },
+              error: function (oData, error) {
+                MessageToast.show("error");
+              },
+            });
+            that._popOver.close();
+            // that._variantFragment.close();
 
-          that.byId("prodInput").setTokens(finalToken);
-          // that.onGetData();
+            that.byId("prodInput").setTokens(finalToken);
+            that.byId("idDropDown").setPressed(false);
+            // that.onGetData();
 
-          // }
+            // }
+          }
+          else {
+            //do nothing
+            that.byId("idDropDown").setPressed(false);
+            that.byId("prodInput").removeAllTokens();
+            that.oProdList.removeSelections();
+            that.byId("idloc").setValue("");
+            that._popOver.close();
+          }
         },
 
-        onManage: function (oEvent) {
+        onManageOpen: function (oEvent) {
+          that.byId("idDropDown").setPressed(false);
+          that._manageVariant.open();
+        },
+        handleManageClose: function () {
+          that._manageVariant.close();
+        },
+        onViewDelete: function (oEvent) {
           var details = {};
           var array = []
-          var deletedItems = oEvent.getParameters().deleted;
-          var totalHeaderItems = that.oGModel.getProperty("/variantHeader");
-          var totalVariantItems = that.oGModel.getProperty("/variantDetails");
-          for (var i = 0; i < deletedItems.length; i++) {
-            for (var j = 0; j < totalVariantItems.length; j++) {
-              if (deletedItems[i] === totalVariantItems[j].VARIANTNAME) {
-                details = {
-                  ID: totalVariantItems[j].VARIANTID,
-                  NAME: totalVariantItems[j].VARIANTNAME
-                }
-                array.push(details);
-                details = {};
-              }
-            }
+          var deletedItem = parseInt(oEvent.getParameters().listItem.getCells()[4].getText());
+          var deletedItemName = oEvent.getParameters().listItem.getCells()[0].getText();
+          var selectedItem = oEvent.getParameters().listItem;
+          var source = oEvent.getSource();
+          // that.deletedArray.push(deletedItem);
+         
+          details = {
+            ID: deletedItem,
+            NAME: deletedItemName
           }
-          var uniqueName = array.filter((obj, pos, arr) => {
-            return (
-              arr.map((mapObj) => mapObj.ID).indexOf(obj.ID) == pos
-            );
-          });
-          that.getModel("BModel").callFunction("/createVariant", {
-            method: "GET",
-            urlParameters: {
-              Flag: "D",
-              VARDATA: JSON.stringify(uniqueName)
-            },
-            success: function (oData) {
-              MessageToast.show(oData.createVariant);
-              that.getData();
-            },
-            error: function (error) {
-              MessageToast.show("Failed to create variant");
-            },
-          });
+          array.push(details);
+          details = {};
+          if (!this.oApproveDialog) {
+            this.oApproveDialog = new Dialog({
+              type: DialogType.Message,
+              title: deletedItemName,
+              content: new Text({ text: "Do you want to delete this View?" }),
+              beginButton: new Button({
+                type: ButtonType.Emphasized,
+                text: "Submit",
+                press: function () {
+                  that.getModel("BModel").callFunction("/createVariant", {
+                    method: "GET",
+                    urlParameters: {
+                      Flag: "D",
+                      VARDATA: JSON.stringify(array)
+                    },
+                    success: function (oData) {
+                      MessageToast.show(oData.createVariant);    
+                      source.removeItem(selectedItem);
+                      that.oApproveDialog.close();
+                      that.onAfterRendering();
+                    },
+                    error: function (error) {
+                      MessageToast.show("Failed to create variant");
+                    },
+                  });
+                }.bind(this)
+              }),
+              endButton: new Button({
+                text: "Cancel",
+                press: function () {
+                  this.oApproveDialog.close();
+                }.bind(this)
+              })
+            });
+          }
+          this.oApproveDialog.open();
+
+
+        },
+        onManage: function () {
+          // var table= document.getElementById("container-cp.appf.cpsaleshconfig---Home--Variants-managementTable-tblBody").rows[0].cells[3].innerText;
+
+
+          var deletedItems = that.deletedArray;
+          var totalHeaderItems = that.oGModel.getProperty("/variantHeader");
+          // that.handleManageClose();
 
         }
 

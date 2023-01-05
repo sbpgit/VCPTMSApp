@@ -2060,3 +2060,87 @@ annotate service.TS_OBJDEP_CHARHDR_F with @(
         }]
     }]
 );
+/// Annotation for Future timeseries
+// CIR log
+annotate service.CLASS with @(
+    UI        : {
+        SelectionFields         : [
+            CLASS_NAME
+        ],
+        LineItem                : [
+            {
+                $Type : 'UI.DataField',
+                Value : CLASS_NAME,
+                ![@UI.Importance]   : #High,
+                ![@HTML5.CssDefaults] : {width : '15rem'}
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : CLASS_DESC,
+                ![@UI.Importance]   : #High,
+                ![@HTML5.CssDefaults] : {width : '15rem'}
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : CLASS_TYPE,
+                ![@UI.Importance]   : #High,
+                ![@HTML5.CssDefaults] : {width : '15rem'}
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : IBPCHAR_CHK,
+                ![@UI.Importance]   : #High,
+                ![@HTML5.CssDefaults] : {width : '15rem'}
+            }
+        ],
+        HeaderInfo              : {
+            Title          : {Value : CLASS_NAME},
+            TypeName       : 'Class Detail',
+            TypeNamePlural : 'Class Details',
+        },
+        // HeaderFacets            : [{
+        //     $Type             : 'UI.ReferenceFacet',
+        //     Target            : '@UI.FieldGroup#Description',
+        //     ![@UI.Importance] : #Medium
+        // }],
+        // FieldGroup #Description : {Data : [{
+        //     $Type : 'UI.DataField',
+        //     Value : LOTSIZE_KEY
+        // }]},
+        FieldGroup #Details     : {Data : [
+            {
+                $Type : 'UI.DataField',
+                Value : CLASS_NAME
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : CLASS_DESC
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : CLASS_TYPE
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : IBPCHAR_CHK
+            }
+        ]}
+    },
+
+    // Page Facets
+    UI.Facets : [{
+        $Type  : 'UI.CollectionFacet',
+        ID     : 'classdet',
+        Label  : 'Class Details',
+        Facets : [{
+            $Type  : 'UI.ReferenceFacet',
+            Label  : 'Class',
+            Target : '@UI.FieldGroup#Details'
+        }]
+    }]
+);
+annotate service.CLASS with @(Capabilities : {
+    Insertable : false,
+    Updatable  : true,
+    Deletable  : false
+});

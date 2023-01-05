@@ -23,15 +23,6 @@ const obgenMktAuth = new MktAuth();
 
 module.exports = (srv) => {
 
-    // const { SBPVCP } = srv.entities;
-    // srv.on('READ', SBPVCP, request => {
-    //     try {
-    //         return service.tx(request).run(request.query);
-    //     }
-    //     catch (err) {
-    //         console.log(err);
-    //     }
-    // });
     // using req.user approach (user attribute - of class cds.User - from the request object)
     srv.on('userInfo', async (req) => {
 
@@ -104,9 +95,6 @@ module.exports = (srv) => {
             req.results = aFilteredResults;
         }
     });
-    /**     */
-
-
 
     // Service for weekly component requirements- assembly
     srv.on("getCompReqFWeekly", async (req) => {
@@ -154,6 +142,7 @@ module.exports = (srv) => {
                     `'
                         ORDER BY 
                             "LOCATION_ID" ASC, 
+                            "FACTORY_LOC" ASC,
                             "PRODUCT_ID" ASC,
                             "VERSION" ASC,
                             "SCENARIO" ASC,
@@ -163,6 +152,7 @@ module.exports = (srv) => {
                 liComp = await cds.run(
                     `
           SELECT DISTINCT "LOCATION_ID",
+                          "FACTORY_LOC",
                           "PRODUCT_ID",
                           "VERSION",
                           "SCENARIO",
@@ -187,6 +177,7 @@ module.exports = (srv) => {
                     `'
                ORDER BY 
                     "LOCATION_ID" ASC, 
+                    "FACTORY_LOC" ASC,
                     "PRODUCT_ID" ASC,
                     "VERSION" ASC,
                     "SCENARIO" ASC,
@@ -215,6 +206,7 @@ module.exports = (srv) => {
                     `'
                  ORDER BY 
                       "LOCATION_ID" ASC, 
+                      "FACTORY_LOC" ASC,
                       "PRODUCT_ID" ASC,
                       "VERSION" ASC,
                       "SCENARIO" ASC,
@@ -224,7 +216,8 @@ module.exports = (srv) => {
                 if (req.data.CRITICALKEY === 'X') {
                     liComp = await cds.run(
                         `
-              SELECT DISTINCT "V_ASMREQ_PRODCONSD"."LOCATION_ID",
+              SELECT DISTINCT "V_ASMREQ_PRODCONSD"."LOCATION_ID",              
+                               "V_ASMREQ_PRODCONSD"."FACTORY_LOC",
                                "V_ASMREQ_PRODCONSD"."PRODUCT_ID",
                                "V_ASMREQ_PRODCONSD"."VERSION",
                                "V_ASMREQ_PRODCONSD"."SCENARIO",
@@ -253,7 +246,8 @@ module.exports = (srv) => {
                         `'  AND "CP_CRITICAL_COMP"."CRITICALKEY" = '` +
                         req.data.CRITICALKEY + `'
                    ORDER BY 
-                        "LOCATION_ID" ASC, 
+                        "LOCATION_ID" ASC,
+                        "FACTORY_LOC" ASC,
                         "PRODUCT_ID" ASC,
                         "VERSION" ASC,
                         "SCENARIO" ASC,
@@ -265,6 +259,7 @@ module.exports = (srv) => {
                     liComp = await cds.run(
                         `
           SELECT DISTINCT "LOCATION_ID",
+                          "FACTORY_LOC",
                           "PRODUCT_ID",
                           "VERSION",
                           "SCENARIO",
@@ -289,6 +284,7 @@ module.exports = (srv) => {
                         `'
                ORDER BY 
                     "LOCATION_ID" ASC, 
+                    "FACTORY_LOC" ASC,
                     "PRODUCT_ID" ASC,
                     "VERSION" ASC,
                     "SCENARIO" ASC,
@@ -325,6 +321,7 @@ module.exports = (srv) => {
             // vCompIndex is to get Componnent quantity for all dates
             vWeekIndex = 0; //j
             lsCompWeekly.LOCATION_ID = liComp[j].LOCATION_ID;
+            lsCompWeekly.FACTORY_LOC = liComp[j].FACTORY_LOC;
             lsCompWeekly.PRODUCT_ID = liComp[j].REF_PRODID;
             lsCompWeekly.ITEM_NUM = liComp[j].ITEM_NUM;
             //   lsCompWeekly.ASSEMBLY = liComp[j].COMPONENT;
@@ -2236,48 +2233,6 @@ module.exports = (srv) => {
                 responseMessage = "Update Failed"
             }
         }
-        // else if (req.data.FLAG === 'C') {//Copy
-        //     vID = await objCatFn.maintainUniqueHeader(req.data.FLAG, liuniquechar[0]);
-        //     if (vID !== ' ') {
-        //         lsresults.LOCATION_ID = liuniquechar[0].LOCATION_ID;
-        //         lsresults.PRODUCT_ID = liuniquechar[0].PRODUCT_ID;
-        //         lsresults.UNIQUE_ID = vID;//parseInt(liuniquechar[0].UNIQUE_ID);
-        //         const li_chardata = await cds.run(
-        //             `SELECT *
-        //         FROM "CP_UNIQUE_ID_ITEM"
-        //         WHERE "LOCATION_ID" = '` +
-        //             lsresults.LOCATION_ID +
-        //             `'
-        //         AND "PRODUCT_ID" = '` +
-        //             lsresults.PRODUCT_ID +
-        //             `'
-        //         AND"UNIQUE_ID" = '` +
-        //             lsresults.UNIQUE_ID +
-        //             `'`
-        //         );
-        //         if (li_chardata.length > 0) {
-        //             // vID = await objCatFn.maintainUniqueHeader(req.data);
-
-        //             for (let i = 0; i < liuniquechar.length; i++) {
-        //                 li_chardata[i].UNIQUE_ID = parseInt(vID);
-        //             }                    
-        //             try {
-        //                 await cds.run(INSERT.into("CP_UNIQUE_ID_ITEM").entries(li_chardata));
-        //                 responseMessage = " Creation/Updation successful";
-        //             } catch (e) {
-        //                 //DONOTHING
-        //                 responseMessage = "Creation Failed"
-        //                 // createResults.push(responseMessage);
-        //             }
-        //         }
-        //         else {
-        //             responseMessage = "Creation Failed"
-        //         }
-        //     }
-        //     else {
-        //         responseMessage = "Unable to copy Unique ID"
-        //     }
-        // }
 
         return responseMessage;
     });
@@ -2397,22 +2352,35 @@ module.exports = (srv) => {
     srv.on("trigrMAWeek", async (req) => {
         let liresults = [];
         console.log("Hello");
-        // let lsresults = {};
-        // lsresults.LOCATION_ID = req.data.LOCATION_ID;
-        // lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
-        // lsresults.WEEK_DATE = req.data.WEEK_DATE;
-        // liresults.push(lsresults);
-        // lsresults = {};
-        // if (liresults.length > 0) {
-        //     try {
-        //         await cds.run(INSERT.into("CP_MARKETAUTH_WEEK").entries(liresults));
-        //         responseMessage = " Creation/Updation successful";
-        //     } catch (e) {
-        //         //DONOTHING
-        //         responseMessage = " Creation failed";
-        //         // createResults.push(responseMessage);
-        //     }
-        // }
+    });
+
+    srv.on("updateIBPClass", async (req) => {
+        let liClassData = {};
+        let lsClassData = {};
+        let vResponse;
+        liClassData = JSON.parse(req.data.CLASSDATA);
+        for (let i = 0; i < liClassData.length; i++) {
+            lsClassData = {};
+            lsClassData.CLASS_NUM = liClassData[i].CLASS_NUM;
+            if (liClassData[i].IBPCHAR_CHK === 'X') {
+                lsClassData.IBPCHAR_CHK = Boolean(true);
+            }
+            else {
+                lsClassData.IBPCHAR_CHK = Boolean(false);
+            }
+            try {
+                await UPDATE`CP_CLASS`
+                    .with({
+                        IBPCHAR_CHK: lsClassData.IBPCHAR_CHK
+                    })
+                    .where(`CLASS_NUM = '${lsClassData.CLASS_NUM}'`);
+                vResponse = "S";
+            }
+            catch (e) {
+                vResponse = "E";
+            }
+        }        
+        return vResponse;
     });
     srv.on("maintainSeedOrder", async (req) => {
         let liresults = [];
@@ -2444,6 +2412,7 @@ module.exports = (srv) => {
         if (req.data.FLAG === "C") {
             lsresults.LOCATION_ID = liSeeddata[0].LOCATION_ID;
             lsresults.PRODUCT_ID = liSeeddata[0].PRODUCT_ID;
+            lsresults.CUSTOMER_GROUP = liSeeddata[0].CUSTOMER_GROUP;
             lsresults.UNIQUE_ID = liSeeddata[0].UNIQUE_ID;
             lsresults.ORD_QTY = parseFloat(liSeeddata[0].ORD_QTY);
             lsresults.MAT_AVAILDATE = liSeeddata[0].MAT_AVAILDATE;
@@ -2459,8 +2428,9 @@ module.exports = (srv) => {
                     `'
                         AND "PRODUCT_ID" = '` +
                     liSeeddata[0].PRODUCT_ID +
-                    `' 
-                        AND "SEED_ORDER" = '` +
+                    `'  AND "CUSTOMER_GROUP" = '` +
+                    liSeeddata[0].CUSTOMER_GROUP +
+                    `'  AND "SEED_ORDER" = '` +
                     vOrder +
                     `' ORDER BY SEED_ORDER DESC`
                 );
@@ -2487,7 +2457,7 @@ module.exports = (srv) => {
                         .where(`LOCATION_ID = '${lsresults.LOCATION_ID}'
                         AND PARAMETER_ID = '${lspara.PARAMETER_ID}'`)
                     responseMessage = lsresults.SEED_ORDER + " Created successfully";
-                    await obgenSOFunctions.createSO(lsresults.LOCATION_ID, lsresults.PRODUCT_ID, lsresults.SEED_ORDER, lsresults.MAT_AVAILDATE, lsresults.ORD_QTY, lsresults.UNIQUE_ID);
+                    await obgenSOFunctions.createSO(lsresults.LOCATION_ID, lsresults.PRODUCT_ID, lsresults.CUSTOMER_GROUP, lsresults.SEED_ORDER, lsresults.MAT_AVAILDATE, lsresults.ORD_QTY, lsresults.UNIQUE_ID);
                 } catch (e) {
                     //DONOTHING
                     responseMessage = " Creation failed";
@@ -2844,15 +2814,6 @@ module.exports = (srv) => {
         let liUniqueItems = [];
         let lsUniqueItems = {};
         let vUniqueId = req.data.UNIQUE_ID;
-        // let liDates = [],
-        //     vWeekIndex,
-        //     vCompIndex,
-        //     vDateIndex,
-        //     vComp,
-        //     lsDates = {};
-        // let columnname = "WEEK";
-
-
 
         const ltUniqueItems = await cds.run(
             `
@@ -3186,14 +3147,6 @@ module.exports = (srv) => {
                 // aCIRQuantities.push(oCIRQtys);
                 oCIRQtys = {};
             }
-            // if (aCIRQuantities.length > 0 && bFlag === false) {
-            //     try {
-            //         // await cds.run(INSERT.into('CP_CIR_GENERATED').entries(aCIRQuantities));
-            //         responseMessage = " Creation/Updation successful";
-            //     } catch (e) {
-            //         responseMessage = " Creation failed";
-            //     }
-            // }
         }
         oCIRQtys = {};
         return responseMessage;
@@ -3201,34 +3154,8 @@ module.exports = (srv) => {
 
     // EOI - Deepa
 
-    ///////////////////////////////////////////////////////////
     srv.on("generateMarketAuthfn", async (request) => {
-        //     var flag, lMessage = '';
-        //     // Generating payload for job scheduler logs
-        //     // let lilocProd = {};
-        //     // let lsData = {};
-        //     // let createtAt = new Date();
-        //     // let id = uuidv1();
-        //     // let values = [];
-        //     // let message = "Started importing IBP Future Demand and Characteristic Plan";
-        //     // let res = req._.req.res;
-        //     // let lilocProdReq = JSON.parse(req.data.MARKETDATA);
 
-        //     if (lilocProdReq[0].PRODUCT_ID === "ALL") {
-        //         lsData.LOCATION_ID = lilocProdReq[0].LOCATION_ID;
-        //         lsData.PRODUCT_ID = lilocProdReq[0].PRODUCT_ID;
-        //         const objCatFn = new Catservicefn();
-        //         const lilocProdT = await objCatFn.getAllProducts(lsData);
-        //         // lsData = {};
-        //         const litemp = JSON.stringify(lilocProdT);
-        //         lilocProd = JSON.parse(litemp);
-        //     }
-        //     else {
-        // lilocProd = JSON.parse(req.data);
-        //     }
-        //     values.push({ id, createtAt, message, lilocProd });
-        //     res.statusCode = 202;
-        //     res.send({ values });
         let flag = await obibpfucntions.importFutureDemandcharPlan(request);
 
         // if (flag === 'S') {
@@ -3289,7 +3216,6 @@ module.exports = (srv) => {
         // }
         // GenFunctions.jobSchMessage('X', lMessage, request);
     });
-    /////////////////////////////////////////////////////////////////
     //VC Planner Document Maintenance- Pradeep
     srv.on("moveData", async req => {
         let contentData = {};

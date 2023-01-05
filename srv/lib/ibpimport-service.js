@@ -462,7 +462,7 @@ module.exports = cds.service.impl(async function () {
                 "VCCHAR": licir[i].CHAR_NUM,
                 "VCCHARVALUE": licir[i].CHARVAL_NUM,
                 "CUSTID": "NULL",
-                "CIRQTY": licir[i].CIRQTY.toString(),
+                "FORECASTORDERQTY": licir[i].CIRQTY.toString(),
                 "PERIODID4_TSTAMP": vWeekDate
             };
             oReq.cir.push(vCIR);
@@ -471,7 +471,7 @@ module.exports = cds.service.impl(async function () {
         let oEntry =
         {
             "Transactionid": vTransID,
-            "AggregationLevelFieldsString": "LOCID,PRDID,VCCLASS,VCCHAR,VCCHARVALUE,CUSTID,CIRQTY,PERIODID4_TSTAMP",
+            "AggregationLevelFieldsString": "LOCID,PRDID,VCCLASS,VCCHAR,VCCHARVALUE,CUSTID,FORECASTORDERQTY,PERIODID4_TSTAMP",
             "DoCommit": true,
             "NavSBPVCP": oReq.cir
         }
@@ -1392,7 +1392,8 @@ module.exports = cds.service.impl(async function () {
                     CHARVAL_NUM,
                     CHARVAL_DESC
                     FROM V_CLASSCHARVAL 
-                WHERE CLASS_NUM = '`+ req.data.CLASS_NUM + `'`);
+                WHERE CLASS_NUM = '`+ req.data.CLASS_NUM + `'
+                AND IBPCHAR_CHK = 'X'`);
 
         //const li_Transid = servicePost.tx(req).get("/GetTransactionID");
         for (i = 0; i < liclass.length; i++) {
@@ -1581,8 +1582,8 @@ module.exports = cds.service.impl(async function () {
         let vLength = parseInt(lisales.length) - 1;
         let liDates = obibpfucntions.generateDateseries(lisales[0].WEEK_DATE, lisales[vLength].WEEK_DATE);
         let vDemd, vAdjqty, vWeekDate;
-        for (let i = 0; i < lisales.length; i++) {
             for (let iDate = 0; iDate < liDates.length; iDate++) {
+                for (let i = 0; i < lisales.length; i++) {
                 vDemd = "", vAdjqty = "", vWeekDate = "";
                 if (liDates[iDate].WEEK_DATE === lisales[i].WEEK_DATE) {
                     vWeekDate = new Date(lisales[i].WEEK_DATE).toISOString().split('Z');
@@ -1615,18 +1616,18 @@ module.exports = cds.service.impl(async function () {
             }
 
         }
-        vWeekDate = new Date(liDates[24].WEEK_DATE).toISOString().split('Z');
-        vDemd = "-2";
-        vAdjqty = "-3";
-        vsales = {
-            "LOCID": "PL10",
-            "PRDID": "FG_100",
-            "CUSTID": "A1",
-            "ACTUALDEMAND": "-1",
-            "SEEDORDERDEMAND": "-2",
-            "PERIODID0_TSTAMP": vWeekDate[0]
-        };
-        oReq.sales.push(vsales);
+        // vWeekDate = new Date(liDates[24].WEEK_DATE).toISOString().split('Z');
+        // vDemd = "-2";
+        // vAdjqty = "-3";
+        // vsales = {
+        //     "LOCID": "PL10",
+        //     "PRDID": "FG_100",
+        //     "CUSTID": "A1",
+        //     "ACTUALDEMAND": "-1",
+        //     "SEEDORDERDEMAND": "-2",
+        //     "PERIODID0_TSTAMP": vWeekDate[0]
+        // };
+        // oReq.sales.push(vsales);
         let vTransID = new Date().getTime().toString();
         let oEntry =
         {

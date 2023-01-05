@@ -653,7 +653,6 @@ sap.ui.define(
                     ],
                     success: function (oData) {
                         sap.ui.core.BusyIndicator.hide();
-
                         that.classnameModel.setData({
                             results: oData.results
                         });
