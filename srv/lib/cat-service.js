@@ -2673,14 +2673,13 @@ module.exports = (srv) => {
             lsDates = {};
         let columnname = "WEEK";
         let sColQty = "_Q";
-        let sActQty = ".ACT_QTY";
-        let sOpenQty = ".OPEN_QTY";
         let aFilSalesH = [];
         let iQty = 0;
         let aCIR_ID = [];
         let oCIR_ID = {};
         let oCIRQty = {};
         let aCIRQty = [];
+        let nextDtIndex = '';
 
         // Data
         const liCIRQty = oCIRData.liCIRQty;
@@ -2733,25 +2732,22 @@ module.exports = (srv) => {
                 aFilSalesH = [];
                 oCIRQty.ACT_QTY = 0;
                 oCIRQty.OPEN_QTY = 0;
+                nextDtIndex = GenFunctions.addOne(i, liDates.length);
                 aFilSalesH = liSalesH.filter(function (aSalesH) {
-                    return aSalesH.UNIQUE_ID === lsCIRWeekly.UNIQUE_ID;
+                    return aSalesH.UNIQUE_ID === lsCIRWeekly.UNIQUE_ID   
+                        && aSalesH.MAT_AVAILDATE >= liDates[i].WEEK_DATE
+                        && aSalesH.MAT_AVAILDATE < liDates[nextDtIndex].WEEK_DATE;
                 });
-                // aFilSalesH = liSalesH.filter(function (aSalesH) {
-                //     return aSalesH.UNIQUE_ID === lsCIRWeekly.UNIQUE_ID && aSalesH.MAT_AVAILDATE >= liDates[i].WEEK_DATE
-                //         && aSalesH.MAT_AVAILDATE < liDates[GenFunctions.addOne(i, liDates.length)].WEEK_DATE;
-                // });
+                
                 if (aFilSalesH.length > 0) {
                     for (let vQtyIndex = 0; vQtyIndex < aFilSalesH.length; vQtyIndex++) {
-                        if(aFilSalesH[vQtyIndex].MAT_AVAILDATE >= liDates[i].WEEK_DATE
-                             && aFilSalesH[vQtyIndex].MAT_AVAILDATE < liDates[GenFunctions.addOne(i, liDates.length)].WEEK_DATE) {
+                        // if(aFilSalesH[vQtyIndex].MAT_AVAILDATE >= liDates[i].WEEK_DATE &&
+                        //     aFilSalesH[vQtyIndex].MAT_AVAILDATE < liDates[nextDtIndex].WEEK_DATE) {
                         
                                 iQty = iQty + parseInt(aFilSalesH[vQtyIndex].ORD_QTY);
-                        }
+                        // }
                     }
-                } 
-                // else {
-                //     oCIRQty.ACT_QTY = iQty;
-                // }                
+                }                                
 
                 for (vCIRIndex = 0; vCIRIndex < liCIRQty.length; vCIRIndex++) {
                     lsCIRWeekly[columnname + vWeekIndex] = 0;
@@ -2762,8 +2758,7 @@ module.exports = (srv) => {
                         lsCIRWeekly[columnname + vWeekIndex] =
                             liCIRQty[vCIRIndex].CIR_QTY;
 
-                        oCIRQty.ACT_QTY = iQty;
-                        //oCIRQty.OPEN_QTY = liCIRQty[vCIRIndex].CIR_QTY;
+                        oCIRQty.ACT_QTY = iQty;                       
                         
                         oCIRQty.OPEN_QTY = liCIRQty[vCIRIndex].CIR_QTY - iQty;
                         
