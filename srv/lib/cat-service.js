@@ -369,6 +369,12 @@ module.exports = (srv) => {
 
         let liComp = [];
         let liCompQty;
+        // Get Factory and Demand Locations
+        const liFtLoc = await SELECT.columns(
+            "LOCATION_ID",
+            "PLAN_LOC",
+            "FACTORY_LOC")
+            .from('CP_FACTORY_SALESLOC');
         switch (await GenFunctions.getParameterValue(req.data.LOCATION_ID, 5)) {
             case 'M1':
                 liCompQty = await cds.run(
@@ -383,24 +389,26 @@ module.exports = (srv) => {
                     req.data.VERSION +
                     `' AND "SCENARIO" = '` +
                     req.data.SCENARIO +
-                    `' AND ( "CAL_DATE" <= '` +
+                    `' AND ( "WEEK_DATE" <= '` +
                     vDateTo +
-                    `' AND "CAL_DATE" >= '` +
+                    `' AND "WEEK_DATE" >= '` +
                     vDateFrom +
                     `') AND "MODEL_VERSION" = '` +
                     req.data.MODEL_VERSION +
                     `'
                  ORDER BY 
                       "LOCATION_ID" ASC, 
+                      "FACTORY_LOC" ASC,
                       "PRODUCT_ID" ASC,
                       "VERSION" ASC,
                       "SCENARIO" ASC,
                       "COMPONENT" ASC,
-                      "CAL_DATE" ASC`
+                      "WEEK_DATE" ASC`
                 );
                 liComp = await cds.run(
                     `
           SELECT DISTINCT "LOCATION_ID",
+                            "FACTORY_LOC",
                           "PRODUCT_ID",
                           "VERSION",
                           "SCENARIO",
@@ -414,16 +422,17 @@ module.exports = (srv) => {
                     req.data.VERSION +
                     `' AND "SCENARIO" = '` +
                     req.data.SCENARIO +
-                    `' AND ( "CAL_DATE" <= '` +
+                    `' AND ( "WEEK_DATE" <= '` +
                     vDateTo +
                     `'
-                AND "CAL_DATE" >= '` +
+                AND "WEEK_DATE" >= '` +
                     vDateFrom +
                     `') AND "MODEL_VERSION" = '` +
                     req.data.MODEL_VERSION +
                     `'
                ORDER BY 
                     "LOCATION_ID" ASC, 
+                    "FACTORY_LOC" ASC,
                     "PRODUCT_ID" ASC,
                     "VERSION" ASC,
                     "SCENARIO" ASC,
@@ -443,24 +452,26 @@ module.exports = (srv) => {
                     req.data.VERSION +
                     `' AND "SCENARIO" = '` +
                     req.data.SCENARIO +
-                    `' AND ( "CAL_DATE" <= '` +
+                    `' AND ( "WEEK_DATE" <= '` +
                     vDateTo +
-                    `' AND "CAL_DATE" >= '` +
+                    `' AND "WEEK_DATE" >= '` +
                     vDateFrom +
                     `') AND "MODEL_VERSION" = '` +
                     req.data.MODEL_VERSION +
                     `'
                      ORDER BY 
                           "LOCATION_ID" ASC, 
+                          "FACTORY_LOC" ASC,
                           "PRODUCT_ID" ASC,
                           "VERSION" ASC,
                           "SCENARIO" ASC,
                           "COMPONENT" ASC,
-                          "CAL_DATE" ASC`
+                          "WEEK_DATE" ASC`
                 );
                 liComp = await cds.run(
                     `
               SELECT DISTINCT "LOCATION_ID",
+                                "FACTORY_LOC",
                               "PRODUCT_ID",
                               "VERSION",
                               "SCENARIO",
@@ -474,16 +485,17 @@ module.exports = (srv) => {
                     req.data.VERSION +
                     `' AND "SCENARIO" = '` +
                     req.data.SCENARIO +
-                    `' AND ( "CAL_DATE" <= '` +
+                    `' AND ( "WEEK_DATE" <= '` +
                     vDateTo +
                     `'
-                    AND "CAL_DATE" >= '` +
+                    AND "WEEK_DATE" >= '` +
                     vDateFrom +
                     `') AND "MODEL_VERSION" = '` +
                     req.data.MODEL_VERSION +
                     `'
                    ORDER BY 
-                        "LOCATION_ID" ASC, 
+                        "LOCATION_ID" ASC,
+                        "FACTORY_LOC" ASC, 
                         "PRODUCT_ID" ASC,
                         "VERSION" ASC,
                         "SCENARIO" ASC,
@@ -491,9 +503,22 @@ module.exports = (srv) => {
                 );
                 break;
         }
+        // var vDateSeries = vDateFrom;
+        // lsDates.CAL_DATE = GenFunctions.getNextMondayCmp(vDateSeries);
+        // vDateSeries = lsDates.CAL_DATE;
+        //////////////////////////////
         var vDateSeries = vDateFrom;
-        lsDates.CAL_DATE = GenFunctions.getNextMondayCmp(vDateSeries);
+        let dDate = new Date(vDateSeries);
+        let dDay = dDate.getDay();
+        if (dDay === 1) {
+            lsDates.CAL_DATE = vDateFrom;
+        } else {
+            lsDates.CAL_DATE = GenFunctions.getNextMondayCmp(vDateSeries);
+        }
+        // lsDates.CAL_DATE = GenFunctions.getNextMondayCmp(vDateSeries);
         vDateSeries = lsDates.CAL_DATE;
+        ////////////////////////////////
+
         liDates.push(lsDates);
         lsDates = {};
         while (vDateSeries <= vDateTo) {
@@ -512,6 +537,7 @@ module.exports = (srv) => {
             // vCompIndex is to get Componnent quantity for all dates
             vWeekIndex = 0; //j
             lsCompWeekly.LOCATION_ID = liComp[j].LOCATION_ID;
+            lsCompWeekly.FACTORY_LOC = liComp[j].FACTORY_LOC;
             lsCompWeekly.PRODUCT_ID = liComp[j].PRODUCT_ID;
             lsCompWeekly.ITEM_NUM = '';
             //   lsCompWeekly.ASSEMBLY = liComp[j].COMPONENT;
@@ -526,7 +552,7 @@ module.exports = (srv) => {
                     lsCompWeekly[columnname + vWeekIndex] = 0;
                     if (
                         liCompQty[vCompIndex].COMPONENT === lsCompWeekly.COMPONENT &&
-                        liCompQty[vCompIndex].CAL_DATE === liDates[i].CAL_DATE
+                        liCompQty[vCompIndex].WEEK_DATE === liDates[i].CAL_DATE
                     ) {
                         //   lsCompWeekly.STRUC_NODE = liCompQty[vCompIndex].STRUC_NODE;
                         lsCompWeekly[columnname + vWeekIndex] =

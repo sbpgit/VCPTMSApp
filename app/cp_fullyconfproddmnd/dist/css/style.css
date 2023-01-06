@@ -1,4 +1,8 @@
 /* Enter your custom styles here */
+.yellow {
+    background-color: #FFFF66;
+}
+
 .table {
     padding-left: 0.1rem;
     margin-right: 0.1rem;
@@ -14,7 +18,7 @@
 
 }
 .hdrBtnMargin {
-    margin-left: 80rem;
+    margin-left: 45rem;
 }
 
 .disableDP input {
@@ -40,4 +44,8 @@
 .tableScrollV {
     overflow-x: hidden;
     overflow-y: hidden;
+}
+
+.iconDisp {
+    margin-top: 1px;
 }
