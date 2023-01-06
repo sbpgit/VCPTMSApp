@@ -925,7 +925,7 @@ sap.ui.define(
                     // that.Loc=[];
                     // var FLoc = that.byId("idloc").getValue();
                     // for(var i=0; i<DemandLoc.length; i++){
-                    //     if(FLoc === DemandLoc[i].Demand_Loc){
+                    //     if(FLoc === DemandLoc[i].DEMAND_LOC){
                     //         that.Loc.push(DemandLoc[i]);
                     //     }
                     // }
@@ -1216,7 +1216,7 @@ sap.ui.define(
                     that.Loc = [];
                     var FLoc = that.byId("idloc").getValue();
                     for (var i = 0; i < DemandLoc.length; i++) {
-                        if (FLoc === DemandLoc[i].Demand_Loc) {
+                        if (FLoc === DemandLoc[i].DEMAND_LOC) {
                             that.Loc.push(DemandLoc[i]);
                         }
                     }
