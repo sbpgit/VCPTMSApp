@@ -154,6 +154,8 @@ sap.ui.define(
                 oGModel.setProperty("/JobType", "A");
               } else if (oData.readJobDetails.action.includes("genUniqueID")) {
                 oGModel.setProperty("/JobType", "O");
+              } else if (oData.readJobDetails.action.includes("postCIRQuantitiesToS4")) {
+                oGModel.setProperty("/JobType", "PF");
               } else if (oData.readJobDetails.action.includes("ibpimport-srv")) {
                 // 20-09-2022
                 if (oData.readJobDetails.action.includes("generateFDemandQty")) {
@@ -221,6 +223,19 @@ sap.ui.define(
               };
               ScheData.push(aIData);
               // 04-10-2022
+            } else if(jobType === "PF"){
+              var data = $.parseJSON(aData[i].data);
+              var aIData = {
+                Location: data.LOCATION_ID,
+                Product: data.PRODUCT_ID,
+                scenario: data.SCENARIO,
+                version: data.VERSION,
+                fromdate: data.FROMDATE,
+                todate: data.TODATE,
+                modelVersion: data.MODEL_VERSION
+              };
+              ScheData.push(aIData);
+              
             } else if (jobType === "D" || jobType === "T" || jobType === "F") {
               var aIData = $.parseJSON(aData[i].data);
               if (aIData.LocProdData) {
@@ -247,15 +262,13 @@ sap.ui.define(
                     // var aIData = data;
                     var aIData = {
                       Location: data.LOCATION_ID,
-                      Product: data.PRODUCT_ID
                     };
                     ScheData.push(aIData);
                     break;
                   case "exportIBPAssembly":
                     // var aIData = data;
                     var aIData = {
-                      Location: data.vcRulesList.LOCATION_ID,
-                      Product: data.vcRulesList.PRODUCT_ID
+                      Location: data.LOCATION_ID,
                     };
                     ScheData.push(aIData);
                     break;
@@ -300,7 +313,7 @@ sap.ui.define(
                 }
               }
 
-            } else if (jobType === "" && oGModel.getProperty("/wFlag") === "X") {
+            } else if (jobType === "" ) { // && oGModel.getProperty("/wFlag") === "X") {
               var data = $.parseJSON(aData[i].data);
               var aIData = {
                   Location: data.LOCATION_ID,
@@ -382,7 +395,8 @@ sap.ui.define(
             if (oActionType === "exportIBPLocation" || oActionType === "exportIBPCustomer") {
               MessageToast.show("There is no schedule data to display for the selected job type");
               iCount = 1;
-            } else if (oActionType === "exportIBPMasterProd" || oActionType === "exportRestrDetails") {
+            } else if (oActionType === "exportIBPMasterProd" || oActionType === "exportRestrDetails" ||
+                       oActionType === "exportIBPLocProd" || oActionType === "exportIBPAssembly") {
               sap.ui.getCore().byId("idJobData").getColumns()[0].setVisible(true);
             } else if (oActionType === "exportIBPClass") {
               sap.ui.getCore().byId("idJobData").getColumns()[7].setVisible(true);
@@ -415,6 +429,15 @@ sap.ui.define(
           case "O":
             sap.ui.getCore().byId("idJobData").getColumns()[0].setVisible(true);
             sap.ui.getCore().byId("idJobData").getColumns()[1].setVisible(true);
+            break;
+          case "PF":
+            sap.ui.getCore().byId("idJobData").getColumns()[0].setVisible(true);
+            sap.ui.getCore().byId("idJobData").getColumns()[1].setVisible(true);
+            sap.ui.getCore().byId("idJobData").getColumns()[4].setVisible(true);
+            sap.ui.getCore().byId("idJobData").getColumns()[5].setVisible(true);
+            sap.ui.getCore().byId("idJobData").getColumns()[6].setVisible(true);
+            sap.ui.getCore().byId("idJobData").getColumns()[9].setVisible(true);
+            sap.ui.getCore().byId("idJobData").getColumns()[10].setVisible(true);
             break;
           case "":
             sap.ui.getCore().byId("idJobData").getColumns()[0].setVisible(true);

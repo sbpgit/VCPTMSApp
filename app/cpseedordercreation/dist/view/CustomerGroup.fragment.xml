@@ -1,6 +1,40 @@
-<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+<!-- <core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
 	<SelectDialog id="CustGrp" title="Customer Group" search="handleSearch" liveChange="handleSearch" rememberSelections="false"
 		confirm="handleSelection" cancel="handleClose" items="{/item}">
 		<StandardListItem title="{CUSTOMER_GROUP}" description="{CUSTOMER_DESC}" type="Active"/>
 	</SelectDialog>
+</core:FragmentDefinition> -->
+
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+	<Dialog type="Standard" title="{i18n>cust}" contentWidth="400px" id="idcustgrp">
+		<content>
+			<Table id="CustSlctList" mode="SingleSelectMaster" growing="true" growingDirection="Downwards" growingScrollToLoad="true"
+                     items="{path: '/results'}" selectionChange="handleSelection" sticky="ColumnHeaders" >
+				<headerToolbar>
+					<Toolbar>
+						<ToolbarSpacer/>
+						<SearchField id="CustSearch"  liveChange="handleSearch"  placeholder="{i18n>cust}"/>
+					</Toolbar>
+				</headerToolbar>
+				<columns>
+					<Column hAlign="Begin" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" >
+						<Text text="{i18n>cust}"/>
+					</Column>
+				</columns>
+				<items>
+					<ColumnListItem>
+						<cells>
+							<ObjectIdentifier title="{CUSTOMER_GROUP}" text="{CUSTOMER_DESC}"/>
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+		</content>
+		<!-- <beginButton>
+			<Button type='Accept' text="{i18n>submit}" press="handleSelection"></Button>
+		</beginButton> -->
+		<endButton>
+			<Button type='Reject' text="{i18n>close}" press="handleClose"></Button>
+		</endButton>
+	</Dialog>
 </core:FragmentDefinition>

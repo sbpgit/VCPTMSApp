@@ -16,6 +16,9 @@ xmlns:l="sap.ui.layout"
 					<Label text="{i18n>prod}"/>
 					<Input id="idProduct" value="" width="90%" editable="false" />
 
+					<Label text="{i18n>cust}"/>
+					<Input id="idCust" value="" width="90%" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
+
 					<Label text="{i18n>uniqid}"/>
 					<Input id="idUniq" value="" width="90%" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
 

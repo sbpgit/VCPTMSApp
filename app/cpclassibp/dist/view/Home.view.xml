@@ -1,0 +1,92 @@
+<mvc:View controllerName="cpapp.cpclassibp.controller.Home" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core" displayBlock="true" xmlns="sap.m" xmlns:m="sap.m" xmlns:l="sap.ui.layout" xmlns:ux="sap.uxap" xmlns:f="sap.ui.layout.form" xmlns:html="http://www.w3.org/1999/xhtml">
+    <ux:ObjectPageLayout id="ObjectPageLayout">
+        <ux:headerTitle>
+            <ux:ObjectPageDynamicHeaderTitle>
+                <ux:expandedHeading>
+                    <HBox>
+                        <Title text="{i18n>title}" class="boldText" titleAlignment="Center" wrapping="true" />
+                        <Button class="hdrBtnMarginHdr" type="Emphasized" icon="sap-icon://sys-help" press="onNavPress" tooltip="Help Document" id="nav2" />
+                    </HBox>
+                </ux:expandedHeading>
+                <ux:snappedHeading>
+                    <HBox fitContainer="true" alignItems="Center">
+                        <Title text="{i18n>title}" wrapping="true" />
+                        <Button class="hdrBtnMarginHdr" type="Emphasized" icon="sap-icon://sys-help" press="onNavPress" tooltip="Help Document" id="nav" />
+                    </HBox>
+                </ux:snappedHeading>
+            </ux:ObjectPageDynamicHeaderTitle>
+        </ux:headerTitle>
+        <!-- <ux:headerContent>
+            <FlexBox wrap="Wrap" fitContainer="true">
+                <l:Grid defaultSpan="XL3 L3 M6 S12">
+                    <VBox>
+                        <Label text="" />
+                        <SearchField id="headSearch" liveChange="handleSearch" placeholder="Unique ID/ Seed Order" />
+                    </VBox>
+                    <VBox>
+                        <Label text="Class Name" required="true" />
+                        <Input id="idclname" value="" placeholder="Class Name" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+                    </VBox>
+                    <VBox>
+                        <Label text="" />
+                        <HBox>
+                            <Button text="Go" type="Emphasized" press="onGetData" tooltip="Get data based on filters" class="sapUiTinyMarginEnd" />
+                        </HBox>
+                    </VBox>
+                </l:Grid>
+            </FlexBox>
+        </ux:headerContent> -->
+        <ux:sections>
+            <ux:ObjectPageSection>
+                <ux:subSections>
+                    <ux:ObjectPageSubSection>
+                        <ux:blocks>
+                            <Table id="classList" items="{path: '/results'}" growingScrollToLoad="true" mode="SingleSelectMaster"  rememberSelections="false">
+                                <headerToolbar>
+                                    <Toolbar>
+                                        <content>
+                                            <ToolbarSpacer />
+                                            
+                                            <SearchField id="classSearch" liveChange="handleSearch" width= "30%" placeholder="Class Name/ Class Desc" />
+                                            <Button id="idCreate" type='Ghost' text="Update IBP Char." press="onClassUpdate" />
+                                        </content>
+                                    </Toolbar>
+                                </headerToolbar>
+                                <columns>
+                                
+                                    <Column hAlign="Left" vAlign="Middle" visible="false">
+                                        <Text text="Class Num" />
+                                    </Column>
+                                    <Column hAlign="Left" vAlign="Middle" >
+                                        <Text text="Class Name" />
+                                    </Column>
+                                    <Column hAlign="Left" vAlign="Middle" >
+                                        <Text text="Class Desc." />
+                                    </Column>
+
+                                    <Column hAlign="Left" vAlign="Middle">
+                                        <Text text="Class Type" />
+                                    </Column>
+                                    <Column hAlign="Left" vAlign="Middle">
+                                        <Text text="IBP Char." />
+                                    </Column>
+                                </columns>
+                                <items>
+                                    <ColumnListItem>
+                                        <cells>
+                                            <Text text="{CLASS_NUM}" />
+                                            <Text text="{CLASS_NAME}" />
+                                            <Text text="{CLASS_DESC}" />
+                                            <Text text="{CLASS_TYPE}" />
+                                            <CheckBox selected="{IBPCHAR_CHK}"  />
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
+                            </Table>
+                        </ux:blocks>
+                    </ux:ObjectPageSubSection>
+                </ux:subSections>
+            </ux:ObjectPageSection>
+        </ux:sections>
+    </ux:ObjectPageLayout>
+</mvc:View>
