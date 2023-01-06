@@ -13,7 +13,7 @@
 >
     <Page id="_IDGenUPage1" showHeader="false" showFooter="true" enableScrolling="false">
         <content>
-            <ux:ObjectPageLayout id="idObjectPageLayoutU" headerContentPinned="true" toggleAnchorBar="onChangeHeaderPinStatus" showTitleInHeaderContent="true" showEditHeaderButton="true" preserveHeaderStateOnScroll="true">
+            <ux:ObjectPageLayout id="idObjectPageLayoutU" headerContentPinned="true" toggleAnchorBar="onChangeHeaderPinStatusU" showTitleInHeaderContent="true" showEditHeaderButton="true" preserveHeaderStateOnScroll="true">
                 <ux:headerTitle>
                     <ux:ObjectPageDynamicHeaderTitle id="_IDGenUObjectPageDynamicHeaderTitle1">
                         <ux:expandedHeading>
@@ -27,7 +27,7 @@
                 </ux:headerTitle>
                 <ux:headerContent>
                     <FlexBox id="_IDGenUFlexBox2" wrap="Wrap" fitContainer="true">
-                        <l:Grid id="_IDGenUGrid1" defaultSpan="XL4 L4 M6 S12" width="100%" class="sapUiRespGridOverflowHidden">
+                        <l:Grid id="_IDGenUGrid1" defaultSpan="XL3 L3 M6 S12" width="100%" class="sapUiRespGridOverflowHidden">
                             <!-- <VBox id="_IDGenUVBox1">
                                 <Label id="_IDGenULabel1" text="" />
                                 <SearchField id="idSearchU" liveChange="onSearchUniqueChar" placeholder="Characteristic" />
@@ -37,45 +37,53 @@
                                 <Input id="idlocU" value="" placeholder="Location" enabled="false" />
                             </VBox>
                             <VBox id="_IDGenUVBox3">
-                                <Label id="_IDGenULabel3" text="Configurable Product" required="true" />
-                                <Input id="idprodListU" placeholder="Configurable Product" enabled="false" />
+                                <Label id="_IDGenULabel3" text="Product" required="true" />
+                                <Input id="idprodListU" placeholder="Product" enabled="false" />
                             </VBox>
                             <VBox id="_IDGenUVBox4">
                                 <Label id="_IDGenULabel4" text="Unique Id" required="true" />
                                 <Input id="idUniqueId" placeholder="Unique Id" enabled="false" />
                             </VBox>
-                            <VBox id="_IDGenUVBox5">
-                                <Label id="_IDGenULabel5" text="Filter Type" required="true" />
-                                <Select id="_IDGenUSelect" selectedKey="NE" width="100%" change="onFilterSelectionChange">
-                                    
-                                    <core:Item key="NE" text="Not Equals" />
-                                    <core:Item key="EQ" text="Equals" />
-                                    
+
+                            <VBox id="_IDGenUVBox7">
+                                <Label id="_IDGenULabel7" text="Week Date" required="true" />
+                                <Select id="_IDWeekDtSel" forceSelection="false" change="onChangeWeekDate" items="{
+						            path: '/weeks'
+					            }">
+                                    <core:Item key="{WEEK_DATE}" text="{WEEK_INDEX}" />
                                 </Select>
                             </VBox>
-                            <VBox id="_IDGenUVBox6">
-                                <Label id="_IDGenULabel6" text="Characteristics" required="true" />
 
-                                <MultiComboBox
-                                    id="idUniqueCharDetailsU"
-                                    showSelectAll="true"
-                                    showSecondaryValues="true"
-                                    selectionFinish="onCharacteristicSelFinish"
-                                    items="{
+                            <VBox id="_IDGenUVBox5">
+                                <Label id="_IDGenULabel5" text="Filter Type (Equals)" required="true" />
+                                <MultiComboBox id="idUniqueCharDetailsEQ" showSelectAll="true" showSecondaryValues="true" 
+                                              selectionChange = "onEQSelectionChange"
+                                             items="{
 				                            path: '/charDetails',
 				                            sorter: { path: 'CHAR_NAME' }
-			                                        }"
-                                >
+			                                        }">
                                     <core:ListItem key="{CHAR_NUM}:{CHARVAL_NUM}" text="{CHAR_DESC} - {CHAR_NAME}" additionalText="{CHARVAL_DESC} - {CHAR_VALUE}" />
                                 </MultiComboBox>
                             </VBox>
-                            <!-- <VBox>
+                            <VBox id="_IDGenUVBox6">
+                                <Label id="_IDGenULabel6" text="Filter Type (Not Equals)" required="true" />
+
+                                <MultiComboBox id="idUniqueCharDetailsNEQ" showSelectAll="true" showSecondaryValues="true" 
+                                          selectionChange = "onNEQSelectionChange"
+                                          items="{
+				                            path: '/charDetails',
+				                            sorter: { path: 'CHAR_NAME' }
+			                                        }">
+                                    <core:ListItem key="{CHAR_NUM}:{CHARVAL_NUM}" text="{CHAR_DESC} - {CHAR_NAME}" additionalText="{CHARVAL_DESC} - {CHAR_VALUE}" />
+                                </MultiComboBox>
+                            </VBox>
+                            <VBox>
                                 <Label text="" />
                                 <HBox id="_IDGenUHBox1">
                                     <Button id="_IDGenUButton1" text="Go" type="Emphasized" press="onFilterData" tooltip="Get data based on filters" />
                                     <Button id="_IDGenUButton2" text="Reset" type="Transparent" press="onResetFilters" tooltip="Reset filters and Data" />
                                 </HBox>
-                            </VBox> -->
+                            </VBox>
                         </l:Grid>
                     </FlexBox>
                 </ux:headerContent>
@@ -85,6 +93,14 @@
                             <ux:ObjectPageSubSection id="_IDGenUObjectPageSubSection1" mode="Expanded" class="sapUiNoMargin">
                                 <ux:blocks>
                                     <VBox id="_IDGenUVBox9" class="sapUiNoMargin">
+                                        <Toolbar>
+                                            <ToolbarSpacer />
+                                            <RadioButtonGroup id="idRBGChars" columns="3" valueState="Information" select="onSelectRBCharFilter">
+                                                <RadioButton id="idAllChars" text="All" selected="true" />
+                                                <RadioButton id="idMatchd" text="Matched" />
+                                                <RadioButton id="idUnMatchd" text="UnMatched" />
+                                            </RadioButtonGroup>
+                                        </Toolbar>
                                         <t:Table id="idUniqueIdChars" class="table" fixedColumnCount="2" selectionMode="None" alternateRowColors="true" enableSelectAll="false" visibleRowCount="8">
                                             <t:columns />
                                         </t:Table>

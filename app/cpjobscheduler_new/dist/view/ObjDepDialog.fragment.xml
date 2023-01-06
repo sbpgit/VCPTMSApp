@@ -1,7 +1,0 @@
-<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
-	<SelectDialog id="odSlctList" title="{i18n>objdep}" rememberSelections="true" search="handleSearch" liveChange="handleSearch"
-		confirm="handleSelection" cancel="handleClose" multiSelect="true" contentWidth="320px" items="{/results}" 
-        selectionChange="handleObjDepChange" growing="false">
-		<StandardListItem title="{OBJ_DEP}" description="{PRODUCT_ID}" info="{LOCATION_ID}" type="Active"/>
-	</SelectDialog>
-</core:FragmentDefinition>

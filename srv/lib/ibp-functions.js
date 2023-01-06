@@ -33,15 +33,23 @@ class IBPFunctions {
                         FROM V_IBP_SALESHCONFIG_VC
                         WHERE LOCATION_ID = '`+ req.LOCATION_ID + `'
                            AND PRODUCT_ID = '`+ req.PRODUCT_ID + `'
-                           AND IBPCHAR_CHK = 'X'`);
+                           AND IBPCHAR_CHK = true
+                        ORDER BY "WEEK_DATE"`);
         // `' AND CUSTOMER_GROUP = '` + req.data.CUSTOMER_GROUP +e
+        const lsProduct = await SELECT.one
+            .columns('REF_PRODID')
+            .from('CP_PARTIALPROD_INTRO')
+            .where(`LOCATION_ID = '${req.LOCATION_ID}'
+                    AND PRODUCT_ID = '${req.PRODUCT_ID}'`);
+
         const liProdChar = await cds.run(`
                                 SELECT PRODUCT_ID,
                                        CLASS_NUM,
                                        CHAR_NUM,
                                        CHARVAL_NUM
                             FROM  V_PRODCLSCHARVAL 
-                            WHERE IBPCHAR_CHK = 'X'
+                            WHERE PRODUCT_ID = '${lsProduct.REF_PRODID}'
+                            AND IBPCHAR_CHK = true
         `);
         let liDates = imDates;
         let vDemd, vAdjqty, vWeekDate, lSuccess = '';
@@ -49,11 +57,15 @@ class IBPFunctions {
         for (let iDate = 0; iDate < liDates.length; iDate++) {
             for (let iCust = 0; iCust < liCust.length; iCust++) {
                 for (let iPrdc = 0; iPrdc < liProdChar.length; iPrdc++) {
+                    lSuccess = '';
                     for (let i = 0; i < lisales.length; i++) {
                         vDemd = "", vAdjqty = "", vWeekDate = "";
                         if (liDates[iDate].WEEK_DATE === lisales[i].WEEK_DATE &&
                             liCust[iCust].CUSTOMER_GROUP === lisales[i].CUSTOMER_GROUP &&
-                            liProdChar[iPrdc].PRODUCT_ID === lisales[i].REF_PRODID) {
+                            liProdChar[iPrdc].PRODUCT_ID === lisales[i].REF_PRODID &&
+                            liProdChar[iPrdc].CLASS_NUM === lisales[i].CLASS_NUM &&
+                            liProdChar[iPrdc].CHAR_NUM === lisales[i].CHAR_NUM &&
+                            liProdChar[iPrdc].CHARVAL_NUM === lisales[i].CHARVAL_NUM) {
                             // Week data in Datetime and quantities in String
                             vWeekDate = new Date(lisales[i].WEEK_DATE).toISOString().split('Z');
                             vDemd = lisales[i].ORD_QTY.split('.');
@@ -71,28 +83,27 @@ class IBPFunctions {
                             };
                             oReq.sales.push(vsales);
                             lSuccess = 'X';
+                            break;
                         }
                     }
                     if (lSuccess === '') {
-                        for (let iPrdct = 0; iPrdct < liProdCharTemp.length; iPrdct++) {
-                            if (liProdChar[iPrdc].PRODUCT_ID === liProdCharTemp[iPrdct].PRODUCT_ID) {
-                                vWeekDate = new Date(liDates[iDate].WEEK_DATE).toISOString().split('Z');
-                                vDemd = "-1";
-                                vAdjqty = "-2";
-                                vsales = {
-                                    "LOCID": req.LOCATION_ID,
-                                    "PRDID": liProdChar[iPrdc].PRODUCT_ID,
-                                    "VCCHAR": liProdCharTemp[iPrdct].CHAR_NUM,
-                                    "VCCHARVALUE": liProdCharTemp[iPrdct].CHARVAL_NUM,
-                                    "VCCLASS": liProdCharTemp[iPrdct].CLASS_NUM,
-                                    "ACTUALDEMANDVC": vDemd,
-                                    "SEEDORDERDEMANDVC": vAdjqty,
-                                    "CUSTID": lisales[i].CUSTOMER_GROUP,
-                                    "PERIODID0_TSTAMP": vWeekDate[0]
-                                };
-                                oReq.sales.push(vsales);
-                            }
-                        }
+                        // for (let iPrdct = 0; iPrdct < liProdChar.length; iPrdct++) {
+                        vWeekDate = new Date(liDates[iDate].WEEK_DATE).toISOString().split('Z');
+                        vDemd = "-1";
+                        vAdjqty = "-2";
+                        vsales = {
+                            "LOCID": req.LOCATION_ID,
+                            "PRDID": req.PRODUCT_ID,
+                            "VCCHAR": liProdChar[iPrdc].CHAR_NUM,
+                            "VCCHARVALUE": liProdChar[iPrdc].CHARVAL_NUM,
+                            "VCCLASS": liProdChar[iPrdc].CLASS_NUM,
+                            "ACTUALDEMANDVC": vDemd,
+                            "SEEDORDERDEMANDVC": vAdjqty,
+                            "CUSTID": liCust[iCust].CUSTOMER_GROUP,
+                            "PERIODID0_TSTAMP": vWeekDate[0]
+                        };
+                        oReq.sales.push(vsales);
+                        // }
                     }
                 }
             }
@@ -294,8 +305,15 @@ class IBPFunctions {
             liDates = [];
         var vDateSeries = lFromDate;
         lsDates = {};
+
         // Calling function to get the next Sunday date of From date
-        lsDates.WEEK_DATE = lFromDate;
+        let dDate = new Date(vDateSeries);
+        let dDay = dDate.getDay();
+        if (dDay === 1) {
+            lsDates.WEEK_DATE = lFromDate;
+        } else {
+            lsDates.WEEK_DATE = GenF.getNextMondayCmp(vDateSeries);
+        }
         vDateSeries = lsDates.WEEK_DATE;
         liDates.push(lsDates);
         lsDates = {};

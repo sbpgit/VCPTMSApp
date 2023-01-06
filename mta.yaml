@@ -25,7 +25,7 @@ modules:
     - ./node_modules
 - name: config_products-db-deployer
   type: hdb
-  path: gen/db
+  path: db
   requires:
   - name: config_products-db
     properties:
@@ -242,10 +242,6 @@ modules:
     - artifacts:
       - cpappcptimeseriesf.zip
       name: cpappcptimeseriesf
-      target-path: resources/
-    - artifacts:
-      - cpappcpclass.zip
-      name: cpappcpclass
       target-path: resources/
     - artifacts:
       - cpappcpclassibp.zip
@@ -699,16 +695,6 @@ modules:
 - name: cpappcptimeseriesf
   type: html5
   path: app/cptimeseriesf
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    supported-platforms: []
-- name: cpappcpclass
-  type: html5
-  path: app/cpclass
   build-parameters:
     build-result: dist
     builder: custom

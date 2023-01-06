@@ -62,7 +62,7 @@ steps:
     mtaDeployParameters: "-f --version-rule ALL"
 
   tmsUpload:
-    nodeName: "SBP_DEV"
+    nodeName: "SBP_TEST"
     credentialId: "tmskey"
 
 
