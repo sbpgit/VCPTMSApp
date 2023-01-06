@@ -244,10 +244,6 @@ modules:
       name: cpappcptimeseriesf
       target-path: resources/
     - artifacts:
-      - cpappcpclass.zip
-      name: cpappcpclass
-      target-path: resources/
-    - artifacts:
       - cpappcpclassibp.zip
       name: cpappcpclassibp
       target-path: resources/
@@ -699,16 +695,6 @@ modules:
 - name: cpappcptimeseriesf
   type: html5
   path: app/cptimeseriesf
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    supported-platforms: []
-- name: cpappcpclass
-  type: html5
-  path: app/cpclass
   build-parameters:
     build-result: dist
     builder: custom

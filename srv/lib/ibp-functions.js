@@ -57,6 +57,7 @@ class IBPFunctions {
         for (let iDate = 0; iDate < liDates.length; iDate++) {
             for (let iCust = 0; iCust < liCust.length; iCust++) {
                 for (let iPrdc = 0; iPrdc < liProdChar.length; iPrdc++) {
+                    lSuccess = '';
                     for (let i = 0; i < lisales.length; i++) {
                         vDemd = "", vAdjqty = "", vWeekDate = "";
                         if (liDates[iDate].WEEK_DATE === lisales[i].WEEK_DATE &&
