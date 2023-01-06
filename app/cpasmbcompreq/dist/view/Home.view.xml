@@ -37,6 +37,10 @@
                 <Label text="Location" required="true"/>
                 <Input id="idloc" value=""  placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
             </VBox>
+            <!-- <VBox >
+                <Label text="Demand Location"/>
+                <Input id="idDemdloc" value=""  placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+            </VBox> -->
             <VBox >
                 <Label text="Configurable Product" required="true"/>
                 <Input id="idprod"  placeholder="Configurable Product" value="" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp"/>
@@ -69,6 +73,10 @@
                 </Select>
             </VBox>
             <VBox >
+                <Label text="Demand Location"/>
+                <MultiInput id="idDemdloc" value=""  placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
+            </VBox>
+            <VBox >
             <CheckBox id="idCheck1" select="onNonZero" text="Get Non-Zero" selected="true" />
             </VBox>
             <VBox>
@@ -92,7 +100,7 @@
                     <ux:ObjectPageSubSection>
                         <ux:blocks>
             
-            <t:Table id="idCompReq" fixedColumnCount="1" selectionMode="Single" alternateRowColors="true" enableSelectAll="false" visibleRowCount="10">
+            <t:Table id="idCompReq" fixedColumnCount="2" selectionMode="Single" alternateRowColors="true" enableSelectAll="false" visibleRowCount="10">
                 <t:columns>
                 </t:columns>
             </t:Table>

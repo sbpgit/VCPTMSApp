@@ -114,6 +114,8 @@ sap.ui.define(
                     );
                     this.getView().addDependent(this._valueHelpDialogClassDetails);
                 }
+                that.oGModel = this.getModel("oGModel");
+                that.oGModel.setProperty("/CurSel","");
             },
 
             /**
@@ -190,8 +192,30 @@ sap.ui.define(
                 this.getModel("BModel").read("/getLocation", {
                     success: function (oData) {
                         sap.ui.core.BusyIndicator.hide();
-                        that.locModel.setData(oData);
-                        that.oLocList.setModel(that.locModel);
+                        // that.locModel.setData(oData);
+                        // that.oLocList.setModel(that.locModel);
+                        that.LocData = oData.results;
+                    },
+                    error: function (oData, error) {
+                        sap.ui.core.BusyIndicator.hide();
+                        MessageToast.show("error");
+                    },
+                });
+
+                this.getModel("BModel").read("/getfactorylocdesc", {
+                    success: function (oData) {
+                        function removeDuplicate(array, key) {
+                            var check = new Set();
+                            return array.filter(obj => !check.has(obj[key]) && check.add(obj[key]));
+                        }
+                        oData.results = removeDuplicate(oData.results, 'FACTORY_LOC');
+
+                        that.FLocData = oData.results;
+                        // that.locModel.setData({
+                        //     Locitems: that.FLocData
+                        // });
+                        // that.oLocList.setModel(that.locModel);
+                        sap.ui.core.BusyIndicator.hide();
                     },
                     error: function (oData, error) {
                         sap.ui.core.BusyIndicator.hide();
@@ -343,6 +367,10 @@ sap.ui.define(
             onJobSelect: function (oEvent) {
                 var oSelJob;
                 var continueFlag = "X";
+                oGModel.setProperty("/PreSel", oGModel.getProperty("/CurSel"));
+                var oSelJob = that.byId("idJobType").getSelectedKey();
+                oGModel.setProperty("/CurSel", oSelJob);
+
                 // Checking for the schedule update or create new schedule or creating new job
                 if (that.oGModel.getProperty("/newSch") === "X") {
                     oSelJob = that.oGModel.getProperty("/JobType");
@@ -661,6 +689,24 @@ sap.ui.define(
 
                 // Location Dialog
                 if (sId.includes("loc")) {
+                    var PreSel = oGModel.getProperty("/PreSel"),
+                        CurSel = oGModel.getProperty("/CurSel");
+
+                    if (PreSel === "PF" || CurSel === "PF") {
+                        if (CurSel === "PF") {
+                            that.locModel.setData({
+                                Locitems: that.FLocData
+                            });
+                            that.oLocList.setModel(that.locModel);
+                        } else if (CurSel !== "PF") {
+                            that.locModel.setData({
+                                Locitems: that.LocData
+                            });
+                            that.oLocList.setModel(that.locModel);
+                        }
+
+                    }
+
                     this._valueHelpDialogLoc.open();
                     // Product Dialog
                 } else if (sId.includes("prod")) {
@@ -2763,7 +2809,8 @@ sap.ui.define(
                 if (oProdItems && this.oVer.getValue() && oDateRng) {
                     vRuleslist = {
                         LOCATION_ID: oLocItem,
-                        PRODUCT_ID: oProdItems,
+                        // PRODUCT_ID: oProdItems,
+                        REF_PRODID : oProdItems,
                         MODEL_VERSION: oSelModelVer,
                         VERSION: oSelVer,
                         SCENARIO: oSelScen,
