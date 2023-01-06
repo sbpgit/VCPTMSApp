@@ -1973,4 +1973,8 @@ module.exports = cds.service.impl(async function () {
 
         // GetExportResult
     });
+    
+    this.on("importChngelogMktAuth", async (req) => {
+        
+    });
 });
