@@ -1059,10 +1059,10 @@ entity![V_LOCPROD]{
 entity![V_FACTORYLOC]{
     key![FACTORY_LOC]   : String(4)  @title : 'Factory Location ';
     key![PLAN_LOC]      : String(4)  @title : 'Planning Location ';
-    key![Demand_Loc]    : String(4)  @title : 'Demand Location ';
+    key![DEMAND_LOC]    : String(4)  @title : 'Demand Location ';
     key![PRODUCT_ID]    : String(40) @title : 'Product';
     key![LOCATION_DESC] : String(40) @title : 'Location Description';
-    key![LOCATION_ID]   : String(4)  @title : 'Location ';
+    // key![LOCATION_ID]   : String(4)  @title : 'Location ';
 }
 
 @cds.persistence.exists
