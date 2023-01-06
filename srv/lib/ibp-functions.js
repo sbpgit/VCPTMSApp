@@ -56,51 +56,56 @@ class IBPFunctions {
         let liProdCharTemp = liProdChar;
         for (let iDate = 0; iDate < liDates.length; iDate++) {
             for (let iCust = 0; iCust < liCust.length; iCust++) {
-                // for (let iPrdc = 0; iPrdc < liProdChar.length; iPrdc++) {
-                for (let i = 0; i < lisales.length; i++) {
-                    vDemd = "", vAdjqty = "", vWeekDate = "";
-                    if (liDates[iDate].WEEK_DATE === lisales[i].WEEK_DATE &&
-                        liCust[iCust].CUSTOMER_GROUP === lisales[i].CUSTOMER_GROUP) { //&&
-                        // liProdChar[iPrdc].PRODUCT_ID === lisales[i].REF_PRODID) {
-                        // Week data in Datetime and quantities in String
-                        vWeekDate = new Date(lisales[i].WEEK_DATE).toISOString().split('Z');
-                        vDemd = lisales[i].ORD_QTY.split('.');
-                        vAdjqty = lisales[i].ADJ_QTY.split('.');
-                        vsales = {
-                            "LOCID": lisales[i].LOCATION_ID,
-                            "PRDID": lisales[i].PRODUCT_ID,
-                            "VCCHAR": lisales[i].CHAR_NUM,
-                            "VCCHARVALUE": lisales[i].CHARVAL_NUM,
-                            "VCCLASS": lisales[i].CLASS_NUM,
-                            "ACTUALDEMANDVC": vDemd[0],
-                            "SEEDORDERDEMANDVC": vAdjqty[0],
-                            "CUSTID": lisales[i].CUSTOMER_GROUP,
-                            "PERIODID0_TSTAMP": vWeekDate[0]
-                        };
-                        oReq.sales.push(vsales);
-                        lSuccess = 'X';
+                for (let iPrdc = 0; iPrdc < liProdChar.length; iPrdc++) {
+                    lSuccess = '';
+                    for (let i = 0; i < lisales.length; i++) {
+                        vDemd = "", vAdjqty = "", vWeekDate = "";
+                        if (liDates[iDate].WEEK_DATE === lisales[i].WEEK_DATE &&
+                            liCust[iCust].CUSTOMER_GROUP === lisales[i].CUSTOMER_GROUP &&
+                            liProdChar[iPrdc].PRODUCT_ID === lisales[i].REF_PRODID &&
+                            liProdChar[iPrdc].CLASS_NUM === lisales[i].CLASS_NUM &&
+                            liProdChar[iPrdc].CHAR_NUM === lisales[i].CHAR_NUM &&
+                            liProdChar[iPrdc].CHARVAL_NUM === lisales[i].CHARVAL_NUM) {
+                            // Week data in Datetime and quantities in String
+                            vWeekDate = new Date(lisales[i].WEEK_DATE).toISOString().split('Z');
+                            vDemd = lisales[i].ORD_QTY.split('.');
+                            vAdjqty = lisales[i].ADJ_QTY.split('.');
+                            vsales = {
+                                "LOCID": lisales[i].LOCATION_ID,
+                                "PRDID": lisales[i].PRODUCT_ID,
+                                "VCCHAR": lisales[i].CHAR_NUM,
+                                "VCCHARVALUE": lisales[i].CHARVAL_NUM,
+                                "VCCLASS": lisales[i].CLASS_NUM,
+                                "ACTUALDEMANDVC": vDemd[0],
+                                "SEEDORDERDEMANDVC": vAdjqty[0],
+                                "CUSTID": lisales[i].CUSTOMER_GROUP,
+                                "PERIODID0_TSTAMP": vWeekDate[0]
+                            };
+                            oReq.sales.push(vsales);
+                            lSuccess = 'X';
+                            break;
+                        }
                     }
-                }
-                if (lSuccess === '') {
-                    for (let iPrdct = 0; iPrdct < liProdChar.length; iPrdct++) {
+                    if (lSuccess === '') {
+                        // for (let iPrdct = 0; iPrdct < liProdChar.length; iPrdct++) {
                         vWeekDate = new Date(liDates[iDate].WEEK_DATE).toISOString().split('Z');
                         vDemd = "-1";
                         vAdjqty = "-2";
                         vsales = {
                             "LOCID": req.LOCATION_ID,
                             "PRDID": req.PRODUCT_ID,
-                            "VCCHAR": liProdChar[iPrdct].CHAR_NUM,
-                            "VCCHARVALUE": liProdChar[iPrdct].CHARVAL_NUM,
-                            "VCCLASS": liProdChar[iPrdct].CLASS_NUM,
+                            "VCCHAR": liProdChar[iPrdc].CHAR_NUM,
+                            "VCCHARVALUE": liProdChar[iPrdc].CHARVAL_NUM,
+                            "VCCLASS": liProdChar[iPrdc].CLASS_NUM,
                             "ACTUALDEMANDVC": vDemd,
                             "SEEDORDERDEMANDVC": vAdjqty,
                             "CUSTID": liCust[iCust].CUSTOMER_GROUP,
                             "PERIODID0_TSTAMP": vWeekDate[0]
                         };
                         oReq.sales.push(vsales);
+                        // }
                     }
                 }
-                // }
             }
         }
         return oReq;
