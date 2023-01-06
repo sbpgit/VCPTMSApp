@@ -10,9 +10,9 @@
     height: auto;
 }
 
-.tableScroll .sapUiTableVSb {
+/* .tableScroll .sapUiTableVSb {
     overflow-y: hidden;
-}
+} */
 .hdrBtnMarginHdr {
   margin-left :1rem;
 
