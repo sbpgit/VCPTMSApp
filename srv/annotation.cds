@@ -1719,6 +1719,7 @@ annotate service.FACTORY_SALESLOC with @(
         SelectionFields         : [
             LOCATION_ID
         ],
+        
         LineItem                : [
             {
                 $Type : 'UI.DataField',
@@ -1748,8 +1749,8 @@ annotate service.FACTORY_SALESLOC with @(
         HeaderInfo              : {
             Title          : {Value : LOCATION_ID},
             Description    : {Value : LOCATION_ID},
-            TypeName       : 'Demand - Plan - Factory Location',
-            TypeNamePlural : 'Demand - Plan - Factory Location-Product',
+            TypeName       : 'Demand, Planning , Factory Location w.r.t Product',
+            TypeNamePlural : 'Demand, Planning , Factory Location w.r.t Product',
         },
         // HeaderFacets            : [{
         //     $Type             : 'UI.ReferenceFacet',
@@ -1776,10 +1777,10 @@ annotate service.FACTORY_SALESLOC with @(
     UI.Facets : [{
         $Type  : 'UI.CollectionFacet',
         ID     : 'FactoryLocation',
-        Label  : 'Demand - Plan - Factory Location',
+        Label  : 'Demand, Planning , Factory Location w.r.t Product',
         Facets : [{
             $Type  : 'UI.ReferenceFacet',
-            Label  : 'Demand - Plan - Factory Location',
+            Label  : 'Demand, Planning , Factory Location w.r.t Product Details',
             Target : '@UI.FieldGroup#Details'
         }]
     }]

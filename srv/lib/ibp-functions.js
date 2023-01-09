@@ -347,7 +347,7 @@ class IBPFunctions {
         const servicePost = await cds.connect.to('IBPMasterDataAPI');
         // Get Planning area and Prefix configurations for IBP
         let liParaValue = await GenF.getIBPParameterValue();
-        let flag, lMessage = '', vScenario;
+        let flag, lSuccess = '', vScenario;
         let resUrl = "/" + liParaValue[0].VALUE + "?$select=VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$inlinecount=allpages";
         let req = await service.tx(request).get(resUrl);
         if (req.length) {
@@ -367,15 +367,59 @@ class IBPFunctions {
                 "'" + req[i].SCENARIONAME + "'" + ')';
             try {
                 await cds.run(modQuery);
-                flag = 'S';
+                lSuccess = 'S';
             }
             catch (err) {
+                lSuccess = 'E';
                 console.log(err);
             }
         }
-        return "S";
+        return lSuccess;
     }
+    /**
+     * 
+     * @param {Request} request 
+     */
+     async importCompAvail(request) {
 
+        const service = await cds.connect.to('IBPDemandsrv');
+        // Get Planning area and Prefix configurations for IBP
+        // let liParaValue = await GenF.getIBPParameterValue();
+        // let lSuccess = '', vScenario, vToDate, vFromDate,resUrl, req;
+
+        // vToDate = new Date();
+        // vToDate = vToDate.getFullYear().toString()+vToDate.getMonth().toString()+vToDate.getDate().toString()+"235959";
+
+        // vFromDate = new Date();
+        // vFromDate.setDate(vFromDate.getDate() - 7);
+        // resUrl = "/" + liParaValue[0].VALUE + "?$select=PERIODID4_TSTAMP,PRDID,LOCID,CUMCOMPONENTAVAILABILITY,VERSIONID,VERSIONNAME,SCENARIOID,SCENARIONAME&$filter=PERIODID4_TSTAMP gt datetime'2023-01-01T00:00:00' and PERIODID4_TSTAMP lt datetime'2023-12-30T00:00:00' and UOMTOID eq 'EA' and CUMCOMPONENTAVAILABILITY gt 0&$inlinecount=allpages";
+        // req = await service.tx(request).get(resUrl);
+        // if (req.length) {
+        //     await DELETE.from('CP_IBPVERSIONSCENARIO');
+        // }
+        // for (let i in req) {
+        //     if (req[i].SCENARIOID === '' || req[i].SCENARIOID === null) {
+        //         vScenario = '_PLAN';
+        //     }
+        //     else {
+        //         vScenario = req[i].SCENARIOID; //'BSL_SCENARIO';
+        //     }
+        //     let modQuery = 'INSERT INTO "CP_IBPVERSIONSCENARIO" VALUES (' +
+        //         "'" + req[i].VERSIONID + "'" + "," +
+        //         "'" + vScenario + "'" + "," +
+        //         "'" + req[i].VERSIONNAME + "'" + "," +
+        //         "'" + req[i].SCENARIONAME + "'" + ')';
+        //     try {
+        //         await cds.run(modQuery);
+        //         lSuccess = 'S';
+        //     }
+        //     catch (err) {
+        //         lSuccess = 'E';
+        //         console.log(err);
+        //     }
+        // }
+        return lSuccess;
+    }
 }
 
 module.exports = IBPFunctions;

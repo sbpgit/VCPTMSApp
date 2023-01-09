@@ -1307,6 +1307,7 @@ module.exports = (srv) => {
             lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
             const obgenTimeseriesM2 = new GenTimeseriesM2();
             await obgenTimeseriesM2.genPrediction(lsData, req, Flag);
+            // await obgenTimeseriesM2.consumeFO(lsData,req);
         }
     });
     // Generate Fully Configured Demand
@@ -1320,6 +1321,7 @@ module.exports = (srv) => {
         //     lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
         const obgenTimeseriesM2 = new GenTimeseriesM2();
         await obgenTimeseriesM2.genPrediction(req.data, req, '');
+        // await obgenTimeseriesM2.consumeFO(lsData,req);
         // }
     });
 
@@ -1544,13 +1546,11 @@ module.exports = (srv) => {
         li_varcharps = await cds.run(
             `SELECT *
             FROM "V_GETVARCHARPS"
-            WHERE "LOCATION_ID" = '` +
-            req.data.LOCATION_ID +
-            `'
-            AND "PRODUCT_ID" = '` +
+            WHERE "PRODUCT_ID" = '` +
             req.data.PRODUCT_ID +
             `'`
         );
+        
         if (req.data.FLAG === 'G' && li_varcharps.length > 0) {
             return li_varcharps;
         }
@@ -1558,19 +1558,16 @@ module.exports = (srv) => {
             const li_locprodclass = await cds.run(
                 `SELECT *
                 FROM "V_LOCPRODCLASSCHAR"
-                WHERE "LOCATION_ID" = '` +
-                req.data.LOCATION_ID +
-                `'
-                AND "PRODUCT_ID" = '` +
+                WHERE "PRODUCT_ID" = '` +
                 req.data.PRODUCT_ID +
-                `' ORDER BY LOCATION_ID, PRODUCT_ID,
+                `' ORDER BY PRODUCT_ID,
                 CHAR_NAME`
             );
             vCount = 1;
             for (i = 0; i < li_locprodclass.length; i++) {
                 vCharFlag = '';
                 lsresults.PRODUCT_ID = li_locprodclass[i].PRODUCT_ID;
-                lsresults.LOCATION_ID = li_locprodclass[i].LOCATION_ID;
+                // lsresults.LOCATION_ID = li_locprodclass[i].LOCATION_ID;
                 lsresults.CHAR_NUM = li_locprodclass[i].CHAR_NUM;
                 lsresults.CHAR_TYPE = 'S';
                 lsresults.SEQUENCE = vCount;
@@ -1604,10 +1601,7 @@ module.exports = (srv) => {
             li_varcharps = await cds.run(
                 `SELECT *
                 FROM "V_GETVARCHARPS"
-                WHERE "LOCATION_ID" = '` +
-                req.data.LOCATION_ID +
-                `'
-                AND "PRODUCT_ID" = '` +
+                WHERE "PRODUCT_ID" = '` +
                 req.data.PRODUCT_ID +
                 `'`
             );
@@ -1621,14 +1615,11 @@ module.exports = (srv) => {
             const li_locprodunique = await cds.run(
                 `SELECT *
                 FROM "CP_UNIQUE_ID_HEADER"
-                WHERE "LOCATION_ID" = '` +
-                req.data.LOCATION_ID +
-                `'
-                AND "PRODUCT_ID" = '` +
+                WHERE "PRODUCT_ID" = '` +
                 req.data.PRODUCT_ID +
                 `' AND "UID_TYPE" = 'P'`
             );
-            lsresults.LOCATION_ID = req.data.LOCATION_ID;
+            // lsresults.LOCATION_ID = req.data.LOCATION_ID;
             lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
             lsresults.UID_TYPE = 'P';
             try {
@@ -1642,8 +1633,7 @@ module.exports = (srv) => {
                     vId = parseInt(li_locprodunique[i].UNIQUE_ID);
                     try {
                         await cds.run(
-                            `DELETE FROM "CP_UNIQUE_ID_ITEM" WHERE "LOCATION_ID" = '` + li_locprodunique[i].LOCATION_ID + `' 
-                                                              AND "PRODUCT_ID" = '`+ li_locprodunique[i].PRODUCT_ID + `'
+                            `DELETE FROM "CP_UNIQUE_ID_ITEM" WHERE "PRODUCT_ID" = '`+ li_locprodunique[i].PRODUCT_ID + `'
                                                               AND "UNIQUE_ID" = `+ vId + ``
                         );
                         vFlag = 'S';
@@ -1655,7 +1645,7 @@ module.exports = (srv) => {
             }
             if (vFlag === 'S') {
                 lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
-                lsresults.LOCATION_ID = req.data.LOCATION_ID;
+                // lsresults.LOCATION_ID = req.data.LOCATION_ID;
                 lsresults.CHAR_NUM = 'SUCCESS';
                 lsresults.CHAR_TYPE = 'S';
                 lsresults.SEQUENCE = vCount;
@@ -1681,10 +1671,7 @@ module.exports = (srv) => {
             li_varcharps = await cds.run(
                 `SELECT *
             FROM "CP_VARCHAR_PS"
-            WHERE "LOCATION_ID" = '` +
-                req.data.LOCATION_ID +
-                `'
-            AND "PRODUCT_ID" = '` +
+            WHERE "PRODUCT_ID" = '` +
                 req.data.PRODUCT_ID +
                 `'
             AND "CHAR_TYPE" = '` +
@@ -1696,10 +1683,7 @@ module.exports = (srv) => {
             li_varcharps = await cds.run(
                 `SELECT *
                 FROM "CP_VARCHAR_PS"
-                WHERE "LOCATION_ID" = '` +
-                req.data.LOCATION_ID +
-                `'
-                AND "PRODUCT_ID" = '` +
+                WHERE "PRODUCT_ID" = '` +
                 req.data.PRODUCT_ID +
                 `'
                 ORDER BY SEQUENCE`
@@ -1709,7 +1693,10 @@ module.exports = (srv) => {
         if (req.data.FLAG === "C") {
             lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
             // lsresults.LOCATION_ID = req.data.LOCATION_ID;
+<<<<<<< HEAD
             lsresults.LOCATION_ID = '';
+=======
+>>>>>>> 9dc1df7e5ae41347004c33cf24743ea4019064a5
             lsresults.CHAR_NUM = req.data.CHAR_NUM;
             lsresults.CHAR_TYPE = req.data.CHAR_TYPE;
             if (req.data.CHAR_TYPE === "P") {
@@ -1728,8 +1715,7 @@ module.exports = (srv) => {
                             CHAR_TYPE: lsresults.CHAR_TYPE,
                             SEQUENCE: lsresults.SEQUENCE
                         })
-                        .where(`LOCATION_ID = '${lsresults.LOCATION_ID}'
-                                          AND PRODUCT_ID = '${lsresults.PRODUCT_ID}'
+                        .where(`PRODUCT_ID = '${lsresults.PRODUCT_ID}'
                                           AND CHAR_NUM = '${lsresults.CHAR_NUM}'`);
 
                     responseMessage = " Creation/Updation successful";
@@ -1748,10 +1734,7 @@ module.exports = (srv) => {
             const liData = await cds.run(
                 `SELECT *
                     FROM "CP_VARCHAR_PS"
-                    WHERE "LOCATION_ID" = '` +
-                req.data.LOCATION_ID +
-                `'
-                    AND "PRODUCT_ID" = '` +
+                    WHERE "PRODUCT_ID" = '` +
                 req.data.PRODUCT_ID +
                 `'
                 ORDER BY SEQUENCE`
@@ -1779,7 +1762,7 @@ module.exports = (srv) => {
                 if (liPrimary.length > 0) {
                     for (let i = 0; i < liPrimary.length; i++) {
                         lsresults.PRODUCT_ID = liPrimary[i].PRODUCT_ID;
-                        lsresults.LOCATION_ID = liPrimary[i].LOCATION_ID;
+                        // lsresults.LOCATION_ID = liPrimary[i].LOCATION_ID;
                         lsresults.CHAR_NUM = liPrimary[i].CHAR_NUM;
                         lsresults.CHAR_TYPE = 'P'
                         if (liPrimary[i].SEQUENCE > req.data.SEQUENCE) {
@@ -1790,8 +1773,7 @@ module.exports = (srv) => {
                                     CHAR_TYPE: lsresults.CHAR_TYPE,
                                     SEQUENCE: lsresults.SEQUENCE
                                 })
-                                .where(`LOCATION_ID = '${lsresults.LOCATION_ID}'
-                                          AND PRODUCT_ID = '${lsresults.PRODUCT_ID}'
+                                .where(`PRODUCT_ID = '${lsresults.PRODUCT_ID}'
                                           AND CHAR_NUM = '${lsresults.CHAR_NUM}'`);
 
                             liresults.push(lsresults);
@@ -1814,7 +1796,7 @@ module.exports = (srv) => {
             liPrimary = v_finalP + 1;
             for (let i = 0; i < li_varcharps.length; i++) {
                 lsresults.PRODUCT_ID = li_varcharps[i].PRODUCT_ID;
-                lsresults.LOCATION_ID = li_varcharps[i].LOCATION_ID;
+                // lsresults.LOCATION_ID = li_varcharps[i].LOCATION_ID;
                 lsresults.CHAR_NUM = li_varcharps[i].CHAR_NUM;
                 lsresults.CHAR_TYPE = 'S' //li_varcharps[i].CHAR_TYPE;
                 // if (li_varcharps[i].SEQUENCE > req.data.SEQUENCE) {
@@ -1825,8 +1807,7 @@ module.exports = (srv) => {
                         CHAR_TYPE: lsresults.CHAR_TYPE,
                         SEQUENCE: lsresults.SEQUENCE
                     })
-                    .where(`LOCATION_ID = '${lsresults.LOCATION_ID}'
-                                          AND PRODUCT_ID = '${lsresults.PRODUCT_ID}'
+                    .where(`PRODUCT_ID = '${lsresults.PRODUCT_ID}'
                                           AND CHAR_NUM = '${lsresults.CHAR_NUM}'`);
 
                 liresults.push(lsresults);
@@ -1848,7 +1829,7 @@ module.exports = (srv) => {
         else if (req.data.FLAG === "E") {
 
             lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
-            lsresults.LOCATION_ID = req.data.LOCATION_ID;
+            // lsresults.LOCATION_ID = req.data.LOCATION_ID;
             lsresults.CHAR_NUM = req.data.CHAR_NUM;
             lsresults.CHAR_TYPE = req.data.CHAR_TYPE;
             lsresults.SEQUENCE = req.data.SEQUENCE;
@@ -1860,8 +1841,7 @@ module.exports = (srv) => {
                             CHAR_TYPE: lsresults.CHAR_TYPE,
                             SEQUENCE: lsresults.SEQUENCE
                         })
-                        .where(`LOCATION_ID = '${lsresults.LOCATION_ID}'
-                                          AND PRODUCT_ID = '${lsresults.PRODUCT_ID}'
+                        .where(`PRODUCT_ID = '${lsresults.PRODUCT_ID}'
                                           AND CHAR_NUM = '${lsresults.CHAR_NUM}'`);
 
                     // await cds.run(INSERT.into("CP_VARCHAR_PS").entries(liresults));
@@ -1888,10 +1868,7 @@ module.exports = (srv) => {
         li_varcharps = await cds.run(
             `SELECT *
             FROM "CP_IBPCHAR_PS"
-            WHERE "LOCATION_ID" = '` +
-            req.data.LOCATION_ID +
-            `'
-            AND "PRODUCT_ID" = '` +
+            WHERE "PRODUCT_ID" = '` +
             req.data.PRODUCT_ID +
             `'
             AND "SEQUENCE" > `+
@@ -1900,7 +1877,7 @@ module.exports = (srv) => {
         );
         if (req.data.FLAG === "C") {
             lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
-            lsresults.LOCATION_ID = req.data.LOCATION_ID;
+            // lsresults.LOCATION_ID = req.data.LOCATION_ID;
             lsresults.CHAR_NUM = req.data.CHAR_NUM;
             lsresults.CHAR_TYPE = req.data.CHAR_TYPE;
             if (req.data.CHAR_TYPE === "S") {
@@ -1918,8 +1895,7 @@ module.exports = (srv) => {
                             CHAR_TYPE: lsresults.CHAR_TYPE,
                             SEQUENCE: lsresults.SEQUENCE
                         })
-                        .where(`LOCATION_ID = '${lsresults.LOCATION_ID}'
-                                          AND PRODUCT_ID = '${lsresults.PRODUCT_ID}'
+                        .where(` PRODUCT_ID = '${lsresults.PRODUCT_ID}'
                                           AND CHAR_NUM = '${lsresults.CHAR_NUM}'`);
 
                     responseMessage = " Creation/Updation successful";
@@ -1935,17 +1911,14 @@ module.exports = (srv) => {
                 li_varcharps = await cds.run(
                     `SELECT *
                     FROM "CP_IBPCHAR_PS"
-                    WHERE "LOCATION_ID" = '` +
-                    req.data.LOCATION_ID +
-                    `'
-                    AND "PRODUCT_ID" = '` +
+                    WHERE "PRODUCT_ID" = '` +
                     req.data.PRODUCT_ID +
                     `'
                     ORDER BY SEQUENCE`
                 );
                 for (let i = 0; i < li_varcharps.length; i++) {
                     lsresults.PRODUCT_ID = li_varcharps[i].PRODUCT_ID;
-                    lsresults.LOCATION_ID = li_varcharps[i].LOCATION_ID;
+                    // lsresults.LOCATION_ID = li_varcharps[i].LOCATION_ID;
                     lsresults.CHAR_NUM = li_varcharps[i].CHAR_NUM;
                     lsresults.CHAR_TYPE = 'P';
                     if (li_varcharps[i].SEQUENCE > req.data.SEQUENCE) {
@@ -1955,8 +1928,7 @@ module.exports = (srv) => {
                                 CHAR_TYPE: lsresults.CHAR_TYPE,
                                 SEQUENCE: lsresults.SEQUENCE
                             })
-                            .where(`LOCATION_ID = '${lsresults.LOCATION_ID}'
-                                          AND PRODUCT_ID = '${lsresults.PRODUCT_ID}'
+                            .where(`PRODUCT_ID = '${lsresults.PRODUCT_ID}'
                                           AND CHAR_NUM = '${lsresults.CHAR_NUM}'`);
 
                         liresults.push(lsresults);
@@ -1970,7 +1942,7 @@ module.exports = (srv) => {
         else if (req.data.FLAG === "E") {
 
             lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
-            lsresults.LOCATION_ID = req.data.LOCATION_ID;
+            // lsresults.LOCATION_ID = req.data.LOCATION_ID;
             lsresults.CHAR_NUM = req.data.CHAR_NUM;
             lsresults.CHAR_TYPE = req.data.CHAR_TYPE;
             lsresults.SEQUENCE = req.data.SEQUENCE;
@@ -1982,8 +1954,7 @@ module.exports = (srv) => {
                             CHAR_TYPE: lsresults.CHAR_TYPE,
                             SEQUENCE: lsresults.SEQUENCE
                         })
-                        .where(`LOCATION_ID = '${lsresults.LOCATION_ID}'
-                                          AND PRODUCT_ID = '${lsresults.PRODUCT_ID}'
+                        .where(`PRODUCT_ID = '${lsresults.PRODUCT_ID}'
                                           AND CHAR_NUM = '${lsresults.CHAR_NUM}'`);
 
                     // await cds.run(INSERT.into("CP_VARCHAR_PS").entries(liresults));
@@ -2007,10 +1978,7 @@ module.exports = (srv) => {
         li_ibpcharps = await cds.run(
             `SELECT *
             FROM "V_GETIBPCHARPS"
-            WHERE "LOCATION_ID" = '` +
-            req.data.LOCATION_ID +
-            `'
-            AND "PRODUCT_ID" = '` +
+            WHERE "PRODUCT_ID" = '` +
             req.data.PRODUCT_ID +
             `'`
         );
@@ -2021,19 +1989,16 @@ module.exports = (srv) => {
             const li_locprodclass = await cds.run(
                 `SELECT *
                 FROM "V_LOCPRODCLASSCHAR"
-                WHERE "LOCATION_ID" = '` +
-                req.data.LOCATION_ID +
-                `'
-                AND "PRODUCT_ID" = '` +
+                WHERE  "PRODUCT_ID" = '` +
                 req.data.PRODUCT_ID +
-                `' ORDER BY LOCATION_ID, PRODUCT_ID,
+                `' ORDER BY PRODUCT_ID,
                 CHAR_NAME`
             );
             vCount = 1;
             for (i = 0; i < li_locprodclass.length; i++) {
                 vCharFlag = '';
                 lsresults.PRODUCT_ID = li_locprodclass[i].PRODUCT_ID;
-                lsresults.LOCATION_ID = li_locprodclass[i].LOCATION_ID;
+                // lsresults.LOCATION_ID = li_locprodclass[i].LOCATION_ID;
                 lsresults.CHAR_NUM = li_locprodclass[i].CHAR_NUM;
                 lsresults.CHAR_TYPE = 'S';
                 lsresults.SEQUENCE = 0;
@@ -2067,10 +2032,7 @@ module.exports = (srv) => {
             li_ibpcharps = await cds.run(
                 `SELECT *
                 FROM "V_GETIBPCHARPS"
-                WHERE "LOCATION_ID" = '` +
-                req.data.LOCATION_ID +
-                `'
-                AND "PRODUCT_ID" = '` +
+                WHERE "PRODUCT_ID" = '` +
                 req.data.PRODUCT_ID +
                 `'`
             );
@@ -2767,14 +2729,11 @@ module.exports = (srv) => {
                 });
                 
                 if (aFilSalesH.length > 0) {
-                    for (let vQtyIndex = 0; vQtyIndex < aFilSalesH.length; vQtyIndex++) {
-                        // if(aFilSalesH[vQtyIndex].MAT_AVAILDATE >= liDates[i].WEEK_DATE &&
-                        //     aFilSalesH[vQtyIndex].MAT_AVAILDATE < liDates[nextDtIndex].WEEK_DATE) {
-                        
-                                iQty = iQty + parseInt(aFilSalesH[vQtyIndex].ORD_QTY);
-                        // }
+                    for (let vQtyIndex = 0; vQtyIndex < aFilSalesH.length; vQtyIndex++) { 
+                        iQty = iQty + parseInt(aFilSalesH[vQtyIndex].ORD_QTY);                       
                     }
-                }                                
+                }      
+                oCIRQty.ACT_QTY = iQty;                         
 
                 for (vCIRIndex = 0; vCIRIndex < liCIRQty.length; vCIRIndex++) {
                     lsCIRWeekly[columnname + vWeekIndex] = 0;
@@ -2784,15 +2743,12 @@ module.exports = (srv) => {
                     ) {
                         lsCIRWeekly[columnname + vWeekIndex] =
                             liCIRQty[vCIRIndex].CIR_QTY;
+                          
+                            oCIRQty.OPEN_QTY = liCIRQty[vCIRIndex].CIR_QTY - iQty;                        
 
-                        oCIRQty.ACT_QTY = iQty;                       
-                        
-                        oCIRQty.OPEN_QTY = liCIRQty[vCIRIndex].CIR_QTY - iQty;
-                        
-
-                        if (oCIRQty.OPEN_QTY < 0) {
-                            oCIRQty.OPEN_QTY = 0;
-                        }
+                            if (oCIRQty.OPEN_QTY < 0) {
+                               oCIRQty.OPEN_QTY = 0;
+                            }
 
                         oCIR_ID.WEEK_DATE = liDates[i].WEEK_DATE;
                         oCIR_ID.CIR_ID = liCIRQty[vCIRIndex].CIR_ID;
