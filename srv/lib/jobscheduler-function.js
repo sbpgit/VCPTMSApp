@@ -1,8 +1,14 @@
 const GenF = require("./gen-functions");
 const cds = require("@sap/cds");
-const hana = require("@sap/hana-client");
+// const hana = require("@sap/hana-client");
 const MktAuth = require("./market-auth");
 const obgenMktAuth = new MktAuth();
+// const JobSchedulerClient = require("@sap/jobs-client");
+const { v1: uuidv1 } = require('uuid')
+// const xsenv = require("@sap/xsenv");
+const Catservicefn = require("./catservice-function");
+// const vAIRKey = process.env.AIR;
+// const IBPFunc = require("./ibp-functions");
 
 
 class preDefHistory {
@@ -31,62 +37,6 @@ class preDefHistory {
         } catch (error) {
             console.error(error);
         }
-        if (flag === 'X') {
-            let dataObj = {};
-            dataObj["success"] = true;
-            dataObj["message"] = "Import of Location is successfull at " + new Date();
-
-
-            if (req.headers['x-sap-job-id'] > 0) {
-                const scheduler = getJobscheduler(req);
-
-                var updateReq = {
-                    jobId: req.headers['x-sap-job-id'],
-                    scheduleId: req.headers['x-sap-job-schedule-id'],
-                    runId: req.headers['x-sap-job-run-id'],
-                    data: dataObj
-                };
-
-                console.log("Location Imported, to update req", updateReq);
-
-                scheduler.updateJobRunLog(updateReq, function (err, result) {
-                    if (err) {
-                        return console.log('Error updating run log: %s', err);
-                    }
-                    //Run log updated successfully
-                    console.log("Import of Location job update results", result);
-
-                });
-            }
-        }
-        else {
-            let dataObj = {};
-            dataObj["failed"] = false;
-            dataObj["message"] = "Import of Location has failed at" + new Date();
-
-
-            if (req.headers['x-sap-job-id'] > 0) {
-                const scheduler = getJobscheduler(req);
-
-                var updateReq = {
-                    jobId: req.headers['x-sap-job-id'],
-                    scheduleId: req.headers['x-sap-job-schedule-id'],
-                    runId: req.headers['x-sap-job-run-id'],
-                    data: dataObj
-                };
-
-                console.log("Import of Location job update req", updateReq);
-
-                scheduler.updateJobRunLog(updateReq, function (err, result) {
-                    if (err) {
-                        return console.log('Error updating run log: %s', err);
-                    }
-                    //Run log updated successfully
-                    console.log("Import of Location job update results", result);
-
-                });
-            }
-        }
     }
     async ImportECCCustGrp (req){
         let createtAt = new Date();
@@ -107,62 +57,6 @@ class preDefHistory {
             flag = 'X';
         } catch (error) {
             console.error(error);
-        }
-        if (flag === 'X') {
-            let dataObj = {};
-            dataObj["success"] = true;
-            dataObj["message"] = "Import of CustomerGroup is successfull at " + new Date();
-
-
-            if (req.headers['x-sap-job-id'] > 0) {
-                const scheduler = getJobscheduler(req);
-
-                var updateReq = {
-                    jobId: req.headers['x-sap-job-id'],
-                    scheduleId: req.headers['x-sap-job-schedule-id'],
-                    runId: req.headers['x-sap-job-run-id'],
-                    data: dataObj
-                };
-
-                console.log("CustomerGroup Imported, to update req", updateReq);
-
-                scheduler.updateJobRunLog(updateReq, function (err, result) {
-                    if (err) {
-                        return console.log('Error updating run log: %s', err);
-                    }
-                    //Run log updated successfully
-                    console.log("Import of CustomerGroup job update results", result);
-
-                });
-            }
-        }
-        else {
-            let dataObj = {};
-            dataObj["failed"] = false;
-            dataObj["message"] = "Import of CustomerGroup has failed at" + new Date();
-
-
-            if (req.headers['x-sap-job-id'] > 0) {
-                const scheduler = getJobscheduler(req);
-
-                var updateReq = {
-                    jobId: req.headers['x-sap-job-id'],
-                    scheduleId: req.headers['x-sap-job-schedule-id'],
-                    runId: req.headers['x-sap-job-run-id'],
-                    data: dataObj
-                };
-
-                console.log("Import of CustomerGroup job update req", updateReq);
-
-                scheduler.updateJobRunLog(updateReq, function (err, result) {
-                    if (err) {
-                        return console.log('Error updating run log: %s', err);
-                    }
-                    //Run log updated successfully
-                    console.log("Import of CustomerGroup job update results", result);
-
-                });
-            }
         }
     }
     async ImportECCProd (req){
@@ -185,62 +79,6 @@ class preDefHistory {
         } catch (error) {
             console.error(error);
         }
-        if (flag === 'X') {
-            let dataObj = {};
-            dataObj["success"] = true;
-            dataObj["message"] = "Import of Product is successfull at " + new Date();
-
-
-            if (req.headers['x-sap-job-id'] > 0) {
-                const scheduler = getJobscheduler(req);
-
-                var updateReq = {
-                    jobId: req.headers['x-sap-job-id'],
-                    scheduleId: req.headers['x-sap-job-schedule-id'],
-                    runId: req.headers['x-sap-job-run-id'],
-                    data: dataObj
-                };
-
-                console.log("Product Imported, to update req", updateReq);
-
-                scheduler.updateJobRunLog(updateReq, function (err, result) {
-                    if (err) {
-                        return console.log('Error updating run log: %s', err);
-                    }
-                    //Run log updated successfully
-                    console.log("Import of Product job update results", result);
-
-                });
-            }
-        }
-        else {
-            let dataObj = {};
-            dataObj["failed"] = false;
-            dataObj["message"] = "Import of Product has failed at" + new Date();
-
-
-            if (req.headers['x-sap-job-id'] > 0) {
-                const scheduler = getJobscheduler(req);
-
-                var updateReq = {
-                    jobId: req.headers['x-sap-job-id'],
-                    scheduleId: req.headers['x-sap-job-schedule-id'],
-                    runId: req.headers['x-sap-job-run-id'],
-                    data: dataObj
-                };
-
-                console.log("Import of Product job update req", updateReq);
-
-                scheduler.updateJobRunLog(updateReq, function (err, result) {
-                    if (err) {
-                        return console.log('Error updating run log: %s', err);
-                    }
-                    //Run log updated successfully
-                    console.log("Import of Product job update results", result);
-
-                });
-            }
-        }
     }
     async ImportECCLocProd (req){
         let createtAt = new Date();
@@ -261,62 +99,6 @@ class preDefHistory {
             flag = 'X';
         } catch (error) {
             console.error(error);
-        }
-        if (flag === 'X') {
-            let dataObj = {};
-            dataObj["success"] = true;
-            dataObj["message"] = "Import of Location-Product is successfull at " + new Date();
-
-
-            if (req.headers['x-sap-job-id'] > 0) {
-                const scheduler = getJobscheduler(req);
-
-                var updateReq = {
-                    jobId: req.headers['x-sap-job-id'],
-                    scheduleId: req.headers['x-sap-job-schedule-id'],
-                    runId: req.headers['x-sap-job-run-id'],
-                    data: dataObj
-                };
-
-                console.log("Location-Product Imported, to update req", updateReq);
-
-                scheduler.updateJobRunLog(updateReq, function (err, result) {
-                    if (err) {
-                        return console.log('Error updating run log: %s', err);
-                    }
-                    //Run log updated successfully
-                    console.log("Import of Location-Product job update results", result);
-
-                });
-            }
-        }
-        else {
-            let dataObj = {};
-            dataObj["failed"] = false;
-            dataObj["message"] = "Import of Location-Product has failed at" + new Date();
-
-
-            if (req.headers['x-sap-job-id'] > 0) {
-                const scheduler = getJobscheduler(req);
-
-                var updateReq = {
-                    jobId: req.headers['x-sap-job-id'],
-                    scheduleId: req.headers['x-sap-job-schedule-id'],
-                    runId: req.headers['x-sap-job-run-id'],
-                    data: dataObj
-                };
-
-                console.log("Import of Location-Product job update req", updateReq);
-
-                scheduler.updateJobRunLog(updateReq, function (err, result) {
-                    if (err) {
-                        return console.log('Error updating run log: %s', err);
-                    }
-                    //Run log updated successfully
-                    console.log("Import of Location-Product job update results", result);
-
-                });
-            }
         }
     }
     async ImportECCProdClass (req){
@@ -339,62 +121,7 @@ class preDefHistory {
         } catch (error) {
             console.error(error);
         }
-        if (flag === 'X') {
-            let dataObj = {};
-            dataObj["success"] = true;
-            dataObj["message"] = "Import of Product-class is successfull at " + new Date();
-
-
-            if (req.headers['x-sap-job-id'] > 0) {
-                const scheduler = getJobscheduler(req);
-
-                var updateReq = {
-                    jobId: req.headers['x-sap-job-id'],
-                    scheduleId: req.headers['x-sap-job-schedule-id'],
-                    runId: req.headers['x-sap-job-run-id'],
-                    data: dataObj
-                };
-
-                console.log("Product-class Imported, to update req", updateReq);
-
-                scheduler.updateJobRunLog(updateReq, function (err, result) {
-                    if (err) {
-                        return console.log('Error updating run log: %s', err);
-                    }
-                    //Run log updated successfully
-                    console.log("Import of Product-class job update results", result);
-
-                });
-            }
-        }
-        else {
-            let dataObj = {};
-            dataObj["failed"] = false;
-            dataObj["message"] = "Import of Product-class has failed at" + new Date();
-
-
-            if (req.headers['x-sap-job-id'] > 0) {
-                const scheduler = getJobscheduler(req);
-
-                var updateReq = {
-                    jobId: req.headers['x-sap-job-id'],
-                    scheduleId: req.headers['x-sap-job-schedule-id'],
-                    runId: req.headers['x-sap-job-run-id'],
-                    data: dataObj
-                };
-
-                console.log("Import of Product-class job update req", updateReq);
-
-                scheduler.updateJobRunLog(updateReq, function (err, result) {
-                    if (err) {
-                        return console.log('Error updating run log: %s', err);
-                    }
-                    //Run log updated successfully
-                    console.log("Import of Product-class job update results", result);
-
-                });
-            }
-        }
+        
     }
     async ImportECCBOM (req){
         let createtAt = new Date();
@@ -419,63 +146,7 @@ class preDefHistory {
         } catch (error) {
             console.error(error);
         }
-        if (flag === 'X') {
-            let dataObj = {};
-            dataObj["success"] = true;
-            dataObj["message"] = "Import of BOM Header is successfull at " + new Date();
-
-
-            if (req.headers['x-sap-job-id'] > 0) {
-                const scheduler = getJobscheduler(req);
-
-                var updateReq = {
-                    jobId: req.headers['x-sap-job-id'],
-                    scheduleId: req.headers['x-sap-job-schedule-id'],
-                    runId: req.headers['x-sap-job-run-id'],
-                    data: dataObj
-                };
-
-                console.log("BOM Header Imported, to update req", updateReq);
-
-                scheduler.updateJobRunLog(updateReq, function (err, result) {
-                    if (err) {
-                        return console.log('Error updating run log: %s', err);
-                    }
-                    //Run log updated successfully
-                    console.log("Import of BOM Header job update results", result);
-
-                });
-            }
-        }
-        else {
-            let dataObj = {};
-            dataObj["failed"] = false;
-            dataObj["message"] = "Import of BOM Header has failed at" + new Date();
-
-
-            if (req.headers['x-sap-job-id'] > 0) {
-                const scheduler = getJobscheduler(req);
-
-                var updateReq = {
-                    jobId: req.headers['x-sap-job-id'],
-                    scheduleId: req.headers['x-sap-job-schedule-id'],
-                    runId: req.headers['x-sap-job-run-id'],
-                    data: dataObj
-                };
-
-                console.log("Import of BOM Header job update req", updateReq);
-
-                scheduler.updateJobRunLog(updateReq, function (err, result) {
-                    if (err) {
-                        return console.log('Error updating run log: %s', err);
-                    }
-                    //Run log updated successfully
-                    console.log("Import of BOM Header job update results", result);
-
-                });
-            }
-        }
-    }
+     }
     async ImportECCClass (req){
         let createtAt = new Date();
         let id = uuidv1();
@@ -502,62 +173,6 @@ class preDefHistory {
         } catch (error) {
             console.error(error);
         }
-        if (flag === 'X') {
-            let dataObj = {};
-            dataObj["success"] = true;
-            dataObj["message"] = "Import of Class is successfull at " + new Date();
-
-
-            if (req.headers['x-sap-job-id'] > 0) {
-                const scheduler = getJobscheduler(req);
-
-                var updateReq = {
-                    jobId: req.headers['x-sap-job-id'],
-                    scheduleId: req.headers['x-sap-job-schedule-id'],
-                    runId: req.headers['x-sap-job-run-id'],
-                    data: dataObj
-                };
-
-                console.log("Class Imported, to update req", updateReq);
-
-                scheduler.updateJobRunLog(updateReq, function (err, result) {
-                    if (err) {
-                        return console.log('Error updating run log: %s', err);
-                    }
-                    //Run log updated successfully
-                    console.log("Import of Class job update results", result);
-
-                });
-            }
-        }
-        else {
-            let dataObj = {};
-            dataObj["failed"] = false;
-            dataObj["message"] = "Import of Class has failed at" + new Date();
-
-
-            if (req.headers['x-sap-job-id'] > 0) {
-                const scheduler = getJobscheduler(req);
-
-                var updateReq = {
-                    jobId: req.headers['x-sap-job-id'],
-                    scheduleId: req.headers['x-sap-job-schedule-id'],
-                    runId: req.headers['x-sap-job-run-id'],
-                    data: dataObj
-                };
-
-                console.log("Import of Class job update req", updateReq);
-
-                scheduler.updateJobRunLog(updateReq, function (err, result) {
-                    if (err) {
-                        return console.log('Error updating run log: %s', err);
-                    }
-                    //Run log updated successfully
-                    console.log("Import of Class job update results", result);
-
-                });
-            }
-        }
     }
     async ImportECCODhdr (req){
         let createtAt = new Date();
@@ -578,62 +193,6 @@ class preDefHistory {
             flag = 'X';
         } catch (error) {
             console.error(error);
-        }
-        if (flag === 'X') {
-            let dataObj = {};
-            dataObj["success"] = true;
-            dataObj["message"] = "Import of Obj. Dependency Header is successfull at " + new Date();
-
-
-            if (req.headers['x-sap-job-id'] > 0) {
-                const scheduler = getJobscheduler(req);
-
-                var updateReq = {
-                    jobId: req.headers['x-sap-job-id'],
-                    scheduleId: req.headers['x-sap-job-schedule-id'],
-                    runId: req.headers['x-sap-job-run-id'],
-                    data: dataObj
-                };
-
-                console.log("Obj. Dependency Header Imported, to update req", updateReq);
-
-                scheduler.updateJobRunLog(updateReq, function (err, result) {
-                    if (err) {
-                        return console.log('Error updating run log: %s', err);
-                    }
-                    //Run log updated successfully
-                    console.log("Import of Obj. Dependency Header job update results", result);
-
-                });
-            }
-        }
-        else {
-            let dataObj = {};
-            dataObj["failed"] = false;
-            dataObj["message"] = "Import of Obj. Dependency Header has failed at" + new Date();
-
-
-            if (req.headers['x-sap-job-id'] > 0) {
-                const scheduler = getJobscheduler(req);
-
-                var updateReq = {
-                    jobId: req.headers['x-sap-job-id'],
-                    scheduleId: req.headers['x-sap-job-schedule-id'],
-                    runId: req.headers['x-sap-job-run-id'],
-                    data: dataObj
-                };
-
-                console.log("Import of Obj. Dependency Header job update req", updateReq);
-
-                scheduler.updateJobRunLog(updateReq, function (err, result) {
-                    if (err) {
-                        return console.log('Error updating run log: %s', err);
-                    }
-                    //Run log updated successfully
-                    console.log("Import of Obj. Dependency Header job update results", result);
-
-                });
-            }
         }
     }
     async ImportPartialProd (req){
@@ -659,50 +218,6 @@ class preDefHistory {
         } catch (error) {
             console.error(error);
         }
-        if (flag === 'X') {
-            let dataObj = {};
-            dataObj["success"] = true;
-            dataObj["message"] = "Import of Partial Products is successfull at " + new Date();
-            if (req.headers['x-sap-job-id'] > 0) {
-                const scheduler = getJobscheduler(req);
-                var updateReq = {
-                    jobId: req.headers['x-sap-job-id'],
-                    scheduleId: req.headers['x-sap-job-schedule-id'],
-                    runId: req.headers['x-sap-job-run-id'],
-                    data: dataObj
-                };
-                console.log("Partial Products imported, to update req", updateReq);
-                scheduler.updateJobRunLog(updateReq, function (err, result) {
-                    if (err) {
-                        return console.log('Error updating run log: %s', err);
-                    }
-                    //Run log updated successfully
-                    console.log("Partial Products job update results", result);
-                });
-            }
-        }
-        else {
-            let dataObj = {};
-            dataObj["failed"] = false;
-            dataObj["message"] = "Partial Products has failed at" + new Date();
-            if (req.headers['x-sap-job-id'] > 0) {
-                const scheduler = getJobscheduler(req);
-                var updateReq = {
-                    jobId: req.headers['x-sap-job-id'],
-                    scheduleId: req.headers['x-sap-job-schedule-id'],
-                    runId: req.headers['x-sap-job-run-id'],
-                    data: dataObj
-                };
-                console.log("Partial Products job update req", updateReq);
-                scheduler.updateJobRunLog(updateReq, function (err, result) {
-                    if (err) {
-                        return console.log('Error updating run log: %s', err);
-                    }
-                    //Run log updated successfully
-                    console.log("Partial Products job update results", result);
-                });
-            }
-        }
     }
     async ImportPVSNode (req){
         let createtAt = new Date();
@@ -726,12 +241,7 @@ class preDefHistory {
         } catch (error) {
             console.error(error);
         }
-        if (flag === 'X') {
-            await GenF.jobSchMessage('X', "Import of PVS node structure is successfull ", req);
-        }
-        else {
-            await GenF.jobSchMessage('', "Import of PVS node structure has failed", req);
-        }
+       
     }
     async ImportPVSBOM (req){
         let createtAt = new Date();
@@ -753,12 +263,7 @@ class preDefHistory {
         } catch (error) {
             console.error(error);
         }
-        if (flag === 'X') {
-            await GenF.jobSchMessage('X', "Import of PVS-BOM is successfull ", req);
-        }
-        else {
-            await GenF.jobSchMessage('', "Import of PVS-BOM has failed", req);
-        }
+        
     }
     async ImportECCAsmbcomp (req){
         let createtAt = new Date();
@@ -780,62 +285,7 @@ class preDefHistory {
         } catch (error) {
             console.error(error);
         }
-        if (flag === 'X') {
-            let dataObj = {};
-            dataObj["success"] = true;
-            dataObj["message"] = "Import of Assembly components is successfull at " + new Date();
-
-
-            if (req.headers['x-sap-job-id'] > 0) {
-                const scheduler = getJobscheduler(req);
-
-                var updateReq = {
-                    jobId: req.headers['x-sap-job-id'],
-                    scheduleId: req.headers['x-sap-job-schedule-id'],
-                    runId: req.headers['x-sap-job-run-id'],
-                    data: dataObj
-                };
-
-                console.log("Assembly components Imported, to update req", updateReq);
-
-                scheduler.updateJobRunLog(updateReq, function (err, result) {
-                    if (err) {
-                        return console.log('Error updating run log: %s', err);
-                    }
-                    //Run log updated successfully
-                    console.log("Assembly components job update results", result);
-
-                });
-            }
-        }
-        else {
-            let dataObj = {};
-            dataObj["failed"] = false;
-            dataObj["message"] = "Assembly components has failed at" + new Date();
-
-
-            if (req.headers['x-sap-job-id'] > 0) {
-                const scheduler = getJobscheduler(req);
-
-                var updateReq = {
-                    jobId: req.headers['x-sap-job-id'],
-                    scheduleId: req.headers['x-sap-job-schedule-id'],
-                    runId: req.headers['x-sap-job-run-id'],
-                    data: dataObj
-                };
-
-                console.log("Assembly components job update req", updateReq);
-
-                scheduler.updateJobRunLog(updateReq, function (err, result) {
-                    if (err) {
-                        return console.log('Error updating run log: %s', err);
-                    }
-                    //Run log updated successfully
-                    console.log("Assembly components job update results", result);
-
-                });
-            }
-        }
+        
     }
     async ImportECCSalesh (req){
         var flag = '';
@@ -866,62 +316,7 @@ class preDefHistory {
            console.error(error);
        }
 
-       if (flag === 'X') {
-           let dataObj = {};
-           dataObj["success"] = true;
-           dataObj["message"] = "Import of Sales History is successfull at " + new Date();
-
-
-           if (req.headers['x-sap-job-id'] > 0) {
-               const scheduler = getJobscheduler(req);
-
-               var updateReq = {
-                   jobId: req.headers['x-sap-job-id'],
-                   scheduleId: req.headers['x-sap-job-schedule-id'],
-                   runId: req.headers['x-sap-job-run-id'],
-                   data: dataObj
-               };
-
-               console.log("Sales History Imported, to update req", updateReq);
-
-               scheduler.updateJobRunLog(updateReq, function (err, result) {
-                   if (err) {
-                       return console.log('Error updating run log: %s', err);
-                   }
-                   //Run log updated successfully
-                   console.log("Import of Sales History job update results", result);
-
-               });
-           }
-       }
-       else {
-           let dataObj = {};
-           dataObj["failed"] = false;
-           dataObj["message"] = "Import of Sales History has failed at" + new Date();
-
-
-           if (req.headers['x-sap-job-id'] > 0) {
-               const scheduler = getJobscheduler(req);
-
-               var updateReq = {
-                   jobId: req.headers['x-sap-job-id'],
-                   scheduleId: req.headers['x-sap-job-schedule-id'],
-                   runId: req.headers['x-sap-job-run-id'],
-                   data: dataObj
-               };
-
-               console.log("Import of Sales History job update req", updateReq);
-
-               scheduler.updateJobRunLog(updateReq, function (err, result) {
-                   if (err) {
-                       return console.log('Error updating run log: %s', err);
-                   }
-                   //Run log updated successfully
-                   console.log("Import of Sales History job update results", result);
-
-               });
-           }
-       }
+       
     }
     async ImportCuvtabInd (req){
         let createtAt = new Date();
@@ -946,62 +341,7 @@ class preDefHistory {
         } catch (error) {
             console.error(error);
         }
-        if (flag === 'X') {
-            let dataObj = {};
-            dataObj["success"] = true;
-            dataObj["message"] = "Import of Value assignment alternatives for variant table is successfull at " + new Date();
-
-
-            if (req.headers['x-sap-job-id'] > 0) {
-                const scheduler = getJobscheduler(req);
-
-                var updateReq = {
-                    jobId: req.headers['x-sap-job-id'],
-                    scheduleId: req.headers['x-sap-job-schedule-id'],
-                    runId: req.headers['x-sap-job-run-id'],
-                    data: dataObj
-                };
-
-                console.log("Value assignment alternatives for variant table imported, to update req", updateReq);
-
-                scheduler.updateJobRunLog(updateReq, function (err, result) {
-                    if (err) {
-                        return console.log('Error updating run log: %s', err);
-                    }
-                    //Run log updated successfully
-                    console.log("Value assignment alternatives for variant table job update results", result);
-
-                });
-            }
-        }
-        else {
-            let dataObj = {};
-            dataObj["failed"] = false;
-            dataObj["message"] = "Value assignment alternatives for variant table has failed at" + new Date();
-
-
-            if (req.headers['x-sap-job-id'] > 0) {
-                const scheduler = getJobscheduler(req);
-
-                var updateReq = {
-                    jobId: req.headers['x-sap-job-id'],
-                    scheduleId: req.headers['x-sap-job-schedule-id'],
-                    runId: req.headers['x-sap-job-run-id'],
-                    data: dataObj
-                };
-
-                console.log("Value assignment alternatives for variant table job update req", updateReq);
-
-                scheduler.updateJobRunLog(updateReq, function (err, result) {
-                    if (err) {
-                        return console.log('Error updating run log: %s', err);
-                    }
-                    //Run log updated successfully
-                    console.log("Value assignment alternatives for variant table job update results", result);
-
-                });
-            }
-        }
+        
     }
     async ImportCIRLog (req){
          let createtAt = new Date();
@@ -1023,62 +363,7 @@ class preDefHistory {
         } catch (error) {
             console.error(error);
         }
-        if (flag === 'X') {
-            let dataObj = {};
-            dataObj["success"] = true;
-            dataObj["message"] = "Import CIR Logs is successfull at " + new Date();
-
-
-            if (req.headers['x-sap-job-id'] > 0) {
-                const scheduler = getJobscheduler(req);
-
-                var updateReq = {
-                    jobId: req.headers['x-sap-job-id'],
-                    scheduleId: req.headers['x-sap-job-schedule-id'],
-                    runId: req.headers['x-sap-job-run-id'],
-                    data: dataObj
-                };
-
-                console.log("CIR Logs imported, to update req", updateReq);
-
-                scheduler.updateJobRunLog(updateReq, function (err, result) {
-                    if (err) {
-                        return console.log('Error updating run log: %s', err);
-                    }
-                    //Run log updated successfully
-                    console.log("CIR Logs update results", result);
-
-                });
-            }
-        }
-        else {
-            let dataObj = {};
-            dataObj["failed"] = false;
-            dataObj["message"] = "CIR Logs has failed at" + new Date();
-
-
-            if (req.headers['x-sap-job-id'] > 0) {
-                const scheduler = getJobscheduler(req);
-
-                var updateReq = {
-                    jobId: req.headers['x-sap-job-id'],
-                    scheduleId: req.headers['x-sap-job-schedule-id'],
-                    runId: req.headers['x-sap-job-run-id'],
-                    data: dataObj
-                };
-
-                console.log("CIR Logs job update req", updateReq);
-
-                scheduler.updateJobRunLog(updateReq, function (err, result) {
-                    if (err) {
-                        return console.log('Error updating run log: %s', err);
-                    }
-                    //Run log updated successfully
-                    console.log("CIR Logs job update results", result);
-
-                });
-            }
-        }
+        
     }
     async ImportSOStock (req){
          let createtAt = new Date();
@@ -1099,12 +384,6 @@ class preDefHistory {
             flag = 'X';
         } catch (error) {
             console.error(error);
-        }
-        if (flag === 'X') {
-            await GenF.jobSchMessage('X', "Import of Salesorder Stock is successfull ", req);
-        }
-        else {
-            await GenF.jobSchMessage('', "Import of Salesorder Stock has failed", req);
         }
     }
 
@@ -1160,815 +439,864 @@ class preDefHistory {
                 }
                 break;
         }
-        // const obgenTimeseries_rt = new GenTimeseriesRT();
-        // await obgenTimeseries_rt.genTimeseries_rt(req.data, req);
-        // console.log(Flag);
+
+        if(Flag === "X"){
+            await this.generateModels(req)
+        }
     }
 
     // Generate Models
     // need to check, added code is correct or not
-    async generateModels (req,isGet){
-        var vcRulesListReq = {};
-   if (isGet == true)
-   {
-       vcRulesListReq = JSON.parse(req.data.vcRulesList);
-   }
-   else
-   {
-       vcRulesListReq = req.data.vcRulesList;
-   }
+//     async generateModels (req,isGet){
+//         var vcRulesListReq = {};
+//    if (isGet == true)
+//    {
+//        vcRulesListReq = JSON.parse(req.data.vcRulesList);
+//    }
+//    else
+//    {
+//        vcRulesListReq = req.data.vcRulesList;
+//    }
 
-    let createtAt = new Date();
-    let id = uuidv1();
-    let values = [];	
-    let message = "Request for Models generation Queued Sucessfully";
+//     let createtAt = new Date();
+//     let id = uuidv1();
+//     let values = [];	
+//     let message = "Request for Models generation Queued Sucessfully";
 
-    values.push({id, createtAt, message, vcRulesListReq});    
+//     values.push({id, createtAt, message, vcRulesListReq});    
 
-    if (isGet == true)
-    {
-        req.reply({values});
-        // req.reply();
-    }
-    else
-    {
-        let res = req._.req.res;
-        res.statusCode = 202;
-        res.send({values});
-    }
+//     if (isGet == true)
+//     {
+//         req.reply({values});
+//         // req.reply();
+//     }
+//     else
+//     {
+//         let res = req._.req.res;
+//         res.statusCode = 202;
+//         res.send({values});
+//     }
 
-    var url;
+//     var url;
 
-    var baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
-    // var baseUrl = 'http' + '://' + req.headers.host;
+//     var baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host; 
+//     // var baseUrl = 'http' + '://' + req.headers.host;
 
 
-    var sqlStr = "";
-    var results= [];
-    var vcRulesList = [];
-    let arrayLength = vcRulesListReq.length;
-    console.log("arrayLength ", arrayLength);
+//     var sqlStr = "";
+//     var results= [];
+//     var vcRulesList = [];
+//     let arrayLength = vcRulesListReq.length;
+//     console.log("arrayLength ", arrayLength);
 
-    if ( (arrayLength == 1) &&
-          ( ( (vcRulesListReq[0].GroupID == "ALL") && 
-            (vcRulesListReq[0].Product == "ALL") && 
-            (vcRulesListReq[0].Location == "ALL") ) ||
+//     if ( (arrayLength == 1) &&
+//           ( ( (vcRulesListReq[0].GroupID == "ALL") && 
+//             (vcRulesListReq[0].Product == "ALL") && 
+//             (vcRulesListReq[0].Location == "ALL") ) ||
 
-            ( (vcRulesListReq[0].GroupID == "ALL") && 
-            (vcRulesListReq[0].Product == "ALL") && 
-            (vcRulesListReq[0].Location != "ALL") ) ||
+//             ( (vcRulesListReq[0].GroupID == "ALL") && 
+//             (vcRulesListReq[0].Product == "ALL") && 
+//             (vcRulesListReq[0].Location != "ALL") ) ||
 
-            ( (vcRulesListReq[0].GroupID == "ALL") && 
-            (vcRulesListReq[0].Product != "ALL") && 
-            (vcRulesListReq[0].Location == "ALL") ) ||
+//             ( (vcRulesListReq[0].GroupID == "ALL") && 
+//             (vcRulesListReq[0].Product != "ALL") && 
+//             (vcRulesListReq[0].Location == "ALL") ) ||
             
-            ( (vcRulesListReq[0].GroupID == "ALL") && 
-            (vcRulesListReq[0].Product != "ALL") && 
-            (vcRulesListReq[0].Location != "ALL") ) ) )
-   {
+//             ( (vcRulesListReq[0].GroupID == "ALL") && 
+//             (vcRulesListReq[0].Product != "ALL") && 
+//             (vcRulesListReq[0].Location != "ALL") ) ) )
+//    {
 
-       if ( (vcRulesListReq[0].Location != "ALL") &&
-            (vcRulesListReq[0].Product == "ALL") )
-       {
-           sqlStr = 'SELECT DISTINCT "LOCATION_ID", "PRODUCT_ID", "GROUP_ID", "TYPE", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "CP_VC_HISTORY_TS"' + 
-                    ' WHERE "LOCATION_ID" =' + "'" +   vcRulesListReq[0].Location + "'" +
-                    ' AND "TYPE" =' + "'" +   vcRulesListReq[0].Type + "'" +
-                    ' GROUP BY "LOCATION_ID", "PRODUCT_ID", "GROUP_ID", "TYPE" HAVING COUNT(DISTINCT "' + vcConfigTimePeriod + '") > ' + "'" + minBuckets + "'";
-       }
-       else if ( (vcRulesListReq[0].Product != "ALL") &&
-                 (vcRulesListReq[0].Location == "ALL") )
-       {
-           sqlStr = 'SELECT DISTINCT "LOCATION_ID", "PRODUCT_ID", "GROUP_ID", "TYPE", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "CP_VC_HISTORY_TS"' + 
-                    ' WHERE "PRODUCT_ID" =' + "'" +   vcRulesListReq[0].Product + "'" +
-                    ' AND "TYPE" =' + "'" +   vcRulesListReq[0].Type + "'" +
-                    ' GROUP BY "LOCATION_ID", "PRODUCT_ID", "GROUP_ID", "TYPE" HAVING COUNT(DISTINCT "' + vcConfigTimePeriod + '") > ' + "'" + minBuckets + "'";
-       }
-       else if ( (vcRulesListReq[0].Product != "ALL") &&
-                 (vcRulesListReq[0].Location != "ALL") )
-       {
-           sqlStr = 'SELECT DISTINCT "LOCATION_ID", "PRODUCT_ID", "GROUP_ID", "TYPE", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "CP_VC_HISTORY_TS"' + 
-               ' WHERE "PRODUCT_ID" =' + "'" +   vcRulesListReq[0].Product + "'" +
-               ' AND "LOCATION_ID" =' + "'" +   vcRulesListReq[0].Location + "'" +
-               ' AND "TYPE" =' + "'" +   vcRulesListReq[0].Type + "'" +
-               ' GROUP BY "LOCATION_ID", "PRODUCT_ID", "GROUP_ID", "TYPE" HAVING COUNT(DISTINCT "' + vcConfigTimePeriod + '") > ' + "'" + minBuckets + "'";
-       }
-       else
-       {
-            sqlStr = 'SELECT DISTINCT "LOCATION_ID", "PRODUCT_ID", "GROUP_ID", "TYPE", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "CP_VC_HISTORY_TS"' + 
-                   // vcRulesListReq[0].tableName + 
-                   ' WHERE "TYPE" =' + "'" +   vcRulesListReq[0].Type + "'" +
-                    ' GROUP BY "LOCATION_ID", "PRODUCT_ID", "GROUP_ID", "TYPE"  HAVING COUNT(DISTINCT "' + vcConfigTimePeriod + '") > ' + "'" + minBuckets + "'";  
-       }
-
-
-
-        results = await cds.run(sqlStr);
-        // console.log('_generateRegModels vcRulesList sqlStr results', results );
+//        if ( (vcRulesListReq[0].Location != "ALL") &&
+//             (vcRulesListReq[0].Product == "ALL") )
+//        {
+//            sqlStr = 'SELECT DISTINCT "LOCATION_ID", "PRODUCT_ID", "GROUP_ID", "TYPE", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "CP_VC_HISTORY_TS"' + 
+//                     ' WHERE "LOCATION_ID" =' + "'" +   vcRulesListReq[0].Location + "'" +
+//                     ' AND "TYPE" =' + "'" +   vcRulesListReq[0].Type + "'" +
+//                     ' GROUP BY "LOCATION_ID", "PRODUCT_ID", "GROUP_ID", "TYPE" HAVING COUNT(DISTINCT "' + vcConfigTimePeriod + '") > ' + "'" + minBuckets + "'";
+//        }
+//        else if ( (vcRulesListReq[0].Product != "ALL") &&
+//                  (vcRulesListReq[0].Location == "ALL") )
+//        {
+//            sqlStr = 'SELECT DISTINCT "LOCATION_ID", "PRODUCT_ID", "GROUP_ID", "TYPE", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "CP_VC_HISTORY_TS"' + 
+//                     ' WHERE "PRODUCT_ID" =' + "'" +   vcRulesListReq[0].Product + "'" +
+//                     ' AND "TYPE" =' + "'" +   vcRulesListReq[0].Type + "'" +
+//                     ' GROUP BY "LOCATION_ID", "PRODUCT_ID", "GROUP_ID", "TYPE" HAVING COUNT(DISTINCT "' + vcConfigTimePeriod + '") > ' + "'" + minBuckets + "'";
+//        }
+//        else if ( (vcRulesListReq[0].Product != "ALL") &&
+//                  (vcRulesListReq[0].Location != "ALL") )
+//        {
+//            sqlStr = 'SELECT DISTINCT "LOCATION_ID", "PRODUCT_ID", "GROUP_ID", "TYPE", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "CP_VC_HISTORY_TS"' + 
+//                ' WHERE "PRODUCT_ID" =' + "'" +   vcRulesListReq[0].Product + "'" +
+//                ' AND "LOCATION_ID" =' + "'" +   vcRulesListReq[0].Location + "'" +
+//                ' AND "TYPE" =' + "'" +   vcRulesListReq[0].Type + "'" +
+//                ' GROUP BY "LOCATION_ID", "PRODUCT_ID", "GROUP_ID", "TYPE" HAVING COUNT(DISTINCT "' + vcConfigTimePeriod + '") > ' + "'" + minBuckets + "'";
+//        }
+//        else
+//        {
+//             sqlStr = 'SELECT DISTINCT "LOCATION_ID", "PRODUCT_ID", "GROUP_ID", "TYPE", COUNT(DISTINCT "' + vcConfigTimePeriod + '") AS "NumberOfPeriods"  FROM "CP_VC_HISTORY_TS"' + 
+//                    // vcRulesListReq[0].tableName + 
+//                    ' WHERE "TYPE" =' + "'" +   vcRulesListReq[0].Type + "'" +
+//                     ' GROUP BY "LOCATION_ID", "PRODUCT_ID", "GROUP_ID", "TYPE"  HAVING COUNT(DISTINCT "' + vcConfigTimePeriod + '") > ' + "'" + minBuckets + "'";  
+//        }
 
 
-        for (let index=0; index<results.length; index++) 
-        {
+
+//         results = await cds.run(sqlStr);
+//         // console.log('_generateRegModels vcRulesList sqlStr results', results );
+
+
+//         for (let index=0; index<results.length; index++) 
+//         {
             
-            let Location = results[index].LOCATION_ID;
-            let Product = results[index].PRODUCT_ID;
-            let GroupID = results[index].GROUP_ID;
-            let Type = results[index].TYPE;
-            let modelVersion = vcRulesListReq[0].modelVersion;
-            let profile = vcRulesListReq[0].profile;
-            let override = vcRulesListReq[0].override;
-            vcRulesList.push({profile,override,Location,Product,GroupID,Type,modelVersion});
+//             let Location = results[index].LOCATION_ID;
+//             let Product = results[index].PRODUCT_ID;
+//             let GroupID = results[index].GROUP_ID;
+//             let Type = results[index].TYPE;
+//             let modelVersion = vcRulesListReq[0].modelVersion;
+//             let profile = vcRulesListReq[0].profile;
+//             let override = vcRulesListReq[0].override;
+//             vcRulesList.push({profile,override,Location,Product,GroupID,Type,modelVersion});
 
-        }
+//         }
 
-    }
-    else
-    {
-        for (var i = 0; i < vcRulesListReq.length; i++)
-        {
+//     }
+//     else
+//     {
+//         for (var i = 0; i < vcRulesListReq.length; i++)
+//         {
                 
-            let varSql = "";
+//             let varSql = "";
     
-            if ( (vcRulesListReq[i].Location != "ALL") &&
-                 (vcRulesListReq[i].Product != "ALL") &&
-                 (vcRulesListReq[i].GroupID != "ALL") )
-            {
-                varSql =  ' "LOCATION_ID" =' + "'" +   vcRulesListReq[i].Location + "'" +
-                          ' AND "PRODUCT_ID" =' + "'" +   vcRulesListReq[i].Product + "'" +
-                          ' AND "GROUP_ID" =' + "'" +   vcRulesListReq[i].GroupID + "'";
-            }
-            else if ( (vcRulesListReq[i].Location == "ALL") &&
-                 (vcRulesListReq[i].Product != "ALL") &&
-                 (vcRulesListReq[i].GroupID != "ALL") )
-            {
-                varSql =  ' "PRODUCT_ID" =' + "'" +   vcRulesListReq[i].Product + "'" +
-                          ' AND "GROUP_ID" =' + "'" +   vcRulesListReq[i].GroupID + "'";
-            }
-            else if ( (vcRulesListReq[i].Location != "ALL") &&
-            (vcRulesListReq[i].Product != "ALL") &&
-            (vcRulesListReq[i].GroupID == "ALL") )
-            {
-                varSql =   ' "LOCATION_ID" =' + "'" +   vcRulesListReq[i].Location + "'" +
-                            ' AND "PRODUCT_ID" =' + "'" +   vcRulesListReq[i].Product + "'";
-            }
-            else if ( (vcRulesListReq[i].Location == "ALL") &&
-                 (vcRulesListReq[i].Product == "ALL") &&
-                 (vcRulesListReq[i].GroupID != "ALL") )
-            {
-                varSql =  ' "GROUP_ID" =' + "'" +   vcRulesListReq[i].GroupID + "'";
-            }
+//             if ( (vcRulesListReq[i].Location != "ALL") &&
+//                  (vcRulesListReq[i].Product != "ALL") &&
+//                  (vcRulesListReq[i].GroupID != "ALL") )
+//             {
+//                 varSql =  ' "LOCATION_ID" =' + "'" +   vcRulesListReq[i].Location + "'" +
+//                           ' AND "PRODUCT_ID" =' + "'" +   vcRulesListReq[i].Product + "'" +
+//                           ' AND "GROUP_ID" =' + "'" +   vcRulesListReq[i].GroupID + "'";
+//             }
+//             else if ( (vcRulesListReq[i].Location == "ALL") &&
+//                  (vcRulesListReq[i].Product != "ALL") &&
+//                  (vcRulesListReq[i].GroupID != "ALL") )
+//             {
+//                 varSql =  ' "PRODUCT_ID" =' + "'" +   vcRulesListReq[i].Product + "'" +
+//                           ' AND "GROUP_ID" =' + "'" +   vcRulesListReq[i].GroupID + "'";
+//             }
+//             else if ( (vcRulesListReq[i].Location != "ALL") &&
+//             (vcRulesListReq[i].Product != "ALL") &&
+//             (vcRulesListReq[i].GroupID == "ALL") )
+//             {
+//                 varSql =   ' "LOCATION_ID" =' + "'" +   vcRulesListReq[i].Location + "'" +
+//                             ' AND "PRODUCT_ID" =' + "'" +   vcRulesListReq[i].Product + "'";
+//             }
+//             else if ( (vcRulesListReq[i].Location == "ALL") &&
+//                  (vcRulesListReq[i].Product == "ALL") &&
+//                  (vcRulesListReq[i].GroupID != "ALL") )
+//             {
+//                 varSql =  ' "GROUP_ID" =' + "'" +   vcRulesListReq[i].GroupID + "'";
+//             }
     
-            sqlStr = 'SELECT  "LOCATION_ID", "PRODUCT_ID", "GROUP_ID", "TYPE" FROM "CP_VC_HISTORY_TS" WHERE ' +
-                        varSql +
-                        ' AND "TYPE" =' + "'" +   vcRulesListReq[i].Type + "'" +
-                        ' GROUP BY "LOCATION_ID", "PRODUCT_ID", "GROUP_ID", "TYPE"' +
-                        ' HAVING COUNT(DISTINCT "' + vcConfigTimePeriod + '") > ' + "'" + minBuckets + "'";// + 'ORDER BY "WeekOfYear"';  
+//             sqlStr = 'SELECT  "LOCATION_ID", "PRODUCT_ID", "GROUP_ID", "TYPE" FROM "CP_VC_HISTORY_TS" WHERE ' +
+//                         varSql +
+//                         ' AND "TYPE" =' + "'" +   vcRulesListReq[i].Type + "'" +
+//                         ' GROUP BY "LOCATION_ID", "PRODUCT_ID", "GROUP_ID", "TYPE"' +
+//                         ' HAVING COUNT(DISTINCT "' + vcConfigTimePeriod + '") > ' + "'" + minBuckets + "'";// + 'ORDER BY "WeekOfYear"';  
             
-            results = await cds.run(sqlStr);
-            console.log('_generateRegModels vcRulesList sqlStr ', sqlStr, 'index = ', i );
-            // console.log('_generateRegModels vcRulesList ELSE sqlStr results', results );
+//             results = await cds.run(sqlStr);
+//             console.log('_generateRegModels vcRulesList sqlStr ', sqlStr, 'index = ', i );
+//             // console.log('_generateRegModels vcRulesList ELSE sqlStr results', results );
     
-            if (results.length > 0)
-            {    
-                for (rIndex = 0 ; rIndex < results.length; rIndex ++)
-                {
-                    let Location = results[rIndex].LOCATION_ID;
-                    let Product = results[rIndex].PRODUCT_ID;
-                    let GroupID = results[rIndex].GROUP_ID;
-                    let Type = results[rIndex].TYPE;
-                    // let modelVersion = vcRulesListReq[0].modelVersion;
-                    let modelVersion = vcRulesListReq[i].modelVersion;
-                    let profile = vcRulesListReq[i].profile;
-                    let override = vcRulesListReq[i].override;
-                    vcRulesList.push({profile,override,Location,Product,GroupID,Type,modelVersion});
-                }
-            }
-        }
-    }
+//             if (results.length > 0)
+//             {    
+//                 for (rIndex = 0 ; rIndex < results.length; rIndex ++)
+//                 {
+//                     let Location = results[rIndex].LOCATION_ID;
+//                     let Product = results[rIndex].PRODUCT_ID;
+//                     let GroupID = results[rIndex].GROUP_ID;
+//                     let Type = results[rIndex].TYPE;
+//                     // let modelVersion = vcRulesListReq[0].modelVersion;
+//                     let modelVersion = vcRulesListReq[i].modelVersion;
+//                     let profile = vcRulesListReq[i].profile;
+//                     let override = vcRulesListReq[i].override;
+//                     vcRulesList.push({profile,override,Location,Product,GroupID,Type,modelVersion});
+//                 }
+//             }
+//         }
+//     }
 
-    var hasCharCount1, hasCharCount2, hasCharCount3, hasCharCount4, hasCharCount5, hasCharCount6, hasCharCount7, hasCharCount8, hasCharCount9, hasCharCount10, hasCharCount11, hasCharCount12  = false;
-    for (var i = 0; i < vcRulesList.length; i++)
-    {
+//     var hasCharCount1, hasCharCount2, hasCharCount3, hasCharCount4, hasCharCount5, hasCharCount6, hasCharCount7, hasCharCount8, hasCharCount9, hasCharCount10, hasCharCount11, hasCharCount12  = false;
+//     for (var i = 0; i < vcRulesList.length; i++)
+//     {
         
-        sqlStr = 'SELECT  COUNT(DISTINCT "ROW") AS numChars FROM "CP_VC_HISTORY_TS" WHERE "PRODUCT_ID" =' +
-                    "'" +  vcRulesList[i].Product + "'" +  
-                    ' AND "GROUP_ID" =' + "'" +   vcRulesList[i].GroupID + "'" +
-                    ' AND "TYPE" =' + "'" +   vcRulesList[i].Type + "'" +
-                    ' AND "LOCATION_ID" =' + "'" +   vcRulesList[i].Location + "'";// + 'ORDER BY "WeekOfYear"';   
-        // console.log('_generateRegModels sqlStr ', sqlStr );
+//         sqlStr = 'SELECT  COUNT(DISTINCT "ROW") AS numChars FROM "CP_VC_HISTORY_TS" WHERE "PRODUCT_ID" =' +
+//                     "'" +  vcRulesList[i].Product + "'" +  
+//                     ' AND "GROUP_ID" =' + "'" +   vcRulesList[i].GroupID + "'" +
+//                     ' AND "TYPE" =' + "'" +   vcRulesList[i].Type + "'" +
+//                     ' AND "LOCATION_ID" =' + "'" +   vcRulesList[i].Location + "'";// + 'ORDER BY "WeekOfYear"';   
+//         // console.log('_generateRegModels sqlStr ', sqlStr );
 
-        results = await cds.run(sqlStr);
-        // console.log('_generateRegModels results ', results );
+//         results = await cds.run(sqlStr);
+//         // console.log('_generateRegModels results ', results );
 
 
-        vcRulesList[i].dimensions = results[0].NUMCHARS;
-        if (vcRulesList[i].dimensions == 1)
-            hasCharCount1 = true; 
-        if (vcRulesList[i].dimensions == 2)
-           hasCharCount2 = true; 
-        if (vcRulesList[i].dimensions == 3)
-           hasCharCount3 = true; 
-        if (vcRulesList[i].dimensions == 4)
-           hasCharCount4 = true; 
-        if (vcRulesList[i].dimensions == 5)
-           hasCharCount5 = true; 
-        if (vcRulesList[i].dimensions == 6)
-           hasCharCount6 = true; 
-        if (vcRulesList[i].dimensions == 7)
-           hasCharCount7 = true; 
-        if (vcRulesList[i].dimensions == 8)
-           hasCharCount8 = true; 
-        if (vcRulesList[i].dimensions == 9)
-           hasCharCount9 = true; 
-        if (vcRulesList[i].dimensions == 10)
-           hasCharCount10 = true; 
-        if (vcRulesList[i].dimensions == 11)
-           hasCharCount11 = true; 
-        if (vcRulesList[i].dimensions == 12)
-           hasCharCount12 = true;
+//         vcRulesList[i].dimensions = results[0].NUMCHARS;
+//         if (vcRulesList[i].dimensions == 1)
+//             hasCharCount1 = true; 
+//         if (vcRulesList[i].dimensions == 2)
+//            hasCharCount2 = true; 
+//         if (vcRulesList[i].dimensions == 3)
+//            hasCharCount3 = true; 
+//         if (vcRulesList[i].dimensions == 4)
+//            hasCharCount4 = true; 
+//         if (vcRulesList[i].dimensions == 5)
+//            hasCharCount5 = true; 
+//         if (vcRulesList[i].dimensions == 6)
+//            hasCharCount6 = true; 
+//         if (vcRulesList[i].dimensions == 7)
+//            hasCharCount7 = true; 
+//         if (vcRulesList[i].dimensions == 8)
+//            hasCharCount8 = true; 
+//         if (vcRulesList[i].dimensions == 9)
+//            hasCharCount9 = true; 
+//         if (vcRulesList[i].dimensions == 10)
+//            hasCharCount10 = true; 
+//         if (vcRulesList[i].dimensions == 11)
+//            hasCharCount11 = true; 
+//         if (vcRulesList[i].dimensions == 12)
+//            hasCharCount12 = true;
         
-        //    console.log('_generateRegModels index i = ', i, ' vcRulesList[i].dimensions = ',vcRulesList[i].dimensions);
+//         //    console.log('_generateRegModels index i = ', i, ' vcRulesList[i].dimensions = ',vcRulesList[i].dimensions);
 
-    }
+//     }
     
- console.log('_generateRegModels Start Time',new Date());
-//  console.log('_generateRegModels vcRulesList ',vcRulesList);
+//  console.log('_generateRegModels Start Time',new Date());
+// //  console.log('_generateRegModels vcRulesList ',vcRulesList);
 
 
 
 
-if (hasCharCount1 == true)
-{
+// if (hasCharCount1 == true)
+// {
     
-    let modelType = 'MLR';
+//     let modelType = 'MLR';
 
-    let ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 1);
-    if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
-    {
-        let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 1);
+//     let ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 1);
+//     if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+//     {
+//         let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 1);
 
-        let dataObj = await _getDataObjForGenModels(ruleList, modelType, 1);
-        url = baseUrl + '/pal/mlrRegressions';
-        await _postRegressionRequest(req,url,paramsObj,1,dataObj,modelType,ruleList);
-    }
+//         let dataObj = await _getDataObjForGenModels(ruleList, modelType, 1);
+//         url = baseUrl + '/pal/mlrRegressions';
+//         await _postRegressionRequest(req,url,paramsObj,1,dataObj,modelType,ruleList);
+//     }
     
-    modelType = 'HGBT';
+//     modelType = 'HGBT';
 
-    ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 1);
-    if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
-    {
-        let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 1);
+//     ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 1);
+//     if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+//     {
+//         let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 1);
 
-        let dataObj = await _getDataObjForGenModels(ruleList, modelType, 1);
-        url =  baseUrl + '/pal/hgbtRegressionsV1';
-        await _postRegressionRequest(req,url,paramsObj,1,dataObj,modelType,ruleList);
-    }
+//         let dataObj = await _getDataObjForGenModels(ruleList, modelType, 1);
+//         url =  baseUrl + '/pal/hgbtRegressionsV1';
+//         await _postRegressionRequest(req,url,paramsObj,1,dataObj,modelType,ruleList);
+//     }
 
-    modelType = 'RDT';
+//     modelType = 'RDT';
 
-    ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 1);
-    if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
-    {
-        let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 1);
+//     ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 1);
+//     if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+//     {
+//         let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 1);
 
-        let dataObj = await _getDataObjForGenModels(ruleList, modelType, 1);
-        url =  baseUrl + '/pal/rdtRegressions';
-        await _postRegressionRequest(req,url,paramsObj,1,dataObj,modelType,ruleList);
-    }
+//         let dataObj = await _getDataObjForGenModels(ruleList, modelType, 1);
+//         url =  baseUrl + '/pal/rdtRegressions';
+//         await _postRegressionRequest(req,url,paramsObj,1,dataObj,modelType,ruleList);
+//     }
 
-    modelType = 'VARMA';
+//     modelType = 'VARMA';
 
-    ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 1);
-    if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
-    {
-        let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 1);
+//     ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 1);
+//     if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+//     {
+//         let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 1);
 
-        let dataObj = await _getDataObjForGenModels(ruleList, modelType, 1);
-        url =  baseUrl + '/pal/varmaModels';
-        await _postRegressionRequest(req,url,paramsObj,1,dataObj,modelType,ruleList);
-    }
+//         let dataObj = await _getDataObjForGenModels(ruleList, modelType, 1);
+//         url =  baseUrl + '/pal/varmaModels';
+//         await _postRegressionRequest(req,url,paramsObj,1,dataObj,modelType,ruleList);
+//     }
 
-}
+// }
 
-    if (hasCharCount2 == true)
-    {
+//     if (hasCharCount2 == true)
+//     {
         
-        let modelType = 'MLR';
+//         let modelType = 'MLR';
 
-        let ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 2);
-        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
-        {
-            let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 2);
+//         let ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 2);
+//         if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+//         {
+//             let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 2);
 
-            let dataObj = await _getDataObjForGenModels(ruleList, modelType, 2);
-            url = baseUrl + '/pal/mlrRegressions';
-            await _postRegressionRequest(req,url,paramsObj,2,dataObj,modelType,ruleList);
-        }
+//             let dataObj = await _getDataObjForGenModels(ruleList, modelType, 2);
+//             url = baseUrl + '/pal/mlrRegressions';
+//             await _postRegressionRequest(req,url,paramsObj,2,dataObj,modelType,ruleList);
+//         }
         
-        modelType = 'HGBT';
+//         modelType = 'HGBT';
 
-        ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 2);
-        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
-        {
-            let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 2);
+//         ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 2);
+//         if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+//         {
+//             let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 2);
 
-            let dataObj = await _getDataObjForGenModels(ruleList, modelType, 2);
-            url =  baseUrl + '/pal/hgbtRegressionsV1';
-            await _postRegressionRequest(req,url,paramsObj,2,dataObj,modelType,ruleList);
-        }
+//             let dataObj = await _getDataObjForGenModels(ruleList, modelType, 2);
+//             url =  baseUrl + '/pal/hgbtRegressionsV1';
+//             await _postRegressionRequest(req,url,paramsObj,2,dataObj,modelType,ruleList);
+//         }
 
-        modelType = 'RDT';
+//         modelType = 'RDT';
 
-        ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 2);
-        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
-        {
-            let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 2);
+//         ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 2);
+//         if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+//         {
+//             let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 2);
 
-            let dataObj = await _getDataObjForGenModels(ruleList, modelType, 2);
-            url =  baseUrl + '/pal/rdtRegressions';
-            await _postRegressionRequest(req,url,paramsObj,2,dataObj,modelType,ruleList);
-        }
+//             let dataObj = await _getDataObjForGenModels(ruleList, modelType, 2);
+//             url =  baseUrl + '/pal/rdtRegressions';
+//             await _postRegressionRequest(req,url,paramsObj,2,dataObj,modelType,ruleList);
+//         }
 
-        modelType = 'VARMA';
+//         modelType = 'VARMA';
 
-        ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 2);
-        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
-        {
-            let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 2);
+//         ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 2);
+//         if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+//         {
+//             let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 2);
 
-            let dataObj = await _getDataObjForGenModels(ruleList, modelType, 2);
-            url =  baseUrl + '/pal/varmaModels';
-            await _postRegressionRequest(req,url,paramsObj,2,dataObj,modelType,ruleList);
-        }
+//             let dataObj = await _getDataObjForGenModels(ruleList, modelType, 2);
+//             url =  baseUrl + '/pal/varmaModels';
+//             await _postRegressionRequest(req,url,paramsObj,2,dataObj,modelType,ruleList);
+//         }
 
-    }
-    if (hasCharCount3 == true)
-    {
-        let modelType = 'MLR';
-        let ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 3);
-        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
-        {
-            let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 3);
+//     }
+//     if (hasCharCount3 == true)
+//     {
+//         let modelType = 'MLR';
+//         let ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 3);
+//         if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+//         {
+//             let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 3);
 
-            let dataObj = await _getDataObjForGenModels(ruleList, modelType, 3);
-            url = baseUrl + '/pal/mlrRegressions';
-            await _postRegressionRequest(req,url,paramsObj,3,dataObj,modelType,ruleList);
-        }
+//             let dataObj = await _getDataObjForGenModels(ruleList, modelType, 3);
+//             url = baseUrl + '/pal/mlrRegressions';
+//             await _postRegressionRequest(req,url,paramsObj,3,dataObj,modelType,ruleList);
+//         }
 
-        modelType = 'HGBT';
+//         modelType = 'HGBT';
         
-        ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 3);
-        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
-        {
-            let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 3);
+//         ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 3);
+//         if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+//         {
+//             let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 3);
 
-            let dataObj = await _getDataObjForGenModels(ruleList, modelType, 3);
-            url =  baseUrl + '/pal/hgbtRegressionsV1';
-            await _postRegressionRequest(req,url,paramsObj,3,dataObj,modelType,ruleList);
-        }
+//             let dataObj = await _getDataObjForGenModels(ruleList, modelType, 3);
+//             url =  baseUrl + '/pal/hgbtRegressionsV1';
+//             await _postRegressionRequest(req,url,paramsObj,3,dataObj,modelType,ruleList);
+//         }
 
-        modelType = 'RDT';
+//         modelType = 'RDT';
         
-        ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 3);
-        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
-        {
-            let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 3);
+//         ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 3);
+//         if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+//         {
+//             let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 3);
 
-            let dataObj = await _getDataObjForGenModels(ruleList, modelType, 3);
-            url =  baseUrl + '/pal/rdtRegressions';
-            await _postRegressionRequest(req,url,paramsObj,3,dataObj,modelType,ruleList);
-        }
+//             let dataObj = await _getDataObjForGenModels(ruleList, modelType, 3);
+//             url =  baseUrl + '/pal/rdtRegressions';
+//             await _postRegressionRequest(req,url,paramsObj,3,dataObj,modelType,ruleList);
+//         }
 
-        modelType = 'VARMA';
+//         modelType = 'VARMA';
         
-        ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 3);
-        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
-        {
-            let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 3);
+//         ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 3);
+//         if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+//         {
+//             let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 3);
 
-            let dataObj = await _getDataObjForGenModels(ruleList, modelType, 3);
-            url =  baseUrl + '/pal/varmaModels';
-            await _postRegressionRequest(req,url,paramsObj,3,dataObj,modelType,ruleList);
-        }
-    }
-    if (hasCharCount4 == true)
-    {
-        let modelType = 'MLR';
-        let ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 4);
-        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
-        {
-            let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 4);
+//             let dataObj = await _getDataObjForGenModels(ruleList, modelType, 3);
+//             url =  baseUrl + '/pal/varmaModels';
+//             await _postRegressionRequest(req,url,paramsObj,3,dataObj,modelType,ruleList);
+//         }
+//     }
+//     if (hasCharCount4 == true)
+//     {
+//         let modelType = 'MLR';
+//         let ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 4);
+//         if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+//         {
+//             let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 4);
 
-            let dataObj = await _getDataObjForGenModels(ruleList, modelType, 4);
-            url = baseUrl + '/pal/mlrRegressions';
-            await _postRegressionRequest(req,url,paramsObj,4,dataObj,modelType,ruleList);
-        }
-        modelType = 'HGBT';
-        ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 4);
-        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
-        {
-            let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 4);
+//             let dataObj = await _getDataObjForGenModels(ruleList, modelType, 4);
+//             url = baseUrl + '/pal/mlrRegressions';
+//             await _postRegressionRequest(req,url,paramsObj,4,dataObj,modelType,ruleList);
+//         }
+//         modelType = 'HGBT';
+//         ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 4);
+//         if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+//         {
+//             let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 4);
 
-            let dataObj = await _getDataObjForGenModels(ruleList, modelType, 4);
-            url =  baseUrl + '/pal/hgbtRegressionsV1';
-            await _postRegressionRequest(req,url,paramsObj,4,dataObj,modelType,ruleList);
-        }
-        modelType = 'RDT';
-        ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 4);
-        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
-        {
-            let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 4);
+//             let dataObj = await _getDataObjForGenModels(ruleList, modelType, 4);
+//             url =  baseUrl + '/pal/hgbtRegressionsV1';
+//             await _postRegressionRequest(req,url,paramsObj,4,dataObj,modelType,ruleList);
+//         }
+//         modelType = 'RDT';
+//         ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 4);
+//         if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+//         {
+//             let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 4);
 
-            let dataObj = await _getDataObjForGenModels(ruleList, modelType, 4);
-            url =  baseUrl + '/pal/rdtRegressions';
-            await _postRegressionRequest(req,url,paramsObj,4,dataObj,modelType,ruleList);
-        }
-        modelType = 'VARMA';
-        ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 4);
-        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
-        {
-            let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 4);
+//             let dataObj = await _getDataObjForGenModels(ruleList, modelType, 4);
+//             url =  baseUrl + '/pal/rdtRegressions';
+//             await _postRegressionRequest(req,url,paramsObj,4,dataObj,modelType,ruleList);
+//         }
+//         modelType = 'VARMA';
+//         ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 4);
+//         if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+//         {
+//             let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 4);
 
-            let dataObj = await _getDataObjForGenModels(ruleList, modelType, 4);
-            url =  baseUrl + '/pal/varmaModels';
-            await _postRegressionRequest(req,url,paramsObj,4,dataObj,modelType,ruleList);
-        }
-    }
-    if (hasCharCount5 == true)
-    {
-        let modelType = 'MLR';
-        let ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 5);
-        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
-        {
-            //let paramsObj =  await _getParamsObjForGenModels(vcRulesList, modelType, 5);
-            let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 5);
+//             let dataObj = await _getDataObjForGenModels(ruleList, modelType, 4);
+//             url =  baseUrl + '/pal/varmaModels';
+//             await _postRegressionRequest(req,url,paramsObj,4,dataObj,modelType,ruleList);
+//         }
+//     }
+//     if (hasCharCount5 == true)
+//     {
+//         let modelType = 'MLR';
+//         let ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 5);
+//         if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+//         {
+//             //let paramsObj =  await _getParamsObjForGenModels(vcRulesList, modelType, 5);
+//             let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 5);
 
-            let dataObj = await _getDataObjForGenModels(ruleList, modelType, 5);
-            url = baseUrl + '/pal/mlrRegressions';
-            await _postRegressionRequest(req,url,paramsObj,5,dataObj,modelType,ruleList);
-        }
-        modelType = 'HGBT';
-        ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 5);
-        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
-        {
-            let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 5);
+//             let dataObj = await _getDataObjForGenModels(ruleList, modelType, 5);
+//             url = baseUrl + '/pal/mlrRegressions';
+//             await _postRegressionRequest(req,url,paramsObj,5,dataObj,modelType,ruleList);
+//         }
+//         modelType = 'HGBT';
+//         ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 5);
+//         if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+//         {
+//             let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 5);
 
-            let dataObj = await _getDataObjForGenModels(ruleList, modelType, 5);
-            url =  baseUrl + '/pal/hgbtRegressionsV1';
-            await _postRegressionRequest(req,url,paramsObj,5,dataObj,modelType,ruleList);
-        }
-        modelType = 'RDT';
-        ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 5);
-        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
-        {
-            let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 5);
+//             let dataObj = await _getDataObjForGenModels(ruleList, modelType, 5);
+//             url =  baseUrl + '/pal/hgbtRegressionsV1';
+//             await _postRegressionRequest(req,url,paramsObj,5,dataObj,modelType,ruleList);
+//         }
+//         modelType = 'RDT';
+//         ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 5);
+//         if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+//         {
+//             let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 5);
 
-            let dataObj = await _getDataObjForGenModels(ruleList, modelType, 5);
-            url =  baseUrl + '/pal/rdtRegressions';
-            await _postRegressionRequest(req,url,paramsObj,5,dataObj,modelType,ruleList);
-        }
-        modelType = 'VARMA';
-        ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 5);
-        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
-        {
-            let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 5);
+//             let dataObj = await _getDataObjForGenModels(ruleList, modelType, 5);
+//             url =  baseUrl + '/pal/rdtRegressions';
+//             await _postRegressionRequest(req,url,paramsObj,5,dataObj,modelType,ruleList);
+//         }
+//         modelType = 'VARMA';
+//         ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 5);
+//         if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+//         {
+//             let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 5);
 
-            let dataObj = await _getDataObjForGenModels(ruleList, modelType, 5);
-            url =  baseUrl + '/pal/varmaModels';
-            await _postRegressionRequest(req,url,paramsObj,5,dataObj,modelType,ruleList);
-        }
-    }
-    if (hasCharCount6 == true)
-    {
-        let modelType = 'MLR';
-        let ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 6);
-        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
-        {
-            let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 6);
+//             let dataObj = await _getDataObjForGenModels(ruleList, modelType, 5);
+//             url =  baseUrl + '/pal/varmaModels';
+//             await _postRegressionRequest(req,url,paramsObj,5,dataObj,modelType,ruleList);
+//         }
+//     }
+//     if (hasCharCount6 == true)
+//     {
+//         let modelType = 'MLR';
+//         let ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 6);
+//         if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+//         {
+//             let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 6);
 
-            let dataObj = await _getDataObjForGenModels(ruleList, modelType, 6);
-            url = baseUrl + '/pal/mlrRegressions';
-            await _postRegressionRequest(req,url,paramsObj,6,dataObj,modelType,ruleList);
+//             let dataObj = await _getDataObjForGenModels(ruleList, modelType, 6);
+//             url = baseUrl + '/pal/mlrRegressions';
+//             await _postRegressionRequest(req,url,paramsObj,6,dataObj,modelType,ruleList);
 
-        }
-        modelType = 'HGBT';
-        ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 6);
-        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
-        {
-            let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 6);
+//         }
+//         modelType = 'HGBT';
+//         ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 6);
+//         if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+//         {
+//             let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 6);
 
-            let dataObj = await _getDataObjForGenModels(ruleList, modelType, 6);
-            url =  baseUrl + '/pal/hgbtRegressionsV1';
-            await _postRegressionRequest(req,url,paramsObj,6,dataObj,modelType,ruleList);
+//             let dataObj = await _getDataObjForGenModels(ruleList, modelType, 6);
+//             url =  baseUrl + '/pal/hgbtRegressionsV1';
+//             await _postRegressionRequest(req,url,paramsObj,6,dataObj,modelType,ruleList);
 
-        }
-        modelType = 'RDT';
-        ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 6);
-        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
-        {
-            let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 6);
+//         }
+//         modelType = 'RDT';
+//         ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 6);
+//         if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+//         {
+//             let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 6);
 
-            let dataObj = await _getDataObjForGenModels(ruleList, modelType, 6);
-            url =  baseUrl + '/pal/rdtRegressions';
-            await _postRegressionRequest(req,url,paramsObj,6,dataObj,modelType,ruleList);
+//             let dataObj = await _getDataObjForGenModels(ruleList, modelType, 6);
+//             url =  baseUrl + '/pal/rdtRegressions';
+//             await _postRegressionRequest(req,url,paramsObj,6,dataObj,modelType,ruleList);
 
-        }
-        modelType = 'VARMA';
-        ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 6);
-        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
-        {
-            let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 6);
+//         }
+//         modelType = 'VARMA';
+//         ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 6);
+//         if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+//         {
+//             let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 6);
 
-            let dataObj = await _getDataObjForGenModels(ruleList, modelType, 6);
-            url =  baseUrl + '/pal/varmaModels';
-            await _postRegressionRequest(req,url,paramsObj,6,dataObj,modelType,ruleList);
+//             let dataObj = await _getDataObjForGenModels(ruleList, modelType, 6);
+//             url =  baseUrl + '/pal/varmaModels';
+//             await _postRegressionRequest(req,url,paramsObj,6,dataObj,modelType,ruleList);
 
-        }
-    }
-    if (hasCharCount7 == true)
-    {
-        let modelType = 'MLR';
-        let ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 7);
-        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
-        {
-            let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 7);
+//         }
+//     }
+//     if (hasCharCount7 == true)
+//     {
+//         let modelType = 'MLR';
+//         let ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 7);
+//         if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+//         {
+//             let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 7);
 
-            let dataObj = await _getDataObjForGenModels(ruleList, modelType, 7);
-            url = baseUrl + '/pal/mlrRegressions';
-            await _postRegressionRequest(req,url,paramsObj,7,dataObj,modelType,ruleList);
-        }
-        modelType = 'HGBT';
-        ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 7);
-        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
-        {
-            let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 7);
+//             let dataObj = await _getDataObjForGenModels(ruleList, modelType, 7);
+//             url = baseUrl + '/pal/mlrRegressions';
+//             await _postRegressionRequest(req,url,paramsObj,7,dataObj,modelType,ruleList);
+//         }
+//         modelType = 'HGBT';
+//         ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 7);
+//         if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+//         {
+//             let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 7);
 
-            let dataObj = await _getDataObjForGenModels(ruleList, modelType, 7);
-            url =  baseUrl + '/pal/hgbtRegressionsV1';
-            await _postRegressionRequest(req,url,paramsObj,7,dataObj,modelType,ruleList);
-        }
-        modelType = 'RDT';
-        ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 7);
-        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
-        {
-            let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 7);
+//             let dataObj = await _getDataObjForGenModels(ruleList, modelType, 7);
+//             url =  baseUrl + '/pal/hgbtRegressionsV1';
+//             await _postRegressionRequest(req,url,paramsObj,7,dataObj,modelType,ruleList);
+//         }
+//         modelType = 'RDT';
+//         ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 7);
+//         if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+//         {
+//             let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 7);
 
-            let dataObj = await _getDataObjForGenModels(ruleList, modelType, 7);
-            url =  baseUrl + '/pal/rdtRegressions';
-            await _postRegressionRequest(req,url,paramsObj,7,dataObj,modelType,ruleList);
-        }
-        modelType = 'VARMA';
-        ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 7);
-        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
-        {
-            let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 7);
+//             let dataObj = await _getDataObjForGenModels(ruleList, modelType, 7);
+//             url =  baseUrl + '/pal/rdtRegressions';
+//             await _postRegressionRequest(req,url,paramsObj,7,dataObj,modelType,ruleList);
+//         }
+//         modelType = 'VARMA';
+//         ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 7);
+//         if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+//         {
+//             let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 7);
 
-            let dataObj = await _getDataObjForGenModels(ruleList, modelType, 7);
-            url =  baseUrl + '/pal/varmaModels';
-            await _postRegressionRequest(req,url,paramsObj,7,dataObj,modelType,ruleList);
-        }
-    }
-    if (hasCharCount8 == true)
-    {
-        let modelType = 'MLR';
-        let ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 8);
-        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
-        {
-            let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 8);
+//             let dataObj = await _getDataObjForGenModels(ruleList, modelType, 7);
+//             url =  baseUrl + '/pal/varmaModels';
+//             await _postRegressionRequest(req,url,paramsObj,7,dataObj,modelType,ruleList);
+//         }
+//     }
+//     if (hasCharCount8 == true)
+//     {
+//         let modelType = 'MLR';
+//         let ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 8);
+//         if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+//         {
+//             let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 8);
 
-            let dataObj = await _getDataObjForGenModels(ruleList, modelType, 8);
-            url = baseUrl + '/pal/mlrRegressions';
-            await _postRegressionRequest(req,url,paramsObj,8,dataObj,modelType,ruleList);
-        }
-        modelType = 'HGBT';
-        ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 8);
-        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
-        {
-            let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 8);
+//             let dataObj = await _getDataObjForGenModels(ruleList, modelType, 8);
+//             url = baseUrl + '/pal/mlrRegressions';
+//             await _postRegressionRequest(req,url,paramsObj,8,dataObj,modelType,ruleList);
+//         }
+//         modelType = 'HGBT';
+//         ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 8);
+//         if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+//         {
+//             let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 8);
 
-            let dataObj = await _getDataObjForGenModels(ruleList, modelType, 8);
-            url =  baseUrl + '/pal/hgbtRegressionsV1';
-            await _postRegressionRequest(req,url,paramsObj,8,dataObj,modelType,ruleList);
-        }
-        modelType = 'RDT';
-        ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 8);
-        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
-        {
-            let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 8);
+//             let dataObj = await _getDataObjForGenModels(ruleList, modelType, 8);
+//             url =  baseUrl + '/pal/hgbtRegressionsV1';
+//             await _postRegressionRequest(req,url,paramsObj,8,dataObj,modelType,ruleList);
+//         }
+//         modelType = 'RDT';
+//         ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 8);
+//         if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+//         {
+//             let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 8);
 
-            let dataObj = await _getDataObjForGenModels(ruleList, modelType, 8);
-            url =  baseUrl + '/pal/rdtRegressions';
-            await _postRegressionRequest(req,url,paramsObj,8,dataObj,modelType,ruleList);
-        }
-        modelType = 'VARMA';
-        ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 8);
-        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
-        {
-            let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 8);
+//             let dataObj = await _getDataObjForGenModels(ruleList, modelType, 8);
+//             url =  baseUrl + '/pal/rdtRegressions';
+//             await _postRegressionRequest(req,url,paramsObj,8,dataObj,modelType,ruleList);
+//         }
+//         modelType = 'VARMA';
+//         ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 8);
+//         if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+//         {
+//             let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 8);
 
-            let dataObj = await _getDataObjForGenModels(ruleList, modelType, 8);
-            url =  baseUrl + '/pal/varmaModels';
-            await _postRegressionRequest(req,url,paramsObj,8,dataObj,modelType,ruleList);
+//             let dataObj = await _getDataObjForGenModels(ruleList, modelType, 8);
+//             url =  baseUrl + '/pal/varmaModels';
+//             await _postRegressionRequest(req,url,paramsObj,8,dataObj,modelType,ruleList);
        
-        }
-    }
-    if (hasCharCount9 == true)
-    {
-        let modelType = 'MLR';
-        let ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 9);
-        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
-        {
-            let paramsObj =  _getParamsObjForGenModels(ruleList, modelType, 9);
+//         }
+//     }
+//     if (hasCharCount9 == true)
+//     {
+//         let modelType = 'MLR';
+//         let ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 9);
+//         if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+//         {
+//             let paramsObj =  _getParamsObjForGenModels(ruleList, modelType, 9);
 
-            let dataObj = await _getDataObjForGenModels(ruleList, modelType, 9);
-            url = baseUrl + '/pal/mlrRegressions';
-            await _postRegressionRequest(req,url,paramsObj,9,dataObj,modelType,ruleList);
-        }
-        modelType = 'HGBT';
-        ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 9);
-        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
-        {
-            let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 9);
+//             let dataObj = await _getDataObjForGenModels(ruleList, modelType, 9);
+//             url = baseUrl + '/pal/mlrRegressions';
+//             await _postRegressionRequest(req,url,paramsObj,9,dataObj,modelType,ruleList);
+//         }
+//         modelType = 'HGBT';
+//         ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 9);
+//         if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+//         {
+//             let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 9);
 
-            let dataObj = await _getDataObjForGenModels(ruleList, modelType, 9);
-            url =  baseUrl + '/pal/hgbtRegressionsV1';
-            await _postRegressionRequest(req,url,paramsObj,9,dataObj,modelType,ruleList);
-        }
-        modelType = 'RDT';
-        ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 9);
-        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
-        {
-            let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 9);
+//             let dataObj = await _getDataObjForGenModels(ruleList, modelType, 9);
+//             url =  baseUrl + '/pal/hgbtRegressionsV1';
+//             await _postRegressionRequest(req,url,paramsObj,9,dataObj,modelType,ruleList);
+//         }
+//         modelType = 'RDT';
+//         ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 9);
+//         if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+//         {
+//             let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 9);
 
-            let dataObj = await _getDataObjForGenModels(ruleList, modelType, 9);
-            url =  baseUrl + '/pal/rdtRegressions';
-            await _postRegressionRequest(req,url,paramsObj,9,dataObj,modelType,ruleList);
-        }
-        modelType = 'VARMA';
-        ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 9);
-        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
-        {
-            let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 9);
+//             let dataObj = await _getDataObjForGenModels(ruleList, modelType, 9);
+//             url =  baseUrl + '/pal/rdtRegressions';
+//             await _postRegressionRequest(req,url,paramsObj,9,dataObj,modelType,ruleList);
+//         }
+//         modelType = 'VARMA';
+//         ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 9);
+//         if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+//         {
+//             let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 9);
 
-            let dataObj = await _getDataObjForGenModels(ruleList, modelType, 9);
-            url =  baseUrl + '/pal/varmaModels';
-            await _postRegressionRequest(req,url,paramsObj,9,dataObj,modelType,ruleList);
-        }
-    }
-    if (hasCharCount10 == true)
-    {
-        let modelType = 'MLR';
-        let ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 10);
-        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
-        {
-            let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 10);
+//             let dataObj = await _getDataObjForGenModels(ruleList, modelType, 9);
+//             url =  baseUrl + '/pal/varmaModels';
+//             await _postRegressionRequest(req,url,paramsObj,9,dataObj,modelType,ruleList);
+//         }
+//     }
+//     if (hasCharCount10 == true)
+//     {
+//         let modelType = 'MLR';
+//         let ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 10);
+//         if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+//         {
+//             let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 10);
 
-            let dataObj = await _getDataObjForGenModels(ruleList, modelType, 10);
-            url = baseUrl + '/pal/mlrRegressions';
-            await _postRegressionRequest(req,url,paramsObj,10,dataObj,modelType,ruleList);
-        }
-        modelType = 'HGBT';
-        ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 10);
-        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
-        {
-            let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 10);
+//             let dataObj = await _getDataObjForGenModels(ruleList, modelType, 10);
+//             url = baseUrl + '/pal/mlrRegressions';
+//             await _postRegressionRequest(req,url,paramsObj,10,dataObj,modelType,ruleList);
+//         }
+//         modelType = 'HGBT';
+//         ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 10);
+//         if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+//         {
+//             let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 10);
 
-            let dataObj = await _getDataObjForGenModels(ruleList, modelType, 10);
-            url =  baseUrl + '/pal/hgbtRegressionsV1';
-            await _postRegressionRequest(req,url,paramsObj,10,dataObj,modelType,ruleList);
-        }
-        modelType = 'RDT';
-        ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 10);
-        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
-        {
-            let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 10);
+//             let dataObj = await _getDataObjForGenModels(ruleList, modelType, 10);
+//             url =  baseUrl + '/pal/hgbtRegressionsV1';
+//             await _postRegressionRequest(req,url,paramsObj,10,dataObj,modelType,ruleList);
+//         }
+//         modelType = 'RDT';
+//         ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 10);
+//         if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+//         {
+//             let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 10);
 
-            let dataObj = await _getDataObjForGenModels(ruleList, modelType, 10);
-            url =  baseUrl + '/pal/rdtRegressions';
-            await _postRegressionRequest(req,url,paramsObj,10,dataObj,modelType,ruleList);
-        }
-        modelType = 'VARMA';
-        ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 10);
-        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
-        {
-            let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 10);
+//             let dataObj = await _getDataObjForGenModels(ruleList, modelType, 10);
+//             url =  baseUrl + '/pal/rdtRegressions';
+//             await _postRegressionRequest(req,url,paramsObj,10,dataObj,modelType,ruleList);
+//         }
+//         modelType = 'VARMA';
+//         ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 10);
+//         if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+//         {
+//             let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 10);
 
-            let dataObj = await _getDataObjForGenModels(ruleList, modelType, 10);
-            url =  baseUrl + '/pal/varmaModels';
-            await _postRegressionRequest(req,url,paramsObj,10,dataObj,modelType,ruleList);
-        }
-    }
-    if (hasCharCount11 == true)
-    {
-        let modelType = 'MLR';
-        let ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 11);
-        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
-        {
-            let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 11);
+//             let dataObj = await _getDataObjForGenModels(ruleList, modelType, 10);
+//             url =  baseUrl + '/pal/varmaModels';
+//             await _postRegressionRequest(req,url,paramsObj,10,dataObj,modelType,ruleList);
+//         }
+//     }
+//     if (hasCharCount11 == true)
+//     {
+//         let modelType = 'MLR';
+//         let ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 11);
+//         if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+//         {
+//             let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 11);
 
-            let dataObj = await _getDataObjForGenModels(ruleList, modelType, 11);
-            url = baseUrl + '/pal/mlrRegressions';
-            await _postRegressionRequest(req,url,paramsObj,11,dataObj,modelType,ruleList);
-        }
-        modelType = 'HGBT';
-        ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 11);
-        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
-        {
-            let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 11);
+//             let dataObj = await _getDataObjForGenModels(ruleList, modelType, 11);
+//             url = baseUrl + '/pal/mlrRegressions';
+//             await _postRegressionRequest(req,url,paramsObj,11,dataObj,modelType,ruleList);
+//         }
+//         modelType = 'HGBT';
+//         ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 11);
+//         if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+//         {
+//             let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 11);
 
-            let dataObj = await _getDataObjForGenModels(ruleList, modelType, 11);
-            url =  baseUrl + '/pal/hgbtRegressionsV1';
-            await _postRegressionRequest(req,url,paramsObj,11,dataObj,modelType,ruleList);
-        }
-        modelType = 'RDT';
-        ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 11);
-        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
-        {
-            let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 11);
+//             let dataObj = await _getDataObjForGenModels(ruleList, modelType, 11);
+//             url =  baseUrl + '/pal/hgbtRegressionsV1';
+//             await _postRegressionRequest(req,url,paramsObj,11,dataObj,modelType,ruleList);
+//         }
+//         modelType = 'RDT';
+//         ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 11);
+//         if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+//         {
+//             let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 11);
 
-            let dataObj = await _getDataObjForGenModels(ruleList, modelType, 11);
-            url =  baseUrl + '/pal/rdtRegressions';
-            await _postRegressionRequest(req,url,paramsObj,11,dataObj,modelType,ruleList);
-        }
-        modelType = 'VARMA';
-        ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 11);
-        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
-        {
-            let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 11);
+//             let dataObj = await _getDataObjForGenModels(ruleList, modelType, 11);
+//             url =  baseUrl + '/pal/rdtRegressions';
+//             await _postRegressionRequest(req,url,paramsObj,11,dataObj,modelType,ruleList);
+//         }
+//         modelType = 'VARMA';
+//         ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 11);
+//         if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+//         {
+//             let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 11);
 
-            let dataObj = await _getDataObjForGenModels(ruleList, modelType, 11);
-            url =  baseUrl + '/pal/varmaModels';
-            await _postRegressionRequest(req,url,paramsObj,11,dataObj,modelType,ruleList);
-        }
-    }
-    if (hasCharCount12 == true)
-    {
-        let modelType = 'MLR';
-        let ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 12);
-        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
-        {
-            let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 12);
+//             let dataObj = await _getDataObjForGenModels(ruleList, modelType, 11);
+//             url =  baseUrl + '/pal/varmaModels';
+//             await _postRegressionRequest(req,url,paramsObj,11,dataObj,modelType,ruleList);
+//         }
+//     }
+//     if (hasCharCount12 == true)
+//     {
+//         let modelType = 'MLR';
+//         let ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 12);
+//         if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+//         {
+//             let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 12);
 
-            let dataObj = await _getDataObjForGenModels(ruleList, modelType, 12);
-            url = baseUrl + '/pal/mlrRegressions';
-            await _postRegressionRequest(req,url,paramsObj,12,dataObj,modelType,ruleList);
-        }
-        modelType = 'HGBT';
-        ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 12);
-        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
-        {
-            let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 12);
+//             let dataObj = await _getDataObjForGenModels(ruleList, modelType, 12);
+//             url = baseUrl + '/pal/mlrRegressions';
+//             await _postRegressionRequest(req,url,paramsObj,12,dataObj,modelType,ruleList);
+//         }
+//         modelType = 'HGBT';
+//         ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 12);
+//         if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+//         {
+//             let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 12);
 
-            let dataObj = await _getDataObjForGenModels(ruleList, modelType, 12);
-            url =  baseUrl + '/pal/hgbtRegressionsV1';
-            await _postRegressionRequest(req,url,paramsObj,12,dataObj,modelType,ruleList);
-        }
-        modelType = 'RDT';
-        ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 12);
-        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
-        {
-            let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 12);
+//             let dataObj = await _getDataObjForGenModels(ruleList, modelType, 12);
+//             url =  baseUrl + '/pal/hgbtRegressionsV1';
+//             await _postRegressionRequest(req,url,paramsObj,12,dataObj,modelType,ruleList);
+//         }
+//         modelType = 'RDT';
+//         ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 12);
+//         if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+//         {
+//             let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 12);
 
-            let dataObj = await _getDataObjForGenModels(ruleList, modelType, 12);
-            url =  baseUrl + '/pal/rdtRegressions';
-            await _postRegressionRequest(req,url,paramsObj,12,dataObj,modelType,ruleList);
-        }
-        modelType = 'VARMA';
-        ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 12);
-        if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
-        {
-            let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 12);
+//             let dataObj = await _getDataObjForGenModels(ruleList, modelType, 12);
+//             url =  baseUrl + '/pal/rdtRegressions';
+//             await _postRegressionRequest(req,url,paramsObj,12,dataObj,modelType,ruleList);
+//         }
+//         modelType = 'VARMA';
+//         ruleList = await _getRuleListTypeForGenModels(vcRulesList, modelType, 12);
+//         if ( (ruleList.length > 0) && ruleList[0].modelType == modelType)
+//         {
+//             let paramsObj =  await _getParamsObjForGenModels(ruleList, modelType, 12);
 
-            let dataObj = await _getDataObjForGenModels(ruleList, modelType, 12);
-            url =  baseUrl + '/pal/varmaModels';
-            await _postRegressionRequest(req,url,paramsObj,12,dataObj,modelType,ruleList);
-        }
-    }
+//             let dataObj = await _getDataObjForGenModels(ruleList, modelType, 12);
+//             url =  baseUrl + '/pal/varmaModels';
+//             await _postRegressionRequest(req,url,paramsObj,12,dataObj,modelType,ruleList);
+//         }
+//     }
  
-    console.log('_generateRegModels End Time',new Date());
+//     console.log('_generateRegModels End Time',new Date());
 
-    let dataObj = {};
-    dataObj["success"] = true;
-    dataObj["message"] = "Generate Models Job Completed Successfully at " +  new Date();
+//     let dataObj = {};
+//     dataObj["success"] = true;
+//     dataObj["message"] = "Generate Models Job Completed Successfully at " +  new Date();
 
-    if (req.headers['x-sap-job-id'] > 0)
-    {
-        const scheduler = getJobscheduler(req);
+//     if (req.headers['x-sap-job-id'] > 0)
+//     {
+//         const scheduler = getJobscheduler(req);
 
-        var updateReq = {
-            jobId: req.headers['x-sap-job-id'],
-            scheduleId: req.headers['x-sap-job-schedule-id'],
-            runId: req.headers['x-sap-job-run-id'],
-            data : dataObj
-            };
+//         var updateReq = {
+//             jobId: req.headers['x-sap-job-id'],
+//             scheduleId: req.headers['x-sap-job-schedule-id'],
+//             runId: req.headers['x-sap-job-run-id'],
+//             data : dataObj
+//             };
 
-        scheduler.updateJobRunLog(updateReq, function(err, result) {
-        if (err) {
-            return console.log('Error updating run log: %s', err);
-        }
+//         scheduler.updateJobRunLog(updateReq, function(err, result) {
+//         if (err) {
+//             return console.log('Error updating run log: %s', err);
+//         }
  
-        });
-    }
-    }
+//         });
+//     }
+//     }
+
+        async generateModels (req){
+            // var request = require('request');
+        // var baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host;  // Un-Comment while deploying
+        // console.log("Started Generation of Clusters");
+        var baseUrl = 'http' + '://' + req.headers.host;
+        var sUrl = baseUrl + '/pal/genClusters';
+
+        const liDistinctProd = await cds.run(
+            `SELECT DISTINCT PRODUCT_ID
+               FROM V_SALES_H
+              WHERE LOCATION_ID = '${lLocation}'
+                AND REF_PRODID = '${lProduct}'`
+        );
+
+        if (liDistinctProd.length > 0) {
+            for (let i = 0; i < liDistinctProd.length; i++) {
+                var options = {
+                    'method': 'POST',
+                    'url': sUrl,
+                    'headers': {
+                        'Content-Type': 'application/json'
+                    },
+
+                    body: JSON.stringify({
+                        "vcRulesList": [
+                            {
+                                "profile": "SBP_AHC_0",
+                                "override": false,
+                                "Location": lLocation,
+                                "Product": liDistinctProd[i].PRODUCT_ID
+                            }
+                        ]
+                    })
+
+                };
+
+                request(options, function (error, response) {
+
+                    if (error) throw new Error(error);
+
+                    console.log(response.body);
+
+                });
+            }
+            console.log("Completed Cluster Results Generation");
+        }
+        }
 
 
     // IBP Export functions
@@ -2015,12 +1343,6 @@ if (hasCharCount1 == true)
          catch (error) {
  
          }
-         if (flag === 'X') {
-             await GenF.jobSchMessage('X', "Export of Location is successful ", req);
-         }
-         else {
-             await GenF.jobSchMessage('', "Export of Location is failed", req);
-         }
     }
     async exportIBPCustomer (req){
         
@@ -2065,12 +1387,6 @@ if (hasCharCount1 == true)
         }
         catch (error) {
 
-        }
-        if (flag === 'X') {
-            await GenF.jobSchMessage('X', "Export of Customer group is successful ", req);
-        }
-        else {
-            await GenF.jobSchMessage('', "Export of Customer group is failed", req);
         }
     }
     async exportIBPMasterProd (req){
@@ -2215,13 +1531,7 @@ if (hasCharCount1 == true)
         catch (error) {
 
         }
-        // return "S";
-        if (flag === 'X') {
-            await GenF.jobSchMessage('X', "Export of Product is successful ", req);
-        }
-        else {
-            await GenF.jobSchMessage('', "Export of Product is failed", req);
-        }
+        
     }
     async exportIBPLocProd (req){
         // Send Response to Scheduler
@@ -2336,13 +1646,6 @@ if (hasCharCount1 == true)
         catch (error) {
 
         }
-        // return "s";
-        if (flag === 'X') {
-            await GenF.jobSchMessage('X', "Export of Location - Product is successful ", req);
-        }
-        else {
-            await GenF.jobSchMessage('', "Export of Location - Product is failed", req);
-        }
     }
     async exportIBPAssembly (req){
          // Get Planning area and Prefix configurations for IBP
@@ -2397,13 +1700,6 @@ if (hasCharCount1 == true)
          }
          catch (error) {
  
-         }
-         // return "S";
-         if (flag === 'X') {
-             await GenF.jobSchMessage('X', "Export of Assembly is successful ", req);
-         }
-         else {
-             await GenF.jobSchMessage('', "Export of Assembly is failed", req);
          }
     }
     async exportIBPClass (req){
@@ -2478,13 +1774,6 @@ if (hasCharCount1 == true)
         catch (error) {
 
         }
-
-        if (flag === 'X') {
-            await GenF.jobSchMessage('X', "Export of class and charateristics is successful ", req);
-        }
-        else {
-            await GenF.jobSchMessage('', "Export of class and charateristics is failed", req);
-        }
     }
     async exportRestrDetails (req){
         
@@ -2521,12 +1810,6 @@ if (hasCharCount1 == true)
             }
             catch (e) {
                 vFlag = '';
-            }
-            if (vFlag === 'S') {
-                await GenF.jobSchMessage('X', "Export Restriction header details is successful ", req);
-            }
-            else {
-                await GenF.jobSchMessage('', "Export Restriction header details has failed", req);
             }
         }
     }
@@ -2614,32 +1897,10 @@ if (hasCharCount1 == true)
                 catch {
                     console.log("Unable to send Actual demand at VC");
                 }
-                // Once Sales History is successfull , send sales Config . Actual demand at VC
-                if (flag === 'S') {
-                    let oReqCfg = await obibpfucntions.exportSalesCfg(lsData);
-                    let vTransID = new Date().getTime().toString();
-                    let oEntryCfg =
-                    {
-                        "Transactionid": vTransID,
-                        "AggregationLevelFieldsString": "LOCID,PRDID,VCCHAR,VCCHARVALUE,VCCLASS,ACTUALDEMANDVC,SEEDORDERDEMANDVC,CUSTID,PERIODID0_TSTAMP",
-                        "VersionID": "",
-                        "DoCommit": true,
-                        "ScenarioID": ""
-                    }
-                    oEntryCfg[lData] = oReqCfg.sales;
-                    try {
-                        await service.tx(req).post(lEntity, oEntryCfg);
-                        flag = 'X';
-                        lMessage = lMessage + ' ' + 'Export of Sales History and Configuration export is successful for product:' + lsData.PRODUCT_ID;
-
-                    }
-                    catch {
-                        lMessage = lMessage + ' ' + 'Export of Sales History and Configuration export is failed for product:' + lsData.PRODUCT_ID;
-                    }
-                }
+                
             }
         }
-        await GenF.jobSchMessage('X', lMessage, req);
+        // await GenF.jobSchMessage('X', lMessage, req);
     }
     async exportActCompDemand (req){
          // Get Planning area and Prefix configurations for IBP
@@ -2777,8 +2038,8 @@ if (hasCharCount1 == true)
                  lMessage = lMessage + ' ' + 'No Actual Component Demand exists on Crtical components for product:' + lsData.PRODUCT_ID;
              }
          }
-         await GenF.jobSchMessage('X', lMessage, req);
-         return "S";
+        //  await GenF.jobSchMessage('X', lMessage, req);
+        //  return "S";
     }
     async exportMktAuth (req){
         
@@ -2891,7 +2152,7 @@ if (hasCharCount1 == true)
                 lMessage = lMessage + ' ' + "Export of Market authorization has failed for product" + lsData.PRODUCT_ID;
             }
         }
-        await GenF.jobSchMessage('X', lMessage, request);
+        // await GenF.jobSchMessage('X', lMessage, request);
     }
     async exportComponentReq (req){
          // Send Response to Scheduler
@@ -3046,7 +2307,7 @@ if (hasCharCount1 == true)
          else {
              lMessage = lMessage + ' ' + 'Export of Assembly requirement Quantity failed as no critical Assemblies exists for product:' + req.data.PRODUCT_ID;
          }
-         await GenF.jobSchMessage('X', lMessage, req);
+        //  await GenF.jobSchMessage('X', lMessage, req);
          // return lMessage;
     }
     async exportIBPCIR (req){
@@ -3139,7 +2400,7 @@ if (hasCharCount1 == true)
                  lMessage = lMessage + ' ' + "Export of CIR to IBP is unsuccessful product" + lsData.PRODUCT_ID + " beacuse of insufficient data ";
              }
              // return "S";
-             await GenF.jobSchMessage('X', lMessage, request);
+            //  await GenF.jobSchMessage('X', lMessage, request);
          }
     }
 
