@@ -30,7 +30,7 @@ annotate service.getFactoryLoc with {
             {
                 $Type             : 'Common.ValueListParameterIn',
                 LocalDataProperty : LOCATION_ID,
-                ValueListProperty : 'LOCATION_ID'
+                ValueListProperty : 'LOCATION_ID',
             }
          ]
         }   
