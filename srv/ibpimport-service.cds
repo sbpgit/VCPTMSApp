@@ -2,6 +2,7 @@
 
 using {IBPDemandsrv as external} from './external/IBPDemandsrv.csn';
 using {IBPMasterDataAPI as externalPost} from './external/IBPMasterDataAPI.csn';
+using {IBPChangeHistory as externalChlogPost} from './external/IBPChangeHistory.csn';
 service IBPImportSrv @(impl : './lib/ibpimport-service.js') {
    
     function exportRestrDetails_fn(LOCATION_ID : String(4)) returns String;

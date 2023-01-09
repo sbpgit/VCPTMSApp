@@ -32,6 +32,7 @@ module.exports = cds.service.impl(async function () {
     // const { SBPVCP } = this.entities;
     const service = await cds.connect.to('IBPDemandsrv');
     const servicePost = await cds.connect.to('IBPMasterDataAPI');
+    const serviceChLog = await cds.connect.to('IBPChangeHistory');
 
     this.on("exportRestrDetails_fn", async (req) => {
         let vFlag = '';
@@ -1976,5 +1977,39 @@ module.exports = cds.service.impl(async function () {
     
     this.on("importChngelogMktAuth", async (req) => {
         
+        // Get Planning area and Prefix configurations for IBP
+        let liParaValue = await GenF.getIBPParameterValue();
+        let lMessage;
+        let vToDate = new Date();
+        vToDate = vToDate.getFullYear().toString()+vToDate.getMonth().toString()+vToDate.getDate().toString()+"235959";
+        let vFromDate = new Date();
+        vFromDate.setDate(vFromDate.getDate() - 7);
+        // vFromDate = vFromDate.toISOString().split('Z')[0].split('T')[0];
+        // vFromDate = vFromDate+"000000";
+        
+        vFromDate = vFromDate.getFullYear().toString()+vFromDate.getMonth().toString()+vFromDate.getDate().toString()+"000000";
+        let oEntry =
+        {
+            "__metadata":{"type":"IBP.API_CHANGEHISTORY_READ_SRV.CalculateOriginalView"},
+            "Plarea": liParaValue[0].VALUE,
+            "Version":"__BASELINE",
+            "Keyfigure":"ADJMARKETAUTHORIZATION",
+            "TimeRangeOfChangesFrom": vFromDate,
+            "TimeRangeOfChangesTo": vToDate
+        }
+        try {
+            let aResponse = await serviceChLog.tx(req).post("   ", oEntry);
+            flag = 'X';
+        }
+        catch (error) {
+            console.log(error);
+        }
+        if (flag === 'X') {
+            lMessage =  "Export of Customer group is successful ";
+        }
+        else {
+            lMessage =  "Export of Customer group is failed";
+        }
+        return lMessage;
     });
 });
