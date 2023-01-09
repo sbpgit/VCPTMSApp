@@ -2019,12 +2019,12 @@ module.exports = cds.service.impl(async function () {
             lMessage = "Successfully imported version scenario from IBP";
             await GenF.jobSchMessage('X', "Import of is Component Availability is successful ", req);
             console.log(lMessage);
-            return "Success";
+            // return "Success";
         } else {
             lMessage = "Failed to import version scenario from IBP";
             await GenF.jobSchMessage(' ', "Import of Component Availability failed", req);
             console.log(lMessage);
-            return "Failed";
+            // return "Failed";
         }
     });
 });
