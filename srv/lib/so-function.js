@@ -305,11 +305,11 @@ class SOFunctions {
 
 
         let liPriChar = [];
+
         liPriChar = await cds.run(`SELECT "CHAR_NUM"
-                                     FROM "CP_VARCHAR_PS"
-                                    WHERE "PRODUCT_ID" = '` + lProduct + `'
-                                      AND "LOCATION_ID" = '` + lLocation + `'
-                                      AND "CHAR_TYPE" = 'P'`)
+                                      FROM "CP_VARCHAR_PS"
+                                     WHERE "PRODUCT_ID" = '` + lProduct + `'
+                                       AND "CHAR_TYPE" = 'P'`)
         let liSalesh = [];
         let lsSalesh = {};
         let lsSaleshConfig = {};
@@ -422,7 +422,6 @@ class SOFunctions {
                 AND CHAR_NUM IN (SELECT "CHAR_NUM"
                                      FROM "CP_VARCHAR_PS"
                                     WHERE "PRODUCT_ID" = '` + lProduct + `'
-                                      AND "LOCATION_ID" = '` + lLocation + `'
                                       AND "CHAR_TYPE" = 'P')
             ORDER BY UNIQUE_ID,
                      PRODUCT_ID,
@@ -786,17 +785,7 @@ class SOFunctions {
     async processPrimaryID(lLocation, lProduct, lUnique) {
 
 
-        // const liUnique = await SELECT.columns('CHAR_NUM', 'CHARVAL_NUM')
-        //     .from('CP_UNIQUE_ID_ITEM')
-        //     .where(`UNIQUE_ID = '${lUnique}' 
-        //                                  AND LOCATION_ID = '${lLocation}'
-        //                                  AND PRODUCT_ID = '${lProduct}'
-        //                                  AND CHAR_NUM IN (SELECT "CHAR_NUM"
-        //                                                     FROM "CP_VARCHAR_PS"
-        //                                                     WHERE "PRODUCT_ID" = '${lProduct}'
-        //                                                     AND "LOCATION_ID" = '${lLocation}'
-        //                                                      AND "CHAR_TYPE" = 'P')`)
-        //     .orderBy('CHAR_NUM', 'CHARVAL_NUM');
+       
         const liUnique = await cds.run(`SELECT CHAR_NUM,
                                             CHARVAL_NUM
                                         FROM CP_UNIQUE_ID_ITEM
@@ -806,7 +795,6 @@ class SOFunctions {
                                         AND CHAR_NUM IN (SELECT CHAR_NUM
                                                         FROM CP_VARCHAR_PS
                                                         WHERE PRODUCT_ID = '${lProduct}'
-                                                        AND LOCATION_ID = '${lLocation}'
                                                         AND CHAR_TYPE = 'P')
                                         ORDER BY  CHAR_NUM,
                                             CHARVAL_NUM`)
@@ -1283,14 +1271,12 @@ class SOFunctions {
         liPriChar = await cds.run(`SELECT "CHAR_NUM"
                                      FROM "CP_VARCHAR_PS"
                                     WHERE "PRODUCT_ID" = '` + lProduct + `'
-                                      AND "LOCATION_ID" = '` + lLocation + `'
                                       AND "CHAR_TYPE" = 'P'`);
 
         let liSecChar = [];
         liSecChar = await cds.run(`SELECT "CHAR_NUM"
                                      FROM "CP_VARCHAR_PS"
                                     WHERE "PRODUCT_ID" = '` + lProduct + `'
-                                      AND "LOCATION_ID" = '` + lLocation + `'
                                       AND "CHAR_TYPE" = 'S'`);
 
         for (let i = 0; i < liDistinctUniqueIds.length; i++) {

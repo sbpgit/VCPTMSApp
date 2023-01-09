@@ -1321,7 +1321,7 @@ module.exports = (srv) => {
         //     lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
         const obgenTimeseriesM2 = new GenTimeseriesM2();
         await obgenTimeseriesM2.genPrediction(req.data, req, '');
-        // await obgenTimeseriesM2.consumeFO(lsData,req);
+        // await obgenTimeseriesM2.consumptionOfFO(lsData,req);
         // }
     });
 
