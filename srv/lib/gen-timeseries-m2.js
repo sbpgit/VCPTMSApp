@@ -880,6 +880,7 @@ class GenTimeseriesM2 {
         let iReqQty = 0;
         let iCIRQtyGentd = 0;
         let liClusterResults = [];
+        let iMaxCIRID = 0;
         await GenF.logMessage(req, `Started Consumption of Forecast Order`);
 
         const lDate = new Date();
@@ -900,7 +901,7 @@ class GenTimeseriesM2 {
 
         // Get Data from CIR Table
         const liCIRData = await cds.run(`SELECT *
-                                            FROM "CP_CIR_GENERTATED"
+                                            FROM "CP_CIR_GENERATED"
                                             WHERE "LOCATION_ID" = '${aData.LOCATION_ID}'
                                               AND "PRODUCT_ID"  = '${aData.PRODUCT_ID}'
                                               AND ("WEEK_DATE" >= '${lStartDate}'
@@ -1021,7 +1022,7 @@ class GenTimeseriesM2 {
 
                         aFilCIRData = aFilPosCIRData.filter(function (aCIRData) {
                             return aCIRData.UNIQUE_ID === liClusterResults[j].NEAREST_ID &&
-                                   aCIRData.WEEK_DATE === aFilNegCIRData[vCIRInd].WEEK_DATE ;
+                                aCIRData.WEEK_DATE === aFilNegCIRData[vCIRInd].WEEK_DATE;
                         });
 
                         aFilUsedQty = aUsedQty.filter(function (aUsedUniqueQty) {
@@ -1081,6 +1082,21 @@ class GenTimeseriesM2 {
                 }
 
             }
+
+
+            if (aResCIR.length > 0) {
+                iMaxCIRID = await cds.run(
+                    `SELECT MAX(CIR_ID) FROM "CP_CIR_GENERATED"`
+                );
+                
+                for (let k = 0; k < aResCIR.length; k++) {
+                    iMaxCIRID = iMaxCIRID + 1;
+                    aResCIR[k].CIR_ID = iMaxCIRID;
+                }
+
+
+            }
+
         }
 
 
