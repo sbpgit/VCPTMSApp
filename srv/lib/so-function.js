@@ -307,9 +307,9 @@ class SOFunctions {
         let liPriChar = [];
 
         liPriChar = await cds.run(`SELECT "CHAR_NUM"
-                                      FROM "CP_VARCHAR_PS"
-                                     WHERE "PRODUCT_ID" = '` + lProduct + `'
-                                       AND "CHAR_TYPE" = 'P'`)
+                                     FROM "CP_VARCHAR_PS"
+                                    WHERE "PRODUCT_ID" = '` + lProduct + `'
+                                      AND "CHAR_TYPE" = 'P'`)
         let liSalesh = [];
         let lsSalesh = {};
         let lsSaleshConfig = {};
@@ -784,8 +784,7 @@ class SOFunctions {
      */
     async processPrimaryID(lLocation, lProduct, lUnique) {
 
-
-       
+        
         const liUnique = await cds.run(`SELECT CHAR_NUM,
                                             CHARVAL_NUM
                                         FROM CP_UNIQUE_ID_ITEM

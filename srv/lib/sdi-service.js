@@ -1372,8 +1372,10 @@ module.exports = (srv) => {
             const dbClass = require("sap-hdb-promisfied")
             let dbConn = new dbClass(await dbClass.createConnectionFromEnv())
             const sp = await dbConn.loadProcedurePromisified(null, '"FG_PVSNODE_SP"');
+            const sp1 = await dbConn.loadProcedurePromisified(null, '"FG_PRODACCESSNODE_SP"');
             const sp2 = await dbConn.loadProcedurePromisified(null, '"FG_PVSBOM_SP"');
             const output = await dbConn.callProcedurePromisified(sp, [])
+            const output1 = await dbConn.callProcedurePromisified(sp1, [])
             const output2 = await dbConn.callProcedurePromisified(sp2, [])
             console.log(output.results);
             flag = 'X';
@@ -1401,7 +1403,9 @@ module.exports = (srv) => {
         try {
             const dbClass = require("sap-hdb-promisfied")
             let dbConn = new dbClass(await dbClass.createConnectionFromEnv())
+            const sp1 = await dbConn.loadProcedurePromisified(null, '"FG_PRODACCESSNODE_SP"');
             const sp = await dbConn.loadProcedurePromisified(null, '"FG_PVSBOM_SP"');
+            const output1 = await dbConn.callProcedurePromisified(sp1, [])
             const output = await dbConn.callProcedurePromisified(sp, [])
             console.log(output.results);
             flag = 'X';

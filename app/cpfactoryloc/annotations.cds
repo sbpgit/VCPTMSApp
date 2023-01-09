@@ -3,6 +3,7 @@ using CatalogService as service from '../../srv/cat-service';
 annotate service.getFactoryLoc with {
   LOCATION_ID @Common : {
         ValueList       : {
+            
             $Type          : 'Common.ValueListType',
             Label          : 'Location',
             CollectionPath : 'getLocation',

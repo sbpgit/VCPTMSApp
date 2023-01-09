@@ -217,7 +217,6 @@ class CIRData {
                FROM "CP_VARCHAR_PS"
               INNER JOIN "CP_PARTIALPROD_INTRO"
                  ON "CP_VARCHAR_PS"."PRODUCT_ID"  = "CP_PARTIALPROD_INTRO"."REF_PRODID"
-                AND "CP_VARCHAR_PS"."LOCATION_ID" = "CP_PARTIALPROD_INTRO"."LOCATION_ID"
               WHERE "CP_PARTIALPROD_INTRO"."PRODUCT_ID" = '` + req.data.PRODUCT_ID + `'`
         );
 
