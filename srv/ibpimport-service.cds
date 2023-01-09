@@ -32,6 +32,7 @@ service IBPImportSrv @(impl : './lib/ibpimport-service.js') {
    // action importibpversce();
     function importibpversce() returns String;
     function importChngelogMktAuth() returns String;
+    action importComponentAvail();
 }
 @protocol : 'rest'
 service IbpImportRest {

@@ -2005,11 +2005,26 @@ module.exports = cds.service.impl(async function () {
             console.log(error);
         }
         if (flag === 'X') {
-            lMessage =  "Export of Customer group is successful ";
+            lMessage =  "Import of Change log is successful ";
         }
         else {
-            lMessage =  "Export of Customer group is failed";
+            lMessage =  "Import of Change log failed";
         }
         return lMessage;
+    });
+    
+    this.on("importComponentAvail", async (req) => {    
+        let flag = await obibpfucntions.importCompAvail(req);  
+        if (flag === 'S') {
+            lMessage = "Successfully imported version scenario from IBP";
+            await GenF.jobSchMessage('X', "Import of is Component Availability is successful ", req);
+            console.log(lMessage);
+            return "Success";
+        } else {
+            lMessage = "Failed to import version scenario from IBP";
+            await GenF.jobSchMessage(' ', "Import of Component Availability failed", req);
+            console.log(lMessage);
+            return "Failed";
+        }
     });
 });
