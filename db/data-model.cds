@@ -512,7 +512,7 @@ context cp {
 
     entity VARCHAR_PS {
         key PRODUCT_ID  : String(40) @title : 'New Product';
-        key LOCATION_ID : String(4)  @title : 'Location ';
+        // key LOCATION_ID : String(4)  @title : 'Location ';
         key CHAR_NUM    : String(30) @title : 'Charateristic Name';
             CHAR_TYPE   : String(2)  @title : 'Characteristic Type';
             SEQUENCE    : Integer    @title : 'Secondary Char. Position';
@@ -906,7 +906,7 @@ context cp {
 
     entity IBPCHAR_PS {
         key PRODUCT_ID  : String(40) @title : 'Configurable Product';
-        key LOCATION_ID : String(4)  @title : 'Location';
+        // key LOCATION_ID : String(4)  @title : 'Location';
         key CHAR_NUM    : String(30) @title : 'Charateristic Name';
             CHAR_TYPE   : String(2)  @title : 'Characteristic Type';
             SEQUENCE    : Integer    @title : 'Secondary Char. Position';
@@ -1236,7 +1236,7 @@ entity![V_NEWPRODREFCHAR]{
 @cds.persistence.exists
 entity![V_GETVARCHARPS]{
     key![PRODUCT_ID]  : String(40)  @title : 'PRODUCT_ID';
-    key![LOCATION_ID] : String(4)   @title : 'LOCATION_ID';
+    // key![LOCATION_ID] : String(4)   @title : 'LOCATION_ID';
     key![CHAR_NUM]    : String(30)  @title : 'CHAR_NUM';
     key![CHAR_NAME]   : String(30)  @title : 'CHAR_NAME';
     key![CHAR_DESC]   : String(150) @title : 'CHAR_DESC';
