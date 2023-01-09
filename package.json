@@ -202,7 +202,7 @@
         "[production]": {
           "credentials": {
             "destination": "IBPExternal",
-            "path": "/sap/opu/odata/IBP/MASTER_DATA_API_SRV"
+            "path": "/sap/opu/odata/IBP/API_CHANGEHISTORY_READ_SRV"
           }
         }
       },
@@ -228,10 +228,6 @@
         "auth": {
           "kind": "xsuaa"
         }
-      },
-      "IBPChangeHistory": {
-        "kind": "odata-v2",
-        "model": "srv/external/IBPChangeHistory"
       }
     },
     "sapux": [
