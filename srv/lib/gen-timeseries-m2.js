@@ -1,6 +1,8 @@
+const request = require('request');
 const GenF = require("./gen-functions");
 const cds = require("@sap/cds");
 const hana = require("@sap/hana-client");
+const { userFamilyName } = require("@sap-cloud-sdk/core/dist/connectivity/scp-cf/user");
 
 class GenTimeseriesM2 {
     constructor() { }
@@ -16,7 +18,7 @@ class GenTimeseriesM2 {
 
         let liPrimaryID = [];
         let lsPrimaryID = {};
-        
+
         let lsMainProduct = await SELECT.one
             .from('CP_PARTIALPROD_INTRO')
             .columns('REF_PRODID')
@@ -82,8 +84,8 @@ class GenTimeseriesM2 {
         FROM "V_PARTIALPRODCHAR"
         WHERE "LOCATION_ID" = '` + adata.LOCATION_ID + `'
         AND ( "PRODUCT_ID" = '` + adata.PRODUCT_ID + `')`
-        // AND ( "PRODUCT_ID" = '` + lMainProduct + `')`
-        // OR "REF_PRODID" = '` + lMainProduct + `' )`
+            // AND ( "PRODUCT_ID" = '` + lMainProduct + `')`
+            // OR "REF_PRODID" = '` + lMainProduct + `' )`
         );
 
         for (let i = 0; i < liPrimaryIDMain.length; i++) {
@@ -109,7 +111,7 @@ class GenTimeseriesM2 {
             }
         }
 
-        if(liPrimaryID.length === 0){
+        if (liPrimaryID.length === 0) {
             console.log(liPrimaryID.length);
             await GenF.logMessage(req, `Please check characteristics Priority , unable to generate timeseries`);
             return;
@@ -250,11 +252,11 @@ class GenTimeseriesM2 {
                     }
                     try {
                         await INSERT(liVCHistory).into('CP_VC_HISTORY_TS');
-                        FlagTest='S';
+                        FlagTest = 'S';
                         // await cds.run(INSERT.into("CP_VC_HISTORY_TS").entries(liVCHistory));
                     }
                     catch (er) {
-                        FlagTest='E';
+                        FlagTest = 'E';
                         console.log(er);
                     }
                     liVCHistory = [];
@@ -267,7 +269,7 @@ class GenTimeseriesM2 {
 
         console.log(FlagTest);
         await GenF.logMessage(req, `Completed history timeseries`);
-        
+
         // Flag = 'X';
         // console.log(Flag);
         if (FlagTest === 'S') {
@@ -379,7 +381,7 @@ class GenTimeseriesM2 {
                     FROM "V_PARTIALPRODCHAR"
                     WHERE "LOCATION_ID" = '` + adata.LOCATION_ID + `'
                     AND ( "PRODUCT_ID" = '` + adata.PRODUCT_ID + `')`
-                    // OR "REF_PRODID" = '` + lMainProduct + `' )`
+            // OR "REF_PRODID" = '` + lMainProduct + `' )`
         );
 
         for (let i = 0; i < liPrimaryIDMain.length; i++) {
@@ -454,7 +456,7 @@ class GenTimeseriesM2 {
                     lsObjdepF.SUCCESS_RATE = 0
                     if (lsFutureDemand.QUANTITY > 0) {
                         lsObjdepF.SUCCESS_RATE = (parseInt(liFutureCharPlan[cntFC].OPT_QTY) * 100 / parseInt(lsFutureDemand.QUANTITY)).toFixed(2);
-                         liObjdepF.push(GenF.parse(lsObjdepF));
+                        liObjdepF.push(GenF.parse(lsObjdepF));
                     }
                     // liObjdepF.push(GenF.parse(lsObjdepF));
                 }
@@ -501,14 +503,14 @@ class GenTimeseriesM2 {
 
         const lDate = new Date();
 
-// Get Start date considering Firm Horizon        
+        // Get Start date considering Firm Horizon        
         const lStartDate = new Date(
             lDate.getFullYear(),
             lDate.getMonth(),
-            lDate.getDate() + ( parseInt(await GenF.getParameterValue(adata.LOCATION_ID, 9)) * 7 )
+            lDate.getDate() + (parseInt(await GenF.getParameterValue(adata.LOCATION_ID, 9)) * 7)
         );
 
-// Get Predictions        
+        // Get Predictions        
         let liPrediction = [];
         liPrediction = await SELECT.from('CP_TS_PREDICTIONS')
             .where(`CAL_DATE    > '${lStartDate.toISOString().split("T")[0]}'
@@ -593,7 +595,7 @@ class GenTimeseriesM2 {
 
         let liCir = [];
         let liCirDiff = [];
-        
+
         let lCir = 0;
         let lPIQty = 0;
         for (let cntUID = 0; cntUID < liUniQty.length; cntUID++) {
@@ -860,6 +862,289 @@ class GenTimeseriesM2 {
             await GenF.jobSchMessage(Flag, "Forcast Demand Generation is failed", req);
         }
 
+    }
+
+    /* Code for Consumption of Forecast Order nearest to the Sales Order Config*/
+    async consumptionOfFO(aData, req) {
+        let iCIRQty = 0;
+        let aFilCIRData = [];
+        let aFilNegCIRData = [];
+        let aFilPosCIRData = [];
+        let oCIRData = {};
+        let oResCIR = {};
+        let aResCIR = [];
+        let oUsedQty = {};
+        let aUsedQty = [];
+        let aFilUsedQty = [];
+        let bFlag = false;
+        let iReqQty = 0;
+        let iCIRQtyGentd = 0;
+        let liClusterResults = [];
+        let iMaxCIRID = 0;
+        await GenF.logMessage(req, `Started Consumption of Forecast Order`);
+
+        const lDate = new Date();
+
+        // Get Start date considering Firm Horizon        
+        const lStartDate = new Date(
+            lDate.getFullYear(),
+            lDate.getMonth(),
+            lDate.getDate() + (parseInt(await GenF.getParameterValue(aData.LOCATION_ID, 9)) * 7) + 1
+        );
+
+        // Get End date considering Forecast Order Horizon        
+        const lEndDate = new Date(
+            lDate.getFullYear(),
+            lDate.getMonth(),
+            lDate.getDate() + (parseInt(await GenF.getParameterValue(aData.LOCATION_ID, 2)) * 7)
+        );
+
+        // Get Data from CIR Table
+        const liCIRData = await cds.run(`SELECT *
+                                            FROM "CP_CIR_GENERATED"
+                                            WHERE "LOCATION_ID" = '${aData.LOCATION_ID}'
+                                              AND "PRODUCT_ID"  = '${aData.PRODUCT_ID}'
+                                              AND ("WEEK_DATE" >= '${lStartDate}'
+                                              AND  "WEEK_DATE" < '${lEndDate}')`);
+
+
+
+        // Get Data from Sales History
+        const liSalesH = await cds.run(
+            `SELECT 
+                LOCATION_ID,
+                PRODUCT_ID,    
+                CASE
+                    WHEN WEEKDAY("MAT_AVAILDATE") = 0 THEN ADD_DAYS( "MAT_AVAILDATE", 6 )
+                    WHEN WEEKDAY("MAT_AVAILDATE") = 1 THEN ADD_DAYS( "MAT_AVAILDATE", 5 )
+                    WHEN WEEKDAY("MAT_AVAILDATE") = 2 THEN ADD_DAYS( "MAT_AVAILDATE", 4 )
+                    WHEN WEEKDAY("MAT_AVAILDATE") = 3 THEN ADD_DAYS( "MAT_AVAILDATE", 3 )
+                    WHEN WEEKDAY("MAT_AVAILDATE") = 4 THEN ADD_DAYS( "MAT_AVAILDATE", 2 )
+                    WHEN WEEKDAY("MAT_AVAILDATE") = 5 THEN ADD_DAYS( "MAT_AVAILDATE", 1 )
+                    WHEN WEEKDAY("MAT_AVAILDATE") = 6 THEN ADD_DAYS( "MAT_AVAILDATE", 0 )
+                END AS "WEEK_DATE",
+                UNIQUE_ID,
+                SUM("ORD_QTY")
+            FROM V_SALES_H
+            WHERE LOCATION_ID = '${aData.LOCATION_ID}'
+              AND PRODUCT_ID = '${aData.PRODUCT_ID}'
+              AND CASE
+                    WHEN WEEKDAY("MAT_AVAILDATE") = 0 THEN ADD_DAYS( "MAT_AVAILDATE", 6 )
+                    WHEN WEEKDAY("MAT_AVAILDATE") = 1 THEN ADD_DAYS( "MAT_AVAILDATE", 5 )
+                    WHEN WEEKDAY("MAT_AVAILDATE") = 2 THEN ADD_DAYS( "MAT_AVAILDATE", 4 )
+                    WHEN WEEKDAY("MAT_AVAILDATE") = 3 THEN ADD_DAYS( "MAT_AVAILDATE", 3 )
+                    WHEN WEEKDAY("MAT_AVAILDATE") = 4 THEN ADD_DAYS( "MAT_AVAILDATE", 2 )
+                    WHEN WEEKDAY("MAT_AVAILDATE") = 5 THEN ADD_DAYS( "MAT_AVAILDATE", 1 )
+                    WHEN WEEKDAY("MAT_AVAILDATE") = 6 THEN ADD_DAYS( "MAT_AVAILDATE", 0 )
+             END > ('${lDate}')
+             GROUP BY CASE
+                        WHEN WEEKDAY("MAT_AVAILDATE") = 0 THEN ADD_DAYS( "MAT_AVAILDATE", 6 )
+                        WHEN WEEKDAY("MAT_AVAILDATE") = 1 THEN ADD_DAYS( "MAT_AVAILDATE", 5 )
+                        WHEN WEEKDAY("MAT_AVAILDATE") = 2 THEN ADD_DAYS( "MAT_AVAILDATE", 4 )
+                        WHEN WEEKDAY("MAT_AVAILDATE") = 3 THEN ADD_DAYS( "MAT_AVAILDATE", 3 )
+                        WHEN WEEKDAY("MAT_AVAILDATE") = 4 THEN ADD_DAYS( "MAT_AVAILDATE", 2 )
+                        WHEN WEEKDAY("MAT_AVAILDATE") = 5 THEN ADD_DAYS( "MAT_AVAILDATE", 1 )
+                        WHEN WEEKDAY("MAT_AVAILDATE") = 6 THEN ADD_DAYS( "MAT_AVAILDATE", 0 )
+                    END,
+                UNIQUE_ID` );
+
+
+
+        // 
+        for (let vSOIndex = 0; vSOIndex < liSalesH.length; vSOIndex++) {
+            bFlag = false;
+            // aFilCIRData = liCIRData.filter(function (aCIRData) {
+            //     return aCIRData.LOCATION_ID === liSalesH[vSOIndex].LOCATION_ID &&
+            //         aCIRData.PRODUCT_ID === liSalesH[vSOIndex].PRODUCT_ID &&
+            //         aCIRData.UNIQUE_ID === liSalesH[vSOIndex].UNIQUE_ID &&
+            //         aCIRData.WEEK_DATE === liSalesH[vSOIndex].WEEK_DATE;
+            // });
+
+
+            for (let vCIRIndx = 0; vCIRIndx < liCIRData.length; vCIRIndx++) {
+                if (liSalesH[vSOIndex].UNIQUE_ID === liCIRData[vCIRIndx].UNIQUE_ID &&
+                    liSalesH[vSOIndex].WEEK_DATE === liCIRData[vCIRIndx].WEEK_DATE) {
+                    bFlag = true;
+                    iCIRQtyGentd = liCIRData[vCIRIndx].CIR_QTY;
+                    liCIRData[vCIRIndx].CIR_QTY = liCIRData[vCIRIndx].CIR_QTY - liSalesH[vSOIndex].ORD_QTY;
+
+                    if (liCIRData[vCIRIndx].CIR_QTY < 0) {
+                        aFilNegCIRData.push(liCIRData[vCIRIndx]);
+
+                    } else {
+                        aFilPosCIRData.push(liCIRData[vCIRIndx]);
+                    }
+                    liCIRData[vCIRIndx].CIR_QTY = iCIRQtyGentd;
+
+                    break;
+                }
+            }
+            if (bFlag === false) {     // New Unique Id Config
+                oCIRData = {};
+                oCIRData.LOCATION_ID = liSalesH[vSOIndex].LOCATION_ID;
+                oCIRData.PRODUCT_ID = liSalesH[vSOIndex].PRODUCT_ID
+                oCIRData.UNIQUE_ID = liSalesH[vSOIndex].UNIQUE_ID;
+                oCIRData.WEEK_DATE = liSalesH[vSOIndex].WEEK_DATE;
+                oCIRData.CIR_ID = 0;
+                oCIRData.MODEL_VERSION = liCIRData[0].MODEL_VERSION;
+                oCIRData.VERSION = liCIRData[0].VERSION;
+                oCIRData.SCENARIO = liCIRData[0].SCENARIO;
+                oCIRData.CIR_QTY = iCIRQty - liSalesH[vSOIndex].ORD_QTY;
+
+                aFilNegCIRData.push(oCIRData);
+            }
+        }
+
+
+        // // Filter CIRData with Negative Values
+        // aFilNegCIRData = liCIRData.filter(function (aCIRData) {
+        //     return aCIRData.CIR_QTY < 0;
+        // });
+
+        // // Filter CIRData with Positive Values
+        // aFilPosCIRData = liCIRData.filter(function (aCIRData) {
+        //     return aCIRData.CIR_QTY > 0;
+        // });
+
+        if (aFilNegCIRData.length > 0) {
+            for (let vCIRInd = 0; vCIRInd < aFilNegCIRData.length; vCIRInd++) {
+                liClusterResults = [];
+                aFilCIRData = [];
+                iCIRQty = 0;
+                iReqQty = Math.abs(aFilNegCIRData[vCIRInd].CIR_QTY);
+                // Get Cluster Results
+                liClusterResults = await getClusterResults(aFilNegCIRData[vCIRInd].LOCATION_ID, aFilNegCIRData[vCIRInd].PRODUCT_ID, aFilNegCIRData[vCIRInd].UNIQUE_ID);
+                for (let j = 0; j < liClusterResults.length; j++) {
+                    oUsedQty = {};
+                    aFilCIRData = [], aFilUsedQty = [];
+                    iCIRQty = 0;
+                    if (iReqQty > 0) {
+
+                        aFilCIRData = aFilPosCIRData.filter(function (aCIRData) {
+                            return aCIRData.UNIQUE_ID === liClusterResults[j].NEAREST_ID &&
+                                aCIRData.WEEK_DATE === aFilNegCIRData[vCIRInd].WEEK_DATE;
+                        });
+
+                        aFilUsedQty = aUsedQty.filter(function (aUsedUniqueQty) {
+                            return aUsedUniqueQty.UNIQUE_ID === liClusterResults[j].NEAREST_ID;
+                        });
+
+                        if (aFilUsedQty.length > 0) {
+                            aFilCIRData[0].CIR_QTY = aFilCIRData[0].CIR_QTY - aFilUsedQty[0].CIR_QTY;
+                        }
+
+                        if (iReqQty >= aFilCIRData[0].CIR_QTY) {
+                            iCIRQty = aFilCIRData[0].CIR_QTY;
+                            iReqQty = iReqQty - aFilCIRData[0].CIR_QTY;
+                        } else if (iReqQty < aFilCIRData[0].CIR_QTY) {
+                            iCIRQty = iReqQty;
+                            iReqQty = 0;
+                        }
+
+                        if (iCIRQty > 0) {
+                            // Update Deducted CIR Quantity from close Unique Id 
+                            await cds.run(`UPDATE CP_CIR_GENERATED SET CIR_QTY = CIR_QTY - '${iCIRQty}'
+                                    WHERE LOCATION_ID = '${aFilCIRData[0].LOCATION_ID}'
+                                    AND PRODUCT_ID = '${aFilCIRData[0].PRODUCT_ID}'
+                                    AND WEEK_DATE = '${aFilCIRData[0].WEEK_DATE}'
+                                    AND CIR_ID = '${aFilCIRData[0].CIR_ID}'
+                                    AND MODEL_VERSION = '${aFilCIRData[0].MODEL_VERSION}'
+                                    AND VERSION = '${aFilCIRData[0].VERSION}'
+                                    AND SCENARIO = '${aFilCIRData[0].SCENARIO}'`);
+
+                            oUsedQty.UNIQUE_ID = aFilCIRData[0].UNIQUE_ID;
+                            oUsedQty.CIR_QTY = iCIRQty;
+                            aUsedQty.push(oUsedQty);
+                        }
+                    } else {
+                        break;
+                    }
+                }
+
+                iReqQty = Math.abs(aFilNegCIRData[vCIRInd].CIR_QTY);
+
+                if (aFilNegCIRData[vCIRInd].CIR_ID !== 0) {
+
+                    // Update Consumed CIR Quantity from close Unique Id 
+                    await cds.run(`UPDATE CP_CIR_GENERATED SET CIR_QTY = CIR_QTY + '${iReqQty}'
+                            WHERE LOCATION_ID = '${aFilNegCIRData[vCIRInd].LOCATION_ID}'
+                            AND PRODUCT_ID = '${aFilNegCIRData[vCIRInd].PRODUCT_ID}'
+                            AND WEEK_DATE = '${aFilNegCIRData[vCIRInd].WEEK_DATE}'
+                            AND CIR_ID = '${aFilNegCIRData[vCIRInd].CIR_ID}'
+                            AND MODEL_VERSION = '${aFilNegCIRData[vCIRInd].MODEL_VERSION}'
+                            AND VERSION = '${aFilNegCIRData[vCIRInd].VERSION}'
+                            AND SCENARIO = '${aFilNegCIRData[vCIRInd].SCENARIO}'`);
+
+                } else {
+                    oResCIR = aFilNegCIRData[vCIRInd];
+                    oResCIR.CIR_QTY = iReqQty;
+                    aResCIR.push(oResCIR);
+                }
+
+            }
+
+
+            if (aResCIR.length > 0) {
+                iMaxCIRID = await cds.run(
+                    `SELECT MAX(CIR_ID) FROM "CP_CIR_GENERATED"`
+                );
+                
+                for (let k = 0; k < aResCIR.length; k++) {
+                    iMaxCIRID = iMaxCIRID + 1;
+                    aResCIR[k].CIR_ID = iMaxCIRID;
+                }
+
+
+            }
+
+        }
+
+
+    }
+
+    async getClusterResults(vLocation, vProduct, vUniqueId) {
+        const rp = require('request-promise');
+        // var baseUrl = req.headers['x-forwarded-proto'] + '://' + req.headers.host;  // Un-Comment while deploying
+        console.log("Get Cluster Unique Ids");
+        const sProfile = "SBP_AHC_0";
+        var baseUrl = 'http' + '://' + req.headers.host;
+        var sUrl = baseUrl + '/pal/getClusterUniqueIDs';
+
+        var options = {
+            'method': 'POST',
+            'url': sUrl,
+            'headers': {
+                'Content-Type': 'application/json'
+            },
+
+            body: JSON.stringify({
+                "vcRulesList": [
+                    {
+                        "Location": vLocation,
+                        "Product": vProduct,
+                        "Profile": sProfile,
+                        "UniqueId": vUniqueId,
+
+                    }
+                ]
+            })
+
+        };
+
+        let ret_response = [];
+        await rp(options)
+            .then(function (response) {
+                const oResponse = JSON.parse(response);
+
+                ret_response = oResponse.Connection.close.nearestsIDs;
+            })
+            .catch(function (error) {
+                console.log('Get Cluster Unique Id - Error ', error);
+                ret_response = JSON.parse(error);
+            });
+
+        // console.log(ret_response);
+        return ret_response;
     }
 
 }

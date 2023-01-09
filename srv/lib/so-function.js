@@ -305,6 +305,7 @@ class SOFunctions {
 
 
         let liPriChar = [];
+
         liPriChar = await cds.run(`SELECT "CHAR_NUM"
                                      FROM "CP_VARCHAR_PS"
                                     WHERE "PRODUCT_ID" = '` + lProduct + `'
