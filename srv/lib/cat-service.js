@@ -1307,6 +1307,7 @@ module.exports = (srv) => {
             lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
             const obgenTimeseriesM2 = new GenTimeseriesM2();
             await obgenTimeseriesM2.genPrediction(lsData, req, Flag);
+            // await obgenTimeseriesM2.consumeFO(lsData,req);
         }
     });
     // Generate Fully Configured Demand
@@ -1320,6 +1321,7 @@ module.exports = (srv) => {
         //     lsData.PRODUCT_ID = lilocProd[i].PRODUCT_ID;
         const obgenTimeseriesM2 = new GenTimeseriesM2();
         await obgenTimeseriesM2.genPrediction(req.data, req, '');
+        // await obgenTimeseriesM2.consumeFO(lsData,req);
         // }
     });
 
@@ -2723,14 +2725,11 @@ module.exports = (srv) => {
                 });
                 
                 if (aFilSalesH.length > 0) {
-                    for (let vQtyIndex = 0; vQtyIndex < aFilSalesH.length; vQtyIndex++) {
-                        // if(aFilSalesH[vQtyIndex].MAT_AVAILDATE >= liDates[i].WEEK_DATE &&
-                        //     aFilSalesH[vQtyIndex].MAT_AVAILDATE < liDates[nextDtIndex].WEEK_DATE) {
-                        
-                                iQty = iQty + parseInt(aFilSalesH[vQtyIndex].ORD_QTY);
-                        // }
+                    for (let vQtyIndex = 0; vQtyIndex < aFilSalesH.length; vQtyIndex++) { 
+                        iQty = iQty + parseInt(aFilSalesH[vQtyIndex].ORD_QTY);                       
                     }
-                }                                
+                }      
+                oCIRQty.ACT_QTY = iQty;                         
 
                 for (vCIRIndex = 0; vCIRIndex < liCIRQty.length; vCIRIndex++) {
                     lsCIRWeekly[columnname + vWeekIndex] = 0;
@@ -2740,15 +2739,12 @@ module.exports = (srv) => {
                     ) {
                         lsCIRWeekly[columnname + vWeekIndex] =
                             liCIRQty[vCIRIndex].CIR_QTY;
+                          
+                            oCIRQty.OPEN_QTY = liCIRQty[vCIRIndex].CIR_QTY - iQty;                        
 
-                        oCIRQty.ACT_QTY = iQty;                       
-                        
-                        oCIRQty.OPEN_QTY = liCIRQty[vCIRIndex].CIR_QTY - iQty;
-                        
-
-                        if (oCIRQty.OPEN_QTY < 0) {
-                            oCIRQty.OPEN_QTY = 0;
-                        }
+                            if (oCIRQty.OPEN_QTY < 0) {
+                               oCIRQty.OPEN_QTY = 0;
+                            }
 
                         oCIR_ID.WEEK_DATE = liDates[i].WEEK_DATE;
                         oCIR_ID.CIR_ID = liCIRQty[vCIRIndex].CIR_ID;

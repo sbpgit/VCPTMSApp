@@ -4,6 +4,6 @@
     liveChange="handleSearch" confirm="handleSelection" cancel="handleClose" contentWidth="320px" items="{/results}" 
     selectionChange="handleProdChange" growing="false">
         <!-- <StandardListItem title="{PRODUCT_ID}" description="{PROD_DESC}" type="Active"/> -->
-        <StandardListItem title="{PARTIALPROD}" description="{PARTIALPROD_DESC}" type="Active"/>
+        <StandardListItem title="{PARTIALPROD}" description="{PARTIALPROD_DESC}" info="{REF_PRODID}" type="Active"/>
     </SelectDialog>
 </core:FragmentDefinition>

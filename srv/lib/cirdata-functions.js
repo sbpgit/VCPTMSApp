@@ -14,88 +14,87 @@ class CIRData {
         let vDateTo = req.data.TODATE; //"2023-01-03";
         let oEntry = {};
         let aPlanningLoc = JSON.parse(req.data.PLANNING_LOC);
-        let aFilterLoc = [];
-        //const liUniqueId = [];
-        // if(aPlanningLoc.length > 0) {
-        //     for(let l = 0; l < aPlanningLoc.length; l++) {
-        //         aFilterLoc.push(aPlanningLoc[l].PLANNING_LOC);
-        //     }
-        // }
-        // req.data.LOCATION_ID +
-        const liCIRQty = await cds.run(
-            `
-            SELECT *            
-            FROM "CP_CIR_GENERATED"             
-            inner join "CP_FACTORY_SALESLOC"
-            ON "CP_CIR_GENERATED"."PRODUCT_ID" = "CP_FACTORY_SALESLOC"."PRODUCT_ID"
-            AND "CP_CIR_GENERATED"."LOCATION_ID" = "CP_FACTORY_SALESLOC"."PLAN_LOC"
-            WHERE  "CP_FACTORY_SALESLOC"."FACTORY_LOC" = '` +
-            req.data.LOCATION_ID + `'
-                 AND  "CP_FACTORY_SALESLOC"."PRODUCT_ID" = '` +
-            req.data.PRODUCT_ID +
-            `' AND  "CP_CIR_GENERATED"."VERSION" = '` +
-            req.data.VERSION +
-            `' AND  "CP_CIR_GENERATED"."SCENARIO" = '` +
-            req.data.SCENARIO +
-            `' AND (  "CP_CIR_GENERATED"."WEEK_DATE" <= '` +
-            vDateTo +
-            `' AND  "CP_CIR_GENERATED"."WEEK_DATE" >= '` +
-            vDateFrom +
-            `') AND  "CP_CIR_GENERATED"."MODEL_VERSION" = '` +
-            req.data.MODEL_VERSION +
-            `'
-                 ORDER BY 
-                 "CP_CIR_GENERATED"."LOCATION_ID" ASC, 
-                 "CP_CIR_GENERATED"."PRODUCT_ID" ASC,
-                 "CP_CIR_GENERATED"."VERSION" ASC,
-                 "CP_CIR_GENERATED"."SCENARIO" ASC,
-                 "CP_CIR_GENERATED"."WEEK_DATE" ASC`
-        );
-
+        let aFilterLoc = [];   
+        
         try {
-        const liUniqueId = await cds.run(
-        ` SELECT DISTINCT 
-          "CP_CIR_GENERATED"."LOCATION_ID", 
-          "CP_CIR_GENERATED"."PRODUCT_ID",
-          "CP_CIR_GENERATED"."VERSION",
-          "CP_CIR_GENERATED"."SCENARIO",
-          "CP_CIR_GENERATED"."UNIQUE_ID",          
-          "CP_UNIQUE_ID_HEADER"."UNIQUE_DESC",
-          "CP_PARTIALPROD_INTRO"."PROD_DESC",
-          "CP_FACTORY_SALESLOC"."LOCATION_ID" AS "DEMAND_LOC",
-          "CP_FACTORY_SALESLOC"."PLAN_LOC" AS "PLANNED_LOC"          
-                          FROM "CP_CIR_GENERATED" 
-                          inner join "CP_FACTORY_SALESLOC"
-                          ON "CP_CIR_GENERATED"."PRODUCT_ID" = "CP_FACTORY_SALESLOC"."PRODUCT_ID"
-                          AND "CP_CIR_GENERATED"."LOCATION_ID" = "CP_FACTORY_SALESLOC"."PLAN_LOC"
-                          inner join "CP_UNIQUE_ID_HEADER"
-                          ON "CP_CIR_GENERATED"."UNIQUE_ID" = "CP_UNIQUE_ID_HEADER"."UNIQUE_ID"
-                          AND "CP_CIR_GENERATED"."LOCATION_ID" = "CP_UNIQUE_ID_HEADER"."LOCATION_ID"
-                          inner join "CP_PARTIALPROD_INTRO"
-                          ON "CP_CIR_GENERATED"."PRODUCT_ID" = "CP_PARTIALPROD_INTRO"."PRODUCT_ID"
-                          AND "CP_CIR_GENERATED"."LOCATION_ID" = "CP_PARTIALPROD_INTRO"."LOCATION_ID"
-                          WHERE  "CP_FACTORY_SALESLOC"."FACTORY_LOC" = '` +
-                req.data.LOCATION_ID +
-                `' AND  "CP_CIR_GENERATED"."PRODUCT_ID" = '` +
-                req.data.PRODUCT_ID +
-                `' AND  "CP_CIR_GENERATED"."VERSION" = '` +
-                req.data.VERSION +
-                `' AND  "CP_CIR_GENERATED"."SCENARIO" = '` +
-                req.data.SCENARIO +
-                `' AND (  "CP_CIR_GENERATED"."WEEK_DATE" <= '` +
-                vDateTo +
-                `' AND  "CP_CIR_GENERATED"."WEEK_DATE" >= '` +
-                vDateFrom +
-                `') AND  "CP_CIR_GENERATED"."MODEL_VERSION" = '` +
-                req.data.MODEL_VERSION +
-                `'
-                               ORDER BY 
-                               "CP_CIR_GENERATED"."LOCATION_ID" ASC, 
-                               "CP_CIR_GENERATED"."PRODUCT_ID" ASC,
-                               "CP_CIR_GENERATED"."VERSION" ASC,
-                               "CP_CIR_GENERATED"."SCENARIO" ASC,
-                               "CP_CIR_GENERATED"."UNIQUE_ID" ASC`
+           const liCIRQty = await cds.run(
+                `SELECT *            
+                   FROM "CP_CIR_GENERATED"             
+                  INNER JOIN "CP_FACTORY_SALESLOC"
+                     ON "CP_CIR_GENERATED"."PRODUCT_ID" = "CP_FACTORY_SALESLOC"."PRODUCT_ID"
+                    AND "CP_CIR_GENERATED"."LOCATION_ID" = "CP_FACTORY_SALESLOC"."PLAN_LOC"
+             INNER JOIN "CP_PARTIALPROD_INTRO"
+                     ON "CP_PARTIALPROD_INTRO"."PRODUCT_ID"  = "CP_CIR_GENERATED"."PRODUCT_ID"
+                    AND "CP_PARTIALPROD_INTRO"."LOCATION_ID" = "CP_CIR_GENERATED"."LOCATION_ID"
+                  WHERE "CP_FACTORY_SALESLOC"."FACTORY_LOC" = '${req.data.LOCATION_ID}'
+                    AND  "CP_PARTIALPROD_INTRO"."PRODUCT_ID" IN (
+                        SELECT DISTINCT "PRODUCT_ID"
+                          FROM "CP_PARTIALPROD_INTRO"
+                        WHERE "LOCATION_ID" = '${req.data.LOCATION_ID}' 
+                          AND ("PRODUCT_ID" = '${req.data.PRODUCT_ID}'
+                                OR "REF_PRODID" = '${req.data.PRODUCT_ID}')
+                          )
+                  AND  "CP_CIR_GENERATED"."VERSION" = '${req.data.VERSION}' 
+                  AND  "CP_CIR_GENERATED"."SCENARIO" = '${req.data.SCENARIO}' 
+                  AND ("CP_CIR_GENERATED"."WEEK_DATE" <= '${vDateTo}' 
+                  AND  "CP_CIR_GENERATED"."WEEK_DATE" >= '${vDateFrom}') 
+                  AND  "CP_CIR_GENERATED"."MODEL_VERSION" = '${req.data.MODEL_VERSION}'
+             ORDER BY 
+                     "CP_CIR_GENERATED"."LOCATION_ID" ASC, 
+                     "CP_CIR_GENERATED"."PRODUCT_ID" ASC,
+                     "CP_CIR_GENERATED"."VERSION" ASC,
+                     "CP_CIR_GENERATED"."SCENARIO" ASC,
+                     "CP_CIR_GENERATED"."WEEK_DATE" ASC`
             );
+            oEntry.liCIRQty = liCIRQty;
+        } catch (e) {
+            console.log(e);
+        }
+
+        try {           
+            const liUniqueId = await cds.run(
+                    ` SELECT DISTINCT 
+                      "CP_CIR_GENERATED"."LOCATION_ID", 
+                      "CP_CIR_GENERATED"."PRODUCT_ID",
+                      "CP_CIR_GENERATED"."VERSION",
+                      "CP_CIR_GENERATED"."SCENARIO",
+                      "CP_CIR_GENERATED"."UNIQUE_ID",          
+                      "CP_UNIQUE_ID_HEADER"."UNIQUE_DESC",
+                      "CP_PARTIALPROD_INTRO"."PROD_DESC",
+                      "CP_FACTORY_SALESLOC"."LOCATION_ID" AS "DEMAND_LOC",
+                      "CP_FACTORY_SALESLOC"."PLAN_LOC" AS "PLANNED_LOC"          
+                                      FROM "CP_CIR_GENERATED" 
+                                      inner join "CP_FACTORY_SALESLOC"
+                                      ON "CP_CIR_GENERATED"."PRODUCT_ID" = "CP_FACTORY_SALESLOC"."PRODUCT_ID"
+                                      AND "CP_CIR_GENERATED"."LOCATION_ID" = "CP_FACTORY_SALESLOC"."PLAN_LOC"
+                                      inner join "CP_UNIQUE_ID_HEADER"
+                                      ON "CP_CIR_GENERATED"."UNIQUE_ID" = "CP_UNIQUE_ID_HEADER"."UNIQUE_ID"
+                                      AND "CP_CIR_GENERATED"."LOCATION_ID" = "CP_UNIQUE_ID_HEADER"."LOCATION_ID"
+                                      inner join "CP_PARTIALPROD_INTRO"
+                                      ON "CP_CIR_GENERATED"."PRODUCT_ID" = "CP_PARTIALPROD_INTRO"."PRODUCT_ID"
+                                      AND "CP_CIR_GENERATED"."LOCATION_ID" = "CP_PARTIALPROD_INTRO"."LOCATION_ID"
+                                      WHERE "CP_FACTORY_SALESLOC"."FACTORY_LOC" = '${req.data.LOCATION_ID}'
+                                        AND "CP_PARTIALPROD_INTRO"."PRODUCT_ID" IN (
+                                                SELECT DISTINCT "PRODUCT_ID"
+                                                  FROM "CP_PARTIALPROD_INTRO"
+                                                 WHERE "LOCATION_ID" = '${req.data.LOCATION_ID}' 
+                                                   AND ("PRODUCT_ID" = '${req.data.PRODUCT_ID}'
+                                                    OR "REF_PRODID" = '${req.data.PRODUCT_ID}')
+                                                ) 
+                                        AND "CP_CIR_GENERATED"."VERSION" = '${req.data.VERSION}'
+                                        AND "CP_CIR_GENERATED"."SCENARIO" = '${req.data.SCENARIO}' 
+                                        AND ("CP_CIR_GENERATED"."WEEK_DATE" <= '${vDateTo}' 
+                                        AND "CP_CIR_GENERATED"."WEEK_DATE" >= '${vDateFrom}') 
+                                        AND "CP_CIR_GENERATED"."MODEL_VERSION" = '${req.data.MODEL_VERSION}'
+                                   ORDER BY 
+                                           "CP_CIR_GENERATED"."LOCATION_ID" ASC, 
+                                           "CP_CIR_GENERATED"."PRODUCT_ID" ASC,
+                                           "CP_CIR_GENERATED"."VERSION" ASC,
+                                           "CP_CIR_GENERATED"."SCENARIO" ASC,
+                                           "CP_CIR_GENERATED"."UNIQUE_ID" ASC`
+                );
+
+           
             oEntry.liUniqueId = liUniqueId;
             if (aPlanningLoc.length > 0) {
                 //Filter by Selected Demand / Planning Location
@@ -110,7 +109,7 @@ class CIRData {
         catch (e) {
             console.log(e);
         }
-       
+
         // Get Actual Sales Orders Quantity
         try {
             const li_salesh = await cds.run(
@@ -132,11 +131,11 @@ class CIRData {
                 });
             }
 
-        } catch(e) {
-          console.log(e);
+        } catch (e) {
+            console.log(e);
         }
 
-        oEntry.liCIRQty = liCIRQty;
+        // oEntry.liCIRQty = liCIRQty;
 
         return oEntry;
     }
@@ -166,12 +165,12 @@ class CIRData {
             //        + req.data.PRODUCT_ID +
             //    `'`
 
-               `SELECT *
+            `SELECT *
                FROM "V_UNIQUE_ID_ITEM"
                WHERE UNIQUE_ID IN ( SELECT DISTINCT "UNIQUE_ID"
                                                FROM "CP_SALES_HM"
                                                WHERE "LOCATION_ID" = '${req.data.LOCATION_ID}'
-                                                 AND "PRODUCT_ID" = '${req.data.PRODUCT_ID}' )`           
+                                                 AND "PRODUCT_ID" = '${req.data.PRODUCT_ID}' )`
 
         );
         return li_uniqueIdItem;
