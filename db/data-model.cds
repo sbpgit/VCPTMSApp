@@ -1247,7 +1247,7 @@ entity![V_GETVARCHARPS]{
 @cds.persistence.exists
 entity![V_GETIBPCHARPS]{
     key![PRODUCT_ID]  : String(40)  @title : 'PRODUCT_ID';
-    key![LOCATION_ID] : String(4)   @title : 'LOCATION_ID';
+    // key![LOCATION_ID] : String(4)   @title : 'LOCATION_ID';
     key![CHAR_NUM]    : String(30)  @title : 'CHAR_NUM';
     key![CHAR_NAME]   : String(30)  @title : 'CHAR_NAME';
     key![CHAR_DESC]   : String(150) @title : 'CHAR_DESC';

@@ -241,8 +241,8 @@ service CatalogService @(impl : './lib/cat-service.js') {
 
     entity genvarcharps         as projection on od.VARCHAR_PS;
     entity getPriSecChar        as projection on V_GETVARCHARPS;
-    function getSecondaryChar(FLAG : String(1), LOCATION_ID : String(4), PRODUCT_ID : String(40))                                                                                                                                                                                returns array of getPriSecChar;
-    function changeToPrimary(LOCATION_ID : String(4), PRODUCT_ID : String(40), CHAR_NUM : String(10), CHAR_TYPE : String(1), SEQUENCE : Integer, FLAG : String(1))                                                                                                               returns String;
+    function getSecondaryChar(FLAG : String(1), PRODUCT_ID : String(40))                                                                                                                                                                                returns array of getPriSecChar;
+    function changeToPrimary(PRODUCT_ID : String(40), CHAR_NUM : String(10), CHAR_TYPE : String(1), SEQUENCE : Integer, FLAG : String(1))                                                                                                               returns String;
     /**
      * \*\*
      */

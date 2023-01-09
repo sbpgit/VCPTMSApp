@@ -33,7 +33,7 @@
                 </ux:headerTitle>
                 <ux:headerContent>
                     <FlexBox wrap="NoWrap" fitContainer="true">
-                        <l:Grid defaultSpan="XL3 L3 M6 S12">
+                        <l:Grid defaultSpan="XL4 L4 M6 S12">
                             <!-- <VBox >
                                 <Label text="Location" required="true" />
                                 <Input id="idloc" value="" placeholder="Location" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
@@ -42,20 +42,10 @@
                                 <Label text="Configurable Product" required="true" />
                                 <Input id="prodInput" value="" placeholder="Product" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="handleValueHelp" />
                             </VBox>
-                            <!-- <VBox >
-						<Label text="" required=""/>
-						<Button id="idUpdate" text="Update" type="Accept" press="onPressUpdate"/>
-					</VBox> -->
                             <VBox>
                                 <Label text="" />
                                 <HBox>
                                     <Button id="idData" text="Go" type="Emphasized" press="onGetData" />
-
-                                    <!-- <Label text="" width="50px" />
-                                    <Button id="idUpdate" text="Update" type="Accept" press="onPressUpdate" />
-
-                                    <Text text="" width="50px" />
-                                    <Button id="idReset" text="Reset" type="Accept" press="onReset" /> -->
                                 </HBox>
                             </VBox>
 

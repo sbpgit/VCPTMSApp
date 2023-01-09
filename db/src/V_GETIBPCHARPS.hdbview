@@ -7,7 +7,7 @@
 -----------------------------------------------------------------------------------------
 VIEW "V_GETIBPCHARPS"
 AS SELECT DISTINCT CP_IBPCHAR_PS.PRODUCT_ID,
-          CP_IBPCHAR_PS.LOCATION_ID,
+        --   CP_IBPCHAR_PS.LOCATION_ID,
           CP_IBPCHAR_PS.CHAR_NUM,
           V_CLASSCHARVAL.CHAR_NAME,
           V_CLASSCHARVAL.CHAR_DESC,

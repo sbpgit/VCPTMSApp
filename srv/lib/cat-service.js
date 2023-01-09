@@ -1693,10 +1693,6 @@ module.exports = (srv) => {
         if (req.data.FLAG === "C") {
             lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
             // lsresults.LOCATION_ID = req.data.LOCATION_ID;
-<<<<<<< HEAD
-            lsresults.LOCATION_ID = '';
-=======
->>>>>>> 9dc1df7e5ae41347004c33cf24743ea4019064a5
             lsresults.CHAR_NUM = req.data.CHAR_NUM;
             lsresults.CHAR_TYPE = req.data.CHAR_TYPE;
             if (req.data.CHAR_TYPE === "P") {

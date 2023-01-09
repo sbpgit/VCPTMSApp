@@ -61,18 +61,18 @@ sap.ui.define([
          * Calling the service to get Data.
          */
             onAfterRendering: function () {
-                sap.ui.core.BusyIndicator.show();
+                // sap.ui.core.BusyIndicator.show();
                 // this.oLoc = this.byId("idloc");
                 this.oProd = this.byId("prodInput");
                 that._valueHelpDialogProd.setTitleAlignment("Center");
-                that._valueHelpDialogLoc.setTitleAlignment("Center");
+                // that._valueHelpDialogLoc.setTitleAlignment("Center");
 
                 this.oProdList = this._oCore.byId(
                     this._valueHelpDialogProd.getId() + "-list"
                 );
-                this.oLocList = this._oCore.byId(
-                    this._valueHelpDialogLoc.getId() + "-list"
-                );
+                // this.oLocList = this._oCore.byId(
+                //     this._valueHelpDialogLoc.getId() + "-list"
+                // );
 
                 // // Calling service to get Location data
                 // this.getModel("BModel").read("/getLocation", {
@@ -85,6 +85,23 @@ sap.ui.define([
                 //         MessageToast.show("error");
                 //     },
                 // });
+
+                this.getModel("BModel").read("/getProducts", {
+                    // filters: [
+                    //     new Filter(
+                    //         "LOCATION_ID",
+                    //         FilterOperator.EQ,
+                    //         aSelectedLoc[0].getTitle()
+                    //     ),
+                    // ],
+                    success: function (oData) {
+                        that.prodModel.setData(oData);
+                        that.oProdList.setModel(that.prodModel);
+                    },
+                    error: function (oData, error) {
+                        MessageToast.show("error");
+                    },
+                });
 
 
             },
@@ -328,23 +345,9 @@ sap.ui.define([
                 } else if (sId.includes("prod")) {
                     // if (that.byId("idloc").getValue()) {
                         // service to get the products based of location
-                    this.getModel("BModel").read("/getLocProdDet", {
-                        // filters: [
-                        //     new Filter(
-                        //         "LOCATION_ID",
-                        //         FilterOperator.EQ,
-                        //         aSelectedLoc[0].getTitle()
-                        //     ),
-                        // ],
-                        success: function (oData) {
-                            that.prodModel.setData(oData);
-                            that.oProdList.setModel(that.prodModel);
+                   
                             that._valueHelpDialogProd.open();
-                        },
-                        error: function (oData, error) {
-                            MessageToast.show("error");
-                        },
-                    });
+                       
                        
                     // } else {
                     //     MessageToast.show("Select Location");
