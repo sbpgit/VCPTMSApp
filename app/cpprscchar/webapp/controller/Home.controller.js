@@ -226,7 +226,7 @@ sap.ui.define([
                         },
                     });
                 } else {
-                    MessageToast.show("Please select Location and Product");
+                    MessageToast.show("Please select a Product");
                 }
             },
 
@@ -312,7 +312,7 @@ sap.ui.define([
                         });
                         that.oSList.setModel(that.SeclistModel);
 
-                        that.searchlist = that.SeclistModel;
+                        that.searchlist = that.finalSecData;//that.SeclistModel;
 
 
                         that.searchlist.forEach(function (row) {
@@ -323,6 +323,7 @@ sap.ui.define([
 
 
                         that.byId("searchField").setModel(that.SeclistModel);
+                        MessageToast.show("Reload Successfull");
 
                     },
                     error: function (oData, error) {
@@ -722,9 +723,9 @@ sap.ui.define([
             onPressUpdate: function (oEvent) {
                 //var oEntry = {};
                 // var sLoc = that.byId("idloc").getValue(),
-                    sProd = that.byId("prodInput").getValue();
+                     var sProd = that.byId("prodInput").getValue();
 
-                if (sLoc !== "" && sProd !== "") {
+                if (sProd !== "") {
                     sap.ui.core.BusyIndicator.show();
                     this.getModel("BModel").callFunction("/getSecondaryChar", {
                         method: "GET",
@@ -810,7 +811,8 @@ sap.ui.define([
                             oGModel.setProperty("/primFlag", "");
                             that.byId("idText").setVisible(false);
                             that.byId("idText").removeStyleClass("textColour");
-
+                            
+                            MessageToast.show("Update Successful");
                         },
                         error: function (oData, error) {
                             sap.ui.core.BusyIndicator.hide();
@@ -818,7 +820,7 @@ sap.ui.define([
                         },
                     });
                 } else {
-                    MessageToast.show("Please select Location and Product");
+                    MessageToast.show("Please select a Product");
                 }
 
 
