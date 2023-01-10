@@ -1979,32 +1979,46 @@ module.exports = cds.service.impl(async function () {
         
         // Get Planning area and Prefix configurations for IBP
         let liParaValue = await GenF.getIBPParameterValue();
-        let lMessage;
+        let lMessage,lSuccess,aJobid;
         let vToDate = new Date();
-        vToDate = vToDate.getFullYear().toString()+vToDate.getMonth().toString()+vToDate.getDate().toString()+"235959";
+        let vMonth = (vToDate.getMonth() + 1).toString();
+        if( vMonth.length === 1){
+            vMonth = '0'+vMonth;
+        }
+        let vDate = vToDate.getDate().toString();
+        if( vDate.length === 1){
+            vDate = '0'+vDate;
+        }
+        vToDate = vToDate.getFullYear().toString()+vMonth+vDate+"235959";
         let vFromDate = new Date();
-        vFromDate.setDate(vFromDate.getDate() - 7);
-        // vFromDate = vFromDate.toISOString().split('Z')[0].split('T')[0];
-        // vFromDate = vFromDate+"000000";
-        
-        vFromDate = vFromDate.getFullYear().toString()+vFromDate.getMonth().toString()+vFromDate.getDate().toString()+"000000";
+        vFromDate = new Date(vFromDate.getFullYear(), vFromDate.getMonth(), vFromDate.getDate() - 7);
+        vMonth = (vFromDate.getMonth() + 1).toString();
+        if( vMonth.length === 1){
+            vMonth = '0'+vMonth;
+        }
+        vDate = vFromDate.getDate().toString();
+        if( vDate.length === 1){
+            vDate = '0'+vDate;
+        }
+        vFromDate = vFromDate.getFullYear().toString()+vMonth+vDate+"000000";
         let oEntry =
         {
             "__metadata":{"type":"IBP.API_CHANGEHISTORY_READ_SRV.CalculateOriginalView"},
             "Plarea": liParaValue[0].VALUE,
             "Version":"__BASELINE",
-            "Keyfigure":"ADJMARKETAUTHORIZATION",
+            "Keyfigure":"MANUALOPTION",
             "TimeRangeOfChangesFrom": vFromDate,
             "TimeRangeOfChangesTo": vToDate
         }
         try {
-            let aResponse = await serviceChLog.tx(req).post("   ", oEntry);
-            flag = 'X';
+            aJobid = await serviceChLog.tx(req).post("/CalculateOriginalViewSet", oEntry);
+            ibpf
+            lSuccess = 'X';
         }
         catch (error) {
             console.log(error);
         }
-        if (flag === 'X') {
+        if (lSuccess === 'X') {
             lMessage =  "Import of Change log is successful ";
         }
         else {
