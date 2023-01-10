@@ -15,37 +15,44 @@ annotate service.PRODUCT with @(
             {
                 $Type : 'UI.DataField', 
                 Value : PRODUCT_ID,
-                ![@UI.Importance]   : #High
+                ![@UI.Importance]   : #High,
+                ![@HTML5.CssDefaults] : {width : '5rem'}
             },
             {
                 $Type : 'UI.DataField', 
                 Value : PROD_DESC,
-                ![@UI.Importance]   : #High
+                ![@UI.Importance]   : #High,
+                ![@HTML5.CssDefaults] : {width : '15rem'}
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : PROD_TYPE,
+                ![@UI.Importance]   : #High,
+                ![@HTML5.CssDefaults] : {width : '10rem'}
             },
             {
                 $Type : 'UI.DataField',
                 Value : PROD_FAMILY,
-                ![@UI.Importance]   : #High
+                ![@UI.Importance]   : #High,
+                ![@HTML5.CssDefaults] : {width : '15rem'}
             },
             {
                 $Type : 'UI.DataField', 
                 Value : PROD_SERIES,
-                ![@UI.Importance]   : #High
+                ![@UI.Importance]   : #High,
+                ![@HTML5.CssDefaults] : {width : '10rem'}
             },
             {
                 $Type : 'UI.DataField',
                 Value : PROD_MODEL,
-                ![@UI.Importance]   : #High
+                ![@UI.Importance]   : #High,
+                ![@HTML5.CssDefaults] : {width : '10rem'}
             },
             {
                 $Type : 'UI.DataField',
                 Value : PROD_MDLRANGE,
-                ![@UI.Importance]   : #High
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : AUTH_GROUP,
-                ![@UI.Importance]   : #High
+                ![@UI.Importance]   : #High,
+                ![@HTML5.CssDefaults] : {width : '10rem'}
             }
         ],
         HeaderInfo                     : {
@@ -67,6 +74,10 @@ annotate service.PRODUCT with @(
             {
                 $Type : 'UI.DataField',
                 Value : PROD_DESC
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : PROD_TYPE
             },
             {
                 $Type : 'UI.DataField',
