@@ -2981,12 +2981,14 @@ module.exports = (srv) => {
         const liUniqueId = oCIRData.liUniqueId;
         const aUniqueIdChar = await objCIR.getUniqueIdCharacteristics(req);
         // const sLoginUserId = req.headers['x-username'];
+        let sLoginUserId = "";
         const sCFDestUser = req.data.VALIDUSER;
         let aFilteredChar = [], aFilteredCIR = [];
         let sUniqueId = "";
         let oUniqueIdChars = {};
         let aUniqueIdChars = [];
         let oEntry = {};
+        sLoginUserId = req.data.USER_ID;
 
 
         for (let i = 0; i < liUniqueId.length; i++) {
@@ -3022,7 +3024,9 @@ module.exports = (srv) => {
                 oEntry.UniqueId = (aFilteredCIR[j].UNIQUE_ID).toString();
                 oEntry.Datum = aFilteredCIR[j].WEEK_DATE + "T10:00:00";
                 oEntry.Valid_User = sCFDestUser;
-                // oEntry.User_Id = sLoginUserId;
+                if (sLoginUserId) {
+                    oEntry.User_Id = sLoginUserId;
+                }
                 oEntry.HeaderConfig = aUniqueIdChars;
                 try {
                     let sReturn = await oModel.tx(req).post("/headerSet", oEntry);
