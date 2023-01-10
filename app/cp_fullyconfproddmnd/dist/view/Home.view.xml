@@ -129,7 +129,7 @@
                                                 <core:ListItem key="{CHAR_NUM}:{CHARVAL_NUM}" text="{CHAR_DESC} - {CHAR_NAME}" additionalText="{CHARVAL_DESC} - {CHAR_VALUE}" />
                                             </MultiComboBox>
                                         </Toolbar>
-                                        <t:Table id="idCIReq" class="table" fixedColumnCount="3" threshold="10" selectionMode="None" alternateRowColors="true" enableSelectAll="false" visibleRowCount="7">
+                                        <t:Table id="idCIReq" class="table" fixedColumnCount="3"  selectionMode="None" alternateRowColors="true" enableSelectAll="false" visibleRowCount="7">
                                             <t:columns />
                                         </t:Table>
                                     </VBox>

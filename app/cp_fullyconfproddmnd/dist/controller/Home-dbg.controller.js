@@ -295,6 +295,7 @@ sap.ui.define(
                 var Loc = that.oGModel.getProperty("/SelectedLoc"),
                     PlanLoc = that.oGModel.getProperty("/SelectedDmndLoc"),
                     Prod = that.oGModel.getProperty("/SelectedProd"),
+                    RefProd = " ",      // that.oGModel.getProperty("/SelectedRefProd"),
                     ver = that.oGModel.getProperty("/SelectedVer"),
                     scen = that.oGModel.getProperty("/SelectedScen"),
                     modelVersion = that.byId("idModelVer").getSelectedKey();
@@ -325,6 +326,7 @@ sap.ui.define(
                         urlParameters: {
                             LOCATION_ID: Loc,
                             PLANNING_LOC: JSON.stringify(PlanLoc),
+                            REF_PRODID: RefProd,
                             PRODUCT_ID: Prod,
                             VERSION: ver,
                             SCENARIO: scen,
@@ -345,7 +347,7 @@ sap.ui.define(
                                 }
                                 if (collapseBtnId) {
                                     collapseBtnId.firePress();
-                                    that.handleVisibleRowCount(4);
+                                    that.handleVisibleRowCount(3);
                                 }
 
 
@@ -426,7 +428,7 @@ sap.ui.define(
                 // Checking column names and applying sap.m.Link to column values
                 that.oTable.bindColumns("/columns", function (sId, oContext) {
                     columnName = oContext.getObject().WEEK_DATE;
-                    
+
                     if (columnName === "Location") {
                         return new sap.ui.table.Column({
                             width: "8rem",
@@ -474,8 +476,7 @@ sap.ui.define(
                         var iWeekIndex = that.getWeekNumber(columnName);
                         var columnText = 'W' + iWeekIndex + " (" + iTotalQty + ")";
                         iactQty = columnName + "_Q" + "/ACT_QTY";
-                        iopenQty = columnName + "_Q" + "/OPEN_QTY";
-                        // var iOpenQty = "=parseInt(${/columnName} - ${/colQty})";   // - ${/colQty}"; 
+                        iopenQty = columnName + "_Q" + "/OPEN_QTY";                        
 
                         // if (that.dFirmHorizonDate > dColName) {
                         if (dColName >= dFrozenHorizonDate && dColName <= dFirmHorizonDate) {
@@ -484,7 +485,7 @@ sap.ui.define(
                                 width: "6rem",
                                 // label: new sap.m.ObjectIdentifier({title: columnName}),
                                 name: columnName,
-                                label: columnText,                                
+                                label: columnText,
                                 template: new sap.m.VBox({
                                     items: [
                                         new sap.m.Input({
@@ -493,9 +494,9 @@ sap.ui.define(
                                             value: "{" + columnName + "}",
                                             change: that.onChangeCIRQty,
                                         }),
+                                        
                                         new sap.m.ObjectIdentifier({
-                                            title: "{" + iactQty + "}",
-                                            text: "{" + iopenQty + "}"
+                                            title: "{" + iactQty + "}" + " / " + "{" + iopenQty + "}"
                                         })
                                     ]
                                 })
@@ -517,9 +518,9 @@ sap.ui.define(
                                         new sap.m.Text({
                                             text: "{" + columnName + "}",
                                         }),
+                                        
                                         new sap.m.ObjectIdentifier({
-                                            title: "{" + iactQty + "}",
-                                            text: "{" + iopenQty + "}"
+                                            title: "{" + iactQty + "}" + " / " + "{" + iopenQty + "}"
                                         })
                                     ]
                                 })
@@ -1058,6 +1059,10 @@ sap.ui.define(
                         "/SelectedProd",
                         aSelectedItems[0].getTitle()
                     );
+                    that.oGModel.setProperty(
+                        "/SelectedRefProd",
+                        aSelectedItems[0].getInfo()
+                    );
                     // Removing the input box values when Product changed
                     that.oVer.setValue("");
                     that.oScen.setValue("");
@@ -1399,13 +1404,16 @@ sap.ui.define(
                 var vFromDate = that.byId("fromDate").getDateValue();
                 var vToDate = that.byId("toDate").getDateValue();
                 oEntry.LOCATION_ID = that.oGModel.getProperty("/SelectedLoc");
+                oEntry.PLANNED_LOC = JSON.stringify(that.oGModel.getProperty("/SelectedDmndLoc")),
                 oEntry.PRODUCT_ID = that.oGModel.getProperty("/SelectedProd");
+                oEntry.REF_PRODID = that.oGModel.getProperty("/SelectedRefProd");
                 oEntry.VERSION = that.oGModel.getProperty("/SelectedVer");
                 oEntry.SCENARIO = that.oGModel.getProperty("/SelectedScen");
                 oEntry.MODEL_VERSION = that.byId("idModelVer").getSelectedKey();
 
                 if (
                     oEntry.LOCATION_ID !== undefined &&
+                    oEntry.PLANNED_LOC !== undefined &&
                     oEntry.PRODUCT_ID !== undefined &&
                     oEntry.VERSION !== undefined &&
                     oEntry.SCENARIO !== undefined &&
@@ -1425,18 +1433,20 @@ sap.ui.define(
                     that.handlePublish(oEntry);
 
 
-                    // // calling service based on filters (Without Job Scheduler)
+                    // calling service based on filters (Without Job Scheduler)
                     // that.getModel("CIRModel").callFunction("/postCIRQuantities", {
                     //     method: "GET",
                     //     urlParameters: {
                     //         LOCATION_ID: oEntry.LOCATION_ID,
-                    //         PRODUCT_ID: oEntry.PRODUCT_ID,
+                    //         PLANNING_LOC: oEntry.PLANNED_LOC,
+                    //         PRODUCT_ID: oEntry.PRODUCT_ID,                            
                     //         VERSION: oEntry.VERSION,
                     //         SCENARIO: oEntry.SCENARIO,
                     //         FROMDATE: vFromDate,
                     //         TODATE: vToDate,
                     //         MODEL_VERSION: oEntry.MODEL_VERSION,
-                    //         VALIDUSER: that.sCFUserDestination  
+                    //         VALIDUSER: that.sCFUserDestination,
+                    //         USER_ID: that.sUserId  
                     //     },
                     //     success: function (data, oResponse) {
                     //         sap.ui.core.BusyIndicator.hide();
@@ -1545,7 +1555,8 @@ sap.ui.define(
 
                 var vcRuleList = {
                     LOCATION_ID: oEntry.LOCATION_ID,
-                    PRODUCT_ID: oEntry.PRODUCT_ID,
+                    PLANNING_LOC: oEntry.PLANNED_LOC,
+                    PRODUCT_ID: oEntry.PRODUCT_ID,                    
                     VERSION: oEntry.VERSION,
                     SCENARIO: oEntry.SCENARIO,
                     FROMDATE: oEntry.FROMDATE,
@@ -1870,9 +1881,9 @@ sap.ui.define(
                 var sWeekDate = oEvent.getSource().mBindingInfos.placeholder.binding.sPath;
                 var iActQty = oCIRData[sWeekDate + sColQty];
 
-                if (inewValue !== iValue) { 
-                    if(inewValue < iActQty.ACT_QTY){
-                        MessageToast.show("Cannot set quantity less than actual qty!", { width: "25rem" });
+                if (inewValue !== iValue) {
+                    if (inewValue < iActQty.ACT_QTY) {
+                        MessageToast.show("Cannot set quantity less than actual quantity!", { width: "40rem" });
                         oCIRData[sWeekDate] = iValue;
                         return;
                     }
@@ -2017,7 +2028,7 @@ sap.ui.define(
              */
             onChangeHeaderPinStatus: function (oEvent) {
                 if (oEvent.getSource()._bHeaderExpanded === true) {
-                    that.handleVisibleRowCount(4);
+                    that.handleVisibleRowCount(3);
                 } else {
                     that.handleVisibleRowCount(0);
                 }

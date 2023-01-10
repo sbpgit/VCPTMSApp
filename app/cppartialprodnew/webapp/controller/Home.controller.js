@@ -206,6 +206,7 @@ sap.ui.define(
                             results: oData.results,
                         });
                         that.CharDetailList.setModel(that.charModel);
+                        that._onCharDetails.setTitle("Product Characteristics" + " - " + sSelProd);
                         that._onCharDetails.open();
                     },
                     error: function () {
