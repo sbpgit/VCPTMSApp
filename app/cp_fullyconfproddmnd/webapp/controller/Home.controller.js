@@ -1404,6 +1404,7 @@ sap.ui.define(
                 var vFromDate = that.byId("fromDate").getDateValue();
                 var vToDate = that.byId("toDate").getDateValue();
                 oEntry.LOCATION_ID = that.oGModel.getProperty("/SelectedLoc");
+                oEntry.PLANNED_LOC = JSON.stringify(that.oGModel.getProperty("/SelectedDmndLoc")),
                 oEntry.PRODUCT_ID = that.oGModel.getProperty("/SelectedProd");
                 oEntry.REF_PRODID = that.oGModel.getProperty("/SelectedRefProd");
                 oEntry.VERSION = that.oGModel.getProperty("/SelectedVer");
@@ -1412,6 +1413,7 @@ sap.ui.define(
 
                 if (
                     oEntry.LOCATION_ID !== undefined &&
+                    oEntry.PLANNED_LOC !== undefined &&
                     oEntry.PRODUCT_ID !== undefined &&
                     oEntry.VERSION !== undefined &&
                     oEntry.SCENARIO !== undefined &&
@@ -1431,18 +1433,20 @@ sap.ui.define(
                     that.handlePublish(oEntry);
 
 
-                    // // calling service based on filters (Without Job Scheduler)
+                    // calling service based on filters (Without Job Scheduler)
                     // that.getModel("CIRModel").callFunction("/postCIRQuantities", {
                     //     method: "GET",
                     //     urlParameters: {
                     //         LOCATION_ID: oEntry.LOCATION_ID,
-                    //         PRODUCT_ID: oEntry.PRODUCT_ID,
+                    //         PLANNING_LOC: oEntry.PLANNED_LOC,
+                    //         PRODUCT_ID: oEntry.PRODUCT_ID,                            
                     //         VERSION: oEntry.VERSION,
                     //         SCENARIO: oEntry.SCENARIO,
                     //         FROMDATE: vFromDate,
                     //         TODATE: vToDate,
                     //         MODEL_VERSION: oEntry.MODEL_VERSION,
-                    //         VALIDUSER: that.sCFUserDestination  
+                    //         VALIDUSER: that.sCFUserDestination,
+                    //         USER_ID: that.sUserId  
                     //     },
                     //     success: function (data, oResponse) {
                     //         sap.ui.core.BusyIndicator.hide();
@@ -1551,7 +1555,8 @@ sap.ui.define(
 
                 var vcRuleList = {
                     LOCATION_ID: oEntry.LOCATION_ID,
-                    PRODUCT_ID: oEntry.PRODUCT_ID,
+                    PLANNING_LOC: oEntry.PLANNED_LOC,
+                    PRODUCT_ID: oEntry.PRODUCT_ID,                    
                     VERSION: oEntry.VERSION,
                     SCENARIO: oEntry.SCENARIO,
                     FROMDATE: oEntry.FROMDATE,

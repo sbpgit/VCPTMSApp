@@ -13,11 +13,16 @@ class CIRData {
         let vDateFrom = req.data.FROMDATE; //"2022-03-04";
         let vDateTo = req.data.TODATE; //"2023-01-03";
         let oEntry = {};
-        let aPlanningLoc = JSON.parse(req.data.PLANNING_LOC);
-        let aFilterLoc = [];   
-        
+        let aPlanningLoc = [];
+        let aFilterLoc = [];
+
+        // Selected Demand / Planned Locations
+        if (req.data.PLANNING_LOC !== undefined) {
+            aPlanningLoc = JSON.parse(req.data.PLANNING_LOC);
+        }
+
         try {
-           const liCIRQty = await cds.run(
+            const liCIRQty = await cds.run(
                 `SELECT *            
                    FROM "CP_CIR_GENERATED"             
                   INNER JOIN "CP_FACTORY_SALESLOC"
@@ -51,9 +56,9 @@ class CIRData {
             console.log(e);
         }
 
-        try {           
+        try {
             const liUniqueId = await cds.run(
-                    ` SELECT DISTINCT 
+                ` SELECT DISTINCT 
                       "CP_CIR_GENERATED"."LOCATION_ID", 
                       "CP_CIR_GENERATED"."PRODUCT_ID",
                       "CP_CIR_GENERATED"."VERSION",
@@ -92,9 +97,9 @@ class CIRData {
                                            "CP_CIR_GENERATED"."VERSION" ASC,
                                            "CP_CIR_GENERATED"."SCENARIO" ASC,
                                            "CP_CIR_GENERATED"."UNIQUE_ID" ASC`
-                );
+            );
 
-           
+
             oEntry.liUniqueId = liUniqueId;
             if (aPlanningLoc.length > 0) {
                 //Filter by Selected Demand / Planning Location
