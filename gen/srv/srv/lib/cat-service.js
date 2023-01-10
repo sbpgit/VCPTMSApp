@@ -1543,58 +1543,104 @@ module.exports = (srv) => {
         let vFlag = '';
         let vCharFlag = '';
         let li_varcharps = [];
-        li_varcharps = await cds.run(
-            `SELECT *
+
+        if (req.data.PRODUCT_ID !== '') {
+            li_varcharps = await cds.run(
+                `SELECT *
             FROM "V_GETVARCHARPS"
             WHERE "PRODUCT_ID" = '` +
-            req.data.PRODUCT_ID +
-            `'`
-        );
-        
+                req.data.PRODUCT_ID +
+                `'`
+            );
+        }
+        else {
+            li_varcharps = await cds.run(
+                `SELECT *
+                FROM "V_GETVARCHARPS"`
+            );
+        }
+
         if (req.data.FLAG === 'G' && li_varcharps.length > 0) {
             return li_varcharps;
         }
         else if (req.data.FLAG === 'R' || li_varcharps.length === 0) {
-            const li_locprodclass = await cds.run(
-                `SELECT *
-                FROM "V_LOCPRODCLASSCHAR"
+            let li_locprodclass;
+            if (req.data.PRODUCT_ID !== '') {
+                li_locprodclass = await cds.run(
+                    `SELECT DISTINCT "PRODUCT_ID",
+                                "CHAR_NUM"
+                FROM "V_PRODCLSCHARVAL"
                 WHERE "PRODUCT_ID" = '` +
-                req.data.PRODUCT_ID +
-                `' ORDER BY PRODUCT_ID,
-                CHAR_NAME`
-            );
+                    req.data.PRODUCT_ID +
+                    `' ORDER BY PRODUCT_ID,
+                CHAR_NUM`
+                );
+            }
+            else {
+                li_locprodclass = await cds.run(
+                    `SELECT DISTINCT "PRODUCT_ID",
+                                    "CHAR_NUM"
+                    FROM "V_PRODCLSCHARVAL"
+                    ORDER BY PRODUCT_ID,
+                    CHAR_NUM`
+                );
+            }
+            const liProd = await cds.run(`SELECT * FROM CP_PRODUCT`);
             vCount = 1;
-            for (i = 0; i < li_locprodclass.length; i++) {
-                vCharFlag = '';
-                lsresults.PRODUCT_ID = li_locprodclass[i].PRODUCT_ID;
-                // lsresults.LOCATION_ID = li_locprodclass[i].LOCATION_ID;
-                lsresults.CHAR_NUM = li_locprodclass[i].CHAR_NUM;
-                lsresults.CHAR_TYPE = 'S';
-                lsresults.SEQUENCE = vCount;
-                if (li_varcharps.length > 0) {
-                    for (j = 0; j < li_varcharps.length; j++) {
-                        if (li_varcharps[j].CHAR_NUM === lsresults.CHAR_NUM) {
-                            vCharFlag = 'X';
-                            break;
-                        }
-                    }
-                    if (vCharFlag === '') {
-                        liresults.push(lsresults);
-                        vCount = vCount + 1;
-                    }
+            for (let iPrd = 0; iPrd < liProd.length; iPrd++) {
+                let liMaxProdSeq = await cds.run(`SELECT max("SEQUENCE") as MAXSEQ,
+                                                "PRODUCT_ID"
+                                        FROM "CP_VARCHAR_PS"
+                                        WHERE CHAR_TYPE = 'S'
+                                        AND PRODUCT_ID = '`+ liProd[iPrd].PRODUCT_ID + `'
+                                        GROUP BY PRODUCT_ID`);
+                if (liMaxProdSeq.length > 0) {
+                    vCount = liMaxProdSeq[0].MAXSEQ;
                 }
                 else {
-                    liresults.push(lsresults);
-                    vCount = vCount + 1;
+                    vCount = 1;
                 }
-                lsresults = {};
-            }
-            if (liresults.length > 0) {
-                try {
-                    await cds.run(INSERT.into("CP_VARCHAR_PS").entries(liresults));
-                    vFlag = 'X';
-                } catch (e) {
-                    vFlag = '';
+                for (let i = 0; i < li_locprodclass.length; i++) {
+                    if (liProd[iPrd].PRODUCT_ID === li_locprodclass[i].PRODUCT_ID) {
+                        vCharFlag = '';
+                        lsresults.PRODUCT_ID = li_locprodclass[i].PRODUCT_ID;
+                        // lsresults.LOCATION_ID = li_locprodclass[i].LOCATION_ID;
+                        lsresults.CHAR_NUM = li_locprodclass[i].CHAR_NUM;
+                        lsresults.CHAR_TYPE = 'S';
+                        if (li_varcharps.length > 0) {
+                            for (let j = 0; j < li_varcharps.length; j++) {
+                                if (li_varcharps[j].CHAR_NUM === lsresults.CHAR_NUM &&
+                                    li_varcharps[j].PRODUCT_ID === lsresults.PRODUCT_ID) {
+                                    vCharFlag = 'X';
+                                    break;
+                                }
+                            }
+                            if (vCharFlag === '') {
+                                lsresults.SEQUENCE = vCount;
+                                liresults.push(lsresults);
+                                vCount = vCount + 1;
+                            }
+                        }
+                        else {
+                            lsresults.SEQUENCE = vCount;
+                            liresults.push(GenFunctions.parse(lsresults));
+                            vCount = vCount + 1;
+                        }
+                        lsresults = {};
+                    }
+                }
+                if (liresults.length > 0) {
+                    try {
+                        await cds.run(INSERT.into("CP_VARCHAR_PS").entries(liresults));
+                        vFlag = 'X';
+
+                    } catch (e) {
+                        vFlag = '';
+                    }
+                    liresults = [];
+                    lsresults = {};
+                    vCount = 1;
+                    vCharFlag = '';
                 }
             }
             // if (vFlag === 'X') {
@@ -1622,18 +1668,20 @@ module.exports = (srv) => {
             // lsresults.LOCATION_ID = req.data.LOCATION_ID;
             lsresults.PRODUCT_ID = req.data.PRODUCT_ID;
             lsresults.UID_TYPE = 'P';
-            try {
-                await cds.delete("CP_UNIQUE_ID_HEADER", lsresults);
-                vFlag = 'X';
-            } catch (e) {
-                //DONOTHING
+            if (li_locprodunique.length > 0) {
+                try {
+                    await cds.delete("CP_UNIQUE_ID_HEADER", lsresults);
+                    vFlag = 'X';
+                } catch (e) {
+                    //DONOTHING
+                }
             }
             if (vFlag === 'X') {
                 for (let i = 0; i < li_locprodunique.length; i++) {
                     vId = parseInt(li_locprodunique[i].UNIQUE_ID);
                     try {
                         await cds.run(
-                            `DELETE FROM "CP_UNIQUE_ID_ITEM" WHERE "PRODUCT_ID" = '`+ li_locprodunique[i].PRODUCT_ID + `'
+                            `DELETE FROM "CP_UNIQUE_ID_ITEM" WHERE "PRODUCT_ID" = '` + li_locprodunique[i].PRODUCT_ID + `'
                                                               AND "UNIQUE_ID" = `+ vId + ``
                         );
                         vFlag = 'S';
@@ -1650,10 +1698,12 @@ module.exports = (srv) => {
                 lsresults.CHAR_TYPE = 'S';
                 lsresults.SEQUENCE = vCount;
                 li_varcharps.push(GenFunctions.parse(lsresults));
-                return li_varcharps;
                 lsresults = {};
+                return li_varcharps;
             }
-
+            else {
+                return li_varcharps;
+            }
         }
 
     });
@@ -2364,7 +2414,7 @@ module.exports = (srv) => {
             catch (e) {
                 vResponse = "E";
             }
-        }        
+        }
         return vResponse;
     });
     srv.on("maintainSeedOrder", async (req) => {
@@ -2719,17 +2769,17 @@ module.exports = (srv) => {
                 oCIRQty.OPEN_QTY = 0;
                 nextDtIndex = GenFunctions.addOne(i, liDates.length);
                 aFilSalesH = liSalesH.filter(function (aSalesH) {
-                    return aSalesH.UNIQUE_ID === lsCIRWeekly.UNIQUE_ID   
+                    return aSalesH.UNIQUE_ID === lsCIRWeekly.UNIQUE_ID
                         && aSalesH.MAT_AVAILDATE >= liDates[i].WEEK_DATE
                         && aSalesH.MAT_AVAILDATE < liDates[nextDtIndex].WEEK_DATE;
                 });
-                
+
                 if (aFilSalesH.length > 0) {
-                    for (let vQtyIndex = 0; vQtyIndex < aFilSalesH.length; vQtyIndex++) { 
-                        iQty = iQty + parseInt(aFilSalesH[vQtyIndex].ORD_QTY);                       
+                    for (let vQtyIndex = 0; vQtyIndex < aFilSalesH.length; vQtyIndex++) {
+                        iQty = iQty + parseInt(aFilSalesH[vQtyIndex].ORD_QTY);
                     }
-                }      
-                oCIRQty.ACT_QTY = iQty;                         
+                }
+                oCIRQty.ACT_QTY = iQty;
 
                 for (vCIRIndex = 0; vCIRIndex < liCIRQty.length; vCIRIndex++) {
                     lsCIRWeekly[columnname + vWeekIndex] = 0;
@@ -2739,12 +2789,12 @@ module.exports = (srv) => {
                     ) {
                         lsCIRWeekly[columnname + vWeekIndex] =
                             liCIRQty[vCIRIndex].CIR_QTY;
-                          
-                            oCIRQty.OPEN_QTY = liCIRQty[vCIRIndex].CIR_QTY - iQty;                        
 
-                            if (oCIRQty.OPEN_QTY < 0) {
-                               oCIRQty.OPEN_QTY = 0;
-                            }
+                        oCIRQty.OPEN_QTY = liCIRQty[vCIRIndex].CIR_QTY - iQty;
+
+                        if (oCIRQty.OPEN_QTY < 0) {
+                            oCIRQty.OPEN_QTY = 0;
+                        }
 
                         oCIR_ID.WEEK_DATE = liDates[i].WEEK_DATE;
                         oCIR_ID.CIR_ID = liCIRQty[vCIRIndex].CIR_ID;

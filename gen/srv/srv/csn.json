@@ -338,6 +338,9 @@
           },
           "@UI.Importance": {
             "#": "High"
+          },
+          "@HTML5.CssDefaults": {
+            "width": "5rem"
           }
         },
         {
@@ -347,6 +350,21 @@
           },
           "@UI.Importance": {
             "#": "High"
+          },
+          "@HTML5.CssDefaults": {
+            "width": "15rem"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "PROD_TYPE"
+          },
+          "@UI.Importance": {
+            "#": "High"
+          },
+          "@HTML5.CssDefaults": {
+            "width": "10rem"
           }
         },
         {
@@ -356,6 +374,9 @@
           },
           "@UI.Importance": {
             "#": "High"
+          },
+          "@HTML5.CssDefaults": {
+            "width": "15rem"
           }
         },
         {
@@ -365,6 +386,9 @@
           },
           "@UI.Importance": {
             "#": "High"
+          },
+          "@HTML5.CssDefaults": {
+            "width": "10rem"
           }
         },
         {
@@ -374,6 +398,9 @@
           },
           "@UI.Importance": {
             "#": "High"
+          },
+          "@HTML5.CssDefaults": {
+            "width": "10rem"
           }
         },
         {
@@ -383,15 +410,9 @@
           },
           "@UI.Importance": {
             "#": "High"
-          }
-        },
-        {
-          "$Type": "UI.DataField",
-          "Value": {
-            "=": "AUTH_GROUP"
           },
-          "@UI.Importance": {
-            "#": "High"
+          "@HTML5.CssDefaults": {
+            "width": "10rem"
           }
         }
       ],
@@ -425,6 +446,12 @@
           "$Type": "UI.DataField",
           "Value": {
             "=": "PROD_DESC"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "PROD_TYPE"
           }
         },
         {
@@ -19197,6 +19224,12 @@
           "$Type": "UI.DataField",
           "Value": {
             "=": "PROD_DESC"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "PROD_TYPE"
           }
         },
         {

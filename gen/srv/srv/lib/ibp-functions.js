@@ -376,6 +376,29 @@ class IBPFunctions {
         }
         return lSuccess;
     }
+    async ImportChangeHis(IJobid,request){
+        
+    const serviceChLog = await cds.connect.to('IBPChangeHistory');
+    
+        // Get Planning area and Prefix configurations for IBP
+        let liParaValue = await GenF.getIBPParameterValue();
+        let lSuccess = '', vScenario, vToDate, vFromDate,resUrl, req, lJobStatus = 5;
+
+       while( lJobStatus > 0){
+        req = '';
+        resUrl = "/" + "ChangeHistoryJobSet('" + IJobid + "')";
+        req = await serviceChLog.tx(request).get(resUrl);
+        if(req.Status === 'Extractable'){
+            lJobStatus = 0;
+            req = '';
+            break;
+        }
+       }
+       if(lJobStatus === 0){
+        resUrl = "/" + "ChangeHistoryJobSet('" + IJobid + "')";
+        req = await serviceChLog.tx(request).get(resUrl);
+       }
+    }
     /**
      * 
      * @param {Request} request 
